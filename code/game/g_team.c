@@ -708,7 +708,8 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 				player->client->ps.persistant[PERS_PADACE_COUNT]++;
 				// add the sprite over the player's head
 				SetAward(player->client, AWARD_PADACE);
-			} else if (player->client->pers.teamState.lastfraggedcarrier + CTF_FRAG_CARRIER_ASSIST_TIMEOUT >
+			}
+			if (player->client->pers.teamState.lastfraggedcarrier + CTF_FRAG_CARRIER_ASSIST_TIMEOUT >
 					   level.time) {
 				AddScore(player, ent->r.currentOrigin, CTF_FRAG_CARRIER_ASSIST_BONUS,
 						 SCORE_BONUS_ASSIST_FRAG_CARRIER_S);

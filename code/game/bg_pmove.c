@@ -415,7 +415,7 @@ static qboolean PM_CheckWaterJump(void) {
 
 	spot[2] += 16;
 	cont = pm->pointcontents(spot, pm->ps->clientNum);
-	if (cont) {
+	if (cont & (CONTENTS_SOLID|CONTENTS_PLAYERCLIP|CONTENTS_BODY)) {
 		return qfalse;
 	}
 
@@ -1874,7 +1874,7 @@ void PmoveSingle(pmove_t *pmove) {
 	// set the firing flag for continuous beam weapons
 	// HERBY: Imperius charging
 	if (!(pm->ps->pm_flags & PMF_RESPAWNED) && (pm->ps->pm_type != PM_INTERMISSION) && (PM_FREEZE != pm->ps->pm_type) &&
-		(pm->cmd.buttons & BUTTON_ATTACK) && pm->ps->ammo[pm->ps->weapon] &&
+		pm->ps->pm_type != PM_NOCLIP && (pm->cmd.buttons & BUTTON_ATTACK) && pm->ps->ammo[pm->ps->weapon] &&
 		(pm->ps->weapon != WP_IMPERIUS || pm->ps->weaponstate == WEAPON_CHARGING) &&
 		((pm->gametype != GT_LPS) || (pm->ps->stats[STAT_LIVESLEFT] > 0)) && !(pm->cmd.buttons & BUTTON_TALK)) {
 		pm->ps->eFlags |= EF_FIRING;
