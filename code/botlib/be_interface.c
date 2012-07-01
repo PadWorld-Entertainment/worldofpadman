@@ -318,7 +318,7 @@ void AAS_TestMovementPrediction(int entnum, vec3_t origin, vec3_t dir);
 void ElevatorBottomCenter(aas_reachability_t *reach, vec3_t bottomcenter);
 int BotGetReachabilityToGoal(vec3_t origin, int areanum, int lastgoalareanum, int lastareanum, int *avoidreach,
 							 float *avoidreachtimes, int *avoidreachtries, bot_goal_t *goal, int travelflags,
-							 int movetravelflags, struct bot_avoidspot_s *avoidspots, int numavoidspots, int *flags);
+							 struct bot_avoidspot_s *avoidspots, int numavoidspots, int *flags);
 
 int AAS_PointLight(vec3_t origin, int *red, int *green, int *blue);
 
@@ -527,7 +527,7 @@ int BotExportTest(int parm0, char *parm1, vec3_t parm2, vec3_t parm3) {
 									  lastgoalareanum, lastareanum,
 									  avoidreach, avoidreachtimes, avoidreachtries,
 									  &goal, TFL_DEFAULT|TFL_FUNCBOB|TFL_ROCKETJUMP,
-		TFL_DEFAULT|TFL_FUNCBOB|TFL_ROCKETJUMP, NULL, 0, &resultFlags); AAS_ReachabilityFromNum(reachnum, &reach);
+		NULL, 0, &resultFlags); AAS_ReachabilityFromNum(reachnum, &reach);
 		AAS_ShowReachability(&reach);
 		*/
 		int curarea;
@@ -544,7 +544,7 @@ int BotExportTest(int parm0, char *parm1, vec3_t parm2, vec3_t parm3) {
 			reachnum =
 				BotGetReachabilityToGoal(curorigin, curarea, lastgoalareanum, lastareanum, avoidreach, avoidreachtimes,
 										 avoidreachtries, &goal, TFL_DEFAULT | TFL_FUNCBOB | TFL_ROCKETJUMP,
-										 TFL_DEFAULT | TFL_FUNCBOB | TFL_ROCKETJUMP, NULL, 0, &resultFlags);
+										 NULL, 0, &resultFlags);
 			AAS_ReachabilityFromNum(reachnum, &reach);
 			AAS_ShowReachability(&reach);
 			VectorCopy(reach.end, origin);

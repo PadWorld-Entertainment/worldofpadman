@@ -816,7 +816,7 @@ CG_AdjustPositionForMover
 Also called by client movement prediction code
 =========================
 */
-void CG_AdjustPositionForMover(const vec3_t in, int moverNum, int fromTime, int toTime, vec3_t out) {
+void CG_AdjustPositionForMover(const vec3_t in, int moverNum, int fromTime, int toTime, vec3_t out, vec3_t angles_in, vec3_t angles_out) {
 	centity_t *cent;
 	vec3_t oldOrigin, origin, deltaOrigin;
 	vec3_t oldAngles, angles, deltaAngles;
@@ -825,12 +825,14 @@ void CG_AdjustPositionForMover(const vec3_t in, int moverNum, int fromTime, int 
 
 	if (moverNum <= 0 || moverNum >= ENTITYNUM_MAX_NORMAL) {
 		VectorCopy(in, out);
+		VectorCopy(angles_in, angles_out);
 		return;
 	}
 
 	cent = &cg_entities[moverNum];
 	if (cent->currentState.eType != ET_MOVER) {
 		VectorCopy(in, out);
+		VectorCopy(angles_in, angles_out);
 		return;
 	}
 
@@ -853,6 +855,7 @@ void CG_AdjustPositionForMover(const vec3_t in, int moverNum, int fromTime, int 
 	VectorAdd(deltaOrigin, move2, deltaOrigin);
 
 	VectorAdd(in, deltaOrigin, out);
+	VectorAdd(angles_in, deltaAngles, angles_out);
 }
 
 /*
@@ -927,7 +930,7 @@ static void CG_CalcEntityLerpPositions(centity_t *cent) {
 	// player state
 	if (cent != &cg.predictedPlayerEntity) {
 		CG_AdjustPositionForMover(cent->lerpOrigin, cent->currentState.groundEntityNum, cg.snap->serverTime, cg.time,
-								  cent->lerpOrigin);
+								  cent->lerpOrigin, cent->lerpAngles, cent->lerpAngles);
 	}
 }
 

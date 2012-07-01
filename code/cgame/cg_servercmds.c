@@ -476,6 +476,8 @@ static void CG_MapRestart(void) {
 
 	cg.timelimitWarnings = 0;
 
+	cg.rewardTime = 0;
+	cg.rewardStack = 0;
 	cg.intermissionStarted = qfalse;
 	cg.levelShot = qfalse;
 

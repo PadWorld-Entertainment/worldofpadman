@@ -736,7 +736,7 @@ void BotAddAvoidSpot(int movestate, vec3_t origin, float radius, int type) {
 //===========================================================================
 int BotGetReachabilityToGoal(vec3_t origin, int areanum, int lastgoalareanum, int lastareanum, int *avoidreach,
 							 float *avoidreachtimes, int *avoidreachtries, bot_goal_t *goal, int travelflags,
-							 int movetravelflags, struct bot_avoidspot_s *avoidspots, int numavoidspots, int *flags) {
+							 struct bot_avoidspot_s *avoidspots, int numavoidspots, int *flags) {
 	int i, t, besttime, bestreachnum, reachnum;
 	aas_reachability_t reach;
 
@@ -746,7 +746,6 @@ int BotGetReachabilityToGoal(vec3_t origin, int areanum, int lastgoalareanum, in
 	//
 	if (AAS_AreaDoNotEnter(areanum) || AAS_AreaDoNotEnter(goal->areanum)) {
 		travelflags |= TFL_DONOTENTER;
-		movetravelflags |= TFL_DONOTENTER;
 	} // end if
 	// use the routing to find the next area to go to
 	besttime = 0;
@@ -864,8 +863,7 @@ int BotMovementViewTarget(int movestate, bot_goal_t *goal, int travelflags, floa
 				return qtrue;
 		} // end if
 		reachnum = BotGetReachabilityToGoal(reach.end, reach.areanum, ms->lastgoalareanum, lastareanum, ms->avoidreach,
-											ms->avoidreachtimes, ms->avoidreachtries, goal, travelflags, travelflags,
-											NULL, 0, NULL);
+											ms->avoidreachtimes, ms->avoidreachtries, goal, travelflags, NULL, 0, NULL);
 		VectorCopy(reach.end, end);
 		lastareanum = reach.areanum;
 		if (lastareanum == goal->areanum) {
@@ -922,7 +920,7 @@ int BotPredictVisiblePosition(vec3_t origin, int areanum, bot_goal_t *goal, int 
 	for (i = 0; i < 20 && (areanum != goal->areanum); i++) {
 		//
 		reachnum = BotGetReachabilityToGoal(end, areanum, lastgoalareanum, lastareanum, avoidreach, avoidreachtimes,
-											avoidreachtries, goal, travelflags, travelflags, NULL, 0, NULL);
+											avoidreachtries, goal, travelflags, NULL, 0, NULL);
 		if (!reachnum)
 			return qfalse;
 		AAS_ReachabilityFromNum(reachnum, &reach);
@@ -2953,7 +2951,7 @@ void BotShowRoute(vec3_t org, bot_goal_t *goal) {
 		}
 		reachnum =
 			BotGetReachabilityToGoal(curorigin, curarea, 0, 0, avoidreach, avoidreachtimes, avoidreachtries, goal,
-									 TFL_DEFAULT | TFL_FUNCBOB, TFL_DEFAULT | TFL_FUNCBOB, NULL, 0, &resultFlags);
+									 TFL_DEFAULT | TFL_FUNCBOB, NULL, 0, &resultFlags);
 
 		AAS_ReachabilityFromNum(reachnum, &reach);
 
@@ -3189,7 +3187,7 @@ void BotMoveToGoal(bot_moveresult_t *result, int movestate, bot_goal_t *goal, in
 			// get a new reachability leading towards the goal
 			reachnum = BotGetReachabilityToGoal(
 				ms->origin, ms->areanum, ms->lastgoalareanum, ms->lastareanum, ms->avoidreach, ms->avoidreachtimes,
-				ms->avoidreachtries, goal, travelflags, travelflags, ms->avoidspots, ms->numavoidspots, &resultflags);
+				ms->avoidreachtries, goal, travelflags, ms->avoidspots, ms->numavoidspots, &resultflags);
 			// the area number the reachability starts in
 			ms->reachareanum = ms->areanum;
 			// reset some state variables
@@ -3328,7 +3326,7 @@ void BotMoveToGoal(bot_moveresult_t *result, int movestate, bot_goal_t *goal, in
 				foundjumppad = qtrue;
 				lastreachnum = BotGetReachabilityToGoal(
 					end, areas[i], ms->lastgoalareanum, ms->lastareanum, ms->avoidreach, ms->avoidreachtimes,
-					ms->avoidreachtries, goal, travelflags, TFL_JUMPPAD, ms->avoidspots, ms->numavoidspots, NULL);
+					ms->avoidreachtries, goal, TFL_JUMPPAD, ms->avoidspots, ms->numavoidspots, NULL);
 				if (lastreachnum) {
 					ms->lastreachnum = lastreachnum;
 					ms->lastareanum = areas[i];
