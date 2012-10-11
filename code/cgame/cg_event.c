@@ -997,19 +997,19 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	{
 		switch (es->eventParm) {
 		case GTS_RED_CAPTURE: // CTF: red team captured the blue flag, 1FCTF: red team captured the neutral flag
-			if (cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_RED)
+			if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED)
 				CG_AddBufferedSound(cgs.media.captureYourTeamSound);
 			else
 				CG_AddBufferedSound(cgs.media.captureOpponentSound);
 			break;
 		case GTS_BLUE_CAPTURE: // CTF: blue team captured the red flag, 1FCTF: blue team captured the neutral flag
-			if (cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_BLUE)
+			if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE)
 				CG_AddBufferedSound(cgs.media.captureYourTeamSound);
 			else
 				CG_AddBufferedSound(cgs.media.captureOpponentSound);
 			break;
 		case GTS_RED_RETURN: // CTF: blue flag returned, 1FCTF: never used
-			if (cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_RED)
+			if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED)
 				CG_AddBufferedSound(cgs.media.returnYourTeamSound);
 			else
 				CG_AddBufferedSound(cgs.media.returnOpponentSound);
@@ -1017,7 +1017,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			CG_AddBufferedSound(cgs.media.blueFlagReturnedSound);
 			break;
 		case GTS_BLUE_RETURN: // CTF red flag returned, 1FCTF: neutral flag returned
-			if (cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_BLUE)
+			if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE)
 				CG_AddBufferedSound(cgs.media.returnYourTeamSound);
 			else
 				CG_AddBufferedSound(cgs.media.returnOpponentSound);
@@ -1029,11 +1029,11 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			// if this player picked up the flag then a sound is played in CG_CheckLocalSounds
 			if (cg.snap->ps.powerups[PW_BLUEFLAG]) {
 			} else {
-				if (cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_BLUE) {
+				if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
 					CG_AddBufferedSound(cgs.media.takenOpponentSound);
 					// "voc_"-sound:
 					CG_AddBufferedSound(cgs.media.enemyTookYourFlagSound);
-				} else if (cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_RED) {
+				} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
 					CG_AddBufferedSound(cgs.media.takenYourTeamSound);
 					// "voc_"-sound:
 					CG_AddBufferedSound(cgs.media.yourTeamTookEnemyFlagSound);
@@ -1044,11 +1044,11 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			// if this player picked up the flag then a sound is played in CG_CheckLocalSounds
 			if (cg.snap->ps.powerups[PW_REDFLAG]) {
 			} else {
-				if (cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_RED) {
+				if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
 					CG_AddBufferedSound(cgs.media.takenOpponentSound);
 					// "voc_"-sound:
 					CG_AddBufferedSound(cgs.media.enemyTookYourFlagSound);
-				} else if (cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_BLUE) {
+				} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
 					CG_AddBufferedSound(cgs.media.takenYourTeamSound);
 					// "voc_"-sound:
 					CG_AddBufferedSound(cgs.media.yourTeamTookEnemyFlagSound);
