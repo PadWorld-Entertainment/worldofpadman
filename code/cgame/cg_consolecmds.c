@@ -35,7 +35,7 @@ static void CG_TargetCommand_f(void) {
 	}
 
 	trap_Argv(1, test, 4);
-	trap_SendConsoleCommand(va("gc %i %i", targetNum, atoi(test)));
+	trap_SendClientCommand(va("gc %i %i", targetNum, atoi(test)));
 }
 
 /*
