@@ -2879,7 +2879,7 @@ int AINode_Battle_Retreat(bot_state_t *bs) {
 		return qfalse;
 	}
 	// update the last time the enemy was visible
-	if (gametype == GT_LPS || // in lps the bot allways known the enemy position	// cyr 20055
+	if (gametype == GT_LPS || // in lps the bot always known the enemy position	// cyr 20055
 		BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, bs->enemy)) {
 		bs->enemyvisible_time = FloatTime();
 		VectorCopy(entinfo.origin, target);
@@ -3100,7 +3100,7 @@ int AINode_Battle_NBG(bot_state_t *bs) {
 	// map specific code
 	BotMapScripts(bs);
 	// update the last time the enemy was visible
-	if (gametype == GT_LPS || // in lps the bot allways known the enemy position	// cyr 20055
+	if (gametype == GT_LPS || // in lps the bot always known the enemy position	// cyr 20055
 		BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, bs->enemy)) {
 		bs->enemyvisible_time = FloatTime();
 		VectorCopy(entinfo.origin, target);
