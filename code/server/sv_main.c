@@ -1125,6 +1125,11 @@ void SV_Frame(int msec) {
 	// check timeouts
 	SV_CheckTimeouts();
 
+#ifdef USE_CSS
+	// reset current and build new snapshot on first query
+	SV_IssueNewSnapshot();
+#endif
+
 	// send messages back to the clients
 	SV_SendClientMessages();
 
