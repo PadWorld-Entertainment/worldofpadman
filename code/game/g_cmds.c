@@ -577,7 +577,7 @@ void SetTeam(gentity_t *ent, const char *s) {
 	//
 
 	// if the player was dead leave the body
-	if (client->ps.stats[STAT_HEALTH] <= 0 && !lpsNoLives) {
+	if (client->ps.stats[STAT_HEALTH] <= 0 && !lpsNoLives && client->pers.connected == CON_CONNECTED) {
 		CopyToBodyQue(ent);
 	}
 
@@ -629,6 +629,11 @@ void SetTeam(gentity_t *ent, const char *s) {
 
 	// get and distribute relevant parameters
 	ClientUserinfoChanged(clientNum);
+
+	// client hasn't spawned yet, they sent an early team command
+	if (client->pers.connected != CON_CONNECTED) {
+		return;
+	}
 
 	ClientBegin(clientNum);
 }
@@ -1823,7 +1828,15 @@ void ClientCommand(int clientNum) {
 	char cmd[MAX_TOKEN_CHARS];
 
 	ent = g_entities + clientNum;
-	if (!ent->client) {
+	if (!ent->client || ent->client->pers.connected != CON_CONNECTED) {
+		if (ent->client && ent->client->pers.localClient) {
+			// Handle early team command sent by UI when starting a local
+			// team play game.
+			trap_Argv(0, cmd, sizeof(cmd));
+			if (Q_stricmp(cmd, "team") == 0) {
+				Cmd_Team_f(ent);
+			}
+		}
 		return; // not fully in game yet
 	}
 
