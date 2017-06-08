@@ -2165,11 +2165,6 @@ qboolean EnemyFitsWell(bot_state_t *bs, aas_entityinfo_t *entinfo, int curenemy)
 	return qfalse;
 }
 // cyr}
-/*
-==================
-BotFindEnemy
-==================
-*/
 
 // detect enemys that changed teams or went spec
 qboolean BotNmyTurnedInvalid(bot_state_t *bs) {
@@ -2196,6 +2191,11 @@ qboolean BotNmyTurnedInvalid(bot_state_t *bs) {
 	return qfalse;
 }
 
+/*
+==================
+BotFindEnemy
+==================
+*/
 int BotFindEnemy(bot_state_t *bs, int curenemy) {
 	int i, healthdecrease;
 	float f, alertness, easyfragger, vis;
@@ -2261,17 +2261,20 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 	} else if (ClientInSprayroom(bs->client)) // after spraying all carts, attack no players nor walls
 		return qfalse;
 
-	//
 	for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
-
-		if (i == bs->client)
+		if (i == bs->client) {
 			continue;
+		}
 		// if it's the current enemy
-		if (i == curenemy)
+		if (i == curenemy) {
 			continue;
-		//
+		}
+		// if the enemy has targeting disabled
+		if (g_entities[i].flags & FL_NOTARGET) {
+			continue;
+		}
 		BotEntityInfo(i, &entinfo);
-		//
+
 		if (!entinfo.valid)
 			continue;
 		// if the enemy isn't dead and the enemy isn't the bot self
@@ -2287,7 +2290,7 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 		// if not an easy fragger don't shoot at chatting players
 		if (easyfragger < 0.5 && EntityIsChatting(&entinfo))
 			continue;
-		//
+
 		if (lastteleport_time > FloatTime() - 3) {
 			VectorSubtract(entinfo.origin, lastteleport_origin, dir);
 			if (VectorLengthSquared(dir) < Square(70))
