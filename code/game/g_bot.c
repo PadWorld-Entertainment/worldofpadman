@@ -651,12 +651,7 @@ void Svcmd_AddBot_f(void) {
 	if (!string[0]) {
 		skill = 4;
 	} else {
-		skill = atof(string);
-
-		if (skill < 1.0f)
-			skill = 1.0f;
-		else if (skill > 5.0f)
-			skill = 5.0f;
+		skill = Com_Clamp(1.0f, 5.0f, (float)atof(string));
 	}
 
 	// team
