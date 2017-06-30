@@ -114,7 +114,7 @@ static int G_ParseBotInfos(char *buf, int max, char *infos[]) {
 G_AddRandomBot
 ===============
 */
-void G_AddRandomBot(int team) {
+static void G_AddRandomBot(int team) {
 	int i, n, num;
 	float skill;
 	const char *value, *teamstr;
