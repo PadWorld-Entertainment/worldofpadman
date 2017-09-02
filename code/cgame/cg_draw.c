@@ -1133,12 +1133,12 @@ static void CG_DrawTeamInfo(void) {
 
 		h = (cgs.teamChatPos - cgs.teamLastChatPos) * TINYCHAR_HEIGHT;
 
-		if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
+		if (cgs.clientinfo[cg.clientNum].team == TEAM_RED) {
 			hcolor[0] = 1.0f;
 			hcolor[1] = 0.0f;
 			hcolor[2] = 0.0f;
 			hcolor[3] = 0.33f;
-		} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
+		} else if (cgs.clientinfo[cg.clientNum].team == TEAM_BLUE) {
 			hcolor[0] = 0.0f;
 			hcolor[1] = 0.0f;
 			hcolor[2] = 1.0f;
