@@ -609,6 +609,9 @@ typedef struct {
 	vec3_t			modeloffset;
 	float			modelscale;
 
+	qboolean		fixedlegs;		// true if legs yaw is always the same as torso yaw
+	qboolean		fixedtorso;		// true if torso never changes yaw
+
 	qhandle_t		weaponModel;
 	qhandle_t		barrelModel;
 	qhandle_t		flashModel;
