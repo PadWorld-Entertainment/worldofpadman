@@ -1776,7 +1776,7 @@ void trap_GetGlconfig(glconfig_t *glconfig);
 void trap_GetGameState(gameState_t *gamestate);
 
 // cgame will poll each frame to see if a newer snapshot has arrived
-// that it is interested in.  The time is returned seperately so that
+// that it is interested in.  The time is returned separately so that
 // snapshot latency can be calculated.
 void trap_GetCurrentSnapshotNumber(int *snapshotNumber, int *serverTime);
 

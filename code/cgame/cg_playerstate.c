@@ -48,6 +48,9 @@ static void CG_CheckAmmo(void) {
 		if (!(weapons & (1 << i))) {
 			continue;
 		}
+		if (cg.snap->ps.ammo[i] < 0) {
+			continue;
+		}
 		switch (i) {
 		case WP_BETTY:
 		case WP_BALLOONY:
