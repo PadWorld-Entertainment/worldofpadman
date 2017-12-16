@@ -817,7 +817,7 @@ void ClientUserinfoChanged(int clientNum) {
 	}
 
 	if (client->pers.connected == CON_CONNECTED) {
-		if (strcmp(oldname, client->pers.netname)) {
+		if (strcmp(oldname, client->pers.netname) != 0) {
 			trap_SendServerCommand(-1,
 								   va("print \"%s" S_COLOR_WHITE " renamed to %s\n\"", oldname, client->pers.netname));
 		}
@@ -853,8 +853,8 @@ void ClientUserinfoChanged(int clientNum) {
 	teamLeader = client->sess.teamLeader;
 
 	// colors
-	strcpy(c1, Info_ValueForKey(userinfo, "color1"));
-	strcpy(c2, Info_ValueForKey(userinfo, "syc_color"));
+	Q_strncpyz(c1, Info_ValueForKey(userinfo, "color1"), sizeof(c1));
+	Q_strncpyz(c2, Info_ValueForKey(userinfo, "syc_color"), sizeof(c2));
 
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
