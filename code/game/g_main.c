@@ -1439,6 +1439,12 @@ static void CheckExitRules(void) {
 	}
 	*/
 
+	if (g_fraglimit.integer < 0) {
+		G_Printf("fraglimit %i is out of range, defaulting to 0\n", g_fraglimit.integer);
+		trap_Cvar_Set("fraglimit", "0");
+		trap_Cvar_Update(&g_fraglimit);
+	}
+
 	if ((g_gametype.integer == GT_LPS) && !(g_LPS_flags.integer & LPSF_PPOINTLIMIT)) {
 		int playersWithLivesLeft = 0;
 		gclient_t *tmpcl = NULL;
@@ -1501,6 +1507,12 @@ static void CheckExitRules(void) {
 				return;
 			}
 		}
+	}
+
+	if (g_capturelimit.integer < 0) {
+		G_Printf("capturelimit %i is out of range, defaulting to 0\n", g_capturelimit.integer);
+		trap_Cvar_Set("capturelimit", "0");
+		trap_Cvar_Update(&g_capturelimit);
 	}
 
 	if (g_gametype.integer >= GT_CTF && g_capturelimit.integer) {
