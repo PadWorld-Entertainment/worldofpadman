@@ -407,6 +407,13 @@ int BotChooseBestFightWeapon(int weaponstate, int *inventory)
 	float weight, bestweight;
 	weaponconfig_t *wc;
 	bot_weaponstate_t *ws;
+	// cyr
+	int j=0;
+	qboolean setcs = qfalse;
+	char info[1024]="0\\test\\";
+//	char* cs;
+
+	setcs = LibVarGetValue("showweaponweights");	// cyr
 
 	ws = BotWeaponStateFromHandle(weaponstate);
 	if (!ws) return 0;
@@ -429,7 +436,15 @@ int BotChooseBestFightWeapon(int weaponstate, int *inventory)
 			bestweight = weight;
 			bestweapon = i;
 		} //end if
+		if(setcs && weight){	// cyr.. write to infostring
+			strcat(info, va("%d\\%s: %.1f\\",j++, wc->weaponinfo[i].name, weight) );
+		}
 	} //end for
+	// cyr
+	if(setcs){
+		botimport.SetConfigString(inventory[2], info/*va("1\\%s\\2\\%s","hello world","its me")*/ );	// cyr	
+	//botimport.Print(PRT_MESSAGE, "sending info string: %s\n\n", info);
+	}
 	return bestweapon;
 } //end of the function BotChooseBestFightWeapon
 //===========================================================================
@@ -540,4 +555,5 @@ void BotShutdownWeaponAI(void)
 		} //end if
 	} //end for
 } //end of the function BotShutdownWeaponAI
+
 

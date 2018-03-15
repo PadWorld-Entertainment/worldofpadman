@@ -554,6 +554,7 @@ typedef struct srfPoly_s {
 	int				fogIndex;
 	int				numVerts;
 	polyVert_t		*verts;
+	int				lvl;//sortSL: for spraylogo stacking
 } srfPoly_t;
 
 typedef struct srfDisplayList_s {
@@ -1104,6 +1105,8 @@ extern	cvar_t	*r_printShaders;
 extern	cvar_t	*r_saveFontData;
 
 extern	cvar_t	*r_GLlibCoolDownMsec;
+
+extern	cvar_t	*r_jpgScreenshotQuality;
 
 //====================================================================
 

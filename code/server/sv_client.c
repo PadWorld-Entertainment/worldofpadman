@@ -81,6 +81,11 @@ void SV_GetChallenge( netadr_t from ) {
 		i = oldest;
 	}
 
+	// we don't use auth-server in WoP
+	challenge->pingTime = svs.time;
+	NET_OutOfBandPrint( NS_SERVER, from, "challengeResponse %i", challenge->challenge );
+	return;
+/* ... nonCDKEY
 	// if they are on a lan address, send the challengeResponse immediately
 	if ( Sys_IsLANAddress( from ) ) {
 		challenge->pingTime = svs.time;
@@ -133,6 +138,7 @@ void SV_GetChallenge( netadr_t from ) {
 			"getIpAuthorize %i %i.%i.%i.%i %s 0 %s",  svs.challenges[i].challenge,
 			from.ip[0], from.ip[1], from.ip[2], from.ip[3], game, sv_strictAuth->string );
 	}
+*/
 }
 
 /*
@@ -145,6 +151,9 @@ challengeResponse to it
 ====================
 */
 void SV_AuthorizeIpPacket( netadr_t from ) {
+	return; // WoP should not use the authorize-server/cdkey
+
+/* ... nonCDKEY
 	int		challenge;
 	int		i;
 	char	*s;
@@ -210,6 +219,7 @@ void SV_AuthorizeIpPacket( netadr_t from ) {
 
 	// clear the challenge record so it won't timeout and let them through
 	Com_Memset( &svs.challenges[i], 0, sizeof( svs.challenges[i] ) );
+*/
 }
 
 /*

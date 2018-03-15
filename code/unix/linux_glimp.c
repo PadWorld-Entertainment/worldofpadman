@@ -199,8 +199,8 @@ static const char *Q_stristr( const char *s, const char *find)
 
 static char *XLateKey(XKeyEvent *ev, int *key)
 {
-  static unsigned char buf[64];
-  static unsigned char bufnomod[2];
+  static char buf[64];
+  static char bufnomod[2];
   KeySym keysym;
   int XLookupRet;
 
@@ -1558,16 +1558,17 @@ void GLimp_Init( void )
   {
     glConfig.hardwareType = GLHW_GENERIC;
 
-    ri.Cvar_Set( "r_textureMode", "GL_LINEAR_MIPMAP_NEAREST" );
+    ri.Cvar_Set( "r_textureMode", "GL_LINEAR_MIPMAP_LINEAR" );
 
     // VOODOO GRAPHICS w/ 2MB
     if ( Q_stristr( buf, "voodoo graphics/1 tmu/2 mb" ) )
     {
+      ri.Cvar_Set( "r_textureMode", "GL_LINEAR_MIPMAP_NEAREST" );
       ri.Cvar_Set( "r_picmip", "2" );
       ri.Cvar_Get( "r_picmip", "1", CVAR_ARCHIVE | CVAR_LATCH );
     } else
     {
-      ri.Cvar_Set( "r_picmip", "1" );
+      ri.Cvar_Set( "r_picmip", "0" );
 
       if ( Q_stristr( buf, "rage 128" ) || Q_stristr( buf, "rage128" ) )
       {

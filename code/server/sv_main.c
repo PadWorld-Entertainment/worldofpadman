@@ -238,7 +238,6 @@ void SV_MasterHeartbeat( void ) {
 	}
 	svs.nextHeartbeatTime = svs.time + HEARTBEAT_MSEC;
 
-
 	// send to group masters
 	for ( i = 0 ; i < MAX_MASTER_SERVERS ; i++ ) {
 		if ( !sv_master[i]->string[0] ) {
@@ -284,6 +283,9 @@ Informs all masters that this server is going down
 =================
 */
 void SV_MasterShutdown( void ) {
+//wopMaster{
+	return; // for wopMaster, there is no sense in heartbeats on shutdown
+//wopMaster}
 	// send a hearbeat right now
 	svs.nextHeartbeatTime = -9999;
 	SV_MasterHeartbeat();
@@ -296,6 +298,75 @@ void SV_MasterShutdown( void ) {
 	// it will be removed from the list
 }
 
+//wopMaster{
+/*
+#######################
+SV_WoPMasterUpadte
+
+  sending a http-request to the wop-masterserver
+#######################
+*/
+#define	WM_UPDATEINTERVAL	15*60*1000
+void SV_WoPMasterUpadte(void)
+{
+	static netadr_t	adr[MAX_WOPMASTER_SERVERS];
+	int			i;
+	int			r;
+	int port = Cvar_Get( "net_port", va( "%i", PORT_SERVER ), CVAR_LATCH )->integer;
+
+	if( !wop_masterSendHeartBeat->integer )
+		return;
+
+	// "dedicated 1" is for lan play, "dedicated 2" is for inet public play
+	if( !com_dedicated || com_dedicated->integer != 2 ) {
+		return;		// only dedicated servers send heartbeats
+	}
+
+	for( i = 0 ; i < MAX_WOPMASTER_SERVERS ; ++i )
+	{
+		if( !wop_master[i]->string[0] )
+			continue;
+
+		if( svs.time < svs.nextWoPMasterUpdates[i] )
+			continue;
+
+		// see if we haven't already resolved the name
+		// resolving usually causes hitches on win95, so only
+		// do it when needed
+		if( wop_master[i]->modified ) {
+			wop_master[i]->modified = qfalse;
+	
+			Com_Printf( "Resolving %s\n", wop_master[i]->string );
+			if ( !NET_StringToAdr( wop_master[i]->string, &adr[i] ) ) {
+				// if the address failed to resolve, clear it
+				// so we don't take repeated dns hits
+				Com_Printf( "Couldn't resolve address: %s\n", wop_master[i]->string );
+				Cvar_Set( wop_master[i]->name, "" );
+				wop_master[i]->modified = qfalse;
+				continue;
+			}
+			if ( !strchr( sv_master[i]->string, ':' ) ) {
+				adr[i].port = BigShort( 80 );
+			}
+			Com_Printf( "%s resolved to %i.%i.%i.%i:%i\n", wop_master[i]->string,
+				adr[i].ip[0], adr[i].ip[1], adr[i].ip[2], adr[i].ip[3],
+				BigShort( adr[i].port ) );
+		}
+
+
+		r=NET_wopMasterRefresh(i, &adr[i], port);
+		if(0==r)
+		{
+			svs.nextWoPMasterUpdates[i] = svs.time + WM_UPDATEINTERVAL;
+			Com_Printf(">> WOP MASTER updated (%s)\n",wop_master[i]->string);
+		}
+		else if(r<0)
+		{
+			svs.nextWoPMasterUpdates[i] = svs.time + WM_UPDATEINTERVAL/5;
+		}
+	}
+}
+//wopMaster}
 
 /*
 ==============================================================================
@@ -884,6 +955,8 @@ void SV_Frame( int msec ) {
 
 	// send a heartbeat to the master if needed
 	SV_MasterHeartbeat();
+
+	SV_WoPMasterUpadte();
 }
 
 //============================================================================

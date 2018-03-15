@@ -84,7 +84,7 @@ void Sys_SnapVector( float *v )
 
 qboolean Sys_RandomBytes( byte *string, int len )
 {
-	HCRYPTPROV  prov;
+/*	HCRYPTPROV  prov;
 
 	if( !CryptAcquireContext( &prov, NULL, NULL,
 		PROV_RSA_FULL, CRYPT_VERIFYCONTEXT ) )  {
@@ -98,6 +98,8 @@ qboolean Sys_RandomBytes( byte *string, int len )
 	}
 	CryptReleaseContext( prov, 0 );
 	return qtrue;
+*/ //[#@] my vc don't want to find the crypt-stuff ... i can't findout why -.-
+	return qfalse;
 }
 
 
@@ -308,7 +310,12 @@ char	*Sys_DefaultHomePath(void) {
 	static char path[MAX_OSPATH];
 	FARPROC qSHGetFolderPath;
 	HMODULE shfolder = LoadLibrary("shfolder.dll");
-	
+
+	// maybe this should be solved a bit different =/
+	// at this point (fs-init) there can't be any cfg-file loaded
+	if(!win_multiUser->integer)
+		return NULL;
+
 	if(shfolder == NULL) {
 		Com_Printf("Unable to load SHFolder.dll\n");
 		return NULL;
@@ -330,7 +337,7 @@ char	*Sys_DefaultHomePath(void) {
 		return NULL;
 	}
 	Q_strncpyz( path, szPath, sizeof(path) );
-	Q_strcat( path, sizeof(path), "\\Quake3" );
+	Q_strcat( path, sizeof(path), "\\WoPadman" );
 	FreeLibrary(shfolder);
 	if( !CreateDirectory( path, NULL ) )
 	{

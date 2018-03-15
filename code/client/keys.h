@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include "keycodes.h"
 
+#define	MAX_KEYS		384
+
 typedef struct {
 	qboolean	down;
 	int			repeats;		// if > 1, it is autorepeating

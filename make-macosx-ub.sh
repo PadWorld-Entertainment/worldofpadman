@@ -1,8 +1,8 @@
 #!/bin/sh
-APPBUNDLE=ioquake3.app
-BINARY=ioquake3.ub
-PKGINFO=APPIOQ3
-ICNS=code/unix/MacSupport/ioquake3.icns
+APPBUNDLE=wop.app
+BINARY=wop-engine.ub
+PKGINFO=APPWOP
+ICNS=code/unix/MacSupport/wop.icns
 DESTDIR=build/release-darwin-ub
 BASEDIR=baseq3
 MPACKDIR=missionpack
@@ -10,8 +10,8 @@ Q3_VERSION=`grep "\#define Q3_VERSION" code/qcommon/q_shared.h | \
 	sed -e 's/.*".* \([^ ]*\)"/\1/'`;
 
 BIN_OBJ="
-	build/release-darwin-ppc/ioquake3.ppc
-	build/release-darwin-i386/ioquake3.i386
+	build/release-darwin-ppc/wop-engine.ppc
+	build/release-darwin-i386/wop-engine.i386
 "
 BASE_OBJ="
 	build/release-darwin-ppc/$BASEDIR/cgameppc.dylib
@@ -30,7 +30,7 @@ MPACK_OBJ="
 	build/release-darwin-i386/$MPACKDIR/qagamei386.dylib
 "
 if [ ! -f Makefile ]; then
-	echo "This script must be run from the ioquake3 build directory";
+	echo "This script must be run from the WoP build directory";
 fi
 
 if [ ! -d /Developer/SDKs/MacOSX10.2.8.sdk ]; then
@@ -59,7 +59,7 @@ fi
 if [ ! -d $DESTDIR/$APPBUNDLE/Contents/Resources ]; then
 	mkdir -p $DESTDIR/$APPBUNDLE/Contents/Resources
 fi
-cp $ICNS $DESTDIR/$APPBUNDLE/Contents/Resources/ioquake3.icns || exit 1;
+cp $ICNS $DESTDIR/$APPBUNDLE/Contents/Resources/wop.icns || exit 1;
 echo $PKGINFO > $DESTDIR/$APPBUNDLE/Contents/PkgInfo
 echo "
 	<?xml version=\"1.0\" encoding="UTF-8"?>
@@ -75,13 +75,13 @@ echo "
 		<key>CFBundleGetInfoString</key>
 		<string>ioquake3 $Q3_VERSION</string>
 		<key>CFBundleIconFile</key>
-		<string>ioquake3.icns</string>
+		<string>wop.icns</string>
 		<key>CFBundleIdentifier</key>
 		<string>org.icculus.quake3</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>ioquake3</string>
+		<string>WorldOfPadman</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>

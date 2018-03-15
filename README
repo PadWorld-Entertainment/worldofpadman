@@ -96,6 +96,7 @@ Makefile.local:
   USE_CURL          - use libcurl for http/ftp download support
   USE_CURL_DLOPEN   - link with libcurl at runtime
   USE_CODEC_VORBIS  - enable Ogg Vorbis support
+  USE_CODEC_MP3     - enable MP3 support. Requires libmad to be installed.
   USE_LOCAL_HEADERS - use headers local to ioq3 instead of system ones
   USE_CCACHE        - use ccache compiler caching tool
   COPYDIR           - the target installation directory

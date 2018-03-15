@@ -42,6 +42,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define	RF_WRAP_FRAMES		512		// mod the model frames by the maxframes to allow continuous
 									// animation without needing to know the frame count
 
+#define RF_FORCEENTALPHA	1024	// force the use of Entity-Alpha
+									// usefull for models(md3) without(or wrong) "shader-skin"
+
 // refdef flags
 #define RDF_NOWORLDMODEL	1		// used for player configuration screen
 #define RDF_HYPERSPACE		4		// teleportation effect

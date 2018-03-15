@@ -142,6 +142,99 @@ static client_t *SV_GetPlayerByNum( void ) {
 
 //=========================================================
 
+char* checkMapRedirect(const char* map)
+{
+static char newMap[MAX_QPATH];
+	char	expanded[MAX_QPATH];
+	int		len;
+	char*	f;
+	char*	p;
+
+	Q_strncpyz(newMap, map, sizeof(newMap));
+
+	len = FS_ReadFile( "scripts/MapGametypeRedirect.dat", (void **)&f);
+
+	if(f)
+	{
+		char* token;
+		int i=0;
+		int gt=-1;
+		int uGT=-1;
+		qboolean changed=qfalse;
+		if(sv_gametype->latchedString)
+			uGT=atoi(sv_gametype->latchedString);
+		else
+			uGT=sv_gametype->integer;
+		p=f;
+
+//		Com_Printf ("loading scripts/MapGametypeRedirect.dat\n");
+		while(token = COM_Parse(&p),token[0] && !changed)
+		{
+			++i;
+			if(i==1)
+				gt=atoi(token);
+			else if(i==2)
+			{
+				int extLen = strlen(token);
+				int mapLen = strlen(map);
+				qboolean hasExt = qfalse;
+
+				if(extLen<mapLen && !Q_stricmp(map+(mapLen-extLen),token))
+					hasExt = qtrue;
+
+				Com_Printf("%s <-> %d\n",token,gt);
+
+				if(uGT == gt)
+				{
+/*					if(hasExt)
+						Com_Printf("N... %s\n",map);
+					else
+						Com_Printf("C... %s%s\n",map,token);
+*/
+					if(!hasExt)
+					{
+						Com_sprintf(newMap,sizeof(newMap),"%s%s",map,token);
+						changed=qtrue;
+					}
+				}
+				else
+				{
+/*					if(hasExt)
+						Com_Printf("C... %s REMOVE EXT(%s)\n",map,token);
+					else
+						Com_Printf("N... %s\n",map,token);
+*/
+					if(hasExt)
+					{
+						newMap[(mapLen-extLen)] = '\0';
+						changed=qtrue;
+					}
+
+				}
+
+				if(changed)
+				{
+					Com_sprintf (expanded, sizeof(expanded), "maps/%s.bsp", newMap);
+					if ( FS_ReadFile (expanded, NULL) == -1 )
+					{
+						Com_Printf ("Can't find map %s (REDIRECT CODE)\n", expanded);
+						// make a different redirect possible
+						Q_strncpyz(newMap, map, sizeof(newMap));
+						changed=qfalse;
+					}
+				}
+
+				i=0;
+			}
+		}
+
+		FS_FreeFile (f);
+	}
+	else
+		Com_Printf ("couldn't load scripts/MapGametypeRedirect.dat\n");
+
+	return newMap;
+}
 
 /*
 ==================
@@ -161,6 +254,8 @@ static void SV_Map_f( void ) {
 	if ( !map ) {
 		return;
 	}
+
+	map = checkMapRedirect(map);
 
 	// make sure the level exists before trying to change, so that
 	// a typo at the server console won't end the game
@@ -263,7 +358,8 @@ static void SV_MapRestart_f( void ) {
 
 		Com_Printf( "variable change -- restarting.\n" );
 		// restart the map the slow way
-		Q_strncpyz( mapname, Cvar_VariableString( "mapname" ), sizeof( mapname ) );
+//		Q_strncpyz( mapname, Cvar_VariableString( "mapname" ), sizeof( mapname ) );
+		Q_strncpyz( mapname, checkMapRedirect(Cvar_VariableString("mapname")), sizeof(mapname) );
 
 		SV_SpawnServer( mapname, qfalse );
 		return;
@@ -406,6 +502,8 @@ server
 ==================
 */
 static void SV_Ban_f( void ) {
+	Com_Printf("This ban-cmd is inactive in WoP (because it's connected with the Q3-CDKey-System)\n");
+/* ... nonCDKEY
 	client_t	*cl;
 
 	// make sure server is running
@@ -451,6 +549,7 @@ static void SV_Ban_f( void ) {
 								   cl->netchan.remoteAddress.ip[2], cl->netchan.remoteAddress.ip[3] );
 		Com_Printf("%s was banned from coming back\n", cl->name);
 	}
+*/
 }
 
 /*
@@ -462,6 +561,8 @@ server
 ==================
 */
 static void SV_BanNum_f( void ) {
+	Com_Printf("This ban-cmd is inactive in WoP (because it's connected with the Q3-CDKey-System)\n");
+/* ... nonCDKEY
 	client_t	*cl;
 
 	// make sure server is running
@@ -505,6 +606,7 @@ static void SV_BanNum_f( void ) {
 								   cl->netchan.remoteAddress.ip[2], cl->netchan.remoteAddress.ip[3] );
 		Com_Printf("%s was banned from coming back\n", cl->name);
 	}
+*/
 }
 
 /*

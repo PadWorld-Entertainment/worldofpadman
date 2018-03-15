@@ -847,6 +847,7 @@ CL_RequestMotd
 ===================
 */
 void CL_RequestMotd( void ) {
+/*
 	char		info[MAX_INFO_STRING];
 
 	if ( !cl_motd->integer ) {
@@ -876,6 +877,7 @@ void CL_RequestMotd( void ) {
 	Info_SetValueForKey( info, "version", com_version->string );
 
 	NET_OutOfBandPrint( NS_CLIENT, cls.updateServer, "getmotd \"%s\"\n", info );
+*/
 }
 
 /*
@@ -1624,9 +1626,11 @@ void CL_CheckForResend( void ) {
 	switch ( cls.state ) {
 	case CA_CONNECTING:
 		// requesting a challenge
+/* ... nonCDKEY
 		if ( !Sys_IsLANAddress( clc.serverAddress ) ) {
 			CL_RequestAuthorization();
 		}
+*/
 		NET_OutOfBandPrint(NS_CLIENT, clc.serverAddress, "getchallenge");
 		break;
 		
@@ -2300,7 +2304,14 @@ void CL_InitRenderer( void ) {
 	re.BeginRegistration( &cls.glconfig );
 
 	// load character sets
-	cls.charSetShader = re.RegisterShader( "gfx/2d/bigchars" );
+	if(cls.glconfig.hardwareType == GLHW_GENERIC)
+	{
+		cls.charSetShader			= re.RegisterShader( "gfx/2d/WoPascii" );
+		if(!cls.charSetShader)
+			cls.charSetShader			= re.RegisterShader( "gfx/2d/bigchars" );
+	}
+	else
+		cls.charSetShader = re.RegisterShader( "gfx/2d/bigchars" );
 	cls.whiteShader = re.RegisterShader( "white" );
 	cls.consoleShader = re.RegisterShader( "console" );
 	g_console_field_width = cls.glconfig.vidWidth / SMALLCHAR_WIDTH - 2;
@@ -2650,13 +2661,13 @@ void CL_Init( void ) {
 	cl_guidServerUniq = Cvar_Get ("cl_guidServerUniq", "1", CVAR_ARCHIVE);
 
 	// userinfo
-	Cvar_Get ("name", "UnnamedPlayer", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("rate", "3000", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("name", "PadPlayer", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("rate", "5000", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("snaps", "20", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("model", "sarge", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("headmodel", "sarge", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("team_model", "james", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("team_headmodel", "*james", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("model", "padman", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("headmodel", "padman", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("team_model", "padman", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("team_headmodel", "padman", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("g_redTeam", "Stroggs", CVAR_SERVERINFO | CVAR_ARCHIVE);
 	Cvar_Get ("g_blueTeam", "Pagans", CVAR_SERVERINFO | CVAR_ARCHIVE);
 	Cvar_Get ("color1",  "4", CVAR_USERINFO | CVAR_ARCHIVE );
@@ -2690,6 +2701,7 @@ void CL_Init( void ) {
 	Cmd_AddCommand ("reconnect", CL_Reconnect_f);
 	Cmd_AddCommand ("localservers", CL_LocalServers_f);
 	Cmd_AddCommand ("globalservers", CL_GlobalServers_f);
+	Cmd_AddCommand ("serverlistWOP", CL_ServerListWoP_f);//wopMaster
 	Cmd_AddCommand ("rcon", CL_Rcon_f);
 	Cmd_AddCommand ("setenv", CL_Setenv_f );
 	Cmd_AddCommand ("ping", CL_Ping_f );
@@ -2708,9 +2720,9 @@ void CL_Init( void ) {
 
 	Cvar_Set( "cl_running", "1" );
 
-	CL_GenerateQKey();	
-	Cvar_Get( "cl_guid", "", CVAR_USERINFO | CVAR_ROM );
-	CL_UpdateGUID( NULL, 0 );
+//	CL_GenerateQKey();	
+//	Cvar_Get( "cl_guid", "", CVAR_USERINFO | CVAR_ROM );
+//	CL_UpdateGUID( NULL, 0 );
 
 	Com_Printf( "----- Client Initialization Complete -----\n" );
 }
@@ -2757,6 +2769,7 @@ void CL_Shutdown( void ) {
 	Cmd_RemoveCommand ("connect");
 	Cmd_RemoveCommand ("localservers");
 	Cmd_RemoveCommand ("globalservers");
+	Cmd_RemoveCommand ("serverlistWOP");//wopMaster
 	Cmd_RemoveCommand ("rcon");
 	Cmd_RemoveCommand ("setenv");
 	Cmd_RemoveCommand ("ping");
@@ -3165,6 +3178,105 @@ void CL_LocalServers_f( void ) {
 		}
 	}
 }
+
+//wopMaster{
+/*
+#######################
+CL_ServerListWoP_f
+
+#######################
+*/
+#define MAX_WOPSERVERLISTBUFFER 256
+#define MAX_LISTLINE 128
+
+void CL_ServerListWoP_f(void)
+{
+	char buffer[MAX_WOPSERVERLISTBUFFER];
+	char line[MAX_LISTLINE];
+	int lineNr=0;
+	qboolean listStarted = qfalse;
+
+	int	Serverlist = wop_Serverlist->integer;
+	int conRet;
+	int cnt=0;
+
+	if(Serverlist<1 || Serverlist>MAX_WOPMASTER_SERVERS)
+		Serverlist=1;
+	--Serverlist;
+
+	do
+	{
+		// connect to HTTP-server and send GET-msg
+		conRet=NET_wopConnectToServerlist(Serverlist,"");
+		if(conRet)
+		{
+			++cnt;
+			if(++Serverlist >= MAX_WOPMASTER_SERVERS) Serverlist=0;
+		}
+	}while(conRet && cnt<MAX_WOPMASTER_SERVERS);
+
+	if(cnt>=MAX_WOPMASTER_SERVERS)
+	{
+		Com_Printf("Couldn't connect to any WoPmaster-Server\n");
+		return;
+	}
+
+	Com_Printf( "Requesting servers from WoPmaster(%s)...\n",wop_master[Serverlist]->string);
+
+	cls.numglobalservers=-1;
+	cls.numGlobalServerAddresses=0;
+	cls.pingUpdateSource = AS_GLOBAL;
+
+	while(NET_wopGetBlockFromServerlist(buffer,MAX_WOPSERVERLISTBUFFER),buffer[0]!='\0')
+	{
+		int i;
+		int j = 0;
+		for(i=0;i<MAX_WOPSERVERLISTBUFFER && buffer[i]!='\0';++i)
+		{
+			if(buffer[i]=='\r') continue;
+
+			if(buffer[i]!='\n')
+			{
+				line[j] = buffer[i];
+				++j;
+			}
+			else
+			{
+				line[j] = '\0';
+
+				if(listStarted)
+				{
+					netadr_t tmpNAdr;
+					if(NET_StringToAdr( line, &tmpNAdr ))
+					{
+						Com_Printf("  %s\n",line);
+						cls.globalServers[cls.numGlobalServerAddresses].adr = tmpNAdr;
+						++cls.numGlobalServerAddresses;
+					}
+				}
+				else if(line[0]=='\0' && lineNr) // leer zeile vor dem eigentlichen inhalt
+				{
+					listStarted = qtrue;
+				}
+				else if(!lineNr && !strstr(line,"200 OK"))//noch mal überdenken ob das so sinn macht
+				{// keine richtige http antwort
+					goto DISCONNECTFROMSERVERLIST;
+				}
+
+				++lineNr;
+				j=0;
+			}
+		}
+//		Com_Printf("[wopServerlist] -> %s\n",buffer);
+	}
+
+DISCONNECTFROMSERVERLIST:
+	// connection beenden
+	NET_wopDisconnectFromServerlist();
+
+	cls.numglobalservers=cls.numGlobalServerAddresses;
+}
+//wopMaster}
 
 /*
 ==================

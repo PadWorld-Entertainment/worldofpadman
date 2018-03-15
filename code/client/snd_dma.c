@@ -1299,12 +1299,15 @@ void S_Base_StartBackgroundTrack( const char *intro, const char *loop ){
 	// Open stream
 	s_backgroundStream = S_CodecOpenStream(intro);
 	if(!s_backgroundStream) {
-		Com_Printf( S_COLOR_YELLOW "WARNING: couldn't open music file %s\n", intro );
+//wop_music{
+		if(strcmp(intro,"<nextsongCMD>"))
+//wop_music}
+			Com_Printf( S_COLOR_YELLOW "WARNING: couldn't open music file %s\n", intro );
 		return;
 	}
 
 	if(s_backgroundStream->info.channels != 2 || s_backgroundStream->info.rate != 22050) {
-		Com_Printf(S_COLOR_YELLOW "WARNING: music file %s is not 22k stereo\n", intro );
+		Com_DPrintf(S_COLOR_YELLOW "WARNING: music file %s is not 22k stereo\n", intro );
 	}
 }
 
@@ -1452,6 +1455,7 @@ qboolean S_Base_Init( soundInterface_t *si ) {
 	}
 
 	s_khz = Cvar_Get ("s_khz", "22", CVAR_ARCHIVE);
+	Cvar_Get("s_compression","0",CVAR_ARCHIVE); // show highquality in menu
 	s_mixahead = Cvar_Get ("s_mixahead", "0.2", CVAR_ARCHIVE);
 	s_mixPreStep = Cvar_Get ("s_mixPreStep", "0.05", CVAR_ARCHIVE);
 	s_show = Cvar_Get ("s_show", "0", CVAR_CHEAT);

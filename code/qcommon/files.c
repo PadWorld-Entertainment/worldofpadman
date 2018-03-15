@@ -2900,6 +2900,8 @@ Q3 media pak0.pk3, you'll want to remove this function
 */
 static void FS_CheckPak0( void )
 {
+	return;
+/*
 	searchpath_t	*path;
 	qboolean founddemo = qfalse;
 	unsigned foundPak = 0;
@@ -2972,6 +2974,7 @@ static void FS_CheckPak0( void )
 		|| !Q_stricmp( fs_gamedirvar->string, "missionpack" ))
 			Com_Error(ERR_FATAL, "\n*** you need to install Quake III Arena in order to play ***");
 	}
+*/
 }
 
 /*
@@ -3353,7 +3356,8 @@ void FS_InitFilesystem( void ) {
 	// busted and error out now, rather than getting an unreadable
 	// graphics screen when the font fails to load
 	if ( FS_ReadFile( "default.cfg", NULL ) <= 0 ) {
-		Com_Error( ERR_FATAL, "Couldn't load default.cfg" );
+//		Com_Error( ERR_FATAL, "Couldn't load default.cfg" );
+		Com_Printf( "Couldn't load default.cfg" );
 		// bk001208 - SafeMode see below, FIXME?
 	}
 
@@ -3391,7 +3395,7 @@ void FS_Restart( int checksumFeed ) {
 	if ( FS_ReadFile( "default.cfg", NULL ) <= 0 ) {
 		// this might happen when connecting to a pure server not using BASEGAME/pak0.pk3
 		// (for instance a TA demo server)
-		if (lastValidBase[0]) {
+/*		if (lastValidBase[0]) {
 			FS_PureServerSetLoadedPaks("", "");
 			Cvar_Set("fs_basepath", lastValidBase);
 			Cvar_Set("fs_gamedirvar", lastValidGame);
@@ -3403,13 +3407,15 @@ void FS_Restart( int checksumFeed ) {
 			return;
 		}
 		Com_Error( ERR_FATAL, "Couldn't load default.cfg" );
+*/
+		Com_Printf( "Couldn't load default.cfg" );
 	}
 
 	// bk010116 - new check before safeMode
 	if ( Q_stricmp(fs_gamedirvar->string, lastValidGame) ) {
 		// skip the q3config.cfg if "safe" is on the command line
 		if ( !Com_SafeMode() ) {
-			Cbuf_AddText ("exec q3config.cfg\n");
+			Cbuf_AddText ("exec wop_config.cfg\n");
 		}
 	}
 

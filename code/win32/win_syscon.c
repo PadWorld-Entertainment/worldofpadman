@@ -297,7 +297,7 @@ void Sys_CreateConsole( void )
 	HDC hDC;
 	WNDCLASS wc;
 	RECT rect;
-	const char *DEDCLASS = "Q3 WinConsole";
+	const char *DEDCLASS = CONSOLE_WINDOW_TITLE;
 	int nHeight;
 	int swidth, sheight;
 	int DEDSTYLE = WS_POPUPWINDOW | WS_CAPTION | WS_MINIMIZEBOX;

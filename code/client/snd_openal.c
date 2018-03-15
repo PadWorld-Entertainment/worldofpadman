@@ -917,7 +917,6 @@ void S_AL_StartLocalSound(sfxHandle_t sfx, int channel)
 
 	// Try to grab a source
 	src = S_AL_SrcAlloc(SRCPRI_LOCAL, -1, channel);
-	
 	if(src == -1)
 		return;
 
@@ -1517,8 +1516,9 @@ void S_AL_MusicProcess(ALuint b)
 		// the music stream.
 		if(intro_stream)
 			intro_stream = NULL;
-		else
-			mus_stream = S_CodecOpenStream(s_backgroundLoop);
+//wop_music ... always load the new file if the old file is done (std ioq3 loads the first loop at "music-cmd")
+//		else
+		mus_stream = S_CodecOpenStream(s_backgroundLoop);
 		
 		curstream = mus_stream;
 
@@ -1563,11 +1563,11 @@ void S_AL_StartBackgroundTrack( const char *intro, const char *loop )
 	int i;
 	qboolean issame;
 
-	// Stop any existing music that might be playing
-	S_AL_StopBackgroundTrack();
-
 	if((!intro || !*intro) && (!loop || !*loop))
 		return;
+
+	// Stop any existing music that might be playing
+	S_AL_StopBackgroundTrack();
 
 	// Allocate a musicSource
 	S_AL_MusicSourceGet();
@@ -1596,8 +1596,18 @@ void S_AL_StartBackgroundTrack( const char *intro, const char *loop )
 	else
 		intro_stream = NULL;
 
+//wop_music{
+	//loading first loop hear will
+	//makes a "dead"-loop with "<nextsongCMD>"
+/*(original)
 	mus_stream = S_CodecOpenStream(s_backgroundLoop);
 	if(!mus_stream)
+*/
+	if(issame)
+		mus_stream = S_CodecOpenStream(s_backgroundLoop);
+
+	if(issame?!mus_stream:!intro_stream)
+//wop_music}
 	{
 		S_AL_CloseMusicFiles();
 		S_AL_MusicSourceFree();

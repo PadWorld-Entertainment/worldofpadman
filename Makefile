@@ -7,6 +7,7 @@
 #  and a little more by Ryan C. Gordon.
 #  and a little more by Rafael Barrero
 #  and a little more by the ioq3 cr3w
+#  ... a little more by wop-noob (raute ;P)
 #
 # GNU Make required
 #
@@ -27,10 +28,10 @@ ifeq ($(COMPILE_PLATFORM),mingw32)
 endif
 
 BUILD_CLIENT     =
-BUILD_CLIENT_SMP =
+BUILD_CLIENT_SMP =0
 BUILD_SERVER     =
-BUILD_GAME_SO    =
-BUILD_GAME_QVM   =
+BUILD_GAME_SO    =0
+BUILD_GAME_QVM   =0
 
 #############################################################################
 #
@@ -68,7 +69,7 @@ endif
 export CROSS_COMPILING
 
 ifndef COPYDIR
-COPYDIR="/usr/local/games/quake3"
+COPYDIR="/usr/local/games/WorldOfPadman"
 endif
 
 ifndef MOUNT_DIR
@@ -97,7 +98,7 @@ USE_OPENAL=1
 endif
 
 ifndef USE_OPENAL_DLOPEN
-USE_OPENAL_DLOPEN=0
+USE_OPENAL_DLOPEN=1
 endif
 
 ifndef USE_CURL
@@ -113,7 +114,11 @@ ifndef USE_CURL_DLOPEN
 endif
 
 ifndef USE_CODEC_VORBIS
-USE_CODEC_VORBIS=0
+USE_CODEC_VORBIS=1
+endif
+
+ifndef USE_CODEC_MP3
+USE_CODEC_MP3=0
 endif
 
 ifndef USE_LOCAL_HEADERS
@@ -211,6 +216,10 @@ ifeq ($(PLATFORM),linux)
     BASE_CFLAGS += -DUSE_CODEC_VORBIS=1
   endif
 
+  ifeq ($(USE_CODEC_MP3),1)
+    BASE_CFLAGS += -DUSE_CODEC_MP3=1
+  endif
+
   ifeq ($(USE_SDL),1)
     BASE_CFLAGS += -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 $(shell sdl-config --cflags)
     GL_CFLAGS =
@@ -256,7 +265,8 @@ ifeq ($(PLATFORM),linux)
 
   THREAD_LDFLAGS=-lpthread
   LDFLAGS=-ldl -lm
-
+  LDFLAGS += -L/emul/linux/x86/usr/lib
+  
   ifeq ($(USE_SDL),1)
     CLIENT_LDFLAGS=$(shell sdl-config --libs)
   else
@@ -277,6 +287,10 @@ ifeq ($(PLATFORM),linux)
 
   ifeq ($(USE_CODEC_VORBIS),1)
     CLIENT_LDFLAGS += -lvorbisfile -lvorbis -logg
+  endif
+
+  ifeq ($(USE_CODEC_MP3),1)
+    CLIENT_LDFLAGS += -lmad
   endif
 
   ifeq ($(ARCH),i386)
@@ -388,6 +402,11 @@ ifeq ($(PLATFORM),darwin)
     CLIENT_LDFLAGS += -lvorbisfile -lvorbis -logg
   endif
 
+  ifeq ($(USE_CODEC_MP3),1)
+    BASE_CFLAGS += -DUSE_CODEC_MP3=1
+    CLIENT_LDFLAGS += -lmad
+  endif
+
   ifeq ($(USE_SDL),1)
     BASE_CFLAGS += -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 -D_THREAD_SAFE=1 \
       -I$(SDLHDIR)/include
@@ -450,6 +469,10 @@ ifeq ($(PLATFORM),mingw32)
     BASE_CFLAGS += -DUSE_CODEC_VORBIS=1
   endif
 
+  ifeq ($(USE_CODEC_MP3),1)
+    BASE_CFLAGS += -DUSE_CODEC_MP3=1
+  endif
+
   GL_CFLAGS =
   MINGW_CFLAGS = -DDONT_TYPEDEF_INT32
 
@@ -479,6 +502,10 @@ ifeq ($(PLATFORM),mingw32)
 
   ifeq ($(USE_CODEC_VORBIS),1)
     CLIENT_LDFLAGS += -lvorbisfile -lvorbis -logg
+  endif
+
+  ifeq ($(USE_CODEC_MP3),1)
+    CLIENT_LDFLAGS += -lmad
   endif
 
   ifeq ($(ARCH),x86)
@@ -520,6 +547,10 @@ ifeq ($(PLATFORM),freebsd)
 
   ifeq ($(USE_CODEC_VORBIS),1)
     BASE_CFLAGS += -DUSE_CODEC_VORBIS=1
+  endif
+
+  ifeq ($(USE_CODEC_MP3),1)
+    BASE_CFLAGS += -DUSE_CODEC_MP3=1
   endif
 
   ifeq ($(USE_SDL),1)
@@ -570,6 +601,9 @@ ifeq ($(PLATFORM),freebsd)
     CLIENT_LDFLAGS += -lvorbisfile -lvorbis -logg
   endif
 
+  ifeq ($(USE_CODEC_MP3),1)
+    CLIENT_LDFLAGS += -lmad
+  endif
 
 else # ifeq freebsd
 
@@ -725,13 +759,13 @@ endif #SunOS
 TARGETS =
 
 ifneq ($(BUILD_SERVER),0)
-  TARGETS += $(B)/ioq3ded.$(ARCH)$(BINEXT)
+  TARGETS += $(B)/wopded.$(ARCH)$(BINEXT)
 endif
 
 ifneq ($(BUILD_CLIENT),0)
-  TARGETS += $(B)/ioquake3.$(ARCH)$(BINEXT)
+  TARGETS += $(B)/wop-engine.$(ARCH)$(BINEXT)
   ifneq ($(BUILD_CLIENT_SMP),0)
-    TARGETS += $(B)/ioquake3-smp.$(ARCH)$(BINEXT)
+    TARGETS += $(B)/wop-smp.$(ARCH)$(BINEXT)
   endif
 endif
 
@@ -891,6 +925,7 @@ Q3OBJ = \
   $(B)/client/snd_codec.o \
   $(B)/client/snd_codec_wav.o \
   $(B)/client/snd_codec_ogg.o \
+  $(B)/client/snd_codec_mp3.o \
   \
   $(B)/client/qal.o \
   $(B)/client/snd_openal.o \
@@ -1074,10 +1109,10 @@ else
     $(B)/client/sdl_glimp_smp.o
 endif
 
-$(B)/ioquake3.$(ARCH)$(BINEXT): $(Q3OBJ) $(Q3POBJ) $(LIBSDLMAIN)
+$(B)/wop-engine.$(ARCH)$(BINEXT): $(Q3OBJ) $(Q3POBJ) $(LIBSDLMAIN)
 	$(CC)  -o $@ $(Q3OBJ) $(Q3POBJ) $(CLIENT_LDFLAGS) $(LDFLAGS) $(LIBSDLMAIN)
 
-$(B)/ioquake3-smp.$(ARCH)$(BINEXT): $(Q3OBJ) $(Q3POBJ_SMP) $(LIBSDLMAIN)
+$(B)/wop-smp.$(ARCH)$(BINEXT): $(Q3OBJ) $(Q3POBJ_SMP) $(LIBSDLMAIN)
 	$(CC)  -o $@ $(Q3OBJ) $(Q3POBJ_SMP) $(CLIENT_LDFLAGS) \
 		$(THREAD_LDFLAGS) $(LDFLAGS) $(LIBSDLMAIN)
 
@@ -1113,6 +1148,7 @@ $(B)/client/snd_main.o : $(CDIR)/snd_main.c; $(DO_CC)
 $(B)/client/snd_codec.o : $(CDIR)/snd_codec.c; $(DO_CC)
 $(B)/client/snd_codec_wav.o : $(CDIR)/snd_codec_wav.c; $(DO_CC)
 $(B)/client/snd_codec_ogg.o : $(CDIR)/snd_codec_ogg.c; $(DO_CC)
+$(B)/client/snd_codec_mp3.o : $(CDIR)/snd_codec_mp3.c; $(DO_CC)
 
 $(B)/client/qal.o : $(CDIR)/qal.c; $(DO_CC)
 $(B)/client/snd_openal.o : $(CDIR)/snd_openal.c; $(DO_CC)
@@ -1387,7 +1423,7 @@ ifeq ($(HAVE_VM_COMPILED),true)
   endif
 endif
 
-$(B)/ioq3ded.$(ARCH)$(BINEXT): $(Q3DOBJ)
+$(B)/wopded.$(ARCH)$(BINEXT): $(Q3DOBJ)
 	$(CC) -o $@ $(Q3DOBJ) $(LDFLAGS)
 
 $(B)/ded/sv_bot.o : $(SDIR)/sv_bot.c; $(DO_DED_CC)
@@ -1802,17 +1838,17 @@ copyfiles: build_release
 	-$(MKDIR) -p -m 0755 $(COPYDIR)/missionpack
 
 ifneq ($(BUILD_CLIENT),0)
-	$(INSTALL) -s -m 0755 $(BR)/ioquake3.$(ARCH)$(BINEXT) $(COPYDIR)/ioquake3.$(ARCH)$(BINEXT)
+	$(INSTALL) -s -m 0755 $(BR)/wop-engine.$(ARCH)$(BINEXT) $(COPYDIR)/wop-engine.$(ARCH)$(BINEXT)
 endif
 
 # Don't copy the SMP until it's working together with SDL.
 #ifneq ($(BUILD_CLIENT_SMP),0)
-#	$(INSTALL) -s -m 0755 $(BR)/ioquake3-smp.$(ARCH)$(BINEXT) $(COPYDIR)/ioquake3-smp.$(ARCH)$(BINEXT)
+#	$(INSTALL) -s -m 0755 $(BR)/wop-smp.$(ARCH)$(BINEXT) $(COPYDIR)/wop-smp.$(ARCH)$(BINEXT)
 #endif
 
 ifneq ($(BUILD_SERVER),0)
-	@if [ -f $(BR)/ioq3ded.$(ARCH)$(BINEXT) ]; then \
-		$(INSTALL) -s -m 0755 $(BR)/ioq3ded.$(ARCH)$(BINEXT) $(COPYDIR)/ioq3ded.$(ARCH)$(BINEXT); \
+	@if [ -f $(BR)/wopded.$(ARCH)$(BINEXT) ]; then \
+		$(INSTALL) -s -m 0755 $(BR)/wopded.$(ARCH)$(BINEXT) $(COPYDIR)/wopded.$(ARCH)$(BINEXT); \
 	fi
 endif
 

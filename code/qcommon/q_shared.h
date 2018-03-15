@@ -26,17 +26,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
-#define Q3_VERSION            "ioQ3 1.33"
+#define Q3_VERSION            "ioQ3 r1051" // "ioQ3 1.33"
 #ifndef SVN_VERSION
   #define SVN_VERSION Q3_VERSION
 #endif
-#define CLIENT_WINDOW_TITLE   "ioquake3"
+#define VERSION_INFO "WoP 1.1 ("SVN_VERSION")"
+#define CLIENT_WINDOW_TITLE   "World of Padman"
 #define CLIENT_WINDOW_ICON    "ioq3"
-#define CONSOLE_WINDOW_TITLE  "ioquake3 console"
+#define CONSOLE_WINDOW_TITLE  "WoP console"
 #define CONSOLE_WINDOW_ICON   "ioq3 console"
 // 1.32 released 7-10-2002
 
-#define BASEGAME              "baseq3"
+#define BASEGAME              "wop"
 
 #define MAX_TEAMNAME 32
 
@@ -114,19 +115,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifdef Q3_VM
    typedef int intptr_t;
 #else
-  #ifndef _MSC_VER
-    #include <stdint.h>
-  #else
-    #include <io.h>
-    typedef __int64 int64_t;
-    typedef __int32 int32_t;
-    typedef __int16 int16_t;
-    typedef __int8 int8_t;
-    typedef unsigned __int64 uint64_t;
-    typedef unsigned __int32 uint32_t;
-    typedef unsigned __int16 uint16_t;
-    typedef unsigned __int8 uint8_t;
-  #endif
+# ifndef _MSC_VER
+#  include <stdint.h>
+# else
+   typedef __int64 int64_t;
+   typedef __int32 int32_t;
+   typedef __int16 int16_t;
+   typedef __int8 int8_t;
+   typedef unsigned __int64 uint64_t;
+   typedef unsigned __int32 uint32_t;
+   typedef unsigned __int16 uint16_t;
+   typedef unsigned __int8 uint8_t;
+   typedef int intptr_t;
+# endif
 #endif
 
 typedef unsigned char 		byte;

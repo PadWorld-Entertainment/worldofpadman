@@ -1,4 +1,4 @@
-VERSION=1.34
+VERSION=1.0
 RELEASE=svn
 
 all:

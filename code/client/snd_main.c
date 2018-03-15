@@ -386,7 +386,7 @@ void S_Init( void )
 		Cmd_AddCommand( "s_stop", S_StopAllSounds );
 		Cmd_AddCommand( "s_info", S_SoundInfo );
 
-		cv = Cvar_Get( "s_useOpenAL", "1", CVAR_ARCHIVE );
+		cv = Cvar_Get( "s_useOpenAL", "0", CVAR_ARCHIVE );// ENTE doesn't like the openAL-sound
 		if( cv->integer ) {
 			//OpenAL
 			started = S_AL_Init( &si );

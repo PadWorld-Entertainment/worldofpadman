@@ -155,6 +155,22 @@ typedef struct {
 	unsigned short	port;
 } netadr_t;
 
+//wopMaster{
+typedef enum
+{
+	HS_SOCKETCLOSED,
+	HS_CONNECTING,
+	HS_CONNECTED,
+	HS_SENDING
+//	,HS_RECVING
+} wopHBhttpStats_t;
+
+int			NET_wopMasterRefresh(int master, const netadr_t* masterAddr, int port);
+int			NET_wopConnectToServerlist(int Serverlist,const char* filter);// I don't know if I will ever use the filter
+void		NET_wopGetBlockFromServerlist(char* buffer,int max);
+void		NET_wopDisconnectFromServerlist(void);
+//wopMaster}
+
 void		NET_Init( void );
 void		NET_Shutdown( void );
 void		NET_Restart( void );
@@ -233,16 +249,25 @@ PROTOCOL
 // NOTE: that stuff only works with two digits protocols
 extern int demo_protocols[];
 
-#define	UPDATE_SERVER_NAME	"update.quake3arena.com"
+#define	UPDATE_SERVER_NAME	"" //"update.quake3arena.com"
 // override on command line, config files etc.
 #ifndef MASTER_SERVER_NAME
-#define MASTER_SERVER_NAME	"master.quake3arena.com"
+#define MASTER_SERVER_NAME	"wopmaster.kickchat.com" //"master.quake3arena.com"
 #endif
 #ifndef AUTHORIZE_SERVER_NAME
-#define	AUTHORIZE_SERVER_NAME	"authorize.quake3arena.com"
+#define	AUTHORIZE_SERVER_NAME	"" //"authorize.quake3arena.com"
 #endif
 
-#define	PORT_MASTER			27950
+//wopMaster{
+#define WOP_MASTER1_ADDR	"wop-engine.sourceforge.net"
+#define WOP_MASTER1_LIST	"/cgi-bin/wopServerlist.cgi"
+#define WOP_MASTER1_HB		"/cgi-bin/wopMaster.cgi"
+#define WOP_MASTER2_ADDR	"base0x23.de"
+#define WOP_MASTER2_LIST	"/cgi-bin/wopServerlist.pl"
+#define WOP_MASTER2_HB		"/cgi-bin/wopMaster.pl"
+//wopMaster}
+
+#define	PORT_MASTER			27955	//27950
 #define	PORT_UPDATE			27951
 #ifndef PORT_AUTHORIZE
 #define	PORT_AUTHORIZE		27952
@@ -765,6 +790,17 @@ extern	cvar_t	*sv_paused;
 
 extern	cvar_t	*cl_packetdelay;
 extern	cvar_t	*sv_packetdelay;
+
+extern	cvar_t	*win_multiUser;
+
+//wopMaster{
+#define MAX_WOPMASTER_SERVERS 3
+extern	cvar_t	*wop_master[MAX_WOPMASTER_SERVERS];
+extern	cvar_t	*wop_masterHB[MAX_WOPMASTER_SERVERS];
+extern	cvar_t	*wop_masterSL[MAX_WOPMASTER_SERVERS];
+extern	cvar_t	*wop_Serverlist;
+extern	cvar_t	*wop_masterSendHeartBeat;
+//wopMaster}
 
 // com_speeds times
 extern	int		time_game;

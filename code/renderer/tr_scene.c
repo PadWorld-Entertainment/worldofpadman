@@ -105,6 +105,14 @@ void R_AddPolygonSurfaces( void ) {
 
 	for ( i = 0, poly = tr.refdef.polys; i < tr.refdef.numPolys ; i++, poly++ ) {
 		sh = R_GetShaderByHandle( poly->hShader );
+//sortSL{
+		// a hack to get the SprayLogo-"Level" into the Engine
+		// without changing the vm-interface-functions
+		if(poly->verts->st[0]>=10.0f)
+			poly->lvl = ((int)poly->verts->st[0]/10);
+		else
+			poly->lvl = 0;
+//sortSL}
 		R_AddDrawSurf( ( void * )poly, sh, poly->fogIndex, qfalse );
 	}
 }

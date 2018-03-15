@@ -969,6 +969,202 @@ void NET_Config( qboolean enableNetworking ) {
 	}
 }
 
+//wopMaster{
+
+#define MAX_WOPMASTER_BUFFER 256
+
+qboolean wopmrStat_NOTinited=qtrue;
+
+int NET_wopMasterRefresh(int master, const netadr_t* masterAddr, int port)
+{
+static wopHBhttpStats_t	wopmrStat[MAX_WOPMASTER_SERVERS];
+static int				WMsocket[MAX_WOPMASTER_SERVERS];
+	struct sockaddr_in	address;
+	int		r;
+	char	sHttpAnfrage[MAX_WOPMASTER_BUFFER];
+	unsigned long val;
+
+	if(wopmrStat_NOTinited)
+	{
+		int i;
+		memset(&wopmrStat,0,sizeof(wopmrStat));
+		for(i=0;i<MAX_WOPMASTER_SERVERS;++i)
+			WMsocket[i] = -1;
+		wopmrStat_NOTinited = qfalse;
+	}
+
+	if(master<0 || master>=MAX_WOPMASTER_SERVERS)
+		return -1;
+
+	if(!winsockInitialized)
+		return -1;
+
+	switch(wopmrStat[master])
+	{
+	case HS_SOCKETCLOSED:
+		// connect a socket to the server
+		WMsocket[master] = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+		if (WMsocket[master] < 0)
+		{
+			Com_Printf("[WoPMaster] socket() failed\n");
+			return -1;
+		}
+
+		val=1;
+		if(0 != ioctlsocket(WMsocket[master],FIONBIO,&val))
+		{
+			Com_Printf("[WoPMaster] setting nonblocking failed\n");
+			closesocket(WMsocket[master]);
+			WMsocket[master] = -1;
+			return -1;
+		}
+
+		address.sin_family = AF_INET;
+		address.sin_addr.s_addr = *((int*)masterAddr->ip);
+		address.sin_port = htons(80);
+		r = connect( WMsocket[master], (struct sockaddr *)&address, sizeof(address));
+		if (r < 0 && WSAGetLastError()!=WSAEWOULDBLOCK)
+		{
+			Com_Printf("[WoPMaster] connect failed\n");
+			closesocket(WMsocket[master]);
+			WMsocket[master] = -1;
+			return -1;
+		}
+		wopmrStat[master]=HS_CONNECTING;
+		break;
+	case HS_CONNECTING:
+		{
+			fd_set wfds,efds;
+			struct timeval tout;
+			FD_ZERO(&wfds);				
+			FD_SET(WMsocket[master],&wfds);				
+			FD_ZERO(&efds);				
+			FD_SET(WMsocket[master],&efds);
+			
+			memset(&tout,0,sizeof(tout));
+			
+			select(-1,NULL,&wfds,&efds,&tout);
+
+			if(FD_ISSET(WMsocket[master], &wfds))
+				wopmrStat[master]=HS_CONNECTED;
+			else if(FD_ISSET(WMsocket[master], &efds))
+			{
+				Com_Printf("[WoPMaster] connect failed\n");
+				closesocket(WMsocket[master]);
+				WMsocket[master] = -1;
+				wopmrStat[master]=HS_SOCKETCLOSED;
+				return -1;
+			}
+		}
+		break;
+	case HS_CONNECTED:
+  
+		Com_sprintf(sHttpAnfrage,MAX_WOPMASTER_BUFFER,"GET %s?%i HTTP/1.0\r\nUser-Agent: WoPServer\r\nHost: %s\r\n\r\n",wop_masterHB[master]->string,port,wop_master[master]->string);
+		send( WMsocket[master], sHttpAnfrage, strlen(sHttpAnfrage), 0);
+		wopmrStat[master]=HS_SENDING;
+		break;
+	
+	case HS_SENDING:
+		{
+			fd_set rfds,efds;
+			struct timeval tout;
+			FD_ZERO(&rfds);				
+			FD_SET(WMsocket[master],&rfds);				
+			FD_ZERO(&efds);				
+			FD_SET(WMsocket[master],&efds);
+			
+			memset(&tout,0,sizeof(tout));
+			
+			select(-1,&rfds,NULL,&efds,&tout);
+
+			if(FD_ISSET(WMsocket[master], &rfds))
+			{
+				closesocket(WMsocket[master]);
+				WMsocket[master] = -1;
+				wopmrStat[master]=HS_SOCKETCLOSED;
+				return 0;
+			}
+			else if(FD_ISSET(WMsocket[master], &efds))
+			{
+				Com_Printf("[WoPMaster] sending failed\n");
+				closesocket(WMsocket[master]);
+				WMsocket[master] = -1;
+				wopmrStat[master]=HS_SOCKETCLOSED;
+				return -1;
+			}
+		}
+		break;
+	}
+	
+	return 1;
+}
+
+int		WSLsocket;
+
+int NET_wopConnectToServerlist(int Serverlist,const char* filter)// I don't know if I will ever use the filter
+{
+	struct sockaddr_in	address;
+	int		r;
+	char	sHttpAnfrage[MAX_WOPMASTER_BUFFER];
+	netadr_t qaddr;
+	if(Serverlist<0 || Serverlist>=MAX_WOPMASTER_SERVERS)
+		return -1;
+
+	WSLsocket = -1;
+
+	if(!winsockInitialized)
+		return -1;
+
+	if(!Sys_StringToAdr(wop_master[Serverlist]->string,&qaddr))
+		return -1;
+
+	Com_sprintf(sHttpAnfrage,MAX_WOPMASTER_BUFFER,"GET %s?%s HTTP/1.0\r\nUser-Agent: WoPServer\r\nHost: %s\r\n\r\n",wop_masterSL[Serverlist]->string,filter,wop_master[Serverlist]->string);
+	
+	// connect a socket to the server
+	WSLsocket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (WSLsocket < 0)
+	{
+		Com_Printf("[WoPMaster] socket() failed\n");
+		return -1;
+	}
+
+	address.sin_family = AF_INET;
+	address.sin_addr.s_addr = *((int*)qaddr.ip);//inet_addr(WOP_MASTERSERVER);//htonl(INADDR_LOOPBACK);
+	address.sin_port = htons(80);
+	r = connect( WSLsocket, (struct sockaddr *)&address, sizeof(address));
+	if (r < 0)
+	{
+		Com_Printf("[WoPMaster] connect failed\n");
+		closesocket (WSLsocket);
+		WSLsocket = -1;
+		return -1;
+	}
+	else
+		send( WSLsocket, sHttpAnfrage, strlen(sHttpAnfrage), 0);
+
+	return 0;
+}
+
+void NET_wopGetBlockFromServerlist(char* buffer,int max)
+{
+	memset(buffer,0,max);
+
+	if(WSLsocket>=0)
+	{
+		if(recv(WSLsocket,buffer,max-1,0)<=0)
+			NET_wopDisconnectFromServerlist();
+	}
+}
+
+void NET_wopDisconnectFromServerlist(void)
+{
+	if(WSLsocket>=0)
+	{
+		closesocket(WSLsocket);
+		WSLsocket = -1;
+	}
+}
+//wopMaster}
 
 /*
 ====================

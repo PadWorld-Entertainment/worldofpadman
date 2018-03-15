@@ -2923,20 +2923,15 @@ static void ScanAndLoadShaderFiles( void )
 		// look for label
 		while ( 1 ) {
 			token = COM_ParseExt( &p, qtrue );
-			if ( token[0] == 0 ) {
+			// break, if we passed the end of this file
+			// memoryaddresses are reversed to the array indexes !
+			if ( token[0] == 0 || ( i-1 >= 0 && p >= buffers[i-1] ))
 				break;
-			}
 
 			hash = generateHashValue(token, MAX_SHADERTEXT_HASH);
 			shaderTextHashTableSizes[hash]++;
 			size++;
 			SkipBracedSection(&p);
-			// if we passed the pointer to the next shader file
-			if ( i < numShaders - 1 ) {
-				if ( p > buffers[i+1] ) {
-					break;
-				}
-			}
 		}
 	}
 
@@ -2958,20 +2953,15 @@ static void ScanAndLoadShaderFiles( void )
 		while ( 1 ) {
 			oldp = p;
 			token = COM_ParseExt( &p, qtrue );
-			if ( token[0] == 0 ) {
+			// break, if we passed the end of this file
+			// memoryaddresses are reversed to the array indexes !
+			if ( token[0] == 0 || ( i-1 >= 0 && p >= buffers[i-1] ) )
 				break;
-			}
 
 			hash = generateHashValue(token, MAX_SHADERTEXT_HASH);
 			shaderTextHashTable[hash][shaderTextHashTableSizes[hash]++] = oldp;
 
 			SkipBracedSection(&p);
-			// if we passed the pointer to the next shader file
-			if ( i < numShaders - 1 ) {
-				if ( p > buffers[i+1] ) {
-					break;
-				}
-			}
 		}
 	}
 

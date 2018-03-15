@@ -202,6 +202,8 @@ typedef struct botlib_import_s
 	//
 	int			(*DebugPolygonCreate)(int color, int numPoints, vec3_t *points);
 	void		(*DebugPolygonDelete)(int id);
+	// cyr
+	void		(*SetConfigString)(int index, const char *val);
 } botlib_import_t;
 
 typedef struct aas_export_s
@@ -513,4 +515,5 @@ name:						default:			module(s):			description:
 "max_levelitems"			"256"				be_ai_goal.c		maximum number of level items
 
 */
+
 
