@@ -633,7 +633,7 @@ static void GLimp_InitExtensions( void )
 	textureFilterAnisotropic = qfalse;
 	if ( GLimp_HaveExtension( "GL_EXT_texture_filter_anisotropic" ) )
 	{
-		if ( r_ext_texture_filter_anisotropic->integer ) {
+		if ( r_ext_anisotropy->integer ) {
 			qglGetIntegerv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, (GLint *)&maxAnisotropy );
 			if ( maxAnisotropy <= 0 ) {
 				ri.Printf( PRINT_ALL, "...GL_EXT_texture_filter_anisotropic not properly supported!\n" );
@@ -656,7 +656,7 @@ static void GLimp_InitExtensions( void )
 	}
 }
 
-#define R_MODE_FALLBACK 3 // 640 * 480
+#define R_MODE_FALLBACK 0 // 640 * 480
 
 /*
 ===============

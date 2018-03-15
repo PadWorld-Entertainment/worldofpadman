@@ -168,7 +168,21 @@ typedef struct aas_routingupdate_s
 	qboolean inlist;							//true if the update is in the list
 	struct aas_routingupdate_s *next;
 	struct aas_routingupdate_s *prev;
+	// cyr
+    struct aas_routingupdate_s* fib_parent;  // zeiger auf vater
+    struct aas_routingupdate_s* fib_child;
+    struct aas_routingupdate_s* fib_left;
+    struct aas_routingupdate_s* fib_right;
+    int                     fib_degree;   // anzahl der söhne
+    int                     fib_mark;     // hm
 } aas_routingupdate_t;
+
+// cyr  fibonacci heap
+typedef struct MyQueue_s{
+    aas_routingupdate_t* proot; // first element ( heap could be implemented without this)
+    aas_routingupdate_t* pmin;  // minimum element
+    int size;                   // nodes count
+}MyQueue_t;
 
 //reversed reachability link
 typedef struct aas_reversedlink_s
@@ -279,6 +293,7 @@ typedef struct aas_s
 	//cache list sorted on time
 	aas_routingcache_t *oldestcache;		// start of cache list sorted on time
 	aas_routingcache_t *newestcache;		// end of cache list sorted on time
+	aas_routingupdate_t** fibA;     // cyr
 	//maximum travel time through portal areas
 	int *portalmaxtraveltimes;
 	//areas the reachabilities go through

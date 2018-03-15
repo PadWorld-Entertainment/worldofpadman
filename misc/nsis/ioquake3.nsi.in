@@ -44,8 +44,7 @@ OutFile "ioquake3-XXXVERSIONXXX-XXXRELEASEXXX.x86.exe"
 ;Pages
 
 !insertmacro MULTIUSER_PAGE_INSTALLMODE
-;!insertmacro MUI_PAGE_LICENSE "../../COPYING.txt"
-!define MUI_COMPONENTSPAGE_NODESC
+#!insertmacro MUI_PAGE_LICENSE "${NSISDIR}\Docs\Modern UI\License.txt"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
@@ -78,13 +77,11 @@ Section "ioquake3 (required)"
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
 
-  File "zlib1.dll"
-
   ; Put file there
   File "../../build/release-mingw32-x86/ioq3ded.x86.exe"
   File "../../build/release-mingw32-x86/ioquake3.x86.exe"
   File "../../COPYING.txt"
-  File "/oname=README.txt" "../../README"
+  File "../../README.txt"
   File "../../id-readme.txt"
   File "../../voip-readme.txt"
 
@@ -139,7 +136,7 @@ Section "OpenAL-Soft library"
 
   SetOutPath $INSTDIR
 
-  File "OpenAL32.dll"
+  File "openal32.dll"
 
 SectionEnd
 
@@ -168,13 +165,11 @@ Section "Uninstall"
   Delete $INSTDIR\id-readme.txt
   Delete $INSTDIR\voip-readme.txt
 
-  Delete $INSTDIR\zlib1.dll
-
   Delete $INSTDIR\SDL.dll
 
   Delete $INSTDIR\libcurl-4.dll
 
-  Delete $INSTDIR\OpenAL32.dll
+  Delete $INSTDIR\openal32.dll
 
   Delete $INSTDIR\uninstall.exe
 

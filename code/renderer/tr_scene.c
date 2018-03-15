@@ -105,6 +105,14 @@ void R_AddPolygonSurfaces( void ) {
 
 	for ( i = 0, poly = tr.refdef.polys; i < tr.refdef.numPolys ; i++, poly++ ) {
 		sh = R_GetShaderByHandle( poly->hShader );
+//sortSL{
+		// a hack to get the SprayLogo-"Level" into the Engine
+		// without changing the vm-interface-functions
+		if(poly->verts->st[0]>=10.0f)
+			poly->lvl = ((int)poly->verts->st[0]/10);
+		else
+			poly->lvl = 0;
+//sortSL}
 		R_AddDrawSurf( ( void * )poly, sh, poly->fogIndex, qfalse );
 	}
 }
@@ -209,14 +217,6 @@ void RE_AddRefEntityToScene( const refEntity_t *ent ) {
 		return;
 	}
 	if ( r_numentities >= MAX_ENTITIES ) {
-		return;
-	}
-	if ( Q_isnan(ent->origin[0]) || Q_isnan(ent->origin[1]) || Q_isnan(ent->origin[2]) ) {
-		static qboolean firstTime = qtrue;
-		if (firstTime) {
-			firstTime = qfalse;
-			Com_DPrintf(S_COLOR_YELLOW "WARNING: RE_AddRefEntityToScene passed a refEntity which has an origin with a NaN component\n");
-		}
 		return;
 	}
 	if ( ent->reType < 0 || ent->reType >= RT_MAX_REF_ENTITY_TYPE ) {

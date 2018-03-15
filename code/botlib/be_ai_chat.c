@@ -1992,7 +1992,7 @@ bot_replychat_t *BotLoadReplyChat(char *filename)
 	botimport.Print(PRT_MESSAGE, "loaded %s\n", filename);
 	//
 	//BotDumpReplyChat(replychatlist);
-	if (botDeveloper)
+	if (bot_developer)
 	{
 		BotCheckReplyChatIntegrety(replychatlist);
 	} //end if
@@ -2191,7 +2191,7 @@ bot_chat_t *BotLoadInitialChat(char *chatfile, char *chatname)
 	botimport.Print(PRT_MESSAGE, "loaded %s from %s\n", chatname, chatfile);
 	//
 	//BotDumpInitialChat(chat);
-	if (botDeveloper)
+	if (bot_developer)
 	{
 		BotCheckInitialChatIntegrety(chat);
 	} //end if
@@ -2980,7 +2980,7 @@ int BotSetupChatAI(void)
 #ifdef DEBUG
 	int starttime = Sys_MilliSeconds();
 #endif //DEBUG
-
+/*
 	file = LibVarString("synfile", "syn.c");
 	synonyms = BotLoadSynonyms(file);
 	file = LibVarString("rndfile", "rnd.c");
@@ -2993,6 +2993,9 @@ int BotSetupChatAI(void)
 		file = LibVarString("rchatfile", "rchat.c");
 		replychats = BotLoadReplyChat(file);
 	} //end if
+*/
+	file = LibVarString("matchfile", "match.c");
+	matchtemplates = BotLoadMatchTemplates(file);
 
 	InitConsoleMessageHeap();
 

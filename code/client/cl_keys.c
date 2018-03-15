@@ -530,19 +530,17 @@ void Field_CharEvent( field_t *edit, int ch ) {
 	//
 	// ignore any other non printable chars
 	//
-	if ( ch < 32 ) {
+	if ( (unsigned)ch < 32 ) {
 		return;
 	}
 
 	if ( key_overstrikeMode ) {	
-		// - 2 to leave room for the leading slash and trailing \0
-		if ( edit->cursor == MAX_EDIT_LINE - 2 )
+		if ( edit->cursor == MAX_EDIT_LINE - 1 )
 			return;
 		edit->buffer[edit->cursor] = ch;
 		edit->cursor++;
 	} else {	// insert mode
-		// - 2 to leave room for the leading slash and trailing \0
-		if ( len == MAX_EDIT_LINE - 2 ) {
+		if ( len == MAX_EDIT_LINE - 1 ) {
 			return; // all full
 		}
 		memmove( edit->buffer + edit->cursor + 1, 
@@ -586,10 +584,8 @@ void Console_Key (int key) {
 	// enter finishes the line
 	if ( key == K_ENTER || key == K_KP_ENTER ) {
 		// if not in the game explicitly prepend a slash if needed
-		if ( cls.state != CA_ACTIVE &&
-				g_consoleField.buffer[0] &&
-				g_consoleField.buffer[0] != '\\' &&
-				g_consoleField.buffer[0] != '/' ) {
+		if ( cls.state != CA_ACTIVE && g_consoleField.buffer[0] != '\\' 
+			&& g_consoleField.buffer[0] != '/' ) {
 			char	temp[MAX_EDIT_LINE-1];
 
 			Q_strncpyz( temp, g_consoleField.buffer, sizeof( temp ) );
@@ -744,7 +740,7 @@ void Message_Key( int key ) {
 
 
 
-			CL_AddReliableCommand(buffer, qfalse);
+			CL_AddReliableCommand( buffer );
 		}
 		Key_SetCatcher( Key_GetCatcher( ) & ~KEYCATCH_MESSAGE );
 		Field_Clear( &chatField );
@@ -1122,72 +1118,94 @@ void CL_InitKeyCommands( void ) {
 
 /*
 ===================
-CL_ParseBinding
-
-Execute the commands in the bind string
+CL_AddKeyUpCommands
 ===================
 */
-void CL_ParseBinding( int key, qboolean down, unsigned time )
-{
-	char buf[ MAX_STRING_CHARS ], *p = buf, *end;
+void CL_AddKeyUpCommands( int key, char *kb, unsigned time) {
+	int i;
+	char button[1024], *buttonPtr;
+	char	cmd[1024];
+	qboolean keyevent;
 
-	if( !keys[key].binding || !keys[key].binding[0] )
+	if ( !kb ) {
 		return;
-	Q_strncpyz( buf, keys[key].binding, sizeof( buf ) );
-
-	while( 1 )
-	{
-		while( isspace( *p ) )
-			p++;
-		end = strchr( p, ';' );
-		if( end )
-			*end = '\0';
-		if( *p == '+' )
-		{
-			// button commands add keynum and time as parameters
-			// so that multiple sources can be discriminated and
-			// subframe corrected
-			char cmd[1024];
-			Com_sprintf( cmd, sizeof( cmd ), "%c%s %d %d\n",
-				( down ) ? '+' : '-', p + 1, key, time );
-			Cbuf_AddText( cmd );
+	}
+	keyevent = qfalse;
+	buttonPtr = button;
+	for ( i = 0; ; i++ ) {
+		if ( kb[i] == ';' || !kb[i] ) {
+			*buttonPtr = '\0';
+			if ( button[0] == '+') {
+				// button commands add keynum and time as parms so that multiple
+				// sources can be discriminated and subframe corrected
+				Com_sprintf (cmd, sizeof(cmd), "-%s %i %i\n", button+1, key, time);
+				Cbuf_AddText (cmd);
+				keyevent = qtrue;
+			} else {
+				if (keyevent) {
+					// down-only command
+					Cbuf_AddText (button);
+					Cbuf_AddText ("\n");
+				}
+			}
+			buttonPtr = button;
+			while ( (kb[i] <= ' ' || kb[i] == ';') && kb[i] != 0 ) {
+				i++;
+			}
 		}
-		else if( down )
-		{
-			// normal commands only execute on key press
-			Cbuf_AddText( p );
-			Cbuf_AddText( "\n" );
-		}
-		if( !end )
+		*buttonPtr++ = kb[i];
+		if ( !kb[i] ) {
 			break;
-		p = end + 1;
+		}
 	}
 }
 
 /*
 ===================
-CL_KeyDownEvent
+CL_KeyEvent
 
-Called by CL_KeyEvent to handle a keypress
+Called by the system for both key up and key down events
 ===================
 */
-void CL_KeyDownEvent( int key, unsigned time )
-{
-	keys[key].down = qtrue;
-	keys[key].repeats++;
-	if( keys[key].repeats == 1 )
-		anykeydown++;
+void CL_KeyEvent (int key, qboolean down, unsigned time) {
+	char	*kb;
+	char	cmd[1024];
 
-	if( keys[K_ALT].down && key == K_ENTER )
+	// update auto-repeat status and BUTTON_ANY status
+	keys[key].down = down;
+
+	if (down) {
+		keys[key].repeats++;
+		if ( keys[key].repeats == 1) {
+			anykeydown++;
+		}
+	} else {
+		keys[key].repeats = 0;
+		anykeydown--;
+		if (anykeydown < 0) {
+			anykeydown = 0;
+		}
+	}
+
+	if (key == K_ENTER)
 	{
-		Cvar_SetValue( "r_fullscreen",
-			!Cvar_VariableIntegerValue( "r_fullscreen" ) );
-		return;
+		if (down)
+		{
+			if (keys[K_ALT].down)
+			{
+				Cvar_SetValue( "r_fullscreen",
+						!Cvar_VariableIntegerValue( "r_fullscreen" ) );
+				return;
+			}
+		}
 	}
 
 	// console key is hardcoded, so the user can never unbind it
-	if( key == K_CONSOLE || ( keys[K_SHIFT].down && key == K_ESCAPE ) )
-	{
+	if (key == K_CONSOLE ||
+		( key == K_ESCAPE && keys[K_SHIFT].down ) ) {
+		if (!down) {
+			return;
+		}
 		Con_ToggleConsole_f ();
 		Key_ClearStates ();
 		return;
@@ -1195,7 +1213,7 @@ void CL_KeyDownEvent( int key, unsigned time )
 
 
 	// keys can still be used for bound actions
-	if ( ( key < 128 || key == K_MOUSE1 ) &&
+	if ( down && ( key < 128 || key == K_MOUSE1 ) &&
 		( clc.demoplaying || cls.state == CA_CINEMATIC ) && Key_GetCatcher( ) == 0 ) {
 
 		if (Cvar_VariableValue ("com_cameraMode") == 0) {
@@ -1204,8 +1222,9 @@ void CL_KeyDownEvent( int key, unsigned time )
 		}
 	}
 
+
 	// escape is always handled special
-	if ( key == K_ESCAPE ) {
+	if ( key == K_ESCAPE && down ) {
 		if ( Key_GetCatcher( ) & KEYCATCH_MESSAGE ) {
 			// clear message mode
 			Message_Key( key );
@@ -1231,51 +1250,9 @@ void CL_KeyDownEvent( int key, unsigned time )
 			return;
 		}
 
-		VM_Call( uivm, UI_KEY_EVENT, key, qtrue );
+		VM_Call( uivm, UI_KEY_EVENT, key, down );
 		return;
 	}
-
-	// distribute the key down event to the apropriate handler
-	if ( Key_GetCatcher( ) & KEYCATCH_CONSOLE ) {
-		Console_Key( key );
-	} else if ( Key_GetCatcher( ) & KEYCATCH_UI ) {
-		if ( uivm ) {
-			VM_Call( uivm, UI_KEY_EVENT, key, qtrue );
-		} 
-	} else if ( Key_GetCatcher( ) & KEYCATCH_CGAME ) {
-		if ( cgvm ) {
-			VM_Call( cgvm, CG_KEY_EVENT, key, qtrue );
-		} 
-	} else if ( Key_GetCatcher( ) & KEYCATCH_MESSAGE ) {
-		Message_Key( key );
-	} else if ( cls.state == CA_DISCONNECTED ) {
-		Console_Key( key );
-	} else {
-		// send the bound action
-		CL_ParseBinding( key, qtrue, time );
-	}
-	return;
-}
-
-/*
-===================
-CL_KeyUpEvent
-
-Called by CL_KeyEvent to handle a keyrelease
-===================
-*/
-void CL_KeyUpEvent( int key, unsigned time )
-{
-	keys[key].repeats = 0;
-	keys[key].down = qfalse;
-	anykeydown--;
-	if (anykeydown < 0) {
-		anykeydown = 0;
-	}
-
-	// don't process key-up events for the console key
-	if ( key == K_CONSOLE || ( key == K_ESCAPE && keys[K_SHIFT].down ) )
-		return;
 
 	//
 	// key up events only perform actions if the game key binding is
@@ -1283,29 +1260,81 @@ void CL_KeyUpEvent( int key, unsigned time )
 	// console mode and menu mode, to keep the character from continuing
 	// an action started before a mode switch.
 	//
-	if( cls.state != CA_DISCONNECTED )
-		CL_ParseBinding( key, qfalse, time );
+	if (!down ) {
+		if ( cls.state != CA_DISCONNECTED ) {
+			kb = keys[key].binding;
 
-	if ( Key_GetCatcher( ) & KEYCATCH_UI && uivm ) {
-		VM_Call( uivm, UI_KEY_EVENT, key, qfalse );
-	} else if ( Key_GetCatcher( ) & KEYCATCH_CGAME && cgvm ) {
-		VM_Call( cgvm, CG_KEY_EVENT, key, qfalse );
+			CL_AddKeyUpCommands( key, kb, time );
+		}
+
+		if ( Key_GetCatcher( ) & KEYCATCH_UI && uivm ) {
+			VM_Call( uivm, UI_KEY_EVENT, key, down );
+		} else if ( Key_GetCatcher( ) & KEYCATCH_CGAME && cgvm ) {
+			VM_Call( cgvm, CG_KEY_EVENT, key, down );
+		}
+
+		return;
+	}
+
+
+	// distribute the key down event to the apropriate handler
+	if ( Key_GetCatcher( ) & KEYCATCH_CONSOLE ) {
+		Console_Key( key );
+	} else if ( Key_GetCatcher( ) & KEYCATCH_UI ) {
+		if ( uivm ) {
+			VM_Call( uivm, UI_KEY_EVENT, key, down );
+		} 
+	} else if ( Key_GetCatcher( ) & KEYCATCH_CGAME ) {
+		if ( cgvm ) {
+			VM_Call( cgvm, CG_KEY_EVENT, key, down );
+		} 
+	} else if ( Key_GetCatcher( ) & KEYCATCH_MESSAGE ) {
+		Message_Key( key );
+	} else if ( cls.state == CA_DISCONNECTED ) {
+		Console_Key( key );
+	} else {
+		// send the bound action
+		kb = keys[key].binding;
+		if ( !kb ) {
+			if (key >= 200) {
+				Com_Printf ("%s is unbound, use controls menu to set.\n"
+					, Key_KeynumToString( key ) );
+			}
+		} else if (kb[0] == '+') {
+			int i;
+			char button[1024], *buttonPtr;
+			buttonPtr = button;
+			for ( i = 0; ; i++ ) {
+				if ( kb[i] == ';' || !kb[i] ) {
+					*buttonPtr = '\0';
+					if ( button[0] == '+') {
+						// button commands add keynum and time as parms so that multiple
+						// sources can be discriminated and subframe corrected
+						Com_sprintf (cmd, sizeof(cmd), "%s %i %i\n", button, key, time);
+						Cbuf_AddText (cmd);
+					} else {
+						// down-only command
+						Cbuf_AddText (button);
+						Cbuf_AddText ("\n");
+					}
+					buttonPtr = button;
+					while ( (kb[i] <= ' ' || kb[i] == ';') && kb[i] != 0 ) {
+						i++;
+					}
+				}
+				*buttonPtr++ = kb[i];
+				if ( !kb[i] ) {
+					break;
+				}
+			}
+		} else {
+			// down-only command
+			Cbuf_AddText (kb);
+			Cbuf_AddText ("\n");
+		}
 	}
 }
 
-/*
-===================
-CL_KeyEvent
-
-Called by the system for both key up and key down events
-===================
-*/
-void CL_KeyEvent (int key, qboolean down, unsigned time) {
-	if( down )
-		CL_KeyDownEvent( key, time );
-	else
-		CL_KeyUpEvent( key, time );
-}
 
 /*
 ===================
@@ -1388,7 +1417,7 @@ void Key_SetCatcher( int catcher ) {
 
 // This must not exceed MAX_CMD_LINE
 #define			MAX_CONSOLE_SAVE_BUFFER	1024
-#define			CONSOLE_HISTORY_FILE    "q3history"
+#define			CONSOLE_HISTORY_FILE    "wophistory"
 static char	consoleSaveBuffer[ MAX_CONSOLE_SAVE_BUFFER ];
 static int	consoleSaveBufferSize = 0;
 

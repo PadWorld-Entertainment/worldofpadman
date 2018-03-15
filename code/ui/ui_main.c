@@ -116,7 +116,7 @@ static const int numSortKeys = sizeof(sortKeys) / sizeof(const char*);
 static char* netnames[] = {
 	"???",
 	"UDP",
-	"UDP6"
+	NULL
 };
 
 #ifndef MISSIONPACK
@@ -164,7 +164,7 @@ void _UI_KeyEvent( int key, qboolean down );
 void _UI_MouseEvent( int dx, int dy );
 void _UI_Refresh( int realtime );
 qboolean _UI_IsFullscreen( void );
-Q_EXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
+intptr_t vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
   switch ( command ) {
 	  case UI_GETAPIVERSION:
 		  return UI_API_VERSION;
@@ -941,7 +941,7 @@ void UI_LoadMenus(const char *menuFile, qboolean reset) {
 
 	handle = trap_PC_LoadSource( menuFile );
 	if (!handle) {
-		Com_Printf( S_COLOR_YELLOW "menu file not found: %s, using default\n", menuFile );
+		trap_Error( va( S_COLOR_YELLOW "menu file not found: %s, using default\n", menuFile ) );
 		handle = trap_PC_LoadSource( "ui/menus.txt" );
 		if (!handle) {
 			trap_Error( va( S_COLOR_RED "default menu file not found: ui/menus.txt, unable to continue!\n") );
@@ -2265,7 +2265,7 @@ static qboolean UI_Handicap_HandleKey(int flags, float *special, int key) {
 		}
     if (h > 100) {
       h = 5;
-    } else if (h < 5) {
+    } else if (h < 0) {
 			h = 100;
 		}
   	trap_Cvar_Set( "handicap", va( "%i", h) );
@@ -3082,7 +3082,7 @@ static void UI_Update(const char *name) {
 				trap_Cvar_SetValue( "r_colorbits", 32 );
 				trap_Cvar_SetValue( "r_depthbits", 24 );
 				trap_Cvar_SetValue( "r_picmip", 0 );
-				trap_Cvar_SetValue( "r_mode", 4 );
+				trap_Cvar_SetValue( "r_mode", 2 );
 				trap_Cvar_SetValue( "r_texturebits", 32 );
 				trap_Cvar_SetValue( "r_fastSky", 0 );
 				trap_Cvar_SetValue( "r_inGameVideo", 1 );
@@ -3098,7 +3098,7 @@ static void UI_Update(const char *name) {
 				trap_Cvar_SetValue( "r_colorbits", 0 );
 				trap_Cvar_SetValue( "r_depthbits", 24 );
 				trap_Cvar_SetValue( "r_picmip", 1 );
-				trap_Cvar_SetValue( "r_mode", 3 );
+				trap_Cvar_SetValue( "r_mode", 2 );
 				trap_Cvar_SetValue( "r_texturebits", 0 );
 				trap_Cvar_SetValue( "r_fastSky", 0 );
 				trap_Cvar_SetValue( "r_inGameVideo", 1 );
@@ -3114,7 +3114,7 @@ static void UI_Update(const char *name) {
 				trap_Cvar_SetValue( "r_colorbits", 0 );
 				trap_Cvar_SetValue( "r_depthbits", 0 );
 				trap_Cvar_SetValue( "r_picmip", 1 );
-				trap_Cvar_SetValue( "r_mode", 3 );
+				trap_Cvar_SetValue( "r_mode", 1 );
 				trap_Cvar_SetValue( "r_texturebits", 0 );
 				trap_Cvar_SetValue( "cg_shadows", 0 );
 				trap_Cvar_SetValue( "r_fastSky", 1 );
@@ -3129,7 +3129,7 @@ static void UI_Update(const char *name) {
 				trap_Cvar_SetValue( "r_lodbias", 2 );
 				trap_Cvar_SetValue( "r_colorbits", 16 );
 				trap_Cvar_SetValue( "r_depthbits", 16 );
-				trap_Cvar_SetValue( "r_mode", 3 );
+				trap_Cvar_SetValue( "r_mode", 0 );
 				trap_Cvar_SetValue( "r_picmip", 2 );
 				trap_Cvar_SetValue( "r_texturebits", 16 );
 				trap_Cvar_SetValue( "cg_shadows", 0 );
@@ -4307,15 +4307,9 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 						return Info_ValueForKey(info, "addr");
 					} else {
 						if ( ui_netSource.integer == AS_LOCAL ) {
-							int nettype = atoi(Info_ValueForKey(info, "nettype"));
-
-							if (nettype < 0 || nettype >= ARRAY_LEN(netnames)) {
-								nettype = 0;
-							}
-
 							Com_sprintf( hostname, sizeof(hostname), "%s [%s]",
 											Info_ValueForKey(info, "hostname"),
-											netnames[nettype] );
+											netnames[atoi(Info_ValueForKey(info, "nettype"))] );
 							return hostname;
 						}
 						else {
@@ -5249,8 +5243,6 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 	  case UIMENU_MAIN:
 			trap_Cvar_Set( "sv_killserver", "1" );
 			trap_Key_SetCatcher( KEYCATCH_UI );
-			//trap_S_StartLocalSound( trap_S_RegisterSound("sound/misc/menu_background.wav", qfalse) , CHAN_LOCAL_SOUND );
-			//trap_S_StartBackgroundTrack("sound/misc/menu_background.wav", NULL);
 			if (uiInfo.inGameLoad) {
 				UI_LoadNonIngame();
 			}
@@ -5425,8 +5417,7 @@ static void UI_DisplayDownloadInfo( const char *downloadName, float centerPoint,
 	Text_PaintCenter(centerPoint, yStart + 248, scale, colorWhite, xferText, 0);
 
 	if (downloadSize > 0) {
-		s = va( "%s (%d%%)", downloadName,
-			(int)( (float)downloadCount * 100.0f / downloadSize ) );
+		s = va( "%s (%d%%)", downloadName, (int)( (float)downloadCount * 100.0f / downloadSize ) );
 	} else {
 		s = downloadName;
 	}
@@ -5715,13 +5706,13 @@ static cvarTable_t		cvarTable[] = {
 
 	{ &ui_arenasFile, "g_arenasFile", "", CVAR_INIT|CVAR_ROM },
 	{ &ui_botsFile, "g_botsFile", "", CVAR_INIT|CVAR_ROM },
-	{ &ui_spScores1, "g_spScores1", "", CVAR_ARCHIVE },
-	{ &ui_spScores2, "g_spScores2", "", CVAR_ARCHIVE },
-	{ &ui_spScores3, "g_spScores3", "", CVAR_ARCHIVE },
-	{ &ui_spScores4, "g_spScores4", "", CVAR_ARCHIVE },
-	{ &ui_spScores5, "g_spScores5", "", CVAR_ARCHIVE },
-	{ &ui_spAwards, "g_spAwards", "", CVAR_ARCHIVE },
-	{ &ui_spVideos, "g_spVideos", "", CVAR_ARCHIVE },
+	{ &ui_spScores1, "g_spScores1", "", CVAR_ARCHIVE | CVAR_ROM },
+	{ &ui_spScores2, "g_spScores2", "", CVAR_ARCHIVE | CVAR_ROM },
+	{ &ui_spScores3, "g_spScores3", "", CVAR_ARCHIVE | CVAR_ROM },
+	{ &ui_spScores4, "g_spScores4", "", CVAR_ARCHIVE | CVAR_ROM },
+	{ &ui_spScores5, "g_spScores5", "", CVAR_ARCHIVE | CVAR_ROM },
+	{ &ui_spAwards, "g_spAwards", "", CVAR_ARCHIVE | CVAR_ROM },
+	{ &ui_spVideos, "g_spVideos", "", CVAR_ARCHIVE | CVAR_ROM },
 	{ &ui_spSkill, "g_spSkill", "2", CVAR_ARCHIVE },
 
 	{ &ui_spSelection, "ui_spSelection", "", CVAR_ROM },

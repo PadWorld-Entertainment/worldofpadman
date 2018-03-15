@@ -7,7 +7,7 @@ This file is part of Quake III Arena source code.
 Quake III Arena source code is free software; you can redistribute it
 and/or modify it under the terms of the GNU General Public License as
 published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
+ (at your option) any later version.
 
 Quake III Arena source code is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,8 +19,6 @@ along with Quake III Arena source code; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
-//
-// q_math.c -- stateless support routines that are included in each code module
 
 // Some of the vector functions are static inline in q_shared.h. q3asm
 // doesn't understand static functions though, so we only want them in
@@ -28,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifdef Q3_VM
 #define __Q3_VM_MATH
 #endif
-
+ 
 #include "q_shared.h"
 
 vec3_t	vec3_origin = {0,0,0};
@@ -46,6 +44,13 @@ vec4_t		colorWhite	= {1, 1, 1, 1};
 vec4_t		colorLtGrey	= {0.75, 0.75, 0.75, 1};
 vec4_t		colorMdGrey	= {0.5, 0.5, 0.5, 1};
 vec4_t		colorDkGrey	= {0.25, 0.25, 0.25, 1};
+vec4_t		colorTBlack33	= {0, 0, 0, 0.33f};
+vec4_t		colorTBlack66	= {0, 0, 0, 0.66f};
+vec4_t		colorDkGreen	= {0, 0.5f, 0, 1};
+vec4_t		colorDkBlue		= {0, 0, 0.5f, 1};
+vec4_t		colorDkRed		= {0.5f, 0, 0, 1};
+vec4_t		colorDkLilac	= {0.4f, 0, 0.4f, 1};
+vec4_t		colorDkOrange	= {0.75f, 0.3f, 0, 1};
 
 vec4_t	g_color_table[8] =
 	{
@@ -58,6 +63,16 @@ vec4_t	g_color_table[8] =
 	{1.0, 0.0, 1.0, 1.0},
 	{1.0, 1.0, 1.0, 1.0},
 	};
+
+// FIXME: Move into bg
+vec4_t	spraycolors[] = {
+	{ 0.0, 1.0, 0.0, 1.0 },
+	{ 1.0, 0.0, 0.0, 1.0 },
+	{ 1.0, 1.0, 0.0, 1.0 },
+	{ 0.0, 0.0, 1.0, 1.0 },
+	{ 1.0, 1.0, 1.0, 1.0 },
+	{ 0.0, 0.0, 0.0, 1.0 }
+};
 
 
 vec3_t	bytedirs[NUMVERTEXNORMALS] =
@@ -439,6 +454,13 @@ void AxisCopy( vec3_t in[3], vec3_t out[3] ) {
 	VectorCopy( in[2], out[2] );
 }
 
+//by HERBY ...
+void AxisScale( vec3_t in[3], float s, vec3_t out[3] ) {
+	VectorScale( in[0], s, out[0] );
+	VectorScale( in[1], s, out[1] );
+	VectorScale( in[2], s, out[2] );
+}
+
 void ProjectPointOnPlane( vec3_t dst, const vec3_t p, const vec3_t normal )
 {
 	float d;
@@ -447,7 +469,7 @@ void ProjectPointOnPlane( vec3_t dst, const vec3_t p, const vec3_t normal )
 
 	inv_denom =  DotProduct( normal, normal );
 #ifndef Q3_VM
-	assert( Q_fabs(inv_denom) != 0.0f ); // zero vectors get here
+//	assert( Q_fabs(inv_denom) != 0.0f ); // bk010122 - zero vectors get here
 #endif
 	inv_denom = 1.0f / inv_denom;
 
@@ -491,6 +513,14 @@ void VectorRotate( vec3_t in, vec3_t matrix[3], vec3_t out )
 	out[0] = DotProduct( in, matrix[0] );
 	out[1] = DotProduct( in, matrix[1] );
 	out[2] = DotProduct( in, matrix[2] );
+}
+
+//HERBY ... herby used the VectorRotate with a "transponierten Matrix" ;)
+void VectorRotateTMatrix( vec3_t in, vec3_t matrix[3], vec3_t out )
+{
+	out[0] = matrix[0][0]*in[0] + matrix[1][0]*in[1] + matrix[2][0]*in[2];
+	out[1] = matrix[0][1]*in[0] + matrix[1][1]*in[1] + matrix[2][1]*in[2];
+	out[2] = matrix[0][2]*in[0] + matrix[1][2]*in[1] + matrix[2][2]*in[2];
 }
 
 //============================================================================
@@ -647,14 +677,50 @@ void SetPlaneSignbits (cplane_t *out) {
 BoxOnPlaneSide
 
 Returns 1, 2, or 1 + 2
+
+// this is the slow, general version
+int BoxOnPlaneSide2 (vec3_t emins, vec3_t emaxs, struct cplane_s *p)
+{
+	int		i;
+	float	dist1, dist2;
+	int		sides;
+	vec3_t	corners[2];
+
+	for (i=0 ; i<3 ; i++)
+	{
+		if (p->normal[i] < 0)
+		{
+			corners[0][i] = emins[i];
+			corners[1][i] = emaxs[i];
+		}
+		else
+		{
+			corners[1][i] = emins[i];
+			corners[0][i] = emaxs[i];
+		}
+	}
+	dist1 = DotProduct (p->normal, corners[0]) - p->dist;
+	dist2 = DotProduct (p->normal, corners[1]) - p->dist;
+	sides = 0;
+	if (dist1 >= 0)
+		sides = 1;
+	if (dist2 < 0)
+		sides |= 2;
+
+	return sides;
+}
+
 ==================
 */
-int BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, struct cplane_s *p)
-{
-	float	dist[2];
-	int		sides, b, i;
 
-	// fast axial cases
+#if !id386
+
+int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *p)
+{
+	float	dist1, dist2;
+	int		sides;
+
+// fast axial cases
 	if (p->type < 3)
 	{
 		if (p->dist <= emins[p->type])
@@ -664,27 +730,291 @@ int BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, struct cplane_s *p)
 		return 3;
 	}
 
-	// general case
-	dist[0] = dist[1] = 0;
-	if (p->signbits < 8) // >= 8: default case is original code (dist[0]=dist[1]=0)
+// general case
+	switch (p->signbits)
 	{
-		for (i=0 ; i<3 ; i++)
-		{
-			b = (p->signbits >> i) & 1;
-			dist[ b] += p->normal[i]*emaxs[i];
-			dist[!b] += p->normal[i]*emins[i];
-		}
+	case 0:
+		dist1 = p->normal[0]*emaxs[0] + p->normal[1]*emaxs[1] + p->normal[2]*emaxs[2];
+		dist2 = p->normal[0]*emins[0] + p->normal[1]*emins[1] + p->normal[2]*emins[2];
+		break;
+	case 1:
+		dist1 = p->normal[0]*emins[0] + p->normal[1]*emaxs[1] + p->normal[2]*emaxs[2];
+		dist2 = p->normal[0]*emaxs[0] + p->normal[1]*emins[1] + p->normal[2]*emins[2];
+		break;
+	case 2:
+		dist1 = p->normal[0]*emaxs[0] + p->normal[1]*emins[1] + p->normal[2]*emaxs[2];
+		dist2 = p->normal[0]*emins[0] + p->normal[1]*emaxs[1] + p->normal[2]*emins[2];
+		break;
+	case 3:
+		dist1 = p->normal[0]*emins[0] + p->normal[1]*emins[1] + p->normal[2]*emaxs[2];
+		dist2 = p->normal[0]*emaxs[0] + p->normal[1]*emaxs[1] + p->normal[2]*emins[2];
+		break;
+	case 4:
+		dist1 = p->normal[0]*emaxs[0] + p->normal[1]*emaxs[1] + p->normal[2]*emins[2];
+		dist2 = p->normal[0]*emins[0] + p->normal[1]*emins[1] + p->normal[2]*emaxs[2];
+		break;
+	case 5:
+		dist1 = p->normal[0]*emins[0] + p->normal[1]*emaxs[1] + p->normal[2]*emins[2];
+		dist2 = p->normal[0]*emaxs[0] + p->normal[1]*emins[1] + p->normal[2]*emaxs[2];
+		break;
+	case 6:
+		dist1 = p->normal[0]*emaxs[0] + p->normal[1]*emins[1] + p->normal[2]*emins[2];
+		dist2 = p->normal[0]*emins[0] + p->normal[1]*emaxs[1] + p->normal[2]*emaxs[2];
+		break;
+	case 7:
+		dist1 = p->normal[0]*emins[0] + p->normal[1]*emins[1] + p->normal[2]*emins[2];
+		dist2 = p->normal[0]*emaxs[0] + p->normal[1]*emaxs[1] + p->normal[2]*emaxs[2];
+		break;
+	default:
+		dist1 = dist2 = 0;		// shut up compiler
+		break;
 	}
 
 	sides = 0;
-	if (dist[0] >= p->dist)
+	if (dist1 >= p->dist)
 		sides = 1;
-	if (dist[1] < p->dist)
+	if (dist2 < p->dist)
 		sides |= 2;
 
 	return sides;
 }
+#elif __GNUC__
+// use matha.s
+#else
+#pragma warning( disable: 4035 )
 
+__declspec( naked ) int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *p)
+{
+	static int bops_initialized;
+	static int Ljmptab[8];
+
+	__asm {
+
+		push ebx
+			
+		cmp bops_initialized, 1
+		je  initialized
+		mov bops_initialized, 1
+		
+		mov Ljmptab[0*4], offset Lcase0
+		mov Ljmptab[1*4], offset Lcase1
+		mov Ljmptab[2*4], offset Lcase2
+		mov Ljmptab[3*4], offset Lcase3
+		mov Ljmptab[4*4], offset Lcase4
+		mov Ljmptab[5*4], offset Lcase5
+		mov Ljmptab[6*4], offset Lcase6
+		mov Ljmptab[7*4], offset Lcase7
+			
+initialized:
+
+		mov edx,dword ptr[4+12+esp]
+		mov ecx,dword ptr[4+4+esp]
+		xor eax,eax
+		mov ebx,dword ptr[4+8+esp]
+		mov al,byte ptr[17+edx]
+		cmp al,8
+		jge Lerror
+		fld dword ptr[0+edx]
+		fld st(0)
+		jmp dword ptr[Ljmptab+eax*4]
+Lcase0:
+		fmul dword ptr[ebx]
+		fld dword ptr[0+4+edx]
+		fxch st(2)
+		fmul dword ptr[ecx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[4+ebx]
+		fld dword ptr[0+8+edx]
+		fxch st(2)
+		fmul dword ptr[4+ecx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[8+ebx]
+		fxch st(5)
+		faddp st(3),st(0)
+		fmul dword ptr[8+ecx]
+		fxch st(1)
+		faddp st(3),st(0)
+		fxch st(3)
+		faddp st(2),st(0)
+		jmp LSetSides
+Lcase1:
+		fmul dword ptr[ecx]
+		fld dword ptr[0+4+edx]
+		fxch st(2)
+		fmul dword ptr[ebx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[4+ebx]
+		fld dword ptr[0+8+edx]
+		fxch st(2)
+		fmul dword ptr[4+ecx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[8+ebx]
+		fxch st(5)
+		faddp st(3),st(0)
+		fmul dword ptr[8+ecx]
+		fxch st(1)
+		faddp st(3),st(0)
+		fxch st(3)
+		faddp st(2),st(0)
+		jmp LSetSides
+Lcase2:
+		fmul dword ptr[ebx]
+		fld dword ptr[0+4+edx]
+		fxch st(2)
+		fmul dword ptr[ecx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[4+ecx]
+		fld dword ptr[0+8+edx]
+		fxch st(2)
+		fmul dword ptr[4+ebx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[8+ebx]
+		fxch st(5)
+		faddp st(3),st(0)
+		fmul dword ptr[8+ecx]
+		fxch st(1)
+		faddp st(3),st(0)
+		fxch st(3)
+		faddp st(2),st(0)
+		jmp LSetSides
+Lcase3:
+		fmul dword ptr[ecx]
+		fld dword ptr[0+4+edx]
+		fxch st(2)
+		fmul dword ptr[ebx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[4+ecx]
+		fld dword ptr[0+8+edx]
+		fxch st(2)
+		fmul dword ptr[4+ebx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[8+ebx]
+		fxch st(5)
+		faddp st(3),st(0)
+		fmul dword ptr[8+ecx]
+		fxch st(1)
+		faddp st(3),st(0)
+		fxch st(3)
+		faddp st(2),st(0)
+		jmp LSetSides
+Lcase4:
+		fmul dword ptr[ebx]
+		fld dword ptr[0+4+edx]
+		fxch st(2)
+		fmul dword ptr[ecx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[4+ebx]
+		fld dword ptr[0+8+edx]
+		fxch st(2)
+		fmul dword ptr[4+ecx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[8+ecx]
+		fxch st(5)
+		faddp st(3),st(0)
+		fmul dword ptr[8+ebx]
+		fxch st(1)
+		faddp st(3),st(0)
+		fxch st(3)
+		faddp st(2),st(0)
+		jmp LSetSides
+Lcase5:
+		fmul dword ptr[ecx]
+		fld dword ptr[0+4+edx]
+		fxch st(2)
+		fmul dword ptr[ebx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[4+ebx]
+		fld dword ptr[0+8+edx]
+		fxch st(2)
+		fmul dword ptr[4+ecx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[8+ecx]
+		fxch st(5)
+		faddp st(3),st(0)
+		fmul dword ptr[8+ebx]
+		fxch st(1)
+		faddp st(3),st(0)
+		fxch st(3)
+		faddp st(2),st(0)
+		jmp LSetSides
+Lcase6:
+		fmul dword ptr[ebx]
+		fld dword ptr[0+4+edx]
+		fxch st(2)
+		fmul dword ptr[ecx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[4+ecx]
+		fld dword ptr[0+8+edx]
+		fxch st(2)
+		fmul dword ptr[4+ebx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[8+ecx]
+		fxch st(5)
+		faddp st(3),st(0)
+		fmul dword ptr[8+ebx]
+		fxch st(1)
+		faddp st(3),st(0)
+		fxch st(3)
+		faddp st(2),st(0)
+		jmp LSetSides
+Lcase7:
+		fmul dword ptr[ecx]
+		fld dword ptr[0+4+edx]
+		fxch st(2)
+		fmul dword ptr[ebx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[4+ecx]
+		fld dword ptr[0+8+edx]
+		fxch st(2)
+		fmul dword ptr[4+ebx]
+		fxch st(2)
+		fld st(0)
+		fmul dword ptr[8+ecx]
+		fxch st(5)
+		faddp st(3),st(0)
+		fmul dword ptr[8+ebx]
+		fxch st(1)
+		faddp st(3),st(0)
+		fxch st(3)
+		faddp st(2),st(0)
+LSetSides:
+		faddp st(2),st(0)
+		fcomp dword ptr[12+edx]
+		xor ecx,ecx
+		fnstsw ax
+		fcomp dword ptr[12+edx]
+		and ah,1
+		xor ah,1
+		add cl,ah
+		fnstsw ax
+		and ah,1
+		add ah,ah
+		add cl,ah
+		pop ebx
+		mov eax,ecx
+		ret
+Lerror:
+		int 3
+	}
+}
+#pragma warning( default: 4035 )
+
+#endif
 
 /*
 =================
@@ -746,7 +1076,7 @@ qboolean BoundsIntersect(const vec3_t mins, const vec3_t maxs,
 	{
 		return qfalse;
 	}
-
+ 
 	return qtrue;
 }
 
@@ -783,7 +1113,6 @@ qboolean BoundsIntersectPoint(const vec3_t mins, const vec3_t maxs,
 }
 
 vec_t VectorNormalize( vec3_t v ) {
-	// NOTE: TTimo - Apple G4 altivec source uses double?
 	float	length, ilength;
 
 	length = v[0]*v[0] + v[1]*v[1] + v[2]*v[2];
@@ -807,11 +1136,17 @@ vec_t VectorNormalize2( const vec3_t v, vec3_t out) {
 
 	if (length)
 	{
+#ifndef Q3_VM // bk0101022 - FPE related
+//	  assert( ((Q_fabs(v[0])!=0.0f) || (Q_fabs(v[1])!=0.0f) || (Q_fabs(v[2])!=0.0f)) );
+#endif
 		ilength = 1/length;
 		out[0] = v[0]*ilength;
 		out[1] = v[1]*ilength;
 		out[2] = v[2]*ilength;
 	} else {
+#ifndef Q3_VM // bk0101022 - FPE related
+//	  assert( ((Q_fabs(v[0])==0.0f) && (Q_fabs(v[1])==0.0f) && (Q_fabs(v[2])==0.0f)) );
+#endif
 		VectorClear( out );
 	}
 		
@@ -1007,3 +1342,5 @@ int Q_isnan( float x )
 
 	return (int)( (unsigned int)fi.ui >> 31 );
 }
+
+

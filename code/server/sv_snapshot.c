@@ -298,6 +298,7 @@ static void SV_AddEntitiesVisibleFromPoint( vec3_t origin, clientSnapshot_t *fra
 	int		l;
 	int		clientarea, clientcluster;
 	int		leafnum;
+	int		c_fullsend;
 	byte	*clientpvs;
 	byte	*bitvector;
 
@@ -316,6 +317,8 @@ static void SV_AddEntitiesVisibleFromPoint( vec3_t origin, clientSnapshot_t *fra
 	frame->areabytes = CM_WriteAreaBits( frame->areabits, clientarea );
 
 	clientpvs = CM_ClusterPVS (clientcluster);
+
+	c_fullsend = 0;
 
 	for ( e = 0 ; e < sv.num_entities ; e++ ) {
 		ent = SV_GentityNum(e);

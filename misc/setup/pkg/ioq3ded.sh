@@ -5,15 +5,8 @@
 
 IOQ3_DIR=/usr/local/share/games/quake3
 
-if [ "x${LD_LIBRARY_PATH}" = "x" ]; then
-	LD_LIBRARY_PATH="${IOQ3_DIR}/lib"
-else
-	LD_LIBRARY_PATH="${IOQ3_DIR}/lib:${LD_LIBRARY_PATH}"
-fi
-export LD_LIBRARY_PATH
-
-COMPILE_PLATFORM=`uname|sed -e 's/_.*//'|tr '[:upper:]' '[:lower:]'`
-COMPILE_ARCH=`uname -p | sed -e 's/i.86/i386/'`
+COMPILE_PLATFORM=`uname|sed -e s/_.*//|tr '[:upper:]' '[:lower:]'`
+COMPILE_ARCH=`uname -p | sed -e s/i.86/i386/`
 
 EXEC_REL=release
 
@@ -39,10 +32,10 @@ if [ "X${EXEC_DIR}" != "X" ]; then
 	fi
 	cd ${IOQ3_DIR} && \
 	${EXEC_DIR}/${EXEC_BIN} ${EXEC_FLAGS} $*
-	exit $? 
+	exit $?
 else
 	echo "No ioq3 binaries found!"
 	exit 1
 fi
-  
+
 

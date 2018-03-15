@@ -296,8 +296,7 @@ static void LAN_GetServerInfo( int source, int n, char *buf, int buflen ) {
 		Info_SetValueForKey( info, "game", server->game);
 		Info_SetValueForKey( info, "gametype", va("%i",server->gameType));
 		Info_SetValueForKey( info, "nettype", va("%i",server->netType));
-		Info_SetValueForKey( info, "addr", NET_AdrToStringwPort(server->adr));
-		Info_SetValueForKey( info, "punkbuster", va("%i", server->punkbuster));
+		Info_SetValueForKey( info, "addr", NET_AdrToString(server->adr));
 		Q_strncpyz(buf, info, buflen);
 	} else {
 		if (buf) {
@@ -625,8 +624,8 @@ static void Key_GetBindingBuf( int keynum, char *buf, int buflen ) {
 CLUI_GetCDKey
 ====================
 */
-static void CLUI_GetCDKey( char *buf, int buflen ) {
 #ifndef STANDALONE
+static void CLUI_GetCDKey( char *buf, int buflen ) {
 	cvar_t	*fs;
 	fs = Cvar_Get ("fs_game", "", CVAR_INIT|CVAR_SYSTEMINFO );
 	if (UI_usesUniqueCDKey() && fs && fs->string[0] != 0) {
@@ -636,9 +635,6 @@ static void CLUI_GetCDKey( char *buf, int buflen ) {
 		Com_Memcpy( buf, cl_cdkey, 16);
 		buf[16] = 0;
 	}
-#else
-	*buf = 0;
-#endif
 }
 
 
@@ -647,7 +643,6 @@ static void CLUI_GetCDKey( char *buf, int buflen ) {
 CLUI_SetCDKey
 ====================
 */
-#ifndef STANDALONE
 static void CLUI_SetCDKey( char *buf ) {
 	cvar_t	*fs;
 	fs = Cvar_Get ("fs_game", "", CVAR_INIT|CVAR_SYSTEMINFO );
@@ -663,6 +658,28 @@ static void CLUI_SetCDKey( char *buf ) {
 	}
 }
 #endif
+
+static float CLUI_GetVoiceGain(const int id)
+{
+	if(id<0 || id>= MAX_CLIENTS)
+		return 0;
+	// todo, make sure server is running
+	return clc.voipGain[id];
+}
+
+static int CLUI_GetVoiceMuteClient(const int id)
+{
+	if(id<0 || id>= MAX_CLIENTS)
+		return 0;
+	// todo, make sure server is running
+	return clc.voipIgnore[id];
+}
+
+static int CLUI_GetVoiceMuteAll(void)
+{
+	// todo, make sure server is running
+	return clc.voipMuteAll;
+}
 
 /*
 ====================
@@ -967,15 +984,15 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 	case UI_MEMORY_REMAINING:
 		return Hunk_MemoryRemaining();
 
+#ifndef STANDALONE
 	case UI_GET_CDKEY:
 		CLUI_GetCDKey( VMA(1), args[2] );
 		return 0;
 
 	case UI_SET_CDKEY:
-#ifndef STANDALONE
 		CLUI_SetCDKey( VMA(1) );
-#endif
 		return 0;
+#endif
 	
 	case UI_SET_PBCLSTATUS:
 		return 0;	
@@ -983,6 +1000,15 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 	case UI_R_REGISTERFONT:
 		re.RegisterFont( VMA(1), args[2], VMA(3));
 		return 0;
+		
+	case UI_GET_VOICEMUTECLIENT:
+		return CLUI_GetVoiceMuteClient(args[1]);
+
+	case UI_GET_VOICEMUTEALL:
+		return CLUI_GetVoiceMuteAll();
+
+	case UI_GET_VOICEGAIN:
+		return FloatAsInt( CLUI_GetVoiceGain(args[1]) );
 
 	case UI_MEMSET:
 		Com_Memset( VMA(1), args[2], args[3] );
@@ -1057,8 +1083,11 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 		re.RemapShader( VMA(1), VMA(2), VMA(3) );
 		return 0;
 
+#ifndef STANDALONE
 	case UI_VERIFY_CDKEY:
 		return CL_CDKeyValidate(VMA(1), VMA(2));
+#endif
+
 		
 	default:
 		Com_Error( ERR_DROP, "Bad UI system trap: %ld", (long int) args[0] );

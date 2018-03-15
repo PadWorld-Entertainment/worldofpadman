@@ -202,6 +202,8 @@ typedef struct botlib_import_s
 	//
 	int			(*DebugPolygonCreate)(int color, int numPoints, vec3_t *points);
 	void		(*DebugPolygonDelete)(int id);
+	// cyr
+	void		(*SetBotInfoString)(const char *val);
 } botlib_import_t;
 
 typedef struct aas_export_s
@@ -237,6 +239,7 @@ typedef struct aas_export_s
 	// be_aas_reach.c
 	//--------------------------------------------
 	int			(*AAS_AreaReachability)(int areanum);
+	int			(*AAS_BestReachableArea)(vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalorigin);
 	//--------------------------------------------
 	// be_aas_route.c
 	//--------------------------------------------
@@ -443,7 +446,7 @@ name:						default:			module(s):			description:
 "log"						"0"					l_log.c				enable/disable creating a log file
 "maxclients"				"4"					be_interface.c		maximum number of clients
 "maxentities"				"1024"				be_interface.c		maximum number of entities
-"bot_developer"				"0"					be_interface.c		bot developer mode (it's "botDeveloper" in C to prevent symbol clash).
+"bot_developer"				"0"					be_interface.c		bot developer mode
 
 "phys_friction"				"6"					be_aas_move.c		ground friction
 "phys_stopspeed"			"100"				be_aas_move.c		stop speed
@@ -513,4 +516,5 @@ name:						default:			module(s):			description:
 "max_levelitems"			"256"				be_ai_goal.c		maximum number of level items
 
 */
+
 

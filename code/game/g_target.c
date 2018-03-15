@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 #include "g_local.h"
 
@@ -73,8 +53,6 @@ void Use_target_remove_powerups( gentity_t *ent, gentity_t *other, gentity_t *ac
 		Team_ReturnFlag( TEAM_RED );
 	} else if( activator->client->ps.powerups[PW_BLUEFLAG] ) {
 		Team_ReturnFlag( TEAM_BLUE );
-	} else if( activator->client->ps.powerups[PW_NEUTRALFLAG] ) {
-		Team_ReturnFlag( TEAM_FREE );
 	}
 
 	memset( activator->client->ps.powerups, 0, sizeof( activator->client->ps.powerups ) );
@@ -122,7 +100,7 @@ void SP_target_delay( gentity_t *ent ) {
 The activator is given this many points.
 */
 void Use_Target_Score (gentity_t *ent, gentity_t *other, gentity_t *activator) {
-	AddScore( activator, ent->r.currentOrigin, ent->count );
+	AddScore( activator, ent->r.currentOrigin, ent->count, SCORE_TARGET_SCORE_S );
 }
 
 void SP_target_score( gentity_t *ent ) {
@@ -162,6 +140,19 @@ void SP_target_print( gentity_t *ent ) {
 	ent->use = Use_Target_Print;
 }
 
+void Use_Target_Script(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+	if ( ( g_dedicated.integer != 0 ) || ( g_gametype.integer != GT_SINGLE_PLAYER ) ) {
+		// Entity is meant to be used in local singleplayer maps only, due to security implications
+		return;
+	}
+
+	trap_SendConsoleCommand( EXEC_APPEND, va("exec %s\n", ent->message) );
+	level.cammode = qtrue;
+}
+ 
+void SP_target_script( gentity_t* ent ){
+	ent->use = Use_Target_Script;
+}
 
 //==========================================================
 
@@ -212,6 +203,8 @@ void SP_target_speaker( gentity_t *ent ) {
 		ent->spawnflags |= 8;
 	}
 
+	// FIXME: Loop through supported formats (ogg, mp3) Should this  be done in engine?
+	//        Or should we simply not add an extension if it's missing?
 	if (!strstr( s, ".wav" )) {
 		Com_sprintf (buffer, sizeof(buffer), "%s.wav", s );
 	} else {
@@ -465,3 +458,21 @@ void SP_target_location( gentity_t *self ){
 	G_SetOrigin( self, self->s.origin );
 }
 
+/*QUAKED target_balloon (1 0 0) (-16 -16 -16) (16 16 16)
+The target of a trigger_balloonzone. Origin of the balloonbox model. 
+"model" specifies the balloonbox model
+*/
+void SP_target_balloon( gentity_t *self ) {
+	// check gametype
+	if ( g_gametype.integer != GT_BALLOON )
+		return;
+
+	// load the model
+	self->s.eType = ET_BALLOON;
+	self->r.svFlags |= SVF_BROADCAST;	// for rendering the wallhack icons
+	self->s.modelindex = G_ModelIndex( self->model );
+
+	// init
+	G_SetOrigin( self, self->s.origin );
+	trap_LinkEntity( self );
+}

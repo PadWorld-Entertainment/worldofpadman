@@ -33,7 +33,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define	RF_FIRST_PERSON		0x0004		// only draw through eyes (view weapon, damage blood blob)
 #define	RF_DEPTHHACK		0x0008		// for view weapon Z crunching
 
-#define RF_CROSSHAIR		0x0010		// This item is a cross hair and will draw over everything similar to
+#define RF_FORCEENTALPHA	0x0010	// force the use of Entity-Alpha
+							// usefull for models(md3) without(or wrong) "shader-skin"
+				
+#define RF_CROSSHAIR		0x0020		// This item is a cross hair and will draw over everything similar to
 						// DEPTHHACK in stereo rendering mode, with the difference that the
 						// projection matrix won't be hacked to reduce the stereo separation as
 						// is done for the gun.
@@ -208,5 +211,17 @@ typedef struct {
 	qboolean				stereoEnabled;
 	qboolean				smpActive;		// dual processor
 } glconfig_t;
+
+#if defined(Q3_VM) || defined(_WIN32)
+
+#define _3DFX_DRIVER_NAME	"3dfxvgl"
+#define OPENGL_DRIVER_NAME	"opengl32"
+
+#else
+
+#define _3DFX_DRIVER_NAME	"libMesaVoodooGL.so"
+#define OPENGL_DRIVER_NAME	"libGL.so.1"
+
+#endif	// !defined _WIN32
 
 #endif	// __TR_TYPES_H

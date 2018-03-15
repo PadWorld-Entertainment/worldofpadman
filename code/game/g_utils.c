@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 // g_utils.c -- misc utility functions for game module
 
@@ -54,7 +34,7 @@ void AddRemap(const char *oldShader, const char *newShader, float timeOffset) {
 	}
 }
 
-const char *BuildShaderStateConfig(void) {
+const char *BuildShaderStateConfig() {
 	static char	buff[MAX_STRING_CHARS*4];
 	char out[(MAX_QPATH * 2) + 5];
 	int i;
@@ -369,6 +349,8 @@ void G_InitGentity( gentity_t *e ) {
 	e->classname = "noclass";
 	e->s.number = e - g_entities;
 	e->r.ownerNum = ENTITYNUM_NONE;
+
+	e->s.otherEntityNum = ENTITYNUM_NONE;
 }
 
 /*
@@ -664,3 +646,106 @@ int DebugLine(vec3_t start, vec3_t end, int color) {
 
 	return trap_DebugPolygonCreate(color, 4, points);
 }
+
+
+void DebugLineDouble(vec3_t start, vec3_t end, int color) {
+	vec3_t points[4], morepoints[4], dir, cross, up = {0, 0, 1};
+	float dot;
+
+	VectorCopy(start, points[0]);
+	VectorCopy(start, points[1]);
+	//points[1][2] -= 2;
+	VectorCopy(end, points[2]);
+	//points[2][2] -= 2;
+	VectorCopy(end, points[3]);
+
+
+	VectorSubtract(end, start, dir);
+	VectorNormalize(dir);
+	dot = DotProduct(dir, up);
+	if (dot > 0.99 || dot < -0.99) VectorSet(cross, 1, 0, 0);
+	else CrossProduct(dir, up, cross);
+
+	VectorNormalize(cross);
+
+	VectorMA(points[0], 2, up, morepoints[0]);
+	VectorMA(points[1], -2, up, morepoints[1]);
+	VectorMA(points[2], -2, up, morepoints[2]);
+	VectorMA(points[3], 2, up, morepoints[3]);
+
+	VectorMA(points[0], 2, cross, points[0]);
+	VectorMA(points[1], -2, cross, points[1]);
+	VectorMA(points[2], -2, cross, points[2]);
+	VectorMA(points[3], 2, cross, points[3]);
+
+	trap_DebugPolygonCreate(color, 4, points);
+	trap_DebugPolygonCreate(color, 4, morepoints);
+}
+
+void DeleteDebugLines(){
+	int i;
+	char buf[100];
+
+	trap_Cvar_VariableStringBuffer( "bot_maxdebugpolys", buf, sizeof(buf) );
+
+	for(i=0; i < atoi(buf); i++){
+		trap_DebugPolygonDelete(i);
+	}
+}
+
+
+static char *AwardName( award_t award ) {
+	char *name;
+
+	switch ( award ) {
+		case AWARD_EXCELLENT:
+			name = "excellent";
+			break;
+		case AWARD_GAUNTLET:
+			name = "gauntlet";
+			break;
+		case AWARD_CAP:
+			name = "cap";
+			break;
+		case AWARD_IMPRESSIVE:
+			name = "impressive";
+			break;
+		case AWARD_DEFEND:
+			name = "defend";
+			break;
+		case AWARD_ASSIST:
+			name = "assist";
+			break;
+		case AWARD_DENIED:
+			name = "denied";
+			break;
+		case AWARD_SPRAYGOD:
+			name = "spraygod";
+			break;
+		case AWARD_SPRAYKILLER:
+			name = "spraykiller";
+			break;
+
+		default:
+			// Should never happen, since we use award_t
+			// Unless someone extends it and forgets to edit this function :)
+			name = "unkown";
+			break;
+	}
+
+	return name;
+}
+
+// award_t is just an alias for EF_AWARD_
+void SetAward( gclient_t *client, award_t award ) {
+	if ( !client ) {
+		return;
+	}
+
+	client->ps.eFlags &= REMOVE_AWARDFLAGS;
+	client->ps.eFlags |= award;
+	client->rewardTime = ( level.time + REWARD_SPRITE_TIME );
+
+	G_LogPrintf( "Award: %i %s\n", ( client - level.clients ), AwardName( award ) );
+}
+

@@ -1,26 +1,7 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 #include "g_local.h"
+#include "wopg_sphandling.h"
 
 
 /*
@@ -44,7 +25,12 @@ void G_WriteClientSessionData( gclient_t *client ) {
 	const char	*s;
 	const char	*var;
 
-	s = va("%i %i %i %i %i %i %i", 
+	// Spaces cause problems with sscanf
+	if ( strchr( client->sess.selectedlogo, ' ' ) ) {
+		client->sess.selectedlogo[0] = '\0';
+	}
+
+	s = va("%i %i %i %i %i %i %i %i %s", 
 		client->sess.sessionTeam,
 		client->sess.spectatorTime,
 		client->sess.spectatorState,
@@ -52,9 +38,11 @@ void G_WriteClientSessionData( gclient_t *client ) {
 		client->sess.wins,
 		client->sess.losses,
 		client->sess.teamLeader
+		,client->sess.livesleft
+		,client->sess.selectedlogo
 		);
 
-	var = va( "session%i", (int)(client - level.clients) );
+	var = va( "session%i", client - level.clients );
 
 	trap_Cvar_Set( var, s );
 }
@@ -69,23 +57,28 @@ Called on a reconnect
 void G_ReadSessionData( gclient_t *client ) {
 	char	s[MAX_STRING_CHARS];
 	const char	*var;
+
+	// bk001205 - format
 	int teamLeader;
 	int spectatorState;
 	int sessionTeam;
 
-	var = va( "session%i", (int)(client - level.clients) );
+	var = va( "session%i", client - level.clients );
 	trap_Cvar_VariableStringBuffer( var, s, sizeof(s) );
 
-	sscanf( s, "%i %i %i %i %i %i %i",
-		&sessionTeam,
+	sscanf( s, "%i %i %i %i %i %i %i %i %s",
+		&sessionTeam,                 // bk010221 - format
 		&client->sess.spectatorTime,
-		&spectatorState,
+		&spectatorState,              // bk010221 - format
 		&client->sess.spectatorClient,
 		&client->sess.wins,
 		&client->sess.losses,
-		&teamLeader
+		&teamLeader                   // bk010221 - format
+		,&client->sess.livesleft
+		,&client->sess.selectedlogo
 		);
 
+	// bk001205 - format issues
 	client->sess.sessionTeam = (team_t)sessionTeam;
 	client->sess.spectatorState = (spectatorState_t)spectatorState;
 	client->sess.teamLeader = (qboolean)teamLeader;
@@ -107,7 +100,11 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 
 	// initial team determination
 	if ( g_gametype.integer >= GT_TEAM ) {
-		if ( g_teamAutoJoin.integer ) {
+		if(wopSP_hasForceTeam()) {
+			sess->sessionTeam = wopSP_forceTeam();
+			BroadcastTeamChange( client, -1 );
+		}
+		else if ( g_teamAutoJoin.integer ) {
 			sess->sessionTeam = PickTeam( -1 );
 			BroadcastTeamChange( client, -1 );
 		} else {
@@ -142,6 +139,9 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 			}
 		}
 	}
+
+	sess->livesleft=0;
+	sess->selectedlogo[0]='\0';
 
 	sess->spectatorState = SPECTATOR_FREE;
 	sess->spectatorTime = level.time;

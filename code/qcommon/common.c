@@ -32,13 +32,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #endif
 
 int demo_protocols[] =
-{ 66, 67, 68, 0 };
+{ 66, 67, 68, 69, 0 };
 
 #define MAX_NUM_ARGVS	50
 
 #define MIN_DEDICATED_COMHUNKMEGS 1
-#define MIN_COMHUNKMEGS		56
-#define DEF_COMHUNKMEGS		64
+#define MIN_COMHUNKMEGS		96
+#define DEF_COMHUNKMEGS		128
 #define DEF_COMZONEMEGS		24
 #define DEF_COMHUNKMEGS_S	XSTRING(DEF_COMHUNKMEGS)
 #define DEF_COMZONEMEGS_S	XSTRING(DEF_COMZONEMEGS)
@@ -69,7 +69,6 @@ cvar_t	*com_cl_running;
 cvar_t	*com_logfile;		// 1 = buffer log, 2 = flush after each print
 cvar_t	*com_showtrace;
 cvar_t	*com_version;
-cvar_t	*com_blood;
 cvar_t	*com_buildScript;	// for automated data building scripts
 cvar_t	*com_introPlayed;
 cvar_t	*cl_paused;
@@ -82,8 +81,8 @@ cvar_t	*com_unfocused;
 cvar_t	*com_maxfpsUnfocused;
 cvar_t	*com_minimized;
 cvar_t	*com_maxfpsMinimized;
-cvar_t	*com_abnormalExit;
 cvar_t	*com_standalone;
+cvar_t	*win_multiUser;
 
 // com_speeds times
 int		time_game;
@@ -94,9 +93,8 @@ int			com_frameTime;
 int			com_frameMsec;
 int			com_frameNumber;
 
-qboolean	com_errorEntered = qfalse;
-qboolean	com_fullyInitialized = qfalse;
-qboolean	com_gameRestarting = qfalse;
+qboolean	com_errorEntered;
+qboolean	com_fullyInitialized;
 
 char	com_errorMessage[MAXPRINTMSG];
 
@@ -238,30 +236,16 @@ void QDECL Com_DPrintf( const char *fmt, ...) {
 Com_Error
 
 Both client and server can use this, and it will
-do the appropriate thing.
+do the apropriate things.
 =============
 */
 void QDECL Com_Error( int code, const char *fmt, ... ) {
 	va_list		argptr;
 	static int	lastErrorTime;
 	static int	errorCount;
-	static qboolean	calledSysError = qfalse;
 	int			currentTime;
 
-	if(com_errorEntered)
-	{
-		if(!calledSysError)
-		{
-			calledSysError = qtrue;
-			Sys_Error("recursive error after: %s", com_errorMessage);
-		}
-		
-		return;
-	}
-
-	com_errorEntered = qtrue;
-
-	Cvar_Set("com_errorCode", va("%i", code));
+	Cvar_Set( "com_errorCode", va( "%i", code ) );
 
 	// when we are running automated scripts, make sure we
 	// know if anything failed
@@ -279,6 +263,11 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 		errorCount = 0;
 	}
 	lastErrorTime = currentTime;
+
+	if ( com_errorEntered ) {
+		Sys_Error( "recursive error after: %s", com_errorMessage );
+	}
+	com_errorEntered = qtrue;
 
 	va_start (argptr,fmt);
 	Q_vsnprintf (com_errorMessage, sizeof(com_errorMessage),fmt,argptr);
@@ -314,22 +303,20 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 			VM_Forced_Unload_Start();
 			CL_FlushMemory( );
 			VM_Forced_Unload_Done();
+			com_errorEntered = qfalse;
 			CL_CDDialog();
 		} else {
 			Com_Printf("Server didn't have CD\n" );
 		}
 		FS_PureServerSetLoadedPaks("", "");
-
-		com_errorEntered = qfalse;
 		longjmp (abortframe, -1);
 	} else {
-		CL_Shutdown (va("Client fatal crashed: %s", com_errorMessage));
+		CL_Shutdown ();
 		SV_Shutdown (va("Server fatal crashed: %s", com_errorMessage));
 	}
 
 	Com_Shutdown ();
 
-	calledSysError = qtrue;
 	Sys_Error ("%s", com_errorMessage);
 }
 
@@ -347,7 +334,7 @@ void Com_Quit_f( void ) {
 	char *p = Cmd_Args( );
 	if ( !com_errorEntered ) {
 		SV_Shutdown (p[0] ? p : "Server quit");
-		CL_Shutdown (p[0] ? p : "Client quit");
+		CL_Shutdown ();
 		Com_Shutdown ();
 		FS_Shutdown(qtrue);
 	}
@@ -683,6 +670,22 @@ int Com_FilterPath(char *filter, char *name, int casesensitive)
 	}
 	new_name[i] = '\0';
 	return Com_Filter(new_filter, new_name, casesensitive);
+}
+
+/*
+============
+Com_HashKey
+============
+*/
+int Com_HashKey(char *string, int maxlen) {
+	int register hash, i;
+
+	hash = 0;
+	for (i = 0; i < maxlen && string[i] != '\0'; i++) {
+		hash += string[i] * (119 + i);
+	}
+	hash = (hash ^ (hash >> 10) ^ (hash >> 20));
+	return hash;
 }
 
 /*
@@ -1394,11 +1397,9 @@ void Com_InitSmallZoneMemory( void ) {
 void Com_InitZoneMemory( void ) {
 	cvar_t	*cv;
 
-	// Please note: com_zoneMegs can only be set on the command line, and
-	// not in q3config.cfg or Com_StartupVariable, as they haven't been
-	// executed by this point. It's a chicken and egg problem. We need the
-	// memory manager configured to handle those places where you would
-	// configure the memory manager.
+	//FIXME: 05/01/06 com_zoneMegs is useless right now as neither q3config.cfg nor
+	// Com_StartupVariable have been executed by this point. The net result is that
+	// s_zoneTotal will always be set to the default value.
 
 	// allocate the random block zone
 	cv = Cvar_Get( "com_zoneMegs", DEF_COMZONEMEGS_S, CVAR_LATCH | CVAR_ARCHIVE );
@@ -2359,114 +2360,6 @@ static void Com_Crash_f( void ) {
 	* ( int * ) 0 = 0x12345678;
 }
 
-/*
-==================
-Com_Setenv_f
-
-For controlling environment variables
-==================
-*/
-void Com_Setenv_f(void)
-{
-	int argc = Cmd_Argc();
-	char *arg1 = Cmd_Argv(1);
-
-	if(argc > 2)
-	{
-		char *arg2 = Cmd_ArgsFrom(2);
-		
-		Sys_SetEnv(arg1, arg2);
-	}
-	else if(argc == 2)
-	{
-		char *env = getenv(arg1);
-		
-		if(env)
-			Com_Printf("%s=%s\n", arg1, env);
-		else
-			Com_Printf("%s undefined\n", arg1);
-        }
-}
-
-/*
-==================
-Com_ExecuteCfg
-
-For controlling environment variables
-==================
-*/
-
-void Com_ExecuteCfg(void)
-{
-	Cbuf_ExecuteText(EXEC_NOW, "exec default.cfg\n");
-	Cbuf_Execute(); // Always execute after exec to prevent text buffer overflowing
-
-	if(!Com_SafeMode())
-	{
-		// skip the q3config.cfg and autoexec.cfg if "safe" is on the command line
-		Cbuf_ExecuteText(EXEC_NOW, "exec " Q3CONFIG_CFG "\n");
-		Cbuf_Execute();
-		Cbuf_ExecuteText(EXEC_NOW, "exec autoexec.cfg\n");
-		Cbuf_Execute();
-	}
-}
-
-/*
-==================
-Com_GameRestart
-
-Change to a new mod properly with cleaning up cvars before switching.
-==================
-*/
-
-void Com_GameRestart(int checksumFeed, qboolean clientRestart)
-{
-	// make sure no recursion can be triggered
-	if(!com_gameRestarting && com_fullyInitialized)
-	{
-		com_gameRestarting = qtrue;
-		
-		if(clientRestart)
-		{
-			CL_Disconnect(qfalse);
-			CL_ShutdownAll();
-		}
-
-		// Kill server if we have one
-		if(com_sv_running->integer)
-			SV_Shutdown("Game directory changed");
-
-		FS_Restart(checksumFeed);
-	
-		// Clean out any user and VM created cvars
-		Cvar_Restart(qtrue);
-		Com_ExecuteCfg();
-		
-		// Restart sound subsystem so old handles are flushed
-		CL_Snd_Restart();
-
-		if(clientRestart)
-			CL_StartHunkUsers(qfalse);
-		
-		com_gameRestarting = qfalse;
-	}
-}
-
-/*
-==================
-Com_GameRestart_f
-
-Expose possibility to change current running mod to the user
-==================
-*/
-
-void Com_GameRestart_f(void)
-{
-	Cvar_Set("fs_game", Cmd_Argv(1));
-
-	Com_GameRestart(0, qtrue);
-}
-
 #ifndef STANDALONE
 
 // TTimo: centralizing the cl_cdkey stuff after I discovered a buffer overflow problem with the dedicated server version
@@ -2489,7 +2382,7 @@ void Com_ReadCDKey( const char *filename ) {
 	char			buffer[33];
 	char			fbuffer[MAX_OSPATH];
 
-	Com_sprintf(fbuffer, sizeof(fbuffer), "%s/q3key", filename);
+	sprintf(fbuffer, "%s/q3key", filename);
 
 	FS_SV_FOpenFileRead( fbuffer, &f );
 	if ( !f ) {
@@ -2519,7 +2412,7 @@ void Com_AppendCDKey( const char *filename ) {
 	char			buffer[33];
 	char			fbuffer[MAX_OSPATH];
 
-	Com_sprintf(fbuffer, sizeof(fbuffer), "%s/q3key", filename);
+	sprintf(fbuffer, "%s/q3key", filename);
 
 	FS_SV_FOpenFileRead( fbuffer, &f );
 	if (!f) {
@@ -2545,6 +2438,7 @@ void Com_AppendCDKey( const char *filename ) {
 Com_WriteCDKey
 =================
 */
+/* ... nonCDKEY
 static void Com_WriteCDKey( const char *filename, const char *ikey ) {
 	fileHandle_t	f;
 	char			fbuffer[MAX_OSPATH];
@@ -2554,7 +2448,7 @@ static void Com_WriteCDKey( const char *filename, const char *ikey ) {
 #endif
 
 
-	Com_sprintf(fbuffer, sizeof(fbuffer), "%s/q3key", filename);
+	sprintf(fbuffer, "%s/q3key", filename);
 
 
 	Q_strncpyz( key, ikey, 17 );
@@ -2585,6 +2479,7 @@ out:
 #endif
 	return;
 }
+*/
 #endif
 
 #endif // STANDALONE
@@ -2606,21 +2501,6 @@ static void Com_DetectAltivec(void)
 	}
 }
 
-/*
-=================
-Com_InitRand
-Seed the random number generator, if possible with an OS supplied random seed.
-=================
-*/
-static void Com_InitRand(void)
-{
-	unsigned int seed;
-
-	if(Sys_RandomBytes((byte *) &seed, sizeof(seed)))
-		srand(seed);
-	else
-		srand(time(NULL));
-}
 
 /*
 =================
@@ -2628,10 +2508,10 @@ Com_Init
 =================
 */
 void Com_Init( char *commandLine ) {
-	char	*s;
+	//char	*s;
 	int	qport;
 
-	Com_Printf( "%s %s %s\n", Q3_VERSION, PLATFORM_STRING, __DATE__ );
+	Com_Printf( "%s %s %s\n", VERSION_INFO, PLATFORM_STRING, __DATE__ );
 
 	if ( setjmp (abortframe) ) {
 		Sys_Error ("Error during initialization");
@@ -2641,14 +2521,13 @@ void Com_Init( char *commandLine ) {
 	Com_Memset( &eventQueue[ 0 ], 0, MAX_QUEUED_EVENTS * sizeof( sysEvent_t ) );
 	Com_Memset( &sys_packetReceived[ 0 ], 0, MAX_MSGLEN * sizeof( byte ) );
 
-	// initialize the weak pseudo-random number generator for use later.
-	Com_InitRand();
-
-	// do this before anything else decides to push events
-	Com_InitPushEvent();
+  // do this before anything else decides to push events
+  Com_InitPushEvent();
 
 	Com_InitSmallZoneMemory();
 	Cvar_Init ();
+
+	win_multiUser = Cvar_Get("win_multiUser","0",0);// CVAR_ARCHIVE
 
 	// prepare enough of the subsystems to handle
 	// cvar and command buffer management
@@ -2657,11 +2536,11 @@ void Com_Init( char *commandLine ) {
 //	Swap_Init ();
 	Cbuf_Init ();
 
-	// override anything from the config files with command line args
-	Com_StartupVariable( NULL );
-
 	Com_InitZoneMemory();
 	Cmd_Init ();
+
+	// override anything from the config files with command line args
+	Com_StartupVariable( NULL );
 
 	// get the developer cvar set as early as possible
 	Com_StartupVariable( "developer" );
@@ -2673,21 +2552,16 @@ void Com_Init( char *commandLine ) {
 
 	Com_InitJournaling();
 
-	// Add some commands here already so users can use them from config files
-	Cmd_AddCommand ("setenv", Com_Setenv_f);
-	if (com_developer && com_developer->integer)
-	{
-		Cmd_AddCommand ("error", Com_Error_f);
-		Cmd_AddCommand ("crash", Com_Crash_f);
-		Cmd_AddCommand ("freeze", Com_Freeze_f);
-	}
-	Cmd_AddCommand ("quit", Com_Quit_f);
-	Cmd_AddCommand ("changeVectors", MSG_ReportChangeVectors_f );
-	Cmd_AddCommand ("writeconfig", Com_WriteConfig_f );
-	Cmd_SetCommandCompletionFunc( "writeconfig", Cmd_CompleteCfgName );
-	Cmd_AddCommand("game_restart", Com_GameRestart_f);
+	Cbuf_AddText ("exec default.cfg\n");
 
-	Com_ExecuteCfg();
+	// skip the q3config.cfg if "safe" is on the command line
+	if ( !Com_SafeMode() ) {
+		Cbuf_AddText ("exec " Q3CONFIG_CFG "\n");
+	}
+
+	Cbuf_AddText ("exec autoexec.cfg\n");
+
+	Cbuf_Execute ();
 
 	// override anything from the config files with command line args
 	Com_StartupVariable( NULL );
@@ -2712,7 +2586,6 @@ void Com_Init( char *commandLine ) {
 	//
 	com_altivec = Cvar_Get ("com_altivec", "1", CVAR_ARCHIVE);
 	com_maxfps = Cvar_Get ("com_maxfps", "85", CVAR_ARCHIVE);
-	com_blood = Cvar_Get ("com_blood", "1", CVAR_ARCHIVE);
 
 	com_developer = Cvar_Get ("developer", "0", CVAR_TEMP );
 	com_logfile = Cvar_Get ("logfile", "0", CVAR_TEMP );
@@ -2738,27 +2611,24 @@ void Com_Init( char *commandLine ) {
 	com_maxfpsUnfocused = Cvar_Get( "com_maxfpsUnfocused", "0", CVAR_ARCHIVE );
 	com_minimized = Cvar_Get( "com_minimized", "0", CVAR_ROM );
 	com_maxfpsMinimized = Cvar_Get( "com_maxfpsMinimized", "0", CVAR_ARCHIVE );
-	com_abnormalExit = Cvar_Get( "com_abnormalExit", "0", CVAR_ROM );
 	com_standalone = Cvar_Get( "com_standalone", "0", CVAR_INIT );
 
 	com_introPlayed = Cvar_Get( "com_introplayed", "0", CVAR_ARCHIVE);
 
-	s = va("%s %s %s", Q3_VERSION, PLATFORM_STRING, __DATE__ );
-	com_version = Cvar_Get ("version", s, CVAR_ROM | CVAR_SERVERINFO );
+	if ( com_developer && com_developer->integer ) {
+		Cmd_AddCommand ("error", Com_Error_f);
+		Cmd_AddCommand ("crash", Com_Crash_f );
+		Cmd_AddCommand ("freeze", Com_Freeze_f);
+	}
+	Cmd_AddCommand ("quit", Com_Quit_f);
+	Cmd_AddCommand ("changeVectors", MSG_ReportChangeVectors_f );
+	Cmd_AddCommand ("writeconfig", Com_WriteConfig_f );
+	Cmd_SetCommandCompletionFunc( "writeconfig", Cmd_CompleteCfgName );
+
+	//s = va("%s %s %s", Q3_VERSION, PLATFORM_STRING, __DATE__ );
+	com_version = Cvar_Get ("version", Q3_VERSION, CVAR_ROM | CVAR_SERVERINFO );
 
 	Sys_Init();
-
-	if( Sys_WritePIDFile( ) ) {
-#ifndef DEDICATED
-		const char *message = "The last time " CLIENT_WINDOW_TITLE " ran, "
-			"it didn't exit properly. This may be due to inappropriate video "
-			"settings. Would you like to start with \"safe\" video settings?";
-
-		if( Sys_Dialog( DT_YES_NO, message, "Abnormal Exit" ) == DR_YES ) {
-			Cvar_Set( "com_abnormalExit", "1" );
-		}
-#endif
-	}
 
 	// Pick a random port value
 	Com_RandomBytes( (byte*)&qport, sizeof(int) );
@@ -2781,11 +2651,13 @@ void Com_Init( char *commandLine ) {
 	if ( !Com_AddStartupCommands() ) {
 		// if the user didn't give any commands, run default action
 		if ( !com_dedicated->integer ) {
-			Cbuf_AddText ("cinematic idlogo.RoQ\n");
+			Cbuf_AddText ("cinematic idlogo.ogm\n");
+/*
 			if( !com_introPlayed->integer ) {
 				Cvar_Set( com_introPlayed->name, "1" );
 				Cvar_Set( "nextmap", "cinematic intro.RoQ" );
 			}
+*/
 		}
 	}
 
@@ -2819,7 +2691,7 @@ void Com_WriteConfigToFile( const char *filename ) {
 		return;
 	}
 
-	FS_Printf (f, "// generated by quake, do not modify\n");
+	FS_Printf (f, "// generated by WoP-Engine, do not modify\n");
 	Key_WriteBindings (f);
 	Cvar_WriteVariables (f);
 	FS_FCloseFile( f );
@@ -2834,9 +2706,6 @@ Writes key bindings and archived cvars to config file if modified
 ===============
 */
 void Com_WriteConfiguration( void ) {
-#ifndef DEDICATED
-	cvar_t	*fs;
-#endif
 	// if we are quiting without fully initializing, make sure
 	// we don't write out anything
 	if ( !com_fullyInitialized ) {
@@ -2849,21 +2718,6 @@ void Com_WriteConfiguration( void ) {
 	cvar_modifiedFlags &= ~CVAR_ARCHIVE;
 
 	Com_WriteConfigToFile( Q3CONFIG_CFG );
-
-	// not needed for dedicated
-#ifndef DEDICATED
-	fs = Cvar_Get ("fs_game", "", CVAR_INIT|CVAR_SYSTEMINFO );
-#ifndef STANDALONE
-	if(!Cvar_VariableIntegerValue("com_standalone"))
-	{
-		if (UI_usesUniqueCDKey() && fs && fs->string[0] != 0) {
-			Com_WriteCDKey( fs->string, &cl_cdkey[16] );
-		} else {
-			Com_WriteCDKey( BASEGAME, cl_cdkey );
-		}
-	}
-#endif
-#endif
 }
 
 
@@ -3078,12 +2932,6 @@ void Com_Frame( void ) {
 
 	if ( com_speeds->integer ) {
 		timeAfter = Sys_Milliseconds ();
-	}
-#else
-	if ( com_speeds->integer ) {
-		timeAfter = Sys_Milliseconds ();
-		timeBeforeEvents = timeAfter;
-		timeBeforeClient = timeAfter;
 	}
 #endif
 
@@ -3461,6 +3309,7 @@ void Com_RandomBytes( byte *string, int len )
 		return;
 
 	Com_Printf( "Com_RandomBytes: using weak randomization\n" );
+	srand( time( 0 ) );
 	for( i = 0; i < len; i++ )
 		string[i] = (unsigned char)( rand() % 255 );
 }

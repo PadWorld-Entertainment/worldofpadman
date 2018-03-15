@@ -31,7 +31,7 @@ static snd_codec_t *codecs;
 S_FileExtension
 =================
 */
-static char *S_FileExtension(const char *fni)
+char *S_FileExtension(const char *fni)
 {
 	// we should search from the ending to the last '/'
 
@@ -105,8 +105,11 @@ void S_CodecInit()
 {
 	codecs = NULL;
 	S_CodecRegister(&wav_codec);
-#ifdef USE_CODEC_VORBIS
+#if USE_CODEC_VORBIS
 	S_CodecRegister(&ogg_codec);
+#endif
+#if USE_CODEC_MP3
+	S_CodecRegister(&mp3_codec);
 #endif
 }
 
@@ -163,6 +166,13 @@ snd_stream_t *S_CodecOpenStream(const char *filename)
 {
 	snd_codec_t *codec;
 	char fn[MAX_QPATH];
+//wop_music{
+	if(!strcmp(filename,"<nextsongCMD>") )
+	{
+		Cbuf_ExecuteText( EXEC_APPEND, "wop_nextsong\n");
+		return NULL;
+	}
+//wop_music}
 
 	codec = S_FindCodecForFile(filename);
 	if(!codec)

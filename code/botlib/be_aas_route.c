@@ -311,7 +311,7 @@ int AAS_EnableRoutingArea(int areanum, int enable)
 
 	if (areanum <= 0 || areanum >= aasworld.numareas)
 	{
-		if (botDeveloper)
+		if (bot_developer)
 		{
 			botimport.Print(PRT_ERROR, "AAS_EnableRoutingArea: areanum %d out of range\n", areanum);
 		} //end if
@@ -878,6 +878,10 @@ void AAS_InitRoutingUpdate(void)
 	//allocate memory for the portal update fields
 	aasworld.portalupdate = (aas_routingupdate_t *) GetClearedMemory(
 									(aasworld.numportals+1) * sizeof(aas_routingupdate_t));
+	// cyr: alloc fib array A
+    if (aasworld.fibA) FreeMemory(aasworld.fibA);
+    aasworld.fibA = (aas_routingupdate_t **) GetClearedMemory(
+                            maxreachabilityareas * sizeof(aas_routingupdate_t*));
 } //end of the function AAS_InitRoutingUpdate
 //===========================================================================
 //
@@ -1269,6 +1273,8 @@ void AAS_FreeRoutingCaches(void)
 	aasworld.areaupdate = NULL;
 	if (aasworld.portalupdate) FreeMemory(aasworld.portalupdate);
 	aasworld.portalupdate = NULL;
+	if (aasworld.fibA) FreeMemory(aasworld.fibA);   // cyr
+    aasworld.fibA = NULL;                           // cyr
 	// free lists with areas the reachabilities go through
 	if (aasworld.reachabilityareas) FreeMemory(aasworld.reachabilityareas);
 	aasworld.reachabilityareas = NULL;
@@ -1286,111 +1292,294 @@ void AAS_FreeRoutingCaches(void)
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_UpdateAreaRoutingCache(aas_routingcache_t *areacache)
-{
-	int i, nextareanum, cluster, badtravelflags, clusterareanum, linknum;
-	int numreachabilityareas;
-	unsigned short int t, startareatraveltimes[128]; //NOTE: not more than 128 reachabilities per area allowed
-	aas_routingupdate_t *updateliststart, *updatelistend, *curupdate, *nextupdate;
-	aas_reachability_t *reach;
-	aas_reversedreachability_t *revreach;
-	aas_reversedlink_t *revlink;
+// cyr{
+void InsertAfter( aas_routingupdate_t* a, aas_routingupdate_t* b){
+    if (a == a->fib_right) {
+        a->fib_right = b;
+        a->fib_left = b;
+        b->fib_right = a;
+        b->fib_left = a;
+    } else {
+        b->fib_right = a->fib_right;
+        a->fib_right->fib_left = b;
+        a->fib_right = b;
+        b->fib_left = a;
+    }
+}
 
-#ifdef ROUTING_DEBUG
-	numareacacheupdates++;
-#endif //ROUTING_DEBUG
-	//number of reachability areas within this cluster
-	numreachabilityareas = aasworld.clusters[areacache->cluster].numreachabilityareas;
-	//
-	aasworld.frameroutingupdates++;
-	//clear the routing update fields
-//	Com_Memset(aasworld.areaupdate, 0, aasworld.numareas * sizeof(aas_routingupdate_t));
-	//
-	badtravelflags = ~areacache->travelflags;
-	//
-	clusterareanum = AAS_ClusterAreaNum(areacache->cluster, areacache->areanum);
-	if (clusterareanum >= numreachabilityareas) return;
-	//
-	Com_Memset(startareatraveltimes, 0, sizeof(startareatraveltimes));
-	//
-	curupdate = &aasworld.areaupdate[clusterareanum];
-	curupdate->areanum = areacache->areanum;
-	//VectorCopy(areacache->origin, curupdate->start);
-	curupdate->areatraveltimes = startareatraveltimes;
-	curupdate->tmptraveltime = areacache->starttraveltime;
-	//
-	areacache->traveltimes[clusterareanum] = areacache->starttraveltime;
-	//put the area to start with in the current read list
-	curupdate->next = NULL;
-	curupdate->prev = NULL;
-	updateliststart = curupdate;
-	updatelistend = curupdate;
-	//while there are updates in the current list
-	while (updateliststart)
-	{
-		curupdate = updateliststart;
-		//
-		if (curupdate->next) curupdate->next->prev = NULL;
-		else updatelistend = NULL;
-		updateliststart = curupdate->next;
-		//
-		curupdate->inlist = qfalse;
-		//check all reversed reachability links
-		revreach = &aasworld.reversedreachability[curupdate->areanum];
-		//
-		for (i = 0, revlink = revreach->first; revlink; revlink = revlink->next, i++)
-		{
-			linknum = revlink->linknum;
-			reach = &aasworld.reachability[linknum];
-			//if there is used an undesired travel type
-			if (AAS_TravelFlagForType_inline(reach->traveltype) & badtravelflags) continue;
-			//if not allowed to enter the next area
-			if (aasworld.areasettings[reach->areanum].areaflags & AREA_DISABLED) continue;
-			//if the next area has a not allowed travel flag
-			if (AAS_AreaContentsTravelFlags_inline(reach->areanum) & badtravelflags) continue;
-			//number of the area the reversed reachability leads to
-			nextareanum = revlink->areanum;
-			//get the cluster number of the area
-			cluster = aasworld.areasettings[nextareanum].cluster;
-			//don't leave the cluster
-			if (cluster > 0 && cluster != areacache->cluster) continue;
-			//get the number of the area in the cluster
-			clusterareanum = AAS_ClusterAreaNum(areacache->cluster, nextareanum);
-			if (clusterareanum >= numreachabilityareas) continue;
-			//time already travelled plus the traveltime through
-			//the current area plus the travel time from the reachability
-			t = curupdate->tmptraveltime +
-						//AAS_AreaTravelTime(curupdate->areanum, curupdate->start, reach->end) +
-						curupdate->areatraveltimes[i] +
-							reach->traveltime;
-			//
-			if (!areacache->traveltimes[clusterareanum] ||
-					areacache->traveltimes[clusterareanum] > t)
-			{
-				areacache->traveltimes[clusterareanum] = t;
-				areacache->reachabilities[clusterareanum] = linknum - aasworld.areasettings[nextareanum].firstreachablearea;
-				nextupdate = &aasworld.areaupdate[clusterareanum];
-				nextupdate->areanum = nextareanum;
-				nextupdate->tmptraveltime = t;
-				//VectorCopy(reach->start, nextupdate->start);
-				nextupdate->areatraveltimes = aasworld.areatraveltimes[nextareanum][linknum -
-													aasworld.areasettings[nextareanum].firstreachablearea];
-				if (!nextupdate->inlist)
-				{
-					// we add the update to the end of the list
-					// we could also use a B+ tree to have a real sorted list
-					// on travel time which makes for faster routing updates
-					nextupdate->next = NULL;
-					nextupdate->prev = updatelistend;
-					if (updatelistend) updatelistend->next = nextupdate;
-					else updateliststart = nextupdate;
-					updatelistend = nextupdate;
-					nextupdate->inlist = qtrue;
-				} //end if
-			} //end if
-		} //end for
-	} //end while
-} //end of the function AAS_UpdateAreaRoutingCache
+void InsertToRoot( MyQueue_t* Q, aas_routingupdate_t* cur){
+    if (Q->proot == NULL)
+        Q->proot = cur->fib_left = cur->fib_right = cur;
+    else
+        InsertAfter(Q->proot, cur);
+}
+
+void Insert(MyQueue_t* Q, aas_routingupdate_t* cur){
+    InsertToRoot(Q, cur);
+    // update min pointer
+    if( Q->pmin==NULL || Q->pmin->tmptraveltime > cur->tmptraveltime)
+        Q->pmin = cur;
+    Q->size++;
+}
+
+void AddToQueue(MyQueue_t* Q, aas_routingupdate_t* cur){ // tmptraveltime muss vorher gesetzt werden !
+    cur->fib_parent = NULL;
+    cur->fib_child = NULL;
+    cur->fib_degree = 0;
+    cur->fib_mark = qfalse;
+    Insert(Q,cur);
+}
+
+aas_routingupdate_t* UnlinkFromQueue( aas_routingupdate_t* cur ){
+    aas_routingupdate_t* ret;   // left sibling
+
+    if (cur == cur->fib_left)
+        ret = NULL;
+    else
+        ret = cur->fib_left;
+
+    // if parents son pointer is on me, redirect to left sibling
+    if (cur->fib_parent != NULL && cur->fib_parent->fib_child == cur)
+        cur->fib_parent->fib_child = ret;
+
+    cur->fib_right->fib_left = cur->fib_left;
+    cur->fib_left->fib_right = cur->fib_right;
+
+    return ret; //(aas_routingupdate_t*)
+}
+
+void Queue_Cut( MyQueue_t* Q, aas_routingupdate_t* cur, aas_routingupdate_t* mother){
+    // entferne x aus der sohnliste von y
+    UnlinkFromQueue(cur);
+    mother->fib_degree--;
+    InsertToRoot(Q, cur);
+    cur->fib_parent = NULL;     // better put this into InsertToRoot ? TODO
+    cur->fib_mark = qfalse;
+}
+
+void Queue_Cascading_Cut( MyQueue_t* Q, aas_routingupdate_t* y){
+    aas_routingupdate_t* z = y->fib_parent;
+    while( z != NULL ){
+        if( y->fib_mark == qtrue ){
+            Queue_Cut(Q, y, z);
+            // bubble up
+            y = z;
+            z = y->fib_parent;
+        }
+        else{
+            y->fib_mark = qtrue;
+            return;
+        }
+    }
+}
+
+qboolean Queue_DecreaseKey( MyQueue_t* Q, aas_routingupdate_t* cur){
+    aas_routingupdate_t* tmp;
+
+    // tmptraveltime is updated and quaranteed to be smaller than former value
+    tmp = cur->fib_parent;
+    // bubble up if smaller than parent
+    if(tmp!=NULL && cur->tmptraveltime < tmp->tmptraveltime){
+        Queue_Cut(Q, cur, tmp);
+        Queue_Cascading_Cut(Q, tmp);
+    }
+    // update global minimum
+    if(cur->tmptraveltime < Q->pmin->tmptraveltime)
+        Q->pmin = cur;
+
+    return qtrue;
+}
+
+
+void QueueLink(aas_routingupdate_t* mother, aas_routingupdate_t* kid){
+    // make y a child of x
+    if (mother->fib_child == NULL){
+        mother->fib_child = kid;
+        kid->fib_left = kid->fib_right = kid;
+    }
+    else
+        InsertAfter(mother->fib_child->fib_left, kid);  // == InsertBefore
+    kid->fib_parent = mother;
+    mother->fib_degree++;
+    kid->fib_mark = qfalse;
+}
+
+void Queue_CleanUp(MyQueue_t* Q, qboolean logme){
+    int deg;
+    int i;
+    aas_routingupdate_t* tmp1;
+    aas_routingupdate_t* tmp2;
+    aas_routingupdate_t* tmp3;
+
+    // array A null setzen
+    memset(aasworld.fibA, 0, sizeof(aas_routingupdate_t*) * Q->size );
+
+    // main loop
+    //iteriere über elemente it der wurzelliste
+    while(Q->proot != NULL){
+        tmp1 = Q->proot;
+        deg = Q->proot->fib_degree;
+        // entferne proot aus wurzelliste
+        if (Q->proot->fib_left == Q->proot)
+             Q->proot = NULL;
+        else{
+            Q->proot = UnlinkFromQueue(Q->proot);
+        }
+        // es sitzt schon ein entferntes listenelement auf der gewünschten position...
+        // -> füge das element mit dem grösseren schlüssel zu den childs des anderen..
+        // dadurch ändert sich der grad -> wieder pos prüfen
+        while( aasworld.fibA[deg] != NULL){
+            tmp2 = aasworld.fibA[deg];
+            // make tmp1 the smaller traveltime
+            if( tmp2->tmptraveltime < tmp1->tmptraveltime){ // swap
+                tmp3=tmp1;  tmp1=tmp2;  tmp2=tmp3;
+            }
+            // füge tmp2 zu den söhnen von tmp1
+            QueueLink(tmp1, tmp2);
+            aasworld.fibA[deg] = NULL;
+            deg++;
+        }
+        // füge entferntes listenelement in array ein
+        aasworld.fibA[deg] = tmp1;
+    }
+    // create new root list from aasworld.fibA
+    Q->pmin = NULL;
+    for(i=0; i < Q->size;i++){
+        if(aasworld.fibA[i]!=NULL){
+            //füge aasworld.fibA[i] zur wurzelliste
+            InsertToRoot(Q, aasworld.fibA[i]);
+            // min updaten
+            if(Q->pmin == NULL || aasworld.fibA[i]->tmptraveltime < Q->pmin->tmptraveltime )
+                    Q->pmin = aasworld.fibA[i];
+        }
+    }
+}
+
+aas_routingupdate_t* QueueExtractMin( MyQueue_t* Q, qboolean logme){
+    aas_routingupdate_t* ret = Q->pmin;
+    aas_routingupdate_t* son = NULL;
+    aas_routingupdate_t* it;    // iterator
+    aas_routingupdate_t* next;
+
+    if(ret != NULL){
+        // add all min's childs to  the root list
+        for(it= ret->fib_child; it!=son && it != NULL;){
+            if(son==NULL) son = it; // init son at cycle start point
+            next = it->fib_right;
+            InsertToRoot(Q, it);
+            it->fib_parent = NULL;
+            it = next;
+        }
+        // entferne ret aus wurzelliste
+        if (ret->fib_left == ret) Q->proot = NULL;
+        else Q->proot = UnlinkFromQueue(ret);
+
+        // update min and recalc
+        if(ret == ret->fib_right)   // ret is the only element Q
+            Q->pmin = NULL;
+        else{
+            Q->pmin = ret->fib_right;
+            Queue_CleanUp(Q, logme);
+        }
+        Q->size--;
+    }
+    return ret;
+}
+
+#define TT_INF 32767    // unsigned short max
+void AAS_UpdateAreaRoutingCache(aas_routingcache_t *areacache){
+    int i, clusterareanum, cluster, numreachabilityareas;
+    int badtravelflags, linknum, nextareanum;
+    unsigned short int startareatraveltimes[128], t;
+    aas_routingupdate_t* curupdate;
+    aas_reachability_t *reach;
+    aas_reversedreachability_t *revreach;
+    aas_reversedlink_t *revlink;
+    MyQueue_t Q;
+
+    numreachabilityareas = aasworld.clusters[areacache->cluster].numreachabilityareas;
+
+    // sanity check
+    clusterareanum = AAS_ClusterAreaNum(areacache->cluster, areacache->areanum);
+    if (clusterareanum >= numreachabilityareas) return;
+    // traveltime from destination area is given
+    areacache->traveltimes[clusterareanum] = areacache->starttraveltime;
+    badtravelflags = ~areacache->travelflags;
+
+
+    // preinit routingupdate objects
+    for(i=0; i<aasworld.clusters[areacache->cluster].numreachabilityareas; i++)
+        aasworld.areaupdate[i].tmptraveltime = TT_INF;  // i= clusterarenum
+
+    // traveltimes inside goal area
+    Com_Memset(startareatraveltimes, 0, sizeof(startareatraveltimes));
+
+    // init Q
+    Q.proot = NULL; Q.pmin = NULL;  Q.size = 0;
+
+    // add goal area to the list
+    aasworld.areaupdate[clusterareanum].areanum = areacache->areanum;
+    aasworld.areaupdate[clusterareanum].areatraveltimes = startareatraveltimes;
+    aasworld.areaupdate[clusterareanum].tmptraveltime = areacache->starttraveltime;
+    AddToQueue( &Q, &aasworld.areaupdate[clusterareanum] ); // inlist true setzen Q_INQUEUE
+
+    while( Q.size ){    // nonempty
+        // get pointer to nearest area, take it out of the queue
+        curupdate = QueueExtractMin(&Q,qtrue);
+        // iterate over all reachabilities, update traveltimes
+        revreach = &aasworld.reversedreachability[curupdate->areanum];
+        //
+        for (i = 0, revlink = revreach->first; revlink; revlink = revlink->next, i++)
+        {
+            linknum = revlink->linknum;
+            reach = &aasworld.reachability[linknum];
+            //if there is used an undesired travel type
+            if (AAS_TravelFlagForType_inline(reach->traveltype) & badtravelflags) continue;
+            //if not allowed to enter the next area
+            if (aasworld.areasettings[reach->areanum].areaflags & AREA_DISABLED) continue;
+            //if the next area has a not allowed travel flag
+            if (AAS_AreaContentsTravelFlags_inline(reach->areanum) & badtravelflags) continue;
+            //number of the area the reversed reachability leads to
+            nextareanum = revlink->areanum;
+            //get the cluster number of the area
+            cluster = aasworld.areasettings[nextareanum].cluster;
+            //don't leave the cluster
+            if (cluster > 0 && cluster != areacache->cluster) continue;
+            //get the number of the area in the cluster
+            clusterareanum = AAS_ClusterAreaNum(areacache->cluster, nextareanum);
+            if (clusterareanum >= numreachabilityareas) continue;
+            //time already travelled plus the traveltime through
+            //the current area plus the travel time from the reachability
+            t = curupdate->tmptraveltime +
+                        //AAS_AreaTravelTime(curupdate->areanum, curupdate->start, reach->end) +
+                        curupdate->areatraveltimes[i] +
+                            reach->traveltime;
+
+            if (aasworld.areaupdate[clusterareanum].tmptraveltime == TT_INF ){
+                aasworld.areaupdate[clusterareanum].areanum = nextareanum;
+                aasworld.areaupdate[clusterareanum].tmptraveltime = t;
+                aasworld.areaupdate[clusterareanum].areatraveltimes = aasworld.areatraveltimes[nextareanum][linknum -
+                                                    aasworld.areasettings[nextareanum].firstreachablearea];
+                AddToQueue( &Q, &aasworld.areaupdate[clusterareanum] );
+                // store new best values
+                areacache->traveltimes[clusterareanum] = t;
+                areacache->reachabilities[clusterareanum] = linknum - aasworld.areasettings[nextareanum].firstreachablearea;
+            }
+            // already in the queue, update value
+            else if(areacache->traveltimes[clusterareanum] > t){
+                // areanum is already set
+                aasworld.areaupdate[clusterareanum].tmptraveltime = t;
+                aasworld.areaupdate[clusterareanum].areatraveltimes = aasworld.areatraveltimes[nextareanum][linknum -
+                                                    aasworld.areasettings[nextareanum].firstreachablearea];
+                Queue_DecreaseKey( &Q, &aasworld.areaupdate[clusterareanum]);
+                // store new best values
+                areacache->traveltimes[clusterareanum] = t;
+                areacache->reachabilities[clusterareanum] = linknum - aasworld.areasettings[nextareanum].firstreachablearea;
+            }
+        }// end for
+    }
+}
+// cyr}
 //===========================================================================
 //
 // Parameter:			-
@@ -1443,98 +1632,101 @@ aas_routingcache_t *AAS_GetAreaRoutingCache(int clusternum, int areanum, int tra
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
+// cyr{
 void AAS_UpdatePortalRoutingCache(aas_routingcache_t *portalcache)
 {
-	int i, portalnum, clusterareanum, clusternum;
-	unsigned short int t;
-	aas_portal_t *portal;
-	aas_cluster_t *cluster;
-	aas_routingcache_t *cache;
-	aas_routingupdate_t *updateliststart, *updatelistend, *curupdate, *nextupdate;
+    int i, portalnum, clusterareanum, clusternum;
+    unsigned short int t;
+    aas_portal_t *portal;
+    aas_cluster_t *cluster;
+    aas_routingcache_t *cache;
+    aas_routingupdate_t *updateliststart, *updatelistend, *curupdate, *nextupdate;
 
 #ifdef ROUTING_DEBUG
-	numportalcacheupdates++;
+    numportalcacheupdates++;
 #endif //ROUTING_DEBUG
-	//clear the routing update fields
-//	Com_Memset(aasworld.portalupdate, 0, (aasworld.numportals+1) * sizeof(aas_routingupdate_t));
-	//
-	curupdate = &aasworld.portalupdate[aasworld.numportals];
-	curupdate->cluster = portalcache->cluster;
-	curupdate->areanum = portalcache->areanum;
-	curupdate->tmptraveltime = portalcache->starttraveltime;
-	//if the start area is a cluster portal, store the travel time for that portal
-	clusternum = aasworld.areasettings[portalcache->areanum].cluster;
-	if (clusternum < 0)
-	{
-		portalcache->traveltimes[-clusternum] = portalcache->starttraveltime;
-	} //end if
-	//put the area to start with in the current read list
-	curupdate->next = NULL;
-	curupdate->prev = NULL;
-	updateliststart = curupdate;
-	updatelistend = curupdate;
-	//while there are updates in the current list
-	while (updateliststart)
-	{
-		curupdate = updateliststart;
-		//remove the current update from the list
-		if (curupdate->next) curupdate->next->prev = NULL;
-		else updatelistend = NULL;
-		updateliststart = curupdate->next;
-		//current update is removed from the list
-		curupdate->inlist = qfalse;
-		//
-		cluster = &aasworld.clusters[curupdate->cluster];
-		//
-		cache = AAS_GetAreaRoutingCache(curupdate->cluster,
-								curupdate->areanum, portalcache->travelflags);
-		//take all portals of the cluster
-		for (i = 0; i < cluster->numportals; i++)
-		{
-			portalnum = aasworld.portalindex[cluster->firstportal + i];
-			portal = &aasworld.portals[portalnum];
-			//if this is the portal of the current update continue
-			if (portal->areanum == curupdate->areanum) continue;
-			//
-			clusterareanum = AAS_ClusterAreaNum(curupdate->cluster, portal->areanum);
-			if (clusterareanum >= cluster->numreachabilityareas) continue;
-			//
-			t = cache->traveltimes[clusterareanum];
-			if (!t) continue;
-			t += curupdate->tmptraveltime;
-			//
-			if (!portalcache->traveltimes[portalnum] ||
-					portalcache->traveltimes[portalnum] > t)
-			{
-				portalcache->traveltimes[portalnum] = t;
-				nextupdate = &aasworld.portalupdate[portalnum];
-				if (portal->frontcluster == curupdate->cluster)
-				{
-					nextupdate->cluster = portal->backcluster;
-				} //end if
-				else
-				{
-					nextupdate->cluster = portal->frontcluster;
-				} //end else
-				nextupdate->areanum = portal->areanum;
-				//add travel time through the actual portal area for the next update
-				nextupdate->tmptraveltime = t + aasworld.portalmaxtraveltimes[portalnum];
-				if (!nextupdate->inlist)
-				{
-					// we add the update to the end of the list
-					// we could also use a B+ tree to have a real sorted list
-					// on travel time which makes for faster routing updates
-					nextupdate->next = NULL;
-					nextupdate->prev = updatelistend;
-					if (updatelistend) updatelistend->next = nextupdate;
-					else updateliststart = nextupdate;
-					updatelistend = nextupdate;
-					nextupdate->inlist = qtrue;
-				} //end if
-			} //end if
-		} //end for
-	} //end while
+    //clear the routing update fields
+//  Com_Memset(aasworld.portalupdate, 0, (aasworld.numportals+1) * sizeof(aas_routingupdate_t));
+    //
+    curupdate = &aasworld.portalupdate[aasworld.numportals];
+    curupdate->cluster = portalcache->cluster;
+    curupdate->areanum = portalcache->areanum;
+    curupdate->tmptraveltime = portalcache->starttraveltime;
+    //if the start area is a cluster portal, store the travel time for that portal
+    clusternum = aasworld.areasettings[portalcache->areanum].cluster;
+    if (clusternum < 0)
+    {
+        portalcache->traveltimes[-clusternum] = portalcache->starttraveltime;
+    } //end if
+    //put the area to start with in the current read list
+    curupdate->fib_left = NULL;
+    curupdate->fib_right = NULL;
+    updateliststart = curupdate;
+    updatelistend = curupdate;
+    //while there are updates in the current list
+    while (updateliststart)
+    {
+        curupdate = updateliststart;
+        //remove the current update from the list
+        if (curupdate->fib_left) curupdate->fib_left->fib_right = NULL;
+        else updatelistend = NULL;
+        updateliststart = curupdate->fib_left;
+        //current update is removed from the list
+        curupdate->inlist = qfalse;
+        //
+        cluster = &aasworld.clusters[curupdate->cluster];
+        //
+        cache = AAS_GetAreaRoutingCache(curupdate->cluster,
+                                curupdate->areanum, portalcache->travelflags);
+        //take all portals of the cluster
+        for (i = 0; i < cluster->numportals; i++)
+        {
+            portalnum = aasworld.portalindex[cluster->firstportal + i];
+            portal = &aasworld.portals[portalnum];
+            //if this is the portal of the current update continue
+            if (portal->areanum == curupdate->areanum) continue;
+            //
+            clusterareanum = AAS_ClusterAreaNum(curupdate->cluster, portal->areanum);
+            if (clusterareanum >= cluster->numreachabilityareas) continue;
+            //
+            t = cache->traveltimes[clusterareanum];
+            if (!t) continue;
+            t += curupdate->tmptraveltime;
+            //
+            if (!portalcache->traveltimes[portalnum] ||
+                    portalcache->traveltimes[portalnum] > t)
+            {
+                portalcache->traveltimes[portalnum] = t;
+                nextupdate = &aasworld.portalupdate[portalnum];
+                if (portal->frontcluster == curupdate->cluster)
+                {
+                    nextupdate->cluster = portal->backcluster;
+                } //end if
+                else
+                {
+                    nextupdate->cluster = portal->frontcluster;
+                } //end else
+                nextupdate->areanum = portal->areanum;
+                //add travel time through the actual portal area for the next update
+                nextupdate->tmptraveltime = t + aasworld.portalmaxtraveltimes[portalnum];
+                if (!nextupdate->inlist)
+                {
+                    // we add the update to the end of the list
+                    // we could also use a B+ tree to have a real sorted list
+                    // on travel time which makes for faster routing updates
+                    nextupdate->fib_left = NULL;
+                    nextupdate->fib_right = updatelistend;
+                    if (updatelistend) updatelistend->fib_left = nextupdate;
+                    else updateliststart = nextupdate;
+                    updatelistend = nextupdate;
+                    nextupdate->inlist = qtrue;
+                } //end if
+            } //end if
+        } //end for
+    } //end while
 } //end of the function AAS_UpdatePortalRoutingCache
+
+// cyr}
 //===========================================================================
 //
 // Parameter:			-
@@ -1603,7 +1795,7 @@ int AAS_AreaRouteToGoalArea(int areanum, vec3_t origin, int goalareanum, int tra
 	//
 	if (areanum <= 0 || areanum >= aasworld.numareas)
 	{
-		if (botDeveloper)
+		if (bot_developer)
 		{
 			botimport.Print(PRT_ERROR, "AAS_AreaTravelTimeToGoalArea: areanum %d out of range\n", areanum);
 		} //end if
@@ -1611,7 +1803,7 @@ int AAS_AreaRouteToGoalArea(int areanum, vec3_t origin, int goalareanum, int tra
 	} //end if
 	if (goalareanum <= 0 || goalareanum >= aasworld.numareas)
 	{
-		if (botDeveloper)
+		if (bot_developer)
 		{
 			botimport.Print(PRT_ERROR, "AAS_AreaTravelTimeToGoalArea: goalareanum %d out of range\n", goalareanum);
 		} //end if

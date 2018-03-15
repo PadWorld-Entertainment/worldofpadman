@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 /**********************************************************************
 	UI_QMENU.C
@@ -27,9 +7,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **********************************************************************/
 #include "ui_local.h"
 
-sfxHandle_t menu_in_sound;
 sfxHandle_t menu_move_sound;
-sfxHandle_t menu_out_sound;
+sfxHandle_t menu_switch_sound;
+sfxHandle_t menu_click_sound;
+
 sfxHandle_t menu_buzz_sound;
 sfxHandle_t menu_null_sound;
 sfxHandle_t weaponChangeSound;
@@ -52,9 +33,18 @@ vec4_t color_dim	    = {0.00f, 0.00f, 0.00f, 0.25f};
 // current color scheme
 vec4_t pulse_color          = {1.00f, 1.00f, 1.00f, 1.00f};
 vec4_t text_color_disabled  = {0.50f, 0.50f, 0.50f, 1.00f};	// light gray
-vec4_t text_color_normal    = {1.00f, 0.43f, 0.00f, 1.00f};	// light orange
-vec4_t text_color_highlight = {1.00f, 1.00f, 0.00f, 1.00f};	// bright yellow
-vec4_t listbar_color        = {1.00f, 0.43f, 0.00f, 0.30f};	// transluscent orange
+vec4_t text_color_normal    = {1.00f, 1.00f, 0.00f, 1.00f};
+vec4_t text_color_highlight = {1.00f, 0.33f, 0.00f, 1.00f};//{0.00f, 1.00f, 0.00f, 1.00f};
+vec4_t listbar_color        = {1.00f, 1.00f, 1.00f, 0.50f};//{0.00f, 1.00f, 0.00f, 0.30f};
+
+vec4_t text_color_ignormal    = {0.00f, 0.00f, 0.00f, 1.00f};
+vec4_t text_color_ighighlight = {0.40f, 0.00f, 0.40f, 1.00f};
+vec4_t listbar_igcolor        = {1.00f, 0.43f, 0.00f, 0.33f};
+
+vec4_t text_color_bluenormal    = {0.40f, 0.40f, 1.00f, 1.00f};
+vec4_t text_color_bluehighlight = {0.30f, 0.30f, 1.00f, 1.00f};
+vec4_t listbar_bluecolor        = {0.00f, 0.00f, 1.00f, 0.33f};
+
 vec4_t text_color_status    = {1.00f, 1.00f, 1.00f, 1.00f};	// bright white	
 
 // action widget
@@ -130,9 +120,85 @@ static void Text_Draw( menutext_s *t )
 	if (t->generic.flags & QMF_GRAYED)
 		color = text_color_disabled;
 	else
+	{
 		color = t->color;
+		if(t->generic.flags & QMF_PULSE)
+		{
+			color[3] = 0.6+0.4*sin(uis.realtime/150.f);
+		}			
+	}
 
 	UI_DrawString( x, y, buff, t->style, color );
+}
+
+/*
+=================
+TextS_Init
+=================
+*/
+static void TextS_Init( menutext_s *t )
+{
+	int	x;
+	int	y;
+	int	w;
+	int	h;
+
+	if(t->fontHeight==0.0f) t->fontHeight=16.0f;
+
+	x = t->generic.x;
+	y = t->generic.y;
+	if(t->style & UI_NS_STR_HGW)//height = width
+		w = Q_PrintStrlen( t->string ) * t->fontHeight;
+	else
+		w = Q_PrintStrlen( t->string ) * (t->fontHeight*0.5f);
+	h =	t->fontHeight;
+
+	if( t->generic.flags & QMF_RIGHT_JUSTIFY ) {
+		x -= w;
+	}
+	else if( t->generic.flags & QMF_CENTER_JUSTIFY ) {
+		x -= w / 2;
+	}
+
+	t->generic.left   = x;
+	t->generic.right  = x + w;
+	t->generic.top    = y;
+	t->generic.bottom = y + h;
+}
+
+/*
+=================
+TextS_Draw
+=================
+*/
+static void TextS_Draw( menutext_s *t )
+{
+	int		x;
+	int		y;
+	float *	color;
+	int		style;
+
+	x = t->generic.x;
+	y = t->generic.y;
+
+	if (t->generic.flags & QMF_GRAYED)
+		color = text_color_disabled;
+	else if(t->focuscolor && Menu_ItemAtCursor( t->generic.parent ) == t)
+		color = t->focuscolor;
+	else
+		color = t->color;
+
+	style = t->style;
+	if( t->generic.flags & QMF_PULSEIFFOCUS ) {
+		if( Menu_ItemAtCursor( t->generic.parent ) == t ) {
+			style |= UI_PULSE;
+		}
+		else {
+			style |= UI_INVERSE;
+		}
+	}
+
+	UI_DrawStringNS(x,y,t->string,style,t->fontHeight,color);
 }
 
 /*
@@ -217,6 +283,8 @@ static void PText_Draw( menutext_s *t )
 
 	if (t->generic.flags & QMF_GRAYED)
 		color = text_color_disabled;
+	else if(t->focuscolor && Menu_ItemAtCursor( t->generic.parent ) == t)
+		color = t->focuscolor;
 	else
 		color = t->color;
 
@@ -325,8 +393,15 @@ void Bitmap_Draw( menubitmap_s *b )
 	else
 	{
 		if (b->shader)
-			UI_DrawHandlePic( x, y, w, h, b->shader );
+		{
+			//coded by QuarterPounder
+			if(!b->focuspicinstead ||
+					(!(b->generic.flags & QMF_HIGHLIGHT) &&
+					 !( (b->generic.flags & QMF_HIGHLIGHT_IF_FOCUS) && (Menu_ItemAtCursor(b->generic.parent) == b) ) )  )
+				UI_DrawHandlePic( x, y, w, h, b->shader );
+		}
 
+		// bk001204 - parentheses
 		if (  ( (b->generic.flags & QMF_PULSE) 
 			|| (b->generic.flags & QMF_PULSEIFFOCUS) )
 		      && (Menu_ItemAtCursor( b->generic.parent ) == b))
@@ -340,7 +415,7 @@ void Bitmap_Draw( menubitmap_s *b )
 			}
 			else
 				color = pulse_color;
-			color[3] = 0.5+0.5*sin(uis.realtime/PULSE_DIVISOR);
+			color[3] = 0.5+0.5*sin(uis.realtime/PULSE_DIVISOR);	// int division, is this on purpose?
 
 			trap_R_SetColor( color );
 			UI_DrawHandlePic( x, y, w, h, b->focusshader );
@@ -357,6 +432,64 @@ void Bitmap_Draw( menubitmap_s *b )
 			else
 				UI_DrawHandlePic( x, y, w, h, b->focusshader );
 		}
+	}
+}
+
+/*
+=================
+Bitmap1024S_Init
+=================
+*/
+void Bitmap1024S_Init( menubitmap1024s_s *b )
+{
+	int	x;
+	int	y;
+	int	w;
+	int	h;
+
+	x = b->x;
+	y = b->y;
+	w = b->w;
+	h =	b->h;
+	if( w < 0 ) {
+		w = -w;
+	}
+	if( h < 0 ) {
+		h = -h;
+	}
+
+	b->generic.left   = x * 0.625f;
+	b->generic.right  = (x+w) * 0.625f;
+	b->generic.top    = y * 0.625f;
+	b->generic.bottom = (y+h) * 0.625f;
+}
+
+/*
+=================
+Bitmap1024S_Draw
+=================
+*/
+void Bitmap1024S_Draw( menubitmap1024s_s *b )
+{
+	if(b->mouseovershader)
+	{
+		if(b->sw>0 && b->shadowshader!=0)
+			UI_DrawHandlePic1024( b->sx, b->sy, b->sw, b->sh, b->shadowshader );
+
+		
+		if(Menu_ItemAtCursor( b->generic.parent ) == b)
+			UI_DrawHandlePic1024( b->x, b->y, b->w, b->h, b->mouseovershader );
+		else
+			UI_DrawHandlePic1024( b->x, b->y, b->w, b->h, b->shader );
+	}
+	else
+	{
+		if( !(Menu_ItemAtCursor( b->generic.parent ) == b) && b->sw>0 )
+		{	
+			UI_DrawHandlePic1024( b->sx, b->sy, b->sw, b->sh, b->shadowshader );
+		}
+
+		UI_DrawHandlePic1024( b->x, b->y, b->w, b->h, b->shader );
 	}
 }
 
@@ -401,17 +534,26 @@ static void Action_Draw( menuaction_s *a )
 	}
 	else if (( a->generic.flags & QMF_PULSEIFFOCUS ) && ( a->generic.parent->cursor == a->generic.menuPosition ))
 	{
-		color = text_color_highlight;
-		style = UI_PULSE;
+		if(a->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluehighlight;
+		else
+			color = (a->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
+		/*style = UI_PULSE;*/
 	}
 	else if (( a->generic.flags & QMF_HIGHLIGHT_IF_FOCUS ) && ( a->generic.parent->cursor == a->generic.menuPosition ))
 	{
-		color = text_color_highlight;
+		if(a->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluehighlight;
+		else
+			color = (a->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
 	}
 	else if ( a->generic.flags & QMF_BLINK )
 	{
 		style = UI_BLINK;
-		color = text_color_highlight;
+		if(a->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluehighlight;
+		else
+			color = (a->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
 	}
 
 	x = a->generic.x;
@@ -506,19 +648,30 @@ static void RadioButton_Draw( menuradiobutton_s *rb )
 	}
 	else if ( focus )
 	{
-		color = text_color_highlight;
+		if(rb->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluehighlight;
+		else
+			color = (rb->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
 		style = UI_LEFT|UI_PULSE|UI_SMALLFONT;
 	}
 	else
 	{
-		color = text_color_normal;
+		if(rb->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluenormal;
+		else
+			color = (rb->generic.flags & QMF_INGAMESTYLE)? text_color_ignormal : text_color_normal;
 		style = UI_LEFT|UI_SMALLFONT;
 	}
 
 	if ( focus )
 	{
 		// draw cursor
-		UI_FillRect( rb->generic.left, rb->generic.top, rb->generic.right-rb->generic.left+1, rb->generic.bottom-rb->generic.top+1, listbar_color ); 
+		if(rb->generic.flags & QMF_BLUESTYLE)
+			UI_FillRect( rb->generic.left, rb->generic.top, rb->generic.right-rb->generic.left+1, rb->generic.bottom-rb->generic.top+1, listbar_bluecolor ); 
+		else if(rb->generic.flags & QMF_INGAMESTYLE)
+			UI_FillRect( rb->generic.left, rb->generic.top, rb->generic.right-rb->generic.left+1, rb->generic.bottom-rb->generic.top+1, listbar_igcolor ); 
+		else
+			UI_FillRect( rb->generic.left, rb->generic.top, rb->generic.right-rb->generic.left+1, rb->generic.bottom-rb->generic.top+1, listbar_color ); 
 		UI_DrawChar( x, y, 13, UI_CENTER|UI_BLINK|UI_SMALLFONT, color);
 	}
 
@@ -566,14 +719,13 @@ Slider_Key
 static sfxHandle_t Slider_Key( menuslider_s *s, int key )
 {
 	sfxHandle_t	sound;
-	int			x;
-	int			oldvalue;
 
 	switch (key)
 	{
 		case K_MOUSE1:
-			x           = uis.cursorx - s->generic.x - 2*SMALLCHAR_WIDTH;
-			oldvalue    = s->curvalue;
+		{	//FIXME? atm this code is duplicated in ui_atom.c (UI_MouseEvent) to have "dragable" sliders ... so extracting a method would be good
+			const int x = uis.cursorx - s->generic.x - 2*SMALLCHAR_WIDTH;
+			const float oldvalue = s->curvalue;
 			s->curvalue = (x/(float)(SLIDER_RANGE*SMALLCHAR_WIDTH)) * (s->maxvalue-s->minvalue) + s->minvalue;
 
 			if (s->curvalue < s->minvalue)
@@ -584,6 +736,7 @@ static sfxHandle_t Slider_Key( menuslider_s *s, int key )
 				sound = menu_move_sound;
 			else
 				sound = 0;
+		}
 			break;
 
 		case K_KP_LEFTARROW:
@@ -643,20 +796,26 @@ static void Slider_Draw( menuslider_s *s ) {
 		style = UI_SMALLFONT;
 	}
 	else if( focus ) {
-		color  = text_color_highlight;
+		if(s->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluehighlight;
+		else
+			color = (s->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
 		style = UI_SMALLFONT | UI_PULSE;
 	}
 	else {
-		color = text_color_normal;
+		if(s->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluenormal;
+		else
+			color = (s->generic.flags & QMF_INGAMESTYLE)? text_color_ignormal : text_color_normal;
 		style = UI_SMALLFONT;
 	}
 
 	// draw label
-	UI_DrawString( x - SMALLCHAR_WIDTH, y, s->generic.name, UI_RIGHT|style, color );
+	UI_DrawString( x - SMALLCHAR_WIDTH, y, s->generic.name, UI_RIGHT|style&~UI_PULSE, color );
 
 	// draw slider
 	UI_SetColor( color );
-	UI_DrawHandlePic( x + SMALLCHAR_WIDTH, y, 96, 16, sliderBar );
+	UI_DrawHandlePic( x + SMALLCHAR_WIDTH, y+4, 96, 8, sliderBar );
 	UI_SetColor( NULL );
 
 	// clamp thumb
@@ -681,7 +840,7 @@ static void Slider_Draw( menuslider_s *s ) {
 		button = sliderButton_0;
 	}
 
-	UI_DrawHandlePic( (int)( x + 2*SMALLCHAR_WIDTH + (SLIDER_RANGE-1)*SMALLCHAR_WIDTH* s->range ) - 2, y - 2, 12, 20, button );
+	UI_DrawHandlePic( (int)( x + 2*SMALLCHAR_WIDTH + (SLIDER_RANGE-1)*SMALLCHAR_WIDTH* s->range ) - 2, y, 12, 16, button );
 }
 #else
 /*
@@ -709,18 +868,29 @@ static void Slider_Draw( menuslider_s *s )
 	}
 	else if (focus)
 	{
-		color  = text_color_highlight;
+		if(rb->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluehighlight;
+		else
+			color = (rb->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
 		style |= UI_PULSE;
 	}
 	else
 	{
-		color = text_color_normal;
+		if(rb->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluenormal;
+		else
+			color = (rb->generic.flags & QMF_INGAMESTYLE)? text_color_ignormal : text_color_normal;
 	}
 
 	if ( focus )
 	{
 		// draw cursor
-		UI_FillRect( s->generic.left, s->generic.top, s->generic.right-s->generic.left+1, s->generic.bottom-s->generic.top+1, listbar_color ); 
+		if(rb->generic.flags & QMF_BLUESTYLE)
+			UI_FillRect( s->generic.left, s->generic.top, s->generic.right-s->generic.left+1, s->generic.bottom-s->generic.top+1, listbar_bluecolor ); 
+		else if(rb->generic.flags & QMF_INGAMESTYLE)
+			UI_FillRect( s->generic.left, s->generic.top, s->generic.right-s->generic.left+1, s->generic.bottom-s->generic.top+1, listbar_igcolor ); 
+		else
+			UI_FillRect( s->generic.left, s->generic.top, s->generic.right-s->generic.left+1, s->generic.bottom-s->generic.top+1, listbar_color ); 
 		UI_DrawChar( x, y, 13, UI_CENTER|UI_BLINK|UI_SMALLFONT, color);
 	}
 
@@ -784,6 +954,30 @@ static void SpinControl_Init( menulist_s *s ) {
 	s->generic.top	  =	s->generic.y;
 	s->generic.right  =	s->generic.x + (len+1)*SMALLCHAR_WIDTH;
 	s->generic.bottom =	s->generic.y + SMALLCHAR_HEIGHT;
+
+	s->dropdown_len = len*SMALLCHAR_WIDTH;
+
+	if(s->generic.flags & QMF_BLUESTYLE)
+	{
+		if(!s->dropdown_bg)		s->dropdown_bg		= colorBlack;
+		if(!s->dropdown_border)	s->dropdown_border	= colorBlue;
+		if(!s->dropdown_mark)	s->dropdown_mark	= colorBlue;
+		if(!s->dropdown_text)	s->dropdown_text	= colorWhite;
+	}
+	else if(s->generic.flags & QMF_INGAMESTYLE)
+	{
+		if(!s->dropdown_bg)		s->dropdown_bg		= colorWhite;
+		if(!s->dropdown_border)	s->dropdown_border	= colorBlack;
+		if(!s->dropdown_mark)	s->dropdown_mark	= color_orange;
+		if(!s->dropdown_text)	s->dropdown_text	= colorBlack;
+	}
+	else
+	{
+		if(!s->dropdown_bg)		s->dropdown_bg		= color_orange;
+		if(!s->dropdown_border)	s->dropdown_border	= colorYellow;
+		if(!s->dropdown_mark)	s->dropdown_mark	= colorRed;
+		if(!s->dropdown_text)	s->dropdown_text	= colorYellow;
+	}
 }
 
 /*
@@ -799,10 +993,32 @@ static sfxHandle_t SpinControl_Key( menulist_s *s, int key )
 	switch (key)
 	{
 		case K_MOUSE1:
-			s->curvalue++;
-			if (s->curvalue >= s->numitems)
-				s->curvalue = 0;
-			sound = menu_move_sound;
+			if((/*s->numitems<3 ||*/ s->generic.ownerdraw) && !(s->generic.flags&QMF_FORCEDROPDOWN))
+			{
+				s->curvalue++;
+				if (s->curvalue >= s->numitems)
+					s->curvalue = 0;
+				sound = menu_click_sound;
+			}
+			else
+			{
+				uis.dropdownlist=s;
+				if(s->generic.right>640)
+					uis.dropdownxywh[0]=640-s->dropdown_len;
+				else
+					uis.dropdownxywh[0]=s->generic.right-s->dropdown_len;
+				uis.dropdownxywh[3]=s->numitems*SMALLCHAR_HEIGHT;
+				uis.dropdownxywh[1]=s->generic.y+SMALLCHAR_HEIGHT*0.5f-uis.dropdownxywh[3]*0.5f;
+
+				if(uis.dropdownxywh[1]+uis.dropdownxywh[3]>480.0f)
+					uis.dropdownxywh[1]=480.0f-uis.dropdownxywh[3];
+				else if(uis.dropdownxywh[1]<0.0f)
+					uis.dropdownxywh[1]=0.0f;
+
+				uis.dropdownxywh[2]=s->dropdown_len;//s->generic.right-s->generic.x-SMALLCHAR_WIDTH;
+
+				return menu_click_sound; // return damit kein callback aufgerufen wird
+			}
 			break;
 		
 		case K_KP_LEFTARROW:
@@ -856,25 +1072,41 @@ static void SpinControl_Draw( menulist_s *s )
 		color = text_color_disabled;
 	else if ( focus )
 	{
-		color = text_color_highlight;
+		if(s->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluehighlight;
+		else
+			color = (s->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
 		style |= UI_PULSE;
 	}
 	else if ( s->generic.flags & QMF_BLINK )
 	{
-		color = text_color_highlight;
+		if(s->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluehighlight;
+		else
+			color = (s->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
 		style |= UI_BLINK;
 	}
 	else
-		color = text_color_normal;
+	{
+		if(s->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluenormal;
+		else
+			color = (s->generic.flags & QMF_INGAMESTYLE)? text_color_ignormal : text_color_normal;
+	}
 
 	if ( focus )
 	{
 		// draw cursor
-		UI_FillRect( s->generic.left, s->generic.top, s->generic.right-s->generic.left+1, s->generic.bottom-s->generic.top+1, listbar_color ); 
+		if(s->generic.flags & QMF_BLUESTYLE)
+			UI_FillRect( s->generic.left, s->generic.top, s->generic.right-s->generic.left+1, s->generic.bottom-s->generic.top+1, listbar_bluecolor ); 
+		else if(s->generic.flags & QMF_INGAMESTYLE)
+			UI_FillRect( s->generic.left, s->generic.top, s->generic.right-s->generic.left+1, s->generic.bottom-s->generic.top+1, listbar_igcolor ); 
+		else
+			UI_FillRect( s->generic.left, s->generic.top, s->generic.right-s->generic.left+1, s->generic.bottom-s->generic.top+1, listbar_color ); 
 		UI_DrawChar( x, y, 13, UI_CENTER|UI_BLINK|UI_SMALLFONT, color);
 	}
 
-	UI_DrawString( x - SMALLCHAR_WIDTH, y, s->generic.name, style|UI_RIGHT, color );
+	UI_DrawString( x - SMALLCHAR_WIDTH, y, s->generic.name, UI_RIGHT|style&~UI_PULSE, color );
 	UI_DrawString( x + SMALLCHAR_WIDTH, y, s->itemnames[s->curvalue], style|UI_LEFT, color );
 }
 
@@ -1064,6 +1296,11 @@ sfxHandle_t ScrollList_Key( menulist_s *l, int key )
 				}
 			}
 
+			if(l->curvalue<l->top || l->curvalue>l->top+l->height-1) {
+				l->top = l->curvalue-(l->height-1);
+				if(l->top<0) l->top=0;
+			}
+
 			if( l->generic.callback ) {
 				l->generic.callback( l, QM_GOTFOCUS );
 			}
@@ -1087,6 +1324,9 @@ sfxHandle_t ScrollList_Key( menulist_s *l, int key )
 					l->top += l->height;
 				}
 			}
+
+			if(l->curvalue<l->top || l->curvalue>l->top+l->height-1)
+				l->top = l->curvalue;
 
 			if( l->generic.callback ) {
 				l->generic.callback( l, QM_GOTFOCUS );
@@ -1209,6 +1449,7 @@ void ScrollList_Draw( menulist_s *l )
 	float*		color;
 	qboolean	hasfocus;
 	int			style;
+	int			sLen;
 
 	hasfocus = (l->generic.parent->cursor == l->generic.menuPosition);
 
@@ -1227,8 +1468,17 @@ void ScrollList_Draw( menulist_s *l )
 					u -= (l->width * SMALLCHAR_WIDTH) / 2 + 1;
 				}
 
-				UI_FillRect(u,y,l->width*SMALLCHAR_WIDTH,SMALLCHAR_HEIGHT+2,listbar_color);
-				color = text_color_highlight;
+				if(l->generic.flags & QMF_BLUESTYLE)
+					UI_FillRect(u,y,l->width*SMALLCHAR_WIDTH,SMALLCHAR_HEIGHT+2,listbar_bluecolor);
+				else if(l->generic.flags & QMF_INGAMESTYLE)
+					UI_FillRect(u,y,l->width*SMALLCHAR_WIDTH,SMALLCHAR_HEIGHT+2,listbar_igcolor);
+				else
+					UI_FillRect(u,y,l->width*SMALLCHAR_WIDTH,SMALLCHAR_HEIGHT+2,listbar_color);
+
+				if( l->generic.flags & QMF_BLUESTYLE)
+					color = text_color_bluehighlight;
+				else
+					color = (l->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
 
 				if (hasfocus)
 					style = UI_PULSE|UI_LEFT|UI_SMALLFONT;
@@ -1237,19 +1487,38 @@ void ScrollList_Draw( menulist_s *l )
 			}
 			else
 			{
-				color = text_color_normal;
+				if(l->generic.flags & QMF_BLUESTYLE)
+					color = text_color_bluenormal;
+				else
+					color = (l->generic.flags & QMF_INGAMESTYLE)? text_color_ignormal : text_color_normal;
 				style = UI_LEFT|UI_SMALLFONT;
 			}
 			if( l->generic.flags & QMF_CENTER_JUSTIFY ) {
 				style |= UI_CENTER;
 			}
 
-			UI_DrawString(
-				x,
-				y,
-				l->itemnames[i],
-				style,
-				color);
+			sLen=strlen(l->itemnames[i]);//TODO? maybe exchange with q3color-strlen-stuff
+			if(sLen>l->width)
+			{
+				int j = l->width;
+				char buff[128]; // max ~ 640/8 = 80
+
+				if(j>126) j=126;
+
+				if(i == l->curvalue)
+				{
+					Q_strncpyz(buff,l->itemnames[i]+(int)((sLen-j+1)*(0.5f*sin(uis.realtime*0.02f/(sLen-j))+0.5f)),j+1);
+					UI_DrawString(x,y,buff,style,color);
+				}
+				else
+				{
+					Q_strncpyz(buff,l->itemnames[i],j);
+					strcpy(buff+j-4,"...");
+					UI_DrawString(x,y,buff,style,color);
+				}
+			}
+			else
+				UI_DrawString(x,y,l->itemnames[i],style,color);
 
 			y += SMALLCHAR_HEIGHT;
 		}
@@ -1320,8 +1589,15 @@ void Menu_AddItem( menuframework_s *menu, void *item )
 				BText_Init((menutext_s*)item);
 				break;
 
+			case MTYPE_BITMAP1024S:
+				Bitmap1024S_Init((menubitmap1024s_s*)item);
+				break;
+			case MTYPE_TEXTS:
+				TextS_Init((menutext_s*)item);
+				break;
+
 			default:
-				trap_Error( va("Menu_Init: unknown type %d", itemptr->type) );
+				trap_Error( va("Menu_AddItem: unknown type %d", itemptr->type) );
 		}
 	}
 
@@ -1367,6 +1643,9 @@ void Menu_SetCursor( menuframework_s *m, int cursor )
 		// cursor can't go there
 		return;
 	}
+
+	if(uis.dropdownlist)
+		return;
 
 	m->cursor_prev = m->cursor;
 	m->cursor      = cursor;
@@ -1512,6 +1791,13 @@ void Menu_Draw( menuframework_s *menu )
 					BText_Draw( (menutext_s*)itemptr );
 					break;
 
+				case MTYPE_BITMAP1024S:
+					Bitmap1024S_Draw( (menubitmap1024s_s*)itemptr );
+					break;
+				case MTYPE_TEXTS:
+					TextS_Draw( (menutext_s*)itemptr );
+					break;
+
 				default:
 					trap_Error( va("Menu_Draw: unknown type %d", itemptr->type) );
 			}
@@ -1530,14 +1816,41 @@ void Menu_Draw( menuframework_s *menu )
 				h =	itemptr->bottom - itemptr->top + 1;
 
 				if (itemptr->flags & QMF_HASMOUSEFOCUS) {
-					UI_DrawRect(x, y, w, h, colorYellow );
+					UI_DrawRect(x, y, w, h, colorYellow, 1 );
 				}
 				else {
-					UI_DrawRect(x, y, w, h, colorWhite );
+					UI_DrawRect(x, y, w, h, colorWhite, 1 );
 				}
 			}
 		}
 #endif
+	}
+
+	if(uis.dropdownlist)
+	{
+		vec4_t	tblack = {0.0f,0.0f,0.0f,0.20f};
+		vec4_t  dropdownBG;
+		int mouseover = (uis.cursory-uis.dropdownxywh[1])/SMALLCHAR_HEIGHT;
+
+		dropdownBG[0] = uis.dropdownxywh[0] - 5;
+		dropdownBG[1] = uis.dropdownxywh[1] - 5;
+		dropdownBG[2] = uis.dropdownxywh[2] + 10;
+		dropdownBG[3] = uis.dropdownxywh[3] + 10;
+
+		if(mouseover<0) mouseover=0;
+		else if(mouseover>uis.dropdownlist->numitems) mouseover=uis.dropdownlist->numitems;
+
+		//UI_FillRect(uis.dropdownxywh[0]+8,uis.dropdownxywh[1]+8,uis.dropdownxywh[2],uis.dropdownxywh[3],tblack);
+		UI_FillRect(dropdownBG[0],dropdownBG[1],dropdownBG[2],dropdownBG[3],uis.dropdownlist->dropdown_bg);
+
+		for(i=0;i<uis.dropdownlist->numitems;i++)
+		{
+			if(i==mouseover)
+				UI_FillRect(uis.dropdownxywh[0],uis.dropdownxywh[1]+i*SMALLCHAR_HEIGHT,uis.dropdownxywh[2],SMALLCHAR_HEIGHT,uis.dropdownlist->dropdown_mark);
+			UI_DrawStringNS(uis.dropdownxywh[0],uis.dropdownxywh[1]+i*SMALLCHAR_HEIGHT,uis.dropdownlist->itemnames[i],UI_LEFT|UI_SMALLFONT,16,uis.dropdownlist->dropdown_text);
+		}
+
+		UI_DrawRect(dropdownBG[0],dropdownBG[1],dropdownBG[2],dropdownBG[3],uis.dropdownlist->dropdown_border, 2);
 	}
 
 	itemptr = Menu_ItemAtCursor( menu );
@@ -1553,7 +1866,7 @@ Menu_ItemAtCursor
 void *Menu_ItemAtCursor( menuframework_s *m )
 {
 	if ( m->cursor < 0 || m->cursor >= m->nitems )
-		return NULL;
+		return 0;
 
 	return m->items[m->cursor];
 }
@@ -1567,7 +1880,7 @@ sfxHandle_t Menu_ActivateItem( menuframework_s *s, menucommon_s* item ) {
 	if ( item->callback ) {
 		item->callback( item, QM_ACTIVATED );
 		if( !( item->flags & QMF_SILENT ) ) {
-			return menu_move_sound;
+			return menu_click_sound;
 		}
 	}
 
@@ -1585,14 +1898,44 @@ sfxHandle_t Menu_DefaultKey( menuframework_s *m, int key )
 	menucommon_s	*item;
 	int				cursor_prev;
 
+	if(uis.dropdownlist && key!=K_F12)
+	{
+		if(key!=K_MOUSE1)
+		{
+			uis.dropdownlist=NULL;
+			return 0;
+		}
+
+		if(uis.cursorx>uis.dropdownxywh[0] && uis.cursorx<uis.dropdownxywh[0]+uis.dropdownxywh[2] &&
+			uis.cursory>uis.dropdownxywh[1] && uis.cursory<uis.dropdownxywh[1]+uis.dropdownxywh[3])
+		{
+			uis.dropdownlist->curvalue=(uis.cursory-uis.dropdownxywh[1])/SMALLCHAR_HEIGHT;//uis.dropdownxywh[3];
+			if(uis.dropdownlist->curvalue<0 || uis.dropdownlist->curvalue>=uis.dropdownlist->numitems)
+			{
+				Com_Printf("ERROR: wrong number @ listdropdown???\n");
+				uis.dropdownlist->curvalue=0;
+			}
+			if ( uis.dropdownlist->generic.callback )
+				uis.dropdownlist->generic.callback( uis.dropdownlist, QM_ACTIVATED );
+			uis.dropdownlist=NULL;
+			return 0;
+		}
+		else
+		{
+			uis.dropdownlist=NULL;
+			return 0;
+		}
+	}
+
 	// menu system keys
 	switch ( key )
 	{
 		case K_MOUSE2:
 		case K_ESCAPE:
 			UI_PopMenu();
-			return menu_out_sound;
+			return menu_null_sound;
 	}
+
 
 	if (!m || !m->nitems)
 		return 0;
@@ -1635,11 +1978,12 @@ sfxHandle_t Menu_DefaultKey( menuframework_s *m, int key )
 	{
 #ifndef NDEBUG
 		case K_F11:
-			uis.debug ^= 1;
+			if(UI_GetCvarInt("developer"))
+				uis.debug ^= 1;
 			break;
 
 		case K_F12:
-			trap_Cmd_ExecuteText(EXEC_APPEND, "screenshot\n");
+			trap_Cmd_ExecuteText(EXEC_APPEND, "screenshotJPEG\n");
 			break;
 #endif
 		case K_KP_UPARROW:
@@ -1712,7 +2056,14 @@ Menu_Cache
 */
 void Menu_Cache( void )
 {
-	uis.charset			= trap_R_RegisterShaderNoMip( "gfx/2d/bigchars" );
+	if(uis.glconfig.hardwareType == GLHW_GENERIC)
+	{
+		uis.charset			= trap_R_RegisterShaderNoMip( "gfx/2d/WoPascii" );
+		if(!uis.charset)
+			uis.charset			= trap_R_RegisterShaderNoMip( "gfx/2d/bigchars" );
+	}
+	else
+		uis.charset			= trap_R_RegisterShaderNoMip( "gfx/2d/bigchars" );
 	uis.charsetProp		= trap_R_RegisterShaderNoMip( "menu/art/font1_prop.tga" );
 	uis.charsetPropGlow	= trap_R_RegisterShaderNoMip( "menu/art/font1_prop_glo.tga" );
 	uis.charsetPropB	= trap_R_RegisterShaderNoMip( "menu/art/font2_prop.tga" );
@@ -1721,19 +2072,32 @@ void Menu_Cache( void )
 	uis.rb_off          = trap_R_RegisterShaderNoMip( "menu/art/switch_off" );
 
 	uis.whiteShader = trap_R_RegisterShaderNoMip( "white" );
-	if ( uis.glconfig.hardwareType == GLHW_RAGEPRO ) {
-		// the blend effect turns to shit with the normal 
-		uis.menuBackShader	= trap_R_RegisterShaderNoMip( "menubackRagePro" );
-	} else {
-		uis.menuBackShader	= trap_R_RegisterShaderNoMip( "menuback" );
-	}
-	uis.menuBackNoLogoShader = trap_R_RegisterShaderNoMip( "menubacknologo" );
+	uis.connectingBG		= trap_R_RegisterShaderNoMip("loadingscreen/connecting");
 
-	menu_in_sound	= trap_S_RegisterSound( "sound/misc/menu1.wav", qfalse );
-	menu_move_sound	= trap_S_RegisterSound( "sound/misc/menu2.wav", qfalse );
-	menu_out_sound	= trap_S_RegisterSound( "sound/misc/menu3.wav", qfalse );
-	menu_buzz_sound	= trap_S_RegisterSound( "sound/misc/menu4.wav", qfalse );
-	weaponChangeSound	= trap_S_RegisterSound( "sound/weapons/change.wav", qfalse );
+	uis.pad_simpleMenuBg	= trap_R_RegisterShaderNoMip("simpleMenuBg");
+	uis.pad_menushader		= trap_R_RegisterShaderNoMip("menushader");
+	uis.pad_mainframe		= trap_R_RegisterShaderNoMip("menu/main/Background");
+	uis.pad_setupbg			= trap_R_RegisterShaderNoMip("menu/setup/Background");
+	uis.pad_display			= trap_R_RegisterShaderNoMip("menu/system/setupback");
+	uis.pad_defaults		= trap_R_RegisterShaderNoMip("menu/default/defaultback");
+	uis.pad_exitbg			= trap_R_RegisterShaderNoMip("menu/exit/exitback");
+	uis.pad_controlbg		= trap_R_RegisterShaderNoMip("menu/controls/controlsback");
+	uis.pad_playerbg		= trap_R_RegisterShaderNoMip("menu/player/playerbg");
+	uis.pad_server2bg		= trap_R_RegisterShaderNoMip("menu/server/bg");
+	uis.pad_modsbg			= trap_R_RegisterShaderNoMip("menu/mods/bg");
+	uis.pad_demobg			= trap_R_RegisterShaderNoMip("menu/demo/bg");
+	uis.pad_specifybg		= trap_R_RegisterShaderNoMip("menu/specify/bg");
+	uis.pad_gameoptionsbg	= trap_R_RegisterShaderNoMip("menu/gameoptions/bg");
+	uis.pad_startservermaps	= trap_R_RegisterShaderNoMip("menu/startserver/mapbg");
+	uis.pad_startserverbots	= trap_R_RegisterShaderNoMip("menu/startserver/botbg");
+	uis.pad_ingamebg		= trap_R_RegisterShaderNoMip("menu/ingame/bg2");
+	uis.pad_singlemenubg	= trap_R_RegisterShaderNoMip("menu/single/background");
+
+	menu_switch_sound = trap_S_RegisterSound( "sounds/menu/menu_switch.wav", qfalse );
+	menu_click_sound = trap_S_RegisterSound( "sounds/menu/mouse_click.wav", qfalse );
+	menu_move_sound = trap_S_RegisterSound( "sounds/menu/mouse_over.wav", qfalse );
+	menu_buzz_sound	= trap_S_RegisterSound( "sounds/menu/menu_error.wav", qfalse );
+	weaponChangeSound	= trap_S_RegisterSound( "sounds/weapons/change.wav", qfalse );
 
 	// need a nonzero sound, make an empty sound for this
 	menu_null_sound = -1;

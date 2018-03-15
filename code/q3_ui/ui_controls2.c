@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 /*
 =======================================================================
@@ -31,10 +11,16 @@ CONTROLS MENU
 
 #include "ui_local.h"
 
-#define ART_BACK0			"menu/art/back_0"
-#define ART_BACK1			"menu/art/back_1"
-#define ART_FRAMEL			"menu/art/frame2_l"
-#define ART_FRAMER			"menu/art/frame1_r"
+#define ART_BACK0			"menu/btnback0"
+#define ART_BACK1			"menu/btnback1"
+#define LOOK0				"menu/controls/look0"
+#define LOOK1				"menu/controls/look1"
+#define MOVEMENT0			"menu/controls/move0"
+#define MOVEMENT1			"menu/controls/move1"
+#define WEAPONS0			"menu/controls/shoot0"
+#define WEAPONS1			"menu/controls/shoot1"
+#define MISC0				"menu/controls/misc0"
+#define MISC1				"menu/controls/misc1"
 
 
 typedef struct {
@@ -109,18 +95,31 @@ typedef struct
 #define ID_GESTURE		29
 #define ID_CHAT			30
 #define ID_CHAT2		31
-#define ID_CHAT3		32
-#define ID_CHAT4		33
+/*#define ID_CHAT3		32
+#define ID_CHAT4		33*/
+
+#define ID_VOTEYES		32
+#define ID_VOTENO		33
+
+#define ID_MUSIC		34
+#define ID_NEXTSONG		35
+#define ID_DROPCART		36
+#define ID_SERVERINFO	37
+#define ID_3RDPERSON	38
+#define ID_HELP_GAMETYPE	39
+#define ID_HELP_ITEMS		40
+#define ID_PUSH2TALK	41
+
 
 // all others
-#define ID_FREELOOK		34
-#define ID_INVERTMOUSE	35
-#define ID_ALWAYSRUN	36
-#define ID_AUTOSWITCH	37
-#define ID_MOUSESPEED	38
-#define ID_JOYENABLE	39
-#define ID_JOYTHRESHOLD	40
-#define ID_SMOOTHMOUSE	41
+#define ID_FREELOOK		42
+#define ID_INVERTMOUSE	43
+#define ID_ALWAYSRUN	44
+#define ID_AUTOSWITCH	45
+#define ID_MOUSESPEED	46
+#define ID_JOYENABLE	47
+#define ID_JOYTHRESHOLD	48
+#define ID_SMOOTHMOUSE	49
 
 #define ANIM_IDLE		0
 #define ANIM_RUN		1
@@ -153,15 +152,10 @@ typedef struct
 {
 	menuframework_s		menu;
 
-	menutext_s			banner;
-	menubitmap_s		framel;
-	menubitmap_s		framer;
-	menubitmap_s		player;
-
-	menutext_s			movement;
-	menutext_s			looking;
-	menutext_s			weapons;
-	menutext_s			misc;
+	menubitmap_s		movement;
+	menubitmap_s		looking;
+	menubitmap_s		weapons;
+	menubitmap_s		misc;
 
 	menuaction_s		walkforward;
 	menuaction_s		backpedal;
@@ -196,8 +190,8 @@ typedef struct
 	menuslider_s		sensitivity;
 	menuradiobutton_s	smoothmouse;
 	menuradiobutton_s	alwaysrun;
-	menuaction_s		showscores;
 	menuradiobutton_s	autoswitch;
+	menuaction_s		showscores;
 	menuaction_s		useitem;
 	playerInfo_t		playerinfo;
 	qboolean			changesmade;
@@ -205,6 +199,17 @@ typedef struct
 	menuaction_s		chat2;
 	menuaction_s		chat3;
 	menuaction_s		chat4;
+
+	menuaction_s		music;
+	menuaction_s		nextSong;
+	menuaction_s		dropCart;
+	menuaction_s		ServerInfo;
+	menuaction_s		thirdPerson;
+	menuaction_s		pushToTalk;
+
+	menuaction_s		helpGametype;
+	menuaction_s		helpItems;
+
 	menuradiobutton_s	joyenable;
 	menuslider_s		joythreshold;
 	int					section;
@@ -223,7 +228,7 @@ typedef struct
 
 static controls_t s_controls;
 
-static vec4_t controls_binding_color  = {1.00f, 0.43f, 0.00f, 1.00f};
+static vec4_t controls_binding_color  = {1.00f, 1.00f, 0.00f, 1.00f};
 
 static bind_t g_bindings[] = 
 {
@@ -244,23 +249,38 @@ static bind_t g_bindings[] =
 	{"+mlook", 			"mouse look",		ID_MOUSELOOK,	ANIM_IDLE,		'/',			-1,		-1, -1},
 	{"centerview", 		"center view",		ID_CENTERVIEW,	ANIM_IDLE,		K_END,			-1,		-1, -1},
 	{"+zoom", 			"zoom view",		ID_ZOOMVIEW,	ANIM_IDLE,		-1,				-1,		-1, -1},
-	{"weapon 1",		"gauntlet",			ID_WEAPON1,		ANIM_WEAPON1,	'1',			-1,		-1, -1},
-	{"weapon 2",		"machinegun",		ID_WEAPON2,		ANIM_WEAPON2,	'2',			-1,		-1, -1},
-	{"weapon 3",		"shotgun",			ID_WEAPON3,		ANIM_WEAPON3,	'3',			-1,		-1, -1},
-	{"weapon 4",		"grenade launcher",	ID_WEAPON4,		ANIM_WEAPON4,	'4',			-1,		-1, -1},
-	{"weapon 5",		"rocket launcher",	ID_WEAPON5,		ANIM_WEAPON5,	'5',			-1,		-1, -1},
-	{"weapon 6",		"lightning",		ID_WEAPON6,		ANIM_WEAPON6,	'6',			-1,		-1, -1},
-	{"weapon 7",		"railgun",			ID_WEAPON7,		ANIM_WEAPON7,	'7',			-1,		-1, -1},
-	{"weapon 8",		"plasma gun",		ID_WEAPON8,		ANIM_WEAPON8,	'8',			-1,		-1, -1},
-	{"weapon 9",		"BFG",				ID_WEAPON9,		ANIM_WEAPON9,	'9',			-1,		-1, -1},
+
+	{"weapon 1",		"PUNCHY",			ID_WEAPON1,		ANIM_WEAPON1,	'1',			-1,		-1, -1},
+	{"weapon 2",		"NiPPER",			ID_WEAPON2,		ANIM_WEAPON2,	'2',			-1,		-1, -1},
+	{"weapon 3",		"PUMPER",			ID_WEAPON3,		ANIM_WEAPON3,	'3',			-1,		-1, -1},
+	{"weapon 4",		"BALLOONY",			ID_WEAPON4,		ANIM_WEAPON4,	'4',			-1,		-1, -1},
+	{"weapon 5",		"BETTY",			ID_WEAPON5,		ANIM_WEAPON5,	'5',			-1,		-1, -1},
+	{"weapon 6",		"BOASTER",			ID_WEAPON6,		ANIM_WEAPON6,	'6',			-1,		-1, -1},
+	{"weapon 7",		"SPLASHER",			ID_WEAPON7,		ANIM_WEAPON7,	'7',			-1,		-1, -1},
+	{"weapon 8",		"BUBBLE.G.",		ID_WEAPON8,		ANIM_WEAPON8,	'8',			-1,		-1, -1},
+	{"weapon 9",		"IMPERiUS",			ID_WEAPON9,		ANIM_WEAPON9,	'9',			-1,		-1, -1},
+
 	{"+attack", 		"attack",			ID_ATTACK,		ANIM_ATTACK,	K_CTRL,			-1,		-1, -1},
 	{"weapprev",		"prev weapon",		ID_WEAPPREV,	ANIM_IDLE,		'[',			-1,		-1, -1},
 	{"weapnext", 		"next weapon",		ID_WEAPNEXT,	ANIM_IDLE,		']',			-1,		-1, -1},
 	{"+button3", 		"gesture",			ID_GESTURE,		ANIM_GESTURE,	K_MOUSE3,		-1,		-1, -1},
 	{"messagemode", 	"chat",				ID_CHAT,		ANIM_CHAT,		't',			-1,		-1, -1},
 	{"messagemode2", 	"chat - team",		ID_CHAT2,		ANIM_CHAT,		-1,				-1,		-1, -1},
-	{"messagemode3", 	"chat - target",	ID_CHAT3,		ANIM_CHAT,		-1,				-1,		-1, -1},
-	{"messagemode4", 	"chat - attacker",	ID_CHAT4,		ANIM_CHAT,		-1,				-1,		-1, -1},
+/*	{"messagemode3", 	"chat - target",	ID_CHAT3,		ANIM_CHAT,		-1,				-1,		-1, -1},
+	{"messagemode4", 	"chat - attacker",	ID_CHAT4,		ANIM_CHAT,		-1,				-1,		-1, -1},*/
+
+	{"vote yes", 		"vote yes",			ID_VOTEYES,		ANIM_IDLE,		'+',	K_KP_PLUS,		-1, -1},
+	{"vote no", 		"vote no",			ID_VOTENO,		ANIM_IDLE,		'-',	K_KP_MINUS,		-1, -1},
+
+	{"wop_music",		"music menu",	ID_MUSIC,		ANIM_IDLE,		'm',			-1,		-1, -1},
+	{"wop_nextsong",	"skip to next song",ID_NEXTSONG,	ANIM_IDLE,		'n',			-1,		-1,	-1},
+	{"dropCartridge",	"drop cartridge",ID_DROPCART,		ANIM_IDLE,		K_BACKSPACE,	-1,		-1, -1},
+	{"toggle cg_drawServerInfos","server info",ID_SERVERINFO,ANIM_IDLE,'k',			-1,		-1, -1},
+	{"toggle cg_thirdPerson","3rd person view",ID_3RDPERSON,ANIM_IDLE,	'u',			-1,		-1, -1},
+	{ "ui_help gametype",	"help gametype",	ID_HELP_GAMETYPE,	ANIM_IDLE,	'g',	-1,	-1,	-1 },
+	{ "ui_help item",		"help items",		ID_HELP_ITEMS,		ANIM_IDLE,	'h',	-1,	-1,	-1 },
+	{"+voiprecord", "voice chat", ID_PUSH2TALK, ANIM_IDLE, 'r', -1, -1, -1},
+
 	{(char*)NULL,		(char*)NULL,		0,				0,				-1,				-1,		-1,	-1},
 };
 
@@ -290,6 +310,8 @@ static menucommon_s *g_movement_controls[] =
 	(menucommon_s *)&s_controls.turnleft,      
 	(menucommon_s *)&s_controls.turnright,     
 	(menucommon_s *)&s_controls.sidestep,
+	(menucommon_s *)&s_controls.useitem, //
+	(menucommon_s *)&s_controls.gesture, //
 	NULL
 };
 
@@ -327,12 +349,20 @@ static menucommon_s *g_looking_controls[] = {
 
 static menucommon_s *g_misc_controls[] = {
 	(menucommon_s *)&s_controls.showscores, 
-	(menucommon_s *)&s_controls.useitem,
-	(menucommon_s *)&s_controls.gesture,
+	//(menucommon_s *)&s_controls.useitem,
+	//(menucommon_s *)&s_controls.gesture,
 	(menucommon_s *)&s_controls.chat,
 	(menucommon_s *)&s_controls.chat2,
 	(menucommon_s *)&s_controls.chat3,
 	(menucommon_s *)&s_controls.chat4,
+	(menucommon_s *)&s_controls.music,
+	(menucommon_s *)&s_controls.nextSong,
+	(menucommon_s *)&s_controls.dropCart,
+	(menucommon_s *)&s_controls.ServerInfo,
+	(menucommon_s *)&s_controls.thirdPerson,
+	(menucommon_s *)&s_controls.helpGametype,
+	(menucommon_s *)&s_controls.helpItems,
+	(menucommon_s *)&s_controls.pushToTalk,
 	NULL,
 };
 
@@ -481,39 +511,39 @@ static void Controls_UpdateModel( int anim ) {
 		break;
 
 	case ANIM_WEAPON1:
-		s_controls.playerWeapon = WP_GAUNTLET;
+		s_controls.playerWeapon = WP_PUNCHY;
 		break;
 
 	case ANIM_WEAPON2:
-		s_controls.playerWeapon = WP_MACHINEGUN;
+		s_controls.playerWeapon = WP_NIPPER;
 		break;
 
 	case ANIM_WEAPON3:
-		s_controls.playerWeapon = WP_SHOTGUN;
+		s_controls.playerWeapon = WP_PUMPER;
 		break;
 
 	case ANIM_WEAPON4:
-		s_controls.playerWeapon = WP_GRENADE_LAUNCHER;
+		s_controls.playerWeapon = WP_BALLOONY;
 		break;
 
 	case ANIM_WEAPON5:
-		s_controls.playerWeapon = WP_ROCKET_LAUNCHER;
+		s_controls.playerWeapon = WP_BETTY;
 		break;
 
 	case ANIM_WEAPON6:
-		s_controls.playerWeapon = WP_LIGHTNING;
+		s_controls.playerWeapon = WP_BOASTER;
 		break;
 
 	case ANIM_WEAPON7:
-		s_controls.playerWeapon = WP_RAILGUN;
+		s_controls.playerWeapon = WP_SPLASHER;
 		break;
 
 	case ANIM_WEAPON8:
-		s_controls.playerWeapon = WP_PLASMAGUN;
+		s_controls.playerWeapon = WP_BUBBLEG;
 		break;
 
 	case ANIM_WEAPON9:
-		s_controls.playerWeapon = WP_BFG;
+		s_controls.playerWeapon = WP_IMPERIUS;
 		break;
 
 	case ANIM_WEAPON10:
@@ -561,6 +591,7 @@ static void Controls_Update( void ) {
 	// disable all controls in all groups
 	for( i = 0; i < C_MAX; i++ ) {
 		controls = g_controls[i];
+		// bk001204 - parentheses
 		for( j = 0;  (control = controls[j]) ; j++ ) {
 			control->flags |= (QMF_HIDDEN|QMF_INACTIVE);
 		}
@@ -569,17 +600,19 @@ static void Controls_Update( void ) {
 	controls = g_controls[s_controls.section];
 
 	// enable controls in active group (and count number of items for vertical centering)
+	// bk001204 - parentheses
 	for( j = 0;  (control = controls[j]) ; j++ ) {
 		control->flags &= ~(QMF_GRAYED|QMF_HIDDEN|QMF_INACTIVE);
 	}
 
 	// position controls
-	y = ( SCREEN_HEIGHT - j * SMALLCHAR_HEIGHT ) / 2;
+	y = 180;//160;
+	// bk001204 - parentheses
 	for( j = 0;	(control = controls[j]) ; j++, y += SMALLCHAR_HEIGHT ) {
-		control->x      = 320;
+		control->x      = 492;
 		control->y      = y;
-		control->left   = 320 - 19*SMALLCHAR_WIDTH;
-		control->right  = 320 + 21*SMALLCHAR_WIDTH;
+		control->left   = 500 - 19*SMALLCHAR_WIDTH;
+		control->right  = 500 + 21*SMALLCHAR_WIDTH;
 		control->top    = y;
 		control->bottom = y + SMALLCHAR_HEIGHT;
 	}
@@ -610,32 +643,37 @@ static void Controls_Update( void ) {
 	s_controls.weapons.generic.flags  &= ~(QMF_GRAYED|QMF_HIGHLIGHT|QMF_HIGHLIGHT_IF_FOCUS);
 	s_controls.misc.generic.flags     &= ~(QMF_GRAYED|QMF_HIGHLIGHT|QMF_HIGHLIGHT_IF_FOCUS);
 
-	s_controls.looking.generic.flags  |= QMF_PULSEIFFOCUS;
-	s_controls.movement.generic.flags |= QMF_PULSEIFFOCUS;
-	s_controls.weapons.generic.flags  |= QMF_PULSEIFFOCUS;
-	s_controls.misc.generic.flags     |= QMF_PULSEIFFOCUS;
+	s_controls.looking.generic.flags  |= QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.movement.generic.flags |= QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.weapons.generic.flags  |= QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.misc.generic.flags     |= QMF_HIGHLIGHT_IF_FOCUS;
 
 	// set buttons
 	switch( s_controls.section ) {
 	case C_MOVEMENT:
-		s_controls.movement.generic.flags &= ~QMF_PULSEIFFOCUS;
-		s_controls.movement.generic.flags |= (QMF_HIGHLIGHT|QMF_HIGHLIGHT_IF_FOCUS);
+		s_controls.movement.generic.flags |= QMF_HIGHLIGHT;
 		break;
 	
 	case C_LOOKING:
-		s_controls.looking.generic.flags &= ~QMF_PULSEIFFOCUS;
-		s_controls.looking.generic.flags |= (QMF_HIGHLIGHT|QMF_HIGHLIGHT_IF_FOCUS);
+		s_controls.looking.generic.flags |= QMF_HIGHLIGHT;
 		break;
 	
 	case C_WEAPONS:
-		s_controls.weapons.generic.flags &= ~QMF_PULSEIFFOCUS;
-		s_controls.weapons.generic.flags |= (QMF_HIGHLIGHT|QMF_HIGHLIGHT_IF_FOCUS);
+		s_controls.weapons.generic.flags |= QMF_HIGHLIGHT;
 		break;		
 
 	case C_MISC:
-		s_controls.misc.generic.flags &= ~QMF_PULSEIFFOCUS;
-		s_controls.misc.generic.flags |= (QMF_HIGHLIGHT|QMF_HIGHLIGHT_IF_FOCUS);
+		s_controls.misc.generic.flags |= QMF_HIGHLIGHT;
 		break;
+	}
+
+	// special case :/
+	if(		0 == UI_GetCvarInt("cl_voip") 
+		||	0 == UI_GetCvarInt("s_useOpenAL")
+		||	1 == UI_GetCvarInt("cl_voipUseVAD")
+		)
+	{
+		s_controls.pushToTalk.generic.flags |= QMF_GRAYED;
 	}
 }
 
@@ -692,13 +730,13 @@ static void Controls_DrawKeyBinding( void *self )
 		if (s_controls.waitingforkey)
 		{
 			UI_DrawChar( x, y, '=', UI_CENTER|UI_BLINK|UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(SCREEN_WIDTH * 0.50, SCREEN_HEIGHT * 0.80, "Waiting for new key ... ESCAPE to cancel", UI_SMALLFONT|UI_CENTER|UI_PULSE, colorWhite );
+			UI_DrawString(500, SCREEN_HEIGHT * 0.85, "Waiting for new key ... ESCAPE to cancel", UI_SMALLFONT|UI_CENTER|UI_PULSE, colorWhite );
 		}
 		else
 		{
 			UI_DrawChar( x, y, 13, UI_CENTER|UI_BLINK|UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(SCREEN_WIDTH * 0.50, SCREEN_HEIGHT * 0.78, "Press ENTER or CLICK to change", UI_SMALLFONT|UI_CENTER, colorWhite );
-			UI_DrawString(SCREEN_WIDTH * 0.50, SCREEN_HEIGHT * 0.82, "Press BACKSPACE to clear", UI_SMALLFONT|UI_CENTER, colorWhite );
+			UI_DrawString(500, SCREEN_HEIGHT * 0.83, "Press ENTER or CLICK to change", UI_SMALLFONT|UI_CENTER, colorWhite );
+			UI_DrawString(500, SCREEN_HEIGHT * 0.87, "Press BACKSPACE to clear", UI_SMALLFONT|UI_CENTER, colorWhite );
 		}
 	}
 	else
@@ -723,7 +761,7 @@ Controls_StatusBar
 */
 static void Controls_StatusBar( void *self )
 {
-	UI_DrawString(SCREEN_WIDTH * 0.50, SCREEN_HEIGHT * 0.80, "Use Arrow Keys or CLICK to change", UI_SMALLFONT|UI_CENTER, colorWhite );
+	UI_DrawString(500, SCREEN_HEIGHT * 0.85, "Use Arrow Keys or CLICK to change", UI_SMALLFONT|UI_CENTER, colorWhite );
 }
 
 
@@ -856,6 +894,32 @@ static void Controls_SetConfig( void )
 	trap_Cmd_ExecuteText( EXEC_APPEND, "in_restart\n" );
 }
 
+void SetDefaultBinds_onUnusedKeys()
+{
+	bind_t*	bindptr;
+	int i;
+	char buff[8];
+
+	if(!wop_AutoBindUnusedKeys.integer)
+		return;
+
+	bindptr = g_bindings;
+	for (i=0; ;i++,bindptr++)
+	{
+		if (!bindptr->label)
+			break;
+
+		if(bindptr->defaultbind1==-1) continue;
+		buff[0]=0;		trap_Key_GetBindingBuf(bindptr->defaultbind1,buff,8);
+		if(buff[0]==0)	trap_Key_SetBinding(bindptr->defaultbind1,bindptr->command);
+
+		if(bindptr->defaultbind2==-1) continue;
+		buff[0]=0;		trap_Key_GetBindingBuf(bindptr->defaultbind2,buff,8);
+		if(buff[0]==0)	trap_Key_SetBinding(bindptr->defaultbind2,bindptr->command);
+
+	}
+}
+
 /*
 =================
 Controls_SetDefaults
@@ -932,7 +996,7 @@ static sfxHandle_t Controls_MenuKey( int key )
 			case K_ESCAPE:
 				s_controls.waitingforkey = qfalse;
 				Controls_Update();
-				return (menu_out_sound);
+				return menu_null_sound;
 	
 			case '`':
 				goto ignorekey;
@@ -1005,7 +1069,7 @@ static sfxHandle_t Controls_MenuKey( int key )
 	if (found)
 	{	
 		Controls_Update();
-		return (menu_out_sound);
+		return menu_null_sound;
 	}
 
 ignorekey:
@@ -1156,8 +1220,6 @@ static void Controls_InitModel( void )
 {
 	memset( &s_controls.playerinfo, 0, sizeof(playerInfo_t) );
 
-	UI_PlayerInfo_SetModel( &s_controls.playerinfo, UI_Cvar_VariableString( "model" ) );
-
 	Controls_UpdateModel( ANIM_IDLE );
 }
 
@@ -1194,230 +1256,211 @@ static void Controls_MenuInit( void )
 	s_controls.menu.key        = Controls_MenuKey;
 	s_controls.menu.wrapAround = qtrue;
 	s_controls.menu.fullscreen = qtrue;
+	s_controls.menu.noPushSelect	= qtrue;
+	s_controls.menu.bgparts		= BGP_CONTROLBG|BGP_SIMPLEBG;
 
-	s_controls.banner.generic.type	= MTYPE_BTEXT;
-	s_controls.banner.generic.flags	= QMF_CENTER_JUSTIFY;
-	s_controls.banner.generic.x		= 320;
-	s_controls.banner.generic.y		= 16;
-	s_controls.banner.string		= "CONTROLS";
-	s_controls.banner.color			= color_white;
-	s_controls.banner.style			= UI_CENTER;
-
-	s_controls.framel.generic.type  = MTYPE_BITMAP;
-	s_controls.framel.generic.name  = ART_FRAMEL;
-	s_controls.framel.generic.flags = QMF_LEFT_JUSTIFY|QMF_INACTIVE;
-	s_controls.framel.generic.x     = 0;
-	s_controls.framel.generic.y     = 78;
-	s_controls.framel.width  	    = 256;
-	s_controls.framel.height  	    = 329;
-
-	s_controls.framer.generic.type  = MTYPE_BITMAP;
-	s_controls.framer.generic.name  = ART_FRAMER;
-	s_controls.framer.generic.flags = QMF_LEFT_JUSTIFY|QMF_INACTIVE;
-	s_controls.framer.generic.x     = 376;
-	s_controls.framer.generic.y     = 76;
-	s_controls.framer.width  	    = 256;
-	s_controls.framer.height  	    = 334;
-
-	s_controls.looking.generic.type     = MTYPE_PTEXT;
-	s_controls.looking.generic.flags    = QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_controls.looking.generic.id	    = ID_LOOKING;
+	s_controls.looking.generic.type		= MTYPE_BITMAP;
+	s_controls.looking.generic.name		= LOOK0;
+	s_controls.looking.generic.flags	= QMF_LEFT_JUSTIFY|QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.looking.generic.x		= 412;
+	s_controls.looking.generic.y		= 40;
+	s_controls.looking.generic.id		= ID_LOOKING;
 	s_controls.looking.generic.callback	= Controls_MenuEvent;
-	s_controls.looking.generic.x	    = 152;
-	s_controls.looking.generic.y	    = 240 - 2 * PROP_HEIGHT;
-	s_controls.looking.string			= "LOOK";
-	s_controls.looking.style			= UI_RIGHT;
-	s_controls.looking.color			= color_red;
+	s_controls.looking.width			= 75;
+	s_controls.looking.height			= 40;
+	s_controls.looking.focuspic			= LOOK1;
+	s_controls.looking.focuspicinstead	= qtrue;
 
-	s_controls.movement.generic.type     = MTYPE_PTEXT;
-	s_controls.movement.generic.flags    = QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_controls.movement.generic.id	     = ID_MOVEMENT;
-	s_controls.movement.generic.callback = Controls_MenuEvent;
-	s_controls.movement.generic.x	     = 152;
-	s_controls.movement.generic.y	     = 240 - PROP_HEIGHT;
-	s_controls.movement.string			= "MOVE";
-	s_controls.movement.style			= UI_RIGHT;
-	s_controls.movement.color			= color_red;
+	// +/-... Rumrücken für Ente
+	s_controls.movement.generic.type	= MTYPE_BITMAP;
+	s_controls.movement.generic.name	= MOVEMENT0;
+	s_controls.movement.generic.flags	= QMF_LEFT_JUSTIFY|QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.movement.generic.x		= 509-9;
+	s_controls.movement.generic.y		= 50-5;
+	s_controls.movement.generic.id		= ID_MOVEMENT;
+	s_controls.movement.generic.callback= Controls_MenuEvent;
+	s_controls.movement.width			= 80;
+	s_controls.movement.height			= 40;
+	s_controls.movement.focuspic		= MOVEMENT1;
+	s_controls.movement.focuspicinstead	= qtrue;
 
-	s_controls.weapons.generic.type	    = MTYPE_PTEXT;
-	s_controls.weapons.generic.flags    = QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_controls.weapons.generic.id	    = ID_WEAPONS;
+	s_controls.weapons.generic.type		= MTYPE_BITMAP;
+	s_controls.weapons.generic.name		= WEAPONS0;
+	s_controls.weapons.generic.flags	= QMF_LEFT_JUSTIFY|QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.weapons.generic.x		= 480-2;
+	s_controls.weapons.generic.y		= 105-15;
+	s_controls.weapons.generic.id		= ID_WEAPONS;
 	s_controls.weapons.generic.callback	= Controls_MenuEvent;
-	s_controls.weapons.generic.x	    = 152;
-	s_controls.weapons.generic.y	    = 240;
-	s_controls.weapons.string			= "SHOOT";
-	s_controls.weapons.style			= UI_RIGHT;
-	s_controls.weapons.color			= color_red;
+	s_controls.weapons.width			= 105;
+	s_controls.weapons.height			= 40;
+	s_controls.weapons.focuspic			= WEAPONS1;
+	s_controls.weapons.focuspicinstead	= qtrue;
 
-	s_controls.misc.generic.type	 = MTYPE_PTEXT;
-	s_controls.misc.generic.flags    = QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_controls.misc.generic.id	     = ID_MISC;
-	s_controls.misc.generic.callback = Controls_MenuEvent;
-	s_controls.misc.generic.x		 = 152;
-	s_controls.misc.generic.y		 = 240 + PROP_HEIGHT;
-	s_controls.misc.string			= "MISC";
-	s_controls.misc.style			= UI_RIGHT;
-	s_controls.misc.color			= color_red;
+	s_controls.misc.generic.type		= MTYPE_BITMAP;
+	s_controls.misc.generic.name		= MISC0;
+	s_controls.misc.generic.flags		= QMF_LEFT_JUSTIFY|QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.misc.generic.x			= 398+3;
+	s_controls.misc.generic.y			= 88-9;
+	s_controls.misc.generic.id			= ID_MISC;
+	s_controls.misc.generic.callback	= Controls_MenuEvent;
+	s_controls.misc.width				= 75;
+	s_controls.misc.height				= 40;
+	s_controls.misc.focuspic			= MISC1;
+	s_controls.misc.focuspicinstead		= qtrue;
 
-	s_controls.back.generic.type	 = MTYPE_BITMAP;
-	s_controls.back.generic.name     = ART_BACK0;
-	s_controls.back.generic.flags    = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_controls.back.generic.x		 = 0;
-	s_controls.back.generic.y		 = 480-64;
-	s_controls.back.generic.id	     = ID_BACK;
-	s_controls.back.generic.callback = Controls_MenuEvent;
-	s_controls.back.width  		     = 128;
-	s_controls.back.height  		 = 64;
-	s_controls.back.focuspic         = ART_BACK1;
 
-	s_controls.player.generic.type      = MTYPE_BITMAP;
-	s_controls.player.generic.flags     = QMF_INACTIVE;
-	s_controls.player.generic.ownerdraw = Controls_DrawPlayer;
-	s_controls.player.generic.x	        = 400;
-	s_controls.player.generic.y	        = -40;
-	s_controls.player.width	            = 32*10;
-	s_controls.player.height            = 56*10;
+	s_controls.back.generic.type		= MTYPE_BITMAP;
+	s_controls.back.generic.name		= ART_BACK0;
+	s_controls.back.generic.flags		= QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS;
+	s_controls.back.generic.x			= 549;
+	s_controls.back.generic.y			= 440;
+	s_controls.back.generic.id			= ID_BACK;
+	s_controls.back.generic.callback	= Controls_MenuEvent;
+	s_controls.back.width				= 80;
+	s_controls.back.height				= 40;
+	s_controls.back.focuspic			= ART_BACK1;
+	s_controls.back.focuspicinstead		= qtrue;
 
 	s_controls.walkforward.generic.type	     = MTYPE_ACTION;
-	s_controls.walkforward.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.walkforward.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.walkforward.generic.callback  = Controls_ActionEvent;
 	s_controls.walkforward.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.walkforward.generic.id 	     = ID_FORWARD;
 
 	s_controls.backpedal.generic.type	   = MTYPE_ACTION;
-	s_controls.backpedal.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.backpedal.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.backpedal.generic.callback  = Controls_ActionEvent;
 	s_controls.backpedal.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.backpedal.generic.id 	   = ID_BACKPEDAL;
 
 	s_controls.stepleft.generic.type	  = MTYPE_ACTION;
-	s_controls.stepleft.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.stepleft.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.stepleft.generic.callback  = Controls_ActionEvent;
 	s_controls.stepleft.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.stepleft.generic.id 		  = ID_MOVELEFT;
 
 	s_controls.stepright.generic.type	   = MTYPE_ACTION;
-	s_controls.stepright.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.stepright.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.stepright.generic.callback  = Controls_ActionEvent;
 	s_controls.stepright.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.stepright.generic.id        = ID_MOVERIGHT;
 
 	s_controls.moveup.generic.type	    = MTYPE_ACTION;
-	s_controls.moveup.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.moveup.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.moveup.generic.callback  = Controls_ActionEvent;
 	s_controls.moveup.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.moveup.generic.id        = ID_MOVEUP;
 
 	s_controls.movedown.generic.type	  = MTYPE_ACTION;
-	s_controls.movedown.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.movedown.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.movedown.generic.callback  = Controls_ActionEvent;
 	s_controls.movedown.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.movedown.generic.id        = ID_MOVEDOWN;
 
 	s_controls.turnleft.generic.type	  = MTYPE_ACTION;
-	s_controls.turnleft.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.turnleft.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.turnleft.generic.callback  = Controls_ActionEvent;
 	s_controls.turnleft.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.turnleft.generic.id        = ID_LEFT;
 
 	s_controls.turnright.generic.type	   = MTYPE_ACTION;
-	s_controls.turnright.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.turnright.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.turnright.generic.callback  = Controls_ActionEvent;
 	s_controls.turnright.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.turnright.generic.id        = ID_RIGHT;
 
 	s_controls.sidestep.generic.type	  = MTYPE_ACTION;
-	s_controls.sidestep.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.sidestep.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.sidestep.generic.callback  = Controls_ActionEvent;
 	s_controls.sidestep.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.sidestep.generic.id        = ID_STRAFE;
 
 	s_controls.run.generic.type	     = MTYPE_ACTION;
-	s_controls.run.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.run.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.run.generic.callback  = Controls_ActionEvent;
 	s_controls.run.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.run.generic.id        = ID_SPEED;
 
 	s_controls.chainsaw.generic.type	  = MTYPE_ACTION;
-	s_controls.chainsaw.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.chainsaw.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.chainsaw.generic.callback  = Controls_ActionEvent;
 	s_controls.chainsaw.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.chainsaw.generic.id        = ID_WEAPON1;
 
 	s_controls.machinegun.generic.type	    = MTYPE_ACTION;
-	s_controls.machinegun.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.machinegun.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.machinegun.generic.callback  = Controls_ActionEvent;
 	s_controls.machinegun.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.machinegun.generic.id        = ID_WEAPON2;
 
 	s_controls.shotgun.generic.type	     = MTYPE_ACTION;
-	s_controls.shotgun.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.shotgun.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.shotgun.generic.callback  = Controls_ActionEvent;
 	s_controls.shotgun.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.shotgun.generic.id        = ID_WEAPON3;
 
 	s_controls.grenadelauncher.generic.type	     = MTYPE_ACTION;
-	s_controls.grenadelauncher.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.grenadelauncher.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.grenadelauncher.generic.callback  = Controls_ActionEvent;
 	s_controls.grenadelauncher.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.grenadelauncher.generic.id        = ID_WEAPON4;
 
 	s_controls.rocketlauncher.generic.type	    = MTYPE_ACTION;
-	s_controls.rocketlauncher.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.rocketlauncher.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.rocketlauncher.generic.callback  = Controls_ActionEvent;
 	s_controls.rocketlauncher.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.rocketlauncher.generic.id        = ID_WEAPON5;
 
 	s_controls.lightning.generic.type	   = MTYPE_ACTION;
-	s_controls.lightning.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.lightning.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.lightning.generic.callback  = Controls_ActionEvent;
 	s_controls.lightning.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.lightning.generic.id        = ID_WEAPON6;
 
 	s_controls.railgun.generic.type	     = MTYPE_ACTION;
-	s_controls.railgun.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.railgun.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.railgun.generic.callback  = Controls_ActionEvent;
 	s_controls.railgun.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.railgun.generic.id        = ID_WEAPON7;
 
 	s_controls.plasma.generic.type	    = MTYPE_ACTION;
-	s_controls.plasma.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.plasma.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.plasma.generic.callback  = Controls_ActionEvent;
 	s_controls.plasma.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.plasma.generic.id        = ID_WEAPON8;
 
 	s_controls.bfg.generic.type	     = MTYPE_ACTION;
-	s_controls.bfg.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.bfg.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.bfg.generic.callback  = Controls_ActionEvent;
 	s_controls.bfg.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.bfg.generic.id        = ID_WEAPON9;
 
 	s_controls.attack.generic.type	    = MTYPE_ACTION;
-	s_controls.attack.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.attack.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.attack.generic.callback  = Controls_ActionEvent;
 	s_controls.attack.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.attack.generic.id        = ID_ATTACK;
 
 	s_controls.prevweapon.generic.type	    = MTYPE_ACTION;
-	s_controls.prevweapon.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.prevweapon.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.prevweapon.generic.callback  = Controls_ActionEvent;
 	s_controls.prevweapon.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.prevweapon.generic.id        = ID_WEAPPREV;
 
 	s_controls.nextweapon.generic.type	    = MTYPE_ACTION;
-	s_controls.nextweapon.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.nextweapon.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.nextweapon.generic.callback  = Controls_ActionEvent;
 	s_controls.nextweapon.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.nextweapon.generic.id        = ID_WEAPNEXT;
 
 	s_controls.lookup.generic.type	    = MTYPE_ACTION;
-	s_controls.lookup.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.lookup.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.lookup.generic.callback  = Controls_ActionEvent;
 	s_controls.lookup.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.lookup.generic.id        = ID_LOOKUP;
 
 	s_controls.lookdown.generic.type	  = MTYPE_ACTION;
-	s_controls.lookdown.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.lookdown.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.lookdown.generic.callback  = Controls_ActionEvent;
 	s_controls.lookdown.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.lookdown.generic.id        = ID_LOOKDOWN;
@@ -1437,25 +1480,25 @@ static void Controls_MenuInit( void )
 	s_controls.freelook.generic.statusbar	= Controls_StatusBar;
 
 	s_controls.centerview.generic.type	    = MTYPE_ACTION;
-	s_controls.centerview.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.centerview.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.centerview.generic.callback  = Controls_ActionEvent;
 	s_controls.centerview.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.centerview.generic.id        = ID_CENTERVIEW;
 
 	s_controls.zoomview.generic.type	  = MTYPE_ACTION;
-	s_controls.zoomview.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.zoomview.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.zoomview.generic.callback  = Controls_ActionEvent;
 	s_controls.zoomview.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.zoomview.generic.id        = ID_ZOOMVIEW;
 
 	s_controls.useitem.generic.type	     = MTYPE_ACTION;
-	s_controls.useitem.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.useitem.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.useitem.generic.callback  = Controls_ActionEvent;
 	s_controls.useitem.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.useitem.generic.id        = ID_USEITEM;
 
 	s_controls.showscores.generic.type	    = MTYPE_ACTION;
-	s_controls.showscores.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.showscores.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.showscores.generic.callback  = Controls_ActionEvent;
 	s_controls.showscores.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.showscores.generic.id        = ID_SHOWSCORES;
@@ -1487,7 +1530,7 @@ static void Controls_MenuInit( void )
 	s_controls.autoswitch.generic.type      = MTYPE_RADIOBUTTON;
 	s_controls.autoswitch.generic.flags	    = QMF_SMALLFONT;
 	s_controls.autoswitch.generic.x	        = SCREEN_WIDTH/2;
-	s_controls.autoswitch.generic.name	    = "autoswitch weapons";
+	s_controls.autoswitch.generic.name	    = "auto switch weapons";
 	s_controls.autoswitch.generic.id        = ID_AUTOSWITCH;
 	s_controls.autoswitch.generic.callback  = Controls_MenuEvent;
 	s_controls.autoswitch.generic.statusbar = Controls_StatusBar;
@@ -1503,34 +1546,84 @@ static void Controls_MenuInit( void )
 	s_controls.sensitivity.generic.statusbar = Controls_StatusBar;
 
 	s_controls.gesture.generic.type	     = MTYPE_ACTION;
-	s_controls.gesture.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.gesture.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.gesture.generic.callback  = Controls_ActionEvent;
 	s_controls.gesture.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.gesture.generic.id        = ID_GESTURE;
 
 	s_controls.chat.generic.type	  = MTYPE_ACTION;
-	s_controls.chat.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.chat.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.chat.generic.callback  = Controls_ActionEvent;
 	s_controls.chat.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.chat.generic.id        = ID_CHAT;
 
 	s_controls.chat2.generic.type	   = MTYPE_ACTION;
-	s_controls.chat2.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.chat2.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.chat2.generic.callback  = Controls_ActionEvent;
 	s_controls.chat2.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.chat2.generic.id        = ID_CHAT2;
 
 	s_controls.chat3.generic.type	   = MTYPE_ACTION;
-	s_controls.chat3.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.chat3.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.chat3.generic.callback  = Controls_ActionEvent;
 	s_controls.chat3.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.chat3.generic.id        = ID_CHAT3;
+//	s_controls.chat3.generic.id        = ID_CHAT3;
+	s_controls.chat3.generic.id        = ID_VOTEYES;
 
 	s_controls.chat4.generic.type	   = MTYPE_ACTION;
-	s_controls.chat4.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.chat4.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.chat4.generic.callback  = Controls_ActionEvent;
 	s_controls.chat4.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.chat4.generic.id        = ID_CHAT4;
+//	s_controls.chat4.generic.id        = ID_CHAT4;
+	s_controls.chat4.generic.id        = ID_VOTENO;
+
+	s_controls.music.generic.type	   = MTYPE_ACTION;
+	s_controls.music.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.music.generic.callback  = Controls_ActionEvent;
+	s_controls.music.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.music.generic.id        = ID_MUSIC;
+
+	s_controls.nextSong.generic.type	   = MTYPE_ACTION;
+	s_controls.nextSong.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.nextSong.generic.callback  = Controls_ActionEvent;
+	s_controls.nextSong.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.nextSong.generic.id        = ID_NEXTSONG;
+
+	s_controls.dropCart.generic.type	  = MTYPE_ACTION;
+	s_controls.dropCart.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.dropCart.generic.callback  = Controls_ActionEvent;
+	s_controls.dropCart.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.dropCart.generic.id        = ID_DROPCART;
+
+	s_controls.thirdPerson.generic.type	    = MTYPE_ACTION;
+	s_controls.thirdPerson.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.thirdPerson.generic.callback  = Controls_ActionEvent;
+	s_controls.thirdPerson.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.thirdPerson.generic.id        = ID_3RDPERSON;
+
+	s_controls.pushToTalk.generic.type		= MTYPE_ACTION;
+	s_controls.pushToTalk.generic.flags		= QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.pushToTalk.generic.callback	= Controls_ActionEvent;
+	s_controls.pushToTalk.generic.ownerdraw	= Controls_DrawKeyBinding;
+	s_controls.pushToTalk.generic.id		= ID_PUSH2TALK;
+
+	s_controls.ServerInfo.generic.type	    = MTYPE_ACTION;
+	s_controls.ServerInfo.generic.flags     = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.ServerInfo.generic.callback  = Controls_ActionEvent;
+	s_controls.ServerInfo.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.ServerInfo.generic.id        = ID_SERVERINFO;
+
+	s_controls.helpGametype.generic.type		= MTYPE_ACTION;
+	s_controls.helpGametype.generic.flags		= ( QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN );
+	s_controls.helpGametype.generic.callback	= Controls_ActionEvent;
+	s_controls.helpGametype.generic.ownerdraw	= Controls_DrawKeyBinding;
+	s_controls.helpGametype.generic.id			= ID_HELP_GAMETYPE;
+
+	s_controls.helpItems.generic.type		= MTYPE_ACTION;
+	s_controls.helpItems.generic.flags		= ( QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN );
+	s_controls.helpItems.generic.callback	= Controls_ActionEvent;
+	s_controls.helpItems.generic.ownerdraw	= Controls_DrawKeyBinding;
+	s_controls.helpItems.generic.id			= ID_HELP_ITEMS;
 
 	s_controls.joyenable.generic.type      = MTYPE_RADIOBUTTON;
 	s_controls.joyenable.generic.flags	   = QMF_SMALLFONT;
@@ -1549,20 +1642,6 @@ static void Controls_MenuInit( void )
 	s_controls.joythreshold.minvalue		  = 0.05f;
 	s_controls.joythreshold.maxvalue		  = 0.75f;
 	s_controls.joythreshold.generic.statusbar = Controls_StatusBar;
-
-	s_controls.name.generic.type	= MTYPE_PTEXT;
-	s_controls.name.generic.flags	= QMF_CENTER_JUSTIFY|QMF_INACTIVE;
-	s_controls.name.generic.x		= 320;
-	s_controls.name.generic.y		= 440;
-	s_controls.name.string			= playername;
-	s_controls.name.style			= UI_CENTER;
-	s_controls.name.color			= text_color_normal;
-
-	Menu_AddItem( &s_controls.menu, &s_controls.banner );
-	Menu_AddItem( &s_controls.menu, &s_controls.framel );
-	Menu_AddItem( &s_controls.menu, &s_controls.framer );
-	Menu_AddItem( &s_controls.menu, &s_controls.player );
-	Menu_AddItem( &s_controls.menu, &s_controls.name );
 
 	Menu_AddItem( &s_controls.menu, &s_controls.looking );
 	Menu_AddItem( &s_controls.menu, &s_controls.movement );
@@ -1614,11 +1693,16 @@ static void Controls_MenuInit( void )
 	Menu_AddItem( &s_controls.menu, &s_controls.chat2 );
 	Menu_AddItem( &s_controls.menu, &s_controls.chat3 );
 	Menu_AddItem( &s_controls.menu, &s_controls.chat4 );
+	Menu_AddItem( &s_controls.menu, &s_controls.music );
+	Menu_AddItem( &s_controls.menu, &s_controls.nextSong );
+	Menu_AddItem( &s_controls.menu, &s_controls.dropCart );
+	Menu_AddItem( &s_controls.menu, &s_controls.ServerInfo );
+	Menu_AddItem( &s_controls.menu, &s_controls.thirdPerson );
+	Menu_AddItem( &s_controls.menu, &s_controls.helpGametype );
+	Menu_AddItem( &s_controls.menu, &s_controls.helpItems );
+	Menu_AddItem( &s_controls.menu, &s_controls.pushToTalk );
 
 	Menu_AddItem( &s_controls.menu, &s_controls.back );
-
-	trap_Cvar_VariableStringBuffer( "name", s_controls.name.string, 16 );
-	Q_CleanStr( s_controls.name.string );
 
 	// initialize the configurable cvars
 	Controls_InitCvars();
@@ -1626,11 +1710,8 @@ static void Controls_MenuInit( void )
 	// initialize the current config
 	Controls_GetConfig();
 
-	// intialize the model
-	Controls_InitModel();
-
 	// intialize the weapons
-	Controls_InitWeapons ();
+//	Controls_InitWeapons ();
 
 	// initial default section
 	s_controls.section = C_LOOKING;
@@ -1648,8 +1729,15 @@ Controls_Cache
 void Controls_Cache( void ) {
 	trap_R_RegisterShaderNoMip( ART_BACK0 );
 	trap_R_RegisterShaderNoMip( ART_BACK1 );
-	trap_R_RegisterShaderNoMip( ART_FRAMEL );
-	trap_R_RegisterShaderNoMip( ART_FRAMER );
+
+	trap_R_RegisterShaderNoMip(LOOK0);
+	trap_R_RegisterShaderNoMip(LOOK1);
+	trap_R_RegisterShaderNoMip(MOVEMENT0);
+	trap_R_RegisterShaderNoMip(MOVEMENT1);
+	trap_R_RegisterShaderNoMip(WEAPONS0);
+	trap_R_RegisterShaderNoMip(WEAPONS1);
+	trap_R_RegisterShaderNoMip(MISC0);
+	trap_R_RegisterShaderNoMip(MISC1);
 }
 
 

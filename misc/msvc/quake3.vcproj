@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9,00"
 	Name="quake3"
 	ProjectGUID="{81CB51C4-B434-4E12-B69B-BAEE102F2852}"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -46,7 +47,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="..\..\code\libcurl; ..\..\code\AL; ..\..\code\libspeex\include; ..\..\code\SDL12\include; ..\..\code\zlib"
+				AdditionalIncludeDirectories="..\..\code\libcurl; ..\..\code\AL; ..\..\code\libspeex\include"
 				PreprocessorDefinitions="_WIN32; WIN32; NDEBUG; _WINDOWS; _CRT_SECURE_NO_DEPRECATE; BOTLIB; USE_ICON; USE_CURL; USE_CURL_DLOPEN; USE_OPENAL; USE_OPENAL_DLOPEN; USE_VOIP; HAVE_CONFIG_H; MISSIONPACK"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -83,6 +84,8 @@
 				MapFileName="$(IntDir)\quake3.map"
 				SubSystem="2"
 				StackReserveSize="8388608"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -104,9 +107,6 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Post build processing.."
 				CommandLine="rem bash -c &quot;perl ./unix/cons -- release-TA&quot;"
@@ -114,7 +114,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\build\quake3_debug"
+			OutputDirectory="..\..\.."
 			IntermediateDirectory="..\..\build\quake3_debug"
 			ConfigurationType="1"
 			UseOfMFC="0"
@@ -144,8 +144,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\code\libcurl; ..\..\code\AL; ..\..\code\libspeex\include; ..\..\code\SDL12\include; ..\..\code\zlib"
-				PreprocessorDefinitions="_WIN32; WIN32; _DEBUG; _WINDOWS; _CRT_SECURE_NO_DEPRECATE; BOTLIB; USE_ICON; USE_CURL; USE_CURL_DLOPEN; USE_OPENAL; USE_OPENAL_DLOPEN; USE_VOIP; HAVE_CONFIG_H"
+				AdditionalIncludeDirectories="..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\SDL12\include"
+				PreprocessorDefinitions="STANDALONE;_WIN32; WIN32; _DEBUG; _WINDOWS; _CRT_SECURE_NO_DEPRECATE; BOTLIB; USE_ICON; USE_CURL; USE_CURL_DLOPEN; USE_OPENAL; USE_OPENAL_DLOPEN; USE_VOIP; HAVE_CONFIG_H;USE_LOCAL_HEADERS"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile="$(IntDir)\quake3.pch"
@@ -174,9 +174,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="user32.lib advapi32.lib winmm.lib wsock32.lib ws2_32.lib SDLmain.lib SDL.lib OpenGL32.lib msvcrt.lib"
-				OutputFile="$(OutDir)\ioquake3.exe"
+				OutputFile="$(OutDir)\wop_debug.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="..\..\code\libs\win32"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\quake3.pdb"
@@ -184,6 +185,8 @@
 				MapFileName="$(IntDir)\quake3.map"
 				SubSystem="2"
 				StackReserveSize="8388608"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -205,9 +208,6 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Post build processing.."
 				CommandLine="rem bash -c &quot;perl ./unix/cons -- debug&quot;"
@@ -215,7 +215,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\build\quake3_release"
+			OutputDirectory="..\..\.."
 			IntermediateDirectory="..\..\build\quake3_release"
 			ConfigurationType="1"
 			UseOfMFC="1"
@@ -246,8 +246,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="..\..\code\SDL12\include; ..\..\code\libcurl; ..\..\code\AL; ..\..\code\libspeex\include; ..\..\code\zlib"
-				PreprocessorDefinitions="_WIN32; WIN32; NDEBUG; _WINDOWS; _CRT_SECURE_NO_DEPRECATE; BOTLIB; USE_ICON; USE_CURL; USE_CURL_DLOPEN; USE_OPENAL; USE_OPENAL_DLOPEN; USE_VOIP; HAVE_CONFIG_H"
+				AdditionalIncludeDirectories="..\..\code\SDL12\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\libvorbis\include;..\..\code\libogg\include;..\..\code\libtheora\include"
+				PreprocessorDefinitions="STANDALONE;_WIN32; WIN32; NDEBUG; _WINDOWS; _CRT_SECURE_NO_DEPRECATE; BOTLIB; USE_ICON; USE_CURL; USE_CURL_DLOPEN; USE_OPENAL; USE_OPENAL_DLOPEN; USE_VOIP; HAVE_CONFIG_H;USE_CODEC_VORBIS;USE_CIN_THEORA"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -273,16 +273,19 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="user32.lib advapi32.lib winmm.lib wsock32.lib ws2_32.lib SDLmain.lib SDL.lib OpenGL32.lib msvcrt.lib"
-				OutputFile="$(OutDir)\ioquake3.exe"
+				AdditionalDependencies="user32.lib advapi32.lib winmm.lib wsock32.lib ws2_32.lib SDLmain.lib SDL.lib OpenGL32.lib msvcrt.lib libogg.lib libvorbis.lib libvorbisfile.lib libtheora.lib"
+				OutputFile="$(OutDir)\wop_msvc9.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="..\..\code\libs\win32"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile="$(IntDir)\quake3.pdb"
 				GenerateMapFile="true"
 				MapFileName="$(IntDir)\quake3.map"
 				SubSystem="2"
 				StackReserveSize="8388608"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -302,9 +305,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -342,8 +342,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\code\libcurl; ..\..\code\AL; ..\..\code\libspeex\include; ..\..\code\SDL12\include; ..\..\code\zlib"
-				PreprocessorDefinitions="_WIN32; WIN32; _DEBUG; _WINDOWS; _CRT_SECURE_NO_DEPRECATE; BOTLIB; USE_ICON; USE_CURL; USE_CURL_DLOPEN; USE_OPENAL; USE_OPENAL_DLOPEN; USE_VOIP; HAVE_CONFIG_H; MISSIONPACK"
+				AdditionalIncludeDirectories="..\..\code\libcurl; ..\..\code\AL; ..\..\code\libspeex\include"
+				PreprocessorDefinitions="_WIN32; WIN32; _DEBUG; _WINDOWS; _CRT_SECURE_NO_DEPRECATE; BOTLIB; USE_ICON; USE_CURL; USE_CURL_DLOPEN; USE_OPENAL; USE_OPENAL_DLOPEN; USE_VOIP; HAVE_CONFIG_H; MISSIONPACK;USE_LOCAL_HEADERS"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile="$(IntDir)\quake3.pch"
@@ -381,6 +381,8 @@
 				MapFileName="$(IntDir)\quake3.map"
 				SubSystem="2"
 				StackReserveSize="8388608"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -402,9 +404,6 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Post build processing.."
 				CommandLine="rem bash -c &quot;perl ./unix/cons -- debug-TA&quot;"
@@ -418,6 +417,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;hpj;bat;for;f90"
 			>
+			<File
+				RelativePath="..\..\code\client\cin_ogm.c"
+				>
+			</File>
 			<File
 				RelativePath="..\..\code\client\cl_avi.c"
 				>
@@ -2176,49 +2179,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\code\qcommon\ioapi.c"
-				>
-				<FileConfiguration
-					Name="Release TA|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug TA|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\code\qcommon\vm.c"
 				>
 				<FileConfiguration
@@ -2438,6 +2398,10 @@
 			</File>
 			<File
 				RelativePath="..\..\code\.\qcommon\surfaceflags.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\sys\sys_local.h"
 				>
 			</File>
 			<File
@@ -2869,6 +2833,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\code\botlib\botlib.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\code\botlib\l_crc.h"
 					>
 				</File>
@@ -3187,34 +3155,6 @@
 			</File>
 			<File
 				RelativePath="..\..\code\libspeex\window.c"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="zlib"
-			>
-			<File
-				RelativePath="..\..\code\zlib\adler32.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\zlib\crc32.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\zlib\inffast.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\zlib\inflate.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\zlib\inftrees.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\zlib\zutil.c"
 				>
 			</File>
 		</Filter>

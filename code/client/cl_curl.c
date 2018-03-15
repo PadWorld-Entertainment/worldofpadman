@@ -292,7 +292,7 @@ void CL_cURL_BeginDownload( const char *localName, const char *remoteURL )
 	if(!(clc.sv_allowDownload & DLF_NO_DISCONNECT) &&
 		!clc.cURLDisconnected) {
 
-		CL_AddReliableCommand("disconnect", qtrue);
+		CL_AddReliableCommand("disconnect");
 		CL_WritePacket();
 		CL_WritePacket();
 		CL_WritePacket();
@@ -332,7 +332,8 @@ void CL_cURL_PerformDownload(void)
 			qcurl_easy_strerror(msg->data.result),
 			code, clc.downloadURL);
 	}
-
+	*clc.downloadTempName = *clc.downloadName = 0;
+	Cvar_Set( "cl_downloadName", "" );
 	CL_NextDownload();
 }
 #endif /* USE_CURL */

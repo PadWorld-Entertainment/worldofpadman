@@ -63,7 +63,7 @@ char	*ex_argv[MAX_EX_ARGC];
 void ExpandWildcards( int *argc, char ***argv )
 {
 	struct _finddata_t fileinfo;
-	intptr_t	handle;
+	int		handle;
 	int		i;
 	char	filename[1024];
 	char	filebase[1024];
@@ -185,7 +185,7 @@ void _printf( const char *format, ... ) {
 	vsprintf (text, format, argptr);
 	va_end (argptr);
 
-  printf("%s", text);
+  printf(text);
 
 #ifdef WIN32
   if (!lookedForServer) {
@@ -396,12 +396,10 @@ void Q_getwd (char *out)
 	int i = 0;
 
 #ifdef WIN32
-   if (_getcwd (out, 256) == NULL)
-     strcpy(out, ".");  /* shrug */
+   _getcwd (out, 256);
    strcat (out, "\\");
 #else
-   if (getcwd (out, 256) == NULL)
-     strcpy(out, ".");  /* shrug */
+   getcwd (out, 256);
    strcat (out, "/");
 #endif
 

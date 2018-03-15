@@ -27,11 +27,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // A user mod should never modify this file
 
 #ifdef STANDALONE
-  #define PRODUCT_NAME			"iofoo3"
-  #define BASEGAME			"foobar"
-  #define CLIENT_WINDOW_TITLE     	"changeme"
-  #define CLIENT_WINDOW_MIN_TITLE 	"changeme2"
-  #define GAMENAME_FOR_MASTER		"iofoo3"	// must NOT contain whitespaces
+  #define PRODUCT_NAME			"wop"
+  #define PRODUCT_TITLE			"WoP"
+  #define BASEGAME				"wop"			// TODO: Use this in Makefile
+  #define CLIENT_WINDOW_TITLE     	"World of Padman"
+  #define CLIENT_WINDOW_MIN_TITLE 	PRODUCT_TITLE
+  #define GAMENAME_FOR_MASTER		"WorldofPadman"	// must NOT contain whitespaces
+
+  #define PRODUCT_BASE			"ioq3 r1553"
+  #define PRODUCT_RELEASE		""			// "beta x" "final"/""
+
+  #define VERSION_INFO			PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
+
+  // TODO: Replace Q3_VERSION with WOP_VERSION
 #else
   #define PRODUCT_NAME			"ioq3"
   #define BASEGAME			"baseq3"
@@ -41,10 +49,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #endif
 
 #ifdef _MSC_VER
-  #define PRODUCT_VERSION "1.35"
+  // TODO: Sync with Makefile!
+  #define PRODUCT_VERSION "1.5"
 #endif
 
-#define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION
+#define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION " " PRODUCT_RELEASE
 
 #define MAX_TEAMNAME 32
 
@@ -79,16 +88,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __attribute__
 #define __attribute__(x)
 #endif
-#endif
-
-#if (defined _MSC_VER)
-#define Q_EXPORT __declspec(dllexport)
-#elif (defined __SUNPRO_C)
-#define Q_EXPORT __global
-#elif ((__GNUC__ >= 3) && (!__EMX__) && (!sun))
-#define Q_EXPORT __attribute__((visibility("default")))
-#else
-#define Q_EXPORT
 #endif
 
 /**********************************************************************
@@ -191,8 +190,6 @@ typedef int		clipHandle_t;
 #define	MAX_QINT			0x7fffffff
 #define	MIN_QINT			(-MAX_QINT-1)
 
-#define ARRAY_LEN(x)			(sizeof(x) / sizeof(*x))
-
 
 // angle indexes
 #define	PITCH				0		// up / down
@@ -224,6 +221,8 @@ typedef int		clipHandle_t;
 #define	MAX_NAME_LENGTH		32		// max length of a client name
 
 #define	MAX_SAY_TEXT	150
+
+#define UI_NS_STR_HGW	0x00008000 //number sized string ... height gleich width
 
 // paramters for command buffer stuffing
 typedef enum {
@@ -365,22 +364,29 @@ extern	vec4_t		colorWhite;
 extern	vec4_t		colorLtGrey;
 extern	vec4_t		colorMdGrey;
 extern	vec4_t		colorDkGrey;
+extern	vec4_t		colorTBlack33;
+extern	vec4_t		colorTBlack66;
+extern	vec4_t		colorDkGreen;
+extern	vec4_t		colorDkBlue;
+extern	vec4_t		colorDkRed;
+extern	vec4_t		colorDkLilac;
+extern	vec4_t		colorDkOrange;
 
 #define Q_COLOR_ESCAPE	'^'
-#define Q_IsColorString(p)	((p) && *(p) == Q_COLOR_ESCAPE && *((p)+1) && isalnum(*((p)+1))) // ^[0-9a-zA-Z]
+#define Q_IsColorString(p)	( p && *(p) == Q_COLOR_ESCAPE && *((p)+1) && isalnum(*((p)+1)) ) // ^[0-9a-zA-Z]
 
-#define COLOR_BLACK	'0'
-#define COLOR_RED	'1'
-#define COLOR_GREEN	'2'
+#define COLOR_BLACK		'0'
+#define COLOR_RED		'1'
+#define COLOR_GREEN		'2'
 #define COLOR_YELLOW	'3'
-#define COLOR_BLUE	'4'
-#define COLOR_CYAN	'5'
+#define COLOR_BLUE		'4'
+#define COLOR_CYAN		'5'
 #define COLOR_MAGENTA	'6'
-#define COLOR_WHITE	'7'
-#define ColorIndex(c)	(((c) - '0') & 0x07)
+#define COLOR_WHITE		'7'
+#define ColorIndex(c)	( ( (c) - '0' ) & 7 )
 
 #define S_COLOR_BLACK	"^0"
-#define S_COLOR_RED	"^1"
+#define S_COLOR_RED		"^1"
 #define S_COLOR_GREEN	"^2"
 #define S_COLOR_YELLOW	"^3"
 #define S_COLOR_BLUE	"^4"
@@ -389,6 +395,9 @@ extern	vec4_t		colorDkGrey;
 #define S_COLOR_WHITE	"^7"
 
 extern vec4_t	g_color_table[8];
+extern vec4_t	spraycolors[];
+//#define NUM_SPRAYCOLORS ( sizeof( spraycolors[] ) / sizeof( spraycolors[0] ) )
+#define NUM_SPRAYCOLORS 6
 
 #define	MAKERGB( v, r, g, b ) v[0]=r;v[1]=g;v[2]=b
 #define	MAKERGBA( v, r, g, b, a ) v[0]=r;v[1]=g;v[2]=b;v[3]=a
@@ -575,6 +584,7 @@ vec_t VectorNormalize (vec3_t v);		// returns vector length
 vec_t VectorNormalize2( const vec3_t v, vec3_t out );
 void Vector4Scale( const vec4_t in, vec_t scale, vec4_t out );
 void VectorRotate( vec3_t in, vec3_t matrix[3], vec3_t out );
+void VectorRotateTMatrix( vec3_t in, vec3_t matrix[3], vec3_t out );
 int Q_log2(int val);
 
 float Q_acos(float c);
@@ -583,7 +593,8 @@ int		Q_rand( int *seed );
 float	Q_random( int *seed );
 float	Q_crandom( int *seed );
 
-#define random()	((rand () & 0x7fff) / ((float)0x7fff))
+#define random()	((rand () & 0x7fff) / ((float)0x8000))
+#define randomindex(count) (rand() % (count))
 #define crandom()	(2.0 * (random() - 0.5))
 
 void vectoangles( const vec3_t value1, vec3_t angles);
@@ -591,6 +602,7 @@ void AnglesToAxis( const vec3_t angles, vec3_t axis[3] );
 
 void AxisClear( vec3_t axis[3] );
 void AxisCopy( vec3_t in[3], vec3_t out[3] );
+void AxisScale( vec3_t in[3], float s, vec3_t out[3] );
 
 void SetPlaneSignbits( struct cplane_s *out );
 int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *plane);
@@ -773,6 +785,10 @@ void Info_SetValueForKey_Big( char *s, const char *key, const char *value );
 qboolean Info_Validate( const char *s );
 void Info_NextPair( const char **s, char *key, char *value );
 
+// value only info strings 
+void StringDump_Push(char* s, const char* value); 
+void StringDump_GetNext( const char **head, char *value ); 
+
 // this is only here so the functions in q_shared.c and bg_*.c can link
 void	QDECL Com_Error( int level, const char *error, ... ) __attribute__ ((format (printf, 2, 3)));
 void	QDECL Com_Printf( const char *msg, ... ) __attribute__ ((format (printf, 1, 2)));
@@ -789,33 +805,30 @@ default values.
 ==========================================================
 */
 
-#define	CVAR_ARCHIVE		0x0001	// set to cause it to be saved to vars.rc
-					// used for system variables, not for player
-					// specific configurations
-#define	CVAR_USERINFO		0x0002	// sent to server on connect or change
-#define	CVAR_SERVERINFO		0x0004	// sent in response to front end requests
-#define	CVAR_SYSTEMINFO		0x0008	// these cvars will be duplicated on all clients
-#define	CVAR_INIT		0x0010	// don't allow change from console at all,
-					// but can be set from the command line
-#define	CVAR_LATCH		0x0020	// will only change when C code next does
-					// a Cvar_Get(), so it can't be changed
-					// without proper initialization.  modified
-					// will be set, even though the value hasn't
-					// changed yet
-#define	CVAR_ROM		0x0040	// display only, cannot be set by user at all
-#define	CVAR_USER_CREATED	0x0080	// created by a set command
-#define	CVAR_TEMP		0x0100	// can be set even when cheats are disabled, but is not archived
-#define CVAR_CHEAT		0x0200	// can not be changed if cheats are disabled
-#define CVAR_NORESTART		0x0400	// do not clear when a cvar_restart is issued
+#define	CVAR_ARCHIVE		1	// set to cause it to be saved to vars.rc
+								// used for system variables, not for player
+								// specific configurations
+#define	CVAR_USERINFO		2	// sent to server on connect or change
+#define	CVAR_SERVERINFO		4	// sent in response to front end requests
+#define	CVAR_SYSTEMINFO		8	// these cvars will be duplicated on all clients
+#define	CVAR_INIT			16	// don't allow change from console at all,
+								// but can be set from the command line
+#define	CVAR_LATCH			32	// will only change when C code next does
+								// a Cvar_Get(), so it can't be changed
+								// without proper initialization.  modified
+								// will be set, even though the value hasn't
+								// changed yet
+#define	CVAR_ROM			64	// display only, cannot be set by user at all
+#define	CVAR_USER_CREATED	128	// created by a set command
+#define	CVAR_TEMP			256	// can be set even when cheats are disabled, but is not archived
+#define CVAR_CHEAT			512	// can not be changed if cheats are disabled
+#define CVAR_NORESTART		1024	// do not clear when a cvar_restart is issued
 
-#define CVAR_SERVER_CREATED	0x0800	// cvar was created by a server the client connected to.
-#define CVAR_VM_CREATED		0x1000	// cvar was created exclusively in one of the VMs.
+#define CVAR_SERVER_CREATED	2048	// cvar was created by a server the client connected to.
 #define CVAR_NONEXISTENT	0xFFFFFFFF	// Cvar doesn't exist.
 
 // nothing outside the Cvar_*() functions should modify these fields!
-typedef struct cvar_s cvar_t;
-
-struct cvar_s {
+typedef struct cvar_s {
 	char			*name;
 	char			*string;
 	char			*resetString;		// cvar_restart will reset to this value
@@ -829,13 +842,9 @@ struct cvar_s {
 	qboolean	integral;
 	float			min;
 	float			max;
-
-	cvar_t *next;
-	cvar_t *prev;
-	cvar_t *hashNext;
-	cvar_t *hashPrev;
-	int			hashIndex;
-};
+	struct cvar_s *next;
+	struct cvar_s *hashNext;
+} cvar_t;
 
 #define	MAX_CVAR_VALUE_STRING	256
 
@@ -1112,6 +1121,7 @@ typedef struct playerState_s {
 #define BUTTON_FOLLOWME		1024
 
 #define	BUTTON_ANY			2048			// any key whatsoever
+#define BUTTON_DROPCART		4096		// button12
 
 #define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,
 										// then BUTTON_WALKING should be set
@@ -1136,7 +1146,8 @@ typedef enum {
 	TR_LINEAR,
 	TR_LINEAR_STOP,
 	TR_SINE,					// value = base + sin( time / duration ) * delta
-	TR_GRAVITY
+	TR_GRAVITY,
+	TR_LOW_GRAVITY
 } trType_t;
 
 typedef struct {
@@ -1299,6 +1310,13 @@ typedef enum _flag_status {
 
 #define CDKEY_LEN 16
 #define CDCHKSUM_LEN 2
+
+typedef enum {
+	WSM_NO=0,
+	WSM_NORMAL,
+	WSM_STARTMAP,
+	WSM_ENDMAP
+} wopStoryMode_e;
 
 
 #endif	// __Q_SHARED_H

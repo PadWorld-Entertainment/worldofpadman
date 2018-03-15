@@ -2,23 +2,23 @@
 
 readlink() {
     local path=$1 ll
-    
-    if [ -L "$path" ]; then 
+
+    if [ -L "$path" ]; then
         ll="$(LC_ALL=C ls -l "$path" 2> /dev/null)" &&
         echo "${ll/* -> }"
-    else    
+    else
         return 1
     fi
 }
 
 script=$0
 count=0
-while [ -L "$script" ]  
+while [ -L "$script" ]
 do
     script=$(readlink "$script")
     count=`expr $count + 1`
-    if [ $count -gt 100 ]   
-    then    
+    if [ $count -gt 100 ]
+    then
         echo "Too many symbolic links"
         exit 1
     fi

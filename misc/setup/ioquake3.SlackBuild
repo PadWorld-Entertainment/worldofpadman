@@ -23,12 +23,6 @@ PKG_VERSION=$VERSION
 
 ARCH=${ARCH:-i586}
 
-if [ "$ARCH" = "i?86" ]; then
-  ARCHSUFFIX="i386"
-elif [ "$ARCH" = "x86_64" ]; then
-  ARCHSUFFIX="64"
-fi
-
 BUILD=${BUILD:-1_io}
 
 APP=ioquake3
@@ -52,7 +46,7 @@ mkdir -p $PKG/usr/bin
 cat >> $PKG/usr/bin/ioquake3 << EOF
 #!/bin/sh
 cd /usr/games/$APP/
-./ioquake3.${ARCHSUFFIX} \$*
+./ioquake3.i386 \$*
 exit \$? 
 EOF
 chmod 754 $PKG/usr/bin/ioquake3
@@ -61,7 +55,7 @@ mkdir -p $PKG/usr/bin
 cat >> $PKG/usr/bin/ioq3ded << EOF
 #!/bin/sh
 cd /usr/games/$APP/
-./ioq3ded.${ARCHSUFFIX} \$*
+./ioq3ded.i386 \$*
 exit \$? 
 EOF
 chmod 754 $PKG/usr/bin/ioq3ded
@@ -70,7 +64,7 @@ mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cat >> $PKG/install/doinst.sh << EOF
-chmod 754 /usr/games/$APP/*.${ARCHSUFFIX}
+chmod 754 /usr/games/$APP/*.i386
 chmod 754 /usr/bin/ioquake3 /usr/bin/ioq3ded
 EOF
 chmod +x $PKG/install/doinst.sh

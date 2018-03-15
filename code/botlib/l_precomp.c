@@ -2561,16 +2561,12 @@ int PC_DollarDirective_evalint(source_t *source)
 	sprintf(token.string, "%d", abs(value));
 	token.type = TT_NUMBER;
 	token.subtype = TT_INTEGER|TT_LONG|TT_DECIMAL;
-
 #ifdef NUMBERVALUE
-	token.intvalue = abs(value);
-	token.floatvalue = token.intvalue;
+	token.intvalue = value;
+	token.floatvalue = value;
 #endif //NUMBERVALUE
-
 	PC_UnreadSourceToken(source, &token);
-	if (value < 0)
-		UnreadSignToken(source);
-
+	if (value < 0) UnreadSignToken(source);
 	return qtrue;
 } //end of the function PC_DollarDirective_evalint
 //============================================================================
@@ -2592,16 +2588,12 @@ int PC_DollarDirective_evalfloat(source_t *source)
 	sprintf(token.string, "%1.2f", fabs(value));
 	token.type = TT_NUMBER;
 	token.subtype = TT_FLOAT|TT_LONG|TT_DECIMAL;
-
 #ifdef NUMBERVALUE
-	token.floatvalue = fabs(value);
-	token.intvalue = (unsigned long) token.floatvalue;
+	token.intvalue = (unsigned long) value;
+	token.floatvalue = value;
 #endif //NUMBERVALUE
-
 	PC_UnreadSourceToken(source, &token);
-	if (value < 0)
-		UnreadSignToken(source);
-
+	if (value < 0) UnreadSignToken(source);
 	return qtrue;
 } //end of the function PC_DollarDirective_evalfloat
 //============================================================================

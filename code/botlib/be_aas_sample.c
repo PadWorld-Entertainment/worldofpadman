@@ -150,7 +150,7 @@ aas_link_t *AAS_AllocAASLink(void)
 	if (!link)
 	{
 #ifndef BSPC
-		if (botDeveloper)
+		if (bot_developer)
 #endif
 		{
 			botimport.Print(PRT_FATAL, "empty aas link heap\n");

@@ -29,7 +29,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //=============================================================================
 
 #define	PERS_SCORE				0		// !!! MUST NOT CHANGE, SERVER AND
-										// GAME BOTH REFERENCE !!!
+#define	PERS_TEAM					1		// GAME BOTH REFERENCE !!!
+
 
 #define	MAX_ENT_CLUSTERS	16
 
@@ -204,11 +205,9 @@ typedef struct client_s {
 typedef struct {
 	netadr_t	adr;
 	int			challenge;
-	int			clientChallenge;		// challenge number coming from the client
 	int			time;				// time the last packet was sent to the autherize server
 	int			pingTime;			// time the challenge response was sent to client
 	int			firstTime;			// time the adr was first used, for authorize timeout checks
-	qboolean	wasrefused;
 	qboolean	connected;
 } challenge_t;
 
@@ -236,6 +235,7 @@ typedef struct {
 } serverStatic_t;
 
 #define SERVER_MAXBANS	1024
+#define SERVER_BANFILE	"serverbans.dat"
 // Structure for managing bans
 typedef struct
 {
@@ -281,7 +281,6 @@ extern	cvar_t	*sv_pure;
 extern	cvar_t	*sv_floodProtect;
 extern	cvar_t	*sv_lanForceRate;
 extern	cvar_t	*sv_strictAuth;
-extern	cvar_t	*sv_banFile;
 
 extern	serverBan_t serverBans[SERVER_MAXBANS];
 extern	int serverBansCount;
@@ -297,7 +296,7 @@ extern	cvar_t	*sv_voip;
 // sv_main.c
 //
 void SV_FinalMessage (char *message);
-void QDECL SV_SendServerCommand( client_t *cl, const char *fmt, ...);
+void QDECL SV_SendServerCommand( client_t *cl, const char *fmt, ...) __attribute__ ((format (printf, 2, 3)));
 
 
 void SV_AddOperatorCommands (void);
@@ -328,7 +327,7 @@ void SV_SpawnServer( char *server, qboolean killBots );
 //
 // sv_client.c
 //
-void SV_GetChallenge(netadr_t from);
+void SV_GetChallenge( netadr_t from );
 
 void SV_DirectConnect( netadr_t from );
 

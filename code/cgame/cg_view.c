@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 // cg_view.c -- setup all the parameters (position, angle, etc)
 // for a 3D rendering
@@ -187,16 +167,7 @@ static void CG_CalcVrect (void) {
 		size = 100;
 	} else {
 		// bound normal viewsize
-		if (cg_viewsize.integer < 30) {
-			trap_Cvar_Set ("cg_viewsize","30");
-			size = 30;
-		} else if (cg_viewsize.integer > 100) {
-			trap_Cvar_Set ("cg_viewsize","100");
-			size = 100;
-		} else {
-			size = cg_viewsize.integer;
-		}
-
+		size = 100;
 	}
 	cg.refdef.width = cgs.glconfig.vidWidth*size/100;
 	cg.refdef.width &= ~1;
@@ -218,6 +189,8 @@ CG_OffsetThirdPersonView
 ===============
 */
 #define	FOCUS_DISTANCE	512
+/// it seems a min distance of 20 looks ok for most models ... setting it higher could be cheat-prone (because it could be abused to look through walls)
+const static float MIN_3RD_DIST = 20.0f;
 static void CG_OffsetThirdPersonView( void ) {
 	vec3_t		forward, right, up;
 	vec3_t		view;
@@ -234,7 +207,7 @@ static void CG_OffsetThirdPersonView( void ) {
 	VectorCopy( cg.refdefViewAngles, focusAngles );
 
 	// if dead, look at killer
-	if ( cg.predictedPlayerState.stats[STAT_HEALTH] <= 0 ) {
+	if ( cg.predictedPlayerState.stats[STAT_HEALTH] <= 0 && (cgs.gametype!=GT_LPS || cg.snap->ps.stats[STAT_LIVESLEFT]>=0)) {
 		focusAngles[YAW] = cg.predictedPlayerState.stats[STAT_DEAD_YAW];
 		cg.refdefViewAngles[YAW] = cg.predictedPlayerState.stats[STAT_DEAD_YAW];
 	}
@@ -273,6 +246,13 @@ static void CG_OffsetThirdPersonView( void ) {
 
 			CG_Trace( &trace, cg.refdef.vieworg, mins, maxs, view, cg.predictedPlayerState.clientNum, MASK_SOLID );
 			VectorCopy( trace.endpos, view );
+
+			if(DistanceSquared(cg.refdef.vieworg,view) < MIN_3RD_DIST*MIN_3RD_DIST) {
+				VectorCopy( cg.refdef.vieworg, view );
+				view[2] += 8;
+				VectorMA( view, -MIN_3RD_DIST * forwardScale, forward, view );
+				VectorMA( view, -MIN_3RD_DIST * sideScale, right, view );
+			}
 		}
 	}
 
@@ -327,7 +307,7 @@ static void CG_OffsetFirstPersonView( void ) {
 	angles = cg.refdefViewAngles;
 
 	// if dead, fix the angle and don't add any kick
-	if ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) {
+	if ( cg.snap->ps.stats[STAT_HEALTH] <= 0  && (cgs.gametype!=GT_LPS || cg.snap->ps.stats[STAT_LIVESLEFT]>=0)) {
 		angles[ROLL] = 40;
 		angles[PITCH] = -15;
 		angles[YAW] = cg.snap->ps.stats[STAT_DEAD_YAW];
@@ -443,19 +423,41 @@ static void CG_OffsetFirstPersonView( void ) {
 //======================================================================
 
 void CG_ZoomDown_f( void ) { 
-	if ( cg.zoomed ) {
+
+	if(cg.snap==NULL)
+		return;
+
+	if(cg.zoomedkeydown)
+		return;
+
+	if (cg.zoomed) {
+		cg.zoomed=qfalse;
+		cg.zoomTime=cg.time;
 		return;
 	}
+
+	if( cg.snap->ps.weapon != WP_SPLASHER && cg.snap->ps.weapon != WP_KMA97 )
+		return;
+
+	if(cg.snap->ps.pm_flags & PMF_FOLLOW || (cgs.gametype==GT_LPS && cg.snap->ps.stats[STAT_LIVESLEFT]<=0))
+		return;
+
+//	trap_S_StartLocalSound(cgs.media.zoomsound,CHAN_LOCAL_SOUND);
+	cg.zoomSoundStat=1;
+
+	cg.zoomedkeydown=qtrue;
 	cg.zoomed = qtrue;
 	cg.zoomTime = cg.time;
 }
 
 void CG_ZoomUp_f( void ) { 
-	if ( !cg.zoomed ) {
+	if(cg.snap==NULL)
 		return;
-	}
-	cg.zoomed = qfalse;
-	cg.zoomTime = cg.time;
+
+	cg.zoomSoundStat=0;//stop sound
+	cg.zoomedkeydown=qfalse;
+	if ( cg.snap->ps.weapon == WP_KMA97 )
+		cg.zoomed = qfalse;
 }
 
 
@@ -491,8 +493,8 @@ static int CG_CalcFov( void ) {
 			fov_x = cg_fov.value;
 			if ( fov_x < 1 ) {
 				fov_x = 1;
-			} else if ( fov_x > 160 ) {
-				fov_x = 160;
+			} else if ( fov_x > 105 ) {
+				fov_x = 105;
 			}
 		}
 
@@ -504,12 +506,29 @@ static int CG_CalcFov( void ) {
 			zoomFov = 160;
 		}
 
+		zoomFov = 5;
+
 		if ( cg.zoomed ) {
-			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
-			if ( f > 1.0 ) {
-				fov_x = zoomFov;
-			} else {
-				fov_x = fov_x + f * ( zoomFov - fov_x );
+			if ( cg.snap->ps.weapon == WP_SPLASHER )		// splasher
+			{
+				if(cg.zoomedkeydown)
+				{
+					f = ( cg.time - cg.zoomTime ) / 2000.0f;
+					cg.zoomfactor=f;
+					if(cg.zoomfactor>1.0f)cg.zoomfactor=1.0f;
+				}
+
+				fov_x = fov_x + cg.zoomfactor * ( zoomFov - fov_x );
+			}
+			else if ( cg.snap->ps.weapon == WP_KMA97 )		// kma97
+			{
+				zoomFov = 20;
+				f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
+				if ( f > 1.0 ) {
+					fov_x = zoomFov;
+				} else {
+					fov_x = fov_x + f * ( zoomFov - fov_x );
+				}
 			}
 		} else {
 			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
@@ -538,6 +557,52 @@ static int CG_CalcFov( void ) {
 		inwater = qfalse;
 	}
 
+	if(cg.snap->ps.powerups[PW_SPEEDY])
+	{
+		if(cg.xyspeed>500.0f)
+		{
+			if(cg.speedyeffect<1.5f) cg.speedyeffect+=(float)cg.frametime*0.001f;
+		}
+		else
+		{
+			if(cg.speedyeffect>1.0f) cg.speedyeffect-=(float)cg.frametime*0.001f;
+			else if(cg.speedyeffect<1.0f) cg.speedyeffect=1.0f;
+		}
+
+		fov_x*=cg.speedyeffect;
+		fov_y*=cg.speedyeffect;
+
+/* erster versuch:
+		float tmpf;
+
+		tmpf = cg.snap->ps.velocity[0]*cg.refdef.viewaxis[0][0]+
+			cg.snap->ps.velocity[1]*cg.refdef.viewaxis[0][1]+
+			cg.snap->ps.velocity[2]*cg.refdef.viewaxis[0][2];
+
+		if(tmpf>640.0f)
+		{
+			fov_x*=1.5f;
+			fov_y*=1.5f;
+		}
+		else if(tmpf>320.0f)
+		{
+			fov_x*=(tmpf+320.0f)/640.0f;
+			fov_y*=(tmpf+320.0f)/640.0f;
+		}
+		else if(tmpf<-640.0f)
+		{
+			fov_x*=0.5f;
+			fov_y*=0.5f;
+		}
+		else if(tmpf<-320.0f)
+		{
+			fov_x*=(960.0f+tmpf)/640.0f;
+			fov_y*=(960.0f+tmpf)/640.0f;
+		}
+*/
+	}
+	else
+		cg.speedyeffect=1.0f;//damit die waffenposition stimmt ;)
 
 	// set it
 	cg.refdef.fov_x = fov_x;
@@ -561,6 +626,9 @@ CG_DamageBlendBlob
 ===============
 */
 static void CG_DamageBlendBlob( void ) {
+	return;
+
+/*
 	int			t;
 	int			maxTime;
 	refEntity_t		ent;
@@ -600,6 +668,7 @@ static void CG_DamageBlendBlob( void ) {
 	ent.shaderRGBA[2] = 255;
 	ent.shaderRGBA[3] = 200 * ( 1.0 - ((float)t / maxTime) );
 	trap_R_AddRefEntityToScene( &ent );
+*/
 }
 
 
@@ -637,6 +706,23 @@ static int CG_CalcViewValues( void ) {
 		}
 	}
 */
+	if (cg.Cam) {
+		float fov = cg_fov.value;
+		float x;
+
+		VectorCopy(cg.CamPos, cg.refdef.vieworg );
+		VectorCopy(cg.CamAngles,cg.refdefViewAngles);
+
+		AnglesToAxis( cg.refdefViewAngles, cg.refdef.viewaxis );
+
+		x = cg.refdef.width / tan( fov / 360 * M_PI );
+		cg.refdef.fov_y = atan2( cg.refdef.height, x );
+		cg.refdef.fov_y = cg.refdef.fov_y * 360 / M_PI;
+		cg.refdef.fov_x = fov;
+
+		return 0;
+	}
+
 	// intermission view
 	if ( ps->pm_type == PM_INTERMISSION ) {
 		VectorCopy( ps->origin, cg.refdef.vieworg );
@@ -644,6 +730,7 @@ static int CG_CalcViewValues( void ) {
 		AnglesToAxis( cg.refdefViewAngles, cg.refdef.viewaxis );
 		return CG_CalcFov();
 	}
+	cg.playedIntermissionMsg=qfalse;
 
 	cg.bobcycle = ( ps->bobCycle & 128 ) >> 7;
 	cg.bobfracsin = fabs( sin( ( ps->bobCycle & 127 ) / 127.0 * M_PI ) );
@@ -760,19 +847,31 @@ Generates and draws a game scene and status information at the given time.
 */
 void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demoPlayback ) {
 	int		inwater;
+	int		lastSnapClientNum = -1;
 
 	cg.time = serverTime;
 	cg.demoPlayback = demoPlayback;
+
+	if(cg_thirdPersonAutoSwitch.integer == 1)
+	{
+		if(cg.weaponSelect == WP_PUNCHY && cg_thirdPerson.integer==0)
+			trap_Cvar_Set("cg_thirdPerson","1");
+		else if(cg.weaponSelect != WP_PUNCHY && cg_thirdPerson.integer!=0)
+			trap_Cvar_Set("cg_thirdPerson","0");
+	}
 
 	// update cvars
 	CG_UpdateCvars();
 
 	// if we are only updating the screen as a loading
 	// pacifier, don't even try to read snapshots
-	if ( cg.infoScreenText[0] != 0 ) {
+	if ( cg.loadingprogress < 1.0f ) {
 		CG_DrawInformation();
 		return;
 	}
+
+	if(!(cg.clientFrame&0xff))
+		trap_SendConsoleCommand("wop_checkmusic\n");//noch überdenken ob ich es nicht doch nur alle paar frames machen sollte
 
 	// any looped sounds will be respecified as entities
 	// are added to the render list
@@ -780,6 +879,10 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 
 	// clear all the render lists
 	trap_R_ClearScene();
+
+	// save old playerstate client
+	if(cg.snap)
+		lastSnapClientNum = cg.snap->ps.clientNum;
 
 	// set up cg.snap and possibly cg.nextSnap
 	CG_ProcessSnapshots();
@@ -791,20 +894,192 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		return;
 	}
 
+	// spec switched view, adjust the glowskins
+	if( lastSnapClientNum != cg.snap->ps.clientNum )
+		CG_ForceModelChange();
+
 	// let the client system know what our weapon and zoom settings are
 	trap_SetUserCmdValue( cg.weaponSelect, cg.zoomSensitivity );
 
 	// this counter will be bumped for every valid scene we generate
 	cg.clientFrame++;
 
+	if(cg.clientFrame==1)//oder doch lieber ein späterer
+	{
+		qtime_t qtime;
+
+		trap_RealTime(&qtime);
+		//random ist im ersten frame kein zufall
+		trap_S_StartLocalSound(cgs.media.Announcer_Welcome[(int)(qtime.tm_sec)%3], CHAN_ANNOUNCER);
+	}
+
 	// update cg.predictedPlayerState
 	CG_PredictPlayerState();
 
 	// decide on third person view
-	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
+	cg.renderingThirdPerson = cg_thirdPerson.integer || ((cg.snap->ps.stats[STAT_HEALTH] <= 0) && (cgs.gametype!=GT_LPS || (cg.snap->ps.stats[STAT_LIVESLEFT]>=0)));
 
 	// build cg.refdef
 	inwater = CG_CalcViewValues();
+
+	if(cg.wopSky[0]!='\0')
+	{
+		poly_t		poly;
+		polyVert_t	verts[4];
+		vec3_t		skyangles, skyf, skyu, skyr;
+
+		memset(&poly,0,sizeof(poly));
+		memset(&verts,0,sizeof(verts));
+		poly.verts = verts;
+		poly.numVerts = 4;
+
+		verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = 255;
+		verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = 255;
+		verts[0].modulate[2] = verts[1].modulate[2] = verts[2].modulate[2] = verts[3].modulate[2] = 255;
+		verts[0].modulate[3] = verts[1].modulate[3] = verts[2].modulate[3] = verts[3].modulate[3] = 255;
+
+		verts[0].st[0]=0;
+		verts[0].st[1]=0;
+
+		verts[1].st[0]=1;
+		verts[1].st[1]=0;
+
+		verts[2].st[0]=1;
+		verts[2].st[1]=1;
+
+		verts[3].st[0]=0;
+		verts[3].st[1]=1;
+
+		memset(skyangles,'0',sizeof(vec3_t));
+		skyangles[0]=cg.wopSky_Angles[0]*sin(cg.time*0.0001f*cg.wopSky_TimeFactors[0]);
+		skyangles[1]=cg.wopSky_Angles[1]*sin(cg.time*0.0001f*cg.wopSky_TimeFactors[1]);
+		skyangles[2]=cg.wopSky_Angles[2]*sin(cg.time*0.0001f*cg.wopSky_TimeFactors[2]);
+		AngleVectors(skyangles,skyf,skyr,skyu);
+
+#define SKYABSTAND 256.0f
+		verts[0].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyf[0]+SKYABSTAND*(-skyr[0]+skyu[0]);
+		verts[0].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyf[1]+SKYABSTAND*(-skyr[1]+skyu[1]);
+		verts[0].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyf[2]+SKYABSTAND*(-skyr[2]+skyu[2]);
+
+		verts[1].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyf[0]+SKYABSTAND*(+skyr[0]+skyu[0]);
+		verts[1].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyf[1]+SKYABSTAND*(+skyr[1]+skyu[1]);
+		verts[1].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyf[2]+SKYABSTAND*(+skyr[2]+skyu[2]);
+
+		verts[2].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyf[0]+SKYABSTAND*(+skyr[0]-skyu[0]);
+		verts[2].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyf[1]+SKYABSTAND*(+skyr[1]-skyu[1]);
+		verts[2].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyf[2]+SKYABSTAND*(+skyr[2]-skyu[2]);
+
+		verts[3].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyf[0]+SKYABSTAND*(-skyr[0]-skyu[0]);
+		verts[3].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyf[1]+SKYABSTAND*(-skyr[1]-skyu[1]);
+		verts[3].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyf[2]+SKYABSTAND*(-skyr[2]-skyu[2]);
+
+		poly.hShader = trap_R_RegisterShader(va("%s_ft",cg.wopSky));
+		trap_R_AddPolyToScene(poly.hShader,poly.numVerts,poly.verts);
+
+
+		verts[0].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyf[0]+SKYABSTAND*(+skyr[0]+skyu[0]);
+		verts[0].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyf[1]+SKYABSTAND*(+skyr[1]+skyu[1]);
+		verts[0].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyf[2]+SKYABSTAND*(+skyr[2]+skyu[2]);
+
+		verts[1].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyf[0]+SKYABSTAND*(-skyr[0]+skyu[0]);
+		verts[1].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyf[1]+SKYABSTAND*(-skyr[1]+skyu[1]);
+		verts[1].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyf[2]+SKYABSTAND*(-skyr[2]+skyu[2]);
+
+		verts[2].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyf[0]+SKYABSTAND*(-skyr[0]-skyu[0]);
+		verts[2].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyf[1]+SKYABSTAND*(-skyr[1]-skyu[1]);
+		verts[2].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyf[2]+SKYABSTAND*(-skyr[2]-skyu[2]);
+
+		verts[3].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyf[0]+SKYABSTAND*(+skyr[0]-skyu[0]);
+		verts[3].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyf[1]+SKYABSTAND*(+skyr[1]-skyu[1]);
+		verts[3].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyf[2]+SKYABSTAND*(+skyr[2]-skyu[2]);
+
+		poly.hShader = trap_R_RegisterShader(va("%s_bk",cg.wopSky));
+		trap_R_AddPolyToScene(poly.hShader,poly.numVerts,poly.verts);
+
+
+		verts[0].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyr[0]+SKYABSTAND*(-skyf[0]+skyu[0]);
+		verts[0].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyr[1]+SKYABSTAND*(-skyf[1]+skyu[1]);
+		verts[0].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyr[2]+SKYABSTAND*(-skyf[2]+skyu[2]);
+
+		verts[1].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyr[0]+SKYABSTAND*(+skyf[0]+skyu[0]);
+		verts[1].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyr[1]+SKYABSTAND*(+skyf[1]+skyu[1]);
+		verts[1].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyr[2]+SKYABSTAND*(+skyf[2]+skyu[2]);
+
+		verts[2].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyr[0]+SKYABSTAND*(+skyf[0]-skyu[0]);
+		verts[2].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyr[1]+SKYABSTAND*(+skyf[1]-skyu[1]);
+		verts[2].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyr[2]+SKYABSTAND*(+skyf[2]-skyu[2]);
+
+		verts[3].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyr[0]+SKYABSTAND*(-skyf[0]-skyu[0]);
+		verts[3].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyr[1]+SKYABSTAND*(-skyf[1]-skyu[1]);
+		verts[3].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyr[2]+SKYABSTAND*(-skyf[2]-skyu[2]);
+
+		poly.hShader = trap_R_RegisterShader(va("%s_rt",cg.wopSky));
+		trap_R_AddPolyToScene(poly.hShader,poly.numVerts,poly.verts);
+
+
+		verts[0].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyr[0]+SKYABSTAND*(+skyf[0]+skyu[0]);
+		verts[0].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyr[1]+SKYABSTAND*(+skyf[1]+skyu[1]);
+		verts[0].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyr[2]+SKYABSTAND*(+skyf[2]+skyu[2]);
+
+		verts[1].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyr[0]+SKYABSTAND*(-skyf[0]+skyu[0]);
+		verts[1].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyr[1]+SKYABSTAND*(-skyf[1]+skyu[1]);
+		verts[1].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyr[2]+SKYABSTAND*(-skyf[2]+skyu[2]);
+
+		verts[2].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyr[0]+SKYABSTAND*(-skyf[0]-skyu[0]);
+		verts[2].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyr[1]+SKYABSTAND*(-skyf[1]-skyu[1]);
+		verts[2].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyr[2]+SKYABSTAND*(-skyf[2]-skyu[2]);
+
+		verts[3].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyr[0]+SKYABSTAND*(+skyf[0]-skyu[0]);
+		verts[3].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyr[1]+SKYABSTAND*(+skyf[1]-skyu[1]);
+		verts[3].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyr[2]+SKYABSTAND*(+skyf[2]-skyu[2]);
+
+		poly.hShader = trap_R_RegisterShader(va("%s_lf",cg.wopSky));
+		trap_R_AddPolyToScene(poly.hShader,poly.numVerts,poly.verts);
+
+		//hr - vr - vl - hl ?
+		verts[0].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyu[0]+SKYABSTAND*(-skyf[0]+skyr[0]);
+		verts[0].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyu[1]+SKYABSTAND*(-skyf[1]+skyr[1]);
+		verts[0].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyu[2]+SKYABSTAND*(-skyf[2]+skyr[2]);
+
+		verts[1].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyu[0]+SKYABSTAND*(+skyf[0]+skyr[0]);
+		verts[1].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyu[1]+SKYABSTAND*(+skyf[1]+skyr[1]);
+		verts[1].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyu[2]+SKYABSTAND*(+skyf[2]+skyr[2]);
+
+		verts[2].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyu[0]+SKYABSTAND*(+skyf[0]-skyr[0]);
+		verts[2].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyu[1]+SKYABSTAND*(+skyf[1]-skyr[1]);
+		verts[2].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyu[2]+SKYABSTAND*(+skyf[2]-skyr[2]);
+
+		verts[3].xyz[0]=cg.refdef.vieworg[0]+(SKYABSTAND*0.995f)*skyu[0]+SKYABSTAND*(-skyf[0]-skyr[0]);
+		verts[3].xyz[1]=cg.refdef.vieworg[1]+(SKYABSTAND*0.995f)*skyu[1]+SKYABSTAND*(-skyf[1]-skyr[1]);
+		verts[3].xyz[2]=cg.refdef.vieworg[2]+(SKYABSTAND*0.995f)*skyu[2]+SKYABSTAND*(-skyf[2]-skyr[2]);
+
+		poly.hShader = trap_R_RegisterShader(va("%s_up",cg.wopSky));
+		trap_R_AddPolyToScene(poly.hShader,poly.numVerts,poly.verts);
+
+
+		verts[0].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyu[0]+SKYABSTAND*(-skyf[0]-skyr[0]);
+		verts[0].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyu[1]+SKYABSTAND*(-skyf[1]-skyr[1]);
+		verts[0].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyu[2]+SKYABSTAND*(-skyf[2]-skyr[2]);
+
+		verts[1].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyu[0]+SKYABSTAND*(+skyf[0]-skyr[0]);
+		verts[1].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyu[1]+SKYABSTAND*(+skyf[1]-skyr[1]);
+		verts[1].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyu[2]+SKYABSTAND*(+skyf[2]-skyr[2]);
+
+		verts[2].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyu[0]+SKYABSTAND*(+skyf[0]+skyr[0]);
+		verts[2].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyu[1]+SKYABSTAND*(+skyf[1]+skyr[1]);
+		verts[2].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyu[2]+SKYABSTAND*(+skyf[2]+skyr[2]);
+
+		verts[3].xyz[0]=cg.refdef.vieworg[0]-(SKYABSTAND*0.995f)*skyu[0]+SKYABSTAND*(-skyf[0]+skyr[0]);
+		verts[3].xyz[1]=cg.refdef.vieworg[1]-(SKYABSTAND*0.995f)*skyu[1]+SKYABSTAND*(-skyf[1]+skyr[1]);
+		verts[3].xyz[2]=cg.refdef.vieworg[2]-(SKYABSTAND*0.995f)*skyu[2]+SKYABSTAND*(-skyf[2]+skyr[2]);
+
+		poly.hShader = trap_R_RegisterShader(va("%s_dn",cg.wopSky));
+		trap_R_AddPolyToScene(poly.hShader,poly.numVerts,poly.verts);
+
+		cg.refdef.rdflags |= RDF_NOWORLDMODEL;
+		trap_R_RenderScene( &cg.refdef );
+		cg.refdef.rdflags &= ~RDF_NOWORLDMODEL;
+	}
 
 	// first person blend blobs, done after AnglesToAxis
 	if ( !cg.renderingThirdPerson ) {
@@ -817,14 +1092,19 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		CG_AddMarks();
 		CG_AddParticles ();
 		CG_AddLocalEntities();
+		AddLogosToScene();
+		Main_SpriteParticles();
 	}
 	CG_AddViewWeapon( &cg.predictedPlayerState );
 
 	// add buffered sounds
 	CG_PlayBufferedSounds();
 
-	// play buffered voice chats
-	CG_PlayBufferedVoiceChats();
+	if(cg.snap->ps.ammo[WP_SPRAYPISTOL]>=8 && cg.sprayyourcolortime<cg.time)
+	{
+		trap_S_StartLocalSound(cgs.media.Announcer_SprayYourColor,cg.snap->ps.clientNum);
+		cg.sprayyourcolortime=cg.time+20000;
+	}
 
 	// finish up the rest of the refdef
 	if ( cg.testModelEntity.hModel ) {
@@ -871,6 +1151,6 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		CG_Printf( "cg.clientFrame:%i\n", cg.clientFrame );
 	}
 
-
+	CG_UpdateVoipTeamIDs();
 }
 

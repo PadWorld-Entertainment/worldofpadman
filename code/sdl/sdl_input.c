@@ -337,6 +337,13 @@ static const char *IN_TranslateSDLToQ3Key( SDL_keysym *keysym,
 	if( in_keyboardDebug->integer )
 		IN_PrintKey( keysym, *key, down );
 
+	if( IN_IsConsoleKey( *key, *buf ) )
+	{
+		// Console keys can't be bound or generate characters
+		*key = K_CONSOLE;
+		*buf = '\0';
+	}
+
 	// Keys that have ASCII names but produce no character are probably
 	// dead keys -- ignore them
 	if( down && strlen( Key_KeynumToString( *key ) ) == 1 &&
@@ -346,13 +353,6 @@ static const char *IN_TranslateSDLToQ3Key( SDL_keysym *keysym,
 			Com_Printf( "  Ignored dead key '%c'\n", *key );
 
 		*key = 0;
-	}
-
-	if( IN_IsConsoleKey( *key, *buf ) )
-	{
-		// Console keys can't be bound or generate characters
-		*key = K_CONSOLE;
-		*buf = '\0';
 	}
 
 	// Don't allow extended ASCII to generate characters
@@ -900,7 +900,7 @@ static void IN_ProcessEvents( void )
 				break;
 
 			case SDL_QUIT:
-				Cbuf_ExecuteText(EXEC_NOW, "quit Closed window\n");
+				Sys_Quit( );
 				break;
 
 			case SDL_VIDEORESIZE:

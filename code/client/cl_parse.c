@@ -366,11 +366,7 @@ void CL_SystemInfoChanged( void ) {
 	// in the future, (val) will be a protocol version string, so only
 	//  accept explicitly 1, not generally non-zero.
 	s = Info_ValueForKey( systemInfo, "sv_voip" );
-	if ( Cvar_VariableValue( "g_gametype" ) == GT_SINGLE_PLAYER || Cvar_VariableValue("ui_singlePlayerActive"))
-		cl_connectedToVoipServer = qfalse;
-	else
-		cl_connectedToVoipServer = (atoi( s ) == 1);
-
+	cl_connectedToVoipServer = (atoi( s ) == 1);
 #endif
 
 	s = Info_ValueForKey( systemInfo, "sv_cheats" );
@@ -556,7 +552,7 @@ void CL_ParseDownload ( msg_t *msg ) {
 
 	if (!*clc.downloadTempName) {
 		Com_Printf("Server sending download, but no download was requested\n");
-		CL_AddReliableCommand("stopdl", qfalse);
+		CL_AddReliableCommand( "stopdl" );
 		return;
 	}
 
@@ -598,7 +594,7 @@ void CL_ParseDownload ( msg_t *msg ) {
 
 		if (!clc.download) {
 			Com_Printf( "Could not create %s\n", clc.downloadTempName );
-			CL_AddReliableCommand("stopdl", qfalse);
+			CL_AddReliableCommand( "stopdl" );
 			CL_NextDownload();
 			return;
 		}
@@ -607,7 +603,7 @@ void CL_ParseDownload ( msg_t *msg ) {
 	if (size)
 		FS_Write( data, size, clc.download );
 
-	CL_AddReliableCommand(va("nextdl %d", clc.downloadBlock), qfalse);
+	CL_AddReliableCommand( va("nextdl %d", clc.downloadBlock) );
 	clc.downloadBlock++;
 
 	clc.downloadCount += size;
@@ -623,6 +619,8 @@ void CL_ParseDownload ( msg_t *msg ) {
 			// rename the file
 			FS_SV_Rename ( clc.downloadTempName, clc.downloadName );
 		}
+		*clc.downloadTempName = *clc.downloadName = 0;
+		Cvar_Set( "cl_downloadName", "" );
 
 		// send intentions now
 		// We need this because without it, we would hold the last nextdl and then start

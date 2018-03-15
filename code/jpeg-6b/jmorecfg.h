@@ -158,10 +158,8 @@ typedef short INT16;
 /* INT32 must hold at least signed 32-bit values. */
 
 /* MinGW basetsd.h defines INT32 - don't redefine it */
-#ifndef __WIN64
-#if !(defined __MINGW32__ && (defined _BASETSD_H || defined _BASETSD_H_))
+#if !(defined __MINGW32__ && defined _BASETSD_H)
 typedef long INT32;
-#endif
 #endif
 
 /* Datatype used for image dimensions.  The JPEG standard only supports

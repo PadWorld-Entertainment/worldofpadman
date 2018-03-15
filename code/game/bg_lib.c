@@ -49,7 +49,7 @@ static char* med3(char *, char *, char *, cmp_t *);
 static void	 swapfunc(char *, char *, int, int);
 
 #ifndef min
-#define min(a, b)	((a) < (b) ? (a) : (b))
+#define min(a, b)	(a) < (b) ? a : b
 #endif
 
 /*
@@ -890,236 +890,6 @@ double _atof( const char **stringPtr ) {
 	return value * sign;
 }
 
-/*
-==============
-strtod
-
-Without an errno variable, this is a fair bit less useful than it is in libc
-but it's still a fair bit more capable than atof or _atof
-Handles inf[inity], nan (ignoring case), hexadecimals, and decimals
-Handles decimal exponents like 10e10 and hex exponents like 0x7f8p20
-10e10 == 10000000000 (power of ten)
-0x7f8p20 == 0x7f800000 (decimal power of two)
-The variable pointed to by endptr will hold the location of the first character
-in the nptr string that was not used in the conversion
-==============
-*/
-double strtod( const char *nptr, const char **endptr )
-{
-	double res;
-	qboolean neg = qfalse;
-
-	// skip whitespace
-	while( isspace( *nptr ) )
-		nptr++;
-
-	// special string parsing
-	if( Q_stricmpn( nptr, "nan", 3 ) == 0 )
-	{
-		floatint_t nan;
-		if( endptr == NULL )
-		{
-			nan.ui = 0x7fffffff;
-			return nan.f;
-		}
-		*endptr = &nptr[3];
-		// nan can be followed by a bracketed number (in hex, octal,
-		// or decimal) which is then put in the mantissa
-		// this can be used to generate signalling or quiet NaNs, for
-		// example (though I doubt it'll ever be used)
-		// note that nan(0) is infinity!
-		if( nptr[3] == '(' )
-		{
-			const char *end;
-			int mantissa = strtol( &nptr[4], &end, 0 );
-			if( *end == ')' )
-			{
-				nan.ui = 0x7f800000 | ( mantissa & 0x7fffff );
-				if( endptr )
-					*endptr = &end[1];
-				return nan.f;
-			}
-		}
-		nan.ui = 0x7fffffff;
-		return nan.f;
-	}
-	if( Q_stricmpn( nptr, "inf", 3 ) == 0 )
-	{
-		floatint_t inf;
-		inf.ui = 0x7f800000;
-		if( endptr == NULL )
-			return inf.f;
-		if( Q_stricmpn( &nptr[3], "inity", 5 ) == 0 )
-			*endptr = &nptr[8];
-		else
-			*endptr = &nptr[3];
-		return inf.f;
-	}
-
-	// normal numeric parsing
-	// sign
-	if( *nptr == '-' )
-	{
-		nptr++;
-		neg = qtrue;
-	}
-	else if( *nptr == '+' )
-		nptr++;
-	// hex
-	if( Q_stricmpn( nptr, "0x", 2 ) == 0 )
-	{
-		// track if we use any digits
-		const char *s = &nptr[1], *end = s;
-		nptr += 2;
-		res = 0;
-		while( qtrue )
-		{
-			if( isdigit( *nptr ) )
-				res = 16 * res + ( *nptr++ - '0' );
-			else if( *nptr >= 'A' && *nptr <= 'F' )
-				res = 16 * res + 10 + *nptr++ - 'A';
-			else if( *nptr >= 'a' && *nptr <= 'f' )
-				res = 16 * res + 10 + *nptr++ - 'a';
-			else
-				break;
-		}
-		// if nptr moved, save it
-		if( end + 1 < nptr )
-			end = nptr;
-		if( *nptr == '.' )
-		{
-			float place;
-			nptr++;
-			// 1.0 / 16.0 == 0.0625
-			// I don't expect the float accuracy to hold out for
-			// very long but since we need to know the length of
-			// the string anyway we keep on going regardless
-			for( place = 0.0625;; place /= 16.0 )
-			{
-				if( isdigit( *nptr ) )
-					res += place * ( *nptr++ - '0' );
-				else if( *nptr >= 'A' && *nptr <= 'F' )
-					res += place * ( 10 + *nptr++ - 'A' );
-				else if( *nptr >= 'a' && *nptr <= 'f' )
-					res += place * ( 10 + *nptr++ - 'a' );
-				else
-					break;
-			}
-			if( end < nptr )
-				end = nptr;
-		}
-		// parse an optional exponent, representing multiplication
-		// by a power of two
-		// exponents are only valid if we encountered at least one
-		// digit already (and have therefore set end to something)
-		if( end != s && tolower( *nptr ) == 'p' )
-		{
-			int exp;
-			float res2;
-			// apparently (confusingly) the exponent should be
-			// decimal
-			exp = strtol( &nptr[1], &end, 10 );
-			if( &nptr[1] == end )
-			{
-				// no exponent
-				if( endptr )
-					*endptr = nptr;
-				return res;
-			}
-			if( exp > 0 )
-			{
-				while( exp-- > 0 )
-				{
-					res2 = res * 2;
-					// check for infinity
-					if( res2 <= res )
-						break;
-					res = res2;
-				}
-			}
-			else
-			{
-				while( exp++ < 0 )
-				{
-					res2 = res / 2;
-					// check for underflow
-					if( res2 >= res )
-						break;
-					res = res2;
-				}
-			}
-		}
-		if( endptr )
-			*endptr = end;
-		return res;
-	}
-	// decimal
-	else
-	{
-		// track if we find any digits
-		const char *end = nptr, *p = nptr;
-		// this is most of the work
-		for( res = 0; isdigit( *nptr );
-			res = 10 * res + *nptr++ - '0' );
-		// if nptr moved, we read something
-		if( end < nptr )
-			end = nptr;
-		if( *nptr == '.' )
-		{
-			// fractional part
-			float place;
-			nptr++;
-			for( place = 0.1; isdigit( *nptr ); place /= 10.0 )
-				res += ( *nptr++ - '0' ) * place;
-			// if nptr moved, we read something
-			if( end + 1 < nptr )
-				end = nptr;
-		}
-		// exponent
-		// meaningless without having already read digits, so check
-		// we've set end to something
-		if( p != end && tolower( *nptr ) == 'e' )
-		{
-			int exp;
-			float res10;
-			exp = strtol( &nptr[1], &end, 10 );
-			if( &nptr[1] == end )
-			{
-				// no exponent
-				if( endptr )
-					*endptr = nptr;
-				return res;
-			}
-			if( exp > 0 )
-			{
-				while( exp-- > 0 )
-				{
-					res10 = res * 10;
-					// check for infinity to save us time
-					if( res10 <= res )
-						break;
-					res = res10;
-				}
-			}
-			else if( exp < 0 )
-			{
-				while( exp++ < 0 )
-				{
-					res10 = res / 10;
-					// check for underflow
-					// (test for 0 would probably be just
-					// as good)
-					if( res10 >= res )
-						break;
-					res = res10;
-				}
-			}
-		}
-		if( endptr )
-			*endptr = end;
-		return res;
-	}
-}
 
 int atoi( const char *string ) {
 	int		sign;
@@ -1214,97 +984,6 @@ int _atoi( const char **stringPtr ) {
 	*stringPtr = string;
 
 	return value * sign;
-}
-
-/*
-==============
-strtol
-
-Handles any base from 2 to 36. If base is 0 then it guesses
-decimal, hex, or octal based on the format of the number (leading 0 or 0x)
-Will not overflow - returns LONG_MIN or LONG_MAX as appropriate
-*endptr is set to the location of the first character not used
-==============
-*/
-long strtol( const char *nptr, const char **endptr, int base )
-{
-	long res;
-	qboolean pos = qtrue;
-
-	if( endptr )
-		*endptr = nptr;
-	// bases other than 0, 2, 8, 16 are very rarely used, but they're
-	// not much extra effort to support
-	if( base < 0 || base == 1 || base > 36 )
-		return 0;
-	// skip leading whitespace
-	while( isspace( *nptr ) )
-		nptr++;
-	// sign
-	if( *nptr == '-' )
-	{
-		nptr++;
-		pos = qfalse;
-	}
-	else if( *nptr == '+' )
-		nptr++;
-	// look for base-identifying sequences e.g. 0x for hex, 0 for octal
-	if( nptr[0] == '0' )
-	{
-		nptr++;
-		// 0 is always a valid digit
-		if( endptr )
-			*endptr = nptr;
-		if( *nptr == 'x' || *nptr == 'X' )
-		{
-			if( base != 0 && base != 16 )
-			{
-				// can't be hex, reject x (accept 0)
-				if( endptr )
-					*endptr = nptr;
-				return 0;
-			}
-			nptr++;
-			base = 16;
-		}
-		else if( base == 0 )
-			base = 8;
-	}
-	else if( base == 0 )
-		base = 10;
-	res = 0;
-	while( qtrue )
-	{
-		int val;
-		if( isdigit( *nptr ) )
-			val = *nptr - '0';
-		else if( islower( *nptr ) )
-			val = 10 + *nptr - 'a';
-		else if( isupper( *nptr ) )
-			val = 10 + *nptr - 'A';
-		else
-			break;
-		if( val >= base )
-			break;
-		// we go negative because LONG_MIN is further from 0 than
-		// LONG_MAX
-		if( res < ( LONG_MIN + val ) / base )
-			res = LONG_MIN; // overflow
-		else
-			res = res * base - val;
-		nptr++;
-		if( endptr )
-			*endptr = nptr;
-	}
-	if( pos )
-	{
-		// can't represent LONG_MIN positive
-		if( res == LONG_MIN )
-			res = LONG_MAX;
-		else
-			res = -res;
-	}
-	return res;
 }
 
 int abs( int n ) {
@@ -2077,14 +1756,274 @@ int Q_snprintf(char *str, size_t length, const char *fmt, ...)
 	return retval;
 }
 
+#define ALT			0x00000001		/* alternate form */
+#define HEXPREFIX	0x00000002		/* add 0x or 0X prefix */
+#define LADJUST		0x00000004		/* left adjustment */
+#define LONGDBL		0x00000008		/* long double */
+#define LONGINT		0x00000010		/* long integer */
+#define QUADINT		0x00000020		/* quad integer */
+#define SHORTINT	0x00000040		/* short integer */
+#define ZEROPAD		0x00000080		/* zero (as opposed to blank) pad */
+#define FPT			0x00000100		/* floating point number */
+
+#define to_digit(c)		((c) - '0')
+#define is_digit(c)		((unsigned)to_digit(c) <= 9)
+#define to_char(n)		((n) + '0')
+
+void AddInt( char **buf_p, int val, int width, int flags ) {
+	char	text[32];
+	int		digits;
+	int		signedVal;
+	char	*buf;
+
+	digits = 0;
+	signedVal = val;
+	if ( val < 0 ) {
+		val = -val;
+	}
+	do {
+		text[digits++] = '0' + val % 10;
+		val /= 10;
+	} while ( val );
+
+	if ( signedVal < 0 ) {
+		text[digits++] = '-';
+	}
+
+	buf = *buf_p;
+
+	if( !( flags & LADJUST ) ) {
+		while ( digits < width ) {
+			*buf++ = ( flags & ZEROPAD ) ? '0' : ' ';
+			width--;
+		}
+	}
+
+	while ( digits-- ) {
+		*buf++ = text[digits];
+		width--;
+	}
+
+	if( flags & LADJUST ) {
+		while ( width-- ) {
+			*buf++ = ( flags & ZEROPAD ) ? '0' : ' ';
+		}
+	}
+
+	*buf_p = buf;
+}
+
+void AddFloat( char **buf_p, float fval, int width, int prec ) {
+	char	text[32];
+	int		digits;
+	float	signedVal;
+	char	*buf;
+	int		val;
+
+	// get the sign
+	signedVal = fval;
+	if ( fval < 0 ) {
+		fval = -fval;
+	}
+
+	// write the float number
+	digits = 0;
+	val = (int)fval;
+	do {
+		text[digits++] = '0' + val % 10;
+		val /= 10;
+	} while ( val );
+
+	if ( signedVal < 0 ) {
+		text[digits++] = '-';
+	}
+
+	buf = *buf_p;
+
+	while ( digits < width ) {
+		*buf++ = ' ';
+		width--;
+	}
+
+	while ( digits-- ) {
+		*buf++ = text[digits];
+	}
+
+	*buf_p = buf;
+
+	if (prec < 0)
+		prec = 6;
+	// write the fraction
+	digits = 0;
+	while (digits < prec) {
+		fval -= (int) fval;
+		fval *= 10.0;
+		val = (int) fval;
+		text[digits++] = '0' + val % 10;
+	}
+
+	if (digits > 0) {
+		buf = *buf_p;
+		*buf++ = '.';
+		for (prec = 0; prec < digits; prec++) {
+			*buf++ = text[prec];
+		}
+		*buf_p = buf;
+	}
+}
+
+
+void AddString( char **buf_p, char *string, int width, int prec ) {
+	int		size;
+	char	*buf;
+
+	buf = *buf_p;
+
+	if ( string == NULL ) {
+		string = "(null)";
+		prec = -1;
+	}
+
+	if ( prec >= 0 ) {
+		for( size = 0; size < prec; size++ ) {
+			if( string[size] == '\0' ) {
+				break;
+			}
+		}
+	}
+	else {
+		size = strlen( string );
+	}
+
+	width -= size;
+
+	while( size-- ) {
+		*buf++ = *string++;
+	}
+
+	while( width-- > 0 ) {
+		*buf++ = ' ';
+	}
+
+	*buf_p = buf;
+}
+
+
+/*
+vsprintf
+
+I'm not going to support a bunch of the more arcane stuff in here
+just to keep it simpler.  For example, the '*' and '$' are not
+currently supported.  I've tried to make it so that it will just
+parse and ignore formats we don't support.
+*/
+int vsprintf( char *buffer, const char *fmt, va_list argptr ) {
+	int		*arg;
+	char	*buf_p;
+	char	ch;
+	int		flags;
+	int		width;
+	int		prec;
+	int		n;
+	char	sign;
+
+	buf_p = buffer;
+	arg = (int *)argptr;
+
+	while( qtrue ) {
+		// run through the format string until we hit a '%' or '\0'
+		for ( ch = *fmt; (ch = *fmt) != '\0' && ch != '%'; fmt++ ) {
+			*buf_p++ = ch;
+		}
+		if ( ch == '\0' ) {
+			goto done;
+		}
+
+		// skip over the '%'
+		fmt++;
+
+		// reset formatting state
+		flags = 0;
+		width = 0;
+		prec = -1;
+		sign = '\0';
+
+rflag:
+		ch = *fmt++;
+reswitch:
+		switch( ch ) {
+		case '-':
+			flags |= LADJUST;
+			goto rflag;
+		case '.':
+			n = 0;
+			while( is_digit( ( ch = *fmt++ ) ) ) {
+				n = 10 * n + ( ch - '0' );
+			}
+			prec = n < 0 ? -1 : n;
+			goto reswitch;
+		case '0':
+			flags |= ZEROPAD;
+			goto rflag;
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			n = 0;
+			do {
+				n = 10 * n + ( ch - '0' );
+				ch = *fmt++;
+			} while( is_digit( ch ) );
+			width = n;
+			goto reswitch;
+		case 'c':
+			*buf_p++ = (char)*arg;
+			arg++;
+			break;
+		case 'd':
+		case 'i':
+			AddInt( &buf_p, *arg, width, flags );
+			arg++;
+			break;
+		case 'f':
+			AddFloat( &buf_p, *(double *)arg, width, prec );
+#ifdef __LCC__
+			arg += 1;	// everything is 32 bit in my compiler
+#else
+			arg += 2;
+#endif
+			break;
+		case 's':
+			AddString( &buf_p, (char *)*arg, width, prec );
+			arg++;
+			break;
+		case '%':
+			*buf_p++ = ch;
+			break;
+		default:
+			*buf_p++ = (char)*arg;
+			arg++;
+			break;
+		}
+	}
+
+done:
+	*buf_p = 0;
+	return buf_p - buffer;
+}
+
 /* this is really crappy */
 int sscanf( const char *buffer, const char *fmt, ... ) {
 	int		cmd;
-	va_list		ap;
+	int		**arg;
 	int		count;
-	size_t		len;
 
-	va_start (ap, fmt);
+	arg = (int **)&fmt + 1;
 	count = 0;
 
 	while ( *fmt ) {
@@ -2093,40 +2032,22 @@ int sscanf( const char *buffer, const char *fmt, ... ) {
 			continue;
 		}
 
-		fmt++;
-		cmd = *fmt;
-
-		if (isdigit (cmd)) {
-			len = (size_t)_atoi (&fmt);
-			cmd = *(fmt - 1);
-		} else {
-			len = MAX_STRING_CHARS - 1;
-			fmt++;
-		}
+		cmd = fmt[1];
+		fmt += 2;
 
 		switch ( cmd ) {
 		case 'i':
 		case 'd':
 		case 'u':
-			*(va_arg (ap, int *)) = _atoi( &buffer );
+			**arg = _atoi( &buffer );
 			break;
 		case 'f':
-			*(va_arg (ap, float *)) = _atof( &buffer );
+			*(float *)*arg = _atof( &buffer );
 			break;
-		case 's':
-			{
-			char *s = va_arg (ap, char *);
-			while (isspace (*buffer))
-				buffer++;
-			while (*buffer && !isspace (*buffer) && len-- > 0 )
-				*s++ = *buffer++;
-			*s++ = '\0';
-			break;
-			}
 		}
+		arg++;
 	}
 
-	va_end (ap);
 	return count;
 }
 

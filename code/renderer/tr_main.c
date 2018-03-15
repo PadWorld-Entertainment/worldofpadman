@@ -456,7 +456,7 @@ void R_SetupFrustum (viewParms_t *dest, float xmin, float xmax, float ymax, floa
 	float oppleg, adjleg, length;
 	int i;
 	
-	if(stereoSep == 0 && xmin == -xmax)
+	if(stereoSep == 0 && xmin != -xmax)
 	{
 		// symmetric case can be simplified
 		VectorCopy(dest->or.origin, ofsorigin);
@@ -523,9 +523,9 @@ void R_SetupProjection(viewParms_t *dest, float zProj, qboolean computeFrustum)
 	if(stereoSep != 0)
 	{
 		if(dest->stereoFrame == STEREO_LEFT)
-			stereoSep = zProj / stereoSep;
+			stereoSep = zProj / r_stereoSeparation->value;
 		else if(dest->stereoFrame == STEREO_RIGHT)
-			stereoSep = zProj / -stereoSep;
+			stereoSep = zProj / -r_stereoSeparation->value;
 		else
 			stereoSep = 0;
 	}
@@ -1132,6 +1132,29 @@ void R_DecomposeSort( unsigned sort, int *entityNum, shader_t **shader,
 	*dlightMap = sort & 3;
 }
 
+//sortSL{
+void SLpolySort(drawSurf_t **Surfs,int numS)
+{
+	int i;
+	int notDone=1;
+	drawSurf_t tmp;
+
+	//ToDo: maybe replace by a better sorting-algorithm
+	while(notDone)
+	{
+		notDone=0;
+		for(i=0;i<(numS-1);++i)
+			if(((srfPoly_t*)(Surfs[i]->surface))->lvl >  ((srfPoly_t*)(Surfs[i+1]->surface))->lvl)
+			{
+				tmp = *(Surfs[i]);
+				*(Surfs[i]) = *(Surfs[i+1]);
+				*(Surfs[i+1]) = tmp;
+				notDone=1;
+			}
+	}
+}
+//sortSL}
+
 /*
 =================
 R_SortDrawSurfs
@@ -1143,6 +1166,11 @@ void R_SortDrawSurfs( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 	int				entityNum;
 	int				dlighted;
 	int				i;
+//sortSL{
+#define MAX_LOGO_POLYS 256 //... copy from mod-code
+	drawSurf_t*		SLpolys[MAX_LOGO_POLYS];
+	int				countSL=0;
+//sortSL}
 
 	// it is possible for some views to not have any surfaces
 	if ( numDrawSurfs < 1 ) {
@@ -1184,6 +1212,23 @@ void R_SortDrawSurfs( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 			break;		// only one mirror view at a time
 		}
 	}
+
+//sortSL{
+	for( i = 0 ; i < numDrawSurfs ; ++i)
+	{
+		if(*(drawSurfs[i].surface) == SF_POLY)
+		{
+			srfPoly_t* poly = (srfPoly_t*)(drawSurfs[i].surface);
+			if(poly->lvl && countSL<MAX_LOGO_POLYS)
+			{
+				SLpolys[countSL] = drawSurfs+i;
+				++countSL;
+			}
+		}
+	}
+
+	SLpolySort(SLpolys,countSL);
+//sortSL}
 
 	R_AddDrawSurfCmd( drawSurfs, numDrawSurfs );
 }

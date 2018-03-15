@@ -1242,6 +1242,52 @@ qboolean Info_Validate( const char *s ) {
 	return qtrue;
 }
 
+void StringDump_Push(char* s, const char* value){
+	const char* blacklist = "\\;\"";
+	char	newi[MAX_INFO_STRING];
+	
+	// scan value for blacklisted chars
+	for(; *blacklist; ++blacklist){
+		if ( strchr(value, *blacklist) ){
+			Com_Printf (S_COLOR_YELLOW "StringDump_Push illegal char '%c'in %s\n", *blacklist, value);
+			return;
+		}
+	}
+	
+	Com_sprintf (newi, sizeof(newi), "\\%s", value);
+	
+	if (strlen(newi) + strlen(s) >= MAX_INFO_STRING){
+		Com_Printf ("Info string length exceeded\n");
+		return;
+	}
+	strcat (newi, s);
+	strcpy (s, newi);
+}
+
+void StringDump_GetNext( const char **head, char *value ) {
+	char	*o;
+	const char	*s;
+
+	s = *head;
+
+	if ( *s == '\\' ) {
+		s++;
+	}
+	value[0] = 0;
+
+	o = value;
+	while ( *s != '\\' ) {
+		if ( !*s ) {
+			*o = 0;
+			*head = s;
+			return;
+		}
+		*o++ = *s++;
+	}
+	*o = 0;
+	*head = s;
+}
+
 /*
 ==================
 Info_SetValueForKey

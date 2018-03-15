@@ -64,20 +64,13 @@ int ReadValue(source_t *source, float *value)
 	if (!strcmp(token.string, "-"))
 	{
 		SourceWarning(source, "negative value set to zero\n");
-
-		if(!PC_ExpectAnyToken(source, &token))
-		{
-			SourceError(source, "Missing return value\n");
-			return qfalse;
-		}
-	}
-
+		if (!PC_ExpectTokenType(source, TT_NUMBER, 0, &token)) return qfalse;
+	} //end if
 	if (token.type != TT_NUMBER)
 	{
 		SourceError(source, "invalid return value %s\n", token.string);
 		return qfalse;
-	}
-	
+	} //end if
 	*value = token.floatvalue;
 	return qtrue;
 } //end of the function ReadValue
@@ -429,7 +422,7 @@ weightconfig_t *ReadWeightConfig(char *filename)
 	//if the file was located in a pak file
 	botimport.Print(PRT_MESSAGE, "loaded %s\n", filename);
 #ifdef DEBUG
-	if (botDeveloper)
+	if (bot_developer)
 	{
 		botimport.Print(PRT_MESSAGE, "weights loaded in %d msec\n", Sys_MilliSeconds() - starttime);
 	} //end if

@@ -1,54 +1,42 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 #include "ui_local.h"
 
-#define SERVERINFO_FRAMEL	"menu/art/frame2_l"
-#define SERVERINFO_FRAMER	"menu/art/frame1_r"
-#define SERVERINFO_BACK0	"menu/art/back_0"
-#define SERVERINFO_BACK1	"menu/art/back_1"
+#define ARROWUP0	"menu/server/arrowup0"
+#define ARROWUP1	"menu/server/arrowup1"
+#define ARROWDOWN0	"menu/server/arrowdown0"
+#define ARROWDOWN1	"menu/server/arrowdown1"
 
 static char* serverinfo_artlist[] =
 {
-	SERVERINFO_FRAMEL,	
-	SERVERINFO_FRAMER,
-	SERVERINFO_BACK0,
-	SERVERINFO_BACK1,
+	ARROWUP0,
+	ARROWUP1,
+	ARROWDOWN0,
+	ARROWDOWN1,
+
 	NULL
 };
 
 #define ID_ADD	 100
 #define ID_BACK	 101
 
+#define ID_SCROLL_UP		102
+#define ID_SCROLL_DOWN		103
+
 typedef struct
 {
 	menuframework_s	menu;
-	menutext_s		banner;
-	menubitmap_s	framel;
-	menubitmap_s	framer;
-	menubitmap_s	back;
+
+	menubitmap1024s_s	arrowup;
+	menubitmap1024s_s	arrowdown;
+	menutext_s			back;
+
 	menutext_s		add;
 	char			info[MAX_INFO_STRING];
 	int				numlines;
+
+	int				firstline;
+	int				numdrawn;
 } serverinfo_t;
 
 static serverinfo_t	s_serverinfo;
@@ -80,6 +68,12 @@ void Favorites_Add( void )
 		{
 			// already in list
 			return;
+		}
+
+		if(adrstr[0]=='\0') // if there is a empty one -> take it ;)
+		{
+			best = i+1;
+			break;
 		}
 		
 		// use first empty or non-numeric available slot
@@ -115,6 +109,22 @@ static void ServerInfo_Event( void* ptr, int event )
 
 			UI_PopMenu();
 			break;
+
+		case ID_SCROLL_UP:
+			if (event != QM_ACTIVATED)
+				break;
+
+			if(s_serverinfo.firstline>0) s_serverinfo.firstline--;
+			break;
+
+		case ID_SCROLL_DOWN:
+			if (event != QM_ACTIVATED)
+				break;
+
+			if ( ( s_serverinfo.firstline + s_serverinfo.numdrawn ) < s_serverinfo.numlines ) {
+				s_serverinfo.firstline++;
+			}
+			break;
 	}
 }
 
@@ -128,23 +138,57 @@ static void ServerInfo_MenuDraw( void )
 	const char		*s;
 	char			key[MAX_INFO_KEY];
 	char			value[MAX_INFO_VALUE];
-	int				i = 0, y;
+	int				y, i=0;
+	int				keylen, vallen, infonum=-1;
 
-	y = SCREEN_HEIGHT/2 - s_serverinfo.numlines*(SMALLCHAR_HEIGHT)/2 - 20;
+	UI_DrawIngameBG();
+	UI_DrawProportionalString( 320, 110, "SERVER INFO",UI_CENTER|UI_SMALLFONT,color_black);
+
+	y = 140;//95;
 	s = s_serverinfo.info;
+	s_serverinfo.numdrawn = 0;
 	while ( s && i < s_serverinfo.numlines ) {
+		i++;
 		Info_NextPair( &s, key, value );
 		if ( !key[0] ) {
 			break;
 		}
 
-		Q_strcat( key, MAX_INFO_KEY, ":" ); 
+		infonum++;
+		if(s_serverinfo.firstline>infonum)
+			continue;
 
-		UI_DrawString(SCREEN_WIDTH*0.50 - 8,y,key,UI_RIGHT|UI_SMALLFONT,color_red);
-		UI_DrawString(SCREEN_WIDTH*0.50 + 8,y,value,UI_LEFT|UI_SMALLFONT,text_color_normal);
+		if(y>260) break;
+
+		Com_sprintf(key,MAX_INFO_KEY,"%s: ",key);
+		keylen=Q_PrintStrlen(key);
+		vallen=Q_PrintStrlen(value);
+		if(keylen+vallen<20)
+		{
+			UI_DrawString(230,y,key,UI_LEFT|UI_SMALLFONT,color_black);
+			UI_DrawString(230+keylen*8,y,value,UI_LEFT|UI_SMALLFONT,color_blue);
+
+			s_serverinfo.numdrawn++;
+		}
+		else
+		{
+			int i;
+
+			// TODO: Also add linebreaks for long keys?
+			UI_DrawString(230,y,key,UI_LEFT|UI_SMALLFONT,color_black);
+			
+			for(i=0;i<vallen;i+=20)
+			{
+				y += SMALLCHAR_HEIGHT;
+				if(y>260) break;
+
+				UI_DrawString(230,y,va("%20.20s",&value[i]),UI_LEFT|UI_SMALLFONT,color_blue);
+
+				s_serverinfo.numdrawn++;
+			}
+		}
 
 		y += SMALLCHAR_HEIGHT;
-		i++;
 	}
 
 	Menu_Draw( &s_serverinfo.menu );
@@ -157,6 +201,17 @@ ServerInfo_MenuKey
 */
 static sfxHandle_t ServerInfo_MenuKey( int key )
 {
+	switch ( key ) {
+	case K_MWHEELUP:
+	case K_PGUP:
+		ServerInfo_Event( &s_serverinfo.arrowup, QM_ACTIVATED );
+		break;
+	case K_MWHEELDOWN:
+	case K_PGDN:
+		ServerInfo_Event( &s_serverinfo.arrowdown, QM_ACTIVATED );
+		break;
+	}
+
 	return ( Menu_DefaultKey( &s_serverinfo.menu, key ) );
 }
 
@@ -196,55 +251,54 @@ void UI_ServerInfoMenu( void )
 
 	s_serverinfo.menu.draw       = ServerInfo_MenuDraw;
 	s_serverinfo.menu.key        = ServerInfo_MenuKey;
-	s_serverinfo.menu.wrapAround = qtrue;
-	s_serverinfo.menu.fullscreen = qtrue;
+	s_serverinfo.arrowup.generic.type		= MTYPE_BITMAP1024S;
+	s_serverinfo.arrowup.x					= 630;
+	s_serverinfo.arrowup.y					= 226;
+	s_serverinfo.arrowup.w					= 29;
+	s_serverinfo.arrowup.h					= 74;
+	s_serverinfo.arrowup.shader				= trap_R_RegisterShaderNoMip(ARROWUP0);
+	s_serverinfo.arrowup.mouseovershader	= trap_R_RegisterShaderNoMip(ARROWUP1);
+	s_serverinfo.arrowup.generic.callback	= ServerInfo_Event;
+	s_serverinfo.arrowup.generic.id			= ID_SCROLL_UP;
+	Menu_AddItem( &s_serverinfo.menu, (void*) &s_serverinfo.arrowup );
 
-	s_serverinfo.banner.generic.type  = MTYPE_BTEXT;
-	s_serverinfo.banner.generic.x	  = 320;
-	s_serverinfo.banner.generic.y	  = 16;
-	s_serverinfo.banner.string		  = "SERVER INFO";
-	s_serverinfo.banner.color	      = color_white;
-	s_serverinfo.banner.style	      = UI_CENTER;
+	s_serverinfo.arrowdown.generic.type		= MTYPE_BITMAP1024S;
+	s_serverinfo.arrowdown.x				= 630;
+	s_serverinfo.arrowdown.y				= 436-74;
+	s_serverinfo.arrowdown.w				= 29;//38
+	s_serverinfo.arrowdown.h				= 74;//98
+	s_serverinfo.arrowdown.shader			= trap_R_RegisterShaderNoMip(ARROWDOWN0);
+	s_serverinfo.arrowdown.mouseovershader	= trap_R_RegisterShaderNoMip(ARROWDOWN1);
+	s_serverinfo.arrowdown.generic.callback	= ServerInfo_Event;
+	s_serverinfo.arrowdown.generic.id		= ID_SCROLL_DOWN;
+	Menu_AddItem( &s_serverinfo.menu, (void*) &s_serverinfo.arrowdown );
 
-	s_serverinfo.framel.generic.type  = MTYPE_BITMAP;
-	s_serverinfo.framel.generic.name  = SERVERINFO_FRAMEL;
-	s_serverinfo.framel.generic.flags = QMF_INACTIVE;
-	s_serverinfo.framel.generic.x	  = 0;  
-	s_serverinfo.framel.generic.y	  = 78;
-	s_serverinfo.framel.width  	      = 256;
-	s_serverinfo.framel.height  	  = 329;
-
-	s_serverinfo.framer.generic.type  = MTYPE_BITMAP;
-	s_serverinfo.framer.generic.name  = SERVERINFO_FRAMER;
-	s_serverinfo.framer.generic.flags = QMF_INACTIVE;
-	s_serverinfo.framer.generic.x	  = 376;
-	s_serverinfo.framer.generic.y	  = 76;
-	s_serverinfo.framer.width  	      = 256;
-	s_serverinfo.framer.height  	  = 334;
-
-	s_serverinfo.add.generic.type	  = MTYPE_PTEXT;
-	s_serverinfo.add.generic.flags    = QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_serverinfo.add.generic.callback = ServerInfo_Event;
-	s_serverinfo.add.generic.id	      = ID_ADD;
-	s_serverinfo.add.generic.x		  = 320;
-	s_serverinfo.add.generic.y		  = 371;
-	s_serverinfo.add.string  		  = "ADD TO FAVORITES";
-	s_serverinfo.add.style  		  = UI_CENTER|UI_SMALLFONT;
-	s_serverinfo.add.color			  =	color_red;
+	s_serverinfo.add.generic.type		= MTYPE_TEXTS;
+	s_serverinfo.add.fontHeight			= 18.0f;
+	s_serverinfo.add.generic.flags		= QMF_CENTER_JUSTIFY;//|QMF_PULSEIFFOCUS;
+	s_serverinfo.add.generic.callback	= ServerInfo_Event;
+	s_serverinfo.add.generic.id			= ID_ADD;
+	s_serverinfo.add.generic.x			= 320;
+	s_serverinfo.add.generic.y			= 290;
+	s_serverinfo.add.string				= "ADD TO FAVORiTES";
+	s_serverinfo.add.style				= UI_CENTER|UI_SMALLFONT;
+	s_serverinfo.add.color				= colorDkBlue;
+	s_serverinfo.add.focuscolor			= colorBlue;
 	if( trap_Cvar_VariableValue( "sv_running" ) ) {
 		s_serverinfo.add.generic.flags |= QMF_GRAYED;
 	}
 
-	s_serverinfo.back.generic.type	   = MTYPE_BITMAP;
-	s_serverinfo.back.generic.name     = SERVERINFO_BACK0;
-	s_serverinfo.back.generic.flags    = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_serverinfo.back.generic.callback = ServerInfo_Event;
-	s_serverinfo.back.generic.id	   = ID_BACK;
-	s_serverinfo.back.generic.x		   = 0;
-	s_serverinfo.back.generic.y		   = 480-64;
-	s_serverinfo.back.width  		   = 128;
-	s_serverinfo.back.height  		   = 64;
-	s_serverinfo.back.focuspic         = SERVERINFO_BACK1;
+	s_serverinfo.back.generic.type		= MTYPE_TEXTS;
+	s_serverinfo.back.fontHeight		= 16.0f;
+//	s_serverinfo.back.generic.flags		= QMF_PULSEIFFOCUS;
+	s_serverinfo.back.generic.callback	= ServerInfo_Event;
+	s_serverinfo.back.generic.id		= ID_BACK;
+	s_serverinfo.back.generic.x			= 245;
+	s_serverinfo.back.generic.y			= 315;
+	s_serverinfo.back.string			= "BACK";
+	s_serverinfo.back.style				= UI_SMALLFONT;
+	s_serverinfo.back.color				= color_black;
+	s_serverinfo.back.focuscolor		= color_orange;
 
 	trap_GetConfigString( CS_SERVERINFO, s_serverinfo.info, MAX_INFO_STRING );
 
@@ -258,16 +312,12 @@ void UI_ServerInfoMenu( void )
 		s_serverinfo.numlines++;
 	}
 
-	if (s_serverinfo.numlines > 16)
-		s_serverinfo.numlines = 16;
 
-	Menu_AddItem( &s_serverinfo.menu, (void*) &s_serverinfo.banner );
-	Menu_AddItem( &s_serverinfo.menu, (void*) &s_serverinfo.framel );
-	Menu_AddItem( &s_serverinfo.menu, (void*) &s_serverinfo.framer );
 	Menu_AddItem( &s_serverinfo.menu, (void*) &s_serverinfo.add );
 	Menu_AddItem( &s_serverinfo.menu, (void*) &s_serverinfo.back );
 
 	UI_PushMenu( &s_serverinfo.menu );
 }
+
 
 

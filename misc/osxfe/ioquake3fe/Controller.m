@@ -29,13 +29,13 @@
 
 - (IBAction)launch:(id)sender {
 	NSString *ioQuake3Path = [[NSBundle mainBundle] pathForAuxiliaryExecutable:IOQ3_BIN];
-	if (!ioQuake3Path) 
+	if (!ioQuake3Path)
 		ioQuake3Path = [[NSBundle bundleWithPath:IOQ3_BUNDLE] pathForAuxiliaryExecutable:IOQ3_BIN];
-		
+
 	NSPipe *pipe = [NSPipe pipe];
 	quakeOut = [pipe fileHandleForReading];
 	[quakeOut readInBackgroundAndNotify];
-	
+
 	quakeTask = [NSTask new];
 	[quakeTask setStandardOutput:pipe];
 	[quakeTask setStandardError:pipe];
@@ -44,9 +44,9 @@
 	if ([args length])
 		[quakeTask setArguments:[args componentsSeparatedByString:@" "]];
 //		[quakeTask setArguments:[args componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]; // tiger
-			
+
 	BOOL die = NO;
-	
+
 	@try {
 		[quakeTask setLaunchPath:ioQuake3Path];
 		[quakeTask launch];
@@ -88,7 +88,7 @@
 			if ([quakeTask terminationStatus] != 0) {
 				ErrorWindow *ew = [[[ErrorWindow alloc] init] autorelease];
 				[ew bitch:[[[NSString alloc] initWithData:quakeData encoding:NSUTF8StringEncoding] autorelease]];
-			} 
+			}
 			else
 				[NSApp terminate:self];
 		}

@@ -1,29 +1,10 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 
 // this file holds commands that can be executed by the server console, but not remote clients
 
 #include "g_local.h"
+#include "wopg_sphandling.h"
 
 
 /*
@@ -379,6 +360,7 @@ gclient_t	*ClientForString( const char *s ) {
 	gclient_t	*cl;
 	int			i;
 	int			idnum;
+	char		netname[1024];
 
 	// numeric values are just slot numbers
 	if ( s[0] >= '0' && s[0] <= '9' ) {
@@ -402,15 +384,127 @@ gclient_t	*ClientForString( const char *s ) {
 		if ( cl->pers.connected == CON_DISCONNECTED ) {
 			continue;
 		}
-		if ( !Q_stricmp( cl->pers.netname, s ) ) {
+		Q_strncpyz(netname, cl->pers.netname, 1024);
+		Q_CleanStr(netname);
+		if ( !Q_stricmp( netname, s ) ) {
 			return cl;
 		}
+		else
+			G_Printf("missmatch %s <-> %s \n", netname, s);
 	}
 
 	G_Printf( "User %s is not on the server\n", s );
 
 	return NULL;
 }
+
+
+/*
+===================
+Svcmd_Say_f
+
+ssay <text>
+===================
+*/
+static void Svcmd_Say_f( void ) {
+	if ( trap_Argc() < 2 ) {
+		G_Printf( "usage: ssay <text>\n" );
+		return;
+	}
+
+	G_Say( NULL, NULL, SAY_ALL, ConcatArgs( 1 ) );
+}
+
+
+/*
+===================
+Svcmd_Tell_f
+
+stell <cid> <text>
+===================
+*/
+static void Svcmd_Tell_f( void ) {
+	char str[3];
+	int cid;
+	gentity_t* target;
+
+	if ( trap_Argc() < 3 ) {
+		G_Printf( "usage: stell <cid> <text>\n" );
+		return;
+	}
+
+	trap_Argv( 1, str, sizeof( str ) );
+	cid = atoi( str );
+
+	if ( ( cid < 0 ) || ( cid >= MAX_CLIENTS ) ) {
+		G_Printf( "Not a valid client number.\n" );
+		return;
+	}
+
+	target = ( g_entities + cid );
+
+	if ( target->client->pers.connected != CON_CONNECTED ) {
+		G_Printf( "Client not connected.\n" );
+		return;
+	}
+
+	G_Say( NULL, target, SAY_TELL, ConcatArgs( 2 ) );
+}
+
+
+typedef enum {
+	CCMD_MP,
+	CCMD_CP,
+	CCMD_PRINT
+} clientCommand_t;
+/*
+===================
+Svcmd_ClientCommand_f
+
+<cmd> <cid> <text>
+===================
+*/
+static void Svcmd_ClientCommand_f( clientCommand_t cmd ) {
+	char str[3], *cmdstr;
+	int cid;
+
+	if ( trap_Argc() < 3 ) {
+		// FIXME: Use real command in error message
+		G_Printf( "usage: $cmd <cid> <text>\n" );
+		return;
+	}
+
+	switch ( cmd ) {
+		case CCMD_MP:
+			cmdstr = "mp";
+			break;
+		case CCMD_CP:
+			cmdstr = "cp";
+			break;
+		case CCMD_PRINT:
+			cmdstr = "print";
+			break;
+
+		default:
+			G_Error( "Svcmd_ClientCommand_f: cmd out of clientCommand_t range!\n" );
+	}
+
+	trap_Argv( 1, str, sizeof( str ) );
+	cid = atoi( str );
+
+	if ( ( ( cid < 0 ) || ( cid >= MAX_CLIENTS ) ) && ( cid != -1 ) ) {
+		G_Printf( "Not a valid client number.\n" );
+		return;
+	}
+
+	if ( (cid != -1 ) && ( level.clients[cid].pers.connected != CON_CONNECTED ) ) {
+		G_Printf( "Client not connected.\n" );
+		return;
+	}
+
+	trap_SendServerCommand( cid, va( "%s \"%s\"" , cmdstr, ConcatArgs( 2 ) ) );
+}
+
 
 /*
 ===================
@@ -435,8 +529,289 @@ void	Svcmd_ForceTeam_f( void ) {
 	SetTeam( &g_entities[cl - level.clients], str );
 }
 
-char	*ConcatArgs( int start );
 
+static void Svcmd_SetGameType_f()
+{
+	char* argStr = ConcatArgs(1);
+	int gt = convertGTStringToGTNumber(argStr);
+
+	if(gt!=-1)
+	{
+//		trap_Cvar_Set("g_gametype",va("%d",gt)); // doesn't use cvar-latch !?
+		trap_SendConsoleCommand( EXEC_APPEND, va("g_gametype %d\n", gt ) );
+//		Com_Printf("gametype = %d\n",gt);
+	}
+	else // ToDo?: msg also to the clients?
+		Com_Printf("Error: Couldn't find a GameType with \"%s\"\n",argStr);
+}
+
+void Svcmd_StopCam( void ){
+	level.cammode = qfalse;
+	trap_SendConsoleCommand( EXEC_APPEND, "wopSP_introFinished\n" );
+}
+
+qboolean FileExists(char* fname){
+	fileHandle_t	f;
+	trap_FS_FOpenFile( fname, &f, FS_READ );
+	if ( !f )
+		return qfalse;
+	else{
+		trap_FS_FCloseFile( f );
+		return qtrue;
+	}
+}
+
+void Svcmd_StartCam( void ){
+	char	map[MAX_QPATH];
+	char	serverinfo[MAX_INFO_STRING];
+	char	path[MAX_QPATH];
+	
+	trap_GetServerinfo( serverinfo, sizeof(serverinfo) );
+	Q_strncpyz( map, Info_ValueForKey( serverinfo, "mapname" ), sizeof(map) );
+	Com_sprintf( path, sizeof(path), "cutscenes\\%s\\scene.cfg", map);
+	if( !FileExists(path) ){
+		G_Printf("%s does not exist\n", path);
+		return;
+	}
+	trap_SendConsoleCommand( EXEC_APPEND, va("exec \"%s\"\n",path) );
+	level.cammode = qtrue;
+}
+
+void FreezePlayers( qboolean on ){
+	int i;
+	for ( i = 0 ; i < level.maxclients ; i++ ) {
+		if ( level.clients[i].pers.connected != CON_CONNECTED )
+			continue;
+		if ( g_entities[i].r.svFlags & SVF_BOT )
+			continue;
+		g_entities[i].client->ps.pm_type = ( on ) ? PM_FREEZE : PM_NORMAL;
+	}
+}
+
+void EditPlayerInventory(gentity_t *ent, int arg_offset);
+
+void Svcmd_CamCmd( void ){
+	char buf[MAX_TOKEN_CHARS];
+	char cmd[MAX_TOKEN_CHARS];
+	char name[MAX_TOKEN_CHARS];
+	int i;
+	gclient_t* cl;
+	
+	if( !level.cammode ){
+		return;
+	}
+
+	if( trap_Argc() < 2 ){
+		return;	
+	}
+
+	trap_Argv( 1, cmd, sizeof(cmd) );
+
+	if ( !Q_stricmp (cmd, "print")  ) 
+	{
+		trap_Argv( 2, buf, sizeof(buf) );
+		trap_SendServerCommand( -1, va("cp \"%s\n\"", buf ) );
+	}
+	else if( !Q_stricmp (cmd, "setclientpos") ) {
+		vec3_t	newOrigin;
+
+		if( trap_Argc() != 8 && trap_Argc() != 6 ){
+			Com_Printf("usage: camcmd setclientpos name/id x y z (a b) \na = PITCH-angle, b = YAW-angle\n");
+			return;
+		}
+
+		trap_Argv( 2, name, sizeof( name ) );
+
+		cl = ClientForString( name ) ;
+		if(!cl) 
+			return;
+
+		for( i=0; i<3; i++){
+			trap_Argv( i+3, buf, sizeof( buf) );
+			newOrigin[i] = atof( buf );
+		}
+
+		G_SetOrigin( &g_entities[cl->ps.clientNum], newOrigin );
+		VectorCopy( newOrigin, cl->ps.origin );
+
+		if(trap_Argc() == 8) {
+			vec3_t	newAngles;
+
+			memset(newAngles,0,sizeof(newAngles));
+			trap_Argv( 6, buf, sizeof( buf ) );
+			newAngles[PITCH] = atoi(buf);
+			trap_Argv( 7, buf, sizeof( buf ) );
+			newAngles[YAW] = atoi(buf);
+
+			SetClientViewAngle( &g_entities[cl->ps.clientNum], newAngles );
+		}
+	}
+	else if( !Q_stricmp (cmd, "setspawn")  )
+	{
+		if( trap_Argc() != 8 ){
+			Com_Printf("usage: camcmd setspawn x y z a b c \n");
+			return;
+		}
+
+		for( i=0; i<3; i++){
+			trap_Argv( i+2, buf, sizeof(buf) );
+			level.cam_spawnpos[i] = atof(buf);
+		}
+		for( i=0; i<3; i++){
+			trap_Argv( i+5, buf, sizeof(buf) );
+			level.cam_spawnangles[i] = atof(buf);
+		}
+	}
+	else if( !Q_stricmp (cmd, "botmove")  )
+	{
+		vec3_t pos;
+
+		if( trap_Argc() != 6 ){
+			Com_Printf("usage: camcmd botmove name x y z \n");
+			return;
+		}
+
+		trap_Argv( 2, name, sizeof( name ) );
+
+		for( i=0; i<3; i++){
+			trap_Argv( i+3, buf, sizeof( buf) );
+			pos[i] = atof( buf );
+		}
+
+		cl = ClientForString( name ) ;
+		if(!cl) 
+			return;
+		BotCamMoveTo( cl->ps.clientNum, pos );
+	}
+	else if( !Q_stricmp (cmd, "botviewangles")  )
+	{
+		vec3_t angles;
+
+		if( trap_Argc() != 5 ){
+			Com_Printf("usage: camcmd botviewangles name x y \n");
+			return;
+		}
+
+		trap_Argv( 2, name, sizeof( name ) );
+		cl = ClientForString( name ) ;
+		if(!cl) 
+			return;
+		trap_Argv( 3, buf, sizeof( buf ) );
+		angles[PITCH] = atoi(buf);
+		trap_Argv( 4, buf, sizeof( buf ) );
+		angles[YAW] = atoi(buf);
+
+		BotCamViewangles( cl->ps.clientNum, angles );
+	}
+	else if( !Q_stricmp (cmd, "botviewtarget")  )
+	{
+		vec3_t target;
+
+		if( trap_Argc() != 6 ){
+			Com_Printf("usage: camcmd botviewtarget name x y z \n");
+			return;
+		}
+
+		trap_Argv( 2, name, sizeof( name ) );
+		cl = ClientForString( name ) ;
+		if(!cl) 
+			return;
+		trap_Argv( 3, buf, sizeof( buf ) );
+		target[0] = atoi(buf);
+		trap_Argv( 4, buf, sizeof( buf ) );
+		target[1] = atoi(buf);
+		trap_Argv( 5, buf, sizeof( buf ) );
+		target[2] = atoi(buf);
+
+		BotCamViewTarget( cl->ps.clientNum, target );
+	}
+	else if( !Q_stricmp (cmd, "botviewentity")  )
+	{
+//		int target_bot;
+		gclient_t* target_cl;
+		if( trap_Argc() != 4 ){
+			Com_Printf("usage: camcmd botviewentity name targetname \n");
+			return;
+		}
+
+		trap_Argv( 2, name, sizeof( name ) );
+		cl = ClientForString( name ) ;
+		if(!cl) 
+			return;
+
+		trap_Argv( 3, buf, sizeof( buf ) );
+		target_cl = ClientForString( buf );
+		if(!target_cl)
+			return;
+		BotCamViewEntitiy( cl->ps.clientNum, target_cl->ps.clientNum );
+
+	}
+	else if( !Q_stricmp (cmd, "boteditinv")  )
+	{
+		if( trap_Argc() < 3) 
+			return;
+		trap_Argv( 2, name, sizeof(name) );
+		cl = ClientForString( name );
+		if( !cl ) return;
+		EditPlayerInventory( &g_entities[cl->ps.clientNum], 3 );
+	}
+	else if( !Q_stricmp (cmd, "botchooseweap")  )
+	{
+		if( trap_Argc() != 4 ){
+			Com_Printf("usage: camcmd botchooseweap name weapID \n");
+			return;
+		}
+		trap_Argv( 2, name, sizeof( name ) );
+		cl = ClientForString( name ) ;
+		if(!cl) 
+			return;
+		trap_Argv( 3, buf, sizeof( buf ) );
+		BotChooseWeap( cl->ps.clientNum, atoi(buf) );
+	}
+	else if( !Q_stricmp (cmd, "bottaunt")  )
+	{
+		if( trap_Argc() != 3 ){
+			Com_Printf("usage: camcmd bottaunt name \n");
+			return;
+		}
+		trap_Argv( 2, name, sizeof( name ) );
+		cl = ClientForString( name ) ;
+		if(!cl) 
+			return;
+
+		BotCamTaunt( cl->ps.clientNum );
+	}
+	else if( !Q_stricmp(cmd, "botfire") )
+	{
+		if( trap_Argc() != 3 ){
+			Com_Printf("usage: camcmd botfire name \n");
+			return;
+		}
+		trap_Argv( 2, name, sizeof( name ) );
+		cl = ClientForString( name ) ;
+		if(!cl) 
+			return;
+
+		BotCamFire( cl->ps.clientNum );		
+	}
+	else if( !Q_stricmp(cmd, "freeze") ){
+		int on;
+
+		
+		if( trap_Argc() != 3 ){
+			Com_Printf("usage: camcmd freeze [0|1] \n");
+			return;
+		}
+		trap_Argv( 2, name, sizeof( name ) );
+		
+		on = atoi( name );
+		FreezePlayers( on );
+	}
+
+}
+
+
+void WaypointInit();
 /*
 =================
 ConsoleCommand
@@ -493,13 +868,75 @@ qboolean	ConsoleCommand( void ) {
 		return qtrue;
 	}
 
-	if (g_dedicated.integer) {
-		if (Q_stricmp (cmd, "say") == 0) {
-			trap_SendServerCommand( -1, va("print \"server: %s\"", ConcatArgs(1) ) );
+	if(Q_stricmp (cmd, "setGametype") == 0)
+	{
+		Svcmd_SetGameType_f();
+		return qtrue;
+	}
+	if(Q_stricmp (cmd, "startcam") == 0){
+        Svcmd_StartCam();
+		return qtrue;
+	}
+	if(Q_stricmp (cmd, "stopcam") == 0){
+        Svcmd_StopCam();
+		return qtrue;
+	}
+	if(Q_stricmp (cmd, "camcmd") == 0){
+		Svcmd_CamCmd();
+		return qtrue;
+	}
+	if( !Q_stricmp( cmd, "initwp") ){
+		WaypointInit();
+		return qtrue;
+	}
+
+	if ( Q_stricmp( cmd, "blibset") == 0 ) {
+		char key[MAX_TOKEN_CHARS];
+		char value[MAX_TOKEN_CHARS];
+
+		trap_Argv(1, key, sizeof(key) );
+		trap_Argv(2, value, sizeof(value) );
+		if(!strlen(key))
+		{
+			G_Printf("missing key\n");
 			return qtrue;
 		}
-		// everything else will also be printed as a say command
-		trap_SendServerCommand( -1, va("print \"server: %s\"", ConcatArgs(0) ) );
+
+		if( !strlen(value) )	// use "1" as default
+			strcpy( value, "1" );				
+		
+		trap_BotLibVarSet( key, value );
+		return qtrue;
+	}
+
+	if(wopSP_cmdCheck(cmd))
+		return qtrue;
+
+	if (g_dedicated.integer) {
+		if ( Q_stricmp( cmd, "ssay" ) == 0 ) {
+			Svcmd_Say_f();
+			return qtrue;
+		}
+		if ( Q_stricmp( cmd, "stell" ) == 0 ) {
+			Svcmd_Tell_f();
+			return qtrue;
+		}
+
+		if ( Q_stricmp( cmd, "scp" ) == 0 ) {
+			Svcmd_ClientCommand_f( CCMD_CP );
+			return qtrue;
+		}
+		if ( Q_stricmp( cmd, "smp" ) == 0 ) {
+			Svcmd_ClientCommand_f( CCMD_MP );
+			return qtrue;
+		}
+		if ( Q_stricmp( cmd, "sprint" ) == 0 ) {
+			Svcmd_ClientCommand_f( CCMD_PRINT );
+			return qtrue;
+		}
+
+		// everything else will also be printed to clients
+		trap_SendServerCommand( -1, va("print \"server: %s\n\"", ConcatArgs(0) ) );
 		return qtrue;
 	}
 

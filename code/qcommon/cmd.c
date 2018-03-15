@@ -34,6 +34,7 @@ typedef struct {
 } cmd_t;
 
 int			cmd_wait;
+int			cmd_wait_msec = 0;
 cmd_t		cmd_text;
 byte		cmd_text_buf[MAX_CMD_BUFFER];
 
@@ -52,11 +53,19 @@ bind g "cmd use rocket ; +attack ; wait ; -attack ; cmd use blaster"
 void Cmd_Wait_f( void ) {
 	if ( Cmd_Argc() == 2 ) {
 		cmd_wait = atoi( Cmd_Argv( 1 ) );
-		if ( cmd_wait < 0 )
-			cmd_wait = 1; // ignore the argument
 	} else {
 		cmd_wait = 1;
 	}
+}
+
+void Cmd_WaitMsec_f( void ){
+	int base;
+	if( Cmd_Argc() != 2 )
+		return;
+		
+	base = ( cmd_wait_msec > Com_Milliseconds() ) ? cmd_wait_msec : Com_Milliseconds();
+	
+	cmd_wait_msec = base + atoi( Cmd_Argv(1) );
 }
 
 
@@ -178,10 +187,14 @@ void Cbuf_Execute (void)
 
 	while (cmd_text.cursize)
 	{
-		if ( cmd_wait > 0 ) {
+		if ( cmd_wait )	{
 			// skip out while text still remains in buffer, leaving it
 			// for next frame
 			cmd_wait--;
+			break;
+		}
+
+		if( cmd_wait_msec > Com_Milliseconds() ){
 			break;
 		}
 
@@ -297,7 +310,11 @@ Just prints the rest of the line to the console
 */
 void Cmd_Echo_f (void)
 {
-	Com_Printf ("%s\n", Cmd_Args());
+	int		i;
+	
+	for (i=1 ; i<Cmd_Argc() ; i++)
+		Com_Printf ("%s ",Cmd_Argv(i));
+	Com_Printf ("\n");
 }
 
 
@@ -792,5 +809,6 @@ void Cmd_Init (void) {
 	Cmd_SetCommandCompletionFunc( "vstr", Cvar_CompleteCvarName );
 	Cmd_AddCommand ("echo",Cmd_Echo_f);
 	Cmd_AddCommand ("wait", Cmd_Wait_f);
+	Cmd_AddCommand ("waitmsec", Cmd_WaitMsec_f);
 }
 

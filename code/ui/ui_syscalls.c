@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 static intptr_t (QDECL *syscall)( intptr_t arg, ... ) = (intptr_t (QDECL *)( intptr_t, ...))-1;
 
-Q_EXPORT void dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg,... ) ) {
+void dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg,... ) ) {
 	syscall = syscallptr;
 }
 
@@ -398,4 +398,21 @@ qboolean trap_VerifyCDKey( const char *key, const char *chksum) {
 
 void trap_SetPbClStatus( int status ) {
 	syscall( UI_SET_PBCLSTATUS, status );
+}
+
+int trap_GetVoiceMuteClient(int client)
+{
+	return syscall( UI_GET_VOICEMUTECLIENT, client);
+}
+
+int trap_GetVoiceMuteAll(void)
+{
+	return syscall(	UI_GET_VOICEMUTEALL );
+}
+
+float trap_GetVoiceGainClient(int client)
+{
+	floatint_t fi;
+	fi.i = syscall( UI_GET_VOICEGAIN, client );
+	return fi.f;
 }

@@ -489,10 +489,10 @@ static void CodeError( char *fmt, ... ) {
 
 	errorCount++;
 
-	fprintf( stderr, "%s:%i ", currentFileName, currentFileLine );
+	report( "%s:%i ", currentFileName, currentFileLine );
 
 	va_start( argptr,fmt );
-	vfprintf( stderr, fmt, argptr );
+	vprintf( fmt,argptr );
 	va_end( argptr );
 }
 
@@ -1520,13 +1520,12 @@ static void ShowHelp( char *argv0 ) {
 	Error("Usage: %s [OPTION]... [FILES]...\n\
 Assemble LCC bytecode assembly to Q3VM bytecode.\n\
 \n\
-  -o OUTPUT      Write assembled output to file OUTPUT.qvm\n\
-  -f LISTFILE    Read options and list of files to assemble from LISTFILE.q3asm\n\
-  -b BUCKETS     Set symbol hash table to BUCKETS buckets\n\
-  -m             Generate a mapfile for each OUTPUT.qvm\n\
-  -v             Verbose compilation report\n\
-  -vq3           Produce a qvm file compatible with Q3 1.32b\n\
-  -h --help -?   Show this help\n\
+    -o OUTPUT      Write assembled output to file OUTPUT.qvm\n\
+    -f LISTFILE    Read options and list of files to assemble from LISTFILE.q3asm\n\
+    -b BUCKETS     Set symbol hash table to BUCKETS buckets\n\
+    -v             Verbose compilation report\n\
+    -vq3           Produce a qvm file compatible with Q3 1.32b\n\
+    -h --help -?   Show this help\n\
 ", argv0);
 }
 

@@ -7,7 +7,7 @@
 
 	NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ErrorWindow.nib" bundle:[NSBundle mainBundle]];
 	[nib instantiateNibWithOwner:self topLevelObjects:nil];
-	
+
 	[errorWindow makeKeyWindow];
 	[errorTextField setFont:[NSFont userFixedPitchFontOfSize:12.0]];
 	[errorTextField setString:@""];
