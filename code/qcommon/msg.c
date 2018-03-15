@@ -324,7 +324,7 @@ void MSG_WriteString( msg_t *sb, const char *s ) {
 
 		// get rid of 0x80+ and '%' chars, because old clients don't like them
 		for ( i = 0 ; i < l ; i++ ) {
-			if ( ((byte *)string)[i] > 127 || string[i] == '%' ) {
+			if ( ((byte *)string)[i] == 0xFF || string[i] == '%' ) {
 				string[i] = '.';
 			}
 		}
@@ -350,7 +350,7 @@ void MSG_WriteBigString( msg_t *sb, const char *s ) {
 
 		// get rid of 0x80+ and '%' chars, because old clients don't like them
 		for ( i = 0 ; i < l ; i++ ) {
-			if ( ((byte *)string)[i] > 127 || string[i] == '%' ) {
+			if ( ((byte *)string)[i] == 0xFF || string[i] == '%' ) {
 				string[i] = '.';
 			}
 		}
@@ -455,7 +455,8 @@ char *MSG_ReadString( msg_t *msg ) {
 			c = '.';
 		}
 		// don't allow higher ascii values
-		if ( c > 127 ) {
+//		if ( c > 127 ) {
+		if ( c == 0xff ) {
 			c = '.';
 		}
 
@@ -483,7 +484,8 @@ char *MSG_ReadBigString( msg_t *msg ) {
 			c = '.';
 		}
 		// don't allow higher ascii values
-		if ( c > 127 ) {
+//		if ( c > 127 ) {
+		if ( c == 0xff ) {
 			c = '.';
 		}
 
@@ -511,7 +513,8 @@ char *MSG_ReadStringLine( msg_t *msg ) {
 			c = '.';
 		}
 		// don't allow higher ascii values
-		if ( c > 127 ) {
+//		if ( c > 127 ) {
+		if ( c == 0xff ) {
 			c = '.';
 		}
 
@@ -1190,7 +1193,7 @@ netField_t	playerStateFields[] =
 { PSF(grapplePoint[0]), 0 },
 { PSF(grapplePoint[1]), 0 },
 { PSF(grapplePoint[2]), 0 },
-{ PSF(jumppad_ent), GENTITYNUM_BITS },
+{ PSF(jumppad_ent), 10 },
 { PSF(loopSound), 16 }
 };
 

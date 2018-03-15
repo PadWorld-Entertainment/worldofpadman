@@ -23,6 +23,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // q_shared.c -- stateless support routines that are included in each code dll
 #include "q_shared.h"
 
+int demo_protocols[] =
+{ 66, 67, 68, 69, 70, 71, 0 };
+
 float Com_Clamp( float min, float max, float value ) {
 	if ( value < min ) {
 		return min;
@@ -1260,6 +1263,52 @@ qboolean Info_Validate( const char *s ) {
 		return qfalse;
 	}
 	return qtrue;
+}
+
+void StringDump_Push(char* s, const char* value){
+	const char* blacklist = "\\;\"";
+	char	newi[MAX_INFO_STRING];
+	
+	// scan value for blacklisted chars
+	for(; *blacklist; ++blacklist){
+		if ( strchr(value, *blacklist) ){
+			Com_Printf (S_COLOR_YELLOW "StringDump_Push illegal char '%c'in %s\n", *blacklist, value);
+			return;
+		}
+	}
+	
+	Com_sprintf (newi, sizeof(newi), "\\%s", value);
+	
+	if (strlen(newi) + strlen(s) >= MAX_INFO_STRING){
+		Com_Printf ("Info string length exceeded\n");
+		return;
+	}
+	strcat (newi, s);
+	strcpy (s, newi);
+}
+
+void StringDump_GetNext( const char **head, char *value ) {
+	char	*o;
+	const char	*s;
+
+	s = *head;
+
+	if ( *s == '\\' ) {
+		s++;
+	}
+	value[0] = 0;
+
+	o = value;
+	while ( *s != '\\' ) {
+		if ( !*s ) {
+			*o = 0;
+			*head = s;
+			return;
+		}
+		*o++ = *s++;
+	}
+	*o = 0;
+	*head = s;
 }
 
 /*

@@ -1120,6 +1120,9 @@ static void RB_IterateStagesGeneric( shaderCommands_t *input )
 		}
 
 		ComputeColors( pStage );
+		if( backEnd.currentEntity && (backEnd.currentEntity->e.renderfx & RF_FORCEENTALPHA) )
+			//TODO: extra code for "blend add"
+			RB_CalcAlphaFromEntity( ( unsigned char * ) tess.svars.colors );
 		ComputeTexCoords( pStage );
 
 		if ( !setArraysOnce )
@@ -1152,7 +1155,16 @@ static void RB_IterateStagesGeneric( shaderCommands_t *input )
 			else 
 				R_BindAnimatedImage( &pStage->bundle[0] );
 
-			GL_State( pStage->stateBits );
+			//TODO: extra code for "blend add"
+			if( backEnd.currentEntity && backEnd.currentEntity->e.renderfx & RF_FORCEENTALPHA &&
+				!(pStage->stateBits & GLS_SRCBLEND_SRC_ALPHA && pStage->stateBits & GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA) )
+			{
+				int hackedState = pStage->stateBits & ~(GLS_SRCBLEND_BITS|GLS_DSTBLEND_BITS);
+				hackedState |= GLS_SRCBLEND_SRC_ALPHA|GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA;
+				GL_State( hackedState );
+			}
+			else
+				GL_State( pStage->stateBits );
 
 			//
 			// draw

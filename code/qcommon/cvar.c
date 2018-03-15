@@ -168,15 +168,10 @@ int Cvar_Flags(const char *var_name)
 {
 	cvar_t *var;
 	
-	if(!(var = Cvar_FindVar(var_name)))
+	if(! (var = Cvar_FindVar(var_name)) )
 		return CVAR_NONEXISTENT;
 	else
-	{
-		if(var->modified)
-			return var->flags | CVAR_MODIFIED;
-		else
-			return var->flags;
-	}
+		return var->flags;
 }
 
 /*
@@ -638,10 +633,10 @@ void Cvar_SetSafe( const char *var_name, const char *value )
 	{
 		if( value )
 			Com_Error( ERR_DROP, "Restricted source tried to set "
-				"\"%s\" to \"%s\"", var_name, value );
+				"\"%s\" to \"%s\"\n", var_name, value );
 		else
 			Com_Error( ERR_DROP, "Restricted source tried to "
-				"modify \"%s\"", var_name );
+				"modify \"%s\"\n", var_name );
 		return;
 	}
 	Cvar_Set( var_name, value );

@@ -55,9 +55,7 @@ cvar_t	*cl_nodelta;
 cvar_t	*cl_debugMove;
 
 cvar_t	*cl_noprint;
-#ifdef UPDATE_SERVER_NAME
 cvar_t	*cl_motd;
-#endif
 
 cvar_t	*rcon_client_password;
 cvar_t	*rconAddress;
@@ -315,7 +313,7 @@ void CL_VoipParseTargets(void)
 {
 	const char *target = cl_voipSendTarget->string;
 	char *end;
-	int val;
+	int val = -1;
 
 	Com_Memset(clc.voipTargets, 0, sizeof(clc.voipTargets));
 	clc.voipFlags &= ~VOIP_SPATIAL;
@@ -357,6 +355,10 @@ void CL_VoipParseTargets(void)
 				{
 					val = VM_Call(cgvm, CG_CROSSHAIR_PLAYER);
 					target += 9;
+				}
+				else if( !Q_stricmpn(target,"team", 4))
+				{
+					target += 4;
 				}
 				else
 				{
@@ -1524,7 +1526,7 @@ CL_RequestMotd
 ===================
 */
 void CL_RequestMotd( void ) {
-#ifdef UPDATE_SERVER_NAME
+/*
 	char		info[MAX_INFO_STRING];
 
 	if ( !cl_motd->integer ) {
@@ -1550,7 +1552,7 @@ void CL_RequestMotd( void ) {
 	Info_SetValueForKey( info, "version", com_version->string );
 
 	NET_OutOfBandPrint( NS_CLIENT, cls.updateServer, "getmotd \"%s\"\n", info );
-#endif
+*/
 }
 
 /*
@@ -2412,7 +2414,6 @@ CL_MotdPacket
 ===================
 */
 void CL_MotdPacket( netadr_t from ) {
-#ifdef UPDATE_SERVER_NAME
 	char	*challenge;
 	char	*info;
 
@@ -2433,7 +2434,6 @@ void CL_MotdPacket( netadr_t from ) {
 
 	Q_strncpyz( cls.updateInfoString, info, sizeof( cls.updateInfoString ) );
 	Cvar_Set( "cl_motdString", challenge );
-#endif
 }
 
 /*
@@ -2609,7 +2609,7 @@ void CL_ConnectionlessPacket( netadr_t from, msg_t *msg ) {
 	
 		if (clc.state != CA_CONNECTING)
 		{
-			Com_DPrintf("Unwanted challenge response received. Ignored.\n");
+			Com_DPrintf("Unwanted challenge response received.  Ignored.\n");
 			return;
 		}
 		
@@ -2688,7 +2688,7 @@ void CL_ConnectionlessPacket( netadr_t from, msg_t *msg ) {
 	// server connection
 	if ( !Q_stricmp(c, "connectResponse") ) {
 		if ( clc.state >= CA_CONNECTED ) {
-			Com_Printf ("Dup connect received. Ignored.\n");
+			Com_Printf ("Dup connect received.  Ignored.\n");
 			return;
 		}
 		if ( clc.state != CA_CHALLENGING ) {
@@ -3111,7 +3111,15 @@ void CL_InitRenderer( void ) {
 	re.BeginRegistration( &cls.glconfig );
 
 	// load character sets
-	cls.charSetShader = re.RegisterShader( "gfx/2d/bigchars" );
+	if(cls.glconfig.hardwareType == GLHW_GENERIC)
+	{
+		cls.charSetShader			= re.RegisterShader( "gfx/2d/WoPascii" );
+		if(!cls.charSetShader)
+			cls.charSetShader			= re.RegisterShader( "gfx/2d/bigchars" );
+	}
+	else
+		cls.charSetShader = re.RegisterShader( "gfx/2d/bigchars" );
+
 	cls.whiteShader = re.RegisterShader( "white" );
 	cls.consoleShader = re.RegisterShader( "console" );
 	g_console_field_width = cls.glconfig.vidWidth / SMALLCHAR_WIDTH - 2;
@@ -3445,9 +3453,7 @@ void CL_Init( void ) {
 	// register our variables
 	//
 	cl_noprint = Cvar_Get( "cl_noprint", "0", 0 );
-#ifdef UPDATE_SERVER_NAME
 	cl_motd = Cvar_Get ("cl_motd", "1", 0);
-#endif
 
 	cl_timeout = Cvar_Get ("cl_timeout", "200", 0);
 
@@ -3491,7 +3497,7 @@ void CL_Init( void ) {
 	cl_showMouseRate = Cvar_Get ("cl_showmouserate", "0", 0);
 
 	cl_allowDownload = Cvar_Get ("cl_allowDownload", "0", CVAR_ARCHIVE);
-#ifdef USE_CURL_DLOPEN
+#ifdef USE_CURL
 	cl_cURLLib = Cvar_Get("cl_cURLLib", DEFAULT_CURL_LIB, CVAR_ARCHIVE);
 #endif
 
@@ -3538,22 +3544,17 @@ void CL_Init( void ) {
 	cl_guidServerUniq = Cvar_Get ("cl_guidServerUniq", "1", CVAR_ARCHIVE);
 
 	// ~ and `, as keys and characters
-	cl_consoleKeys = Cvar_Get( "cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
+	cl_consoleKeys = Cvar_Get( "cl_consoleKeys", "~ 0x7e", CVAR_ARCHIVE);
 
 	// userinfo
-	Cvar_Get ("name", "UnnamedPlayer", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("name", "PadPlayer", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("rate", "25000", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("snaps", "20", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("model", "sarge", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("headmodel", "sarge", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("team_model", "james", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("team_headmodel", "*james", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("g_redTeam", "Stroggs", CVAR_SERVERINFO | CVAR_ARCHIVE);
-	Cvar_Get ("g_blueTeam", "Pagans", CVAR_SERVERINFO | CVAR_ARCHIVE);
-	Cvar_Get ("color1",  "4", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("color2", "5", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("model", "padman", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("headmodel", "padman", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("team_model", "padman", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("team_headmodel", "padman", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("handicap", "100", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("teamtask", "0", CVAR_USERINFO );
 	Cvar_Get ("sex", "male", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("cl_anonymous", "0", CVAR_USERINFO | CVAR_ARCHIVE );
 
@@ -3569,10 +3570,10 @@ void CL_Init( void ) {
 	cl_voipSend = Cvar_Get ("cl_voipSend", "0", 0);
 	cl_voipSendTarget = Cvar_Get ("cl_voipSendTarget", "spatial", 0);
 	cl_voipGainDuringCapture = Cvar_Get ("cl_voipGainDuringCapture", "0.2", CVAR_ARCHIVE);
-	cl_voipCaptureMult = Cvar_Get ("cl_voipCaptureMult", "2.0", CVAR_ARCHIVE);
+	cl_voipCaptureMult = Cvar_Get ("cl_voipCaptureMult", "4.0", CVAR_ARCHIVE);
 	cl_voipUseVAD = Cvar_Get ("cl_voipUseVAD", "0", CVAR_ARCHIVE);
 	cl_voipVADThreshold = Cvar_Get ("cl_voipVADThreshold", "0.25", CVAR_ARCHIVE);
-	cl_voipShowMeter = Cvar_Get ("cl_voipShowMeter", "1", CVAR_ARCHIVE);
+	cl_voipShowMeter = Cvar_Get ("cl_voipShowMeter", "0", CVAR_ARCHIVE);
 
 	// This is a protocol version number.
 	cl_voip = Cvar_Get ("cl_voip", "1", CVAR_USERINFO | CVAR_ARCHIVE | CVAR_LATCH);
@@ -3721,7 +3722,6 @@ static void CL_SetServerInfo(serverInfo_t *server, const char *info, int ping) {
 			server->netType = atoi(Info_ValueForKey(info, "nettype"));
 			server->minPing = atoi(Info_ValueForKey(info, "minping"));
 			server->maxPing = atoi(Info_ValueForKey(info, "maxping"));
-			server->punkbuster = atoi(Info_ValueForKey(info, "punkbuster"));
 			server->g_humanplayers = atoi(Info_ValueForKey(info, "g_humanplayers"));
 			server->g_needpass = atoi(Info_ValueForKey(info, "g_needpass"));
 		}
@@ -3763,22 +3763,13 @@ void CL_ServerInfoPacket( netadr_t from, msg_t *msg ) {
 	char	*infoString;
 	int		prot;
 	char	*gamename;
-	qboolean gameMismatch;
 
 	infoString = MSG_ReadString( msg );
 
 	// if this isn't the correct gamename, ignore it
 	gamename = Info_ValueForKey( infoString, "gamename" );
 
-#ifdef LEGACY_PROTOCOL
-	// gamename is optional for legacy protocol
-	if (com_legacyprotocol->integer && !*gamename)
-		gameMismatch = qfalse;
-	else
-#endif
-		gameMismatch = !*gamename || strcmp(gamename, com_gamename->string) != 0;
-
-	if (gameMismatch)
+	if (gamename && *gamename && strcmp(gamename, com_gamename->string))
 	{
 		Com_DPrintf( "Game mismatch in info packet: %s\n", infoString );
 		return;
@@ -3866,7 +3857,6 @@ void CL_ServerInfoPacket( netadr_t from, msg_t *msg ) {
 	cls.localServers[i].game[0] = '\0';
 	cls.localServers[i].gameType = 0;
 	cls.localServers[i].netType = from.type;
-	cls.localServers[i].punkbuster = 0;
 	cls.localServers[i].g_humanplayers = 0;
 	cls.localServers[i].g_needpass = 0;
 									 

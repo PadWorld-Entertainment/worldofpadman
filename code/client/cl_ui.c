@@ -297,7 +297,6 @@ static void LAN_GetServerInfo( int source, int n, char *buf, int buflen ) {
 		Info_SetValueForKey( info, "gametype", va("%i",server->gameType));
 		Info_SetValueForKey( info, "nettype", va("%i",server->netType));
 		Info_SetValueForKey( info, "addr", NET_AdrToStringwPort(server->adr));
-		Info_SetValueForKey( info, "punkbuster", va("%i", server->punkbuster));
 		Info_SetValueForKey( info, "g_needpass", va("%i", server->g_needpass));
 		Info_SetValueForKey( info, "g_humanplayers", va("%i", server->g_humanplayers));
 		Q_strncpyz(buf, info, buflen);
@@ -666,6 +665,41 @@ static void CLUI_SetCDKey( char *buf ) {
 }
 #endif
 
+static float CLUI_GetVoiceGain( const int id ) {
+#ifndef USE_VOIP
+		return 0;
+#else	
+	if ( ( id < 0 ) || ( id >= ( sizeof( clc.voipGain ) / sizeof( clc.voipGain[0] ) ) ) ) {
+		return 0;
+	}
+
+	// TODO: make sure server is running
+	return clc.voipGain[id];
+#endif
+}
+
+static int CLUI_GetVoiceMuteClient( const int id ) {
+#ifndef USE_VOIP
+	return 0;
+#else
+	if ( ( id < 0 ) || ( id >= ( sizeof( clc.voipIgnore ) / sizeof( clc.voipIgnore[0] ) ) ) ) {
+		return 0;
+	}
+
+	// TODO: make sure server is running
+	return clc.voipIgnore[id];
+#endif
+}
+
+static int CLUI_GetVoiceMuteAll( void ) {
+#ifndef USE_VOIP
+	return 0;
+#else
+	// TODO: make sure server is running
+	return clc.voipMuteAll;
+#endif
+}
+
 /*
 ====================
 GetConfigString
@@ -765,7 +799,7 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 		return 0;
 
 	case UI_CMD_EXECUTETEXT:
-		if(args[1] == EXEC_NOW
+		if(args[1] == 0
 		&& (!strncmp(VMA(2), "snd_restart", 11)
 		|| !strncmp(VMA(2), "vid_restart", 11)
 		|| !strncmp(VMA(2), "quit", 5)))
@@ -985,6 +1019,15 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 	case UI_R_REGISTERFONT:
 		re.RegisterFont( VMA(1), args[2], VMA(3));
 		return 0;
+		
+	case UI_GET_VOICEMUTECLIENT:
+		return CLUI_GetVoiceMuteClient(args[1]);
+
+	case UI_GET_VOICEMUTEALL:
+		return CLUI_GetVoiceMuteAll();
+
+	case UI_GET_VOICEGAIN:
+		return FloatAsInt( CLUI_GetVoiceGain(args[1]) );
 
 	case UI_MEMSET:
 		Com_Memset( VMA(1), args[2], args[3] );
@@ -1059,8 +1102,10 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 		re.RemapShader( VMA(1), VMA(2), VMA(3) );
 		return 0;
 
+#ifndef STANDALONE
 	case UI_VERIFY_CDKEY:
 		return CL_CDKeyValidate(VMA(1), VMA(2));
+#endif
 		
 	default:
 		Com_Error( ERR_DROP, "Bad UI system trap: %ld", (long int) args[0] );
@@ -1098,14 +1143,13 @@ void CL_InitUI( void ) {
 	vmInterpret_t		interpret;
 
 	// load the dll or bytecode
-	interpret = Cvar_VariableValue("vm_ui");
-	if(cl_connectedToPureServer)
-	{
+	if ( cl_connectedToPureServer != 0 ) {
 		// if sv_pure is set we only allow qvms to be loaded
-		if(interpret != VMI_COMPILED && interpret != VMI_BYTECODE)
-			interpret = VMI_COMPILED;
+		interpret = VMI_COMPILED;
 	}
-
+	else {
+		interpret = Cvar_VariableValue( "vm_ui" );
+	}
 	uivm = VM_Create( "ui", CL_UISystemCalls, interpret );
 	if ( !uivm ) {
 		Com_Error( ERR_FATAL, "VM_Create on UI failed" );
@@ -1119,10 +1163,6 @@ void CL_InitUI( void ) {
 		VM_Call( uivm, UI_INIT, (clc.state >= CA_AUTHORIZING && clc.state < CA_ACTIVE));
 	}
 	else if (v != UI_API_VERSION) {
-		// Free uivm now, so UI_SHUTDOWN doesn't get called later.
-		VM_Free( uivm );
-		uivm = NULL;
-
 		Com_Error( ERR_DROP, "User Interface is version %d, expected %d", v, UI_API_VERSION );
 		cls.uiStarted = qfalse;
 	}

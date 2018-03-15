@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 /*
 =======================================================================
@@ -33,6 +13,10 @@ CONFIRMATION MENU
 
 
 #define ART_CONFIRM_FRAME	"menu/art/cut_frame"
+#define CONF_YES0			"menu/exit/yes0"
+#define CONF_YES1			"menu/exit/yes1"
+#define CONF_NO0			"menu/exit/no0"
+#define CONF_NO1			"menu/exit/no1"
 
 #define ID_CONFIRM_NO		10
 #define ID_CONFIRM_YES		11
@@ -41,8 +25,12 @@ CONFIRMATION MENU
 typedef struct {
 	menuframework_s menu;
 
-	menutext_s		no;
+/*	menutext_s		no;
 	menutext_s		yes;
+*/
+	menubitmap_s	yes;
+	menubitmap_s	no;
+	menutext_s		ok;
 
 	int				slashX;
 	const char *	question;
@@ -142,10 +130,11 @@ static void MessageMenu_Draw( void ) {
 ConfirmMenu_Draw
 =================
 */
-static void ConfirmMenu_Draw( void ) {
-	UI_DrawNamedPic( 142, 118, 359, 256, ART_CONFIRM_FRAME );
-	UI_DrawProportionalString( 320, 204, s_confirm.question, s_confirm.style, color_red );
-	UI_DrawProportionalString( s_confirm.slashX, 265, "/", UI_LEFT|UI_INVERSE, color_red );
+static void ConfirmMenu_Draw( void )
+{
+	UI_DrawIngameBG();
+	UI_DrawStringNS( 320, 204, s_confirm.question, s_confirm.style,24, color_black );
+//	UI_DrawProportionalString( s_confirm.slashX, 265, "/", UI_LEFT, color_black );
 
 	Menu_Draw( &s_confirm.menu );
 
@@ -160,7 +149,8 @@ static void ConfirmMenu_Draw( void ) {
 ConfirmMenu_Cache
 =================
 */
-void ConfirmMenu_Cache( void ) {
+void ConfirmMenu_Cache( void )
+{
 	trap_R_RegisterShaderNoMip( ART_CONFIRM_FRAME );
 }
 
@@ -170,7 +160,8 @@ void ConfirmMenu_Cache( void ) {
 UI_ConfirmMenu_Stlye
 =================
 */
-void UI_ConfirmMenu_Style( const char *question, int style, void (*draw)( void ), void (*action)( qboolean result ) ) {
+void UI_ConfirmMenu_Style( const char *question, int style, void (*draw)( void ), void (*action)( qboolean result ) )
+{
 	uiClientState_t	cstate;
 	int	n1, n2, n3;
 	int	l1, l2, l3;
@@ -205,25 +196,51 @@ void UI_ConfirmMenu_Style( const char *question, int style, void (*draw)( void )
 		s_confirm.menu.fullscreen = qtrue;
 	}
 
-	s_confirm.yes.generic.type		= MTYPE_PTEXT;      
-	s_confirm.yes.generic.flags		= QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS; 
+/*	s_confirm.yes.generic.type		= MTYPE_PTEXT;      
+	s_confirm.yes.generic.flags		= QMF_LEFT_JUSTIFY; 
 	s_confirm.yes.generic.callback	= ConfirmMenu_Event;
 	s_confirm.yes.generic.id		= ID_CONFIRM_YES;
 	s_confirm.yes.generic.x			= l1;
 	s_confirm.yes.generic.y			= 264;
 	s_confirm.yes.string			= "YES";
-	s_confirm.yes.color				= color_red;
+	s_confirm.yes.color				= color_black;
+	s_confirm.yes.focuscolor		= color_orange;
 	s_confirm.yes.style				= UI_LEFT;
 
 	s_confirm.no.generic.type		= MTYPE_PTEXT;      
-	s_confirm.no.generic.flags		= QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS; 
+	s_confirm.no.generic.flags		= QMF_LEFT_JUSTIFY; 
 	s_confirm.no.generic.callback	= ConfirmMenu_Event;
 	s_confirm.no.generic.id			= ID_CONFIRM_NO;
 	s_confirm.no.generic.x		    = l3;
 	s_confirm.no.generic.y		    = 264;
 	s_confirm.no.string				= "NO";
-	s_confirm.no.color			    = color_red;
+	s_confirm.no.color			    = color_black;
+	s_confirm.no.focuscolor			= color_orange;
 	s_confirm.no.style			    = UI_LEFT;
+*/
+	s_confirm.yes.generic.type		= MTYPE_BITMAP;
+	s_confirm.yes.generic.name		= CONF_YES0;
+	s_confirm.yes.generic.flags		= QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS; 
+	s_confirm.yes.generic.callback	= ConfirmMenu_Event;
+	s_confirm.yes.generic.id		= ID_CONFIRM_YES;
+	s_confirm.yes.generic.x			= l1+15;
+	s_confirm.yes.generic.y			= 264;
+    s_confirm.yes.width				= 43;//65;
+	s_confirm.yes.height			= 30;//40;
+	s_confirm.yes.focuspic			= CONF_YES1;
+	s_confirm.yes.focuspicinstead	= qtrue;
+
+	s_confirm.no.generic.type		= MTYPE_BITMAP;
+	s_confirm.no.generic.name		= CONF_NO0;
+	s_confirm.no.generic.flags		= QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS; 
+	s_confirm.no.generic.callback	= ConfirmMenu_Event;
+	s_confirm.no.generic.id			= ID_CONFIRM_NO;
+	s_confirm.no.generic.x		    = l3;
+	s_confirm.no.generic.y		    = 264;
+    s_confirm.no.width				= 33;//45;
+	s_confirm.no.height				= 30;//40;
+	s_confirm.no.focuspic			= CONF_NO1;
+	s_confirm.no.focuspicinstead	= qtrue;
 
 	Menu_AddItem( &s_confirm.menu,	&s_confirm.yes );             
 	Menu_AddItem( &s_confirm.menu,	&s_confirm.no );
@@ -275,17 +292,17 @@ void UI_Message( const char **lines ) {
 		s_confirm.menu.fullscreen = qtrue;
 	}
 
-	s_confirm.yes.generic.type		= MTYPE_PTEXT;      
-	s_confirm.yes.generic.flags		= QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS; 
-	s_confirm.yes.generic.callback	= ConfirmMenu_Event;
-	s_confirm.yes.generic.id		= ID_CONFIRM_YES;
-	s_confirm.yes.generic.x			= l1;
-	s_confirm.yes.generic.y			= 280;
-	s_confirm.yes.string			= "OK";
-	s_confirm.yes.color				= color_red;
-	s_confirm.yes.style				= UI_LEFT;
+	s_confirm.ok.generic.type		= MTYPE_PTEXT;      
+	s_confirm.ok.generic.flags		= QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS; 
+	s_confirm.ok.generic.callback	= ConfirmMenu_Event;
+	s_confirm.ok.generic.id			= ID_CONFIRM_YES;
+	s_confirm.ok.generic.x			= l1;
+	s_confirm.ok.generic.y			= 280;
+	s_confirm.ok.string				= "OK";
+	s_confirm.ok.color				= color_red;
+	s_confirm.ok.style				= UI_LEFT;
 
-	Menu_AddItem( &s_confirm.menu,	&s_confirm.yes );
+	Menu_AddItem( &s_confirm.menu,	&s_confirm.ok );
 	
 	UI_PushMenu( &s_confirm.menu );
 

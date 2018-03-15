@@ -170,6 +170,13 @@ S_CodecOpenStream
 */
 snd_stream_t *S_CodecOpenStream(const char *filename)
 {
+//wop_music{
+	if(!strcmp(filename,"<nextsongCMD>") )
+	{
+		Cbuf_ExecuteText( EXEC_APPEND, "wop_nextsong\n");
+		return NULL;
+	}
+//wop_music}
 	return S_CodecGetSound(filename, NULL);
 }
 
@@ -201,7 +208,7 @@ snd_stream_t *S_CodecUtilOpen(const char *filename, snd_codec_t *codec)
 	length = FS_FOpenFileRead(filename, &hnd, qtrue);
 	if(!hnd)
 	{
-		Com_DPrintf("Can't read sound file %s\n", filename);
+		Com_Printf("Can't read sound file %s\n", filename);
 		return NULL;
 	}
 

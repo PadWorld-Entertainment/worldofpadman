@@ -1076,8 +1076,8 @@ static void SV_Status_f( void ) {
 
 	Com_Printf ("map: %s\n", sv_mapname->string );
 
-	Com_Printf ("num score ping name            lastmsg address               qport rate\n");
-	Com_Printf ("--- ----- ---- --------------- ------- --------------------- ----- -----\n");
+	Com_Printf ("num score team ping name            lastmsg address               qport rate\n");
+	Com_Printf ("--- ----- ---- ---- --------------- ------- --------------------- ----- -----\n");
 	for (i=0,cl=svs.clients ; i < sv_maxclients->integer ; i++,cl++)
 	{
 		if (!cl->state)
@@ -1085,6 +1085,7 @@ static void SV_Status_f( void ) {
 		Com_Printf ("%3i ", i);
 		ps = SV_GameClientNum( i );
 		Com_Printf ("%5i ", ps->persistant[PERS_SCORE]);
+		Com_Printf( "%4i ", (ps->pm_flags & PMF_FOLLOW) ? TEAM_SPECTATOR : ps->persistant[PERS_TEAM] );
 
 		if (cl->state == CS_CONNECTED)
 			Com_Printf ("CNCT ");
@@ -1161,6 +1162,8 @@ static void SV_ConSay_f(void) {
 
 	strcat(text, p);
 
+	// FIXME: This does not work with wop, as wop uses "chat #id #text" now
+	//        Would be best to remove this to gamecode
 	SV_SendServerCommand(NULL, "chat \"%s\"", text);
 }
 

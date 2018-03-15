@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 
 // cg_localents.c -- every frame, generate renderer commands for locally
@@ -154,6 +134,7 @@ CG_FragmentBounceMark
 ================
 */
 void CG_FragmentBounceMark( localEntity_t *le, trace_t *trace ) {
+/*
 	int			radius;
 
 	if ( le->leMarkType == LEMT_BLOOD ) {
@@ -172,6 +153,7 @@ void CG_FragmentBounceMark( localEntity_t *le, trace_t *trace ) {
 	// don't allow a fragment to make multiple marks, or they
 	// pile up while settling
 	le->leMarkType = LEMT_NONE;
+*/
 }
 
 /*
@@ -298,7 +280,7 @@ void CG_AddFragment( localEntity_t *le ) {
 	// if it is in a nodrop zone, remove it
 	// this keeps gibs from waiting at the bottom of pits of death
 	// and floating levels
-	if ( CG_PointContents( trace.endpos, 0 ) & CONTENTS_NODROP ) {
+	if ( trap_CM_PointContents( trace.endpos, 0 ) & CONTENTS_NODROP ) {
 		CG_FreeLocalEntity( le );
 		return;
 	}
@@ -347,6 +329,29 @@ void CG_AddFadeRGB( localEntity_t *le ) {
 }
 
 /*
+====================
+CG_AddSprayTrailFade
+====================
+*/
+void CG_AddSprayTrailFade( localEntity_t *le ) {
+	refEntity_t *re;
+	float c;
+
+	re = &le->refEntity;
+
+	c = ( le->endTime - cg.time ) * le->lifeRate;
+	c *= 0xff;
+
+	re->shaderRGBA[3] = le->color[3] * c;
+
+	re->radius = le->radius*(cg.time-le->startTime)/le->angles.trDuration;//(le->endTime-le->startTime);
+
+	BG_EvaluateTrajectory( &le->pos, cg.time, re->origin );
+
+	trap_R_AddRefEntityToScene( re );
+}
+
+/*
 ==================
 CG_AddMoveScaleFade
 ==================
@@ -368,6 +373,27 @@ static void CG_AddMoveScaleFade( localEntity_t *le ) {
 		c = ( le->endTime - cg.time ) * le->lifeRate;
 	}
 
+	if ( re->hModel ) {
+		if ( (le->leFlags & LEF_AXIS_ALIGNED) && le->radius ) {
+			// it has a variing scale
+			AxisClear( re->axis );
+			AxisScale( re->axis, re->radius + le->radius * (cg.time - le->startTime) / (le->endTime - le->startTime), re->axis );
+		}
+		if ( !(le->leFlags & LEF_AXIS_ALIGNED) ) {
+			// model looks in flight direction
+			vec3_t	delta, angles;
+			
+			BG_EvaluateTrajectoryDelta( &le->pos, cg.time, delta );
+			vectoangles( delta, angles );
+			AnglesToAxis( angles, re->axis );
+			//if ( re->radius || le->radius ) AxisScale( re->axis, re->radius + le->radius * (cg.time - le->startTime) / (le->endTime - le->startTime), re->axis );
+		}
+	}
+
+	// HERBY: Particles
+	re->shaderRGBA[0] = 0xff * c * le->color[0];
+	re->shaderRGBA[1] = 0xff * c * le->color[1];
+	re->shaderRGBA[2] = 0xff * c * le->color[2];
 	re->shaderRGBA[3] = 0xff * c * le->color[3];
 
 	if ( !( le->leFlags & LEF_PUFF_DONT_SCALE ) ) {
@@ -375,6 +401,25 @@ static void CG_AddMoveScaleFade( localEntity_t *le ) {
 	}
 
 	BG_EvaluateTrajectory( &le->pos, cg.time, re->origin );
+
+	// check for collisions
+	if ( le->leFlags & LEF_COLLISIONS ) {
+		// do a trace sometimes
+		if ( (cg.oldTime >> 6) != (cg.time >> 6) ) {
+			trace_t		trace;
+
+			CG_Trace( &trace, re->oldorigin, NULL, NULL, re->origin, -1, CONTENTS_SOLID );
+			VectorCopy( re->origin, re->oldorigin );
+
+			// hit something
+			if ( trace.fraction < 1.0 ) {
+				// stop
+				VectorCopy( trace.endpos, le->pos.trBase );
+				le->pos.trType = TR_STATIONARY;
+				le->leFlags &= ~(LEF_COLLISIONS | LEF_TUMBLE);
+			}
+		}
+	}
 
 	// if the view would be "inside" the sprite, kill the sprite
 	// so it doesn't add too much overdraw
@@ -477,7 +522,16 @@ static void CG_AddExplosion( localEntity_t *ex ) {
 	ent = &ex->refEntity;
 
 	// add the entity
-	trap_R_AddRefEntityToScene(ent);
+	if ( ent->customShader == cgs.media.nipperWaveShader )
+	{
+		vec3_t	axisCopy[3];
+		AxisCopy( ent->axis, axisCopy );
+		AxisScale( ent->axis, 0.05 + 0.2 * (float)( cg.time - ex->startTime ) / ( ex->endTime - ex->startTime ), ent->axis );
+		trap_R_AddRefEntityToScene(ent);
+		AxisCopy( axisCopy, ent->axis );
+	}
+	else
+		trap_R_AddRefEntityToScene(ent);
 
 	// add the dlight
 	if ( ex->light ) {
@@ -535,179 +589,677 @@ static void CG_AddSpriteExplosion( localEntity_t *le ) {
 	}
 }
 
-
-#ifdef MISSIONPACK
 /*
 ====================
-CG_AddKamikaze
+CG_AddTrail
 ====================
 */
-void CG_AddKamikaze( localEntity_t *le ) {
-	refEntity_t	*re;
-	refEntity_t shockwave;
-	float		c;
-	vec3_t		test, axis[3];
-	int			t;
+#define TRAIL_TEXSCALE		0.005
+// FADETIME declared in cg_local.h
+
+void CG_AddTrail( localEntity_t *le ) {
+	vec3_t		endPos, startPos;
+	vec3_t		endDir, startDir, beamDir;
+	vec3_t		endDelta, startDelta;
+	float		texScale;
+	int			fadeFrac;
+	polyVert_t	verts[4];
+
+	// calculate positions and delta vectors
+	BG_EvaluateTrajectory( &le->pos, le->fadeInTime, endPos );
+	BG_EvaluateTrajectory( &le->pos, le->pos.trTime, startPos );
+	startPos[2] -= 5;
+
+	VectorSubtract( startPos, cg.refdef.vieworg, startDir );
+	VectorSubtract( endPos, cg.refdef.vieworg, endDir );
+	VectorSubtract( endPos, startPos, beamDir );
+
+	texScale = VectorLength( beamDir ) * TRAIL_TEXSCALE;
+	VectorNormalize( beamDir );
+
+	CrossProduct( startDir, beamDir, startDelta );
+	CrossProduct( endDir, beamDir, endDelta );
+
+	VectorNormalize2( startDelta, startDir );
+	VectorNormalize2( endDelta, endDir );
+
+	// calc fade fraction
+	fadeFrac = 255 - ((cg.time - le->fadeInTime) * 255 / TRAIL_FADETIME);
+	if ( fadeFrac < 0 ) fadeFrac = 0;
+	if ( fadeFrac > 255 ) fadeFrac = 255;
+
+	// set vert properties
+	verts[0].st[0] = 0;	
+	verts[0].st[1] = 0;	
+	verts[0].modulate[0] = verts[0].modulate[1] = verts[0].modulate[2] = 0;	
+	verts[0].modulate[3] = 255;	
+
+	verts[1].st[0] = 0;	
+	verts[1].st[1] = 1;	
+	verts[1].modulate[0] = verts[1].modulate[1] = verts[1].modulate[2] = 0;	
+	verts[1].modulate[3] = 255;	
+
+	verts[2].st[0] = texScale;	
+	verts[2].st[1] = 1;	
+	verts[2].modulate[0] = verts[2].modulate[1] = verts[2].modulate[2] = fadeFrac;	
+	verts[2].modulate[3] = 255;	
+
+	verts[3].st[0] = texScale;	
+	verts[3].st[1] = 0;	
+	verts[3].modulate[0] = verts[3].modulate[1] = verts[3].modulate[2] = fadeFrac;	
+	verts[3].modulate[3] = 255;	
+
+	// add first plane
+	RotatePointAroundVector( startDelta, beamDir, startDir, 30 );
+	RotatePointAroundVector( endDelta, beamDir, endDir, 30 );
+
+	VectorMA( startPos,  le->refEntity.radius, startDelta, verts[0].xyz );
+	VectorMA( startPos, -le->refEntity.radius, startDelta, verts[1].xyz );
+	VectorMA( endPos, -le->refEntity.radius, endDelta, verts[2].xyz );
+	VectorMA( endPos,  le->refEntity.radius, endDelta, verts[3].xyz );
+
+	trap_R_AddPolyToScene( le->refEntity.customShader, 4, verts );
+
+	// add second plane
+	RotatePointAroundVector( startDelta, beamDir, startDir, -30 );
+	RotatePointAroundVector( endDelta, beamDir, endDir, -30 );
+
+	VectorMA( startPos,  le->refEntity.radius, startDelta, verts[0].xyz );
+	VectorMA( startPos, -le->refEntity.radius, startDelta, verts[1].xyz );
+	VectorMA( endPos, -le->refEntity.radius, endDelta, verts[2].xyz );
+	VectorMA( endPos,  le->refEntity.radius, endDelta, verts[3].xyz );
+
+	trap_R_AddPolyToScene( le->refEntity.customShader, 4, verts );
+}
+
+/*
+====================
+CG_AddTrailTracedRGB
+====================
+*/
+void CG_AddTrailTracedRGB( localEntity_t *le ) {
+	vec3_t		endPos, startPos;
+	vec3_t		endDir, startDir, beamDir;
+	vec3_t		endDelta, startDelta;
+	float		texScale;
+	int			fadeFrac;
+	polyVert_t	verts[4];
+	trace_t		trace;
+
+	// calculate positions and delta vectors
+	BG_EvaluateTrajectory( &le->pos, le->fadeInTime, endPos );
+	BG_EvaluateTrajectory( &le->pos, le->pos.trTime, startPos );
+	startPos[2] -= 5;
+
+	/* trace to get a reasonable trail endpoint
+	for missiles that travel rediculously fast like kma97
+	( I guess that could be kinda costly though.. )*/
+	CG_Trace( &trace, startPos, vec3_origin, vec3_origin, endPos, 0, MASK_SHOT );
+	VectorCopy( trace.endpos, endPos );
+	
+	VectorSubtract( startPos, cg.refdef.vieworg, startDir );
+	VectorSubtract( endPos, cg.refdef.vieworg, endDir );
+	VectorSubtract( endPos, startPos, beamDir );
+
+	texScale = VectorLength( beamDir ) * TRAIL_TEXSCALE;
+	VectorNormalize( beamDir );
+
+	CrossProduct( startDir, beamDir, startDelta );
+	CrossProduct( endDir, beamDir, endDelta );
+
+	VectorNormalize2( startDelta, startDir );
+	VectorNormalize2( endDelta, endDir );
+
+	// calc fade fraction
+	fadeFrac = 255 - ((cg.time - le->fadeInTime) * 255 / TRAIL_FADETIME);
+	if ( fadeFrac < 0 ) fadeFrac = 0;
+	if ( fadeFrac > 255 ) fadeFrac = 255;
+
+	// set vert properties
+	verts[0].st[0] = 0;	
+	verts[0].st[1] = 0;	
+	verts[0].modulate[0] = 0;
+	verts[0].modulate[1] = 0;
+	verts[0].modulate[2] = 0;
+	verts[0].modulate[3] = 255;	
+
+	verts[1].st[0] = 0;	
+	verts[1].st[1] = 1;	
+	verts[1].modulate[0] = 0;
+	verts[1].modulate[1] = 0;
+	verts[1].modulate[2] = 0;
+	verts[1].modulate[3] = 255;	
+
+	verts[2].st[0] = texScale;	
+	verts[2].st[1] = 1;	
+	verts[2].modulate[0] = le->color[0] * fadeFrac;
+	verts[2].modulate[1] = le->color[1] * fadeFrac;
+	verts[2].modulate[2] = le->color[2] * fadeFrac;
+	verts[2].modulate[3] = 255;	
+
+	verts[3].st[0] = texScale;	
+	verts[3].st[1] = 0;	
+	verts[3].modulate[0] = le->color[0] * fadeFrac;
+	verts[3].modulate[1] = le->color[1] * fadeFrac;
+	verts[3].modulate[2] = le->color[2] * fadeFrac;
+	verts[3].modulate[3] = 255;
+	
+	// add first plane
+	RotatePointAroundVector( startDelta, beamDir, startDir, 30 );
+	RotatePointAroundVector( endDelta, beamDir, endDir, 30 );
+
+	VectorMA( startPos,  le->refEntity.radius, startDelta, verts[0].xyz );
+	VectorMA( startPos, -le->refEntity.radius, startDelta, verts[1].xyz );
+	VectorMA( endPos, -le->refEntity.radius, endDelta, verts[2].xyz );
+	VectorMA( endPos,  le->refEntity.radius, endDelta, verts[3].xyz );
+
+	trap_R_AddPolyToScene( le->refEntity.customShader, 4, verts );
+
+	// add second plane
+	RotatePointAroundVector( startDelta, beamDir, startDir, -30 );
+	RotatePointAroundVector( endDelta, beamDir, endDir, -30 );
+
+	VectorMA( startPos,  le->refEntity.radius, startDelta, verts[0].xyz );
+	VectorMA( startPos, -le->refEntity.radius, startDelta, verts[1].xyz );
+	VectorMA( endPos, -le->refEntity.radius, endDelta, verts[2].xyz );
+	VectorMA( endPos,  le->refEntity.radius, endDelta, verts[3].xyz );
+
+	trap_R_AddPolyToScene( le->refEntity.customShader, 4, verts );
+}
+
+/*
+====================
+CG_CalcNormAxis
+====================
+*/
+void CG_CalcNormAxis( const vec3_t dir, vec3_t axis[3] )
+{
+	vec3_t	adir;
+
+	// forward vector is the dir
+	VectorCopy( dir, axis[0] );
+
+	// find up vector
+	if ( dir[2] != 0.0f ) {
+		VectorCopy( dir, adir );
+		if ( adir[2] > 0 ) VectorScale( adir, -1, adir ); 
+		axis[1][0] = adir[0]; 
+		axis[1][1] = adir[1]; 
+		axis[1][2] = -(adir[0]*adir[0] + adir[1]*adir[1]) / adir[2];
+		VectorNormalize( axis[1] );
+	} else {
+		VectorSet( axis[1], 0, 0, 1 );
+	}
+
+	// find the normal
+	CrossProduct( axis[1], axis[0], axis[2] );
+}
+
+/*
+====================
+CG_AddWaterBeam
+====================
+*/
+#define BOASTER_WIDTH		4
+#define BOASTER_FADEOUT		500
+#define BOASTER_TRACETIME	100
+#define BOASTER_IMPACTTIME	600
+#define BOASTER_IMPACTUP	20
+#define BOASTER_IMPACTSIDE	30
+#define BOASTER_TEARDIST	128
+// FADETIME declared in cg_local.h
+
+void CG_AddWaterBeam( localEntity_t *le ) {
+	vec3_t		endPos, startPos;
+	vec3_t		endDir, startDir, beamDir;
+	vec3_t		endDelta, startDelta;
+	vec3_t		endAxis[3], startAxis[3];
+	vec3_t		rot;
+	int			fade, fadeEnd;
+	int			i;
+	float		phi;
+	polyVert_t	verts[4];
+	float		startwidth, endwidth;
+
+	// changing back to sv-muzzelPoint, after some time (first cl-movement is done from weaponmodel-muzzelPoint)
+	if(le->angles.trTime && cg.time-le->pos.trTime>150)	{
+		vec3_t oldCurPos, newCurPos;
+		trace_t tr;
+		BG_EvaluateTrajectory( &le->pos, le->startTime, oldCurPos );
+
+		VectorCopy(le->angles.trBase,le->pos.trBase);
+		VectorCopy(le->angles.trDelta,le->pos.trDelta);
+		le->angles.trTime=0;
+
+		BG_EvaluateTrajectory( &le->pos, le->startTime, newCurPos );
+
+		// check if there is a wall between current and new pos
+		CG_Trace( &tr, oldCurPos, NULL, NULL, newCurPos, le->ownerNum, MASK_SHOT);
+		if(tr.fraction!=1.0f || tr.startsolid) {
+			if ( !(tr.surfaceFlags & SURF_NOIMPACT) )
+				CG_MissileHitWall( WP_BOASTER, (tr.entityNum == ENTITYNUM_WORLD && tr.plane.normal[2] > 0.8), tr.endpos, tr.plane.normal, 0, IMPACTSOUND_DEFAULT );
+			return;
+		}
+
+//		BG_EvaluateTrajectory( &le->pos, cg.time, startPos );
+//		CG_GenerateParticles( cgs.media.fireDropModel, 0, startPos, 16, le->pos.trDelta, 120, 
+//			250, 4, 0, cg.time, 700, 400, 0, 0, 0, 0, LEF_GRAVITY | LEF_COLLISIONS, 0 );
+	}
+
+	if( le->newer && le->newer->angles.trTime && cg.time-le->newer->pos.trTime>150)
+	{
+		VectorCopy(le->newer->angles.trBase,le->newer->pos.trBase);
+		VectorCopy(le->newer->angles.trDelta,le->newer->pos.trDelta);
+		le->newer->angles.trTime=0;
+	}
+
+	if( le->older && le->older->angles.trTime && cg.time-le->older->pos.trTime>150)
+	{
+		VectorCopy(le->older->angles.trBase,le->older->pos.trBase);
+		VectorCopy(le->older->angles.trDelta,le->older->pos.trDelta);
+		le->older->angles.trTime=0;
+	}
+
+	// check for last entity
+	if ( !le->newer )
+	{
+		centity_t	*owner;
+		vec3_t		forward;
+		owner = &cg_entities[le->ownerNum];
+
+		// get the current muzzle
+		if ( !(owner->currentState.eFlags & EF_DEAD) )
+		{
+			CG_GetWaterMuzzle( le, owner, forward );
+//			VectorCopy( le->color, startPos );
+			VectorCopy(cgs.clientinfo[owner->currentState.number].realmuzzle, startPos);
+
+			if ( DotProduct( forward, owner->beamEnd ) < 0.98 ) 
+			{
+				// get independent
+				if ( le->older ) le->older->newer = le->older;
+				le->older = le;
+			}
+		}
+		else VectorCopy( le->pos.trBase, startPos );
+
+		startwidth = 1.5f;
+	}
+	else
+	{
+		BG_EvaluateTrajectory( &le->newer->pos, cg.time, startPos );
+
+		if(cg.time-le->newer->pos.trTime>50)
+			startwidth=BOASTER_WIDTH;
+		else
+			startwidth=1.5f+2.5f*(float)(cg.time-le->newer->pos.trTime)*0.01f;// 1/100=0.01f
+	}
+
+	// calculate positions and delta vectors
+	BG_EvaluateTrajectory( &le->pos, cg.time, endPos );
+	VectorSubtract( endPos, startPos, beamDir );
+
+	// tear beam apart, if needed
+	if ( le == le->newer || (!le->newer && VectorLength( beamDir ) > BOASTER_TEARDIST) ) 
+	{
+//		if ( le->older && le != le->older ) le->older->newer = le->older;
+		le->newer = le;
+		fadeEnd = 0;
+
+		// take velocity for direction of the beam
+		BG_EvaluateTrajectoryDelta( &le->pos, cg.time, startDelta );
+		VectorNormalize( startDelta );
+
+		endwidth=startwidth;
+		if(cg.time-le->pos.trTime>70)
+			VectorMA( endPos, -BOASTER_TEARDIST, startDelta, startPos );
+
+		VectorSubtract( endPos, startPos, beamDir );	
+	}
+	else
+	{
+		fadeEnd = 255;
+		if(cg.time-le->pos.trTime>50)
+			endwidth=BOASTER_WIDTH;
+		else
+			endwidth=1.5f+2.5f*(float)(cg.time-le->pos.trTime)*0.01f;// 1/100=0.01f
+	}
+
+	// check for wall hits
+	if ( cg.time > le->startTime + BOASTER_TRACETIME )
+	{
+		trace_t	tr;
+static vec3_t minBoaster = {-8.0f,-8.0f,-8.0f};
+static vec3_t maxBoaster = {8.0f,8.0f,8.0f};
+
+		BG_EvaluateTrajectory( &le->pos, le->startTime, endDelta );
+		CG_Trace( &tr, endDelta, minBoaster, maxBoaster, endPos, le->ownerNum, MASK_SHOT);
+
+		if ( tr.fraction < 1.0 )
+		{
+			// impact
+			if ( le->newer && le != le->newer ) le->newer->older = le->newer;
+			if ( le->older && le != le->older ) le->older->newer = le->older;
+
+			if ( !(tr.surfaceFlags & SURF_NOIMPACT) )
+				CG_MissileHitWall( WP_BOASTER, (tr.entityNum == ENTITYNUM_WORLD && tr.plane.normal[2] > 0.8), tr.endpos, tr.plane.normal, 0, IMPACTSOUND_DEFAULT );//clientNum wird hier missbraucht ;P
+
+			CG_FreeLocalEntity( le );
+			return;
+		}
+
+		le->startTime = cg.time;
+	}
+	
+	// set static vert properties
+	verts[0].st[0] = 0;	
+	verts[0].st[1] = 0;	
+	verts[0].modulate[3] = 255;	
+
+	verts[1].st[0] = 0;	
+	verts[1].st[1] = 1;	
+	verts[1].modulate[3] = 255;	
+
+	verts[2].st[0] = 1;	
+	verts[2].st[1] = 1;	
+	verts[2].modulate[3] = 255;	
+
+	verts[3].st[0] = 1;	
+	verts[3].st[1] = 0;	
+	verts[3].modulate[3] = 255;	
+
+	if ( cg.time > le->endTime - BOASTER_FADEOUT ) {
+		fade = 255 * (float)(le->endTime - cg.time) / BOASTER_FADEOUT;
+		fadeEnd *= (float)(le->endTime - cg.time) / BOASTER_FADEOUT;
+	} else
+		fade = 255;
+
+	// use the beamDir for the startDir
+	VectorNormalize( beamDir );
+	VectorCopy( beamDir, startDir );
+	VectorCopy( beamDir, endDir );
+
+	// calc an endDir out of the older le
+	if ( le->older && le->older != le ) {
+		BG_EvaluateTrajectory( &le->older->pos, cg.time, endDelta );
+		VectorSubtract( endDelta, endPos, endDir );
+		VectorNormalize( endDir );
+	}
+
+	CG_CalcNormAxis( startDir, startAxis );
+	CG_CalcNormAxis( endDir, endAxis );
+
+	// set vert properties
+	VectorSet( verts[0].modulate, fadeEnd, fadeEnd, fadeEnd );
+	VectorSet( verts[1].modulate, fadeEnd, fadeEnd, fadeEnd );
+	VectorSet( verts[2].modulate, fade, fade, fade );
+	VectorSet( verts[3].modulate, fade, fade, fade );
+
+	// add planes
+	phi = 0;
+	VectorSet( rot, 0, 0, 1 );
+	VectorRotateTMatrix( rot, startAxis, startDelta );
+	VectorRotateTMatrix( rot, endAxis, endDelta );
+
+	for ( i = 0; i < 6; i++ )
+	{
+		VectorCopy( startDelta, startDir );
+		VectorCopy( endDelta, endDir );
+
+		phi += M_PI/3;
+		VectorSet( rot, 0, sin(phi), cos(phi) );
+		VectorRotateTMatrix( rot, startAxis, startDelta );
+		VectorRotateTMatrix( rot, endAxis, endDelta );
+
+		VectorMA( startPos, startwidth, startDir, verts[0].xyz );
+		VectorMA( startPos, startwidth, startDelta, verts[1].xyz );
+		VectorMA( endPos, endwidth, endDelta, verts[2].xyz );
+		VectorMA( endPos, endwidth, endDir, verts[3].xyz );
+
+		trap_R_AddPolyToScene( cgs.media.waterBeamShader, 4, verts );
+	}
+
+	// add planes
+/*	for ( i = 0; i < 3; i++ )
+	{
+		phi = i*2*M_PI/3;
+		VectorSet( rot, 0, sin(phi), cos(phi) );
+		VectorRotateTMatrix( rot, startAxis, startDelta );
+		VectorRotateTMatrix( rot, endAxis, endDelta );
+
+		VectorMA( startPos,  BOASTER_WIDTH, startDelta, verts[0].xyz );
+		VectorMA( startPos, -BOASTER_WIDTH, startDelta, verts[1].xyz );
+		VectorMA( endPos, -BOASTER_WIDTH, endDelta, verts[2].xyz );
+		VectorMA( endPos,  BOASTER_WIDTH, endDelta, verts[3].xyz );
+
+		trap_R_AddPolyToScene( cgs.media.waterBeamShader, 4, verts );
+	}*/
+}
+
+/*
+====================
+CG_AddPumperTrail
+====================
+*/
+#define PUMPER_WIDTH		6
+#define PUMPER_DELTA_PHI	(M_PI/5)
+#define PUMPER_DELTA_POS	16
+
+void CG_AddPumperTrail( localEntity_t *le ) {
+	vec3_t		axis[3];
+	vec3_t		beamDir, rot;
+	vec3_t		newDelta, lastDelta;
+	vec3_t		newPos, lastPos;
+	int			fade, modulate;
+	float		phi, pos, dist;
+	polyVert_t	verts[4];
+
+	// set static vert properties
+	fade = 255 * (float)(le->endTime - cg.time) / (float)(le->endTime - le->startTime);
+
+	verts[0].st[0] = 0;	
+	verts[0].st[1] = 0;	
+	verts[0].modulate[3] = 255;	
+
+	verts[1].st[0] = 0;	
+	verts[1].st[1] = 1;	
+	verts[1].modulate[3] = 255;	
+
+	verts[2].st[0] = 1;	
+	verts[2].st[1] = 1;	
+	verts[2].modulate[3] = 255;	
+
+	verts[3].st[0] = 1;	
+	verts[3].st[1] = 0;	
+	verts[3].modulate[3] = 255;	
+
+	// calculate axis
+	VectorSubtract( le->pos.trDelta, le->pos.trBase, beamDir );
+	dist = VectorLength( beamDir );
+	VectorNormalize( beamDir );
+	CG_CalcNormAxis( beamDir, axis );
+	VectorScale( beamDir, PUMPER_DELTA_POS, beamDir );
+
+	// initialize
+	VectorSet( rot, 0, 0, 1 );
+	VectorRotateTMatrix( rot, axis, newDelta );
+	VectorCopy( le->pos.trBase, newPos );
+	phi = le->lifeRate;
+	pos = 0;
+	modulate = 0;
+	VectorSet( verts[2].modulate, modulate, modulate, modulate );
+	VectorSet( verts[3].modulate, modulate, modulate, modulate );
+
+	// add planes
+	do
+	{
+		// store old position and delta
+		VectorCopy( newDelta, lastDelta );
+		VectorCopy( newPos, lastPos );
+
+		// set the modulate values
+		VectorCopy( verts[2].modulate, verts[0].modulate );
+		VectorCopy( verts[3].modulate, verts[1].modulate );
+
+		modulate = pos > 0.2*dist ? fade : fade * pos / dist * 5;
+		VectorSet( verts[2].modulate, modulate, modulate, modulate );
+		VectorSet( verts[3].modulate, modulate, modulate, modulate );
+
+		// get new delta
+		phi += PUMPER_DELTA_PHI;
+		VectorSet( rot, 0, sin(phi), cos(phi) );
+		VectorRotateTMatrix( rot, axis, newDelta );
+
+		// get new position
+		if ( pos + PUMPER_DELTA_POS > dist )
+			VectorScale( beamDir, (dist - pos) / PUMPER_DELTA_POS, beamDir );
+
+		pos += PUMPER_DELTA_POS;
+		VectorAdd( lastPos, beamDir, newPos );
+
+		VectorMA( lastPos,  PUMPER_WIDTH, lastDelta, verts[0].xyz );
+		VectorMA( lastPos, -PUMPER_WIDTH, lastDelta, verts[1].xyz );
+		VectorMA( newPos,  -PUMPER_WIDTH, newDelta,  verts[2].xyz );
+		VectorMA( newPos,   PUMPER_WIDTH, newDelta,  verts[3].xyz );
+
+		trap_R_AddPolyToScene( cgs.media.pumperTrailShader, 4, verts );
+	} while ( pos < dist );
+}
+
+
+void CG_AddBoomiesExplosion( localEntity_t *le ) {
+	refEntity_t *re;
+	float	frac;
+
+	// setup and fade
+	re = &le->refEntity;
+	frac = (le->endTime - cg.time) * le->lifeRate;
+
+	// resize
+	AnglesToAxis( le->angles.trBase, re->axis );
+	AxisScale( re->axis, 2 * (1.05 - frac), re->axis ); //imperius: 10 * (1.05 - frac)
+
+	// render the core
+	re->reType = RT_SPRITE;
+	re->customShader = cgs.media.boomiesCoreShader;
+	re->radius = 20 + 200 * sin( M_PI * frac );
+	re->shaderRGBA[0] = re->shaderRGBA[1] = re->shaderRGBA[2] = (frac > 0.25) ? 255 : 255*4 * frac;
+	trap_R_AddRefEntityToScene( re );
+
+/*	// render the rings
+	re->reType = RT_MODEL;
+	re->customShader = 0;
+	re->hModel = cgs.media.imperiusRingsModel;
+	re->shaderRGBA[0] = re->shaderRGBA[1] = re->shaderRGBA[2] = 255 * frac;
+	trap_R_AddRefEntityToScene( re );
+*/
+	// render the sphere
+	if ( frac > 0.3 )
+	{
+		frac = (frac - 0.3) * 3;
+		if ( frac > 1.0 ) frac = 1.0;
+		re->reType = RT_MODEL;
+		re->customShader = 0;
+		re->hModel = cgs.media.boomiesSphereModel;
+		re->shaderRGBA[0] = re->shaderRGBA[1] = re->shaderRGBA[2] = 255 * frac;
+		trap_R_AddRefEntityToScene( re );
+	}
+}
+
+/*
+====================
+CG_AddImperiusBoom
+====================
+*/
+void CG_AddImperiusBoom( localEntity_t *le ) {
+	refEntity_t *re;
+	float	frac;
+
+	// setup and fade
+	re = &le->refEntity;
+	frac = (le->endTime - cg.time) * le->lifeRate;
+
+	// resize
+	AnglesToAxis( le->angles.trBase, re->axis );
+	AxisScale( re->axis, 10 * (1.05 - frac), re->axis );
+
+	// render the core
+	re->reType = RT_SPRITE;
+	re->customShader = cgs.media.imperiusCoreShader;
+	re->radius = 20 + 200 * sin( M_PI * frac );
+	re->shaderRGBA[0] = re->shaderRGBA[1] = re->shaderRGBA[2] = (frac > 0.25) ? 255 : 255*4 * frac;
+	trap_R_AddRefEntityToScene( re );
+
+	// render the rings
+	re->reType = RT_MODEL;
+	re->customShader = 0;
+	re->hModel = cgs.media.imperiusRingsModel;
+	re->shaderRGBA[0] = re->shaderRGBA[1] = re->shaderRGBA[2] = 255 * frac;
+	trap_R_AddRefEntityToScene( re );
+
+	// render the sphere
+	if ( frac > 0.3 )
+	{
+		frac = (frac - 0.3) * 3;
+		if ( frac > 1.0 ) frac = 1.0;
+		re->hModel = cgs.media.imperiusSphereModel;
+		re->shaderRGBA[0] = re->shaderRGBA[1] = re->shaderRGBA[2] = 255 * frac;
+		trap_R_AddRefEntityToScene( re );
+	}
+}
+
+
+/*
+====================
+CG_AddImperiusRings
+====================
+*/
+void CG_AddImperiusRings( localEntity_t *le ) {
+	refEntity_t *re;
+	vec3_t	axis[3];
+	float	c, s;
 
 	re = &le->refEntity;
 
-	t = cg.time - le->startTime;
-	VectorClear( test );
-	AnglesToAxis( test, axis );
+	c = ( le->endTime - cg.time ) * le->lifeRate;
+	c *= 0xff;
+	re->shaderRGBA[0] = le->color[0] * c;
+	re->shaderRGBA[1] = le->color[1] * c;
+	re->shaderRGBA[2] = le->color[2] * c;
+	re->shaderRGBA[3] = le->color[3] * c;
 
-	if (t > KAMI_SHOCKWAVE_STARTTIME && t < KAMI_SHOCKWAVE_ENDTIME) {
+	s = 0.1 + ( cg.time - le->startTime ) * le->lifeRate * 0.3;
+	AxisCopy( re->axis, axis );
+	AxisScale( axis, s, re->axis );
 
-		if (!(le->leFlags & LEF_SOUND1)) {
-//			trap_S_StartSound (re->origin, ENTITYNUM_WORLD, CHAN_AUTO, cgs.media.kamikazeExplodeSound );
-			trap_S_StartLocalSound(cgs.media.kamikazeExplodeSound, CHAN_AUTO);
-			le->leFlags |= LEF_SOUND1;
-		}
-		// 1st kamikaze shockwave
-		memset(&shockwave, 0, sizeof(shockwave));
-		shockwave.hModel = cgs.media.kamikazeShockWave;
-		shockwave.reType = RT_MODEL;
-		shockwave.shaderTime = re->shaderTime;
-		VectorCopy(re->origin, shockwave.origin);
+	trap_R_AddRefEntityToScene( re );
 
-		c = (float)(t - KAMI_SHOCKWAVE_STARTTIME) / (float)(KAMI_SHOCKWAVE_ENDTIME - KAMI_SHOCKWAVE_STARTTIME);
-		VectorScale( axis[0], c * KAMI_SHOCKWAVE_MAXRADIUS / KAMI_SHOCKWAVEMODEL_RADIUS, shockwave.axis[0] );
-		VectorScale( axis[1], c * KAMI_SHOCKWAVE_MAXRADIUS / KAMI_SHOCKWAVEMODEL_RADIUS, shockwave.axis[1] );
-		VectorScale( axis[2], c * KAMI_SHOCKWAVE_MAXRADIUS / KAMI_SHOCKWAVEMODEL_RADIUS, shockwave.axis[2] );
-		shockwave.nonNormalizedAxes = qtrue;
-
-		if (t > KAMI_SHOCKWAVEFADE_STARTTIME) {
-			c = (float)(t - KAMI_SHOCKWAVEFADE_STARTTIME) / (float)(KAMI_SHOCKWAVE_ENDTIME - KAMI_SHOCKWAVEFADE_STARTTIME);
-		}
-		else {
-			c = 0;
-		}
-		c *= 0xff;
-		shockwave.shaderRGBA[0] = 0xff - c;
-		shockwave.shaderRGBA[1] = 0xff - c;
-		shockwave.shaderRGBA[2] = 0xff - c;
-		shockwave.shaderRGBA[3] = 0xff - c;
-
-		trap_R_AddRefEntityToScene( &shockwave );
-	}
-
-	if (t > KAMI_EXPLODE_STARTTIME && t < KAMI_IMPLODE_ENDTIME) {
-		// explosion and implosion
-		c = ( le->endTime - cg.time ) * le->lifeRate;
-		c *= 0xff;
-		re->shaderRGBA[0] = le->color[0] * c;
-		re->shaderRGBA[1] = le->color[1] * c;
-		re->shaderRGBA[2] = le->color[2] * c;
-		re->shaderRGBA[3] = le->color[3] * c;
-
-		if( t < KAMI_IMPLODE_STARTTIME ) {
-			c = (float)(t - KAMI_EXPLODE_STARTTIME) / (float)(KAMI_IMPLODE_STARTTIME - KAMI_EXPLODE_STARTTIME);
-		}
-		else {
-			if (!(le->leFlags & LEF_SOUND2)) {
-//				trap_S_StartSound (re->origin, ENTITYNUM_WORLD, CHAN_AUTO, cgs.media.kamikazeImplodeSound );
-				trap_S_StartLocalSound(cgs.media.kamikazeImplodeSound, CHAN_AUTO);
-				le->leFlags |= LEF_SOUND2;
-			}
-			c = (float)(KAMI_IMPLODE_ENDTIME - t) / (float) (KAMI_IMPLODE_ENDTIME - KAMI_IMPLODE_STARTTIME);
-		}
-		VectorScale( axis[0], c * KAMI_BOOMSPHERE_MAXRADIUS / KAMI_BOOMSPHEREMODEL_RADIUS, re->axis[0] );
-		VectorScale( axis[1], c * KAMI_BOOMSPHERE_MAXRADIUS / KAMI_BOOMSPHEREMODEL_RADIUS, re->axis[1] );
-		VectorScale( axis[2], c * KAMI_BOOMSPHERE_MAXRADIUS / KAMI_BOOMSPHEREMODEL_RADIUS, re->axis[2] );
-		re->nonNormalizedAxes = qtrue;
-
-		trap_R_AddRefEntityToScene( re );
-		// add the dlight
-		trap_R_AddLightToScene( re->origin, c * 1000.0, 1.0, 1.0, c );
-	}
-
-	if (t > KAMI_SHOCKWAVE2_STARTTIME && t < KAMI_SHOCKWAVE2_ENDTIME) {
-		// 2nd kamikaze shockwave
-		if (le->angles.trBase[0] == 0 &&
-			le->angles.trBase[1] == 0 &&
-			le->angles.trBase[2] == 0) {
-			le->angles.trBase[0] = random() * 360;
-			le->angles.trBase[1] = random() * 360;
-			le->angles.trBase[2] = random() * 360;
-		}
-		memset(&shockwave, 0, sizeof(shockwave));
-		shockwave.hModel = cgs.media.kamikazeShockWave;
-		shockwave.reType = RT_MODEL;
-		shockwave.shaderTime = re->shaderTime;
-		VectorCopy(re->origin, shockwave.origin);
-
-		test[0] = le->angles.trBase[0];
-		test[1] = le->angles.trBase[1];
-		test[2] = le->angles.trBase[2];
-		AnglesToAxis( test, axis );
-
-		c = (float)(t - KAMI_SHOCKWAVE2_STARTTIME) / (float)(KAMI_SHOCKWAVE2_ENDTIME - KAMI_SHOCKWAVE2_STARTTIME);
-		VectorScale( axis[0], c * KAMI_SHOCKWAVE2_MAXRADIUS / KAMI_SHOCKWAVEMODEL_RADIUS, shockwave.axis[0] );
-		VectorScale( axis[1], c * KAMI_SHOCKWAVE2_MAXRADIUS / KAMI_SHOCKWAVEMODEL_RADIUS, shockwave.axis[1] );
-		VectorScale( axis[2], c * KAMI_SHOCKWAVE2_MAXRADIUS / KAMI_SHOCKWAVEMODEL_RADIUS, shockwave.axis[2] );
-		shockwave.nonNormalizedAxes = qtrue;
-
-		if (t > KAMI_SHOCKWAVE2FADE_STARTTIME) {
-			c = (float)(t - KAMI_SHOCKWAVE2FADE_STARTTIME) / (float)(KAMI_SHOCKWAVE2_ENDTIME - KAMI_SHOCKWAVE2FADE_STARTTIME);
-		}
-		else {
-			c = 0;
-		}
-		c *= 0xff;
-		shockwave.shaderRGBA[0] = 0xff - c;
-		shockwave.shaderRGBA[1] = 0xff - c;
-		shockwave.shaderRGBA[2] = 0xff - c;
-		shockwave.shaderRGBA[3] = 0xff - c;
-
-		trap_R_AddRefEntityToScene( &shockwave );
-	}
+	AxisCopy( axis, re->axis );
 }
 
 /*
-===================
-CG_AddInvulnerabilityImpact
-===================
+====================
+CG_AddTeleffect
+====================
 */
-void CG_AddInvulnerabilityImpact( localEntity_t *le ) {
-	trap_R_AddRefEntityToScene( &le->refEntity );
+void CG_AddTeleffect( localEntity_t *le ) {
+	refEntity_t *re;
+	float		frac;
+
+	// setup and fade
+	re = &le->refEntity;
+	frac = (le->endTime - cg.time) * le->lifeRate;
+
+	// resize
+	AnglesToAxis( le->angles.trBase, re->axis );
+	AxisScale( re->axis, (1.3f - frac*0.3f), re->axis );
+
+	// render the rings
+	re->reType = RT_MODEL;
+	re->shaderRGBA[0] = re->shaderRGBA[1] = re->shaderRGBA[2] = 255 * frac;
+	trap_R_AddRefEntityToScene( re );
 }
 
-/*
-===================
-CG_AddInvulnerabilityJuiced
-===================
-*/
-void CG_AddInvulnerabilityJuiced( localEntity_t *le ) {
-	int t;
-
-	t = cg.time - le->startTime;
-	if ( t > 3000 ) {
-		le->refEntity.axis[0][0] = (float) 1.0 + 0.3 * (t - 3000) / 2000;
-		le->refEntity.axis[1][1] = (float) 1.0 + 0.3 * (t - 3000) / 2000;
-		le->refEntity.axis[2][2] = (float) 0.7 + 0.3 * (2000 - (t - 3000)) / 2000;
-	}
-	if ( t > 5000 ) {
-		le->endTime = 0;
-		CG_GibPlayer( le->refEntity.origin );
-	}
-	else {
-		trap_R_AddRefEntityToScene( &le->refEntity );
-	}
-}
-
-/*
-===================
-CG_AddRefEntity
-===================
-*/
-void CG_AddRefEntity( localEntity_t *le ) {
-	if (le->endTime < cg.time) {
-		CG_FreeLocalEntity( le );
-		return;
-	}
-	trap_R_AddRefEntityToScene( &le->refEntity );
-}
-
-#endif
 /*
 ===================
 CG_AddScorePlum
@@ -848,6 +1400,38 @@ void CG_AddLocalEntities( void ) {
 			CG_AddFadeRGB( le );
 			break;
 
+		case LE_SPRAYTRAIL:
+			CG_AddSprayTrailFade( le );
+			break;
+
+		case LE_TRAIL:
+			CG_AddTrail( le );
+			break;
+
+		case LE_TRAIL_TRACED_RGB:
+			CG_AddTrailTracedRGB( le );
+			break;
+
+		case LE_WATERBEAM:
+			CG_AddWaterBeam( le );
+			break;
+
+		case LE_PUMPERTRAIL:
+			CG_AddPumperTrail( le );
+			break;
+
+		case LE_IMPERIUSBOOM:
+			CG_AddImperiusBoom( le );
+			break;
+
+		case LE_IMPERIUSRINGS:
+			CG_AddImperiusRings( le );
+			break;
+
+		case LE_TELEFFECT:
+			CG_AddTeleffect( le );
+			break;
+
 		case LE_FALL_SCALE_FADE: // gib blood trails
 			CG_AddFallScaleFade( le );
 			break;
@@ -860,20 +1444,9 @@ void CG_AddLocalEntities( void ) {
 			CG_AddScorePlum( le );
 			break;
 
-#ifdef MISSIONPACK
-		case LE_KAMIKAZE:
-			CG_AddKamikaze( le );
+		case LE_BOOMIESEXPLOSION:
+			CG_AddBoomiesExplosion( le );
 			break;
-		case LE_INVULIMPACT:
-			CG_AddInvulnerabilityImpact( le );
-			break;
-		case LE_INVULJUICED:
-			CG_AddInvulnerabilityJuiced( le );
-			break;
-		case LE_SHOWREFENTITY:
-			CG_AddRefEntity( le );
-			break;
-#endif
 		}
 	}
 }

@@ -707,6 +707,7 @@ static void Init_AAS_Export( aas_export_t *aas ) {
 	// be_aas_reach.c
 	//--------------------------------------------
 	aas->AAS_AreaReachability = AAS_AreaReachability;
+	aas->AAS_BestReachableArea = AAS_BestReachableArea;
 	//--------------------------------------------
 	// be_aas_route.c
 	//--------------------------------------------

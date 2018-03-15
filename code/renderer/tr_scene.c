@@ -105,6 +105,14 @@ void R_AddPolygonSurfaces( void ) {
 
 	for ( i = 0, poly = tr.refdef.polys; i < tr.refdef.numPolys ; i++, poly++ ) {
 		sh = R_GetShaderByHandle( poly->hShader );
+//sortSL{
+		// a hack to get the SprayLogo-"Level" into the Engine
+		// without changing the vm-interface-functions
+		if(poly->verts->st[0]>=10.0f)
+			poly->lvl = ((int)poly->verts->st[0]/10);
+		else
+			poly->lvl = 0;
+//sortSL}
 		R_AddDrawSurf( ( void * )poly, sh, poly->fogIndex, qfalse );
 	}
 }
@@ -209,7 +217,6 @@ void RE_AddRefEntityToScene( const refEntity_t *ent ) {
 		return;
 	}
 	if ( r_numentities >= MAX_ENTITIES ) {
-		ri.Printf(PRINT_DEVELOPER, "RE_AddRefEntityToScene: Dropping refEntity, reached MAX_ENTITIES\n");
 		return;
 	}
 	if ( Q_isnan(ent->origin[0]) || Q_isnan(ent->origin[1]) || Q_isnan(ent->origin[2]) ) {
@@ -220,7 +227,7 @@ void RE_AddRefEntityToScene( const refEntity_t *ent ) {
 		}
 		return;
 	}
-	if ( (int)ent->reType < 0 || ent->reType >= RT_MAX_REF_ENTITY_TYPE ) {
+	if ( ent->reType < 0 || ent->reType >= RT_MAX_REF_ENTITY_TYPE ) {
 		ri.Error( ERR_DROP, "RE_AddRefEntityToScene: bad reType %i", ent->reType );
 	}
 

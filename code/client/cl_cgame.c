@@ -25,9 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "../botlib/botlib.h"
 
-#ifdef USE_MUMBLE
 #include "libmumblelink.h"
-#endif
 
 extern	botlib_export_t	*botlib_export;
 
@@ -386,6 +384,10 @@ void CL_CM_LoadMap( const char *mapname ) {
 	CM_LoadMap( mapname, qtrue, &checksum );
 }
 
+void CL_GetVoipTimes( int* times ){
+	memcpy( times, clc.voipLastPacket, sizeof(int)*MAX_CLIENTS );
+}
+
 /*
 ====================
 CL_ShutdonwCGame
@@ -662,7 +664,7 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 	case CG_REAL_TIME:
 		return Com_RealTime( VMA(1) );
 	case CG_SNAPVECTOR:
-		Q_SnapVector(VMA(1));
+		Q_SnapVector( VMA(1) );
 		return 0;
 
 	case CG_CIN_PLAYCINEMATIC:
@@ -701,6 +703,10 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		return re.GetEntityToken( VMA(1), args[2] );
 	case CG_R_INPVS:
 		return re.inPVS( VMA(1), VMA(2) );
+	case CG_GET_VOIP_TIMES:
+		CL_GetVoipTimes( VMA(1) );
+		return 0;
+
 
 	default:
 	        assert(0);
@@ -734,14 +740,13 @@ void CL_InitCGame( void ) {
 	Com_sprintf( cl.mapname, sizeof( cl.mapname ), "maps/%s.bsp", mapname );
 
 	// load the dll or bytecode
-	interpret = Cvar_VariableValue("vm_cgame");
-	if(cl_connectedToPureServer)
-	{
+	if ( cl_connectedToPureServer != 0 ) {
 		// if sv_pure is set we only allow qvms to be loaded
-		if(interpret != VMI_COMPILED && interpret != VMI_BYTECODE)
-			interpret = VMI_COMPILED;
+		interpret = VMI_COMPILED;
 	}
-
+	else {
+		interpret = Cvar_VariableValue( "vm_cgame" );
+	}
 	cgvm = VM_Create( "cgame", CL_CgameSystemCalls, interpret );
 	if ( !cgvm ) {
 		Com_Error( ERR_DROP, "VM_Create on cgame failed" );
@@ -943,6 +948,7 @@ void CL_FirstSnapshot( void ) {
 			clc.speexDecoder[i] = speex_decoder_init(&speex_nb_mode);
 			clc.voipIgnore[i] = qfalse;
 			clc.voipGain[i] = 1.0f;
+			clc.voipLastPacket[i] = 0;
 		}
 		clc.speexInitialized = qtrue;
 		clc.voipMuteAll = qfalse;
@@ -1096,6 +1102,7 @@ void CL_SetCGameTime( void ) {
 	}
 
 }
+
 
 
 

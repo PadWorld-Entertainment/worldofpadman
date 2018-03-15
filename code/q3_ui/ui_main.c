@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 /*
 =======================================================================
@@ -79,7 +59,8 @@ Q_EXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2, int arg3, i
 		UI_DrawConnectScreen( arg0 );
 		return 0;
 	case UI_HASUNIQUECDKEY:				// mod authors need to observe this
-		return qtrue;  // change this to qfalse for mods!
+//(original)		return qtrue;  // bk010117 - change this to qfalse for mods!
+		return qfalse; //Raute: found this Sep. 4th 2005 O_o ... by accident -.-
 	}
 
 	return -1;
@@ -131,8 +112,11 @@ vmCvar_t	ui_browserGameType;
 vmCvar_t	ui_browserSortKey;
 vmCvar_t	ui_browserShowFull;
 vmCvar_t	ui_browserShowEmpty;
+vmCvar_t	ui_browserOnlyHumans;
+vmCvar_t	ui_browserHidePrivate;
 
-vmCvar_t	ui_brassTime;
+vmCvar_t	ui_createGametype;
+
 vmCvar_t	ui_drawCrosshair;
 vmCvar_t	ui_drawCrosshairNames;
 vmCvar_t	ui_marks;
@@ -155,8 +139,21 @@ vmCvar_t	ui_server15;
 vmCvar_t	ui_server16;
 
 vmCvar_t	ui_cdkeychecked;
-vmCvar_t	ui_ioq3;
+//spray anfang
+//vmCvar_t	logolist;
+//spray ende
+//lens anfang
+//vmCvar_t	lensflarelist;
+//lens ende
+vmCvar_t	spraycolor;
+vmCvar_t	syc_logo;
+vmCvar_t	s_wop_restarted;
+vmCvar_t	con_notifytime;
+vmCvar_t	wop_AutoswitchSongByNextMap;
+vmCvar_t	wop_AutoBindUnusedKeys;
+vmCvar_t	wop_specialSPLoadingScreen;
 
+// bk001129 - made static to avoid aliasing.
 static cvarTable_t		cvarTable[] = {
 	{ &ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", CVAR_ARCHIVE },
 	{ &ui_ffa_timelimit, "ui_ffa_timelimit", "0", CVAR_ARCHIVE },
@@ -185,14 +182,17 @@ static cvarTable_t		cvarTable[] = {
 
 	{ &ui_spSelection, "ui_spSelection", "", CVAR_ROM },
 
-	{ &ui_browserMaster, "ui_browserMaster", "0", CVAR_ARCHIVE },
+	{ &ui_browserMaster, "ui_browserMaster", "2", CVAR_ARCHIVE },
 	{ &ui_browserGameType, "ui_browserGameType", "0", CVAR_ARCHIVE },
-	{ &ui_browserSortKey, "ui_browserSortKey", "4", CVAR_ARCHIVE },
-	{ &ui_browserShowFull, "ui_browserShowFull", "1", CVAR_ARCHIVE },
+	{ &ui_browserSortKey, "ui_browserSortKey", "5", CVAR_ARCHIVE },
+	{ &ui_browserShowFull, "ui_browserShowFull", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowEmpty, "ui_browserShowEmpty", "1", CVAR_ARCHIVE },
+	{ &ui_browserOnlyHumans, "ui_browserOnlyHumans", "1", CVAR_ARCHIVE },
+	{ &ui_browserHidePrivate, "ui_browserHidePrivate", "0", CVAR_ARCHIVE },
 
-	{ &ui_brassTime, "cg_brassTime", "2500", CVAR_ARCHIVE },
-	{ &ui_drawCrosshair, "cg_drawCrosshair", "4", CVAR_ARCHIVE },
+	{ &ui_createGametype, "ui_createGametype", "3", 0 },
+
+	{ &ui_drawCrosshair, "cg_drawCrosshair", "1", CVAR_ARCHIVE },
 	{ &ui_drawCrosshairNames, "cg_drawCrosshairNames", "1", CVAR_ARCHIVE },
 	{ &ui_marks, "cg_marks", "1", CVAR_ARCHIVE },
 
@@ -213,8 +213,20 @@ static cvarTable_t		cvarTable[] = {
 	{ &ui_server15, "server15", "", CVAR_ARCHIVE },
 	{ &ui_server16, "server16", "", CVAR_ARCHIVE },
 
-	{ &ui_cdkeychecked, "ui_cdkeychecked", "0", CVAR_ROM },
-	{ &ui_ioq3, "ui_ioq3", "1", CVAR_ROM }
+	{ &ui_cdkeychecked, "ui_cdkeychecked", "0", CVAR_ROM }
+//spray anfang
+//	,{ NULL, "logolist", "", CVAR_INIT|CVAR_ROM } // ohne verwaltungs-cvar -> kein value limit
+//spray ende
+//lens anfang
+//	,{ NULL, "lensflarelist", "", CVAR_INIT|CVAR_ROM }
+//lens ende
+	,{ &spraycolor, "syc_color", "0", CVAR_ARCHIVE|CVAR_USERINFO }
+	,{ &syc_logo, "syc_logo", "", CVAR_ARCHIVE }
+	,{ &s_wop_restarted, "s_wop_restarted", "0", CVAR_ROM|CVAR_TEMP }//CVAR_NORESTART
+	,{ &con_notifytime, "con_notifytime", "4", CVAR_ARCHIVE }
+	,{ &wop_AutoswitchSongByNextMap, "wop_AutoswitchSongByNextMap", "0", CVAR_ARCHIVE }
+	,{ &wop_AutoBindUnusedKeys, "wop_AutoBindUnusedKeys", "1", CVAR_ARCHIVE }
+	,{ &wop_specialSPLoadingScreen, "wop_specialSPLoadingScreen", "1", CVAR_TEMP }
 };
 
 static int cvarTableSize = ARRAY_LEN( cvarTable );
@@ -232,6 +244,14 @@ void UI_RegisterCvars( void ) {
 	for ( i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++ ) {
 		trap_Cvar_Register( cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags );
 	}
+
+	// cvars die mehr als 256 Zeich aufnehmen sollen (256-limit ist nur im gamecode)
+//spray anfang
+	trap_Cvar_Register( NULL, "logolist", "", CVAR_INIT|CVAR_ROM );
+//spray ende
+//lens anfang
+	trap_Cvar_Register( NULL, "lensflarelist", "", CVAR_INIT|CVAR_ROM );
+//lens ende
 }
 
 /*

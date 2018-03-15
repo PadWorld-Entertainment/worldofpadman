@@ -1,34 +1,9 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 // cg_consolecmds.c -- text commands typed in at the local console, or
 // executed by a key binding
 
 #include "cg_local.h"
-#include "../ui/ui_shared.h"
-#ifdef MISSIONPACK
-extern menuDef_t *menuScoreboard;
-#endif
-
 
 
 void CG_TargetCommand_f( void ) {
@@ -45,31 +20,6 @@ void CG_TargetCommand_f( void ) {
 }
 
 
-
-/*
-=================
-CG_SizeUp_f
-
-Keybinding command
-=================
-*/
-static void CG_SizeUp_f (void) {
-	trap_Cvar_Set("cg_viewsize", va("%i",(int)(cg_viewsize.integer+10)));
-}
-
-
-/*
-=================
-CG_SizeDown_f
-
-Keybinding command
-=================
-*/
-static void CG_SizeDown_f (void) {
-	trap_Cvar_Set("cg_viewsize", va("%i",(int)(cg_viewsize.integer-10)));
-}
-
-
 /*
 =============
 CG_Viewpos_f
@@ -78,17 +28,17 @@ Debugging command to print the current position
 =============
 */
 static void CG_Viewpos_f (void) {
-	CG_Printf ("(%i %i %i) : %i\n", (int)cg.refdef.vieworg[0],
+	CG_Printf ("(%i %i %i) : %i %i %i\n", (int)cg.refdef.vieworg[0],
 		(int)cg.refdef.vieworg[1], (int)cg.refdef.vieworg[2], 
-		(int)cg.refdefViewAngles[YAW]);
+		(int)cg.refdefViewAngles[PITCH], (int)cg.refdefViewAngles[YAW], (int)cg.refdefViewAngles[ROLL]);
+	/*CG_Printf ("(%f %f %f) : %f %f %f : %i\n", 
+		(float)cg.refdef.vieworg[0], (float)cg.refdef.vieworg[1], (float)cg.refdef.vieworg[2], 
+		(float)cg.refdefViewAngles[PITCH], (float)cg.refdefViewAngles[YAW], (float)cg.refdefViewAngles[ROLL],(int)cg.time);*/
 }
 
 
 static void CG_ScoresDown_f( void ) {
 
-#ifdef MISSIONPACK
-		CG_BuildSpectatorString();
-#endif
 	if ( cg.scoresRequestTime + 2000 < cg.time ) {
 		// the scores are more than two seconds out of data,
 		// so request new ones
@@ -114,71 +64,6 @@ static void CG_ScoresUp_f( void ) {
 		cg.scoreFadeTime = cg.time;
 	}
 }
-
-#ifdef MISSIONPACK
-extern menuDef_t *menuScoreboard;
-void Menu_Reset( void );			// FIXME: add to right include file
-
-static void CG_LoadHud_f( void) {
-  char buff[1024];
-	const char *hudSet;
-  memset(buff, 0, sizeof(buff));
-
-	String_Init();
-	Menu_Reset();
-	
-	trap_Cvar_VariableStringBuffer("cg_hudFiles", buff, sizeof(buff));
-	hudSet = buff;
-	if (hudSet[0] == '\0') {
-		hudSet = "ui/hud.txt";
-	}
-
-	CG_LoadMenus(hudSet);
-  menuScoreboard = NULL;
-}
-
-
-static void CG_scrollScoresDown_f( void) {
-	if (menuScoreboard && cg.scoreBoardShowing) {
-		Menu_ScrollFeeder(menuScoreboard, FEEDER_SCOREBOARD, qtrue);
-		Menu_ScrollFeeder(menuScoreboard, FEEDER_REDTEAM_LIST, qtrue);
-		Menu_ScrollFeeder(menuScoreboard, FEEDER_BLUETEAM_LIST, qtrue);
-	}
-}
-
-
-static void CG_scrollScoresUp_f( void) {
-	if (menuScoreboard && cg.scoreBoardShowing) {
-		Menu_ScrollFeeder(menuScoreboard, FEEDER_SCOREBOARD, qfalse);
-		Menu_ScrollFeeder(menuScoreboard, FEEDER_REDTEAM_LIST, qfalse);
-		Menu_ScrollFeeder(menuScoreboard, FEEDER_BLUETEAM_LIST, qfalse);
-	}
-}
-
-
-static void CG_spWin_f( void) {
-	trap_Cvar_Set("cg_cameraOrbit", "2");
-	trap_Cvar_Set("cg_cameraOrbitDelay", "35");
-	trap_Cvar_Set("cg_thirdPerson", "1");
-	trap_Cvar_Set("cg_thirdPersonAngle", "0");
-	trap_Cvar_Set("cg_thirdPersonRange", "100");
-	CG_AddBufferedSound(cgs.media.winnerSound);
-	//trap_S_StartLocalSound(cgs.media.winnerSound, CHAN_ANNOUNCER);
-	CG_CenterPrint("YOU WIN!", SCREEN_HEIGHT * .30, 0);
-}
-
-static void CG_spLose_f( void) {
-	trap_Cvar_Set("cg_cameraOrbit", "2");
-	trap_Cvar_Set("cg_cameraOrbitDelay", "35");
-	trap_Cvar_Set("cg_thirdPerson", "1");
-	trap_Cvar_Set("cg_thirdPersonAngle", "0");
-	trap_Cvar_Set("cg_thirdPersonRange", "100");
-	CG_AddBufferedSound(cgs.media.loserSound);
-	//trap_S_StartLocalSound(cgs.media.loserSound, CHAN_ANNOUNCER);
-	CG_CenterPrint("YOU LOSE...", SCREEN_HEIGHT * .30, 0);
-}
-
-#endif
 
 static void CG_TellTarget_f( void ) {
 	int		clientNum;
@@ -240,173 +125,6 @@ static void CG_VoiceTellAttacker_f( void ) {
 	trap_SendClientCommand( command );
 }
 
-#ifdef MISSIONPACK
-static void CG_NextTeamMember_f( void ) {
-  CG_SelectNextPlayer();
-}
-
-static void CG_PrevTeamMember_f( void ) {
-  CG_SelectPrevPlayer();
-}
-
-// ASS U ME's enumeration order as far as task specific orders, OFFENSE is zero, CAMP is last
-//
-static void CG_NextOrder_f( void ) {
-	clientInfo_t *ci = cgs.clientinfo + cg.snap->ps.clientNum;
-	if (ci) {
-		if (!ci->teamLeader && sortedTeamPlayers[cg_currentSelectedPlayer.integer] != cg.snap->ps.clientNum) {
-			return;
-		}
-	}
-	if (cgs.currentOrder < TEAMTASK_CAMP) {
-		cgs.currentOrder++;
-
-		if (cgs.currentOrder == TEAMTASK_RETRIEVE) {
-			if (!CG_OtherTeamHasFlag()) {
-				cgs.currentOrder++;
-			}
-		}
-
-		if (cgs.currentOrder == TEAMTASK_ESCORT) {
-			if (!CG_YourTeamHasFlag()) {
-				cgs.currentOrder++;
-			}
-		}
-
-	} else {
-		cgs.currentOrder = TEAMTASK_OFFENSE;
-	}
-	cgs.orderPending = qtrue;
-	cgs.orderTime = cg.time + 3000;
-}
-
-
-static void CG_ConfirmOrder_f (void ) {
-	trap_SendConsoleCommand(va("cmd vtell %d %s\n", cgs.acceptLeader, VOICECHAT_YES));
-	trap_SendConsoleCommand("+button5; wait; -button5");
-	if (cg.time < cgs.acceptOrderTime) {
-		trap_SendClientCommand(va("teamtask %d\n", cgs.acceptTask));
-		cgs.acceptOrderTime = 0;
-	}
-}
-
-static void CG_DenyOrder_f (void ) {
-	trap_SendConsoleCommand(va("cmd vtell %d %s\n", cgs.acceptLeader, VOICECHAT_NO));
-	trap_SendConsoleCommand("+button6; wait; -button6");
-	if (cg.time < cgs.acceptOrderTime) {
-		cgs.acceptOrderTime = 0;
-	}
-}
-
-static void CG_TaskOffense_f (void ) {
-	if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF) {
-		trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONGETFLAG));
-	} else {
-		trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONOFFENSE));
-	}
-	trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_OFFENSE));
-}
-
-static void CG_TaskDefense_f (void ) {
-	trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONDEFENSE));
-	trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_DEFENSE));
-}
-
-static void CG_TaskPatrol_f (void ) {
-	trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONPATROL));
-	trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_PATROL));
-}
-
-static void CG_TaskCamp_f (void ) {
-	trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONCAMPING));
-	trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_CAMP));
-}
-
-static void CG_TaskFollow_f (void ) {
-	trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONFOLLOW));
-	trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_FOLLOW));
-}
-
-static void CG_TaskRetrieve_f (void ) {
-	trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONRETURNFLAG));
-	trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_RETRIEVE));
-}
-
-static void CG_TaskEscort_f (void ) {
-	trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_ONFOLLOWCARRIER));
-	trap_SendClientCommand(va("teamtask %d\n", TEAMTASK_ESCORT));
-}
-
-static void CG_TaskOwnFlag_f (void ) {
-	trap_SendConsoleCommand(va("cmd vsay_team %s\n", VOICECHAT_IHAVEFLAG));
-}
-
-static void CG_TauntKillInsult_f (void ) {
-	trap_SendConsoleCommand("cmd vsay kill_insult\n");
-}
-
-static void CG_TauntPraise_f (void ) {
-	trap_SendConsoleCommand("cmd vsay praise\n");
-}
-
-static void CG_TauntTaunt_f (void ) {
-	trap_SendConsoleCommand("cmd vtaunt\n");
-}
-
-static void CG_TauntDeathInsult_f (void ) {
-	trap_SendConsoleCommand("cmd vsay death_insult\n");
-}
-
-static void CG_TauntGauntlet_f (void ) {
-	trap_SendConsoleCommand("cmd vsay kill_guantlet\n");
-}
-
-static void CG_TaskSuicide_f (void ) {
-	int		clientNum;
-	char	command[128];
-
-	clientNum = CG_CrosshairPlayer();
-	if ( clientNum == -1 ) {
-		return;
-	}
-
-	Com_sprintf( command, 128, "tell %i suicide", clientNum );
-	trap_SendClientCommand( command );
-}
-
-
-
-/*
-==================
-CG_TeamMenu_f
-==================
-*/
-/*
-static void CG_TeamMenu_f( void ) {
-  if (trap_Key_GetCatcher() & KEYCATCH_CGAME) {
-    CG_EventHandling(CGAME_EVENT_NONE);
-    trap_Key_SetCatcher(0);
-  } else {
-    CG_EventHandling(CGAME_EVENT_TEAMMENU);
-    //trap_Key_SetCatcher(KEYCATCH_CGAME);
-  }
-}
-*/
-
-/*
-==================
-CG_EditHud_f
-==================
-*/
-/*
-static void CG_EditHud_f( void ) {
-  //cls.keyCatchers ^= KEYCATCH_CGAME;
-  //VM_Call (cgvm, CG_EVENT_HANDLING, (cls.keyCatchers & KEYCATCH_CGAME) ? CGAME_EVENT_EDITHUD : CGAME_EVENT_NONE);
-}
-*/
-
-#endif
-
 /*
 ==================
 CG_StartOrbit_f
@@ -444,6 +162,92 @@ static void CG_Camera_f( void ) {
 }
 */
 
+static void CG_ReChooseLogo_f(void)
+{
+	cg.logoselected=2;
+	cg.ignorekeys = cg.time+1000;
+}
+
+static const char *gameNames[] = {
+	GAMETYPE_NAME( GT_FFA ),
+	GAMETYPE_NAME( GT_TOURNAMENT ),
+	GAMETYPE_NAME( GT_SINGLE_PLAYER ),
+	GAMETYPE_NAME( GT_SPRAYFFA ),
+	GAMETYPE_NAME( GT_LPS ),
+	GAMETYPE_NAME( GT_TEAM ),
+	GAMETYPE_NAME( GT_CTF ),
+	GAMETYPE_NAME( GT_SPRAY ),
+	GAMETYPE_NAME( GT_BALLOON ),
+	NULL
+};
+
+#define MAX_BUFFERLEN	256
+static void CG_HelpCmd_f(void)
+{
+	char buffer[MAX_BUFFERLEN];
+
+	if(trap_Argc()>1)
+	{
+		trap_Args(buffer,MAX_BUFFERLEN);
+		if(!Q_stricmp(buffer,"g_gametype"))
+		{
+			int i;
+
+			Com_Printf("GT# -> gametype:\n");
+			for(i=0;gameNames[i]!=NULL;i++)
+				Com_Printf("%3i -> %s\n",i,gameNames[i]);
+		}
+	}
+	else
+	{
+		Com_Printf("available help:\n");
+		Com_Printf(" g_gametype\n");
+	}
+}
+
+static void CG_DropCartridge_f(void) {
+//	trap_SendClientCommand("dropCartridge"); // also goes over spamm filter
+	trap_SendConsoleCommand("+button12;-button12\n"); // BUTTON_DROPCART
+}
+
+static void CG_Cam( void ) {	
+	// SP only
+	//if( cgs.gametype != GT_SINGLE_PLAYER ) 
+	//	return;
+
+	// toggle cam mode
+	cg.Cam = cg.Cam ? 0 : 1;
+	VectorCopy(cg.refdef.vieworg, cg.CamPos);
+	VectorCopy(cg.refdefViewAngles, cg.CamAngles);
+}
+
+void Cmd_SetFreecamPos_f( void ) {
+	vec3_t	origin, angles;
+	char	buffer[MAX_TOKEN_CHARS];
+	int		i;
+
+	if ( trap_Argc() < 3 ) {
+		CG_Printf("usage: setviewpos x y z pitch yaw roll\n");
+		return;
+	}
+
+	VectorClear( angles );
+
+	for ( i = 0 ; i < 3 ; i++ ) {
+		trap_Argv( i + 1, buffer, sizeof( buffer ) );
+		origin[i] = atof( buffer );
+	}
+
+	trap_Argv( 5, buffer, sizeof( buffer ) );
+	angles[YAW] = atof( buffer );
+	trap_Argv( 4, buffer, sizeof( buffer ) );
+	angles[PITCH] = atof( buffer );
+	trap_Argv( 6, buffer, sizeof( buffer ) );
+	angles[ROLL] = atof( buffer );
+
+	VectorCopy( origin, cg.CamPos );
+	VectorCopy( angles, cg.CamAngles );
+}
 
 typedef struct {
 	char	*cmd;
@@ -462,8 +266,6 @@ static consoleCommand_t	commands[] = {
 	{ "-scores", CG_ScoresUp_f },
 	{ "+zoom", CG_ZoomDown_f },
 	{ "-zoom", CG_ZoomUp_f },
-	{ "sizeup", CG_SizeUp_f },
-	{ "sizedown", CG_SizeDown_f },
 	{ "weapnext", CG_NextWeapon_f },
 	{ "weapprev", CG_PrevWeapon_f },
 	{ "weapon", CG_Weapon_f },
@@ -472,35 +274,17 @@ static consoleCommand_t	commands[] = {
 	{ "vtell_target", CG_VoiceTellTarget_f },
 	{ "vtell_attacker", CG_VoiceTellAttacker_f },
 	{ "tcmd", CG_TargetCommand_f },
-#ifdef MISSIONPACK
-	{ "loadhud", CG_LoadHud_f },
-	{ "nextTeamMember", CG_NextTeamMember_f },
-	{ "prevTeamMember", CG_PrevTeamMember_f },
-	{ "nextOrder", CG_NextOrder_f },
-	{ "confirmOrder", CG_ConfirmOrder_f },
-	{ "denyOrder", CG_DenyOrder_f },
-	{ "taskOffense", CG_TaskOffense_f },
-	{ "taskDefense", CG_TaskDefense_f },
-	{ "taskPatrol", CG_TaskPatrol_f },
-	{ "taskCamp", CG_TaskCamp_f },
-	{ "taskFollow", CG_TaskFollow_f },
-	{ "taskRetrieve", CG_TaskRetrieve_f },
-	{ "taskEscort", CG_TaskEscort_f },
-	{ "taskSuicide", CG_TaskSuicide_f },
-	{ "taskOwnFlag", CG_TaskOwnFlag_f },
-	{ "tauntKillInsult", CG_TauntKillInsult_f },
-	{ "tauntPraise", CG_TauntPraise_f },
-	{ "tauntTaunt", CG_TauntTaunt_f },
-	{ "tauntDeathInsult", CG_TauntDeathInsult_f },
-	{ "tauntGauntlet", CG_TauntGauntlet_f },
-	{ "spWin", CG_spWin_f },
-	{ "spLose", CG_spLose_f },
-	{ "scoresDown", CG_scrollScoresDown_f },
-	{ "scoresUp", CG_scrollScoresUp_f },
-#endif
 	{ "startOrbit", CG_StartOrbit_f },
 	//{ "camera", CG_Camera_f },
 	{ "loaddeferred", CG_LoadDeferredPlayers }	
+
+	,{"help", CG_HelpCmd_f }
+	,{"rechooselogo", CG_ReChooseLogo_f }
+	,{"dropCartridge",CG_DropCartridge_f}
+	,{"dropTeamItem",CG_DropCartridge_f}
+ 	,{"freecamsetpos", Cmd_SetFreecamPos_f}
+ 	,{"freecam", CG_Cam}
+	,{"spraydump", DumpPolyInfo}
 };
 
 
@@ -524,6 +308,9 @@ qboolean CG_ConsoleCommand( void ) {
 			return qtrue;
 		}
 	}
+
+	if(CG_Cutscene2d_CheckCmd(cmd))
+		return qtrue;
 
 	return qfalse;
 }
@@ -569,10 +356,18 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("addbot");
 	trap_AddCommand ("setviewpos");
 	trap_AddCommand ("callvote");
+	trap_AddCommand ("cv");
 	trap_AddCommand ("vote");
 	trap_AddCommand ("callteamvote");
 	trap_AddCommand ("teamvote");
 	trap_AddCommand ("stats");
 	trap_AddCommand ("teamtask");
 	trap_AddCommand ("loaddefered");	// spelled wrong, but not changing for demo
+	trap_AddCommand("rechooselogo");
+	trap_AddCommand("ready");
+	trap_AddCommand("TeamReady");
+	trap_AddCommand("dropCartridge");
+	trap_AddCommand("dropTeamItem");
+	trap_AddCommand("help");
+	trap_AddCommand("spraydump");
 }

@@ -227,7 +227,7 @@ void AssetCache( void ) {
 		uiInfo.uiDC.Assets.crosshairShader[n] = trap_R_RegisterShaderNoMip( va("gfx/2d/crosshair%c", 'a' + n ) );
 	}
 
-	uiInfo.newHighScoreSound = trap_S_RegisterSound("sound/feedback/voc_newhighscore.wav", qfalse);
+	uiInfo.newHighScoreSound = trap_S_RegisterSound("sound/feedback/voc_newhighscore", qfalse);
 }
 
 void _UI_DrawSides(float x, float y, float w, float h, float size) {
@@ -666,7 +666,7 @@ char *GetMenuBuffer(const char *filename) {
 		return defaultMenu;
 	}
 	if ( len >= MAX_MENUFILE ) {
-		trap_Print( va( S_COLOR_RED "menu file too large: %s is %i, max allowed is %i\n", filename, len, MAX_MENUFILE ) );
+		trap_Print( va( S_COLOR_RED "menu file too large: %s is %i, max allowed is %i", filename, len, MAX_MENUFILE ) );
 		trap_FS_FCloseFile( f );
 		return defaultMenu;
 	}
@@ -3124,7 +3124,7 @@ static void UI_Update(const char *name) {
 				trap_Cvar_SetValue( "r_colorbits", 32 );
 				trap_Cvar_SetValue( "r_depthbits", 24 );
 				trap_Cvar_SetValue( "r_picmip", 0 );
-				trap_Cvar_SetValue( "r_mode", 4 );
+				trap_Cvar_SetValue( "r_mode", 2 );
 				trap_Cvar_SetValue( "r_texturebits", 32 );
 				trap_Cvar_SetValue( "r_fastSky", 0 );
 				trap_Cvar_SetValue( "r_inGameVideo", 1 );
@@ -3140,7 +3140,7 @@ static void UI_Update(const char *name) {
 				trap_Cvar_SetValue( "r_colorbits", 0 );
 				trap_Cvar_SetValue( "r_depthbits", 24 );
 				trap_Cvar_SetValue( "r_picmip", 1 );
-				trap_Cvar_SetValue( "r_mode", 3 );
+				trap_Cvar_SetValue( "r_mode", 2 );
 				trap_Cvar_SetValue( "r_texturebits", 0 );
 				trap_Cvar_SetValue( "r_fastSky", 0 );
 				trap_Cvar_SetValue( "r_inGameVideo", 1 );
@@ -3156,7 +3156,7 @@ static void UI_Update(const char *name) {
 				trap_Cvar_SetValue( "r_colorbits", 0 );
 				trap_Cvar_SetValue( "r_depthbits", 0 );
 				trap_Cvar_SetValue( "r_picmip", 1 );
-				trap_Cvar_SetValue( "r_mode", 3 );
+				trap_Cvar_SetValue( "r_mode", 1 );
 				trap_Cvar_SetValue( "r_texturebits", 0 );
 				trap_Cvar_SetValue( "cg_shadows", 0 );
 				trap_Cvar_SetValue( "r_fastSky", 1 );
@@ -3171,7 +3171,7 @@ static void UI_Update(const char *name) {
 				trap_Cvar_SetValue( "r_lodbias", 2 );
 				trap_Cvar_SetValue( "r_colorbits", 16 );
 				trap_Cvar_SetValue( "r_depthbits", 16 );
-				trap_Cvar_SetValue( "r_mode", 3 );
+				trap_Cvar_SetValue( "r_mode", 0 );
 				trap_Cvar_SetValue( "r_picmip", 2 );
 				trap_Cvar_SetValue( "r_texturebits", 16 );
 				trap_Cvar_SetValue( "cg_shadows", 0 );
@@ -5293,8 +5293,6 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 	  case UIMENU_MAIN:
 			trap_Cvar_Set( "sv_killserver", "1" );
 			trap_Key_SetCatcher( KEYCATCH_UI );
-			//trap_S_StartLocalSound( trap_S_RegisterSound("sound/misc/menu_background.wav", qfalse) , CHAN_LOCAL_SOUND );
-			//trap_S_StartBackgroundTrack("sound/misc/menu_background.wav", NULL);
 			if (uiInfo.inGameLoad) {
 				UI_LoadNonIngame();
 			}
@@ -5469,8 +5467,7 @@ static void UI_DisplayDownloadInfo( const char *downloadName, float centerPoint,
 	Text_PaintCenter(centerPoint, yStart + 248, scale, colorWhite, xferText, 0);
 
 	if (downloadSize > 0) {
-		s = va( "%s (%d%%)", downloadName,
-			(int)( (float)downloadCount * 100.0f / downloadSize ) );
+		s = va( "%s (%d%%)", downloadName, (int)( (float)downloadCount * 100.0f / downloadSize ) );
 	} else {
 		s = downloadName;
 	}

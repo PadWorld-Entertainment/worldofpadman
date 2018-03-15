@@ -1,31 +1,10 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 #ifndef __UI_LOCAL_H__
 #define __UI_LOCAL_H__
 
 #include "../qcommon/q_shared.h"
 #include "../renderer/tr_types.h"
-//NOTE: include the ui_public.h from the new UI
 #include "../ui/ui_public.h"
 //redefine to old API version
 #undef UI_API_VERSION
@@ -67,8 +46,11 @@ extern vmCvar_t	ui_browserGameType;
 extern vmCvar_t	ui_browserSortKey;
 extern vmCvar_t	ui_browserShowFull;
 extern vmCvar_t	ui_browserShowEmpty;
+extern vmCvar_t	ui_browserOnlyHumans;
+extern vmCvar_t	ui_browserHidePrivate;
 
-extern vmCvar_t	ui_brassTime;
+extern vmCvar_t	ui_createGametype;
+
 extern vmCvar_t	ui_drawCrosshair;
 extern vmCvar_t	ui_drawCrosshairNames;
 extern vmCvar_t	ui_marks;
@@ -92,7 +74,21 @@ extern vmCvar_t	ui_server16;
 
 extern vmCvar_t	ui_cdkey;
 extern vmCvar_t	ui_cdkeychecked;
-extern vmCvar_t	ui_ioq3;
+
+extern vmCvar_t	spraycolor;
+extern vmCvar_t	syc_logo;
+extern vmCvar_t	s_wop_restarted;
+extern vmCvar_t	con_notifytime;
+extern vmCvar_t	wop_AutoswitchSongByNextMap;
+extern vmCvar_t	wop_AutoBindUnusedKeys;
+
+extern vmCvar_t wop_specialSPLoadingScreen;
+
+//
+// locals
+//
+
+#define UI_LOCALEFILE			"locales/ui.txt"
 
 
 //
@@ -120,6 +116,9 @@ extern vmCvar_t	ui_ioq3;
 #define MTYPE_PTEXT				9
 #define MTYPE_BTEXT				10
 
+#define MTYPE_BITMAP1024S		11 //pic in 1024x768 with shadow(S)
+#define MTYPE_TEXTS			12 //sizeable(S) text
+
 #define QMF_BLINK				((unsigned int) 0x00000001)
 #define QMF_SMALLFONT			((unsigned int) 0x00000002)
 #define QMF_LEFT_JUSTIFY		((unsigned int) 0x00000004)
@@ -142,10 +141,33 @@ extern vmCvar_t	ui_ioq3;
 #define QMF_UPPERCASE			((unsigned int) 0x00080000)	// edit field is all upper case
 #define QMF_SILENT				((unsigned int) 0x00100000)
 
+#define	QMF_INGAMESTYLE			0x00200000
+#define QMF_FORCEDROPDOWN		0x00400000	// forces dropdown at SpinControls width ownerdraw (normal ownerdraw SCs should work like they did in vq3)
+#define QMF_BLUESTYLE			0x00800000
+
 // callback notifications
 #define QM_GOTFOCUS				1
 #define QM_LOSTFOCUS			2
 #define QM_ACTIVATED			3
+
+#define BGP_MAINBG				0x000001
+#define BGP_MAINFRAME			0x000002
+#define BGP_SETUPBG				0x000004
+#define BGP_SYSTEMBG			0x000008
+#define BGP_DEFAULTSBG			0x000010
+#define BGP_EXITBG				0x000020
+#define BGP_CONTROLBG			0x000040
+#define BGP_PLAYERBG			0x000080
+#define BGP_SERVER2BG			0x000100
+#define BGP_MODSBG				0x000200
+#define BGP_DEMOBG				0x000400
+#define BGP_SPECIFYBG			0x000800
+#define	BGP_GAMEOPTIONS			0x001000
+#define BGP_STARTSERVERMAPS		0x002000
+#define BGP_STARTSERVERBOTS		0x004000
+#define BGP_SIMPLEBG			0x008000
+#define	BGP_LASTMENU			0x010000
+#define BGP_SINGLEMENU			0x020000
 
 typedef struct _tag_menuframework
 {
@@ -160,13 +182,18 @@ typedef struct _tag_menuframework
 
 	qboolean	wrapAround;
 	qboolean	fullscreen;
-	qboolean	showlogo;
+
+	int			bgparts;
+	qboolean	noPushSelect;
+
+	qboolean	noMouseCursor;
 } menuframework_s;
 
 typedef struct
 {
 	int type;
 	const char *name;
+	const char *toolTip;
 	int	id;
 	int x, y;
 	int left;
@@ -222,6 +249,12 @@ typedef struct
 	int height;
 	int	columns;
 	int	seperation;
+
+	int   dropdown_len;
+	float *dropdown_bg;
+	float *dropdown_text;
+	float *dropdown_mark;
+	float *dropdown_border;
 } menulist_s;
 
 typedef struct
@@ -245,7 +278,19 @@ typedef struct
 	int				width;
 	int				height;
 	float*			focuscolor;
+
+	qboolean		focuspicinstead;//by QuarterPounder
 } menubitmap_s;
+
+typedef struct
+{
+	menucommon_s	generic;
+	qhandle_t		shader;
+	qhandle_t		shadowshader;
+	qhandle_t		mouseovershader;
+	int				x, y, w, h;// 1024!
+	int				sx, sy, sw, sh;//shadow x/y/w/h ... 1024!
+} menubitmap1024s_s;
 
 typedef struct
 {
@@ -253,6 +298,9 @@ typedef struct
 	char*			string;
 	int				style;
 	float*			color;
+
+	float			fontHeight;//for TextS ...
+	float*			focuscolor;
 } menutext_s;
 
 extern void			Menu_Cache( void );
@@ -269,9 +317,11 @@ extern void			Bitmap_Init( menubitmap_s *b );
 extern void			Bitmap_Draw( menubitmap_s *b );
 extern void			ScrollList_Draw( menulist_s *l );
 extern sfxHandle_t	ScrollList_Key( menulist_s *l, int key );
-extern sfxHandle_t	menu_in_sound;
+
 extern sfxHandle_t	menu_move_sound;
-extern sfxHandle_t	menu_out_sound;
+extern sfxHandle_t	menu_switch_sound;
+extern sfxHandle_t	menu_click_sound;
+
 extern sfxHandle_t	menu_buzz_sound;
 extern sfxHandle_t	menu_null_sound;
 extern sfxHandle_t	weaponChangeSound;
@@ -286,6 +336,7 @@ extern vec4_t		color_black;
 extern vec4_t		color_white;
 extern vec4_t		color_yellow;
 extern vec4_t		color_blue;
+extern vec4_t		color_lightOrange;
 extern vec4_t		color_orange;
 extern vec4_t		color_red;
 extern vec4_t		color_dim;
@@ -295,6 +346,13 @@ extern vec4_t		listbar_color;
 extern vec4_t		text_color_disabled; 
 extern vec4_t		text_color_normal;
 extern vec4_t		text_color_highlight;
+
+extern vec4_t		listbar_igcolor;
+extern vec4_t		text_color_ignormal;
+extern vec4_t		text_color_ighighlight;
+extern vec4_t		text_color_bluenormal;
+extern vec4_t		text_color_bluehighlight;
+extern vec4_t		listbar_bluecolor;
 
 extern char	*ui_medalNames[];
 extern char	*ui_medalPicNames[];
@@ -312,23 +370,58 @@ extern void			MenuField_Draw( menufield_s *f );
 extern sfxHandle_t	MenuField_Key( menufield_s* m, int* key );
 
 //
+// ui_main.c
+//
+extern void UI_RegisterCvars( void );
+extern void UI_UpdateCvars( void );
+#define UI_GetCvarInt( cv ) (int)trap_Cvar_VariableValue( cv )
+
+//
 // ui_menu.c
 //
 extern void MainMenu_Cache( void );
 extern void UI_MainMenu(void);
-extern void UI_RegisterCvars( void );
-extern void UI_UpdateCvars( void );
+
+//
+// ui_wopsp.c
+//
+extern void WoPSPMenu_Init(void);
+
+//
+// ui_exit.c
+//
+extern void ExitMenu_Init(void);
+extern void ExitMenu_Cache(void);
 
 //
 // ui_credits.c
 //
 extern void UI_CreditMenu( void );
+extern void UI_BigCredits_Cache( void );
+extern void UI_InitBigCredits( void );
+extern void UI_SecretMenu( void );
 
 //
 // ui_ingame.c
 //
 extern void InGame_Cache( void );
 extern void UI_InGameMenu(void);
+
+//
+// ui_callvote.c
+//
+extern void UI_CallVoteMenu(void);
+
+//
+// ui_music.c
+//
+void MusicMenu_Init( void );
+void MusicMenu_Shutdown( void );
+void MusicMenu_Open( void );
+void MusicMenu_Cache( void );
+void Music_Check( void );
+void Music_TriggerRestart( void );
+void Music_NextTrack( void );
 
 //
 // ui_confirm.c
@@ -343,6 +436,7 @@ extern void UI_Message( const char **lines );
 //
 extern void UI_SetupMenu_Cache( void );
 extern void UI_SetupMenu(void);
+extern void SetupDefaultMenu_Cache(void);
 
 //
 // ui_team.c
@@ -360,6 +454,7 @@ extern void UI_DrawConnectScreen( qboolean overlay );
 //
 extern void UI_ControlsMenu( void );
 extern void Controls_Cache( void );
+extern void SetDefaultBinds_onUnusedKeys(void);
 
 //
 // ui_demo2.c
@@ -389,8 +484,8 @@ extern void UI_CDKeyMenu_f( void );
 
 //
 // ui_playermodel.c
-//
-extern void UI_PlayerModelMenu( void );
+// ... FIXME: this sourcefile isn't used by wop
+//extern void UI_PlayerModelMenu( void );
 extern void PlayerModel_Cache( void );
 
 //
@@ -426,12 +521,11 @@ extern void UI_ArenaServersMenu( void );
 extern void ArenaServers_Cache( void );
 
 //
-// ui_startserver.c
+// ui_startserver2.c
 //
 extern void UI_StartServerMenu( qboolean multiplayer );
 extern void StartServer_Cache( void );
-extern void ServerOptions_Cache( void );
-extern void UI_BotSelectMenu( char *bot );
+extern void UI_BotSelectMenu( void );
 extern void UI_BotSelectMenu_Cache( void );
 
 //
@@ -445,7 +539,6 @@ extern void ServerInfo_Cache( void );
 //
 extern void UI_GraphicsOptionsMenu( void );
 extern void GraphicsOptions_Cache( void );
-extern void DriverInfo_Cache( void );
 
 //
 // ui_players.c
@@ -486,14 +579,14 @@ typedef struct {
 
 	animation_t		animations[MAX_ANIMATIONS];
 
+	vec3_t			modeloffset;
+	float			modelscale;
+
 	qhandle_t		weaponModel;
 	qhandle_t		barrelModel;
 	qhandle_t		flashModel;
 	vec3_t			flashDlightColor;
 	int				muzzleFlashTime;
-
-	vec3_t			color1;
-	byte			c1RGBA[4];
 
 	// currently in use drawing parms
 	vec3_t			viewAngles;
@@ -521,6 +614,9 @@ typedef struct {
 	int				barrelTime;
 
 	int				realWeapon;
+
+	qboolean		glowModel;
+	byte			glowColor[4];
 } playerInfo_t;
 
 void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time );
@@ -544,6 +640,35 @@ typedef struct {
 	qhandle_t			whiteShader;
 	qhandle_t			menuBackShader;
 	qhandle_t			menuBackNoLogoShader;
+
+	menulist_s*			dropdownlist;
+	vec4_t				dropdownxywh;
+	qboolean			musicbool;
+	qhandle_t			connectingBG;
+
+	qhandle_t			pad_simpleMenuBg;
+	qhandle_t			pad_menushader;//"menushader"
+	qhandle_t			pad_mainframe;//"menu/main/Background"
+	qhandle_t			pad_setupbg;
+	qhandle_t			pad_display;
+	qhandle_t			pad_defaults;
+	qhandle_t			pad_exitbg;
+	qhandle_t			pad_controlbg;
+	qhandle_t			pad_playerbg;
+	qhandle_t			pad_server2bg;
+	qhandle_t			pad_modsbg;
+	qhandle_t			pad_demobg;
+	qhandle_t			pad_specifybg;
+	qhandle_t			pad_gameoptionsbg;
+	qhandle_t			pad_startservermaps;
+	qhandle_t			pad_startserverbots;
+	qhandle_t			pad_ingamebg;
+	qhandle_t			pad_singlemenubg;
+
+	char				spraylogoNames[MAX_SPRAYLOGOS_LOADED][MAX_SPRAYLOGO_NAME];
+	qhandle_t			spraylogoShaders[MAX_SPRAYLOGOS_LOADED];
+	int					spraylogosLoaded;
+
 	qhandle_t			charset;
 	qhandle_t			charsetProp;
 	qhandle_t			charsetPropGlow;
@@ -553,7 +678,11 @@ typedef struct {
 	qhandle_t			rb_off;
 	float				xscale;
 	float				yscale;
-	float				bias;
+	float				xbias;
+	float				ybias;
+
+	float				scale1024;
+
 	qboolean			demoversion;
 	qboolean			firstdraw;
 } uiStatic_t;
@@ -568,14 +697,28 @@ extern float		UI_ClampCvar( float min, float max, float value );
 extern void			UI_DrawNamedPic( float x, float y, float width, float height, const char *picname );
 extern void			UI_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader ); 
 extern void			UI_FillRect( float x, float y, float width, float height, const float *color );
-extern void			UI_DrawRect( float x, float y, float width, float height, const float *color );
+extern void			UI_DrawRect( float x, float y, float width, float height, const float *color, int thickness );
+
+extern void			UI_StartMusic(void);
+extern void			UI_StartCreditMusic(void);
+extern void			UI_StopMusic(void);
+extern void			UI_AdjustFrom1024(float *x, float *y, float *w, float *h);
+extern void			UI_DrawHandlePic1024(float x, float y, float w, float h, qhandle_t hShader);
+extern void			UI_ModelIcon(const char *modelAndSkin, char *iconName, int SizeOfIconName);
+extern void			UI_DrawStringNS( int x, int y, const char* str, int style, float fontsize, vec4_t color );
+extern void			UI_DrawIngameBG(void);
+
 extern void			UI_UpdateScreen( void );
 extern void			UI_SetColor( const float *rgba );
 extern void			UI_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
 extern void			UI_DrawBannerString( int x, int y, const char* str, int style, vec4_t color );
 extern float		UI_ProportionalSizeScale( int style );
 extern void			UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t color );
-extern void			UI_DrawProportionalString_AutoWrapped( int x, int ystart, int xmax, int ystep, const char* str, int style, vec4_t color );
+extern void			UI_DrawString_AutoWrapped( int x, int ystart, int xmax, int ystep, const char* str, int style, vec4_t color, qboolean proportinal );
+extern int			UI_AutoWrappedString_LineCount( int width, const char* str, int style, qboolean proportional );
+
+extern void UI_DrawProportionalString2( int x, int y, const char* str, vec4_t color, float sizeScale, qhandle_t charset );
+
 extern int			UI_ProportionalStringWidth( const char* str );
 extern void			UI_DrawString( int x, int y, const char* str, int style, vec4_t color );
 extern void			UI_DrawChar( int x, int y, int ch, int style, vec4_t color );
@@ -593,6 +736,9 @@ extern void			UI_Refresh( int time );
 extern void			UI_StartDemoLoop( void );
 extern qboolean		m_entersound;
 extern uiStatic_t	uis;
+
+extern int QDECL BotListCompare( const void *arg1, const void *arg2 );
+
 
 //
 // ui_spLevel.c
@@ -682,9 +828,23 @@ int				trap_MemoryRemaining( void );
 void			trap_GetCDKey( char *buf, int buflen );
 void			trap_SetCDKey( char *buf );
 
-qboolean               trap_VerifyCDKey( const char *key, const char *chksum);
+void			trap_S_StopBackgroundTrack( void );
+void			trap_S_StartBackgroundTrack( const char *intro, const char *loop);
+int				trap_RealTime(qtime_t *qtime);
+
+int				trap_CIN_PlayCinematic( const char *arg0, int xpos, int ypos, int width, int height, int bits);
+e_status		trap_CIN_RunCinematic (int handle);
+void			trap_CIN_DrawCinematic (int handle);
+e_status		trap_CIN_StopCinematic(int handle);
+void			trap_CIN_SetExtents(int handle, int x, int y, int w, int h);
+
+qboolean		trap_VerifyCDKey( const char *key, const char *chksum); // bk001208 - RC4
 
 void			trap_SetPbClStatus( int status );
+
+int				trap_GetVoiceMuteClient(int client);
+int				trap_GetVoiceMuteAll(void);
+float			trap_GetVoiceGainClient(int client);
 
 //
 // ui_addbots.c
@@ -697,6 +857,8 @@ void UI_AddBotsMenu( void );
 //
 void UI_RemoveBots_Cache( void );
 void UI_RemoveBotsMenu( void );
+
+void UI_VoiceIngame( void );
 
 //
 // ui_teamorders.c
@@ -773,33 +935,24 @@ void UI_SPUnlockMedals_f( void );
 
 void UI_InitGameinfo( void );
 
-//GRank
+//
+// ui_mediaview.c
+//
+void LaunchMediaViewMenu(const char* mediaRef, const char* execOnClose);
 
 //
-// ui_rankings.c
+// wop_advanced2d.c
 //
-void Rankings_DrawText( void* self );
-void Rankings_DrawName( void* self );
-void Rankings_DrawPassword( void* self );
-void Rankings_Cache( void );
-void UI_RankingsMenu( void );
+#include "../cgame/wopc_advanced2d.h"
+
 
 //
-// ui_login.c
+// ui_help.c
 //
-void Login_Cache( void );
-void UI_LoginMenu( void );
+extern void UI_HelpMenu( void );
+extern void UI_HelpMenu_f( void );
+extern void UI_HelpMenu_Cache( void );
 
-//
-// ui_signup.c
-//
-void Signup_Cache( void );
-void UI_SignupMenu( void );
-
-//
-// ui_rankstatus.c
-//
-void RankStatus_Cache( void );
-void UI_RankStatusMenu( void );
 
 #endif
+

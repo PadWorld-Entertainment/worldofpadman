@@ -32,10 +32,6 @@ glstate_t	glState;
 
 static void GfxInfo_f( void );
 
-#ifdef USE_RENDERER_DLOPEN
-cvar_t  *com_altivec;
-#endif
-
 cvar_t	*r_flareSize;
 cvar_t	*r_flareFade;
 cvar_t	*r_flareCoeff;
@@ -65,6 +61,7 @@ cvar_t	*r_anaglyphMode;
 cvar_t	*r_greyscale;
 
 cvar_t	*r_ignorehwgamma;
+cvar_t	*r_defaultChangedMarker;
 cvar_t	*r_measureOverdraw;
 
 cvar_t	*r_inGameVideo;
@@ -93,7 +90,7 @@ cvar_t	*r_ext_compressed_textures;
 cvar_t	*r_ext_multitexture;
 cvar_t	*r_ext_compiled_vertex_array;
 cvar_t	*r_ext_texture_env_add;
-cvar_t	*r_ext_texture_filter_anisotropic;
+cvar_t	*r_ext_anisotropy;
 cvar_t	*r_ext_max_anisotropy;
 
 cvar_t	*r_ignoreGLErrors;
@@ -110,6 +107,7 @@ cvar_t	*r_drawBuffer;
 cvar_t	*r_lightmap;
 cvar_t	*r_vertexLight;
 cvar_t	*r_uiFullScreen;
+cvar_t	*r_noborder;
 cvar_t	*r_shadows;
 cvar_t	*r_flares;
 cvar_t	*r_mode;
@@ -158,6 +156,8 @@ cvar_t	*r_debugSort;
 cvar_t	*r_printShaders;
 cvar_t	*r_saveFontData;
 
+cvar_t	*r_jpgScreenshotQuality;
+cvar_t	*r_ext_multisample;
 cvar_t	*r_marksOnTriangleMeshes;
 
 cvar_t	*r_aviMotionJpegQuality;
@@ -275,20 +275,26 @@ typedef struct vidmode_s
 	float pixelAspect;		// pixel width / height
 } vidmode_t;
 
+// think of R_MODE_FALLBACK and the hardcoded values in UI_Update when changing r_vidModes
 vidmode_t r_vidModes[] =
 {
-	{ "Mode  0: 320x240",		320,	240,	1 },
-	{ "Mode  1: 400x300",		400,	300,	1 },
-	{ "Mode  2: 512x384",		512,	384,	1 },
-	{ "Mode  3: 640x480",		640,	480,	1 },
-	{ "Mode  4: 800x600",		800,	600,	1 },
-	{ "Mode  5: 960x720",		960,	720,	1 },
-	{ "Mode  6: 1024x768",		1024,	768,	1 },
-	{ "Mode  7: 1152x864",		1152,	864,	1 },
-	{ "Mode  8: 1280x1024",		1280,	1024,	1 },
-	{ "Mode  9: 1600x1200",		1600,	1200,	1 },
-	{ "Mode 10: 2048x1536",		2048,	1536,	1 },
-	{ "Mode 11: 856x480 (wide)",856,	480,	1 }
+	{ "Mode  0:  640x 480 ( 4: 3)",	 640,  480, 1 },
+	{ "Mode  1:  800x 600 ( 4: 3)",	 800,  600, 1 },
+	{ "Mode  2: 1024x 768 ( 4: 3)",	1024,  768, 1 },
+	{ "Mode  3: 1152x 864 ( 4: 3)",	1152,  864, 1 },
+	{ "Mode  4: 1280x 720 (16: 9)",	1280,  720, 1 },
+	{ "Mode  5: 1280x 800 (16:10)",	1280,  800, 1 },
+	{ "Mode  6: 1280x 960 ( 4: 3)",	1280,  960, 1 },
+	{ "Mode  7: 1280x1024 ( 5: 4)",	1280, 1024, 1 },
+	{ "Mode  8: 1366x 768 (16: 9)",	1366,  768, 1 },
+	{ "Mode  9: 1440x 900 (16:10)",	1440,  900, 1 },
+	{ "Mode 10: 1600x 900 (16: 9)",	1600,  900, 1 },
+	{ "Mode 11: 1600x1200 ( 4: 3)",	1600, 1200, 1 },
+	{ "Mode 12: 1680x1050 (16:10)",	1680, 1050, 1 },
+	{ "Mode 13: 1920x1080 (16: 9)",	1920, 1080, 1 },
+	{ "Mode 14: 1920x1200 (16:10)",	1920, 1200, 1 },
+	{ "Mode 15: 2048x1536 ( 4: 3)",	2048, 1536, 1 },
+	{ "Mode 16: 2560x1600 (16:10)",	2560, 1600, 1 }
 };
 static int	s_numVidModes = ARRAY_LEN( r_vidModes );
 
@@ -985,10 +991,6 @@ R_Register
 */
 void R_Register( void ) 
 {
-	#ifdef USE_RENDERER_DLOPEN
-	com_altivec = ri.Cvar_Get("com_altivec", "1", CVAR_ARCHIVE);
-	#endif	
-
 	//
 	// latched and archived variables
 	//
@@ -998,24 +1000,32 @@ void R_Register( void )
 	r_ext_compiled_vertex_array = ri.Cvar_Get( "r_ext_compiled_vertex_array", "1", CVAR_ARCHIVE | CVAR_LATCH);
 	r_ext_texture_env_add = ri.Cvar_Get( "r_ext_texture_env_add", "1", CVAR_ARCHIVE | CVAR_LATCH);
 
-	r_ext_texture_filter_anisotropic = ri.Cvar_Get( "r_ext_texture_filter_anisotropic",
-			"0", CVAR_ARCHIVE | CVAR_LATCH );
+	r_ext_anisotropy = ri.Cvar_Get( "r_ext_anisotropy",	"0", CVAR_ARCHIVE | CVAR_LATCH );
 	r_ext_max_anisotropy = ri.Cvar_Get( "r_ext_max_anisotropy", "2", CVAR_ARCHIVE | CVAR_LATCH );
 
-	r_picmip = ri.Cvar_Get ("r_picmip", "1", CVAR_ARCHIVE | CVAR_LATCH );
+	r_picmip = ri.Cvar_Get ("r_picmip", "0", CVAR_ARCHIVE | CVAR_LATCH );
 	r_roundImagesDown = ri.Cvar_Get ("r_roundImagesDown", "1", CVAR_ARCHIVE | CVAR_LATCH );
 	r_colorMipLevels = ri.Cvar_Get ("r_colorMipLevels", "0", CVAR_LATCH );
 	ri.Cvar_CheckRange( r_picmip, 0, 16, qtrue );
 	r_detailTextures = ri.Cvar_Get( "r_detailtextures", "1", CVAR_ARCHIVE | CVAR_LATCH );
-	r_texturebits = ri.Cvar_Get( "r_texturebits", "0", CVAR_ARCHIVE | CVAR_LATCH );
-	r_colorbits = ri.Cvar_Get( "r_colorbits", "0", CVAR_ARCHIVE | CVAR_LATCH );
+ 	r_texturebits = ri.Cvar_Get( "r_texturebits", "32", CVAR_ARCHIVE | CVAR_LATCH );
+ 	r_colorbits = ri.Cvar_Get( "r_colorbits", "32", CVAR_ARCHIVE | CVAR_LATCH );
 	r_stencilbits = ri.Cvar_Get( "r_stencilbits", "8", CVAR_ARCHIVE | CVAR_LATCH );
 	r_depthbits = ri.Cvar_Get( "r_depthbits", "0", CVAR_ARCHIVE | CVAR_LATCH );
 	r_ext_multisample = ri.Cvar_Get( "r_ext_multisample", "0", CVAR_ARCHIVE | CVAR_LATCH );
 	ri.Cvar_CheckRange( r_ext_multisample, 0, 4, qtrue );
 	r_overBrightBits = ri.Cvar_Get ("r_overBrightBits", "1", CVAR_ARCHIVE | CVAR_LATCH );
+	
+	//TODO: maybe move it to a better position
+	r_defaultChangedMarker = ri.Cvar_Get( "r_defaultChangedMarker", "", CVAR_ARCHIVE | CVAR_ROM );
+#define DEFAULTCHANGE071116 71116
+	if( r_defaultChangedMarker->integer<DEFAULTCHANGE071116 ) {
+		ri.Cvar_Set("r_ignorehwgamma","0");
+		ri.Cvar_Set("r_overBrightBits","0");	
+		ri.Cvar_Set("r_defaultChangedMarker",va("%d",DEFAULTCHANGE071116));
+	}
 	r_ignorehwgamma = ri.Cvar_Get( "r_ignorehwgamma", "0", CVAR_ARCHIVE | CVAR_LATCH);
-	r_mode = ri.Cvar_Get( "r_mode", "3", CVAR_ARCHIVE | CVAR_LATCH );
+	r_mode = ri.Cvar_Get( "r_mode", "2", CVAR_ARCHIVE | CVAR_LATCH );
 	r_fullscreen = ri.Cvar_Get( "r_fullscreen", "1", CVAR_ARCHIVE );
 	r_noborder = ri.Cvar_Get("r_noborder", "0", CVAR_ARCHIVE);
 	r_customwidth = ri.Cvar_Get( "r_customwidth", "1600", CVAR_ARCHIVE | CVAR_LATCH );
@@ -1044,7 +1054,7 @@ void R_Register( void )
 	//
 	r_lodCurveError = ri.Cvar_Get( "r_lodCurveError", "250", CVAR_ARCHIVE|CVAR_CHEAT );
 	r_lodbias = ri.Cvar_Get( "r_lodbias", "0", CVAR_ARCHIVE );
-	r_flares = ri.Cvar_Get ("r_flares", "0", CVAR_ARCHIVE );
+	r_flares = ri.Cvar_Get ("r_flares", "1", CVAR_ARCHIVE );
 	r_znear = ri.Cvar_Get( "r_znear", "4", CVAR_CHEAT );
 	ri.Cvar_CheckRange( r_znear, 0.001f, 200, qfalse );
 	r_zproj = ri.Cvar_Get( "r_zproj", "64", CVAR_ARCHIVE );
@@ -1056,7 +1066,7 @@ void R_Register( void )
 	r_dynamiclight = ri.Cvar_Get( "r_dynamiclight", "1", CVAR_ARCHIVE );
 	r_dlightBacks = ri.Cvar_Get( "r_dlightBacks", "1", CVAR_ARCHIVE );
 	r_finish = ri.Cvar_Get ("r_finish", "0", CVAR_ARCHIVE);
-	r_textureMode = ri.Cvar_Get( "r_textureMode", "GL_LINEAR_MIPMAP_NEAREST", CVAR_ARCHIVE );
+	r_textureMode = ri.Cvar_Get( "r_textureMode", "GL_LINEAR_MIPMAP_LINEAR", CVAR_ARCHIVE );
 	r_swapInterval = ri.Cvar_Get( "r_swapInterval", "0",
 					CVAR_ARCHIVE | CVAR_LATCH );
 	r_gamma = ri.Cvar_Get( "r_gamma", "1", CVAR_ARCHIVE );
@@ -1072,6 +1082,7 @@ void R_Register( void )
 	r_directedScale = ri.Cvar_Get( "r_directedScale", "1", CVAR_CHEAT );
 
 	r_anaglyphMode = ri.Cvar_Get("r_anaglyphMode", "0", CVAR_ARCHIVE);
+
 
 	//
 	// temporary variables that can change at any time
@@ -1127,6 +1138,8 @@ void R_Register( void )
 	r_maxpolys = ri.Cvar_Get( "r_maxpolys", va("%d", MAX_POLYS), 0);
 	r_maxpolyverts = ri.Cvar_Get( "r_maxpolyverts", va("%d", MAX_POLYVERTS), 0);
 
+	r_jpgScreenshotQuality = ri.Cvar_Get( "r_jpgScreenshotQuality", "90", CVAR_ARCHIVE );
+	
 	// make sure all the commands added here are also
 	// removed in R_Shutdown
 	ri.Cmd_AddCommand( "imagelist", R_ImageList_f );
@@ -1158,7 +1171,9 @@ void R_Init( void ) {
 	Com_Memset( &tess, 0, sizeof( tess ) );
 
 	if(sizeof(glconfig_t) != 11332)
+	{
 		ri.Error( ERR_FATAL, "Mod ABI incompatible: sizeof(glconfig_t) == %u != 11332", (unsigned int) sizeof(glconfig_t));
+	}
 
 //	Swap_Init();
 

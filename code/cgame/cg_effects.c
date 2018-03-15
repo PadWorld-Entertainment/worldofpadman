@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 // cg_effects.c -- these functions generate localentities, usually as a result
 // of event processing
@@ -143,24 +123,26 @@ localEntity_t *CG_SmokePuff( const vec3_t p, const vec3_t vel,
 	re->customShader = hShader;
 
 	// rage pro can't alpha fade, so use a different shader
-	if ( cgs.glconfig.hardwareType == GLHW_RAGEPRO ) {
+/*	if ( cgs.glconfig.hardwareType == GLHW_RAGEPRO ) {
 		re->customShader = cgs.media.smokePuffRageProShader;
 		re->shaderRGBA[0] = 0xff;
 		re->shaderRGBA[1] = 0xff;
 		re->shaderRGBA[2] = 0xff;
 		re->shaderRGBA[3] = 0xff;
 	} else {
+*/
 		re->shaderRGBA[0] = le->color[0] * 0xff;
 		re->shaderRGBA[1] = le->color[1] * 0xff;
 		re->shaderRGBA[2] = le->color[2] * 0xff;
 		re->shaderRGBA[3] = 0xff;
-	}
+//	}
 
 	re->reType = RT_SPRITE;
 	re->radius = le->radius;
 
 	return le;
 }
+
 
 /*
 ==================
@@ -169,215 +151,208 @@ CG_SpawnEffect
 Player teleporting in or out
 ==================
 */
-void CG_SpawnEffect( vec3_t org ) {
+void CG_TeleOutEffect(vec3_t org, int team, centity_t *cent)
+{
+	clientInfo_t	*ci;
+	refEntity_t*	legs = NULL;
+	refEntity_t*	torso = NULL;
+	refEntity_t*	head = NULL;
+	int				clientNum;
+	int				renderfx;
 	localEntity_t	*le;
-	refEntity_t		*re;
+	int				i;
 
-	le = CG_AllocLocalEntity();
-	le->leFlags = 0;
-	le->leType = LE_FADE_RGB;
-	le->startTime = cg.time;
-	le->endTime = cg.time + 500;
-	le->lifeRate = 1.0 / ( le->endTime - le->startTime );
-
-	le->color[0] = le->color[1] = le->color[2] = le->color[3] = 1.0;
-
-	re = &le->refEntity;
-
-	re->reType = RT_MODEL;
-	re->shaderTime = cg.time / 1000.0f;
-
-#ifndef MISSIONPACK
-	re->customShader = cgs.media.teleportEffectShader;
-#endif
-	re->hModel = cgs.media.teleportEffectModel;
-	AxisClear( re->axis );
-
-	VectorCopy( org, re->origin );
-#ifdef MISSIONPACK
-	re->origin[2] += 16;
-#else
-	re->origin[2] -= 24;
-#endif
-}
-
-
-#ifdef MISSIONPACK
-/*
-===============
-CG_LightningBoltBeam
-===============
-*/
-void CG_LightningBoltBeam( vec3_t start, vec3_t end ) {
-	localEntity_t	*le;
-	refEntity_t		*beam;
-
-	le = CG_AllocLocalEntity();
-	le->leFlags = 0;
-	le->leType = LE_SHOWREFENTITY;
-	le->startTime = cg.time;
-	le->endTime = cg.time + 50;
-
-	beam = &le->refEntity;
-
-	VectorCopy( start, beam->origin );
-	// this is the end point
-	VectorCopy( end, beam->oldorigin );
-
-	beam->reType = RT_LIGHTNING;
-	beam->customShader = cgs.media.lightningShader;
-}
-
-/*
-==================
-CG_KamikazeEffect
-==================
-*/
-void CG_KamikazeEffect( vec3_t org ) {
-	localEntity_t	*le;
-	refEntity_t		*re;
-
-	le = CG_AllocLocalEntity();
-	le->leFlags = 0;
-	le->leType = LE_KAMIKAZE;
-	le->startTime = cg.time;
-	le->endTime = cg.time + 3000;//2250;
-	le->lifeRate = 1.0 / ( le->endTime - le->startTime );
-
-	le->color[0] = le->color[1] = le->color[2] = le->color[3] = 1.0;
-
-	VectorClear(le->angles.trBase);
-
-	re = &le->refEntity;
-
-	re->reType = RT_MODEL;
-	re->shaderTime = cg.time / 1000.0f;
-
-	re->hModel = cgs.media.kamikazeEffectModel;
-
-	VectorCopy( org, re->origin );
-
-}
-
-/*
-==================
-CG_ObeliskExplode
-==================
-*/
-void CG_ObeliskExplode( vec3_t org, int entityNum ) {
-	localEntity_t	*le;
-	vec3_t origin;
-
-	// create an explosion
-	VectorCopy( org, origin );
-	origin[2] += 64;
-	le = CG_MakeExplosion( origin, vec3_origin,
-						   cgs.media.dishFlashModel,
-						   cgs.media.rocketExplosionShader,
-						   600, qtrue );
-	le->light = 300;
-	le->lightColor[0] = 1;
-	le->lightColor[1] = 0.75;
-	le->lightColor[2] = 0.0;
-}
-
-/*
-==================
-CG_ObeliskPain
-==================
-*/
-void CG_ObeliskPain( vec3_t org ) {
-	float r;
-	sfxHandle_t sfx;
-
-	// hit sound
-	r = rand() & 3;
-	if ( r < 2 ) {
-		sfx = cgs.media.obeliskHitSound1;
-	} else if ( r == 2 ) {
-		sfx = cgs.media.obeliskHitSound2;
-	} else {
-		sfx = cgs.media.obeliskHitSound3;
+	clientNum = cent->currentState.clientNum;
+	if ( clientNum < 0 || clientNum >= MAX_CLIENTS ) {
+		CG_Error( "Bad clientNum on TeleOut-Ent");
 	}
-	trap_S_StartSound ( org, ENTITYNUM_NONE, CHAN_BODY, sfx );
+	ci = &cgs.clientinfo[ clientNum ];
+
+	// it is possible to see corpses from disconnected players that may
+	// not have valid clientinfo
+//	if ( !ci->infoValid ) {
+//		return;
+//	}
+
+	for(i=0;i<3;++i)
+	{
+		le = CG_AllocLocalEntity();
+		le->leType = LE_TELEFFECT;
+		le->startTime = cg.time;
+		le->endTime = cg.time + 2000;
+		le->lifeRate = 1.0 / (le->endTime - le->startTime);
+	//	VectorCopy( org, le->refEntity.origin );
+	//	VectorSet( le->angles.trBase, 0, 0, 0 ); //360*crandom(), 360*crandom(), 360*crandom() );
+		le->angles.trBase[YAW] = cent->currentState.angles[YAW];
+		if ( team == 1 ) le->refEntity.customShader = cgs.media.teleportEffectRedShader;
+		else if ( team == 2 ) le->refEntity.customShader = cgs.media.teleportEffectBlueShader;
+		else le->refEntity.customShader = cgs.media.teleportEffectGreenShader;
+		switch(i)
+		{
+		case 0:
+			head = &(le->refEntity);
+			le->refEntity.frame = 0;
+			break;
+		case 1:
+			torso = &(le->refEntity);
+			le->refEntity.frame = ci->animations[TORSO_STAND].firstFrame;
+			break;
+		case 2:
+			legs = &(le->refEntity);
+			le->refEntity.frame = ci->animations[LEGS_IDLE].firstFrame;
+			break;
+		}
+		le->refEntity.oldframe = le->refEntity.frame;
+		AnglesToAxis( le->angles.trBase, le->refEntity.axis );
+	}
+
+//	VectorCopy(cent->currentState.angles,cent->lerpAngles);
+
+	// get the player model information
+	renderfx = 0;
+
+//	memset( legs, 0, sizeof(refEntity_t) );
+//	memset( torso, 0, sizeof(refEntity_t) );
+//	memset( head, 0, sizeof(refEntity_t) );
+
+	// get the rotation information
+//	CG_PlayerAngles( cent, legs.axis, torso.axis, head.axis );
+	
+	// get the animation state (after rotation, to allow feet shuffle)
+//	CG_PlayerAnimation( cent, &legs.oldframe, &legs.frame, &legs.backlerp,
+//		 &torso.oldframe, &torso.frame, &torso.backlerp );
+
+	renderfx |= RF_LIGHTING_ORIGIN;			// use the same origin for all
+
+	//
+	// add the legs
+	//
+	legs->hModel = ci->legsModel;
+//	legs.customSkin = ci->legsSkin;
+
+	VectorCopy( org, legs->origin );
+
+	VectorCopy( org, legs->lightingOrigin );
+	legs->renderfx = renderfx;
+	VectorCopy (legs->origin, legs->oldorigin);	// don't positionally lerp at all
+
+
+	// if the model failed, allow the default nullmodel to be displayed
+	if (!legs->hModel) {
+		return;
+	}
+
+	//
+	// add the torso
+	//
+	torso->hModel = ci->torsoModel;
+	if (!torso->hModel) {
+		return;
+	}
+
+//	torso.customSkin = ci->torsoSkin;
+
+	VectorCopy( org, torso->lightingOrigin );
+
+	CG_PositionRotatedEntityOnTag( torso, legs, ci->legsModel, "tag_torso");
+
+	torso->renderfx = renderfx;
+
+
+	//
+	// add the head
+	//
+	head->hModel = ci->headModel;
+	if (!head->hModel) {
+		return;
+	}
+//	head.customSkin = ci->headSkin;
+
+	VectorCopy( org, head->lightingOrigin );
+
+	CG_PositionRotatedEntityOnTag( head, torso, ci->torsoModel, "tag_head");
+
+	head->renderfx = renderfx;
 }
 
-
-/*
-==================
-CG_InvulnerabilityImpact
-==================
-*/
-void CG_InvulnerabilityImpact( vec3_t org, vec3_t angles ) {
+void CG_SpawnEffect( vec3_t org, int team ) {
 	localEntity_t	*le;
-	refEntity_t		*re;
-	int				r;
-	sfxHandle_t		sfx;
 
 	le = CG_AllocLocalEntity();
-	le->leFlags = 0;
-	le->leType = LE_INVULIMPACT;
+	le->leType = LE_TELEFFECT;
 	le->startTime = cg.time;
 	le->endTime = cg.time + 1000;
-	le->lifeRate = 1.0 / ( le->endTime - le->startTime );
-
-	le->color[0] = le->color[1] = le->color[2] = le->color[3] = 1.0;
-
-	re = &le->refEntity;
-
-	re->reType = RT_MODEL;
-	re->shaderTime = cg.time / 1000.0f;
-
-	re->hModel = cgs.media.invulnerabilityImpactModel;
-
-	VectorCopy( org, re->origin );
-	AnglesToAxis( angles, re->axis );
-
-	r = rand() & 3;
-	if ( r < 2 ) {
-		sfx = cgs.media.invulnerabilityImpactSound1;
-	} else if ( r == 2 ) {
-		sfx = cgs.media.invulnerabilityImpactSound2;
-	} else {
-		sfx = cgs.media.invulnerabilityImpactSound3;
-	}
-	trap_S_StartSound (org, ENTITYNUM_NONE, CHAN_BODY, sfx );
+	le->lifeRate = 1.0 / (le->endTime - le->startTime);
+	le->radius = rand();
+	VectorCopy( org, le->refEntity.origin );
+	VectorSet( le->angles.trBase, 0, 0, 0 ); //360*crandom(), 360*crandom(), 360*crandom() );
+	//model zuweisung aus CG_AddTeleffect hier her verlegt ... um LE_TELEFFECT für den neuen effekt zu nutzen
+	le->refEntity.hModel = cgs.media.teleportEffectModel;
+	if ( team == 1 ) le->refEntity.customShader = cgs.media.teleportEffectRedShader;
+	else if ( team == 2 ) le->refEntity.customShader = cgs.media.teleportEffectBlueShader;
+	else le->refEntity.customShader = cgs.media.teleportEffectGreenShader;
 }
 
 /*
-==================
-CG_InvulnerabilityJuiced
-==================
+=====================
+CG_GenerateParticles
+
+Generates multiple generic particles
+=====================
 */
-void CG_InvulnerabilityJuiced( vec3_t org ) {
+void CG_GenerateParticles( qhandle_t model, qhandle_t shader, vec3_t pos, float randomPos, vec3_t speed, float randomDir, 
+						  float randomSpeed, int numParticles, int owner, int time, int life, int randomLife, int size, 
+						  int randomSize, int addSize, int randomAddSize, int flags, int renderfx ) {
 	localEntity_t	*le;
 	refEntity_t		*re;
-	vec3_t			angles;
+	vec3_t	angles;
+	vec3_t	axis[3];
+	int		i;
 
-	le = CG_AllocLocalEntity();
-	le->leFlags = 0;
-	le->leType = LE_INVULJUICED;
-	le->startTime = cg.time;
-	le->endTime = cg.time + 10000;
-	le->lifeRate = 1.0 / ( le->endTime - le->startTime );
+	for ( i = 0; i < numParticles; i++ ) {
+		// initialize new le
+		le = CG_AllocLocalEntity();
+		le->leType = LE_MOVE_SCALE_FADE;
+		le->startTime = time;
+		le->endTime = time + life + crandom()*randomLife;
+		le->lifeRate = 1.0 / (le->endTime - le->startTime);
+		le->radius = addSize + crandom()*randomAddSize;
+		le->leFlags = flags; 
+		re = &le->refEntity;
+		re->shaderTime = time / 1000.0f;
+		re->radius = size + crandom()*randomSize;
+		re->renderfx = renderfx;
+		le->color[0] = le->color[1] = le->color[2] = le->color[3] = 1.0;
 
-	le->color[0] = le->color[1] = le->color[2] = le->color[3] = 1.0;
+		if ( model ) {
+			re->hModel = model;
+			re->customShader = shader;
+			if ( flags & LEF_AXIS_ALIGNED ) {
+				AxisClear( re->axis );
+				if ( re->radius ) AxisScale( re->axis, re->radius, re->axis );
+			}
+		} else {
+			re->reType = RT_SPRITE;
+			re->customShader = shader;
+		}
 
-	re = &le->refEntity;
+		// initialize movement
+		if ( flags & LEF_GRAVITY ) le->pos.trType = TR_GRAVITY;
+		else le->pos.trType = TR_LINEAR;
+		if ( flags & LEF_COLLISIONS ) le->leFlags |= LEF_COLLISIONS;
+		le->pos.trTime = time;
+		VectorSet( le->pos.trBase, pos[0] + crandom()*randomPos, pos[1] + crandom()*randomPos, pos[2] + crandom()*randomPos );
+		VectorCopy( le->pos.trBase, le->refEntity.oldorigin );
 
-	re->reType = RT_MODEL;
-	re->shaderTime = cg.time / 1000.0f;
-
-	re->hModel = cgs.media.invulnerabilityJuicedModel;
-
-	VectorCopy( org, re->origin );
-	VectorClear(angles);
-	AnglesToAxis( angles, re->axis );
-
-	trap_S_StartSound (org, ENTITYNUM_NONE, CHAN_BODY, cgs.media.invulnerabilityJuicedSound );
+		vectoangles( speed, angles );
+		angles[0] += crandom()*randomDir;
+		angles[1] += crandom()*randomDir;
+		angles[2] += crandom()*randomDir;
+		AnglesToAxis( angles, axis );
+		VectorNormalize( axis[0] );
+		VectorScale( axis[0], VectorLength(speed) + crandom()*randomSpeed, le->pos.trDelta );
+	}
 }
-
-#endif
 
 /*
 ==================
@@ -493,7 +468,11 @@ CG_Bleed
 This is the spurt of blood when a character gets hit
 =================
 */
-void CG_Bleed( vec3_t origin, int entityNum ) {
+void CG_Bleed( vec3_t origin, int entityNum )
+{
+	//TODO? ... hier könnte man das mit den >>SCHMERZ<< sprites machen
+	return;
+/*
 	localEntity_t	*ex;
 
 	if ( !cg_blood.integer ) {
@@ -517,6 +496,7 @@ void CG_Bleed( vec3_t origin, int entityNum ) {
 	if ( entityNum == cg.snap->ps.clientNum ) {
 		ex->refEntity.renderfx |= RF_THIRD_PERSON;
 	}
+*/
 }
 
 
@@ -561,7 +541,10 @@ Generated a bunch of gibs launching out from the bodies location
 */
 #define	GIB_VELOCITY	250
 #define	GIB_JUMP		250
-void CG_GibPlayer( vec3_t playerOrigin ) {
+void CG_GibPlayer( vec3_t playerOrigin )
+{
+	return;
+/*
 	vec3_t	origin, velocity;
 
 	if ( !cg_blood.integer ) {
@@ -636,6 +619,7 @@ void CG_GibPlayer( vec3_t playerOrigin ) {
 	velocity[1] = crandom()*GIB_VELOCITY;
 	velocity[2] = GIB_JUMP + crandom()*GIB_VELOCITY;
 	CG_LaunchGib( origin, velocity, cgs.media.gibLeg );
+*/
 }
 
 /*
@@ -679,7 +663,9 @@ Generated a bunch of gibs launching out from the bodies location
 ===================
 */
 void CG_BigExplode( vec3_t playerOrigin ) {
-	vec3_t	origin, velocity;
+
+	return;
+	/*vec3_t	origin, velocity;
 
 	if ( !cg_blood.integer ) {
 		return;
@@ -714,5 +700,6 @@ void CG_BigExplode( vec3_t playerOrigin ) {
 	velocity[1] = crandom()*EXP_VELOCITY*2.5;
 	velocity[2] = EXP_JUMP + crandom()*EXP_VELOCITY;
 	CG_LaunchExplode( origin, velocity, cgs.media.smoke2 );
+	*/
 }
 

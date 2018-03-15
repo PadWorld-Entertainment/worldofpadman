@@ -26,16 +26,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
+
+#define	PROTOCOL_VERSION	71
+// v1.5 - 69
+// v1.1 - v1.2: 68
+// maintain a list of compatible protocols for demo playing
+// NOTE: that stuff only works with two digits protocols
+extern int demo_protocols[];
+
 #ifdef STANDALONE
-  #define PRODUCT_NAME			"iofoo3"
-  #define BASEGAME			"foobar"
-  #define CLIENT_WINDOW_TITLE     	"changeme"
-  #define CLIENT_WINDOW_MIN_TITLE 	"changeme2"
-  #define HOMEPATH_NAME_UNIX		".foo"
-  #define HOMEPATH_NAME_WIN		"FooBar"
-  #define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
-  #define GAMENAME_FOR_MASTER		"foobar"	// must NOT contain whitespace
-//  #define LEGACY_PROTOCOL	// You probably don't need this for your standalone game
+  #define PRODUCT_NAME			"wop"
+  #define PRODUCT_TITLE			"WoP"
+  #define BASEGAME				"wop"			// TODO: Use this in Makefile
+  #define CLIENT_WINDOW_TITLE     	"World of Padman"
+  #define CLIENT_WINDOW_MIN_TITLE 	PRODUCT_TITLE
+  #define PRODUCT_BASE			"ioq3 r2140M"
+  #define PRODUCT_RELEASE		""			// "beta x" "final"/""
+ 
+  #define VERSION_INFO			PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
+  #define HOMEPATH_NAME_UNIX		".padman"
+  #define HOMEPATH_NAME_WIN		"Padman"
+  #define HOMEPATH_NAME_MACOSX		"WorldOfPadman"
+  #define GAMENAME_FOR_MASTER	"WorldofPadman"
+//  #define LEGACY_PROTOCOL
 #else
   #define PRODUCT_NAME			"ioq3"
   #define BASEGAME			"baseq3"
@@ -54,10 +67,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define BASETA				"missionpack"
 
 #ifndef PRODUCT_VERSION
-  #define PRODUCT_VERSION "1.36"
+  // TODO: Sync with Makefile!
+  #define PRODUCT_VERSION "1.6"
 #endif
 
-#define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION
+#define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION " " PRODUCT_RELEASE
 
 #define MAX_TEAMNAME		32
 #define MAX_MASTER_SERVERS      5	// number of supported master servers
@@ -246,6 +260,8 @@ typedef int		clipHandle_t;
 
 #define	MAX_SAY_TEXT	150
 
+#define UI_NS_STR_HGW	0x00008000 //number sized string ... height gleich width
+
 // paramters for command buffer stuffing
 typedef enum {
 	EXEC_NOW,			// don't return until completed, a VM should NEVER use this,
@@ -386,6 +402,13 @@ extern	vec4_t		colorWhite;
 extern	vec4_t		colorLtGrey;
 extern	vec4_t		colorMdGrey;
 extern	vec4_t		colorDkGrey;
+extern	vec4_t		colorTBlack33;
+extern	vec4_t		colorTBlack66;
+extern	vec4_t		colorDkGreen;
+extern	vec4_t		colorDkBlue;
+extern	vec4_t		colorDkRed;
+extern	vec4_t		colorDkLilac;
+extern	vec4_t		colorDkOrange;
 
 #define Q_COLOR_ESCAPE	'^'
 #define Q_IsColorString(p)	((p) && *(p) == Q_COLOR_ESCAPE && *((p)+1) && isalnum(*((p)+1))) // ^[0-9a-zA-Z]
@@ -410,6 +433,9 @@ extern	vec4_t		colorDkGrey;
 #define S_COLOR_WHITE	"^7"
 
 extern vec4_t	g_color_table[8];
+extern vec4_t	spraycolors[];
+//#define NUM_SPRAYCOLORS ( sizeof( spraycolors[] ) / sizeof( spraycolors[0] ) )
+#define NUM_SPRAYCOLORS 6
 
 #define	MAKERGB( v, r, g, b ) v[0]=r;v[1]=g;v[2]=b
 #define	MAKERGBA( v, r, g, b, a ) v[0]=r;v[1]=g;v[2]=b;v[3]=a
@@ -652,6 +678,7 @@ vec_t VectorNormalize (vec3_t v);		// returns vector length
 vec_t VectorNormalize2( const vec3_t v, vec3_t out );
 void Vector4Scale( const vec4_t in, vec_t scale, vec4_t out );
 void VectorRotate( vec3_t in, vec3_t matrix[3], vec3_t out );
+void VectorRotateTMatrix( vec3_t in, vec3_t matrix[3], vec3_t out );
 int Q_log2(int val);
 
 float Q_acos(float c);
@@ -660,7 +687,8 @@ int		Q_rand( int *seed );
 float	Q_random( int *seed );
 float	Q_crandom( int *seed );
 
-#define random()	((rand () & 0x7fff) / ((float)0x7fff))
+#define random()	((rand () & 0x7fff) / ((float)0x8000))
+#define randomindex(count) (rand() % (count))
 #define crandom()	(2.0 * (random() - 0.5))
 
 void vectoangles( const vec3_t value1, vec3_t angles);
@@ -668,6 +696,7 @@ void AnglesToAxis( const vec3_t angles, vec3_t axis[3] );
 
 void AxisClear( vec3_t axis[3] );
 void AxisCopy( vec3_t in[3], vec3_t out[3] );
+void AxisScale( vec3_t in[3], float s, vec3_t out[3] );
 
 void SetPlaneSignbits( struct cplane_s *out );
 int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *plane);
@@ -856,6 +885,10 @@ void Info_SetValueForKey_Big( char *s, const char *key, const char *value );
 qboolean Info_Validate( const char *s );
 void Info_NextPair( const char **s, char *key, char *value );
 
+// value only info strings 
+void StringDump_Push(char* s, const char* value); 
+void StringDump_GetNext( const char **head, char *value ); 
+
 // this is only here so the functions in q_shared.c and bg_*.c can link
 void	QDECL Com_Error( int level, const char *error, ... ) __attribute__ ((noreturn, format(printf, 2, 3)));
 void	QDECL Com_Printf( const char *msg, ... ) __attribute__ ((format (printf, 1, 2)));
@@ -894,9 +927,7 @@ default values.
 #define CVAR_SERVER_CREATED	0x0800	// cvar was created by a server the client connected to.
 #define CVAR_VM_CREATED		0x1000	// cvar was created exclusively in one of the VMs.
 #define CVAR_PROTECTED		0x2000	// prevent modifying this var from VMs or the server
-// These flags are only returned by the Cvar_Flags() function
-#define CVAR_MODIFIED		0x40000000	// Cvar was modified
-#define CVAR_NONEXISTENT	0x80000000	// Cvar doesn't exist.
+#define CVAR_NONEXISTENT	0xFFFFFFFF	// Cvar doesn't exist.
 
 // nothing outside the Cvar_*() functions should modify these fields!
 typedef struct cvar_s cvar_t;
@@ -1215,6 +1246,7 @@ typedef struct playerState_s {
 #define BUTTON_FOLLOWME		1024
 
 #define	BUTTON_ANY			2048			// any key whatsoever
+#define BUTTON_DROPCART		4096		// button12
 
 #define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,
 										// then BUTTON_WALKING should be set
@@ -1239,7 +1271,8 @@ typedef enum {
 	TR_LINEAR,
 	TR_LINEAR_STOP,
 	TR_SINE,					// value = base + sin( time / duration ) * delta
-	TR_GRAVITY
+	TR_GRAVITY,
+	TR_LOW_GRAVITY
 } trType_t;
 
 typedef struct {
@@ -1403,6 +1436,12 @@ typedef enum _flag_status {
 #define CDKEY_LEN 16
 #define CDCHKSUM_LEN 2
 
+typedef enum {
+	WSM_NO=0,
+	WSM_NORMAL,
+	WSM_STARTMAP,
+	WSM_ENDMAP
+} wopStoryMode_e;
 
 #define LERP( a, b, w ) ( ( a ) * ( 1.0f - ( w ) ) + ( b ) * ( w ) )
 #define LUMA( red, green, blue ) ( 0.2126f * ( red ) + 0.7152f * ( green ) + 0.0722f * ( blue ) )

@@ -336,6 +336,13 @@ static const char *IN_TranslateSDLToQ3Key( SDL_keysym *keysym,
 	if( in_keyboardDebug->integer )
 		IN_PrintKey( keysym, *key, down );
 
+	if( IN_IsConsoleKey( *key, *buf ) )
+	{
+		// Console keys can't be bound or generate characters
+		*key = K_CONSOLE;
+		*buf = '\0';
+	}
+
 	// Keys that have ASCII names but produce no character are probably
 	// dead keys -- ignore them
 	if( down && strlen( Key_KeynumToString( *key ) ) == 1 &&
@@ -345,13 +352,6 @@ static const char *IN_TranslateSDLToQ3Key( SDL_keysym *keysym,
 			Com_Printf( "  Ignored dead key '%c'\n", *key );
 
 		*key = 0;
-	}
-
-	if( IN_IsConsoleKey( *key, *buf ) )
-	{
-		// Console keys can't be bound or generate characters
-		*key = K_CONSOLE;
-		*buf = '\0';
 	}
 
 	// Don't allow extended ASCII to generate characters
@@ -535,12 +535,13 @@ static void IN_DeactivateMouse( void )
 static int joy_keys[16] = {
 	K_LEFTARROW, K_RIGHTARROW,
 	K_UPARROW, K_DOWNARROW,
-	K_JOY17, K_JOY18,
-	K_JOY19, K_JOY20,
-	K_JOY21, K_JOY22,
-	K_JOY23, K_JOY24,
-	K_JOY25, K_JOY26,
-	K_JOY27, K_JOY28
+	K_JOY16, K_JOY17,
+	K_JOY18, K_JOY19,
+	K_JOY20, K_JOY21,
+	K_JOY22, K_JOY23,
+
+	K_JOY24, K_JOY25,
+	K_JOY26, K_JOY27
 };
 
 // translate hat events into keypresses

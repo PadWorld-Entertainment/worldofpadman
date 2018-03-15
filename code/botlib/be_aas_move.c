@@ -271,11 +271,10 @@ void AAS_JumpReachRunStart(aas_reachability_t *reach, vec3_t runstart)
 	//
 	AAS_PredictClientMovement(&move, -1, start, PRESENCE_NORMAL, qtrue,
 								vec3_origin, cmdmove, 1, 2, 0.1f,
-								SE_ENTERWATER|SE_ENTERSLIME|SE_ENTERLAVA|
-								SE_HITGROUNDDAMAGE|SE_GAP, 0, qfalse);
+								SE_ENTERWATER|SE_ENTERSLIME|SE_ENTERLAVA|SE_GAP, 0, qfalse);
 	VectorCopy(move.endpos, runstart);
 	//don't enter slime or lava and don't fall from too high
-	if (move.stopevent & (SE_ENTERSLIME|SE_ENTERLAVA|SE_HITGROUNDDAMAGE))
+	if (move.stopevent & (SE_ENTERSLIME|SE_ENTERLAVA))
 	{
 		VectorCopy(start, runstart);
 	} //end if
@@ -641,13 +640,11 @@ int AAS_ClientMovementPrediction(struct aas_clientmove_s *move,
 			//trace a bounding box
 			trace = AAS_TraceClientBBox(org, end, presencetype, entnum);
 			//
-//#ifdef AAS_MOVE_DEBUG
-			if (visualize)
-			{
+			if (0){		// cyr, spams console through showreachesfrom|to    //if(visualize){
 				if (trace.startsolid) botimport.Print(PRT_MESSAGE, "PredictMovement: start solid\n");
 				AAS_DebugLine(org, trace.endpos, LINECOLOR_RED);
 			} //end if
-//#endif //AAS_MOVE_DEBUG
+
 			//
 			if (stopevent & (SE_ENTERAREA|SE_TOUCHJUMPPAD|SE_TOUCHTELEPORTER|SE_TOUCHCLUSTERPORTAL))
 			{

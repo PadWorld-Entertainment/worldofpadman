@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 /*
 =======================================================================
@@ -31,25 +11,20 @@ TEAM ORDERS MENU
 
 #include "ui_local.h"
 
-
-#define ART_FRAME		"menu/art/addbotframe"
-#define ART_BACK0		"menu/art/back_0"
-#define ART_BACK1		"menu/art/back_1"	
+#define ART_FRAME		"menu/ingame/bg.tga"
 
 #define ID_LIST_BOTS		10
 #define ID_LIST_CTF_ORDERS	11
 #define ID_LIST_TEAM_ORDERS	12
 
+#define ORDER_HEIGHT 24
 
 typedef struct {
 	menuframework_s	menu;
 
-	menutext_s		banner;
-	menubitmap_s	frame;
-
 	menulist_s		list;
 
-	menubitmap_s	back;
+	menutext_s		back;
 
 	int				gametype;
 	int				numBots;
@@ -62,43 +37,45 @@ static teamOrdersMenuInfo_t	teamOrdersMenuInfo;
 
 #define NUM_CTF_ORDERS		7
 static const char *ctfOrders[] = {
-	"I Am the Leader",
-	"Defend the Base",
-	"Follow Me",
-	"Get Enemy Flag",
-	"Camp Here",
+	"I am the leader",
+	"Defend the base",
+	"Follow me",
+	"Get enemy lolly",
+	"Camp here",
 	"Report",
-	"I Relinquish Command",
+	"I relinquish command",
 	NULL
 };
 static const char *ctfMessages[] = {
-	"i am the leader",
+	"I am the leader",
 	"%s defend the base",
 	"%s follow me",
-	"%s get enemy flag",
+	"%s get enemy lolly",
 	"%s camp here",
 	"%s report",
-	"i stop being the leader",
+	"I stop being the leader",
 	NULL
 };
 
-#define NUM_TEAM_ORDERS		6
+#define NUM_TEAM_ORDERS		7 //raute: 6 -> 7
 static const char *teamOrders[] = {
-	"I Am the Leader",
-	"Follow Me",
+	"I am the leader",
+	"Follow me",
 	"Roam",
-	"Camp Here",
+	"Camp here",
 	"Report",
-	"I Relinquish Command",
+	"Give cartridges",
+	"I relinquish Command",
 	NULL
 };
 static const char *teamMessages[] = {
-	"i am the leader",
+	"I am the leader",
 	"%s follow me",
 	"%s roam",
 	"%s camp here",
 	"%s report",
-	"i stop being the leader",
+	"%s give your cartridges to me",
+	"I stop being the leader",
 	NULL
 };
 
@@ -143,7 +120,7 @@ static void UI_TeamOrdersMenu_SetList( int id ) {
 		break;
 	}
 
-	teamOrdersMenuInfo.list.generic.bottom = teamOrdersMenuInfo.list.generic.top + teamOrdersMenuInfo.list.numitems * PROP_HEIGHT;
+	teamOrdersMenuInfo.list.generic.bottom = teamOrdersMenuInfo.list.generic.top + teamOrdersMenuInfo.list.numitems * ORDER_HEIGHT;
 }
 
 
@@ -168,7 +145,7 @@ sfxHandle_t UI_TeamOrdersMenu_Key( int key ) {
 			x = l->generic.left;
 			y = l->generic.top;
 			if( UI_CursorInRect( x, y, l->generic.right - x, l->generic.bottom - y ) ) {
-				index = (uis.cursory - y) / PROP_HEIGHT;
+				index = (uis.cursory - y) / ORDER_HEIGHT;
 				l->oldvalue = l->curvalue;
 				l->curvalue = index;
 
@@ -231,17 +208,17 @@ static void UI_TeamOrdersMenu_ListDraw( void *self ) {
 	for( i = 0; i < l->numitems; i++ ) {
 		style = UI_LEFT|UI_SMALLFONT|UI_CENTER;
 		if( i == l->curvalue ) {
-			color = color_yellow;
+			color = color_orange;
 			if( hasfocus ) {
 				style |= UI_PULSE;
 			}
 		}
 		else {
-			color = color_orange;
+			color = color_black;
 		}
 
-		UI_DrawProportionalString( x, y, l->itemnames[i], style, color );
-		y += PROP_HEIGHT;
+		UI_DrawStringNS(x,y,l->itemnames[i],style,18.0f,color);
+		y += ORDER_HEIGHT;
 	}
 }
 
@@ -295,7 +272,7 @@ static void UI_TeamOrdersMenu_BuildBotList( void ) {
 	int		numPlayers;
 	int		isBot;
 	int		n;
-	char	playerTeam = '3';
+	char	playerTeam;
 	char	botTeam;
 	char	info[MAX_INFO_STRING];
 
@@ -312,11 +289,14 @@ static void UI_TeamOrdersMenu_BuildBotList( void ) {
 	numPlayers = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
 	teamOrdersMenuInfo.gametype = atoi( Info_ValueForKey( info, "g_gametype" ) );
 
+	trap_GetConfigString( CS_PLAYERS + cs.clientNum, info, MAX_INFO_STRING );
+	playerTeam = *Info_ValueForKey( info, "t" );
+
 	for( n = 0; n < numPlayers && teamOrdersMenuInfo.numBots < 9; n++ ) {
 		trap_GetConfigString( CS_PLAYERS + n, info, MAX_INFO_STRING );
 
 		if( n == cs.clientNum ) {
-			playerTeam = *Info_ValueForKey( info, "t" );
+//			playerTeam = *Info_ValueForKey( info, "t" );
 			continue;
 		}
 
@@ -336,6 +316,18 @@ static void UI_TeamOrdersMenu_BuildBotList( void ) {
 	}
 }
 
+/*
+#######################
+  TeamOrderMenu_Draw
+#######################
+*/
+static void TeamOrderMenu_Draw( void ) {
+	UI_DrawIngameBG();
+	UI_DrawProportionalString( 320, 110, "TEAM ORDERS",UI_CENTER|UI_SMALLFONT,color_black);
+
+	// standard menu drawing
+	Menu_Draw( &teamOrdersMenuInfo.menu );
+}
 
 /*
 ===============
@@ -351,40 +343,25 @@ static void UI_TeamOrdersMenu_Init( void ) {
 
 	UI_TeamOrdersMenu_BuildBotList();
 
-	teamOrdersMenuInfo.banner.generic.type		= MTYPE_BTEXT;
-	teamOrdersMenuInfo.banner.generic.x			= 320;
-	teamOrdersMenuInfo.banner.generic.y			= 16;
-	teamOrdersMenuInfo.banner.string			= "TEAM ORDERS";
-	teamOrdersMenuInfo.banner.color				= color_white;
-	teamOrdersMenuInfo.banner.style				= UI_CENTER;
-
-	teamOrdersMenuInfo.frame.generic.type		= MTYPE_BITMAP;
-	teamOrdersMenuInfo.frame.generic.flags		= QMF_INACTIVE;
-	teamOrdersMenuInfo.frame.generic.name		= ART_FRAME;
-	teamOrdersMenuInfo.frame.generic.x			= 320-233;
-	teamOrdersMenuInfo.frame.generic.y			= 240-166;
-	teamOrdersMenuInfo.frame.width				= 466;
-	teamOrdersMenuInfo.frame.height				= 332;
+	teamOrdersMenuInfo.menu.draw = TeamOrderMenu_Draw;
 
 	teamOrdersMenuInfo.list.generic.type		= MTYPE_SCROLLLIST;
 	teamOrdersMenuInfo.list.generic.flags		= QMF_PULSEIFFOCUS;
 	teamOrdersMenuInfo.list.generic.ownerdraw	= UI_TeamOrdersMenu_ListDraw;
 	teamOrdersMenuInfo.list.generic.callback	= UI_TeamOrdersMenu_ListEvent;
 	teamOrdersMenuInfo.list.generic.x			= 320-64;
-	teamOrdersMenuInfo.list.generic.y			= 120;
+	teamOrdersMenuInfo.list.generic.y			= 140;//120;
 
-	teamOrdersMenuInfo.back.generic.type		= MTYPE_BITMAP;
-	teamOrdersMenuInfo.back.generic.name		= ART_BACK0;
-	teamOrdersMenuInfo.back.generic.flags		= QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS;
+	teamOrdersMenuInfo.back.generic.type		= MTYPE_TEXTS;
+	teamOrdersMenuInfo.back.fontHeight			= 16.0f;
+	teamOrdersMenuInfo.back.generic.flags		= QMF_PULSEIFFOCUS;
 	teamOrdersMenuInfo.back.generic.callback	= UI_TeamOrdersMenu_BackEvent;
-	teamOrdersMenuInfo.back.generic.x			= 0;
-	teamOrdersMenuInfo.back.generic.y			= 480-64;
-	teamOrdersMenuInfo.back.width				= 128;
-	teamOrdersMenuInfo.back.height				= 64;
-	teamOrdersMenuInfo.back.focuspic			= ART_BACK1;
+	teamOrdersMenuInfo.back.generic.x			= 245;
+	teamOrdersMenuInfo.back.generic.y			= 315;
+	teamOrdersMenuInfo.back.string				= "BACK";
+	teamOrdersMenuInfo.back.style				= UI_SMALLFONT;
+	teamOrdersMenuInfo.back.color				= color_black;
 
-	Menu_AddItem( &teamOrdersMenuInfo.menu, &teamOrdersMenuInfo.banner );
-	Menu_AddItem( &teamOrdersMenuInfo.menu, &teamOrdersMenuInfo.frame );
 	Menu_AddItem( &teamOrdersMenuInfo.menu, &teamOrdersMenuInfo.list );
 	Menu_AddItem( &teamOrdersMenuInfo.menu, &teamOrdersMenuInfo.back );
 
@@ -402,8 +379,6 @@ UI_TeamOrdersMenu_Cache
 */
 void UI_TeamOrdersMenu_Cache( void ) {
 	trap_R_RegisterShaderNoMip( ART_FRAME );
-	trap_R_RegisterShaderNoMip( ART_BACK0 );
-	trap_R_RegisterShaderNoMip( ART_BACK1 );
 }
 
 

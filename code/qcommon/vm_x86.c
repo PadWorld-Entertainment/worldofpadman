@@ -24,22 +24,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "vm_local.h"
 
 #ifdef _WIN32
-  #include <windows.h>
-#else
-  #ifdef __FreeBSD__
-  #include <sys/types.h>
-  #endif
+#include <windows.h>
+#endif
 
-  #include <sys/mman.h> // for PROT_ stuff
+#ifdef __FreeBSD__
+#include <sys/types.h>
+#endif
 
-  /* need this on NX enabled systems (i386 with PAE kernel or
-   * noexec32=on x86_64) */
-  #define VM_X86_MMAP
-  
-  // workaround for systems that use the old MAP_ANON macro
-  #ifndef MAP_ANONYMOUS
-    #define MAP_ANONYMOUS MAP_ANON
-  #endif
+#ifndef _WIN32
+#include <sys/mman.h> // for PROT_ stuff
+#endif
+
+/* need this on NX enabled systems (i386 with PAE kernel or
+ * noexec32=on x86_64) */
+#if defined(__linux__) || defined(__FreeBSD__)
+#define VM_X86_MMAP
 #endif
 
 static void VM_Destroy_Compiled(vm_t* self);
@@ -443,7 +442,7 @@ static void DoSyscall(void)
 		int *data;
 #if idx64
 		int index;
-		intptr_t args[16];
+		intptr_t args[11];
 #endif
 		
 		data = (int *) (savedVM->dataBase + programStack + 4);
@@ -456,7 +455,7 @@ static void DoSyscall(void)
 		opStackBase[opStackOfs + 1] = savedVM->systemCall(args);
 #else
 		data[0] = ~syscallNum;
-		opStackBase[opStackOfs + 1] = savedVM->systemCall((intptr_t *) data);
+		opStackBase[opStackOfs + 1] = savedVM->systemCall(data);
 #endif
 	}
 	else
@@ -1777,25 +1776,25 @@ int VM_CallCompiled(vm_t *vm, int *args)
   #endif		
 #elif idx64
 	__asm__ volatile(
-		"movq %5, %%rax\n"
-		"movq %3, %%r8\n"
-		"movq %4, %%r9\n"
-		"push %%r15\n"
-		"push %%r14\n"
-		"push %%r13\n"
-		"push %%r12\n"
-		"callq *%%rax\n"
-		"pop %%r12\n"
-		"pop %%r13\n"
-		"pop %%r14\n"
-		"pop %%r15\n"
+		"movq %5, %%rax\r\n"
+		"movq %3, %%r8\r\n"
+		"movq %4, %%r9\r\n"
+		"push %%r15\r\n"
+		"push %%r14\r\n"
+		"push %%r13\r\n"
+		"push %%r12\r\n"
+		"callq *%%rax\r\n"
+		"pop %%r12\r\n"
+		"pop %%r13\r\n"
+		"pop %%r14\r\n"
+		"pop %%r15\r\n"
 		: "+S" (programStack), "+D" (opStack), "+b" (opStackOfs)
 		: "g" (vm->instructionPointers), "g" (vm->dataBase), "g" (entryPoint)
 		: "cc", "memory", "%rax", "%rcx", "%rdx", "%r8", "%r9", "%r10", "%r11"
 	);
 #else
 	__asm__ volatile(
-		"calll *%3\n"
+		"calll *%3\r\n"
 		: "+S" (programStack), "+D" (opStack), "+b" (opStackOfs)
 		: "g" (entryPoint)
 		: "cc", "memory", "%eax", "%ecx", "%edx"

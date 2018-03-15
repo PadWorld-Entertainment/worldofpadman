@@ -538,13 +538,11 @@ void CL_ParseGamestate( msg_t *msg ) {
 		CL_StopRecord_f();
 	
 	// reinitialize the filesystem if the game directory has changed
-	if(!cls.oldGameSet && (Cvar_Flags("fs_game") & CVAR_MODIFIED))
+	if(FS_ConditionalRestart(clc.checksumFeed, qfalse) && !cls.oldGameSet)
 	{
 		cls.oldGameSet = qtrue;
 		Q_strncpyz(cls.oldGame, oldGame, sizeof(cls.oldGame));
 	}
-
-	FS_ConditionalRestart(clc.checksumFeed, qfalse);
 
 	// This used to call CL_StartHunkUsers, but now we enter the download state before loading the
 	// cgame
@@ -829,6 +827,7 @@ void CL_ParseVoip ( msg_t *msg ) {
 		CL_PlayVoip(sender, written, (const byte *) decoded, flags);
 
 	clc.voipIncomingSequence[sender] = sequence + frames;
+	clc.voipLastPacket[sender] = cl.serverTime;
 }
 #endif
 

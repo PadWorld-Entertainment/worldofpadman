@@ -1127,9 +1127,32 @@ void R_DecomposeSort( unsigned sort, int *entityNum, shader_t **shader,
 					 int *fogNum, int *dlightMap ) {
 	*fogNum = ( sort >> QSORT_FOGNUM_SHIFT ) & 31;
 	*shader = tr.sortedShaders[ ( sort >> QSORT_SHADERNUM_SHIFT ) & (MAX_SHADERS-1) ];
-	*entityNum = ( sort >> QSORT_ENTITYNUM_SHIFT ) & MAX_ENTITIES;
+	*entityNum = ( sort >> QSORT_ENTITYNUM_SHIFT ) & (MAX_GENTITIES-1);
 	*dlightMap = sort & 3;
 }
+
+//sortSL{
+void SLpolySort(drawSurf_t **Surfs,int numS)
+{
+	int i;
+	int notDone=1;
+	drawSurf_t tmp;
+
+	//ToDo: maybe replace by a better sorting-algorithm
+	while(notDone)
+	{
+		notDone=0;
+		for(i=0;i<(numS-1);++i)
+			if(((srfPoly_t*)(Surfs[i]->surface))->lvl >  ((srfPoly_t*)(Surfs[i+1]->surface))->lvl)
+			{
+				tmp = *(Surfs[i]);
+				*(Surfs[i]) = *(Surfs[i+1]);
+				*(Surfs[i+1]) = tmp;
+				notDone=1;
+			}
+	}
+}
+//sortSL}
 
 /*
 =================
@@ -1142,6 +1165,11 @@ void R_SortDrawSurfs( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 	int				entityNum;
 	int				dlighted;
 	int				i;
+//sortSL{
+#define MAX_LOGO_POLYS 256 //... copy from mod-code
+	drawSurf_t*		SLpolys[MAX_LOGO_POLYS];
+	int				countSL=0;
+//sortSL}
 
 	// it is possible for some views to not have any surfaces
 	if ( numDrawSurfs < 1 ) {
@@ -1183,6 +1211,23 @@ void R_SortDrawSurfs( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 			break;		// only one mirror view at a time
 		}
 	}
+
+//sortSL{
+	for( i = 0 ; i < numDrawSurfs ; ++i)
+	{
+		if(*(drawSurfs[i].surface) == SF_POLY)
+		{
+			srfPoly_t* poly = (srfPoly_t*)(drawSurfs[i].surface);
+			if(poly->lvl && countSL<MAX_LOGO_POLYS)
+			{
+				SLpolys[countSL] = drawSurfs+i;
+				++countSL;
+			}
+		}
+	}
+
+	SLpolySort(SLpolys,countSL);
+//sortSL}
 
 	R_AddDrawSurfCmd( drawSurfs, numDrawSurfs );
 }

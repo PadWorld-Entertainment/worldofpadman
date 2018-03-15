@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 #include "g_local.h"
 
@@ -42,6 +22,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define	RESPAWN_HOLDABLE	60
 #define	RESPAWN_MEGAHEALTH	35//120
 #define	RESPAWN_POWERUP		120
+
+#define RESPAWN_DROPPED_FLAG	30
+#define RESPAWN_DROPPED_ITEM	30
 
 
 //======================================================================
@@ -112,93 +95,83 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 		// anti-reward
 		client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_DENIEDREWARD;
 	}
+
+	// FIXME: Where's the best place for this?
+	if ( ent->item->giTag == PW_BERSERKER ) {
+		trap_SendServerCommand( ( ent - g_entities ), va( "srwc %i", WP_PUNCHY ) );
+		other->client->pers.cmd.weapon = WP_PUNCHY;
+		other->client->ps.weapon = WP_PUNCHY;
+	}
+
 	return RESPAWN_POWERUP;
 }
 
 //======================================================================
 
-#ifdef MISSIONPACK
-int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
-	int		clientNum;
-	char	userinfo[MAX_INFO_STRING];
-	float	handicap;
-	int		max;
-
-	other->client->ps.stats[STAT_PERSISTANT_POWERUP] = ent->item - bg_itemlist;
-	other->client->persistantPowerup = ent;
-
-	switch( ent->item->giTag ) {
-	case PW_GUARD:
-		clientNum = other->client->ps.clientNum;
-		trap_GetUserinfo( clientNum, userinfo, sizeof(userinfo) );
-		handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
-		if( handicap<=0.0f || handicap>100.0f) {
-			handicap = 100.0f;
-		}
-		max = (int)(2 *  handicap);
-
-		other->health = max;
-		other->client->ps.stats[STAT_HEALTH] = max;
-		other->client->ps.stats[STAT_MAX_HEALTH] = max;
-		other->client->ps.stats[STAT_ARMOR] = max;
-		other->client->pers.maxHealth = max;
-
-		break;
-
-	case PW_SCOUT:
-		clientNum = other->client->ps.clientNum;
-		trap_GetUserinfo( clientNum, userinfo, sizeof(userinfo) );
-		handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
-		if( handicap<=0.0f || handicap>100.0f) {
-			handicap = 100.0f;
-		}
-		other->client->pers.maxHealth = handicap;
-		other->client->ps.stats[STAT_ARMOR] = 0;
-		break;
-
-	case PW_DOUBLER:
-		clientNum = other->client->ps.clientNum;
-		trap_GetUserinfo( clientNum, userinfo, sizeof(userinfo) );
-		handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
-		if( handicap<=0.0f || handicap>100.0f) {
-			handicap = 100.0f;
-		}
-		other->client->pers.maxHealth = handicap;
-		break;
-	case PW_AMMOREGEN:
-		clientNum = other->client->ps.clientNum;
-		trap_GetUserinfo( clientNum, userinfo, sizeof(userinfo) );
-		handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
-		if( handicap<=0.0f || handicap>100.0f) {
-			handicap = 100.0f;
-		}
-		other->client->pers.maxHealth = handicap;
-		memset(other->client->ammoTimes, 0, sizeof(other->client->ammoTimes));
-		break;
-	default:
-		clientNum = other->client->ps.clientNum;
-		trap_GetUserinfo( clientNum, userinfo, sizeof(userinfo) );
-		handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
-		if( handicap<=0.0f || handicap>100.0f) {
-			handicap = 100.0f;
-		}
-		other->client->pers.maxHealth = handicap;
-		break;
-	}
-
-	return -1;
-}
-
-//======================================================================
-#endif
-
 int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
+	int count = 0;
 
-	other->client->ps.stats[STAT_HOLDABLE_ITEM] = ent->item - bg_itemlist;
 
-	if( ent->item->giTag == HI_KAMIKAZE ) {
-		other->client->ps.eFlags |= EF_KAMIKAZE;
+	if ( ent->count > 0 ) {
+		count = ent->count;
 	}
+	else {
+		// apply defaults
+		switch ( ent->item->giTag ) {
+			case HI_FLOATER:
+				count = MAX_FLOATER;
+				break;
+			case HI_KILLERDUCKS:
+				count = MAX_KILLERDUCKS;
+				break;
+			case HI_BOOMIES:
+				count = MAX_BOOMIES;
+				break;
+			case HI_BAMBAM:
+				count = MAX_BAMBAMS;
+				break;
+			default:
+				count = 0; // FIXME: Return here?
+				break;
+		}
+	}
+
+	// already has this holdable, add to
+	// NOTE: Basically BG_CanItemBeGrabbed() already ensures this
+	if ( bg_itemlist[other->client->ps.stats[STAT_HOLDABLE_ITEM]].giTag == ent->item->giTag ) {
+		count += other->client->ps.stats[STAT_HOLDABLEVAR];
+	}
+	// apply upper limits
+	switch ( ent->item->giTag ) {
+		case HI_FLOATER:
+			if ( count > MAX_FLOATER ) {
+				count = MAX_FLOATER;
+			}
+			break;
+		case HI_KILLERDUCKS:
+			if ( count > MAX_KILLERDUCKS ) {
+				count = MAX_KILLERDUCKS;
+			}
+			break;
+		case HI_BOOMIES:
+			if ( count > MAX_BOOMIES ) {
+				count = MAX_BOOMIES;
+			}
+			break;
+		case HI_BAMBAM:
+			if ( count > MAX_BAMBAMS ) {
+				count = MAX_BAMBAMS;
+			}
+			break;
+		default:
+			count = 0; // FIXME: Return here?
+			break;
+	}
+
+	// FIXME: Check for NULLs?
+	other->client->ps.stats[STAT_HOLDABLE_ITEM] = ( ent->item - bg_itemlist );
+	other->client->ps.stats[STAT_HOLDABLEVAR] = count;
+
 
 	return RESPAWN_HOLDABLE;
 }
@@ -209,8 +182,12 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 void Add_Ammo (gentity_t *ent, int weapon, int count)
 {
 	ent->client->ps.ammo[weapon] += count;
-	if ( ent->client->ps.ammo[weapon] > 200 ) {
-		ent->client->ps.ammo[weapon] = 200;
+
+	if ( ( weapon == WP_IMPERIUS ) && ( ent->client->ps.ammo[weapon] > MAXAMMO_IMPERIUS ) ) {
+		ent->client->ps.ammo[weapon] = MAXAMMO_IMPERIUS;
+	}
+	else if ( ent->client->ps.ammo[weapon] > MAXAMMO_WEAPON ) {
+		ent->client->ps.ammo[weapon] = MAXAMMO_WEAPON;
 	}
 }
 
@@ -224,7 +201,46 @@ int Pickup_Ammo (gentity_t *ent, gentity_t *other)
 		quantity = ent->item->quantity;
 	}
 
+	if(ent->item->giTag == WP_SPRAYPISTOL)
+	{
+		if((!strcmp(ent->item->classname,"ammo_spray_b") || !strcmp(ent->item->classname,"ammo_spray_r")) && ent->s.otherEntityNum == other->s.number)
+		{
+			return 0; // leave the item in the world ...
+		}
+
+		if(!strcmp(ent->item->classname,"ammo_spray_n") && ent->s.otherEntityNum == other->s.number)
+		{
+			if((level.time-other->client->lastOwnCartMSGtime)>5000)
+			{
+				trap_SendServerCommand( other->s.clientNum, "cp \"You can't grab your own cartridge!\n\"" );
+				other->client->lastOwnCartMSGtime=level.time;
+			}
+			return 0; // leave the item in the world ...
+		}
+
+		if( ((!strcmp(ent->item->classname,"ammo_spray_b") && other->client->sess.sessionTeam==TEAM_BLUE)  ||
+			 (!strcmp(ent->item->classname,"ammo_spray_r") && other->client->sess.sessionTeam==TEAM_RED) ||
+			 !strcmp(ent->item->classname,"ammo_spray_n"))
+			&& other->client->ps.ammo[WP_SPRAYPISTOL]>=8 )
+		{
+			if((level.time-other->client->lastOwnCartMSGtime)>5000) // I know the variablename doesn't fit for this :P (#@)
+			{
+				trap_SendServerCommand( other->s.clientNum, "cp \"You can't grab more than 8 cartridges!\n\"" );
+				other->client->lastOwnCartMSGtime=level.time;
+			}
+			return 0; // leave the item in the world ...
+		}
+
+		if( (!strcmp(ent->item->classname,"ammo_spray_b") && other->client->sess.sessionTeam==TEAM_RED) ||
+			(!strcmp(ent->item->classname,"ammo_spray_r") && other->client->sess.sessionTeam==TEAM_BLUE) )
+		{
+			return RESPAWN_AMMO; // remove item from world ... but no Add_Ammo
+		}
+	}
+
 	Add_Ammo (other, ent->item->giTag, quantity);
+
+	other->client->ps.generic1=other->client->ps.ammo[WP_SPRAYPISTOL];
 
 	return RESPAWN_AMMO;
 }
@@ -280,12 +296,6 @@ int Pickup_Health (gentity_t *ent, gentity_t *other) {
 	int			quantity;
 
 	// small and mega healths will go over the max
-#ifdef MISSIONPACK
-	if( bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
-		max = other->client->ps.stats[STAT_MAX_HEALTH];
-	}
-	else
-#endif
 	if ( ent->item->quantity != 5 && ent->item->quantity != 100 ) {
 		max = other->client->ps.stats[STAT_MAX_HEALTH];
 	} else {
@@ -315,27 +325,10 @@ int Pickup_Health (gentity_t *ent, gentity_t *other) {
 //======================================================================
 
 int Pickup_Armor( gentity_t *ent, gentity_t *other ) {
-#ifdef MISSIONPACK
-	int		upperBound;
-
-	other->client->ps.stats[STAT_ARMOR] += ent->item->quantity;
-
-	if( other->client && bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
-		upperBound = other->client->ps.stats[STAT_MAX_HEALTH];
-	}
-	else {
-		upperBound = other->client->ps.stats[STAT_MAX_HEALTH] * 2;
-	}
-
-	if ( other->client->ps.stats[STAT_ARMOR] > upperBound ) {
-		other->client->ps.stats[STAT_ARMOR] = upperBound;
-	}
-#else
 	other->client->ps.stats[STAT_ARMOR] += ent->item->quantity;
 	if ( other->client->ps.stats[STAT_ARMOR] > other->client->ps.stats[STAT_MAX_HEALTH] * 2 ) {
 		other->client->ps.stats[STAT_ARMOR] = other->client->ps.stats[STAT_MAX_HEALTH] * 2;
 	}
-#endif
 
 	return RESPAWN_ARMOR;
 }
@@ -348,7 +341,7 @@ RespawnItem
 ===============
 */
 void RespawnItem( gentity_t *ent ) {
-	// randomly select from teamed entities
+	// select from teamed entities
 	if (ent->team) {
 		gentity_t	*master;
 		int	count;
@@ -357,15 +350,34 @@ void RespawnItem( gentity_t *ent ) {
 		if ( !ent->teammaster ) {
 			G_Error( "RespawnItem: bad teammaster");
 		}
-		master = ent->teammaster;
 
-		for (count = 0, ent = master; ent; ent = ent->teamchain, count++)
-			;
+		if( ent->spawnflags & 2)	// randomly select from the group
+		{
+			master = ent->teammaster;
 
-		choice = rand() % count;
+			for (count = 0, ent = master; ent; ent = ent->teamchain, count++)
+				;
 
-		for (count = 0, ent = master; count < choice; ent = ent->teamchain, count++)
-			;
+			choice = rand() % count;
+
+			for (count = 0, ent = master; count < choice; ent = ent->teamchain, count++)
+				;
+		}
+		else	// loop through the group
+		{
+			if(ent->teamchain)
+				ent = ent->teamchain;
+			else
+				ent = ent->teammaster;
+		}
+	}
+
+	if(ent->team)
+	{
+		if ( !ent->teammaster )
+			G_Error( "RespawnItem: bad teammaster");
+
+
 	}
 
 	ent->r.contents = CONTENTS_TRIGGER;
@@ -384,22 +396,7 @@ void RespawnItem( gentity_t *ent ) {
 		else {
 			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_SOUND );
 		}
-		te->s.eventParm = G_SoundIndex( "sound/items/poweruprespawn.wav" );
-		te->r.svFlags |= SVF_BROADCAST;
-	}
-
-	if ( ent->item->giType == IT_HOLDABLE && ent->item->giTag == HI_KAMIKAZE ) {
-		// play powerup spawn sound to all clients
-		gentity_t	*te;
-
-		// if the powerup respawn sound should Not be global
-		if (ent->speed) {
-			te = G_TempEntity( ent->s.pos.trBase, EV_GENERAL_SOUND );
-		}
-		else {
-			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_SOUND );
-		}
-		te->s.eventParm = G_SoundIndex( "sound/items/kamikazerespawn.wav" );
+		te->s.eventParm = G_SoundIndex( "sounds/items/powerup_respawn" );
 		te->r.svFlags |= SVF_BROADCAST;
 	}
 
@@ -453,11 +450,6 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		respawn = Pickup_Powerup(ent, other);
 		predict = qfalse;
 		break;
-#ifdef MISSIONPACK
-	case IT_PERSISTANT_POWERUP:
-		respawn = Pickup_PersistantPowerup(ent, other);
-		break;
-#endif
 	case IT_TEAM:
 		respawn = Pickup_Team(ent, other);
 		break;
@@ -583,17 +575,16 @@ gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity ) {
 	VectorCopy( velocity, dropped->s.pos.trDelta );
 
 	dropped->s.eFlags |= EF_BOUNCE_HALF;
-#ifdef MISSIONPACK
-	if ((g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF)			&& item->giType == IT_TEAM) { // Special case for CTF flags
-#else
-	if (g_gametype.integer == GT_CTF && item->giType == IT_TEAM) { // Special case for CTF flags
-#endif
+	// Special case for CTF flags
+	if ( ( g_gametype.integer == GT_CTF ) && ( item->giType == IT_TEAM ) ) {
 		dropped->think = Team_DroppedFlagThink;
-		dropped->nextthink = level.time + 30000;
+		dropped->nextthink = ( level.time + RESPAWN_DROPPED_FLAG * 1000 );
 		Team_CheckDroppedItem( dropped );
-	} else { // auto-remove after 30 seconds
+	}
+	// auto-remove after timeout
+	else {
 		dropped->think = G_FreeEntity;
-		dropped->nextthink = level.time + 30000;
+		dropped->nextthink = ( level.time + RESPAWN_DROPPED_ITEM * 1000 );
 	}
 
 	dropped->flags = FL_DROPPED_ITEM;
@@ -621,6 +612,9 @@ gentity_t *Drop_Item( gentity_t *ent, gitem_t *item, float angle ) {
 	AngleVectors( angles, velocity, NULL, NULL );
 	VectorScale( velocity, 150, velocity );
 	velocity[2] += 200 + crandom() * 50;
+
+	// FIXME: Cartridges call LaunchItem() directly
+	G_LogPrintf( "DropItem: %ld %s\n", ( ent - g_entities ), item->classname );
 	
 	return LaunchItem( item, ent->s.pos.trBase, velocity );
 }
@@ -701,6 +695,16 @@ void FinishSpawningItem( gentity_t *ent ) {
 		return;
 	}
 
+	if ( ent->item->giType == IT_HOLDABLE ) {
+		if ( ( ent->item->giTag == HI_BAMBAM ) && ( g_gametype.integer != GT_CTF ) ) {
+			return;
+		}
+		else if ( ( ent->item->giTag == HI_BOOMIES ) &&
+		          ( ( g_gametype.integer != GT_CTF ) && ( g_gametype.integer != GT_BALLOON ) ) ) {
+			return;
+		}
+	}
+
 
 	trap_LinkEntity (ent);
 }
@@ -722,74 +726,15 @@ void G_CheckTeamItems( void ) {
 		gitem_t	*item;
 
 		// check for the two flags
-		item = BG_FindItem( "Red Flag" );
+		item = BG_FindItem( "red Lolly" );
 		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTF_redflag in map\n" );
+			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTL_redlolly in map" );
 		}
-		item = BG_FindItem( "Blue Flag" );
+		item = BG_FindItem( "blue Lolly" );
 		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTF_blueflag in map\n" );
+			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTL_bluelolly in map" );
 		}
 	}
-#ifdef MISSIONPACK
-	if( g_gametype.integer == GT_1FCTF ) {
-		gitem_t	*item;
-
-		// check for all three flags
-		item = BG_FindItem( "Red Flag" );
-		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTF_redflag in map\n" );
-		}
-		item = BG_FindItem( "Blue Flag" );
-		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTF_blueflag in map\n" );
-		}
-		item = BG_FindItem( "Neutral Flag" );
-		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTF_neutralflag in map\n" );
-		}
-	}
-
-	if( g_gametype.integer == GT_OBELISK ) {
-		gentity_t	*ent;
-
-		// check for the two obelisks
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_redobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_redobelisk in map\n" );
-		}
-
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_blueobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_blueobelisk in map\n" );
-		}
-	}
-
-	if( g_gametype.integer == GT_HARVESTER ) {
-		gentity_t	*ent;
-
-		// check for all three obelisks
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_redobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_redobelisk in map\n" );
-		}
-
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_blueobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_blueobelisk in map\n" );
-		}
-
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_neutralobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_neutralobelisk in map\n" );
-		}
-	}
-#endif
 }
 
 /*
@@ -801,14 +746,14 @@ void ClearRegisteredItems( void ) {
 	memset( itemRegistered, 0, sizeof( itemRegistered ) );
 
 	// players always start with the base weapon
-	RegisterItem( BG_FindItemForWeapon( WP_MACHINEGUN ) );
-	RegisterItem( BG_FindItemForWeapon( WP_GAUNTLET ) );
-#ifdef MISSIONPACK
-	if( g_gametype.integer == GT_HARVESTER ) {
-		RegisterItem( BG_FindItem( "Red Cube" ) );
-		RegisterItem( BG_FindItem( "Blue Cube" ) );
+	RegisterItem( BG_FindItemForWeapon( WP_NIPPER ) );
+	RegisterItem( BG_FindItemForWeapon( WP_PUNCHY ) );
+
+	RegisterItem( BG_FindItemForWeapon( WP_KILLERDUCKS ) );
+
+	if ( IsSyc() ) {
+		RegisterItem( BG_FindItemForWeapon( WP_SPRAYPISTOL ) );
 	}
-#endif
 }
 
 /*
@@ -894,15 +839,10 @@ void G_SpawnItem (gentity_t *ent, gitem_t *item) {
 	ent->physicsBounce = 0.50;		// items are bouncy
 
 	if ( item->giType == IT_POWERUP ) {
-		G_SoundIndex( "sound/items/poweruprespawn.wav" );
+		G_SoundIndex( "sounds/items/powerup_respawn" );
 		G_SpawnFloat( "noglobalsound", "0", &ent->speed);
 	}
 
-#ifdef MISSIONPACK
-	if ( item->giType == IT_PERSISTANT_POWERUP ) {
-		ent->s.generic1 = ent->spawnflags;
-	}
-#endif
 }
 
 

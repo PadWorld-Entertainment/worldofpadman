@@ -165,6 +165,7 @@ typedef struct aas_routingupdate_s
 	qboolean inlist;							//true if the update is in the list
 	struct aas_routingupdate_s *next;
 	struct aas_routingupdate_s *prev;
+	int	heapPos;
 } aas_routingupdate_t;
 
 //reversed reachability link
@@ -276,6 +277,9 @@ typedef struct aas_s
 	//cache list sorted on time
 	aas_routingcache_t *oldestcache;		// start of cache list sorted on time
 	aas_routingcache_t *newestcache;		// end of cache list sorted on time
+	aas_routingupdate_t** clusterCacheHeap;
+	int clusterCacheHeapSize;
+	int clusterCacheHeapMaxSize;
 	//maximum travel time through portal areas
 	int *portalmaxtraveltimes;
 	//areas the reachabilities go through

@@ -515,6 +515,12 @@ void SV_BotInitCvars(void) {
 SV_BotInitBotLib
 ==================
 */
+// cyr{
+void SV_SetBotInfoString(const char* cs){
+	SV_SetConfigstring(CS_BOTINFO, cs);	
+}
+// cyr}
+
 void SV_BotInitBotLib(void) {
 	botlib_import_t	botlib_import;
 
@@ -552,6 +558,9 @@ void SV_BotInitBotLib(void) {
 	//debug polygons
 	botlib_import.DebugPolygonCreate = BotImport_DebugPolygonCreate;
 	botlib_import.DebugPolygonDelete = BotImport_DebugPolygonDelete;
+
+	// cyr: set bot configstring
+	botlib_import.SetBotInfoString = SV_SetBotInfoString;
 
 	botlib_export = (botlib_export_t *)GetBotLibAPI( BOTLIB_API_VERSION, &botlib_import );
 	assert(botlib_export); 	// somehow we end up with a zero import.

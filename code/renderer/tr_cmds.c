@@ -275,9 +275,9 @@ void RE_StretchPic ( float x, float y, float w, float h,
 					  float s1, float t1, float s2, float t2, qhandle_t hShader ) {
 	stretchPicCommand_t	*cmd;
 
-  if (!tr.registered) {
-    return;
-  }
+	if (!tr.registered) {
+		return;
+	}
 	cmd = R_GetCommandBuffer( sizeof( *cmd ) );
 	if ( !cmd ) {
 		return;
@@ -297,8 +297,7 @@ void RE_StretchPic ( float x, float y, float w, float h,
 #define MODE_RED_CYAN	1
 #define MODE_RED_BLUE	2
 #define MODE_RED_GREEN	3
-#define MODE_GREEN_MAGENTA 4
-#define MODE_MAX	MODE_GREEN_MAGENTA
+#define MODE_MAX	MODE_RED_GREEN
 
 void R_SetColorMode(GLboolean *rgba, stereoFrame_t stereoFrame, int colormode)
 {
@@ -314,26 +313,16 @@ void R_SetColorMode(GLboolean *rgba, stereoFrame_t stereoFrame, int colormode)
 		colormode -= MODE_MAX;
 	}
 	
-	if(colormode == MODE_GREEN_MAGENTA)
+	if(stereoFrame == STEREO_LEFT)
+		rgba[1] = rgba[2] = GL_FALSE;
+	else if(stereoFrame == STEREO_RIGHT)
 	{
-		if(stereoFrame == STEREO_LEFT)
-			rgba[0] = rgba[2] = GL_FALSE;
-		else if(stereoFrame == STEREO_RIGHT)
-			rgba[1] = GL_FALSE;
-	}
-	else
-	{
-		if(stereoFrame == STEREO_LEFT)
-			rgba[1] = rgba[2] = GL_FALSE;
-		else if(stereoFrame == STEREO_RIGHT)
-		{
-			rgba[0] = GL_FALSE;
+		rgba[0] = GL_FALSE;
 		
-			if(colormode == MODE_RED_BLUE)
-				rgba[1] = GL_FALSE;
-			else if(colormode == MODE_RED_GREEN)
-				rgba[2] = GL_FALSE;
-		}
+		if(colormode == MODE_RED_BLUE)
+			rgba[1] = GL_FALSE;
+		else if(colormode == MODE_RED_GREEN)
+			rgba[2] = GL_FALSE;
 	}
 }
 

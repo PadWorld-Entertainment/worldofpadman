@@ -320,7 +320,7 @@ Con_Init
 void Con_Init (void) {
 	int		i;
 
-	con_notifytime = Cvar_Get ("con_notifytime", "3", 0);
+	con_notifytime = Cvar_Get ("con_notifytime", "-5", 0);
 	con_conspeed = Cvar_Get ("scr_conspeed", "3", 0);
 
 	Field_Clear( &g_consoleField );
@@ -609,6 +609,7 @@ void Con_DrawSolidConsole( float frac ) {
 //	qhandle_t		conShader;
 	int				currentColor;
 	vec4_t			color;
+	vec4_t			tblack = {0,0,0,0.4f};
 
 	lines = cls.glconfig.vidHeight * frac;
 	if (lines <= 0)
@@ -630,23 +631,24 @@ void Con_DrawSolidConsole( float frac ) {
 		SCR_DrawPic( 0, 0, SCREEN_WIDTH, y, cls.consoleShader );
 	}
 
-	color[0] = 1;
-	color[1] = 0;
-	color[2] = 0;
-	color[3] = 1;
-	SCR_FillRect( 0, y, SCREEN_WIDTH, 2, color );
+ 	color[0] = 1.0f;
+ 	color[1] = 0.8f;
+ 	color[2] = 0.0f;
+  	color[3] = 1;
+ 	SCR_FillRect( 0, y-2, SCREEN_WIDTH, 4, color );
+ 	SCR_FillRect( 0, y+2, SCREEN_WIDTH, 8, tblack );
 
 
 	// draw the version number
 
-	re.SetColor( g_color_table[ColorIndex(COLOR_RED)] );
-
-	i = strlen( Q3_VERSION );
-
-	for (x=0 ; x<i ; x++) {
-		SCR_DrawSmallChar( cls.glconfig.vidWidth - ( i - x + 1 ) * SMALLCHAR_WIDTH,
-			lines - SMALLCHAR_HEIGHT, Q3_VERSION[x] );
-	}
+ 	re.SetColor( color );
+  
+ 	i = strlen( VERSION_INFO );
+  
+  	for (x=0 ; x<i ; x++) {  
+  		SCR_DrawSmallChar( cls.glconfig.vidWidth - ( i - x ) * SMALLCHAR_WIDTH, 
+ 			(lines-(SMALLCHAR_HEIGHT+SMALLCHAR_HEIGHT/2)), VERSION_INFO[x] );
+  	}
 
 
 	// draw the text

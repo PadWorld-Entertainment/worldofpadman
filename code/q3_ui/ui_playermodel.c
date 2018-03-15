@@ -1,26 +1,8 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 #include "ui_local.h"
+
+///FIXME!!! it seems this file isn't used in wop ... I think it would be better to remove it ...
 
 #define MODEL_BACK0			"menu/art/back_0"
 #define MODEL_BACK1			"menu/art/back_1"
@@ -104,6 +86,8 @@ typedef struct
 
 static playermodel_t s_playermodel;
 
+void PlayerModel_Cache( void );
+
 /*
 =================
 PlayerModel_UpdateGrid
@@ -182,7 +166,7 @@ static void PlayerModel_UpdateModel( void )
 	VectorClear( moveangles );
 
 	UI_PlayerInfo_SetModel( &s_playermodel.playerinfo, s_playermodel.modelskin );
-	UI_PlayerInfo_SetInfo( &s_playermodel.playerinfo, LEGS_IDLE, TORSO_STAND, viewangles, moveangles, WP_MACHINEGUN, qfalse );
+	UI_PlayerInfo_SetInfo( &s_playermodel.playerinfo, LEGS_IDLE, TORSO_STAND, viewangles, moveangles, WP_NIPPER, qfalse );
 }
 
 /*
@@ -331,7 +315,7 @@ static void PlayerModel_PicEvent( void* ptr, int event )
 
 	// get model and strip icon_
 	modelnum = s_playermodel.modelpage*MAX_MODELSPERPAGE + i;
-	buffptr  = s_playermodel.modelnames[modelnum] + strlen("models/players/");
+	buffptr  = s_playermodel.modelnames[modelnum] + strlen("models/wop_players/");
 	pdest    = strstr(buffptr,"icon_");
 	if (pdest)
 	{
@@ -391,7 +375,7 @@ static void PlayerModel_BuildList( void )
 	int		numfiles;
 	char	dirlist[2048];
 	char	filelist[2048];
-	char	skinname[MAX_QPATH];
+	char	skinname[64];
 	char*	dirptr;
 	char*	fileptr;
 	int		i;
@@ -418,26 +402,22 @@ static void PlayerModel_BuildList( void )
 			continue;
 			
 		// iterate all skin files in directory
-		numfiles = trap_FS_GetFileList( va("models/players/%s",dirptr), "tga", filelist, 2048 );
+		numfiles = trap_FS_GetFileList( va("models/wop_players/%s",dirptr), "tga", filelist, 2048 );
 		fileptr  = filelist;
 		for (j=0; j<numfiles && s_playermodel.nummodels < MAX_PLAYERMODELS;j++,fileptr+=filelen+1)
 		{
 			filelen = strlen(fileptr);
 
-			COM_StripExtension(fileptr,skinname, sizeof(skinname));
+			COM_StripExtension(fileptr,skinname, sizeof(skinname) );
 
 			// look for icon_????
 			if (!Q_stricmpn(skinname,"icon_",5))
 			{
 				Com_sprintf( s_playermodel.modelnames[s_playermodel.nummodels++],
 					sizeof( s_playermodel.modelnames[s_playermodel.nummodels] ),
-					"models/players/%s/%s", dirptr, skinname );
+					"models/wop_players/%s/%s", dirptr, skinname );
 				//if (s_playermodel.nummodels >= MAX_PLAYERMODELS)
 				//	return;
-			}
-
-			if( precache ) {
-				trap_S_RegisterSound( va( "sound/player/announce/%s_wins.wav", skinname), qfalse );
 			}
 		}
 	}	
@@ -469,16 +449,11 @@ static void PlayerModel_SetMenuItems( void )
 	// model
 	trap_Cvar_VariableStringBuffer( "model", s_playermodel.modelskin, 64 );
 	
-	// use default skin if none is set
-	if (!strchr(s_playermodel.modelskin, '/')) {
-		Q_strcat(s_playermodel.modelskin, 64, "/default");
-	}
-	
 	// find model in our list
 	for (i=0; i<s_playermodel.nummodels; i++)
 	{
 		// strip icon_
-		buffptr  = s_playermodel.modelnames[i] + strlen("models/players/");
+		buffptr  = s_playermodel.modelnames[i] + strlen("models/wop_players/");
 		pdest    = strstr(buffptr,"icon_");
 		if (pdest)
 		{

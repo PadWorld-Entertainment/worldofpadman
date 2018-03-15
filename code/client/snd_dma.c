@@ -393,7 +393,7 @@ void S_Base_BeginRegistration( void ) {
 		Com_Memset(s_knownSfx, '\0', sizeof(s_knownSfx));
 		Com_Memset(sfxHash, '\0', sizeof(sfx_t *) * LOOP_HASH);
 
-		S_Base_RegisterSound("sound/feedback/hit.wav", qfalse);		// changed to a sound in baseq3
+		S_Base_RegisterSound("sounds/hit", qfalse);		// changed to a sound in baseq3
 	}
 }
 
@@ -1340,12 +1340,15 @@ void S_Base_StartBackgroundTrack( const char *intro, const char *loop ){
 	// Open stream
 	s_backgroundStream = S_CodecOpenStream(intro);
 	if(!s_backgroundStream) {
-		Com_Printf( S_COLOR_YELLOW "WARNING: couldn't open music file %s\n", intro );
+//wop_music{
+		if(strcmp(intro,"<nextsongCMD>"))
+//wop_music}
+			Com_Printf( S_COLOR_YELLOW "WARNING: couldn't open music file %s\n", intro );
 		return;
 	}
 
 	if(s_backgroundStream->info.channels != 2 || s_backgroundStream->info.rate != 22050) {
-		Com_Printf(S_COLOR_YELLOW "WARNING: music file %s is not 22k stereo\n", intro );
+		Com_DPrintf(S_COLOR_YELLOW "WARNING: music file %s is not 22k stereo\n", intro );
 	}
 }
 

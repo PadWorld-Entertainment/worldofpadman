@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 
 /*****************************************************************************
@@ -34,6 +14,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CTF
 
 #define MAX_ITEMS					256
+
 //bot flags
 #define BFL_STRAFERIGHT				1	//strafe to the right
 #define BFL_ATTACKED				2	//bot has attacked last ai frame
@@ -48,58 +29,61 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LTG_DEFENDKEYAREA			3	//defend a key area
 #define LTG_GETFLAG					4	//get the enemy flag
 #define LTG_RUSHBASE				5	//rush to the base
-#define LTG_RETURNFLAG				6	//return the flag
-#define LTG_CAMP					7	//camp somewhere
-#define LTG_CAMPORDER				8	//ordered to camp somewhere
-#define LTG_PATROL					9	//patrol
+//#define LTG_RETURNFLAG				6	//return the flag
+#define LTG_BALLCAMP					7	//camp somewhere
+//#define LTG_CAMPORDER				8	//ordered to camp somewhere
+//#define LTG_PATROL					9	//patrol
 #define LTG_GETITEM					10	//get an item
-#define LTG_KILL					11	//kill someone
-#define LTG_HARVEST					12	//harvest skulls
+//#define LTG_KILL					11	//kill someone
+//#define LTG_HARVEST					12	//harvest skulls
 #define LTG_ATTACKENEMYBASE			13	//attack the enemy base
-#define LTG_MAKELOVE_UNDER			14
+#define LTG_GO_FOR_HEALTH			14
 #define LTG_MAKELOVE_ONTOP			15
+#define LTG_GIVECART				16
+#define LTG_FETCHCART				17
+#define LTG_JOINMATE				18
+#define LTG_CAPTUREFLAG				19
+#define LTG_PICKUPFLAG				20
+#define LTG_PLANTBOOMIE				21
+#define LTG_PLANTBAMBAM				22
+
 //some goal dedication times
+
+#define TEAM_BALLOONTHINK_TIME       4
+#define TEAM_BALLOONCAMP_TIME		10
+
 #define TEAM_HELP_TIME				60	//1 minute teamplay help time
 #define TEAM_ACCOMPANY_TIME			600	//10 minutes teamplay accompany time
 #define TEAM_DEFENDKEYAREA_TIME		600	//10 minutes ctf defend base time
 #define TEAM_CAMP_TIME				600	//10 minutes camping time
-#define TEAM_PATROL_TIME			600	//10 minutes patrolling time
-#define TEAM_LEAD_TIME				600	//10 minutes taking the lead
 #define TEAM_GETITEM_TIME			60	//1 minute
-#define	TEAM_KILL_SOMEONE			180	//3 minute to kill someone
-#define TEAM_ATTACKENEMYBASE_TIME	600	//10 minutes
-#define TEAM_HARVEST_TIME			120	//2 minutes
-#define CTF_GETFLAG_TIME			600	//10 minutes ctf get flag time
+#define SYC_CART_EXCHANGE_TIME		15
+#define RUSHBASE_TIME				120	//2 minutes
 #define CTF_RUSHBASE_TIME			120	//2 minutes ctf rush base time
 #define CTF_RETURNFLAG_TIME			180	//3 minutes to return the flag
-#define CTF_ROAM_TIME				60	//1 minute ctf roam time
-//patrol flags
-#define PATROL_LOOP					1
-#define PATROL_REVERSE				2
-#define PATROL_BACK					4
-//teamplay task preference
-#define TEAMTP_DEFENDER				1
-#define TEAMTP_ATTACKER				2
-//CTF strategy
-#define CTFS_AGRESSIVE				1
+
+#define PUSHCART_DIST 160
+
 //copied from the aas file header
 #define PRESENCE_NONE				1
 #define PRESENCE_NORMAL				2
 #define PRESENCE_CROUCH				4
-//
-#define MAX_PROXMINES				64
 
-//check points
-typedef struct bot_waypoint_s
-{
-	int			inuse;
-	char		name[32];
-	bot_goal_t	goal;
-	struct		bot_waypoint_s *next, *prev;
-} bot_waypoint_t;
+
 
 #define MAX_ACTIVATESTACK		8
 #define MAX_ACTIVATEAREAS		32
+
+extern vmCvar_t bot_developer;
+
+// ai debug modes
+#define AIDBG_CHAT			8
+#define AIDBG_ROUTES		16
+#define AIDBG_GAMETYPE		32
+#define AIDBG_MOVE			64
+#define AIDBG_GOAL			128
+#define AIDBG_COMBAT		256
+#define AIDBG_ALL			32767
 
 typedef struct bot_activategoal_s
 {
@@ -117,6 +101,79 @@ typedef struct bot_activategoal_s
 	int areasdisabled;						//true if the areas are disabled for the routing
 	struct bot_activategoal_s *next;		//next activate goal on stack
 } bot_activategoal_t;
+
+/*
+typedef struct nmyinfo_s{
+int client;			// id
+int	maxhealth;		// pessimistic guess, depending on painsounds
+vec3_t lastpos;		// where last seen/heard
+vec3_t lasttime;	// when last seen/heard
+int	   flags;		// waffen, items...
+}nmy_info_t;
+*/
+
+typedef enum
+{
+	CWM_MOVEMENT,
+	CWM_ENTITY,
+	CWM_TARGET,
+	CWM_ANGLES
+} cam_viewmode_t;
+
+typedef enum{
+	BCM_IDLE,
+	BCM_MOVETO
+} cam_movement_t;
+
+typedef enum{
+	WPLINKRED,
+	WPLINKBLUE,
+	WPLINKLATERAL,
+	WPLINKNUMTYPES
+} cam_link_t;
+
+typedef struct ctf_waypoint_s ctf_waypoint_t;
+typedef struct waypointlinks_s waypointlinks_t;
+
+#define MAX_LINKSPERTYPE	5
+struct waypointlinks_s{
+	ctf_waypoint_t* link[MAX_LINKSPERTYPE];
+	int				num;
+};
+
+struct ctf_waypoint_s{
+	waypointlinks_t links[WPLINKNUMTYPES];
+	bot_goal_t		goal;
+	//int travelTime[3];
+	char name[128];
+};
+
+typedef struct bambamspot_s
+{
+	bot_goal_t goal;
+	team_t team;
+	gentity_t* occupied;
+}bambamspot_t;
+
+typedef struct boomiespot_s
+{
+	bot_goal_t goal;
+	vec3_t angles;
+	team_t team;
+	gentity_t* occupied;
+}boomiespot_t;
+
+#define MAX_WAYPOINTS	64
+extern ctf_waypoint_t waypoints[MAX_WAYPOINTS];
+extern int numwaypoints;
+
+#define MAX_BAMBAMSPOTS 64
+extern bambamspot_t bambamspots[MAX_BAMBAMSPOTS];
+extern int numbambamspots;
+
+#define MAX_BOOMIESPOTS 64
+extern boomiespot_t boomiespots[MAX_BOOMIESPOTS];
+extern int numboomiespots;
 
 //bot state
 typedef struct bot_state_s
@@ -154,8 +211,6 @@ typedef struct bot_state_s
 	int entergamechat;								//true when the bot used an enter game chat
 	int num_deaths;									//number of time this bot died
 	int num_kills;									//number of kills of this bot
-	int revenge_enemy;								//the revenge enemy
-	int revenge_kills;								//number of kills the enemy made
 	int lastframe_health;							//health value the last frame
 	int lasthitcount;								//number of hits last frame
 	int chatto;										//chat to all or team
@@ -171,8 +226,6 @@ typedef struct bot_state_s
 	float check_time;								//time to check for nearby items
 	float stand_time;								//time the bot is standing still
 	float lastchat_time;							//time the bot last selected a chat
-	float kamikaze_time;							//time to check for kamikaze usage
-	float invulnerability_time;						//time to check for invulnerability usage
 	float standfindenemy_time;						//time to find enemy while standing
 	float attackstrafe_time;						//time the bot is strafing in one dir
 	float attackcrouch_time;						//time the bot will stop crouching
@@ -182,11 +235,9 @@ typedef struct bot_state_s
 	float enemydeath_time;							//time the enemy died
 	float enemyposition_time;						//time the position and velocity of the enemy were stored
 	float defendaway_time;							//time away while defending
-	float defendaway_range;							//max travel time away from defend area
+	//float defendaway_range;							//max travel time away from defend area
 	float rushbaseaway_time;						//time away from rushing to the base
 	float attackaway_time;							//time away from attacking the enemy base
-	float harvestaway_time;							//time away from harvesting
-	float ctfroam_time;								//time the bot is roaming in ctf
 	float killedenemy_time;							//time the bot killed the enemy
 	float arrive_time;								//time arrived (at companion)
 	float lastair_time;								//last time the bot had air
@@ -196,16 +247,11 @@ typedef struct bot_state_s
 	float firethrottlewait_time;					//amount of time to wait
 	float firethrottleshoot_time;					//amount of time to shoot
 	float notblocked_time;							//last time the bot was not blocked
-	float blockedbyavoidspot_time;					//time blocked by an avoid spot
 	float predictobstacles_time;					//last time the bot predicted obstacles
 	int predictobstacles_goalareanum;				//last goal areanum the bot predicted obstacles for
 	vec3_t aimtarget;
 	vec3_t enemyvelocity;							//enemy velocity 0.5 secs ago during battle
 	vec3_t enemyorigin;								//enemy origin 0.5 secs ago during battle
-	//
-	int kamikazebody;								//kamikaze body
-	int proxmines[MAX_PROXMINES];
-	int numproxmines;
 	//
 	int character;									//the bot character
 	int ms;											//move state of the bot
@@ -222,57 +268,79 @@ typedef struct bot_state_s
 	vec3_t viewanglespeed;
 	//
 	int ltgtype;									//long term goal type
+	
 	// team goals
 	int teammate;									//team mate involved in this team goal
 	int decisionmaker;								//player who decided to go for this goal
-	int ordered;									//true if ordered to do something
-	float order_time;								//time ordered to do something
-	int owndecision_time;							//time the bot made its own decision
+	// int ordered;									//true if ordered to do something
+	// float order_time;								//time ordered to do something
+	//int owndecision_time;							//time the bot made it's own decision
 	bot_goal_t teamgoal;							//the team goal
-	bot_goal_t altroutegoal;						//alternative route goal
-	float reachedaltroutegoal_time;					//time the bot reached the alt route goal
 	float teammessage_time;							//time to message team mates what the bot is doing
 	float teamgoal_time;							//time to stop helping team mate
 	float teammatevisible_time;						//last time the team mate was NOT visible
-	int teamtaskpreference;							//team task preference
+	
 	// last ordered team goal
-	int lastgoal_decisionmaker;
-	int lastgoal_ltgtype;
-	int lastgoal_teammate;
-	bot_goal_t lastgoal_teamgoal;
+	//int lastgoal_decisionmaker;
+	//int lastgoal_ltgtype;
+	//int lastgoal_teammate;
+	//bot_goal_t lastgoal_teamgoal;
+	
 	// for leading team mates
-	int lead_teammate;								//team mate the bot is leading
-	bot_goal_t lead_teamgoal;						//team goal while leading
-	float lead_time;								//time leading someone
-	float leadvisible_time;							//last time the team mate was visible
-	float leadmessage_time;							//last time a messaged was sent to the team mate
-	float leadbackup_time;							//time backing up towards team mate
-	//
-	char teamleader[32];							//netname of the team leader
-	float askteamleader_time;						//time asked for team leader
-	float becometeamleader_time;					//time the bot will become the team leader
-	float teamgiveorders_time;						//time to give team orders
-	float lastflagcapture_time;						//last time a flag was captured
+	// int lead_teammate;								//team mate the bot is leading
+	// bot_goal_t lead_teamgoal;						//team goal while leading
+	// float lead_time;								//time leading someone
+	// float leadvisible_time;							//last time the team mate was visible
+	// float leadmessage_time;							//last time a messaged was sent to the team mate
+	// float leadbackup_time;							//time backing up towards team mate
+
+	
+	//	char teamleader[32];							//netname of the team leader
+	//	float askteamleader_time;						//time asked for team leader
+	//	float becometeamleader_time;					//time the bot will become the team leader
+	//	float teamgiveorders_time;						//time to give team orders
 	int numteammates;								//number of team mates
-	int redflagstatus;								//0 = at base, 1 = not at base
-	int blueflagstatus;								//0 = at base, 1 = not at base
-	int neutralflagstatus;							//0 = at base, 1 = our team has flag, 2 = enemy team has flag, 3 = enemy team dropped the flag
-	int flagstatuschanged;							//flag status changed
 	int forceorders;								//true if forced to give orders
 	int flagcarrier;								//team mate carrying the enemy flag
-	int ctfstrategy;								//ctf strategy
+	int hstationgoal;								// 0 = no hstation, > 0 = station index +1
 	char subteam[32];								//sub team name
-	float formation_dist;							//formation team mate intervening space
+	int formation_dist;
 
 	bot_activategoal_t *activatestack;				//first activate goal on the stack
 	bot_activategoal_t activategoalheap[MAX_ACTIVATESTACK];	//activate goal heap
 
-	bot_waypoint_t *checkpoints;					//check points
-	bot_waypoint_t *patrolpoints;					//patrol points
-	bot_waypoint_t *curpatrolpoint;					//current patrol point the bot is going for
-	int patrolflags;								//patrol flags
+	int lastcartcount;	 // number of cartridges the bot carried last frame
+	vec3_t	syctarget;	 // coordinates of current spraytarget
+	int spraydist;		 // maximum distance for this logo (stupid ?)
+	bot_goal_t* which_wall;	// which wall to take during this spray rush, see BotChooseWall
+	float sprayTimer;	 // current spraytarget is best before this time (3 sec)
+	int stuckcounter; 	 // bathscript, increased every frame the bot is stuck (his traveltime is the same as last frame)
+	int curtt;			 // bathscript, current traveltime
+	qboolean takecart;	 // stop going for mate, go for NBG
+	float checkcarttime; // search for weak cart carrying mates - time interval
+	float checkhealth_time;
+	qboolean cartthrown;
+	int orderclient;	// teamleader AI, if this is == -1 order only this client
+	int frametime;		// clock frame duration
+	float duckuse_time;	// dont use ducks till that time
+	//int blueflagstatus;
+	//int redflagstatus;
+	int observed;
+	cam_movement_t cam_movement;
+	qboolean cam_taunt;
+	qboolean cam_fire;
+	cam_viewmode_t cam_viewmode;
+	int cam_target;
+	vec3_t cam_angles;
+//	nmyinfo_t nmys[4];
+	ctf_waypoint_t*	wp;
+	int				wptime;
+	char log[10][MAX_SAY_TEXT];
+	int logHead;
+	char hudinfo[MAX_INFO_STRING];
 } bot_state_t;
 
+float AngleDifference(float ang1, float ang2);
 //resets the whole bot state
 void BotResetState(bot_state_t *bs);
 //returns the number of bots in the game
@@ -280,14 +348,22 @@ int NumBots(void);
 //returns info about the entity
 void BotEntityInfo(int entnum, aas_entityinfo_t *info);
 
+qboolean BotWpValid( bot_state_t* bs );
+qboolean FindWp( bot_state_t* bs, qboolean direction_home );
+qboolean GetNextWp( bot_state_t* bs, qboolean );
+qboolean BotWpHasSuccessor(bot_state_t* bs, qboolean direction_home);
+int GetWpID(ctf_waypoint_t* wp);
+void WaypointInit(void);
+
 extern float floattime;
 #define FloatTime() floattime
 
 // from the game source
+void	BotAddInfo(bot_state_t* bs, char* value, int dbgFlags );
 void	QDECL BotAI_Print(int type, char *fmt, ...) __attribute__ ((format (printf, 2, 3)));
 void	QDECL QDECL BotAI_BotInitialChat( bot_state_t *bs, char *type, ... );
 void	BotAI_Trace(bsp_trace_t *bsptrace, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, int passent, int contentmask);
 int		BotAI_GetClientState( int clientNum, playerState_t *state );
 int		BotAI_GetEntityState( int entityNum, entityState_t *state );
 int		BotAI_GetSnapshotEntity( int clientNum, int sequence, entityState_t *state );
-int		BotTeamLeader(bot_state_t *bs);
+

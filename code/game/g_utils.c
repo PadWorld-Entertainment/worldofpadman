@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 // g_utils.c -- misc utility functions for game module
 
@@ -54,7 +34,7 @@ void AddRemap(const char *oldShader, const char *newShader, float timeOffset) {
 	}
 }
 
-const char *BuildShaderStateConfig(void) {
+const char *BuildShaderStateConfig() {
 	static char	buff[MAX_STRING_CHARS*4];
 	char out[(MAX_QPATH * 2) + 5];
 	int i;
@@ -369,6 +349,8 @@ void G_InitGentity( gentity_t *e ) {
 	e->classname = "noclass";
 	e->s.number = e - g_entities;
 	e->r.ownerNum = ENTITYNUM_NONE;
+
+	e->s.otherEntityNum = ENTITYNUM_NONE;
 }
 
 /*
@@ -664,3 +646,199 @@ int DebugLine(vec3_t start, vec3_t end, int color) {
 
 	return trap_DebugPolygonCreate(color, 4, points);
 }
+
+
+void DebugLineDouble(vec3_t start, vec3_t end, int color) {
+	vec3_t points[4], morepoints[4], dir, cross, up = {0, 0, 1};
+	float dot;
+
+	VectorCopy(start, points[0]);
+	VectorCopy(start, points[1]);
+	//points[1][2] -= 2;
+	VectorCopy(end, points[2]);
+	//points[2][2] -= 2;
+	VectorCopy(end, points[3]);
+
+
+	VectorSubtract(end, start, dir);
+	VectorNormalize(dir);
+	dot = DotProduct(dir, up);
+	if (dot > 0.99 || dot < -0.99) VectorSet(cross, 1, 0, 0);
+	else CrossProduct(dir, up, cross);
+
+	VectorNormalize(cross);
+
+	VectorMA(points[0], 2, up, morepoints[0]);
+	VectorMA(points[1], -2, up, morepoints[1]);
+	VectorMA(points[2], -2, up, morepoints[2]);
+	VectorMA(points[3], 2, up, morepoints[3]);
+
+	VectorMA(points[0], 2, cross, points[0]);
+	VectorMA(points[1], -2, cross, points[1]);
+	VectorMA(points[2], -2, cross, points[2]);
+	VectorMA(points[3], 2, cross, points[3]);
+
+	trap_DebugPolygonCreate(color, 4, points);
+	trap_DebugPolygonCreate(color, 4, morepoints);
+}
+
+void DeleteDebugLines(){
+	int i;
+	char buf[100];
+
+	trap_Cvar_VariableStringBuffer( "bot_maxdebugpolys", buf, sizeof(buf) );
+
+	for(i=0; i < atoi(buf); i++){
+		trap_DebugPolygonDelete(i);
+	}
+}
+
+
+static char *AwardName( award_t award ) {
+	char *name;
+
+	switch ( award ) {
+		case AWARD_EXCELLENT:
+			name = "excellent";
+			break;
+		case AWARD_GAUNTLET:
+			name = "gauntlet";
+			break;
+		case AWARD_CAP:
+			name = "cap";
+			break;
+		case AWARD_IMPRESSIVE:
+			name = "impressive";
+			break;
+		case AWARD_DEFEND:
+			name = "defend";
+			break;
+		case AWARD_ASSIST:
+			name = "assist";
+			break;
+		case AWARD_DENIED:
+			name = "denied";
+			break;
+		case AWARD_SPRAYGOD:
+			name = "spraygod";
+			break;
+		case AWARD_SPRAYKILLER:
+			name = "spraykiller";
+			break;
+
+		default:
+			// Should never happen, since we use award_t
+			// Unless someone extends it and forgets to edit this function :)
+			name = "unkown";
+			break;
+	}
+
+	return name;
+}
+
+// award_t is just an alias for EF_AWARD_
+void SetAward( gclient_t *client, award_t award ) {
+	if ( !client ) {
+		return;
+	}
+
+	client->ps.eFlags &= REMOVE_AWARDFLAGS;
+	client->ps.eFlags |= award;
+	client->rewardTime = ( level.time + REWARD_SPRITE_TIME );
+
+	G_LogPrintf( "Award: %ld %s\n", ( client - level.clients ), AwardName( award ) );
+}
+
+
+// Removes any items owned by the player; e.g. Killerducks, Bambams, Boomies etc.
+// This should be called on disconnect and team change in team games
+void RemoveOwnedItems( gentity_t *client ) {
+	int			i;
+	gentity_t	*ent;
+
+	for ( i = MAX_CLIENTS, ent = &g_entities[i]; i < level.num_entities; ++i, ++ent ) {
+		if ( !ent->inuse ) {
+			continue;
+		}
+
+		if ( ( ent->s.eType == ET_BAMBAM ) || ( ent->s.eType == ET_BOOMIES ) ||
+		     ( ( ent->s.eType == ET_MISSILE ) && ( ent->s.weapon == WP_KILLERDUCKS ) ) ) {
+			if ( ent->parent == client ) {
+				if ( ent->die ) {
+					ent->die( ent, ent, client, 999, MOD_SUICIDE );
+				}
+			}
+		}
+
+	}
+}
+
+
+static const char *gametypeNames[GT_MAX_GAME_TYPE] = {
+	GAMETYPE_NAME( GT_FFA ),
+	GAMETYPE_NAME( GT_TOURNAMENT ),
+	GAMETYPE_NAME( GT_SINGLE_PLAYER ),
+	GAMETYPE_NAME( GT_SPRAYFFA ),
+	GAMETYPE_NAME( GT_LPS ),
+	GAMETYPE_NAME( GT_TEAM ),
+	GAMETYPE_NAME( GT_CTF ),
+	GAMETYPE_NAME( GT_SPRAY ),
+	GAMETYPE_NAME( GT_BALLOON )
+};
+
+const char *GametypeName( gametype_t gametype ) {
+	if ( ( gametype < GT_FFA ) || ( gametype >= GT_MAX_GAME_TYPE ) ) {
+		return "invalid gametype";
+	}
+
+	return gametypeNames[gametype];
+}
+
+
+static const char *gametypeNamesShort[GT_MAX_GAME_TYPE] = {
+	GAMETYPE_NAME_SHORT( GT_FFA ),
+	GAMETYPE_NAME_SHORT( GT_TOURNAMENT ),
+	GAMETYPE_NAME_SHORT( GT_SINGLE_PLAYER ),
+	GAMETYPE_NAME_SHORT( GT_SPRAYFFA ),
+	GAMETYPE_NAME_SHORT( GT_LPS ),
+	GAMETYPE_NAME_SHORT( GT_TEAM ),
+	GAMETYPE_NAME_SHORT( GT_CTF ),
+	GAMETYPE_NAME_SHORT( GT_SPRAY ),
+	GAMETYPE_NAME_SHORT( GT_BALLOON )
+};
+
+const char *GametypeNameShort( gametype_t gametype ) {
+	if ( ( gametype < GT_FFA ) || ( gametype >= GT_MAX_GAME_TYPE ) ) {
+		return "invalid gametype";
+	}
+
+	return gametypeNamesShort[gametype];
+}
+
+
+/*
+	Blindy saves the times of all powerups and removes them afterwards.
+	Does not care for PW_REDFLAG, PW_NONE, PW_NUM_POWERUPS.
+*/
+void G_BackupPowerups( gclient_t *cl ) {
+	int i;
+
+	for ( i = 0; i < ARRAY_LEN( cl->powerupsBackpack ); i++ ) {
+		cl->powerupsBackpack[i] = cl->ps.powerups[i];
+		cl->ps.powerups[i] = 0;
+	}
+}
+
+
+/*
+	Blindly restores the times of all powerups and resets the backup.
+*/
+void G_RestorePowerups( gclient_t *cl ) {
+	int i;
+
+	for ( i = 0; i < ARRAY_LEN( cl->powerupsBackpack ); i++ ) {
+		cl->ps.powerups[i] = cl->powerupsBackpack[i];
+		cl->powerupsBackpack[i] = 0;
+	}
+}
+

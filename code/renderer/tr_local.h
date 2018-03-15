@@ -554,6 +554,7 @@ typedef struct srfPoly_s {
 	int				fogIndex;
 	int				numVerts;
 	polyVert_t		*verts;
+	int				lvl;//sortSL: for spraylogo stacking
 } srfPoly_t;
 
 typedef struct srfDisplayList_s {
@@ -836,7 +837,7 @@ the bits are allocated as follows:
 */
 #define	QSORT_FOGNUM_SHIFT	2
 #define	QSORT_ENTITYNUM_SHIFT	7
-#define	QSORT_SHADERNUM_SHIFT	(QSORT_ENTITYNUM_SHIFT+ENTITYNUM_BITS)
+#define	QSORT_SHADERNUM_SHIFT	(QSORT_ENTITYNUM_SHIFT+GENTITYNUM_BITS)
 #if (QSORT_SHADERNUM_SHIFT+SHADERNUM_BITS) > 32
 	#error "Need to update sorting, too many bits."
 #endif
@@ -1085,7 +1086,7 @@ extern cvar_t	*r_ext_multitexture;
 extern cvar_t	*r_ext_compiled_vertex_array;
 extern cvar_t	*r_ext_texture_env_add;
 
-extern cvar_t	*r_ext_texture_filter_anisotropic;
+extern cvar_t	*r_ext_anisotropy;
 extern cvar_t	*r_ext_max_anisotropy;
 
 extern	cvar_t	*r_nobind;						// turns off binding to appropriate textures
@@ -1146,6 +1147,9 @@ extern	cvar_t	*r_printShaders;
 extern	cvar_t	*r_saveFontData;
 
 extern cvar_t	*r_marksOnTriangleMeshes;
+
+extern	cvar_t	*r_jpgScreenshotQuality;
+extern	cvar_t	*r_ext_multisample;
 
 //====================================================================
 

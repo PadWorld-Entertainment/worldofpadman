@@ -534,7 +534,7 @@ intptr_t SV_GameSystemCalls( intptr_t *args ) {
 
 	case BOTLIB_EA_ACTION:
 		botlib_export->ea.EA_Action( args[1], args[2] );
-		return 0;
+		return 1;
 	case BOTLIB_EA_GESTURE:
 		botlib_export->ea.EA_Gesture( args[1] );
 		return 0;
@@ -794,6 +794,9 @@ intptr_t SV_GameSystemCalls( intptr_t *args ) {
 	case BOTLIB_AI_GENETIC_PARENTS_AND_CHILD_SELECTION:
 		return botlib_export->ai.GeneticParentsAndChildSelection(args[1], VMA(2), VMA(3), VMA(4), VMA(5));
 
+	case BOTLIB_AAS_BESTREACHABLEAREA:
+		return botlib_export->aas.AAS_BestReachableArea( VMA(1), VMA(2), VMA(3), VMA(4) );
+
 	case TRAP_MEMSET:
 		Com_Memset( VMA(1), args[2], args[3] );
 		return 0;
@@ -901,7 +904,7 @@ void SV_RestartGameProgs( void ) {
 	VM_Call( gvm, GAME_SHUTDOWN, qtrue );
 
 	// do a restart instead of a free
-	gvm = VM_Restart(gvm, qtrue);
+	gvm = VM_Restart( gvm );
 	if ( !gvm ) {
 		Com_Error( ERR_FATAL, "VM_Restart on game failed" );
 	}
@@ -954,4 +957,5 @@ qboolean SV_GameCommand( void ) {
 
 	return VM_Call( gvm, GAME_CONSOLE_COMMAND );
 }
+
 

@@ -1173,7 +1173,7 @@ bot_matchpiece_t *BotLoadMatchPieces(source_t *source, char *endtoken)
 	{
 		if (token.type == TT_NUMBER && (token.subtype & TT_INTEGER))
 		{
-			if (token.intvalue >= MAX_MATCHVARIABLES)
+			if (token.intvalue < 0 || token.intvalue >= MAX_MATCHVARIABLES)
 			{
 				SourceError(source, "can't have more than %d match variables\n", MAX_MATCHVARIABLES);
 				FreeSource(source);
@@ -2977,7 +2977,7 @@ int BotSetupChatAI(void)
 #ifdef DEBUG
 	int starttime = Sys_MilliSeconds();
 #endif //DEBUG
-
+/*
 	file = LibVarString("synfile", "syn.c");
 	synonyms = BotLoadSynonyms(file);
 	file = LibVarString("rndfile", "rnd.c");
@@ -2990,6 +2990,9 @@ int BotSetupChatAI(void)
 		file = LibVarString("rchatfile", "rchat.c");
 		replychats = BotLoadReplyChat(file);
 	} //end if
+*/
+	file = LibVarString("matchfile", "match.c");
+	matchtemplates = BotLoadMatchTemplates(file);
 
 	InitConsoleMessageHeap();
 

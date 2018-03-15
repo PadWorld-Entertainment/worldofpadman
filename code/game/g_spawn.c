@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 
 #include "g_local.h"
@@ -75,7 +55,7 @@ qboolean	G_SpawnVector( const char *key, const char *defaultString, float *out )
 // fields are needed for spawning from the entity string
 //
 typedef enum {
-	F_INT,
+	F_INT, 
 	F_FLOAT,
 	F_STRING,
 	F_VECTOR,
@@ -85,7 +65,7 @@ typedef enum {
 typedef struct
 {
 	char	*name;
-	size_t	ofs;
+	int		ofs;
 	fieldtype_t	type;
 } field_t;
 
@@ -109,7 +89,10 @@ field_t fields[] = {
 	{"angle", FOFS(s.angles), F_ANGLEHACK},
 	{"targetShaderName", FOFS(targetShaderName), F_STRING},
 	{"targetShaderNewName", FOFS(targetShaderNewName), F_STRING},
-
+	{"animationStart",FOFS(animationStart),F_INT},
+	{"animationEnd",  FOFS(animationEnd),F_INT},
+	{"animationFPS",  FOFS(animationFPS),F_FLOAT},
+	{"distance", FOFS(distance), F_FLOAT}, 
 	{NULL}
 };
 
@@ -132,6 +115,11 @@ void SP_func_button (gentity_t *ent);
 void SP_func_door (gentity_t *ent);
 void SP_func_train (gentity_t *ent);
 void SP_func_timer (gentity_t *self);
+void SP_func_door_rotating( gentity_t *ent );
+
+void SP_station_health( gentity_t *ent );
+void SP_misc_sprayroomtl_teleporter(gentity_t *ent);
+void SP_misc_externalmodel(gentity_t *ent);
 
 void SP_trigger_always (gentity_t *ent);
 void SP_trigger_multiple (gentity_t *ent);
@@ -139,11 +127,18 @@ void SP_trigger_push (gentity_t *ent);
 void SP_trigger_teleport (gentity_t *ent);
 void SP_trigger_hurt (gentity_t *ent);
 
+void SP_trigger_balloonzone (gentity_t *ent);
+void SP_trigger_exit(gentity_t *self);
+void SP_trigger_forbiddenitems( gentity_t *self );
+
+void SP_target_balloon (gentity_t *ent);
+
 void SP_target_remove_powerups( gentity_t *ent );
 void SP_target_give (gentity_t *ent);
 void SP_target_delay (gentity_t *ent);
 void SP_target_speaker (gentity_t *ent);
 void SP_target_print (gentity_t *ent);
+void SP_target_script(gentity_t* ent);
 void SP_target_laser (gentity_t *self);
 void SP_target_score( gentity_t *ent );
 void SP_target_teleporter( gentity_t *ent );
@@ -167,6 +162,7 @@ void SP_misc_portal_surface(gentity_t *ent);
 void SP_shooter_rocket( gentity_t *ent );
 void SP_shooter_plasma( gentity_t *ent );
 void SP_shooter_grenade( gentity_t *ent );
+void SP_shooter_killerduck( gentity_t *ent );
 
 void SP_team_CTF_redplayer( gentity_t *ent );
 void SP_team_CTF_blueplayer( gentity_t *ent );
@@ -174,12 +170,10 @@ void SP_team_CTF_blueplayer( gentity_t *ent );
 void SP_team_CTF_redspawn( gentity_t *ent );
 void SP_team_CTF_bluespawn( gentity_t *ent );
 
-#ifdef MISSIONPACK
-void SP_team_blueobelisk( gentity_t *ent );
-void SP_team_redobelisk( gentity_t *ent );
-void SP_team_neutralobelisk( gentity_t *ent );
-#endif
-void SP_item_botroam( gentity_t *ent ) { }
+void SP_item_botroam(gentity_t *ent)
+{
+//	int i;
+}
 
 spawn_t	spawns[] = {
 	// info entities don't do anything at all, but provide positional
@@ -201,6 +195,11 @@ spawn_t	spawns[] = {
 	{"func_train", SP_func_train},
 	{"func_group", SP_info_null},
 	{"func_timer", SP_func_timer},			// rename trigger_timer?
+	{"func_door_rotating", SP_func_door_rotating},
+
+	{"station_health", SP_station_health},
+
+	{"misc_sprayroomtl_teleporter", SP_misc_sprayroomtl_teleporter},
 
 	// Triggers are brush objects that cause an effect when contacted
 	// by a living player, usually involving firing targets.
@@ -213,13 +212,20 @@ spawn_t	spawns[] = {
 	{"trigger_teleport", SP_trigger_teleport},
 	{"trigger_hurt", SP_trigger_hurt},
 
+	{"trigger_balloonzone", SP_trigger_balloonzone},
+	{"trigger_forbiddenitems", SP_trigger_forbiddenitems},
+	{"trigger_exit",SP_trigger_exit},
+
 	// targets perform no action by themselves, but must be triggered
 	// by another entity
+	{"target_balloon", SP_target_balloon}, 
+
 	{"target_give", SP_target_give},
 	{"target_remove_powerups", SP_target_remove_powerups},
 	{"target_delay", SP_target_delay},
 	{"target_speaker", SP_target_speaker},
 	{"target_print", SP_target_print},
+	{"target_script", SP_target_script},
 	{"target_laser", SP_target_laser},
 	{"target_score", SP_target_score},
 	{"target_teleporter", SP_target_teleporter},
@@ -234,27 +240,25 @@ spawn_t	spawns[] = {
 
 	{"misc_teleporter_dest", SP_misc_teleporter_dest},
 	{"misc_model", SP_misc_model},
+
+	{"misc_externalmodel",SP_misc_externalmodel},
+
 	{"misc_portal_surface", SP_misc_portal_surface},
 	{"misc_portal_camera", SP_misc_portal_camera},
 
-	{"shooter_rocket", SP_shooter_rocket},
-	{"shooter_grenade", SP_shooter_grenade},
-	{"shooter_plasma", SP_shooter_plasma},
+	{"shooter_betty", SP_shooter_rocket},
+	{"shooter_balloony", SP_shooter_grenade},
+	{"shooter_bubbleg", SP_shooter_plasma},
+	{"shooter_killerduck", SP_shooter_killerduck},
 
-	{"team_CTF_redplayer", SP_team_CTF_redplayer},
-	{"team_CTF_blueplayer", SP_team_CTF_blueplayer},
+	{"team_redplayer", SP_team_CTF_redplayer},
+	{"team_blueplayer", SP_team_CTF_blueplayer},
 
-	{"team_CTF_redspawn", SP_team_CTF_redspawn},
-	{"team_CTF_bluespawn", SP_team_CTF_bluespawn},
+	{"team_redspawn", SP_team_CTF_redspawn},
+	{"team_bluespawn", SP_team_CTF_bluespawn},
 
-#ifdef MISSIONPACK
-	{"team_redobelisk", SP_team_redobelisk},
-	{"team_blueobelisk", SP_team_blueobelisk},
-	{"team_neutralobelisk", SP_team_neutralobelisk},
-#endif
 	{"item_botroam", SP_item_botroam},
-
-	{NULL, 0}
+	{0, 0}
 };
 
 /*
@@ -379,12 +383,65 @@ void G_ParseField( const char *key, const char *value, gentity_t *ent ) {
 	}
 }
 
-#define ADJUST_AREAPORTAL() \
-	if(ent->s.eType == ET_MOVER) \
-	{ \
-		trap_LinkEntity(ent); \
-		trap_AdjustAreaPortalState(ent, qtrue); \
-	}
+
+typedef struct {
+	const char* s; //search
+	const char* r; //replace
+} replacePair_t;
+
+replacePair_t q3ToWopItems[] = {
+	{ "weapon_gauntlet",		"weapon_punchy"		},
+	{ "weapon_machinegun",		"weapon_nipper"		},
+	{ "weapon_shotgun",			"weapon_pumper"		},
+	{ "weapon_lightning",		"weapon_boaster"	},
+	{ "weapon_railgun",			"weapon_splasher"	},
+	{ "weapon_plasmagun",		"weapon_bubbleg"	},
+	{ "weapon_grenadelauncher",	"weapon_balloony"	},
+	{ "weapon_rocketlauncher",	"weapon_betty"		},
+	{ "weapon_bfg",				"weapon_imperius"	},
+			
+	{ "ammo_shells",	"ammo_pumper"	},
+	{ "ammo_bullets",	"ammo_nipper"	},
+	{ "ammo_grenades",	"ammo_balloony"	},
+	{ "ammo_cells",		"ammo_bubbleg"	},
+	{ "ammo_lightning",	"ammo_boaster"	},
+	{ "ammo_rockets",	"ammo_betty"	},
+	{ "ammo_slugs",		"ammo_splasher"	},
+	{ "ammo_bfg",		"ammo_imperius"	},
+			
+	{ "item_quad",		"item_padpower"			},
+	{ "item_enviro",	"item_climber"			},
+	{ "item_hast",		"item_speedy"			},
+	{ "item_flight",	"item_jump"				},
+	{ "item_invis",		"item_visionless"		},
+	{ "item_regen",		"item_revival"			},
+	{ "item_armor_body","item_armor_padshield"	},
+			
+	{ "team_CTF_redflag",	"team_CTL_redlolly"	},
+	{ "team_CTF_blueflag",	"team_CTL_bluelolly"},
+	{ "team_CTF_redplayer",	"team_redplayer"	},
+	{ "team_CTF_blueplayer","team_blueplayer"	},
+	{ "team_CTF_redspawn",	"team_redspawn"		},
+	{ "team_CTF_bluespawn",	"team_bluespawn"	},
+	{ NULL,		NULL }
+};
+
+replacePair_t shortMarkernames[] = {
+	{ "black",	"models/mapobjects/pad_weaponmarker/pad_wepm_black_bg.md3"	},
+	{ "blue",	"models/mapobjects/pad_weaponmarker/pad_wepm_blue_bg.md3"	},
+	{ "green",	"models/mapobjects/pad_weaponmarker/pad_wepm_green_gg.md3"	},
+	{ "purple",	"models/mapobjects/pad_weaponmarker/pad_wepm_green_bg.md3"	},
+	{ "orange",	"models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg.md3"	},
+	{ NULL,		NULL }
+};
+
+replacePair_t spawnpointReplacements[] = {
+	{ "team_redplayer",		"info_player_deathmatch" },
+	{ "team_blueplayer",	"info_player_deathmatch" },
+	{ "team_redspawn",		"info_player_deathmatch" },
+	{ "team_bluespawn",		"info_player_deathmatch" },
+	{ NULL,					NULL }
+};
 
 /*
 ===================
@@ -397,8 +454,11 @@ level.spawnVars[], then call the class specfic spawn function
 void G_SpawnGEntityFromSpawnVars( void ) {
 	int			i;
 	gentity_t	*ent;
-	char		*s, *value, *gametypeName;
-	static char *gametypeNames[] = {"ffa", "tournament", "single", "team", "ctf", "oneflag", "obelisk", "harvester"};
+	char		*s, *value;
+	const char	*gametypeName;
+	gitem_t		*item;
+
+	static const char *gametypeNames[] = {"ffa", "tournament", "single", "spray", "lps", "team", "ctl", "sptp", "balloon"};
 
 	// get the next free entity
 	ent = G_Spawn();
@@ -407,11 +467,65 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 		G_ParseField( level.spawnVars[i][0], level.spawnVars[i][1], ent );
 	}
 
+	// Convert suitable items from q3
+	if ( g_q3Items.integer ) {
+		for ( i = 0; q3ToWopItems[i].s; i++ ) {
+			if ( Q_stricmp( ent->classname, q3ToWopItems[i].s ) == 0 ) {
+				ent->classname = (char*)q3ToWopItems[i].r;
+				break;
+			}
+		}
+	}
+
+	// Convert additional team spawnpoints when not in team gametypes
+	if ( g_gametype.integer < GT_TEAM ) {
+		for ( i = 0; spawnpointReplacements[i].s; i++ ) {
+			if ( Q_stricmp( ent->classname, spawnpointReplacements[i].s ) == 0 ) {
+				ent->classname = (char*)spawnpointReplacements[i].r;
+				break;
+			}
+		}
+	}
+
+	// remove lollies if we aren't in CTL
+	// FIXME: Should mappers do this via gametype spawnvar (also for balloons, lps items etc) ?
+	if( g_gametype.integer!=GT_CTF
+		&& (!Q_stricmp(ent->classname,"team_CTL_redlolly") || !Q_stricmp(ent->classname,"team_CTL_bluelolly")) )
+	{
+		G_FreeEntity( ent );
+		return;
+	}
+
+
+	if ( !IsSyc() ) {
+		G_SpawnInt( "onlyspraygt", "0", &i );
+		if ( i ) {
+			G_FreeEntity( ent );
+			return;
+		}
+	}
+
+	if( g_gametype.integer == GT_LPS ) {
+		if( !Q_stricmp(ent->classname,"station_health")
+				|| NULL!=strstr(ent->classname,"_imperius")
+				|| !Q_stricmpn(ent->classname,"holdable_",9)
+				|| (!Q_stricmpn(ent->classname,"item_",5)
+					&& Q_stricmp(ent->classname,"item_botroam")) ) {
+			G_FreeEntity( ent );
+			return;
+		}
+
+		G_SpawnInt( "notLPS", "0", &i );
+		if( i ) {
+			G_FreeEntity( ent );
+			return;
+		}
+	}
+
 	// check for "notsingle" flag
 	if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
 		G_SpawnInt( "notsingle", "0", &i );
 		if ( i ) {
-			ADJUST_AREAPORTAL();
 			G_FreeEntity( ent );
 			return;
 		}
@@ -420,34 +534,22 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 	if ( g_gametype.integer >= GT_TEAM ) {
 		G_SpawnInt( "notteam", "0", &i );
 		if ( i ) {
-			ADJUST_AREAPORTAL();
 			G_FreeEntity( ent );
 			return;
 		}
 	} else {
 		G_SpawnInt( "notfree", "0", &i );
 		if ( i ) {
-			ADJUST_AREAPORTAL();
 			G_FreeEntity( ent );
 			return;
 		}
 	}
 
-#ifdef MISSIONPACK
-	G_SpawnInt( "notta", "0", &i );
+	G_SpawnInt( "notwop", "0", &i );
 	if ( i ) {
-		ADJUST_AREAPORTAL();
 		G_FreeEntity( ent );
 		return;
 	}
-#else
-	G_SpawnInt( "notq3a", "0", &i );
-	if ( i ) {
-		ADJUST_AREAPORTAL();
-		G_FreeEntity( ent );
-		return;
-	}
-#endif
 
 	if( G_SpawnString( "gametype", NULL, &value ) ) {
 		if( g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE ) {
@@ -455,10 +557,81 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 
 			s = strstr( value, gametypeName );
 			if( !s ) {
-				ADJUST_AREAPORTAL();
 				G_FreeEntity( ent );
 				return;
 			}
+		}
+	}
+
+	if( G_SpawnString( "notGametype", NULL, &value ) ) {
+		if( g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE ) {
+			gametypeName = gametypeNames[g_gametype.integer];
+
+			s = strstr( value, gametypeName );
+			if( s ) {
+				G_FreeEntity( ent );
+				return;
+			}
+		}
+	}
+
+
+	for ( item = ( bg_itemlist + 1 ); item->classname; item++ ) {
+    	if ( strcmp( item->classname, ent->classname ) == 0 ) {
+			RegisterItem( item );
+			break;
+		}
+	}
+
+
+	/*
+	Modifiers / Instagib
+	Exclude unwanted Items from spawning in Instagib, but have them register with
+	the client anyway. (So we have working visuals and sound for the entities when
+	we turn off the modifier, which doesn't trigger a full client reload)
+	*/
+	if ( g_modInstagib.integer && !Instagib_canSpawnEntity( ent ) ) {
+		G_FreeEntity( ent );
+		return;
+	}
+
+
+	// weapon marker
+	if( G_SpawnString("marker", NULL, &value) ) {
+		trace_t		tr;
+		vec3_t		min = {-16.0f,-16.0f, 0.0f};
+		vec3_t		max = { 16.0f, 16.0f, 1.0f};
+		vec3_t		trEnd;
+
+		if ( g_modInstagib.integer ) { // no markers for instagib
+			G_FreeEntity( ent );
+			return;
+		}
+
+		VectorCopy( ent->s.origin, trEnd );
+		trEnd[2] -= 512;
+		trap_Trace(&tr,ent->s.origin,min,max,trEnd,ENTITYNUM_NONE,MASK_SHOT);
+
+		if(!tr.startsolid && tr.fraction!=1.0f) {
+			gentity_t	*marker_ent;
+			marker_ent = G_Spawn();
+
+			marker_ent->classname = "misc_externalmodel";
+			for(i=0;shortMarkernames[i].s!=NULL;++i) {
+				if(!Q_stricmp(value,shortMarkernames[i].s))
+					marker_ent->model = (char *)shortMarkernames[i].r;
+			}
+			if(marker_ent->model == NULL)
+				marker_ent->model = G_NewString(value);
+			marker_ent->s.modelindex = G_ModelIndex( marker_ent->model );
+
+			VectorCopy( ent->s.angles, marker_ent->s.angles );
+
+			G_SetOrigin( marker_ent, tr.endpos );
+
+			VectorCopy( marker_ent->s.angles, marker_ent->s.apos.trBase );
+
+			trap_LinkEntity(marker_ent);
 		}
 	}
 
@@ -485,7 +658,7 @@ char *G_AddSpawnVarToken( const char *string ) {
 
 	l = strlen( string );
 	if ( level.numSpawnVarChars + l + 1 > MAX_SPAWN_VARS_CHARS ) {
-		G_Error( "G_AddSpawnVarToken: MAX_SPAWN_VARS" );
+		G_Error( "G_AddSpawnVarToken: MAX_SPAWN_CHARS" );
 	}
 
 	dest = level.spawnVarChars + level.numSpawnVarChars;
@@ -591,6 +764,24 @@ void SP_worldspawn( void ) {
 	G_SpawnString( "enableBreath", "0", &s );
 	trap_Cvar_Set( "g_enableBreath", s );
 
+	G_SpawnInt("maxsprayroomtime","30",&level.maxsprayroomtime);
+	{
+		char	tmpstr[256];
+		vec3_t	tmpv3;
+
+		G_SpawnString("skylensflare_dir","10 10 10", &s);
+		sscanf(s,"%f %f %f",&tmpv3[0],&tmpv3[1],&tmpv3[2]);
+		VectorNormalize(tmpv3);
+		
+		G_SpawnString("skylensflare","", &s);
+		Com_sprintf(tmpstr, 256, "%1.3f %1.3f %1.3f >%.128s",tmpv3[0],tmpv3[1],tmpv3[2],s);
+
+		trap_Cvar_Set( "g_skyLensflare", tmpstr );
+	}
+
+	G_SpawnString( "wopSky", "", &s );
+	trap_Cvar_Set( "g_sky", s );
+
 	g_entities[ENTITYNUM_WORLD].s.number = ENTITYNUM_WORLD;
 	g_entities[ENTITYNUM_WORLD].r.ownerNum = ENTITYNUM_NONE;
 	g_entities[ENTITYNUM_WORLD].classname = "worldspawn";
@@ -604,8 +795,20 @@ void SP_worldspawn( void ) {
 	if ( g_restarted.integer ) {
 		trap_Cvar_Set( "g_restarted", "0" );
 		level.warmupTime = 0;
-	} else if ( g_doWarmup.integer ) { // Turn it on
+	}
+	else if ( g_doWarmup.integer ) { // Turn it on
 		level.warmupTime = -1;
+		trap_SetConfigstring( CS_WARMUP, va("%i", level.warmupTime) );
+		G_LogPrintf( "Warmup:\n" );
+	}
+	else if(g_gametype.integer==GT_LPS) {
+		if(g_warmup.integer>=20)
+			level.warmupTime = g_warmup.integer;
+		else
+		{
+			level.warmupTime = 20;
+			trap_Cvar_Set("g_warmup","20");
+		}
 		trap_SetConfigstring( CS_WARMUP, va("%i", level.warmupTime) );
 		G_LogPrintf( "Warmup:\n" );
 	}
@@ -624,6 +827,7 @@ void G_SpawnEntitiesFromString( void ) {
 	// allow calls to G_Spawn*()
 	level.spawning = qtrue;
 	level.numSpawnVars = 0;
+	level.sr_tl_tele = NULL;
 
 	// the worldspawn is not an actual entity, but it still
 	// has a "spawn" function to perform any global setup

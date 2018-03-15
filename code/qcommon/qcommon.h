@@ -244,28 +244,10 @@ void Netchan_TransmitNextFragment( netchan_t *chan );
 qboolean Netchan_Process( netchan_t *chan, msg_t *msg );
 
 
-/*
-==============================================================
-
-PROTOCOL
-
-==============================================================
-*/
-
-#define	PROTOCOL_VERSION	71
-#define PROTOCOL_LEGACY_VERSION	68
-// 1.31 - 67
-
-// maintain a list of compatible protocols for demo playing
-// NOTE: that stuff only works with two digits protocols
-extern int demo_protocols[];
-
-#if !defined UPDATE_SERVER_NAME && !defined STANDALONE
-#define	UPDATE_SERVER_NAME	"update.quake3arena.com"
-#endif
+#define	UPDATE_SERVER_NAME	"" //"update.quake3arena.com"
 // override on command line, config files etc.
 #ifndef MASTER_SERVER_NAME
-#define MASTER_SERVER_NAME	"master.quake3arena.com"
+#define MASTER_SERVER_NAME	"master.worldofpadman.com" //"master.quake3arena.com"
 #endif
 
 #ifndef STANDALONE
@@ -277,7 +259,7 @@ extern int demo_protocols[];
   #endif
 #endif
 
-#define	PORT_MASTER			27950
+#define	PORT_MASTER			27955	//27950
 #define	PORT_UPDATE			27951
 #define	PORT_SERVER			27960
 #define	NUM_SERVER_PORTS	4		// broadcast scan this many ports after
@@ -363,7 +345,7 @@ void	VM_Free( vm_t *vm );
 void	VM_Clear(void);
 void	VM_Forced_Unload_Start(void);
 void	VM_Forced_Unload_Done(void);
-vm_t	*VM_Restart(vm_t *vm, qboolean unpure);
+vm_t	*VM_Restart( vm_t *vm );
 
 intptr_t		QDECL VM_Call( vm_t *vm, int callNum, ... );
 
@@ -599,9 +581,9 @@ issues.
 #define	MAX_FILE_HANDLES	64
 
 #ifdef DEDICATED
-#	define Q3CONFIG_CFG "q3config_server.cfg"
+#	define Q3CONFIG_CFG "wopconfig_server.cfg"
 #else
-#	define Q3CONFIG_CFG "q3config.cfg"
+#	define Q3CONFIG_CFG "wopconfig.cfg"
 #endif
 
 qboolean FS_Initialized( void );
@@ -663,7 +645,7 @@ int		FS_Read( void *buffer, int len, fileHandle_t f );
 void	FS_FCloseFile( fileHandle_t f );
 // note: you can't just fclose from another DLL, due to MS libc issues
 
-long	FS_ReadFileDir(const char *qpath, void *searchPath, qboolean unpure, void **buffer);
+long	FS_ReadFileDir(const char *qpath, void *searchPath, void **buffer);
 long	FS_ReadFile(const char *qpath, void **buffer);
 // returns the length of the file
 // a null buffer will just return the file length without loading
@@ -851,7 +833,6 @@ extern	cvar_t	*com_timescale;
 extern	cvar_t	*com_sv_running;
 extern	cvar_t	*com_cl_running;
 extern	cvar_t	*com_version;
-extern	cvar_t	*com_blood;
 extern	cvar_t	*com_buildScript;		// for building release pak files
 extern	cvar_t	*com_journal;
 extern	cvar_t	*com_cameraMode;
@@ -919,7 +900,7 @@ temp file loading
 
 */
 
-#if !defined(NDEBUG) && !defined(BSPC)
+#if defined(_DEBUG) && !defined(BSPC)
 	#define ZONE_DEBUG
 #endif
 
@@ -949,6 +930,7 @@ void *Hunk_AllocateTempMemory( int size );
 void Hunk_FreeTempMemory( void *buf );
 int	Hunk_MemoryRemaining( void );
 void Hunk_Log( void);
+void Hunk_Trash( void );
 
 void Com_TouchMemory( void );
 

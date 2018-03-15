@@ -1081,7 +1081,7 @@ Returns filesize and an open FILE pointer.
 */
 extern qboolean		com_fullyInitialized;
 
-long FS_FOpenFileReadDir(const char *filename, searchpath_t *search, fileHandle_t *file, qboolean uniqueFILE, qboolean unpure)
+long FS_FOpenFileReadDir(const char *filename, searchpath_t *search, fileHandle_t *file, qboolean uniqueFILE)
 {
 	long			hash;
 	pack_t		*pak;
@@ -1190,7 +1190,7 @@ long FS_FOpenFileReadDir(const char *filename, searchpath_t *search, fileHandle_
 		if(search->pack->hashTable[hash])
 		{
 			// disregard if it doesn't match one of the allowed pure pak files
-			if(!unpure && !FS_PakIsPure(search->pack))
+			if(!FS_PakIsPure(search->pack))
 			{
 				*file = 0;
 				return -1;
@@ -1281,12 +1281,12 @@ long FS_FOpenFileReadDir(const char *filename, searchpath_t *search, fileHandle_
 		//   this test can make the search fail although the file is in the directory
 		// I had the problem on https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=8
 		// turned out I used FS_FileExists instead
-		if(!unpure && fs_numServerPaks)
+		if(fs_numServerPaks)
 		{
 			if(!FS_IsExt(filename, ".cfg", len) &&		// for config files
 			   !FS_IsExt(filename, ".menu", len) &&		// menu files
 			   !FS_IsExt(filename, ".game", len) &&		// menu files
-			   !FS_IsExt(filename, ".dat", len) &&		// for journal files
+			   !FS_IsExt(filename, ".cfg", len) &&		// for journal files
 			   !FS_IsDemoExt(filename, len))			// demos
 			{
 				*file = 0;
@@ -1341,7 +1341,7 @@ long FS_FOpenFileRead(const char *filename, fileHandle_t *file, qboolean uniqueF
 
 	for(search = fs_searchpaths; search; search = search->next)
 	{
-	        len = FS_FOpenFileReadDir(filename, search, file, uniqueFILE, qfalse);
+	        len = FS_FOpenFileReadDir(filename, search, file, uniqueFILE);
 	        
 	        if(file == NULL)
 	        {
@@ -1398,7 +1398,7 @@ vmInterpret_t FS_FindVM(void **startSearch, char *found, int foundlen, const cha
 	if(enableDll)
 		Com_sprintf(dllName, sizeof(dllName), "%s" ARCH_STRING DLL_EXT, name);
 		
-	Com_sprintf(qvmName, sizeof(qvmName), "vm/%s.qvm", name);
+	Com_sprintf(qvmName, sizeof(dllName), "vm/%s.qvm", name);
 
 	lastSearch = *startSearch;
 	if(*startSearch == NULL)
@@ -1425,7 +1425,7 @@ vmInterpret_t FS_FindVM(void **startSearch, char *found, int foundlen, const cha
 				}
 			}
 
-			if(FS_FOpenFileReadDir(qvmName, search, NULL, qfalse, qfalse) > 0)
+			if(FS_FOpenFileReadDir(qvmName, search, NULL, qfalse) > 0)
 			{
 				*startSearch = search;
 				return VMI_COMPILED;
@@ -1447,7 +1447,7 @@ vmInterpret_t FS_FindVM(void **startSearch, char *found, int foundlen, const cha
                                 }
 		        }
 
-			if(FS_FOpenFileReadDir(qvmName, search, NULL, qfalse, qfalse) > 0)
+			if(FS_FOpenFileReadDir(qvmName, search, NULL, qfalse) > 0)
 			{
 				*startSearch = search;
 
@@ -1752,7 +1752,7 @@ a null buffer will just return the file length without loading
 If searchPath is non-NULL search only in that specific search path
 ============
 */
-long FS_ReadFileDir(const char *qpath, void *searchPath, qboolean unpure, void **buffer)
+long FS_ReadFileDir(const char *qpath, void *searchPath, void **buffer)
 {
 	fileHandle_t	h;
 	searchpath_t	*search;
@@ -1825,7 +1825,7 @@ long FS_ReadFileDir(const char *qpath, void *searchPath, qboolean unpure, void *
 	else
 	{
 		// look for it in a specific search path only
-		len = FS_FOpenFileReadDir(qpath, search, &h, qfalse, unpure);
+		len = FS_FOpenFileReadDir(qpath, search, &h, qfalse);
 	}
 
 	if ( h == 0 ) {
@@ -1884,7 +1884,7 @@ a null buffer will just return the file length without loading
 */
 long FS_ReadFile(const char *qpath, void **buffer)
 {
-	return FS_ReadFileDir(qpath, NULL, qfalse, buffer);
+	return FS_ReadFileDir(qpath, NULL, buffer);
 }
 
 /*
@@ -2709,7 +2709,7 @@ void FS_Path_f( void ) {
 				}
 			}
 		} else {
-			Com_Printf ("%s%c%s\n", s->dir->path, PATH_SEP, s->dir->gamedir );
+			Com_Printf ("%s/%s\n", s->dir->path, s->dir->gamedir );
 		}
 	}
 
@@ -2751,7 +2751,7 @@ qboolean FS_Which(const char *filename, void *searchPath)
 {
 	searchpath_t *search = searchPath;
 
-	if(FS_FOpenFileReadDir(filename, search, NULL, qfalse, qfalse) > 0)
+	if(FS_FOpenFileReadDir(filename, search, NULL, qfalse) > 0)
 	{
 		if(search->pack)
 		{
@@ -3879,13 +3879,13 @@ void FS_Restart( int checksumFeed ) {
 /*
 =================
 FS_ConditionalRestart
-
-Restart if necessary
-Return qtrue if restarting due to game directory changed, qfalse otherwise
+restart if necessary
 =================
 */
 qboolean FS_ConditionalRestart(int checksumFeed, qboolean disconnect)
 {
+	int retval;
+	
 	if(fs_gamedirvar->modified)
 	{
 		if(FS_FilenameCompare(lastValidGame, fs_gamedirvar->string) &&
@@ -3896,8 +3896,13 @@ qboolean FS_ConditionalRestart(int checksumFeed, qboolean disconnect)
 			return qtrue;
 		}
 		else
+		{
 			fs_gamedirvar->modified = qfalse;
+			retval = qtrue;
+		}
 	}
+	else
+		retval = qfalse;
 	
 	if(checksumFeed != fs_checksumFeed)
 		FS_Restart(checksumFeed);

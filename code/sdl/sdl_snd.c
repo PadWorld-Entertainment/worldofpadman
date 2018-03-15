@@ -178,7 +178,7 @@ qboolean SNDDMA_Init(void)
 		tmp = 16;
 
 	desired.freq = (int) s_sdlSpeed->value;
-	if(!desired.freq) desired.freq = 22050;
+	if(!desired.freq) desired.freq = 44100;
 	desired.format = ((tmp == 16) ? AUDIO_S16SYS : AUDIO_U8);
 
 	// I dunno if this is the best idea, but I'll give it a try...

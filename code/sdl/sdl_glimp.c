@@ -76,6 +76,8 @@ cvar_t *r_allowResize; // make window resizable
 cvar_t *r_centerWindow;
 cvar_t *r_sdlDriver;
 
+qboolean haveMultiSample = qfalse; 
+
 void (APIENTRYP qglActiveTextureARB) (GLenum texture);
 void (APIENTRYP qglClientActiveTextureARB) (GLenum texture);
 void (APIENTRYP qglMultiTexCoord2fARB) (GLenum target, GLfloat s, GLfloat t);
@@ -355,13 +357,15 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder)
 		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, tdepthbits );
 		SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, tstencilbits );
 
-		SDL_GL_SetAttribute( SDL_GL_MULTISAMPLEBUFFERS, samples ? 1 : 0 );
-		SDL_GL_SetAttribute( SDL_GL_MULTISAMPLESAMPLES, samples );
+		if( haveMultiSample )
+		{
+			SDL_GL_SetAttribute( SDL_GL_MULTISAMPLEBUFFERS, samples ? 1 : 0 );
+			SDL_GL_SetAttribute( SDL_GL_MULTISAMPLESAMPLES, samples );
+		}
 
 		if(r_stereoEnabled->integer)
 		{
-			glConfig.stereoEnabled = qtrue;
-			SDL_GL_SetAttribute(SDL_GL_STEREO, 1);
+			glConfig.stereoEnabled = ( SDL_GL_SetAttribute(SDL_GL_STEREO, 1) == 0 );
 		}
 		else
 		{
@@ -643,10 +647,21 @@ static void GLimp_InitExtensions( void )
 		ri.Printf( PRINT_ALL, "...GL_EXT_compiled_vertex_array not found\n" );
 	}
 
+	if( GLimp_HaveExtension( "GL_ARB_multisample" ) )
+	{
+		haveMultiSample = qtrue;
+		if( r_ext_multisample->value )
+			ri.Printf( PRINT_ALL, "...using GL_ARB_multisample\n");
+	}
+	else
+	{
+		ri.Printf( PRINT_ALL, "...GL_ARB_multisample not found\n");
+	}
+
 	textureFilterAnisotropic = qfalse;
 	if ( GLimp_HaveExtension( "GL_EXT_texture_filter_anisotropic" ) )
 	{
-		if ( r_ext_texture_filter_anisotropic->integer ) {
+		if ( r_ext_anisotropy->integer ) {
 			qglGetIntegerv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, (GLint *)&maxAnisotropy );
 			if ( maxAnisotropy <= 0 ) {
 				ri.Printf( PRINT_ALL, "...GL_EXT_texture_filter_anisotropic not properly supported!\n" );
@@ -669,7 +684,7 @@ static void GLimp_InitExtensions( void )
 	}
 }
 
-#define R_MODE_FALLBACK 3 // 640 * 480
+#define R_MODE_FALLBACK 0 // 640 * 480
 
 /*
 ===============

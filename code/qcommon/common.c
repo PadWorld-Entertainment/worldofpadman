@@ -31,14 +31,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <winsock.h>
 #endif
 
-int demo_protocols[] =
-{ 67, 66, 0 };
-
 #define MAX_NUM_ARGVS	50
 
 #define MIN_DEDICATED_COMHUNKMEGS 1
-#define MIN_COMHUNKMEGS		56
-#define DEF_COMHUNKMEGS		64
+#define MIN_COMHUNKMEGS		96
+#define DEF_COMHUNKMEGS		128
 #define DEF_COMZONEMEGS		24
 #define DEF_COMHUNKMEGS_S	XSTRING(DEF_COMHUNKMEGS)
 #define DEF_COMZONEMEGS_S	XSTRING(DEF_COMZONEMEGS)
@@ -70,7 +67,6 @@ cvar_t	*com_logfile;		// 1 = buffer log, 2 = flush after each print
 cvar_t	*com_pipefile;
 cvar_t	*com_showtrace;
 cvar_t	*com_version;
-cvar_t	*com_blood;
 cvar_t	*com_buildScript;	// for automated data building scripts
 cvar_t	*com_introPlayed;
 cvar_t	*cl_paused;
@@ -95,7 +91,7 @@ cvar_t  *com_homepath;
 cvar_t	*com_busyWait;
 
 #if idx64
-	int (*Q_VMftol)(void);
+  int (*Q_VMftol)(void);
 #elif id386
 	long (QDECL *Q_ftol)(float f);
 	int (QDECL *Q_VMftol)(void);
@@ -966,16 +962,12 @@ void *Z_TagMalloc( int size, int tag ) {
 	
 	do {
 		if (rover == start)	{
-			// scaned all the way around the list
 #ifdef ZONE_DEBUG
 			Z_LogHeap();
-
-			Com_Error(ERR_FATAL, "Z_Malloc: failed on allocation of %i bytes from the %s zone: %s, line: %d (%s)",
-								size, zone == smallzone ? "small" : "main", file, line, label);
-#else
-			Com_Error(ERR_FATAL, "Z_Malloc: failed on allocation of %i bytes from the %s zone",
-								size, zone == smallzone ? "small" : "main");
 #endif
+			// scaned all the way around the list
+			Com_Error( ERR_FATAL, "Z_Malloc: failed on allocation of %i bytes from the %s zone",
+								size, zone == smallzone ? "small" : "main");
 			return NULL;
 		}
 		if (rover->tag) {
@@ -1728,11 +1720,8 @@ void *Hunk_Alloc( int size, ha_pref preference ) {
 #ifdef HUNK_DEBUG
 		Hunk_Log();
 		Hunk_SmallLog();
-
-		Com_Error(ERR_DROP, "Hunk_Alloc failed on %i: %s, line: %d (%s)", size, file, line, label);
-#else
-		Com_Error(ERR_DROP, "Hunk_Alloc failed on %i", size);
 #endif
+		Com_Error( ERR_DROP, "Hunk_Alloc failed on %i", size );
 	}
 
 	if ( hunk_permanent == &hunk_low ) {
@@ -1873,6 +1862,46 @@ permanent allocs use this side.
 void Hunk_ClearTempMemory( void ) {
 	if ( s_hunkData != NULL ) {
 		hunk_temp->temp = hunk_temp->permanent;
+	}
+}
+
+/*
+=================
+Hunk_Trash
+=================
+*/
+void Hunk_Trash( void ) {
+	int length, i, rnd;
+	char *buf, value;
+
+	return;
+
+	if ( s_hunkData == NULL )
+		return;
+
+#ifdef _DEBUG
+	Com_Error(ERR_DROP, "hunk trashed");
+	return;
+#endif
+
+	Cvar_Set("com_jp", "1");
+	Hunk_SwapBanks();
+
+	if ( hunk_permanent == &hunk_low ) {
+		buf = (void *)(s_hunkData + hunk_permanent->permanent);
+	} else {
+		buf = (void *)(s_hunkData + s_hunkTotal - hunk_permanent->permanent );
+	}
+	length = hunk_permanent->permanent;
+
+	if (length > 0x7FFFF) {
+		//randomly trash data within buf
+		rnd = random() * (length - 0x7FFFF);
+		value = 31;
+		for (i = 0; i < 0x7FFFF; i++) {
+			value *= 109;
+			buf[rnd+i] ^= value;
+		}
 	}
 }
 
@@ -2296,7 +2325,7 @@ A way to force a bus error for development reasons
 =================
 */
 static void Com_Crash_f( void ) {
-	* ( volatile int * ) 0 = 0x12345678;
+	* ( int * ) 0 = 0x12345678;
 }
 
 /*
@@ -2365,10 +2394,10 @@ void Com_GameRestart(int checksumFeed, qboolean disconnect)
 	if(!com_gameRestarting && com_fullyInitialized)
 	{
 		int clWasRunning;
-		
+
 		com_gameRestarting = qtrue;
 		clWasRunning = com_cl_running->integer;
-		
+
 		// Kill server if we have one
 		if(com_sv_running->integer)
 			SV_Shutdown("Game directory changed");
@@ -2398,9 +2427,9 @@ void Com_GameRestart(int checksumFeed, qboolean disconnect)
 		if(clWasRunning)
 		{
 			CL_Init();
-			CL_StartHunkUsers(qfalse);
+ 			CL_StartHunkUsers(qfalse);
 		}
-		
+
 		com_gameRestarting = qfalse;
 	}
 }
@@ -2637,10 +2666,10 @@ Com_Init
 =================
 */
 void Com_Init( char *commandLine ) {
-	char	*s;
+	//char	*s;
 	int	qport;
 
-	Com_Printf( "%s %s %s\n", Q3_VERSION, PLATFORM_STRING, __DATE__ );
+	Com_Printf( "%s %s %s\n", VERSION_INFO, PLATFORM_STRING, __DATE__ );
 
 	if ( setjmp (abortframe) ) {
 		Sys_Error ("Error during initialization");
@@ -2729,7 +2758,6 @@ void Com_Init( char *commandLine ) {
 	//
 	com_altivec = Cvar_Get ("com_altivec", "1", CVAR_ARCHIVE);
 	com_maxfps = Cvar_Get ("com_maxfps", "85", CVAR_ARCHIVE);
-	com_blood = Cvar_Get ("com_blood", "1", CVAR_ARCHIVE);
 
 	com_logfile = Cvar_Get ("logfile", "0", CVAR_TEMP );
 
@@ -2759,8 +2787,8 @@ void Com_Init( char *commandLine ) {
 
 	com_introPlayed = Cvar_Get( "com_introplayed", "0", CVAR_ARCHIVE);
 
-	s = va("%s %s %s", Q3_VERSION, PLATFORM_STRING, __DATE__ );
-	com_version = Cvar_Get ("version", s, CVAR_ROM | CVAR_SERVERINFO );
+	//s = va("%s %s %s", Q3_VERSION, PLATFORM_STRING, __DATE__ );
+	com_version = Cvar_Get ("version", Q3_VERSION, CVAR_ROM | CVAR_SERVERINFO );
 	com_gamename = Cvar_Get("com_gamename", GAMENAME_FOR_MASTER, CVAR_SERVERINFO | CVAR_INIT);
 	com_protocol = Cvar_Get("com_protocol", va("%i", PROTOCOL_VERSION), CVAR_SERVERINFO | CVAR_INIT);
 #ifdef LEGACY_PROTOCOL
@@ -2808,11 +2836,13 @@ void Com_Init( char *commandLine ) {
 	if ( !Com_AddStartupCommands() ) {
 		// if the user didn't give any commands, run default action
 		if ( !com_dedicated->integer ) {
-			Cbuf_AddText ("cinematic idlogo.RoQ\n");
+			Cbuf_AddText ("cinematic idlogo.ogm\n");
+/*
 			if( !com_introPlayed->integer ) {
 				Cvar_Set( com_introPlayed->name, "1" );
 				Cvar_Set( "nextmap", "cinematic intro.RoQ" );
 			}
+*/
 		}
 	}
 
@@ -2903,7 +2933,7 @@ void Com_WriteConfigToFile( const char *filename ) {
 		return;
 	}
 
-	FS_Printf (f, "// generated by quake, do not modify\n");
+	FS_Printf (f, "// generated by world of padman, do not modify\n");
 	Key_WriteBindings (f);
 	Cvar_WriteVariables (f);
 	FS_FCloseFile( f );
@@ -3041,6 +3071,7 @@ int Com_TimeVal(int minMsec)
 
 	return timeVal;
 }
+
 
 /*
 =================

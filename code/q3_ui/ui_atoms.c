@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 /**********************************************************************
 	UI_ATOMS.C
@@ -26,9 +6,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	User interface building blocks and support functions.
 **********************************************************************/
 #include "ui_local.h"
+#include "../game/wopg_sphandling.h"
 
 uiStatic_t		uis;
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
+
+// these are here so the functions in q_shared.c can link
+#ifndef UI_HARD_LINKED
 
 void QDECL Com_Error( int level, const char *error, ... ) {
 	va_list		argptr;
@@ -52,6 +36,8 @@ void QDECL Com_Printf( const char *msg, ... ) {
 	trap_Print( va("%s", text) );
 }
 
+#endif
+
 /*
 =================
 UI_ClampCvar
@@ -71,6 +57,27 @@ UI_StartDemoLoop
 */
 void UI_StartDemoLoop( void ) {
 	trap_Cmd_ExecuteText( EXEC_APPEND, "d1\n" );
+}
+
+void UI_StartCreditMusic(void)
+{
+	uis.musicbool=qtrue;
+	trap_S_StopBackgroundTrack();
+//	trap_S_StartBackgroundTrack("music/green sun - yes, he comes!.ogg", "music/green sun - yes, he comes!.ogg");
+	trap_S_StartBackgroundTrack("wopmusic/greensun/09_pad-anthem (credits).ogg", "wopmusic/greensun/09_pad-anthem (credits).ogg");
+}
+
+void UI_StartMusic(void)
+{
+	uis.musicbool=qtrue;
+	trap_S_StartBackgroundTrack("music/22khz_menue_loop", "music/22khz_menue_loop");
+}
+
+void UI_StopMusic(void)
+{
+	if(uis.musicbool==qtrue)//nicht stopen wenn 2(wop_music menu -> exit) oder 0(keine music gestartet)
+		trap_S_StopBackgroundTrack();
+	uis.musicbool=qfalse;
 }
 
 /*
@@ -111,17 +118,23 @@ void UI_PushMenu( menuframework_s *menu )
 
 	trap_Key_SetCatcher( KEYCATCH_UI );
 
-	// force first available item to have focus
-	for (i=0; i<menu->nitems; i++)
+	if(menu->noPushSelect)
 	{
-		item = (menucommon_s *)menu->items[i];
-		if (!(item->flags & (QMF_GRAYED|QMF_MOUSEONLY|QMF_INACTIVE)))
-		{
-			menu->cursor_prev = -1;
-			Menu_SetCursor( menu, i );
-			break;
-		}
+		menu->cursor=-1;
+//		Menu_CursorMoved( &s_main.menu );
 	}
+	else
+		// force first available item to have focus
+		for (i=0; i<menu->nitems; i++)
+		{
+			item = (menucommon_s *)menu->items[i];
+			if (!(item->flags & (QMF_GRAYED|QMF_MOUSEONLY|QMF_INACTIVE)))
+			{
+				menu->cursor_prev = -1;
+				Menu_SetCursor( menu, i );
+				break;
+			}
+		}
 
 	uis.firstdraw = qtrue;
 }
@@ -133,8 +146,6 @@ UI_PopMenu
 */
 void UI_PopMenu (void)
 {
-	trap_S_StartLocalSound( menu_out_sound, CHAN_LOCAL_SOUND );
-
 	uis.menusp--;
 
 	if (uis.menusp < 0)
@@ -153,6 +164,9 @@ void UI_ForceMenuOff (void)
 {
 	uis.menusp     = 0;
 	uis.activemenu = NULL;
+
+	if(!trap_Cvar_VariableValue("cl_paused"))
+		UI_StopMusic();
 
 	trap_Key_SetCatcher( trap_Key_GetCatcher() & ~KEYCATCH_UI );
 	trap_Key_ClearStates();
@@ -330,6 +344,8 @@ static int propMapB[26][3] = {
 #define PROPB_SPACE_WIDTH	12
 #define PROPB_HEIGHT		36
 
+// bk001205 - code below duplicated in cgame/cg_drawtools.c
+// bk001205 - FIXME: does this belong in ui_shared.c?
 /*
 =================
 UI_DrawBannerString
@@ -338,7 +354,7 @@ UI_DrawBannerString
 static void UI_DrawBannerString2( int x, int y, const char* str, vec4_t color )
 {
 	const char* s;
-	unsigned char	ch;
+	unsigned char	ch; // bk001204 - unsigned
 	float	ax;
 	float	ay;
 	float	aw;
@@ -351,8 +367,8 @@ static void UI_DrawBannerString2( int x, int y, const char* str, vec4_t color )
 	// draw the colored text
 	trap_R_SetColor( color );
 	
-	ax = x * uis.xscale + uis.bias;
-	ay = y * uis.yscale;
+	ax = x * uis.xscale + uis.xbias;
+	ay = y * uis.yscale + uis.ybias;
 
 	s = str;
 	while ( *s )
@@ -445,13 +461,13 @@ int UI_ProportionalStringWidth( const char* str ) {
 	return width;
 }
 
-static void UI_DrawProportionalString2( int x, int y, const char* str, vec4_t color, float sizeScale, qhandle_t charset )
+void UI_DrawProportionalString2( int x, int y, const char* str, vec4_t color, float sizeScale, qhandle_t charset )
 {
 	const char* s;
-	unsigned char	ch;
+	unsigned char	ch; // bk001204 - unsigned
 	float	ax;
 	float	ay;
-	float	aw = 0;
+	float	aw = 0; // bk001204 - init
 	float	ah;
 	float	frow;
 	float	fcol;
@@ -461,8 +477,8 @@ static void UI_DrawProportionalString2( int x, int y, const char* str, vec4_t co
 	// draw the colored text
 	trap_R_SetColor( color );
 	
-	ax = x * uis.xscale + uis.bias;
-	ay = y * uis.yscale;
+	ax = x * uis.xscale + uis.xbias;
+	ay = y * uis.yscale + uis.ybias;
 
 	s = str;
 	while ( *s )
@@ -546,6 +562,7 @@ void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t
 	}
 
 	if ( style & UI_PULSE ) {
+/*(original)
 		drawcolor[0] = color[0] * 0.7;
 		drawcolor[1] = color[1] * 0.7;
 		drawcolor[2] = color[2] * 0.7;
@@ -557,60 +574,91 @@ void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t
 		drawcolor[2] = color[2];
 		drawcolor[3] = 0.5 + 0.5 * sin( uis.realtime / PULSE_DIVISOR );
 		UI_DrawProportionalString2( x, y, str, drawcolor, sizeScale, uis.charsetPropGlow );
+*/
+		UI_DrawProportionalString2( x, y, str, color, sizeScale, uis.charsetProp );
+		drawcolor[0] = color[0];
+		drawcolor[1] = color[1];
+		drawcolor[2] = color[2];
+		drawcolor[3] = 0.75f + 0.25f * sin( uis.realtime / PULSE_DIVISOR );
+		UI_DrawProportionalString2( x-2+(int)(random()*5.99f), y-2+(int)(random()*5.99f), str, drawcolor, sizeScale, uis.charsetProp );
+
 		return;
 	}
 
 	UI_DrawProportionalString2( x, y, str, color, sizeScale, uis.charsetProp );
 }
 
-/*
-=================
-UI_DrawProportionalString_Wrapped
-=================
-*/
-void UI_DrawProportionalString_AutoWrapped( int x, int y, int xmax, int ystep, const char* str, int style, vec4_t color ) {
-	int width;
+int CharWidthForStringStyle( int style )
+{
+	if (style & UI_SMALLFONT)
+		return SMALLCHAR_WIDTH;
+
+	else if (style & UI_GIANTFONT)
+		return GIANTCHAR_WIDTH;
+
+	return	BIGCHAR_WIDTH;
+}
+
+int CharHeightForStringStyle( int style )
+{
+	if (style & UI_SMALLFONT)
+		return SMALLCHAR_HEIGHT;
+
+	else if (style & UI_GIANTFONT)
+		return GIANTCHAR_HEIGHT;
+
+	return	BIGCHAR_HEIGHT;
+}
+
+int UI_AutoWrappedString_LineCount( int xmax, const char* str, int style, qboolean proportional )
+{
 	char *s1,*s2,*s3;
 	char c_bcp;
 	char buf[1024];
-	float   sizeScale;
+	float sizeScale;
+	int lineCount = 0;
+	int width;
 
 	if (!str || str[0]=='\0')
-		return;
-	
+		return 0;
+
 	sizeScale = UI_ProportionalSizeScale( style );
 	
 	Q_strncpyz(buf, str, sizeof(buf));
 	s1 = s2 = s3 = buf;
 
-	while (1) {
+		while (1) {
 		do {
 			s3++;
-		} while (*s3!=' ' && *s3!='\0');
+		} while (*s3!=' ' && *s3!='\0' && *s3!='\n');
 		c_bcp = *s3;
 		*s3 = '\0';
-		width = UI_ProportionalStringWidth(s1) * sizeScale;
+
+		if( proportional )
+			width = UI_ProportionalStringWidth(s1) * sizeScale;
+		else
+			width = strlen( s1 ) * CharWidthForStringStyle( style );
+
 		*s3 = c_bcp;
-		if (width > xmax) {
+		if (width > xmax || c_bcp == '\n' ) {
 			if (s1==s2)
 			{
 				// fuck, don't have a clean cut, we'll overflow
 				s2 = s3;
 			}
-			*s2 = '\0';
-			UI_DrawProportionalString(x, y, s1, style, color);
-			y += ystep;
+			*s2 = '\0';			
+			lineCount++;
 			if (c_bcp == '\0')
-      {
-        // that was the last word
-        // we could start a new loop, but that wouldn't be much use
-        // even if the word is too long, we would overflow it (see above)
-        // so just print it now if needed
-        s2++;
-        if (*s2 != '\0') // if we are printing an overflowing line we have s2 == s3
-          UI_DrawProportionalString(x, y, s2, style, color);
+			{
+				// that was the last word
+				// we could start a new loop, but that wouldn't be much use
+				// even if the word is too long, we would overflow it (see above)
+				// so just print it now if needed
+				s2++;
+				if (*s2 != '\0') // if we are printing an overflowing line we have s2 == s3
+				  lineCount++;
 				break; 
-      }
+			}
 			s2++;
 			s1 = s2;
 			s3 = s2;
@@ -620,7 +668,107 @@ void UI_DrawProportionalString_AutoWrapped( int x, int y, int xmax, int ystep, c
 			s2 = s3;
 			if (c_bcp == '\0') // we reached the end
 			{
+				lineCount++;
+				break;
+			}
+		}
+	}
+	return lineCount;
+}
+
+/*
+=================
+UI_DrawProportionalString_Wrapped
+=================
+*/
+void UI_DrawString_AutoWrapped( int x, int y, int xmax, int ystep, const char* str, int style, vec4_t color, qboolean proportional ) {
+	int width;
+	char *s1,*s2,*s3;
+	char c_bcp;
+	char buf[1024];
+	float   sizeScale;
+
+	if (!str || str[0]=='\0')
+		return;
+	
+	
+	sizeScale = UI_ProportionalSizeScale( style );
+	
+	Q_strncpyz(buf, str, sizeof(buf));
+	s1 = s2 = s3 = buf;
+
+	while (1) {
+		do {
+			s3++;
+		} while (*s3!=' ' && *s3!='\0' && *s3!='\n');
+
+		if(*s3=='\n')
+		{
+			*s3='\0';
+
+			if( proportional )
 				UI_DrawProportionalString(x, y, s1, style, color);
+			else
+				UI_DrawString(x, y, s1, style, color);
+
+			y += ystep;
+			s3++;
+			s1=s2=s3;
+			continue;
+		}
+
+		c_bcp = *s3;
+		*s3 = '\0';
+
+		if( proportional )
+			width = UI_ProportionalStringWidth(s1) * sizeScale;
+		else
+			width = strlen(s1) * CharWidthForStringStyle( style );
+
+		*s3 = c_bcp;
+		if (width > xmax) {
+			if (s1==s2)
+			{
+				// fuck, don't have a clean cut, we'll overflow
+				s2 = s3;
+			}
+			*s2 = '\0';
+			
+			if( proportional )
+				UI_DrawProportionalString(x, y, s1, style, color);
+			else
+				UI_DrawString(x, y, s1, style, color);
+
+			y += ystep;
+			if (c_bcp == '\0')
+			{
+				// that was the last word
+				// we could start a new loop, but that wouldn't be much use
+				// even if the word is too long, we would overflow it (see above)
+				// so just print it now if needed
+				s2++;
+				if (*s2 != '\0') // if we are printing an overflowing line we have s2 == s3
+				{
+					if( proportional )
+						UI_DrawProportionalString(x, y, s2, style, color);
+					else
+						UI_DrawString(x, y, s2, style, color);
+				}
+				break; 
+			}
+			s2++;
+			s1 = s2;
+			s3 = s2;
+		}
+		else
+		{
+			s2 = s3;
+			if (c_bcp == '\0') // we reached the end
+			{
+				if( proportional )
+					UI_DrawProportionalString(x, y, s1, style, color);
+				else
+					UI_DrawString(x, y, s1, style, color);
 				break;
 			}
 		}
@@ -652,8 +800,9 @@ static void UI_DrawString2( int x, int y, const char* str, vec4_t color, int cha
 	// draw the colored text
 	trap_R_SetColor( color );
 	
-	ax = x * uis.xscale + uis.bias;
-	ay = y * uis.yscale;
+	ax = x * uis.xscale + uis.xbias;
+	ay = y * uis.yscale + uis.ybias;
+
 	aw = charw * uis.xscale;
 	ah = charh * uis.yscale;
 
@@ -685,7 +834,7 @@ static void UI_DrawString2( int x, int y, const char* str, vec4_t color, int cha
 	}
 
 	trap_R_SetColor( NULL );
-}
+} 
 
 /*
 =================
@@ -709,20 +858,80 @@ void UI_DrawString( int x, int y, const char* str, int style, vec4_t color )
 	if ((style & UI_BLINK) && ((uis.realtime/BLINK_DIVISOR) & 1))
 		return;
 
-	if (style & UI_SMALLFONT)
+	charw = CharWidthForStringStyle( style );
+	charh = CharHeightForStringStyle( style );
+
+	if (style & UI_PULSE)
 	{
-		charw =	SMALLCHAR_WIDTH;
-		charh =	SMALLCHAR_HEIGHT;
-	}
-	else if (style & UI_GIANTFONT)
-	{
-		charw =	GIANTCHAR_WIDTH;
-		charh =	GIANTCHAR_HEIGHT;
-	}
+		lowlight[0] = 0.8*color[0]; 
+		lowlight[1] = 0.8*color[1];
+		lowlight[2] = 0.8*color[2];
+		lowlight[3] = 0.8*color[3];
+		UI_LerpColor(color,lowlight,newcolor,0.5+0.5*sin(uis.realtime/PULSE_DIVISOR));
+		drawcolor = newcolor;
+	}	
 	else
+		drawcolor = color;
+
+	switch (style & UI_FORMATMASK)
 	{
-		charw =	BIGCHAR_WIDTH;
-		charh =	BIGCHAR_HEIGHT;
+		case UI_CENTER:
+			// center justify at x
+			len = strlen(str);
+			x   = x - len*charw/2;
+			break;
+
+		case UI_RIGHT:
+			// right justify at x
+			len = strlen(str);
+			x   = x - len*charw;
+			break;
+
+		default:
+			// left justify at x
+			break;
+	}
+
+	if ( style & UI_DROPSHADOW )
+	{
+		dropcolor[0] = dropcolor[1] = dropcolor[2] = 0;
+		dropcolor[3] = drawcolor[3];
+		UI_DrawString2(x+2,y+2,str,dropcolor,charw,charh);
+	}
+
+	UI_DrawString2(x,y,str,drawcolor,charw,charh);
+}
+
+/*
+=================
+UI_DrawStringNS
+=================
+*/
+void UI_DrawStringNS( int x, int y, const char* str, int style, float fontsize, vec4_t color )
+{
+	int		len;
+	int		charw;
+	int		charh;
+	vec4_t	newcolor;
+	vec4_t	lowlight;
+	float	*drawcolor;
+	vec4_t	dropcolor;
+
+	if( !str ) {
+		return;
+	}
+
+	if ((style & UI_BLINK) && ((uis.realtime/BLINK_DIVISOR) & 1))
+		return;
+
+	if(style & UI_NS_STR_HGW)//height = width
+	{
+		charw = charh = fontsize;
+	}
+	else //height/2 = width
+	{
+		charw = fontsize/2; 
+		charh = fontsize;
 	}
 
 	if (style & UI_PULSE)
@@ -789,6 +998,7 @@ qboolean UI_IsFullscreen( void ) {
 	return qfalse;
 }
 
+#if 0
 static void NeedCDAction( qboolean result ) {
 	if ( !result ) {
 		trap_Cmd_ExecuteText( EXEC_APPEND, "quit\n" );
@@ -800,6 +1010,7 @@ static void NeedCDKeyAction( qboolean result ) {
 		trap_Cmd_ExecuteText( EXEC_APPEND, "quit\n" );
 	}
 }
+#endif
 
 void UI_SetActiveMenu( uiMenuCommand_t menu ) {
 	// this should be the ONLY way the menu system is brought up
@@ -813,22 +1024,18 @@ void UI_SetActiveMenu( uiMenuCommand_t menu ) {
 	case UIMENU_MAIN:
 		UI_MainMenu();
 		return;
-	case UIMENU_NEED_CD:
-		UI_ConfirmMenu( "Insert the CD", 0, NeedCDAction );
+/*	case UIMENU_NEED_CD:
+		UI_ConfirmMenu( "Insert the CD", (voidfunc_f)NULL, NeedCDAction );
 		return;
 	case UIMENU_BAD_CD_KEY:
-		UI_ConfirmMenu( "Bad CD Key", 0, NeedCDKeyAction );
-		return;
+		UI_ConfirmMenu( "Bad CD Key", (voidfunc_f)NULL, NeedCDKeyAction );
+		return; */
 	case UIMENU_INGAME:
-		/*
-		//GRank
-		UI_RankingsMenu();
-		return;
-		*/
 		trap_Cvar_Set( "cl_paused", "1" );
 		UI_InGameMenu();
 		return;
 		
+	// bk001204
 	case UIMENU_TEAM:
 	case UIMENU_POSTGAME:
 	default:
@@ -879,19 +1086,41 @@ void UI_MouseEvent( int dx, int dy )
 
 	// update mouse screen position
 	uis.cursorx += dx;
-	if (uis.cursorx < -uis.bias)
-		uis.cursorx = -uis.bias;
-	else if (uis.cursorx > SCREEN_WIDTH+uis.bias)
-		uis.cursorx = SCREEN_WIDTH+uis.bias;
+	if (uis.cursorx < -uis.xbias)
+		uis.cursorx = -uis.xbias;
+	else if (uis.cursorx > SCREEN_WIDTH+uis.xbias)
+		uis.cursorx = SCREEN_WIDTH+uis.xbias;
 
+	// todo: use ybias here for odd screens (and symmetry)
 	uis.cursory += dy;
 	if (uis.cursory < 0)
 		uis.cursory = 0;
 	else if (uis.cursory > SCREEN_HEIGHT)
 		uis.cursory = SCREEN_HEIGHT;
 
+	if(uis.dropdownlist)
+		return;
+
+	// dragable slider ;)
+	if( uis.activemenu->cursor>=0 && trap_Key_IsDown(K_MOUSE1) && uis.activemenu->items[uis.activemenu->cursor]!=NULL &&
+		((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor]))->type == MTYPE_SLIDER )
+	{
+		menuslider_s *s = uis.activemenu->items[uis.activemenu->cursor];
+		const int x = uis.cursorx - s->generic.x - 2*SMALLCHAR_WIDTH;
+		const float oldvalue = s->curvalue;
+		s->curvalue = (x/(float)(SLIDER_RANGE*SMALLCHAR_WIDTH)) * (s->maxvalue-s->minvalue) + s->minvalue;
+		if (s->curvalue < s->minvalue)
+			s->curvalue = s->minvalue;
+		else if (s->curvalue > s->maxvalue)
+			s->curvalue = s->maxvalue;
+		if ( s->curvalue != oldvalue && s->generic.callback )
+			s->generic.callback( s, QM_ACTIVATED );
+	}
+
 	// region test the active menu items
-	for (i=0; i<uis.activemenu->nitems; i++)
+//	for (i=0; i<uis.activemenu->nitems; i++)
+	// draw order == selection order ...
+	for (i=uis.activemenu->nitems-1; i>=0; --i)
 	{
 		m = (menucommon_s*)uis.activemenu->items[i];
 
@@ -911,7 +1140,8 @@ void UI_MouseEvent( int dx, int dy )
 		if (uis.activemenu->cursor != i)
 		{
 			Menu_SetCursor( uis.activemenu, i );
-			((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor_prev]))->flags &= ~QMF_HASMOUSEFOCUS;
+			if(uis.activemenu->cursor_prev>=0 && uis.activemenu->cursor_prev<uis.activemenu->nitems)
+				((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor_prev]))->flags &= ~QMF_HASMOUSEFOCUS;
 
 			if ( !(((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor]))->flags & QMF_SILENT ) ) {
 				trap_S_StartLocalSound( menu_move_sound, CHAN_LOCAL_SOUND );
@@ -922,7 +1152,8 @@ void UI_MouseEvent( int dx, int dy )
 		return;
 	}  
 
-	if (uis.activemenu->nitems > 0) {
+	if(uis.activemenu->cursor>=0 && uis.activemenu->cursor<uis.activemenu->nitems)
+	{
 		// out of any region
 		((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor]))->flags &= ~QMF_HASMOUSEFOCUS;
 	}
@@ -965,8 +1196,7 @@ void UI_Cache_f( void ) {
 	SpecifyServer_Cache();
 	ArenaServers_Cache();
 	StartServer_Cache();
-	ServerOptions_Cache();
-	DriverInfo_Cache();
+
 	GraphicsOptions_Cache();
 	UI_DisplayOptionsMenu_Cache();
 	UI_SoundOptionsMenu_Cache();
@@ -978,6 +1208,10 @@ void UI_Cache_f( void ) {
 	UI_AddBots_Cache();
 	UI_RemoveBots_Cache();
 	UI_SetupMenu_Cache();
+
+	SetupDefaultMenu_Cache();
+	UI_BigCredits_Cache();
+
 //	UI_LoadConfig_Cache();
 //	UI_SaveConfigMenu_Cache();
 	UI_BotSelectMenu_Cache();
@@ -985,7 +1219,6 @@ void UI_Cache_f( void ) {
 	UI_ModsMenu_Cache();
 
 }
-
 
 /*
 =================
@@ -1003,6 +1236,8 @@ qboolean UI_ConsoleCommand( int realTime ) {
 	// ensure minimum menu data is available
 	Menu_Cache();
 
+	// These should not be available, since they are defunctional!
+/*
 	if ( Q_stricmp (cmd, "levelselect") == 0 ) {
 		UI_SPLevelMenu_f();
 		return qtrue;
@@ -1022,12 +1257,14 @@ qboolean UI_ConsoleCommand( int realTime ) {
 		UI_CinematicsMenu_f();
 		return qtrue;
 	}
+*/
 
+	// this is still needed, but its ingame menu entry is disabled
 	if ( Q_stricmp (cmd, "ui_teamOrders") == 0 ) {
 		UI_TeamOrdersMenu_f();
 		return qtrue;
 	}
-
+/*
 	if ( Q_stricmp (cmd, "iamacheater") == 0 ) {
 		UI_SPUnlock_f();
 		return qtrue;
@@ -1042,7 +1279,53 @@ qboolean UI_ConsoleCommand( int realTime ) {
 		UI_CDKeyMenu_f();
 		return qtrue;
 	}
+*/
+	if ( Q_stricmp( cmd, "wop_music" ) == 0 ) {
+		MusicMenu_Open();
+		return qtrue;
+	}
+	if ( Q_stricmp( cmd, "wop_checkmusic" ) == 0 ) {
+		Music_Check();
+		return qtrue;
+	}
+	if ( Q_stricmp( cmd, "wop_nextsong" ) == 0 ) {
+		Music_NextTrack();
+		return qtrue;
+	}
+	if ( Q_stricmp( cmd, "wop_restartmusic" ) == 0 ) {
+		Music_TriggerRestart();
+		return qtrue;
+	}
 
+	if ( Q_stricmp( cmd, "ui_help" ) == 0 ) {
+		UI_HelpMenu_f();
+		return qtrue;
+	}
+
+	// See note above
+/*
+	if(Q_stricmp(cmd, "wop_mediaview")==0) {
+		int argc = trap_Argc();
+		if(argc==2 || argc==3) {
+			if(uis.menusp==0)
+				trap_Cvar_Set( "cl_paused", "1" );
+
+			if(argc==2)
+				LaunchMediaViewMenu(UI_Argv(1),NULL);
+			else {
+				char tmpExecOnClose[512];
+				trap_Argv( 2, tmpExecOnClose, sizeof(tmpExecOnClose) );
+				LaunchMediaViewMenu(UI_Argv(1),tmpExecOnClose);
+			}
+		}
+		else
+			Com_Printf("  usage: %s [mediaRef]\n",cmd);
+		return qtrue;
+	}
+
+	if(wopSP_cmdCheck(cmd))
+		return qtrue;
+*/
 	return qfalse;
 }
 
@@ -1051,7 +1334,10 @@ qboolean UI_ConsoleCommand( int realTime ) {
 UI_Shutdown
 =================
 */
-void UI_Shutdown( void ) {
+void UI_Shutdown( void )
+{
+	UI_StopMusic();
+	MusicMenu_Shutdown();
 }
 
 /*
@@ -1062,6 +1348,21 @@ UI_Init
 void UI_Init( void ) {
 	UI_RegisterCvars();
 
+// not yet
+//	WOP_LoadMenuText(UI_LOCALEFILE, qtrue);
+
+	SetDefaultBinds_onUnusedKeys();
+
+	if(s_wop_restarted.integer!=qtrue)
+	{
+		trap_Cvar_Set("s_wop_restarted","1");
+//erstmal rausgenommen für WoP-Engine
+//		trap_Cmd_ExecuteText( EXEC_NOW, "snd_restart\n" );//noch testen ob das nicht zu radikal ist, auch da return! ... old: EXEC_APPEND
+//		return;
+	}
+
+	MusicMenu_Init();
+
 	UI_InitGameinfo();
 
 	// cache redundant calulations
@@ -1070,15 +1371,26 @@ void UI_Init( void ) {
 	// for 640x480 virtualized screen
 	uis.xscale = uis.glconfig.vidWidth * (1.0/640.0);
 	uis.yscale = uis.glconfig.vidHeight * (1.0/480.0);
+	
 	if ( uis.glconfig.vidWidth * 480 > uis.glconfig.vidHeight * 640 ) {
 		// wide screen
-		uis.bias = 0.5 * ( uis.glconfig.vidWidth - ( uis.glconfig.vidHeight * (640.0/480.0) ) );
+		uis.xbias = 0.5 * ( uis.glconfig.vidWidth - ( uis.glconfig.vidHeight * (640.0/480.0) ) );
 		uis.xscale = uis.yscale;
 	}
 	else {
 		// no wide screen
-		uis.bias = 0;
+		uis.xbias = 0;
 	}
+
+	if(uis.glconfig.vidWidth * 480 < uis.glconfig.vidHeight * 640)
+	{
+		uis.ybias = 0.5f * ( uis.glconfig.vidHeight - ( uis.glconfig.vidWidth * (480.0f/640.0f) ) );
+		uis.yscale = uis.xscale;
+	}
+	else
+		uis.ybias = 0;
+
+	uis.scale1024 = uis.xscale * (640.0f/1024.0f);//uis.glconfig.vidHeight * (1.0f/768.0f);
 
 	// initialize the menu system
 	Menu_Cache();
@@ -1096,10 +1408,18 @@ Adjusted for resolution and screen aspect ratio
 */
 void UI_AdjustFrom640( float *x, float *y, float *w, float *h ) {
 	// expect valid pointers
-	*x = *x * uis.xscale + uis.bias;
-	*y *= uis.yscale;
+	*x = *x * uis.xscale + uis.xbias;
+	*y = *y * uis.yscale + uis.ybias;
 	*w *= uis.xscale;
 	*h *= uis.yscale;
+}
+
+void UI_AdjustFrom1024( float *x, float *y, float *w, float *h ) {
+	// expect valid pointers
+	*x = *x * uis.scale1024 + uis.xbias;
+	*y = *y * uis.scale1024 + uis.ybias;
+	*w *= uis.scale1024;
+	*h *= uis.scale1024;
 }
 
 void UI_DrawNamedPic( float x, float y, float width, float height, const char *picname ) {
@@ -1140,6 +1460,36 @@ void UI_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader ) {
 	trap_R_DrawStretchPic( x, y, w, h, s0, t0, s1, t1, hShader );
 }
 
+void UI_DrawHandlePic1024( float x, float y, float w, float h, qhandle_t hShader ) {
+	float	s0;
+	float	s1;
+	float	t0;
+	float	t1;
+
+	if( w < 0 ) {	// flip about vertical
+		w  = -w;
+		s0 = 1;
+		s1 = 0;
+	}
+	else {
+		s0 = 0;
+		s1 = 1;
+	}
+
+	if( h < 0 ) {	// flip about horizontal
+		h  = -h;
+		t0 = 1;
+		t1 = 0;
+	}
+	else {
+		t0 = 0;
+		t1 = 1;
+	}
+	
+	UI_AdjustFrom1024( &x, &y, &w, &h );
+	trap_R_DrawStretchPic( x, y, w, h, s0, t0, s1, t1, hShader );
+}
+
 /*
 ================
 UI_FillRect
@@ -1163,15 +1513,15 @@ UI_DrawRect
 Coordinates are 640*480 virtual values
 =================
 */
-void UI_DrawRect( float x, float y, float width, float height, const float *color ) {
+void UI_DrawRect( float x, float y, float width, float height, const float *color, int thickness ) {
 	trap_R_SetColor( color );
 
 	UI_AdjustFrom640( &x, &y, &width, &height );
 
-	trap_R_DrawStretchPic( x, y, width, 1, 0, 0, 0, 0, uis.whiteShader );
-	trap_R_DrawStretchPic( x, y, 1, height, 0, 0, 0, 0, uis.whiteShader );
-	trap_R_DrawStretchPic( x, y + height - 1, width, 1, 0, 0, 0, 0, uis.whiteShader );
-	trap_R_DrawStretchPic( x + width - 1, y, 1, height, 0, 0, 0, 0, uis.whiteShader );
+	trap_R_DrawStretchPic( x, y, width, thickness, 0, 0, 0, 0, uis.whiteShader );
+	trap_R_DrawStretchPic( x, y, thickness, height, 0, 0, 0, 0, uis.whiteShader );
+	trap_R_DrawStretchPic( x, y + height - thickness, width, thickness, 0, 0, 0, 0, uis.whiteShader );
+	trap_R_DrawStretchPic( x + width - thickness, y, thickness, height, 0, 0, 0, 0, uis.whiteShader );
 
 	trap_R_SetColor( NULL );
 }
@@ -1182,6 +1532,93 @@ void UI_SetColor( const float *rgba ) {
 
 void UI_UpdateScreen( void ) {
 	trap_UpdateScreen();
+}
+
+#define WOP_INGAME_X 0
+#define WOP_INGAME_Y 0
+#define WOP_INGAME_B 640
+#define WOP_INGAME_H 480
+
+void UI_DrawIngameBG()
+{
+	float wsCorrection=( uis.glconfig.vidWidth*480.0f/(float)uis.glconfig.vidHeight )-640.0f;
+	if(wsCorrection<0) wsCorrection = 0.0f;
+
+	UI_DrawHandlePic( WOP_INGAME_X-(wsCorrection*0.5f), WOP_INGAME_Y, WOP_INGAME_B+wsCorrection, WOP_INGAME_H, uis.pad_ingamebg );
+}
+
+void UI_DrawMenu(menuframework_s* menu)
+{
+	if ( menu )
+	{
+		if(menu->bgparts & BGP_LASTMENU)
+		{
+			if (uis.menusp-2 > 0)
+			{
+				UI_DrawMenu(uis.stack[uis.menusp-2]);
+			}
+		}
+		else if (menu->fullscreen)
+		{
+			// draw the background
+			// schwarzer Hintergrund für nicht 4/3-Auflösungen
+			trap_R_SetColor(colorBlack);
+			trap_R_DrawStretchPic(0,0,uis.glconfig.vidWidth,uis.glconfig.vidHeight,0,0,0,0,uis.whiteShader);
+			trap_R_SetColor(NULL);
+
+			if( menu->bgparts )
+			{
+				if(menu->bgparts & BGP_MAINBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_menushader );
+				if(menu->bgparts & BGP_SIMPLEBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_simpleMenuBg );
+				if(menu->bgparts & BGP_MAINFRAME)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_mainframe );
+				if(menu->bgparts & BGP_SETUPBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_setupbg );
+				if(menu->bgparts & BGP_SYSTEMBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_display );
+				if(menu->bgparts & BGP_DEFAULTSBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_defaults );
+				if(menu->bgparts & BGP_EXITBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_exitbg );
+				if(menu->bgparts & BGP_CONTROLBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_controlbg );
+				if(menu->bgparts & BGP_PLAYERBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_playerbg );
+				if(menu->bgparts & BGP_SERVER2BG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_server2bg );
+				if(menu->bgparts & BGP_MODSBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_modsbg );
+				if(menu->bgparts & BGP_DEMOBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_demobg );
+				if(menu->bgparts & BGP_SPECIFYBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_specifybg );
+				if(menu->bgparts & BGP_GAMEOPTIONS)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_gameoptionsbg );
+				if(menu->bgparts & BGP_STARTSERVERMAPS)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_startservermaps );
+				if(menu->bgparts & BGP_STARTSERVERBOTS)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_startserverbots );
+				if(menu->bgparts & BGP_SINGLEMENU)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_singlemenubg );
+			}
+			else {
+				UI_FillRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,colorBlack);
+
+			}
+		}
+
+		if (menu->draw)
+			menu->draw();
+		else
+			Menu_Draw( menu );
+
+		if( uis.firstdraw ) {
+			UI_MouseEvent( 0, 0 );
+			uis.firstdraw = qfalse;
+		}
+	}
 }
 
 /*
@@ -1200,39 +1637,38 @@ void UI_Refresh( int realtime )
 
 	UI_UpdateCvars();
 
-	if ( uis.activemenu )
+	if(!trap_Cvar_VariableValue("cl_paused"))
 	{
-		if (uis.activemenu->fullscreen)
-		{
-			// draw the background
-			if( uis.activemenu->showlogo ) {
-				UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.menuBackShader );
-			}
-			else {
-				UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.menuBackNoLogoShader );
-			}
-		}
+		if(!uis.musicbool)
+			UI_StartMusic();
+	}
+	else
+		Music_Check();
 
-		if (uis.activemenu->draw)
-			uis.activemenu->draw();
-		else
-			Menu_Draw( uis.activemenu );
+	UI_DrawMenu(uis.activemenu);
 
-		if( uis.firstdraw ) {
-			UI_MouseEvent( 0, 0 );
-			uis.firstdraw = qfalse;
-		}
+	if(!uis.activemenu || !uis.activemenu->noMouseCursor) {
+		// draw cursor
+		UI_SetColor( NULL );
+		UI_DrawHandlePic( uis.cursorx-16, uis.cursory-16, 32, 32, uis.cursor);
 	}
 
-	// draw cursor
-	UI_SetColor( NULL );
-	UI_DrawHandlePic( uis.cursorx-16, uis.cursory-16, 32, 32, uis.cursor);
+//	{ vec4_t	twhite = { 1,1,1,0.5f}; UI_DrawString(300,0,GAME_VERSION,UI_SMALLFONT,twhite); }
 
 #ifndef NDEBUG
 	if (uis.debug)
 	{
 		// cursor coordinates
-		UI_DrawString( 0, 0, va("(%d,%d)",uis.cursorx,uis.cursory), UI_LEFT|UI_SMALLFONT, colorRed );
+		int y;
+		char tmpstr[16];
+		int len;
+
+		y = trap_Key_GetCatcher()&KEYCATCH_CONSOLE ? 240 : 1;
+		Com_sprintf(tmpstr,16,"(%i,%i)",uis.cursorx,uis.cursory);
+		len=strlen(tmpstr);
+		UI_FillRect(1,y,8*len+2,18,colorWhite);
+		UI_DrawRect(1,y,8*len+2,18,colorBlack,1);
+		UI_DrawString( 2, y+1, tmpstr, UI_LEFT|UI_SMALLFONT, colorBlack );
 	}
 #endif
 
@@ -1241,7 +1677,6 @@ void UI_Refresh( int realtime )
 	// caching images
 	if (m_entersound)
 	{
-		trap_S_StartLocalSound( menu_in_sound, CHAN_LOCAL_SOUND );
 		m_entersound = qfalse;
 	}
 }
@@ -1249,7 +1684,7 @@ void UI_Refresh( int realtime )
 void UI_DrawTextBox (int x, int y, int width, int lines)
 {
 	UI_FillRect( x + BIGCHAR_WIDTH/2, y + BIGCHAR_HEIGHT/2, ( width + 1 ) * BIGCHAR_WIDTH, ( lines + 1 ) * BIGCHAR_HEIGHT, colorBlack );
-	UI_DrawRect( x + BIGCHAR_WIDTH/2, y + BIGCHAR_HEIGHT/2, ( width + 1 ) * BIGCHAR_WIDTH, ( lines + 1 ) * BIGCHAR_HEIGHT, colorWhite );
+	UI_DrawRect( x + BIGCHAR_WIDTH/2, y + BIGCHAR_HEIGHT/2, ( width + 1 ) * BIGCHAR_WIDTH, ( lines + 1 ) * BIGCHAR_HEIGHT, colorWhite, 1 );
 }
 
 qboolean UI_CursorInRect (int x, int y, int width, int height)
@@ -1261,4 +1696,77 @@ qboolean UI_CursorInRect (int x, int y, int width, int height)
 		return qfalse;
 
 	return qtrue;
+}
+
+/*
+#######################
+UI_ModelIcon
+based on ServerPlayerIcon(ui_startserver.c)
+#######################
+*/
+void UI_ModelIcon(const char *modelAndSkin, char *iconName, int SizeOfIconName)
+{
+	char	*skin;
+	char	model[MAX_QPATH];
+
+	Q_strncpyz( model, modelAndSkin, sizeof(model));
+	skin = strrchr( model, '/' );
+	if ( skin ) {
+		*skin++ = '\0';
+	}
+	else {
+		skin = "default";
+	}
+
+	Com_sprintf(iconName, SizeOfIconName, "models/wop_players/%s/icon_%s.tga", model, skin );
+
+	if( !trap_R_RegisterShaderNoMip( iconName ) && Q_stricmp( skin, "default" ) != 0 ) {
+		Com_sprintf(iconName, SizeOfIconName, "models/wop_players/%s/icon_default.tga", model );
+	}
+}
+
+/*
+#######################
+BotListCompare
+used for qsort in startserver2- and addbots-menu
+#######################
+*/
+// Ente requested to sort some main characters to the top ...
+static int GetBotListSpecialScore(const char* name) {
+	if(!Q_stricmp(name,"padman"))
+		return 5;
+	else if(!Q_stricmp(name,"padgirl"))
+		return 4;
+	else if(!Q_stricmp(name,"monsterpad"))
+		return 3;
+	else if(!Q_stricmp(name,"padlilly"))
+		return 2;
+	else if(!Q_stricmp(name,"fatpad"))
+		return 1;
+	else
+		return 0;
+}
+int QDECL BotListCompare( const void *arg1, const void *arg2 ) {
+	int			num1, num2;
+	const char	*info1, *info2;
+	const char	*name1, *name2;
+
+	num1 = *(int *)arg1;
+	num2 = *(int *)arg2;
+
+	info1 = UI_GetBotInfoByNumber( num1 );
+	info2 = UI_GetBotInfoByNumber( num2 );
+
+	name1 = Info_ValueForKey( info1, "name" );
+	name2 = Info_ValueForKey( info2, "name" );
+
+	{
+		const int score1 = GetBotListSpecialScore(name1);
+		const int score2 = GetBotListSpecialScore(name2);
+		if(score1 || score2) {
+			return score2-score1;
+		}
+	}
+
+	return Q_stricmp( name1, name2 );
 }

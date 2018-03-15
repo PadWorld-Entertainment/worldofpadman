@@ -1,24 +1,4 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
+// Copyright (C) 1999-2000 Id Software, Inc.
 //
 // bg_pmove.c -- both games player movement code
 // takes a playerstate and a usercmd as input and returns a modifed playerstate
@@ -207,11 +187,6 @@ static void PM_Friction( void ) {
 		drop += speed*pm_waterfriction*pm->waterlevel*pml.frametime;
 	}
 
-	// apply flying friction
-	if ( pm->ps->powerups[PW_FLIGHT]) {
-		drop += speed*pm_flightfriction*pml.frametime;
-	}
-
 	if ( pm->ps->pm_type == PM_SPECTATOR) {
 		drop += speed*pm_spectatorfriction*pml.frametime;
 	}
@@ -377,7 +352,15 @@ static qboolean PM_CheckJump( void ) {
 	pm->ps->pm_flags |= PMF_JUMP_HELD;
 
 	pm->ps->groundEntityNum = ENTITYNUM_NONE;
-	pm->ps->velocity[2] = JUMP_VELOCITY;
+
+	if( pm->ps->powerups[PW_JUMPER] && pm->ps->weapon != WP_SPRAYPISTOL ) {
+		// FIXME: Magical constant 2.5
+		pm->ps->velocity[2] = ( JUMP_VELOCITY * 2.5 );
+	}
+	else {
+		pm->ps->velocity[2] = JUMP_VELOCITY;
+	}
+
 	PM_AddEvent( EV_JUMP );
 
 	if ( pm->cmd.forwardmove >= 0 ) {
@@ -424,7 +407,7 @@ static qboolean	PM_CheckWaterJump( void ) {
 
 	spot[2] += 16;
 	cont = pm->pointcontents (spot, pm->ps->clientNum );
-	if ( cont & (CONTENTS_SOLID|CONTENTS_PLAYERCLIP|CONTENTS_BODY) ) {
+	if ( cont ) {
 		return qfalse;
 	}
 
@@ -532,22 +515,6 @@ static void PM_WaterMove( void ) {
 
 	PM_SlideMove( qfalse );
 }
-
-#ifdef MISSIONPACK
-/*
-===================
-PM_InvulnerabilityMove
-
-Only with the invulnerability powerup
-===================
-*/
-static void PM_InvulnerabilityMove( void ) {
-	pm->cmd.forwardmove = 0;
-	pm->cmd.rightmove = 0;
-	pm->cmd.upmove = 0;
-	VectorClear(pm->ps->velocity);
-}
-#endif
 
 /*
 ===================
@@ -682,6 +649,7 @@ static void PM_GrappleMove( void ) {
 	pml.groundPlane = qfalse;
 }
 
+
 /*
 ===================
 PM_WalkMove
@@ -775,9 +743,6 @@ static void PM_WalkMove( void ) {
 	}
 
 	PM_Accelerate (wishdir, wishspeed, accelerate);
-
-	//Com_Printf("velocity = %1.1f %1.1f %1.1f\n", pm->ps->velocity[0], pm->ps->velocity[1], pm->ps->velocity[2]);
-	//Com_Printf("velocity1 = %1.1f\n", VectorLength(pm->ps->velocity));
 
 	if ( ( pml.groundTrace.surfaceFlags & SURF_SLICK ) || pm->ps->pm_flags & PMF_TIME_KNOCKBACK ) {
 		pm->ps->velocity[2] -= pm->ps->gravity * pml.frametime;
@@ -909,6 +874,20 @@ static int PM_FootstepForSurface( void ) {
 	if ( pml.groundTrace.surfaceFlags & SURF_METALSTEPS ) {
 		return EV_FOOTSTEP_METAL;
 	}
+
+	if ( pml.groundTrace.surfaceFlags & SURF_CARPETSTEPS )	
+		return EV_FOOTSTEP_CARPET;
+	if ( pml.groundTrace.surfaceFlags & SURF_LATTICESTEPS )	
+		return EV_FOOTSTEP_LATTICE;
+	if ( pml.groundTrace.surfaceFlags & SURF_SANDSTEPS )	
+		return EV_FOOTSTEP_SAND;
+	if ( pml.groundTrace.surfaceFlags & SURF_SOFTSTEPS )
+		return EV_FOOTSTEP_SOFT;
+	if ( pml.groundTrace.surfaceFlags & SURF_WOODSTEPS )
+		return EV_FOOTSTEP_WOOD;
+	if ( pml.groundTrace.surfaceFlags & SURF_SNOWSTEPS )
+		return EV_FOOTSTEP_SNOW;
+
 	return EV_FOOTSTEP;
 }
 
@@ -981,9 +960,16 @@ static void PM_CrashLand( void ) {
 	// SURF_NODAMAGE is used for bounce pads where you don't ever
 	// want to take damage or play a crunch sound
 	if ( !(pml.groundTrace.surfaceFlags & SURF_NODAMAGE) )  {
-		if ( delta > 60 ) {
+
+		if(pm->ps->powerups[PW_JUMPER] && delta>7)
+			PM_AddEvent( EV_FALL_SHORT );
+		else if ( delta > 60 )
+		{
 			PM_AddEvent( EV_FALL_FAR );
-		} else if ( delta > 40 ) {
+
+			PM_ForceLegsAnim( LEGS_HEAVYLAND );
+		}
+		else if ( delta > 40 ) {
 			// this is a pain grunt, so don't play it if dead
 			if ( pm->ps->stats[STAT_HEALTH] > 0 ) {
 				PM_AddEvent( EV_FALL_MEDIUM );
@@ -1161,6 +1147,11 @@ static void PM_GroundTrace( void ) {
 		return;
 	}
 
+	if(pm->ps->pm_flags & PMF_TOUCHSLICKENT)
+	{
+		pml.groundTrace.surfaceFlags |= SURF_SLICK;
+	}
+
 	pml.groundPlane = qtrue;
 	pml.walking = qtrue;
 
@@ -1249,21 +1240,15 @@ static void PM_CheckDuck (void)
 {
 	trace_t	trace;
 
-	if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
-		if ( pm->ps->pm_flags & PMF_INVULEXPAND ) {
-			// invulnerability sphere has a 42 units radius
-			VectorSet( pm->mins, -42, -42, -42 );
-			VectorSet( pm->maxs, 42, 42, 42 );
-		}
-		else {
-			VectorSet( pm->mins, -15, -15, MINS_Z );
-			VectorSet( pm->maxs, 15, 15, 16 );
-		}
-		pm->ps->pm_flags |= PMF_DUCKED;
-		pm->ps->viewheight = CROUCH_VIEWHEIGHT;
+	if( pm->ps->powerups[PW_CLIMBER] )
+	{
+		pm->ps->viewheight = 26;//default
+
+		VectorSet( pm->mins, -30, -30, -30 );
+		VectorSet( pm->maxs, 30, 30, 30 );
+
 		return;
 	}
-	pm->ps->pm_flags &= ~PMF_INVULEXPAND;
 
 	pm->mins[0] = -15;
 	pm->mins[1] = -15;
@@ -1332,9 +1317,6 @@ static void PM_Footsteps( void ) {
 
 	if ( pm->ps->groundEntityNum == ENTITYNUM_NONE ) {
 
-		if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
-			PM_ContinueLegsAnim( LEGS_IDLECR );
-		}
 		// airborne leaves position in cycle intact, but doesn't advance
 		if ( pm->waterlevel > 1 ) {
 			PM_ContinueLegsAnim( LEGS_SWIM );
@@ -1480,7 +1462,7 @@ static void PM_BeginWeaponChange( int weapon ) {
 
 	PM_AddEvent( EV_CHANGE_WEAPON );
 	pm->ps->weaponstate = WEAPON_DROPPING;
-	pm->ps->weaponTime += 200;
+	pm->ps->weaponTime += ADDTIME_WEAPONCHANGE_BEGIN;
 	PM_StartTorsoAnim( TORSO_DROP );
 }
 
@@ -1502,9 +1484,13 @@ static void PM_FinishWeaponChange( void ) {
 		weapon = WP_NONE;
 	}
 
+	if ( pm->ps->powerups[PW_BERSERKER] && !( ( weapon == WP_PUNCHY ) || ( weapon == WP_SPRAYPISTOL ) ) ) {
+		weapon = WP_PUNCHY;
+	}
+
 	pm->ps->weapon = weapon;
 	pm->ps->weaponstate = WEAPON_RAISING;
-	pm->ps->weaponTime += 250;
+	pm->ps->weaponTime += ADDTIME_WEAPONCHANGE_FINISH;
 	PM_StartTorsoAnim( TORSO_RAISE );
 }
 
@@ -1516,9 +1502,12 @@ PM_TorsoAnimation
 ==============
 */
 static void PM_TorsoAnimation( void ) {
-	if ( pm->ps->weaponstate == WEAPON_READY ) {
-		if ( pm->ps->weapon == WP_GAUNTLET ) {
+	if ( pm->ps->weaponstate == WEAPON_READY )
+	{
+		if ( pm->ps->weapon == WP_PUNCHY ) {
 			PM_ContinueTorsoAnim( TORSO_STAND2 );
+		} else if(pm->ps->weapon == WP_SPRAYPISTOL ) {
+			PM_ContinueTorsoAnim( TORSO_SPRAYSTAND );
 		} else {
 			PM_ContinueTorsoAnim( TORSO_STAND );
 		}
@@ -1553,12 +1542,69 @@ static void PM_Weapon( void ) {
 		return;
 	}
 
+	pm->ps->eFlags &= ~EF_FLOATER;
+
 	// check for item using
 	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) {
+		// No items in sprayroom
+		if ( ( pm->ps->stats[STAT_WEAPONS] & ( 1 << WP_SPRAYPISTOL ) ) &&
+		     ( pm->ps->stats[STAT_SPRAYROOMSECS] > 0 ) ) {
+			return;
+		}
+
 		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
 			if ( bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_MEDKIT
 				&& pm->ps->stats[STAT_HEALTH] >= (pm->ps->stats[STAT_MAX_HEALTH] + 25) ) {
 				// don't use medkit if at max health
+			} else if(bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_FLOATER) {
+				PM_AddEvent( EV_USE_ITEM0 + HI_FLOATER );
+				if ( ( pm->ps->legsAnim & ~ANIM_TOGGLEBIT ) != LEGS_FLYING || ( ( pm->ps->legsAnim & ~ANIM_TOGGLEBIT ) == LEGS_FLYING && pm->ps->legsTimer <= 0 ) )
+					PM_ForceLegsAnim( LEGS_FLYING );
+
+				pm->ps->eFlags |= EF_FLOATER;
+
+				pm->ps->stats[STAT_HOLDABLEVAR]-=50;//FIXME: it would be better if the value gets calculated from framerate ...
+				if(pm->ps->stats[STAT_HOLDABLEVAR]<=0)
+				{
+					pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
+					pm->ps->stats[STAT_HOLDABLEVAR] = 0;
+					pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;
+				}
+				goto shootafterrspecialHI;
+			} else if(bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_KILLERDUCKS) {
+				if(pm->ps->weaponstate!=WEAPON_READY)
+					goto shootafterrspecialHI;
+
+				PM_AddEvent( EV_USE_ITEM0 + HI_KILLERDUCKS );
+				pm->ps->stats[STAT_HOLDABLEVAR]--;
+
+				if(pm->ps->stats[STAT_HOLDABLEVAR]<=0)
+				{
+					pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
+					pm->ps->stats[STAT_HOLDABLEVAR] = 0;
+					pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;
+				}
+				pm->ps->weaponTime = 500;
+				pm->ps->weaponstate = WEAPON_FIRING;
+				goto shootafterrspecialHI;
+			} else if(bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_BOOMIES) {
+				if(pm->ps->weaponstate!=WEAPON_READY)
+					goto shootafterrspecialHI;
+
+				PM_AddEvent( EV_USE_ITEM0 + HI_BOOMIES );
+
+				pm->ps->weaponTime = 500;
+				pm->ps->weaponstate = WEAPON_FIRING;
+				goto shootafterrspecialHI;
+			} else if(bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_BAMBAM) {
+				if(pm->ps->weaponstate!=WEAPON_READY)
+					goto shootafterrspecialHI;
+
+				PM_AddEvent( EV_USE_ITEM0 + HI_BAMBAM );
+				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
+
+				pm->ps->weaponTime = 2000;
+				pm->ps->weaponstate = WEAPON_FIRING;
 			} else {
 				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
 				PM_AddEvent( EV_USE_ITEM0 + bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag );
@@ -1570,6 +1616,39 @@ static void PM_Weapon( void ) {
 		pm->ps->pm_flags &= ~PMF_USE_ITEM_HELD;
 	}
 
+shootafterrspecialHI:
+
+	// HERBY: Imperius charging
+	// FIXME: A whole new weapons state for one weapon? Sick
+	if ( pm->ps->weaponstate == WEAPON_CHARGING ) {
+		int seed;
+		// advance time
+		pm->ps->weaponTime += pml.msec;
+		if ( pm->ps->weaponTime > CHARGETIME_IMPERIUS ) {
+			pm->ps->eFlags |= EF_CHARGED;
+		}
+
+		// shaking
+		seed = pm->ps->pmove_framecount;
+		pm->ps->delta_angles[PITCH]+= pml.msec * pm->ps->weaponTime * 0.003*Q_crandom( &seed );
+		pm->ps->delta_angles[YAW]  += pml.msec * pm->ps->weaponTime * 0.003*Q_crandom( &seed );
+
+		// button release or overcharge
+		if ( !(pm->cmd.buttons & BUTTON_ATTACK) ) 
+		{
+			pm->ps->weaponstate = WEAPON_FIRING;
+			pm->ps->weaponTime = ADDTIME_IMPERIUS;
+			if ( pm->ps->eFlags & EF_CHARGED ) goto fire;
+		} 
+		else if ( pm->ps->weaponTime > OVERCHARGETIME_IMPERIUS ) {
+			PM_AddEvent( EV_IMPERIUS_EXPLODE );
+			pm->ps->eFlags &= ~EF_CHARGED;
+			pm->ps->weaponstate = WEAPON_FIRING;
+			pm->ps->weaponTime = ADDTIME_IMPERIUS;
+			--(pm->ps->ammo[ pm->ps->weapon ]);
+		}
+		return;
+	}
 
 	// make weapon function
 	if ( pm->ps->weaponTime > 0 ) {
@@ -1585,6 +1664,11 @@ static void PM_Weapon( void ) {
 		}
 	}
 
+	if( pm->ps->weapon == WP_NIPPER && pm->ps->weaponstate == WEAPON_READY && pm->ps->weaponTime > 0 && !(pm->cmd.buttons & BUTTON_ATTACK))
+	{
+		pm->ps->weaponTime = 0;
+	}
+
 	if ( pm->ps->weaponTime > 0 ) {
 		return;
 	}
@@ -1597,8 +1681,10 @@ static void PM_Weapon( void ) {
 
 	if ( pm->ps->weaponstate == WEAPON_RAISING ) {
 		pm->ps->weaponstate = WEAPON_READY;
-		if ( pm->ps->weapon == WP_GAUNTLET ) {
+		if ( pm->ps->weapon == WP_PUNCHY ) {
 			PM_StartTorsoAnim( TORSO_STAND2 );
+		} else if ( pm->ps->weapon == WP_SPRAYPISTOL ) {
+			PM_StartTorsoAnim( TORSO_SPRAYSTAND );
 		} else {
 			PM_StartTorsoAnim( TORSO_STAND );
 		}
@@ -1612,8 +1698,28 @@ static void PM_Weapon( void ) {
 		return;
 	}
 
+	if ( ( pm->ps->stats[STAT_WEAPONS] & ( 1 << WP_SPRAYPISTOL ) ) &&
+	     ( ( pm->ps->stats[STAT_SPRAYROOMSECS] > 0 ) && ( pm->ps->weapon != WP_SPRAYPISTOL ) ) ) {
+		return;
+	}
+
+	if( pm->ps->weapon == WP_SPRAYPISTOL && pm->ps->weaponstate == WEAPON_READY)
+	{
+		pm->ps->weaponTime = 400;
+		pm->ps->weaponstate = WEAPON_FIRING;
+		return;
+	}
+
+	if( pm->ps->weapon == WP_NIPPER && pm->ps->weaponstate != WEAPON_READY)
+	{
+		//noch was ein binden damit die nipper auch automatisch schießt
+		pm->ps->weaponTime += ADDTIME_AUTOFIRE_NIPPER;
+		pm->ps->weaponstate = WEAPON_READY;
+		return;
+	}
+
 	// start the animation even if out of ammo
-	if ( pm->ps->weapon == WP_GAUNTLET ) {
+	if ( pm->ps->weapon == WP_PUNCHY ) {
 		// the guantlet only "fires" when it actually hits something
 		if ( !pm->gauntletHit ) {
 			pm->ps->weaponTime = 0;
@@ -1621,6 +1727,8 @@ static void PM_Weapon( void ) {
 			return;
 		}
 		PM_StartTorsoAnim( TORSO_ATTACK2 );
+	} else if( pm->ps->weapon == WP_SPRAYPISTOL ) {
+		PM_StartTorsoAnim( TORSO_SPRAYATTACK );
 	} else {
 		PM_StartTorsoAnim( TORSO_ATTACK );
 	}
@@ -1630,9 +1738,20 @@ static void PM_Weapon( void ) {
 	// check for out of ammo
 	if ( ! pm->ps->ammo[ pm->ps->weapon ] ) {
 		PM_AddEvent( EV_NOAMMO );
-		pm->ps->weaponTime += 500;
+		pm->ps->weaponTime += ADDTIME_WEAPON_NOAMMO;
 		return;
 	}
+
+	// HERBY: Imperius charging
+	if ( pm->ps->weapon == WP_IMPERIUS ) {
+		pm->ps->weaponstate = WEAPON_CHARGING;
+		pm->ps->weaponTime = 0;
+		return;
+	}
+
+fire:
+	// HERBY: Reset flag
+	pm->ps->eFlags &= ~EF_CHARGED;
 
 	// take an ammo away if not infinite
 	if ( pm->ps->ammo[ pm->ps->weapon ] != -1 ) {
@@ -1642,63 +1761,48 @@ static void PM_Weapon( void ) {
 	// fire weapon
 	PM_AddEvent( EV_FIRE_WEAPON );
 
-	switch( pm->ps->weapon ) {
+	switch( pm->ps->weapon ) 
+	{
 	default:
-	case WP_GAUNTLET:
-		addTime = 400;
+	case WP_PUNCHY:
+		addTime = ADDTIME_PUNCHY;
 		break;
-	case WP_LIGHTNING:
-		addTime = 50;
+	case WP_BOASTER:
+		addTime = ADDTIME_BOASTER;
 		break;
-	case WP_SHOTGUN:
-		addTime = 1000;
+	case WP_PUMPER:
+		addTime = ADDTIME_PUMPER;
 		break;
-	case WP_MACHINEGUN:
-		addTime = 100;
+	case WP_NIPPER:
+		addTime = ADDTIME_NIPPER;
 		break;
-	case WP_GRENADE_LAUNCHER:
-		addTime = 800;
+	case WP_BALLOONY:
+		addTime = ADDTIME_BALLOONY;
 		break;
-	case WP_ROCKET_LAUNCHER:
-		addTime = 800;
+	case WP_BETTY:
+		addTime = ADDTIME_BETTY;
 		break;
-	case WP_PLASMAGUN:
-		addTime = 100;
+	case WP_BUBBLEG:
+		addTime = ADDTIME_BUBBLEG;
 		break;
-	case WP_RAILGUN:
-		addTime = 1500;
+	case WP_SPLASHER:
+		addTime = ADDTIME_SPLASHER;
 		break;
-	case WP_BFG:
+	case WP_IMPERIUS:
 		addTime = 200;
 		break;
+
+	case WP_KMA97:	// "Kiss My Ass 97"
+		addTime = ADDTIME_KMA97;
+		break;
+
 	case WP_GRAPPLING_HOOK:
 		addTime = 400;
 		break;
-#ifdef MISSIONPACK
-	case WP_NAILGUN:
-		addTime = 1000;
-		break;
-	case WP_PROX_LAUNCHER:
+
+	case WP_SPRAYPISTOL:
 		addTime = 800;
 		break;
-	case WP_CHAINGUN:
-		addTime = 30;
-		break;
-#endif
-	}
-
-#ifdef MISSIONPACK
-	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
-		addTime /= 1.5;
-	}
-	else
-	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
-		addTime /= 1.3;
-  }
-  else
-#endif
-	if ( pm->ps->powerups[PW_HASTE] ) {
-		addTime /= 1.3;
 	}
 
 	pm->ps->weaponTime += addTime;
@@ -1717,38 +1821,6 @@ static void PM_Animate( void ) {
 			pm->ps->torsoTimer = TIMER_GESTURE;
 			PM_AddEvent( EV_TAUNT );
 		}
-#ifdef MISSIONPACK
-	} else if ( pm->cmd.buttons & BUTTON_GETFLAG ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_GETFLAG );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_GUARDBASE ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_GUARDBASE );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_PATROL ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_PATROL );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_FOLLOWME ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_FOLLOWME );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_AFFIRMATIVE ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_AFFIRMATIVE);
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_NEGATIVE ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_NEGATIVE );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-#endif
 	}
 }
 
@@ -1832,7 +1904,8 @@ PmoveSingle
 */
 void trap_SnapVector( float *v );
 
-void PmoveSingle (pmove_t *pmove) {
+void PmoveSingle (pmove_t *pmove)
+{
 	pm = pmove;
 
 	// this counter lets us debug movement problems with a journal
@@ -1862,8 +1935,13 @@ void PmoveSingle (pmove_t *pmove) {
 	}
 
 	// set the firing flag for continuous beam weapons
-	if ( !(pm->ps->pm_flags & PMF_RESPAWNED) && pm->ps->pm_type != PM_INTERMISSION && pm->ps->pm_type != PM_NOCLIP
-		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ] ) {
+	// HERBY: Imperius charging
+	if ( !(pm->ps->pm_flags & PMF_RESPAWNED)
+		&& ( pm->ps->pm_type != PM_INTERMISSION ) && ( PM_FREEZE != pm->ps->pm_type )
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ]
+		&& ( pm->ps->weapon != WP_IMPERIUS || pm->ps->weaponstate == WEAPON_CHARGING )
+		&& ( ( pm->gametype != GT_LPS ) || ( pm->ps->stats[STAT_LIVESLEFT] > 0 ) )
+		&& !( pm->cmd.buttons & BUTTON_TALK ) ) {
 		pm->ps->eFlags |= EF_FIRING;
 	} else {
 		pm->ps->eFlags &= ~EF_FIRING;
@@ -1967,15 +2045,7 @@ void PmoveSingle (pmove_t *pmove) {
 
 	PM_DropTimers();
 
-#ifdef MISSIONPACK
-	if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
-		PM_InvulnerabilityMove();
-	} else
-#endif
-	if ( pm->ps->powerups[PW_FLIGHT] ) {
-		// flight powerup doesn't allow jump and has different friction
-		PM_FlyMove();
-	} else if (pm->ps->pm_flags & PMF_GRAPPLE_PULL) {
+	if (pm->ps->pm_flags & PMF_GRAPPLE_PULL) {
 		PM_GrappleMove();
 		// We can wiggle a bit
 		PM_AirMove();

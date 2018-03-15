@@ -1,25 +1,3 @@
-/*
-===========================================================================
-Copyright (C) 1999-2005 Id Software, Inc.
-
-This file is part of Quake III Arena source code.
-
-Quake III Arena source code is free software; you can redistribute it
-and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-Quake III Arena source code is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Quake III Arena source code; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
-*/
-
 //========================================================
 //========================================================
 //name
@@ -121,8 +99,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CHARACTERISTIC_SELFPRESERVATION				42	//float [0, 1]
 //how likely the bot is to take revenge
 #define CHARACTERISTIC_VENGEFULNESS					43	//float [0, 1]	//use this!!
-//tendency to camp
-#define CHARACTERISTIC_CAMPER						44	//float [0, 1]
+//name of the syc logo
+#define CHARACTERISTIC_SPRAYLOGO					44	//string
 //========================================================
 //========================================================
 //tendency to get easy frags
@@ -131,4 +109,5 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CHARACTERISTIC_ALERTNESS					46	//float [0, 1]
 //how much the bot fires its weapon
 #define CHARACTERISTIC_FIRETHROTTLE					47	//float [0, 1]
+
 

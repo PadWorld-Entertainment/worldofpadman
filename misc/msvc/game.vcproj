@@ -112,7 +112,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\build\game_debug"
+			OutputDirectory="..\..\..\wop"
 			IntermediateDirectory="..\..\build\game_debug"
 			ConfigurationType="2"
 			UseOfMFC="0"
@@ -208,7 +208,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\build\game_release"
+			OutputDirectory="..\..\..\wop"
 			IntermediateDirectory="..\..\build\game_release"
 			ConfigurationType="2"
 			UseOfMFC="0"
@@ -1125,6 +1125,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\code\game\g_ctlitems.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\g_gameinfo.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\g_items.c"
 				>
 				<FileConfiguration
@@ -1335,6 +1343,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\code\game\g_modifiers.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\g_mover.c"
 				>
 				<FileConfiguration
@@ -1459,6 +1471,10 @@
 						PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;MISSIONPACK;"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\code\game\g_stations.c"
+				>
 			</File>
 			<File
 				RelativePath="..\..\code\game\g_svcmds.c"
@@ -1762,6 +1778,14 @@
 				RelativePath="..\..\code\qcommon\q_shared.c"
 				>
 			</File>
+			<File
+				RelativePath="..\..\code\game\wopg_sphandling.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\wopg_spstoryfiles.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -1828,15 +1852,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\bg_game.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\bg_local.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\code\game\bg_public.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\game\botlib.h"
 				>
 			</File>
 			<File
@@ -1873,6 +1897,14 @@
 			</File>
 			<File
 				RelativePath="..\..\code\game\syn.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\wopg_sphandling.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\wopg_spstoryfiles.h"
 				>
 			</File>
 		</Filter>
