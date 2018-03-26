@@ -171,7 +171,7 @@ A "connect" OOB command has been received
 */
 void SV_DirectConnect(netadr_t from) {
 	char userinfo[MAX_INFO_STRING];
-	int i;
+	int i, n;
 	client_t *cl, *newcl;
 	client_t temp;
 	//sharedEntity_t *ent;
@@ -191,6 +191,17 @@ void SV_DirectConnect(netadr_t from) {
 	if (SV_IsBanned(&from, qfalse)) {
 		NET_OutOfBandPrint(NS_SERVER, from, "print\nYou are banned from this server.\n");
 		return;
+	}
+
+	// check for concurrent connections
+	for (i = 0, n = 0; i < sv_maxclients->integer; i++) {
+		const netadr_t *addr = &svs.clients[i].netchan.remoteAddress;
+		if (addr->type != NA_BOT && NET_CompareBaseAdr(*addr, from) && svs.clients[i].state >= CS_PRIMED) {
+			if (++n >= sv_maxconcurrent->integer) {
+				NET_OutOfBandPrint(NS_SERVER, from, "print\nToo many connections.\n");
+				return;
+			}
+		}
 	}
 
 	Q_strncpyz(userinfo, Cmd_Argv(1), sizeof(userinfo));
@@ -407,6 +418,7 @@ gotnewcl:
 	newcl->lastPacketTime = svs.time;
 	newcl->lastConnectTime = svs.time;
 
+	newcl->justConnected = qtrue;
 	// when we receive the first packet from the client, we will
 	// notice that it is from a different serverid and that the
 	// gamestate message was not just sent, forcing a retransmit
@@ -1702,6 +1714,9 @@ void SV_ExecuteClientMessage(client_t *cl, msg_t *msg) {
 		cl->reliableAcknowledge = cl->reliableSequence;
 		return;
 	}
+
+	cl->justConnected = qfalse;
+
 	// if this is a usercmd from a previous gamestate,
 	// ignore it or retransmit the current gamestate
 	//
