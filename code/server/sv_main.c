@@ -38,6 +38,7 @@ cvar_t *sv_rconPassword;	// password for remote server commands
 cvar_t *sv_privatePassword; // password for the privateClient slots
 cvar_t *sv_allowDownload;
 cvar_t *sv_maxclients;
+cvar_t *sv_maxconcurrent;
 
 cvar_t *sv_privateClients; // number of clients reserved for password
 cvar_t *sv_hostname;
@@ -957,6 +958,12 @@ static void SV_CheckTimeouts(void) {
 			// using the client id cause the cl->name is empty at this point
 			Com_DPrintf("Going from CS_ZOMBIE to CS_FREE for client %d\n", i);
 			cl->state = CS_FREE; // can now be reused
+			continue;
+		}
+		if (cl->justConnected && svs.time - cl->lastPacketTime > 4000) {
+			// four seconds is enough for a real client to respond
+			SV_DropClient(cl, "timed out");
+			cl->state = CS_FREE;
 			continue;
 		}
 		if (cl->state >= CS_CONNECTED && cl->lastPacketTime < droppoint) {
