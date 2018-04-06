@@ -223,16 +223,19 @@ void SV_DirectConnect(netadr_t from) {
 	qport = atoi(Info_ValueForKey(userinfo, "qport"));
 
 	// quick reject
+	newcl = NULL;
 	for (i = 0, cl = svs.clients; i < sv_maxclients->integer; i++, cl++) {
-		if (cl->state == CS_FREE) {
-			continue;
-		}
 		if (NET_CompareBaseAdr(from, cl->netchan.remoteAddress) &&
 			(cl->netchan.qport == qport || from.port == cl->netchan.remoteAddress.port)) {
-			if ((svs.time - cl->lastConnectTime) < (sv_reconnectlimit->integer * 1000)) {
+			int elapsed = svs.time - cl->lastConnectTime;
+			if (elapsed < (sv_reconnectlimit->integer * 1000)) {
+				int remains = ((sv_reconnectlimit->integer * 1000) - elapsed + 999) / 1000;
 				Com_DPrintf("%s:reconnect rejected : too soon\n", NET_AdrToString(from));
+				NET_OutOfBandPrint(NS_SERVER, from, "print\nReconnecting, please wait %i second%s.\n", remains,
+								   (remains != 1) ? "s" : "");
 				return;
 			}
+			newcl = cl; // we may reuse this slot
 			break;
 		}
 	}
@@ -296,8 +299,7 @@ void SV_DirectConnect(netadr_t from) {
 		challengeptr->connected = qtrue;
 	}
 
-	newcl = &temp;
-	Com_Memset(newcl, 0, sizeof(*newcl));
+	Com_Memset(&temp, 0, sizeof(temp));
 
 	// if there is already a slot for this ip, reuse it
 	for (i = 0, cl = svs.clients; i < sv_maxclients->integer; i++, cl++) {
@@ -336,6 +338,11 @@ void SV_DirectConnect(netadr_t from) {
 	} else {
 		// skip past the reserved slots
 		startIndex = sv_privateClients->integer;
+	}
+
+	if (newcl && newcl >= svs.clients + startIndex && newcl->state == CS_FREE) {
+		Com_Printf("%s: reuse slot %i\n", NET_AdrToString(from), (int)(newcl - svs.clients));
+		goto gotnewcl;
 	}
 
 	newcl = NULL;
@@ -532,7 +539,6 @@ void SV_DropClient(client_t *drop, const char *reason) {
 	// if this was the last client on the server, send a heartbeat
 	// to the master so it is known the server is empty
 	// send a heartbeat now so the master will get up to date info
-	// if there is already a slot for this ip, reuse it
 	for (i = 0; i < sv_maxclients->integer; i++) {
 		if (svs.clients[i].state >= CS_CONNECTED) {
 			break;
