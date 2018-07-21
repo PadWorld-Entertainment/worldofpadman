@@ -1337,6 +1337,9 @@ typedef struct {
 	qboolean vertexArrayObject;
 	qboolean directStateAccess;
 
+	int maxVertexAttribs;
+	qboolean gpuVertexAnimation;
+
 	GLenum vaoCacheGlIndexType; // GL_UNSIGNED_INT or GL_UNSIGNED_SHORT
 	size_t vaoCacheGlIndexSize; // must be <= sizeof( vaoCacheGlIndex_t )
 

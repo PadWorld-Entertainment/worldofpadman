@@ -253,6 +253,7 @@ void R_AddMD3Surfaces(trRefEntity_t *ent) {
 	int i;
 	mdvModel_t *model = NULL;
 	mdvSurface_t *surface = NULL;
+	void *drawSurf;
 	shader_t *shader = NULL;
 	int cull;
 	int lod;
@@ -347,23 +348,29 @@ void R_AddMD3Surfaces(trRefEntity_t *ent) {
 			shader = tr.shaders[surface->shaderIndexes[ent->e.skinNum % surface->numShaderIndexes]];
 		}
 
+		if (model->numVaoSurfaces > 0) {
+			drawSurf = &model->vaoSurfaces[i];
+		} else {
+			drawSurf = surface;
+		}
+
 		// we will add shadows even if the main object isn't visible in the view
 
 		// stencil shadows can't do personal models unless I polyhedron clip
 		if (!personalModel && r_shadows->integer == 2 && fogNum == 0 &&
 			!(ent->e.renderfx & (RF_NOSHADOW | RF_DEPTHHACK)) && shader->sort == SS_OPAQUE) {
-			R_AddDrawSurf((void *)&model->vaoSurfaces[i], tr.shadowShader, 0, qfalse, qfalse, 0);
+			R_AddDrawSurf(drawSurf, tr.shadowShader, 0, qfalse, qfalse, 0);
 		}
 
 		// projection shadows work fine with personal models
 		if (r_shadows->integer == 3 && fogNum == 0 && (ent->e.renderfx & RF_SHADOW_PLANE) &&
 			shader->sort == SS_OPAQUE) {
-			R_AddDrawSurf((void *)&model->vaoSurfaces[i], tr.projectionShadowShader, 0, qfalse, qfalse, 0);
+			R_AddDrawSurf(drawSurf, tr.projectionShadowShader, 0, qfalse, qfalse, 0);
 		}
 
 		// don't add third_person objects if not viewing through a portal
 		if (!personalModel) {
-			R_AddDrawSurf((void *)&model->vaoSurfaces[i], shader, fogNum, qfalse, qfalse, cubemapIndex);
+			R_AddDrawSurf(drawSurf, shader, fogNum, qfalse, qfalse, cubemapIndex);
 		}
 
 		surface++;

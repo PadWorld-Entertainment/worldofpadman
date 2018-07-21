@@ -272,6 +272,9 @@ static void InitOpenGL(void) {
 		qglGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &temp);
 		glConfig.numTextureUnits = temp;
 
+		qglGetIntegerv( GL_MAX_VERTEX_ATTRIBS, &temp );
+		glRefConfig.maxVertexAttribs = temp;
+
 		// reserve 160 components for other uniforms
 		qglGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &temp);
 		glRefConfig.glslMaxAnimatedBones = Com_Clamp(0, IQM_MAX_JOINTS, (temp - 160) / 16);
