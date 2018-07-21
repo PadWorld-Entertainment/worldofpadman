@@ -277,6 +277,8 @@ static void RB_SurfaceBeam(void) {
 	vec3_t direction, normalized_direction;
 	vec3_t start_points[NUM_BEAM_SEGS], end_points[NUM_BEAM_SEGS];
 	vec3_t oldorigin, origin;
+	vec3_t verts[(NUM_BEAM_SEGS + 1) * 2];
+	glIndex_t indexes[(NUM_BEAM_SEGS) * 6];
 
 	e = &backEnd.currentEntity->e;
 
@@ -301,7 +303,6 @@ static void RB_SurfaceBeam(void) {
 
 	for (i = 0; i < NUM_BEAM_SEGS; i++) {
 		RotatePointAroundVector(start_points[i], normalized_direction, perpvec, (360.0 / NUM_BEAM_SEGS) * i);
-		//		VectorAdd( start_points[i], origin, start_points[i] );
 		VectorAdd(start_points[i], direction, end_points[i]);
 	}
 
@@ -311,12 +312,26 @@ static void RB_SurfaceBeam(void) {
 
 	qglColor3f(1, 0, 0);
 
-	qglBegin(GL_TRIANGLE_STRIP);
 	for (i = 0; i <= NUM_BEAM_SEGS; i++) {
-		qglVertex3fv(start_points[i % NUM_BEAM_SEGS]);
-		qglVertex3fv(end_points[i % NUM_BEAM_SEGS]);
+		VectorCopy(start_points[i % NUM_BEAM_SEGS], verts[i * 2]);
+		VectorCopy(end_points[i % NUM_BEAM_SEGS], verts[i * 2 + 1]);
 	}
-	qglEnd();
+
+	for (i = 0; i < NUM_BEAM_SEGS; i++) {
+		indexes[i * 6 + 0] = i * 2;
+		indexes[i * 6 + 1] = i * 2 + 1;
+		indexes[i * 6 + 2] = (i + 1) * 2;
+
+		indexes[i * 6 + 3] = i * 2 + 1;
+		indexes[i * 6 + 4] = (i + 1) * 2 + 1;
+		indexes[i * 6 + 5] = (i + 1) * 2;
+	}
+
+	qglDisableClientState(GL_COLOR_ARRAY);
+	qglDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	qglVertexPointer(3, GL_FLOAT, 0, verts);
+	qglDrawElements(GL_TRIANGLES, NUM_BEAM_SEGS * 6, GL_INDEX_TYPE, indexes);
 }
 
 //================================================================================
@@ -985,20 +1000,28 @@ Draws x/y/z lines from the origin for orientation debugging
 ===================
 */
 static void RB_SurfaceAxis(void) {
+	vec3_t verts[6] = {
+		{0, 0, 0}, {16, 0, 0},
+		{0, 0, 0}, {0, 16, 0},
+		{0, 0, 0}, {0, 0, 16}
+	};
+	color4ub_t colors[6] = {
+		{255, 0, 0, 255}, {255, 0, 0, 255},
+		{0, 255, 0, 255}, {0, 255, 0, 255},
+		{0, 0, 255, 255}, {0, 0, 255, 255}
+	};
+
 	GL_Bind(tr.whiteImage);
 	GL_State(GLS_DEFAULT);
 	qglLineWidth(3);
-	qglBegin(GL_LINES);
-	qglColor3f(1, 0, 0);
-	qglVertex3f(0, 0, 0);
-	qglVertex3f(16, 0, 0);
-	qglColor3f(0, 1, 0);
-	qglVertex3f(0, 0, 0);
-	qglVertex3f(0, 16, 0);
-	qglColor3f(0, 0, 1);
-	qglVertex3f(0, 0, 0);
-	qglVertex3f(0, 0, 16);
-	qglEnd();
+
+	qglEnableClientState(GL_COLOR_ARRAY);
+	qglDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	qglVertexPointer(3, GL_FLOAT, 0, verts);
+	qglColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+	qglDrawArrays(GL_LINES, 0, 6);
+
 	qglLineWidth(1);
 }
 
