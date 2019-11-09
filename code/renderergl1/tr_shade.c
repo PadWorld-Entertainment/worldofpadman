@@ -164,6 +164,11 @@ void R_DrawElements(int numIndexes, const glIndex_t *indexes) {
 		}
 	}
 
+	// OpenGL ES doesn't support glBegin, force glDrawElements
+	if (qglesMajorVersion >= 1) {
+		primitives = 2;
+	}
+
 	if (primitives == 2) {
 		qglDrawElements(GL_TRIANGLES, numIndexes, GL_INDEX_TYPE, indexes);
 		return;
