@@ -1141,6 +1141,7 @@ void R_InitFogTable(void);
 float R_FogFactor(float s, float t);
 void R_InitImages(void);
 void R_DeleteTextures(void);
+void R_ConvertTextureFormat(const byte *in, int width, int height, GLenum format, GLenum type, byte *out);
 int R_SumOfUsedImages(void);
 void R_InitSkins(void);
 skin_t *R_GetSkinByHandle(qhandle_t hSkin);

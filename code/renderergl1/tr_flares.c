@@ -455,6 +455,19 @@ void RB_RenderFlares(void) {
 		return;
 	}
 
+	if (r_flares->modified) {
+		if (qglesMajorVersion >= 1) {
+			ri.Printf(PRINT_WARNING,
+					  "OpenGL ES does not support reading depth to determine if flares are visible\n");
+			ri.Cvar_Set("r_flares", "0");
+		}
+		r_flares->modified = qfalse;
+	}
+
+	if (!r_flares->integer) {
+		return;
+	}
+
 	if (r_flareCoeff->modified) {
 		R_SetFlareCoeff();
 		r_flareCoeff->modified = qfalse;
