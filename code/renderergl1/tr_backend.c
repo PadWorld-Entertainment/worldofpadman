@@ -755,6 +755,7 @@ void RE_StretchRaw(int x, int y, int w, int h, int cols, int rows, const byte *d
 }
 
 void RE_UploadCinematic(int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty) {
+	byte *buffer;
 
 	GL_Bind(tr.scratchImage[client]);
 
@@ -762,16 +763,35 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const byte *data, int 
 	if (cols != tr.scratchImage[client]->width || rows != tr.scratchImage[client]->height) {
 		tr.scratchImage[client]->width = tr.scratchImage[client]->uploadWidth = cols;
 		tr.scratchImage[client]->height = tr.scratchImage[client]->uploadHeight = rows;
-		qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, cols, rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+		// manually convert RGBA to RGB for OpenGL ES
+		if (qglesMajorVersion >= 1) {
+			buffer = ri.Hunk_AllocateTempMemory(3 * cols * rows);
+
+			R_ConvertTextureFormat(data, cols, rows, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+			qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cols, rows, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+
+			ri.Hunk_FreeTempMemory(buffer);
+		} else {
+			qglTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, cols, rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		}
+
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glConfig.haveClampToEdge ? GL_CLAMP_TO_EDGE : GL_CLAMP);
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glConfig.haveClampToEdge ? GL_CLAMP_TO_EDGE : GL_CLAMP);
 	} else {
 		if (dirty) {
-			// otherwise, just subimage upload it so that drivers can tell we are going to be changing
-			// it and don't try and do a texture compression
-			qglTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, cols, rows, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			if (qglesMajorVersion >= 1) {
+				buffer = ri.Hunk_AllocateTempMemory(3 * cols * rows);
+
+				R_ConvertTextureFormat(data, cols, rows, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+				qglTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, cols, rows, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+
+				ri.Hunk_FreeTempMemory(buffer);
+			} else {
+				qglTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, cols, rows, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			}
 		}
 	}
 }
