@@ -96,7 +96,7 @@ Cmd_Score_f
 Request current scoreboard information
 ==================
 */
-void Cmd_Score_f(gentity_t *ent) {
+static void Cmd_Score_f(gentity_t *ent) {
 	DeathmatchScoreboardMessage(ent);
 }
 

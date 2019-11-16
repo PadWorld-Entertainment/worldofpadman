@@ -521,7 +521,6 @@ void G_SpawnEntitiesFromString(void);
 //
 // g_cmds.c
 //
-void Cmd_Score_f(gentity_t *ent);
 void StopFollowing(gentity_t *ent);
 void BroadcastTeamChange(gclient_t *client, int oldTeam);
 void SetTeam(gentity_t *ent, const char *s);
