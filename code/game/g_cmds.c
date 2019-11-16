@@ -351,7 +351,7 @@ Sets client to godmode
 argv(0) god
 ==================
 */
-void Cmd_God_f(gentity_t *ent) {
+static void Cmd_God_f(gentity_t *ent) {
 	const char *msg;
 
 	if (!CheatsOk(ent)) {
@@ -376,7 +376,7 @@ Sets client to notarget
 argv(0) notarget
 ==================
 */
-void Cmd_Notarget_f(gentity_t *ent) {
+static void Cmd_Notarget_f(gentity_t *ent) {
 	char *msg;
 
 	if (!CheatsOk(ent)) {
@@ -399,7 +399,7 @@ Cmd_Noclip_f
 argv(0) noclip
 ==================
 */
-void Cmd_Noclip_f(gentity_t *ent) {
+static void Cmd_Noclip_f(gentity_t *ent) {
 	char *msg;
 
 	if (!CheatsOk(ent)) {
@@ -416,7 +416,7 @@ void Cmd_Noclip_f(gentity_t *ent) {
 	trap_SendServerCommand(ent - g_entities, va("print \"%s\"", msg));
 }
 
-void Cmd_Thaw_f(gentity_t *ent) {
+static void Cmd_Thaw_f(gentity_t *ent) {
 	if (!CheatsOk(ent)) {
 		return;
 	}
@@ -435,7 +435,7 @@ and sends over a command to the client to resize the view,
 hide the scoreboard, and take a special screenshot
 ==================
 */
-void Cmd_LevelShot_f(gentity_t *ent) {
+static void Cmd_LevelShot_f(gentity_t *ent) {
 	if (!ent->client->pers.localClient) {
 		trap_SendServerCommand(ent - g_entities,
 							   "print \"The levelshot command must be executed by a local client\n\"");
@@ -460,7 +460,7 @@ void Cmd_LevelShot_f(gentity_t *ent) {
 Cmd_Kill_f
 =================
 */
-void Cmd_Kill_f(gentity_t *ent) {
+static void Cmd_Kill_f(gentity_t *ent) {
 	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
 		return;
 	}
@@ -607,7 +607,7 @@ void SetTeam(gentity_t *ent, const char *s) {
 	// execute the team change
 	//
 
-	// if the player was dead leave the body
+	// if the player was dead leave the body, but only if they're actually in game
 	if (client->ps.stats[STAT_HEALTH] <= 0 && !lpsNoLives && client->pers.connected == CON_CONNECTED) {
 		CopyToBodyQue(ent);
 	}
@@ -704,7 +704,7 @@ void StopFollowing(gentity_t *ent) {
 Cmd_Team_f
 =================
 */
-void Cmd_Team_f(gentity_t *ent) {
+static void Cmd_Team_f(gentity_t *ent) {
 	int oldTeam;
 	char s[MAX_TOKEN_CHARS];
 
@@ -749,7 +749,7 @@ void Cmd_Team_f(gentity_t *ent) {
 Cmd_Follow_f
 =================
 */
-void Cmd_Follow_f(gentity_t *ent) {
+static void Cmd_Follow_f(gentity_t *ent) {
 	int i;
 	char arg[MAX_TOKEN_CHARS];
 
@@ -864,10 +864,9 @@ void Cmd_FollowCycle_f(gentity_t *ent, int dir) {
 
 /*
 ==================
-G_Say
+G_SayTo
 ==================
 */
-
 static void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message) {
 	if (!other) {
 		return;
@@ -1039,8 +1038,8 @@ static void Cmd_Tell_f(gentity_t *ent) {
 static char *gc_orders[] = {"hold your position", "hold this position", "come here", "cover me",
 							"guard location",	  "search and destroy", "report"};
 
-void Cmd_GameCommand_f(gentity_t *ent) {
 	int player;
+static void Cmd_GameCommand_f(gentity_t *ent) {
 	int order;
 	char str[MAX_TOKEN_CHARS];
 
@@ -1064,7 +1063,7 @@ void Cmd_GameCommand_f(gentity_t *ent) {
 Cmd_Where_f
 ==================
 */
-void Cmd_Where_f(gentity_t *ent) {
+static void Cmd_Where_f(gentity_t *ent) {
 	trap_SendServerCommand(ent - g_entities, va("print \"%s\n\"", vtos(ent->s.origin)));
 }
 
