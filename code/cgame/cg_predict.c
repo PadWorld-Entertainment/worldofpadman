@@ -273,6 +273,24 @@ static void CG_TouchItem( centity_t *cent ) {
 		return;
 	}
 
+	// don't pickup own items (used for SyC-Cartridges)
+	if( cent->currentState.otherEntityNum == cg.snap->ps.clientNum)
+		return;
+
+	// don't Predict PickUp of >8 Cartridges
+	// ... this isn't in BG_CanItemBeGrabbed, because on the serverside it is also handled outside of bg...
+	if(bg_itemlist[cent->currentState.modelindex].giTag==WP_SPRAYPISTOL) {
+		gitem_t	*item = &bg_itemlist[cent->currentState.modelindex];
+		if( ((!strcmp(item->classname,"ammo_spray_b") && cg.predictedPlayerState.persistant[PERS_TEAM]==TEAM_BLUE)  ||
+			 (!strcmp(item->classname,"ammo_spray_r") && cg.predictedPlayerState.persistant[PERS_TEAM]==TEAM_RED) ||
+			 !strcmp(item->classname,"ammo_spray_n"))
+			&& cg.predictedPlayerState.ammo[WP_SPRAYPISTOL]>=8 )
+		{
+			return; // can't hold more than 8 usable cartridges
+		}
+	}
+
+
 	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState ) ) {
 		return;		// can't hold it
 	}
@@ -281,19 +299,12 @@ static void CG_TouchItem( centity_t *cent ) {
 
 	// Special case for flags.  
 	// We don't predict touching our own flag
-#ifdef MISSIONPACK
-	if( cgs.gametype == GT_1FCTF ) {
-		if( item->giType == IT_TEAM && item->giTag != PW_NEUTRALFLAG ) {
-			return;
-		}
-	}
-#endif
 	if( cgs.gametype == GT_CTF ) {
 		if (cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_RED &&
-			item->giType == IT_TEAM && item->giTag == PW_REDFLAG)
+			item->giTag == PW_REDFLAG)
 			return;
 		if (cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_BLUE &&
-			item->giType == IT_TEAM && item->giTag == PW_BLUEFLAG)
+			item->giTag == PW_BLUEFLAG)
 			return;
 	}
 
@@ -367,8 +378,12 @@ static void CG_TouchTriggerPrediction( void ) {
 			continue;
 		}
 
-		if ( ent->eType == ET_TELEPORT_TRIGGER ) {
-			cg.hyperspace = qtrue;
+		if ( ent->eType == ET_TELEPORT_TRIGGER &&
+			(cg.snap->ps.persistant[PERS_TEAM]==TEAM_SPECTATOR || cg.snap->ps.ammo[WP_SPRAYPISTOL] || ent->generic1!=0x23) )
+		{
+			// the hyperspace-effect is realy ugly ... and it can only be seen, if there are big lags or high ping
+//			cg.hyperspace = qtrue;
+
 		} else if ( ent->eType == ET_PUSH_TRIGGER ) {
 			BG_TouchJumpPad( &cg.predictedPlayerState, ent );
 		}
@@ -489,14 +504,12 @@ void CG_PredictPlayerState( void ) {
 
 	if ( pmove_msec.integer < 8 ) {
 		trap_Cvar_Set("pmove_msec", "8");
-		trap_Cvar_Update(&pmove_msec);
 	}
 	else if (pmove_msec.integer > 33) {
 		trap_Cvar_Set("pmove_msec", "33");
-		trap_Cvar_Update(&pmove_msec);
 	}
 
-	cg_pmove.pmove_fixed = pmove_fixed.integer;// | cg_pmove_fixed.integer;
+	cg_pmove.pmove_fixed = pmove_fixed.integer;
 	cg_pmove.pmove_msec = pmove_msec.integer;
 
 	// run cmds
@@ -536,9 +549,9 @@ void CG_PredictPlayerState( void ) {
 				}
 				cg.thisFrameTeleport = qfalse;
 			} else {
-				vec3_t adjusted, new_angles;
+				vec3_t	adjusted;
 				CG_AdjustPositionForMover( cg.predictedPlayerState.origin, 
-				cg.predictedPlayerState.groundEntityNum, cg.physicsTime, cg.oldTime, adjusted, cg.predictedPlayerState.viewangles, new_angles);
+					cg.predictedPlayerState.groundEntityNum, cg.physicsTime, cg.oldTime, adjusted );
 
 				if ( cg_showmiss.integer ) {
 					if (!VectorCompare( oldPlayerState.origin, adjusted )) {
@@ -581,8 +594,10 @@ void CG_PredictPlayerState( void ) {
 			cg_pmove.cmd.serverTime = ((cg_pmove.cmd.serverTime + pmove_msec.integer-1) / pmove_msec.integer) * pmove_msec.integer;
 		}
 
-		Pmove (&cg_pmove);
 
+		cg_pmove.gametype = cgs.gametype;
+
+		Pmove( &cg_pmove );
 		moved = qtrue;
 
 		// add push trigger movement effects
@@ -591,6 +606,7 @@ void CG_PredictPlayerState( void ) {
 		// check for predictable events that changed from previous predictions
 		//CG_CheckChangedPredictableEvents(&cg.predictedPlayerState);
 	}
+
 
 	if ( cg_showmiss.integer > 1 ) {
 		CG_Printf( "[%i : %i] ", cg_pmove.cmd.serverTime, cg.time );
@@ -606,7 +622,7 @@ void CG_PredictPlayerState( void ) {
 	// adjust for the movement of the groundentity
 	CG_AdjustPositionForMover( cg.predictedPlayerState.origin, 
 		cg.predictedPlayerState.groundEntityNum, 
-		cg.physicsTime, cg.time, cg.predictedPlayerState.origin, cg.predictedPlayerState.viewangles, cg.predictedPlayerState.viewangles);
+		cg.physicsTime, cg.time, cg.predictedPlayerState.origin );
 
 	if ( cg_showmiss.integer ) {
 		if (cg.predictedPlayerState.eventSequence > oldPlayerState.eventSequence + MAX_PS_EVENTS) {

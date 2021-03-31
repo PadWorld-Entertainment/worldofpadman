@@ -65,13 +65,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define IDEAL_ATTACKDIST			140
 
-#define MAX_WAYPOINTS		128
+float scorealert[3];    // for both teams, how alarming the current situation is
+
 //
-bot_waypoint_t botai_waypoints[MAX_WAYPOINTS];
-bot_waypoint_t *botai_freewaypoints;
 
 //NOTE: not using a cvars which can be updated because the game should be reloaded anyway
 int gametype;		//game type
+int maxclients;		//maximum number of clients
 
 vmCvar_t bot_grapple;
 vmCvar_t bot_rocketjump;
@@ -82,51 +82,42 @@ vmCvar_t bot_challenge;
 vmCvar_t bot_predictobstacles;
 vmCvar_t g_spSkill;
 
-extern vmCvar_t bot_developer;
 
 vec3_t lastteleport_origin;		//last teleport event origin
 float lastteleport_time;		//last teleport event time
 int max_bspmodelindex;			//maximum BSP model index
 
-//CTF flag goals
+
+//cyr {
 bot_goal_t ctf_redflag;
 bot_goal_t ctf_blueflag;
-#ifdef MISSIONPACK
-bot_goal_t ctf_neutralflag;
-bot_goal_t redobelisk;
-bot_goal_t blueobelisk;
-bot_goal_t neutralobelisk;
-#endif
+bot_goal_t balloongoal[MAX_BALLOONS];
+bot_goal_t rwall, bwall, spraytele, outtele;
+bot_goal_t hstations[MAX_HSTATIONS];
+int num_hstations;
+//cyr }
 
-#define MAX_ALTROUTEGOALS		32
+qboolean EntityIsChatting(aas_entityinfo_t *entinfo);
 
-int altroutegoals_setup;
-aas_altroutegoal_t red_altroutegoals[MAX_ALTROUTEGOALS];
-int red_numaltroutegoals;
-aas_altroutegoal_t blue_altroutegoals[MAX_ALTROUTEGOALS];
-int blue_numaltroutegoals;
+qboolean ClientInSprayroom( int clId)
+{
+	if( gametype != GT_SPRAYFFA && gametype != GT_SPRAY )
+		return qfalse;
+
+	if(clId<0 || clId >= MAX_CLIENTS )
+		return qfalse;
+	if( !g_entities[clId].client )
+		return qfalse;
 
 
-/*
-==================
-BotSetUserInfo
-==================
-*/
-void BotSetUserInfo(bot_state_t *bs, char *key, char *value) {
-	char userinfo[MAX_INFO_STRING];
+	if( 0 >= g_entities[clId].client->ps.stats[STAT_SPRAYROOMSECS] )
+		return qfalse;
 
-	trap_GetUserinfo(bs->client, userinfo, sizeof(userinfo));
-	Info_SetValueForKey(userinfo, key, value);
-	trap_SetUserinfo(bs->client, userinfo);
-	ClientUserinfoChanged( bs->client );
+	return qtrue;
 }
 
-/*
-==================
-BotCTFCarryingFlag
-==================
-*/
-int BotCTFCarryingFlag(bot_state_t *bs) {
+
+qboolean BotCTFCarryingFlag(bot_state_t* bs){
 	if (gametype != GT_CTF) return CTF_FLAG_NONE;
 
 	if (bs->inventory[INVENTORY_REDFLAG] > 0) return CTF_FLAG_RED;
@@ -134,24 +125,118 @@ int BotCTFCarryingFlag(bot_state_t *bs) {
 	return CTF_FLAG_NONE;
 }
 
+
+int BotGetNumClientCarts(bot_state_t* bs, int clientnum){
+	// evt noch visibility pruefen
+	if (gametype == GT_SPRAY || gametype == GT_SPRAYFFA)
+		return g_entities[clientnum].client->ps.ammo[WP_SPRAYPISTOL];
+	else
+		return 0;
+}
+
+int BotGetVisTeamPlayers(bot_state_t *bs, int *players, int maxplayers, qboolean sameteam) {
+    int i, numplayers;
+    //char buf[MAX_INFO_STRING];
+    static int maxclients;
+    aas_entityinfo_t entinfo;
+    float alertness, easyfragger;
+
+    alertness = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_ALERTNESS, 0, 1);
+	easyfragger = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_EASY_FRAGGER, 0, 1);
+
+    if (!maxclients)
+        maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
+
+    numplayers = 0;
+    for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
+    	float squaredist, f, vis;
+		vec3_t dir;
+
+        if (i == bs->client ) continue;
+        if( BotSameTeam(bs, i) != sameteam) continue;
+
+        BotEntityInfo(i, &entinfo);
+        //if the player is dead or invisible and not shooting, skip it
+        if (!entinfo.valid ||
+            EntityIsDead(&entinfo) ||
+            (EntityIsInvisible(&entinfo) && !EntityIsShooting(&entinfo)))
+            continue;
+        //if not an easy fragger don't shoot at chatting players
+		if (easyfragger < 0.5 && EntityIsChatting(&entinfo)) continue;
+
+		//calculate the distance towards the enemy
+		VectorSubtract(entinfo.origin, bs->origin, dir);
+		squaredist = VectorLengthSquared(dir);
+		// just out of tele. orientation time
+		if (lastteleport_time > FloatTime() - 2) {
+			VectorSubtract(entinfo.origin, lastteleport_origin, dir);
+			if (VectorLengthSquared(dir) < Square(70)) continue;
+		}
+		// hm !! grosse alertnessreichweite, aber kein interesse zeigen wenn weit weg !?
+		if (squaredist > Square(900.0 + alertness * 4000.0)) continue;
+
+		// 90degree for distances above 810 units, more for smaller distances (180 degree max)
+		f = 90 + 90 - (90 - (squaredist > Square(810) ? Square(810) : squaredist) / (810 * 9));
+        // visible ?
+        vis = BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, i);
+        if (vis > 0 || gametype == GT_LPS){
+            players[numplayers++] = i;
+            if (numplayers >= maxplayers) break;
+            //G_Printf("/%s ", Info_ValueForKey(buf, "n"));
+        }
+    }
+    //G_Printf("\n %d mates \n", numteammates);
+    return numplayers;
+}
+
+
+qboolean IsDuck(int ent){
+	if(ent < 0 || ent > MAX_GENTITIES)
+		return qfalse;
+	return (g_entities[ent].s.weapon == WP_KILLERDUCKS && g_entities[ent].s.eType == ET_MISSILE);
+}
+
+qboolean IsWall(int ent){
+	if(ent < 0 || ent > MAX_GENTITIES)
+		return qfalse;
+	return ( &g_entities[ent] == level.bspraywall ||
+			 &g_entities[ent] == level.rspraywall ||
+			 &g_entities[ent] == level.nspraywall   );
+}
+
+qboolean IsBambam(int ent)
+{
+	if(ent < 0 || ent > MAX_GENTITIES)
+		return qfalse;
+	return ( g_entities[ent].s.eType == ET_BAMBAM );
+}
+
+qboolean IsBoomie( int ent )
+{
+	if( ent < 0 || ent > MAX_GENTITIES)
+		return qfalse;
+	return( g_entities[ent].s.eType == ET_BOOMIES );
+}
+
+
+
+
 /*
 ==================
 BotTeam
 ==================
 */
 int BotTeam(bot_state_t *bs) {
+	gclient_t* client;
 
 	if (bs->client < 0 || bs->client >= MAX_CLIENTS) {
+		//BotAI_Print(PRT_ERROR, "BotCTFTeam: client out of range\n");
 		return qfalse;
 	}
-
-    if (level.clients[bs->client].sess.sessionTeam == TEAM_RED) {
-		return TEAM_RED;
-	} else if (level.clients[bs->client].sess.sessionTeam == TEAM_BLUE) {
-		return TEAM_BLUE;
-	}
-
-	return TEAM_FREE;
+	client = g_entities[bs->client].client;
+	if(!client)
+		return qfalse;
+	return client->sess.sessionTeam;
 }
 
 /*
@@ -169,35 +254,6 @@ int BotOppositeTeam(bot_state_t *bs) {
 
 /*
 ==================
-BotEnemyFlag
-==================
-*/
-bot_goal_t *BotEnemyFlag(bot_state_t *bs) {
-	if (BotTeam(bs) == TEAM_RED) {
-		return &ctf_blueflag;
-	}
-	else {
-		return &ctf_redflag;
-	}
-}
-
-/*
-==================
-BotTeamFlag
-==================
-*/
-bot_goal_t *BotTeamFlag(bot_state_t *bs) {
-	if (BotTeam(bs) == TEAM_RED) {
-		return &ctf_redflag;
-	}
-	else {
-		return &ctf_blueflag;
-	}
-}
-
-
-/*
-==================
 EntityIsDead
 ==================
 */
@@ -206,43 +262,48 @@ qboolean EntityIsDead(aas_entityinfo_t *entinfo) {
 
 	if (entinfo->number >= 0 && entinfo->number < MAX_CLIENTS) {
 		//retrieve the current client state
-		if (!BotAI_GetClientState(entinfo->number, &ps)) {
-			return qfalse;
-		}
-
+		BotAI_GetClientState( entinfo->number, &ps );
 		if (ps.pm_type != PM_NORMAL) return qtrue;
+		return qfalse;
 	}
-	return qfalse;
+
+	if( IsDuck(entinfo->number) )
+		return qfalse;
+	
+	if( IsBambam(entinfo->number) )
+		return qfalse;
+
+	if( IsBoomie(entinfo->number) )
+		return qfalse;
+
+	//not a player, not a duck -> dead
+	return qtrue;
 }
 
-/*
-==================
-EntityCarriesFlag
-==================
-*/
-qboolean EntityCarriesFlag(aas_entityinfo_t *entinfo) {
-	if ( entinfo->powerups & ( 1 << PW_REDFLAG ) )
-		return qtrue;
-	if ( entinfo->powerups & ( 1 << PW_BLUEFLAG ) )
-		return qtrue;
-#ifdef MISSIONPACK
-	if ( entinfo->powerups & ( 1 << PW_NEUTRALFLAG ) )
-		return qtrue;
-#endif
-	return qfalse;
+qboolean EntityCarriesCarts(aas_entityinfo_t *entinfo){
+	if(entinfo->type != ET_PLAYER) return qfalse;
+	return(g_entities[entinfo->number].client->ps.ammo[WP_SPRAYPISTOL]);
 }
-
 /*
 ==================
 EntityIsInvisible
 ==================
 */
 qboolean EntityIsInvisible(aas_entityinfo_t *entinfo) {
-	// the flag is always visible
-	if (EntityCarriesFlag(entinfo)) {
-		return qfalse;
+
+// cyr_zIinvis
+	if(entinfo->number < MAX_CLIENTS){
+		// spray ammo is visible
+		if( EntityCarriesCarts(entinfo) )
+			return qfalse;
+		// lps guys are visible
+		if (gametype == GT_LPS)
+			return qfalse;
 	}
-	if (entinfo->powerups & (1 << PW_INVIS)) {
+// cyr_zIinvis
+
+	// no sprayammo and visionless -> invis
+	if (entinfo->powerups & (1 << PW_VISIONLESS)) {
 		return qtrue;
 	}
 	return qfalse;
@@ -273,80 +334,8 @@ qboolean EntityIsChatting(aas_entityinfo_t *entinfo) {
 }
 
 /*
-==================
-EntityHasQuad
-==================
-*/
-qboolean EntityHasQuad(aas_entityinfo_t *entinfo) {
-	if (entinfo->powerups & (1 << PW_QUAD)) {
-		return qtrue;
-	}
-	return qfalse;
-}
-
-#ifdef MISSIONPACK
-/*
-==================
-EntityHasKamikze
-==================
-*/
-qboolean EntityHasKamikaze(aas_entityinfo_t *entinfo) {
-	if (entinfo->flags & EF_KAMIKAZE) {
-		return qtrue;
-	}
-	return qfalse;
-}
-
-/*
-==================
-EntityCarriesCubes
-==================
-*/
-qboolean EntityCarriesCubes(aas_entityinfo_t *entinfo) {
-	entityState_t state;
-
-	if (gametype != GT_HARVESTER)
-		return qfalse;
-	//FIXME: get this info from the aas_entityinfo_t ?
-	BotAI_GetEntityState(entinfo->number, &state);
-	if (state.generic1 > 0)
-		return qtrue;
-	return qfalse;
-}
-
-/*
-==================
-Bot1FCTFCarryingFlag
-==================
-*/
-int Bot1FCTFCarryingFlag(bot_state_t *bs) {
-	if (gametype != GT_1FCTF) return qfalse;
-
-	if (bs->inventory[INVENTORY_NEUTRALFLAG] > 0) return qtrue;
-	return qfalse;
-}
-
-/*
-==================
-BotHarvesterCarryingCubes
-==================
-*/
-int BotHarvesterCarryingCubes(bot_state_t *bs) {
-	if (gametype != GT_HARVESTER) return qfalse;
-
-	if (bs->inventory[INVENTORY_REDCUBE] > 0) return qtrue;
-	if (bs->inventory[INVENTORY_BLUECUBE] > 0) return qtrue;
-	return qfalse;
-}
-#endif
-
-/*
-==================
-BotRememberLastOrderedTask
-==================
-*/
 void BotRememberLastOrderedTask(bot_state_t *bs) {
-	if (!bs->ordered) {
+	if (! bs->ordered) {
 		return;
 	}
 	bs->lastgoal_decisionmaker = bs->decisionmaker;
@@ -355,971 +344,694 @@ void BotRememberLastOrderedTask(bot_state_t *bs) {
 	bs->lastgoal_teammate = bs->teammate;
 }
 
-/*
-==================
-BotSetTeamStatus
-==================
-*/
-void BotSetTeamStatus(bot_state_t *bs) {
-#ifdef MISSIONPACK
-	int teamtask;
-	aas_entityinfo_t entinfo;
-
-	teamtask = TEAMTASK_PATROL;
-
-	switch(bs->ltgtype) {
-		case LTG_TEAMHELP:
-			break;
-		case LTG_TEAMACCOMPANY:
-			BotEntityInfo(bs->teammate, &entinfo);
-			if ( ( (gametype == GT_CTF || gametype == GT_1FCTF) && EntityCarriesFlag(&entinfo))
-				|| ( gametype == GT_HARVESTER && EntityCarriesCubes(&entinfo)) ) {
-				teamtask = TEAMTASK_ESCORT;
-			}
-			else {
-				teamtask = TEAMTASK_FOLLOW;
-			}
-			break;
-		case LTG_DEFENDKEYAREA:
-			teamtask = TEAMTASK_DEFENSE;
-			break;
-		case LTG_GETFLAG:
-			teamtask = TEAMTASK_OFFENSE;
-			break;
-		case LTG_RUSHBASE:
-			teamtask = TEAMTASK_DEFENSE;
-			break;
-		case LTG_RETURNFLAG:
-			teamtask = TEAMTASK_RETRIEVE;
-			break;
-		case LTG_CAMP:
-		case LTG_CAMPORDER:
-			teamtask = TEAMTASK_CAMP;
-			break;
-		case LTG_PATROL:
-			teamtask = TEAMTASK_PATROL;
-			break;
-		case LTG_GETITEM:
-			teamtask = TEAMTASK_PATROL;
-			break;
-		case LTG_KILL:
-			teamtask = TEAMTASK_PATROL;
-			break;
-		case LTG_HARVEST:
-			teamtask = TEAMTASK_OFFENSE;
-			break;
-		case LTG_ATTACKENEMYBASE:
-			teamtask = TEAMTASK_OFFENSE;
-			break;
-		default:
-			teamtask = TEAMTASK_PATROL;
-			break;
-	}
-	BotSetUserInfo(bs, "teamtask", va("%d", teamtask));
-#endif
-}
-
-/*
-==================
-BotSetLastOrderedTask
-==================
-*/
 int BotSetLastOrderedTask(bot_state_t *bs) {
-
-	if (gametype == GT_CTF) {
-		// don't go back to returning the flag if it's at the base
-		if ( bs->lastgoal_ltgtype == LTG_RETURNFLAG ) {
-			if ( BotTeam(bs) == TEAM_RED ) {
-				if ( bs->redflagstatus == 0 ) {
-					bs->lastgoal_ltgtype = 0;
-				}
-			}
-			else {
-				if ( bs->blueflagstatus == 0 ) {
-					bs->lastgoal_ltgtype = 0;
-				}
-			}
-		}
-	}
 
 	if ( bs->lastgoal_ltgtype ) {
 		bs->decisionmaker = bs->lastgoal_decisionmaker;
-		bs->ordered = qtrue;
+		// bs->ordered = qtrue;
 		bs->ltgtype = bs->lastgoal_ltgtype;
 		memcpy(&bs->teamgoal, &bs->lastgoal_teamgoal, sizeof(bot_goal_t));
 		bs->teammate = bs->lastgoal_teammate;
 		bs->teamgoal_time = FloatTime() + 300;
-		BotSetTeamStatus(bs);
-		//
-		if ( gametype == GT_CTF ) {
-			if ( bs->ltgtype == LTG_GETFLAG ) {
-				bot_goal_t *tb, *eb;
-				int tt, et;
-
-				tb = BotTeamFlag(bs);
-				eb = BotEnemyFlag(bs);
-				tt = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, tb->areanum, TFL_DEFAULT);
-				et = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, eb->areanum, TFL_DEFAULT);
-				// if the travel time towards the enemy base is larger than towards our base
-				if (et > tt) {
-					//get an alternative route goal towards the enemy base
-					BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
-				}
-			}
-		}
 		return qtrue;
 	}
 	return qfalse;
 }
 
-/*
-==================
-BotRefuseOrder
-==================
-*/
+
 void BotRefuseOrder(bot_state_t *bs) {
 	if (!bs->ordered)
 		return;
 	// if the bot was ordered to do something
 	if ( bs->order_time && bs->order_time > FloatTime() - 10 ) {
 		trap_EA_Action(bs->client, ACTION_NEGATIVE);
-		BotVoiceChat(bs, bs->decisionmaker, VOICECHAT_NO);
 		bs->order_time = 0;
 	}
 }
-
-/*
-==================
-BotCTFSeekGoals
-==================
 */
-void BotCTFSeekGoals(bot_state_t *bs) {
-	float rnd, l1, l2;
-	int flagstatus, c;
+
+qboolean GetCTLFlagGoal(int team, bot_goal_t* goal)
+{
+	int i;
+	gentity_t* ent;
+	int itemtag = (team == TEAM_RED) ? PW_REDFLAG : PW_BLUEFLAG;
+	vec3_t goalorigin;
+
+	for (i = MAX_CLIENTS; i < level.num_entities; i++) 
+	{
+		ent = &g_entities[i];
+		if(ent->inuse && ent->item && ent->item->giTag == itemtag && ent->flags & FL_DROPPED_ITEM )	
+		{
+			memset(goal, 0, sizeof(bot_goal_t) );
+			goal->areanum = trap_AAS_BestReachableArea( ent->r.currentOrigin, tv(-5,-5,-5), tv(5,5,5), goalorigin ); 
+			VectorCopy( goalorigin, goal->origin);
+			goal->entitynum = i;
+			VectorSet(goal->maxs, 8,8,8);
+			VectorSet(goal->mins, -8,-8,-8);
+			return qtrue;
+		}
+	}
+	return qfalse;
+}
+
+//cyr{
+qboolean IsMyBalloon(int team, bot_goal_t* goal){
+	int state;
+
+	if(!goal || goal->entitynum < 0 || goal->entitynum > MAX_GENTITIES)
+		return qfalse;
+
+	state = level.balloonState[ g_entities[ goal->entitynum ].count ];
+	return ((team == TEAM_RED && state == '1') || (team == TEAM_BLUE && state == '2'));
+}
+
+
+qboolean BotPickUnCappedBalloon(bot_state_t* bs){
+	float rnd, step;
+	int i;
+	int ballindex;
+	int state;
+	int uncaptured[MAX_BALLOONS];
+	int numuncap;
+
+	
+	// find uncaptured balloons
+	numuncap=0;
+
+ 	for(i=0; i < level.numBalloons; i++){
+		ballindex = g_entities[ balloongoal[i].entitynum ].count;
+		state = level.balloonState[ballindex];		// status of goal i
+
+		if( (BotTeam(bs) == TEAM_RED && state != '1') ||
+			(BotTeam(bs) == TEAM_BLUE && state != '2') ){
+		   	uncaptured[numuncap++]=i;
+		}
+	}
+	
+
+	if(!numuncap){
+		// todo: roam
+		bs->ltgtype = 0;
+		return qfalse;
+	}
+
+	// choose one
+	rnd = random();
+	step = 1.0f /numuncap;		// beware of division by zero
+	for(i=1; i <= numuncap; i++)
+       	if ( rnd < step*i ){
+           	memcpy(&bs->teamgoal, &(balloongoal[ uncaptured[i-1] ]), sizeof(bot_goal_t));
+           	break;
+       	}
+
+	return qtrue;
+}
+
+qboolean BotPickBestBalloonGoal(bot_state_t* bs){
+	int i, j;
+	int index;
+	int state;
+	int capstate[MAX_BALLOONS];
+	int numcap, numnmycap, numuncap;
+	float weight;	// 0 - attack, 100 - defend
+
+	float tt, wtt, multiplier;
+	float bestdist = 9999.9f;
+	int bestgoal = -1;
+
+	// get status of balloons
+	numcap = numnmycap = numuncap = 0;
+
+	for(i=0; i < level.numBalloons; i++){
+		index = g_entities[ balloongoal[i].entitynum ].count;
+		state = level.balloonState[index];		// status of goal i
+		if((BotTeam(bs) == TEAM_RED && state == '1') ||
+			(BotTeam(bs) == TEAM_BLUE && state == '2') ){
+			// own balloon
+		   	capstate[i]=0;
+		   	numcap++;
+		}
+		else if((BotTeam(bs) == TEAM_RED && state == '2') ||
+				(BotTeam(bs) == TEAM_BLUE && state == '1')){
+			// nmy balloon
+		     capstate[i]=1;
+		     numnmycap++;
+		}
+		else{
+			// uncap balloon
+			capstate[i]=2;
+			numuncap++;
+		}
+	}
+
+	// go for uncapped loons as long as there are such
+	if(numuncap)
+		 return BotPickUnCappedBalloon(bs);
+
+
+	//weight gets 0 if nmy controls and 1 if the bots team controls
+	weight = ((numcap - numnmycap) + level.numBalloons ) / (2.0 * level.numBalloons) ;
+	
+	if(weight == 0) weight = 0.1f;
+	if(weight == 1) weight = 0.9f;
+
+	scorealert[BotTeam(bs)] = weight; //should also depend on scorediff and caplimit
+
+
+	// find best goal	
+	for(j=0; j<level.numBalloons;j++){
+		tt = BotClientTravelTimeToGoal( bs->client, &balloongoal[j] );
+		if(!tt) continue;
+
+		// prefer balloons based on current balloon-difference
+		if(!capstate[j]){	// our balloon
+			multiplier = 1.0 - weight;
+		}
+		else{
+			if(capstate[j] == 1)	// nmy balloon
+				multiplier = weight;
+			else // uncap balloon
+				multiplier = (1.0 - weight) / 2;
+		}
+		wtt = tt * multiplier * multiplier;
+		
+		//G_Printf("%f .. %d -> %f -> %f , %d (%f)\n", weight, i, tt, wtt, capstate[j], multiplier);		
+		//BotAddInfo(bs, va("ball%d %d -> %.1f", j, capstate[j], wtt), AIDBG_GAMETYPE);
+
+		if(wtt < bestdist){
+			bestdist = wtt;
+			bestgoal = j;
+		}		
+	}
+
+	if( bestgoal == -1)	// airborne? dont make decision this frame
+		return qfalse;
+
+	// store best goal
+	memcpy(&bs->teamgoal, &balloongoal[bestgoal], sizeof(bot_goal_t));
+	return qtrue;
+}
+
+
+void BotBalloonSeekGoals(bot_state_t *bs){
 	vec3_t dir;
-	aas_entityinfo_t entinfo;
 
-	//when carrying a flag in ctf the bot should rush to the base
-	if (BotCTFCarryingFlag(bs)) {
-		//if not already rushing to the base
-		if (bs->ltgtype != LTG_RUSHBASE) {
-			BotRefuseOrder(bs);
-			bs->ltgtype = LTG_RUSHBASE;
-			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
-			bs->rushbaseaway_time = 0;
-			bs->decisionmaker = bs->client;
-			bs->ordered = qfalse;
-			//
-			switch(BotTeam(bs)) {
-				case TEAM_RED: VectorSubtract(bs->origin, ctf_blueflag.origin, dir); break;
-				case TEAM_BLUE: VectorSubtract(bs->origin, ctf_redflag.origin, dir); break;
-				default: VectorSet(dir, 999, 999, 999); break;
-			}
-			// if the bot picked up the flag very close to the enemy base
-			if ( VectorLength(dir) < 128 ) {
-				// get an alternative route goal through the enemy base
-				BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
-			} else {
-				// don't use any alt route goal, just get the hell out of the base
-				bs->altroutegoal.areanum = 0;
-			}
-			BotSetUserInfo(bs, "teamtask", va("%d", TEAMTASK_OFFENSE));
-			BotVoiceChat(bs, -1, VOICECHAT_IHAVEFLAG);
-		}
-		else if (bs->rushbaseaway_time > FloatTime()) {
-			if (BotTeam(bs) == TEAM_RED) flagstatus = bs->redflagstatus;
-			else flagstatus = bs->blueflagstatus;
-			//if the flag is back
-			if (flagstatus == 0) {
-				bs->rushbaseaway_time = 0;
-			}
-		}
+	// dont go for balloon as long as bad equiped
+	if(bs->ltgtype != LTG_BALLCAMP && (bs->inventory[INV_GOTWEAPON] < 40 || bs->inventory[INVENTORY_HEALTH] < 30) ){
+		bs->ltgtype = 0;
 		return;
 	}
-	// if the bot decided to follow someone
-	if ( bs->ltgtype == LTG_TEAMACCOMPANY && !bs->ordered ) {
-		// if the team mate being accompanied no longer carries the flag
-		BotEntityInfo(bs->teammate, &entinfo);
-		if (!EntityCarriesFlag(&entinfo)) {
-			bs->ltgtype = 0;
-		}
-	}
-	//
-	if (BotTeam(bs) == TEAM_RED) flagstatus = bs->redflagstatus * 2 + bs->blueflagstatus;
-	else flagstatus = bs->blueflagstatus * 2 + bs->redflagstatus;
-	//if our team has the enemy flag and our flag is at the base
-	if (flagstatus == 1) {
-		//
-		if (bs->owndecision_time < FloatTime()) {
-			//if Not defending the base already
-			if (!(bs->ltgtype == LTG_DEFENDKEYAREA &&
-					(bs->teamgoal.number == ctf_redflag.number ||
-					bs->teamgoal.number == ctf_blueflag.number))) {
-				//if there is a visible team mate flag carrier
-				c = BotTeamFlagCarrierVisible(bs);
-				if (c >= 0 &&
-						// and not already following the team mate flag carrier
-						(bs->ltgtype != LTG_TEAMACCOMPANY || bs->teammate != c)) {
-					//
-					BotRefuseOrder(bs);
-					//follow the flag carrier
-					bs->decisionmaker = bs->client;
-					bs->ordered = qfalse;
-					//the team mate
-					bs->teammate = c;
-					//last time the team mate was visible
-					bs->teammatevisible_time = FloatTime();
-					//no message
-					bs->teammessage_time = 0;
-					//no arrive message
-					bs->arrive_time = 1;
-					//
-					BotVoiceChat(bs, bs->teammate, VOICECHAT_ONFOLLOW);
-					//get the team goal time
-					bs->teamgoal_time = FloatTime() + TEAM_ACCOMPANY_TIME;
-					bs->ltgtype = LTG_TEAMACCOMPANY;
-					bs->formation_dist = 3.5 * 32;		//3.5 meter
-					BotSetTeamStatus(bs);
-					bs->owndecision_time = FloatTime() + 5;
-				}
-			}
-		}
-		return;
-	}
-	//if the enemy has our flag
-	else if (flagstatus == 2) {
-		//
-		if (bs->owndecision_time < FloatTime()) {
-			//if enemy flag carrier is visible
-			c = BotEnemyFlagCarrierVisible(bs);
-			if (c >= 0) {
-				//FIXME: fight enemy flag carrier
-			}
-			//if not already doing something important
-			if (bs->ltgtype != LTG_GETFLAG &&
-				bs->ltgtype != LTG_RETURNFLAG &&
-				bs->ltgtype != LTG_TEAMHELP &&
-				bs->ltgtype != LTG_TEAMACCOMPANY &&
-				bs->ltgtype != LTG_CAMPORDER &&
-				bs->ltgtype != LTG_PATROL &&
-				bs->ltgtype != LTG_GETITEM) {
 
-				BotRefuseOrder(bs);
+
+	if(bs->ltgtype == 0){
+		// compare balloon goal and choose one
+		if(!BotPickBestBalloonGoal(bs))
+			return;	// invalid traveltymes, probably airborne
+		
+		bs->decisionmaker = bs->client;
+		bs->teamgoal_time = FloatTime() + TEAM_BALLOONTHINK_TIME;
+
+		if( IsMyBalloon( BotTeam(bs), &bs->teamgoal ) )
+			bs->ltgtype = LTG_DEFENDKEYAREA;
+		else
+			bs->ltgtype = LTG_ATTACKENEMYBASE;
+	}
+
+	// if attacking a balloon and near enough to camp: do it
+	if(bs->ltgtype == LTG_ATTACKENEMYBASE){	
+		if( IsMyBalloon(BotTeam(bs), &bs->teamgoal) ){
+			bs->ltgtype = LTG_DEFENDKEYAREA;
+		}
+		else{
+			VectorSubtract(bs->teamgoal.origin, bs->origin, dir);
+			if ( !IsMyBalloon(BotTeam(bs), &bs->teamgoal) && VectorLengthSquared(dir) < Square(75)){
+				//BotRefuseOrder(bs);
+				bs->ltgtype = LTG_BALLCAMP;		//stay here to capture
 				bs->decisionmaker = bs->client;
-				bs->ordered = qfalse;
-				//
-				if (random() < 0.5) {
-					//go for the enemy flag
-					bs->ltgtype = LTG_GETFLAG;
-				}
-				else {
-					bs->ltgtype = LTG_RETURNFLAG;
-				}
-				//no team message
-				bs->teammessage_time = 0;
-				//set the time the bot will stop getting the flag
-				bs->teamgoal_time = FloatTime() + CTF_GETFLAG_TIME;
-				//get an alternative route goal towards the enemy base
-				BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
-				//
-				BotSetTeamStatus(bs);
-				bs->owndecision_time = FloatTime() + 5;
+    			// bs->ordered = qfalse;
+    			bs->teamgoal_time = FloatTime() + TEAM_BALLOONCAMP_TIME;
 			}
 		}
-		return;
 	}
-	//if both flags Not at their bases
-	else if (flagstatus == 3) {
-		//
-		if (bs->owndecision_time < FloatTime()) {
-			// if not trying to return the flag and not following the team flag carrier
-			if ( bs->ltgtype != LTG_RETURNFLAG && bs->ltgtype != LTG_TEAMACCOMPANY ) {
-				//
-				c = BotTeamFlagCarrierVisible(bs);
-				// if there is a visible team mate flag carrier
-				if (c >= 0) {
-					BotRefuseOrder(bs);
-					//follow the flag carrier
-					bs->decisionmaker = bs->client;
-					bs->ordered = qfalse;
-					//the team mate
-					bs->teammate = c;
-					//last time the team mate was visible
-					bs->teammatevisible_time = FloatTime();
-					//no message
-					bs->teammessage_time = 0;
-					//no arrive message
-					bs->arrive_time = 1;
-					//
-					BotVoiceChat(bs, bs->teammate, VOICECHAT_ONFOLLOW);
-					//get the team goal time
-					bs->teamgoal_time = FloatTime() + TEAM_ACCOMPANY_TIME;
-					bs->ltgtype = LTG_TEAMACCOMPANY;
-					bs->formation_dist = 3.5 * 32;		//3.5 meter
-					//
-					BotSetTeamStatus(bs);
-					bs->owndecision_time = FloatTime() + 5;
-				}
-				else {
-					BotRefuseOrder(bs);
-					bs->decisionmaker = bs->client;
-					bs->ordered = qfalse;
-					//get the enemy flag
-					bs->teammessage_time = FloatTime() + 2 * random();
-					//get the flag
-					bs->ltgtype = LTG_RETURNFLAG;
-					//set the time the bot will stop getting the flag
-					bs->teamgoal_time = FloatTime() + CTF_RETURNFLAG_TIME;
-					//get an alternative route goal towards the enemy base
-					BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
-					//
-					BotSetTeamStatus(bs);
-					bs->owndecision_time = FloatTime() + 5;
-				}
-			}
-		}
-		return;
-	}
-	// don't just do something wait for the bot team leader to give orders
-	if (BotTeamLeader(bs)) {
-		return;
-	}
-	// if the bot is ordered to do something
-	if ( bs->lastgoal_ltgtype ) {
-		bs->teamgoal_time += 60;
-	}
-	// if the bot decided to do something on its own and has a last ordered goal
-	if ( !bs->ordered && bs->lastgoal_ltgtype ) {
-		bs->ltgtype = 0;
-	}
-	//if already a CTF or team goal
-	if (bs->ltgtype == LTG_TEAMHELP ||
-			bs->ltgtype == LTG_TEAMACCOMPANY ||
-			bs->ltgtype == LTG_DEFENDKEYAREA ||
-			bs->ltgtype == LTG_GETFLAG ||
-			bs->ltgtype == LTG_RUSHBASE ||
-			bs->ltgtype == LTG_RETURNFLAG ||
-			bs->ltgtype == LTG_CAMPORDER ||
-			bs->ltgtype == LTG_PATROL ||
-			bs->ltgtype == LTG_GETITEM ||
-			bs->ltgtype == LTG_MAKELOVE_UNDER ||
-			bs->ltgtype == LTG_MAKELOVE_ONTOP) {
-		return;
-	}
-	//
-	if (BotSetLastOrderedTask(bs))
-		return;
-	//
-	if (bs->owndecision_time > FloatTime())
-		return;;
-	//if the bot is roaming
-	if (bs->ctfroam_time > FloatTime())
-		return;
-	//if the bot has enough aggression to decide what to do
-	if (BotAggression(bs) < 50)
-		return;
-	//set the time to send a message to the team mates
-	bs->teammessage_time = FloatTime() + 2 * random();
-	//
-	if (bs->teamtaskpreference & (TEAMTP_ATTACKER|TEAMTP_DEFENDER)) {
-		if (bs->teamtaskpreference & TEAMTP_ATTACKER) {
-			l1 = 0.7f;
-		}
-		else {
-			l1 = 0.2f;
-		}
-		l2 = 0.9f;
-	}
-	else {
-		l1 = 0.4f;
-		l2 = 0.7f;
-	}
-	//get the flag or defend the base
-	rnd = random();
-	if (rnd < l1 && ctf_redflag.areanum && ctf_blueflag.areanum) {
-		bs->decisionmaker = bs->client;
-		bs->ordered = qfalse;
-		bs->ltgtype = LTG_GETFLAG;
-		//set the time the bot will stop getting the flag
-		bs->teamgoal_time = FloatTime() + CTF_GETFLAG_TIME;
-		//get an alternative route goal towards the enemy base
-		BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
-		BotSetTeamStatus(bs);
-	}
-	else if (rnd < l2 && ctf_redflag.areanum && ctf_blueflag.areanum) {
-		bs->decisionmaker = bs->client;
-		bs->ordered = qfalse;
-		//
-		if (BotTeam(bs) == TEAM_RED) memcpy(&bs->teamgoal, &ctf_redflag, sizeof(bot_goal_t));
-		else memcpy(&bs->teamgoal, &ctf_blueflag, sizeof(bot_goal_t));
-		//set the ltg type
-		bs->ltgtype = LTG_DEFENDKEYAREA;
-		//set the time the bot stops defending the base
-		bs->teamgoal_time = FloatTime() + TEAM_DEFENDKEYAREA_TIME;
-		bs->defendaway_time = 0;
-		BotSetTeamStatus(bs);
-	}
-	else {
-		bs->ltgtype = 0;
-		//set the time the bot will stop roaming
-		bs->ctfroam_time = FloatTime() + CTF_ROAM_TIME;
-		BotSetTeamStatus(bs);
-	}
-	bs->owndecision_time = FloatTime() + 5;
-#ifdef DEBUG
-	BotPrintTeamGoal(bs);
-#endif //DEBUG
 }
 
-/*
-==================
-BotCTFRetreatGoals
-==================
+qboolean BotWantsCarts(bot_state_t* bs, int* mate){
+	int i, ccandidates, cand[MAX_CLIENTS];
+
+	// check mates for carts periodically (1sec)
+	if(bs->checkcarttime > FloatTime())
+		return qfalse;
+	bs->checkcarttime = FloatTime() + 1;
+
+	// if self is low, return
+	if(bs->inventory[INVENTORY_HEALTH] + bs->inventory[INVENTORY_ARMOR] < 30 )
+		return qfalse;
+
+	ccandidates = BotGetVisTeamPlayers(bs, cand, sizeof(cand), qtrue);
+	for(i=0; i<ccandidates;i++){
+		int numcarts;
+		gentity_t* ent;	// mate candidate
+		vec3_t vectele;
+		vec3_t vecself;
+		float teledist, selfdist;
+
+		ent = &g_entities[cand[i]];
+
+		// skip humans
+		if ( !(ent->r.svFlags & SVF_BOT) ) continue;
+/*		{
+			*mate = ent->s.number;
+			if(!BotGetNumClientCarts(bs, *mate)) continue;
+			return qtrue;
+		}	// cyr_ptr
 */
-void BotCTFRetreatGoals(bot_state_t *bs) {
-	//when carrying a flag in ctf the bot should rush to the base
-	if (BotCTFCarryingFlag(bs)) {
-		//if not already rushing to the base
-		if (bs->ltgtype != LTG_RUSHBASE) {
-			BotRefuseOrder(bs);
-			bs->ltgtype = LTG_RUSHBASE;
-			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
-			bs->rushbaseaway_time = 0;
+
+		// skip players without carts
+		numcarts = BotGetNumClientCarts(bs, cand[i]);
+		if(!numcarts) continue;
+
+		// mate extreme low and self is moderate healthy (regardless of PU, weapon)
+		if(ent->health + ent->client->ps.stats[STAT_ARMOR] < 15 &&
+		   bs->inventory[INVENTORY_HEALTH] + bs->inventory[INVENTORY_ARMOR] > 30){
+			// check distances
+			VectorSubtract(ent->r.currentOrigin, spraytele.origin, vectele);
+			teledist = VectorLength(vectele);
+			VectorSubtract(ent->r.currentOrigin, bs->origin, vecself);
+			selfdist = VectorLength(vecself);
+			if(teledist < 200) continue;
+			if(teledist < selfdist) continue;
+			// ok, take it
+			//SpecMe(bs->client);
+			*mate = cand[i];
+			return qtrue;
+		}
+		// if mate is not that low, take into account also his powerups
+		if(! ent->client->ps.powerups[PW_PADPOWER] &&
+		   ! ent->client->ps.powerups[PW_SPEEDY] &&
+		   ent->health + ent->client->ps.stats[STAT_ARMOR] < 30 &&
+		   bs->inventory[INVENTORY_HEALTH] + bs->inventory[INVENTORY_ARMOR] > 60 ){
+			// check distances
+			VectorSubtract(ent->r.currentOrigin, spraytele.origin, vectele);
+			teledist = VectorLength(vectele);
+			VectorSubtract(ent->r.currentOrigin, bs->origin, vecself);
+			selfdist = VectorLength(vecself);
+			if(teledist < 200) continue;
+			if(teledist < selfdist) continue;
+			// ok, take it
+			//SpecMe(bs->client);
+			*mate = cand[i];
+			return qtrue;
+		}
+	}
+	return qfalse;
+}
+
+void BotSyCSeekGoals(bot_state_t *bs){
+
+	if( ClientInSprayroom(bs->client)){
+		// got ammo and not rushing ?
+		if(bs->inventory[INVENTORY_SPRAYPISTOLAMMO] && bs->ltgtype != LTG_RUSHBASE){
+			//BotRefuseOrder(bs);
+            bs->ltgtype = LTG_RUSHBASE;
+            bs->teamgoal_time = FloatTime() + RUSHBASE_TIME;
+            bs->rushbaseaway_time = 0;
+            bs->decisionmaker = bs->client;
+            // bs->ordered = qfalse;
+			bs->which_wall = BotChooseWall(bs);
+		}
+		// no more ammo and not leaving ?
+		else if(!bs->inventory[INVENTORY_SPRAYPISTOLAMMO] && bs->ltgtype != LTG_ATTACKENEMYBASE){
+			//BotRefuseOrder(bs);
+            bs->ltgtype = LTG_ATTACKENEMYBASE;
+            bs->teamgoal_time = FloatTime() + RUSHBASE_TIME;
+            bs->decisionmaker = bs->client;
+            // bs->ordered = qfalse;
+		}
+		return;	//
+	}
+
+	// outside the sprayroom
+    if ( bs->ltgtype != LTG_GIVECART  && bs->ltgtype != LTG_FETCHCART) {
+		 int mate = 0;
+		// feeling good and want to take others carts ?
+		if(BotWantsCarts(bs, &mate)){
+			char buf[MAX_MESSAGE_SIZE];
+			//BotRefuseOrder(bs);
+            bs->ltgtype = LTG_FETCHCART;
+			bs->teammate = mate;
+            bs->teamgoal_time = FloatTime() + SYC_CART_EXCHANGE_TIME;
 			bs->decisionmaker = bs->client;
-			bs->ordered = qfalse;
-			BotSetTeamStatus(bs);
+            // bs->ordered = qfalse;
+			bs->takecart = qfalse;
+			// send chat command to mate
+			BotAI_BotInitialChat(bs, "fetchcart_start", buf, NULL);
+			trap_BotEnterChat(bs->cs, bs->teammate, CHAT_TELL);
+			return;
 		}
-	}
-}
-
-#ifdef MISSIONPACK
-/*
-==================
-Bot1FCTFSeekGoals
-==================
-*/
-void Bot1FCTFSeekGoals(bot_state_t *bs) {
-	aas_entityinfo_t entinfo;
-	float rnd, l1, l2;
-	int c;
-
-	//when carrying a flag in ctf the bot should rush to the base
-	if (Bot1FCTFCarryingFlag(bs)) {
-		//if not already rushing to the base
-		if (bs->ltgtype != LTG_RUSHBASE) {
-			BotRefuseOrder(bs);
-			bs->ltgtype = LTG_RUSHBASE;
-			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
-			bs->rushbaseaway_time = 0;
-			bs->decisionmaker = bs->client;
-			bs->ordered = qfalse;
-			//get an alternative route goal towards the enemy base
-			BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
-			//
-			BotSetTeamStatus(bs);
-			BotVoiceChat(bs, -1, VOICECHAT_IHAVEFLAG);
-		}
-		return;
-	}
-	// if the bot decided to follow someone
-	if ( bs->ltgtype == LTG_TEAMACCOMPANY && !bs->ordered ) {
-		// if the team mate being accompanied no longer carries the flag
-		BotEntityInfo(bs->teammate, &entinfo);
-		if (!EntityCarriesFlag(&entinfo)) {
-			bs->ltgtype = 0;
-		}
-	}
-	//our team has the flag
-	if (bs->neutralflagstatus == 1) {
-		if (bs->owndecision_time < FloatTime()) {
-			// if not already following someone
-			if (bs->ltgtype != LTG_TEAMACCOMPANY) {
-				//if there is a visible team mate flag carrier
-				c = BotTeamFlagCarrierVisible(bs);
-				if (c >= 0) {
-					BotRefuseOrder(bs);
-					//follow the flag carrier
-					bs->decisionmaker = bs->client;
-					bs->ordered = qfalse;
-					//the team mate
-					bs->teammate = c;
-					//last time the team mate was visible
-					bs->teammatevisible_time = FloatTime();
-					//no message
-					bs->teammessage_time = 0;
-					//no arrive message
-					bs->arrive_time = 1;
-					//
-					BotVoiceChat(bs, bs->teammate, VOICECHAT_ONFOLLOW);
-					//get the team goal time
-					bs->teamgoal_time = FloatTime() + TEAM_ACCOMPANY_TIME;
-					bs->ltgtype = LTG_TEAMACCOMPANY;
-					bs->formation_dist = 3.5 * 32;		//3.5 meter
-					BotSetTeamStatus(bs);
-					bs->owndecision_time = FloatTime() + 5;
-					return;
-				}
-			}
-			//if already a CTF or team goal
-			if (bs->ltgtype == LTG_TEAMHELP ||
-					bs->ltgtype == LTG_TEAMACCOMPANY ||
-					bs->ltgtype == LTG_DEFENDKEYAREA ||
-					bs->ltgtype == LTG_GETFLAG ||
-					bs->ltgtype == LTG_RUSHBASE ||
-					bs->ltgtype == LTG_CAMPORDER ||
-					bs->ltgtype == LTG_PATROL ||
-					bs->ltgtype == LTG_ATTACKENEMYBASE ||
-					bs->ltgtype == LTG_GETITEM ||
-					bs->ltgtype == LTG_MAKELOVE_UNDER ||
-					bs->ltgtype == LTG_MAKELOVE_ONTOP) {
-				return;
-			}
-			//if not already attacking the enemy base
-			if (bs->ltgtype != LTG_ATTACKENEMYBASE) {
-				BotRefuseOrder(bs);
-				bs->decisionmaker = bs->client;
-				bs->ordered = qfalse;
-				//
-				if (BotTeam(bs) == TEAM_RED) memcpy(&bs->teamgoal, &ctf_blueflag, sizeof(bot_goal_t));
-				else memcpy(&bs->teamgoal, &ctf_redflag, sizeof(bot_goal_t));
-				//set the ltg type
-				bs->ltgtype = LTG_ATTACKENEMYBASE;
-				//set the time the bot will stop getting the flag
-				bs->teamgoal_time = FloatTime() + TEAM_ATTACKENEMYBASE_TIME;
-				BotSetTeamStatus(bs);
-				bs->owndecision_time = FloatTime() + 5;
-			}
-		}
-		return;
-	}
-	//enemy team has the flag
-	else if (bs->neutralflagstatus == 2) {
-		if (bs->owndecision_time < FloatTime()) {
-			c = BotEnemyFlagCarrierVisible(bs);
-			if (c >= 0) {
-				//FIXME: attack enemy flag carrier
-			}
-			//if already a CTF or team goal
-			if (bs->ltgtype == LTG_TEAMHELP ||
-					bs->ltgtype == LTG_TEAMACCOMPANY ||
-					bs->ltgtype == LTG_CAMPORDER ||
-					bs->ltgtype == LTG_PATROL ||
-					bs->ltgtype == LTG_GETITEM) {
-				return;
-			}
-			// if not already defending the base
-			if (bs->ltgtype != LTG_DEFENDKEYAREA) {
-				BotRefuseOrder(bs);
-				bs->decisionmaker = bs->client;
-				bs->ordered = qfalse;
-				//
-				if (BotTeam(bs) == TEAM_RED) memcpy(&bs->teamgoal, &ctf_redflag, sizeof(bot_goal_t));
-				else memcpy(&bs->teamgoal, &ctf_blueflag, sizeof(bot_goal_t));
-				//set the ltg type
-				bs->ltgtype = LTG_DEFENDKEYAREA;
-				//set the time the bot stops defending the base
-				bs->teamgoal_time = FloatTime() + TEAM_DEFENDKEYAREA_TIME;
-				bs->defendaway_time = 0;
-				BotSetTeamStatus(bs);
-				bs->owndecision_time = FloatTime() + 5;
-			}
-		}
-		return;
-	}
-	// don't just do something wait for the bot team leader to give orders
-	if (BotTeamLeader(bs)) {
-		return;
-	}
-	// if the bot is ordered to do something
-	if ( bs->lastgoal_ltgtype ) {
-		bs->teamgoal_time += 60;
-	}
-	// if the bot decided to do something on its own and has a last ordered goal
-	if ( !bs->ordered && bs->lastgoal_ltgtype ) {
-		bs->ltgtype = 0;
-	}
-	//if already a CTF or team goal
-	if (bs->ltgtype == LTG_TEAMHELP ||
-			bs->ltgtype == LTG_TEAMACCOMPANY ||
-			bs->ltgtype == LTG_DEFENDKEYAREA ||
-			bs->ltgtype == LTG_GETFLAG ||
-			bs->ltgtype == LTG_RUSHBASE ||
-			bs->ltgtype == LTG_RETURNFLAG ||
-			bs->ltgtype == LTG_CAMPORDER ||
-			bs->ltgtype == LTG_PATROL ||
-			bs->ltgtype == LTG_ATTACKENEMYBASE ||
-			bs->ltgtype == LTG_GETITEM ||
-			bs->ltgtype == LTG_MAKELOVE_UNDER ||
-			bs->ltgtype == LTG_MAKELOVE_ONTOP) {
-		return;
-	}
-	//
-	if (BotSetLastOrderedTask(bs))
-		return;
-	//
-	if (bs->owndecision_time > FloatTime())
-		return;;
-	//if the bot is roaming
-	if (bs->ctfroam_time > FloatTime())
-		return;
-	//if the bot has enough aggression to decide what to do
-	if (BotAggression(bs) < 50)
-		return;
-	//set the time to send a message to the team mates
-	bs->teammessage_time = FloatTime() + 2 * random();
-	//
-	if (bs->teamtaskpreference & (TEAMTP_ATTACKER|TEAMTP_DEFENDER)) {
-		if (bs->teamtaskpreference & TEAMTP_ATTACKER) {
-			l1 = 0.7f;
-		}
-		else {
-			l1 = 0.2f;
-		}
-		l2 = 0.9f;
-	}
-	else {
-		l1 = 0.4f;
-		l2 = 0.7f;
-	}
-	//get the flag or defend the base
-	rnd = random();
-	if (rnd < l1 && ctf_neutralflag.areanum) {
-		bs->decisionmaker = bs->client;
-		bs->ordered = qfalse;
-		bs->ltgtype = LTG_GETFLAG;
-		//set the time the bot will stop getting the flag
-		bs->teamgoal_time = FloatTime() + CTF_GETFLAG_TIME;
-		BotSetTeamStatus(bs);
-	}
-	else if (rnd < l2 && ctf_redflag.areanum && ctf_blueflag.areanum) {
-		bs->decisionmaker = bs->client;
-		bs->ordered = qfalse;
-		//
-		if (BotTeam(bs) == TEAM_RED) memcpy(&bs->teamgoal, &ctf_redflag, sizeof(bot_goal_t));
-		else memcpy(&bs->teamgoal, &ctf_blueflag, sizeof(bot_goal_t));
-		//set the ltg type
-		bs->ltgtype = LTG_DEFENDKEYAREA;
-		//set the time the bot stops defending the base
-		bs->teamgoal_time = FloatTime() + TEAM_DEFENDKEYAREA_TIME;
-		bs->defendaway_time = 0;
-		BotSetTeamStatus(bs);
-	}
-	else {
-		bs->ltgtype = 0;
-		//set the time the bot will stop roaming
-		bs->ctfroam_time = FloatTime() + CTF_ROAM_TIME;
-		BotSetTeamStatus(bs);
-	}
-	bs->owndecision_time = FloatTime() + 5;
-#ifdef DEBUG
-	BotPrintTeamGoal(bs);
-#endif //DEBUG
-}
-
-/*
-==================
-Bot1FCTFRetreatGoals
-==================
-*/
-void Bot1FCTFRetreatGoals(bot_state_t *bs) {
-	//when carrying a flag in ctf the bot should rush to the enemy base
-	if (Bot1FCTFCarryingFlag(bs)) {
-		//if not already rushing to the base
-		if (bs->ltgtype != LTG_RUSHBASE) {
-			BotRefuseOrder(bs);
-			bs->ltgtype = LTG_RUSHBASE;
-			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
-			bs->rushbaseaway_time = 0;
-			bs->decisionmaker = bs->client;
-			bs->ordered = qfalse;
-			//get an alternative route goal towards the enemy base
-			BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
-			BotSetTeamStatus(bs);
-		}
-	}
-}
-
-/*
-==================
-BotObeliskSeekGoals
-==================
-*/
-void BotObeliskSeekGoals(bot_state_t *bs) {
-	float rnd, l1, l2;
-
-	// don't just do something wait for the bot team leader to give orders
-	if (BotTeamLeader(bs)) {
-		return;
-	}
-	// if the bot is ordered to do something
-	if ( bs->lastgoal_ltgtype ) {
-		bs->teamgoal_time += 60;
-	}
-	//if already a team goal
-	if (bs->ltgtype == LTG_TEAMHELP ||
-			bs->ltgtype == LTG_TEAMACCOMPANY ||
-			bs->ltgtype == LTG_DEFENDKEYAREA ||
-			bs->ltgtype == LTG_GETFLAG ||
-			bs->ltgtype == LTG_RUSHBASE ||
-			bs->ltgtype == LTG_RETURNFLAG ||
-			bs->ltgtype == LTG_CAMPORDER ||
-			bs->ltgtype == LTG_PATROL ||
-			bs->ltgtype == LTG_ATTACKENEMYBASE ||
-			bs->ltgtype == LTG_GETITEM ||
-			bs->ltgtype == LTG_MAKELOVE_UNDER ||
-			bs->ltgtype == LTG_MAKELOVE_ONTOP) {
-		return;
-	}
-	//
-	if (BotSetLastOrderedTask(bs))
-		return;
-	//if the bot is roaming
-	if (bs->ctfroam_time > FloatTime())
-		return;
-	//if the bot has enough aggression to decide what to do
-	if (BotAggression(bs) < 50)
-		return;
-	//set the time to send a message to the team mates
-	bs->teammessage_time = FloatTime() + 2 * random();
-	//
-	if (bs->teamtaskpreference & (TEAMTP_ATTACKER|TEAMTP_DEFENDER)) {
-		if (bs->teamtaskpreference & TEAMTP_ATTACKER) {
-			l1 = 0.7f;
-		}
-		else {
-			l1 = 0.2f;
-		}
-		l2 = 0.9f;
-	}
-	else {
-		l1 = 0.4f;
-		l2 = 0.7f;
-	}
-	//get the flag or defend the base
-	rnd = random();
-	if (rnd < l1 && redobelisk.areanum && blueobelisk.areanum) {
-		bs->decisionmaker = bs->client;
-		bs->ordered = qfalse;
-		//
-		if (BotTeam(bs) == TEAM_RED) memcpy(&bs->teamgoal, &blueobelisk, sizeof(bot_goal_t));
-		else memcpy(&bs->teamgoal, &redobelisk, sizeof(bot_goal_t));
-		//set the ltg type
-		bs->ltgtype = LTG_ATTACKENEMYBASE;
-		//set the time the bot will stop attacking the enemy base
-		bs->teamgoal_time = FloatTime() + TEAM_ATTACKENEMYBASE_TIME;
-		//get an alternate route goal towards the enemy base
-		BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
-		BotSetTeamStatus(bs);
-	}
-	else if (rnd < l2 && redobelisk.areanum && blueobelisk.areanum) {
-		bs->decisionmaker = bs->client;
-		bs->ordered = qfalse;
-		//
-		if (BotTeam(bs) == TEAM_RED) memcpy(&bs->teamgoal, &redobelisk, sizeof(bot_goal_t));
-		else memcpy(&bs->teamgoal, &blueobelisk, sizeof(bot_goal_t));
-		//set the ltg type
-		bs->ltgtype = LTG_DEFENDKEYAREA;
-		//set the time the bot stops defending the base
-		bs->teamgoal_time = FloatTime() + TEAM_DEFENDKEYAREA_TIME;
-		bs->defendaway_time = 0;
-		BotSetTeamStatus(bs);
-	}
-	else {
-		bs->ltgtype = 0;
-		//set the time the bot will stop roaming
-		bs->ctfroam_time = FloatTime() + CTF_ROAM_TIME;
-		BotSetTeamStatus(bs);
-	}
-}
-
-/*
-==================
-BotGoHarvest
-==================
-*/
-void BotGoHarvest(bot_state_t *bs) {
-	//
-	if (BotTeam(bs) == TEAM_RED) memcpy(&bs->teamgoal, &blueobelisk, sizeof(bot_goal_t));
-	else memcpy(&bs->teamgoal, &redobelisk, sizeof(bot_goal_t));
-	//set the ltg type
-	bs->ltgtype = LTG_HARVEST;
-	//set the time the bot will stop harvesting
-	bs->teamgoal_time = FloatTime() + TEAM_HARVEST_TIME;
-	bs->harvestaway_time = 0;
-	BotSetTeamStatus(bs);
-}
-
-/*
-==================
-BotObeliskRetreatGoals
-==================
-*/
-void BotObeliskRetreatGoals(bot_state_t *bs) {
-	//nothing special
-}
-
-/*
-==================
-BotHarvesterSeekGoals
-==================
-*/
-void BotHarvesterSeekGoals(bot_state_t *bs) {
-	aas_entityinfo_t entinfo;
-	float rnd, l1, l2;
-	int c;
-
-	//when carrying cubes in harvester the bot should rush to the base
-	if (BotHarvesterCarryingCubes(bs)) {
-		//if not already rushing to the base
-		if (bs->ltgtype != LTG_RUSHBASE) {
-			BotRefuseOrder(bs);
-			bs->ltgtype = LTG_RUSHBASE;
-			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
-			bs->rushbaseaway_time = 0;
-			bs->decisionmaker = bs->client;
-			bs->ordered = qfalse;
-			//get an alternative route goal towards the enemy base
-			BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
-			//
-			BotSetTeamStatus(bs);
-		}
-		return;
-	}
-	// don't just do something wait for the bot team leader to give orders
-	if (BotTeamLeader(bs)) {
-		return;
-	}
-	// if the bot decided to follow someone
-	if ( bs->ltgtype == LTG_TEAMACCOMPANY && !bs->ordered ) {
-		// if the team mate being accompanied no longer carries the flag
-		BotEntityInfo(bs->teammate, &entinfo);
-		if (!EntityCarriesCubes(&entinfo)) {
-			bs->ltgtype = 0;
-		}
-	}
-	// if the bot is ordered to do something
-	if ( bs->lastgoal_ltgtype ) {
-		bs->teamgoal_time += 60;
-	}
-	//if not yet doing something
-	if (bs->ltgtype == LTG_TEAMHELP ||
-			bs->ltgtype == LTG_TEAMACCOMPANY ||
-			bs->ltgtype == LTG_DEFENDKEYAREA ||
-			bs->ltgtype == LTG_GETFLAG ||
-			bs->ltgtype == LTG_CAMPORDER ||
-			bs->ltgtype == LTG_PATROL ||
-			bs->ltgtype == LTG_ATTACKENEMYBASE ||
-			bs->ltgtype == LTG_HARVEST ||
-			bs->ltgtype == LTG_GETITEM ||
-			bs->ltgtype == LTG_MAKELOVE_UNDER ||
-			bs->ltgtype == LTG_MAKELOVE_ONTOP) {
-		return;
-	}
-	//
-	if (BotSetLastOrderedTask(bs))
-		return;
-	//if the bot is roaming
-	if (bs->ctfroam_time > FloatTime())
-		return;
-	//if the bot has enough aggression to decide what to do
-	if (BotAggression(bs) < 50)
-		return;
-	//set the time to send a message to the team mates
-	bs->teammessage_time = FloatTime() + 2 * random();
-	//
-	c = BotEnemyCubeCarrierVisible(bs);
-	if (c >= 0) {
-		//FIXME: attack enemy cube carrier
-	}
-	if (bs->ltgtype != LTG_TEAMACCOMPANY) {
-		//if there is a visible team mate carrying cubes
-		c = BotTeamCubeCarrierVisible(bs);
-		if (c >= 0) {
-			//follow the team mate carrying cubes
-			bs->decisionmaker = bs->client;
-			bs->ordered = qfalse;
-			//the team mate
-			bs->teammate = c;
-			//last time the team mate was visible
-			bs->teammatevisible_time = FloatTime();
-			//no message
-			bs->teammessage_time = 0;
-			//no arrive message
-			bs->arrive_time = 1;
-			//
-			BotVoiceChat(bs, bs->teammate, VOICECHAT_ONFOLLOW);
-			//get the team goal time
-			bs->teamgoal_time = FloatTime() + TEAM_ACCOMPANY_TIME;
-			bs->ltgtype = LTG_TEAMACCOMPANY;
-			bs->formation_dist = 3.5 * 32;		//3.5 meter
-			BotSetTeamStatus(bs);
+		else if(bs->inventory[INVENTORY_SPRAYPISTOLAMMO] && bs->ltgtype != LTG_RUSHBASE){
+			//BotRefuseOrder(bs);
+            bs->ltgtype = LTG_RUSHBASE;
+            bs->teamgoal_time = FloatTime() + RUSHBASE_TIME;
+            bs->rushbaseaway_time = 0;
+            bs->decisionmaker = bs->client;
+            // bs->ordered = qfalse;
+			bs->which_wall = BotChooseWall(bs);
 			return;
 		}
 	}
-	//
-	if (bs->teamtaskpreference & (TEAMTP_ATTACKER|TEAMTP_DEFENDER)) {
-		if (bs->teamtaskpreference & TEAMTP_ATTACKER) {
-			l1 = 0.7f;
+
+
+}
+
+void BotSyCRetreatGoals(bot_state_t *bs){
+	// outside the sprayroom
+    if ( bs->ltgtype != LTG_GIVECART  && bs->ltgtype != LTG_FETCHCART) {
+		int mate = 0;
+		// feeling good and want to take others carts ?
+		if(BotWantsCarts(bs, &mate)){
+			char buf[MAX_MESSAGE_SIZE];
+			//BotRefuseOrder(bs);
+            bs->ltgtype = LTG_FETCHCART;
+			bs->teammate = mate;
+            bs->teamgoal_time = FloatTime() + SYC_CART_EXCHANGE_TIME;
+			bs->decisionmaker = bs->client;
+            // bs->ordered = qfalse;
+			bs->takecart = qfalse;
+			// send chat command to mate
+			BotAI_BotInitialChat(bs, "fetchcart_start", buf, NULL);
+			trap_BotEnterChat(bs->cs, bs->teammate, CHAT_TELL);
+			return;
 		}
-		else {
-			l1 = 0.2f;
+		else if(bs->inventory[INVENTORY_SPRAYPISTOLAMMO] && bs->ltgtype != LTG_RUSHBASE){
+			//BotRefuseOrder(bs);
+            bs->ltgtype = LTG_RUSHBASE;
+            bs->teamgoal_time = FloatTime() + RUSHBASE_TIME;
+            bs->rushbaseaway_time = 0;
+            bs->decisionmaker = bs->client;
+            // bs->ordered = qfalse;
+			bs->which_wall = BotChooseWall(bs);
+			return;
 		}
-		l2 = 0.9f;
-	}
-	else {
-		l1 = 0.4f;
-		l2 = 0.7f;
-	}
-	//
-	rnd = random();
-	if (rnd < l1 && redobelisk.areanum && blueobelisk.areanum) {
-		bs->decisionmaker = bs->client;
-		bs->ordered = qfalse;
-		BotGoHarvest(bs);
-	}
-	else if (rnd < l2 && redobelisk.areanum && blueobelisk.areanum) {
-		bs->decisionmaker = bs->client;
-		bs->ordered = qfalse;
-		//
-		if (BotTeam(bs) == TEAM_RED) memcpy(&bs->teamgoal, &redobelisk, sizeof(bot_goal_t));
-		else memcpy(&bs->teamgoal, &blueobelisk, sizeof(bot_goal_t));
-		//set the ltg type
-		bs->ltgtype = LTG_DEFENDKEYAREA;
-		//set the time the bot stops defending the base
-		bs->teamgoal_time = FloatTime() + TEAM_DEFENDKEYAREA_TIME;
-		bs->defendaway_time = 0;
-		BotSetTeamStatus(bs);
-	}
-	else {
-		bs->ltgtype = 0;
-		//set the time the bot will stop roaming
-		bs->ctfroam_time = FloatTime() + CTF_ROAM_TIME;
-		BotSetTeamStatus(bs);
 	}
 }
 
-/*
-==================
-BotHarvesterRetreatGoals
-==================
-*/
-void BotHarvesterRetreatGoals(bot_state_t *bs) {
-	//when carrying cubes in harvester the bot should rush to the base
-	if (BotHarvesterCarryingCubes(bs)) {
-		//if not already rushing to the base
-		if (bs->ltgtype != LTG_RUSHBASE) {
-			BotRefuseOrder(bs);
-			bs->ltgtype = LTG_RUSHBASE;
+// returns which "number" in the team is this bot (will be used for some fake teamplay ;P)
+int BotNumberInTeam(bot_state_t* bs) {
+	static int maxclients=0;
+	int i;
+	int r = 0;
+
+	if (!maxclients)
+		maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
+
+    for (i = 0; i < maxclients && i < MAX_CLIENTS; ++i) {
+
+        if (i == bs->client)
+			break;
+
+        if(BotSameTeam(bs, i)) //FIXME: that call maybe a bit to heavy ... and probably also return true for none-bot teammates
+			++r;
+	}
+
+	return r;
+}
+
+int GetTeamFlagCarrier( int team ){
+	int i;
+	int pu = (team == TEAM_RED)? PW_REDFLAG : PW_BLUEFLAG;
+
+	for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
+		// valid client?
+		if (!g_entities[i].inuse || !g_entities[i].client)
+			continue;
+		
+		// carrying the flag?
+		if( g_entities[i].client->ps.powerups[pu] )
+			return i;
+	}
+	return -1;
+}
+
+qboolean PickBoomieGoal(bot_state_t* bs)
+{
+	int i;
+	team_t botTeam = BotTeam(bs);
+	static const int TT_MAX = 999999;
+	int tt, best_tt = TT_MAX;
+	int best_id = 0;
+
+	for(i=0; i<numboomiespots; i++)
+	{
+		if( boomiespots[i].team != botTeam ||
+			boomiespots[i].occupied)
+			continue;
+		tt = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, boomiespots[i].goal.areanum, bs->tfl);
+		if( tt && tt < best_tt)
+		{
+			best_tt = tt;
+			best_id = i;
+		}
+	}
+
+	if( best_tt == TT_MAX )
+		return qfalse;
+
+	memcpy( &bs->teamgoal, &boomiespots[best_id].goal, sizeof(bot_goal_t) );
+	bs->teammate = best_id;
+	return qtrue;
+}
+
+qboolean PickBambamGoal(bot_state_t* bs)
+{
+	int i;
+	team_t botTeam = BotTeam(bs);
+	static const int TT_MAX = 999999;
+	int tt, best_tt = TT_MAX;
+	int best_id = 0;
+
+	for(i=0; i<numbambamspots;i++)
+	{
+		if( bambamspots[i].team != botTeam ||
+			bambamspots[i].occupied )
+			continue;
+		
+		tt = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bambamspots[i].goal.areanum, bs->tfl );
+		if( tt && tt < best_tt )
+		{
+			best_id = i;
+			best_tt = tt;
+		}
+	}
+
+	if( best_tt == TT_MAX)
+		return qfalse;
+
+	memcpy( &bs->teamgoal, &bambamspots[best_id].goal, sizeof(bot_goal_t) );
+	bs->teammate = best_id;
+	return qtrue;
+}
+
+void BotCtfSeekGoals(bot_state_t* bs){
+	int flagstatus, nmyflagstatus;
+	int action = 0;
+	int carrier;
+
+	if( bs->ltgtype == LTG_JOINMATE )
+		return;
+
+	flagstatus = Team_GetFlagStatus( BotTeam(bs) );
+	nmyflagstatus = Team_GetFlagStatus( BotOppositeTeam(bs) );
+	
+	// carrying the flag? rush home!
+	if( BotCTFCarryingFlag(bs) ){
+		// try to get a health-goal if we are really low
+		if(bs->inventory[INVENTORY_HEALTH] < 30){
+			bs->ltgtype = 0;
+			return;
+		}
+
+		// special case: bot is alone
+		if( 0 == TeamCount( bs->client, BotTeam(bs))  )
+		{
+			// if our flag is gone, go get it
+			if( flagstatus == FLAG_DROPPED )
+			{
+				// pick it up
+				if(	bs->ltgtype != LTG_PICKUPFLAG){
+					if( GetDroppedLollyGoal( BotTeam(bs), &bs->teamgoal ) )
+					{
+						bs->decisionmaker = bs->client;
+						bs->ltgtype = LTG_PICKUPFLAG;		
+						bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
+					}
+					else{ // cant get the dropped flag, go home
+						if (bs->ltgtype != LTG_CAPTUREFLAG) 
+						{
+							bs->ltgtype = LTG_CAPTUREFLAG;
+							bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
+							bs->rushbaseaway_time = 0;
+							bs->decisionmaker = bs->client;
+						}
+					}
+				}
+				return;
+			}
+			else if( flagstatus == FLAG_TAKEN )
+			{
+				// roam around so you get a chance to encounter the enemy
+				bs->ltgtype = 0; 
+				return;
+			}
+			// flag is at base, all good
+		}
+
+		if (bs->ltgtype != LTG_CAPTUREFLAG) {
+			bs->ltgtype = LTG_CAPTUREFLAG;
 			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
 			bs->rushbaseaway_time = 0;
 			bs->decisionmaker = bs->client;
-			bs->ordered = qfalse;
-			BotSetTeamStatus(bs);
 		}
 		return;
 	}
+
+	/*
+	if( bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BAMBAM )
+	{
+		if( bs->ltgtype == LTG_PLANTBAMBAM )
+			return;
+		else
+		{
+			// plant bambam
+			if( PickBambamGoal(bs) )
+			{
+				bs->decisionmaker = bs->client;
+				bs->ltgtype = LTG_PLANTBAMBAM;		
+				bs->teamgoal_time = FloatTime() + 120;
+				return;
+			}
+		}
+		return;
+	}
+
+	if( bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BOOMIE )
+	{
+		if(bs->ltgtype == LTG_PLANTBOOMIE )
+			return;
+		else
+		{
+			// plant boomie
+			if( PickBoomieGoal(bs) )
+			{
+				bs->decisionmaker = bs->client;
+				bs->ltgtype = LTG_PLANTBOOMIE;		
+				bs->teamgoal_time = FloatTime() + 120;
+				return;
+			}
+			// no goal, choose another ltgtype
+		}
+	}
+	*/
+	
+	// dont go for ctl-goals as long as bad equiped (though don't interrupt important tasks)
+	if( bs->ltgtype != LTG_PICKUPFLAG &&	// LTG_CAPTUREFLAG is covered above
+		(bs->inventory[INV_GOTWEAPON] < 40 || bs->inventory[INVENTORY_HEALTH] < 30) ){
+		bs->ltgtype = 0;
+		return;
+	}
+
+	if( BotNumberInTeam(bs) & 1 ){ // the bots 1,3,5,... will be defensive
+		switch(flagstatus){
+			case FLAG_TAKEN:
+				if(nmyflagstatus == FLAG_TAKEN)
+					action = LTG_TEAMACCOMPANY;
+				else
+					action = LTG_GETFLAG;
+				break;
+			case FLAG_DROPPED:
+				action = LTG_PICKUPFLAG;
+				break;
+			default:	// FLAG_ATBASE
+				action = LTG_DEFENDKEYAREA;
+		}
+	}
+	else {
+		// the enemyflag was taken ... and we have our flag ... defend it!
+		if( nmyflagstatus == FLAG_TAKEN ){
+			if(flagstatus == FLAG_DROPPED)
+				action = LTG_PICKUPFLAG;
+			else
+				action = LTG_TEAMACCOMPANY;			
+		}
+		else
+			action = LTG_GETFLAG;
+	}
+
+	// assign LTG, unless the bot is already going for it
+	if(action == LTG_DEFENDKEYAREA && bs->ltgtype != LTG_DEFENDKEYAREA ) {
+		// defend
+		if (BotTeam(bs) == TEAM_RED) 
+			memcpy(&bs->teamgoal, &ctf_redflag, sizeof(bot_goal_t));
+		else 
+			memcpy(&bs->teamgoal, &ctf_blueflag, sizeof(bot_goal_t));
+		
+		bs->ltgtype = LTG_DEFENDKEYAREA;
+		bs->decisionmaker = bs->client;
+		bs->teamgoal_time = FloatTime() + TEAM_DEFENDKEYAREA_TIME;
+		bs->defendaway_time = 0;		
+	}
+	else if(action == LTG_GETFLAG && bs->ltgtype != LTG_GETFLAG) {
+		if( nmyflagstatus == FLAG_DROPPED )
+		{
+			// get a goal for the flag
+			if( !GetCTLFlagGoal( BotOppositeTeam(bs), &bs->teamgoal ) )
+			{
+				bs->ltgtype = 0;
+				return;
+			}
+		}
+		// attack enemy flag/base
+		bs->decisionmaker = bs->client;
+		bs->ltgtype = LTG_GETFLAG; 
+		//set the time the bot will stop getting the flag
+		bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
+	}
+	else if(action == LTG_PICKUPFLAG && bs->ltgtype != LTG_PICKUPFLAG){
+		// get the goal
+		if( !GetDroppedLollyGoal( BotTeam(bs), &bs->teamgoal ) )
+			return;
+		bs->decisionmaker = bs->client;
+		bs->ltgtype = LTG_PICKUPFLAG;		
+		bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
+	}
+	else if(action == LTG_TEAMACCOMPANY && bs->ltgtype != LTG_TEAMACCOMPANY ){
+		carrier = GetTeamFlagCarrier( BotTeam(bs) );
+		if( carrier == -1 )	// should never happen
+			return;
+		bs->decisionmaker = bs->client;
+		bs->teammate = carrier;
+		bs->teammatevisible_time = FloatTime();
+		bs->teammessage_time = 0;
+		bs->arrive_time = 0;
+		bs->teamgoal_time = FloatTime() + TEAM_ACCOMPANY_TIME;
+		bs->ltgtype = LTG_TEAMACCOMPANY;
+		bs->formation_dist = 3.5 * 32;		//3.5 meter
+	}
 }
-#endif
+
+qboolean GetDroppedLollyGoal(int team, bot_goal_t* goal)
+{
+	char *itemname = ( team == TEAM_RED ) ? "red Lolly" : "blue Lolly";
+
+	if ( trap_BotGetLevelItemGoal(-1, itemname, goal) < 0 )
+		return qfalse;
+
+
+	// goal unreachable?
+	if( !goal->areanum || !trap_AAS_AreaReachability(goal->areanum) )
+		return qfalse;
+
+	return qtrue;
+}
 
 /*
 ==================
@@ -1328,42 +1040,20 @@ BotTeamGoals
 */
 void BotTeamGoals(bot_state_t *bs, int retreat) {
 
-	if ( retreat ) {
-		if (gametype == GT_CTF) {
-			BotCTFRetreatGoals(bs);
-		}
-#ifdef MISSIONPACK
-		else if (gametype == GT_1FCTF) {
-			Bot1FCTFRetreatGoals(bs);
-		}
-		else if (gametype == GT_OBELISK) {
-			BotObeliskRetreatGoals(bs);
-		}
-		else if (gametype == GT_HARVESTER) {
-			BotHarvesterRetreatGoals(bs);
-		}
-#endif
+	if( gametype == GT_CTF){
+		BotCtfSeekGoals(bs);
 	}
-	else {
-		if (gametype == GT_CTF) {
-			//decide what to do in CTF mode
-			BotCTFSeekGoals(bs);
+    else if (gametype == GT_BALLOON) {
+        BotBalloonSeekGoals(bs);
+    }
+	else if (gametype == GT_SPRAY || gametype == GT_SPRAYFFA) {	
+		if ( retreat ) {
+			BotSyCRetreatGoals(bs);
 		}
-#ifdef MISSIONPACK
-		else if (gametype == GT_1FCTF) {
-			Bot1FCTFSeekGoals(bs);
+		else {
+			BotSyCSeekGoals(bs);
 		}
-		else if (gametype == GT_OBELISK) {
-			BotObeliskSeekGoals(bs);
-		}
-		else if (gametype == GT_HARVESTER) {
-			BotHarvesterSeekGoals(bs);
-		}
-#endif
-	}
-	// reset the order time which is used to see if
-	// we decided to refuse an order
-	bs->order_time = 0;
+	}	
 }
 
 /*
@@ -1429,8 +1119,11 @@ ClientFromName
 int ClientFromName(char *name) {
 	int i;
 	char buf[MAX_INFO_STRING];
+	static int maxclients;
 
-	for (i = 0; i < level.maxclients; i++) {
+	if (!maxclients)
+		maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
+	for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
 		trap_GetConfigstring(CS_PLAYERS+i, buf, sizeof(buf));
 		Q_CleanStr( buf );
 		if (!Q_stricmp(Info_ValueForKey(buf, "n"), name)) return i;
@@ -1525,55 +1218,69 @@ char *EasyClientName(int client, char *buf, int size) {
 	return buf;
 }
 
-/*
-==================
-BotSynonymContext
-==================
-*/
-int BotSynonymContext(bot_state_t *bs) {
-	int context;
-
-	context = CONTEXT_NORMAL|CONTEXT_NEARBYITEM|CONTEXT_NAMES;
-	//
-	if (gametype == GT_CTF
-#ifdef MISSIONPACK
-		|| gametype == GT_1FCTF
-#endif
-		) {
-		if (BotTeam(bs) == TEAM_RED) context |= CONTEXT_CTFREDTEAM;
-		else context |= CONTEXT_CTFBLUETEAM;
-	}
-#ifdef MISSIONPACK
-	else if (gametype == GT_OBELISK) {
-		if (BotTeam(bs) == TEAM_RED) context |= CONTEXT_OBELISKREDTEAM;
-		else context |= CONTEXT_OBELISKBLUETEAM;
-	}
-	else if (gametype == GT_HARVESTER) {
-		if (BotTeam(bs) == TEAM_RED) context |= CONTEXT_HARVESTERREDTEAM;
-		else context |= CONTEXT_HARVESTERBLUETEAM;
-	}
-#endif
-	return context;
-}
 
 /*
 ==================
 BotChooseWeapon
 ==================
 */
-void BotChooseWeapon(bot_state_t *bs) {
-	int newweaponnum;
+void BotChooseWeapon( bot_state_t *bs ) {
+	int offset = ( INVENTORY_PUNCHY - WP_PUNCHY );
 
-	if (bs->cur_ps.weaponstate == WEAPON_RAISING ||
-			bs->cur_ps.weaponstate == WEAPON_DROPPING) {
-		trap_EA_SelectWeapon(bs->client, bs->weaponnum);
+	// enforce punchy in berserker mode
+	if ( bs->cur_ps.powerups[PW_BERSERKER] )
+	{
+		bs->weaponnum = WP_PUNCHY;
+		trap_EA_SelectWeapon( bs->client, bs->weaponnum);
+		return;
+	}
+
+	if ( ( bs->cur_ps.weaponstate == WEAPON_RAISING ) ||
+	     ( bs->cur_ps.weaponstate == WEAPON_DROPPING ) ) {
+	   //check if the weapon is still in inventory
+		if ( bs->inventory[( bs->weaponnum + offset)] ) {
+			trap_EA_SelectWeapon( bs->client, bs->weaponnum );
+		}
+		else {
+	   		//G_Printf("^4 lost weapon during change \n");
+	   		bs->cur_ps.weaponstate = WEAPON_READY;	// hm
+	   		BotChooseWeapon( bs );
+	   		return;
+	   }
 	}
 	else {
-		newweaponnum = trap_BotChooseBestFightWeapon(bs->ws, bs->inventory);
-		if (bs->weaponnum != newweaponnum) bs->weaponchange_time = FloatTime();
+		int newweaponnum = trap_BotChooseBestFightWeapon( bs->ws, bs->inventory );
+
+		// Now fix special cases the engine does not know about
+
+		if ( ( GT_SPRAYFFA == gametype ) || ( GT_SPRAY == gametype ) ) {
+			if ( ( bs->cur_ps.stats[STAT_SPRAYROOMSECS] > 0 ) && ( newweaponnum != WP_SPRAYPISTOL ) ) {
+				newweaponnum = WP_SPRAYPISTOL;
+			}
+			else if ( WP_SPRAYPISTOL == newweaponnum ) {
+				newweaponnum = WP_PUNCHY; // This should be a save default
+			}
+		}
+
+		if ( g_modInstagib.integer && ( newweaponnum != WP_SPRAYPISTOL ) ) {
+			newweaponnum = Instagib_getSpawnWeapon();
+			bs->weaponnum = newweaponnum;
+			trap_EA_SelectWeapon( bs->client, bs->weaponnum );
+			return;
+		}
+
+
+		if ( ! bs->inventory[ newweaponnum + offset] ) {
+			return;
+		}
+
+		if ( bs->weaponnum != newweaponnum ) {
+			bs->weaponchange_time = FloatTime();
+		}
 		bs->weaponnum = newweaponnum;
-		//BotAI_Print(PRT_MESSAGE, "bs->weaponnum = %d\n", bs->weaponnum);
-		trap_EA_SelectWeapon(bs->client, bs->weaponnum);
+		//G_Printf( "bs->weaponnum = %d\n", bs->weaponnum );
+
+		trap_EA_SelectWeapon( bs->client, bs->weaponnum );
 	}
 }
 
@@ -1616,174 +1323,83 @@ void BotSetupForMovement(bot_state_t *bs) {
 
 /*
 ==================
-BotCheckItemPickup
-==================
-*/
-void BotCheckItemPickup(bot_state_t *bs, int *oldinventory) {
-#ifdef MISSIONPACK
-	int offence, leader;
-
-	if (gametype <= GT_TEAM)
-		return;
-
-	offence = -1;
-	// go into offence if picked up the kamikaze or invulnerability
-	if (!oldinventory[INVENTORY_KAMIKAZE] && bs->inventory[INVENTORY_KAMIKAZE] >= 1) {
-		offence = qtrue;
-	}
-	if (!oldinventory[INVENTORY_INVULNERABILITY] && bs->inventory[INVENTORY_INVULNERABILITY] >= 1) {
-		offence = qtrue;
-	}
-	// if not already wearing the kamikaze or invulnerability
-	if (!bs->inventory[INVENTORY_KAMIKAZE] && !bs->inventory[INVENTORY_INVULNERABILITY]) {
-		if (!oldinventory[INVENTORY_SCOUT] && bs->inventory[INVENTORY_SCOUT] >= 1) {
-			offence = qtrue;
-		}
-		if (!oldinventory[INVENTORY_GUARD] && bs->inventory[INVENTORY_GUARD] >= 1) {
-			offence = qtrue;
-		}
-		if (!oldinventory[INVENTORY_DOUBLER] && bs->inventory[INVENTORY_DOUBLER] >= 1) {
-			offence = qfalse;
-		}
-		if (!oldinventory[INVENTORY_AMMOREGEN] && bs->inventory[INVENTORY_AMMOREGEN] >= 1) {
-			offence = qfalse;
-		}
-	}
-
-	if (offence >= 0) {
-		leader = ClientFromName(bs->teamleader);
-		if (offence) {
-			if (!(bs->teamtaskpreference & TEAMTP_ATTACKER)) {
-				// if we have a bot team leader
-				if (BotTeamLeader(bs)) {
-					// tell the leader we want to be on offence
-					BotVoiceChat(bs, leader, VOICECHAT_WANTONOFFENSE);
-					//BotAI_BotInitialChat(bs, "wantoffence", NULL);
-					//trap_BotEnterChat(bs->cs, leader, CHAT_TELL);
-				}
-				else if (g_spSkill.integer <= 3) {
-					if ( bs->ltgtype != LTG_GETFLAG &&
-						 bs->ltgtype != LTG_ATTACKENEMYBASE &&
-						 bs->ltgtype != LTG_HARVEST ) {
-						//
-						if ((gametype != GT_CTF || (bs->redflagstatus == 0 && bs->blueflagstatus == 0)) &&
-							(gametype != GT_1FCTF || bs->neutralflagstatus == 0) ) {
-							// tell the leader we want to be on offence
-							BotVoiceChat(bs, leader, VOICECHAT_WANTONOFFENSE);
-							//BotAI_BotInitialChat(bs, "wantoffence", NULL);
-							//trap_BotEnterChat(bs->cs, leader, CHAT_TELL);
-						}
-					}
-				}
-				bs->teamtaskpreference |= TEAMTP_ATTACKER;
-			}
-			bs->teamtaskpreference &= ~TEAMTP_DEFENDER;
-		}
-		else {
-			if (!(bs->teamtaskpreference & TEAMTP_DEFENDER)) {
-				// if we have a bot team leader
-				if (BotTeamLeader(bs)) {
-					// tell the leader we want to be on defense
-					BotVoiceChat(bs, -1, VOICECHAT_WANTONDEFENSE);
-					//BotAI_BotInitialChat(bs, "wantdefence", NULL);
-					//trap_BotEnterChat(bs->cs, leader, CHAT_TELL);
-				}
-				else if (g_spSkill.integer <= 3) {
-					if ( bs->ltgtype != LTG_DEFENDKEYAREA ) {
-						//
-						if ((gametype != GT_CTF || (bs->redflagstatus == 0 && bs->blueflagstatus == 0)) &&
-							(gametype != GT_1FCTF || bs->neutralflagstatus == 0) ) {
-							// tell the leader we want to be on defense
-							BotVoiceChat(bs, -1, VOICECHAT_WANTONDEFENSE);
-							//BotAI_BotInitialChat(bs, "wantdefence", NULL);
-							//trap_BotEnterChat(bs->cs, leader, CHAT_TELL);
-						}
-					}
-				}
-				bs->teamtaskpreference |= TEAMTP_DEFENDER;
-			}
-			bs->teamtaskpreference &= ~TEAMTP_ATTACKER;
-		}
-	}
-#endif
-}
-
-/*
-==================
 BotUpdateInventory
 ==================
 */
+int BotCalcWeapEquip(bot_state_t* bs, int weapid, int ammoid, int snapammo){
+	int ammo;
+
+	if( bs->inventory[weapid] ){
+		// ignore ammo above the pickup amount
+		if( bs->inventory[ammoid] > snapammo )
+			ammo = snapammo;
+		else
+			ammo = bs->inventory[ammoid];
+		// [0..100]
+		return ( 100 * (float)(ammo / snapammo) );
+	}
+	// no weap, no equip
+	return 0;
+}
+
+
 void BotUpdateInventory(bot_state_t *bs) {
 	int oldinventory[MAX_ITEMS];
+	int sum = 0;
 
 	memcpy(oldinventory, bs->inventory, sizeof(oldinventory));
 	//armor
 	bs->inventory[INVENTORY_ARMOR] = bs->cur_ps.stats[STAT_ARMOR];
 	//weapons
-	bs->inventory[INVENTORY_GAUNTLET] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_GAUNTLET)) != 0;
-	bs->inventory[INVENTORY_SHOTGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_SHOTGUN)) != 0;
-	bs->inventory[INVENTORY_MACHINEGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_MACHINEGUN)) != 0;
-	bs->inventory[INVENTORY_GRENADELAUNCHER] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_GRENADE_LAUNCHER)) != 0;
-	bs->inventory[INVENTORY_ROCKETLAUNCHER] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_ROCKET_LAUNCHER)) != 0;
-	bs->inventory[INVENTORY_LIGHTNING] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_LIGHTNING)) != 0;
-	bs->inventory[INVENTORY_RAILGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_RAILGUN)) != 0;
-	bs->inventory[INVENTORY_PLASMAGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_PLASMAGUN)) != 0;
-	bs->inventory[INVENTORY_BFG10K] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_BFG)) != 0;
-	bs->inventory[INVENTORY_GRAPPLINGHOOK] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_GRAPPLING_HOOK)) != 0;
-#ifdef MISSIONPACK
-	bs->inventory[INVENTORY_NAILGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_NAILGUN)) != 0;;
-	bs->inventory[INVENTORY_PROXLAUNCHER] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_PROX_LAUNCHER)) != 0;;
-	bs->inventory[INVENTORY_CHAINGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_CHAINGUN)) != 0;;
-#endif
-	//ammo
-	bs->inventory[INVENTORY_SHELLS] = bs->cur_ps.ammo[WP_SHOTGUN];
-	bs->inventory[INVENTORY_BULLETS] = bs->cur_ps.ammo[WP_MACHINEGUN];
-	bs->inventory[INVENTORY_GRENADES] = bs->cur_ps.ammo[WP_GRENADE_LAUNCHER];
-	bs->inventory[INVENTORY_CELLS] = bs->cur_ps.ammo[WP_PLASMAGUN];
-	bs->inventory[INVENTORY_LIGHTNINGAMMO] = bs->cur_ps.ammo[WP_LIGHTNING];
-	bs->inventory[INVENTORY_ROCKETS] = bs->cur_ps.ammo[WP_ROCKET_LAUNCHER];
-	bs->inventory[INVENTORY_SLUGS] = bs->cur_ps.ammo[WP_RAILGUN];
-	bs->inventory[INVENTORY_BFGAMMO] = bs->cur_ps.ammo[WP_BFG];
-#ifdef MISSIONPACK
-	bs->inventory[INVENTORY_NAILS] = bs->cur_ps.ammo[WP_NAILGUN];
-	bs->inventory[INVENTORY_MINES] = bs->cur_ps.ammo[WP_PROX_LAUNCHER];
-	bs->inventory[INVENTORY_BELT] = bs->cur_ps.ammo[WP_CHAINGUN];
-#endif
-	//powerups
+	bs->inventory[INVENTORY_PUNCHY]		= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_PUNCHY)) != 0;
+	bs->inventory[INVENTORY_NIPPER]		= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_NIPPER)) != 0;
+	bs->inventory[INVENTORY_PUMPER]		= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_PUMPER)) != 0;
+	bs->inventory[INVENTORY_BALLOONY]	= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_BALLOONY)) != 0;
+	bs->inventory[INVENTORY_BETTY]		= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_BETTY)) != 0;
+	bs->inventory[INVENTORY_BOASTER]	= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_BOASTER)) != 0;
+	bs->inventory[INVENTORY_SPLASHER]	= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_SPLASHER)) != 0;
+	bs->inventory[INVENTORY_BUBBLEG]	= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_BUBBLEG)) != 0;
+	bs->inventory[INVENTORY_IMPERIUS]	= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_IMPERIUS)) != 0;
+	bs->inventory[INVENTORY_SPRAYPISTOL]= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_SPRAYPISTOL)) != 0;
+	bs->inventory[INVENTORY_KMA]		= (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_KMA97)) != 0;
+	// ammo
+	bs->inventory[INVENTORY_NIPPERAMMO]		= bs->cur_ps.ammo[WP_NIPPER];
+	bs->inventory[INVENTORY_PUMPERAMMO]		= bs->cur_ps.ammo[WP_PUMPER];
+	bs->inventory[INVENTORY_BALLOONYAMMO]	= bs->cur_ps.ammo[WP_BALLOONY];
+	bs->inventory[INVENTORY_BUBBLEGAMMO]	= bs->cur_ps.ammo[WP_BUBBLEG];
+	bs->inventory[INVENTORY_BOASTERAMMO]		= bs->cur_ps.ammo[WP_BOASTER];
+	bs->inventory[INVENTORY_BETTYAMMO]		= bs->cur_ps.ammo[WP_BETTY];
+	bs->inventory[INVENTORY_SPLASHERAMMO]	= bs->cur_ps.ammo[WP_SPLASHER];
+	bs->inventory[INVENTORY_IMPERIUSAMMO]	= bs->cur_ps.ammo[WP_IMPERIUS];
+    bs->inventory[INVENTORY_SPRAYPISTOLAMMO]   = bs->cur_ps.ammo[WP_SPRAYPISTOL];
+	//holdables
 	bs->inventory[INVENTORY_HEALTH] = bs->cur_ps.stats[STAT_HEALTH];
-	bs->inventory[INVENTORY_TELEPORTER] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_TELEPORTER;
-	bs->inventory[INVENTORY_MEDKIT] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_MEDKIT;
-#ifdef MISSIONPACK
-	bs->inventory[INVENTORY_KAMIKAZE] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_KAMIKAZE;
-	bs->inventory[INVENTORY_PORTAL] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_PORTAL;
-	bs->inventory[INVENTORY_INVULNERABILITY] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_INVULNERABILITY;
-#endif
-	bs->inventory[INVENTORY_QUAD] = bs->cur_ps.powerups[PW_QUAD] != 0;
-	bs->inventory[INVENTORY_ENVIRONMENTSUIT] = bs->cur_ps.powerups[PW_BATTLESUIT] != 0;
-	bs->inventory[INVENTORY_HASTE] = bs->cur_ps.powerups[PW_HASTE] != 0;
-	bs->inventory[INVENTORY_INVISIBILITY] = bs->cur_ps.powerups[PW_INVIS] != 0;
-	bs->inventory[INVENTORY_REGEN] = bs->cur_ps.powerups[PW_REGEN] != 0;
-	bs->inventory[INVENTORY_FLIGHT] = bs->cur_ps.powerups[PW_FLIGHT] != 0;
-#ifdef MISSIONPACK
-	bs->inventory[INVENTORY_SCOUT] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_SCOUT;
-	bs->inventory[INVENTORY_GUARD] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_GUARD;
-	bs->inventory[INVENTORY_DOUBLER] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_DOUBLER;
-	bs->inventory[INVENTORY_AMMOREGEN] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_AMMOREGEN;
-#endif
-	bs->inventory[INVENTORY_REDFLAG] = bs->cur_ps.powerups[PW_REDFLAG] != 0;
-	bs->inventory[INVENTORY_BLUEFLAG] = bs->cur_ps.powerups[PW_BLUEFLAG] != 0;
-#ifdef MISSIONPACK
-	bs->inventory[INVENTORY_NEUTRALFLAG] = bs->cur_ps.powerups[PW_NEUTRALFLAG] != 0;
-	if (BotTeam(bs) == TEAM_RED) {
-		bs->inventory[INVENTORY_REDCUBE] = bs->cur_ps.generic1;
-		bs->inventory[INVENTORY_BLUECUBE] = 0;
-	}
-	else {
-		bs->inventory[INVENTORY_REDCUBE] = 0;
-		bs->inventory[INVENTORY_BLUECUBE] = bs->cur_ps.generic1;
-	}
-#endif
-	BotCheckItemPickup(bs, oldinventory);
+	bs->inventory[INVENTORY_FLOATER] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_FLOATER;
+	bs->inventory[INVENTORY_KILLERDUCKS] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_KILLERDUCKS;
+	bs->inventory[INVENTORY_BAMBAM] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BAMBAM;
+	bs->inventory[INVENTORY_BOOMIE] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BOOMIE;
+	//powerups
+	bs->inventory[INVENTORY_PADPOWER]	= bs->cur_ps.powerups[PW_PADPOWER] != 0;
+	bs->inventory[INVENTORY_CLIMBER]	= bs->cur_ps.powerups[PW_CLIMBER] != 0;
+	bs->inventory[INVENTORY_SPEEDY]		= bs->cur_ps.powerups[PW_SPEEDY] != 0;
+	bs->inventory[INVENTORY_JUMPER]		= bs->cur_ps.powerups[PW_JUMPER] != 0;
+	bs->inventory[INVENTORY_VISIONLESS]	= bs->cur_ps.powerups[PW_VISIONLESS] != 0;
+	bs->inventory[INVENTORY_REVIVAL]	= bs->cur_ps.powerups[PW_REVIVAL] != 0;
+	
+	bs->inventory[INVENTORY_REDFLAG]	= bs->cur_ps.powerups[PW_REDFLAG] != 0;
+	bs->inventory[INVENTORY_BLUEFLAG]	= bs->cur_ps.powerups[PW_BLUEFLAG] != 0;
+	
+	// cyr
+	bs->inventory[INVENTORY_CLIENTNUM] = bs->client;	// cyr
+	sum += BotCalcWeapEquip(bs, INVENTORY_PUMPER, INVENTORY_PUMPERAMMO, 10);
+	sum += BotCalcWeapEquip(bs, INVENTORY_BALLOONY, INVENTORY_BALLOONYAMMO, 10);
+	sum += BotCalcWeapEquip(bs, INVENTORY_BETTY, INVENTORY_BETTYAMMO, 10);
+	sum += BotCalcWeapEquip(bs, INVENTORY_BOASTER, INVENTORY_BOASTERAMMO, 50);
+	sum += BotCalcWeapEquip(bs, INVENTORY_SPLASHER, INVENTORY_SPLASHERAMMO, 10);
+	sum += BotCalcWeapEquip(bs, INVENTORY_BUBBLEG, INVENTORY_BUBBLEGAMMO, 50);
+	sum += BotCalcWeapEquip(bs, INVENTORY_IMPERIUS, INVENTORY_IMPERIUSAMMO, 3);
+	if(bs->inventory[INVENTORY_KMA]) sum += 100;
+	bs->inventory[INV_GOTWEAPON] = sum;
 }
 
 /*
@@ -1796,232 +1412,36 @@ void BotUpdateBattleInventory(bot_state_t *bs, int enemy) {
 	aas_entityinfo_t entinfo;
 
 	BotEntityInfo(enemy, &entinfo);
+	if( !entinfo.valid )
+		return;
 	VectorSubtract(entinfo.origin, bs->origin, dir);
 	bs->inventory[ENEMY_HEIGHT] = (int) dir[2];
-	dir[2] = 0;
-	bs->inventory[ENEMY_HORIZONTAL_DIST] = (int) VectorLength(dir);
+	//dir[2] = 0;
+	bs->inventory[ENEMY_DIST] = (int) VectorLength(dir);
 	//FIXME: add num visible enemies and num visible team mates to the inventory
 }
 
-#ifdef MISSIONPACK
-/*
-==================
-BotUseKamikaze
-==================
-*/
-#define KAMIKAZE_DIST		1024
+#define KILLER_DIST 350
+//cyr{
+void BotUseKillerducks(bot_state_t* bs){
+    int enemies, teammates;
 
-void BotUseKamikaze(bot_state_t *bs) {
-	int c, teammates, enemies;
-	aas_entityinfo_t entinfo;
-	vec3_t dir, target;
-	bot_goal_t *goal;
-	bsp_trace_t trace;
+    // abuse: inv_time wird bei jedem check und USE gesetzt
+	if (bs->duckuse_time > FloatTime() )
+        return;
+    bs->duckuse_time = FloatTime() + 1;
 
-	//if the bot has no kamikaze
-	if (bs->inventory[INVENTORY_KAMIKAZE] <= 0)
-		return;
-	if (bs->kamikaze_time > FloatTime())
-		return;
-	bs->kamikaze_time = FloatTime() + 0.2;
-	if (gametype == GT_CTF) {
-		//never use kamikaze if the team flag carrier is visible
-		if (BotCTFCarryingFlag(bs))
-			return;
-		c = BotTeamFlagCarrierVisible(bs);
-		if (c >= 0) {
-			BotEntityInfo(c, &entinfo);
-			VectorSubtract(entinfo.origin, bs->origin, dir);
-			if (VectorLengthSquared(dir) < Square(KAMIKAZE_DIST))
-				return;
-		}
-		c = BotEnemyFlagCarrierVisible(bs);
-		if (c >= 0) {
-			BotEntityInfo(c, &entinfo);
-			VectorSubtract(entinfo.origin, bs->origin, dir);
-			if (VectorLengthSquared(dir) < Square(KAMIKAZE_DIST)) {
-				trap_EA_Use(bs->client);
-				return;
-			}
-		}
-	}
-	else if (gametype == GT_1FCTF) {
-		//never use kamikaze if the team flag carrier is visible
-		if (Bot1FCTFCarryingFlag(bs))
-			return;
-		c = BotTeamFlagCarrierVisible(bs);
-		if (c >= 0) {
-			BotEntityInfo(c, &entinfo);
-			VectorSubtract(entinfo.origin, bs->origin, dir);
-			if (VectorLengthSquared(dir) < Square(KAMIKAZE_DIST))
-				return;
-		}
-		c = BotEnemyFlagCarrierVisible(bs);
-		if (c >= 0) {
-			BotEntityInfo(c, &entinfo);
-			VectorSubtract(entinfo.origin, bs->origin, dir);
-			if (VectorLengthSquared(dir) < Square(KAMIKAZE_DIST)) {
-				trap_EA_Use(bs->client);
-				return;
-			}
-		}
-	}
-	else if (gametype == GT_OBELISK) {
-		switch(BotTeam(bs)) {
-			case TEAM_RED: goal = &blueobelisk; break;
-			default: goal = &redobelisk; break;
-		}
-		//if the obelisk is visible
-		VectorCopy(goal->origin, target);
-		target[2] += 1;
-		VectorSubtract(bs->origin, target, dir);
-		if (VectorLengthSquared(dir) < Square(KAMIKAZE_DIST * 0.9)) {
-			BotAI_Trace(&trace, bs->eye, NULL, NULL, target, bs->client, CONTENTS_SOLID);
-			if (trace.fraction >= 1 || trace.ent == goal->entitynum) {
-				trap_EA_Use(bs->client);
-				return;
-			}
-		}
-	}
-	else if (gametype == GT_HARVESTER) {
-		//
-		if (BotHarvesterCarryingCubes(bs))
-			return;
-		//never use kamikaze if a team mate carrying cubes is visible
-		c = BotTeamCubeCarrierVisible(bs);
-		if (c >= 0) {
-			BotEntityInfo(c, &entinfo);
-			VectorSubtract(entinfo.origin, bs->origin, dir);
-			if (VectorLengthSquared(dir) < Square(KAMIKAZE_DIST))
-				return;
-		}
-		c = BotEnemyCubeCarrierVisible(bs);
-		if (c >= 0) {
-			BotEntityInfo(c, &entinfo);
-			VectorSubtract(entinfo.origin, bs->origin, dir);
-			if (VectorLengthSquared(dir) < Square(KAMIKAZE_DIST)) {
-				trap_EA_Use(bs->client);
-				return;
-			}
-		}
-	}
-	//
-	BotVisibleTeamMatesAndEnemies(bs, &teammates, &enemies, KAMIKAZE_DIST);
-	//
-	if (enemies > 2 && enemies > teammates+1) {
-		trap_EA_Use(bs->client);
-		return;
-	}
+    if (bs->inventory[INVENTORY_KILLERDUCKS] <= 0)
+        return;
+
+	BotVisibleTeamMatesAndEnemies(bs, &teammates, &enemies, KILLER_DIST);
+    if(!teammates && enemies){
+        trap_EA_Use(bs->client);
+        bs->duckuse_time = FloatTime() + 2;
+    }
 }
+//cyr}
 
-/*
-==================
-BotUseInvulnerability
-==================
-*/
-void BotUseInvulnerability(bot_state_t *bs) {
-	int c;
-	vec3_t dir, target;
-	bot_goal_t *goal;
-	bsp_trace_t trace;
-
-	//if the bot has no invulnerability
-	if (bs->inventory[INVENTORY_INVULNERABILITY] <= 0)
-		return;
-	if (bs->invulnerability_time > FloatTime())
-		return;
-	bs->invulnerability_time = FloatTime() + 0.2;
-	if (gametype == GT_CTF) {
-		//never use kamikaze if the team flag carrier is visible
-		if (BotCTFCarryingFlag(bs))
-			return;
-		c = BotEnemyFlagCarrierVisible(bs);
-		if (c >= 0)
-			return;
-		//if near enemy flag and the flag is visible
-		switch(BotTeam(bs)) {
-			case TEAM_RED: goal = &ctf_blueflag; break;
-			default: goal = &ctf_redflag; break;
-		}
-		//if the obelisk is visible
-		VectorCopy(goal->origin, target);
-		target[2] += 1;
-		VectorSubtract(bs->origin, target, dir);
-		if (VectorLengthSquared(dir) < Square(200)) {
-			BotAI_Trace(&trace, bs->eye, NULL, NULL, target, bs->client, CONTENTS_SOLID);
-			if (trace.fraction >= 1 || trace.ent == goal->entitynum) {
-				trap_EA_Use(bs->client);
-				return;
-			}
-		}
-	}
-	else if (gametype == GT_1FCTF) {
-		//never use kamikaze if the team flag carrier is visible
-		if (Bot1FCTFCarryingFlag(bs))
-			return;
-		c = BotEnemyFlagCarrierVisible(bs);
-		if (c >= 0)
-			return;
-		//if near enemy flag and the flag is visible
-		switch(BotTeam(bs)) {
-			case TEAM_RED: goal = &ctf_blueflag; break;
-			default: goal = &ctf_redflag; break;
-		}
-		//if the obelisk is visible
-		VectorCopy(goal->origin, target);
-		target[2] += 1;
-		VectorSubtract(bs->origin, target, dir);
-		if (VectorLengthSquared(dir) < Square(200)) {
-			BotAI_Trace(&trace, bs->eye, NULL, NULL, target, bs->client, CONTENTS_SOLID);
-			if (trace.fraction >= 1 || trace.ent == goal->entitynum) {
-				trap_EA_Use(bs->client);
-				return;
-			}
-		}
-	}
-	else if (gametype == GT_OBELISK) {
-		switch(BotTeam(bs)) {
-			case TEAM_RED: goal = &blueobelisk; break;
-			default: goal = &redobelisk; break;
-		}
-		//if the obelisk is visible
-		VectorCopy(goal->origin, target);
-		target[2] += 1;
-		VectorSubtract(bs->origin, target, dir);
-		if (VectorLengthSquared(dir) < Square(300)) {
-			BotAI_Trace(&trace, bs->eye, NULL, NULL, target, bs->client, CONTENTS_SOLID);
-			if (trace.fraction >= 1 || trace.ent == goal->entitynum) {
-				trap_EA_Use(bs->client);
-				return;
-			}
-		}
-	}
-	else if (gametype == GT_HARVESTER) {
-		//
-		if (BotHarvesterCarryingCubes(bs))
-			return;
-		c = BotEnemyCubeCarrierVisible(bs);
-		if (c >= 0)
-			return;
-		//if near enemy base and enemy base is visible
-		switch(BotTeam(bs)) {
-			case TEAM_RED: goal = &blueobelisk; break;
-			default: goal = &redobelisk; break;
-		}
-		//if the obelisk is visible
-		VectorCopy(goal->origin, target);
-		target[2] += 1;
-		VectorSubtract(bs->origin, target, dir);
-		if (VectorLengthSquared(dir) < Square(200)) {
-			BotAI_Trace(&trace, bs->eye, NULL, NULL, target, bs->client, CONTENTS_SOLID);
-			if (trace.fraction >= 1 || trace.ent == goal->entitynum) {
-				trap_EA_Use(bs->client);
-				return;
-			}
-		}
-	}
-}
-#endif
 
 /*
 ==================
@@ -2029,27 +1449,78 @@ BotBattleUseItems
 ==================
 */
 void BotBattleUseItems(bot_state_t *bs) {
-	if (bs->inventory[INVENTORY_HEALTH] < 40) {
-		if (bs->inventory[INVENTORY_TELEPORTER] > 0) {
-			if (!BotCTFCarryingFlag(bs)
-#ifdef MISSIONPACK
-				&& !Bot1FCTFCarryingFlag(bs)
-				&& !BotHarvesterCarryingCubes(bs)
-#endif
-				) {
-				trap_EA_Use(bs->client);
+	bsp_trace_t bsptrace;
+	vec3_t end, mins = {-15, -15, -2}, maxs = {15, 15, 2};
+	float above;
+	float rnd;
+	aas_entityinfo_t entinfo, enemyinfo;
+	vec3_t botvelocity, up, forward;
+	qboolean falling;
+
+	BotUseKillerducks(bs);  // cyr
+	
+	// if enemy has splasher, return	// floaters are easy targets 
+
+	// if room(area) ceiling - botheight < 200 return	// keep dist from ceil
+	// if botheight - nmy > 300	 return			// dont get to far from nmy
+
+	// if bot has splash weapon: use floater
+	// if nmy has splash weapon: use floater
+
+	
+	if (bs->inventory[INVENTORY_FLOATER] <= 0)
+        return;
+
+	if (bs->inventory[ENEMY_DIST] > 400)
+		return;
+
+	// how many units is the bot above the enemy?
+	above = 0 - bs->inventory[ENEMY_HEIGHT];
+
+	VectorCopy(bs->origin, end);
+	end[2] += 100;
+	VectorSubtract(end, bs->origin, up);
+	BotEntityInfo(bs->client, &entinfo);
+	if(!entinfo.valid)
+		return;
+	VectorSubtract(entinfo.origin, entinfo.lastvisorigin, botvelocity);
+	falling = ( DotProduct(up, botvelocity) < 0);
+	//if(falling && bot_developer.integer)
+	//	G_Printf("falling! %f \n", DotProduct(up, botvelocity) );
+
+	//trap_EA_MoveForward(bs->client);
+	BotEntityInfo(bs->enemy, &enemyinfo);
+	if(!enemyinfo.valid)
+		return;
+	//direction towards the enemy
+	VectorSubtract(enemyinfo.origin, bs->origin, forward);
+
+	trap_BotMoveInDirection(bs->ms, forward, 400, MOVE_WALK);
+	//trap_EA_MoveLeft(bs->client);
+
+	if( above < 200){
+		// check ceiling distance
+		BotAI_Trace(&bsptrace, bs->origin, mins, maxs, end, bs->entitynum, CONTENTS_SOLID|CONTENTS_PLAYERCLIP|CONTENTS_BOTCLIP);
+		if( bsptrace.fraction == 1.0 ){
+
+			// ceiling not near, fly !			
+			if(above > 150 && !falling){
+				rnd = crandom();
+				if(rnd > 0.3)
+					trap_EA_Use(bs->client);
 			}
+			//
+			else
+				trap_EA_Use(bs->client);
 		}
+		return;
 	}
-	if (bs->inventory[INVENTORY_HEALTH] < 60) {
-		if (bs->inventory[INVENTORY_MEDKIT] > 0) {
-			trap_EA_Use(bs->client);
-		}
+	// den fall etwas d�mpfen
+	if(	above < 250 && falling){
+		rnd = crandom();
+		if(rnd > 0.2) trap_EA_Use(bs->client);
 	}
-#ifdef MISSIONPACK
-	BotUseKamikaze(bs);
-	BotUseInvulnerability(bs);
-#endif
+
 }
 
 /*
@@ -2112,76 +1583,6 @@ qboolean BotInLavaOrSlime(bot_state_t *bs) {
 
 /*
 ==================
-BotCreateWayPoint
-==================
-*/
-bot_waypoint_t *BotCreateWayPoint(char *name, vec3_t origin, int areanum) {
-	bot_waypoint_t *wp;
-	vec3_t waypointmins = {-8, -8, -8}, waypointmaxs = {8, 8, 8};
-
-	wp = botai_freewaypoints;
-	if ( !wp ) {
-		BotAI_Print( PRT_WARNING, "BotCreateWayPoint: Out of waypoints\n" );
-		return NULL;
-	}
-	botai_freewaypoints = botai_freewaypoints->next;
-
-	Q_strncpyz( wp->name, name, sizeof(wp->name) );
-	VectorCopy(origin, wp->goal.origin);
-	VectorCopy(waypointmins, wp->goal.mins);
-	VectorCopy(waypointmaxs, wp->goal.maxs);
-	wp->goal.areanum = areanum;
-	wp->next = NULL;
-	wp->prev = NULL;
-	return wp;
-}
-
-/*
-==================
-BotFindWayPoint
-==================
-*/
-bot_waypoint_t *BotFindWayPoint(bot_waypoint_t *waypoints, char *name) {
-	bot_waypoint_t *wp;
-
-	for (wp = waypoints; wp; wp = wp->next) {
-		if (!Q_stricmp(wp->name, name)) return wp;
-	}
-	return NULL;
-}
-
-/*
-==================
-BotFreeWaypoints
-==================
-*/
-void BotFreeWaypoints(bot_waypoint_t *wp) {
-	bot_waypoint_t *nextwp;
-
-	for (; wp; wp = nextwp) {
-		nextwp = wp->next;
-		wp->next = botai_freewaypoints;
-		botai_freewaypoints = wp;
-	}
-}
-
-/*
-==================
-BotInitWaypoints
-==================
-*/
-void BotInitWaypoints(void) {
-	int i;
-
-	botai_freewaypoints = NULL;
-	for (i = 0; i < MAX_WAYPOINTS; i++) {
-		botai_waypoints[i].next = botai_freewaypoints;
-		botai_freewaypoints = &botai_waypoints[i];
-	}
-}
-
-/*
-==================
 TeamPlayIsOn
 ==================
 */
@@ -2196,10 +1597,10 @@ BotAggression
 */
 float BotAggression(bot_state_t *bs) {
 	//if the bot has quad
-	if (bs->inventory[INVENTORY_QUAD]) {
+	if (bs->inventory[INVENTORY_PADPOWER]) {
 		//if the bot is not holding the gauntlet or the enemy is really nearby
-		if (bs->weaponnum != WP_GAUNTLET ||
-			bs->inventory[ENEMY_HORIZONTAL_DIST] < 80) {
+		if (bs->weaponnum != WP_PUNCHY ||
+			bs->inventory[ENEMY_DIST] < 80) {
 			return 70;
 		}
 	}
@@ -2212,27 +1613,30 @@ float BotAggression(bot_state_t *bs) {
 		//if the bot has insufficient armor
 		if (bs->inventory[INVENTORY_ARMOR] < 40) return 0;
 	}
-	//if the bot can use the bfg
-	if (bs->inventory[INVENTORY_BFG10K] > 0 &&
-			bs->inventory[INVENTORY_BFGAMMO] > 7) return 100;
-	//if the bot can use the railgun
-	if (bs->inventory[INVENTORY_RAILGUN] > 0 &&
-			bs->inventory[INVENTORY_SLUGS] > 5) return 95;
-	//if the bot can use the lightning gun
-	if (bs->inventory[INVENTORY_LIGHTNING] > 0 &&
-			bs->inventory[INVENTORY_LIGHTNINGAMMO] > 50) return 90;
-	//if the bot can use the rocketlauncher
-	if (bs->inventory[INVENTORY_ROCKETLAUNCHER] > 0 &&
-			bs->inventory[INVENTORY_ROCKETS] > 5) return 90;
-	//if the bot can use the plasmagun
-	if (bs->inventory[INVENTORY_PLASMAGUN] > 0 &&
-			bs->inventory[INVENTORY_CELLS] > 40) return 85;
+
+	if(bs->inventory[INVENTORY_KMA]) //FIXME/CHECKME: I'm not really sure if it is good to make them agressive in instaGib
+		return 100;
+	//if the bot can use the IMPERiUS
+	if (bs->inventory[INVENTORY_IMPERIUS] > 0 &&
+			bs->inventory[INVENTORY_IMPERIUSAMMO] > 0) return 100;
+	//if the bot can use the SPLASHER
+	if (bs->inventory[INVENTORY_SPLASHER] > 0 &&
+			bs->inventory[INVENTORY_SPLASHERAMMO] > 5) return 95;
+	//if the bot can use the BOASTER
+	if (bs->inventory[INVENTORY_BOASTER] > 0 &&
+			bs->inventory[INVENTORY_BOASTERAMMO] > 50) return 90;
+	//if the bot can use the BETTY
+	if (bs->inventory[INVENTORY_BETTY] > 0 &&
+			bs->inventory[INVENTORY_BETTYAMMO] > 5) return 90;
+	//if the bot can use the BUBBLEG
+	if (bs->inventory[INVENTORY_BUBBLEG] > 0 &&
+			bs->inventory[INVENTORY_BUBBLEGAMMO] > 40) return 85;
 	//if the bot can use the grenade launcher
-	if (bs->inventory[INVENTORY_GRENADELAUNCHER] > 0 &&
-			bs->inventory[INVENTORY_GRENADES] > 10) return 80;
+	if (bs->inventory[INVENTORY_BALLOONY] > 0 &&
+			bs->inventory[INVENTORY_BALLOONYAMMO] > 10) return 80;
 	//if the bot can use the shotgun
-	if (bs->inventory[INVENTORY_SHOTGUN] > 0 &&
-			bs->inventory[INVENTORY_SHELLS] > 10) return 50;
+	if (bs->inventory[INVENTORY_PUMPER] > 0 &&
+			bs->inventory[INVENTORY_PUMPERAMMO] > 10) return 50;
 	//otherwise the bot is not feeling too good
 	return 0;
 }
@@ -2243,13 +1647,13 @@ BotFeelingBad
 ==================
 */
 float BotFeelingBad(bot_state_t *bs) {
-	if (bs->weaponnum == WP_GAUNTLET) {
+	if (bs->weaponnum == WP_PUNCHY) {
 		return 100;
 	}
 	if (bs->inventory[INVENTORY_HEALTH] < 40) {
 		return 100;
 	}
-	if (bs->weaponnum == WP_MACHINEGUN) {
+	if (bs->weaponnum == WP_NIPPER) {
 		return 90;
 	}
 	if (bs->inventory[INVENTORY_HEALTH] < 60) {
@@ -2266,49 +1670,45 @@ BotWantsToRetreat
 int BotWantsToRetreat(bot_state_t *bs) {
 	aas_entityinfo_t entinfo;
 
-	if (gametype == GT_CTF) {
-		//always retreat when carrying a CTF flag
-		if (BotCTFCarryingFlag(bs))
-			return qtrue;
-	}
-#ifdef MISSIONPACK
-	else if (gametype == GT_1FCTF) {
-		//if carrying the flag then always retreat
-		if (Bot1FCTFCarryingFlag(bs))
-			return qtrue;
-	}
-	else if (gametype == GT_OBELISK) {
-		//the bots should be dedicated to attacking the enemy obelisk
-		if (bs->ltgtype == LTG_ATTACKENEMYBASE) {
-			if (bs->enemy != redobelisk.entitynum &&
-						bs->enemy != blueobelisk.entitynum) {
-				return qtrue;
-			}
-		}
-		if (BotFeelingBad(bs) > 50) {
+	if(gametype == GT_CTF)
+	{
+		if( bs->ltgtype == LTG_CAPTUREFLAG ||
+			bs->ltgtype == LTG_GETFLAG ||
+			bs->ltgtype == LTG_PICKUPFLAG )
+		{
 			return qtrue;
 		}
-		return qfalse;
 	}
-	else if (gametype == GT_HARVESTER) {
-		//if carrying cubes then always retreat
-		if (BotHarvesterCarryingCubes(bs)) return qtrue;
-	}
-#endif
-	//
-	if (bs->enemy >= 0) {
+    else if(gametype == GT_BALLOON){
+        if(bs->ltgtype == LTG_ATTACKENEMYBASE)
+            return qtrue;
+        if(bs->ltgtype == LTG_DEFENDKEYAREA && // attack only if inside defendrange
+        trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin,  bs->teamgoal.areanum, TFL_DEFAULT) > 250){
+            return qtrue;
+        }
+    }
+
+ 	else if(gametype == GT_SPRAY || gametype == GT_SPRAYFFA){
+ 		if( IsWall(bs->enemy) )	// spraywall, avoid the odd movement of battle_fight node
+ 			return qtrue;
+
+		// bot has cards? -> qtrue
+		BotEntityInfo(bs->client, &entinfo);
+		if(!entinfo.valid)
+			return qfalse;
+
+		if( EntityCarriesCarts(&entinfo) )
+			return qtrue;
+
+		// nmy has cards? -> qfalse
 		BotEntityInfo(bs->enemy, &entinfo);
-		// if the enemy is carrying a flag
-		if (EntityCarriesFlag(&entinfo)) return qfalse;
-#ifdef MISSIONPACK
-		// if the enemy is carrying cubes
-		if (EntityCarriesCubes(&entinfo)) return qfalse;
-#endif
-	}
-	//if the bot is getting the flag
-	if (bs->ltgtype == LTG_GETFLAG)
-		return qtrue;
-	//
+		if(!entinfo.valid)
+			return qfalse;
+
+		if( EntityCarriesCarts(&entinfo) )
+			return qfalse;
+ 	}
+
 	if (BotAggression(bs) < 50)
 		return qtrue;
 	return qfalse;
@@ -2321,48 +1721,41 @@ BotWantsToChase
 */
 int BotWantsToChase(bot_state_t *bs) {
 	aas_entityinfo_t entinfo;
+	aas_entityinfo_t enemyinfo;
 
-	if (gametype == GT_CTF) {
-		//never chase when carrying a CTF flag
-		if (BotCTFCarryingFlag(bs))
+	if(gametype == GT_CTF)
+	{
+		if( bs->ltgtype == LTG_CAPTUREFLAG ||
+			bs->ltgtype == LTG_GETFLAG ||
+			bs->ltgtype == LTG_PICKUPFLAG )
+		{
 			return qfalse;
-		//always chase if the enemy is carrying a flag
-		BotEntityInfo(bs->enemy, &entinfo);
-		if (EntityCarriesFlag(&entinfo))
-			return qtrue;
-	}
-#ifdef MISSIONPACK
-	else if (gametype == GT_1FCTF) {
-		//never chase if carrying the flag
-		if (Bot1FCTFCarryingFlag(bs))
-			return qfalse;
-		//always chase if the enemy is carrying a flag
-		BotEntityInfo(bs->enemy, &entinfo);
-		if (EntityCarriesFlag(&entinfo))
-			return qtrue;
-	}
-	else if (gametype == GT_OBELISK) {
-		//the bots should be dedicated to attacking the enemy obelisk
-		if (bs->ltgtype == LTG_ATTACKENEMYBASE) {
-			if (bs->enemy != redobelisk.entitynum &&
-						bs->enemy != blueobelisk.entitynum) {
-				return qfalse;
-			}
 		}
 	}
-	else if (gametype == GT_HARVESTER) {
-		//never chase if carrying cubes
-		if (BotHarvesterCarryingCubes(bs)) return qfalse;
+    else if(gametype == GT_BALLOON){
+        if(bs->ltgtype == LTG_DEFENDKEYAREA || bs->ltgtype == LTG_ATTACKENEMYBASE)
+            return qfalse;
+    }
+	else if(gametype == GT_SPRAY || gametype == GT_SPRAYFFA){
 
-		BotEntityInfo(bs->enemy, &entinfo);
-		// always chase if the enemy is carrying cubes
-		if (EntityCarriesCubes(&entinfo)) return qtrue;
-	}
-#endif
-	//if the bot is getting the flag
-	if (bs->ltgtype == LTG_GETFLAG)
-		return qfalse;
-	//
+		// bot has cards? -> dont chase
+		BotEntityInfo(bs->client, &entinfo);
+		if(!entinfo.valid)
+			return qfalse;
+
+		if( EntityCarriesCarts(&entinfo) )
+			return qfalse;
+
+		BotEntityInfo(bs->enemy, &enemyinfo);
+		if(!enemyinfo.valid)
+			return qfalse;
+
+		// nmy has cards? -> chase
+		if( EntityCarriesCarts(&enemyinfo) )
+			return qtrue;
+ 	}
+
+
 	if (BotAggression(bs) > 50)
 		return qtrue;
 	return qfalse;
@@ -2374,165 +1767,6 @@ BotWantsToHelp
 ==================
 */
 int BotWantsToHelp(bot_state_t *bs) {
-	return qtrue;
-}
-
-/*
-==================
-BotCanAndWantsToRocketJump
-==================
-*/
-int BotCanAndWantsToRocketJump(bot_state_t *bs) {
-	float rocketjumper;
-
-	//if rocket jumping is disabled
-	if (!bot_rocketjump.integer) return qfalse;
-	//if no rocket launcher
-	if (bs->inventory[INVENTORY_ROCKETLAUNCHER] <= 0) return qfalse;
-	//if low on rockets
-	if (bs->inventory[INVENTORY_ROCKETS] < 3) return qfalse;
-	//never rocket jump with the Quad
-	if (bs->inventory[INVENTORY_QUAD]) return qfalse;
-	//if low on health
-	if (bs->inventory[INVENTORY_HEALTH] < 60) return qfalse;
-	//if not full health
-	if (bs->inventory[INVENTORY_HEALTH] < 90) {
-		//if the bot has insufficient armor
-		if (bs->inventory[INVENTORY_ARMOR] < 40) return qfalse;
-	}
-	rocketjumper = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_WEAPONJUMPING, 0, 1);
-	if (rocketjumper < 0.5) return qfalse;
-	return qtrue;
-}
-
-/*
-==================
-BotHasPersistantPowerupAndWeapon
-==================
-*/
-int BotHasPersistantPowerupAndWeapon(bot_state_t *bs) {
-#ifdef MISSIONPACK
-	// if the bot does not have a persistant powerup
-	if (!bs->inventory[INVENTORY_SCOUT] &&
-		!bs->inventory[INVENTORY_GUARD] &&
-		!bs->inventory[INVENTORY_DOUBLER] &&
-		!bs->inventory[INVENTORY_AMMOREGEN] ) {
-		return qfalse;
-	}
-#endif
-	//if the bot is very low on health
-	if (bs->inventory[INVENTORY_HEALTH] < 60) return qfalse;
-	//if the bot is low on health
-	if (bs->inventory[INVENTORY_HEALTH] < 80) {
-		//if the bot has insufficient armor
-		if (bs->inventory[INVENTORY_ARMOR] < 40) return qfalse;
-	}
-	//if the bot can use the bfg
-	if (bs->inventory[INVENTORY_BFG10K] > 0 &&
-			bs->inventory[INVENTORY_BFGAMMO] > 7) return qtrue;
-	//if the bot can use the railgun
-	if (bs->inventory[INVENTORY_RAILGUN] > 0 &&
-			bs->inventory[INVENTORY_SLUGS] > 5) return qtrue;
-	//if the bot can use the lightning gun
-	if (bs->inventory[INVENTORY_LIGHTNING] > 0 &&
-			bs->inventory[INVENTORY_LIGHTNINGAMMO] > 50) return qtrue;
-	//if the bot can use the rocketlauncher
-	if (bs->inventory[INVENTORY_ROCKETLAUNCHER] > 0 &&
-			bs->inventory[INVENTORY_ROCKETS] > 5) return qtrue;
-	//
-	if (bs->inventory[INVENTORY_NAILGUN] > 0 &&
-			bs->inventory[INVENTORY_NAILS] > 5) return qtrue;
-	//
-	if (bs->inventory[INVENTORY_PROXLAUNCHER] > 0 &&
-			bs->inventory[INVENTORY_MINES] > 5) return qtrue;
-	//
-	if (bs->inventory[INVENTORY_CHAINGUN] > 0 &&
-			bs->inventory[INVENTORY_BELT] > 40) return qtrue;
-	//if the bot can use the plasmagun
-	if (bs->inventory[INVENTORY_PLASMAGUN] > 0 &&
-			bs->inventory[INVENTORY_CELLS] > 20) return qtrue;
-	return qfalse;
-}
-
-/*
-==================
-BotGoCamp
-==================
-*/
-void BotGoCamp(bot_state_t *bs, bot_goal_t *goal) {
-	float camper;
-
-	bs->decisionmaker = bs->client;
-	//set message time to zero so bot will NOT show any message
-	bs->teammessage_time = 0;
-	//set the ltg type
-	bs->ltgtype = LTG_CAMP;
-	//set the team goal
-	memcpy(&bs->teamgoal, goal, sizeof(bot_goal_t));
-	//get the team goal time
-	camper = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CAMPER, 0, 1);
-	if (camper > 0.99) bs->teamgoal_time = FloatTime() + 99999;
-	else bs->teamgoal_time = FloatTime() + 120 + 180 * camper + random() * 15;
-	//set the last time the bot started camping
-	bs->camp_time = FloatTime();
-	//the teammate that requested the camping
-	bs->teammate = 0;
-	//do NOT type arrive message
-	bs->arrive_time = 1;
-}
-
-/*
-==================
-BotWantsToCamp
-==================
-*/
-int BotWantsToCamp(bot_state_t *bs) {
-	float camper;
-	int cs, traveltime, besttraveltime;
-	bot_goal_t goal, bestgoal;
-
-	camper = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CAMPER, 0, 1);
-	if (camper < 0.1) return qfalse;
-	//if the bot has a team goal
-	if (bs->ltgtype == LTG_TEAMHELP ||
-			bs->ltgtype == LTG_TEAMACCOMPANY ||
-			bs->ltgtype == LTG_DEFENDKEYAREA ||
-			bs->ltgtype == LTG_GETFLAG ||
-			bs->ltgtype == LTG_RUSHBASE ||
-			bs->ltgtype == LTG_CAMP ||
-			bs->ltgtype == LTG_CAMPORDER ||
-			bs->ltgtype == LTG_PATROL) {
-		return qfalse;
-	}
-	//if camped recently
-	if (bs->camp_time > FloatTime() - 60 + 300 * (1-camper)) return qfalse;
-	//
-	if (random() > camper) {
-		bs->camp_time = FloatTime();
-		return qfalse;
-	}
-	//if the bot isn't healthy enough
-	if (BotAggression(bs) < 50) return qfalse;
-	//the bot should have at least have the rocket launcher, the railgun or the bfg10k with some ammo
-	if ((bs->inventory[INVENTORY_ROCKETLAUNCHER] <= 0 || bs->inventory[INVENTORY_ROCKETS] < 10) &&
-		(bs->inventory[INVENTORY_RAILGUN] <= 0 || bs->inventory[INVENTORY_SLUGS] < 10) &&
-		(bs->inventory[INVENTORY_BFG10K] <= 0 || bs->inventory[INVENTORY_BFGAMMO] < 10)) {
-		return qfalse;
-	}
-	//find the closest camp spot
-	besttraveltime = 99999;
-	for (cs = trap_BotGetNextCampSpotGoal(0, &goal); cs; cs = trap_BotGetNextCampSpotGoal(cs, &goal)) {
-		traveltime = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, goal.areanum, TFL_DEFAULT);
-		if (traveltime && traveltime < besttraveltime) {
-			besttraveltime = traveltime;
-			memcpy(&bestgoal, &goal, sizeof(bot_goal_t));
-		}
-	}
-	if (besttraveltime > 150) return qfalse;
-	//ok found a camp spot, go camp there
-	BotGoCamp(bs, &bestgoal);
-	bs->ordered = qfalse;
-	//
 	return qtrue;
 }
 
@@ -2559,13 +1793,15 @@ BotGoForPowerups
 */
 void BotGoForPowerups(bot_state_t *bs) {
 
-	//don't avoid any of the powerups anymore
-	BotDontAvoid(bs, "Quad Damage");
-	BotDontAvoid(bs, "Regeneration");
-	BotDontAvoid(bs, "Battle Suit");
-	BotDontAvoid(bs, "Speed");
-	BotDontAvoid(bs, "Invisibility");
-	//BotDontAvoid(bs, "Flight");
+	//don't avoid any of the powerups anymore	
+	BotDontAvoid(bs, "REViVAL");
+	BotDontAvoid(bs, "ViSiONLESS");
+	BotDontAvoid(bs, "JUMPER");
+	BotDontAvoid(bs, "SPEEDY");
+	BotDontAvoid(bs, "CLiMBER");
+	BotDontAvoid(bs, "PADPOWER");
+	BotDontAvoid(bs, "KiLLERDUCKS");
+	BotDontAvoid(bs, "FLOATER");
 	//reset the long term goal time so the bot will go for the powerup
 	//NOTE: the long term goal type doesn't change
 	bs->ltg_time = 0;
@@ -2633,7 +1869,7 @@ BotAttackMove
 ==================
 */
 bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl) {
-	int movetype, i, attackentity;
+	int movetype, i;
 	float attack_skill, jumper, croucher, dist, strafechange_time;
 	float attack_dist, attack_range;
 	vec3_t forward, backward, sideward, hordir, up = {0, 0, 1};
@@ -2641,11 +1877,10 @@ bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl) {
 	bot_moveresult_t moveresult;
 	bot_goal_t goal;
 
-	attackentity = bs->enemy;
-	//
+
 	if (bs->attackchase_time > FloatTime()) {
 		//create the chase goal
-		goal.entitynum = attackentity;
+		goal.entitynum = bs->enemy;
 		goal.areanum = bs->lastenemyareanum;
 		VectorCopy(bs->lastenemyorigin, goal.origin);
 		VectorSet(goal.mins, -8, -8, -8);
@@ -2667,7 +1902,9 @@ bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl) {
 	//initialize the movement state
 	BotSetupForMovement(bs);
 	//get the enemy entity info
-	BotEntityInfo(attackentity, &entinfo);
+	BotEntityInfo(bs->enemy, &entinfo);
+	if(!entinfo.valid)
+		return moveresult;
 	//direction towards the enemy
 	VectorSubtract(entinfo.origin, bs->origin, forward);
 	//the distance towards the enemy
@@ -2696,7 +1933,14 @@ bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl) {
 			bs->attackjump_time = FloatTime() + 1;
 		}
 	}
-	if (bs->cur_ps.weapon == WP_GAUNTLET) {
+
+	if ( IsBoomie(bs->enemy) )
+	{
+		attack_range = 30;
+		attack_dist = BOOMIES_TRIGGERBOX*4 - attack_range;
+		movetype = MOVE_WALK; // no jump, no crouch
+	}
+	else if (bs->cur_ps.weapon == WP_PUNCHY) {
 		attack_dist = 0;
 		attack_range = 0;
 	}
@@ -2704,14 +1948,15 @@ bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl) {
 		attack_dist = IDEAL_ATTACKDIST;
 		attack_range = 40;
 	}
+
 	//if the bot is stupid
 	if (attack_skill <= 0.4) {
 		//just walk to or away from the enemy
 		if (dist > attack_dist + attack_range) {
-			if (trap_BotMoveInDirection(bs->ms, forward, 400, movetype)) return moveresult;
+			if (trap_BotMoveInDirection(bs->ms, forward, 400, movetype)) return moveresult;	
 		}
 		if (dist < attack_dist - attack_range) {
-			if (trap_BotMoveInDirection(bs->ms, backward, 400, movetype)) return moveresult;
+			if (trap_BotMoveInDirection(bs->ms, backward, 400, movetype)) return moveresult;	
 		}
 		return moveresult;
 	}
@@ -2753,13 +1998,13 @@ bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl) {
 			}
 		}
 		//perform the movement
-		if (trap_BotMoveInDirection(bs->ms, sideward, 400, movetype))
+		if (trap_BotMoveInDirection(bs->ms, sideward, 400, movetype))	
 			return moveresult;
 		//movement failed, flip the strafe direction
 		bs->flags ^= BFL_STRAFERIGHT;
 		bs->attackstrafe_time = 0;
 	}
-	//bot couldn't do any useful movement
+	//bot couldn't do any usefull movement
 //	bs->attackchase_time = AAS_Time() + 6;
 	return moveresult;
 }
@@ -2770,20 +2015,26 @@ BotSameTeam
 ==================
 */
 int BotSameTeam(bot_state_t *bs, int entnum) {
+	gclient_t* otherclient;
+	gclient_t* botclient;
 
 	if (bs->client < 0 || bs->client >= MAX_CLIENTS) {
+		//BotAI_Print(PRT_ERROR, "BotSameTeam: client out of range\n");
 		return qfalse;
 	}
-
 	if (entnum < 0 || entnum >= MAX_CLIENTS) {
+		//BotAI_Print(PRT_ERROR, "BotSameTeam: client out of range\n");
 		return qfalse;
 	}
+	if ( gametype < GT_TEAM )
+		return qfalse;
 
-	if (gametype >= GT_TEAM) {
-		if (level.clients[bs->client].sess.sessionTeam == level.clients[entnum].sess.sessionTeam) return qtrue;
-	}
+	otherclient = g_entities[entnum].client;
+	botclient = g_entities[bs->client].client;
+	if(!otherclient || !botclient)
+		return qfalse;
 
-	return qfalse;
+	return (otherclient->sess.sessionTeam == botclient->sess.sessionTeam);
 }
 
 /*
@@ -2830,12 +2081,13 @@ float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int
 	aas_entityinfo_t entinfo;
 	vec3_t dir, entangles, start, end, middle;
 
-	BotEntityInfo(ent, &entinfo);
-	if (!entinfo.valid) {
-		return 0;
-	}
+	if (ent < MAX_CLIENTS && gametype == GT_LPS)	
+		return 1.0;	// all players visible. everywhere
 
 	//calculate middle of bounding box
+	BotEntityInfo(ent, &entinfo);
+	if(!entinfo.valid)
+		return 0;
 	VectorAdd(entinfo.mins, entinfo.maxs, middle);
 	VectorScale(middle, 0.5, middle);
 	VectorAdd(entinfo.origin, middle, middle);
@@ -2927,17 +2179,77 @@ float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int
 	return bestvis;
 }
 
+
+// cyr{
+qboolean EnemyFitsWell(bot_state_t *bs, aas_entityinfo_t* entinfo, int curenemy){
+	aas_entityinfo_t curenemyinfo;
+	vec3_t dir1, dir2;
+	float l1, l2;
+
+	if(curenemy < 0) return qtrue;
+	if(entinfo->type != ET_PLAYER) return qfalse;
+	
+	// enemy carries sprayammo?
+	if(g_entities[entinfo->number].client->ps.ammo[WP_SPRAYPISTOL] >= 2)
+		return qtrue;
+
+	if(bs->weaponnum == WP_IMPERIUS){
+		BotEntityInfo(curenemy, &curenemyinfo);
+		if(!curenemyinfo.valid)
+			return qfalse;
+		VectorSubtract(entinfo->origin, bs->origin, dir1);
+		l1 = VectorLength(dir1);
+		VectorSubtract(curenemyinfo.origin, bs->origin, dir2);
+		l2 = VectorLength(dir2);
+		if(l2 < 900 && l1 > l2){	// curenemy is near, candidate is further away
+			//G_Printf("^1 imped \n");	// cyr_ptr
+			return qtrue;
+		}
+	}
+	return qfalse;
+}
+// cyr}
 /*
 ==================
 BotFindEnemy
 ==================
 */
+
+// detect enemys that changed teams or went spec
+qboolean BotNmyTurnedInvalid(bot_state_t* bs){
+	aas_entityinfo_t entinfo;
+
+	if(bs->enemy < 0)
+		return qtrue;
+
+	if( BotSameTeam(bs, bs->enemy) )
+		return qtrue;
+
+	if( ClientInSprayroom(bs->enemy) ){
+		return qtrue;
+	}
+	
+	BotEntityInfo(bs->enemy, &entinfo);
+	if(!entinfo.valid)
+		return qtrue;
+
+	// specs are dead
+	if ( EntityIsDead(&entinfo) )
+		return qtrue;
+
+	return qfalse;
+}
+
 int BotFindEnemy(bot_state_t *bs, int curenemy) {
 	int i, healthdecrease;
 	float f, alertness, easyfragger, vis;
 	float squaredist, cursquaredist;
 	aas_entityinfo_t entinfo, curenemyinfo;
 	vec3_t dir, angles;
+
+	gentity_t* ent;
+	vec3_t nmydir;
+	float lengthsqr;
 
 	alertness = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_ALERTNESS, 0, 1);
 	easyfragger = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_EASY_FRAGGER, 0, 1);
@@ -2947,51 +2259,61 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 	bs->lasthealth = bs->inventory[INVENTORY_HEALTH];
 	//
 	if (curenemy >= 0) {
+		// can we skip checking other candidates?
 		BotEntityInfo(curenemy, &curenemyinfo);
-		if (EntityCarriesFlag(&curenemyinfo)) return qfalse;
-		VectorSubtract(curenemyinfo.origin, bs->origin, dir);
-		cursquaredist = VectorLengthSquared(dir);
+		if(curenemyinfo.valid)
+		{
+			if ( EnemyFitsWell(bs, &curenemyinfo, curenemy) ) return qfalse;
+			// no we cant, so lets compare
+			VectorSubtract(curenemyinfo.origin, bs->origin, dir);
+			cursquaredist = VectorLengthSquared(dir);
+		}
+		else{
+			cursquaredist = 0;
+		}
 	}
 	else {
 		cursquaredist = 0;
 	}
-#ifdef MISSIONPACK
-	if (gametype == GT_OBELISK) {
-		vec3_t target;
+
+	if( ClientInSprayroom(bs->client) && bs->inventory[INVENTORY_SPRAYPISTOLAMMO] ){
+		vec3_t target, dir;
 		bot_goal_t *goal;
 		bsp_trace_t trace;
 
-		if (BotTeam(bs) == TEAM_RED)
-			goal = &blueobelisk;
-		else
-			goal = &redobelisk;
-		//if the obelisk is visible
+		goal = bs->which_wall;//BotChooseWall(bs);
+
 		VectorCopy(goal->origin, target);
 		target[2] += 1;
-		BotAI_Trace(&trace, bs->eye, NULL, NULL, target, bs->client, CONTENTS_SOLID);
-		if (trace.fraction >= 1 || trace.ent == goal->entitynum) {
-			if (goal->entitynum == bs->enemy) {
-				return qfalse;
+
+		VectorSubtract(target, bs->origin, dir);
+        if (VectorLengthSquared(dir) < Square(256.0f)){	//cyr2
+
+			BotAI_Trace(&trace, bs->eye, NULL, NULL, target, bs->client, CONTENTS_SOLID);
+			if (trace.fraction >= 1 || trace.ent == goal->entitynum) {
+
+				if (goal->entitynum == bs->enemy) {
+					return qfalse;
+				}
+				bs->enemy = goal->entitynum;
+				bs->enemysight_time = FloatTime();
+				bs->enemysuicide = qfalse;
+				bs->enemydeath_time = 0;
+				bs->enemyvisible_time = FloatTime();
+				return qtrue;
 			}
-			bs->enemy = goal->entitynum;
-			bs->enemysight_time = FloatTime();
-			bs->enemysuicide = qfalse;
-			bs->enemydeath_time = 0;
-			bs->enemyvisible_time = FloatTime();
-			return qtrue;
 		}
+		return qfalse;
 	}
-#endif
+	else if( ClientInSprayroom(bs->client) )	// after spraying all carts, attack no players nor walls
+		return qfalse;
+
 	//
-	for (i = 0; i < level.maxclients; i++) {
+	for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
 
 		if (i == bs->client) continue;
 		//if it's the current enemy
 		if (i == curenemy) continue;
-		//if the enemy has targeting disabled
-		if (g_entities[i].flags & FL_NOTARGET) {
-			continue;
-		}
 		//
 		BotEntityInfo(i, &entinfo);
 		//
@@ -3002,6 +2324,8 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 		if (EntityIsInvisible(&entinfo) && !EntityIsShooting(&entinfo)) {
 			continue;
 		}
+		// no fighting in the sprayroom please
+		if( ClientInSprayroom(i) ) continue;
 		//if not an easy fragger don't shoot at chatting players
 		if (easyfragger < 0.5 && EntityIsChatting(&entinfo)) continue;
 		//
@@ -3012,8 +2336,9 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 		//calculate the distance towards the enemy
 		VectorSubtract(entinfo.origin, bs->origin, dir);
 		squaredist = VectorLengthSquared(dir);
-		//if this entity is not carrying a flag
-		if (!EntityCarriesFlag(&entinfo))
+		
+
+		if (!EnemyFitsWell(bs, &entinfo, curenemy) )//(!EntityCarriesFlag(&entinfo))
 		{
 			//if this enemy is further away than the current one
 			if (curenemy >= 0 && squaredist > cursquaredist) continue;
@@ -3053,105 +2378,150 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 		bs->enemyvisible_time = FloatTime();
 		return qtrue;
 	}
+	// no client enemy, search for ducks
+	for (i = MAX_CLIENTS; i < level.num_entities; i++) {
+		ent = &g_entities[i];
+		if(!ent->inuse)
+			continue;
+
+		if (i == curenemy) continue;
+
+		if( IsBambam(i) )
+		{
+			// it has to be an enemy
+			if((ent->team[0] == 'b' && BotTeam(bs) == TEAM_BLUE) ||
+				(ent->team[0] == 'r' && BotTeam(bs) == TEAM_RED) )
+				continue;
+
+			vis = BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, i);
+			if(vis <= 0)
+				continue;
+
+			bs->enemy = i;
+			bs->enemysight_time = FloatTime();
+			bs->enemysuicide = qfalse;
+			bs->enemydeath_time = 0;
+			bs->enemyvisible_time = FloatTime();
+			return qtrue;
+		}
+
+		if( IsBoomie(i) )
+		{
+			// it has to be an enemy
+			if((ent->team[0] == 'b' && BotTeam(bs) == TEAM_BLUE) ||
+				(ent->team[0] == 'r' && BotTeam(bs) == TEAM_RED) )
+				continue;
+
+			vis = BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 80, i);
+			if(vis <= 0)
+				continue;
+
+			VectorSubtract( ent->r.currentOrigin, bs->origin, nmydir);
+			lengthsqr = VectorLengthSquared(nmydir);
+			if(lengthsqr > Square(400) )
+				continue;
+
+			bs->enemy = i;
+			bs->enemysight_time = FloatTime();
+			bs->enemysuicide = qfalse;
+			bs->enemydeath_time = 0;
+			bs->enemyvisible_time = FloatTime();
+			return qtrue;
+		}
+
+		/*if ( !ent->inuse || !IsDuck(i) )	continue;
+
+		// low distance ?
+		VectorSubtract( ent->r.currentOrigin, bs->origin, duckdir);
+		lengthsqr = VectorLengthSquared(duckdir);
+		if(lengthsqr > Square(100) )
+				continue;
+		// looking at me ? (duck does not store angles !?)
+		//AngleVectors (duckangles, duckforward, duckright, duckup);
+		if(healthdecrease){
+			bs->enemy = i;
+			bs->enemysight_time = FloatTime();
+			bs->enemysuicide = qfalse;
+			bs->enemydeath_time = 0;
+			bs->enemyvisible_time = FloatTime();
+			return qtrue;
+		}*/
+
+	}
 	return qfalse;
 }
 
-/*
-==================
-BotTeamFlagCarrierVisible
-==================
-*/
-int BotTeamFlagCarrierVisible(bot_state_t *bs) {
-	int i;
-	float vis;
-	aas_entityinfo_t entinfo;
+//cyr_ret{
+int BotSprayWallCheckAttack(bot_state_t *bs) {
+//    float points, reactiontime, fov, firethrottle;
+	float fov;
+    int attackentity;
+//    bsp_trace_t bsptrace;
+    //float selfpreservation;
+    vec3_t forward, right, start, end, dir, angles;
+    weaponinfo_t wi;
+    bsp_trace_t trace;
+    aas_entityinfo_t entinfo;
+    vec3_t mins = {-8, -8, -8}, maxs = {8, 8, 8};
 
-	for (i = 0; i < level.maxclients; i++) {
-		if (i == bs->client)
-			continue;
-		//
-		BotEntityInfo(i, &entinfo);
-		//if this player is active
-		if (!entinfo.valid)
-			continue;
-		//if this player is carrying a flag
-		if (!EntityCarriesFlag(&entinfo))
-			continue;
-		//if the flag carrier is not on the same team
-		if (!BotSameTeam(bs, i))
-			continue;
-		//if the flag carrier is not visible
-		vis = BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, i);
-		if (vis <= 0)
-			continue;
-		//
-		return i;
-	}
-	return -1;
+    attackentity = bs->enemy;
+    //
+    BotEntityInfo(attackentity, &entinfo);
+	if(!entinfo.valid)
+		return qtrue;
+
+    // if attacking a player
+    if (attackentity <= MAX_CLIENTS)
+        return qtrue;
+
+    //if changing weapons
+    if (bs->weaponchange_time > FloatTime() - 0.45){
+        return qtrue;
+    }
+
+    VectorSubtract(bs->aimtarget, bs->eye, dir);
+    //
+    if( VectorLengthSquared(dir) > Square(bs->spraydist) )
+        return qtrue;
+
+    if (VectorLengthSquared(dir) < Square(100))
+        fov = 120;
+    else
+        fov = 50;
+    //
+    vectoangles(dir, angles);
+    if (!InFieldOfVision(bs->viewangles, fov, angles)){
+        return qtrue;
+    }
+    //get the weapon info
+    trap_BotGetWeaponInfo(bs->ws, bs->weaponnum, &wi);
+    //get the start point shooting from
+    VectorCopy(bs->origin, start);
+    start[2] += bs->cur_ps.viewheight;
+    AngleVectors(bs->viewangles, forward, right, NULL);
+    start[0] += forward[0] * wi.offset[0] + right[0] * wi.offset[1];
+    start[1] += forward[1] * wi.offset[0] + right[1] * wi.offset[1];
+    start[2] += forward[2] * wi.offset[0] + right[2] * wi.offset[1] + wi.offset[2];
+
+    //end point aiming at
+    //VectorSubtract(start, bs->aimtarget, dir);
+    VectorMA(start, 256, forward, end);
+
+    //a little back to make sure not inside a very close enemy
+    VectorMA(start, -12, forward, start);
+    BotAI_Trace(&trace, start, mins, maxs, end, bs->entitynum, MASK_SHOT);
+    // not hitting nmy ?
+    if(trace.fraction == 1)
+        return qtrue;
+    if (trace.ent != attackentity)
+        return qtrue;
+
+    // everthing went fine, shoot
+    trap_EA_Attack(bs->client);
+    return qfalse;
 }
+//cyr_ret }
 
-/*
-==================
-BotTeamFlagCarrier
-==================
-*/
-int BotTeamFlagCarrier(bot_state_t *bs) {
-	int i;
-	aas_entityinfo_t entinfo;
-
-	for (i = 0; i < level.maxclients; i++) {
-		if (i == bs->client)
-			continue;
-		//
-		BotEntityInfo(i, &entinfo);
-		//if this player is active
-		if (!entinfo.valid)
-			continue;
-		//if this player is carrying a flag
-		if (!EntityCarriesFlag(&entinfo))
-			continue;
-		//if the flag carrier is not on the same team
-		if (!BotSameTeam(bs, i))
-			continue;
-		//
-		return i;
-	}
-	return -1;
-}
-
-/*
-==================
-BotEnemyFlagCarrierVisible
-==================
-*/
-int BotEnemyFlagCarrierVisible(bot_state_t *bs) {
-	int i;
-	float vis;
-	aas_entityinfo_t entinfo;
-
-	for (i = 0; i < level.maxclients; i++) {
-		if (i == bs->client)
-			continue;
-		//
-		BotEntityInfo(i, &entinfo);
-		//if this player is active
-		if (!entinfo.valid)
-			continue;
-		//if this player is carrying a flag
-		if (!EntityCarriesFlag(&entinfo))
-			continue;
-		//if the flag carrier is on the same team
-		if (BotSameTeam(bs, i))
-			continue;
-		//if the flag carrier is not visible
-		vis = BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, i);
-		if (vis <= 0)
-			continue;
-		//
-		return i;
-	}
-	return -1;
-}
 
 /*
 ==================
@@ -3176,9 +2546,6 @@ void BotVisibleTeamMatesAndEnemies(bot_state_t *bs, int *teammates, int *enemies
 		//if this player is active
 		if (!entinfo.valid)
 			continue;
-		//if this player is carrying a flag
-		if (!EntityCarriesFlag(&entinfo))
-			continue;
 		//if not within range
 		VectorSubtract(entinfo.origin, bs->origin, dir);
 		if (VectorLengthSquared(dir) > Square(range))
@@ -3199,70 +2566,6 @@ void BotVisibleTeamMatesAndEnemies(bot_state_t *bs, int *teammates, int *enemies
 	}
 }
 
-#ifdef MISSIONPACK
-/*
-==================
-BotTeamCubeCarrierVisible
-==================
-*/
-int BotTeamCubeCarrierVisible(bot_state_t *bs) {
-	int i;
-	float vis;
-	aas_entityinfo_t entinfo;
-
-	for (i = 0; i < level.maxclients; i++) {
-		if (i == bs->client) continue;
-		//
-		BotEntityInfo(i, &entinfo);
-		//if this player is active
-		if (!entinfo.valid) continue;
-		//if this player is carrying a flag
-		if (!EntityCarriesCubes(&entinfo)) continue;
-		//if the flag carrier is not on the same team
-		if (!BotSameTeam(bs, i)) continue;
-		//if the flag carrier is not visible
-		vis = BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, i);
-		if (vis <= 0) continue;
-		//
-		return i;
-	}
-	return -1;
-}
-
-/*
-==================
-BotEnemyCubeCarrierVisible
-==================
-*/
-int BotEnemyCubeCarrierVisible(bot_state_t *bs) {
-	int i;
-	float vis;
-	aas_entityinfo_t entinfo;
-
-	for (i = 0; i < level.maxclients; i++) {
-		if (i == bs->client)
-			continue;
-		//
-		BotEntityInfo(i, &entinfo);
-		//if this player is active
-		if (!entinfo.valid)
-			continue;
-		//if this player is carrying a flag
-		if (!EntityCarriesCubes(&entinfo)) continue;
-		//if the flag carrier is on the same team
-		if (BotSameTeam(bs, i))
-			continue;
-		//if the flag carrier is not visible
-		vis = BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, i);
-		if (vis <= 0)
-			continue;
-		//
-		return i;
-	}
-	return -1;
-}
-#endif
-
 /*
 ==================
 BotAimAtEnemy
@@ -3278,24 +2581,50 @@ void BotAimAtEnemy(bot_state_t *bs) {
 	bot_goal_t goal;
 	bsp_trace_t trace;
 	vec3_t target;
+	float wi_spread_y, wi_spread_x;	// cyr
 
 	//if the bot has no enemy
 	if (bs->enemy < 0) {
 		return;
 	}
+	if(bs->ltgtype == LTG_GIVECART){
+		aas_entityinfo_t mateinfo;
+		vec3_t mdir;
+
+		BotEntityInfo(bs->teammate, &mateinfo);
+		if(mateinfo.valid)
+		{
+			VectorSubtract(mateinfo.origin, bs->origin, mdir);
+			if( VectorLengthSquared(mdir) < Square(PUSHCART_DIST) )
+				return;
+		}
+	}
 	//get the enemy entity information
 	BotEntityInfo(bs->enemy, &entinfo);
+	if(!entinfo.valid)
+		return;
+
 	//if this is not a player (should be an obelisk)
-	if (bs->enemy >= MAX_CLIENTS) {
+	if ( IsWall(bs->enemy) ) {
 		//if the obelisk is visible
-		VectorCopy(entinfo.origin, target);
-#ifdef MISSIONPACK
-		// if attacking an obelisk
-		if ( bs->enemy == redobelisk.entitynum ||
-			bs->enemy == blueobelisk.entitynum ) {
-			target[2] += 32;
-		}
-#endif
+// eigena cyr{
+        if( bs->lastcartcount != bs->inventory[INVENTORY_SPRAYPISTOLAMMO] ||
+        	bs->sprayTimer < FloatTime() ){
+
+			bs->sprayTimer = FloatTime() + 3;
+            //recalc target
+            for(i=0;i<3;i++){
+            	int nmysize;
+                nmysize = entinfo.maxs[i] - entinfo.mins[i] ;
+                // random value for each dimension ( 10% space at borders)
+                bs->syctarget[i] = entinfo.mins[i] + nmysize * 0.15f + nmysize * 0.7f * random();	//cyr2
+                bs->spraydist = 100 + 150.0 * random();
+            }
+            bs->lastcartcount = bs->inventory[INVENTORY_SPRAYPISTOLAMMO];
+        }
+        VectorCopy(bs->syctarget, target);
+//cyr}
+
 		//aim at the obelisk
 		VectorSubtract(target, bs->eye, dir);
 		vectoangles(dir, bs->ideal_viewangles);
@@ -3319,31 +2648,31 @@ void BotAimAtEnemy(bot_state_t *bs) {
 	//get the weapon information
 	trap_BotGetWeaponInfo(bs->ws, bs->weaponnum, &wi);
 	//get the weapon specific aim accuracy and or aim skill
-	if (wi.number == WP_MACHINEGUN) {
+	if (wi.number == WP_NIPPER) {
 		aim_accuracy = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_ACCURACY_MACHINEGUN, 0, 1);
 	}
-	else if (wi.number == WP_SHOTGUN) {
+	else if (wi.number == WP_PUMPER) {
 		aim_accuracy = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_ACCURACY_SHOTGUN, 0, 1);
 	}
-	else if (wi.number == WP_GRENADE_LAUNCHER) {
+	else if (wi.number == WP_BALLOONY) {
 		aim_accuracy = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_ACCURACY_GRENADELAUNCHER, 0, 1);
 		aim_skill = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_SKILL_GRENADELAUNCHER, 0, 1);
 	}
-	else if (wi.number == WP_ROCKET_LAUNCHER) {
+	else if (wi.number == WP_BETTY) {
 		aim_accuracy = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_ACCURACY_ROCKETLAUNCHER, 0, 1);
 		aim_skill = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_SKILL_ROCKETLAUNCHER, 0, 1);
 	}
-	else if (wi.number == WP_LIGHTNING) {
+	else if (wi.number == WP_BOASTER) {
 		aim_accuracy = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_ACCURACY_LIGHTNING, 0, 1);
 	}
-	else if (wi.number == WP_RAILGUN) {
+	else if (wi.number == WP_SPLASHER) {
 		aim_accuracy = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_ACCURACY_RAILGUN, 0, 1);
 	}
-	else if (wi.number == WP_PLASMAGUN) {
+	else if (wi.number == WP_BUBBLEG) {
 		aim_accuracy = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_ACCURACY_PLASMAGUN, 0, 1);
 		aim_skill = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_SKILL_PLASMAGUN, 0, 1);
 	}
-	else if (wi.number == WP_BFG) {
+	else if (wi.number == WP_IMPERIUS) {
 		aim_accuracy = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_ACCURACY_BFG10K, 0, 1);
 		aim_skill = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_SKILL_BFG10K, 0, 1);
 	}
@@ -3351,6 +2680,9 @@ void BotAimAtEnemy(bot_state_t *bs) {
 	if (aim_accuracy <= 0) aim_accuracy = 0.0001f;
 	//get the enemy entity information
 	BotEntityInfo(bs->enemy, &entinfo);
+	if(!entinfo.valid)
+		return;
+
 	//if the enemy is invisible then shoot crappy most of the time
 	if (EntityIsInvisible(&entinfo)) {
 		if (random() > 0.1) aim_accuracy *= 0.4f;
@@ -3452,7 +2784,7 @@ void BotAimAtEnemy(bot_state_t *bs) {
 			if (entinfo.origin[2] < bs->origin[2] + 16) {
 				//try to aim at the ground in front of the enemy
 				VectorCopy(entinfo.origin, end);
-				end[2] -= 64;
+				end[2] -= 64;	
 				BotAI_Trace(&trace, entinfo.origin, NULL, NULL, end, entinfo.number, MASK_SHOT);
 				//
 				VectorCopy(bestorigin, groundtarget);
@@ -3480,41 +2812,46 @@ void BotAimAtEnemy(bot_state_t *bs) {
 				}
 			}
 		}
-		bestorigin[0] += 20 * crandom() * (1 - aim_accuracy);
-		bestorigin[1] += 20 * crandom() * (1 - aim_accuracy);
-		bestorigin[2] += 10 * crandom() * (1 - aim_accuracy);
+		bestorigin[0] += 20 * crandom() * (1 - aim_accuracy) * 0.3f ;
+		bestorigin[1] += 20 * crandom() * (1 - aim_accuracy) * 0.3f ;
+		bestorigin[2] += 10 * crandom() * (1 - aim_accuracy) * 0.3f ;
 	}
-	else {
+	else {	// invisible enemy
 		//
 		VectorCopy(bs->lastenemyorigin, bestorigin);
 		bestorigin[2] += 8;
-		//if the bot is skilled enough
-		if (aim_skill > 0.5) {
-			//do prediction shots around corners
-			if (wi.number == WP_BFG ||
-				wi.number == WP_ROCKET_LAUNCHER ||
-				wi.number == WP_GRENADE_LAUNCHER) {
-				//create the chase goal
-				goal.entitynum = bs->client;
-				goal.areanum = bs->areanum;
-				VectorCopy(bs->eye, goal.origin);
-				VectorSet(goal.mins, -8, -8, -8);
-				VectorSet(goal.maxs, 8, 8, 8);
-				//
-				if (trap_BotPredictVisiblePosition(bs->lastenemyorigin, bs->lastenemyareanum, &goal, TFL_DEFAULT, target)) {
-					VectorSubtract(target, bs->eye, dir);
-					if (VectorLengthSquared(dir) > Square(80)) {
-						VectorCopy(target, bestorigin);
-						bestorigin[2] -= 20;
-					}
+		
+		//do prediction shots around corners
+		if (wi.number == WP_PUMPER ||
+			wi.number == WP_BETTY ||
+			wi.number == WP_BALLOONY) {
+			//create the chase goal
+			goal.entitynum = bs->client;
+			goal.areanum = bs->areanum;
+			VectorCopy(bs->eye, goal.origin);
+			VectorSet(goal.mins, -8, -8, -8);
+			VectorSet(goal.maxs, 8, 8, 8);
+			//
+			if (trap_BotPredictVisiblePosition(bs->lastenemyorigin, bs->lastenemyareanum, &goal, TFL_DEFAULT, target)) {
+				VectorSubtract(target, bs->eye, dir);
+				if (VectorLengthSquared(dir) > Square(80)) {
+					VectorCopy(target, bestorigin);
+					bestorigin[2] -= 20;
 				}
-				aim_accuracy = 1;
 			}
+			aim_accuracy = 1;
+		}
+		// any obstacles/walls in between? this happens when using jumppads or teleporters
+		BotAI_Trace(&trace, bs->origin, NULL, NULL, bestorigin, bs->entitynum, MASK_SHOT);
+		if (trace.fraction < 0.9){
+			//if(bot_developer.integer)
+			//	BotAI_Print(PRT_MESSAGE, "discarding aimtarget.. trace fraction is %.1f\n", trace.fraction);
+			return;
 		}
 	}
 	//
 	if (enemyvisible) {
-		BotAI_Trace(&trace, bs->eye, NULL, NULL, bestorigin, bs->entitynum, MASK_SHOT);
+		BotAI_Trace( &trace, bs->eye, NULL, NULL, bestorigin, bs->entitynum, MASK_SHOT );
 		VectorCopy(trace.endpos, bs->aimtarget);
 	}
 	else {
@@ -3523,28 +2860,43 @@ void BotAimAtEnemy(bot_state_t *bs) {
 	//get aim direction
 	VectorSubtract(bestorigin, bs->eye, dir);
 	//
-	if (wi.number == WP_MACHINEGUN ||
-		wi.number == WP_SHOTGUN ||
-		wi.number == WP_LIGHTNING ||
-		wi.number == WP_RAILGUN) {
+	if (wi.number == WP_NIPPER ||
+		wi.number == WP_PUMPER ||
+		wi.number == WP_BOASTER ||
+		wi.number == WP_SPLASHER) {
 		//distance towards the enemy
 		dist = VectorLength(dir);
 		if (dist > 150) dist = 150;
 		f = 0.6 + dist / 150 * 0.4;
 		aim_accuracy *= f;
 	}
-	//add some random stuff to the aim direction depending on the aim accuracy
-	if (aim_accuracy < 0.8) {
-		VectorNormalize(dir);
-		for (i = 0; i < 3; i++) dir[i] += 0.3 * crandom() * (1 - aim_accuracy);
-	}
+
+	if( IsBambam(bs->enemy) )
+		aim_accuracy += (1 - aim_accuracy) * 0.66;
+	else if( IsBoomie(bs->enemy) )
+		aim_accuracy += (1 - aim_accuracy) * 0.5;
+
+
+	
 	//set the ideal view angles
 	vectoangles(dir, bs->ideal_viewangles);
+	
 	//take the weapon spread into account for lower skilled bots
-	bs->ideal_viewangles[PITCH] += 6 * wi.vspread * crandom() * (1 - aim_accuracy);
+	wi_spread_x = 9 *  crandom() * (1 - aim_accuracy);
+	if(crandom() < 0.5f )
+		bs->ideal_viewangles[PITCH] += wi_spread_x;
+	else
+		bs->ideal_viewangles[PITCH] -= wi_spread_x;
 	bs->ideal_viewangles[PITCH] = AngleMod(bs->ideal_viewangles[PITCH]);
-	bs->ideal_viewangles[YAW] += 6 * wi.hspread * crandom() * (1 - aim_accuracy);
-	bs->ideal_viewangles[YAW] = AngleMod(bs->ideal_viewangles[YAW]);
+
+	wi_spread_y = 6 * crandom() * (1 - aim_accuracy);
+	if( crandom() < 0.5f )
+		bs->ideal_viewangles[YAW] +=  wi_spread_y;
+	else
+		bs->ideal_viewangles[YAW] -=  wi_spread_y;
+	bs->ideal_viewangles[YAW] = AngleMod( bs->ideal_viewangles[YAW] );
+	//G_Printf( "skill %f spread %.2f %.2f \n", aim_skill, wi_spread_x, wi_spread_y );
+
 	//if the bots should be really challenging
 	if (bot_challenge.integer) {
 		//if the bot is really accurate and has the enemy in view for some time
@@ -3567,53 +2919,42 @@ void BotCheckAttack(bot_state_t *bs) {
 	int attackentity;
 	bsp_trace_t bsptrace;
 	//float selfpreservation;
-	vec3_t forward, right, start, end, dir, angles;
+	vec3_t forward, right, start, end, dir, angles, miss;
 	weaponinfo_t wi;
 	bsp_trace_t trace;
-	aas_entityinfo_t entinfo;
 	vec3_t mins = {-8, -8, -8}, maxs = {8, 8, 8};
 
 	attackentity = bs->enemy;
-	//
-	BotEntityInfo(attackentity, &entinfo);
-	// if not attacking a player
-	if (attackentity >= MAX_CLIENTS) {
-#ifdef MISSIONPACK
-		// if attacking an obelisk
-		if ( entinfo.number == redobelisk.entitynum ||
-			entinfo.number == blueobelisk.entitynum ) {
-			// if obelisk is respawning return
-			if ( g_entities[entinfo.number].activator &&
-				g_entities[entinfo.number].activator->s.frame == 2 ) {
-				return;
-			}
-		}
-#endif
-	}
-	//
+
 	reactiontime = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_REACTIONTIME, 0, 1);
 	if (bs->enemysight_time > FloatTime() - reactiontime) return;
 	if (bs->teleport_time > FloatTime() - reactiontime) return;
 	//if changing weapons
 	if (bs->weaponchange_time > FloatTime() - 0.1) return;
-	//check fire throttle characteristic
-	if (bs->firethrottlewait_time > FloatTime()) return;
-	firethrottle = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_FIRETHROTTLE, 0, 1);
-	if (bs->firethrottleshoot_time < FloatTime()) {
-		if (random() > firethrottle) {
-			bs->firethrottlewait_time = FloatTime() + firethrottle;
-			bs->firethrottleshoot_time = 0;
+
+	if(bs->weaponnum != WP_IMPERIUS){
+		//check fire throttle characteristic
+		if (bs->firethrottlewait_time > FloatTime()){
+			return;
 		}
-		else {
-			bs->firethrottleshoot_time = FloatTime() + 1 - firethrottle;
-			bs->firethrottlewait_time = 0;
+		firethrottle = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_FIRETHROTTLE, 0, 1);
+		if (bs->firethrottleshoot_time < FloatTime()) {
+			if (random() > firethrottle) {
+				bs->firethrottlewait_time = FloatTime() + firethrottle;
+				bs->firethrottleshoot_time = 0;
+			}
+			else {
+				bs->firethrottleshoot_time = FloatTime() + 1 - firethrottle;
+				bs->firethrottlewait_time = 0;
+			}
 		}
 	}
 	//
 	//
 	VectorSubtract(bs->aimtarget, bs->eye, dir);
 	//
-	if (bs->weaponnum == WP_GAUNTLET) {
+	if (bs->weaponnum == WP_PUNCHY) {
+
 		if (VectorLengthSquared(dir) > Square(60)) {
 			return;
 		}
@@ -3628,7 +2969,16 @@ void BotCheckAttack(bot_state_t *bs) {
 		return;
 	BotAI_Trace(&bsptrace, bs->eye, NULL, NULL, bs->aimtarget, bs->client, CONTENTS_SOLID|CONTENTS_PLAYERCLIP);
 	if (bsptrace.fraction < 1 && bsptrace.ent != attackentity)
-		return;
+	{		
+		if( IsBambam(bs->enemy) || IsBoomie(bs->enemy) )
+		{
+			VectorScale(dir, 1.0f - bsptrace.fraction, miss);
+			if( VectorLengthSquared(miss) > Square(30) )
+				return;
+		}
+		else
+			return;
+	}
 
 	//get the weapon info
 	trap_BotGetWeaponInfo(bs->ws, bs->weaponnum, &wi);
@@ -3665,17 +3015,142 @@ void BotCheckAttack(bot_state_t *bs) {
 			//FIXME: check if a teammate gets radial damage
 		}
 	}
-	//if fire has to be release to activate weapon
-	if (wi.flags & WFL_FIRERELEASED) {
-		if (bs->flags & BFL_ATTACKED) {
+
+// cyr_zIMP {
+	if (wi.number == WP_IMPERIUS ) {
+		// trace expected fire time...
+		if(bs->cur_ps.eFlags & EF_CHARGED){
+			// release fire button...shoot
+		}
+		else{	// charge
 			trap_EA_Attack(bs->client);
+			//G_Printf("^1 loading %d\n",bs->cur_ps.weaponTime);
 		}
 	}
-	else {
+	else	// shoot
 		trap_EA_Attack(bs->client);
-	}
-	bs->flags ^= BFL_ATTACKED;
+// cyr_zIMP }
 }
+
+/*
+CheckSplash -- trace 800 units in direction of view, return fraction
+
+BotCheckChargedImp
+-- test if weapon is IMP and status is CHARGED
+-- get optimal target pos with vecMA
+-- check splash for 4 angles:
+		opti
+		opti - 15
+		opti + 10
+		75 degree up()
+  choose the one with the least splash dmg
+*/
+// cyr_zIMP {
+float CheckSplash(bot_state_t* bs, weaponinfo_t* wi, vec3_t view){
+	vec3_t start, end, forward, right;
+	vec3_t mins = {-8, -8, -8}, maxs = {8, 8, 8};
+	bsp_trace_t trace;
+
+	VectorCopy(bs->origin, start);
+	start[2] += bs->cur_ps.viewheight;
+	AngleVectors(view, forward, right, NULL);
+	start[0] += forward[0] * wi->offset[0] + right[0] * wi->offset[1];
+	start[1] += forward[1] * wi->offset[0] + right[1] * wi->offset[1];
+	start[2] += forward[2] * wi->offset[0] + right[2] * wi->offset[1] + wi->offset[2];
+	// test for imp splash distance
+	VectorMA(start, 800, forward, end);
+	//a little back to make sure not inside a very close enemy
+	VectorMA(start, -12, forward, start);
+	BotAI_Trace(&trace, start, mins, maxs, end, bs->entitynum, MASK_SHOT);
+	return trace.fraction;
+}
+
+qboolean BotCheckChargedImp(bot_state_t *bs){
+	weaponinfo_t wi;
+	//int visplayers[MAX_CLIENTS];
+	//int numplayers;
+	aas_entityinfo_t entinfo;
+	vec3_t dir, bestorigin, angdif, final; //, start, end;
+	float speed;
+	int bestang, dist;
+	//vec3_t mins = {-8, -8, -8}, maxs = {8, 8, 8};
+	float selfhurt[4];
+
+	// test auf entity-dead usw fehlt
+
+	//get the weapon info
+	if( !bs->inventory[bs->weaponnum])	// maybe BotChooseWeapon has not yet been called
+		return qfalse;
+	trap_BotGetWeaponInfo(bs->ws, bs->weaponnum, &wi);
+	// no imp or not charged
+	if(wi.number != WP_IMPERIUS || !(bs->cur_ps.eFlags & EF_CHARGED) )
+		return qfalse;
+
+	//BotAimAtEnemy(bs);
+	BotEntityInfo(bs->enemy, &entinfo);
+	if(!entinfo.valid)
+		return qfalse;
+
+	VectorSubtract(entinfo.origin, bs->origin, dir);
+	//distance towards the enemy
+	dist = VectorLength(dir);
+	//direction the enemy is moving in
+	VectorSubtract(entinfo.origin, entinfo.lastvisorigin, dir);
+	dir[2] = 0;
+	//
+	speed = VectorNormalize(dir) / entinfo.update_time;
+	//botimport.Print(PRT_MESSAGE, "speed = %f, wi->speed = %f\n", speed, wi->speed);
+	//best spot to aim at
+	VectorMA(entinfo.origin, (dist / wi.speed) * speed, dir, bestorigin);
+
+	VectorSubtract(bestorigin, bs->eye, dir);
+	vectoangles(dir, bs->viewangles);
+	bs->ideal_viewangles[PITCH] = AngleMod(bs->viewangles[PITCH]);
+	bs->ideal_viewangles[YAW] = AngleMod(bs->viewangles[YAW]);
+	// thats it, shoot
+
+
+	//  test for splash
+	selfhurt[0] = CheckSplash(bs, &wi, bs->viewangles);
+	if(selfhurt[0] < 0.9){
+		VectorCopy(bs->viewangles, angdif);
+		angdif[0]-= 15;
+		selfhurt[1] = CheckSplash(bs, &wi, angdif);
+		angdif[0]+= 10;
+		selfhurt[2] = CheckSplash(bs, &wi, angdif);
+		angdif[0] = -75;
+		selfhurt[3] = CheckSplash(bs, &wi, angdif);
+		// choose highest value (high distance)
+		bestang = (selfhurt[0] >= selfhurt[1]) ? 0 : 1;
+		bestang = (selfhurt[bestang] >= selfhurt[2]) ? bestang : 2;
+		bestang = (selfhurt[bestang] >= selfhurt[3]) ? bestang : 3;
+		switch(bestang){
+			case 0:
+				VectorCopy(bs->viewangles, final);
+				break;
+			case 1:
+				VectorCopy(bs->viewangles, final);
+				final[0]-= 15;
+				break;
+			case 2:
+				VectorCopy(bs->viewangles, final);
+				final[0]+= 10;
+				break;
+			case 3:
+				VectorCopy(bs->viewangles, final);
+				final[0]= -75;
+				break;
+			default:
+				VectorCopy(bs->viewangles, final);
+		}
+		VectorCopy(final, bs->viewangles);
+		trap_EA_View(bs->client, final);
+	}
+
+	return qtrue;
+}
+// cyr_zIMP }
+
 
 /*
 ==================
@@ -3683,78 +3158,28 @@ BotMapScripts
 ==================
 */
 void BotMapScripts(bot_state_t *bs) {
-	char info[1024];
-	char mapname[128];
-	int i, shootbutton;
-	float aim_accuracy;
-	aas_entityinfo_t entinfo;
-	vec3_t dir;
+    char info[1024];
+    char mapname[128];
+    vec3_t one, two;
 
-	trap_GetServerinfo(info, sizeof(info));
+    trap_GetServerinfo(info, sizeof(info));
 
-	strncpy(mapname, Info_ValueForKey( info, "mapname" ), sizeof(mapname)-1);
-	mapname[sizeof(mapname)-1] = '\0';
+    strncpy(mapname, Info_ValueForKey( info, "mapname" ), sizeof(mapname)-1);
+    mapname[sizeof(mapname)-1] = '\0';
 
-	if (!Q_stricmp(mapname, "q3tourney6") || !Q_stricmp(mapname, "q3tourney6_ctf") || !Q_stricmp(mapname, "mpq3tourney6")) {
-		vec3_t mins = {694, 200, 480}, maxs = {968, 472, 680};
-		vec3_t buttonorg = {304, 352, 920};
-		//NOTE: NEVER use the func_bobbing in q3tourney6
-		bs->tfl &= ~TFL_FUNCBOB;
-		//crush area is higher in mpq3tourney6
-		if (!Q_stricmp(mapname, "mpq3tourney6")) {
-			mins[2] += 64;
-			maxs[2] += 64;
-		}
-		//if the bot is in the bounding box of the crush area
-		if (bs->origin[0] > mins[0] && bs->origin[0] < maxs[0]) {
-			if (bs->origin[1] > mins[1] && bs->origin[1] < maxs[1]) {
-				if (bs->origin[2] > mins[2] && bs->origin[2] < maxs[2]) {
-					return;
-				}
-			}
-		}
-		shootbutton = qfalse;
-		//if an enemy is in the bounding box then shoot the button
-		for (i = 0; i < level.maxclients; i++) {
-
-			if (i == bs->client) continue;
-			//
-			BotEntityInfo(i, &entinfo);
-			//
-			if (!entinfo.valid) continue;
-			//if the enemy isn't dead and the enemy isn't the bot self
-			if (EntityIsDead(&entinfo) || entinfo.number == bs->entitynum) continue;
-			//
-			if (entinfo.origin[0] > mins[0] && entinfo.origin[0] < maxs[0]) {
-				if (entinfo.origin[1] > mins[1] && entinfo.origin[1] < maxs[1]) {
-					if (entinfo.origin[2] > mins[2] && entinfo.origin[2] < maxs[2]) {
-						//if there's a team mate below the crusher
-						if (BotSameTeam(bs, i)) {
-							shootbutton = qfalse;
-							break;
-						}
-						else if (gametype < GT_CTF || bs->enemy == i) {
-							shootbutton = qtrue;
-						}
-					}
-				}
-			}
-		}
-		if (shootbutton) {
-			bs->flags |= BFL_IDEALVIEWSET;
-			VectorSubtract(buttonorg, bs->eye, dir);
-			vectoangles(dir, bs->ideal_viewangles);
-			aim_accuracy = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_AIM_ACCURACY, 0, 1);
-			bs->ideal_viewangles[PITCH] += 8 * crandom() * (1 - aim_accuracy);
-			bs->ideal_viewangles[PITCH] = AngleMod(bs->ideal_viewangles[PITCH]);
-			bs->ideal_viewangles[YAW] += 8 * crandom() * (1 - aim_accuracy);
-			bs->ideal_viewangles[YAW] = AngleMod(bs->ideal_viewangles[YAW]);
-			//
-			if (InFieldOfVision(bs->viewangles, 20, bs->ideal_viewangles)) {
-				trap_EA_Attack(bs->client);
-			}
-		}
-	}
+//cyr{
+    if( !Q_stricmp(mapname, "wop_padattic") ){
+        if( bs->inventory[INVENTORY_SPRAYPISTOLAMMO] ){
+            trap_BotAddAvoidSpot(bs->ms, outtele.origin, 100, AVOID_ALWAYS);
+            VectorCopy(outtele.origin, one);
+            one[0]+=100;
+            trap_BotAddAvoidSpot(bs->ms, one, 100, AVOID_ALWAYS);
+            VectorCopy(outtele.origin, two);
+            two[0]-=100;
+            trap_BotAddAvoidSpot(bs->ms, two, 100, AVOID_ALWAYS);
+        }
+    }
+//cyr}
 }
 
 /*
@@ -3839,6 +3264,7 @@ int BotFuncButtonActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *a
 	modelindex = atoi(model+1);
 	if (!modelindex)
 		return qfalse;
+	VectorClear(angles);
 	entitynum = BotModelMinsMaxs(modelindex, ET_MOVER, 0, mins, maxs);
 	//get the lip of the button
 	trap_AAS_FloatForBSPEpairKey(bspent, "lip", &lip);
@@ -3976,7 +3402,7 @@ BotFuncDoorGoal
 int BotFuncDoorActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *activategoal) {
 	int modelindex, entitynum;
 	char model[MAX_INFO_STRING];
-	vec3_t mins, maxs, origin;
+	vec3_t mins, maxs, origin, angles;
 
 	//shoot at the shootable door
 	trap_AAS_ValueForBSPEpairKey(bspent, "model", model, sizeof(model));
@@ -3985,6 +3411,7 @@ int BotFuncDoorActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *act
 	modelindex = atoi(model+1);
 	if (!modelindex)
 		return qfalse;
+	VectorClear(angles);
 	entitynum = BotModelMinsMaxs(modelindex, ET_MOVER, 0, mins, maxs);
 	//door origin
 	VectorAdd(mins, maxs, origin);
@@ -4010,7 +3437,7 @@ BotTriggerMultipleGoal
 int BotTriggerMultipleActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *activategoal) {
 	int i, areas[10], numareas, modelindex, entitynum;
 	char model[128];
-	vec3_t start, end, mins, maxs;
+	vec3_t start, end, mins, maxs, angles;
 	vec3_t origin, goalorigin;
 
 	activategoal->shoot = qfalse;
@@ -4022,6 +3449,7 @@ int BotTriggerMultipleActivateGoal(bot_state_t *bs, int bspent, bot_activategoal
 	modelindex = atoi(model+1);
 	if (!modelindex)
 		return qfalse;
+	VectorClear(angles);
 	entitynum = BotModelMinsMaxs(modelindex, 0, CONTENTS_TRIGGER, mins, maxs);
 	//trigger origin
 	VectorAdd(mins, maxs, origin);
@@ -4169,10 +3597,13 @@ int BotGetActivateGoal(bot_state_t *bs, int entitynum, bot_activategoal_t *activ
 	char targetname[10][128];
 	aas_entityinfo_t entinfo;
 	aas_areainfo_t areainfo;
-	vec3_t origin, absmins, absmaxs;
+	vec3_t origin, angles, absmins, absmaxs;
 
 	memset(activategoal, 0, sizeof(bot_activategoal_t));
 	BotEntityInfo(entitynum, &entinfo);
+	if(!entinfo.valid)
+		return 0;
+
 	Com_sprintf(model, sizeof( model ), "*%d", entinfo.modelindex);
 	for (ent = trap_AAS_NextBSPEntity(0); ent; ent = trap_AAS_NextBSPEntity(ent)) {
 		if (!trap_AAS_ValueForBSPEpairKey(ent, "model", tmpmodel, sizeof(tmpmodel))) continue;
@@ -4213,6 +3644,7 @@ int BotGetActivateGoal(bot_state_t *bs, int entitynum, bot_activategoal_t *activ
 		if (*model) {
 			modelindex = atoi(model+1);
 			if (modelindex) {
+				VectorClear(angles);
 				BotModelMinsMaxs(modelindex, ET_MOVER, 0, absmins, absmaxs);
 				//
 				numareas = trap_AAS_BBoxAreas(absmins, absmaxs, areas, MAX_ACTIVATEAREAS*2);
@@ -4358,6 +3790,12 @@ int BotGoForActivateGoal(bot_state_t *bs, bot_activategoal_t *activategoal) {
 		activategoal->time = FloatTime() + 10;
 	activategoal->start_time = FloatTime();
 	BotEntityInfo(activategoal->goal.entitynum, &activateinfo);
+	if(!activateinfo.valid)
+	{
+		AIEnter_Seek_LTG(bs, "ActivateGoal: goal ent invalid");
+		return qtrue;
+	}
+
 	VectorCopy(activateinfo.origin, activategoal->origin);
 	//
 	if (BotPushOntoActivateGoalStack(bs, activategoal)) {
@@ -4457,6 +3895,9 @@ void BotAIBlocked(bot_state_t *bs, bot_moveresult_t *moveresult, int activate) {
 	}
 	// get info for the entity that is blocking the bot
 	BotEntityInfo(moveresult->blockentity, &entinfo);
+	if(!entinfo.valid)
+		return;
+
 #ifdef OBSTACLEDEBUG
 	ClientName(bs->client, netname, sizeof(netname));
 	BotAI_Print(PRT_MESSAGE, "%s: I'm blocked by model %d\n", netname, entinfo.modelindex);
@@ -4561,11 +4002,15 @@ int BotAIPredictObstacles(bot_state_t *bs, bot_goal_t *goal) {
 	bs->predictobstacles_goalareanum = goal->areanum;
 	bs->predictobstacles_time = FloatTime();
 
-	// predict at most 100 areas or 1 second ahead
+	// predict at most 100 areas or 10 seconds ahead
 	trap_AAS_PredictRoute(&route, bs->areanum, bs->origin,
 							goal->areanum, bs->tfl, 100, 1000,
 							RSE_USETRAVELTYPE|RSE_ENTERCONTENTS,
 							AREACONTENTS_MOVER, TFL_BRIDGE, 0);
+	if(bot_developer.integer & AIDBG_MOVE){
+		DeleteDebugLines();
+		DebugLineDouble(bs->origin, route.endpos, 3);
+	}
 	// if bot has to travel through an area with a mover
 	if (route.stopevent & RSE_ENTERCONTENTS) {
 		// if the bot will run into a mover
@@ -4613,99 +4058,11 @@ BotCheckConsoleMessages
 ==================
 */
 void BotCheckConsoleMessages(bot_state_t *bs) {
-	char botname[MAX_NETNAME], message[MAX_MESSAGE_SIZE], netname[MAX_NETNAME], *ptr;
-	float chat_reply;
-	int context, handle;
+	int handle;
 	bot_consolemessage_t m;
-	bot_match_t match;
 
-	//the name of this bot
-	ClientName(bs->client, botname, sizeof(botname));
-	//
-	while((handle = trap_BotNextConsoleMessage(bs->cs, &m)) != 0) {
-		//if the chat state is flooded with messages the bot will read them quickly
-		if (trap_BotNumConsoleMessages(bs->cs) < 10) {
-			//if it is a chat message the bot needs some time to read it
-			if (m.type == CMS_CHAT && m.time > FloatTime() - (1 + random())) break;
-		}
-		//
-		ptr = m.message;
-		//if it is a chat message then don't unify white spaces and don't
-		//replace synonyms in the netname
-		if (m.type == CMS_CHAT) {
-			//
-			if (trap_BotFindMatch(m.message, &match, MTCONTEXT_REPLYCHAT)) {
-				ptr = m.message + match.variables[MESSAGE].offset;
-			}
-		}
-		//unify the white spaces in the message
-		trap_UnifyWhiteSpaces(ptr);
-		//replace synonyms in the right context
-		context = BotSynonymContext(bs);
-		trap_BotReplaceSynonyms(ptr, context);
-		//if there's no match
-		if (!BotMatchMessage(bs, m.message)) {
-			//if it is a chat message
-			if (m.type == CMS_CHAT && !bot_nochat.integer) {
-				//
-				if (!trap_BotFindMatch(m.message, &match, MTCONTEXT_REPLYCHAT)) {
-					trap_BotRemoveConsoleMessage(bs->cs, handle);
-					continue;
-				}
-				//don't use eliza chats with team messages
-				if (match.subtype & ST_TEAM) {
-					trap_BotRemoveConsoleMessage(bs->cs, handle);
-					continue;
-				}
-				//
-				trap_BotMatchVariable(&match, NETNAME, netname, sizeof(netname));
-				trap_BotMatchVariable(&match, MESSAGE, message, sizeof(message));
-				//if this is a message from the bot self
-				if (bs->client == ClientFromName(netname)) {
-					trap_BotRemoveConsoleMessage(bs->cs, handle);
-					continue;
-				}
-				//unify the message
-				trap_UnifyWhiteSpaces(message);
-				//
-				trap_Cvar_Update(&bot_testrchat);
-				if (bot_testrchat.integer) {
-					//
-					trap_BotLibVarSet("bot_testrchat", "1");
-					//if bot replies with a chat message
-					if (trap_BotReplyChat(bs->cs, message, context, CONTEXT_REPLY,
-															NULL, NULL,
-															NULL, NULL,
-															NULL, NULL,
-															botname, netname)) {
-						BotAI_Print(PRT_MESSAGE, "------------------------\n");
-					}
-					else {
-						BotAI_Print(PRT_MESSAGE, "**** no valid reply ****\n");
-					}
-				}
-				//if at a valid chat position and not chatting already and not in teamplay
-				else if (bs->ainode != AINode_Stand && BotValidChatPosition(bs) && !TeamPlayIsOn()) {
-					chat_reply = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CHAT_REPLY, 0, 1);
-					if (random() < 1.5 / (NumBots()+1) && random() < chat_reply) {
-						//if bot replies with a chat message
-						if (trap_BotReplyChat(bs->cs, message, context, CONTEXT_REPLY,
-																NULL, NULL,
-																NULL, NULL,
-																NULL, NULL,
-																botname, netname)) {
-							//remove the console message
-							trap_BotRemoveConsoleMessage(bs->cs, handle);
-							bs->stand_time = FloatTime() + BotChatTime(bs);
-							AIEnter_Stand(bs, "BotCheckConsoleMessages: reply chat");
-							//EA_Say(bs->client, bs->cs.chatmessage);
-							break;
-						}
-					}
-				}
-			}
-		}
-		//remove the console message
+	while((handle = trap_BotNextConsoleMessage(bs->cs, &m)) != 0){
+		BotMatchMessage(bs, m.message);
 		trap_BotRemoveConsoleMessage(bs->cs, handle);
 	}
 }
@@ -4716,57 +4073,14 @@ BotCheckEvents
 ==================
 */
 void BotCheckForGrenades(bot_state_t *bs, entityState_t *state) {
+
 	// if this is not a grenade
-	if (state->eType != ET_MISSILE || state->weapon != WP_GRENADE_LAUNCHER)
+	if (state->eType != ET_MISSILE || state->weapon != WP_BALLOONY)
 		return;
+
 	// try to avoid the grenade
 	trap_BotAddAvoidSpot(bs->ms, state->pos.trBase, 160, AVOID_ALWAYS);
 }
-
-#ifdef MISSIONPACK
-/*
-==================
-BotCheckForProxMines
-==================
-*/
-void BotCheckForProxMines(bot_state_t *bs, entityState_t *state) {
-	// if this is not a prox mine
-	if (state->eType != ET_MISSILE || state->weapon != WP_PROX_LAUNCHER)
-		return;
-	// if this prox mine is from someone on our own team
-	if (state->generic1 == BotTeam(bs))
-		return;
-	// if the bot doesn't have a weapon to deactivate the mine
-	if (!(bs->inventory[INVENTORY_PLASMAGUN] > 0 && bs->inventory[INVENTORY_CELLS] > 0) &&
-		!(bs->inventory[INVENTORY_ROCKETLAUNCHER] > 0 && bs->inventory[INVENTORY_ROCKETS] > 0) &&
-		!(bs->inventory[INVENTORY_BFG10K] > 0 && bs->inventory[INVENTORY_BFGAMMO] > 0) ) {
-		return;
-	}
-	// try to avoid the prox mine
-	trap_BotAddAvoidSpot(bs->ms, state->pos.trBase, 160, AVOID_ALWAYS);
-	//
-	if (bs->numproxmines >= MAX_PROXMINES)
-		return;
-	bs->proxmines[bs->numproxmines] = state->number;
-	bs->numproxmines++;
-}
-
-/*
-==================
-BotCheckForKamikazeBody
-==================
-*/
-void BotCheckForKamikazeBody(bot_state_t *bs, entityState_t *state) {
-	// if this entity is not wearing the kamikaze
-	if (!(state->eFlags & EF_KAMIKAZE))
-		return;
-	// if this entity isn't dead
-	if (!(state->eFlags & EF_DEAD))
-		return;
-	//remember this kamikaze body
-	bs->kamikazebody = state->number;
-}
-#endif
 
 /*
 ==================
@@ -4795,6 +4109,41 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 	}
 	//
 	switch(event) {
+		case EV_DROP_CARTRIDGE:
+		{
+			if(bs->ltgtype == LTG_FETCHCART){
+				// get event location !!!
+				bs->takecart = qtrue;
+
+				/*
+				vec3_t dir;
+				char* items[]={"red Cartridge","blue Cartridge"};
+				bot_goal_t goal;
+				float dist;
+
+				G_Printf("^2 launched ...");	// cyr_ptr
+				VectorSubtract(state->origin, bs->origin, dir);
+				if(VectorLength(dir) >= PUSHCART_DIST ){
+					G_Printf("too far %d :/ \n", VectorLength(dir));	// cyr_ptr
+					//break;	// cyr_ptr
+				}
+				else G_Printf("in range ...");		// cyr_ptr
+
+
+				// push droped cart in item db
+				trap_BotUpdateEntityItems();
+				// identify cart
+				dist = BotNearestVisibleItem(bs, items[BotTeam(bs)-1], &goal );
+				if(dist < 200){
+					bs->takecart = qtrue;
+					memcpy(&goal, &bs->teamgoal, sizeof(bot_goal_t));
+					G_Printf("taking it ! \n");	// cyr_ptr
+				}
+				else G_Printf("not found :/ \n");	// cyr_ptr
+				*/
+			}
+			break;
+		}
 		//client obituary event
 		case EV_OBITUARY:
 		{
@@ -4826,121 +4175,56 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 			else if (attacker == bs->enemy && target == attacker) {
 				bs->enemysuicide = qtrue;
 			}
-			//
-#ifdef MISSIONPACK			
-			if (gametype == GT_1FCTF) {
-				//
-				BotEntityInfo(target, &entinfo);
-				if ( entinfo.powerups & ( 1 << PW_NEUTRALFLAG ) ) {
-					if (!BotSameTeam(bs, target)) {
-						bs->neutralflagstatus = 3;	//enemy dropped the flag
-						bs->flagstatuschanged = qtrue;
-					}
-				}
-			}
-#endif
 			break;
 		}
 		case EV_GLOBAL_SOUND:
 		{
-			if (state->eventParm < 0 || state->eventParm >= MAX_SOUNDS) {
+			if (state->eventParm < 0 || state->eventParm > MAX_SOUNDS) {
 				BotAI_Print(PRT_ERROR, "EV_GLOBAL_SOUND: eventParm (%d) out of range\n", state->eventParm);
 				break;
 			}
 			trap_GetConfigstring(CS_SOUNDS + state->eventParm, buf, sizeof(buf));
-			/*
-			if (!strcmp(buf, "sound/teamplay/flagret_red.wav")) {
-				//red flag is returned
-				bs->redflagstatus = 0;
-				bs->flagstatuschanged = qtrue;
-			}
-			else if (!strcmp(buf, "sound/teamplay/flagret_blu.wav")) {
-				//blue flag is returned
-				bs->blueflagstatus = 0;
-				bs->flagstatuschanged = qtrue;
-			}
-			else*/
-#ifdef MISSIONPACK
-			if (!strcmp(buf, "sound/items/kamikazerespawn.wav" )) {
-				//the kamikaze respawned so don't avoid it
-				BotDontAvoid(bs, "Kamikaze");
-			}
-			else
-#endif
-				if (!strcmp(buf, "sound/items/poweruprespawn.wav")) {
+				if (!strcmp(buf, "sounds/items/powerup_respawn")) {
 				//powerup respawned... go get it
 				BotGoForPowerups(bs);
 			}
 			break;
 		}
-		case EV_GLOBAL_TEAM_SOUND:
-		{
-			if (gametype == GT_CTF) {
+		case EV_GLOBAL_TEAM_SOUND:{
+			/*if (gametype == GT_CTF) {
 				switch(state->eventParm) {
 					case GTS_RED_CAPTURE:
 						bs->blueflagstatus = 0;
 						bs->redflagstatus = 0;
-						bs->flagstatuschanged = qtrue;
+						//bs->flagstatuschanged = qtrue;
 						break; //see BotMatch_CTF
 					case GTS_BLUE_CAPTURE:
 						bs->blueflagstatus = 0;
 						bs->redflagstatus = 0;
-						bs->flagstatuschanged = qtrue;
+						//bs->flagstatuschanged = qtrue;
 						break; //see BotMatch_CTF
 					case GTS_RED_RETURN:
 						//blue flag is returned
 						bs->blueflagstatus = 0;
-						bs->flagstatuschanged = qtrue;
+						//bs->flagstatuschanged = qtrue;
 						break;
 					case GTS_BLUE_RETURN:
 						//red flag is returned
 						bs->redflagstatus = 0;
-						bs->flagstatuschanged = qtrue;
+						//bs->flagstatuschanged = qtrue;
 						break;
 					case GTS_RED_TAKEN:
 						//blue flag is taken
 						bs->blueflagstatus = 1;
-						bs->flagstatuschanged = qtrue;
+						//bs->flagstatuschanged = qtrue;
 						break; //see BotMatch_CTF
 					case GTS_BLUE_TAKEN:
 						//red flag is taken
 						bs->redflagstatus = 1;
-						bs->flagstatuschanged = qtrue;
+						//bs->flagstatuschanged = qtrue;
 						break; //see BotMatch_CTF
 				}
-			}
-#ifdef MISSIONPACK
-			else if (gametype == GT_1FCTF) {
-				switch(state->eventParm) {
-					case GTS_RED_CAPTURE:
-						bs->neutralflagstatus = 0;
-						bs->flagstatuschanged = qtrue;
-						break;
-					case GTS_BLUE_CAPTURE:
-						bs->neutralflagstatus = 0;
-						bs->flagstatuschanged = qtrue;
-						break;
-					case GTS_RED_RETURN:
-						//flag has returned
-						bs->neutralflagstatus = 0;
-						bs->flagstatuschanged = qtrue;
-						break;
-					case GTS_BLUE_RETURN:
-						//flag has returned
-						bs->neutralflagstatus = 0;
-						bs->flagstatuschanged = qtrue;
-						break;
-					case GTS_RED_TAKEN:
-						bs->neutralflagstatus = BotTeam(bs) == TEAM_RED ? 2 : 1; //FIXME: check Team_TakeFlagSound in g_team.c
-						bs->flagstatuschanged = qtrue;
-						break;
-					case GTS_BLUE_TAKEN:
-						bs->neutralflagstatus = BotTeam(bs) == TEAM_BLUE ? 2 : 1; //FIXME: check Team_TakeFlagSound in g_team.c
-						bs->flagstatuschanged = qtrue;
-						break;
-				}
-			}
-#endif
+			}*/
 			break;
 		}
 		case EV_PLAYER_TELEPORT_IN:
@@ -4985,6 +4269,16 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 		case EV_JUMP_PAD:
 		case EV_JUMP:
 		case EV_TAUNT:
+
+		case EV_HEHE1:
+		case EV_HEHE2:
+
+		case EV_FOOTSTEP_CARPET:
+		case EV_FOOTSTEP_LATTICE:
+		case EV_FOOTSTEP_SAND:
+		case EV_FOOTSTEP_SOFT:
+		case EV_FOOTSTEP_WOOD:
+
 		case EV_WATER_TOUCH:
 		case EV_WATER_LEAVE:
 		case EV_WATER_UNDER:
@@ -4995,23 +4289,6 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 		case EV_CHANGE_WEAPON:
 		case EV_FIRE_WEAPON:
 			//FIXME: either add to sound queue or mark player as someone making noise
-			break;
-		case EV_USE_ITEM0:
-		case EV_USE_ITEM1:
-		case EV_USE_ITEM2:
-		case EV_USE_ITEM3:
-		case EV_USE_ITEM4:
-		case EV_USE_ITEM5:
-		case EV_USE_ITEM6:
-		case EV_USE_ITEM7:
-		case EV_USE_ITEM8:
-		case EV_USE_ITEM9:
-		case EV_USE_ITEM10:
-		case EV_USE_ITEM11:
-		case EV_USE_ITEM12:
-		case EV_USE_ITEM13:
-		case EV_USE_ITEM14:
-		case EV_USE_ITEM15:
 			break;
 	}
 }
@@ -5027,10 +4304,6 @@ void BotCheckSnapshot(bot_state_t *bs) {
 
 	//remove all avoid spots
 	trap_BotAddAvoidSpot(bs->ms, vec3_origin, 0, AVOID_CLEAR);
-	//reset kamikaze body
-	bs->kamikazebody = 0;
-	//reset number of proxmines
-	bs->numproxmines = 0;
 	//
 	ent = 0;
 	while( ( ent = BotAI_GetSnapshotEntity( bs->client, ent, &state ) ) != -1 ) {
@@ -5061,156 +4334,27 @@ BotCheckAir
 ==================
 */
 void BotCheckAir(bot_state_t *bs) {
-	if (bs->inventory[INVENTORY_ENVIRONMENTSUIT] <= 0) {
-		if (trap_AAS_PointContents(bs->eye) & (CONTENTS_WATER|CONTENTS_SLIME|CONTENTS_LAVA)) {
-			return;
-		}
-	}
+	if (trap_AAS_PointContents(bs->eye) & (CONTENTS_WATER|CONTENTS_SLIME|CONTENTS_LAVA))
+		return;
+	// we have air this frame
 	bs->lastair_time = FloatTime();
 }
 
-/*
-==================
-BotAlternateRoute
-==================
-*/
-bot_goal_t *BotAlternateRoute(bot_state_t *bs, bot_goal_t *goal) {
-	int t;
+// any gametype specific map contents missing?
+qboolean MissingMapConts(void)
+{
 
-	// if the bot has an alternative route goal
-	if (bs->altroutegoal.areanum) {
-		//
-		if (bs->reachedaltroutegoal_time)
-			return goal;
-		// travel time towards alternative route goal
-		t = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->altroutegoal.areanum, bs->tfl);
-		if (t && t < 20) {
-			//BotAI_Print(PRT_MESSAGE, "reached alternate route goal\n");
-			bs->reachedaltroutegoal_time = FloatTime();
-		}
-		memcpy(goal, &bs->altroutegoal, sizeof(bot_goal_t));
-		return &bs->altroutegoal;
-	}
-	return goal;
-}
+	if(gametype == GT_BALLOON)
+		return (level.numBalloons == 0);
+    
+	if(gametype == GT_SPRAY || gametype == GT_SPRAYFFA){
+        return( !level.sr_tele    ||
+                !level.bspraywall ||
+                !level.rspraywall ||
+                !level.sr_teleout);
+    }
 
-/*
-==================
-BotGetAlternateRouteGoal
-==================
-*/
-int BotGetAlternateRouteGoal(bot_state_t *bs, int base) {
-	aas_altroutegoal_t *altroutegoals;
-	bot_goal_t *goal;
-	int numaltroutegoals, rnd;
-
-	if (base == TEAM_RED) {
-		altroutegoals = red_altroutegoals;
-		numaltroutegoals = red_numaltroutegoals;
-	}
-	else {
-		altroutegoals = blue_altroutegoals;
-		numaltroutegoals = blue_numaltroutegoals;
-	}
-	if (!numaltroutegoals)
-		return qfalse;
-	rnd = (float) random() * numaltroutegoals;
-	if (rnd >= numaltroutegoals)
-		rnd = numaltroutegoals-1;
-	goal = &bs->altroutegoal;
-	goal->areanum = altroutegoals[rnd].areanum;
-	VectorCopy(altroutegoals[rnd].origin, goal->origin);
-	VectorSet(goal->mins, -8, -8, -8);
-	VectorSet(goal->maxs, 8, 8, 8);
-	goal->entitynum = 0;
-	goal->iteminfo = 0;
-	goal->number = 0;
-	goal->flags = 0;
-	//
-	bs->reachedaltroutegoal_time = 0;
-	return qtrue;
-}
-
-/*
-==================
-BotSetupAlternateRouteGoals
-==================
-*/
-void BotSetupAlternativeRouteGoals(void) {
-
-	if (altroutegoals_setup)
-		return;
-#ifdef MISSIONPACK
-	if (gametype == GT_CTF) {
-		if (trap_BotGetLevelItemGoal(-1, "Neutral Flag", &ctf_neutralflag) < 0)
-			BotAI_Print(PRT_WARNING, "No alt routes without Neutral Flag\n");
-		if (ctf_neutralflag.areanum) {
-			//
-			red_numaltroutegoals = trap_AAS_AlternativeRouteGoals(
-										ctf_neutralflag.origin, ctf_neutralflag.areanum,
-										ctf_redflag.origin, ctf_redflag.areanum, TFL_DEFAULT,
-										red_altroutegoals, MAX_ALTROUTEGOALS,
-										ALTROUTEGOAL_CLUSTERPORTALS|
-										ALTROUTEGOAL_VIEWPORTALS);
-			blue_numaltroutegoals = trap_AAS_AlternativeRouteGoals(
-										ctf_neutralflag.origin, ctf_neutralflag.areanum,
-										ctf_blueflag.origin, ctf_blueflag.areanum, TFL_DEFAULT,
-										blue_altroutegoals, MAX_ALTROUTEGOALS,
-										ALTROUTEGOAL_CLUSTERPORTALS|
-										ALTROUTEGOAL_VIEWPORTALS);
-		}
-	}
-	else if (gametype == GT_1FCTF) {
-		if (trap_BotGetLevelItemGoal(-1, "Neutral Obelisk", &neutralobelisk) < 0)
-			BotAI_Print(PRT_WARNING, "One Flag CTF without Neutral Obelisk\n");
-		red_numaltroutegoals = trap_AAS_AlternativeRouteGoals(
-									ctf_neutralflag.origin, ctf_neutralflag.areanum,
-									ctf_redflag.origin, ctf_redflag.areanum, TFL_DEFAULT,
-									red_altroutegoals, MAX_ALTROUTEGOALS,
-									ALTROUTEGOAL_CLUSTERPORTALS|
-									ALTROUTEGOAL_VIEWPORTALS);
-		blue_numaltroutegoals = trap_AAS_AlternativeRouteGoals(
-									ctf_neutralflag.origin, ctf_neutralflag.areanum,
-									ctf_blueflag.origin, ctf_blueflag.areanum, TFL_DEFAULT,
-									blue_altroutegoals, MAX_ALTROUTEGOALS,
-									ALTROUTEGOAL_CLUSTERPORTALS|
-									ALTROUTEGOAL_VIEWPORTALS);
-	}
-	else if (gametype == GT_OBELISK) {
-		if (trap_BotGetLevelItemGoal(-1, "Neutral Obelisk", &neutralobelisk) < 0)
-			BotAI_Print(PRT_WARNING, "No alt routes without Neutral Obelisk\n");
-		//
-		red_numaltroutegoals = trap_AAS_AlternativeRouteGoals(
-									neutralobelisk.origin, neutralobelisk.areanum,
-									redobelisk.origin, redobelisk.areanum, TFL_DEFAULT,
-									red_altroutegoals, MAX_ALTROUTEGOALS,
-									ALTROUTEGOAL_CLUSTERPORTALS|
-									ALTROUTEGOAL_VIEWPORTALS);
-		blue_numaltroutegoals = trap_AAS_AlternativeRouteGoals(
-									neutralobelisk.origin, neutralobelisk.areanum,
-									blueobelisk.origin, blueobelisk.areanum, TFL_DEFAULT,
-									blue_altroutegoals, MAX_ALTROUTEGOALS,
-									ALTROUTEGOAL_CLUSTERPORTALS|
-									ALTROUTEGOAL_VIEWPORTALS);
-	}
-	else if (gametype == GT_HARVESTER) {
-		if (trap_BotGetLevelItemGoal(-1, "Neutral Obelisk", &neutralobelisk) < 0)
-			BotAI_Print(PRT_WARNING, "Harvester without Neutral Obelisk\n");
-		red_numaltroutegoals = trap_AAS_AlternativeRouteGoals(
-									neutralobelisk.origin, neutralobelisk.areanum,
-									redobelisk.origin, redobelisk.areanum, TFL_DEFAULT,
-									red_altroutegoals, MAX_ALTROUTEGOALS,
-									ALTROUTEGOAL_CLUSTERPORTALS|
-									ALTROUTEGOAL_VIEWPORTALS);
-		blue_numaltroutegoals = trap_AAS_AlternativeRouteGoals(
-									neutralobelisk.origin, neutralobelisk.areanum,
-									blueobelisk.origin, blueobelisk.areanum, TFL_DEFAULT,
-									blue_altroutegoals, MAX_ALTROUTEGOALS,
-									ALTROUTEGOAL_CLUSTERPORTALS|
-									ALTROUTEGOAL_VIEWPORTALS);
-	}
-#endif
-	altroutegoals_setup = qtrue;
+    return qfalse;
 }
 
 /*
@@ -5219,7 +4363,7 @@ BotDeathmatchAI
 ==================
 */
 void BotDeathmatchAI(bot_state_t *bs, float thinktime) {
-	char gender[144], name[144];
+	char gender[144], name[144], buf[144];
 	char userinfo[MAX_INFO_STRING];
 	int i;
 
@@ -5233,6 +4377,11 @@ void BotDeathmatchAI(bot_state_t *bs, float thinktime) {
 		trap_GetUserinfo(bs->client, userinfo, sizeof(userinfo));
 		Info_SetValueForKey(userinfo, "sex", gender);
 		trap_SetUserinfo(bs->client, userinfo);
+		//set the team
+		if ( !bs->map_restart && g_gametype.integer != GT_TOURNAMENT ) {
+			Com_sprintf(buf, sizeof(buf), "team %s", bs->settings.team);
+			trap_EA_Command(bs->client, buf);
+		}
 		//set the chat gender
 		if (gender[0] == 'm') trap_BotSetChatGender(bs->cs, CHAT_GENDERMALE);
 		else if (gender[0] == 'f')  trap_BotSetChatGender(bs->cs, CHAT_GENDERFEMALE);
@@ -5243,11 +4392,16 @@ void BotDeathmatchAI(bot_state_t *bs, float thinktime) {
 		//
 		bs->lastframe_health = bs->inventory[INVENTORY_HEALTH];
 		bs->lasthitcount = bs->cur_ps.persistant[PERS_HITS];
-		//
+		bs->which_wall = NULL;
+
 		bs->setupcount = 0;
-		//
-		BotSetupAlternativeRouteGoals();
 	}
+
+	// test for map - gametype mismatch
+	if( MissingMapConts() ){
+		return;		// just stand still, dont exec any ainode
+	}
+
 	//no ideal view set
 	bs->flags &= ~BFL_IDEALVIEWSET;
 	//
@@ -5261,16 +4415,16 @@ void BotDeathmatchAI(bot_state_t *bs, float thinktime) {
 		//check for air
 		BotCheckAir(bs);
 	}
+
 	//check the console messages
 	BotCheckConsoleMessages(bs);
-	//if not in the intermission and not in observer mode
-	if (!BotIntermission(bs) && !BotIsObserver(bs)) {
-		//do team AI
-		BotTeamAI(bs);
-	}
+	
+	// teamleader stuff, disabled atm
+	//if (!BotIntermission(bs) && !BotIsObserver(bs)) {	BotTeamAI(bs); }
+
 	//if the bot has no ai node
 	if (!bs->ainode) {
-		AIEnter_Seek_LTG(bs, "BotDeathmatchAI: no ai node");
+			AIEnter_Seek_LTG(bs, "BotDeathmatchAI: no ai node");
 	}
 	//if the bot entered the game less than 8 seconds ago
 	if (!bs->entergamechat && bs->entergame_time > FloatTime() - 8) {
@@ -5280,6 +4434,8 @@ void BotDeathmatchAI(bot_state_t *bs, float thinktime) {
 		}
 		bs->entergamechat = qtrue;
 	}
+	if(level.cammode)
+			bs->ainode = AINode_Cam;
 	//reset the node switches from the previous frame
 	BotResetNodeSwitches();
 	//execute AI nodes
@@ -5301,119 +4457,138 @@ void BotDeathmatchAI(bot_state_t *bs, float thinktime) {
 	bs->lasthitcount = bs->cur_ps.persistant[PERS_HITS];
 }
 
-/*
-==================
-BotSetEntityNumForGoalWithModel
-==================
-*/
-void BotSetEntityNumForGoalWithModel(bot_goal_t *goal, int eType, char *modelname) {
-	gentity_t *ent;
-	int i, modelindex;
-	vec3_t dir;
 
-	modelindex = G_ModelIndex( modelname );
-	ent = &g_entities[0];
-	for (i = 0; i < level.num_entities; i++, ent++) {
-		if ( !ent->inuse ) {
-			continue;
-		}
-		if ( eType && ent->s.eType != eType) {
-			continue;
-		}
-		if (ent->s.modelindex != modelindex) {
-			continue;
-		}
-		VectorSubtract(goal->origin, ent->s.origin, dir);
-		if (VectorLengthSquared(dir) < Square(10)) {
-			goal->entitynum = i;
-			return;
-		}
+void BotSelectLogo(bot_state_t* bs){
+	char* logostring;
+	char buf[300];
+	char userinfo[MAX_INFO_STRING];
+
+	//trap_Characteristic_String(bs->character, CHARACTERISTIC_SPRAYLOGO, logostring, sizeof(logostring));
+
+	trap_GetUserinfo(bs->client, userinfo, sizeof(userinfo));
+	logostring = Info_ValueForKey(userinfo, "spraylogo");
+
+	Com_sprintf(buf, sizeof(buf), "selectlogo %s", logostring );
+    trap_EA_Command(bs->client, buf);
+}
+
+
+#define BOXHEIGHT 54
+#define BOXDEPTH  45
+
+// alternative zB BotGoalForBSPEntity
+void CheckMatrixForGoal(bot_goal_t* goal){
+	int xmin, xmax, ymin, ymax, zmin, zmax;
+	int i, j, k;
+	int step;
+	vec3_t pos, sample, offset, bestsample = {0, 0, 0};
+	int sarea, earea;
+	int dist, bestdist;
+	int reachable;
+
+	VectorCopy(goal->origin, pos);
+	sarea = BotPointAreaNum(pos);
+	bestdist = 9999;
+
+	zmin = zmax = BOXHEIGHT;
+	xmin = xmax = ymin = ymax = BOXDEPTH;	// == WIDTH
+	step = 2;
+
+	for(i = pos[0]-xmin; i < pos[0]+xmax; i+=step )
+		for(j = pos[1]-ymin; j < pos[1]+ymax; j+=step )
+			for(k = pos[2]-zmin; k < pos[2]+zmax; k+=step){		// scan 3 dimensions
+				VectorSet(sample, i, j, k);
+				earea = BotPointAreaNum(sample);
+				if(sarea != earea){	// crossed area border
+					reachable = trap_AAS_AreaReachability(earea);
+					if(reachable){
+						VectorSubtract(pos, sample, offset);
+						dist = VectorLength(offset);
+						if(dist < bestdist){
+							bestdist = dist;
+							VectorCopy(sample, bestsample);
+						}
+					}
+				}
+			}
+
+
+	if(bestdist < 9999){	// success
+		VectorCopy(bestsample, goal->origin);
+		goal->areanum = BotPointAreaNum(goal->origin);
 	}
 }
 
-/*
-==================
-BotSetEntityNumForGoal
-==================
-*/
-void BotSetEntityNumForGoal(bot_goal_t *goal, char *classname) {
-	gentity_t *ent;
-	int i;
-	vec3_t dir;
+void FixGoalArea(bot_goal_t* goal){
+	vec3_t start, end;
+	int numareas, areas[10];
 
-	ent = &g_entities[0];
-	for (i = 0; i < level.num_entities; i++, ent++) {
-		if ( !ent->inuse ) {
-			continue;
-		}
-		if ( Q_stricmp(ent->classname, classname) != 0 ) {
-			continue;
-		}
-		VectorSubtract(goal->origin, ent->s.origin, dir);
-		if (VectorLengthSquared(dir) < Square(10)) {
-			goal->entitynum = i;
-			return;
-		}
-	}
+	VectorCopy(goal->origin, start);
+	start[2] -= 32;
+	VectorCopy(goal->origin, end);
+	end[2] += 32;
+	numareas = trap_AAS_TraceAreas(start, end, areas, NULL, 10);
+	if (numareas)
+		goal->areanum = areas[0];
+	else
+		CheckMatrixForGoal(goal);
 }
 
-/*
-==================
-BotSetEntityNumForGoalWithActivator
-==================
-*/
-void BotSetEntityNumForGoalWithActivator(bot_goal_t *goal, char *classname) {
-	gentity_t *ent;
-	int i;
-	vec3_t dir;
+int CheckAreaForGoal(vec3_t origin){	// copy of BotFuzzyPointReachabilityArea
+	int firstareanum, j, x, y, z;
+	int areas[10], numareas, areanum, bestareanum;
+	float dist, bestdist;
+	vec3_t points[10], v, end, bestorigin;
 
-	ent = &g_entities[0];
-	for (i = 0; i < level.num_entities; i++, ent++) {
-		if ( !ent->inuse || !ent->activator ) {
-			continue;
+	firstareanum = 0;
+	areanum = trap_AAS_PointAreaNum(origin);
+	if (areanum){
+		firstareanum = areanum;
+		if (trap_AAS_AreaReachability(areanum)){
+			return areanum;
 		}
-		if ( Q_stricmp(ent->activator->classname, classname) != 0 ) {
-			continue;
+	} //end if
+	VectorCopy(origin, end);
+	end[2] += 4;
+	numareas = trap_AAS_TraceAreas(origin, end, areas, points, 10);
+	for (j = 0; j < numareas; j++)
+	{
+		if (trap_AAS_AreaReachability(areas[j])) return areas[j];
+	} //end for
+	bestdist = 999999;
+	bestareanum = 0;
+	for (z = 1; z >= -1; z -= 1){
+		for (x = 1; x >= -1; x -= 1){
+			for (y = 1; y >= -1; y -= 1){
+				VectorCopy(origin, end);
+				end[0] += x * 8;
+				end[1] += y * 8;
+				end[2] += z * 12;
+				numareas = trap_AAS_TraceAreas(origin, end, areas, points, 10);
+				for (j = 0; j < numareas; j++)
+				{
+					if (trap_AAS_AreaReachability(areas[j]))
+					{
+						VectorSubtract(points[j], origin, v);
+						dist = VectorLength(v);
+						if (dist < bestdist)
+						{
+							bestareanum = areas[j];
+							bestdist = dist;
+							VectorCopy(points[j], bestorigin);
+						} //end if
+					} //end if
+					if (!firstareanum) firstareanum = areas[j];
+				} //end for
+			} //end for
+		} //end for
+		if (bestareanum){
+			return bestareanum;
+			//VectorCopy(bestorigin, origin);
 		}
-		VectorSubtract(goal->origin, ent->s.origin, dir);
-		if (VectorLengthSquared(dir) < Square(10)) {
-			goal->entitynum = i;
-			return;
-		}
-	}
-}
-
-/*
-==================
-BotGoalForBSPEntity
-==================
-*/
-int BotGoalForBSPEntity( char *classname, bot_goal_t *goal ) {
-	char value[MAX_INFO_STRING];
-	vec3_t origin, start, end;
-	int ent, numareas, areas[10];
-
-	memset(goal, 0, sizeof(bot_goal_t));
-	for (ent = trap_AAS_NextBSPEntity(0); ent; ent = trap_AAS_NextBSPEntity(ent)) {
-		if (!trap_AAS_ValueForBSPEpairKey(ent, "classname", value, sizeof(value)))
-			continue;
-		if (!strcmp(value, classname)) {
-			if (!trap_AAS_VectorForBSPEpairKey(ent, "origin", origin))
-				return qfalse;
-			VectorCopy(origin, goal->origin);
-			VectorCopy(origin, start);
-			start[2] -= 32;
-			VectorCopy(origin, end);
-			end[2] += 32;
-			numareas = trap_AAS_TraceAreas(start, end, areas, NULL, 10);
-			if (!numareas)
-				return qfalse;
-			goal->areanum = areas[0];
-			return qtrue;
-		}
-	}
-	return qfalse;
-}
+	} //end for
+	return firstareanum;
+} //end of the function BotFuzzyPointReachabilityArea
 
 /*
 ==================
@@ -5421,10 +4596,13 @@ BotSetupDeathmatchAI
 ==================
 */
 void BotSetupDeathmatchAI(void) {
-	int ent, modelnum;
+	int ent, modelnum, i, j;
 	char model[128];
+    gentity_t* pent;
+
 
 	gametype = trap_Cvar_VariableIntegerValue("g_gametype");
+	maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
 
 	trap_Cvar_Register(&bot_rocketjump, "bot_rocketjump", "1", 0);
 	trap_Cvar_Register(&bot_grapple, "bot_grapple", "0", 0);
@@ -5434,42 +4612,166 @@ void BotSetupDeathmatchAI(void) {
 	trap_Cvar_Register(&bot_challenge, "bot_challenge", "0", 0);
 	trap_Cvar_Register(&bot_predictobstacles, "bot_predictobstacles", "1", 0);
 	trap_Cvar_Register(&g_spSkill, "g_spSkill", "2", 0);
-	//
-	if (gametype == GT_CTF) {
-		if (trap_BotGetLevelItemGoal(-1, "Red Flag", &ctf_redflag) < 0)
-			BotAI_Print(PRT_WARNING, "CTF without Red Flag\n");
-		if (trap_BotGetLevelItemGoal(-1, "Blue Flag", &ctf_blueflag) < 0)
-			BotAI_Print(PRT_WARNING, "CTF without Blue Flag\n");
-	}
-#ifdef MISSIONPACK
-	else if (gametype == GT_1FCTF) {
-		if (trap_BotGetLevelItemGoal(-1, "Neutral Flag", &ctf_neutralflag) < 0)
-			BotAI_Print(PRT_WARNING, "One Flag CTF without Neutral Flag\n");
-		if (trap_BotGetLevelItemGoal(-1, "Red Flag", &ctf_redflag) < 0)
-			BotAI_Print(PRT_WARNING, "One Flag CTF without Red Flag\n");
-		if (trap_BotGetLevelItemGoal(-1, "Blue Flag", &ctf_blueflag) < 0)
-			BotAI_Print(PRT_WARNING, "One Flag CTF without Blue Flag\n");
-	}
-	else if (gametype == GT_OBELISK) {
-		if (trap_BotGetLevelItemGoal(-1, "Red Obelisk", &redobelisk) < 0)
-			BotAI_Print(PRT_WARNING, "Overload without Red Obelisk\n");
-		BotSetEntityNumForGoalWithActivator(&redobelisk, "team_redobelisk");
-		if (trap_BotGetLevelItemGoal(-1, "Blue Obelisk", &blueobelisk) < 0)
-			BotAI_Print(PRT_WARNING, "Overload without Blue Obelisk\n");
-		BotSetEntityNumForGoalWithActivator(&blueobelisk, "team_blueobelisk");
-	}
-	else if (gametype == GT_HARVESTER) {
-		if (trap_BotGetLevelItemGoal(-1, "Red Obelisk", &redobelisk) < 0)
-			BotAI_Print(PRT_WARNING, "Harvester without Red Obelisk\n");
-		BotSetEntityNumForGoalWithActivator(&redobelisk, "team_redobelisk");
-		if (trap_BotGetLevelItemGoal(-1, "Blue Obelisk", &blueobelisk) < 0)
-			BotAI_Print(PRT_WARNING, "Harvester without Blue Obelisk\n");
-		BotSetEntityNumForGoalWithActivator(&blueobelisk, "team_blueobelisk");
-		if (trap_BotGetLevelItemGoal(-1, "Neutral Obelisk", &neutralobelisk) < 0)
-			BotAI_Print(PRT_WARNING, "Harvester without Neutral Obelisk\n");
-		BotSetEntityNumForGoalWithActivator(&neutralobelisk, "team_neutralobelisk");
-	}
-#endif
+
+	
+    if( gametype == GT_CTF){
+		qboolean redInit = qfalse;
+		qboolean blueInit = qfalse;
+
+		// todo: get rid of the trapcalls and to everything in the loop below
+    	if (trap_BotGetLevelItemGoal(-1, "red Lolly", &ctf_redflag) < 0)
+    		BotAI_Print(PRT_WARNING, "CTL without Red Lolly\n");
+    	if (trap_BotGetLevelItemGoal(-1, "blue Lolly", &ctf_blueflag) < 0)
+    	    BotAI_Print(PRT_WARNING, "CTL without Blue Lolly\n");
+
+		// find the entity numbers
+		pent = &g_entities[MAX_CLIENTS];
+		for(i=MAX_CLIENTS; i<level.num_entities; i++, pent++)
+		{
+			if(!pent->inuse) continue;
+			if( !Q_stricmp(pent->classname, "team_CTL_bluelolly") )
+			{
+				ctf_blueflag.entitynum = i;
+				blueInit = qtrue;				
+			}
+			else if( !Q_stricmp(pent->classname, "team_CTL_redlolly") )
+			{
+				ctf_redflag.entitynum = i;
+				redInit = qtrue;				
+			}
+
+			if(redInit && blueInit)
+				break;
+		}
+
+		WaypointInit();
+    }
+    
+	// find hstations
+    pent = &g_entities[0];
+    j = 0;
+
+    for (i = 0; i < level.num_entities; i++, pent++) {
+        if ( !pent->inuse ) continue;
+        if (j == MAX_HSTATIONS) break;
+		if ( pent->s.eType == ET_STATION ){
+            hstations[j].entitynum = i;
+            VectorCopy(pent->s.origin, hstations[j].origin);
+            hstations[j].areanum = BotPointAreaNum( hstations[j].origin );
+            VectorCopy(pent->r.mins, hstations[j].mins);
+            VectorCopy(pent->r.maxs, hstations[j].maxs);
+            hstations[j].flags = 0; // no item, not dropped, no airgoal, not for roaming
+
+                // adjust origin if not reachable
+            if( !trap_AAS_AreaReachability(hstations[j].areanum) )
+                 CheckMatrixForGoal( &hstations[j] );
+
+            j++;
+        }
+    }
+    num_hstations = j;
+     
+
+    if(gametype == GT_SPRAY || gametype == GT_SPRAYFFA){
+
+		if(level.bspraywall)
+		{
+			// blue wall
+			bwall.origin[0] = (level.bspraywall->r.mins[0] + level.bspraywall->r.maxs[0] ) / 2;
+			bwall.origin[1] = (level.bspraywall->r.mins[1] + level.bspraywall->r.maxs[1] ) / 2;
+			if( level.bspraywall->r.mins[2] < level.bspraywall->r.maxs[2])
+				bwall.origin[2] = level.bspraywall->r.mins[2] + 5;
+			else
+				bwall.origin[2] = level.bspraywall->r.maxs[2] + 5;
+
+			bwall.entitynum = level.bspraywall->s.number;
+			VectorCopy(level.bspraywall->r.mins, bwall.mins);
+			VectorCopy(level.bspraywall->r.maxs, bwall.maxs);
+			bwall.areanum = BotPointAreaNum( bwall.origin );
+			bwall.flags = 0;
+			CheckMatrixForGoal(&bwall);
+		}
+
+		if(level.rspraywall)
+		{
+			// red wall
+			rwall.origin[0] = (level.rspraywall->r.mins[0] + level.rspraywall->r.maxs[0] ) / 2;
+			rwall.origin[1] = (level.rspraywall->r.mins[1] + level.rspraywall->r.maxs[1] ) / 2;
+			if( level.rspraywall->r.mins[2] < level.rspraywall->r.maxs[2])
+				rwall.origin[2] = level.rspraywall->r.mins[2] + 5;
+			else
+				rwall.origin[2] = level.rspraywall->r.maxs[2] + 5;
+
+			rwall.entitynum = level.rspraywall->s.number;
+			VectorCopy(level.rspraywall->r.mins, rwall.mins);
+			VectorCopy(level.rspraywall->r.maxs, rwall.maxs);
+			rwall.areanum = BotPointAreaNum( rwall.origin );
+			rwall.flags = 0;
+
+			CheckMatrixForGoal(&rwall);
+		}
+
+		if(level.sr_tele)
+		{
+			// tele in
+			spraytele.origin[0] = ( level.sr_tele->r.mins[0] + level.sr_tele->r.maxs[0] ) / 2;
+			spraytele.origin[1] = ( level.sr_tele->r.mins[1] + level.sr_tele->r.maxs[1] ) / 2;
+			spraytele.origin[2] = ( level.sr_tele->r.mins[2] + level.sr_tele->r.maxs[2] ) / 2;
+
+			spraytele.entitynum = level.sr_tele->s.number;
+			VectorCopy(level.sr_tele->r.mins, spraytele.mins);
+			VectorCopy(level.sr_tele->r.maxs, spraytele.maxs);
+			spraytele.areanum = BotPointAreaNum( spraytele.origin );
+			spraytele.flags = 0;
+
+			FixGoalArea(&spraytele);
+			//CheckMatrixForGoal(&spraytele);
+			//spraytele.areanum = CheckAreaForGoal(spraytele.origin);			
+		}
+
+		if(level.sr_teleout)
+		{
+			// tele out
+			outtele.origin[0] = (level.sr_teleout->r.mins[0] + level.sr_teleout->r.maxs[0]) * 0.5f;
+			outtele.origin[1] = (level.sr_teleout->r.mins[1] + level.sr_teleout->r.maxs[1]) * 0.5f;
+			outtele.origin[2] = level.sr_teleout->r.mins[2] + 10;
+			outtele.entitynum = level.sr_teleout->s.number;
+			VectorCopy(level.sr_teleout->r.mins, outtele.mins);
+			VectorCopy(level.sr_teleout->r.maxs, outtele.maxs);
+			outtele.areanum = BotPointAreaNum( outtele.origin );
+			outtele.flags = 0;
+			CheckMatrixForGoal(&outtele);
+		}
+    }
+    else if (gametype == GT_BALLOON){
+        pent = &g_entities[0];
+        j = 0;
+
+        for (i = 0; i < level.num_entities; i++, pent++) {
+            if ( !pent->inuse ) continue;
+            if (j == MAX_BALLOONS) break;
+            if ( !Q_stricmp(pent->classname, "trigger_balloonzone")){//"target_balloon") ) {
+                balloongoal[j].entitynum = i;
+
+                VectorCopy(pent->s.origin, balloongoal[j].origin);
+                balloongoal[j].origin[0] = ( pent->r.mins[0] + pent->r.maxs[0] ) / 2 ;
+                balloongoal[j].origin[1] = ( pent->r.mins[1] + pent->r.maxs[1] ) / 2 ;
+                balloongoal[j].origin[2] = ( pent->r.mins[2] < pent->r.maxs[2] ) ? pent->r.mins[2] : pent->r.maxs[2] ;
+                balloongoal[j].origin[2]+= 32;  // testing
+
+                balloongoal[j].areanum = BotPointAreaNum( balloongoal[j].origin );
+                VectorCopy(pent->r.mins, balloongoal[j].mins);
+                VectorCopy(pent->r.maxs, balloongoal[j].maxs);
+                balloongoal[j].flags = 0; // no item, not dropped, no airgoal, not for roaming
+
+                // adjust origin if not reachable
+                if( !trap_AAS_AreaReachability(balloongoal[j].areanum) )
+                	CheckMatrixForGoal( &balloongoal[j] );
+
+                j++;
+            }
+        }
+    }
 
 	max_bspmodelindex = 0;
 	for (ent = trap_AAS_NextBSPEntity(0); ent; ent = trap_AAS_NextBSPEntity(ent)) {
@@ -5480,15 +4782,4 @@ void BotSetupDeathmatchAI(void) {
 				max_bspmodelindex = modelnum;
 		}
 	}
-	//initialize the waypoint heap
-	BotInitWaypoints();
-}
-
-/*
-==================
-BotShutdownDeathmatchAI
-==================
-*/
-void BotShutdownDeathmatchAI(void) {
-	altroutegoals_setup = qfalse;
 }

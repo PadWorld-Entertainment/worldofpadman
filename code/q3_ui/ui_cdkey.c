@@ -32,11 +32,11 @@ CD KEY MENU
 #include "ui_local.h"
 
 
-#define ART_FRAME		"menu/art/cut_frame"
-#define ART_ACCEPT0		"menu/art/accept_0"
-#define ART_ACCEPT1		"menu/art/accept_1"	
-#define ART_BACK0		"menu/art/back_0"
-#define ART_BACK1		"menu/art/back_1"	
+#define ART_FRAME		"cdkey.tga"
+#define ART_ACCEPT0		"menu/system/accept"
+#define ART_ACCEPT1		"menu/system/accept"	
+#define ART_BACK0		"menu/BtnBack0"
+#define ART_BACK1		"menu/BtnBack1"
 
 #define ID_CDKEY		10
 #define ID_ACCEPT		11
@@ -170,7 +170,7 @@ static void UI_CDKeyMenu_DrawKey( void *self ) {
 
 	val = UI_CDKeyMenu_PreValidateKey( f->field.buffer );
 	if( val == 1 ) {
-		UI_DrawProportionalString( 320, 376, "Please enter your CD Key", UI_CENTER|UI_SMALLFONT, color_yellow );
+		UI_DrawProportionalString( 320, 376, "Please enter your CD Key", UI_CENTER|UI_SMALLFONT, colorMdGrey );
 	}
 	else if ( val == 0 ) {
 		UI_DrawProportionalString( 320, 376, "The CD Key appears to be valid, thank you", UI_CENTER|UI_SMALLFONT, color_white );
@@ -205,10 +205,10 @@ static void UI_CDKeyMenu_Init( void ) {
 	cdkeyMenuInfo.frame.generic.type				= MTYPE_BITMAP;
 	cdkeyMenuInfo.frame.generic.name				= ART_FRAME;
 	cdkeyMenuInfo.frame.generic.flags				= QMF_INACTIVE;
-	cdkeyMenuInfo.frame.generic.x					= 142;
-	cdkeyMenuInfo.frame.generic.y					= 118;
-	cdkeyMenuInfo.frame.width  						= 359;
-	cdkeyMenuInfo.frame.height  					= 256;
+	cdkeyMenuInfo.frame.generic.x					= 0;
+	cdkeyMenuInfo.frame.generic.y					= 0;
+	cdkeyMenuInfo.frame.width  						= 640;
+	cdkeyMenuInfo.frame.height  					= 480;
 
 	cdkeyMenuInfo.cdkey.generic.type				= MTYPE_FIELD;
 	cdkeyMenuInfo.cdkey.generic.name				= "CD Key:";
@@ -224,10 +224,11 @@ static void UI_CDKeyMenu_Init( void ) {
 	cdkeyMenuInfo.accept.generic.flags				= QMF_RIGHT_JUSTIFY|QMF_PULSEIFFOCUS;
 	cdkeyMenuInfo.accept.generic.id					= ID_ACCEPT;
 	cdkeyMenuInfo.accept.generic.callback			= UI_CDKeyMenu_Event;
-	cdkeyMenuInfo.accept.generic.x					= 640;
-	cdkeyMenuInfo.accept.generic.y					= 480-64;
-	cdkeyMenuInfo.accept.width						= 128;
-	cdkeyMenuInfo.accept.height						= 64;
+	cdkeyMenuInfo.accept.generic.x					= 620;
+	cdkeyMenuInfo.accept.generic.y					= 410;
+	cdkeyMenuInfo.accept.width						= 102;
+	cdkeyMenuInfo.accept.height						= 61;
+	cdkeyMenuInfo.accept.focuspicinstead			= qtrue;
 	cdkeyMenuInfo.accept.focuspic					= ART_ACCEPT1;
 
 	cdkeyMenuInfo.back.generic.type					= MTYPE_BITMAP;
@@ -235,13 +236,12 @@ static void UI_CDKeyMenu_Init( void ) {
 	cdkeyMenuInfo.back.generic.flags				= QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS;
 	cdkeyMenuInfo.back.generic.id					= ID_BACK;
 	cdkeyMenuInfo.back.generic.callback				= UI_CDKeyMenu_Event;
-	cdkeyMenuInfo.back.generic.x					= 0;
-	cdkeyMenuInfo.back.generic.y					= 480-64;
-	cdkeyMenuInfo.back.width						= 128;
-	cdkeyMenuInfo.back.height						= 64;
+	cdkeyMenuInfo.back.generic.x					= 9;
+	cdkeyMenuInfo.back.generic.y					= 440;
+	cdkeyMenuInfo.back.width						= 80;
+	cdkeyMenuInfo.back.height						= 40;
 	cdkeyMenuInfo.back.focuspic						= ART_BACK1;
 
-	Menu_AddItem( &cdkeyMenuInfo.menu, &cdkeyMenuInfo.banner );
 	Menu_AddItem( &cdkeyMenuInfo.menu, &cdkeyMenuInfo.frame );
 	Menu_AddItem( &cdkeyMenuInfo.menu, &cdkeyMenuInfo.cdkey );
 	Menu_AddItem( &cdkeyMenuInfo.menu, &cdkeyMenuInfo.accept );

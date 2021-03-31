@@ -402,3 +402,20 @@ qboolean trap_VerifyCDKey( const char *key, const char *chksum) {
 void trap_SetPbClStatus( int status ) {
 	syscall( UI_SET_PBCLSTATUS, status );
 }
+
+int trap_GetVoiceMuteClient(int client)
+{
+	return syscall( UI_GET_VOICEMUTECLIENT, client);
+}
+
+int trap_GetVoiceMuteAll(void)
+{
+	return syscall(	UI_GET_VOICEMUTEALL );
+}
+
+float trap_GetVoiceGainClient(int client)
+{
+	floatint_t fi;
+	fi.i = syscall( UI_GET_VOICEGAIN, client );
+	return fi.f;
+}

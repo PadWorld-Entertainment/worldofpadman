@@ -253,7 +253,7 @@ void MField_CharEvent( mfield_t *edit, int ch ) {
 		return;
 	}
 
-	if ( trap_Key_GetOverstrikeMode() ) {
+	if ( !trap_Key_GetOverstrikeMode() ) {	
 		if ((edit->cursor == MAX_EDIT_LINE - 1) || (edit->maxchars && edit->cursor >= edit->maxchars))
 			return;
 	} else {
@@ -363,19 +363,34 @@ void MenuField_Draw( menufield_s *f )
 	if (f->generic.flags & QMF_GRAYED)
 		color = text_color_disabled;
 	else if (focus)
-		color = text_color_highlight;
+	{
+		if(f->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluehighlight;
+		else
+			color = (f->generic.flags & QMF_INGAMESTYLE)? text_color_ighighlight : text_color_highlight;
+	}
 	else
-		color = text_color_normal;
+	{
+		if(f->generic.flags & QMF_BLUESTYLE)
+			color = text_color_bluenormal;
+		else
+			color = (f->generic.flags & QMF_INGAMESTYLE)? text_color_ignormal : text_color_normal;
+	}
 
 	if ( focus )
 	{
 		// draw cursor
-		UI_FillRect( f->generic.left, f->generic.top, f->generic.right-f->generic.left+1, f->generic.bottom-f->generic.top+1, listbar_color ); 
+		if(f->generic.flags & QMF_BLUESTYLE)
+			UI_FillRect( f->generic.left, f->generic.top, f->generic.right-f->generic.left+1, f->generic.bottom-f->generic.top+1, listbar_bluecolor ); 
+		else if(f->generic.flags & QMF_INGAMESTYLE)
+			UI_FillRect( f->generic.left, f->generic.top, f->generic.right-f->generic.left+1, f->generic.bottom-f->generic.top+1, listbar_igcolor ); 
+		else
+			UI_FillRect( f->generic.left, f->generic.top, f->generic.right-f->generic.left+1, f->generic.bottom-f->generic.top+1, listbar_color ); 
 		UI_DrawChar( x, y, 13, UI_CENTER|UI_BLINK|style, color);
 	}
 
 	if ( f->generic.name ) {
-		UI_DrawString( x - w, y, f->generic.name, style|UI_RIGHT, color );
+		UI_DrawString( x - w, y, f->generic.name, UI_RIGHT | (style & ~UI_PULSE), color );
 	}
 
 	MField_Draw( &f->field, x + w, y, style, color );

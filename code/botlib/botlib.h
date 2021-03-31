@@ -203,6 +203,8 @@ typedef struct botlib_import_s
 	//
 	int			(*DebugPolygonCreate)(int color, int numPoints, vec3_t *points);
 	void		(*DebugPolygonDelete)(int id);
+	// cyr
+	void		(*SetBotInfoString)(const char *val);
 } botlib_import_t;
 
 typedef struct aas_export_s
@@ -238,6 +240,7 @@ typedef struct aas_export_s
 	// be_aas_reach.c
 	//--------------------------------------------
 	int			(*AAS_AreaReachability)(int areanum);
+	int			(*AAS_BestReachableArea)(vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalorigin);
 	//--------------------------------------------
 	// be_aas_route.c
 	//--------------------------------------------

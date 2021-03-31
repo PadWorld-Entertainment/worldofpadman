@@ -73,8 +73,6 @@ void Use_target_remove_powerups( gentity_t *ent, gentity_t *other, gentity_t *ac
 		Team_ReturnFlag( TEAM_RED );
 	} else if( activator->client->ps.powerups[PW_BLUEFLAG] ) {
 		Team_ReturnFlag( TEAM_BLUE );
-	} else if( activator->client->ps.powerups[PW_NEUTRALFLAG] ) {
-		Team_ReturnFlag( TEAM_FREE );
 	}
 
 	memset( activator->client->ps.powerups, 0, sizeof( activator->client->ps.powerups ) );
@@ -122,7 +120,7 @@ void SP_target_delay( gentity_t *ent ) {
 The activator is given this many points.
 */
 void Use_Target_Score (gentity_t *ent, gentity_t *other, gentity_t *activator) {
-	AddScore( activator, ent->r.currentOrigin, ent->count );
+	AddScore( activator, ent->r.currentOrigin, ent->count, SCORE_TARGET_SCORE_S );
 }
 
 void SP_target_score( gentity_t *ent ) {
@@ -162,6 +160,19 @@ void SP_target_print( gentity_t *ent ) {
 	ent->use = Use_Target_Print;
 }
 
+void Use_Target_Script(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+	if ( ( g_dedicated.integer != 0 ) || ( g_gametype.integer != GT_SINGLE_PLAYER ) ) {
+		// Entity is meant to be used in local singleplayer maps only, due to security implications
+		return;
+	}
+
+	trap_SendConsoleCommand( EXEC_APPEND, va("exec %s\n", ent->message) );
+	level.cammode = qtrue;
+}
+ 
+void SP_target_script( gentity_t* ent ){
+	ent->use = Use_Target_Script;
+}
 
 //==========================================================
 
@@ -196,7 +207,6 @@ void Use_Target_Speaker (gentity_t *ent, gentity_t *other, gentity_t *activator)
 }
 
 void SP_target_speaker( gentity_t *ent ) {
-	char	buffer[MAX_QPATH];
 	char	*s;
 
 	G_SpawnFloat( "wait", "0", &ent->wait );
@@ -212,12 +222,7 @@ void SP_target_speaker( gentity_t *ent ) {
 		ent->spawnflags |= 8;
 	}
 
-	if (!strstr( s, ".wav" )) {
-		Com_sprintf (buffer, sizeof(buffer), "%s.wav", s );
-	} else {
-		Q_strncpyz( buffer, s, sizeof(buffer) );
-	}
-	ent->noise_index = G_SoundIndex(buffer);
+	ent->noise_index = G_SoundIndex( s );
 
 	// a repeating speaker can be done completely client side
 	ent->s.eType = ET_SPEAKER;
@@ -465,3 +470,27 @@ void SP_target_location( gentity_t *self ){
 	G_SetOrigin( self, self->s.origin );
 }
 
+/*QUAKED target_balloon (1 0 0) (-16 -16 -16) (16 16 16)
+The target of a trigger_balloonzone. Origin of the balloonbox model. 
+"model" specifies the balloonbox model
+*/
+void SP_target_balloon( gentity_t *self ) {
+	// check gametype
+	if ( g_gametype.integer != GT_BALLOON )
+		return;
+
+	// load the model
+	self->s.eType = ET_BALLOON;
+	self->r.svFlags |= SVF_BROADCAST;	// for rendering the wallhack icons
+	
+	//self->s.modelindex = G_ModelIndex( self->model );
+	// new code uses a fixed model as well as fixed bounds
+	self->s.modelindex = G_ModelIndex( "models/special/ballon.md3" );
+	VectorSet( self->r.mins, -16, -16, -16 );
+	VectorSet( self->r.maxs,  16,  16,  8 );
+	self->r.contents = CONTENTS_BODY;
+
+	// init
+	G_SetOrigin( self, self->s.origin );
+	trap_LinkEntity( self );
+}

@@ -138,10 +138,10 @@ static void PlayerIcon( const char *modelAndSkin, char *iconName, int iconNameMa
 		skin = "default";
 	}
 
-	Com_sprintf(iconName, iconNameMaxSize, "models/players/%s/icon_%s.tga", model, skin );
+	Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_%s.tga", model, skin );
 
 	if( !trap_R_RegisterShaderNoMip( iconName ) && Q_stricmp( skin, "default" ) != 0 ) {
-		Com_sprintf(iconName, iconNameMaxSize, "models/players/%s/icon_default.tga", model );
+		Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_default.tga", model );
 	}
 }
 
@@ -368,11 +368,7 @@ static void UI_SPLevelMenu_ResetAction( qboolean result ) {
 
 	// clear game variables
 	UI_NewGame();
-	if ( UI_GetSpecialArenaInfo( "training" ) ) {
-		trap_Cvar_SetValue( "ui_spSelection", -4 );
-	} else {
-		trap_Cvar_SetValue( "ui_spSelection", 0 );
-	}
+	trap_Cvar_SetValue( "ui_spSelection", -4 );
 
 	// make the level select menu re-initialize
 	UI_PopMenu();

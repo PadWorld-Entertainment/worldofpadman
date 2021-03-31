@@ -82,43 +82,12 @@ void UpdateTournamentInfo( void ) {
 		else {
 			accuracy = 0;
 		}
-#ifdef MISSIONPACK
-		won = qfalse;
-		if (g_gametype.integer >= GT_CTF) {
-			score1 = level.teamScores[TEAM_RED];
-			score2 = level.teamScores[TEAM_BLUE];
-			if (level.clients[playerClientNum].sess.sessionTeam	== TEAM_RED) {
-				won = (level.teamScores[TEAM_RED] > level.teamScores[TEAM_BLUE]);
-			} else {
-				won = (level.teamScores[TEAM_BLUE] > level.teamScores[TEAM_RED]);
-			}
-		} else {
-			if (&level.clients[playerClientNum] == &level.clients[ level.sortedClients[0] ]) {
-				won = qtrue;
-				score1 = level.clients[ level.sortedClients[0] ].ps.persistant[PERS_SCORE];
-				score2 = level.clients[ level.sortedClients[1] ].ps.persistant[PERS_SCORE];
-			} else {
-				score2 = level.clients[ level.sortedClients[0] ].ps.persistant[PERS_SCORE];
-				score1 = level.clients[ level.sortedClients[1] ].ps.persistant[PERS_SCORE];
-			}
-		}
-		if (won && player->client->ps.persistant[PERS_KILLED] == 0) {
-			perfect = 1;
-		} else {
-			perfect = 0;
-		}
-		Com_sprintf( msg, sizeof(msg), "postgame %i %i %i %i %i %i %i %i %i %i %i %i %i %i", level.numNonSpectatorClients, playerClientNum, accuracy,
-			player->client->ps.persistant[PERS_IMPRESSIVE_COUNT], player->client->ps.persistant[PERS_EXCELLENT_COUNT],player->client->ps.persistant[PERS_DEFEND_COUNT],
-			player->client->ps.persistant[PERS_ASSIST_COUNT], player->client->ps.persistant[PERS_GAUNTLET_FRAG_COUNT], player->client->ps.persistant[PERS_SCORE],
-			perfect, score1, score2, level.time, player->client->ps.persistant[PERS_CAPTURES] );
-
-#else
 		perfect = ( level.clients[playerClientNum].ps.persistant[PERS_RANK] == 0 && player->client->ps.persistant[PERS_KILLED] == 0 ) ? 1 : 0;
-		Com_sprintf( msg, sizeof(msg), "postgame %i %i %i %i %i %i %i %i", level.numNonSpectatorClients, playerClientNum, accuracy,
+
+		Com_sprintf( msg, sizeof(msg), "postgame %i %i %i %i %i %i %i %i %i %i", level.numNonSpectatorClients, playerClientNum, accuracy,
 			player->client->ps.persistant[PERS_IMPRESSIVE_COUNT], player->client->ps.persistant[PERS_EXCELLENT_COUNT],
 			player->client->ps.persistant[PERS_GAUNTLET_FRAG_COUNT], player->client->ps.persistant[PERS_SCORE],
-			perfect );
-#endif
+			perfect, (player->client->ps.persistant[PERS_SPRAYAWARDS_COUNT]>>8), player->client->ps.persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF );
 	}
 
 	msglen = strlen( msg );
@@ -163,11 +132,16 @@ static gentity_t *SpawnModelOnVictoryPad( gentity_t *pad, vec3_t offset, gentity
 	body->s.legsAnim = LEGS_IDLE;
 	body->s.torsoAnim = TORSO_STAND;
 	if( body->s.weapon == WP_NONE ) {
-		body->s.weapon = WP_MACHINEGUN;
+		body->s.weapon = WP_NIPPER;
 	}
-	if( body->s.weapon == WP_GAUNTLET) {
+
+	if( body->s.weapon == WP_PUNCHY) {
 		body->s.torsoAnim = TORSO_STAND2;
 	}
+	else if( body->s.weapon == WP_SPRAYPISTOL) {
+		body->s.torsoAnim = TORSO_SPRAYSTAND;
+	}
+
 	body->s.event = 0;
 	body->r.svFlags = ent->r.svFlags;
 	VectorCopy (ent->r.mins, body->r.mins);
@@ -202,8 +176,11 @@ static gentity_t *SpawnModelOnVictoryPad( gentity_t *pad, vec3_t offset, gentity
 static void CelebrateStop( gentity_t *player ) {
 	int		anim;
 
-	if( player->s.weapon == WP_GAUNTLET) {
+	if( player->s.weapon == WP_PUNCHY) {
 		anim = TORSO_STAND2;
+	}
+	else if( player->s.weapon == WP_SPRAYPISTOL) {
+		anim = TORSO_SPRAYSTAND;
 	}
 	else {
 		anim = TORSO_STAND;

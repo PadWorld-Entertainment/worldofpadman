@@ -174,6 +174,13 @@ S_CodecOpenStream
 */
 snd_stream_t *S_CodecOpenStream(const char *filename)
 {
+//wop_music{
+	if(!strcmp(filename,"<nextsongCMD>") )
+	{
+		Cbuf_ExecuteText( EXEC_APPEND, "wop_nextsong\n");
+		return NULL;
+	}
+//wop_music}
 	return S_CodecGetSound(filename, NULL);
 }
 

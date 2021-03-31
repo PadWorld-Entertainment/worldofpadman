@@ -39,6 +39,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define	RF_FIRST_PERSON		0x0004		// only draw through eyes (view weapon, damage blood blob)
 #define	RF_DEPTHHACK		0x0008		// for view weapon Z crunching
 
+#define RF_FORCEENTALPHA       0x0010  // force the use of Entity-Alpha
+										// usefull for models(md3) without(or wrong) "shader-skin"
+
 #define RF_CROSSHAIR		0x0010		// This item is a cross hair and will draw over everything similar to
 						// DEPTHHACK in stereo rendering mode, with the difference that the
 						// projection matrix won't be hacked to reduce the stereo separation as

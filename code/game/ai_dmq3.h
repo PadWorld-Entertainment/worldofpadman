@@ -30,14 +30,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *****************************************************************************/
 
+//ctf flags
+#define CTF_FLAG_NONE		0
+#define CTF_FLAG_RED		1
+#define CTF_FLAG_BLUE		2
+
 //setup the deathmatch AI
 void BotSetupDeathmatchAI(void);
-//shutdown the deathmatch AI
-void BotShutdownDeathmatchAI(void);
 //let the bot live within its deathmatch AI net
 void BotDeathmatchAI(bot_state_t *bs, float thinktime);
-//free waypoints
-void BotFreeWaypoints(bot_waypoint_t *wp);
+
 //choose a weapon
 void BotChooseWeapon(bot_state_t *bs);
 //setup movement stuff
@@ -62,54 +64,30 @@ qboolean EntityIsDead(aas_entityinfo_t *entinfo);
 qboolean EntityIsInvisible(aas_entityinfo_t *entinfo);
 //returns true if the entity is shooting
 qboolean EntityIsShooting(aas_entityinfo_t *entinfo);
-#ifdef MISSIONPACK
-//returns true if this entity has the kamikaze
-qboolean EntityHasKamikaze(aas_entityinfo_t *entinfo);
-#endif
 // set a user info key/value pair
 void BotSetUserInfo(bot_state_t *bs, char *key, char *value);
-// set the team status (offense, defense etc.)
-void BotSetTeamStatus(bot_state_t *bs);
 //returns the name of the client
 char *ClientName(int client, char *name, int size);
 //returns a simplified client name
 char *EasyClientName(int client, char *name, int size);
 //returns the skin used by the client
 char *ClientSkin(int client, char *skin, int size);
-// returns the appropriate synonym context for the current game type and situation
-int BotSynonymContext(bot_state_t *bs);
-// set last ordered task
-int BotSetLastOrderedTask(bot_state_t *bs);
 // selection of goals for teamplay
 void BotTeamGoals(bot_state_t *bs, int retreat);
 //returns the aggression of the bot in the range [0, 100]
 float BotAggression(bot_state_t *bs);
-//returns how bad the bot feels
-float BotFeelingBad(bot_state_t *bs);
 //returns true if the bot wants to retreat
 int BotWantsToRetreat(bot_state_t *bs);
 //returns true if the bot wants to chase
 int BotWantsToChase(bot_state_t *bs);
 //returns true if the bot wants to help
 int BotWantsToHelp(bot_state_t *bs);
-//returns true if the bot can and wants to rocketjump
-int BotCanAndWantsToRocketJump(bot_state_t *bs);
-// returns true if the bot has a persistant powerup and a weapon
-int BotHasPersistantPowerupAndWeapon(bot_state_t *bs);
-//returns true if the bot wants to and goes camping
-int BotWantsToCamp(bot_state_t *bs);
 //the bot will perform attack movements
 bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl);
 //returns true if the bot and the entity are in the same team
 int BotSameTeam(bot_state_t *bs, int entnum);
 //returns true if teamplay is on
 int TeamPlayIsOn(void);
-// returns the client number of the team mate flag carrier (-1 if none)
-int BotTeamFlagCarrier(bot_state_t *bs);
-//returns visible team mate flag carrier if available
-int BotTeamFlagCarrierVisible(bot_state_t *bs);
-//returns visible enemy flag carrier if available
-int BotEnemyFlagCarrierVisible(bot_state_t *bs);
 //get the number of visible teammates and enemies
 void BotVisibleTeamMatesAndEnemies(bot_state_t *bs, int *teammates, int *enemies, float range);
 //returns true if within the field of vision for the given angles
@@ -136,38 +114,10 @@ int BotPopFromActivateGoalStack(bot_state_t *bs);
 void BotClearActivateGoalStack(bot_state_t *bs);
 //returns the team the bot is in
 int BotTeam(bot_state_t *bs);
-//returns the opposite team of the bot
+//retuns the opposite team of the bot
 int BotOppositeTeam(bot_state_t *bs);
-//returns the flag the bot is carrying (CTFFLAG_?)
-int BotCTFCarryingFlag(bot_state_t *bs);
 //remember the last ordered task
 void BotRememberLastOrderedTask(bot_state_t *bs);
-//set ctf goals (defend base, get enemy flag) during seek
-void BotCTFSeekGoals(bot_state_t *bs);
-//set ctf goals (defend base, get enemy flag) during retreat
-void BotCTFRetreatGoals(bot_state_t *bs);
-//
-#ifdef MISSIONPACK
-int Bot1FCTFCarryingFlag(bot_state_t *bs);
-int BotHarvesterCarryingCubes(bot_state_t *bs);
-void Bot1FCTFSeekGoals(bot_state_t *bs);
-void Bot1FCTFRetreatGoals(bot_state_t *bs);
-void BotObeliskSeekGoals(bot_state_t *bs);
-void BotObeliskRetreatGoals(bot_state_t *bs);
-void BotGoHarvest(bot_state_t *bs);
-void BotHarvesterSeekGoals(bot_state_t *bs);
-void BotHarvesterRetreatGoals(bot_state_t *bs);
-int BotTeamCubeCarrierVisible(bot_state_t *bs);
-int BotEnemyCubeCarrierVisible(bot_state_t *bs);
-#endif
-//get a random alternate route goal towards the given base
-int BotGetAlternateRouteGoal(bot_state_t *bs, int base);
-//returns either the alternate route goal or the given goal
-bot_goal_t *BotAlternateRoute(bot_state_t *bs, bot_goal_t *goal);
-//create a new waypoint
-bot_waypoint_t *BotCreateWayPoint(char *name, vec3_t origin, int areanum);
-//find a waypoint with the given name
-bot_waypoint_t *BotFindWayPoint(bot_waypoint_t *waypoints, char *name);
 //strstr but case insensitive
 char *stristr(char *str, char *charset);
 //returns the number of the client with the given name
@@ -177,14 +127,23 @@ int ClientOnSameTeamFromName(bot_state_t *bs, char *name);
 int BotPointAreaNum(vec3_t origin);
 //
 void BotMapScripts(bot_state_t *bs);
+qboolean ClientInSprayroom(int clId);
+qboolean BotCheckChargedImp(bot_state_t *bs);
+qboolean BotNmyTurnedInvalid(bot_state_t* bs);
+int BotGetNumClientCarts(bot_state_t* bs, int clientnum);
+int BotSprayWallCheckAttack(bot_state_t *bs);
+void BotSelectLogo(bot_state_t* bs);
+qboolean IsDuck(int ent);
+qboolean IsWall(int ent);
+qboolean IsBoomie(int ent);
+qboolean IsBambam(int ent);
+qboolean IsMyBalloon(int team, bot_goal_t* goal);
+qboolean BotCTFCarryingFlag(bot_state_t* bs);
+void CheckMatrixForGoal(bot_goal_t* goal);
+qboolean GetDroppedLollyGoal(int team, bot_goal_t* goal);
+qboolean GetCTLFlagGoal(int team, bot_goal_t* goal);
 
-//ctf flags
-#define CTF_FLAG_NONE		0
-#define CTF_FLAG_RED		1
-#define CTF_FLAG_BLUE		2
-//CTF skins
-#define CTF_SKIN_REDTEAM	"red"
-#define CTF_SKIN_BLUETEAM	"blue"
+#define MAX_HSTATIONS	8
 
 extern int gametype;		//game type
 extern int maxclients;		//maximum number of clients
@@ -198,9 +157,10 @@ extern vmCvar_t bot_challenge;
 
 extern bot_goal_t ctf_redflag;
 extern bot_goal_t ctf_blueflag;
-#ifdef MISSIONPACK
-extern bot_goal_t ctf_neutralflag;
-extern bot_goal_t redobelisk;
-extern bot_goal_t blueobelisk;
-extern bot_goal_t neutralobelisk;
-#endif
+extern bot_goal_t balloongoal[MAX_BALLOONS];
+extern bot_goal_t rwall;
+extern bot_goal_t bwall;
+extern bot_goal_t spraytele;
+extern bot_goal_t outtele;
+extern bot_goal_t hstations[MAX_HSTATIONS];
+extern int num_hstations;

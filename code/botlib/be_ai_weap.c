@@ -138,7 +138,7 @@ int BotValidWeaponNumber(int weaponnum)
 {
 	if (weaponnum <= 0 || weaponnum > weaponconfig->numweapons)
 	{
-		botimport.Print(PRT_ERROR, "weapon number out of range\n");
+		botimport.Print(PRT_ERROR, "weapon number (%d) out of range (%d)\n", weaponnum, weaponconfig->numweapons );
 		return qfalse;
 	} //end if
 	return qtrue;
@@ -407,6 +407,13 @@ int BotChooseBestFightWeapon(int weaponstate, int *inventory)
 	float weight, bestweight;
 	weaponconfig_t *wc;
 	bot_weaponstate_t *ws;
+	// cyr
+	int j=0;
+	qboolean setcs = qfalse;
+	char info[1024]="0\\test\\";
+//	char* cs;
+
+	setcs = LibVarGetValue("showweaponweights");	// cyr
 
 	ws = BotWeaponStateFromHandle(weaponstate);
 	if (!ws) return 0;
@@ -429,7 +436,15 @@ int BotChooseBestFightWeapon(int weaponstate, int *inventory)
 			bestweight = weight;
 			bestweapon = i;
 		} //end if
+		if(setcs && weight){	// cyr.. write to infostring
+			strcat(info, va("%d\\%s: %.1f\\",j++, wc->weaponinfo[i].name, weight) );
+		}
 	} //end for
+	// cyr
+	if(setcs){
+		botimport.SetBotInfoString(info/*va("1\\%s\\2\\%s","hello world","its me")*/ );	// cyr	
+	//botimport.Print(PRT_MESSAGE, "sending info string: %s\n\n", info);
+	}
 	return bestweapon;
 } //end of the function BotChooseBestFightWeapon
 //===========================================================================
@@ -440,6 +455,18 @@ int BotChooseBestFightWeapon(int weaponstate, int *inventory)
 //===========================================================================
 void BotResetWeaponState(int weaponstate)
 {
+	struct weightconfig_s *weaponweightconfig;
+	int *weaponweightindex;
+	bot_weaponstate_t *ws;
+
+	ws = BotWeaponStateFromHandle(weaponstate);
+	if (!ws) return;
+	weaponweightconfig = ws->weaponweightconfig;
+	weaponweightindex = ws->weaponweightindex;
+
+	//Com_Memset(ws, 0, sizeof(bot_weaponstate_t));
+	ws->weaponweightconfig = weaponweightconfig;
+	ws->weaponweightindex = weaponweightindex;
 } //end of the function BotResetWeaponState
 //========================================================================
 //

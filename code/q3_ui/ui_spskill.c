@@ -187,8 +187,8 @@ void UI_SPSkillMenu_Cache( void ) {
 	skillMenuInfo.skillpics[3] = trap_R_RegisterShaderNoMip( ART_MAP_COMPLETE4 );
 	skillMenuInfo.skillpics[4] = trap_R_RegisterShaderNoMip( ART_MAP_COMPLETE5 );
 
-	skillMenuInfo.nightmareSound = trap_S_RegisterSound( "sound/misc/nightmare.wav", qfalse );
-	skillMenuInfo.silenceSound = trap_S_RegisterSound( "sound/misc/silence.wav", qfalse );
+	skillMenuInfo.nightmareSound = trap_S_RegisterSound( "sound/misc/nightmare", qfalse );
+	skillMenuInfo.silenceSound = trap_S_RegisterSound( "sound/misc/silence", qfalse );
 }
 
 

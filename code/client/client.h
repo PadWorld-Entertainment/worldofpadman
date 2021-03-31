@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #endif
 
 // file full of random crap that gets used to create cl_guid
-#define QKEY_FILE "qkey"
+#define QKEY_FILE "wopkey"
 #define QKEY_SIZE 2048
 
 #define	RETRANSMIT_TIMEOUT	3000	// time between connection packet retransmits
@@ -597,6 +597,22 @@ void CIN_SetExtents (int handle, int x, int y, int w, int h);
 void CIN_SetLooping (int handle, qboolean loop);
 void CIN_UploadCinematic(int handle);
 void CIN_CloseAllVideos(void);
+// yuv->rgb will be used for Theora(ogm)
+void ROQ_GenYUVTables( void );
+void Frame_yuv_to_rgb24( const unsigned char* y, const unsigned char* u, const unsigned char* v,
+						int width, int height, int y_stride, int uv_stride,
+						int yWShift, int uvWShift, int yHShift, int uvHShift,
+						unsigned int* output );
+
+//
+// cin_ogm.c
+//
+
+int Cin_OGM_Init(const char* filename);
+int Cin_OGM_Run(int time);
+unsigned char* Cin_OGM_GetOutput(int* outWidth, int* outHeight);
+void Cin_OGM_Shutdown(void);
+
 
 //
 // cl_cgame.c

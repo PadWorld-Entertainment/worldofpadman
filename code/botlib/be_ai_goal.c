@@ -47,10 +47,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "be_ai_move.h"
 
 //#define DEBUG_AI_GOAL
-#ifdef RANDOMIZE
+//#ifdef RANDOMIZE
 #define UNDECIDEDFUZZY
-#endif //RANDOMIZE
-#define DROPPEDWEIGHT
+//#endif //RANDOMIZE
+//#define DROPPEDWEIGHT
 //minimum avoid goal time
 #define AVOID_MINIMUM_TIME		10
 //default avoid goal time
@@ -112,6 +112,7 @@ typedef struct levelitem_s
 	int iteminfo;						//index into the item info
 	int flags;							//item flags
 	float weight;						//fixed roam weight
+	float respawntime; // experimental for another roam setting
 	vec3_t origin;						//origin of the item
 	int goalareanum;					//area the item is in
 	vec3_t goalorigin;					//goal origin within the area
@@ -183,6 +184,7 @@ itemconfig_t *itemconfig = NULL;
 levelitem_t *levelitemheap = NULL;
 levelitem_t *freelevelitems = NULL;
 levelitem_t *levelitems = NULL;
+levelitem_t *spoton_li = NULL;	// cyr
 int numlevelitems = 0;
 //map locations
 maplocation_t *maplocations = NULL;
@@ -199,6 +201,43 @@ libvar_t *droppedweight = NULL;
 // Returns:					-
 // Changes Globals:		-
 //========================================================================
+//cyr{
+
+void PrintCurItemInfo(){
+	if(spoton_li == NULL){
+		botimport.Print(PRT_MESSAGE, "no item\n");
+		return;
+	}
+
+	if (!itemconfig) return;
+	botimport.Print(PRT_MESSAGE, "itemtype %s \n", itemconfig->iteminfo[spoton_li->iteminfo].classname );
+}
+
+void GetNextItemNumber(int *ent, int *goal){
+	// if not inside the chain, go to start
+	if(spoton_li == NULL){
+		if(levelitems == NULL){	// no list? no number
+			*ent = 0;
+			return;	
+		}
+		else	spoton_li = levelitems;
+	}
+	else	// move along the chain
+		spoton_li = spoton_li->prev;
+	
+	// reached end of list?
+	if(spoton_li == NULL){
+		*ent = 0;
+		return;
+	}
+
+	*ent = spoton_li->entitynum;
+	*goal = spoton_li->goalareanum;
+	return;		
+}
+
+//cyr}
+
 bot_goalstate_t *BotGoalStateFromHandle(int handle)
 {
 	if (handle <= 0 || handle > MAX_CLIENTS)
@@ -635,6 +674,7 @@ void BotInitLevelItems(void)
 		{
 			li->flags |= IFL_ROAM;
 			AAS_FloatForBSPEpairKey(ent, "weight", &li->weight);
+			AAS_FloatForBSPEpairKey(ent, "respawntime", &li->respawntime);
 		} //end if
 		//if not a stationary item
 		if (!(spawnflags & 1))
@@ -1298,6 +1338,23 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 	bot_goal_t goal;
 	bot_goalstate_t *gs;
 
+	// cyr
+	int j=0;
+	char info[1024]="0\\test\\";
+	//char strtmp[1024];
+	qboolean setcs = qfalse;
+	float fuzzweight;	// weight without distance scaling
+	float roamfactor = (float) LibVarGetValue("roamfactor") / 100;
+	//vec3_t amins ={-8,-8,-8};
+	//vec3_t amaxs ={8,8,8};
+
+
+	//botimport.Print(PRT_MESSAGE, "roamfactor is %.1f \n", roamfactor);
+	//AAS_ClearShownDebugLines();
+
+	setcs = LibVarGetValue("showitemweights");	// cyr
+
+
 	gs = BotGoalStateFromHandle(goalstate);
 	if (!gs)
 		return qfalse;
@@ -1363,8 +1420,13 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 		if (li->timeout)
 			weight += droppedweight->value;
 #endif //DROPPEDWEIGHT
+		fuzzweight = weight;	// cyr, keep a copy for debug print
+
 		//use weight scale for item_botroam
-		if (li->flags & IFL_ROAM) weight *= li->weight;
+		if (li->flags & IFL_ROAM){
+			weight *= li->weight * roamfactor;
+			//AAS_ShowBoundingBox(li->goalorigin, amins, amaxs);	// cyr
+		}
 		//
 		if (weight > 0)
 		{
@@ -1387,6 +1449,9 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 				} //end if
 			} //end if
 		} //end if
+		// cyr.. write to infostring
+		if(setcs && weight > 10 && strlen(info) < 900 )
+			strcat(info, va("%d\\%s: %.1f\\",j++, iteminfo->name/*, fuzzweight*/, weight) );
 	} //end for
 	//if no goal item found
 	if (!bestitem)
@@ -1415,6 +1480,9 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 		*/
 		return qfalse;
 	} //end if
+	if(setcs)
+		botimport.SetBotInfoString(info);	// cyr	
+		//botimport.Print(PRT_MESSAGE, "sending info string: %s\n\n", info);
 	//create a bot goal for this item
 	iteminfo = &ic->iteminfo[bestitem->iteminfo];
 	VectorCopy(bestitem->goalorigin, goal.origin);
@@ -1434,6 +1502,9 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 	{
 		avoidtime = AVOID_DROPPED_TIME;
 	} //end if
+	else if(bestitem->flags & IFL_ROAM && bestitem->respawntime) {
+		avoidtime = bestitem->respawntime;
+	}
 	else
 	{
 		avoidtime = iteminfo->respawntime;
@@ -1465,6 +1536,7 @@ int BotChooseNBGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 	levelitem_t *li, *bestitem;
 	bot_goal_t goal;
 	bot_goalstate_t *gs;
+	float roamfactor = (float) LibVarGetValue("roamfactor") / 100;
 
 	gs = BotGoalStateFromHandle(goalstate);
 	if (!gs)
@@ -1525,7 +1597,7 @@ int BotChooseNBGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 			continue;
 		//
 #ifdef UNDECIDEDFUZZY
-		weight = FuzzyWeightUndecided(inventory, gs->itemweightconfig, weightnum);
+ 		weight = FuzzyWeightUndecided(inventory, gs->itemweightconfig, weightnum);
 #else
 		weight = FuzzyWeight(inventory, gs->itemweightconfig, weightnum);
 #endif //UNDECIDEDFUZZY
@@ -1534,8 +1606,9 @@ int BotChooseNBGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 		if (li->timeout)
 			weight += droppedweight->value;
 #endif //DROPPEDWEIGHT
-		//use weight scale for item_botroam
-		if (li->flags & IFL_ROAM) weight *= li->weight;
+ 		//use weight scale for item_botroam
+		if (li->flags & IFL_ROAM) 
+			weight = roamfactor * li->weight * weight;	// cyr
 		//
 		if (weight > 0)
 		{
@@ -1591,6 +1664,9 @@ int BotChooseNBGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 	{
 		avoidtime = AVOID_DROPPED_TIME;
 	} //end if
+	else if(bestitem->flags & IFL_ROAM && bestitem->respawntime) {
+		avoidtime = bestitem->respawntime;
+	}
 	else
 	{
 		avoidtime = iteminfo->respawntime;

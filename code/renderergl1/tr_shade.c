@@ -939,6 +939,10 @@ static void RB_IterateStagesGeneric( shaderCommands_t *input )
 		}
 
 		ComputeColors( pStage );
+		// TODO: added renderergl2 support
+		if( backEnd.currentEntity && (backEnd.currentEntity->e.renderfx & RF_FORCEENTALPHA) )
+			//TODO: extra code for "blend add"
+			RB_CalcAlphaFromEntity( ( unsigned char * ) tess.svars.colors );
 		ComputeTexCoords( pStage );
 
 		if ( !setArraysOnce )

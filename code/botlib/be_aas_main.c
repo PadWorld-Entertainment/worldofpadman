@@ -47,6 +47,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 aas_t aasworld;
 
 libvar_t *saveroutingcache;
+int showroute_ent = 0;	// cyr
+int showroute_entarea = 0;	// cyr
 
 //===========================================================================
 //
@@ -64,6 +66,96 @@ void QDECL AAS_Error(char *fmt, ...)
 	va_end(arglist);
 	botimport.Print(PRT_FATAL, "%s", str);
 } //end of the function AAS_Error
+//===========================================================================
+//
+// Parameter:				-
+// Returns:					-
+// Changes Globals:		-
+//===========================================================================
+char *AAS_StringFromIndex(char *indexname, char *stringindex[], int numindexes, int index)
+{
+	if (!aasworld.indexessetup)
+	{
+		botimport.Print(PRT_ERROR, "%s: index %d not setup\n", indexname, index);
+		return "";
+	} //end if
+	if (index < 0 || index >= numindexes)
+	{
+		botimport.Print(PRT_ERROR, "%s: index %d out of range\n", indexname, index);
+		return "";
+	} //end if
+	if (!stringindex[index])
+	{
+		if (index)
+		{
+			botimport.Print(PRT_ERROR, "%s: reference to unused index %d\n", indexname, index);
+		} //end if
+		return "";
+	} //end if
+	return stringindex[index];
+} //end of the function AAS_StringFromIndex
+//===========================================================================
+//
+// Parameter:				-
+// Returns:					-
+// Changes Globals:		-
+//===========================================================================
+int AAS_IndexFromString(char *indexname, char *stringindex[], int numindexes, char *string)
+{
+	int i;
+	if (!aasworld.indexessetup)
+	{
+		botimport.Print(PRT_ERROR, "%s: index not setup \"%s\"\n", indexname, string);
+		return 0;
+	} //end if
+	for (i = 0; i < numindexes; i++)
+	{
+		if (!stringindex[i]) continue;
+		if (!Q_stricmp(stringindex[i], string)) return i;
+	} //end for
+	return 0;
+} //end of the function AAS_IndexFromString
+//===========================================================================
+//
+// Parameter:				-
+// Returns:					-
+// Changes Globals:		-
+//===========================================================================
+char *AAS_ModelFromIndex(int index)
+{
+	return AAS_StringFromIndex("ModelFromIndex", &aasworld.configstrings[CS_MODELS], MAX_MODELS, index);
+} //end of the function AAS_ModelFromIndex
+//===========================================================================
+//
+// Parameter:				-
+// Returns:					-
+// Changes Globals:		-
+//===========================================================================
+int AAS_IndexFromModel(char *modelname)
+{
+	return AAS_IndexFromString("IndexFromModel", &aasworld.configstrings[CS_MODELS], MAX_MODELS, modelname);
+} //end of the function AAS_IndexFromModel
+//===========================================================================
+//
+// Parameter:				-
+// Returns:					-
+// Changes Globals:		-
+//===========================================================================
+void AAS_UpdateStringIndexes(int numconfigstrings, char *configstrings[])
+{
+	int i;
+	//set string pointers and copy the strings
+	for (i = 0; i < numconfigstrings; i++)
+	{
+		if (configstrings[i])
+		{
+			//if (aasworld.configstrings[i]) FreeMemory(aasworld.configstrings[i]);
+			aasworld.configstrings[i] = (char *) GetMemory(strlen(configstrings[i]) + 1);
+			strcpy(aasworld.configstrings[i], configstrings[i]);
+		} //end if
+	} //end for
+	aasworld.indexessetup = qtrue;
+} //end of the function AAS_UpdateStringIndexes
 //===========================================================================
 //
 // Parameter:				-
@@ -138,6 +230,66 @@ void AAS_ContinueInit(float time)
 	//at this point AAS is initialized
 	AAS_SetInitialized();
 } //end of the function AAS_ContinueInit
+
+//cyr
+void ShowReachesFrom(void){
+	int reachnum, areanum;
+	aas_reachability_t reach;
+	vec3_t origin;
+	aas_entityinfo_t entinfo;
+
+	// client0 position
+	AAS_EntityInfo(0, &entinfo);
+	areanum = AAS_PointAreaNum(entinfo.origin);
+
+	VectorCopy(entinfo.origin, origin);
+	origin[2] -= 20;	// player height... how much is it?
+
+	if(!areanum) return;
+	for (reachnum = AAS_NextAreaReachability(areanum, 0); reachnum;
+		reachnum = AAS_NextAreaReachability(areanum, reachnum)){
+		
+		AAS_ReachabilityFromNum(reachnum, &reach);
+		
+		//AAS_DrawArrow(entinfo.origin, reach.start, LINECOLOR_BLUE, LINECOLOR_YELLOW);
+		AAS_DebugLine(origin, reach.start, LINECOLOR_YELLOW);
+		AAS_ShowReachability(&reach);
+		AAS_ShowArea(reach.areanum, qtrue);
+
+		//botimport.Print(PRT_MESSAGE, " towards area %d \n", reach.areanum);
+	}
+}
+
+void ShowReachesTo(void){
+	int areanum;
+	aas_reachability_t* reach;
+//	vec3_t origin;
+	aas_entityinfo_t entinfo;
+	int linknum;
+	aas_reversedreachability_t *revreach;
+    aas_reversedlink_t *revlink;
+
+	// client0 position
+	AAS_EntityInfo(0, &entinfo);
+	areanum = AAS_PointAreaNum(entinfo.origin);
+
+	if(!areanum) return;
+	// iterate over all 
+	revreach = &aasworld.reversedreachability[areanum];
+        //
+        for (revlink = revreach->first; revlink; revlink = revlink->next){
+        	linknum = revlink->linknum;
+            reach = &aasworld.reachability[linknum];
+
+			//AAS_DrawArrow(entinfo.origin, reach->end, LINECOLOR_BLUE, LINECOLOR_YELLOW);
+			AAS_DebugLine(entinfo.origin, reach->end, LINECOLOR_BLUE);
+			AAS_ShowReachability(reach);
+			AAS_ShowArea(revlink->areanum, qtrue);
+
+			//botimport.Print(PRT_MESSAGE, " from area %d \n", revlink->areanum);
+        }
+}
+
 //===========================================================================
 // called at the start of every frame
 //
@@ -156,6 +308,10 @@ int AAS_StartFrame(float time)
 	AAS_ContinueInit(time);
 	//
 	aasworld.frameroutingupdates = 0;
+
+	AAS_ClearShownPolygons();
+	AAS_ClearShownDebugLines();
+
 	//
 	if (botDeveloper)
 	{
@@ -181,6 +337,47 @@ int AAS_StartFrame(float time)
 		AAS_WriteRouteCache();
 		LibVarSet("saveroutingcache", "0");
 	} //end if
+// cyr{
+	if ( LibVarGetValue("shownextitem") ){
+		/*
+		GetNextItemNumber(&showroute_ent, &showroute_entarea);
+		botimport.Print(PRT_MESSAGE, "avl %f next item: %d \n", LibVarGetValue("shownextitem"), showroute_ent);
+		PrintCurItemInfo();
+		ShowRoute(0, showroute_ent, showroute_entarea, qtrue);
+		*/
+		LibVarSet("shownextitem", "0");
+	}
+	if ( LibVarGetValue("shownoitem") ){
+		/*
+		showroute_ent = 0;
+		botimport.Print(PRT_MESSAGE, " %f dont show item route \n", LibVarGetValue("shownoitem") );
+		AAS_ClearShownPolygons();
+		AAS_ClearShownDebugLines();
+		*/
+		LibVarSet("shownoitem", "0");
+	}
+
+
+	if(showroute_ent != 0){
+		AAS_ClearShownPolygons();
+		AAS_ClearShownDebugLines();
+		ShowRoute(0, showroute_ent, showroute_entarea, qfalse);
+	}
+
+	if ( LibVarGetValue("showreachesfrom") ){
+		//botimport.Print(PRT_MESSAGE, " from \n");
+		AAS_ClearShownPolygons();
+		AAS_ClearShownDebugLines();
+		ShowReachesFrom();
+	}
+
+	if ( LibVarGetValue("showreachesto") ){
+		AAS_ClearShownPolygons();
+		AAS_ClearShownDebugLines();
+		ShowReachesTo();
+	}
+
+// cyr}
 	//
 	aasworld.numframes++;
 	return BLERR_NOERROR;

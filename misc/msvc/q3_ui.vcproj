@@ -206,7 +206,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\build\q3_ui_release"
+			OutputDirectory="..\..\..\wop"
 			IntermediateDirectory="..\..\build\q3_ui_release"
 			ConfigurationType="2"
 			UseOfMFC="0"
@@ -238,7 +238,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;Q3_UI_EXPORTS;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="UI;WIN32;NDEBUG;_WINDOWS;_USRDLL;Q3_UI_EXPORTS;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -299,7 +299,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\build\q3_ui_debug"
+			OutputDirectory="..\..\..\wop"
 			IntermediateDirectory="..\..\build\q3_ui_debug"
 			ConfigurationType="2"
 			UseOfMFC="0"
@@ -330,7 +330,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;UI_EXPORTS;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="UI;WIN32;_DEBUG;_WINDOWS;_USRDLL;UI_EXPORTS;_CRT_SECURE_NO_DEPRECATE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
@@ -579,6 +579,10 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\code\q3_ui\ui_callvote.c"
+				>
 			</File>
 			<File
 				RelativePath="..\..\code\q3_ui\ui_cdkey.c"
@@ -949,6 +953,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\code\q3_ui\ui_exit.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\q3_ui\ui_gameinfo.c"
 				>
 				<FileConfiguration
@@ -993,6 +1001,10 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\code\q3_ui\ui_help.c"
+				>
 			</File>
 			<File
 				RelativePath="..\..\code\q3_ui\ui_ingame.c"
@@ -1135,6 +1147,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\code\q3_ui\ui_mediaview.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\q3_ui\ui_menu.c"
 				>
 				<FileConfiguration
@@ -1271,6 +1287,10 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\code\q3_ui\ui_music.c"
+				>
 			</File>
 			<File
 				RelativePath="..\..\code\q3_ui\ui_network.c"
@@ -2149,50 +2169,8 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\code\q3_ui\ui_startserver.c"
+				RelativePath="..\..\code\q3_ui\ui_startserver2.c"
 				>
-				<FileConfiguration
-					Name="Debug TA|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_MBCS;_USRDLL;UI_EXPORTS;"
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release TA|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;Q3_UI_EXPORTS;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;Q3_UI_EXPORTS;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_MBCS;_USRDLL;UI_EXPORTS;"
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\code\ui\ui_syscalls.c"
@@ -2378,6 +2356,26 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\..\code\q3_ui\ui_voicechat.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\q3_ui\ui_wopsp.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\cgame\wopc_advanced2d.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\wopg_sphandling.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\wopg_spstoryfiles.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -2446,6 +2444,18 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\code\cgame\wopc_advanced2d.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\wopg_sphandling.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\wopg_spstoryfiles.h"
+				>
 			</File>
 		</Filter>
 		<Filter

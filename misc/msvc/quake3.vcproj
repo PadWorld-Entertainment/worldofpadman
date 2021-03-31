@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="quake3"
 	ProjectGUID="{81CB51C4-B434-4E12-B69B-BAEE102F2852}"
 	TargetFrameworkVersion="131072"
@@ -60,7 +60,6 @@
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				CompileAs="1"
-				FloatingPointModel="2"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -116,7 +115,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\build\quake3_debug"
+			OutputDirectory="..\..\.."
 			IntermediateDirectory="..\..\build\quake3_debug"
 			ConfigurationType="1"
 			UseOfMFC="0"
@@ -160,7 +159,6 @@
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
 				CompileAs="1"
-				FloatingPointModel="2"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -218,7 +216,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\build\quake3_release"
+			OutputDirectory="..\..\.."
 			IntermediateDirectory="..\..\build\quake3_release"
 			ConfigurationType="1"
 			UseOfMFC="1"
@@ -262,7 +260,6 @@
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				CompileAs="1"
-				FloatingPointModel="2"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -360,7 +357,6 @@
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
 				CompileAs="1"
-				FloatingPointModel="2"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -423,6 +419,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;hpj;bat;for;f90"
 			>
+			<File
+				RelativePath="..\..\code\client\cin_ogm.c"
+				>
+			</File>
 			<File
 				RelativePath="..\..\code\client\cl_avi.c"
 				>

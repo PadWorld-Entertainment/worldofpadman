@@ -32,6 +32,7 @@ MARK POLYS
 ===================================================================
 */
 
+#define MIN_MARK_DISTANCE	0.5 //HERBY
 
 markPoly_t	cg_activeMarkPolys;			// double linked list
 markPoly_t	*cg_freeMarkPolys;			// single linked list
@@ -65,7 +66,7 @@ CG_FreeMarkPoly
 ==================
 */
 void CG_FreeMarkPoly( markPoly_t *le ) {
-	if ( !le->prevMark || !le->nextMark ) {
+	if ( !le->prevMark ) {
 		CG_Error( "CG_FreeLocalEntity: not active" );
 	}
 
@@ -139,6 +140,8 @@ void CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir,
 	markFragment_t	markFragments[MAX_MARK_FRAGMENTS], *mf;
 	vec3_t			markPoints[MAX_MARK_POINTS];
 	vec3_t			projection;
+	markPoly_t		*mp, *next;
+	vec3_t			delta;
 
 	if ( !cg_addMarks.integer ) {
 		return;
@@ -152,6 +155,18 @@ void CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir,
 	//	return;
 	//}
 
+	// HERBY: Bubble G overdraw fix
+	mp = cg_activeMarkPolys.nextMark;
+	for ( ; mp != &cg_activeMarkPolys; mp = next ) {
+		next = mp->nextMark;
+		if(temporary) break; // keep all marks if the new one is just the shadow
+		if(mp->markShader == cgs.media.SchaumShader) continue;//die slick-ents einfach übergehen
+		VectorSubtract( mp->origin, origin, delta );
+		if ( radius <= mp->radius + 4 && VectorLength( delta ) < ( radius + mp->radius ) * MIN_MARK_DISTANCE ) {
+			CG_FreeMarkPoly( mp );
+		}
+	}	
+
 	// create the texture axis
 	VectorNormalize2( dir, axis[0] );
 	PerpendicularVector( axis[1], axis[0] );
@@ -161,7 +176,7 @@ void CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir,
 	texCoordScale = 0.5 * 1.0 / radius;
 
 	// create the full polygon
-	for ( i = 0 ; i < 3 ; i++ ) {
+	for ( i = 0 ; i < 3 ; ++i ) {
 		originalPoints[0][i] = origin[i] - radius * axis[1][i] - radius * axis[2][i];
 		originalPoints[1][i] = origin[i] + radius * axis[1][i] - radius * axis[2][i];
 		originalPoints[2][i] = origin[i] + radius * axis[1][i] + radius * axis[2][i];
@@ -173,6 +188,15 @@ void CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir,
 	numFragments = trap_CM_MarkFragments( 4, (void *)originalPoints,
 					projection, MAX_MARK_POINTS, markPoints[0],
 					MAX_MARK_FRAGMENTS, markFragments );
+
+	if(!numFragments && markShader == cgs.media.SchaumShader)
+	{
+		numFragments = 1;
+		markFragments->firstPoint = 0;
+		markFragments->numPoints = 4;
+		for(i=0;i<4;++i)
+			VectorCopy(originalPoints[i],markPoints[i]);
+	}
 
 	colors[0] = red * 255;
 	colors[1] = green * 255;
@@ -216,6 +240,8 @@ void CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir,
 		mark->color[1] = green;
 		mark->color[2] = blue;
 		mark->color[3] = alpha;
+		mark->radius = radius;
+		VectorCopy( origin, mark->origin );
 		memcpy( mark->verts, verts, mf->numPoints * sizeof( verts[0] ) );
 		markTotal++;
 	}
@@ -245,6 +271,31 @@ void CG_AddMarks( void ) {
 		// grab next now, so if the local entity is freed we
 		// still have it
 		next = mp->nextMark;
+
+		if(mp->markShader == cgs.media.SchaumShader)
+		{
+			if(cg.time> mp->time + 10000 )
+			{
+				CG_FreeMarkPoly( mp );
+				continue;
+			}
+
+			if((fade=cg.time-mp->time-8000)>=0)
+			{
+				fade=1.0f-(fade/2000.0f);
+
+				if ( mp->verts[0].modulate[0] != 0 ) {
+					for ( j = 0 ; j < mp->poly.numVerts ; j++ ) {
+						mp->verts[j].modulate[0] = mp->color[0] * fade;
+						mp->verts[j].modulate[1] = mp->color[1] * fade;
+						mp->verts[j].modulate[2] = mp->color[2] * fade;
+					}
+				}
+			}
+
+			trap_R_AddPolyToScene( mp->markShader, mp->poly.numVerts, mp->verts );
+			continue;
+		}
 
 		// see if it is time to completely remove it
 		if ( cg.time > mp->time + MARK_TOTAL_TIME ) {

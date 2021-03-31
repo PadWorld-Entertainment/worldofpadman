@@ -742,7 +742,7 @@ void BotAddAvoidSpot(int movestate, vec3_t origin, float radius, int type)
 int BotGetReachabilityToGoal(vec3_t origin, int areanum,
 									  int lastgoalareanum, int lastareanum,
 									  int *avoidreach, float *avoidreachtimes, int *avoidreachtries,
-									  bot_goal_t *goal, int travelflags,
+									  bot_goal_t *goal, int travelflags, int movetravelflags,
 									  struct bot_avoidspot_s *avoidspots, int numavoidspots, int *flags)
 {
 	int i, t, besttime, bestreachnum, reachnum;
@@ -754,6 +754,7 @@ int BotGetReachabilityToGoal(vec3_t origin, int areanum,
 	if (AAS_AreaDoNotEnter(areanum) || AAS_AreaDoNotEnter(goal->areanum))
 	{
 		travelflags |= TFL_DONOTENTER;
+		movetravelflags |= TFL_DONOTENTER;
 	} //end if
 	//use the routing to find the next area to go to
 	besttime = 0;
@@ -873,7 +874,7 @@ int BotMovementViewTarget(int movestate, bot_goal_t *goal, int travelflags, floa
 		reachnum = BotGetReachabilityToGoal(reach.end, reach.areanum,
 						ms->lastgoalareanum, lastareanum,
 							ms->avoidreach, ms->avoidreachtimes, ms->avoidreachtries,
-									goal, travelflags, NULL, 0, NULL);
+									goal, travelflags, travelflags, NULL, 0, NULL);
 		VectorCopy(reach.end, end);
 		lastareanum = reach.areanum;
 		if (lastareanum == goal->areanum)
@@ -932,7 +933,7 @@ int BotPredictVisiblePosition(vec3_t origin, int areanum, bot_goal_t *goal, int 
 		reachnum = BotGetReachabilityToGoal(end, areanum,
 						lastgoalareanum, lastareanum,
 							avoidreach, avoidreachtimes, avoidreachtries,
-									goal, travelflags, NULL, 0, NULL);
+									goal, travelflags, travelflags, NULL, 0, NULL);
 		if (!reachnum) return qfalse;
 		AAS_ReachabilityFromNum(reachnum, &reach);
 		//
@@ -1147,15 +1148,13 @@ int BotWalkInDirection(bot_movestate_t *ms, vec3_t dir, float speed, int type)
 			cmdmove[2] = 400;
 			maxframes = PREDICTIONTIME_JUMP / 0.1;
 			cmdframes = 1;
-			stopevent = SE_HITGROUND|SE_HITGROUNDDAMAGE|
-						SE_ENTERWATER|SE_ENTERSLIME|SE_ENTERLAVA;
+			stopevent = SE_HITGROUND|SE_ENTERWATER|SE_ENTERSLIME|SE_ENTERLAVA;
 		} //end if
 		else
 		{
 			maxframes = 2;
 			cmdframes = 2;
-			stopevent = SE_HITGROUNDDAMAGE|
-						SE_ENTERWATER|SE_ENTERSLIME|SE_ENTERLAVA;
+			stopevent = SE_ENTERWATER|SE_ENTERSLIME|SE_ENTERLAVA;
 		} //end else
 		//AAS_ClearShownDebugLines();
 		//
@@ -1171,12 +1170,11 @@ int BotWalkInDirection(bot_movestate_t *ms, vec3_t dir, float speed, int type)
 			return qfalse;
 		} //end if
 		//don't enter slime or lava and don't fall from too high
-		if (move.stopevent & (SE_ENTERSLIME|SE_ENTERLAVA|SE_HITGROUNDDAMAGE))
+		if (move.stopevent & (SE_ENTERSLIME|SE_ENTERLAVA))
 		{
 			//botimport.Print(PRT_MESSAGE, "client %d: would be hurt ", ms->client);
 			//if (move.stopevent & SE_ENTERSLIME) botimport.Print(PRT_MESSAGE, "slime\n");
 			//if (move.stopevent & SE_ENTERLAVA) botimport.Print(PRT_MESSAGE, "lava\n");
-			//if (move.stopevent & SE_HITGROUNDDAMAGE) botimport.Print(PRT_MESSAGE, "hitground\n");
 			return qfalse;
 		} //end if
 		//if ground was hit
@@ -2994,6 +2992,43 @@ bot_moveresult_t BotMoveInGoalArea(bot_movestate_t *ms, bot_goal_t *goal)
 	//
 	return result;
 } //end of the function BotMoveInGoalArea
+
+void BotShowRoute(vec3_t org, bot_goal_t* goal){
+	int startarea, curarea, i;
+	vec3_t curorigin;
+	// hm
+	static int avoidreach[MAX_AVOIDREACH];
+	static float avoidreachtimes[MAX_AVOIDREACH];
+	static int avoidreachtries[MAX_AVOIDREACH];
+	int reachnum, resultFlags;
+	aas_reachability_t reach;
+
+	startarea = AAS_PointAreaNum(org);
+	curarea = startarea;
+	VectorCopy(org, curorigin);
+
+		// move towards goal
+	for ( i = 0; i < 100; i++ ) {
+		if ( curarea == goal->areanum ) {
+			break;
+		}
+		reachnum = BotGetReachabilityToGoal(curorigin, curarea,
+										  0, 0,
+										  avoidreach, avoidreachtimes, avoidreachtries,
+										  goal, TFL_DEFAULT|TFL_FUNCBOB, TFL_DEFAULT|TFL_FUNCBOB,
+										  NULL, 0, &resultFlags);
+		
+		AAS_ReachabilityFromNum(reachnum, &reach);
+		
+		AAS_DrawArrow(curorigin, reach.start, LINECOLOR_BLUE, LINECOLOR_YELLOW);
+		AAS_ShowReachability(&reach);
+		
+		VectorCopy(reach.end, curorigin);	
+		//lastareanum = curarea;
+		curarea = reach.areanum;
+	}
+}
+
 //===========================================================================
 //
 // Parameter:				-
@@ -3022,6 +3057,10 @@ void BotMoveToGoal(bot_moveresult_t *result, int movestate, bot_goal_t *goal, in
 	//reset the grapple before testing if the bot has a valid goal
 	//because the bot could lose all its goals when stuck to a wall
 	BotResetGrapple(ms);
+
+	if( LibVarGetValue("showbotroutes") )
+		BotShowRoute(ms->origin, goal);
+
 	//
 	if (!goal)
 	{
@@ -3186,7 +3225,7 @@ void BotMoveToGoal(bot_moveresult_t *result, int movestate, bot_goal_t *goal, in
 			else if ((reach.traveltype & TRAVELTYPE_MASK) == TRAVEL_ELEVATOR ||
 				(reach.traveltype & TRAVELTYPE_MASK) == TRAVEL_FUNCBOB)
 			{
-				if ((result->flags & MOVERESULT_ONTOPOF_ELEVATOR) ||
+				if ((result->flags & MOVERESULT_ONTOPOF_FUNCBOB) ||
 					(result->flags & MOVERESULT_ONTOPOF_FUNCBOB))
 				{
 					ms->reachability_time = AAS_Time() + 5;
@@ -3245,7 +3284,7 @@ void BotMoveToGoal(bot_moveresult_t *result, int movestate, bot_goal_t *goal, in
 			reachnum = BotGetReachabilityToGoal(ms->origin, ms->areanum,
 								ms->lastgoalareanum, ms->lastareanum,
 											ms->avoidreach, ms->avoidreachtimes, ms->avoidreachtries,
-														goal, travelflags,
+														goal, travelflags, travelflags,
 																ms->avoidspots, ms->numavoidspots, &resultflags);
 			//the area number the reachability starts in
 			ms->reachareanum = ms->areanum;
@@ -3368,7 +3407,7 @@ void BotMoveToGoal(bot_moveresult_t *result, int movestate, bot_goal_t *goal, in
 				lastreachnum = BotGetReachabilityToGoal(end, areas[i],
 							ms->lastgoalareanum, ms->lastareanum,
 							ms->avoidreach, ms->avoidreachtimes, ms->avoidreachtries,
-							goal, TFL_JUMPPAD, ms->avoidspots, ms->numavoidspots, NULL);
+							goal, travelflags, TFL_JUMPPAD, ms->avoidspots, ms->numavoidspots, NULL);
 				if (lastreachnum)
 				{
 					ms->lastreachnum = lastreachnum;
@@ -3456,6 +3495,35 @@ void BotMoveToGoal(bot_moveresult_t *result, int movestate, bot_goal_t *goal, in
 	//copy the last origin
 	VectorCopy(ms->origin, ms->lastorigin);
 } //end of the function BotMoveToGoal
+
+// cyr {
+
+void ShowRoute(int client, int goalent, int goalentarea, int report){	// origin of goal
+	vec3_t curorigin;
+	bot_goal_t goal;
+	aas_entityinfo_t entinfo, goalinfo;
+
+	// get goal origin and area
+	AAS_EntityInfo(goalent, &goalinfo);
+	VectorCopy( goalinfo.origin, goal.origin);
+	goal.areanum = goalentarea; //AAS_PointAreaNum(origin); //botlibglobals.goalareanum;
+
+	
+	// bot pos
+	AAS_EntityInfo(client, &entinfo);
+	VectorCopy(entinfo.origin, curorigin);
+
+	BotShowRoute(curorigin, &goal);
+
+/*	// draw straight arrow		
+	curorigin[2]-=25;
+	AAS_DrawArrow(curorigin, goal.origin, LINECOLOR_BLUE, LINECOLOR_YELLOW);
+	curorigin[2]+=25;*/
+
+	//if(report) botimport.Print(PRT_MESSAGE, "from %d to %d \n", area, goal.areanum);
+}
+// cyr }
+
 //===========================================================================
 //
 // Parameter:				-

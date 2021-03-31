@@ -667,11 +667,12 @@ void Con_DrawSolidConsole( float frac ) {
 		SCR_DrawPic( 0, 0, SCREEN_WIDTH, y, cls.consoleShader );
 	}
 
-	color[0] = 1;
-	color[1] = 0;
-	color[2] = 0;
-	color[3] = 1;
-	SCR_FillRect( 0, y, SCREEN_WIDTH, 2, color );
+ 	color[0] = 1.0f;
+ 	color[1] = 0.8f;
+ 	color[2] = 0.0f;
+  	color[3] = 1;
+ 	SCR_FillRect( 0, y-2, SCREEN_WIDTH, 4, color );
+ 	//SCR_FillRect( 0, y+2, SCREEN_WIDTH, 8, tblack );
 
 
 	// draw the version number

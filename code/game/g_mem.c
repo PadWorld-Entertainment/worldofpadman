@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "g_local.h"
 
 
-#define POOLSIZE	(256 * 1024)
+#define POOLSIZE	(512 * 1024)
 
 static char		memoryPool[POOLSIZE];
 static int		allocPoint;

@@ -25,18 +25,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // because games can change separately from the main system version, we need a
 // second version that must match between game and cgame
 
-#define	GAME_VERSION		BASEGAME "-1"
+#include "bg_game.h"
+
+//(original)#define	GAME_VERSION		BASEGAME "-1"
+#define	GAME_VERSION		"padcode 1.153"
 
 #define	DEFAULT_GRAVITY		800
-#define	GIB_HEALTH			-40
+
+#define DEFAULT_GSPEED_STR	"280"
+
+//(original)#define	GIB_HEALTH			-40
+
+#define	LOW_GRAVITY			400
+#define	GIB_HEALTH			-200
+
 #define	ARMOR_PROTECTION	0.66
 
 #define	MAX_ITEMS			256
 
 #define	RANK_TIED_FLAG		0x4000
 
-#define DEFAULT_SHOTGUN_SPREAD	700
-#define DEFAULT_SHOTGUN_COUNT	11
+#define BALLOONY_SIZE		8
+#define MAX_BALLOONS			3
 
 #define	ITEM_RADIUS			15		// item sizes are needed for client side pickup detection
 
@@ -80,6 +90,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CS_SHADERSTATE			24
 #define CS_BOTINFO				25
 
+#define CS_BALLOONS				26
+
 #define	CS_ITEMS				27		// string of 0's and 1's that tell which items are present
 
 #define	CS_MODELS				32
@@ -99,15 +111,50 @@ typedef enum {
 	GT_TOURNAMENT,		// one on one tournament
 	GT_SINGLE_PLAYER,	// single player ffa
 
+	GT_SPRAYFFA,		// spray logo ffa GT
+	GT_LPS,
+
 	//-- team games go after this --
 
 	GT_TEAM,			// team deathmatch
 	GT_CTF,				// capture the flag
-	GT_1FCTF,
-	GT_OBELISK,
-	GT_HARVESTER,
+
+	GT_SPRAY,			// spray logo GT
+
+	GT_BALLOON,			// Big Balloon
+
 	GT_MAX_GAME_TYPE
 } gametype_t;
+
+
+// NOTE: Make sure those cover all gametypes!
+#define GTN__GT_FFA				"Free For All"
+#define GTN__GT_TOURNAMENT		"Tournament"
+#define GTN__GT_SINGLE_PLAYER	"Singleplayer"
+#define GTN__GT_SPRAYFFA		"Spray Your Color"
+#define GTN__GT_LPS				"Last Pad Standing"
+#define GTN__GT_TEAM			"Free For All Team"
+#define GTN__GT_CTF				"Capture The Lolly"
+#define GTN__GT_SPRAY			"Spray Your Color Team"
+#define GTN__GT_BALLOON			"BigBalloon"
+#define GTN__GT_MAX_GAME_TYPE	"Unknown"
+
+#define GTN_S__GT_FFA			"FFA"
+#define GTN_S__GT_TOURNAMENT	"1VS1"
+#define GTN_S__GT_SINGLE_PLAYER	"SP"
+#define GTN_S__GT_SPRAYFFA		"SYC"
+#define GTN_S__GT_LPS			"LPS"
+#define GTN_S__GT_TEAM			"TFFA"
+#define GTN_S__GT_CTF			"CTL"
+#define GTN_S__GT_SPRAY			"TSYC"
+#define GTN_S__GT_BALLOON		"BB"
+#define GTN_S__GT_MAX_GAME_TYPE	"?"
+
+#define GAMETYPE_NAME(gametype) GTN__##gametype
+#define GAMETYPE_NAME_SHORT(gametype) GTN_S__##gametype
+
+
+int	convertGTStringToGTNumber(char* argStr);
 
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
 
@@ -137,6 +184,8 @@ typedef enum {
 	WEAPON_RAISING,
 	WEAPON_DROPPING,
 	WEAPON_FIRING
+
+	,WEAPON_CHARGING // "loading" an imperius-shoot
 } weaponstate_t;
 
 // pmove->pm_flags
@@ -154,6 +203,8 @@ typedef enum {
 #define PMF_SCOREBOARD		8192	// spectate as a scoreboard
 #define PMF_INVULEXPAND		16384	// invulnerability sphere set to full size
 
+#define PMF_TOUCHSLICKENT	0x08000	// touched a slick-entity (spawned by boaster hitting the ground)
+
 #define	PMF_ALL_TIMES	(PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK)
 
 #define	MAXTOUCH	32
@@ -169,6 +220,8 @@ typedef struct {
 	qboolean	gauntletHit;		// true if a gauntlet attack would actually hit something
 
 	int			framecount;
+
+	int			gametype;
 
 	// results (out)
 	int			numtouch;
@@ -203,16 +256,22 @@ void Pmove (pmove_t *pmove);
 typedef enum {
 	STAT_HEALTH,
 	STAT_HOLDABLE_ITEM,
-#ifdef MISSIONPACK
-	STAT_PERSISTANT_POWERUP,
-#endif
 	STAT_WEAPONS,					// 16 bit fields
 	STAT_ARMOR,				
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)
 	STAT_CLIENTS_READY,				// bit mask of clients wishing to exit the intermission (FIXME: configstring?)
-	STAT_MAX_HEALTH					// health / armor limit, changeable by handicap
+	STAT_MAX_HEALTH,					// health / armor limit, changable by handicap
+
+	STAT_HOLDABLEVAR,				// for Floater/Killerduck "ammo"
+	STAT_SPRAYROOMSECS,				// time for sprayroom->killroom stuff
+									// According to latin notation, "cs" can be replaced with "x" :)
+	STAT_BALLOONTIME,
+	STAT_FORBIDDENITEMS,
+
+	STAT_HB_EFLAGS					// copy of the higher bytes of eFlags
 } statIndex_t;
 
+#define STAT_LIVESLEFT	STAT_SPRAYROOMSECS // in LPS we don't need the sprayroom seconds
 
 // player_state->persistant[] indexes
 // these fields are the only part of player_state that isn't
@@ -220,9 +279,9 @@ typedef enum {
 // NOTE: may not have more than 16
 typedef enum {
 	PERS_SCORE,						// !!! MUST NOT CHANGE, SERVER AND GAME BOTH REFERENCE !!!
+	PERS_TEAM,						// !!! MUST NOT CHANGE, SERVER AND GAME BOTH REFERENCE !!!
 	PERS_HITS,						// total points damage inflicted so damage beeps can sound on change
 	PERS_RANK,						// player rank or team rank
-	PERS_TEAM,						// player team
 	PERS_SPAWN_COUNT,				// incremented every respawn
 	PERS_PLAYEREVENTS,				// 16 bits that can be flipped for events
 	PERS_ATTACKER,					// clientnum of last damage inflicter
@@ -235,14 +294,16 @@ typedef enum {
 	PERS_ASSIST_COUNT,				// assist awards
 	PERS_GAUNTLET_FRAG_COUNT,		// kills with the guantlet
 	PERS_CAPTURES					// captures
+
+	,PERS_SPRAYAWARDS_COUNT			// 0xFF00 -> god, 0x00FF -> killer ... because there are max 16 PERS and also only 16 bit(per PERS) O_o
 } persEnum_t;
 
 
 // entityState_t->eFlags
 #define	EF_DEAD				0x00000001		// don't draw a foe marker over players with EF_DEAD
-#ifdef MISSIONPACK
-#define EF_TICKING			0x00000002		// used to make players play the prox mine ticking sound
-#endif
+
+#define EF_HURT				0x00000002		// used to determine if somebody is hurt (for stars)
+
 #define	EF_TELEPORT_BIT		0x00000004		// toggled every time the origin abruptly changes
 #define	EF_AWARD_EXCELLENT	0x00000008		// draw an excellent sprite
 #define EF_PLAYER_EVENT		0x00000010
@@ -251,7 +312,9 @@ typedef enum {
 #define	EF_AWARD_GAUNTLET	0x00000040		// draw a gauntlet sprite
 #define	EF_NODRAW			0x00000080		// may have an event, but no model (unspawned items)
 #define	EF_FIRING			0x00000100		// for lightning gun
-#define	EF_KAMIKAZE			0x00000200
+
+#define	EF_CHARGED			0x00000200
+
 #define	EF_MOVER_STOP		0x00000400		// will push otherwise
 #define EF_AWARD_CAP		0x00000800		// draw the capture sprite
 #define	EF_TALK				0x00001000		// draw a talk balloon
@@ -263,26 +326,27 @@ typedef enum {
 #define EF_AWARD_DENIED		0x00040000		// denied
 #define EF_TEAMVOTED		0x00080000		// already cast a team vote
 
+#define EF_FLOATER			0x00100000		// player uses floater
+#define EF_AWARD_SPRAYGOD	0x00200000
+#define EF_AWARD_SPRAYKILLER 0x00400000
+#define EF_NOLIFESLEFT		0x00800000		//
+
+#define REMOVE_AWARDFLAGS ~(EF_AWARD_IMPRESSIVE|EF_AWARD_EXCELLENT|EF_AWARD_GAUNTLET|EF_AWARD_ASSIST|EF_AWARD_DEFEND|EF_AWARD_CAP|EF_AWARD_SPRAYGOD|EF_AWARD_SPRAYKILLER)
+
 // NOTE: may not have more than 16
 typedef enum {
 	PW_NONE,
 
-	PW_QUAD,
-	PW_BATTLESUIT,
-	PW_HASTE,
-	PW_INVIS,
-	PW_REGEN,
-	PW_FLIGHT,
+	PW_SPEEDY,
+	PW_PADPOWER,
+	PW_CLIMBER,
+	PW_JUMPER,
+	PW_VISIONLESS,
+	PW_REVIVAL,
+	PW_BERSERKER,
 
 	PW_REDFLAG,
 	PW_BLUEFLAG,
-	PW_NEUTRALFLAG,
-
-	PW_SCOUT,
-	PW_GUARD,
-	PW_DOUBLER,
-	PW_AMMOREGEN,
-	PW_INVULNERABILITY,
 
 	PW_NUM_POWERUPS
 
@@ -293,35 +357,60 @@ typedef enum {
 
 	HI_TELEPORTER,
 	HI_MEDKIT,
-	HI_KAMIKAZE,
-	HI_PORTAL,
-	HI_INVULNERABILITY,
+
+	HI_FLOATER,
+	HI_KILLERDUCKS,
+
+	HI_BAMBAM,
+	HI_BOOMIES,
 
 	HI_NUM_HOLDABLE
 } holdable_t;
 
 
 typedef enum {
+	BBS_INACTIVE=0,		// throwen to the ground, not yet building
+	BBS_BUILDING,		// can't should, playing anim 1-50
+	BBS_IDLE,			// waiting for enemy, playing anim 51-85 (! set nextthink 20sek, for zzz)
+	BBS_IDLE2SHOOTING,	// switch to this by first enemy trigger ... switch to shooting at a delayed think
+	BBS_SHOOTING,		// shoots if it was triggered by a enemy, playing anim 86-105 (! set nextthink, for shooting2idle)
+	BBS_SHOOTING2IDLE,	// switch to this in a think after last shooting
+	BBS_ZZZ,			// after 20sec idle it will sleep for 3.76sec
+} BamBam_State_e;
+
+
+typedef enum {
 	WP_NONE,
 
-	WP_GAUNTLET,
-	WP_MACHINEGUN,
-	WP_SHOTGUN,
-	WP_GRENADE_LAUNCHER,
-	WP_ROCKET_LAUNCHER,
-	WP_LIGHTNING,
-	WP_RAILGUN,
-	WP_PLASMAGUN,
-	WP_BFG,
+	WP_PUNCHY,
+	WP_NIPPER,
+	WP_PUMPER,
+	WP_BALLOONY,
+	WP_BETTY,
+	WP_BOASTER,
+	WP_SPLASHER,
+	WP_BUBBLEG,
+	WP_IMPERIUS,
+	WP_KMA97,			// "Kiss My Ass 1997"
+
 	WP_GRAPPLING_HOOK,
-#ifdef MISSIONPACK
-	WP_NAILGUN,
-	WP_PROX_LAUNCHER,
-	WP_CHAINGUN,
-#endif
+
+	WP_SPRAYPISTOL,
+
+	WP_KILLERDUCKS,// isn't a real weapon ... but we use it to build the KDs like missiles
+	WP_BAMBAM_MISSILE, // isn't a real weapon ... but the clientside missile code is based on weaponNr
 
 	WP_NUM_WEAPONS
 } weapon_t;
+
+
+// flags for g_LPS_flags for GT_LPS
+typedef enum {
+	LPSF_PPOINTLIMIT	= 1, // Multiple map_restarts until one player won pointlimit times
+						     // Why has this two P's in its name?
+	LPSF_MULTIPOINTS	= 2, // With LPSF_PPOINTLIMIT, everyone get's points depending on his rank
+	LPSF_NOARROWS		= 4  // Don't draw Icons clientside
+} lpsflag_t;
 
 
 // reward sounds (stored in ps->persistant[PERS_PLAYEREVENTS])
@@ -377,6 +466,8 @@ typedef enum {
 	EV_CHANGE_WEAPON,
 	EV_FIRE_WEAPON,
 
+	EV_IMPERIUS_EXPLODE, //HERBY
+
 	EV_USE_ITEM0,
 	EV_USE_ITEM1,
 	EV_USE_ITEM2,
@@ -399,21 +490,28 @@ typedef enum {
 	EV_PLAYER_TELEPORT_IN,
 	EV_PLAYER_TELEPORT_OUT,
 
+	EV_PLAYER_TELEPORT_RED_IN,
+	EV_PLAYER_TELEPORT_RED_OUT,
+	EV_PLAYER_TELEPORT_BLUE_IN,
+	EV_PLAYER_TELEPORT_BLUE_OUT,
+
+	EV_DROP_CARTRIDGE,
+
 	EV_GRENADE_BOUNCE,		// eventParm will be the soundindex
+
+	EV_STICKY_BOUNCE, //HERBY
 
 	EV_GENERAL_SOUND,
 	EV_GLOBAL_SOUND,		// no attenuation
 	EV_GLOBAL_TEAM_SOUND,
-
-	EV_BULLET_HIT_FLESH,
-	EV_BULLET_HIT_WALL,
 
 	EV_MISSILE_HIT,
 	EV_MISSILE_MISS,
 	EV_MISSILE_MISS_METAL,
 	EV_RAILTRAIL,
 	EV_SHOTGUN,
-	EV_BULLET,				// otherEntity is the shooter
+
+	EV_SPRAYLOGO,
 
 	EV_PAIN,
 	EV_DEATH1,
@@ -421,27 +519,29 @@ typedef enum {
 	EV_DEATH3,
 	EV_OBITUARY,
 
-	EV_POWERUP_QUAD,
-	EV_POWERUP_BATTLESUIT,
-	EV_POWERUP_REGEN,
+	EV_POWERUP_REVIVAL,
+	EV_POWERUP_PADPOWER,
 
 	EV_GIB_PLAYER,			// gib a previously living player
 	EV_SCOREPLUM,			// score plum
 
-//#ifdef MISSIONPACK
-	EV_PROXIMITY_MINE_STICK,
-	EV_PROXIMITY_MINE_TRIGGER,
-	EV_KAMIKAZE,			// kamikaze explodes
-	EV_OBELISKEXPLODE,		// obelisk explodes
-	EV_OBELISKPAIN,			// obelisk is in pain
-	EV_INVUL_IMPACT,		// invulnerability sphere impact
-	EV_JUICED,				// invulnerability juiced effect
-	EV_LIGHTNINGBOLT,		// lightning bolt bounced of invulnerability sphere
-//#endif
-
 	EV_DEBUG_LINE,
 	EV_STOPLOOPINGSOUND,
 	EV_TAUNT,
+
+	EV_HEHE1,
+	EV_HEHE2,
+
+	EV_FOOTSTEP_CARPET,
+	EV_FOOTSTEP_LATTICE,
+	EV_FOOTSTEP_SAND,
+	EV_FOOTSTEP_SOFT,
+	EV_FOOTSTEP_WOOD,
+	EV_FOOTSTEP_SNOW,
+
+	EV_BAMBAM_EXPLOSION,
+	EV_BOOMIES_EXPLOSION,
+
 	EV_TAUNT_YES,
 	EV_TAUNT_NO,
 	EV_TAUNT_FOLLOWME,
@@ -505,6 +605,11 @@ typedef enum {
 	LEGS_IDLECR,
 
 	LEGS_TURN,
+
+	TORSO_SPRAYATTACK,
+	TORSO_SPRAYSTAND,
+	LEGS_FLYING,
+	LEGS_HEAVYLAND,
 
 	TORSO_GETFLAG,
 	TORSO_GUARDBASE,
@@ -571,36 +676,36 @@ typedef enum {
 // means of death
 typedef enum {
 	MOD_UNKNOWN,
-	MOD_SHOTGUN,
-	MOD_GAUNTLET,
-	MOD_MACHINEGUN,
-	MOD_GRENADE,
-	MOD_GRENADE_SPLASH,
-	MOD_ROCKET,
-	MOD_ROCKET_SPLASH,
-	MOD_PLASMA,
-	MOD_PLASMA_SPLASH,
-	MOD_RAILGUN,
-	MOD_LIGHTNING,
-	MOD_BFG,
-	MOD_BFG_SPLASH,
+	MOD_PUMPER,
+	MOD_PUNCHY,
+	MOD_NIPPER,
+	MOD_BALLOONY,
+	MOD_BALLOONY_SPLASH,
+	MOD_BETTY,
+	MOD_BETTY_SPLASH,
+	MOD_BUBBLEG,
+	MOD_BUBBLEG_SPLASH, // should be unused
+	MOD_SPLASHER,
+	MOD_BOASTER,
+	MOD_IMPERIUS,
+	MOD_IMPERIUS_SPLASH,
+	MOD_INJECTOR,
+
+	MOD_KILLERDUCKS,
+
 	MOD_WATER,
 	MOD_SLIME,
 	MOD_LAVA,
 	MOD_CRUSH,
 	MOD_TELEFRAG,
-	MOD_FALLING,
+	MOD_FALLING,	// should be unused
 	MOD_SUICIDE,
 	MOD_TARGET_LASER,
 	MOD_TRIGGER_HURT,
-#ifdef MISSIONPACK
-	MOD_NAIL,
-	MOD_CHAINGUN,
-	MOD_PROXIMITY_MINE,
-	MOD_KAMIKAZE,
-	MOD_JUICED,
-#endif
-	MOD_GRAPPLE
+	MOD_GRAPPLE,	// should be unused
+
+	MOD_BAMBAM,
+	MOD_BOOMIES
 } meansOfDeath_t;
 
 
@@ -686,6 +791,14 @@ typedef enum {
 	ET_GRAPPLE,				// grapple hooked on wall
 	ET_TEAM,
 
+	ET_EXPLOSION,
+	ET_BALLOON,
+
+	ET_STATION,				// health-station ...
+
+	ET_BAMBAM,
+	ET_BOOMIES,
+
 	ET_EVENTS				// any of the EV_* events can be added freestanding
 							// by setting eType to ET_EVENTS + eventNum
 							// this avoids having to set eFlags and eventNum
@@ -735,4 +848,23 @@ qboolean	BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTim
 #define KAMI_SHOCKWAVE_MAXRADIUS		1320
 #define KAMI_BOOMSPHERE_MAXRADIUS		720
 #define KAMI_SHOCKWAVE2_MAXRADIUS		704
+
+
+// These are used by cgame and q3_ui
+#define SPRAYLOGO_PATH			"spraylogos"
+#define SPRAYLOGO_LIST_CVAR		"logolist"
+#define SPRAYLOGO_DEFAULT_NAME	"01_wop"
+#define MAX_SPRAYLOGOS_LOADED	64
+#define MAX_SPRAYLOGO_NAME		32
+
+enum {
+	ICON_ARROW			= 1,
+	ICON_BALLOON		= 2,
+	ICON_TEAMMATE		= 4,
+	ICON_HEALTHSTATION	= 8,
+	ICON_SPRAYROOM		= 16
+};
+
+#define ICON_ALL ( ICON_ARROW | ICON_BALLOON | ICON_TEAMMATE | ICON_HEALTHSTATION | ICON_SPRAYROOM )
+// Don't forget to update cg_icons in cg_main.c as well
 

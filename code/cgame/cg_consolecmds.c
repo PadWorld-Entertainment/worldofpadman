@@ -41,7 +41,7 @@ void CG_TargetCommand_f( void ) {
 	}
 
 	trap_Argv( 1, test, 4 );
-	trap_SendClientCommand( va( "gc %i %i", targetNum, atoi( test ) ) );
+	trap_SendConsoleCommand( va( "gc %i %i", targetNum, atoi( test ) ) );
 }
 
 
@@ -210,7 +210,6 @@ static void CG_TellAttacker_f( void ) {
 	trap_SendClientCommand( command );
 }
 
-#ifdef MISSIONPACK
 static void CG_VoiceTellTarget_f( void ) {
 	int		clientNum;
 	char	command[128];
@@ -241,6 +240,7 @@ static void CG_VoiceTellAttacker_f( void ) {
 	trap_SendClientCommand( command );
 }
 
+#ifdef MISSIONPACK
 static void CG_NextTeamMember_f( void ) {
   CG_SelectNextPlayer();
 }
@@ -444,6 +444,92 @@ static void CG_Camera_f( void ) {
 }
 */
 
+static void CG_ReChooseLogo_f(void)
+{
+	cg.logoselected=2;
+	cg.ignorekeys = cg.time+1000;
+}
+
+static const char *gameNames[] = {
+	GAMETYPE_NAME( GT_FFA ),
+	GAMETYPE_NAME( GT_TOURNAMENT ),
+	GAMETYPE_NAME( GT_SINGLE_PLAYER ),
+	GAMETYPE_NAME( GT_SPRAYFFA ),
+	GAMETYPE_NAME( GT_LPS ),
+	GAMETYPE_NAME( GT_TEAM ),
+	GAMETYPE_NAME( GT_CTF ),
+	GAMETYPE_NAME( GT_SPRAY ),
+	GAMETYPE_NAME( GT_BALLOON ),
+	NULL
+};
+
+#define MAX_BUFFERLEN	256
+static void CG_HelpCmd_f(void)
+{
+	char buffer[MAX_BUFFERLEN];
+
+	if(trap_Argc()>1)
+	{
+		trap_Args(buffer,MAX_BUFFERLEN);
+		if(!Q_stricmp(buffer,"g_gametype"))
+		{
+			int i;
+
+			Com_Printf("GT# -> gametype:\n");
+			for(i=0;gameNames[i]!=NULL;i++)
+				Com_Printf("%3i -> %s\n",i,gameNames[i]);
+		}
+	}
+	else
+	{
+		Com_Printf("available help:\n");
+		Com_Printf(" g_gametype\n");
+	}
+}
+
+static void CG_DropCartridge_f(void) {
+//	trap_SendClientCommand("dropCartridge"); // also goes over spamm filter
+	trap_SendConsoleCommand("+button12;-button12\n"); // BUTTON_DROPCART
+}
+
+static void CG_Cam( void ) {	
+	// SP only
+	//if( cgs.gametype != GT_SINGLE_PLAYER ) 
+	//	return;
+
+	// toggle cam mode
+	cg.Cam = cg.Cam ? 0 : 1;
+	VectorCopy(cg.refdef.vieworg, cg.CamPos);
+	VectorCopy(cg.refdefViewAngles, cg.CamAngles);
+}
+
+void Cmd_SetFreecamPos_f( void ) {
+	vec3_t	origin, angles;
+	char	buffer[MAX_TOKEN_CHARS];
+	int		i;
+
+	if ( trap_Argc() < 3 ) {
+		CG_Printf("usage: setviewpos x y z pitch yaw roll\n");
+		return;
+	}
+
+	VectorClear( angles );
+
+	for ( i = 0 ; i < 3 ; i++ ) {
+		trap_Argv( i + 1, buffer, sizeof( buffer ) );
+		origin[i] = atof( buffer );
+	}
+
+	trap_Argv( 5, buffer, sizeof( buffer ) );
+	angles[YAW] = atof( buffer );
+	trap_Argv( 4, buffer, sizeof( buffer ) );
+	angles[PITCH] = atof( buffer );
+	trap_Argv( 6, buffer, sizeof( buffer ) );
+	angles[ROLL] = atof( buffer );
+
+	VectorCopy( origin, cg.CamPos );
+	VectorCopy( angles, cg.CamAngles );
+}
 
 typedef struct {
 	char	*cmd;
@@ -470,9 +556,9 @@ static consoleCommand_t	commands[] = {
 	{ "tcmd", CG_TargetCommand_f },
 	{ "tell_target", CG_TellTarget_f },
 	{ "tell_attacker", CG_TellAttacker_f },
-#ifdef MISSIONPACK
 	{ "vtell_target", CG_VoiceTellTarget_f },
 	{ "vtell_attacker", CG_VoiceTellAttacker_f },
+#ifdef MISSIONPACK
 	{ "loadhud", CG_LoadHud_f },
 	{ "nextTeamMember", CG_NextTeamMember_f },
 	{ "prevTeamMember", CG_PrevTeamMember_f },
@@ -501,6 +587,14 @@ static consoleCommand_t	commands[] = {
 	{ "startOrbit", CG_StartOrbit_f },
 	//{ "camera", CG_Camera_f },
 	{ "loaddeferred", CG_LoadDeferredPlayers }	
+
+	,{"help", CG_HelpCmd_f }
+	,{"rechooselogo", CG_ReChooseLogo_f }
+	,{"dropCartridge",CG_DropCartridge_f}
+	,{"dropTeamItem",CG_DropCartridge_f}
+ 	,{"freecamsetpos", Cmd_SetFreecamPos_f}
+ 	,{"freecam", CG_Cam}
+	,{"spraydump", DumpPolyInfo}
 };
 
 
@@ -524,6 +618,9 @@ qboolean CG_ConsoleCommand( void ) {
 			return qtrue;
 		}
 	}
+
+	if(CG_Cutscene2d_CheckCmd(cmd))
+		return qtrue;
 
 	return qfalse;
 }
@@ -574,10 +671,18 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("addbot");
 	trap_AddCommand ("setviewpos");
 	trap_AddCommand ("callvote");
+	trap_AddCommand ("cv");
 	trap_AddCommand ("vote");
 	trap_AddCommand ("callteamvote");
 	trap_AddCommand ("teamvote");
 	trap_AddCommand ("stats");
 	trap_AddCommand ("teamtask");
 	trap_AddCommand ("loaddefered");	// spelled wrong, but not changing for demo
+	trap_AddCommand("rechooselogo");
+	trap_AddCommand("ready");
+	trap_AddCommand("TeamReady");
+	trap_AddCommand("dropCartridge");
+	trap_AddCommand("dropTeamItem");
+	trap_AddCommand("help");
+	trap_AddCommand("spraydump");
 }

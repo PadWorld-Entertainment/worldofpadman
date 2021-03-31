@@ -33,6 +33,7 @@ static qhandle_t	loadingPlayerIcons[MAX_LOADING_PLAYER_ICONS];
 static qhandle_t	loadingItemIcons[MAX_LOADING_ITEM_ICONS];
 
 
+#if 0
 /*
 ===================
 CG_DrawLoadingIcons
@@ -57,7 +58,7 @@ static void CG_DrawLoadingIcons( void ) {
 		CG_DrawPic( x, y, 32, 32, loadingItemIcons[n] );
 	}
 }
-
+#endif
 
 /*
 ======================
@@ -67,6 +68,17 @@ CG_LoadingString
 */
 void CG_LoadingString( const char *s ) {
 	Q_strncpyz( cg.infoScreenText, s, sizeof( cg.infoScreenText ) );
+
+	trap_UpdateScreen();
+}
+
+/*
+#######################
+CG_ChangeLoadingProgress
+#######################
+*/
+void CG_ChangeLoadingProgress( float f ) {
+	cg.loadingprogress = f;
 
 	trap_UpdateScreen();
 }
@@ -108,18 +120,18 @@ void CG_LoadingClient( int clientNum ) {
 		if ( skin ) {
 			*skin++ = '\0';
 		} else {
-			skin = "default";
+			skin = DEFAULT_SKIN;
 		}
 
-		Com_sprintf( iconName, MAX_QPATH, "models/players/%s/icon_%s.tga", model, skin );
+		Com_sprintf( iconName, MAX_QPATH, "models/wop_players/%s/icon_%s.tga", model, skin );
 		
 		loadingPlayerIcons[loadingPlayerIconCount] = trap_R_RegisterShaderNoMip( iconName );
 		if ( !loadingPlayerIcons[loadingPlayerIconCount] ) {
-			Com_sprintf( iconName, MAX_QPATH, "models/players/characters/%s/icon_%s.tga", model, skin );
+			Com_sprintf( iconName, MAX_QPATH, "models/wop_players/characters/%s/icon_%s.tga", model, skin );
 			loadingPlayerIcons[loadingPlayerIconCount] = trap_R_RegisterShaderNoMip( iconName );
 		}
 		if ( !loadingPlayerIcons[loadingPlayerIconCount] ) {
-			Com_sprintf( iconName, MAX_QPATH, "models/players/%s/icon_%s.tga", DEFAULT_MODEL, "default" );
+			Com_sprintf( iconName, MAX_QPATH, "models/wop_players/%s/icon_%s.tga", DEFAULT_MODEL, DEFAULT_SKIN );
 			loadingPlayerIcons[loadingPlayerIconCount] = trap_R_RegisterShaderNoMip( iconName );
 		}
 		if ( loadingPlayerIcons[loadingPlayerIconCount] ) {
@@ -130,13 +142,8 @@ void CG_LoadingClient( int clientNum ) {
 	Q_strncpyz( personality, Info_ValueForKey( info, "n" ), sizeof(personality) );
 	Q_CleanStr( personality );
 
-	if( cgs.gametype == GT_SINGLE_PLAYER ) {
-		trap_S_RegisterSound( va( "sound/player/announce/%s.wav", personality ), qtrue );
-	}
-
 	CG_LoadingString( personality );
 }
-
 
 /*
 ====================
@@ -149,27 +156,88 @@ void CG_DrawInformation( void ) {
 	const char	*s;
 	const char	*info;
 	const char	*sysInfo;
-	int			y;
-	int			value;
+//	int			y;
+//	int			value;
 	qhandle_t	levelshot;
-	qhandle_t	detail;
-	char		buf[1024];
+	qhandle_t	helppage;
+//	char		buf[1024];
+	float		lx,ly,lw,lh;//l->loading
+	// levelshot ideal coords (assuming 1024*768 resolution)
+	int lsiX = 167;
+	int lsiY = 125;
+	int lsiW = 690;
+	int lsiH = 517;
+	float idealAspectRatio = 4.0/3;
+	int lsCenterDistX;			// x - distance to center
+	int lsX, lsY, lsW, lsH;		// actual levelshot coords
 
 	info = CG_ConfigString( CS_SERVERINFO );
 	sysInfo = CG_ConfigString( CS_SYSTEMINFO );
 
-	s = Info_ValueForKey( info, "mapname" );
-	levelshot = trap_R_RegisterShaderNoMip( va( "levelshots/%s.tga", s ) );
-	if ( !levelshot ) {
-		levelshot = trap_R_RegisterShaderNoMip( "menu/art/unknownmap" );
-	}
 	trap_R_SetColor( NULL );
-	CG_DrawPic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, levelshot );
 
-	// blend a detail texture over it
-	detail = trap_R_RegisterShader( "levelShotDetail" );
-	trap_R_DrawStretchPic( 0, 0, cgs.glconfig.vidWidth, cgs.glconfig.vidHeight, 0, 0, 2.5, 2, detail );
+	CG_DrawPic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, trap_R_RegisterShaderNoMip("loadingscreen/connecting"));
+	
+	s = Info_ValueForKey( info, "mapname" );
+	levelshot = trap_R_RegisterShaderNoMip( va( "levelshots/%s", s ) );
+	if ( !levelshot ) {
+		levelshot = trap_R_RegisterShaderNoMip( "levelshots/unknownmap" );
+	}
 
+	switch ( cgs.gametype ) {
+		case GT_BALLOON:
+			info = "menu/help/loadinghelp_bb.tga";
+			break;
+		case GT_CTF:
+			info = "menu/help/loadinghelp_ctl.tga";
+			break;
+		case GT_FFA:
+			info = "menu/help/loadinghelp_ffa.tga";
+			break;
+		case GT_LPS:
+			info = "menu/help/loadinghelp_lps.tga";
+			break;
+		case GT_SPRAYFFA:
+			info = "menu/help/loadinghelp_syc.tga";
+			break;
+		case GT_SPRAY:
+			info = "menu/help/loadinghelp_teamsyc.tga";
+			break;
+		case GT_TEAM:
+			info = "menu/help/loadinghelp_teamffa.tga";
+			break;
+
+		default:
+			info = "menu/help/loadinghelp_ffa.tga";
+			break;
+	}
+
+	helppage = trap_R_RegisterShaderNoMip( info );
+
+
+	// now scale x and width to preserve the levelshot aspect ratio
+	lsCenterDistX = (512 - lsiX) * idealAspectRatio / cgs.glconfig.windowAspect;
+	lsX = 512 - lsCenterDistX;
+	lsY = lsiY;
+	lsW = (float)lsiW * (idealAspectRatio / cgs.glconfig.windowAspect);
+	lsH = lsiH;
+
+	CG_DrawPic1024( lsX, lsY, lsW, lsH, levelshot );
+	CG_DrawPic1024( lsX, lsY, lsW, lsH, helppage );
+
+//test werte: 300,650,424,40
+//von minibild: 282,675,460,48
+	lx=282;
+	ly=675;
+	lw=460*cg.loadingprogress;
+	lh=48;
+	CG_AdjustFrom1024(&lx,&ly,&lw,&lh);
+	trap_R_DrawStretchPic(lx,ly,lw,lh,0,0,cg.loadingprogress,1,trap_R_RegisterShaderNoMip("loadingscreen/ladebalken"));
+	CG_DrawPic1024(282,675,460,48,trap_R_RegisterShaderNoMip("loadingscreen/ladefenster"));
+
+	return;
+
+	#if 0
 	// draw the icons of things as they are loaded
 	CG_DrawLoadingIcons();
 
@@ -248,19 +316,14 @@ void CG_DrawInformation( void ) {
 		s = "Team Deathmatch";
 		break;
 	case GT_CTF:
-		s = "Capture The Flag";
+		s = "Capture the Lolly";
 		break;
-#ifdef MISSIONPACK
-	case GT_1FCTF:
-		s = "One Flag CTF";
+	case GT_SPRAY:
+		s = "TeamPlay Spraymode";
 		break;
-	case GT_OBELISK:
-		s = "Overload";
+	case GT_SPRAYFFA:
+		s = "FFA Spraymode";
 		break;
-	case GT_HARVESTER:
-		s = "Harvester";
-		break;
-#endif
 	default:
 		s = "Unknown Gametype";
 		break;
@@ -277,20 +340,22 @@ void CG_DrawInformation( void ) {
 	}
 
 	if (cgs.gametype < GT_CTF ) {
-		value = atoi( Info_ValueForKey( info, "fraglimit" ) );
-		if ( value ) {
-			UI_DrawProportionalString( 320, y, va( "fraglimit %i", value ),
+		value = atoi( Info_ValueForKey( info, "pointlimit" ) );
+			UI_DrawProportionalString( 320, y, va( "pointlimit %i", value ),
 				UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+		if ( value ) {
 			y += PROP_HEIGHT;
 		}
 	}
 
 	if (cgs.gametype >= GT_CTF) {
-		value = atoi( Info_ValueForKey( info, "capturelimit" ) );
+		value = atoi( Info_ValueForKey( info, "pointlimit" ) );
 		if ( value ) {
-			UI_DrawProportionalString( 320, y, va( "capturelimit %i", value ),
+			UI_DrawProportionalString( 320, y, va( "pointlimit %i", value ),
 				UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+			y += PROP_HEIGHT;
 		}
 	}
+	#endif
 }
 

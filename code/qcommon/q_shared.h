@@ -26,34 +26,51 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
+
+#define	PROTOCOL_VERSION	72
+// v1.6 - 71
+// v1.5 - 69
+// v1.1 - v1.2: 68
+// maintain a list of compatible protocols for demo playing
+// NOTE: that stuff only works with two digits protocols
+extern int demo_protocols[];
+
 #ifdef STANDALONE
-  #define PRODUCT_NAME				"iofoo3"
-  #define BASEGAME					"foobar"
-  #define CLIENT_WINDOW_TITLE		"changeme"
-  #define CLIENT_WINDOW_MIN_TITLE	"changeme2"
-  #define HOMEPATH_NAME_UNIX		".foo"
-  #define HOMEPATH_NAME_WIN			"FooBar"
-  #define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
+  #define PRODUCT_NAME                 "wop"
+  #define PRODUCT_TITLE                        "WoP"
+  #define BASEGAME                             "wop"                   // TODO: Use this in Makefile
+  #define CLIENT_WINDOW_TITLE          "World of Padman"
+  #define CLIENT_WINDOW_MIN_TITLE      PRODUCT_TITLE
+  #define PRODUCT_BASE                 "ioq3 r2140M"
+  #define PRODUCT_RELEASE              ""                      // "beta x" "final"/""
+ 
+  #define VERSION_INFO                 PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
+  #define HOMEPATH_NAME_UNIX           ".padman"
+  #define HOMEPATH_NAME_WIN            "Padman"
+  #define HOMEPATH_NAME_MACOSX         "WorldOfPadman"
 //  #define STEAMPATH_NAME			"Foo Bar"
 //  #define STEAMPATH_APPID         ""
-  #define GAMENAME_FOR_MASTER		"foobar"	// must NOT contain whitespace
+//  #define GOGPATH_ID                           "1441704920"
+  #define GAMENAME_FOR_MASTER  "WorldofPadman"
   #define CINEMATICS_LOGO		"foologo.roq"
   #define CINEMATICS_INTRO		"intro.roq"
-//  #define LEGACY_PROTOCOL	// You probably don't need this for your standalone game
+//  #define LEGACY_PROTOCOL
 #else
-  #define PRODUCT_NAME				"ioq3"
-  #define BASEGAME					"baseq3"
-  #define CLIENT_WINDOW_TITLE		"ioquake3"
-  #define CLIENT_WINDOW_MIN_TITLE	"ioq3"
-  #define HOMEPATH_NAME_UNIX		".q3a"
-  #define HOMEPATH_NAME_WIN			"Quake3"
-  #define HOMEPATH_NAME_MACOSX		HOMEPATH_NAME_WIN
-  #define STEAMPATH_NAME			"Quake 3 Arena"
-  #define STEAMPATH_APPID			"2200"
-  #define GOGPATH_ID				"1441704920"
-  #define GAMENAME_FOR_MASTER		"Quake3Arena"
-  #define CINEMATICS_LOGO		"idlogo.RoQ"
-  #define CINEMATICS_INTRO		"intro.RoQ"
+  #define PRODUCT_NAME                         "ioq3"
+  #define BASEGAME                                     "baseq3"
+  #define CLIENT_WINDOW_TITLE          "ioquake3"
+  #define CLIENT_WINDOW_MIN_TITLE      "ioq3"
+  #define PRODUCT_BASE                 "ioq3 r2140M"
+  #define PRODUCT_RELEASE              ""                      // "beta x" "final"/""
+  #define HOMEPATH_NAME_UNIX           ".q3a"
+  #define HOMEPATH_NAME_WIN                    "Quake3"
+  #define HOMEPATH_NAME_MACOSX         HOMEPATH_NAME_WIN
+  #define STEAMPATH_NAME                       "Quake 3 Arena"
+  #define STEAMPATH_APPID                      "2200"
+  #define GOGPATH_ID                           "1441704920"
+  #define GAMENAME_FOR_MASTER          "Quake3Arena"
+  #define CINEMATICS_LOGO              "idlogo.RoQ"
+  #define CINEMATICS_INTRO             "intro.RoQ"
   #define LEGACY_PROTOCOL
 #endif
 
@@ -62,20 +79,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 // When com_gamename is LEGACY_MASTER_GAMENAME, use quake3 master protocol.
 // You shouldn't change this unless you know what you're doing
-#define LEGACY_MASTER_GAMENAME		"Quake3Arena"
-#define LEGACY_HEARTBEAT_FOR_MASTER	"QuakeArena-1"
+#define LEGACY_MASTER_GAMENAME         "Quake3Arena"
+#define LEGACY_HEARTBEAT_FOR_MASTER    "QuakeArena-1"
 
 #define BASETA				"missionpack"
 
 #ifndef PRODUCT_VERSION
-  #define PRODUCT_VERSION "1.36"
+  // TODO: Sync with Makefile!
+  #define PRODUCT_VERSION "1.6"
 #endif
 
-#ifndef PRODUCT_DATE
-#  define PRODUCT_DATE __DATE__
-#endif
-
-#define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION
+#define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION " " PRODUCT_RELEASE
 
 #define MAX_TEAMNAME		32
 #define MAX_MASTER_SERVERS      5	// number of supported master servers
@@ -267,7 +281,9 @@ typedef int		clipHandle_t;
 
 #define	MAX_SAY_TEXT	150
 
-// parameters for command buffer stuffing
+#define UI_NS_STR_HGW	0x00008000 //number sized string ... height gleich width
+
+// paramters for command buffer stuffing
 typedef enum {
 	EXEC_NOW,			// don't return until completed, a VM should NEVER use this,
 						// because some commands might cause the VM to be unloaded...
@@ -409,6 +425,13 @@ extern	vec4_t		colorWhite;
 extern	vec4_t		colorLtGrey;
 extern	vec4_t		colorMdGrey;
 extern	vec4_t		colorDkGrey;
+extern	vec4_t		colorTBlack33;
+extern	vec4_t		colorTBlack66;
+extern	vec4_t		colorDkGreen;
+extern	vec4_t		colorDkBlue;
+extern	vec4_t		colorDkRed;
+extern	vec4_t		colorDkLilac;
+extern	vec4_t		colorDkOrange;
 
 #define Q_COLOR_ESCAPE	'^'
 qboolean Q_IsColorString(const char *p);  // ^[0-9a-zA-Z]
@@ -434,6 +457,9 @@ qboolean Q_IsColorString(const char *p);  // ^[0-9a-zA-Z]
 #define S_COLOR_WHITE	"^7"
 
 extern vec4_t	g_color_table[8];
+extern vec4_t	spraycolors[];
+//#define NUM_SPRAYCOLORS ( sizeof( spraycolors[] ) / sizeof( spraycolors[0] ) )
+#define NUM_SPRAYCOLORS 6
 
 #define	MAKERGB( v, r, g, b ) v[0]=r;v[1]=g;v[2]=b
 #define	MAKERGBA( v, r, g, b, a ) v[0]=r;v[1]=g;v[2]=b;v[3]=a
@@ -678,6 +704,7 @@ vec_t VectorNormalize (vec3_t v);		// returns vector length
 vec_t VectorNormalize2( const vec3_t v, vec3_t out );
 void Vector4Scale( const vec4_t in, vec_t scale, vec4_t out );
 void VectorRotate( vec3_t in, vec3_t matrix[3], vec3_t out );
+void VectorRotateTMatrix( vec3_t in, vec3_t matrix[3], vec3_t out );
 int Q_log2(int val);
 
 float Q_acos(float c);
@@ -686,7 +713,8 @@ int		Q_rand( int *seed );
 float	Q_random( int *seed );
 float	Q_crandom( int *seed );
 
-#define random()	((rand () & 0x7fff) / ((float)0x7fff))
+#define random()	((rand () & 0x7fff) / ((float)0x8000))
+#define randomindex(count) (rand() % (count))
 #define crandom()	(2.0 * (random() - 0.5))
 
 void vectoangles( const vec3_t value1, vec3_t angles);
@@ -694,6 +722,7 @@ void AnglesToAxis( const vec3_t angles, vec3_t axis[3] );
 
 void AxisClear( vec3_t axis[3] );
 void AxisCopy( vec3_t in[3], vec3_t out[3] );
+void AxisScale( vec3_t in[3], float s, vec3_t out[3] );
 
 void SetPlaneSignbits( struct cplane_s *out );
 int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *plane);
@@ -881,6 +910,10 @@ void Info_SetValueForKey( char *s, const char *key, const char *value );
 void Info_SetValueForKey_Big( char *s, const char *key, const char *value );
 qboolean Info_Validate( const char *s );
 void Info_NextPair( const char **s, char *key, char *value );
+
+// value only info strings 
+void StringDump_Push(char* s, const char* value); 
+void StringDump_GetNext( const char **head, char *value ); 
 
 // this is only here so the functions in q_shared.c and bg_*.c can link
 void	QDECL Com_Error( int level, const char *error, ... ) __attribute__ ((noreturn, format(printf, 2, 3)));
@@ -1242,6 +1275,7 @@ typedef struct playerState_s {
 #define BUTTON_FOLLOWME		1024
 
 #define	BUTTON_ANY			2048			// any key whatsoever
+#define BUTTON_DROPCART		4096			// button12
 
 #define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,
 										// then BUTTON_WALKING should be set
@@ -1266,7 +1300,8 @@ typedef enum {
 	TR_LINEAR,
 	TR_LINEAR_STOP,
 	TR_SINE,					// value = base + sin( time / duration ) * delta
-	TR_GRAVITY
+	TR_GRAVITY,
+	TR_LOW_GRAVITY
 } trType_t;
 
 typedef struct {
@@ -1430,6 +1465,12 @@ typedef enum _flag_status {
 #define CDKEY_LEN 16
 #define CDCHKSUM_LEN 2
 
+typedef enum {
+	WSM_NO=0,
+	WSM_NORMAL,
+	WSM_STARTMAP,
+	WSM_ENDMAP
+} wopStoryMode_e;
 
 #define LERP( a, b, w ) ( ( a ) * ( 1.0f - ( w ) ) + ( b ) * ( w ) )
 #define LUMA( red, green, blue ) ( 0.2126f * ( red ) + 0.7152f * ( green ) + 0.0722f * ( blue ) )

@@ -2973,7 +2973,7 @@ int BotSetupChatAI(void)
 #ifdef DEBUG
 	int starttime = Sys_MilliSeconds();
 #endif //DEBUG
-
+/*
 	file = LibVarString("synfile", "syn.c");
 	synonyms = BotLoadSynonyms(file);
 	file = LibVarString("rndfile", "rnd.c");
@@ -2986,6 +2986,9 @@ int BotSetupChatAI(void)
 		file = LibVarString("rchatfile", "rchat.c");
 		replychats = BotLoadReplyChat(file);
 	} //end if
+*/
+	file = LibVarString("matchfile", "match.c");
+	matchtemplates = BotLoadMatchTemplates(file);
 
 	InitConsoleMessageHeap();
 

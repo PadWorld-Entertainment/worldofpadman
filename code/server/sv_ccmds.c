@@ -1186,14 +1186,15 @@ static void SV_Status_f( void ) {
 	{
 		if (!cl->state)
 			continue;
-		Com_Printf ("%2i ", i);
+		Com_Printf ("%3i ", i);
 		ps = SV_GameClientNum( i );
 		Com_Printf ("%5i ", ps->persistant[PERS_SCORE]);
+		Com_Printf( "%4i ", (ps->pm_flags & PMF_FOLLOW) ? TEAM_SPECTATOR : ps->persistant[PERS_TEAM] );
 
 		if (cl->state == CS_CONNECTED)
-			Com_Printf ("CON ");
+			Com_Printf ("CNCT ");
 		else if (cl->state == CS_ZOMBIE)
-			Com_Printf ("ZMB ");
+			Com_Printf ("ZMBI ");
 		else
 		{
 			ping = cl->ping < 9999 ? cl->ping : 9999;
@@ -1260,7 +1261,8 @@ static void SV_ConSay_f(void) {
 
 	strcat(text, p);
 
-	Com_Printf("%s\n", text);
+	// FIXME: This does not work with wop, as wop uses "chat #id #text" now
+	//        Would be best to remove this to gamecode
 	SV_SendServerCommand(NULL, "chat \"%s\"", text);
 }
 

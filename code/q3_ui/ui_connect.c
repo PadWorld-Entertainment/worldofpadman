@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "ui_local.h"
+#include "../game/wopg_sphandling.h"
+
+#include "../game/wopg_spstoryfiles.h"
 
 /*
 ===============================================================================
@@ -70,6 +73,7 @@ static void UI_DisplayDownloadInfo( const char *downloadName ) {
 	static char dlText[]	= "Downloading:";
 	static char etaText[]	= "Estimated time left:";
 	static char xferText[]	= "Transfer rate:";
+//	vec4_t tblack66 = {0.0f,0.0f,0.0f,0.66f};
 
 	int downloadSize, downloadCount, downloadTime;
 	char dlSizeBuf[64], totalSizeBuf[64], xferRateBuf[64], dlTimeBuf[64];
@@ -82,12 +86,24 @@ static void UI_DisplayDownloadInfo( const char *downloadName ) {
 	downloadCount = trap_Cvar_VariableValue( "cl_downloadCount" );
 	downloadTime = trap_Cvar_VariableValue( "cl_downloadTime" );
 
+#if 0 // bk010104
+	fprintf( stderr, "\n\n-----------------------------------------------\n");
+	fprintf( stderr, "DB: downloadSize:  %16d\n", downloadSize );
+	fprintf( stderr, "DB: downloadCount: %16d\n", downloadCount );
+	fprintf( stderr, "DB: downloadTime:  %16d\n", downloadTime );  
+  	fprintf( stderr, "DB: UI realtime:   %16d\n", uis.realtime );	// bk
+	fprintf( stderr, "DB: UI frametime:  %16d\n", uis.frametime );	// bk
+#endif
+
 	leftWidth = UI_ProportionalStringWidth( dlText ) * UI_ProportionalSizeScale( style );
 	width = UI_ProportionalStringWidth( etaText ) * UI_ProportionalSizeScale( style );
 	if (width > leftWidth) leftWidth = width;
 	width = UI_ProportionalStringWidth( xferText ) * UI_ProportionalSizeScale( style );
 	if (width > leftWidth) leftWidth = width;
 	leftWidth += 16;
+
+//	UI_FillRect(-5,128-8,650,(224-128)+32+16,tblack66);
+//	UI_DrawRect(-5,128-8,650,(224-128)+32+16,colorBlack);
 
 	UI_DrawProportionalString( 8, 128, dlText, style, color_white );
 	UI_DrawProportionalString( 8, 160, etaText, style, color_white );
@@ -109,12 +125,19 @@ static void UI_DisplayDownloadInfo( const char *downloadName ) {
 		UI_DrawProportionalString( leftWidth, 192, 
 			va("(%s of %s copied)", dlSizeBuf, totalSizeBuf), style, color_white );
 	} else {
+	  // bk010108
+	  //float elapsedTime = (float)(uis.realtime - downloadTime); // current - start (msecs)
+	  //elapsedTime = elapsedTime * 0.001f; // in seconds
+	  //if ( elapsedTime <= 0.0f ) elapsedTime == 0.0f;
 	  if ( (uis.realtime - downloadTime) / 1000) {
 			xferRate = downloadCount / ((uis.realtime - downloadTime) / 1000);
 		  //xferRate = (int)( ((float)downloadCount) / elapsedTime);
 		} else {
 			xferRate = 0;
 		}
+
+	  //fprintf( stderr, "DB: elapsedTime:  %16.8f\n", elapsedTime );	// bk
+	  //fprintf( stderr, "DB: xferRate:   %16d\n", xferRate );	// bk
 
 		UI_ReadableSize( xferRateBuf, sizeof xferRateBuf, xferRate );
 
@@ -125,7 +148,7 @@ static void UI_DisplayDownloadInfo( const char *downloadName ) {
 			// We do it in K (/1024) because we'd overflow around 4MB
 			n = (n - (((downloadCount/1024) * n) / (downloadSize/1024))) * 1000;
 			
-			UI_PrintTime ( dlTimeBuf, sizeof dlTimeBuf, n );
+			UI_PrintTime ( dlTimeBuf, sizeof dlTimeBuf, n ); // bk010104
 				//(n - (((downloadCount/1024) * n) / (downloadSize/1024))) * 1000);
 
 			UI_DrawProportionalString( leftWidth, 160, 
@@ -163,13 +186,79 @@ void UI_DrawConnectScreen( qboolean overlay ) {
 	char			*s;
 	uiClientState_t	cstate;
 	char			info[MAX_INFO_VALUE];
+	char			downloadName[MAX_INFO_VALUE];
+
+	trap_Cvar_VariableStringBuffer( "cl_downloadName", downloadName, sizeof(downloadName) );
 
 	Menu_Cache();
+
+	if(wop_specialSPLoadingScreen.integer) {
+		static int tmp = 0;
+
+		trap_Cvar_VariableStringBuffer( WOPSP_STORY_CVAR, info, sizeof(info) );
+		if(info[0]) {
+			char seID[MAX_INFO_VALUE];
+			trap_Cvar_VariableStringBuffer( WOPSP_SELEMENT_CVAR, seID, sizeof(seID) );
+
+			if(!wopSP_openStory(info)) {
+				wop_StoryElement_t tmpE;
+				wopSP_findStoryElement(seID, &tmpE);
+
+				if(wopSP_validSE(&tmpE) && *tmpE.intro) {
+					if(!Q_stricmpn("picture:",tmpE.intro,8))
+						Q_strncpyz(info,tmpE.intro+8,sizeof(info));
+					else
+						info[0] = '\0';
+				}
+				else
+					info[0] = '\0';
+			}
+			else
+				info[0] = '\0';
+
+			if(info[0]) {
+				UI_FillRect(0,0,640,480,colorBlack);
+//				UI_FillRect(10*tmp,0,20,20,colorWhite);
+				UI_DrawNamedPic(0,0,640,480,info);
+				switch((tmp>>1)%3) {
+				case 0:
+					UI_DrawStringNS(500,440,"Loading .",UI_LEFT,20,colorRed);
+					break;
+				case 1:
+					UI_DrawStringNS(500,440,"Loading ..",UI_LEFT,20,colorRed);
+					break;
+				case 2:
+				default:
+					UI_DrawStringNS(500,440,"Loading ...",UI_LEFT,20,colorRed);
+					break;
+				}
+			}
+			else { //TODO: if we don't have a comic show some special loading screen (padman in the "teleporting" tunnel or something like that)
+/*				UI_FillRect(0,0,640,480,colorCyan);
+				UI_FillRect(10*tmp,0,20,20,colorBlack);
+
+				UI_DrawStringNS(100,100,va("storyelement: %s",info),0,16,colorMagenta);
+*/
+			}
+			++tmp;
+
+			return;
+		}
+	}
 
 	if ( !overlay ) {
 		// draw the dialog background
 		UI_SetColor( color_white );
-		UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.menuBackShader );
+
+		//UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.connectingBG );
+		// stretch it like in cgame ...
+		if (*downloadName)
+			trap_R_DrawStretchPic(0,0,uis.glconfig.vidWidth,uis.glconfig.vidHeight,0,0,1,1,uis.pad_simpleMenuBg);
+		else
+			trap_R_DrawStretchPic(0,0,uis.glconfig.vidWidth,uis.glconfig.vidHeight,0,0,1,1,uis.connectingBG);
+	}
+	else {
+		return;//doppelt over lay O_o
 	}
 
 	// see what information we should display
@@ -189,7 +278,7 @@ void UI_DrawConnectScreen( qboolean overlay ) {
 	
 	// print any server info (server full, bad version, etc)
 	if ( cstate.connState < CA_CONNECTED ) {
-		UI_DrawProportionalString_AutoWrapped( 320, 192, 630, 20, cstate.messageString, UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, menu_text_color );
+		UI_DrawString_AutoWrapped( 320, 192, 630, 20, cstate.messageString, UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, menu_text_color, qtrue );
 	}
 
 #if 0
@@ -228,14 +317,10 @@ void UI_DrawConnectScreen( qboolean overlay ) {
 	case CA_CHALLENGING:
 		s = va("Awaiting connection...%i", cstate.connectPacketCount);
 		break;
-	case CA_CONNECTED: {
-		char downloadName[MAX_INFO_VALUE];
-
-			trap_Cvar_VariableStringBuffer( "cl_downloadName", downloadName, sizeof(downloadName) );
-			if (*downloadName) {
-				UI_DisplayDownloadInfo( downloadName );
-				return;
-			}
+	case CA_CONNECTED:
+		if (*downloadName) {
+			UI_DisplayDownloadInfo( downloadName );
+			return;
 		}
 		s = "Awaiting gamestate...";
 		break;

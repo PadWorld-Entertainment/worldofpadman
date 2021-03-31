@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "g_local.h"
+#include "wopg_sphandling.h"
 
 
 /*
@@ -44,7 +45,12 @@ void G_WriteClientSessionData( gclient_t *client ) {
 	const char	*s;
 	const char	*var;
 
-	s = va("%i %i %i %i %i %i %i", 
+	// Spaces cause problems with sscanf
+	if ( strchr( client->sess.selectedlogo, ' ' ) ) {
+		client->sess.selectedlogo[0] = '\0';
+	}
+
+	s = va("%i %i %i %i %i %i %i %i %s", 
 		client->sess.sessionTeam,
 		client->sess.spectatorNum,
 		client->sess.spectatorState,
@@ -52,9 +58,11 @@ void G_WriteClientSessionData( gclient_t *client ) {
 		client->sess.wins,
 		client->sess.losses,
 		client->sess.teamLeader
+		,client->sess.livesleft
+		,client->sess.selectedlogo
 		);
 
-	var = va( "session%i", (int)(client - level.clients) );
+	var = va( "session%ld", client - level.clients );
 
 	trap_Cvar_Set( var, s );
 }
@@ -73,17 +81,19 @@ void G_ReadSessionData( gclient_t *client ) {
 	int spectatorState;
 	int sessionTeam;
 
-	var = va( "session%i", (int)(client - level.clients) );
+	var = va( "session%ld", client - level.clients );
 	trap_Cvar_VariableStringBuffer( var, s, sizeof(s) );
 
-	sscanf( s, "%i %i %i %i %i %i %i",
-		&sessionTeam,
+	sscanf( s, "%i %i %i %i %i %i %i %i %s",
+		&sessionTeam,                 // bk010221 - format
 		&client->sess.spectatorNum,
 		&spectatorState,
 		&client->sess.spectatorClient,
 		&client->sess.wins,
 		&client->sess.losses,
-		&teamLeader
+		&teamLeader,                   // bk010221 - format
+		&client->sess.livesleft,
+		client->sess.selectedlogo
 		);
 
 	client->sess.sessionTeam = (team_t)sessionTeam;
@@ -105,27 +115,21 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 
 	sess = &client->sess;
 
-	// check for team preference, mainly for bots
-	value = Info_ValueForKey( userinfo, "teampref" );
-
-	// check for human's team preference set by start server menu
-	if ( !value[0] && g_localTeamPref.string[0] && client->pers.localClient ) {
-		value = g_localTeamPref.string;
-
-		// clear team so it's only used once
-		trap_Cvar_Set( "g_localTeamPref", "" );
-	}
-
 	// initial team determination
 	if ( g_gametype.integer >= GT_TEAM ) {
-		// always spawn as spectator in team games
-		sess->sessionTeam = TEAM_SPECTATOR;
-		sess->spectatorState = SPECTATOR_FREE;
-
-		if ( value[0] || g_teamAutoJoin.integer ) {
-			SetTeam( &g_entities[client - level.clients], value );
+		if(wopSP_hasForceTeam()) {
+			sess->sessionTeam = wopSP_forceTeam();
+			BroadcastTeamChange( client, -1 );
+		}
+		else if ( g_teamAutoJoin.integer ) {
+			sess->sessionTeam = PickTeam( -1 );
+			BroadcastTeamChange( client, -1 );
+		} else {
+			// always spawn as spectator in team games
+			sess->sessionTeam = TEAM_SPECTATOR;	
 		}
 	} else {
+		value = Info_ValueForKey( userinfo, "team" );
 		if ( value[0] == 's' ) {
 			// a willing spectator, not a waiting-in-line
 			sess->sessionTeam = TEAM_SPECTATOR;
@@ -151,10 +155,12 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 				break;
 			}
 		}
-
-		sess->spectatorState = SPECTATOR_FREE;
 	}
 
+	sess->livesleft=0;
+	sess->selectedlogo[0]='\0';
+
+	sess->spectatorState = SPECTATOR_FREE;
 	AddTournamentQueue(client);
 
 	G_WriteClientSessionData( client );

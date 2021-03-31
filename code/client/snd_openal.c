@@ -481,7 +481,7 @@ qboolean S_AL_BufferInit( void )
 	numSfx = 0;
 
 	// Load the default sound, and lock it
-	default_sfx = S_AL_BufferFind("sound/feedback/hit.wav");
+	default_sfx = S_AL_BufferFind("sounds/hit");
 	S_AL_BufferUse(default_sfx);
 	knownSfx[default_sfx].isLocked = qtrue;
 
@@ -2048,8 +2048,9 @@ void S_AL_MusicProcess(ALuint b)
 		// the music stream.
 		if(intro_stream)
 			intro_stream = NULL;
-		else
-			mus_stream = S_CodecOpenStream(s_backgroundLoop);
+//wop_music ... always load the new file if the old file is done (std ioq3 loads the first loop at "music-cmd")
+//		else
+		mus_stream = S_CodecOpenStream(s_backgroundLoop);
 		
 		curstream = mus_stream;
 
@@ -2127,8 +2128,18 @@ void S_AL_StartBackgroundTrack( const char *intro, const char *loop )
 	else
 		intro_stream = NULL;
 
+//wop_music{
+	//loading first loop here will
+	//makes a "dead"-loop with "<nextsongCMD>"
+/*(original)
 	mus_stream = S_CodecOpenStream(s_backgroundLoop);
 	if(!mus_stream)
+*/
+	if(issame)
+		mus_stream = S_CodecOpenStream(s_backgroundLoop);
+
+	if(issame?!mus_stream:!intro_stream)
+//wop_music}
 	{
 		S_AL_CloseMusicFiles();
 		S_AL_MusicSourceFree();

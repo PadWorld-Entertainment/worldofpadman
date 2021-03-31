@@ -244,6 +244,10 @@ typedef struct aas_header_s
 	aas_lump_t lumps[AAS_LUMPS];
 } aas_header_t;
 
+// cyr
+void ShowRoute(int client, int goalent, int goalentarea,  int report);
+void GetNextItemNumber(int *, int *);
+void PrintCurItemInfo(void);
 
 //====== additional information ======
 /*

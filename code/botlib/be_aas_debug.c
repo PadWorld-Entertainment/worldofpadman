@@ -411,6 +411,31 @@ void AAS_ShowArea(int areanum, int groundfacesonly)
 	} //end if
 	//pointer to the convex area
 	area = &aasworld.areas[areanum];
+
+	// cyr: aas created with -optimize has no faces or edges, show at least a rough box
+	if( !area->numfaces ){
+		vec3_t tmp, tmp2;
+		// aas was compiled using -optimize.. no faces, no edges
+		if(!groundfacesonly){
+			VectorSet(tmp, 0, 0, 0);
+			AAS_ShowBoundingBox(tmp, area->mins, area->maxs);
+		}
+		else{
+			VectorCopy(area->maxs, tmp);
+			tmp[2] = area->mins[2];
+			VectorCopy(tmp, tmp2);
+
+			tmp[0] = area->mins[0];
+			AAS_DebugLine(area->mins, tmp, LINECOLOR_GREEN );
+			AAS_DebugLine(tmp, tmp2, LINECOLOR_GREEN );
+			tmp[0] = area->maxs[0];
+			tmp[1] = area->mins[1];
+			AAS_DebugLine(area->mins, tmp, LINECOLOR_GREEN );
+			AAS_DebugLine(tmp, tmp2, LINECOLOR_GREEN );
+		}
+		return;
+	}
+
 	//walk through the faces of the area
 	for (i = 0; i < area->numfaces; i++)
 	{
@@ -629,7 +654,7 @@ void AAS_ShowReachability(aas_reachability_t *reach)
 		AAS_PredictClientMovement(&move, -1, reach->start, PRESENCE_NORMAL, qtrue,
 									velocity, cmdmove, 3, 30, 0.1f,
 									SE_HITGROUND|SE_ENTERWATER|SE_ENTERSLIME|
-									SE_ENTERLAVA|SE_HITGROUNDDAMAGE, 0, qtrue);
+									SE_ENTERLAVA, 0, qtrue);
 		//
 		if ((reach->traveltype & TRAVELTYPE_MASK) == TRAVEL_JUMP)
 		{
@@ -651,8 +676,7 @@ void AAS_ShowReachability(aas_reachability_t *reach)
 		//
 		AAS_PredictClientMovement(&move, -1, reach->start, PRESENCE_NORMAL, qtrue,
 									velocity, cmdmove, 30, 30, 0.1f,
-									SE_ENTERWATER|SE_ENTERSLIME|
-									SE_ENTERLAVA|SE_HITGROUNDDAMAGE|
+									SE_ENTERWATER|SE_ENTERSLIME|SE_ENTERLAVA|
 									SE_TOUCHJUMPPAD|SE_HITGROUNDAREA, reach->areanum, qtrue);
 	} //end else if
 	else if ((reach->traveltype & TRAVELTYPE_MASK) == TRAVEL_JUMPPAD)
@@ -670,8 +694,7 @@ void AAS_ShowReachability(aas_reachability_t *reach)
 		//
 		AAS_PredictClientMovement(&move, -1, reach->start, PRESENCE_NORMAL, qtrue,
 									velocity, cmdmove, 30, 30, 0.1f,
-									SE_ENTERWATER|SE_ENTERSLIME|
-									SE_ENTERLAVA|SE_HITGROUNDDAMAGE|
+									SE_ENTERWATER|SE_ENTERSLIME|SE_ENTERLAVA|
 									SE_TOUCHJUMPPAD|SE_HITGROUNDAREA, reach->areanum, qtrue);
 	} //end else if
 } //end of the function AAS_ShowReachability

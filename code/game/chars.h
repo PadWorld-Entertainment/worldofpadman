@@ -121,8 +121,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CHARACTERISTIC_SELFPRESERVATION				42	//float [0, 1]
 //how likely the bot is to take revenge
 #define CHARACTERISTIC_VENGEFULNESS					43	//float [0, 1]	//use this!!
-//tendency to camp
-#define CHARACTERISTIC_CAMPER						44	//float [0, 1]
+//name of the syc logo
+#define CHARACTERISTIC_SPRAYLOGO					44	//string
 //========================================================
 //========================================================
 //tendency to get easy frags
