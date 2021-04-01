@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "q_shared.h"
 
 int demo_protocols[] =
-{ 67, 66, 0 };
+{ 66, 67, 68, 69, 70, 71, 0 };
 
 // ^[0-9a-zA-Z]
 qboolean Q_IsColorString(const char *p) {
