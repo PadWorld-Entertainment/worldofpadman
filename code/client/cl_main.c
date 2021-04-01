@@ -3649,7 +3649,7 @@ void CL_Init( void ) {
 	cl_voipSend = Cvar_Get ("cl_voipSend", "0", 0);
 	cl_voipSendTarget = Cvar_Get ("cl_voipSendTarget", "spatial", 0);
 	cl_voipGainDuringCapture = Cvar_Get ("cl_voipGainDuringCapture", "0.2", CVAR_ARCHIVE);
-	cl_voipCaptureMult = Cvar_Get ("cl_voipCaptureMult", "2.0", CVAR_ARCHIVE);
+	cl_voipCaptureMult = Cvar_Get ("cl_voipCaptureMult", "4.0", CVAR_ARCHIVE);
 	cl_voipUseVAD = Cvar_Get ("cl_voipUseVAD", "0", CVAR_ARCHIVE);
 	cl_voipVADThreshold = Cvar_Get ("cl_voipVADThreshold", "0.25", CVAR_ARCHIVE);
 	cl_voipShowMeter = Cvar_Get ("cl_voipShowMeter", "1", CVAR_ARCHIVE);
