@@ -67,7 +67,6 @@ typedef struct {
 	menulist_s		mode;
 	menulist_s		tq;
 	menulist_s  	fs;
-	menulist_s		lighting;
 	menulist_s  	texturebits;
 	menulist_s  	colordepth;
 	menulist_s  	geometry;
@@ -85,7 +84,6 @@ typedef struct
 	int mode;
 	qboolean fullscreen;
 	int tq;
-	int lighting;
 	int colordepth;
 	int texturebits;
 	int geometry;
@@ -715,19 +713,11 @@ void GraphicsOptions_MenuInit( void )
 
 	static const char *s_graphics_options_names[] =
 	{
-		"Very High Quality",
 		"High Quality",
 		"Normal",
 		"Fast",
-		"Fastest",
+		"Faster",
 		"Custom",
-		NULL
-	};
-
-	static const char *lighting_names[] =
-	{
-		"Lightmap",
-		"Vertex",
 		NULL
 	};
 
@@ -988,9 +978,9 @@ void GraphicsOptions_MenuInit( void )
 
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.list );
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.mode );
+
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.colordepth );
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.fs );
-	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.lighting );
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.geometry );
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.tq );
 	Menu_AddItem( &s_graphicsoptions.menu, ( void * ) &s_graphicsoptions.texturebits );
