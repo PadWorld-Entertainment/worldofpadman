@@ -1343,7 +1343,6 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 	char info[1024]="0\\test\\";
 	//char strtmp[1024];
 	qboolean setcs = qfalse;
-	float fuzzweight;	// weight without distance scaling
 	float roamfactor = (float) LibVarGetValue("roamfactor") / 100;
 	//vec3_t amins ={-8,-8,-8};
 	//vec3_t amaxs ={8,8,8};
@@ -1420,7 +1419,6 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 		if (li->timeout)
 			weight += droppedweight->value;
 #endif //DROPPEDWEIGHT
-		fuzzweight = weight;	// cyr, keep a copy for debug print
 
 		//use weight scale for item_botroam
 		if (li->flags & IFL_ROAM){
