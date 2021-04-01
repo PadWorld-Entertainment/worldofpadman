@@ -402,9 +402,6 @@ static void PlayerModel_BuildList( void )
 	int		j;
 	int		dirlen;
 	int		filelen;
-	qboolean precache;
-
-	precache = trap_Cvar_VariableValue("com_buildscript");
 
 	s_playermodel.modelpage = 0;
 	s_playermodel.nummodels = 0;
