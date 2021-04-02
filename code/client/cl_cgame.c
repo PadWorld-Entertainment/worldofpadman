@@ -377,6 +377,10 @@ void CL_CM_LoadMap( const char *mapname ) {
 	CM_LoadMap( mapname, qtrue, &checksum );
 }
 
+void CL_GetVoipTimes( int* times ){
+	memcpy( times, clc.voipLastPacket, sizeof(int)*MAX_CLIENTS );
+}
+
 /*
 ====================
 CL_ShutdonwCGame
@@ -692,6 +696,9 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		return re.GetEntityToken( VMA(1), args[2] );
 	case CG_R_INPVS:
 		return re.inPVS( VMA(1), VMA(2) );
+	case CG_GET_VOIP_TIMES:
+		CL_GetVoipTimes( VMA(1) );
+		return 0;
 
 	default:
 	        assert(0);
@@ -924,6 +931,7 @@ void CL_FirstSnapshot( void ) {
 			}
 			clc.voipIgnore[i] = qfalse;
 			clc.voipGain[i] = 1.0f;
+			clc.voipLastPacket[i] = 0;
 		}
 		clc.voipCodecInitialized = qtrue;
 		clc.voipMuteAll = qfalse;

@@ -676,6 +676,28 @@ static void CLUI_SetCDKey( char *buf ) {
 }
 #endif
 
+static float CLUI_GetVoiceGain(const int id)
+{
+	if(id<0 || id>= MAX_CLIENTS)
+		return 0;
+	// todo, make sure server is running
+	return clc.voipGain[id];
+}
+
+static int CLUI_GetVoiceMuteClient(const int id)
+{
+	if(id<0 || id>= MAX_CLIENTS)
+		return 0;
+	// todo, make sure server is running
+	return clc.voipIgnore[id];
+}
+
+static int CLUI_GetVoiceMuteAll(void)
+{
+	// todo, make sure server is running
+	return clc.voipMuteAll;
+}
+
 /*
 ====================
 GetConfigString
@@ -995,6 +1017,15 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 	case UI_R_REGISTERFONT:
 		re.RegisterFont( VMA(1), args[2], VMA(3));
 		return 0;
+
+	case UI_GET_VOICEMUTECLIENT:
+		return CLUI_GetVoiceMuteClient(args[1]);
+
+	case UI_GET_VOICEMUTEALL:
+		return CLUI_GetVoiceMuteAll();
+
+	case UI_GET_VOICEGAIN:
+		return FloatAsInt( CLUI_GetVoiceGain(args[1]) );
 
 	case UI_MEMSET:
 		Com_Memset( VMA(1), args[2], args[3] );

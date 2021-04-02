@@ -163,7 +163,7 @@ typedef enum {
 	CG_R_INPVS,
 	// 1.32
 	CG_FS_SEEK,
-
+	CG_GET_VOIP_TIMES,
 /*
 	CG_LOADCAMERA,
 	CG_STARTCAMERA,

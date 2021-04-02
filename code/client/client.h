@@ -246,6 +246,7 @@ typedef struct {
 	int voipIncomingSequence[MAX_CLIENTS];
 	float voipGain[MAX_CLIENTS];
 	qboolean voipIgnore[MAX_CLIENTS];
+	int voipLastPacket[MAX_CLIENTS];
 	qboolean voipMuteAll;
 
 	// outgoing data...
