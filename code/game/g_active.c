@@ -1017,6 +1017,7 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 		Pmove (&pm);
 #else
+		pm.gametype = g_gametype.integer;
 		Pmove (&pm);
 #endif
 
