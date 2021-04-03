@@ -41,7 +41,7 @@ extern int demo_protocols[];
   #define BASEGAME                     "wop"                   // TODO: Use this in Makefile
   #define CLIENT_WINDOW_TITLE          "World of Padman"
   #define CLIENT_WINDOW_MIN_TITLE      PRODUCT_TITLE
-  #define PRODUCT_BASE                 "ioq3 r2140M"
+  #define PRODUCT_BASE                 "ioq3 05180e3"
   #define PRODUCT_RELEASE              "dev"                   // "beta x" "final"/""
 
   #define VERSION_INFO                 PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
