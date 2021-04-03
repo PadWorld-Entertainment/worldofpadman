@@ -37,37 +37,37 @@ extern int demo_protocols[];
 
 #ifdef STANDALONE
   #define PRODUCT_NAME                 "wop"
-  #define PRODUCT_TITLE                        "WoP"
-  #define BASEGAME                             "wop"                   // TODO: Use this in Makefile
+  #define PRODUCT_TITLE                "WoP"
+  #define BASEGAME                     "wop"                   // TODO: Use this in Makefile
   #define CLIENT_WINDOW_TITLE          "World of Padman"
   #define CLIENT_WINDOW_MIN_TITLE      PRODUCT_TITLE
   #define PRODUCT_BASE                 "ioq3 r2140M"
-  #define PRODUCT_RELEASE              ""                      // "beta x" "final"/""
- 
+  #define PRODUCT_RELEASE              "dev"                   // "beta x" "final"/""
+
   #define VERSION_INFO                 PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
-  #define HOMEPATH_NAME_UNIX           ".padman"
-  #define HOMEPATH_NAME_WIN            "Padman"
+  #define HOMEPATH_NAME_UNIX           ".worldofpadman"
+  #define HOMEPATH_NAME_WIN            "WorldOfPadman"
   #define HOMEPATH_NAME_MACOSX         "WorldOfPadman"
-//  #define STEAMPATH_NAME			"Foo Bar"
-//  #define STEAMPATH_APPID         ""
-//  #define GOGPATH_ID                           "1441704920"
-  #define GAMENAME_FOR_MASTER  "WorldofPadman"
-  #define CINEMATICS_LOGO		"foologo.roq"
-  #define CINEMATICS_INTRO		"intro.roq"
+//  #define STEAMPATH_NAME               ""
+//  #define STEAMPATH_APPID              ""
+//  #define GOGPATH_ID                   ""
+  #define GAMENAME_FOR_MASTER          "WorldofPadman"
+  #define CINEMATICS_LOGO		"idlogo.ogm"
+  #define CINEMATICS_INTRO		"intro.ogm"
 //  #define LEGACY_PROTOCOL
 #else
-  #define PRODUCT_NAME                         "ioq3"
-  #define BASEGAME                                     "baseq3"
+  #define PRODUCT_NAME                 "ioq3"
+  #define BASEGAME                     "baseq3"
   #define CLIENT_WINDOW_TITLE          "ioquake3"
   #define CLIENT_WINDOW_MIN_TITLE      "ioq3"
   #define PRODUCT_BASE                 "ioq3 r2140M"
   #define PRODUCT_RELEASE              ""                      // "beta x" "final"/""
   #define HOMEPATH_NAME_UNIX           ".q3a"
-  #define HOMEPATH_NAME_WIN                    "Quake3"
+  #define HOMEPATH_NAME_WIN            "Quake3"
   #define HOMEPATH_NAME_MACOSX         HOMEPATH_NAME_WIN
-  #define STEAMPATH_NAME                       "Quake 3 Arena"
-  #define STEAMPATH_APPID                      "2200"
-  #define GOGPATH_ID                           "1441704920"
+  #define STEAMPATH_NAME               "Quake 3 Arena"
+  #define STEAMPATH_APPID              "2200"
+  #define GOGPATH_ID                   "1441704920"
   #define GAMENAME_FOR_MASTER          "Quake3Arena"
   #define CINEMATICS_LOGO              "idlogo.RoQ"
   #define CINEMATICS_INTRO             "intro.RoQ"
@@ -86,7 +86,7 @@ extern int demo_protocols[];
 
 #ifndef PRODUCT_VERSION
   // TODO: Sync with Makefile!
-  #define PRODUCT_VERSION "1.6"
+  #define PRODUCT_VERSION "1.7"
 #endif
 
 #define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION " " PRODUCT_RELEASE
@@ -94,7 +94,7 @@ extern int demo_protocols[];
 #define MAX_TEAMNAME		32
 #define MAX_MASTER_SERVERS      5	// number of supported master servers
 
-#define DEMOEXT	"dm_"			// standard demo extension
+#define DEMOEXT	"wopdemo_"			// standard demo extension
 
 #ifdef _MSC_VER
 
@@ -281,9 +281,9 @@ typedef int		clipHandle_t;
 
 #define	MAX_SAY_TEXT	150
 
-#define UI_NS_STR_HGW	0x00008000 //number sized string ... height gleich width
+#define UI_NS_STR_HGW	0x00008000 //number sized string ... height equals width
 
-// paramters for command buffer stuffing
+// parameters for command buffer stuffing
 typedef enum {
 	EXEC_NOW,			// don't return until completed, a VM should NEVER use this,
 						// because some commands might cause the VM to be unloaded...
