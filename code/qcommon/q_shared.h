@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // A user mod should never modify this file
 
 
-#define	PROTOCOL_VERSION	72
-// v1.6 - 71
+#define	PROTOCOL_VERSION	71
+// v1.6.x - 71
 // v1.5 - 69
 // v1.1 - v1.2: 68
 // maintain a list of compatible protocols for demo playing
