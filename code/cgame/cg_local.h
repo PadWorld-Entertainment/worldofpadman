@@ -268,7 +268,7 @@ typedef struct localEntity_s {
 	leMarkType_t		leMarkType;		// mark to leave on fragment impact
 	leBounceSoundType_t	leBounceSoundType;
 
-	refEntity_t		refEntity;		
+	refEntity_t		refEntity;
 } localEntity_t;
 
 //======================================================================
@@ -304,7 +304,7 @@ typedef struct centity_s {
 	int				errorTime;		// decay the error from this time
 	vec3_t			errorOrigin;
 	vec3_t			errorAngles;
-	
+
 	qboolean		extrapolated;	// false if origin / angles is an interpolation
 	vec3_t			rawOrigin;
 	vec3_t			rawAngles;
@@ -507,12 +507,12 @@ typedef struct {
 #define MAX_PREDICTED_EVENTS	16
 
 #define MAX_CHATMESSAGES		4
- 
+
 typedef struct {
 	int			clientFrame;		// incremented each frame
 
 	int			clientNum;
-	
+
 	qboolean	demoPlayback;
 	qboolean	levelShot;			// taking a level menu screenshot
 	int			deferredPlayerLoading;
@@ -1055,7 +1055,7 @@ typedef struct {
 
 	qhandle_t	medalPadStar;
 
-	
+
 
 
 	sfxHandle_t	berserkerPunchyLoop;
@@ -1495,11 +1495,11 @@ void CG_DrawRect1024( float x, float y, float width, float height, float size, c
 void CG_DrawPic1024( float x, float y, float width, float height, qhandle_t Shader );
 void CG_FillRect( float x, float y, float width, float height, const float *color );
 void CG_DrawPic( float x, float y, float width, float height, qhandle_t hShader );
-void CG_DrawString( float x, float y, const char *string, 
+void CG_DrawString( float x, float y, const char *string,
 				   float charWidth, float charHeight, const float *modulate );
 
 
-void CG_DrawStringExt( int x, int y, const char *string, const float *setColor, 
+void CG_DrawStringExt( int x, int y, const char *string, const float *setColor,
 		qboolean forceColor, qboolean shadow, int charWidth, int charHeight, int maxChars );
 void CG_DrawBigString( int x, int y, const char *s, float alpha );
 void CG_DrawBigStringColor( int x, int y, const char *s, vec4_t color );
@@ -1582,7 +1582,7 @@ void CG_UpdateVoipTeamIDs(void);
 //
 void CG_BuildSolidList( void );
 int	CG_PointContents( const vec3_t point, int passEntityNum );
-void CG_Trace( trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, 
+void CG_Trace( trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end,
 					 int skipNumber, int mask );
 void CG_PredictPlayerState( void );
 void CG_LoadDeferredPlayers( void );
@@ -1605,9 +1605,9 @@ void CG_AddPacketEntities( void );
 void CG_Beam( centity_t *cent );
 void CG_AdjustPositionForMover( const vec3_t in, int moverNum, int fromTime, int toTime, vec3_t out );
 
-void CG_PositionEntityOnTag( refEntity_t *entity, const refEntity_t *parent, 
+void CG_PositionEntityOnTag( refEntity_t *entity, const refEntity_t *parent,
 							qhandle_t parentModel, char *tagName );
-void CG_PositionRotatedEntityOnTag( refEntity_t *entity, const refEntity_t *parent, 
+void CG_PositionRotatedEntityOnTag( refEntity_t *entity, const refEntity_t *parent,
 							qhandle_t parentModel, char *tagName );
 
 void CG_BamBam_Explosion(vec3_t origin);
@@ -1648,11 +1648,11 @@ void CG_OutOfAmmoChange( void );	// should this be in pmove?
 //
 void	CG_InitMarkPolys( void );
 void	CG_AddMarks( void );
-void	CG_ImpactMark( qhandle_t markShader, 
-				    const vec3_t origin, const vec3_t dir, 
-					float orientation, 
-				    float r, float g, float b, float a, 
-					qboolean alphaFade, 
+void	CG_ImpactMark( qhandle_t markShader,
+				    const vec3_t origin, const vec3_t dir,
+					float orientation,
+				    float r, float g, float b, float a,
+					qboolean alphaFade,
 					float radius, qboolean temporary );
 
 //
@@ -1665,8 +1665,8 @@ void	CG_AddLocalEntities( void );
 //
 // cg_effects.c
 //
-localEntity_t *CG_SmokePuff( const vec3_t p, 
-				   const vec3_t vel, 
+localEntity_t *CG_SmokePuff( const vec3_t p,
+				   const vec3_t vel,
 				   float radius,
 				   float r, float g, float b, float a,
 				   float duration,
@@ -1674,8 +1674,8 @@ localEntity_t *CG_SmokePuff( const vec3_t p,
 				   int fadeInTime,
 				   int leFlags,
 				   qhandle_t hShader );
-void CG_GenerateParticles( qhandle_t model, qhandle_t shader, vec3_t pos, float randomPos, vec3_t speed, float randomDir, 
-						  float randomSpeed, int numParticles, int owner, int time, int life, int randomLife, int size, 
+void CG_GenerateParticles( qhandle_t model, qhandle_t shader, vec3_t pos, float randomPos, vec3_t speed, float randomDir,
+						  float randomSpeed, int numParticles, int owner, int time, int life, int randomLife, int size,
 						  int randomSize, int addSize, int randomAddSize, int flags, int renderfx );
 void CG_BubbleTrail( vec3_t start, vec3_t end, float spacing );
 void CG_SpawnEffect( vec3_t org, int team );
@@ -1852,7 +1852,7 @@ void		trap_CM_TransformedBoxTrace( trace_t *results, const vec3_t start, const v
 					  const vec3_t origin, const vec3_t angles );
 
 // Returns the projection of a polygon onto the solid brushes in the world
-int			trap_CM_MarkFragments( int numPoints, const vec3_t *points, 
+int			trap_CM_MarkFragments( int numPoints, const vec3_t *points,
 			const vec3_t projection,
 			int maxPoints, vec3_t pointBuffer,
 			int maxFragments, markFragment_t *fragmentBuffer );
@@ -1899,10 +1899,10 @@ void		trap_R_AddLightToScene( const vec3_t org, float intensity, float r, float 
 int			trap_R_LightForPoint( vec3_t point, vec3_t ambientLight, vec3_t directedLight, vec3_t lightDir );
 void		trap_R_RenderScene( const refdef_t *fd );
 void		trap_R_SetColor( const float *rgba );	// NULL = 1,1,1,1
-void		trap_R_DrawStretchPic( float x, float y, float w, float h, 
+void		trap_R_DrawStretchPic( float x, float y, float w, float h,
 			float s1, float t1, float s2, float t2, qhandle_t hShader );
 void		trap_R_ModelBounds( clipHandle_t model, vec3_t mins, vec3_t maxs );
-int			trap_R_LerpTag( orientation_t *tag, clipHandle_t mod, int startFrame, int endFrame, 
+int			trap_R_LerpTag( orientation_t *tag, clipHandle_t mod, int startFrame, int endFrame,
 					   float frac, const char *tagName );
 void		trap_R_RemapShader( const char *oldShader, const char *newShader, const char *timeOffset );
 
@@ -1934,7 +1934,7 @@ qboolean	trap_GetServerCommand( int serverCommandNumber );
 // this will always be at least one higher than the number in the current
 // snapshot, and it may be quite a few higher if it is a fast computer on
 // a lagged connection
-int			trap_GetCurrentCmdNumber( void );	
+int			trap_GetCurrentCmdNumber( void );
 
 qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd );
 

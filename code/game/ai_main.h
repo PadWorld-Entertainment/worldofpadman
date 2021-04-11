@@ -287,7 +287,7 @@ typedef struct bot_state_s
 	vec3_t viewanglespeed;
 	//
 	int ltgtype;									//long term goal type
-	
+
 	// team goals
 	int teammate;									//team mate involved in this team goal
 	int decisionmaker;								//player who decided to go for this goal
@@ -298,13 +298,13 @@ typedef struct bot_state_s
 	float teammessage_time;							//time to message team mates what the bot is doing
 	float teamgoal_time;							//time to stop helping team mate
 	float teammatevisible_time;						//last time the team mate was NOT visible
-	
+
 	// last ordered team goal
 	//int lastgoal_decisionmaker;
 	//int lastgoal_ltgtype;
 	//int lastgoal_teammate;
 	//bot_goal_t lastgoal_teamgoal;
-	
+
 	// for leading team mates
 	// int lead_teammate;								//team mate the bot is leading
 	// bot_goal_t lead_teamgoal;						//team goal while leading
@@ -313,7 +313,7 @@ typedef struct bot_state_s
 	// float leadmessage_time;							//last time a messaged was sent to the team mate
 	// float leadbackup_time;							//time backing up towards team mate
 
-	
+
 	//	char teamleader[32];							//netname of the team leader
 	//	float askteamleader_time;						//time asked for team leader
 	//	float becometeamleader_time;					//time the bot will become the team leader
