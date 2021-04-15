@@ -7,3 +7,7 @@ vc_generate_documentation_comments = doxygen_slash_star
 
 [*.{c,h}]
 charset = utf-8
+
+[*.yml]
+indent_style = space
+indent_size = 2
