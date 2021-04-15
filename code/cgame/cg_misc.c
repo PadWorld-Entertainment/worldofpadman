@@ -34,13 +34,13 @@ void CG_LimitCvars( void ) {
 	}
 
 	i = CG_GetCvarInt( "com_maxfps" );
-	if ( i < 43 ) {
-		i = 43;
-		trap_Cvar_Set( "com_maxfps", "43" );
+	if ( i < 20 ) {
+		i = 20;
+		trap_Cvar_Set( "com_maxfps", "20" );
 	}
-	else if ( i > 125 ) {
-		i = 125;
-		trap_Cvar_Set( "com_maxfps", "125" );
+	else if ( i > 250 ) {
+		i = 250;
+		trap_Cvar_Set( "com_maxfps", "250" );
 	}
 
 	if ( i % CG_GetCvarInt( "cl_maxpackets" ) ) {
@@ -194,7 +194,7 @@ static void CG_ColorByEntityType( int eType, byte colors[4] ) {
 			colors[2] = 128;
 			colors[3] = 255;
 			break;
-		
+
 		// ET_GRAPPLE
 		// ET_TEAM
 		// ET_EXPLOSION
@@ -538,7 +538,7 @@ void CG_AddBoundingBox( const centity_t *cent ) {
 	exty = ( maxs[1] - mins[1] );
 	extz = ( maxs[2] - mins[2] );
 
-	
+
 	// set the polygon's texture coordinates
 	verts[0].st[0] = 0;
 	verts[0].st[1] = 0;
