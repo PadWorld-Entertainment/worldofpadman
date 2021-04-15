@@ -1,4 +1,4 @@
-![Build](https://github.com/ioquake/ioq3/workflows/Build/badge.svg)
+[![Build](https://github.com/PadWorld-Entertainment/worldofpadman/workflows/Build/badge.svg)](https://github.com/PadWorld-Entertainment/worldofpadman/actions)
 
                    ,---------------------------------------.
                    |   _                     _       ____  |
