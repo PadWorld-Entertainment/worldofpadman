@@ -45,8 +45,8 @@ extern int demo_protocols[];
   #define PRODUCT_RELEASE              "dev"                   // "beta x" "final"/""
 
   #define VERSION_INFO                 PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
-  #define HOMEPATH_NAME_UNIX           ".worldofpadman"
-  #define HOMEPATH_NAME_WIN            "WorldOfPadman"
+  #define HOMEPATH_NAME_UNIX           ".padman"
+  #define HOMEPATH_NAME_WIN            "Padman"
   #define HOMEPATH_NAME_MACOSX         "WorldOfPadman"
 //  #define STEAMPATH_NAME               ""
 //  #define STEAMPATH_APPID              ""
