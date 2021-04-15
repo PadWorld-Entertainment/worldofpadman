@@ -176,7 +176,7 @@ typedef struct {
 //======================================================================
 
 // local entities are created as a result of events or predicted actions,
-// and live independantly from all server transmitted entities
+// and live independently from all server transmitted entities
 
 typedef struct markPoly_s {
 	struct markPoly_s	*prevMark, *nextMark;
@@ -519,7 +519,7 @@ typedef struct {
 	qboolean	loading;			// don't defer players at initial startup
 	qboolean	intermissionStarted;	// don't play voice rewards, because game will end shortly
 
-	// there are only one or two snapshot_t that are relevent at a time
+	// there are only one or two snapshot_t that are relevant at a time
 	int			latestSnapshotNum;	// the number of snapshots the client system has received
 	int			latestSnapshotTime;	// the time from latestSnapshotNum, so we don't need to read the snapshot yet
 
@@ -703,7 +703,7 @@ typedef struct {
 
 	int			itemPickup;
 	int			itemPickupTime;
-	int			itemPickupBlendTime;	// the pulse around the crosshair is timed seperately
+	int			itemPickupBlendTime;	// the pulse around the crosshair is timed separately
 
 	int			weaponSelectTime;
 	int			weaponAnimation;
@@ -932,7 +932,7 @@ typedef struct {
 	sfxHandle_t	ghostPadSpawn;
 	sfxHandle_t	ghostPadSpook;
 
-	sfxHandle_t	pickupSound;//für waffen
+	sfxHandle_t	pickupSound;//fÃ¼r waffen
 	sfxHandle_t	HIpickupSound;
 	sfxHandle_t	ARpickupSound;
 //sta
@@ -1515,7 +1515,7 @@ void CG_ColorForHealth( vec4_t hcolor );
 void CG_GetColorForHealth( int health, int armor, vec4_t hcolor );
 
 void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t color );
-int UI_ProportionalStringWidth( const char* str ); //für die Splasher-Ammo
+int UI_ProportionalStringWidth( const char* str ); //fÃ¼r die Splasher-Ammo
 void CG_DrawRect( float x, float y, float width, float height, float size, const float *color );
 void CG_DrawSides(float x, float y, float w, float h, float size);
 void CG_DrawTopBottom(float x, float y, float w, float h, float size);

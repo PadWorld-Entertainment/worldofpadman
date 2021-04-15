@@ -160,7 +160,7 @@ void CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir,
 	for ( ; mp != &cg_activeMarkPolys; mp = next ) {
 		next = mp->nextMark;
 		if(temporary) break; // keep all marks if the new one is just the shadow
-		if(mp->markShader == cgs.media.SchaumShader) continue;//die slick-ents einfach übergehen
+		if(mp->markShader == cgs.media.SchaumShader) continue;//die slick-ents einfach Ã¼bergehen
 		VectorSubtract( mp->origin, origin, delta );
 		if ( radius <= mp->radius + 4 && VectorLength( delta ) < ( radius + mp->radius ) * MIN_MARK_DISTANCE ) {
 			CG_FreeMarkPoly( mp );

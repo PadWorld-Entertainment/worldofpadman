@@ -559,7 +559,7 @@ gitem_t	bg_itemlist[] =
 /* precache */ "",
 /* sounds */ ""
 	},
-// ^^ boomis & bambam ^^
+// ^^ boomies & bambam ^^
 
 	//
 	// POWERUP ITEMS
@@ -579,7 +579,7 @@ gitem_t	bg_itemlist[] =
 		IT_POWERUP,
 		PW_PADPOWER,
 /* precache */ "",
-/* sounds */ "sounds/items/padpower/damage3"//noch ändern
+/* sounds */ "sounds/items/padpower/damage3"//noch Ã¤ndern
 	},
 
 /*QUAKED item_climber (.8 0 .8) (-16 -16 -16) (16 16 16) suspended

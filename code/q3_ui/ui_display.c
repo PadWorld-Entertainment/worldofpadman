@@ -51,7 +51,7 @@ DISPLAY OPTIONS MENU
 #define ID_BRIGHTNESS		14
 #define	ID_ANAGLYPH			17
 #define ID_GREYSCALE		18
-#define ID_BACK			15
+#define ID_BACK				15
 #define ID_IGNOREHWG		16
 
 typedef struct {

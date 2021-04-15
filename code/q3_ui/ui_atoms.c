@@ -1580,7 +1580,7 @@ void UI_DrawMenu(menuframework_s* menu)
 		else if (menu->fullscreen)
 		{
 			// draw the background
-			// schwarzer Hintergrund für nicht 4/3-Auflösungen
+			// schwarzer Hintergrund fÃ¼r nicht 4/3-AuflÃ¶sungen
 			trap_R_SetColor(colorBlack);
 			trap_R_DrawStretchPic(0,0,uis.glconfig.vidWidth,uis.glconfig.vidHeight,0,0,0,0,uis.whiteShader);
 			trap_R_SetColor(NULL);

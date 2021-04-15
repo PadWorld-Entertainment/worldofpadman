@@ -306,7 +306,7 @@ void CG_SpawnEffect( vec3_t org, int team ) {
 	le->radius = rand();
 	VectorCopy( org, le->refEntity.origin );
 	VectorSet( le->angles.trBase, 0, 0, 0 ); //360*crandom(), 360*crandom(), 360*crandom() );
-	//model zuweisung aus CG_AddTeleffect hier her verlegt ... um LE_TELEFFECT für den neuen effekt zu nutzen
+	//model zuweisung aus CG_AddTeleffect hier her verlegt ... um LE_TELEFFECT fÃ¼r den neuen effekt zu nutzen
 	le->refEntity.hModel = cgs.media.teleportEffectModel;
 	if ( team == 1 ) le->refEntity.customShader = cgs.media.teleportEffectRedShader;
 	else if ( team == 2 ) le->refEntity.customShader = cgs.media.teleportEffectBlueShader;
@@ -490,7 +490,7 @@ This is the spurt of blood when a character gets hit
 */
 void CG_Bleed( vec3_t origin, int entityNum )
 {
-	//TODO? ... hier könnte man das mit den >>SCHMERZ<< sprites machen
+	//TODO? ... hier kÃ¶nnte man das mit den >>SCHMERZ<< sprites machen
 	return;
 /*
 	localEntity_t	*ex;

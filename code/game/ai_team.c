@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*****************************************************************************
  * name:		ai_team.c
  *
- * desc:		Quake3 bot AI
+ * desc:		WoP bot AI
  *
  * $Archive: /MissionPack/code/game/ai_team.c $
  *
@@ -409,7 +409,7 @@ void BotTeamAI(bot_state_t *bs) {
 			for(i = 0; i < MAX_BALLOONS; i++){
 				if(lastballoonstate[i] != level.balloonState[i]){
 					lastballoonstate[i] = level.balloonState[i];
-					bs->teamgiveorders_time = FloatTime();	// orders f¸r "balloon attacked" ¸berspringen wenns geht
+					bs->teamgiveorders_time = FloatTime();	// orders f√ºr "balloon attacked" √ºberspringen wenns geht
 				}
 			}
 

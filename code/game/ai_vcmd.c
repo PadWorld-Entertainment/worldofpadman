@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*****************************************************************************
  * name:		ai_vcmd.c
  *
- * desc:		Quake3 bot AI
+ * desc:		WoP bot AI
  *
  * $Archive: /MissionPack/code/game/ai_vcmd.c $
  *

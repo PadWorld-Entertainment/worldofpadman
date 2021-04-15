@@ -1986,7 +1986,7 @@ void WoP_RunFrame(void)
 		ent = g_entities + i;
 
 		if(!ent->inuse)
-			continue;//ich glaub das hat keinen sinn ... ich vermutte das alle möglichen client-ents auf inuse geschaltet sind ...
+			continue;//ich glaub das hat keinen sinn ... ich vermutte das alle mÃ¶glichen client-ents auf inuse geschaltet sind ...
 
 		if ( level.clients[i].pers.connected != CON_CONNECTED ) {
 			ent->r.svFlags &= ~SVF_BROADCAST;

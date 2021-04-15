@@ -1750,7 +1750,7 @@ shootafterrspecialHI:
 
 	if( pm->ps->weapon == WP_NIPPER && pm->ps->weaponstate != WEAPON_READY)
 	{
-		//noch was ein binden damit die nipper auch automatisch schießt
+		//noch was ein binden damit die nipper auch automatisch schieÃŸt
 		pm->ps->weaponTime += ADDTIME_AUTOFIRE_NIPPER;
 		pm->ps->weaponstate = WEAPON_READY;
 		return;

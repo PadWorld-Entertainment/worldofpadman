@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 // cg_servercmds.c -- reliably sequenced text commands sent by the server
-// these are processed at snapshot transition time, so there will definately
+// these are processed at snapshot transition time, so there will definitely
 // be a valid snapshot this frame
 
 #include "cg_local.h"
@@ -81,7 +81,7 @@ static void CG_ParseScores( void ) {
 	memset( cg.scores, 0, sizeof( cg.scores ) );
 	for ( i = 0 ; i < cg.numScores ; i++ ) {
 		//
-		//i*14 zu i*17 um geändert
+		//i*14 zu i*17 um geÃ¤ndert
 
 		cg.scores[i].client = atoi( CG_Argv( i * 17 + 4 ) );
 		cg.scores[i].score = atoi( CG_Argv( i * 17 + 5 ) );
@@ -97,7 +97,7 @@ static void CG_ParseScores( void ) {
 		cg.scores[i].assistCount = atoi(CG_Argv(i * 17 + 15));
 		cg.scores[i].perfect = atoi(CG_Argv(i * 17 + 16));
 		cg.scores[i].captures = atoi(CG_Argv(i * 17 + 17));
-		cg.scores[i].spraygod = atoi(CG_Argv(i * 17 + 18)); //noch mal ändern ... oder stimmt das doch?
+		cg.scores[i].spraygod = atoi(CG_Argv(i * 17 + 18)); //noch mal Ã¤ndern ... oder stimmt das doch?
 		cg.scores[i].spraykiller = atoi(CG_Argv(i * 17 + 19));
 		cg.scores[i].livesleft = atoi(CG_Argv(i * 17 + 20));
 

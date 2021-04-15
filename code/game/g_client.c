@@ -326,7 +326,7 @@ gentity_t *SelectRandomFurthestSpawnPoint ( vec3_t avoidPoint, vec3_t origin, ve
 					continue;
 	
 				VectorCopy (tmpent.s.origin, origin);
-//				origin[2] += 9;//sind jetzt vor dem ¸berpr¸fen
+//				origin[2] += 9;//sind jetzt vor dem √ºberpr√ºfen
 				VectorCopy (spot->s.angles, angles);
 				return spot;
 			}
@@ -472,7 +472,7 @@ void InitBodyQue (void) {
 =============
 BodySink
 
-After sitting around for five seconds, fall into the ground and dissapear
+After sitting around for five seconds, fall into the ground and disappear
 wop: we no longer sink ... we fly XD (this is done on the clientside, to make it smooth)
 =============
 */
@@ -515,7 +515,7 @@ void CopyToBodyQue( gentity_t *ent ) {
 		return; // maybe this was the reason for deadbodys in the lps-intermission-view
 
 	// grab a body que and cycle to the next one
-	body = level.bodyQue[ ent->s.number ];//noch zu ‰ndern falls BODY_QUEUE_SIZE ge‰ndert wird
+	body = level.bodyQue[ ent->s.number ];//noch zu √§ndern falls BODY_QUEUE_SIZE ge√§ndert wird
 
 	trap_UnlinkEntity (body);
 
@@ -1046,7 +1046,7 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	}
 
 	
-	// get and distribute relevent paramters
+	// get and distribute relevant parameters
 	G_LogPrintf( "ClientConnect: %i %s %s\n", clientNum, Info_ValueForKey(userinfo,"cl_guid"), Info_ValueForKey(userinfo,"ip") );
 	ClientUserinfoChanged( clientNum );
 

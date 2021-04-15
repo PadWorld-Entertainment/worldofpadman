@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*****************************************************************************
  * name:		ai_dmq3.c
  *
- * desc:		Quake3 bot AI
+ * desc:		WoP bot AI
  *
  * $Archive: /MissionPack/code/game/ai_dmq3.c $
  *
@@ -1515,7 +1515,7 @@ void BotBattleUseItems(bot_state_t *bs) {
 		}
 		return;
 	}
-	// den fall etwas d�mpfen
+	// den fall etwas dämpfen
 	if(	above < 250 && falling){
 		rnd = crandom();
 		if(rnd > 0.2) trap_EA_Use(bs->client);
@@ -2004,7 +2004,7 @@ bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl) {
 		bs->flags ^= BFL_STRAFERIGHT;
 		bs->attackstrafe_time = 0;
 	}
-	//bot couldn't do any usefull movement
+	//bot couldn't do any useful movement
 //	bs->attackchase_time = AAS_Time() + 6;
 	return moveresult;
 }

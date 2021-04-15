@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*****************************************************************************
  * name:		ai_main.c
  *
- * desc:		Quake3 bot AI
+ * desc:		WoP bot AI
  *
  * $Archive: /MissionPack/code/game/ai_main.c $
  *
@@ -833,7 +833,7 @@ void BotTestAAS(vec3_t origin) {
 	if (bot_testsolid.integer) {
 		if (!trap_AAS_Initialized()) return;
 		areanum = BotPointAreaNum(origin);
-		if (areanum) BotAI_Print(PRT_MESSAGE, "\remtpy area");
+		if (areanum) BotAI_Print(PRT_MESSAGE, "\rempty area");
 		else BotAI_Print(PRT_MESSAGE, "\r^1SOLID area");
 	}
 	else if (bot_testclusters.integer) {
@@ -1733,7 +1733,7 @@ int BotAIShutdownClient(int client, qboolean restart) {
 	}
 
 	trap_BotFreeMoveState(bs->ms);
-	//free the goal state`
+	//free the goal state
 	trap_BotFreeGoalState(bs->gs);
 	//free the chat file
 	trap_BotFreeChatState(bs->cs);

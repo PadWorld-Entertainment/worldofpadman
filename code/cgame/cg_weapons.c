@@ -1164,7 +1164,7 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 		break;
 	case WP_SPLASHER:
 //		gun.frame=(int)(((float)(cg.time - cent->muzzleFlashTime))*0.022f);
-		gun.frame=(int)((cg.time - cent->muzzleFlashTime)/45);//45.454545 ... wo her hatte ich die zahl o_O
+		gun.frame=(int)((cg.time - cent->muzzleFlashTime)/45);//45.454545 ... woher hatte ich die zahl o_O
 		if(gun.frame>23)
 			gun.frame=0;
 
@@ -1230,7 +1230,7 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 		// continuous flash
 	} else {
 		// impulse flash
-		if(!((weaponNum==WP_PUMPER || weaponNum == WP_BUBBLEG || weaponNum == WP_NIPPER || weaponNum == WP_BETTY || weaponNum == WP_BALLOONY || weaponNum == WP_SPLASHER || weaponNum == WP_KMA97 ) && cg.time - cent->muzzleFlashTime < MUZZLE_FLASH_TIME))//MUZZLE_FLASH_TIME=80 ... ich machmal bischen höher ^^
+		if(!((weaponNum==WP_PUMPER || weaponNum == WP_BUBBLEG || weaponNum == WP_NIPPER || weaponNum == WP_BETTY || weaponNum == WP_BALLOONY || weaponNum == WP_SPLASHER || weaponNum == WP_KMA97 ) && cg.time - cent->muzzleFlashTime < MUZZLE_FLASH_TIME))//MUZZLE_FLASH_TIME=80 ... ich machmal bischen hÃ¶her ^^
 		{
 			return;
 		}
@@ -1774,7 +1774,7 @@ void CG_Weapon_f( void ) {
 	num = atoi( CG_Argv( 1 ) );
 
 	if(cg.zoomed) CG_ZoomDown_f();
-//direkte wahl einer waffe mit 0 amma soll möglich sein -> deshalb CG_WeaponSelectable nicht sinnvoll
+//direkte wahl einer waffe mit 0 amma soll mÃ¶glich sein -> deshalb CG_WeaponSelectable nicht sinnvoll
 //	if(CG_WeaponSelectable(num))	return;
 
 	if ( !CG_WeaponSelectableSprayroom( num ) ) {
@@ -1921,7 +1921,7 @@ CG_MissileHitWall
 Caused by an EV_MISSILE_MISS event, or directly by local bullet tracing
 =================
 */
-//FIXME: why do we use the clientNum-var so strange? °°
+//FIXME: why do we use the clientNum-var so strange? ï¿½ï¿½
 void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, int colorCode, impactSound_t soundType ) {
 	qhandle_t		mod;
 	qhandle_t		mark;
@@ -2049,7 +2049,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 		mark = cgs.media.burnMarkShader;
 		radius = 4;
 		break;
-//	case WP_SPRAYPISTOL://noch mal drübernachdenken ... eigentlich brauch ich keine explosion
+//	case WP_SPRAYPISTOL://noch mal drÃ¼ber nachdenken ... eigentlich brauch ich keine explosion
 //		break;
 	case WP_KILLERDUCKS:
 		mod = cgs.media.dishFlashModel;
@@ -2161,7 +2161,7 @@ CG_ShotgunFire
 void CG_ShotgunFire( entityState_t *es )
 {
 // seed und otherEntNum ungenutzt oder?
-//noch so ändern das ich es nicht nochmal berechnen muss
+//noch so Ã¤ndern das ich es nicht nochmal berechnen muss
 	vec3_t	start, end;
 	vec3_t	forward, right, up;
 	trace_t	tr;

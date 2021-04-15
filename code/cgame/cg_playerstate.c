@@ -351,7 +351,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 		sfx = cgs.media.humiliationSound;
 		pushReward(sfx, cgs.media.medalGauntlet, ps->persistant[PERS_GAUNTLET_FRAG_COUNT]);
 		reward = qtrue;
-		//Com_Printf("guantlet frag\n");
+		//Com_Printf("gauntlet frag\n");
 	}
 	// if any of the player event bits changed
 	if (ps->persistant[PERS_PLAYEREVENTS] != ops->persistant[PERS_PLAYEREVENTS]) {
@@ -398,7 +398,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 		msec = cg.time - cgs.levelStartTime;
 		if ( !( cg.timelimitWarnings & 4 ) && msec > ( cgs.timelimit * 60 + 2 ) * 1000 ) {
 			cg.timelimitWarnings |= 1 | 2 | 4;
-			trap_S_StartLocalSound( cgs.media.suddenDeathSound, CHAN_ANNOUNCER );//noch ändern ... wirklich?
+			trap_S_StartLocalSound( cgs.media.suddenDeathSound, CHAN_ANNOUNCER );//noch Ã¤ndern ... wirklich?
 		}
 		else if( !cg.warmup && !(cg.timelimitWarnings & 8 ) && msec > (cgs.timelimit*60 -1) * 1000 )
 		{

@@ -78,7 +78,7 @@ static void UI_Mods_MenuEvent( void *ptr, int event ) {
 	switch ( ((menucommon_s*)ptr)->id ) {
 	case ID_GO:
 		trap_Cvar_Set( "fs_game", s_mods.fs_gameList[s_mods.list.curvalue] );
-		trap_Cvar_Set("s_wop_restarted","0");//damit bei padmob->anderer mod->padmod kein falscher sound bleibt
+		trap_Cvar_Set("s_wop_restarted","0");//damit bei padmod->anderer mod->padmod kein falscher sound bleibt
 		trap_Cmd_ExecuteText( EXEC_APPEND, "vid_restart;" );
 		UI_PopMenu();
 		break;

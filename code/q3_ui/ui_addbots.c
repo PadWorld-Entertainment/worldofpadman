@@ -252,7 +252,7 @@ UI_AddBotsMenu_Init
 =================
 */
 static const char *skillNames[] = {
-	"Kindergarden",
+	"Kindergarten",
 	"Flower power",
 	"Mosquito Bite",
 	"Peacemaker",

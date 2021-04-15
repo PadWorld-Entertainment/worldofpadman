@@ -884,7 +884,7 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	}
 
 	if(!(cg.clientFrame&0xff))
-		trap_SendConsoleCommand("wop_checkmusic\n");//noch überdenken ob ich es nicht doch nur alle paar frames machen sollte
+		trap_SendConsoleCommand("wop_checkmusic\n");//noch Ã¼berdenken ob ich es nicht doch nur alle paar frames machen sollte
 
 	// any looped sounds will be respecified as entities
 	// are added to the render list
@@ -917,7 +917,7 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	// this counter will be bumped for every valid scene we generate
 	cg.clientFrame++;
 
-	if(cg.clientFrame==1)//oder doch lieber ein späterer
+	if(cg.clientFrame==1)//oder doch lieber ein spÃ¤terer
 	{
 		qtime_t qtime;
 

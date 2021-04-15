@@ -732,7 +732,7 @@ static void StartServer_MenuInit( void ) {
 	for (i=0; i<MAX_MAPSPERPAGE; i++)
 	{
 		x =	(i % MAX_MAPCOLS) * (128+10) + 60;
-		y = (i / MAX_MAPCOLS/* % MAX_MAPROWS*/) * (110+8) + 40;//fr¸her auch 128+8
+		y = (i / MAX_MAPCOLS/* % MAX_MAPROWS*/) * (110+8) + 40;//fr√ºher auch 128+8
 
 		s_startserver.mappics[i].generic.type		= MTYPE_BITMAP;
 		s_startserver.mappics[i].generic.flags		= QMF_LEFT_JUSTIFY;
@@ -792,7 +792,7 @@ static void StartServer_MenuInit( void ) {
 	s_startserver.hostname.field.widthInChars = 12;
 	s_startserver.hostname.field.maxchars     = 64;
 
-//	if(0)//noch ‰ndern // s_serveroptions.gametype >= GT_TEAM )
+//	if(0)//noch √§ndern // s_serveroptions.gametype >= GT_TEAM )
 //	{
 		y += BIGCHAR_HEIGHT+2;
 		s_startserver.friendlyfire.generic.type	= MTYPE_RADIOBUTTON;
@@ -1276,7 +1276,7 @@ void UI_BotSelectMenu_UpdateList(void)
 			if(s_startserver.selectbotinfos[j].name[0]!='\0')
 			{
 				tmpptr=s_startserver.selectbotinfos[j].name;
-				j++;//damit es +1 ist wenn die ‰uﬂere schleife looped
+				j++;//damit es +1 ist wenn die √§u√üere schleife looped
 				break;
 			}
 		}

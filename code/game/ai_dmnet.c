@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*****************************************************************************
  * name:		ai_dmnet.c
  *
- * desc:		Quake3 bot AI
+ * desc:		WoP bot AI
  *
  * $Archive: /MissionPack/code/game/ai_dmnet.c $
  *
@@ -514,7 +514,7 @@ void SelfTeamGoal(bot_state_t* bs){
 ==================
 BotGetLongTermGoal
 
-we could also create a seperate AI node for every long term goal type
+we could also create a separate AI node for every long term goal type
 however this saves us a lot of code
 ==================
 */

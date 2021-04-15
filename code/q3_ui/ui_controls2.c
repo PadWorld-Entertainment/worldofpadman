@@ -1233,7 +1233,7 @@ static void Controls_MenuInit( void )
 	s_controls.looking.focuspic			= LOOK1;
 	s_controls.looking.focuspicinstead	= qtrue;
 
-	// +/-... Rumrücken für Ente
+	// +/-... RumrÃ¼cken fÃ¼r Ente
 	s_controls.movement.generic.type	= MTYPE_BITMAP;
 	s_controls.movement.generic.name	= MOVEMENT0;
 	s_controls.movement.generic.flags	= QMF_LEFT_JUSTIFY|QMF_HIGHLIGHT_IF_FOCUS;

@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define SB_INTER_HEIGHT		16 // interleaved height
 
-// -48 => f¸r die l¸cken zwischen den "teams"
+// -48 => f√ºr die l√ºcken zwischen den "teams"
 #define SB_MAXCLIENTS_NORMAL  ((SB_STATUSBAR - SB_TOP -48) / SB_NORMAL_HEIGHT)
 #define SB_MAXCLIENTS_INTER   ((SB_STATUSBAR - SB_TOP -48) / SB_INTER_HEIGHT - 1)
 

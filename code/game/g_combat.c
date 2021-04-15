@@ -155,16 +155,16 @@ void TossClientItems( gentity_t *self ) {
 		if(self->client->sess.sessionTeam == TEAM_RED)
 		{
 			for(;self->client->ps.ammo[WP_SPRAYPISTOL]>0;self->client->ps.ammo[WP_SPRAYPISTOL]--)
-				Drop_Item(self,BG_FindItem("red Cartridge"),random()*360);//pickup name ändern !!!
+				Drop_Item(self,BG_FindItem("red Cartridge"),random()*360);//pickup name Ã¤ndern !!!
 
-			Drop_Item(self,BG_FindItem("blue Cartridge"),random()*360)->nextthink=level.time+120000;//pickup name ändern !!!
+			Drop_Item(self,BG_FindItem("blue Cartridge"),random()*360)->nextthink=level.time+120000;//pickup name Ã¤ndern !!!
 		}
 		else if(self->client->sess.sessionTeam == TEAM_BLUE)
 		{
 			for(;self->client->ps.ammo[WP_SPRAYPISTOL]>0;self->client->ps.ammo[WP_SPRAYPISTOL]--)
-				Drop_Item(self,BG_FindItem("blue Cartridge"),random()*360);//pickup name ändern !!!
+				Drop_Item(self,BG_FindItem("blue Cartridge"),random()*360);//pickup name Ã¤ndern !!!
 
-			Drop_Item(self,BG_FindItem("red Cartridge"),random()*360)->nextthink=level.time+120000;//pickup name ändern !!!
+			Drop_Item(self,BG_FindItem("red Cartridge"),random()*360)->nextthink=level.time+120000;//pickup name Ã¤ndern !!!
 		}
 		//other->client->ps.generic1=other->client->ps.ammo[WP_SPRAYPISTOL];
 		self->client->ps.generic1=0;
@@ -182,7 +182,7 @@ void TossClientItems( gentity_t *self ) {
 
 		for(;self->client->ps.ammo[WP_SPRAYPISTOL]>0;self->client->ps.ammo[WP_SPRAYPISTOL]--)
 		{
-			tmpGE=Drop_Item(self,BG_FindItem("neutral Cartridge"),random()*360);//pickup name ändern !!!
+			tmpGE=Drop_Item(self,BG_FindItem("neutral Cartridge"),random()*360);//pickup name Ã¤ndern !!!
 
 			tmpGE->nextthink=level.time+120000;
 			if(first)

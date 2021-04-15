@@ -258,7 +258,7 @@ void	G_TouchTriggers( gentity_t *ent ) {
 	VectorSubtract( ent->client->ps.origin, range, mins );
 	VectorAdd( ent->client->ps.origin, range, maxs );
 
-	// check if we laged thru a tele-trigger (for the tele-tubes of the syc-room)
+	// check if we lagged through a tele-trigger (for the tele-tubes of the syc-room)
 	{
 		vec3_t	tmpv3;
 		float	v;

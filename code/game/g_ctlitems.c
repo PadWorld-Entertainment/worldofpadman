@@ -504,7 +504,7 @@ static void boomies_touch( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 }
 
 /*
-	create a Boomy(? or is it Boomie °°)
+	create a Boomy(? or is it Boomie Â°Â°)
 	trace forward .... if hitting a wall, place it there ... else drop to ground
 	... doesn't handle boomies-holdable stuff!
 */

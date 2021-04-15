@@ -690,7 +690,7 @@ void SetTeam( gentity_t *ent, char *s ) {
 
 	BroadcastTeamChange( client, oldTeam );
 
-	// get and distribute relevent paramters
+	// get and distribute relevant parameters
 	ClientUserinfoChanged( clientNum );
 
 	ClientBegin( clientNum );

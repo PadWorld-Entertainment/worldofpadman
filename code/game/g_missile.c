@@ -501,7 +501,7 @@ void move_killerducks(gentity_t *ent)
 	}
 //CJP end
 
-	opferlenght=(1024.0f*1024.0f);//262144.0f;//(512.0f)²
+	opferlenght=(1024.0f*1024.0f);//262144.0f;//(512.0f)Â²
 	opfer=-1;
 	for(i=0;i<g_maxclients.integer;i++)
 	{
@@ -517,7 +517,7 @@ void move_killerducks(gentity_t *ent)
 		
 		tmpv3[0]=level.clients[i].ps.origin[0]-ent->r.currentOrigin[0];
 		tmpv3[1]=level.clients[i].ps.origin[1]-ent->r.currentOrigin[1];
-		tmpv3[2]=(level.clients[i].ps.origin[2]-ent->r.currentOrigin[2])*2.0f;//die höhe soll stärker gewertet werden ...
+		tmpv3[2]=(level.clients[i].ps.origin[2]-ent->r.currentOrigin[2])*2.0f;//die hÃ¶he soll stÃ¤rker gewertet werden ...
 
 		tmpv3[0]=tmpv3[0]*tmpv3[0]+tmpv3[1]*tmpv3[1]+tmpv3[2]*tmpv3[2];
 
@@ -533,7 +533,7 @@ void move_killerducks(gentity_t *ent)
 	{
 		tmpv3[0]=level.clients[ownerNum].ps.origin[0]-ent->r.currentOrigin[0];
 		tmpv3[1]=level.clients[ownerNum].ps.origin[1]-ent->r.currentOrigin[1];
-		tmpv3[2]=(level.clients[ownerNum].ps.origin[2]-ent->r.currentOrigin[2])*2.0f;//die höhe soll stärker gewertet werden ...
+		tmpv3[2]=(level.clients[ownerNum].ps.origin[2]-ent->r.currentOrigin[2])*2.0f;//die hÃ¶he soll stÃ¤rker gewertet werden ...
 
 		tmpv3[0]=tmpv3[0]*tmpv3[0]+tmpv3[1]*tmpv3[1]+tmpv3[2]*tmpv3[2];
 
@@ -575,7 +575,7 @@ void move_killerducks(gentity_t *ent)
 		{
 			tmpf=1/sqrt(tmpf);//also wenn die wurzel aus >400 0 wird ist eh der weltuntergang nicht mehr weit O_o
 
-			if(ent->s.pos.trDelta[0]*tmpv3[0]+ent->s.pos.trDelta[1]*tmpv3[1]<0.98)//cos<0.98 -> größer ~10° abweichung
+			if(ent->s.pos.trDelta[0]*tmpv3[0]+ent->s.pos.trDelta[1]*tmpv3[1]<0.98)//cos<0.98 -> grÃ¶ÃŸer ~10Â° abweichung
 			{
 				ent->s.pos.trDelta[0]=tmpv3[0]*400.0f;
 				ent->s.pos.trDelta[1]=tmpv3[1]*400.0f;
@@ -635,11 +635,11 @@ void move_killerducks(gentity_t *ent)
 
 	tmpv3[0]=ent->s.pos.trBase[0]+ent->s.pos.trDelta[0]*(float)tmptime*0.001f;
 	tmpv3[1]=ent->s.pos.trBase[1]+ent->s.pos.trDelta[1]*(float)tmptime*0.001f;
-	tmpv3[2]=ent->s.pos.trBase[2]+ent->s.pos.trDelta[2]*(float)tmptime*0.001f-ent->s.pos.trDelta[2]*((float)tmptime*(float)tmptime*0.000001f);//0.001² ... hmm was sollte das //noch mal O_o
+	tmpv3[2]=ent->s.pos.trBase[2]+ent->s.pos.trDelta[2]*(float)tmptime*0.001f-ent->s.pos.trDelta[2]*((float)tmptime*(float)tmptime*0.000001f);//0.001Â² ... hmm was sollte das //noch mal O_o
 
 	trap_Trace(&tr,ent->s.pos.trBase,ent->r.mins,ent->r.maxs,tmpv3,ent->s.number,ent->clipmask);
 
-//	if(ent->s.pos.trDelta[2]<1)//nicht die richtung ändern wenn wir uns nach oben bewegen (JUMP/JUMP_PAD)
+//	if(ent->s.pos.trDelta[2]<1)//nicht die richtung Ã¤ndern wenn wir uns nach oben bewegen (JUMP/JUMP_PAD)
 //	{
 		if(tr.fraction!=1.0f)
 		{
@@ -671,7 +671,7 @@ void move_killerducks(gentity_t *ent)
 				if(trj.startsolid==qfalse && trj.plane.normal[2]>0.8f)
 				{
 //					if(trj.fraction>0.5f)
-//					{//uah nich schön ;)
+//					{//uah nich schÃ¶n ;)
 						tr.endpos[0]=trj.endpos[0];
 						tr.endpos[1]=trj.endpos[1];
 						tr.endpos[2]=trj.endpos[2];
@@ -689,7 +689,7 @@ void move_killerducks(gentity_t *ent)
 					oldvel[1]=ent->s.pos.trDelta[1];
 					oldvel[2]=ent->s.pos.trDelta[2];
 
-					//noch ändern
+					//noch Ã¤ndern
 					CrossProduct(oldvel,tr.plane.normal,tmpv3);
 					CrossProduct(tmpv3,tr.plane.normal,ent->s.pos.trDelta);
 					VectorNormalize(ent->s.pos.trDelta);
@@ -706,7 +706,7 @@ void move_killerducks(gentity_t *ent)
 						float cosalpha;
 	
 						oldspeed=VectorNormalize(oldvel);
-						VectorNormalize(tr.plane.normal);//noch überlegen ob das weg kann (ist das schon 1 lang?)
+						VectorNormalize(tr.plane.normal);//noch Ã¼berlegen ob das weg kann (ist das schon 1 lang?)
 	
 						cosalpha=oldvel[0]*tr.plane.normal[0]+oldvel[1]*tr.plane.normal[1]+oldvel[2]*tr.plane.normal[2];
 	
@@ -716,7 +716,7 @@ void move_killerducks(gentity_t *ent)
 					}
 				}
 			}
-			//if hitting any non worldent ...//noch, hmm was ist mit den map-ents(türen usw.)
+			//if hitting any non worldent ...//noch, hmm was ist mit den map-ents(tÃ¼ren usw.)
 			else if(tr.contents & CONTENTS_BODY)
 			{
 //:HERBY:ea
