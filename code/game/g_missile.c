@@ -330,7 +330,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 				velocity[2] = 1;	// stepped on a grenade
 			}
 			G_Damage (other, ent, &g_entities[ent->r.ownerNum], velocity,
-				ent->s.origin, ent->damage, 
+				ent->s.origin, ent->damage,
 				0, ent->methodOfDeath);
 		}
 	}
@@ -424,7 +424,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 
 	// splash damage (doesn't apply to person directly hit)
 	if ( ent->splashDamage ) {
-		if( G_RadiusDamage( trace->endpos, ent->parent, ent->splashDamage, ent->splashRadius, 
+		if( G_RadiusDamage( trace->endpos, ent->parent, ent->splashDamage, ent->splashRadius,
 			other, ent->splashMethodOfDeath ) ) {
 			if( !hitClient ) {
 				g_entities[ent->r.ownerNum].client->accuracy_hits++;
@@ -444,11 +444,11 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 move_killerducks
 #######################
 */
-const float duckAttackPos[5] = { 0.0f, 20.0f, -20.0f, 10.0f, -10.0f };
-int duckFrame;
-int duckNum;
+static const float duckAttackPos[5] = { 0.0f, 20.0f, -20.0f, 10.0f, -10.0f };
+static int duckFrame;
+static int duckNum;
 
-void move_killerducks(gentity_t *ent)
+static void move_killerducks(gentity_t *ent)
 {
 	int tmptime;
 	trace_t	tr;
@@ -514,7 +514,7 @@ void move_killerducks(gentity_t *ent)
 		if( ( level.clients[i].sess.sessionTeam == TEAM_SPECTATOR ) || LPSDeadSpec( &level.clients[i] ) ) {
 			continue;
 		}
-		
+
 		tmpv3[0]=level.clients[i].ps.origin[0]-ent->r.currentOrigin[0];
 		tmpv3[1]=level.clients[i].ps.origin[1]-ent->r.currentOrigin[1];
 		tmpv3[2]=(level.clients[i].ps.origin[2]-ent->r.currentOrigin[2])*2.0f;//die höhe soll stärker gewertet werden ...
@@ -564,7 +564,7 @@ void move_killerducks(gentity_t *ent)
 		if ( duckFrame != level.framenum ) {
 			duckNum = 0;
 			duckFrame = level.framenum;
-		} 
+		}
 		else duckNum++;
 		VectorMA( tmpv3, duckAttackPos[duckNum%5], tmpv3_2, tmpv3 );
 //:HERBY:ee
@@ -613,9 +613,9 @@ void move_killerducks(gentity_t *ent)
 		float	backoff;
 		float	change;
 		int		i;
-		
+
 		backoff = DotProduct (ent->s.pos.trDelta, tr.plane.normal);
-		
+
 		if ( backoff < 0 ) {
 			backoff *= 1.001f;
 		} else {
@@ -639,7 +639,7 @@ void move_killerducks(gentity_t *ent)
 
 	trap_Trace(&tr,ent->s.pos.trBase,ent->r.mins,ent->r.maxs,tmpv3,ent->s.number,ent->clipmask);
 
-//	if(ent->s.pos.trDelta[2]<1)//nicht die richtung ändern wenn wir uns nach oben bewegen (JUMP/JUMP_PAD)
+//	if(ent->s.pos.trDelta[2]<1)// don't change the direction whenever we move upwards (JUMP/JUMP_PAD)
 //	{
 		if(tr.fraction!=1.0f)
 		{
@@ -648,7 +648,7 @@ void move_killerducks(gentity_t *ent)
 //			{
 //				ent->s.pos.trDelta[2]=0;
 //			}
-//			else 
+//			else
 			if(tr.contents & CONTENTS_SOLID)//tr.entityNum==ENTITYNUM_WORLD)//!=opfer)
 			{
 				vec3_t	oldvel;
@@ -671,7 +671,7 @@ void move_killerducks(gentity_t *ent)
 				if(trj.startsolid==qfalse && trj.plane.normal[2]>0.8f)
 				{
 //					if(trj.fraction>0.5f)
-//					{//uah nich schön ;)
+//					{//uah not nice ;)
 						tr.endpos[0]=trj.endpos[0];
 						tr.endpos[1]=trj.endpos[1];
 						tr.endpos[2]=trj.endpos[2];
@@ -689,11 +689,11 @@ void move_killerducks(gentity_t *ent)
 					oldvel[1]=ent->s.pos.trDelta[1];
 					oldvel[2]=ent->s.pos.trDelta[2];
 
-					//noch ändern
+					//TODO: change me
 					CrossProduct(oldvel,tr.plane.normal,tmpv3);
 					CrossProduct(tmpv3,tr.plane.normal,ent->s.pos.trDelta);
 					VectorNormalize(ent->s.pos.trDelta);
-	
+
 					if(tr.plane.normal[2]>0.6f)
 					{
 						ent->s.pos.trDelta[0]*=-400.0f;
@@ -704,19 +704,19 @@ void move_killerducks(gentity_t *ent)
 					{
 						float oldspeed;
 						float cosalpha;
-	
+
 						oldspeed=VectorNormalize(oldvel);
-						VectorNormalize(tr.plane.normal);//noch überlegen ob das weg kann (ist das schon 1 lang?)
-	
+						VectorNormalize(tr.plane.normal);// TODO: maybe this can get removed because it already is normalized?
+
 						cosalpha=oldvel[0]*tr.plane.normal[0]+oldvel[1]*tr.plane.normal[1]+oldvel[2]*tr.plane.normal[2];
-	
+
 						ent->s.pos.trDelta[0]=(tr.plane.normal[0]*-2*cosalpha+oldvel[0])*oldspeed;
 						ent->s.pos.trDelta[1]=(tr.plane.normal[1]*-2*cosalpha+oldvel[1])*oldspeed;
 						ent->s.pos.trDelta[2]=(tr.plane.normal[2]*-2*cosalpha+oldvel[2])*oldspeed;
 					}
 				}
 			}
-			//if hitting any non worldent ...//noch, hmm was ist mit den map-ents(türen usw.)
+			//if hitting any non worldent ... TODO: what about the map-ents like doors and so on?
 			else if(tr.contents & CONTENTS_BODY)
 			{
 //:HERBY:ea
@@ -756,18 +756,18 @@ void move_killerducks(gentity_t *ent)
 ======================================================================
 */
 
-void think_slickent( gentity_t *ent ) {
+static void think_slickent( gentity_t *ent ) {
 	G_FreeEntity( ent );
 }
 
-void touch_slickent( gentity_t *self, gentity_t *other, trace_t *trace )
+static void touch_slickent( gentity_t *self, gentity_t *other, trace_t *trace )
 {
 //	Com_Printf("touched slickent(self/cNum=%i|other/cNum=%i)\n",self->s.clientNum,other->s.clientNum);
 	other->client->last_slickent_touch = level.time;
 	other->client->ps.pm_flags |= PMF_TOUCHSLICKENT;
 }
 
-void launch_slickent(vec3_t origin, float size, vec3_t normal)
+static void launch_slickent(vec3_t origin, float size, vec3_t normal)
 {
 	gentity_t	*slickent;
 
@@ -838,7 +838,7 @@ void G_RunMissile( gentity_t *ent ) {
 			if ( other->takedamage && ent->damage ) {
 				vec3_t delta;
 				BG_EvaluateTrajectoryDelta( &ent->s.pos, level.time, delta );
-				G_Damage( other, ent, attacker, delta, tr.endpos, 
+				G_Damage( other, ent, attacker, delta, tr.endpos,
 					ent->damage, 0, ent->methodOfDeath );
 
 				if(other->client) {
@@ -919,7 +919,7 @@ void G_RunExplosion( gentity_t *ent ) {
 	{
 		// do damage
 		ent->pain_debounce_time += 100;
-		G_RadiusDamage( ent->r.currentOrigin, ent->parent, 400, 
+		G_RadiusDamage( ent->r.currentOrigin, ent->parent, 400,
 			frac * ent->splashRadius, NULL, ent->splashMethodOfDeath );
 	}
 }
@@ -959,7 +959,7 @@ gentity_t *fire_nipper (gentity_t *self, vec3_t start, vec3_t dir) {
 	VectorCopy (start, bolt->r.currentOrigin);
 
 	return bolt;
-}	
+}
 
 //=============================================================================
 
@@ -998,7 +998,7 @@ gentity_t *fire_splasher (gentity_t *self, vec3_t start, vec3_t dir) {
 	VectorCopy (start, bolt->r.currentOrigin);
 
 	return bolt;
-}	
+}
 
 /*
 =================
@@ -1209,7 +1209,7 @@ gentity_t *fire_duck (gentity_t *self, vec3_t start, vec3_t dir) {
 //	VectorCopy (start, bolt->r.currentOrigin);
 
 	return bolt;
-}	
+}
 
 //=============================================================================
 
