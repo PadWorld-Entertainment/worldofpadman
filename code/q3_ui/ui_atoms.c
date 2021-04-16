@@ -386,7 +386,7 @@ static void UI_DrawBannerString2( int x, int y, const char* str, vec4_t color )
 
 	// draw the colored text
 	trap_R_SetColor( color );
-	
+
 	ax = x * uis.xscale + uis.xbias;
 	ay = y * uis.yscale + uis.ybias;
 
@@ -496,7 +496,7 @@ void UI_DrawProportionalString2( int x, int y, const char* str, vec4_t color, fl
 
 	// draw the colored text
 	trap_R_SetColor( color );
-	
+
 	ax = x * uis.xscale + uis.xbias;
 	ay = y * uis.yscale + uis.ybias;
 
@@ -643,7 +643,7 @@ int UI_AutoWrappedString_LineCount( int xmax, const char* str, int style, qboole
 		return 0;
 
 	sizeScale = UI_ProportionalSizeScale( style );
-	
+
 	Q_strncpyz(buf, str, sizeof(buf));
 	s1 = s2 = s3 = buf;
 
@@ -666,7 +666,7 @@ int UI_AutoWrappedString_LineCount( int xmax, const char* str, int style, qboole
 				// fuck, don't have a clean cut, we'll overflow
 				s2 = s3;
 			}
-			*s2 = '\0';			
+			*s2 = '\0';
 			lineCount++;
 			if (c_bcp == '\0')
 			{
@@ -677,7 +677,7 @@ int UI_AutoWrappedString_LineCount( int xmax, const char* str, int style, qboole
 				s2++;
 				if (*s2 != '\0') // if we are printing an overflowing line we have s2 == s3
 				  lineCount++;
-				break; 
+				break;
 			}
 			s2++;
 			s1 = s2;
@@ -710,9 +710,9 @@ void UI_DrawString_AutoWrapped( int x, int y, int xmax, int ystep, const char* s
 
 	if (!str || str[0]=='\0')
 		return;
-	
+
 	sizeScale = UI_ProportionalSizeScale( style );
-	
+
 	Q_strncpyz(buf, str, sizeof(buf));
 	s1 = s2 = s3 = buf;
 
@@ -752,7 +752,7 @@ void UI_DrawString_AutoWrapped( int x, int y, int xmax, int ystep, const char* s
 				s2 = s3;
 			}
 			*s2 = '\0';
-			
+
 			if( proportional )
 				UI_DrawProportionalString(x, y, s1, style, color);
 			else
@@ -773,7 +773,7 @@ void UI_DrawString_AutoWrapped( int x, int y, int xmax, int ystep, const char* s
 					else
 						UI_DrawString(x, y, s2, style, color);
 				}
-				break; 
+				break;
 			}
 			s2++;
 			s1 = s2;
@@ -818,7 +818,7 @@ static void UI_DrawString2( int x, int y, const char* str, vec4_t color, int cha
 
 	// draw the colored text
 	trap_R_SetColor( color );
-	
+
 	ax = x * uis.xscale + uis.xbias;
 	ay = y * uis.yscale + uis.ybias;
 
@@ -882,13 +882,13 @@ void UI_DrawString( int x, int y, const char* str, int style, vec4_t color )
 
 	if (style & UI_PULSE)
 	{
-		lowlight[0] = 0.8*color[0]; 
+		lowlight[0] = 0.8*color[0];
 		lowlight[1] = 0.8*color[1];
 		lowlight[2] = 0.8*color[2];
 		lowlight[3] = 0.8*color[3];
 		UI_LerpColor(color,lowlight,newcolor,0.5+0.5*sin(uis.realtime/PULSE_DIVISOR));
 		drawcolor = newcolor;
-	}	
+	}
 	else
 		drawcolor = color;
 
@@ -949,19 +949,19 @@ void UI_DrawStringNS( int x, int y, const char* str, int style, float fontsize, 
 	}
 	else //height/2 = width
 	{
-		charw = fontsize/2; 
+		charw = fontsize/2;
 		charh = fontsize;
 	}
 
 	if (style & UI_PULSE)
 	{
-		lowlight[0] = 0.8*color[0]; 
+		lowlight[0] = 0.8*color[0];
 		lowlight[1] = 0.8*color[1];
 		lowlight[2] = 0.8*color[2];
 		lowlight[3] = 0.8*color[3];
 		UI_LerpColor(color,lowlight,newcolor,0.5+0.5*sin(uis.realtime/PULSE_DIVISOR));
 		drawcolor = newcolor;
-	}	
+	}
 	else
 		drawcolor = color;
 
@@ -1053,7 +1053,7 @@ void UI_SetActiveMenu( uiMenuCommand_t menu ) {
 		trap_Cvar_Set( "cl_paused", "1" );
 		UI_InGameMenu();
 		return;
-		
+
 	// bk001204
 	case UIMENU_TEAM:
 	case UIMENU_POSTGAME:
@@ -1169,7 +1169,7 @@ void UI_MouseEvent( int dx, int dy )
 
 		((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor]))->flags |= QMF_HASMOUSEFOCUS;
 		return;
-	}  
+	}
 
 	if(uis.activemenu->cursor>=0 && uis.activemenu->cursor<uis.activemenu->nitems)
 	{
@@ -1390,7 +1390,7 @@ void UI_Init( void ) {
 	// for 640x480 virtualized screen
 	uis.xscale = uis.glconfig.vidWidth * (1.0/640.0);
 	uis.yscale = uis.glconfig.vidHeight * (1.0/480.0);
-	
+
 	if ( uis.glconfig.vidWidth * 480 > uis.glconfig.vidHeight * 640 ) {
 		// wide screen
 		uis.xbias = 0.5 * ( uis.glconfig.vidWidth - ( uis.glconfig.vidHeight * (640.0/480.0) ) );
@@ -1474,7 +1474,7 @@ void UI_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader ) {
 		t0 = 0;
 		t1 = 1;
 	}
-	
+
 	UI_AdjustFrom640( &x, &y, &w, &h );
 	trap_R_DrawStretchPic( x, y, w, h, s0, t0, s1, t1, hShader );
 }
@@ -1504,7 +1504,7 @@ void UI_DrawHandlePic1024( float x, float y, float w, float h, qhandle_t hShader
 		t0 = 0;
 		t1 = 1;
 	}
-	
+
 	UI_AdjustFrom1024( &x, &y, &w, &h );
 	trap_R_DrawStretchPic( x, y, w, h, s0, t0, s1, t1, hShader );
 }
