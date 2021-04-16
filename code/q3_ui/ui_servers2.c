@@ -409,22 +409,18 @@ static int QDECL ArenaServers_Compare( const void *arg1, const void *arg2 ) {
 ArenaServers_Go
 =================
 */
-static void ArenaServers_Go( void ) {
-	servernode_t*	servernode;
+static void ArenaServers_Go(void) {
+	servernode_t *servernode;
 
 	servernode = g_arenaservers.table[g_arenaservers.list.curvalue].servernode;
-	if( servernode ) {
-		/* FIXME: Implement?
-		if(servernode->needPass) {
-			UI_SpecifyPasswordMenu( va( "connect %s\n", servernode->adrstr ), servernode->hostname );
+	if (servernode) {
+		if (servernode->needPass) {
+			UI_SpecifyPasswordMenu(va("connect %s\n", servernode->adrstr), servernode->hostname);
+		} else {
+			trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", servernode->adrstr));
 		}
-		else
-			trap_Cmd_ExecuteText( EXEC_APPEND, va( "connect %s\n", servernode->adrstr ) );
-		*/
-		trap_Cmd_ExecuteText( EXEC_APPEND, va( "connect %s\n", servernode->adrstr ) );
 	}
 }
-
 
 /*
 =================

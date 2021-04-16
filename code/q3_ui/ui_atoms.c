@@ -1613,6 +1613,8 @@ void UI_DrawMenu(menuframework_s* menu)
 					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_demobg );
 				if(menu->bgparts & BGP_SPECIFYBG)
 					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_specifybg );
+				if(menu->bgparts & BGP_SPECIFYPASSBG)
+					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_specifypassbg );
 				if(menu->bgparts & BGP_GAMEOPTIONS)
 					UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_gameoptionsbg );
 				if(menu->bgparts & BGP_STARTSERVERMAPS)

@@ -2200,6 +2200,7 @@ void Menu_Cache( void )
 	uis.pad_modsbg			= trap_R_RegisterShaderNoMip("menu/mods/bg");
 	uis.pad_demobg			= trap_R_RegisterShaderNoMip("menu/demo/bg");
 	uis.pad_specifybg		= trap_R_RegisterShaderNoMip("menu/specify/bg");
+	uis.pad_specifypassbg	= trap_R_RegisterShaderNoMip("menu/specify/bgpass");
 	uis.pad_gameoptionsbg	= trap_R_RegisterShaderNoMip("menu/gameoptions/bg");
 	uis.pad_startservermaps	= trap_R_RegisterShaderNoMip("menu/startserver/mapbg");
 	uis.pad_startserverbots	= trap_R_RegisterShaderNoMip("menu/startserver/botbg");

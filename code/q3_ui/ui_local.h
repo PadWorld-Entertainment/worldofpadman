@@ -188,6 +188,7 @@ extern vmCvar_t wop_specialSPLoadingScreen;
 #define BGP_SIMPLEBG			0x008000
 #define	BGP_LASTMENU			0x010000
 #define BGP_SINGLEMENU			0x020000
+#define BGP_SPECIFYPASSBG		0x040000
 
 typedef struct _tag_menuframework
 {
@@ -502,6 +503,12 @@ extern void UI_CDKeyMenu( void );
 extern void UI_CDKeyMenu_Cache( void );
 extern void UI_CDKeyMenu_f( void );
 
+
+//
+// ui_password.c
+//
+extern void UI_SpecifyPasswordMenu( const char* string, const char *name );
+
 //
 // ui_playermodel.c
 // ... FIXME: this sourcefile isn't used by wop
@@ -679,6 +686,7 @@ typedef struct {
 	qhandle_t			pad_modsbg;
 	qhandle_t			pad_demobg;
 	qhandle_t			pad_specifybg;
+	qhandle_t			pad_specifypassbg;
 	qhandle_t			pad_gameoptionsbg;
 	qhandle_t			pad_startservermaps;
 	qhandle_t			pad_startserverbots;
