@@ -88,7 +88,7 @@ static void SpecifyServer_Event( void* ptr, int event )
 	}
 }
 
-static void SpecifyServer_DrawField( void *self ) {
+void SpecifyServer_DrawField( void *self ) {
 	menufield_s		*f;
 	qboolean		focus;
 	int				style;
