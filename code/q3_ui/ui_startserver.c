@@ -348,7 +348,7 @@ static void StartServer_GametypeEvent( void* ptr, int event ) {
 		s_startserver.friendlyfire.generic.flags |= QMF_GRAYED;
 
 	if(gametype_remap[s_startserver.gametype.curvalue]==GT_LPS)
-		s_startserver.StartLives.generic.flags &= ~QMF_GRAYED;	
+		s_startserver.StartLives.generic.flags &= ~QMF_GRAYED;
 	else
 		s_startserver.StartLives.generic.flags |= QMF_GRAYED;
 
@@ -732,7 +732,7 @@ static void StartServer_MenuInit( void ) {
 	for (i=0; i<MAX_MAPSPERPAGE; i++)
 	{
 		x =	(i % MAX_MAPCOLS) * (128+10) + 60;
-		y = (i / MAX_MAPCOLS/* % MAX_MAPROWS*/) * (110+8) + 40;//früher auch 128+8
+		y = (i / MAX_MAPCOLS/* % MAX_MAPROWS*/) * (110+8) + 40;//was 128+8
 
 		s_startserver.mappics[i].generic.type		= MTYPE_BITMAP;
 		s_startserver.mappics[i].generic.flags		= QMF_LEFT_JUSTIFY;
@@ -783,7 +783,7 @@ static void StartServer_MenuInit( void ) {
 
 #define OPTIONS_XPOS 502
 
-	y = 176;	
+	y = 176;
 	s_startserver.hostname.generic.type       = MTYPE_FIELD;
 	s_startserver.hostname.generic.name       = "Host Name:";
 	s_startserver.hostname.generic.flags      = QMF_SMALLFONT;
@@ -792,7 +792,7 @@ static void StartServer_MenuInit( void ) {
 	s_startserver.hostname.field.widthInChars = 12;
 	s_startserver.hostname.field.maxchars     = 64;
 
-//	if(0)//noch ändern // s_serveroptions.gametype >= GT_TEAM )
+//	if(0)//TODO: change me // s_serveroptions.gametype >= GT_TEAM )
 //	{
 		y += BIGCHAR_HEIGHT+2;
 		s_startserver.friendlyfire.generic.type	= MTYPE_RADIOBUTTON;
