@@ -3107,6 +3107,12 @@ endif
 dist:
 	git archive --format zip --output $(CLIENTBIN)-$(VERSION).zip HEAD
 
+%-run: release
+	cd $(BR) && ./$(@:-run=)$(FULLBINEXT)
+
+%-debug: debug
+	cd $(BD) && gdb ./$(@:-debug=)$(FULLBINEXT) -ex run
+
 #############################################################################
 # DEPENDENCIES
 #############################################################################
