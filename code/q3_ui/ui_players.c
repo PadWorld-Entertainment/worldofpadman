@@ -106,9 +106,6 @@ tryagain:
 		break;
 
 	case WP_NIPPER:
-		MAKERGB( pi->flashDlightColor, 1, 1, 0 );
-		break;
-
 	case WP_PUMPER:
 		MAKERGB( pi->flashDlightColor, 1, 1, 0 );
 		break;
@@ -299,14 +296,14 @@ static void UI_LegsSequencing( playerInfo_t *pi ) {
 UI_PositionEntityOnTag
 ======================
 */
-static void UI_PositionEntityOnTag( refEntity_t *entity, const refEntity_t *parent, 
+static void UI_PositionEntityOnTag( refEntity_t *entity, const refEntity_t *parent,
 							clipHandle_t parentModel, char *tagName ) {
 	int				i;
 	orientation_t	lerped;
-	
+
 	// lerp the tag
 	trap_CM_LerpTag( &lerped, parentModel, parent->oldframe, parent->frame,
-		1.0 - parent->backlerp, tagName );
+		1.0f - parent->backlerp, tagName );
 
 	// FIXME: allow origin offsets along tag?
 	VectorCopy( parent->origin, entity->origin );
@@ -325,7 +322,7 @@ static void UI_PositionEntityOnTag( refEntity_t *entity, const refEntity_t *pare
 UI_PositionRotatedEntityOnTag
 ======================
 */
-static void UI_PositionRotatedEntityOnTag( refEntity_t *entity, const refEntity_t *parent, 
+static void UI_PositionRotatedEntityOnTag( refEntity_t *entity, const refEntity_t *parent,
 							clipHandle_t parentModel, char *tagName ) {
 	int				i;
 	orientation_t	lerped;
@@ -333,7 +330,7 @@ static void UI_PositionRotatedEntityOnTag( refEntity_t *entity, const refEntity_
 
 	// lerp the tag
 	trap_CM_LerpTag( &lerped, parentModel, parent->oldframe, parent->frame,
-		1.0 - parent->backlerp, tagName );
+		1.0f - parent->backlerp, tagName );
 
 	// FIXME: allow origin offsets along tag?
 	VectorCopy( parent->origin, entity->origin );
@@ -426,7 +423,7 @@ static void UI_RunLerpFrame( playerInfo_t *ci, lerpFrame_t *lf, int newAnimation
 	if ( lf->frameTime == lf->oldFrameTime ) {
 		lf->backlerp = 0;
 	} else {
-		lf->backlerp = 1.0 - (float)( dp_realtime - lf->oldFrameTime ) / ( lf->frameTime - lf->oldFrameTime );
+		lf->backlerp = 1.0f - (float)( dp_realtime - lf->oldFrameTime ) / ( lf->frameTime - lf->oldFrameTime );
 	}
 }
 
@@ -493,17 +490,17 @@ static void UI_SwingAngles( float destination, float swingTolerance, float clamp
 	if ( !*swinging ) {
 		return;
 	}
-	
+
 	// modify the speed depending on the delta
 	// so it doesn't seem so linear
 	swing = AngleSubtract( destination, *angle );
-	scale = fabs( swing );
+	scale = Q_fabs( swing );
 	if ( scale < swingTolerance * 0.5 ) {
-		scale = 0.5;
+		scale = 0.5f;
 	} else if ( scale < swingTolerance ) {
-		scale = 1.0;
+		scale = 1.0f;
 	} else {
-		scale = 2.0;
+		scale = 2.0f;
 	}
 
 	// swing towards the destination angle
@@ -620,10 +617,10 @@ static void UI_PlayerAngles( playerInfo_t *pi, vec3_t legs[3], vec3_t torso[3], 
 	// --------- pitch -------------
 
 	// only show a fraction of the pitch angle in the torso
-	if ( headAngles[PITCH] > 180 ) {
-		dest = (-360 + headAngles[PITCH]) * 0.75;
+	if ( headAngles[PITCH] > 180.0f ) {
+		dest = (-360.0f + headAngles[PITCH]) * 0.75f;
 	} else {
-		dest = headAngles[PITCH] * 0.75;
+		dest = headAngles[PITCH] * 0.75f;
 	}
 	UI_SwingAngles( dest, 15, 30, 0.1f, &pi->torso.pitchAngle, &pi->torso.pitching );
 	torsoAngles[PITCH] = pi->torso.pitchAngle;
@@ -705,7 +702,7 @@ float	UI_MachinegunSpinAngle( playerInfo_t *pi ) {
 			delta = COAST_TIME;
 		}
 
-		speed = 0.5 * ( SPIN_SPEED + (float)( COAST_TIME - delta ) / COAST_TIME );
+		speed = 0.5f * ( SPIN_SPEED + (float)( COAST_TIME - delta ) / COAST_TIME );
 		angle = pi->barrelAngle + delta * speed;
 	}
 
@@ -786,10 +783,10 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	refdef.fov_x = (int)((float)refdef.width / (float)uis.glconfig.vidHeight * 90.0f);
 	xx = refdef.width / tan( refdef.fov_x / 360 * M_PI );
 	refdef.fov_y = atan2( refdef.height, xx );
-	refdef.fov_y *= ( 360 / M_PI );
+	refdef.fov_y *= ( 360.0 / M_PI );
 
 	// calculate distance so the player nearly fills the box
-	len = 0.7 * ( maxs[2] - mins[2] );		
+	len = 0.7f * ( maxs[2] - mins[2] );
 	origin[0] = len / tan( DEG2RAD(refdef.fov_x) * 0.5 );
 	origin[1] = 0.5 * ( mins[1] + maxs[1] );
 	origin[2] = -0.5 * ( mins[2] + maxs[2] );
@@ -804,7 +801,7 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 
 	// get the rotation information
 	UI_PlayerAngles( pi, legs.axis, torso.axis, head.axis );
-	
+
 	// get the animation state (after rotation, to allow feet shuffle)
 	UI_PlayerAnimation( pi, &legs.oldframe, &legs.frame, &legs.backlerp,
 		 &torso.oldframe, &torso.frame, &torso.backlerp );
@@ -934,12 +931,12 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	origin[0] -= 100;	// + = behind, - = in front
 	origin[1] += 100;	// + = left, - = right
 	origin[2] += 100;	// + = above, - = below
-	trap_R_AddLightToScene( origin, 500, 1.0, 1.0, 1.0 );
+	trap_R_AddLightToScene( origin, 500, 1.0f, 1.0f, 1.0f );
 
 	origin[0] -= 100;
 	origin[1] -= 100;
 	origin[2] -= 100;
-	trap_R_AddLightToScene( origin, 500, 1.0, 0.0, 0.0 );
+	trap_R_AddLightToScene( origin, 500, 1.0f, 0.0f, 0.0f );
 
 	trap_R_RenderScene( &refdef );
 }
@@ -1222,12 +1219,12 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 			Q_strncpyz( subSkinName, "default", sizeof( subSkinName ) );
 		}
 		// FIXME: Move GLOW_SKIN and DEFAULT_SKIN define to bg
-		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/glow_lower_%s.skin", modelName, subSkinName ); 
+		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/glow_lower_%s.skin", modelName, subSkinName );
 		pi->legsSkin = trap_R_RegisterSkin( filename );
-		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/glow_upper_%s.skin", modelName, subSkinName ); 
+		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/glow_upper_%s.skin", modelName, subSkinName );
 		pi->torsoSkin = trap_R_RegisterSkin( filename );
-		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/glow_head_%s.skin", modelName, subSkinName ); 
-		pi->headSkin = trap_R_RegisterSkin( filename ); 
+		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/glow_head_%s.skin", modelName, subSkinName );
+		pi->headSkin = trap_R_RegisterSkin( filename );
 
 
 		// if any skins failed to load
