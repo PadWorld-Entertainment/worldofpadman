@@ -1,21 +1,22 @@
 /*
 ===========================================================================
-Copyright (C) 2009 Poul Sander
+Copyright (C) 2009 Poul Sander (OpenArena)
+Copyright (C) 2021 Padworld Entertainment
 
-This file is part of the Open Arena source code.
+This file is part of the World of Padman source code.
 
-Open Arena source code is free software; you can redistribute it
+World of Padman source code is free software; you can redistribute it
 and/or modify it under the terms of the GNU General Public License as
 published by the Free Software Foundation; either version 2 of the License,
 or (at your option) any later version.
 
-Open Arena source code is distributed in the hope that it will be
+World of Padman source code is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Open Arena source code; if not, write to the Free Software
+along with World of Padman source code; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
