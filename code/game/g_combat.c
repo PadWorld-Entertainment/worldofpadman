@@ -133,9 +133,9 @@ void TossClientItems( gentity_t *self ) {
 	{
 		weapon = WP_NONE;
 	}
-	
+
 	// drop the weapon if not punchy, nipper of spraypistol
-	if ( weapon > WP_NIPPER && weapon != WP_GRAPPLING_HOOK && 
+	if ( weapon > WP_NIPPER && weapon != WP_GRAPPLING_HOOK &&
 		weapon != WP_SPRAYPISTOL &&
 		self->client->ps.ammo[ weapon ] )
 	{
@@ -499,14 +499,14 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		} else {
 			/*if(g_gametype.integer!=GT_SPRAY && g_gametype.integer!=GT_SPRAYFFA && g_gametype.integer!=GT_BALLOON && g_gametype.integer!=GT_LPS)
 				AddScore( attacker, self->r.currentOrigin, 1 ); */
-			
+
 			// Scores for killing only in some non-teamplay gametypes
 			if ( ( g_gametype.integer <= GT_TEAM ) && ( g_gametype.integer != GT_LPS ) && ( !IsSyc() ) ) {
 				AddScore( attacker, self->r.currentOrigin, SCORE_KILL, SCORE_KILL_S );
 			}
 
 			if( meansOfDeath == MOD_PUNCHY ) {
-				
+
 				// play humiliation on player
 				if(!attacker->client->ps.powerups[PW_BERSERKER])
 				{
@@ -634,9 +634,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			self->health = GIB_HEALTH+1;
 		}
 
-		self->client->ps.legsAnim = 
+		self->client->ps.legsAnim =
 			( ( self->client->ps.legsAnim & ANIM_TOGGLEBIT ) ^ ANIM_TOGGLEBIT ) | anim;
-		self->client->ps.torsoAnim = 
+		self->client->ps.torsoAnim =
 			( ( self->client->ps.torsoAnim & ANIM_TOGGLEBIT ) ^ ANIM_TOGGLEBIT ) | anim;
 
 		G_AddEvent( self, EV_DEATH1 + i, killer );
@@ -779,7 +779,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 	client = targ->client;
 
-	if ( ( !attacker || ( attacker->s.eType != ET_PLAYER ) ) && 
+	if ( ( !attacker || ( attacker->s.eType != ET_PLAYER ) ) &&
 	     ( client && ( client->lastSentFlying > -1 ) ) &&
 	     ( ( mod == MOD_FALLING /* just in case */ ) || ( mod == MOD_LAVA ) || ( mod == MOD_SLIME ) || ( mod == MOD_TRIGGER_HURT ) || ( mod == MOD_SUICIDE ) ) )  {
 			// FIXME: Magical constant
@@ -1011,7 +1011,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	// See if it's the player hurting the emeny flag carrier
 #ifdef MISSIONPACK
 	if( g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF ) {
-#else	
+#else
 	if( g_gametype.integer == GT_CTF) {
 #endif
 		Team_CheckHurtCarrier(targ, attacker);
@@ -1029,7 +1029,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		if ( targ->client ) {
 			targ->client->ps.stats[STAT_HEALTH] = targ->health;
 		}
-			
+
 		if ( targ->health <= 0 ) {
 			if ( client )
 				targ->flags |= FL_NO_KNOCKBACK;
@@ -1071,7 +1071,7 @@ qboolean CanDamage (gentity_t *targ, vec3_t origin) {
 	if (tr.fraction == 1.0 || tr.entityNum == targ->s.number)
 		return qtrue;
 
-	// this should probably check in the plane of projection, 
+	// this should probably check in the plane of projection,
 	// rather than in world coordinate, and also include Z
 	VectorCopy (midpoint, dest);
 	dest[0] += 15.0;
