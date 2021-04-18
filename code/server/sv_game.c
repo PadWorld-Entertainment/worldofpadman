@@ -800,6 +800,9 @@ intptr_t SV_GameSystemCalls( intptr_t *args ) {
 	case BOTLIB_AI_GENETIC_PARENTS_AND_CHILD_SELECTION:
 		return botlib_export->ai.GeneticParentsAndChildSelection(args[1], VMA(2), VMA(3), VMA(4), VMA(5));
 
+	case BOTLIB_AAS_BESTREACHABLEAREA:
+		return botlib_export->aas.AAS_BestReachableArea(VMA(1), VMA(2), VMA(3), VMA(4));
+
 	case TRAP_MEMSET:
 		Com_Memset( VMA(1), args[2], args[3] );
 		return 0;
