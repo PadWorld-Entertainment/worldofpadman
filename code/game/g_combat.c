@@ -336,21 +336,10 @@ void CheckAlmostCapture( gentity_t *self, gentity_t *attacker ) {
 	if ( self->client->ps.powerups[PW_REDFLAG] ||
 		self->client->ps.powerups[PW_BLUEFLAG] ) {
 		// get the goal flag this player should have been going for
-		if ( g_gametype.integer == GT_CTF ) {
-			if ( self->client->sess.sessionTeam == TEAM_BLUE ) {
-				classname = "team_CTL_bluelolly";
-			}
-			else {
-				classname = "team_CTL_redlolly";
-			}
-		}
-		else {
-			if ( self->client->sess.sessionTeam == TEAM_BLUE ) {
-				classname = "team_CTL_redlolly";
-			}
-			else {
-				classname = "team_CTL_redlolly";
-			}
+		if (self->client->sess.sessionTeam == TEAM_BLUE) {
+			classname = "team_CTL_bluelolly";
+		} else {
+			classname = "team_CTL_redlolly";
 		}
 		ent = NULL;
 		do
