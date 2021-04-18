@@ -1123,8 +1123,8 @@ ifeq ($(USE_CIN_THEORA),1)
   ifeq ($(USE_INTERNAL_THEORA),1)
     CLIENT_CFLAGS += -I$(THEORADIR)/include -I$(THEORADIR)/lib
   else
-    VORBIS_CFLAGS ?= $(shell $(PKG_CONFIG) --silence-errors --cflags theora || true)
-    VORBIS_LIBS ?= $(shell $(PKG_CONFIG) --silence-errors --libs theora || echo -ltheora)
+    THEORA_CFLAGS ?= $(shell $(PKG_CONFIG) --silence-errors --cflags theora || true)
+    THEORA_LIBS ?= $(shell $(PKG_CONFIG) --silence-errors --libs theora || echo -ltheora)
   endif
   CLIENT_CFLAGS += $(THEORA_CFLAGS)
   CLIENT_LIBS += $(THEORA_LIBS)
