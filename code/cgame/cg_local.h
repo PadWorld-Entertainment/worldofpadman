@@ -85,8 +85,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define	DEFAULT_MODEL			"padman"
 #define DEFAULT_HEADMODEL		"padman"
-#define	DEFAULT_TEAM_MODEL		"padgirl"
-#define	DEFAULT_TEAM_HEADMODEL	"padgirl"
+#define	DEFAULT_TEAM_MODEL		"padman"
+#define	DEFAULT_TEAM_HEADMODEL	"padman"
 #define DEFAULT_SKIN			"default"
 #define GLOW_SKIN				"glow"
 
