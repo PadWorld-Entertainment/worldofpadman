@@ -3114,6 +3114,12 @@ dist:
 %-debug: debug
 	cd $(BD) && gdb ./$(@:-debug=)$(FULLBINEXT) -ex run
 
+format-asm format-autoupdater format-botlib format-cgame format-client format-game format-null format-q3_ui format-qcommon format-renderercommon format-renderergl1 format-renderergl2 format-sdl format-server format-sys format-tools format-ui:
+	@find code/$(word 2,$(subst -, ,$@)) -name "*.[ch]" -exec clang-format -i {} \;
+
+format: format-asm format-autoupdater format-botlib format-cgame format-client format-game format-null format-q3_ui format-qcommon format-renderercommon format-renderergl1 format-renderergl2 format-sdl format-server format-sys format-tools format-ui
+
+
 #############################################################################
 # DEPENDENCIES
 #############################################################################
