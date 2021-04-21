@@ -789,20 +789,20 @@ static void Preferences_MenuInit( void ) {
 	Menu_AddItem( &s_preferences.menu, &s_preferences.forcemodel );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.glowmodel );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.glowcolor );
+	Menu_AddItem( &s_preferences.menu, &s_preferences.identifytarget );
 	// page 2
 	Menu_AddItem( &s_preferences.menu, &s_preferences.simpleitems );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.wallmarks );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.dynamiclights );
-	Menu_AddItem( &s_preferences.menu, &s_preferences.identifytarget );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.highqualitysky );
-	Menu_AddItem( &s_preferences.menu, &s_preferences.synceveryframe );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.flares );
+	Menu_AddItem( &s_preferences.menu, &s_preferences.synceveryframe );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.lensFlare );
-	Menu_AddItem( &s_preferences.menu, &s_preferences.whLPS);
 	Menu_AddItem( &s_preferences.menu, &s_preferences.whTeamMates );
-	Menu_AddItem( &s_preferences.menu, &s_preferences.whBalloons );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.whHStations );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.whSycTele );
+	Menu_AddItem( &s_preferences.menu, &s_preferences.whBalloons );
+	Menu_AddItem( &s_preferences.menu, &s_preferences.whLPS);
 	
 	// misc
 	Menu_AddItem( &s_preferences.menu, &s_preferences.more );
