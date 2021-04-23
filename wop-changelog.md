@@ -6,6 +6,8 @@
 
 - ADDED
 	- 64bit binaries for Windows
+	- server password ui
+	- added support for png images
 - CHANGED
 	- restored `^` as additional default console key (can be changed via `cl_consoleKeys`)
  	- increased `com_maxfps` clamp range and set default value to `125`
@@ -14,6 +16,7 @@
 - FIXED
 	- demo_protocols include current PROTOCOL_VERSION 71 now to make demo ui work
 	- drop shadow distance for the engine to improve the readability of text
+	- selection order in options menu
 
 ## 2011-12-17 - VERSION: 1.6
 
