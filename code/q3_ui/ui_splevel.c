@@ -138,10 +138,10 @@ static void PlayerIcon( const char *modelAndSkin, char *iconName, int iconNameMa
 		skin = "default";
 	}
 
-	Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_%s.tga", model, skin );
+	Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_%s", model, skin );
 
 	if( !trap_R_RegisterShaderNoMip( iconName ) && Q_stricmp( skin, "default" ) != 0 ) {
-		Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_default.tga", model );
+		Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_default", model );
 	}
 }
 
@@ -236,7 +236,7 @@ static void UI_SPLevelMenu_SetMenuArena( int n, int level, const char *arenaInfo
 		levelMenuInfo.levelScores[n] = 8;
 	}
 
-	Com_sprintf( levelMenuInfo.levelPicNames[n], sizeof(levelMenuInfo.levelPicNames[n]), "levelshots/%s.tga", map );
+	Com_sprintf( levelMenuInfo.levelPicNames[n], sizeof(levelMenuInfo.levelPicNames[n]), "levelshots/%s", map );
 	if( !trap_R_RegisterShaderNoMip( levelMenuInfo.levelPicNames[n] ) ) {
 		strcpy( levelMenuInfo.levelPicNames[n], ART_MAP_UNKNOWN );
 	}

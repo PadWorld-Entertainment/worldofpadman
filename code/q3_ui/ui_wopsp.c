@@ -4,14 +4,14 @@
 #include "../game/wopg_spstoryfiles.h"
 #include "../game/wopg_sphandling.h"
 
-#define WSPM_START0		"menu/single/start0.tga"
-#define WSPM_START1		"menu/single/start1.tga"
+#define WSPM_START0		"menu/single/start0"
+#define WSPM_START1		"menu/single/start1"
 
-#define WSPM_CONTINUE0	"menu/single/continue0.tga"
-#define WSPM_CONTINUE1	"menu/single/continue1.tga"
+#define WSPM_CONTINUE0	"menu/single/continue0"
+#define WSPM_CONTINUE1	"menu/single/continue1"
 
-#define WSPM_EXIT0		"menu/single/exit0.tga"
-#define WSPM_EXIT1		"menu/single/exit1.tga"
+#define WSPM_EXIT0		"menu/single/exit0"
+#define WSPM_EXIT1		"menu/single/exit1"
 
 #define MAX_STORYELEMENTS	32
 #define MAX_CURRENTSTORYSTR	128
@@ -266,17 +266,17 @@ void WoPSPMenu_Init() {
 ####################### ####################### #######################
 */
 
-#define WSPC_FORWARD0	"menu/single/continue/forward0.tga"
-#define WSPC_FORWARD1	"menu/single/continue/forward1.tga"
+#define WSPC_FORWARD0	"menu/single/continue/forward0"
+#define WSPC_FORWARD1	"menu/single/continue/forward1"
 
-#define WSPC_BACKWARD0	"menu/single/continue/backward0.tga"
-#define WSPC_BACKWARD1	"menu/single/continue/backward1.tga"
+#define WSPC_BACKWARD0	"menu/single/continue/backward0"
+#define WSPC_BACKWARD1	"menu/single/continue/backward1"
 
-#define WSPC_START0		"menu/single/continue/start0.tga"
-#define WSPC_START1		"menu/single/continue/start1.tga"
+#define WSPC_START0		"menu/single/continue/start0"
+#define WSPC_START1		"menu/single/continue/start1"
 
-#define WSPC_EXIT0		"menu/single/continue/exit0.tga"
-#define WSPC_EXIT1		"menu/single/continue/exit1.tga"
+#define WSPC_EXIT0		"menu/single/continue/exit0"
+#define WSPC_EXIT1		"menu/single/continue/exit1"
 
 typedef struct {
 	menuframework_s	menu;
@@ -426,8 +426,8 @@ void WoPSPContinue_Init(void) {
 	wopSPcontinue.centerSE = wopSPmenu.lastAvailableSE;
 
 	wopSPcontinue.bg					= trap_R_RegisterShaderNoMip("menu/single/continue/background");
-	wopSPcontinue.gateLeft				= trap_R_RegisterShaderNoMip("menu/single/continue/gate_l.tga");
-	wopSPcontinue.gateRight				= trap_R_RegisterShaderNoMip("menu/single/continue/gate_r.tga");
+	wopSPcontinue.gateLeft				= trap_R_RegisterShaderNoMip("menu/single/continue/gate_l");
+	wopSPcontinue.gateRight				= trap_R_RegisterShaderNoMip("menu/single/continue/gate_r");
 	wopSPcontinue.menu.fullscreen		= qtrue;
 	wopSPcontinue.menu.draw				= WoPSPContinue_Draw;
 	wopSPcontinue.menu.noPushSelect		= qtrue;

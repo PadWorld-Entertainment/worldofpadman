@@ -24,12 +24,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define ART_BACK0			"menu/BtnBack0"
 #define ART_BACK1			"menu/BtnBack1"	
-#define ART_FIGHT0			"menu/mods/load0.tga"
-#define ART_FIGHT1			"menu/mods/load1.tga"
-#define ART_ARROWUP0		"menu/mods/arrowup0.tga"
-#define ART_ARROWUP1		"menu/mods/arrowup1.tga"
-#define ART_ARROWDOWN0		"menu/mods/arrowdown0.tga"
-#define ART_ARROWDOWN1		"menu/mods/arrowdown1.tga"
+#define ART_FIGHT0			"menu/mods/load0"
+#define ART_FIGHT1			"menu/mods/load1"
+#define ART_ARROWUP0		"menu/mods/arrowup0"
+#define ART_ARROWUP1		"menu/mods/arrowup1"
+#define ART_ARROWDOWN0		"menu/mods/arrowdown0"
+#define ART_ARROWDOWN1		"menu/mods/arrowdown1"
 
 #define MAX_MODS			64
 #define NAMEBUFSIZE			( MAX_MODS * 48 )

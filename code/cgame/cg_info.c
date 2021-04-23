@@ -123,15 +123,15 @@ void CG_LoadingClient( int clientNum ) {
 			skin = DEFAULT_SKIN;
 		}
 
-		Com_sprintf( iconName, MAX_QPATH, "models/wop_players/%s/icon_%s.tga", model, skin );
-		
+		Com_sprintf( iconName, MAX_QPATH, "models/wop_players/%s/icon_%s", model, skin );
+
 		loadingPlayerIcons[loadingPlayerIconCount] = trap_R_RegisterShaderNoMip( iconName );
 		if ( !loadingPlayerIcons[loadingPlayerIconCount] ) {
-			Com_sprintf( iconName, MAX_QPATH, "models/wop_players/characters/%s/icon_%s.tga", model, skin );
+			Com_sprintf( iconName, MAX_QPATH, "models/wop_players/characters/%s/icon_%s", model, skin );
 			loadingPlayerIcons[loadingPlayerIconCount] = trap_R_RegisterShaderNoMip( iconName );
 		}
 		if ( !loadingPlayerIcons[loadingPlayerIconCount] ) {
-			Com_sprintf( iconName, MAX_QPATH, "models/wop_players/%s/icon_%s.tga", DEFAULT_MODEL, DEFAULT_SKIN );
+			Com_sprintf( iconName, MAX_QPATH, "models/wop_players/%s/icon_%s", DEFAULT_MODEL, DEFAULT_SKIN );
 			loadingPlayerIcons[loadingPlayerIconCount] = trap_R_RegisterShaderNoMip( iconName );
 		}
 		if ( loadingPlayerIcons[loadingPlayerIconCount] ) {
@@ -186,29 +186,29 @@ void CG_DrawInformation( void ) {
 
 	switch ( cgs.gametype ) {
 		case GT_BALLOON:
-			info = "menu/help/loadinghelp_bb.tga";
+			info = "menu/help/loadinghelp_bb";
 			break;
 		case GT_CTF:
-			info = "menu/help/loadinghelp_ctl.tga";
+			info = "menu/help/loadinghelp_ctl";
 			break;
 		case GT_FFA:
-			info = "menu/help/loadinghelp_ffa.tga";
+			info = "menu/help/loadinghelp_ffa";
 			break;
 		case GT_LPS:
-			info = "menu/help/loadinghelp_lps.tga";
+			info = "menu/help/loadinghelp_lps";
 			break;
 		case GT_SPRAYFFA:
-			info = "menu/help/loadinghelp_syc.tga";
+			info = "menu/help/loadinghelp_syc";
 			break;
 		case GT_SPRAY:
-			info = "menu/help/loadinghelp_teamsyc.tga";
+			info = "menu/help/loadinghelp_teamsyc";
 			break;
 		case GT_TEAM:
-			info = "menu/help/loadinghelp_teamffa.tga";
+			info = "menu/help/loadinghelp_teamffa";
 			break;
 
 		default:
-			info = "menu/help/loadinghelp_ffa.tga";
+			info = "menu/help/loadinghelp_ffa";
 			break;
 	}
 

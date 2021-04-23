@@ -32,9 +32,9 @@ CD KEY MENU
 #include "ui_local.h"
 
 
-#define ART_FRAME		"cdkey.tga"
+#define ART_FRAME		"cdkey"
 #define ART_ACCEPT0		"menu/system/accept"
-#define ART_ACCEPT1		"menu/system/accept"	
+#define ART_ACCEPT1		"menu/system/accept"
 #define ART_BACK0		"menu/BtnBack0"
 #define ART_BACK1		"menu/BtnBack1"
 

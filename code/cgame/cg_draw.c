@@ -2242,7 +2242,7 @@ static void CG_DrawDisconnect( void ) {
 
 	y = 480 - 48;
 
-	CG_DrawPic( x, y, 48, 48, trap_R_RegisterShader("gfx/2d/net.tga" ) );
+	CG_DrawPic( x, y, 48, 48, trap_R_RegisterShader("gfx/2d/net" ) );
 }
 
 

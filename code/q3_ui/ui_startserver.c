@@ -952,7 +952,7 @@ void StartServer_Cache( void )
 	trap_R_RegisterShaderNoMip( GAMESERVER_UNKNOWNMAP );
 
 	for(i=0;i<10;i++)
-		s_startserver.mapNumbers[i] = trap_R_RegisterShaderNoMip(va("menu/startserver/%i.tga",i));
+		s_startserver.mapNumbers[i] = trap_R_RegisterShaderNoMip(va("menu/startserver/%i",i));
 
 	s_startserver.nummaps = UI_GetNumArenas();
 
@@ -1097,10 +1097,10 @@ static void ServerPlayerIcon( const char *modelAndSkin, char *iconName, int icon
 		skin = "default";
 	}
 
-	Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_%s.tga", model, skin );
+	Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_%s", model, skin );
 
 	if( !trap_R_RegisterShaderNoMip( iconName ) && Q_stricmp( skin, "default" ) != 0 ) {
-		Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_default.tga", model );
+		Com_sprintf(iconName, iconNameMaxSize, "models/wop_players/%s/icon_default", model );
 	}
 }
 
@@ -1533,7 +1533,7 @@ static void UI_BotSelectMenu_DrawBotIcon(void* self)
 		if (!(Menu_ItemAtCursor( b->generic.parent ) == b))
 		{
 	//		UI_DrawHandlePic( x, y, w, h, b->focusshader );
-			UI_DrawNamedPic(x,y,w+8,h+8,"menu/player/micon_shadow.tga");
+			UI_DrawNamedPic(x,y,w+8,h+8,"menu/player/micon_shadow");
 		}
 
 		UI_DrawHandlePic( x, y, w, h, b->shader );
@@ -1655,8 +1655,8 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.arrowup.y					= y;//480-(10*MAX_SELECTLISTBOTS)-20;
 	botSelectInfo.arrowup.w					= 38;
 	botSelectInfo.arrowup.h					= 100;
-	botSelectInfo.arrowup.shader			= trap_R_RegisterShaderNoMip("menu/server/arrowup0.tga");
-	botSelectInfo.arrowup.mouseovershader	= trap_R_RegisterShaderNoMip("menu/server/arrowup1.tga");
+	botSelectInfo.arrowup.shader			= trap_R_RegisterShaderNoMip("menu/server/arrowup0");
+	botSelectInfo.arrowup.mouseovershader	= trap_R_RegisterShaderNoMip("menu/server/arrowup1");
 	botSelectInfo.arrowup.generic.callback	= UI_BotSelectMenu_ListUp;
 
 	botSelectInfo.arrowdown.generic.type	= MTYPE_BITMAP1024S;
@@ -1664,8 +1664,8 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.arrowdown.y				= y+(25.6f*MAX_SELECTLISTBOTS)-99;//480+20;
 	botSelectInfo.arrowdown.w				= 38;
 	botSelectInfo.arrowdown.h				= 99;
-	botSelectInfo.arrowdown.shader			= trap_R_RegisterShaderNoMip("menu/server/arrowdown0.tga");
-	botSelectInfo.arrowdown.mouseovershader	= trap_R_RegisterShaderNoMip("menu/server/arrowdown1.tga");
+	botSelectInfo.arrowdown.shader			= trap_R_RegisterShaderNoMip("menu/server/arrowdown0");
+	botSelectInfo.arrowdown.mouseovershader	= trap_R_RegisterShaderNoMip("menu/server/arrowdown1");
 	botSelectInfo.arrowdown.generic.callback= UI_BotSelectMenu_ListDown;
 
 	botSelectInfo.BotSkill.generic.type		= MTYPE_SPINCONTROL;

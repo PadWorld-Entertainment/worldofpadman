@@ -33,13 +33,13 @@ DEMOS MENU
 
 
 #define ART_BACK0			"menu/BtnBack0"
-#define ART_BACK1			"menu/BtnBack1"	
+#define ART_BACK1			"menu/BtnBack1"
 #define ART_GO0				"menu/demo/play0"
 #define ART_GO1				"menu/demo/play1"
-#define ART_ARROWUP0		"menu/demo/arrowup0.tga"
-#define ART_ARROWUP1		"menu/demo/arrowup1.tga"
-#define ART_ARROWDOWN0		"menu/demo/arrowdown0.tga"
-#define ART_ARROWDOWN1		"menu/demo/arrowdown1.tga"
+#define ART_ARROWUP0		"menu/demo/arrowup0"
+#define ART_ARROWUP1		"menu/demo/arrowup1"
+#define ART_ARROWDOWN0		"menu/demo/arrowdown0"
+#define ART_ARROWDOWN1		"menu/demo/arrowdown1"
 
 #define MAX_DEMOS			1024
 #define NAMEBUFSIZE			( MAX_DEMOS * 32 )

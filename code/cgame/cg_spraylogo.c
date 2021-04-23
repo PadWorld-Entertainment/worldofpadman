@@ -229,10 +229,10 @@ void Init_SprayLogoSys(void)
 {
 	cgs.media.spraypuff			= trap_R_RegisterShader("weaponeffect/spraypuff");
 	cgs.media.spraymark			= trap_R_RegisterShader("weaponeffect/spraymark");
-	cgs.media.slmenu_arrowr		= trap_R_RegisterShaderNoMip("menu/spraylogo/slmenu_arrowr.tga");
-	cgs.media.slmenu_arrowl		= trap_R_RegisterShaderNoMip("menu/spraylogo/slmenu_arrowl.tga");
+	cgs.media.slmenu_arrowr		= trap_R_RegisterShaderNoMip("menu/spraylogo/slmenu_arrowr");
+	cgs.media.slmenu_arrowl		= trap_R_RegisterShaderNoMip("menu/spraylogo/slmenu_arrowl");
 	cgs.media.cgwopmenu_cursor	= trap_R_RegisterShaderNoMip( "menu/art/3_cursor2" );
-	cgs.media.chooselogo_bg		= trap_R_RegisterShaderNoMip("menu/spraylogo/bg.tga");
+	cgs.media.chooselogo_bg		= trap_R_RegisterShaderNoMip("menu/spraylogo/bg");
 	Load_Logos();
 	Init_LogoPolyList();
 

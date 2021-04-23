@@ -12,10 +12,10 @@ CALL VOTE MENU
 #include "ui_local.h"
 
 
-#define ART_ARROWUP0		"menu/mods/arrowup0.tga"
-#define ART_ARROWUP1		"menu/mods/arrowup1.tga"
-#define ART_ARROWDOWN0		"menu/mods/arrowdown0.tga"
-#define ART_ARROWDOWN1		"menu/mods/arrowdown1.tga"
+#define ART_ARROWUP0		"menu/mods/arrowup0"
+#define ART_ARROWUP1		"menu/mods/arrowup1"
+#define ART_ARROWDOWN0		"menu/mods/arrowdown0"
+#define ART_ARROWDOWN1		"menu/mods/arrowdown1"
 
 #define ID_BACK				10
 #define ID_GO				11

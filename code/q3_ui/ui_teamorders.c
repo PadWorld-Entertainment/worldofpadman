@@ -31,7 +31,7 @@ TEAM ORDERS MENU
 
 #include "ui_local.h"
 
-#define ART_FRAME		"menu/ingame/bg.tga"
+#define ART_FRAME		"menu/ingame/bg"
 
 #define ID_LIST_BOTS		10
 #define ID_LIST_CTF_ORDERS	11

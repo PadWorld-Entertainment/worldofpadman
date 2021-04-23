@@ -580,7 +580,9 @@ static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelN
 	}
 
 
-	if ( CG_FindClientHeadFile( filename, sizeof( filename ), ci, NULL, headModelName, headSkinName, "icon", "tga" ) ) {
+	if ( CG_FindClientHeadFile( filename, sizeof( filename ), ci, NULL, headModelName, headSkinName, "icon", "png" ) ) {
+		ci->modelIcon = trap_R_RegisterShaderNoMip( filename );
+	} else if ( CG_FindClientHeadFile( filename, sizeof( filename ), ci, NULL, headModelName, headSkinName, "icon", "tga" ) ) {
 		ci->modelIcon = trap_R_RegisterShaderNoMip( filename );
 	}
 	else if ( CG_FindClientHeadFile( filename, sizeof( filename ), ci, NULL, headModelName, headSkinName, "icon", "skin" ) ) {

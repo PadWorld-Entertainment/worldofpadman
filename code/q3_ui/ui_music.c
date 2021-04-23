@@ -29,7 +29,7 @@
 
 #include "ui_local.h"
 
-#define MUSIC_BG_ARM "wopmusic/bg_arm.tga"
+#define MUSIC_BG_ARM "wopmusic/bg_arm"
 
 #define MAX_TRACKS			15
 #define MAX_ALBUMS			10
