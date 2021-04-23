@@ -4188,28 +4188,30 @@ void	FS_Flush( fileHandle_t f ) {
 	fflush(fsh[f].handleFiles.file.o);
 }
 
-void	FS_FilenameCompletion( const char *dir, const char *ext,
-		qboolean stripExt, void(*callback)(const char *s), qboolean allowNonPureFilesOnDisk ) {
-	char	**filenames;
-	int		nfiles;
-	int		i;
-	char	filename[ MAX_STRING_CHARS ];
+void FS_FilenameCompletion(const char *dir, const char **ext, int cnt, qboolean stripExt,
+						   void (*callback)(const char *s), qboolean allowNonPureFilesOnDisk) {
+	char **filenames;
+	int nfiles;
+	int j, i;
+	char filename[MAX_STRING_CHARS];
 
-	filenames = FS_ListFilteredFiles( dir, ext, NULL, &nfiles, allowNonPureFilesOnDisk );
+	for (i = 0; i < cnt; i++) {
+		filenames = FS_ListFilteredFiles(dir, ext[i], NULL, &nfiles, allowNonPureFilesOnDisk);
 
-	FS_SortFileList( filenames, nfiles );
+		FS_SortFileList(filenames, nfiles);
 
-	for( i = 0; i < nfiles; i++ ) {
-		FS_ConvertPath( filenames[ i ] );
-		Q_strncpyz( filename, filenames[ i ], MAX_STRING_CHARS );
+		for (j = 0; j < nfiles; j++) {
+			FS_ConvertPath(filenames[j]);
+			Q_strncpyz(filename, filenames[j], MAX_STRING_CHARS);
 
-		if( stripExt ) {
-			COM_StripExtension(filename, filename, sizeof(filename));
+			if (stripExt) {
+				COM_StripExtension(filename, filename, sizeof(filename));
+			}
+
+			callback(filename);
 		}
-
-		callback( filename );
+		FS_FreeFileList(filenames);
 	}
-	FS_FreeFileList( filenames );
 }
 
 const char *FS_GetCurrentGameDir(void)

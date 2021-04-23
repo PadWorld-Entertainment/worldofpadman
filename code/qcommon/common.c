@@ -3432,6 +3432,19 @@ void Field_CompleteKeyname( void )
 }
 #endif
 
+void Field_CompleteFilenameMultiple(const char *dir, const char **ext, int cnt, qboolean allowNonPureFilesOnDisk)
+{
+	matchCount       = 0;
+	shortestMatch[0] = 0;
+
+	FS_FilenameCompletion(dir, ext, cnt, qfalse, FindMatches, allowNonPureFilesOnDisk);
+
+	if (!Field_Complete())
+	{
+		FS_FilenameCompletion(dir, ext, cnt, qfalse, PrintMatches, allowNonPureFilesOnDisk);
+	}
+}
+
 /*
 ===============
 Field_CompleteFilename
@@ -3443,10 +3456,10 @@ void Field_CompleteFilename( const char *dir,
 	matchCount = 0;
 	shortestMatch[ 0 ] = 0;
 
-	FS_FilenameCompletion( dir, ext, stripExt, FindMatches, allowNonPureFilesOnDisk );
+	FS_FilenameCompletion( dir, &ext, 1, stripExt, FindMatches, allowNonPureFilesOnDisk );
 
 	if( !Field_Complete( ) )
-		FS_FilenameCompletion( dir, ext, stripExt, PrintMatches, allowNonPureFilesOnDisk );
+		FS_FilenameCompletion( dir, &ext, 1, stripExt, PrintMatches, allowNonPureFilesOnDisk );
 }
 
 /*
