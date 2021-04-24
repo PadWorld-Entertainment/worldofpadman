@@ -963,7 +963,7 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		verts[3].st[0]=0;
 		verts[3].st[1]=1;
 
-		memset(skyangles,'0',sizeof(vec3_t));
+		memset(skyangles, 0, sizeof(vec3_t));
 		skyangles[0]=cg.wopSky_Angles[0]*sin(cg.time*0.0001f*cg.wopSky_TimeFactors[0]);
 		skyangles[1]=cg.wopSky_Angles[1]*sin(cg.time*0.0001f*cg.wopSky_TimeFactors[1]);
 		skyangles[2]=cg.wopSky_Angles[2]*sin(cg.time*0.0001f*cg.wopSky_TimeFactors[2]);
