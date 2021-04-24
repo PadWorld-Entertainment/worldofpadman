@@ -3286,7 +3286,6 @@ static bind_t g_bindings[] =
 
 static const int g_bindCount = ARRAY_LEN(g_bindings);
 
-#ifndef MISSIONPACK
 static configcvar_t g_configcvars[] =
 {
 	{"cl_run",			0,					0},
@@ -3299,7 +3298,6 @@ static configcvar_t g_configcvars[] =
 	{"cl_freelook",		0,					0},
 	{NULL,				0,					0}
 };
-#endif
 
 /*
 =================
@@ -5920,11 +5918,6 @@ displayContextDef_t *Display_GetContext(void) {
 	return DC;
 }
  
-#ifndef MISSIONPACK
-static float captureX;
-static float captureY;
-#endif
-
 void *Display_CaptureItem(int x, int y) {
 	int i;
 

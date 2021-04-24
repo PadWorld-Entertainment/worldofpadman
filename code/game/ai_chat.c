@@ -52,11 +52,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "syn.h"				//synonyms
 #include "match.h"				//string matching types and vars
 
-// for the voice chats
-#ifdef MISSIONPACK
-#include "../../ui/menudef.h"
-#endif
-
 #define TIME_BETWEENCHATTING	25
 
 
@@ -281,13 +276,8 @@ BotRandomWeaponName
 char *BotRandomWeaponName(void) {
 	int rnd;
 
-#ifdef MISSIONPACK
-	rnd = random() * 11.9;
-#else
 	rnd = random() * 8.9;
-#endif
 	switch(rnd) {
-
 		case 0: return "PUNCHY";
 		case 1: return "PUMPER";
 		case 2: return "NiPPER";
@@ -455,9 +445,6 @@ int BotChat_StartLevel(bot_state_t *bs) {
 	if (bs->lastchat_time > FloatTime() - TIME_BETWEENCHATTING) return qfalse;
 	//don't chat in teamplay
 	if (TeamPlayIsOn()) {
-#ifdef MISSIONPACK
-	    trap_EA_Command(bs->client, "vtaunt");
-#endif
 	    return qfalse;
 	}
 	// don't chat in tournament mode
@@ -588,10 +575,6 @@ int BotChat_Death(bot_state_t *bs) {
 			BotAI_BotInitialChat(bs, "death_suicide", BotRandomOpponentName(bs), NULL);
 		else if (bs->botdeathtype == MOD_TELEFRAG)
 			BotAI_BotInitialChat(bs, "death_telefrag", name, NULL);
-#ifdef MISSIONPACK
-		else if (bs->botdeathtype == MOD_KAMIKAZE && trap_BotNumInitialChats(bs->cs, "death_kamikaze"))
-			BotAI_BotInitialChat(bs, "death_kamikaze", name, NULL);
-#endif
 		else {
 			if ((bs->botdeathtype == MOD_PUNCHY ||
 				bs->botdeathtype == MOD_SPLASHER ||
@@ -669,9 +652,6 @@ int BotChat_Kill(bot_state_t *bs) {
 	{
 		//don't chat in teamplay
 		if (TeamPlayIsOn()) {
-#ifdef MISSIONPACK
-			trap_EA_Command(bs->client, "vtaunt");
-#endif
 			return qfalse;			// don't wait
 		}
 		//
@@ -684,10 +664,6 @@ int BotChat_Kill(bot_state_t *bs) {
 		else if (bs->enemydeathtype == MOD_TELEFRAG) {
 			BotAI_BotInitialChat(bs, "kill_telefrag", name, NULL);
 		}
-#ifdef MISSIONPACK
-		else if (bs->botdeathtype == MOD_KAMIKAZE && trap_BotNumInitialChats(bs->cs, "kill_kamikaze"))
-			BotAI_BotInitialChat(bs, "kill_kamikaze", name, NULL);
-#endif
 		//choose between insult and praise
 		else if (random() < trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CHAT_INSULT, 0, 1)) {
 			BotAI_BotInitialChat(bs, "kill_insult", name, NULL);
@@ -900,9 +876,6 @@ int BotChat_Random(bot_state_t *bs) {
 		EasyClientName(bs->lastkilledplayer, name, sizeof(name));
 	}
 	if (TeamPlayIsOn()) {
-#ifdef MISSIONPACK
-		trap_EA_Command(bs->client, "vtaunt");
-#endif
 		return qfalse;			// don't wait
 	}
 	//

@@ -536,22 +536,6 @@ static void PM_WaterMove( void ) {
 	PM_SlideMove( qfalse );
 }
 
-#ifdef MISSIONPACK
-/*
-===================
-PM_InvulnerabilityMove
-
-Only with the invulnerability powerup
-===================
-*/
-static void PM_InvulnerabilityMove( void ) {
-	pm->cmd.forwardmove = 0;
-	pm->cmd.rightmove = 0;
-	pm->cmd.upmove = 0;
-	VectorClear(pm->ps->velocity);
-}
-#endif
-
 /*
 ===================
 PM_FlyMove
@@ -1859,38 +1843,6 @@ static void PM_Animate( void ) {
 			pm->ps->torsoTimer = TIMER_GESTURE;
 			PM_AddEvent( EV_TAUNT );
 		}
-#ifdef MISSIONPACK
-	} else if ( pm->cmd.buttons & BUTTON_GETFLAG ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_GETFLAG );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_GUARDBASE ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_GUARDBASE );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_PATROL ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_PATROL );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_FOLLOWME ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_FOLLOWME );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_AFFIRMATIVE ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_AFFIRMATIVE);
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-	} else if ( pm->cmd.buttons & BUTTON_NEGATIVE ) {
-		if ( pm->ps->torsoTimer == 0 ) {
-			PM_StartTorsoAnim( TORSO_NEGATIVE );
-			pm->ps->torsoTimer = 600;	//TIMER_GESTURE;
-		}
-#endif
 	}
 }
 

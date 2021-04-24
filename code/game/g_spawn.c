@@ -277,11 +277,6 @@ spawn_t	spawns[] = {
 	{"team_redspawn", SP_team_CTF_redspawn},
 	{"team_bluespawn", SP_team_CTF_bluespawn},
 
-#ifdef MISSIONPACK
-	{"team_redobelisk", SP_team_redobelisk},
-	{"team_blueobelisk", SP_team_blueobelisk},
-	{"team_neutralobelisk", SP_team_neutralobelisk},
-#endif
 	{"item_botroam", SP_item_botroam},
 
 	{NULL, 0}

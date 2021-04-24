@@ -96,18 +96,6 @@ void BotPrintTeamGoal(bot_state_t *bs) {
 			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna try to return the flag for %1.0f secs\n", netname, t);
 			break;
 		}
-#ifdef MISSIONPACK
-		case LTG_ATTACKENEMYBASE:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna attack the enemy base for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_HARVEST:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna harvest for %1.0f secs\n", netname, t);
-			break;
-		}
-#endif
 		case LTG_DEFENDKEYAREA:
 		{
 			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna defend a key area for %1.0f secs\n", netname, t);

@@ -316,12 +316,6 @@ int Pickup_Health (gentity_t *ent, gentity_t *other) {
 	int			quantity;
 
 	// small and mega healths will go over the max
-#ifdef MISSIONPACK
-	if( bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
-		max = other->client->ps.stats[STAT_MAX_HEALTH];
-	}
-	else
-#endif
 	if ( ent->item->quantity != 5 && ent->item->quantity != 100 ) {
 		max = other->client->ps.stats[STAT_MAX_HEALTH];
 	} else {
@@ -351,27 +345,10 @@ int Pickup_Health (gentity_t *ent, gentity_t *other) {
 //======================================================================
 
 int Pickup_Armor( gentity_t *ent, gentity_t *other ) {
-#ifdef MISSIONPACK
-	int		upperBound;
-
-	other->client->ps.stats[STAT_ARMOR] += ent->item->quantity;
-
-	if( other->client && bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
-		upperBound = other->client->ps.stats[STAT_MAX_HEALTH];
-	}
-	else {
-		upperBound = other->client->ps.stats[STAT_MAX_HEALTH] * 2;
-	}
-
-	if ( other->client->ps.stats[STAT_ARMOR] > upperBound ) {
-		other->client->ps.stats[STAT_ARMOR] = upperBound;
-	}
-#else
 	other->client->ps.stats[STAT_ARMOR] += ent->item->quantity;
 	if ( other->client->ps.stats[STAT_ARMOR] > other->client->ps.stats[STAT_MAX_HEALTH] * 2 ) {
 		other->client->ps.stats[STAT_ARMOR] = other->client->ps.stats[STAT_MAX_HEALTH] * 2;
 	}
-#endif
 
 	return RESPAWN_ARMOR;
 }
@@ -419,8 +396,6 @@ void RespawnItem( gentity_t *ent ) {
 	{
 		if ( !ent->teammaster )
 			G_Error( "RespawnItem: bad teammaster");
-
-
 	}
 
 	ent->r.contents = CONTENTS_TRIGGER;
@@ -493,11 +468,6 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		respawn = Pickup_Powerup(ent, other);
 		predict = qfalse;
 		break;
-#ifdef MISSIONPACK
-	case IT_PERSISTANT_POWERUP:
-		respawn = Pickup_PersistantPowerup(ent, other);
-		break;
-#endif
 	case IT_TEAM:
 		respawn = Pickup_Team(ent, other);
 		break;
@@ -783,65 +753,6 @@ void G_CheckTeamItems( void ) {
 			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTL_bluelolly in map" );
 		}
 	}
-#ifdef MISSIONPACK
-	if( g_gametype.integer == GT_1FCTF ) {
-		gitem_t	*item;
-
-		// check for all three flags
-		item = BG_FindItem( "Red Flag" );
-		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTF_redflag in map\n" );
-		}
-		item = BG_FindItem( "Blue Flag" );
-		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTF_blueflag in map\n" );
-		}
-		item = BG_FindItem( "Neutral Flag" );
-		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_CTF_neutralflag in map\n" );
-		}
-	}
-
-	if( g_gametype.integer == GT_OBELISK ) {
-		gentity_t	*ent;
-
-		// check for the two obelisks
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_redobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_redobelisk in map\n" );
-		}
-
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_blueobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_blueobelisk in map\n" );
-		}
-	}
-
-	if( g_gametype.integer == GT_HARVESTER ) {
-		gentity_t	*ent;
-
-		// check for all three obelisks
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_redobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_redobelisk in map\n" );
-		}
-
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_blueobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_blueobelisk in map\n" );
-		}
-
-		ent = NULL;
-		ent = G_Find( ent, FOFS(classname), "team_neutralobelisk" );
-		if( !ent ) {
-			G_Printf( S_COLOR_YELLOW "WARNING: No team_neutralobelisk in map\n" );
-		}
-	}
-#endif
 }
 
 /*
@@ -949,12 +860,6 @@ void G_SpawnItem (gentity_t *ent, gitem_t *item) {
 		G_SoundIndex( "sounds/items/powerup_respawn" );
 		G_SpawnFloat( "noglobalsound", "0", &ent->speed);
 	}
-
-#ifdef MISSIONPACK
-	if ( item->giType == IT_PERSISTANT_POWERUP ) {
-		ent->s.generic1 = ent->spawnflags;
-	}
-#endif
 }
 
 

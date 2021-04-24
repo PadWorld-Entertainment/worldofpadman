@@ -109,7 +109,6 @@ Makefile.local:
   BUILD_SERVER         - build the 'ioq3ded' server binary
   BUILD_CLIENT         - build the 'ioquake3' client binary
   BUILD_BASEGAME       - build the 'baseq3' binaries
-  BUILD_MISSIONPACK    - build the 'missionpack' binaries
   BUILD_GAME_SO        - build the game shared libraries
   BUILD_GAME_QVM       - build the game qvms
   BUILD_STANDALONE     - build binaries suited for stand-alone games
@@ -119,8 +118,6 @@ Makefile.local:
   USE_YACC             - use yacc to update code/tools/lcc/lburg/gram.c
   BASEGAME             - rename 'baseq3'
   BASEGAME_CFLAGS      - custom CFLAGS for basegame
-  MISSIONPACK          - rename 'missionpack'
-  MISSIONPACK_CFLAGS   - custom CFLAGS for missionpack (default '-DMISSIONPACK')
   USE_OPENAL           - use OpenAL where available
   USE_OPENAL_DLOPEN    - link with OpenAL at runtime
   USE_CURL             - use libcurl for http/ftp download support

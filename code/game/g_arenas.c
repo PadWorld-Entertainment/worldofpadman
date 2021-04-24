@@ -42,10 +42,6 @@ void UpdateTournamentInfo( void ) {
 	gentity_t	*player;
 	int			playerClientNum;
 	int			n, accuracy, perfect,	msglen;
-#ifdef MISSIONPACK
-  int score1, score2;
-	qboolean won;
-#endif
 	char		buf[32];
 	char		msg[MAX_STRING_CHARS];
 
@@ -69,11 +65,7 @@ void UpdateTournamentInfo( void ) {
 	CalculateRanks();
 
 	if ( level.clients[playerClientNum].sess.sessionTeam == TEAM_SPECTATOR ) {
-#ifdef MISSIONPACK
-		Com_sprintf( msg, sizeof(msg), "postgame %i %i 0 0 0 0 0 0 0 0 0 0 0", level.numNonSpectatorClients, playerClientNum );
-#else
 		Com_sprintf( msg, sizeof(msg), "postgame %i %i 0 0 0 0 0 0", level.numNonSpectatorClients, playerClientNum );
-#endif
 	}
 	else {
 		if( player->client->accuracy_shots ) {

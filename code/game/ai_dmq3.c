@@ -4090,9 +4090,6 @@ BotCheckEvents
 void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 	int event;
 	char buf[128];
-#ifdef MISSIONPACK
-	aas_entityinfo_t entinfo;
-#endif
 
 	//NOTE: this sucks, we're accessing the gentity_t directly
 	//but there's no other fast way to do it right now
@@ -4311,13 +4308,6 @@ void BotCheckSnapshot(bot_state_t *bs) {
 		BotCheckEvents(bs, &state);
 		//check for grenades the bot should avoid
 		BotCheckForGrenades(bs, &state);
-		//
-#ifdef MISSIONPACK
-		//check for proximity mines which the bot should deactivate
-		BotCheckForProxMines(bs, &state);
-		//check for dead bodies with the kamikaze effect which should be gibbed
-		BotCheckForKamikazeBody(bs, &state);
-#endif
 	}
 	//check the player state for events
 	BotAI_GetEntityState(bs->client, &state);
