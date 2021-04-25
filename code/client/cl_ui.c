@@ -632,50 +632,6 @@ static void Key_GetBindingBuf( int keynum, char *buf, int buflen ) {
 	}
 }
 
-/*
-====================
-CLUI_GetCDKey
-====================
-*/
-static void CLUI_GetCDKey( char *buf, int buflen ) {
-#ifndef STANDALONE
-	const char *gamedir;
-	gamedir = Cvar_VariableString( "fs_game" );
-	if (UI_usesUniqueCDKey() && gamedir[0] != 0) {
-		Com_Memcpy( buf, &cl_cdkey[16], 16);
-		buf[16] = 0;
-	} else {
-		Com_Memcpy( buf, cl_cdkey, 16);
-		buf[16] = 0;
-	}
-#else
-	*buf = 0;
-#endif
-}
-
-
-/*
-====================
-CLUI_SetCDKey
-====================
-*/
-#ifndef STANDALONE
-static void CLUI_SetCDKey( char *buf ) {
-	const char *gamedir;
-	gamedir = Cvar_VariableString( "fs_game" );
-	if (UI_usesUniqueCDKey() && gamedir[0] != 0) {
-		Com_Memcpy( &cl_cdkey[16], buf, 16 );
-		cl_cdkey[32] = 0;
-		// set the flag so the fle will be written at the next opportunity
-		cvar_modifiedFlags |= CVAR_ARCHIVE;
-	} else {
-		Com_Memcpy( cl_cdkey, buf, 16 );
-		// set the flag so the fle will be written at the next opportunity
-		cvar_modifiedFlags |= CVAR_ARCHIVE;
-	}
-}
-#endif
-
 static float CLUI_GetVoiceGain(const int id)
 {
 	if(id<0 || id>= MAX_CLIENTS)
@@ -719,7 +675,7 @@ static int GetConfigString(int index, char *buf, int size)
 	}
 
 	Q_strncpyz( buf, cl.gameState.stringData+offset, size);
- 
+
 	return qtrue;
 }
 
@@ -755,7 +711,7 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 		return Sys_Milliseconds();
 
 	case UI_CVAR_REGISTER:
-		Cvar_Register( VMA(1), VMA(2), VMA(3), args[4] ); 
+		Cvar_Register( VMA(1), VMA(2), VMA(3), args[4] );
 		return 0;
 
 	case UI_CVAR_UPDATE:
@@ -828,7 +784,7 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 
 	case UI_FS_SEEK:
 		return FS_Seek( args[1], args[2], args[3] );
-	
+
 	case UI_R_REGISTERMODEL:
 		return re.RegisterModel( VMA(1) );
 
@@ -925,7 +881,7 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 
 	case UI_GETCLIENTSTATE:
 		GetClientState( VMA(1) );
-		return 0;		
+		return 0;
 
 	case UI_GETGLCONFIG:
 		CL_GetGlconfig( VMA(1) );
@@ -1002,17 +958,9 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 		return Hunk_MemoryRemaining();
 
 	case UI_GET_CDKEY:
-		CLUI_GetCDKey( VMA(1), args[2] );
-		return 0;
-
 	case UI_SET_CDKEY:
-#ifndef STANDALONE
-		CLUI_SetCDKey( VMA(1) );
-#endif
-		return 0;
-	
 	case UI_SET_PBCLSTATUS:
-		return 0;	
+		return 0;
 
 	case UI_R_REGISTERFONT:
 		re.RegisterFont( VMA(1), args[2], VMA(3));
@@ -1101,8 +1049,8 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 		return 0;
 
 	case UI_VERIFY_CDKEY:
-		return CL_CDKeyValidate(VMA(1), VMA(2));
-		
+		return qtrue;
+
 	default:
 		Com_Error( ERR_DROP, "Bad UI system trap: %ld", (long int) args[0] );
 
@@ -1172,16 +1120,6 @@ void CL_InitUI( void ) {
 		VM_Call( uivm, UI_INIT, (clc.state >= CA_AUTHORIZING && clc.state < CA_ACTIVE) );
 	}
 }
-
-#ifndef STANDALONE
-qboolean UI_usesUniqueCDKey( void ) {
-	if (uivm) {
-		return (VM_Call( uivm, UI_HASUNIQUECDKEY) == qtrue);
-	} else {
-		return qfalse;
-	}
-}
-#endif
 
 /*
 ====================

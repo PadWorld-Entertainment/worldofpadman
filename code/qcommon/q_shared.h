@@ -35,44 +35,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // NOTE: that stuff only works with two digits protocols
 extern int demo_protocols[];
 
-#ifdef STANDALONE
-  #define PRODUCT_NAME                 "wop"
-  #define PRODUCT_TITLE                "WoP"
-  #define BASEGAME                     "wop"                   // TODO: Use this in Makefile
-  #define CLIENT_WINDOW_TITLE          "World of Padman"
-  #define CLIENT_WINDOW_MIN_TITLE      PRODUCT_TITLE
-  #define PRODUCT_BASE                 "ioq3 05180e3"
-  #define PRODUCT_RELEASE              "dev"                   // "beta x" "final"/""
+#define PRODUCT_NAME                 "wop"
+#define PRODUCT_TITLE                "WoP"
+#define BASEGAME                     "wop"                   // TODO: Use this in Makefile
+#define CLIENT_WINDOW_TITLE          "World of Padman"
+#define CLIENT_WINDOW_MIN_TITLE      PRODUCT_TITLE
+#define PRODUCT_BASE                 "ioq3 05180e3"
+#define PRODUCT_RELEASE              "dev"                   // "beta x" "final"/""
 
-  #define VERSION_INFO                 PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
-  #define HOMEPATH_NAME_UNIX           ".padman"
-  #define HOMEPATH_NAME_WIN            "Padman"
-  #define HOMEPATH_NAME_MACOSX         "WorldOfPadman"
-//  #define STEAMPATH_NAME               ""
-//  #define STEAMPATH_APPID              ""
-//  #define GOGPATH_ID                   ""
-  #define GAMENAME_FOR_MASTER          "WorldofPadman"
-  #define CINEMATICS_LOGO		"idlogo.ogm"
-  #define CINEMATICS_INTRO		"intro.ogm"
-//  #define LEGACY_PROTOCOL
-#else
-  #define PRODUCT_NAME                 "ioq3"
-  #define BASEGAME                     "baseq3"
-  #define CLIENT_WINDOW_TITLE          "ioquake3"
-  #define CLIENT_WINDOW_MIN_TITLE      "ioq3"
-  #define PRODUCT_BASE                 "ioq3 r2140M"
-  #define PRODUCT_RELEASE              ""                      // "beta x" "final"/""
-  #define HOMEPATH_NAME_UNIX           ".q3a"
-  #define HOMEPATH_NAME_WIN            "Quake3"
-  #define HOMEPATH_NAME_MACOSX         HOMEPATH_NAME_WIN
-  #define STEAMPATH_NAME               "Quake 3 Arena"
-  #define STEAMPATH_APPID              "2200"
-  #define GOGPATH_ID                   "1441704920"
-  #define GAMENAME_FOR_MASTER          "Quake3Arena"
-  #define CINEMATICS_LOGO              "idlogo.RoQ"
-  #define CINEMATICS_INTRO             "intro.RoQ"
-  #define LEGACY_PROTOCOL
-#endif
+#define VERSION_INFO                 PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
+#define HOMEPATH_NAME_UNIX           ".padman"
+#define HOMEPATH_NAME_WIN            "Padman"
+#define HOMEPATH_NAME_MACOSX         "WorldOfPadman"
+//#define STEAMPATH_NAME               ""
+//#define STEAMPATH_APPID              ""
+//#define GOGPATH_ID                   ""
+#define GAMENAME_FOR_MASTER          "WorldofPadman"
+#define CINEMATICS_LOGO		"idlogo.ogm"
+#define CINEMATICS_INTRO		"intro.ogm"
 
 // Heartbeat for dpmaster protocol. You shouldn't change this unless you know what you're doing
 #define HEARTBEAT_FOR_MASTER		"DarkPlaces"
@@ -81,8 +61,6 @@ extern int demo_protocols[];
 // You shouldn't change this unless you know what you're doing
 #define LEGACY_MASTER_GAMENAME         "Quake3Arena"
 #define LEGACY_HEARTBEAT_FOR_MASTER    "QuakeArena-1"
-
-#define BASETA				"missionpack"
 
 #ifndef PRODUCT_VERSION
   // TODO: Sync with Makefile!

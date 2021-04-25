@@ -8,7 +8,6 @@
 !define PUBLISHER "The ioquake3 Team"
 !define URL "http://ioquake3.org/"
 ; uncomment if the mod works without baseq3
-;!define STANDALONE
 
 !define MUI_ICON "../quake3.ico"
 
@@ -110,12 +109,7 @@ Section "${NAME}" sec_base
 
   WriteUninstaller "uninstall-${FSNAME}.exe"
 
-!ifdef STANDALONE
-!define ARGS "+set com_basegame ${MODDIR}"
-!else
-!define ARGS "+set fs_game ${MODDIR}"
-!endif
-  CreateShortCut "$SMPROGRAMS\ioquake3\${NAME}.lnk" "$INSTDIR\ioquake3.x86.exe" "${ARGS}" "$INSTDIR\ioquake3.x86.exe" 0 "" "" "${NAME}"
+  CreateShortCut "$SMPROGRAMS\ioquake3\${NAME}.lnk" "$INSTDIR\ioquake3.x86.exe" "" "$INSTDIR\ioquake3.x86.exe" 0 "" "" "${NAME}"
 
 SectionEnd
 
@@ -126,7 +120,7 @@ Section "Uninstall"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\${MODDIR}\*
-  
+
   Delete $INSTDIR\uninstall-${FSNAME}.exe
 
   ; Remove shortcuts, if any

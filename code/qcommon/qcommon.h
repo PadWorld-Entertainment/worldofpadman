@@ -231,10 +231,6 @@ typedef struct {
 	int			challenge;
 	int		lastSentTime;
 	int		lastSentSize;
-
-#ifdef LEGACY_PROTOCOL
-	qboolean	compat;
-#endif
 } netchan_t;
 
 void Netchan_Init( int qport );
@@ -257,21 +253,9 @@ PROTOCOL
 #define PROTOCOL_LEGACY_VERSION	68
 // 1.31 - 67
 
-#if !defined UPDATE_SERVER_NAME && !defined STANDALONE
-#define	UPDATE_SERVER_NAME	"update.quake3arena.com"
-#endif
 // override on command line, config files etc.
 #ifndef MASTER_SERVER_NAME
-#define MASTER_SERVER_NAME	"master.worldofpadman.com" //"master.quake3arena.com"
-#endif
-
-#ifndef STANDALONE
-  #ifndef AUTHORIZE_SERVER_NAME
-    #define	AUTHORIZE_SERVER_NAME	"authorize.quake3arena.com"
-  #endif
-  #ifndef PORT_AUTHORIZE
-  #define	PORT_AUTHORIZE		27952
-  #endif
+#define MASTER_SERVER_NAME	"master.worldofpadman.com"
 #endif
 
 #define	PORT_MASTER			27955	//27950
@@ -591,9 +575,8 @@ issues.
 #define FS_GENERAL_REF	0x01
 #define FS_UI_REF		0x02
 #define FS_CGAME_REF	0x04
-// number of id paks that will never be autodownloaded from baseq3/missionpack
+// TODO: mgerhardy - wrong count for wop
 #define NUM_ID_PAKS		9
-#define NUM_TA_PAKS		4
 
 #define	MAX_FILE_HANDLES	64
 
@@ -878,9 +861,6 @@ extern	cvar_t	*sv_packetdelay;
 
 extern	cvar_t	*com_gamename;
 extern	cvar_t	*com_protocol;
-#ifdef LEGACY_PROTOCOL
-extern	cvar_t	*com_legacyprotocol;
-#endif
 #ifndef DEDICATED
 extern  cvar_t  *con_autochat;
 #endif

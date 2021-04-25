@@ -11,9 +11,6 @@ ifeq ($(COMPILE_PLATFORM),sunos)
   COMPILE_ARCH=$(shell uname -p | sed -e 's/i.86/x86/')
 endif
 
-ifndef BUILD_STANDALONE
-  BUILD_STANDALONE = 1
-endif
 ifndef BUILD_CLIENT
   BUILD_CLIENT     = 1
 endif
@@ -1180,10 +1177,6 @@ endif
 
 ifeq ($(USE_LOCAL_HEADERS),1)
   BASE_CFLAGS += -DUSE_LOCAL_HEADERS
-endif
-
-ifeq ($(BUILD_STANDALONE),1)
-  BASE_CFLAGS += -DSTANDALONE
 endif
 
 ifeq ($(GENERATE_DEPENDENCIES),1)
