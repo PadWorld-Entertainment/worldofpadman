@@ -3,7 +3,7 @@
 #include "wopg_spstoryfiles.h"
 
 #if defined(UI)
-#include "../ui/ui_local.h"
+#include "../q3_ui/ui_local.h"
 
 static void executeCmd(const char* cmd) {
 	trap_Cmd_ExecuteText(EXEC_APPEND, cmd);
@@ -463,7 +463,7 @@ qboolean wopSP_loadGameState(const char* storyname, const char* savename, char* 
 			//going to end of line
 			if(parsePtr!=NULL)
 				while(*(++parsePtr) != '\n' && *parsePtr != '\0') ;
-			
+
 			// end of line? move on!
 			if(*parsePtr == '\n')
 				parsePtr++;

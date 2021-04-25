@@ -1209,7 +1209,6 @@ void UI_Cache_f( void ) {
 	PlayerSettings_Cache();
 	Controls_Cache();
 	Demos_Cache();
-	UI_CinematicsMenu_Cache();
 	Preferences_Cache();
 	ServerInfo_Cache();
 	SpecifyServer_Cache();
@@ -1220,9 +1219,6 @@ void UI_Cache_f( void ) {
 	UI_DisplayOptionsMenu_Cache();
 	UI_SoundOptionsMenu_Cache();
 	UI_NetworkOptionsMenu_Cache();
-	UI_SPLevelMenu_Cache();
-	UI_SPSkillMenu_Cache();
-	UI_SPPostgameMenu_Cache();
 	TeamMain_Cache();
 	UI_AddBots_Cache();
 	UI_RemoveBots_Cache();
@@ -1231,12 +1227,8 @@ void UI_Cache_f( void ) {
 	SetupDefaultMenu_Cache();
 	UI_BigCredits_Cache();
 
-//	UI_LoadConfig_Cache();
-//	UI_SaveConfigMenu_Cache();
 	UI_BotSelectMenu_Cache();
-	UI_CDKeyMenu_Cache();
 	UI_ModsMenu_Cache();
-
 }
 
 
@@ -1256,50 +1248,11 @@ qboolean UI_ConsoleCommand( int realTime ) {
 	// ensure minimum menu data is available
 	Menu_Cache();
 
-	// These should not be available, since they are defunctional!
-/*
-	if ( Q_stricmp (cmd, "levelselect") == 0 ) {
-		UI_SPLevelMenu_f();
-		return qtrue;
-	}
-
-	if ( Q_stricmp (cmd, "postgame") == 0 ) {
-		UI_SPPostgameMenu_f();
-		return qtrue;
-	}
-
-	if ( Q_stricmp (cmd, "ui_cache") == 0 ) {
-		UI_Cache_f();
-		return qtrue;
-	}
-
-	if ( Q_stricmp (cmd, "ui_cinematics") == 0 ) {
-		UI_CinematicsMenu_f();
-		return qtrue;
-	}
-*/
-
 	// this is still needed, but its ingame menu entry is disabled
 	if ( Q_stricmp (cmd, "ui_teamOrders") == 0 ) {
 		UI_TeamOrdersMenu_f();
 		return qtrue;
 	}
-/*
-	if ( Q_stricmp (cmd, "iamacheater") == 0 ) {
-		UI_SPUnlock_f();
-		return qtrue;
-	}
-
-	if ( Q_stricmp (cmd, "iamamonkey") == 0 ) {
-		UI_SPUnlockMedals_f();
-		return qtrue;
-	}
-
-	if ( Q_stricmp (cmd, "ui_cdkey") == 0 ) {
-		UI_CDKeyMenu_f();
-		return qtrue;
-	}
-*/
 	if ( Q_stricmp( cmd, "wop_music" ) == 0 ) {
 		MusicMenu_Open();
 		return qtrue;

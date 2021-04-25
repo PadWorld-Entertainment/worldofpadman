@@ -3,7 +3,7 @@
 #include "wopg_spstoryfiles.h"
 
 #ifdef UI
-#include "../ui/ui_local.h"
+#include "../q3_ui/ui_local.h"
 
 /*
 static executeCmd(const char* cmd) {
