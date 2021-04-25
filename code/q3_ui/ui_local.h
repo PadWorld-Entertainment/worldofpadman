@@ -92,8 +92,6 @@ extern vmCvar_t	con_notifytime;
 extern vmCvar_t	wop_AutoswitchSongByNextMap;
 extern vmCvar_t	wop_AutoBindUnusedKeys;
 
-extern vmCvar_t wop_specialSPLoadingScreen;
-
 //
 // locals
 //
@@ -391,11 +389,6 @@ extern void MainMenu_Cache( void );
 extern void UI_MainMenu(void);
 
 //
-// ui_wopsp.c
-//
-extern void WoPSPMenu_Init(void);
-
-//
 // ui_exit.c
 //
 extern void ExitMenu_Init(void);
@@ -498,12 +491,6 @@ extern void PlayerSettings_Cache( void );
 //
 extern void UI_PreferencesMenu( void );
 extern void Preferences_Cache( void );
-
-//
-// ui_specifyleague.c
-//
-extern void UI_SpecifyLeagueMenu( void );
-extern void SpecifyLeague_Cache( void );
 
 //
 // ui_specifyserver.c

@@ -24,14 +24,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // this file holds commands that can be executed by the server console, but not remote clients
 
 #include "g_local.h"
-#include "wopg_sphandling.h"
-
 
 /*
 ==============================================================================
 
 PACKET FILTERING
- 
+
 
 You can add or remove addresses from the filter list with:
 
@@ -82,13 +80,13 @@ static qboolean StringToFilter (char *s, ipFilter_t *f)
 	int		i, j;
 	byte	b[4];
 	byte	m[4];
-	
+
 	for (i=0 ; i<4 ; i++)
 	{
 		b[i] = 0;
 		m[i] = 0;
 	}
-	
+
 	for (i=0 ; i<4 ; i++)
 	{
 		if (*s < '0' || *s > '9')
@@ -105,7 +103,7 @@ static qboolean StringToFilter (char *s, ipFilter_t *f)
 			G_Printf( "Bad filter address: %s\n", s );
 			return qfalse;
 		}
-		
+
 		j = 0;
 		while (*s >= '0' && *s <= '9')
 		{
@@ -119,10 +117,10 @@ static qboolean StringToFilter (char *s, ipFilter_t *f)
 			break;
 		s++;
 	}
-	
+
 	f->mask = *(unsigned *)m;
 	f->compare = *(unsigned *)b;
-	
+
 	return qtrue;
 }
 
@@ -155,7 +153,7 @@ static void UpdateIPBans (void)
 			else
 				Q_strcat(ip, sizeof(ip), va("%i", b[j]));
 			Q_strcat(ip, sizeof(ip), (j<3) ? "." : " ");
-		}		
+		}
 		if (strlen(iplist_final)+strlen(ip) < MAX_CVAR_VALUE_STRING - 1)
 		{
 			Q_strcat( iplist_final, sizeof(iplist_final), ip);
@@ -194,7 +192,7 @@ qboolean G_FilterPacket (char *from)
 			break;
 		i++, p++;
 	}
-	
+
 	in = *(unsigned *)m;
 
 	for (i=0 ; i<numIPFilters ; i++)
@@ -225,7 +223,7 @@ static void AddIP( char *str )
 		}
 		numIPFilters++;
 	}
-	
+
 	if (!StringToFilter (str, &ipFilters[i]))
 		ipFilters[i].compare = 0xffffffffu;
 
@@ -237,7 +235,7 @@ static void AddIP( char *str )
 G_ProcessIPBans
 =================
 */
-void G_ProcessIPBans(void) 
+void G_ProcessIPBans(void)
 {
 	char *s, *t;
 	char		str[MAX_CVAR_VALUE_STRING];
@@ -573,7 +571,6 @@ static void Svcmd_SetGameType_f(void)
 
 void Svcmd_StopCam( void ){
 	level.cammode = qfalse;
-	trap_SendConsoleCommand( EXEC_APPEND, "wopSP_introFinished\n" );
 }
 
 qboolean FileExists(char* fname){
@@ -591,7 +588,7 @@ void Svcmd_StartCam( void ){
 	char	map[MAX_QPATH];
 	char	serverinfo[MAX_INFO_STRING];
 	char	path[MAX_QPATH];
-	
+
 	trap_GetServerinfo( serverinfo, sizeof(serverinfo) );
 	Q_strncpyz( map, Info_ValueForKey( serverinfo, "mapname" ), sizeof(map) );
 	Com_sprintf( path, sizeof(path), "cutscenes\\%s\\scene.cfg", map);
@@ -622,18 +619,18 @@ void Svcmd_CamCmd( void ){
 	char name[MAX_TOKEN_CHARS];
 	int i;
 	gclient_t* cl;
-	
+
 	if( !level.cammode ){
 		return;
 	}
 
 	if( trap_Argc() < 2 ){
-		return;	
+		return;
 	}
 
 	trap_Argv( 1, cmd, sizeof(cmd) );
 
-	if ( !Q_stricmp (cmd, "print")  ) 
+	if ( !Q_stricmp (cmd, "print")  )
 	{
 		trap_Argv( 2, buf, sizeof(buf) );
 		trap_SendServerCommand( -1, va("cp \"%s\n\"", buf ) );
@@ -649,7 +646,7 @@ void Svcmd_CamCmd( void ){
 		trap_Argv( 2, name, sizeof( name ) );
 
 		cl = ClientForString( name ) ;
-		if(!cl) 
+		if(!cl)
 			return;
 
 		for( i=0; i<3; i++){
@@ -705,7 +702,7 @@ void Svcmd_CamCmd( void ){
 		}
 
 		cl = ClientForString( name ) ;
-		if(!cl) 
+		if(!cl)
 			return;
 		BotCamMoveTo( cl->ps.clientNum, pos );
 	}
@@ -720,7 +717,7 @@ void Svcmd_CamCmd( void ){
 
 		trap_Argv( 2, name, sizeof( name ) );
 		cl = ClientForString( name ) ;
-		if(!cl) 
+		if(!cl)
 			return;
 		trap_Argv( 3, buf, sizeof( buf ) );
 		angles[PITCH] = atoi(buf);
@@ -740,7 +737,7 @@ void Svcmd_CamCmd( void ){
 
 		trap_Argv( 2, name, sizeof( name ) );
 		cl = ClientForString( name ) ;
-		if(!cl) 
+		if(!cl)
 			return;
 		trap_Argv( 3, buf, sizeof( buf ) );
 		target[0] = atoi(buf);
@@ -762,7 +759,7 @@ void Svcmd_CamCmd( void ){
 
 		trap_Argv( 2, name, sizeof( name ) );
 		cl = ClientForString( name ) ;
-		if(!cl) 
+		if(!cl)
 			return;
 
 		trap_Argv( 3, buf, sizeof( buf ) );
@@ -774,7 +771,7 @@ void Svcmd_CamCmd( void ){
 	}
 	else if( !Q_stricmp (cmd, "boteditinv")  )
 	{
-		if( trap_Argc() < 3) 
+		if( trap_Argc() < 3)
 			return;
 		trap_Argv( 2, name, sizeof(name) );
 		cl = ClientForString( name );
@@ -789,7 +786,7 @@ void Svcmd_CamCmd( void ){
 		}
 		trap_Argv( 2, name, sizeof( name ) );
 		cl = ClientForString( name ) ;
-		if(!cl) 
+		if(!cl)
 			return;
 		trap_Argv( 3, buf, sizeof( buf ) );
 		BotChooseWeap( cl->ps.clientNum, atoi(buf) );
@@ -802,7 +799,7 @@ void Svcmd_CamCmd( void ){
 		}
 		trap_Argv( 2, name, sizeof( name ) );
 		cl = ClientForString( name ) ;
-		if(!cl) 
+		if(!cl)
 			return;
 
 		BotCamTaunt( cl->ps.clientNum );
@@ -815,21 +812,21 @@ void Svcmd_CamCmd( void ){
 		}
 		trap_Argv( 2, name, sizeof( name ) );
 		cl = ClientForString( name ) ;
-		if(!cl) 
+		if(!cl)
 			return;
 
-		BotCamFire( cl->ps.clientNum );		
+		BotCamFire( cl->ps.clientNum );
 	}
 	else if( !Q_stricmp(cmd, "freeze") ){
 		int on;
 
-		
+
 		if( trap_Argc() != 3 ){
 			Com_Printf("usage: camcmd freeze [0|1] \n");
 			return;
 		}
 		trap_Argv( 2, name, sizeof( name ) );
-		
+
 		on = atoi( name );
 		FreezePlayers( on );
 	}
@@ -928,14 +925,11 @@ qboolean	ConsoleCommand( void ) {
 		}
 
 		if( !strlen(value) )	// use "1" as default
-			strcpy( value, "1" );				
-		
+			strcpy( value, "1" );
+
 		trap_BotLibVarSet( key, value );
 		return qtrue;
 	}
-
-	if(wopSP_cmdCheck(cmd))
-		return qtrue;
 
 	if (g_dedicated.integer) {
 		if ( Q_stricmp( cmd, "ssay" ) == 0 ) {

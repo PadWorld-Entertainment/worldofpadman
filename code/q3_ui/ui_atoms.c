@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	User interface building blocks and support functions.
 **********************************************************************/
 #include "ui_local.h"
-#include "../game/wopg_sphandling.h"
 
 uiStatic_t		uis;
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
@@ -1295,9 +1294,6 @@ qboolean UI_ConsoleCommand( int realTime ) {
 			Com_Printf("  usage: %s [mediaRef]\n",cmd);
 		return qtrue;
 	}
-
-	if(wopSP_cmdCheck(cmd))
-		return qtrue;
 */
 	return qfalse;
 }

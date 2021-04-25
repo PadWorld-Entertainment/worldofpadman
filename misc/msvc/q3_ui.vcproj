@@ -2361,19 +2361,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\code\q3_ui\ui_wopsp.c"
-				>
-			</File>
-			<File
 				RelativePath="..\..\code\cgame\wopc_advanced2d.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\game\wopg_sphandling.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\game\wopg_spstoryfiles.c"
 				>
 			</File>
 		</Filter>
@@ -2447,14 +2435,6 @@
 			</File>
 			<File
 				RelativePath="..\..\code\cgame\wopc_advanced2d.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\game\wopg_sphandling.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\game\wopg_spstoryfiles.h"
 				>
 			</File>
 		</Filter>

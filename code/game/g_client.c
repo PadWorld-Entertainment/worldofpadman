@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "g_local.h"
-#include "wopg_sphandling.h"
 
 // g_client.c -- client functions that don't happen every frame
 
@@ -273,7 +272,7 @@ gentity_t *SelectRandomFurthestSpawnPoint ( vec3_t avoidPoint, vec3_t origin, ve
 		}
 
 		VectorSubtract( spot->s.origin, avoidPoint, delta );
-		
+
 		squareddist = VectorLengthSquared( delta );
 		for (i = 0; i < numSpots; i++) {
 			if ( squareddist > list_squareddist[i] ) {
@@ -285,12 +284,12 @@ gentity_t *SelectRandomFurthestSpawnPoint ( vec3_t avoidPoint, vec3_t origin, ve
 				}
 				list_squareddist[i] = squareddist;
 				list_spot[i] = spot;
-				
+
 				numSpots++;
 				break;
 			}
 		}
-		
+
 		if(i >= numSpots && numSpots < MAX_SPAWN_POINTS)
 		{
 			list_squareddist[numSpots] = squareddist;
@@ -324,7 +323,7 @@ gentity_t *SelectRandomFurthestSpawnPoint ( vec3_t avoidPoint, vec3_t origin, ve
 				j++;
 				if ( SpotWouldTelefrag( &tmpent ) )
 					continue;
-	
+
 				VectorCopy (tmpent.s.origin, origin);
 //				origin[2] += 9;//sind jetzt vor dem überprüfen
 				VectorCopy (spot->s.angles, angles);
@@ -376,7 +375,7 @@ gentity_t *SelectSpawnPoint ( vec3_t avoidPoint, vec3_t origin, vec3_t angles, q
 		if ( spot == nearestSpot ) {
 			// last try
 			spot = SelectRandomDeathmatchSpawnPoint ( );
-		}		
+		}
 	}
 
 	// find a single player start spot
@@ -404,7 +403,7 @@ gentity_t *SelectInitialSpawnPoint( vec3_t origin, vec3_t angles, qboolean isbot
 	gentity_t	*spot;
 
 	spot = NULL;
-	
+
 	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL)
 	{
 		if(((spot->flags & FL_NO_BOTS) && isbot) ||
@@ -412,7 +411,7 @@ gentity_t *SelectInitialSpawnPoint( vec3_t origin, vec3_t angles, qboolean isbot
 		{
 			continue;
 		}
-		
+
 		if((spot->spawnflags & 0x01))
 			break;
 	}
@@ -486,7 +485,7 @@ void BodySink( gentity_t *ent ) {
 	if ( level.time - ent->timestamp > 6500 ) {
 		trap_UnlinkEntity( ent );//the body ques are never actually freed, they are just unlinked
 		ent->physicsObject = qfalse;
-		return;	
+		return;
 	}
 	ent->nextthink = level.time + 200;
 }
@@ -626,7 +625,7 @@ void respawn( gentity_t *ent ) {
 	if ( g_gametype.integer < GT_TEAM )
 		tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
 	else
-		tent = G_TempEntity( ent->client->ps.origin, ent->client->sess.sessionTeam == TEAM_RED ? 
+		tent = G_TempEntity( ent->client->ps.origin, ent->client->sess.sessionTeam == TEAM_RED ?
 			EV_PLAYER_TELEPORT_RED_IN : EV_PLAYER_TELEPORT_BLUE_IN );
 	tent->s.clientNum = ent->s.clientNum;
 }
@@ -737,7 +736,7 @@ static void ClientCleanName(const char *in, char *out, int outSize)
 
 	// discard leading spaces
 	for(; *in == ' '; in++);
-	
+
 	for(; *in && outpos < outSize - 1; in++)
 	{
 		out[outpos] = *in;
@@ -747,7 +746,7 @@ static void ClientCleanName(const char *in, char *out, int outSize)
 			// don't allow too many consecutive spaces
 			if(spaces > 2)
 				continue;
-			
+
 			spaces++;
 		}
 		else if(outpos > 0 && out[outpos - 1] == Q_COLOR_ESCAPE)
@@ -755,7 +754,7 @@ static void ClientCleanName(const char *in, char *out, int outSize)
 			if(Q_IsColorString(&out[outpos - 1]))
 			{
 				colorlessLen--;
-				
+
 				if(ColorIndex(*in) == 0)
 				{
 					// Disallow color black in names to prevent players
@@ -775,7 +774,7 @@ static void ClientCleanName(const char *in, char *out, int outSize)
 			spaces = 0;
 			colorlessLen++;
 		}
-		
+
 		outpos++;
 	}
 
@@ -849,7 +848,7 @@ void ClientUserinfoChanged( int clientNum ) {
 
 	if ( client->pers.connected == CON_CONNECTED ) {
 		if ( strcmp( oldname, client->pers.netname ) ) {
-			trap_SendServerCommand( -1, va("print \"%s" S_COLOR_WHITE " renamed to %s\n\"", oldname, 
+			trap_SendServerCommand( -1, va("print \"%s" S_COLOR_WHITE " renamed to %s\n\"", oldname,
 				client->pers.netname) );
 		}
 	}
@@ -889,7 +888,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	// colors
 	strcpy(c1, Info_ValueForKey( userinfo, "color1" ));
 	strcpy(c2, Info_ValueForKey( userinfo, "syc_color" ));
-	
+
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
 	if (ent->r.svFlags & SVF_BOT)
@@ -906,7 +905,7 @@ void ClientUserinfoChanged( int clientNum ) {
 //cyr}
 	} else {
 		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\tt\\%d\\tl\\%d\\sl\\%s",
-			client->pers.netname, client->sess.sessionTeam, model, headModel, c1, c2, 
+			client->pers.netname, client->sess.sessionTeam, model, headModel, c1, c2,
 			client->pers.maxHealth, client->sess.wins, client->sess.losses, teamTask, teamLeader, client->sess.selectedlogo);
 	}
 
@@ -998,7 +997,7 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 		}
 	}
 
-	
+
 	// get and distribute relevant parameters
 	G_LogPrintf( "ClientConnect: %i %s %s\n", clientNum, Info_ValueForKey(userinfo,"cl_guid"), Info_ValueForKey(userinfo,"ip") );
 	ClientUserinfoChanged( clientNum );
@@ -1077,7 +1076,7 @@ void ClientBegin( int clientNum ) {
 		if ( g_gametype.integer < GT_TEAM )
 			tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
 		else
-			tent = G_TempEntity( ent->client->ps.origin, ent->client->sess.sessionTeam == TEAM_RED ? 
+			tent = G_TempEntity( ent->client->ps.origin, ent->client->sess.sessionTeam == TEAM_RED ?
 				EV_PLAYER_TELEPORT_RED_IN : EV_PLAYER_TELEPORT_BLUE_IN );
 		tent->s.clientNum = ent->s.clientNum;
 
@@ -1089,9 +1088,6 @@ void ClientBegin( int clientNum ) {
 
 	// count current clients and rank for scoreboard
 	CalculateRanks();
-
-	if(clientNum==0)
-		wopSP_client0Begins();
 }
 
 /*
@@ -1130,20 +1126,20 @@ void ClientSpawn(gentity_t *ent) {
 	// find a spawn point
 	// do it before setting health back up, so farthest
 	// ranging doesn't count this client
-	
+
 	if( level.cammode && (ent->r.svFlags & SVF_BOT) ){
 		VectorCopy(level.cam_spawnpos, spawn_origin);
 		VectorCopy(level.cam_spawnangles, spawn_angles);
 		spawnPoint = NULL;
 	}
 	else if ( ( client->sess.sessionTeam == TEAM_SPECTATOR ) || LPSDeadSpec( client ) ) {
-		spawnPoint = SelectSpectatorSpawnPoint ( 
+		spawnPoint = SelectSpectatorSpawnPoint (
 						spawn_origin, spawn_angles);
 	} else if (g_gametype.integer >= GT_TEAM ) {
 		// all base oriented team games use the CTF spawn points
-		spawnPoint = SelectCTFSpawnPoint ( 
-						client->sess.sessionTeam, 
-						client->pers.teamState.state, 
+		spawnPoint = SelectCTFSpawnPoint (
+						client->sess.sessionTeam,
+						client->pers.teamState.state,
 						spawn_origin, spawn_angles,
 						!!(ent->r.svFlags & SVF_BOT));
 	}
@@ -1159,8 +1155,8 @@ void ClientSpawn(gentity_t *ent) {
 		else
 		{
 			// don't spawn near existing origin if possible
-			spawnPoint = SelectSpawnPoint ( 
-				client->ps.origin, 
+			spawnPoint = SelectSpawnPoint (
+				client->ps.origin,
 				spawn_origin, spawn_angles, !!(ent->r.svFlags & SVF_BOT));
 		}
 	}
@@ -1228,7 +1224,7 @@ void ClientSpawn(gentity_t *ent) {
 
 	// No one has hit the client yet!
 	client->lastSentFlying = -1;
-	
+
 	VectorCopy (playerMins, ent->r.mins);
 	VectorCopy (playerMaxs, ent->r.maxs);
 
@@ -1239,7 +1235,7 @@ void ClientSpawn(gentity_t *ent) {
 	{
 		int		weapon;
 		weapon = Instagib_getSpawnWeapon();
-		
+
 		// add instagib weapon to client's inventory
 		client->ps.stats[ STAT_WEAPONS ] = ( 1 << weapon );
 		client->ps.ammo[ weapon ] = INFINITE;
@@ -1403,7 +1399,7 @@ void ClientDisconnect( int clientNum ) {
 			if ( g_gametype.integer < GT_TEAM )
 				tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_OUT );
 			else
-				tent = G_TempEntity( ent->client->ps.origin, ent->client->sess.sessionTeam == TEAM_RED ? 
+				tent = G_TempEntity( ent->client->ps.origin, ent->client->sess.sessionTeam == TEAM_RED ?
 					EV_PLAYER_TELEPORT_RED_OUT : EV_PLAYER_TELEPORT_BLUE_OUT );
 			VectorCopy(ent->client->ps.viewangles,tent->s.angles);
 

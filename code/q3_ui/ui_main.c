@@ -161,7 +161,6 @@ vmCvar_t	s_wop_restarted;
 vmCvar_t	con_notifytime;
 vmCvar_t	wop_AutoswitchSongByNextMap;
 vmCvar_t	wop_AutoBindUnusedKeys;
-vmCvar_t	wop_specialSPLoadingScreen;
 
 // bk001129 - made static to avoid aliasing.
 static cvarTable_t		cvarTable[] = {
@@ -226,7 +225,6 @@ static cvarTable_t		cvarTable[] = {
 	,{ &con_notifytime, "con_notifytime", "4", CVAR_ARCHIVE }
 	,{ &wop_AutoswitchSongByNextMap, "wop_AutoswitchSongByNextMap", "0", CVAR_ARCHIVE }
 	,{ &wop_AutoBindUnusedKeys, "wop_AutoBindUnusedKeys", "1", CVAR_ARCHIVE }
-	,{ &wop_specialSPLoadingScreen, "wop_specialSPLoadingScreen", "1", CVAR_TEMP }
 };
 
 static int cvarTableSize = ARRAY_LEN( cvarTable );

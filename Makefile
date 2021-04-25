@@ -2489,8 +2489,6 @@ Q3GOBJ_ = \
   $(B)/$(BASEGAME)/game/g_trigger.o \
   $(B)/$(BASEGAME)/game/g_utils.o \
   $(B)/$(BASEGAME)/game/g_weapon.o \
-  $(B)/$(BASEGAME)/game/wopg_sphandling.o \
-  $(B)/$(BASEGAME)/game/wopg_spstoryfiles.o \
   \
   $(B)/$(BASEGAME)/qcommon/q_math.o \
   $(B)/$(BASEGAME)/qcommon/q_shared.o
@@ -2552,10 +2550,7 @@ Q3UIOBJ_ = \
   $(B)/$(BASEGAME)/ui/ui_teamorders.o \
   $(B)/$(BASEGAME)/ui/ui_video.o \
   $(B)/$(BASEGAME)/ui/ui_voicechat.o \
-  $(B)/$(BASEGAME)/ui/ui_wopsp.o \
   $(B)/$(BASEGAME)/ui/wopc_advanced2d.o \
-  $(B)/$(BASEGAME)/ui/wopg_sphandling.o \
-  $(B)/$(BASEGAME)/ui/wopg_spstoryfiles.o \
   \
   $(B)/$(BASEGAME)/qcommon/q_math.o \
   $(B)/$(BASEGAME)/qcommon/q_shared.o
@@ -2736,9 +2731,6 @@ $(B)/$(BASEGAME)/game/%.asm: $(GDIR)/%.c $(Q3LCC)
 $(B)/$(BASEGAME)/ui/bg_%.o: $(GDIR)/bg_%.c
 	$(DO_UI_CC)
 
-$(B)/$(BASEGAME)/ui/wopg_%.o: $(GDIR)/wopg_%.c
-	$(DO_UI_CC)
-
 $(B)/$(BASEGAME)/ui/wopc_%.o: $(CGDIR)/wopc_%.c
 	$(DO_UI_CC)
 
@@ -2746,9 +2738,6 @@ $(B)/$(BASEGAME)/ui/%.o: $(Q3UIDIR)/%.c
 	$(DO_UI_CC)
 
 $(B)/$(BASEGAME)/ui/bg_%.asm: $(GDIR)/bg_%.c $(Q3LCC)
-	$(DO_UI_Q3LCC)
-
-$(B)/$(BASEGAME)/ui/wopg_%.asm: $(GDIR)/wopg_%.c $(Q3LCC)
 	$(DO_UI_Q3LCC)
 
 $(B)/$(BASEGAME)/ui/wopc_%.asm: $(CGDIR)/wopc_%.c $(Q3LCC)

@@ -1778,14 +1778,6 @@
 				RelativePath="..\..\code\qcommon\q_shared.c"
 				>
 			</File>
-			<File
-				RelativePath="..\..\code\game\wopg_sphandling.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\game\wopg_spstoryfiles.c"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -1897,14 +1889,6 @@
 			</File>
 			<File
 				RelativePath="..\..\code\game\syn.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\game\wopg_sphandling.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\code\game\wopg_spstoryfiles.h"
 				>
 			</File>
 		</Filter>

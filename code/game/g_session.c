@@ -21,8 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "g_local.h"
-#include "wopg_sphandling.h"
-
 
 /*
 =======================================================================
@@ -50,7 +48,7 @@ void G_WriteClientSessionData( gclient_t *client ) {
 		client->sess.selectedlogo[0] = '\0';
 	}
 
-	s = va("%i %i %i %i %i %i %i %i %s", 
+	s = va("%i %i %i %i %i %i %i %i %s",
 		client->sess.sessionTeam,
 		client->sess.spectatorNum,
 		client->sess.spectatorState,
@@ -117,16 +115,12 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 
 	// initial team determination
 	if ( g_gametype.integer >= GT_TEAM ) {
-		if(wopSP_hasForceTeam()) {
-			sess->sessionTeam = wopSP_forceTeam();
-			BroadcastTeamChange( client, -1 );
-		}
-		else if ( g_teamAutoJoin.integer ) {
+		if ( g_teamAutoJoin.integer ) {
 			sess->sessionTeam = PickTeam( -1 );
 			BroadcastTeamChange( client, -1 );
 		} else {
 			// always spawn as spectator in team games
-			sess->sessionTeam = TEAM_SPECTATOR;	
+			sess->sessionTeam = TEAM_SPECTATOR;
 		}
 	} else {
 		value = Info_ValueForKey( userinfo, "team" );
@@ -138,7 +132,7 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 			default:
 			case GT_FFA:
 			case GT_SINGLE_PLAYER:
-				if ( g_maxGameClients.integer > 0 && 
+				if ( g_maxGameClients.integer > 0 &&
 					level.numNonSpectatorClients >= g_maxGameClients.integer ) {
 					sess->sessionTeam = TEAM_SPECTATOR;
 				} else {
@@ -179,7 +173,7 @@ void G_InitWorldSession( void ) {
 
 	trap_Cvar_VariableStringBuffer( "session", s, sizeof(s) );
 	gt = atoi( s );
-	
+
 	// if the gametype changed since the last session, don't use any
 	// client sessions
 	if ( g_gametype.integer != gt ) {

@@ -21,9 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "ui_local.h"
-#include "../game/wopg_sphandling.h"
-
-#include "../game/wopg_spstoryfiles.h"
 
 /*
 ===============================================================================
@@ -43,11 +40,11 @@ static void UI_ReadableSize ( char *buf, int bufsize, int value )
 {
 	if (value > 1024*1024*1024 ) { // gigs
 		Com_sprintf( buf, bufsize, "%d", value / (1024*1024*1024) );
-		Com_sprintf( buf+strlen(buf), bufsize-strlen(buf), ".%02d GB", 
+		Com_sprintf( buf+strlen(buf), bufsize-strlen(buf), ".%02d GB",
 			(value % (1024*1024*1024))*100 / (1024*1024*1024) );
 	} else if (value > 1024*1024 ) { // megs
 		Com_sprintf( buf, bufsize, "%d", value / (1024*1024) );
-		Com_sprintf( buf+strlen(buf), bufsize-strlen(buf), ".%02d MB", 
+		Com_sprintf( buf+strlen(buf), bufsize-strlen(buf), ".%02d MB",
 			(value % (1024*1024))*100 / (1024*1024) );
 	} else if (value > 1024 ) { // kilos
 		Com_sprintf( buf, bufsize, "%d KB", value / 1024 );
@@ -90,7 +87,7 @@ static void UI_DisplayDownloadInfo( const char *downloadName ) {
 	fprintf( stderr, "\n\n-----------------------------------------------\n");
 	fprintf( stderr, "DB: downloadSize:  %16d\n", downloadSize );
 	fprintf( stderr, "DB: downloadCount: %16d\n", downloadCount );
-	fprintf( stderr, "DB: downloadTime:  %16d\n", downloadTime );  
+	fprintf( stderr, "DB: downloadTime:  %16d\n", downloadTime );
   	fprintf( stderr, "DB: UI realtime:   %16d\n", uis.realtime );	// bk
 	fprintf( stderr, "DB: UI frametime:  %16d\n", uis.frametime );	// bk
 #endif
@@ -122,7 +119,7 @@ static void UI_DisplayDownloadInfo( const char *downloadName ) {
 
 	if (downloadCount < 4096 || !downloadTime) {
 		UI_DrawProportionalString( leftWidth, 160, "estimating", style, color_white );
-		UI_DrawProportionalString( leftWidth, 192, 
+		UI_DrawProportionalString( leftWidth, 192,
 			va("(%s of %s copied)", dlSizeBuf, totalSizeBuf), style, color_white );
 	} else {
 	  // bk010108
@@ -147,28 +144,28 @@ static void UI_DisplayDownloadInfo( const char *downloadName ) {
 
 			// We do it in K (/1024) because we'd overflow around 4MB
 			n = (n - (((downloadCount/1024) * n) / (downloadSize/1024))) * 1000;
-			
+
 			UI_PrintTime ( dlTimeBuf, sizeof dlTimeBuf, n ); // bk010104
 				//(n - (((downloadCount/1024) * n) / (downloadSize/1024))) * 1000);
 
-			UI_DrawProportionalString( leftWidth, 160, 
+			UI_DrawProportionalString( leftWidth, 160,
 				dlTimeBuf, style, color_white );
-			UI_DrawProportionalString( leftWidth, 192, 
+			UI_DrawProportionalString( leftWidth, 192,
 				va("(%s of %s copied)", dlSizeBuf, totalSizeBuf), style, color_white );
 		} else {
-			UI_DrawProportionalString( leftWidth, 160, 
+			UI_DrawProportionalString( leftWidth, 160,
 				"estimating", style, color_white );
 			if (downloadSize) {
-				UI_DrawProportionalString( leftWidth, 192, 
+				UI_DrawProportionalString( leftWidth, 192,
 					va("(%s of %s copied)", dlSizeBuf, totalSizeBuf), style, color_white );
 			} else {
-				UI_DrawProportionalString( leftWidth, 192, 
+				UI_DrawProportionalString( leftWidth, 192,
 					va("(%s copied)", dlSizeBuf), style, color_white );
 			}
 		}
 
 		if (xferRate) {
-			UI_DrawProportionalString( leftWidth, 224, 
+			UI_DrawProportionalString( leftWidth, 224,
 				va("%s/Sec", xferRateBuf), style, color_white );
 		}
 	}
@@ -191,60 +188,6 @@ void UI_DrawConnectScreen( qboolean overlay ) {
 	trap_Cvar_VariableStringBuffer( "cl_downloadName", downloadName, sizeof(downloadName) );
 
 	Menu_Cache();
-
-	if(wop_specialSPLoadingScreen.integer) {
-		static int tmp = 0;
-
-		trap_Cvar_VariableStringBuffer( WOPSP_STORY_CVAR, info, sizeof(info) );
-		if(info[0]) {
-			char seID[MAX_INFO_VALUE];
-			trap_Cvar_VariableStringBuffer( WOPSP_SELEMENT_CVAR, seID, sizeof(seID) );
-
-			if(!wopSP_openStory(info)) {
-				wop_StoryElement_t tmpE;
-				wopSP_findStoryElement(seID, &tmpE);
-
-				if(wopSP_validSE(&tmpE) && *tmpE.intro) {
-					if(!Q_stricmpn("picture:",tmpE.intro,8))
-						Q_strncpyz(info,tmpE.intro+8,sizeof(info));
-					else
-						info[0] = '\0';
-				}
-				else
-					info[0] = '\0';
-			}
-			else
-				info[0] = '\0';
-
-			if(info[0]) {
-				UI_FillRect(0,0,640,480,colorBlack);
-//				UI_FillRect(10*tmp,0,20,20,colorWhite);
-				UI_DrawNamedPic(0,0,640,480,info);
-				switch((tmp>>1)%3) {
-				case 0:
-					UI_DrawStringNS(500,440,"Loading .",UI_LEFT,20,colorRed);
-					break;
-				case 1:
-					UI_DrawStringNS(500,440,"Loading ..",UI_LEFT,20,colorRed);
-					break;
-				case 2:
-				default:
-					UI_DrawStringNS(500,440,"Loading ...",UI_LEFT,20,colorRed);
-					break;
-				}
-			}
-			else { //TODO: if we don't have a comic show some special loading screen (padman in the "teleporting" tunnel or something like that)
-/*				UI_FillRect(0,0,640,480,colorCyan);
-				UI_FillRect(10*tmp,0,20,20,colorBlack);
-
-				UI_DrawStringNS(100,100,va("storyelement: %s",info),0,16,colorMagenta);
-*/
-			}
-			++tmp;
-
-			return;
-		}
-	}
 
 	if ( !overlay ) {
 		// draw the dialog background
@@ -273,9 +216,9 @@ void UI_DrawConnectScreen( qboolean overlay ) {
 	//UI_DrawProportionalString( 320, 96, "Press Esc to abort", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, menu_text_color );
 
 	// display global MOTD at bottom
-	UI_DrawProportionalString( SCREEN_WIDTH/2, SCREEN_HEIGHT-32, 
+	UI_DrawProportionalString( SCREEN_WIDTH/2, SCREEN_HEIGHT-32,
 		Info_ValueForKey( cstate.updateInfoString, "motd" ), UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, menu_text_color );
-	
+
 	// print any server info (server full, bad version, etc)
 	if ( cstate.connState < CA_CONNECTED ) {
 		UI_DrawString_AutoWrapped( 320, 192, 630, 20, cstate.messageString, UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, menu_text_color, qtrue );
@@ -296,7 +239,7 @@ void UI_DrawConnectScreen( qboolean overlay ) {
 		Field_Clear( &passwordField.field );
 		passwordField.width = 256;
 		passwordField.field.widthInChars = 16;
-		Q_strncpyz( passwordField.field.buffer, Cvar_VariableString("password"), 
+		Q_strncpyz( passwordField.field.buffer, Cvar_VariableString("password"),
 			sizeof(passwordField.field.buffer) );
 
 		Menu_AddItem( &s_ingame_menu, ( void * ) &s_customize_player_action );
