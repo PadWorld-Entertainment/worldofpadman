@@ -660,9 +660,7 @@ static void CG_RegisterItemSounds( int itemNum ) {
 			s++;
 		}
 
-		if ( !strcmp(data+len-3, "wav" )) {
-			trap_S_RegisterSound( data, qfalse );
-		}
+		trap_S_RegisterSound( data, qfalse );
 	}
 }
 
