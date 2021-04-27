@@ -474,14 +474,14 @@ static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelN
 	}
 
 
-	Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/lower.md3", modelName );
+	Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/lower", modelName );
 	ci->legsModel = trap_R_RegisterModel( filename );
 	if ( !ci->legsModel ) {
 		Com_Printf( "Failed to load model file %s\n", filename );
 		return qfalse;
 	}
 
-	Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/upper.md3", modelName );
+	Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/upper", modelName );
 	ci->torsoModel = trap_R_RegisterModel( filename );
 	if ( !ci->torsoModel ) {
 		Com_Printf( "Failed to load model file %s\n", filename );
@@ -495,7 +495,7 @@ static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelN
 	     ( Q_stricmp( headSkinName, "red" ) != 0 ) &&
 	     ( Q_stricmp( headSkinName, "blue" ) != 0 ) ) {
 		// first try directly with skinName
-		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head_%s.md3", headModelName, headSkinName );
+		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head_%s", headModelName, headSkinName );
 		ci->headModel = trap_R_RegisterModel( filename );
 
 		// if this fails, we will try it with a skinName without the teamending
@@ -509,13 +509,13 @@ static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelN
 				*ptr = '\0';
 			}
 
-			Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head_%s.md3", headModelName, skinWhithoutTeam );
+			Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head_%s", headModelName, skinWhithoutTeam );
 			ci->headModel = trap_R_RegisterModel( filename );
 		}
 	}
 
 	if ( !ci->headModel ) {
-		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head.md3", headModelName );
+		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head", headModelName );
 		ci->headModel = trap_R_RegisterModel( filename );
 	}
 

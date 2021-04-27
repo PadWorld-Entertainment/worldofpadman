@@ -413,12 +413,12 @@ qboolean bambam_createByPlayer( gentity_t *pEnt, char* pickupName ) {
 	entBam->s.eType = ET_BAMBAM;
 	
 	if ( pEnt->client->sess.sessionTeam == TEAM_BLUE ) {
-		entBam->s.modelindex = G_ModelIndex( "models/weapons2/bambam/bambam_blue.md3" );
+		entBam->s.modelindex = G_ModelIndex( "models/weapons2/bambam/bambam_blue" );
 		entBam->team = "b";
 		entBam->s.time2 = TEAM_BLUE;
 	}
 	else {
-		entBam->s.modelindex = G_ModelIndex( "models/weapons2/bambam/bambam_red.md3" );
+		entBam->s.modelindex = G_ModelIndex( "models/weapons2/bambam/bambam_red" );
 		entBam->team = "r";
 		entBam->s.time2 = TEAM_RED;
 	}
@@ -547,11 +547,11 @@ qboolean boomies_createByPlayer( gentity_t *pEnt, char* pickupName ) {
 		ent->s.eFlags = 0;
 
 		if(pEnt->client->sess.sessionTeam == TEAM_BLUE) {
-			ent->s.modelindex = G_ModelIndex("models/weapons2/boomies/boomies_blue.md3");
+			ent->s.modelindex = G_ModelIndex("models/weapons2/boomies/boomies_blue");
 			ent->team = "b";
 		}
 		else {
-			ent->s.modelindex = G_ModelIndex("models/weapons2/boomies/boomies_red.md3");
+			ent->s.modelindex = G_ModelIndex("models/weapons2/boomies/boomies_red");
 			ent->team = "r";
 		}
 

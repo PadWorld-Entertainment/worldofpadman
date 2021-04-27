@@ -1010,10 +1010,10 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.deadfadeSkin		= trap_R_RegisterShader( "deadfadeSkin" );
 
 	cgs.media.StationRingShader	= trap_R_RegisterShader( "station/ring" );
-	cgs.media.HealthStation_Base	= trap_R_RegisterModel( "models/mapobjects/pad_healthstation/pad_hs_base.md3" );
-	cgs.media.HealthStation_Cross	= trap_R_RegisterModel( "models/mapobjects/pad_healthstation/pad_hs_cross.md3" );
-	cgs.media.HealthStation_Ring	= trap_R_RegisterModel( "models/mapobjects/pad_healthstation/pad_hs_ring.md3" );
-	cgs.media.StationLoadingRings	= trap_R_RegisterModel( "models/teleporter.md3" );
+	cgs.media.HealthStation_Base	= trap_R_RegisterModel( "models/mapobjects/pad_healthstation/pad_hs_base" );
+	cgs.media.HealthStation_Cross	= trap_R_RegisterModel( "models/mapobjects/pad_healthstation/pad_hs_cross" );
+	cgs.media.HealthStation_Ring	= trap_R_RegisterModel( "models/mapobjects/pad_healthstation/pad_hs_ring" );
+	cgs.media.StationLoadingRings	= trap_R_RegisterModel( "models/teleporter" );
 
 	cgs.media.SchaumShader	= trap_R_RegisterShader("boaster/schaum");
 
@@ -1073,15 +1073,15 @@ static void CG_RegisterGraphics( void ) {
 			cgs.media.hud_bk_balloon_blue	= trap_R_RegisterShaderNoMip( "hud/bk_balloon_blue" );
 			cgs.media.hud_balloon		= trap_R_RegisterShaderNoMip( "hud/balloonicon" );
 			cgs.media.hud_balloon_bar	= trap_R_RegisterShaderNoMip( "hud/balloonbar" );
-			cgs.media.boomiesSphereModel = trap_R_RegisterModel( "models/weaponsfx/boomiessphere.md3" );
+			cgs.media.boomiesSphereModel = trap_R_RegisterModel( "models/weaponsfx/boomiessphere" );
 			cgs.media.boomiesCoreShader  = trap_R_RegisterShader( "boomiesCore" );
 		}
 		else if ( cgs.gametype == GT_CTF || cg_buildScript.integer ) {
 			cgs.media.hud_CTL_bg_red		= trap_R_RegisterShaderNoMip( "hud/CTL_red" );
 			cgs.media.hud_CTL_bg_blue	= trap_R_RegisterShaderNoMip( "hud/CTL_blue" );
 
-			cgs.media.redFlagModel	= trap_R_RegisterModel( "models/ctl/lollipop_red.md3" );
-			cgs.media.blueFlagModel	= trap_R_RegisterModel( "models/ctl/lollipop_blue.md3" );
+			cgs.media.redFlagModel	= trap_R_RegisterModel( "models/ctl/lollipop_red" );
+			cgs.media.blueFlagModel	= trap_R_RegisterModel( "models/ctl/lollipop_blue" );
 			cgs.media.redFlagShader[0]	= trap_R_RegisterShaderNoMip( "icons/iconf_red1" );
 			cgs.media.redFlagShader[1]	= trap_R_RegisterShaderNoMip( "icons/iconf_red2" );
 			cgs.media.redFlagShader[2]	= trap_R_RegisterShaderNoMip( "icons/iconf_red3" );
@@ -1091,12 +1091,12 @@ static void CG_RegisterGraphics( void ) {
 
 			cgs.media.bambamMissileRedShader	= trap_R_RegisterShader("bambamMissileRed");
 			cgs.media.bambamMissileBlueShader	= trap_R_RegisterShader("bambamMissileBlue");
-			trap_R_RegisterModel( "models/weapons2/bambam/bambam_red.md3" );
-			trap_R_RegisterModel( "models/weapons2/bambam/bambam_blue.md3" );
+			trap_R_RegisterModel( "models/weapons2/bambam/bambam_red" );
+			trap_R_RegisterModel( "models/weapons2/bambam/bambam_blue" );
 
-			cgs.media.bambamExplosionLeg		= trap_R_RegisterModel( "models/weapons2/bambam/bambamExplosionLeg.md3" );
-			cgs.media.bambamExplosionTorso	= trap_R_RegisterModel( "models/weapons2/bambam/bambamExplosionTorso.md3" );
-			cgs.media.bambamImpactDrops		= trap_R_RegisterModel( "models/weaponsfx/bambamdrop.md3" );
+			cgs.media.bambamExplosionLeg		= trap_R_RegisterModel( "models/weapons2/bambam/bambamExplosionLeg" );
+			cgs.media.bambamExplosionTorso	= trap_R_RegisterModel( "models/weapons2/bambam/bambamExplosionTorso" );
+			cgs.media.bambamImpactDrops		= trap_R_RegisterModel( "models/weaponsfx/bambamdrop" );
 
 			cgs.media.bambamImpactDropsRedShader	= trap_R_RegisterShader("models/weaponsfx/bambamdrop_red");
 			cgs.media.bambamImpactDropsBlueShader	= trap_R_RegisterShader("models/weaponsfx/bambamdrop_blue");
@@ -1106,7 +1106,7 @@ static void CG_RegisterGraphics( void ) {
 		}
 
 		if ( ( cgs.gametype == GT_CTF ) || ( cgs.gametype == GT_BALLOON ) || cg_buildScript.integer ) {
-			cgs.media.boomiesSphereModel = trap_R_RegisterModel( "models/weaponsfx/boomiessphere.md3" );
+			cgs.media.boomiesSphereModel = trap_R_RegisterModel( "models/weaponsfx/boomiessphere" );
 			cgs.media.boomiesCoreShader  = trap_R_RegisterShader( "boomiesCore" );
 		}
 	}
@@ -1124,12 +1124,12 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.hud_dotempty		= trap_R_RegisterShaderNoMip( "hud/dotempty" );
 
 
-	cgs.media.star = trap_R_RegisterModel( "models/weaponsfx/star.md3" );
+	cgs.media.star = trap_R_RegisterModel( "models/weaponsfx/star" );
 
 	cgs.media.balloonShader	= trap_R_RegisterShader( "sprites/balloon3" );
-	cgs.media.dishFlashModel	= trap_R_RegisterModel( "models/boom.md3" );
+	cgs.media.dishFlashModel	= trap_R_RegisterModel( "models/boom" );
 
-	cgs.media.teleportEffectModel			= trap_R_RegisterModel( "models/special/teleport.md3" );
+	cgs.media.teleportEffectModel			= trap_R_RegisterModel( "models/special/teleport" );
 	if ( cgs.gametype < GT_TEAM || cg_buildScript.integer ) {
 		cgs.media.teleportEffectGreenShader	= trap_R_RegisterShader( "teleEffectGreen" );
 		cgs.media.teleEffectFPGreenShader		= trap_R_RegisterShader( "teleEffectGreenFP" );

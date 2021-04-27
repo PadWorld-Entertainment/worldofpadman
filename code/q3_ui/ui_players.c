@@ -90,13 +90,13 @@ tryagain:
 	if ( weaponNum == WP_NIPPER || weaponNum == WP_PUNCHY || weaponNum == WP_IMPERIUS ) {
 		strcpy( path, item->world_model[0] );
 		COM_StripExtension( path, path, sizeof(path) );
-		strcat( path, "_barrel.md3" );
+		strcat( path, "_barrel" );
 		pi->barrelModel = trap_R_RegisterModel( path );
 	}
 
 	strcpy( path, item->world_model[0] );
 	COM_StripExtension( path, path, sizeof(path) );
-	strcat( path, "_flash.md3" );
+	strcat( path, "_flash" );
 	pi->flashModel = trap_R_RegisterModel( path );
 
 	switch( weaponNum )
@@ -1204,14 +1204,14 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 
 	// load cmodels before models so filecache works
 
-	Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/lower.md3", modelName );
+	Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/lower", modelName );
 	pi->legsModel = trap_R_RegisterModel( filename );
 	if ( !pi->legsModel ) {
 		Com_Printf( "Failed to load model file %s\n", filename );
 		return qfalse;
 	}
 
-	Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/upper.md3", modelName );
+	Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/upper", modelName );
 	pi->torsoModel = trap_R_RegisterModel( filename );
 	if ( !pi->torsoModel ) {
 		Com_Printf( "Failed to load model file %s\n", filename );
@@ -1222,7 +1222,7 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 	if( *skinName && Q_stricmp(skinName,"default") ) {
 
 		// first try directly with skinName
-		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head_%s.md3", modelName, skinName );
+		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head_%s", modelName, skinName );
 		pi->headModel = trap_R_RegisterModel( filename );
 
 		// if it fail, we will try it with a skinName without the teamending
@@ -1235,13 +1235,13 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 				*ptr = '\0';
 			}
 
-			Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head_%s.md3", modelName, skinWhithoutTeam );
+			Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head_%s", modelName, skinWhithoutTeam );
 			pi->headModel = trap_R_RegisterModel( filename );
 		}
 	}
 
 	if ( !pi->headModel ) {
-		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head.md3", modelName );
+		Com_sprintf( filename, sizeof( filename ), "models/wop_players/%s/head", modelName );
 		pi->headModel = trap_R_RegisterModel( filename );
 	}
 

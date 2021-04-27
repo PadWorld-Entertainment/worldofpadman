@@ -90,12 +90,12 @@ tryagain:
 
 	if ( weaponNum == WP_MACHINEGUN || weaponNum == WP_GAUNTLET || weaponNum == WP_BFG ) {
 		COM_StripExtension( item->world_model[0], path, sizeof(path) );
-		Q_strcat( path, sizeof(path), "_barrel.md3" );
+		Q_strcat( path, sizeof(path), "_barrel" );
 		pi->barrelModel = trap_R_RegisterModel( path );
 	}
 
 	COM_StripExtension( item->world_model[0], path, sizeof(path) );
-	Q_strcat( path, sizeof(path), "_flash.md3" );
+	Q_strcat( path, sizeof(path), "_flash" );
 	pi->flashModel = trap_R_RegisterModel( path );
 
 	switch( weaponNum ) {
@@ -1236,10 +1236,10 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 
 	// load cmodels before models so filecache works
 
-	Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower.md3", modelName );
+	Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower", modelName );
 	pi->legsModel = trap_R_RegisterModel( filename );
 	if ( !pi->legsModel ) {
-		Com_sprintf( filename, sizeof( filename ), "models/players/characters/%s/lower.md3", modelName );
+		Com_sprintf( filename, sizeof( filename ), "models/players/characters/%s/lower", modelName );
 		pi->legsModel = trap_R_RegisterModel( filename );
 		if ( !pi->legsModel ) {
 			Com_Printf( "Failed to load model file %s\n", filename );
@@ -1247,10 +1247,10 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 		}
 	}
 
-	Com_sprintf( filename, sizeof( filename ), "models/players/%s/upper.md3", modelName );
+	Com_sprintf( filename, sizeof( filename ), "models/players/%s/upper", modelName );
 	pi->torsoModel = trap_R_RegisterModel( filename );
 	if ( !pi->torsoModel ) {
-		Com_sprintf( filename, sizeof( filename ), "models/players/characters/%s/upper.md3", modelName );
+		Com_sprintf( filename, sizeof( filename ), "models/players/characters/%s/upper", modelName );
 		pi->torsoModel = trap_R_RegisterModel( filename );
 		if ( !pi->torsoModel ) {
 			Com_Printf( "Failed to load model file %s\n", filename );
@@ -1259,14 +1259,14 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 	}
 
 	if (headModelName[0] == '*' ) {
-		Com_sprintf( filename, sizeof( filename ), "models/players/heads/%s/%s.md3", &headModelName[1], &headModelName[1] );
+		Com_sprintf( filename, sizeof( filename ), "models/players/heads/%s/%s", &headModelName[1], &headModelName[1] );
 	}
 	else {
-		Com_sprintf( filename, sizeof( filename ), "models/players/%s/head.md3", headModelName );
+		Com_sprintf( filename, sizeof( filename ), "models/players/%s/head", headModelName );
 	}
 	pi->headModel = trap_R_RegisterModel( filename );
 	if ( !pi->headModel && headModelName[0] != '*') {
-		Com_sprintf( filename, sizeof( filename ), "models/players/heads/%s/%s.md3", headModelName, headModelName );
+		Com_sprintf( filename, sizeof( filename ), "models/players/heads/%s/%s", headModelName, headModelName );
 		pi->headModel = trap_R_RegisterModel( filename );
 	}
 

@@ -453,11 +453,11 @@ replacePair_t q3ToWopItems[] = {
 };
 
 replacePair_t shortMarkernames[] = {
-	{ "black",	"models/mapobjects/pad_weaponmarker/pad_wepm_black_bg.md3"	},
-	{ "blue",	"models/mapobjects/pad_weaponmarker/pad_wepm_blue_bg.md3"	},
-	{ "green",	"models/mapobjects/pad_weaponmarker/pad_wepm_green_gg.md3"	},
-	{ "purple",	"models/mapobjects/pad_weaponmarker/pad_wepm_green_bg.md3"	},
-	{ "orange",	"models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg.md3"	},
+	{ "black",	"models/mapobjects/pad_weaponmarker/pad_wepm_black_bg"	},
+	{ "blue",	"models/mapobjects/pad_weaponmarker/pad_wepm_blue_bg"	},
+	{ "green",	"models/mapobjects/pad_weaponmarker/pad_wepm_green_gg"	},
+	{ "purple",	"models/mapobjects/pad_weaponmarker/pad_wepm_green_bg"	},
+	{ "orange",	"models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg"	},
 	{ NULL,		NULL }
 };
 

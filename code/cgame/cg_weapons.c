@@ -493,7 +493,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 	{
 		strcpy( path, item->world_model[0] );
 		COM_StripExtension( path, path, sizeof(path) );
-		strcat( path, "_flash.md3" );
+		strcat( path, "_flash" );
 		weaponInfo->flashModel = trap_R_RegisterModel( path );
 	}
 
@@ -501,7 +501,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 	{
 		strcpy( path, item->world_model[0] );
 		COM_StripExtension( path, path, sizeof(path) );
-		strcat( path, "_barrel.md3" );
+		strcat( path, "_barrel" );
 		weaponInfo->barrelModel = trap_R_RegisterModel( path );
 	}
 	else
@@ -509,11 +509,11 @@ void CG_RegisterWeapon( int weaponNum ) {
 
 	strcpy( path, item->world_model[0] );
 	COM_StripExtension( path, path, sizeof(path) );
-	strcat( path, "_hand.md3" );
+	strcat( path, "_hand" );
 	weaponInfo->handsModel = trap_R_RegisterModel( path );
 
 	if ( !weaponInfo->handsModel ) {
-		weaponInfo->handsModel = trap_R_RegisterModel( "models/weapons2/nipper/nipper_hand.md3" );
+		weaponInfo->handsModel = trap_R_RegisterModel( "models/weapons2/nipper/nipper_hand" );
 	}
 NOADDITIONALMODELS:
 
@@ -528,7 +528,7 @@ NOADDITIONALMODELS:
 
 	case WP_BOASTER:
 		MAKERGB( weaponInfo->flashDlightColor, 0.6f, 0.6f, 1.0f );
-		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaponsfx/gum.md3" ); // <-- testing server stuff
+		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaponsfx/gum" ); // <-- testing server stuff
 		weaponInfo->readySound = trap_S_RegisterSound( "sounds/weapons/boaster/ready", qfalse );
 		weaponInfo->firingSound = trap_S_RegisterSound( "sounds/weapons/boaster/firing", qfalse );
 
@@ -541,7 +541,7 @@ NOADDITIONALMODELS:
 
 	case WP_GRAPPLING_HOOK:
 		MAKERGB( weaponInfo->flashDlightColor, 0.6f, 0.6f, 1.0f );
-		weaponInfo->missileModel = trap_R_RegisterModel( "models/ammo/rocket/rocket.md3" );
+		weaponInfo->missileModel = trap_R_RegisterModel( "models/ammo/rocket/rocket" );
 		weaponInfo->missileTrailFunc = CG_GrappleTrail;
 		weaponInfo->missileDlight = 200;
 		MAKERGB( weaponInfo->missileDlightColor, 1, 0.75f, 0 );
@@ -558,7 +558,7 @@ NOADDITIONALMODELS:
 	case WP_PUMPER:
 		MAKERGB( weaponInfo->flashDlightColor, 1, 1, 0 );
 		weaponInfo->flashSound[0] = trap_S_RegisterSound( "sounds/weapons/pumper/flash", qfalse );
-		cgs.media.pumperFlashModel = trap_R_RegisterModel( "models/weaponsfx/flash.md3" );
+		cgs.media.pumperFlashModel = trap_R_RegisterModel( "models/weaponsfx/flash" );
 		cgs.media.pumperTrailShader = trap_R_RegisterShader( "pumperTrail" );
 		break;
 
@@ -574,18 +574,18 @@ NOADDITIONALMODELS:
 		cgs.media.rocketExplosionShader = trap_R_RegisterShader( "fireExplosion" );
 		cgs.media.fireBallShader  = trap_R_RegisterShader( "fireBall" );
 		cgs.media.fireTrailShader = trap_R_RegisterShader( "fireTrail" );
-		cgs.media.fireDropModel = trap_R_RegisterModel( "models/weaponsfx/firedrop.md3" );
+		cgs.media.fireDropModel = trap_R_RegisterModel( "models/weaponsfx/firedrop" );
 		break;
 
 	case WP_BALLOONY:
 		// HERBY: Balloony defs
-		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaponsfx/balloon.md3" );
+		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaponsfx/balloon" );
 //		weaponInfo->missileTrailFunc = CG_GrenadeTrail;
 		weaponInfo->wiTrailTime = 700;
 		weaponInfo->trailRadius = 12;
 		weaponInfo->flashSound[0] = trap_S_RegisterSound( "sounds/weapons/balloony/flash", qfalse );
 		cgs.media.waterExplosionShader = trap_R_RegisterShader( "waterSplash" );
-		cgs.media.bigDropModel = trap_R_RegisterModel( "models/weaponsfx/balloony_drop.md3" );
+		cgs.media.bigDropModel = trap_R_RegisterModel( "models/weaponsfx/balloony_drop" );
 		cgs.media.hgrenb1aSound		= trap_S_RegisterSound( "sounds/weapons/balloony/balloonyb1a", qfalse);
 		cgs.media.hgrenb2aSound		= trap_S_RegisterSound( "sounds/weapons/balloony/balloonyb2a", qfalse);
 		cgs.media.BalloonyExplosion	= trap_S_RegisterSound( "sounds/weapons/balloony/explosion", qfalse );
@@ -597,13 +597,13 @@ NOADDITIONALMODELS:
 
 	case WP_BUBBLEG:
 		// HERBY: BUBBLE G
-		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaponsfx/gum.md3" );
+		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaponsfx/gum" );
 		weaponInfo->flashSound[0] = trap_S_RegisterSound( "sounds/weapons/bubbleg/flash", qfalse );
 		cgs.media.gumMarkShader = trap_R_RegisterShader( "gumMark" );
 		break;
 
 	case WP_SPLASHER:
-		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaponsfx/waterdrop.md3" );
+		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaponsfx/waterdrop" );
 		weaponInfo->missileSound = trap_S_RegisterSound( "sounds/weapons/betty/fly", qfalse );
 		weaponInfo->missileTrailFunc = CG_SplasherTrail;
 		weaponInfo->wiTrailTime = 2000;
@@ -613,7 +613,7 @@ NOADDITIONALMODELS:
 		weaponInfo->readySound = trap_S_RegisterSound( "sounds/weapons/splasher/ready", qfalse );
 		cgs.media.waterTrailShader = trap_R_RegisterShader( "waterTrail" );
 		cgs.media.waterBallShader = trap_R_RegisterShader( "waterBall" );
-		cgs.media.smallDropModel = trap_R_RegisterModel( "models/weaponsfx/smalldrop.md3" );
+		cgs.media.smallDropModel = trap_R_RegisterModel( "models/weaponsfx/smalldrop" );
 		for ( i = 0; i <= 8; i++ ) {
 			cgs.media.zoomsound[i] = trap_S_RegisterSound( va( "sounds/weapons/splasher/zoom0%i", i ), qtrue );
 		}
@@ -623,7 +623,7 @@ NOADDITIONALMODELS:
 		break;
 
 	case WP_KMA97:
-		weaponInfo->missileModel	= trap_R_RegisterModel( "models/weaponsfx/kmadrop.md3" );
+		weaponInfo->missileModel	= trap_R_RegisterModel( "models/weaponsfx/kmadrop" );
 		weaponInfo->missileSound	= trap_S_RegisterSound( "sounds/weapons/betty/fly", qfalse );
 		weaponInfo->missileTrailFunc = CG_KMATrail;
 		weaponInfo->wiTrailTime		= 2000;
@@ -632,7 +632,7 @@ NOADDITIONALMODELS:
 		weaponInfo->flashSound[0]	= trap_S_RegisterSound( "sounds/weapons/kma97/flash", qfalse );
 		cgs.media.kmaTrailShader	= trap_R_RegisterShader( "kmaTrail" );
 		cgs.media.kmaBallShader		= trap_R_RegisterShader( "kmaBall" );
-		cgs.media.smallKmaDropModel	= trap_R_RegisterModel( "models/weaponsfx/smallkmadrop.md3" );
+		cgs.media.smallKmaDropModel	= trap_R_RegisterModel( "models/weaponsfx/smallkmadrop" );
 		cgs.media.zoomhud_kma		= trap_R_RegisterShaderNoMip( "zoomhud_kma" );
 		cgs.media.zoomKMAaura		= trap_R_RegisterShader( "gfx/kmazoomAura" );
 		cgs.media.zoomKMAbluescreen	= trap_R_RegisterShader( "gfx/kmaBlueScreen" );
@@ -644,9 +644,9 @@ NOADDITIONALMODELS:
 		weaponInfo->flashSound[0] = trap_S_RegisterSound( "sounds/weapons/imperius/flash", qfalse );
 		weaponInfo->missileTrailFunc = CG_ImperiusTrail;
 		weaponInfo->wiTrailTime = 500;
-		cgs.media.imperiusSphereModel = trap_R_RegisterModel( "models/weaponsfx/impsphere.md3" );
-		cgs.media.imperiusRingsModel  = trap_R_RegisterModel( "models/weaponsfx/imprings.md3" );
-		cgs.media.imperiusBeamModel   = trap_R_RegisterModel( "models/weaponsfx/impbeam.md3" );
+		cgs.media.imperiusSphereModel = trap_R_RegisterModel( "models/weaponsfx/impsphere" );
+		cgs.media.imperiusRingsModel  = trap_R_RegisterModel( "models/weaponsfx/imprings" );
+		cgs.media.imperiusBeamModel   = trap_R_RegisterModel( "models/weaponsfx/impbeam" );
 		cgs.media.imperiusCoreShader  = trap_R_RegisterShader( "imperiusCore" );
 		cgs.media.imperiusRingShader  = trap_R_RegisterShader( "imperiusRing" );
 		cgs.media.sfx_imperiusexp	= trap_S_RegisterSound( "sounds/weapons/imperius/explosion", qfalse );
@@ -675,10 +675,10 @@ NOADDITIONALMODELS:
 
 	case WP_KILLERDUCKS:
 		cgs.media.duckExplosionShader	= trap_R_RegisterShader( "newDuckExplosion" );
-		cgs.media.duckWheelModel	= trap_R_RegisterModel( "models/weapons2/killerducks/duckwheel.md3" );
-		cgs.media.duckHeadModel	= trap_R_RegisterModel( "models/weapons2/killerducks/duckhead.md3" );
+		cgs.media.duckWheelModel	= trap_R_RegisterModel( "models/weapons2/killerducks/duckwheel" );
+		cgs.media.duckHeadModel	= trap_R_RegisterModel( "models/weapons2/killerducks/duckhead" );
 		cgs.media.duckExplosionSound	= trap_S_RegisterSound( "sounds/weapons/killerducks/explosion", qfalse );
-		weaponInfo->missileModel		= trap_R_RegisterModel( "models/weapons2/killerducks/pad_killerduck.md3" );
+		weaponInfo->missileModel		= trap_R_RegisterModel( "models/weapons2/killerducks/pad_killerduck" );
 		weaponInfo->missileSound		= trap_S_RegisterSound( "sounds/weapons/killerducks/walking", qfalse );
 		break;
 

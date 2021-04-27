@@ -67,7 +67,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"item_armor_shard", 
 		"sounds/items/armor/padshard_pickup",
-		{ "models/powerups/armor/pad_shard.md3", 
+		{ "models/powerups/armor/pad_shard", 
 		0,
 		0, 0} ,
 /* icon */		"icons/padshard",
@@ -84,7 +84,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"item_armor_padshield",
 		"sounds/names/powerups/padshield",
-        { "models/powerups/armor/pad_shield.md3",
+        { "models/powerups/armor/pad_shield",
 		0, 0, 0},
 /* icon */		"icons/padshild",
 /* pickup */	"PAD SHiELD",
@@ -105,7 +105,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_punchy", 
 		"sounds/names/weapons/punchy",
-		{ "models/weapons2/punchy/punchy.md3",
+		{ "models/weapons2/punchy/punchy",
 		0, 0, 0},
 /* icon */		"icons/iconw_punchy",
 /* pickup */	"PUNCHY",
@@ -121,7 +121,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_nipper", 
 		"sounds/names/weapons/nipper",
-        { "models/weapons2/nipper/nipper.md3", 
+        { "models/weapons2/nipper/nipper", 
 		0, 0, 0},
 /* icon */		"icons/iconw_nipper",
 /* pickup */	"NiPPER",
@@ -137,7 +137,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_boaster", 
 		"sounds/names/weapons/boaster",
-        { "models/weapons2/boaster/boaster.md3", 
+        { "models/weapons2/boaster/boaster", 
 		0, 0, 0},
 /* icon */		"icons/iconw_boaster",
 /* pickup */	"BOASTER",
@@ -153,8 +153,8 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_splasher", 
 		"sounds/names/weapons/splasher",
-//        { "models/weapons2/railgun/railgun.md3", 
-        { "models/weapons2/splasher/splasher.md3", 
+//        { "models/weapons2/railgun/railgun", 
+        { "models/weapons2/splasher/splasher", 
 		0, 0, 0},
 /* icon */		"icons/iconw_splasher",
 /* pickup */	"SPLASHER",
@@ -170,7 +170,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_bubbleg", 
 		"sounds/names/weapons/bubbleg",
-        { "models/weapons2/bubbleg/bubbleg.md3", 
+        { "models/weapons2/bubbleg/bubbleg", 
 		0, 0, 0},
 /* icon */		"icons/iconw_bubbleg",
 /* pickup */	"BUBBLE.G.",
@@ -186,7 +186,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_balloony",
 		"sounds/names/weapons/balloony",
-        { "models/weapons2/balloony/balloony.md3", 
+        { "models/weapons2/balloony/balloony", 
 		0, 0, 0},
 /* icon */		"icons/iconw_balloony",
 /* pickup */	"BALLOONY",
@@ -202,7 +202,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_betty",
 		"sounds/names/weapons/betty",
-        { "models/weapons2/betty/betty.md3", 
+        { "models/weapons2/betty/betty", 
 		0, 0, 0},
 /* icon */		"icons/iconw_betty",
 /* pickup */	"BETTY",
@@ -219,7 +219,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_pumper", 
 		"sounds/names/weapons/pumper",
-        { "models/weapons2/pumper/pumper.md3", 
+        { "models/weapons2/pumper/pumper", 
 		0, 0, 0},
 /* icon */		"icons/iconw_pumper",
 /* pickup */	"PUMPER",
@@ -235,7 +235,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_imperius",
 		"sounds/names/weapons/imperius",
-        { "models/weapons2/imperius/imperius.md3", 
+        { "models/weapons2/imperius/imperius", 
 		0, 0, 0},
 /* icon */		"icons/iconw_imperius",
 /* pickup */	"IMPERiUS",
@@ -251,7 +251,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_killerducks",
 		"sounds/names/weapons/killerducks",
-        { "models/weapons2/killerducks/pad_killerduck_pu.md3", 
+        { "models/weapons2/killerducks/pad_killerduck_pu", 
 		0, 0, 0},
 /* icon */		"icons/killerducks",
 /* pickup */	"KiLLERDUCKS WEAPON",
@@ -272,7 +272,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"weapon_spraypistol",
 		"sounds/weapons/weapon_pickup",
-        { "models/weapons2/spraypistol/spraypistol.md3",
+        { "models/weapons2/spraypistol/spraypistol",
 		0, 0, 0},
 /* icon */		"icons/iconw_spraypistol_red",
 /* pickup */	"Spray Pistol",
@@ -292,7 +292,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_pumper",
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/powerups/ammo/pumper_am.md3", 
+        { "models/powerups/ammo/pumper_am", 
 		0, 0, 0},
 /* icon */		"icons/icona_pumper",
 /* pickup */	"PUMPER AMMO",
@@ -308,7 +308,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_nipper",
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/powerups/ammo/nipper_am.md3", 
+        { "models/powerups/ammo/nipper_am", 
 		0, 0, 0},
 /* icon */		"icons/icona_nipper",
 /* pickup */	"NiPPER AMMO",
@@ -324,7 +324,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_balloony",
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/powerups/ammo/balloony_am.md3", 
+        { "models/powerups/ammo/balloony_am", 
 		0, 0, 0},
 /* icon */		"icons/icona_balloony",
 /* pickup */	"BALLOONY AMMO",
@@ -340,7 +340,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_bubbleg",
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/powerups/ammo/bubbleg_am.md3", 
+        { "models/powerups/ammo/bubbleg_am", 
 		0, 0, 0},
 /* icon */		"icons/icona_bubbleg",
 /* pickup */	"BUBBLE.G. AMMO",
@@ -356,7 +356,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_boaster",
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/powerups/ammo/boaster_am.md3", 
+        { "models/powerups/ammo/boaster_am", 
 		0, 0, 0},
 /* icon */		"icons/icona_boaster",
 /* pickup */	"BOASTER AMMO",
@@ -372,7 +372,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_betty",
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/powerups/ammo/betty_am.md3", 
+        { "models/powerups/ammo/betty_am", 
 		0, 0, 0},
 /* icon */		"icons/icona_betty",
 /* pickup */	"BETTY AMMO",
@@ -388,7 +388,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_splasher",
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/powerups/ammo/splasher_am.md3", 
+        { "models/powerups/ammo/splasher_am", 
 		0, 0, 0},
 /* icon */		"icons/icona_splasher",
 /* pickup */	"SPLASHER AMMO",
@@ -404,7 +404,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_imperius",
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/powerups/ammo/imperius_am.md3", 
+        { "models/powerups/ammo/imperius_am", 
 		0, 0, 0},
 /* icon */		"icons/icona_imperius",
 /* pickup */	"IMPERiUS AMMO",
@@ -420,7 +420,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_killerducks",
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/weapons2/killerducks/pad_killerduck_pu.md3", 
+        { "models/weapons2/killerducks/pad_killerduck_pu", 
 		0, 0, 0},
 /* icon */		"icons/killerducks",
 /* pickup */	"KiLLERDUCKS AMMO",
@@ -440,7 +440,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_spray_r",
 		"sounds/weapons/ammo/spraypistol/cartridges",
-        { "models/weapons2/spraypistol/cart_red.md3",
+        { "models/weapons2/spraypistol/cart_red",
 		0, 0, 0},
 /* icon */		"icons/icona_cart_red",
 /* pickup */	"red Cartridge",//if changing this string, you will have to change some other code!!!
@@ -456,7 +456,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_spray_b",
 		"sounds/weapons/ammo/spraypistol/cartridges",
-        { "models/weapons2/spraypistol/cart_blue.md3",
+        { "models/weapons2/spraypistol/cart_blue",
 		0, 0, 0},
 /* icon */		"icons/icona_cart_blue",
 /* pickup */	"blue Cartridge",//if changing this string, you will have to change some other code!!!
@@ -472,7 +472,7 @@ gitem_t	bg_itemlist[] =
 	{
 		"ammo_spray_n",
 		"sounds/weapons/ammo/spraypistol/cartridges",
-        { "models/weapons2/spraypistol/cart_neutral.md3",
+        { "models/weapons2/spraypistol/cart_neutral",
 		0, 0, 0},
 /* icon */		"icons/icona_cart_neutral",
 /* pickup */	"neutral Cartridge",//if changing this string, you will have to change some other code!!!
@@ -493,8 +493,8 @@ gitem_t	bg_itemlist[] =
 		"holdable_floater", 
 		"sounds/names/powerups/floater",
         { 
-		"models/powerups/instant/floater.md3", 
-		"models/powerups/instant/floater_ring.md3",
+		"models/powerups/instant/floater",
+		"models/powerups/instant/floater_ring",
 		0, 0},
 /* icon */		"icons/floater",
 /* pickup */	"FLOATER",
@@ -511,8 +511,8 @@ gitem_t	bg_itemlist[] =
 		"holdable_killerducks", 
 		"sounds/names/weapons/killerducks",
         { 
-		"models/weapons2/killerducks/pad_killerduck_pu.md3", 
-		"models/powerups/instant/killerducks_ring.md3",
+		"models/weapons2/killerducks/pad_killerduck_pu",
+		"models/powerups/instant/killerducks_ring",
 		0, 0},
 /* icon */		"icons/killerducks",
 /* pickup */	"KiLLERDUCKS",
@@ -530,8 +530,8 @@ gitem_t	bg_itemlist[] =
 		"holdable_bambam", 
 		"sounds/names/powerups/bambam",
         { 
-		"models/powerups/instant/bambam.md3", 
-		"models/powerups/instant/bambam_ring.md3",
+		"models/powerups/instant/bambam",
+		"models/powerups/instant/bambam_ring",
 		0, 0},
 /* icon */		"icons/bambam",
 /* pickup */	"BAMBAM",
@@ -548,8 +548,8 @@ gitem_t	bg_itemlist[] =
 		"holdable_boomies", 
 		"sounds/names/powerups/boomies",
         { 
-		"models/powerups/instant/boomies.md3", 
-		"models/powerups/instant/boomies_ring.md3",
+		"models/powerups/instant/boomies",
+		"models/powerups/instant/boomies_ring",
 		0, 0},
 /* icon */		"icons/boomies",
 /* pickup */	"BOOMiES",
@@ -570,8 +570,8 @@ gitem_t	bg_itemlist[] =
 	{
 		"item_padpower", 
 		"sounds/names/powerups/padpower",
-        { "models/powerups/instant/padpower.md3", 
-        "models/powerups/instant/padpower_ring.md3",
+        { "models/powerups/instant/padpower",
+        "models/powerups/instant/padpower_ring",
 		0, 0 },
 /* icon */		"icons/padpower",
 /* pickup */	"PADPOWER",
@@ -587,8 +587,8 @@ gitem_t	bg_itemlist[] =
 	{
 		"item_climber",
 		"sounds/names/powerups/climber",
-        { "models/powerups/instant/climber.md3", 
-		"models/powerups/instant/climber_ring.md3", 
+        { "models/powerups/instant/climber",
+		"models/powerups/instant/climber_ring",
 		0, 0 },
 /* icon */		"icons/climber",
 /* pickup */	"CLiMBER",
@@ -604,8 +604,8 @@ gitem_t	bg_itemlist[] =
 	{
 		"item_speedy",
 		"sounds/names/powerups/speedy",
-        { "models/powerups/instant/speedy.md3", 
-		"models/powerups/instant/speedy_ring.md3", 
+        { "models/powerups/instant/speedy",
+		"models/powerups/instant/speedy_ring",
 		0, 0 },
 /* icon */		"icons/speedy",
 /* pickup */	"SPEEDY",
@@ -621,8 +621,8 @@ gitem_t	bg_itemlist[] =
 	{
 		"item_jumper",
 		"sounds/names/powerups/jumper",
-        { "models/powerups/instant/jumper.md3", 
-		"models/powerups/instant/jumper_ring.md3", 
+        { "models/powerups/instant/jumper",
+		"models/powerups/instant/jumper_ring",
 		0, 0 },
 /* icon */		"icons/jumper",
 /* pickup */	"JUMPER",
@@ -638,8 +638,8 @@ gitem_t	bg_itemlist[] =
 	{
 		"item_visionless",
 		"sounds/names/powerups/visionless",
-        { "models/powerups/instant/visionless.md3", 
-		"models/powerups/instant/visionless_ring.md3", 
+        { "models/powerups/instant/visionless",
+		"models/powerups/instant/visionless_ring",
 		0, 0 },
 /* icon */		"icons/visionless",
 /* pickup */	"ViSiONLESS",
@@ -655,8 +655,8 @@ gitem_t	bg_itemlist[] =
 	{
 		"item_revival",
 		"sounds/names/powerups/revival",
-        { "models/powerups/instant/revival.md3", 
-		"models/powerups/instant/revival_ring.md3", 
+        { "models/powerups/instant/revival",
+		"models/powerups/instant/revival_ring",
 		0, 0 },
 /* icon */		"icons/revival",
 /* pickup */	"REViVAL",
@@ -672,8 +672,8 @@ gitem_t	bg_itemlist[] =
 	{
 		"item_berserker",
 		"sounds/weapons/punchy/berserker",
-        { 0,//"models/powerups/instant/revival.md3", 
-		0,//"models/powerups/instant/revival_ring.md3", 
+        { 0,//"models/powerups/instant/revival",
+		0,//"models/powerups/instant/revival_ring",
 		0, 0 },
 /* icon */		"icons/berserker",
 /* pickup */	"PUPPET MASTER",//"BERSERKER",
@@ -691,7 +691,7 @@ Only in CTL games
 	{
 		"team_CTL_redlolly",
 		NULL,
-        { "models/ctl/lollipop_red.md3",
+        { "models/ctl/lollipop_red",
 		0, 0, 0 },
 /* icon */		"icons/iconf_red1",
 /* pickup */	"red Lolly",
@@ -708,7 +708,7 @@ Only in CTL games
 	{
 		"team_CTL_bluelolly",
 		NULL,
-        { "models/ctl/lollipop_blue.md3",
+        { "models/ctl/lollipop_blue",
 		0, 0, 0 },
 /* icon */		"icons/iconf_blu1",
 /* pickup */	"blue Lolly",
@@ -724,7 +724,7 @@ Only in CTL games
 	{
 		"weapon_kma97",	// "Kiss My Ass 97"
 		"sounds/names/weapons/kma97",
-        { "models/weapons2/kma97/kma97.md3", 
+        { "models/weapons2/kma97/kma97",
 		0, 0, 0 },
 /* icon */		"icons/iconw_kma97",
 /* pickup */	"KMA97",
@@ -740,7 +740,7 @@ Only in CTL games
 	{
 		"ammo_kma97",		// "Kiss My Ass 97"
 		"sounds/weapons/ammo/ammo_pickup",
-        { "models/powerups/ammo/kma97_am.md3", 
+        { "models/powerups/ammo/kma97_am",
 		0, 0, 0},
 /* icon */		"icons/icona_kma97",
 /* pickup */	"KMA97 AMMO",

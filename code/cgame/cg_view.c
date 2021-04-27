@@ -36,7 +36,7 @@ enhanced into a single model testing facility.
 Model viewing can begin with either "testmodel <modelname>" or "testgun <modelname>".
 
 The names must be the full pathname after the basedir, like 
-"models/weapons/v_launch/tris.md3" or "players/male/tris.md3"
+"models/weapons/v_launch/tris" or "players/male/tris"
 
 Testmodel will create a fake entity 100 units in front of the current view
 position, directly facing the viewer.  It will remain immobile, so you can

@@ -485,7 +485,7 @@ void SP_target_balloon( gentity_t *self ) {
 	
 	//self->s.modelindex = G_ModelIndex( self->model );
 	// new code uses a fixed model as well as fixed bounds
-	self->s.modelindex = G_ModelIndex( "models/special/ballon.md3" );
+	self->s.modelindex = G_ModelIndex( "models/special/ballon" );
 	VectorSet( self->r.mins, -16, -16, -16 );
 	VectorSet( self->r.maxs,  16,  16,  8 );
 	self->r.contents = CONTENTS_BODY;
