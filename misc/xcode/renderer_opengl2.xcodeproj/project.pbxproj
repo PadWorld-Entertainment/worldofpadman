@@ -664,7 +664,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../code/jpeg-8c\"",
+					"\"$(SRCROOT)/../../code/jpeg-9d\"",
 					"\"$(SRCROOT)/../../code/SDL2/include\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -681,7 +681,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../code/jpeg-8c\"",
+					"\"$(SRCROOT)/../../code/jpeg-9d\"",
 					"\"$(SRCROOT)/../../code/SDL2/include\"",
 				);
 				LIBRARY_SEARCH_PATHS = (

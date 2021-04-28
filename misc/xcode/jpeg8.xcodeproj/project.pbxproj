@@ -144,13 +144,13 @@
 		2737EBE914D13F3000675E9F /* code */ = {
 			isa = PBXGroup;
 			children = (
-				2737EBEE14D13F5900675E9F /* jpeg-8c */,
+				2737EBEE14D13F5900675E9F /* jpeg-9d */,
 			);
 			name = code;
 			path = ../../code;
 			sourceTree = SOURCE_ROOT;
 		};
-		2737EBEE14D13F5900675E9F /* jpeg-8c */ = {
+		2737EBEE14D13F5900675E9F /* jpeg-9d */ = {
 			isa = PBXGroup;
 			children = (
 				274FAB8F178FAB9600B17C7A /* jaricom.c */,
@@ -209,7 +209,7 @@
 				274FABC4178FAB9600B17C7A /* jutils.c */,
 				274FABC5178FAB9600B17C7A /* jversion.h */,
 			);
-			path = "jpeg-8c";
+			path = "jpeg-9d";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

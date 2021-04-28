@@ -48,7 +48,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="..\..\code\SDL12\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;&quot;..\..\code\jpeg-8c&quot;"
+				AdditionalIncludeDirectories="..\..\code\SDL12\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;&quot;..\..\code\jpeg-9d&quot;"
 				PreprocessorDefinitions="_WIN32;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;HAVE_CONFIG_H;MISSIONPACK;USE_INTERNAL_JPEG;USE_RENDERER_DLOPEN"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -148,7 +148,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\code\SDL12\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;&quot;..\..\code\jpeg-8c&quot;"
+				AdditionalIncludeDirectories="..\..\code\SDL12\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;&quot;..\..\code\jpeg-9d&quot;"
 				PreprocessorDefinitions="_WIN32;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;HAVE_CONFIG_H;USE_INTERNAL_JPEG;USE_RENDERER_DLOPEN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -252,7 +252,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="..\..\code\SDL12\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;&quot;..\..\code\jpeg-8c&quot;"
+				AdditionalIncludeDirectories="..\..\code\SDL12\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;&quot;..\..\code\jpeg-9d&quot;"
 				PreprocessorDefinitions="_WIN32;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;HAVE_CONFIG_H;USE_INTERNAL_JPEG;USE_RENDERER_DLOPEN"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -350,7 +350,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\code\SDL12\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;&quot;..\..\code\jpeg-8c&quot;"
+				AdditionalIncludeDirectories="..\..\code\SDL12\include;..\..\code\libcurl;..\..\code\AL;..\..\code\libspeex\include;..\..\code\zlib;&quot;..\..\code\jpeg-9d&quot;"
 				PreprocessorDefinitions="_WIN32;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;BOTLIB;USE_ICON;USE_CURL;USE_CURL_DLOPEN;USE_OPENAL;USE_OPENAL_DLOPEN;USE_VOIP;HAVE_CONFIG_H;MISSIONPACK;USE_INTERNAL_JPEG;USE_RENDERER_DLOPEN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -669,187 +669,187 @@
 				Name="Source Files"
 				>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jaricom.c"
+					RelativePath="..\..\code\jpeg-9d\jaricom.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcapimin.c"
+					RelativePath="..\..\code\jpeg-9d\jcapimin.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcapistd.c"
+					RelativePath="..\..\code\jpeg-9d\jcapistd.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcarith.c"
+					RelativePath="..\..\code\jpeg-9d\jcarith.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jccoefct.c"
+					RelativePath="..\..\code\jpeg-9d\jccoefct.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jccolor.c"
+					RelativePath="..\..\code\jpeg-9d\jccolor.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcdctmgr.c"
+					RelativePath="..\..\code\jpeg-9d\jcdctmgr.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jchuff.c"
+					RelativePath="..\..\code\jpeg-9d\jchuff.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcinit.c"
+					RelativePath="..\..\code\jpeg-9d\jcinit.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcmainct.c"
+					RelativePath="..\..\code\jpeg-9d\jcmainct.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcmarker.c"
+					RelativePath="..\..\code\jpeg-9d\jcmarker.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcmaster.c"
+					RelativePath="..\..\code\jpeg-9d\jcmaster.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcomapi.c"
+					RelativePath="..\..\code\jpeg-9d\jcomapi.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcparam.c"
+					RelativePath="..\..\code\jpeg-9d\jcparam.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcprepct.c"
+					RelativePath="..\..\code\jpeg-9d\jcprepct.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jcsample.c"
+					RelativePath="..\..\code\jpeg-9d\jcsample.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jctrans.c"
+					RelativePath="..\..\code\jpeg-9d\jctrans.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdapimin.c"
+					RelativePath="..\..\code\jpeg-9d\jdapimin.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdapistd.c"
+					RelativePath="..\..\code\jpeg-9d\jdapistd.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdarith.c"
+					RelativePath="..\..\code\jpeg-9d\jdarith.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdatadst.c"
+					RelativePath="..\..\code\jpeg-9d\jdatadst.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdatasrc.c"
+					RelativePath="..\..\code\jpeg-9d\jdatasrc.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdcoefct.c"
+					RelativePath="..\..\code\jpeg-9d\jdcoefct.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdcolor.c"
+					RelativePath="..\..\code\jpeg-9d\jdcolor.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jddctmgr.c"
+					RelativePath="..\..\code\jpeg-9d\jddctmgr.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdhuff.c"
+					RelativePath="..\..\code\jpeg-9d\jdhuff.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdinput.c"
+					RelativePath="..\..\code\jpeg-9d\jdinput.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdmainct.c"
+					RelativePath="..\..\code\jpeg-9d\jdmainct.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdmarker.c"
+					RelativePath="..\..\code\jpeg-9d\jdmarker.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdmaster.c"
+					RelativePath="..\..\code\jpeg-9d\jdmaster.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdmerge.c"
+					RelativePath="..\..\code\jpeg-9d\jdmerge.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdpostct.c"
+					RelativePath="..\..\code\jpeg-9d\jdpostct.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdsample.c"
+					RelativePath="..\..\code\jpeg-9d\jdsample.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jdtrans.c"
+					RelativePath="..\..\code\jpeg-9d\jdtrans.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jerror.c"
+					RelativePath="..\..\code\jpeg-9d\jerror.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jfdctflt.c"
+					RelativePath="..\..\code\jpeg-9d\jfdctflt.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jfdctfst.c"
+					RelativePath="..\..\code\jpeg-9d\jfdctfst.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jfdctint.c"
+					RelativePath="..\..\code\jpeg-9d\jfdctint.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jidctflt.c"
+					RelativePath="..\..\code\jpeg-9d\jidctflt.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jidctfst.c"
+					RelativePath="..\..\code\jpeg-9d\jidctfst.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jidctint.c"
+					RelativePath="..\..\code\jpeg-9d\jidctint.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jmemmgr.c"
+					RelativePath="..\..\code\jpeg-9d\jmemmgr.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jmemnobs.c"
+					RelativePath="..\..\code\jpeg-9d\jmemnobs.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jquant1.c"
+					RelativePath="..\..\code\jpeg-9d\jquant1.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jquant2.c"
+					RelativePath="..\..\code\jpeg-9d\jquant2.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\code\jpeg-8c\jutils.c"
+					RelativePath="..\..\code\jpeg-9d\jutils.c"
 					>
 				</File>
 			</Filter>
