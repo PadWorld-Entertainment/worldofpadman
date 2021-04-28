@@ -1107,7 +1107,7 @@ static qboolean UI_ParseAnimationFile( const char *filename, playerInfo_t *pi ) 
 
 		token = COM_Parse( &text_p );
 		if ( !token[0] ) {
-			if( i >= TORSO_GETFLAG && i <= TORSO_NEGATIVE ) {
+			if( i >= TORSO_SPRAYATTACK && i <= TORSO_NEGATIVE ) {
 				animations[i].firstFrame = animations[TORSO_GESTURE].firstFrame;
 				animations[i].frameLerp = animations[TORSO_GESTURE].frameLerp;
 				animations[i].initialLerp = animations[TORSO_GESTURE].initialLerp;
