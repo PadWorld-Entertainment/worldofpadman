@@ -1530,6 +1530,8 @@ int CIN_PlayCinematic( const char *arg, int x, int y, int w, int h, int systemBi
 	Com_Memset(&cin, 0, sizeof(cinematics_t) );
 	currentHandle = CIN_HandleForVideo();
 
+	Com_Memset(&cinTable[currentHandle], 0, sizeof(cin_cache) );
+
 	cin.currentHandle = currentHandle;
 	cin.flags = systemBits;
 
