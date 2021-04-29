@@ -586,6 +586,7 @@ void	SCR_DrawSmallChar( int x, int y, int ch );
 // cl_cin.c
 //
 
+void CL_CompleteCinematicName(char *args, int argNum);
 void CL_PlayCinematic_f( void );
 void SCR_DrawCinematic (void);
 void SCR_RunCinematic (void);

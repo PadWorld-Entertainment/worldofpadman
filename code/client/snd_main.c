@@ -423,6 +423,20 @@ void S_Play_f( void ) {
 	}
 }
 
+static void S_CompleteMusicName(char *args, int argNum) {
+	if (argNum == 2) {
+		static const char *exts[] = {
+#ifdef USE_CODEC_OPUS
+			"opus",
+#endif
+#ifdef USE_CODEC_VORBIS
+			"ogg",
+#endif
+			"wav"};
+		Field_CompleteFilenameMultiple("music", ARRAY_LEN(exts), exts, qtrue);
+	}
+}
+
 /*
 =================
 S_Music_f
@@ -493,6 +507,7 @@ void S_Init( void )
 
 		Cmd_AddCommand( "play", S_Play_f );
 		Cmd_AddCommand( "music", S_Music_f );
+		Cmd_SetCommandCompletionFunc("music", S_CompleteMusicName);
 		Cmd_AddCommand( "stopmusic", S_StopMusic_f );
 		Cmd_AddCommand( "s_list", S_SoundList );
 		Cmd_AddCommand( "s_stop", S_StopAllSounds );
