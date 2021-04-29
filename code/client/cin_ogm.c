@@ -270,14 +270,14 @@ static qboolean loadAudio(cinematics_t* cin) {
 				ptr+=2;//numChans;
 			}
 
-			if(i>0) {
-				// tell libvorbis how many samples we actually consumed
-				vorbis_synthesis_read(&g_ogm.vd,i);
+			// tell libvorbis how many samples we actually consumed
+			vorbis_synthesis_read(&g_ogm.vd, i);
 
-				S_RawSamples( 0, i, g_ogm.vi.rate, 2, 2, rawBuffer, 1.0f, -1 );
-
-				anyDataTransferred = qtrue;
+			if (!(cin->flags & CIN_silent)) {
+				S_RawSamples(0, i, g_ogm.vi.rate, 2, g_ogm.vi.channels, rawBuffer, 1.0f, -1);
 			}
+
+			anyDataTransferred = qtrue;
 		}
 
 		if(!anyDataTransferred)	{
