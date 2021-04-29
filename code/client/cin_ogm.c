@@ -238,7 +238,7 @@ static byte rawBuffer[SIZEOF_RAWBUFF];
 
   return: audio wants more packets
 */
-static qboolean loadAudio(void) {
+static qboolean loadAudio(cinematics_t* cin) {
 	qboolean anyDataTransferred	= qtrue;
 	float	**pcm;
 	float	*right,*left;
@@ -504,7 +504,7 @@ static int loadVideoFrame(void) {
 
   return: qtrue => noDataTransferred
 */
-static qboolean loadFrame(void) {
+static qboolean loadFrame(cinematics_t* cin) {
 	qboolean anyDataTransferred	= qtrue;
 	qboolean needVOutputData		= qtrue;
 //	qboolean audioSDone	= qfalse;
@@ -547,7 +547,7 @@ static qboolean loadFrame(void) {
 
 			// load all Audio after loading new pages ...
 			if(g_ogm.VFrameCount>1) // wait some videoframes (it's better to have some delay, than a lagy sound)
-				audioWantsMoreData = loadAudio();
+				audioWantsMoreData = loadAudio(cin);
 		}
 	}
 
@@ -602,7 +602,7 @@ qboolean isPowerOf2(int x) {
 */
 //TODO: vorbis/theora-header&init in sub-functions
 //TODO: "clean" error-returns ...
-int Cin_OGM_Init(const char* filename) {
+int Cin_OGM_Init(cinematics_t* cin, const char* filename) {
 	int status;
 	ogg_page	og;
 	ogg_packet	op;
@@ -610,7 +610,7 @@ int Cin_OGM_Init(const char* filename) {
 
 	if(g_ogm.ogmFile) {
 		Com_Printf("WARNING: it seams there was already a ogm running, it will be killed to start %s\n", filename);
-		Cin_OGM_Shutdown();
+		Cin_OGM_Shutdown(cin);
 	}
 
 	memset(&g_ogm,0,sizeof(cin_ogm_t));
@@ -807,12 +807,12 @@ int nextNeededVFrame(void) {
   return:	0 => nothing special
 			1 => eof
 */
-int Cin_OGM_Run(int time) {
+int Cin_OGM_Run(cinematics_t* cin, int time) {
 
 	g_ogm.currentTime = time;
 
 	while(!g_ogm.VFrameCount || time+20>=(int)(g_ogm.VFrameCount*g_ogm.Vtime_unit/10000)) {
-		if(loadFrame())
+		if(loadFrame(cin))
 			return 1;
 	}
 
@@ -823,7 +823,7 @@ int Cin_OGM_Run(int time) {
   Gives a Pointer to the current Output-Buffer
   and the Resolution
 */
-unsigned char* Cin_OGM_GetOutput(int* outWidth, int* outHeight){
+unsigned char* Cin_OGM_GetOutput(cinematics_t* cin, int* outWidth, int* outHeight){
 	if(outWidth!=NULL)
 		*outWidth = g_ogm.outputWidht;
 	if(outHeight!=NULL)
@@ -832,7 +832,7 @@ unsigned char* Cin_OGM_GetOutput(int* outWidth, int* outHeight){
 	return g_ogm.outputBuffer;
 }
 
-void Cin_OGM_Shutdown() {
+void Cin_OGM_Shutdown(cinematics_t* cin) {
 #ifdef USE_CIN_XVID
 	int status;
 
@@ -862,8 +862,8 @@ void Cin_OGM_Shutdown() {
 }
 
 #else
-int Cin_OGM_Init(const char* filename) { return 1;}
-int Cin_OGM_Run(int time) { return 1; }
-unsigned char* Cin_OGM_GetOutput(int* outWidth, int* outHeight) { return 0; }
-void Cin_OGM_Shutdown(void) {}
+int Cin_OGM_Init(cinematics_t* cin, const char* filename) { return 1;}
+int Cin_OGM_Run(cinematics_t* cin, int time) { return 1; }
+unsigned char* Cin_OGM_GetOutput(cinematics_t* cin, int* outWidth, int* outHeight) { return 0; }
+void Cin_OGM_Shutdown(cinematics_t* cin) {}
 #endif

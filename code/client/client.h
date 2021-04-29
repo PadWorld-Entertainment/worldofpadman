@@ -586,6 +586,24 @@ void	SCR_DrawSmallChar( int x, int y, int ch );
 // cl_cin.c
 //
 
+#define DEFAULT_CIN_WIDTH	512
+#define DEFAULT_CIN_HEIGHT	512
+
+typedef struct {
+	byte linbuf[DEFAULT_CIN_WIDTH * DEFAULT_CIN_HEIGHT * 4 * 2];
+	byte file[65536];
+	short sqrTable[256];
+
+	int mcomp[256];
+	byte *qStatus[2][32768];
+
+	long oldXOff, oldYOff, oldysize, oldxsize;
+
+	int currentHandle;
+
+	int flags;
+} cinematics_t;
+
 void CL_CompleteCinematicName(char *args, int argNum);
 void CL_PlayCinematic_f( void );
 void SCR_DrawCinematic (void);
@@ -610,11 +628,10 @@ void Frame_yuv_to_rgb24( const unsigned char* y, const unsigned char* u, const u
 // cin_ogm.c
 //
 
-int Cin_OGM_Init(const char* filename);
-int Cin_OGM_Run(int time);
-unsigned char* Cin_OGM_GetOutput(int* outWidth, int* outHeight);
-void Cin_OGM_Shutdown(void);
-
+int Cin_OGM_Init(cinematics_t *cin, const char *filename);
+int Cin_OGM_Run(cinematics_t *cin, int time);
+unsigned char *Cin_OGM_GetOutput(cinematics_t *cin, int *outWidth, int *outHeight);
+void Cin_OGM_Shutdown(cinematics_t *cin);
 
 //
 // cl_cgame.c

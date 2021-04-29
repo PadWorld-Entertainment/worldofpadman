@@ -37,9 +37,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define MAXSIZE				8
 #define MINSIZE				4
 
-#define DEFAULT_CIN_WIDTH	512
-#define DEFAULT_CIN_HEIGHT	512
-
 #define ROQ_QUAD			0x1000
 #define ROQ_QUAD_INFO		0x1001
 #define ROQ_CODEBOOK		0x1002
@@ -77,19 +74,6 @@ typedef enum{
 	FT_ROQ=0,	// normal roq (vq3 stuff)
 	FT_OGM		// ogm(ogg wrapper, vorbis audio, xvid/theora video) for WoP
 }filetype_t;
-
-typedef struct {
-	byte				linbuf[DEFAULT_CIN_WIDTH*DEFAULT_CIN_HEIGHT*4*2];
-	byte				file[65536];
-	short				sqrTable[256];
-
-	int		mcomp[256];
-	byte				*qStatus[2][32768];
-
-	long				oldXOff, oldYOff, oldysize, oldxsize;
-
-	int					currentHandle;
-} cinematics_t;
 
 typedef struct {
 	char				fileName[MAX_OSPATH];
@@ -1335,7 +1319,7 @@ static void RoQShutdown( void ) {
 	}
 	cinTable[currentHandle].fileName[0] = 0;
 	if(cinTable[currentHandle].fileType==FT_OGM) {
-		Cin_OGM_Shutdown();
+		Cin_OGM_Shutdown(&cin);
 		cinTable[currentHandle].buf = NULL;
 	}
 	currentHandle = -1;
@@ -1389,7 +1373,7 @@ e_status CIN_RunCinematic (int handle)
 		cin.currentHandle = currentHandle;
 		cinTable[currentHandle].status = FMV_EOF;
 		if(cinTable[currentHandle].fileType==FT_OGM)
-			Cin_OGM_Init(cinTable[currentHandle].fileName);
+			Cin_OGM_Init(&cin, cinTable[currentHandle].fileName);
 		else
 			RoQReset();
 	}
@@ -1413,13 +1397,13 @@ e_status CIN_RunCinematic (int handle)
 
 	if(cinTable[currentHandle].fileType==FT_OGM) {
 
-		if(Cin_OGM_Run(cinTable[currentHandle].startTime==0?0:CL_ScaledMilliseconds()-cinTable[currentHandle].startTime))
+		if(Cin_OGM_Run(&cin, cinTable[currentHandle].startTime==0?0:CL_ScaledMilliseconds()-cinTable[currentHandle].startTime))
 			cinTable[currentHandle].status = FMV_EOF;
 		else {
 			int newW, newH;
 			qboolean resolutionChange=qfalse;
 
-			cinTable[currentHandle].buf = Cin_OGM_GetOutput(&newW,&newH);
+			cinTable[currentHandle].buf = Cin_OGM_GetOutput(&cin, &newW,&newH);
 
 			if(newW != cinTable[currentHandle].CIN_WIDTH) {
 				cinTable[currentHandle].CIN_WIDTH = newW;
@@ -1461,15 +1445,15 @@ e_status CIN_RunCinematic (int handle)
 				cinTable[currentHandle].status = FMV_IDLE;
 			}
 			else if (cinTable[currentHandle].looping) {
-				Cin_OGM_Shutdown();
-				Cin_OGM_Init(cinTable[currentHandle].fileName);
+				Cin_OGM_Shutdown(&cin);
+				Cin_OGM_Init(&cin, cinTable[currentHandle].fileName);
 				cinTable[currentHandle].buf = NULL;
 				cinTable[currentHandle].startTime = 0;
 				cinTable[currentHandle].status = FMV_PLAY;
 			} 
 			else {
 				RoQShutdown();
-//				Cin_OGM_Shutdown();
+//				Cin_OGM_Shutdown(&cin);
 			}
 		}
 
@@ -1547,16 +1531,17 @@ int CIN_PlayCinematic( const char *arg, int x, int y, int w, int h, int systemBi
 	currentHandle = CIN_HandleForVideo();
 
 	cin.currentHandle = currentHandle;
+	cin.flags = systemBits;
 
 	strcpy(cinTable[currentHandle].fileName, name);
 
 	fileextPtr = COM_GetExtension(name); // using the function from soundfile/audiocodec-detection
 	if(!Q_stricmp(fileextPtr,"ogm")) {
 
-		if(Cin_OGM_Init(name))	{
+		if(Cin_OGM_Init(&cin, name))	{
 			Com_Printf("starting ogm-playback failed(%s)\n", arg);
 			cinTable[currentHandle].fileName[0] = 0;
-			Cin_OGM_Shutdown();
+			Cin_OGM_Shutdown(&cin);
 			return -1;
 		}
 
