@@ -1791,7 +1791,7 @@ void S_AL_RawSamples(int stream, int samples, int rate, int width, int channels,
 
 	if (numBuffers == MAX_STREAM_BUFFERS)
 	{
-		Com_DPrintf(S_COLOR_RED"WARNING: Steam dropping raw samples, reached MAX_STREAM_BUFFERS\n");
+		Com_DPrintf(S_COLOR_RED"WARNING: Stream dropping raw samples, reached MAX_STREAM_BUFFERS\n");
 		return;
 	}
 
