@@ -54,7 +54,7 @@ static const char *HELP_GAMETYPE[] = {
 	"help_syc", "help_lps", "help_team_ffa", "help_ctl", "help_team_syc", "help_bb",
 	"help_unknown" // must be the last entry!
 };
-static const unsigned int NUM_HELP_GAMETYPE = (sizeof(HELP_GAMETYPE) / sizeof(HELP_GAMETYPE[0]));
+
 // Must contain an entry for each gametype_t
 // Maps gametypes to array indices of HELP_GAMETYPE
 static const int GAMETYPE_REMAP[] = {

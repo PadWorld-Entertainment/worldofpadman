@@ -202,7 +202,6 @@ static void UI_VoiceChatMenu_sendTargetEvent(void *ptr, int event) {
 static void UI_VoiceChatMenu_InitClients(void) {
 	int i;
 	char *name;
-	char *skill;
 	int index;
 	char info[MAX_INFO_STRING];
 	char localClientName[32]; // used to identify the local client.. there has to be a better way
@@ -219,10 +218,6 @@ static void UI_VoiceChatMenu_InitClients(void) {
 
 		if (Q_stricmpn(name, localClientName, 32) == 0)
 			continue;
-
-		skill = Info_ValueForKey(info, "skill"); // only bots have this key set
-		// if( strlen(skill) )
-		//	continue;
 
 		// it' a client, add it
 		index = voiceChatMenuInfo.numClients++;

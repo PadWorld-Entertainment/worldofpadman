@@ -21,9 +21,11 @@
 #include "cpu.h"
 
 #if !defined(OC_X86_ASM)
+#if 0
 static ogg_uint32_t oc_cpu_flags_get(void){
   return 0;
 }
+#endif
 #else
 # if !defined(_MSC_VER)
 #  if defined(__amd64__)||defined(__x86_64__)

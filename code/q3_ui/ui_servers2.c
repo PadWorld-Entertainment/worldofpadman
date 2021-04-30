@@ -421,7 +421,6 @@ static void ArenaServers_UpdateMenu(void) {
 	int i;
 	int j;
 	int count;
-	char *buff;
 	servernode_t *servernodeptr;
 	table_t *tableptr;
 	char *pingColor, *slotsColor, *mapColor, *modColor;
@@ -514,7 +513,6 @@ static void ArenaServers_UpdateMenu(void) {
 	for (i = 0, j = 0; i < count; i++, servernodeptr++) {
 		tableptr = &g_arenaservers.table[j];
 		tableptr->servernode = servernodeptr;
-		buff = tableptr->buff;
 
 		// can only cull valid results
 		if (!g_emptyservers && !servernodeptr->numclients) {

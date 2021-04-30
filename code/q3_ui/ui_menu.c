@@ -82,21 +82,6 @@ typedef struct {
 
 static errorMessage_t s_errorMessage;
 
-#if 0
-/*
-=================
-MainMenu_ExitAction
-=================
-*/
-static void MainMenu_ExitAction( qboolean result ) {
-	if( !result ) {
-		return;
-	}
-	UI_PopMenu();
-	UI_CreditMenu();
-}
-#endif
-
 /*
 =================
 Main_MenuEvent
@@ -109,15 +94,6 @@ void Main_MenuEvent(void *ptr, int event) {
 
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_SINGLEPLAYER:
-		//(original)		UI_SPLevelMenu();
-		//#ifdef WOPSP_TEST
-		//		WoPSPMenu_Init();
-		/*
-		#else
-				Q_strncpyz(s_main.msg,"SinglePlayer hasn't been implemented yet!",MAX_MSGLENGHT);
-				s_main.msgtime=uis.realtime;
-		#endif
-		*/
 		UI_StartServerMenu(qtrue);
 		break;
 
@@ -132,12 +108,6 @@ void Main_MenuEvent(void *ptr, int event) {
 	case ID_DEMOS:
 		UI_DemosMenu();
 		break;
-
-		/*(orignal)
-			case ID_CINEMATICS:
-				UI_CinematicsMenu();
-				break;
-		*/
 
 	case ID_MODS:
 		UI_ModsMenu();
@@ -249,7 +219,6 @@ and that local cinematics are killed
 */
 void UI_MainMenu(void) {
 	trap_Cvar_Set("sv_killserver", "1");
-	//	trap_Cmd_ExecuteText(EXEC_APPEND, "wopSP_stopStory\n");
 	trap_Cvar_Set("mapname", ""); // note: I just recognized that this isn't reset on server shutdown ... but for some
 								  // optimations in wopSP-code it is better to have this on a correct value
 

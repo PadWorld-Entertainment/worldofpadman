@@ -252,24 +252,24 @@ static void UI_CallVote_Draw(void) {
 
 		sec = ((atoi(info) + VOTE_TIME) / 1000);
 
-		UI_DrawStringNS(240, 130, "Vote in progress", UI_LEFT, 16.0, colorBlack);
-		UI_DrawStringNS(240, (130 + 16), va("Lasts: %d:%2.2d", (sec / 60), (sec % 60)), UI_LEFT, 16.0, colorBlack);
+		UI_DrawStringNS(240, 130, "Vote in progress", UI_LEFT, 16.0f, colorBlack);
+		UI_DrawStringNS(240, (130 + 16), va("Lasts: %d:%2.2d", (sec / 60), (sec % 60)), UI_LEFT, 16.0f, colorBlack);
 
 		trap_GetConfigString(CS_VOTE_STRING, info, sizeof(info));
-		UI_DrawStringNS(240, (130 + 40), "Vote is about:", UI_LEFT, 16.0, colorBlack);
+		UI_DrawStringNS(240, (130 + 40), "Vote is about:", UI_LEFT, 16.0f, colorBlack);
 		i = 0;
 #define MAXLINELEN 20
 		do {
 			Q_strncpyz(buff, (info + (i * MAXLINELEN)), (MAXLINELEN + 1));
 			i++;
-			UI_DrawStringNS(240, (130 + 40 + (17 * i)), buff, UI_LEFT, 16.0, colorBlack);
+			UI_DrawStringNS(240, (130 + 40 + (17 * i)), buff, UI_LEFT, 16.0f, colorBlack);
 		} while (strlen(buff) == MAXLINELEN);
 
 		trap_GetConfigString(CS_VOTE_YES, info, sizeof(info));
-		UI_DrawStringNS(230, 285, info, UI_LEFT, 23.0, colorBlack);
+		UI_DrawStringNS(230, 285, info, UI_LEFT, 23.0f, colorBlack);
 
 		trap_GetConfigString(CS_VOTE_NO, info, sizeof(info));
-		UI_DrawStringNS(360, 285, info, UI_RIGHT, 23.0, colorBlack);
+		UI_DrawStringNS(360, 285, info, UI_RIGHT, 23.0f, colorBlack);
 	} else {
 		if (s_callVoteMenu.voteRunning) {
 			s_callVoteMenu.voteRunning = qfalse;
@@ -280,7 +280,7 @@ static void UI_CallVote_Draw(void) {
 			s_callVoteMenu.go.generic.flags &= ~QMF_GRAYED;
 		}
 
-		UI_DrawStringNS(240, 130, "Vote type:", UI_LEFT, 18.0, colorBlack);
+		UI_DrawStringNS(240, 130, "Vote type:", UI_LEFT, 18.0f, colorBlack);
 
 		if (s_callVoteMenu.numListitems) {
 			int i = (s_callVoteMenu.selectedItem - s_callVoteMenu.baseItem);
@@ -444,11 +444,9 @@ UI_CallVoteMenu_Init
 static void UI_CallVoteMenu_Init(void) {
 	int n;
 	int y;
-	int gametype;
 	char info[MAX_INFO_STRING];
 
 	trap_GetConfigString(CS_SERVERINFO, info, sizeof(info));
-	gametype = atoi(Info_ValueForKey(info, "g_gametype"));
 
 	memset(&s_callVoteMenu, 0, sizeof(s_callVoteMenu));
 	s_callVoteMenu.menu.draw = UI_CallVote_Draw;
@@ -501,7 +499,7 @@ static void UI_CallVoteMenu_Init(void) {
 
 	for (n = 0, y = 170; n < NUM_LISTITEMS; n++, y += 18) {
 		s_callVoteMenu.listitems[n].generic.type = MTYPE_TEXTS;
-		s_callVoteMenu.listitems[n].fontHeight = 16.0;
+		s_callVoteMenu.listitems[n].fontHeight = 16.0f;
 		s_callVoteMenu.listitems[n].generic.flags = QMF_LEFT_JUSTIFY;
 		s_callVoteMenu.listitems[n].generic.id = (ID_LISTITEM0 + n);
 		s_callVoteMenu.listitems[n].generic.x = 230;
@@ -528,7 +526,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.voteyes.focuscolor = color_orange;
 
 	s_callVoteMenu.voteno.generic.type = MTYPE_TEXTS;
-	s_callVoteMenu.voteno.fontHeight = 32.0;
+	s_callVoteMenu.voteno.fontHeight = 32.0f;
 	s_callVoteMenu.voteno.generic.flags = QMF_RIGHT_JUSTIFY;
 	s_callVoteMenu.voteno.generic.callback = UI_CallVote_Vote;
 	s_callVoteMenu.voteno.generic.id = ID_VOTENO;
@@ -541,7 +539,7 @@ static void UI_CallVoteMenu_Init(void) {
 
 	y = 300;
 	s_callVoteMenu.go.generic.type = MTYPE_TEXTS;
-	s_callVoteMenu.go.fontHeight = 24.0;
+	s_callVoteMenu.go.fontHeight = 24.0f;
 	s_callVoteMenu.go.generic.flags = QMF_RIGHT_JUSTIFY;
 	s_callVoteMenu.go.generic.callback = UI_CallVote_GoEvent;
 	s_callVoteMenu.go.generic.id = ID_GO;
@@ -553,7 +551,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.go.focuscolor = color_orange;
 
 	s_callVoteMenu.back.generic.type = MTYPE_TEXTS;
-	s_callVoteMenu.back.fontHeight = 16.0;
+	s_callVoteMenu.back.fontHeight = 16.0f;
 	s_callVoteMenu.back.generic.callback = UI_CallVote_BackEvent;
 	s_callVoteMenu.back.generic.id = ID_BACK;
 	s_callVoteMenu.back.generic.x = 230;

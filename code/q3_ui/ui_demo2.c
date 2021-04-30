@@ -105,10 +105,6 @@ UI_DemosMenu_Key
 =================
 */
 static sfxHandle_t UI_DemosMenu_Key(int key) {
-	menucommon_s *item;
-
-	item = Menu_ItemAtCursor(&s_demos.menu);
-
 	return Menu_DefaultKey(&s_demos.menu, key);
 }
 
@@ -129,7 +125,7 @@ Demos_MenuInit
 */
 static void Demos_MenuInit(void) {
 	int i, j;
-	int len, extlen;
+	int len;
 	char *demoname, extension[32];
 
 	memset(&s_demos, 0, sizeof(demos_t));
