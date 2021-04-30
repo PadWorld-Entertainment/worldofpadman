@@ -112,6 +112,16 @@ extern int demo_protocols[];
 #define UNUSED_VAR
 #endif
 
+#ifndef Q_NORETURN
+#if defined(__GNUC__)
+#define Q_NORETURN __attribute__((noreturn))
+#elif defined(_MSC_VER)
+#define Q_NORETURN __declspec(noreturn)
+#else
+#define Q_NORETURN
+#endif
+#endif
+
 #if (defined _MSC_VER)
 #define Q_EXPORT __declspec(dllexport)
 #elif (defined __SUNPRO_C)

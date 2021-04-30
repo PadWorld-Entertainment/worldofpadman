@@ -726,7 +726,7 @@ extern int QDECL BotListCompare(const void *arg1, const void *arg2);
 // ui_syscalls.c
 //
 void trap_Print(const char *string);
-void trap_Error(const char *string) __attribute__((noreturn));
+void trap_Error(const char *string) Q_NORETURN;
 int trap_Milliseconds(void);
 void trap_Cvar_Register(vmCvar_t *vmCvar, const char *varName, const char *defaultValue, int flags);
 void trap_Cvar_Update(vmCvar_t *vmCvar);

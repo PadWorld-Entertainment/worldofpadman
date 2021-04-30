@@ -787,7 +787,7 @@ void Com_EndRedirect(void);
 void QDECL Com_Printf(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 void QDECL Com_DPrintf(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 void QDECL Com_Error(int code, const char *fmt, ...) __attribute__((noreturn, format(printf, 2, 3)));
-void Com_Quit_f(void) __attribute__((noreturn));
+void Com_Quit_f(void) Q_NORETURN;
 void Com_GameRestart(int checksumFeed, qboolean disconnect);
 
 int Com_Milliseconds(void); // will be journaled properly
@@ -1039,7 +1039,7 @@ qboolean Sys_DllExtension(const char *name);
 char *Sys_GetCurrentUser(void);
 
 void QDECL Sys_Error(const char *error, ...) __attribute__((noreturn, format(printf, 1, 2)));
-void Sys_Quit(void) __attribute__((noreturn));
+void Sys_Quit(void) Q_NORETURN;
 char *Sys_GetClipboardData(void); // note that this isn't journaled...
 
 void Sys_Print(const char *msg);
