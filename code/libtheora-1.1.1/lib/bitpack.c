@@ -38,7 +38,7 @@ static oc_pb_window oc_pack_refill(oc_pack_buf *_b,int _bits){
   stop=_b->stop;
   while(available<=OC_PB_WINDOW_SIZE-8&&ptr<stop){
     available+=8;
-    window|=(oc_pb_window)*ptr++<<OC_PB_WINDOW_SIZE-available;
+    window|=(oc_pb_window)*ptr++<<(OC_PB_WINDOW_SIZE-available);
   }
   _b->ptr=ptr;
   if(_bits>available){
@@ -58,7 +58,7 @@ int oc_pack_look1(oc_pack_buf *_b){
   window=_b->window;
   available=_b->bits;
   if(available<1)_b->window=window=oc_pack_refill(_b,1);
-  return window>>OC_PB_WINDOW_SIZE-1;
+  return window>>(OC_PB_WINDOW_SIZE-1);
 }
 
 void oc_pack_adv1(oc_pack_buf *_b){
@@ -78,7 +78,7 @@ long oc_pack_read(oc_pack_buf *_b,int _bits){
     window=oc_pack_refill(_b,_bits);
     available=_b->bits;
   }
-  result=window>>OC_PB_WINDOW_SIZE-_bits;
+  result=window>>(OC_PB_WINDOW_SIZE-_bits);
   available-=_bits;
   window<<=1;
   window<<=_bits-1;
@@ -97,7 +97,7 @@ int oc_pack_read1(oc_pack_buf *_b){
     window=oc_pack_refill(_b,1);
     available=_b->bits;
   }
-  result=window>>OC_PB_WINDOW_SIZE-1;
+  result=window>>(OC_PB_WINDOW_SIZE-1);
   available--;
   window<<=1;
   _b->bits=available;
