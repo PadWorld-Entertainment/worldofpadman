@@ -243,24 +243,6 @@ void LookAtKiller(gentity_t *self, gentity_t *inflictor, gentity_t *attacker) {
 
 /*
 ==================
-GibEntity
-==================
-*/
-void GibEntity(gentity_t *self, int killer) {
-	return; // we don't want any gib-stuff
-	/*
-		gentity_t *ent;
-		int i;
-
-		G_AddEvent( self, EV_GIB_PLAYER, killer );
-		self->takedamage = qfalse;
-		self->s.eType = ET_INVISIBLE;
-		self->r.contents = 0;
-	*/
-}
-
-/*
-==================
 body_die
 ==================
 */
@@ -268,17 +250,12 @@ void body_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int da
 	if (self->health > GIB_HEALTH) {
 		return;
 	}
-	// if ( !g_blood.integer ) {
 	self->health = GIB_HEALTH + 1;
-	return;
-	//}
-
-	// GibEntity( self, 0 );
 }
 
 // these are just for logging, the client prints its own messages
 // keep in sync with meansOfDeath_t !!!
-char *modNames[] = {
+static const char *modNames[] = {
 	"MOD_UNKNOWN",		   "MOD_PUMPER",  "MOD_PUNCHY",		  "MOD_NIPPER",			 "MOD_BALLOONY",
 	"MOD_BALLOONY_SPLASH", "MOD_BETTY",	  "MOD_BETTY_SPLASH", "MOD_BUBBLEG",		 "MOD_BUBBLEG_SPLASH",
 	"MOD_SPLASHER",		   "MOD_BOASTER", "MOD_IMPERIUS",	  "MOD_IMPERIUS_SPLASH", "MOD_INJECTOR",
@@ -369,7 +346,7 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	int contents;
 	int killer;
 	int i;
-	char *killerName, *obit;
+	const char *killerName, *obit;
 
 	if (self->client->ps.pm_type == PM_DEAD) {
 		return;
@@ -412,7 +389,8 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 		obit = modNames[meansOfDeath];
 	}
 
-	G_LogPrintf("Kill: %i %s %i\n", killer, obit, self->s.number);
+	G_LogPrintf("Kill: %i %i %i: %s killed %s by %s\n", killer, self->s.number, meansOfDeath, killerName,
+				self->client->pers.netname, obit);
 
 	// broadcast the death event to everyone
 	ent = G_TempEntity(self->r.currentOrigin, EV_OBITUARY);

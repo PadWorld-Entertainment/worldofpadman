@@ -186,7 +186,6 @@ qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, char *pickupName)
 
 #define BAMBAM_IDLE_THINKTIME (20 * 1000) // idle -> zzz
 static void bambam_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
-
 	if (!other->client)
 		return;
 	if (!ent->team)
@@ -216,7 +215,6 @@ static void bambam_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		trap_Trace(&tr, start, NULL, NULL, end, ent - g_entities, MASK_SHOT);
 
 		if (tr.fraction == 1.0f || tr.entityNum == (other - g_entities)) {
-			gentity_t *m;
 			vec3_t dir;
 
 			// Wake up when inactive, don't shoot yet
@@ -228,18 +226,15 @@ static void bambam_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 
 			if (ent->s.generic1 != BBS_SHOOTING) {
 				return;
-			} else {
-				ent->nextthink = (level.time + FIREDELAY_BAMBAM);
 			}
+			ent->nextthink = (level.time + FIREDELAY_BAMBAM);
 
 			// ~hack~ to use only one VectorNormalize, it should work because the 'end' isn't that different to
 			// 'other->s.pos.trBase'
 			VectorSubtract(end, start, dir);
-			//			if(VectorNormalize(dir)>0.0f) {
+			//if (VectorNormalize(dir) > 0.0f) {
 			if (tmpLen > 0.0f) {
 				VectorScale(dir, 1 / tmpLen, dir);
-				m = fire_bambamMissile(ent, start, dir, missileVelocity);
-				//				m->damage /= 20; // reduce dmg for testing
 				G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sounds/items/bambam/shoot"));
 
 				ent->timestamp = level.time;
@@ -330,11 +325,6 @@ qboolean bambam_createByPlayer(gentity_t *pEnt, char *pickupName) {
 	vec3_t tmpAngles;
 	trace_t tr;
 
-	vec3_t boxMins = {-128, -128, -30};
-	vec3_t boxMaxs = {128, 128, 64};
-	int boxEnts[10];
-	int numBoxEnts;
-	int i;
 	gentity_t *entBam;
 
 	if (MAX_TEAM_BAMBAMS <= level.numBambams[pEnt->client->sess.sessionTeam]) {

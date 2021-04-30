@@ -477,7 +477,7 @@ void Draw4VertsPic(float x1, float y1, float x2, float y2, float x3, float y3, f
 	poly.hShader = shader;
 
 	//	Com_Printf("x1=%3.2f, y1=%3.2f, x2=%3.2f, y2=%3.2f\nx3=%3.2f, y3=%3.2f, x4=%3.2f, y4=%3.2f\n", x1, y1, x2, y2,
-	//x3, y3, x4, y4);
+	// x3, y3, x4, y4);
 
 	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = 255 * color[0];
 

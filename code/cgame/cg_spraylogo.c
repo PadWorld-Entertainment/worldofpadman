@@ -627,7 +627,7 @@ void ActiveChooseLogoMenu(void) {
 	//	CG_DrawStringExt(300,40,va("loaded=%i",loadedlogos),colorWhite,qtrue,qfalse,8,16,32);
 
 	//	CG_DrawStringExt(40,POSY_FIRSTLINE-26,"please select a logo ... you can use the
-	//mouse",colorWhite,qtrue,qfalse,8,16,64);
+	// mouse",colorWhite,qtrue,qfalse,8,16,64);
 	CG_DrawStringExt(XLL, POSY_FIRSTLINE - 26, "please select a SprayLogo ...", colorWhite, qtrue, qfalse, 8, 16, 64);
 
 	CursorAtLogo = -1;

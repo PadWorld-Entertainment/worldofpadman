@@ -26,7 +26,7 @@ typedef struct flare_s {
 	float pos;
 	vec4_t color;
 	//(//noch einbinden)draw only in special distances (0->start fade, 1->end fade and start fulldraw, 2->end fulldraw
-	//and start fade, 3->end fade)
+	// and start fade, 3->end fade)
 	float radius;	  //(//noch einbinden)0->base radius, 1->radius over pos*dir, 2->distance(1/x²)
 	vec4_t turnstyle; // 0->base-angle, 1->center(1.0f=wirklich zur mitte), 2->bei x bewegung, 3->bei y bewegung
 } flare_t;
@@ -496,9 +496,6 @@ The main-init for the lensflaresys ... should be called at every vid_restart
 void Init_LensFlareSys(void) {
 	int i;
 	char tmpstr[256];
-	const char *info;
-
-	info = CG_ConfigString(CS_SERVERINFO);
 
 	memset(&flaremem, 0, sizeof(flaremem));
 	memset(&lfmem, 0, sizeof(lfmem));

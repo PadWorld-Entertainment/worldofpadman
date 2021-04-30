@@ -134,7 +134,7 @@ struct gentity_s {
 
 	qboolean inuse;
 
-	char *classname; // set in QuakeEd
+	const char *classname; // set in QuakeEd
 	int spawnflags;	 // set in QuakeEd
 
 	qboolean neverFree; // if true, FreeEntity will only unlink

@@ -145,7 +145,7 @@ int BotGetVisTeamPlayers(bot_state_t *bs, int *players, int maxplayers, qboolean
 
 	numplayers = 0;
 	for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
-		float squaredist, f, vis;
+		float squaredist, vis;
 		vec3_t dir;
 
 		if (i == bs->client)
@@ -174,15 +174,12 @@ int BotGetVisTeamPlayers(bot_state_t *bs, int *players, int maxplayers, qboolean
 		if (squaredist > Square(900.0 + alertness * 4000.0))
 			continue;
 
-		// 90degree for distances above 810 units, more for smaller distances (180 degree max)
-		f = 90 + 90 - (90 - (squaredist > Square(810) ? Square(810) : squaredist) / (810 * 9));
 		// visible ?
 		vis = BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, i);
 		if (vis > 0 || gametype == GT_LPS) {
 			players[numplayers++] = i;
 			if (numplayers >= maxplayers)
 				break;
-			// G_Printf("/%s ", Info_ValueForKey(buf, "n"));
 		}
 	}
 	// G_Printf("\n %d mates \n", numteammates);
@@ -493,12 +490,12 @@ qboolean BotPickBestBalloonGoal(bot_state_t *bs) {
 
 		// prefer balloons based on current balloon-difference
 		if (!capstate[j]) { // our balloon
-			multiplier = 1.0 - weight;
+			multiplier = 1.0f - weight;
 		} else {
 			if (capstate[j] == 1) // nmy balloon
 				multiplier = weight;
 			else // uncap balloon
-				multiplier = (1.0 - weight) / 2;
+				multiplier = (1.0f - weight) / 2.0f;
 		}
 		wtt = tt * multiplier * multiplier;
 
@@ -4461,7 +4458,7 @@ int CheckAreaForGoal(vec3_t origin) { // copy of BotFuzzyPointReachabilityArea
 	int firstareanum, j, x, y, z;
 	int areas[10], numareas, areanum, bestareanum;
 	float dist, bestdist;
-	vec3_t points[10], v, end, bestorigin;
+	vec3_t points[10], v, end;
 
 	firstareanum = 0;
 	areanum = trap_AAS_PointAreaNum(origin);
@@ -4470,14 +4467,14 @@ int CheckAreaForGoal(vec3_t origin) { // copy of BotFuzzyPointReachabilityArea
 		if (trap_AAS_AreaReachability(areanum)) {
 			return areanum;
 		}
-	} // end if
+	}
 	VectorCopy(origin, end);
 	end[2] += 4;
 	numareas = trap_AAS_TraceAreas(origin, end, areas, points, 10);
 	for (j = 0; j < numareas; j++) {
 		if (trap_AAS_AreaReachability(areas[j]))
 			return areas[j];
-	} // end for
+	}
 	bestdist = 999999;
 	bestareanum = 0;
 	for (z = 1; z >= -1; z -= 1) {
@@ -4495,21 +4492,19 @@ int CheckAreaForGoal(vec3_t origin) { // copy of BotFuzzyPointReachabilityArea
 						if (dist < bestdist) {
 							bestareanum = areas[j];
 							bestdist = dist;
-							VectorCopy(points[j], bestorigin);
-						} // end if
-					}	  // end if
+						}
+					}
 					if (!firstareanum)
 						firstareanum = areas[j];
-				} // end for
-			}	  // end for
-		}		  // end for
+				}
+			}
+		}
 		if (bestareanum) {
 			return bestareanum;
-			// VectorCopy(bestorigin, origin);
 		}
-	} // end for
+	}
 	return firstareanum;
-} // end of the function BotFuzzyPointReachabilityArea
+}
 
 /*
 ==================

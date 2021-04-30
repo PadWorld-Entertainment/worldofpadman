@@ -346,16 +346,11 @@ G_RegisterCvars
 void G_RegisterCvars(void) {
 	int i;
 	cvarTable_t *cv;
-	qboolean remapped = qfalse;
 
 	for (i = 0, cv = gameCvarTable; i < gameCvarTableSize; i++, cv++) {
 		trap_Cvar_Register(cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags);
 		if (cv->vmCvar)
 			cv->modificationCount = cv->vmCvar->modificationCount;
-
-		if (cv->teamShader) {
-			remapped = qtrue;
-		}
 	}
 
 	// check some things
@@ -375,7 +370,6 @@ G_UpdateCvars
 void G_UpdateCvars(void) {
 	int i;
 	cvarTable_t *cv;
-	qboolean remapped = qfalse;
 
 	for (i = 0, cv = gameCvarTable; i < gameCvarTableSize; i++, cv++) {
 		if (cv->vmCvar) {
@@ -389,10 +383,6 @@ void G_UpdateCvars(void) {
 					trap_SendServerCommand(
 						-1, va("print \"Server: %s changed to %s\n\"", cv->cvarName, cv->vmCvar->string));
 					G_LogPrintf("CvarChange: %s %s\n", cv->cvarName, cv->vmCvar->string);
-				}
-
-				if (cv->teamShader) {
-					remapped = qtrue;
 				}
 			}
 		}
@@ -1288,8 +1278,6 @@ void LogExit(const char *string) {
 	}
 
 	for (i = 0; i < numSorted; i++) {
-		int ping;
-
 		cl = &level.clients[level.sortedClients[i]];
 
 		if (cl->sess.sessionTeam == TEAM_SPECTATOR) {
@@ -1298,8 +1286,6 @@ void LogExit(const char *string) {
 		if (cl->pers.connected == CON_CONNECTING) {
 			continue;
 		}
-
-		ping = cl->ps.ping < 999 ? cl->ps.ping : 999;
 
 		G_LogPrintf("Score: %i %i\n", level.sortedClients[i], cl->ps.persistant[PERS_SCORE]);
 	}

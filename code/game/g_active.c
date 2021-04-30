@@ -17,7 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Quake III Arena source code; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-===========================================================================
+
 */
 //
 
@@ -998,14 +998,11 @@ while a slow client may have multiple ClientEndFrame between ClientThink.
 */
 void ClientEndFrame(gentity_t *ent) {
 	int i;
-	clientPersistant_t *pers;
 
 	if ((ent->client->sess.sessionTeam == TEAM_SPECTATOR) || LPSDeadSpec(ent->client)) {
 		SpectatorClientEndFrame(ent);
 		return;
 	}
-
-	pers = &ent->client->pers;
 
 	// turn off any expired powerups
 	for (i = 0; i < MAX_POWERUPS; i++) {
@@ -1013,14 +1010,6 @@ void ClientEndFrame(gentity_t *ent) {
 			ent->client->ps.powerups[i] = 0;
 		}
 	}
-
-	// save network bandwidth
-#if 0
-	if ( !g_synchronousClients->integer && ent->client->ps.pm_type == PM_NORMAL ) {
-		// FIXME: this must change eventually for non-sync demo recording
-		VectorClear( ent->client->ps.viewangles );
-	}
-#endif
 
 	//
 	// If the end of unit layout is displayed, don't give

@@ -424,7 +424,7 @@ static void S_CompleteMusicName(char *args, int argNum) {
 			"ogg",
 #endif
 			"wav"};
-		Field_CompleteFilenameMultiple("music", ARRAY_LEN(exts), exts, qtrue);
+		Field_CompleteFilenameMultiple("music", exts, ARRAY_LEN(exts), qtrue);
 	}
 }
 

@@ -154,24 +154,19 @@ Draw all the status / pacifier stuff during level loading
 void CG_DrawInformation(void) {
 	const char *s;
 	const char *info;
-	const char *sysInfo;
-	//	int			y;
-	//	int			value;
 	qhandle_t levelshot;
 	qhandle_t helppage;
-	//	char		buf[1024];
-	float lx, ly, lw, lh; // l->loading
+	float lx, ly, lw, lh;
 	// levelshot ideal coords (assuming 1024*768 resolution)
 	int lsiX = 167;
 	int lsiY = 125;
 	int lsiW = 690;
 	int lsiH = 517;
-	float idealAspectRatio = 4.0 / 3;
+	float idealAspectRatio = 4.0f / 3.0f;
 	int lsCenterDistX;		// x - distance to center
 	int lsX, lsY, lsW, lsH; // actual levelshot coords
 
 	info = CG_ConfigString(CS_SERVERINFO);
-	sysInfo = CG_ConfigString(CS_SYSTEMINFO);
 
 	trap_R_SetColor(NULL);
 
@@ -242,41 +237,38 @@ void CG_DrawInformation(void) {
 
 	// the first 150 rows are reserved for the client connection
 	// screen to write into
-	if ( cg.infoScreenText[0] ) {
-		UI_DrawProportionalString( 320, 128-32, va("Loading... %s", cg.infoScreenText),
-			UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+	if (cg.infoScreenText[0]) {
+		UI_DrawProportionalString(320, 128 - 32, va("Loading... %s", cg.infoScreenText),
+								  UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
 	} else {
-		UI_DrawProportionalString( 320, 128-32, "Awaiting snapshot...",
-			UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+		UI_DrawProportionalString(320, 128 - 32, "Awaiting snapshot...", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW,
+								  colorWhite);
 	}
 
 	// draw info string information
 
-	y = 180-32;
+	y = 180 - 32;
 
 	// don't print server lines if playing a local game
-	trap_Cvar_VariableStringBuffer( "sv_running", buf, sizeof( buf ) );
-	if ( !atoi( buf ) ) {
+	trap_Cvar_VariableStringBuffer("sv_running", buf, sizeof(buf));
+	if (!atoi(buf)) {
 		// server hostname
-		Q_strncpyz(buf, Info_ValueForKey( info, "sv_hostname" ), 1024);
+		Q_strncpyz(buf, Info_ValueForKey(info, "sv_hostname"), 1024);
 		Q_CleanStr(buf);
-		UI_DrawProportionalString( 320, y, buf,
-			UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+		UI_DrawProportionalString(320, y, buf, UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
 		y += PROP_HEIGHT;
 
 		// pure server
-		s = Info_ValueForKey( sysInfo, "sv_pure" );
-		if ( s[0] == '1' ) {
-			UI_DrawProportionalString( 320, y, "Pure Server",
-				UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+		s = Info_ValueForKey(sysInfo, "sv_pure");
+		if (s[0] == '1') {
+			UI_DrawProportionalString(320, y, "Pure Server", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
 			y += PROP_HEIGHT;
 		}
 
 		// server-specific message of the day
-		s = CG_ConfigString( CS_MOTD );
-		if ( s[0] ) {
-			UI_DrawProportionalString( 320, y, s,
-				UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+		s = CG_ConfigString(CS_MOTD);
+		if (s[0]) {
+			UI_DrawProportionalString(320, y, s, UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
 			y += PROP_HEIGHT;
 		}
 
@@ -285,23 +277,21 @@ void CG_DrawInformation(void) {
 	}
 
 	// map-specific message (long map name)
-	s = CG_ConfigString( CS_MESSAGE );
-	if ( s[0] ) {
-		UI_DrawProportionalString( 320, y, s,
-			UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+	s = CG_ConfigString(CS_MESSAGE);
+	if (s[0]) {
+		UI_DrawProportionalString(320, y, s, UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
 		y += PROP_HEIGHT;
 	}
 
 	// cheats warning
-	s = Info_ValueForKey( sysInfo, "sv_cheats" );
-	if ( s[0] == '1' ) {
-		UI_DrawProportionalString( 320, y, "CHEATS ARE ENABLED",
-			UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+	s = Info_ValueForKey(sysInfo, "sv_cheats");
+	if (s[0] == '1') {
+		UI_DrawProportionalString(320, y, "CHEATS ARE ENABLED", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
 		y += PROP_HEIGHT;
 	}
 
 	// game type
-	switch ( cgs.gametype ) {
+	switch (cgs.gametype) {
 	case GT_FFA:
 		s = "Free For All";
 		break;
@@ -327,31 +317,30 @@ void CG_DrawInformation(void) {
 		s = "Unknown Gametype";
 		break;
 	}
-	UI_DrawProportionalString( 320, y, s,
-		UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+	UI_DrawProportionalString(320, y, s, UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
 	y += PROP_HEIGHT;
-		
-	value = atoi( Info_ValueForKey( info, "timelimit" ) );
-	if ( value ) {
-		UI_DrawProportionalString( 320, y, va( "timelimit %i", value ),
-			UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+
+	value = atoi(Info_ValueForKey(info, "timelimit"));
+	if (value) {
+		UI_DrawProportionalString(320, y, va("timelimit %i", value), UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW,
+								  colorWhite);
 		y += PROP_HEIGHT;
 	}
 
-	if (cgs.gametype < GT_CTF ) {
-		value = atoi( Info_ValueForKey( info, "pointlimit" ) );
-			UI_DrawProportionalString( 320, y, va( "pointlimit %i", value ),
-				UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
-		if ( value ) {
+	if (cgs.gametype < GT_CTF) {
+		value = atoi(Info_ValueForKey(info, "pointlimit"));
+		UI_DrawProportionalString(320, y, va("pointlimit %i", value), UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW,
+								  colorWhite);
+		if (value) {
 			y += PROP_HEIGHT;
 		}
 	}
 
 	if (cgs.gametype >= GT_CTF) {
-		value = atoi( Info_ValueForKey( info, "pointlimit" ) );
-		if ( value ) {
-			UI_DrawProportionalString( 320, y, va( "pointlimit %i", value ),
-				UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+		value = atoi(Info_ValueForKey(info, "pointlimit"));
+		if (value) {
+			UI_DrawProportionalString(320, y, va("pointlimit %i", value), UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW,
+									  colorWhite);
 			y += PROP_HEIGHT;
 		}
 	}

@@ -291,7 +291,7 @@ CG_CheckLocalSounds
 ==================
 */
 void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
-	int highScore, health, armor;
+	int highScore;
 	qboolean reward = qfalse;
 	sfxHandle_t sfx;
 
@@ -302,8 +302,6 @@ void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 
 	// hit changes
 	if (ps->persistant[PERS_HITS] > ops->persistant[PERS_HITS]) {
-		armor = ps->persistant[PERS_ATTACKEE_ARMOR] & 0xff;
-		health = ps->persistant[PERS_ATTACKEE_ARMOR] >> 8;
 		trap_S_StartLocalSound(cgs.media.hitSound, CHAN_LOCAL_SOUND);
 	} else if (ps->persistant[PERS_HITS] < ops->persistant[PERS_HITS]) {
 		trap_S_StartLocalSound(cgs.media.hitTeamSound, CHAN_LOCAL_SOUND);
@@ -394,7 +392,7 @@ void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 		msec = cg.time - cgs.levelStartTime;
 		if (!(cg.timelimitWarnings & 4) && msec > (cgs.timelimit * 60 + 2) * 1000) {
 			cg.timelimitWarnings |= 1 | 2 | 4;
-			trap_S_StartLocalSound(cgs.media.suddenDeathSound, CHAN_ANNOUNCER); // noch ändern ... wirklich?
+			trap_S_StartLocalSound(cgs.media.suddenDeathSound, CHAN_ANNOUNCER); // TODO maybe change
 		} else if (!cg.warmup && !(cg.timelimitWarnings & 8) && msec > (cgs.timelimit * 60 - 1) * 1000) {
 			cg.timelimitWarnings |= 1 | 2 | 8;
 			trap_S_StartLocalSound(cgs.media.CountDown_GameOver, CHAN_ANNOUNCER);

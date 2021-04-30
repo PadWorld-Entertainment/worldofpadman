@@ -53,13 +53,13 @@ int Instagib_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t 
 	if (attacker == target)
 		return damage;
 
-	else if (mod == MOD_TRIGGER_HURT || mod == MOD_WATER || mod == MOD_SLIME || mod == MOD_LAVA)
+	if (mod == MOD_TRIGGER_HURT || mod == MOD_WATER || mod == MOD_SLIME || mod == MOD_LAVA)
 		return damage;
 
-	else if (dflags == DAMAGE_RADIUS && attacker->client)
+	if (dflags == DAMAGE_RADIUS && attacker->client)
 		return 0; // no splash damage from players -- might change later ;)
-	else
-		return INSTAGIB_DAMAGE;
+
+	return INSTAGIB_DAMAGE;
 }
 
 /**
@@ -68,7 +68,7 @@ Returns qfalse if entity is not to be spawned for instagib play.
 ent:	entity that wants to be spawned
 */
 qboolean Instagib_canSpawnEntity(gentity_t *ent) {
-	char *classname, *listEntry;
+	const char *classname, *listEntry;
 	int i;
 	static char *list[] = {// list of stuff we don't want
 						   "holdable_", "weapon_", "ammo_", "station_health", NULL};
@@ -139,4 +139,3 @@ with during instagib play
 int Instagib_getSpawnWeapon() {
 	return WP_KMA97; // for now, it's always KMA :)
 }
-// *********************************
