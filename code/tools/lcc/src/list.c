@@ -1,7 +1,6 @@
 #include "c.h"
 
-
-static List freenodes;		/* free list nodes */
+static List freenodes; /* free list nodes */
 
 /* append - append x to list, return new list */
 List append(void *x, List list) {

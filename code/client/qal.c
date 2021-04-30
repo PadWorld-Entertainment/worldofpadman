@@ -116,21 +116,17 @@ static qboolean alinit_fail = qfalse;
 GPA
 =================
 */
-static void *GPA(char *str)
-{
+static void *GPA(char *str) {
 	void *rv;
 
 	rv = Sys_LoadFunction(OpenALLib, str);
-	if(!rv)
-	{
-		Com_Printf( " Can't load symbol %s\n", str);
+	if (!rv) {
+		Com_Printf(" Can't load symbol %s\n", str);
 		alinit_fail = qtrue;
 		return NULL;
-	}
-	else
-	{
-		Com_DPrintf( " Loaded symbol %s (%p)\n", str, rv);
-        return rv;
+	} else {
+		Com_DPrintf(" Loaded symbol %s (%p)\n", str, rv);
+		return rv;
 	}
 }
 
@@ -139,12 +135,11 @@ static void *GPA(char *str)
 QAL_Init
 =================
 */
-qboolean QAL_Init(const char *libname)
-{
-	if(OpenALLib)
+qboolean QAL_Init(const char *libname) {
+	if (OpenALLib)
 		return qtrue;
 
-	if(!(OpenALLib = Sys_LoadDll(libname, qtrue)))
+	if (!(OpenALLib = Sys_LoadDll(libname, qtrue)))
 		return qfalse;
 
 	alinit_fail = qfalse;
@@ -225,10 +220,9 @@ qboolean QAL_Init(const char *libname)
 	qalcCaptureStop = GPA("alcCaptureStop");
 	qalcCaptureSamples = GPA("alcCaptureSamples");
 
-	if(alinit_fail)
-	{
+	if (alinit_fail) {
 		QAL_Shutdown();
-		Com_Printf( " One or more symbols not found\n");
+		Com_Printf(" One or more symbols not found\n");
 		return qfalse;
 	}
 
@@ -240,10 +234,8 @@ qboolean QAL_Init(const char *libname)
 QAL_Shutdown
 =================
 */
-void QAL_Shutdown( void )
-{
-	if(OpenALLib)
-	{
+void QAL_Shutdown(void) {
+	if (OpenALLib) {
 		Sys_UnloadLibrary(OpenALLib);
 		OpenALLib = NULL;
 	}
@@ -325,12 +317,10 @@ void QAL_Shutdown( void )
 	qalcCaptureSamples = NULL;
 }
 #else
-qboolean QAL_Init(const char *libname)
-{
+qboolean QAL_Init(const char *libname) {
 	return qtrue;
 }
-void QAL_Shutdown( void )
-{
+void QAL_Shutdown(void) {
 }
 #endif
 #endif

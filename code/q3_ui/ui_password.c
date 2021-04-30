@@ -92,7 +92,7 @@ static void SpecifyPassword_Cache(void) {
 	}
 }
 
-extern void SpecifyServer_DrawField( void *self );
+extern void SpecifyServer_DrawField(void *self);
 
 /*
 =================
@@ -116,7 +116,7 @@ static void SpecifyPassword_MenuInit(void) {
 	s_specifypassword.password.generic.y = 234;
 	s_specifypassword.password.field.widthInChars = 22;
 	s_specifypassword.password.field.maxchars = 80;
-	s_specifypassword.password.generic.ownerdraw  = SpecifyServer_DrawField;
+	s_specifypassword.password.generic.ownerdraw = SpecifyServer_DrawField;
 	trap_Cvar_VariableStringBuffer("password", s_specifypassword.password.field.buffer, 80);
 
 	s_specifypassword.back.generic.type = MTYPE_BITMAP;

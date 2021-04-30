@@ -1,15 +1,14 @@
 #include "c.h"
 
-
 static void printtoken(void);
-int errcnt   = 0;
+int errcnt = 0;
 int errlimit = 20;
 char kind[] = {
-#define xx(a,b,c,d,e,f,g) f,
-#define yy(a,b,c,d,e,f,g) f,
+#define xx(a, b, c, d, e, f, g) f,
+#define yy(a, b, c, d, e, f, g) f,
 #include "token.h"
 };
-int wflag;		/* != 0 to suppress warning messages */
+int wflag; /* != 0 to suppress warning messages */
 
 void test(int tok, char set[]) {
 	if (t == tok)
@@ -83,7 +82,9 @@ int fatal(const char *name, const char *fmt, int n) {
 /* printtoken - print current token preceded by a space */
 static void printtoken(void) {
 	switch (t) {
-	case ID: fprint(stderr, " `%s'", token); break;
+	case ID:
+		fprint(stderr, " `%s'", token);
+		break;
 	case ICON:
 		fprint(stderr, " `%s'", vtoa(tsym->type, tsym->u.c.v));
 		break;
@@ -98,10 +99,10 @@ static void printtoken(void) {
 					fprint(stderr, "\\%o", *s);
 				else
 					fprint(stderr, "%c", *s);
-		} else {	/* wchar_t string */
+		} else { /* wchar_t string */
 			unsigned int *s = tsym->u.c.v.p;
 			assert(tsym->type->type->size == widechar->size);
-			n = tsym->type->size/widechar->size;
+			n = tsym->type->size / widechar->size;
 			fprint(stderr, " L\"");
 			for (i = 0; i < 20 && i < n && *s; s++, i++)
 				if (*s < ' ' || *s >= 0177)
@@ -114,12 +115,16 @@ static void printtoken(void) {
 		else
 			fprint(stderr, "\"");
 		break;
-		}
+	}
 	case FCON:
-		fprint(stderr, " `%S'", token, (char*)cp - token);
+		fprint(stderr, " `%S'", token, (char *)cp - token);
 		break;
-	case '`': case '\'': fprint(stderr, " \"%k\"", t); break;
-	default: fprint(stderr, " `%k'", t);
+	case '`':
+	case '\'':
+		fprint(stderr, " \"%k\"", t);
+		break;
+	default:
+		fprint(stderr, " `%k'", t);
 	}
 }
 

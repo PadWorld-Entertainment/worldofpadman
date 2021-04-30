@@ -29,10 +29,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 CL_Netchan_TransmitNextFragment
 =================
 */
-qboolean CL_Netchan_TransmitNextFragment(netchan_t *chan)
-{
-	if(chan->unsentFragments)
-	{
+qboolean CL_Netchan_TransmitNextFragment(netchan_t *chan) {
+	if (chan->unsentFragments) {
 		Netchan_TransmitNextFragment(chan);
 		return qtrue;
 	}
@@ -45,14 +43,13 @@ qboolean CL_Netchan_TransmitNextFragment(netchan_t *chan)
 CL_Netchan_Transmit
 ================
 */
-void CL_Netchan_Transmit( netchan_t *chan, msg_t* msg ) {
-	MSG_WriteByte( msg, clc_EOF );
+void CL_Netchan_Transmit(netchan_t *chan, msg_t *msg) {
+	MSG_WriteByte(msg, clc_EOF);
 
 	Netchan_Transmit(chan, msg->cursize, msg->data);
 
 	// Transmit all fragments without delay
-	while(CL_Netchan_TransmitNextFragment(chan))
-	{
+	while (CL_Netchan_TransmitNextFragment(chan)) {
 		Com_DPrintf("WARNING: #462 unsent fragments (not supposed to happen!)\n");
 	}
 }
@@ -62,10 +59,10 @@ void CL_Netchan_Transmit( netchan_t *chan, msg_t* msg ) {
 CL_Netchan_Process
 =================
 */
-qboolean CL_Netchan_Process( netchan_t *chan, msg_t *msg ) {
+qboolean CL_Netchan_Process(netchan_t *chan, msg_t *msg) {
 	int ret;
 
-	ret = Netchan_Process( chan, msg );
+	ret = Netchan_Process(chan, msg);
 	if (!ret)
 		return qfalse;
 

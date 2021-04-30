@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-
 #ifndef __QAL_H__
 #define __QAL_H__
 
@@ -38,21 +37,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../AL/alc.h"
 #else
 #if defined(_MSC_VER) || defined(__APPLE__)
-  // MSVC users must install the OpenAL SDK which doesn't use the AL/*.h scheme.
-  // OSX framework also needs this
-  #include <al.h>
-  #include <alc.h>
+// MSVC users must install the OpenAL SDK which doesn't use the AL/*.h scheme.
+// OSX framework also needs this
+#include <al.h>
+#include <alc.h>
 #else
-  #include <AL/al.h>
-  #include <AL/alc.h>
+#include <AL/al.h>
+#include <AL/alc.h>
 #endif
 #endif
 
 /* Hack to enable compiling both on OpenAL SDK and OpenAL-soft. */
 #ifndef ALC_ENUMERATE_ALL_EXT
-#  define ALC_ENUMERATE_ALL_EXT 1
-#  define ALC_DEFAULT_ALL_DEVICES_SPECIFIER        0x1012
-#  define ALC_ALL_DEVICES_SPECIFIER                0x1013
+#define ALC_ENUMERATE_ALL_EXT 1
+#define ALC_DEFAULT_ALL_DEVICES_SPECIFIER 0x1012
+#define ALC_ALL_DEVICES_SPECIFIER 0x1013
 #endif
 
 #ifdef USE_OPENAL_DLOPEN
@@ -246,6 +245,6 @@ extern LPALCCAPTURESAMPLES qalcCaptureSamples;
 #endif
 
 qboolean QAL_Init(const char *libname);
-void QAL_Shutdown( void );
+void QAL_Shutdown(void);
 
-#endif	// __QAL_H__
+#endif // __QAL_H__

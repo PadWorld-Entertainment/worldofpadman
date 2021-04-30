@@ -1,13 +1,12 @@
 #include "c.h"
 
-
 int where = STMT;
 static int warn;
-static int nid = 1;		/* identifies trees & nodes in debugging output */
+static int nid = 1; /* identifies trees & nodes in debugging output */
 static struct nodeid {
 	int printed;
 	Tree node;
-} ids[500];			/* if ids[i].node == p, then p's id is i */
+} ids[500]; /* if ids[i].node == p, then p's id is i */
 
 static void printtree1(Tree, int, int);
 
@@ -51,9 +50,9 @@ static Tree root1(Tree p) {
 		p->u.sym = 0;
 		if (q->kids[0] == 0 && q->kids[1] == 0)
 			p = root1(p->kids[0]);
-		}
-		break;
-	case AND: case OR:
+	} break;
+	case AND:
+	case OR:
 		if ((p->kids[1] = root1(p->kids[1])) == 0)
 			p = root1(p->kids[0]);
 		break;
@@ -64,19 +63,30 @@ static Tree root1(Tree p) {
 	case RIGHT:
 		if (p->kids[1] == 0)
 			return root1(p->kids[0]);
-		if (p->kids[0] && p->kids[0]->op == CALL+B
-		&&  p->kids[1] && p->kids[1]->op == INDIR+B)
+		if (p->kids[0] && p->kids[0]->op == CALL + B && p->kids[1] && p->kids[1]->op == INDIR + B)
 			/* avoid premature release of the CALL+B temporary */
 			return p->kids[0];
-		if (p->kids[0] && p->kids[0]->op == RIGHT
-		&&  p->kids[1] == p->kids[0]->kids[0])
+		if (p->kids[0] && p->kids[0]->op == RIGHT && p->kids[1] == p->kids[0]->kids[0])
 			/* de-construct e++ construction */
 			return p->kids[0]->kids[1];
 		p = tree(RIGHT, p->type, root1(p->kids[0]), root1(p->kids[1]));
 		return p->kids[0] || p->kids[1] ? p : (Tree)0;
-	case EQ:  case NE:  case GT:   case GE:  case LE:  case LT: 
-	case ADD: case SUB: case MUL:  case DIV: case MOD:
-	case LSH: case RSH: case BAND: case BOR: case BXOR:
+	case EQ:
+	case NE:
+	case GT:
+	case GE:
+	case LE:
+	case LT:
+	case ADD:
+	case SUB:
+	case MUL:
+	case DIV:
+	case MOD:
+	case LSH:
+	case RSH:
+	case BAND:
+	case BOR:
+	case BXOR:
 		if (warn++ == 0)
 			warning("expression with no effect elided\n");
 		p = tree(RIGHT, p->type, root1(p->kids[0]), root1(p->kids[1]));
@@ -87,20 +97,33 @@ static Tree root1(Tree p) {
 		if (isptr(p->kids[0]->type) && isvolatile(p->kids[0]->type->type))
 			warning("reference to `volatile %t' elided\n", p->type);
 		/* fall through */
-	case CVI: case CVF: case CVU: case CVP:
-	case NEG: case BCOM: case FIELD:
+	case CVI:
+	case CVF:
+	case CVU:
+	case CVP:
+	case NEG:
+	case BCOM:
+	case FIELD:
 		if (warn++ == 0)
 			warning("expression with no effect elided\n");
 		return root1(p->kids[0]);
-	case ADDRL: case ADDRG: case ADDRF: case CNST:
+	case ADDRL:
+	case ADDRG:
+	case ADDRF:
+	case CNST:
 		if (needconst)
 			return p;
 		if (warn++ == 0)
 			warning("expression with no effect elided\n");
 		return NULL;
-	case ARG: case ASGN: case CALL: case JUMP: case LABEL:
+	case ARG:
+	case ASGN:
+	case CALL:
+	case JUMP:
+	case LABEL:
 		break;
-	default: assert(0);
+	default:
+		assert(0);
 	}
 	return p;
 }
@@ -111,62 +134,18 @@ Tree root(Tree p) {
 }
 
 char *opname(int op) {
-	static char *opnames[] = {
-	"",
-	"CNST",
-	"ARG",
-	"ASGN",
-	"INDIR",
-	"CVC",
-	"CVD",
-	"CVF",
-	"CVI",
-	"CVP",
-	"CVS",
-	"CVU",
-	"NEG",
-	"CALL",
-	"*LOAD*",
-	"RET",
-	"ADDRG",
-	"ADDRF",
-	"ADDRL",
-	"ADD",
-	"SUB",
-	"LSH",
-	"MOD",
-	"RSH",
-	"BAND",
-	"BCOM",
-	"BOR",
-	"BXOR",
-	"DIV",
-	"MUL",
-	"EQ",
-	"GE",
-	"GT",
-	"LE",
-	"LT",
-	"NE",
-	"JUMP",
-	"LABEL",
-	"AND",
-	"NOT",
-	"OR",
-	"COND",
-	"RIGHT",
-	"FIELD"
-	}, *suffixes[] = {
-		"0", "F", "D", "C", "S", "I", "U", "P", "V", "B",
-		"10","11","12","13","14","15"
-	};
+	static char *opnames[] = {"",	   "CNST",	"ARG", "ASGN", "INDIR", "CVC",	  "CVD",   "CVF",	"CVI",
+							  "CVP",   "CVS",	"CVU", "NEG",  "CALL",	"*LOAD*", "RET",   "ADDRG", "ADDRF",
+							  "ADDRL", "ADD",	"SUB", "LSH",  "MOD",	"RSH",	  "BAND",  "BCOM",	"BOR",
+							  "BXOR",  "DIV",	"MUL", "EQ",   "GE",	"GT",	  "LE",	   "LT",	"NE",
+							  "JUMP",  "LABEL", "AND", "NOT",  "OR",	"COND",	  "RIGHT", "FIELD"},
+				*suffixes[] = {"0", "F", "D", "C", "S", "I", "U", "P", "V", "B", "10", "11", "12", "13", "14", "15"};
 
 	if (generic(op) >= AND && generic(op) <= FIELD && opsize(op) == 0)
 		return opnames[opindex(op)];
 	return stringf("%s%s%s",
-		opindex(op) > 0 && opindex(op) < NELEMS(opnames) ?
-			opnames[opindex(op)] : stringd(opindex(op)),
-		suffixes[optype(op)], opsize(op) > 0 ? stringd(opsize(op)) : "");
+				   opindex(op) > 0 && opindex(op) < NELEMS(opnames) ? opnames[opindex(op)] : stringd(opindex(op)),
+				   suffixes[optype(op)], opsize(op) > 0 ? stringd(opsize(op)) : "");
 }
 
 int nodeid(Tree p) {
@@ -209,8 +188,8 @@ static void printtree1(Tree p, int fd, int lev) {
 		if (p->kids[i])
 			fprint(f, " #%d", nodeid(p->kids[i]));
 	if (p->op == FIELD && p->u.field)
-		fprint(f, " %s %d..%d", p->u.field->name,
-			fieldsize(p->u.field) + fieldright(p->u.field), fieldright(p->u.field));
+		fprint(f, " %s %d..%d", p->u.field->name, fieldsize(p->u.field) + fieldright(p->u.field),
+			   fieldright(p->u.field));
 	else if (generic(p->op) == CNST)
 		fprint(f, " %s", vtoa(p->type, p->u.v));
 	else if (p->u.sym)

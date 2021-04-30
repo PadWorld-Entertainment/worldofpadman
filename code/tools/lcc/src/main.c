@@ -12,15 +12,15 @@ int Aflag;		/* >= 0 if -A specified */
 int Pflag;		/* != 0 if -P specified */
 int glevel;		/* == [0-9] if -g[0-9] specified */
 int xref;		/* != 0 for cross-reference data */
-Symbol YYnull;		/* _YYnull  symbol if -n or -nvalidate specified */
-Symbol YYcheck;		/* _YYcheck symbol if -nvalidate,check specified */
+Symbol YYnull;	/* _YYnull  symbol if -n or -nvalidate specified */
+Symbol YYcheck; /* _YYcheck symbol if -nvalidate,check specified */
 
 static char *comment;
 static Interface stabIR;
-static char *currentfile;       /* current file name */
-static int currentline;		/* current line number */
-static FILE *srcfp;		/* stream for current file, if non-NULL */
-static int srcpos;		/* position of srcfp, if srcfp is non-NULL */
+static char *currentfile; /* current file name */
+static int currentline;	  /* current line number */
+static FILE *srcfp;		  /* stream for current file, if non-NULL */
+static int srcpos;		  /* position of srcfp, if srcfp is non-NULL */
 int main(int argc, char *argv[]) {
 	int i, j;
 	for (i = argc - 1; i > 0; i--)
@@ -59,15 +59,15 @@ int main(int argc, char *argv[]) {
 	if (glevel || xref) {
 		Symbol symroot = NULL;
 		Coordinate src;
-		foreach(types,       GLOBAL, typestab, &symroot);
-		foreach(identifiers, GLOBAL, typestab, &symroot);
+		foreach (types, GLOBAL, typestab, &symroot)
+			;
+		foreach (identifiers, GLOBAL, typestab, &symroot)
+			;
 		src.file = firstfile;
 		src.x = 0;
 		src.y = lineno;
 		if ((glevel > 2 || xref) && IR->stabend)
-			(*IR->stabend)(&src, symroot,
-				ltov(&loci,    PERM),
-				ltov(&symbols, PERM), NULL);
+			(*IR->stabend)(&src, symroot, ltov(&loci, PERM), ltov(&symbols, PERM), NULL);
 		else if (IR->stabend)
 			(*IR->stabend)(&src, NULL, NULL, NULL, NULL);
 	}
@@ -89,9 +89,9 @@ void main_init(int argc, char *argv[]) {
 	for (i = 1; i < argc; i++)
 		if (strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "-g2") == 0)
 			glevel = 2;
-		else if (strncmp(argv[i], "-g", 2) == 0) {	/* -gn[,x] */
+		else if (strncmp(argv[i], "-g", 2) == 0) { /* -gn[,x] */
 			char *p = strchr(argv[i], ',');
-			glevel = atoi(argv[i]+2);
+			glevel = atoi(argv[i] + 2);
 			if (p) {
 				comment = p + 1;
 				if (glevel == 0)
@@ -102,7 +102,7 @@ void main_init(int argc, char *argv[]) {
 					IR->stabline = stabline;
 					IR->stabend = stabend;
 				}
-			}	
+			}
 		} else if (strcmp(argv[i], "-x") == 0)
 			xref++;
 		else if (strcmp(argv[i], "-A") == 0) {
@@ -118,16 +118,16 @@ void main_init(int argc, char *argv[]) {
 				YYnull->sclass = EXTERN;
 				(*IR->defsymbol)(YYnull);
 			}
-		} else if (strncmp(argv[i], "-n", 2) == 0) {	/* -nvalid[,check] */
+		} else if (strncmp(argv[i], "-n", 2) == 0) { /* -nvalid[,check] */
 			char *p = strchr(argv[i], ',');
 			if (p) {
-				YYcheck = install(string(p+1), &globals, GLOBAL, PERM);
+				YYcheck = install(string(p + 1), &globals, GLOBAL, PERM);
 				YYcheck->type = func(voidptype, NULL, 1);
 				YYcheck->sclass = EXTERN;
 				(*IR->defsymbol)(YYcheck);
-				p = stringn(argv[i]+2, p - (argv[i]+2));
+				p = stringn(argv[i] + 2, p - (argv[i] + 2));
 			} else
-				p = string(argv[i]+2);
+				p = string(argv[i] + 2);
 			YYnull = install(p, &globals, GLOBAL, PERM);
 			YYnull->type = func(voidptype, NULL, 1);
 			YYnull->sclass = EXTERN;
@@ -137,13 +137,13 @@ void main_init(int argc, char *argv[]) {
 		else if (strncmp(argv[i], "-s", 2) == 0)
 			density = strtod(&argv[i][2], NULL);
 		else if (strncmp(argv[i], "-errout=", 8) == 0) {
-			FILE *f = fopen(argv[i]+8, "w");
+			FILE *f = fopen(argv[i] + 8, "w");
 			if (f == NULL) {
-				fprint(stderr, "%s: can't write errors to `%s'\n", argv[0], argv[i]+8);
+				fprint(stderr, "%s: can't write errors to `%s'\n", argv[0], argv[i] + 8);
 				exit(EXIT_FAILURE);
 			}
 			fclose(f);
-			f = freopen(argv[i]+8, "w", stderr);
+			f = freopen(argv[i] + 8, "w", stderr);
 			assert(f);
 		} else if (strncmp(argv[i], "-e", 2) == 0) {
 			int x;
@@ -168,13 +168,11 @@ void main_init(int argc, char *argv[]) {
 				outfile = argv[i];
 		}
 
-	if (infile != NULL && strcmp(infile, "-") != 0
-	&& freopen(infile, "r", stdin) == NULL) {
+	if (infile != NULL && strcmp(infile, "-") != 0 && freopen(infile, "r", stdin) == NULL) {
 		fprint(stderr, "%s: can't read `%s'\n", argv[0], infile);
 		exit(EXIT_FAILURE);
 	}
-	if (outfile != NULL && strcmp(outfile, "-") != 0
-	&& freopen(outfile, "w", stdout) == NULL) {
+	if (outfile != NULL && strcmp(outfile, "-") != 0 && freopen(outfile, "w", stdout) == NULL) {
 		fprint(stderr, "%s: can't write `%s'\n", argv[0], outfile);
 		exit(EXIT_FAILURE);
 	}
@@ -203,7 +201,7 @@ static void stabline(Coordinate *cp) {
 			rewind(srcfp);
 			srcpos = 0;
 		}
-		for ( ; srcpos < cp->y; srcpos++)
+		for (; srcpos < cp->y; srcpos++)
 			if (fgets(buf, sizeof buf, srcfp) == NULL) {
 				fclose(srcfp);
 				srcfp = NULL;

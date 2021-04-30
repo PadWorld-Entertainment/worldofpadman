@@ -1,7 +1,7 @@
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
-              2015 James Canete
+			  2015 James Canete
 
 This file is part of Quake III Arena source code.
 
@@ -23,10 +23,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "../renderercommon/tr_common.h"
 
-typedef unsigned int   ui32_t;
+typedef unsigned int ui32_t;
 
-typedef struct ddsHeader_s
-{
+typedef struct ddsHeader_s {
 	ui32_t headerSize;
 	ui32_t flags;
 	ui32_t height;
@@ -48,42 +47,39 @@ typedef struct ddsHeader_s
 	ui32_t caps3;
 	ui32_t caps4;
 	ui32_t reserved2;
-}
-ddsHeader_t;
+} ddsHeader_t;
 
 // flags:
-#define _DDSFLAGS_REQUIRED     0x001007
-#define _DDSFLAGS_PITCH        0x8
-#define _DDSFLAGS_MIPMAPCOUNT  0x20000
+#define _DDSFLAGS_REQUIRED 0x001007
+#define _DDSFLAGS_PITCH 0x8
+#define _DDSFLAGS_MIPMAPCOUNT 0x20000
 #define _DDSFLAGS_FIRSTMIPSIZE 0x80000
-#define _DDSFLAGS_VOLUMEDEPTH  0x800000
+#define _DDSFLAGS_VOLUMEDEPTH 0x800000
 
 // pixelFormatFlags:
 #define DDSPF_ALPHAPIXELS 0x1
-#define DDSPF_ALPHA       0x2
-#define DDSPF_FOURCC      0x4
-#define DDSPF_RGB         0x40
-#define DDSPF_YUV         0x200
-#define DDSPF_LUMINANCE   0x20000
+#define DDSPF_ALPHA 0x2
+#define DDSPF_FOURCC 0x4
+#define DDSPF_RGB 0x40
+#define DDSPF_YUV 0x200
+#define DDSPF_LUMINANCE 0x20000
 
 // caps:
-#define DDSCAPS_COMPLEX  0x8
-#define DDSCAPS_MIPMAP   0x400000
+#define DDSCAPS_COMPLEX 0x8
+#define DDSCAPS_MIPMAP 0x400000
 #define DDSCAPS_REQUIRED 0x1000
 
 // caps2:
 #define DDSCAPS2_CUBEMAP 0xFE00
-#define DDSCAPS2_VOLUME  0x200000
+#define DDSCAPS2_VOLUME 0x200000
 
-typedef struct ddsHeaderDxt10_s
-{
+typedef struct ddsHeaderDxt10_s {
 	ui32_t dxgiFormat;
 	ui32_t dimensions;
 	ui32_t miscFlags;
 	ui32_t arraySize;
 	ui32_t miscFlags2;
-}
-ddsHeaderDxt10_t;
+} ddsHeaderDxt10_t;
 
 // dxgiFormat
 // from http://msdn.microsoft.com/en-us/library/windows/desktop/bb173059%28v=vs.85%29.aspx
@@ -207,14 +203,10 @@ typedef enum DXGI_FORMAT {
 	DXGI_FORMAT_FORCE_UINT = 0xffffffffUL
 } DXGI_FORMAT;
 
-#define EncodeFourCC(x) ((((ui32_t)((x)[0]))      ) | \
-                         (((ui32_t)((x)[1])) << 8 ) | \
-                         (((ui32_t)((x)[2])) << 16) | \
-                         (((ui32_t)((x)[3])) << 24) )
+#define EncodeFourCC(x)                                                                                                \
+	((((ui32_t)((x)[0]))) | (((ui32_t)((x)[1])) << 8) | (((ui32_t)((x)[2])) << 16) | (((ui32_t)((x)[3])) << 24))
 
-
-void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLenum *picFormat, int *numMips )
-{
+void R_LoadDDS(const char *filename, byte **pic, int *width, int *height, GLenum *picFormat, int *numMips) {
 	union {
 		byte *b;
 		void *v;
@@ -224,8 +216,7 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 	ddsHeaderDxt10_t *ddsHeaderDxt10 = NULL;
 	byte *data;
 
-	if (!picFormat)
-	{
+	if (!picFormat) {
 		ri.Printf(PRINT_ERROR, "R_LoadDDS() called without picFormat parameter!");
 		return;
 	}
@@ -244,7 +235,7 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 	//
 	// load the file
 	//
-	len = ri.FS_ReadFile( ( char * ) filename, &buffer.v);
+	len = ri.FS_ReadFile((char *)filename, &buffer.v);
 	if (!buffer.b || len < 0) {
 		return;
 	}
@@ -252,8 +243,7 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 	//
 	// reject files that are too small to hold even a header
 	//
-	if (len < 4 + sizeof(*ddsHeader))
-	{
+	if (len < 4 + sizeof(*ddsHeader)) {
 		ri.Printf(PRINT_ALL, "File %s is too small to be a DDS file.\n", filename);
 		ri.FS_FreeFile(buffer.v);
 		return;
@@ -262,8 +252,7 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 	//
 	// reject files that don't start with "DDS "
 	//
-	if (*((ui32_t *)(buffer.b)) != EncodeFourCC("DDS "))
-	{
+	if (*((ui32_t *)(buffer.b)) != EncodeFourCC("DDS ")) {
 		ri.Printf(PRINT_ALL, "File %s is not a DDS file.\n", filename);
 		ri.FS_FreeFile(buffer.v);
 		return;
@@ -273,10 +262,8 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 	// parse header and dx10 header if available
 	//
 	ddsHeader = (ddsHeader_t *)(buffer.b + 4);
-	if ((ddsHeader->pixelFormatFlags & DDSPF_FOURCC) && ddsHeader->fourCC == EncodeFourCC("DX10"))
-	{
-		if (len < 4 + sizeof(*ddsHeader) + sizeof(*ddsHeaderDxt10))
-		{
+	if ((ddsHeader->pixelFormatFlags & DDSPF_FOURCC) && ddsHeader->fourCC == EncodeFourCC("DX10")) {
+		if (len < 4 + sizeof(*ddsHeader) + sizeof(*ddsHeaderDxt10)) {
 			ri.Printf(PRINT_ALL, "File %s indicates a DX10 header it is too small to contain.\n", filename);
 			ri.FS_FreeFile(buffer.v);
 			return;
@@ -285,9 +272,7 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 		ddsHeaderDxt10 = (ddsHeaderDxt10_t *)(buffer.b + 4 + sizeof(ddsHeader_t));
 		data = buffer.b + 4 + sizeof(*ddsHeader) + sizeof(*ddsHeaderDxt10);
 		len -= 4 + sizeof(*ddsHeader) + sizeof(*ddsHeaderDxt10);
-	}
-	else
-	{
+	} else {
 		data = buffer.b + 4 + sizeof(*ddsHeader);
 		len -= 4 + sizeof(*ddsHeader);
 	}
@@ -297,8 +282,7 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 	if (height)
 		*height = ddsHeader->height;
 
-	if (numMips)
-	{
+	if (numMips) {
 		if (ddsHeader->flags & _DDSFLAGS_MIPMAPCOUNT)
 			*numMips = ddsHeader->numMips;
 		else
@@ -306,100 +290,95 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 	}
 
 	// FIXME: handle cube map
-	//if ((ddsHeader->caps2 & DDSCAPS2_CUBEMAP) == DDSCAPS2_CUBEMAP)
+	// if ((ddsHeader->caps2 & DDSCAPS2_CUBEMAP) == DDSCAPS2_CUBEMAP)
 
 	//
 	// Convert DXGI format/FourCC into OpenGL format
 	//
-	if (ddsHeaderDxt10)
-	{
-		switch (ddsHeaderDxt10->dxgiFormat)
-		{
-			case DXGI_FORMAT_BC1_TYPELESS:
-			case DXGI_FORMAT_BC1_UNORM:
-				// FIXME: check for GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
-				*picFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
-				break;
+	if (ddsHeaderDxt10) {
+		switch (ddsHeaderDxt10->dxgiFormat) {
+		case DXGI_FORMAT_BC1_TYPELESS:
+		case DXGI_FORMAT_BC1_UNORM:
+			// FIXME: check for GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
+			*picFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+			break;
 
-			case DXGI_FORMAT_BC1_UNORM_SRGB:
-				// FIXME: check for GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT
-				*picFormat = GL_COMPRESSED_SRGB_S3TC_DXT1_EXT;
-				break;
+		case DXGI_FORMAT_BC1_UNORM_SRGB:
+			// FIXME: check for GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT
+			*picFormat = GL_COMPRESSED_SRGB_S3TC_DXT1_EXT;
+			break;
 
-			case DXGI_FORMAT_BC2_TYPELESS:
-			case DXGI_FORMAT_BC2_UNORM:
-				*picFormat = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
-				break;
+		case DXGI_FORMAT_BC2_TYPELESS:
+		case DXGI_FORMAT_BC2_UNORM:
+			*picFormat = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+			break;
 
-			case DXGI_FORMAT_BC2_UNORM_SRGB:
-				*picFormat = GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT;
-				break;
+		case DXGI_FORMAT_BC2_UNORM_SRGB:
+			*picFormat = GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT;
+			break;
 
-			case DXGI_FORMAT_BC3_TYPELESS:
-			case DXGI_FORMAT_BC3_UNORM:
-				*picFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-				break;
+		case DXGI_FORMAT_BC3_TYPELESS:
+		case DXGI_FORMAT_BC3_UNORM:
+			*picFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+			break;
 
-			case DXGI_FORMAT_BC3_UNORM_SRGB:
-				*picFormat = GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT;
-				break;
+		case DXGI_FORMAT_BC3_UNORM_SRGB:
+			*picFormat = GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT;
+			break;
 
-			case DXGI_FORMAT_BC4_TYPELESS:
-			case DXGI_FORMAT_BC4_UNORM:
-				*picFormat = GL_COMPRESSED_RED_RGTC1;
-				break;
+		case DXGI_FORMAT_BC4_TYPELESS:
+		case DXGI_FORMAT_BC4_UNORM:
+			*picFormat = GL_COMPRESSED_RED_RGTC1;
+			break;
 
-			case DXGI_FORMAT_BC4_SNORM:
-				*picFormat = GL_COMPRESSED_SIGNED_RED_RGTC1;
-				break;
+		case DXGI_FORMAT_BC4_SNORM:
+			*picFormat = GL_COMPRESSED_SIGNED_RED_RGTC1;
+			break;
 
-			case DXGI_FORMAT_BC5_TYPELESS:
-			case DXGI_FORMAT_BC5_UNORM:
-				*picFormat = GL_COMPRESSED_RG_RGTC2;
-				break;
+		case DXGI_FORMAT_BC5_TYPELESS:
+		case DXGI_FORMAT_BC5_UNORM:
+			*picFormat = GL_COMPRESSED_RG_RGTC2;
+			break;
 
-			case DXGI_FORMAT_BC5_SNORM:
-				*picFormat = GL_COMPRESSED_SIGNED_RG_RGTC2;
-				break;
+		case DXGI_FORMAT_BC5_SNORM:
+			*picFormat = GL_COMPRESSED_SIGNED_RG_RGTC2;
+			break;
 
-			case DXGI_FORMAT_BC6H_TYPELESS:
-			case DXGI_FORMAT_BC6H_UF16:
-				*picFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
-				break;
+		case DXGI_FORMAT_BC6H_TYPELESS:
+		case DXGI_FORMAT_BC6H_UF16:
+			*picFormat = GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
+			break;
 
-			case DXGI_FORMAT_BC6H_SF16:
-				*picFormat = GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB;
-				break;
+		case DXGI_FORMAT_BC6H_SF16:
+			*picFormat = GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB;
+			break;
 
-			case DXGI_FORMAT_BC7_TYPELESS:
-			case DXGI_FORMAT_BC7_UNORM:
-				*picFormat = GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
-				break;
+		case DXGI_FORMAT_BC7_TYPELESS:
+		case DXGI_FORMAT_BC7_UNORM:
+			*picFormat = GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
+			break;
 
-			case DXGI_FORMAT_BC7_UNORM_SRGB:
-				*picFormat = GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB;
-				break;
+		case DXGI_FORMAT_BC7_UNORM_SRGB:
+			*picFormat = GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB;
+			break;
 
-			case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
-				*picFormat = GL_SRGB8_ALPHA8_EXT;
-				break;
+		case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+			*picFormat = GL_SRGB8_ALPHA8_EXT;
+			break;
 
-			case DXGI_FORMAT_R8G8B8A8_UNORM:
-			case DXGI_FORMAT_R8G8B8A8_SNORM:
-				*picFormat = GL_RGBA8;
-				break;
+		case DXGI_FORMAT_R8G8B8A8_UNORM:
+		case DXGI_FORMAT_R8G8B8A8_SNORM:
+			*picFormat = GL_RGBA8;
+			break;
 
-			default:
-				ri.Printf(PRINT_ALL, "DDS File %s has unsupported DXGI format %d.", filename, ddsHeaderDxt10->dxgiFormat);
-				ri.FS_FreeFile(buffer.v);
-				return;
-				break;
+		default:
+			ri.Printf(PRINT_ALL, "DDS File %s has unsupported DXGI format %d.", filename, ddsHeaderDxt10->dxgiFormat);
+			ri.FS_FreeFile(buffer.v);
+			return;
+			break;
 		}
-	}
-	else
-	{
-		if (ddsHeader->pixelFormatFlags & DDSPF_FOURCC)
-		{
+	} else {
+		if (ddsHeader->pixelFormatFlags & DDSPF_FOURCC) {
 			if (ddsHeader->fourCC == EncodeFourCC("DXT1"))
 				*picFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
 			else if (ddsHeader->fourCC == EncodeFourCC("DXT2"))
@@ -422,24 +401,16 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 				*picFormat = GL_COMPRESSED_RG_RGTC2;
 			else if (ddsHeader->fourCC == EncodeFourCC("BC5S"))
 				*picFormat = GL_COMPRESSED_SIGNED_RG_RGTC2;
-			else
-			{
+			else {
 				ri.Printf(PRINT_ALL, "DDS File %s has unsupported FourCC.", filename);
 				ri.FS_FreeFile(buffer.v);
 				return;
 			}
-		}
-		else if (ddsHeader->pixelFormatFlags == (DDSPF_RGB | DDSPF_ALPHAPIXELS)
-			&& ddsHeader->rgbBitCount == 32
-			&& ddsHeader->rBitMask == 0x000000ff
-			&& ddsHeader->gBitMask == 0x0000ff00
-			&& ddsHeader->bBitMask == 0x00ff0000
-			&& ddsHeader->aBitMask == 0xff000000)
-		{
+		} else if (ddsHeader->pixelFormatFlags == (DDSPF_RGB | DDSPF_ALPHAPIXELS) && ddsHeader->rgbBitCount == 32 &&
+				   ddsHeader->rBitMask == 0x000000ff && ddsHeader->gBitMask == 0x0000ff00 &&
+				   ddsHeader->bBitMask == 0x00ff0000 && ddsHeader->aBitMask == 0xff000000) {
 			*picFormat = GL_RGBA8;
-		}
-		else
-		{
+		} else {
 			ri.Printf(PRINT_ALL, "DDS File %s has unsupported RGBA format.", filename);
 			ri.FS_FreeFile(buffer.v);
 			return;
@@ -452,8 +423,7 @@ void R_LoadDDS ( const char *filename, byte **pic, int *width, int *height, GLen
 	ri.FS_FreeFile(buffer.v);
 }
 
-void R_SaveDDS(const char *filename, byte *pic, int width, int height, int depth)
-{
+void R_SaveDDS(const char *filename, byte *pic, int width, int height, int depth) {
 	byte *data;
 	ddsHeader_t *ddsHeader;
 	int picSize, size;

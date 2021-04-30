@@ -9,22 +9,20 @@
  * Hideset 0 is empty.
  */
 
-#define	HSSIZ	32
-typedef	Nlist	**Hideset;
-Hideset	*hidesets;
-int	nhidesets = 0;
-int	maxhidesets = 3;
-int	inserths(Hideset, Hideset, Nlist *);
+#define HSSIZ 32
+typedef Nlist **Hideset;
+Hideset *hidesets;
+int nhidesets = 0;
+int maxhidesets = 3;
+int inserths(Hideset, Hideset, Nlist *);
 
 /*
  * Test for membership in a hideset
  */
-int
-checkhideset(int hs, Nlist *np)
-{
+int checkhideset(int hs, Nlist *np) {
 	Hideset hsp;
 
-	if (hs>=nhidesets)
+	if (hs >= nhidesets)
 		abort();
 	for (hsp = hidesets[hs]; *hsp; hsp++) {
 		if (*hsp == np)
@@ -36,36 +34,32 @@ checkhideset(int hs, Nlist *np)
 /*
  * Return the (possibly new) hideset obtained by adding np to hs.
  */
-int
-newhideset(int hs, Nlist *np)
-{
+int newhideset(int hs, Nlist *np) {
 	int i, len;
-	Nlist *nhs[HSSIZ+3];
+	Nlist *nhs[HSSIZ + 3];
 	Hideset hs1, hs2;
 
 	len = inserths(nhs, hidesets[hs], np);
-	for (i=0; i<nhidesets; i++) {
-		for (hs1=nhs, hs2=hidesets[i]; *hs1==*hs2; hs1++, hs2++)
+	for (i = 0; i < nhidesets; i++) {
+		for (hs1 = nhs, hs2 = hidesets[i]; *hs1 == *hs2; hs1++, hs2++)
 			if (*hs1 == NULL)
 				return i;
 	}
-	if (len>=HSSIZ)
+	if (len >= HSSIZ)
 		return hs;
 	if (nhidesets >= maxhidesets) {
-		maxhidesets = 3*maxhidesets/2+1;
-		hidesets = (Hideset *)realloc(hidesets, (sizeof (Hideset *))*maxhidesets);
+		maxhidesets = 3 * maxhidesets / 2 + 1;
+		hidesets = (Hideset *)realloc(hidesets, (sizeof(Hideset *)) * maxhidesets);
 		if (hidesets == NULL)
 			error(FATAL, "Out of memory from realloc");
 	}
-	hs1 = (Hideset)domalloc(len*sizeof(Hideset));
-	memmove(hs1, nhs, len*sizeof(Hideset));
+	hs1 = (Hideset)domalloc(len * sizeof(Hideset));
+	memmove(hs1, nhs, len * sizeof(Hideset));
 	hidesets[nhidesets] = hs1;
 	return nhidesets++;
 }
 
-int
-inserths(Hideset dhs, Hideset shs, Nlist *np)
-{
+int inserths(Hideset dhs, Hideset shs, Nlist *np) {
 	Hideset odhs = dhs;
 
 	while (*shs && *shs < np)
@@ -81,9 +75,7 @@ inserths(Hideset dhs, Hideset shs, Nlist *np)
 /*
  * Hideset union
  */
-int
-unionhideset(int hs1, int hs2)
-{
+int unionhideset(int hs1, int hs2) {
 	Hideset hp;
 
 	for (hp = hidesets[hs2]; *hp; hp++)
@@ -91,22 +83,18 @@ unionhideset(int hs1, int hs2)
 	return hs1;
 }
 
-void
-iniths(void)
-{
-	hidesets = (Hideset *)domalloc(maxhidesets*sizeof(Hideset *));
+void iniths(void) {
+	hidesets = (Hideset *)domalloc(maxhidesets * sizeof(Hideset *));
 	hidesets[0] = (Hideset)domalloc(sizeof(Hideset));
 	*hidesets[0] = NULL;
 	nhidesets++;
 }
 
-void
-prhideset(int hs)
-{
+void prhideset(int hs) {
 	Hideset np;
 
 	for (np = hidesets[hs]; *np; np++) {
-		fprintf(stderr, (char*)(*np)->name, (*np)->len);
+		fprintf(stderr, (char *)(*np)->name, (*np)->len);
 		fprintf(stderr, " ");
 	}
 }

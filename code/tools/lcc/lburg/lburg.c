@@ -17,9 +17,7 @@ static Term terms;
 static Nonterm nts;
 static Rule rules;
 static int nrules;
-static struct block {
-	struct block *link;
-} *memlist;			/* list of allocated blocks */
+static struct block { struct block *link; } * memlist; /* list of allocated blocks */
 
 static char *stringf(char *fmt, ...);
 static void print(char *fmt, ...);
@@ -41,7 +39,7 @@ static void emittest(Tree t, char *v, char *suffix);
 int main(int argc, char *argv[]) {
 	int c, i;
 	Nonterm p;
-	
+
 	for (i = 1; i < argc; i++)
 		if (strcmp(argv[i], "-T") == 0)
 			Tflag = 1;
@@ -50,8 +48,7 @@ int main(int argc, char *argv[]) {
 		else if (strncmp(argv[i], "-p", 2) == 0 && i + 1 < argc)
 			prefix = argv[++i];
 		else if (*argv[i] == '-' && argv[i][1]) {
-			yyerror("usage: %s [-T | -p prefix]... [ [ input ] output ] \n",
-				argv[0]);
+			yyerror("usage: %s [-T | -p prefix]... [ [ input ] output ] \n", argv[0]);
 			exit(1);
 		} else if (infp == NULL) {
 			if (strcmp(argv[i], "-") == 0)
@@ -94,7 +91,7 @@ int main(int argc, char *argv[]) {
 	if (!feof(infp))
 		while ((c = getc(infp)) != EOF)
 			putc(c, outfp);
-	while (memlist) {	/* for purify */
+	while (memlist) { /* for purify */
 		struct block *q = memlist->link;
 		free(memlist);
 		memlist = q;
@@ -124,7 +121,7 @@ static char *stringf(char *fmt, ...) {
 	vsprintf(buf, fmt, ap);
 	va_end(ap);
 	return strcpy(alloc(strlen(buf) + 1), buf);
-}	
+}
 
 struct entry {
 	union {
@@ -133,23 +130,23 @@ struct entry {
 		struct nonterm nt;
 	} sym;
 	struct entry *link;
-} *table[211];
-#define HASHSIZE (sizeof table/sizeof table[0])
+} * table[211];
+#define HASHSIZE (sizeof table / sizeof table[0])
 
 /* hash - return hash number for str */
 static unsigned hash(char *str) {
 	unsigned h = 0;
 
 	while (*str)
-		h = (h<<1) + *str++;
+		h = (h << 1) + *str++;
 	return h;
 }
 
 /* lookup - lookup symbol name */
 static void *lookup(char *name) {
-	struct entry *p = table[hash(name)%HASHSIZE];
+	struct entry *p = table[hash(name) % HASHSIZE];
 
-	for ( ; p; p = p->link)
+	for (; p; p = p->link)
 		if (strcmp(name, p->sym.name) == 0)
 			return &p->sym;
 	return 0;
@@ -158,7 +155,7 @@ static void *lookup(char *name) {
 /* install - install symbol name */
 static void *install(char *name) {
 	struct entry *p = alloc(sizeof *p);
-	int i = hash(name)%HASHSIZE;
+	int i = hash(name) % HASHSIZE;
 
 	p->sym.name = name;
 	p->link = table[i];
@@ -201,8 +198,7 @@ Term term(char *id, int esn) {
 	while (*q && (*q)->esn < p->esn)
 		q = &(*q)->link;
 	if (*q && (*q)->esn == p->esn)
-		yyerror("duplicate external symbol number `%s=%d'\n",
-			p->name, p->esn);
+		yyerror("duplicate external symbol number `%s=%d'\n", p->name, p->esn);
 	p->link = *q;
 	*q = p;
 	return p;
@@ -267,7 +263,7 @@ Rule rule(char *id, Tree pattern, char *template, char *code) {
 	} else if (pattern->left == NULL && pattern->right == NULL) {
 		Nonterm p = pattern->op;
 		r->chain = p->chain;
-	        p->chain = r;
+		p->chain = r;
 		if (r->cost == -1)
 			yyerror("illegal nonconstant cost `%s'\n", code);
 	}
@@ -283,12 +279,18 @@ static void print(char *fmt, ...) {
 	va_list ap;
 
 	va_start(ap, fmt);
-	for ( ; *fmt; fmt++)
+	for (; *fmt; fmt++)
 		if (*fmt == '%')
 			switch (*++fmt) {
-			case 'd': fprintf(outfp, "%d", va_arg(ap, int)); break;
-			case 's': fputs(va_arg(ap, char *), outfp); break;
-			case 'P': fprintf(outfp, "%s_", prefix); break;
+			case 'd':
+				fprintf(outfp, "%d", va_arg(ap, int));
+				break;
+			case 's':
+				fputs(va_arg(ap, char *), outfp);
+				break;
+			case 'P':
+				fprintf(outfp, "%s_", prefix);
+				break;
 			case 'T': {
 				Tree t = va_arg(ap, Tree);
 				print("%S", t->op);
@@ -297,20 +299,28 @@ static void print(char *fmt, ...) {
 				else if (t->left)
 					print("(%T)", t->left);
 				break;
-				}
+			}
 			case 'R': {
 				Rule r = va_arg(ap, Rule);
 				print("%S: %T", r->lhs, r->pattern);
 				break;
-				}
-			case 'S': fputs(va_arg(ap, Term)->name, outfp); break;
-			case '1': case '2': case '3': case '4': case '5': {
+			}
+			case 'S':
+				fputs(va_arg(ap, Term)->name, outfp);
+				break;
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5': {
 				int n = *fmt - '0';
 				while (n-- > 0)
 					putc('\t', outfp);
 				break;
-				}
-			default: putc(*fmt, outfp); break;			
+			}
+			default:
+				putc(*fmt, outfp);
+				break;
 			}
 		else
 			putc(*fmt, outfp);
@@ -334,7 +344,7 @@ static void reach(Tree t) {
 static void ckreach(Nonterm p) {
 	Rule r;
 
-        p->reached = 1;
+	p->reached = 1;
 	for (r = p->rules; r; r = r->decode)
 		reach(r->pattern);
 }
@@ -345,7 +355,8 @@ static void emitcase(Term p, int ntnumber) {
 
 	print("%1case %d: /* %S */\n", p->esn, p);
 	switch (p->arity) {
-	case 0: case -1:
+	case 0:
+	case -1:
 		break;
 	case 1:
 		print("%2%Plabel(LEFT_CHILD(a));\n");
@@ -354,12 +365,14 @@ static void emitcase(Term p, int ntnumber) {
 		print("%2%Plabel(LEFT_CHILD(a));\n");
 		print("%2%Plabel(RIGHT_CHILD(a));\n");
 		break;
-	default: assert(0);
+	default:
+		assert(0);
 	}
 	for (r = p->rules; r; r = r->next) {
 		char *indent = "\t\t\0";
 		switch (p->arity) {
-		case 0: case -1:
+		case 0:
+		case -1:
 			print("%2/* %R */\n", r);
 			if (r->cost == -1) {
 				print("%2c = %s;\n", r->code);
@@ -375,8 +388,7 @@ static void emitcase(Term p, int ntnumber) {
 				indent = "\t\t\t";
 			} else
 				print("%2/* %R */\n", r);
-			if (r->pattern->nterms == 2 && r->pattern->left
-			&&  r->pattern->right == NULL)
+			if (r->pattern->nterms == 2 && r->pattern->left && r->pattern->right == NULL)
 				emitrecalc(indent, r->pattern->op, r->pattern->left->op);
 			print("%sc = ", indent);
 			emitcost(r->pattern->left, "LEFT_CHILD(a)");
@@ -388,22 +400,22 @@ static void emitcase(Term p, int ntnumber) {
 		case 2:
 			if (r->pattern->nterms > 1) {
 				print("%2if (%1/* %R */\n", r);
-				emittest(r->pattern->left,  "LEFT_CHILD(a)",
-					r->pattern->right->nterms ? " && " : " ");
+				emittest(r->pattern->left, "LEFT_CHILD(a)", r->pattern->right->nterms ? " && " : " ");
 				emittest(r->pattern->right, "RIGHT_CHILD(a)", " ");
 				print("%2) {\n");
 				indent = "\t\t\t";
 			} else
 				print("%2/* %R */\n", r);
 			print("%sc = ", indent);
-			emitcost(r->pattern->left,  "LEFT_CHILD(a)");
+			emitcost(r->pattern->left, "LEFT_CHILD(a)");
 			emitcost(r->pattern->right, "RIGHT_CHILD(a)");
 			print("%s;\n", r->code);
 			emitrecord(indent, r, "c", 0);
 			if (indent[2])
 				print("%2}\n");
 			break;
-		default: assert(0);
+		default:
+			assert(0);
 		}
 	}
 	print("%2break;\n");
@@ -421,7 +433,8 @@ static void emitclosure(Nonterm nts) {
 		if (p->chain) {
 			Rule r;
 			print("static void %Pclosure_%S(NODEPTR_TYPE a, int c) {\n"
-"%1struct %Pstate *p = STATE_LABEL(a);\n", p);
+				  "%1struct %Pstate *p = STATE_LABEL(a);\n",
+				  p);
 			for (r = p->chain; r; r = r->chain)
 				emitrecord("\t", r, "c", r->cost);
 			print("}\n\n");
@@ -434,7 +447,7 @@ static void emitcost(Tree t, char *v) {
 
 	if (p->kind == TERM) {
 		if (t->left)
-			emitcost(t->left,  stringf("LEFT_CHILD(%s)",  v));
+			emitcost(t->left, stringf("LEFT_CHILD(%s)", v));
 		if (t->right)
 			emitcost(t->right, stringf("RIGHT_CHILD(%s)", v));
 	} else
@@ -482,8 +495,8 @@ static char *computekids(Tree t, char *v, char *bp, int *ip) {
 /* emitkids - emit _kids */
 static void emitkids(Rule rules, int nrules) {
 	int i;
-	Rule r, *rc = alloc((nrules + 1 + 1)*sizeof *rc);
-	char **str  = alloc((nrules + 1 + 1)*sizeof *str);
+	Rule r, *rc = alloc((nrules + 1 + 1) * sizeof *rc);
+	char **str = alloc((nrules + 1 + 1) * sizeof *str);
 
 	for (i = 0, r = rules; r; r = r->link) {
 		int j = 0;
@@ -497,11 +510,11 @@ static void emitkids(Rule rules, int nrules) {
 		rc[j] = r;
 	}
 	print("static void %Pkids(NODEPTR_TYPE p, int eruleno, NODEPTR_TYPE kids[]) {\n"
-"%1if (!p)\n%2fatal(\"%Pkids\", \"Null tree\\n\", 0);\n"
-"%1if (!kids)\n%2fatal(\"%Pkids\", \"Null kids\\n\", 0);\n"
-"%1switch (eruleno) {\n");
+		  "%1if (!p)\n%2fatal(\"%Pkids\", \"Null tree\\n\", 0);\n"
+		  "%1if (!kids)\n%2fatal(\"%Pkids\", \"Null kids\\n\", 0);\n"
+		  "%1switch (eruleno) {\n");
 	for (i = 0; (r = rc[i]) != NULL; i++) {
-		for ( ; r; r = r->kids)
+		for (; r; r = r->kids)
 			print("%1case %d: /* %R */\n", r->ern, r);
 		print("%s%2break;\n", str[i]);
 	}
@@ -514,17 +527,17 @@ static void emitlabel(Term terms, Nonterm start, int ntnumber) {
 	Term p;
 
 	print("static void %Plabel(NODEPTR_TYPE a) {\n%1int c;\n"
-"%1struct %Pstate *p;\n\n"
-"%1if (!a)\n%2fatal(\"%Plabel\", \"Null tree\\n\", 0);\n");
+		  "%1struct %Pstate *p;\n\n"
+		  "%1if (!a)\n%2fatal(\"%Plabel\", \"Null tree\\n\", 0);\n");
 	print("%1STATE_LABEL(a) = p = allocate(sizeof *p, FUNC);\n"
-"%1p->rule._stmt = 0;\n");
+		  "%1p->rule._stmt = 0;\n");
 	for (i = 1; i <= ntnumber; i++)
 		print("%1p->cost[%d] =\n", i);
 	print("%20x7fff;\n%1switch (OP_LABEL(a)) {\n");
 	for (p = terms; p; p = p->link)
 		emitcase(p, ntnumber);
 	print("%1default:\n"
-"%2fatal(\"%Plabel\", \"Bad terminal %%d\\n\", OP_LABEL(a));\n%1}\n}\n\n");
+		  "%2fatal(\"%Plabel\", \"Bad terminal %%d\\n\", OP_LABEL(a));\n%1}\n}\n\n");
 }
 
 /* computents - fill in bp with _nts vector for tree t */
@@ -535,7 +548,7 @@ static char *computents(Tree t, char *bp) {
 			sprintf(bp, "%s_%s_NT, ", prefix, p->name);
 			bp += strlen(bp);
 		} else
-			bp = computents(t->right, computents(t->left,  bp));
+			bp = computents(t->right, computents(t->left, bp));
 	}
 	return bp;
 }
@@ -543,8 +556,8 @@ static char *computents(Tree t, char *bp) {
 /* emitnts - emit _nts ragged array */
 static void emitnts(Rule rules, int nrules) {
 	Rule r;
-	int i, j, *nts = alloc((nrules + 1)*sizeof *nts);
-	char **str = alloc((nrules + 1)*sizeof *str);
+	int i, j, *nts = alloc((nrules + 1) * sizeof *nts);
+	char **str = alloc((nrules + 1) * sizeof *str);
 
 	for (i = 0, r = rules; r; r = r->link) {
 		char buf[1024];
@@ -559,7 +572,7 @@ static void emitnts(Rule rules, int nrules) {
 	}
 	print("\nstatic short *%Pnts[] = {\n");
 	for (i = j = 0, r = rules; r; r = r->link) {
-		for ( ; j < r->ern; j++)
+		for (; j < r->ern; j++)
 			print("%10,%1/* %d */\n", j);
 		print("%1%Pnts_%d,%1/* %d */\n", nts[i++], j++);
 	}
@@ -568,8 +581,8 @@ static void emitnts(Rule rules, int nrules) {
 
 /* emitrecalc - emit code that tests for recalculation of INDIR?(VREGP) */
 static void emitrecalc(char *pre, Term root, Term kid) {
-	if (root->kind == TERM && strncmp(root->name, "INDIR", 5) == 0
-	&&   kid->kind == TERM &&  strcmp(kid->name,  "VREGP"   ) == 0) {
+	if (root->kind == TERM && strncmp(root->name, "INDIR", 5) == 0 && kid->kind == TERM &&
+		strcmp(kid->name, "VREGP") == 0) {
 		Nonterm p;
 		print("%sif (mayrecalc(a)) {\n", pre);
 		print("%s%1struct %Pstate *q = a->syms[RX]->u.t.cse->x.state;\n", pre);
@@ -586,13 +599,11 @@ static void emitrecalc(char *pre, Term root, Term kid) {
 /* emitrecord - emit code that tests for a winning match of rule r */
 static void emitrecord(char *pre, Rule r, char *c, int cost) {
 	if (Tflag)
-		print("%s%Ptrace(a, %d, %s + %d, p->cost[%P%S_NT]);\n",
-			pre, r->ern, c, cost, r->lhs);
+		print("%s%Ptrace(a, %d, %s + %d, p->cost[%P%S_NT]);\n", pre, r->ern, c, cost, r->lhs);
 	print("%sif (", pre);
 	print("%s + %d < p->cost[%P%S_NT]) {\n"
-"%s%1p->cost[%P%S_NT] = %s + %d;\n%s%1p->rule.%P%S = %d;\n",
-		c, cost, r->lhs, pre, r->lhs, c, cost, pre, r->lhs,
-		r->packed);
+		  "%s%1p->cost[%P%S_NT] = %s + %d;\n%s%1p->rule.%P%S = %d;\n",
+		  c, cost, r->lhs, pre, r->lhs, c, cost, pre, r->lhs, r->packed);
 	if (r->lhs->chain)
 		print("%s%1%Pclosure_%S(a, %s + %d);\n", pre, r->lhs, c, cost);
 	print("%s}\n", pre);
@@ -610,11 +621,13 @@ static void emitrule(Nonterm nts) {
 		print("};\n\n");
 	}
 	print("static int %Prule(void *state, int goalnt) {\n"
-"%1if (goalnt < 1 || goalnt > %d)\n%2fatal(\"%Prule\", \"Bad goal nonterminal %%d\\n\", goalnt);\n"
-"%1if (!state)\n%2return 0;\n%1switch (goalnt) {\n", ntnumber);
+		  "%1if (goalnt < 1 || goalnt > %d)\n%2fatal(\"%Prule\", \"Bad goal nonterminal %%d\\n\", goalnt);\n"
+		  "%1if (!state)\n%2return 0;\n%1switch (goalnt) {\n",
+		  ntnumber);
 	for (p = nts; p; p = p->link)
 		print("%1case %P%S_NT:"
-"%1return %Pdecode_%S[((struct %Pstate *)state)->rule.%P%S];\n", p, p, p);
+			  "%1return %Pdecode_%S[((struct %Pstate *)state)->rule.%P%S];\n",
+			  p, p, p);
 	print("%1default:\n%2fatal(\"%Prule\", \"Bad goal nonterminal %%d\\n\", goalnt);\n%2return 0;\n%1}\n}\n\n");
 }
 
@@ -632,8 +645,7 @@ static void emitstring(Rule rules) {
 	for (r = rules; r; r = r->link) {
 		int len = strlen(r->template);
 		print("/* %d */%1%d,%1/* %s */\n", r->ern,
-			len >= 2 && r->template[len-2] == '\\' && r->template[len-1] == 'n',
-			r->template);
+			  len >= 2 && r->template[len - 2] == '\\' && r->template[len - 1] == 'n', r->template);
 	}
 	print("};\n");
 	print("\nstatic char *%Pstring[] = {\n");
@@ -646,10 +658,10 @@ static void emitstring(Rule rules) {
 /* emitstruct - emit the definition of the state structure */
 static void emitstruct(Nonterm nts, int ntnumber) {
 	print("struct %Pstate {\n%1short cost[%d];\n%1struct {\n", ntnumber + 1);
-	for ( ; nts; nts = nts->link) {
+	for (; nts; nts = nts->link) {
 		int n = 1, m = nts->lhscount;
 		while ((m >>= 1) != 0)
-			n++;		
+			n++;
 		print("%2unsigned int %P%S:%d;\n", nts, n);
 	}
 	print("%1} rule;\n};\n\n");
@@ -660,11 +672,9 @@ static void emittest(Tree t, char *v, char *suffix) {
 	Term p = t->op;
 
 	if (p->kind == TERM) {
-		print("%3%s->op == %d%s/* %S */\n", v, p->esn,
-			t->nterms > 1 ? " && " : suffix, p);
+		print("%3%s->op == %d%s/* %S */\n", v, p->esn, t->nterms > 1 ? " && " : suffix, p);
 		if (t->left)
-			emittest(t->left, stringf("LEFT_CHILD(%s)",  v),
-				t->right && t->right->nterms ? " && " : suffix);
+			emittest(t->left, stringf("LEFT_CHILD(%s)", v), t->right && t->right->nterms ? " && " : suffix);
 		if (t->right)
 			emittest(t->right, stringf("RIGHT_CHILD(%s)", v), suffix);
 	}

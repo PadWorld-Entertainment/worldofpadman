@@ -1,6 +1,5 @@
 #include "c.h"
 
-
 struct entry {
 	Apply func;
 	void *cl;
@@ -25,4 +24,3 @@ void apply(List event, void *arg1, void *arg2) {
 		} while (lp != event);
 	}
 }
-

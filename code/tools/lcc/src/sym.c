@@ -1,7 +1,6 @@
 #include "c.h"
 #include <stdio.h>
 
-
 #define equalp(x) v.x == p->sym.u.c.v.x
 
 struct table {
@@ -10,20 +9,16 @@ struct table {
 	struct entry {
 		struct symbol sym;
 		struct entry *link;
-	} *buckets[256];
+	} * buckets[256];
 	Symbol all;
 };
 #define HASHSIZE NELEMS(((Table)0)->buckets)
-static struct table
-	cns = { CONSTANTS },
-	ext = { GLOBAL },
-	ids = { GLOBAL },
-	tys = { GLOBAL };
-Table constants   = &cns;
-Table externals   = &ext;
+static struct table cns = {CONSTANTS}, ext = {GLOBAL}, ids = {GLOBAL}, tys = {GLOBAL};
+Table constants = &cns;
+Table externals = &ext;
 Table identifiers = &ids;
-Table globals     = &ids;
-Table types       = &tys;
+Table globals = &ids;
+Table types = &tys;
 Table labels;
 int level = GLOBAL;
 static int tempid;
@@ -39,7 +34,7 @@ Table table(Table tp, int level) {
 		new->all = tp->all;
 	return new;
 }
-void foreach(Table tp, int lev, void (*apply)(Symbol, void *), void *cl) {
+void foreach (Table tp, int lev, void (*apply)(Symbol, void *), void *cl) {
 	assert(tp);
 	while (tp && tp->level > lev)
 		tp = tp->previous;
@@ -80,7 +75,7 @@ void exitscope(void) {
 Symbol install(const char *name, Table *tpp, int level, int arena) {
 	Table tp = *tpp;
 	struct entry *p;
-	unsigned h = (unsigned long)name&(HASHSIZE-1);
+	unsigned h = (unsigned long)name & (HASHSIZE - 1);
 
 	assert(level == 0 || level >= tp->level);
 	if (level > 0 && tp->level < level)
@@ -97,7 +92,7 @@ Symbol install(const char *name, Table *tpp, int level, int arena) {
 Symbol relocate(const char *name, Table src, Table dst) {
 	struct entry *p, **q;
 	Symbol *r;
-	unsigned h = (unsigned long)name&(HASHSIZE-1);
+	unsigned h = (unsigned long)name & (HASHSIZE - 1);
 
 	for (q = &src->buckets[h]; *q; q = &(*q)->link)
 		if (name == (*q)->sym.name)
@@ -126,7 +121,7 @@ Symbol relocate(const char *name, Table src, Table dst) {
 }
 Symbol lookup(const char *name, Table tp) {
 	struct entry *p;
-	unsigned h = (unsigned long)name&(HASHSIZE-1);
+	unsigned h = (unsigned long)name & (HASHSIZE - 1);
 
 	assert(tp);
 	do
@@ -144,7 +139,7 @@ int genlabel(int n) {
 }
 Symbol findlabel(int lab) {
 	struct entry *p;
-	unsigned h = lab&(HASHSIZE-1);
+	unsigned h = lab & (HASHSIZE - 1);
 
 	for (p = labels->buckets[h]; p; p = p->link)
 		if (lab == p->sym.u.l.label)
@@ -163,19 +158,35 @@ Symbol findlabel(int lab) {
 }
 Symbol constant(Type ty, Value v) {
 	struct entry *p;
-	unsigned h = v.u&(HASHSIZE-1);
+	unsigned h = v.u & (HASHSIZE - 1);
 
 	ty = unqual(ty);
 	for (p = constants->buckets[h]; p; p = p->link)
 		if (eqtype(ty, p->sym.type, 1))
 			switch (ty->op) {
-			case INT:      if (equalp(i)) return &p->sym; break;
-			case UNSIGNED: if (equalp(u)) return &p->sym; break;
-			case FLOAT:    if (equalp(d)) return &p->sym; break;
-			case FUNCTION: if (equalp(g)) return &p->sym; break;
+			case INT:
+				if (equalp(i))
+					return &p->sym;
+				break;
+			case UNSIGNED:
+				if (equalp(u))
+					return &p->sym;
+				break;
+			case FLOAT:
+				if (equalp(d))
+					return &p->sym;
+				break;
+			case FUNCTION:
+				if (equalp(g))
+					return &p->sym;
+				break;
 			case ARRAY:
-			case POINTER:  if (equalp(p)) return &p->sym; break;
-			default: assert(0);
+			case POINTER:
+				if (equalp(p))
+					return &p->sym;
+				break;
+			default:
+				assert(0);
 			}
 	NEW0(p, PERM);
 	p->sym.name = vtoa(ty, v);
@@ -237,7 +248,7 @@ Symbol allsymbols(Table tp) {
 }
 
 void locus(Table tp, Coordinate *cp) {
-	loci    = append(cp, loci);
+	loci = append(cp, loci);
 	symbols = append(allsymbols(tp), symbols);
 }
 
@@ -299,16 +310,21 @@ char *vtoa(Type ty, Value v) {
 
 	ty = unqual(ty);
 	switch (ty->op) {
-	case INT:      return stringd(v.i);
-	case UNSIGNED: return stringf((v.u&~0x7FFF) ? "0x%X" : "%U", v.u);
-	case FLOAT:    return stringf("%g", (double)v.d);
+	case INT:
+		return stringd(v.i);
+	case UNSIGNED:
+		return stringf((v.u & ~0x7FFF) ? "0x%X" : "%U", v.u);
+	case FLOAT:
+		return stringf("%g", (double)v.d);
 	case ARRAY:
-		if (ty->type == chartype || ty->type == signedchar
-		||  ty->type == unsignedchar)
+		if (ty->type == chartype || ty->type == signedchar || ty->type == unsignedchar)
 			return v.p;
 		return stringf("%p", v.p);
-	case POINTER:  return stringf("%p", v.p);
-	case FUNCTION: return stringf("%p", v.g);
+	case POINTER:
+		return stringf("%p", v.p);
+	case FUNCTION:
+		return stringf("%p", v.g);
 	}
-	assert(0); return NULL;
+	assert(0);
+	return NULL;
 }

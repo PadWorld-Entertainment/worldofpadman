@@ -48,10 +48,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "ai_dmnet.h"
 #include "ai_team.h"
 //
-#include "chars.h"				//characteristics
-#include "inv.h"				//indexes into the inventory
-#include "syn.h"				//synonyms
-#include "match.h"				//string matching types and vars
+#include "chars.h" //characteristics
+#include "inv.h"   //indexes into the inventory
+#include "syn.h"   //synonyms
+#include "match.h" //string matching types and vars
 
 // for the voice chats
 #include "../../ui/menudef.h"
@@ -70,71 +70,59 @@ void BotPrintTeamGoal(bot_state_t *bs) {
 
 	ClientName(bs->client, netname, sizeof(netname));
 	t = bs->teamgoal_time - FloatTime();
-	switch(bs->ltgtype) {
-		case LTG_TEAMHELP:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna help a team mate for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_TEAMACCOMPANY:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna accompany a team mate for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_GETFLAG:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna get the flag for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_RUSHBASE:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna rush to the base for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_RETURNFLAG:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna try to return the flag for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_DEFENDKEYAREA:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna defend a key area for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_GETITEM:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna get an item for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_KILL:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna kill someone for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_CAMP:
-		case LTG_CAMPORDER:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna camp for %1.0f secs\n", netname, t);
-			break;
-		}
-		case LTG_PATROL:
-		{
-			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna patrol for %1.0f secs\n", netname, t);
-			break;
-		}
-		default:
-		{
-			if (bs->ctfroam_time > FloatTime()) {
-				t = bs->ctfroam_time - FloatTime();
-				BotAI_Print(PRT_MESSAGE, "%s: I'm gonna roam for %1.0f secs\n", netname, t);
-			}
-			else {
-				BotAI_Print(PRT_MESSAGE, "%s: I've got a regular goal\n", netname);
-			}
+	switch (bs->ltgtype) {
+	case LTG_TEAMHELP: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna help a team mate for %1.0f secs\n", netname, t);
+		break;
+	}
+	case LTG_TEAMACCOMPANY: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna accompany a team mate for %1.0f secs\n", netname, t);
+		break;
+	}
+	case LTG_GETFLAG: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna get the flag for %1.0f secs\n", netname, t);
+		break;
+	}
+	case LTG_RUSHBASE: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna rush to the base for %1.0f secs\n", netname, t);
+		break;
+	}
+	case LTG_RETURNFLAG: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna try to return the flag for %1.0f secs\n", netname, t);
+		break;
+	}
+	case LTG_DEFENDKEYAREA: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna defend a key area for %1.0f secs\n", netname, t);
+		break;
+	}
+	case LTG_GETITEM: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna get an item for %1.0f secs\n", netname, t);
+		break;
+	}
+	case LTG_KILL: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna kill someone for %1.0f secs\n", netname, t);
+		break;
+	}
+	case LTG_CAMP:
+	case LTG_CAMPORDER: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna camp for %1.0f secs\n", netname, t);
+		break;
+	}
+	case LTG_PATROL: {
+		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna patrol for %1.0f secs\n", netname, t);
+		break;
+	}
+	default: {
+		if (bs->ctfroam_time > FloatTime()) {
+			t = bs->ctfroam_time - FloatTime();
+			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna roam for %1.0f secs\n", netname, t);
+		} else {
+			BotAI_Print(PRT_MESSAGE, "%s: I've got a regular goal\n", netname);
 		}
 	}
+	}
 }
-#endif //DEBUG
+#endif // DEBUG
 
 /*
 ==================
@@ -147,17 +135,18 @@ FIXME: add stuff like "upper rocket launcher"
 int BotGetItemTeamGoal(char *goalname, bot_goal_t *goal) {
 	int i;
 
-	if (!strlen(goalname)) return qfalse;
+	if (!strlen(goalname))
+		return qfalse;
 	i = -1;
 	do {
 		i = trap_BotGetLevelItemGoal(i, goalname, goal);
 		if (i > 0) {
-			//do NOT defend dropped items
+			// do NOT defend dropped items
 			if (goal->flags & GFL_DROPPED)
 				continue;
 			return qtrue;
 		}
-	} while(i > 0);
+	} while (i > 0);
 	return qfalse;
 }
 
@@ -167,7 +156,8 @@ BotGetMessageTeamGoal
 ==================
 */
 int BotGetMessageTeamGoal(bot_state_t *bs, char *goalname, bot_goal_t *goal) {
-	if (BotGetItemTeamGoal(goalname, goal)) return qtrue;
+	if (BotGetItemTeamGoal(goalname, goal))
+		return qtrue;
 	return qfalse;
 }
 
@@ -182,11 +172,13 @@ int FindClientByName(char *name) {
 
 	for (i = 0; i < level.maxclients; i++) {
 		ClientName(i, buf, sizeof(buf));
-		if (!Q_stricmp(buf, name)) return i;
+		if (!Q_stricmp(buf, name))
+			return i;
 	}
 	for (i = 0; i < level.maxclients; i++) {
 		ClientName(i, buf, sizeof(buf));
-		if (stristr(buf, name)) return i;
+		if (stristr(buf, name))
+			return i;
 	}
 	return -1;
 }
@@ -201,14 +193,18 @@ int FindEnemyByName(bot_state_t *bs, char *name) {
 	char buf[MAX_INFO_STRING];
 
 	for (i = 0; i < level.maxclients; i++) {
-		if (BotSameTeam(bs, i)) continue;
+		if (BotSameTeam(bs, i))
+			continue;
 		ClientName(i, buf, sizeof(buf));
-		if (!Q_stricmp(buf, name)) return i;
+		if (!Q_stricmp(buf, name))
+			return i;
 	}
 	for (i = 0; i < level.maxclients; i++) {
-		if (BotSameTeam(bs, i)) continue;
+		if (BotSameTeam(bs, i))
+			continue;
 		ClientName(i, buf, sizeof(buf));
-		if (stristr(buf, name)) return i;
+		if (stristr(buf, name))
+			return i;
 	}
 	return -1;
 }
@@ -224,14 +220,14 @@ int NumPlayersOnSameTeam(bot_state_t *bs) {
 
 	num = 0;
 	for (i = 0; i < level.maxclients; i++) {
-		trap_GetConfigstring(CS_PLAYERS+i, buf, MAX_INFO_STRING);
+		trap_GetConfigstring(CS_PLAYERS + i, buf, MAX_INFO_STRING);
 		if (strlen(buf)) {
-			if (BotSameTeam(bs, i+1)) num++;
+			if (BotSameTeam(bs, i + 1))
+				num++;
 		}
 	}
 	return num;
 }
-
 
 /*
 ==================
@@ -241,16 +237,17 @@ BotAddressedToBot
 int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 	char addressedto[MAX_MESSAGE_SIZE];
 	char netname[MAX_MESSAGE_SIZE];
-	//char name[MAX_MESSAGE_SIZE];
+	// char name[MAX_MESSAGE_SIZE];
 	char botname[128];
 	int client;
-	//char buf[MAX_MESSAGE_SIZE];
+	// char buf[MAX_MESSAGE_SIZE];
 
 	trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
 	client = ClientOnSameTeamFromName(bs, netname);
-	if (client < 0) return qfalse;
-	
-	//if the message is addressed to someone
+	if (client < 0)
+		return qfalse;
+
+	// if the message is addressed to someone
 	if (match->subtype & ST_ADDRESSED) {
 
 		// compare addressee with botname
@@ -258,14 +255,14 @@ int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 		ClientName(bs->client, botname, 128);
 
 		// is that me?
-		if ( strlen(addressedto) && (stristr(botname, addressedto)) ){
+		if (strlen(addressedto) && (stristr(botname, addressedto))) {
 			return qtrue;
 		}
 
 		// no its not!
-		if( bot_developer.integer & AIDBG_CHAT){
-			//Com_sprintf(buf, sizeof(buf), "not addressed to me but %s", addressedto);
-			//trap_EA_Say(bs->client, buf);
+		if (bot_developer.integer & AIDBG_CHAT) {
+			// Com_sprintf(buf, sizeof(buf), "not addressed to me but %s", addressedto);
+			// trap_EA_Say(bs->client, buf);
 		}
 
 		return qfalse;
@@ -274,21 +271,21 @@ int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 	return qtrue;
 }
 
-void BotMatch_WrongWall(bot_state_t* bs, bot_match_t *match){
+void BotMatch_WrongWall(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];
 	char buf[MAX_INFO_STRING];
 	int client;
 
-	if(gametype != GT_SPRAY)
+	if (gametype != GT_SPRAY)
 		return;
 
 	// talking about me ? (avoid clientfromname, its ambiguous)
 	trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
 	trap_GetConfigstring(CS_PLAYERS + bs->client, buf, sizeof(buf));
-	Q_CleanStr( buf );
-	if (!Q_stricmp(Info_ValueForKey(buf, "n"), netname)){
+	Q_CleanStr(buf);
+	if (!Q_stricmp(Info_ValueForKey(buf, "n"), netname)) {
 		// could be someone with same name, so make (more) sure
-		if( ClientInSprayroom(bs->client) ){
+		if (ClientInSprayroom(bs->client)) {
 			bs->which_wall = BotChooseCorrectWall(bs);
 			bs->enemy = -1;
 			// chat
@@ -299,11 +296,12 @@ void BotMatch_WrongWall(bot_state_t* bs, bot_match_t *match){
 	}
 	// check if opposite team
 	client = ClientFromName(netname);
-	if(!BotSameTeam(bs, client)){
+	if (!BotSameTeam(bs, client)) {
 		float rnd;
 		// flame
 		rnd = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CHAT_INSULT, 0, 1);
-		if(random() > rnd) return;	
+		if (random() > rnd)
+			return;
 		BotAI_BotInitialChat(bs, "wall_insult", netname, NULL);
 		trap_BotEnterChat(bs->cs, 0, CHAT_ALL);
 	}
@@ -319,8 +317,8 @@ void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 	char balloonindex[MAX_MESSAGE_SIZE];
 	char netname[MAX_MESSAGE_SIZE];
 
-    int ballindex;
-    int state;
+	int ballindex;
+	int state;
 
 
 
@@ -335,7 +333,7 @@ void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 
 
 	ballindex = atoi(balloonindex);
-	
+
 	if(ballindex != -1){    // valid balloon index
 		trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
 		client = ClientFromName(netname);
@@ -343,7 +341,7 @@ void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 		// bs->ordered = qtrue;
 		bs->order_time = FloatTime();
 		bs->teammessage_time = FloatTime() + 2 * random();
-		
+
 		state = level.balloonState[ballindex];
 		// not our balloon?
 		if(BotTeam(bs) == TEAM_RED && state != '1' ||
@@ -380,35 +378,36 @@ void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 	}
 	else
 		bs->ltgtype = 0;    // roam
-	
+
 	return;
 }
 */
 
-void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match){
+void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];
 	int client;
 
-	//if not addressed to this bot
-	if ( !TeamPlayIsOn() || !BotAddressedToBot(bs, match) ) return;
+	// if not addressed to this bot
+	if (!TeamPlayIsOn() || !BotAddressedToBot(bs, match))
+		return;
 
 	// who wants me to to come?
 	trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
 	client = ClientOnSameTeamFromName(bs, netname);
 
-	bs->teammate = client;		
-	bs->teammatevisible_time = FloatTime();		//last time the team mate was assumed visible
+	bs->teammate = client;
+	bs->teammatevisible_time = FloatTime(); // last time the team mate was assumed visible
 
 	bs->decisionmaker = client;
 	// bs->ordered = qtrue;
-	//bs->order_time = FloatTime();
+	// bs->order_time = FloatTime();
 
-	//set the time to send a message to the team mates
+	// set the time to send a message to the team mates
 	bs->teammessage_time = FloatTime() + 2 * random();
-	//set the ltg type
+	// set the ltg type
 	bs->ltgtype = LTG_JOINMATE;
-	//set the team goal time
-	bs->teamgoal_time = FloatTime() + 300;	// 5 minutes
+	// set the team goal time
+	bs->teamgoal_time = FloatTime() + 300; // 5 minutes
 }
 
 /*
@@ -421,10 +420,12 @@ void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];
 	int client;
 
-	if (!TeamPlayIsOn()) return;
-	//if not addressed to this bot
-	if (!BotAddressedToBot(bs, match)) return;
-	//get the match variable
+	if (!TeamPlayIsOn())
+		return;
+	// if not addressed to this bot
+	if (!BotAddressedToBot(bs, match))
+		return;
+	// get the match variable
 	trap_BotMatchVariable(match, ITEM, itemname, sizeof(itemname));
 	//
 	if (!BotGetMessageTeamGoal(bs, itemname, &bs->teamgoal)) {
@@ -437,17 +438,17 @@ void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
 	//
 	bs->decisionmaker = client;
 	// bs->ordered = qtrue;
-	//bs->order_time = FloatTime();
-	//set the time to send a message to the team mates
+	// bs->order_time = FloatTime();
+	// set the time to send a message to the team mates
 	bs->teammessage_time = FloatTime() + 1 * random();
-	//set the ltg type
+	// set the ltg type
 	bs->ltgtype = LTG_GETITEM;
-	//set the team goal time
+	// set the team goal time
 	bs->teamgoal_time = FloatTime() + TEAM_GETITEM_TIME;
 
 #ifdef DEBUG
 //	BotPrintTeamGoal(bs);
-#endif //DEBUG
+#endif // DEBUG
 }
 
 /*
@@ -458,17 +459,17 @@ void BotMatch_StartTeamLeaderShip(bot_state_t *bs, bot_match_t *match) {
 	if (!TeamPlayIsOn()) return;
 
 	//get the team mate that will be the team leader
-	trap_BotMatchVariable(match, NETNAME, teammate, sizeof(teammate));	// warum nicht NETNAME ? 
+	trap_BotMatchVariable(match, NETNAME, teammate, sizeof(teammate));	// warum nicht NETNAME ?
 	client = FindClientByName(teammate);
-	
+
 	// ignore human leaders
 	if ( !(g_entities[client].r.svFlags & SVF_BOT) )
 		return;
 
 	// copy mates name to leader
-	if (client >= 0){ 
+	if (client >= 0){
 		ClientName(client, bs->teamleader, sizeof(bs->teamleader));
-		
+
 		if(bot_developer.integer & AIDBG_CHAT)
 			G_Printf("my new leader: %s \n", bs->teamleader);
 	}
@@ -525,14 +526,14 @@ float BotNearestVisibleItem(bot_state_t *bs, char *itemname, bot_goal_t *goal) {
 		VectorSubtract(tmpgoal.origin, bs->origin, dir);
 		dist = VectorLength(dir);
 		if (dist < bestdist) {
-			//trace from start to end
-			BotAI_Trace(&trace, bs->eye, NULL, NULL, tmpgoal.origin, bs->client, CONTENTS_SOLID|CONTENTS_PLAYERCLIP);
+			// trace from start to end
+			BotAI_Trace(&trace, bs->eye, NULL, NULL, tmpgoal.origin, bs->client, CONTENTS_SOLID | CONTENTS_PLAYERCLIP);
 			if (trace.fraction >= 1.0) {
 				bestdist = dist;
 				memcpy(goal, &tmpgoal, sizeof(bot_goal_t));
 			}
 		}
-	} while(i > 0);
+	} while (i > 0);
 	return bestdist;
 }
 
@@ -553,33 +554,34 @@ void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];
 	aas_entityinfo_t entinfo;
 
+	if (!TeamPlayIsOn())
+		return;
+	// if not addressed to this bot
+	if (!BotAddressedToBot(bs, match))
+		return;
 
-	if (!TeamPlayIsOn()) return;
-	//if not addressed to this bot
-	if (!BotAddressedToBot(bs, match)) return;
-
-	//get the netname
+	// get the netname
 	trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
 	client = ClientFromName(netname);
-	
-	//if the bot doesn't know who to help (FindClientByName returned -1)
+
+	// if the bot doesn't know who to help (FindClientByName returned -1)
 	if (client < 0) {
 		BotAI_BotInitialChat(bs, "whois", netname, NULL);
 		client = ClientFromName(netname);
 		trap_BotEnterChat(bs->cs, client, CHAT_TELL);
 		return;
 	}
-	//don't help or accompany yourself
+	// don't help or accompany yourself
 	if (client == bs->client) {
 		return;
 	}
 	//
 	bs->teamgoal.entitynum = -1;
 	BotEntityInfo(client, &entinfo);
-	//if info is valid (in PVS)
+	// if info is valid (in PVS)
 	if (entinfo.valid) {
 		areanum = BotPointAreaNum(entinfo.origin);
-		if (areanum) {// && trap_AAS_AreaReachability(areanum)) {
+		if (areanum) { // && trap_AAS_AreaReachability(areanum)) {
 			bs->teamgoal.entitynum = client;
 			bs->teamgoal.areanum = areanum;
 			VectorCopy(entinfo.origin, bs->teamgoal.origin);
@@ -594,23 +596,23 @@ void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
 		trap_BotEnterChat(bs->cs, client, CHAT_TEAM);
 		return;
 	}
-	//the team mate
+	// the team mate
 	bs->teammate = client;
 	//
 	trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
 	//
 	client = ClientFromName(netname);
-	//the team mate who ordered
+	// the team mate who ordered
 	bs->decisionmaker = client;
 	// bs->ordered = qtrue;
-	//bs->order_time = FloatTime();
-	//last time the team mate was assumed visible
+	// bs->order_time = FloatTime();
+	// last time the team mate was assumed visible
 	bs->teammatevisible_time = FloatTime();
-	//set the time to send a message to the team mates
+	// set the time to send a message to the team mates
 	bs->teammessage_time = FloatTime() + 1 * random();
-	//set the ltg type
+	// set the ltg type
 	bs->ltgtype = LTG_GIVECART;
-	//G_Printf("^4giving cart! \n");	// cyr 20055
+	// G_Printf("^4giving cart! \n");	// cyr 20055
 	bs->teamgoal_time = FloatTime() + SYC_CART_EXCHANGE_TIME;
 }
 // cyr_drop}
@@ -623,50 +625,49 @@ int BotMatchMessage(bot_state_t *bs, char *message) {
 	bot_match_t match;
 
 	match.type = 0;
-	//if it is an unknown message
-	if (!trap_BotFindMatch(message, &match, MTCONTEXT_MISC|MTCONTEXT_INITIALTEAMCHAT )) {
-		if(bot_developer.integer & AIDBG_CHAT ){
+	// if it is an unknown message
+	if (!trap_BotFindMatch(message, &match, MTCONTEXT_MISC | MTCONTEXT_INITIALTEAMCHAT)) {
+		if (bot_developer.integer & AIDBG_CHAT) {
 			G_Printf("^2no match for ^1%s\n", message);
 		}
 		return qfalse;
 	}
 
-	if(bot_developer.integer & AIDBG_CHAT){
+	if (bot_developer.integer & AIDBG_CHAT) {
 		G_Printf("^6match %d for^1 %s\n", match.type, message);
 	}
 
-	//react to the found message
-	switch(match.type)
-	{
-		case MSG_WRONGWALL:{
-			BotMatch_WrongWall(bs, &match);
-			break;
-		}
-		//case MSG_GOFORBALLOON:{				//someone calling for company
-		//	BotMatch_GoForBalloon(bs, &match);
-		//	break;
-		//}
-		case MSG_DROPCART:{
-			BotMatch_DropCart(bs, &match);
-			break;
-		}
-		case MSG_GETITEM:{
-			BotMatch_GetItem(bs, &match);
-			break;
-		}
-		case MSG_ENTERGAME:{			//someone entered the game
-			BotMatch_EnterGame(bs, &match);
-			break;
-		}
-		case MSG_CATCHME:{
-			BotMatch_CatchMe(bs, &match);
-			break;
-		}
-		default:{
-			if(bot_developer.integer)
-				BotAI_Print(PRT_MESSAGE, "unknown match type %d\n",match.type);
-			break;
-		}
+	// react to the found message
+	switch (match.type) {
+	case MSG_WRONGWALL: {
+		BotMatch_WrongWall(bs, &match);
+		break;
+	}
+	// case MSG_GOFORBALLOON:{				//someone calling for company
+	//	BotMatch_GoForBalloon(bs, &match);
+	//	break;
+	//}
+	case MSG_DROPCART: {
+		BotMatch_DropCart(bs, &match);
+		break;
+	}
+	case MSG_GETITEM: {
+		BotMatch_GetItem(bs, &match);
+		break;
+	}
+	case MSG_ENTERGAME: { // someone entered the game
+		BotMatch_EnterGame(bs, &match);
+		break;
+	}
+	case MSG_CATCHME: {
+		BotMatch_CatchMe(bs, &match);
+		break;
+	}
+	default: {
+		if (bot_developer.integer)
+			BotAI_Print(PRT_MESSAGE, "unknown match type %d\n", match.type);
+		break;
+	}
 	}
 	return qtrue;
 }

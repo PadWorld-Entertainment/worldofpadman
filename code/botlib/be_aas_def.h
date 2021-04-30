@@ -31,49 +31,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "../qcommon/q_shared.h"
 
-//debugging on
+// debugging on
 #define AAS_DEBUG
 
-#define	CS_SCORES			32
-#define	CS_MODELS			(CS_SCORES+MAX_CLIENTS)
-#define	CS_SOUNDS			(CS_MODELS+MAX_MODELS)
+#define CS_SCORES 32
+#define CS_MODELS (CS_SCORES + MAX_CLIENTS)
+#define CS_SOUNDS (CS_MODELS + MAX_MODELS)
 
-#define DF_AASENTNUMBER(x)		(x - aasworld.entities)
-#define DF_NUMBERAASENT(x)		(&aasworld.entities[x])
-#define DF_AASENTCLIENT(x)		(x - aasworld.entities - 1)
-#define DF_CLIENTAASENT(x)		(&aasworld.entities[x + 1])
+#define DF_AASENTNUMBER(x) (x - aasworld.entities)
+#define DF_NUMBERAASENT(x) (&aasworld.entities[x])
+#define DF_AASENTCLIENT(x) (x - aasworld.entities - 1)
+#define DF_CLIENTAASENT(x) (&aasworld.entities[x + 1])
 
 #ifndef MAX_PATH
-	#define MAX_PATH				MAX_QPATH
+#define MAX_PATH MAX_QPATH
 #endif
 
-//string index (for model, sound and image index)
-typedef struct aas_stringindex_s
-{
+// string index (for model, sound and image index)
+typedef struct aas_stringindex_s {
 	int numindexes;
 	char **index;
 } aas_stringindex_t;
 
-//structure to link entities to areas and areas to entities
-typedef struct aas_link_s
-{
+// structure to link entities to areas and areas to entities
+typedef struct aas_link_s {
 	int entnum;
 	int areanum;
 	struct aas_link_s *next_ent, *prev_ent;
 	struct aas_link_s *next_area, *prev_area;
 } aas_link_t;
 
-//structure to link entities to leaves and leaves to entities
-typedef struct bsp_link_s
-{
+// structure to link entities to leaves and leaves to entities
+typedef struct bsp_link_s {
 	int entnum;
 	int leafnum;
 	struct bsp_link_s *next_ent, *prev_ent;
 	struct bsp_link_s *next_leaf, *prev_leaf;
 } bsp_link_t;
 
-typedef struct bsp_entdata_s
-{
+typedef struct bsp_entdata_s {
 	vec3_t origin;
 	vec3_t angles;
 	vec3_t absmins;
@@ -82,19 +78,17 @@ typedef struct bsp_entdata_s
 	int modelnum;
 } bsp_entdata_t;
 
-//entity
-typedef struct aas_entity_s
-{
-	//entity info
+// entity
+typedef struct aas_entity_s {
+	// entity info
 	aas_entityinfo_t i;
-	//links into the AAS areas
+	// links into the AAS areas
 	aas_link_t *areas;
-	//links into the BSP leaves
+	// links into the BSP leaves
 	bsp_link_t *leaves;
 } aas_entity_t;
 
-typedef struct aas_settings_s
-{
+typedef struct aas_settings_s {
 	vec3_t phys_gravitydirection;
 	float phys_friction;
 	float phys_stopspeed;
@@ -134,155 +128,149 @@ typedef struct aas_settings_s
 	float rs_maxjumpfallheight;
 } aas_settings_t;
 
-#define CACHETYPE_PORTAL		0
-#define CACHETYPE_AREA			1
+#define CACHETYPE_PORTAL 0
+#define CACHETYPE_AREA 1
 
-//routing cache
-typedef struct aas_routingcache_s
-{
-	byte type;									//portal or area cache
-	float time;									//last time accessed or updated
-	int size;									//size of the routing cache
-	int cluster;								//cluster the cache is for
-	int areanum;								//area the cache is created for
-	vec3_t origin;								//origin within the area
-	float starttraveltime;						//travel time to start with
-	int travelflags;							//combinations of the travel flags
+// routing cache
+typedef struct aas_routingcache_s {
+	byte type;			   // portal or area cache
+	float time;			   // last time accessed or updated
+	int size;			   // size of the routing cache
+	int cluster;		   // cluster the cache is for
+	int areanum;		   // area the cache is created for
+	vec3_t origin;		   // origin within the area
+	float starttraveltime; // travel time to start with
+	int travelflags;	   // combinations of the travel flags
 	struct aas_routingcache_s *prev, *next;
 	struct aas_routingcache_s *time_prev, *time_next;
-	unsigned char *reachabilities;				//reachabilities used for routing
-	unsigned short int traveltimes[1];			//travel time for every area (variable sized)
+	unsigned char *reachabilities;	   // reachabilities used for routing
+	unsigned short int traveltimes[1]; // travel time for every area (variable sized)
 } aas_routingcache_t;
 
-//fields for the routing algorithm
-typedef struct aas_routingupdate_s
-{
+// fields for the routing algorithm
+typedef struct aas_routingupdate_s {
 	int cluster;
-	int areanum;								//area number of the update
-	vec3_t start;								//start point the area was entered
-	unsigned short int tmptraveltime;			//temporary travel time
-	unsigned short int *areatraveltimes;		//travel times within the area
-	qboolean inlist;							//true if the update is in the list
+	int areanum;						 // area number of the update
+	vec3_t start;						 // start point the area was entered
+	unsigned short int tmptraveltime;	 // temporary travel time
+	unsigned short int *areatraveltimes; // travel times within the area
+	qboolean inlist;					 // true if the update is in the list
 	struct aas_routingupdate_s *next;
 	struct aas_routingupdate_s *prev;
-	int	heapPos;
+	int heapPos;
 } aas_routingupdate_t;
 
-//reversed reachability link
-typedef struct aas_reversedlink_s
-{
-	int linknum;								//the aas_areareachability_t
-	int areanum;								//reachable from this area
-	struct aas_reversedlink_s *next;			//next link
+// reversed reachability link
+typedef struct aas_reversedlink_s {
+	int linknum;					 // the aas_areareachability_t
+	int areanum;					 // reachable from this area
+	struct aas_reversedlink_s *next; // next link
 } aas_reversedlink_t;
 
-//reversed area reachability
-typedef struct aas_reversedreachability_s
-{
+// reversed area reachability
+typedef struct aas_reversedreachability_s {
 	int numlinks;
 	aas_reversedlink_t *first;
 } aas_reversedreachability_t;
 
-//areas a reachability goes through
-typedef struct aas_reachabilityareas_s
-{
+// areas a reachability goes through
+typedef struct aas_reachabilityareas_s {
 	int firstarea, numareas;
 } aas_reachabilityareas_t;
 
-typedef struct aas_s
-{
-	int loaded;									//true when an AAS file is loaded
-	int initialized;							//true when AAS has been initialized
-	int savefile;								//set true when file should be saved
+typedef struct aas_s {
+	int loaded;		 // true when an AAS file is loaded
+	int initialized; // true when AAS has been initialized
+	int savefile;	 // set true when file should be saved
 	int bspchecksum;
-	//current time
+	// current time
 	float time;
 	int numframes;
-	//name of the aas file
+	// name of the aas file
 	char filename[MAX_QPATH];
 	char mapname[MAX_QPATH];
-	//bounding boxes
+	// bounding boxes
 	int numbboxes;
 	aas_bbox_t *bboxes;
-	//vertexes
+	// vertexes
 	int numvertexes;
 	aas_vertex_t *vertexes;
-	//planes
+	// planes
 	int numplanes;
 	aas_plane_t *planes;
-	//edges
+	// edges
 	int numedges;
 	aas_edge_t *edges;
-	//edge index
+	// edge index
 	int edgeindexsize;
 	aas_edgeindex_t *edgeindex;
-	//faces
+	// faces
 	int numfaces;
 	aas_face_t *faces;
-	//face index
+	// face index
 	int faceindexsize;
 	aas_faceindex_t *faceindex;
-	//convex areas
+	// convex areas
 	int numareas;
 	aas_area_t *areas;
-	//convex area settings
+	// convex area settings
 	int numareasettings;
 	aas_areasettings_t *areasettings;
-	//reachablity list
+	// reachablity list
 	int reachabilitysize;
 	aas_reachability_t *reachability;
-	//nodes of the bsp tree
+	// nodes of the bsp tree
 	int numnodes;
 	aas_node_t *nodes;
-	//cluster portals
+	// cluster portals
 	int numportals;
 	aas_portal_t *portals;
-	//cluster portal index
+	// cluster portal index
 	int portalindexsize;
 	aas_portalindex_t *portalindex;
-	//clusters
+	// clusters
 	int numclusters;
 	aas_cluster_t *clusters;
 	//
 	int numreachabilityareas;
 	float reachabilitytime;
-	//enities linked in the areas
-	aas_link_t *linkheap;						//heap with link structures
-	int linkheapsize;							//size of the link heap
-	aas_link_t *freelinks;						//first free link
-	aas_link_t **arealinkedentities;			//entities linked into areas
-	//entities
+	// enities linked in the areas
+	aas_link_t *linkheap;			 // heap with link structures
+	int linkheapsize;				 // size of the link heap
+	aas_link_t *freelinks;			 // first free link
+	aas_link_t **arealinkedentities; // entities linked into areas
+	// entities
 	int maxentities;
 	int maxclients;
 	aas_entity_t *entities;
-	//string indexes
+	// string indexes
 	char *configstrings[MAX_CONFIGSTRINGS];
 	int indexessetup;
-	//index to retrieve travel flag for a travel type
+	// index to retrieve travel flag for a travel type
 	int travelflagfortype[MAX_TRAVELTYPES];
-	//travel flags for each area based on contents
+	// travel flags for each area based on contents
 	int *areacontentstravelflags;
-	//routing update
+	// routing update
 	aas_routingupdate_t *areaupdate;
 	aas_routingupdate_t *portalupdate;
-	//number of routing updates during a frame (reset every frame)
+	// number of routing updates during a frame (reset every frame)
 	int frameroutingupdates;
-	//reversed reachability links
+	// reversed reachability links
 	aas_reversedreachability_t *reversedreachability;
-	//travel times within the areas
+	// travel times within the areas
 	unsigned short ***areatraveltimes;
-	//array of size numclusters with cluster cache
+	// array of size numclusters with cluster cache
 	aas_routingcache_t ***clusterareacache;
 	aas_routingcache_t **portalcache;
-	//cache list sorted on time
-	aas_routingcache_t *oldestcache;		// start of cache list sorted on time
-	aas_routingcache_t *newestcache;		// end of cache list sorted on time
-	aas_routingupdate_t** clusterCacheHeap;
+	// cache list sorted on time
+	aas_routingcache_t *oldestcache; // start of cache list sorted on time
+	aas_routingcache_t *newestcache; // end of cache list sorted on time
+	aas_routingupdate_t **clusterCacheHeap;
 	int clusterCacheHeapSize;
 	int clusterCacheHeapMaxSize;
-	//maximum travel time through portal areas
+	// maximum travel time through portal areas
 	int *portalmaxtraveltimes;
-	//areas the reachabilities go through
+	// areas the reachabilities go through
 	int *reachabilityareaindex;
 	aas_reachabilityareas_t *reachabilityareas;
 } aas_t;
@@ -304,4 +292,4 @@ typedef struct aas_s
 #include "be_aas_bsp.h"
 #include "be_aas_move.h"
 
-#endif //BSPCINCLUDE
+#endif // BSPCINCLUDE

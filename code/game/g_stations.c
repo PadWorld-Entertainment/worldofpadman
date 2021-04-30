@@ -22,10 +22,9 @@ s.angles2[2] => health in the station (0: leer, 1:voll ... wird in der cgame gen
 
 #include "g_local.h"
 
-
-#define HEALTHSTATION_DEFAULT_HEALTH	300
-#define HEALTHSTATION_DEFAULT_RATE		2
-#define HEALTHSTATION_RELOADTIME		30000
+#define HEALTHSTATION_DEFAULT_HEALTH 300
+#define HEALTHSTATION_DEFAULT_RATE 2
+#define HEALTHSTATION_RELOADTIME 30000
 // TODO: #defines for FULLENERGYMESSAGE_DELAY, TOUCH_DELAY, (.3/500)
 
 /*
@@ -46,23 +45,20 @@ s.angles2[2] => health in the station (0: leer, 1:voll ... wird in der cgame gen
 		in the station at the same time.
 */
 
-
 /*
 	{"station_health", SP_station_health},
 */
 
-static void Think_ReloadStation( gentity_t *ent )
-{
-	if(ent->pos2[2]==0.0f)//only move down if there is no player touch
+static void Think_ReloadStation(gentity_t *ent) {
+	if (ent->pos2[2] == 0.0f) // only move down if there is no player touch
 	{
-		if(ent->s.angles2[1]>0.01f)
-			ent->s.angles2[1]-=0.0006f*(level.time - level.previousTime);//0.3 / 500 ;);
+		if (ent->s.angles2[1] > 0.01f)
+			ent->s.angles2[1] -= 0.0006f * (level.time - level.previousTime); // 0.3 / 500 ;);
 		else
-			ent->s.angles2[1]=0.0f;
+			ent->s.angles2[1] = 0.0f;
 	}
 
-	if(ent->pos2[0] && level.time>ent->pos2[0])
-	{
+	if (ent->pos2[0] && level.time > ent->pos2[0]) {
 		gentity_t *te;
 
 		// restore maximum health, see spawn code
@@ -70,70 +66,70 @@ static void Think_ReloadStation( gentity_t *ent )
 		ent->s.apos.trDuration = ent->health;
 		ent->s.angles2[2] = 1.0f;
 
-		te = G_TempEntity( ent->s.pos.trBase, EV_GENERAL_SOUND );
-		te->s.eventParm = G_SoundIndex( "sounds/healthstation/station_reloaded" );
+		te = G_TempEntity(ent->s.pos.trBase, EV_GENERAL_SOUND);
+		te->s.eventParm = G_SoundIndex("sounds/healthstation/station_reloaded");
 		te->r.svFlags |= SVF_BROADCAST;
 
-		ent->pos2[0]=0.0f;
+		ent->pos2[0] = 0.0f;
 	}
 
-	ent->nextthink = level.time+5;//think in the next frame
-	ent->pos2[2]=0.0f;
+	ent->nextthink = level.time + 5; // think in the next frame
+	ent->pos2[2] = 0.0f;
 }
 
-static void Touch_ReloadStation( gentity_t *ent, gentity_t *other, trace_t *trace )
-{
-	if(!other->client)	return;
+static void Touch_ReloadStation(gentity_t *ent, gentity_t *other, trace_t *trace) {
+	if (!other->client)
+		return;
 
-	if(ent->s.angles2[1]<0.99f)
-		ent->s.angles2[1]+=0.0006f*(level.time - level.previousTime);//0.3 / 500 ;)
+	if (ent->s.angles2[1] < 0.99f)
+		ent->s.angles2[1] += 0.0006f * (level.time - level.previousTime); // 0.3 / 500 ;)
 	else
-		ent->s.angles2[1]=1.0f;
+		ent->s.angles2[1] = 1.0f;
 
-	ent->pos2[2]=1.0f;
+	ent->pos2[2] = 1.0f;
 
-	if ( other->health >= other->client->ps.stats[STAT_MAX_HEALTH] ) {
+	if (other->health >= other->client->ps.stats[STAT_MAX_HEALTH]) {
 		gentity_t *te;
 
-		if(ent->pos1[0]+2000<level.time)
-		{
-			te = G_TempEntity( ent->s.pos.trBase, EV_GENERAL_SOUND );
-			te->s.eventParm = G_SoundIndex( "sounds/healthstation/full_energy" );
+		if (ent->pos1[0] + 2000 < level.time) {
+			te = G_TempEntity(ent->s.pos.trBase, EV_GENERAL_SOUND);
+			te->s.eventParm = G_SoundIndex("sounds/healthstation/full_energy");
 			te->r.svFlags |= SVF_BROADCAST;
-			ent->pos1[0]=(float)level.time;
+			ent->pos1[0] = (float)level.time;
 		}
 
 		return;
 	}
 
 	// if station ran empty
-	if ( ent->health <= 0 ) {
+	if (ent->health <= 0) {
 		// and no reload is scheduled
-		if ( ent->pos2[0] == 0 ) {
+		if (ent->pos2[0] == 0) {
 			// schedule a reload after RELOADTIME
-			ent->pos2[0] = (float)( level.time + HEALTHSTATION_RELOADTIME );
+			ent->pos2[0] = (float)(level.time + HEALTHSTATION_RELOADTIME);
 		}
 
 		return;
 	}
 
-	if(((float)level.time-ent->pos2[1])<100.0f)	return;//touch-event only every 0.1 sek
+	if (((float)level.time - ent->pos2[1]) < 100.0f)
+		return; // touch-event only every 0.1 sek
 
 	other->health += ent->count;
-	if ( other->health > other->client->ps.stats[STAT_MAX_HEALTH] ) {
+	if (other->health > other->client->ps.stats[STAT_MAX_HEALTH]) {
 		other->health = other->client->ps.stats[STAT_MAX_HEALTH];
 	}
 	other->client->ps.stats[STAT_HEALTH] = other->health;
 
 	// only reduce if not "infinite" health
-	if ( ent->splashDamage ) {
+	if (ent->splashDamage) {
 		ent->health -= ent->count;
 	}
 
-	ent->pos2[1]=(float)level.time;
+	ent->pos2[1] = (float)level.time;
 
 	ent->s.apos.trDuration = ent->health;
-	ent->s.angles2[2] = ((float)ent->health / ent->damage );
+	ent->s.angles2[2] = ((float)ent->health / ent->damage);
 }
 
 /*
@@ -141,36 +137,35 @@ static void Touch_ReloadStation( gentity_t *ent, gentity_t *other, trace_t *trac
 SP_station_health
 ########################
 */
-void SP_station_health( gentity_t *ent ) {
+void SP_station_health(gentity_t *ent) {
 	int health, count;
 
 	// TODO: Use #defines?
 	ent->r.mins[0] = -40;
 	ent->r.mins[1] = -40;
-	ent->r.mins[2] =   0;
-	ent->r.maxs[0] =  40;
-	ent->r.maxs[1] =  40;
-	ent->r.maxs[2] =  64;
+	ent->r.mins[2] = 0;
+	ent->r.maxs[0] = 40;
+	ent->r.maxs[1] = 40;
+	ent->r.maxs[2] = 64;
 	ent->r.contents = CONTENTS_TRIGGER;
 	ent->touch = Touch_ReloadStation;
 
-	G_SetOrigin( ent, ent->s.origin );
+	G_SetOrigin(ent, ent->s.origin);
 
 	ent->think = Think_ReloadStation;
-	ent->nextthink = ( level.time + 5 );
+	ent->nextthink = (level.time + 5);
 
 	ent->s.eType = ET_STATION;
 	ent->inuse = qtrue;
 	// FIXME: Use G_InitGentity() instead?
 
-	trap_LinkEntity( ent );
+	trap_LinkEntity(ent);
 
-	G_SpawnInt( "health", XSTRING( HEALTHSTATION_DEFAULT_HEALTH ), &health );
-	if ( health > 0 ) {
+	G_SpawnInt("health", XSTRING(HEALTHSTATION_DEFAULT_HEALTH), &health);
+	if (health > 0) {
 		ent->health = health;
 		ent->splashDamage = qtrue; // station can deplete
-	}
-	else {
+	} else {
 		// Use a positive "random" value, so codechanges are minimal
 		ent->health = HEALTHSTATION_DEFAULT_HEALTH;
 		ent->splashDamage = qfalse; // station has infinite health
@@ -178,13 +173,13 @@ void SP_station_health( gentity_t *ent ) {
 	ent->damage = ent->health; // store maximum health for reloading
 
 	// TODO: Sanity check, at least >0 ?
-	G_SpawnInt( "count", XSTRING( HEALTHSTATION_DEFAULT_RATE ), &count );
+	G_SpawnInt("count", XSTRING(HEALTHSTATION_DEFAULT_RATE), &count);
 	ent->count = count;
 
 	// cache sounds
-	G_SoundIndex( "sounds/healthstation/full_energy" );
-	G_SoundIndex( "sounds/healthstation/station_reloaded" );
+	G_SoundIndex("sounds/healthstation/full_energy");
+	G_SoundIndex("sounds/healthstation/station_reloaded");
 
 	ent->s.apos.trDuration = ent->health;
-	ent->s.angles2[2] = ( (float)ent->health / ent->damage );
+	ent->s.angles2[2] = ((float)ent->health / ent->damage);
 }

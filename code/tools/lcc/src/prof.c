@@ -1,12 +1,15 @@
 #include "c.h"
 
-
 struct callsite {
 	char *file, *name;
 	union coordinate {
 		unsigned int coord;
-		struct { unsigned int y:16,x:10,index:6; } le;
-		struct { unsigned int index:6,x:10,y:16; } be;
+		struct {
+			unsigned int y : 16, x : 10, index : 6;
+		} le;
+		struct {
+			unsigned int index : 6, x : 10, y : 16;
+		} be;
 	} u;
 };
 struct func {
@@ -15,18 +18,18 @@ struct func {
 	char *name;
 	union coordinate src;
 };
-struct map {		/* source code map; 200 coordinates/map */
+struct map { /* source code map; 200 coordinates/map */
 	int size;
 	union coordinate u[200];
 };
 
-int npoints;		/* # of execution points if -b specified */
-int ncalled = -1;	/* #times prof.out says current function was called */
+int npoints;			/* # of execution points if -b specified */
+int ncalled = -1;		/* #times prof.out says current function was called */
 static Symbol YYlink;	/* symbol for file's struct _bbdata */
-static Symbol YYcounts;	/* symbol for _YYcounts if -b specified */
+static Symbol YYcounts; /* symbol for _YYcounts if -b specified */
 static List maplist;	/* list of struct map *'s */
 static List filelist;	/* list of file names */
-static Symbol funclist;	/* list of struct func *'s */
+static Symbol funclist; /* list of struct func *'s */
 static Symbol afunc;	/* current function's struct func */
 
 /* bbcall - build tree to set _callsite at call site *cp, emit call site data */
@@ -55,10 +58,9 @@ static void bbcall(Symbol yycounts, Coordinate *cp, Tree *e) {
 	if (generic((*e)->op) != CALL)
 		t = (*e)->kids[0];
 	assert(generic(t->op) == CALL);
-	t = tree(t->op, t->type,
-		tree(RIGHT, t->kids[0]->type,
-			t->kids[0],
-			tree(RIGHT, t->kids[0]->type, asgn(caller, idtree(p)), t->kids[0])),
+	t = tree(
+		t->op, t->type,
+		tree(RIGHT, t->kids[0]->type, t->kids[0], tree(RIGHT, t->kids[0]->type, asgn(caller, idtree(p)), t->kids[0])),
 		t->kids[1]);
 	if (generic((*e)->op) != CALL)
 		t = tree((*e)->op, (*e)->type, t, (*e)->kids[1]);
@@ -68,20 +70,19 @@ static void bbcall(Symbol yycounts, Coordinate *cp, Tree *e) {
 /* bbentry - return tree for _prologue(&afunc, &YYlink)' */
 static void bbentry(Symbol yylink, Symbol f) {
 	static Symbol prologue;
-	
+
 	afunc = genident(STATIC, array(voidptype, 4, 0), GLOBAL);
 	if (prologue == 0) {
 		prologue = mksymbol(EXTERN, "_prologue", ftype(inttype, voidptype));
 		prologue->defined = 0;
 	}
 	walk(vcall(prologue, voidtype, pointer(idtree(afunc)), pointer(idtree(yylink)), NULL), 0, 0);
-
 }
 
 /* bbexit - return tree for _epilogue(&afunc)' */
 static void bbexit(Symbol yylink, Symbol f, Tree e) {
 	static Symbol epilogue;
-	
+
 	if (epilogue == 0) {
 		epilogue = mksymbol(EXTERN, "_epilogue", ftype(inttype, voidptype));
 		epilogue->defined = 0;
@@ -149,8 +150,8 @@ static void bbincr(Symbol yycounts, Coordinate *cp, Tree *e) {
 		mp->u[mp->size].be.y = cp->y;
 		mp->u[mp->size++].be.index = bbfile(cp->file);
 	}
-	t = incr('+', rvalue((*optree['+'])(ADD, pointer(idtree(yycounts)),
-		consttree(npoints++, inttype))), consttree(1, inttype));
+	t = incr('+', rvalue((*optree['+'])(ADD, pointer(idtree(yycounts)), consttree(npoints++, inttype))),
+			 consttree(1, inttype));
 	if (*e)
 		*e = tree(RIGHT, (*e)->type, t, *e);
 	else
@@ -183,7 +184,7 @@ static void bbvars(Symbol yylink) {
 		for (j = 0; j < (*mp)->size; j++)
 			(*IR->defconst)(U, unsignedtype->size, (v.u = (*mp)->u[j].coord, v));
 	if (i > 0)
-		(*IR->space)(i*coords->type->type->size);
+		(*IR->space)(i * coords->type->type->size);
 	defpointer(NULL);
 	defglobal(yylink, DATA);
 	defpointer(NULL);
@@ -206,23 +207,21 @@ void prof_init(int argc, char *argv[]) {
 	if (IR) {
 		for (i = 1; i < argc; i++)
 			if (strncmp(argv[i], "-a", 2) == 0) {
-				if (ncalled == -1
-				&& process(argv[i][2] ? &argv[i][2] : "prof.out") > 0)
+				if (ncalled == -1 && process(argv[i][2] ? &argv[i][2] : "prof.out") > 0)
 					ncalled = 0;
-			} else if ((strcmp(argv[i], "-b") == 0
-			         || strcmp(argv[i], "-C") == 0) && YYlink == 0) {
+			} else if ((strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "-C") == 0) && YYlink == 0) {
 				YYlink = genident(STATIC, array(unsignedtype, 0, 0), GLOBAL);
 				attach((Apply)bbentry, YYlink, &events.entry);
-				attach((Apply)bbexit,  YYlink, &events.returns);
-				attach((Apply)bbfunc,  YYlink, &events.exit);
-				attach((Apply)bbvars,  YYlink, &events.end);
+				attach((Apply)bbexit, YYlink, &events.returns);
+				attach((Apply)bbfunc, YYlink, &events.exit);
+				attach((Apply)bbvars, YYlink, &events.end);
 				if (strcmp(argv[i], "-b") == 0) {
 					YYcounts = genident(STATIC, array(unsignedtype, 0, 0), GLOBAL);
-					maplist = append(allocate(sizeof (struct map), PERM), maplist);
+					maplist = append(allocate(sizeof(struct map), PERM), maplist);
 					((struct map *)maplist->x)->size = 0;
 					attach((Apply)bbcall, YYcounts, &events.calls);
 					attach((Apply)bbincr, YYcounts, &events.points);
 				}
 			}
-  }
+	}
 }

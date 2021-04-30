@@ -48,59 +48,51 @@ damage:		damage to be normally dealt by attack
 dflags:		special DAMAGE_* flag
 mod:		method of death used in the attack
 */
-int Instagib_calculateDamage( gentity_t *target, gentity_t *inflictor,
-										gentity_t *attacker, int damage, int dflags, int mod )
-{
-	if ( attacker == target )
+int Instagib_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage, int dflags,
+							 int mod) {
+	if (attacker == target)
 		return damage;
 
-	else if ( mod == MOD_TRIGGER_HURT || mod == MOD_WATER || mod == MOD_SLIME || mod == MOD_LAVA )
+	else if (mod == MOD_TRIGGER_HURT || mod == MOD_WATER || mod == MOD_SLIME || mod == MOD_LAVA)
 		return damage;
 
-	else if ( dflags == DAMAGE_RADIUS && attacker->client )
+	else if (dflags == DAMAGE_RADIUS && attacker->client)
 		return 0; // no splash damage from players -- might change later ;)
 	else
-        return INSTAGIB_DAMAGE;
+		return INSTAGIB_DAMAGE;
 }
-
 
 /**
 Returns qfalse if entity is not to be spawned for instagib play.
 
 ent:	entity that wants to be spawned
 */
-qboolean Instagib_canSpawnEntity( gentity_t *ent )
-{
-	char	*classname, *listEntry;
-	int		i;
-	static char	*list[] = { // list of stuff we don't want
-		"holdable_", "weapon_", "ammo_", "station_health",
-			NULL
-	};
+qboolean Instagib_canSpawnEntity(gentity_t *ent) {
+	char *classname, *listEntry;
+	int i;
+	static char *list[] = {// list of stuff we don't want
+						   "holdable_", "weapon_", "ammo_", "station_health", NULL};
 
 	classname = ent->classname;
 
 	// see if entity is in the list of stuff that we don't want
 	i = 0;
-	while ( NULL != list[ i ] )
-	{
-		listEntry = list[ i ];
-		if ( NULL != strstr( classname, listEntry ) )
+	while (NULL != list[i]) {
+		listEntry = list[i];
+		if (NULL != strstr(classname, listEntry))
 			return qfalse;
 
 		i++;
 	}
 
 	// special case: we want SOME item_*s
-	if ( NULL != strstr( classname, "item_" ) )
-	{
-		if ( NULL == strstr( classname, "botroam" ) )
+	if (NULL != strstr(classname, "item_")) {
+		if (NULL == strstr(classname, "botroam"))
 			return qfalse;
 	}
 
 	return qtrue; // happy spawning
 }
-
 
 /**
 Applys Weapon Jump Knockback to a player's velocity
@@ -111,45 +103,40 @@ mod:		method of death
 
 (feels kinda weird, very un-rocket-jumpy.. >_<)
 */
-void Instagib_applyWeaponJumpKnockback( vec3_t origin, gentity_t *playerEnt, int mod )
-{
-	int		distance;
-	vec3_t	distanceVector;
+void Instagib_applyWeaponJumpKnockback(vec3_t origin, gentity_t *playerEnt, int mod) {
+	int distance;
+	vec3_t distanceVector;
 
-	if ( !playerEnt->client ) // check for invalid client
+	if (!playerEnt->client) // check for invalid client
 		return;
 
-	if ( mod != MOD_INJECTOR )
-		return;	// for now, only KMA97
+	if (mod != MOD_INJECTOR)
+		return; // for now, only KMA97
 
-	VectorSubtract( origin, playerEnt->r.currentOrigin, distanceVector );
-	distance = VectorLength( distanceVector );
+	VectorSubtract(origin, playerEnt->r.currentOrigin, distanceVector);
+	distance = VectorLength(distanceVector);
 
-	if ( distance <= INSTAGIB_WJUMP_MAXRADIUS )
-	{
-		vec3_t	direction, kvel;
-		float	mass, knockback;
+	if (distance <= INSTAGIB_WJUMP_MAXRADIUS) {
+		vec3_t direction, kvel;
+		float mass, knockback;
 
-		VectorSubtract( playerEnt->r.currentOrigin, origin, direction );
+		VectorSubtract(playerEnt->r.currentOrigin, origin, direction);
 		direction[2] += 25;
-		VectorNormalize( direction );
+		VectorNormalize(direction);
 
 		mass = 200;
 		knockback = INSTAGIB_WJUMP_KNOCKBACK;
 
-		VectorScale( direction, g_knockback.value * knockback / mass, kvel );
-		VectorAdd( playerEnt->client->ps.velocity, kvel, playerEnt->client->ps.velocity );
+		VectorScale(direction, g_knockback.value * knockback / mass, kvel);
+		VectorAdd(playerEnt->client->ps.velocity, kvel, playerEnt->client->ps.velocity);
 	}
 }
-
 
 /**
 Returns WP_* index of the weapon that players are to be spawned
 with during instagib play
 */
-int Instagib_getSpawnWeapon()
-{
+int Instagib_getSpawnWeapon() {
 	return WP_KMA97; // for now, it's always KMA :)
 }
 // *********************************
-
