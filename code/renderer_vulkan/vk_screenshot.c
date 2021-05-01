@@ -44,7 +44,7 @@ static void imgFlipY(unsigned char *pBuf, const uint32_t w, const uint32_t h) {
 	const uint32_t a_row = w * 4;
 	const uint32_t nLines = h / 2;
 
-	unsigned char *pTmp = (unsigned char *)malloc(a_row);
+	unsigned char *pTmp = (unsigned char *)ri.Hunk_AllocateTempMemory(a_row);
 	unsigned char *pSrc = pBuf;
 	unsigned char *pDst = pBuf + w * (h - 1) * 4;
 
@@ -58,7 +58,7 @@ static void imgFlipY(unsigned char *pBuf, const uint32_t w, const uint32_t h) {
 		pDst -= a_row;
 	}
 
-	free(pTmp);
+	ri.Hunk_FreeTempMemory(pTmp);
 }
 
 // Just reading the pixels for the GPU MEM, don't care about swizzling
@@ -213,7 +213,7 @@ void RB_TakeScreenshot(int width, int height, char *fileName, VkBool32 isJpeg) {
 		// int padlen;
 		// memcount = (width * 3 + padlen) * height;
 		// RE_SaveJPG(fileName, 90, width, height, buffer + offset, padlen);
-		unsigned char *const pImg = (unsigned char *)malloc(cnPixels * 4);
+		unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
 
 		vk_read_pixels(pImg, width, height);
 
@@ -237,7 +237,7 @@ void RB_TakeScreenshot(int width, int height, char *fileName, VkBool32 isJpeg) {
 
 		RE_SaveJPG(fileName, 90, width, height, pImg, 0);
 
-		free(pImg);
+		ri.Hunk_FreeTempMemory(pImg);
 
 		// bufSize = RE_SaveJPGToBuffer(out, bufSize, 90, width, height, pImg, padding);
 		// ri.FS_WriteFile(filename, out, bufSize);
@@ -246,7 +246,7 @@ void RB_TakeScreenshot(int width, int height, char *fileName, VkBool32 isJpeg) {
 		// const uint32_t cnPixels = width * height;
 		const uint32_t imgSize = 18 + cnPixels * 3;
 
-		unsigned char *const pBuffer = (unsigned char *)malloc(imgSize + cnPixels * 4);
+		unsigned char *const pBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(imgSize + cnPixels * 4);
 		unsigned char *const buffer_ptr = pBuffer + 18;
 		unsigned char *const pImg = pBuffer + imgSize;
 
@@ -285,7 +285,7 @@ void RB_TakeScreenshot(int width, int height, char *fileName, VkBool32 isJpeg) {
 		}
 		ri.FS_WriteFile(fileName, pBuffer, imgSize);
 
-		free(pBuffer);
+		ri.Hunk_FreeTempMemory(pBuffer);
 	}
 }
 
@@ -330,7 +330,7 @@ static void R_LevelShot(int W, int H) {
 	float xScale, yScale;
 	int xx, yy;
 	int i = 0;
-	sprintf(checkname, "levelshots/%s.tga", tr.world->baseName);
+	Com_sprintf(checkname, sizeof(checkname), "levelshots/%s.tga", tr.world->baseName);
 
 	source = (unsigned char *)ri.Hunk_AllocateTempMemory(W * H * 3);
 
@@ -342,7 +342,7 @@ static void R_LevelShot(int W, int H) {
 	buffer[16] = 24; // pixel size
 
 	{
-		unsigned char *buffer2 = (unsigned char *)malloc(W * H * 4);
+		unsigned char *buffer2 = (unsigned char *)ri.Hunk_AllocateTempMemory(W * H * 4);
 		vk_read_pixels(buffer2, W, H);
 
 		unsigned char *buffer_ptr = source;
@@ -354,7 +354,7 @@ static void R_LevelShot(int W, int H) {
 			buffer_ptr += 3;
 			buffer2_ptr += 4;
 		}
-		free(buffer2);
+		ri.Hunk_FreeTempMemory(buffer2);
 	}
 
 	// resample from source
@@ -538,7 +538,7 @@ void RB_TakeVideoFrameCmd(const videoFrameCommand_t *const cmd) {
 	// AVI line padding
 	avipadwidth = PAD(linelen, 4);
 
-	unsigned char *const pImg = (unsigned char *)malloc(cmd->width * cmd->height * 4);
+	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cmd->width * cmd->height * 4);
 
 	vk_read_pixels(pImg, cmd->width, cmd->height);
 

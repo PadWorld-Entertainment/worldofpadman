@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 // tr_main.c -- main control flow for each frame
 
+#include "tr_backend.h"
 #include "tr_cvar.h"
 #include "tr_globals.h"
 #include "tr_local.h"
@@ -35,6 +36,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "tr_debuggraphics.h"
 #include "tr_portalplane.h"
 #include "tr_printmat.h"
+
+backEndState_t backEnd;
 
 // x: 1x3
 // x^T: 3x1

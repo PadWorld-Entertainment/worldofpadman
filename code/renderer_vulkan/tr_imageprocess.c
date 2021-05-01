@@ -6,18 +6,6 @@
 static unsigned char s_intensitytable[256];
 static unsigned char s_gammatable[256];
 
-/*
-void R_GammaCorrect(unsigned char* buffer, const unsigned int Size)
-{
-	unsigned int i;
-
-	for( i = 0; i < Size; i++ )
-	{
-		buffer[i] = s_gammatable[buffer[i]];
-	}
-}
-*/
-
 void R_SetColorMappings(void) {
 	int i, j;
 	int inf;
@@ -211,7 +199,7 @@ void R_MipMap2(const unsigned char *in, uint32_t inWidth, uint32_t inHeight, uns
 	unsigned int outHeight = inHeight >> 1;
 	unsigned int nBytes = outWidth * outHeight * 4;
 
-	unsigned char *temp = (unsigned char *)malloc(nBytes);
+	unsigned char *temp = (unsigned char *)ri.Hunk_AllocateTempMemory(nBytes);
 
 	const unsigned int inWidthMask = inWidth - 1;
 	const unsigned int inHeightMask = inHeight - 1;
@@ -249,7 +237,7 @@ void R_MipMap2(const unsigned char *in, uint32_t inWidth, uint32_t inHeight, uns
 	}
 
 	memcpy(out, temp, nBytes);
-	free(temp);
+	ri.Hunk_FreeTempMemory(temp);
 }
 
 /*
@@ -269,8 +257,6 @@ void ResampleTexture(unsigned char *pOut, const unsigned int inwidth, const unsi
 	unsigned int i, j;
 	unsigned int p1[2048], p2[2048];
 
-	// printf("inwidth: %d \t outwidth: %d \n", inwidth, outwidth);
-
 	unsigned int fracstep = (inwidth << 16) / outwidth;
 
 	unsigned int frac1 = fracstep >> 2;
@@ -287,13 +273,6 @@ void ResampleTexture(unsigned char *pOut, const unsigned int inwidth, const unsi
 	for (i = 0; i < outheight; i++) {
 		const unsigned char *inrow1 = pIn + 4 * inwidth * (unsigned int)((i + 0.25) * inheight / outheight);
 		const unsigned char *inrow2 = pIn + 4 * inwidth * (unsigned int)((i + 0.75) * inheight / outheight);
-		// const unsigned char* inrow1 = pIn + inwidth * (unsigned int)((4*i+1)*inheight/outheight);
-		// const unsigned char* inrow2 = pIn + inwidth * (unsigned int)((4*i+3)*inheight/outheight);
-
-		// printf("inrow1: %d \t inrow2: %d \n",
-		//        4 * (unsigned int)((i+0.25)*inheight/outheight),
-		//        4 * (unsigned int)((i+0.75)*inheight/outheight)
-		//        );
 
 		for (j = 0; j < outwidth; j++) {
 			const unsigned char *pix1 = inrow1 + p1[j];
@@ -311,143 +290,4 @@ void ResampleTexture(unsigned char *pOut, const unsigned int inwidth, const unsi
 
 		pOut += outwidth * 4;
 	}
-}
-
-void GetScaledDimension(const unsigned int width, const unsigned int height, unsigned int *const outW,
-						unsigned int *const outH, int isPicMip) {
-	const unsigned int max_texture_size = 2048;
-
-	unsigned int scaled_width, scaled_height;
-
-	for (scaled_width = max_texture_size; scaled_width > width; scaled_width >>= 1)
-		;
-
-	for (scaled_height = max_texture_size; scaled_height > height; scaled_height >>= 1)
-		;
-
-	// perform optional picmip operation
-	if (isPicMip) {
-		scaled_width >>= r_picmip->integer;
-		scaled_height >>= r_picmip->integer;
-	}
-
-	// clamp to minimum size
-	if (scaled_width == 0) {
-		scaled_width = 1;
-	}
-	if (scaled_height == 0) {
-		scaled_height = 1;
-	}
-
-	*outW = scaled_width;
-	*outH = scaled_height;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-// DEBUG HELPER FUNCTIONAS ...
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-void imsave(char *fileName, unsigned char *buffer2, unsigned int width, unsigned int height);
-void fsWriteFile(const char *qpath, const void *buffer, int size);
-
-void fsWriteFile(const char *qpath, const void *buffer, int size) {
-
-	unsigned char *buf = (unsigned char *)buffer;
-
-	FILE *f = fopen(qpath, "wb");
-	if (!f) {
-		fprintf(stderr, "Failed to open %s\n", qpath);
-		return;
-	}
-
-	int remaining = size;
-	int tries = 0;
-	int block = 0;
-	int written = 0;
-
-	while (remaining) {
-		block = remaining;
-		written = fwrite(buf, 1, block, f);
-		if (written == 0) {
-			if (!tries) {
-				tries = 1;
-			} else {
-				fprintf(stderr, "FS_Write: 0 bytes written\n");
-				return;
-			}
-		}
-
-		if (written == -1) {
-			fprintf(stderr, "FS_Write: -1 bytes written\n");
-			return;
-		}
-
-		remaining -= written;
-		buf += written;
-	}
-
-	// FS_Write( buffer, size, f );
-
-	fclose(f);
-}
-
-void imsave(char *fileName, unsigned char *buffer2, unsigned int width, unsigned int height) {
-
-	const unsigned int cnPixels = width * height;
-
-	unsigned char *buffer = (unsigned char *)malloc(cnPixels * 3 + 18);
-
-	memset(buffer, 0, 18);
-	buffer[2] = 2; // uncompressed type
-	buffer[12] = width & 255;
-	buffer[13] = width >> 8;
-	buffer[14] = height & 255;
-	buffer[15] = height >> 8;
-	buffer[16] = 24; // pixel size
-
-	unsigned char *buffer_ptr = buffer + 18;
-	unsigned char *buffer2_ptr = buffer2;
-
-	unsigned int i;
-	for (i = 0; i < cnPixels; i++) {
-		buffer_ptr[0] = buffer2_ptr[0];
-		buffer_ptr[1] = buffer2_ptr[1];
-		buffer_ptr[2] = buffer2_ptr[2];
-		buffer_ptr += 3;
-		buffer2_ptr += 4;
-	}
-
-	// swap rgb to bgr
-	const unsigned int c = 18 + width * height * 3;
-	for (i = 18; i < c; i += 3) {
-		unsigned char temp = buffer[i];
-		buffer[i] = buffer[i + 2];
-		buffer[i + 2] = temp;
-	}
-
-	fsWriteFile(fileName, buffer, c);
-
-	free(buffer);
-
-	ri.Printf(PRINT_ALL, "imsave: %s\n", fileName);
-}
-
-void DEBUG_resample(const char *name, unsigned char *data, unsigned char *pBuffer, unsigned int width,
-					unsigned int height, unsigned int scaled_width, unsigned int scaled_height) {
-	const char *slash = strrchr(name, '/');
-
-	char tmpName[128] = {0};
-	char tmpName2[128] = "resampled_";
-
-	strcpy(tmpName, slash + 1);
-	strcat(tmpName2, tmpName);
-
-	imsave(tmpName, data, width, height);
-	imsave(tmpName2, pBuffer, scaled_width, scaled_height);
-
-	ri.Printf(PRINT_ALL, "tmpName: %s\n", tmpName);
-	ri.Printf(PRINT_ALL, "tmpName2: %s\n", tmpName2);
-
-	ri.Printf(PRINT_ALL, "DEBUG_resample, inwidth: %d, inheight: %d, outwidth: %d, outheight: %d\n", width, height,
-			  scaled_width, scaled_height);
 }

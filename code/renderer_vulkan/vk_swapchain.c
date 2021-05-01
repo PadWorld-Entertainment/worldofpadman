@@ -79,7 +79,7 @@ void vk_createSwapChain(VkDevice device, VkSurfaceKHR surface, VkSurfaceFormatKH
 		uint32_t nPM, i;
 		qvkGetPhysicalDeviceSurfacePresentModesKHR(vk.physical_device, surface, &nPM, NULL);
 
-		VkPresentModeKHR *pPresentModes = (VkPresentModeKHR *)malloc(nPM * sizeof(VkPresentModeKHR));
+		VkPresentModeKHR *pPresentModes = (VkPresentModeKHR *)ri.Hunk_AllocateTempMemory(nPM * sizeof(VkPresentModeKHR));
 
 		qvkGetPhysicalDeviceSurfacePresentModesKHR(vk.physical_device, surface, &nPM, pPresentModes);
 
@@ -111,7 +111,7 @@ void vk_createSwapChain(VkDevice device, VkSurfaceKHR surface, VkSurfaceFormatKH
 			}
 		}
 
-		free(pPresentModes);
+		ri.Hunk_FreeTempMemory(pPresentModes);
 
 		if (mailbox_supported) {
 			present_mode = VK_PRESENT_MODE_MAILBOX_KHR;

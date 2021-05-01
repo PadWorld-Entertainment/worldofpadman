@@ -64,7 +64,7 @@ static void vk_createStagingBuffer(uint32_t size) {
 
 	memset(&StagBuf, 0, sizeof(StagBuf));
 
-	ri.Printf(PRINT_ALL, " Create Staging Buffer: %d\n", size);
+	ri.Printf(PRINT_DEVELOPER, " Create Staging Buffer: %d\n", size);
 
 	{
 		VkBufferCreateInfo buffer_desc;
@@ -112,13 +112,13 @@ static void vk_createStagingBuffer(uint32_t size) {
 
 		VK_CHECK(qvkBindBufferMemory(vk.device, StagBuf.buff, StagBuf.mappableMem, 0));
 
-		ri.Printf(PRINT_ALL, " Stagging buffer alignment: %ld, memoryTypeBits: 0x%x, Type Index: %d. \n",
+		ri.Printf(PRINT_DEVELOPER, " Stagging buffer alignment: %ld, memoryTypeBits: 0x%x, Type Index: %d. \n",
 				  memory_requirements.alignment, memory_requirements.memoryTypeBits, alloc_info.memoryTypeIndex);
 	}
 }
 
 static void vk_destroy_staging_buffer(void) {
-	ri.Printf(PRINT_ALL, " Destroy staging buffer. \n");
+	ri.Printf(PRINT_DEVELOPER, " Destroy staging buffer. \n");
 
 	if (StagBuf.buff != VK_NULL_HANDLE) {
 		qvkDestroyBuffer(vk.device, StagBuf.buff, NULL);
@@ -303,14 +303,14 @@ static void vk_createImageAndBindWithMemory(image_t *pImg) {
 	devMemImg.Chunks[devMemImg.Index].Used = memory_requirements.size;
 	++devMemImg.Index;
 
-	ri.Printf(PRINT_ALL, " --- Device memory allocation --- \n");
+	ri.Printf(PRINT_DEVELOPER, " --- Device memory allocation --- \n");
 
-	ri.Printf(PRINT_ALL, "alignment: %ld, Type Index: %d. \n", memory_requirements.alignment,
+	ri.Printf(PRINT_DEVELOPER, "alignment: %ld, Type Index: %d. \n", memory_requirements.alignment,
 			  alloc_info.memoryTypeIndex);
 
-	ri.Printf(PRINT_ALL, "Image chuck memory consumed: %d M \n", devMemImg.Index * (IMAGE_CHUNK_SIZE >> 20));
+	ri.Printf(PRINT_DEVELOPER, "Image chuck memory consumed: %d M \n", devMemImg.Index * (IMAGE_CHUNK_SIZE >> 20));
 
-	ri.Printf(PRINT_ALL, " --- ------------------------ --- \n");
+	ri.Printf(PRINT_DEVELOPER, " --- ------------------------ --- \n");
 }
 
 static void vk_createImageViewAndDescriptorSet(image_t *pImage) {
@@ -418,7 +418,7 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 		ri.Error(ERR_DROP, "CreateImage: \"%s\" is too long\n", name);
 	}
 
-	ri.Printf(PRINT_ALL, " Create Image: %s\n", name);
+	ri.Printf(PRINT_DEVELOPER, " Create Image: %s\n", name);
 
 	// Create image_t object.
 
@@ -461,11 +461,7 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 	// Textures can be an actual image, a lightmap, or even normal maps for advanced
 	// surface lighting effects.
 
-	// convert to exact power of 2 sizes
-	// GetScaledDimension(width, height, &pImage->uploadWidth, &pImage->uploadHeight, allowPicmip);
-
 	const unsigned int max_texture_size = 2048;
-
 	unsigned int scaled_width, scaled_height;
 
 	for (scaled_width = max_texture_size; scaled_width > width; scaled_width >>= 1)
@@ -483,13 +479,9 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 	pImage->uploadHeight = scaled_height;
 
 	uint32_t buffer_size = 4 * pImage->uploadWidth * pImage->uploadHeight;
-	unsigned char *const pUploadBuffer = (unsigned char *)malloc(2 * buffer_size);
+	unsigned char *const pUploadBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(2 * buffer_size);
 
 	if ((scaled_width != width) || (scaled_height != height)) {
-		// just info
-		// ri.Printf( PRINT_WARNING, "ResampleTexture: inwidth: %d, inheight: %d, outwidth: %d, outheight: %d\n",
-		//        width, height, scaled_width, scaled_height );
-
 		// go down from [width, height] to [scaled_width, scaled_height]
 		ResampleTexture(pUploadBuffer, width, height, pic, scaled_width, scaled_height);
 	} else {
@@ -588,8 +580,6 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 			dst_ptr += curLevelSize;
 		}
 		pImage->mipLevels = curMipMapLevel;
-		// ri.Printf( PRINT_WARNING, "curMipMapLevel: %d, base_width: %d, base_height: %d, buffer_size: %d, name: %s\n",
-		//    curMipMapLevel, scaled_width, scaled_height, buffer_size, name);
 	}
 
 	vk_createImageAndBindWithMemory(pImage);
@@ -600,7 +590,7 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 	memcpy(data, pUploadBuffer, buffer_size);
 	qvkUnmapMemory(vk.device, StagBuf.mappableMem);
 
-	free(pUploadBuffer);
+	ri.Hunk_FreeTempMemory(pUploadBuffer);
 
 	vk_stagBufferToDeviceLocalMem(pImage->handle, regions, pImage->mipLevels);
 
@@ -623,17 +613,14 @@ image_t *R_FindImageFile(const char *name, VkBool32 mipmap, VkBool32 allowPicmip
 		ri.Printf(PRINT_WARNING, "Find Image File: NULL\n");
 		return NULL;
 	}
-	// ri.Printf( PRINT_WARNING, "Find Image File: %s\n", name);
-
 	int hash = generateHashValue(name);
 
 	// see if the image is already loaded
-
 	for (image = hashTable[hash]; image; image = image->next) {
 		if (!strcmp(name, image->imgName)) {
 			// the white image can be used with any set of parms,
 			// but other mismatches are errors
-			if (strcmp(name, "*white")) {
+			if (strcmp(name, "*white") != 0) {
 				if (image->mipmap != mipmap) {
 					ri.Printf(PRINT_WARNING, "WARNING: reused image %s with mixed mipmap parm\n", name);
 				}
@@ -669,19 +656,18 @@ image_t *R_FindImageFile(const char *name, VkBool32 mipmap, VkBool32 allowPicmip
 }
 
 void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *data, int client, VkBool32 dirty) {
-
 	image_t *prtImage = tr.scratchImage[client];
 
 	// if the scratchImage isn't in the format we want, specify it as a new texture
-	if ((cols != prtImage->uploadWidth) || (rows != prtImage->uploadHeight)) {
-		ri.Printf(PRINT_ALL, "w=%d, h=%d, cols=%d, rows=%d, client=%d, prtImage->width=%d, prtImage->height=%d\n", w, h,
+	if (cols != prtImage->uploadWidth || rows != prtImage->uploadHeight) {
+		ri.Printf(PRINT_DEVELOPER, "w=%d, h=%d, cols=%d, rows=%d, client=%d, prtImage->width=%d, prtImage->height=%d\n", w, h,
 				  cols, rows, client, prtImage->uploadWidth, prtImage->uploadHeight);
 
 		prtImage->uploadWidth = cols;
 		prtImage->uploadHeight = rows;
 		prtImage->mipLevels = 1;
-		// VULKAN
 
+		// VULKAN
 		qvkDestroyImage(vk.device, prtImage->handle, NULL);
 		qvkDestroyImageView(vk.device, prtImage->view, NULL);
 		qvkFreeDescriptorSets(vk.device, vk.descriptor_pool, 1, &prtImage->descriptor_set);
@@ -823,7 +809,7 @@ static void R_CreateFogImage(void) {
 
 	unsigned int x, y;
 
-	unsigned char *const data = (unsigned char *)malloc(FOG_S * FOG_T * 4);
+	unsigned char *const data = ri.Hunk_AllocateTempMemory(FOG_S * FOG_T * 4);
 
 	// S is distance, T is depth
 	for (x = 0; x < FOG_S; x++) {
@@ -840,7 +826,7 @@ static void R_CreateFogImage(void) {
 	// what we want.
 	tr.fogImage = R_CreateImage("*fog", (unsigned char *)data, FOG_S, FOG_T, qfalse, qfalse, GL_CLAMP);
 
-	free(data);
+	ri.Hunk_FreeTempMemory(data);
 }
 
 static void R_CreateScratchImage(void) {
@@ -885,8 +871,7 @@ void R_InitImages(void) {
 }
 
 static void vk_destroySingleImage(image_t *pImg) {
-
-	ri.Printf(PRINT_ALL, " Destroy Image: %s \n", pImg->imgName);
+	ri.Printf(PRINT_DEVELOPER, " Destroy Image: %s \n", pImg->imgName);
 	if (pImg->descriptor_set != VK_NULL_HANDLE) {
 		// To free allocated descriptor sets
 		qvkFreeDescriptorSets(vk.device, vk.descriptor_pool, 1, &pImg->descriptor_set);

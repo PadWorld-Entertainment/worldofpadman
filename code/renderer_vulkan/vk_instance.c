@@ -209,9 +209,9 @@ static void vk_createInstance(void) {
 
 	ri.Printf(PRINT_ALL, "--- Total %d instance extensions. --- \n", nInsExt);
 
-	VkExtensionProperties *pInsExt = (VkExtensionProperties *)malloc(sizeof(VkExtensionProperties) * nInsExt);
+	VkExtensionProperties *pInsExt = (VkExtensionProperties *)ri.Hunk_AllocateTempMemory(sizeof(VkExtensionProperties) * nInsExt);
 
-	const char **ppInstanceExt = malloc(sizeof(char *) * (nInsExt));
+	const char **ppInstanceExt = ri.Hunk_AllocateTempMemory(sizeof(char *) * (nInsExt));
 
 	VK_CHECK(qvkEnumerateInstanceExtensionProperties(NULL, &nInsExt, pInsExt));
 
@@ -255,9 +255,8 @@ static void vk_createInstance(void) {
 		ri.Error(ERR_FATAL, "%d, returned by qvkCreateInstance.", e);
 	}
 
-	free(ppInstanceExt);
-
-	free(pInsExt);
+	ri.Hunk_FreeTempMemory(ppInstanceExt);
+	ri.Hunk_FreeTempMemory(pInsExt);
 }
 
 static void vk_loadGlobalFunctions(void) {
@@ -322,14 +321,14 @@ static void vk_selectPhysicalDevice(void) {
 	if (gpu_count <= 0)
 		ri.Error(ERR_FATAL, "Vulkan: no physical device found");
 
-	VkPhysicalDevice *pPhyDev = (VkPhysicalDevice *)malloc(sizeof(VkPhysicalDevice) * gpu_count);
+	VkPhysicalDevice *pPhyDev = (VkPhysicalDevice *)ri.Hunk_AllocateTempMemory(sizeof(VkPhysicalDevice) * gpu_count);
 
 	// TODO: multi graphic cards selection support
 	VK_CHECK(qvkEnumeratePhysicalDevices(vk.instance, &gpu_count, pPhyDev));
 	// For demo app we just grab the first physical device
 	vk.physical_device = pPhyDev[0];
 
-	free(pPhyDev);
+	ri.Hunk_FreeTempMemory(pPhyDev);
 
 	ri.Printf(PRINT_ALL, " Total %d graphics card, the first one is choosed. \n", gpu_count);
 
@@ -348,7 +347,7 @@ static void vk_selectSurfaceFormat(void) {
 	VK_CHECK(qvkGetPhysicalDeviceSurfaceFormatsKHR(vk.physical_device, vk.surface, &nSurfmt, NULL));
 	assert(nSurfmt > 0);
 
-	VkSurfaceFormatKHR *pSurfFmts = (VkSurfaceFormatKHR *)malloc(nSurfmt * sizeof(VkSurfaceFormatKHR));
+	VkSurfaceFormatKHR *pSurfFmts = (VkSurfaceFormatKHR *)ri.Hunk_AllocateTempMemory(nSurfmt * sizeof(VkSurfaceFormatKHR));
 
 	// To query the supported swapchain format-color space pairs for a surface
 	VK_CHECK(qvkGetPhysicalDeviceSurfaceFormatsKHR(vk.physical_device, vk.surface, &nSurfmt, pSurfFmts));
@@ -381,7 +380,7 @@ static void vk_selectSurfaceFormat(void) {
 			vk.surface_format = pSurfFmts[0];
 	}
 
-	free(pSurfFmts);
+	ri.Hunk_FreeTempMemory(pSurfFmts);
 
 	// To query the basic capabilities of a surface, needed in order to create a swapchain
 	VK_CHECK(qvkGetPhysicalDeviceSurfaceCapabilitiesKHR(vk.physical_device, vk.surface, &vk.surface_caps));
@@ -448,14 +447,15 @@ static void vk_selectQueueFamilyForPresentation(void) {
 	// compute commands or one that only allows memory thansfer related
 	// commands. We need to check which queue families are supported by
 	// the device and which one of these supports the commands that we use.
-
+	uint32_t i;
 	uint32_t nSurfmt;
+	VkQueueFamilyProperties *pQueueFamilies;
+
 	qvkGetPhysicalDeviceQueueFamilyProperties(vk.physical_device, &nSurfmt, NULL);
 
 	assert(nSurfmt > 0);
 
-	VkQueueFamilyProperties *pQueueFamilies =
-		(VkQueueFamilyProperties *)malloc(nSurfmt * sizeof(VkQueueFamilyProperties));
+	pQueueFamilies = (VkQueueFamilyProperties *)ri.Hunk_AllocateTempMemory(nSurfmt * sizeof(VkQueueFamilyProperties));
 
 	// To query properties of queues available on a physical device
 	qvkGetPhysicalDeviceQueueFamilyProperties(vk.physical_device, &nSurfmt, pQueueFamilies);
@@ -464,7 +464,6 @@ static void vk_selectQueueFamilyForPresentation(void) {
 	// Iterate over each queue to learn whether it supports presenting:
 	vk.queue_family_index = -1;
 
-	uint32_t i;
 	for (i = 0; i < nSurfmt; ++i) {
 		// To look for a queue family that has the capability of presenting
 		// to our window surface
@@ -481,7 +480,7 @@ static void vk_selectQueueFamilyForPresentation(void) {
 		}
 	}
 
-	free(pQueueFamilies);
+	ri.Hunk_FreeTempMemory(pQueueFamilies);
 
 	if (vk.queue_family_index == -1)
 		ri.Error(ERR_FATAL, "Vulkan: failed to find queue family");
@@ -499,13 +498,18 @@ static void vk_createLogicalDevice(void) {
 	//  VK_KHR_swapchain device extension after querying for its support.
 	uint32_t nDevExts = 0;
 	VkBool32 swapchainExtFound = 0;
+	VkExtensionProperties *pDeviceExt;
+	const float priority = 1.0f;
+	VkDeviceQueueCreateInfo queue_desc;
+	VkPhysicalDeviceFeatures features;
+	VkDeviceCreateInfo device_desc;
 
 	// To query the numbers of extensions available to a given physical device
 	ri.Printf(PRINT_ALL, " Check for VK_KHR_swapchain extension. \n");
 
 	qvkEnumerateDeviceExtensionProperties(vk.physical_device, NULL, &nDevExts, NULL);
 
-	VkExtensionProperties *pDeviceExt = (VkExtensionProperties *)malloc(sizeof(VkExtensionProperties) * nDevExts);
+	pDeviceExt = (VkExtensionProperties *)ri.Hunk_AllocateTempMemory(sizeof(VkExtensionProperties) * nDevExts);
 
 	qvkEnumerateDeviceExtensionProperties(vk.physical_device, NULL, &nDevExts, pDeviceExt);
 
@@ -519,10 +523,8 @@ static void vk_createLogicalDevice(void) {
 	if (VK_FALSE == swapchainExtFound)
 		ri.Error(ERR_FATAL, "VK_KHR_SWAPCHAIN_EXTENSION_NAME is not available");
 
-	free(pDeviceExt);
+	ri.Hunk_FreeTempMemory(pDeviceExt);
 
-	const float priority = 1.0;
-	VkDeviceQueueCreateInfo queue_desc;
 	queue_desc.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 	queue_desc.pNext = NULL;
 	queue_desc.flags = 0;
@@ -534,14 +536,12 @@ static void vk_createLogicalDevice(void) {
 	// has specific feature requirements it should check supported
 	// features based on this query.
 
-	VkPhysicalDeviceFeatures features;
 	qvkGetPhysicalDeviceFeatures(vk.physical_device, &features);
 	if (features.shaderClipDistance == VK_FALSE)
 		ri.Error(ERR_FATAL, "vk_create_device: shaderClipDistance feature is not supported");
 	if (features.fillModeNonSolid == VK_FALSE)
 		ri.Error(ERR_FATAL, "vk_create_device: fillModeNonSolid feature is not supported");
 
-	VkDeviceCreateInfo device_desc;
 	device_desc.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 	device_desc.pNext = NULL;
 	device_desc.flags = 0;

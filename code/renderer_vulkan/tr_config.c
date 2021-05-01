@@ -135,9 +135,6 @@ void R_glConfigInit(void) {
 	glConfig.stencilBits = 8;
 }
 
-// ==================================================
-// ==================================================
-
 static void printDeviceExtensions(void) {
 	uint32_t nDevExts = 0;
 
@@ -146,7 +143,7 @@ static void printDeviceExtensions(void) {
 
 	assert(nDevExts > 0);
 
-	VkExtensionProperties *pDevExt = (VkExtensionProperties *)malloc(sizeof(VkExtensionProperties) * nDevExts);
+	VkExtensionProperties *pDevExt = (VkExtensionProperties *)ri.Hunk_AllocateTempMemory(sizeof(VkExtensionProperties) * nDevExts);
 
 	qvkEnumerateDeviceExtensionProperties(vk.physical_device, NULL, &nDevExts, pDevExt);
 
@@ -157,7 +154,7 @@ static void printDeviceExtensions(void) {
 	}
 	ri.Printf(PRINT_ALL, "--------- ----------------------------------- ---------\n");
 
-	free(pDevExt);
+	ri.Hunk_FreeTempMemory(pDevExt);
 }
 
 static void printInstanceExtensions(int setting) {
@@ -169,7 +166,7 @@ static void printInstanceExtensions(int setting) {
 
 	assert(nInsExt > 0);
 
-	VkExtensionProperties *pInsExt = (VkExtensionProperties *)malloc(sizeof(VkExtensionProperties) * nInsExt);
+	VkExtensionProperties *pInsExt = (VkExtensionProperties *)ri.Hunk_AllocateTempMemory(sizeof(VkExtensionProperties) * nInsExt);
 
 	VK_CHECK(qvkEnumerateInstanceExtensionProperties(NULL, &nInsExt, pInsExt));
 
@@ -181,9 +178,7 @@ static void printInstanceExtensions(int setting) {
 	}
 	ri.Printf(PRINT_ALL, "----- ------------------------------------- -----\n\n");
 
-	// =================================================================
-
-	// we enabled all the instance extenstion, dose this reasonable???
+	// we enabled all the instance extension, is this reasonable???
 	// so we copy it to glConfig.ext str,
 	// split it with create instance function so that made it clear and clean
 	if (setting) {
@@ -196,45 +191,40 @@ static void printInstanceExtensions(int setting) {
 			glConfig.extensions_string[indicator++] = ' ';
 		}
 
-		free(pInsExt);
 	}
-	// ==================================================================
-	/*
-		uint32_t nDevExts = 0;
+	ri.Hunk_FreeTempMemory(pInsExt);
 
-		// To query the extensions available to a given physical device
-		VK_CHECK( qvkEnumerateDeviceExtensionProperties( vk.physical_device, NULL, &nDevExts, NULL) );
+#if 0
+	uint32_t nDevExts = 0;
 
-		assert(nDevExts > 0);
+	// To query the extensions available to a given physical device
+	VK_CHECK(qvkEnumerateDeviceExtensionProperties(vk.physical_device, NULL, &nDevExts, NULL));
 
-		VkExtensionProperties* pDevExt =
-			(VkExtensionProperties *) malloc(sizeof(VkExtensionProperties) * nDevExts);
+	assert(nDevExts > 0);
 
-		qvkEnumerateDeviceExtensionProperties(
-				vk.physical_device, NULL, &nDevExts, pDevExt);
+	VkExtensionProperties *pDevExt = (VkExtensionProperties *)ri.Hunk_AllocateTempMemory(sizeof(VkExtensionProperties) * nDevExts);
 
+	qvkEnumerateDeviceExtensionProperties(vk.physical_device, NULL, &nDevExts, pDevExt);
 
-		ri.Printf(PRINT_ALL, "---- Total %d Device Extension Supported ----\n", nDevExts);
-		uint32_t i;
-		for (i=0; i<nDevExts; ++i)
-		{
-			ri.Printf(PRINT_ALL, " %s \n", pDevExt[i].extensionName);
-		}
-		ri.Printf(PRINT_ALL, "---- ----------------------------------- ----\n\n");
+	ri.Printf(PRINT_ALL, "---- Total %d Device Extension Supported ----\n", nDevExts);
+	uint32_t i;
+	for (i = 0; i < nDevExts; ++i) {
+		ri.Printf(PRINT_ALL, " %s \n", pDevExt[i].extensionName);
+	}
+	ri.Printf(PRINT_ALL, "---- ----------------------------------- ----\n\n");
 
-	// There much more device extentions, beyound UI driver info can display
-	// and we only use VK_KHR_swapchain for now, so won't copy that,
+	// There are much more device extensions, beyond UI driver info can display
+	// and we only use VK_KHR_swapchain for now, so don't copy that,
 	// just print it out.
 
-		for (i = 0; i < nDevExts; ++i)
-		{
-			uint32_t len = strlen(pDevExt[i].extensionName);
-			memcpy(glConfig.extensions_string + indicator, pDevExt[i].extensionName, len);
-			indicator += len;
-			glConfig.extensions_string[indicator++] = ' ';
-		}
-		free(pDevExt);
-	*/
+	for (i = 0; i < nDevExts; ++i) {
+		uint32_t len = strlen(pDevExt[i].extensionName);
+		memcpy(glConfig.extensions_string + indicator, pDevExt[i].extensionName, len);
+		indicator += len;
+		glConfig.extensions_string[indicator++] = ' ';
+	}
+	ri.Hunk_FreeTempMemory(pDevExt);
+#endif
 }
 
 void vulkanInfo_f(void) {

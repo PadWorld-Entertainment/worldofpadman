@@ -48,8 +48,7 @@ void R_Init(void) {
 	// clear all our internal state
 	memset(&tr, 0, sizeof(tr));
 	memset(&tess, 0, sizeof(tess));
-
-	R_ClearBackendState();
+	memset(&backEnd, 0, sizeof(backEnd));
 
 	if ((intptr_t)tess.xyz & 15) {
 		ri.Printf(PRINT_ALL, "WARNING: tess.xyz not 16 byte aligned\n");
@@ -93,12 +92,8 @@ void R_Init(void) {
 
 	ri.Cmd_AddCommand("vkinfo", vulkanInfo_f);
 	ri.Cmd_AddCommand("minimize", vk_minimizeWindow);
-
 	ri.Cmd_AddCommand("pipelineList", R_PipelineList_f);
-
 	ri.Cmd_AddCommand("gpuMem", gpuMemUsageInfo_f);
-
-	ri.Cmd_AddCommand("printOR", R_PrintBackEnd_OR_f);
 
 	R_InitScene();
 
@@ -113,13 +108,9 @@ void R_Init(void) {
 	}
 
 	R_InitImages();
-
 	R_InitShaders();
-
 	R_InitSkins();
-
 	R_ModelInit();
-
 	R_InitFreeType();
 
 	ri.Printf(PRINT_ALL, "----- R_Init finished -----\n");
@@ -134,12 +125,10 @@ void RE_Shutdown(qboolean destroyWindow) {
 	ri.Cmd_RemoveCommand("shaderlist");
 	ri.Cmd_RemoveCommand("skinlist");
 
-	ri.Cmd_RemoveCommand("minimize");
-
 	ri.Cmd_RemoveCommand("vkinfo");
+	ri.Cmd_RemoveCommand("minimize");
 	ri.Cmd_RemoveCommand("pipelineList");
 	ri.Cmd_RemoveCommand("gpuMem");
-	ri.Cmd_RemoveCommand("printOR");
 
 	R_DoneFreeType();
 

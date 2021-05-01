@@ -3,9 +3,6 @@
 
 #include "../qcommon/q_shared.h"
 
-void GetScaledDimension(const unsigned int width, const unsigned int height, unsigned int *const outW,
-						unsigned int *const outH, int isPicMip);
-
 void R_SetColorMappings(void);
 void R_LightScaleTexture(unsigned char *dst, unsigned char *in, unsigned int nBytes);
 void ResampleTexture(unsigned char *pOut, const unsigned int inwidth, const unsigned int inheight,
