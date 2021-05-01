@@ -365,7 +365,6 @@ typedef struct {
 	int handicap;
 	int wins, losses; // in tourney mode
 
-	int teamTask;		 // task in teamplay (offence/defence)
 	qboolean teamLeader; // true when this is a team leader
 
 	int powerups; // so can display quad/flag status

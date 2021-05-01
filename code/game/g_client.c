@@ -769,7 +769,7 @@ if desired.
 */
 void ClientUserinfoChanged(int clientNum) {
 	gentity_t *ent;
-	int teamTask, teamLeader, team, health;
+	int teamLeader, team, health;
 	char *s;
 	char model[MAX_QPATH];
 	char headModel[MAX_QPATH];
@@ -849,8 +849,6 @@ void ClientUserinfoChanged(int clientNum) {
 		client->pers.teamInfo = qfalse;
 	}
 
-	// team task (0 = none, 1 = offence, 2 = defence)
-	teamTask = atoi(Info_ValueForKey(userinfo, "teamtask"));
 	// team Leader (1 = leader, 0 is normal player)
 	teamLeader = client->sess.teamLeader;
 
@@ -866,16 +864,16 @@ void ClientUserinfoChanged(int clientNum) {
 		int rnd;
 		rnd = random() * 5.9;
 		rnd_str = va("%d", rnd);
-		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tt\\%d\\tl\\%"
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tl\\%"
 			   "d\\sl\\%s",
 			   client->pers.netname, team, model, headModel, c1, rnd_str, client->pers.maxHealth, client->sess.wins,
-			   client->sess.losses, Info_ValueForKey(userinfo, "skill"), teamTask, teamLeader,
+			   client->sess.losses, Info_ValueForKey(userinfo, "skill"), teamLeader,
 			   client->sess.selectedlogo);
 		// cyr}
 	} else {
-		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\tt\\%d\\tl\\%d\\sl\\%s",
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\tl\\%d\\sl\\%s",
 			   client->pers.netname, client->sess.sessionTeam, model, headModel, c1, c2, client->pers.maxHealth,
-			   client->sess.wins, client->sess.losses, teamTask, teamLeader, client->sess.selectedlogo);
+			   client->sess.wins, client->sess.losses, teamLeader, client->sess.selectedlogo);
 	}
 
 	trap_SetConfigstring(CS_PLAYERS + clientNum, s);

@@ -440,29 +440,6 @@ void Cmd_LevelShot_f(gentity_t *ent) {
 }
 
 /*
-==================
-Cmd_TeamTask_f
-==================
-*/
-void Cmd_TeamTask_f(gentity_t *ent) {
-	char userinfo[MAX_INFO_STRING];
-	char arg[MAX_TOKEN_CHARS];
-	int task;
-	int client = ent->client - level.clients;
-
-	if (trap_Argc() != 2) {
-		return;
-	}
-	trap_Argv(1, arg, sizeof(arg));
-	task = atoi(arg);
-
-	trap_GetUserinfo(client, userinfo, sizeof(userinfo));
-	Info_SetValueForKey(userinfo, "teamtask", va("%d", task));
-	trap_SetUserinfo(client, userinfo);
-	ClientUserinfoChanged(client);
-}
-
-/*
 =================
 Cmd_Kill_f
 =================
@@ -1874,8 +1851,6 @@ void ClientCommand(int clientNum) {
 		Cmd_Noclip_f(ent);
 	else if (Q_stricmp(cmd, "kill") == 0)
 		Cmd_Kill_f(ent);
-	/*else if (Q_stricmp (cmd, "teamtask") == 0)
-		Cmd_TeamTask_f (ent);*/
 	else if (Q_stricmp(cmd, "levelshot") == 0)
 		Cmd_LevelShot_f(ent);
 	else if (Q_stricmp(cmd, "follow") == 0)
@@ -1892,26 +1867,18 @@ void ClientCommand(int clientNum) {
 		Cmd_CallVote_f(ent);
 	else if (Q_stricmp(cmd, "vote") == 0)
 		Cmd_Vote_f(ent);
-	// TODO: Remove teamvotes altogether?
-	/*else if (Q_stricmp (cmd, "callteamvote") == 0)
-		Cmd_CallTeamVote_f (ent);
-	else if (Q_stricmp (cmd, "teamvote") == 0)
-		Cmd_TeamVote_f (ent);*/
 	else if (Q_stricmp(cmd, "gc") == 0)
 		Cmd_GameCommand_f(ent);
 	else if (Q_stricmp(cmd, "setviewpos") == 0)
 		Cmd_SetViewpos_f(ent);
 	else if (Q_stricmp(cmd, "stats") == 0)
 		Cmd_Stats_f(ent);
-
 	else if (Q_stricmp(cmd, "selectlogo") == 0)
 		Cmd_SelectLogo_f(ent);
-
 	else if (Q_stricmp(cmd, "ready") == 0)
 		Cmd_ReadyToFight_f(ent);
 	else if (Q_stricmp(cmd, "TeamReady") == 0)
 		Cmd_TeamReady_f(ent);
-
 	else if (Q_stricmp(cmd, "dropCartridge") == 0 || Q_stricmp(cmd, "sv_dropCartridge") == 0 ||
 			 Q_stricmp(cmd, "dropTeamItem") == 0)
 		Cmd_dropCartridge_f(ent);
