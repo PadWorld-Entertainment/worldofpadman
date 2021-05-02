@@ -1943,7 +1943,7 @@ static void S_AL_MusicUpdate(void) {
 	int numBuffers;
 	ALint state;
 
-	if (!musicPlaying)
+	if (!musicPlaying || !musicSource)
 		return;
 
 	qalGetSourcei(musicSource, AL_BUFFERS_PROCESSED, &numBuffers);
@@ -1951,6 +1951,8 @@ static void S_AL_MusicUpdate(void) {
 		ALuint b;
 		qalSourceUnqueueBuffers(musicSource, 1, &b);
 		S_AL_MusicProcess(b);
+		if (!musicSource)
+			return;
 		qalSourceQueueBuffers(musicSource, 1, &b);
 	}
 
