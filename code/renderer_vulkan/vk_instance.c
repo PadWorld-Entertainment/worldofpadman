@@ -151,6 +151,10 @@ static void vk_createInstance(void) {
 	VkExtensionProperties *pInsExt;
 	VkResult e;
 	const char **ppInstanceExt;
+	qboolean enableValidationLayers = qfalse;
+#ifdef DEBUG
+	enableValidationLayers = qtrue;
+#endif
 
 	// There is no global state in Vulkan and all per-application state
 	// is stored in a VkInstance object. Creating a VkInstance object
@@ -231,18 +235,14 @@ static void vk_createInstance(void) {
 	instanceCreateInfo.enabledExtensionCount = nInsExt;
 	instanceCreateInfo.ppEnabledExtensionNames = ppInstanceExt;
 
-#ifndef NDEBUG
-	ri.Printf(PRINT_ALL, "Using VK_LAYER_LUNARG_standard_validation\n");
-
-	{
-		const char *const validation_layer_name = "VK_LAYER_LUNARG_standard_validation";
-		instanceCreateInfo.enabledLayerCount = 1;
-		instanceCreateInfo.ppEnabledLayerNames = &validation_layer_name;
-	}
-#else
 	instanceCreateInfo.enabledLayerCount = 0;
 	instanceCreateInfo.ppEnabledLayerNames = NULL;
-#endif
+
+	if (enableValidationLayers) {
+		static const char *validation_layer_name[] = {"VK_LAYER_KHRONOS_validation"};
+		instanceCreateInfo.ppEnabledLayerNames = validation_layer_name;
+		instanceCreateInfo.enabledLayerCount = 1;
+	}
 
 	e = qvkCreateInstance(&instanceCreateInfo, NULL, &vk.instance);
 	if (e == VK_SUCCESS) {
