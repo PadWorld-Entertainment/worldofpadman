@@ -172,7 +172,7 @@ void UI_ForceMenuOff(void) {
 	uis.menusp = 0;
 	uis.activemenu = NULL;
 
-	if (!trap_Cvar_VariableValue("cl_paused"))
+	if (!UI_GetCvarInt("cl_paused"))
 		UI_StopMusic();
 
 	trap_Key_SetCatcher(trap_Key_GetCatcher() & ~KEYCATCH_UI);

@@ -370,7 +370,7 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 		axis[2][2] = axis[1][0] * axis[0][1] - axis[1][1] * axis[0][0];
 		VectorNormalize(axis[2]);
 
-		// turn 180° ...
+		// turn 180 degree ...
 		axis[1][0] *= -1.0f;
 		axis[1][1] *= -1.0f;
 		axis[1][2] *= -1.0f;
@@ -588,6 +588,8 @@ void ActiveChooseLogoMenu(void) {
 	float *spraycolor;
 	int mouseOverColor = -1;
 
+	trap_Cvar_Set("cl_paused", "1");
+
 	if (cgs.gametype == GT_SPRAY) {
 		if (cgs.clientinfo[cg.clientNum].team == TEAM_RED)
 			spraycolor = colorRed;
@@ -596,9 +598,7 @@ void ActiveChooseLogoMenu(void) {
 	} else {
 		trap_Cvar_VariableStringBuffer("syc_color", colorchar, sizeof(colorchar));
 
-		if (colorchar[0] > '5')
-			colorchar[0] = '0';
-		else if (colorchar[0] < '0')
+		if (colorchar[0] > '5' || colorchar[0] < '0')
 			colorchar[0] = '0';
 
 		spraycolor = spraycolors[(int)(colorchar[0] - '0')];
@@ -692,14 +692,14 @@ void ActiveChooseLogoMenu(void) {
 
 	CG_DrawPic(cgs.cursorX - 16, cgs.cursorY - 16, 32, 32, cgs.media.cgwopmenu_cursor);
 
-	if (cgs.lastusedkey == K_MOUSE1 && lastklicktime + 500 < cg.time) {
+	if (cgs.lastusedkey == K_MOUSE1 && lastklicktime + 500 < cg.millis) {
 		if (CursorAtLogo != -1) {
 			trap_S_StartLocalSound(menu_click_sound, CHAN_LOCAL_SOUND);
 
 			trap_Cvar_Set("syc_logo", loadedlogos_array[CursorAtLogo].name);
 			trap_SendClientCommand(va("selectlogo \"%s\"\n", loadedlogos_array[CursorAtLogo].name));
 			trap_Key_SetCatcher(catcher & ~KEYCATCH_CGAME);
-			cg.logoselected = qtrue;
+			cg.wantSelectLogo = qfalse;
 		} else if (mouseOverColor != -1) {
 			trap_S_StartLocalSound(menu_click_sound, CHAN_LOCAL_SOUND);
 
@@ -722,21 +722,21 @@ void ActiveChooseLogoMenu(void) {
 				}
 			}
 		}
-		lastklicktime = cg.time;
+		lastklicktime = cg.millis;
 	}
 
 	if (cgs.lastusedkey == K_ESCAPE) // don't set a logo, so we have a empty str
 	{
 		trap_Key_SetCatcher(catcher & ~KEYCATCH_CGAME);
-		cg.logoselected = qtrue;
-	} else if ((cgs.lastusedkey == K_PGUP || cgs.lastusedkey == K_MWHEELUP) && lastpagetime + 500 < cg.time) {
+		cg.wantSelectLogo = qfalse;
+	} else if ((cgs.lastusedkey == K_PGUP || cgs.lastusedkey == K_MWHEELUP) && lastpagetime + 500 < cg.millis) {
 		if (activepage > 0)
 			activepage--;
-		lastpagetime = cg.time;
-	} else if ((cgs.lastusedkey == K_PGDN || cgs.lastusedkey == K_MWHEELDOWN) && lastpagetime + 500 < cg.time) {
+		lastpagetime = cg.millis;
+	} else if ((cgs.lastusedkey == K_PGDN || cgs.lastusedkey == K_MWHEELDOWN) && lastpagetime + 500 < cg.millis) {
 		if (activepage < (numPages - 1))
 			activepage++;
-		lastpagetime = cg.time;
+		lastpagetime = cg.millis;
 	} else if (cgs.lastusedkey >= '1' && cgs.lastusedkey <= '8') // a num key ... cgame don't use K_CHAR_FLAG
 	{
 		i = (cgs.lastusedkey - '1') + activepage * 8;
@@ -744,10 +744,14 @@ void ActiveChooseLogoMenu(void) {
 			trap_Cvar_Set("syc_logo", loadedlogos_array[i].name);
 			trap_SendClientCommand(va("selectlogo \"%s\"\n", loadedlogos_array[i].name));
 			trap_Key_SetCatcher(catcher & ~KEYCATCH_CGAME);
-			cg.logoselected = qtrue;
+			cg.wantSelectLogo = qfalse;
 		}
 	} else if (cgs.lastusedkey == K_F12) {
 		trap_SendConsoleCommand("screenshotJPEG\n");
+	}
+
+	if (!cg.wantSelectLogo) {
+		trap_Cvar_Set("cl_paused", "0");
 	}
 
 	cgs.lastusedkey = 0; // clean

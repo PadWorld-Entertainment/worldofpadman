@@ -2618,7 +2618,7 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 	}
 
 	// draw the menu above all
-	if (cg.logoselected == 2) {
+	if (cg.wantSelectLogo) {
 		ActiveChooseLogoMenu();
 	}
 

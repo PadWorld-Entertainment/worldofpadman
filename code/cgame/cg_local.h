@@ -517,14 +517,15 @@ typedef struct {
 	int time; // this is the time value that the client
 			  // is rendering at.
 	int oldTime; // time at last frame, used for missile trails and prediction checking
+	int millis; // current frame milliseconds
 
 	int physicsTime; // either cg.snap->time or cg.nextSnap->time
 
 	int timelimitWarnings; // 5 min, 1 min, overtime
 	int fraglimitWarnings;
 
-	qboolean logoselected;
-	int ignorekeys;
+	qboolean wantSelectLogo;
+	int handleInputMillis;
 
 	int first2dtime;
 	char wopSky[128];

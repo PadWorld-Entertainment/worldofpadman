@@ -197,8 +197,8 @@ static void CG_Camera_f( void ) {
 */
 
 static void CG_ReChooseLogo_f(void) {
-	cg.logoselected = 2;
-	cg.ignorekeys = cg.time + 1000;
+	cg.wantSelectLogo = qtrue;
+	cg.handleInputMillis = cg.millis + 1000;
 }
 
 static const char *gameNames[] = {GAMETYPE_NAME(GT_FFA),		   GAMETYPE_NAME(GT_TOURNAMENT),

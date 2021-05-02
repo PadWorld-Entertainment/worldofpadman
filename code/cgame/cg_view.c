@@ -843,6 +843,7 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	int lastSnapClientNum = -1;
 
 	cg.time = serverTime;
+	cg.millis = trap_Milliseconds();
 	cg.demoPlayback = demoPlayback;
 
 	if (cg_thirdPersonAutoSwitch.integer == 1) {

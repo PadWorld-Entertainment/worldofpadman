@@ -683,7 +683,10 @@ static void CG_ServerCommand(void) {
 				trap_SendClientCommand("selectlogo " SPRAYLOGO_DEFAULT_NAME "\n");
 			}
 
-			cg.logoselected = qtrue;
+			if (cg.wantSelectLogo) {
+				trap_Cvar_Set("cl_paused", "0");
+				cg.wantSelectLogo = qfalse;
+			}
 			break;
 		}
 

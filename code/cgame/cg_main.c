@@ -1437,7 +1437,7 @@ void CG_EventHandling(int type) {
 }
 
 void CG_KeyEvent(int key, qboolean down) {
-	if (cg.ignorekeys < cg.time) {
+	if (cg.handleInputMillis < cg.millis) {
 		cgs.lastusedkey = key;
 	}
 }
