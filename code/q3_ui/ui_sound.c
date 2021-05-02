@@ -157,6 +157,7 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 		UI_DisplayOptionsMenu();
 		break;
 
+	case ID_openAL:
 	case ID_SOUND:
 		break;
 
@@ -174,12 +175,7 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 		break;
 
 	case ID_MUSICAUTOSWITCH:
-		trap_Cvar_SetValue("wop_AutoswitchSongByNextMap", soundOptionsInfo.musicautoswitch.curvalue);
-		break;
-
-	case ID_openAL:
-
-		//soundOptionsInfo.openAL.curvalue = !soundOptionsInfo.openAL.curvalue;
+		trap_Cvar_SetValue("wop_AutoswitchSongByNextMap", (float)soundOptionsInfo.musicautoswitch.curvalue);
 		break;
 
 	case ID_GAINWHILECAPTURE:
@@ -187,11 +183,11 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 		break;
 
 	case ID_VOIPMODE:
-		trap_Cvar_SetValue("cl_voip", soundOptionsInfo.voipmode.curvalue);
+		trap_Cvar_SetValue("cl_voip", (float)soundOptionsInfo.voipmode.curvalue);
 		break;
 
 	case ID_RECORDMODE:
-		trap_Cvar_SetValue("cl_voipUseVAD", soundOptionsInfo.voipRecordMode.curvalue);
+		trap_Cvar_SetValue("cl_voipUseVAD", (float)soundOptionsInfo.voipRecordMode.curvalue);
 		break;
 
 	case ID_VOICETHRESHOLD:
@@ -437,7 +433,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 
 	soundOptionsInfo.sfxvolume.curvalue = trap_Cvar_VariableValue("s_volume") * 10;
 	soundOptionsInfo.musicvolume.curvalue = trap_Cvar_VariableValue("s_musicvolume") * 10;
-	soundOptionsInfo.musicautoswitch.curvalue = (trap_Cvar_VariableValue("wop_AutoswitchSongByNextMap") != 0);
+	soundOptionsInfo.musicautoswitch.curvalue = (UI_GetCvarInt("wop_AutoswitchSongByNextMap") != 0);
 	// soundOptionsInfo.voiceThresholdVAD.curvalue = trap_Cvar_VariableValue("cl_voipVADThreshold") * 10;
 	soundOptionsInfo.voiceGainDuringCapture.curvalue = trap_Cvar_VariableValue("cl_voipGainDuringCapture") * 10;
 	soundOptionsInfo.voipmode.curvalue = UI_GetCvarInt("cl_voip");

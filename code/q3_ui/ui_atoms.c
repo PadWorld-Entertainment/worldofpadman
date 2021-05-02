@@ -851,7 +851,7 @@ void UI_DrawString(int x, int y, const char *str, int style, vec4_t color) {
 		lowlight[1] = 0.8 * color[1];
 		lowlight[2] = 0.8 * color[2];
 		lowlight[3] = 0.8 * color[3];
-		UI_LerpColor(color, lowlight, newcolor, 0.5 + 0.5 * sin(uis.realtime / PULSE_DIVISOR));
+		UI_LerpColor(color, lowlight, newcolor, (float)(0.5 + 0.5 * sin(uis.realtime / PULSE_DIVISOR)));
 		drawcolor = newcolor;
 	} else
 		drawcolor = color;
