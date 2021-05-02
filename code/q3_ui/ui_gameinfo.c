@@ -49,7 +49,7 @@ static int allocPoint, outOfMemory;
 UI_Alloc
 ===============
 */
-void *UI_Alloc(int size) {
+static void *UI_Alloc(int size) {
 	char *p;
 
 	if (allocPoint + size > POOLSIZE) {
@@ -69,7 +69,7 @@ void *UI_Alloc(int size) {
 UI_InitMemory
 ===============
 */
-void UI_InitMemory(void) {
+static void UI_InitMemory(void) {
 	allocPoint = 0;
 	outOfMemory = qfalse;
 }
