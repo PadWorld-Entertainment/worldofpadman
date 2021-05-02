@@ -209,6 +209,9 @@ typedef struct {
 	int menuPosition;
 	unsigned int flags;
 
+	/**
+	 * @param[in] event QM_GOTFOCUS, QM_LOSTFOCUS or QM_ACTIVATED
+	 */
 	void (*callback)(void *self, int event);
 	void (*statusbar)(void *self);
 	// total subclassing, owner draws everything if set

@@ -1767,6 +1767,14 @@ void Menu_Draw(menuframework_s *menu) {
 #endif
 	}
 
+	itemptr = Menu_ItemAtCursor(menu);
+	if (itemptr) {
+		if (itemptr->statusbar)
+			itemptr->statusbar((void *)itemptr);
+
+		UI_DrawToolTip(itemptr);
+	}
+
 	if (uis.dropdownlist) {
 		vec4_t dropdownBG;
 		int mouseover = (uis.cursory - uis.dropdownxywh[1]) / SMALLCHAR_HEIGHT;
@@ -1790,14 +1798,6 @@ void Menu_Draw(menuframework_s *menu) {
 		}
 
 		UI_DrawRect(dropdownBG[0], dropdownBG[1], dropdownBG[2], dropdownBG[3], uis.dropdownlist->dropdown_border, 2);
-	}
-
-	itemptr = Menu_ItemAtCursor(menu);
-	if (itemptr) {
-		if (itemptr->statusbar)
-			itemptr->statusbar((void *)itemptr);
-
-		UI_DrawToolTip(itemptr);
 	}
 }
 
