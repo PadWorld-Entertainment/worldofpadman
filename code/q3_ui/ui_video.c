@@ -277,8 +277,6 @@ static void GraphicsOptions_CheckConfig(void) {
 			continue;
 		if (s_ivo_templates[i].filter != s_graphicsoptions.filter.curvalue)
 			continue;
-		//		if ( s_ivo_templates[i].texturebits != s_graphicsoptions.texturebits.curvalue )
-		//			continue;
 		if (s_ivo_templates[i].ct != s_graphicsoptions.ct.curvalue)
 			continue;
 		if (s_ivo_templates[i].af != s_graphicsoptions.af.curvalue)
@@ -355,8 +353,8 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_SetValue("r_texturebits", 32);
 		break;
 	}
-	trap_Cvar_SetValue("r_picmip", 3 - s_graphicsoptions.tq.curvalue);
-	trap_Cvar_SetValue("r_fullscreen", s_graphicsoptions.fs.curvalue);
+	trap_Cvar_SetValue("r_picmip", (float)(3 - s_graphicsoptions.tq.curvalue));
+	trap_Cvar_SetValue("r_fullscreen", (float)s_graphicsoptions.fs.curvalue);
 	switch (s_graphicsoptions.colordepth.curvalue) {
 	case 0:
 		trap_Cvar_SetValue("r_colorbits", 0);
@@ -424,9 +422,9 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 			trap_Cvar_Set("r_customheight", h);
 		}
 
-		trap_Cvar_SetValue("r_mode", mode);
+		trap_Cvar_SetValue("r_mode", (float)mode);
 	} else
-		trap_Cvar_SetValue("r_mode", s_graphicsoptions.mode.curvalue);
+		trap_Cvar_SetValue("r_mode", (float)s_graphicsoptions.mode.curvalue);
 
 	trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
 }
@@ -500,7 +498,7 @@ GraphicsOptions_SetMenuItems
 =================
 */
 static void GraphicsOptions_SetMenuItems(void) {
-	s_graphicsoptions.mode.curvalue = GraphicsOptions_FindDetectedResolution(trap_Cvar_VariableValue("r_mode"));
+	s_graphicsoptions.mode.curvalue = GraphicsOptions_FindDetectedResolution(UI_GetCvarInt("r_mode"));
 
 	if (s_graphicsoptions.mode.curvalue < 0) {
 		if (resolutionsDetected) {
@@ -524,16 +522,16 @@ static void GraphicsOptions_SetMenuItems(void) {
 		}
 	}
 
-	s_graphicsoptions.fs.curvalue = trap_Cvar_VariableValue("r_fullscreen");
+	s_graphicsoptions.fs.curvalue = UI_GetCvarInt("r_fullscreen");
 
-	s_graphicsoptions.tq.curvalue = 3 - trap_Cvar_VariableValue("r_picmip");
+	s_graphicsoptions.tq.curvalue = 3 - UI_GetCvarInt("r_picmip");
 	if (s_graphicsoptions.tq.curvalue < 0) {
 		s_graphicsoptions.tq.curvalue = 0;
 	} else if (s_graphicsoptions.tq.curvalue > 3) {
 		s_graphicsoptions.tq.curvalue = 3;
 	}
 
-	switch ((int)trap_Cvar_VariableValue("r_texturebits")) {
+	switch (UI_GetCvarInt("r_texturebits")) {
 	default:
 	case 0:
 		s_graphicsoptions.texturebits.curvalue = 0;
@@ -562,7 +560,7 @@ static void GraphicsOptions_SetMenuItems(void) {
 		s_graphicsoptions.geometry.curvalue = 2;
 	}
 
-	switch ((int)trap_Cvar_VariableValue("r_colorbits")) {
+	switch (UI_GetCvarInt("r_colorbits")) {
 	default:
 	case 0:
 		s_graphicsoptions.colordepth.curvalue = 0;
@@ -579,7 +577,7 @@ static void GraphicsOptions_SetMenuItems(void) {
 		s_graphicsoptions.colordepth.curvalue = 0;
 	}
 
-	s_graphicsoptions.ct.curvalue = trap_Cvar_VariableValue("r_ext_compressed_textures");
+	s_graphicsoptions.ct.curvalue = UI_GetCvarInt("r_ext_compressed_textures");
 
 	s_graphicsoptions.aa.curvalue = ceil(sqrt(trap_Cvar_VariableValue("r_ext_multisample")));
 
