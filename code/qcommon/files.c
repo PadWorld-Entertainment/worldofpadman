@@ -3754,6 +3754,7 @@ int FS_FOpenFileByMode(const char *qpath, fileHandle_t *f, fsMode_t mode) {
 		break;
 	case FS_APPEND_SYNC:
 		sync = qtrue;
+		// fall-through
 	case FS_APPEND:
 		*f = FS_FOpenFileAppend(qpath);
 		r = 0;
