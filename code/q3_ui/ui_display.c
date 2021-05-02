@@ -100,12 +100,14 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 	}
 
 	switch (((menucommon_s *)ptr)->id) {
+	case ID_DISPLAY:
+	case ID_GREYSCALE:
+	case ID_IGNOREHWG:
+		break;
+
 	case ID_GRAPHICS:
 		UI_PopMenu();
 		UI_GraphicsOptionsMenu();
-		break;
-
-	case ID_DISPLAY:
 		break;
 
 	case ID_SOUND:
@@ -122,10 +124,6 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		trap_Cvar_SetValue("r_gamma", displayOptionsInfo.brightness.curvalue / 10.0f);
 		break;
 
-	case ID_IGNOREHWG:
-		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-		break;
-
 	case ID_BACK:
 		UI_PopMenu();
 		break;
@@ -137,10 +135,6 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		} else {
 			displayOptionsInfo.greyscale.generic.flags &= ~QMF_GRAYED;
 		}
-		break;
-
-	case ID_GREYSCALE:
-		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 		break;
 	}
 }
