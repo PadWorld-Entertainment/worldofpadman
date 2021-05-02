@@ -185,7 +185,7 @@ void UI_ForceMenuOff(void) {
 UI_LerpColor
 =================
 */
-void UI_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t) {
+void UI_LerpColor(const vec4_t a, const vec4_t b, vec4_t c, float t) {
 	int i;
 
 	// lerp and clamp each component
@@ -362,7 +362,7 @@ static int propMapB[26][3] = {
 UI_DrawBannerString
 =================
 */
-static void UI_DrawBannerString2(int x, int y, const char *str, vec4_t color) {
+static void UI_DrawBannerString2(int x, int y, const char *str, const vec4_t color) {
 	const char *s;
 	unsigned char ch;
 	float ax;
@@ -402,7 +402,7 @@ static void UI_DrawBannerString2(int x, int y, const char *str, vec4_t color) {
 	trap_R_SetColor(NULL);
 }
 
-void UI_DrawBannerString(int x, int y, const char *str, int style, vec4_t color) {
+void UI_DrawBannerString(int x, int y, const char *str, int style, const vec4_t color) {
 	const char *s;
 	int ch;
 	int width;
@@ -467,7 +467,7 @@ int UI_ProportionalStringWidth(const char *str) {
 	return width;
 }
 
-void UI_DrawProportionalString2(int x, int y, const char *str, vec4_t color, float sizeScale, qhandle_t charset) {
+void UI_DrawProportionalString2(int x, int y, const char *str, const vec4_t color, float sizeScale, qhandle_t charset) {
 	const char *s;
 	unsigned char ch;
 	float ax;
@@ -525,7 +525,7 @@ float UI_ProportionalSizeScale(int style) {
 UI_DrawProportionalString
 =================
 */
-void UI_DrawProportionalString(int x, int y, const char *str, int style, vec4_t color) {
+void UI_DrawProportionalString(int x, int y, const char *str, int style, const vec4_t color) {
 	vec4_t drawcolor;
 	int width;
 	float sizeScale;
@@ -677,7 +677,7 @@ int UI_AutoWrappedString_LineCount(int xmax, const char *str, int style, qboolea
 UI_DrawProportionalString_Wrapped
 =================
 */
-void UI_DrawString_AutoWrapped(int x, int y, int xmax, int ystep, const char *str, int style, vec4_t color,
+void UI_DrawString_AutoWrapped(int x, int y, int xmax, int ystep, const char *str, int style, const vec4_t color,
 							   qboolean proportional) {
 	int width;
 	char *s1, *s2, *s3;
@@ -771,7 +771,7 @@ void UI_DrawString_AutoWrapped(int x, int y, int xmax, int ystep, const char *st
 UI_DrawString2
 =================
 */
-static void UI_DrawString2(int x, int y, const char *str, vec4_t color, int charw, int charh) {
+static void UI_DrawString2(int x, int y, const char *str, const vec4_t color, int charw, int charh) {
 	const char *s;
 	char ch;
 	int forceColor = qfalse; // APSFIXME;
@@ -827,7 +827,7 @@ static void UI_DrawString2(int x, int y, const char *str, vec4_t color, int char
 UI_DrawString
 =================
 */
-void UI_DrawString(int x, int y, const char *str, int style, vec4_t color) {
+void UI_DrawString(int x, int y, const char *str, int style, const vec4_t color) {
 	int len;
 	int charw;
 	int charh;
@@ -852,9 +852,10 @@ void UI_DrawString(int x, int y, const char *str, int style, vec4_t color) {
 		lowlight[2] = 0.8 * color[2];
 		lowlight[3] = 0.8 * color[3];
 		UI_LerpColor(color, lowlight, newcolor, (float)(0.5 + 0.5 * sin(uis.realtime / PULSE_DIVISOR)));
-		drawcolor = newcolor;
-	} else
-		drawcolor = color;
+	} else {
+		Vector4Copy(color, newcolor);
+	}
+	drawcolor = newcolor;
 
 	switch (style & UI_FORMATMASK) {
 	case UI_CENTER:
@@ -888,13 +889,13 @@ void UI_DrawString(int x, int y, const char *str, int style, vec4_t color) {
 UI_DrawStringNS
 =================
 */
-void UI_DrawStringNS(int x, int y, const char *str, int style, float fontsize, vec4_t color) {
+void UI_DrawStringNS(int x, int y, const char *str, int style, float fontsize, const vec4_t color) {
 	int len;
 	int charw;
 	int charh;
 	vec4_t newcolor;
 	vec4_t lowlight;
-	float *drawcolor;
+	const float *drawcolor;
 	vec4_t dropcolor;
 
 	if (!str) {
@@ -955,7 +956,7 @@ void UI_DrawStringNS(int x, int y, const char *str, int style, float fontsize, v
 UI_DrawChar
 =================
 */
-void UI_DrawChar(int x, int y, int ch, int style, vec4_t color) {
+void UI_DrawChar(int x, int y, int ch, int style, const vec4_t color) {
 	char buff[2];
 
 	buff[0] = ch;

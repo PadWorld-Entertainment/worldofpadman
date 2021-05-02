@@ -619,7 +619,7 @@ static const int propMapB[26][3] = {
 UI_DrawBannerString
 =================
 */
-static void UI_DrawBannerString2(int x, int y, const char *str, vec4_t color) {
+static void UI_DrawBannerString2(int x, int y, const char *str, const vec4_t color) {
 	const char *s;
 	unsigned char ch; // bk001204 : array subscript
 	float ax;
@@ -659,7 +659,7 @@ static void UI_DrawBannerString2(int x, int y, const char *str, vec4_t color) {
 	trap_R_SetColor(NULL);
 }
 
-void UI_DrawBannerString(int x, int y, const char *str, int style, vec4_t color) {
+void UI_DrawBannerString(int x, int y, const char *str, int style, const vec4_t color) {
 	const char *s;
 	int ch;
 	int width;
@@ -724,7 +724,7 @@ int UI_ProportionalStringWidth(const char *str) {
 	return width;
 }
 
-static void UI_DrawProportionalString2(int x, int y, const char *str, vec4_t color, float sizeScale,
+static void UI_DrawProportionalString2(int x, int y, const char *str, const vec4_t color, float sizeScale,
 									   qhandle_t charset) {
 	const char *s;
 	unsigned char ch; // bk001204 - unsigned
@@ -785,7 +785,7 @@ float UI_ProportionalSizeScale(int style) {
 UI_DrawProportionalString
 =================
 */
-void UI_DrawProportionalString(int x, int y, const char *str, int style, vec4_t color) {
+void UI_DrawProportionalString(int x, int y, const char *str, int style, const vec4_t color) {
 	vec4_t drawcolor;
 	int width;
 	float sizeScale;

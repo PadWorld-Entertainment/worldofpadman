@@ -56,7 +56,7 @@ typedef struct {
 	int numListitems;
 	int baseItem;
 	int selectedItem;
-	char *selItemStr;
+	const char *selItemStr;
 	qboolean voteRunning;
 	int lastGoTime;
 } callVoteMenu_t;
@@ -136,8 +136,8 @@ static void UI_CallVote_ClickListItem(void *ptr, int event) {
 		return;
 	}
 
-	s_callVoteMenu.selectedItem = (((menucommon_s *)ptr)->id - ID_LISTITEM0 + s_callVoteMenu.baseItem);
-	s_callVoteMenu.selItemStr = ((menutext_s *)ptr)->string;
+	s_callVoteMenu.selectedItem = (((const menucommon_s *)ptr)->id - ID_LISTITEM0 + s_callVoteMenu.baseItem);
+	s_callVoteMenu.selItemStr = ((const menutext_s *)ptr)->string;
 }
 
 /*

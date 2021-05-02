@@ -120,7 +120,7 @@ static void Text_Draw(menutext_s *t) {
 	int x;
 	int y;
 	char buff[512];
-	float *color;
+	vec4_t color;
 
 	x = t->generic.x;
 	y = t->generic.y;
@@ -136,9 +136,9 @@ static void Text_Draw(menutext_s *t) {
 		strcat(buff, t->string);
 
 	if (t->generic.flags & QMF_GRAYED)
-		color = text_color_disabled;
+		Vector4Copy(text_color_disabled, color);
 	else {
-		color = t->color;
+		Vector4Copy(t->color, color);
 		if (t->generic.flags & QMF_PULSE) {
 			color[3] = 0.6 + 0.4 * sin(uis.realtime / 150.f);
 		}
@@ -189,18 +189,18 @@ TextS_Draw
 static void TextS_Draw(menutext_s *t) {
 	int x;
 	int y;
-	float *color;
+	vec4_t color;
 	int style;
 
 	x = t->generic.x;
 	y = t->generic.y;
 
 	if (t->generic.flags & QMF_GRAYED)
-		color = text_color_disabled;
+		Vector4Copy(text_color_disabled, color);
 	else if (t->focuscolor && Menu_ItemAtCursor(t->generic.parent) == t)
-		color = t->focuscolor;
+		Vector4Copy(t->focuscolor, color);
 	else
-		color = t->color;
+		Vector4Copy(t->color, color);
 
 	style = t->style;
 	if (t->generic.flags & QMF_PULSEIFFOCUS) {
@@ -231,7 +231,7 @@ BText_Draw
 static void BText_Draw(menutext_s *t) {
 	int x;
 	int y;
-	float *color;
+	const float *color;
 
 	x = t->generic.x;
 	y = t->generic.y;
@@ -283,7 +283,7 @@ PText_Draw
 static void PText_Draw(menutext_s *t) {
 	int x;
 	int y;
-	float *color;
+	const float *color;
 	int style;
 
 	x = t->generic.x;
@@ -501,7 +501,7 @@ Action_Draw
 static void Action_Draw(menuaction_s *a) {
 	int x, y;
 	int style;
-	float *color;
+	const float *color;
 
 	style = 0;
 	color = menu_text_color;

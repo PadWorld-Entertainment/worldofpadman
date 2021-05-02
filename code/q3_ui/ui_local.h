@@ -294,10 +294,10 @@ typedef struct {
 	menucommon_s generic;
 	char *string;
 	int style;
-	float *color;
+	const float *color;
 
 	float fontHeight; // for TextS ...
-	float *focuscolor;
+	const float *focuscolor;
 } menutext_s;
 
 extern void Menu_Cache(void);
@@ -687,24 +687,24 @@ extern void UI_StopMusic(void);
 extern void UI_AdjustFrom1024(float *x, float *y, float *w, float *h);
 extern void UI_DrawHandlePic1024(float x, float y, float w, float h, qhandle_t hShader);
 extern void UI_ModelIcon(const char *modelAndSkin, char *iconName, int SizeOfIconName);
-extern void UI_DrawStringNS(int x, int y, const char *str, int style, float fontsize, vec4_t color);
+extern void UI_DrawStringNS(int x, int y, const char *str, int style, float fontsize, const vec4_t color);
 extern void UI_DrawIngameBG(void);
 
 extern void UI_UpdateScreen(void);
 extern void UI_SetColor(const float *rgba);
-extern void UI_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
-extern void UI_DrawBannerString(int x, int y, const char *str, int style, vec4_t color);
+extern void UI_LerpColor(const vec4_t a, const vec4_t b, vec4_t c, float t);
+extern void UI_DrawBannerString(int x, int y, const char *str, int style, const vec4_t color);
 extern float UI_ProportionalSizeScale(int style);
-extern void UI_DrawProportionalString(int x, int y, const char *str, int style, vec4_t color);
-extern void UI_DrawString_AutoWrapped(int x, int ystart, int xmax, int ystep, const char *str, int style, vec4_t color,
+extern void UI_DrawProportionalString(int x, int y, const char *str, int style, const vec4_t color);
+extern void UI_DrawString_AutoWrapped(int x, int ystart, int xmax, int ystep, const char *str, int style, const vec4_t color,
 									  qboolean proportinal);
 extern int UI_AutoWrappedString_LineCount(int width, const char *str, int style, qboolean proportional);
 
-extern void UI_DrawProportionalString2(int x, int y, const char *str, vec4_t color, float sizeScale, qhandle_t charset);
+extern void UI_DrawProportionalString2(int x, int y, const char *str, const vec4_t color, float sizeScale, qhandle_t charset);
 
 extern int UI_ProportionalStringWidth(const char *str);
-extern void UI_DrawString(int x, int y, const char *str, int style, vec4_t color);
-extern void UI_DrawChar(int x, int y, int ch, int style, vec4_t color);
+extern void UI_DrawString(int x, int y, const char *str, int style, const vec4_t color);
+extern void UI_DrawChar(int x, int y, int ch, int style, const vec4_t color);
 extern qboolean UI_CursorInRect(int x, int y, int width, int height);
 extern void UI_AdjustFrom640(float *x, float *y, float *w, float *h);
 extern void UI_DrawTextBox(int x, int y, int width, int lines);
