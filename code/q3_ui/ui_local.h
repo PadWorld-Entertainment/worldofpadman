@@ -211,6 +211,7 @@ typedef struct {
 
 	void (*callback)(void *self, int event);
 	void (*statusbar)(void *self);
+	// total subclassing, owner draws everything if set
 	void (*ownerdraw)(void *self);
 } menucommon_s;
 
@@ -310,8 +311,6 @@ extern sfxHandle_t Menu_ActivateItem(menuframework_s *s, menucommon_s *item);
 extern void Menu_SetCursor(menuframework_s *s, int cursor);
 extern void Menu_SetCursorToItem(menuframework_s *m, void *ptr);
 extern sfxHandle_t Menu_DefaultKey(menuframework_s *s, int key);
-extern void Bitmap_Init(menubitmap_s *b);
-extern void Bitmap_Draw(menubitmap_s *b);
 extern void ScrollList_Draw(menulist_s *l);
 extern sfxHandle_t ScrollList_Key(menulist_s *l, int key);
 

@@ -276,7 +276,7 @@ static void PText_Draw(menutext_s *t) {
 Bitmap_Init
 =================
 */
-void Bitmap_Init(menubitmap_s *b) {
+static void Bitmap_Init(menubitmap_s *b) {
 	int x;
 	int y;
 	int w;
@@ -313,7 +313,7 @@ void Bitmap_Init(menubitmap_s *b) {
 Bitmap_Draw
 =================
 */
-void Bitmap_Draw(menubitmap_s *b) {
+static void Bitmap_Draw(menubitmap_s *b) {
 	float x;
 	float y;
 	float w;
@@ -389,7 +389,7 @@ void Bitmap_Draw(menubitmap_s *b) {
 Bitmap1024S_Init
 =================
 */
-void Bitmap1024S_Init(menubitmap1024s_s *b) {
+static void Bitmap1024S_Init(menubitmap1024s_s *b) {
 	int x;
 	int y;
 	int w;
@@ -417,7 +417,7 @@ void Bitmap1024S_Init(menubitmap1024s_s *b) {
 Bitmap1024S_Draw
 =================
 */
-void Bitmap1024S_Draw(menubitmap1024s_s *b) {
+static void Bitmap1024S_Draw(menubitmap1024s_s *b) {
 	if (b->mouseovershader) {
 		if (b->sw > 0 && b->shadowshader != 0)
 			UI_DrawHandlePic1024(b->sx, b->sy, b->sw, b->sh, b->shadowshader);
@@ -1618,7 +1618,7 @@ wrap:
 	}
 }
 
-void UI_DrawToolTip(menucommon_s *focusItem) {
+static void UI_DrawToolTip(const menucommon_s *focusItem) {
 	static const int textStyleFlags = UI_SMALLFONT;
 	static const int maxTextWidth = 250;
 	static const int boxMargin = 5;
