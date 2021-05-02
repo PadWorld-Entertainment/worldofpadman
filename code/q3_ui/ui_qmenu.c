@@ -1348,7 +1348,7 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 ScrollList_Draw
 =================
 */
-void ScrollList_Draw(menulist_s *l) {
+static void ScrollList_Draw(const menulist_s *l) {
 	int x;
 	int u;
 	int y;
@@ -1575,7 +1575,7 @@ void Menu_SetCursorToItem(menuframework_s *m, void *ptr) {
 ** to adjust the menu's cursor so that it's at the next available
 ** slot.
 */
-void Menu_AdjustCursor(menuframework_s *m, int dir) {
+static void Menu_AdjustCursor(menuframework_s *m, int dir) {
 	menucommon_s *item = NULL;
 	qboolean wrapped = qfalse;
 
