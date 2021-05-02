@@ -84,12 +84,12 @@ void SpecifyServer_DrawField(void *self) {
 	int style;
 	char *txt;
 	char c;
-	float *color;
+	const float *color;
 	int n;
 	int basex, x, y;
 	//	vec4_t			highlight_color = {0.00f, 0.00f, 0.00f, 1.00f};
-	float *highlight_color = text_color_highlight;
-	vec4_t bg_color = {1.00f, 1.00f, 1.00f, 0.50f};
+	const float *highlight_color = text_color_highlight;
+	const vec4_t bg_color = {1.00f, 1.00f, 1.00f, 0.50f};
 	//	float*			bg_color = listbar_color;
 
 	f = (menufield_s *)self;

@@ -623,7 +623,7 @@ static void StartServer_Draw(void) {
 }
 
 static void GameType_Draw(void *voidptr) {
-	float *color;
+	const float *color;
 	int x, y;
 	int style;
 	qboolean focus;
@@ -1232,7 +1232,7 @@ void UI_BotSelectMenu_UpdateList(void) {
 					s_startserver.selectbotinfos[j - 1].team == TEAM_RED ? color_red : color_blue;
 			} else {
 				char *skinname;
-				float *skincolor; // FIXME: vec4_t
+				const float *skincolor; // FIXME: vec4_t
 
 				switch (s_startserver.selectbotinfos[j - 1].team) {
 				default:

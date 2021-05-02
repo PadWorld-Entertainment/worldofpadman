@@ -164,9 +164,9 @@ static void PlayerSettings_DrawName(void *self) {
 	menufield_s *f;
 	qboolean focus;
 	int style;
-	char *txt;
+	const char *txt;
 	char c;
-	float *color;
+	const float *color;
 	int n;
 	int basex, x, y;
 
@@ -216,61 +216,6 @@ static void PlayerSettings_DrawName(void *self) {
 		UI_DrawChar(basex + f->field.cursor * SMALLCHAR_WIDTH, y, c, style, color_white);
 	}
 }
-
-#if 0
-/*
-=================
-PlayerSettings_DrawHandicap
-=================
-*/
-static void PlayerSettings_DrawHandicap( void *self ) {
-	menulist_s		*item;
-	qboolean		focus;
-	int				style;
-	float			*color;
-
-	item = (menulist_s *)self;
-	focus = (item->generic.parent->cursor == item->generic.menuPosition);
-
-	style = UI_LEFT|UI_SMALLFONT;
-	color = text_color_normal;
-	if( focus ) {
-		style |= UI_PULSE;
-		color = text_color_highlight;
-	}
-
-	UI_DrawProportionalString( item->generic.x, item->generic.y, "Handicap", style, color );
-	UI_DrawProportionalString( item->generic.x + 64, item->generic.y + PROP_HEIGHT, handicap_items[item->curvalue], style, color );
-}
-
-
-/*
-=================
-PlayerSettings_DrawEffects
-=================
-*/
-static void PlayerSettings_DrawEffects( void *self ) {
-	menulist_s		*item;
-	qboolean		focus;
-	int				style;
-	float			*color;
-
-	item = (menulist_s *)self;
-	focus = (item->generic.parent->cursor == item->generic.menuPosition);
-
-	style = UI_LEFT|UI_SMALLFONT;
-	color = text_color_normal;
-	if( focus ) {
-		style |= UI_PULSE;
-		color = text_color_highlight;
-	}
-
-	UI_DrawProportionalString( item->generic.x, item->generic.y, "Effects", style, color );
-
-	UI_DrawHandlePic( item->generic.x + 64, item->generic.y + PROP_HEIGHT + 8, 128, 8, s_playersettings.fxBasePic );
-	UI_DrawHandlePic( item->generic.x + 64 + item->curvalue * 16 + 8, item->generic.y + PROP_HEIGHT + 6, 16, 12, s_playersettings.fxPic[item->curvalue] );
-}
-#endif
 
 /*
 =================
@@ -378,7 +323,7 @@ static void PlayerSettings_SetMenuItems(void) {
 			   sizeof(s_playersettings.name.field.buffer));
 
 	// effects color
-	c = trap_Cvar_VariableValue("color1") - 1;
+	c = UI_GetCvarInt("color1") - 1;
 	if (c < 0 || c > 6) {
 		c = 6;
 	}
@@ -436,8 +381,7 @@ static int GetSpecialSkinScore(const char *iconPath) {
 		return 2;
 	else if (NULL != Q_stristr(iconPath, "/red"))
 		return 1;
-	else
-		return 0;
+	return 0;
 }
 static int SkinComp(const void *vA, const void *vB) {
 	const SkinData_t *a = (const SkinData_t *)vA;

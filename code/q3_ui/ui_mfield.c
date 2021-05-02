@@ -30,7 +30,7 @@ Handles horizontal scrolling and cursor blinking
 x, y, are in pixels
 ===================
 */
-void MField_Draw(mfield_t *edit, int x, int y, int style, vec4_t color) {
+void MField_Draw(mfield_t *edit, int x, int y, int style, const vec4_t color) {
 	int len;
 	int charw;
 	int drawLen;
@@ -315,7 +315,7 @@ void MenuField_Draw(menufield_s *f) {
 	int w;
 	int style;
 	qboolean focus;
-	float *color;
+	const float *color;
 
 	x = f->generic.x;
 	y = f->generic.y;

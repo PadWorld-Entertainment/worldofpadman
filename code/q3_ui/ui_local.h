@@ -253,10 +253,10 @@ typedef struct {
 	int seperation;
 
 	int dropdown_len;
-	float *dropdown_bg;
-	float *dropdown_text;
-	float *dropdown_mark;
-	float *dropdown_border;
+	const float *dropdown_bg;
+	const float *dropdown_text;
+	const float *dropdown_mark;
+	const float *dropdown_border;
 } menulist_s;
 
 typedef struct {
@@ -270,13 +270,13 @@ typedef struct {
 
 typedef struct {
 	menucommon_s generic;
-	char *focuspic;
-	char *errorpic;
+	const char *focuspic;
+	const char *errorpic;
 	qhandle_t shader;
 	qhandle_t focusshader;
 	int width;
 	int height;
-	float *focuscolor;
+	const float *focuscolor;
 
 	qboolean focuspicinstead; // by QuarterPounder
 } menubitmap_s;
@@ -322,34 +322,34 @@ extern sfxHandle_t menu_click_sound;
 extern sfxHandle_t menu_buzz_sound;
 extern sfxHandle_t menu_null_sound;
 extern sfxHandle_t weaponChangeSound;
-extern vec4_t menu_text_color;
-extern vec4_t menu_grayed_color;
-extern vec4_t menu_dark_color;
-extern vec4_t menu_highlight_color;
-extern vec4_t menu_red_color;
-extern vec4_t menu_black_color;
-extern vec4_t menu_dim_color;
-extern vec4_t color_black;
-extern vec4_t color_white;
-extern vec4_t color_yellow;
-extern vec4_t color_blue;
-extern vec4_t color_lightOrange;
-extern vec4_t color_orange;
-extern vec4_t color_red;
-extern vec4_t color_dim;
-extern vec4_t name_color;
-extern vec4_t list_color;
-extern vec4_t listbar_color;
-extern vec4_t text_color_disabled;
-extern vec4_t text_color_normal;
-extern vec4_t text_color_highlight;
+extern const vec4_t menu_text_color;
+extern const vec4_t menu_grayed_color;
+extern const vec4_t menu_dark_color;
+extern const vec4_t menu_highlight_color;
+extern const vec4_t menu_red_color;
+extern const vec4_t menu_black_color;
+extern const vec4_t menu_dim_color;
+extern const vec4_t color_black;
+extern const vec4_t color_white;
+extern const vec4_t color_yellow;
+extern const vec4_t color_blue;
+extern const vec4_t color_lightOrange;
+extern const vec4_t color_orange;
+extern const vec4_t color_red;
+extern const vec4_t color_dim;
+extern const vec4_t name_color;
+extern const vec4_t list_color;
+extern const vec4_t listbar_color;
+extern const vec4_t text_color_disabled;
+extern const vec4_t text_color_normal;
+extern const vec4_t text_color_highlight;
 
-extern vec4_t listbar_igcolor;
-extern vec4_t text_color_ignormal;
-extern vec4_t text_color_ighighlight;
-extern vec4_t text_color_bluenormal;
-extern vec4_t text_color_bluehighlight;
-extern vec4_t listbar_bluecolor;
+extern const vec4_t listbar_igcolor;
+extern const vec4_t text_color_ignormal;
+extern const vec4_t text_color_ighighlight;
+extern const vec4_t text_color_bluenormal;
+extern const vec4_t text_color_bluehighlight;
+extern const vec4_t listbar_bluecolor;
 
 extern char *ui_medalNames[];
 extern char *ui_medalPicNames[];
@@ -361,7 +361,7 @@ extern char *ui_medalSounds[];
 extern void MField_Clear(mfield_t *edit);
 extern void MField_KeyDownEvent(mfield_t *edit, int key);
 extern void MField_CharEvent(mfield_t *edit, int ch);
-extern void MField_Draw(mfield_t *edit, int x, int y, int style, vec4_t color);
+extern void MField_Draw(mfield_t *edit, int x, int y, int style, const vec4_t color);
 extern void MenuField_Init(menufield_s *m);
 extern void MenuField_Draw(menufield_s *f);
 extern sfxHandle_t MenuField_Key(menufield_s *m, int *key);

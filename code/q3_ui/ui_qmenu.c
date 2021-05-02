@@ -39,68 +39,31 @@ static qhandle_t sliderBar;
 static qhandle_t sliderButton_0;
 static qhandle_t sliderButton_1;
 
-vec4_t menu_text_color = {1.0f, 1.0f, 1.0f, 1.0f};
-vec4_t menu_dim_color = {0.0f, 0.0f, 0.0f, 0.75f};
-vec4_t color_black = {0.00f, 0.00f, 0.00f, 1.00f};
-vec4_t color_white = {1.00f, 1.00f, 1.00f, 1.00f};
-vec4_t color_yellow = {1.00f, 1.00f, 0.00f, 1.00f};
-vec4_t color_blue = {0.00f, 0.00f, 1.00f, 1.00f};
-vec4_t color_lightOrange = {1.00f, 0.68f, 0.00f, 1.00f};
-vec4_t color_orange = {1.00f, 0.43f, 0.00f, 1.00f};
-vec4_t color_red = {1.00f, 0.00f, 0.00f, 1.00f};
-vec4_t color_dim = {0.00f, 0.00f, 0.00f, 0.25f};
+const vec4_t menu_text_color = {1.0f, 1.0f, 1.0f, 1.0f};
+const vec4_t menu_dim_color = {0.0f, 0.0f, 0.0f, 0.75f};
+const vec4_t color_black = {0.00f, 0.00f, 0.00f, 1.00f};
+const vec4_t color_white = {1.00f, 1.00f, 1.00f, 1.00f};
+const vec4_t color_yellow = {1.00f, 1.00f, 0.00f, 1.00f};
+const vec4_t color_blue = {0.00f, 0.00f, 1.00f, 1.00f};
+const vec4_t color_lightOrange = {1.00f, 0.68f, 0.00f, 1.00f};
+const vec4_t color_orange = {1.00f, 0.43f, 0.00f, 1.00f};
+const vec4_t color_red = {1.00f, 0.00f, 0.00f, 1.00f};
+const vec4_t color_dim = {0.00f, 0.00f, 0.00f, 0.25f};
 
 // current color scheme
-vec4_t pulse_color = {1.00f, 1.00f, 1.00f, 1.00f};
-vec4_t text_color_disabled = {0.50f, 0.50f, 0.50f, 1.00f}; // light gray
-vec4_t text_color_normal = {1.00f, 1.00f, 0.00f, 1.00f};
-vec4_t text_color_highlight = {1.00f, 0.33f, 0.00f, 1.00f}; //{0.00f, 1.00f, 0.00f, 1.00f};
-vec4_t listbar_color = {1.00f, 1.00f, 1.00f, 0.50f};		//{0.00f, 1.00f, 0.00f, 0.30f};
+static const vec4_t pulse_color = {1.00f, 1.00f, 1.00f, 1.00f};
+const vec4_t text_color_disabled = {0.50f, 0.50f, 0.50f, 1.00f}; // light gray
+const vec4_t text_color_normal = {1.00f, 1.00f, 0.00f, 1.00f};
+const vec4_t text_color_highlight = {1.00f, 0.33f, 0.00f, 1.00f}; //{0.00f, 1.00f, 0.00f, 1.00f};
+const vec4_t listbar_color = {1.00f, 1.00f, 1.00f, 0.50f};		//{0.00f, 1.00f, 0.00f, 0.30f};
 
-vec4_t text_color_ignormal = {0.00f, 0.00f, 0.00f, 1.00f};
-vec4_t text_color_ighighlight = {0.40f, 0.00f, 0.40f, 1.00f};
-vec4_t listbar_igcolor = {1.00f, 0.43f, 0.00f, 0.33f};
+const vec4_t text_color_ignormal = {0.00f, 0.00f, 0.00f, 1.00f};
+const vec4_t text_color_ighighlight = {0.40f, 0.00f, 0.40f, 1.00f};
+const vec4_t listbar_igcolor = {1.00f, 0.43f, 0.00f, 0.33f};
 
-vec4_t text_color_bluenormal = {0.40f, 0.40f, 1.00f, 1.00f};
-vec4_t text_color_bluehighlight = {0.30f, 0.30f, 1.00f, 1.00f};
-vec4_t listbar_bluecolor = {0.00f, 0.00f, 1.00f, 0.33f};
-
-vec4_t text_color_status = {1.00f, 1.00f, 1.00f, 1.00f}; // bright white
-
-// action widget
-static void Action_Init(menuaction_s *a);
-static void Action_Draw(menuaction_s *a);
-
-// radio button widget
-static void RadioButton_Init(menuradiobutton_s *rb);
-static void RadioButton_Draw(menuradiobutton_s *rb);
-static sfxHandle_t RadioButton_Key(menuradiobutton_s *rb, int key);
-
-// slider widget
-static void Slider_Init(menuslider_s *s);
-static sfxHandle_t Slider_Key(menuslider_s *s, int key);
-static void Slider_Draw(menuslider_s *s);
-
-// spin control widget
-static void SpinControl_Init(menulist_s *s);
-static void SpinControl_Draw(menulist_s *s);
-static sfxHandle_t SpinControl_Key(menulist_s *l, int key);
-
-// text widget
-static void Text_Init(menutext_s *b);
-static void Text_Draw(menutext_s *b);
-
-// scrolllist widget
-static void ScrollList_Init(menulist_s *l);
-sfxHandle_t ScrollList_Key(menulist_s *l, int key);
-
-// proportional text widget
-static void PText_Init(menutext_s *b);
-static void PText_Draw(menutext_s *b);
-
-// proportional banner text widget
-static void BText_Init(menutext_s *b);
-static void BText_Draw(menutext_s *b);
+const vec4_t text_color_bluenormal = {0.40f, 0.40f, 1.00f, 1.00f};
+const vec4_t text_color_bluehighlight = {0.30f, 0.30f, 1.00f, 1.00f};
+const vec4_t listbar_bluecolor = {0.00f, 0.00f, 1.00f, 0.33f};
 
 /*
 =================
@@ -356,7 +319,7 @@ void Bitmap_Draw(menubitmap_s *b) {
 	float w;
 	float h;
 	vec4_t tempcolor;
-	float *color;
+	vec4_t color;
 
 	x = b->generic.x;
 	y = b->generic.y;
@@ -401,9 +364,9 @@ void Bitmap_Draw(menubitmap_s *b) {
 				tempcolor[0] = b->focuscolor[0];
 				tempcolor[1] = b->focuscolor[1];
 				tempcolor[2] = b->focuscolor[2];
-				color = tempcolor;
+				Vector4Copy(tempcolor, color);
 			} else
-				color = pulse_color;
+				Vector4Copy(pulse_color, color);
 			color[3] = 0.5 + 0.5 * sin(uis.realtime / PULSE_DIVISOR); // int division, is this on purpose?
 
 			trap_R_SetColor(color);
@@ -597,7 +560,7 @@ RadioButton_Draw
 static void RadioButton_Draw(menuradiobutton_s *rb) {
 	int x;
 	int y;
-	float *color;
+	const float *color;
 	int style;
 	qboolean focus;
 
@@ -734,7 +697,7 @@ static void Slider_Draw(menuslider_s *s) {
 	int x;
 	int y;
 	int style;
-	float *color;
+	const float *color;
 	int button;
 	qboolean focus;
 
@@ -986,8 +949,8 @@ static sfxHandle_t SpinControl_Key(menulist_s *s, int key) {
 SpinControl_Draw
 =================
 */
-static void SpinControl_Draw(menulist_s *s) {
-	float *color;
+static void SpinControl_Draw(const menulist_s *s) {
+	const float *color;
 	int x, y;
 	int style;
 	qboolean focus;
@@ -1392,7 +1355,7 @@ void ScrollList_Draw(menulist_s *l) {
 	int i;
 	int base;
 	int column;
-	float *color;
+	const float *color;
 	qboolean hasfocus;
 	int style;
 	int sLen;

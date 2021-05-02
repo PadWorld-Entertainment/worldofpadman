@@ -376,7 +376,7 @@ Crosshair_Draw
 */
 static void Crosshair_Draw(void *self) {
 	menulist_s *s;
-	float *color;
+	const float *color;
 	int x, y;
 	int style;
 	qboolean focus;
