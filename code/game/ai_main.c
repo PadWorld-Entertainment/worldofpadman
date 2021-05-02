@@ -262,13 +262,13 @@ void InitWpTravelTimes(void)
 }
 */
 
-char *ParseLink(char *buf, int type) {
+static const char *ParseLink(const char *buf, int type) {
 	char wpfrom[128];
 	char wpto[128];
 	int i, from, to;
 	// qboolean gotfrom, gotto;
 	waypointlinks_t *links;
-	char *token;
+	const char *token;
 
 	token = COM_Parse(&buf);
 	if (!*token) {
@@ -321,8 +321,8 @@ char *ParseLink(char *buf, int type) {
 	return buf;
 }
 
-char *ParseBambam(char *buf) {
-	char *token;
+static const char *ParseBambam(const char *buf) {
+	const char *token;
 	team_t team;
 	vec3_t pos;
 	int i;
@@ -376,8 +376,8 @@ char *ParseBambam(char *buf) {
 	return buf;
 }
 
-char *ParseBoomie(char *buf) {
-	char *token;
+static const char *ParseBoomie(const char *buf) {
+	const char *token;
 	team_t team;
 	vec3_t pos;
 	vec3_t angles;
@@ -446,8 +446,8 @@ char *ParseBoomie(char *buf) {
 	return buf;
 }
 
-void ParseWaypointFile(char *buf) {
-	char *token;
+void ParseWaypointFile(const char *buf) {
+	const char *token;
 	ctf_waypoint_t *wp;
 	int i;
 	qboolean eof = qfalse;
@@ -623,7 +623,7 @@ void AI_RemoveBambam(gentity_t *pEnt) {
 }
 
 // append info to bot's CS
-void BotAddInfo(bot_state_t *bs, char *value, int dbgFlags) {
+void BotAddInfo(bot_state_t *bs, const char *value, int dbgFlags) {
 	if (bot_developer.integer & dbgFlags)
 		StringDump_Push(bs->hudinfo, value);
 }
@@ -633,7 +633,7 @@ void BotAddInfo(bot_state_t *bs, char *value, int dbgFlags) {
 BotAI_Print
 ==================
 */
-void QDECL BotAI_Print(int type, char *fmt, ...) {
+void QDECL BotAI_Print(int type, const char *fmt, ...) {
 	char str[2048];
 	va_list ap;
 
@@ -759,7 +759,7 @@ int BotAI_GetSnapshotEntity(int clientNum, int sequence, entityState_t *state) {
 BotAI_BotInitialChat
 ==================
 */
-void QDECL BotAI_BotInitialChat(bot_state_t *bs, char *type, ...) {
+void QDECL BotAI_BotInitialChat(bot_state_t *bs, const char *type, ...) {
 	int i, mcontext;
 	va_list ap;
 	char *p;

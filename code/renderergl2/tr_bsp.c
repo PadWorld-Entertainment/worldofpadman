@@ -2262,7 +2262,7 @@ R_LoadEntities
 ================
 */
 void R_LoadEntities(lump_t *l) {
-	char *p, *token, *s;
+	const char *p, *token, *s;
 	char keyname[MAX_TOKEN_CHARS];
 	char value[MAX_TOKEN_CHARS];
 	world_t *w;
@@ -2305,12 +2305,12 @@ void R_LoadEntities(lump_t *l) {
 		// check for remapping of shaders for vertex lighting
 		s = "vertexremapshader";
 		if (!Q_strncmp(keyname, s, strlen(s))) {
-			s = strchr(value, ';');
-			if (!s) {
+			char *vs = strchr(value, ';');
+			if (!vs) {
 				ri.Printf(PRINT_WARNING, "WARNING: no semi colon in vertexshaderremap '%s'\n", value);
 				break;
 			}
-			*s++ = 0;
+			*vs++ = 0;
 			if (r_vertexLight->integer) {
 				R_RemapShader(value, s, "0");
 			}
@@ -2319,12 +2319,12 @@ void R_LoadEntities(lump_t *l) {
 		// check for remapping of shaders
 		s = "remapshader";
 		if (!Q_strncmp(keyname, s, strlen(s))) {
-			s = strchr(value, ';');
-			if (!s) {
+			char *vs = strchr(value, ';');
+			if (!vs) {
 				ri.Printf(PRINT_WARNING, "WARNING: no semi colon in shaderremap '%s'\n", value);
 				break;
 			}
-			*s++ = 0;
+			*vs++ = 0;
 			R_RemapShader(value, s, "0");
 			continue;
 		}
@@ -2355,9 +2355,8 @@ qboolean R_GetEntityToken(char *buffer, int size) {
 	if (!s_worldData.entityParsePoint && !s[0]) {
 		s_worldData.entityParsePoint = s_worldData.entityString;
 		return qfalse;
-	} else {
-		return qtrue;
 	}
+	return qtrue;
 }
 
 #ifndef MAX_SPAWN_VARS
@@ -2365,8 +2364,8 @@ qboolean R_GetEntityToken(char *buffer, int size) {
 #endif
 
 // derived from G_ParseSpawnVars() in g_spawn.c
-qboolean R_ParseSpawnVars(char *spawnVarChars, int maxSpawnVarChars, int *numSpawnVars,
-						  char *spawnVars[MAX_SPAWN_VARS][2]) {
+static qboolean R_ParseSpawnVars(char *spawnVarChars, int maxSpawnVarChars, int *numSpawnVars,
+						  const char *spawnVars[MAX_SPAWN_VARS][2]) {
 	char keyname[MAX_TOKEN_CHARS];
 	char com_token[MAX_TOKEN_CHARS];
 	int numSpawnVarChars = 0;
@@ -2449,6 +2448,7 @@ void R_LoadEnvironmentJson(const char *baseName) {
 
 	Com_sprintf(filename, MAX_QPATH, "cubemaps/%s/env.json", baseName);
 
+	buffer.v = NULL;
 	filelen = ri.FS_ReadFile(filename, &buffer.v);
 	if (!buffer.c)
 		return;
@@ -2505,7 +2505,7 @@ void R_LoadEnvironmentJson(const char *baseName) {
 void R_LoadCubemapEntities(char *cubemapEntityName) {
 	char spawnVarChars[2048];
 	int numSpawnVars;
-	char *spawnVars[MAX_SPAWN_VARS][2];
+	const char *spawnVars[MAX_SPAWN_VARS][2];
 	int numCubemaps = 0;
 
 	// count cubemaps
@@ -2696,6 +2696,7 @@ void RE_LoadWorldMap(const char *name) {
 	tr.worldMapLoaded = qtrue;
 
 	// load it
+	buffer.v = NULL;
 	ri.FS_ReadFile(name, &buffer.v);
 	if (!buffer.b) {
 		ri.Error(ERR_DROP, "RE_LoadWorldMap: %s not found", name);
@@ -2811,7 +2812,7 @@ void RE_LoadWorldMap(const char *name) {
 			for (i = 0; i < w->lightGridBounds[2]; i++) {
 				int j;
 
-				sprintf(fileName, "primarylg%d.tga", i);
+				Com_sprintf(fileName, sizeof(fileName), "primarylg%d.tga", i);
 
 				out = buffer + 18;
 				for (j = 0; j < w->lightGridBounds[0] * w->lightGridBounds[1]; j++) {

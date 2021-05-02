@@ -644,7 +644,7 @@ typedef struct msurface_s {
 	surfaceType_t *data; // any of srf*_t
 } msurface_t;
 
-#define CONTENTS_NODE -1
+#define CONTENTS_NODE (-1)
 typedef struct mnode_s {
 	// common with leaf and node
 	int contents;	   // -1 for nodes, to differentiate from leafs
@@ -710,7 +710,7 @@ typedef struct {
 	byte *novis; // clusterBytes of 0xff
 
 	char *entityString;
-	char *entityParsePoint;
+	const char *entityParsePoint;
 } world_t;
 
 //======================================================================

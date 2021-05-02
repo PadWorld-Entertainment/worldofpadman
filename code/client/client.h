@@ -503,7 +503,7 @@ void IN_CenterView(void);
 void CL_VerifyCode(void);
 
 float CL_KeyState(kbutton_t *key);
-int Key_StringToKeynum(char *str);
+int Key_StringToKeynum(const char *str);
 char *Key_KeynumToString(int keynum);
 
 //

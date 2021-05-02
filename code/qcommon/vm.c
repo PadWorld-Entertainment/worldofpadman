@@ -212,7 +212,7 @@ void VM_LoadSymbols(vm_t *vm) {
 		char *c;
 		void *v;
 	} mapfile;
-	char *text_p, *token;
+	const char *text_p, *token;
 	char name[MAX_QPATH];
 	char symbols[MAX_QPATH];
 	vmSymbol_t **prev, *sym;
@@ -227,6 +227,7 @@ void VM_LoadSymbols(vm_t *vm) {
 		return;
 	}
 
+	mapfile.v = NULL;
 	COM_StripExtension(vm->name, name, sizeof(name));
 	Com_sprintf(symbols, sizeof(symbols), "vm/%s.map", name);
 	FS_ReadFile(symbols, &mapfile.v);

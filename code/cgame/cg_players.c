@@ -77,10 +77,10 @@ models/players/visor/animation.cfg, etc
 ======================
 */
 static qboolean CG_ParseAnimationFile(const char *filename, clientInfo_t *ci) {
-	char *text_p, *prev;
+	const char *text_p, *prev;
 	int len;
 	int i;
-	char *token;
+	const char *token;
 	float fps;
 	int skip;
 	char text[20000];
@@ -129,16 +129,10 @@ static qboolean CG_ParseAnimationFile(const char *filename, clientInfo_t *ci) {
 				ci->footsteps = FOOTSTEP_NORMAL;
 			} else if (!Q_stricmp(token, "boot")) {
 				ci->footsteps = FOOTSTEP_BOOT;
-/*			} else if ( !Q_stricmp( token, "flesh" ) ) {
-				ci->footsteps = FOOTSTEP_FLESH;
-			} else if ( !Q_stricmp( token, "mech" ) ) {
-				ci->footsteps = FOOTSTEP_MECH;
-			} else if ( !Q_stricmp( token, "energy" ) ) {
-				ci->footsteps = FOOTSTEP_ENERGY;
-*/			} else {
-	CG_Printf("Bad footsteps parm in %s: %s\n", filename, token);
-}
-continue;
+			} else {
+				CG_Printf("Bad footsteps param in %s: %s\n", filename, token);
+			}
+			continue;
 		} else if (!Q_stricmp(token, "headoffset")) {
 			for (i = 0; i < 3; i++) {
 				token = COM_Parse(&text_p);
@@ -336,7 +330,7 @@ CG_FindClientModelFile
 */
 static qboolean CG_FindClientModelFile(char *filename, int length, clientInfo_t *ci, const char *teamName,
 									   const char *modelName, const char *skinName, const char *base, const char *ext) {
-	char *team;
+	const char *team;
 
 	if (cgs.gametype >= GT_TEAM) {
 		switch (ci->team) {
@@ -378,11 +372,7 @@ static qboolean CG_FindClientModelFile(char *filename, int length, clientInfo_t 
 		// "models/wop_players/padman/lower_padsoldier.skin"
 		Com_sprintf(filename, length, "models/wop_players/%s/%s_%s.%s", modelName, base, skinName, ext);
 	}
-	if (CG_FileExists(filename)) {
-		return qtrue;
-	}
-
-	return qfalse;
+	return CG_FileExists(filename);
 }
 
 /*
@@ -393,7 +383,6 @@ CG_FindClientHeadFile
 static qboolean CG_FindClientHeadFile(char *filename, int length, clientInfo_t *ci, const char *teamName,
 									  const char *headModelName, const char *headSkinName, const char *base,
 									  const char *ext) {
-
 	return CG_FindClientModelFile(filename, length, ci, teamName, headModelName, headSkinName, base, ext);
 }
 

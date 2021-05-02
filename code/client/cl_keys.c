@@ -796,7 +796,7 @@ the K_* names are matched up.
 to be configured even if they don't have defined names.
 ===================
 */
-int Key_StringToKeynum(char *str) {
+int Key_StringToKeynum(const char *str) {
 	keyname_t *kn;
 	int n;
 
@@ -1392,7 +1392,7 @@ Load the console history from cl_consoleHistory
 ================
 */
 void CL_LoadConsoleHistory(void) {
-	char *token, *text_p;
+	const char *token, *text_p;
 	int i, numChars, numLines = 0;
 	fileHandle_t f;
 

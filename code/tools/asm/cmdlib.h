@@ -79,12 +79,6 @@ void Q_mkdir(const char *path);
 
 extern char qdir[1024];
 extern char gamedir[1024];
-extern char writedir[1024];
-void SetQdirFromPath(const char *path);
-char *ExpandArg(const char *path);	// from cmd line
-char *ExpandPath(const char *path); // from scripts
-char *ExpandGamePath(const char *path);
-char *ExpandPathAndArchive(const char *path);
 
 double I_FloatTime(void);
 
@@ -113,7 +107,7 @@ void ExtractFileExtension(const char *path, char *dest);
 
 int ParseNum(const char *str);
 
-char *COM_Parse(char *data);
+const char *COM_Parse(const char *data);
 
 extern char com_token[1024];
 extern qboolean com_eof;

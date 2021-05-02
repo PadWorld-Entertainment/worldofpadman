@@ -79,8 +79,8 @@ static void UI_InitMemory(void) {
 UI_ParseInfos
 ===============
 */
-int UI_ParseInfos(char *buf, int max, char *infos[]) {
-	char *token;
+static int UI_ParseInfos(const char *buf, int max, char *infos[]) {
+	const char *token;
 	int count;
 	char key[MAX_TOKEN_CHARS];
 	char info[MAX_INFO_STRING];
@@ -116,12 +116,13 @@ int UI_ParseInfos(char *buf, int max, char *infos[]) {
 
 			token = COM_ParseExt(&buf, qfalse);
 			if (!token[0]) {
-				strcpy(token, "<NULL>");
+				Info_SetValueForKey(info, key, "<NULL>");
+			} else {
+				Info_SetValueForKey(info, key, token);
 			}
-			Info_SetValueForKey(info, key, token);
 		}
 		// NOTE: extra space for arena number
-		infos[count] = UI_Alloc(strlen(info) + strlen("\\num\\") + strlen(va("%d", MAX_ARENAS)) + 1);
+		infos[count] = UI_Alloc(strlen(info) + strlen(va("\\num\\%d", MAX_ARENAS)) + 1);
 		if (infos[count]) {
 			strcpy(infos[count], info);
 			count++;

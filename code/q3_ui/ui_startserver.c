@@ -113,10 +113,10 @@ static const char *teamstrs[] = {"free", "Red", "Blue", "spectator", 0};
 GametypeBits
 =================
 */
-static int GametypeBits(char *string) {
+static int GametypeBits(const char *string) {
 	int bits;
-	char *p;
-	char *token;
+	const char *p;
+	const char *token;
 
 	bits = 0;
 	p = string;
@@ -305,7 +305,7 @@ static void StartServer_GametypeEvent(void *ptr, int event) {
 		if (s_startserver.maploop[i] < 0)
 			break;
 
-		strcpy(tmpmaplist[i], s_startserver.maplist[s_startserver.maploop[i]]);
+		Q_strncpyz(tmpmaplist[i], s_startserver.maplist[s_startserver.maploop[i]], sizeof(tmpmaplist[i]));
 	}
 
 	trap_Cvar_Set("g_gametype", va("%i", gametype_remap[s_startserver.gametype.curvalue]));

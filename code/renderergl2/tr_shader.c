@@ -35,7 +35,7 @@ static texModInfo_t texMods[MAX_SHADER_STAGES][TR_MAX_TEXMODS];
 static shader_t *hashTable[FILE_HASH_SIZE];
 
 #define MAX_SHADERTEXT_HASH 2048
-static char **shaderTextHashTable[MAX_SHADERTEXT_HASH];
+static const char **shaderTextHashTable[MAX_SHADERTEXT_HASH];
 
 /*
 ================
@@ -118,8 +118,8 @@ void R_RemapShader(const char *shaderName, const char *newShaderName, const char
 ParseVector
 ===============
 */
-static qboolean ParseVector(char **text, int count, float *v) {
-	char *token;
+static qboolean ParseVector(const char **text, int count, float *v) {
+	const char *token;
 	int i;
 
 	// FIXME: spaces are currently required after parens, should change parseext...
@@ -266,8 +266,8 @@ static genFunc_t NameToGenFunc(const char *funcname) {
 ParseWaveForm
 ===================
 */
-static void ParseWaveForm(char **text, waveForm_t *wave) {
-	char *token;
+static void ParseWaveForm(const char **text, waveForm_t *wave) {
+	const char *token;
 
 	token = COM_ParseExt(text, qfalse);
 	if (token[0] == 0) {
@@ -311,9 +311,9 @@ static void ParseWaveForm(char **text, waveForm_t *wave) {
 ParseTexMod
 ===================
 */
-static void ParseTexMod(char *_text, shaderStage_t *stage) {
+static void ParseTexMod(const char *_text, shaderStage_t *stage) {
 	const char *token;
-	char **text = &_text;
+	const char **text = &_text;
 	texModInfo_t *tmi;
 
 	if (stage->bundle[0].numTexMods == TR_MAX_TEXMODS) {
@@ -510,8 +510,8 @@ static void ParseTexMod(char *_text, shaderStage_t *stage) {
 ParseStage
 ===================
 */
-static qboolean ParseStage(shaderStage_t *stage, char **text) {
-	char *token;
+static qboolean ParseStage(shaderStage_t *stage, const char **text) {
+	const char *token;
 	int depthMaskBits = GLS_DEPTHMASK_TRUE, blendSrcBits = 0, blendDstBits = 0, atestBits = 0, depthFuncBits = 0;
 	qboolean depthMaskExplicit = qfalse;
 
@@ -1184,8 +1184,8 @@ deformVertexes autoSprite2
 deformVertexes text[0-7]
 ===============
 */
-static void ParseDeform(char **text) {
-	char *token;
+static void ParseDeform(const char **text) {
+	const char *token;
 	deformStage_t *ds;
 
 	token = COM_ParseExt(text, qfalse);
@@ -1320,9 +1320,9 @@ ParseSkyParms
 skyParms <outerbox> <cloudheight> <innerbox>
 ===============
 */
-static void ParseSkyParms(char **text) {
-	char *token;
-	static char *suf[6] = {"rt", "bk", "lf", "ft", "up", "dn"};
+static void ParseSkyParms(const char **text) {
+	const char *token;
+	static const char *suf[6] = {"rt", "bk", "lf", "ft", "up", "dn"};
 	char pathname[MAX_QPATH];
 	int i;
 	imgFlags_t imgFlags = IMGFLAG_MIPMAP | IMGFLAG_PICMIP;
@@ -1381,8 +1381,8 @@ static void ParseSkyParms(char **text) {
 ParseSort
 =================
 */
-void ParseSort(char **text) {
-	char *token;
+static void ParseSort(const char **text) {
+	const char *token;
 
 	token = COM_ParseExt(text, qfalse);
 	if (token[0] == 0) {
@@ -1416,11 +1416,11 @@ void ParseSort(char **text) {
 // this table is also present in q3map
 
 typedef struct {
-	char *name;
+	const char *name;
 	int clearSolid, surfaceFlags, contents;
 } infoParm_t;
 
-infoParm_t infoParms[] = {
+static const infoParm_t infoParms[] = {
 	// server relevant contents
 	{"water", 1, 0, CONTENTS_WATER},
 	{"slime", 1, 0, CONTENTS_SLIME}, // mildly damaging
@@ -1470,8 +1470,8 @@ ParseSurfaceParm
 surfaceparm <name>
 ===============
 */
-static void ParseSurfaceParm(char **text) {
-	char *token;
+static void ParseSurfaceParm(const char **text) {
+	const char *token;
 	int numInfoParms = ARRAY_LEN(infoParms);
 	int i;
 
@@ -1499,8 +1499,8 @@ shader.  Parse it into the global shader variable.  Later functions
 will optimize it.
 =================
 */
-static qboolean ParseShader(char **text) {
-	char *token;
+static qboolean ParseShader(const char **text) {
+	const char *token;
 	int s;
 
 	s = 0;
@@ -2755,10 +2755,8 @@ return NULL if not found
 If found, it will return a valid shader
 =====================
 */
-static char *FindShaderInShaderText(const char *shadername) {
-
-	char *token, *p;
-
+static const char *FindShaderInShaderText(const char *shadername) {
+	const char *token, *p;
 	int i, hash;
 
 	hash = generateHashValue(shadername, MAX_SHADERTEXT_HASH);
@@ -2866,7 +2864,7 @@ most world construction surfaces.
 shader_t *R_FindShader(const char *name, int lightmapIndex, qboolean mipRawImage) {
 	char strippedName[MAX_QPATH];
 	int hash;
-	char *shaderText;
+	const char *shaderText;
 	image_t *image;
 	shader_t *sh;
 
@@ -3267,10 +3265,11 @@ a single large text block that can be scanned for shader names
 static void ScanAndLoadShaderFiles(void) {
 	char **shaderFiles;
 	char *buffers[MAX_SHADER_FILES] = {NULL};
-	char *p;
+	const char *p;
 	int numShaderFiles;
 	int i;
-	char *oldp, *token, *hashMem, *textEnd;
+	const char *oldp, *token, *hashMem;
+	char *textEnd;
 	int shaderTextHashTableSizes[MAX_SHADERTEXT_HASH], hash, size;
 	char shaderName[MAX_QPATH];
 	int shaderLine;
@@ -3395,7 +3394,7 @@ static void ScanAndLoadShaderFiles(void) {
 	hashMem = ri.Hunk_Alloc(size * sizeof(char *), h_low);
 
 	for (i = 0; i < MAX_SHADERTEXT_HASH; i++) {
-		shaderTextHashTable[i] = (char **)hashMem;
+		shaderTextHashTable[i] = (const char **)hashMem;
 		hashMem = ((char *)hashMem) + ((shaderTextHashTableSizes[i] + 1) * sizeof(char *));
 	}
 
@@ -3415,8 +3414,6 @@ static void ScanAndLoadShaderFiles(void) {
 
 		SkipBracedSection(&p, 0);
 	}
-
-	return;
 }
 
 /*

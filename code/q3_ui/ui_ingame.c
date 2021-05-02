@@ -194,15 +194,15 @@ void InGame_MenuInit(void) {
 	char info[MAX_INFO_STRING];
 	//	int		team;
 	int allowVote;
-	qboolean isLocalServer = (trap_Cvar_VariableValue("sv_running"));
-	int gametype = trap_Cvar_VariableValue("g_gametype");
+	qboolean isLocalServer = UI_GetCvarInt("sv_running");
+	int gametype = UI_GetCvarInt("g_gametype");
 	qboolean isSinglePlayer = (gametype == GT_SINGLE_PLAYER);
 	qboolean isSyC = (gametype == GT_SPRAYFFA || gametype == GT_SPRAY);
 
 	trap_GetConfigString(CS_SERVERINFO, info, MAX_INFO_STRING);
 	allowVote = atoi(Info_ValueForKey(info, "g_allowVote"));
 
-	memset(&s_ingame, 0, sizeof(ingamemenu_t));
+	memset(&s_ingame, 0, sizeof(s_ingame));
 
 	InGame_Cache();
 

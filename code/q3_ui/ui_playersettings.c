@@ -270,7 +270,9 @@ static void PlayerSettings_SaveChanges(void) {
 	trap_Cvar_SetValue("color1", uitogamecode[s_playersettings.effects.curvalue]);
 
 	trap_Cvar_Set("syc_logo", uis.spraylogoNames[s_playersettings.slogo_num]);
-	trap_Cmd_ExecuteText(EXEC_APPEND, va("selectlogo \"%s\"\n", uis.spraylogoNames[s_playersettings.slogo_num]));
+	//if (connected) {
+		trap_Cmd_ExecuteText(EXEC_APPEND, va("selectlogo \"%s\"\n", uis.spraylogoNames[s_playersettings.slogo_num]));
+	//}
 }
 
 /*

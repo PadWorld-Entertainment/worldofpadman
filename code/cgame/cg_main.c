@@ -328,7 +328,7 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	// Should match ICON_ALL
 	{&cg_icons, "cg_icons", "31", CVAR_ARCHIVE}};
 
-static int cvarTableSize = ARRAY_LEN(cvarTable);
+static const int cvarTableSize = ARRAY_LEN(cvarTable);
 
 int CG_GetCvarInt(const char *cvar) {
 	char buffer[32];
@@ -611,7 +611,7 @@ The server says this item is used on this level
 static void CG_RegisterItemSounds(int itemNum) {
 	gitem_t *item;
 	char data[MAX_QPATH];
-	char *s, *start;
+	const char *s, *start;
 	int len;
 
 	item = &bg_itemlist[itemNum];
@@ -903,7 +903,7 @@ This function may execute for a couple of minutes with a slow disk.
 static void CG_RegisterGraphics(void) {
 	int i;
 	char items[MAX_ITEMS + 1];
-	static char *sb_nums[11] = {
+	static const char *sb_nums[11] = {
 		"gfx/2d/numbers/zero_32b",	"gfx/2d/numbers/one_32b",  "gfx/2d/numbers/two_32b",   "gfx/2d/numbers/three_32b",
 		"gfx/2d/numbers/four_32b",	"gfx/2d/numbers/five_32b", "gfx/2d/numbers/six_32b",   "gfx/2d/numbers/seven_32b",
 		"gfx/2d/numbers/eight_32b", "gfx/2d/numbers/nine_32b", "gfx/2d/numbers/minus_32b",
@@ -1249,7 +1249,7 @@ CG_StartMusic
 ======================
 */
 void CG_StartMusic(void) {
-	char *s;
+	const char *s;
 	char parm1[MAX_QPATH], parm2[MAX_QPATH];
 
 	// start the background music

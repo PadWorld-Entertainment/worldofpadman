@@ -527,7 +527,7 @@ int trap_BotNumConsoleMessages(int chatstate) {
 	return syscall(BOTLIB_AI_NUM_CONSOLE_MESSAGE, chatstate);
 }
 
-void trap_BotInitialChat(int chatstate, char *type, int mcontext, char *var0, char *var1, char *var2, char *var3,
+void trap_BotInitialChat(int chatstate, const char *type, int mcontext, char *var0, char *var1, char *var2, char *var3,
 						 char *var4, char *var5, char *var6, char *var7) {
 	syscall(BOTLIB_AI_INITIAL_CHAT, chatstate, type, mcontext, var0, var1, var2, var3, var4, var5, var6, var7);
 }

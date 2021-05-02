@@ -1437,7 +1437,7 @@ ParseOptionFile
 */
 static void ParseOptionFile(const char *filename) {
 	char expanded[MAX_OS_PATH];
-	char *text, *text_p;
+	const char *text, *text_p;
 
 	strcpy(expanded, filename);
 	DefaultExtension(expanded, ".q3asm");

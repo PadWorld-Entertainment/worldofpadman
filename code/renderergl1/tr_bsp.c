@@ -1739,7 +1739,7 @@ R_LoadEntities
 ================
 */
 void R_LoadEntities(lump_t *l) {
-	char *p, *token, *s;
+	const char *p, *token, *s;
 	char keyname[MAX_TOKEN_CHARS];
 	char value[MAX_TOKEN_CHARS];
 	world_t *w;
@@ -1782,12 +1782,12 @@ void R_LoadEntities(lump_t *l) {
 		// check for remapping of shaders for vertex lighting
 		s = "vertexremapshader";
 		if (!Q_strncmp(keyname, s, strlen(s))) {
-			s = strchr(value, ';');
-			if (!s) {
+			char *vs = strchr(value, ';');
+			if (!vs) {
 				ri.Printf(PRINT_WARNING, "WARNING: no semi colon in vertexshaderremap '%s'\n", value);
 				break;
 			}
-			*s++ = 0;
+			*vs++ = 0;
 			if (r_vertexLight->integer) {
 				R_RemapShader(value, s, "0");
 			}
@@ -1796,12 +1796,12 @@ void R_LoadEntities(lump_t *l) {
 		// check for remapping of shaders
 		s = "remapshader";
 		if (!Q_strncmp(keyname, s, strlen(s))) {
-			s = strchr(value, ';');
-			if (!s) {
+			char *vs = strchr(value, ';');
+			if (!vs) {
 				ri.Printf(PRINT_WARNING, "WARNING: no semi colon in shaderremap '%s'\n", value);
 				break;
 			}
-			*s++ = 0;
+			*vs++ = 0;
 			R_RemapShader(value, s, "0");
 			continue;
 		}
@@ -1862,6 +1862,7 @@ void RE_LoadWorldMap(const char *name) {
 	tr.worldMapLoaded = qtrue;
 
 	// load it
+	buffer.v = NULL;
 	ri.FS_ReadFile(name, &buffer.v);
 	if (!buffer.b) {
 		ri.Error(ERR_DROP, "RE_LoadWorldMap: %s not found", name);

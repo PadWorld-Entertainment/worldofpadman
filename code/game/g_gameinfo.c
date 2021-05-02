@@ -17,8 +17,8 @@ static char *g_arenaInfos[MAX_ARENAS];
 G_ParseInfos
 ===============
 */
-static int G_ParseInfos(char *buf, int max, char *infos[]) {
-	char *token;
+static int G_ParseInfos(const char *buf, int max, char *infos[]) {
+	const char *token;
 	int count;
 	char key[MAX_TOKEN_CHARS];
 	char info[MAX_INFO_STRING];
@@ -51,9 +51,10 @@ static int G_ParseInfos(char *buf, int max, char *infos[]) {
 
 			token = COM_ParseExt(&buf, qfalse);
 			if (!token[0]) {
-				strcpy(token, "<NULL>");
+				Info_SetValueForKey(info, key, "<NULL>");
+			} else {
+				Info_SetValueForKey(info, key, token);
 			}
-			Info_SetValueForKey(info, key, token);
 		}
 
 		// extra space for arena number
@@ -198,8 +199,8 @@ GametypeBits
 */
 static int GametypeBits(const char *string) {
 	int bits;
-	char *p;
-	char *token;
+	const char *p;
+	const char *token;
 	int i;
 
 	bits = 0;

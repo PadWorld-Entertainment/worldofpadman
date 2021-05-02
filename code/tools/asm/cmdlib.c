@@ -205,122 +205,6 @@ gamedir will hold qdir + the game directory (id1, id2, etc)
 
 char qdir[1024];
 char gamedir[1024];
-char writedir[1024];
-
-void SetQdirFromPath(const char *path) {
-	char temp[1024];
-	const char *c;
-	const char *sep;
-	int len, count;
-
-	if (!(path[0] == '/' || path[0] == '\\' || path[1] == ':')) { // path is partial
-		Q_getwd(temp);
-		strcat(temp, path);
-		path = temp;
-	}
-
-	// search for "quake2" in path
-
-	len = strlen(BASEDIRNAME);
-	for (c = path + strlen(path) - 1; c != path; c--) {
-		int i;
-
-		if (!Q_strncasecmp(c, BASEDIRNAME, len)) {
-			//
-			// strncpy (qdir, path, c+len+2-path);
-			// the +2 assumes a 2 or 3 following quake which is not the
-			// case with a retail install
-			// so we need to add up how much to the next separator
-			sep = c + len;
-			count = 1;
-			while (*sep && *sep != '/' && *sep != '\\') {
-				sep++;
-				count++;
-			}
-			strncpy(qdir, path, c + len + count - path);
-			qprintf("qdir: %s\n", qdir);
-			for (i = 0; i < strlen(qdir); i++) {
-				if (qdir[i] == '\\')
-					qdir[i] = '/';
-			}
-
-			c += len + count;
-			while (*c) {
-				if (*c == '/' || *c == '\\') {
-					strncpy(gamedir, path, c + 1 - path);
-
-					for (i = 0; i < strlen(gamedir); i++) {
-						if (gamedir[i] == '\\')
-							gamedir[i] = '/';
-					}
-
-					qprintf("gamedir: %s\n", gamedir);
-
-					if (!writedir[0])
-						strcpy(writedir, gamedir);
-					else if (writedir[strlen(writedir) - 1] != '/') {
-						writedir[strlen(writedir)] = '/';
-						writedir[strlen(writedir) + 1] = 0;
-					}
-
-					return;
-				}
-				c++;
-			}
-			Error("No gamedir in %s", path);
-			return;
-		}
-	}
-	Error("SetQdirFromPath: no '%s' in %s", BASEDIRNAME, path);
-}
-
-char *ExpandArg(const char *path) {
-	static char full[1024];
-
-	if (path[0] != '/' && path[0] != '\\' && path[1] != ':') {
-		Q_getwd(full);
-		strcat(full, path);
-	} else
-		strcpy(full, path);
-	return full;
-}
-
-char *ExpandPath(const char *path) {
-	static char full[1024];
-	if (!qdir[0])
-		Error("ExpandPath called without qdir set");
-	if (path[0] == '/' || path[0] == '\\' || path[1] == ':') {
-		strcpy(full, path);
-		return full;
-	}
-	sprintf(full, "%s%s", qdir, path);
-	return full;
-}
-
-char *ExpandGamePath(const char *path) {
-	static char full[1024];
-	if (!qdir[0])
-		Error("ExpandGamePath called without qdir set");
-	if (path[0] == '/' || path[0] == '\\' || path[1] == ':') {
-		strcpy(full, path);
-		return full;
-	}
-	sprintf(full, "%s%s", gamedir, path);
-	return full;
-}
-
-char *ExpandPathAndArchive(const char *path) {
-	char *expanded;
-	char archivename[1024];
-
-	expanded = ExpandPath(path);
-
-	if (archive) {
-		sprintf(archivename, "%s/%s", archivedir, path);
-		QCopyFile(expanded, archivename);
-	}
-	return expanded;
-}
 
 char *copystring(const char *s) {
 	char *b;
@@ -413,7 +297,7 @@ COM_Parse
 Parse a token out of a string
 ==============
 */
-char *COM_Parse(char *data) {
+const char *COM_Parse(const char *data) {
 	int c;
 	int len;
 
