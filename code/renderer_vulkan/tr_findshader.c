@@ -60,7 +60,7 @@ static const char *FindShaderInShaderText(const char *shadername) {
 	const char *token;
 	for (i = 0; shaderTextHashTable[hash][i]; i++) {
 		p = shaderTextHashTable[hash][i];
-		token = R_ParseExt(&p, qtrue);
+		token = COM_ParseExt(&p, qtrue);
 		if (!Q_stricmp(token, shadername)) {
 			return p;
 		}
@@ -73,7 +73,7 @@ static const char *FindShaderInShaderText(const char *shadername) {
 
 	// look for label
 	while (1) {
-		token = R_ParseExt(&p, qtrue);
+		token = COM_ParseExt(&p, qtrue);
 		if (token[0] == 0) {
 			break;
 		}
@@ -362,7 +362,7 @@ static void Shader_DoSimpleCheck(const char *name, const char *p) {
 		int shaderLine;
 		char shaderName[64] = {0};
 
-		const char *token = R_ParseExt(&p, qtrue);
+		const char *token = COM_ParseExt(&p, qtrue);
 		if (0 == *token)
 			break;
 
@@ -370,7 +370,7 @@ static void Shader_DoSimpleCheck(const char *name, const char *p) {
 
 		shaderLine = R_GetCurrentParseLine();
 
-		token = R_ParseExt(&p, qtrue);
+		token = COM_ParseExt(&p, qtrue);
 		if (token[0] != '{' || token[1] != '\0') {
 			ri.Printf(PRINT_WARNING, "WARNING: Ignoring shader file %s. Shader \"%s\" on line %d missing opening brace",
 					  name, shaderName, shaderLine);
@@ -401,7 +401,7 @@ static void SetShaderTextHashTableSizes(void) {
 
 	// look for shader names
 	while (1) {
-		const char *token = R_ParseExt(&p, qtrue);
+		const char *token = COM_ParseExt(&p, qtrue);
 		if (token[0] == 0) {
 			break;
 		}
@@ -427,7 +427,7 @@ static void SetShaderTextHashTableSizes(void) {
 	// look for shader names
 	while (1) {
 		const char *oldp = p;
-		const char *token = R_ParseExt(&p, qtrue);
+		const char *token = COM_ParseExt(&p, qtrue);
 
 		if (token[0] == 0) {
 			break;
