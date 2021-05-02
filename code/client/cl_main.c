@@ -261,9 +261,7 @@ void CL_Voip_f(void) {
 		} else if (Q_isanumber(Cmd_Argv(2))) {
 			int id = atoi(Cmd_Argv(2));
 			if (id >= 0 && id < MAX_CLIENTS) {
-				Com_Printf("VoIP: current gain for player #%d "
-						   "is %f\n",
-						   id, clc.voipGain[id]);
+				Com_Printf("VoIP: current gain for player #%d is %f\n", id, clc.voipGain[id]);
 			} else {
 				Com_Printf("VoIP: invalid player ID#\n");
 			}
