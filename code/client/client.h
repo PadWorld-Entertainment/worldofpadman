@@ -596,7 +596,7 @@ typedef struct {
 	int flags;
 } cinematics_t;
 
-void CL_CompleteCinematicName(char *args, int argNum);
+void CL_CompleteCinematicName(const char *args, int argNum);
 void CL_PlayCinematic_f(void);
 void SCR_DrawCinematic(void);
 void SCR_RunCinematic(void);

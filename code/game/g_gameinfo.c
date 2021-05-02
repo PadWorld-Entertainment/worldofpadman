@@ -22,6 +22,7 @@ static int G_ParseInfos(char *buf, int max, char *infos[]) {
 	int count;
 	char key[MAX_TOKEN_CHARS];
 	char info[MAX_INFO_STRING];
+	int infoStringSize;
 
 	count = 0;
 
@@ -29,7 +30,7 @@ static int G_ParseInfos(char *buf, int max, char *infos[]) {
 		token = COM_Parse(&buf);
 		if (!token[0]) {
 			break;
-		} else if (strcmp(token, "{")) {
+		} else if (strcmp(token, "{") != 0) {
 			G_Printf("Missing { in info file\n");
 			break;
 		} else if (count >= max) {
@@ -56,9 +57,10 @@ static int G_ParseInfos(char *buf, int max, char *infos[]) {
 		}
 
 		// extra space for arena number
-		infos[count] = G_Alloc(strlen(info) + strlen("\\num\\") + strlen(va("%d", MAX_ARENAS)) + 1);
+		infoStringSize = strlen(info) + strlen("\\num\\") + strlen(va("%d", MAX_ARENAS)) + 1;
+		infos[count] = G_Alloc(infoStringSize);
 		if (infos[count]) {
-			strcpy(infos[count], info);
+			Q_strncpyz(infos[count], info, infoStringSize);
 			count++;
 		}
 	}

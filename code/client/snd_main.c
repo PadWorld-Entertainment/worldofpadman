@@ -414,7 +414,7 @@ void S_Play_f(void) {
 	}
 }
 
-static void S_CompleteMusicName(char *args, int argNum) {
+static void S_CompleteMusicName(const char *args, int argNum) {
 	if (argNum == 2) {
 		static const char *exts[] = {
 #ifdef USE_CODEC_OPUS

@@ -801,8 +801,8 @@ int Com_HexStrToInt(const char *str);
 
 int QDECL Com_sprintf(char *dest, int size, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
 
-char *Com_SkipTokens(char *s, int numTokens, char *sep);
-char *Com_SkipCharset(char *s, char *sep);
+const char *Com_SkipTokens(const char *s, int numTokens, const char *sep);
+const char *Com_SkipCharset(const char *s, const char *sep);
 
 void Com_RandomBytes(byte *string, int len);
 

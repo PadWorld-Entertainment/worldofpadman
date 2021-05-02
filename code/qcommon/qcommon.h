@@ -406,7 +406,7 @@ void Cmd_AddCommand(const char *cmd_name, xcommand_t function);
 
 void Cmd_RemoveCommand(const char *cmd_name);
 
-typedef void (*completionFunc_t)(char *args, int argNum);
+typedef void (*completionFunc_t)(const char *args, int argNum);
 
 // don't allow VMs to remove system commands
 void Cmd_RemoveCommandSafe(const char *cmd_name);
@@ -414,8 +414,8 @@ void Cmd_RemoveCommandSafe(const char *cmd_name);
 void Cmd_CommandCompletion(void (*callback)(const char *s));
 // callback with each valid string
 void Cmd_SetCommandCompletionFunc(const char *command, completionFunc_t complete);
-void Cmd_CompleteArgument(const char *command, char *args, int argNum);
-void Cmd_CompleteCfgName(char *args, int argNum);
+void Cmd_CompleteArgument(const char *command, const char *args, int argNum);
+void Cmd_CompleteCfgName(const char *args, int argNum);
 
 int Cmd_Argc(void);
 char *Cmd_Argv(int arg);
@@ -535,7 +535,7 @@ void Cvar_SetDescription(cvar_t *var, const char *var_description);
 void Cvar_Restart(qboolean unsetVM);
 void Cvar_Restart_f(void);
 
-void Cvar_CompleteCvarName(char *args, int argNum);
+void Cvar_CompleteCvarName(const char *args, int argNum);
 
 extern int cvar_modifiedFlags;
 // whenever a cvar is modifed, its flags will be OR'd into this, so
@@ -727,7 +727,7 @@ void Field_AutoComplete(field_t *edit);
 void Field_CompleteKeyname(void);
 void Field_CompleteFilenameMultiple(const char *dir, const char **ext, int cnt, qboolean allowNonPureFilesOnDisk);
 void Field_CompleteFilename(const char *dir, const char *ext, qboolean stripExt, qboolean allowNonPureFilesOnDisk);
-void Field_CompleteCommand(char *cmd, qboolean doCommands, qboolean doCvars);
+void Field_CompleteCommand(const char *cmd, qboolean doCommands, qboolean doCvars);
 void Field_CompletePlayerName(const char **names, int count);
 
 /*

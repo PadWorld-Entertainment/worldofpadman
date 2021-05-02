@@ -1325,10 +1325,10 @@ void Cvar_Update(vmCvar_t *vmCvar) {
 Cvar_CompleteCvarName
 ==================
 */
-void Cvar_CompleteCvarName(char *args, int argNum) {
+void Cvar_CompleteCvarName(const char *args, int argNum) {
 	if (argNum == 2) {
 		// Skip "<cmd> "
-		char *p = Com_SkipTokens(args, 1, " ");
+		const char *p = Com_SkipTokens(args, 1, " ");
 
 		if (p > args)
 			Field_CompleteCommand(p, qfalse, qtrue);

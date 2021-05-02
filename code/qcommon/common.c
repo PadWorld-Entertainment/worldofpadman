@@ -3116,7 +3116,7 @@ static void PrintCvarMatches(const char *s) {
 Field_FindFirstSeparator
 ===============
 */
-static char *Field_FindFirstSeparator(char *s) {
+static const char *Field_FindFirstSeparator(const char *s) {
 	int i;
 
 	for (i = 0; i < strlen(s); i++) {
@@ -3204,7 +3204,7 @@ void Field_CompleteFilename(const char *dir, const char *ext, qboolean stripExt,
 Field_CompleteCommand
 ===============
 */
-void Field_CompleteCommand(char *cmd, qboolean doCommands, qboolean doCvars) {
+void Field_CompleteCommand(const char *cmd, qboolean doCommands, qboolean doCvars) {
 	int completionArgument = 0;
 
 	// Skip leading whitespace and quotes
@@ -3238,7 +3238,7 @@ void Field_CompleteCommand(char *cmd, qboolean doCommands, qboolean doCvars) {
 
 	if (completionArgument > 1) {
 		const char *baseCmd = Cmd_Argv(0);
-		char *p;
+		const char *p;
 
 #ifndef DEDICATED
 		// This should always be true

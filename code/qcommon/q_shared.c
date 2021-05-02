@@ -912,7 +912,7 @@ int Q_PrintStrlen(const char *string) {
 char *Q_CleanStr(char *string) {
 	char *d;
 	char *s;
-	int c;
+	char c;
 
 	s = string;
 	d = string;
@@ -1346,7 +1346,7 @@ void Info_SetValueForKey_Big(char *s, const char *key, const char *value) {
 Com_CharIsOneOfCharset
 ==================
 */
-static qboolean Com_CharIsOneOfCharset(char c, char *set) {
+static qboolean Com_CharIsOneOfCharset(char c, const char *set) {
 	int i;
 
 	for (i = 0; i < strlen(set); i++) {
@@ -1362,8 +1362,8 @@ static qboolean Com_CharIsOneOfCharset(char c, char *set) {
 Com_SkipCharset
 ==================
 */
-char *Com_SkipCharset(char *s, char *sep) {
-	char *p = s;
+const char *Com_SkipCharset(const char *s, const char *sep) {
+	const char *p = s;
 
 	while (p) {
 		if (Com_CharIsOneOfCharset(*p, sep))
@@ -1380,9 +1380,9 @@ char *Com_SkipCharset(char *s, char *sep) {
 Com_SkipTokens
 ==================
 */
-char *Com_SkipTokens(char *s, int numTokens, char *sep) {
+const char *Com_SkipTokens(const char *s, int numTokens, const char *sep) {
 	int sepCount = 0;
-	char *p = s;
+	const char *p = s;
 
 	while (sepCount < numTokens) {
 		if (Com_CharIsOneOfCharset(*p++, sep)) {

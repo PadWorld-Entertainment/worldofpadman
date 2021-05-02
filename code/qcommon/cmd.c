@@ -711,7 +711,7 @@ void Cmd_CommandCompletion(void (*callback)(const char *s)) {
 Cmd_CompleteArgument
 ============
 */
-void Cmd_CompleteArgument(const char *command, char *args, int argNum) {
+void Cmd_CompleteArgument(const char *command, const char *args, int argNum) {
 	cmd_function_t *cmd;
 
 	for (cmd = cmd_functions; cmd; cmd = cmd->next) {
@@ -818,7 +818,7 @@ void Cmd_List_f(void) {
 Cmd_CompleteCfgName
 ==================
 */
-void Cmd_CompleteCfgName(char *args, int argNum) {
+void Cmd_CompleteCfgName(const char *args, int argNum) {
 	if (argNum == 2) {
 		Field_CompleteFilename("", "cfg", qfalse, qtrue);
 	}

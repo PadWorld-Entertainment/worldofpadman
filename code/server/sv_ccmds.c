@@ -1267,7 +1267,7 @@ static void SV_KillServer_f(void) {
 SV_CompleteMapName
 ==================
 */
-static void SV_CompleteMapName(char *args, int argNum) {
+static void SV_CompleteMapName(const char *args, int argNum) {
 	if (argNum == 2) {
 		Field_CompleteFilename("maps", "bsp", qtrue, qfalse);
 	}
@@ -1278,7 +1278,7 @@ static void SV_CompleteMapName(char *args, int argNum) {
 SV_CompletePlayerName
 ==================
 */
-static void SV_CompletePlayerName(char *args, int argNum) {
+static void SV_CompletePlayerName(const char *args, int argNum) {
 	if (argNum == 2) {
 		char names[MAX_CLIENTS][MAX_NAME_LENGTH];
 		const char *namesPtr[MAX_CLIENTS];

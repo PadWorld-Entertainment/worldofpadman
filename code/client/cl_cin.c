@@ -1778,7 +1778,7 @@ void CIN_DrawCinematic(int handle) {
 	cinTable[handle].dirty = qfalse;
 }
 
-void CL_CompleteCinematicName(char *args, int argNum) {
+void CL_CompleteCinematicName(const char *args, int argNum) {
 	if (argNum == 2) {
 		static const char *extensions[] = {"roq", "ogm"};
 		Field_CompleteFilenameMultiple("video", extensions, ARRAY_LEN(extensions), qtrue);

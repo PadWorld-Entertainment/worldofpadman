@@ -127,7 +127,7 @@ clientConnection_t clc;
 clientStatic_t cls;
 vm_t *cgvm;
 
-char cl_reconnectArgs[MAX_OSPATH];
+static char cl_reconnectArgs[MAX_OSPATH];
 char cl_oldGame[MAX_QPATH];
 qboolean cl_oldGameSet;
 
@@ -137,7 +137,7 @@ refexport_t re;
 static void *rendererLib = NULL;
 #endif
 
-ping_t cl_pinglist[MAX_PINGREQUESTS];
+static ping_t cl_pinglist[MAX_PINGREQUESTS];
 
 typedef struct serverStatus_s {
 	char string[BIG_INFO_STRING];
@@ -148,7 +148,7 @@ typedef struct serverStatus_s {
 	qboolean retrieved;
 } serverStatus_t;
 
-serverStatus_t cl_serverStatusList[MAX_SERVERSTATUSREQUESTS];
+static serverStatus_t cl_serverStatusList[MAX_SERVERSTATUSREQUESTS];
 
 #if defined __USEA3D && defined __A3D_GEOM
 void hA3Dg_ExportRenderGeom(refexport_t *incoming_re);
@@ -957,7 +957,7 @@ static int CL_WalkDemoExt(char *arg, char *name, int *demofile) {
 CL_CompleteDemoName
 ====================
 */
-static void CL_CompleteDemoName(char *args, int argNum) {
+static void CL_CompleteDemoName(const char *args, int argNum) {
 	if (argNum == 2) {
 		char demoExt[16];
 
@@ -1226,7 +1226,7 @@ update cl_guid using QKEY_FILE and optional prefix
 */
 static void CL_UpdateGUID(const char *prefix, int prefix_len) {
 	fileHandle_t f;
-	int len;
+	long len;
 
 	len = FS_SV_FOpenFileRead(QKEY_FILE, &f);
 	FS_FCloseFile(f);
@@ -1578,10 +1578,10 @@ void CL_Connect_f(void) {
 CL_CompleteRcon
 ==================
 */
-static void CL_CompleteRcon(char *args, int argNum) {
+static void CL_CompleteRcon(const char *args, int argNum) {
 	if (argNum == 2) {
 		// Skip "rcon "
-		char *p = Com_SkipTokens(args, 1, " ");
+		const char *p = Com_SkipTokens(args, 1, " ");
 
 		if (p > args)
 			Field_CompleteCommand(p, qtrue, qtrue);
@@ -1593,7 +1593,7 @@ static void CL_CompleteRcon(char *args, int argNum) {
 CL_CompletePlayerName
 ==================
 */
-static void CL_CompletePlayerName(char *args, int argNum) {
+static void CL_CompletePlayerName(const char *args, int argNum) {
 	if (argNum == 2) {
 		char names[MAX_CLIENTS][MAX_NAME_LENGTH];
 		const char *namesPtr[MAX_CLIENTS];
