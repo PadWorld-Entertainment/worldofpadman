@@ -187,7 +187,7 @@ UI_TeamOrdersMenu_ListDraw
 =================
 */
 static void UI_TeamOrdersMenu_ListDraw(void *self) {
-	menulist_s *l;
+	const menulist_s *l;
 	int x;
 	int y;
 	int i;
@@ -195,7 +195,7 @@ static void UI_TeamOrdersMenu_ListDraw(void *self) {
 	qboolean hasfocus;
 	int style;
 
-	l = (menulist_s *)self;
+	l = (const menulist_s *)self;
 
 	hasfocus = (l->generic.parent->cursor == l->generic.menuPosition);
 
@@ -230,8 +230,8 @@ static void UI_TeamOrdersMenu_ListEvent(void *ptr, int event) {
 	if (event != QM_ACTIVATED)
 		return;
 
-	id = ((menulist_s *)ptr)->generic.id;
-	selection = ((menulist_s *)ptr)->curvalue;
+	id = ((const menulist_s *)ptr)->generic.id;
+	selection = ((const menulist_s *)ptr)->curvalue;
 
 	if (id == ID_LIST_BOTS) {
 		teamOrdersMenuInfo.selectedBot = selection;
