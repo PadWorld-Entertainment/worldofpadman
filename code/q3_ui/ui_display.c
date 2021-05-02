@@ -82,6 +82,9 @@ static void ApplyPressed(void *unused, int notification) {
 	if (notification != QM_ACTIVATED)
 		return;
 
+	trap_Cvar_SetValue("r_ignorehwgamma", (float)displayOptionsInfo.ignoreHWG.curvalue);
+	trap_Cvar_SetValue("r_greyscale", (displayOptionsInfo.greyscale.curvalue / 100.0f));
+
 	// hide the button and do the vid restart
 	displayOptionsInfo.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 	trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
@@ -120,8 +123,7 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		break;
 
 	case ID_IGNOREHWG:
-		trap_Cvar_SetValue("r_ignorehwgamma", displayOptionsInfo.ignoreHWG.curvalue);
-		trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
+		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 		break;
 
 	case ID_BACK:
@@ -129,7 +131,7 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		break;
 
 	case ID_ANAGLYPH:
-		trap_Cvar_SetValue("r_anaglyphMode", displayOptionsInfo.anaglyph.curvalue);
+		trap_Cvar_SetValue("r_anaglyphMode", (float)displayOptionsInfo.anaglyph.curvalue);
 		if (!displayOptionsInfo.anaglyph.curvalue) {
 			displayOptionsInfo.greyscale.generic.flags |= QMF_GRAYED;
 		} else {
@@ -138,10 +140,25 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		break;
 
 	case ID_GREYSCALE:
-		trap_Cvar_SetValue("r_greyscale", (displayOptionsInfo.greyscale.curvalue / 100.0f));
 		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 		break;
 	}
+}
+
+static void DisplayOptions_UpdateMenuItems(void) {
+	displayOptionsInfo.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+
+	if (UI_GetCvarInt("r_ignorehwgamma") != displayOptionsInfo.ignoreHWG.curvalue) {
+		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (UI_GetCvarInt("r_greyscale") != displayOptionsInfo.greyscale.curvalue) {
+		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	}
+}
+
+static void DisplayOptions_MenuDraw(void) {
+	DisplayOptions_UpdateMenuItems();
+
+	Menu_Draw(&displayOptionsInfo.menu);
 }
 
 /*
@@ -157,7 +174,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	UI_DisplayOptionsMenu_Cache();
 	displayOptionsInfo.menu.wrapAround = qtrue;
 	displayOptionsInfo.menu.fullscreen = qtrue;
-
+	displayOptionsInfo.menu.draw = DisplayOptions_MenuDraw;
 	displayOptionsInfo.menu.bgparts = BGP_SYSTEMBG | BGP_SIMPLEBG;
 
 	displayOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
