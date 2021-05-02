@@ -187,7 +187,7 @@ UI_HelpMenu_SetTopic
 ===============
 */
 static void UI_HelpMenu_SetTopic(void) {
-	char *arg;
+	const char *arg;
 	char info[MAX_INFO_STRING];
 	int gametype;
 

@@ -1127,7 +1127,7 @@ void UI_MouseEvent(int dx, int dy) {
 	}
 }
 
-char *UI_Argv(int arg) {
+const char *UI_Argv(int arg) {
 	static char buffer[MAX_STRING_CHARS];
 
 	trap_Argv(arg, buffer, sizeof(buffer));
@@ -1135,7 +1135,7 @@ char *UI_Argv(int arg) {
 	return buffer;
 }
 
-char *UI_Cvar_VariableString(const char *var_name) {
+const char *UI_Cvar_VariableString(const char *var_name) {
 	static char buffer[MAX_STRING_CHARS];
 
 	trap_Cvar_VariableStringBuffer(var_name, buffer, sizeof(buffer));
@@ -1184,7 +1184,7 @@ UI_ConsoleCommand
 =================
 */
 qboolean UI_ConsoleCommand(int realTime) {
-	char *cmd;
+	const char *cmd;
 
 	uis.frametime = realTime - uis.realtime;
 	uis.realtime = realTime;
