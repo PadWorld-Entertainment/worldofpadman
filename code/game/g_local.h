@@ -404,8 +404,6 @@ typedef struct {
 
 	int warmupTime; // restart match at this time
 
-	int lastGhostPadTime;
-
 	gentity_t *sr_tele; // for bot-code
 	gentity_t *rspraywall, *bspraywall, *nspraywall;
 	gentity_t *sr_tl_tele; // sprayroom timelimit tele ;)
