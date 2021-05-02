@@ -271,7 +271,7 @@ void Cmd_SetFreecamPos_f(void) {
 }
 
 typedef struct {
-	char *cmd;
+	const char *cmd;
 	void (*function)(void);
 } consoleCommand_t;
 
@@ -298,9 +298,7 @@ static consoleCommand_t commands[] = {{"testgun", CG_TestGun_f},
 									  {"vtell_attacker", CG_VoiceTellAttacker_f},
 									  {"startOrbit", CG_StartOrbit_f},
 									  //{ "camera", CG_Camera_f },
-									  {"loaddeferred", CG_LoadDeferredPlayers}
-
-									  ,
+									  {"loaddeferred", CG_LoadDeferredPlayers},
 									  {"help", CG_HelpCmd_f},
 									  {"rechooselogo", CG_ReChooseLogo_f},
 									  {"dropCartridge", CG_DropCartridge_f},
