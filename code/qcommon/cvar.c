@@ -165,12 +165,9 @@ int Cvar_Flags(const char *var_name) {
 
 	if (!(var = Cvar_FindVar(var_name)))
 		return CVAR_NONEXISTENT;
-	else {
-		if (var->modified)
-			return var->flags | CVAR_MODIFIED;
-		else
-			return var->flags;
-	}
+	if (var->modified)
+		return var->flags | CVAR_MODIFIED;
+	return var->flags;
 }
 
 /*
@@ -269,8 +266,8 @@ static const char *Cvar_Validate(cvar_t *var, const char *value, qboolean warn) 
 		}
 
 		return s;
-	} else
-		return value;
+	}
+	return value;
 }
 
 /*
@@ -296,7 +293,7 @@ cvar_t *Cvar_Get(const char *var_name, const char *var_value, int flags) {
 	}
 
 #if 0 // FIXME: values with backslash happen
-	if ( !Cvar_ValidateString( var_value ) ) {
+	if (!Cvar_ValidateString(var_value)) {
 		Com_Printf("invalid cvar value string: %s\n", var_value );
 		var_value = "BADVALUE";
 	}
