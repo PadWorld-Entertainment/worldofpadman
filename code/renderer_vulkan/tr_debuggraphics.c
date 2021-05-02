@@ -9,8 +9,6 @@
 #include "vk_shade_geometry.h"
 
 void R_DebugPolygon(int color, int numPoints, float *points) {
-	if (numPoints < 3 || numPoints >= SHADER_MAX_VERTEXES / 2)
-		return;
 	int i;
 	// In Vulkan we don't have GL_POLYGON + GLS_POLYMODE_LINE equivalent,
 	// so we use lines to draw polygon outlines.This approach has additional
@@ -19,18 +17,23 @@ void R_DebugPolygon(int color, int numPoints, float *points) {
 
 	// Backface culling.
 	float pa[3], pb[3], p[3];
+	const float *m;
+	float n[3];
 
-	const float *m = getptr_modelview_matrix();
+	if (numPoints < 3 || numPoints >= SHADER_MAX_VERTEXES / 2)
+		return;
+
+	m = getptr_modelview_matrix();
 
 	// transform to eye space
 	Vec3Transform(points, m, pa);
 	Vec3Transform(&points[3], m, pb);
 	VectorSubtract(pb, pa, p);
 
-	float n[3];
 	for (i = 2; i < numPoints; i++) {
-		Vec3Transform(&points[3 * i], m, pb);
 		float q[3];
+
+		Vec3Transform(&points[3 * i], m, pb);
 		VectorSubtract(pb, pa, q);
 		CrossProduct(q, p, n);
 		if (VectorLength(n) > 1e-5)

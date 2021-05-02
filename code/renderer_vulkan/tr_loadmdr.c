@@ -455,22 +455,17 @@ qboolean R_LoadMDR(model_t *mod, void *buffer, int filesize, const char *mod_nam
 }
 
 qhandle_t R_RegisterMDR(const char *name, model_t *mod) {
-
 	char *buf;
-
 	qboolean loaded = qfalse;
 	int filesize = ri.FS_ReadFile(name, (void**)&buf);
+	int ident;
+
 	if (!buf) {
 		mod->type = MOD_BAD;
 		return 0;
 	}
 
-#if defined(Q3_BIG_ENDIAN)
-	int ident = LittleLong(*(int *)buf);
-#else
-	int ident = *(int *)buf;
-#endif
-
+	ident = LittleLong(*(int *)buf);
 	if (ident == MDR_IDENT)
 		loaded = R_LoadMDR(mod, buf, filesize, name);
 

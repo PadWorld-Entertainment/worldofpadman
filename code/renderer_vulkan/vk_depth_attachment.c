@@ -5,11 +5,17 @@
 #include "vk_instance.h"
 
 void vk_createDepthAttachment(int Width, int Height) {
+	VkImageAspectFlags image_aspect_flags = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+	VkCommandBufferAllocateInfo alloc_info;
+	VkCommandBuffer pCB;
+	VkCommandBufferBeginInfo begin_info;
+	VkSubmitInfo submit_info;
+
 	// A depth attachment is based on an image, just like the color attachment
 	// The difference is that the swap chain will not automatically create
 	// depth image for us. We need only s single depth image, because only
 	// one draw operation is running at once.
-	ri.Printf(PRINT_ALL, " Create depth image: vk.depth_image, %d x %d. \n", Width, Height);
+	ri.Printf(PRINT_DEVELOPER, " Create depth image: vk.depth_image, %d x %d. \n", Width, Height);
 	{
 		VkImageCreateInfo desc;
 		desc.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -32,12 +38,13 @@ void vk_createDepthAttachment(int Width, int Height) {
 		VK_CHECK(qvkCreateImage(vk.device, &desc, NULL, &vk.depth_image));
 	}
 
-	ri.Printf(PRINT_ALL, " Allocate device local memory for depth image: vk.depth_image_memory. \n");
+	ri.Printf(PRINT_DEVELOPER, " Allocate device local memory for depth image: vk.depth_image_memory. \n");
 	{
 		VkMemoryRequirements memory_requirements;
+		VkMemoryAllocateInfo alloc_info;
+
 		qvkGetImageMemoryRequirements(vk.device, vk.depth_image, &memory_requirements);
 
-		VkMemoryAllocateInfo alloc_info;
 		alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		alloc_info.pNext = NULL;
 		alloc_info.allocationSize = memory_requirements.size;
@@ -48,7 +55,7 @@ void vk_createDepthAttachment(int Width, int Height) {
 		VK_CHECK(qvkBindImageMemory(vk.device, vk.depth_image, vk.depth_image_memory, 0));
 	}
 
-	ri.Printf(PRINT_ALL, " Create image view for depth image: vk.depth_image_view. \n");
+	ri.Printf(PRINT_DEVELOPER, " Create image view for depth image: vk.depth_image_view.\n");
 	{
 		VkImageViewCreateInfo desc;
 		desc.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -69,19 +76,14 @@ void vk_createDepthAttachment(int Width, int Height) {
 		VK_CHECK(qvkCreateImageView(vk.device, &desc, NULL, &vk.depth_image_view));
 	}
 
-	VkImageAspectFlags image_aspect_flags = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-
-	VkCommandBufferAllocateInfo alloc_info;
 	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	alloc_info.pNext = NULL;
 	alloc_info.commandPool = vk.command_pool;
 	alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 	alloc_info.commandBufferCount = 1;
 
-	VkCommandBuffer pCB;
 	VK_CHECK(qvkAllocateCommandBuffers(vk.device, &alloc_info, &pCB));
 
-	VkCommandBufferBeginInfo begin_info;
 	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	begin_info.pNext = NULL;
 	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -96,7 +98,6 @@ void vk_createDepthAttachment(int Width, int Height) {
 
 	VK_CHECK(qvkEndCommandBuffer(pCB));
 
-	VkSubmitInfo submit_info;
 	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submit_info.pNext = NULL;
 	submit_info.waitSemaphoreCount = 0;

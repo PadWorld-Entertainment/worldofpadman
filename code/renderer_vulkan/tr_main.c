@@ -79,20 +79,6 @@ static void R_WorldPointToLocal(const vec3_t world, const orientationr_t *const 
 	R_WorldVectorToLocal(delta, pRT->axis, out);
 }
 
-/*
-static void R_MirrorVector (vec3_t in, orientation_t *surface, orientation_t *camera, vec3_t out)
-{
-	int		i;
-
-	VectorClear( out );
-	for ( i = 0 ; i < 3 ; i++ )
-	{
-		float d = DotProduct(in, surface->axis[i]);
-		VectorMA( out, d, camera->axis[i], out );
-	}
-}
-*/
-
 static inline void R_MirrorVector(vec3_t in, orientation_t *surface, orientation_t *camera, vec3_t out) {
 	vec3_t local;
 	R_WorldVectorToLocal(in, surface->axis, local);
@@ -100,12 +86,14 @@ static inline void R_MirrorVector(vec3_t in, orientation_t *surface, orientation
 }
 
 static void R_MirrorPoint(vec3_t in, orientation_t *surface, orientation_t *camera, vec3_t out) {
-	// ri.Printf(PRINT_ALL, "R_MirrorPoint\n");
 	vec3_t vectmp;
+	vec3_t local;
+
+	// ri.Printf(PRINT_ALL, "R_MirrorPoint\n");
+
 	VectorSubtract(in, surface->origin, vectmp);
 
 	// vec3_t transformed;
-	vec3_t local;
 	R_WorldVectorToLocal(vectmp, surface->axis, local);
 	R_LocalVecToWorld(local, camera->axis, vectmp);
 	VectorAdd(vectmp, camera->origin, out);
@@ -129,7 +117,8 @@ typedef struct {
 =================
 */
 void R_RotateForEntity(const trRefEntity_t *const ent, const viewParms_t *const viewParms, orientationr_t *const or) {
-
+	float glMatrix[16] QALIGN(16);
+	
 	if (ent->e.reType != RT_MODEL) {
 		* or = viewParms->world;
 		return;
@@ -141,8 +130,6 @@ void R_RotateForEntity(const trRefEntity_t *const ent, const viewParms_t *const 
 	// VectorCopy( ent->e.axis[2], or->axis[2] );
 	memcpy(or->origin, ent->e.origin, 12);
 	memcpy(or->axis, ent->e.axis, 36);
-
-	float glMatrix[16] QALIGN(16);
 
 	glMatrix[0] = or->axis[0][0];
 	glMatrix[1] = or->axis[0][1];
@@ -230,11 +217,10 @@ static void R_RotateForViewer(viewParms_t *const pViewParams, orientationr_t *co
 	// const viewParms_t * const pViewParams = &tr.viewParms;
 	// for current entity
 	// orientationr_t * const pEntityPose = &tr.or;
-
-	const static float s_flipMatrix[16] QALIGN(16) = {// convert from our coordinate system (looking down X)
+	static const float s_flipMatrix[16] QALIGN(16) = {// convert from our coordinate system (looking down X)
 													  // to OpenGL's coordinate system (looking down -Z)
 													  0, 0, -1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1};
-
+	float viewerMatrix[16] QALIGN(16);
 	float o0, o1, o2;
 
 	pEntityPose->origin[0] = pEntityPose->origin[1] = pEntityPose->origin[2] = 0;
@@ -248,7 +234,6 @@ static void R_RotateForViewer(viewParms_t *const pViewParams, orientationr_t *co
 	pEntityPose->viewOrigin[1] = o1 = pViewParams->or.origin[1];
 	pEntityPose->viewOrigin[2] = o2 = pViewParams->or.origin[2];
 
-	float viewerMatrix[16] QALIGN(16);
 	viewerMatrix[0] = pViewParams->or.axis[0][0];
 	viewerMatrix[1] = pViewParams->or.axis[1][0];
 	viewerMatrix[2] = pViewParams->or.axis[2][0];
@@ -282,11 +267,12 @@ Setup that culling frustum planes for the current view
 =================
 */
 static void R_SetupFrustum(viewParms_t *const pViewParams) {
+	uint32_t i = 0;
 
 	{
-		float ang = pViewParams->fovX * (float)(M_PI / 360.0f);
-		float xs = sin(ang);
-		float xc = cos(ang);
+		const float ang = pViewParams->fovX * (float)(M_PI / 360.0f);
+		const float xs = sin(ang);
+		const float xc = cos(ang);
 
 		float temp1[3];
 		float temp2[3];
@@ -304,9 +290,9 @@ static void R_SetupFrustum(viewParms_t *const pViewParams) {
 	}
 
 	{
-		float ang = pViewParams->fovY * (float)(M_PI / 360.0f);
-		float xs = sin(ang);
-		float xc = cos(ang);
+		const float ang = pViewParams->fovY * (float)(M_PI / 360.0f);
+		const float xs = sin(ang);
+		const float xc = cos(ang);
 		float temp1[3];
 		float temp2[3];
 
@@ -322,7 +308,6 @@ static void R_SetupFrustum(viewParms_t *const pViewParams) {
 		pViewParams->frustum[3].type = PLANE_NON_AXIAL;
 	}
 
-	uint32_t i = 0;
 	for (i = 0; i < 4; i++) {
 		// SetPlaneSignbits( &pViewParams->frustum[i] );
 		// cplane_t* out = &pViewParams->frustum[i];
@@ -429,11 +414,13 @@ static qboolean R_GetPortalOrientations(drawSurf_t *drawSurf, int entityNum, ori
 	// the origin of the camera
 	for (i = 0; i < tr.refdef.num_entities; i++) {
 		trRefEntity_t *e = &tr.refdef.entities[i];
+		float d;
+
 		if (e->e.reType != RT_PORTALSURFACE) {
 			continue;
 		}
 
-		float d = DotProduct(e->e.origin, originalPlane.normal) - originalPlane.dist;
+		d = DotProduct(e->e.origin, originalPlane.normal) - originalPlane.dist;
 		if (d > 64 || d < -64) {
 			continue;
 		}
@@ -538,11 +525,13 @@ static qboolean IsMirror(const drawSurf_t *drawSurf, int entityNum) {
 	// the origin of the camera
 	for (i = 0; i < tr.refdef.num_entities; i++) {
 		trRefEntity_t *e = &tr.refdef.entities[i];
+		float d;
+
 		if (e->e.reType != RT_PORTALSURFACE) {
 			continue;
 		}
 
-		float d = DotProduct(e->e.origin, originalPlane.normal) - originalPlane.dist;
+		d = DotProduct(e->e.origin, originalPlane.normal) - originalPlane.dist;
 		if (d > 64 || d < -64) {
 			continue;
 		}
@@ -655,6 +644,9 @@ Returns qtrue if another view has been rendered
 static qboolean R_MirrorViewBySurface(drawSurf_t *drawSurf, int entityNum) {
 	vec4_t clipDest[128];
 	orientation_t surface, camera;
+	// save old viewParms so we can return to it after the mirror view
+	viewParms_t oldParms = tr.viewParms;
+	viewParms_t newParms = tr.viewParms;
 
 	// don't recursively mirror
 	if (tr.viewParms.isPortal) {
@@ -672,10 +664,6 @@ static qboolean R_MirrorViewBySurface(drawSurf_t *drawSurf, int entityNum) {
 		return qfalse;
 	}
 
-	// save old viewParms so we can return to it after the mirror view
-	viewParms_t oldParms = tr.viewParms;
-
-	viewParms_t newParms = tr.viewParms;
 	newParms.isPortal = qtrue;
 
 	if (!R_GetPortalOrientations(drawSurf, entityNum, &surface, &camera, newParms.pvsOrigin, &newParms.isMirror)) {
@@ -918,11 +906,9 @@ recurse:
 		lo = lostk[stkptr];
 		hi = histk[stkptr];
 		goto recurse; /* pop subarray from stack */
-	} else
-		return; /* all subarrays done */
+	}
 }
 
-//==========================================================================================
 /*
 =================
 R_AddDrawSurf
@@ -1066,6 +1052,7 @@ void R_AddEntitySurfaces(viewParms_t *const pViewParam) {
 					break;
 				case MOD_IQM:
 					R_AddIQMSurfaces(ent);
+					break;
 				case MOD_BRUSH:
 					R_AddBrushModelSurfaces(ent);
 					break;
@@ -1090,6 +1077,10 @@ void R_AddEntitySurfaces(viewParms_t *const pViewParam) {
 
 static void R_SetupProjection(viewParms_t *const pViewParams) {
 	float zFar;
+	float zNear;
+	float p10;
+	float py;
+	float px;
 
 	// set the projection matrix with the minimum zfar
 	// now that we have the world bounded
@@ -1103,23 +1094,23 @@ static void R_SetupProjection(viewParms_t *const pViewParams) {
 		pViewParams->zFar = zFar = 2048.0f;
 	} else {
 		float o[3];
+		float farthestCornerDistance = 0;
+		uint32_t i;
 
 		o[0] = pViewParams->or.origin[0];
 		o[1] = pViewParams->or.origin[1];
 		o[2] = pViewParams->or.origin[2];
 
-		float farthestCornerDistance = 0;
-		uint32_t i;
-
 		// set far clipping planes dynamically
 		for (i = 0; i < 8; i++) {
 			float v[3];
+			float distance;
 
 			v[0] = ((i & 1) ? pViewParams->visBounds[0][0] : pViewParams->visBounds[1][0]) - o[0];
 			v[1] = ((i & 2) ? pViewParams->visBounds[0][1] : pViewParams->visBounds[1][1]) - o[1];
 			v[2] = ((i & 4) ? pViewParams->visBounds[0][2] : pViewParams->visBounds[1][2]) - o[0];
 
-			float distance = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
+			distance = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 
 			if (distance > farthestCornerDistance) {
 				farthestCornerDistance = distance;
@@ -1133,11 +1124,10 @@ static void R_SetupProjection(viewParms_t *const pViewParams) {
 	// update q3's proj matrix (opengl) to vulkan conventions: z - [0, 1] instead of [-1, 1] and invert y direction
 
 	// Vulkan clip space has inverted Y and half Z.
-	float zNear = r_znear->value;
-	float p10 = -zFar / (zFar - zNear);
-
-	float py = tan(pViewParams->fovY * (M_PI / 360.0f));
-	float px = tan(pViewParams->fovX * (M_PI / 360.0f));
+	zNear = r_znear->value;
+	p10 = -zFar / (zFar - zNear);
+	py = tan(pViewParams->fovY * (M_PI / 360.0f));
+	px = tan(pViewParams->fovX * (M_PI / 360.0f));
 
 	pViewParams->projectionMatrix[0] = 1.0f / px;
 	pViewParams->projectionMatrix[1] = 0;
@@ -1202,4 +1192,7 @@ void R_RenderView(viewParms_t *parms) {
 		// draw main system development information (surface outlines, etc)
 		R_DebugGraphics();
 	}
+}
+
+void R_IssuePendingRenderCommands(void) {
 }

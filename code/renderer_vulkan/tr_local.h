@@ -599,7 +599,7 @@ typedef struct {
 	byte *novis; // clusterBytes of 0xff
 
 	char *entityString;
-	char *entityParsePoint;
+	const char *entityParsePoint;
 } world_t;
 
 //======================================================================
@@ -666,16 +666,16 @@ void R_DecomposeSort(unsigned sort, int *entityNum, shader_t **shader, int *fogN
 void R_AddDrawSurf(surfaceType_t *surface, shader_t *shader, int fogIndex, int dlightMap);
 void ScanAndLoadShaderFiles(void);
 shader_t *GeneratePermanentShader(void);
-qboolean ParseShader(char **text);
+qboolean ParseShader(const char **text);
 
 #define CULL_IN 0 // completely unclipped
 #define CULL_CLIP 1 // clipped by one or more planes
 #define CULL_OUT 2 // completely outside the clipping planes
 // void R_LocalNormalToWorld (vec3_t local, vec3_t world);
 // void R_LocalPointToWorld (vec3_t local, vec3_t world);
-int R_CullLocalBox(vec3_t bounds[2]);
-int R_CullPointAndRadius(vec3_t origin, float radius);
-int R_CullLocalPointAndRadius(vec3_t origin, float radius);
+int R_CullLocalBox(const vec3_t bounds[2]);
+int R_CullPointAndRadius(const vec3_t origin, float radius);
+int R_CullLocalPointAndRadius(const vec3_t origin, float radius);
 
 void R_RotateForEntity(const trRefEntity_t *ent, const viewParms_t *viewParms, orientationr_t * or);
 

@@ -63,7 +63,7 @@ VkFence fence_renderFinished;
    and rendering commands.
 
 
-   The presentation engine is an abstraction for the platform¡¯s compositor
+   The presentation engine is an abstraction for the platform's compositor
    or display engine. The presentation engine controls the order in which
    presentable images are acquired for use by the application.
 
@@ -82,6 +82,8 @@ VkFence fence_renderFinished;
 
 void vk_create_sync_primitives(void) {
 	VkSemaphoreCreateInfo desc;
+	VkFenceCreateInfo fence_desc;
+
 	desc.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 	desc.pNext = NULL;
 	desc.flags = 0;
@@ -97,7 +99,6 @@ void vk_create_sync_primitives(void) {
 	VK_CHECK(qvkCreateSemaphore(vk.device, &desc, NULL, &sema_imageAvailable));
 	VK_CHECK(qvkCreateSemaphore(vk.device, &desc, NULL, &sema_renderFinished));
 
-	VkFenceCreateInfo fence_desc;
 	fence_desc.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 	fence_desc.pNext = NULL;
 
@@ -151,6 +152,11 @@ void vk_destroy_sync_primitives(void) {
 //  A framebuffer is compatible with a render pass if it was created
 //  using the same render pass or a compatible render pass.
 static void vk_createRenderPass(VkDevice device) {
+	VkAttachmentDescription attachments[2];
+	VkAttachmentReference color_attachment_ref;
+	VkAttachmentReference depth_attachment_ref;
+	VkSubpassDescription subpass;
+	VkRenderPassCreateInfo desc;
 
 	// Before we can finish creating the pipeline, we need to tell vulkan
 	// about the framebuffer attachment that will be used while rendering.
@@ -158,7 +164,6 @@ static void vk_createRenderPass(VkDevice device) {
 	// how many samples to use for each of them and how their contents
 	// should be handled throughout the rendering operations.
 
-	VkAttachmentDescription attachments[2];
 	attachments[0].flags = 0;
 
 	//  The format of the color attachment should match the format of the
@@ -198,15 +203,12 @@ static void vk_createRenderPass(VkDevice device) {
 	// with an image.
 
 	// Images used as color attachment
-	VkAttachmentReference color_attachment_ref;
 	color_attachment_ref.attachment = 0;
 	color_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-	VkAttachmentReference depth_attachment_ref;
 	depth_attachment_ref.attachment = 1;
 	depth_attachment_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-	VkSubpassDescription subpass;
 	subpass.flags = 0;
 	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 	subpass.inputAttachmentCount = 0;
@@ -218,7 +220,6 @@ static void vk_createRenderPass(VkDevice device) {
 	subpass.preserveAttachmentCount = 0;
 	subpass.pPreserveAttachments = NULL;
 
-	VkRenderPassCreateInfo desc;
 	desc.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
 	desc.pNext = NULL;
 	desc.flags = 0;
@@ -243,7 +244,9 @@ static void vk_createRenderPass(VkDevice device) {
 }
 
 void vk_createFrameBuffers(uint32_t w, uint32_t h) {
-	ri.Printf(PRINT_ALL, " Create RenderPass:  vk.render_pass \n");
+	uint32_t i;
+
+	ri.Printf(PRINT_DEVELOPER, " Create RenderPass:  vk.render_pass \n");
 	//
 	// Renderpass.
 	// A render pass represents a collection of attachments, subpasses,
@@ -334,13 +337,12 @@ void vk_createFrameBuffers(uint32_t w, uint32_t h) {
 	// in the swap chain and use the one that corresponds to the retrieved
 	// image at draw time.
 
-	ri.Printf(PRINT_ALL, " Create vk.framebuffers \n");
+	ri.Printf(PRINT_DEVELOPER, " Create vk.framebuffers \n");
 
 	// Render passes operate in conjunction with framebuffers.
 	// Framebuffers represent a collection of specific memory
 	// attachments that a render pass instance uses.
 
-	uint32_t i;
 	for (i = 0; i < vk.swapchain_image_count; i++) {
 		// set color and depth attachment
 		VkImageView attachments[2] = {vk.swapchain_image_views[i], vk.depth_image_view};
@@ -390,11 +392,11 @@ void vk_createFrameBuffers(uint32_t w, uint32_t h) {
 }
 
 void vk_destroyFrameBuffers(void) {
+	uint32_t i;
 	// we should delete the framebuffers before the image views
 	// and the render pass that they are based on.
-	ri.Printf(PRINT_ALL, " Destroy vk.framebuffers vk.swapchain_image_views vk.swapchain\n");
+	ri.Printf(PRINT_DEVELOPER, " Destroy vk.framebuffers vk.swapchain_image_views vk.swapchain\n");
 
-	uint32_t i;
 	for (i = 0; i < vk.swapchain_image_count; i++) {
 		qvkDestroyFramebuffer(vk.device, vk.framebuffers[i], NULL);
 		qvkDestroyImageView(vk.device, vk.swapchain_image_views[i], NULL);
@@ -406,6 +408,9 @@ void vk_destroyFrameBuffers(void) {
 }
 
 void vk_begin_frame(void) {
+	VkCommandBufferBeginInfo begin_info;
+	VkClearValue clear_values[2];
+	VkRenderPassBeginInfo renderPass_beginInfo;
 
 	// An application can acquire use of a presentable image with vkAcquireNextImageKHR.
 	// After acquiring a presentable image and before modifying it, the application must
@@ -447,7 +452,6 @@ void vk_begin_frame(void) {
 	// begin_info is an instance of the VkCommandBufferBeginInfo structure,
 	// which defines additional information about how the command buffer
 	// begins recording.
-	VkCommandBufferBeginInfo begin_info;
 	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	begin_info.pNext = NULL;
 	// VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT specifies that
@@ -503,12 +507,10 @@ void vk_begin_frame(void) {
 	}
 
 	// Begin render pass.
-	VkClearValue clear_values[2];
 	/// ignore clear_values[0] which corresponds to color attachment
-	clear_values[1].depthStencil.depth = 1.0;
+	clear_values[1].depthStencil.depth = 1.0f;
 	clear_values[1].depthStencil.stencil = 0;
 
-	VkRenderPassBeginInfo renderPass_beginInfo;
 	renderPass_beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	renderPass_beginInfo.pNext = NULL;
 	renderPass_beginInfo.renderPass = vk.render_pass;
@@ -523,14 +525,16 @@ void vk_begin_frame(void) {
 }
 
 void vk_end_frame(void) {
+	VkPipelineStageFlags wait_dst_stage_mask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	VkSubmitInfo submit_info;
+	VkPresentInfoKHR present_info;
+	VkResult result;
+
 	qvkCmdEndRenderPass(vk.command_buffer);
 
 	VK_CHECK(qvkEndCommandBuffer(vk.command_buffer));
 
-	VkPipelineStageFlags wait_dst_stage_mask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-
 	// Queue submission and synchronization
-	VkSubmitInfo submit_info;
 	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submit_info.pNext = NULL;
 	submit_info.waitSemaphoreCount = 1;
@@ -583,7 +587,6 @@ void vk_end_frame(void) {
 
 	VK_CHECK(qvkQueueSubmit(vk.queue, 1, &submit_info, fence_renderFinished));
 
-	VkPresentInfoKHR present_info;
 	present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	present_info.pNext = NULL;
 	present_info.waitSemaphoreCount = 1;
@@ -605,10 +608,12 @@ void vk_end_frame(void) {
 	// image to the correct layout, to queue an image for presentation.
 	// queue is a queue that is capable of presentation to the target
 	// surface's platform on the same device as the image's swapchain.
-	VkResult result = qvkQueuePresentKHR(vk.queue, &present_info);
+	result = qvkQueuePresentKHR(vk.queue, &present_info);
 	if (result == VK_SUCCESS) {
 		return;
-	} else if ((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_ERROR_SURFACE_LOST_KHR)) {
+	}
+
+	if ((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_ERROR_SURFACE_LOST_KHR)) {
 		// we first call vkDeviceWaitIdle because we
 		// shouldn't touch resources that still be in use
 		qvkDeviceWaitIdle(vk.device);

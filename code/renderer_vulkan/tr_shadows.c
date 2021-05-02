@@ -77,11 +77,11 @@ static void R_ExtrudeShadowEdges(void) {
 	for (i = 0; i < tess.numVertexes; i++) {
 		c = numEdgeDefs[i];
 		for (j = 0; j < c; j++) {
+			qboolean sil_edge = qtrue;
 			if (!edgeDefs[i][j].facing) {
 				continue;
 			}
 
-			qboolean sil_edge = qtrue;
 			i2 = edgeDefs[i][j].i2;
 			c2 = numEdgeDefs[i2];
 			for (k = 0; k < c2; k++) {
@@ -106,16 +106,15 @@ static void R_ExtrudeShadowEdges(void) {
 
 // VULKAN
 static void vk_renderShadowEdges(VkPipeline vk_pipeline) {
-
 	int i = 0;
 	while (i < numExtrudedEdges) {
+		int k = 0;
 		int count = numExtrudedEdges - i;
 		if (count > (SHADER_MAX_VERTEXES - 1) / 4)
 			count = (SHADER_MAX_VERTEXES - 1) / 4;
 
 		memcpy(tess.xyz, extrudedEdges[i * 4], 4 * count * sizeof(vec4_t));
 		tess.numVertexes = count * 4;
-		int k = 0;
 
 		for (k = 0; k < count; k++) {
 			tess.indexes[k * 6 + 0] = k * 4 + 0;
@@ -230,6 +229,13 @@ overlap and double darken.
 =================
 */
 void RB_ShadowFinish(void) {
+	int i = 0;
+	static const float tmp[16] = {
+		1, 0, 0, 0, 
+		0, 1, 0, 0, 
+		0, 0, 1, 0, 
+		0, 0, 0, 1};
+
 	if (r_shadows->integer != 2) {
 		return;
 	}
@@ -250,7 +256,6 @@ void RB_ShadowFinish(void) {
 	VectorSet(tess.xyz[1], 100, 100, -10);
 	VectorSet(tess.xyz[2], 100, -100, -10);
 	VectorSet(tess.xyz[3], -100, -100, -10);
-	int i = 0;
 
 	for (i = 0; i < 4; i++) {
 		VectorSet(tess.svars.colors[i], 153, 153, 153);
@@ -261,8 +266,6 @@ void RB_ShadowFinish(void) {
 	// PushModelView();
 
 	// Com_Memcpy(tmp, vk_world.modelview_transform, 64);
-
-	float tmp[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
 
 	vk_UploadXYZI(tess.xyz, tess.numVertexes, tess.indexes, tess.numIndexes);
 	updateMVP(backEnd.viewParms.isPortal, backEnd.projection2D, tmp);
@@ -282,30 +285,30 @@ void RB_ProjectionShadowDeform(void) {
 	vec3_t ground;
 	vec3_t light;
 	vec3_t lightDir;
-
+	float groundDist, d;
+	int i;
 	float *xyz = (float *)tess.xyz;
 
 	ground[0] = backEnd.or.axis[0][2];
 	ground[1] = backEnd.or.axis[1][2];
 	ground[2] = backEnd.or.axis[2][2];
 
-	float groundDist = backEnd.or.origin[2] - backEnd.currentEntity->e.shadowPlane;
+	groundDist = backEnd.or.origin[2] - backEnd.currentEntity->e.shadowPlane;
 
 	VectorCopy(backEnd.currentEntity->lightDir, lightDir);
 
-	float d = DotProduct(lightDir, ground);
+	d = DotProduct(lightDir, ground);
 	// don't let the shadows get too long or go negative
 	if (d < 0.5) {
 		VectorMA(lightDir, (0.5 - d), ground, lightDir);
 		d = DotProduct(lightDir, ground);
 	}
-	d = 1.0 / d;
+	d = 1.0f / d;
 
 	light[0] = lightDir[0] * d;
 	light[1] = lightDir[1] * d;
 	light[2] = lightDir[2] * d;
 
-	int i;
 	for (i = 0; i < tess.numVertexes; i++, xyz += 4) {
 		float h = DotProduct(xyz, ground) + groundDist;
 

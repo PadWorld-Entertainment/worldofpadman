@@ -589,15 +589,14 @@ void RB_CalcColorFromEntity(unsigned char (*dstColors)[4]) {
 void RB_CalcColorFromOneMinusEntity(unsigned char (*dstColors)[4]) {
 	if (backEnd.currentEntity) {
 		unsigned char invModulate[4];
+		uint32_t nVerts = tess.numVertexes;
+		uint32_t i;
 
 		invModulate[0] = 255 - backEnd.currentEntity->e.shaderRGBA[0];
 		invModulate[1] = 255 - backEnd.currentEntity->e.shaderRGBA[1];
 		invModulate[2] = 255 - backEnd.currentEntity->e.shaderRGBA[2];
 		invModulate[3] = 255 - backEnd.currentEntity->e.shaderRGBA[3];
 		// this trashes alpha, but the AGEN block fixes it
-
-		uint32_t nVerts = tess.numVertexes;
-		uint32_t i;
 		for (i = 0; i < nVerts; i++) {
 			memcpy(dstColors[i], invModulate, 4);
 		}
@@ -674,6 +673,8 @@ void RB_CalcWaveColor( const waveForm_t *wf, unsigned char *dstColors )
 
 void RB_CalcWaveColor(const waveForm_t *wf, unsigned char (*dstColors)[4]) {
 	float glow;
+	uint8_t color;
+	uint32_t i;
 
 	if (wf->func == GF_NOISE)
 		glow = wf->base + R_NoiseGet4f(0, 0, 0, (tess.shaderTime + wf->phase) * wf->frequency) * wf->amplitude;
@@ -685,9 +686,8 @@ void RB_CalcWaveColor(const waveForm_t *wf, unsigned char (*dstColors)[4]) {
 	else if (glow > 1)
 		glow = 1;
 
-	uint8_t color = glow * 255;
+	color = glow * 255;
 
-	uint32_t i;
 	for (i = 0; i < tess.numVertexes; i++) {
 		dstColors[i][0] = color;
 		dstColors[i][1] = color;
@@ -885,12 +885,12 @@ void RB_CalcEnvironmentTexCoords(float *st) {
 
 		d = DotProduct(normal, viewer);
 
-		reflected[0] = normal[0] * 2 * d - viewer[0];
-		reflected[1] = normal[1] * 2 * d - viewer[1];
-		reflected[2] = normal[2] * 2 * d - viewer[2];
+		reflected[0] = normal[0] * 2.0f * d - viewer[0];
+		reflected[1] = normal[1] * 2.0f * d - viewer[1];
+		reflected[2] = normal[2] * 2.0f * d - viewer[2];
 
-		st[0] = 0.5 + reflected[1] * 0.5;
-		st[1] = 0.5 - reflected[2] * 0.5;
+		st[0] = 0.5f + reflected[1] * 0.5f;
+		st[1] = 0.5f - reflected[2] * 0.5f;
 	}
 }
 
@@ -984,11 +984,11 @@ void RB_CalcRotateTexCoords(float degsPerSecond, float *st) {
 
 	tmi.matrix[0][0] = cosValue;
 	tmi.matrix[1][0] = -sinValue;
-	tmi.translate[0] = 0.5 - 0.5 * cosValue + 0.5 * sinValue;
+	tmi.translate[0] = 0.5f - 0.5f * cosValue + 0.5f * sinValue;
 
 	tmi.matrix[0][1] = sinValue;
 	tmi.matrix[1][1] = cosValue;
-	tmi.translate[1] = 0.5 - 0.5 * sinValue - 0.5 * cosValue;
+	tmi.translate[1] = 0.5f - 0.5f * sinValue - 0.5f * cosValue;
 
 	RB_CalcTransformTexCoords(&tmi, st);
 }
@@ -1137,6 +1137,7 @@ void RB_CalcDiffuseColor(unsigned char (*colors)[4]) {
 		jVecChar = vec_sel(jVecChar, vSel, vSel);	 // RGBARGBARGBARGBA replace alpha with 255
 		vec_ste((vector unsigned int)jVecChar, 0, (unsigned int *)&colors[i * 4]); // store color
 #else
+		int R, G, B;
 		incoming = DotProduct(normal, lightDir);
 		if (incoming <= 0) {
 			colors[i][0] = ent->ambientLightRGBA[0];
@@ -1147,19 +1148,19 @@ void RB_CalcDiffuseColor(unsigned char (*colors)[4]) {
 			continue;
 		}
 
-		int R = (int)(ambientLight[0] + incoming * directedLight[0]);
+		R = (int)(ambientLight[0] + incoming * directedLight[0]);
 		if (R > 255) {
 			R = 255;
 		}
 		colors[i][0] = R;
 
-		int G = (int)(ambientLight[1] + incoming * directedLight[1]);
+		G = (int)(ambientLight[1] + incoming * directedLight[1]);
 		if (G > 255) {
 			G = 255;
 		}
 		colors[i][1] = G;
 
-		int B = (int)(ambientLight[2] + incoming * directedLight[2]);
+		B = (int)(ambientLight[2] + incoming * directedLight[2]);
 		if (B > 255) {
 			B = 255;
 		}

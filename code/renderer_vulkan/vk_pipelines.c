@@ -59,7 +59,7 @@ static struct Vk_Pipeline_Def s_pipeline_defs[MAX_VK_PIPELINES];
 static uint32_t s_numPipelines = 0;
 
 void R_PipelineList_f(void) {
-	ri.Printf(PRINT_ALL, " Total pipeline created: %d\n", s_numPipelines);
+	ri.Printf(PRINT_DEVELOPER, " Total pipeline created: %d\n", s_numPipelines);
 }
 
 // uniform values in the shaders need to be specified during pipeline creation
@@ -67,16 +67,17 @@ void R_PipelineList_f(void) {
 // in the fragment shader.
 
 void vk_createPipelineLayout(void) {
-	ri.Printf(PRINT_ALL, " Create: vk.descriptor_pool, vk.set_layout, vk.pipeline_layout\n");
+	ri.Printf(PRINT_DEVELOPER, " Create: vk.descriptor_pool, vk.set_layout, vk.pipeline_layout\n");
 
 	// Like command buffers, descriptor sets are allocated from a pool.
 	// So we must first create the Descriptor pool.
 	{
 		VkDescriptorPoolSize pool_size;
+		VkDescriptorPoolCreateInfo desc;
+
 		pool_size.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		pool_size.descriptorCount = MAX_DRAWIMAGES;
 
-		VkDescriptorPoolCreateInfo desc;
 		desc.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 		desc.pNext = NULL;
 		desc.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT; // used by the cinematic images
@@ -95,6 +96,8 @@ void vk_createPipelineLayout(void) {
 
 	{
 		VkDescriptorSetLayoutBinding descriptor_binding;
+		VkDescriptorSetLayoutCreateInfo desc;
+
 		// is the binding number of this entry and corresponds to
 		// a resource of the same binding number in the shader stages
 		descriptor_binding.binding = 0;
@@ -122,7 +125,6 @@ void vk_createPipelineLayout(void) {
 		// then pImmutableSamplers is ignored.
 		descriptor_binding.pImmutableSamplers = NULL;
 
-		VkDescriptorSetLayoutCreateInfo desc;
 		desc.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
 		desc.pNext = NULL;
 		desc.flags = 0;
@@ -133,51 +135,71 @@ void vk_createPipelineLayout(void) {
 		VK_CHECK(qvkCreateDescriptorSetLayout(vk.device, &desc, NULL, &vk.set_layout));
 	}
 
-	VkPushConstantRange push_range;
-	push_range.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-	push_range.offset = 0;
-	push_range.size = 128; // 16 mvp floats + 16
+	{
+		VkPushConstantRange push_range;
+		VkPipelineLayoutCreateInfo desc;
+		VkDescriptorSetLayout set_layouts[2] = {vk.set_layout, vk.set_layout};
 
-	VkDescriptorSetLayout set_layouts[2] = {vk.set_layout, vk.set_layout};
+		push_range.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+		push_range.offset = 0;
+		push_range.size = 128; // 16 mvp floats + 16
 
-	VkPipelineLayoutCreateInfo desc;
-	desc.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	desc.pNext = NULL;
-	desc.flags = 0;
 
-	// setLayoutCount: the number of descriptor sets included in the pipeline layout.
-	// pSetLayouts: a pointer to an array of VkDescriptorSetLayout objects.
-	desc.setLayoutCount = 2;
-	desc.pSetLayouts = set_layouts;
+		desc.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+		desc.pNext = NULL;
+		desc.flags = 0;
 
-	// pushConstantRangeCount is the number of push constant ranges
-	// included in the pipeline layout.
-	//
-	// pPushConstantRanges is a pointer to an array of VkPushConstantRange
-	// structures defining a set of push constant ranges for use in
-	// a single pipeline layout.
-	//
-	// In addition to descriptor set layouts, a pipeline layout also
-	// describes how many push constants can be accessed by each stage
-	// of the pipeline.
+		// setLayoutCount: the number of descriptor sets included in the pipeline layout.
+		// pSetLayouts: a pointer to an array of VkDescriptorSetLayout objects.
+		desc.setLayoutCount = 2;
+		desc.pSetLayouts = set_layouts;
 
-	desc.pushConstantRangeCount = 1;
-	desc.pPushConstantRanges = &push_range;
+		// pushConstantRangeCount is the number of push constant ranges
+		// included in the pipeline layout.
+		//
+		// pPushConstantRanges is a pointer to an array of VkPushConstantRange
+		// structures defining a set of push constant ranges for use in
+		// a single pipeline layout.
+		//
+		// In addition to descriptor set layouts, a pipeline layout also
+		// describes how many push constants can be accessed by each stage
+		// of the pipeline.
 
-	// Access to descriptor sets from a pipeline is accomplished through
-	// a pipeline layout. Zero or more descriptor set layouts and zero or
-	// more push constant ranges are combined to form a pipeline layout
-	// object which describes the complete set of resources that can be
-	// accessed by a pipeline. The pipeline layout represents a sequence
-	// of descriptor sets with each having a specific layout.
-	// This sequence of layouts is used to determine the interface between
-	// shader stages and shader resources.
-	//
-	// Each pipeline is created using a pipeline layout.
-	VK_CHECK(qvkCreatePipelineLayout(vk.device, &desc, NULL, &vk.pipeline_layout));
+		desc.pushConstantRangeCount = 1;
+		desc.pPushConstantRanges = &push_range;
+
+		// Access to descriptor sets from a pipeline is accomplished through
+		// a pipeline layout. Zero or more descriptor set layouts and zero or
+		// more push constant ranges are combined to form a pipeline layout
+		// object which describes the complete set of resources that can be
+		// accessed by a pipeline. The pipeline layout represents a sequence
+		// of descriptor sets with each having a specific layout.
+		// This sequence of layouts is used to determine the interface between
+		// shader stages and shader resources.
+		//
+		// Each pipeline is created using a pipeline layout.
+		VK_CHECK(qvkCreatePipelineLayout(vk.device, &desc, NULL, &vk.pipeline_layout));
+	}
 }
 
 static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pPipeLine) {
+	VkSpecializationMapEntry specialization_entries;
+	VkSpecializationInfo specialization_info;
+	VkPipelineShaderStageCreateInfo shaderStages[2];
+	VkVertexInputBindingDescription bindings[4];
+	VkPipelineVertexInputStateCreateInfo vertex_input_state;
+	VkVertexInputAttributeDescription attribs[4];
+	VkPipelineInputAssemblyStateCreateInfo input_assembly_state;
+	VkPipelineDepthStencilStateCreateInfo depth_stencil_state;
+	VkPipelineMultisampleStateCreateInfo multisample_state;
+	VkPipelineRasterizationStateCreateInfo rasterization_state;
+	VkPipelineViewportStateCreateInfo viewport_state;
+	VkDynamicState dynamic_state_array[3] = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR,
+											 VK_DYNAMIC_STATE_DEPTH_BIAS};
+	VkPipelineDynamicStateCreateInfo dynamic_state;
+	VkPipelineColorBlendStateCreateInfo blend_state;
+	VkPipelineColorBlendAttachmentState attachment_blend_state = {};
+	VkGraphicsPipelineCreateInfo create_info;
 
 	struct Specialization_Data {
 		int32_t alpha_test_func;
@@ -194,19 +216,16 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	else
 		ri.Error(ERR_DROP, "create_pipeline: invalid alpha test state bits\n");
 
-	VkSpecializationMapEntry specialization_entries;
 	specialization_entries.constantID = 0;
 	specialization_entries.offset = offsetof(struct Specialization_Data, alpha_test_func);
 	specialization_entries.size = sizeof(int32_t);
 
-	VkSpecializationInfo specialization_info;
 	specialization_info.mapEntryCount = 1;
 	specialization_info.pMapEntries = &specialization_entries;
 	specialization_info.dataSize = sizeof(struct Specialization_Data);
 	specialization_info.pData = &specialization_data;
 
 	// Two stages: vs and fs
-	VkPipelineShaderStageCreateInfo shaderStages[2];
 
 	shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
@@ -239,7 +258,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	// A vertex binding describes at which rate to load data
 	// from memory throughout the vertices
 
-	VkVertexInputBindingDescription bindings[4];
 	{
 		// xyz array
 		bindings[0].binding = 0;
@@ -262,7 +280,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	}
 
 	// Describes how to handle vertex input
-	VkVertexInputAttributeDescription attribs[4];
 	{
 		// xyz
 		attribs[0].location = 0;
@@ -286,7 +303,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 		attribs[3].offset = 0;
 	}
 
-	VkPipelineVertexInputStateCreateInfo vertex_input_state;
 	vertex_input_state.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 	vertex_input_state.pNext = NULL;
 	vertex_input_state.flags = 0;
@@ -298,7 +314,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	//
 	// Primitive assembly.
 	//
-	VkPipelineInputAssemblyStateCreateInfo input_assembly_state;
 	input_assembly_state.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	input_assembly_state.pNext = NULL;
 	input_assembly_state.flags = 0;
@@ -309,7 +324,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	//
 	// Viewport.
 	//
-	VkPipelineViewportStateCreateInfo viewport_state;
 	viewport_state.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 	viewport_state.pNext = NULL;
 	viewport_state.flags = 0;
@@ -324,7 +338,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	// from the vertex shader and turns it into fragments to be colored
 	// by the fragment shader. It also performs depth testing, face culling
 	// and the scissor test.
-	VkPipelineRasterizationStateCreateInfo rasterization_state;
 	rasterization_state.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 	rasterization_state.pNext = NULL;
 	rasterization_state.flags = 0;
@@ -354,7 +367,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	rasterization_state.depthBiasSlopeFactor = 0.0f;	// dynamic depth bias state
 	rasterization_state.lineWidth = 1.0f;
 
-	VkPipelineMultisampleStateCreateInfo multisample_state;
 	multisample_state.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 	multisample_state.pNext = NULL;
 	multisample_state.flags = 0;
@@ -367,7 +379,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 
 	// If you are using a depth and/or stencil buffer, then you also need to configure
 	// the depth and stencil tests.
-	VkPipelineDepthStencilStateCreateInfo depth_stencil_state;
 	depth_stencil_state.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 	depth_stencil_state.pNext = NULL;
 	depth_stencil_state.flags = 0;
@@ -404,8 +415,8 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 		memset(&depth_stencil_state.back, 0, sizeof(depth_stencil_state.back));
 	}
 
-	depth_stencil_state.minDepthBounds = 0.0;
-	depth_stencil_state.maxDepthBounds = 0.0;
+	depth_stencil_state.minDepthBounds = 0.0f;
+	depth_stencil_state.maxDepthBounds = 0.0f;
 
 	// After a fragment shader has returned a color, it needs to be combined
 	// with the color that is already in the framebuffer. This transformation
@@ -416,7 +427,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 
 	// contains the configuraturation per attached framebuffer
 
-	VkPipelineColorBlendAttachmentState attachment_blend_state = {};
 	attachment_blend_state.blendEnable =
 		(def->state_bits & (GLS_SRCBLEND_BITS | GLS_DSTBLEND_BITS)) ? VK_TRUE : VK_FALSE;
 
@@ -496,7 +506,6 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	}
 
 	// Contains the global color blending settings
-	VkPipelineColorBlendStateCreateInfo blend_state;
 	blend_state.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
 	blend_state.pNext = NULL;
 	blend_state.flags = 0;
@@ -514,16 +523,12 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	// Examples are the size of the viewport, line width and blend constants
 	// If we want to do that, we have to fill in a VkPipelineDynamicStateCreateInfo
 	// structure like this.
-	VkPipelineDynamicStateCreateInfo dynamic_state;
 	dynamic_state.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
 	dynamic_state.pNext = NULL;
 	dynamic_state.flags = 0;
 	dynamic_state.dynamicStateCount = 3;
-	VkDynamicState dynamic_state_array[3] = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR,
-											 VK_DYNAMIC_STATE_DEPTH_BIAS};
 	dynamic_state.pDynamicStates = dynamic_state_array;
 
-	VkGraphicsPipelineCreateInfo create_info;
 	create_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	// pNext is NULL or a pointer to an extension-specific structure.
 	create_info.pNext = NULL;
@@ -669,8 +674,7 @@ void create_pipelines_for_each_stage(shaderStage_t *pStage, shader_t *pShader) {
 }
 
 void create_standard_pipelines(void) {
-
-	ri.Printf(PRINT_ALL, " Create skybox pipeline \n");
+	ri.Printf(PRINT_DEVELOPER, " Create skybox pipeline \n");
 	{
 
 		struct Vk_Pipeline_Def def;
@@ -686,10 +690,16 @@ void create_standard_pipelines(void) {
 		vk_create_pipeline(&def, &g_stdPipelines.skybox_pipeline);
 	}
 
-	ri.Printf(PRINT_ALL, " Create Q3 stencil shadows pipeline \n");
+	ri.Printf(PRINT_DEVELOPER, " Create Q3 stencil shadows pipeline \n");
 	{
 		{
 			struct Vk_Pipeline_Def def;
+			cullType_t cull_types[2] = {CT_FRONT_SIDED, CT_BACK_SIDED};
+			VkBool32 mirror_flags[2] = {VK_TRUE, VK_FALSE};
+
+			int i = 0;
+			int j = 0;
+
 			memset(&def, 0, sizeof(def));
 
 			def.polygon_offset = VK_FALSE;
@@ -698,11 +708,6 @@ void create_standard_pipelines(void) {
 			def.clipping_plane = VK_FALSE;
 			def.shadow_phase = SHADOWS_RENDERING_EDGES;
 
-			cullType_t cull_types[2] = {CT_FRONT_SIDED, CT_BACK_SIDED};
-			VkBool32 mirror_flags[2] = {VK_TRUE, VK_FALSE};
-
-			int i = 0;
-			int j = 0;
 
 			for (i = 0; i < 2; i++) {
 				def.face_culling = cull_types[i];
@@ -730,15 +735,9 @@ void create_standard_pipelines(void) {
 		}
 	}
 
-	ri.Printf(PRINT_ALL, " Create fog and dlights pipeline \n");
+	ri.Printf(PRINT_DEVELOPER, " Create fog and dlights pipeline \n");
 	{
 		struct Vk_Pipeline_Def def;
-		memset(&def, 0, sizeof(def));
-
-		def.shader_type = ST_SINGLE_TEXTURE;
-		def.clipping_plane = VK_FALSE;
-		def.mirror = VK_FALSE;
-
 		unsigned int fog_state_bits[2] = {GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA |
 											  GLS_DEPTHFUNC_EQUAL,
 										  GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA};
@@ -748,6 +747,13 @@ void create_standard_pipelines(void) {
 		VkBool32 polygon_offset[2] = {VK_FALSE, VK_TRUE};
 
 		int i = 0, j = 0, k = 0;
+
+		memset(&def, 0, sizeof(def));
+
+		def.shader_type = ST_SINGLE_TEXTURE;
+		def.clipping_plane = VK_FALSE;
+		def.mirror = VK_FALSE;
+
 
 		for (i = 0; i < 2; i++) {
 			unsigned fog_state = fog_state_bits[i];
@@ -770,7 +776,7 @@ void create_standard_pipelines(void) {
 	}
 
 	// debug pipelines
-	ri.Printf(PRINT_ALL, " Create tris debug pipeline \n");
+	ri.Printf(PRINT_DEVELOPER, " Create tris debug pipeline \n");
 	{
 		struct Vk_Pipeline_Def def;
 		memset(&def, 0, sizeof(def));
@@ -779,7 +785,7 @@ void create_standard_pipelines(void) {
 		vk_create_pipeline(&def, &g_stdPipelines.tris_debug_pipeline);
 	}
 
-	ri.Printf(PRINT_ALL, " Create tris mirror debug pipeline \n");
+	ri.Printf(PRINT_DEVELOPER, " Create tris mirror debug pipeline \n");
 	{
 		struct Vk_Pipeline_Def def;
 		memset(&def, 0, sizeof(def));
@@ -789,7 +795,7 @@ void create_standard_pipelines(void) {
 		vk_create_pipeline(&def, &g_stdPipelines.tris_mirror_debug_pipeline);
 	}
 
-	ri.Printf(PRINT_ALL, " Create normals debug pipeline \n");
+	ri.Printf(PRINT_DEVELOPER, " Create normals debug pipeline \n");
 	{
 		struct Vk_Pipeline_Def def;
 		memset(&def, 0, sizeof(def));
@@ -799,7 +805,7 @@ void create_standard_pipelines(void) {
 		vk_create_pipeline(&def, &g_stdPipelines.normals_debug_pipeline);
 	}
 
-	ri.Printf(PRINT_ALL, " Create surface debug pipeline \n");
+	ri.Printf(PRINT_DEVELOPER, " Create surface debug pipeline \n");
 	{
 		struct Vk_Pipeline_Def def;
 		memset(&def, 0, sizeof(def));
@@ -808,7 +814,7 @@ void create_standard_pipelines(void) {
 		vk_create_pipeline(&def, &g_stdPipelines.surface_debug_pipeline_solid);
 	}
 
-	ri.Printf(PRINT_ALL, " Create surface debug outline pipeline \n");
+	ri.Printf(PRINT_DEVELOPER, " Create surface debug outline pipeline \n");
 	{
 		struct Vk_Pipeline_Def def;
 		memset(&def, 0, sizeof(def));
@@ -818,7 +824,7 @@ void create_standard_pipelines(void) {
 		vk_create_pipeline(&def, &g_stdPipelines.surface_debug_pipeline_outline);
 	}
 
-	ri.Printf(PRINT_ALL, " Create images debug pipeline \n");
+	ri.Printf(PRINT_DEVELOPER, " Create images debug pipeline \n");
 	{
 		struct Vk_Pipeline_Def def;
 		memset(&def, 0, sizeof(def));
@@ -829,9 +835,9 @@ void create_standard_pipelines(void) {
 }
 
 void vk_destroyShaderStagePipeline(void) {
+	uint32_t i;
 	// shader stage
 	qvkDeviceWaitIdle(vk.device);
-	uint32_t i;
 	for (i = 0; i < s_numPipelines; i++) {
 		qvkDestroyPipeline(vk.device, s_pipeline_defs[i].pipeline, NULL);
 		memset(&s_pipeline_defs[i], 0, sizeof(struct Vk_Pipeline_Def));

@@ -155,20 +155,17 @@ static qboolean R_LoadMD3(model_t *mod, int lod, void *buffer, const char *mod_n
 }
 
 qhandle_t R_RegisterMD3(const char *name, model_t *mod) {
-
 	char *buf;
 	int numLoaded = 0;
+	char filename[MAX_QPATH] = {0};
+	char *dot;
+	uint32_t lod;
 
 	ri.FS_ReadFile(name, (void**)&buf);
 
 	if (NULL != buf) {
 		qboolean loaded = qfalse;
-
-#if defined(Q3_BIG_ENDIAN)
 		int ident = LittleLong(*(int *)buf);
-#else
-		int ident = *(int *)buf;
-#endif
 		if (ident == MD3_IDENT)
 			loaded = R_LoadMD3(mod, 0, buf, name);
 		else
@@ -189,27 +186,22 @@ qhandle_t R_RegisterMD3(const char *name, model_t *mod) {
 		ri.Printf(PRINT_WARNING, "R_RegisterMD3: failed loading %s from disk. \n", name);
 	}
 
-	char filename[MAX_QPATH] = {0};
 	strcpy(filename, name);
-	char *const dot = strrchr(filename, '.');
-	*dot = 0;
+	dot = strrchr(filename, '.');
+	*dot = '\0';
 
-	uint32_t lod;
 	for (lod = 1; lod < MD3_MAX_LODS; lod++) {
 		qboolean loaded = qfalse;
-
 		char namebuf[MAX_QPATH + 20] = {0};
+		int ident;
+
 		snprintf(namebuf, sizeof(namebuf), "%s_%d.md3", filename, lod);
 
 		ri.FS_ReadFile(namebuf, (void**)&buf);
 		if (!buf)
 			continue;
 
-#if defined(Q3_BIG_ENDIAN)
-		int ident = LittleLong(*(int *)buf);
-#else
-		int ident = *(int *)buf;
-#endif
+		ident = LittleLong(*(int *)buf);
 		if (ident == MD3_IDENT)
 			loaded = R_LoadMD3(mod, lod, buf, name);
 		else
@@ -226,8 +218,8 @@ qhandle_t R_RegisterMD3(const char *name, model_t *mod) {
 
 	if (numLoaded)
 		return mod->index;
-	else
-		ri.Printf(PRINT_WARNING, "R_RegisterMD3: couldn't load %s\n", name);
+
+	ri.Printf(PRINT_WARNING, "R_RegisterMD3: couldn't load %s\n", name);
 
 	/*
 		if(numLoaded)

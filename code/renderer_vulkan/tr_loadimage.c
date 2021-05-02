@@ -17,10 +17,10 @@ typedef struct {
 
 // Note that the ordering indicates the order of preference used
 // when there are multiple images of different formats available
-const static imageExtToLoaderMap_t imageLoaders[6] = {{"png", R_LoadPNG},  {"tga", R_LoadTGA}, {"jpg", R_LoadJPG},
+static const imageExtToLoaderMap_t imageLoaders[6] = {{"png", R_LoadPNG},  {"tga", R_LoadTGA}, {"jpg", R_LoadJPG},
 													  {"jpeg", R_LoadJPG}, {"pcx", R_LoadPCX}, {"bmp", R_LoadBMP}};
 
-const static int numImageLoaders = 6;
+static const int numImageLoaders = 6;
 
 void R_LoadImage(const char *name, unsigned char **pic, int *width, int *height) {
 	int orgLoader = -1;
@@ -33,12 +33,12 @@ void R_LoadImage(const char *name, unsigned char **pic, int *width, int *height)
 	// char* dot = NULL;
 	char *pExt = NULL;
 	// char* slash = NULL;
+	char c;
 
 	*pic = NULL;
 	*width = 0;
 	*height = 0;
 
-	char c;
 
 	// copy name to localName
 	while ((c = *pDst++ = *pSrc++)) {

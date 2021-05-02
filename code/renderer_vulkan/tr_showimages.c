@@ -14,24 +14,25 @@ Also called by RE_EndRegistration
 // TODO: move glConfig retated stuff to glConfig.c,
 
 void RB_ShowImages(image_t **const pImg, unsigned int N) {
+	int width;
+	int height;
+	float w;
+	float h;
+	const float black[4] = {0, 0, 0, 1};
+	uint32_t i;
 
 	backEnd.projection2D = qtrue;
 
-	const float black[4] = {0, 0, 0, 1};
 	vk_clearColorAttachments(black);
-
-	int width;
-	int height;
-
+	
 	R_GetWinResolution(&width, &height);
 
-	const float w = width / 20;
-	const float h = height / 15;
+	w = width / 20;
+	h = height / 15;
 
 	tess.numIndexes = 6;
 	tess.numVertexes = 4;
 
-	uint32_t i;
 	for (i = 0; i < N; ++i) {
 		// image_t* image = tr.images[i];
 		float x = i % 20 * w;

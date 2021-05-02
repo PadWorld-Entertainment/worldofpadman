@@ -100,10 +100,11 @@ static int R_CullModel(md3Header_t *header, trRefEntity_t *ent) {
 }
 
 int R_ComputeLOD(trRefEntity_t *ent) {
-
 	int lod = 0;
-
+	float tmpVec[3];
+	float dist;
 	float radius;
+
 	// radius are guarentee large than 0;
 
 	// multiple LODs exist, so compute projected bounding sphere
@@ -124,11 +125,9 @@ int R_ComputeLOD(trRefEntity_t *ent) {
 		radius = RadiusFromBounds(frame->bounds[0], frame->bounds[1]);
 	}
 
-	float tmpVec[3];
 	VectorSubtract(ent->e.origin, tr.viewParms.or.origin, tmpVec);
-	float dist = DotProduct(tr.viewParms.or.axis[0], tmpVec);
+	dist = DotProduct(tr.viewParms.or.axis[0], tmpVec);
 	if (dist > 0) {
-
 		// vec3_t	p;
 		// p[0] = 0;
 		// p[1] = r ;
@@ -267,11 +266,10 @@ void R_AddMD3Surfaces(trRefEntity_t *ent) {
 			shader = R_GetShaderByHandle(ent->e.customShader);
 		} else if (ent->e.customSkin > 0 && ent->e.customSkin < tr.numSkins) {
 			skin_t *skin = R_GetSkinByHandle(ent->e.customSkin);
+			int j;
 
 			// match the surface name to something in the skin file
 			shader = tr.defaultShader;
-
-			int j;
 
 			for (j = 0; j < skin->numSurfaces; j++) {
 				// the names have both been lowercased

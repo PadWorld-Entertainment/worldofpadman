@@ -224,11 +224,10 @@ R_LoadVisibility
 =================
 */
 static void R_LoadVisibility(lump_t *l) {
-	ri.Printf(PRINT_ALL, "\n---R_LoadVisibility---\n");
-
 	unsigned char *buf;
-
 	int len = (s_worldData.numClusters + 63) & ~63;
+
+	ri.Printf(PRINT_ALL, "\n---R_LoadVisibility---\n");
 	s_worldData.novis = (byte *)ri.Hunk_Alloc(len, h_low);
 	memset(s_worldData.novis, 0xff, len);
 
@@ -254,14 +253,15 @@ static void R_LoadVisibility(lump_t *l) {
 	}
 }
 
-//===============================================================================
-
 static shader_t *ShaderForShaderNum(int shaderNum, int lightmapNum) {
+	dshader_t *dsh;
+	shader_t *shader;
+
 	shaderNum = LittleLong(shaderNum);
 	if (shaderNum < 0 || shaderNum >= s_worldData.numShaders) {
 		ri.Error(ERR_DROP, "ShaderForShaderNum: bad num %i", shaderNum);
 	}
-	dshader_t *dsh = &s_worldData.shaders[shaderNum];
+	dsh = &s_worldData.shaders[shaderNum];
 
 	if (r_vertexLight->integer) {
 		lightmapNum = LIGHTMAP_BY_VERTEX;
@@ -271,7 +271,7 @@ static shader_t *ShaderForShaderNum(int shaderNum, int lightmapNum) {
 		lightmapNum = LIGHTMAP_WHITEIMAGE;
 	}
 
-	shader_t *shader = R_FindShader(dsh->shader, lightmapNum, qtrue);
+	shader = R_FindShader(dsh->shader, lightmapNum, qtrue);
 
 	// if the shader had errors, just use default shader
 	if (shader->defaultShader) {
@@ -1376,12 +1376,11 @@ R_LoadSubmodels
 =================
 */
 static void R_LoadSubmodels(lump_t *l) {
-
-	ri.Printf(PRINT_ALL, "\n---R_LoadSubmodels---\n");
-
 	dmodel_t *in;
 	bmodel_t *out;
 	int i, j, count;
+
+	ri.Printf(PRINT_DEVELOPER, "\n---R_LoadSubmodels---\n");
 
 	in = (dmodel_t *)(void *)(fileBase + l->fileofs);
 	if (l->filelen % sizeof(*in))
@@ -1391,8 +1390,6 @@ static void R_LoadSubmodels(lump_t *l) {
 	s_worldData.bmodels = out = (bmodel_t *)ri.Hunk_Alloc(count * sizeof(*out), h_low);
 
 	for (i = 0; i < count; i++, in++, out++) {
-		// model_t *model = R_AllocModel();
-
 		model_t *model = ri.Hunk_Alloc(sizeof(model_t), h_low);
 		assert(model != NULL); // this should never happen
 
@@ -1406,7 +1403,7 @@ static void R_LoadSubmodels(lump_t *l) {
 		if (++tr.numModels == MAX_MOD_KNOWN) {
 			ri.Printf(PRINT_WARNING, "R_AllocModel: MAX_MOD_KNOWN.\n");
 		}
-		ri.Printf(PRINT_ALL, "Allocate Memory for %s model. \n", model->name);
+		ri.Printf(PRINT_DEVELOPER, "Allocate Memory for %s model. \n", model->name);
 
 		for (j = 0; j < 3; j++) {
 			out->bounds[0][j] = LittleFloat(in->mins[j]);
@@ -1417,8 +1414,6 @@ static void R_LoadSubmodels(lump_t *l) {
 		out->numSurfaces = LittleLong(in->numSurfaces);
 	}
 }
-
-//==================================================================
 
 /*
 =================
@@ -1439,13 +1434,13 @@ R_LoadNodesAndLeafs
 =================
 */
 static void R_LoadNodesAndLeafs(lump_t *nodeLump, lump_t *leafLump) {
-	ri.Printf(PRINT_ALL, "\n---R_LoadNodesAndLeafs---\n");
-
 	int i, j, p;
 	dnode_t *in;
 	dleaf_t *inLeaf;
 	mnode_t *out;
 	int numNodes, numLeafs;
+
+	ri.Printf(PRINT_DEVELOPER, "\n---R_LoadNodesAndLeafs---\n");
 
 	in = (dnode_t *)(void *)(fileBase + nodeLump->fileofs);
 	if (nodeLump->filelen % sizeof(dnode_t) || leafLump->filelen % sizeof(dleaf_t)) {
@@ -1504,8 +1499,6 @@ static void R_LoadNodesAndLeafs(lump_t *nodeLump, lump_t *leafLump) {
 	R_SetParent(s_worldData.nodes, NULL);
 }
 
-//=============================================================================
-
 /*
 =================
 R_LoadShaders
@@ -1538,11 +1531,12 @@ R_LoadMarksurfaces
 =================
 */
 static void R_LoadMarksurfaces(lump_t *l) {
-	ri.Printf(PRINT_ALL, "\n---R_LoadMarksurfaces---\n");
 	int i, j, count;
 	msurface_t **out;
-
 	int *in = (int *)(void *)(fileBase + l->fileofs);
+
+	ri.Printf(PRINT_DEVELOPER, "\n---R_LoadMarksurfaces---\n");
+
 	if (l->filelen % sizeof(*in))
 		ri.Error(ERR_DROP, "LoadMap: funny lump size in %s", s_worldData.name);
 	count = l->filelen / sizeof(*in);
@@ -1708,13 +1702,13 @@ static void R_LoadFogs(lump_t *l, lump_t *brushesLump, lump_t *sidesLump) {
 }
 
 void R_LoadLightGrid(lump_t *l) {
-	ri.Printf(PRINT_ALL, "\n---R_LoadLightGrid---\n");
-
 	int i;
 	vec3_t maxs;
 	int numGridPoints;
 	world_t *w;
 	float *wMins, *wMaxs;
+
+	ri.Printf(PRINT_DEVELOPER, "\n---R_LoadLightGrid---\n");
 
 	w = &s_worldData;
 
@@ -1752,13 +1746,14 @@ void R_LoadLightGrid(lump_t *l) {
 void RE_RemapShader(const char *oldShader, const char *newShader, const char *timeOffset);
 
 void R_LoadEntities(lump_t *l) {
-
-	ri.Printf(PRINT_ALL, "\n---R_LoadEntities---\n");
-
-	char *p, *token, *s;
+	const char *p;
+	const char *token;
+	const char *s;
 	char keyname[MAX_TOKEN_CHARS];
 	char value[MAX_TOKEN_CHARS];
 	world_t *w;
+
+	ri.Printf(PRINT_DEVELOPER, "\n---R_LoadEntities---\n");
 
 	w = &s_worldData;
 	w->lightGridSize[0] = 64;
@@ -1798,12 +1793,12 @@ void R_LoadEntities(lump_t *l) {
 		// check for remapping of shaders for vertex lighting
 		s = "vertexremapshader";
 		if (!Q_strncmp(keyname, s, strlen(s))) {
-			s = strchr(value, ';');
-			if (!s) {
+			char *vs = strchr(value, ';');
+			if (!vs) {
 				ri.Printf(PRINT_WARNING, "WARNING: no semi colon in vertexshaderremap '%s'\n", value);
 				break;
 			}
-			*s++ = 0;
+			*vs++ = 0;
 			if (r_vertexLight->integer) {
 				RE_RemapShader(value, s, "0");
 			}
@@ -1812,12 +1807,12 @@ void R_LoadEntities(lump_t *l) {
 		// check for remapping of shaders
 		s = "remapshader";
 		if (!Q_strncmp(keyname, s, (int)strlen(s))) {
-			s = strchr(value, ';');
-			if (!s) {
+			char *vs = strchr(value, ';');
+			if (!vs) {
 				ri.Printf(PRINT_WARNING, "WARNING: no semi colon in shaderremap '%s'\n", value);
 				break;
 			}
-			*s++ = 0;
+			*vs++ = 0;
 			RE_RemapShader(value, s, "0");
 			continue;
 		}
@@ -1835,9 +1830,8 @@ qboolean RE_GetEntityToken(char *buffer, int size) {
 	if (!s_worldData.entityParsePoint || !s[0]) {
 		s_worldData.entityParsePoint = s_worldData.entityString;
 		return qfalse;
-	} else {
-		return qtrue;
 	}
+	return qtrue;
 }
 
 /*
@@ -1867,7 +1861,7 @@ void RE_LoadWorldMap(const char *name) {
 	VectorNormalize(tr.sunDirection);
 
 	// load it
-	ri.FS_ReadFile(name, (void**)&buffer);
+	ri.FS_ReadFile(name, (void **)&buffer);
 	if (!buffer) {
 		ri.Error(ERR_DROP, "RE_LoadWorldMap: %s not found", name);
 	}

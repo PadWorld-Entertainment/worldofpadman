@@ -61,7 +61,6 @@ uint32_t find_memory_type(uint32_t memory_type_bits, VkMemoryPropertyFlags prope
 }
 
 static void vk_createStagingBuffer(uint32_t size) {
-
 	memset(&StagBuf, 0, sizeof(StagBuf));
 
 	ri.Printf(PRINT_DEVELOPER, " Create Staging Buffer: %d\n", size);
@@ -98,9 +97,10 @@ static void vk_createStagingBuffer(uint32_t size) {
 
 	{
 		VkMemoryRequirements memory_requirements;
+		VkMemoryAllocateInfo alloc_info;
+
 		qvkGetBufferMemoryRequirements(vk.device, StagBuf.buff, &memory_requirements);
 
-		VkMemoryAllocateInfo alloc_info;
 		alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		alloc_info.pNext = NULL;
 		alloc_info.allocationSize = memory_requirements.size;
@@ -147,8 +147,13 @@ static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pReg
 	// non-multisampled image with vkCmdResolveImage.
 	//
 	VkCommandBuffer cmd_buf;
+	VkBufferMemoryBarrier barrier;
+	VkSubmitInfo submit_info;
+
 	{
 		VkCommandBufferAllocateInfo alloc_info;
+		VkCommandBufferBeginInfo begin_info;
+
 		alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		alloc_info.pNext = NULL;
 		alloc_info.commandPool = vk.command_pool;
@@ -156,7 +161,6 @@ static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pReg
 		alloc_info.commandBufferCount = 1;
 		VK_CHECK(qvkAllocateCommandBuffers(vk.device, &alloc_info, &cmd_buf));
 
-		VkCommandBufferBeginInfo begin_info;
 		begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 		begin_info.pNext = NULL;
 		begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -164,7 +168,6 @@ static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pReg
 		VK_CHECK(qvkBeginCommandBuffer(cmd_buf, &begin_info));
 	}
 
-	VkBufferMemoryBarrier barrier;
 	barrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
 	barrier.pNext = NULL;
 	barrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
@@ -198,7 +201,6 @@ static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pReg
 
 	VK_CHECK(qvkEndCommandBuffer(cmd_buf));
 
-	VkSubmitInfo submit_info;
 	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submit_info.pNext = NULL;
 	submit_info.waitSemaphoreCount = 0;
@@ -241,8 +243,13 @@ This is the only way any image_t are created
 ================
 */
 static void vk_createImageAndBindWithMemory(image_t *pImg) {
-
 	VkImageCreateInfo desc;
+	VkMemoryRequirements memory_requirements;
+	uint32_t mask;
+	uint32_t i = 0;
+	VkMemoryAllocateInfo alloc_info;
+	VkDeviceMemory memory;
+
 	desc.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	desc.pNext = NULL;
 	desc.flags = 0;
@@ -266,13 +273,11 @@ static void vk_createImageAndBindWithMemory(image_t *pImg) {
 	// =======================================================
 	// Binding it with device local memory
 	// =======================================================
-	VkMemoryRequirements memory_requirements;
 	qvkGetImageMemoryRequirements(vk.device, pImg->handle, &memory_requirements);
 
 	// ensure that memory region has proper alignment
-	uint32_t mask = (memory_requirements.alignment - 1);
+	mask = (memory_requirements.alignment - 1);
 
-	uint32_t i = 0;
 	for (i = 0; i < devMemImg.Index; i++) {
 		// ensure that memory region has proper alignment
 		VkDeviceSize offset_aligned = (devMemImg.Chunks[i].Used + mask) & (~mask);
@@ -288,14 +293,12 @@ static void vk_createImageAndBindWithMemory(image_t *pImg) {
 	// Couldn't find suitable in existing chunk.
 	// Allocate a new chunk
 
-	VkMemoryAllocateInfo alloc_info;
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	alloc_info.pNext = NULL;
 	alloc_info.allocationSize = IMAGE_CHUNK_SIZE;
 	alloc_info.memoryTypeIndex =
 		find_memory_type(memory_requirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-	VkDeviceMemory memory;
 	VK_CHECK(qvkAllocateMemory(vk.device, &alloc_info, NULL, &memory));
 	VK_CHECK(qvkBindImageMemory(vk.device, pImg->handle, memory, 0));
 
@@ -314,10 +317,13 @@ static void vk_createImageAndBindWithMemory(image_t *pImg) {
 }
 
 static void vk_createImageViewAndDescriptorSet(image_t *pImage) {
-
 	VkImageView imageView;
-
+	VkDescriptorSet desSet;
+	VkDescriptorSetAllocateInfo descSetAllocInfo;
+	VkWriteDescriptorSet descriptor_write;
+	VkDescriptorImageInfo image_info;
 	VkImageViewCreateInfo desc;
+
 	desc.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	desc.pNext = NULL;
 	desc.flags = 0;
@@ -367,9 +373,6 @@ static void vk_createImageViewAndDescriptorSet(image_t *pImage) {
 	// we defined in the pipeline_layout sample.
 	// This layout describes how the descriptor set is to be allocated.
 
-	VkDescriptorSet desSet;
-
-	VkDescriptorSetAllocateInfo descSetAllocInfo;
 	descSetAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 	descSetAllocInfo.pNext = NULL;
 	descSetAllocInfo.descriptorPool = vk.descriptor_pool;
@@ -382,9 +385,6 @@ static void vk_createImageViewAndDescriptorSet(image_t *pImage) {
 	pImage->descriptor_set = desSet;
 
 	// ri.Printf(PRINT_ALL, " Allocate Descriptor Sets \n");
-	VkWriteDescriptorSet descriptor_write;
-
-	VkDescriptorImageInfo image_info;
 	image_info.sampler = vk_find_sampler(pImage->mipmap, pImage->wrapClampMode == GL_REPEAT);
 	image_info.imageView = imageView;
 	image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -414,6 +414,15 @@ static void vk_createImageViewAndDescriptorSet(image_t *pImage) {
 
 image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t width, const uint32_t height,
 					   VkBool32 isMipMap, VkBool32 allowPicmip, int glWrapClampMode) {
+	image_t *pImage;
+	const unsigned int max_texture_size = 2048;
+	unsigned int scaled_width, scaled_height;
+	uint32_t buffer_size;
+	unsigned char *pUploadBuffer;
+	VkBufferImageCopy regions[12];
+	void *data;
+	int hash;
+
 	if (strlen(name) >= MAX_QPATH) {
 		ri.Error(ERR_DROP, "CreateImage: \"%s\" is too long\n", name);
 	}
@@ -422,7 +431,7 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 
 	// Create image_t object.
 
-	image_t *pImage = (image_t *)ri.Hunk_Alloc(sizeof(image_t), h_low);
+	pImage = (image_t *)ri.Hunk_Alloc(sizeof(image_t), h_low);
 
 	Q_strncpyz(pImage->imgName, name, sizeof(pImage->imgName));
 	pImage->index = tr.numImages;
@@ -461,9 +470,6 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 	// Textures can be an actual image, a lightmap, or even normal maps for advanced
 	// surface lighting effects.
 
-	const unsigned int max_texture_size = 2048;
-	unsigned int scaled_width, scaled_height;
-
 	for (scaled_width = max_texture_size; scaled_width > width; scaled_width >>= 1)
 		;
 
@@ -478,8 +484,8 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 	pImage->uploadWidth = scaled_width;
 	pImage->uploadHeight = scaled_height;
 
-	uint32_t buffer_size = 4 * pImage->uploadWidth * pImage->uploadHeight;
-	unsigned char *const pUploadBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(2 * buffer_size);
+	buffer_size = 4 * pImage->uploadWidth * pImage->uploadHeight;
+	pUploadBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(2 * buffer_size);
 
 	if ((scaled_width != width) || (scaled_height != height)) {
 		// go down from [width, height] to [scaled_width, scaled_height]
@@ -497,8 +503,6 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 	//
 	// The set of all bytes bound to each destination region must not overlap
 	// the set of all bytes bound to another destination region.
-
-	VkBufferImageCopy regions[12];
 
 	regions[0].bufferOffset = 0;
 	regions[0].bufferRowLength = 0;
@@ -527,6 +531,7 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 		// Use the normal mip-mapping to go down from [scaled_width, scaled_height] to [1,1] dimensions.
 
 		while (1) {
+			uint32_t curLevelSize;
 
 			if (r_simpleMipMaps->integer) {
 				R_MipMap(in_ptr, base_width, base_height, dst_ptr);
@@ -560,7 +565,7 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 			regions[curMipMapLevel].imageExtent.height = base_height;
 			regions[curMipMapLevel].imageExtent.depth = 1;
 
-			uint32_t curLevelSize = base_width * base_height * 4;
+			curLevelSize = base_width * base_height * 4;
 
 			buffer_size += curLevelSize;
 
@@ -585,7 +590,6 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 	vk_createImageAndBindWithMemory(pImage);
 	vk_createImageViewAndDescriptorSet(pImage);
 
-	void *data;
 	VK_CHECK(qvkMapMemory(vk.device, StagBuf.mappableMem, 0, VK_WHOLE_SIZE, 0, &data));
 	memcpy(data, pUploadBuffer, buffer_size);
 	qvkUnmapMemory(vk.device, StagBuf.mappableMem);
@@ -594,7 +598,7 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 
 	vk_stagBufferToDeviceLocalMem(pImage->handle, regions, pImage->mipLevels);
 
-	const int hash = generateHashValue(name);
+	hash = generateHashValue(name);
 	pImage->next = hashTable[hash];
 	hashTable[hash] = pImage;
 
@@ -608,12 +612,15 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 
 image_t *R_FindImageFile(const char *name, VkBool32 mipmap, VkBool32 allowPicmip, int glWrapClampMode) {
 	image_t *image;
+	int hash;
+	uint32_t width = 0, height = 0;
+	unsigned char *pic = NULL;
 
 	if (name == NULL) {
 		ri.Printf(PRINT_WARNING, "Find Image File: NULL\n");
 		return NULL;
 	}
-	int hash = generateHashValue(name);
+	hash = generateHashValue(name);
 
 	// see if the image is already loaded
 	for (image = hashTable[hash]; image; image = image->next) {
@@ -638,9 +645,6 @@ image_t *R_FindImageFile(const char *name, VkBool32 mipmap, VkBool32 allowPicmip
 	//
 	// load the pic from disk
 	//
-	uint32_t width = 0, height = 0;
-	unsigned char *pic = NULL;
-
 	R_LoadImage(name, &pic, &width, &height);
 
 	if (pic == NULL) {
@@ -660,6 +664,10 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *d
 
 	// if the scratchImage isn't in the format we want, specify it as a new texture
 	if (cols != prtImage->uploadWidth || rows != prtImage->uploadHeight) {
+		VkBufferImageCopy region;
+		const uint32_t buffer_size = cols * rows * 4;
+		void *pDat;
+
 		ri.Printf(PRINT_DEVELOPER, "w=%d, h=%d, cols=%d, rows=%d, client=%d, prtImage->width=%d, prtImage->height=%d\n", w, h,
 				  cols, rows, client, prtImage->uploadWidth, prtImage->uploadHeight);
 
@@ -676,7 +684,6 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *d
 
 		vk_createImageViewAndDescriptorSet(prtImage);
 
-		VkBufferImageCopy region;
 		region.bufferOffset = 0;
 		region.bufferRowLength = 0;
 		region.bufferImageHeight = 0;
@@ -691,9 +698,6 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *d
 		region.imageExtent.height = rows;
 		region.imageExtent.depth = 1;
 
-		const uint32_t buffer_size = cols * rows * 4;
-
-		void *pDat;
 		VK_CHECK(qvkMapMemory(vk.device, StagBuf.mappableMem, 0, VK_WHOLE_SIZE, 0, &pDat));
 		memcpy(pDat, data, buffer_size);
 		qvkUnmapMemory(vk.device, StagBuf.mappableMem);
@@ -706,6 +710,9 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *d
 		// vk_uploadSingleImage(prtImage->handle, cols, rows, data);
 
 		VkBufferImageCopy region;
+		const uint32_t buffer_size = cols * rows * 4;
+		void *pDat;
+
 		region.bufferOffset = 0;
 		region.bufferRowLength = 0;
 		region.bufferImageHeight = 0;
@@ -720,9 +727,6 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *d
 		region.imageExtent.height = rows;
 		region.imageExtent.depth = 1;
 
-		const uint32_t buffer_size = cols * rows * 4;
-
-		void *pDat;
 		VK_CHECK(qvkMapMemory(vk.device, StagBuf.mappableMem, 0, VK_WHOLE_SIZE, 0, &pDat));
 		memcpy(pDat, data, buffer_size);
 		qvkUnmapMemory(vk.device, StagBuf.mappableMem);
@@ -733,21 +737,17 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *d
 
 static void R_CreateDefaultImage(void) {
 #define DEFAULT_SIZE 16
-
 	unsigned char data[DEFAULT_SIZE][DEFAULT_SIZE][4];
+	uint32_t x;
 
 	// the default image will be a box, to allow you to see the mapping coordinates
 	memset(data, 32, sizeof(data));
 
-	uint32_t x;
 	for (x = 0; x < DEFAULT_SIZE; x++) {
 		data[0][x][0] = data[0][x][1] = data[0][x][2] = data[0][x][3] = 255;
-
 		data[x][0][0] = data[x][0][1] = data[x][0][2] = data[x][0][3] = 255;
-
 		data[DEFAULT_SIZE - 1][x][0] = data[DEFAULT_SIZE - 1][x][1] = data[DEFAULT_SIZE - 1][x][2] =
 			data[DEFAULT_SIZE - 1][x][3] = 255;
-
 		data[x][DEFAULT_SIZE - 1][0] = data[x][DEFAULT_SIZE - 1][1] = data[x][DEFAULT_SIZE - 1][2] =
 			data[x][DEFAULT_SIZE - 1][3] = 255;
 	}
@@ -779,7 +779,6 @@ static void R_CreateIdentityLightImage(void) {
 
 static void R_CreateDlightImage(void) {
 #define DLIGHT_SIZE 16
-
 	uint32_t x, y;
 	unsigned char data[DLIGHT_SIZE][DLIGHT_SIZE][4];
 
@@ -806,16 +805,13 @@ static void R_CreateDlightImage(void) {
 static void R_CreateFogImage(void) {
 #define FOG_S 256
 #define FOG_T 32
-
 	unsigned int x, y;
-
 	unsigned char *const data = ri.Hunk_AllocateTempMemory(FOG_S * FOG_T * 4);
 
 	// S is distance, T is depth
 	for (x = 0; x < FOG_S; x++) {
 		for (y = 0; y < FOG_T; y++) {
 			float d = R_FogFactor((x + 0.5f) / FOG_S, (y + 0.5f) / FOG_T);
-
 			unsigned int index = (y * FOG_S + x) * 4;
 			data[index] = data[index + 1] = data[index + 2] = 255;
 			data[index + 3] = 255 * d;
@@ -831,7 +827,6 @@ static void R_CreateFogImage(void) {
 
 static void R_CreateScratchImage(void) {
 	uint32_t x;
-
 	unsigned char data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
 	for (x = 0; x < 32; x++) {
@@ -886,9 +881,9 @@ static void vk_destroySingleImage(image_t *pImg) {
 }
 
 void vk_destroyImageRes(void) {
-	vk_free_sampler();
-
 	uint32_t i = 0;
+
+	vk_free_sampler();
 
 	for (i = 0; i < tr.numImages; i++) {
 		vk_destroySingleImage(tr.images[i]);

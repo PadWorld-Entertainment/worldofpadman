@@ -7,7 +7,7 @@
 Returns CULL_IN, CULL_CLIP, or CULL_OUT
 =================
 */
-int R_CullLocalBox(vec3_t bounds[2]) {
+int R_CullLocalBox(const vec3_t bounds[2]) {
 	int i, j;
 	vec3_t transformed[8];
 	float dists[8];
@@ -63,13 +63,13 @@ int R_CullLocalBox(vec3_t bounds[2]) {
 	return CULL_CLIP; // partially clipped
 }
 
-static void R_LocalPointToWorld(vec3_t local, const orientationr_t *const pRT, vec3_t world) {
+static void R_LocalPointToWorld(const vec3_t local, const orientationr_t *const pRT, vec3_t world) {
 	world[0] = local[0] * pRT->axis[0][0] + local[1] * pRT->axis[1][0] + local[2] * pRT->axis[2][0] + pRT->origin[0];
 	world[1] = local[0] * pRT->axis[0][1] + local[1] * pRT->axis[1][1] + local[2] * pRT->axis[2][1] + pRT->origin[1];
 	world[2] = local[0] * pRT->axis[0][2] + local[1] * pRT->axis[1][2] + local[2] * pRT->axis[2][2] + pRT->origin[2];
 }
 
-int R_CullLocalPointAndRadius(vec3_t pt, float radius) {
+int R_CullLocalPointAndRadius(const vec3_t pt, float radius) {
 	vec3_t transformed;
 
 	R_LocalPointToWorld(pt, &tr.or, transformed);
@@ -80,7 +80,7 @@ int R_CullLocalPointAndRadius(vec3_t pt, float radius) {
 /*
 ** R_CullPointAndRadius
 */
-int R_CullPointAndRadius(vec3_t pt, float radius) {
+int R_CullPointAndRadius(const vec3_t pt, float radius) {
 	int i;
 	float dist;
 	cplane_t *frust;

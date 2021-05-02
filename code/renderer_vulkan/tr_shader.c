@@ -41,8 +41,8 @@ static texModInfo_t texMods[MAX_SHADER_STAGES][TR_MAX_TEXMODS];
 ParseVector
 ===============
 */
-static qboolean ParseVector(char **text, int count, float *v) {
-	char *token;
+static qboolean ParseVector(const char **text, int count, float *v) {
+	const char *token;
 	int i;
 
 	// FIXME: spaces are currently required after parens, should change parseext...
@@ -177,8 +177,8 @@ static genFunc_t NameToGenFunc(const char *funcname) {
 ParseWaveForm
 ===================
 */
-static void ParseWaveForm(char **text, waveForm_t *wave) {
-	char *token;
+static void ParseWaveForm(const char **text, waveForm_t *wave) {
+	const char *token;
 
 	token = R_ParseExt(text, qfalse);
 	if (token[0] == 0) {
@@ -222,9 +222,9 @@ static void ParseWaveForm(char **text, waveForm_t *wave) {
 ParseTexMod
 ===================
 */
-static void ParseTexMod(char *_text, shaderStage_t *stage) {
+static void ParseTexMod(const char *_text, shaderStage_t *stage) {
 	const char *token;
-	char **text = &_text;
+	const char **text = &_text;
 	texModInfo_t *tmi;
 
 	if (stage->bundle[0].numTexMods == TR_MAX_TEXMODS) {
@@ -416,14 +416,14 @@ static void ParseTexMod(char *_text, shaderStage_t *stage) {
 	}
 }
 
-static qboolean ParseStage(shaderStage_t *stage, char **text) {
+static qboolean ParseStage(shaderStage_t *stage, const char **text) {
 	int depthMaskBits = GLS_DEPTHMASK_TRUE, blendSrcBits = 0, blendDstBits = 0, atestBits = 0, depthFuncBits = 0;
 	qboolean depthMaskExplicit = qfalse;
 
 	stage->active = qtrue;
 
 	while (1) {
-		char *token = R_ParseExt(text, qtrue);
+		const char *token = R_ParseExt(text, qtrue);
 		if (token[0] == 0) {
 			ri.Printf(PRINT_WARNING, "WARNING: no matching '}' found\n");
 			return qfalse;
@@ -494,12 +494,12 @@ static qboolean ParseStage(shaderStage_t *stage, char **text) {
 
 			// parse up to MAX_IMAGE_ANIMATIONS animations
 			while (1) {
+				int num = stage->bundle[0].numImageAnimations;
 
 				token = R_ParseExt(text, qfalse);
 				if (!token[0]) {
 					break;
 				}
-				int num = stage->bundle[0].numImageAnimations;
 				if (num < MAX_IMAGE_ANIMATIONS) {
 					stage->bundle[0].image[num] =
 						R_FindImageFile(token, !shader.noMipMaps, !shader.noPicMip, GL_REPEAT);
@@ -798,8 +798,8 @@ deformVertexes autoSprite2
 deformVertexes text[0-7]
 ===============
 */
-static void ParseDeform(char **text) {
-	char *token;
+static void ParseDeform(const char **text) {
+	const char *token;
 	deformStage_t *ds;
 
 	token = R_ParseExt(text, qfalse);
@@ -934,9 +934,9 @@ ParseSkyParms
 skyParms <outerbox> <cloudheight> <innerbox>
 ===============
 */
-static void ParseSkyParms(char **text) {
-	char *token;
-	static char *suf[6] = {"rt", "bk", "lf", "ft", "up", "dn"};
+static void ParseSkyParms(const char **text) {
+	const char *token;
+	static const char *suf[6] = {"rt", "bk", "lf", "ft", "up", "dn"};
 	char pathname[MAX_QPATH];
 	int i;
 
@@ -992,8 +992,8 @@ static void ParseSkyParms(char **text) {
 ParseSort
 =================
 */
-void ParseSort(char **text) {
-	char *token;
+void ParseSort(const char **text) {
+	const char *token;
 
 	token = R_ParseExt(text, qfalse);
 	if (token[0] == 0) {
@@ -1027,12 +1027,12 @@ void ParseSort(char **text) {
 // this table is also present in q3map
 
 typedef struct {
-	char *name;
+	const char *name;
 	int clearSolid;
 	unsigned int surfaceFlags, contents;
 } infoParm_t;
 
-infoParm_t infoParms[] = {
+static const infoParm_t infoParms[] = {
 	// server relevant contents
 	{"water", 1, 0, CONTENTS_WATER},
 	{"slime", 1, 0, CONTENTS_SLIME}, // mildly damaging
@@ -1082,11 +1082,11 @@ ParseSurfaceParm
 surfaceparm <name>
 ===============
 */
-static void ParseSurfaceParm(char **text) {
+static void ParseSurfaceParm(const char **text) {
 	int numInfoParms = sizeof(infoParms) / sizeof(infoParms[0]);
 	int i;
 
-	char *token = R_ParseExt(text, qfalse);
+	const char *token = R_ParseExt(text, qfalse);
 	for (i = 0; i < numInfoParms; i++) {
 		if (!Q_stricmp(token, infoParms[i].name)) {
 			shader.surfaceFlags |= (int)infoParms[i].surfaceFlags;
@@ -1109,11 +1109,10 @@ The current text pointer is at the explicit text definition of the shader.
 Parse it into the global shader variable.  Later functions will optimize it.
 =================
 */
-qboolean ParseShader(char **text) {
-
+qboolean ParseShader(const char **text) {
 	int s = 0;
 
-	char *token = R_ParseExt(text, qtrue);
+	const char *token = R_ParseExt(text, qtrue);
 	if (token[0] != '{') {
 		ri.Printf(PRINT_WARNING, "WARNING: expecting '{', found '%s' instead in shader '%s'\n", token, shader.name);
 		return qfalse;
@@ -1326,7 +1325,7 @@ static collapse_t collapse[] = {{0, GLS_DSTBLEND_SRC_COLOR | GLS_SRCBLEND_ZERO, 
 								{GLS_DSTBLEND_ONE | GLS_SRCBLEND_ONE, GLS_DSTBLEND_ONE | GLS_SRCBLEND_ONE, GL_ADD,
 								 GLS_DSTBLEND_ONE | GLS_SRCBLEND_ONE},
 
-								{-1}};
+								{-1, 0, 0, 0}};
 
 /*
 ================
@@ -1515,6 +1514,9 @@ from the current global working shader
 */
 shader_t *FinishShader(void) {
 	qboolean hasLightmapStage = qfalse;
+	int iStage;
+	int i = 0;
+
 	//
 	// set sky stuff appropriate
 	//
@@ -1532,7 +1534,6 @@ shader_t *FinishShader(void) {
 	//
 	// set appropriate stage information
 	//
-	int iStage;
 	for (iStage = 0; iStage < MAX_SHADER_STAGES; iStage++) {
 		shaderStage_t *pStage = &stages[iStage];
 
@@ -1641,7 +1642,6 @@ shader_t *FinishShader(void) {
 	}
 
 	// VULKAN: create pipelines for each shader stage
-	int i = 0;
 	for (i = 0; i < iStage; i++) {
 		create_pipelines_for_each_stage(&stages[i], &shader);
 	}
@@ -1652,6 +1652,7 @@ shader_t *FinishShader(void) {
 //========================================================================================
 
 void R_SetTheShader(const char *name, int lightmapIndex) {
+	int i;
 
 	// clear the global shader
 	memset(&shader, 0, sizeof(shader));
@@ -1667,7 +1668,6 @@ void R_SetTheShader(const char *name, int lightmapIndex) {
 
 	// stages
 	memset(&stages, 0, sizeof(stages));
-	int i;
 	for (i = 0; i < MAX_SHADER_STAGES; i++) {
 		stages[i].bundle[0].texMods = texMods[i];
 	}
@@ -1711,13 +1711,14 @@ static void SortNewShader(void) {
 
 shader_t *GeneratePermanentShader(void) {
 	int i;
+	shader_t *newShader;
 
 	if (tr.numShaders == MAX_SHADERS) {
 		ri.Printf(PRINT_WARNING, "WARNING: GeneratePermanentShader - MAX_SHADERS hit\n");
 		return tr.defaultShader;
 	}
 
-	shader_t *newShader = (shader_t *)ri.Hunk_Alloc(sizeof(shader_t), h_low);
+	newShader = (shader_t *)ri.Hunk_Alloc(sizeof(shader_t), h_low);
 
 	*newShader = shader;
 
@@ -1735,13 +1736,13 @@ shader_t *GeneratePermanentShader(void) {
 	tr.numShaders++;
 
 	for (i = 0; i < newShader->numUnfoggedPasses; i++) {
+		int b;
 		if (!stages[i].active) {
 			break;
 		}
 		newShader->stages[i] = (shaderStage_t *)ri.Hunk_Alloc(sizeof(stages[i]), h_low);
 		*newShader->stages[i] = stages[i];
 
-		int b;
 		for (b = 0; b < NUM_TEXTURE_BUNDLES; b++) {
 			int size = newShader->stages[i]->bundle[b].numTexMods * sizeof(texModInfo_t);
 			newShader->stages[i]->bundle[b].texMods = (texModInfo_t *)ri.Hunk_Alloc(size, h_low);
@@ -1875,14 +1876,13 @@ static void CreateInternalShaders(void) {
 }
 
 static void CreateExternalShaders(void) {
-	ri.Printf(PRINT_ALL, "CreateExternalShaders\n");
+	ri.Printf(PRINT_DEVELOPER, "CreateExternalShaders\n");
 
 	tr.projectionShadowShader = R_FindShader("projectionShadow", LIGHTMAP_NONE, qtrue);
 }
 
 void R_InitShaders(void) {
-
-	ri.Printf(PRINT_ALL, "Initializing Shaders\n");
+	ri.Printf(PRINT_DEVELOPER, "Initializing Shaders\n");
 
 	R_ClearShaderHashTable();
 

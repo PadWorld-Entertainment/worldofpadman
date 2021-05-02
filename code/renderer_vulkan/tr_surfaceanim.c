@@ -8,8 +8,17 @@
 void RB_MDRSurfaceAnim(mdrSurface_t *surface) {
 	int j, k;
 	float backlerp;
-
+	mdrHeader_t *header;
 	mdrBone_t bones[MDR_MAX_BONES], *bonePtr;
+	int frameSize;
+	int *triangles;
+	int indexes;
+	int baseIndex;
+	int baseVertex;
+	mdrFrame_t *frame;
+	mdrFrame_t *oldFrame;
+	int numVerts;
+	mdrVertex_t *v;
 
 	// don't lerp if lerping off, or this is the only frame, or the last frame...
 	if (backEnd.currentEntity->e.oldframe == backEnd.currentEntity->e.frame) {
@@ -18,21 +27,17 @@ void RB_MDRSurfaceAnim(mdrSurface_t *surface) {
 		backlerp = backEnd.currentEntity->e.backlerp;
 	}
 
-	mdrHeader_t *header = (mdrHeader_t *)((unsigned char *)surface + surface->ofsHeader);
-
-	int frameSize = (size_t)(&((mdrFrame_t *)0)->bones[header->numBones]);
-
-	mdrFrame_t *frame = (mdrFrame_t *)((byte *)header + header->ofsFrames + backEnd.currentEntity->e.frame * frameSize);
-
-	mdrFrame_t *oldFrame =
-		(mdrFrame_t *)((byte *)header + header->ofsFrames + backEnd.currentEntity->e.oldframe * frameSize);
+	header = (mdrHeader_t *)((unsigned char *)surface + surface->ofsHeader);
+	frameSize = (size_t)(&((mdrFrame_t *)0)->bones[header->numBones]);
+	frame = (mdrFrame_t *)((byte *)header + header->ofsFrames + backEnd.currentEntity->e.frame * frameSize);
+	oldFrame = (mdrFrame_t *)((byte *)header + header->ofsFrames + backEnd.currentEntity->e.oldframe * frameSize);
 
 	RB_CHECKOVERFLOW(surface->numVerts, surface->numTriangles * 3);
 
-	int *triangles = (int *)((byte *)surface + surface->ofsTriangles);
-	int indexes = surface->numTriangles * 3;
-	int baseIndex = tess.numIndexes;
-	int baseVertex = tess.numVertexes;
+	triangles = (int *)((byte *)surface + surface->ofsTriangles);
+	indexes = surface->numTriangles * 3;
+	baseIndex = tess.numIndexes;
+	baseVertex = tess.numVertexes;
 
 	// Set up all triangles.
 	for (j = 0; j < indexes; j++) {
@@ -47,10 +52,10 @@ void RB_MDRSurfaceAnim(mdrSurface_t *surface) {
 		// no lerping needed
 		bonePtr = frame->bones;
 	} else {
-		bonePtr = bones;
 		int nBones = header->numBones;
 		int n;
 		float tmp;
+		bonePtr = bones;
 		for (n = 0; n < nBones; n++) {
 			tmp = frame->bones[n].matrix[0][0];
 			bones[n].matrix[0][0] = tmp + backlerp * (oldFrame->bones[n].matrix[0][0] - tmp);
@@ -84,8 +89,8 @@ void RB_MDRSurfaceAnim(mdrSurface_t *surface) {
 	//
 	// deform the vertexes by the lerped bones
 	//
-	mdrVertex_t *v = (mdrVertex_t *)((unsigned char *)surface + surface->ofsVerts);
-	int numVerts = surface->numVerts;
+	v = (mdrVertex_t *)((unsigned char *)surface + surface->ofsVerts);
+	numVerts = surface->numVerts;
 	for (j = 0; j < numVerts; j++) {
 		float tempVert[3] = {0, 0, 0};
 		float tempNormal[3] = {0, 0, 0};

@@ -10,12 +10,11 @@ void R_SetColorMappings(void) {
 	int i, j;
 	int inf;
 	int shift = 0;
+	float g = r_gamma->value;
 
 	for (i = 0; i < 255; i++) {
 		s_intensitytable[i] = s_gammatable[i] = i;
 	}
-
-	float g = r_gamma->value;
 
 	for (i = 0; i < 256; i++) {
 		if (g == 1) {
@@ -53,29 +52,29 @@ Scale up the pixel values in a texture to increase the lighting range
 void R_LightScaleTexture(unsigned char *dst, unsigned char *in, unsigned int nBytes) {
 	unsigned int i;
 
-	if (0) {
-		for (i = 0; i < nBytes; i += 4) {
-			unsigned int n1 = i + 1;
-			unsigned int n2 = i + 2;
-			unsigned int n3 = i + 3;
+#if 0
+	for (i = 0; i < nBytes; i += 4) {
+		unsigned int n1 = i + 1;
+		unsigned int n2 = i + 2;
+		unsigned int n3 = i + 3;
 
-			dst[i] = s_gammatable[in[i]];
-			dst[n1] = s_gammatable[in[n1]];
-			dst[n2] = s_gammatable[in[n2]];
-			dst[n3] = in[n3];
-		}
-	} else {
-		for (i = 0; i < nBytes; i += 4) {
-			unsigned int n1 = i + 1;
-			unsigned int n2 = i + 2;
-			unsigned int n3 = i + 3;
-
-			dst[i] = s_gammatable[s_intensitytable[in[i]]];
-			dst[n1] = s_gammatable[s_intensitytable[in[n1]]];
-			dst[n2] = s_gammatable[s_intensitytable[in[n2]]];
-			dst[n3] = in[n3];
-		}
+		dst[i] = s_gammatable[in[i]];
+		dst[n1] = s_gammatable[in[n1]];
+		dst[n2] = s_gammatable[in[n2]];
+		dst[n3] = in[n3];
 	}
+#else
+	for (i = 0; i < nBytes; i += 4) {
+		unsigned int n1 = i + 1;
+		unsigned int n2 = i + 2;
+		unsigned int n3 = i + 3;
+
+		dst[i] = s_gammatable[s_intensitytable[in[i]]];
+		dst[n1] = s_gammatable[s_intensitytable[in[n1]]];
+		dst[n2] = s_gammatable[s_intensitytable[in[n2]]];
+		dst[n3] = in[n3];
+	}
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -144,14 +143,13 @@ Operates in place, quartering the size of the texture, no error checking
 ================
 */
 void R_MipMap(const unsigned char *in, uint32_t width, uint32_t height, unsigned char *out) {
+	uint32_t i;
+	const unsigned int row = width * 4;
 
 	if ((width == 1) && (height == 1)) {
 		out[0] = in[0];
 		return;
 	}
-	uint32_t i;
-
-	const unsigned int row = width * 4;
 	width >>= 1;
 	height >>= 1;
 
@@ -185,24 +183,23 @@ Proper linear filter, no error checking
 ================
 */
 void R_MipMap2(const unsigned char *in, uint32_t inWidth, uint32_t inHeight, unsigned char *out) {
-
 	int i, j;
-
-	if ((inWidth == 1) && (inHeight == 1)) {
-		out[0] = in[0];
-		return;
-	}
-	// ri.Printf (PRINT_ALL, "\n---R_MipMap2---\n");
-	// Not run time funs, can be used for best view effects
-
 	unsigned int outWidth = inWidth >> 1;
 	unsigned int outHeight = inHeight >> 1;
 	unsigned int nBytes = outWidth * outHeight * 4;
-
-	unsigned char *temp = (unsigned char *)ri.Hunk_AllocateTempMemory(nBytes);
-
 	const unsigned int inWidthMask = inWidth - 1;
 	const unsigned int inHeightMask = inHeight - 1;
+	unsigned char *temp;
+
+	if (inWidth == 1 && inHeight == 1) {
+		out[0] = in[0];
+		return;
+	}
+	
+	// ri.Printf (PRINT_ALL, "\n---R_MipMap2---\n");
+	// Not run time funs, can be used for best view effects
+
+	temp = (unsigned char *)ri.Hunk_AllocateTempMemory(nBytes);
 
 	for (i = 0; i < outHeight; i++) {
 		for (j = 0; j < outWidth; j++) {

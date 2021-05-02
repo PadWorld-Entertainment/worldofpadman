@@ -38,7 +38,7 @@ struct Vk_Sampler_Def {
 #define GL_LINEAR_MIPMAP_LINEAR 0x2703
 #endif
 
-const static textureMode_t texModes[] = {{"GL_NEAREST", GL_NEAREST, GL_NEAREST},
+static const textureMode_t texModes[] = {{"GL_NEAREST", GL_NEAREST, GL_NEAREST},
 										 {"GL_LINEAR", GL_LINEAR, GL_LINEAR},
 										 {"GL_NEAREST_MIPMAP_NEAREST", GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST},
 										 {"GL_LINEAR_MIPMAP_NEAREST", GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR},
@@ -83,6 +83,16 @@ void vk_set_sampler(int m) {
 
 VkSampler vk_find_sampler(VkBool32 mipmap, VkBool32 repeat_texture) {
 	struct Vk_Sampler_Def sampler_def;
+	uint32_t i;
+	VkSamplerAddressMode address_mode =
+		repeat_texture ? VK_SAMPLER_ADDRESS_MODE_REPEAT : VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	VkFilter mag_filter;
+	VkFilter min_filter;
+	VkSamplerMipmapMode mipmap_mode;
+	qboolean max_lod_0_25 = qfalse; // used to emulate OpenGL's GL_LINEAR/GL_NEAREST minification filter
+	VkSamplerCreateInfo desc;
+	VkSampler sampler;
+
 	memset(&sampler_def, 0, sizeof(sampler_def));
 
 	sampler_def.repeat_texture = repeat_texture;
@@ -95,7 +105,6 @@ VkSampler vk_find_sampler(VkBool32 mipmap, VkBool32 repeat_texture) {
 	}
 
 	// Look for sampler among existing samplers.
-	uint32_t i;
 	for (i = 0; i < s_NumSamplers; i++) {
 		if ((s_SamplerDefs[i].repeat_texture == sampler_def.repeat_texture) &&
 			(s_SamplerDefs[i].gl_mag_filter == sampler_def.gl_mag_filter) &&
@@ -110,10 +119,6 @@ VkSampler vk_find_sampler(VkBool32 mipmap, VkBool32 repeat_texture) {
 		ri.Error(ERR_DROP, "vk_find_sampler: MAX_VK_SAMPLERS hit\n");
 	}
 
-	VkSamplerAddressMode address_mode =
-		repeat_texture ? VK_SAMPLER_ADDRESS_MODE_REPEAT : VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-
-	VkFilter mag_filter;
 	if (sampler_def.gl_mag_filter == GL_NEAREST) {
 		mag_filter = VK_FILTER_NEAREST;
 	} else if (sampler_def.gl_mag_filter == GL_LINEAR) {
@@ -122,9 +127,6 @@ VkSampler vk_find_sampler(VkBool32 mipmap, VkBool32 repeat_texture) {
 		ri.Error(ERR_FATAL, "vk_find_sampler: invalid gl_mag_filter");
 	}
 
-	VkFilter min_filter;
-	VkSamplerMipmapMode mipmap_mode;
-	qboolean max_lod_0_25 = qfalse; // used to emulate OpenGL's GL_LINEAR/GL_NEAREST minification filter
 	if (sampler_def.gl_min_filter == GL_NEAREST) {
 		min_filter = VK_FILTER_NEAREST;
 		mipmap_mode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
@@ -149,7 +151,6 @@ VkSampler vk_find_sampler(VkBool32 mipmap, VkBool32 repeat_texture) {
 		ri.Error(ERR_FATAL, "vk_find_sampler: invalid gl_min_filter");
 	}
 
-	VkSamplerCreateInfo desc;
 	desc.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
 	desc.pNext = NULL;
 	desc.flags = 0;
@@ -169,7 +170,6 @@ VkSampler vk_find_sampler(VkBool32 mipmap, VkBool32 repeat_texture) {
 	desc.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
 	desc.unnormalizedCoordinates = VK_FALSE;
 
-	VkSampler sampler;
 	VK_CHECK(qvkCreateSampler(vk.device, &desc, NULL, &sampler));
 
 	s_ImgSamplers[s_NumSamplers++] = sampler;

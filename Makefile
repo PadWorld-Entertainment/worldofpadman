@@ -1802,7 +1802,7 @@ Q3VKOBJ = \
   $(B)/renderer_vulkan/tr_bsp.o \
   $(B)/renderer_vulkan/tr_cmds.o \
   $(B)/renderer_vulkan/tr_curve.o \
-  $(B)/renderer_vulkan/tr_fonts.o \
+  $(B)/renderer_vulkan/tr_font.o \
   $(B)/renderer_vulkan/tr_image.o \
   $(B)/renderer_vulkan/tr_findshader.o \
   $(B)/renderer_vulkan/tr_listshader.o \

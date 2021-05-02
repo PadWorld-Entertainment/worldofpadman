@@ -117,12 +117,13 @@ static int R_IQMLerpTag(orientation_t *tag, iqmData_t *data, int startFrame, int
 }
 
 int RE_LerpTag(orientation_t *tag, qhandle_t handle, int startFrame, int endFrame, float frac, const char *tagName) {
-
-	// ri.Printf(PRINT_ALL, "R_LerpTag\n");
-
+	uint32_t i;
 	md3Tag_t *start, *end;
 	md3Tag_t start_space, end_space;
 	model_t *model = R_GetModelByHandle(handle);
+
+	// ri.Printf(PRINT_ALL, "R_LerpTag\n");
+
 	if (!model->md3[0]) {
 		if (model->type == MOD_MDR) {
 			start = R_GetAnimTag((mdrHeader_t *)model->modelData, startFrame, tagName, &start_space);
@@ -142,7 +143,6 @@ int RE_LerpTag(orientation_t *tag, qhandle_t handle, int startFrame, int endFram
 		return qfalse;
 	}
 
-	uint32_t i;
 	for (i = 0; i < 3; i++) {
 		tag->origin[i] = start->origin[i] + (end->origin[i] - start->origin[i]) * frac;
 		tag->axis[0][i] = start->axis[0][i] + (end->axis[0][i] - start->axis[0][i]) * frac;

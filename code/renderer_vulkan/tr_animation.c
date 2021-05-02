@@ -117,18 +117,20 @@ static int R_MDRCullModel(mdrHeader_t *header, trRefEntity_t *ent) {
 
 static int R_MDRComputeFogNum(mdrHeader_t *header, trRefEntity_t *ent) {
 	vec3_t localOrigin;
+	int frameSize;
+	int i, j;
+	mdrFrame_t *mdrFrame;
 
 	if (tr.refdef.rd.rdflags & RDF_NOWORLDMODEL) {
 		return 0;
 	}
 
-	int frameSize = (size_t)(&((mdrFrame_t *)0)->bones[header->numBones]);
+	frameSize = (size_t)(&((mdrFrame_t *)0)->bones[header->numBones]);
 
 	// FIXME: non-normalized axis issues
-	mdrFrame_t *mdrFrame = (mdrFrame_t *)((byte *)header + header->ofsFrames + frameSize * ent->e.frame);
+	mdrFrame = (mdrFrame_t *)((byte *)header + header->ofsFrames + frameSize * ent->e.frame);
 	VectorAdd(ent->e.origin, mdrFrame->localOrigin, localOrigin);
 
-	int i, j;
 	for (i = 1; i < tr.world->numfogs; i++) {
 		fog_t *fog = &tr.world->fogs[i];
 		for (j = 0; j < 3; j++) {
@@ -150,7 +152,12 @@ static int R_MDRComputeFogNum(mdrHeader_t *header, trRefEntity_t *ent) {
 
 void R_MDRAddAnimSurfaces(trRefEntity_t *ent) {
 	shader_t *shader;
+	mdrSurface_t *surface;
+	mdrLOD_t *lod;
 	int i, j;
+	int lodnum = 0;
+	int cull;
+	int fogNum;
 
 	mdrHeader_t *header = (mdrHeader_t *)tr.currentModel->modelData;
 	qboolean personalModel = (ent->e.renderfx & RF_THIRD_PERSON) && !tr.viewParms.isPortal;
@@ -177,14 +184,12 @@ void R_MDRAddAnimSurfaces(trRefEntity_t *ent) {
 	// cull the entire model if merged bounding box of both frames
 	// is outside the view frustum.
 	//
-	int cull = R_MDRCullModel(header, ent);
+	cull = R_MDRCullModel(header, ent);
 	if (cull == CULL_OUT) {
 		return;
 	}
 
 	// figure out the current LOD of the model we're rendering, and set the lod pointer respectively.
-	int lodnum = 0;
-
 	if (tr.currentModel->numLods > 1)
 		lodnum = R_ComputeLOD(ent);
 
@@ -194,7 +199,7 @@ void R_MDRAddAnimSurfaces(trRefEntity_t *ent) {
 	if (header->numLODs <= lodnum)
 		lodnum = header->numLODs - 1;
 
-	mdrLOD_t *lod = (mdrLOD_t *)((unsigned char *)header + header->ofsLODs);
+	lod = (mdrLOD_t *)((unsigned char *)header + header->ofsLODs);
 	for (i = 0; i < lodnum; i++) {
 		lod = (mdrLOD_t *)((unsigned char *)lod + lod->ofsEnd);
 	}
@@ -205,9 +210,9 @@ void R_MDRAddAnimSurfaces(trRefEntity_t *ent) {
 	}
 
 	// fogNum?
-	int fogNum = R_MDRComputeFogNum(header, ent);
+	fogNum = R_MDRComputeFogNum(header, ent);
 
-	mdrSurface_t *surface = (mdrSurface_t *)((unsigned char *)lod + lod->ofsSurfaces);
+	surface = (mdrSurface_t *)((unsigned char *)lod + lod->ofsSurfaces);
 
 	for (i = 0; i < lod->numSurfaces; i++) {
 		if (ent->e.customShader)

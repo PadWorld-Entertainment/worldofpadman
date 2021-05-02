@@ -46,8 +46,10 @@ static cvar_t *r_displayIndex;
 static void VKimp_DetectAvailableModes(void) {
 	int i, j;
 	char buf[MAX_STRING_CHARS] = {0};
-
+	int numSDLModes;
+	int numModes = 0;
 	SDL_DisplayMode windowMode;
+	SDL_Rect *modes;
 
 	// If a window exists, note its display index
 	if (window_sdl != NULL) {
@@ -58,15 +60,14 @@ static void VKimp_DetectAvailableModes(void) {
 		}
 	}
 
-	int numSDLModes = SDL_GetNumDisplayModes(r_displayIndex->integer);
+	numSDLModes = SDL_GetNumDisplayModes(r_displayIndex->integer);
 
 	if (SDL_GetWindowDisplayMode(window_sdl, &windowMode) < 0 || numSDLModes <= 0) {
 		ri.Printf(PRINT_ALL, "Couldn't get window display mode, no resolutions detected: %s\n", SDL_GetError());
 		return;
 	}
 
-	int numModes = 0;
-	SDL_Rect *modes = SDL_calloc(numSDLModes, sizeof(SDL_Rect));
+	modes = SDL_calloc(numSDLModes, sizeof(SDL_Rect));
 	if (!modes) {
 		ri.Error(ERR_FATAL, "Out of memory");
 	}
@@ -120,8 +121,11 @@ static void VKimp_DetectAvailableModes(void) {
 
 static int VKimp_SetMode(int mode, qboolean fullscreen) {
 	SDL_DisplayMode desktopMode;
-
+	int display_mode_count;
 	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN;
+	int tmp;
+	int width = 640;
+	int height = 480;
 
 	if (r_allowResize->integer)
 		flags |= SDL_WINDOW_RESIZABLE;
@@ -130,13 +134,13 @@ static int VKimp_SetMode(int mode, qboolean fullscreen) {
 
 	SDL_GetNumVideoDisplays();
 
-	int display_mode_count = SDL_GetNumDisplayModes(r_displayIndex->integer);
+	display_mode_count = SDL_GetNumDisplayModes(r_displayIndex->integer);
 	if (display_mode_count < 1) {
 		ri.Printf(PRINT_ALL, " SDL_GetNumDisplayModes failed: %s", SDL_GetError());
 	}
 
-	int tmp = SDL_GetDesktopDisplayMode(r_displayIndex->integer, &desktopMode);
-	if ((tmp == 0) && (desktopMode.h > 0)) {
+	tmp = SDL_GetDesktopDisplayMode(r_displayIndex->integer, &desktopMode);
+	if (tmp == 0 && desktopMode.h > 0) {
 		Uint32 f = desktopMode.format;
 		ri.Printf(PRINT_ALL, " bpp %i\t%s\t%i x %i, refresh_rate: %dHz\n", SDL_BITSPERPIXEL(f),
 				  SDL_GetPixelFormatName(f), desktopMode.w, desktopMode.h, desktopMode.refresh_rate);
@@ -167,9 +171,6 @@ static int VKimp_SetMode(int mode, qboolean fullscreen) {
 		ri.Printf(PRINT_ALL, "Existing window being destroyed\n");
 	}
 
-	int width = 640;
-	int height = 480;
-
 	R_GetWinResolution(&width, &height);
 
 	window_sdl =
@@ -188,17 +189,18 @@ static int VKimp_SetMode(int mode, qboolean fullscreen) {
  * This routine is responsible for initializing the OS specific portions of Vulkan
  */
 void vk_createWindow(void) {
-	ri.Printf(PRINT_ALL, "\n...Creating window (using SDL2)...\n");
-
-	// Print SDL2 Version ....
 	SDL_version v;
 	SDL_version *sdl_version = &v;
+	SDL_Surface *icon;
+
+	ri.Printf(PRINT_ALL, "\n...Creating window (using SDL2)...\n");
 	SDL_GetVersion(&v);
+
 	ri.Printf(PRINT_ALL, " Found SDL version %i.%i.%i\n", sdl_version->major, sdl_version->minor, sdl_version->patch);
 
 	r_displayIndex = ri.Cvar_Get("r_displayIndex", "0", CVAR_ARCHIVE | CVAR_LATCH);
 
-	SDL_Surface *icon = SDL_CreateRGBSurfaceFrom((void *)CLIENT_WINDOW_ICON.pixel_data, CLIENT_WINDOW_ICON.width,
+	icon = SDL_CreateRGBSurfaceFrom((void *)CLIENT_WINDOW_ICON.pixel_data, CLIENT_WINDOW_ICON.width,
 												 CLIENT_WINDOW_ICON.height, CLIENT_WINDOW_ICON.bytes_per_pixel * 8,
 												 CLIENT_WINDOW_ICON.bytes_per_pixel * CLIENT_WINDOW_ICON.width,
 #ifdef Q3_LITTLE_ENDIAN
@@ -258,8 +260,8 @@ success:
 }
 
 void vk_getInstanceProcAddrImpl(void) {
-	ri.Printf(PRINT_ALL, " *** Vulkan Initialization ***\n");
 	int code = SDL_Vulkan_LoadLibrary(NULL);
+	ri.Printf(PRINT_ALL, " *** Vulkan Initialization ***\n");
 	if (code) {
 		ri.Error(ERR_FATAL, "Failed to load Vulkan library (code %d): %s", code, SDL_GetError());
 	}
@@ -267,7 +269,7 @@ void vk_getInstanceProcAddrImpl(void) {
 
 	qvkGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)SDL_Vulkan_GetVkGetInstanceProcAddr();
 	if (qvkGetInstanceProcAddr == NULL) {
-		ri.Error(ERR_FATAL, "Failed to find entrypoint vkGetInstanceProcAddr\n");
+		ri.Error(ERR_FATAL, "Failed to find entrypoint vkGetInstanceProcAddr");
 	}
 
 	ri.Printf(PRINT_ALL, " Get instance proc address. (using SDL2)\n");
@@ -288,7 +290,7 @@ void vk_createSurfaceImpl(void) {
 
 	if (!SDL_Vulkan_CreateSurface(window_sdl, vk.instance, &vk.surface)) {
 		vk.surface = VK_NULL_HANDLE;
-		ri.Error(ERR_FATAL, "SDL_Vulkan_CreateSurface(): %s\n", SDL_GetError());
+		ri.Error(ERR_FATAL, "SDL_Vulkan_CreateSurface(): %s", SDL_GetError());
 	}
 }
 
@@ -299,9 +301,9 @@ Minimize the game so that user is back at the desktop
 */
 void vk_minimizeWindow(void) {
 	VkBool32 toggleWorked = 1;
-	ri.Printf(PRINT_ALL, " Minimizing Window (SDL). \n");
-
 	VkBool32 isWinFullscreen = (SDL_GetWindowFlags(window_sdl) & SDL_WINDOW_FULLSCREEN);
+
+	ri.Printf(PRINT_ALL, " Minimizing Window (SDL).\n");
 
 	if (isWinFullscreen) {
 		toggleWorked = (SDL_SetWindowFullscreen(window_sdl, 0) >= 0);
@@ -320,33 +322,30 @@ void vk_minimizeWindow(void) {
 }
 
 /*
-	if( r_fullscreen->modified )
-	{
-		qboolean    needToToggle;
-		qboolean    sdlToggled = qfalse;
+	if (r_fullscreen->modified) {
+		qboolean needToToggle;
+		qboolean sdlToggled = qfalse;
 
 		// Find out the current state
-		int fullscreen = !!( SDL_GetWindowFlags( window_sdl ) & SDL_WINDOW_FULLSCREEN );
+		int fullscreen = !!(SDL_GetWindowFlags(window_sdl) & SDL_WINDOW_FULLSCREEN);
 
-		if( r_fullscreen->integer && ri.Cvar_VariableIntegerValue( "in_nograb" ) )
-		{
-			ri.Printf( PRINT_ALL, "Fullscreen not allowed with in_nograb 1\n");
-			ri.Cvar_Set( "r_fullscreen", "0" );
+		if (r_fullscreen->integer && ri.Cvar_VariableIntegerValue("in_nograb")) {
+			ri.Printf(PRINT_ALL, "Fullscreen not allowed with in_nograb 1\n");
+			ri.Cvar_Set("r_fullscreen", "0");
 			r_fullscreen->modified = qfalse;
 		}
 
 		// Is the state we want different from the current state?
 		needToToggle = !!r_fullscreen->integer != fullscreen;
 
-		if( needToToggle )
-		{
-			sdlToggled = SDL_SetWindowFullscreen( window_sdl, r_fullscreen->integer ) >= 0;
+		if (needToToggle) {
+			sdlToggled = SDL_SetWindowFullscreen(window_sdl, r_fullscreen->integer) >= 0;
 
 			// SDL_WM_ToggleFullScreen didn't work, so do it the slow way
-			if( !sdlToggled )
+			if (!sdlToggled)
 				ri.Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
 
-			ri.IN_Restart( );
+			ri.IN_Restart();
 		}
 
 		r_fullscreen->modified = qfalse;

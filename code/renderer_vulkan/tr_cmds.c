@@ -87,11 +87,12 @@ Passing NULL will set the color to white
 =============
 */
 void RE_SetColor(const float *rgba) {
+	setColorCommand_t *cmd;
 	if (!tr.registered) {
 		return;
 	}
 
-	setColorCommand_t *cmd = (setColorCommand_t *)R_GetCommandBuffer(sizeof(setColorCommand_t));
+	cmd = (setColorCommand_t *)R_GetCommandBuffer(sizeof(setColorCommand_t));
 	if (!cmd) {
 		return;
 	}
@@ -112,10 +113,11 @@ void RE_SetColor(const float *rgba) {
 }
 
 void RE_StretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader) {
+	stretchPicCommand_t *cmd;
 	if (!tr.registered) {
 		return;
 	}
-	stretchPicCommand_t *cmd = (stretchPicCommand_t *)R_GetCommandBuffer(sizeof(stretchPicCommand_t));
+	cmd = (stretchPicCommand_t *)R_GetCommandBuffer(sizeof(stretchPicCommand_t));
 	if (!cmd) {
 		return;
 	}
@@ -132,7 +134,7 @@ void RE_StretchPic(float x, float y, float w, float h, float s1, float t1, float
 }
 
 void RE_BeginFrame(stereoFrame_t stereoFrame) {
-
+	drawBufferCommand_t *cmd;
 	if (!tr.registered) {
 		return;
 	}
@@ -140,7 +142,7 @@ void RE_BeginFrame(stereoFrame_t stereoFrame) {
 	// use the other buffers next frame, because another CPU
 	// may still be rendering into the current ones
 	// draw buffer stuff
-	drawBufferCommand_t *cmd = (drawBufferCommand_t *)R_GetCommandBuffer(sizeof(drawBufferCommand_t));
+	cmd = (drawBufferCommand_t *)R_GetCommandBuffer(sizeof(drawBufferCommand_t));
 	if (!cmd) {
 		return;
 	}
@@ -155,10 +157,11 @@ Returns the number of msec spent in the back end
 =============
 */
 void RE_EndFrame(int *frontEndMsec, int *backEndMsec) {
+	swapBuffersCommand_t *cmd;
 	if (!tr.registered) {
 		return;
 	}
-	swapBuffersCommand_t *cmd = (swapBuffersCommand_t *)R_GetCommandBuffer(sizeof(swapBuffersCommand_t));
+	cmd = (swapBuffersCommand_t *)R_GetCommandBuffer(sizeof(swapBuffersCommand_t));
 	if (!cmd) {
 		return;
 	}
@@ -189,6 +192,11 @@ static void RB_RenderDrawSurfList(drawSurf_t *drawSurfs, int numDrawSurfs) {
 	int dlighted, oldDlighted;
 	// save original time for entity shader offsets
 	float originalTime = backEnd.refdef.floatTime;
+	int entityNum;
+	int oldEntityNum = -1;
+	int oldSort = -1;
+	drawSurf_t *drawSurf;
+	int i;
 
 	// Any mirrored or portaled views have already been drawn,
 	// so prepare to actually render the visible surfaces for this view
@@ -219,19 +227,12 @@ static void RB_RenderDrawSurfList(drawSurf_t *drawSurfs, int numDrawSurfs) {
 	}
 
 	// draw everything
-	int entityNum;
-	int oldEntityNum = -1;
 	backEnd.currentEntity = &tr.worldEntity;
 	oldShader = NULL;
 	oldFogNum = -1;
 	oldDlighted = qfalse;
-	int oldSort = -1;
 
 	backEnd.pc.c_surfaces += numDrawSurfs;
-
-	drawSurf_t *drawSurf;
-
-	int i;
 
 	for (i = 0, drawSurf = drawSurfs; i < numDrawSurfs; i++, drawSurf++) {
 		if ((int)drawSurf->sort == oldSort) {
@@ -313,15 +314,19 @@ static void RB_RenderDrawSurfList(drawSurf_t *drawSurfs, int numDrawSurfs) {
 }
 
 void RB_StretchPic(const stretchPicCommand_t *const cmd) {
+	uint32_t numIndexes;
+	unsigned int n0;
+	unsigned int n1;
+	unsigned int n2;
+	unsigned int n3;
 
 	if (qfalse == backEnd.projection2D) {
+		int t = ri.Milliseconds();
 
 		backEnd.projection2D = qtrue;
 
 		// set 2D virtual screen size
 		// set time for 2D shaders
-		int t = ri.Milliseconds();
-
 		backEnd.refdef.rd.time = t;
 		backEnd.refdef.floatTime = t * 0.001f;
 	}
@@ -336,12 +341,12 @@ void RB_StretchPic(const stretchPicCommand_t *const cmd) {
 
 	RB_CHECKOVERFLOW(4, 6);
 
-	const unsigned int n0 = tess.numVertexes;
-	const unsigned int n1 = n0 + 1;
-	const unsigned int n2 = n0 + 2;
-	const unsigned int n3 = n0 + 3;
+	n0 = tess.numVertexes;
+	n1 = n0 + 1;
+	n2 = n0 + 2;
+	n3 = n0 + 3;
 
-	uint32_t numIndexes = tess.numIndexes;
+	numIndexes = tess.numIndexes;
 
 	tess.indexes[numIndexes] = n3;
 	tess.indexes[numIndexes + 1] = n0;
@@ -388,7 +393,6 @@ void RB_StretchPic(const stretchPicCommand_t *const cmd) {
 }
 
 static void R_PerformanceCounters(void) {
-
 	if (r_speeds->integer == 1) {
 		ri.Printf(PRINT_ALL, "%i/%i shaders/surfs %i leafs %i verts %i/%i tris\n", backEnd.pc.c_shaders,
 				  backEnd.pc.c_surfaces, tr.pc.c_leafs, backEnd.pc.c_vertexes, backEnd.pc.c_indexes / 3,
@@ -420,6 +424,8 @@ smp extensions, or asynchronously by another thread.
 ====================
 */
 void R_IssueRenderCommands(qboolean runPerformanceCounters) {
+	int t1;
+	const void *data;
 
 	if (runPerformanceCounters) {
 		R_PerformanceCounters();
@@ -428,12 +434,12 @@ void R_IssueRenderCommands(qboolean runPerformanceCounters) {
 	// actually start the commands going
 	// let it start on the new batch
 	// RB_ExecuteRenderCommands( cmdList->cmds );
-	int t1 = ri.Milliseconds();
+	t1 = ri.Milliseconds();
 
 	// add an end-of-list command
 	*(int *)(BE_Commands.cmds + BE_Commands.used) = RC_END_OF_LIST;
 
-	const void *data = BE_Commands.cmds;
+	data = BE_Commands.cmds;
 
 	while (1) {
 		const int T = *(const int *)data;

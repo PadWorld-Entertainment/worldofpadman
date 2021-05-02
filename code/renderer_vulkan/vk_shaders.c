@@ -43,10 +43,10 @@ static struct StageShaderModuleManager s_gShaderModules;
 // and craete VkShaderModule from it
 
 static void create_shader_module(const unsigned char *pBytes, const int count, VkShaderModule *pVkShaderMod) {
+	VkShaderModuleCreateInfo desc;
 	if (count % 4 != 0) {
 		ri.Error(ERR_FATAL, "Vulkan: SPIR-V binary buffer size is not multiple of 4");
 	}
-	VkShaderModuleCreateInfo desc;
 	desc.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 	desc.pNext = NULL;
 	desc.flags = 0;
@@ -60,40 +60,36 @@ static void create_shader_module(const unsigned char *pBytes, const int count, V
 // The shaders aren't linked to each other yet and they haven't even been given
 // a purpose yet.
 void vk_loadShaderModules(void) {
-
 	extern unsigned char single_texture_vert_spv[];
 	extern int single_texture_vert_spv_size;
-
-	create_shader_module(single_texture_vert_spv, single_texture_vert_spv_size, &s_gShaderModules.single_texture_vs);
-
 	extern unsigned char single_texture_clipping_plane_vert_spv[];
 	extern int single_texture_clipping_plane_vert_spv_size;
+	extern unsigned char single_texture_frag_spv[];
+	extern int single_texture_frag_spv_size;
+	extern unsigned char multi_texture_vert_spv[];
+	extern int multi_texture_vert_spv_size;
+	extern unsigned char multi_texture_clipping_plane_vert_spv[];
+	extern int multi_texture_clipping_plane_vert_spv_size;
+	extern unsigned char multi_texture_mul_frag_spv[];
+	extern int multi_texture_mul_frag_spv_size;
+	extern unsigned char multi_texture_add_frag_spv[];
+	extern int multi_texture_add_frag_spv_size;
+
+	create_shader_module(single_texture_vert_spv, single_texture_vert_spv_size, &s_gShaderModules.single_texture_vs);
 
 	create_shader_module(single_texture_clipping_plane_vert_spv, single_texture_clipping_plane_vert_spv_size,
 						 &s_gShaderModules.single_texture_clipping_plane_vs);
 
-	extern unsigned char single_texture_frag_spv[];
-	extern int single_texture_frag_spv_size;
-
 	create_shader_module(single_texture_frag_spv, single_texture_frag_spv_size, &s_gShaderModules.single_texture_fs);
-
-	extern unsigned char multi_texture_vert_spv[];
-	extern int multi_texture_vert_spv_size;
 
 	create_shader_module(multi_texture_vert_spv, multi_texture_vert_spv_size, &s_gShaderModules.multi_texture_vs);
 
-	extern unsigned char multi_texture_clipping_plane_vert_spv[];
-	extern int multi_texture_clipping_plane_vert_spv_size;
 	create_shader_module(multi_texture_clipping_plane_vert_spv, multi_texture_clipping_plane_vert_spv_size,
 						 &s_gShaderModules.multi_texture_clipping_plane_vs);
 
-	extern unsigned char multi_texture_mul_frag_spv[];
-	extern int multi_texture_mul_frag_spv_size;
 	create_shader_module(multi_texture_mul_frag_spv, multi_texture_mul_frag_spv_size,
 						 &s_gShaderModules.multi_texture_mul_fs);
 
-	extern unsigned char multi_texture_add_frag_spv[];
-	extern int multi_texture_add_frag_spv_size;
 	create_shader_module(multi_texture_add_frag_spv, multi_texture_add_frag_spv_size,
 						 &s_gShaderModules.multi_texture_add_fs);
 }

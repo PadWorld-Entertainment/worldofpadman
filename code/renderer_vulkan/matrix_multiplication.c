@@ -260,6 +260,7 @@ void PointRotateAroundVector(float *res, const float *vec, const float *p, const
 	float cos_th = cos(rad);
 	float sin_th = sin(rad);
 	float k[3];
+	float d;
 
 	// writing it this way allows gcc to recognize that rsqrt can be used
 	float invLen = 1.0f / sqrtf(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
@@ -267,7 +268,7 @@ void PointRotateAroundVector(float *res, const float *vec, const float *p, const
 	k[1] = vec[1] * invLen;
 	k[2] = vec[2] * invLen;
 
-	float d = (1 - cos_th) * (p[0] * k[0] + p[1] * k[1] + p[2] * k[2]);
+	d = (1 - cos_th) * (p[0] * k[0] + p[1] * k[1] + p[2] * k[2]);
 
 	res[0] = sin_th * (k[1] * p[2] - k[2] * p[1]);
 	res[1] = sin_th * (k[2] * p[0] - k[0] * p[2]);
@@ -300,6 +301,7 @@ void RotateAroundUnitVector(float *res, const float *k, const float *p, const fl
 // dst: unit vector which perpendicular of forward(src)
 void VectorPerp(const float src[3], float dst[3]) {
 	float unit[3];
+	float invLen, d;
 
 	float sqlen = src[0] * src[0] + src[1] * src[1] + src[2] * src[2];
 	if (0 == sqlen) {
@@ -315,12 +317,12 @@ void VectorPerp(const float src[3], float dst[3]) {
 	// forward = (1/sqrt(3), 1/sqrt(3), -1/sqrt(3)),
 	// then right = (-1/sqrt(3), -1/sqrt(3), 1/sqrt(3))
 
-	float invLen = 1.0f / sqrtf(sqlen);
+	invLen = 1.0f / sqrtf(sqlen);
 	unit[0] = src[0] * invLen;
 	unit[1] = src[1] * invLen;
 	unit[2] = src[2] * invLen;
 
-	float d = DotProduct(unit, dst);
+	d = DotProduct(unit, dst);
 	dst[0] -= d * unit[0];
 	dst[1] -= d * unit[1];
 	dst[2] -= d * unit[2];
@@ -338,16 +340,16 @@ void VectorPerp(const float src[3], float dst[3]) {
 // after this funtion is called , forward are nornalized.
 // right, up: perpendicular of forward
 float MakeTwoPerpVectors(const float forward[3], float right[3], float up[3]) {
-
 	float sqLen = forward[0] * forward[0] + forward[1] * forward[1] + forward[2] * forward[2];
 	if (sqLen) {
 		float nf[3] = {0, 0, 1};
 		float invLen = 1.0f / sqrtf(sqLen);
+		float adjlen;
 		nf[0] = forward[0] * invLen;
 		nf[1] = forward[1] * invLen;
 		nf[2] = forward[2] * invLen;
 
-		float adjlen = DotProduct(nf, right);
+		adjlen = DotProduct(nf, right);
 
 		// this rotate and negate guarantees a vector
 		// not colinear with the original
@@ -370,7 +372,6 @@ float MakeTwoPerpVectors(const float forward[3], float right[3], float up[3]) {
 
 void TransformModelToClip_SSE(const float src[3], const float pMatModel[16], const float pMatProj[16], float dst[4]) {
 #if defined __x86_64__
-
 	float AugSrc[4] = {src[0], src[1], src[2], 1.0f};
 
 	__m128 row1 = _mm_load_ps(&pMatProj[0]);
@@ -398,99 +399,4 @@ void TransformModelToClip_SSE(const float src[3], const float pMatModel[16], con
 	float eye[4];
 	TransformModelToClip(src, pMatModel, pMatProj, eye, dst);
 #endif
-
-	//    print4f("AugSrc", AugSrc);
-	//    printMat4x4f("MatModel", pMatModel);
-	//    printMat4x4f("MatProj", pMatProj);
-	//    MatrixMultiply4x4_SSE(pMatModel, pMatProj, mvp);
-	//    Mat4x1Transform_SSE(mvp, AugSrc, dst);
-	//    print4f("dst", dst);
 }
-
-/*
-
-void TransformModelToClip_SSE2( const float x[3], const float pMatModel[16], const float pMatProj[16], float dst[4] )
-{
-
-	// 7/8 broadcaster, 8 load, 7/8 mult, 6 add
-
-	__m128 row = _mm_add_ps(
-			_mm_add_ps( _mm_mul_ps( _mm_set1_ps(x[0]), _mm_load_ps(pMatModel   ) ) ,
-						_mm_mul_ps( _mm_set1_ps(x[1]), _mm_load_ps(pMatModel+4 ) ) )
-			,
-			_mm_add_ps( _mm_mul_ps( _mm_set1_ps(x[2]), _mm_load_ps(pMatModel+8 ) ) ,
-													   _mm_load_ps(pMatModel+12) ) );
-	_mm_store_ps(dst, _mm_add_ps(
-			_mm_add_ps( _mm_mul_ps( _mm_set1_ps(row[0]), _mm_load_ps(pMatProj   ) ) ,
-						_mm_mul_ps( _mm_set1_ps(row[1]), _mm_load_ps(pMatProj+4 ) ) )
-			,
-			_mm_add_ps( _mm_mul_ps( _mm_set1_ps(row[2]), _mm_load_ps(pMatProj+8 ) ) ,
-						_mm_mul_ps( _mm_set1_ps(row[3]), _mm_load_ps(pMatProj+12) ) ) )
-				);
-
-
-//    _mm_store_ps(dst, row);
-
-//    Mat4x1Transform_SSE(pMatModel, AugSrc, eye);
-//    Mat4x1Transform_SSE(pMatProj, eye, dst);
-}
-
-*/
-
-// ===============================================
-// not used now
-// ===============================================
-
-/*
-void Mat4SimpleInverse( const float in[16], float out[16])
-{
-	float v[3];
-	float invSqrLen;
-
-	VectorCopy(in + 0, v);
-	invSqrLen = 1.0f / DotProduct(v, v); VectorScale(v, invSqrLen, v);
-	out[ 0] = v[0]; out[ 4] = v[1]; out[ 8] = v[2]; out[12] = -DotProduct(v, &in[12]);
-
-	VectorCopy(in + 4, v);
-	invSqrLen = 1.0f / DotProduct(v, v); VectorScale(v, invSqrLen, v);
-	out[ 1] = v[0]; out[ 5] = v[1]; out[ 9] = v[2]; out[13] = -DotProduct(v, &in[12]);
-
-	VectorCopy(in + 8, v);
-	invSqrLen = 1.0f / DotProduct(v, v); VectorScale(v, invSqrLen, v);
-	out[ 2] = v[0]; out[ 6] = v[1]; out[10] = v[2]; out[14] = -DotProduct(v, &in[12]);
-
-	out[ 3] = 0.0f; out[ 7] = 0.0f; out[11] = 0.0f; out[15] = 1.0f;
-}
-
-
-void Mat4Dump( const float in[16] )
-{
-	printf( "%3.5f %3.5f %3.5f %3.5f\n", in[ 0], in[ 4], in[ 8], in[12]);
-	printf( "%3.5f %3.5f %3.5f %3.5f\n", in[ 1], in[ 5], in[ 9], in[13]);
-	printf( "%3.5f %3.5f %3.5f %3.5f\n", in[ 2], in[ 6], in[10], in[14]);
-	printf( "%3.5f %3.5f %3.5f %3.5f\n", in[ 3], in[ 7], in[11], in[15]);
-}
-
-void Mat4View(vec3_t axes[3], vec3_t origin, mat4_t out)
-{
-	out[0]  = axes[0][0];
-	out[1]  = axes[1][0];
-	out[2]  = axes[2][0];
-	out[3]  = 0;
-
-	out[4]  = axes[0][1];
-	out[5]  = axes[1][1];
-	out[6]  = axes[2][1];
-	out[7]  = 0;
-
-	out[8]  = axes[0][2];
-	out[9]  = axes[1][2];
-	out[10] = axes[2][2];
-	out[11] = 0;
-
-	out[12] = -DotProduct(origin, axes[0]);
-	out[13] = -DotProduct(origin, axes[1]);
-	out[14] = -DotProduct(origin, axes[2]);
-	out[15] = 1;
-}
-*/

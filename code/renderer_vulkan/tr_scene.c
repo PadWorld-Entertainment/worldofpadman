@@ -82,6 +82,9 @@ void R_InitNextFrame(void) {
 }
 
 void R_InitScene(void) {
+	unsigned int len;
+	char *ptr;
+
 	max_polys = r_maxpolys->integer;
 	if (max_polys < MAX_POLYS)
 		max_polys = MAX_POLYS;
@@ -90,9 +93,9 @@ void R_InitScene(void) {
 	if (max_polyverts < MAX_POLYVERTS)
 		max_polyverts = MAX_POLYVERTS;
 
-	unsigned int len = sizeof(backEndData_t) + sizeof(srfPoly_t) * max_polys + sizeof(polyVert_t) * max_polyverts;
+	len = sizeof(backEndData_t) + sizeof(srfPoly_t) * max_polys + sizeof(polyVert_t) * max_polyverts;
 
-	char *ptr = ri.Hunk_Alloc(len, h_low);
+	ptr = ri.Hunk_Alloc(len, h_low);
 	memset(ptr, 0, len);
 
 	backEndData = (backEndData_t *)ptr;
@@ -298,6 +301,9 @@ to handle mirrors,
 @@@@@@@@@@@@@@@@@@@@@
 */
 void RE_RenderScene(const refdef_t *fd) {
+	int startTime = ri.Milliseconds();
+	viewParms_t parms;
+
 	if (!tr.registered) {
 		return;
 	}
@@ -305,8 +311,6 @@ void RE_RenderScene(const refdef_t *fd) {
 	if (r_norefresh->integer) {
 		return;
 	}
-
-	int startTime = ri.Milliseconds();
 
 	tr.refdef.AreamaskModified = qfalse;
 
@@ -365,7 +369,6 @@ void RE_RenderScene(const refdef_t *fd) {
 	//   |
 	//   |
 	//   y
-	viewParms_t parms;
 	memset(&parms, 0, sizeof(parms));
 
 	parms.viewportX = fd->x;

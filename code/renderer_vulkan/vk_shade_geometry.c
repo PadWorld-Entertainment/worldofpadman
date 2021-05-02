@@ -170,9 +170,14 @@ VkRect2D get_scissor_rect(void) {
 // Host access to buffer must be externally synchronized
 
 void vk_createVertexBuffer(void) {
-	ri.Printf(PRINT_ALL, " Create vertex buffer: shadingDat.vertex_buffer \n");
-
+	VkMemoryRequirements vb_memory_requirements;
+	VkMemoryAllocateInfo alloc_info;
 	VkBufferCreateInfo desc;
+	uint32_t memory_type_bits;
+	void *data;
+
+	ri.Printf(PRINT_DEVELOPER, " Create vertex buffer: shadingDat.vertex_buffer \n");
+
 	desc.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	desc.pNext = NULL;
 	desc.flags = 0;
@@ -185,12 +190,10 @@ void vk_createVertexBuffer(void) {
 
 	VK_CHECK(qvkCreateBuffer(vk.device, &desc, NULL, &shadingDat.vertex_buffer));
 
-	VkMemoryRequirements vb_memory_requirements;
 	qvkGetBufferMemoryRequirements(vk.device, shadingDat.vertex_buffer, &vb_memory_requirements);
 
-	uint32_t memory_type_bits = vb_memory_requirements.memoryTypeBits;
+	memory_type_bits = vb_memory_requirements.memoryTypeBits;
 
-	VkMemoryAllocateInfo alloc_info;
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	alloc_info.pNext = NULL;
 	alloc_info.allocationSize = vb_memory_requirements.size;
@@ -210,15 +213,19 @@ void vk_createVertexBuffer(void) {
 
 	qvkBindBufferMemory(vk.device, shadingDat.vertex_buffer, shadingDat.vertex_buffer_memory, 0);
 
-	void *data;
 	VK_CHECK(qvkMapMemory(vk.device, shadingDat.vertex_buffer_memory, 0, VK_WHOLE_SIZE, 0, &data));
 	shadingDat.vertex_buffer_ptr = (unsigned char *)data;
 }
 
 void vk_createIndexBuffer(void) {
-	ri.Printf(PRINT_ALL, " Create index buffer: shadingDat.index_buffer \n");
-
 	VkBufferCreateInfo desc;
+	uint32_t memory_type_bits;
+	VkMemoryRequirements ib_memory_requirements;
+	VkMemoryAllocateInfo alloc_info;
+	void *data;
+
+	ri.Printf(PRINT_DEVELOPER, " Create index buffer: shadingDat.index_buffer \n");
+
 	desc.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	desc.pNext = NULL;
 	desc.flags = 0;
@@ -230,12 +237,10 @@ void vk_createIndexBuffer(void) {
 
 	VK_CHECK(qvkCreateBuffer(vk.device, &desc, NULL, &shadingDat.index_buffer));
 
-	VkMemoryRequirements ib_memory_requirements;
 	qvkGetBufferMemoryRequirements(vk.device, shadingDat.index_buffer, &ib_memory_requirements);
 
-	uint32_t memory_type_bits = ib_memory_requirements.memoryTypeBits;
+	memory_type_bits = ib_memory_requirements.memoryTypeBits;
 
-	VkMemoryAllocateInfo alloc_info;
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	alloc_info.pNext = NULL;
 	alloc_info.allocationSize = ib_memory_requirements.size;
@@ -254,7 +259,6 @@ void vk_createIndexBuffer(void) {
 	VK_CHECK(qvkAllocateMemory(vk.device, &alloc_info, NULL, &shadingDat.index_buffer_memory));
 	qvkBindBufferMemory(vk.device, shadingDat.index_buffer, shadingDat.index_buffer_memory, 0);
 
-	void *data;
 	VK_CHECK(qvkMapMemory(vk.device, shadingDat.index_buffer_memory, 0, VK_WHOLE_SIZE, 0, &data));
 	shadingDat.index_buffer_ptr = (unsigned char *)data;
 }
@@ -289,17 +293,22 @@ void vk_shade_geometry(VkPipeline pipeline, VkBool32 multitexture, enum Vk_Depth
 	VkDeviceSize offs[3] = {COLOR_OFFSET + shadingDat.color_st_elements * sizeof(color4ub_t),
 							ST0_OFFSET + shadingDat.color_st_elements * sizeof(vec2_t),
 							ST1_OFFSET + shadingDat.color_st_elements * sizeof(vec2_t)};
+	unsigned char *dst_color;
+	unsigned char *dst_st0;
+
+	VkViewport viewport;
+	VkRect2D scissor; // = get_scissor_rect();
 
 	// color
 	if ((shadingDat.color_st_elements + tess.numVertexes) * sizeof(color4ub_t) > COLOR_SIZE)
 		ri.Error(ERR_DROP, "vulkan: vertex buffer overflow (color) %ld \n",
 				 (shadingDat.color_st_elements + tess.numVertexes) * sizeof(color4ub_t));
 
-	unsigned char *dst_color = shadingDat.vertex_buffer_ptr + offs[0];
+	dst_color = shadingDat.vertex_buffer_ptr + offs[0];
 	memcpy(dst_color, tess.svars.colors, tess.numVertexes * sizeof(color4ub_t));
 	// st0
 
-	unsigned char *dst_st0 = shadingDat.vertex_buffer_ptr + offs[1];
+	dst_st0 = shadingDat.vertex_buffer_ptr + offs[1];
 	memcpy(dst_st0, tess.svars.texcoords[0], tess.numVertexes * sizeof(vec2_t));
 
 	// st1
@@ -326,9 +335,6 @@ void vk_shade_geometry(VkPipeline pipeline, VkBool32 multitexture, enum Vk_Depth
 
 	// configure pipeline's dynamic state
 
-	VkViewport viewport;
-	VkRect2D scissor; // = get_scissor_rect();
-
 	vk_setViewportScissor(backEnd.projection2D, depRg, &viewport, &scissor);
 
 	qvkCmdSetScissor(vk.command_buffer, 0, 1, &scissor);
@@ -351,6 +357,7 @@ void updateMVP(VkBool32 isPortal, VkBool32 is2D, const float mvMat4x4[16]) {
 	if (isPortal) {
 		// mvp transform + eye transform + clipping plane in eye space
 		float push_constants[32] QALIGN(16);
+		struct rplane_s eye_plane;
 
 		// Eye space transform.
 		MatrixMultiply4x4_SSE(mvMat4x4, backEnd.viewParms.projectionMatrix, push_constants);
@@ -374,8 +381,6 @@ void updateMVP(VkBool32 isPortal, VkBool32 is2D, const float mvMat4x4[16]) {
 		push_constants[27] = backEnd.or.modelMatrix[14];
 
 		// Clipping plane in eye coordinates.
-		struct rplane_s eye_plane;
-
 		R_TransformPlane(backEnd.viewParms.or.axis, backEnd.viewParms.or.origin, &eye_plane);
 
 		// Apply s_flipMatrix to be in the same coordinate system as push_constants.
@@ -526,6 +531,8 @@ void vk_destroy_shading_data(void) {
 void vk_clearDepthStencilAttachments(void) {
 	if (shadingDat.s_depth_attachment_dirty) {
 		VkClearAttachment attachments;
+		VkClearRect clear_rect;
+
 		memset(&attachments, 0, sizeof(VkClearAttachment));
 
 		attachments.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
@@ -536,7 +543,6 @@ void vk_clearDepthStencilAttachments(void) {
 			attachments.clearValue.depthStencil.stencil = 0;
 		}
 
-		VkClearRect clear_rect;
 		clear_rect.rect = get_scissor_rect();
 		clear_rect.baseArrayLayer = 0;
 		clear_rect.layerCount = 1;
@@ -546,10 +552,10 @@ void vk_clearDepthStencilAttachments(void) {
 }
 
 void vk_clearColorAttachments(const float *color) {
+	VkClearAttachment attachments[1];
+	VkClearRect clear_rect[1];
 
 	// ri.Printf(PRINT_ALL, "vk_clearColorAttachments\n");
-
-	VkClearAttachment attachments[1];
 	memset(attachments, 0, sizeof(VkClearAttachment));
 
 	// aspectMask is a mask selecting the color, depth and/or stencil aspects
@@ -557,7 +563,7 @@ void vk_clearColorAttachments(const float *color) {
 	// VK_IMAGE_ASPECT_COLOR_BIT for color attachments,
 	// VK_IMAGE_ASPECT_DEPTH_BIT for depth/stencil attachments with a depth
 	// component, and VK_IMAGE_ASPECT_STENCIL_BIT for depth/stencil attachments
-	// with a stencil component. If the subpass¡¯s depth/stencil attachment
+	// with a stencil component. If the subpasses depth/stencil attachment
 	// is VK_ATTACHMENT_UNUSED, then the clear has no effect.
 
 	attachments[0].aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -592,7 +598,6 @@ void vk_clearColorAttachments(const float *color) {
 		rect_count = 2;
 	*/
 
-	VkClearRect clear_rect[1];
 	clear_rect[0].rect = get_scissor_rect();
 	clear_rect[0].baseArrayLayer = 0;
 	clear_rect[0].layerCount = 1;
@@ -620,7 +625,6 @@ static void ComputeColors(shaderStage_t *pStage) {
 		memcpy(tess.svars.colors, tess.vertexColors, tess.numVertexes * sizeof(tess.vertexColors[0]));
 		break;
 	case CGEN_CONST:
-
 		nVerts = tess.numVertexes;
 
 		for (i = 0; i < nVerts; i++) {
@@ -728,9 +732,10 @@ static void ComputeColors(shaderStage_t *pStage) {
 
 		for (i = 0; i < tess.numVertexes; i++) {
 			vec3_t v;
+			float len;
 
 			VectorSubtract(tess.xyz[i], backEnd.viewParms.or.origin, v);
-			float len = VectorLength(v);
+			len = VectorLength(v);
 
 			len /= tess.shader->portalRange;
 
@@ -863,36 +868,43 @@ Perform dynamic lighting with another rendering pass
 */
 static void ProjectDlightTexture(void) {
 	byte clipBits[SHADER_MAX_VERTEXES];
+	uint32_t l;
 
 	if (!backEnd.refdef.num_dlights) {
 		return;
 	}
 
-	uint32_t l;
 	for (l = 0; l < backEnd.refdef.num_dlights; l++) {
+		vec3_t origin;
+		float *texCoords;
+		float radius;
+		float scale;
+		float modulate;
+		float floatColor[3];
+		uint32_t i;
+		uint32_t numIndexes = 0;
 		// dlight_t	*dl;
 
 		if (!(tess.dlightBits & (1 << l))) {
 			continue; // this surface definately doesn't have any of this light
 		}
-		float *texCoords = tess.svars.texcoords[0][0];
+		texCoords = tess.svars.texcoords[0][0];
 		// colors = tess.svars.colors[0];
 
 		// dl = &backEnd.refdef.dlights[l];
-		vec3_t origin;
 
 		VectorCopy(backEnd.refdef.dlights[l].transformed, origin);
 
-		float radius = backEnd.refdef.dlights[l].radius;
-		float scale = 1.0f / radius;
-		float modulate;
+		radius = backEnd.refdef.dlights[l].radius;
+		scale = 1.0f / radius;
 
-		float floatColor[3] = {backEnd.refdef.dlights[l].color[0] * 255.0f, backEnd.refdef.dlights[l].color[1] * 255.0f,
-							   backEnd.refdef.dlights[l].color[2] * 255.0f};
+		floatColor[0] = backEnd.refdef.dlights[l].color[0] * 255.0f;
+		floatColor[1] = backEnd.refdef.dlights[l].color[1] * 255.0f;
+		floatColor[2] = backEnd.refdef.dlights[l].color[2] * 255.0f;
 
-		uint32_t i;
 		for (i = 0; i < tess.numVertexes; i++, texCoords += 2) {
 			vec3_t dist;
+			uint32_t clip = 0;
 
 			backEnd.pc.c_dlightVertexes++;
 
@@ -900,7 +912,6 @@ static void ProjectDlightTexture(void) {
 			texCoords[0] = 0.5f + dist[0] * scale;
 			texCoords[1] = 0.5f + dist[1] * scale;
 
-			uint32_t clip = 0;
 			if (texCoords[0] < 0.0f) {
 				clip |= 1;
 			} else if (texCoords[0] > 1.0f) {
@@ -938,7 +949,6 @@ static void ProjectDlightTexture(void) {
 		}
 
 		// build a list of triangles that need light
-		uint32_t numIndexes = 0;
 		for (i = 0; i < tess.numIndexes; i += 3) {
 			uint32_t a, b, c;
 
@@ -975,12 +985,11 @@ Blends a fog texture on top of everything else
 ===================
 */
 static void RB_FogPass(void) {
-
 	unsigned int i;
-
 	fog_t *fog = tr.world->fogs + tess.fogNum;
-
+	VkPipeline pipeline;
 	const unsigned int nVerts = tess.numVertexes;
+
 	for (i = 0; i < nVerts; i++) {
 		tess.svars.colors[i][0] = fog->colorRGBA[0];
 		tess.svars.colors[i][1] = fog->colorRGBA[1];
@@ -995,12 +1004,12 @@ static void RB_FogPass(void) {
 	// VULKAN
 
 	assert(tess.shader->fogPass > 0);
-	VkPipeline pipeline =
-		g_stdPipelines.fog_pipelines[tess.shader->fogPass - 1][tess.shader->cullType][tess.shader->polygonOffset];
+	pipeline = g_stdPipelines.fog_pipelines[tess.shader->fogPass - 1][tess.shader->cullType][tess.shader->polygonOffset];
 	vk_shade_geometry(pipeline, VK_FALSE, DEPTH_RANGE_NORMAL, VK_TRUE);
 }
 
 void RB_StageIteratorGeneric(void) {
+	uint32_t stage = 0;
 	//	shaderCommands_t *input = &tess;
 
 	RB_DeformTessGeometry();
@@ -1013,9 +1022,10 @@ void RB_StageIteratorGeneric(void) {
 
 	updateMVP(backEnd.viewParms.isPortal, backEnd.projection2D, getptr_modelview_matrix());
 
-	uint32_t stage = 0;
-
 	for (stage = 0; stage < MAX_SHADER_STAGES; ++stage) {
+		VkBool32 multitexture;
+		enum Vk_Depth_Range depth_range;
+
 		if (NULL == tess.xstages[stage]) {
 			break;
 		}
@@ -1026,16 +1036,19 @@ void RB_StageIteratorGeneric(void) {
 		// base
 		// set state
 		// R_BindAnimatedImage( &tess.xstages[stage]->bundle[0] );
-		VkBool32 multitexture = (tess.xstages[stage]->bundle[1].image[0] != NULL);
+		multitexture = (tess.xstages[stage]->bundle[1].image[0] != NULL);
 
 		{
+			int numAnimaImg;
+			int index;
+
 			if (tess.xstages[stage]->bundle[0].isVideoMap) {
 				ri.CIN_RunCinematic(tess.xstages[stage]->bundle[0].videoMapHandle);
 				ri.CIN_UploadCinematic(tess.xstages[stage]->bundle[0].videoMapHandle);
 				goto ENDANIMA;
 			}
 
-			int numAnimaImg = tess.xstages[stage]->bundle[0].numImageAnimations;
+			numAnimaImg = tess.xstages[stage]->bundle[0].numImageAnimations;
 
 			if (numAnimaImg <= 1) {
 				updateCurDescriptor(tess.xstages[stage]->bundle[0].image[0]->descriptor_set, 0);
@@ -1045,7 +1058,7 @@ void RB_StageIteratorGeneric(void) {
 
 			// it is necessary to do this messy calc to make sure animations line up
 			// exactly with waveforms of the same frequency
-			int index = (int)(tess.shaderTime * tess.xstages[stage]->bundle[0].imageAnimationSpeed * FUNCTABLE_SIZE) >>
+			index = (int)(tess.shaderTime * tess.xstages[stage]->bundle[0].imageAnimationSpeed * FUNCTABLE_SIZE) >>
 						FUNCTABLE_SIZE2;
 
 			if (index < 0) {
@@ -1064,6 +1077,7 @@ void RB_StageIteratorGeneric(void) {
 		//
 
 		if (multitexture) {
+			int index2;
 			// DrawMultitextured( input, stage );
 			// output = t0 * t1 or t0 + t1
 
@@ -1085,7 +1099,7 @@ void RB_StageIteratorGeneric(void) {
 
 			// it is necessary to do this messy calc to make sure animations line up
 			// exactly with waveforms of the same frequency
-			int index2 = (int)(tess.shaderTime * tess.xstages[stage]->bundle[1].imageAnimationSpeed * FUNCTABLE_SIZE) >>
+			index2 = (int)(tess.shaderTime * tess.xstages[stage]->bundle[1].imageAnimationSpeed * FUNCTABLE_SIZE) >>
 						 FUNCTABLE_SIZE2;
 
 			if (index2 < 0) {
@@ -1104,7 +1118,7 @@ void RB_StageIteratorGeneric(void) {
 			// replace diffuse texture with a white one thus effectively render only lightmap
 		}
 
-		enum Vk_Depth_Range depth_range = DEPTH_RANGE_NORMAL;
+		depth_range = DEPTH_RANGE_NORMAL;
 		if (tess.shader->isSky) {
 			depth_range = DEPTH_RANGE_ONE;
 			if (r_showsky->integer)

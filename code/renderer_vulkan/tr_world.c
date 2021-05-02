@@ -33,7 +33,7 @@ Returns true if the grid is completely culled away.
 Also sets the clipped hint bit in tess
 =================
 */
-static qboolean R_CullTriSurf(srfTriangles_t *cv) {
+static qboolean R_CullTriSurf(const srfTriangles_t *cv) {
 	int boxCull = R_CullLocalBox(cv->bounds);
 
 	if (boxCull == CULL_OUT) {
@@ -103,6 +103,8 @@ This will also allow mirrors on both sides of a model without recursion.
 */
 static qboolean R_CullSurface(surfaceType_t *surface, shader_t *shader) {
 	srfSurfaceFace_t *sface;
+	float d;
+
 	if (r_nocull->integer) {
 		return qfalse;
 	}
@@ -129,7 +131,7 @@ static qboolean R_CullSurface(surfaceType_t *surface, shader_t *shader) {
 	}
 
 	sface = (srfSurfaceFace_t *)surface;
-	float d = DotProduct(tr.or.viewOrigin, sface->plane.normal);
+	d = DotProduct(tr.or.viewOrigin, sface->plane.normal);
 
 	// don't cull exactly on the plane, because there are levels of rounding
 	// through the BSP, ICD, and hardware that may cause pixel gaps if an
@@ -202,8 +204,6 @@ static int R_DlightGrid(srfGridMesh_t *grid, int dlightBits) {
 
 static int R_DlightTrisurf(srfTriangles_t *surf, int dlightBits) {
 	// FIXME: more dlight culling to trisurfs...
-	surf->dlightBits = dlightBits;
-	return dlightBits;
 #if 0
 	int			i;
 	dlight_t	*dl;
@@ -228,9 +228,9 @@ static int R_DlightTrisurf(srfTriangles_t *surf, int dlightBits) {
 		tr.pc.c_dlightSurfacesCulled++;
 	}
 
-	grid->dlightBits = dlightBits;
-	return dlightBits;
 #endif
+	surf->dlightBits = dlightBits;
+	return dlightBits;
 }
 
 /*
@@ -336,7 +336,6 @@ R_RecursiveWorldNode
 ================
 */
 static void R_RecursiveWorldNode(mnode_t *node, int planeBits, int dlightBits) {
-
 	do {
 		int newDlights[2];
 

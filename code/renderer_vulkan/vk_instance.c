@@ -129,9 +129,8 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vk_DebugCallback(VkDebugReportFlagsEXT flags, VkD
 }
 
 static void vk_createDebugCallback(PFN_vkDebugReportCallbackEXT qvkDebugCB) {
-	ri.Printf(PRINT_ALL, " vk_createDebugCallback() \n");
-
 	VkDebugReportCallbackCreateInfoEXT desc;
+	ri.Printf(PRINT_DEVELOPER, " vk_createDebugCallback() \n");
 	desc.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
 	desc.pNext = NULL;
 	desc.flags =
@@ -145,11 +144,19 @@ static void vk_createDebugCallback(PFN_vkDebugReportCallbackEXT qvkDebugCB) {
 #endif
 
 static void vk_createInstance(void) {
+	VkApplicationInfo appInfo;
+	VkInstanceCreateInfo instanceCreateInfo;
+	uint32_t nInsExt = 0;
+	uint32_t i = 0;
+	VkExtensionProperties *pInsExt;
+	VkResult e;
+	const char **ppInstanceExt;
+
 	// There is no global state in Vulkan and all per-application state
 	// is stored in a VkInstance object. Creating a VkInstance object
 	// initializes the Vulkan library and allows the application to pass
 	// information about itself to the implementation.
-	ri.Printf(PRINT_ALL, " Creating instance: vk.instance\n");
+	ri.Printf(PRINT_DEVELOPER, " Creating instance: vk.instance\n");
 
 	// The version of Vulkan that is supported by an instance may be
 	// different than the version of Vulkan supported by a device or
@@ -159,13 +166,11 @@ static void vk_createInstance(void) {
 	// If the vkGetInstanceProcAddr returns NULL for vkEnumerateInstanceVersion,
 	// it is a Vulkan 1.0 implementation. Otherwise, the application can
 	// call vkEnumerateInstanceVersion to determine the version of Vulkan.
-
-	VkApplicationInfo appInfo;
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	appInfo.pNext = NULL;
-	appInfo.pApplicationName = "OpenArena";
+	appInfo.pApplicationName = CLIENT_WINDOW_TITLE;
 	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.pEngineName = "VulkanArena";
+	appInfo.pEngineName = CLIENT_WINDOW_TITLE;
 	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
 	// apiVersion must be the highest version of Vulkan that the
 	// application is designed to use, encoded as described in the
@@ -174,8 +179,6 @@ static void vk_createInstance(void) {
 	// instance object. Only the major and minor versions of the
 	// instance must match those requested in apiVersion.
 	appInfo.apiVersion = VK_MAKE_VERSION(1, 0, 0);
-
-	VkInstanceCreateInfo instanceCreateInfo;
 
 	instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	// pNext is NULL or a pointer to an extension-specific structure.
@@ -201,7 +204,6 @@ static void vk_createInstance(void) {
 	// Extensions may be provided by layers as well as by a Vulkan implementation.
 	//
 	// check extensions availability
-	uint32_t nInsExt = 0;
 	// To retrieve a list of supported extensions before creating an instance
 	VK_CHECK(qvkEnumerateInstanceExtensionProperties(NULL, &nInsExt, NULL));
 
@@ -209,13 +211,11 @@ static void vk_createInstance(void) {
 
 	ri.Printf(PRINT_ALL, "--- Total %d instance extensions. --- \n", nInsExt);
 
-	VkExtensionProperties *pInsExt = (VkExtensionProperties *)ri.Hunk_AllocateTempMemory(sizeof(VkExtensionProperties) * nInsExt);
+	pInsExt = (VkExtensionProperties *)ri.Hunk_AllocateTempMemory(sizeof(VkExtensionProperties) * nInsExt);
 
-	const char **ppInstanceExt = ri.Hunk_AllocateTempMemory(sizeof(char *) * (nInsExt));
+	ppInstanceExt = (const char **)ri.Hunk_AllocateTempMemory(sizeof(char *) * (nInsExt));
 
 	VK_CHECK(qvkEnumerateInstanceExtensionProperties(NULL, &nInsExt, pInsExt));
-
-	uint32_t i = 0;
 
 	// Each platform-specific extension is an instance extension.
 	// The application must enable instance extensions with vkCreateInstance
@@ -234,15 +234,17 @@ static void vk_createInstance(void) {
 #ifndef NDEBUG
 	ri.Printf(PRINT_ALL, "Using VK_LAYER_LUNARG_standard_validation\n");
 
-	const char *const validation_layer_name = "VK_LAYER_LUNARG_standard_validation";
-	instanceCreateInfo.enabledLayerCount = 1;
-	instanceCreateInfo.ppEnabledLayerNames = &validation_layer_name;
+	{
+		const char *const validation_layer_name = "VK_LAYER_LUNARG_standard_validation";
+		instanceCreateInfo.enabledLayerCount = 1;
+		instanceCreateInfo.ppEnabledLayerNames = &validation_layer_name;
+	}
 #else
 	instanceCreateInfo.enabledLayerCount = 0;
 	instanceCreateInfo.ppEnabledLayerNames = NULL;
 #endif
 
-	VkResult e = qvkCreateInstance(&instanceCreateInfo, NULL, &vk.instance);
+	e = qvkCreateInstance(&instanceCreateInfo, NULL, &vk.instance);
 	if (e == VK_SUCCESS) {
 		ri.Printf(PRINT_ALL, "--- Vulkan create instance success! ---\n\n");
 	} else if (e == VK_ERROR_INCOMPATIBLE_DRIVER) {
@@ -309,6 +311,8 @@ static void vk_loadGlobalFunctions(void) {
 ////////////////////////////////
 
 static void vk_selectPhysicalDevice(void) {
+	VkPhysicalDevice *pPhyDev;
+
 	// After initializing the Vulkan library through a VkInstance
 	// we need to look for and select a graphics card in the system
 	// that supports the features we need. In fact we can select any
@@ -321,7 +325,7 @@ static void vk_selectPhysicalDevice(void) {
 	if (gpu_count <= 0)
 		ri.Error(ERR_FATAL, "Vulkan: no physical device found");
 
-	VkPhysicalDevice *pPhyDev = (VkPhysicalDevice *)ri.Hunk_AllocateTempMemory(sizeof(VkPhysicalDevice) * gpu_count);
+	pPhyDev = (VkPhysicalDevice *)ri.Hunk_AllocateTempMemory(sizeof(VkPhysicalDevice) * gpu_count);
 
 	// TODO: multi graphic cards selection support
 	VK_CHECK(qvkEnumeratePhysicalDevices(vk.instance, &gpu_count, pPhyDev));
@@ -338,6 +342,8 @@ static void vk_selectPhysicalDevice(void) {
 
 static void vk_selectSurfaceFormat(void) {
 	uint32_t nSurfmt;
+	VkSurfaceFormatKHR *pSurfFmts;
+	VkFormatProperties props;
 
 	ri.Printf(PRINT_ALL, "\n -------- vk_selectSurfaceFormat() -------- \n");
 
@@ -347,7 +353,7 @@ static void vk_selectSurfaceFormat(void) {
 	VK_CHECK(qvkGetPhysicalDeviceSurfaceFormatsKHR(vk.physical_device, vk.surface, &nSurfmt, NULL));
 	assert(nSurfmt > 0);
 
-	VkSurfaceFormatKHR *pSurfFmts = (VkSurfaceFormatKHR *)ri.Hunk_AllocateTempMemory(nSurfmt * sizeof(VkSurfaceFormatKHR));
+	pSurfFmts = (VkSurfaceFormatKHR *)ri.Hunk_AllocateTempMemory(nSurfmt * sizeof(VkSurfaceFormatKHR));
 
 	// To query the supported swapchain format-color space pairs for a surface
 	VK_CHECK(qvkGetPhysicalDeviceSurfaceFormatsKHR(vk.physical_device, vk.surface, &nSurfmt, pSurfFmts));
@@ -394,8 +400,6 @@ static void vk_selectSurfaceFormat(void) {
 		ri.Error(ERR_FATAL, "VK_IMAGE_USAGE_TRANSFER_SRC_BIT is not supported by you GPU.");
 
 	// To query supported format features which are properties of the physical device
-
-	VkFormatProperties props;
 
 	// To determine the set of valid usage bits for a given format,
 	// call vkGetPhysicalDeviceFormatProperties.
@@ -503,6 +507,7 @@ static void vk_createLogicalDevice(void) {
 	VkDeviceQueueCreateInfo queue_desc;
 	VkPhysicalDeviceFeatures features;
 	VkDeviceCreateInfo device_desc;
+	uint32_t j;
 
 	// To query the numbers of extensions available to a given physical device
 	ri.Printf(PRINT_ALL, " Check for VK_KHR_swapchain extension. \n");
@@ -513,7 +518,6 @@ static void vk_createLogicalDevice(void) {
 
 	qvkEnumerateDeviceExtensionProperties(vk.physical_device, NULL, &nDevExts, pDeviceExt);
 
-	uint32_t j;
 	for (j = 0; j < nDevExts; j++) {
 		if (!strcmp(device_extensions[0], pDeviceExt[j].extensionName)) {
 			swapchainExtFound = VK_TRUE;
@@ -682,7 +686,6 @@ void vk_getProcAddress(void) {
 }
 
 void vk_clearProcAddress(void) {
-
 	ri.Printf(PRINT_ALL, " Destroy logical device: vk.device. \n");
 	// Device queues are implicitly cleaned up when the device is destroyed
 	// so we don't need to do anything in clean up

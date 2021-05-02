@@ -34,9 +34,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LL(x) x = LittleLong(x)
 
 // 3x4 identity matrix
-const static float identityMatrix[12] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0};
+static const float identityMatrix[12] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0};
 
-static qboolean IQM_CheckRange(iqmHeader_t *header, int offset, int count, int size) {
+static qboolean IQM_CheckRange(const iqmHeader_t *header, int offset, int count, int size) {
 	// return true if the range specified by offset, count and size
 	// doesn't fit into the file
 	return (count <= 0 || offset < 0 || offset > header->filesize || offset + count * size < 0 ||
@@ -44,7 +44,7 @@ static qboolean IQM_CheckRange(iqmHeader_t *header, int offset, int count, int s
 }
 // "multiply" 3x4 matrices, these are assumed to be the top 3 rows
 // of a 4x4 matrix with the last row = (0 0 0 1)
-static void Matrix34Multiply(float *a, float const *b, float *out) {
+static void Matrix34Multiply(const float *a, float const *b, float *out) {
 	out[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8];
 	out[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9];
 	out[2] = a[0] * b[2] + a[1] * b[6] + a[2] * b[10];
@@ -59,8 +59,8 @@ static void Matrix34Multiply(float *a, float const *b, float *out) {
 	out[11] = a[8] * b[3] + a[9] * b[7] + a[10] * b[11] + a[11];
 }
 
-static void InterpolateMatrix(float *a, float *b, float lerp, float *mat) {
-	float unLerp = 1.0f - lerp;
+static void InterpolateMatrix(const float *a, const float *b, float lerp, float *mat) {
+	const float unLerp = 1.0f - lerp;
 
 	mat[0] = a[0] * unLerp + b[0] * lerp;
 	mat[1] = a[1] * unLerp + b[1] * lerp;
@@ -75,16 +75,17 @@ static void InterpolateMatrix(float *a, float *b, float lerp, float *mat) {
 	mat[10] = a[10] * unLerp + b[10] * lerp;
 	mat[11] = a[11] * unLerp + b[11] * lerp;
 }
-static void JointToMatrix(vec4_t rot, vec3_t scale, vec3_t trans, float *mat) {
-	float xx = 2.0f * rot[0] * rot[0];
-	float yy = 2.0f * rot[1] * rot[1];
-	float zz = 2.0f * rot[2] * rot[2];
-	float xy = 2.0f * rot[0] * rot[1];
-	float xz = 2.0f * rot[0] * rot[2];
-	float yz = 2.0f * rot[1] * rot[2];
-	float wx = 2.0f * rot[3] * rot[0];
-	float wy = 2.0f * rot[3] * rot[1];
-	float wz = 2.0f * rot[3] * rot[2];
+
+static void JointToMatrix(const vec4_t rot, const vec3_t scale, const vec3_t trans, float *mat) {
+	const float xx = 2.0f * rot[0] * rot[0];
+	const float yy = 2.0f * rot[1] * rot[1];
+	const float zz = 2.0f * rot[2] * rot[2];
+	const float xy = 2.0f * rot[0] * rot[1];
+	const float xz = 2.0f * rot[0] * rot[2];
+	const float yz = 2.0f * rot[1] * rot[2];
+	const float wx = 2.0f * rot[3] * rot[0];
+	const float wy = 2.0f * rot[3] * rot[1];
+	const float wz = 2.0f * rot[3] * rot[2];
 
 	mat[0] = scale[0] * (1.0f - (yy + zz));
 	mat[1] = scale[0] * (xy - wz);
@@ -99,7 +100,7 @@ static void JointToMatrix(vec4_t rot, vec3_t scale, vec3_t trans, float *mat) {
 	mat[10] = scale[2] * (1.0f - (xx + yy));
 	mat[11] = trans[2];
 }
-static void Matrix34Invert(float *inMat, float *outMat) {
+static void Matrix34Invert(const float *inMat, float *outMat) {
 	vec3_t trans;
 	float invSqrLen, *v;
 
@@ -785,9 +786,6 @@ Add all surfaces of this model
 =================
 */
 void R_AddIQMSurfaces(trRefEntity_t *ent) {
-	//
-	ri.Printf(PRINT_ALL, "Add IQM Surfaces. \n");
-
 	iqmData_t *data;
 	srfIQModel_t *surface;
 	int i, j;
@@ -796,6 +794,8 @@ void R_AddIQMSurfaces(trRefEntity_t *ent) {
 	int fogNum;
 	shader_t *shader;
 	skin_t *skin;
+
+	ri.Printf(PRINT_DEVELOPER, "Add IQM Surfaces. \n");
 
 	data = tr.currentModel->modelData;
 	surface = data->surfaces;

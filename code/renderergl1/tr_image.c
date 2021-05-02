@@ -43,7 +43,7 @@ void R_GammaCorrect(byte *buffer, int bufSize) {
 }
 
 typedef struct {
-	char *name;
+	const char *name;
 	int minimize, maximize;
 } textureMode_t;
 

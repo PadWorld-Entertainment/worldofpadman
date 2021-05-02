@@ -4,7 +4,7 @@
 #include "tr_model.h"
 
 typedef struct {
-	char *ext;
+	const char *ext;
 	qhandle_t (*ModelLoader)(const char *, model_t *);
 } modelExtToLoaderMap_t;
 
@@ -26,10 +26,13 @@ asked for again.
 ====================
 */
 qhandle_t RE_RegisterModel(const char *name) {
-	ri.Printf(PRINT_ALL, "RegisterModel: %s. \n", name);
-
 	qboolean orgNameFailed = qfalse;
 	int orgLoader = -1;
+	qhandle_t hModel;
+	model_t *mod;
+	const char *dot;
+
+	ri.Printf(PRINT_DEVELOPER, "RegisterModel: %s. \n", name);
 
 	if (!name || !name[0]) {
 		ri.Printf(PRINT_WARNING, "RE_RegisterModel: NULL name\n");
@@ -44,8 +47,6 @@ qhandle_t RE_RegisterModel(const char *name) {
 	//
 	// search the currently loaded models
 	//
-	qhandle_t hModel;
-
 	for (hModel = 1; hModel < tr.numModels; hModel++) {
 		if (0 == strcmp(tr.models[hModel]->name, name)) {
 			if (tr.models[hModel]->type == MOD_BAD) {
@@ -59,7 +60,7 @@ qhandle_t RE_RegisterModel(const char *name) {
 	// allocate a new model_t
 	ri.Printf(PRINT_ALL, "Allocate Memory for %s. \n", name);
 
-	model_t *mod = ri.Hunk_Alloc(sizeof(model_t), h_low);
+	mod = ri.Hunk_Alloc(sizeof(model_t), h_low);
 
 	// only set the name after the model has been successfully loaded
 	Q_strncpyz(mod->name, name, MAX_QPATH);
@@ -75,7 +76,7 @@ qhandle_t RE_RegisterModel(const char *name) {
 
 	// load the files
 
-	const char *dot = strrchr(name, '.');
+	dot = strrchr(name, '.');
 
 	if (dot != NULL) {
 		if ((dot[1] == 'm') && (dot[2] == 'd') && (dot[3] == '3')) {
@@ -88,17 +89,17 @@ qhandle_t RE_RegisterModel(const char *name) {
 			ri.Printf(PRINT_WARNING, " %s format not support now. \n ", name);
 		}
 	} else {
+		uint32_t i; 
 		ri.Printf(PRINT_WARNING,
 				  "RegisterModel: %s without extention. "
 				  " Try and find a suitable match using all the model formats supported\n",
 				  name);
 
-		uint32_t i;
 		for (i = 0; i < numModelLoaders; i++) {
+			char altName[MAX_QPATH * 2] = {0};
 			if (i == orgLoader)
 				continue;
 
-			char altName[MAX_QPATH * 2] = {0};
 			snprintf(altName, sizeof(altName), "%s.%s", name, modelLoaders[i].ext);
 
 			// Load

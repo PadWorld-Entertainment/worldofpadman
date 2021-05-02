@@ -39,10 +39,11 @@ model_t *R_GetModelByHandle(qhandle_t index) {
 ///////////////////////////////////////////////////////////////////////////////
 
 void R_ModelInit(void) {
-	ri.Printf(PRINT_ALL, "R_ModelInit: \n");
-
 	// leave a space for NULL model
 	model_t *mod = ri.Hunk_Alloc(sizeof(model_t), h_low);
+
+	ri.Printf(PRINT_DEVELOPER, "R_ModelInit: \n");
+
 	mod->index = tr.numModels = 0;
 	mod->type = MOD_BAD;
 

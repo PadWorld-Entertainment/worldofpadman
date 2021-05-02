@@ -152,7 +152,6 @@ void vk_destroy_commands(void) {
 void record_image_layout_transition(VkCommandBuffer cmdBuf, VkImage image, VkImageAspectFlags image_aspect_flags,
 									VkAccessFlags src_access_flags, VkImageLayout old_layout,
 									VkAccessFlags dst_access_flags, VkImageLayout new_layout) {
-
 	VkImageMemoryBarrier barrier = {0};
 	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	barrier.pNext = NULL;

@@ -62,13 +62,18 @@ void RB_CheckOverflow(int verts, int indexes) {
 }
 
 void RB_AddQuadStampExt(vec3_t origin, vec3_t left, vec3_t up, byte *color, float s1, float t1, float s2, float t2) {
+	uint32_t ndx0;
+	uint32_t ndx1;
+	uint32_t ndx2;
+	uint32_t ndx3;
+	vec3_t normal;
 
 	RB_CHECKOVERFLOW(4, 6);
 
-	const uint32_t ndx0 = tess.numVertexes;
-	const uint32_t ndx1 = ndx0 + 1;
-	const uint32_t ndx2 = ndx0 + 2;
-	const uint32_t ndx3 = ndx0 + 3;
+	ndx0 = tess.numVertexes;
+	ndx1 = ndx0 + 1;
+	ndx2 = ndx0 + 2;
+	ndx3 = ndx0 + 3;
 
 	// triangle indexes for a simple quad
 	tess.indexes[tess.numIndexes] = ndx0;
@@ -97,7 +102,6 @@ void RB_AddQuadStampExt(vec3_t origin, vec3_t left, vec3_t up, byte *color, floa
 
 	// constant normal all the way around
 
-	vec3_t normal;
 	VectorSubtract(vec3_origin, backEnd.viewParms.or.axis[0], normal);
 	tess.normal[ndx0][0] = tess.normal[ndx1][0] = tess.normal[ndx2][0] = tess.normal[ndx3][0] = normal[0];
 	tess.normal[ndx0][1] = tess.normal[ndx1][1] = tess.normal[ndx2][1] = tess.normal[ndx3][1] = normal[1];
@@ -191,11 +195,12 @@ RB_SurfacePolychain
 */
 void RB_SurfacePolychain(srfPoly_t *p) {
 	int i;
+	uint32_t numv;
 
 	RB_CHECKOVERFLOW(p->numVerts, 3 * (p->numVerts - 2));
 
 	// fan triangles into the tess array
-	uint32_t numv = tess.numVertexes;
+	numv = tess.numVertexes;
 	for (i = 0; i < p->numVerts; i++) {
 		VectorCopy(p->verts[i].xyz, tess.xyz[numv]);
 		tess.texCoords[numv][0][0] = p->verts[i].st[0];
@@ -370,7 +375,7 @@ static void DoRailDiscs(int numSegs, const vec3_t start, const vec3_t dir, const
 	if (!numSegs)
 		return;
 
-	scale = 0.25;
+	scale = 0.25f;
 
 	for (i = 0; i < 4; i++) {
 		c = cos(DEG2RAD(45 + i * 90));
@@ -580,7 +585,7 @@ static void LerpMeshVertexes(md3Surface_t *surf, float backlerp) {
 	newNormals = newXyz + 3;
 
 	newXyzScale = MD3_XYZ_SCALE * (1.0 - backlerp);
-	newNormalScale = 1.0 - backlerp;
+	newNormalScale = 1.0f - backlerp;
 
 	numVerts = surf->numVerts;
 
