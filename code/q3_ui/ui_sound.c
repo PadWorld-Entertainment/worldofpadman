@@ -79,7 +79,6 @@ typedef struct {
 	menuradiobutton_s voipmode;
 	menulist_s voipRecordMode;
 	menutext_s voipmode_grayed;
-	menutext_s voip_restart;
 	menuslider_s voiceThresholdVAD;
 	menuslider_s voiceGainDuringCapture;
 
@@ -189,12 +188,6 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 
 	case ID_VOIPMODE:
 		trap_Cvar_SetValue("cl_voip", soundOptionsInfo.voipmode.curvalue);
-		// voip activated? then tell the user to restart
-		if (soundOptionsInfo.voipmode.curvalue)
-			soundOptionsInfo.voip_restart.generic.flags &= ~QMF_HIDDEN;
-		else
-			soundOptionsInfo.voip_restart.generic.flags |= QMF_HIDDEN;
-
 		break;
 
 	case ID_RECORDMODE:
@@ -404,15 +397,6 @@ static void UI_SoundOptionsMenu_Init(void) {
 		"This is the volume of audio coming out of your speakers while you are recording sound for transmission. This "
 		"prevents audio feedback and echo. If you're using headphones, you don't need to turn this down.";
 
-	y += BIGCHAR_HEIGHT + 2;
-	soundOptionsInfo.voip_restart.generic.type = MTYPE_TEXT;
-	soundOptionsInfo.voip_restart.generic.flags = QMF_HIDDEN | QMF_PULSE;
-	soundOptionsInfo.voip_restart.generic.x = POSITION_X;
-	soundOptionsInfo.voip_restart.generic.y = y;
-	soundOptionsInfo.voip_restart.string = "Restart the game to enable Voice Chat!";
-	soundOptionsInfo.voip_restart.style = (UI_CENTER | UI_SMALLFONT);
-	soundOptionsInfo.voip_restart.color = menu_text_color;
-
 	soundOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.back.generic.name = BACK0;
 	soundOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
@@ -448,7 +432,6 @@ static void UI_SoundOptionsMenu_Init(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipRecordMode);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voiceGainDuringCapture);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voiceThresholdVAD);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voip_restart);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.back);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.apply);
 
