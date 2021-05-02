@@ -179,9 +179,9 @@ void CG_DrawChar(int x, int y, int width, int height, int ch) {
 	row = ch >> 4;
 	col = ch & 15;
 
-	frow = row * 0.0625;
-	fcol = col * 0.0625;
-	size = 0.0625;
+	frow = row * 0.0625f;
+	fcol = col * 0.0625f;
+	size = 0.0625f;
 
 	trap_R_DrawStretchPic(ax, ay, aw, ah, fcol, frow, fcol + size, frow + size, cgs.media.charsetShader);
 }
@@ -252,7 +252,7 @@ void CG_DrawStringExt(int x, int y, const char *string, const float *setColor, q
 void CG_DrawBigString(int x, int y, const char *s, float alpha) {
 	float color[4];
 
-	color[0] = color[1] = color[2] = 1.0;
+	color[0] = color[1] = color[2] = 1.0f;
 	color[3] = alpha;
 	CG_DrawStringExt(x, y, s, color, qfalse, qtrue, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0);
 }
@@ -264,7 +264,7 @@ void CG_DrawBigStringColor(int x, int y, const char *s, vec4_t color) {
 void CG_DrawSmallString(int x, int y, const char *s, float alpha) {
 	float color[4];
 
-	color[0] = color[1] = color[2] = 1.0;
+	color[0] = color[1] = color[2] = 1.0f;
 	color[3] = alpha;
 	CG_DrawStringExt(x, y, s, color, qfalse, qfalse, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 }
@@ -307,10 +307,10 @@ refresh window.
 static void CG_TileClearBox(int x, int y, int w, int h, qhandle_t hShader) {
 	float s1, t1, s2, t2;
 
-	s1 = x / 64.0;
-	t1 = y / 64.0;
-	s2 = (x + w) / 64.0;
-	t2 = (y + h) / 64.0;
+	s1 = x / 64.0f;
+	t1 = y / 64.0f;
+	s2 = (x + w) / 64.0f;
+	t2 = (y + h) / 64.0f;
 	trap_R_DrawStretchPic(x, y, w, h, s1, t1, s2, t2, hShader);
 }
 
@@ -386,10 +386,10 @@ CG_TeamColor
 ================
 */
 float *CG_TeamColor(int team) {
-	static vec4_t red = {1, 0.2f, 0.2f, 1};
-	static vec4_t blue = {0.2f, 0.2f, 1, 1};
-	static vec4_t other = {1, 1, 1, 1};
-	static vec4_t spectator = {0.7f, 0.7f, 0.7f, 1};
+	static vec4_t red = {1.0f, 0.2f, 0.2f, 1.0f};
+	static vec4_t blue = {0.2f, 0.2f, 1.0f, 1.0f};
+	static vec4_t other = {1.0f, 1.0f, 1.0f, 1.0f};
+	static vec4_t spectator = {0.7f, 0.7f, 0.7f, 1.0f};
 
 	switch (team) {
 	case TEAM_RED:
@@ -465,7 +465,7 @@ void CG_ColorForHealth(vec4_t hcolor) {
 UI_DrawProportionalString2
 =================
 */
-static int propMap[128][3] = {
+static const int propMap[128][3] = {
 	{0, 0, -1},
 	{0, 0, -1},
 	{0, 0, -1},
@@ -603,13 +603,10 @@ static int propMap[128][3] = {
 	{0, 0, -1}		// DEL
 };
 
-static int propMapB[26][3] = {
+static const int propMapB[26][3] = {
 	{11, 12, 33},  {49, 12, 31},  {85, 12, 31},	 {120, 12, 30},	 {156, 12, 21},	 {183, 12, 21}, {207, 12, 32},
-
 	{13, 55, 30},  {49, 55, 13},  {66, 55, 29},	 {101, 55, 31},	 {135, 55, 21},	 {158, 55, 40}, {204, 55, 32},
-
 	{12, 97, 31},  {48, 97, 31},  {82, 97, 30},	 {118, 97, 30},	 {153, 97, 30},	 {185, 97, 25}, {213, 97, 30},
-
 	{11, 139, 32}, {42, 139, 51}, {93, 139, 32}, {126, 139, 31}, {158, 139, 25},
 };
 
@@ -777,10 +774,10 @@ UI_ProportionalSizeScale
 */
 float UI_ProportionalSizeScale(int style) {
 	if (style & UI_SMALLFONT) {
-		return 0.75;
+		return 0.75f;
 	}
 
-	return 1.00;
+	return 1.0f;
 }
 
 /*
@@ -919,7 +916,7 @@ qboolean CG_WorldToScreenWrap(vec3_t point, float *x, float *y) {
 
 	// Snap to the edge of the screen when the point is behind us
 	if (dotForward < 0.f && *x > 0 && *x < 640 && *y > 0 && *y < 480) {
-		if (abs(*x - 320) > abs(*y - 240))
+		if (abs((int)*x - 320) > abs((int)*y - 240))
 			*x = *x <= 320 ? 0.f : 640;
 		else
 			*y = *y <= 240 ? 0.f : 480;

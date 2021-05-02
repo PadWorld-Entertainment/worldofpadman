@@ -205,7 +205,7 @@ CG_OffsetThirdPersonView
 #define FOCUS_DISTANCE 512
 /// it seems a min distance of 20 looks ok for most models ... setting it higher could be cheat-prone (because it could
 /// be abused to look through walls)
-const static float MIN_3RD_DIST = 20.0f;
+static const float MIN_3RD_DIST = 20.0f;
 static void CG_OffsetThirdPersonView(void) {
 	vec3_t forward, right, up;
 	vec3_t view;

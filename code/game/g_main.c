@@ -27,12 +27,11 @@ level_locals_t level;
 
 typedef struct {
 	vmCvar_t *vmCvar;
-	char *cvarName;
-	char *defaultString;
+	const char *cvarName;
+	const char *defaultString;
 	int cvarFlags;
 	int modificationCount; // for tracking changes
 	qboolean trackChange;  // track this variable, and announce if changed
-	qboolean teamShader;   // track and if changed, update shader state
 } cvarTable_t;
 
 gentity_t g_entities[MAX_GENTITIES];
@@ -131,8 +130,8 @@ static cvarTable_t gameCvarTable[] = {
 
 	{&g_friendlyFire, "g_friendlyFire", "0", CVAR_ARCHIVE, 0, qtrue},
 
-	{&g_teamAutoJoin, "g_teamAutoJoin", "0", CVAR_ARCHIVE},
-	{&g_teamForceBalance, "g_teamForceBalance", "1", CVAR_ARCHIVE},
+	{&g_teamAutoJoin, "g_teamAutoJoin", "0", CVAR_ARCHIVE, 0, qfalse},
+	{&g_teamForceBalance, "g_teamForceBalance", "1", CVAR_ARCHIVE, 0, qfalse},
 
 	{&g_warmup, "g_warmup", "20", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qtrue},
 	{&g_doWarmup, "g_doWarmup", "0", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue},
@@ -201,7 +200,7 @@ static cvarTable_t gameCvarTable[] = {
 
 	{&g_logDamage, "g_logDamage", "0", CVAR_ARCHIVE, 0, qfalse}};
 
-static int gameCvarTableSize = ARRAY_LEN(gameCvarTable);
+static const int gameCvarTableSize = ARRAY_LEN(gameCvarTable);
 
 void G_InitGame(int levelTime, int randomSeed, int restart);
 void G_RunFrame(int levelTime);

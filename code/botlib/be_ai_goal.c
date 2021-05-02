@@ -126,19 +126,19 @@ typedef struct iteminfo_s {
 	int number;					 // number of the item info
 } iteminfo_t;
 
-#define ITEMINFO_OFS(x) (size_t) & (((iteminfo_t *)0)->x)
+#define ITEMINFO_OFS(x) (size_t) (&(((iteminfo_t *)0)->x))
 
-fielddef_t iteminfo_fields[] = {{"name", ITEMINFO_OFS(name), FT_STRING},
-								{"model", ITEMINFO_OFS(model), FT_STRING},
-								{"modelindex", ITEMINFO_OFS(modelindex), FT_INT},
-								{"type", ITEMINFO_OFS(type), FT_INT},
-								{"index", ITEMINFO_OFS(index), FT_INT},
-								{"respawntime", ITEMINFO_OFS(respawntime), FT_FLOAT},
-								{"mins", ITEMINFO_OFS(mins), FT_FLOAT | FT_ARRAY, 3},
-								{"maxs", ITEMINFO_OFS(maxs), FT_FLOAT | FT_ARRAY, 3},
-								{NULL, 0, 0}};
+static const fielddef_t iteminfo_fields[] = {{"name", ITEMINFO_OFS(name), FT_STRING, 0, 0.0f, 0.0f, NULL},
+											 {"model", ITEMINFO_OFS(model), FT_STRING, 0, 0.0f, 0.0f, NULL},
+											 {"modelindex", ITEMINFO_OFS(modelindex), FT_INT, 0, 0.0f, 0.0f, NULL},
+											 {"type", ITEMINFO_OFS(type), FT_INT, 0, 0.0f, 0.0f, NULL},
+											 {"index", ITEMINFO_OFS(index), FT_INT, 0, 0.0f, 0.0f, NULL},
+											 {"respawntime", ITEMINFO_OFS(respawntime), FT_FLOAT, 0, 0.0f, 0.0f, NULL},
+											 {"mins", ITEMINFO_OFS(mins), FT_FLOAT | FT_ARRAY, 3, 0.0f, 0.0f, NULL},
+											 {"maxs", ITEMINFO_OFS(maxs), FT_FLOAT | FT_ARRAY, 3, 0.0f, 0.0f, NULL},
+											 {NULL, 0, 0, 0, 0.0f, 0.0f, NULL}};
 
-structdef_t iteminfo_struct = {sizeof(iteminfo_t), iteminfo_fields};
+static const structdef_t iteminfo_struct = {sizeof(iteminfo_t), iteminfo_fields};
 
 typedef struct itemconfig_s {
 	int numiteminfo;
@@ -1121,14 +1121,14 @@ void BotUpdateEntityItems(void) {
 		AddLevelItemToList(li);
 		// botimport.Print(PRT_MESSAGE, "found new level item %s\n", ic->iteminfo[i].classname);
 	} // end for
-	/*
-	for (li = levelitems; li; li = li->next)
-	{
-		if (!li->entitynum)
-		{
-			BotFindEntityForLevelItem(li);
-		} //end if
-	} //end for*/
+	  /*
+	  for (li = levelitems; li; li = li->next)
+	  {
+		  if (!li->entitynum)
+		  {
+			  BotFindEntityForLevelItem(li);
+		  } //end if
+	  } //end for*/
 } // end of the function BotUpdateEntityItems
 //===========================================================================
 //

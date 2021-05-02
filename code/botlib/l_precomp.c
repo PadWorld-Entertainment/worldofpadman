@@ -293,7 +293,7 @@ void PC_FreeToken(token_t *token) {
 // Returns:					-
 // Changes Globals:		-
 //============================================================================
-int PC_ReadSourceToken(source_t *source, token_t *token) {
+static int PC_ReadSourceToken(source_t *source, token_t *token) {
 	token_t *t;
 	script_t *script;
 	int type, skip;
@@ -1734,6 +1734,7 @@ int PC_EvaluateTokens(source_t *source, token_t *tokens, signed long int *intval
 					negativevalue = 1;
 					break;
 				} // end if
+				// fall through
 			}	  // end case
 
 			case P_MUL:

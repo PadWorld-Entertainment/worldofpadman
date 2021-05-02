@@ -47,8 +47,8 @@
    are just as fast, and do not require any special target architecture.
   Earlier gcc versions (3.x) compiled both code to the same assembly
    instructions, because of the way they represented ((_b)>(_a)) internally.*/
-#define OC_MAXI(_a,_b)      ((_a)-((_a)-(_b)&-((_b)>(_a))))
-#define OC_MINI(_a,_b)      ((_a)+((_b)-(_a)&-((_b)<(_a))))
+#define OC_MAXI(_a,_b)      ((_a)-(((_a)-(_b))&-((_b)>(_a))))
+#define OC_MINI(_a,_b)      ((_a)+(((_b)-(_a))&-((_b)<(_a))))
 /*Clamps an integer into the given range.
   If _a>_c, then the lower bound _a is respected over the upper bound _c (this
    behavior is required to meet our documented API behavior).

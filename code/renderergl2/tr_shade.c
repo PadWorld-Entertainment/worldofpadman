@@ -1253,6 +1253,7 @@ static void RB_RenderShadowmap(shaderCommands_t *input) {
 	ComputeDeformValues(&deformGen, deformParams);
 
 	{
+		vec4_t vector;
 		shaderProgram_t *sp = &tr.shadowmapShader[0];
 
 		if (glState.vertexAnimation) {
@@ -1260,8 +1261,6 @@ static void RB_RenderShadowmap(shaderCommands_t *input) {
 		} else if (glState.boneAnimation) {
 			sp = &tr.shadowmapShader[SHADOWMAPDEF_USE_BONE_ANIMATION];
 		}
-
-		vec4_t vector;
 
 		GLSL_BindProgram(sp);
 

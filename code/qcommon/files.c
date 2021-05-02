@@ -2114,6 +2114,7 @@ static char **FS_ListFilteredFiles(const char *path, const char *extensions, cha
 	char zpath[MAX_ZPATH];
 	const char *extension;
 	char extensionBuf[128];
+	char *ext;
 
 	if (!fs_searchpaths) {
 		Com_Error(ERR_FATAL, "Filesystem call made without initialization");
@@ -2133,7 +2134,7 @@ static char **FS_ListFilteredFiles(const char *path, const char *extensions, cha
 	}
 
 	Q_strncpyz(extensionBuf, extensions, sizeof(extensionBuf));
-	char *ext = extensionBuf;
+	ext = extensionBuf;
 	nfiles = 0;
 	FS_ReturnPath(path, zpath, &pathDepth);
 

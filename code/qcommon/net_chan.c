@@ -221,6 +221,7 @@ copied out.
 */
 qboolean Netchan_Process(netchan_t *chan, msg_t *msg) {
 	int sequence;
+	int checksum;
 	int fragmentStart, fragmentLength;
 	qboolean fragmented;
 
@@ -244,7 +245,7 @@ qboolean Netchan_Process(netchan_t *chan, msg_t *msg) {
 		MSG_ReadShort(msg);
 	}
 
-	int checksum = MSG_ReadLong(msg);
+	checksum = MSG_ReadLong(msg);
 
 	// UDP spoofing protection
 	if (NETCHAN_GENCHECKSUM(chan->challenge, sequence) != checksum)
