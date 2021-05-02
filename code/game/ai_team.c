@@ -59,9 +59,6 @@ int muh;
 
 #include "match.h"
 
-// for the voice chats
-#include "../../ui/menudef.h"
-
 // cyr{
 int lastorderedgoal[MAX_CLIENTS]; // leader AI, aviod spamming humans with the same MSG
 int lastballoonstate[MAX_BALLOONS];

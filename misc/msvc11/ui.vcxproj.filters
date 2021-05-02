@@ -49,9 +49,6 @@
     <CustomBuildStep Include="..\..\code\game\bg_public.h">
       <Filter>Header Files</Filter>
     </CustomBuildStep>
-    <CustomBuildStep Include="..\..\ui\menudef.h">
-      <Filter>Header Files</Filter>
-    </CustomBuildStep>
     <CustomBuildStep Include="..\..\code\ui\ui_local.h">
       <Filter>Header Files</Filter>
     </CustomBuildStep>

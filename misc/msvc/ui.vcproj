@@ -861,26 +861,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\code\..\ui\menudef.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\code\game\q_shared.h"
 				>
 				<FileConfiguration
