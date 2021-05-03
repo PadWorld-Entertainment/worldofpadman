@@ -1303,7 +1303,6 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 
 	cgs.media.whiteShader = trap_R_RegisterShader("white");
 	cgs.media.charsetProp = trap_R_RegisterShaderNoMip("menu/art/font1_prop");
-	cgs.media.charsetPropGlow = trap_R_RegisterShaderNoMip("menu/art/font1_prop_glo");
 	cgs.media.charsetPropB = trap_R_RegisterShaderNoMip("menu/art/font2_prop");
 
 	CG_RegisterCvars();
