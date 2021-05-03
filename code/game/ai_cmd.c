@@ -84,10 +84,12 @@ void BotPrintTeamGoal(bot_state_t *bs) {
 		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna rush to the base for %1.0f secs\n", netname, t);
 		break;
 	}
+#if 0
 	case LTG_RETURNFLAG: {
 		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna try to return the flag for %1.0f secs\n", netname, t);
 		break;
 	}
+#endif
 	case LTG_DEFENDKEYAREA: {
 		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna defend a key area for %1.0f secs\n", netname, t);
 		break;
@@ -96,6 +98,7 @@ void BotPrintTeamGoal(bot_state_t *bs) {
 		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna get an item for %1.0f secs\n", netname, t);
 		break;
 	}
+#if 0
 	case LTG_KILL: {
 		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna kill someone for %1.0f secs\n", netname, t);
 		break;
@@ -109,11 +112,15 @@ void BotPrintTeamGoal(bot_state_t *bs) {
 		BotAI_Print(PRT_MESSAGE, "%s: I'm gonna patrol for %1.0f secs\n", netname, t);
 		break;
 	}
+#endif
 	default: {
+#if 0
 		if (bs->ctfroam_time > FloatTime()) {
 			t = bs->ctfroam_time - FloatTime();
 			BotAI_Print(PRT_MESSAGE, "%s: I'm gonna roam for %1.0f secs\n", netname, t);
-		} else {
+		} else
+#endif
+		{
 			BotAI_Print(PRT_MESSAGE, "%s: I've got a regular goal\n", netname);
 		}
 	}
