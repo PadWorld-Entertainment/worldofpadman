@@ -9,7 +9,7 @@
 
 #ifdef UI
 
-#include "../q3_ui/ui_local.h"
+#include "../ui/ui_local.h"
 
 #define FONTSHADER uis.charset
 #define WHITESHADER uis.whiteShader

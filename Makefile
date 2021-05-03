@@ -120,10 +120,6 @@ ifndef BASEGAME_CFLAGS
 BASEGAME_CFLAGS=
 endif
 
-ifndef MISSIONPACK
-MISSIONPACK=missionpack
-endif
-
 ifndef COPYDIR
 COPYDIR="/usr/local/games/worldofpadman"
 endif
@@ -260,7 +256,6 @@ CGDIR=$(MOUNT_DIR)/cgame
 BLIBDIR=$(MOUNT_DIR)/botlib
 NDIR=$(MOUNT_DIR)/null
 UIDIR=$(MOUNT_DIR)/ui
-Q3UIDIR=$(MOUNT_DIR)/q3_ui
 JPDIR=$(MOUNT_DIR)/jpeg-9d
 OGGDIR=$(MOUNT_DIR)/libogg-1.3.3
 VORBISDIR=$(MOUNT_DIR)/libvorbis-1.3.6
@@ -1297,12 +1292,6 @@ $(Q)$(CC) $(BASEGAME_CFLAGS) -DUI $(SHLIBCFLAGS) $(CFLAGS) $(OPTIMIZEVM) -o $@ -
 $(Q)$(DO_QVM_DEP)
 endef
 
-define DO_UI_CC_MISSIONPACK
-$(echo_cmd) "UI_CC_MISSIONPACK $<"
-$(Q)$(CC) -DUI $(SHLIBCFLAGS) $(CFLAGS) $(OPTIMIZEVM) -o $@ -c $<
-$(Q)$(DO_QVM_DEP)
-endef
-
 define DO_AS
 $(echo_cmd) "AS $<"
 $(Q)$(CC) $(CFLAGS) $(OPTIMIZE) -x assembler-with-cpp -o $@ -c $<
@@ -1459,7 +1448,6 @@ makedirs:
 	@$(MKDIR) $(B)/$(BASEGAME)/ui
 	@$(MKDIR) $(B)/$(BASEGAME)/qcommon
 	@$(MKDIR) $(B)/$(BASEGAME)/vm
-	@$(MKDIR) $(B)/$(MISSIONPACK)/ui
 	@$(MKDIR) $(B)/tools/asm
 	@$(MKDIR) $(B)/tools/etc
 	@$(MKDIR) $(B)/tools/rcc
@@ -1635,12 +1623,6 @@ define DO_UI_Q3LCC
 $(echo_cmd) "UI_Q3LCC $<"
 $(Q)$(Q3LCC) $(BASEGAME_CFLAGS) -DUI -o $@ $<
 endef
-
-define DO_UI_Q3LCC_MISSIONPACK
-$(echo_cmd) "UI_Q3LCC_MISSIONPACK $<"
-$(Q)$(Q3LCC) -DUI -o $@ $<
-endef
-
 
 Q3ASMOBJ = \
   $(B)/tools/asm/q3asm.o \
@@ -2703,7 +2685,7 @@ Q3UIOBJ_ = \
   $(B)/$(BASEGAME)/qcommon/q_math.o \
   $(B)/$(BASEGAME)/qcommon/q_shared.o
 
-Q3UIOBJ = $(Q3UIOBJ_) $(B)/$(MISSIONPACK)/ui/ui_syscalls.o
+Q3UIOBJ = $(Q3UIOBJ_) $(B)/$(BASEGAME)/ui/ui_syscalls.o
 Q3UIVMOBJ = $(Q3UIOBJ_:%.o=%.asm)
 
 $(B)/$(BASEGAME)/ui$(SHLIBNAME): $(Q3UIOBJ)
@@ -2912,7 +2894,7 @@ $(B)/$(BASEGAME)/ui/bg_%.o: $(GDIR)/bg_%.c
 $(B)/$(BASEGAME)/ui/wopc_%.o: $(CGDIR)/wopc_%.c
 	$(DO_UI_CC)
 
-$(B)/$(BASEGAME)/ui/%.o: $(Q3UIDIR)/%.c
+$(B)/$(BASEGAME)/ui/%.o: $(UIDIR)/%.c
 	$(DO_UI_CC)
 
 $(B)/$(BASEGAME)/ui/bg_%.asm: $(GDIR)/bg_%.c $(Q3LCC)
@@ -2921,11 +2903,8 @@ $(B)/$(BASEGAME)/ui/bg_%.asm: $(GDIR)/bg_%.c $(Q3LCC)
 $(B)/$(BASEGAME)/ui/wopc_%.asm: $(CGDIR)/wopc_%.c $(Q3LCC)
 	$(DO_UI_Q3LCC)
 
-$(B)/$(BASEGAME)/ui/%.asm: $(Q3UIDIR)/%.c $(Q3LCC)
+$(B)/$(BASEGAME)/ui/%.asm: $(UIDIR)/%.c $(Q3LCC)
 	$(DO_UI_Q3LCC)
-
-$(B)/$(MISSIONPACK)/ui/%.o: $(UIDIR)/%.c
-	$(DO_UI_CC_MISSIONPACK)
 
 $(B)/$(BASEGAME)/qcommon/%.o: $(CMDIR)/%.c
 	$(DO_SHLIB_CC)
@@ -2939,8 +2918,8 @@ $(B)/$(BASEGAME)/qcommon/%.asm: $(CMDIR)/%.c $(Q3LCC)
 #############################################################################
 
 OBJ = $(Q3OBJ) $(Q3ROBJ) $(Q3R2OBJ) $(Q3VKOBJ) $(Q3DOBJ) $(JPGOBJ) \
-  $(MPGOBJ) $(Q3GOBJ) $(Q3CGOBJ) $(MPCGOBJ) $(Q3UIOBJ) $(MPUIOBJ) \
-  $(MPGVMOBJ) $(Q3GVMOBJ) $(Q3CGVMOBJ) $(MPCGVMOBJ) $(Q3UIVMOBJ) $(MPUIVMOBJ)
+  $(Q3GOBJ) $(Q3CGOBJ) $(Q3UIOBJ) \
+  $(Q3GVMOBJ) $(Q3CGVMOBJ) $(Q3UIVMOBJ)
 TOOLSOBJ = $(LBURGOBJ) $(Q3CPPOBJ) $(Q3RCCOBJ) $(Q3LCCOBJ) $(Q3ASMOBJ)
 STRINGOBJ = $(Q3R2STRINGOBJ)
 
@@ -2960,9 +2939,15 @@ ifneq ($(BUILD_CLIENT),0)
     ifneq ($(BUILD_RENDERER_OPENGL2),0)
 	$(INSTALL) $(STRIP_FLAG) -m 0755 $(BR)/renderer_opengl2_$(SHLIBNAME) $(COPYBINDIR)/renderer_opengl2_$(SHLIBNAME)
     endif
+    ifneq ($(BUILD_RENDERER_VULKAN),0)
+	$(INSTALL) $(STRIP_FLAG) -m 0755 $(BR)/renderer_vulkan_$(SHLIBNAME) $(COPYBINDIR)/renderer_vulkan_$(SHLIBNAME)
+    endif
   else
     ifneq ($(BUILD_RENDERER_OPENGL2),0)
 	$(INSTALL) $(STRIP_FLAG) -m 0755 $(BR)/$(CLIENTBIN)_opengl2$(FULLBINEXT) $(COPYBINDIR)/$(CLIENTBIN)_opengl2$(FULLBINEXT)
+    endif
+    ifneq ($(BUILD_RENDERER_VULKAN),0)
+	$(INSTALL) $(STRIP_FLAG) -m 0755 $(BR)/$(CLIENTBIN)_vulkan$(FULLBINEXT) $(COPYBINDIR)/$(CLIENTBIN)_vulkan$(FULLBINEXT)
     endif
   endif
 endif
