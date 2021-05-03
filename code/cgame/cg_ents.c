@@ -997,122 +997,6 @@ static void CG_Balloon(centity_t *cent) {
 	trap_R_AddRefEntityToScene(&ent);
 }
 
-#if 0
-/*
-#######################
-CG_StationHealth
-#######################
-*/
-#define SH_NUMBER_SIZE 16 // 8
-#define SH_MAXCHARS 16
-
-static void CG_DrawIntegerToScene( vec3_t origin, int value ) {
-	vec3_t		delta, dir, vec, up = {0, 0, 1};
-	float		len, currentoffset;
-	int			i, currentchar;
-	qboolean	negative;
-	polyVert_t	polyVerts[4];
-	char		tmpstr[SH_MAXCHARS];
-
-	memset(&polyVerts,0,sizeof(polyVerts));
-	polyVerts[0].modulate[0] = 
-		polyVerts[1].modulate[0] = 
-		polyVerts[2].modulate[0] = 
-		polyVerts[3].modulate[0] = 0xff;
-	polyVerts[0].modulate[1] = 
-		polyVerts[1].modulate[1] = 
-		polyVerts[2].modulate[1] = 
-		polyVerts[3].modulate[1] = 0xff;
-	polyVerts[0].modulate[2] = 
-		polyVerts[1].modulate[2] = 
-		polyVerts[2].modulate[2] = 
-		polyVerts[3].modulate[2] = 0xff;
-
-	VectorSubtract(cg.refdef.vieworg, origin, dir);
-	CrossProduct(dir, up, vec);
-	VectorNormalize(vec);
-
-	// if the view would be "inside" the sprite, kill the sprite
-	// so it doesn't add too much overdraw
-	VectorSubtract( origin, cg.refdef.vieworg, delta );
-	len = VectorLength( delta );
-	if ( len < 32 )
-	{ return; }
-	else if( len < 128 )
-	{
-		polyVerts[0].modulate[3] = 
-			polyVerts[1].modulate[3] = 
-			polyVerts[2].modulate[3] = 
-			polyVerts[3].modulate[3] = 0xff*(len-32)/128;
-	}
-	else
-	{
-		polyVerts[0].modulate[3] = 
-			polyVerts[1].modulate[3] = 
-			polyVerts[2].modulate[3] = 
-			polyVerts[3].modulate[3] = 0xff;
-	}
-
-	//not needed @ stations ... but maybe I need it later
-	negative=qfalse;
-	if (value < 0) {
-		negative=qtrue;
-		value=-value;
-	}
-
-	currentchar=SH_MAXCHARS-1;
-	tmpstr[currentchar--]='\0';
-	do
-	{
-		tmpstr[currentchar--]='0'+(value%10);
-		value/=10;
-	} while(currentchar>0 && value>0);// currentchar>0 => so we have space for a minus
-
-	if(negative)
-	{
-		tmpstr[currentchar--]='-';
-	}
-
-	currentchar++;//back to the last written char
-	currentoffset=(float)strlen(&tmpstr[currentchar])*(float)SH_NUMBER_SIZE*0.25f;
-
-	polyVerts[0].xyz[2] = 
-		polyVerts[1].xyz[2] = origin[2];
-	polyVerts[3].xyz[2] = 
-		polyVerts[2].xyz[2] = origin[2]-(float)SH_NUMBER_SIZE;//up[2] is 1 ;)
-
-	for (i = currentchar; tmpstr[i]!='\0' ; i++, currentoffset-=((float)SH_NUMBER_SIZE*0.5f))
-	{
-		polyVerts[0].st[1] =
-			polyVerts[1].st[1] = (tmpstr[i]>>4)*0.0625f;
-		polyVerts[3].st[1] =
-			polyVerts[2].st[1] = ((tmpstr[i]>>4)+1)*0.0625f;
-
-		polyVerts[0].xyz[0] = 
-			polyVerts[3].xyz[0] = origin[0]+vec[0]*currentoffset;
-		polyVerts[1].xyz[0] = 
-			polyVerts[2].xyz[0] = origin[0]+vec[0]*(currentoffset-((float)SH_NUMBER_SIZE*0.5f));
-
-		polyVerts[0].xyz[1] = 
-			polyVerts[3].xyz[1] = origin[1]+vec[1]*currentoffset;
-		polyVerts[1].xyz[1] = 
-			polyVerts[2].xyz[1] = origin[1]+vec[1]*(currentoffset-((float)SH_NUMBER_SIZE*0.5f));
-
-		polyVerts[0].st[0] =
-			polyVerts[3].st[0] = (tmpstr[i]&15)*0.0625f;
-		polyVerts[1].st[0] =
-			polyVerts[2].st[0] = ((tmpstr[i]&15)+1)*0.0625f;
-
-//		Com_Printf("paint:'%c'@{{%.0f|%.0f|%.0f}|{%.0f|%.0f|%.0f}|{%.0f|%.0f|%.0f}|{%.0f|%.0f|%.0f}}\n",tmpstr[i],polyVerts[0].xyz[0],polyVerts[0].xyz[1],polyVerts[0].xyz[2]
-//			,polyVerts[1].xyz[0],polyVerts[1].xyz[1],polyVerts[1].xyz[2]
-//			,polyVerts[2].xyz[0],polyVerts[2].xyz[1],polyVerts[2].xyz[2]
-//			,polyVerts[3].xyz[0],polyVerts[3].xyz[1],polyVerts[3].xyz[2]);
-
-		trap_R_AddPolyToScene(cgs.media.charsetShader,4,polyVerts);
-	}
-}
-#endif
-
 static void CG_Station(centity_t *cent) {
 	refEntity_t ent;
 	//	vec3_t			temporig;
@@ -1162,21 +1046,9 @@ static void CG_Station(centity_t *cent) {
 		trap_R_AddRefEntityToScene(&ent);
 
 		trap_S_StopLoopingSound(cent->currentState.number);
-		/*
-				if(cent->currentState.angles2[2]!=1.0f)
-				{
-					AnglesToAxis(cg.autoAngles,ent.axis);
-					ent.customShader = cgs.media.quadWeaponShader;
-		//			ent.shaderRGBA[0] =
-		//			ent.shaderRGBA[1] =
-		//			ent.shaderRGBA[2] = 0xff;
-		//			ent.shaderRGBA[3] = 80;
-					trap_R_AddRefEntityToScene(&ent);
-				}
-		*/
-	} else { // Liste von missbrauchten Variablen:
-		// angles2[1] -> timer damit die loading-ringe langsam runter gehen (1.0=ein player steht in der station)
-		// beamEnd[0] -> angles2[1] vom letzten frame
+	} else { // list of re-used variables
+		// angles2[1] -> timer for slowing down the loading ring movement (1.0=ein player steht in der station)
+		// beamEnd[0] -> angles2[1] of the last frame
 		if (cent->currentState.angles2[1] < 1.0f) {
 			if (cent->beamEnd[0] < cent->currentState.angles2[1] && !cent->trailTime) {
 				trap_S_StartSound(cent->lerpOrigin, cent->currentState.number, CHAN_ITEM, cgs.media.station_start);
@@ -1267,18 +1139,14 @@ void CG_Boomies_Explosion(vec3_t origin) {
 
 static void CG_DrawBamBam(centity_t *cent) {
 	refEntity_t ent;
-	vec3_t tmpV3;
 
 	memset(&ent, 0, sizeof(ent));
 
 	VectorCopy(cent->lerpOrigin, ent.origin);
-	//	AxisClear(ent.axis);
 	AnglesToAxis(cent->currentState.angles, ent.axis);
 
 	ent.reType = RT_MODEL;
 	ent.hModel = cgs.gameModels[cent->currentState.modelindex];
-
-	//	ent.frame = ent.oldframe = (((5*cg.time)/1000)&0xff);
 
 	ent.oldframe = cent->lastweaponframe;
 	switch (cent->currentState.generic1) {
@@ -1306,16 +1174,11 @@ static void CG_DrawBamBam(centity_t *cent) {
 	}
 	cent->lastweaponframe = ent.frame;
 
-	VectorCopy(ent.origin, tmpV3);
-	tmpV3[2] += 64;
-	//	CG_DrawIntegerToScene(tmpV3,ent.frame);
-
 	trap_R_AddRefEntityToScene(&ent);
 }
 
 static void CG_DrawBoomies(centity_t *cent) {
 	refEntity_t ent;
-	vec3_t tmpV3;
 
 	memset(&ent, 0, sizeof(ent));
 
@@ -1331,10 +1194,6 @@ static void CG_DrawBoomies(centity_t *cent) {
 	if (ent.frame > 15)
 		ent.frame = 15;
 	ent.oldframe = ent.frame;
-
-	VectorCopy(ent.origin, tmpV3);
-	tmpV3[2] += 64;
-	//	CG_DrawIntegerToScene(tmpV3,ent.frame);
 
 	trap_R_AddRefEntityToScene(&ent);
 }

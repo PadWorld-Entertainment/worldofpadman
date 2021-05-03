@@ -790,8 +790,6 @@ typedef struct {
 	qhandle_t noammoShader;
 
 	qhandle_t smokePuffShader;
-	//	qhandle_t	smokePuffRageProShader;
-	//	qhandle_t	shotgunSmokePuffShader;
 	qhandle_t plasmaBallShader;
 	qhandle_t waterBubbleShader;
 	qhandle_t bloodTrailShader;
@@ -813,7 +811,6 @@ typedef struct {
 
 	// powerup shaders
 	qhandle_t quadShader;
-	qhandle_t quadWeaponShader;
 	qhandle_t invisShader;
 	qhandle_t regenShader;
 	qhandle_t battleSuitShader;
