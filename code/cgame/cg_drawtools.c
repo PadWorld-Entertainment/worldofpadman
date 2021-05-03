@@ -824,17 +824,13 @@ void UI_DrawProportionalString(int x, int y, const char *str, int style, const v
 	}
 
 	if (style & UI_PULSE) {
-		drawcolor[0] = color[0] * 0.8;
-		drawcolor[1] = color[1] * 0.8;
-		drawcolor[2] = color[2] * 0.8;
-		drawcolor[3] = color[3];
 		UI_DrawProportionalString2(x, y, str, color, sizeScale, cgs.media.charsetProp);
-
 		drawcolor[0] = color[0];
 		drawcolor[1] = color[1];
 		drawcolor[2] = color[2];
-		drawcolor[3] = 0.5 + 0.5 * sin(cg.time / PULSE_DIVISOR);
-		UI_DrawProportionalString2(x, y, str, drawcolor, sizeScale, cgs.media.charsetPropGlow);
+		drawcolor[3] = 0.75f + 0.25f * sin(cg.time / PULSE_DIVISOR);
+		UI_DrawProportionalString2(x - 2 + (int)(random() * 5.99f), y - 2 + (int)(random() * 5.99f), str, drawcolor,
+								   sizeScale, cgs.media.charsetProp);
 		return;
 	}
 
