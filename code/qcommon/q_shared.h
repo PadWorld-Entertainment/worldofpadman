@@ -71,7 +71,7 @@ extern const int demo_protocols[];
 #define MAX_TEAMNAME 32
 #define MAX_MASTER_SERVERS 5 // number of supported master servers
 
-#define DEMOEXT "wopdemo_" // standard demo extension
+#define DEMOEXT "dm_" // standard demo extension
 
 #ifdef _MSC_VER
 
