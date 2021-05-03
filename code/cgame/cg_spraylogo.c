@@ -429,7 +429,7 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 		color[3] = 255;
 	}
 
-	texCoordScale = 0.5 * 1.0 / radius;
+	texCoordScale = 0.5f * 1.0f / radius;
 
 	tmplp = drawLogoPolys;
 	level = 1;
@@ -483,8 +483,8 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 			v->xyz[2] = LogoFragmentPoints[lf->firstPoint + j][2] + dir[2] * (0.1f + 0.01f * (float)(level));
 
 			VectorSubtract(v->xyz, origin, delta);
-			v->st[0] = 0.5 + DotProduct(delta, axis[1]) * texCoordScale;
-			v->st[1] = 0.5 + DotProduct(delta, axis[2]) * texCoordScale;
+			v->st[0] = 0.5f + DotProduct(delta, axis[1]) * texCoordScale;
+			v->st[1] = 0.5f + DotProduct(delta, axis[2]) * texCoordScale;
 			v->st[0] += level * 10.0f; // "missbrauch" ... level-info into the engine ^^
 
 			memcpy(&v->modulate, &color, sizeof(color));
