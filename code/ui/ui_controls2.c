@@ -1096,36 +1096,6 @@ static void Controls_ActionEvent(void *ptr, int event) {
 	}
 }
 
-#if 0
-/*
-=================
-Controls_InitModel
-=================
-*/
-static void Controls_InitModel( void )
-{
-	memset( &s_controls.playerinfo, 0, sizeof(playerInfo_t) );
-
-	Controls_UpdateModel( ANIM_IDLE );
-}
-
-/*
-=================
-Controls_InitWeapons
-=================
-*/
-static void Controls_InitWeapons( void ) {
-	gitem_t *	item;
-
-	for ( item = bg_itemlist + 1 ; item->classname ; item++ ) {
-		if ( item->giType != IT_WEAPON ) {
-			continue;
-		}
-		trap_R_RegisterModel( item->world_model[0] );
-	}
-}
-#endif
-
 /*
 =================
 Controls_MenuInit
