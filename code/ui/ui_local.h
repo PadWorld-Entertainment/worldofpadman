@@ -118,7 +118,6 @@ extern vmCvar_t wop_AutoBindUnusedKeys;
 #define MTYPE_TEXT 7
 #define MTYPE_SCROLLLIST 8
 #define MTYPE_PTEXT 9 // proportional string
-#define MTYPE_BTEXT 10 // banner string
 
 #define MTYPE_BITMAP1024S 11 // pic in 1024x768 with shadow(S)
 #define MTYPE_TEXTS 12		 // sizeable(S) text
@@ -465,12 +464,6 @@ extern void UI_ModsMenu_Cache(void);
 extern void UI_SpecifyPasswordMenu(const char *string, const char *name);
 
 //
-// ui_playermodel.c
-// ... FIXME: this sourcefile isn't used by wop
-// extern void UI_PlayerModelMenu( void );
-extern void PlayerModel_Cache(void);
-
-//
 // ui_playersettings.c
 //
 extern void UI_PlayerSettingsMenu(void);
@@ -651,7 +644,6 @@ typedef struct {
 
 	qhandle_t charsetShader;
 	qhandle_t charsetProp;
-	qhandle_t charsetPropB;
 	qhandle_t cursor;
 	qhandle_t rb_on;
 	qhandle_t rb_off;
@@ -690,7 +682,6 @@ extern void UI_DrawIngameBG(void);
 extern void UI_UpdateScreen(void);
 extern void UI_SetColor(const float *rgba);
 extern void UI_LerpColor(const vec4_t a, const vec4_t b, vec4_t c, float t);
-extern void UI_DrawBannerString(int x, int y, const char *str, int style, const vec4_t color);
 extern float UI_ProportionalSizeScale(int style);
 extern void UI_DrawProportionalString(int x, int y, const char *str, int style, const vec4_t color);
 extern void UI_DrawString_AutoWrapped(int x, int ystart, int xmax, int ystep, const char *str, int style, const vec4_t color,

@@ -179,36 +179,6 @@ static void TextS_Draw(menutext_s *t) {
 
 /*
 =================
-BText_Init
-=================
-*/
-static void BText_Init(menutext_s *t) {
-	t->generic.flags |= QMF_INACTIVE;
-}
-
-/*
-=================
-BText_Draw
-=================
-*/
-static void BText_Draw(menutext_s *t) {
-	int x;
-	int y;
-	const float *color;
-
-	x = t->generic.x;
-	y = t->generic.y;
-
-	if (t->generic.flags & QMF_GRAYED)
-		color = text_color_disabled;
-	else
-		color = t->color;
-
-	UI_DrawBannerString(x, y, t->string, t->style, color);
-}
-
-/*
-=================
 PText_Init
 =================
 */
@@ -1489,10 +1459,6 @@ void Menu_AddItem(menuframework_s *menu, void *item) {
 			PText_Init((menutext_s *)item);
 			break;
 
-		case MTYPE_BTEXT:
-			BText_Init((menutext_s *)item);
-			break;
-
 		case MTYPE_BITMAP1024S:
 			Bitmap1024S_Init((menubitmap1024s_s *)item);
 			break;
@@ -1727,10 +1693,6 @@ void Menu_Draw(menuframework_s *menu) {
 
 			case MTYPE_PTEXT:
 				PText_Draw((menutext_s *)itemptr);
-				break;
-
-			case MTYPE_BTEXT:
-				BText_Draw((menutext_s *)itemptr);
 				break;
 
 			case MTYPE_BITMAP1024S:
@@ -1987,7 +1949,6 @@ Menu_Cache
 void Menu_Cache(void) {
 	uis.charsetShader = trap_R_RegisterShaderNoMip("gfx/2d/WoPascii");
 	uis.charsetProp = trap_R_RegisterShaderNoMip("menu/art/font1_prop");
-	uis.charsetPropB = trap_R_RegisterShaderNoMip("menu/art/font2_prop");
 	uis.cursor = trap_R_RegisterShaderNoMip("menu/art/3_cursor2");
 	uis.rb_on = trap_R_RegisterShaderNoMip("menu/art/switch_on");
 	uis.rb_off = trap_R_RegisterShaderNoMip("menu/art/switch_off");
