@@ -351,7 +351,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.voipmode_grayed.generic.flags = QMF_PULSE;
 	soundOptionsInfo.voipmode_grayed.generic.x = POSITION_X - 25;
 	soundOptionsInfo.voipmode_grayed.generic.y = y;
-	soundOptionsInfo.voipmode_grayed.string = "needs openAL & fast network:";
+	soundOptionsInfo.voipmode_grayed.string = "needs fast network:";
 	soundOptionsInfo.voipmode_grayed.style = (UI_CENTER | UI_SMALLFONT);
 	soundOptionsInfo.voipmode_grayed.color = menu_text_color;
 
