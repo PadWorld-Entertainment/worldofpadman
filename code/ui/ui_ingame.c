@@ -270,8 +270,7 @@ void InGame_MenuInit(void) {
 	s_ingame.voiceingame.focuscolor = color_orange;
 	s_ingame.voiceingame.style = UI_CENTER | UI_SMALLFONT;
 	// voip has to be supported by both server and client
-	if (!trap_Cvar_VariableValue("sv_voip") || !trap_Cvar_VariableValue("cl_voip") ||
-		!trap_Cvar_VariableValue("s_useOpenAL")) {
+	if (!trap_Cvar_VariableValue("sv_voip") || !trap_Cvar_VariableValue("cl_voip")) {
 		s_ingame.voiceingame.generic.flags |= QMF_GRAYED;
 	}
 

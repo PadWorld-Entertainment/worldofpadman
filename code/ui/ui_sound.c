@@ -90,7 +90,7 @@ static soundOptionsInfo_t soundOptionsInfo;
 
 static void UI_SoundOptionsMenu_Update(void) {
 	// openAL and a high rate are conditions for all voip settings
-	qboolean disableVoip = (0 == soundOptionsInfo.openAL.curvalue || 25000 > trap_Cvar_VariableValue("rate"));
+	qboolean disableVoip = 25000 > trap_Cvar_VariableValue("rate");
 	// voip is a condition for voip volume
 	qboolean voipOff = (0 == soundOptionsInfo.voipmode.curvalue);
 	// automatic recording is a condition for voip threshold

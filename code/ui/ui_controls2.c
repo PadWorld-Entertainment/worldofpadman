@@ -619,7 +619,7 @@ static void Controls_Update(void) {
 	}
 
 	// special case :/
-	if (0 == UI_GetCvarInt("cl_voip") || 0 == UI_GetCvarInt("s_useOpenAL") || 1 == UI_GetCvarInt("cl_voipUseVAD")) {
+	if (0 == UI_GetCvarInt("cl_voip") || 1 == UI_GetCvarInt("cl_voipUseVAD")) {
 		s_controls.pushToTalk.generic.flags |= QMF_GRAYED;
 	}
 }
