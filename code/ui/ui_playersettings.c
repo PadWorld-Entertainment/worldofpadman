@@ -44,7 +44,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_HANDICAP 11
 #define ID_EFFECTS 12
 #define ID_BACK 13
-//#define ID_MODEL		14
 
 #define ID_MODELSLEFT 15
 #define ID_MODELSRIGHT 16
@@ -630,12 +629,6 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 	case ID_HANDICAP:
 		// trap_Cvar_Set( "handicap", va( "%i", 100 - 25 * s_playersettings.handicap.curvalue ) );
 		break;
-
-		/*	case ID_MODEL:
-				PlayerSettings_SaveChanges();
-				UI_PlayerModelMenu();
-				break;
-		*/
 	case ID_BACK:
 		PlayerSettings_SaveChanges();
 		UI_PopMenu();

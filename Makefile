@@ -2663,7 +2663,6 @@ Q3UIOBJ_ = \
   $(B)/$(BASEGAME)/ui/ui_music.o \
   $(B)/$(BASEGAME)/ui/ui_network.o \
   $(B)/$(BASEGAME)/ui/ui_password.o \
-  $(B)/$(BASEGAME)/ui/ui_playermodel.o \
   $(B)/$(BASEGAME)/ui/ui_players.o \
   $(B)/$(BASEGAME)/ui/ui_playersettings.o \
   $(B)/$(BASEGAME)/ui/ui_preferences.o \
