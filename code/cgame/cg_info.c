@@ -32,33 +32,6 @@ static int loadingItemIconCount;
 static qhandle_t loadingPlayerIcons[MAX_LOADING_PLAYER_ICONS];
 static qhandle_t loadingItemIcons[MAX_LOADING_ITEM_ICONS];
 
-#if 0
-/*
-===================
-CG_DrawLoadingIcons
-===================
-*/
-static void CG_DrawLoadingIcons( void ) {
-	int		n;
-	int		x, y;
-
-	for( n = 0; n < loadingPlayerIconCount; n++ ) {
-		x = 16 + n * 78;
-		y = 324-40;
-		CG_DrawPic( x, y, 64, 64, loadingPlayerIcons[n] );
-	}
-
-	for( n = 0; n < loadingItemIconCount; n++ ) {
-		y = 400-40;
-		if( n >= 13 ) {
-			y += 40;
-		}
-		x = 16 + n % 13 * 48;
-		CG_DrawPic( x, y, 32, 32, loadingItemIcons[n] );
-	}
-}
-#endif
-
 /*
 ======================
 CG_LoadingString
@@ -200,7 +173,6 @@ void CG_DrawInformation(void) {
 	case GT_TEAM:
 		info = "menu/help/loadinghelp_teamffa";
 		break;
-
 	default:
 		info = "menu/help/loadinghelp_ffa";
 		break;
@@ -218,8 +190,8 @@ void CG_DrawInformation(void) {
 	CG_DrawPic1024(lsX, lsY, lsW, lsH, levelshot);
 	CG_DrawPic1024(lsX, lsY, lsW, lsH, helppage);
 
-	// test werte: 300,650,424,40
-	// von minibild: 282,675,460,48
+	// test values: 300,650,424,40
+	// thumbnail: 282,675,460,48
 	lx = 282;
 	ly = 675;
 	lw = 460 * cg.loadingprogress;
@@ -228,121 +200,4 @@ void CG_DrawInformation(void) {
 	trap_R_DrawStretchPic(lx, ly, lw, lh, 0, 0, cg.loadingprogress, 1,
 						  trap_R_RegisterShaderNoMip("loadingscreen/ladebalken"));
 	CG_DrawPic1024(282, 675, 460, 48, trap_R_RegisterShaderNoMip("loadingscreen/ladefenster"));
-
-	return;
-
-#if 0
-	// draw the icons of things as they are loaded
-	CG_DrawLoadingIcons();
-
-	// the first 150 rows are reserved for the client connection
-	// screen to write into
-	if (cg.infoScreenText[0]) {
-		UI_DrawProportionalString(320, 128 - 32, va("Loading... %s", cg.infoScreenText),
-								  UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
-	} else {
-		UI_DrawProportionalString(320, 128 - 32, "Awaiting snapshot...", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW,
-								  colorWhite);
-	}
-
-	// draw info string information
-
-	y = 180 - 32;
-
-	// don't print server lines if playing a local game
-	trap_Cvar_VariableStringBuffer("sv_running", buf, sizeof(buf));
-	if (!atoi(buf)) {
-		// server hostname
-		Q_strncpyz(buf, Info_ValueForKey(info, "sv_hostname"), 1024);
-		Q_CleanStr(buf);
-		UI_DrawProportionalString(320, y, buf, UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
-		y += PROP_HEIGHT;
-
-		// pure server
-		s = Info_ValueForKey(sysInfo, "sv_pure");
-		if (s[0] == '1') {
-			UI_DrawProportionalString(320, y, "Pure Server", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
-			y += PROP_HEIGHT;
-		}
-
-		// server-specific message of the day
-		s = CG_ConfigString(CS_MOTD);
-		if (s[0]) {
-			UI_DrawProportionalString(320, y, s, UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
-			y += PROP_HEIGHT;
-		}
-
-		// some extra space after hostname and motd
-		y += 10;
-	}
-
-	// map-specific message (long map name)
-	s = CG_ConfigString(CS_MESSAGE);
-	if (s[0]) {
-		UI_DrawProportionalString(320, y, s, UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
-		y += PROP_HEIGHT;
-	}
-
-	// cheats warning
-	s = Info_ValueForKey(sysInfo, "sv_cheats");
-	if (s[0] == '1') {
-		UI_DrawProportionalString(320, y, "CHEATS ARE ENABLED", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
-		y += PROP_HEIGHT;
-	}
-
-	// game type
-	switch (cgs.gametype) {
-	case GT_FFA:
-		s = "Free For All";
-		break;
-	case GT_SINGLE_PLAYER:
-		s = "Single Player";
-		break;
-	case GT_TOURNAMENT:
-		s = "Tournament";
-		break;
-	case GT_TEAM:
-		s = "Team Deathmatch";
-		break;
-	case GT_CTF:
-		s = "Capture the Lolly";
-		break;
-	case GT_SPRAY:
-		s = "TeamPlay Spraymode";
-		break;
-	case GT_SPRAYFFA:
-		s = "FFA Spraymode";
-		break;
-	default:
-		s = "Unknown Gametype";
-		break;
-	}
-	UI_DrawProportionalString(320, y, s, UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, colorWhite);
-	y += PROP_HEIGHT;
-
-	value = atoi(Info_ValueForKey(info, "timelimit"));
-	if (value) {
-		UI_DrawProportionalString(320, y, va("timelimit %i", value), UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW,
-								  colorWhite);
-		y += PROP_HEIGHT;
-	}
-
-	if (cgs.gametype < GT_CTF) {
-		value = atoi(Info_ValueForKey(info, "pointlimit"));
-		UI_DrawProportionalString(320, y, va("pointlimit %i", value), UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW,
-								  colorWhite);
-		if (value) {
-			y += PROP_HEIGHT;
-		}
-	}
-
-	if (cgs.gametype >= GT_CTF) {
-		value = atoi(Info_ValueForKey(info, "pointlimit"));
-		if (value) {
-			UI_DrawProportionalString(320, y, va("pointlimit %i", value), UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW,
-									  colorWhite);
-			y += PROP_HEIGHT;
-		}
-	}
-#endif
 }
