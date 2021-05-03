@@ -651,7 +651,6 @@ typedef struct {
 
 	qhandle_t charset;
 	qhandle_t charsetProp;
-	qhandle_t charsetPropGlow;
 	qhandle_t charsetPropB;
 	qhandle_t cursor;
 	qhandle_t rb_on;

@@ -564,19 +564,6 @@ void UI_DrawProportionalString(int x, int y, const char *str, int style, const v
 	}
 
 	if (style & UI_PULSE) {
-		/*(original)
-				drawcolor[0] = color[0] * 0.7;
-				drawcolor[1] = color[1] * 0.7;
-				drawcolor[2] = color[2] * 0.7;
-				drawcolor[3] = color[3];
-				UI_DrawProportionalString2( x, y, str, color, sizeScale, uis.charsetProp );
-
-				drawcolor[0] = color[0];
-				drawcolor[1] = color[1];
-				drawcolor[2] = color[2];
-				drawcolor[3] = 0.5 + 0.5 * sin( uis.realtime / PULSE_DIVISOR );
-				UI_DrawProportionalString2( x, y, str, drawcolor, sizeScale, uis.charsetPropGlow );
-		*/
 		UI_DrawProportionalString2(x, y, str, color, sizeScale, uis.charsetProp);
 		drawcolor[0] = color[0];
 		drawcolor[1] = color[1];
