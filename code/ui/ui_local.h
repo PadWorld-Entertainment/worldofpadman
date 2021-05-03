@@ -173,8 +173,7 @@ extern vmCvar_t wop_AutoBindUnusedKeys;
 #define BGP_STARTSERVERBOTS 0x004000
 #define BGP_SIMPLEBG 0x008000
 #define BGP_LASTMENU 0x010000
-#define BGP_SINGLEMENU 0x020000
-#define BGP_SPECIFYPASSBG 0x040000
+#define BGP_SPECIFYPASSBG 0x020000
 
 typedef struct _tag_menuframework {
 	int cursor;
@@ -645,7 +644,6 @@ typedef struct {
 	qhandle_t pad_startservermaps;
 	qhandle_t pad_startserverbots;
 	qhandle_t pad_ingamebg;
-	qhandle_t pad_singlemenubg;
 
 	char spraylogoNames[MAX_SPRAYLOGOS_LOADED][MAX_SPRAYLOGO_NAME];
 	qhandle_t spraylogoShaders[MAX_SPRAYLOGOS_LOADED];

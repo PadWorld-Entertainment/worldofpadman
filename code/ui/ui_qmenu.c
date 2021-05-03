@@ -2019,7 +2019,6 @@ void Menu_Cache(void) {
 	uis.pad_startservermaps = trap_R_RegisterShaderNoMip("menu/startserver/mapbg");
 	uis.pad_startserverbots = trap_R_RegisterShaderNoMip("menu/startserver/botbg");
 	uis.pad_ingamebg = trap_R_RegisterShaderNoMip("menu/ingame/bg2");
-	uis.pad_singlemenubg = trap_R_RegisterShaderNoMip("menu/single/background");
 
 	menu_switch_sound = trap_S_RegisterSound("sounds/menu/menu_switch", qfalse);
 	menu_click_sound = trap_S_RegisterSound("sounds/menu/mouse_click", qfalse);

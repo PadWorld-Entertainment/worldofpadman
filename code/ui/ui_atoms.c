@@ -1503,8 +1503,6 @@ void UI_DrawMenu(menuframework_s *menu) {
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_startservermaps);
 				if (menu->bgparts & BGP_STARTSERVERBOTS)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_startserverbots);
-				if (menu->bgparts & BGP_SINGLEMENU)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_singlemenubg);
 			} else {
 				UI_FillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, colorBlack);
 			}
