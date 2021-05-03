@@ -577,6 +577,17 @@ TODO: write some info ;)
 
 static int activepage = 0;
 
+static const char *SkipNumber(const char *logoName) {
+	const char *p = logoName;
+	while (*p != '\0') {
+		const char c = tolower(*p);
+		if (c >= 'a' && c <= 'z')
+			return p;
+		++p;
+	}
+	return logoName;
+}
+
 void ActiveChooseLogoMenu(void) {
 	vec4_t tblack33 = {0.0f, 0.0f, 0.0f, 0.33f};
 	int i, j, catcher, CursorAtLogo, numPages;
@@ -632,14 +643,16 @@ void ActiveChooseLogoMenu(void) {
 
 	CursorAtLogo = -1;
 	for (i = 0, j = activepage * 8; i < 4; i++, j++) {
+		const char *logoName;
 		// first line
 		if (j >= loadedlogos)
 			break;
 		trap_R_SetColor(spraycolor);
 		CG_DrawPic(XLL + i * (LOGOSIZE + GAP), POSY_FIRSTLINE, LOGOSIZE, LOGOSIZE, loadedlogos_array[j].logohandle);
 		trap_R_SetColor(NULL);
-		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(loadedlogos_array[j].name) * 4,
-						 POSY_FIRSTLINE + LOGOSIZE + 10, loadedlogos_array[j].name, colorWhite, qtrue, qtrue, 8, 16,
+		logoName = SkipNumber(loadedlogos_array[j].name);
+		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
+						 POSY_FIRSTLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8, 16,
 						 32);
 		//		if((cgs.cursorX>XLL+i*(LOGOSIZE+GAP) && cgs.cursorX<XLL+LOGOSIZE+i*(LOGOSIZE+GAP)) &&
 		//			(cgs.cursorY>POSY_FIRSTLINE && cgs.cursorY<POSY_FIRSTLINE+LOGOSIZE+26))
@@ -653,8 +666,9 @@ void ActiveChooseLogoMenu(void) {
 		CG_DrawPic(XLL + i * (LOGOSIZE + GAP), POSY_SECONDLINE, LOGOSIZE, LOGOSIZE,
 				   loadedlogos_array[(j + 4)].logohandle);
 		trap_R_SetColor(NULL);
-		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(loadedlogos_array[(j + 4)].name) * 4,
-						 POSY_SECONDLINE + LOGOSIZE + 10, loadedlogos_array[(j + 4)].name, colorWhite, qtrue, qtrue, 8,
+		logoName = SkipNumber(loadedlogos_array[(j + 4)].name);
+		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
+						 POSY_SECONDLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8,
 						 16, 32);
 		//		if((cgs.cursorX>XLL+i*(LOGOSIZE+GAP) && cgs.cursorX<XLL+LOGOSIZE+i*(LOGOSIZE+GAP)) &&
 		//			(cgs.cursorY>POSY_SECONDLINE && cgs.cursorY<POSY_SECONDLINE+LOGOSIZE+26))
