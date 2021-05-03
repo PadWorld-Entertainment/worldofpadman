@@ -649,7 +649,7 @@ typedef struct {
 	qhandle_t spraylogoShaders[MAX_SPRAYLOGOS_LOADED];
 	int spraylogosLoaded;
 
-	qhandle_t charset;
+	qhandle_t charsetShader;
 	qhandle_t charsetProp;
 	qhandle_t charsetPropB;
 	qhandle_t cursor;

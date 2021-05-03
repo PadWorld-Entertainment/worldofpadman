@@ -11,7 +11,7 @@
 
 #include "../ui/ui_local.h"
 
-#define FONTSHADER uis.charset
+#define FONTSHADER uis.charsetShader
 #define WHITESHADER uis.whiteShader
 #define ADJUSTFROM640 UI_AdjustFrom640
 #define INT_MSECTIME uis.realtime

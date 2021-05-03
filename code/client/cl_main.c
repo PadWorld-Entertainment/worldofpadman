@@ -2804,13 +2804,7 @@ void CL_InitRenderer(void) {
 	re.BeginRegistration(&cls.glconfig);
 
 	// load character sets
-	if (cls.glconfig.hardwareType == GLHW_GENERIC) {
-		cls.charSetShader = re.RegisterShader("gfx/2d/WoPascii");
-		if (!cls.charSetShader)
-			cls.charSetShader = re.RegisterShader("gfx/2d/bigchars");
-	} else
-		cls.charSetShader = re.RegisterShader("gfx/2d/bigchars");
-
+	cls.charSetShader = re.RegisterShader("gfx/2d/WoPascii");
 	cls.whiteShader = re.RegisterShader("white");
 	cls.consoleShader = re.RegisterShader("console");
 	g_console_field_width = cls.glconfig.vidWidth / SMALLCHAR_WIDTH - 2;

@@ -1985,12 +1985,7 @@ Menu_Cache
 =================
 */
 void Menu_Cache(void) {
-	if (uis.glconfig.hardwareType == GLHW_GENERIC) {
-		uis.charset = trap_R_RegisterShaderNoMip("gfx/2d/WoPascii");
-		if (!uis.charset)
-			uis.charset = trap_R_RegisterShaderNoMip("gfx/2d/bigchars");
-	} else
-		uis.charset = trap_R_RegisterShaderNoMip("gfx/2d/bigchars");
+	uis.charsetShader = trap_R_RegisterShaderNoMip("gfx/2d/WoPascii");
 	uis.charsetProp = trap_R_RegisterShaderNoMip("menu/art/font1_prop");
 	uis.charsetPropB = trap_R_RegisterShaderNoMip("menu/art/font2_prop");
 	uis.cursor = trap_R_RegisterShaderNoMip("menu/art/3_cursor2");

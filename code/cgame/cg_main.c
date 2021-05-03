@@ -1292,17 +1292,9 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 	cgs.serverCommandSequence = serverCommandSequence;
 
 	// load a few needed things before we do any screen updates
-	if (cgs.glconfig.hardwareType == GLHW_GENERIC) {
-		cgs.media.charsetShader = trap_R_RegisterShader("gfx/2d/WoPascii");
-		if (!cgs.media.charsetShader) {
-			cgs.media.charsetShader = trap_R_RegisterShader("gfx/2d/bigchars");
-		}
-	} else {
-		cgs.media.charsetShader = trap_R_RegisterShader("gfx/2d/bigchars");
-	}
-
-	cgs.media.whiteShader = trap_R_RegisterShader("white");
+	cgs.media.charsetShader = trap_R_RegisterShader("gfx/2d/WoPascii");
 	cgs.media.charsetProp = trap_R_RegisterShaderNoMip("menu/art/font1_prop");
+	cgs.media.whiteShader = trap_R_RegisterShader("white");
 
 	CG_RegisterCvars();
 

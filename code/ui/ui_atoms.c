@@ -799,7 +799,7 @@ static void UI_DrawString2(int x, int y, const char *str, const vec4_t color, in
 		if (ch != ' ') {
 			frow = (ch >> 4) * 0.0625;
 			fcol = (ch & 15) * 0.0625;
-			trap_R_DrawStretchPic(ax, ay, aw, ah, fcol, frow, fcol + 0.0625, frow + 0.0625, uis.charset);
+			trap_R_DrawStretchPic(ax, ay, aw, ah, fcol, frow, fcol + 0.0625, frow + 0.0625, uis.charsetShader);
 		}
 
 		ax += aw;
