@@ -575,12 +575,6 @@ static void StartServer_LevelshotDraw(void *self) {
 
 	for (i = 0; i < MAX_MAPSINLOOP; i++)
 		if (s_startserver.maploop[i] == n) {
-			//			UI_DrawStringNS(x+4,y+4,va("%i",i+1), UI_LEFT,30.0f,color_white);
-			//			UI_DrawStringNS(x+6,y+6,va("%i",i+1), UI_LEFT,30.0f,color_black);
-			//			UI_DrawStringNS(x+5,y+5,va("%i",i+1), UI_LEFT,30.0f,color_orange);
-			//			UI_DrawProportionalString2(x+8,y+8,va("%i",i+1),color_black,1.5f,uis.charsetProp);
-			//			UI_DrawProportionalString2(x+5,y+5,va("%i",i+1),color_white,1.5f,uis.charsetProp);
-
 			if (i + 1 > 9) {
 				UI_DrawHandlePic(x + 8, y + 6, 20, 35, s_startserver.mapNumbers[((i + 1) / 10) % 10]);
 				UI_DrawHandlePic(x + 8 + 23, y + 6, 20, 35, s_startserver.mapNumbers[(i + 1) % 10]);
@@ -592,7 +586,6 @@ static void StartServer_LevelshotDraw(void *self) {
 
 	x = b->generic.x;
 	y = b->generic.y + b->height;
-	//	UI_FillRect( x, y, b->width, 28, colorBlack );
 
 	x += b->width / 2;
 	y += 4;
@@ -607,14 +600,6 @@ static void StartServer_LevelshotDraw(void *self) {
 		UI_DrawStringNS(x, y, mapUpper, UI_CENTER, 14.0f, color_white);
 	} else
 		UI_DrawStringNS(x, y, s_startserver.longnamemaplist[n], UI_CENTER, 14.0f, color_white);
-
-	//	x = b->generic.x;
-	//	y = b->generic.y;
-	//	w = b->width;
-	//	h =	b->height + 28;
-	//	if( b->generic.flags & QMF_HIGHLIGHT ) {
-	//		UI_DrawHandlePic( x, y, w, h, b->focusshader );
-	//	}
 }
 
 static void StartServer_Draw(void) {
@@ -641,7 +626,6 @@ static void GameType_Draw(void *voidptr) {
 		UI_FillRect(s->generic.left, s->generic.top, ((s->generic.right - s->generic.left + 1) * 15) / 16,
 					s->generic.bottom - s->generic.top + 1, listbar_color);
 
-	//	UI_DrawString( x, y, s->itemnames[s->curvalue], style|UI_LEFT, color );
 	UI_DrawStringNS(x, y, s->itemnames[s->curvalue], style, 15.0f, color);
 }
 
