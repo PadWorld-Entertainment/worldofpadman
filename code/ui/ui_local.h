@@ -857,22 +857,12 @@ typedef enum {
 } awardType_t;
 
 const char *UI_GetArenaInfoByNumber(int num);
-const char *UI_GetArenaInfoByMap(const char *map);
-const char *UI_GetSpecialArenaInfo(const char *tag);
 int UI_GetNumArenas(void);
-int UI_GetNumSPArenas(void);
-int UI_GetNumSPTiers(void);
 
 char *UI_GetBotInfoByNumber(int num);
-char *UI_GetBotInfoByName(const char *name);
 int UI_GetNumBots(void);
 
 void UI_InitGameinfo(void);
-
-//
-// ui_mediaview.c
-//
-void LaunchMediaViewMenu(const char *mediaRef, const char *execOnClose);
 
 //
 // wop_advanced2d.c

@@ -1106,28 +1106,6 @@ qboolean UI_ConsoleCommand(int realTime) {
 		UI_HelpMenu_f();
 		return qtrue;
 	}
-
-	// See note above
-	/*
-		if(Q_stricmp(cmd, "wop_mediaview")==0) {
-			int argc = trap_Argc();
-			if(argc==2 || argc==3) {
-				if(uis.menusp==0)
-					trap_Cvar_Set( "cl_paused", "1" );
-
-				if(argc==2)
-					LaunchMediaViewMenu(UI_Argv(1),NULL);
-				else {
-					char tmpExecOnClose[512];
-					trap_Argv( 2, tmpExecOnClose, sizeof(tmpExecOnClose) );
-					LaunchMediaViewMenu(UI_Argv(1),tmpExecOnClose);
-				}
-			}
-			else
-				Com_Printf("  usage: %s [mediaRef]\n",cmd);
-			return qtrue;
-		}
-	*/
 	return qfalse;
 }
 

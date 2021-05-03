@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define POOLSIZE 128 * 1024
 
-int ui_numBots;
+static int ui_numBots;
 static char *ui_botInfos[MAX_BOTS];
 
 static int ui_numArenas;
@@ -181,8 +181,6 @@ static void UI_LoadArenas(void) {
 	trap_Cvar_Register(&arenasFile, "g_arenasFile", "", CVAR_INIT | CVAR_ROM);
 	if (*arenasFile.string) {
 		UI_LoadArenasFromFile(arenasFile.string);
-	} else {
-		//		UI_LoadArenasFromFile("scripts/arenas.txt");
 	}
 
 	// get all arenas from .arena files
@@ -286,40 +284,6 @@ const char *UI_GetArenaInfoByNumber(int num) {
 
 /*
 ===============
-UI_GetArenaInfoByNumber
-===============
-*/
-const char *UI_GetArenaInfoByMap(const char *map) {
-	int n;
-
-	for (n = 0; n < ui_numArenas; n++) {
-		if (Q_stricmp(Info_ValueForKey(ui_arenaInfos[n], "map"), map) == 0) {
-			return ui_arenaInfos[n];
-		}
-	}
-
-	return NULL;
-}
-
-/*
-===============
-UI_GetSpecialArenaInfo
-===============
-*/
-const char *UI_GetSpecialArenaInfo(const char *tag) {
-	int n;
-
-	for (n = 0; n < ui_numArenas; n++) {
-		if (Q_stricmp(Info_ValueForKey(ui_arenaInfos[n], "special"), tag) == 0) {
-			return ui_arenaInfos[n];
-		}
-	}
-
-	return NULL;
-}
-
-/*
-===============
 UI_LoadBotsFromFile
 ===============
 */
@@ -398,243 +362,11 @@ char *UI_GetBotInfoByNumber(int num) {
 
 /*
 ===============
-UI_GetBotInfoByName
-===============
-*/
-char *UI_GetBotInfoByName(const char *name) {
-	int n;
-	char *value;
-
-	for (n = 0; n < ui_numBots; n++) {
-		value = Info_ValueForKey(ui_botInfos[n], "name");
-		if (!Q_stricmp(value, name)) {
-			return ui_botInfos[n];
-		}
-	}
-
-	return NULL;
-}
-
-//
-// single player game info
-//
-
-/*
-===============
-UI_GetBestScore
-
-Returns the player's best finish on a given level, 0 if the have not played the level
-===============
-*/
-void UI_GetBestScore(int level, int *score, int *skill) {
-	int n;
-	int skillScore;
-	int bestScore;
-	int bestScoreSkill;
-	char arenaKey[16];
-	char scores[MAX_INFO_VALUE];
-
-	if (!score || !skill) {
-		return;
-	}
-
-	if (level < 0 || level > ui_numArenas) {
-		return;
-	}
-
-	bestScore = 0;
-	bestScoreSkill = 0;
-
-	for (n = 1; n <= 5; n++) {
-		trap_Cvar_VariableStringBuffer(va("g_spScores%i", n), scores, MAX_INFO_VALUE);
-
-		Com_sprintf(arenaKey, sizeof(arenaKey), "l%i", level);
-		skillScore = atoi(Info_ValueForKey(scores, arenaKey));
-
-		if (skillScore < 1 || skillScore > 8) {
-			continue;
-		}
-
-		if (!bestScore || skillScore <= bestScore) {
-			bestScore = skillScore;
-			bestScoreSkill = n;
-		}
-	}
-
-	*score = bestScore;
-	*skill = bestScoreSkill;
-}
-
-/*
-===============
-UI_SetBestScore
-
-Set the player's best finish for a level
-===============
-*/
-void UI_SetBestScore(int level, int score) {
-	int skill;
-	int oldScore;
-	char arenaKey[16];
-	char scores[MAX_INFO_VALUE];
-
-	// validate score
-	if (score < 1 || score > 8) {
-		return;
-	}
-
-	// validate skill
-	skill = (int)trap_Cvar_VariableValue("g_spSkill");
-	if (skill < 1 || skill > 5) {
-		return;
-	}
-
-	// get scores
-	trap_Cvar_VariableStringBuffer(va("g_spScores%i", skill), scores, MAX_INFO_VALUE);
-
-	// see if this is better
-	Com_sprintf(arenaKey, sizeof(arenaKey), "l%i", level);
-	oldScore = atoi(Info_ValueForKey(scores, arenaKey));
-	if (oldScore && oldScore <= score) {
-		return;
-	}
-
-	// update scores
-	Info_SetValueForKey(scores, arenaKey, va("%i", score));
-	trap_Cvar_Set(va("g_spScores%i", skill), scores);
-}
-
-/*
-===============
-UI_ShowTierVideo
-===============
-*/
-qboolean UI_ShowTierVideo(int tier) {
-	char key[16];
-	char videos[MAX_INFO_VALUE];
-
-	if (tier <= 0) {
-		return qfalse;
-	}
-
-	trap_Cvar_VariableStringBuffer("g_spVideos", videos, sizeof(videos));
-
-	Com_sprintf(key, sizeof(key), "tier%i", tier);
-	if (atoi(Info_ValueForKey(videos, key))) {
-		return qfalse;
-	}
-
-	Info_SetValueForKey(videos, key, va("%i", 1));
-	trap_Cvar_Set("g_spVideos", videos);
-
-	return qtrue;
-}
-
-/*
-===============
-UI_CanShowTierVideo
-===============
-*/
-qboolean UI_CanShowTierVideo(int tier) {
-	char key[16];
-	char videos[MAX_INFO_VALUE];
-
-	if (!tier) {
-		return qfalse;
-	}
-
-	if (uis.demoversion && tier != 8) {
-		return qfalse;
-	}
-
-	trap_Cvar_VariableStringBuffer("g_spVideos", videos, sizeof(videos));
-
-	Com_sprintf(key, sizeof(key), "tier%i", tier);
-	if (atoi(Info_ValueForKey(videos, key))) {
-		return qtrue;
-	}
-
-	return qfalse;
-}
-
-/*
-===============
-UI_GetCurrentGame
-
-Returns the next level the player has not won
-===============
-*/
-int UI_GetCurrentGame(void) {
-	int level;
-	int rank;
-	int skill;
-	const char *info;
-
-	info = UI_GetSpecialArenaInfo("training");
-	if (info) {
-		level = atoi(Info_ValueForKey(info, "num"));
-		UI_GetBestScore(level, &rank, &skill);
-		if (!rank || rank > 1) {
-			return level;
-		}
-	}
-
-	for (level = 0; level < ui_numSinglePlayerArenas; level++) {
-		UI_GetBestScore(level, &rank, &skill);
-		if (!rank || rank > 1) {
-			return level;
-		}
-	}
-
-	info = UI_GetSpecialArenaInfo("final");
-	if (!info) {
-		return -1;
-	}
-	return atoi(Info_ValueForKey(info, "num"));
-}
-
-/*
-===============
-UI_NewGame
-
-Clears the scores and sets the difficutly level
-===============
-*/
-void UI_NewGame(void) {
-	trap_Cvar_Set("g_spScores1", "");
-	trap_Cvar_Set("g_spScores2", "");
-	trap_Cvar_Set("g_spScores3", "");
-	trap_Cvar_Set("g_spScores4", "");
-	trap_Cvar_Set("g_spScores5", "");
-	trap_Cvar_Set("g_spAwards", "");
-	trap_Cvar_Set("g_spVideos", "");
-}
-
-/*
-===============
 UI_GetNumArenas
 ===============
 */
 int UI_GetNumArenas(void) {
 	return ui_numArenas;
-}
-
-/*
-===============
-UI_GetNumSPArenas
-===============
-*/
-int UI_GetNumSPArenas(void) {
-	return ui_numSinglePlayerArenas;
-}
-
-/*
-===============
-UI_GetNumSPTiers
-===============
-*/
-int UI_GetNumSPTiers(void) {
-	return ui_numSinglePlayerArenas / ARENAS_PER_TIER;
 }
 
 /*
@@ -646,7 +378,7 @@ int UI_GetNumBots(void) {
 	return ui_numBots;
 }
 
-void UI_LoadLogoForMenu(const char *spraylogoName) {
+static void UI_LoadLogoForMenu(const char *spraylogoName) {
 	if (uis.spraylogosLoaded >= MAX_SPRAYLOGOS_LOADED) {
 		return;
 	}
@@ -665,7 +397,7 @@ void UI_LoadLogoForMenu(const char *spraylogoName) {
 // used for communication is not CVAR_ARCHIVE (which is intended) and the menu
 // always shows the spraylogo selection.
 //
-void UI_SearchSpraylogos(void) {
+static void UI_SearchSpraylogos(void) {
 	int i;
 	char fileList[1024];
 	char *namePtr;
@@ -709,7 +441,7 @@ void UI_SearchSpraylogos(void) {
 	trap_Cvar_Set(SPRAYLOGO_LIST_CVAR, cvarBuff);
 }
 
-void UI_SearchLensFlares(void) {
+static void UI_SearchLensFlares(void) {
 	char dirlist[1024];
 	char tmpcvarstr[1024];
 	char *filestrptr;
