@@ -244,9 +244,6 @@ PROTOCOL
 ==============================================================
 */
 
-#define PROTOCOL_LEGACY_VERSION 68
-// 1.31 - 67
-
 // override on command line, config files etc.
 #ifndef MASTER_SERVER_NAME
 #define MASTER_SERVER_NAME "master.worldofpadman.com"

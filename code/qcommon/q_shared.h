@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // v1.1 - v1.2: 68
 // maintain a list of compatible protocols for demo playing
 // NOTE: that stuff only works with two digits protocols
-extern int demo_protocols[];
+extern const int demo_protocols[];
 
 #define PRODUCT_NAME "wop"
 #define PRODUCT_TITLE "WoP"
