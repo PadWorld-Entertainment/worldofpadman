@@ -146,7 +146,6 @@ vmCvar_t ui_server14;
 vmCvar_t ui_server15;
 vmCvar_t ui_server16;
 
-vmCvar_t ui_cdkeychecked;
 // spray anfang
 // vmCvar_t	logolist;
 // spray ende
@@ -209,17 +208,14 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&ui_server15, "server15", "", CVAR_ARCHIVE},
 								  {&ui_server16, "server16", "", CVAR_ARCHIVE},
 
-								  {&ui_cdkeychecked, "ui_cdkeychecked", "0", CVAR_ROM}
 								  // spray anfang
 								  //	,{ NULL, "logolist", "", CVAR_INIT|CVAR_ROM } // ohne verwaltungs-cvar -> kein
 								  //value limit spray ende lens anfang
 								  //	,{ NULL, "lensflarelist", "", CVAR_INIT|CVAR_ROM }
 								  // lens ende
-								  ,
 								  {&spraycolor, "syc_color", "0", CVAR_ARCHIVE | CVAR_USERINFO},
 								  {&syc_logo, "syc_logo", "", CVAR_ARCHIVE},
-								  {&s_wop_restarted, "s_wop_restarted", "0", CVAR_ROM | CVAR_TEMP} // CVAR_NORESTART
-								  ,
+								  {&s_wop_restarted, "s_wop_restarted", "0", CVAR_ROM | CVAR_TEMP}, // CVAR_NORESTART
 								  {&con_notifytime, "con_notifytime", "4", CVAR_ARCHIVE},
 								  {&wop_AutoswitchSongByNextMap, "wop_AutoswitchSongByNextMap", "0", CVAR_ARCHIVE},
 								  {&wop_AutoBindUnusedKeys, "wop_AutoBindUnusedKeys", "1", CVAR_ARCHIVE}};

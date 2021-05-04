@@ -82,9 +82,6 @@ extern vmCvar_t ui_server14;
 extern vmCvar_t ui_server15;
 extern vmCvar_t ui_server16;
 
-extern vmCvar_t ui_cdkey;
-extern vmCvar_t ui_cdkeychecked;
-
 extern vmCvar_t spraycolor;
 extern vmCvar_t syc_logo;
 extern vmCvar_t s_wop_restarted;
@@ -418,8 +415,6 @@ void Music_NextTrack(void);
 //
 extern void ConfirmMenu_Cache(void);
 extern void UI_ConfirmMenu(const char *question, void (*draw)(void), void (*action)(qboolean result));
-extern void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(void), void (*action)(qboolean result));
-extern void UI_Message(const char **lines);
 
 //
 // ui_setup.c
