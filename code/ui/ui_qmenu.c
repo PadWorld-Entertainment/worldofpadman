@@ -179,70 +179,6 @@ static void TextS_Draw(menutext_s *t) {
 
 /*
 =================
-PText_Init
-=================
-*/
-static void PText_Init(menutext_s *t) {
-	int x;
-	int y;
-	int w;
-	int h;
-	float sizeScale;
-
-	sizeScale = UI_ProportionalSizeScale(t->style);
-
-	x = t->generic.x;
-	y = t->generic.y;
-	w = UI_ProportionalStringWidth(t->string) * sizeScale;
-	h = PROP_HEIGHT * sizeScale;
-
-	if (t->generic.flags & QMF_RIGHT_JUSTIFY) {
-		x -= w;
-	} else if (t->generic.flags & QMF_CENTER_JUSTIFY) {
-		x -= w / 2;
-	}
-
-	t->generic.left = x - PROP_GAP_WIDTH * sizeScale;
-	t->generic.right = x + w + PROP_GAP_WIDTH * sizeScale;
-	t->generic.top = y;
-	t->generic.bottom = y + h;
-}
-
-/*
-=================
-PText_Draw
-=================
-*/
-static void PText_Draw(menutext_s *t) {
-	int x;
-	int y;
-	const float *color;
-	int style;
-
-	x = t->generic.x;
-	y = t->generic.y;
-
-	if (t->generic.flags & QMF_GRAYED)
-		color = text_color_disabled;
-	else if (t->focuscolor && Menu_ItemAtCursor(t->generic.parent) == t)
-		color = t->focuscolor;
-	else
-		color = t->color;
-
-	style = t->style;
-	if (t->generic.flags & QMF_PULSEIFFOCUS) {
-		if (Menu_ItemAtCursor(t->generic.parent) == t) {
-			style |= UI_PULSE;
-		} else {
-			style |= UI_INVERSE;
-		}
-	}
-
-	UI_DrawProportionalString(x, y, t->string, style, color);
-}
-
-/*
-=================
 Bitmap_Init
 =================
 */
@@ -1455,10 +1391,6 @@ void Menu_AddItem(menuframework_s *menu, void *item) {
 			ScrollList_Init((menulist_s *)item);
 			break;
 
-		case MTYPE_PTEXT:
-			PText_Init((menutext_s *)item);
-			break;
-
 		case MTYPE_BITMAP1024S:
 			Bitmap1024S_Init((menubitmap1024s_s *)item);
 			break;
@@ -1689,10 +1621,6 @@ void Menu_Draw(menuframework_s *menu) {
 
 			case MTYPE_SCROLLLIST:
 				ScrollList_Draw((menulist_s *)itemptr);
-				break;
-
-			case MTYPE_PTEXT:
-				PText_Draw((menutext_s *)itemptr);
 				break;
 
 			case MTYPE_BITMAP1024S:

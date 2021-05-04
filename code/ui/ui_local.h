@@ -114,7 +114,6 @@ extern vmCvar_t wop_AutoBindUnusedKeys;
 #define MTYPE_BITMAP 6
 #define MTYPE_TEXT 7
 #define MTYPE_SCROLLLIST 8
-#define MTYPE_PTEXT 9 // proportional string
 
 #define MTYPE_BITMAP1024S 11 // pic in 1024x768 with shadow(S)
 #define MTYPE_TEXTS 12		 // sizeable(S) text
