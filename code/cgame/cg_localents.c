@@ -114,7 +114,7 @@ or generates more localentities along a trail.
 CG_FragmentBounceMark
 ================
 */
-void CG_FragmentBounceMark(localEntity_t *le, trace_t *trace) {
+static void CG_FragmentBounceMark(localEntity_t *le, trace_t *trace) {
 }
 
 /*
@@ -122,7 +122,7 @@ void CG_FragmentBounceMark(localEntity_t *le, trace_t *trace) {
 CG_FragmentBounceSound
 ================
 */
-void CG_FragmentBounceSound(localEntity_t *le, trace_t *trace) {
+static void CG_FragmentBounceSound(localEntity_t *le, trace_t *trace) {
 	// don't allow a fragment to make multiple bounce sounds,
 	// or it gets too noisy as they settle
 	le->leBounceSoundType = LEBS_NONE;
@@ -133,7 +133,7 @@ void CG_FragmentBounceSound(localEntity_t *le, trace_t *trace) {
 CG_ReflectVelocity
 ================
 */
-void CG_ReflectVelocity(localEntity_t *le, trace_t *trace) {
+static void CG_ReflectVelocity(localEntity_t *le, trace_t *trace) {
 	vec3_t velocity;
 	float dot;
 	int hitTime;
@@ -153,7 +153,6 @@ void CG_ReflectVelocity(localEntity_t *le, trace_t *trace) {
 	if (trace->allsolid || (trace->plane.normal[2] > 0 &&
 							(le->pos.trDelta[2] < 40 || le->pos.trDelta[2] < -cg.frametime * le->pos.trDelta[2]))) {
 		le->pos.trType = TR_STATIONARY;
-	} else {
 	}
 }
 
