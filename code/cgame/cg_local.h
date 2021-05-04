@@ -90,9 +90,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 enum { FORCEMODEL_ENEMY = 1, FORCEMODEL_TEAM = 2 };
 
-#define DEFAULT_REDTEAM_NAME "Stroggs"
-#define DEFAULT_BLUETEAM_NAME "Pagans"
-
 typedef enum {
 	FOOTSTEP_NORMAL,
 	FOOTSTEP_BOOT,
@@ -159,8 +156,6 @@ typedef struct {
 	int barrelTime;
 	qboolean barrelSpinning;
 } playerEntity_t;
-
-//=================================================
 
 //======================================================================
 
@@ -754,8 +749,6 @@ typedef struct {
 
 	qhandle_t deferShader;
 
-	qhandle_t smoke2;
-
 	qhandle_t lightningShader;
 
 	qhandle_t friendShader;
@@ -797,14 +790,7 @@ typedef struct {
 	qhandle_t energyMarkShader;
 
 	// powerup shaders
-	qhandle_t quadShader;
 	qhandle_t invisShader;
-	qhandle_t regenShader;
-	qhandle_t battleSuitShader;
-	qhandle_t battleWeaponShader;
-	qhandle_t hastePuffShader;
-	qhandle_t redKamikazeShader;
-	qhandle_t blueKamikazeShader;
 
 	qhandle_t lpsIcon;
 	qhandle_t lpsIconLead;
@@ -1023,9 +1009,6 @@ typedef struct {
 	sfxHandle_t wearOffSound;
 	sfxHandle_t footsteps[FOOTSTEP_TOTAL][4];
 
-	sfxHandle_t gibBounce1Sound;
-	sfxHandle_t gibBounce2Sound;
-	sfxHandle_t gibBounce3Sound;
 	sfxHandle_t teleInSound;
 	sfxHandle_t teleOutSound;
 	sfxHandle_t noAmmoSound;
