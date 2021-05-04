@@ -1475,10 +1475,6 @@ qboolean CG_WorldToScreenWrap(vec3_t point, float *x, float *y);
 //
 extern int sortedTeamPlayers[TEAM_MAXOVERLAY];
 extern int numSortedTeamPlayers;
-extern int drawTeamOverlayModificationCount;
-extern char systemChat[256];
-extern char teamChat1[256];
-extern char teamChat2[256];
 
 void CG_MessagePrint(const char *str);
 void CG_AddLagometerFrameInfo(void);

@@ -23,9 +23,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cg_main.c -- initialization and primary entry point for cgame
 #include "cg_local.h"
 
-int forceModelModificationCount = -1;
-int glowModelModificationCount = -1;
-int glowModelTeamModificationCount = -1;
+static int forceModelModificationCount = -1;
+static int glowModelModificationCount = -1;
+static int glowModelTeamModificationCount = -1;
+static int drawTeamOverlayModificationCount = -1;
 
 void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum);
 void CG_Shutdown(void);
@@ -40,7 +41,6 @@ This must be the very first function compiled into the .q3vm file
 */
 Q_EXPORT intptr_t vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7,
 						 int arg8, int arg9, int arg10, int arg11) {
-
 	switch (command) {
 	case CG_INIT:
 		CG_Init(arg0, arg1, arg2);
