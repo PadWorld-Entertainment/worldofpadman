@@ -39,14 +39,18 @@ CONFIRMATION MENU
 #define ID_CONFIRM_NO 10
 #define ID_CONFIRM_YES 11
 
+#define YESNOBITMAP 1
+
 typedef struct {
 	menuframework_s menu;
 
-	/*	menutext_s		no;
-		menutext_s		yes;
-	*/
+#if YESNOBITMAP
 	menubitmap_s yes;
 	menubitmap_s no;
+#else
+	menutext_s no;
+	menutext_s yes;
+#endif
 	menutext_s ok;
 
 	int slashX;
@@ -201,28 +205,7 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 		s_confirm.menu.fullscreen = qtrue;
 	}
 
-	/*	s_confirm.yes.generic.type		= MTYPE_PTEXT;
-		s_confirm.yes.generic.flags		= QMF_LEFT_JUSTIFY;
-		s_confirm.yes.generic.callback	= ConfirmMenu_Event;
-		s_confirm.yes.generic.id		= ID_CONFIRM_YES;
-		s_confirm.yes.generic.x			= l1;
-		s_confirm.yes.generic.y			= 264;
-		s_confirm.yes.string			= "YES";
-		s_confirm.yes.color				= color_black;
-		s_confirm.yes.focuscolor		= color_orange;
-		s_confirm.yes.style				= UI_LEFT;
-
-		s_confirm.no.generic.type		= MTYPE_PTEXT;
-		s_confirm.no.generic.flags		= QMF_LEFT_JUSTIFY;
-		s_confirm.no.generic.callback	= ConfirmMenu_Event;
-		s_confirm.no.generic.id			= ID_CONFIRM_NO;
-		s_confirm.no.generic.x		    = l3;
-		s_confirm.no.generic.y		    = 264;
-		s_confirm.no.string				= "NO";
-		s_confirm.no.color			    = color_black;
-		s_confirm.no.focuscolor			= color_orange;
-		s_confirm.no.style			    = UI_LEFT;
-	*/
+#if YESNOBITMAP
 	s_confirm.yes.generic.type = MTYPE_BITMAP;
 	s_confirm.yes.generic.name = CONF_YES0;
 	s_confirm.yes.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
@@ -246,6 +229,29 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 	s_confirm.no.height = 30; // 40;
 	s_confirm.no.focuspic = CONF_NO1;
 	s_confirm.no.focuspicinstead = qtrue;
+#else
+	s_confirm.yes.generic.type = MTYPE_PTEXT;
+	s_confirm.yes.generic.flags = QMF_LEFT_JUSTIFY;
+	s_confirm.yes.generic.callback = ConfirmMenu_Event;
+	s_confirm.yes.generic.id = ID_CONFIRM_YES;
+	s_confirm.yes.generic.x = l1;
+	s_confirm.yes.generic.y = 264;
+	s_confirm.yes.string = "YES";
+	s_confirm.yes.color = color_black;
+	s_confirm.yes.focuscolor = color_orange;
+	s_confirm.yes.style = UI_LEFT;
+
+	s_confirm.no.generic.type = MTYPE_PTEXT;
+	s_confirm.no.generic.flags = QMF_LEFT_JUSTIFY;
+	s_confirm.no.generic.callback = ConfirmMenu_Event;
+	s_confirm.no.generic.id = ID_CONFIRM_NO;
+	s_confirm.no.generic.x = l3;
+	s_confirm.no.generic.y = 264;
+	s_confirm.no.string = "NO";
+	s_confirm.no.color = color_black;
+	s_confirm.no.focuscolor = color_orange;
+	s_confirm.no.style = UI_LEFT;
+#endif
 
 	Menu_AddItem(&s_confirm.menu, &s_confirm.yes);
 	Menu_AddItem(&s_confirm.menu, &s_confirm.no);
