@@ -415,7 +415,7 @@ static void CG_OffsetFirstPersonView(void) {
 	{
 #define NECK_LENGTH 8
 	vec3_t			forward, up;
- 
+
 	cg.refdef.vieworg[2] -= NECK_LENGTH;
 	AngleVectors( cg.refdefViewAngles, forward, NULL, up );
 	VectorMA( cg.refdef.vieworg, 3, forward, cg.refdef.vieworg );
@@ -864,8 +864,8 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	}
 
 	if (!(cg.clientFrame & 0xff))
-		trap_SendConsoleCommand(
-			"wop_checkmusic\n"); // noch überdenken ob ich es nicht doch nur alle paar frames machen sollte
+		// TODO: maybe we should not execute this every frame
+		trap_SendConsoleCommand("wop_checkmusic\n");
 
 	// any looped sounds will be respecified as entities
 	// are added to the render list
