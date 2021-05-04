@@ -703,28 +703,6 @@ static void Controls_StatusBar(void *self) {
 	UI_DrawString(500, SCREEN_HEIGHT * 0.85, "Use Arrow Keys or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
 }
 
-#if 0
-/*
-=================
-Controls_DrawPlayer
-=================
-*/
-static void Controls_DrawPlayer( void *self ) {
-	menubitmap_s	*b;
-	char			buf[MAX_QPATH];
-
-	trap_Cvar_VariableStringBuffer( "model", buf, sizeof( buf ) );
-	if ( strcmp( buf, s_controls.playerModel ) != 0 ) {
-		UI_PlayerInfo_SetModel( &s_controls.playerinfo, buf );
-		strcpy( s_controls.playerModel, buf );
-		Controls_UpdateModel( ANIM_IDLE );
-	}
-
-	b = (menubitmap_s*) self;
-	UI_DrawPlayer( b->generic.x, b->generic.y, b->width, b->height, &s_controls.playerinfo, uis.realtime/2 );
-}
-#endif
-
 /*
 =================
 Controls_GetKeyAssignment

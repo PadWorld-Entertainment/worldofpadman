@@ -143,10 +143,6 @@ void InGame_Event(void *ptr, int notification) {
 		UI_VoiceIngame();
 		break;
 
-		/*	case ID_TEAMORDERS:
-				UI_TeamOrdersMenu();
-				break;
-		*/
 	case ID_CALLVOTE:
 		UI_CallVoteMenu();
 		break;
@@ -274,28 +270,6 @@ void InGame_MenuInit(void) {
 		s_ingame.voiceingame.generic.flags |= QMF_GRAYED;
 	}
 
-	/*	s_ingame.teamorders.generic.type			= MTYPE_TEXTS;
-		s_ingame.teamorders.fontHeight			= 20.0f;
-		s_ingame.teamorders.generic.flags		= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
-		s_ingame.teamorders.generic.x			= 320;
-		s_ingame.teamorders.generic.y			= y;
-		s_ingame.teamorders.generic.id			= ID_TEAMORDERS;
-		s_ingame.teamorders.generic.callback	= InGame_Event;
-		s_ingame.teamorders.string				= "TEAM ORDERS";
-		s_ingame.teamorders.color				= color_black;
-		s_ingame.teamorders.style				= UI_CENTER|UI_SMALLFONT;
-		if( !(trap_Cvar_VariableValue( "g_gametype" ) >= GT_TEAM) ) {
-			s_ingame.teamorders.generic.flags |= QMF_GRAYED;
-		}
-		else {
-			trap_GetClientState( &cs );
-			trap_GetConfigString( CS_PLAYERS + cs.clientNum, info, MAX_INFO_STRING );
-			team = atoi( Info_ValueForKey( info, "t" ) );
-			if( team == TEAM_SPECTATOR ) {
-				s_ingame.teamorders.generic.flags |= QMF_GRAYED;
-			}
-		}
-	*/
 	y += INGAME_MENU_VERTICAL_SPACING;
 	s_ingame.callvote.generic.type = MTYPE_TEXTS;
 	s_ingame.callvote.fontHeight = 20.0f;
