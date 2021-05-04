@@ -1965,8 +1965,6 @@ CG_MissileHitPlayer
 =================
 */
 void CG_MissileHitPlayer(int weapon, vec3_t origin, vec3_t dir, int ColorCode, int entityNum) { // HERBY
-	CG_Bleed(origin, entityNum);
-
 	// some weapons will make an explosion with the blood, while
 	// others will just make the blood
 	switch (weapon) {

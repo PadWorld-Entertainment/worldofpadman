@@ -219,7 +219,6 @@ typedef enum { LEMT_NONE, LEMT_BURN, LEMT_BLOOD } leMarkType_t; // fragment loca
 
 typedef enum {
 	LEBS_NONE,
-	LEBS_BLOOD,
 	LEBS_BRASS
 } leBounceSoundType_t; // fragment local entities can make sounds on impacts
 
@@ -754,18 +753,6 @@ typedef struct {
 	//	qhandle_t	teamStatusBar;
 
 	qhandle_t deferShader;
-
-	// gib explosions
-	qhandle_t gibAbdomen;
-	qhandle_t gibArm;
-	qhandle_t gibChest;
-	qhandle_t gibFist;
-	qhandle_t gibFoot;
-	qhandle_t gibForearm;
-	qhandle_t gibIntestine;
-	qhandle_t gibLeg;
-	qhandle_t gibSkull;
-	qhandle_t gibBrain;
 
 	qhandle_t smoke2;
 
@@ -1471,7 +1458,7 @@ qboolean CG_WorldToScreen(vec3_t point, float *x, float *y);
 qboolean CG_WorldToScreenWrap(vec3_t point, float *x, float *y);
 
 //
-// cg_draw.c, cg_newDraw.c
+// cg_draw.c
 //
 extern int sortedTeamPlayers[TEAM_MAXOVERLAY];
 extern int numSortedTeamPlayers;
@@ -1484,31 +1471,9 @@ void CG_DrawHead(float x, float y, float w, float h, int clientNum, vec3_t headA
 void CG_DrawActive(stereoFrame_t stereoView);
 void CG_DrawFlagModel(float x, float y, float w, float h, int team, qboolean force2D);
 void CG_DrawTeamBackground(int x, int y, int w, int h, float alpha, int team);
-void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y, int ownerDraw, int ownerDrawFlags,
-				  int align, float special, float scale, vec4_t color, qhandle_t shader, int textStyle);
-void CG_Text_Paint(float x, float y, float scale, vec4_t color, const char *text, float adjust, int limit, int style);
-int CG_Text_Width(const char *text, float scale, int limit);
-int CG_Text_Height(const char *text, float scale, int limit);
-void CG_SelectPrevPlayer(void);
-void CG_SelectNextPlayer(void);
-float CG_GetValue(int ownerDraw);
-qboolean CG_OwnerDrawVisible(int flags);
-void CG_RunMenuScript(char **args);
-void CG_ShowResponseHead(void);
 void CG_SetPrintString(int type, const char *p);
-void CG_InitTeamChat(void);
-void CG_GetTeamColor(vec4_t *color);
-const char *CG_GetGameStatusText(void);
-const char *CG_GetKillerText(void);
 void CG_Draw3DModel(float x, float y, float w, float h, qhandle_t model, qhandle_t skin, vec3_t origin, vec3_t angles,
 					float scale, byte rgba[4]);
-void CG_Text_PaintChar(float x, float y, float width, float height, float scale, float s, float t, float s2, float t2,
-					   qhandle_t hShader);
-void CG_CheckOrderPending(void);
-const char *CG_GameTypeString(void);
-qboolean CG_YourTeamHasFlag(void);
-qboolean CG_OtherTeamHasFlag(void);
-qhandle_t CG_StatusHandle(int task);
 
 //
 // cg_player.c
@@ -1607,11 +1572,6 @@ void CG_BubbleTrail(vec3_t start, vec3_t end, float spacing);
 void CG_SpawnEffect(vec3_t org, int team);
 void CG_TeleOutEffect(vec3_t org, int team, centity_t *cent);
 void CG_ScorePlum(int client, vec3_t org, int score);
-
-void CG_GibPlayer(vec3_t playerOrigin);
-void CG_BigExplode(vec3_t playerOrigin);
-
-void CG_Bleed(vec3_t origin, int entityNum);
 
 localEntity_t *CG_MakeExplosion(vec3_t origin, vec3_t dir, qhandle_t hModel, qhandle_t shader, int msec,
 								qboolean isSprite);
