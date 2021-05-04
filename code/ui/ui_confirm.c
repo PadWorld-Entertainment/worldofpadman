@@ -119,36 +119,12 @@ static sfxHandle_t ConfirmMenu_Key(int key) {
 
 /*
 =================
-MessaheMenu_Draw
-=================
-*/
-static void MessageMenu_Draw(void) {
-	int i, y;
-
-	UI_DrawNamedPic(142, 118, 359, 256, ART_CONFIRM_FRAME);
-
-	y = 188;
-	for (i = 0; s_confirm.lines[i]; i++) {
-		UI_DrawProportionalString(320, y, s_confirm.lines[i], s_confirm.style, color_red);
-		y += 18;
-	}
-
-	Menu_Draw(&s_confirm.menu);
-
-	if (s_confirm.draw) {
-		s_confirm.draw();
-	}
-}
-
-/*
-=================
 ConfirmMenu_Draw
 =================
 */
 static void ConfirmMenu_Draw(void) {
 	UI_DrawIngameBG();
 	UI_DrawStringNS(320, 204, s_confirm.question, s_confirm.style, 24, color_black);
-	//	UI_DrawProportionalString( s_confirm.slashX, 265, "/", UI_LEFT, color_black );
 
 	Menu_Draw(&s_confirm.menu);
 
