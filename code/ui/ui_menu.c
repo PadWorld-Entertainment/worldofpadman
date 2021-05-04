@@ -169,10 +169,6 @@ static void Main_MenuDraw(void) {
 
 	msglen = strlen(s_main.msg);
 
-	// advanced2d-test ;)
-	//	DrawTurnableString(320,240,"blablubli",colorRed,50,uis.realtime/100.0f,TURNORIGIN_MIDDLECENTER);
-	//	DrawLine(320.0f*(1.0f+sin(uis.realtime*0.001f+30)),240.0f*(1.0f+sin(uis.realtime*0.001f+87)),320.0f*(1.0f+sin(uis.realtime*0.001f+4567)),240.0f*(1.0f+sin(uis.realtime*0.001f+649)),20,colorGreen);
-
 	if (s_main.msgtime != 0 && uis.realtime - s_main.msgtime <= 5000) {
 		if (uis.realtime - s_main.msgtime > 4750) {
 			size = 16.0f * ((float)(5000 - (uis.realtime - s_main.msgtime)) / 250.0f);
