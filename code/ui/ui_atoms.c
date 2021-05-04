@@ -203,7 +203,11 @@ void UI_LerpColor(const vec4_t a, const vec4_t b, vec4_t c, float t) {
 UI_DrawProportionalString2
 =================
 */
-static int propMap[128][3] = {
+static const struct FontData {
+	int x;
+	int y;
+	int width;
+} propMap[128] = {
 	{0, 0, -1},
 	{0, 0, -1},
 	{0, 0, -1},
@@ -355,7 +359,7 @@ int UI_ProportionalStringWidth(const char *str) {
 	width = 0;
 	while (*s) {
 		ch = *s & 127;
-		charWidth = propMap[ch][2];
+		charWidth = propMap[ch].width;
 		if (charWidth != -1) {
 			width += charWidth;
 			width += PROP_GAP_WIDTH;
@@ -390,12 +394,12 @@ void UI_DrawProportionalString2(int x, int y, const char *str, const vec4_t colo
 		ch = *s & 127;
 		if (ch == ' ') {
 			aw = (float)PROP_SPACE_WIDTH * uis.xscale * sizeScale;
-		} else if (propMap[ch][2] != -1) {
-			fcol = (float)propMap[ch][0] / 256.0f;
-			frow = (float)propMap[ch][1] / 256.0f;
-			fwidth = (float)propMap[ch][2] / 256.0f;
+		} else if (propMap[ch].width != -1) {
+			fcol = (float)propMap[ch].x / 256.0f;
+			frow = (float)propMap[ch].y / 256.0f;
+			fwidth = (float)propMap[ch].width / 256.0f;
 			fheight = (float)PROP_HEIGHT / 256.0f;
-			aw = (float)propMap[ch][2] * uis.xscale * sizeScale;
+			aw = (float)propMap[ch].width * uis.xscale * sizeScale;
 			ah = (float)PROP_HEIGHT * uis.yscale * sizeScale;
 			trap_R_DrawStretchPic(ax, ay, aw, ah, fcol, frow, fcol + fwidth, frow + fheight, charset);
 		}

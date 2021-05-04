@@ -465,7 +465,11 @@ void CG_ColorForHealth(vec4_t hcolor) {
 UI_DrawProportionalString2
 =================
 */
-static const int propMap[128][3] = {
+static const struct FontData {
+	int x;
+	int y;
+	int width;
+} propMap[128] = {
 	{0, 0, -1},
 	{0, 0, -1},
 	{0, 0, -1},
@@ -613,7 +617,7 @@ static int UI_ProportionalStringWidth(const char *str) {
 	width = 0;
 	while (*s) {
 		ch = *s & 127;
-		charWidth = propMap[ch][2];
+		charWidth = propMap[ch].width;
 		if (charWidth != -1) {
 			width += charWidth;
 			width += PROP_GAP_WIDTH;
@@ -649,12 +653,12 @@ static void UI_DrawProportionalString2(int x, int y, const char *str, const vec4
 		ch = *s & 127;
 		if (ch == ' ') {
 			aw = (float)PROP_SPACE_WIDTH * cgs.screenXScale * sizeScale;
-		} else if (propMap[ch][2] != -1) {
-			fcol = (float)propMap[ch][0] / 256.0f;
-			frow = (float)propMap[ch][1] / 256.0f;
-			fwidth = (float)propMap[ch][2] / 256.0f;
+		} else if (propMap[ch].width != -1) {
+			fcol = (float)propMap[ch].x / 256.0f;
+			frow = (float)propMap[ch].y / 256.0f;
+			fwidth = (float)propMap[ch].width / 256.0f;
 			fheight = (float)PROP_HEIGHT / 256.0f;
-			aw = (float)propMap[ch][2] * cgs.screenXScale * sizeScale;
+			aw = (float)propMap[ch].width * cgs.screenXScale * sizeScale;
 			ah = (float)PROP_HEIGHT * cgs.screenYScale * sizeScale;
 			trap_R_DrawStretchPic(ax, ay, aw, ah, fcol, frow, fcol + fwidth, frow + fheight, charset);
 		} else {

@@ -74,7 +74,7 @@ int initrefdef = 0;
 Initrefdef2D
 #######################
 */
-void Initrefdef2D(void) {
+static void Initrefdef2D(void) {
 	float x, y, w, h;
 
 	memset(&refdef2D, 0, sizeof(refdef2D));
@@ -116,7 +116,7 @@ void Initrefdef2D(void) {
 DrawPoly
 #######################
 */
-void DrawPoly(poly_t *poly) {
+static void DrawPoly(poly_t *poly) {
 	if (!initrefdef)
 		Initrefdef2D();
 
