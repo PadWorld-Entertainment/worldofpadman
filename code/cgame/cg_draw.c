@@ -2574,7 +2574,7 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 		return;
 	}
 
-	if (cg_cineHideHud.integer || wop_storyMode.integer == WSM_STARTMAP) {
+	if (cg_cineHideHud.integer) {
 		CG_DrawCenterString();
 		return;
 	}

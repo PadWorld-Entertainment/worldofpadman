@@ -1191,27 +1191,16 @@ void ClientSpawn(gentity_t *ent) {
 		client->ps.stats[STAT_WEAPONS] = (1 << weapon);
 		client->ps.ammo[weapon] = INFINITE;
 	} else {
-		if (wop_storyMode.integer) {
-			if (wop_storyMode.integer == WSM_NORMAL) { // normal story map (no punchy)
-				client->ps.stats[STAT_WEAPONS] = (1 << WP_NIPPER);
-				client->ps.ammo[WP_NIPPER] = 100;
-			} else if (wop_storyMode.integer == WSM_STARTMAP) { // start/home map (no weapon)
-			} else if (wop_storyMode.integer == WSM_ENDMAP) {	// end map (only punchy)
-				client->ps.stats[STAT_WEAPONS] |= (1 << WP_PUNCHY);
-				client->ps.ammo[WP_PUNCHY] = -1;
-			}
+		// add normal wop weapons to client's inventory
+		client->ps.stats[STAT_WEAPONS] = (1 << WP_NIPPER);
+		if (g_gametype.integer == GT_TEAM) {
+			client->ps.ammo[WP_NIPPER] = 50;
 		} else {
-			// add normal wop weapons to client's inventory
-			client->ps.stats[STAT_WEAPONS] = (1 << WP_NIPPER);
-			if (g_gametype.integer == GT_TEAM) {
-				client->ps.ammo[WP_NIPPER] = 50;
-			} else {
-				client->ps.ammo[WP_NIPPER] = 100;
-			}
-
-			client->ps.stats[STAT_WEAPONS] |= (1 << WP_PUNCHY);
-			client->ps.ammo[WP_PUNCHY] = -1;
+			client->ps.ammo[WP_NIPPER] = 100;
 		}
+
+		client->ps.stats[STAT_WEAPONS] |= (1 << WP_PUNCHY);
+		client->ps.ammo[WP_PUNCHY] = -1;
 	}
 
 	// client->ps.ammo[WP_GRAPPLING_HOOK] = -1;

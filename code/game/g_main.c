@@ -79,7 +79,6 @@ vmCvar_t g_filterBan;
 vmCvar_t g_smoothClients;
 vmCvar_t pmove_fixed;
 vmCvar_t pmove_msec;
-vmCvar_t g_rankings;
 vmCvar_t g_listEntity;
 
 vmCvar_t g_q3Items;
@@ -90,15 +89,11 @@ vmCvar_t g_LPS_flags;
 vmCvar_t g_KillerduckHealth;
 vmCvar_t nextmapBackUp;
 vmCvar_t g_transmitSVboastermissiles;
-vmCvar_t wop_storyMode;
 vmCvar_t g_suddenDeath;
 
 // Modifiers
 vmCvar_t g_modInstagib;
 vmCvar_t g_modInstagib_WeaponJump;
-
-// Game Stats
-vmCvar_t g_trackGameStats;
 
 vmCvar_t g_logDamage;
 
@@ -177,7 +172,6 @@ static cvarTable_t gameCvarTable[] = {
 	{&g_KillerduckHealth, "g_KillerduckHealth", "-1", CVAR_ARCHIVE, 0, qfalse},
 
 	{&g_q3Items, "g_q3Items", "0", CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse},
-	{&wop_storyMode, "wop_storyMode", "", CVAR_ROM, 0, qfalse},
 	{&g_sky, "g_sky", "", (CVAR_SYSTEMINFO | CVAR_ROM), 0, qfalse},
 	{&g_skyLensflare, "g_skyLensflare", "", (CVAR_SYSTEMINFO | CVAR_ROM), 0, qfalse},
 	{&g_LPS_startlives, "g_LPS_startlives", "10", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse},
@@ -191,9 +185,6 @@ static cvarTable_t gameCvarTable[] = {
 	{&g_modInstagib, "g_instaPad", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qtrue},
 	// TODO: Either rename again or allow instapad-weaponjump in non-instapad gameplay :)
 	{&g_modInstagib_WeaponJump, "g_weaponJump", "1", CVAR_ARCHIVE, 0, qtrue},
-
-	{&g_trackGameStats, "g_trackGameStats", "1", 0, 0, qfalse},
-	{&g_rankings, "g_rankings", "0", 0, 0, qfalse},
 
 	{NULL, PLAYERINFO_TEAM, PLAYERINFO_NONE, (CVAR_SERVERINFO | CVAR_ROM), 0, qfalse},
 	{NULL, PLAYERINFO_BOT, PLAYERINFO_NONE, (CVAR_SERVERINFO | CVAR_ROM), 0, qfalse},
@@ -1350,7 +1341,7 @@ void CheckIntermissionExit(void) {
 	}
 
 	// never exit in less than five seconds
-	if (level.time < level.intermissiontime + 5000 && wop_storyMode.integer != WSM_STARTMAP) {
+	if (level.time < level.intermissiontime + 5000) {
 		return;
 	}
 

@@ -883,11 +883,6 @@ extern vmCvar_t g_cubeTimeout;
 extern vmCvar_t g_smoothClients;
 extern vmCvar_t pmove_fixed;
 extern vmCvar_t pmove_msec;
-extern vmCvar_t g_rankings;
-extern vmCvar_t g_enableDust;
-extern vmCvar_t g_enableBreath;
-extern vmCvar_t g_singlePlayer;
-extern vmCvar_t g_proxMineTimeout;
 
 extern vmCvar_t g_q3Items;
 extern vmCvar_t g_sky;
@@ -896,10 +891,6 @@ extern vmCvar_t g_LPS_startlives;
 extern vmCvar_t g_LPS_flags;
 extern vmCvar_t g_KillerduckHealth;
 extern vmCvar_t g_transmitSVboastermissiles;
-extern vmCvar_t wop_storyMode; // no weapon, no 2D, no gamelogic, ...
-
-// Game Stats
-extern vmCvar_t g_trackGameStats;
 
 // Modifiers
 extern vmCvar_t g_modInstagib;

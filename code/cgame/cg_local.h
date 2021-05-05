@@ -1339,7 +1339,6 @@ extern vmCvar_t cg_LPSwallhackAlpha;
 
 extern vmCvar_t cg_cineHideHud;
 extern vmCvar_t cg_cineDrawLetterBox;
-extern vmCvar_t wop_storyMode;
 
 extern vmCvar_t cg_glowModel;
 extern vmCvar_t cg_glowModelTeam;

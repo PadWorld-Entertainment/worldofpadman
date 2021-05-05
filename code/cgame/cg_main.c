@@ -177,7 +177,6 @@ vmCvar_t cg_LPSwallhackAlpha;
 
 vmCvar_t cg_cineHideHud; // FIXME: would be better to rename it to "cutscene"-mode
 vmCvar_t cg_cineDrawLetterBox;
-vmCvar_t wop_storyMode;
 
 vmCvar_t cg_glowModel;
 vmCvar_t cg_glowModelTeam;
@@ -304,7 +303,6 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 
 	{&cg_cineHideHud, "cg_CINE_hideHUD", "0", CVAR_TEMP},
 	{&cg_cineDrawLetterBox, "cg_CINE_drawLetterBox", "0", CVAR_TEMP},
-	{&wop_storyMode, "wop_storyMode", "0", CVAR_ROM},
 
 	{&cg_glowModel, "cg_glowModel", "", CVAR_ARCHIVE},
 	{&cg_glowModelTeam, "cg_glowModelTeam", "", CVAR_ARCHIVE},
