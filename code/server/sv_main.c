@@ -620,12 +620,15 @@ void SVC_Info(netadr_t from) {
 
 	// don't count privateclients
 	count = humans = 0;
-	for (i = sv_privateClients->integer; i < sv_maxclients->integer; i++) {
-		if (svs.clients[i].state >= CS_CONNECTED) {
+	for (i = 0; i < sv_maxclients->integer; i++) {
+		if (svs.clients[i].state < CS_CONNECTED) {
+			continue;
+		}
+		if (i >= sv_privateClients->integer) {
 			count++;
-			if (svs.clients[i].netchan.remoteAddress.type != NA_BOT) {
-				humans++;
-			}
+		}
+		if (svs.clients[i].netchan.remoteAddress.type != NA_BOT) {
+			humans++;
 		}
 	}
 

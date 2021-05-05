@@ -716,7 +716,7 @@ SortRanks
 
 =============
 */
-int QDECL SortRanks(const void *a, const void *b) {
+static int QDECL SortRanks(const void *a, const void *b) {
 	gclient_t *ca, *cb;
 
 	ca = &level.clients[*(int *)a];
