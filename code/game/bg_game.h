@@ -112,8 +112,8 @@
 
 // Holdables
 // TODO: Merge into existing vars above?
-#define MAX_FLOATER 30000
-#define FLOATER_USAGE_PER_MS 5
+#define MAX_FLOATER 8000
+#define FLOATER_USAGE_PER_MS 1
 #define MAX_KILLERDUCKS 5
 #define MAX_BOOMIES 3
 #define MAX_BAMBAMS 1

@@ -1194,6 +1194,7 @@ typedef struct playerState_s {
 	int damagePitch;
 	int damageCount;
 
+	// these values are transmitted as short values in the snapshot
 	int stats[MAX_STATS];
 	int persistant[MAX_PERSISTANT]; // stats that aren't cleared on death
 	int powerups[MAX_POWERUPS];		// level.time that the powerup runs out

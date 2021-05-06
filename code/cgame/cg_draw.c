@@ -1377,6 +1377,7 @@ static void CG_DrawHoldableItem(float y) {
 
 	value = cg.snap->ps.stats[STAT_HOLDABLE_ITEM];
 	if (value) {
+		const int itemState = cg.snap->ps.stats[STAT_HOLDABLEVAR];
 		CG_RegisterItemVisuals(value);
 
 		y -= ICON_SIZE;
@@ -1386,19 +1387,17 @@ static void CG_DrawHoldableItem(float y) {
 		}
 
 		if (bg_itemlist[value].giTag == HI_FLOATER) {
-			vec4_t tmpcolor = {0.33f, 0.33f, 1.0f, 0.66f};
-
-			CG_FillRect(640 - ICON_SIZE - 10,
-						y + ICON_SIZE - (int)(ICON_SIZE * cg.snap->ps.stats[STAT_HOLDABLEVAR] * 0.0000333333f), 10,
-						(int)(ICON_SIZE * cg.snap->ps.stats[STAT_HOLDABLEVAR] * 0.0000333333f),
-						tmpcolor); //*0.0000333333f -> /30000
-			CG_DrawRect(640 - ICON_SIZE - 10, y, 10, ICON_SIZE, 1.0f, colorWhite);
-			//			CG_DrawStringExt(640-ICON_SIZE,(SCREEN_HEIGHT-ICON_SIZE)/2+16,va("%i",cg.snap->ps.stats[STAT_HOLDABLEVAR]),colorWhite,qtrue,qfalse,10,16,8);
+			const vec4_t barColor = {0.33f, 0.33f, 1.0f, 0.66f};
+			const float barFactor = 1.0f / (float)MAX_FLOATER;
+			const int barHeight = (int)(ICON_SIZE * itemState * barFactor);
+			const float barX = 640 - ICON_SIZE - 10;
+			CG_FillRect(barX, y + ICON_SIZE - barHeight, 10, barHeight, barColor);
+			CG_DrawRect(barX, y, 10, ICON_SIZE, 1.0f, colorWhite);
 		} else if (bg_itemlist[value].giTag == HI_KILLERDUCKS) {
-			CG_DrawStringExt(640 - 28, y + 8, va("%i", cg.snap->ps.stats[STAT_HOLDABLEVAR]), colorWhite, qtrue, qtrue,
+			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
 							 8, 16, 1);
 		} else if (bg_itemlist[value].giTag == HI_BOOMIES) {
-			CG_DrawStringExt(640 - 28, y + 8, va("%i", cg.snap->ps.stats[STAT_HOLDABLEVAR]), colorWhite, qtrue, qtrue,
+			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
 							 8, 16, 1);
 		}
 	}
