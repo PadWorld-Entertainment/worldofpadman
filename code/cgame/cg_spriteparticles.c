@@ -428,47 +428,6 @@ void LaunchSpeedyPuffTrail(vec3_t origin) {
 		Com_Printf("changeerror=%i\n", tmpce);
 }
 
-// puff for floatering around °°
-// ... we won't use it ... we keep using the vq3-partikels, for this
-void LaunchFloaterPuff(vec3_t origin) {
-	sparticle_t *p;
-	changeerror_t tmpce;
-
-	p = Alloc_SpriteParticle();
-
-	p->starttime = cg.time;
-
-	p->currentshader = cgs.media.smokePuffShader;
-
-	p->endtime = cg.time + 4000;
-
-	p->origin[0] = origin[0];
-	p->origin[1] = origin[1];
-	p->origin[2] = origin[2];
-
-	p->radius = 10.0f;
-
-	p->velocity[0] = 0.0f;
-	p->velocity[1] = 0.0f;
-	p->velocity[2] = -2.0f;
-
-	p->vrandom[0] = 0.0f;
-	p->vrandom[1] = 0.2f;
-	p->vrandom[2] = 0.2f;
-
-	p->currentcolor[0] = 0.2f;
-	p->currentcolor[1] = 0.0f;
-	p->currentcolor[2] = 0.4f;
-	p->currentcolor[3] = 0.8f;
-
-	if ((tmpce = AddCCToParticle(p, 0, 1500, 0.6f, 0.4f, 1.0f, 0.80f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-	if ((tmpce = AddCCToParticle(p, 1500, 2000, 1.0f, 1.0f, 1.0f, 0.8f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-	if ((tmpce = AddCCToParticle(p, 2100, 2500, 1.0f, 1.0f, 1.0f, 0.0f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-}
-
 // not realy used ... because it looked realy ugly ^^
 void LaunchPunchyBerserker(vec3_t origin) {
 	sparticle_t *p;

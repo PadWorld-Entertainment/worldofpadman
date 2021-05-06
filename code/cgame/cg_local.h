@@ -1626,7 +1626,6 @@ void AddLFsToScreen(void);
 //
 void Init_SpriteParticles(void);
 void LaunchSpeedyPuffTrail(vec3_t origin);
-void LaunchFloaterPuff(vec3_t origin);
 void LaunchRevivalParticle(vec3_t origin, const int lifetime);
 void Main_SpriteParticles(void);
 
