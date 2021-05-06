@@ -175,30 +175,7 @@ typedef enum {
 
 } changeerror_t;
 
-changeerror_t AddCSHToParticle(sparticle_t *p, int time, qhandle_t shader) {
-	changeshader_t *tmpcsh;
-
-	if (freecsh == NULL)
-		return CE_MEMFULL;
-
-	freecsh->time = time;
-	freecsh->shader = shader;
-
-	if (!p->csh) {
-		p->csh = freecsh;
-	} else {
-		for (tmpcsh = p->csh; tmpcsh->next != NULL; tmpcsh = tmpcsh->next)
-			;
-		tmpcsh->next = freecsh;
-	}
-	tmpcsh = freecsh->next;
-	freecsh->next = NULL;
-	freecsh = tmpcsh;
-
-	return CE_NOTHING;
-}
-
-changeerror_t AddCCToParticle(sparticle_t *p, int fadetime, int time, float r, float g, float b, float a) {
+static changeerror_t AddCCToParticle(sparticle_t *p, int fadetime, int time, float r, float g, float b, float a) {
 	changecolor_t *tmpcc;
 
 	if (freecc == NULL)
@@ -240,30 +217,7 @@ changeerror_t AddCCToParticle(sparticle_t *p, int fadetime, int time, float r, f
 	return CE_NOTHING;
 }
 
-changeerror_t AddCSIToParticle(sparticle_t *p, int time, float changepersecond) {
-	changesize_t *tmpcsi;
-
-	if (freecsi == NULL)
-		return CE_MEMFULL;
-
-	freecsi->time = time;
-	freecsi->changepersecond = changepersecond;
-
-	if (!p->csi) {
-		p->csi = freecsi;
-	} else {
-		for (tmpcsi = p->csi; tmpcsi->next != NULL; tmpcsi = tmpcsi->next)
-			;
-		tmpcsi->next = freecsi;
-	}
-	tmpcsi = freecsi->next;
-	freecsi->next = NULL;
-	freecsi = tmpcsi;
-
-	return CE_NOTHING;
-}
-
-sparticle_t *Alloc_SpriteParticle(void) {
+static sparticle_t *Alloc_SpriteParticle(void) {
 	sparticle_t *tmpp;
 
 	if (!freep) // we must free something
@@ -282,109 +236,6 @@ sparticle_t *Alloc_SpriteParticle(void) {
 		lastp = tmpp;
 
 	return tmpp;
-}
-
-// used long long long time ago *sight*
-void LaunchStationStar(vec3_t origin) {
-	sparticle_t *p;
-	changeerror_t tmpce;
-	float tmpcr;
-
-	p = Alloc_SpriteParticle();
-
-	p->starttime = cg.time;
-
-	p->currentshader = spritehandles.starts[(int)(random() * 2.99f)];
-
-	p->endtime = cg.time + 3000;
-
-	tmpcr = crandom();
-	p->origin[0] = origin[0] + tmpcr * 32.0f;
-	p->origin[1] = origin[1] + sin(acos(tmpcr)) * crandom() * 32.0f;
-	p->origin[2] = origin[2];
-
-	p->radius = 2.5f;
-
-	p->velocity[0] = 0.0f;
-	p->velocity[1] = 0.0f;
-	p->velocity[2] = 100.0f;
-
-	p->vrandom[0] = 1.0f;
-	p->vrandom[1] = 1.0f;
-	p->vrandom[2] = 1.0f;
-
-	p->acceleration[0] = 0.0f;
-	p->acceleration[1] = 0.0f;
-	p->acceleration[2] = -50.0f;
-
-	p->currentcolor[0] = p->currentcolor[1] = p->currentcolor[2] = p->currentcolor[3] = 1.0f;
-
-	if ((tmpce = AddCCToParticle(p, 2000, 3000, 1.0f, 1.0f, 1.0f, 0.0f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-	/*
-		p->currentcolor[0] = 1.0f;
-		p->currentcolor[1] = 0.0f;
-		p->currentcolor[2] = 0.0f;
-		p->currentcolor[3] = 0.8f;
-
-		if(tmpce=AddCCToParticle(p,500,1500,1.0f,1.0f,0.0f,0.6f)) Com_Printf("changeerror=%i\n",tmpce);
-		if(tmpce=AddCCToParticle(p,2000,2000,0.0f,0.0f,0.0f,1.0f)) Com_Printf("changeerror=%i\n",tmpce);
-		if(tmpce=AddCCToParticle(p,3000,3500,0.0f,0.0f,0.0f,0.0f)) Com_Printf("changeerror=%i\n",tmpce);
-	*/
-}
-
-// playing around XD (you can see this in the credit menu ... if Ente hasn't removed it ;) )
-void LaunchSpiralParticle(vec3_t origin) {
-	sparticle_t *p;
-	changeerror_t tmpce;
-	//	float		tmpcr;
-
-	p = Alloc_SpriteParticle();
-
-	p->starttime = cg.time;
-
-	p->currentshader = cgs.media.whiteShader;
-
-	p->endtime = cg.time + 3000;
-
-	p->origin[0] = origin[0];
-	p->origin[1] = origin[1];
-	p->origin[2] = origin[2];
-
-	p->radius = 5.0f;
-
-	p->velocity[0] = 10.0f * sin((float)cg.time * 0.01f);
-	p->velocity[1] = 10.0f * cos((float)cg.time * 0.01f);
-	p->velocity[2] = -20.0f;
-
-	p->vrandom[0] = 0.0f;
-	p->vrandom[1] = 0.0f;
-	p->vrandom[2] = 0.0f;
-
-	p->acceleration[0] = 0.0f;
-	p->acceleration[1] = 0.0f;
-	p->acceleration[2] = 0.0f;
-
-	p->currentcolor[0] = 0.0f;
-	p->currentcolor[1] = 0.33f;
-	p->currentcolor[2] = 0.0f;
-	p->currentcolor[3] = 1.0f;
-
-	if ((tmpce = AddCCToParticle(p, 0, 2100, 0.0f, 1.0f, 0.0f, 1.0f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-	if ((tmpce = AddCCToParticle(p, 2100, 3000, 0.0f, 1.0f, 0.0f, 0.0f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-
-	/* rot->gelb->weiß->weg
-		p->currentcolor[0] = 1.0f;
-		p->currentcolor[1] = 0.0f;
-		p->currentcolor[2] = 0.0f;
-		p->currentcolor[3] = 1.0f;
-
-		if(tmpce=AddCCToParticle(p,1000,2000,1.0f,1.0f,0.0f,1.0f)) Com_Printf("changeerror=%i\n",tmpce);
-		if(tmpce=AddCCToParticle(p,2000,2100,1.0f,1.0f,1.0f,1.0f)) Com_Printf("changeerror=%i\n",tmpce);
-		if(tmpce=AddCCToParticle(p,2100,3000,1.0f,1.0f,1.0f,0.0f)) Com_Printf("changeerror=%i\n",tmpce);
-	*/
 }
 
 // puffs when running around with speedy
@@ -425,55 +276,6 @@ void LaunchSpeedyPuffTrail(vec3_t origin) {
 	if ((tmpce = AddCCToParticle(p, 2100, 3000, 1.0f, 1.0f, 1.0f, 0.8f)))
 		Com_Printf("changeerror=%i\n", tmpce);
 	if ((tmpce = AddCCToParticle(p, 3100, 4000, 1.0f, 1.0f, 1.0f, 0.0f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-}
-
-// not realy used ... because it looked realy ugly ^^
-void LaunchPunchyBerserker(vec3_t origin) {
-	sparticle_t *p;
-	changeerror_t tmpce;
-
-	p = Alloc_SpriteParticle();
-
-	p->starttime = cg.time;
-
-	p->currentshader = cgs.media.smokePuffShader;
-
-	p->endtime = cg.time + 4000;
-
-	p->origin[0] = origin[0];
-	p->origin[1] = origin[1];
-	p->origin[2] = origin[2];
-
-	p->radius = 8.0f;
-
-	p->velocity[0] = 0.0f;
-	p->velocity[1] = 0.0f;
-	p->velocity[2] = 20.0f;
-
-	p->vrandom[0] = 0.0f;
-	p->vrandom[1] = 5.0f;
-	p->vrandom[2] = 5.0f;
-
-	p->acceleration[0] = 0.0f;
-	p->acceleration[1] = 0.0f;
-	p->acceleration[2] = 0.0f;
-
-	p->currentcolor[0] = 1.0f;
-	p->currentcolor[1] = 0.0f;
-	p->currentcolor[2] = 0.0f;
-	p->currentcolor[3] = 0.7f;
-
-	if ((tmpce = AddCSIToParticle(p, 1000, -6.0f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-	if ((tmpce = AddCSIToParticle(p, 1100, 60.0f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-
-	if ((tmpce = AddCCToParticle(p, 0, 800, 1.0f, 0.66f, 0.0f, 0.20f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-	if ((tmpce = AddCCToParticle(p, 800, 1200, 0.0f, 0.0f, 0.0f, 0.33f)))
-		Com_Printf("changeerror=%i\n", tmpce);
-	if ((tmpce = AddCCToParticle(p, 1200, 1600, 0.0f, 0.0f, 0.0f, 0.0f)))
 		Com_Printf("changeerror=%i\n", tmpce);
 }
 
@@ -523,7 +325,7 @@ void LaunchRevivalParticle(vec3_t origin, const int lifetime) {
 		CHANGE_ERROR(tmpce);
 }
 
-void CheckCurrentStats(sparticle_t *p) {
+static void CheckCurrentStats(sparticle_t *p) {
 	float ftmp;
 	vec3_t oldOrigin;
 	trace_t tr;
@@ -602,7 +404,7 @@ void CheckCurrentStats(sparticle_t *p) {
 	p->velocity[2] += (p->acceleration[2] + p->vrandom[2] * ftmp) * (float)cg.frametime * 0.001f;
 }
 
-void AddSpriteParticleToScene(sparticle_t *p) {
+static void AddSpriteParticleToScene(sparticle_t *p) {
 	polyVert_t verts[4];
 
 	if (p->radius == 0)

@@ -1015,12 +1015,6 @@ static void CG_Station(centity_t *cent) {
 	if (cent->currentState.angles2[1] == 0.0f) {
 		vec3_t tmpangles;
 
-		/*
-				if(!(cg.frametime>200 || cg.frametime<1)) tmpi+=cg.frametime;
-		//		if(!(cg.clientFrame%2)) LaunchStationStar(ent.origin);
-				while(tmpi>40) { LaunchStationStar(ent.origin); tmpi-=40; }//20->40
-		*/
-
 		AnglesToAxis(cg.autoAngles, ent.axis);
 		ent.origin[2] += 48.0f + sin(cg.time * 0.005f) * 4.0f; // 24(oldmodel)->48(new)
 		ent.oldorigin[2] += 48.0f + sin(cg.time * 0.005f) * 4.0f;
