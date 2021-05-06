@@ -1528,8 +1528,7 @@ static void PM_Weapon(void) {
 
 				pm->ps->eFlags |= EF_FLOATER;
 
-				pm->ps->stats[STAT_HOLDABLEVAR] -=
-					50; // FIXME: it would be better if the value gets calculated from framerate ...
+				pm->ps->stats[STAT_HOLDABLEVAR] -= FLOATER_USAGE_PER_MS * pml.msec;
 				if (pm->ps->stats[STAT_HOLDABLEVAR] <= 0) {
 					pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
 					pm->ps->stats[STAT_HOLDABLEVAR] = 0;
