@@ -902,6 +902,7 @@ void oc_enc_tokenize_dc_frag_list(oc_enc_ctx *_enc,int _pli,
             }
             /*Fall through.*/
           }
+          // fall through
           case OC_DCT_ZRL_TOKEN:{
             dct_tokens0[ti0]=OC_DCT_ZRL_TOKEN;
             extra_bits0[ti0]=(ogg_uint16_t)(eb1+1);
@@ -954,6 +955,7 @@ void oc_enc_tokenize_dc_frag_list(oc_enc_ctx *_enc,int _pli,
             eb1=((eb1&4)<<1)-1;
             /*Fall through.*/
           }
+          // fall through
           case OC_DCT_RUN_CAT1C:{
             dct_tokens0[ti0]=OC_DCT_RUN_CAT1C;
             extra_bits0[ti0]=(ogg_uint16_t)(eb1+1);
@@ -964,6 +966,7 @@ void oc_enc_tokenize_dc_frag_list(oc_enc_ctx *_enc,int _pli,
             eb1=(eb1<<1)-1;
             /*Fall through.*/
           }
+          // fall through
           case OC_DCT_RUN_CAT2B:{
             dct_tokens0[ti0]=OC_DCT_RUN_CAT2B;
             extra_bits0[ti0]=(ogg_uint16_t)(eb1+1);
