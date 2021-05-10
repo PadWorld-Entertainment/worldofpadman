@@ -458,7 +458,7 @@ void weapon_spraypistol_fire(gentity_t *ent) {
 			} else {
 				AddScore(ent, tr.endpos, SCORE_SPRAY_WRONGWALL, SCORE_SPRAY_WRONGWALL_S);
 				// FIXME: Use an event rather than that crap
-				trap_SendServerCommand(-1, va("cdi 1 %i", (int)(random() * 3.9999)));
+				trap_SendServerCommand(-1, va("cdi " XSTRING(CLIENT_DO_IT_SPRAYED_ON_WRONG_WALL) " %i", (int)(random() * 3.9999)));
 
 				PrintMsg(NULL, "%s" S_COLOR_MAGENTA " (%s Team) sprayed on the WRONG WALL!!!\n",
 						 ent->client->pers.netname, TeamName(ent->client->sess.sessionTeam));
@@ -470,7 +470,7 @@ void weapon_spraypistol_fire(gentity_t *ent) {
 				check_sprayawards(ent);
 			} else {
 				AddScore(ent, tr.endpos, SCORE_SPRAY_WRONGWALL, SCORE_SPRAY_WRONGWALL_S);
-				trap_SendServerCommand(-1, va("cdi 1 %i", (int)(random() * 3.9999)));
+				trap_SendServerCommand(-1, va("cdi " XSTRING(CLIENT_DO_IT_SPRAYED_ON_WRONG_WALL) " %i", (int)(random() * 3.9999)));
 
 				PrintMsg(NULL, "%s" S_COLOR_MAGENTA " (%s Team) sprayed on the WRONG WALL!!!\n",
 						 ent->client->pers.netname, TeamName(ent->client->sess.sessionTeam));

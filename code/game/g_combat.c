@@ -421,7 +421,7 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 		self->client->lastDeathTime = level.time;
 
 		if (self->client->sess.livesleft <= 0) {
-			trap_SendServerCommand(self->s.number, "cdi 2");
+			trap_SendServerCommand(self->s.number, "cdi " XSTRING(CLIENT_DO_IT_LPS_LOST));
 		}
 	}
 

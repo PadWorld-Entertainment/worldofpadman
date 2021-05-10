@@ -643,11 +643,6 @@ void G_RunMover(gentity_t *ent);
 void Touch_DoorTrigger(gentity_t *ent, gentity_t *other, trace_t *trace);
 
 //
-// g_trigger.c
-//
-void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t *trace);
-
-//
 // g_misc.c
 //
 void TeleportPlayer(gentity_t *player, vec3_t origin, vec3_t angles);

@@ -60,8 +60,8 @@ int muh;
 #include "match.h"
 
 // cyr{
-int lastorderedgoal[MAX_CLIENTS]; // leader AI, aviod spamming humans with the same MSG
-int lastballoonstate[MAX_BALLOONS];
+static int lastorderedgoal[MAX_CLIENTS]; // leader AI, aviod spamming humans with the same MSG
+static int lastballoonstate[MAX_BALLOONS];
 // cyr}
 
 /*
@@ -69,7 +69,7 @@ int lastballoonstate[MAX_BALLOONS];
 BotValidTeamLeader
 ==================
 */
-int BotValidTeamLeader(bot_state_t *bs) {
+static int BotValidTeamLeader(bot_state_t *bs) {
 	int leadclient;
 	if (!strlen(bs->teamleader))
 		return qfalse;
@@ -91,7 +91,7 @@ int BotValidTeamLeader(bot_state_t *bs) {
 BotNumTeamMates
 ==================
 */
-int BotNumTeamMates(bot_state_t *bs) {
+static int BotNumTeamMates(bot_state_t *bs) {
 	int i, numplayers;
 	char buf[MAX_INFO_STRING];
 
@@ -112,64 +112,7 @@ int BotNumTeamMates(bot_state_t *bs) {
 	return numplayers;
 }
 
-int BotSortTeamMatesByBaseTravelTime(bot_state_t *bs, int *teammates, int maxteammates) {
-
-	int i, j, k, numteammates, traveltime;
-	char buf[MAX_INFO_STRING];
-	int traveltimes[MAX_CLIENTS];
-	bot_goal_t *goal = NULL;
-
-	numteammates = 0;
-	for (i = 0; i < level.maxclients; i++) {
-		trap_GetConfigstring(CS_PLAYERS + i, buf, sizeof(buf));
-		// if no config string or no name
-		if (!strlen(buf) || !strlen(Info_ValueForKey(buf, "n")))
-			continue;
-		// skip spectators
-		if (atoi(Info_ValueForKey(buf, "t")) == TEAM_SPECTATOR)
-			continue;
-		//
-		if (BotSameTeam(bs, i)) {
-			//
-			traveltime = BotClientTravelTimeToGoal(i, goal);
-			//
-			for (j = 0; j < numteammates; j++) {
-				if (traveltime < traveltimes[j]) {
-					for (k = numteammates; k > j; k--) {
-						traveltimes[k] = traveltimes[k - 1];
-						teammates[k] = teammates[k - 1];
-					}
-					break;
-				}
-			}
-			traveltimes[j] = traveltime;
-			teammates[j] = i;
-			numteammates++;
-			if (numteammates >= maxteammates)
-				break;
-		}
-	}
-	return numteammates;
-}
-
-void BotSayTeamOrderAlways(bot_state_t *bs, int toclient) {
-	char teamchat[MAX_MESSAGE_SIZE];
-	char buf[MAX_MESSAGE_SIZE];
-	char name[MAX_NETNAME];
-
-	// if the bot is talking to itself
-	if (bs->client == toclient) {
-		// don't show the message just put it in the console message queue
-		trap_BotGetChatMessage(bs->cs, buf, sizeof(buf));
-		ClientName(bs->client, name, sizeof(name));
-		Com_sprintf(teamchat, sizeof(teamchat), EC "(%s" EC ")" EC ": %s", name, buf);
-		trap_BotQueueConsoleMessage(bs->cs, CMS_CHAT, teamchat);
-	} else {
-		trap_BotEnterChat(bs->cs, toclient, CHAT_TELL);
-	}
-}
-
-int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
+static int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
 
 	int i, numteammates;
 	char buf[MAX_INFO_STRING];

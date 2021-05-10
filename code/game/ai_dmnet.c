@@ -60,12 +60,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define DEFENDAWAY_RANGE 1000
 
 extern vmCvar_t bot_thinktime;
-// cyr, positions for reachability test mode
-vec3_t testreach_start;
-vec3_t testreach_end;
 
-int numnodeswitches;
-char nodeswitch[MAX_NODESWITCHES + 1][144];
+static int numnodeswitches;
+static char nodeswitch[MAX_NODESWITCHES + 1][144];
 
 extern bot_state_t *botstates[MAX_CLIENTS];
 
@@ -80,7 +77,7 @@ int BotClientTravelTimeToGoal(int client, bot_goal_t *goal) {
 	return trap_AAS_AreaTravelTimeToGoalArea(areanum, ps.origin, goal->areanum, TFL_DEFAULT);
 }
 
-int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
+static int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
 	int i, numteammates;
 	char buf[MAX_INFO_STRING];
 	static int maxclients;

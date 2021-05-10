@@ -349,7 +349,7 @@ float CG_GetCvarFloat(const char *cvar) {
 CG_RegisterCvars
 =================
 */
-void CG_RegisterCvars(void) {
+static void CG_RegisterCvars(void) {
 	int i;
 	cvarTable_t *cv;
 	char var[MAX_TOKEN_CHARS];

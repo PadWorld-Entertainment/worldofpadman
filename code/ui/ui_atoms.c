@@ -890,12 +890,6 @@ void UI_SetActiveMenu(uiMenuCommand_t menu) {
 	case UIMENU_MAIN:
 		UI_MainMenu();
 		return;
-		/*	case UIMENU_NEED_CD:
-				UI_ConfirmMenu( "Insert the CD", (voidfunc_f)NULL, NeedCDAction );
-				return;
-			case UIMENU_BAD_CD_KEY:
-				UI_ConfirmMenu( "Bad CD Key", (voidfunc_f)NULL, NeedCDKeyAction );
-				return; */
 	case UIMENU_INGAME:
 		trap_Cvar_Set("cl_paused", "1");
 		UI_InGameMenu();

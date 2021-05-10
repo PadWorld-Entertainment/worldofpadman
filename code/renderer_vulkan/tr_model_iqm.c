@@ -253,7 +253,6 @@ qboolean R_LoadIQM(model_t *mod, void *buffer, int filesize, const char *mod_nam
 		default:
 			// not supported
 			return qfalse;
-			break;
 		}
 
 		switch (vertexarray->type) {

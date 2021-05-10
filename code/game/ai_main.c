@@ -909,7 +909,7 @@ void BotAddInfoLtg(bot_state_t *bs) {
 	}
 }
 
-void BotAddInfoNode(bot_state_t *bs) {
+static void BotAddInfoNode(bot_state_t *bs) {
 	char ainode[MAX_MESSAGE_SIZE];
 
 	// ainode
@@ -931,7 +931,7 @@ void BotAddInfoNode(bot_state_t *bs) {
 	BotAddInfo(bs, va("ainode %s", ainode), AIDBG_ALL);
 }
 
-void BotSetInfoConfigString(bot_state_t *bs) {
+static void BotSetInfoConfigString(bot_state_t *bs) {
 
 	// write ai-node
 	BotAddInfoNode(bs);
@@ -980,7 +980,7 @@ void BotSetInfoConfigString(bot_state_t *bs) {
 BotUpdateInfoConfigStrings
 ==============
 */
-void BotUpdateInfoConfigStrings(void) {
+static void BotUpdateInfoConfigStrings(void) {
 	int i;
 	char buf[MAX_INFO_STRING];
 
@@ -1002,7 +1002,7 @@ void BotUpdateInfoConfigStrings(void) {
 BotInterbreedBots
 ==============
 */
-void BotInterbreedBots(void) {
+static void BotInterbreedBots(void) {
 	float ranks[MAX_CLIENTS];
 	int parent1, parent2, child;
 	int i;
@@ -1034,7 +1034,7 @@ void BotInterbreedBots(void) {
 BotWriteInterbreeded
 ==============
 */
-void BotWriteInterbreeded(char *filename) {
+static void BotWriteInterbreeded(char *filename) {
 	float rank, bestrank;
 	int i, bestbot;
 
@@ -1087,7 +1087,7 @@ void BotInterbreedEndMatch(void) {
 BotInterbreeding
 ==============
 */
-void BotInterbreeding(void) {
+static void BotInterbreeding(void) {
 	int i;
 
 	trap_Cvar_Update(&bot_interbreedchar);
@@ -1133,15 +1133,6 @@ void BotEntityInfo(int entnum, aas_entityinfo_t *info) {
 
 /*
 ==============
-NumBots
-==============
-*/
-int NumBots(void) {
-	return numbots;
-}
-
-/*
-==============
 AngleDifference
 ==============
 */
@@ -1150,11 +1141,11 @@ float AngleDifference(float ang1, float ang2) {
 
 	diff = ang1 - ang2;
 	if (ang1 > ang2) {
-		if (diff > 180.0)
-			diff -= 360.0;
+		if (diff > 180.0f)
+			diff -= 360.0f;
 	} else {
-		if (diff < -180.0)
-			diff += 360.0;
+		if (diff < -180.0f)
+			diff += 360.0f;
 	}
 	return diff;
 }
@@ -1173,11 +1164,11 @@ float BotChangeViewAngle(float angle, float ideal_angle, float speed) {
 		return angle;
 	move = ideal_angle - angle;
 	if (ideal_angle > angle) {
-		if (move > 180.0)
-			move -= 360.0;
+		if (move > 180.0f)
+			move -= 360.0f;
 	} else {
-		if (move < -180.0)
-			move += 360.0;
+		if (move < -180.0f)
+			move += 360.0f;
 	}
 	if (move > 0) {
 		if (move > speed)
@@ -1239,14 +1230,14 @@ void BotChangeViewAngles(bot_state_t *bs, float thinktime) {
 			bs->viewangles[i] += anglespeed;
 			bs->viewangles[i] = AngleMod(bs->viewangles[i]);
 			// demping
-			bs->viewanglespeed[i] *= 0.45 * (1 - factor);
+			bs->viewanglespeed[i] *= 0.45f * (1.0f - factor);
 		}
 		// BotAI_Print(PRT_MESSAGE, "ideal_angles %f %f\n", bs->ideal_viewangles[0], bs->ideal_viewangles[1],
 		// bs->ideal_viewangles[2]);` bs->viewangles[i] = bs->ideal_viewangles[i];
 	}
 	// bs->viewangles[PITCH] = 0;
-	if (bs->viewangles[PITCH] > 180)
-		bs->viewangles[PITCH] -= 360;
+	if (bs->viewangles[PITCH] > 180.0f)
+		bs->viewangles[PITCH] -= 360.0f;
 	// elementary action: view
 	trap_EA_View(bs->client, bs->viewangles);
 }
@@ -1360,7 +1351,7 @@ void BotInputToUserCommand(bot_input_t *bi, usercmd_t *ucmd, int delta_angles[3]
 BotUpdateInput
 ==============
 */
-void BotShowViewAngles(bot_state_t *bs) {
+static void BotShowViewAngles(bot_state_t *bs) {
 	vec3_t forward, end;
 	AngleVectors(bs->ideal_viewangles, forward, NULL, NULL);
 	// VectorScale(forward, 500, forward);
@@ -1369,7 +1360,7 @@ void BotShowViewAngles(bot_state_t *bs) {
 	DebugLineDouble(bs->origin, end, 4);
 }
 
-void BotUpdateInput(bot_state_t *bs, int time, int elapsed_time) {
+static void BotUpdateInput(bot_state_t *bs, int time, int elapsed_time) {
 	bot_input_t bi;
 	int j;
 
@@ -1399,7 +1390,7 @@ void BotUpdateInput(bot_state_t *bs, int time, int elapsed_time) {
 BotAIRegularUpdate
 ==============
 */
-void BotAIRegularUpdate(void) {
+static void BotAIRegularUpdate(void) {
 	if (regularupdate_time < FloatTime()) {
 		trap_BotUpdateEntityItems();
 		regularupdate_time = FloatTime() + 0.3;
@@ -1411,7 +1402,7 @@ void BotAIRegularUpdate(void) {
 RemoveColorEscapeSequences
 ==============
 */
-void RemoveColorEscapeSequences(char *text) {
+static void RemoveColorEscapeSequences(char *text) {
 	int i, l;
 
 	l = 0;
@@ -1432,7 +1423,7 @@ void RemoveColorEscapeSequences(char *text) {
 BotAI
 ==============
 */
-int BotAI(int client, float thinktime) {
+static int BotAI(int client, float thinktime) {
 	bot_state_t *bs;
 	char buf[1024], *args;
 	int j;

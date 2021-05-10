@@ -835,7 +835,7 @@ go to a random point that doesn't telefrag
 ================
 */
 #define MAX_TEAM_SPAWN_POINTS 32
-gentity_t *SelectRandomTeamSpawnPoint(int teamstate, team_t team) {
+static gentity_t *SelectRandomTeamSpawnPoint(int teamstate, team_t team) {
 	gentity_t *spot;
 	int count;
 	int selection;

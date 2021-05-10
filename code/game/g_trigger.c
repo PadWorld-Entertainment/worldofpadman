@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #include "g_local.h"
 
-void InitTrigger(gentity_t *self) {
+static void InitTrigger(gentity_t *self) {
 	if (!VectorCompare(self->s.angles, vec3_origin))
 		G_SetMovedir(self->s.angles, self->movedir);
 
@@ -32,14 +32,14 @@ void InitTrigger(gentity_t *self) {
 }
 
 // the wait time has passed, so set back up for another activation
-void multi_wait(gentity_t *ent) {
+static void multi_wait(gentity_t *ent) {
 	ent->nextthink = 0;
 }
 
 // the trigger was just activated
 // ent->activator should be set to the activator so it can be held through a delay
 // so wait for the delay time before firing
-void multi_trigger(gentity_t *ent, gentity_t *activator) {
+static void multi_trigger(gentity_t *ent, gentity_t *activator) {
 	ent->activator = activator;
 	if (ent->nextthink) {
 		return; // can't retrigger until the wait is over
@@ -68,11 +68,11 @@ void multi_trigger(gentity_t *ent, gentity_t *activator) {
 	}
 }
 
-void Use_Multi(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_Multi(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	multi_trigger(ent, activator);
 }
 
-void Touch_Multi(gentity_t *self, gentity_t *other, trace_t *trace) {
+static void Touch_Multi(gentity_t *self, gentity_t *other, trace_t *trace) {
 	if (!other->client) {
 		return;
 	}
@@ -110,7 +110,7 @@ trigger_always
 ==============================================================================
 */
 
-void trigger_always_think(gentity_t *ent) {
+static void trigger_always_think(gentity_t *ent) {
 	G_UseTargets(ent, ent);
 	G_FreeEntity(ent);
 }
@@ -132,7 +132,7 @@ trigger_push
 ==============================================================================
 */
 
-void trigger_push_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
+static void trigger_push_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 
 	if (!other->client) {
 		return;
@@ -148,7 +148,7 @@ AimAtTarget
 Calculate origin2 so the target apogee will be hit
 =================
 */
-void AimAtTarget(gentity_t *self) {
+static void AimAtTarget(gentity_t *self) {
 	gentity_t *ent;
 	vec3_t origin;
 	float height, gravity, time, forward;
@@ -202,7 +202,7 @@ void SP_trigger_push(gentity_t *self) {
 	trap_LinkEntity(self);
 }
 
-void Use_target_push(gentity_t *self, gentity_t *other, gentity_t *activator) {
+static void Use_target_push(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	if (!activator->client) {
 		return;
 	}
@@ -256,7 +256,7 @@ trigger_teleport
 ==============================================================================
 */
 
-void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
+static void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	gentity_t *dest;
 
 	if (!other->client) {
@@ -385,7 +385,7 @@ NO_PROTECTION	*nothing* stops the damage
 "dmg"			default 5 (whole numbers only)
 
 */
-void hurt_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+static void hurt_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	if (self->r.linked) {
 		trap_UnlinkEntity(self);
 	} else {
@@ -393,7 +393,7 @@ void hurt_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	}
 }
 
-void hurt_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
+static void hurt_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	int dflags;
 
 	if (!other->takedamage) {
@@ -463,13 +463,13 @@ so, the basic time between firing is a random time between
 (wait - random) and (wait + random)
 
 */
-void func_timer_think(gentity_t *self) {
+static void func_timer_think(gentity_t *self) {
 	G_UseTargets(self, self->activator);
 	// set time before next firing
 	self->nextthink = level.time + 1000 * (self->wait + crandom() * self->random);
 }
 
-void func_timer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+static void func_timer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	self->activator = activator;
 
 	// if on, turn it off
@@ -520,7 +520,7 @@ trigger_balloonzone
 #define BT_RED 1
 #define BT_BLUE 2
 
-void TouchBalloonzone(gentity_t *self, gentity_t *other, trace_t *trace) {
+static void TouchBalloonzone(gentity_t *self, gentity_t *other, trace_t *trace) {
 	int team, timer;
 
 	if (!other->client) {
@@ -615,7 +615,7 @@ static void AddBalloonScores(gentity_t *balloon, team_t team, int score) {
 	}
 }
 
-void ThinkBalloonzone(gentity_t *self) {
+static void ThinkBalloonzone(gentity_t *self) {
 	//"(team == 0) ? TEAM_RED : TEAM_BLUE" => ! in this code red=0, blue=1 ! (unlike TEAM_RED(1), TEAM_BLUE(2) from
 	//team_t)
 	// FIXME: Remove that offset team uglyness or at least make it readable!!1!
@@ -788,11 +788,11 @@ void SP_trigger_balloonzone(gentity_t *ent) {
 	trap_LinkEntity(ent);
 
 	// set defaults
-	if (ent->wait < 0.1) {
-		ent->wait = 3.0;
+	if (ent->wait < 0.1f) {
+		ent->wait = 3.0f;
 	}
-	if (ent->speed < 0.1) {
-		ent->speed = 4.0;
+	if (ent->speed < 0.1f) {
+		ent->speed = 4.0f;
 	}
 	ent->target_ent->s.time = (ent->speed * 1000);
 }
@@ -800,7 +800,7 @@ void SP_trigger_balloonzone(gentity_t *ent) {
 #define FITEM_BAMBAMS 1
 #define FITEM_BOOMIES 2
 // TODO: Implement all items/powerups and holdables?
-void trigger_forbiddenitems_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
+static void trigger_forbiddenitems_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	if (other && other->client) {
 		if (self->spawnflags & FITEM_BAMBAMS) {
 			other->client->ps.stats[STAT_FORBIDDENITEMS] |= (1 << HI_BAMBAM);

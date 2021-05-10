@@ -184,7 +184,7 @@ static void InGame_Draw(void) {
 InGame_MenuInit
 =================
 */
-void InGame_MenuInit(void) {
+static void InGame_MenuInit(void) {
 	int y;
 	//	uiClientState_t	cs;
 	char info[MAX_INFO_STRING];

@@ -193,10 +193,10 @@ static cvarTable_t gameCvarTable[] = {
 
 static const int gameCvarTableSize = ARRAY_LEN(gameCvarTable);
 
-void G_InitGame(int levelTime, int randomSeed, int restart);
-void G_RunFrame(int levelTime);
-void G_ShutdownGame(int restart);
-void CheckExitRules(void);
+static void G_InitGame(int levelTime, int randomSeed, int restart);
+static void G_RunFrame(int levelTime);
+static void G_ShutdownGame(int restart);
+static void CheckExitRules(void);
 
 /*
 ================
@@ -285,7 +285,7 @@ All but the first will have the FL_TEAMSLAVE flag set and teammaster field set
 All but the last will have the teamchain field set to the next one
 ================
 */
-void G_FindTeams(void) {
+static void G_FindTeams(void) {
 	gentity_t *e, *e2;
 	int i, j;
 	int c, c2;
@@ -333,7 +333,7 @@ void G_FindTeams(void) {
 G_RegisterCvars
 =================
 */
-void G_RegisterCvars(void) {
+static void G_RegisterCvars(void) {
 	int i;
 	cvarTable_t *cv;
 
@@ -385,7 +385,7 @@ G_InitGame
 
 ============
 */
-void G_InitGame(int levelTime, int randomSeed, int restart) {
+static void G_InitGame(int levelTime, int randomSeed, int restart) {
 	int i;
 
 	G_Printf("------- Game Initialization -------\n");
@@ -504,7 +504,7 @@ void G_InitGame(int levelTime, int randomSeed, int restart) {
 G_ShutdownGame
 =================
 */
-void G_ShutdownGame(int restart) {
+static void G_ShutdownGame(int restart) {
 	char buff[MAX_CVAR_VALUE_STRING];
 
 	// backup the nextmap so we don't loose maploops on map_restart
@@ -576,7 +576,7 @@ If there are less than two tournament players, put a
 spectator in the game and restart
 =============
 */
-void AddTournamentPlayer(void) {
+static void AddTournamentPlayer(void) {
 	int i;
 	gclient_t *client;
 	gclient_t *nextInLine;
@@ -650,7 +650,7 @@ RemoveTournamentLoser
 Make the loser a spectator at the back of the line
 =======================
 */
-void RemoveTournamentLoser(void) {
+static void RemoveTournamentLoser(void) {
 	int clientNum;
 
 	if (level.numPlayingClients != 2) {
@@ -669,32 +669,10 @@ void RemoveTournamentLoser(void) {
 
 /*
 =======================
-RemoveTournamentWinner
-=======================
-*/
-void RemoveTournamentWinner(void) {
-	int clientNum;
-
-	if (level.numPlayingClients != 2) {
-		return;
-	}
-
-	clientNum = level.sortedClients[0];
-
-	if (level.clients[clientNum].pers.connected != CON_CONNECTED) {
-		return;
-	}
-
-	// make them a spectator
-	SetTeam(&g_entities[clientNum], "s");
-}
-
-/*
-=======================
 AdjustTournamentScores
 =======================
 */
-void AdjustTournamentScores(void) {
+static void AdjustTournamentScores(void) {
 	int clientNum;
 
 	clientNum = level.sortedClients[0];
@@ -1291,7 +1269,7 @@ If one or more players have not acknowledged the continue, the game will
 wait 10 seconds before going on.
 =================
 */
-void CheckIntermissionExit(void) {
+static void CheckIntermissionExit(void) {
 	int ready, notReady;
 	int i;
 	gclient_t *cl;
@@ -1377,7 +1355,7 @@ void CheckIntermissionExit(void) {
 ScoreIsTied
 =============
 */
-qboolean ScoreIsTied(void) {
+static qboolean ScoreIsTied(void) {
 	int a, b;
 
 	if (level.numPlayingClients < 2) {
@@ -1413,7 +1391,7 @@ and the time everyone is moved to the intermission spot, so you
 can see the last frag.
 =================
 */
-void CheckExitRules(void) {
+static void CheckExitRules(void) {
 	int i;
 	gclient_t *cl;
 	// if at the intermission, wait for all non-bots to
@@ -1550,7 +1528,7 @@ CheckTournament
 Once a frame, check for changes in tournement player state
 =============
 */
-void CheckTournament(void) {
+static void CheckTournament(void) {
 	// check because we run 3 game frames before calling Connect and/or ClientBegin
 	// for clients on a map_restart
 	if (level.numPlayingClients == 0) {
@@ -1660,7 +1638,7 @@ void CheckTournament(void) {
 CheckVote
 ==================
 */
-void CheckVote(void) {
+static void CheckVote(void) {
 	if (level.voteExecuteTime && level.voteExecuteTime < level.time) {
 		level.voteExecuteTime = 0;
 		trap_SendConsoleCommand(EXEC_APPEND, va("%s\n", level.voteString));
@@ -1696,7 +1674,7 @@ void CheckVote(void) {
 PrintTeam
 ==================
 */
-void PrintTeam(int team, char *message) {
+static void PrintTeam(int team, char *message) {
 	int i;
 
 	for (i = 0; i < level.maxclients; i++) {
@@ -1777,7 +1755,7 @@ void CheckTeamLeader(int team) {
 CheckTeamVote
 ==================
 */
-void CheckTeamVote(int team) {
+static void CheckTeamVote(int team) {
 	int cs_offset;
 
 	if (team == TEAM_RED)
@@ -1820,7 +1798,7 @@ void CheckTeamVote(int team) {
 CheckCvars
 ==================
 */
-void CheckCvars(void) {
+static void CheckCvars(void) {
 	static int lastMod = -1;
 
 	if (g_password.modificationCount != lastMod) {
@@ -1870,7 +1848,7 @@ some things which we check each frame ;)
 // FIXME: Most of this should NOT be done every frame, rather once each second per client
 //        or even in a special function. Entire code is horrible
 
-void WoP_RunFrame(void) {
+static void WoP_RunFrame(void) {
 	gentity_t *playersWithLives[2]; // for LPS
 	float maxReady, curReady;
 	int i;
@@ -1997,7 +1975,7 @@ void WoP_RunFrame(void) {
 			if (IsSyc()) {
 				if ((ent->client->sess.selectedlogo[0] == '\0') &&
 					(!ent->client->logoasktime || ((ent->client->logoasktime + 1000) < level.time))) {
-					trap_SendServerCommand(i, "cdi 3");
+					trap_SendServerCommand(i, "cdi " XSTRING(CLIENT_DO_IT_SELECT_LOGO));
 					ent->client->logoasktime = level.time;
 				}
 			}
@@ -2030,7 +2008,7 @@ void WoP_RunFrame(void) {
 						player_die(ent, ent, ent, 100000, MOD_SUICIDE);
 					}
 
-					trap_SendServerCommand(i, "cdi 0");
+					trap_SendServerCommand(i, "cdi " XSTRING(CLIENT_DO_IT_SPRAYROOM_GOODBYE));
 					ent->client->ps.stats[STAT_SPRAYROOMSECS] = 0;
 				}
 			}
@@ -2126,7 +2104,7 @@ G_RunFrame
 Advances the non-player objects in the world
 ================
 */
-void G_RunFrame(int levelTime) {
+static void G_RunFrame(int levelTime) {
 	int i;
 	gentity_t *ent;
 
