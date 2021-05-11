@@ -181,7 +181,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define PATH_SEP '/'
 
 #if !defined(ARCH_STRING)
+#if INTPTR_MAX == INT64_MAX
+#define ARCH_STRING "x86_64"
+#elif INTPTR_MAX == INT32_MAX
+#define ARCH_STRING "x86"
+#else
 #error ARCH_STRING should be defined by the Makefile
+#endif
 #endif
 
 #if defined __x86_64__
