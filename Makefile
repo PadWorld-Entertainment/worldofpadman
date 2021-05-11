@@ -129,6 +129,10 @@ ifndef MOUNT_DIR
 MOUNT_DIR=code
 endif
 
+ifndef LIBS_DIR
+LIBS_DIR=libs
+endif
+
 ifndef BUILD_DIR
 BUILD_DIR=build
 endif
@@ -234,6 +238,7 @@ endif
 
 BD=$(BUILD_DIR)/debug-$(PLATFORM)-$(ARCH)
 BR=$(BUILD_DIR)/release-$(PLATFORM)-$(ARCH)
+
 CDIR=$(MOUNT_DIR)/client
 SDIR=$(MOUNT_DIR)/server
 RCOMMONDIR=$(MOUNT_DIR)/renderercommon
@@ -249,23 +254,25 @@ CGDIR=$(MOUNT_DIR)/cgame
 BLIBDIR=$(MOUNT_DIR)/botlib
 NDIR=$(MOUNT_DIR)/null
 UIDIR=$(MOUNT_DIR)/ui
-JPDIR=$(MOUNT_DIR)/jpeg-9d
-OGGDIR=$(MOUNT_DIR)/libogg-1.3.4
-VORBISDIR=$(MOUNT_DIR)/libvorbis-1.3.7
-THEORADIR=$(MOUNT_DIR)/libtheora-1.1.1
-OPUSDIR=$(MOUNT_DIR)/opus-1.2.1
-OPUSFILEDIR=$(MOUNT_DIR)/opusfile-0.9
-ZDIR=$(MOUNT_DIR)/zlib
 TOOLSDIR=$(MOUNT_DIR)/tools
 Q3ASMDIR=$(MOUNT_DIR)/tools/asm
 LBURGDIR=$(MOUNT_DIR)/tools/lcc/lburg
 Q3CPPDIR=$(MOUNT_DIR)/tools/lcc/cpp
 Q3LCCETCDIR=$(MOUNT_DIR)/tools/lcc/etc
 Q3LCCSRCDIR=$(MOUNT_DIR)/tools/lcc/src
+
 LOKISETUPDIR=misc/setup
 NSISDIR=misc/nsis
-SDLHDIR=$(MOUNT_DIR)/SDL2
-LIBSDIR=$(MOUNT_DIR)/libs
+
+JPDIR=$(LIBS_DIR)/jpeg-9d
+OGGDIR=$(LIBS_DIR)/libogg-1.3.4
+VORBISDIR=$(LIBS_DIR)/libvorbis-1.3.7
+THEORADIR=$(LIBS_DIR)/libtheora-1.1.1
+OPUSDIR=$(LIBS_DIR)/opus-1.2.1
+OPUSFILEDIR=$(LIBS_DIR)/opusfile-0.9
+ZDIR=$(LIBS_DIR)/zlib
+SDLHDIR=$(LIBS_DIR)/SDL2
+LIBSDIR=$(LIBS_DIR)/libs
 
 bin_path=$(shell which $(1) 2> /dev/null)
 
