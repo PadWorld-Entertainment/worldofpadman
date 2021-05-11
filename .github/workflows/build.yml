@@ -1,6 +1,6 @@
 on:
   push:
-    branches: 
+    branches:
       - main
   pull_request:
     branches:
@@ -9,16 +9,14 @@ on:
 name: "Build"
 
 jobs:
-  build:
+  build-make:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
-          # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
           - ubuntu-18.04
           - windows-2019
           - macos-10.15
-#          - macos-11.0
     env:
       ARCHIVE: 1
 
@@ -36,10 +34,6 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         run: choco install zip
 
-#      - name: "Install Dependencies (macOS)"
-#        if: ${{ runner.os == 'macOS' }}
-#        run: 
-
       - name: "Compile"
         run: make release
 
@@ -48,3 +42,34 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: build/*.zip
+
+  build-cmake:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-18.04
+          - windows-2019
+          - macos-10.15
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: "Install Dependencies (Linux)"
+        if: ${{ runner.os == 'Linux' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsdl2-dev
+
+      - name: "Install Dependencies (OSX)"
+        if: ${{ runner.os == 'macOS' }}
+        run: |
+          brew install sdl2
+
+      - name: "Compile"
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build .
