@@ -58,7 +58,7 @@ void SV_GetChallenge(netadr_t from) {
 	int clientChallenge;
 	challenge_t *challenge;
 	qboolean wasfound = qfalse;
-	char *gameName;
+	const char *gameName;
 	qboolean gameMismatch;
 
 	// ignore if we are in single player
@@ -1015,7 +1015,8 @@ static void SV_VerifyPaks_f(client_t *cl) {
 	int nChkSum1, nChkSum2, nClientPaks, nServerPaks, i, j, nCurArg;
 	int nClientChkSum[1024];
 	int nServerChkSum[1024];
-	const char *pPaks, *pArg;
+	const char *pPaks;
+	const char *pArg;
 	qboolean bGood = qtrue;
 
 	// if we are pure, we "expect" the client to load certain things from

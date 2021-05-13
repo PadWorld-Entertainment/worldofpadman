@@ -424,7 +424,7 @@ void CL_ParseGamestate(msg_t *msg) {
 	int newnum;
 	entityState_t nullstate;
 	int cmd;
-	char *s;
+	const char *s;
 	char oldGame[MAX_QPATH];
 
 	Con_Close();
@@ -773,7 +773,7 @@ when it transitions a snapshot
 =====================
 */
 void CL_ParseCommandString(msg_t *msg) {
-	char *s;
+	const char *s;
 	int seq;
 	int index;
 

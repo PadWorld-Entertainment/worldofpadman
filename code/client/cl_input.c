@@ -72,7 +72,7 @@ void IN_MLookUp(void) {
 
 void IN_KeyDown(kbutton_t *b) {
 	int k;
-	char *c;
+	const char *c;
 
 	c = Cmd_Argv(1);
 	if (c[0]) {
@@ -108,7 +108,7 @@ void IN_KeyDown(kbutton_t *b) {
 
 void IN_KeyUp(kbutton_t *b) {
 	int k;
-	char *c;
+	const char *c;
 	unsigned uptime;
 
 	c = Cmd_Argv(1);

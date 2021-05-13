@@ -657,7 +657,7 @@ void CL_Record_f(void) {
 	int len;
 	entityState_t *ent;
 	entityState_t nullstate;
-	char *s;
+	const char *s;
 
 	if (Cmd_Argc() > 2) {
 		Com_Printf("record <demoname>\n");
@@ -1371,7 +1371,7 @@ so when they are typed in at the console, they will need to be forwarded.
 ===================
 */
 void CL_ForwardCommandToServer(const char *string) {
-	char *cmd;
+	const char *cmd;
 
 	cmd = Cmd_Argv(0);
 
@@ -2169,7 +2169,7 @@ CL_MotdPacket
 void CL_MotdPacket(netadr_t from) {
 #ifdef UPDATE_SERVER_NAME
 	char *challenge;
-	char *info;
+	const char *info;
 
 	// if not from our server, ignore it
 	if (!NET_CompareAdr(from, cls.updateServer)) {
@@ -2336,8 +2336,8 @@ Responses to broadcasts, etc
 =================
 */
 void CL_ConnectionlessPacket(netadr_t from, msg_t *msg) {
-	char *s;
-	char *c;
+	const char *s;
+	const char *c;
 	int challenge = 0;
 
 	MSG_BeginReadingOOB(msg);
@@ -2353,7 +2353,7 @@ void CL_ConnectionlessPacket(netadr_t from, msg_t *msg) {
 
 	// challenge from the server we are connecting to
 	if (!Q_stricmp(c, "challengeResponse")) {
-		char *strver;
+		const char *strver;
 		int ver;
 
 		if (clc.state != CA_CONNECTING) {
@@ -2984,7 +2984,7 @@ void CL_InitRef(void) {
 //===========================================================================================
 
 void CL_SetModel_f(void) {
-	char *arg;
+	const char *arg;
 	char name[256];
 
 	arg = Cmd_Argv(1);
@@ -3096,7 +3096,7 @@ static void CL_GenerateQKey(void) {
 }
 
 void CL_Sayto_f(void) {
-	char *rawname;
+	const char *rawname;
 	char name[MAX_NAME_LENGTH];
 	char cleanName[MAX_NAME_LENGTH];
 	const char *info;
@@ -3475,9 +3475,9 @@ CL_ServerInfoPacket
 void CL_ServerInfoPacket(netadr_t from, msg_t *msg) {
 	int i, type;
 	char info[MAX_INFO_STRING];
-	char *infoString;
+	const char *infoString;
 	int prot;
-	char *gamename;
+	const char *gamename;
 	qboolean gameMismatch;
 
 	infoString = MSG_ReadString(msg);
@@ -3664,7 +3664,7 @@ CL_ServerStatusResponse
 ===================
 */
 void CL_ServerStatusResponse(netadr_t from, msg_t *msg) {
-	char *s;
+	const char *s;
 	char info[MAX_INFO_STRING];
 	int i, l, score, ping;
 	int len;
@@ -3722,7 +3722,6 @@ void CL_ServerStatusResponse(netadr_t from, msg_t *msg) {
 		Com_Printf("num: score: ping: name:\n");
 	}
 	for (i = 0, s = MSG_ReadStringLine(msg); *s; s = MSG_ReadStringLine(msg), i++) {
-
 		len = strlen(serverStatus->string);
 		Com_sprintf(&serverStatus->string[len], sizeof(serverStatus->string) - len, "\\%s", s);
 
@@ -4028,7 +4027,7 @@ CL_Ping_f
 void CL_Ping_f(void) {
 	netadr_t to;
 	ping_t *pingptr;
-	char *server;
+	const char *server;
 	int argc;
 	netadrtype_t family = NA_UNSPEC;
 
@@ -4180,7 +4179,7 @@ CL_ServerStatus_f
 */
 void CL_ServerStatus_f(void) {
 	netadr_t to, *toptr = NULL;
-	char *server;
+	const char *server;
 	serverStatus_t *serverStatus;
 	int argc;
 	netadrtype_t family = NA_UNSPEC;

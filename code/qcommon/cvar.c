@@ -716,7 +716,7 @@ Prints the contents of a cvar
 ============
 */
 void Cvar_Print_f(void) {
-	char *name;
+	const char *name;
 	cvar_t *cv;
 
 	if (Cmd_Argc() != 2) {
@@ -786,7 +786,7 @@ weren't declared in C code.
 */
 void Cvar_Set_f(void) {
 	int c;
-	char *cmd;
+	const char *cmd;
 	cvar_t *v;
 
 	c = Cmd_Argc();
@@ -888,7 +888,7 @@ Cvar_List_f
 void Cvar_List_f(void) {
 	cvar_t *var;
 	int i;
-	char *match;
+	const char *match;
 
 	if (Cmd_Argc() > 1) {
 		match = Cmd_Argv(1);
@@ -962,8 +962,8 @@ Cvar_ListModified_f
 void Cvar_ListModified_f(void) {
 	cvar_t *var;
 	int totalModified;
-	char *value;
-	char *match;
+	const char *value;
+	const char *match;
 
 	if (Cmd_Argc() > 1) {
 		match = Cmd_Argv(1);

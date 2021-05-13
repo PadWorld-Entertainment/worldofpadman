@@ -88,9 +88,9 @@ int MSG_ReadByte(msg_t *sb);
 int MSG_ReadShort(msg_t *sb);
 int MSG_ReadLong(msg_t *sb);
 float MSG_ReadFloat(msg_t *sb);
-char *MSG_ReadString(msg_t *sb);
-char *MSG_ReadBigString(msg_t *sb);
-char *MSG_ReadStringLine(msg_t *sb);
+const char *MSG_ReadString(msg_t *sb);
+const char *MSG_ReadBigString(msg_t *sb);
+const char *MSG_ReadStringLine(msg_t *sb);
 float MSG_ReadAngle16(msg_t *sb);
 void MSG_ReadData(msg_t *sb, void *buffer, int size);
 int MSG_LookaheadByte(msg_t *msg);
@@ -415,7 +415,7 @@ void Cmd_CompleteArgument(const char *command, const char *args, int argNum);
 void Cmd_CompleteCfgName(const char *args, int argNum);
 
 int Cmd_Argc(void);
-char *Cmd_Argv(int arg);
+const char *Cmd_Argv(int arg);
 void Cmd_ArgvBuffer(int arg, char *buffer, int bufferLength);
 char *Cmd_Args(void);
 char *Cmd_ArgsFrom(int arg);
@@ -790,8 +790,8 @@ void Com_GameRestart(int checksumFeed, qboolean disconnect);
 int Com_Milliseconds(void); // will be journaled properly
 unsigned Com_BlockChecksum(const void *buffer, int length);
 char *Com_MD5File(const char *filename, int length, const char *prefix, int prefix_len);
-int Com_Filter(char *filter, char *name, int casesensitive);
-int Com_FilterPath(char *filter, char *name, int casesensitive);
+int Com_Filter(const char *filter, const char *name, int casesensitive);
+int Com_FilterPath(const char *filter, const char *name, int casesensitive);
 int Com_RealTime(qtime_t *qtime);
 qboolean Com_SafeMode(void);
 void Com_RunAndTimeServerPacket(netadr_t *evFrom, msg_t *buf);
@@ -1081,7 +1081,7 @@ const char *Sys_Dirname(char *path);
 const char *Sys_Basename(char *path);
 char *Sys_ConsoleInput(void);
 
-char **Sys_ListFiles(const char *directory, const char *extension, char *filter, int *numfiles, qboolean wantsubs);
+char **Sys_ListFiles(const char *directory, const char *extension, const char *filter, int *numfiles, qboolean wantsubs);
 void Sys_FreeFileList(char **list);
 void Sys_Sleep(int msec);
 

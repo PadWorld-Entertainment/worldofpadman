@@ -460,11 +460,11 @@ be after execing the config and default.
 */
 void Com_StartupVariable(const char *match) {
 	int i;
-	char *s;
+	const char *s;
 
 	for (i = 0; i < com_numConsoleLines; i++) {
 		Cmd_TokenizeString(com_consoleLines[i]);
-		if (strcmp(Cmd_Argv(0), "set")) {
+		if (strcmp(Cmd_Argv(0), "set") != 0) {
 			continue;
 		}
 
@@ -559,7 +559,7 @@ void Info_Print(const char *s) {
 Com_StringContains
 ============
 */
-char *Com_StringContains(char *str1, char *str2, int casesensitive) {
+static const char *Com_StringContains(const char *str1, char *str2, int casesensitive) {
 	int len, i, j;
 
 	len = strlen(str1) - strlen(str2);
@@ -587,9 +587,9 @@ char *Com_StringContains(char *str1, char *str2, int casesensitive) {
 Com_Filter
 ============
 */
-int Com_Filter(char *filter, char *name, int casesensitive) {
+int Com_Filter(const char *filter, const char *name, int casesensitive) {
 	char buf[MAX_TOKEN_CHARS];
-	char *ptr;
+	const char *ptr;
 	int i, found;
 
 	while (*filter) {
@@ -668,7 +668,7 @@ int Com_Filter(char *filter, char *name, int casesensitive) {
 Com_FilterPath
 ============
 */
-int Com_FilterPath(char *filter, char *name, int casesensitive) {
+int Com_FilterPath(const char *filter, const char *name, int casesensitive) {
 	int i;
 	char new_filter[MAX_QPATH];
 	char new_name[MAX_QPATH];
@@ -2264,14 +2264,14 @@ For controlling environment variables
 */
 void Com_Setenv_f(void) {
 	int argc = Cmd_Argc();
-	char *arg1 = Cmd_Argv(1);
+	const char *arg1 = Cmd_Argv(1);
 
 	if (argc > 2) {
-		char *arg2 = Cmd_ArgsFrom(2);
+		const char *arg2 = Cmd_ArgsFrom(2);
 
 		Sys_SetEnv(arg1, arg2);
 	} else if (argc == 2) {
-		char *env = getenv(arg1);
+		const char *env = getenv(arg1);
 
 		if (env)
 			Com_Printf("%s=%s\n", arg1, env);

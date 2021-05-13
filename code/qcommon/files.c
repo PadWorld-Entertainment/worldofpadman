@@ -2099,7 +2099,7 @@ Returns a uniqued list of files that match the given criteria
 from all search paths
 ===============
 */
-static char **FS_ListFilteredFiles(const char *path, const char *extensions, char *filter, int *numfiles,
+static char **FS_ListFilteredFiles(const char *path, const char *extensions, const char *filter, int *numfiles,
 								   qboolean allowNonPureFilesOnDisk) {
 	int nfiles;
 	char **listCopy;
@@ -2511,8 +2511,8 @@ FS_Dir_f
 ================
 */
 void FS_Dir_f(void) {
-	char *path;
-	char *extension;
+	const char *path;
+	const char *extension;
 	char **dirnames;
 	int ndirs;
 	int i;
@@ -2628,7 +2628,7 @@ FS_NewDir_f
 ================
 */
 void FS_NewDir_f(void) {
-	char *filter;
+	const char *filter;
 	char **dirnames;
 	int ndirs;
 	int i;
@@ -2737,7 +2737,7 @@ FS_Which_f
 */
 void FS_Which_f(void) {
 	searchpath_t *search;
-	char *filename;
+	const char *filename;
 
 	filename = Cmd_Argv(1);
 

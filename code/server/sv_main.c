@@ -764,8 +764,8 @@ connectionless packets.
 =================
 */
 static void SV_ConnectionlessPacket(netadr_t from, msg_t *msg) {
-	char *s;
-	char *c;
+	const char *s;
+	const char *c;
 
 	MSG_BeginReadingOOB(msg);
 	MSG_ReadLong(msg); // skip the -1 marker

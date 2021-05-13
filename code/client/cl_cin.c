@@ -1786,7 +1786,8 @@ void CL_CompleteCinematicName(const char *args, int argNum) {
 }
 
 void CL_PlayCinematic_f(void) {
-	char *arg, *s;
+	const char *arg;
+	const char *s;
 	int bits = CIN_system;
 
 	Com_DPrintf("CL_PlayCinematic_f\n");
