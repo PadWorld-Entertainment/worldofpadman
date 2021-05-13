@@ -3806,7 +3806,8 @@ ioquake3 2017; made master 0 fetch all master servers and 1-5 request a single m
 void CL_GlobalServers_f(void) {
 	netadr_t to;
 	int count, i, masterNum;
-	char command[1024], *masteraddress;
+	char command[1024];
+	const char *masteraddress;
 
 	if ((count = Cmd_Argc()) < 3 || (masterNum = atoi(Cmd_Argv(1))) < 0 || masterNum > MAX_MASTER_SERVERS) {
 		Com_Printf("usage: globalservers <master# 0-%d> <protocol> [keywords]\n", MAX_MASTER_SERVERS);

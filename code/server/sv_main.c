@@ -588,7 +588,7 @@ if a user is interested in a server to do a full status
 */
 void SVC_Info(netadr_t from) {
 	int i, count, humans;
-	char *gamedir;
+	const char *gamedir;
 	char infostring[MAX_INFO_STRING];
 
 	// ignore if we are in single player

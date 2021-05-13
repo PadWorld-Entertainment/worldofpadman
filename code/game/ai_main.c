@@ -975,6 +975,7 @@ static void BotSetInfoConfigString(bot_state_t *bs) {
 		BotAddInfo(bs, "nmy: bambam", AIDBG_COMBAT);
 }
 
+#if 0
 /*
 ==============
 BotUpdateInfoConfigStrings
@@ -996,6 +997,7 @@ static void BotUpdateInfoConfigStrings(void) {
 		BotSetInfoConfigString(botstates[i]);
 	}
 }
+#endif
 
 /*
 ==============
@@ -1346,6 +1348,7 @@ void BotInputToUserCommand(bot_input_t *bi, usercmd_t *ucmd, int delta_angles[3]
 	// Com_Printf("ucmd->serverTime = %d\n", ucmd->serverTime);
 }
 
+#if 0
 /*
 ==============
 BotUpdateInput
@@ -1359,6 +1362,7 @@ static void BotShowViewAngles(bot_state_t *bs) {
 	VectorMA(bs->origin, 300, forward, end);
 	DebugLineDouble(bs->origin, end, 4);
 }
+#endif
 
 static void BotUpdateInput(bot_state_t *bs, int time, int elapsed_time) {
 	bot_input_t bi;

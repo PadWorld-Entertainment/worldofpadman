@@ -130,7 +130,7 @@ int Cvar_VariableIntegerValue(const char *var_name) {
 Cvar_VariableString
 ============
 */
-char *Cvar_VariableString(const char *var_name) {
+const char *Cvar_VariableString(const char *var_name) {
 	cvar_t *var;
 
 	var = Cvar_FindVar(var_name);
@@ -744,7 +744,7 @@ given values
 */
 void Cvar_Toggle_f(void) {
 	int i, c = Cmd_Argc();
-	char *curval;
+	const char *curval;
 
 	if (c < 2) {
 		Com_Printf("usage: toggle <variable> [value1, value2, ...]\n");
