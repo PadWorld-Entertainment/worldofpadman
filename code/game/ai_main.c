@@ -1876,7 +1876,7 @@ void BotAIObserve(void) {
 	int i;
 
 	if (!bot_developer.integer) {
-		trap_SetConfigstring(CS_BOTINFO, '\0');
+		trap_SetConfigstring(CS_BOTINFO, "");
 		return;
 	}
 
@@ -1885,7 +1885,7 @@ void BotAIObserve(void) {
 	observer = BotFindHumanPlayer();
 
 	if (!observer) {
-		trap_SetConfigstring(CS_BOTINFO, '\0');
+		trap_SetConfigstring(CS_BOTINFO, "");
 		return;
 	}
 
