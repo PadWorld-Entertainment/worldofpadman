@@ -1528,7 +1528,7 @@ static int BotAI(int client, float thinktime) {
 BotScheduleBotThink
 ==================
 */
-void BotScheduleBotThink(void) {
+static void BotScheduleBotThink(void) {
 	int i, botnum;
 
 	botnum = 0;
@@ -1851,7 +1851,7 @@ gentity_t *BotFindHumanPlayer(void) {
 	return NULL;
 }
 
-int ScanForCrossHairPlayer(gentity_t *observer) {
+static int ScanForCrossHairPlayer(gentity_t *observer) {
 	trace_t trace;
 	vec3_t start, forward, end;
 	int entnum = observer - g_entities;
@@ -1869,7 +1869,7 @@ int ScanForCrossHairPlayer(gentity_t *observer) {
 
 // maintains bot_state_t::observed for all bots
 // find a human player, then find a bot the human player might be interested in
-void BotAIObserve(void) {
+static void BotAIObserve(void) {
 	gentity_t *observer;
 	int observedId;
 	static int lastobserved = -1;
@@ -2156,7 +2156,7 @@ int BotAIStartFrame(int time) {
 BotInitLibrary
 ==============
 */
-int BotInitLibrary(void) {
+static int BotInitLibrary(void) {
 	char buf[144];
 
 	// set the maxclients and maxentities library variables before calling BotSetupLibrary
