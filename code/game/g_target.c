@@ -202,7 +202,7 @@ void Use_Target_Speaker(gentity_t *ent, gentity_t *other, gentity_t *activator) 
 }
 
 void SP_target_speaker(gentity_t *ent) {
-	char *s;
+	const char *s;
 
 	G_SpawnFloat("wait", "0", &ent->wait);
 	G_SpawnFloat("random", "0", &ent->random);

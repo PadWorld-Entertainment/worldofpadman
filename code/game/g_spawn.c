@@ -23,11 +23,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "g_local.h"
 
-qboolean G_SpawnString(const char *key, const char *defaultString, char **out) {
+qboolean G_SpawnString(const char *key, const char *defaultString, const char **out) {
 	int i;
 
 	if (!level.spawning) {
-		*out = (char *)defaultString;
+		*out = defaultString;
 		//		G_Error( "G_SpawnString() called while not spawning" );
 	}
 
@@ -38,12 +38,12 @@ qboolean G_SpawnString(const char *key, const char *defaultString, char **out) {
 		}
 	}
 
-	*out = (char *)defaultString;
+	*out = defaultString;
 	return qfalse;
 }
 
 qboolean G_SpawnFloat(const char *key, const char *defaultString, float *out) {
-	char *s;
+	const char *s;
 	qboolean present;
 
 	present = G_SpawnString(key, defaultString, &s);
@@ -52,7 +52,7 @@ qboolean G_SpawnFloat(const char *key, const char *defaultString, float *out) {
 }
 
 qboolean G_SpawnInt(const char *key, const char *defaultString, int *out) {
-	char *s;
+	const char *s;
 	qboolean present;
 
 	present = G_SpawnString(key, defaultString, &s);
@@ -61,7 +61,7 @@ qboolean G_SpawnInt(const char *key, const char *defaultString, int *out) {
 }
 
 qboolean G_SpawnVector(const char *key, const char *defaultString, float *out) {
-	char *s;
+	const char *s;
 	qboolean present;
 
 	present = G_SpawnString(key, defaultString, &s);
@@ -451,7 +451,8 @@ level.spawnVars[], then call the class specific spawn function
 void G_SpawnGEntityFromSpawnVars(void) {
 	int i;
 	gentity_t *ent;
-	char *s, *value;
+	const char *s;
+	const char *value;
 	const char *gametypeName;
 	gitem_t *item;
 
@@ -722,7 +723,7 @@ Every map should have exactly one worldspawn.
 "message"	Text to print during connection process
 */
 void SP_worldspawn(void) {
-	char *s;
+	const char *s;
 
 	G_SpawnString("classname", "", &s);
 	if (Q_stricmp(s, "worldspawn")) {

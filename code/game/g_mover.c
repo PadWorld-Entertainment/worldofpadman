@@ -814,7 +814,7 @@ void InitMover(gentity_t *ent) {
 	float light;
 	vec3_t color;
 	qboolean lightSet, colorSet;
-	char *sound;
+	const char *sound;
 
 	// if the "model2" key is set, use a separate model
 	// for drawing, but clip against the brushes
@@ -891,7 +891,7 @@ void InitRotator(gentity_t *ent) {
 	float light;
 	vec3_t color;
 	qboolean lightSet, colorSet;
-	char *sound;
+	const char *sound;
 
 	// if the "model2" key is set, use a seperate model
 	// for drawing, but clip against the brushes

@@ -492,7 +492,7 @@ typedef struct {
 //
 // g_spawn.c
 //
-qboolean G_SpawnString(const char *key, const char *defaultString, char **out);
+qboolean G_SpawnString(const char *key, const char *defaultString, const char **out);
 // spawn string returns a temporary reference, you must CopyString() if you want to keep it
 qboolean G_SpawnFloat(const char *key, const char *defaultString, float *out);
 qboolean G_SpawnInt(const char *key, const char *defaultString, int *out);
@@ -538,8 +538,8 @@ void SaveRegisteredItems(void);
 //
 // g_utils.c
 //
-int G_ModelIndex(char *name);
-int G_SoundIndex(char *name);
+int G_ModelIndex(const char *name);
+int G_SoundIndex(const char *name);
 void G_TeamCommand(team_t team, char *cmd);
 void G_KillBox(gentity_t *ent);
 gentity_t *G_Find(gentity_t *from, int fieldofs, const char *match);
