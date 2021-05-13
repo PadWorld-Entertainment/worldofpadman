@@ -129,8 +129,6 @@ static char *gamenames[] = {GAMETYPE_NAME_SHORT(GT_FFA),
 							GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE),
 							NULL};
 
-static char *netnames[] = {"??? ", "UDP ", "UDP6", NULL};
-
 static char quake3worldMessage[] = "Visit worldofpadman.com - News, Community, Events, Files";
 
 typedef struct {
@@ -150,7 +148,6 @@ typedef struct servernode_s {
 	int gametype;
 	char gamename[16];
 	qboolean mod;
-	int nettype;
 	int minPing;
 	int maxPing;
 } servernode_t;
@@ -720,10 +717,6 @@ static void ArenaServers_Insert(char *adrstr, char *info, int pingtime) {
 	servernodeptr->pingtime = pingtime;
 	servernodeptr->minPing = atoi(Info_ValueForKey(info, "minPing"));
 	servernodeptr->maxPing = atoi(Info_ValueForKey(info, "maxPing"));
-
-	servernodeptr->nettype = atoi(Info_ValueForKey(info, "nettype"));
-	if (servernodeptr->nettype < 0 || servernodeptr->nettype >= ARRAY_LEN(netnames) - 1)
-		servernodeptr->nettype = 0;
 
 	s = Info_ValueForKey(info, "game");
 	i = atoi(Info_ValueForKey(info, "gametype"));
