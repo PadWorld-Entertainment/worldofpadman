@@ -727,6 +727,8 @@ static int AAS_AreaClusterPortal(int areanum) {
 int AAS_AreaDoNotEnter(int areanum) {
 	return (aasworld.areasettings[areanum].contents & AREACONTENTS_DONOTENTER);
 } // end of the function AAS_AreaDoNotEnter
+
+#if 0
 //===========================================================================
 // returns the time it takes perform a barrier jump
 //
@@ -737,6 +739,8 @@ int AAS_AreaDoNotEnter(int areanum) {
 static unsigned short int AAS_BarrierJumpTravelTime(void) {
 	return aassettings.phys_jumpvel / (aassettings.phys_gravity * 0.1);
 } // end op the function AAS_BarrierJumpTravelTime
+#endif
+
 //===========================================================================
 // returns true if there already exists a reachability from area1 to area2
 //
@@ -753,6 +757,8 @@ static qboolean AAS_ReachabilityExists(int area1num, int area2num) {
 	} // end for
 	return qfalse;
 } // end of the function AAS_ReachabilityExists
+
+#if 0
 //===========================================================================
 // returns true if there is a solid just after the end point when going
 // from start to end
@@ -785,6 +791,8 @@ static int AAS_NearbySolidOrGap(vec3_t start, vec3_t end) {
 	} // end if
 	return qfalse;
 } // end of the function AAS_SolidGapTime
+#endif
+
 //===========================================================================
 // searches for swim reachabilities between adjacent areas
 //
