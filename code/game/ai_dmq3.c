@@ -2035,7 +2035,7 @@ float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int
 	vec3_t dir, entangles, start, end, middle;
 
 	if (ent < MAX_CLIENTS && gametype == GT_LPS)
-		return 1.0; // all players visible. everywhere
+		return 1.0f; // all players visible. everywhere
 
 	// calculate middle of bounding box
 	BotEntityInfo(ent, &entinfo);
@@ -2081,7 +2081,7 @@ float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int
 		// trace from start to end
 		BotAI_Trace(&trace, start, NULL, NULL, end, passent, contents_mask);
 		// if water was hit
-		waterfactor = 1.0;
+		waterfactor = 1.0f;
 		// note: trace.contents is always 0, see BotAI_Trace
 		if (trace.contents & (CONTENTS_LAVA | CONTENTS_SLIME | CONTENTS_WATER)) {
 			// if the water surface is translucent
@@ -2089,7 +2089,7 @@ float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int
 				// trace through the water
 				contents_mask &= ~(CONTENTS_LAVA | CONTENTS_SLIME | CONTENTS_WATER);
 				BotAI_Trace(&trace, trace.endpos, NULL, NULL, end, passent, contents_mask);
-				waterfactor = 0.5;
+				waterfactor = 0.5f;
 			}
 		}
 		// if a full trace or the hitent was hit
@@ -2115,14 +2115,14 @@ float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int
 				squaredfogdist = 0;
 			}
 			// decrease visibility with the view distance through fog
-			vis = 1 / ((squaredfogdist * 0.001) < 1 ? 1 : (squaredfogdist * 0.001));
+			vis = 1.0f / ((squaredfogdist * 0.001f) < 1 ? 1 : (squaredfogdist * 0.001f));
 			// if entering water visibility is reduced
 			vis *= waterfactor;
 			//
 			if (vis > bestvis)
 				bestvis = vis;
 			// if pretty much no fog
-			if (bestvis >= 0.95)
+			if (bestvis >= 0.95f)
 				return bestvis;
 		}
 		// check bottom and top of bounding box as well
