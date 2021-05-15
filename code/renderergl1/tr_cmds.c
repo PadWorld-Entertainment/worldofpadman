@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 R_PerformanceCounters
 =====================
 */
-void R_PerformanceCounters(void) {
+static void R_PerformanceCounters(void) {
 	if (!r_speeds->integer) {
 		// clear the counters even if we aren't printing
 		Com_Memset(&tr.pc, 0, sizeof(tr.pc));
@@ -112,7 +112,7 @@ R_GetCommandBufferReserved
 make sure there is enough command space
 ============
 */
-void *R_GetCommandBufferReserved(int bytes, int reservedBytes) {
+static void *R_GetCommandBufferReserved(int bytes, int reservedBytes) {
 	renderCommandList_t *cmdList;
 
 	cmdList = &backEndData->commands;
@@ -121,7 +121,7 @@ void *R_GetCommandBufferReserved(int bytes, int reservedBytes) {
 	// always leave room for the end of list command
 	if (cmdList->used + bytes + sizeof(int) + reservedBytes > MAX_RENDER_COMMANDS) {
 		if (bytes > MAX_RENDER_COMMANDS - sizeof(int)) {
-			ri.Error(ERR_FATAL, "R_GetCommandBuffer: bad size %i", bytes);
+			ri.Error(ERR_FATAL, "R_GetCommandBufferReserved: bad size %i", bytes);
 		}
 		// if we run out of room, just start dropping commands
 		return NULL;
@@ -228,7 +228,7 @@ void RE_StretchPic(float x, float y, float w, float h, float s1, float t1, float
 #define MODE_GREEN_MAGENTA 4
 #define MODE_MAX MODE_GREEN_MAGENTA
 
-void R_SetColorMode(GLboolean *rgba, stereoFrame_t stereoFrame, int colormode) {
+static void R_SetColorMode(GLboolean *rgba, stereoFrame_t stereoFrame, int colormode) {
 	rgba[0] = rgba[1] = rgba[2] = rgba[3] = GL_TRUE;
 
 	if (colormode > MODE_MAX) {

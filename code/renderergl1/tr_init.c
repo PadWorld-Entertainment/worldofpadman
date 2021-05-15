@@ -344,8 +344,7 @@ Stores the length of padding after a line of pixels to address padlen
 Return value must be freed with ri.Hunk_FreeTempMemory()
 ==================
 */
-
-byte *RB_ReadPixels(int x, int y, int width, int height, size_t *offset, int *padlen) {
+static byte *RB_ReadPixels(int x, int y, int width, int height, size_t *offset, int *padlen) {
 	byte *buffer, *bufstart;
 	int padwidth, linelen;
 	GLint packAlign;
@@ -545,7 +544,7 @@ levelshots are specialized 128*128 thumbnails for
 the menu system, sampled down from full screen distorted images
 ====================
 */
-void R_LevelShot(void) {
+static void R_LevelShot(void) {
 	char checkname[MAX_OSPATH];
 	byte *buffer;
 	byte *source, *allsource;
@@ -844,7 +843,7 @@ R_PrintLongString
 Workaround for ri.Printf's 1024 characters buffer limit.
 ================
 */
-void R_PrintLongString(const char *string) {
+static void R_PrintLongString(const char *string) {
 	char buffer[1024];
 	const char *p;
 	int size = strlen(string);
