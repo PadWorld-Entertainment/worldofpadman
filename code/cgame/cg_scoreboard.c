@@ -73,7 +73,7 @@ static qboolean localClient; // true if local client has been displayed
 
 /*
 =================
-CG_DrawScoreboard
+CG_DrawClientScore
 =================
 */
 static void CG_DrawClientScore(int y, score_t *score, float *color, float fade, int lineHeight) {
@@ -288,7 +288,7 @@ static int CG_TeamScoreboard(int y, team_t team, float fade, int maxLines, int l
 
 /*
 =================
-CG_DrawScoreboard
+CG_DrawOldScoreboard
 
 Draw the normal in-game scoreboard
 =================
@@ -321,7 +321,7 @@ qboolean CG_DrawOldScoreboard(void) {
 
 	if (cg.showScores || cg.predictedPlayerState.pm_type == PM_DEAD ||
 		cg.predictedPlayerState.pm_type == PM_INTERMISSION) {
-		fade = 1.0;
+		fade = 1.0f;
 		fadeColor = colorWhite;
 	} else {
 		fadeColor = CG_FadeColor(cg.scoreFadeTime, FADE_TIME);
