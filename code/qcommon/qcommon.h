@@ -530,7 +530,6 @@ void Cvar_CheckRange(cvar_t *cv, float minVal, float maxVal, qboolean shouldBeIn
 void Cvar_SetDescription(cvar_t *var, const char *var_description);
 
 void Cvar_Restart(qboolean unsetVM);
-void Cvar_Restart_f(void);
 
 void Cvar_CompleteCvarName(const char *args, int argNum);
 
@@ -774,12 +773,11 @@ typedef struct {
 
 void Com_QueueEvent(int time, sysEventType_t type, int value, int value2, int ptrLength, void *ptr);
 int Com_EventLoop(void);
-sysEvent_t Com_GetSystemEvent(void);
 
 char *CopyString(const char *in);
 void Info_Print(const char *s);
 
-void Com_BeginRedirect(char *buffer, int buffersize, void (*flush)(char *));
+void Com_BeginRedirect(char *buffer, int buffersize, void (*flush)(const char *));
 void Com_EndRedirect(void);
 void QDECL Com_Printf(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 void QDECL Com_DPrintf(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
@@ -794,7 +792,7 @@ int Com_Filter(const char *filter, const char *name, int casesensitive);
 int Com_FilterPath(const char *filter, const char *name, int casesensitive);
 int Com_RealTime(qtime_t *qtime);
 qboolean Com_SafeMode(void);
-void Com_RunAndTimeServerPacket(netadr_t *evFrom, msg_t *buf);
+void Com_RunAndTimeServerPacket(const netadr_t *evFrom, msg_t *buf);
 
 qboolean Com_IsVoipTarget(uint8_t *voipTargets, int voipTargetsSize, int clientNum);
 
@@ -930,7 +928,7 @@ void CL_InitKeyCommands(void);
 
 void CL_Init(void);
 void CL_Disconnect(qboolean showMainMenu);
-void CL_Shutdown(char *finalmsg, qboolean disconnect, qboolean quit);
+void CL_Shutdown(const char *finalmsg, qboolean disconnect, qboolean quit);
 void CL_Frame(int msec);
 qboolean CL_GameCommand(void);
 void CL_KeyEvent(int key, qboolean down, unsigned time);
@@ -944,7 +942,7 @@ void CL_JoystickEvent(int axis, int value, int time);
 
 void CL_PacketEvent(netadr_t from, msg_t *msg);
 
-void CL_ConsolePrint(char *text);
+void CL_ConsolePrint(const char *text);
 
 void CL_MapLoading(void);
 // do a screen update before starting to load a map
@@ -993,7 +991,7 @@ void SCR_DebugGraph(float value); // FIXME: move logging to common?
 // server interface
 //
 void SV_Init(void);
-void SV_Shutdown(char *finalmsg);
+void SV_Shutdown(const char *finalmsg);
 void SV_Frame(int msec);
 void SV_PacketEvent(netadr_t from, msg_t *msg);
 int SV_FrameMsec(void);

@@ -677,7 +677,7 @@ SVC_FlushRedirect
 
 ================
 */
-static void SV_FlushRedirect(char *outputbuf) {
+static void SV_FlushRedirect(const char *outputbuf) {
 	NET_OutOfBandPrint(NS_SERVER, svs.redirectAddress, "print\n%s", outputbuf);
 }
 

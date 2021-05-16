@@ -48,7 +48,7 @@ next frame.  This allows commands like:
 bind g "cmd use rocket ; +attack ; wait ; -attack ; cmd use blaster"
 ============
 */
-void Cmd_Wait_f(void) {
+static void Cmd_Wait_f(void) {
 	if (Cmd_Argc() == 2) {
 		cmd_wait = atoi(Cmd_Argv(1));
 		if (cmd_wait < 0)
@@ -110,6 +110,7 @@ void Cbuf_InsertText(const char *text) {
 	int i;
 
 	len = strlen(text) + 1;
+
 	if (len + cmd_text.cursize > cmd_text.maxsize) {
 		Com_Printf("Cbuf_InsertText overflowed\n");
 		return;
@@ -137,7 +138,7 @@ Cbuf_ExecuteText
 void Cbuf_ExecuteText(int exec_when, const char *text) {
 	switch (exec_when) {
 	case EXEC_NOW:
-		if (text && strlen(text) > 0) {
+		if (text && text[0] != '\0') {
 			Com_DPrintf(S_COLOR_YELLOW "EXEC_NOW %s\n", text);
 			Cmd_ExecuteString(text);
 		} else {
@@ -172,7 +173,7 @@ void Cbuf_Execute(void) {
 	// breaking it for semicolon or newline.
 	qboolean in_star_comment = qfalse;
 	qboolean in_slash_comment = qfalse;
-	while (cmd_text.cursize) {
+	while (cmd_text.cursize > 0) {
 		if (cmd_wait > 0) {
 			// skip out while text still remains in buffer, leaving it
 			// for next frame
@@ -217,7 +218,7 @@ void Cbuf_Execute(void) {
 		}
 
 		Com_Memcpy(line, text, i);
-		line[i] = 0;
+		line[i] = '\0';
 
 		// delete the text from the command buffer and move remaining commands down
 		// this is necessary because commands (exec) can insert data at the
@@ -250,7 +251,7 @@ void Cbuf_Execute(void) {
 Cmd_Exec_f
 ===============
 */
-void Cmd_Exec_f(void) {
+static void Cmd_Exec_f(void) {
 	qboolean quiet;
 	union {
 		char *c;
@@ -288,7 +289,7 @@ Cmd_Vstr_f
 Inserts the current value of a variable as command text
 ===============
 */
-void Cmd_Vstr_f(void) {
+static void Cmd_Vstr_f(void) {
 	const char *v;
 
 	if (Cmd_Argc() != 2) {
@@ -307,7 +308,7 @@ Cmd_Echo_f
 Just prints the rest of the line to the console
 ===============
 */
-void Cmd_Echo_f(void) {
+static void Cmd_Echo_f(void) {
 	Com_Printf("%s\n", Cmd_Args());
 }
 
@@ -535,7 +536,7 @@ static void Cmd_TokenizeString2(const char *text_in, qboolean ignoreQuotes) {
 			while (*text && *text != '"') {
 				*textOut++ = *text++;
 			}
-			*textOut++ = 0;
+			*textOut++ = '\0';
 			if (!*text) {
 				return; // all tokens parsed
 			}
@@ -565,7 +566,7 @@ static void Cmd_TokenizeString2(const char *text_in, qboolean ignoreQuotes) {
 			*textOut++ = *text++;
 		}
 
-		*textOut++ = 0;
+		*textOut++ = '\0';
 
 		if (!*text) {
 			return; // all tokens parsed
@@ -596,7 +597,7 @@ void Cmd_TokenizeStringIgnoreQuotes(const char *text_in) {
 Cmd_FindCommand
 ============
 */
-cmd_function_t *Cmd_FindCommand(const char *cmd_name) {
+static cmd_function_t *Cmd_FindCommand(const char *cmd_name) {
 	cmd_function_t *cmd;
 	for (cmd = cmd_functions; cmd; cmd = cmd->next)
 		if (!Q_stricmp(cmd_name, cmd->name))
@@ -621,7 +622,7 @@ void Cmd_AddCommand(const char *cmd_name, xcommand_t function) {
 	}
 
 	// use a small malloc to avoid zone fragmentation
-	cmd = S_Malloc(sizeof(cmd_function_t));
+	cmd = S_Malloc(sizeof(*cmd));
 	cmd->name = CopyString(cmd_name);
 	cmd->function = function;
 	cmd->complete = NULL;
@@ -699,7 +700,7 @@ Cmd_CommandCompletion
 ============
 */
 void Cmd_CommandCompletion(void (*callback)(const char *s)) {
-	cmd_function_t *cmd;
+	const cmd_function_t *cmd;
 
 	for (cmd = cmd_functions; cmd; cmd = cmd->next) {
 		callback(cmd->name);
@@ -766,16 +767,19 @@ void Cmd_ExecuteString(const char *text) {
 		return;
 	}
 
+#ifndef DEDICATED
 	// check client game commands
 	if (com_cl_running && com_cl_running->integer && CL_GameCommand()) {
 		return;
 	}
+#endif
 
 	// check server game commands
 	if (com_sv_running && com_sv_running->integer && SV_GameCommand()) {
 		return;
 	}
 
+#ifndef DEDICATED
 	// check ui commands
 	if (com_cl_running && com_cl_running->integer && UI_GameCommand()) {
 		return;
@@ -784,6 +788,7 @@ void Cmd_ExecuteString(const char *text) {
 	// send it as a server command if we are connected
 	// this will usually result in a chat message
 	CL_ForwardCommandToServer(text);
+#endif
 }
 
 /*
@@ -791,10 +796,10 @@ void Cmd_ExecuteString(const char *text) {
 Cmd_List_f
 ============
 */
-void Cmd_List_f(void) {
-	cmd_function_t *cmd;
-	int i;
+static void Cmd_List_f(void) {
+	const cmd_function_t *cmd;
 	const char *match;
+	int i;
 
 	if (Cmd_Argc() > 1) {
 		match = Cmd_Argv(1);

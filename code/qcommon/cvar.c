@@ -24,13 +24,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "q_shared.h"
 #include "qcommon.h"
 
-cvar_t *cvar_vars = NULL;
-cvar_t *cvar_cheats;
+static cvar_t *cvar_vars = NULL;
+static cvar_t *cvar_cheats;
 int cvar_modifiedFlags;
 
 #define MAX_CVARS 1024
-cvar_t cvar_indexes[MAX_CVARS];
-int cvar_numIndexes;
+static cvar_t cvar_indexes[MAX_CVARS];
+static int cvar_numIndexes;
 
 #define FILE_HASH_SIZE 256
 static cvar_t *hashTable[FILE_HASH_SIZE];
@@ -85,6 +85,9 @@ Cvar_FindVar
 static cvar_t *Cvar_FindVar(const char *var_name) {
 	cvar_t *var;
 	long hash;
+
+	if (!var_name)
+		return NULL;
 
 	hash = generateHashValue(var_name);
 
@@ -149,7 +152,7 @@ void Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize) 
 
 	var = Cvar_FindVar(var_name);
 	if (!var) {
-		*buffer = 0;
+		*buffer = '\0';
 	} else {
 		Q_strncpyz(buffer, var->string, bufsize);
 	}
@@ -176,7 +179,7 @@ Cvar_CommandCompletion
 ============
 */
 void Cvar_CommandCompletion(void (*callback)(const char *s)) {
-	cvar_t *cvar;
+	const cvar_t *cvar;
 
 	for (cvar = cvar_vars; cvar; cvar = cvar->next) {
 		if (cvar->name)
@@ -302,14 +305,15 @@ cvar_t *Cvar_Get(const char *var_name, const char *var_value, int flags) {
 	var = Cvar_FindVar(var_name);
 
 	if (var) {
+		int vm_created = (flags & CVAR_VM_CREATED);
 		var_value = Cvar_Validate(var, var_value, qfalse);
 
 		// Make sure the game code cannot mark engine-added variables as gamecode vars
 		if (var->flags & CVAR_VM_CREATED) {
-			if (!(flags & CVAR_VM_CREATED))
+			if (!vm_created)
 				var->flags &= ~CVAR_VM_CREATED;
 		} else if (!(var->flags & CVAR_USER_CREATED)) {
-			if (flags & CVAR_VM_CREATED)
+			if (vm_created)
 				flags &= ~CVAR_VM_CREATED;
 		}
 
@@ -432,7 +436,7 @@ Cvar_Print
 Prints the value, default, and latched string of the given variable
 ============
 */
-void Cvar_Print(cvar_t *v) {
+static void Cvar_Print(const cvar_t *v) {
 	Com_Printf("\"%s\" is:\"%s" S_COLOR_WHITE "\"", v->name, v->string);
 
 	if (!(v->flags & CVAR_ROM)) {
@@ -715,7 +719,7 @@ Prints the contents of a cvar
 (preferred over Cvar_Command where cvar names and commands conflict)
 ============
 */
-void Cvar_Print_f(void) {
+static void Cvar_Print_f(void) {
 	const char *name;
 	cvar_t *cv;
 
@@ -742,7 +746,7 @@ Toggles a cvar for easy single key binding, optionally through a list of
 given values
 ============
 */
-void Cvar_Toggle_f(void) {
+static void Cvar_Toggle_f(void) {
 	int i, c = Cmd_Argc();
 	const char *curval;
 
@@ -784,7 +788,7 @@ Allows setting and defining of arbitrary cvars from console, even if they
 weren't declared in C code.
 ============
 */
-void Cvar_Set_f(void) {
+static void Cvar_Set_f(void) {
 	int c;
 	const char *cmd;
 	cvar_t *v;
@@ -832,7 +836,7 @@ void Cvar_Set_f(void) {
 Cvar_Reset_f
 ============
 */
-void Cvar_Reset_f(void) {
+static void Cvar_Reset_f(void) {
 	if (Cmd_Argc() != 2) {
 		Com_Printf("usage: reset <variable>\n");
 		return;
@@ -885,7 +889,7 @@ void Cvar_WriteVariables(fileHandle_t f) {
 Cvar_List_f
 ============
 */
-void Cvar_List_f(void) {
+static void Cvar_List_f(void) {
 	cvar_t *var;
 	int i;
 	const char *match;
@@ -959,7 +963,7 @@ void Cvar_List_f(void) {
 Cvar_ListModified_f
 ============
 */
-void Cvar_ListModified_f(void) {
+static void Cvar_ListModified_f(void) {
 	cvar_t *var;
 	int totalModified;
 	const char *value;
@@ -1044,8 +1048,7 @@ Cvar_Unset
 Unsets a cvar
 ============
 */
-
-cvar_t *Cvar_Unset(cvar_t *cv) {
+static cvar_t *Cvar_Unset(cvar_t *cv) {
 	cvar_t *next = cv->next;
 
 	// note what types of cvars have been modified (userinfo, archive, serverinfo, systeminfo)
@@ -1088,8 +1091,7 @@ Cvar_Unset_f
 Unsets a userdefined cvar
 ============
 */
-
-void Cvar_Unset_f(void) {
+static void Cvar_Unset_f(void) {
 	cvar_t *cv;
 
 	if (Cmd_Argc() != 2) {
@@ -1145,7 +1147,7 @@ Cvar_Restart_f
 Resets all cvars to their hardcoded values
 ============
 */
-void Cvar_Restart_f(void) {
+static void Cvar_Restart_f(void) {
 	Cvar_Restart(qfalse);
 }
 

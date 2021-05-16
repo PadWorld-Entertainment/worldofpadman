@@ -34,7 +34,7 @@ int c_winding_points;
 void pw(winding_t *w) {
 	int i;
 	for (i = 0; i < w->numpoints; i++)
-		printf("(%5.1f, %5.1f, %5.1f)\n", w->p[i][0], w->p[i][1], w->p[i][2]);
+		Com_Printf("%f, %f, %f\n", w->p[i][0], w->p[i][1], w->p[i][2]);
 }
 
 /*
@@ -44,7 +44,7 @@ AllocWinding
 */
 winding_t *AllocWinding(int points) {
 	winding_t *w;
-	int s;
+	size_t s;
 
 	c_winding_allocs++;
 	c_winding_points += points;
@@ -142,7 +142,7 @@ vec_t WindingArea(winding_t *w) {
 WindingBounds
 =============
 */
-void WindingBounds(winding_t *w, vec3_t mins, vec3_t maxs) {
+void WindingBounds(const winding_t *w, vec3_t mins, vec3_t maxs) {
 	vec_t v;
 	int i, j;
 
@@ -249,7 +249,7 @@ winding_t *BaseWindingForPlane(vec3_t normal, vec_t dist) {
 CopyWinding
 ==================
 */
-winding_t *CopyWinding(winding_t *w) {
+winding_t *CopyWinding(const winding_t *w) {
 	intptr_t size;
 	winding_t *c;
 
@@ -381,7 +381,7 @@ void ClipWindingEpsilon(winding_t *in, vec3_t normal, vec_t dist, vec_t epsilon,
 ChopWindingInPlace
 =============
 */
-void ChopWindingInPlace(winding_t **inout, vec3_t normal, vec_t dist, vec_t epsilon) {
+void ChopWindingInPlace(winding_t **inout, const vec3_t normal, vec_t dist, vec_t epsilon) {
 	winding_t *in;
 	vec_t dists[MAX_POINTS_ON_WINDING + 4] = {0};
 	int sides[MAX_POINTS_ON_WINDING + 4] = {0};
@@ -552,7 +552,7 @@ void CheckWinding(winding_t *w) {
 WindingOnPlaneSide
 ============
 */
-int WindingOnPlaneSide(winding_t *w, vec3_t normal, vec_t dist) {
+int WindingOnPlaneSide(const winding_t *w, vec3_t normal, vec_t dist) {
 	qboolean front, back;
 	int i;
 	vec_t d;

@@ -106,32 +106,32 @@ int time_frontend; // renderer frontend time
 int time_backend;  // renderer backend time
 
 int com_frameTime;
-int com_frameNumber;
+static int com_frameNumber;
 
 qboolean com_errorEntered = qfalse;
 qboolean com_fullyInitialized = qfalse;
-qboolean com_gameRestarting = qfalse;
-qboolean com_gameClientRestarting = qfalse;
+static qboolean com_gameRestarting = qfalse;
+static qboolean com_gameClientRestarting = qfalse;
 
-char com_errorMessage[MAXPRINTMSG];
+static char com_errorMessage[MAXPRINTMSG];
 
-void Com_WriteConfig_f(void);
+static void Com_WriteConfig_f(void);
 void CIN_CloseAllVideos(void);
 
 //============================================================================
 
 static char *rd_buffer;
 static int rd_buffersize;
-static void (*rd_flush)(char *buffer);
+static void (*rd_flush)(const char *buffer);
 
-void Com_BeginRedirect(char *buffer, int buffersize, void (*flush)(char *)) {
+void Com_BeginRedirect(char *buffer, int buffersize, void (*flush)(const char *)) {
 	if (!buffer || !buffersize || !flush)
 		return;
 	rd_buffer = buffer;
 	rd_buffersize = buffersize;
 	rd_flush = flush;
 
-	*rd_buffer = 0;
+	*rd_buffer = '\0';
 }
 
 void Com_EndRedirect(void) {
@@ -245,7 +245,7 @@ void QDECL Com_DPrintf(const char *fmt, ...) {
 Com_Error
 
 Both client and server can use this, and it will
-do the appropriate thing.
+do the appropriate things.
 =============
 */
 void QDECL Com_Error(int code, const char *fmt, ...) {
@@ -359,7 +359,7 @@ do the appropriate things.
 */
 void Com_Quit_f(void) {
 	// don't try to shutdown if we are in a recursive error
-	char *p = Cmd_Args();
+	const char *p = Cmd_Args();
 	if (!com_errorEntered) {
 		// Some VMs might execute "quit" command directly,
 		// which would trigger an unload of active VM error.
@@ -440,7 +440,7 @@ qboolean Com_SafeMode(void) {
 	for (i = 0; i < com_numConsoleLines; i++) {
 		Cmd_TokenizeString(com_consoleLines[i]);
 		if (!Q_stricmp(Cmd_Argv(0), "safe") || !Q_stricmp(Cmd_Argv(0), "cvar_restart")) {
-			com_consoleLines[i][0] = 0;
+			com_consoleLines[i][0] = '\0';
 			return qtrue;
 		}
 	}
@@ -490,7 +490,7 @@ Returns qtrue if any late commands were added, which
 will keep the demoloop from immediately starting
 =================
 */
-qboolean Com_AddStartupCommands(void) {
+static qboolean Com_AddStartupCommands(void) {
 	int i;
 	qboolean added;
 
@@ -602,11 +602,11 @@ int Com_Filter(const char *filter, const char *name, int casesensitive) {
 				filter++;
 			}
 			buf[i] = '\0';
-			if (strlen(buf)) {
+			if (i) {
 				ptr = Com_StringContains(name, buf, casesensitive);
 				if (!ptr)
 					return qfalse;
-				name = ptr + strlen(buf);
+				name = ptr + i;
 			}
 		} else if (*filter == '?') {
 			filter++;
@@ -1061,7 +1061,7 @@ static void Z_CheckHeap(void) {
 Z_LogZoneHeap
 ========================
 */
-void Z_LogZoneHeap(memzone_t *zone, char *name) {
+static void Z_LogZoneHeap(memzone_t *zone, const char *name) {
 #ifdef ZONE_DEBUG
 	char dump[32], *ptr;
 	int i, j;
@@ -1489,10 +1489,10 @@ void Hunk_SmallLog(void) {
 
 /*
 =================
-Com_InitHunkZoneMemory
+Com_InitHunkMemory
 =================
 */
-void Com_InitHunkMemory(void) {
+static void Com_InitHunkMemory(void) {
 	cvar_t *cv;
 	int nMinAlloc;
 	char *pMsg = NULL;
@@ -1854,7 +1854,7 @@ static sysEvent_t com_pushedEvents[MAX_PUSHED_EVENTS];
 Com_InitJournaling
 =================
 */
-void Com_InitJournaling(void) {
+static void Com_InitJournaling(void) {
 	Com_StartupVariable("journal");
 	com_journal = Cvar_Get("journal", "0", CVAR_INIT);
 	if (!com_journal->integer) {
@@ -1945,12 +1945,11 @@ void Com_QueueEvent(int time, sysEventType_t type, int value, int value2, int pt
 /*
 ================
 Com_GetSystemEvent
-
 ================
 */
-sysEvent_t Com_GetSystemEvent(void) {
+static sysEvent_t Com_GetSystemEvent(void) {
 	sysEvent_t ev;
-	char *s;
+	const char *s;
 
 	// return if we have data
 	if (eventHead > eventTail) {
@@ -2031,7 +2030,7 @@ sysEvent_t Com_GetRealEvent(void) {
 Com_InitPushEvent
 =================
 */
-void Com_InitPushEvent(void) {
+static void Com_InitPushEvent(void) {
 	// clear the static buffer array
 	// this requires SE_NONE to be accepted as a valid but NOP event
 	memset(com_pushedEvents, 0, sizeof(com_pushedEvents));
@@ -2046,7 +2045,7 @@ void Com_InitPushEvent(void) {
 Com_PushEvent
 =================
 */
-void Com_PushEvent(sysEvent_t *event) {
+static void Com_PushEvent(const sysEvent_t *event) {
 	sysEvent_t *ev;
 	static int printedWarning = 0;
 
@@ -2077,7 +2076,7 @@ void Com_PushEvent(sysEvent_t *event) {
 Com_GetEvent
 =================
 */
-sysEvent_t Com_GetEvent(void) {
+static sysEvent_t Com_GetEvent(void) {
 	if (com_pushedEventsHead > com_pushedEventsTail) {
 		com_pushedEventsTail++;
 		return com_pushedEvents[(com_pushedEventsTail - 1) & (MAX_PUSHED_EVENTS - 1)];
@@ -2090,7 +2089,7 @@ sysEvent_t Com_GetEvent(void) {
 Com_RunAndTimeServerPacket
 =================
 */
-void Com_RunAndTimeServerPacket(netadr_t *evFrom, msg_t *buf) {
+void Com_RunAndTimeServerPacket(const netadr_t *evFrom, msg_t *buf) {
 	int t1, t2, msec;
 
 	t1 = 0;
@@ -2188,7 +2187,6 @@ int Com_Milliseconds(void) {
 
 	// get events and push them until we get a null event with the current time
 	do {
-
 		ev = Com_GetRealEvent();
 		if (ev.evType != SE_NONE) {
 			Com_PushEvent(&ev);
@@ -2443,7 +2441,7 @@ Com_Init
 =================
 */
 void Com_Init(char *commandLine) {
-	char *s;
+	const char *s;
 	int qport;
 
 	Com_Printf("%s %s\n", Q3_VERSION, PLATFORM_STRING);
@@ -2725,7 +2723,7 @@ Com_WriteConfig_f
 Write the config file to a specific name
 ===============
 */
-void Com_WriteConfig_f(void) {
+static void Com_WriteConfig_f(void) {
 	char filename[MAX_QPATH];
 
 	if (Cmd_Argc() != 2) {
@@ -2750,7 +2748,7 @@ void Com_WriteConfig_f(void) {
 Com_ModifyMsec
 ================
 */
-int Com_ModifyMsec(int msec) {
+static int Com_ModifyMsec(int msec) {
 	int clampTime;
 
 	//
@@ -2800,8 +2798,7 @@ int Com_ModifyMsec(int msec) {
 Com_TimeVal
 =================
 */
-
-int Com_TimeVal(int minMsec) {
+static int Com_TimeVal(int minMsec) {
 	int timeVal;
 
 	timeVal = Sys_Milliseconds() - com_frameTime;
@@ -3042,7 +3039,7 @@ Field_Clear
 ==================
 */
 void Field_Clear(field_t *edit) {
-	memset(edit->buffer, 0, MAX_EDIT_LINE);
+	memset(edit->buffer, 0, sizeof(edit->buffer));
 	edit->cursor = 0;
 	edit->scroll = 0;
 }
@@ -3056,7 +3053,6 @@ static field_t *completionField;
 /*
 ===============
 FindMatches
-
 ===============
 */
 static void FindMatches(const char *s) {
@@ -3087,7 +3083,6 @@ static void FindMatches(const char *s) {
 /*
 ===============
 PrintMatches
-
 ===============
 */
 static void PrintMatches(const char *s) {
@@ -3099,7 +3094,6 @@ static void PrintMatches(const char *s) {
 /*
 ===============
 PrintCvarMatches
-
 ===============
 */
 static void PrintCvarMatches(const char *s) {
@@ -3246,19 +3240,21 @@ void Field_CompleteCommand(const char *cmd, qboolean doCommands, qboolean doCvar
 			baseCmd++;
 #endif
 
-		if ((p = Field_FindFirstSeparator(cmd)))
+		if ((p = Field_FindFirstSeparator(cmd)) != NULL) {
 			Field_CompleteCommand(p + 1, qtrue, qtrue); // Compound command
-		else
+		} else {
 			Cmd_CompleteArgument(baseCmd, cmd, completionArgument);
+		}
 	} else {
 		if (completionString[0] == '\\' || completionString[0] == '/')
 			completionString++;
 
 		matchCount = 0;
-		shortestMatch[0] = 0;
+		shortestMatch[0] = '\0';
 
-		if (strlen(completionString) == 0)
+		if (completionString[0] == '\0') {
 			return;
+		}
 
 		if (doCommands)
 			Cmd_CommandCompletion(FindMatches);

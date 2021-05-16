@@ -104,7 +104,7 @@ void CM_ClearLevelPatches(void) {
 CM_SignbitsForNormal
 =================
 */
-static int CM_SignbitsForNormal(vec3_t normal) {
+static int CM_SignbitsForNormal(const vec3_t normal) {
 	int bits, j;
 
 	bits = 0;
@@ -124,7 +124,7 @@ Returns false if the triangle is degenrate.
 The normal will point out of the clock for clockwise ordered points
 =====================
 */
-static qboolean CM_PlaneFromPoints(vec4_t plane, vec3_t a, vec3_t b, vec3_t c) {
+static qboolean CM_PlaneFromPoints(vec4_t plane, const vec3_t a, const vec3_t b, const vec3_t c) {
 	vec3_t d1, d2;
 
 	VectorSubtract(b, a, d1);
@@ -154,7 +154,7 @@ Returns true if the given quadratic curve is not flat enough for our
 collision detection purposes
 =================
 */
-static qboolean CM_NeedsSubdivision(vec3_t a, vec3_t b, vec3_t c) {
+static qboolean CM_NeedsSubdivision(const vec3_t a, const vec3_t b, const vec3_t c) {
 	vec3_t cmid;
 	vec3_t lmid;
 	vec3_t delta;
@@ -186,7 +186,7 @@ a, b, and c are control points.
 the subdivided sequence will be: a, out1, out2, out3, c
 ===============
 */
-static void CM_Subdivide(vec3_t a, vec3_t b, vec3_t c, vec3_t out1, vec3_t out2, vec3_t out3) {
+static void CM_Subdivide(const vec3_t a, const vec3_t b, const vec3_t c, vec3_t out1, vec3_t out2, vec3_t out3) {
 	int i;
 
 	for (i = 0; i < 3; i++) {
@@ -294,7 +294,7 @@ static void CM_SubdivideGridColumns(cGrid_t *grid) {
 		// grid->points[i+2][x] is an interpolating control point
 
 		//
-		// first see if we can collapse the aproximating collumn away
+		// first see if we can collapse the aproximating column away
 		//
 		for (j = 0; j < grid->height; j++) {
 			if (CM_NeedsSubdivision(grid->points[i][j], grid->points[i + 1][j], grid->points[i + 2][j])) {
@@ -353,7 +353,7 @@ CM_ComparePoints
 ======================
 */
 #define POINT_EPSILON 0.1
-static qboolean CM_ComparePoints(float *a, float *b) {
+static qboolean CM_ComparePoints(const float *a, const float *b) {
 	float d;
 
 	d = a[0] - b[0];
@@ -427,7 +427,7 @@ static facet_t facets[MAX_FACETS];
 CM_PlaneEqual
 ==================
 */
-int CM_PlaneEqual(patchPlane_t *p, float plane[4], int *flipped) {
+static qboolean CM_PlaneEqual(const patchPlane_t *p, const float plane[4], int *flipped) {
 	float invplane[4];
 
 	if (fabs(p->plane[0] - plane[0]) < NORMAL_EPSILON && fabs(p->plane[1] - plane[1]) < NORMAL_EPSILON &&
@@ -453,7 +453,7 @@ int CM_PlaneEqual(patchPlane_t *p, float plane[4], int *flipped) {
 CM_SnapVector
 ==================
 */
-void CM_SnapVector(vec3_t normal) {
+static void CM_SnapVector(vec3_t normal) {
 	int i;
 
 	for (i = 0; i < 3; i++) {
@@ -475,7 +475,7 @@ void CM_SnapVector(vec3_t normal) {
 CM_FindPlane2
 ==================
 */
-int CM_FindPlane2(float plane[4], int *flipped) {
+static int CM_FindPlane2(const float plane[4], int *flipped) {
 	int i;
 
 	// see if the points are close enough to an existing plane
@@ -504,7 +504,7 @@ int CM_FindPlane2(float plane[4], int *flipped) {
 CM_FindPlane
 ==================
 */
-static int CM_FindPlane(float *p1, float *p2, float *p3) {
+static int CM_FindPlane(const float *p1, const float *p2, const float *p3) {
 	float plane[4];
 	int i;
 	float d;
@@ -556,8 +556,8 @@ static int CM_FindPlane(float *p1, float *p2, float *p3) {
 CM_PointOnPlaneSide
 ==================
 */
-static int CM_PointOnPlaneSide(float *p, int planeNum) {
-	float *plane;
+static int CM_PointOnPlaneSide(const float *p, int planeNum) {
+	const float *plane;
 	float d;
 
 	if (planeNum == -1) {
@@ -605,8 +605,8 @@ static int CM_GridPlane(int gridPlanes[MAX_GRID_SIZE][MAX_GRID_SIZE][2], int i, 
 CM_EdgePlaneNum
 ==================
 */
-static int CM_EdgePlaneNum(cGrid_t *grid, int gridPlanes[MAX_GRID_SIZE][MAX_GRID_SIZE][2], int i, int j, int k) {
-	float *p1, *p2;
+static int CM_EdgePlaneNum(const cGrid_t *grid, int gridPlanes[MAX_GRID_SIZE][MAX_GRID_SIZE][2], int i, int j, int k) {
+	const float *p1, *p2;
 	vec3_t up;
 	int p;
 
@@ -681,10 +681,10 @@ static int CM_EdgePlaneNum(cGrid_t *grid, int gridPlanes[MAX_GRID_SIZE][MAX_GRID
 CM_SetBorderInward
 ===================
 */
-static void CM_SetBorderInward(facet_t *facet, cGrid_t *grid, int gridPlanes[MAX_GRID_SIZE][MAX_GRID_SIZE][2], int i,
-							   int j, int which) {
+static void CM_SetBorderInward(facet_t *facet, const cGrid_t *grid, int gridPlanes[MAX_GRID_SIZE][MAX_GRID_SIZE][2],
+							   int i, int j, int which) {
 	int k, l;
-	float *points[4];
+	const float *points[4];
 	int numPoints;
 
 	switch (which) {
@@ -725,8 +725,7 @@ static void CM_SetBorderInward(facet_t *facet, cGrid_t *grid, int gridPlanes[MAX
 			side = CM_PointOnPlaneSide(points[l], facet->borderPlanes[k]);
 			if (side == SIDE_FRONT) {
 				front++;
-			}
-			if (side == SIDE_BACK) {
+			} else if (side == SIDE_BACK) {
 				back++;
 			}
 		}
@@ -760,7 +759,7 @@ CM_ValidateFacet
 If the facet isn't bounded by its borders, we screwed up.
 ==================
 */
-static qboolean CM_ValidateFacet(facet_t *facet) {
+static qboolean CM_ValidateFacet(const facet_t *facet) {
 	float plane[4];
 	int j;
 	winding_t *w;
@@ -812,7 +811,7 @@ static qboolean CM_ValidateFacet(facet_t *facet) {
 CM_AddFacetBevels
 ==================
 */
-void CM_AddFacetBevels(facet_t *facet) {
+static void CM_AddFacetBevels(facet_t *facet) {
 
 	int i, j, k, l;
 	int axis, dir, flipped;
@@ -980,9 +979,9 @@ typedef enum { EN_TOP, EN_RIGHT, EN_BOTTOM, EN_LEFT } edgeName_t;
 CM_PatchCollideFromGrid
 ==================
 */
-static void CM_PatchCollideFromGrid(cGrid_t *grid, patchCollide_t *pf) {
+static void CM_PatchCollideFromGrid(const cGrid_t *grid, patchCollide_t *pf) {
 	int i, j;
-	float *p1, *p2, *p3;
+	const float *p1, *p2, *p3;
 	int gridPlanes[MAX_GRID_SIZE][MAX_GRID_SIZE][2];
 	facet_t *facet;
 	int borders[4];
@@ -1328,7 +1327,8 @@ void CM_TracePointThroughPatchCollide(traceWork_t *tw, const struct patchCollide
 CM_CheckFacetPlane
 ====================
 */
-int CM_CheckFacetPlane(float *plane, vec3_t start, vec3_t end, float *enterFrac, float *leaveFrac, int *hit) {
+static int CM_CheckFacetPlane(const float *plane, const vec3_t start, const vec3_t end, float *enterFrac,
+							  float *leaveFrac, int *hit) {
 	float d1, d2, f;
 
 	*hit = qfalse;

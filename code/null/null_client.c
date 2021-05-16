@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 cvar_t *cl_shownet;
 
-void CL_Shutdown(char *finalmsg, qboolean disconnect, qboolean quit) {
+void CL_Shutdown(const char *finalmsg, qboolean disconnect, qboolean quit) {
 }
 
 void CL_Init(void) {
@@ -67,7 +67,7 @@ qboolean UI_GameCommand(void) {
 void CL_ForwardCommandToServer(const char *string) {
 }
 
-void CL_ConsolePrint(char *txt) {
+void CL_ConsolePrint(const char *txt) {
 }
 
 void CL_JoystickEvent(int axis, int value, int time) {
