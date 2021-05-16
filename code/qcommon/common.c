@@ -3062,7 +3062,7 @@ FindMatches
 ===============
 */
 static void FindMatches(const char *s) {
-	int i;
+	int i, n;
 
 	if (Q_stricmpn(s, completionString, strlen(completionString))) {
 		return;
@@ -3073,15 +3073,16 @@ static void FindMatches(const char *s) {
 		return;
 	}
 
+	n = (int)strlen(s);
 	// cut shortestMatch to the amount common with s
 	for (i = 0; shortestMatch[i]; i++) {
-		if (i >= strlen(s)) {
-			shortestMatch[i] = 0;
+		if (i >= n) {
+			shortestMatch[i] = '\0';
 			break;
 		}
 
 		if (tolower(shortestMatch[i]) != tolower(s[i])) {
-			shortestMatch[i] = 0;
+			shortestMatch[i] = '\0';
 		}
 	}
 }
@@ -3117,13 +3118,12 @@ Field_FindFirstSeparator
 ===============
 */
 static const char *Field_FindFirstSeparator(const char *s) {
-	int i;
-
-	for (i = 0; i < strlen(s); i++) {
-		if (s[i] == ';')
-			return &s[i];
+	char c;
+	while ((c = *s) != '\0') {
+		if (c == ';')
+			return s;
+		s++;
 	}
-
 	return NULL;
 }
 
