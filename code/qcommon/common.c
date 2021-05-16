@@ -2133,10 +2133,11 @@ int Com_EventLoop(void) {
 		// if no more events are available
 		if (ev.evType == SE_NONE) {
 			// manually send packet events for the loopback channel
+#ifndef DEDICATED
 			while (NET_GetLoopPacket(NS_CLIENT, &evFrom, &buf)) {
 				CL_PacketEvent(evFrom, &buf);
 			}
-
+#endif
 			while (NET_GetLoopPacket(NS_SERVER, &evFrom, &buf)) {
 				// if the server just shut down, flush the events
 				if (com_sv_running->integer) {
@@ -2148,6 +2149,7 @@ int Com_EventLoop(void) {
 		}
 
 		switch (ev.evType) {
+#ifndef DEDICATED
 		case SE_KEY:
 			CL_KeyEvent(ev.evValue, ev.evValue2, ev.evTime);
 			break;
@@ -2160,6 +2162,7 @@ int Com_EventLoop(void) {
 		case SE_JOYSTICK_AXIS:
 			CL_JoystickEvent(ev.evValue, ev.evValue2, ev.evTime);
 			break;
+#endif
 		case SE_CONSOLE:
 			Cbuf_AddText((char *)ev.evPtr);
 			Cbuf_AddText("\n");
