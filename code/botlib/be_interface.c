@@ -110,7 +110,7 @@ qboolean ValidEntityNumber(int num, char *str) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-qboolean BotLibSetup(char *str) {
+static qboolean BotLibSetup(const char *str) {
 	if (!botlibglobals.botlibsetup) {
 		botimport.Print(PRT_ERROR, "%s: bot library used before being setup\n", str);
 		return qfalse;
@@ -133,7 +133,7 @@ int Export_BotLibSetup(void) {
 	//	Swap_Init();
 
 	if (botDeveloper) {
-		char *homedir, *gamedir, *basedir;
+		const char *homedir, *gamedir, *basedir;
 		char logfilename[MAX_OSPATH];
 
 		homedir = LibVarGetString("homedir");
@@ -245,11 +245,10 @@ int Export_BotLibVarSet(const char *var_name, const char *value) {
 // Changes Globals:		-
 //===========================================================================
 int Export_BotLibVarGet(const char *var_name, char *value, int size) {
-	char *varvalue;
+	const char *varvalue;
 
 	varvalue = LibVarGetString(var_name);
-	strncpy(value, varvalue, size - 1);
-	value[size - 1] = '\0';
+	Q_strncpyz(value, varvalue, size);
 	return BLERR_NOERROR;
 } // end of the function Export_BotLibVarGet
 //===========================================================================
@@ -300,7 +299,7 @@ int Export_BotLibLoadMap(const char *mapname) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int Export_BotLibUpdateEntity(int ent, bot_entitystate_t *state) {
+static int Export_BotLibUpdateEntity(int ent, bot_entitystate_t *state) {
 	if (!BotLibSetup("BotUpdateEntity"))
 		return BLERR_LIBRARYNOTSETUP;
 	if (!ValidEntityNumber(ent, "BotUpdateEntity"))
@@ -527,7 +526,8 @@ int BotExportTest(int parm0, char *parm1, vec3_t parm2, vec3_t parm3) {
 									  lastgoalareanum, lastareanum,
 									  avoidreach, avoidreachtimes, avoidreachtries,
 									  &goal, TFL_DEFAULT|TFL_FUNCBOB|TFL_ROCKETJUMP,
-		NULL, 0, &resultFlags); AAS_ReachabilityFromNum(reachnum, &reach);
+									  NULL, 0, &resultFlags);
+		AAS_ReachabilityFromNum(reachnum, &reach);
 		AAS_ShowReachability(&reach);
 		*/
 		int curarea;

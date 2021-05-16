@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *****************************************************************************/
 
 #include "../qcommon/q_shared.h"
+#include "../qcommon/qcommon.h"
 #include "l_memory.h"
 #include "l_script.h"
 #include "l_precomp.h"
@@ -259,8 +260,7 @@ int AAS_ValueForBSPEpairKey(int ent, char *key, char *value, int size) {
 		return qfalse;
 	for (epair = bspworld.entities[ent].epairs; epair; epair = epair->next) {
 		if (!strcmp(epair->key, key)) {
-			strncpy(value, epair->value, size - 1);
-			value[size - 1] = '\0';
+			Q_strncpyz(value, epair->value, size);
 			return qtrue;
 		} // end if
 	}	  // end for

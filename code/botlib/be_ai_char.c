@@ -242,7 +242,7 @@ bot_character_t *BotLoadCharacterFromFile(char *charfile, int skill) {
 						return NULL;
 					} // end if
 					index = token.intvalue;
-					if (index < 0 || index > MAX_CHARACTERISTICS) {
+					if (index < 0 || index >= MAX_CHARACTERISTICS) {
 						SourceError(source, "characteristic index out of range [0, %d]", MAX_CHARACTERISTICS);
 						FreeSource(source);
 						BotFreeCharacterStrings(ch);
@@ -705,8 +705,7 @@ void Characteristic_String(int character, int index, char *buf, int size) {
 		return;
 	// an integer will be converted to a float
 	if (ch->c[index].type == CT_STRING) {
-		strncpy(buf, ch->c[index].value.string, size - 1);
-		buf[size - 1] = '\0';
+		Q_strncpyz(buf, ch->c[index].value.string, size);
 	} // end if
 	else {
 		botimport.Print(PRT_ERROR, "characteristic %d is not a string\n", index);

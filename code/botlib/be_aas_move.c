@@ -392,13 +392,15 @@ void AAS_ApplyFriction(vec3_t vel, float friction, float stopspeed, float framet
 		vel[1] *= newspeed;
 	} // end if
 } // end of the function AAS_ApplyFriction
+
 //===========================================================================
 //
 // Parameter:			-
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int AAS_ClipToBBox(aas_trace_t *trace, vec3_t start, vec3_t end, int presencetype, vec3_t mins, vec3_t maxs) {
+static qboolean AAS_ClipToBBox(aas_trace_t *trace, const vec3_t start, const vec3_t end, int presencetype,
+							   const vec3_t mins, const vec3_t maxs) {
 	int i, j, side;
 	float front, back, frac, planedist;
 	vec3_t bboxmins, bboxmaxs, absmins, absmaxs, dir, mid;
@@ -419,6 +421,8 @@ int AAS_ClipToBBox(aas_trace_t *trace, vec3_t start, vec3_t end, int presencetyp
 	VectorSubtract(end, start, dir);
 	frac = 1;
 	for (i = 0; i < 3; i++) {
+		if (fabsf(dir[i]) < 0.001f) // this may cause denormalization or division by zero
+			continue;
 		// get plane to test collision with for the current axis direction
 		if (dir[i] > 0)
 			planedist = absmins[i];
@@ -460,6 +464,7 @@ int AAS_ClipToBBox(aas_trace_t *trace, vec3_t start, vec3_t end, int presencetyp
 	} // end if
 	return qfalse;
 } // end of the function AAS_ClipToBBox
+
 //===========================================================================
 // predicts the movement
 // assumes regular bounding box sizes
@@ -478,10 +483,10 @@ int AAS_ClipToBBox(aas_trace_t *trace, vec3_t start, vec3_t end, int presencetyp
 // Returns:				aas_clientmove_t
 // Changes Globals:		-
 //===========================================================================
-int AAS_ClientMovementPrediction(struct aas_clientmove_s *move, int entnum, vec3_t origin, int presencetype,
-								 int onground, vec3_t velocity, vec3_t cmdmove, int cmdframes, int maxframes,
-								 float frametime, int stopevent, int stopareanum, vec3_t mins, vec3_t maxs,
-								 int visualize) {
+static int AAS_ClientMovementPrediction(aas_clientmove_t *move, int entnum, const vec3_t origin, int presencetype,
+										int onground, const vec3_t velocity, const vec3_t cmdmove, int cmdframes,
+										int maxframes, float frametime, int stopevent, int stopareanum,
+										const vec3_t mins, const vec3_t maxs, int visualize) {
 	float phys_friction, phys_stopspeed, phys_gravity, phys_waterfriction;
 	float phys_watergravity;
 	float phys_walkaccelerate, phys_airaccelerate, phys_swimaccelerate;
@@ -517,8 +522,8 @@ int AAS_ClientMovementPrediction(struct aas_clientmove_s *move, int entnum, vec3
 	phys_maxsteepness = aassettings.phys_maxsteepness;
 	phys_jumpvel = aassettings.phys_jumpvel * frametime;
 	//
-	Com_Memset(move, 0, sizeof(aas_clientmove_t));
-	Com_Memset(&trace, 0, sizeof(aas_trace_t));
+	Com_Memset(move, 0, sizeof(*move));
+	Com_Memset(&trace, 0, sizeof(trace));
 	// start at the current origin
 	VectorCopy(origin, org);
 	org[2] += 0.25;
@@ -910,6 +915,7 @@ int AAS_ClientMovementPrediction(struct aas_clientmove_s *move, int entnum, vec3
 	//
 	return qtrue;
 } // end of the function AAS_ClientMovementPrediction
+
 //===========================================================================
 //
 // Parameter:			-
@@ -919,10 +925,12 @@ int AAS_ClientMovementPrediction(struct aas_clientmove_s *move, int entnum, vec3
 int AAS_PredictClientMovement(struct aas_clientmove_s *move, int entnum, vec3_t origin, int presencetype, int onground,
 							  vec3_t velocity, vec3_t cmdmove, int cmdframes, int maxframes, float frametime,
 							  int stopevent, int stopareanum, int visualize) {
-	vec3_t mins, maxs;
+	const vec3_t mins = {-4, -4, -4};
+	const vec3_t maxs = {4, 4, 4};
 	return AAS_ClientMovementPrediction(move, entnum, origin, presencetype, onground, velocity, cmdmove, cmdframes,
 										maxframes, frametime, stopevent, stopareanum, mins, maxs, visualize);
 } // end of the function AAS_PredictClientMovement
+
 //===========================================================================
 //
 // Parameter:			-

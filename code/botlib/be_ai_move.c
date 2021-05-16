@@ -3141,7 +3141,7 @@ void BotMoveToGoal(bot_moveresult_t *result, int movestate, bot_goal_t *goal, in
 			// special elevator case
 			else if ((reach.traveltype & TRAVELTYPE_MASK) == TRAVEL_ELEVATOR ||
 					 (reach.traveltype & TRAVELTYPE_MASK) == TRAVEL_FUNCBOB) {
-				if ((result->flags & MOVERESULT_ONTOPOF_FUNCBOB) || (result->flags & MOVERESULT_ONTOPOF_FUNCBOB)) {
+				if ((result->flags & MOVERESULT_ONTOPOF_ELEVATOR) || (result->flags & MOVERESULT_ONTOPOF_FUNCBOB)) {
 					ms->reachability_time = AAS_Time() + 5;
 				} // end if
 				// if the bot was going for an elevator and reached the reachability area

@@ -124,12 +124,12 @@ static define_t *globaldefines;
 // Returns:					-
 // Changes Globals:		-
 //============================================================================
-void QDECL SourceError(source_t *source, char *str, ...) {
+void QDECL SourceError(source_t *source, const char *fmt, ...) {
 	char text[1024];
 	va_list ap;
 
-	va_start(ap, str);
-	Q_vsnprintf(text, sizeof(text), str, ap);
+	va_start(ap, fmt);
+	Q_vsnprintf(text, sizeof(text), fmt, ap);
 	va_end(ap);
 #ifdef BOTLIB
 	botimport.Print(PRT_ERROR, "file %s, line %d: %s\n", source->scriptstack->filename, source->scriptstack->line,
@@ -148,12 +148,12 @@ void QDECL SourceError(source_t *source, char *str, ...) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void QDECL SourceWarning(source_t *source, char *str, ...) {
+void QDECL SourceWarning(source_t *source, const char *fmt, ...) {
 	char text[1024];
 	va_list ap;
 
-	va_start(ap, str);
-	Q_vsnprintf(text, sizeof(text), str, ap);
+	va_start(ap, fmt);
+	Q_vsnprintf(text, sizeof(text), fmt, ap);
 	va_end(ap);
 #ifdef BOTLIB
 	botimport.Print(PRT_WARNING, "file %s, line %d: %s\n", source->scriptstack->filename, source->scriptstack->line,
@@ -427,14 +427,15 @@ static int PC_ReadDefineParms(source_t *source, define_t *define, token_t **parm
 	} // end for
 	return qtrue;
 } // end of the function PC_ReadDefineParms
+
 //============================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //============================================================================
-static int PC_StringizeTokens(token_t *tokens, token_t *token) {
-	token_t *t;
+static int PC_StringizeTokens(const token_t *tokens, token_t *token) {
+	const token_t *t;
 
 	token->type = TT_STRING;
 	token->whitespace_p = NULL;
@@ -446,7 +447,8 @@ static int PC_StringizeTokens(token_t *tokens, token_t *token) {
 	} // end for
 	strncat(token->string, "\"", MAX_TOKEN - strlen(token->string) - 1);
 	return qtrue;
-} // end of the function PC_StringizeTokens
+}
+
 //============================================================================
 //
 // Parameter:				-
@@ -456,20 +458,27 @@ static int PC_StringizeTokens(token_t *tokens, token_t *token) {
 static int PC_MergeTokens(token_t *t1, token_t *t2) {
 	// merging of a name with a name or number
 	if (t1->type == TT_NAME && (t2->type == TT_NAME || t2->type == TT_NUMBER)) {
+		if (strlen(t1->string) + strlen(t2->string) >= sizeof(t1->string))
+			return qfalse;
 		strcat(t1->string, t2->string);
 		return qtrue;
-	} // end if
+	}
+
 	// merging of two strings
 	if (t1->type == TT_STRING && t2->type == TT_STRING) {
+		int len1 = (int)strlen(t1->string);
+		if (strlen(t1->string) + strlen(t2->string) - 2 >= sizeof(t1->string))
+			return qfalse;
 		// remove trailing double quote
-		t1->string[strlen(t1->string) - 1] = '\0';
+		t1->string[len1 - 1] = '\0';
 		// concat without leading double quote
 		strcat(t1->string, &t2->string[1]);
 		return qtrue;
-	} // end if
+	}
 	// FIXME: merging of two number of the same sub type
 	return qfalse;
-} // end of the function PC_MergeTokens
+}
+
 //============================================================================
 //
 // Parameter:				-
@@ -1189,7 +1198,7 @@ static int PC_Directive_define(source_t *source) {
 // Returns:					-
 // Changes Globals:		-
 //============================================================================
-static define_t *PC_DefineFromString(char *string) {
+static define_t *PC_DefineFromString(const char *string) {
 	script_t *script;
 	source_t src;
 	token_t *t;
@@ -1266,7 +1275,7 @@ int PC_AddDefine(source_t *source, char *string) {
 // Returns:					-
 // Changes Globals:		-
 //============================================================================
-int PC_AddGlobalDefine(char *string) {
+int PC_AddGlobalDefine(const char *string) {
 	define_t *define;
 
 	define = PC_DefineFromString(string);
@@ -2799,7 +2808,7 @@ void PC_UnreadToken(source_t *source, token_t *token) {
 // Returns:					-
 // Changes Globals:		-
 //============================================================================
-void PC_SetIncludePath(source_t *source, char *path) {
+void PC_SetIncludePath(source_t *source, const char *path) {
 	size_t len;
 
 	Q_strncpyz(source->includepath, path, sizeof(source->includepath) - 1);
@@ -3035,7 +3044,7 @@ int PC_SourceFileAndLine(int handle, char *filename, int *line) {
 // Returns:				-
 // Changes Globals:		-
 //============================================================================
-void PC_SetBaseFolder(char *path) {
+void PC_SetBaseFolder(const char *path) {
 	PS_SetBaseFolder(path);
 } // end of the function PC_SetBaseFolder
 //============================================================================

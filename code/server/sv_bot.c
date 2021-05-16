@@ -139,7 +139,7 @@ void BotDrawDebugPolygons(void (*drawPoly)(int color, int numPoints, float *poin
 BotImport_Print
 ==================
 */
-static __attribute__((format(printf, 2, 3))) void QDECL BotImport_Print(int type, char *fmt, ...) {
+static __attribute__((format(printf, 2, 3))) void QDECL BotImport_Print(int type, const char *fmt, ...) {
 	char str[2048];
 	va_list ap;
 
@@ -434,7 +434,7 @@ static void BotImport_DebugLineShow(int line, vec3_t start, vec3_t end, int colo
 SV_BotClientCommand
 ==================
 */
-static void BotClientCommand(int client, char *command) {
+static void BotClientCommand(int client, const char *command) {
 	SV_ExecuteClientCommand(&svs.clients[client], command, qtrue);
 }
 

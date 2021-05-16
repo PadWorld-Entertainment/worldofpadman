@@ -283,7 +283,7 @@ void BotMutateGoalFuzzyLogic(int goalstate, float range) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-itemconfig_t *LoadItemConfig(char *filename) {
+itemconfig_t *LoadItemConfig(const char *filename) {
 	int max_iteminfo;
 	token_t token;
 	char path[MAX_QPATH];
@@ -1734,7 +1734,7 @@ void BotFreeGoalState(int handle) {
 // Changes Globals:		-
 //===========================================================================
 int BotSetupGoalAI(void) {
-	char *filename;
+	const char *filename;
 
 	// check if teamplay is on
 	g_gametype = LibVarValue("g_gametype", "0");

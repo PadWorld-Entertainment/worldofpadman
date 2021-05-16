@@ -216,11 +216,8 @@ static int ReadString(source_t *source, const fielddef_t *fd, void *p) {
 		return 0;
 	// remove the double quotes
 	StripDoubleQuotes(token.string);
-	// copy the string
-	strncpy((char *)p, token.string, MAX_STRINGFIELD - 1);
-	// make sure the string is closed with a zero
-	((char *)p)[MAX_STRINGFIELD - 1] = '\0';
-	//
+	// copy the string and make sure it is closed with a zero
+	Q_strncpyz((char *)p, token.string, MAX_STRINGFIELD);
 	return 1;
 } // end of the function ReadString
 //===========================================================================
