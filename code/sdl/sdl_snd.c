@@ -117,9 +117,9 @@ static void SNDDMA_AudioCallback(void *userdata, Uint8 *stream, int len) {
 #endif
 }
 
-static struct {
-	Uint16 enumFormat;
-	char *stringFormat;
+static const struct {
+	uint16_t enumFormat;
+	const char *stringFormat;
 } formatToStringTable[] = {{AUDIO_U8, "AUDIO_U8"},		   {AUDIO_S8, "AUDIO_S8"},
 						   {AUDIO_U16LSB, "AUDIO_U16LSB"}, {AUDIO_S16LSB, "AUDIO_S16LSB"},
 						   {AUDIO_U16MSB, "AUDIO_U16MSB"}, {AUDIO_S16MSB, "AUDIO_S16MSB"},
@@ -133,8 +133,8 @@ SNDDMA_PrintAudiospec
 ===============
 */
 static void SNDDMA_PrintAudiospec(const char *str, const SDL_AudioSpec *spec) {
+	const char *fmt = NULL;
 	int i;
-	char *fmt = NULL;
 
 	Com_Printf("%s:\n", str);
 
@@ -201,7 +201,7 @@ qboolean SNDDMA_Init(void) {
 
 	// I dunno if this is the best idea, but I'll give it a try...
 	//  should probably check a cvar for this...
-	if (s_sdlDevSamps->value)
+	if (s_sdlDevSamps->integer)
 		desired.samples = s_sdlDevSamps->value;
 	else {
 		// just pick a sane default.
@@ -234,7 +234,7 @@ qboolean SNDDMA_Init(void) {
 	// 32768 is what the OSS driver filled in here on my system. I don't
 	//  know if it's a good value overall, but at least we know it's
 	//  reasonable...this is why I let the user override.
-	tmp = s_sdlMixSamps->value;
+	tmp = s_sdlMixSamps->integer;
 	if (!tmp)
 		tmp = (obtained.samples * obtained.channels) * 10;
 

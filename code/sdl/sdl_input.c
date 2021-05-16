@@ -643,7 +643,7 @@ static void IN_ShutdownJoystick(void) {
 }
 
 static qboolean KeyToAxisAndSign(int keynum, int *outAxis, int *outSign) {
-	char *bind;
+	const char *bind;
 
 	if (!keynum)
 		return qfalse;
