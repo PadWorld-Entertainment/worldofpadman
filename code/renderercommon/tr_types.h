@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __TR_TYPES_H
 #define __TR_TYPES_H
 
+#define MAX_VIDEO_HANDLES 16
+
 #define MAX_DLIGHTS 32 // can't be increased, because bit flags are used on surfaces
 
 #define REFENTITYNUM_BITS 10 // can't be increased without changing drawsurf bit packing
@@ -212,5 +214,7 @@ typedef struct {
 	qboolean stereoEnabled;
 	qboolean smpActive; // UNUSED, present for compatibility
 } glconfig_t;
+
+typedef byte color4ub_t[4];
 
 #endif // __TR_TYPES_H

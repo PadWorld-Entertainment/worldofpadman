@@ -829,7 +829,7 @@ static void R_CreateScratchImage(void) {
 	uint32_t x;
 	unsigned char data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
-	for (x = 0; x < 32; x++) {
+	for (x = 0; x < MAX_VIDEO_HANDLES; x++) {
 		// scratchimage is usually used for cinematic drawing
 		tr.scratchImage[x] =
 			R_CreateImage("*scratch", (unsigned char *)data, DEFAULT_SIZE, DEFAULT_SIZE, qfalse, qtrue, GL_CLAMP);

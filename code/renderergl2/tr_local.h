@@ -393,8 +393,6 @@ typedef struct {
 
 struct shaderCommands_s;
 
-typedef enum { CT_FRONT_SIDED, CT_BACK_SIDED, CT_TWO_SIDED } cullType_t;
-
 typedef enum {
 	FP_NONE,  // surface is translucent and will just be adjusted properly
 	FP_EQUAL, // surface is opaque but possibly alpha tested
@@ -788,7 +786,6 @@ SURFACES
 
 ==============================================================================
 */
-typedef byte color4ub_t[4];
 
 // any changes in surfaceType must be mirrored in rb_surfaceTable[]
 typedef enum {
@@ -1415,7 +1412,7 @@ typedef struct {
 	const byte *externalVisData; // from RE_SetWorldVisData, shared with CM_Load
 
 	image_t *defaultImage;
-	image_t *scratchImage[32];
+	image_t *scratchImage[MAX_VIDEO_HANDLES];
 	image_t *fogImage;
 	image_t *dlightImage; // inverse-quare highlight for projective adding
 	image_t *flareImage;

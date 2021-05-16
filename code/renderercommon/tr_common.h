@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define TR_COMMON_H
 
 #include "../qcommon/q_shared.h"
-#include "../renderercommon/tr_public.h"
+#include "tr_public.h"
 #include "qgl.h"
 
 typedef enum {
@@ -61,12 +61,14 @@ typedef struct image_s {
 	struct image_s *next;
 } image_t;
 
+typedef enum { CT_FRONT_SIDED, CT_BACK_SIDED, CT_TWO_SIDED } cullType_t;
+
 // any change in the LIGHTMAP_* defines here MUST be reflected in
 // R_FindShader() in tr_bsp.c
-#define LIGHTMAP_2D -4		  // shader is for 2D rendering
-#define LIGHTMAP_BY_VERTEX -3 // pre-lit triangle models
-#define LIGHTMAP_WHITEIMAGE -2
-#define LIGHTMAP_NONE -1
+#define LIGHTMAP_2D (-4) // shader is for 2D rendering
+#define LIGHTMAP_BY_VERTEX (-3) // pre-lit triangle models
+#define LIGHTMAP_WHITEIMAGE (-2)
+#define LIGHTMAP_NONE (-1)
 
 extern refimport_t ri;
 extern glconfig_t glConfig; // outside of TR since it shouldn't be cleared during ref re-init
