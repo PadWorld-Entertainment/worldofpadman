@@ -659,8 +659,13 @@ image_t *R_FindImageFile(const char *name, VkBool32 mipmap, VkBool32 allowPicmip
 	return image;
 }
 
-void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *data, int client, VkBool32 dirty) {
+void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *data, int client, qboolean dirty) {
 	image_t *prtImage = tr.scratchImage[client];
+
+	if (!tr.scratchImage[client]) {
+		ri.Printf(PRINT_WARNING, "RE_UploadCinematic: scratch images not initialized\n");
+		return;
+	}
 
 	// if the scratchImage isn't in the format we want, specify it as a new texture
 	if (cols != prtImage->uploadWidth || rows != prtImage->uploadHeight) {
