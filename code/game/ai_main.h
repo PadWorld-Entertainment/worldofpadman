@@ -66,6 +66,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LTG_PICKUPFLAG 20
 #define LTG_PLANTBOOMIE 21
 #define LTG_PLANTBAMBAM 22
+#define LTG_UNFREEZE 23
 
 // some goal dedication times
 
@@ -81,6 +82,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define RUSHBASE_TIME 120		// 2 minutes
 #define CTF_RUSHBASE_TIME 120	// 2 minutes ctf rush base time
 #define CTF_RETURNFLAG_TIME 180 // 3 minutes to return the flag
+#define TEAM_UNFREEZETIME 120
 
 #define PUSHCART_DIST 160
 #if USE_TEAMAI
@@ -315,6 +317,7 @@ typedef struct bot_state_s {
 	int blueflagstatus;
 	int redflagstatus;
 #endif
+	int freezecheck_time;
 	int hstationgoal; // 0 = no hstation, > 0 = station index +1
 	// char subteam[32]; // sub team name
 	int formation_dist;

@@ -2444,6 +2444,7 @@ Q3CGOBJ_ = \
   $(B)/$(BASEGAME)/cgame/cg_effects.o \
   $(B)/$(BASEGAME)/cgame/cg_ents.o \
   $(B)/$(BASEGAME)/cgame/cg_event.o \
+  $(B)/$(BASEGAME)/cgame/cg_freezetag.o \
   $(B)/$(BASEGAME)/cgame/cg_info.o \
   $(B)/$(BASEGAME)/cgame/cg_lensflare.o \
   $(B)/$(BASEGAME)/cgame/cg_localents.o \
@@ -2502,6 +2503,7 @@ Q3GOBJ_ = \
   $(B)/$(BASEGAME)/game/g_cmds.o \
   $(B)/$(BASEGAME)/game/g_combat.o \
   $(B)/$(BASEGAME)/game/g_ctlitems.o \
+  $(B)/$(BASEGAME)/game/g_freezetag.o \
   $(B)/$(BASEGAME)/game/g_gameinfo.o \
   $(B)/$(BASEGAME)/game/g_items.o \
   $(B)/$(BASEGAME)/game/g_mem.o \

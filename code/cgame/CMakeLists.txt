@@ -8,6 +8,7 @@ set(SRCS
 	cg_effects.c
 	cg_ents.c
 	cg_event.c
+	cg_freezetag.c
 	cg_info.c
 	cg_lensflare.c
 	cg_localents.c

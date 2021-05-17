@@ -89,7 +89,7 @@ void AddScore(gentity_t *ent, vec3_t origin, int score, char *reason) {
 		ScorePlum(ent, origin, score);
 	//
 	ent->client->ps.persistant[PERS_SCORE] += score;
-	if (g_gametype.integer == GT_TEAM)
+	if (g_gametype.integer == GT_TEAM || g_gametype.integer == GT_FREEZETAG)
 		level.teamScores[ent->client->ps.persistant[PERS_TEAM]] += score;
 
 	CalculateRanks();
@@ -699,6 +699,22 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		}
 	}
 
+	// freezetag
+	if (G_FreezeTag() && FT_PlayerIsFrozen(targ)) {
+		if (mod == MOD_TRIGGER_HURT) {
+			FT_RelocateToNearestSpawnPoint(targ);
+			FT_FreezePlayer(targ, attacker);
+		}
+		return;
+	} else if (G_FreezeTag() && FT_PlayerIsFrozen(attacker)) {
+		if (mod == MOD_PUNCHY)
+			return;
+	} else if (G_FreezeTag() && mod == MOD_TELEFRAG) {
+		FT_FreezePlayer(targ, attacker);
+		FT_RelocateToNearestSpawnPoint(targ);
+		return;
+	}
+
 	if (!dir) {
 		dflags |= DAMAGE_NO_KNOCKBACK;
 	} else {
@@ -882,7 +898,16 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 				targ->health = -999;
 
 			targ->enemy = attacker;
-			targ->die(targ, inflictor, attacker, take, mod);
+
+			// don't kill players in freezetag
+			if (G_FreezeTag() && !FT_PlayerIsFrozen(targ)) {
+				if (mod == MOD_TRIGGER_HURT) {
+					ClientSpawn(targ); // relocate players to a spawnpoint
+				}
+				FT_FreezePlayer(targ, attacker);
+			} else {
+				targ->die(targ, inflictor, attacker, take, mod);
+			}
 			return;
 		} else if (targ->pain) {
 			targ->pain(targ, attacker, take);

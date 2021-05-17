@@ -19,6 +19,7 @@ set(SRCS
 	g_cmds.c
 	g_combat.c
 	g_ctlitems.c
+	g_freezetag.c
 	g_gameinfo.c
 	g_items.c
 	g_mem.c
