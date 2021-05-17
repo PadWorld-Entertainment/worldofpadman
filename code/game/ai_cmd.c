@@ -310,12 +310,13 @@ void BotMatch_WrongWall(bot_state_t *bs, bot_match_t *match) {
 		trap_BotEnterChat(bs->cs, 0, CHAT_ALL);
 	}
 }
+
+#if 0
 /*
 ==================
 BotMatch_GoForBalloon
 ==================
 */
-/*
 void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 	int client;
 	char balloonindex[MAX_MESSAGE_SIZE];
@@ -324,21 +325,21 @@ void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 	int ballindex;
 	int state;
 
+	if (!TeamPlayIsOn())
+		return;
+	// if not addressed to this bot
+	if (!BotAddressedToBot(bs, match))
+		return;
 
+	if (gametype != GT_BALLOON)
+		return;
 
-	if (!TeamPlayIsOn()) return;
-	//if not addressed to this bot
-	if (!BotAddressedToBot(bs, match)) return;
-
-	if( gametype != GT_BALLOON ) return;
-
-	//get the team mate name
+	// get the team mate name
 	trap_BotMatchVariable(match, BALLOON, balloonindex, sizeof(balloonindex));
-
 
 	ballindex = atoi(balloonindex);
 
-	if(ballindex != -1){    // valid balloon index
+	if (ballindex != -1) { // valid balloon index
 		trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
 		client = ClientFromName(netname);
 		bs->decisionmaker = client;
@@ -348,44 +349,39 @@ void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 
 		state = level.balloonState[ballindex];
 		// not our balloon?
-		if(BotTeam(bs) == TEAM_RED && state != '1' ||
-			BotTeam(bs) == TEAM_BLUE && state != '2' ){
+		if (BotTeam(bs) == TEAM_RED && state != '1' || BotTeam(bs) == TEAM_BLUE && state != '2') {
 			bs->ltgtype = LTG_ATTACKENEMYBASE;
 			bs->teamgoal_time = FloatTime() + TEAM_BALLOONATTACK_TIME;
 
-			if( bot_developer.integer & AIDBG_CHAT){
+			if (bot_developer.integer & AIDBG_CHAT) {
 				char botname[128];
 				ClientName(bs->client, botname, 128);
-				G_Printf("%s attacking %s \n", botname, g_entities[ balloongoal[ballindex].entitynum ].message );
+				G_Printf("%s attacking %s \n", botname, g_entities[balloongoal[ballindex].entitynum].message);
 			}
-		}
-		else{
+		} else {
 			// DEFEND !!11
 			// cyr_20055
 			// reset defendaway_time only if the ltgtype changes.
 			// so roaming defenders keep on roaming
-			if(bs->ltgtype != LTG_DEFENDKEYAREA){
+			if (bs->ltgtype != LTG_DEFENDKEYAREA) {
 				bs->ltgtype = LTG_DEFENDKEYAREA;
 				bs->defendaway_time = 0;
 			}
 			bs->teamgoal_time = FloatTime() + TEAM_BALLOONDEFEND_TIME;
 
-			if( bot_developer.integer & AIDBG_CHAT){
+			if (bot_developer.integer & AIDBG_CHAT) {
 				char botname[128];
 				ClientName(bs->client, botname, 128);
-				G_Printf("%s defending %s \n", botname, g_entities[ balloongoal[ballindex].entitynum ].message );
+				G_Printf("%s defending %s \n", botname, g_entities[balloongoal[ballindex].entitynum].message);
 			}
 		}
 		memcpy(&bs->teamgoal, &balloongoal[ballindex], sizeof(bot_goal_t));
 		// remember last ordered task
 		BotRememberLastOrderedTask(bs);
-	}
-	else
-		bs->ltgtype = 0;    // roam
-
-	return;
+	} else
+		bs->ltgtype = 0; // roam
 }
-*/
+#endif
 
 void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];

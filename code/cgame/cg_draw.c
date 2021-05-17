@@ -603,7 +603,7 @@ static float CG_DrawServerInfos(float y) {
 	y += SMALLCHAR_HEIGHT;
 	//	trap_Cvar_VariableStringBuffer("g_gametype",tmpstr,MAX_CVAR_VALUE_STRING);
 	tmpi = cgs.gametype;
-	tmpi = (tmpi < 0 || tmpi > GT_BALLOON) ? (GT_BALLOON + 1) : tmpi;
+	tmpi = (tmpi < 0 || tmpi >= GT_MAX_GAME_TYPE) ? GT_MAX_GAME_TYPE : tmpi;
 	CG_DrawStringExt(640 - xpos + 2, y, va("gametype: %s", gametype_strs[tmpi]), colorWhite, qfalse, qfalse, 8, 16, 18);
 
 	y += SMALLCHAR_HEIGHT;
@@ -2607,7 +2607,7 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 			twhite[3] = (float)(8000 - (cg.time - cg.first2dtime)) / 3000.0f;
 
 		tmpi = cgs.gametype;
-		tmpi = (tmpi < 0 || tmpi > GT_BALLOON) ? (GT_BALLOON + 1) : tmpi;
+		tmpi = (tmpi < 0 || tmpi >= GT_MAX_GAME_TYPE) ? GT_MAX_GAME_TYPE : tmpi;
 		lenOfDrawStr = strlen(gametype_strs[tmpi]);
 		CG_DrawStringExt(320 - lenOfDrawStr * 6, 240 - 26, gametype_strs[tmpi], twhite, qfalse, qfalse, 12, 24, 30);
 		CG_DrawStringExt(320 - lenOfDrawStr * 6, 240 - 26, gametype_strs[tmpi], twhite, qfalse, qfalse, 12, 24, 30);
