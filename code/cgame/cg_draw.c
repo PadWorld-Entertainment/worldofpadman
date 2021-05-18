@@ -2235,11 +2235,11 @@ static void CG_DrawWarmup(void) {
 		}
 	} else {
 		if (cgs.gametype == GT_FFA) {
-			s = "Free For All";
+			s = GAMETYPE_NAME(GT_FFA);
 		} else if (cgs.gametype == GT_TEAM) {
-			s = "Team Deathmatch";
+			s = GAMETYPE_NAME(GT_TEAM);
 		} else if (cgs.gametype == GT_CTF) {
-			s = "Capture the Lolly";
+			s = GAMETYPE_NAME(GT_CTF);
 		} else {
 			s = "";
 		}
