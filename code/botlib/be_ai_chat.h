@@ -72,7 +72,7 @@ int BotAllocChatState(void);
 // frees the chatstate
 void BotFreeChatState(int handle);
 // adds a console message to the chat state
-void BotQueueConsoleMessage(int chatstate, int type, char *message);
+void BotQueueConsoleMessage(int chatstate, int type, const char *message);
 // removes the console message from the chat state
 void BotRemoveConsoleMessage(int chatstate, int handle);
 // returns the next console message from the state

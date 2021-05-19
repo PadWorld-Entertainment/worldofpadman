@@ -1027,7 +1027,7 @@ void trap_Characteristic_String(int character, int index, char *buf, int size);
 
 int trap_BotAllocChatState(void);
 void trap_BotFreeChatState(int handle);
-void trap_BotQueueConsoleMessage(int chatstate, int type, char *message);
+void trap_BotQueueConsoleMessage(int chatstate, int type, const char *message);
 void trap_BotRemoveConsoleMessage(int chatstate, int handle);
 int trap_BotNextConsoleMessage(int chatstate, void /* struct bot_consolemessage_s */ *cm);
 int trap_BotNumConsoleMessages(int chatstate);

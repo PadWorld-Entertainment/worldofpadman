@@ -306,7 +306,7 @@ void BotRemoveConsoleMessage(int chatstate, int handle) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void BotQueueConsoleMessage(int chatstate, int type, char *message) {
+void BotQueueConsoleMessage(int chatstate, int type, const char *message) {
 	bot_consolemessage_t *m;
 	bot_chatstate_t *cs;
 

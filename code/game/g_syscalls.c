@@ -511,7 +511,7 @@ void trap_BotFreeChatState(int handle) {
 	syscall(BOTLIB_AI_FREE_CHAT_STATE, handle);
 }
 
-void trap_BotQueueConsoleMessage(int chatstate, int type, char *message) {
+void trap_BotQueueConsoleMessage(int chatstate, int type, const char *message) {
 	syscall(BOTLIB_AI_QUEUE_CONSOLE_MESSAGE, chatstate, type, message);
 }
 
