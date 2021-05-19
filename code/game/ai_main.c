@@ -1464,7 +1464,7 @@ static int BotAI(int client, float thinktime) {
 			trap_BotQueueConsoleMessage(bs->cs, CMS_NORMAL, args);
 		} else if (!Q_stricmp(buf, "say")) {
 			// remove first and last quote from the chat message
-			memmove(args, args + 5, strlen(args));
+			memmove(args, args + 1, strlen(args));
 			args[strlen(args) - 1] = '\0';
 			trap_BotQueueConsoleMessage(bs->cs, CMS_CHAT, args);
 		} else if (!Q_stricmp(buf, "scores")) {			 /*FIXME: parse scores?*/

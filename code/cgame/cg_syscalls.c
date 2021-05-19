@@ -356,7 +356,7 @@ int trap_Key_GetKey(const char *binding) {
 	return syscall(CG_KEY_GETKEY, binding);
 }
 
-int trap_PC_AddGlobalDefine(char *define) {
+int trap_PC_AddGlobalDefine(const char *define) {
 	return syscall(CG_PC_ADD_GLOBAL_DEFINE, define);
 }
 
@@ -372,7 +372,7 @@ int trap_PC_ReadToken(int handle, pc_token_t *pc_token) {
 	return syscall(CG_PC_READ_TOKEN, handle, pc_token);
 }
 
-int trap_PC_SourceFileAndLine(int handle, char *filename, int *line) {
+int trap_PC_SourceFileAndLine(int handle, const char *filename, int *line) {
 	return syscall(CG_PC_SOURCE_FILE_AND_LINE, handle, filename, line);
 }
 

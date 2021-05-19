@@ -331,7 +331,7 @@ void trap_SetCDKey(char *buf) {
 	syscall(UI_SET_CDKEY, buf);
 }
 
-int trap_PC_AddGlobalDefine(char *define) {
+int trap_PC_AddGlobalDefine(const char *define) {
 	return syscall(UI_PC_ADD_GLOBAL_DEFINE, define);
 }
 
@@ -347,7 +347,7 @@ int trap_PC_ReadToken(int handle, pc_token_t *pc_token) {
 	return syscall(UI_PC_READ_TOKEN, handle, pc_token);
 }
 
-int trap_PC_SourceFileAndLine(int handle, char *filename, int *line) {
+int trap_PC_SourceFileAndLine(int handle, const char *filename, int *line) {
 	return syscall(UI_PC_SOURCE_FILE_AND_LINE, handle, filename, line);
 }
 

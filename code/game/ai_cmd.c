@@ -61,7 +61,7 @@ int notleader[MAX_CLIENTS];
 BotPrintTeamGoal
 ==================
 */
-void BotPrintTeamGoal(bot_state_t *bs) {
+static void BotPrintTeamGoal(bot_state_t *bs) {
 	char netname[MAX_NETNAME];
 	float t;
 
@@ -311,13 +311,13 @@ void BotMatch_WrongWall(bot_state_t *bs, bot_match_t *match) {
 	}
 }
 
-#if 0
 /*
 ==================
 BotMatch_GoForBalloon
 ==================
 */
-void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
+static void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
+#if 0
 	int client;
 	char balloonindex[MAX_MESSAGE_SIZE];
 	char netname[MAX_MESSAGE_SIZE];
@@ -375,13 +375,13 @@ void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 				G_Printf("%s defending %s \n", botname, g_entities[balloongoal[ballindex].entitynum].message);
 			}
 		}
-		memcpy(&bs->teamgoal, &balloongoal[ballindex], sizeof(bot_goal_t));
+		memcpy(&bs->teamgoal, &balloongoal[ballindex], sizeof(bs->teamgoal));
 		// remember last ordered task
 		BotRememberLastOrderedTask(bs);
 	} else
 		bs->ltgtype = 0; // roam
-}
 #endif
+}
 
 void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];
@@ -447,7 +447,7 @@ void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
 	bs->teamgoal_time = FloatTime() + TEAM_GETITEM_TIME;
 
 #ifdef DEBUG
-//	BotPrintTeamGoal(bs);
+	BotPrintTeamGoal(bs);
 #endif // DEBUG
 }
 
@@ -508,7 +508,7 @@ void BotMatch_NewLeader(bot_state_t *bs, bot_match_t *match) {
 BotNearestVisibleItem
 ==================
 */
-float BotNearestVisibleItem(bot_state_t *bs, char *itemname, bot_goal_t *goal) {
+float BotNearestVisibleItem(bot_state_t *bs, const char *itemname, bot_goal_t *goal) {
 	int i;
 	char name[64];
 	bot_goal_t tmpgoal;
@@ -530,14 +530,14 @@ float BotNearestVisibleItem(bot_state_t *bs, char *itemname, bot_goal_t *goal) {
 			BotAI_Trace(&trace, bs->eye, NULL, NULL, tmpgoal.origin, bs->client, CONTENTS_SOLID | CONTENTS_PLAYERCLIP);
 			if (trace.fraction >= 1.0) {
 				bestdist = dist;
-				memcpy(goal, &tmpgoal, sizeof(bot_goal_t));
+				memcpy(goal, &tmpgoal, sizeof(*goal));
 			}
 		}
 	} while (i > 0);
 	return bestdist;
 }
 
-void BotMatch_EnterGame(bot_state_t *bs, bot_match_t *match) {
+static void BotMatch_EnterGame(bot_state_t *bs, bot_match_t *match) {
 	int client;
 	char netname[MAX_NETNAME];
 
@@ -549,7 +549,7 @@ void BotMatch_EnterGame(bot_state_t *bs, bot_match_t *match) {
 }
 
 // cyr_drop{
-void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
+static void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
 	int client, areanum;
 	char netname[MAX_MESSAGE_SIZE];
 	aas_entityinfo_t entinfo;
@@ -621,7 +621,7 @@ void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
 BotMatchMessage
 ==================
 */
-int BotMatchMessage(bot_state_t *bs, char *message) {
+int BotMatchMessage(bot_state_t *bs, const char *message) {
 	bot_match_t match;
 
 	match.type = 0;
@@ -643,10 +643,10 @@ int BotMatchMessage(bot_state_t *bs, char *message) {
 		BotMatch_WrongWall(bs, &match);
 		break;
 	}
-	// case MSG_GOFORBALLOON:{				//someone calling for company
-	//	BotMatch_GoForBalloon(bs, &match);
-	//	break;
-	//}
+	case MSG_GOFORBALLOON:{				//someone calling for company
+		BotMatch_GoForBalloon(bs, &match);
+		break;
+	}
 	case MSG_DROPCART: {
 		BotMatch_DropCart(bs, &match);
 		break;

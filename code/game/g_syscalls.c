@@ -554,11 +554,11 @@ void trap_BotGetChatMessage(int chatstate, char *buf, int size) {
 	syscall(BOTLIB_AI_GET_CHAT_MESSAGE, chatstate, buf, size);
 }
 
-int trap_StringContains(char *str1, char *str2, int casesensitive) {
+int trap_StringContains(const char *str1, const char *str2, int casesensitive) {
 	return syscall(BOTLIB_AI_STRING_CONTAINS, str1, str2, casesensitive);
 }
 
-int trap_BotFindMatch(char *str, void /* struct bot_match_s */ *match, unsigned long int context) {
+int trap_BotFindMatch(const char *str, void /* struct bot_match_s */ *match, unsigned long int context) {
 	return syscall(BOTLIB_AI_FIND_MATCH, str, match, context);
 }
 
@@ -582,7 +582,7 @@ void trap_BotSetChatGender(int chatstate, int gender) {
 	syscall(BOTLIB_AI_SET_CHAT_GENDER, chatstate, gender);
 }
 
-void trap_BotSetChatName(int chatstate, char *name, int client) {
+void trap_BotSetChatName(int chatstate, const char *name, int client) {
 	syscall(BOTLIB_AI_SET_CHAT_NAME, chatstate, name, client);
 }
 
@@ -647,7 +647,7 @@ int trap_BotItemGoalInVisButNotVisible(int viewer, vec3_t eye, vec3_t viewangles
 	return syscall(BOTLIB_AI_ITEM_GOAL_IN_VIS_BUT_NOT_VISIBLE, viewer, eye, viewangles, goal);
 }
 
-int trap_BotGetLevelItemGoal(int index, char *classname, void /* struct bot_goal_s */ *goal) {
+int trap_BotGetLevelItemGoal(int index, const char *classname, void /* struct bot_goal_s */ *goal) {
 	return syscall(BOTLIB_AI_GET_LEVEL_ITEM_GOAL, index, classname, goal);
 }
 
@@ -764,7 +764,7 @@ void trap_BotGetWeaponInfo(int weaponstate, int weapon, void /* struct weaponinf
 	syscall(BOTLIB_AI_GET_WEAPON_INFO, weaponstate, weapon, weaponinfo);
 }
 
-int trap_BotLoadWeaponWeights(int weaponstate, char *filename) {
+int trap_BotLoadWeaponWeights(int weaponstate, const char *filename) {
 	return syscall(BOTLIB_AI_LOAD_WEAPON_WEIGHTS, weaponstate, filename);
 }
 
@@ -796,7 +796,7 @@ int trap_PC_ReadToken(int handle, pc_token_t *pc_token) {
 	return syscall(BOTLIB_PC_READ_TOKEN, handle, pc_token);
 }
 
-int trap_PC_SourceFileAndLine(int handle, char *filename, int *line) {
+int trap_PC_SourceFileAndLine(int handle, const char *filename, int *line) {
 	return syscall(BOTLIB_PC_SOURCE_FILE_AND_LINE, handle, filename, line);
 }
 

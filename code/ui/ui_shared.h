@@ -26,10 +26,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../renderercommon/tr_types.h"
 #include "../client/keycodes.h"
 
-int trap_PC_AddGlobalDefine(char *define);
+int trap_PC_AddGlobalDefine(const char *define);
 int trap_PC_LoadSource(const char *filename);
 int trap_PC_FreeSource(int handle);
 int trap_PC_ReadToken(int handle, pc_token_t *pc_token);
-int trap_PC_SourceFileAndLine(int handle, char *filename, int *line);
+int trap_PC_SourceFileAndLine(int handle, const char *filename, int *line);
 
 #endif
