@@ -594,7 +594,6 @@ static sfxHandle_t Slider_Key(menuslider_s *s, int key) {
 	return (sound);
 }
 
-#if 1
 /*
 =================
 Slider_Draw
@@ -605,8 +604,9 @@ static void Slider_Draw(menuslider_s *s) {
 	int y;
 	int style;
 	const float *color;
-	int button;
 	qboolean focus;
+#if 1
+	int button;
 
 	x = s->generic.x;
 	y = s->generic.y;
@@ -658,20 +658,8 @@ static void Slider_Draw(menuslider_s *s) {
 
 	UI_DrawHandlePic((int)(x + 2 * SMALLCHAR_WIDTH + (SLIDER_RANGE - 1) * SMALLCHAR_WIDTH * s->range) - 2, y, 12, 16,
 					 button);
-}
 #else
-/*
-=================
-Slider_Draw
-=================
-*/
-static void Slider_Draw(menuslider_s *s) {
-	float *color;
-	int style;
 	int i;
-	int x;
-	int y;
-	qboolean focus;
 
 	x = s->generic.x;
 	y = s->generic.y;
@@ -733,8 +721,8 @@ static void Slider_Draw(menuslider_s *s) {
 	}
 	UI_DrawChar((int)(x + 2 * SMALLCHAR_WIDTH + (SLIDER_RANGE - 1) * SMALLCHAR_WIDTH * s->range), y, 131,
 				UI_LEFT | style, color);
-}
 #endif
+}
 
 /*
 =================
