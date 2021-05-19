@@ -701,6 +701,7 @@ int Q_rand(int *seed);
 float Q_random(int *seed);
 float Q_crandom(int *seed);
 
+// random value between 0.0f and 1.0f
 #define random() ((rand() & 0x7fff) / ((float)0x8000))
 #define randomindex(count) (rand() % (count))
 #define crandom() (2.0 * (random() - 0.5))
