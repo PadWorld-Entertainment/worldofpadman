@@ -169,11 +169,11 @@ static void UI_LoadArenas(void) {
 	vmCvar_t arenasFile;
 	char filename[128];
 	char dirlist[2048];
-	char *dirptr;
+	const char *dirptr;
 	int i, n;
 	int dirlen;
-	char *type;
-	char *tag;
+	const char *type;
+	const char *tag;
 	int singlePlayerNum, specialNum, otherNum;
 
 	ui_numArenas = 0;
@@ -265,7 +265,7 @@ UI_GetArenaInfoByNumber
 */
 const char *UI_GetArenaInfoByNumber(int num) {
 	int n;
-	char *value;
+	const char *value;
 
 	if (num < 0 || num >= ui_numArenas) {
 		trap_Print(va(S_COLOR_RED "Invalid arena number: %i\n", num));
@@ -322,7 +322,7 @@ static void UI_LoadBots(void) {
 	int numdirs;
 	char filename[128];
 	char dirlist[1024];
-	char *dirptr;
+	const char *dirptr;
 	int i;
 	int dirlen;
 
@@ -444,7 +444,7 @@ static void UI_SearchSpraylogos(void) {
 static void UI_SearchLensFlares(void) {
 	char dirlist[1024];
 	char tmpcvarstr[1024];
-	char *filestrptr;
+	const char *filestrptr;
 	int dirlen, numdirs, i;
 	char scriptname[32]; // reicht scho ;)
 
@@ -474,7 +474,6 @@ UI_InitGameinfo
 ===============
 */
 void UI_InitGameinfo(void) {
-
 	UI_InitMemory();
 	UI_LoadArenas();
 	UI_LoadBots();

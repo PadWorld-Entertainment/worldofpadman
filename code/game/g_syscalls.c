@@ -709,7 +709,7 @@ void trap_BotResetMoveState(int movestate) {
 	syscall(BOTLIB_AI_RESET_MOVE_STATE, movestate);
 }
 
-void trap_BotAddAvoidSpot(int movestate, vec3_t origin, float radius, int type) {
+void trap_BotAddAvoidSpot(int movestate, const vec3_t origin, float radius, int type) {
 	syscall(BOTLIB_AI_ADD_AVOID_SPOT, movestate, origin, PASSFLOAT(radius), type);
 }
 

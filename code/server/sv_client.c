@@ -180,11 +180,11 @@ void SV_DirectConnect(netadr_t from) {
 	int version;
 	int qport;
 	int challenge;
-	char *password;
+	const char *password;
 	int startIndex;
 	intptr_t denied;
 	int count;
-	char *ip;
+	const char *ip;
 
 	Com_DPrintf("SVC_DirectConnect ()\n");
 
@@ -1176,8 +1176,8 @@ into a more C friendly form.
 =================
 */
 void SV_UserinfoChanged(client_t *cl) {
-	char *val;
-	char *ip;
+	const char *val;
+	const char *ip;
 	int i;
 	int len;
 

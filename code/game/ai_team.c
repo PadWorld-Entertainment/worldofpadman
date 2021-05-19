@@ -33,10 +33,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // team leader AI disabled until someone comes up with actual use for it,
 // and a fix for multiple bots with the same name in one team
 
-#if 1
-#define REMOVETHISWHENFILEISUSEDAGAIN
-int muh;
-#else
 
 #include "g_local.h"
 #include "../botlib/botlib.h"
@@ -58,6 +54,7 @@ int muh;
 #include "ai_vcmd.h"
 
 #include "match.h"
+#if 0
 
 // cyr{
 static int lastorderedgoal[MAX_CLIENTS]; // leader AI, aviod spamming humans with the same MSG
@@ -113,7 +110,6 @@ static int BotNumTeamMates(bot_state_t *bs) {
 }
 
 static int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
-
 	int i, numteammates;
 	char buf[MAX_INFO_STRING];
 
@@ -141,7 +137,7 @@ static int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
 	return numteammates;
 }
 
-void BotInstructMate(bot_state_t *bs, int client, int goal) {
+static void BotInstructMate(bot_state_t *bs, int client, int goal) {
 	char name[MAX_NETNAME];
 
 	ClientName(client, name, sizeof(name));
@@ -162,7 +158,7 @@ void BotInstructMate(bot_state_t *bs, int client, int goal) {
 	BotSayTeamOrder(bs, client);
 }
 
-void BotBalloonOrders(bot_state_t *bs) {
+static void BotBalloonOrders(bot_state_t *bs) {
 	int i, j;
 	int index;
 	int state;
@@ -247,7 +243,7 @@ void BotBalloonOrders(bot_state_t *bs) {
 	}
 }
 
-int FindHumanTeamLeader(bot_state_t *bs) {
+static int FindHumanTeamLeader(bot_state_t *bs) {
 	int i;
 
 	for (i = 0; i < MAX_CLIENTS; i++) {
@@ -267,9 +263,11 @@ int FindHumanTeamLeader(bot_state_t *bs) {
 	}
 	return qfalse;
 }
+#endif
 
 void BotTeamAI(bot_state_t *bs) {
-
+	// teamleader stuff, disabled atm
+#if 0
 	int numteammates;
 	char netname[MAX_NETNAME];
 	// cyr{
@@ -346,7 +344,7 @@ void BotTeamAI(bot_state_t *bs) {
 		for (i = 0; i < MAX_BALLOONS; i++) {
 			if (lastballoonstate[i] != level.balloonState[i]) {
 				lastballoonstate[i] = level.balloonState[i];
-				bs->teamgiveorders_time = FloatTime(); // orders für "balloon attacked" überspringen wenns geht
+				bs->teamgiveorders_time = FloatTime(); // orders fuer "balloon attacked" ueberspringen wenns geht
 			}
 		}
 
@@ -360,5 +358,5 @@ void BotTeamAI(bot_state_t *bs) {
 	}
 		// cyr}
 	}
-}
 #endif
+}

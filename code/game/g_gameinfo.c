@@ -152,7 +152,7 @@ G_GetArenaInfoByNumber
 */
 const char *G_GetArenaInfoByNumber(int num) {
 	int n;
-	char *value;
+	const char *value;
 
 	if ((num < 0) || (num >= g_numArenas)) {
 		G_Printf(S_COLOR_RED "Invalid arena number: %d\n", num);
@@ -183,7 +183,7 @@ void G_InitGameinfo(void) {
 //
 
 typedef struct {
-	char *name;
+	const char *name;
 	int bit;
 } g_gametypeBitmap_s;
 
@@ -204,7 +204,7 @@ static int GametypeBits(const char *string) {
 	int i;
 
 	bits = 0;
-	p = (char *)string;
+	p = (const char *)string;
 	while (qtrue) {
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {

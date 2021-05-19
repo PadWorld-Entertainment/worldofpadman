@@ -164,11 +164,11 @@ static void UpdateIPBans(void) {
 G_FilterPacket
 =================
 */
-qboolean G_FilterPacket(char *from) {
+qboolean G_FilterPacket(const char *from) {
 	int i;
 	unsigned in;
 	byte m[4];
-	char *p;
+	const char *p;
 
 	i = 0;
 	p = from;
@@ -183,7 +183,7 @@ qboolean G_FilterPacket(char *from) {
 		i++, p++;
 	}
 
-	in = *(unsigned *)m;
+	in = *(const unsigned *)m;
 
 	for (i = 0; i < numIPFilters; i++)
 		if ((in & ipFilters[i].mask) == ipFilters[i].compare)

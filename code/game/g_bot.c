@@ -71,7 +71,7 @@ static int G_ParseBotInfos(char *buf, int max, char *infos[]) {
 		if (!token[0]) {
 			break;
 		}
-		if (strcmp(token, "{")) {
+		if (strcmp(token, "{") != 0) {
 			Com_Printf("Missing { in info file\n");
 			break;
 		}
@@ -449,14 +449,14 @@ G_AddBot
 */
 static void G_AddBot(const char *name, float skill, const char *team, int delay, char *altname) {
 	int clientNum;
-	char *botinfo;
+	const char *botinfo;
 	gentity_t *bot;
-	char *key;
-	char *s;
-	char *botname;
-	char *model;
-	char *headmodel;
-	char *logo;
+	const char *key;
+	const char *s;
+	const char *botname;
+	const char *model;
+	const char *headmodel;
+	const char *logo;
 	char userinfo[MAX_INFO_STRING];
 
 	// get the botinfo from bots.txt
@@ -724,35 +724,34 @@ G_SpawnBots
 ===============
 */
 static void G_SpawnBots( char *botList, int baseDelay ) {
-	char		*bot;
-	char		*p;
-	float		skill;
-	int			delay;
-	char		bots[MAX_INFO_VALUE];
+	const char *bot;
+	char *p;
+	float skill;
+	int delay;
+	char bots[MAX_INFO_VALUE];
 
 	podium1 = NULL;
 	podium2 = NULL;
 	podium3 = NULL;
 
-	skill = trap_Cvar_VariableValue( "g_spSkill" );
-	if( skill < 1 ) {
-		trap_Cvar_Set( "g_spSkill", "1" );
+	skill = trap_Cvar_VariableValue("g_spSkill");
+	if (skill < 1) {
+		trap_Cvar_Set("g_spSkill", "1");
 		skill = 1;
-	}
-	else if ( skill > 5 ) {
-		trap_Cvar_Set( "g_spSkill", "5" );
+	} else if (skill > 5) {
+		trap_Cvar_Set("g_spSkill", "5");
 		skill = 5;
 	}
 
-	Q_strncpyz( bots, botList, sizeof(bots) );
+	Q_strncpyz(bots, botList, sizeof(bots));
 	p = &bots[0];
 	delay = baseDelay;
-	while( *p ) {
-		//skip spaces
-		while( *p && *p == ' ' ) {
+	while (*p) {
+		// skip spaces
+		while (*p && *p == ' ') {
 			p++;
 		}
-		if( !p ) {
+		if (!p) {
 			break;
 		}
 
@@ -760,16 +759,16 @@ static void G_SpawnBots( char *botList, int baseDelay ) {
 		bot = p;
 
 		// skip until space of null
-		while( *p && *p != ' ' ) {
+		while (*p && *p != ' ') {
 			p++;
 		}
-		if( *p ) {
+		if (*p) {
 			*p++ = 0;
 		}
 
 		// we must add the bot this way, calling G_AddBot directly at this stage
 		// does "Bad Things"
-		trap_SendConsoleCommand( EXEC_INSERT, va("addbot %s %f free %i\n", bot, skill, delay) );
+		trap_SendConsoleCommand(EXEC_INSERT, va("addbot %s %f free %i\n", bot, skill, delay));
 
 		delay += BOT_BEGIN_DELAY_INCREMENT;
 	}
@@ -814,7 +813,7 @@ void G_LoadBots(void) {
 	int numdirs;
 	char filename[128];
 	char dirlist[1024];
-	char *dirptr;
+	const char *dirptr;
 	int i;
 	int dirlen;
 
@@ -834,7 +833,7 @@ void G_LoadBots(void) {
 	}
 
 	// get all bots from .bot files
-	numdirs = trap_FS_GetFileList("scripts", ".bot", dirlist, 1024);
+	numdirs = trap_FS_GetFileList("scripts", ".bot", dirlist, sizeof(dirlist));
 	dirptr = dirlist;
 	for (i = 0; i < numdirs; i++, dirptr += dirlen + 1) {
 		dirlen = strlen(dirptr);
@@ -850,7 +849,7 @@ void G_LoadBots(void) {
 G_GetBotInfoByNumber
 ===============
 */
-char *G_GetBotInfoByNumber(int num) {
+const char *G_GetBotInfoByNumber(int num) {
 	if (num < 0 || num >= g_numBots) {
 		trap_Print(va(S_COLOR_RED "Invalid bot number: %i\n", num));
 		return NULL;
@@ -863,9 +862,9 @@ char *G_GetBotInfoByNumber(int num) {
 G_GetBotInfoByName
 ===============
 */
-char *G_GetBotInfoByName(const char *name) {
+const char *G_GetBotInfoByName(const char *name) {
 	int n;
-	char *value;
+	const char *value;
 
 	for (n = 0; n < g_numBots; n++) {
 		value = Info_ValueForKey(g_botInfos[n], "name");

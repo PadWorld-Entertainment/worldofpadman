@@ -664,7 +664,7 @@ int TeamCount(int ignoreClientNum, int team);
 int TeamLeader(int team);
 team_t PickTeam(int ignoreClientNum);
 void SetClientViewAngle(gentity_t *ent, vec3_t angle);
-gentity_t *SelectSpawnPoint(vec3_t avoidPoint, vec3_t origin, vec3_t angles, qboolean isbot);
+gentity_t *SelectSpawnPoint(const vec3_t avoidPoint, vec3_t origin, vec3_t angles, qboolean isbot);
 void CopyToBodyQue(gentity_t *ent);
 void respawn(gentity_t *ent);
 void BeginIntermission(void);
@@ -684,7 +684,7 @@ qboolean GetASpawnPosition(vec3_t currentPos, vec3_t output);
 //
 qboolean ConsoleCommand(void);
 void G_ProcessIPBans(void);
-qboolean G_FilterPacket(char *from);
+qboolean G_FilterPacket(const char *from);
 int convertGTStringToGTNumber(char *argStr);
 
 //
@@ -783,8 +783,8 @@ qboolean CantDamageTeamitem(gentity_t *target, gentity_t *attacker);
 // g_bot.c
 //
 void G_LoadBots(void);
-char *G_GetBotInfoByNumber(int num);
-char *G_GetBotInfoByName(const char *name);
+const char *G_GetBotInfoByNumber(int num);
+const char *G_GetBotInfoByName(const char *name);
 void G_CheckBotSpawn(void);
 void G_RemoveQueuedBotBegin(int clientNum);
 qboolean G_BotConnect(int clientNum, qboolean restart);
@@ -1092,7 +1092,7 @@ int trap_BotPredictVisiblePosition(vec3_t origin, int areanum, void /* struct bo
 int trap_BotAllocMoveState(void);
 void trap_BotFreeMoveState(int handle);
 void trap_BotInitMoveState(int handle, void /* struct bot_initmove_s */ *initmove);
-void trap_BotAddAvoidSpot(int movestate, vec3_t origin, float radius, int type);
+void trap_BotAddAvoidSpot(int movestate, const vec3_t origin, float radius, int type);
 
 int trap_BotChooseBestFightWeapon(int weaponstate, int *inventory);
 void trap_BotGetWeaponInfo(int weaponstate, int weapon, void /* struct weaponinfo_s */ *weaponinfo);

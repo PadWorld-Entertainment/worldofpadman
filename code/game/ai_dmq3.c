@@ -3995,7 +3995,7 @@ int BotAIPredictObstacles(bot_state_t *bs, bot_goal_t *goal) {
 BotCheckConsoleMessages
 ==================
 */
-void BotCheckConsoleMessages(bot_state_t *bs) {
+static void BotCheckConsoleMessages(bot_state_t *bs) {
 	int handle;
 	bot_consolemessage_t m;
 
@@ -4340,8 +4340,9 @@ void BotDeathmatchAI(bot_state_t *bs, float thinktime) {
 	// check the console messages
 	BotCheckConsoleMessages(bs);
 
-	// teamleader stuff, disabled atm
-	// if (!BotIntermission(bs) && !BotIsObserver(bs)) {	BotTeamAI(bs); }
+	if (!BotIntermission(bs) && !BotIsObserver(bs)) {
+		BotTeamAI(bs);
+	}
 
 	// if the bot has no ai node
 	if (!bs->ainode) {
@@ -4381,7 +4382,7 @@ void BotDeathmatchAI(bot_state_t *bs, float thinktime) {
 }
 
 void BotSelectLogo(bot_state_t *bs) {
-	char *logostring;
+	const char *logostring;
 	char buf[300];
 	char userinfo[MAX_INFO_STRING];
 

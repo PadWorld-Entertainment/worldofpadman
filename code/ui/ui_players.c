@@ -1302,7 +1302,7 @@ void UI_PlayerInfo_SetModel(playerInfo_t *pi, const char *model) {
 UI_PlayerInfo_SetInfo
 ===============
 */
-void UI_PlayerInfo_SetInfo(playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles,
+void UI_PlayerInfo_SetInfo(playerInfo_t *pi, int legsAnim, int torsoAnim, const vec3_t viewAngles, const vec3_t moveAngles,
 						   weapon_t weaponNumber, qboolean chat) {
 	int currentAnim;
 	weapon_t weaponNum;

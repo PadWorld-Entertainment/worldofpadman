@@ -201,7 +201,7 @@ static void UI_VoiceChatMenu_sendTargetEvent(void *ptr, int event) {
 
 static void UI_VoiceChatMenu_InitClients(void) {
 	int i;
-	char *name;
+	const char *name;
 	int index;
 	char info[MAX_INFO_STRING];
 	char localClientName[32]; // used to identify the local client.. there has to be a better way

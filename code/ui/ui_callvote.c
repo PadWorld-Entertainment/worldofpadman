@@ -405,7 +405,7 @@ static void UI_CallVote_CVType(void *unused, int event) {
 		ptr = ArrayForListStrs;
 
 		for (i = 0; i < numPlayers; i++) {
-			char *tmpcp;
+			const char *tmpcp;
 			trap_GetConfigString((CS_PLAYERS + i), info, sizeof(info));
 
 			tmpcp = Info_ValueForKey(info, "n");

@@ -922,8 +922,8 @@ static int AAS_ClientMovementPrediction(aas_clientmove_t *move, int entnum, cons
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int AAS_PredictClientMovement(struct aas_clientmove_s *move, int entnum, vec3_t origin, int presencetype, int onground,
-							  vec3_t velocity, vec3_t cmdmove, int cmdframes, int maxframes, float frametime,
+int AAS_PredictClientMovement(struct aas_clientmove_s *move, int entnum, const vec3_t origin, int presencetype, int onground,
+							  const vec3_t velocity, const vec3_t cmdmove, int cmdframes, int maxframes, float frametime,
 							  int stopevent, int stopareanum, int visualize) {
 	const vec3_t mins = {-4, -4, -4};
 	const vec3_t maxs = {4, 4, 4};
@@ -937,9 +937,9 @@ int AAS_PredictClientMovement(struct aas_clientmove_s *move, int entnum, vec3_t 
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int AAS_ClientMovementHitBBox(struct aas_clientmove_s *move, int entnum, vec3_t origin, int presencetype, int onground,
-							  vec3_t velocity, vec3_t cmdmove, int cmdframes, int maxframes, float frametime,
-							  vec3_t mins, vec3_t maxs, int visualize) {
+int AAS_ClientMovementHitBBox(struct aas_clientmove_s *move, int entnum, const vec3_t origin, int presencetype, int onground,
+							  const vec3_t velocity, const vec3_t cmdmove, int cmdframes, int maxframes, float frametime,
+							  const vec3_t mins, const vec3_t maxs, int visualize) {
 	return AAS_ClientMovementPrediction(move, entnum, origin, presencetype, onground, velocity, cmdmove, cmdframes,
 										maxframes, frametime, SE_HITBOUNDINGBOX, 0, mins, maxs, visualize);
 } // end of the function AAS_ClientMovementHitBBox

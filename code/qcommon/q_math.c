@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "q_shared.h"
 
-vec3_t vec3_origin = {0, 0, 0};
+const vec3_t vec3_origin = {0, 0, 0};
 vec3_t axisDefault[3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
 
 vec4_t colorBlack = {0, 0, 0, 1};

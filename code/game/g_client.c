@@ -240,7 +240,7 @@ SelectRandomFurthestSpawnPoint
 Chooses a player start, deathmatch start, etc
 ============
 */
-gentity_t *SelectRandomFurthestSpawnPoint(vec3_t avoidPoint, vec3_t origin, vec3_t angles, qboolean isbot) {
+static gentity_t *SelectRandomFurthestSpawnPoint(const vec3_t avoidPoint, vec3_t origin, vec3_t angles, qboolean isbot) {
 	gentity_t *spot;
 	vec3_t delta;
 	float squareddist;
@@ -312,7 +312,7 @@ gentity_t *SelectRandomFurthestSpawnPoint(vec3_t avoidPoint, vec3_t origin, vec3
 					continue;
 
 				VectorCopy(tmpent.s.origin, origin);
-				//				origin[2] += 9;//sind jetzt vor dem überprüfen
+				//				origin[2] += 9;//sind jetzt vor dem ueberpruefen
 				VectorCopy(spot->s.angles, angles);
 				return spot;
 			}
@@ -346,36 +346,36 @@ SelectSpawnPoint
 Chooses a player start, deathmatch start, etc
 ============
 */
-gentity_t *SelectSpawnPoint(vec3_t avoidPoint, vec3_t origin, vec3_t angles, qboolean isbot) {
+gentity_t *SelectSpawnPoint(const vec3_t avoidPoint, vec3_t origin, vec3_t angles, qboolean isbot) {
+#if 1
 	return SelectRandomFurthestSpawnPoint(avoidPoint, origin, angles, isbot);
+#else
+	gentity_t *spot;
+	gentity_t *nearestSpot;
 
-	/*
-	gentity_t	*spot;
-	gentity_t	*nearestSpot;
+	nearestSpot = SelectNearestDeathmatchSpawnPoint(avoidPoint);
 
-	nearestSpot = SelectNearestDeathmatchSpawnPoint( avoidPoint );
-
-	spot = SelectRandomDeathmatchSpawnPoint ( );
-	if ( spot == nearestSpot ) {
+	spot = SelectRandomDeathmatchSpawnPoint();
+	if (spot == nearestSpot) {
 		// roll again if it would be real close to point of death
-		spot = SelectRandomDeathmatchSpawnPoint ( );
-		if ( spot == nearestSpot ) {
+		spot = SelectRandomDeathmatchSpawnPoint();
+		if (spot == nearestSpot) {
 			// last try
-			spot = SelectRandomDeathmatchSpawnPoint ( );
+			spot = SelectRandomDeathmatchSpawnPoint();
 		}
 	}
 
 	// find a single player start spot
 	if (!spot) {
-		G_Error( "Couldn't find a spawn point" );
+		G_Error("Couldn't find a spawn point");
 	}
 
-	VectorCopy (spot->s.origin, origin);
+	VectorCopy(spot->s.origin, origin);
 	origin[2] += 9;
-	VectorCopy (spot->s.angles, angles);
+	VectorCopy(spot->s.angles, angles);
 
 	return spot;
-	*/
+#endif
 }
 
 /*
@@ -386,7 +386,7 @@ Try to find a spawn point marked 'initial', otherwise
 use normal spawn selection.
 ============
 */
-gentity_t *SelectInitialSpawnPoint(vec3_t origin, vec3_t angles, qboolean isbot) {
+static gentity_t *SelectInitialSpawnPoint(vec3_t origin, vec3_t angles, qboolean isbot) {
 	gentity_t *spot;
 
 	spot = NULL;
@@ -770,7 +770,7 @@ if desired.
 void ClientUserinfoChanged(int clientNum) {
 	gentity_t *ent;
 	int teamLeader, team, health;
-	char *s;
+	const char *s;
 	char model[MAX_QPATH];
 	char headModel[MAX_QPATH];
 	char oldname[MAX_STRING_CHARS];
@@ -903,8 +903,8 @@ restarts.
 ============
 */
 char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
-	char *value;
-	//	char		*areabits;
+	const char *value;
+	//	const char *areabits;
 	gclient_t *client;
 	char userinfo[MAX_INFO_STRING];
 	gentity_t *ent;

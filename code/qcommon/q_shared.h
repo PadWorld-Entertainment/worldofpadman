@@ -452,7 +452,7 @@ extern vec4_t spraycolors[];
 
 struct cplane_s;
 
-extern vec3_t vec3_origin;
+extern const vec3_t vec3_origin;
 extern vec3_t axisDefault[3];
 
 #define nanmask (255 << 23)
@@ -876,7 +876,7 @@ void Com_TruncateLongString(char *buffer, const char *s);
 //
 // key / value info strings
 //
-char *Info_ValueForKey(const char *s, const char *key);
+const char *Info_ValueForKey(const char *s, const char *key);
 void Info_RemoveKey(char *s, const char *key);
 void Info_RemoveKey_Big(char *s, const char *key);
 void Info_SetValueForKey(char *s, const char *key, const char *value);

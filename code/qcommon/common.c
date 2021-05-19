@@ -741,8 +741,8 @@ all big things are allocated on the hunk.
 #define MINFRAGMENT 64
 
 typedef struct zonedebug_s {
-	char *label;
-	char *file;
+	const char *label;
+	const char *file;
 	int line;
 	int allocSize;
 } zonedebug_t;
@@ -1219,8 +1219,8 @@ typedef struct hunkblock_s {
 	int size;
 	byte printed;
 	struct hunkblock_s *next;
-	char *label;
-	char *file;
+	const char *label;
+	const char *file;
 	int line;
 } hunkblock_t;
 
@@ -1386,7 +1386,7 @@ void Com_InitSmallZoneMemory(void) {
 }
 
 void Com_InitZoneMemory(void) {
-	cvar_t *cv;
+	const cvar_t *cv;
 
 	// Please note: com_zoneMegs can only be set on the command line, and
 	// not in q3config.cfg or Com_StartupVariable, as they haven't been
@@ -1498,7 +1498,7 @@ Com_InitHunkMemory
 static void Com_InitHunkMemory(void) {
 	cvar_t *cv;
 	int nMinAlloc;
-	char *pMsg = NULL;
+	const char *pMsg = NULL;
 
 	// make sure the file system has allocated and "not" freed any temp blocks
 	// this allows the config and product id files ( journal files too ) to be loaded
@@ -1608,7 +1608,6 @@ The server calls this before shutting down or loading a new map
 =================
 */
 void Hunk_Clear(void) {
-
 #ifndef DEDICATED
 	CL_ShutdownCGame();
 	CL_ShutdownUI();
@@ -2823,7 +2822,6 @@ Com_Frame
 =================
 */
 void Com_Frame(void) {
-
 	int msec, minMsec;
 	int timeVal, timeValSV;
 	static int lastTime = 0, bias = 0;

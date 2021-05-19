@@ -253,8 +253,8 @@ typedef struct aas_export_s {
 	// be_aas_move.c
 	//--------------------------------------------
 	int (*AAS_Swimming)(vec3_t origin);
-	int (*AAS_PredictClientMovement)(struct aas_clientmove_s *move, int entnum, vec3_t origin, int presencetype,
-									 int onground, vec3_t velocity, vec3_t cmdmove, int cmdframes, int maxframes,
+	int (*AAS_PredictClientMovement)(struct aas_clientmove_s *move, int entnum, const vec3_t origin, int presencetype,
+									 int onground, const vec3_t velocity, const vec3_t cmdmove, int cmdframes, int maxframes,
 									 float frametime, int stopevent, int stopareanum, int visualize);
 } aas_export_t;
 

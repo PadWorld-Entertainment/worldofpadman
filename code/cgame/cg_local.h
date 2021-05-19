@@ -1546,7 +1546,7 @@ void CG_AddLocalEntities(void);
 //
 localEntity_t *CG_SmokePuff(const vec3_t p, const vec3_t vel, float radius, float r, float g, float b, float a,
 							float duration, int startTime, int fadeInTime, int leFlags, qhandle_t hShader);
-void CG_GenerateParticles(qhandle_t model, qhandle_t shader, vec3_t pos, float randomPos, vec3_t speed, float randomDir,
+void CG_GenerateParticles(qhandle_t model, qhandle_t shader, const vec3_t pos, float randomPos, const vec3_t speed, float randomDir,
 						  float randomSpeed, int numParticles, int owner, int time, int life, int randomLife, int size,
 						  int randomSize, int addSize, int randomAddSize, int flags, int renderfx);
 void CG_BubbleTrail(vec3_t start, vec3_t end, float spacing);

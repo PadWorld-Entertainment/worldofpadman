@@ -129,7 +129,7 @@ and whenever the server updates any serverinfo flagged cvars
 */
 void CG_ParseServerinfo(void) {
 	const char *info;
-	char *mapname;
+	const char *mapname;
 
 	info = CG_ConfigString(CS_SERVERINFO);
 	cgs.gametype = atoi(Info_ValueForKey(info, "g_gametype"));

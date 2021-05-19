@@ -270,10 +270,11 @@ static void Bitmap_Draw(menubitmap_s *b) {
 				tempcolor[0] = b->focuscolor[0];
 				tempcolor[1] = b->focuscolor[1];
 				tempcolor[2] = b->focuscolor[2];
+				tempcolor[3] = 0;
 				Vector4Copy(tempcolor, color);
 			} else
 				Vector4Copy(pulse_color, color);
-			color[3] = 0.5 + 0.5 * sin(uis.realtime / PULSE_DIVISOR); // int division, is this on purpose?
+			color[3] = 0.5f + 0.5f * sin(uis.realtime / PULSE_DIVISOR); // int division, is this on purpose?
 
 			trap_R_SetColor(color);
 			UI_DrawHandlePic(x, y, w, h, b->focusshader);
