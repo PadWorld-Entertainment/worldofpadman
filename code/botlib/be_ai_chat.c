@@ -180,20 +180,20 @@ typedef struct {
 	char chatname[MAX_QPATH];
 } bot_ichatdata_t;
 
-bot_ichatdata_t *ichatdata[MAX_CLIENTS];
+static bot_ichatdata_t *ichatdata[MAX_CLIENTS];
 
-bot_chatstate_t *botchatstates[MAX_CLIENTS + 1];
+static bot_chatstate_t *botchatstates[MAX_CLIENTS + 1];
 // console message heap
-bot_consolemessage_t *consolemessageheap = NULL;
-bot_consolemessage_t *freeconsolemessages = NULL;
+static bot_consolemessage_t *consolemessageheap = NULL;
+static bot_consolemessage_t *freeconsolemessages = NULL;
 // list with match strings
-bot_matchtemplate_t *matchtemplates = NULL;
+static bot_matchtemplate_t *matchtemplates = NULL;
 // list with synonyms
-bot_synonymlist_t *synonyms = NULL;
+static bot_synonymlist_t *synonyms = NULL;
 // list with random strings
-bot_randomlist_t *randomstrings = NULL;
+static bot_randomlist_t *randomstrings = NULL;
 // reply chats
-bot_replychat_t *replychats = NULL;
+static bot_replychat_t *replychats = NULL;
 
 //========================================================================
 //
@@ -568,7 +568,7 @@ void BotDumpSynonymList(bot_synonymlist_t *synlist) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-bot_synonymlist_t *BotLoadSynonyms(const char *filename) {
+static bot_synonymlist_t *BotLoadSynonyms(const char *filename) {
 	int pass, size, contextlevel, numsynonyms;
 	unsigned long int context, contextstack[32];
 	char *ptr = NULL;
@@ -900,7 +900,7 @@ void BotDumpRandomStringList(bot_randomlist_t *randomlist) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-bot_randomlist_t *BotLoadRandomStrings(const char *filename) {
+static bot_randomlist_t *BotLoadRandomStrings(const char *filename) {
 	int pass, size;
 	char *ptr = NULL, chatmessagestring[MAX_MESSAGE_SIZE];
 	source_t *source;
@@ -1195,7 +1195,7 @@ void BotFreeMatchTemplates(bot_matchtemplate_t *mt) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-bot_matchtemplate_t *BotLoadMatchTemplates(const char *matchfile) {
+static bot_matchtemplate_t *BotLoadMatchTemplates(const char *matchfile) {
 	source_t *source;
 	token_t token;
 	bot_matchtemplate_t *matchtemplate, *matches, *lastmatch;
@@ -2773,22 +2773,25 @@ int BotSetupChatAI(void) {
 #ifdef DEBUG
 	int starttime = Sys_MilliSeconds();
 #endif // DEBUG
-	/*
-		file = LibVarString("synfile", "syn.c");
-		synonyms = BotLoadSynonyms(file);
-		file = LibVarString("rndfile", "rnd.c");
-		randomstrings = BotLoadRandomStrings(file);
-		file = LibVarString("matchfile", "match.c");
-		matchtemplates = BotLoadMatchTemplates(file);
-		//
-		if (!LibVarValue("nochat", "0"))
-		{
-			file = LibVarString("rchatfile", "rchat.c");
-			replychats = BotLoadReplyChat(file);
-		} //end if
-	*/
+
+#if 0
+	file = LibVarString("synfile", "syn.c");
+	synonyms = BotLoadSynonyms(file);
+
+	file = LibVarString("rndfile", "rnd.c");
+	randomstrings = BotLoadRandomStrings(file);
+
 	file = LibVarString("matchfile", "match.c");
 	matchtemplates = BotLoadMatchTemplates(file);
+
+	if (!LibVarValue("nochat", "0")) {
+		file = LibVarString("rchatfile", "rchat.c");
+		replychats = BotLoadReplyChat(file);
+	}
+#else
+	file = LibVarString("matchfile", "match.c");
+	matchtemplates = BotLoadMatchTemplates(file);
+#endif
 
 	InitConsoleMessageHeap();
 
