@@ -1607,14 +1607,14 @@ static void CartridgePickUpAbleForOwner(gentity_t *ent) {
 
 /*
 #######################
-Cmd_dropCartridge_f
+Cmd_DropCartridge_f
 #######################
 */
 // FIXME: Rename, since it also works for flags!
 // TODO: This entire code is almost the same as Drop_Item(), except for
 //       higher velocity and no random z
 // TODO: Enforce a cooldown time
-void Cmd_dropCartridge_f(gentity_t *ent) {
+void Cmd_DropCartridge_f(gentity_t *ent) {
 	gentity_t *tmpGE = NULL;
 	vec3_t velocity, angles;
 
@@ -1624,7 +1624,6 @@ void Cmd_dropCartridge_f(gentity_t *ent) {
 
 	// Spray your Color Team
 	if (g_gametype.integer == GT_SPRAY) {
-
 		if (ent->client->ps.ammo[WP_SPRAYPISTOL] <= 0) {
 			return;
 		}
@@ -1791,7 +1790,7 @@ void Cmd_EditBotInv_f(gentity_t *ent) {
 	gentity_t *spec_ent;
 
 	if (!bot_developer.integer) {
-		trap_SendServerCommand(ent - g_entities, va("print \"this cmd is only for bot testing\n\""));
+		trap_SendServerCommand(ent - g_entities, "print \"this cmd is only for bot testing\n\"");
 		return;
 	}
 
@@ -1799,7 +1798,7 @@ void Cmd_EditBotInv_f(gentity_t *ent) {
 
 	if (spec_ent != ent) {
 		if (!(ent->r.svFlags & SVF_BOT)) {
-			trap_SendServerCommand(ent - g_entities, va("print \"error: target is human \n\""));
+			trap_SendServerCommand(ent - g_entities, "print \"error: target is human \n\"");
 			return;
 		}
 
@@ -1906,7 +1905,7 @@ void ClientCommand(int clientNum) {
 		Cmd_TeamReady_f(ent);
 	else if (Q_stricmp(cmd, "dropCartridge") == 0 || Q_stricmp(cmd, "sv_dropCartridge") == 0 ||
 			 Q_stricmp(cmd, "dropTeamItem") == 0)
-		Cmd_dropCartridge_f(ent);
+		Cmd_DropCartridge_f(ent);
 	else if (Q_stricmp(cmd, "editbotinv") == 0)
 		Cmd_EditBotInv_f(ent);
 	else
