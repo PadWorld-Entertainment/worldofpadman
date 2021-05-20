@@ -695,7 +695,7 @@ void FireWeapon(gentity_t *ent);
 //
 // g_cmds.c
 //
-void DeathmatchScoreboardMessage(gentity_t *ent);
+void DeathmatchScoreboardMessage(const gentity_t *ent);
 
 //
 // g_main.c

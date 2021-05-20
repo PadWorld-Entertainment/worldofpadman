@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #include "g_local.h"
 #include "match.h"
+#include "inv.h"
 
 extern vmCvar_t bot_developer;
 
@@ -31,7 +32,7 @@ DeathmatchScoreboardMessage
 
 ==================
 */
-void DeathmatchScoreboardMessage(gentity_t *ent) {
+void DeathmatchScoreboardMessage(const gentity_t *ent) {
 	char entry[1024];
 	char string[1000];
 	int stringlength;
@@ -99,7 +100,7 @@ void Cmd_Score_f(gentity_t *ent) {
 CheatsOk
 ==================
 */
-qboolean CheatsOk(gentity_t *ent) {
+static qboolean CheatsOk(const gentity_t *ent) {
 	if (!g_cheats.integer) {
 		trap_SendServerCommand(ent - g_entities, va("print \"Cheats are not enabled on this server.\n\""));
 		return qfalse;
@@ -150,13 +151,13 @@ SanitizeString
 Remove case and control characters
 ==================
 */
-void SanitizeString(char *in, char *out) {
+static void SanitizeString(const char *in, char *out) {
 	while (*in) {
 		if (*in == 27) {
 			in += 2; // skip color code
 			continue;
 		}
-		if (*in < 32) {
+		if (*in < ' ') {
 			in++;
 			continue;
 		}
@@ -174,7 +175,7 @@ Returns a player number for either a number or name string
 Returns -1 if invalid
 ==================
 */
-int ClientNumberFromString(gentity_t *to, char *s) {
+static int ClientNumberFromString(const gentity_t *to, const char *s) {
 	gclient_t *cl;
 	int idnum;
 	char s2[MAX_STRING_CHARS];
@@ -219,7 +220,7 @@ Cmd_Give_f
 Give items to a client
 ==================
 */
-void Cmd_Give_f(gentity_t *ent) {
+static void Cmd_Give_f(gentity_t *ent) {
 	char *name;
 	gitem_t *it;
 	int i;
@@ -305,13 +306,13 @@ void Cmd_Give_f(gentity_t *ent) {
 	}
 
 	if (Q_stricmp(name, "bambam") == 0) {
-		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 28; // MODELINDEX_BAMBAM;
+		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_BAMBAM;
 		ent->client->ps.stats[STAT_HOLDABLEVAR] = 5;
 		return;
 	}
 
 	if (Q_stricmp(name, "boomie") == 0) {
-		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 29; // MODELINDEX_BAMBAM;
+		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_BOOMIE;
 		ent->client->ps.stats[STAT_HOLDABLEVAR] = 5;
 		return;
 	}
@@ -1732,19 +1733,19 @@ void EditPlayerInventory(gentity_t *ent, int arg_offset) {
 		ent->client->ps.powerups[PW_BERSERKER] = level.time + 30000;
 	} else if (Q_stricmp(itstr, "pu_floater") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
-		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 26; // MODELINDEX_FLOATER
+		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_FLOATER;
 		ent->client->ps.stats[STAT_HOLDABLEVAR] = level.time + 1000 * atoi(arg);
 	} else if (Q_stricmp(itstr, "pu_killerducks") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
-		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 27; // MODELINDEX_KILLERDUCKS
+		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_KILLERDUCKS;
 		ent->client->ps.stats[STAT_HOLDABLEVAR] = 5;
 	} else if (Q_stricmp(itstr, "pu_bambam") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
-		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 28; // MODELINDEX_KILLERDUCKS
+		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_BAMBAM;
 		ent->client->ps.stats[STAT_HOLDABLEVAR] = 3;
 	} else if (Q_stricmp(itstr, "pu_boomie") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
-		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 29; // MODELINDEX_KILLERDUCKS
+		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_BOOMIE;
 		ent->client->ps.stats[STAT_HOLDABLEVAR] = 3;
 	}
 	// give weapon
