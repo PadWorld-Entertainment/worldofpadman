@@ -526,7 +526,7 @@ void Svcmd_ForceTeam_f(void) {
 }
 
 static void Svcmd_SetGameType_f(void) {
-	char *argStr = ConcatArgs(1);
+	const char *argStr = ConcatArgs(1);
 	int gt = convertGTStringToGTNumber(argStr);
 
 	if (gt != -1) {

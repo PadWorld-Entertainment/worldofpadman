@@ -105,20 +105,20 @@ qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, char *pickupName)
 		} else if (otherEnt->s.eType == ET_ITEM && otherEnt->item->giType == IT_WEAPON) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if ((distSqr < Square(64)) && !(otherEnt->flags & FL_DROPPED_ITEM)) {
-				trap_SendServerCommand((pEnt - g_entities), va("cp \"Too close to weapon spawnpoint\""));
+				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to weapon spawnpoint\"");
 				return qfalse;
 			}
 		} else if (otherEnt->s.eType == ET_STATION) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), va("cp \"Too close to health station\""));
+				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to health station\"");
 				return qfalse;
 			}
 		} else if (otherEnt->s.eType == ET_ITEM &&
 				   (otherEnt->item->giTag == PW_REDFLAG || otherEnt->item->giTag == PW_BLUEFLAG)) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(256)) {
-				trap_SendServerCommand((pEnt - g_entities), va("cp \"Too close to lolly base\""));
+				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to lolly base\"");
 				return qfalse;
 			}
 		} else if (otherEnt->s.eType == ET_PUSH_TRIGGER) {
@@ -130,27 +130,27 @@ qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, char *pickupName)
 			VectorScale(origin, 0.5, origin);
 			distSqr = DistanceSquared(origin, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), va("cp \"Too close to jump pad\""));
+				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to jump pad\"");
 				return qfalse;
 			}
 		} else if (!Q_stricmp(otherEnt->classname, "target_push")) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), va("cp \"Too close to jump pad\""));
+				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to jump pad\"");
 				return qfalse;
 			}
 		} else if (!Q_stricmp(otherEnt->classname, "target_position") ||
 				   !Q_stricmp(otherEnt->classname, "misc_teleporter_dest")) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), va("cp \"Too close to teleporter exit\""));
+				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to teleporter exit\"");
 				return qfalse;
 			}
 		} else if (!Q_stricmp(otherEnt->classname, "info_player_start") ||
 				   !Q_stricmp(otherEnt->classname, "info_player_deathmatch")) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), va("cp \"Too close to spawn point\""));
+				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to spawn point\"");
 				return qfalse;
 			}
 		} else if (!Q_stricmp(otherEnt->classname, "trigger_balloonzone")) {
@@ -162,7 +162,7 @@ qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, char *pickupName)
 			VectorScale(origin, 0.5, origin);
 			distSqr = DistanceSquared(origin, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), va("cp \"Too close to balloon\""));
+				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to balloon\"");
 				return qfalse;
 			}
 		}

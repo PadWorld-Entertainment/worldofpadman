@@ -1261,30 +1261,32 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 	s->generic1 = ps->generic1;
 }
 
-int convertGTStringToGTNumber(char *argStr) {
+int convertGTStringToGTNumber(const char *argStr) {
 	int gt = -1;
+	char buf[512];
+	Q_strncpyz(buf, argStr, sizeof(buf));
+	Q_strupr(buf);
 
-	Q_strlwr(argStr);
-
-	if (strstr(argStr, "syc") || (strstr(argStr, "spray") && strstr(argStr, "color"))) {
-		if (strstr(argStr, "tp") || strstr(argStr, "team"))
+	if (strstr(buf, GAMETYPE_NAME_SHORT(GT_SPRAYFFA)) || (strstr(buf, "SPRAY") && strstr(buf, "COLOR"))) {
+		if (strstr(buf, "TP") || strstr(buf, "TEAM")) {
 			gt = GT_SPRAY;
-		else
+		} else {
 			gt = GT_SPRAYFFA;
-	} else if (strstr(argStr, "balloon") || strstr(argStr, "bb"))
+		}
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_BALLOON)) || strstr(buf, "BALLOON")) {
 		gt = GT_BALLOON;
-	else if (strstr(argStr, "lps") || (strstr(argStr, "last") && strstr(argStr, "standing")))
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_LPS)) || (strstr(buf, "LAST") && strstr(buf, "STANDING"))) {
 		gt = GT_LPS;
-	else if (strstr(argStr, "ctl") ||
-			 (strstr(argStr, "capture") && (strstr(argStr, "lolly") || strstr(argStr, "lolli" /*pop"*/))))
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_CTF)) ||
+			   (strstr(buf, "CAPTURE") && (strstr(buf, "LOLLY") || strstr(buf, "LOLLI" /*pop"*/)))) {
 		gt = GT_CTF;
-	else if (strstr(argStr, "tournament") || strstr(argStr, "tourney"))
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_TOURNAMENT)) || strstr(buf, "TOURNAMENT") || strstr(buf, "TOURNEY")) {
 		gt = GT_TOURNAMENT;
-	else {
-		if (strstr(argStr, "tp") || strstr(argStr, "team") || strstr(argStr, "tdm"))
-			gt = GT_TEAM;
-		else if (strstr(argStr, "ffa") || strstr(argStr, "free") || strstr(argStr, "dm"))
-			gt = GT_FFA;
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_TEAM)) || strstr(buf, "TP") || strstr(buf, "TEAM") ||
+			   strstr(buf, "TDM")) {
+		gt = GT_TEAM;
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_FFA)) || strstr(buf, "FREE") || strstr(buf, "DM")) {
+		gt = GT_FFA;
 	}
 
 	return gt;

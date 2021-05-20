@@ -102,11 +102,11 @@ CheatsOk
 */
 static qboolean CheatsOk(const gentity_t *ent) {
 	if (!g_cheats.integer) {
-		trap_SendServerCommand(ent - g_entities, va("print \"Cheats are not enabled on this server.\n\""));
+		trap_SendServerCommand(ent - g_entities, "print \"Cheats are not enabled on this server.\n\"");
 		return qfalse;
 	}
 	if (ent->health <= 0) {
-		trap_SendServerCommand(ent - g_entities, va("print \"You must be alive to use this command.\n\""));
+		trap_SendServerCommand(ent - g_entities, "print \"You must be alive to use this command.\n\"");
 		return qfalse;
 	}
 	return qtrue;
@@ -117,7 +117,7 @@ static qboolean CheatsOk(const gentity_t *ent) {
 ConcatArgs
 ==================
 */
-char *ConcatArgs(int start) {
+const char *ConcatArgs(int start) {
 	int i, c, tlen;
 	static char line[MAX_STRING_CHARS];
 	int len;
@@ -221,7 +221,7 @@ Give items to a client
 ==================
 */
 static void Cmd_Give_f(gentity_t *ent) {
-	char *name;
+	const char *name;
 	gitem_t *it;
 	int i;
 	qboolean give_all;
@@ -956,7 +956,7 @@ Cmd_Say_f
 ==================
 */
 static void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0) {
-	char *p;
+	const char *p;
 
 	if (trap_Argc() < 2 && !arg0) {
 		return;
@@ -979,7 +979,7 @@ Cmd_Tell_f
 static void Cmd_Tell_f(gentity_t *ent) {
 	int targetNum;
 	gentity_t *target;
-	char *p;
+	const char *p;
 	char arg[MAX_TOKEN_CHARS];
 
 	if (trap_Argc() < 2) {
@@ -1048,7 +1048,7 @@ void Cmd_CallVote_f(gentity_t *ent) {
 	int i;
 	char arg1[MAX_STRING_TOKENS];
 	char arg2[MAX_STRING_TOKENS];
-	char *c;
+	const char *c;
 
 	if (!g_allowVote.integer) {
 		trap_SendServerCommand(ent - g_entities, "print \"Voting not allowed here.\n\"");
@@ -1513,11 +1513,11 @@ void Cmd_SetViewpos_f(gentity_t *ent) {
 	int i;
 
 	if (!g_cheats.integer) {
-		trap_SendServerCommand(ent - g_entities, va("print \"Cheats are not enabled on this server.\n\""));
+		trap_SendServerCommand(ent - g_entities, "print \"Cheats are not enabled on this server.\n\"");
 		return;
 	}
 	if (trap_Argc() != 5) {
-		trap_SendServerCommand(ent - g_entities, va("print \"usage: setviewpos x y z yaw\n\""));
+		trap_SendServerCommand(ent - g_entities, "print \"usage: setviewpos x y z yaw\n\"");
 		return;
 	}
 

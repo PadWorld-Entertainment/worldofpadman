@@ -509,7 +509,7 @@ void BroadcastTeamChange(gclient_t *client, int oldTeam);
 void SetTeam(gentity_t *ent, const char *s);
 void Cmd_FollowCycle_f(gentity_t *ent, int dir);
 void Cmd_DropCartridge_f(gentity_t *ent);
-char *ConcatArgs(int start);
+const char *ConcatArgs(int start);
 void G_Say(gentity_t *ent, gentity_t *target, int mode, const char *chatText);
 
 //
@@ -685,7 +685,7 @@ qboolean GetASpawnPosition(vec3_t currentPos, vec3_t output);
 qboolean ConsoleCommand(void);
 void G_ProcessIPBans(void);
 qboolean G_FilterPacket(const char *from);
-int convertGTStringToGTNumber(char *argStr);
+int convertGTStringToGTNumber(const char *argStr);
 
 //
 // g_weapon.c
