@@ -13,9 +13,9 @@
 #define MSG_WHOISTEAMLAEDER 5	  // who is the team leader
 #define MSG_GETITEM 6			  // get an item
 #define MSG_MAKELOVE 7			  //
-#define MSG_DROPCART 8			  //
-#define MSG_WRONGWALL 9			  //
-#define MSG_CATCHME 10			  //
+#define MSG_DROPCART 8			  // cyr_drop
+#define MSG_WRONGWALL 9			  // cyr_spray
+#define MSG_CATCHME 10			  // cyr_debug
 
 // command sub types
 #define ST_ADDRESSED 1

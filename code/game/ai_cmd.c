@@ -256,7 +256,7 @@ int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 
 		// compare addressee with botname
 		trap_BotMatchVariable(match, ADDRESSEE, addressedto, sizeof(addressedto));
-		ClientName(bs->client, botname, 128);
+		ClientName(bs->client, botname, sizeof(botname));
 
 		// is that me?
 		if (strlen(addressedto) && (stristr(botname, addressedto))) {

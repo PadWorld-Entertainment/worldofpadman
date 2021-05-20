@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "g_local.h"
+#include "match.h"
 
 extern vmCvar_t bot_developer;
 
@@ -862,8 +863,6 @@ static void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const
 	trap_SendServerCommand((other - g_entities), va("say %d %ld \"%s%c%c%s\"", mode, (ent ? (ent - g_entities) : -1),
 													name, Q_COLOR_ESCAPE, color, message));
 }
-
-#define EC "\x19"
 
 void G_Say(gentity_t *ent, gentity_t *target, int mode, const char *chatText) {
 	int j, cid;
