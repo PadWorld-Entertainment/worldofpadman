@@ -309,9 +309,9 @@ typedef struct ai_export_s {
 	void (*BotRemoveConsoleMessage)(int chatstate, int handle);
 	int (*BotNextConsoleMessage)(int chatstate, struct bot_consolemessage_s *cm);
 	int (*BotNumConsoleMessages)(int chatstate);
-	void (*BotInitialChat)(int chatstate, char *type, int mcontext, char *var0, char *var1, char *var2, char *var3,
+	void (*BotInitialChat)(int chatstate, const char *type, int mcontext, char *var0, char *var1, char *var2, char *var3,
 						   char *var4, char *var5, char *var6, char *var7);
-	int (*BotNumInitialChats)(int chatstate, char *type);
+	int (*BotNumInitialChats)(int chatstate, const char *type);
 	int (*BotReplyChat)(int chatstate, char *message, int mcontext, int vcontext, char *var0, char *var1, char *var2,
 						char *var3, char *var4, char *var5, char *var6, char *var7);
 	int (*BotChatLength)(int chatstate);

@@ -532,7 +532,7 @@ void trap_BotInitialChat(int chatstate, const char *type, int mcontext, char *va
 	syscall(BOTLIB_AI_INITIAL_CHAT, chatstate, type, mcontext, var0, var1, var2, var3, var4, var5, var6, var7);
 }
 
-int trap_BotNumInitialChats(int chatstate, char *type) {
+int trap_BotNumInitialChats(int chatstate, const char *type) {
 	return syscall(BOTLIB_AI_NUM_INITIAL_CHATS, chatstate, type);
 }
 

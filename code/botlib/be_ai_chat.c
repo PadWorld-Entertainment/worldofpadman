@@ -2296,7 +2296,7 @@ static const char *BotChooseInitialChatMessage(bot_chatstate_t *cs, const char *
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int BotNumInitialChats(int chatstate, char *type) {
+int BotNumInitialChats(int chatstate, const char *type) {
 	bot_chatstate_t *cs;
 	bot_chattype_t *t;
 
@@ -2321,7 +2321,7 @@ int BotNumInitialChats(int chatstate, char *type) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void BotInitialChat(int chatstate, char *type, int mcontext, char *var0, char *var1, char *var2, char *var3, char *var4,
+void BotInitialChat(int chatstate, const char *type, int mcontext, char *var0, char *var1, char *var2, char *var3, char *var4,
 					char *var5, char *var6, char *var7) {
 	const char *message;
 	int index;

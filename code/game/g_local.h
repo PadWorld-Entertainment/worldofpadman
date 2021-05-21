@@ -1033,7 +1033,7 @@ int trap_BotNextConsoleMessage(int chatstate, void /* struct bot_consolemessage_
 int trap_BotNumConsoleMessages(int chatstate);
 void trap_BotInitialChat(int chatstate, const char *type, int mcontext, char *var0, char *var1, char *var2, char *var3,
 						 char *var4, char *var5, char *var6, char *var7);
-int trap_BotNumInitialChats(int chatstate, char *type);
+int trap_BotNumInitialChats(int chatstate, const char *type);
 int trap_BotReplyChat(int chatstate, char *message, int mcontext, int vcontext, char *var0, char *var1, char *var2,
 					  char *var3, char *var4, char *var5, char *var6, char *var7);
 int trap_BotChatLength(int chatstate);
