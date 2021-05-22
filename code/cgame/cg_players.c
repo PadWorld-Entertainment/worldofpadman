@@ -1910,12 +1910,13 @@ static void CG_PlayerSprites(const centity_t *cent) {
 
 	team = cgs.clientinfo[cent->currentState.clientNum].team;
 
-	// // freezetag
-	// if (CG_FreezeTag() && FT_PlayerIsFrozen(cent)) {
-	//  if (cg.snap->ps.persistant[PERS_TEAM] == team)
-	//   CG_PlayerFloatSprite(cent, cgs.media.freezeIconShader);
-	//  return;
-	// }
+	if (CG_FreezeTag() && FT_PlayerIsFrozen(cent)) {
+		if (cg.snap->ps.persistant[PERS_TEAM] == team) {
+			const qboolean wallhack = cg_icons.integer & ICON_FREEZETAG;
+			CG_PlayerFloatSprite(cent, cgs.media.freezeIconShader, wallhack);
+		}
+		return;
+	}
 
 	if (!(cent->currentState.eFlags & EF_DEAD) && cg.snap->ps.persistant[PERS_TEAM] == team &&
 		cgs.gametype >= GT_TEAM) {

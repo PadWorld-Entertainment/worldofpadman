@@ -67,6 +67,7 @@ GAME OPTIONS MENU
 #define ID_WALLHACKHSTATION 152
 #define ID_WALLHACKSYCTELE 153
 #define ID_LENSFLARE 154
+#define ID_WALLHACKFREEZETAG 15
 
 #define NUM_CROSSHAIRS 12
 
@@ -100,6 +101,7 @@ typedef struct {
 
 	menulist_s glowcolor;
 	menuradiobutton_s whLPS;
+	menuradiobutton_s whFreezeTag;
 	menuradiobutton_s whTeamMates;
 	menuradiobutton_s whBalloons;
 	menuradiobutton_s whHStations;
@@ -138,6 +140,7 @@ static menucommon_s *page2_options[] = {(menucommon_s *)&s_preferences.simpleite
 										(menucommon_s *)&s_preferences.whBalloons,
 										(menucommon_s *)&s_preferences.whHStations,
 										(menucommon_s *)&s_preferences.whSycTele,
+										(menucommon_s *)&s_preferences.whFreezeTag,
 										(menucommon_s *)&s_preferences.lensFlare,
 										NULL};
 
@@ -185,6 +188,7 @@ static void Preferences_SetMenuItems(void) {
 	s_preferences.whLPS.curvalue = (ICON_ARROW & cg_iconsCvarValue);
 	s_preferences.whBalloons.curvalue = (ICON_BALLOON & cg_iconsCvarValue);
 	s_preferences.whTeamMates.curvalue = (ICON_TEAMMATE & cg_iconsCvarValue);
+	s_preferences.whFreezeTag.curvalue = (ICON_FREEZETAG & cg_iconsCvarValue);
 	s_preferences.whHStations.curvalue = (ICON_HEALTHSTATION & cg_iconsCvarValue);
 	s_preferences.whSycTele.curvalue = (ICON_SPRAYROOM & cg_iconsCvarValue);
 
@@ -320,6 +324,7 @@ static void Preferences_Event(void *ptr, int notification) {
 	case ID_WALLHACKLPS:
 	case ID_WALLHACKTEAMMATES:
 	case ID_WALLHACKBALLOONS:
+	case ID_WALLHACKFREEZETAG:
 	case ID_WALLHACKHSTATION:
 	case ID_WALLHACKSYCTELE: {
 		// this is only necessary if cg_icons contains flags that we don't cover here
@@ -333,6 +338,9 @@ static void Preferences_Event(void *ptr, int notification) {
 		}
 		if (s_preferences.whTeamMates.curvalue) {
 			icons |= ICON_TEAMMATE;
+		}
+		if (s_preferences.whFreezeTag.curvalue) {
+			icons |= ICON_FREEZETAG;
 		}
 		if (s_preferences.whHStations.curvalue) {
 			icons |= ICON_HEALTHSTATION;
@@ -690,6 +698,17 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whLPS.generic.toolTip =
 		"Show an arrow icon over every player in Last Pad Standing, visible through walls, to help you find them.";
 
+	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.whFreezeTag.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.whFreezeTag.generic.name = "Freeze Tag Icon:";
+	s_preferences.whFreezeTag.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.whFreezeTag.generic.callback = Preferences_Event;
+	s_preferences.whFreezeTag.generic.id = ID_WALLHACKFREEZETAG;
+	s_preferences.whFreezeTag.generic.x = PREFERENCES_X_POS;
+	s_preferences.whFreezeTag.generic.y = y;
+	s_preferences.whFreezeTag.generic.toolTip =
+		"Show an icon over frozen teammates, visible through walls, to help you find them.";
+
 	yp2 = y + BIGCHAR_HEIGHT + 2;
 
 	// place the "more" button
@@ -758,6 +777,7 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whSycTele);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whBalloons);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whLPS);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.whFreezeTag);
 
 	// misc
 	Menu_AddItem(&s_preferences.menu, &s_preferences.more);

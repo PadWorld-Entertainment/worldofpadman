@@ -1651,7 +1651,7 @@ void Main_SpriteParticles(void);
 //
 qboolean CG_FreezeTag(void);
 qboolean FT_LocalIsFrozen(void);
-qboolean FT_PlayerIsFrozen(centity_t *cent);
+qboolean FT_PlayerIsFrozen(const centity_t *cent);
 
 //
 // cg_cutscene2d.c
