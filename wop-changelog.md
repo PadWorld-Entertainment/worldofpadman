@@ -1,5 +1,10 @@
 # World of Padman Changelog
 
+## (tba.) - VERSION: 1.7
+
+- ADDED
+	- Freeze Tag game mode
+
 ## (tba.) - VERSION: 1.6.1
 
 [ioq3-main](https://github.com/ioquake/ioq3/commit/4003a5b78c217588ab2cb23243e693f35d90aba0)
