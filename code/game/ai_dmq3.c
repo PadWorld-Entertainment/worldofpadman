@@ -1197,7 +1197,7 @@ void BotChooseWeapon(bot_state_t *bs) {
 		if (bs->inventory[(bs->weaponnum + offset)]) {
 			trap_EA_SelectWeapon(bs->client, bs->weaponnum);
 		} else {
-			// G_Printf("^4 lost weapon during change \n");
+			// G_Printf(S_COLOR_BLUE " lost weapon during change \n");
 			bs->cur_ps.weaponstate = WEAPON_READY; // hm
 			BotChooseWeapon(bs);
 			return;
@@ -2158,7 +2158,7 @@ qboolean EnemyFitsWell(bot_state_t *bs, aas_entityinfo_t *entinfo, int curenemy)
 		VectorSubtract(curenemyinfo.origin, bs->origin, dir2);
 		l2 = VectorLength(dir2);
 		if (l2 < 900 && l1 > l2) { // curenemy is near, candidate is further away
-			// G_Printf("^1 imped \n");	// cyr_ptr
+			// G_Printf(S_COLOR_RED " imped \n");	// cyr_ptr
 			return qtrue;
 		}
 	}
@@ -2973,7 +2973,7 @@ void BotCheckAttack(bot_state_t *bs) {
 			// release fire button...shoot
 		} else { // charge
 			trap_EA_Attack(bs->client);
-			// G_Printf("^1 loading %d\n",bs->cur_ps.weaponTime);
+			// G_Printf(S_COLOR_RED " loading %d\n",bs->cur_ps.weaponTime);
 		}
 	} else // shoot
 		trap_EA_Attack(bs->client);
@@ -4054,7 +4054,7 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 			bot_goal_t goal;
 			float dist;
 
-			G_Printf("^2 launched ...");	// cyr_ptr
+			G_Printf(S_COLOR_GREEN " launched ...");	// cyr_ptr
 			VectorSubtract(state->origin, bs->origin, dir);
 			if(VectorLength(dir) >= PUSHCART_DIST ){
 				G_Printf("too far %d :/ \n", VectorLength(dir));	// cyr_ptr

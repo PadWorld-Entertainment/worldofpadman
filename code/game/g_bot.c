@@ -694,7 +694,7 @@ void Svcmd_BotList_f(void) {
 	char model[MAX_TOKEN_CHARS];
 	char aifile[MAX_TOKEN_CHARS];
 
-	trap_Print("^1name             model            aifile              funname\n");
+	trap_Print(S_COLOR_RED "name             model            aifile              funname\n");
 	for (i = 0; i < g_numBots; i++) {
 		Q_strncpyz(name, Info_ValueForKey(g_botInfos[i], "name"), sizeof(name));
 		if (!*name) {

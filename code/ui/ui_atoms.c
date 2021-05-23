@@ -1145,12 +1145,12 @@ void UI_Init(void) {
 	trap_GetGlconfig(&uis.glconfig);
 
 	// for 640x480 virtualized screen
-	uis.xscale = uis.glconfig.vidWidth * (1.0 / 640.0);
-	uis.yscale = uis.glconfig.vidHeight * (1.0 / 480.0);
+	uis.xscale = uis.glconfig.vidWidth * (1.0f / 640.0f);
+	uis.yscale = uis.glconfig.vidHeight * (1.0f / 480.0f);
 
 	if (uis.glconfig.vidWidth * 480 > uis.glconfig.vidHeight * 640) {
 		// wide screen
-		uis.xbias = 0.5 * (uis.glconfig.vidWidth - (uis.glconfig.vidHeight * (640.0 / 480.0)));
+		uis.xbias = 0.5 * (uis.glconfig.vidWidth - (uis.glconfig.vidHeight * (640.0f / 480.0f)));
 		uis.xscale = uis.yscale;
 	} else {
 		// no wide screen

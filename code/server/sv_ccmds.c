@@ -1023,7 +1023,7 @@ static void SV_Status_f(void) {
 
 		// TTimo adding a ^7 to reset the color
 		s = NET_AdrToString(cl->netchan.remoteAddress);
-		Com_Printf("^7%s", s);
+		Com_Printf(S_COLOR_WHITE "%s", s);
 		l = 39 - strlen(s);
 		j = 0;
 

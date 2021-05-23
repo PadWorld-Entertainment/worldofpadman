@@ -1208,7 +1208,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 					// even spraytele not reachable?
 					// if (bot_developer.integer) {
 					//	if (!BotClientTravelTimeToGoal(bs->client, goal)) {
-					//		G_Printf("^1 no way to wall, tele area is %d \n", spraytele.areanum);
+					//		G_Printf(S_COLOR_RED " no way to wall, tele area is %d \n", spraytele.areanum);
 					//	}
 					// }
 				}
@@ -2281,7 +2281,7 @@ int AINode_Seek_LTG(bot_state_t *bs) {
 			trap_BotGetTopGoal(bs->gs, &nbg);
 			tt_nbg = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, nbg.areanum, bs->tfl);
 			if (bot_developer.integer & AIDBG_GOAL)
-				G_Printf("^2going for NBG with tt: %d, LTG has %d, range %d \n", tt_nbg, tt_ltg, range);
+				G_Printf(S_COLOR_GREEN "going for NBG with tt: %d, LTG has %d, range %d \n", tt_nbg, tt_ltg, range);
 			trap_BotResetLastAvoidReach(bs->ms);
 			// get the goal at the top of the stack
 			// trap_BotGetTopGoal(bs->gs, &tmpgoal);

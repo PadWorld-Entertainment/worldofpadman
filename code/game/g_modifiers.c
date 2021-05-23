@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "g_local.h"
 
-//#define dbg_print(x) trap_SendServerCommand( -1, va( "print \"^3%s\n\"", x ) )
+//#define dbg_print(x) trap_SendServerCommand( -1, va( "print \"" S_COLOR_YELLOW "%s\n\"", x ) )
 
 /*
 *****************************************

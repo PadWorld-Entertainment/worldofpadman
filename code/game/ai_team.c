@@ -168,7 +168,7 @@ static void BotBalloonOrders(bot_state_t *bs) {
 	int numcap, numnmycap;
 	float weight; // 0 - attack, 100 - defend
 
-	// G_Printf("^1 orders for %d",BotTeam(bs));	// 20055
+	// G_Printf(S_COLOR_RED " orders for %d",BotTeam(bs));	// 20055
 	// get status of balloons
 	numcap = numnmycap = 0;
 

@@ -124,28 +124,27 @@ static void Playlist_AddTrack(int album, int track, qboolean init) {
 			freeOrderItems = playOrder;
 
 			return;
-		} else {
-			// iterate through playlist and find track in album
-			for (playOrder = (playOrder2 = musicInfo.playOrder)->next; playOrder != NULL; playOrder = playOrder->next) {
-				if ((album == playOrder->album) && (track == playOrder->track)) {
-					if (playOrder == musicInfo.lastplayOrderItem) {
-						musicInfo.lastplayOrderItem = playOrder2;
-					}
-					playOrder2->next = playOrder->next;
-					playOrder->next = freeOrderItems;
-					freeOrderItems = playOrder;
-
-					return;
+		}
+		// iterate through playlist and find track in album
+		for (playOrder = (playOrder2 = musicInfo.playOrder)->next; playOrder != NULL; playOrder = playOrder->next) {
+			if ((album == playOrder->album) && (track == playOrder->track)) {
+				if (playOrder == musicInfo.lastplayOrderItem) {
+					musicInfo.lastplayOrderItem = playOrder2;
 				}
+				playOrder2->next = playOrder->next;
+				playOrder->next = freeOrderItems;
+				freeOrderItems = playOrder;
 
-				playOrder2 = playOrder;
+				return;
 			}
+
+			playOrder2 = playOrder;
 		}
 	}
 
 	// no more free items, *should* never happen since playOrderMemory is large enough
 	if (NULL == freeOrderItems) {
-		Com_Printf(MUSIC_MESSAGEPREFIX_S "^1selected too many tracks!\n");
+		Com_Printf(S_COLOR_RED MUSIC_MESSAGEPREFIX_S "selected too many tracks!\n");
 		return;
 	}
 
@@ -313,8 +312,8 @@ void MusicMenu_Init(void) {
 			Com_Printf(MUSIC_MESSAGEPREFIX_S "Could not read playlist from disk, will play all available tracks.\n");
 			Playlist_AddAllTracks(qtrue);
 		} else if (i >= sizeof(playlist)) {
-			Com_Printf(MUSIC_MESSAGEPREFIX_S
-					   "^1Playlist from disk too large for internal buffer (is %d, max %ld), will be reset!\n",
+			Com_Printf(S_COLOR_RED MUSIC_MESSAGEPREFIX_S
+					   "Playlist from disk too large for internal buffer (is %d, max %ld), will be reset!\n",
 					   i, (sizeof(playlist) - 1));
 			// TODO: Empty playlist from memory will lateron be written to disk. Do Playlist_AddAllTracks( qtrue )
 			// instead?
@@ -356,7 +355,7 @@ void MusicMenu_Shutdown(void) {
 
 	trap_FS_FOpenFile(PLAYLIST_FILENAME_S, &f, FS_WRITE);
 	if (!f) {
-		Com_Printf(MUSIC_MESSAGEPREFIX_S "^1Could not save playlist to disk!\n");
+		Com_Printf(S_COLOR_RED MUSIC_MESSAGEPREFIX_S "Could not save playlist to disk!\n");
 		return;
 	}
 
@@ -369,7 +368,7 @@ void MusicMenu_Shutdown(void) {
 }
 
 static void Music_PrintTrackInfo(const trackInfo_t *ti) {
-	Com_Printf(MUSIC_MESSAGEPREFIX_S "Playing \"^3%s^7\"\n", ti->title);
+	Com_Printf(MUSIC_MESSAGEPREFIX_S "Playing \"" S_COLOR_YELLOW "%s" S_COLOR_WHITE "\"\n", ti->title);
 }
 
 static void Music_PlayNextTrack(const trackInfo_t *ti) {
@@ -461,7 +460,7 @@ static void MusicMenu_Event(void *ptr, int notification) {
 #define FACTOR1024 (1024.0f / 640.0f)
 static void MusicMenu_Draw(void) {
 	int t;
-	float switchOffset = 0.0;
+	float switchOffset = 0.0f;
 
 	if (musicMenu.switchState != MUSICSWITCH_NONE) {
 		// if MUSICSWITCH_OUT or MUSICSWITCH_QUIT
@@ -475,7 +474,7 @@ static void MusicMenu_Draw(void) {
 		}
 
 		switchOffset *= switchOffset;
-		switchOffset *= 0.001;
+		switchOffset *= 0.001f;
 
 		for (t = 0; t < MAX_TRACKS; ++t) {
 			musicMenu.tracks[t].generic.x = (188 + switchOffset);
@@ -561,7 +560,6 @@ static sfxHandle_t MusicMenu_Key(int key) {
 		}
 		musicMenu.switchState = MUSICSWITCH_QUIT;
 		return 0;
-		break;
 	case 's':
 	case 'S':
 		if ((musicInfo.numAlbums > 1) && (MUSICSWITCH_NONE == musicMenu.switchState)) {
@@ -569,7 +567,6 @@ static sfxHandle_t MusicMenu_Key(int key) {
 			musicMenu.switchTime = uis.realtime;
 		}
 		return 0;
-		break;
 	}
 
 	return (Menu_DefaultKey(&musicMenu.menu, key));
@@ -598,7 +595,7 @@ void MusicMenu_Open(void) {
 	y = 82;
 	for (t = 0; t < MAX_TRACKS; ++t) {
 		musicMenu.tracks[t].generic.type = MTYPE_TEXTS;
-		musicMenu.tracks[t].fontHeight = 16.0;
+		musicMenu.tracks[t].fontHeight = 16.0f;
 		if (t >= musicInfo.albums[musicMenu.currentAlbum].numTracks) {
 			musicMenu.tracks[t].generic.flags = (QMF_HIDDEN | QMF_INACTIVE);
 		} else {

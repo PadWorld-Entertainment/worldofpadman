@@ -480,7 +480,7 @@ static float CG_DrawTimeLeft(float y) {
 			va("^%ctime left: ^%c%3i:%i%i", textcolor, textcolor2, (timeleft / 60000), secs / 10, secs % 10),
 			colorWhite, qfalse, qfalse, 8, 16, 18);
 	} else
-		CG_DrawStringExt(640 - 148, y + 2, "^0time left:  ^3--:--", colorWhite, qfalse, qfalse, 8, 16, 18);
+		CG_DrawStringExt(640 - 148, y + 2, S_COLOR_BLACK "time left:  " S_COLOR_YELLOW "--:--", colorWhite, qfalse, qfalse, 8, 16, 18);
 
 	return y + BIGCHAR_HEIGHT + 4;
 }

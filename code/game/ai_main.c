@@ -229,38 +229,34 @@ qboolean BotWpHasSuccessor(bot_state_t *bs, qboolean direction_home) {
 	return (bs->wp->links[team].num || bs->wp->links[WPLINKLATERAL].num);
 }
 
-/*
+#if 0
 // wp traveltimes don't make much sense as they are.
 // also they can't be initialized at level start, because AAS init is not done at this point
-void InitWpTravelTimes(void)
-{
+void InitWpTravelTimes(void) {
 	int i;
-	ctf_waypoint_t* wp;
+	ctf_waypoint_t *wp;
 
 	wp = &waypoints[0];
-	for(i=0; i<numwaypoints; i++,wp++)
-	{
-		if( !trap_AAS_AreaReachability( wp->goal.areanum ) )
-		{
+	for (i = 0; i < numwaypoints; i++, wp++) {
+		if (!trap_AAS_AreaReachability(wp->goal.areanum)) {
 			G_Printf("waypoint %s unreachable\n", wp->name);
 			wp->travelTime[TEAM_RED] = wp->travelTime[TEAM_RED] = 99999;
 			continue;
 		}
-		wp->travelTime[TEAM_RED] = trap_AAS_AreaTravelTimeToGoalArea(
-			wp->goal.areanum, wp->goal.origin, ctf_redflag.areanum, TFL_DEFAULT);
+		wp->travelTime[TEAM_RED] =
+			trap_AAS_AreaTravelTimeToGoalArea(wp->goal.areanum, wp->goal.origin, ctf_redflag.areanum, TFL_DEFAULT);
 
-		if( !wp->travelTime[TEAM_RED] )
-			G_Printf("^1 waypoint %s has no route to the red flag \n", wp->name);
+		if (!wp->travelTime[TEAM_RED])
+			G_Printf(S_COLOR_RED " waypoint %s has no route to the red flag \n", wp->name);
 
+		wp->travelTime[TEAM_BLUE] =
+			trap_AAS_AreaTravelTimeToGoalArea(wp->goal.areanum, wp->goal.origin, ctf_blueflag.areanum, TFL_DEFAULT);
 
-		wp->travelTime[TEAM_BLUE] = trap_AAS_AreaTravelTimeToGoalArea(
-			wp->goal.areanum, wp->goal.origin, ctf_blueflag.areanum, TFL_DEFAULT);
-
-		if( !wp->travelTime[TEAM_BLUE] )
-			G_Printf("^1 waypoint %s has no route to the blue flag \n", wp->name);
+		if (!wp->travelTime[TEAM_BLUE])
+			G_Printf(S_COLOR_RED " waypoint %s has no route to the blue flag \n", wp->name);
 	}
 }
-*/
+#endif
 
 static const char *ParseLink(const char *buf, int type) {
 	char wpfrom[128];

@@ -142,14 +142,15 @@ static menucommon_s *page2_options[] = {(menucommon_s *)&s_preferences.simpleite
 										NULL};
 
 static const char *ffahud_names[] = {"Black", "Red",	"Blue", "Green",	"Chrome", "Whitemetal",
-									 "Rust",  "Flower", "Wood", "Airforce", 0};
+									 "Rust",  "Flower", "Wood", "Airforce", NULL};
 
-static const char *con_notifytime_strs[] = {"short", "long", "short (icon)", "long (icon)", 0};
+static const char *con_notifytime_strs[] = {"short", "long", "short (icon)", "long (icon)", NULL};
 
-static const char *glowcolor_names[] = {"^0Black", "^1Red",		"^2Green", "^3Yellow", "^4Blue",
-										"^5Cyan",  "^6Magenta", "^7White", 0};
+static const char *glowcolor_names[] = {S_COLOR_BLACK "Black",	   S_COLOR_RED "Red",	  S_COLOR_GREEN "Green",
+										S_COLOR_YELLOW "Yellow",   S_COLOR_BLUE "Blue",	  S_COLOR_CYAN "Cyan",
+										S_COLOR_MAGENTA "Magenta", S_COLOR_WHITE "White", NULL};
 
-void UpdateGlowColorFlags(void) {
+static void UpdateGlowColorFlags(void) {
 	if (s_preferences.glowcolor.generic.flags & QMF_HIDDEN)
 		return;
 

@@ -1224,15 +1224,16 @@ typedef struct playerState_s {
 // so they aren't game/cgame only definitions
 //
 #define BUTTON_ATTACK 1
-#define BUTTON_TALK 2 // displays talk balloon and disables actions
+// displays talk balloon and disables actions
+#define BUTTON_TALK 2
 #define BUTTON_USE_HOLDABLE 4
 #define BUTTON_GESTURE 8
-#define BUTTON_WALKING                                                                                                 \
-	16 // walking can't just be inferred from MOVE_RUN
-	   // because a key pressed late in the frame will
-	   // only generate a small move value for that frame
-	   // walking will use different animations and
-	   // won't generate footsteps
+// walking can't just be inferred from MOVE_RUN
+// because a key pressed late in the frame will
+// only generate a small move value for that frame
+// walking will use different animations and
+// won't generate footsteps
+#define BUTTON_WALKING 16
 #define BUTTON_AFFIRMATIVE 32
 #define BUTTON_NEGATIVE 64
 
@@ -1241,12 +1242,14 @@ typedef struct playerState_s {
 #define BUTTON_PATROL 512
 #define BUTTON_FOLLOWME 1024
 
-#define BUTTON_ANY 2048		 // any key whatsoever
-#define BUTTON_DROPCART 4096 // button12
+// any key whatsoever
+#define BUTTON_ANY 2048
+// button12
+#define BUTTON_DROPCART 4096
 
-#define MOVE_RUN                                                                                                       \
-	120 // if forwardmove or rightmove are >= MOVE_RUN,
-		// then BUTTON_WALKING should be set
+// if forwardmove or rightmove are >= MOVE_RUN,
+// then BUTTON_WALKING should be set
+#define MOVE_RUN 120
 
 // usercmd_t is sent to the server each client frame
 typedef struct usercmd_s {
@@ -1286,7 +1289,6 @@ typedef struct {
 // Different eTypes may use the information in different ways
 // The messages are delta compressed, so it doesn't really matter if
 // the structure size is fairly large
-
 typedef struct entityState_s {
 	int number; // entity index
 	int eType;	// entityType_t
@@ -1424,9 +1426,6 @@ typedef enum _flag_status {
 #define SAY_ALL 0
 #define SAY_TEAM 1
 #define SAY_TELL 2
-
-#define CDKEY_LEN 16
-#define CDCHKSUM_LEN 2
 
 #define LERP(a, b, w) ((a) * (1.0f - (w)) + (b) * (w))
 #define LUMA(red, green, blue) (0.2126f * (red) + 0.7152f * (green) + 0.0722f * (blue))

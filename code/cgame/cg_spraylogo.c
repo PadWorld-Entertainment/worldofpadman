@@ -240,7 +240,7 @@ TODO: write some info ;)
 */
 void Free_LogoPoly(logoPoly_t *lp) {
 	if (!lp) {
-		Com_Printf("^1ERROR: Free_LogoPoly get a NULL pointer\n");
+		Com_Printf(S_COLOR_RED "ERROR: Free_LogoPoly get a NULL pointer\n");
 		return;
 	}
 
@@ -281,9 +281,9 @@ logoPoly_t *Alloc_LogoPoly(void) {
 	{
 		if (!drawLogoPolys) // this should NEVER happen ... so make a big error and add a disconnect cmd
 		{
-			Com_Printf("^1***********************************************\n"
-					   "^1* ERROR: no LogoPolys in draw and free !!!!!! *\n"
-					   "^1***********************************************\n");
+			Com_Printf(S_COLOR_RED "***********************************************\n"
+					   S_COLOR_RED "* ERROR: no LogoPolys in draw and free !!!!!! *\n"
+					   S_COLOR_RED "***********************************************\n");
 			trap_SendConsoleCommand("disconnect\n");
 			return (logoPoly_t *)(NULL);
 		}
@@ -547,7 +547,7 @@ void AddLogosToScene(void) {
 		// tmplp=lp;
 		lp = lp->nextPoly;
 	}
-	// if(tmplp!=lastdrawLogoPolys) Com_Printf("^1last drawn Logo wasn't lastdrawLogoPolys-ptr\n");
+	// if (tmplp != lastdrawLogoPolys) { Com_Printf(S_COLOR_RED "last drawn Logo wasn't lastdrawLogoPolys-ptr\n"); }
 }
 
 qboolean CursorInBox(int x, int y, int w, int h) {

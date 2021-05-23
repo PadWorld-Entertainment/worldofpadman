@@ -303,7 +303,7 @@ static void StrEndWork(void) {
 		}
 		break;
 	default:
-		Com_Printf("^1error in lensflare-script: wrong parserlvl (wrong '{' or '}')\n");
+		Com_Printf(S_COLOR_RED "error in lensflare-script: wrong parserlvl (wrong '{' or '}')\n");
 		break;
 	}
 
@@ -382,7 +382,7 @@ void LF_Parser(const char *scriptname) {
 			case PL_LF:
 				// alloc a new lf-struct and set a pointer ...
 				if (numlfs + 1 >= MAX_LENSFLARES) {
-					Com_Printf("^1can't load lensflare-script: no struct free (MAX=%i)\n", MAX_LENSFLARES);
+					Com_Printf(S_COLOR_RED "can't load lensflare-script: no struct free (MAX=%i)\n", MAX_LENSFLARES);
 					return;
 				}
 
@@ -393,7 +393,7 @@ void LF_Parser(const char *scriptname) {
 			case PL_FLARE:
 				// alloc a new flare-struct and set the firstflare-pointer ...
 				if (!freeflares) {
-					Com_Printf("^1can't finish load lensflare-script(\"%s\"): no flare-struct free (MAX=%i)\n",
+					Com_Printf(S_COLOR_RED "can't finish load lensflare-script(\"%s\"): no flare-struct free (MAX=%i)\n",
 							   lfmem[numlfs - 1].lfname, MAX_FLARES);
 					return;
 				}
@@ -425,7 +425,7 @@ void LF_Parser(const char *scriptname) {
 						tmpString[tmpstrl] = buffer[i];
 						tmpString[++tmpstrl] = '\0';
 					} else
-						Com_Printf("^2tmpString is full (this may happen if you use very long names, >%i chars) ... if "
+						Com_Printf(S_COLOR_GREEN "tmpString is full (this may happen if you use very long names, >%i chars) ... if "
 								   "this leads to errors, short the names or/and send me a mail at raute_at@gmx.de\n",
 								   (MAX_TMPSTRING - 2));
 				}
@@ -438,7 +438,7 @@ void LF_Parser(const char *scriptname) {
 					tmpString[tmpstrl] = buffer[i];
 					tmpString[++tmpstrl] = '\0';
 				} else
-					Com_Printf("^2tmpString is full (this may happen if you use very long names, >%i chars) ... if "
+					Com_Printf(S_COLOR_GREEN "tmpString is full (this may happen if you use very long names, >%i chars) ... if "
 							   "this leads to errors, short the names or/and send me a mail at raute_at@gmx.de\n",
 							   (MAX_TMPSTRING - 2));
 			}
@@ -659,7 +659,7 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, refdef_t *refdef, vec
 		vec[1] = dir[1];
 		vec[2] = dir[2];
 
-		*distanceSquared = 14400000000.0f; // 120000²
+		*distanceSquared = 14400000000.0f; // 120000
 	}
 
 	// make a dotproduct to get a rough anglecheck ...
@@ -681,7 +681,7 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, refdef_t *refdef, vec
 	if (vec[1] * axis[2][0] - vec[0] * axis[2][1]) // don't diff with 0
 		v2[1] = (vec[0] * axis[0][1] - vec[1] * axis[0][0] + v2[0] * (vec[0] * axis[1][1] - vec[1] * axis[1][0])) /
 				(vec[1] * axis[2][0] - vec[0] * axis[2][1]);
-	else // use a formular with an other "Definitionslücke"(definition-gap ?)
+	else // use a formular with an other "Definitionsluecke"(definition-gap ?)
 		v2[1] = (vec[0] * axis[0][2] - vec[2] * axis[0][0] + v2[0] * (vec[0] * axis[1][2] - vec[2] * axis[1][0])) /
 				(vec[2] * axis[2][0] - vec[0] * axis[2][2]);
 
@@ -693,7 +693,7 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, refdef_t *refdef, vec
 	v2[0] *= ((float)(xywh[2]) * 0.5f) / tan(refdef->fov_x * 0.5f * DEG2RAD_FLOAT);
 	v2[1] *= ((float)(xywh[3]) * 0.5f) / tan(refdef->fov_y * 0.5f * DEG2RAD_FLOAT);
 
-	return 1.0f; // noch neuen code für den alpha-wert schreiben
+	return 1.0f; // noch neuen code fuer den alpha-wert schreiben
 }
 
 /*
@@ -791,7 +791,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 					} else
 						tmpf = 0.0f;
 
-					tmpf *= tmpflare->turnstyle[1]; // noch mal überlegen ob das sinnmacht
+					tmpf *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinnmacht
 				}
 
 				tmpf += tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
@@ -866,7 +866,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 				} else
 					tmpf = 0.0f;
 
-				tmpf *= tmpflare->turnstyle[1]; // noch mal überlegen ob das sinnmacht
+				tmpf *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinn macht
 			}
 
 			tmpf += (tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
@@ -928,7 +928,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 				} else
 					angle = 0.0f;
 
-				angle *= tmpflare->turnstyle[1]; // noch mal überlegen ob das sinnmacht
+				angle *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinn macht
 			}
 
 			angle += (tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
@@ -1032,7 +1032,7 @@ void AddLFsToScreen(void) {
 		if (lfalpha == 0.0f)
 			continue;
 		DrawLensflare(IFD_Array[i].lensflare, v2, lfalpha, distanceSquared, xywh,
-					  qfalse); // normal 480 ... außer wen das bild verkleinert wird
+					  qfalse); // normal 480 ... ausser wenn das bild verkleinert wird
 	}
 
 	// del list
