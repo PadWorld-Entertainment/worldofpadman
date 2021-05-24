@@ -514,7 +514,7 @@ static void UI_CallVoteMenu_Init(void) {
 	y = 270;
 
 	s_callVoteMenu.voteyes.generic.type = MTYPE_TEXTS;
-	s_callVoteMenu.voteyes.fontHeight = 32.0;
+	s_callVoteMenu.voteyes.fontHeight = 32.0f;
 	s_callVoteMenu.voteyes.generic.flags = QMF_LEFT_JUSTIFY;
 	s_callVoteMenu.voteyes.generic.callback = UI_CallVote_Vote;
 	s_callVoteMenu.voteyes.generic.id = ID_VOTEYES;

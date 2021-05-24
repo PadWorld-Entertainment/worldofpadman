@@ -348,7 +348,6 @@ void MusicMenu_Init(void) {
 void MusicMenu_Shutdown(void) {
 	playOrder_t *playOrder;
 	int i;
-	int size;
 	fileHandle_t f;
 
 	if (!musicInitialized) {
@@ -362,8 +361,9 @@ void MusicMenu_Shutdown(void) {
 	}
 
 	for (playOrder = musicInfo.playOrder, i = 0; playOrder != NULL; playOrder = playOrder->next, i += 3) {
-		size = (strlen(musicInfo.albums[playOrder->album].tracks[playOrder->track].file) + 1); // +1 => '\n'
-		trap_FS_Write(va("%s\n", musicInfo.albums[playOrder->album].tracks[playOrder->track].file), size, f);
+		const char *line = va("%s\n", musicInfo.albums[playOrder->album].tracks[playOrder->track].file);
+		const int size = strlen(line);
+		trap_FS_Write(line, size, f);
 	}
 
 	trap_FS_FCloseFile(f);
@@ -529,7 +529,7 @@ static void MusicMenu_Draw(void) {
 		UI_DrawHandlePic((130 + switchOffset), 61, 366, 338, musicInfo.albums[musicMenu.currentAlbum].background);
 	} else {
 		UI_FillRect((160 + switchOffset), 60, 335, 340, colorBlack);
-		UI_DrawStringNS((170 + switchOffset), 62, musicInfo.albums[musicMenu.currentAlbum].name, 0, 16.0, colorWhite);
+		UI_DrawStringNS((170 + switchOffset), 62, musicInfo.albums[musicMenu.currentAlbum].name, 0, 16.0f, colorWhite);
 	}
 
 	UI_DrawHandlePic((433 + switchOffset), 68, 500, 315, musicMenu.background);

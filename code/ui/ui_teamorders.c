@@ -48,7 +48,7 @@ typedef struct {
 	int gametype;
 	int numBots;
 	int selectedBot;
-	char *bots[9];
+	const char *bots[9];
 	char botNames[9][16];
 } teamOrdersMenuInfo_t;
 

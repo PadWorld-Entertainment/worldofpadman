@@ -161,13 +161,15 @@ static void UI_VoiceChatMenu_BackEvent(void *ptr, int event) {
 }
 
 static void UI_VoiceChatMenu_GainSliderEvent(void *ptr, int event) {
-	int clID = voiceChatMenuInfo.clientIDs[voiceChatMenuInfo.baseClientNum + voiceChatMenuInfo.selectedClientNum];
-	float gain = voiceChatMenuInfo.gain.curvalue / 5;
+	const int arrayIdx = voiceChatMenuInfo.baseClientNum + voiceChatMenuInfo.selectedClientNum;
+	const int clID = voiceChatMenuInfo.clientIDs[arrayIdx];
+	const float gain = voiceChatMenuInfo.gain.curvalue / 5;
 	trap_Cmd_ExecuteText(EXEC_APPEND, va("voip gain %d %f", clID, gain));
 }
 
 static void UI_VoiceChatMenu_MuteEvent(void *ptr, int event) {
-	int clID = voiceChatMenuInfo.clientIDs[voiceChatMenuInfo.baseClientNum + voiceChatMenuInfo.selectedClientNum];
+	const int arrayIdx = voiceChatMenuInfo.baseClientNum + voiceChatMenuInfo.selectedClientNum;
+	const int clID = voiceChatMenuInfo.clientIDs[arrayIdx];
 
 	if (event != QM_ACTIVATED)
 		return;
@@ -206,7 +208,7 @@ static void UI_VoiceChatMenu_InitClients(void) {
 	char info[MAX_INFO_STRING];
 	char localClientName[32]; // used to identify the local client.. there has to be a better way
 
-	trap_Cvar_VariableStringBuffer("name", localClientName, 32);
+	trap_Cvar_VariableStringBuffer("name", localClientName, sizeof(localClientName));
 	voiceChatMenuInfo.numClients = 0;
 
 	for (i = 0; i < MAX_CLIENTS; ++i) {
@@ -216,7 +218,7 @@ static void UI_VoiceChatMenu_InitClients(void) {
 		if (!strlen(name))
 			continue;
 
-		if (Q_stricmpn(name, localClientName, 32) == 0)
+		if (Q_stricmpn(name, localClientName, sizeof(localClientName)) == 0)
 			continue;
 
 		// it' a client, add it

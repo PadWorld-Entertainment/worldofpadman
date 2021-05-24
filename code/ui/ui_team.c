@@ -132,7 +132,7 @@ void TeamMain_MenuInit(void) {
 
 	y = 180;
 	s_teammain.joinred.generic.type = MTYPE_TEXTS;
-	s_teammain.joinred.fontHeight = 20.0;
+	s_teammain.joinred.fontHeight = 20.0f;
 	s_teammain.joinred.generic.flags = QMF_CENTER_JUSTIFY;
 	s_teammain.joinred.generic.id = ID_JOINRED;
 	s_teammain.joinred.generic.callback = TeamMain_MenuEvent;
@@ -145,7 +145,7 @@ void TeamMain_MenuInit(void) {
 
 	y += 20;
 	s_teammain.joinblue.generic.type = MTYPE_TEXTS;
-	s_teammain.joinblue.fontHeight = 20.0;
+	s_teammain.joinblue.fontHeight = 20.0f;
 	s_teammain.joinblue.generic.flags = QMF_CENTER_JUSTIFY;
 	s_teammain.joinblue.generic.id = ID_JOINBLUE;
 	s_teammain.joinblue.generic.callback = TeamMain_MenuEvent;
@@ -158,7 +158,7 @@ void TeamMain_MenuInit(void) {
 
 	y += 30;
 	s_teammain.joingame.generic.type = MTYPE_TEXTS;
-	s_teammain.joingame.fontHeight = 20.0;
+	s_teammain.joingame.fontHeight = 20.0f;
 	s_teammain.joingame.generic.flags = QMF_CENTER_JUSTIFY;
 	s_teammain.joingame.generic.id = ID_JOINGAME;
 	s_teammain.joingame.generic.callback = TeamMain_MenuEvent;
@@ -171,7 +171,7 @@ void TeamMain_MenuInit(void) {
 
 	y += 40;
 	s_teammain.spectate.generic.type = MTYPE_TEXTS;
-	s_teammain.spectate.fontHeight = 20.0;
+	s_teammain.spectate.fontHeight = 20.0f;
 	s_teammain.spectate.generic.flags = QMF_CENTER_JUSTIFY;
 	s_teammain.spectate.generic.id = ID_SPECTATE;
 	s_teammain.spectate.generic.callback = TeamMain_MenuEvent;

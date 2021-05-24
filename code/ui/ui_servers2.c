@@ -1551,7 +1551,7 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.remove.generic.id = ID_REMOVE;
 
 	g_arenaservers.addFav.generic.type = MTYPE_TEXTS;
-	g_arenaservers.addFav.fontHeight = 16.0;
+	g_arenaservers.addFav.fontHeight = 16.0f;
 	g_arenaservers.addFav.generic.flags = QMF_PULSEIFFOCUS;
 	g_arenaservers.addFav.generic.callback = ArenaServers_Event;
 	g_arenaservers.addFav.generic.id = ID_ADDTOFAV;
@@ -1563,7 +1563,7 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.addFav.focuscolor = color_red;
 
 	g_arenaservers.addAllFav.generic.type = MTYPE_TEXTS;
-	g_arenaservers.addAllFav.fontHeight = 16.0;
+	g_arenaservers.addAllFav.fontHeight = 16.0f;
 	g_arenaservers.addAllFav.generic.flags = QMF_PULSEIFFOCUS;
 	g_arenaservers.addAllFav.generic.callback = ArenaServers_Event;
 	g_arenaservers.addAllFav.generic.id = ID_ADDALLTOFAV;
