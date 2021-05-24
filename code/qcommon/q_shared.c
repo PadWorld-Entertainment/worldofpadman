@@ -324,18 +324,9 @@ const char *Com_ParseLine(const char **data_p) {
 	l = 0;
 	do {
 		c = (int)*data++;
-		if (c == -1 || c == 0 || c == '\n' || (c == '\r' && *data != '\n')) {
+		if (c == 0 || c == '\n' || (c == '\r' && *data != '\n')) {
 			break;
 		}
-		// translate all fmt spec to avoid crash bugs
-		if (c == '%') {
-			c = '.';
-		}
-		// don't allow higher ascii values
-		if (c > 127) {
-			c = '.';
-		}
-		// break only after reading all expected data from bitstream
 		if (l >= sizeof(string) - 1) {
 			break;
 		}
