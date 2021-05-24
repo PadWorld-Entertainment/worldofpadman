@@ -120,7 +120,7 @@ static void UI_RemoveBotsMenu_DeleteEvent(void *ptr, int event) {
 			va("clientkick %i\n",
 			   removeBotsMenuInfo.botClientNums[removeBotsMenuInfo.baseBotNum + removeBotsMenuInfo.selectedBotNum]));
 
-	uis.musicbool = 2;
+	uis.musicstate = MUSICSTATE_RUNNING_MUSIC_MENU;
 	trap_Cvar_Set("cl_paused", "0");
 }
 

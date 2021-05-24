@@ -111,7 +111,7 @@ static void Playlist_AddTrack(int album, int track, qboolean init) {
 		// are we currently playing the song to be added?
 		if ((track == musicInfo.playOrder->track) && (album == musicInfo.playOrder->album)) {
 			// stop it
-			musicInfo.songStarted = 0;
+			musicInfo.songStarted = qfalse;
 			trap_S_StopBackgroundTrack();
 
 			// if it was the last track,
@@ -183,7 +183,7 @@ static void Playlist_Clear(void) {
 
 	musicInfo.playOrder = musicInfo.lastplayOrderItem = NULL;
 
-	musicInfo.songStarted = 0;
+	musicInfo.songStarted = qfalse;
 	trap_S_StopBackgroundTrack();
 }
 
@@ -403,7 +403,7 @@ void Music_TriggerRestart(void) {
 }
 
 void Music_Check(void) {
-	if (qtrue == uis.musicbool) {
+	if (uis.musicstate == MUSICSTATE_RUNNING) {
 		return;
 	}
 
@@ -411,7 +411,7 @@ void Music_Check(void) {
 		return;
 	}
 
-	if (qfalse == musicInfo.songStarted) {
+	if (!musicInfo.songStarted) {
 		if (wop_AutoswitchSongByNextMap.integer) {
 			Music_NextTrack();
 		} else {
@@ -582,10 +582,11 @@ void MusicMenu_Open(void) {
 	int y, t;
 
 	memset(&musicMenu, 0, sizeof(musicMenu));
-	uis.musicbool = 2; // weil beim cmd aufruf cl_paused nicht gesetzt wird
-					   // 2->music kommt vom music-menu ... 1->music ist ui-bgmusic
+	// because cl_paused is not set when calling via cmd
+	uis.musicstate = MUSICSTATE_RUNNING_MUSIC_MENU;
 
-	trap_Cvar_Set("cl_paused", "1"); // wenn musicbool auf 2 ist sollt das nicht's ausmachen
+	// this should not matter if MUSICSTATE_RUNNING_MUSIC_MENU is set
+	trap_Cvar_Set("cl_paused", "1");
 
 	MusicMenu_Cache();
 

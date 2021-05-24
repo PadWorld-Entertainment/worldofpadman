@@ -80,7 +80,7 @@ void UI_StartDemoLoop(void) {
 }
 
 void UI_StartCreditMusic(void) {
-	uis.musicbool = qtrue;
+	uis.musicstate = MUSICSTATE_RUNNING;
 	trap_S_StopBackgroundTrack();
 	//	trap_S_StartBackgroundTrack("music/green sun - yes, he comes!.ogg", "music/green sun - yes, he comes!.ogg");
 	trap_S_StartBackgroundTrack("wopmusic/greensun/09_pad-anthem (credits).ogg",
@@ -88,14 +88,15 @@ void UI_StartCreditMusic(void) {
 }
 
 void UI_StartMusic(void) {
-	uis.musicbool = qtrue;
+	uis.musicstate = MUSICSTATE_RUNNING;
 	trap_S_StartBackgroundTrack("music/22khz_menue_loop", "music/22khz_menue_loop");
 }
 
 void UI_StopMusic(void) {
-	if (uis.musicbool == qtrue) // nicht stopen wenn 2(wop_music menu -> exit) oder 0(keine music gestartet)
+	if (uis.musicstate == MUSICSTATE_RUNNING) {
 		trap_S_StopBackgroundTrack();
-	uis.musicbool = qfalse;
+	}
+	uis.musicstate = MUSICSTATE_STOPPED;
 }
 
 /*
@@ -1398,10 +1399,12 @@ void UI_Refresh(int realtime) {
 	UI_UpdateCvars();
 
 	if (!trap_Cvar_VariableValue("cl_paused")) {
-		if (!uis.musicbool)
+		if (uis.musicstate == MUSICSTATE_STOPPED) {
 			UI_StartMusic();
-	} else
+		}
+	} else {
 		Music_Check();
+	}
 
 	UI_DrawMenu(uis.activemenu);
 

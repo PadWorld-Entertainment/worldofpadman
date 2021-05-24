@@ -119,7 +119,7 @@ static void UI_CallVote_GoEvent(void *ptr, int event) {
 			tmpStr = va("callvote %s", s_callVoteMenu.votetype.itemnames[s_callVoteMenu.votetype.curvalue]);
 	}
 
-	uis.musicbool = 2;
+	uis.musicstate = MUSICSTATE_RUNNING_MUSIC_MENU;
 	trap_Cvar_Set("cl_paused", "0");
 
 	trap_Cmd_ExecuteText(EXEC_APPEND, tmpStr);

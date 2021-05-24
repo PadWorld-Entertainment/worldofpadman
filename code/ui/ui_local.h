@@ -591,6 +591,12 @@ void UI_PlayerInfo_SetInfo(playerInfo_t *pi, int legsAnim, int torsoAnim, const 
 						   weapon_t weaponNum, qboolean chat);
 qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName);
 
+typedef enum {
+	MUSICSTATE_STOPPED,			  // no music is running
+	MUSICSTATE_RUNNING,			  // ui background music
+	MUSICSTATE_RUNNING_MUSIC_MENU // music was started from the music menu
+} music_state_t;
+
 //
 // ui_atoms.c
 //
@@ -610,7 +616,7 @@ typedef struct {
 
 	menulist_s *dropdownlist;
 	vec4_t dropdownxywh;
-	qboolean musicbool;
+	music_state_t musicstate;
 	qhandle_t connectingBG;
 
 	qhandle_t pad_simpleMenuBg;
