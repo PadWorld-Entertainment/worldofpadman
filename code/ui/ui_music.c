@@ -327,7 +327,7 @@ void MusicMenu_Init(void) {
 		playlistPtr = playlist;
 		for (;;) {
 			trackName = Com_ParseLine(&playlistPtr);
-			if (*playlistPtr == '\0') {
+			if (*playlistPtr == '\0' && *trackName == '\0') {
 				break;
 			}
 			if (*trackName == '\0') {
