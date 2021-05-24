@@ -699,7 +699,6 @@ extern const char *UI_Argv(int arg);
 extern const char *UI_Cvar_VariableString(const char *var_name);
 extern void UI_Refresh(int time);
 extern void UI_StartDemoLoop(void);
-extern qboolean m_entersound;
 extern uiStatic_t uis;
 
 extern int QDECL BotListCompare(const void *arg1, const void *arg2);

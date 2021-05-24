@@ -315,6 +315,41 @@ int COM_GetCurrentParseLine(void) {
 	return com_lines;
 }
 
+const char *Com_ParseLine(const char **data_p) {
+	static char string[MAX_STRING_CHARS];
+	int l;
+	int c;
+	const char *data = *data_p;
+
+	l = 0;
+	do {
+		c = (int)*data++;
+		if (c == -1 || c == 0 || c == '\n' || (c == '\r' && *data != '\n')) {
+			break;
+		}
+		// translate all fmt spec to avoid crash bugs
+		if (c == '%') {
+			c = '.';
+		}
+		// don't allow higher ascii values
+		if (c > 127) {
+			c = '.';
+		}
+		// break only after reading all expected data from bitstream
+		if (l >= sizeof(string) - 1) {
+			break;
+		}
+		string[l++] = (char)c;
+	} while (1);
+
+	string[l] = '\0';
+
+	*data_p = data;
+
+	return string;
+}
+
+
 const char *COM_Parse(const char **data_p) {
 	return COM_ParseExt(data_p, qtrue);
 }

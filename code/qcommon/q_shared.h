@@ -762,6 +762,7 @@ void COM_DefaultExtension(char *path, int maxSize, const char *extension);
 
 void COM_BeginParseSession(const char *name);
 int COM_GetCurrentParseLine(void);
+const char *Com_ParseLine(const char **data_p);
 const char *COM_Parse(const char **data_p);
 const char *COM_ParseExt(const char **data_p, qboolean allowLineBreak);
 int COM_Compress(char *data_p);

@@ -301,9 +301,9 @@ void MusicMenu_Init(void) {
 	// no playlist in memory?
 	if (NULL == musicInfo.playOrder) {
 		fileHandle_t f;
-		char playlist[2048];
-		char trackName[MAX_QPATH];
-		char *c;
+		char playlist[4096];
+		const char *trackName;
+		const char *playlistPtr;
 		int i, t, a;
 
 		i = trap_FS_FOpenFile(PLAYLIST_FILENAME_S, &f, FS_READ);
@@ -311,31 +311,33 @@ void MusicMenu_Init(void) {
 			// if playlist could not be read from file, fallback to playing all tracks
 			Com_Printf(MUSIC_MESSAGEPREFIX_S "Could not read playlist from disk, will play all available tracks.\n");
 			Playlist_AddAllTracks(qtrue);
-		} else if (i >= sizeof(playlist)) {
-			Com_Printf(S_COLOR_RED MUSIC_MESSAGEPREFIX_S
-					   "Playlist from disk too large for internal buffer (is %d, max %ld), will be reset!\n",
-					   i, (sizeof(playlist) - 1));
-			// TODO: Empty playlist from memory will lateron be written to disk. Do Playlist_AddAllTracks( qtrue )
-			// instead?
-		} else {
-			memset(playlist, 0, sizeof(playlist));
-			trap_FS_Read(playlist, (sizeof(playlist) - 1), f);
-			trap_FS_FCloseFile(f);
+			return;
+		}
 
-			i = 0;
-			for (c = playlist; *c != '\0'; ++c) {
-				if ('\n' != *c) {
-					trackName[i++] = *c;
-				} else {
-					trackName[i] = '\0';
-					for (a = 0; a < musicInfo.numAlbums; ++a) {
-						for (t = 0; t < musicInfo.albums[a].numTracks; ++t) {
-							if (Q_stricmp(musicInfo.albums[a].tracks[t].file, trackName) == 0) {
-								Playlist_AddTrack(a, t, qtrue);
-								break;
-							}
-						}
-						i = 0;
+		if (i >= sizeof(playlist)) {
+			Com_Printf(S_COLOR_YELLOW MUSIC_MESSAGEPREFIX_S
+					   "Playlist from disk too large for internal buffer (is %d, max %ld), playlist will get cut!\n",
+					   i, (sizeof(playlist) - 1));
+		}
+
+		memset(playlist, 0, sizeof(playlist));
+		trap_FS_Read(playlist, (sizeof(playlist) - 1), f);
+		trap_FS_FCloseFile(f);
+
+		playlistPtr = playlist;
+		for (;;) {
+			trackName = Com_ParseLine(&playlistPtr);
+			if (*playlistPtr == '\0') {
+				break;
+			}
+			if (*trackName == '\0') {
+				continue;
+			}
+			for (a = 0; a < musicInfo.numAlbums; ++a) {
+				for (t = 0; t < musicInfo.albums[a].numTracks; ++t) {
+					if (Q_stricmp(musicInfo.albums[a].tracks[t].file, trackName) == 0) {
+						Playlist_AddTrack(a, t, qtrue);
+						break;
 					}
 				}
 			}
