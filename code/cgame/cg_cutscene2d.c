@@ -28,6 +28,7 @@ typedef enum {
 	C2DTT_RESIZE,	 // v1/v2 = resize-velocity x/y in pixel/ms ( += onto w/h )
 	C2DTT_FADEALPHA, // v1/v2 = alpha change for pic/text
 } c2dTransType_t;
+
 typedef struct {
 	c2dTransType_t type;
 	int picture; // handle which point at the picture, that should be transformed
@@ -39,14 +40,13 @@ typedef struct {
 } cutscene2dTransformation_t;
 
 typedef struct {
-
 	cutscene2dPicture_t pics[MAX_CUTSCENE2D_PICTURES];
 	cutscene2dTransformation_t trans[MAX_CUTSCENE2D_TRANSFORMATIONS];
 } cg_cutscene2d_t;
 
 static cg_cutscene2d_t cg_cutscene2d;
 
-static qboolean cutscene2d_Inited = qfalse;
+static qboolean cutscene2d_initialized = qfalse;
 
 static qboolean isPicHandleOK(int i) {
 	return (i >= 0 && i < MAX_CUTSCENE2D_PICTURES);
@@ -68,6 +68,7 @@ static void Cutscene2d_setPicDefault(cutscene2dPicture_t *pic) {
 	pic->color[2] = pic->textcolor[2] = 1.0f;
 	pic->color[3] = pic->textcolor[3] = 1.0f;
 }
+
 static void Cutscene2d_ResetPic(int picID) {
 	if (isPicHandleOK(picID)) {
 		int i;
@@ -94,19 +95,18 @@ static void Cutscene2d_ResetAll(void) {
 }
 
 void CG_Cutscene2d_Init(void) {
-
-	if (cutscene2d_Inited)
+	if (cutscene2d_initialized)
 		return;
 
 	Cutscene2d_ResetAll();
 
-	cutscene2d_Inited = qtrue;
+	cutscene2d_initialized = qtrue;
 }
 
 void CG_Cutscene2d_Draw(void) {
 	int i;
 
-	CG_Cutscene2d_Init(); // make sure that we are inited
+	CG_Cutscene2d_Init(); // make sure that we are initialized
 
 	for (i = 0; i < MAX_CUTSCENE2D_PICTURES; ++i) {
 		cutscene2dPicture_t *pic = &cg_cutscene2d.pics[i];
@@ -144,7 +144,7 @@ void CG_Cutscene2d_Draw(void) {
 void CG_Cutscene2d_UpdateTrans(void) {
 	int i;
 
-	CG_Cutscene2d_Init(); // make sure that we are inited
+	CG_Cutscene2d_Init(); // make sure that we are initialized
 
 	for (i = 0; i < MAX_CUTSCENE2D_TRANSFORMATIONS; ++i) {
 		cutscene2dTransformation_t *tran = &cg_cutscene2d.trans[i];
@@ -217,7 +217,7 @@ qboolean CG_Cutscene2d_CheckCmd(const char *cmd) {
 	cutscene2dPicture_t *pic;
 	int argc;
 
-	CG_Cutscene2d_Init(); // make sure that we are inited
+	CG_Cutscene2d_Init(); // make sure that we are initialized
 
 	argc = trap_Argc();
 

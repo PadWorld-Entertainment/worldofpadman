@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "cg_local.h"
 
-void CG_TargetCommand_f(void) {
+static void CG_TargetCommand_f(void) {
 	int targetNum;
 	char test[4];
 
@@ -201,33 +201,33 @@ static void CG_ReChooseLogo_f(void) {
 	cg.handleInputMillis = cg.millis + 1000;
 }
 
-static const char *gameNames[] = {GAMETYPE_NAME(GT_FFA),		   GAMETYPE_NAME(GT_TOURNAMENT),
-								  GAMETYPE_NAME(GT_SINGLE_PLAYER), GAMETYPE_NAME(GT_SPRAYFFA),
-								  GAMETYPE_NAME(GT_LPS),		   GAMETYPE_NAME(GT_TEAM),
-								  GAMETYPE_NAME(GT_CTF),		   GAMETYPE_NAME(GT_SPRAY),
-								  GAMETYPE_NAME(GT_BALLOON),	   NULL};
-
 #define MAX_BUFFERLEN 256
 static void CG_HelpCmd_f(void) {
+	static const char *gameNames[] = {GAMETYPE_NAME(GT_FFA),		   GAMETYPE_NAME(GT_TOURNAMENT),
+									  GAMETYPE_NAME(GT_SINGLE_PLAYER), GAMETYPE_NAME(GT_SPRAYFFA),
+									  GAMETYPE_NAME(GT_LPS),		   GAMETYPE_NAME(GT_TEAM),
+									  GAMETYPE_NAME(GT_CTF),		   GAMETYPE_NAME(GT_SPRAY),
+									  GAMETYPE_NAME(GT_BALLOON),	   NULL};
 	char buffer[MAX_BUFFERLEN];
 
-	if (trap_Argc() > 1) {
-		trap_Args(buffer, MAX_BUFFERLEN);
-		if (!Q_stricmp(buffer, "g_gametype")) {
-			int i;
-
-			Com_Printf("GT# -> gametype:\n");
-			for (i = 0; gameNames[i] != NULL; i++)
-				Com_Printf("%3i -> %s\n", i, gameNames[i]);
-		}
-	} else {
+	if (trap_Argc() <= 0) {
 		Com_Printf("available help:\n");
 		Com_Printf(" g_gametype\n");
+		return;
+	}
+
+	trap_Args(buffer, MAX_BUFFERLEN);
+	if (!Q_stricmp(buffer, "g_gametype")) {
+		int i;
+
+		Com_Printf("GT# -> gametype:\n");
+		for (i = 0; gameNames[i] != NULL; i++)
+			Com_Printf("%3i -> %s\n", i, gameNames[i]);
 	}
 }
 
 static void CG_DropCartridge_f(void) {
-	//	trap_SendClientCommand("dropCartridge"); // also goes over spamm filter
+	//	trap_SendClientCommand("dropCartridge"); // also goes over spam filter
 	trap_SendConsoleCommand("+button12;-button12\n"); // BUTTON_DROPCART
 }
 
