@@ -2176,10 +2176,14 @@ static int BotInitLibrary(void) {
 	if (strlen(buf))
 		trap_BotLibVarSet("max_levelitems", buf);
 	// game type
-	trap_Cvar_VariableStringBuffer("g_gametype", buf, sizeof(buf));
-	if (!strlen(buf))
-		strcpy(buf, "0");
-	trap_BotLibVarSet("g_gametype", buf);
+	gametype = (int)trap_Cvar_VariableValue("g_gametype");
+	if (gametype == GT_SINGLE_PLAYER) {
+		trap_BotLibVarSet("bot_gametype", XSTRING(BOTLIB_GT_SINGLE_PLAYER));
+	} else if (gametype >= GT_TEAM) {
+		trap_BotLibVarSet("bot_gametype", XSTRING(BOTLIB_GT_TEAM));
+	} else {
+		trap_BotLibVarSet("bot_gametype", XSTRING(BOTLIB_GT_FFA));
+	}
 	// bot developer mode and log file
 	trap_BotLibVarSet("bot_developer", bot_developer.string);
 	trap_Cvar_VariableStringBuffer("logfile", buf, sizeof(buf));

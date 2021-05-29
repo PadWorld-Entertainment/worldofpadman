@@ -86,18 +86,11 @@ typedef struct campspot_s {
 	struct campspot_s *next;
 } campspot_t;
 
-// FIXME: these are game specific
 typedef enum {
-	GT_FFA,			  // free for all
-	GT_TOURNAMENT,	  // one on one tournament
-	GT_SINGLE_PLAYER, // single player tournament
-
-	//-- team games go after this --
-
-	GT_TEAM, // team deathmatch
-	GT_CTF,	 // capture the flag
-	GT_MAX_GAME_TYPE
-} gametype_t;
+	BOTLIB_GT_SINGLE_PLAYER,
+	BOTLIB_GT_FFA,
+	BOTLIB_GT_TEAM
+} botgametype_t;
 
 typedef struct levelitem_s {
 	int number;		   // number of the level item
@@ -174,7 +167,7 @@ static maplocation_t *maplocations = NULL;
 // camp spots
 static campspot_t *campspots = NULL;
 // the game type
-static int g_gametype = 0;
+static botgametype_t bot_gametype = BOTLIB_GT_SINGLE_PLAYER;
 #ifdef DROPPEDWEIGHT
 // additional dropped item weight
 static libvar_t *droppedweight = NULL;
@@ -737,11 +730,10 @@ int BotGetLevelItemGoal(int index, char *name, bot_goal_t *goal) {
 		}
 	}
 	for (; li; li = li->next) {
-
-		if (g_gametype == GT_SINGLE_PLAYER) {
+		if (bot_gametype == BOTLIB_GT_SINGLE_PLAYER) {
 			if (li->flags & IFL_NOTSINGLE)
 				continue;
-		} else if (g_gametype >= GT_TEAM) {
+		} else if (bot_gametype == BOTLIB_GT_TEAM) {
 			if (li->flags & IFL_NOTTEAM)
 				continue;
 		} else {
@@ -920,11 +912,10 @@ void BotUpdateEntityItems(void) {
 			// if this level item is already linked
 			if (li->entitynum)
 				continue;
-
-			if (g_gametype == GT_SINGLE_PLAYER) {
+			if (bot_gametype == BOTLIB_GT_SINGLE_PLAYER) {
 				if (li->flags & IFL_NOTSINGLE)
 					continue;
-			} else if (g_gametype >= GT_TEAM) {
+			} else if (bot_gametype == BOTLIB_GT_TEAM) {
 				if (li->flags & IFL_NOTTEAM)
 					continue;
 			} else {
@@ -1126,10 +1117,10 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 	Com_Memset(&goal, 0, sizeof(goal));
 	// go through the items in the level
 	for (li = levelitems; li; li = li->next) {
-		if (g_gametype == GT_SINGLE_PLAYER) {
+		if (bot_gametype == BOTLIB_GT_SINGLE_PLAYER) {
 			if (li->flags & IFL_NOTSINGLE)
 				continue;
-		} else if (g_gametype >= GT_TEAM) {
+		} else if (bot_gametype == BOTLIB_GT_TEAM) {
 			if (li->flags & IFL_NOTTEAM)
 				continue;
 		} else {
@@ -1273,10 +1264,10 @@ int BotChooseNBGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 	Com_Memset(&goal, 0, sizeof(bot_goal_t));
 	// go through the items in the level
 	for (li = levelitems; li; li = li->next) {
-		if (g_gametype == GT_SINGLE_PLAYER) {
+		if (bot_gametype == BOTLIB_GT_SINGLE_PLAYER) {
 			if (li->flags & IFL_NOTSINGLE)
 				continue;
-		} else if (g_gametype >= GT_TEAM) {
+		} else if (bot_gametype == BOTLIB_GT_TEAM) {
 			if (li->flags & IFL_NOTTEAM)
 				continue;
 		} else {
@@ -1504,8 +1495,8 @@ void BotFreeGoalState(int handle) {
 int BotSetupGoalAI(void) {
 	const char *filename;
 
-	// check if teamplay is on
-	g_gametype = LibVarValue("g_gametype", "0");
+	// check which game type is active
+	bot_gametype = LibVarValue("bot_gametype", XSTRING(BOTLIB_GT_SINGLE_PLAYER));
 	// item configuration file
 	filename = LibVarString("itemconfig", "items.c");
 	// load the item configuration
