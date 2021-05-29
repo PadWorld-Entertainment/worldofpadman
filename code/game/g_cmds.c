@@ -1733,19 +1733,19 @@ void EditPlayerInventory(gentity_t *ent, int arg_offset) {
 	} else if (Q_stricmp(itstr, "pu_floater") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
 		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_FLOATER;
-		ent->client->ps.stats[STAT_HOLDABLEVAR] = level.time + 1000 * atoi(arg);
+		ent->client->ps.stats[STAT_HOLDABLEVAR] = MAX_FLOATER;
 	} else if (Q_stricmp(itstr, "pu_killerducks") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
 		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_KILLERDUCKS;
-		ent->client->ps.stats[STAT_HOLDABLEVAR] = 5;
+		ent->client->ps.stats[STAT_HOLDABLEVAR] = MAX_KILLERDUCKS;
 	} else if (Q_stricmp(itstr, "pu_bambam") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
 		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_BAMBAM;
-		ent->client->ps.stats[STAT_HOLDABLEVAR] = 3;
+		ent->client->ps.stats[STAT_HOLDABLEVAR] = MAX_BAMBAMS;
 	} else if (Q_stricmp(itstr, "pu_boomie") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
 		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_BOOMIE;
-		ent->client->ps.stats[STAT_HOLDABLEVAR] = 3;
+		ent->client->ps.stats[STAT_HOLDABLEVAR] = MAX_BOOMIES;
 	}
 	// give weapon
 	//------------
