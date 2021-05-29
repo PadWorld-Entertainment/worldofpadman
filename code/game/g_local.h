@@ -219,7 +219,7 @@ struct gentity_s {
 	gentity_t *teammaster; // master of the team
 
 	int watertype;
-	int waterlevel;
+	waterLevel_t waterlevel;
 
 	int noise_index;
 

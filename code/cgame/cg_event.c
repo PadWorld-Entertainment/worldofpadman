@@ -460,7 +460,7 @@ static int CG_WaterLevel(centity_t *cent) {
 	//
 	// get waterlevel, accounting for ducking
 	//
-	waterlevel = 0;
+	waterlevel = WL_NOT;
 
 	point[0] = cent->lerpOrigin[0];
 	point[1] = cent->lerpOrigin[1];
@@ -470,17 +470,17 @@ static int CG_WaterLevel(centity_t *cent) {
 	if (contents & MASK_WATER) {
 		sample2 = viewheight - MINS_Z;
 		sample1 = sample2 / 2;
-		waterlevel = 1;
+		waterlevel = WL_SPLASHING;
 		point[2] = cent->lerpOrigin[2] + MINS_Z + sample1;
 		contents = CG_PointContents(point, -1);
 
 		if (contents & MASK_WATER) {
-			waterlevel = 2;
+			waterlevel = WL_SWIMMING;
 			point[2] = cent->lerpOrigin[2] + MINS_Z + sample2;
 			contents = CG_PointContents(point, -1);
 
 			if (contents & MASK_WATER) {
-				waterlevel = 3;
+				waterlevel = WL_DIVING;
 			}
 		}
 	}
@@ -514,7 +514,7 @@ void CG_PainEvent(centity_t *cent, int health) {
 	}
 #if 0
 	// play a gurp sound instead of a normal pain sound
-	if (CG_WaterLevel(cent) == 3) {
+	if (CG_WaterLevel(cent) == WL_DIVING) {
 		if (rand() & 1) {
 			trap_S_StartSound(NULL, cent->currentState.number, CHAN_VOICE, CG_CustomSound(cent->currentState.number, "sound/player/gurp1"));
 		} else {
@@ -1217,7 +1217,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		DEBUGNAME("EV_DEATHx");
 		// TODO: temporary disabled - see https://github.com/PadWorld-Entertainment/worldofpadman/issues/36
 		// missing sounds in wop - once we have them - we should activate this.
-		if (0 && CG_WaterLevel(cent) == 3) {
+		if (0 && CG_WaterLevel(cent) == WL_DIVING) {
 			trap_S_StartSound(NULL, es->number, CHAN_VOICE, CG_CustomSound(es->number, "*drown"));
 		} else {
 			trap_S_StartSound(NULL, es->number, CHAN_VOICE,

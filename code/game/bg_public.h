@@ -229,7 +229,7 @@ typedef struct {
 	vec3_t mins, maxs; // bounding box size
 
 	int watertype;
-	int waterlevel;
+	waterLevel_t waterlevel;
 
 	float xyspeed;
 

@@ -1252,6 +1252,13 @@ typedef struct playerState_s {
 // then BUTTON_WALKING should be set
 #define MOVE_RUN 120
 
+typedef enum {
+	WL_NOT,
+	WL_SPLASHING,
+	WL_SWIMMING, // wading / swimming at surface
+	WL_DIVING
+} waterLevel_t;
+
 // usercmd_t is sent to the server each client frame
 typedef struct usercmd_s {
 	int serverTime;

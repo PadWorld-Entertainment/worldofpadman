@@ -19,7 +19,6 @@ along with Quake III Arena source code; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
-//
 
 #include "g_local.h"
 
@@ -33,7 +32,7 @@ damage values to that client for pain blends and kicks, and
 global pain sound events for all clients.
 ===============
 */
-void P_DamageFeedback(gentity_t *player) {
+static void P_DamageFeedback(gentity_t *player) {
 	gclient_t *client;
 	float count;
 	vec3_t angles;
@@ -92,9 +91,9 @@ P_WorldEffects
 Check for lava / slime contents and drowning
 =============
 */
-void P_WorldEffects(gentity_t *ent) {
+static void P_WorldEffects(gentity_t *ent) {
 	qboolean envirosuit;
-	int waterlevel;
+	waterLevel_t waterlevel;
 
 	if (ent->client->noclip) {
 		ent->client->airOutTime = level.time + 12000; // don't need air
@@ -108,7 +107,7 @@ void P_WorldEffects(gentity_t *ent) {
 	//
 	// check for drowning
 	//
-	if (waterlevel == 3) {
+	if (waterlevel == WL_DIVING) {
 		// envirosuit give air
 		if (envirosuit) {
 			ent->client->airOutTime = level.time + 10000;
@@ -143,7 +142,7 @@ void P_WorldEffects(gentity_t *ent) {
 	//
 	// check for sizzle damage (move to pmove?)
 	//
-	if (waterlevel && (ent->watertype & (CONTENTS_LAVA | CONTENTS_SLIME))) {
+	if (waterlevel != WL_NOT && (ent->watertype & (CONTENTS_LAVA | CONTENTS_SLIME))) {
 		if (ent->health > 0 && ent->pain_debounce_time <= level.time) {
 
 			if (envirosuit) {
@@ -167,7 +166,7 @@ G_SetClientSound
 ===============
 */
 void G_SetClientSound(gentity_t *ent) {
-	if (ent->waterlevel && (ent->watertype & (CONTENTS_LAVA | CONTENTS_SLIME))) {
+	if (ent->waterlevel != WL_NOT && (ent->watertype & (CONTENTS_LAVA | CONTENTS_SLIME))) {
 		ent->client->ps.loopSound = level.snd_fry;
 	} else {
 		ent->client->ps.loopSound = 0;
@@ -904,7 +903,7 @@ void ClientThink_real(gentity_t *ent) {
 		return;
 	}
 
-	if ((pm.waterlevel <= 1) && (pm.ps->groundEntityNum != ENTITYNUM_NONE) &&
+	if ((pm.waterlevel <= WL_SPLASHING) && (pm.ps->groundEntityNum != ENTITYNUM_NONE) &&
 		((client->lastSentFlyingTime + 500) > level.time)) {
 		if (!(pm.ps->pm_flags & PMF_TIME_KNOCKBACK)) {
 			client->lastSentFlying = -1;

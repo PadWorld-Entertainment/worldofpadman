@@ -237,17 +237,16 @@ qboolean PM_SlideMove(qboolean gravity) {
 /*
 ==================
 PM_StepSlideMove
-
 ==================
 */
 void PM_StepSlideMove(qboolean gravity) {
 	vec3_t start_o, start_v;
 	//	vec3_t		down_o, down_v;
 	trace_t trace;
-	//	float		down_dist, up_dist;
-	//	vec3_t		delta, delta2;
 	vec3_t up, down;
 	float stepSize;
+	// use the step move
+	float delta;
 
 	VectorCopy(pm->ps->origin, start_o);
 	VectorCopy(pm->ps->velocity, start_v);
@@ -264,9 +263,6 @@ void PM_StepSlideMove(qboolean gravity) {
 	if (pm->ps->velocity[2] > 0 && (trace.fraction == 1.0 || DotProduct(trace.plane.normal, up) < 0.7)) {
 		return;
 	}
-
-	// VectorCopy (pm->ps->origin, down_o);
-	// VectorCopy (pm->ps->velocity, down_v);
 
 	VectorCopy(start_o, up);
 	up[2] += STEPSIZE;
@@ -298,36 +294,19 @@ void PM_StepSlideMove(qboolean gravity) {
 		PM_ClipVelocity(pm->ps->velocity, trace.plane.normal, pm->ps->velocity, OVERCLIP);
 	}
 
-#if 0
-	// if the down trace can trace back to the original position directly, don't step
-	pm->trace( &trace, pm->ps->origin, pm->mins, pm->maxs, start_o, pm->ps->clientNum, pm->tracemask);
-	if ( trace.fraction == 1.0 ) {
-		// use the original move
-		VectorCopy (down_o, pm->ps->origin);
-		VectorCopy (down_v, pm->ps->velocity);
-		if ( pm->debugLevel ) {
-			Com_Printf("%i:bend\n", c_pmove);
+	delta = pm->ps->origin[2] - start_o[2];
+	if (delta > 2) {
+		if (delta < 7) {
+			PM_AddEvent(EV_STEP_4);
+		} else if (delta < 11) {
+			PM_AddEvent(EV_STEP_8);
+		} else if (delta < 15) {
+			PM_AddEvent(EV_STEP_12);
+		} else {
+			PM_AddEvent(EV_STEP_16);
 		}
-	} else
-#endif
-	{
-		// use the step move
-		float delta;
-
-		delta = pm->ps->origin[2] - start_o[2];
-		if (delta > 2) {
-			if (delta < 7) {
-				PM_AddEvent(EV_STEP_4);
-			} else if (delta < 11) {
-				PM_AddEvent(EV_STEP_8);
-			} else if (delta < 15) {
-				PM_AddEvent(EV_STEP_12);
-			} else {
-				PM_AddEvent(EV_STEP_16);
-			}
-		}
-		if (pm->debugLevel) {
-			Com_Printf("%i:stepped\n", c_pmove);
-		}
+	}
+	if (pm->debugLevel) {
+		Com_Printf("%i:stepped\n", c_pmove);
 	}
 }

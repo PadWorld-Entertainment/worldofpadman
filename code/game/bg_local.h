@@ -50,7 +50,7 @@ typedef struct {
 
 	vec3_t previous_origin;
 	vec3_t previous_velocity;
-	int previous_waterlevel;
+	waterLevel_t previous_waterlevel;
 } pml_t;
 
 extern pmove_t *pm;
