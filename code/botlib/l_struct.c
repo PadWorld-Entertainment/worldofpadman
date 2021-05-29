@@ -88,7 +88,7 @@ static qboolean ReadNumber(source_t *source, const fielddef_t *fd, void *p) {
 			return 0;
 		} // end if
 		// if not a minus sign
-		if (strcmp(token.string, "-")) {
+		if (strcmp(token.string, "-") != 0) {
 			SourceError(source, "unexpected punctuation %s", token.string);
 			return 0;
 		} // end if
@@ -300,7 +300,7 @@ int ReadStructure(source_t *source, const structdef_t *def, char *structure) {
 					return qfalse;
 				if (!strcmp(token.string, "}"))
 					break;
-				if (strcmp(token.string, ",")) {
+				if (strcmp(token.string, ",") != 0) {
 					SourceError(source, "expected a comma, found %s", token.string);
 					return qfalse;
 				} // end if
@@ -355,7 +355,7 @@ int WriteFloat(FILE *fp, float value) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int WriteStructWithIndent(FILE *fp, const structdef_t *def, const char *structure, int indent) {
+static int WriteStructWithIndent(FILE *fp, const structdef_t *def, const char *structure, int indent) {
 	int i, num;
 	void *p;
 	const fielddef_t *fd;

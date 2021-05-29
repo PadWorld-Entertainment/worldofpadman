@@ -78,7 +78,7 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 // be larger than the travel time towards the long term goal from the current bot position
 int BotChooseNBGItem(int goalstate, vec3_t origin, int *inventory, int travelflags, bot_goal_t *ltg, float maxtime);
 // returns true if the bot touches the goal
-int BotTouchingGoal(vec3_t origin, bot_goal_t *goal);
+int BotTouchingGoal(const vec3_t origin, const bot_goal_t *goal);
 // returns true if the goal should be visible but isn't
 int BotItemGoalInVisButNotVisible(int viewer, vec3_t eye, vec3_t viewangles, bot_goal_t *goal);
 // search for a goal for the given classname, the index can be used

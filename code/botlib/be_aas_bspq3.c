@@ -166,7 +166,7 @@ qboolean AAS_EntityCollision(int entnum, vec3_t start, vec3_t boxmins, vec3_t bo
 	return qfalse;
 } // end of the function AAS_EntityCollision
 //===========================================================================
-// returns true if in Potentially Hearable Set
+// returns true if in Potentially Visible Set
 //
 // Parameter:				-
 // Returns:					-
@@ -175,16 +175,6 @@ qboolean AAS_EntityCollision(int entnum, vec3_t start, vec3_t boxmins, vec3_t bo
 qboolean AAS_inPVS(vec3_t p1, vec3_t p2) {
 	return botimport.inPVS(p1, p2);
 } // end of the function AAS_InPVS
-//===========================================================================
-// returns true if in Potentially Visible Set
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
-//===========================================================================
-qboolean AAS_inPHS(vec3_t p1, vec3_t p2) {
-	return qtrue;
-} // end of the function AAS_inPHS
 //===========================================================================
 //
 // Parameter:				-
@@ -214,15 +204,6 @@ bsp_link_t *AAS_BSPLinkEntity(vec3_t absmins, vec3_t absmaxs, int entnum, int mo
 } // end of the function AAS_BSPLinkEntity
 //===========================================================================
 //
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
-//===========================================================================
-int AAS_BoxEntities(vec3_t absmins, vec3_t absmaxs, int *list, int maxcount) {
-	return 0;
-} // end of the function AAS_BoxEntities
-//===========================================================================
-//
 // Parameter:			-
 // Returns:				-
 // Changes Globals:		-
@@ -239,7 +220,7 @@ int AAS_NextBSPEntity(int ent) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int AAS_BSPEntityInRange(int ent) {
+static int AAS_BSPEntityInRange(int ent) {
 	if (ent <= 0 || ent >= bspworld.numentities) {
 		botimport.Print(PRT_MESSAGE, "bsp entity out of range\n");
 		return qfalse;
@@ -323,7 +304,7 @@ int AAS_IntForBSPEpairKey(int ent, const char *key, int *value) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FreeBSPEntities(void) {
+static void AAS_FreeBSPEntities(void) {
 	int i;
 	bsp_entity_t *ent;
 	bsp_epair_t *epair, *nextepair;
@@ -348,7 +329,7 @@ void AAS_FreeBSPEntities(void) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_ParseBSPEntities(void) {
+static void AAS_ParseBSPEntities(void) {
 	script_t *script;
 	token_t token;
 	bsp_entity_t *ent;
@@ -406,15 +387,6 @@ void AAS_ParseBSPEntities(void) {
 	}	  // end while
 	FreeScript(script);
 } // end of the function AAS_ParseBSPEntities
-//===========================================================================
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
-//===========================================================================
-int AAS_BSPTraceLight(vec3_t start, vec3_t end, vec3_t endpos, int *red, int *green, int *blue) {
-	return 0;
-} // end of the function AAS_BSPTraceLight
 //===========================================================================
 //
 // Parameter:				-

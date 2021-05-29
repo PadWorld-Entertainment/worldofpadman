@@ -292,13 +292,12 @@ int AAS_StartFrame(float time) {
 	AAS_InvalidateEntities();
 	// initialize AAS
 	AAS_ContinueInit(time);
-	//
+
 	aasworld.frameroutingupdates = 0;
 
 	AAS_ClearShownPolygons();
 	AAS_ClearShownDebugLines();
 
-	//
 	if (botDeveloper) {
 		if (LibVarGetValue("showcacheupdates")) {
 			AAS_RoutingInfo();
@@ -313,28 +312,25 @@ int AAS_StartFrame(float time) {
 			LibVarSet("memorydump", "0");
 		} // end if
 	}	  // end if
-	//
+
 	if (saveroutingcache->value) {
 		AAS_WriteRouteCache();
 		LibVarSet("saveroutingcache", "0");
-	} // end if
+	}
+
 	// cyr{
 	if (LibVarGetValue("shownextitem")) {
-		/*
 		GetNextItemNumber(&showroute_ent, &showroute_entarea);
-		botimport.Print(PRT_MESSAGE, "avl %f next item: %d \n", LibVarGetValue("shownextitem"), showroute_ent);
+		botimport.Print(PRT_MESSAGE, "avl %f next item: %d\n", LibVarGetValue("shownextitem"), showroute_ent);
 		PrintCurItemInfo();
 		ShowRoute(0, showroute_ent, showroute_entarea, qtrue);
-		*/
 		LibVarSet("shownextitem", "0");
 	}
 	if (LibVarGetValue("shownoitem")) {
-		/*
 		showroute_ent = 0;
-		botimport.Print(PRT_MESSAGE, " %f dont show item route \n", LibVarGetValue("shownoitem") );
+		botimport.Print(PRT_MESSAGE, " %f dont show item route\n", LibVarGetValue("shownoitem") );
 		AAS_ClearShownPolygons();
 		AAS_ClearShownDebugLines();
-		*/
 		LibVarSet("shownoitem", "0");
 	}
 
@@ -358,7 +354,7 @@ int AAS_StartFrame(float time) {
 	}
 
 	// cyr}
-	//
+
 	aasworld.numframes++;
 	return BLERR_NOERROR;
 } // end of the function AAS_StartFrame

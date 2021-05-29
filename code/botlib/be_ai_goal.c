@@ -1551,12 +1551,12 @@ int BotChooseNBGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int BotTouchingGoal(vec3_t origin, bot_goal_t *goal) {
+int BotTouchingGoal(const vec3_t origin, const bot_goal_t *goal) {
 	int i;
 	vec3_t boxmins, boxmaxs;
 	vec3_t absmins, absmaxs;
-	vec3_t safety_maxs = {0, 0, 0}; //{4, 4, 10};
-	vec3_t safety_mins = {0, 0, 0}; //{-4, -4, 0};
+	const vec3_t safety_maxs = {0, 0, 0}; //{4, 4, 10};
+	const vec3_t safety_mins = {0, 0, 0}; //{-4, -4, 0};
 
 	AAS_PresenceTypeBoundingBox(PRESENCE_NORMAL, boxmins, boxmaxs);
 	VectorSubtract(goal->mins, boxmaxs, absmins);

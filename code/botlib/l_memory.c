@@ -36,16 +36,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "be_interface.h"
 
 //#define MEMDEBUG
-//#define MEMORYMANEGER
+//#define MEMORYMANAGER
 
 #define MEM_ID 0x12345678l
 #define HUNK_ID 0x87654321l
 
-int allocatedmemory;
-int totalmemorysize;
-int numblocks;
+#ifdef MEMORYMANAGER
 
-#ifdef MEMORYMANEGER
+static int allocatedmemory;
+static int totalmemorysize;
+static int numblocks;
 
 typedef struct memoryblock_s {
 	unsigned long int id;
@@ -59,7 +59,7 @@ typedef struct memoryblock_s {
 	struct memoryblock_s *prev, *next;
 } memoryblock_t;
 
-memoryblock_t *memory;
+static memoryblock_t *memory;
 
 //===========================================================================
 //
@@ -67,7 +67,7 @@ memoryblock_t *memory;
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void LinkMemoryBlock(memoryblock_t *block) {
+static void LinkMemoryBlock(memoryblock_t *block) {
 	block->prev = NULL;
 	block->next = memory;
 	if (memory)
@@ -80,7 +80,7 @@ void LinkMemoryBlock(memoryblock_t *block) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void UnlinkMemoryBlock(memoryblock_t *block) {
+static void UnlinkMemoryBlock(memoryblock_t *block) {
 	if (block->prev)
 		block->prev->next = block->next;
 	else
@@ -198,7 +198,7 @@ void *GetClearedHunkMemory(unsigned long size)
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-memoryblock_t *BlockFromPointer(void *ptr, char *str) {
+static memoryblock_t *BlockFromPointer(void *ptr, char *str) {
 	memoryblock_t *block;
 
 	if (!ptr) {

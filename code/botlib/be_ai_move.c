@@ -549,55 +549,27 @@ static int BotAvoidSpots(vec3_t origin, aas_reachability_t *reach, bot_avoidspot
 	float squareddist, squaredradius;
 
 	switch (reach->traveltype & TRAVELTYPE_MASK) {
-	case TRAVEL_WALK:
-		checkbetween = qtrue;
-		break;
-	case TRAVEL_CROUCH:
-		checkbetween = qtrue;
-		break;
-	case TRAVEL_BARRIERJUMP:
-		checkbetween = qtrue;
-		break;
-	case TRAVEL_LADDER:
-		checkbetween = qtrue;
-		break;
 	case TRAVEL_WALKOFFLEDGE:
-		checkbetween = qfalse;
-		break;
 	case TRAVEL_JUMP:
-		checkbetween = qfalse;
-		break;
-	case TRAVEL_SWIM:
-		checkbetween = qtrue;
-		break;
-	case TRAVEL_WATERJUMP:
-		checkbetween = qtrue;
-		break;
 	case TRAVEL_TELEPORT:
-		checkbetween = qfalse;
-		break;
 	case TRAVEL_ELEVATOR:
-		checkbetween = qfalse;
-		break;
 	case TRAVEL_GRAPPLEHOOK:
-		checkbetween = qfalse;
-		break;
 	case TRAVEL_ROCKETJUMP:
-		checkbetween = qfalse;
-		break;
 	case TRAVEL_BFGJUMP:
-		checkbetween = qfalse;
-		break;
 	case TRAVEL_JUMPPAD:
-		checkbetween = qfalse;
-		break;
 	case TRAVEL_FUNCBOB:
 		checkbetween = qfalse;
 		break;
+	case TRAVEL_WALK:
+	case TRAVEL_CROUCH:
+	case TRAVEL_BARRIERJUMP:
+	case TRAVEL_LADDER:
+	case TRAVEL_SWIM:
+	case TRAVEL_WATERJUMP:
 	default:
 		checkbetween = qtrue;
 		break;
-	} // end switch
+	}
 
 	type = AVOID_CLEAR;
 	for (i = 0; i < numavoidspots; i++) {
@@ -667,14 +639,14 @@ int BotGetReachabilityToGoal(vec3_t origin, int areanum, int lastgoalareanum, in
 	// if not in a valid area
 	if (!areanum)
 		return 0;
-	//
+
 	if (AAS_AreaDoNotEnter(areanum) || AAS_AreaDoNotEnter(goal->areanum)) {
 		travelflags |= TFL_DONOTENTER;
 	} // end if
 	// use the routing to find the next area to go to
 	besttime = 0;
 	bestreachnum = 0;
-	//
+
 	for (reachnum = AAS_NextAreaReachability(areanum, 0); reachnum;
 		 reachnum = AAS_NextAreaReachability(areanum, reachnum)) {
 #ifdef AVOIDREACH
@@ -722,7 +694,7 @@ int BotGetReachabilityToGoal(vec3_t origin, int areanum, int lastgoalareanum, in
 			bestreachnum = reachnum;
 		} // end if
 	}	  // end for
-	//
+
 	return bestreachnum;
 } // end of the function BotGetReachabilityToGoal
 //===========================================================================
@@ -1099,7 +1071,7 @@ static int BotWalkInDirection(bot_movestate_t *ms, vec3_t dir, float speed, int 
 		tmpdir[0] = move.endpos[0] - ms->origin[0];
 		tmpdir[1] = move.endpos[1] - ms->origin[1];
 		tmpdir[2] = 0;
-		//
+
 		// AAS_DrawCross(move.endpos, 4, LINECOLOR_BLUE);
 		// the bot is blocked by something
 		if (VectorLength(tmpdir) < speed * ms->thinktime * 0.5)

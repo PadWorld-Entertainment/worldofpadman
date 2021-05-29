@@ -82,7 +82,7 @@ typedef enum { qfalse, qtrue } qboolean;
 #define PUNCTABLE
 
 // longer punctuations first
-punctuation_t default_punctuations[] = {
+static punctuation_t default_punctuations[] = {
 	// binary operators
 	{">>=", P_RSHIFT_ASSIGN, NULL},
 	{"<<=", P_LSHIFT_ASSIGN, NULL},
@@ -167,7 +167,7 @@ char basefolder[MAX_QPATH];
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void PS_CreatePunctuationTable(script_t *script, punctuation_t *punctuations) {
+static void PS_CreatePunctuationTable(script_t *script, punctuation_t *punctuations) {
 	int i;
 	punctuation_t *p, *lastp, *newp;
 
@@ -206,7 +206,7 @@ void PS_CreatePunctuationTable(script_t *script, punctuation_t *punctuations) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-char *PunctuationFromNum(script_t *script, int num) {
+const char *PunctuationFromNum(script_t *script, int num) {
 	int i;
 
 	for (i = 0; script->punctuations[i].p; i++) {
@@ -762,7 +762,7 @@ int PS_ReadLiteral(script_t *script, token_t *token) {
 //============================================================================
 int PS_ReadPunctuation(script_t *script, token_t *token) {
 	int len;
-	char *p;
+	const char *p;
 	punctuation_t *punc;
 
 #ifdef PUNCTABLE

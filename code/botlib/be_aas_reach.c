@@ -123,7 +123,7 @@ static float AAS_FaceArea(aas_face_t *face) {
 		VectorSubtract(aasworld.vertexes[edge->v[side]], v, d1);
 		VectorSubtract(aasworld.vertexes[edge->v[!side]], v, d2);
 		CrossProduct(d1, d2, cross);
-		total += 0.5 * VectorLength(cross);
+		total += 0.5f * VectorLength(cross);
 	} // end for
 	return total;
 } // end of the function AAS_FaceArea
@@ -166,13 +166,21 @@ static float AAS_AreaVolume(int areanum) {
 	volume /= 3;
 	return volume;
 } // end of the function AAS_AreaVolume
+
+//===========================================================================
+// returns qtrue if the area contains ground faces
+//===========================================================================
+static int AAS_AreaGrounded(int areanum) {
+	return (aasworld.areasettings[areanum].areaflags & AREA_GROUNDED);
+}
+
 //===========================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int AAS_BestReachableLinkArea(aas_link_t *areas) {
+static int AAS_BestReachableLinkArea(aas_link_t *areas) {
 	aas_link_t *link;
 
 	for (link = areas; link; link = link->next_area) {
@@ -220,7 +228,7 @@ static int AAS_GetJumpPadInfo(int ent, vec3_t areastart, vec3_t absmins, vec3_t 
 	VectorAdd(origin, absmins, absmins);
 	VectorAdd(origin, absmaxs, absmaxs);
 	VectorAdd(absmins, absmaxs, origin);
-	VectorScale(origin, 0.5, origin);
+	VectorScale(origin, 0.5f, origin);
 
 	// get the start areas
 	VectorCopy(origin, teststart);
@@ -233,7 +241,7 @@ static int AAS_GetJumpPadInfo(int ent, vec3_t areastart, vec3_t absmins, vec3_t 
 	else {
 		VectorCopy(trace.endpos, areastart);
 	} // end else
-	areastart[2] += 0.125;
+	areastart[2] += 0.125f;
 	//
 	// AAS_DrawPermanentCross(origin, 4, 4);
 	// get the target entity
@@ -313,7 +321,7 @@ int AAS_BestReachableFromJumpPadArea(vec3_t origin, vec3_t mins, vec3_t maxs) {
 		// velocity[2]);
 		//
 		VectorSet(cmdmove, 0, 0, 0);
-		Com_Memset(&move, 0, sizeof(aas_clientmove_t));
+		Com_Memset(&move, 0, sizeof(move));
 		AAS_ClientMovementHitBBox(&move, -1, areastart, PRESENCE_NORMAL, qfalse, velocity, cmdmove, 0, 30, 0.1f,
 								  bboxmins, bboxmaxs, bot_visualizejumppads);
 		if (move.frames < 30) {
@@ -374,8 +382,8 @@ int AAS_BestReachableArea(vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalor
 	if (areanum) {
 		// drop client bbox down and try again
 		VectorCopy(start, end);
-		start[2] += 0.25;
-		end[2] -= 50;
+		start[2] += 0.25f;
+		end[2] -= 50.0f;
 		trace = AAS_TraceClientBBox(start, end, PRESENCE_CROUCH, -1);
 		if (!trace.startsolid) {
 			areanum = AAS_PointAreaNum(trace.endpos);
@@ -544,7 +552,7 @@ static void AAS_FaceCenter(int facenum, vec3_t center) {
 		VectorAdd(center, aasworld.vertexes[edge->v[0]], center);
 		VectorAdd(center, aasworld.vertexes[edge->v[1]], center);
 	} // end for
-	scale = 0.5 / face->numedges;
+	scale = 0.5f / face->numedges;
 	VectorScale(center, scale, center);
 } // end of the function AAS_FaceCenter
 //===========================================================================
@@ -561,7 +569,7 @@ static int AAS_FallDamageDistance(void) {
 	maxzvelocity = sqrt(30 * 10000);
 	gravity = aassettings.phys_gravity;
 	t = maxzvelocity / gravity;
-	return 0.5 * gravity * t * t;
+	return 0.5f * gravity * t * t;
 } // end of the function AAS_FallDamageDistance
 //===========================================================================
 // distance = 0.5 * gravity * t * t
@@ -591,7 +599,7 @@ static float AAS_MaxJumpHeight(float phys_jumpvel) {
 
 	phys_gravity = aassettings.phys_gravity;
 	// maximum height a player can jump with the given initial z velocity
-	return 0.5 * phys_gravity * (phys_jumpvel / phys_gravity) * (phys_jumpvel / phys_gravity);
+	return 0.5f * phys_gravity * (phys_jumpvel / phys_gravity) * (phys_jumpvel / phys_gravity);
 } // end of the function MaxJumpHeight
 //===========================================================================
 // returns true if a player can only crouch in the area
@@ -620,8 +628,7 @@ static float AAS_MaxJumpDistance(float phys_jumpvel) {
 int AAS_AreaCrouch(int areanum) {
 	if (!(aasworld.areasettings[areanum].presencetype & PRESENCE_NORMAL))
 		return qtrue;
-	else
-		return qfalse;
+	return qfalse;
 } // end of the function AAS_AreaCrouch
 //===========================================================================
 // returns qtrue if it is possible to swim in the area
@@ -633,19 +640,8 @@ int AAS_AreaCrouch(int areanum) {
 int AAS_AreaSwim(int areanum) {
 	if (aasworld.areasettings[areanum].areaflags & AREA_LIQUID)
 		return qtrue;
-	else
-		return qfalse;
+	return qfalse;
 } // end of the function AAS_AreaSwim
-//===========================================================================
-// returns qtrue if the area contains ground faces
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
-//===========================================================================
-int AAS_AreaGrounded(int areanum) {
-	return (aasworld.areasettings[areanum].areaflags & AREA_GROUNDED);
-} // end of the function AAS_AreaGround
 //===========================================================================
 // returns true if the area contains ladder faces
 //
@@ -878,7 +874,7 @@ static int AAS_Reachability_EqualFloorHeight(int area1num, int area2num) {
 					// VectorMA(start, -1, normal, start);
 					VectorMA(end, INSIDEUNITS_WALKEND, normal, end);
 					VectorMA(start, INSIDEUNITS_WALKSTART, normal, start);
-					end[2] += 0.125;
+					end[2] += 0.125f;
 					//
 					height = DotProduct(invgravity, start);
 					// NOTE: if there's nearby solid or a gap area after this area

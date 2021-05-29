@@ -146,7 +146,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 // punctuation
 typedef struct punctuation_s {
-	char *p;					// punctuation character(s)
+	const char *p;				// punctuation character(s)
 	int n;						// punctuation indication
 	struct punctuation_s *next; // next punctuation
 } punctuation_t;
@@ -226,7 +226,7 @@ void ResetScript(script_t *script);
 // returns true if at the end of the script
 int EndOfScript(script_t *script);
 // returns a pointer to the punctuation with the given number
-char *PunctuationFromNum(script_t *script, int num);
+const char *PunctuationFromNum(script_t *script, int num);
 // load a script from the given file at the given offset with the given length
 script_t *LoadScriptFile(const char *filename);
 // load a script from the given memory with the given length

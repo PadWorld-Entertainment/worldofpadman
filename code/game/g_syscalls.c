@@ -639,7 +639,7 @@ int trap_BotChooseNBGItem(int goalstate, vec3_t origin, int *inventory, int trav
 	return syscall(BOTLIB_AI_CHOOSE_NBG_ITEM, goalstate, origin, inventory, travelflags, ltg, PASSFLOAT(maxtime));
 }
 
-int trap_BotTouchingGoal(vec3_t origin, void /* struct bot_goal_s */ *goal) {
+int trap_BotTouchingGoal(const vec3_t origin, const void /* struct bot_goal_s */ *goal) {
 	return syscall(BOTLIB_AI_TOUCHING_GOAL, origin, goal);
 }
 
