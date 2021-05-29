@@ -677,7 +677,7 @@ void trap_BotUpdateEntityItems(void) {
 	syscall(BOTLIB_AI_UPDATE_ENTITY_ITEMS);
 }
 
-int trap_BotLoadItemWeights(int goalstate, char *filename) {
+int trap_BotLoadItemWeights(int goalstate, const char *filename) {
 	return syscall(BOTLIB_AI_LOAD_ITEM_WEIGHTS, goalstate, filename);
 }
 
@@ -689,7 +689,7 @@ void trap_BotInterbreedGoalFuzzyLogic(int parent1, int parent2, int child) {
 	syscall(BOTLIB_AI_INTERBREED_GOAL_FUZZY_LOGIC, parent1, parent2, child);
 }
 
-void trap_BotSaveGoalFuzzyLogic(int goalstate, char *filename) {
+void trap_BotSaveGoalFuzzyLogic(int goalstate, const char *filename) {
 	syscall(BOTLIB_AI_SAVE_GOAL_FUZZY_LOGIC, goalstate, filename);
 }
 

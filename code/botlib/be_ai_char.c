@@ -196,7 +196,7 @@ void BotDefaultCharacteristics(bot_character_t *ch, bot_character_t *defaultch) 
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-bot_character_t *BotLoadCharacterFromFile(char *charfile, int skill) {
+static bot_character_t *BotLoadCharacterFromFile(const char *charfile, int skill) {
 	int indent, index, foundcharacter;
 	bot_character_t *ch;
 	source_t *source;
@@ -327,7 +327,7 @@ bot_character_t *BotLoadCharacterFromFile(char *charfile, int skill) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int BotFindCachedCharacter(char *charfile, float skill) {
+static int BotFindCachedCharacter(const char *charfile, float skill) {
 	int handle;
 
 	for (handle = 1; handle <= MAX_CLIENTS; handle++) {
@@ -346,7 +346,7 @@ int BotFindCachedCharacter(char *charfile, float skill) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int BotLoadCachedCharacter(char *charfile, float skill, int reload) {
+static int BotLoadCachedCharacter(const char *charfile, float skill, int reload) {
 	int handle, cachedhandle, intskill;
 	bot_character_t *ch = NULL;
 #ifdef DEBUG
@@ -449,7 +449,7 @@ int BotLoadCachedCharacter(char *charfile, float skill, int reload) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int BotLoadCharacterSkill(char *charfile, float skill) {
+static int BotLoadCharacterSkill(const char *charfile, float skill) {
 	int ch, defaultch;
 
 	defaultch = BotLoadCachedCharacter(DEFAULT_CHARACTER, skill, qfalse);
@@ -467,7 +467,7 @@ int BotLoadCharacterSkill(char *charfile, float skill) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int BotInterpolateCharacters(int handle1, int handle2, float desiredskill) {
+static int BotInterpolateCharacters(int handle1, int handle2, float desiredskill) {
 	bot_character_t *ch1, *ch2, *out;
 	int i, handle;
 	float scale;
@@ -514,16 +514,16 @@ int BotInterpolateCharacters(int handle1, int handle2, float desiredskill) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int BotLoadCharacter(char *charfile, float skill) {
+int BotLoadCharacter(const char *charfile, float skill) {
 	int firstskill, secondskill, handle;
 
 	// make sure the skill is in the valid range
-	if (skill < 1.0)
-		skill = 1.0;
-	else if (skill > 5.0)
-		skill = 5.0;
+	if (skill < 1.0f)
+		skill = 1.0f;
+	else if (skill > 5.0f)
+		skill = 5.0f;
 	// skill 1, 4 and 5 should be available in the character files
-	if (skill == 1.0 || skill == 4.0 || skill == 5.0) {
+	if (skill == 1.0f || skill == 4.0f || skill == 5.0f) {
 		return BotLoadCharacterSkill(charfile, skill);
 	} // end if
 	// check if there's a cached skill
@@ -532,7 +532,7 @@ int BotLoadCharacter(char *charfile, float skill) {
 		botimport.Print(PRT_MESSAGE, "loaded cached skill %f from %s\n", skill, charfile);
 		return handle;
 	} // end if
-	if (skill < 4.0) {
+	if (skill < 4.0f) {
 		// load skill 1 and 4
 		firstskill = BotLoadCharacterSkill(charfile, 1);
 		if (!firstskill)

@@ -1527,7 +1527,7 @@ aas_routingcache_t *AAS_GetAreaRoutingCache(int clusternum, int areanum, int tra
 // Changes Globals:		-
 //===========================================================================
 // cyr{
-void AAS_UpdatePortalRoutingCache(aas_routingcache_t *portalcache) {
+static void AAS_UpdatePortalRoutingCache(aas_routingcache_t *portalcache) {
 	int i, portalnum, clusterareanum, clusternum;
 	unsigned short int t;
 	aas_portal_t *portal;
@@ -1624,7 +1624,7 @@ void AAS_UpdatePortalRoutingCache(aas_routingcache_t *portalcache) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-aas_routingcache_t *AAS_GetPortalRoutingCache(int clusternum, int areanum, int travelflags) {
+static aas_routingcache_t *AAS_GetPortalRoutingCache(int clusternum, int areanum, int travelflags) {
 	aas_routingcache_t *cache;
 
 	// find the cached portal routing if existing
@@ -1664,8 +1664,8 @@ aas_routingcache_t *AAS_GetPortalRoutingCache(int clusternum, int areanum, int t
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int AAS_AreaRouteToGoalArea(int areanum, vec3_t origin, int goalareanum, int travelflags, int *traveltime,
-							int *reachnum) {
+static int AAS_AreaRouteToGoalArea(int areanum, vec3_t origin, int goalareanum, int travelflags, int *traveltime,
+								   int *reachnum) {
 	int clusternum, goalclusternum, portalnum, i, clusterareanum, bestreachnum;
 	unsigned short int t, besttime;
 	aas_portal_t *portal;
@@ -1846,7 +1846,7 @@ int AAS_AreaTravelTimeToGoalArea(int areanum, vec3_t origin, int goalareanum, in
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int AAS_AreaReachabilityToGoalArea(int areanum, vec3_t origin, int goalareanum, int travelflags) {
+static int AAS_AreaReachabilityToGoalArea(int areanum, vec3_t origin, int goalareanum, int travelflags) {
 	int traveltime, reachnum = 0;
 
 	if (AAS_AreaRouteToGoalArea(areanum, origin, goalareanum, travelflags, &traveltime, &reachnum)) {
@@ -1958,15 +1958,6 @@ int AAS_PredictRoute(struct aas_predictroute_s *route, int areanum, vec3_t origi
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int AAS_BridgeWalkable(int areanum) {
-	return qfalse;
-} // end of the function AAS_BridgeWalkable
-//===========================================================================
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
-//===========================================================================
 void AAS_ReachabilityFromNum(int num, struct aas_reachability_s *reach) {
 	if (!aasworld.initialized) {
 		Com_Memset(reach, 0, sizeof(aas_reachability_t));
@@ -2038,209 +2029,3 @@ int AAS_NextModelReachability(int num, int modelnum) {
 	}	  // end for
 	return 0;
 } // end of the function AAS_NextModelReachability
-//===========================================================================
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
-//===========================================================================
-int AAS_RandomGoalArea(int areanum, int travelflags, int *goalareanum, vec3_t goalorigin) {
-	int i, n, t;
-	vec3_t start, end;
-	aas_trace_t trace;
-
-	// if the area has no reachabilities
-	if (!AAS_AreaReachability(areanum))
-		return qfalse;
-	//
-	n = aasworld.numareas * random();
-	for (i = 0; i < aasworld.numareas; i++) {
-		if (n <= 0)
-			n = 1;
-		if (n >= aasworld.numareas)
-			n = 1;
-		if (AAS_AreaReachability(n)) {
-			t = AAS_AreaTravelTimeToGoalArea(areanum, aasworld.areas[areanum].center, n, travelflags);
-			// if the goal is reachable
-			if (t > 0) {
-				if (AAS_AreaSwim(n)) {
-					*goalareanum = n;
-					VectorCopy(aasworld.areas[n].center, goalorigin);
-					// botimport.Print(PRT_MESSAGE, "found random goal area %d\n", *goalareanum);
-					return qtrue;
-				} // end if
-				VectorCopy(aasworld.areas[n].center, start);
-				if (!AAS_PointAreaNum(start))
-					Log_Write("area %d center %f %f %f in solid?", n, start[0], start[1], start[2]);
-				VectorCopy(start, end);
-				end[2] -= 300;
-				trace = AAS_TraceClientBBox(start, end, PRESENCE_CROUCH, -1);
-				if (!trace.startsolid && trace.fraction < 1 && AAS_PointAreaNum(trace.endpos) == n) {
-					if (AAS_AreaGroundFaceArea(n) > 300) {
-						*goalareanum = n;
-						VectorCopy(trace.endpos, goalorigin);
-						// botimport.Print(PRT_MESSAGE, "found random goal area %d\n", *goalareanum);
-						return qtrue;
-					} // end if
-				}	  // end if
-			}		  // end if
-		}			  // end if
-		n++;
-	} // end for
-	return qfalse;
-} // end of the function AAS_RandomGoalArea
-//===========================================================================
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
-//===========================================================================
-int AAS_AreaVisible(int srcarea, int destarea) {
-	return qfalse;
-} // end of the function AAS_AreaVisible
-//===========================================================================
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
-//===========================================================================
-float DistancePointToLine(vec3_t v1, vec3_t v2, vec3_t point) {
-	vec3_t vec, p2;
-
-	AAS_ProjectPointOntoVector(point, v1, v2, p2);
-	VectorSubtract(point, p2, vec);
-	return VectorLength(vec);
-} // end of the function DistancePointToLine
-//===========================================================================
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
-//===========================================================================
-int AAS_NearestHideArea(int srcnum, vec3_t origin, int areanum, int enemynum, vec3_t enemyorigin, int enemyareanum,
-						int travelflags) {
-	int i, j, nextareanum, badtravelflags, numreach, bestarea;
-	unsigned short int t, besttraveltime;
-	static unsigned short int *hidetraveltimes;
-	aas_routingupdate_t *updateliststart, *updatelistend, *curupdate, *nextupdate;
-	aas_reachability_t *reach;
-	float dist1, dist2;
-	vec3_t v1, v2, p;
-	qboolean startVisible;
-
-	//
-	if (!hidetraveltimes) {
-		hidetraveltimes = (unsigned short int *)GetClearedMemory(aasworld.numareas * sizeof(unsigned short int));
-	} // end if
-	else {
-		Com_Memset(hidetraveltimes, 0, aasworld.numareas * sizeof(unsigned short int));
-	} // end else
-	besttraveltime = 0;
-	bestarea = 0;
-	// assume visible
-	startVisible = qtrue;
-	//
-	badtravelflags = ~travelflags;
-	//
-	curupdate = &aasworld.areaupdate[areanum];
-	curupdate->areanum = areanum;
-	VectorCopy(origin, curupdate->start);
-	curupdate->areatraveltimes = aasworld.areatraveltimes[areanum][0];
-	curupdate->tmptraveltime = 0;
-	// put the area to start with in the current read list
-	curupdate->next = NULL;
-	curupdate->prev = NULL;
-	updateliststart = curupdate;
-	updatelistend = curupdate;
-	// while there are updates in the list
-	while (updateliststart) {
-		curupdate = updateliststart;
-		//
-		if (curupdate->next)
-			curupdate->next->prev = NULL;
-		else
-			updatelistend = NULL;
-		updateliststart = curupdate->next;
-		//
-		curupdate->inlist = qfalse;
-		// check all reversed reachability links
-		numreach = aasworld.areasettings[curupdate->areanum].numreachableareas;
-		reach = &aasworld.reachability[aasworld.areasettings[curupdate->areanum].firstreachablearea];
-		//
-		for (i = 0; i < numreach; i++, reach++) {
-			// if an undesired travel type is used
-			if (AAS_TravelFlagForType_inline(reach->traveltype) & badtravelflags)
-				continue;
-			//
-			if (AAS_AreaContentsTravelFlags_inline(reach->areanum) & badtravelflags)
-				continue;
-			// number of the area the reachability leads to
-			nextareanum = reach->areanum;
-			// if this moves us into the enemies area, skip it
-			if (nextareanum == enemyareanum)
-				continue;
-			// time already travelled plus the traveltime through
-			// the current area plus the travel time from the reachability
-			t = curupdate->tmptraveltime + AAS_AreaTravelTime(curupdate->areanum, curupdate->start, reach->start) +
-				reach->traveltime;
-
-			// avoid going near the enemy
-			AAS_ProjectPointOntoVector(enemyorigin, curupdate->start, reach->end, p);
-			for (j = 0; j < 3; j++)
-				if ((p[j] > curupdate->start[j] && p[j] > reach->end[j]) ||
-					(p[j] < curupdate->start[j] && p[j] < reach->end[j]))
-					break;
-			if (j < 3) {
-				VectorSubtract(enemyorigin, reach->end, v2);
-			} // end if
-			else {
-				VectorSubtract(enemyorigin, p, v2);
-			} // end else
-			dist2 = VectorLength(v2);
-			// never go through the enemy
-			if (dist2 < 40)
-				continue;
-			//
-			VectorSubtract(enemyorigin, curupdate->start, v1);
-			dist1 = VectorLength(v1);
-			//
-			if (dist2 < dist1) {
-				t += (dist1 - dist2) * 10;
-			}
-			// if we weren't visible when starting, make sure we don't move into their view
-			if (!startVisible && AAS_AreaVisible(enemyareanum, nextareanum)) {
-				continue;
-			}
-			//
-			if (besttraveltime && t >= besttraveltime)
-				continue;
-			//
-			if (!hidetraveltimes[nextareanum] || hidetraveltimes[nextareanum] > t) {
-				// if the nextarea is not visible from the enemy area
-				if (!AAS_AreaVisible(enemyareanum, nextareanum)) {
-					besttraveltime = t;
-					bestarea = nextareanum;
-				} // end if
-				hidetraveltimes[nextareanum] = t;
-				nextupdate = &aasworld.areaupdate[nextareanum];
-				nextupdate->areanum = nextareanum;
-				nextupdate->tmptraveltime = t;
-				// remember where we entered this area
-				VectorCopy(reach->end, nextupdate->start);
-				// if this update is not in the list yet
-				if (!nextupdate->inlist) {
-					// add the new update to the end of the list
-					nextupdate->next = NULL;
-					nextupdate->prev = updatelistend;
-					if (updatelistend)
-						updatelistend->next = nextupdate;
-					else
-						updateliststart = nextupdate;
-					updatelistend = nextupdate;
-					nextupdate->inlist = qtrue;
-				} // end if
-			}	  // end if
-		}		  // end for
-	}			  // end while
-	return bestarea;
-} // end of the function AAS_NearestHideArea

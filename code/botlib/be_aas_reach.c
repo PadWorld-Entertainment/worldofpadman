@@ -61,27 +61,23 @@ extern botlib_import_t botimport;
 // area flag used for weapon jumping
 #define AREA_WEAPONJUMP 8192 // valid area to weapon jump to
 // number of reachabilities of each type
-int reach_swim;			// swim
-int reach_equalfloor;	// walk on floors with equal height
-int reach_step;			// step up
-int reach_walk;			// walk of step
-int reach_barrier;		// jump up to a barrier
-int reach_waterjump;	// jump out of water
-int reach_walkoffledge; // walk of a ledge
-int reach_jump;			// jump
-int reach_ladder;		// climb or descent a ladder
-int reach_teleport;		// teleport
-int reach_elevator;		// use an elevator
-int reach_funcbob;		// use a func bob
-int reach_grapple;		// grapple hook
-int reach_doublejump;	// double jump
-int reach_rampjump;		// ramp jump
-int reach_strafejump;	// strafe jump (just normal jump but further)
-int reach_rocketjump;	// rocket jump
-int reach_bfgjump;		// bfg jump
-int reach_jumppad;		// jump pads
+static int reach_swim;			// swim
+static int reach_equalfloor;	// walk on floors with equal height
+static int reach_step;			// step up
+static int reach_walk;			// walk of step
+static int reach_barrier;		// jump up to a barrier
+static int reach_waterjump;	// jump out of water
+static int reach_walkoffledge; // walk of a ledge
+static int reach_jump;			// jump
+static int reach_ladder;		// climb or descent a ladder
+static int reach_teleport;		// teleport
+static int reach_elevator;		// use an elevator
+static int reach_funcbob;		// use a func bob
+static int reach_grapple;		// grapple hook
+static int reach_rocketjump;	// rocket jump
+static int reach_jumppad;		// jump pads
 // if true grapple reachabilities are skipped
-int calcgrapplereach;
+static int calcgrapplereach;
 // linked reachability
 typedef struct aas_lreachability_s {
 	int areanum;				   // number of the reachable area
@@ -95,10 +91,10 @@ typedef struct aas_lreachability_s {
 	struct aas_lreachability_s *next;
 } aas_lreachability_t;
 // temporary reachabilities
-aas_lreachability_t *reachabilityheap;	// heap with reachabilities
-aas_lreachability_t *nextreachability;	// next free reachability from the heap
-aas_lreachability_t **areareachability; // reachability links for every area
-int numlreachabilities;
+static aas_lreachability_t *reachabilityheap;	// heap with reachabilities
+static aas_lreachability_t *nextreachability;	// next free reachability from the heap
+static aas_lreachability_t **areareachability; // reachability links for every area
+static int numlreachabilities;
 
 //===========================================================================
 // returns the surface area of the given face
@@ -296,7 +292,7 @@ int AAS_BestReachableFromJumpPadArea(vec3_t origin, vec3_t mins, vec3_t maxs) {
 	for (ent = AAS_NextBSPEntity(0); ent; ent = AAS_NextBSPEntity(ent)) {
 		if (!AAS_ValueForBSPEpairKey(ent, "classname", classname, MAX_EPAIRKEY))
 			continue;
-		if (strcmp(classname, "trigger_push"))
+		if (strcmp(classname, "trigger_push") != 0)
 			continue;
 		//
 		if (!AAS_GetJumpPadInfo(ent, areastart, absmins, absmaxs, velocity))
@@ -641,37 +637,6 @@ int AAS_AreaSwim(int areanum) {
 		return qfalse;
 } // end of the function AAS_AreaSwim
 //===========================================================================
-// returns qtrue if the area contains a liquid
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
-//===========================================================================
-int AAS_AreaLiquid(int areanum) {
-	if (aasworld.areasettings[areanum].areaflags & AREA_LIQUID)
-		return qtrue;
-	else
-		return qfalse;
-} // end of the function AAS_AreaLiquid
-//===========================================================================
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
-//===========================================================================
-int AAS_AreaLava(int areanum) {
-	return (aasworld.areasettings[areanum].contents & AREACONTENTS_LAVA);
-} // end of the function AAS_AreaLava
-//===========================================================================
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
-//===========================================================================
-int AAS_AreaSlime(int areanum) {
-	return (aasworld.areasettings[areanum].contents & AREACONTENTS_SLIME);
-} // end of the function AAS_AreaSlime
-//===========================================================================
 // returns qtrue if the area contains ground faces
 //
 // Parameter:				-
@@ -688,7 +653,7 @@ int AAS_AreaGrounded(int areanum) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int AAS_AreaLadder(int areanum) {
+static int AAS_AreaLadder(int areanum) {
 	return (aasworld.areasettings[areanum].areaflags & AREA_LADDER);
 } // end of the function AAS_AreaLadder
 //===========================================================================
@@ -757,41 +722,6 @@ static qboolean AAS_ReachabilityExists(int area1num, int area2num) {
 	} // end for
 	return qfalse;
 } // end of the function AAS_ReachabilityExists
-
-#if 0
-//===========================================================================
-// returns true if there is a solid just after the end point when going
-// from start to end
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
-//===========================================================================
-static int AAS_NearbySolidOrGap(vec3_t start, vec3_t end) {
-	vec3_t dir, testpoint;
-	int areanum;
-
-	VectorSubtract(end, start, dir);
-	dir[2] = 0;
-	VectorNormalize(dir);
-	VectorMA(end, 48, dir, testpoint);
-
-	areanum = AAS_PointAreaNum(testpoint);
-	if (!areanum) {
-		testpoint[2] += 16;
-		areanum = AAS_PointAreaNum(testpoint);
-		if (!areanum)
-			return qtrue;
-	} // end if
-	VectorMA(end, 64, dir, testpoint);
-	areanum = AAS_PointAreaNum(testpoint);
-	if (areanum) {
-		if (!AAS_AreaSwim(areanum) && !AAS_AreaGrounded(areanum))
-			return qtrue;
-	} // end if
-	return qfalse;
-} // end of the function AAS_SolidGapTime
-#endif
 
 //===========================================================================
 // searches for swim reachabilities between adjacent areas
@@ -992,16 +922,6 @@ static int AAS_Reachability_EqualFloorHeight(int area1num, int area2num) {
 		if (!AAS_AreaCrouch(area1num) && AAS_AreaCrouch(area2num)) {
 			lreach->traveltime += aassettings.rs_startcrouch;
 		} // end if
-		/*
-		//NOTE: if there's nearby solid or a gap area after this area
-		if (!AAS_NearbySolidOrGap(lreach->start, lreach->end))
-		{
-			lreach->traveltime += 100;
-		} //end if
-		*/
-		// avoid rather small areas
-		// if (AAS_AreaGroundFaceArea(lreach->areanum) < 500) lreach->traveltime += 100;
-		//
 		reach_equalfloor++;
 		return qtrue;
 	} // end if
@@ -1327,16 +1247,6 @@ static int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(int area1num, in
 			} // end if
 			lreach->next = areareachability[area1num];
 			areareachability[area1num] = lreach;
-			// NOTE: if there's nearby solid or a gap area after this area
-			/*
-			if (!AAS_NearbySolidOrGap(lreach->start, lreach->end))
-			{
-				lreach->traveltime += 100;
-			} //end if
-			*/
-			// avoid rather small areas
-			// if (AAS_AreaGroundFaceArea(lreach->areanum) < 500) lreach->traveltime += 100;
-			//
 			reach_step++;
 			return qtrue;
 		} // end if
@@ -1544,7 +1454,7 @@ static int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(int area1num, in
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-float VectorDistance(vec3_t v1, vec3_t v2) {
+static inline float VectorDistance(const vec3_t v1, const vec3_t v2) {
 	vec3_t dir;
 
 	VectorSubtract(v2, v1, dir);
@@ -1557,7 +1467,7 @@ float VectorDistance(vec3_t v1, vec3_t v2) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-static int VectorBetweenVectors(vec3_t v, vec3_t v1, vec3_t v2) {
+static int VectorBetweenVectors(const vec3_t v, const vec3_t v1, const vec3_t v2) {
 	vec3_t dir1, dir2;
 
 	VectorSubtract(v, v1, dir1);
@@ -1571,9 +1481,9 @@ static int VectorBetweenVectors(vec3_t v, vec3_t v1, vec3_t v2) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-static void VectorMiddle(vec3_t v1, vec3_t v2, vec3_t middle) {
+static void VectorMiddle(const vec3_t v1, const vec3_t v2, vec3_t middle) {
 	VectorAdd(v1, v2, middle);
-	VectorScale(middle, 0.5, middle);
+	VectorScale(middle, 0.5f, middle);
 } // end of the function VectorMiddle
 //===========================================================================
 // calculate a range of points closest to each other on both edges
@@ -1586,182 +1496,6 @@ static void VectorMiddle(vec3_t v1, vec3_t v2, vec3_t middle) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-/*
-float AAS_ClosestEdgePoints(vec3_t v1, vec3_t v2, vec3_t v3, vec3_t v4,
-							aas_plane_t *plane1, aas_plane_t *plane2,
-							vec3_t beststart, vec3_t bestend, float bestdist)
-{
-	vec3_t dir1, dir2, p1, p2, p3, p4;
-	float a1, a2, b1, b2, dist;
-	int founddist;
-
-	//edge vectors
-	VectorSubtract(v2, v1, dir1);
-	VectorSubtract(v4, v3, dir2);
-	//get the horizontal directions
-	dir1[2] = 0;
-	dir2[2] = 0;
-	//
-	// p1 = point on an edge vector of area2 closest to v1
-	// p2 = point on an edge vector of area2 closest to v2
-	// p3 = point on an edge vector of area1 closest to v3
-	// p4 = point on an edge vector of area1 closest to v4
-	//
-	if (dir2[0])
-	{
-		a2 = dir2[1] / dir2[0];
-		b2 = v3[1] - a2 * v3[0];
-		//point on the edge vector of area2 closest to v1
-		p1[0] = (DotProduct(v1, dir2) - (a2 * dir2[0] + b2 * dir2[1])) / dir2[0];
-		p1[1] = a2 * p1[0] + b2;
-		//point on the edge vector of area2 closest to v2
-		p2[0] = (DotProduct(v2, dir2) - (a2 * dir2[0] + b2 * dir2[1])) / dir2[0];
-		p2[1] = a2 * p2[0] + b2;
-	} //end if
-	else
-	{
-		//point on the edge vector of area2 closest to v1
-		p1[0] = v3[0];
-		p1[1] = v1[1];
-		//point on the edge vector of area2 closest to v2
-		p2[0] = v3[0];
-		p2[1] = v2[1];
-	} //end else
-	//
-	if (dir1[0])
-	{
-		//
-		a1 = dir1[1] / dir1[0];
-		b1 = v1[1] - a1 * v1[0];
-		//point on the edge vector of area1 closest to v3
-		p3[0] = (DotProduct(v3, dir1) - (a1 * dir1[0] + b1 * dir1[1])) / dir1[0];
-		p3[1] = a1 * p3[0] + b1;
-		//point on the edge vector of area1 closest to v4
-		p4[0] = (DotProduct(v4, dir1) - (a1 * dir1[0] + b1 * dir1[1])) / dir1[0];
-		p4[1] = a1 * p4[0] + b1;
-	} //end if
-	else
-	{
-		//point on the edge vector of area1 closest to v3
-		p3[0] = v1[0];
-		p3[1] = v3[1];
-		//point on the edge vector of area1 closest to v4
-		p4[0] = v1[0];
-		p4[1] = v4[1];
-	} //end else
-	//start with zero z-coordinates
-	p1[2] = 0;
-	p2[2] = 0;
-	p3[2] = 0;
-	p4[2] = 0;
-	//calculate the z-coordinates from the ground planes
-	p1[2] = (plane2->dist - DotProduct(plane2->normal, p1)) / plane2->normal[2];
-	p2[2] = (plane2->dist - DotProduct(plane2->normal, p2)) / plane2->normal[2];
-	p3[2] = (plane1->dist - DotProduct(plane1->normal, p3)) / plane1->normal[2];
-	p4[2] = (plane1->dist - DotProduct(plane1->normal, p4)) / plane1->normal[2];
-	//
-	founddist = qfalse;
-	//
-	if (VectorBetweenVectors(p1, v3, v4))
-	{
-		dist = VectorDistance(v1, p1);
-		if (dist > bestdist - 0.5 && dist < bestdist + 0.5)
-		{
-			VectorMiddle(beststart, v1, beststart);
-			VectorMiddle(bestend, p1, bestend);
-		} //end if
-		else if (dist < bestdist)
-		{
-			bestdist = dist;
-			VectorCopy(v1, beststart);
-			VectorCopy(p1, bestend);
-		} //end if
-		founddist = qtrue;
-	} //end if
-	if (VectorBetweenVectors(p2, v3, v4))
-	{
-		dist = VectorDistance(v2, p2);
-		if (dist > bestdist - 0.5 && dist < bestdist + 0.5)
-		{
-			VectorMiddle(beststart, v2, beststart);
-			VectorMiddle(bestend, p2, bestend);
-		} //end if
-		else if (dist < bestdist)
-		{
-			bestdist = dist;
-			VectorCopy(v2, beststart);
-			VectorCopy(p2, bestend);
-		} //end if
-		founddist = qtrue;
-	} //end else if
-	if (VectorBetweenVectors(p3, v1, v2))
-	{
-		dist = VectorDistance(v3, p3);
-		if (dist > bestdist - 0.5 && dist < bestdist + 0.5)
-		{
-			VectorMiddle(beststart, p3, beststart);
-			VectorMiddle(bestend, v3, bestend);
-		} //end if
-		else if (dist < bestdist)
-		{
-			bestdist = dist;
-			VectorCopy(p3, beststart);
-			VectorCopy(v3, bestend);
-		} //end if
-		founddist = qtrue;
-	} //end else if
-	if (VectorBetweenVectors(p4, v1, v2))
-	{
-		dist = VectorDistance(v4, p4);
-		if (dist > bestdist - 0.5 && dist < bestdist + 0.5)
-		{
-			VectorMiddle(beststart, p4, beststart);
-			VectorMiddle(bestend, v4, bestend);
-		} //end if
-		else if (dist < bestdist)
-		{
-			bestdist = dist;
-			VectorCopy(p4, beststart);
-			VectorCopy(v4, bestend);
-		} //end if
-		founddist = qtrue;
-	} //end else if
-	//if no shortest distance was found the shortest distance
-	//is between one of the vertexes of edge1 and one of edge2
-	if (!founddist)
-	{
-		dist = VectorDistance(v1, v3);
-		if (dist < bestdist)
-		{
-			bestdist = dist;
-			VectorCopy(v1, beststart);
-			VectorCopy(v3, bestend);
-		} //end if
-		dist = VectorDistance(v1, v4);
-		if (dist < bestdist)
-		{
-			bestdist = dist;
-			VectorCopy(v1, beststart);
-			VectorCopy(v4, bestend);
-		} //end if
-		dist = VectorDistance(v2, v3);
-		if (dist < bestdist)
-		{
-			bestdist = dist;
-			VectorCopy(v2, beststart);
-			VectorCopy(v3, bestend);
-		} //end if
-		dist = VectorDistance(v2, v4);
-		if (dist < bestdist)
-		{
-			bestdist = dist;
-			VectorCopy(v2, beststart);
-			VectorCopy(v4, bestend);
-		} //end if
-	} //end if
-	return bestdist;
-} //end of the function AAS_ClosestEdgePoints*/
-
 static float AAS_ClosestEdgePoints(vec3_t v1, vec3_t v2, vec3_t v3, vec3_t v4, aas_plane_t *plane1, aas_plane_t *plane2,
 							vec3_t beststart1, vec3_t bestend1, vec3_t beststart2, vec3_t bestend2, float bestdist) {
 	vec3_t dir1, dir2, p1, p2, p3, p4;

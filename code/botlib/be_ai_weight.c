@@ -56,7 +56,7 @@ weightconfig_t *weightFileList[MAX_WEIGHT_FILES];
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int ReadValue(source_t *source, float *value) {
+static int ReadValue(source_t *source, float *value) {
 	token_t token;
 
 	if (!PC_ExpectAnyToken(source, &token))
@@ -84,7 +84,7 @@ int ReadValue(source_t *source, float *value) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int ReadFuzzyWeight(source_t *source, fuzzyseperator_t *fs) {
+static int ReadFuzzyWeight(source_t *source, fuzzyseperator_t *fs) {
 	if (PC_CheckTokenString(source, "balance")) {
 		fs->type = WT_BALANCE;
 		if (!PC_ExpectTokenString(source, "("))
@@ -119,7 +119,7 @@ int ReadFuzzyWeight(source_t *source, fuzzyseperator_t *fs) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void FreeFuzzySeperators_r(fuzzyseperator_t *fs) {
+static void FreeFuzzySeperators_r(fuzzyseperator_t *fs) {
 	if (!fs)
 		return;
 	if (fs->child)
@@ -134,7 +134,7 @@ void FreeFuzzySeperators_r(fuzzyseperator_t *fs) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void FreeWeightConfig2(weightconfig_t *config) {
+static void FreeWeightConfig2(weightconfig_t *config) {
 	int i;
 
 	for (i = 0; i < config->numweights; i++) {
@@ -161,7 +161,7 @@ void FreeWeightConfig(weightconfig_t *config) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-fuzzyseperator_t *ReadFuzzySeperators_r(source_t *source) {
+static fuzzyseperator_t *ReadFuzzySeperators_r(source_t *source) {
 	int newindent, index, def, founddefault;
 	token_t token;
 	fuzzyseperator_t *fs, *lastfs, *firstfs;
@@ -275,7 +275,7 @@ fuzzyseperator_t *ReadFuzzySeperators_r(source_t *source) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-weightconfig_t *ReadWeightConfig(char *filename) {
+weightconfig_t *ReadWeightConfig(const char *filename) {
 	int newindent, avail = 0, n;
 	token_t token;
 	source_t *source;
@@ -416,7 +416,7 @@ weightconfig_t *ReadWeightConfig(char *filename) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-qboolean WriteFuzzyWeight(FILE *fp, fuzzyseperator_t *fs)
+static qboolean WriteFuzzyWeight(FILE *fp, fuzzyseperator_t *fs)
 {
 	if (fs->type == WT_BALANCE)
 	{
@@ -442,7 +442,7 @@ qboolean WriteFuzzyWeight(FILE *fp, fuzzyseperator_t *fs)
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-qboolean WriteFuzzySeperators_r(FILE *fp, fuzzyseperator_t *fs, int indent)
+static qboolean WriteFuzzySeperators_r(FILE *fp, fuzzyseperator_t *fs, int indent)
 {
 	if (!WriteIndent(fp, indent)) return qfalse;
 	if (fprintf(fp, "switch(%d)\n", fs->index) < 0) return qfalse;
@@ -528,7 +528,7 @@ qboolean WriteWeightConfig(char *filename, weightconfig_t *config)
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int FindFuzzyWeight(weightconfig_t *wc, char *name) {
+int FindFuzzyWeight(weightconfig_t *wc, const char *name) {
 	int i;
 
 	for (i = 0; i < wc->numweights; i++) {

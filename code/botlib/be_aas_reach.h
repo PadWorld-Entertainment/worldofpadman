@@ -52,16 +52,8 @@ float AAS_AreaGroundFaceArea(int areanum);
 int AAS_AreaCrouch(int areanum);
 // returns true if a player can swim in this area
 int AAS_AreaSwim(int areanum);
-// returns true if the area is filled with a liquid
-int AAS_AreaLiquid(int areanum);
-// returns true if the area contains lava
-int AAS_AreaLava(int areanum);
-// returns true if the area contains slime
-int AAS_AreaSlime(int areanum);
 // returns true if the area has one or more ground faces
 int AAS_AreaGrounded(int areanum);
-// returns true if the area has one or more ladder faces
-int AAS_AreaLadder(int areanum);
 // returns true if the area is a jump pad
 int AAS_AreaJumpPad(int areanum);
 // returns true if the area is donotenter

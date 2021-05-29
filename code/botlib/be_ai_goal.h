@@ -99,11 +99,11 @@ void BotUpdateEntityItems(void);
 // interbreed the goal fuzzy logic
 void BotInterbreedGoalFuzzyLogic(int parent1, int parent2, int child);
 // save the goal fuzzy logic to disk
-void BotSaveGoalFuzzyLogic(int goalstate, char *filename);
+void BotSaveGoalFuzzyLogic(int goalstate, const char *filename);
 // mutate the goal fuzzy logic
 void BotMutateGoalFuzzyLogic(int goalstate, float range);
 // loads item weights for the bot
-int BotLoadItemWeights(int goalstate, char *filename);
+int BotLoadItemWeights(int goalstate, const char *filename);
 // frees the item weights of the bot
 void BotFreeItemWeights(int goalstate);
 // returns the handle of a newly allocated goal state

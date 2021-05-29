@@ -562,6 +562,8 @@ void BotDumpSynonymList(bot_synonymlist_t *synlist) {
 		fprintf(fp, "]\n");
 	} // end for
 } // end of the function BotDumpSynonymList
+
+#if 0
 //===========================================================================
 //
 // Parameter:				-
@@ -712,6 +714,8 @@ static bot_synonymlist_t *BotLoadSynonyms(const char *filename) {
 	//
 	return synlist;
 } // end of the function BotLoadSynonyms
+#endif
+
 //===========================================================================
 // replace all the synonyms in the string
 //
@@ -894,6 +898,7 @@ void BotDumpRandomStringList(bot_randomlist_t *randomlist) {
 		} // end for
 	}	  // end for
 } // end of the function BotDumpRandomStringList
+#if 0
 //===========================================================================
 //
 // Parameter:				-
@@ -924,7 +929,7 @@ static bot_randomlist_t *BotLoadRandomStrings(const char *filename) {
 		PC_SetBaseFolder(BOTFILESBASEFOLDER);
 		source = LoadSourceFile(filename);
 		if (!source) {
-			botimport.Print(PRT_ERROR, "counldn't load %s\n", filename);
+			botimport.Print(PRT_ERROR, "couldn't load %s\n", filename);
 			return NULL;
 		} // end if
 		//
@@ -993,13 +998,14 @@ static bot_randomlist_t *BotLoadRandomStrings(const char *filename) {
 	//
 	return randomlist;
 } // end of the function BotLoadRandomStrings
+#endif
 //===========================================================================
 //
 // Parameter:				-
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-char *RandomString(char *name) {
+static const char *RandomString(const char *name) {
 	bot_randomlist_t *random;
 	bot_randomstring_t *rs;
 	int i;
@@ -2116,7 +2122,8 @@ int BotLoadChatFile(int chatstate, const char *chatfile, const char *chatname) {
 static int BotExpandChatMessage(char *outmessage, const char *message, unsigned long mcontext, bot_match_t *match,
 						 unsigned long vcontext, int reply) {
 	int num, len, i, expansion;
-	char *outputbuf, *ptr;
+	char *outputbuf;
+	const char *ptr;
 	const char *msgptr;
 	char temp[MAX_MESSAGE_SIZE];
 

@@ -327,8 +327,6 @@ int AAS_Reachability_WeaponJump(int area1num, int area2num);
 
 int BotFuzzyPointReachabilityArea(vec3_t origin);
 
-float BotGapDistance(vec3_t origin, vec3_t hordir, int entnum);
-
 void AAS_FloodAreas(vec3_t origin);
 
 int BotExportTest(int parm0, char *parm1, vec3_t parm2, vec3_t parm3) {
@@ -553,7 +551,6 @@ int BotExportTest(int parm0, char *parm1, vec3_t parm2, vec3_t parm3) {
 		}
 	} // end else
 	VectorClear(forward);
-	// BotGapDistance(origin, forward, 0);
 	/*
 	if (parm0 & BUTTON_USE)
 	{

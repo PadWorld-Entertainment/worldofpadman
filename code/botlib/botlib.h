@@ -227,10 +227,10 @@ typedef struct aas_export_s {
 	//--------------------------------------------
 	int (*AAS_PointContents)(vec3_t point);
 	int (*AAS_NextBSPEntity)(int ent);
-	int (*AAS_ValueForBSPEpairKey)(int ent, char *key, char *value, int size);
-	int (*AAS_VectorForBSPEpairKey)(int ent, char *key, vec3_t v);
-	int (*AAS_FloatForBSPEpairKey)(int ent, char *key, float *value);
-	int (*AAS_IntForBSPEpairKey)(int ent, char *key, int *value);
+	int (*AAS_ValueForBSPEpairKey)(int ent, const char *key, char *value, int size);
+	int (*AAS_VectorForBSPEpairKey)(int ent, const char *key, vec3_t v);
+	int (*AAS_FloatForBSPEpairKey)(int ent, const char *key, float *value);
+	int (*AAS_IntForBSPEpairKey)(int ent, const char *key, int *value);
 	//--------------------------------------------
 	// be_aas_reach.c
 	//--------------------------------------------
@@ -293,7 +293,7 @@ typedef struct ai_export_s {
 	//-----------------------------------
 	// be_ai_char.h
 	//-----------------------------------
-	int (*BotLoadCharacter)(char *charfile, float skill);
+	int (*BotLoadCharacter)(const char *charfile, float skill);
 	void (*BotFreeCharacter)(int character);
 	float (*Characteristic_Float)(int character, int index);
 	float (*Characteristic_BFloat)(int character, int index, float min, float max);
@@ -351,10 +351,10 @@ typedef struct ai_export_s {
 	void (*BotSetAvoidGoalTime)(int goalstate, int number, float avoidtime);
 	void (*BotInitLevelItems)(void);
 	void (*BotUpdateEntityItems)(void);
-	int (*BotLoadItemWeights)(int goalstate, char *filename);
+	int (*BotLoadItemWeights)(int goalstate, const char *filename);
 	void (*BotFreeItemWeights)(int goalstate);
 	void (*BotInterbreedGoalFuzzyLogic)(int parent1, int parent2, int child);
-	void (*BotSaveGoalFuzzyLogic)(int goalstate, char *filename);
+	void (*BotSaveGoalFuzzyLogic)(int goalstate, const char *filename);
 	void (*BotMutateGoalFuzzyLogic)(int goalstate, float range);
 	int (*BotAllocGoalState)(int client);
 	void (*BotFreeGoalState)(int handle);
@@ -380,7 +380,7 @@ typedef struct ai_export_s {
 	//-----------------------------------
 	int (*BotChooseBestFightWeapon)(int weaponstate, int *inventory);
 	void (*BotGetWeaponInfo)(int weaponstate, int weapon, struct weaponinfo_s *weaponinfo);
-	int (*BotLoadWeaponWeights)(int weaponstate, char *filename);
+	int (*BotLoadWeaponWeights)(int weaponstate, const char *filename);
 	int (*BotAllocWeaponState)(void);
 	void (*BotFreeWeaponState)(int weaponstate);
 	void (*BotResetWeaponState)(int weaponstate);

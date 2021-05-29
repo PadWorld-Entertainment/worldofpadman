@@ -256,7 +256,7 @@ void BotInterbreedGoalFuzzyLogic(int parent1, int parent2, int child) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void BotSaveGoalFuzzyLogic(int goalstate, char *filename) {
+void BotSaveGoalFuzzyLogic(int goalstate, const char *filename) {
 	// bot_goalstate_t *gs;
 
 	// gs = BotGoalStateFromHandle(goalstate);
@@ -1355,33 +1355,11 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 	} // end for
 	// if no goal item found
 	if (!bestitem) {
-		/*
-		//if not in lava or slime
-		if (!AAS_AreaLava(areanum) && !AAS_AreaSlime(areanum))
-		{
-			if (AAS_RandomGoalArea(areanum, travelflags, &goal.areanum, goal.origin))
-			{
-				VectorSet(goal.mins, -15, -15, -15);
-				VectorSet(goal.maxs, 15, 15, 15);
-				goal.entitynum = 0;
-				goal.number = 0;
-				goal.flags = GFL_ROAM;
-				goal.iteminfo = 0;
-				//push the goal on the stack
-				BotPushGoal(goalstate, &goal);
-				//
-#ifdef DEBUG
-				botimport.Print(PRT_MESSAGE, "chosen roam goal area %d\n", goal.areanum);
-#endif //DEBUG
-				return qtrue;
-			} //end if
-		} //end if
-		*/
 		return qfalse;
 	} // end if
 	if (setcs)
 		botimport.SetBotInfoString(info); // cyr
-										  // botimport.Print(PRT_MESSAGE, "sending info string: %s\n\n", info);
+	// botimport.Print(PRT_MESSAGE, "sending info string: %s\n\n", info);
 	// create a bot goal for this item
 	iteminfo = &ic->iteminfo[bestitem->iteminfo];
 	VectorCopy(bestitem->goalorigin, goal.origin);
@@ -1653,7 +1631,7 @@ void BotResetGoalState(int goalstate) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int BotLoadItemWeights(int goalstate, char *filename) {
+int BotLoadItemWeights(int goalstate, const char *filename) {
 	bot_goalstate_t *gs;
 
 	gs = BotGoalStateFromHandle(goalstate);
