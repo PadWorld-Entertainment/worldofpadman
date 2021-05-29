@@ -1067,7 +1067,7 @@ static bot_matchtemplate_t *BotLoadMatchTemplates(const char *matchfile) {
 	PC_SetBaseFolder(BOTFILESBASEFOLDER);
 	source = LoadSourceFile(matchfile);
 	if (!source) {
-		botimport.Print(PRT_ERROR, "counldn't load %s\n", matchfile);
+		botimport.Print(PRT_ERROR, "couldn't load %s\n", matchfile);
 		return NULL;
 	}
 

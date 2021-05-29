@@ -178,7 +178,7 @@ static bot_character_t *BotLoadCharacterFromFile(const char *charfile, int skill
 	PC_SetBaseFolder(BOTFILESBASEFOLDER);
 	source = LoadSourceFile(charfile);
 	if (!source) {
-		botimport.Print(PRT_ERROR, "counldn't load %s\n", charfile);
+		botimport.Print(PRT_ERROR, "couldn't load %s\n", charfile);
 		return NULL;
 	}
 	ch = (bot_character_t *)GetClearedMemory(sizeof(bot_character_t) +
