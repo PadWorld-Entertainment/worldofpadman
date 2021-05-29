@@ -2158,6 +2158,7 @@ void BotInitialChat(int chatstate, const char *type, int mcontext, char *var0, c
 	BotConstructChatMessage(cs, message, mcontext, &match, 0, qfalse);
 }
 
+#if 0
 void BotPrintReplyChatKeys(bot_replychat_t *replychat) {
 	bot_replychatkey_t *key;
 	bot_matchpiece_t *mp;
@@ -2198,6 +2199,7 @@ void BotPrintReplyChatKeys(bot_replychat_t *replychat) {
 	}
 	botimport.Print(PRT_MESSAGE, "{\n");
 }
+#endif
 
 int BotReplyChat(int chatstate, char *message, int mcontext, int vcontext, char *var0, char *var1, char *var2,
 				 char *var3, char *var4, char *var5, char *var6, char *var7) {

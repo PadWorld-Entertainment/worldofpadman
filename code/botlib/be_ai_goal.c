@@ -173,12 +173,9 @@ static botgametype_t bot_gametype = BOTLIB_GT_SINGLE_PLAYER;
 static libvar_t *droppedweight = NULL;
 #endif
 
-//========================================================================
-
-//========================================================================
 // cyr{
 
-void PrintCurItemInfo() {
+void PrintCurItemInfo(void) {
 	if (spoton_li == NULL) {
 		botimport.Print(PRT_MESSAGE, "no item\n");
 		return;
@@ -320,11 +317,11 @@ itemconfig_t *LoadItemConfig(const char *filename) {
 	botimport.Print(PRT_MESSAGE, "loaded %s\n", path);
 	return ic;
 }
-//===========================================================================
-// index to find the weight function of an iteminfo
 
 //===========================================================================
-int *ItemWeightIndex(weightconfig_t *iwc, itemconfig_t *ic) {
+// index to find the weight function of an iteminfo
+//===========================================================================
+static int *ItemWeightIndex(weightconfig_t *iwc, itemconfig_t *ic) {
 	int *index, i;
 
 	// initialize item weight index
@@ -339,7 +336,7 @@ int *ItemWeightIndex(weightconfig_t *iwc, itemconfig_t *ic) {
 	return index;
 }
 
-void InitLevelItemHeap(void) {
+static void InitLevelItemHeap(void) {
 	int i, max_levelitems;
 
 	if (levelitemheap)
@@ -356,7 +353,7 @@ void InitLevelItemHeap(void) {
 	freelevelitems = levelitemheap;
 }
 
-levelitem_t *AllocLevelItem(void) {
+static levelitem_t *AllocLevelItem(void) {
 	levelitem_t *li;
 
 	li = freelevelitems;
@@ -370,12 +367,12 @@ levelitem_t *AllocLevelItem(void) {
 	return li;
 }
 
-void FreeLevelItem(levelitem_t *li) {
+static void FreeLevelItem(levelitem_t *li) {
 	li->next = freelevelitems;
 	freelevelitems = li;
 }
 
-void AddLevelItemToList(levelitem_t *li) {
+static void AddLevelItemToList(levelitem_t *li) {
 	if (levelitems)
 		levelitems->prev = li;
 	li->prev = NULL;
@@ -383,7 +380,7 @@ void AddLevelItemToList(levelitem_t *li) {
 	levelitems = li;
 }
 
-void RemoveLevelItemFromList(levelitem_t *li) {
+static void RemoveLevelItemFromList(levelitem_t *li) {
 	if (li->prev)
 		li->prev->next = li->next;
 	else
@@ -392,7 +389,7 @@ void RemoveLevelItemFromList(levelitem_t *li) {
 		li->next->prev = li->prev;
 }
 
-void BotFreeInfoEntities(void) {
+static void BotFreeInfoEntities(void) {
 	maplocation_t *ml, *nextml;
 	campspot_t *cs, *nextcs;
 
@@ -408,7 +405,7 @@ void BotFreeInfoEntities(void) {
 	campspots = NULL;
 }
 
-void BotInitInfoEntities(void) {
+static void BotInitInfoEntities(void) {
 	char classname[MAX_EPAIRKEY];
 	maplocation_t *ml;
 	campspot_t *cs;
@@ -633,7 +630,7 @@ void BotDumpAvoidGoals(int goalstate) {
 	}
 }
 
-void BotAddToAvoidGoals(bot_goalstate_t *gs, int number, float avoidtime) {
+static void BotAddToAvoidGoals(bot_goalstate_t *gs, int number, float avoidtime) {
 	int i;
 
 	for (i = 0; i < MAX_AVOIDGOALS; i++) {
@@ -710,12 +707,11 @@ void BotSetAvoidGoalTime(int goalstate, int number, float avoidtime) {
 			}
 		}
 		return;
-	} else {
-		BotAddToAvoidGoals(gs, number, avoidtime);
 	}
+	BotAddToAvoidGoals(gs, number, avoidtime);
 }
 
-int BotGetLevelItemGoal(int index, char *name, bot_goal_t *goal) {
+int BotGetLevelItemGoal(int index, const char *name, bot_goal_t *goal) {
 	levelitem_t *li;
 
 	if (!itemconfig)
@@ -761,7 +757,7 @@ int BotGetLevelItemGoal(int index, char *name, bot_goal_t *goal) {
 	return -1;
 }
 
-int BotGetMapLocationGoal(char *name, bot_goal_t *goal) {
+int BotGetMapLocationGoal(const char *name, bot_goal_t *goal) {
 	maplocation_t *ml;
 	vec3_t mins = {-8, -8, -8}, maxs = {8, 8, 8};
 
@@ -805,7 +801,8 @@ int BotGetNextCampSpotGoal(int num, bot_goal_t *goal) {
 	return 0;
 }
 
-void BotFindEntityForLevelItem(levelitem_t *li) {
+#if 0
+static void BotFindEntityForLevelItem(levelitem_t *li) {
 	int ent, modelindex;
 	itemconfig_t *ic;
 	aas_entityinfo_t entinfo;
@@ -837,6 +834,7 @@ void BotFindEntityForLevelItem(levelitem_t *li) {
 		}
 	}
 }
+#endif
 
 // NOTE: enum entityType_t in bg_public.h
 #define ET_ITEM 2

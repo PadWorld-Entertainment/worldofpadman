@@ -450,6 +450,7 @@ void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
 #endif // DEBUG
 }
 
+#if 0
 /*
 ==================
 BotNearestVisibleItem
@@ -483,6 +484,7 @@ float BotNearestVisibleItem(bot_state_t *bs, const char *itemname, bot_goal_t *g
 	} while (i > 0);
 	return bestdist;
 }
+#endif
 
 static void BotMatch_EnterGame(bot_state_t *bs, bot_match_t *match) {
 	int client;

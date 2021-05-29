@@ -344,9 +344,9 @@ typedef struct ai_export_s {
 							float maxtime);
 	int (*BotTouchingGoal)(const vec3_t origin, const struct bot_goal_s *goal);
 	int (*BotItemGoalInVisButNotVisible)(int viewer, vec3_t eye, vec3_t viewangles, struct bot_goal_s *goal);
-	int (*BotGetLevelItemGoal)(int index, char *classname, struct bot_goal_s *goal);
+	int (*BotGetLevelItemGoal)(int index, const char *classname, struct bot_goal_s *goal);
 	int (*BotGetNextCampSpotGoal)(int num, struct bot_goal_s *goal);
-	int (*BotGetMapLocationGoal)(char *name, struct bot_goal_s *goal);
+	int (*BotGetMapLocationGoal)(const char *name, struct bot_goal_s *goal);
 	float (*BotAvoidGoalTime)(int goalstate, int number);
 	void (*BotSetAvoidGoalTime)(int goalstate, int number, float avoidtime);
 	void (*BotInitLevelItems)(void);

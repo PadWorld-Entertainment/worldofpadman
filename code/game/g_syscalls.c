@@ -655,7 +655,7 @@ int trap_BotGetNextCampSpotGoal(int num, void /* struct bot_goal_s */ *goal) {
 	return syscall(BOTLIB_AI_GET_NEXT_CAMP_SPOT_GOAL, num, goal);
 }
 
-int trap_BotGetMapLocationGoal(char *name, void /* struct bot_goal_s */ *goal) {
+int trap_BotGetMapLocationGoal(const char *name, void /* struct bot_goal_s */ *goal) {
 	return syscall(BOTLIB_AI_GET_MAP_LOCATION_GOAL, name, goal);
 }
 

@@ -478,7 +478,7 @@ qboolean WriteWeightConfig(char *filename, weightconfig_t *config) {
 }
 #endif
 
-int FindFuzzyWeight(weightconfig_t *wc, const char *name) {
+int FindFuzzyWeight(const weightconfig_t *wc, const char *name) {
 	int i;
 
 	for (i = 0; i < wc->numweights; i++) {
@@ -489,7 +489,7 @@ int FindFuzzyWeight(weightconfig_t *wc, const char *name) {
 	return -1;
 }
 
-float FuzzyWeight_r(int *inventory, fuzzyseperator_t *fs) {
+static float FuzzyWeight_r(const int *inventory, const fuzzyseperator_t *fs) {
 	float scale, w1, w2;
 
 	if (inventory[fs->index] < fs->value) {
@@ -522,7 +522,7 @@ float FuzzyWeight_r(int *inventory, fuzzyseperator_t *fs) {
 	return fs->weight;
 }
 
-float FuzzyWeightUndecided_r(int *inventory, fuzzyseperator_t *fs) {
+static float FuzzyWeightUndecided_r(const int *inventory, const fuzzyseperator_t *fs) {
 	float scale, w1, w2;
 
 	if (inventory[fs->index] < fs->value) {
@@ -607,7 +607,7 @@ float FuzzyWeightUndecided(int *inventory, weightconfig_t *wc, int weightnum) {
 #endif
 }
 
-void EvolveFuzzySeperator_r(fuzzyseperator_t *fs) {
+static void EvolveFuzzySeperator_r(fuzzyseperator_t *fs) {
 	if (fs->child) {
 		EvolveFuzzySeperator_r(fs->child);
 	} else if (fs->type == WT_BALANCE) {
@@ -634,7 +634,7 @@ void EvolveWeightConfig(weightconfig_t *config) {
 	}
 }
 
-void ScaleFuzzySeperator_r(fuzzyseperator_t *fs, float scale) {
+static void ScaleFuzzySeperator_r(fuzzyseperator_t *fs, float scale) {
 	if (fs->child) {
 		ScaleFuzzySeperator_r(fs->child, scale);
 	} else if (fs->type == WT_BALANCE) {
@@ -665,7 +665,7 @@ void ScaleWeight(weightconfig_t *config, char *name, float scale) {
 	}
 }
 
-void ScaleFuzzySeperatorBalanceRange_r(fuzzyseperator_t *fs, float scale) {
+static void ScaleFuzzySeperatorBalanceRange_r(fuzzyseperator_t *fs, float scale) {
 	if (fs->child) {
 		ScaleFuzzySeperatorBalanceRange_r(fs->child, scale);
 	} else if (fs->type == WT_BALANCE) {
@@ -693,7 +693,7 @@ void ScaleFuzzyBalanceRange(weightconfig_t *config, float scale) {
 	}
 }
 
-int InterbreedFuzzySeperator_r(fuzzyseperator_t *fs1, fuzzyseperator_t *fs2, fuzzyseperator_t *fsout) {
+static int InterbreedFuzzySeperator_r(fuzzyseperator_t *fs1, fuzzyseperator_t *fs2, fuzzyseperator_t *fsout) {
 	if (fs1->child) {
 		if (!fs2->child || !fsout->child) {
 			botimport.Print(PRT_ERROR, "cannot interbreed weight configs, unequal child\n");
@@ -724,9 +724,9 @@ int InterbreedFuzzySeperator_r(fuzzyseperator_t *fs1, fuzzyseperator_t *fs2, fuz
 	}
 	return qtrue;
 }
+
 //===========================================================================
 // config1 and config2 are interbreeded and stored in configout
-
 //===========================================================================
 void InterbreedWeightConfigs(weightconfig_t *config1, weightconfig_t *config2, weightconfig_t *configout) {
 	int i;

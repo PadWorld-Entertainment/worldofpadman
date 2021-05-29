@@ -1693,7 +1693,7 @@ int BotWantsToHelp(bot_state_t *bs) {
 BotDontAvoid
 ==================
 */
-void BotDontAvoid(bot_state_t *bs, char *itemname) {
+static void BotDontAvoid(bot_state_t *bs, const char *itemname) {
 	bot_goal_t goal;
 	int num;
 
@@ -1709,8 +1709,7 @@ void BotDontAvoid(bot_state_t *bs, char *itemname) {
 BotGoForPowerups
 ==================
 */
-void BotGoForPowerups(bot_state_t *bs) {
-
+static void BotGoForPowerups(bot_state_t *bs) {
 	// don't avoid any of the powerups anymore
 	BotDontAvoid(bs, "REViVAL");
 	BotDontAvoid(bs, "ViSiONLESS");
@@ -4009,39 +4008,38 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 	} else {
 		event = state->event & ~EV_EVENT_BITS;
 	}
-	//
+
 	switch (event) {
 	case EV_DROP_CARTRIDGE: {
 		if (bs->ltgtype == LTG_FETCHCART) {
 			// get event location !!!
 			bs->takecart = qtrue;
 
-			/*
+#if 0
 			vec3_t dir;
-			char* items[]={"red Cartridge","blue Cartridge"};
+			const char *items[] = {"red Cartridge", "blue Cartridge"};
 			bot_goal_t goal;
 			float dist;
 
-			G_Printf(S_COLOR_GREEN " launched ...");	// cyr_ptr
+			G_Printf(S_COLOR_GREEN " launched ..."); // cyr_ptr
 			VectorSubtract(state->origin, bs->origin, dir);
-			if(VectorLength(dir) >= PUSHCART_DIST ){
-				G_Printf("too far %d :/ \n", VectorLength(dir));	// cyr_ptr
-				//break;	// cyr_ptr
-			}
-			else G_Printf("in range ...");		// cyr_ptr
-
+			if (VectorLength(dir) >= PUSHCART_DIST) {
+				G_Printf("too far %d\n", VectorLength(dir)); // cyr_ptr
+																 // break;	// cyr_ptr
+			} else
+				G_Printf("in range ..."); // cyr_ptr
 
 			// push droped cart in item db
 			trap_BotUpdateEntityItems();
 			// identify cart
-			dist = BotNearestVisibleItem(bs, items[BotTeam(bs)-1], &goal );
-			if(dist < 200){
+			dist = BotNearestVisibleItem(bs, items[BotTeam(bs) - 1], &goal);
+			if (dist < 200) {
 				bs->takecart = qtrue;
-				memcpy(&goal, &bs->teamgoal, sizeof(bot_goal_t));
-				G_Printf("taking it ! \n");	// cyr_ptr
-			}
-			else G_Printf("not found :/ \n");	// cyr_ptr
-			*/
+				memcpy(&goal, &bs->teamgoal, sizeof(goal));
+				G_Printf("taking it\n"); // cyr_ptr
+			} else
+				G_Printf("not found\n"); // cyr_ptr
+#endif
 		}
 		break;
 	}
@@ -4052,16 +4050,16 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 		target = state->otherEntityNum;
 		attacker = state->otherEntityNum2;
 		mod = state->eventParm;
-		//
+
 		if (target == bs->client) {
 			bs->botdeathtype = mod;
 			bs->lastkilledby = attacker;
-			//
+
 			if (target == attacker || target == ENTITYNUM_NONE || target == ENTITYNUM_WORLD)
 				bs->botsuicide = qtrue;
 			else
 				bs->botsuicide = qfalse;
-			//
+
 			bs->num_deaths++;
 		}
 		// else if this client was killed by the bot
@@ -4069,7 +4067,7 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 			bs->enemydeathtype = mod;
 			bs->lastkilledplayer = target;
 			bs->killedenemy_time = FloatTime();
-			//
+
 			bs->num_kills++;
 		} else if (attacker == bs->enemy && target == attacker) {
 			bs->enemysuicide = qtrue;

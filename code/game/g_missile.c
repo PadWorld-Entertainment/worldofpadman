@@ -204,7 +204,7 @@ void G_MissileImpact(gentity_t *ent, trace_t *trace) {
 	// is it cheaper in bandwidth to just remove this ent and create a new
 	// one, rather than changing the missile into the explosion?
 
-	memcpy(&ent->s.apos, &ent->s.pos, sizeof(trajectory_t));
+	Com_Memcpy(&ent->s.apos, &ent->s.pos, sizeof(trajectory_t));
 
 	if (other->takedamage && other->client) {
 		G_AddEvent(ent, EV_MISSILE_HIT, DirToByte(trace->plane.normal));
@@ -302,7 +302,7 @@ static void move_killerducks(gentity_t *ent) {
 	}
 	// CJP end
 
-	opferlenght = (1024.0f * 1024.0f); // 262144.0f;//(512.0f)²
+	opferlenght = (1024.0f * 1024.0f); // 262144.0f;//(512.0f)
 	opfer = -1;
 	for (i = 0; i < g_maxclients.integer; i++) {
 		if (level.clients[i].pers.connected != CON_CONNECTED)
@@ -318,7 +318,7 @@ static void move_killerducks(gentity_t *ent) {
 		tmpv3[0] = level.clients[i].ps.origin[0] - ent->r.currentOrigin[0];
 		tmpv3[1] = level.clients[i].ps.origin[1] - ent->r.currentOrigin[1];
 		tmpv3[2] = (level.clients[i].ps.origin[2] - ent->r.currentOrigin[2]) *
-				   2.0f; // die höhe soll stärker gewertet werden ...
+				   2.0f; // the height should have a higher influence ..
 
 		tmpv3[0] = tmpv3[0] * tmpv3[0] + tmpv3[1] * tmpv3[1] + tmpv3[2] * tmpv3[2];
 
@@ -333,7 +333,7 @@ static void move_killerducks(gentity_t *ent) {
 		tmpv3[0] = level.clients[ownerNum].ps.origin[0] - ent->r.currentOrigin[0];
 		tmpv3[1] = level.clients[ownerNum].ps.origin[1] - ent->r.currentOrigin[1];
 		tmpv3[2] = (level.clients[ownerNum].ps.origin[2] - ent->r.currentOrigin[2]) *
-				   2.0f; // die höhe soll stärker gewertet werden ...
+				   2.0f; // the height should have a higher influence ..
 
 		tmpv3[0] = tmpv3[0] * tmpv3[0] + tmpv3[1] * tmpv3[1] + tmpv3[2] * tmpv3[2];
 
@@ -376,7 +376,7 @@ static void move_killerducks(gentity_t *ent) {
 			tmpf = 1 / sqrt(tmpf); // also wenn die wurzel aus >400 0 wird ist eh der weltuntergang nicht mehr weit O_o
 
 			if (ent->s.pos.trDelta[0] * tmpv3[0] + ent->s.pos.trDelta[1] * tmpv3[1] <
-				0.98) // cos<0.98 -> größer ~10° abweichung
+				0.98) // cos<0.98 -> more than ~10degree deviation
 			{
 				ent->s.pos.trDelta[0] = tmpv3[0] * 400.0f;
 				ent->s.pos.trDelta[1] = tmpv3[1] * 400.0f;
@@ -541,7 +541,6 @@ static void move_killerducks(gentity_t *ent) {
 	trap_LinkEntity(ent);
 
 	G_RunThink(ent);
-	return;
 }
 
 /*
@@ -581,7 +580,7 @@ static void launch_slickent(vec3_t origin, float size, vec3_t normal) {
 	slickent->touch = touch_slickent;
 	slickent->r.svFlags = SVF_USE_CURRENT_ORIGIN /*|SVF_CAPSULE*/;
 	slickent->s.eType = ET_GENERAL; // ET_MOVER;
-	slickent->s.weapon = 23; //... dann missbrauch ich eben die var *muhaha* ... extreeeeem-varmissbrauching :ugly:
+	slickent->s.weapon = 23; //... dann missbrauch ich eben die var *muhaha* ... extreeeeem-varmissbrauching :ugly: - see CG_General
 	slickent->s.generic1 = (int)size; // missssssssssssbrauch =)
 	slickent->s.time2 = 360 * random();
 	VectorCopy(origin, slickent->s.origin);

@@ -1672,7 +1672,7 @@ shootafterrspecialHI:
 	}
 
 	if (pm->ps->weapon == WP_NIPPER && pm->ps->weaponstate != WEAPON_READY) {
-		// noch was ein binden damit die nipper auch automatisch schießt
+		// nipper should fire automatically
 		pm->ps->weaponTime += ADDTIME_AUTOFIRE_NIPPER;
 		pm->ps->weaponstate = WEAPON_READY;
 		return;
@@ -1855,7 +1855,6 @@ void PM_UpdateViewAngles(playerState_t *ps, const usercmd_t *cmd) {
 /*
 ================
 PmoveSingle
-
 ================
 */
 void trap_SnapVector(float *v);
@@ -1935,7 +1934,7 @@ void PmoveSingle(pmove_t *pmove) {
 	// save old velocity for crashlanding
 	VectorCopy(pm->ps->velocity, pml.previous_velocity);
 
-	pml.frametime = pml.msec * 0.001;
+	pml.frametime = pml.msec * 0.001f;
 
 	// update the viewangles
 	PM_UpdateViewAngles(pm->ps, &pm->cmd);

@@ -129,9 +129,6 @@ typedef struct bot_weaponstate_s {
 static bot_weaponstate_t *botweaponstates[MAX_CLIENTS + 1];
 static weaponconfig_t *weaponconfig;
 
-//========================================================================
-
-//========================================================================
 static int BotValidWeaponNumber(int weaponnum) {
 	if (weaponnum <= 0 || weaponnum > weaponconfig->numweapons) {
 		botimport.Print(PRT_ERROR, "weapon number (%d) out of range (%d)\n", weaponnum, weaponconfig->numweapons);
@@ -139,9 +136,7 @@ static int BotValidWeaponNumber(int weaponnum) {
 	}
 	return qtrue;
 }
-//========================================================================
 
-//========================================================================
 static bot_weaponstate_t *BotWeaponStateFromHandle(int handle) {
 	if (handle <= 0 || handle > MAX_CLIENTS) {
 		botimport.Print(PRT_FATAL, "weapon state handle %d out of range\n", handle);
@@ -280,7 +275,7 @@ static weaponconfig_t *LoadWeaponConfig(const char *filename) {
 	return wc;
 }
 
-static int *WeaponWeightIndex(weightconfig_t *wwc, weaponconfig_t *wc) {
+static int *WeaponWeightIndex(const weightconfig_t *wwc, const weaponconfig_t *wc) {
 	int *index, i;
 
 	// initialize item weight index
@@ -400,9 +395,7 @@ void BotResetWeaponState(int weaponstate) {
 	ws->weaponweightconfig = weaponweightconfig;
 	ws->weaponweightindex = weaponweightindex;
 }
-//========================================================================
 
-//========================================================================
 int BotAllocWeaponState(void) {
 	int i;
 
@@ -414,9 +407,7 @@ int BotAllocWeaponState(void) {
 	}
 	return 0;
 }
-//========================================================================
 
-//========================================================================
 void BotFreeWeaponState(int handle) {
 	if (handle <= 0 || handle > MAX_CLIENTS) {
 		botimport.Print(PRT_FATAL, "weapon state handle %d out of range\n", handle);
