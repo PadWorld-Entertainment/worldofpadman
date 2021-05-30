@@ -1199,9 +1199,8 @@ static float CG_DrawPowerups(float y) {
 }
 
 int CG_DrawCartridgeStatus(int y) {
-	char s1[16];								 //,s2[16];
-	vec4_t bgcolor = {1.0f, 0.33f, 0.0f, 0.33f}; // I know this isn't red =)
-	//	vec4_t	blue = {0.0f,0.33f,1.0f,0.33f};//I know this isn't blue =)
+	char s1[16];
+	vec4_t bgcolor = {1.0f, 0.33f, 0.0f, 0.33f};
 
 	Com_sprintf(s1, 16, "%i", cg.snap->ps.ammo[WP_SPRAYPISTOL]);
 
@@ -1235,7 +1234,41 @@ int CG_DrawCartridgeStatus(int y) {
 	return y;
 }
 
-static void CG_DrawHoldableItem(float y);
+/*
+===================
+CG_DrawHoldableItem
+===================
+*/
+static void CG_DrawHoldableItem(float y) {
+	int value;
+
+	value = cg.snap->ps.stats[STAT_HOLDABLE_ITEM];
+	if (value) {
+		const int itemState = cg.snap->ps.stats[STAT_HOLDABLEVAR];
+		CG_RegisterItemVisuals(value);
+
+		y -= ICON_SIZE;
+		CG_DrawPic(640 - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cg_items[value].icon);
+		if (cg.snap->ps.stats[STAT_FORBIDDENITEMS] & (1 << bg_itemlist[value].giTag)) {
+			CG_DrawPic(640 - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
+		}
+
+		if (bg_itemlist[value].giTag == HI_FLOATER) {
+			const vec4_t barColor = {0.33f, 0.33f, 1.0f, 0.66f};
+			const float barFactor = 1.0f / (float)MAX_FLOATER;
+			const int barHeight = (int)(ICON_SIZE * itemState * barFactor);
+			const float barX = 640 - ICON_SIZE - 10;
+			CG_FillRect(barX, y + ICON_SIZE - barHeight, 10, barHeight, barColor);
+			CG_DrawRect(barX, y, 10, ICON_SIZE, 1.0f, colorWhite);
+		} else if (bg_itemlist[value].giTag == HI_KILLERDUCKS) {
+			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
+							 8, 16, 1);
+		} else if (bg_itemlist[value].giTag == HI_BOOMIES) {
+			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
+							 8, 16, 1);
+		}
+	}
+}
 
 /*
 =====================
@@ -1294,21 +1327,11 @@ CG_DrawLowerLeft
 =====================
 */
 static void CG_DrawLowerLeft(void) {
-	float y;
-
-	y = 360;
-
-	// if ( cgs.gametype >= GT_TEAM && cg_drawTeamOverlay.integer == 3 ) {
-	//	y = CG_DrawTeamOverlay( y, qfalse, qfalse );
-	//}
-
-	y = CG_DrawPickupItem(y);
+	CG_DrawPickupItem(360);
 
 	if (cg_drawTeamOverlay.integer)
 		CG_WoPTeamOverlay();
 }
-
-//===========================================================================================
 
 /*
 =================
@@ -1368,42 +1391,6 @@ static void CG_DrawTeamInfo(void) {
 			CG_DrawStringExt(CHATLOC_X + TINYCHAR_WIDTH, CHATLOC_Y - (cgs.teamChatPos - i) * TINYCHAR_HEIGHT,
 							 cgs.teamChatMsgs[i % chatHeight], hcolor, qfalse, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
 							 0);
-		}
-	}
-}
-
-/*
-===================
-CG_DrawHoldableItem
-===================
-*/
-static void CG_DrawHoldableItem(float y) {
-	int value;
-
-	value = cg.snap->ps.stats[STAT_HOLDABLE_ITEM];
-	if (value) {
-		const int itemState = cg.snap->ps.stats[STAT_HOLDABLEVAR];
-		CG_RegisterItemVisuals(value);
-
-		y -= ICON_SIZE;
-		CG_DrawPic(640 - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cg_items[value].icon);
-		if (cg.snap->ps.stats[STAT_FORBIDDENITEMS] & (1 << bg_itemlist[value].giTag)) {
-			CG_DrawPic(640 - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
-		}
-
-		if (bg_itemlist[value].giTag == HI_FLOATER) {
-			const vec4_t barColor = {0.33f, 0.33f, 1.0f, 0.66f};
-			const float barFactor = 1.0f / (float)MAX_FLOATER;
-			const int barHeight = (int)(ICON_SIZE * itemState * barFactor);
-			const float barX = 640 - ICON_SIZE - 10;
-			CG_FillRect(barX, y + ICON_SIZE - barHeight, 10, barHeight, barColor);
-			CG_DrawRect(barX, y, 10, ICON_SIZE, 1.0f, colorWhite);
-		} else if (bg_itemlist[value].giTag == HI_KILLERDUCKS) {
-			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
-							 8, 16, 1);
-		} else if (bg_itemlist[value].giTag == HI_BOOMIES) {
-			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
-							 8, 16, 1);
 		}
 	}
 }
@@ -1498,7 +1485,7 @@ typedef struct {
 	int snapshotCount;
 } lagometer_t;
 
-lagometer_t lagometer;
+static lagometer_t lagometer;
 
 /*
 ==============
@@ -2386,9 +2373,9 @@ void CG_GetBalloonStateColor(entityState_t *s, vec4_t col) {
 }
 
 static void CG_GetBalloonColor(int index, vec4_t color) {
-	static const vec4_t red = {1.0, 0.0, 0.0, 1.0};
-	static const vec4_t blue = {0.0, 0.0, 1.0, 1.0};
-	static const vec4_t white = {1.0, 1.0, 1.0, 1.0};
+	static const vec4_t red = {1.0f, 0.0f, 0.0f, 1.0f};
+	static const vec4_t blue = {0.0f, 0.0f, 1.0f, 1.0f};
+	static const vec4_t white = {1.0f, 1.0f, 1.0f, 1.0f};
 	static const vec4_t yellow = {1.0f, 0.9f, 0.1f, 1.0f};
 	// FIXME: Make this buffer safe
 	char status = cgs.balloonState[index];
@@ -2585,9 +2572,6 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 		return;
 	}
 
-	//	{ vec4_t	twhite = { 1,1,1,0.5f}; CG_DrawStringExt(300,0,GAME_VERSION,twhite,qtrue,qfalse,8,16,32); }
-	//	Com_Printf(":=%i\n",trap_Key_IsDown(':'));
-
 	if (cg.first2dtime == 0)
 		cg.first2dtime = cg.time;
 	if (cg.time - cg.first2dtime < 8000 && 1) // noch cvar einfuegen ;P
@@ -2669,27 +2653,8 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 	} else if (cg.zoomed) {
 		vec4_t ammoColor = {1.0f, 0.5f, 0.0f, 1.0f};
 		char tmpstr[16];
-		//		int		ammoWidth;
 
 		CG_DrawCrosshairNames();
-		/*
-				CG_DrawStatusBar();
-				CG_DrawAmmoWarning();
-				CG_DrawWeaponSelect();
-				CG_DrawHoldableItem();
-				CG_DrawReward();
-				if ( cgs.gametype >= GT_TEAM )
-					CG_DrawTeamInfo();
-
-				CG_DrawVote();
-				CG_DrawTeamVote();
-				CG_DrawLagometer();
-				CG_DrawUpperRight(stereoFrame);
-				CG_DrawLowerRight();
-				CG_DrawLowerLeft();
-		*/
-		//		CG_FillRect(240-40,360,52,20,colorWhite);
-		//		CG_DrawRect(240-40,360,52,20,1,colorBlack);
 
 		// Draw Ammo count on screen
 		if (cg.snap->ps.weapon == WP_SPLASHER) {
@@ -2706,24 +2671,12 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 		float x, y, w, h;
 		int weaponNum, team;
 		int hudnum;
-		/*
-				trap_R_DrawStretchPic(cg.refdef.x,cg.refdef.y+(int)((float)cg.refdef.height*0.759f),
-					(int)((float)cg.refdef.width*0.128f),(int)((float)cg.refdef.height*0.241f),0,0,1,1,cgs.media.hud_bl);
-
-				trap_R_DrawStretchPic(cg.refdef.x+(int)((float)cg.refdef.width*0.334f),cg.refdef.y+(int)((float)cg.refdef.height*0.846f),
-					(int)((float)cg.refdef.width*0.332f),(int)((float)cg.refdef.height*0.139f),0,0,1,1,cgs.media.hud_bc);
-
-				trap_R_DrawStretchPic(cg.refdef.x+(int)((float)cg.refdef.width*0.857f),cg.refdef.y+(int)((float)cg.refdef.height*0.764f),
-					(int)((float)cg.refdef.width*0.143f),(int)((float)cg.refdef.height*0.236f),0,0,1,1,cgs.media.hud_br);
-		*/
 
 		if (stereoFrame == STEREO_CENTER)
 			CG_DrawCrosshair();
 		CG_DrawCrosshairNames();
-		//		CG_DrawStatusBar();
 		CG_DrawAmmoWarning();
 		CG_DrawWeaponSelect();
-		//		CG_DrawHoldableItem(); // -> jetzt im lower right
 		CG_DrawReward();
 		if (cgs.gametype >= GT_TEAM)
 			CG_DrawTeamInfo();

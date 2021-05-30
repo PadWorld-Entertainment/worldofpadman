@@ -262,7 +262,7 @@ typedef enum {
 	STAT_MAX_HEALTH,	// health / armor limit, changable by handicap
 
 	STAT_HOLDABLEVAR,	// for Floater/Killerduck "ammo"
-	STAT_SPRAYROOMSECS, // time for sprayroom->killroom stuff
+	STAT_SPRAYROOMSECS, // time for sprayroom->killroom stuff (this is level.maxsprayroomtime+1)
 						// According to latin notation, "cs" can be replaced with "x" :)
 	STAT_BALLOONTIME,
 	STAT_FORBIDDENITEMS,

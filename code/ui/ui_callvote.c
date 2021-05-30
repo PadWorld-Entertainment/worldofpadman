@@ -34,8 +34,8 @@ static char ArrayForListStrs[MAX_LISTSTRARRAY];
 static void UI_CallVote_Cache(void);
 static void UI_CallVote_CVType(void *unused, int event);
 
-vec4_t colorTOrange = {1.f, 0.43f, 0.f, 0.66f};
-vec4_t colorMOver = {0.4f, 0.f, 0.4f, 1.f};
+static vec4_t colorTOrange = {1.f, 0.43f, 0.f, 0.66f};
+static vec4_t colorMOver = {0.4f, 0.f, 0.4f, 1.f};
 
 static const char *callvote_strs[] = {"kick", "timelimit", "pointlimit",  "gametype",
 									  "map",  "next map",  "restart map", 0};
