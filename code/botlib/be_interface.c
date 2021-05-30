@@ -59,8 +59,6 @@ botlib_export_t be_botlib_export;
 botlib_import_t botimport;
 
 int botDeveloper;
-// qtrue if the library is setup
-int botlibsetup = qfalse;
 
 //===========================================================================
 
@@ -152,7 +150,6 @@ int Export_BotLibSetup(void) {
 	if (errnum != BLERR_NOERROR)
 		return errnum;
 
-	botlibsetup = qtrue;
 	botlibglobals.botlibsetup = qtrue;
 
 	return BLERR_NOERROR;
@@ -188,7 +185,6 @@ int Export_BotLibShutdown(void) {
 	// shut down library log file
 	Log_Shutdown();
 
-	botlibsetup = qfalse;
 	botlibglobals.botlibsetup = qfalse;
 	// print any files still open
 	PC_CheckOpenSourceHandles();

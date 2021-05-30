@@ -48,7 +48,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define EVALUATERECURSIVELY
 
 #define MAX_WEIGHT_FILES 128
-weightconfig_t *weightFileList[MAX_WEIGHT_FILES];
+static weightconfig_t *weightFileList[MAX_WEIGHT_FILES];
 
 static int ReadValue(source_t *source, float *value) {
 	token_t token;
