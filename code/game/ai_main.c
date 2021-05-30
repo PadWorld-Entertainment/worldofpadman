@@ -72,33 +72,33 @@ int numbots;
 // floating point time
 float floattime;
 // time to do a regular update
-float regularupdate_time;
+static float regularupdate_time;
 //
-int bot_interbreed;
-int bot_interbreedmatchcount;
+static int bot_interbreed;
+static int bot_interbreedmatchcount;
 //
-vmCvar_t bot_thinktime;
-vmCvar_t bot_memorydump;
-vmCvar_t bot_saveroutingcache;
-vmCvar_t bot_pause;
-vmCvar_t bot_testsolid;
-vmCvar_t bot_testclusters;
+static vmCvar_t bot_thinktime;
+static vmCvar_t bot_memorydump;
+static vmCvar_t bot_saveroutingcache;
+static vmCvar_t bot_pause;
+static vmCvar_t bot_testsolid;
+static vmCvar_t bot_testclusters;
 vmCvar_t bot_developer;
-vmCvar_t bot_interbreedchar;
-vmCvar_t bot_interbreedbots;
-vmCvar_t bot_interbreedcycle;
-vmCvar_t bot_interbreedwrite;
+static vmCvar_t bot_interbreedchar;
+static vmCvar_t bot_interbreedbots;
+static vmCvar_t bot_interbreedcycle;
+static vmCvar_t bot_interbreedwrite;
 // cyr
-vmCvar_t bot_cachetest;
-vmCvar_t bot_roamfactor;
-vmCvar_t bot_shownextitem;
-vmCvar_t bot_shownoitem;
-vmCvar_t bot_showreachesfrom;
-vmCvar_t bot_showreachesto;
+static vmCvar_t bot_cachetest;
+static vmCvar_t bot_roamfactor;
+static vmCvar_t bot_shownextitem;
+static vmCvar_t bot_shownoitem;
+static vmCvar_t bot_showreachesfrom;
+static vmCvar_t bot_showreachesto;
 
 void ExitLevel(void);
 
-void ResetWaypoints(void) {
+static void ResetWaypoints(void) {
 	numwaypoints = 0;
 	memset(waypoints, 0, sizeof(waypoints));
 
@@ -115,7 +115,7 @@ qboolean BotWpValid(bot_state_t *bs) {
 	return (bs->wp && bs->wptime && level.time - bs->wptime < validspan);
 }
 
-ctf_waypoint_t *FindNearestWP(bot_state_t *bs) {
+static ctf_waypoint_t *FindNearestWP(bot_state_t *bs) {
 	int i;
 	int best = -1;
 	int travelTime;
@@ -217,7 +217,6 @@ qboolean GetNextWp(bot_state_t *bs, qboolean direction_home) {
 
 // true if the bots wp has outgoing links
 qboolean BotWpHasSuccessor(bot_state_t *bs, qboolean direction_home) {
-
 	int team = (direction_home) ? BotTeam(bs) : BotOppositeTeam(bs);
 	team -= 1;
 
@@ -442,7 +441,7 @@ static const char *ParseBoomie(const char *buf) {
 	return buf;
 }
 
-void ParseWaypointFile(const char *buf) {
+static void ParseWaypointFile(const char *buf) {
 	const char *token;
 	ctf_waypoint_t *wp;
 	int i;
@@ -525,7 +524,7 @@ void ParseWaypointFile(const char *buf) {
 	}
 }
 
-void ReadWaypointFile(void) {
+static void ReadWaypointFile(void) {
 	int len;
 	fileHandle_t f;
 	char buf[8192];

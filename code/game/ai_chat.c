@@ -601,12 +601,12 @@ int BotChat_Death(bot_state_t *bs) {
 	}
 	if (BotNumActivePlayers() <= 1)
 		return qfalse;
-	//
+
 	if (bs->lastkilledby >= 0 && bs->lastkilledby < MAX_CLIENTS)
-		EasyClientName(bs->lastkilledby, name, 32);
+		EasyClientName(bs->lastkilledby, name, sizeof(name));
 	else
-		strcpy(name, "[world]");
-	//
+		Q_strncpyz(name, "[world]", sizeof(name));
+
 	if (TeamPlayIsOn() && BotSameTeam(bs, bs->lastkilledby)) {
 		if (bs->lastkilledby == bs->client)
 			return qfalse;
@@ -617,7 +617,7 @@ int BotChat_Death(bot_state_t *bs) {
 		if (TeamPlayIsOn()) {
 			return qtrue;
 		}
-		//
+
 		if (bs->botdeathtype == MOD_WATER)
 			BotAI_BotInitialChat(bs, "death_drown", BotRandomOpponentName(bs), NULL);
 		else if (bs->botdeathtype == MOD_SLIME)
