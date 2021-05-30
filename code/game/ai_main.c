@@ -1477,7 +1477,7 @@ static int BotAI(int client, float thinktime) {
 		// cyr{
 		else if (!Q_stricmp(buf, "cdi")) {
 			cdi_type = atoi(args);
-			if (cdi_type == 3)
+			if (cdi_type == CLIENT_DO_IT_SELECT_LOGO)
 				BotSelectLogo(bs);
 		}
 		// cyr}

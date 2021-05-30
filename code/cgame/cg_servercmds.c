@@ -654,27 +654,23 @@ static void CG_ServerCommand(void) {
 
 		// FIXME: Magical constants!
 		switch (id) {
-		// sprayroom goodbye
-		case 0:
+		case CLIENT_DO_IT_SPRAYROOM_GOODBYE:
 			i = (int)(random() * 1.9999f);
 			trap_S_StartLocalSound(cgs.media.Announcer_SRfrag[i], CHAN_ANNOUNCER);
 			break;
 
-		// sprayed on wrong wall
-		case 1:
+		case CLIENT_DO_IT_SPRAYED_ON_WRONG_WALL:
 			i = atoi(CG_Argv(2));
 			trap_S_StartLocalSound(cgs.media.wrongLogo[i], CHAN_ANNOUNCER);
 			break;
 
-		// LPS lost
-		case 2:
+		case CLIENT_DO_IT_LPS_LOST:
 			trap_S_StartLocalSound(cgs.media.YouLooseSound, CHAN_ANNOUNCER);
 			trap_S_StartLocalSound(cgs.media.YouLooseSound, CHAN_ANNOUNCER);
 			break;
 
-		// select syc-logo
 		// TODO: Remove!
-		case 3: {
+		case CLIENT_DO_IT_SELECT_LOGO: {
 			char buffer[64];
 
 			trap_Cvar_VariableStringBuffer("syc_logo", buffer, sizeof(buffer));

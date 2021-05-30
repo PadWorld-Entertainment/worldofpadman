@@ -1323,7 +1323,6 @@ static int CG_DrawPickupItem(int y) {
 /*
 =====================
 CG_DrawLowerLeft
-
 =====================
 */
 static void CG_DrawLowerLeft(void) {
