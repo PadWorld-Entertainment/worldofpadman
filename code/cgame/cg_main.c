@@ -933,10 +933,10 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.deferShader = trap_R_RegisterShaderNoMip("gfx/2d/defer");
 
 	cgs.media.scoreboardBG = trap_R_RegisterShaderNoMip("scoreboard/bg");
-	cgs.media.scoreboardName = trap_R_RegisterShaderNoMip("scoreboard/name");
-	cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip("scoreboard/ping");
-	cgs.media.scoreboardScore = trap_R_RegisterShaderNoMip("scoreboard/score");
-	cgs.media.scoreboardTime = trap_R_RegisterShaderNoMip("scoreboard/time");
+	cgs.media.scoreboardName = trap_R_RegisterShaderNoMip("menu/tab/name");
+	cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip("menu/tab/ping");
+	cgs.media.scoreboardScore = trap_R_RegisterShaderNoMip("menu/tab/score");
+	cgs.media.scoreboardTime = trap_R_RegisterShaderNoMip("menu/tab/time");
 	cgs.media.voiceIcon = trap_R_RegisterShaderNoMip("hud/voiceIcon");
 
 	cgs.media.healthstationIcon = trap_R_RegisterShaderNoMip("icons/healthstation");
