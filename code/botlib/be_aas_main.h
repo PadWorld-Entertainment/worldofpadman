@@ -53,5 +53,5 @@ int AAS_Initialized(void);
 int AAS_Loaded(void);
 // returns the current time
 float AAS_Time(void);
-//
+
 void AAS_ProjectPointOntoVector(vec3_t point, vec3_t vStart, vec3_t vEnd, vec3_t vProj);

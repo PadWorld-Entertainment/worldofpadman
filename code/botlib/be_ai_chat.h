@@ -19,7 +19,7 @@ along with Quake III Arena source code; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
-//
+
 /*****************************************************************************
  * name:		be_ai_chat.h
  *
@@ -80,8 +80,8 @@ int BotNextConsoleMessage(int chatstate, bot_consolemessage_t *cm);
 // returns the number of console messages currently stored in the state
 int BotNumConsoleMessages(int chatstate);
 // selects a chat message of the given type
-void BotInitialChat(int chatstate, const char *type, int mcontext, char *var0, char *var1, char *var2, char *var3, char *var4,
-					char *var5, char *var6, char *var7);
+void BotInitialChat(int chatstate, const char *type, int mcontext, char *var0, char *var1, char *var2, char *var3,
+					char *var4, char *var5, char *var6, char *var7);
 // returns the number of initial chat messages of the given type
 int BotNumInitialChats(int chatstate, const char *type);
 // find and select a reply for the given message

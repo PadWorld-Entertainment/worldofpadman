@@ -19,7 +19,7 @@ along with Quake III Arena source code; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
-//
+
 /*****************************************************************************
  * name:		botlib.h
  *
@@ -177,7 +177,7 @@ typedef struct botlib_import_s {
 	int (*inPVS)(vec3_t p1, vec3_t p2);
 	// retrieve the BSP entity data lump
 	char *(*BSPEntityData)(void);
-	//
+
 	void (*BSPModelMinsMaxsOrigin)(int modelnum, vec3_t angles, vec3_t mins, vec3_t maxs, vec3_t origin);
 	// send a bot client command
 	void (*BotClientCommand)(int client, const char *command);
@@ -196,7 +196,7 @@ typedef struct botlib_import_s {
 	int (*DebugLineCreate)(void);
 	void (*DebugLineDelete)(int line);
 	void (*DebugLineShow)(int line, vec3_t start, vec3_t end, int color);
-	//
+
 	int (*DebugPolygonCreate)(int color, int numPoints, vec3_t *points);
 	void (*DebugPolygonDelete)(int id);
 	// cyr
@@ -254,8 +254,8 @@ typedef struct aas_export_s {
 	//--------------------------------------------
 	int (*AAS_Swimming)(vec3_t origin);
 	int (*AAS_PredictClientMovement)(struct aas_clientmove_s *move, int entnum, const vec3_t origin, int presencetype,
-									 int onground, const vec3_t velocity, const vec3_t cmdmove, int cmdframes, int maxframes,
-									 float frametime, int stopevent, int stopareanum, int visualize);
+									 int onground, const vec3_t velocity, const vec3_t cmdmove, int cmdframes,
+									 int maxframes, float frametime, int stopevent, int stopareanum, int visualize);
 } aas_export_t;
 
 typedef struct ea_export_s {
@@ -263,7 +263,7 @@ typedef struct ea_export_s {
 	void (*EA_Command)(int client, const char *command);
 	void (*EA_Say)(int client, const char *str);
 	void (*EA_SayTeam)(int client, const char *str);
-	//
+
 	void (*EA_Action)(int client, int action);
 	void (*EA_Gesture)(int client);
 	void (*EA_Talk)(int client);
@@ -309,8 +309,8 @@ typedef struct ai_export_s {
 	void (*BotRemoveConsoleMessage)(int chatstate, int handle);
 	int (*BotNextConsoleMessage)(int chatstate, struct bot_consolemessage_s *cm);
 	int (*BotNumConsoleMessages)(int chatstate);
-	void (*BotInitialChat)(int chatstate, const char *type, int mcontext, char *var0, char *var1, char *var2, char *var3,
-						   char *var4, char *var5, char *var6, char *var7);
+	void (*BotInitialChat)(int chatstate, const char *type, int mcontext, char *var0, char *var1, char *var2,
+						   char *var3, char *var4, char *var5, char *var6, char *var7);
 	int (*BotNumInitialChats)(int chatstate, const char *type);
 	int (*BotReplyChat)(int chatstate, char *message, int mcontext, int vcontext, char *var0, char *var1, char *var2,
 						char *var3, char *var4, char *var5, char *var6, char *var7);

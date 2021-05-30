@@ -19,7 +19,6 @@ along with Quake III Arena source code; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
-//
 
 /*****************************************************************************
  * name:		be_aas.h
@@ -61,7 +60,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define TFL_FUNCBOB 0x01000000		// func bobbing
 #define TFL_FLIGHT 0x02000000		// flight
 #define TFL_BRIDGE 0x04000000		// move over a bridge
-//
+
 #define TFL_NOTTEAM1 0x08000000 // not team 1
 #define TFL_NOTTEAM2 0x10000000 // not team 2
 
@@ -112,7 +111,7 @@ typedef struct bsp_trace_s
 	int				contents;	// contents on other side of surface hit
 	int				ent;		// number of entity hit
 } bsp_trace_t;
-//
+
 */
 
 // entity info

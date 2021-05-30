@@ -62,7 +62,7 @@ int AAS_BBoxAreas(vec3_t absmins, vec3_t absmaxs, int *areas, int maxareas);
 int AAS_AreaInfo(int areanum, aas_areainfo_t *info);
 // returns the area the point is in
 int AAS_PointAreaNum(vec3_t point);
-//
+
 int AAS_PointReachabilityAreaIndex(vec3_t point);
 // returns the plane the given face is in
 void AAS_FacePlane(int facenum, vec3_t normal, float *dist);

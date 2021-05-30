@@ -19,7 +19,6 @@ along with Quake III Arena source code; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
-//
 
 /*****************************************************************************
  * name:		be_ai_move.h
@@ -58,7 +57,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define MOVERESULT_ONTOPOF_FUNCBOB 64	  // bot is ontop of a func_bobbing
 #define MOVERESULT_ONTOPOF_ELEVATOR 128	  // bot is ontop of an elevator (func_plat)
 #define MOVERESULT_BLOCKEDBYAVOIDSPOT 256 // bot is blocked by an avoid spot
-//
+
 #define MAX_AVOIDREACH 1
 #define MAX_AVOIDSPOTS 32
 // avoid spot types
