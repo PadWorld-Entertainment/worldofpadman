@@ -1072,7 +1072,7 @@ char *ClientSkin(int client, char *skin, int size) {
 ClientFromName
 ==================
 */
-int ClientFromName(char *name) {
+int ClientFromName(const char *name) {
 	int i;
 	char buf[MAX_INFO_STRING];
 	static int maxclients;
@@ -1093,7 +1093,7 @@ int ClientFromName(char *name) {
 ClientOnSameTeamFromName
 ==================
 */
-int ClientOnSameTeamFromName(bot_state_t *bs, char *name) {
+int ClientOnSameTeamFromName(bot_state_t *bs, const char *name) {
 	int i;
 	char buf[MAX_INFO_STRING];
 
@@ -1106,26 +1106,6 @@ int ClientOnSameTeamFromName(bot_state_t *bs, char *name) {
 			return i;
 	}
 	return -1;
-}
-
-/*
-==================
-stristr
-==================
-*/
-char *stristr(char *str, char *charset) {
-	int i;
-
-	while (*str) {
-		for (i = 0; charset[i] && str[i]; i++) {
-			if (toupper(charset[i]) != toupper(str[i]))
-				break;
-		}
-		if (!charset[i])
-			return str;
-		str++;
-	}
-	return NULL;
 }
 
 /*

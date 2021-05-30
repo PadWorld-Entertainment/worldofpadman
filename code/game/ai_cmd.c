@@ -181,7 +181,7 @@ int FindClientByName(char *name) {
 	}
 	for (i = 0; i < level.maxclients; i++) {
 		ClientName(i, buf, sizeof(buf));
-		if (stristr(buf, name))
+		if (Q_stristr(buf, name))
 			return i;
 	}
 	return -1;
@@ -207,7 +207,7 @@ int FindEnemyByName(bot_state_t *bs, char *name) {
 		if (BotSameTeam(bs, i))
 			continue;
 		ClientName(i, buf, sizeof(buf));
-		if (stristr(buf, name))
+		if (Q_stristr(buf, name))
 			return i;
 	}
 	return -1;
@@ -253,13 +253,12 @@ int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 
 	// if the message is addressed to someone
 	if (match->subtype & ST_ADDRESSED) {
-
 		// compare addressee with botname
 		trap_BotMatchVariable(match, ADDRESSEE, addressedto, sizeof(addressedto));
 		ClientName(bs->client, botname, sizeof(botname));
 
 		// is that me?
-		if (strlen(addressedto) && (stristr(botname, addressedto))) {
+		if (strlen(addressedto) && Q_stristr(botname, addressedto)) {
 			return qtrue;
 		}
 

@@ -716,7 +716,7 @@ int BotChat_Kill(bot_state_t *bs) {
 		if (TeamPlayIsOn()) {
 			return qfalse; // don't wait
 		}
-		//
+
 		if (bs->enemydeathtype == MOD_PUNCHY) {
 			BotAI_BotInitialChat(bs, "kill_gauntlet", name, NULL);
 		} else if (bs->enemydeathtype == MOD_SPLASHER) {

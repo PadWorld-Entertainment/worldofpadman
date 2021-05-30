@@ -118,11 +118,9 @@ int BotTeam(bot_state_t *bs);
 int BotOppositeTeam(bot_state_t *bs);
 // remember the last ordered task
 void BotRememberLastOrderedTask(bot_state_t *bs);
-// strstr but case insensitive
-char *stristr(char *str, char *charset);
 // returns the number of the client with the given name
-int ClientFromName(char *name);
-int ClientOnSameTeamFromName(bot_state_t *bs, char *name);
+int ClientFromName(const char *name);
+int ClientOnSameTeamFromName(bot_state_t *bs, const char *name);
 //
 int BotPointAreaNum(vec3_t origin);
 //
