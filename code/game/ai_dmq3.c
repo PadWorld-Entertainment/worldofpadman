@@ -855,16 +855,13 @@ void BotCtfSeekGoals(bot_state_t *bs) {
 		return;
 	}
 
-	/*
-	if( bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BAMBAM )
-	{
-		if( bs->ltgtype == LTG_PLANTBAMBAM )
+#if 0
+	if (bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BAMBAM) {
+		if (bs->ltgtype == LTG_PLANTBAMBAM)
 			return;
-		else
-		{
+		else {
 			// plant bambam
-			if( PickBambamGoal(bs) )
-			{
+			if (PickBambamGoal(bs)) {
 				bs->decisionmaker = bs->client;
 				bs->ltgtype = LTG_PLANTBAMBAM;
 				bs->teamgoal_time = FloatTime() + 120;
@@ -874,15 +871,12 @@ void BotCtfSeekGoals(bot_state_t *bs) {
 		return;
 	}
 
-	if( bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BOOMIE )
-	{
-		if(bs->ltgtype == LTG_PLANTBOOMIE )
+	if (bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BOOMIE) {
+		if (bs->ltgtype == LTG_PLANTBOOMIE)
 			return;
-		else
-		{
+		else {
 			// plant boomie
-			if( PickBoomieGoal(bs) )
-			{
+			if (PickBoomieGoal(bs)) {
 				bs->decisionmaker = bs->client;
 				bs->ltgtype = LTG_PLANTBOOMIE;
 				bs->teamgoal_time = FloatTime() + 120;
@@ -891,7 +885,7 @@ void BotCtfSeekGoals(bot_state_t *bs) {
 			// no goal, choose another ltgtype
 		}
 	}
-	*/
+#endif
 
 	// dont go for ctl-goals as long as bad equiped (though don't interrupt important tasks)
 	if (bs->ltgtype != LTG_PICKUPFLAG && // LTG_CAPTUREFLAG is covered above
@@ -2545,7 +2539,6 @@ void BotAimAtEnemy(bot_state_t *bs) {
 		// if the obelisk is visible
 		// eigena cyr{
 		if (bs->lastcartcount != bs->inventory[INVENTORY_SPRAYPISTOLAMMO] || bs->sprayTimer < FloatTime()) {
-
 			bs->sprayTimer = FloatTime() + 3;
 			// recalc target
 			for (i = 0; i < 3; i++) {

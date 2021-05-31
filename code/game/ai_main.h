@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 //#define DEBUG
 #define CTF
+#define USE_TEAMAI 0
 
 #define MAX_ITEMS 256
 // bot flags
@@ -82,7 +83,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CTF_RETURNFLAG_TIME 180 // 3 minutes to return the flag
 
 #define PUSHCART_DIST 160
-
+#if USE_TEAMAI
+// teamplay task preference
+// TODO: implementation unfinished - see ioq3
+#define TEAMTP_DEFENDER 1
+#define TEAMTP_ATTACKER 2
+// CTF strategy
+#define CTFS_AGRESSIVE 1
+#endif
 // copied from the aas file header
 #define PRESENCE_NONE 1
 #define PRESENCE_NORMAL 2
@@ -293,15 +301,22 @@ typedef struct bot_state_s {
 	// float leadmessage_time;							//last time a messaged was sent to the team mate
 	// float leadbackup_time;							//time backing up towards team mate
 
-	//	char teamleader[32];							//netname of the team leader
-	//	float askteamleader_time;						//time asked for team leader
-	//	float becometeamleader_time;					//time the bot will become the team leader
-	//	float teamgiveorders_time;						//time to give team orders
-	int numteammates; // number of team mates
-	int forceorders;  // true if forced to give orders
-	int flagcarrier;  // team mate carrying the enemy flag
+#if USE_TEAMAI
+	char teamleader[32];		 // netname of the team leader
+	float askteamleader_time;	 // time asked for team leader
+	float becometeamleader_time; // time the bot will become the team leader
+	float teamgiveorders_time;	 // time to give team orders
+	float lastflagcapture_time;	 // last time a flag was captured
+	int flagstatuschanged;		 // flag status changed
+	int flagcarrier;			 // team mate carrying the enemy flag
+	int ctfstrategy;			 // ctf strategy
+	int forceorders;			 // true if forced to give orders
+	int numteammates;			 // number of team mates
+	int blueflagstatus;
+	int redflagstatus;
+#endif
 	int hstationgoal; // 0 = no hstation, > 0 = station index +1
-	char subteam[32]; // sub team name
+	// char subteam[32]; // sub team name
 	int formation_dist;
 
 	bot_activategoal_t *activatestack;						// first activate goal on the stack
@@ -321,8 +336,6 @@ typedef struct bot_state_s {
 	int orderclient;	// teamleader AI, if this is == -1 order only this client
 	int frametime;		// clock frame duration
 	float duckuse_time; // dont use ducks till that time
-	// int blueflagstatus;
-	// int redflagstatus;
 	int observed;
 	cam_movement_t cam_movement;
 	qboolean cam_taunt;
