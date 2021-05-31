@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // team leader AI disabled until someone comes up with actual use for it,
 // and a fix for multiple bots with the same name in one team
 
-
 #include "g_local.h"
 #include "../botlib/botlib.h"
 #include "../botlib/be_aas.h"
@@ -54,10 +53,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "ai_vcmd.h"
 
 #include "match.h"
-#if 0
+
+#define USE_TEAMAI 1
+
+#if USE_TEAMAI
 
 // cyr{
-static int lastorderedgoal[MAX_CLIENTS]; // leader AI, aviod spamming humans with the same MSG
+static int lastorderedgoal[MAX_CLIENTS]; // leader AI, avoid spamming humans with the same MSG
 static int lastballoonstate[MAX_BALLOONS];
 // cyr}
 
@@ -101,7 +103,7 @@ static int BotNumTeamMates(bot_state_t *bs) {
 		// skip spectators
 		if (atoi(Info_ValueForKey(buf, "t")) == TEAM_SPECTATOR)
 			continue;
-		//
+
 		if (BotSameTeam(bs, i)) {
 			numplayers++;
 		}
@@ -124,9 +126,8 @@ static int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
 		// skip spectators
 		if (atoi(Info_ValueForKey(buf, "t")) == TEAM_SPECTATOR)
 			continue;
-		//
+
 		if (BotSameTeam(bs, i)) {
-			//
 			teammates[numteammates++] = i;
 			if (numteammates >= maxteammates)
 				break;
@@ -227,9 +228,9 @@ static void BotBalloonOrders(bot_state_t *bs) {
 				multiplier = weight;
 			} else {
 				if (capstate[j] == 1) // nmy balloon
-					multiplier = 1.0 - weight;
+					multiplier = 1.0f - weight;
 				else // uncap balloon
-					multiplier = (1.0 - weight) / 2;
+					multiplier = (1.0f - weight) / 2.0f;
 			}
 			wtt = tt * multiplier * multiplier;
 
@@ -266,15 +267,13 @@ static int FindHumanTeamLeader(bot_state_t *bs) {
 #endif
 
 void BotTeamAI(bot_state_t *bs) {
-	// teamleader stuff, disabled atm
-#if 0
+#if USE_TEAMAI
 	int numteammates;
 	char netname[MAX_NETNAME];
 	// cyr{
 	int i;
 	// cyr}
 
-	//
 	if (gametype < GT_TEAM)
 		return;
 	// make sure we've got a valid team leader
@@ -300,8 +299,7 @@ void BotTeamAI(bot_state_t *bs) {
 				BotAI_BotInitialChat(bs, "iamteamleader", NULL);
 				trap_BotEnterChat(bs->cs, 0, CHAT_TEAM);
 				ClientName(bs->client, netname, sizeof(netname));
-				strncpy(bs->teamleader, netname, sizeof(bs->teamleader));
-				bs->teamleader[sizeof(bs->teamleader)] = '\0';
+				Q_strncpyz(bs->teamleader, netname, sizeof(bs->teamleader));
 				bs->becometeamleader_time = 0;
 			}
 			return;
@@ -314,7 +312,6 @@ void BotTeamAI(bot_state_t *bs) {
 	ClientName(bs->client, netname, sizeof(netname));
 	if (Q_stricmp(netname, bs->teamleader) != 0)
 		return;
-	//
 	numteammates = BotNumTeamMates(bs);
 	// give orders
 	switch (gametype) {

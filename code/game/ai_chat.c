@@ -935,7 +935,7 @@ int BotChat_Random(bot_state_t *bs) {
 	// don't chat when doing something important :)
 	if (bs->ltgtype == LTG_TEAMHELP || bs->ltgtype == LTG_TEAMACCOMPANY || bs->ltgtype == LTG_RUSHBASE)
 		return qfalse;
-	//
+
 	rnd = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CHAT_RANDOM, 0, 1);
 	if (random() > bs->thinktime * 0.1)
 		return qfalse;

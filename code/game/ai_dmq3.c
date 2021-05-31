@@ -327,7 +327,7 @@ qboolean EntityIsChatting(aas_entityinfo_t *entinfo) {
 
 /*
 void BotRememberLastOrderedTask(bot_state_t *bs) {
-	if (! bs->ordered) {
+	if (!bs->ordered) {
 		return;
 	}
 	bs->lastgoal_decisionmaker = bs->decisionmaker;
@@ -337,8 +337,7 @@ void BotRememberLastOrderedTask(bot_state_t *bs) {
 }
 
 int BotSetLastOrderedTask(bot_state_t *bs) {
-
-	if ( bs->lastgoal_ltgtype ) {
+	if (bs->lastgoal_ltgtype) {
 		bs->decisionmaker = bs->lastgoal_decisionmaker;
 		// bs->ordered = qtrue;
 		bs->ltgtype = bs->lastgoal_ltgtype;
@@ -350,12 +349,11 @@ int BotSetLastOrderedTask(bot_state_t *bs) {
 	return qfalse;
 }
 
-
 void BotRefuseOrder(bot_state_t *bs) {
 	if (!bs->ordered)
 		return;
 	// if the bot was ordered to do something
-	if ( bs->order_time && bs->order_time > FloatTime() - 10 ) {
+	if (bs->order_time && bs->order_time > FloatTime() - 10) {
 		trap_EA_Action(bs->client, ACTION_NEGATIVE);
 		bs->order_time = 0;
 	}
@@ -630,7 +628,6 @@ qboolean BotWantsCarts(bot_state_t *bs, int *mate) {
 }
 
 void BotSyCSeekGoals(bot_state_t *bs) {
-
 	if (ClientInSprayroom(bs->client)) {
 		// got ammo and not rushing ?
 		if (bs->inventory[INVENTORY_SPRAYPISTOLAMMO] && bs->ltgtype != LTG_RUSHBASE) {
@@ -650,7 +647,7 @@ void BotSyCSeekGoals(bot_state_t *bs) {
 			bs->decisionmaker = bs->client;
 			// bs->ordered = qfalse;
 		}
-		return; //
+		return;
 	}
 
 	// outside the sprayroom
@@ -683,7 +680,7 @@ void BotSyCSeekGoals(bot_state_t *bs) {
 	}
 }
 
-void BotSyCRetreatGoals(bot_state_t *bs) {
+static void BotSyCRetreatGoals(bot_state_t *bs) {
 	// outside the sprayroom
 	if (bs->ltgtype != LTG_GIVECART && bs->ltgtype != LTG_FETCHCART) {
 		int mate = 0;
@@ -715,7 +712,7 @@ void BotSyCRetreatGoals(bot_state_t *bs) {
 }
 
 // returns which "number" in the team is this bot (will be used for some fake teamplay ;P)
-int BotNumberInTeam(bot_state_t *bs) {
+static int BotNumberInTeam(bot_state_t *bs) {
 	static int maxclients = 0;
 	int i;
 	int r = 0;
@@ -724,20 +721,18 @@ int BotNumberInTeam(bot_state_t *bs) {
 		maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
 
 	for (i = 0; i < maxclients && i < MAX_CLIENTS; ++i) {
-
 		if (i == bs->client)
 			break;
 
-		if (BotSameTeam(
-				bs,
-				i)) // FIXME: that call maybe a bit to heavy ... and probably also return true for none-bot teammates
+		// FIXME: that call maybe a bit to heavy ... and probably also return true for none-bot teammates
+		if (BotSameTeam(bs, i))
 			++r;
 	}
 
 	return r;
 }
 
-int GetTeamFlagCarrier(int team) {
+static int GetTeamFlagCarrier(int team) {
 	int i;
 	int pu = (team == TEAM_RED) ? PW_REDFLAG : PW_BLUEFLAG;
 
@@ -753,7 +748,7 @@ int GetTeamFlagCarrier(int team) {
 	return -1;
 }
 
-qboolean PickBoomieGoal(bot_state_t *bs) {
+static qboolean PickBoomieGoal(bot_state_t *bs) {
 	int i;
 	team_t botTeam = BotTeam(bs);
 	static const int TT_MAX = 999999;
@@ -778,7 +773,7 @@ qboolean PickBoomieGoal(bot_state_t *bs) {
 	return qtrue;
 }
 
-qboolean PickBambamGoal(bot_state_t *bs) {
+static qboolean PickBambamGoal(bot_state_t *bs) {
 	int i;
 	team_t botTeam = BotTeam(bs);
 	static const int TT_MAX = 999999;
