@@ -77,7 +77,7 @@ static float regularupdate_time;
 static int bot_interbreed;
 static int bot_interbreedmatchcount;
 //
-static vmCvar_t bot_thinktime;
+vmCvar_t bot_thinktime;
 static vmCvar_t bot_memorydump;
 static vmCvar_t bot_saveroutingcache;
 static vmCvar_t bot_pause;
