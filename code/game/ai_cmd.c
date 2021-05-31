@@ -354,7 +354,7 @@ static void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 
 			if (bot_developer.integer & AIDBG_CHAT) {
 				char botname[128];
-				ClientName(bs->client, botname, 128);
+				ClientName(bs->client, botname, sizeof(botname));
 				G_Printf("%s attacking %s \n", botname, g_entities[balloongoal[ballindex].entitynum].message);
 			}
 		} else {
@@ -370,7 +370,7 @@ static void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 
 			if (bot_developer.integer & AIDBG_CHAT) {
 				char botname[128];
-				ClientName(bs->client, botname, 128);
+				ClientName(bs->client, botname, sizeof(botname));
 				G_Printf("%s defending %s \n", botname, g_entities[balloongoal[ballindex].entitynum].message);
 			}
 		}
@@ -426,7 +426,7 @@ void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
 		return;
 	// get the match variable
 	trap_BotMatchVariable(match, ITEM, itemname, sizeof(itemname));
-	//
+
 	if (!BotGetMessageTeamGoal(bs, itemname, &bs->teamgoal)) {
 		BotAI_BotInitialChat(bs, "cannotfind", itemname, NULL);
 		trap_BotEnterChat(bs->cs, bs->client, CHAT_TEAM);
@@ -434,7 +434,7 @@ void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
 	}
 	trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
 	client = ClientOnSameTeamFromName(bs, netname);
-	//
+
 	bs->decisionmaker = client;
 	// bs->ordered = qtrue;
 	// bs->order_time = FloatTime();
@@ -449,58 +449,6 @@ void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
 	BotPrintTeamGoal(bs);
 #endif // DEBUG
 }
-
-/*
-void BotMatch_StartTeamLeaderShip(bot_state_t *bs, bot_match_t *match) {
-	int client;
-	char teammate[MAX_MESSAGE_SIZE];
-
-	if (!TeamPlayIsOn()) return;
-
-	//get the team mate that will be the team leader
-	trap_BotMatchVariable(match, NETNAME, teammate, sizeof(teammate));	// warum nicht NETNAME ?
-	client = FindClientByName(teammate);
-
-	// ignore human leaders
-	if ( !(g_entities[client].r.svFlags & SVF_BOT) )
-		return;
-
-	// copy mates name to leader
-	if (client >= 0){
-		ClientName(client, bs->teamleader, sizeof(bs->teamleader));
-
-		if(bot_developer.integer & AIDBG_CHAT)
-			G_Printf("my new leader: %s \n", bs->teamleader);
-	}
-	// should never happen
-	else if(bot_developer.integer & AIDBG_CHAT)
-		G_Printf("invalid leader: %s \n", teammate);
-}
-
-void BotMatch_WhoIsTeamLeader(bot_state_t *bs, bot_match_t *match) {
-	char netname[MAX_MESSAGE_SIZE];
-
-	if (!TeamPlayIsOn()) return;
-
-	ClientName(bs->client, netname, sizeof(netname));
-	//if this bot IS the team leader
-	if (!Q_stricmp(netname, bs->teamleader)) {
-		BotAI_BotInitialChat(bs, "iamteamleader", NULL);
-		trap_BotEnterChat(bs->cs, 0, CHAT_TEAM);
-	}
-}
-
-void BotMatch_NewLeader(bot_state_t *bs, bot_match_t *match) {
-	int client;
-	char netname[MAX_NETNAME];
-
-	trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
-	client = FindClientByName(netname);
-	if (!BotSameTeam(bs, client))
-		return;
-	Q_strncpyz(bs->teamleader, netname, sizeof(bs->teamleader));
-}
-*/
 
 /*
 ==================
@@ -574,7 +522,7 @@ static void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
 	if (client == bs->client) {
 		return;
 	}
-	//
+
 	bs->teamgoal.entitynum = -1;
 	BotEntityInfo(client, &entinfo);
 	// if info is valid (in PVS)
@@ -597,9 +545,9 @@ static void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
 	}
 	// the team mate
 	bs->teammate = client;
-	//
+
 	trap_BotMatchVariable(match, NETNAME, netname, sizeof(netname));
-	//
+
 	client = ClientFromName(netname);
 	// the team mate who ordered
 	bs->decisionmaker = client;
@@ -615,6 +563,7 @@ static void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
 	bs->teamgoal_time = FloatTime() + SYC_CART_EXCHANGE_TIME;
 }
 // cyr_drop}
+
 /*
 ==================
 BotMatchMessage

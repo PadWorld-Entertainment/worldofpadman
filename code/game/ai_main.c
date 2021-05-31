@@ -1692,10 +1692,10 @@ int BotAISetupClient(int client, struct bot_settings_s *settings, qboolean resta
 	bs->walker = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_WALKER, 0, 1);
 	numbots++;
 
-	// if (trap_Cvar_VariableIntegerValue("bot_testichat")) {
-	//	trap_BotLibVarSet("bot_testichat", "1");
-	//	BotChatTest(bs);
-	//}
+	if (trap_Cvar_VariableIntegerValue("bot_testichat")) {
+		trap_BotLibVarSet("bot_testichat", "1");
+		BotChatTest(bs);
+	}
 	// NOTE: reschedule the bot thinking
 	BotScheduleBotThink();
 	// if interbreeding start with a mutation
