@@ -1672,7 +1672,6 @@ void AAS_ReachabilityFromNum(int num, struct aas_reachability_s *reach) {
 		return;
 	}
 	Com_Memcpy(reach, &aasworld.reachability[num], sizeof(aas_reachability_t));
-	;
 }
 
 int AAS_NextAreaReachability(int areanum, int reachnum) {

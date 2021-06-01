@@ -1332,6 +1332,7 @@ static void BotCheckInitialChatIntegrity(bot_chat_t *chat) {
 	}
 }
 
+#if 0
 static void BotCheckReplyChatIntegrity(bot_replychat_t *replychat) {
 	bot_replychat_t *rp;
 	bot_chatmessage_t *cm;
@@ -1348,6 +1349,7 @@ static void BotCheckReplyChatIntegrity(bot_replychat_t *replychat) {
 		FreeMemory(s);
 	}
 }
+#endif
 
 #if 0
 static void BotDumpReplyChat(bot_replychat_t *replychat) {

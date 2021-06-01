@@ -160,23 +160,25 @@ typedef struct bot_goalstate_s {
 	float avoidgoaltimes[MAX_AVOIDGOALS]; // times to avoid the goals
 } bot_goalstate_t;
 
-bot_goalstate_t *botgoalstates[MAX_CLIENTS + 1]; // FIXME: init?
+static bot_goalstate_t *botgoalstates[MAX_CLIENTS + 1]; // FIXME: init?
 // item configuration
-itemconfig_t *itemconfig = NULL;
+static itemconfig_t *itemconfig = NULL;
 // level items
-levelitem_t *levelitemheap = NULL;
-levelitem_t *freelevelitems = NULL;
-levelitem_t *levelitems = NULL;
-levelitem_t *spoton_li = NULL; // cyr
-int numlevelitems = 0;
+static levelitem_t *levelitemheap = NULL;
+static levelitem_t *freelevelitems = NULL;
+static levelitem_t *levelitems = NULL;
+static levelitem_t *spoton_li = NULL; // cyr
+static int numlevelitems = 0;
 // map locations
-maplocation_t *maplocations = NULL;
+static maplocation_t *maplocations = NULL;
 // camp spots
-campspot_t *campspots = NULL;
+static campspot_t *campspots = NULL;
 // the game type
-int g_gametype = 0;
+static int g_gametype = 0;
+#ifdef DROPPEDWEIGHT
 // additional dropped item weight
-libvar_t *droppedweight = NULL;
+static libvar_t *droppedweight = NULL;
+#endif
 
 //========================================================================
 
@@ -231,7 +233,7 @@ bot_goalstate_t *BotGoalStateFromHandle(int handle) {
 }
 
 void BotInterbreedGoalFuzzyLogic(int parent1, int parent2, int child) {
-	bot_goalstate_t *p1, *p2, *c;
+	const bot_goalstate_t *p1, *p2, *c;
 
 	p1 = BotGoalStateFromHandle(parent1);
 	p2 = BotGoalStateFromHandle(parent2);
@@ -631,7 +633,7 @@ void BotDumpAvoidGoals(int goalstate) {
 		return;
 	for (i = 0; i < MAX_AVOIDGOALS; i++) {
 		if (gs->avoidgoaltimes[i] >= AAS_Time()) {
-			BotGoalName(gs->avoidgoals[i], name, 32);
+			BotGoalName(gs->avoidgoals[i], name, sizeof(name));
 			Log_Write("avoid goal %s, number %d for %f seconds", name, gs->avoidgoals[i],
 					  gs->avoidgoaltimes[i] - AAS_Time());
 		}
@@ -1008,7 +1010,7 @@ void BotDumpGoalStack(int goalstate) {
 	if (!gs)
 		return;
 	for (i = 1; i <= gs->goalstacktop; i++) {
-		BotGoalName(gs->goalstack[i].number, name, 32);
+		BotGoalName(gs->goalstack[i].number, name, sizeof(name));
 		Log_Write("%d: %s", i, name);
 	}
 }
@@ -1025,7 +1027,7 @@ void BotPushGoal(int goalstate, bot_goal_t *goal) {
 		return;
 	}
 	gs->goalstacktop++;
-	Com_Memcpy(&gs->goalstack[gs->goalstacktop], goal, sizeof(bot_goal_t));
+	gs->goalstack[gs->goalstacktop] = *goal;
 }
 
 void BotPopGoal(int goalstate) {
@@ -1055,7 +1057,7 @@ int BotGetTopGoal(int goalstate, bot_goal_t *goal) {
 		return qfalse;
 	if (!gs->goalstacktop)
 		return qfalse;
-	Com_Memcpy(goal, &gs->goalstack[gs->goalstacktop], sizeof(bot_goal_t));
+	*goal = gs->goalstack[gs->goalstacktop];
 	return qtrue;
 }
 
@@ -1067,7 +1069,7 @@ int BotGetSecondGoal(int goalstate, bot_goal_t *goal) {
 		return qfalse;
 	if (gs->goalstacktop <= 1)
 		return qfalse;
-	Com_Memcpy(goal, &gs->goalstack[gs->goalstacktop - 1], sizeof(bot_goal_t));
+	*goal = gs->goalstack[gs->goalstacktop - 1];
 	return qtrue;
 }
 
@@ -1121,7 +1123,7 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int *inventory, int travelfla
 	// best weight and item so far
 	bestweight = 0;
 	bestitem = NULL;
-	Com_Memset(&goal, 0, sizeof(bot_goal_t));
+	Com_Memset(&goal, 0, sizeof(goal));
 	// go through the items in the level
 	for (li = levelitems; li; li = li->next) {
 		if (g_gametype == GT_SINGLE_PLAYER) {
@@ -1513,7 +1515,9 @@ int BotSetupGoalAI(void) {
 		return BLERR_CANNOTLOADITEMCONFIG;
 	}
 
+#ifdef DROPPEDWEIGHT
 	droppedweight = LibVar("droppedweight", "1000");
+#endif
 	// everything went ok
 	return BLERR_NOERROR;
 }
