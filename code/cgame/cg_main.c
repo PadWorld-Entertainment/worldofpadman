@@ -330,7 +330,7 @@ static const int cvarTableSize = ARRAY_LEN(cvarTable);
 int CG_GetCvarInt(const char *cvar) {
 	char buffer[32];
 
-	trap_Cvar_VariableStringBuffer(cvar, buffer, 32);
+	trap_Cvar_VariableStringBuffer(cvar, buffer, sizeof(buffer));
 
 	return atoi(buffer);
 }
@@ -338,7 +338,7 @@ int CG_GetCvarInt(const char *cvar) {
 float CG_GetCvarFloat(const char *cvar) {
 	char buffer[32];
 
-	trap_Cvar_VariableStringBuffer(cvar, buffer, 32);
+	trap_Cvar_VariableStringBuffer(cvar, buffer, sizeof(buffer));
 
 	return atof(buffer);
 }
