@@ -60,7 +60,7 @@ qboolean Calculate_2DOf3D(vec3_t point, refdef_t *refdef, float *x, float *y) {
 	if (vec[1] * axis[2][0] - vec[0] * axis[2][1]) // don't diff with 0
 		*y = (vec[0] * axis[0][1] - vec[1] * axis[0][0] + (*x) * (vec[0] * axis[1][1] - vec[1] * axis[1][0])) /
 			 (vec[1] * axis[2][0] - vec[0] * axis[2][1]);
-	else // use a formular with an other "Definitionslücke"(definition-gap ?)
+	else // use a formular with an other "Definitionsluecke"(definition-gap ?)
 		*y = (vec[0] * axis[0][2] - vec[2] * axis[0][0] + (*x) * (vec[0] * axis[1][2] - vec[2] * axis[1][0])) /
 			 (vec[2] * axis[2][0] - vec[0] * axis[2][2]);
 
@@ -122,7 +122,7 @@ qboolean Calculate_2DOfDIR(vec3_t vec, refdef_t *refdef, float *x, float *y) {
 	if (vec[1] * axis[2][0] - vec[0] * axis[2][1]) // don't diff with 0
 		*y = (vec[0] * axis[0][1] - vec[1] * axis[0][0] + (*x) * (vec[0] * axis[1][1] - vec[1] * axis[1][0])) /
 			 (vec[1] * axis[2][0] - vec[0] * axis[2][1]);
-	else // use a formular with an other "Definitionslücke"(definition-gap ?)
+	else // use a formular with an other "Definitionsluecke"(definition-gap ?)
 		*y = (vec[0] * axis[0][2] - vec[2] * axis[0][0] + (*x) * (vec[0] * axis[1][2] - vec[2] * axis[1][0])) /
 			 (vec[2] * axis[2][0] - vec[0] * axis[2][2]);
 

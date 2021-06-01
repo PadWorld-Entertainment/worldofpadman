@@ -158,7 +158,7 @@ void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, 
 		if (temporary)
 			break; // keep all marks if the new one is just the shadow
 		if (mp->markShader == cgs.media.SchaumShader)
-			continue; // die slick-ents einfach übergehen
+			continue; // just forward the slick-ents
 		VectorSubtract(mp->origin, origin, delta);
 		if (radius <= mp->radius + 4 && VectorLength(delta) < (radius + mp->radius) * MIN_MARK_DISTANCE) {
 			CG_FreeMarkPoly(mp);
@@ -171,7 +171,7 @@ void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, 
 	RotatePointAroundVector(axis[2], axis[0], axis[1], orientation);
 	CrossProduct(axis[0], axis[2], axis[1]);
 
-	texCoordScale = 0.5 * 1.0 / radius;
+	texCoordScale = 0.5f * 1.0f / radius;
 
 	// create the full polygon
 	for (i = 0; i < 3; ++i) {

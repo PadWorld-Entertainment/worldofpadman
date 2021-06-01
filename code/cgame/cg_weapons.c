@@ -1820,7 +1820,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		mark = cgs.media.burnMarkShader;
 		radius = 4;
 		break;
-		//	case WP_SPRAYPISTOL://noch mal drueber nachdenken ... eigentlich brauch ich keine explosion
+		//	case WP_SPRAYPISTOL:// think about this again - we don't need an explosion here
 		//		break;
 	case WP_KILLERDUCKS:
 		mod = cgs.media.dishFlashModel;
