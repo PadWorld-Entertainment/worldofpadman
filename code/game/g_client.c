@@ -1337,7 +1337,6 @@ void ClientDisconnect(int clientNum) {
 	}
 
 	if (!level.cammode) {
-
 		// send effect if they were completely connected
 		if (ent->client->pers.connected == CON_CONNECTED &&
 			((ent->client->sess.sessionTeam != TEAM_SPECTATOR) && !LPSDeadSpec(ent->client))) {

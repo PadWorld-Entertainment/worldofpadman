@@ -1794,7 +1794,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		le->leType = LE_IMPERIUSBOOM;
 		le->startTime = cg.time;
 		le->endTime = cg.time + 1000;
-		le->lifeRate = 1.0 / (le->endTime - le->startTime);
+		le->lifeRate = 1.0f / (le->endTime - le->startTime);
 		le->radius = rand();
 		VectorMA(origin, 16, dir, le->refEntity.origin);
 		VectorSet(le->angles.trBase, 360 * crandom(), 360 * crandom(), 360 * crandom());

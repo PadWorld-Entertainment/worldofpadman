@@ -61,7 +61,7 @@ void CG_BubbleTrail(vec3_t start, vec3_t end, float spacing) {
 		le->leType = LE_MOVE_SCALE_FADE;
 		le->startTime = cg.time;
 		le->endTime = cg.time + 1000 + random() * 250;
-		le->lifeRate = 1.0 / (le->endTime - le->startTime);
+		le->lifeRate = 1.0f / (le->endTime - le->startTime);
 
 		re = &le->refEntity;
 		re->shaderTime = cg.time / 1000.0f;
@@ -75,7 +75,7 @@ void CG_BubbleTrail(vec3_t start, vec3_t end, float spacing) {
 		re->shaderRGBA[2] = 0xff;
 		re->shaderRGBA[3] = 0xff;
 
-		le->color[3] = 1.0;
+		le->color[3] = 1.0f;
 
 		le->pos.trType = TR_LINEAR;
 		le->pos.trTime = cg.time;
@@ -116,9 +116,9 @@ localEntity_t *CG_SmokePuff(const vec3_t p, const vec3_t vel, float radius, floa
 	le->fadeInTime = fadeInTime;
 	le->endTime = startTime + duration;
 	if (fadeInTime > startTime) {
-		le->lifeRate = 1.0 / (le->endTime - le->fadeInTime);
+		le->lifeRate = 1.0f / (le->endTime - le->fadeInTime);
 	} else {
-		le->lifeRate = 1.0 / (le->endTime - le->startTime);
+		le->lifeRate = 1.0f / (le->endTime - le->startTime);
 	}
 	le->color[0] = r;
 	le->color[1] = g;
@@ -188,7 +188,7 @@ void CG_TeleOutEffect(vec3_t org, int team, centity_t *cent) {
 		le->leType = LE_TELEFFECT;
 		le->startTime = cg.time;
 		le->endTime = cg.time + 2000;
-		le->lifeRate = 1.0 / (le->endTime - le->startTime);
+		le->lifeRate = 1.0f / (le->endTime - le->startTime);
 		//	VectorCopy( org, le->refEntity.origin );
 		//	VectorSet( le->angles.trBase, 0, 0, 0 ); //360*crandom(), 360*crandom(), 360*crandom() );
 		le->angles.trBase[YAW] = cent->currentState.angles[YAW];
@@ -290,11 +290,11 @@ void CG_SpawnEffect(vec3_t org, int team) {
 	le->leType = LE_TELEFFECT;
 	le->startTime = cg.time;
 	le->endTime = cg.time + 1000;
-	le->lifeRate = 1.0 / (le->endTime - le->startTime);
+	le->lifeRate = 1.0f / (le->endTime - le->startTime);
 	le->radius = rand();
 	VectorCopy(org, le->refEntity.origin);
 	VectorSet(le->angles.trBase, 0, 0, 0); // 360*crandom(), 360*crandom(), 360*crandom() );
-	// model zuweisung aus CG_AddTeleffect hier her verlegt ... um LE_TELEFFECT für den neuen effekt zu nutzen
+	// model zuweisung aus CG_AddTeleffect hier her verlegt ... um LE_TELEFFECT fuer den neuen effekt zu nutzen
 	le->refEntity.hModel = cgs.media.teleportEffectModel;
 	if (team == 1)
 		le->refEntity.customShader = cgs.media.teleportEffectRedShader;
@@ -326,14 +326,14 @@ void CG_GenerateParticles(qhandle_t model, qhandle_t shader, const vec3_t pos, f
 		le->leType = LE_MOVE_SCALE_FADE;
 		le->startTime = time;
 		le->endTime = time + life + crandom() * randomLife;
-		le->lifeRate = 1.0 / (le->endTime - le->startTime);
+		le->lifeRate = 1.0f / (le->endTime - le->startTime);
 		le->radius = addSize + crandom() * randomAddSize;
 		le->leFlags = flags;
 		re = &le->refEntity;
 		re->shaderTime = time / 1000.0f;
 		re->radius = size + crandom() * randomSize;
 		re->renderfx = renderfx;
-		le->color[0] = le->color[1] = le->color[2] = le->color[3] = 1.0;
+		le->color[0] = le->color[1] = le->color[2] = le->color[3] = 1.0f;
 
 		if (model) {
 			re->hModel = model;
@@ -391,9 +391,9 @@ void CG_ScorePlum(int client, vec3_t org, int score) {
 	le->leType = LE_SCOREPLUM;
 	le->startTime = cg.time;
 	le->endTime = cg.time + 4000;
-	le->lifeRate = 1.0 / (le->endTime - le->startTime);
+	le->lifeRate = 1.0f / (le->endTime - le->startTime);
 
-	le->color[0] = le->color[1] = le->color[2] = le->color[3] = 1.0;
+	le->color[0] = le->color[1] = le->color[2] = le->color[3] = 1.0f;
 	le->radius = score;
 
 	VectorCopy(org, le->pos.trBase);

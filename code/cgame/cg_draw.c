@@ -2878,7 +2878,7 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 			trap_R_DrawStretchPic(x, y, w * tmpf, h, (1.0f - tmpf), 0, 1, 1, cgs.media.hud_energybar);
 			if (tmpf2 > 0.0f) {
 				//				x=214+10+(1.0f-tmpf2)*w; // hier braeuchte man ein neues AdjustFrom640 ... aber x ist
-				//bei tmpf=1 eh schon da wo es sein soll
+				// bei tmpf=1 eh schon da wo es sein soll
 				x += (1.0f - tmpf2) * w;
 				trap_R_DrawStretchPic(x, y, w * tmpf2, h, (1.0f - tmpf2), 0, 1, 1, cgs.media.hud_energybar2);
 			}
@@ -3040,7 +3040,7 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 
 #define CTL_LOLLYMDLX 576 // 573
 #define CTL_LOLLYMDLY 428 // 426
-#define CTL_LOLLYMDLW 46  // 50
+#define CTL_LOLLYMDLW 46 // 50
 #define CTL_LOLLYMDLH 50
 
 #define CTL_STATX 612

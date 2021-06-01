@@ -1784,7 +1784,7 @@ CG_PlayerFloatSprite
 Float a sprite over the player's head
 ===============
 */
-static void CG_PlayerFloatSprite(centity_t *cent, qhandle_t shader, qboolean wallhack) {
+static void CG_PlayerFloatSprite(const centity_t *cent, qhandle_t shader, qboolean wallhack) {
 	int rf;
 	refEntity_t ent;
 
@@ -1840,7 +1840,7 @@ CG_PlayerSprites
 Float sprites over the player's head
 ===============
 */
-static void CG_PlayerSprites(centity_t *cent) {
+static void CG_PlayerSprites(const centity_t *cent) {
 	int team;
 
 	if (cent->currentState.eFlags & EF_CONNECTION) {
@@ -1942,7 +1942,7 @@ static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 	}
 
 	// fade the shadow out with height
-	alpha = 1.0 - trace.fraction;
+	alpha = 1.0f - trace.fraction;
 
 	// bk0101022 - hack / FPE - bogus planes?
 	// assert( DotProduct( trace.plane.normal, trace.plane.normal ) != 0.0f )

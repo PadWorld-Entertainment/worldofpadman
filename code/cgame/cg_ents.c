@@ -1173,7 +1173,7 @@ void CG_Boomies_Explosion(vec3_t origin) {
 	le->leType = LE_BOOMIESEXPLOSION;
 	le->startTime = cg.time;
 	le->endTime = cg.time + 1000;
-	le->lifeRate = 1.0 / (le->endTime - le->startTime);
+	le->lifeRate = 1.0f / (le->endTime - le->startTime);
 	VectorCopy(origin, le->refEntity.origin);
 	VectorSet(le->angles.trBase, 360 * crandom(), 360 * crandom(), 360 * crandom());
 

@@ -511,7 +511,7 @@ qboolean BotPickBestBalloonGoal(bot_state_t *bs) {
 	return qtrue;
 }
 
-void BotBalloonSeekGoals(bot_state_t *bs) {
+static void BotBalloonSeekGoals(bot_state_t *bs) {
 	vec3_t dir;
 
 	// dont go for balloon as long as bad equiped

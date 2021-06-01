@@ -432,8 +432,11 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 			if (g_gametype.integer != GT_LPS)
 				AddScore(attacker, self->r.currentOrigin, SCORE_TEAMKILL, SCORE_TEAMKILL_S);
 		} else {
-			/*if(g_gametype.integer!=GT_SPRAY && g_gametype.integer!=GT_SPRAYFFA && g_gametype.integer!=GT_BALLOON &&
-			   g_gametype.integer!=GT_LPS) AddScore( attacker, self->r.currentOrigin, 1 ); */
+#if 0
+			if (g_gametype.integer != GT_SPRAY && g_gametype.integer != GT_SPRAYFFA &&
+				g_gametype.integer != GT_BALLOON && g_gametype.integer != GT_LPS)
+				AddScore(attacker, self->r.currentOrigin, 1, "");
+#endif
 
 			// Scores for killing only in some non-teamplay gametypes
 			if ((g_gametype.integer <= GT_TEAM) && (g_gametype.integer != GT_LPS) && (!IsSyc())) {
@@ -441,7 +444,6 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 			}
 
 			if (meansOfDeath == MOD_PUNCHY) {
-
 				// play humiliation on player
 				if (!attacker->client->ps.powerups[PW_BERSERKER]) {
 					attacker->client->ps.persistant[PERS_GAUNTLET_FRAG_COUNT]++;
