@@ -135,7 +135,7 @@ typedef enum {
 #define GTN__GT_TEAM "Free For All Team"
 #define GTN__GT_CTF "Capture The Lolly"
 #define GTN__GT_SPRAY "Spray Your Color Team"
-#define GTN__GT_BALLOON "BigBalloon"
+#define GTN__GT_BALLOON "Big Balloon"
 #define GTN__GT_MAX_GAME_TYPE "Unknown"
 
 #define GTN_S__GT_FFA "FFA"
