@@ -1428,6 +1428,7 @@ static void BotFreeReplyChat(bot_replychat_t *replychat) {
 	}
 }
 
+#if 0
 static void BotCheckValidReplyChatKeySet(source_t *source, bot_replychatkey_t *keys) {
 	int allprefixed, hasvariableskey, hasstringkey;
 	bot_matchpiece_t *m;
@@ -1511,7 +1512,9 @@ static void BotCheckValidReplyChatKeySet(source_t *source, bot_replychatkey_t *k
 							  "invalid when outputting one of the chat messages");
 	}
 }
+#endif
 
+#if 0
 static bot_replychat_t *BotLoadReplyChat(const char *filename) {
 	char chatmessagestring[MAX_MESSAGE_SIZE];
 	char namebuffer[MAX_MESSAGE_SIZE];
@@ -1657,6 +1660,7 @@ static bot_replychat_t *BotLoadReplyChat(const char *filename) {
 
 	return replychatlist;
 }
+#endif
 
 #if 0
 static void BotDumpInitialChat(bot_chat_t *chat) {
