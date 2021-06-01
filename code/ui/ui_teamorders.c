@@ -75,7 +75,7 @@ static const char *teamMessages[] = {"I am the leader",
 									 "%s roam",
 									 "%s camp here",
 									 "%s report",
-									 "%s give your cartridges to me", // this works, everything is not implemented
+									 "%s give your cartridges to me", // this works, everything else is not implemented
 									 "I stop being the leader",
 									 NULL};
 

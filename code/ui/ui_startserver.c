@@ -126,7 +126,7 @@ static int GametypeBits(const char *string) {
 			break;
 		}
 
-		if (Q_stricmp(token, "ffa") == 0) {
+		if (Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_FFA)) == 0) {
 			bits |= 1 << GT_FFA;
 			continue;
 		}
@@ -146,7 +146,7 @@ static int GametypeBits(const char *string) {
 			continue;
 		}
 
-		if (Q_stricmp(token, "ctf") == 0 || Q_stricmp(token, "ctl") == 0) {
+		if (Q_stricmp(token, "ctf") == 0 || Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_CTF)) == 0) {
 			bits |= 1 << GT_CTF;
 			continue;
 		}
@@ -158,11 +158,11 @@ static int GametypeBits(const char *string) {
 			bits |= 1 << GT_SPRAY;
 			continue;
 		}
-		if (Q_stricmp(token, "LPS") == 0) {
+		if (Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_LPS)) == 0) {
 			bits |= 1 << GT_LPS;
 			continue;
 		}
-		if (Q_stricmp(token, "BB") == 0) {
+		if (Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_BALLOON)) == 0) {
 			bits |= 1 << GT_BALLOON;
 			continue;
 		}
