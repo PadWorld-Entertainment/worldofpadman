@@ -323,8 +323,7 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 
 	{&cg_ambient, "cg_ambient", "1", CVAR_ARCHIVE},
 
-	// Should match ICON_ALL
-	{&cg_icons, "cg_icons", "31", CVAR_ARCHIVE}};
+	{&cg_icons, "cg_icons", XSTRING(ICON_ALL), CVAR_ARCHIVE}};
 
 static const int cvarTableSize = ARRAY_LEN(cvarTable);
 
