@@ -185,7 +185,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 
 	displayOptionsInfo.display.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.display.generic.name = DISPLAY0;
-	displayOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	displayOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	displayOptionsInfo.display.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.display.generic.id = ID_DISPLAY;
 	displayOptionsInfo.display.generic.x = 159;

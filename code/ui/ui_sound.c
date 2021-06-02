@@ -273,7 +273,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 
 	soundOptionsInfo.sound.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.sound.generic.name = SOUND0;
-	soundOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	soundOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	soundOptionsInfo.sound.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.sound.generic.id = ID_SOUND;
 	soundOptionsInfo.sound.generic.x = 40;

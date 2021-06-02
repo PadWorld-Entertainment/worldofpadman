@@ -170,7 +170,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 
 	networkOptionsInfo.network.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.network.generic.name = NETWORK0;
-	networkOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	networkOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	networkOptionsInfo.network.generic.callback = UI_NetworkOptionsMenu_Event;
 	networkOptionsInfo.network.generic.id = ID_NETWORK;
 	networkOptionsInfo.network.generic.x = 170;

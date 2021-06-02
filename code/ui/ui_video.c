@@ -623,7 +623,7 @@ void GraphicsOptions_MenuInit(void) {
 
 	s_graphicsoptions.graphics.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.graphics.generic.name = GRAPHICS0;
-	s_graphicsoptions.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_graphicsoptions.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	s_graphicsoptions.graphics.generic.callback = GraphicsOptions_Event;
 	s_graphicsoptions.graphics.generic.id = ID_GRAPHICS;
 	s_graphicsoptions.graphics.generic.x = 26;
