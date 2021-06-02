@@ -42,8 +42,8 @@ CONTROLS MENU
 #define MISC1 "menu/controls/misc1"
 
 typedef struct {
-	char *command;
-	char *label;
+	const char *command;
+	const char *label;
 	int id;
 	int anim;
 	int defaultbind1;
@@ -53,7 +53,7 @@ typedef struct {
 } bind_t;
 
 typedef struct {
-	char *name;
+	const char *name;
 	float defaultvalue;
 	float value;
 } configcvar_t;
@@ -374,7 +374,7 @@ static float Controls_GetCvarDefault(char *name) {
 			break;
 	}
 
-	return (cvarptr->defaultvalue);
+	return cvarptr->defaultvalue;
 }
 
 /*
@@ -395,7 +395,7 @@ static float Controls_GetCvarValue(char *name) {
 			break;
 	}
 
-	return (cvarptr->value);
+	return cvarptr->value;
 }
 
 /*
@@ -650,12 +650,12 @@ static void Controls_DrawKeyBinding(void *self) {
 	if (b1 == -1)
 		strcpy(name, "???");
 	else {
-		trap_Key_KeynumToStringBuf(b1, name, 32);
+		trap_Key_KeynumToStringBuf(b1, name, sizeof(name));
 		Q_strupr(name);
 
 		b2 = g_bindings[a->generic.id].bind2;
 		if (b2 != -1) {
-			trap_Key_KeynumToStringBuf(b2, name2, 32);
+			trap_Key_KeynumToStringBuf(b2, name2, sizeof(name));
 			Q_strupr(name2);
 
 			strcat(name, " or ");
@@ -708,7 +708,7 @@ static void Controls_StatusBar(void *self) {
 Controls_GetKeyAssignment
 =================
 */
-static void Controls_GetKeyAssignment(char *command, int *twokeys) {
+static void Controls_GetKeyAssignment(const char *command, int *twokeys) {
 	int count;
 	int j;
 	char b[256];
@@ -717,7 +717,7 @@ static void Controls_GetKeyAssignment(char *command, int *twokeys) {
 	count = 0;
 
 	for (j = 0; j < 256; j++) {
-		trap_Key_GetBindingBuf(j, b, 256);
+		trap_Key_GetBindingBuf(j, b, sizeof(b));
 		if (*b == 0) {
 			continue;
 		}
@@ -1081,7 +1081,7 @@ Controls_MenuInit
 */
 static void Controls_MenuInit(void) {
 	// zero set all our globals
-	memset(&s_controls, 0, sizeof(controls_t));
+	memset(&s_controls, 0, sizeof(s_controls));
 
 	Controls_Cache();
 
