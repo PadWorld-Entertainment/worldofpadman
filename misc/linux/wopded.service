@@ -5,7 +5,7 @@ Description=This service spawns an ioquake3 Internet server
 
 [Service]
 User=q3a
-ExecStart=/usr/local/games/quake3/ioq3ded.x86_64 +set dedicated 2
+ExecStart=/usr/local/games/worldofpadman/wopded.x86_64 +set dedicated 2
 Restart=on-abort
 
 [Install]
