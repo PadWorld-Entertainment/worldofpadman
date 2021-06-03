@@ -69,19 +69,19 @@ cvar_t *com_version;
 cvar_t *com_blood;
 cvar_t *com_buildScript; // for automated data building scripts
 #ifdef CINEMATICS_INTRO
-cvar_t *com_introPlayed;
+static cvar_t *com_introPlayed;
 #endif
 cvar_t *cl_paused;
 cvar_t *sv_paused;
 cvar_t *cl_packetdelay;
 cvar_t *sv_packetdelay;
-cvar_t *com_cameraMode;
+static cvar_t *com_cameraMode;
 cvar_t *com_ansiColor;
 cvar_t *com_unfocused;
-cvar_t *com_maxfpsUnfocused;
+static cvar_t *com_maxfpsUnfocused;
 cvar_t *com_minimized;
-cvar_t *com_maxfpsMinimized;
-cvar_t *com_abnormalExit;
+static cvar_t *com_maxfpsMinimized;
+static cvar_t *com_abnormalExit;
 cvar_t *com_standalone;
 cvar_t *com_gamename;
 cvar_t *com_protocol;

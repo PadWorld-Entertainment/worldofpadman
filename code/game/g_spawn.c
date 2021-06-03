@@ -75,38 +75,38 @@ qboolean G_SpawnVector(const char *key, const char *defaultString, float *out) {
 typedef enum { F_INT, F_FLOAT, F_STRING, F_VECTOR, F_ANGLEHACK } fieldtype_t;
 
 typedef struct {
-	char *name;
+	const char *name;
 	size_t ofs;
 	fieldtype_t type;
 } field_t;
 
-field_t fields[] = {{"classname", FOFS(classname), F_STRING},
-					{"origin", FOFS(s.origin), F_VECTOR},
-					{"model", FOFS(model), F_STRING},
-					{"model2", FOFS(model2), F_STRING},
-					{"spawnflags", FOFS(spawnflags), F_INT},
-					{"speed", FOFS(speed), F_FLOAT},
-					{"target", FOFS(target), F_STRING},
-					{"targetname", FOFS(targetname), F_STRING},
-					{"message", FOFS(message), F_STRING},
-					{"team", FOFS(team), F_STRING},
-					{"wait", FOFS(wait), F_FLOAT},
-					{"random", FOFS(random), F_FLOAT},
-					{"count", FOFS(count), F_INT},
-					{"health", FOFS(health), F_INT},
-					{"dmg", FOFS(damage), F_INT},
-					{"angles", FOFS(s.angles), F_VECTOR},
-					{"angle", FOFS(s.angles), F_ANGLEHACK},
-					{"targetShaderName", FOFS(targetShaderName), F_STRING},
-					{"targetShaderNewName", FOFS(targetShaderNewName), F_STRING},
-					{"animationStart", FOFS(animationStart), F_INT},
-					{"animationEnd", FOFS(animationEnd), F_INT},
-					{"animationFPS", FOFS(animationFPS), F_FLOAT},
-					{"distance", FOFS(distance), F_FLOAT},
-					{NULL}};
+static const field_t fields[] = {{"classname", FOFS(classname), F_STRING},
+								 {"origin", FOFS(s.origin), F_VECTOR},
+								 {"model", FOFS(model), F_STRING},
+								 {"model2", FOFS(model2), F_STRING},
+								 {"spawnflags", FOFS(spawnflags), F_INT},
+								 {"speed", FOFS(speed), F_FLOAT},
+								 {"target", FOFS(target), F_STRING},
+								 {"targetname", FOFS(targetname), F_STRING},
+								 {"message", FOFS(message), F_STRING},
+								 {"team", FOFS(team), F_STRING},
+								 {"wait", FOFS(wait), F_FLOAT},
+								 {"random", FOFS(random), F_FLOAT},
+								 {"count", FOFS(count), F_INT},
+								 {"health", FOFS(health), F_INT},
+								 {"dmg", FOFS(damage), F_INT},
+								 {"angles", FOFS(s.angles), F_VECTOR},
+								 {"angle", FOFS(s.angles), F_ANGLEHACK},
+								 {"targetShaderName", FOFS(targetShaderName), F_STRING},
+								 {"targetShaderNewName", FOFS(targetShaderNewName), F_STRING},
+								 {"animationStart", FOFS(animationStart), F_INT},
+								 {"animationEnd", FOFS(animationEnd), F_INT},
+								 {"animationFPS", FOFS(animationFPS), F_FLOAT},
+								 {"distance", FOFS(distance), F_FLOAT},
+								 {NULL}};
 
 typedef struct {
-	char *name;
+	const char *name;
 	void (*spawn)(gentity_t *ent);
 } spawn_t;
 
@@ -349,7 +349,7 @@ in a gentity
 ===============
 */
 void G_ParseField(const char *key, const char *value, gentity_t *ent) {
-	field_t *f;
+	const field_t *f;
 	byte *b;
 	float v;
 	vec3_t vec;
@@ -364,6 +364,7 @@ void G_ParseField(const char *key, const char *value, gentity_t *ent) {
 				*(char **)(b + f->ofs) = G_NewString(value);
 				break;
 			case F_VECTOR:
+				vec[0] = vec[1] = vec[2] = 0.0f;
 				sscanf(value, "%f %f %f", &vec[0], &vec[1], &vec[2]);
 				((float *)(b + f->ofs))[0] = vec[0];
 				((float *)(b + f->ofs))[1] = vec[1];

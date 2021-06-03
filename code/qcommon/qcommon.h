@@ -815,12 +815,9 @@ extern cvar_t *com_version;
 extern cvar_t *com_blood;
 extern cvar_t *com_buildScript; // for building release pak files
 extern cvar_t *com_journal;
-extern cvar_t *com_cameraMode;
 extern cvar_t *com_ansiColor;
 extern cvar_t *com_unfocused;
-extern cvar_t *com_maxfpsUnfocused;
 extern cvar_t *com_minimized;
-extern cvar_t *com_maxfpsMinimized;
 extern cvar_t *com_altivec;
 extern cvar_t *com_standalone;
 extern cvar_t *com_basegame;
