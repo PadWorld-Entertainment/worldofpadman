@@ -1943,8 +1943,6 @@ int BotAIStartFrame(int time) {
 		trap_BotLibVarSet("showitemweights", "0");
 	}
 
-	trap_Cvar_Update(&bot_rocketjump);
-	trap_Cvar_Update(&bot_grapple);
 	trap_Cvar_Update(&bot_fastchat);
 	trap_Cvar_Update(&bot_nochat);
 	trap_Cvar_Update(&bot_testrchat);

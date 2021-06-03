@@ -69,18 +69,16 @@ float scorealert[3]; // for both teams, how alarming the current situation is
 int gametype;	// game type
 int maxclients; // maximum number of clients
 
-vmCvar_t bot_grapple;
-vmCvar_t bot_rocketjump;
 vmCvar_t bot_fastchat;
 vmCvar_t bot_nochat;
 vmCvar_t bot_testrchat;
 vmCvar_t bot_challenge;
-vmCvar_t bot_predictobstacles;
-vmCvar_t g_spSkill;
+static vmCvar_t bot_predictobstacles;
+static vmCvar_t g_spSkill;
 
-vec3_t lastteleport_origin; // last teleport event origin
-float lastteleport_time;	// last teleport event time
-int max_bspmodelindex;		// maximum BSP model index
+static vec3_t lastteleport_origin; // last teleport event origin
+static float lastteleport_time;	// last teleport event time
+static int max_bspmodelindex;		// maximum BSP model index
 
 // cyr {
 bot_goal_t ctf_redflag;
@@ -4486,8 +4484,6 @@ void BotSetupDeathmatchAI(void) {
 	gametype = trap_Cvar_VariableIntegerValue("g_gametype");
 	maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
 
-	trap_Cvar_Register(&bot_rocketjump, "bot_rocketjump", "1", 0);
-	trap_Cvar_Register(&bot_grapple, "bot_grapple", "0", 0);
 	trap_Cvar_Register(&bot_fastchat, "bot_fastchat", "0", 0);
 	trap_Cvar_Register(&bot_nochat, "bot_nochat", "0", 0);
 	trap_Cvar_Register(&bot_testrchat, "bot_testrchat", "0", 0);

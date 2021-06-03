@@ -40,7 +40,7 @@ typedef struct {
 // static int			botBeginDelay = 0;  // bk001206 - unused, init
 static botSpawnQueue_t botSpawnQueue[BOT_SPAWN_QUEUE_DEPTH];
 
-vmCvar_t bot_minplayers;
+static vmCvar_t bot_minplayers;
 
 extern gentity_t *podium1;
 extern gentity_t *podium2;
