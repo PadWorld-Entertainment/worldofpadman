@@ -3,6 +3,8 @@ Makefile.local
 /compile_commands.json
 /.vscode
 /.cache
+/*.gz
+/*.dmg
 *.swp
 *tags
 *~
