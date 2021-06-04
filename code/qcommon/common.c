@@ -70,8 +70,7 @@ cvar_t *com_logfile; // 1 = buffer log, 2 = flush after each print
 cvar_t *com_pipefile;
 cvar_t *com_showtrace;
 cvar_t *com_version;
-cvar_t *com_blood;
-cvar_t *com_buildScript; // for automated data building scripts
+static cvar_t *com_buildScript; // for automated data building scripts
 #ifdef CINEMATICS_INTRO
 static cvar_t *com_introPlayed;
 #endif
@@ -86,7 +85,6 @@ static cvar_t *com_maxfpsUnfocused;
 cvar_t *com_minimized;
 static cvar_t *com_maxfpsMinimized;
 static cvar_t *com_abnormalExit;
-cvar_t *com_standalone;
 cvar_t *com_gamename;
 cvar_t *com_protocol;
 cvar_t *com_basegame;
@@ -2492,7 +2490,6 @@ void Com_Init(char *commandLine) {
 	// done early so bind command exists
 	CL_InitKeyCommands();
 
-	com_standalone = Cvar_Get("com_standalone", "0", CVAR_ROM);
 	com_basegame = Cvar_Get("com_basegame", BASEGAME, CVAR_INIT);
 	com_homepath = Cvar_Get("com_homepath", "", CVAR_INIT | CVAR_PROTECTED);
 
@@ -2538,7 +2535,6 @@ void Com_Init(char *commandLine) {
 	//
 	com_altivec = Cvar_Get("com_altivec", "1", CVAR_ARCHIVE);
 	com_maxfps = Cvar_Get("com_maxfps", "125", CVAR_ARCHIVE);
-	com_blood = Cvar_Get("com_blood", "1", CVAR_ARCHIVE);
 
 	com_logfile = Cvar_Get("logfile", "0", CVAR_TEMP);
 
