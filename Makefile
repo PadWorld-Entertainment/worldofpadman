@@ -70,13 +70,6 @@ ifeq ($(COMPILE_ARCH),x64)
   COMPILE_ARCH=x86_64
 endif
 
-ifeq ($(COMPILE_ARCH),powerpc)
-  COMPILE_ARCH=ppc
-endif
-ifeq ($(COMPILE_ARCH),powerpc64)
-  COMPILE_ARCH=ppc64
-endif
-
 ifeq ($(COMPILE_ARCH),axp)
   COMPILE_ARCH=alpha
 endif
@@ -356,14 +349,6 @@ ifneq (,$(findstring "$(PLATFORM)", "linux" "gnu_kfreebsd" "kfreebsd-gnu" "gnu")
     OPTIMIZE = $(OPTIMIZEVM) -ffast-math
     HAVE_VM_COMPILED=true
   else
-  ifeq ($(ARCH),ppc)
-    ALTIVEC_CFLAGS = -maltivec
-    HAVE_VM_COMPILED=true
-  endif
-  ifeq ($(ARCH),ppc64)
-    ALTIVEC_CFLAGS = -maltivec
-    HAVE_VM_COMPILED=true
-  endif
   ifeq ($(ARCH),sparc)
     OPTIMIZE += -mtune=ultrasparc3 -mv8plus
     OPTIMIZEVM += -mtune=ultrasparc3 -mv8plus
@@ -411,9 +396,6 @@ ifneq (,$(findstring "$(PLATFORM)", "linux" "gnu_kfreebsd" "kfreebsd-gnu" "gnu")
     # linux32 make ...
     BASE_CFLAGS += -m32
   else
-  ifeq ($(ARCH),ppc64)
-    BASE_CFLAGS += -m64
-  endif
   endif
 else # ifeq Linux
 
@@ -449,14 +431,6 @@ ifeq ($(PLATFORM),darwin)
   BASE_CFLAGS += -mmacosx-version-min=$(MACOSX_VERSION_MIN) \
                  -DMAC_OS_X_VERSION_MIN_REQUIRED=$(MAC_OS_X_VERSION_MIN_REQUIRED)
 
-  ifeq ($(ARCH),ppc)
-    BASE_CFLAGS += -arch ppc
-    ALTIVEC_CFLAGS = -faltivec
-  endif
-  ifeq ($(ARCH),ppc64)
-    BASE_CFLAGS += -arch ppc64
-    ALTIVEC_CFLAGS = -faltivec
-  endif
   ifeq ($(ARCH),x86)
     OPTIMIZEVM += -march=prescott -mfpmath=sse
     # x86 vm will crash without -mstackrealign since MMX instructions will be
@@ -513,12 +487,7 @@ ifeq ($(PLATFORM),darwin)
   RENDERER_LIBS += -framework OpenGL
 
   ifeq ($(USE_LOCAL_HEADERS),1)
-    # libSDL2-2.0.0.dylib for PPC is SDL 2.0.1 + changes to compile
-    ifneq ($(findstring $(ARCH),ppc ppc64),)
-      BASE_CFLAGS += -I$(SDLHDIR)/include-macppc
-    else
-      BASE_CFLAGS += -I$(SDLHDIR)/include
-    endif
+    BASE_CFLAGS += -I$(SDLHDIR)/include
 
     # We copy sdlmain before ranlib'ing it so that subversion doesn't think
     #  the file has been modified by each build.
@@ -791,14 +760,6 @@ ifeq ($(PLATFORM),openbsd)
     OPTIMIZE = $(OPTIMIZEVM) -ffast-math
     HAVE_VM_COMPILED=true
   else
-  ifeq ($(ARCH),ppc)
-    ALTIVEC_CFLAGS = -maltivec
-    HAVE_VM_COMPILED=true
-  endif
-  ifeq ($(ARCH),ppc64)
-    ALTIVEC_CFLAGS = -maltivec
-    HAVE_VM_COMPILED=true
-  endif
   ifeq ($(ARCH),sparc64)
     OPTIMIZE += -mtune=ultrasparc3 -mv8plus
     OPTIMIZEVM += -mtune=ultrasparc3 -mv8plus
@@ -2246,9 +2207,6 @@ ifeq ($(HAVE_VM_COMPILED),true)
     Q3OBJ += \
       $(B)/client/vm_x86.o
   endif
-  ifneq ($(findstring $(ARCH),ppc ppc64),)
-    Q3OBJ += $(B)/client/vm_powerpc.o $(B)/client/vm_powerpc_asm.o
-  endif
   ifeq ($(ARCH),sparc)
     Q3OBJ += $(B)/client/vm_sparc.o
   endif
@@ -2438,9 +2396,6 @@ ifeq ($(HAVE_VM_COMPILED),true)
   ifneq ($(findstring $(ARCH),x86 x86_64),)
     Q3DOBJ += \
       $(B)/ded/vm_x86.o
-  endif
-  ifneq ($(findstring $(ARCH),ppc ppc64),)
-    Q3DOBJ += $(B)/ded/vm_powerpc.o $(B)/ded/vm_powerpc_asm.o
   endif
   ifeq ($(ARCH),sparc)
     Q3DOBJ += $(B)/ded/vm_sparc.o
