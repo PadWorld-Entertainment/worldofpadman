@@ -2468,10 +2468,10 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 
 	// TODO: don't draw the icon if the healthstation is visible and close
 
-	size = Com_Clamp(0.5, 1, (1 / (sqrt(squaredDist) * 0.002)));
+	size = Com_Clamp(0.5f, 1, (1.0f / (sqrt(squaredDist) * 0.002f)));
 
 	trap_R_SetColor(NULL);
-	CG_DrawPic((x - 16.0 * size), (y - 16.0 * size), (32.0 * size), (32.0 * size), cgs.media.healthstationIcon);
+	CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size), cgs.media.healthstationIcon);
 }
 
 static void CG_DrawSprayroomIcon(centity_t *cent) {

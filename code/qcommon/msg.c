@@ -714,7 +714,7 @@ void MSG_ReportChangeVectors_f(void) {
 }
 
 typedef struct {
-	char *name;
+	const char *name;
 	int offset;
 	int bits; // 0 = float
 } netField_t;
@@ -722,57 +722,57 @@ typedef struct {
 // using the stringizing operator to save typing...
 #define NETF(x) #x, (size_t) & ((entityState_t *)0)->x
 
-netField_t entityStateFields[] = {{NETF(pos.trTime), 32},
-								  {NETF(pos.trBase[0]), 0},
-								  {NETF(pos.trBase[1]), 0},
-								  {NETF(pos.trDelta[0]), 0},
-								  {NETF(pos.trDelta[1]), 0},
-								  {NETF(pos.trBase[2]), 0},
-								  {NETF(apos.trBase[1]), 0},
-								  {NETF(pos.trDelta[2]), 0},
-								  {NETF(apos.trBase[0]), 0},
-								  {NETF(event), 10},
-								  {NETF(angles2[1]), 0},
-								  {NETF(eType), 8},
-								  {NETF(torsoAnim), 8},
-								  {NETF(eventParm), 8},
-								  {NETF(legsAnim), 8},
-								  {NETF(groundEntityNum), GENTITYNUM_BITS},
-								  {NETF(pos.trType), 8},
-								  {NETF(eFlags), 19},
-								  {NETF(otherEntityNum), GENTITYNUM_BITS},
-								  {NETF(weapon), 8},
-								  {NETF(clientNum), 8},
-								  {NETF(angles[1]), 0},
-								  {NETF(pos.trDuration), 32},
-								  {NETF(apos.trType), 8},
-								  {NETF(origin[0]), 0},
-								  {NETF(origin[1]), 0},
-								  {NETF(origin[2]), 0},
-								  {NETF(solid), 24},
-								  {NETF(powerups), MAX_POWERUPS},
-								  {NETF(modelindex), 8},
-								  {NETF(otherEntityNum2), GENTITYNUM_BITS},
-								  {NETF(loopSound), 8},
-								  {NETF(generic1), 8},
-								  {NETF(origin2[2]), 0},
-								  {NETF(origin2[0]), 0},
-								  {NETF(origin2[1]), 0},
-								  {NETF(modelindex2), 8},
-								  {NETF(angles[0]), 0},
-								  {NETF(time), 32},
-								  {NETF(apos.trTime), 32},
-								  {NETF(apos.trDuration), 32},
-								  {NETF(apos.trBase[2]), 0},
-								  {NETF(apos.trDelta[0]), 0},
-								  {NETF(apos.trDelta[1]), 0},
-								  {NETF(apos.trDelta[2]), 0},
-								  {NETF(time2), 32},
-								  {NETF(angles[2]), 0},
-								  {NETF(angles2[0]), 0},
-								  {NETF(angles2[2]), 0},
-								  {NETF(constantLight), 32},
-								  {NETF(frame), 16}};
+static netField_t const entityStateFields[] = {{NETF(pos.trTime), 32},
+											   {NETF(pos.trBase[0]), 0},
+											   {NETF(pos.trBase[1]), 0},
+											   {NETF(pos.trDelta[0]), 0},
+											   {NETF(pos.trDelta[1]), 0},
+											   {NETF(pos.trBase[2]), 0},
+											   {NETF(apos.trBase[1]), 0},
+											   {NETF(pos.trDelta[2]), 0},
+											   {NETF(apos.trBase[0]), 0},
+											   {NETF(event), 10},
+											   {NETF(angles2[1]), 0},
+											   {NETF(eType), 8},
+											   {NETF(torsoAnim), 8},
+											   {NETF(eventParm), 8},
+											   {NETF(legsAnim), 8},
+											   {NETF(groundEntityNum), GENTITYNUM_BITS},
+											   {NETF(pos.trType), 8},
+											   {NETF(eFlags), 19},
+											   {NETF(otherEntityNum), GENTITYNUM_BITS},
+											   {NETF(weapon), 8},
+											   {NETF(clientNum), 8},
+											   {NETF(angles[1]), 0},
+											   {NETF(pos.trDuration), 32},
+											   {NETF(apos.trType), 8},
+											   {NETF(origin[0]), 0},
+											   {NETF(origin[1]), 0},
+											   {NETF(origin[2]), 0},
+											   {NETF(solid), 24},
+											   {NETF(powerups), MAX_POWERUPS},
+											   {NETF(modelindex), 8},
+											   {NETF(otherEntityNum2), GENTITYNUM_BITS},
+											   {NETF(loopSound), 8},
+											   {NETF(generic1), 8},
+											   {NETF(origin2[2]), 0},
+											   {NETF(origin2[0]), 0},
+											   {NETF(origin2[1]), 0},
+											   {NETF(modelindex2), 8},
+											   {NETF(angles[0]), 0},
+											   {NETF(time), 32},
+											   {NETF(apos.trTime), 32},
+											   {NETF(apos.trDuration), 32},
+											   {NETF(apos.trBase[2]), 0},
+											   {NETF(apos.trDelta[0]), 0},
+											   {NETF(apos.trDelta[1]), 0},
+											   {NETF(apos.trDelta[2]), 0},
+											   {NETF(time2), 32},
+											   {NETF(angles[2]), 0},
+											   {NETF(angles2[0]), 0},
+											   {NETF(angles2[2]), 0},
+											   {NETF(constantLight), 32},
+											   {NETF(frame), 16}};
 
 // if (int)f == f and (int)f + ( 1<<(FLOAT_INT_BITS-1) ) < ( 1 << FLOAT_INT_BITS )
 // the float will be sent with FLOAT_INT_BITS, otherwise all 32 bits will be sent
@@ -793,7 +793,7 @@ identical, under the assumption that the in-order delta code will catch it.
 void MSG_WriteDeltaEntity(msg_t *msg, struct entityState_s *from, struct entityState_s *to, qboolean force) {
 	int i, lc;
 	int numFields;
-	netField_t *field;
+	const netField_t *field;
 	int trunc;
 	float fullFloat;
 	int *fromF, *toF;
@@ -909,7 +909,7 @@ Can go from either a baseline or a previous packet_entity
 void MSG_ReadDeltaEntity(msg_t *msg, entityState_t *from, entityState_t *to, int number) {
 	int i, lc;
 	int numFields;
-	netField_t *field;
+	const netField_t *field;
 	int *fromF, *toF;
 	int print;
 	int trunc;
@@ -1032,54 +1032,54 @@ plyer_state_t communication
 // using the stringizing operator to save typing...
 #define PSF(x) #x, (size_t) & ((playerState_t *)0)->x
 
-netField_t playerStateFields[] = {{PSF(commandTime), 32},
-								  {PSF(origin[0]), 0},
-								  {PSF(origin[1]), 0},
-								  {PSF(bobCycle), 8},
-								  {PSF(velocity[0]), 0},
-								  {PSF(velocity[1]), 0},
-								  {PSF(viewangles[1]), 0},
-								  {PSF(viewangles[0]), 0},
-								  {PSF(weaponTime), -16},
-								  {PSF(origin[2]), 0},
-								  {PSF(velocity[2]), 0},
-								  {PSF(legsTimer), 8},
-								  {PSF(pm_time), -16},
-								  {PSF(eventSequence), 16},
-								  {PSF(torsoAnim), 8},
-								  {PSF(movementDir), 4},
-								  {PSF(events[0]), 8},
-								  {PSF(legsAnim), 8},
-								  {PSF(events[1]), 8},
-								  {PSF(pm_flags), 16},
-								  {PSF(groundEntityNum), GENTITYNUM_BITS},
-								  {PSF(weaponstate), 4},
-								  {PSF(eFlags), 16},
-								  {PSF(externalEvent), 10},
-								  {PSF(gravity), 16},
-								  {PSF(speed), 16},
-								  {PSF(delta_angles[1]), 16},
-								  {PSF(externalEventParm), 8},
-								  {PSF(viewheight), -8},
-								  {PSF(damageEvent), 8},
-								  {PSF(damageYaw), 8},
-								  {PSF(damagePitch), 8},
-								  {PSF(damageCount), 8},
-								  {PSF(generic1), 8},
-								  {PSF(pm_type), 8},
-								  {PSF(delta_angles[0]), 16},
-								  {PSF(delta_angles[2]), 16},
-								  {PSF(torsoTimer), 12},
-								  {PSF(eventParms[0]), 8},
-								  {PSF(eventParms[1]), 8},
-								  {PSF(clientNum), 8},
-								  {PSF(weapon), 5},
-								  {PSF(viewangles[2]), 0},
-								  {PSF(grapplePoint[0]), 0},
-								  {PSF(grapplePoint[1]), 0},
-								  {PSF(grapplePoint[2]), 0},
-								  {PSF(jumppad_ent), GENTITYNUM_BITS},
-								  {PSF(loopSound), 16}};
+static const netField_t playerStateFields[] = {{PSF(commandTime), 32},
+											   {PSF(origin[0]), 0},
+											   {PSF(origin[1]), 0},
+											   {PSF(bobCycle), 8},
+											   {PSF(velocity[0]), 0},
+											   {PSF(velocity[1]), 0},
+											   {PSF(viewangles[1]), 0},
+											   {PSF(viewangles[0]), 0},
+											   {PSF(weaponTime), -16},
+											   {PSF(origin[2]), 0},
+											   {PSF(velocity[2]), 0},
+											   {PSF(legsTimer), 8},
+											   {PSF(pm_time), -16},
+											   {PSF(eventSequence), 16},
+											   {PSF(torsoAnim), 8},
+											   {PSF(movementDir), 4},
+											   {PSF(events[0]), 8},
+											   {PSF(legsAnim), 8},
+											   {PSF(events[1]), 8},
+											   {PSF(pm_flags), 16},
+											   {PSF(groundEntityNum), GENTITYNUM_BITS},
+											   {PSF(weaponstate), 4},
+											   {PSF(eFlags), 16},
+											   {PSF(externalEvent), 10},
+											   {PSF(gravity), 16},
+											   {PSF(speed), 16},
+											   {PSF(delta_angles[1]), 16},
+											   {PSF(externalEventParm), 8},
+											   {PSF(viewheight), -8},
+											   {PSF(damageEvent), 8},
+											   {PSF(damageYaw), 8},
+											   {PSF(damagePitch), 8},
+											   {PSF(damageCount), 8},
+											   {PSF(generic1), 8},
+											   {PSF(pm_type), 8},
+											   {PSF(delta_angles[0]), 16},
+											   {PSF(delta_angles[2]), 16},
+											   {PSF(torsoTimer), 12},
+											   {PSF(eventParms[0]), 8},
+											   {PSF(eventParms[1]), 8},
+											   {PSF(clientNum), 8},
+											   {PSF(weapon), 5},
+											   {PSF(viewangles[2]), 0},
+											   {PSF(grapplePoint[0]), 0},
+											   {PSF(grapplePoint[1]), 0},
+											   {PSF(grapplePoint[2]), 0},
+											   {PSF(jumppad_ent), GENTITYNUM_BITS},
+											   {PSF(loopSound), 16}};
 
 /*
 =============
@@ -1095,7 +1095,7 @@ void MSG_WriteDeltaPlayerstate(msg_t *msg, struct playerState_s *from, struct pl
 	int ammobits;
 	int powerupbits;
 	int numFields;
-	netField_t *field;
+	const netField_t *field;
 	int *fromF, *toF;
 	float fullFloat;
 	int trunc, lc;
@@ -1236,7 +1236,7 @@ MSG_ReadDeltaPlayerstate
 void MSG_ReadDeltaPlayerstate(msg_t *msg, playerState_t *from, playerState_t *to) {
 	int i, lc;
 	int bits;
-	netField_t *field;
+	const netField_t *field;
 	int numFields;
 	int startBit, endBit;
 	int print;
@@ -1371,7 +1371,7 @@ void MSG_ReadDeltaPlayerstate(msg_t *msg, playerState_t *from, playerState_t *to
 	}
 }
 
-int msg_hData[256] = {
+static const int msg_hData[256] = {
 	250315, // 0
 	41193,	// 1
 	6292,	// 2
@@ -1642,40 +1642,3 @@ void MSG_initHuffman(void) {
 		}
 	}
 }
-
-/*
-void MSG_NUinitHuffman() {
-	byte	*data;
-	int		size, i, ch;
-	int		array[256];
-
-	msgInit = qtrue;
-
-	Huff_Init(&msgHuff);
-	// load it in
-	size = FS_ReadFile( "netchan/netchan.bin", (void **)&data );
-
-	for(i=0;i<256;i++) {
-		array[i] = 0;
-	}
-	for(i=0;i<size;i++) {
-		ch = data[i];
-		Huff_addRef(&msgHuff.compressor,	ch);			// Do update
-		Huff_addRef(&msgHuff.decompressor,	ch);			// Do update
-		array[ch]++;
-	}
-	Com_Printf("msg_hData {\n");
-	for(i=0;i<256;i++) {
-		if (array[i] == 0) {
-			Huff_addRef(&msgHuff.compressor,	i);			// Do update
-			Huff_addRef(&msgHuff.decompressor,	i);			// Do update
-		}
-		Com_Printf("%d,			// %d\n", array[i], i);
-	}
-	Com_Printf("};\n");
-	FS_FreeFile( data );
-	Cbuf_AddText( "condump dump.txt\n" );
-}
-*/
-
-//===========================================================================

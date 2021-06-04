@@ -250,8 +250,6 @@ typedef struct localEntity_s {
 	refEntity_t refEntity;
 } localEntity_t;
 
-//======================================================================
-
 //=================================================
 
 // centity_t have a direct corespondence with gentity_t in the game, but
