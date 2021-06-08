@@ -5,6 +5,7 @@ Makefile.local
 /.cache
 /*.gz
 /*.dmg
+/*.zip
 *.swp
 *tags
 *~

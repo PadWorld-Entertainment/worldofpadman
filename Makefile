@@ -2956,10 +2956,10 @@ endif
 SDL2_VERSION=2.0.14
 SDL2_URL=https://www.libsdl.org/release/
 
-SDL2-devel-$(SDL2_VERSION)-mingw.tar.gz SDL2-$(SDL2_VERSION).tar.gz SDL2-$(SDL2_VERSION).dmg:
+SDL2-devel-$(SDL2_VERSION)-mingw.tar.gz SDL2-$(SDL2_VERSION).tar.gz SDL2-$(SDL2_VERSION).dmg SDL2-devel-$(SDL2_VERSION)-VC.zip:
 	curl $(SDL2_URL)$@ -o $@
 
-download-sdl2: SDL2-devel-$(SDL2_VERSION)-mingw.tar.gz SDL2-$(SDL2_VERSION).tar.gz SDL2-$(SDL2_VERSION).dmg
+download-sdl2: SDL2-devel-$(SDL2_VERSION)-mingw.tar.gz SDL2-$(SDL2_VERSION).tar.gz SDL2-$(SDL2_VERSION).dmg SDL2-devel-$(SDL2_VERSION)-VC.zip
 
 .PHONY: update-sdl2
 update-sdl2: download-sdl2
@@ -2971,6 +2971,8 @@ update-sdl2: download-sdl2
 	tar --strip-components=3 -xzf SDL2-devel-$(SDL2_VERSION)-mingw.tar.gz -C libs/libs/win32 SDL2-$(SDL2_VERSION)/i686-w64-mingw32/lib/libSDL2main.a
 	rm -rf libs/SDL2/include/*
 	tar --strip-components=4 -xzf SDL2-devel-$(SDL2_VERSION)-mingw.tar.gz -C libs/SDL2/include SDL2-$(SDL2_VERSION)/i686-w64-mingw32/include/SDL2/
+	unzip -oj SDL2-devel-$(SDL2_VERSION)-VC.zip SDL2-$(SDL2_VERSION)/lib/x86/*.lib -d libs/libs/win32/
+	unzip -oj SDL2-devel-$(SDL2_VERSION)-VC.zip SDL2-$(SDL2_VERSION)/lib/x64/*.lib -d libs/libs/win64/
 	7z e -olibs/libs/macosx SDL2-$(SDL2_VERSION).dmg SDL2/SDL2.framework/Versions/A/SDL2
 	mv libs/libs/macosx/SDL2 libs/libs/macosx/libSDL2-2.0.0.dylib
 	install_name_tool -id @executable_path/libSDL2-2.0.0.dylib libs/libs/macosx/libSDL2-2.0.0.dylib
