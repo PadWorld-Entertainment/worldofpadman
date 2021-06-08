@@ -329,7 +329,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.musicautoswitch.generic.type = MTYPE_RADIOBUTTON;
-	soundOptionsInfo.musicautoswitch.generic.name = "Auto switch Song";
+	soundOptionsInfo.musicautoswitch.generic.name = "Auto Switch Song";
 	soundOptionsInfo.musicautoswitch.generic.flags = QMF_SMALLFONT;
 	soundOptionsInfo.musicautoswitch.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.musicautoswitch.generic.id = ID_MUSICAUTOSWITCH;
