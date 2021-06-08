@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 #include "keycodes.h"
+#include "../qcommon/qcommon.h"
+#include "../qcommon/q_shared.h"
 
 typedef struct {
 	qboolean down;
@@ -27,12 +29,8 @@ typedef struct {
 	char *binding;
 } qkey_t;
 
-extern qboolean key_overstrikeMode;
 extern qkey_t keys[MAX_KEYS];
 
-// NOTE TTimo the declaration of field_t and Field_Clear is now in qcommon/qcommon.h
-void Field_KeyDownEvent(field_t *edit, int key);
-void Field_CharEvent(field_t *edit, int ch);
 void Field_Draw(field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape);
 void Field_BigDraw(field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape);
 

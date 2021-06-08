@@ -504,7 +504,7 @@ void CL_VerifyCode(void);
 
 float CL_KeyState(kbutton_t *key);
 int Key_StringToKeynum(const char *str);
-char *Key_KeynumToString(int keynum);
+const char *Key_KeynumToString(int keynum);
 
 //
 // cl_parse.c
@@ -564,7 +564,6 @@ int SCR_GetBigStringWidth(const char *str); // returns in virtual 640x480 coordi
 void SCR_AdjustFrom640(float *x, float *y, float *w, float *h);
 void SCR_FillRect(float x, float y, float width, float height, const float *color);
 void SCR_DrawPic(float x, float y, float width, float height, qhandle_t hShader);
-void SCR_DrawNamedPic(float x, float y, float width, float height, const char *picname);
 
 void SCR_DrawBigString(int x, int y, const char *s, float alpha,
 					   qboolean noColorEscape); // draws a string with embedded color control characters with fade

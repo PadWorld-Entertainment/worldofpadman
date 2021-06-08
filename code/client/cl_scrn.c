@@ -23,30 +23,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "client.h"
 
-qboolean scr_initialized; // ready to draw
+static qboolean scr_initialized; // ready to draw
 
 cvar_t *cl_timegraph;
-cvar_t *cl_debuggraph;
-cvar_t *cl_graphheight;
-cvar_t *cl_graphscale;
-cvar_t *cl_graphshift;
-
-/*
-================
-SCR_DrawNamedPic
-
-Coordinates are 640*480 virtual values
-=================
-*/
-void SCR_DrawNamedPic(float x, float y, float width, float height, const char *picname) {
-	qhandle_t hShader;
-
-	assert(width != 0);
-
-	hShader = re.RegisterShader(picname);
-	SCR_AdjustFrom640(&x, &y, &width, &height);
-	re.DrawStretchPic(x, y, width, height, 0, 0, 1, 1, hShader);
-}
+static cvar_t *cl_debuggraph;
+static cvar_t *cl_graphheight;
+static cvar_t *cl_graphscale;
+static cvar_t *cl_graphshift;
 
 /*
 ================
@@ -60,10 +43,10 @@ void SCR_AdjustFrom640(float *x, float *y, float *w, float *h) {
 	float yscale;
 
 #if 0
-		// adjust for wide screens
-		if ( cls.glconfig.vidWidth * 480 > cls.glconfig.vidHeight * 640 ) {
-			*x += 0.5 * ( cls.glconfig.vidWidth - ( cls.glconfig.vidHeight * 640 / 480 ) );
-		}
+	// adjust for wide screens
+	if (cls.glconfig.vidWidth * 480 > cls.glconfig.vidHeight * 640) {
+		*x += 0.5f * (cls.glconfig.vidWidth - (cls.glconfig.vidHeight * 640 / 480));
+	}
 #endif
 
 	// scale for screen sizes
@@ -185,7 +168,7 @@ to a fixed color.
 Coordinates are at 640 by 480 virtual resolution
 ==================
 */
-void SCR_DrawStringExt(int x, int y, float size, const char *string, float *setColor, qboolean forceColor,
+static void SCR_DrawStringExt(int x, int y, float size, const char *string, float *setColor, qboolean forceColor,
 					   qboolean noColorEscape) {
 	vec4_t color;
 	const char *s;

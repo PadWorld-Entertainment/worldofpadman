@@ -100,12 +100,14 @@ void MField_Draw(mfield_t *edit, int x, int y, int style, const vec4_t color) {
 	UI_DrawChar(x + (edit->cursor - prestep) * charw, y, cursorChar, style & ~(UI_CENTER | UI_RIGHT), color);
 }
 
+static void MField_CharEvent(mfield_t *edit, int ch);
+
 /*
 ================
 MField_Paste
 ================
 */
-void MField_Paste(mfield_t *edit) {
+static void MField_Paste(mfield_t *edit) {
 	char pasteBuffer[64];
 	int pasteLen, i;
 
@@ -128,7 +130,7 @@ in-game talk, and menu fields
 Key events are used for non-printable characters, others are gotten from char events.
 =================
 */
-void MField_KeyDownEvent(mfield_t *edit, int key) {
+static void MField_KeyDownEvent(mfield_t *edit, int key) {
 	int len;
 
 	// shift-insert is paste
@@ -191,7 +193,7 @@ void MField_KeyDownEvent(mfield_t *edit, int key) {
 MField_CharEvent
 ==================
 */
-void MField_CharEvent(mfield_t *edit, int ch) {
+static void MField_CharEvent(mfield_t *edit, int ch) {
 	int len;
 
 	if (ch == 'v' - 'a' + 1) { // ctrl-v is paste
