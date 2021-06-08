@@ -198,7 +198,7 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 											 VK_DYNAMIC_STATE_DEPTH_BIAS};
 	VkPipelineDynamicStateCreateInfo dynamic_state;
 	VkPipelineColorBlendStateCreateInfo blend_state;
-	VkPipelineColorBlendAttachmentState attachment_blend_state = {};
+	VkPipelineColorBlendAttachmentState attachment_blend_state;
 	VkGraphicsPipelineCreateInfo create_info;
 
 	struct Specialization_Data {
