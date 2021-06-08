@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#ifdef _MSC_VER
+#include <stdlib.h>
+#else
 #include <libgen.h>
+#endif
 
 int main(int argc, char **argv) {
 	FILE *ifp;
 	FILE *ofp;
 	char buffer[1024];
+	char *base;
 
 	if (argc < 3)
 		return 1;
@@ -22,8 +27,13 @@ int main(int argc, char **argv) {
 	if (!ofp)
 		return 3;
 
+#ifdef _MSC_VER
+	_splitpath_s(inFile, NULL, 0, NULL, 0, buffer, sizeof(buffer), NULL, 0);
+	base = buffer;
+#else
+	base = basename(inFile);
+#endif
 	// Strip extension
-	char *base = basename(inFile);
 	*strrchr(base, '.') = '\0';
 
 	fprintf(ofp, "const char *fallbackShader_%s =\n", base);
