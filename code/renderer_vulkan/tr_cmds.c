@@ -425,7 +425,7 @@ smp extensions, or asynchronously by another thread.
 */
 void R_IssueRenderCommands(qboolean runPerformanceCounters) {
 	int t1;
-	const void *data;
+	const byte *data;
 
 	if (runPerformanceCounters) {
 		R_PerformanceCounters();

@@ -116,7 +116,7 @@ extern const int demo_protocols[];
 #if defined(__GNUC__)
 #define Q_NORETURN __attribute__((noreturn))
 #elif defined(_MSC_VER)
-#define Q_NORETURN __declspec(noreturn)
+#define Q_NORETURN // __declspec(noreturn)
 #else
 #define Q_NORETURN
 #endif

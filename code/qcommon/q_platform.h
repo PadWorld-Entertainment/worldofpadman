@@ -98,10 +98,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_INLINE __inline
 #define PATH_SEP '\\'
 
-#if defined(__WIN64__)
+#if defined(__WIN64__) || defined(_WIN64)
 #define ARCH_STRING "x86_64"
 #elif defined _M_ALPHA
 #define ARCH_STRING "AXP"
+#elif defined(__WIN32__) || defined(_WIN32)
+#define ARCH_STRING "x86"
 #endif
 
 #define Q3_LITTLE_ENDIAN
