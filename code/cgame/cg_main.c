@@ -941,7 +941,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.healthstationIcon = trap_R_RegisterShaderNoMip("icons/healthstation");
 
 	if (cgs.gametype == GT_LPS || cg_buildScript.integer) {
-		cgs.media.scoreboardlivesleft = trap_R_RegisterShaderNoMip("scoreboard/livesleft");
+		cgs.media.scoreboardlivesleft = trap_R_RegisterShaderNoMip("menu/tab/lives");
 		cgs.media.scoreboardscore_lives = trap_R_RegisterShaderNoMip("scoreboard/score_lives");
 
 		cgs.media.lpsIcon = trap_R_RegisterShaderNoMip("icons/LPSwallhackicon");
