@@ -1067,16 +1067,6 @@ long FS_FOpenFileReadDir(const char *filename, searchpath_t *search, fileHandle_
 		return -1;
 	}
 
-	// make sure the q3key file is only readable by the quake3.exe at initialization
-	// any other time the key should only be accessed in memory using the provided functions
-	if (com_fullyInitialized && strstr(filename, "q3key")) {
-		if (file == NULL)
-			return qfalse;
-
-		*file = 0;
-		return -1;
-	}
-
 	if (file == NULL) {
 		// just wants to see if file is there
 

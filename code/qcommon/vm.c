@@ -354,7 +354,7 @@ VM_LoadQVM
 Load a .qvm file
 =================
 */
-vmHeader_t *VM_LoadQVM(vm_t *vm, qboolean alloc, qboolean unpure) {
+static vmHeader_t *VM_LoadQVM(vm_t *vm, qboolean alloc, qboolean unpure) {
 	int dataLength;
 	int i;
 	char filename[MAX_QPATH];
