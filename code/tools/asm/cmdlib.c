@@ -231,13 +231,13 @@ double I_FloatTime(void) {
 	static int		secbase;
 
 	gettimeofday(&tp, &tzp);
-	
+
 	if (!secbase)
 	{
 		secbase = tp.tv_sec;
 		return tp.tv_usec/1000000.0;
 	}
-	
+
 	return (tp.tv_sec - secbase) + tp.tv_usec/1000000.0;
 #endif
 }
@@ -712,87 +712,8 @@ void ExtractFileExtension(const char *path, char *dest) {
 	strcpy(dest, src);
 }
 
-/*
-==============
-ParseNum / ParseHex
-==============
-*/
-int ParseHex(const char *hex) {
-	const char *str;
-	int num;
-
-	num = 0;
-	str = hex;
-
-	while (*str) {
-		num <<= 4;
-		if (*str >= '0' && *str <= '9')
-			num += *str - '0';
-		else if (*str >= 'a' && *str <= 'f')
-			num += 10 + *str - 'a';
-		else if (*str >= 'A' && *str <= 'F')
-			num += 10 + *str - 'A';
-		else
-			Error("Bad hex number: %s", hex);
-		str++;
-	}
-
-	return num;
-}
-
-int ParseNum(const char *str) {
-	if (str[0] == '$')
-		return ParseHex(str + 1);
-	if (str[0] == '0' && str[1] == 'x')
-		return ParseHex(str + 2);
-	return atol(str);
-}
-
-/*
-============================================================================
-
-					BYTE ORDER FUNCTIONS
-
-============================================================================
-*/
-
-short ShortSwap(short l) {
-	byte b1, b2;
-
-	b1 = l & 255;
-	b2 = (l >> 8) & 255;
-
-	return (b1 << 8) + b2;
-}
-
-int LongSwap(int l) {
-	byte b1, b2, b3, b4;
-
-	b1 = l & 255;
-	b2 = (l >> 8) & 255;
-	b3 = (l >> 16) & 255;
-	b4 = (l >> 24) & 255;
-
-	return ((int)b1 << 24) + ((int)b2 << 16) + ((int)b3 << 8) + b4;
-}
-
-typedef union {
-	float f;
-	unsigned int i;
-} _FloatByteUnion;
-
-float FloatSwap(const float *f) {
-	_FloatByteUnion out;
-
-	out.f = *f;
-	out.i = LongSwap(out.i);
-
-	return out.f;
-}
-
-//=======================================================
-
 // FIXME: byte swap?
+// FIXME: duplicated in l_crc.c
 
 // this is a 16 bit, non-reflected CRC using the polynomial 0x1021
 // and the initial and final xor values shown below...  in other words, the
@@ -824,10 +745,6 @@ static unsigned short crctable[256] = {
 
 void CRC_Init(unsigned short *crcvalue) {
 	*crcvalue = CRC_INIT_VALUE;
-}
-
-void CRC_ProcessByte(unsigned short *crcvalue, byte data) {
-	*crcvalue = (*crcvalue << 8) ^ crctable[(*crcvalue >> 8) ^ data];
 }
 
 unsigned short CRC_Value(unsigned short crcvalue) {
@@ -871,21 +788,4 @@ void CreatePath(const char *path) {
 		_chdrive(olddrive);
 	}
 #endif
-}
-
-/*
-============
-QCopyFile
-
-  Used to archive source files
-============
-*/
-void QCopyFile(const char *from, const char *to) {
-	void *buffer;
-	int length;
-
-	length = LoadFile(from, &buffer);
-	CreatePath(to);
-	SaveFile(to, buffer, length);
-	free(buffer);
 }

@@ -43,10 +43,10 @@ int vm_debugLevel;
 static int forced_unload;
 
 #define MAX_VM 3
-vm_t vmTable[MAX_VM];
+static vm_t vmTable[MAX_VM];
 
-void VM_VmInfo_f(void);
-void VM_VmProfile_f(void);
+static void VM_VmInfo_f(void);
+static void VM_VmProfile_f(void);
 
 #if 0 // 64bit!
 // converts a VM pointer to a C pointer and
@@ -129,6 +129,7 @@ vmSymbol_t *VM_ValueToFunctionSymbol(vm_t *vm, int value) {
 	return sym;
 }
 
+#if 0
 /*
 ===============
 VM_SymbolToValue
@@ -144,6 +145,7 @@ int VM_SymbolToValue(vm_t *vm, const char *symbol) {
 	}
 	return 0;
 }
+#endif
 
 /*
 =====================
@@ -179,7 +181,7 @@ const char *VM_SymbolForCompiledPointer( vm_t *vm, void *code ) {
 ParseHex
 ===============
 */
-int ParseHex(const char *text) {
+static int ParseHex(const char *text) {
 	int value;
 	int c;
 
@@ -207,7 +209,7 @@ int ParseHex(const char *text) {
 VM_LoadSymbols
 ===============
 */
-void VM_LoadSymbols(vm_t *vm) {
+static void VM_LoadSymbols(vm_t *vm) {
 	union {
 		char *c;
 		void *v;
@@ -658,7 +660,6 @@ VM_Free
 ==============
 */
 void VM_Free(vm_t *vm) {
-
 	if (!vm) {
 		return;
 	}
@@ -680,14 +681,14 @@ void VM_Free(vm_t *vm) {
 		Com_Memset(vm, 0, sizeof(*vm));
 	}
 #if 0 // now automatically freed by hunk
-	if ( vm->codeBase ) {
-		Z_Free( vm->codeBase );
+	if (vm->codeBase) {
+		Z_Free(vm->codeBase);
 	}
-	if ( vm->dataBase ) {
-		Z_Free( vm->dataBase );
+	if (vm->dataBase) {
+		Z_Free(vm->dataBase);
 	}
-	if ( vm->instructionPointers ) {
-		Z_Free( vm->instructionPointers );
+	if (vm->instructionPointers) {
+		Z_Free(vm->instructionPointers);
 	}
 #endif
 	Com_Memset(vm, 0, sizeof(*vm));
@@ -735,7 +736,6 @@ void *VM_ExplicitArgPtr(vm_t *vm, intptr_t intValue) {
 	if (currentVM == NULL)
 		return NULL;
 
-	//
 	if (vm->entryPoint) {
 		return (void *)(vm->dataBase + intValue);
 	} else {
@@ -766,7 +766,6 @@ an OP_ENTER instruction, which will subtract space for
 locals from sp
 ==============
 */
-
 intptr_t QDECL VM_Call(vm_t *vm, int callnum, ...) {
 	vm_t *oldVM;
 	intptr_t r;
@@ -856,7 +855,7 @@ VM_VmProfile_f
 
 ==============
 */
-void VM_VmProfile_f(void) {
+static void VM_VmProfile_f(void) {
 	vm_t *vm;
 	vmSymbol_t **sorted, *sym;
 	int i;
@@ -903,7 +902,7 @@ VM_VmInfo_f
 
 ==============
 */
-void VM_VmInfo_f(void) {
+static void VM_VmInfo_f(void) {
 	vm_t *vm;
 	int i;
 

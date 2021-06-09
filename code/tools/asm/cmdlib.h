@@ -105,8 +105,6 @@ void ExtractFilePath(const char *path, char *dest);
 void ExtractFileBase(const char *path, char *dest);
 void ExtractFileExtension(const char *path, char *dest);
 
-int ParseNum(const char *str);
-
 const char *COM_Parse(const char *data);
 
 extern char com_token[1024];
@@ -115,11 +113,9 @@ extern qboolean com_eof;
 char *copystring(const char *s);
 
 void CRC_Init(unsigned short *crcvalue);
-void CRC_ProcessByte(unsigned short *crcvalue, byte data);
 unsigned short CRC_Value(unsigned short crcvalue);
 
 void CreatePath(const char *path);
-void QCopyFile(const char *from, const char *to);
 
 extern qboolean archive;
 extern char archivedir[1024];

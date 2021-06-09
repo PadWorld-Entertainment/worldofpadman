@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "l_crc.h"
 
 // FIXME: byte swap?
+// FIXME: duplicated in asm/cmdlib.c
 
 // this is a 16 bit, non-reflected CRC using the polynomial 0x1021
 // and the initial and final xor values shown below...  in other words, the
@@ -70,10 +71,6 @@ unsigned short crctable[257] = {
 
 void CRC_Init(unsigned short *crcvalue) {
 	*crcvalue = CRC_INIT_VALUE;
-}
-
-void CRC_ProcessByte(unsigned short *crcvalue, byte data) {
-	*crcvalue = (*crcvalue << 8) ^ crctable[(*crcvalue >> 8) ^ data];
 }
 
 unsigned short CRC_Value(unsigned short crcvalue) {
