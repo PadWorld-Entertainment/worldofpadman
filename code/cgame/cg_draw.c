@@ -1245,6 +1245,7 @@ static void CG_DrawHoldableItem(float y) {
 	value = cg.snap->ps.stats[STAT_HOLDABLE_ITEM];
 	if (value) {
 		const int itemState = cg.snap->ps.stats[STAT_HOLDABLEVAR];
+		const int itemId = bg_itemlist[value].giTag;
 		CG_RegisterItemVisuals(value);
 
 		y -= ICON_SIZE;
@@ -1253,17 +1254,15 @@ static void CG_DrawHoldableItem(float y) {
 			CG_DrawPic(640 - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
 		}
 
-		if (bg_itemlist[value].giTag == HI_FLOATER) {
+		if (itemId == HI_FLOATER) {
 			const vec4_t barColor = {0.33f, 0.33f, 1.0f, 0.66f};
 			const float barFactor = 1.0f / (float)MAX_FLOATER;
 			const int barHeight = (int)(ICON_SIZE * itemState * barFactor);
 			const float barX = 640 - ICON_SIZE - 10;
 			CG_FillRect(barX, y + ICON_SIZE - barHeight, 10, barHeight, barColor);
 			CG_DrawRect(barX, y, 10, ICON_SIZE, 1.0f, colorWhite);
-		} else if (bg_itemlist[value].giTag == HI_KILLERDUCKS) {
-			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
-							 8, 16, 1);
-		} else if (bg_itemlist[value].giTag == HI_BOOMIES) {
+		}
+		if (itemId == HI_KILLERDUCKS || itemId == HI_BOOMIES) {
 			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
 							 8, 16, 1);
 		}
