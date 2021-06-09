@@ -169,7 +169,6 @@ SV_DirectConnect
 A "connect" OOB command has been received
 ==================
 */
-
 void SV_DirectConnect(netadr_t from) {
 	char userinfo[MAX_INFO_STRING];
 	int i;
@@ -285,7 +284,7 @@ void SV_DirectConnect(netadr_t from) {
 	}
 
 	newcl = &temp;
-	Com_Memset(newcl, 0, sizeof(client_t));
+	Com_Memset(newcl, 0, sizeof(*newcl));
 
 	// if there is already a slot for this ip, reuse it
 	for (i = 0, cl = svs.clients; i < sv_maxclients->integer; i++, cl++) {
@@ -745,7 +744,7 @@ Check to see if the client wants a file, open it if needed and start pumping the
 Fill up msg with data, return number of download blocks added
 ==================
 */
-int SV_WriteDownloadToClient(client_t *cl, msg_t *msg) {
+static int SV_WriteDownloadToClient(client_t *cl, msg_t *msg) {
 	int curindex;
 	int unreferenced = 1;
 	char errorMessage[1024];
@@ -931,7 +930,6 @@ Send one round of fragments, or queued messages to all clients that have data pe
 Return the shortest time interval for sending next packet to client
 ==================
 */
-
 int SV_SendQueuedMessages(void) {
 	int i, retval = -1, nextFragT;
 	client_t *cl;
@@ -960,7 +958,6 @@ SV_SendDownloadMessages
 Send one round of download messages to all clients
 ==================
 */
-
 int SV_SendDownloadMessages(void) {
 	int i, numDLs = 0, retval;
 	client_t *cl;
@@ -1024,7 +1021,6 @@ static void SV_VerifyPaks_f(client_t *cl) {
 	// ui and cgame that we think should be loaded based on the pure setting
 	//
 	if (sv_pure->integer != 0) {
-
 		nChkSum1 = nChkSum2 = 0;
 		// we run the game, so determine which cgame and ui the client "should" be running
 		bGood = (FS_FileIsInPAK("vm/cgame.qvm", &nChkSum1) == 1);

@@ -572,15 +572,15 @@ void FS_InitFilesystem(void);
 void FS_Shutdown(qboolean closemfp);
 
 qboolean FS_ConditionalRestart(int checksumFeed, qboolean disconnect);
-void FS_Restart(int checksumFeed);
 // shutdown and restart the filesystem so changes to fs_gamedir can take effect
+void FS_Restart(int checksumFeed);
 
 void FS_AddGameDirectory(const char *path, const char *dir);
 
-char **FS_ListFiles(const char *directory, const char *extension, int *numfiles);
 // directory should not have either a leading or trailing /
 // if extension is "/", only subdirectories will be returned
 // the returned files will not include any directories or /
+char **FS_ListFiles(const char *directory, const char *extension, int *numfiles);
 
 void FS_FreeFileList(char **list);
 
@@ -601,97 +601,91 @@ int FS_GetModList(char *listbuf, int bufsize);
 void FS_GetModDescription(const char *modDir, char *description, int descriptionLen);
 
 fileHandle_t FS_FOpenFileWrite(const char *qpath);
-fileHandle_t FS_FOpenFileAppend(const char *filename);
-fileHandle_t FS_FCreateOpenPipeFile(const char *filename);
 // will properly create any needed paths and deal with seperater character issues
+fileHandle_t FS_FCreateOpenPipeFile(const char *filename);
 
 fileHandle_t FS_SV_FOpenFileWrite(const char *filename);
 long FS_SV_FOpenFileRead(const char *filename, fileHandle_t *fp);
 void FS_SV_Rename(const char *from, const char *to, qboolean safe);
-long FS_FOpenFileRead(const char *qpath, fileHandle_t *file, qboolean uniqueFILE);
 // if uniqueFILE is true, then a new FILE will be fopened even if the file
 // is found in an already open pak file.  If uniqueFILE is false, you must call
 // FS_FCloseFile instead of fclose, otherwise the pak FILE would be improperly closed
 // It is generally safe to always set uniqueFILE to true, because the majority of
 // file IO goes through FS_ReadFile, which Does The Right Thing already.
+long FS_FOpenFileRead(const char *qpath, fileHandle_t *file, qboolean uniqueFILE);
 
-int FS_FileIsInPAK(const char *filename, int *pChecksum);
 // returns 1 if a file is in the PAK file, otherwise -1
+int FS_FileIsInPAK(const char *filename, int *pChecksum);
 
 int FS_Write(const void *buffer, int len, fileHandle_t f);
 
-int FS_Read(void *buffer, int len, fileHandle_t f);
 // properly handles partial reads and reads from other dlls
+int FS_Read(void *buffer, int len, fileHandle_t f);
 
-void FS_FCloseFile(fileHandle_t f);
 // note: you can't just fclose from another DLL, due to MS libc issues
+void FS_FCloseFile(fileHandle_t f);
 
 long FS_ReadFileDir(const char *qpath, void *searchPath, qboolean unpure, void **buffer);
-long FS_ReadFile(const char *qpath, void **buffer);
 // returns the length of the file
 // a null buffer will just return the file length without loading
 // as a quick check for existence. -1 length == not present
 // A 0 byte will always be appended at the end, so string ops are safe.
 // the buffer should be considered read-only, because it may be cached
 // for other uses.
+long FS_ReadFile(const char *qpath, void **buffer);
 
-void FS_ForceFlush(fileHandle_t f);
 // forces flush on files we're writing to.
+void FS_ForceFlush(fileHandle_t f);
 
-void FS_FreeFile(void *buffer);
 // frees the memory returned by FS_ReadFile
+void FS_FreeFile(void *buffer);
 
-void FS_WriteFile(const char *qpath, const void *buffer, int size);
 // writes a complete file, creating any subdirectories needed
+void FS_WriteFile(const char *qpath, const void *buffer, int size);
 
-long FS_filelength(fileHandle_t f);
-// doesn't work for files that are opened from a pack file
-
-int FS_FTell(fileHandle_t f);
 // where are we?
+int FS_FTell(fileHandle_t f);
 
 void FS_Flush(fileHandle_t f);
 
-void QDECL FS_Printf(fileHandle_t f, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 // like fprintf
+void QDECL FS_Printf(fileHandle_t f, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 
-int FS_FOpenFileByMode(const char *qpath, fileHandle_t *f, fsMode_t mode);
 // opens a file for reading, writing, or appending depending on the value of mode
+int FS_FOpenFileByMode(const char *qpath, fileHandle_t *f, fsMode_t mode);
 
-int FS_Seek(fileHandle_t f, long offset, int origin);
 // seek on a file
+int FS_Seek(fileHandle_t f, long offset, int origin);
 
 qboolean FS_FilenameCompare(const char *s1, const char *s2);
 
 const char *FS_LoadedPakNames(void);
 const char *FS_LoadedPakChecksums(void);
-const char *FS_LoadedPakPureChecksums(void);
 // Returns a space separated string containing the checksums of all loaded pk3 files.
 // Servers with sv_pure set will get this string and pass it to clients.
+const char *FS_LoadedPakPureChecksums(void);
 
 const char *FS_ReferencedPakNames(void);
 const char *FS_ReferencedPakChecksums(void);
-const char *FS_ReferencedPakPureChecksums(void);
 // Returns a space separated string containing the checksums of all loaded
 // AND referenced pk3 files. Servers with sv_pure set will get this string
 // back from clients for pure validation
+const char *FS_ReferencedPakPureChecksums(void);
 
-void FS_ClearPakReferences(int flags);
 // clears referenced booleans on loaded pk3s
+void FS_ClearPakReferences(int flags);
 
 void FS_PureServerSetReferencedPaks(const char *pakSums, const char *pakNames);
-void FS_PureServerSetLoadedPaks(const char *pakSums, const char *pakNames);
 // If the string is empty, all data sources will be allowed.
 // If not empty, only pk3 files that match one of the space
 // separated checksums will be checked for files, with the
 // sole exception of .cfg files.
+void FS_PureServerSetLoadedPaks(const char *pakSums, const char *pakNames);
 
 qboolean FS_CheckDirTraversal(const char *checkdir);
 qboolean FS_InvalidGameDir(const char *gamedir);
 qboolean FS_idPak(char *pak, char *base, int numPaks);
 qboolean FS_ComparePaks(char *neededpaks, int len, qboolean dlstring);
-
-void FS_Rename(const char *from, const char *to);
 
 void FS_Remove(const char *osPath);
 void FS_HomeRemove(const char *homePath);
@@ -916,9 +910,10 @@ CLIENT / SERVER SYSTEMS
 //
 // client interface
 //
-void CL_InitKeyCommands(void);
+
 // the keyboard binding interface must be setup before execing
 // config files, but the rest of client startup will happen later
+void CL_InitKeyCommands(void);
 
 void CL_Init(void);
 void CL_Disconnect(qboolean showMainMenu);
@@ -927,8 +922,8 @@ void CL_Frame(int msec);
 qboolean CL_GameCommand(void);
 void CL_KeyEvent(int key, qboolean down, unsigned time);
 
-void CL_CharEvent(int key);
 // char events are for field typing, not game control
+void CL_CharEvent(int key);
 
 void CL_MouseEvent(int dx, int dy, int time);
 
@@ -938,43 +933,43 @@ void CL_PacketEvent(netadr_t from, msg_t *msg);
 
 void CL_ConsolePrint(const char *text);
 
-void CL_MapLoading(void);
 // do a screen update before starting to load a map
 // when the server is going to load a new map, the entire hunk
 // will be cleared, so the client must shutdown cgame, ui, and
 // the renderer
+void CL_MapLoading(void);
 
-void CL_ForwardCommandToServer(const char *string);
 // adds the current command line as a clc_clientCommand to the client message.
 // things like godmode, noclip, etc, are commands directed to the server,
 // so when they are typed in at the console, they will need to be forwarded.
+void CL_ForwardCommandToServer(const char *string);
 
-void CL_CDDialog(void);
 // bring up the "need a cd to play" dialog
+void CL_CDDialog(void);
 
-void CL_FlushMemory(void);
 // dump all memory on an error
+void CL_FlushMemory(void);
 
-void CL_ShutdownAll(qboolean shutdownRef);
 // shutdown client
+void CL_ShutdownAll(qboolean shutdownRef);
 
-void CL_InitRef(void);
 // initialize renderer interface
+void CL_InitRef(void);
 
-void CL_StartHunkUsers(qboolean rendererOnly);
 // start all the client stuff using the hunk
+void CL_StartHunkUsers(qboolean rendererOnly);
 
-void CL_Snd_Shutdown(void);
 // Restart sound subsystem
+void CL_Snd_Shutdown(void);
 
-void Key_KeynameCompletion(void (*callback)(const char *s));
 // for keyname autocompletion
+void Key_KeynameCompletion(void (*callback)(const char *s));
 
-void Key_WriteBindings(fileHandle_t f);
 // for writing the config files
+void Key_WriteBindings(fileHandle_t f);
 
-void S_ClearSoundBuffer(void);
 // call before filesystem access
+void S_ClearSoundBuffer(void);
 
 void SCR_DebugGraph(float value); // FIXME: move logging to common?
 
@@ -1048,8 +1043,8 @@ void Sys_SetErrorText(const char *text);
 
 void Sys_SendPacket(int length, const void *data, netadr_t to);
 
-qboolean Sys_StringToAdr(const char *s, netadr_t *a, netadrtype_t family);
 // Does NOT parse port numbers, only base addresses.
+qboolean Sys_StringToAdr(const char *s, netadr_t *a, netadrtype_t family);
 
 qboolean Sys_IsLANAddress(netadr_t adr);
 void Sys_ShowIP(void);

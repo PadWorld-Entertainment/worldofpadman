@@ -92,7 +92,7 @@ SV_GameDropClient
 Disconnects the client with a message
 ===============
 */
-void SV_GameDropClient(int clientNum, const char *reason) {
+static void SV_GameDropClient(int clientNum, const char *reason) {
 	if (clientNum < 0 || clientNum >= sv_maxclients->integer) {
 		return;
 	}
@@ -106,7 +106,7 @@ SV_SetBrushModel
 sets mins and maxs for inline bmodels
 =================
 */
-void SV_SetBrushModel(sharedEntity_t *ent, const char *name) {
+static void SV_SetBrushModel(sharedEntity_t *ent, const char *name) {
 	clipHandle_t h;
 	vec3_t mins, maxs;
 
@@ -166,7 +166,7 @@ SV_inPVSIgnorePortals
 Does NOT check portalareas
 =================
 */
-qboolean SV_inPVSIgnorePortals(const vec3_t p1, const vec3_t p2) {
+static qboolean SV_inPVSIgnorePortals(const vec3_t p1, const vec3_t p2) {
 	int leafnum;
 	int cluster;
 	byte *mask;
@@ -189,7 +189,7 @@ qboolean SV_inPVSIgnorePortals(const vec3_t p1, const vec3_t p2) {
 SV_AdjustAreaPortalState
 ========================
 */
-void SV_AdjustAreaPortalState(sharedEntity_t *ent, qboolean open) {
+static void SV_AdjustAreaPortalState(sharedEntity_t *ent, qboolean open) {
 	svEntity_t *svEnt;
 
 	svEnt = SV_SvEntityForGentity(ent);
@@ -204,7 +204,7 @@ void SV_AdjustAreaPortalState(sharedEntity_t *ent, qboolean open) {
 SV_EntityContact
 ==================
 */
-qboolean SV_EntityContact(vec3_t mins, vec3_t maxs, const sharedEntity_t *gEnt, int capsule) {
+static qboolean SV_EntityContact(vec3_t mins, vec3_t maxs, const sharedEntity_t *gEnt, int capsule) {
 	const float *origin, *angles;
 	clipHandle_t ch;
 	trace_t trace;
@@ -225,7 +225,7 @@ SV_GetServerinfo
 
 ===============
 */
-void SV_GetServerinfo(char *buffer, int bufferSize) {
+static void SV_GetServerinfo(char *buffer, int bufferSize) {
 	if (bufferSize < 1) {
 		Com_Error(ERR_DROP, "SV_GetServerinfo: bufferSize == %i", bufferSize);
 	}
@@ -238,7 +238,7 @@ SV_LocateGameData
 
 ===============
 */
-void SV_LocateGameData(sharedEntity_t *gEnts, int numGEntities, int sizeofGEntity_t, playerState_t *clients,
+static void SV_LocateGameData(sharedEntity_t *gEnts, int numGEntities, int sizeofGEntity_t, playerState_t *clients,
 					   int sizeofGameClient) {
 	sv.gentities = gEnts;
 	sv.gentitySize = sizeofGEntity_t;
@@ -254,7 +254,7 @@ SV_GetUsercmd
 
 ===============
 */
-void SV_GetUsercmd(int clientNum, usercmd_t *cmd) {
+static void SV_GetUsercmd(int clientNum, usercmd_t *cmd) {
 	if (clientNum < 0 || clientNum >= sv_maxclients->integer) {
 		Com_Error(ERR_DROP, "SV_GetUsercmd: bad clientNum:%i", clientNum);
 	}
@@ -276,7 +276,7 @@ SV_GameSystemCalls
 The module is making a system call
 ====================
 */
-intptr_t SV_GameSystemCalls(intptr_t *args) {
+static intptr_t SV_GameSystemCalls(intptr_t *args) {
 	switch (args[0]) {
 	case G_PRINT:
 		Com_Printf("%s", (const char *)VMA(1));
@@ -414,8 +414,6 @@ intptr_t SV_GameSystemCalls(intptr_t *args) {
 	case G_SNAPVECTOR:
 		Q_SnapVector(VMA(1));
 		return 0;
-
-		//====================================
 
 	case BOTLIB_SETUP:
 		return SV_BotLibSetup();

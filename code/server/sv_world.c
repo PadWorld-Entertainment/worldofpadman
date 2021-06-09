@@ -69,8 +69,8 @@ typedef struct worldSector_s {
 #define AREA_DEPTH 4
 #define AREA_NODES 64
 
-worldSector_t sv_worldSectors[AREA_NODES];
-int sv_numworldSectors;
+static worldSector_t sv_worldSectors[AREA_NODES];
+static int sv_numworldSectors;
 
 /*
 ===============
@@ -587,7 +587,7 @@ void SV_Trace(trace_t *results, const vec3_t start, const vec3_t mins, const vec
 		maxs = vec3_origin;
 	}
 
-	Com_Memset(&clip, 0, sizeof(moveclip_t));
+	Com_Memset(&clip, 0, sizeof(clip));
 
 	// clip to world
 	CM_BoxTrace(&clip.trace, start, end, mins, maxs, 0, contentmask, capsule);

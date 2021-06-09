@@ -278,13 +278,13 @@ static int fs_serverReferencedPaks[MAX_SEARCH_PATHS];		// checksums
 static char *fs_serverReferencedPakNames[MAX_SEARCH_PATHS]; // pk3 names
 
 // last valid game folder used
-char lastValidBase[MAX_OSPATH];
-char lastValidComBaseGame[MAX_OSPATH];
-char lastValidFsBaseGame[MAX_OSPATH];
-char lastValidGame[MAX_OSPATH];
+static char lastValidBase[MAX_OSPATH];
+static char lastValidComBaseGame[MAX_OSPATH];
+static char lastValidFsBaseGame[MAX_OSPATH];
+static char lastValidGame[MAX_OSPATH];
 
 #ifdef FS_MISSING
-FILE *missingFiles = NULL;
+static FILE *missingFiles = NULL;
 #endif
 
 /* C99 defines __func__ */
@@ -311,7 +311,7 @@ qboolean FS_Initialized(void) {
 FS_PakIsPure
 =================
 */
-qboolean FS_PakIsPure(pack_t *pack) {
+static qboolean FS_PakIsPure(pack_t *pack) {
 	int i;
 
 	if (fs_numServerPaks) {
@@ -405,8 +405,7 @@ void FS_ForceFlush(fileHandle_t f) {
 FS_fplength
 ================
 */
-
-long FS_fplength(FILE *h) {
+static long FS_fplength(FILE *h) {
 	long pos;
 	long end;
 
@@ -427,7 +426,7 @@ it will return the size of the pak file, not the expected
 size of the file.
 ================
 */
-long FS_filelength(fileHandle_t f) {
+static long FS_filelength(fileHandle_t f) {
 	FILE *h;
 
 	h = FS_FileForHandle(f);
@@ -495,18 +494,18 @@ FS_CreatePath
 Creates any directories needed to store the given filename
 ============
 */
-qboolean FS_CreatePath(char *OSPath) {
+qboolean FS_CreatePath(char *ospath) {
 	char *ofs;
 	char path[MAX_OSPATH];
 
 	// make absolutely sure that it can't back up the path
 	// FIXME: is c: allowed???
-	if (strstr(OSPath, "..") || strstr(OSPath, "::")) {
-		Com_Printf("WARNING: refusing to create relative path \"%s\"\n", OSPath);
+	if (strstr(ospath, "..") || strstr(ospath, "::")) {
+		Com_Printf("WARNING: refusing to create relative path \"%s\"\n", ospath);
 		return qtrue;
 	}
 
-	Q_strncpyz(path, OSPath, sizeof(path));
+	Q_strncpyz(path, ospath, sizeof(path));
 	FS_ReplaceSeparators(path);
 
 	// Skip creation of the root directory as it will always be there
@@ -533,7 +532,7 @@ qboolean FS_CreatePath(char *OSPath) {
 =================
 FS_CheckFilenameIsMutable
 
-ERR_FATAL if trying to maniuplate a file with the platform library, QVM, or pk3 extension
+ERR_FATAL if trying to manipulate a file with the platform library, QVM, or pk3 extension
 =================
  */
 static void FS_CheckFilenameIsMutable(const char *filename, const char *function) {
@@ -578,7 +577,7 @@ FS_FileInPathExists
 Tests if path and file exists
 ================
 */
-qboolean FS_FileInPathExists(const char *testpath) {
+static qboolean FS_FileInPathExists(const char *testpath) {
 	FILE *filep;
 
 	filep = Sys_FOpen(testpath, "rb");
@@ -612,7 +611,7 @@ FS_SV_FileExists
 Tests if the file exists
 ================
 */
-qboolean FS_SV_FileExists(const char *file) {
+static qboolean FS_SV_FileExists(const char *file) {
 	char *testpath;
 
 	testpath = FS_BuildOSPath(fs_homepath->string, file, "");
@@ -785,34 +784,6 @@ void FS_SV_Rename(const char *from, const char *to, qboolean safe) {
 }
 
 /*
-===========
-FS_Rename
-
-===========
-*/
-void FS_Rename(const char *from, const char *to) {
-	char *from_ospath, *to_ospath;
-
-	if (!fs_searchpaths) {
-		Com_Error(ERR_FATAL, "Filesystem call made without initialization");
-	}
-
-	// don't let sound stutter
-	S_ClearSoundBuffer();
-
-	from_ospath = FS_BuildOSPath(fs_homepath->string, fs_gamedir, from);
-	to_ospath = FS_BuildOSPath(fs_homepath->string, fs_gamedir, to);
-
-	if (fs_debug->integer) {
-		Com_Printf("FS_Rename: %s --> %s\n", from_ospath, to_ospath);
-	}
-
-	FS_CheckFilenameIsMutable(to_ospath, __func__);
-
-	rename(from_ospath, to_ospath);
-}
-
-/*
 ==============
 FS_FCloseFile
 
@@ -892,7 +863,7 @@ FS_FOpenFileAppend
 
 ===========
 */
-fileHandle_t FS_FOpenFileAppend(const char *filename) {
+static fileHandle_t FS_FOpenFileAppend(const char *filename) {
 	char *ospath;
 	fileHandle_t f;
 

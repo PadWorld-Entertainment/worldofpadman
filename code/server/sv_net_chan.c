@@ -46,7 +46,7 @@ void SV_Netchan_FreeQueue(client_t *client) {
 SV_Netchan_TransmitNextInQueue
 =================
 */
-void SV_Netchan_TransmitNextInQueue(client_t *client) {
+static void SV_Netchan_TransmitNextInQueue(client_t *client) {
 	netchan_buffer_t *netbuf;
 
 	Com_DPrintf("#462 Netchan_TransmitNextFragment: popping a queued message for transmit\n");
