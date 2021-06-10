@@ -47,7 +47,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CRC_INIT_VALUE 0xffff
 #define CRC_XOR_VALUE 0x0000
 
-unsigned short crctable[257] = {
+static unsigned short crctable[257] = {
 	0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad,
 	0xe1ce, 0xf1ef, 0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6, 0x9339, 0x8318, 0xb37b, 0xa35a,
 	0xd3bd, 0xc39c, 0xf3ff, 0xe3de, 0x2462, 0x3443, 0x0420, 0x1401, 0x64e6, 0x74c7, 0x44a4, 0x5485, 0xa56a, 0xb54b,
@@ -89,12 +89,4 @@ unsigned short CRC_ProcessString(unsigned char *data, int length) {
 		crcvalue = (crcvalue << 8) ^ crctable[ind];
 	}
 	return CRC_Value(crcvalue);
-}
-
-void CRC_ContinueProcessString(unsigned short *crc, char *data, int length) {
-	int i;
-
-	for (i = 0; i < length; i++) {
-		*crc = (*crc << 8) ^ crctable[(*crc >> 8) ^ data[i]];
-	}
 }
