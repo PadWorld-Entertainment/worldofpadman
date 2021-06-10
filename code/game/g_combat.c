@@ -186,8 +186,6 @@ void TossClientItems(gentity_t *self) {
 		self->client->ps.generic1 = 0;
 	}
 
-	// drop all the powerups if not in teamplay
-	// if ( g_gametype.integer >= GT_TEAM ) {
 	angle = 45;
 	for (i = 1; i < PW_NUM_POWERUPS; i++) {
 		if (i == PW_BERSERKER)
@@ -218,7 +216,6 @@ void TossClientItems(gentity_t *self) {
 			angle += 45;
 		}
 	}
-	//}
 }
 
 /*
