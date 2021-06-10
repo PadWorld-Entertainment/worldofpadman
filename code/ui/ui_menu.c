@@ -30,8 +30,8 @@ MAIN MENU
 
 #include "ui_local.h"
 
-#define ID_SINGLEPLAYER 10
-#define ID_MULTIPLAYER 11
+#define ID_CREATE 10
+#define ID_JOIN 11
 #define ID_SETUP 12
 #define ID_DEMOS 13
 #define ID_MODS 14
@@ -39,18 +39,18 @@ MAIN MENU
 #define ID_CREDITS 16
 #define ID_SECRET 17
 
-#define MULTIPLAYER0 "menu/main/ButtonMultiplayer0"
-#define MULTIPLAYER1 "menu/main/ButtonMultiplayer1"
-#define SINGLEPLAYER0 "menu/main/ButtonSingleplayer0"
-#define SINGLEPLAYER1 "menu/main/ButtonSingleplayer1"
-#define SETUP0 "menu/main/ButtonSetup0"
-#define SETUP1 "menu/main/ButtonSetup1"
-#define DEMOS0 "menu/main/ButtonDemos0"
-#define DEMOS1 "menu/main/ButtonDemos1"
-#define MODS0 "menu/main/ButtonMods0"
-#define MODS1 "menu/main/ButtonMods1"
-#define EXIT0 "menu/main/ButtonExit0"
-#define EXIT1 "menu/main/ButtonExit1"
+#define CREATE0 "menu/buttons/create0"
+#define CREATE1 "menu/buttons/create1"
+#define JOIN0 "menu/buttons/join0"
+#define JOIN1 "menu/buttons/join1"
+#define SETUP0 "menu/buttons/setup0"
+#define SETUP1 "menu/buttons/setup1"
+#define DEMOS0 "menu/buttons/demos0"
+#define DEMOS1 "menu/buttons/demos1"
+#define MODS0 "menu/buttons/mods0"
+#define MODS1 "menu/buttons/mods1"
+#define EXIT0 "menu/buttons/exit0"
+#define EXIT1 "menu/buttons/exit1"
 #define CREDITS0 "menu/main/ButtonCredits0"
 #define CREDITS1 "menu/main/ButtonCredits1"
 
@@ -59,15 +59,14 @@ MAIN MENU
 typedef struct {
 	menuframework_s menu;
 
-	menubitmap_s Singleplayer;
-	menubitmap_s Multiplayer;
+	menubitmap_s Create;
+	menubitmap_s Join;
 	menubitmap_s Setup;
 	menubitmap_s Demos;
 	menubitmap_s Mods;
 	menubitmap_s Exit;
 	menubitmap_s Credits;
-
-	menubitmap_s secret;
+	menubitmap_s Secret;
 
 	char msg[MAX_MSGLENGHT];
 	int msgtime;
@@ -93,11 +92,11 @@ void Main_MenuEvent(void *ptr, int event) {
 	}
 
 	switch (((menucommon_s *)ptr)->id) {
-	case ID_SINGLEPLAYER:
+	case ID_CREATE:
 		UI_StartServerMenu(qtrue);
 		break;
 
-	case ID_MULTIPLAYER:
+	case ID_JOIN:
 		UI_ArenaServersMenu();
 		break;
 
@@ -133,10 +132,10 @@ MainMenu_Cache
 ===============
 */
 void MainMenu_Cache(void) {
-	trap_R_RegisterShaderNoMip(MULTIPLAYER0);
-	trap_R_RegisterShaderNoMip(MULTIPLAYER1);
-	trap_R_RegisterShaderNoMip(SINGLEPLAYER0);
-	trap_R_RegisterShaderNoMip(SINGLEPLAYER1);
+	trap_R_RegisterShaderNoMip(CREATE0);
+	trap_R_RegisterShaderNoMip(CREATE1);
+	trap_R_RegisterShaderNoMip(JOIN0);
+	trap_R_RegisterShaderNoMip(JOIN1);
 	trap_R_RegisterShaderNoMip(SETUP0);
 	trap_R_RegisterShaderNoMip(SETUP1);
 	trap_R_RegisterShaderNoMip(DEMOS0);
@@ -258,31 +257,31 @@ void UI_MainMenu(void) {
 	s_main.menu.bgparts = BGP_MAINBG | BGP_MAINFRAME;
 	s_main.menu.noPushSelect = qtrue;
 
-	s_main.Singleplayer.generic.type = MTYPE_BITMAP;
-	s_main.Singleplayer.generic.name = SINGLEPLAYER0;
-	s_main.Singleplayer.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Singleplayer.generic.x = 497;
-	s_main.Singleplayer.generic.y = 140;
-	s_main.Singleplayer.generic.id = ID_SINGLEPLAYER;
-	s_main.Singleplayer.generic.callback = Main_MenuEvent;
-	s_main.Singleplayer.width = 120;
-	s_main.Singleplayer.height = 40;
-	s_main.Singleplayer.focuspic = SINGLEPLAYER1;
-	s_main.Singleplayer.focuspicinstead = qtrue;
-	Menu_AddItem(&s_main.menu, &s_main.Singleplayer);
+	s_main.Create.generic.type = MTYPE_BITMAP;
+	s_main.Create.generic.name = CREATE0;
+	s_main.Create.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.Create.generic.x = 497;
+	s_main.Create.generic.y = 140;
+	s_main.Create.generic.id = ID_CREATE;
+	s_main.Create.generic.callback = Main_MenuEvent;
+	s_main.Create.width = 120;
+	s_main.Create.height = 40;
+	s_main.Create.focuspic = CREATE1;
+	s_main.Create.focuspicinstead = qtrue;
+	Menu_AddItem(&s_main.menu, &s_main.Create);
 
-	s_main.Multiplayer.generic.type = MTYPE_BITMAP;
-	s_main.Multiplayer.generic.name = MULTIPLAYER0;
-	s_main.Multiplayer.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Multiplayer.generic.x = 508;
-	s_main.Multiplayer.generic.y = 175;
-	s_main.Multiplayer.generic.id = ID_MULTIPLAYER;
-	s_main.Multiplayer.generic.callback = Main_MenuEvent;
-	s_main.Multiplayer.width = 120;
-	s_main.Multiplayer.height = 40;
-	s_main.Multiplayer.focuspic = MULTIPLAYER1;
-	s_main.Multiplayer.focuspicinstead = qtrue;
-	Menu_AddItem(&s_main.menu, &s_main.Multiplayer);
+	s_main.Join.generic.type = MTYPE_BITMAP;
+	s_main.Join.generic.name = JOIN0;
+	s_main.Join.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.Join.generic.x = 508;
+	s_main.Join.generic.y = 175;
+	s_main.Join.generic.id = ID_JOIN;
+	s_main.Join.generic.callback = Main_MenuEvent;
+	s_main.Join.width = 80;
+	s_main.Join.height = 40;
+	s_main.Join.focuspic = JOIN1;
+	s_main.Join.focuspicinstead = qtrue;
+	Menu_AddItem(&s_main.menu, &s_main.Join);
 
 	s_main.Setup.generic.type = MTYPE_BITMAP;
 	s_main.Setup.generic.name = SETUP0;
@@ -349,15 +348,15 @@ void UI_MainMenu(void) {
 	s_main.Credits.focuspicinstead = qtrue;
 	Menu_AddItem(&s_main.menu, &s_main.Credits);
 
-	s_main.secret.generic.type = MTYPE_BITMAP;
-	s_main.secret.generic.flags = QMF_MOUSEONLY | QMF_SILENT | QMF_HIDDEN;
-	s_main.secret.generic.x = 129;
-	s_main.secret.generic.y = 431;
-	s_main.secret.generic.id = ID_SECRET;
-	s_main.secret.generic.callback = Main_MenuEvent;
-	s_main.secret.width = 22;
-	s_main.secret.height = 22;
-	Menu_AddItem(&s_main.menu, &s_main.secret);
+	s_main.Secret.generic.type = MTYPE_BITMAP;
+	s_main.Secret.generic.flags = QMF_MOUSEONLY | QMF_SILENT | QMF_HIDDEN;
+	s_main.Secret.generic.x = 129;
+	s_main.Secret.generic.y = 431;
+	s_main.Secret.generic.id = ID_SECRET;
+	s_main.Secret.generic.callback = Main_MenuEvent;
+	s_main.Secret.width = 22;
+	s_main.Secret.height = 22;
+	Menu_AddItem(&s_main.menu, &s_main.Secret);
 
 	trap_Key_SetCatcher(KEYCATCH_UI);
 	uis.menusp = 0;
