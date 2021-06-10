@@ -1262,7 +1262,7 @@ static void CG_DrawHoldableItem(float y) {
 			CG_FillRect(barX, y + ICON_SIZE - barHeight, 10, barHeight, barColor);
 			CG_DrawRect(barX, y, 10, ICON_SIZE, 1.0f, colorWhite);
 		}
-		if (itemId == HI_KILLERDUCKS || itemId == HI_BOOMIES) {
+		if (itemId == HI_KILLERDUCKS || itemId == HI_BOOMIES || itemId == HI_FLOATER) {
 			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
 							 8, 16, 1);
 		}
