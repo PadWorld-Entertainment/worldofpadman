@@ -12,29 +12,42 @@ int main(int argc, char **argv) {
 	FILE *ofp;
 	char buffer[1024];
 	char *base;
+#ifndef _MSC_VER
+	char *ext;
+#endif
+	char *inFile, *outFile;
 
-	if (argc < 3)
+	if (argc < 3) {
+		printf("usage: stringify <input> <output>\n");
 		return 1;
+	}
 
-	char *inFile = argv[1];
-	char *outFile = argv[2];
+	inFile = argv[1];
+	outFile = argv[2];
 
 	ifp = fopen(inFile, "r");
-	if (!ifp)
+	if (!ifp) {
+		printf("failed to open %s\n", inFile);
 		return 2;
+	}
 
 	ofp = fopen(outFile, "w");
-	if (!ofp)
+	if (!ofp) {
+		printf("failed to open %s for writing\n", outFile);
 		return 3;
+	}
 
 #ifdef _MSC_VER
 	_splitpath_s(inFile, NULL, 0, NULL, 0, buffer, sizeof(buffer), NULL, 0);
 	base = buffer;
 #else
 	base = basename(inFile);
-#endif
 	// Strip extension
-	*strrchr(base, '.') = '\0';
+	ext = strrchr(base, '.');
+	if (ext) {
+		*ext = '\0';
+	}
+#endif
 
 	fprintf(ofp, "const char *fallbackShader_%s =\n", base);
 
