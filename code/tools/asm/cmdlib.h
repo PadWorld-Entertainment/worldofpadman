@@ -112,9 +112,6 @@ extern qboolean com_eof;
 
 char *copystring(const char *s);
 
-void CRC_Init(unsigned short *crcvalue);
-unsigned short CRC_Value(unsigned short crcvalue);
-
 void CreatePath(const char *path);
 
 extern qboolean archive;
@@ -122,7 +119,6 @@ extern char archivedir[1024];
 
 extern qboolean verbose;
 void qprintf(const char *format, ...);
-void _printf(const char *format, ...);
 
 void ExpandWildcards(int *argc, char ***argv);
 
