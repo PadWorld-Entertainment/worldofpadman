@@ -305,7 +305,7 @@ void CheckAlmostCapture(gentity_t *self, gentity_t *attacker) {
 CheckAlmostScored
 ==================
 */
-void CheckAlmostScored(gentity_t *self, gentity_t *attacker) {
+static void CheckAlmostScored(gentity_t *self, gentity_t *attacker) {
 	gentity_t *ent;
 	vec3_t dir;
 	char *classname;
@@ -583,7 +583,7 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 CheckArmor
 ================
 */
-int CheckArmor(gentity_t *ent, int damage, int dflags) {
+static int CheckArmor(gentity_t *ent, int damage, int dflags) {
 	gclient_t *client;
 	int save;
 	int count;
@@ -614,40 +614,6 @@ int CheckArmor(gentity_t *ent, int damage, int dflags) {
 }
 
 /*
-================
-RaySphereIntersections
-================
-*/
-int RaySphereIntersections(vec3_t origin, float radius, vec3_t point, vec3_t dir, vec3_t intersections[2]) {
-	float b, c, d, t;
-
-	//	| origin - (point + t * dir) | = radius
-	//	a = dir[0]^2 + dir[1]^2 + dir[2]^2;
-	//	b = 2 * (dir[0] * (point[0] - origin[0]) + dir[1] * (point[1] - origin[1]) + dir[2] * (point[2] - origin[2]));
-	//	c = (point[0] - origin[0])^2 + (point[1] - origin[1])^2 + (point[2] - origin[2])^2 - radius^2;
-
-	// normalize dir so a = 1
-	VectorNormalize(dir);
-	b = 2 * (dir[0] * (point[0] - origin[0]) + dir[1] * (point[1] - origin[1]) + dir[2] * (point[2] - origin[2]));
-	c = (point[0] - origin[0]) * (point[0] - origin[0]) + (point[1] - origin[1]) * (point[1] - origin[1]) +
-		(point[2] - origin[2]) * (point[2] - origin[2]) - radius * radius;
-
-	d = b * b - 4 * c;
-	if (d > 0) {
-		t = (-b + sqrt(d)) / 2;
-		VectorMA(point, t, dir, intersections[0]);
-		t = (-b - sqrt(d)) / 2;
-		VectorMA(point, t, dir, intersections[1]);
-		return 2;
-	} else if (d == 0) {
-		t = (-b) / 2;
-		VectorMA(point, t, dir, intersections[0]);
-		return 1;
-	}
-	return 0;
-}
-
-/*
 ============
 T_Damage
 
@@ -670,7 +636,6 @@ dflags		these flags are used to control how T_Damage works
 	DAMAGE_NO_PROTECTION	kills godmode, armor, everything
 ============
 */
-
 void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage,
 			  int dflags, int mod) {
 	gclient_t *client;
@@ -933,7 +898,7 @@ Returns qtrue if the inflictor can directly damage the target.  Used for
 explosions and melee attacks.
 ============
 */
-qboolean CanDamage(gentity_t *targ, vec3_t origin) {
+static qboolean CanDamage(const gentity_t *targ, const vec3_t origin) {
 	vec3_t dest;
 	trace_t tr;
 	vec3_t midpoint;
@@ -1032,7 +997,7 @@ qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float 
 			continue;
 		}
 
-		points = damage * (1.0 - dist / radius);
+		points = damage * (1.0f - dist / radius);
 
 		if (CanDamage(ent, origin)) {
 			if (LogAccuracyHit(ent, attacker)) {

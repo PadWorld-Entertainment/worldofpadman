@@ -783,7 +783,6 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 	case IT_HOLDABLE:
 		// can only hold one item at a time
 		if (ps->stats[STAT_HOLDABLE_ITEM]) {
-
 			// pick it up, if you already have one of this type
 			if (ps->stats[STAT_HOLDABLE_ITEM] == item - bg_itemlist)
 				return qtrue;
