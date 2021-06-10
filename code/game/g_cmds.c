@@ -307,13 +307,13 @@ static void Cmd_Give_f(gentity_t *ent) {
 
 	if (Q_stricmp(name, "bambam") == 0) {
 		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_BAMBAM;
-		ent->client->ps.stats[STAT_HOLDABLEVAR] = 5;
+		ent->client->ps.stats[STAT_HOLDABLEVAR] = MAX_BAMBAMS;
 		return;
 	}
 
 	if (Q_stricmp(name, "boomie") == 0) {
 		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = MODELINDEX_BOOMIE;
-		ent->client->ps.stats[STAT_HOLDABLEVAR] = 5;
+		ent->client->ps.stats[STAT_HOLDABLEVAR] = MAX_BOOMIES;
 		return;
 	}
 
@@ -347,7 +347,7 @@ argv(0) god
 ==================
 */
 void Cmd_God_f(gentity_t *ent) {
-	char *msg;
+	const char *msg;
 
 	if (!CheatsOk(ent)) {
 		return;
