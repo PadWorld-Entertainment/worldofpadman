@@ -1137,12 +1137,14 @@ typedef struct {
 // to predict player motion and actions
 // nothing outside of pmove should modify these, or some degree of prediction error
 // will occur
-
+//
 // you can't add anything to this without modifying the code in msg.c
-
+//
 // playerState_t is a full superset of entityState_t as it is used by players,
 // so if a playerState_t is transmitted, the entityState_t can be fully derived
 // from it.
+//
+// see MSG_WriteDeltaPlayerstate and MSG_ReadDeltaPlayerstate
 typedef struct playerState_s {
 	int commandTime; // cmd->serverTime of last executed command
 	int pm_type;
@@ -1198,8 +1200,13 @@ typedef struct playerState_s {
 
 	// these values are transmitted as short values in the snapshot
 	int stats[MAX_STATS];
-	int persistant[MAX_PERSISTANT]; // stats that aren't cleared on death
-	int powerups[MAX_POWERUPS];		// level.time that the powerup runs out
+	// stats that aren't cleared on death
+	// these values are transmitted as short values in the snapshot
+	int persistant[MAX_PERSISTANT];
+	// level.time that the powerup runs out
+	// these values are transmitted as int values in the snapshot
+	int powerups[MAX_POWERUPS];
+	// these values are transmitted as short values in the snapshot
 	int ammo[MAX_WEAPONS];
 
 	int generic1;
