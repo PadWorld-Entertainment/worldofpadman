@@ -66,8 +66,6 @@ typedef unsigned char byte;
 extern int myargc;
 extern char **myargv;
 
-char *strupr(char *in);
-char *strlower(char *in);
 int Q_strncasecmp(const char *s1, const char *s2, int n);
 int Q_stricmp(const char *s1, const char *s2);
 void Q_getwd(char *out);
@@ -91,8 +89,6 @@ void SafeRead(FILE *f, void *buffer, int count);
 void SafeWrite(FILE *f, const void *buffer, int count);
 
 int LoadFile(const char *filename, void **bufferptr);
-int LoadFileBlock(const char *filename, void **bufferptr);
-int TryLoadFile(const char *filename, void **bufferptr);
 void SaveFile(const char *filename, const void *buffer, int count);
 qboolean FileExists(const char *filename);
 
@@ -103,7 +99,6 @@ void StripExtension(char *path);
 
 void ExtractFilePath(const char *path, char *dest);
 void ExtractFileBase(const char *path, char *dest);
-void ExtractFileExtension(const char *path, char *dest);
 
 const char *COM_Parse(const char *data);
 

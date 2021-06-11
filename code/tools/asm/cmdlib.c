@@ -390,26 +390,6 @@ int Q_stricmp(const char *s1, const char *s2) {
 	return Q_strncasecmp(s1, s2, 99999);
 }
 
-char *strupr(char *start) {
-	char *in;
-	in = start;
-	while (*in) {
-		*in = toupper(*in);
-		in++;
-	}
-	return start;
-}
-
-char *strlower(char *start) {
-	char *in;
-	in = start;
-	while (*in) {
-		*in = tolower(*in);
-		in++;
-	}
-	return start;
-}
-
 /*
 =============================================================================
 
@@ -542,62 +522,6 @@ int LoadFile(const char *filename, void **bufferptr) {
 
 /*
 ==============
-LoadFileBlock
--
-rounds up memory allocation to 4K boundary
--
-==============
-*/
-int LoadFileBlock(const char *filename, void **bufferptr) {
-	FILE *f;
-	int length, nBlock, nAllocSize;
-	void *buffer;
-
-	f = SafeOpenRead(filename);
-	length = Q_filelength(f);
-	nAllocSize = length;
-	nBlock = nAllocSize % MEM_BLOCKSIZE;
-	if (nBlock > 0) {
-		nAllocSize += MEM_BLOCKSIZE - nBlock;
-	}
-	buffer = malloc(nAllocSize + 1);
-	memset(buffer, 0, nAllocSize + 1);
-	SafeRead(f, buffer, length);
-	fclose(f);
-
-	*bufferptr = buffer;
-	return length;
-}
-
-/*
-==============
-TryLoadFile
-
-Allows failure
-==============
-*/
-int TryLoadFile(const char *filename, void **bufferptr) {
-	FILE *f;
-	int length;
-	void *buffer;
-
-	*bufferptr = NULL;
-
-	f = myfopen(filename, "rb");
-	if (!f)
-		return -1;
-	length = Q_filelength(f);
-	buffer = malloc(length + 1);
-	((char *)buffer)[length] = 0;
-	SafeRead(f, buffer, length);
-	fclose(f);
-
-	*bufferptr = buffer;
-	return length;
-}
-
-/*
-==============
 SaveFile
 ==============
 */
@@ -695,24 +619,6 @@ void ExtractFileBase(const char *path, char *dest) {
 		*dest++ = *src++;
 	}
 	*dest = 0;
-}
-
-void ExtractFileExtension(const char *path, char *dest) {
-	const char *src;
-
-	src = path + strlen(path) - 1;
-
-	//
-	// back up until a . or the start
-	//
-	while (src != path && *(src - 1) != '.')
-		src--;
-	if (src == path) {
-		*dest = 0; // no extension
-		return;
-	}
-
-	strcpy(dest, src);
 }
 
 /*
