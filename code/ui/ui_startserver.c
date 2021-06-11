@@ -839,22 +839,22 @@ static void StartServer_MenuInit(void) {
 	for (i = 0; i < MAX_MAPSPERPAGE; i++) {
 		Menu_AddItem(&s_startserver.menu, &s_startserver.mappics[i]);
 	}
-
 	Menu_AddItem(&s_startserver.menu, &s_startserver.arrowleft);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.arrowright);
-	Menu_AddItem(&s_startserver.menu, &s_startserver.back);
-	Menu_AddItem(&s_startserver.menu, &s_startserver.fraglimit);
-	Menu_AddItem(&s_startserver.menu, &s_startserver.timelimit);
-	Menu_AddItem(&s_startserver.menu, &s_startserver.maxclients);
+
+	Menu_AddItem(&s_startserver.menu, &s_startserver.hostname);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.friendlyfire);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.instagib);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.pure);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.dedicated);
-	Menu_AddItem(&s_startserver.menu, &s_startserver.hostname);
+	Menu_AddItem(&s_startserver.menu, &s_startserver.fraglimit);
+	Menu_AddItem(&s_startserver.menu, &s_startserver.timelimit);
+	Menu_AddItem(&s_startserver.menu, &s_startserver.maxclients);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.StartLives);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.selectbots);
 
 	Menu_AddItem(&s_startserver.menu, &s_startserver.fight);
+	Menu_AddItem(&s_startserver.menu, &s_startserver.back);
 
 	Q_strncpyz(s_startserver.hostname.field.buffer, UI_Cvar_VariableString("sv_hostname"),
 			   sizeof(s_startserver.hostname.field.buffer));
