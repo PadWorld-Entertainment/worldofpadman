@@ -19,10 +19,10 @@ BGP_STARTSERVERBOTS
 #define STARTSERVER_ARROWLEFT1 "menu/startserver/arrowleft1"
 #define STARTSERVER_ARROWRIGHT0 "menu/startserver/arrowright0"
 #define STARTSERVER_ARROWRIGHT1 "menu/startserver/arrowright1"
-#define STARTSERVER_BACK0 "menu/BtnBack0"
-#define STARTSERVER_BACK1 "menu/BtnBack1"
-#define STARTSERVER_SELECTBOTS0 "menu/startserver/selectbot0"
-#define STARTSERVER_SELECTBOTS1 "menu/startserver/selectbot1"
+#define STARTSERVER_BACK0 "menu/buttons/back0"
+#define STARTSERVER_BACK1 "menu/buttons/back1"
+#define STARTSERVER_SELECTBOTS0 "menu/buttons/selectbots0"
+#define STARTSERVER_SELECTBOTS1 "menu/buttons/selectbots1"
 #define GAMESERVER_UNKNOWNMAP "menu/art/unknownmap"
 
 #define MAX_MAPROWS 3
@@ -813,9 +813,9 @@ static void StartServer_MenuInit(void) {
 	s_startserver.selectbots.generic.callback = StartServer_MenuEvent;
 	s_startserver.selectbots.generic.id = ID_SELECTBOTS;
 	s_startserver.selectbots.focuspic = STARTSERVER_SELECTBOTS1;
-	s_startserver.selectbots.generic.x = OPTIONS_XPOS - 59;
+	s_startserver.selectbots.generic.x = OPTIONS_XPOS - 80;
 	s_startserver.selectbots.generic.y = y;
-	s_startserver.selectbots.width = 118;
+	s_startserver.selectbots.width = 160;
 	s_startserver.selectbots.height = 22;
 	s_startserver.selectbots.focuspicinstead = qtrue;
 
