@@ -379,7 +379,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.musicautoswitch.generic.type = MTYPE_RADIOBUTTON;
-	soundOptionsInfo.musicautoswitch.generic.name = "Auto Switch Song";
+	soundOptionsInfo.musicautoswitch.generic.name = "Auto Switch Song:";
 	soundOptionsInfo.musicautoswitch.generic.flags = QMF_SMALLFONT;
 	soundOptionsInfo.musicautoswitch.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.musicautoswitch.generic.id = ID_MUSICAUTOSWITCH;
@@ -472,14 +472,14 @@ static void UI_SoundOptionsMenu_Init(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.network);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.sfxvolume);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicvolume);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicautoswitch);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.soundSystem);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.quality);
+	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicautoswitch);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipmode);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipmode_grayed);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipRecordMode);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voiceGainDuringCapture);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voiceThresholdVAD);
+	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voiceGainDuringCapture);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.back);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.apply);
 
