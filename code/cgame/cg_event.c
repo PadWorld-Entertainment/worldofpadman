@@ -779,8 +779,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 				trap_S_StartSound(NULL, es->number, CHAN_AUTO, cgs.media.n_healthSound);
 			} else if (item->giType == IT_TEAM) {
 				trap_S_StartSound(NULL, es->number, CHAN_AUTO, cgs.media.stolenlollySound);
-			} else if (item->giType == IT_PERSISTANT_POWERUP) {
-			} else {
+			} else if (item->giType != IT_PERSISTANT_POWERUP) {
 				if (item->giType == IT_WEAPON)
 					trap_S_StartSound(NULL, es->number, CHAN_AUTO, cgs.media.pickupSound);
 				if (item->giType != IT_WEAPON || !(cg.snap->ps.stats[STAT_WEAPONS] & (1 << item->giTag))) {
