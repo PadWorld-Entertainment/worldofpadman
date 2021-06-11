@@ -19,10 +19,11 @@ BGP_STARTSERVERBOTS
 #define STARTSERVER_ARROWLEFT1 "menu/startserver/arrowleft1"
 #define STARTSERVER_ARROWRIGHT0 "menu/startserver/arrowright0"
 #define STARTSERVER_ARROWRIGHT1 "menu/startserver/arrowright1"
-#define STARTSERVER_BACK0 "menu/buttons/back0"
-#define STARTSERVER_BACK1 "menu/buttons/back1"
 #define STARTSERVER_SELECTBOTS0 "menu/buttons/selectbots0"
 #define STARTSERVER_SELECTBOTS1 "menu/buttons/selectbots1"
+#define STARTSERVER_BACK0 "menu/buttons/back0"
+#define STARTSERVER_BACK1 "menu/buttons/back1"
+
 #define GAMESERVER_UNKNOWNMAP "menu/art/unknownmap"
 
 #define MAX_MAPROWS 3
@@ -813,10 +814,10 @@ static void StartServer_MenuInit(void) {
 	s_startserver.selectbots.generic.callback = StartServer_MenuEvent;
 	s_startserver.selectbots.generic.id = ID_SELECTBOTS;
 	s_startserver.selectbots.focuspic = STARTSERVER_SELECTBOTS1;
-	s_startserver.selectbots.generic.x = OPTIONS_XPOS - 80;
+	s_startserver.selectbots.generic.x = OPTIONS_XPOS - 70;
 	s_startserver.selectbots.generic.y = y;
-	s_startserver.selectbots.width = 160;
-	s_startserver.selectbots.height = 22;
+	s_startserver.selectbots.width = 140;
+	s_startserver.selectbots.height = 24;
 	s_startserver.selectbots.focuspicinstead = qtrue;
 
 	s_startserver.fight.generic.type = MTYPE_BITMAP1024S;
@@ -890,10 +891,11 @@ void StartServer_Cache(void) {
 	trap_R_RegisterShaderNoMip(STARTSERVER_ARROWLEFT1);
 	trap_R_RegisterShaderNoMip(STARTSERVER_ARROWRIGHT0);
 	trap_R_RegisterShaderNoMip(STARTSERVER_ARROWRIGHT1);
-	trap_R_RegisterShaderNoMip(STARTSERVER_BACK0);
-	trap_R_RegisterShaderNoMip(STARTSERVER_BACK1);
 	trap_R_RegisterShaderNoMip(STARTSERVER_SELECTBOTS0);
 	trap_R_RegisterShaderNoMip(STARTSERVER_SELECTBOTS1);
+	trap_R_RegisterShaderNoMip(STARTSERVER_BACK0);
+	trap_R_RegisterShaderNoMip(STARTSERVER_BACK1);
+
 	trap_R_RegisterShaderNoMip(GAMESERVER_UNKNOWNMAP);
 
 	for (i = 0; i < 10; i++)
@@ -937,8 +939,6 @@ BOT SELECT MENU *****
 =============================================================================
 */
 
-#define BOTSELECT_BACK0 "menu/BtnBack0"
-#define BOTSELECT_BACK1 "menu/BtnBack1"
 #define BOTSELECT_ACCEPT0 "menu/art/accept_0"
 #define BOTSELECT_ACCEPT1 "menu/art/accept_1"
 #define BOTSELECT_SELECT "menu/art/opponents_select"
@@ -946,6 +946,7 @@ BOT SELECT MENU *****
 #define BOTSELECT_ARROWS "menu/art/gs_arrows_0"
 #define BOTSELECT_ARROWSL "menu/art/gs_arrows_l"
 #define BOTSELECT_ARROWSR "menu/art/gs_arrows_r"
+// STARTSERVER_BACK0, STARTSERVER_BACK1 used from start server menu
 
 #define PLAYERGRID_COLS 4 // 3
 #define PLAYERGRID_ROWS 4
@@ -1313,8 +1314,8 @@ UI_BotSelectMenu_Cache
 =================
 */
 void UI_BotSelectMenu_Cache(void) {
-	trap_R_RegisterShaderNoMip(BOTSELECT_BACK0);
-	trap_R_RegisterShaderNoMip(BOTSELECT_BACK1);
+	trap_R_RegisterShaderNoMip(STARTSERVER_BACK0);
+	trap_R_RegisterShaderNoMip(STARTSERVER_BACK1);
 	trap_R_RegisterShaderNoMip(BOTSELECT_ACCEPT0);
 	trap_R_RegisterShaderNoMip(BOTSELECT_ACCEPT1);
 	trap_R_RegisterShaderNoMip(BOTSELECT_SELECT);
@@ -1598,14 +1599,14 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.slotsleft.color = color_yellow;
 
 	botSelectInfo.back.generic.type = MTYPE_BITMAP;
-	botSelectInfo.back.generic.name = BOTSELECT_BACK0;
+	botSelectInfo.back.generic.name = STARTSERVER_BACK0;
 	botSelectInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	botSelectInfo.back.generic.callback = UI_BotSelectMenu_BackEvent;
 	botSelectInfo.back.generic.x = 552;
 	botSelectInfo.back.generic.y = 440;
 	botSelectInfo.back.width = 80;
 	botSelectInfo.back.height = 40;
-	botSelectInfo.back.focuspic = BOTSELECT_BACK1;
+	botSelectInfo.back.focuspic = STARTSERVER_BACK1;
 
 	for (i = 0; i < MAX_MODELSPERPAGE; i++) {
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.pics[i]);
