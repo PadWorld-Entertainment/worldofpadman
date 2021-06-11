@@ -242,8 +242,8 @@ static sfxHandle_t AddBotsMenu_Key(int key) {
 UI_AddBotsMenu_Init
 =================
 */
-static const char *skillNames[] = {"Kindergarten", "Flower power",		"Mosquito Bite",
-								   "Peacemaker",   "Brutal Blue Noses", NULL};
+static const char *skillNames[] = {"Kindergarten", "Flower Power", "Mosquito Bite",
+								   "Peacemaker", "Brutal Blue Noses", NULL};
 
 static const char *teamNames1[] = {"Default", "Red", "Blue", NULL};
 

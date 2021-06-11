@@ -983,8 +983,8 @@ typedef struct {
 
 static botSelectInfo_t botSelectInfo;
 
-static const char *botSkill_list[] = {"Kindergarden", "Flower power",	   "Mosquito Bite",
-									  "Peacemaker",	  "Brutal Blue Noses", 0};
+static const char *botSkill_list[] = {"Kindergarten", "Flower Power", "Mosquito Bite",
+									  "Peacemaker", "Brutal Blue Noses", 0};
 
 /*
 =================
