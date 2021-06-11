@@ -260,7 +260,7 @@ void UI_MainMenu(void) {
 	s_main.Create.generic.type = MTYPE_BITMAP;
 	s_main.Create.generic.name = CREATE0;
 	s_main.Create.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Create.generic.x = 497;
+	s_main.Create.generic.x = 510;
 	s_main.Create.generic.y = 140;
 	s_main.Create.generic.id = ID_CREATE;
 	s_main.Create.generic.callback = Main_MenuEvent;
@@ -273,7 +273,7 @@ void UI_MainMenu(void) {
 	s_main.Join.generic.type = MTYPE_BITMAP;
 	s_main.Join.generic.name = JOIN0;
 	s_main.Join.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Join.generic.x = 508;
+	s_main.Join.generic.x = 516;
 	s_main.Join.generic.y = 175;
 	s_main.Join.generic.id = ID_JOIN;
 	s_main.Join.generic.callback = Main_MenuEvent;
