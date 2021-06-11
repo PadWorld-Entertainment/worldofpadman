@@ -34,24 +34,21 @@ SETUP MENU
 #define ID_CUSTOMIZECONTROLS 11
 #define ID_SYSTEMCONFIG 12
 #define ID_GAME 13
-#define ID_CDKEY 14
-#define ID_LOAD 15
-#define ID_SAVE 16
-#define ID_DEFAULTS 17
-#define ID_BACK 18
+#define ID_DEFAULTS 14
+#define ID_BACK 15
 
-#define PLAYER0 "menu/setup/BtnPlayer0"
-#define PLAYER1 "menu/setup/BtnPlayer1"
-#define CONTROLS0 "menu/setup/BtnControls0"
-#define CONTROLS1 "menu/setup/BtnControls1"
-#define SYSTEM0 "menu/setup/BtnSystem0"
-#define SYSTEM1 "menu/setup/BtnSystem1"
-#define DEFAULTS0 "menu/setup/BtnDefaults0"
-#define DEFAULTS1 "menu/setup/BtnDefaults1"
-#define OPTIONS0 "menu/setup/BtnOptions0"
-#define OPTIONS1 "menu/setup/BtnOptions1"
-#define BACK0 "menu/BtnBack0"
-#define BACK1 "menu/BtnBack1"
+#define PLAYER0 "menu/buttons/player0"
+#define PLAYER1 "menu/buttons/player1"
+#define CONTROLS0 "menu/buttons/controls0"
+#define CONTROLS1 "menu/buttons/controls1"
+#define SYSTEM0 "menu/buttons/system0"
+#define SYSTEM1 "menu/buttons/system1"
+#define OPTIONS0 "menu/buttons/game0"
+#define OPTIONS1 "menu/buttons/game1"
+#define DEFAULTS0 "menu/buttons/defaults0"
+#define DEFAULTS1 "menu/buttons/defaults1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 
 typedef struct {
 	menuframework_s menu;
@@ -77,15 +74,14 @@ static setupMenuInfo_t setupMenuInfo;
 #define ID_DEFAULT_NO 11
 #define ID_DEFAULT_BACK 12
 
-#define YES0 "menu/default/yes0"
-#define YES1 "menu/default/yes1"
-#define NO0 "menu/default/no0"
-#define NO1 "menu/default/no1"
-// BACK0, BACK1 von oben ;)
+#define YES0 "menu/buttons/yes0"
+#define YES1 "menu/buttons/yes1"
+#define NO0 "menu/buttons/no0"
+#define NO1 "menu/buttons/no1"
+// BACK0, BACK1 used from setup menu
 
 typedef struct {
 	menuframework_s menu;
-
 	menubitmap_s Yes;
 	menubitmap_s No;
 	menubitmap_s Back;
@@ -117,11 +113,8 @@ static void SetupDefaultMenu_Event(void *ptr, int event) {
 }
 
 static void SetupDefaultMenu_Draw(void) {
-	//	UI_DrawString(6, 381,"WARNING: This will reset *ALL*\noptions to their default
-	//values.",UI_SMALLFONT,colorYellow);
 	UI_DrawStringNS(320 - 145, 380, "This will reset *^1ALL^3* options", UI_LEFT, 20, color_yellow);
 	UI_DrawStringNS(320, 380 + 22, "to their default values.", UI_CENTER, 20, color_yellow);
-
 	Menu_Draw(&setupDefaultMenu.menu);
 }
 
@@ -146,7 +139,7 @@ static void SetupDefaultMenu_Init(void) {
 	setupDefaultMenu.Yes.generic.y = 284; // 241;
 	setupDefaultMenu.Yes.generic.id = ID_DEFAULT_YES;
 	setupDefaultMenu.Yes.generic.callback = SetupDefaultMenu_Event;
-	setupDefaultMenu.Yes.width = 65;
+	setupDefaultMenu.Yes.width = 80;
 	setupDefaultMenu.Yes.height = 40;
 	setupDefaultMenu.Yes.focuspic = YES1;
 	setupDefaultMenu.Yes.focuspicinstead = qtrue;
@@ -155,11 +148,11 @@ static void SetupDefaultMenu_Init(void) {
 	setupDefaultMenu.No.generic.type = MTYPE_BITMAP;
 	setupDefaultMenu.No.generic.name = NO0;
 	setupDefaultMenu.No.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupDefaultMenu.No.generic.x = 492; // 449;
+	setupDefaultMenu.No.generic.x = 497; // 449;
 	setupDefaultMenu.No.generic.y = 284; // 241;
 	setupDefaultMenu.No.generic.id = ID_DEFAULT_NO;
 	setupDefaultMenu.No.generic.callback = SetupDefaultMenu_Event;
-	setupDefaultMenu.No.width = 45;
+	setupDefaultMenu.No.width = 40;
 	setupDefaultMenu.No.height = 40;
 	setupDefaultMenu.No.focuspic = NO1;
 	setupDefaultMenu.No.focuspicinstead = qtrue;
@@ -287,11 +280,11 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.Options.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.Options.generic.name = OPTIONS0;
 	setupMenuInfo.Options.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.Options.generic.x = 41;
+	setupMenuInfo.Options.generic.x = 50;
 	setupMenuInfo.Options.generic.y = 167;
 	setupMenuInfo.Options.generic.id = ID_GAME;
 	setupMenuInfo.Options.generic.callback = UI_SetupMenu_Event;
-	setupMenuInfo.Options.width = 120;
+	setupMenuInfo.Options.width = 80;
 	setupMenuInfo.Options.height = 40;
 	setupMenuInfo.Options.focuspic = OPTIONS1;
 	setupMenuInfo.Options.focuspicinstead = qtrue;
