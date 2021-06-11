@@ -95,8 +95,6 @@ typedef struct {
 	menubitmap_s apply;
 	menubitmap_s back;
 
-	float sfxvolume_original;
-	float musicvolume_original;
 	int soundSystem_original;
 	int quality_original;
 } soundOptionsInfo_t;
@@ -213,12 +211,6 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 		break;
 
 	case ID_APPLY:
-		trap_Cvar_SetValue("s_volume", soundOptionsInfo.sfxvolume.curvalue / 10);
-		soundOptionsInfo.sfxvolume_original = soundOptionsInfo.sfxvolume.curvalue;
-
-		trap_Cvar_SetValue("s_musicvolume", soundOptionsInfo.musicvolume.curvalue / 10);
-		soundOptionsInfo.musicvolume_original = soundOptionsInfo.musicvolume.curvalue;
-
 		// Check if something changed that requires the sound system to be restarted.
 		if (soundOptionsInfo.quality_original != soundOptionsInfo.quality.curvalue ||
 			soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue) {
@@ -256,8 +248,6 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 }
 
 static void SoundOptions_UpdateMenuItems(void) {
-	soundOptionsInfo.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
-
 	if (soundOptionsInfo.soundSystem.curvalue == UISND_SDL) {
 		soundOptionsInfo.quality.generic.flags &= ~QMF_GRAYED;
 	} else {
@@ -266,12 +256,6 @@ static void SoundOptions_UpdateMenuItems(void) {
 
 	soundOptionsInfo.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 
-	if (soundOptionsInfo.sfxvolume_original != soundOptionsInfo.sfxvolume.curvalue) {
-		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (soundOptionsInfo.musicvolume_original != soundOptionsInfo.musicvolume.curvalue) {
-		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
 	if (soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue) {
 		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
