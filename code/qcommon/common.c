@@ -1133,17 +1133,23 @@ typedef struct memstatic_s {
 	byte mem[2];
 } memstatic_t;
 
-memstatic_t emptystring = {{(sizeof(memblock_t) + 2 + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'\0', '\0'}};
-memstatic_t numberstring[] = {{{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'0', '\0'}},
-							  {{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'1', '\0'}},
-							  {{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'2', '\0'}},
-							  {{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'3', '\0'}},
-							  {{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'4', '\0'}},
-							  {{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'5', '\0'}},
-							  {{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'6', '\0'}},
-							  {{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'7', '\0'}},
-							  {{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'8', '\0'}},
-							  {{(sizeof(memstatic_t) + 3) & ~3, TAG_STATIC, NULL, NULL, ZONEID}, {'9', '\0'}}};
+#ifdef ZONE_DEBUG
+#define ZONE_DEBUG_INIT(size) {(size), TAG_STATIC, NULL, NULL, ZONEID, {NULL, NULL, 0, 0}}
+#else
+#define ZONE_DEBUG_INIT(size) {(size), TAG_STATIC, NULL, NULL, ZONEID}
+#endif
+
+static memstatic_t emptystring = {ZONE_DEBUG_INIT((sizeof(memblock_t) + 2 + 3) & ~3), {'\0', '\0'}};
+static memstatic_t numberstring[] = {{ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'0', '\0'}},
+									 {ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'1', '\0'}},
+									 {ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'2', '\0'}},
+									 {ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'3', '\0'}},
+									 {ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'4', '\0'}},
+									 {ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'5', '\0'}},
+									 {ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'6', '\0'}},
+									 {ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'7', '\0'}},
+									 {ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'8', '\0'}},
+									 {ZONE_DEBUG_INIT((sizeof(memstatic_t) + 3) & ~3), {'9', '\0'}}};
 
 /*
 ========================
