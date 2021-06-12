@@ -139,11 +139,11 @@ set(SRCS
 add_library(opus STATIC ${SRCS})
 target_include_directories(opus PUBLIC celt include silk silk/float)
 target_compile_definitions(opus PRIVATE
-	-DFLOATING_POINT
-	-DFLOAT_APPROX
-	-DOPUS_BUILD
-	-DUSE_CODEC_OPUS
-	-DUSE_ALLOCA
-	-DHAVE_LRINTF
+	FLOATING_POINT
+	FLOAT_APPROX
+	OPUS_BUILD
+	USE_ALLOCA
+	HAVE_LRINTF
 )
+target_compile_definitions(opus PUBLIC USE_CODEC_OPUS)
 target_link_libraries(opus ogg)

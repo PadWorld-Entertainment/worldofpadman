@@ -38,6 +38,6 @@ set(SRCS
 set(LIB_SRCS cg_syscalls.c)
 set(QVM_SRCS ${SRCS} cg_syscalls.asm)
 list(APPEND SRCS ${LIB_SRCS})
-add_library(${PROJECT_NAME} SHARED ${SRCS})
+wop_add_library(TARGET ${PROJECT_NAME} GAME SRCS ${SRCS})
 target_compile_definitions(${PROJECT_NAME} PRIVATE CGAME)
 add_qvm(${PROJECT_NAME} ${QVM_SRCS})

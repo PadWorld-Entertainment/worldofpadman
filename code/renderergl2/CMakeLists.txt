@@ -94,7 +94,7 @@ if (USE_RENDERER_DLOPEN)
 endif()
 
 project(renderer_opengl2)
-add_library(${PROJECT_NAME} SHARED ${SRCS})
+wop_add_library(TARGET ${PROJECT_NAME} SRCS ${SRCS})
 set(LIBS jpeg ${SDL2_LIBRARIES})
 if (MSVC)
 	list(APPEND LIBS ws2_32 winmm psapi gdi32 ole32)

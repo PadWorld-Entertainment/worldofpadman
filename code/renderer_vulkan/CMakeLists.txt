@@ -93,7 +93,7 @@ foreach (shader ${SHADER_SRCS})
 	if (${shadertype} STREQUAL "frag")
 		set(spirvext fspv)
 	endif()
-	set(spirvfile ${shaderfile}_${shadertype}.${spirv_ext})
+	set(spirvfile ${shaderfile}_${shadertype}.${spirvext})
 	set(cfile ${shaderfile}_${shadertype}.c)
 
 	list(APPEND SRCS ${cfile})
@@ -102,7 +102,7 @@ foreach (shader ${SHADER_SRCS})
 	set_source_files_properties(${spirvfile} PROPERTIES GENERATED TRUE)
 
 	add_custom_command(OUTPUT ${spirvfile}
-		COMMAND ${GLSL_LANG_VALIDATOR} -V ${CMAKE_CURRENT_SOURCE_DIR}/${shader} -o ${CMAKE_CURRENT_BINARY_DIR}/${spirvfile}
+		COMMAND ${GLSL_LANG_VALIDATOR} --quiet -V ${CMAKE_CURRENT_SOURCE_DIR}/${shader} -o ${CMAKE_CURRENT_BINARY_DIR}/${spirvfile}
 		COMMENT "Generate spirv for ${shader} (${shadertype}): ${spirvfile}"
 	)
 	add_custom_command(OUTPUT ${cfile}
@@ -121,7 +121,7 @@ if (USE_RENDERER_DLOPEN)
 endif()
 
 project(renderer_vulkan)
-add_library(${PROJECT_NAME} SHARED ${SRCS})
+wop_add_library(TARGET ${PROJECT_NAME} SRCS ${SRCS})
 set(LIBS jpeg ${SDL2_LIBRARIES})
 if (MSVC)
 	list(APPEND LIBS ws2_32 winmm psapi gdi32 ole32)

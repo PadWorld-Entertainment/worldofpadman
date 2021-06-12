@@ -39,5 +39,6 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 endif()
 
 add_library(theora STATIC ${SRCS})
-target_link_libraries(theora PUBLIC ogg)
+target_link_libraries(theora PUBLIC vorbis)
 target_include_directories(theora PUBLIC include lib)
+target_compile_definitions(theora PUBLIC USE_CIN_THEORA)

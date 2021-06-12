@@ -6,6 +6,11 @@ else()
 	set(GLSL_LANG_VALIDATOR ${CODE_DIR}/../tools/windows/glslangValidator.exe)
 endif()
 
+check_compiler_flag(-Wall)
+check_compiler_flag(-Wextra)
+check_compiler_flag(-Wno-unused-parameter)
+check_compiler_flag(-Wno-sign-compare)
+
 set(QCOMMON_COLLISION_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/cm_load.c
 	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/cm_local.h
@@ -24,6 +29,156 @@ set(QCOMMON_VM_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_x86.c
 )
 
+find_program(GDB_EXECUTABLE gdb)
+find_program(LLDB_EXECUTABLE lldb)
+if (GDB_EXECUTABLE)
+	set(DEBUGGER ${GDB_EXECUTABLE} CACHE STRING "Which debugger should be used")
+elseif (LLDB_EXECUTABLE)
+	set(DEBUGGER ${LLDB_EXECUTABLE} CACHE STRING "Which debugger should be used")
+else()
+	set(DEBUGGER "unknown" CACHE STRING "Which debugger should be used")
+	message(STATUS "No debugger (gdb or lldb) was found")
+endif()
+set_property(CACHE DEBUGGER PROPERTY STRINGS gdb lldb)
+
+function(wop_add_debuggger TARGET)
+	if (${DEBUGGER} MATCHES "gdb")
+		add_custom_target(${TARGET}-debug)
+		add_custom_command(TARGET ${TARGET}-debug
+			COMMAND ${GDB_EXECUTABLE} -ex run --args $<TARGET_FILE:${TARGET}>
+			COMMENT "Starting debugger session for ${TARGET}"
+			USES_TERMINAL
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+			DEPENDS ${TARGET}
+		)
+	elseif (${DEBUGGER} MATCHES "lldb")
+		add_custom_target(${TARGET}-debug)
+		add_custom_command(TARGET ${TARGET}-debug
+			COMMAND CG_CONTEXT_SHOW_BACKTRACE=1 ${LLDB_EXECUTABLE} -b -o run $<TARGET_FILE:${TARGET}>
+			COMMENT "Starting debugger session for ${TARGET}"
+			USES_TERMINAL
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+			DEPENDS ${TARGET}
+		)
+	endif()
+endfunction()
+
+function(wop_add_library)
+	set(_OPTIONS_ARGS GAME)
+	set(_ONE_VALUE_ARGS TARGET)
+	set(_MULTI_VALUE_ARGS SRCS)
+
+	cmake_parse_arguments(_LIB "${_OPTIONS_ARGS}" "${_ONE_VALUE_ARGS}" "${_MULTI_VALUE_ARGS}" ${ARGN} )
+
+	set(ARCH x86)
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(ARCH x86_64)
+	endif()
+
+	set(OUTPUTNAME "${_LIB_TARGET}_${ARCH}")
+	set(LIB_BINARY_DIR "${ENGINE_BINARY_DIR}")
+	if (_LIB_GAME)
+		set(LIB_BINARY_DIR "${GAME_BINARY_DIR}")
+	endif()
+
+	add_library(${_LIB_TARGET} SHARED ${_LIB_SRCS})
+	set_target_properties(${_LIB_TARGET} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/${GAME_NAME})
+	set_target_properties(${_LIB_TARGET} PROPERTIES PREFIX "")
+	set_target_properties(${_LIB_TARGET} PROPERTIES OUTPUT_NAME "${OUTPUTNAME}")
+	set_target_properties(${_LIB_TARGET} PROPERTIES
+		ARCHIVE_OUTPUT_DIRECTORY "${LIB_BINARY_DIR}"
+		LIBRARY_OUTPUT_DIRECTORY "${LIB_BINARY_DIR}"
+		RUNTIME_OUTPUT_DIRECTORY "${LIB_BINARY_DIR}"
+	)
+	foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+		string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
+		set_target_properties(${_LIB_TARGET} PROPERTIES
+			ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${LIB_BINARY_DIR}"
+			LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${LIB_BINARY_DIR}"
+			RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${LIB_BINARY_DIR}"
+		)
+	endforeach()
+endfunction()
+
+function(wop_add_executable)
+	set(_OPTIONS_ARGS WINDOWED)
+	set(_ONE_VALUE_ARGS TARGET)
+	set(_MULTI_VALUE_ARGS SRCS)
+
+	cmake_parse_arguments(_EXE "${_OPTIONS_ARGS}" "${_ONE_VALUE_ARGS}" "${_MULTI_VALUE_ARGS}" ${ARGN} )
+
+	if (_EXE_WINDOWED)
+		if (WIN32)
+			add_executable(${_EXE_TARGET} WIN32 ${SRCS})
+			if (MSVC)
+				set_target_properties(${_EXE_TARGET} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+			endif()
+		elseif(APPLE)
+			add_executable(${_EXE_TARGET} MACOSX_BUNDLE ${SRCS})
+		else()
+			add_executable(${_EXE_TARGET} ${SRCS})
+		endif()
+	else()
+		add_executable(${_EXE_TARGET} ${SRCS})
+		if (WIN32)
+			if (MSVC)
+				set_target_properties(${_EXE_TARGET} PROPERTIES LINK_FLAGS "/SUBSYSTEM:CONSOLE")
+			endif()
+		endif()
+	endif()
+
+	set(ARCH x86)
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(ARCH x86_64)
+	endif()
+
+	set(OUTPUTNAME "${_EXE_TARGET}.${ARCH}")
+	set_target_properties(${_EXE_TARGET} PROPERTIES OUTPUT_NAME "${OUTPUTNAME}")
+	set_target_properties(${_EXE_TARGET} PROPERTIES
+		ARCHIVE_OUTPUT_DIRECTORY "${ENGINE_BINARY_DIR}"
+		LIBRARY_OUTPUT_DIRECTORY "${ENGINE_BINARY_DIR}"
+		RUNTIME_OUTPUT_DIRECTORY "${ENGINE_BINARY_DIR}"
+	)
+	foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+		string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
+		set_target_properties(${_EXE_TARGET} PROPERTIES
+			ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${ENGINE_BINARY_DIR}"
+			LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${ENGINE_BINARY_DIR}"
+			RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${ENGINE_BINARY_DIR}"
+		)
+	endforeach()
+
+	if (APPLE)
+		configure_file(${ROOT_DIR}/misc/osx/application.plist.in ${CMAKE_CURRENT_BINARY_DIR}/application.plist)
+		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/application.plist)
+		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE ON)
+		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "${CMAKE_PROJECT_NAME}")
+		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "YES")
+		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")
+		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${CODESIGNIDENTITY})
+		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${DEVELOPMENT_TEAM_ID})
+		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER ${PROVISIONING_PROFILE_NAME})
+		if (${CMAKE_GENERATOR} STREQUAL "Xcode")
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_EXECUTABLE_NAME \${EXECUTABLE_NAME})
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_PRODUCT_NAME \${PRODUCT_NAME})
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME \${PRODUCT_NAME})
+		else()
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_PRODUCT_NAME "${CMAKE_PROJECT_NAME}")
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${CMAKE_PROJECT_NAME}")
+		endif()
+		configure_file(${ROOT_DIR}/misc/osx/copy_dylib.sh.in ${CMAKE_CURRENT_BINARY_DIR}/copy_dylib.sh @ONLY)
+		add_custom_command(TARGET ${_EXE_TARGET} POST_BUILD COMMAND cd ${CMAKE_BINARY_DIR}\; ${CMAKE_CURRENT_BINARY_DIR}/copy_dylib.sh)
+	endif()
+
+	add_custom_target(${_EXE_TARGET}-run
+		COMMAND $<TARGET_FILE:${_EXE_TARGET}>
+		USES_TERMINAL
+		DEPENDS ${_EXE_TARGET}
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+	)
+	wop_add_debuggger(${_EXE_TARGET})
+endfunction()
+
 function(add_qvm TARGET)
 	set(srcfiles ${ARGV})
 	string(TOUPPER ${TARGET} UPPERTARGET)
@@ -40,21 +195,24 @@ function(add_qvm TARGET)
 				OUTPUT ${q3asm_outfile}
 				COMMAND q3lcc
 				ARGS ${compileflags} -o "${q3asm_outfile}" "${CMAKE_CURRENT_SOURCE_DIR}/${srcfile}"
-				DEPENDS q3lcc ${QVM_DEPS}
+				DEPENDS q3lcc ${CMAKE_CURRENT_SOURCE_DIR}/${srcfile}
 			)
 			set_source_files_properties(${q3asm_outfile} PROPERTIES GENERATED TRUE)
 			list(APPEND QVM_SRCS ${q3asm_outfile})
 		endif()
 	endforeach()
 
+	set(QVM_PATH ${GAME_NAME}/vm/${TARGET}.qvm)
 	add_custom_command(
-		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.qvm
+		OUTPUT ${QVM_PATH}
 		COMMAND q3asm
-		ARGS -o ${TARGET}.qvm ${QVM_SRCS}
+		ARGS -o ${QVM_PATH} ${QVM_SRCS}
 		DEPENDS q3asm ${QVM_SRCS}
 	)
-	add_custom_target(${TARGET}.qvm DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.qvm)
-	add_dependencies(${TARGET} ${TARGET}.qvm)
+	add_custom_target(qvm_${TARGET} DEPENDS ${QVM_PATH})
+	add_dependencies(${TARGET} qvm_${TARGET})
+	set_source_files_properties(${QVM_PATH} PROPERTIES GENERATED TRUE)
+	set_source_files_properties(${QVM_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/${QVM_PATH})
 endfunction()
 
 function(add_botlib TARGET)
@@ -114,22 +272,30 @@ function(add_asm TARGET)
 	endif()
 endfunction()
 
+if (DEFAULT_BASEDIR)
+	add_compile_definitions(DEFAULT_BASEDIR="${DEFAULT_BASEDIR}")
+endif()
+
 add_subdirectory(tools)
+
+set(RENDERER_LIST renderer_opengl1)
+add_subdirectory(renderergl1)
+if (BUILD_RENDERER_OPENGL2)
+	add_subdirectory(renderergl2)
+	list(APPEND RENDERER_LIST renderer_opengl2)
+endif()
+if (BUILD_RENDERER_VULKAN)
+	add_subdirectory(renderer_vulkan)
+	list(APPEND RENDERER_LIST renderer_vulkan)
+endif()
+
+add_subdirectory(cgame)
+add_subdirectory(game)
+add_subdirectory(ui)
+
 if (BUILD_CLIENT)
 	add_subdirectory(client)
 endif()
 if (BUILD_SERVER)
 	add_subdirectory(server)
 endif()
-
-add_subdirectory(renderergl1)
-if (BUILD_RENDERER_OPENGL2)
-	add_subdirectory(renderergl2)
-endif()
-if (BUILD_RENDERER_VULKAN)
-	add_subdirectory(renderer_vulkan)
-endif()
-
-add_subdirectory(cgame)
-add_subdirectory(game)
-add_subdirectory(ui)

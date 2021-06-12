@@ -1981,6 +1981,7 @@ static ALCdevice *alCaptureDevice;
 static cvar_t *s_alCapture;
 #endif
 
+#ifndef ALDRIVER_DEFAULT
 #if defined(_WIN64)
 #define ALDRIVER_DEFAULT "OpenAL64.dll"
 #elif defined(_WIN32)
@@ -1991,6 +1992,7 @@ static cvar_t *s_alCapture;
 #define ALDRIVER_DEFAULT "libopenal.so"
 #else
 #define ALDRIVER_DEFAULT "libopenal.so.1"
+#endif
 #endif
 
 /*
