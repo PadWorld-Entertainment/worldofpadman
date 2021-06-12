@@ -371,8 +371,8 @@ Tree addrof(Tree p) {
 			Symbol t1 = q->u.sym;
 			q->u.sym = 0;
 			q = idtree(t1);
-			/* fall through */
 		}
+		/* fall through */
 		case INDIR:
 			if (p == q)
 				return q->kids[0];

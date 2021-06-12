@@ -111,7 +111,7 @@ syntax:
  * Generate a line directive for cursource
  */
 void genline(void) {
-	static Token ta = {UNCLASS};
+	static Token ta = {UNCLASS, 0, 0, 0, 0, NULL};
 	static Tokenrow tr = {&ta, &ta, &ta + 1, 1};
 	uchar *p;
 

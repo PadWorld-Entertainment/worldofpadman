@@ -266,7 +266,7 @@ struct fsm {
 	{CIRC1, {C_XX}, ACT(CIRC, S_SELFB)},
 	{CIRC1, {'='}, ACT(ASCIRC, S_SELF)},
 
-	{-1}};
+	{-1, {'\0'}, 0}};
 
 /* first index is char, second is state */
 /* increase #states to power of 2 to encourage use of shift */
@@ -379,6 +379,7 @@ int gettokens(Tokenrow *trp, int reset) {
 			case S_SELF:
 				ip += runelen;
 				runelen = 1;
+				// fall through
 			case S_SELFB:
 				tp->type = GETACT(state);
 				tp->len = ip - tp->t;
@@ -443,6 +444,7 @@ int gettokens(Tokenrow *trp, int reset) {
 
 			case S_STNL:
 				error(ERROR, "Unterminated string or char const");
+				break;
 			case S_NL:
 				tp->t = ip;
 				tp->type = NL;
@@ -472,6 +474,7 @@ int gettokens(Tokenrow *trp, int reset) {
 			case S_EOFCOM:
 				error(WARNING, "EOF inside comment");
 				--ip;
+				// fall through
 			case S_COMMENT:
 				++ip;
 				tp->t = ip;

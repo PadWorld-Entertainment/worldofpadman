@@ -549,7 +549,7 @@ static void help(void) {
 						   "-Dname -Dname=def	define the preprocessor symbol `name'\n",
 						   "-E	run only the preprocessor on the named C programs and unsuffixed files\n",
 						   "-g	produce symbol table information for debuggers\n",
-						   "-help or -?	print this message\n",
+						   "-help	print this message\n",
 						   "-Idir	add `dir' to the beginning of the list of #include directories\n",
 						   "-lx	search library `x'\n",
 						   "-N	do not search the standard directories for #include files\n",
@@ -565,7 +565,7 @@ static void help(void) {
 						   "-t -tname	emit function tracing calls to printf or to `name'\n",
 						   "-target name	is ignored\n",
 						   "-tempdir=dir	place temporary files in `dir/'",
-						   "\n"
+						   "\n",
 						   "-Uname	undefine the preprocessor symbol `name'\n",
 						   "-v	show commands as they are executed; 2nd -v suppresses execution\n",
 						   "-w	suppress warnings\n",
@@ -688,12 +688,12 @@ static void opt(char *arg) {
 	case 'h':
 		if (strcmp(arg, "-help") == 0) {
 			static int printed = 0;
-		case '?':
 			if (!printed)
 				help();
 			printed = 1;
 			return;
 		}
+		break;
 #ifdef linux
 	case 's':
 		if (strcmp(arg, "-static") == 0) {
@@ -701,6 +701,7 @@ static void opt(char *arg) {
 				fprintf(stderr, "%s: %s ignored\n", progname, arg);
 			return;
 		}
+		break;
 #endif
 	}
 	if (arg[2] == 0)
