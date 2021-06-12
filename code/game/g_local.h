@@ -232,7 +232,7 @@ struct gentity_s {
 	int animationEnd;
 	float animationFPS;
 
-	gitem_t *item; // for bonus items
+	const gitem_t *item; // for bonus items
 };
 
 typedef enum { CON_DISCONNECTED, CON_CONNECTING, CON_CONNECTED } clientConnected_t;
@@ -521,10 +521,10 @@ void RespawnItem(gentity_t *ent);
 
 void UseHoldableItem(gentity_t *ent);
 void PrecacheItem(gitem_t *it);
-gentity_t *Drop_Item(gentity_t *ent, gitem_t *item, float angle);
-gentity_t *LaunchItem(gitem_t *item, vec3_t origin, vec3_t velocity);
+gentity_t *Drop_Item(gentity_t *ent, const gitem_t *item, float angle);
+gentity_t *LaunchItem(const gitem_t *item, vec3_t origin, vec3_t velocity);
 void SetRespawn(gentity_t *ent, float delay);
-void G_SpawnItem(gentity_t *ent, gitem_t *item);
+void G_SpawnItem(gentity_t *ent, const gitem_t *item);
 void FinishSpawningItem(gentity_t *ent);
 void Think_Weapon(gentity_t *ent);
 int ArmorIndex(gentity_t *ent);
@@ -532,7 +532,7 @@ void Add_Ammo(gentity_t *ent, int weapon, int count);
 void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace);
 
 void ClearRegisteredItems(void);
-void RegisterItem(gitem_t *item);
+void RegisterItem(const gitem_t *item);
 void SaveRegisteredItems(void);
 
 //

@@ -488,7 +488,7 @@ void ClientEvents(gentity_t *ent, int oldEventSequence) {
 	//	vec3_t	dir;
 	vec3_t origin, angles;
 	//	qboolean	fired;
-	gitem_t *item;
+	const gitem_t *item;
 	gentity_t *drop;
 
 	client = ent->client;
@@ -578,7 +578,7 @@ void ClientEvents(gentity_t *ent, int oldEventSequence) {
 
 		// HI_BAMBAM
 		case EV_USE_ITEM5: {
-			gitem_t *item = BG_FindItemForHoldable(HI_BAMBAM);
+			const gitem_t *item = BG_FindItemForHoldable(HI_BAMBAM);
 			if (item) {
 				if (client->ps.stats[STAT_FORBIDDENITEMS] & (1 << HI_BAMBAM)) {
 					trap_SendServerCommand((ent - g_entities), va("cp \"%s not allowed here\"", item->pickup_name));
@@ -596,7 +596,7 @@ void ClientEvents(gentity_t *ent, int oldEventSequence) {
 
 		// HI_BOOMIES
 		case EV_USE_ITEM6: {
-			gitem_t *item = BG_FindItemForHoldable(HI_BOOMIES);
+			const gitem_t *item = BG_FindItemForHoldable(HI_BOOMIES);
 			if (item) {
 				if (client->ps.stats[STAT_FORBIDDENITEMS] & (1 << HI_BOOMIES)) {
 					trap_SendServerCommand((ent - g_entities), va("cp \"%s not allowed here\"", item->pickup_name));

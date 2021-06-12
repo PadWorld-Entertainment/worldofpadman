@@ -606,7 +606,7 @@ The server says this item is used on this level
 =================
 */
 static void CG_RegisterItemSounds(int itemNum) {
-	gitem_t *item;
+	const gitem_t *item;
 	char data[MAX_QPATH];
 	const char *s, *start;
 	int len;

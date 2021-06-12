@@ -763,7 +763,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	case EV_ITEM_PICKUP:
 		DEBUGNAME("EV_ITEM_PICKUP");
 		{
-			gitem_t *item;
+			const gitem_t *item;
 			int index;
 
 			index = es->eventParm; // player predicted
@@ -801,7 +801,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	case EV_GLOBAL_ITEM_PICKUP:
 		DEBUGNAME("EV_GLOBAL_ITEM_PICKUP");
 		{
-			gitem_t *item;
+			const gitem_t *item;
 			int index;
 
 			index = es->eventParm; // player predicted

@@ -61,7 +61,7 @@ CG_LoadingItem
 ===================
 */
 void CG_LoadingItem(int itemNum) {
-	gitem_t *item;
+	const gitem_t *item;
 
 	item = &bg_itemlist[itemNum];
 

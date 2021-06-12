@@ -48,7 +48,7 @@ UI_PlayerInfo_SetWeapon
 ===============
 */
 static void UI_PlayerInfo_SetWeapon(playerInfo_t *pi, weapon_t weaponNum) {
-	gitem_t *item;
+	const gitem_t *item;
 	char path[MAX_QPATH];
 
 	pi->currentWeapon = weaponNum;

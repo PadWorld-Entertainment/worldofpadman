@@ -30,9 +30,6 @@ CONNECTION SCREEN
 ===============================================================================
 */
 
-qboolean passwordNeeded = qtrue;
-menufield_s passwordField;
-
 static connstate_t lastConnState;
 static char lastLoadingText[MAX_INFO_VALUE];
 
@@ -225,30 +222,6 @@ void UI_DrawConnectScreen(qboolean overlay) {
 								  menu_text_color, qtrue);
 	}
 
-#if 0
-	// display password field
-	if ( passwordNeeded ) {
-		s_ingame_menu.x = SCREEN_WIDTH * 0.50 - 128;
-		s_ingame_menu.nitems = 0;
-		s_ingame_menu.wrapAround = qtrue;
-
-		passwordField.generic.type = MTYPE_FIELD;
-		passwordField.generic.name = "Password:";
-		passwordField.generic.callback = 0;
-		passwordField.generic.x		= 10;
-		passwordField.generic.y		= 180;
-		Field_Clear( &passwordField.field );
-		passwordField.width = 256;
-		passwordField.field.widthInChars = 16;
-		Q_strncpyz( passwordField.field.buffer, Cvar_VariableString("password"),
-			sizeof(passwordField.field.buffer) );
-
-		Menu_AddItem( &s_ingame_menu, ( void * ) &s_customize_player_action );
-
-		MField_Draw( &passwordField );
-	}
-#endif
-
 	if (lastConnState > cstate.connState) {
 		lastLoadingText[0] = '\0';
 	}
@@ -269,9 +242,7 @@ void UI_DrawConnectScreen(qboolean overlay) {
 		s = "Awaiting gamestate...";
 		break;
 	case CA_LOADING:
-		return;
 	case CA_PRIMED:
-		return;
 	default:
 		return;
 	}

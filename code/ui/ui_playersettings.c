@@ -144,6 +144,7 @@ typedef struct {
 	char name[MAX_MODELSKINNAME_STR];
 	qhandle_t icon;
 } SkinData_t;
+
 typedef struct {
 	qhandle_t modelicons[MAX_UIMODELS];
 	qhandle_t modeliconsB[MAX_UIMODELS];
@@ -152,7 +153,7 @@ typedef struct {
 	SkinData_t modelskins[MAX_SKINS];
 } ps_playericons_t;
 
-ps_playericons_t ps_playericons;
+static ps_playericons_t ps_playericons;
 
 /*
 =================
@@ -229,7 +230,7 @@ static void PlayerSettings_DrawPlayer(void *self) {
 	trap_Cvar_VariableStringBuffer("model", buf, sizeof(buf));
 	if (strcmp(buf, s_playersettings.playerModel) != 0) {
 		UI_PlayerInfo_SetModel(&s_playersettings.playerinfo, buf);
-		strcpy(s_playersettings.playerModel, buf);
+		Q_strncpyz(s_playersettings.playerModel, buf, sizeof(s_playersettings.playerModel));
 
 		viewangles[YAW] = 180 + 10;
 		viewangles[PITCH] = 0;
@@ -381,6 +382,7 @@ static int GetSpecialSkinScore(const char *iconPath) {
 		return 1;
 	return 0;
 }
+
 static int SkinComp(const void *vA, const void *vB) {
 	const SkinData_t *a = (const SkinData_t *)vA;
 	const SkinData_t *b = (const SkinData_t *)vB;
@@ -407,7 +409,7 @@ static void sortSkins(int first, int last) {
 static const char fixedModelList[] = "padman\0padgirl\0monster\0padlilly\0fatpad";
 static const int numFixedModels = 5;
 
-qboolean IsEntryInList(const char *modelName, const char *list, int numListEntries) {
+static qboolean IsEntryInList(const char *modelName, const char *list, int numListEntries) {
 	int i = 0;
 	const char *entryPtr = list;
 
@@ -425,11 +427,11 @@ qboolean IsEntryInList(const char *modelName, const char *list, int numListEntri
 	return qfalse;
 }
 
-qboolean IsAFixedModelListEntry(const char *modelName) {
+static qboolean IsAFixedModelListEntry(const char *modelName) {
 	return IsEntryInList(modelName, fixedModelList, numFixedModels);
 }
 
-void TweakModelFolderList(char *list, int *numEntries) {
+static void TweakModelFolderList(char *list, int *numEntries) {
 	char newList[MAX_MODEL_DIR_LIST];
 	int newNumEntries = 0;
 	char *entryPtr = NULL;

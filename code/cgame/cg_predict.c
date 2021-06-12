@@ -253,7 +253,7 @@ CG_TouchItem
 ===================
 */
 static void CG_TouchItem(centity_t *cent) {
-	gitem_t *item;
+	const 	gitem_t *item;
 
 	if (!cg_predictItems.integer) {
 		return;
@@ -274,7 +274,7 @@ static void CG_TouchItem(centity_t *cent) {
 	// don't Predict PickUp of >8 Cartridges
 	// ... this isn't in BG_CanItemBeGrabbed, because on the serverside it is also handled outside of bg...
 	if (bg_itemlist[cent->currentState.modelindex].giTag == WP_SPRAYPISTOL) {
-		gitem_t *item = &bg_itemlist[cent->currentState.modelindex];
+		const gitem_t *item = &bg_itemlist[cent->currentState.modelindex];
 		if (((!strcmp(item->classname, "ammo_spray_b") && cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_BLUE) ||
 			 (!strcmp(item->classname, "ammo_spray_r") && cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_RED) ||
 			 !strcmp(item->classname, "ammo_spray_n")) &&

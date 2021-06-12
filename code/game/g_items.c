@@ -549,7 +549,7 @@ LaunchItem
 Spawns an item and tosses it forward
 ================
 */
-gentity_t *LaunchItem(gitem_t *item, vec3_t origin, vec3_t velocity) {
+gentity_t *LaunchItem(const gitem_t *item, vec3_t origin, vec3_t velocity) {
 	gentity_t *dropped;
 
 	dropped = G_Spawn();
@@ -598,7 +598,7 @@ Drop_Item
 Spawns an item and tosses it forward
 ================
 */
-gentity_t *Drop_Item(gentity_t *ent, gitem_t *item, float angle) {
+gentity_t *Drop_Item(gentity_t *ent, const gitem_t *item, float angle) {
 	vec3_t velocity;
 	vec3_t angles;
 
@@ -716,7 +716,7 @@ void G_CheckTeamItems(void) {
 	Team_InitGame();
 
 	if (g_gametype.integer == GT_CTF) {
-		gitem_t *item;
+		const gitem_t *item;
 
 		// check for the two flags
 		item = BG_FindItem("red Lolly");
@@ -756,7 +756,7 @@ RegisterItem
 The item will be added to the precache list
 ===============
 */
-void RegisterItem(gitem_t *item) {
+void RegisterItem(const gitem_t *item) {
 	if (!item) {
 		G_Error("RegisterItem: NULL");
 	}
@@ -796,8 +796,7 @@ void SaveRegisteredItems(void) {
 G_ItemDisabled
 ============
 */
-int G_ItemDisabled(gitem_t *item) {
-
+static int G_ItemDisabled(const gitem_t *item) {
 	char name[128];
 
 	Com_sprintf(name, sizeof(name), "disable_%s", item->classname);
@@ -814,7 +813,7 @@ Items can't be immediately dropped to floor, because they might
 be on an entity that hasn't spawned yet.
 ============
 */
-void G_SpawnItem(gentity_t *ent, gitem_t *item) {
+void G_SpawnItem(gentity_t *ent, const gitem_t *item) {
 	G_SpawnFloat("random", "0", &ent->random);
 	G_SpawnFloat("wait", "0", &ent->wait);
 
@@ -828,7 +827,7 @@ void G_SpawnItem(gentity_t *ent, gitem_t *item) {
 	ent->nextthink = level.time + FRAMETIME * 2;
 	ent->think = FinishSpawningItem;
 
-	ent->physicsBounce = 0.50; // items are bouncy
+	ent->physicsBounce = 0.5f; // items are bouncy
 
 	if (item->giType == IT_POWERUP) {
 		G_SoundIndex("sounds/items/powerup_respawn");

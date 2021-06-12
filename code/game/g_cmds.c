@@ -222,7 +222,7 @@ Give items to a client
 */
 static void Cmd_Give_f(gentity_t *ent) {
 	const char *name;
-	gitem_t *it;
+	const gitem_t *it;
 	int i;
 	qboolean give_all;
 	gentity_t *it_ent;
@@ -1648,7 +1648,7 @@ void Cmd_DropCartridge_f(gentity_t *ent) {
 		ent->client->ps.ammo[WP_SPRAYPISTOL]--;
 		ent->client->ps.generic1--;
 	} else if (g_gametype.integer == GT_CTF) {
-		gitem_t *item;
+		const gitem_t *item;
 		vec3_t origin;
 		int j;
 

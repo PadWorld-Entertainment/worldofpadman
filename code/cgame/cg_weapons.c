@@ -327,7 +327,8 @@ The server says this item is used on this level
 */
 void CG_RegisterWeapon(int weaponNum) {
 	weaponInfo_t *weaponInfo;
-	gitem_t *item, *ammo;
+	const gitem_t *item;
+	const gitem_t *ammo;
 	char path[MAX_QPATH];
 	vec3_t mins, maxs;
 	int i;
@@ -592,7 +593,7 @@ The server says this item is used on this level
 */
 void CG_RegisterItemVisuals(int itemNum) {
 	itemInfo_t *itemInfo;
-	gitem_t *item;
+	const gitem_t *item;
 
 	if (itemNum < 0 || itemNum >= bg_numItems) {
 		CG_Error("CG_RegisterItemVisuals: itemNum %d out of range [0-%d]", itemNum, bg_numItems - 1);

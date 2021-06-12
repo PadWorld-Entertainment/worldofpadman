@@ -175,7 +175,7 @@ void CG_DrawFlagModel(float x, float y, float w, float h, int team, qboolean for
 		}
 		CG_Draw3DModel(x, y, w, h, handle, 0, origin, angles, 1.15f, NULL); // old: 1.0f
 	} else if (cg_drawIcons.integer) {
-		gitem_t *item;
+		const gitem_t *item;
 
 		if (team == TEAM_RED) {
 			item = BG_FindItemForPowerup(PW_REDFLAG);
@@ -779,7 +779,7 @@ static void CG_WoPTeamOverlay(void) {
 					continue;
 
 				if (ci->powerups & (1 << j)) {
-					gitem_t *item;
+					const gitem_t *item;
 
 					item = BG_FindItemForPowerup(j);
 
@@ -1124,7 +1124,7 @@ static float CG_DrawPowerups(float y) {
 	int active;
 	playerState_t *ps;
 	int t;
-	gitem_t *item;
+	const gitem_t *item;
 	float size;
 	float f;
 

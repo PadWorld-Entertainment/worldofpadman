@@ -207,7 +207,7 @@ typedef struct {
 
 	int section;
 	qboolean waitingforkey;
-	char playerModel[64];
+	char playerModel[MAX_QPATH];
 	vec3_t playerViewangles;
 	vec3_t playerMoveangles;
 	int playerLegs;

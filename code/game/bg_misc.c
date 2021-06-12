@@ -41,7 +41,7 @@ spawning. "random" random number of plus or minus seconds varied from the respaw
 duration on most items.
 */
 
-gitem_t bg_itemlist[] = {
+const gitem_t bg_itemlist[] = {
 	{NULL,
 	 NULL,
 	 {NULL, NULL, NULL, NULL},
@@ -620,7 +620,7 @@ int bg_numItems = ARRAY_LEN(bg_itemlist) - 1;
 BG_FindItemForPowerup
 ==============
 */
-gitem_t *BG_FindItemForPowerup(powerup_t pw) {
+const gitem_t *BG_FindItemForPowerup(powerup_t pw) {
 	int i;
 
 	for (i = 0; i < bg_numItems; i++) {
@@ -639,7 +639,7 @@ gitem_t *BG_FindItemForPowerup(powerup_t pw) {
 BG_FindItemForHoldable
 ==============
 */
-gitem_t *BG_FindItemForHoldable(holdable_t pw) {
+const gitem_t *BG_FindItemForHoldable(holdable_t pw) {
 	int i;
 
 	for (i = 0; i < bg_numItems; i++) {
@@ -659,8 +659,8 @@ BG_FindItemForWeapon
 
 ===============
 */
-gitem_t *BG_FindItemForWeapon(weapon_t weapon) {
-	gitem_t *it;
+const gitem_t *BG_FindItemForWeapon(weapon_t weapon) {
+	const gitem_t *it;
 
 	for (it = bg_itemlist + 1; it->classname; it++) {
 		if (it->giType == IT_WEAPON && it->giTag == weapon) {
@@ -678,8 +678,8 @@ BG_FindItem
 
 ===============
 */
-gitem_t *BG_FindItem(const char *pickupName) {
-	gitem_t *it;
+const gitem_t *BG_FindItem(const char *pickupName) {
+	const gitem_t *it;
 
 	for (it = bg_itemlist + 1; it->classname; it++) {
 		if (!Q_stricmp(it->pickup_name, pickupName))
@@ -720,7 +720,7 @@ This needs to be the same for client side prediction and server use.
 ================
 */
 qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playerState_t *ps) {
-	gitem_t *item;
+	const gitem_t *item;
 
 	if (ent->modelindex < 1 || ent->modelindex >= bg_numItems) {
 		Com_Error(ERR_DROP, "BG_CanItemBeGrabbed: index out of range");

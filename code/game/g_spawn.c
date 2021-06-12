@@ -278,7 +278,7 @@ returning qfalse if not found
 */
 qboolean G_CallSpawn(gentity_t *ent) {
 	spawn_t *s;
-	gitem_t *item;
+	const gitem_t *item;
 
 	if (!ent->classname) {
 		G_Printf("G_CallSpawn: NULL classname\n");
@@ -455,7 +455,7 @@ void G_SpawnGEntityFromSpawnVars(void) {
 	const char *s;
 	const char *value;
 	const char *gametypeName;
-	gitem_t *item;
+	const gitem_t *item;
 
 	static const char *gametypeNames[] = {"ffa",  "tournament", "single", "spray",	"lps",
 										  "team", "ctl",		"sptp",	  "balloon"};

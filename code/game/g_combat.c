@@ -34,7 +34,7 @@ void BerserkerCheck(gentity_t *ent) {
 		return;
 
 	if (!(ent->client->ps.persistant[PERS_GAUNTLET_FRAG_COUNT] % 5)) {
-		gitem_t *it;
+		const gitem_t *it;
 		gentity_t *it_ent;
 		trace_t trace;
 
@@ -105,7 +105,7 @@ Toss the weapon and powerups for the killed player
 =================
 */
 void TossClientItems(gentity_t *self) {
-	gitem_t *item;
+	const gitem_t *item;
 	int weapon;
 	float angle;
 	int i;
@@ -153,13 +153,13 @@ void TossClientItems(gentity_t *self) {
 				Drop_Item(self, BG_FindItem("red Cartridge"), random() * 360); // pickup name ändern !!!
 
 			Drop_Item(self, BG_FindItem("blue Cartridge"), random() * 360)->nextthink =
-				level.time + 120000; // pickup name ändern !!!
+				level.time + 120000; // change pickup name!!!
 		} else if (self->client->sess.sessionTeam == TEAM_BLUE) {
 			for (; self->client->ps.ammo[WP_SPRAYPISTOL] > 0; self->client->ps.ammo[WP_SPRAYPISTOL]--)
 				Drop_Item(self, BG_FindItem("blue Cartridge"), random() * 360); // pickup name ändern !!!
 
 			Drop_Item(self, BG_FindItem("red Cartridge"), random() * 360)->nextthink =
-				level.time + 120000; // pickup name ändern !!!
+				level.time + 120000; // change pickup name!!!
 		}
 		// other->client->ps.generic1=other->client->ps.ammo[WP_SPRAYPISTOL];
 		self->client->ps.generic1 = 0;
