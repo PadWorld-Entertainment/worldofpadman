@@ -43,8 +43,8 @@ SETUP MENU
 #define CONTROLS1 "menu/buttons/controls1"
 #define SYSTEM0 "menu/buttons/system0"
 #define SYSTEM1 "menu/buttons/system1"
-#define OPTIONS0 "menu/buttons/game0"
-#define OPTIONS1 "menu/buttons/game1"
+#define OPTIONS0 "menu/buttons/options0"
+#define OPTIONS1 "menu/buttons/options1"
 #define DEFAULTS0 "menu/buttons/defaults0"
 #define DEFAULTS1 "menu/buttons/defaults1"
 #define BACK0 "menu/buttons/back0"
@@ -78,7 +78,7 @@ static setupMenuInfo_t setupMenuInfo;
 #define YES1 "menu/buttons/yes1"
 #define NO0 "menu/buttons/no0"
 #define NO1 "menu/buttons/no1"
-// BACK0, BACK1 used from setup menu
+// BACK0, BACK1 used from SETUP MENU
 
 typedef struct {
 	menuframework_s menu;
@@ -241,7 +241,7 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.Player.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.Player.generic.name = PLAYER0;
 	setupMenuInfo.Player.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.Player.generic.x = 59;
+	setupMenuInfo.Player.generic.x = 42;
 	setupMenuInfo.Player.generic.y = 46;
 	setupMenuInfo.Player.generic.id = ID_CUSTOMIZEPLAYER;
 	setupMenuInfo.Player.generic.callback = UI_SetupMenu_Event;
@@ -254,7 +254,7 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.Controls.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.Controls.generic.name = CONTROLS0;
 	setupMenuInfo.Controls.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.Controls.generic.x = 40;
+	setupMenuInfo.Controls.generic.x = 30;
 	setupMenuInfo.Controls.generic.y = 87;
 	setupMenuInfo.Controls.generic.id = ID_CUSTOMIZECONTROLS;
 	setupMenuInfo.Controls.generic.callback = UI_SetupMenu_Event;
@@ -267,7 +267,7 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.System.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.System.generic.name = SYSTEM0;
 	setupMenuInfo.System.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.System.generic.x = 42;
+	setupMenuInfo.System.generic.x = 59;
 	setupMenuInfo.System.generic.y = 127;
 	setupMenuInfo.System.generic.id = ID_SYSTEMCONFIG;
 	setupMenuInfo.System.generic.callback = UI_SetupMenu_Event;
@@ -280,11 +280,11 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.Options.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.Options.generic.name = OPTIONS0;
 	setupMenuInfo.Options.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.Options.generic.x = 60;
+	setupMenuInfo.Options.generic.x = 41;
 	setupMenuInfo.Options.generic.y = 167;
 	setupMenuInfo.Options.generic.id = ID_GAME;
 	setupMenuInfo.Options.generic.callback = UI_SetupMenu_Event;
-	setupMenuInfo.Options.width = 80;
+	setupMenuInfo.Options.width = 120;
 	setupMenuInfo.Options.height = 40;
 	setupMenuInfo.Options.focuspic = OPTIONS1;
 	setupMenuInfo.Options.focuspicinstead = qtrue;
@@ -294,7 +294,7 @@ static void UI_SetupMenu_Init(void) {
 		setupMenuInfo.Defaults.generic.type = MTYPE_BITMAP;
 		setupMenuInfo.Defaults.generic.name = DEFAULTS0;
 		setupMenuInfo.Defaults.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-		setupMenuInfo.Defaults.generic.x = 32;
+		setupMenuInfo.Defaults.generic.x = 41;
 		setupMenuInfo.Defaults.generic.y = 207;
 		setupMenuInfo.Defaults.generic.id = ID_DEFAULTS;
 		setupMenuInfo.Defaults.generic.callback = UI_SetupMenu_Event;
