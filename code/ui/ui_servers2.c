@@ -41,9 +41,8 @@ MULTIPLAYER MENU (SERVER BROWSER)
 #define MAX_LEAGUELENGTH 28
 #define MAX_LISTBOXWIDTH 64
 
-// FIXME: Paths are horrible
-#define ART_BACK0 "menu/BtnBack0"
-#define ART_BACK1 "menu/BtnBack1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 #define ART_SPECIFY0 "menu/server/specify0"
 #define ART_SPECIFY1 "menu/server/specify1"
 #define ART_REFRESH0 "menu/server/refresh0"
@@ -1570,7 +1569,7 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.addAllFav.focuscolor = color_red;
 
 	g_arenaservers.back.generic.type = MTYPE_BITMAP;
-	g_arenaservers.back.generic.name = ART_BACK0;
+	g_arenaservers.back.generic.name = BACK0;
 	g_arenaservers.back.generic.flags = (QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS);
 	g_arenaservers.back.generic.callback = ArenaServers_Event;
 	g_arenaservers.back.generic.id = ID_BACK;
@@ -1578,7 +1577,7 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.back.generic.y = 440;
 	g_arenaservers.back.width = 80;
 	g_arenaservers.back.height = 40;
-	g_arenaservers.back.focuspic = ART_BACK1;
+	g_arenaservers.back.focuspic = BACK1;
 
 	g_arenaservers.specify.generic.type = MTYPE_BITMAP1024S;
 	g_arenaservers.specify.x = 360;
@@ -1673,8 +1672,8 @@ ArenaServers_Cache
 =================
 */
 void ArenaServers_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_BACK0);
-	trap_R_RegisterShaderNoMip(ART_BACK1);
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(ART_SPECIFY0);
 	trap_R_RegisterShaderNoMip(ART_SPECIFY1);
 	trap_R_RegisterShaderNoMip(ART_REFRESH0);

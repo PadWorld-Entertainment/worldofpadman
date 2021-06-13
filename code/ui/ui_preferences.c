@@ -30,8 +30,8 @@ GAME OPTIONS MENU
 
 #include "ui_local.h"
 
-#define ART_BACK0 "menu/BtnBack0"
-#define ART_BACK1 "menu/BtnBack1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 
 #define PREFERENCES_X_POS 534
 
@@ -727,7 +727,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.more.style = UI_CENTER | UI_SMALLFONT;
 
 	s_preferences.back.generic.type = MTYPE_BITMAP;
-	s_preferences.back.generic.name = ART_BACK0;
+	s_preferences.back.generic.name = BACK0;
 	s_preferences.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_preferences.back.generic.x = 552; // 8;
 	s_preferences.back.generic.y = 440;
@@ -735,7 +735,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.back.generic.callback = Preferences_Event;
 	s_preferences.back.width = 80;
 	s_preferences.back.height = 40;
-	s_preferences.back.focuspic = ART_BACK1;
+	s_preferences.back.focuspic = BACK1;
 	s_preferences.back.focuspicinstead = qtrue;
 
 	/*
@@ -797,8 +797,8 @@ Preferences_Cache
 void Preferences_Cache(void) {
 	int n;
 
-	trap_R_RegisterShaderNoMip(ART_BACK0);
-	trap_R_RegisterShaderNoMip(ART_BACK1);
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 	for (n = 0; n < NUM_CROSSHAIRS; n++) {
 		s_preferences.crosshairShader[n] = trap_R_RegisterShaderNoMip(va("gfx/2d/crosshair%c", 'a' + n));
 	}

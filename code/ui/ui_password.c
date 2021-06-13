@@ -27,15 +27,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		SPECIFY PASSWORD
 *********************************************************************************/
 
-#define SPECIFYSERVER_BACK0 "menu/BtnBack0"
-#define SPECIFYSERVER_BACK1 "menu/BtnBack1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 #define SPECIFYSERVER_FIGHT0 "menu/specify/fight0"
 #define SPECIFYSERVER_FIGHT1 "menu/specify/fight1"
 
 #define ID_SPECIFYPASSWORDBACK 102
 #define ID_SPECIFYPASSWORDGO 103
 
-static char *specifypassword_artlist[] = {SPECIFYSERVER_BACK0, SPECIFYSERVER_BACK1, SPECIFYSERVER_FIGHT0,
+static char *specifypassword_artlist[] = {BACK0, BACK1, SPECIFYSERVER_FIGHT0,
 										  SPECIFYSERVER_FIGHT1, NULL};
 
 typedef struct {
@@ -120,7 +120,7 @@ static void SpecifyPassword_MenuInit(void) {
 	trap_Cvar_VariableStringBuffer("password", s_specifypassword.password.field.buffer, 80);
 
 	s_specifypassword.back.generic.type = MTYPE_BITMAP;
-	s_specifypassword.back.generic.name = SPECIFYSERVER_BACK0;
+	s_specifypassword.back.generic.name = BACK0;
 	s_specifypassword.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_specifypassword.back.generic.x = 8;
 	s_specifypassword.back.generic.y = 440;
@@ -128,7 +128,7 @@ static void SpecifyPassword_MenuInit(void) {
 	s_specifypassword.back.generic.callback = SpecifyPassword_Event;
 	s_specifypassword.back.width = 80;
 	s_specifypassword.back.height = 40;
-	s_specifypassword.back.focuspic = SPECIFYSERVER_BACK1;
+	s_specifypassword.back.focuspic = BACK1;
 	s_specifypassword.back.focuspicinstead = qtrue;
 
 	s_specifypassword.go.generic.type = MTYPE_BITMAP1024S;

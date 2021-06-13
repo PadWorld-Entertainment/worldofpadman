@@ -21,8 +21,8 @@ BGP_STARTSERVERBOTS
 #define STARTSERVER_ARROWRIGHT1 "menu/startserver/arrowright1"
 #define STARTSERVER_SELECTBOTS0 "menu/buttons/selectbots0"
 #define STARTSERVER_SELECTBOTS1 "menu/buttons/selectbots1"
-#define STARTSERVER_BACK0 "menu/buttons/back0"
-#define STARTSERVER_BACK1 "menu/buttons/back1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 
 #define GAMESERVER_UNKNOWNMAP "menu/art/unknownmap"
 
@@ -712,11 +712,11 @@ static void StartServer_MenuInit(void) {
 	s_startserver.arrowright.generic.id = ID_NEXTPAGE;
 
 	s_startserver.back.generic.type = MTYPE_BITMAP;
-	s_startserver.back.generic.name = STARTSERVER_BACK0;
+	s_startserver.back.generic.name = BACK0;
 	s_startserver.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_startserver.back.generic.callback = StartServer_MenuEvent;
 	s_startserver.back.generic.id = ID_STARTSERVERBACK;
-	s_startserver.back.focuspic = STARTSERVER_BACK1;
+	s_startserver.back.focuspic = BACK1;
 	s_startserver.back.generic.x = 8;
 	s_startserver.back.generic.y = 440;
 	s_startserver.back.width = 80;
@@ -893,8 +893,8 @@ void StartServer_Cache(void) {
 	trap_R_RegisterShaderNoMip(STARTSERVER_ARROWRIGHT1);
 	trap_R_RegisterShaderNoMip(STARTSERVER_SELECTBOTS0);
 	trap_R_RegisterShaderNoMip(STARTSERVER_SELECTBOTS1);
-	trap_R_RegisterShaderNoMip(STARTSERVER_BACK0);
-	trap_R_RegisterShaderNoMip(STARTSERVER_BACK1);
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 
 	trap_R_RegisterShaderNoMip(GAMESERVER_UNKNOWNMAP);
 
@@ -946,7 +946,7 @@ BOT SELECT MENU *****
 #define BOTSELECT_ARROWS "menu/art/gs_arrows_0"
 #define BOTSELECT_ARROWSL "menu/art/gs_arrows_l"
 #define BOTSELECT_ARROWSR "menu/art/gs_arrows_r"
-// STARTSERVER_BACK0, STARTSERVER_BACK1 used from start server menu
+// BACK0, BACK1 used from start server menu
 
 #define PLAYERGRID_COLS 4 // 3
 #define PLAYERGRID_ROWS 4

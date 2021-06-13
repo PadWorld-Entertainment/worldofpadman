@@ -26,8 +26,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ART_FRAMER "menu/art/frame1_r"
 #define ART_MODEL0 "menu/art/model_0"
 #define ART_MODEL1 "menu/art/model_1"
-#define ART_BACK0 "menu/art/back_0"
-#define ART_BACK1 "menu/art/back_1"
 #define ART_FX_BASE "menu/art/fx_base"
 #define ART_FX_BLUE "menu/art/fx_blue"
 #define ART_FX_CYAN "menu/art/fx_cyan"
@@ -37,8 +35,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ART_FX_WHITE "menu/art/fx_white"
 #define ART_FX_YELLOW "menu/art/fx_yel"
 
-#define BACK0 "menu/BtnBack0"
-#define BACK1 "menu/BtnBack1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 
 #define ID_NAME 10
 #define ID_HANDICAP 11
@@ -959,8 +957,6 @@ void PlayerSettings_Cache(void) {
 	trap_R_RegisterShaderNoMip(ART_FRAMER);
 	trap_R_RegisterShaderNoMip(ART_MODEL0);
 	trap_R_RegisterShaderNoMip(ART_MODEL1);
-	trap_R_RegisterShaderNoMip(ART_BACK0);
-	trap_R_RegisterShaderNoMip(ART_BACK1);
 
 	s_playersettings.fxBasePic = trap_R_RegisterShaderNoMip(ART_FX_BASE);
 	s_playersettings.fxPic[0] = trap_R_RegisterShaderNoMip(ART_FX_RED);

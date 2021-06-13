@@ -1142,7 +1142,7 @@ static void Controls_MenuInit(void) {
 	s_controls.back.generic.type = MTYPE_BITMAP;
 	s_controls.back.generic.name = BACK0;
 	s_controls.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	s_controls.back.generic.x = 549;
+	s_controls.back.generic.x = 552;
 	s_controls.back.generic.y = 440;
 	s_controls.back.generic.id = ID_BACK;
 	s_controls.back.generic.callback = Controls_MenuEvent;

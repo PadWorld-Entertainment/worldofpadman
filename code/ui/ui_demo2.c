@@ -30,8 +30,8 @@ DEMOS MENU
 
 #include "ui_local.h"
 
-#define ART_BACK0 "menu/BtnBack0"
-#define ART_BACK1 "menu/BtnBack1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 #define ART_GO0 "menu/demo/play0"
 #define ART_GO1 "menu/demo/play1"
 #define ART_ARROWUP0 "menu/demo/arrowup0"
@@ -158,7 +158,7 @@ static void Demos_MenuInit(void) {
 	s_demos.right.generic.id = ID_RIGHT;
 
 	s_demos.back.generic.type = MTYPE_BITMAP;
-	s_demos.back.generic.name = ART_BACK0;
+	s_demos.back.generic.name = BACK0;
 	s_demos.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_demos.back.generic.x = 8;
 	s_demos.back.generic.y = 440;
@@ -166,7 +166,7 @@ static void Demos_MenuInit(void) {
 	s_demos.back.generic.callback = Demos_MenuEvent;
 	s_demos.back.width = 80;
 	s_demos.back.height = 40;
-	s_demos.back.focuspic = ART_BACK1;
+	s_demos.back.focuspic = BACK1;
 	s_demos.back.focuspicinstead = qtrue;
 
 	s_demos.go.generic.type = MTYPE_BITMAP1024S;
@@ -237,8 +237,8 @@ Demos_Cache
 =================
 */
 void Demos_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_BACK0);
-	trap_R_RegisterShaderNoMip(ART_BACK1);
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(ART_GO0);
 	trap_R_RegisterShaderNoMip(ART_GO1);
 	trap_R_RegisterShaderNoMip(ART_ARROWUP0);

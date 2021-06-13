@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #include "ui_local.h"
 
-#define ART_BACK0 "menu/BtnBack0"
-#define ART_BACK1 "menu/BtnBack1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 #define ART_FIGHT0 "menu/mods/load0"
 #define ART_FIGHT1 "menu/mods/load1"
 #define ART_ARROWUP0 "menu/mods/arrowup0"
@@ -200,7 +200,7 @@ static void UI_Mods_MenuInit(void) {
 	s_mods.menu.bgparts = BGP_MODSBG | BGP_SIMPLEBG;
 
 	s_mods.back.generic.type = MTYPE_BITMAP;
-	s_mods.back.generic.name = ART_BACK0;
+	s_mods.back.generic.name = BACK0;
 	s_mods.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_mods.back.generic.x = 8;
 	s_mods.back.generic.y = 440;
@@ -208,7 +208,7 @@ static void UI_Mods_MenuInit(void) {
 	s_mods.back.generic.callback = UI_Mods_MenuEvent;
 	s_mods.back.width = 80;
 	s_mods.back.height = 40;
-	s_mods.back.focuspic = ART_BACK1;
+	s_mods.back.focuspic = BACK1;
 	s_mods.back.focuspicinstead = qtrue;
 
 	s_mods.go.generic.type = MTYPE_BITMAP1024S;
@@ -266,8 +266,8 @@ UI_Mods_Cache
 =================
 */
 void UI_ModsMenu_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_BACK0);
-	trap_R_RegisterShaderNoMip(ART_BACK1);
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(ART_FIGHT0);
 	trap_R_RegisterShaderNoMip(ART_FIGHT1);
 	trap_R_RegisterShaderNoMip(ART_ARROWUP0);
