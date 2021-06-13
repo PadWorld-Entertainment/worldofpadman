@@ -633,7 +633,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	s_graphicsoptions.graphics.generic.callback = GraphicsOptions_Event;
 	s_graphicsoptions.graphics.generic.id = ID_GRAPHICS;
-	s_graphicsoptions.graphics.generic.x = 26;
+	s_graphicsoptions.graphics.generic.x = 16;
 	s_graphicsoptions.graphics.generic.y = 37;
 	s_graphicsoptions.graphics.width = 160;
 	s_graphicsoptions.graphics.height = 40;
@@ -645,7 +645,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.display.generic.callback = GraphicsOptions_Event;
 	s_graphicsoptions.display.generic.id = ID_DISPLAY;
-	s_graphicsoptions.display.generic.x = 159;
+	s_graphicsoptions.display.generic.x = 169;
 	s_graphicsoptions.display.generic.y = 30;
 	s_graphicsoptions.display.width = 120;
 	s_graphicsoptions.display.height = 40;
@@ -657,8 +657,8 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.sound.generic.callback = GraphicsOptions_Event;
 	s_graphicsoptions.sound.generic.id = ID_SOUND;
-	s_graphicsoptions.sound.generic.x = 40;
-	s_graphicsoptions.sound.generic.y = 77;
+	s_graphicsoptions.sound.generic.x = 36;
+	s_graphicsoptions.sound.generic.y = 79;
 	s_graphicsoptions.sound.width = 120;
 	s_graphicsoptions.sound.height = 40;
 	s_graphicsoptions.sound.focuspic = SOUND1;
@@ -669,8 +669,8 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.network.generic.callback = GraphicsOptions_Event;
 	s_graphicsoptions.network.generic.id = ID_NETWORK;
-	s_graphicsoptions.network.generic.x = 170;
-	s_graphicsoptions.network.generic.y = 80;
+	s_graphicsoptions.network.generic.x = 142;
+	s_graphicsoptions.network.generic.y = 82;
 	s_graphicsoptions.network.width = 160;
 	s_graphicsoptions.network.height = 40;
 	s_graphicsoptions.network.focuspic = NETWORK1;
@@ -802,7 +802,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_graphicsoptions.back.generic.callback = GraphicsOptions_Event;
 	s_graphicsoptions.back.generic.id = ID_BACK2;
-	s_graphicsoptions.back.generic.x = 9;
+	s_graphicsoptions.back.generic.x = 8;
 	s_graphicsoptions.back.generic.y = 440;
 	s_graphicsoptions.back.width = 80;
 	s_graphicsoptions.back.height = 40;

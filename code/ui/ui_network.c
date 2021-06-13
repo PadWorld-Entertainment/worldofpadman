@@ -137,7 +137,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.graphics.generic.callback = UI_NetworkOptionsMenu_Event;
 	networkOptionsInfo.graphics.generic.id = ID_GRAPHICS;
-	networkOptionsInfo.graphics.generic.x = 26;
+	networkOptionsInfo.graphics.generic.x = 16;
 	networkOptionsInfo.graphics.generic.y = 37;
 	networkOptionsInfo.graphics.width = 160;
 	networkOptionsInfo.graphics.height = 40;
@@ -149,7 +149,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.display.generic.callback = UI_NetworkOptionsMenu_Event;
 	networkOptionsInfo.display.generic.id = ID_DISPLAY;
-	networkOptionsInfo.display.generic.x = 159;
+	networkOptionsInfo.display.generic.x = 169;
 	networkOptionsInfo.display.generic.y = 30;
 	networkOptionsInfo.display.width = 120;
 	networkOptionsInfo.display.height = 40;
@@ -161,8 +161,8 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.sound.generic.callback = UI_NetworkOptionsMenu_Event;
 	networkOptionsInfo.sound.generic.id = ID_SOUND;
-	networkOptionsInfo.sound.generic.x = 40;
-	networkOptionsInfo.sound.generic.y = 77;
+	networkOptionsInfo.sound.generic.x = 36;
+	networkOptionsInfo.sound.generic.y = 79;
 	networkOptionsInfo.sound.width = 120;
 	networkOptionsInfo.sound.height = 40;
 	networkOptionsInfo.sound.focuspic = SOUND1;
@@ -173,8 +173,8 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	networkOptionsInfo.network.generic.callback = UI_NetworkOptionsMenu_Event;
 	networkOptionsInfo.network.generic.id = ID_NETWORK;
-	networkOptionsInfo.network.generic.x = 170;
-	networkOptionsInfo.network.generic.y = 80;
+	networkOptionsInfo.network.generic.x = 142;
+	networkOptionsInfo.network.generic.y = 82;
 	networkOptionsInfo.network.width = 160;
 	networkOptionsInfo.network.height = 40;
 	networkOptionsInfo.network.focuspic = NETWORK1;
@@ -207,7 +207,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	networkOptionsInfo.back.generic.callback = UI_NetworkOptionsMenu_Event;
 	networkOptionsInfo.back.generic.id = ID_BACK;
-	networkOptionsInfo.back.generic.x = 9;
+	networkOptionsInfo.back.generic.x = 8;
 	networkOptionsInfo.back.generic.y = 440;
 	networkOptionsInfo.back.width = 80;
 	networkOptionsInfo.back.height = 40;

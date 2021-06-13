@@ -1118,8 +1118,8 @@ static void Controls_MenuInit(void) {
 	s_controls.weapons.generic.type = MTYPE_BITMAP;
 	s_controls.weapons.generic.name = WEAPONS0;
 	s_controls.weapons.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.weapons.generic.x = 400;
-	s_controls.weapons.generic.y = 80;
+	s_controls.weapons.generic.x = 390;
+	s_controls.weapons.generic.y = 84;
 	s_controls.weapons.generic.id = ID_WEAPONS;
 	s_controls.weapons.generic.callback = Controls_MenuEvent;
 	s_controls.weapons.width = 120;
@@ -1130,7 +1130,7 @@ static void Controls_MenuInit(void) {
 	s_controls.misc.generic.type = MTYPE_BITMAP;
 	s_controls.misc.generic.name = MISC0;
 	s_controls.misc.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.misc.generic.x = 520;
+	s_controls.misc.generic.x = 508;
 	s_controls.misc.generic.y = 90;
 	s_controls.misc.generic.id = ID_MISC;
 	s_controls.misc.generic.callback = Controls_MenuEvent;
