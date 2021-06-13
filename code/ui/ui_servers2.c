@@ -43,10 +43,12 @@ MULTIPLAYER MENU (SERVER BROWSER)
 
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-#define ART_SPECIFY0 "menu/server/specify0"
-#define ART_SPECIFY1 "menu/server/specify1"
-#define ART_REFRESH0 "menu/server/refresh0"
-#define ART_REFRESH1 "menu/server/refresh1"
+#define SPECIFY0 "menu/buttons/specify0"
+#define SPECIFY1 "menu/buttons/specify1"
+#define REFRESH0 "menu/buttons/refresh0"
+#define REFRESH1 "menu/buttons/refresh1"
+#define DELETE0 "menu/buttons/delete0"
+#define DELETE1 "menu/buttons/delete1"
 #define ART_CONNECT0 "menu/server/fight0"
 #define ART_CONNECT1 "menu/server/fight1"
 #define ART_ARROWS_UP0 "menu/server/arrowup0"
@@ -54,8 +56,6 @@ MULTIPLAYER MENU (SERVER BROWSER)
 #define ART_ARROWS_DOWN0 "menu/server/arrowdown0"
 #define ART_ARROWS_DOWN1 "menu/server/arrowdown1"
 #define ART_UNKNOWNMAP "menu/art/unknownmap"
-#define ART_REMOVE0 "menu/server/delete0"
-#define ART_REMOVE1 "menu/server/delete1"
 
 #define ID_MASTER 10
 #define ID_GAMETYPE 11
@@ -1534,23 +1534,13 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.statusbar.style = UI_CENTER | UI_SMALLFONT;
 	g_arenaservers.statusbar.color = text_color_normal;
 
-	g_arenaservers.remove.generic.type = MTYPE_BITMAP1024S;
-	g_arenaservers.remove.x = 810;
-	g_arenaservers.remove.y = 89;
-	g_arenaservers.remove.w = 133;
-	g_arenaservers.remove.h = 83;
-	g_arenaservers.remove.shader = trap_R_RegisterShaderNoMip(ART_REMOVE0);
-	g_arenaservers.remove.mouseovershader = trap_R_RegisterShaderNoMip(ART_REMOVE1);
-	g_arenaservers.remove.generic.callback = ArenaServers_Event;
-	g_arenaservers.remove.generic.id = ID_REMOVE;
-
 	g_arenaservers.addFav.generic.type = MTYPE_TEXTS;
 	g_arenaservers.addFav.fontHeight = 16.0f;
 	g_arenaservers.addFav.generic.flags = QMF_PULSEIFFOCUS;
 	g_arenaservers.addFav.generic.callback = ArenaServers_Event;
 	g_arenaservers.addFav.generic.id = ID_ADDTOFAV;
-	g_arenaservers.addFav.generic.x = 465;
-	g_arenaservers.addFav.generic.y = 20;
+	g_arenaservers.addFav.generic.x = 460;
+	g_arenaservers.addFav.generic.y = 32;
 	g_arenaservers.addFav.string = "Add to Favorites";
 	g_arenaservers.addFav.style = UI_SMALLFONT;
 	g_arenaservers.addFav.color = color_orange;
@@ -1561,8 +1551,8 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.addAllFav.generic.flags = QMF_PULSEIFFOCUS;
 	g_arenaservers.addAllFav.generic.callback = ArenaServers_Event;
 	g_arenaservers.addAllFav.generic.id = ID_ADDALLTOFAV;
-	g_arenaservers.addAllFav.generic.x = 465;
-	g_arenaservers.addAllFav.generic.y = 40;
+	g_arenaservers.addAllFav.generic.x = 460;
+	g_arenaservers.addAllFav.generic.y = 48;
 	g_arenaservers.addAllFav.string = "Add all to Favorites";
 	g_arenaservers.addAllFav.style = UI_SMALLFONT;
 	g_arenaservers.addAllFav.color = color_orange;
@@ -1579,25 +1569,35 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.back.height = 40;
 	g_arenaservers.back.focuspic = BACK1;
 
-	g_arenaservers.specify.generic.type = MTYPE_BITMAP1024S;
-	g_arenaservers.specify.x = 360;
-	g_arenaservers.specify.y = 674;
+	g_arenaservers.specify.generic.type = MTYPE_BITMAP;
+	g_arenaservers.specify.x = 120;
+	g_arenaservers.specify.y = 420;
 	g_arenaservers.specify.w = 120;
-	g_arenaservers.specify.h = 60;
-	g_arenaservers.specify.shader = trap_R_RegisterShaderNoMip(ART_SPECIFY0);
-	g_arenaservers.specify.mouseovershader = trap_R_RegisterShaderNoMip(ART_SPECIFY1);
+	g_arenaservers.specify.h = 40;
+	g_arenaservers.specify.shader = SPECIFY0;
+	g_arenaservers.specify.mouseovershader = SPECIFY1;
 	g_arenaservers.specify.generic.callback = ArenaServers_Event;
 	g_arenaservers.specify.generic.id = ID_SPECIFY;
 
-	g_arenaservers.refresh.generic.type = MTYPE_BITMAP1024S;
-	g_arenaservers.refresh.x = 530;
-	g_arenaservers.refresh.y = 674;
+	g_arenaservers.refresh.generic.type = MTYPE_BITMAP;
+	g_arenaservers.refresh.x = 260;
+	g_arenaservers.refresh.y = 420;
 	g_arenaservers.refresh.w = 120;
-	g_arenaservers.refresh.h = 60;
-	g_arenaservers.refresh.shader = trap_R_RegisterShaderNoMip(ART_REFRESH0);
-	g_arenaservers.refresh.mouseovershader = trap_R_RegisterShaderNoMip(ART_REFRESH1);
+	g_arenaservers.refresh.h = 40;
+	g_arenaservers.refresh.shader = REFRESH0;
+	g_arenaservers.refresh.mouseovershader = REFRESH1;
 	g_arenaservers.refresh.generic.callback = ArenaServers_Event;
 	g_arenaservers.refresh.generic.id = ID_REFRESH;
+
+	g_arenaservers.remove.generic.type = MTYPE_BITMAP;
+	g_arenaservers.remove.x = 400;
+	g_arenaservers.remove.y = 420;
+	g_arenaservers.remove.w = 120;
+	g_arenaservers.remove.h = 40;
+	g_arenaservers.remove.shader = DELETE0;
+	g_arenaservers.remove.mouseovershader = DELETE1;
+	g_arenaservers.remove.generic.callback = ArenaServers_Event;
+	g_arenaservers.remove.generic.id = ID_REMOVE;
 
 	g_arenaservers.go.generic.type = MTYPE_BITMAP1024S;
 	g_arenaservers.go.x = 865;
@@ -1627,11 +1627,12 @@ static void ArenaServers_MenuInit(void) {
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.addFav);
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.addAllFav);
 
-	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.remove);
-	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.back);
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.specify);
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.refresh);
+	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.remove);
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.go);
+
+	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.back);
 
 	ArenaServers_LoadFavorites();
 
@@ -1674,10 +1675,12 @@ ArenaServers_Cache
 void ArenaServers_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
-	trap_R_RegisterShaderNoMip(ART_SPECIFY0);
-	trap_R_RegisterShaderNoMip(ART_SPECIFY1);
-	trap_R_RegisterShaderNoMip(ART_REFRESH0);
-	trap_R_RegisterShaderNoMip(ART_REFRESH1);
+	trap_R_RegisterShaderNoMip(SPECIFY0);
+	trap_R_RegisterShaderNoMip(SPECIFY1);
+	trap_R_RegisterShaderNoMip(REFRESH0);
+	trap_R_RegisterShaderNoMip(REFRESH1);
+	trap_R_RegisterShaderNoMip(DELETE0);
+	trap_R_RegisterShaderNoMip(DELETE1);
 	trap_R_RegisterShaderNoMip(ART_CONNECT0);
 	trap_R_RegisterShaderNoMip(ART_CONNECT1);
 	trap_R_RegisterShaderNoMip(ART_ARROWS_UP0);
