@@ -30,16 +30,16 @@ CONTROLS MENU
 
 #include "ui_local.h"
 
-#define ART_BACK0 "menu/btnback0"
-#define ART_BACK1 "menu/btnback1"
-#define LOOK0 "menu/controls/look0"
-#define LOOK1 "menu/controls/look1"
-#define MOVEMENT0 "menu/controls/move0"
-#define MOVEMENT1 "menu/controls/move1"
-#define WEAPONS0 "menu/controls/shoot0"
-#define WEAPONS1 "menu/controls/shoot1"
-#define MISC0 "menu/controls/misc0"
-#define MISC1 "menu/controls/misc1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
+#define LOOK0 "menu/buttons/look0"
+#define LOOK1 "menu/buttons/look1"
+#define MOVEMENT0 "menu/buttons/move0"
+#define MOVEMENT1 "menu/buttons/move1"
+#define WEAPONS0 "menu/buttons/shoot0"
+#define WEAPONS1 "menu/buttons/shoot1"
+#define MISC0 "menu/buttons/misc0"
+#define MISC1 "menu/buttons/misc1"
 
 typedef struct {
 	const char *command;
@@ -1098,7 +1098,7 @@ static void Controls_MenuInit(void) {
 	s_controls.looking.generic.y = 40;
 	s_controls.looking.generic.id = ID_LOOKING;
 	s_controls.looking.generic.callback = Controls_MenuEvent;
-	s_controls.looking.width = 75;
+	s_controls.looking.width = 80;
 	s_controls.looking.height = 40;
 	s_controls.looking.focuspic = LOOK1;
 	s_controls.looking.focuspicinstead = qtrue;
@@ -1106,8 +1106,8 @@ static void Controls_MenuInit(void) {
 	s_controls.movement.generic.type = MTYPE_BITMAP;
 	s_controls.movement.generic.name = MOVEMENT0;
 	s_controls.movement.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.movement.generic.x = 509 - 9;
-	s_controls.movement.generic.y = 50 - 5;
+	s_controls.movement.generic.x = 500;
+	s_controls.movement.generic.y = 45;
 	s_controls.movement.generic.id = ID_MOVEMENT;
 	s_controls.movement.generic.callback = Controls_MenuEvent;
 	s_controls.movement.width = 80;
@@ -1118,11 +1118,11 @@ static void Controls_MenuInit(void) {
 	s_controls.weapons.generic.type = MTYPE_BITMAP;
 	s_controls.weapons.generic.name = WEAPONS0;
 	s_controls.weapons.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.weapons.generic.x = 480 - 2;
-	s_controls.weapons.generic.y = 105 - 15;
+	s_controls.weapons.generic.x = 400;
+	s_controls.weapons.generic.y = 80;
 	s_controls.weapons.generic.id = ID_WEAPONS;
 	s_controls.weapons.generic.callback = Controls_MenuEvent;
-	s_controls.weapons.width = 105;
+	s_controls.weapons.width = 120;
 	s_controls.weapons.height = 40;
 	s_controls.weapons.focuspic = WEAPONS1;
 	s_controls.weapons.focuspicinstead = qtrue;
@@ -1130,17 +1130,17 @@ static void Controls_MenuInit(void) {
 	s_controls.misc.generic.type = MTYPE_BITMAP;
 	s_controls.misc.generic.name = MISC0;
 	s_controls.misc.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.misc.generic.x = 398 + 3;
-	s_controls.misc.generic.y = 88 - 9;
+	s_controls.misc.generic.x = 520;
+	s_controls.misc.generic.y = 90;
 	s_controls.misc.generic.id = ID_MISC;
 	s_controls.misc.generic.callback = Controls_MenuEvent;
-	s_controls.misc.width = 75;
+	s_controls.misc.width = 80;
 	s_controls.misc.height = 40;
 	s_controls.misc.focuspic = MISC1;
 	s_controls.misc.focuspicinstead = qtrue;
 
 	s_controls.back.generic.type = MTYPE_BITMAP;
-	s_controls.back.generic.name = ART_BACK0;
+	s_controls.back.generic.name = BACK0;
 	s_controls.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_controls.back.generic.x = 549;
 	s_controls.back.generic.y = 440;
@@ -1148,7 +1148,7 @@ static void Controls_MenuInit(void) {
 	s_controls.back.generic.callback = Controls_MenuEvent;
 	s_controls.back.width = 80;
 	s_controls.back.height = 40;
-	s_controls.back.focuspic = ART_BACK1;
+	s_controls.back.focuspic = BACK1;
 	s_controls.back.focuspicinstead = qtrue;
 
 	s_controls.walkforward.generic.type = MTYPE_ACTION;
@@ -1490,8 +1490,8 @@ Controls_Cache
 =================
 */
 void Controls_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_BACK0);
-	trap_R_RegisterShaderNoMip(ART_BACK1);
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 
 	trap_R_RegisterShaderNoMip(LOOK0);
 	trap_R_RegisterShaderNoMip(LOOK1);
