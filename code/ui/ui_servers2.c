@@ -173,10 +173,10 @@ typedef struct {
 	menutext_s addFav;
 	menutext_s addAllFav;
 
-	menubitmap1024s_s remove;
 	menubitmap_s back;
-	menubitmap1024s_s refresh;
-	menubitmap1024s_s specify;
+	menubitmap_s refresh;
+	menubitmap_s specify;
+	menubitmap_s remove;
 	menubitmap1024s_s go;
 
 	pinglist_t pinglist[MAX_PINGREQUESTS];
