@@ -1314,8 +1314,8 @@ UI_BotSelectMenu_Cache
 =================
 */
 void UI_BotSelectMenu_Cache(void) {
-	trap_R_RegisterShaderNoMip(STARTSERVER_BACK0);
-	trap_R_RegisterShaderNoMip(STARTSERVER_BACK1);
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(BOTSELECT_ACCEPT0);
 	trap_R_RegisterShaderNoMip(BOTSELECT_ACCEPT1);
 	trap_R_RegisterShaderNoMip(BOTSELECT_SELECT);
@@ -1599,14 +1599,14 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.slotsleft.color = color_yellow;
 
 	botSelectInfo.back.generic.type = MTYPE_BITMAP;
-	botSelectInfo.back.generic.name = STARTSERVER_BACK0;
+	botSelectInfo.back.generic.name = BACK0;
 	botSelectInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	botSelectInfo.back.generic.callback = UI_BotSelectMenu_BackEvent;
 	botSelectInfo.back.generic.x = 552;
 	botSelectInfo.back.generic.y = 440;
 	botSelectInfo.back.width = 80;
 	botSelectInfo.back.height = 40;
-	botSelectInfo.back.focuspic = STARTSERVER_BACK1;
+	botSelectInfo.back.focuspic = BACK1;
 
 	for (i = 0; i < MAX_MODELSPERPAGE; i++) {
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.pics[i]);
