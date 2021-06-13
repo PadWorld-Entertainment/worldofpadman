@@ -32,18 +32,18 @@ GRAPHICS OPTIONS MENU
 =======================================================================
 */
 
-#define BACK0 "menu/BtnBack0"
-#define BACK1 "menu/BtnBack1"
-#define GRAPHICS0 "menu/system/graphics0"
-#define GRASHICS1 "menu/system/graphics1"
-#define DISPLAY0 "menu/system/display0"
-#define DISPLAY1 "menu/system/display1"
-#define SOUND0 "menu/system/sound0"
-#define SOUND1 "menu/system/sound1"
-#define NETWORK0 "menu/system/network0"
-#define NETWORK1 "menu/system/network1"
-#define ACCEPT0 "menu/system/accept"
-#define ACCEPT1 "menu/system/accept"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
+#define GRAPHICS0 "menu/buttons/graphics0"
+#define GRASHICS1 "menu/buttons/graphics1"
+#define DISPLAY0 "menu/buttons/display0"
+#define DISPLAY1 "menu/buttons/display1"
+#define SOUND0 "menu/buttons/sound0"
+#define SOUND1 "menu/buttons/sound1"
+#define NETWORK0 "menu/buttons/network0"
+#define NETWORK1 "menu/buttons/network1"
+#define ACCEPT0 "menu/buttons/accept"
+#define ACCEPT1 "menu/buttons/accept"
 
 #define ID_BACK2 101
 #define ID_FULLSCREEN 102
@@ -635,7 +635,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.graphics.generic.id = ID_GRAPHICS;
 	s_graphicsoptions.graphics.generic.x = 26;
 	s_graphicsoptions.graphics.generic.y = 37;
-	s_graphicsoptions.graphics.width = 130;
+	s_graphicsoptions.graphics.width = 160;
 	s_graphicsoptions.graphics.height = 40;
 	s_graphicsoptions.graphics.focuspic = GRASHICS1;
 	s_graphicsoptions.graphics.focuspicinstead = qtrue;
@@ -647,7 +647,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.display.generic.id = ID_DISPLAY;
 	s_graphicsoptions.display.generic.x = 159;
 	s_graphicsoptions.display.generic.y = 30;
-	s_graphicsoptions.display.width = 122;
+	s_graphicsoptions.display.width = 120;
 	s_graphicsoptions.display.height = 40;
 	s_graphicsoptions.display.focuspic = DISPLAY1;
 	s_graphicsoptions.display.focuspicinstead = qtrue;
@@ -659,7 +659,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.sound.generic.id = ID_SOUND;
 	s_graphicsoptions.sound.generic.x = 40;
 	s_graphicsoptions.sound.generic.y = 77;
-	s_graphicsoptions.sound.width = 130;
+	s_graphicsoptions.sound.width = 120;
 	s_graphicsoptions.sound.height = 40;
 	s_graphicsoptions.sound.focuspic = SOUND1;
 	s_graphicsoptions.sound.focuspicinstead = qtrue;
@@ -671,8 +671,8 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.network.generic.id = ID_NETWORK;
 	s_graphicsoptions.network.generic.x = 170;
 	s_graphicsoptions.network.generic.y = 80;
-	s_graphicsoptions.network.width = 100;
-	s_graphicsoptions.network.height = 45;
+	s_graphicsoptions.network.width = 160;
+	s_graphicsoptions.network.height = 40;
 	s_graphicsoptions.network.focuspic = NETWORK1;
 	s_graphicsoptions.network.focuspicinstead = qtrue;
 
@@ -813,10 +813,10 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.apply.generic.name = ACCEPT0;
 	s_graphicsoptions.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
 	s_graphicsoptions.apply.generic.callback = GraphicsOptions_ApplyChanges;
-	s_graphicsoptions.apply.generic.x = 516;
-	s_graphicsoptions.apply.generic.y = 405;
-	s_graphicsoptions.apply.width = 102;
-	s_graphicsoptions.apply.height = 61;
+	s_graphicsoptions.apply.generic.x = 512;
+	s_graphicsoptions.apply.generic.y = 440;
+	s_graphicsoptions.apply.width = 120;
+	s_graphicsoptions.apply.height = 40;
 	s_graphicsoptions.apply.focuspic = ACCEPT1;
 
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.graphics);

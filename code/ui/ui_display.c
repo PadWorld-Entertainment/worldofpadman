@@ -30,18 +30,18 @@ DISPLAY OPTIONS MENU
 
 #include "ui_local.h"
 
-#define BACK0 "menu/BtnBack0"
-#define BACK1 "menu/BtnBack1"
-#define GRAPHICS0 "menu/system/graphics0"
-#define GRASHICS1 "menu/system/graphics1"
-#define DISPLAY0 "menu/system/display0"
-#define DISPLAY1 "menu/system/display1"
-#define SOUND0 "menu/system/sound0"
-#define SOUND1 "menu/system/sound1"
-#define NETWORK0 "menu/system/network0"
-#define NETWORK1 "menu/system/network1"
-#define ACCEPT0 "menu/system/accept"
-#define ACCEPT1 "menu/system/accept"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
+#define GRAPHICS0 "menu/buttons/graphics0"
+#define GRASHICS1 "menu/buttons/graphics1"
+#define DISPLAY0 "menu/buttons/display0"
+#define DISPLAY1 "menu/buttons/display1"
+#define SOUND0 "menu/buttons/sound0"
+#define SOUND1 "menu/buttons/sound1"
+#define NETWORK0 "menu/buttons/network0"
+#define NETWORK1 "menu/buttons/network1"
+#define ACCEPT0 "menu/buttons/accept"
+#define ACCEPT1 "menu/buttons/accept"
 
 #define ID_GRAPHICS 10
 #define ID_DISPLAY 11
@@ -178,7 +178,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.graphics.generic.id = ID_GRAPHICS;
 	displayOptionsInfo.graphics.generic.x = 26;
 	displayOptionsInfo.graphics.generic.y = 37;
-	displayOptionsInfo.graphics.width = 130;
+	displayOptionsInfo.graphics.width = 160;
 	displayOptionsInfo.graphics.height = 40;
 	displayOptionsInfo.graphics.focuspic = GRASHICS1;
 	displayOptionsInfo.graphics.focuspicinstead = qtrue;
@@ -190,7 +190,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.display.generic.id = ID_DISPLAY;
 	displayOptionsInfo.display.generic.x = 159;
 	displayOptionsInfo.display.generic.y = 30;
-	displayOptionsInfo.display.width = 122;
+	displayOptionsInfo.display.width = 120;
 	displayOptionsInfo.display.height = 40;
 	displayOptionsInfo.display.focuspic = DISPLAY1;
 	displayOptionsInfo.display.focuspicinstead = qtrue;
@@ -202,7 +202,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.sound.generic.id = ID_SOUND;
 	displayOptionsInfo.sound.generic.x = 40;
 	displayOptionsInfo.sound.generic.y = 77;
-	displayOptionsInfo.sound.width = 130;
+	displayOptionsInfo.sound.width = 120;
 	displayOptionsInfo.sound.height = 40;
 	displayOptionsInfo.sound.focuspic = SOUND1;
 	displayOptionsInfo.sound.focuspicinstead = qtrue;
@@ -214,8 +214,8 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.network.generic.id = ID_NETWORK;
 	displayOptionsInfo.network.generic.x = 170;
 	displayOptionsInfo.network.generic.y = 80;
-	displayOptionsInfo.network.width = 100;
-	displayOptionsInfo.network.height = 45;
+	displayOptionsInfo.network.width = 160;
+	displayOptionsInfo.network.height = 40;
 	displayOptionsInfo.network.focuspic = NETWORK1;
 	displayOptionsInfo.network.focuspicinstead = qtrue;
 
@@ -274,10 +274,10 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.apply.generic.name = ACCEPT0;
 	displayOptionsInfo.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
 	displayOptionsInfo.apply.generic.callback = ApplyPressed;
-	displayOptionsInfo.apply.generic.x = 516;
-	displayOptionsInfo.apply.generic.y = 405;
-	displayOptionsInfo.apply.width = 102;
-	displayOptionsInfo.apply.height = 61;
+	displayOptionsInfo.apply.generic.x = 512;
+	displayOptionsInfo.apply.generic.y = 440;
+	displayOptionsInfo.apply.width = 120;
+	displayOptionsInfo.apply.height = 40;
 	displayOptionsInfo.apply.focuspic = ACCEPT1;
 
 	displayOptionsInfo.back.generic.type = MTYPE_BITMAP;
