@@ -1,3 +1,4 @@
+add_subdirectory(AL)
 add_subdirectory(curl-7.54.0)
 add_subdirectory(jpeg-9d)
 add_subdirectory(libogg-1.3.4)
