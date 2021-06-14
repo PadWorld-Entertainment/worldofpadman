@@ -22,19 +22,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #include "ui_local.h"
 
-#define ART_FRAMEL "menu/art/frame2_l"
-#define ART_FRAMER "menu/art/frame1_r"
-#define ART_MODEL0 "menu/art/model_0"
-#define ART_MODEL1 "menu/art/model_1"
-#define ART_FX_BASE "menu/art/fx_base"
-#define ART_FX_BLUE "menu/art/fx_blue"
-#define ART_FX_CYAN "menu/art/fx_cyan"
-#define ART_FX_GREEN "menu/art/fx_grn"
-#define ART_FX_RED "menu/art/fx_red"
-#define ART_FX_TEAL "menu/art/fx_teal"
-#define ART_FX_WHITE "menu/art/fx_white"
-#define ART_FX_YELLOW "menu/art/fx_yel"
-
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
 
@@ -62,7 +49,6 @@ typedef struct {
 	menuframework_s menu;
 
 	menutext_s banner;
-	menubitmap_s framel;
 	menubitmap_s framer;
 	menubitmap_s player;
 
@@ -97,8 +83,6 @@ typedef struct {
 
 	menubitmap_s item_null;
 
-	qhandle_t fxBasePic;
-	qhandle_t fxPic[7];
 	playerInfo_t playerinfo;
 	int current_fx;
 	char playerModel[MAX_QPATH];
@@ -953,19 +937,6 @@ PlayerSettings_Cache
 =================
 */
 void PlayerSettings_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_FRAMEL);
-	trap_R_RegisterShaderNoMip(ART_FRAMER);
-	trap_R_RegisterShaderNoMip(ART_MODEL0);
-	trap_R_RegisterShaderNoMip(ART_MODEL1);
-
-	s_playersettings.fxBasePic = trap_R_RegisterShaderNoMip(ART_FX_BASE);
-	s_playersettings.fxPic[0] = trap_R_RegisterShaderNoMip(ART_FX_RED);
-	s_playersettings.fxPic[1] = trap_R_RegisterShaderNoMip(ART_FX_YELLOW);
-	s_playersettings.fxPic[2] = trap_R_RegisterShaderNoMip(ART_FX_GREEN);
-	s_playersettings.fxPic[3] = trap_R_RegisterShaderNoMip(ART_FX_TEAL);
-	s_playersettings.fxPic[4] = trap_R_RegisterShaderNoMip(ART_FX_BLUE);
-	s_playersettings.fxPic[5] = trap_R_RegisterShaderNoMip(ART_FX_CYAN);
-	s_playersettings.fxPic[6] = trap_R_RegisterShaderNoMip(ART_FX_WHITE);
 
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
