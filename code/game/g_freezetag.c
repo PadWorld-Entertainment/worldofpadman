@@ -71,7 +71,7 @@ static void FT_AnnounceThaw(gclient_t *client, gclient_t *other) {
 static void FT_TossPowerUps(gentity_t *player) {
 	int i;
 	gclient_t *client;
-	gitem_t *item;
+	const gitem_t *item;
 	gentity_t *ent;
 
 	client = player->client;
