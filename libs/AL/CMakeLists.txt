@@ -13,7 +13,7 @@ if (OPENAL_FOUND)
 	endif()
 	set(INCLUDE_DIRS ${OPENAL_INCLUDE_DIR})
 else()
-	set(INCLUDE_DIRS ..)
+	set(INCLUDE_DIRS .. .)
 endif()
 
 if (LIBS)
