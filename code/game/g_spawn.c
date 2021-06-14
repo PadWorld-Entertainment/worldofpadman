@@ -457,8 +457,8 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	const char *gametypeName;
 	const gitem_t *item;
 
-	static const char *gametypeNames[] = {"ffa",  "tournament", "single", "spray",	"lps",
-										  "team", "ctl",		"sptp",	  "balloon"};
+	static const char *gametypeNames[] = {"ffa",  "tournament", "single", "spray", "lps",
+										  "team", "freeze",		"ctl",	  "sptp",  "balloon"};
 
 	// get the next free entity
 	ent = G_Spawn();
