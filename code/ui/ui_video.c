@@ -68,6 +68,7 @@ typedef struct {
 	menulist_s mode;
 	menulist_s tq;
 	menulist_s fs;
+	menulist_s lighting;
 	menulist_s texturebits;
 	menulist_s colordepth;
 	menulist_s geometry;
@@ -84,6 +85,7 @@ typedef struct {
 	int mode;
 	qboolean fullscreen;
 	int tq;
+	int lighting;
 	int colordepth;
 	int texturebits;
 	int geometry;
@@ -96,12 +98,12 @@ typedef struct {
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{2, qtrue, 3, 2, 2, 2, 1, qfalse, 4, 2},
-												  {2, qtrue, 3, 0, 0, 1, 0, qfalse, 3, 0},
-												  {1, qtrue, 2, 1, 0, 0, 0, qfalse, 2, 0},
-												  {0, qtrue, 1, 1, 0, 0, 0, qtrue, 0, 0},
+static InitialVideoOptions_s s_ivo_templates[] = {{2, qtrue, 3, 0, 2, 2, 2, 1, qfalse, 4, 2},
+												  {2, qtrue, 3, 0, 0, 0, 1, 0, qfalse, 3, 0},
+												  {1, qtrue, 2, 0, 1, 0, 0, 0, qfalse, 2, 0},
+												  {0, qtrue, 1, 0, 1, 0, 0, 0, qtrue, 0, 0},
 												  {
-													  2, qtrue, 1, 0, 0, 0, 0, qtrue, 0, 0 // "custom" placeholder
+													  2, qtrue, 1, 0, 0, 0, 0, 0, qtrue, 0, 0 // "custom" placeholder
 												  }};
 
 #define NUM_IVO_TEMPLATES (ARRAY_LEN(s_ivo_templates))
@@ -250,6 +252,7 @@ static void GraphicsOptions_GetInitialVideo(void) {
 	s_ivo.mode = s_graphicsoptions.mode.curvalue;
 	s_ivo.fullscreen = s_graphicsoptions.fs.curvalue;
 	s_ivo.tq = s_graphicsoptions.tq.curvalue;
+	s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
 	s_ivo.geometry = s_graphicsoptions.geometry.curvalue;
 	s_ivo.filter = s_graphicsoptions.filter.curvalue;
 	s_ivo.texturebits = s_graphicsoptions.texturebits.curvalue;
@@ -274,6 +277,8 @@ static void GraphicsOptions_CheckConfig(void) {
 		if (s_ivo_templates[i].fullscreen != s_graphicsoptions.fs.curvalue)
 			continue;
 		if (s_ivo_templates[i].tq != s_graphicsoptions.tq.curvalue)
+			continue;
+		if (s_ivo_templates[i].lighting != s_graphicsoptions.lighting.curvalue)
 			continue;
 		if (s_ivo_templates[i].geometry != s_graphicsoptions.geometry.curvalue)
 			continue;
@@ -315,6 +320,9 @@ static void GraphicsOptions_UpdateMenuItems(void) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 	if (s_ivo.tq != s_graphicsoptions.tq.curvalue) {
+		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	}
+	if (s_ivo.lighting != s_graphicsoptions.lighting.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 	if (s_ivo.colordepth != s_graphicsoptions.colordepth.curvalue) {
@@ -380,6 +388,7 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_SetValue("r_depthbits", 24);
 		break;
 	}
+	trap_Cvar_SetValue( "r_vertexLight", s_graphicsoptions.lighting.curvalue );
 
 	if (s_graphicsoptions.geometry.curvalue == 2) {
 		trap_Cvar_SetValue("r_lodBias", 0);
@@ -455,6 +464,7 @@ static void GraphicsOptions_Event(void *ptr, int event) {
 		ivo = &s_ivo_templates[s_graphicsoptions.list.curvalue];
 		s_graphicsoptions.mode.curvalue = ivo->mode;
 		s_graphicsoptions.tq.curvalue = ivo->tq;
+		s_graphicsoptions.lighting.curvalue = ivo->lighting;
 		s_graphicsoptions.colordepth.curvalue = ivo->colordepth;
 		s_graphicsoptions.texturebits.curvalue = ivo->texturebits;
 		s_graphicsoptions.geometry.curvalue = ivo->geometry;
@@ -540,6 +550,7 @@ static void GraphicsOptions_SetMenuItems(void) {
 		s_graphicsoptions.tq.curvalue = 3;
 	}
 
+	s_graphicsoptions.lighting.curvalue = trap_Cvar_VariableValue( "r_vertexLight" ) != 0;
 	switch (UI_GetCvarInt("r_texturebits")) {
 	default:
 	case 0:
@@ -606,7 +617,7 @@ void GraphicsOptions_MenuInit(void) {
 	static const char *tq_names[] = {"Default", "16 bit", "32 bit", NULL};
 
 	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
-
+	static const char *lighting_names[] = {"High (Lightmap)", "Low (Vertex)", NULL};
 	static const char *colordepth_names[] = {"Default", "16 bit", "32 bit", NULL};
 
 	static const char *filter_names[] = {"Bilinear", "Trilinear", NULL};
@@ -721,8 +732,17 @@ void GraphicsOptions_MenuInit(void) {
 		"On: Uses entire display for game, ensure correct resolution is set to match your physical display for best "
 		"graphic results. \nOff: Play the game in a window, change resolution to change size of window. (Not "
 		"recommended).";
-	y += (BIGCHAR_HEIGHT + 2);
+	y += BIGCHAR_HEIGHT + 2;
 
+	// references/modifies "r_vertexLight"
+	s_graphicsoptions.lighting.generic.type = MTYPE_SPINCONTROL;
+	s_graphicsoptions.lighting.generic.name = "Lighting:";
+	s_graphicsoptions.lighting.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.lighting.generic.x = XPOSITION;
+	s_graphicsoptions.lighting.generic.y = y;
+	s_graphicsoptions.lighting.itemnames = lighting_names;
+	y += BIGCHAR_HEIGHT + 2;
+	
 	// references/modifies "r_lodBias" & "subdivisions"
 	s_graphicsoptions.geometry.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.geometry.generic.name = "Geometric Detail:";
@@ -829,6 +849,7 @@ void GraphicsOptions_MenuInit(void) {
 
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.colordepth);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.fs);
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.lighting);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.geometry);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tq);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.texturebits);
