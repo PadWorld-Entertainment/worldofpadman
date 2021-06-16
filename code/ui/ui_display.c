@@ -48,10 +48,11 @@ DISPLAY OPTIONS MENU
 #define ID_SOUND 12
 #define ID_NETWORK 13
 #define ID_BRIGHTNESS 14
+#define ID_SCREENSIZE 15
 #define ID_ANAGLYPH 17
 #define ID_GREYSCALE 18
-#define ID_BACK 15
 #define ID_IGNOREHWG 16
+#define ID_BACK 19
 
 typedef struct {
 	menuframework_s menu;
@@ -62,11 +63,9 @@ typedef struct {
 	menubitmap_s network;
 
 	menuradiobutton_s ignoreHWG;
-
 	menuslider_s brightness;
-
+	menuslider_s screensize;
 	menulist_s anaglyph;
-
 	menuslider_s greyscale;
 
 	menubitmap_s apply;
@@ -124,6 +123,10 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		trap_Cvar_SetValue("r_gamma", displayOptionsInfo.brightness.curvalue / 10.0f);
 		break;
 
+	case ID_SCREENSIZE:
+		trap_Cvar_SetValue("cg_viewsize", displayOptionsInfo.screensize.curvalue * 10);
+		break;
+		
 	case ID_BACK:
 		UI_PopMenu();
 		break;
@@ -246,7 +249,18 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	if (!uis.glconfig.deviceSupportsGamma)
 		displayOptionsInfo.brightness.generic.flags |= QMF_GRAYED;
 
-	y += (2 * BIGCHAR_HEIGHT + 2);
+	y += BIGCHAR_HEIGHT+2;
+	displayOptionsInfo.screensize.generic.type = MTYPE_SLIDER;
+	displayOptionsInfo.screensize.generic.name = "Screen Size:";
+	displayOptionsInfo.screensize.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.screensize.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.screensize.generic.id = ID_SCREENSIZE;
+	displayOptionsInfo.screensize.generic.x = 400;
+	displayOptionsInfo.screensize.generic.y = y;
+	displayOptionsInfo.screensize.minvalue = 3;
+    displayOptionsInfo.screensize.maxvalue = 10;
+
+	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
 	displayOptionsInfo.anaglyph.generic.name = "Stereoscopic 3D:";
 	displayOptionsInfo.anaglyph.generic.flags = QMF_SMALLFONT;
@@ -298,12 +312,14 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.network);
 	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.ignoreHWG);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
+	Menu_AddItem( &displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize );
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.apply);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.back);
 
 	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
+	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue( "cg_viewsize") / 10;
 	displayOptionsInfo.anaglyph.curvalue =
 		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
