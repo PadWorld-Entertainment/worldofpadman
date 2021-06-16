@@ -28,14 +28,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-#define SPECIFYSERVER_FIGHT0 "menu/specify/fight0"
-#define SPECIFYSERVER_FIGHT1 "menu/specify/fight1"
+#define FIGHT0 "menu/buttons/fight0"
+#define FIGHT1 "menu/buttons/fight1"
 
 #define ID_SPECIFYSERVERBACK 102
 #define ID_SPECIFYSERVERGO 103
 
-static char *specifyserver_artlist[] = {BACK0, BACK1, SPECIFYSERVER_FIGHT0,
-										SPECIFYSERVER_FIGHT1, NULL};
+static char *specifyserver_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NULL};
 
 typedef struct {
 	menuframework_s menu;
@@ -194,8 +193,8 @@ void SpecifyServer_MenuInit(void) {
 	s_specifyserver.go.y = 658; // 620;
 	s_specifyserver.go.w = 135; // 187;
 	s_specifyserver.go.h = 97;	// 134;
-	s_specifyserver.go.shader = trap_R_RegisterShaderNoMip(SPECIFYSERVER_FIGHT0);
-	s_specifyserver.go.mouseovershader = trap_R_RegisterShaderNoMip(SPECIFYSERVER_FIGHT1);
+	s_specifyserver.go.shader = FIGHT0;
+	s_specifyserver.go.mouseovershader = FIGHT1;
 	s_specifyserver.go.generic.callback = SpecifyServer_Event;
 	s_specifyserver.go.generic.id = ID_SPECIFYSERVERGO;
 

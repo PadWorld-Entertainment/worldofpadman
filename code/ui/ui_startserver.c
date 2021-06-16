@@ -13,8 +13,8 @@ BGP_STARTSERVERMAPS
 BGP_STARTSERVERBOTS
 */
 
-#define STARTSERVER_FIGHT0 "menu/startserver/fight0"
-#define STARTSERVER_FIGHT1 "menu/startserver/fight1"
+#define FIGHT0 "menu/buttons/fight0"
+#define FIGHT1 "menu/buttons/fight1"
 #define STARTSERVER_ARROWLEFT0 "menu/startserver/arrowleft0"
 #define STARTSERVER_ARROWLEFT1 "menu/startserver/arrowleft1"
 #define STARTSERVER_ARROWRIGHT0 "menu/startserver/arrowright0"
@@ -24,7 +24,7 @@ BGP_STARTSERVERBOTS
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
 
-#define GAMESERVER_UNKNOWNMAP "menu/art/unknownmap"
+#define UNKNOWNMAP "menu/art/unknownmap"
 
 #define MAX_MAPROWS 3
 #define MAX_MAPCOLS 2
@@ -687,7 +687,7 @@ static void StartServer_MenuInit(void) {
 		s_startserver.mappics[i].width = 128;
 		s_startserver.mappics[i].height = 96;
 		//		s_startserver.mappics[i].focuspic			= GAMESERVER_SELECTED;
-		s_startserver.mappics[i].errorpic = GAMESERVER_UNKNOWNMAP;
+		s_startserver.mappics[i].errorpic = UNKNOWNMAP;
 		s_startserver.mappics[i].generic.ownerdraw = StartServer_LevelshotDraw;
 	}
 
@@ -825,8 +825,8 @@ static void StartServer_MenuInit(void) {
 	s_startserver.fight.y = 655; // 658;
 	s_startserver.fight.w = 135;
 	s_startserver.fight.h = 97;
-	s_startserver.fight.shader = trap_R_RegisterShaderNoMip(STARTSERVER_FIGHT0);
-	s_startserver.fight.mouseovershader = trap_R_RegisterShaderNoMip(STARTSERVER_FIGHT1);
+	s_startserver.fight.shader = FIGHT0;
+	s_startserver.fight.mouseovershader = FIGHT1;
 	s_startserver.fight.generic.callback = StartServer_MenuEvent;
 	s_startserver.fight.generic.id = ID_STARTSERVER;
 
@@ -885,8 +885,8 @@ void StartServer_Cache(void) {
 	const char *info;
 	char picname[MAX_QPATH];
 
-	trap_R_RegisterShaderNoMip(STARTSERVER_FIGHT0);
-	trap_R_RegisterShaderNoMip(STARTSERVER_FIGHT1);
+	trap_R_RegisterShaderNoMip(FIGHT0);
+	trap_R_RegisterShaderNoMip(FIGHT1);
 	trap_R_RegisterShaderNoMip(STARTSERVER_ARROWLEFT0);
 	trap_R_RegisterShaderNoMip(STARTSERVER_ARROWLEFT1);
 	trap_R_RegisterShaderNoMip(STARTSERVER_ARROWRIGHT0);
@@ -896,7 +896,7 @@ void StartServer_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 
-	trap_R_RegisterShaderNoMip(GAMESERVER_UNKNOWNMAP);
+	trap_R_RegisterShaderNoMip(UNKNOWNMAP);
 
 	for (i = 0; i < 10; i++)
 		s_startserver.mapNumbers[i] = trap_R_RegisterShaderNoMip(va("menu/startserver/%i", i));

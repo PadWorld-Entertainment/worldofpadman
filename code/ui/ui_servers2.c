@@ -49,8 +49,8 @@ MULTIPLAYER MENU (SERVER BROWSER)
 #define REFRESH1 "menu/buttons/refresh1"
 #define DELETE0 "menu/buttons/delete0"
 #define DELETE1 "menu/buttons/delete1"
-#define ART_CONNECT0 "menu/server/fight0"
-#define ART_CONNECT1 "menu/server/fight1"
+#define FIGHT0 "menu/buttons/fight0"
+#define FIGHT1 "menu/buttons/fight1"
 #define ART_ARROWS_UP0 "menu/server/arrowup0"
 #define ART_ARROWS_UP1 "menu/server/arrowup1"
 #define ART_ARROWS_DOWN0 "menu/server/arrowdown0"
@@ -1610,8 +1610,8 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.go.y = 658;
 	g_arenaservers.go.w = 135;
 	g_arenaservers.go.h = 97;
-	g_arenaservers.go.shader = trap_R_RegisterShaderNoMip(ART_CONNECT0);
-	g_arenaservers.go.mouseovershader = trap_R_RegisterShaderNoMip(ART_CONNECT1);
+	g_arenaservers.go.shader = FIGHT0;
+	g_arenaservers.go.mouseovershader = FIGHT1;
 	g_arenaservers.go.generic.callback = ArenaServers_Event;
 	g_arenaservers.go.generic.id = ID_CONNECT;
 
@@ -1687,8 +1687,8 @@ void ArenaServers_Cache(void) {
 	trap_R_RegisterShaderNoMip(REFRESH1);
 	trap_R_RegisterShaderNoMip(DELETE0);
 	trap_R_RegisterShaderNoMip(DELETE1);
-	trap_R_RegisterShaderNoMip(ART_CONNECT0);
-	trap_R_RegisterShaderNoMip(ART_CONNECT1);
+	trap_R_RegisterShaderNoMip(FIGHT0);
+	trap_R_RegisterShaderNoMip(FIGHT1);
 	trap_R_RegisterShaderNoMip(ART_ARROWS_UP0);
 	trap_R_RegisterShaderNoMip(ART_ARROWS_UP1);
 	trap_R_RegisterShaderNoMip(ART_ARROWS_DOWN0);

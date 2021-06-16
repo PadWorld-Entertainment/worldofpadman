@@ -29,14 +29,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-#define SPECIFYSERVER_FIGHT0 "menu/specify/fight0"
-#define SPECIFYSERVER_FIGHT1 "menu/specify/fight1"
+#define FIGHT0 "menu/buttons/fight0"
+#define FIGHT1 "menu/buttons/fight1"
 
 #define ID_SPECIFYPASSWORDBACK 102
 #define ID_SPECIFYPASSWORDGO 103
 
-static char *specifypassword_artlist[] = {BACK0, BACK1, SPECIFYSERVER_FIGHT0,
-										  SPECIFYSERVER_FIGHT1, NULL};
+static char *specifypassword_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NULL};
 
 typedef struct {
 	menuframework_s menu;
@@ -136,8 +135,8 @@ static void SpecifyPassword_MenuInit(void) {
 	s_specifypassword.go.y = 658;
 	s_specifypassword.go.w = 135;
 	s_specifypassword.go.h = 97;
-	s_specifypassword.go.shader = trap_R_RegisterShaderNoMip(SPECIFYSERVER_FIGHT0);
-	s_specifypassword.go.mouseovershader = trap_R_RegisterShaderNoMip(SPECIFYSERVER_FIGHT1);
+	s_specifypassword.go.shader = FIGHT0;
+	s_specifypassword.go.mouseovershader = FIGHT1;
 	s_specifypassword.go.generic.callback = SpecifyPassword_Event;
 	s_specifypassword.go.generic.id = ID_SPECIFYPASSWORDGO;
 
