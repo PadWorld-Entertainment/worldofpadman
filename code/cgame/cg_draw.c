@@ -3002,7 +3002,7 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 			for (i = 0; i < MAX_BALLOONS; i++) {
 				CG_GetBalloonColor(i, iconColor);
 				trap_R_SetColor(iconColor);
-				CG_DrawPic((640 - 34), (480 - 33 - 36 * i), 27, 27, cgs.media.hud_balloon);
+				CG_DrawPic((640 - 35), (480 - 34 - 36 * i), 28, 28, cgs.media.hud_balloon);
 			}
 			trap_R_SetColor(NULL);
 
