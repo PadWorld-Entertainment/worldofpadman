@@ -822,11 +822,11 @@ static void StartServer_MenuInit(void) {
 
 	s_startserver.fight.generic.type = MTYPE_BITMAP1024S;
 	s_startserver.fight.x = 870; // 845;
-	s_startserver.fight.y = 655; // 658;
+	s_startserver.fight.y = 660; // 658;
 	s_startserver.fight.w = 135;
 	s_startserver.fight.h = 97;
-	s_startserver.fight.shader = FIGHT0;
-	s_startserver.fight.mouseovershader = FIGHT1;
+	s_startserver.fight.shader = trap_R_RegisterShaderNoMip(FIGHT0);
+	s_startserver.fight.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
 	s_startserver.fight.generic.callback = StartServer_MenuEvent;
 	s_startserver.fight.generic.id = ID_STARTSERVER;
 

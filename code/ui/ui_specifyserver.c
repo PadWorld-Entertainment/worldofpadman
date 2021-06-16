@@ -189,12 +189,12 @@ void SpecifyServer_MenuInit(void) {
 	s_specifyserver.back.focuspicinstead = qtrue;
 
 	s_specifyserver.go.generic.type = MTYPE_BITMAP1024S;
-	s_specifyserver.go.x = 845; // 820;
-	s_specifyserver.go.y = 658; // 620;
+	s_specifyserver.go.x = 870; // 820;
+	s_specifyserver.go.y = 660; // 620;
 	s_specifyserver.go.w = 135; // 187;
 	s_specifyserver.go.h = 97;	// 134;
-	s_specifyserver.go.shader = FIGHT0;
-	s_specifyserver.go.mouseovershader = FIGHT1;
+	s_specifyserver.go.shader = trap_R_RegisterShaderNoMip(FIGHT0);
+	s_specifyserver.go.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
 	s_specifyserver.go.generic.callback = SpecifyServer_Event;
 	s_specifyserver.go.generic.id = ID_SPECIFYSERVERGO;
 

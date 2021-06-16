@@ -131,12 +131,12 @@ static void SpecifyPassword_MenuInit(void) {
 	s_specifypassword.back.focuspicinstead = qtrue;
 
 	s_specifypassword.go.generic.type = MTYPE_BITMAP1024S;
-	s_specifypassword.go.x = 845;
-	s_specifypassword.go.y = 658;
+	s_specifypassword.go.x = 870;
+	s_specifypassword.go.y = 660;
 	s_specifypassword.go.w = 135;
 	s_specifypassword.go.h = 97;
-	s_specifypassword.go.shader = FIGHT0;
-	s_specifypassword.go.mouseovershader = FIGHT1;
+	s_specifypassword.go.shader = trap_R_RegisterShaderNoMip(FIGHT0);
+	s_specifypassword.go.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
 	s_specifypassword.go.generic.callback = SpecifyPassword_Event;
 	s_specifypassword.go.generic.id = ID_SPECIFYPASSWORDGO;
 

@@ -1606,12 +1606,12 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.remove.focuspicinstead = qtrue;
 
 	g_arenaservers.go.generic.type = MTYPE_BITMAP1024S;
-	g_arenaservers.go.x = 865;
-	g_arenaservers.go.y = 658;
+	g_arenaservers.go.x = 870;
+	g_arenaservers.go.y = 660;
 	g_arenaservers.go.w = 135;
 	g_arenaservers.go.h = 97;
-	g_arenaservers.go.shader = FIGHT0;
-	g_arenaservers.go.mouseovershader = FIGHT1;
+	g_arenaservers.go.shader = trap_R_RegisterShaderNoMip(FIGHT0);
+	g_arenaservers.go.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
 	g_arenaservers.go.generic.callback = ArenaServers_Event;
 	g_arenaservers.go.generic.id = ID_CONNECT;
 
