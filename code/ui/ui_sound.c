@@ -60,7 +60,7 @@ SOUND OPTIONS MENU
 #define ID_VOIPMODE 23
 #define ID_RECORDMODE 24
 
-#define POSITION_X 180
+#define XPOSITION 185
 
 static const char *recording_modes[] = {"Push to talk", "Automatic", 0};
 
@@ -335,13 +335,13 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.network.focuspic = NETWORK1;
 	soundOptionsInfo.network.focuspicinstead = qtrue;
 
-	y = 240 - 1.5 * (BIGCHAR_HEIGHT + 2);
+	y = 180 + 2 * (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.sfxvolume.generic.type = MTYPE_SLIDER;
 	soundOptionsInfo.sfxvolume.generic.name = "Effects Volume:";
 	soundOptionsInfo.sfxvolume.generic.flags = QMF_SMALLFONT;
 	soundOptionsInfo.sfxvolume.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.sfxvolume.generic.id = ID_EFFECTSVOLUME;
-	soundOptionsInfo.sfxvolume.generic.x = POSITION_X;
+	soundOptionsInfo.sfxvolume.generic.x = XPOSITION;
 	soundOptionsInfo.sfxvolume.generic.y = y;
 	soundOptionsInfo.sfxvolume.minvalue = 0;
 	soundOptionsInfo.sfxvolume.maxvalue = 10;
@@ -352,7 +352,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.musicvolume.generic.flags = QMF_SMALLFONT;
 	soundOptionsInfo.musicvolume.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.musicvolume.generic.id = ID_MUSICVOLUME;
-	soundOptionsInfo.musicvolume.generic.x = POSITION_X;
+	soundOptionsInfo.musicvolume.generic.x = XPOSITION;
 	soundOptionsInfo.musicvolume.generic.y = y;
 	soundOptionsInfo.musicvolume.minvalue = 0;
 	soundOptionsInfo.musicvolume.maxvalue = 10;
@@ -363,7 +363,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.soundSystem.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	soundOptionsInfo.soundSystem.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.soundSystem.generic.id = ID_SOUNDSYSTEM;
-	soundOptionsInfo.soundSystem.generic.x = POSITION_X;
+	soundOptionsInfo.soundSystem.generic.x = XPOSITION;
 	soundOptionsInfo.soundSystem.generic.y = y;
 	soundOptionsInfo.soundSystem.itemnames = soundSystem_items;
 
@@ -373,7 +373,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.quality.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	soundOptionsInfo.quality.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.quality.generic.id = ID_QUALITY;
-	soundOptionsInfo.quality.generic.x = POSITION_X;
+	soundOptionsInfo.quality.generic.x = XPOSITION;
 	soundOptionsInfo.quality.generic.y = y;
 	soundOptionsInfo.quality.itemnames = quality_items;
 
@@ -383,7 +383,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.musicautoswitch.generic.flags = QMF_SMALLFONT;
 	soundOptionsInfo.musicautoswitch.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.musicautoswitch.generic.id = ID_MUSICAUTOSWITCH;
-	soundOptionsInfo.musicautoswitch.generic.x = POSITION_X;
+	soundOptionsInfo.musicautoswitch.generic.x = XPOSITION;
 	soundOptionsInfo.musicautoswitch.generic.y = y;
 	soundOptionsInfo.musicautoswitch.generic.toolTip = "Enable to automatically switch to the next song on map change, "
 													   "if set to off current song will restart on map change.";
@@ -394,12 +394,12 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.voipmode.generic.flags = QMF_SMALLFONT;
 	soundOptionsInfo.voipmode.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.voipmode.generic.id = ID_VOIPMODE;
-	soundOptionsInfo.voipmode.generic.x = POSITION_X;
+	soundOptionsInfo.voipmode.generic.x = XPOSITION;
 	soundOptionsInfo.voipmode.generic.y = y;
 
 	soundOptionsInfo.voipmode_grayed.generic.type = MTYPE_TEXT;
 	soundOptionsInfo.voipmode_grayed.generic.flags = QMF_PULSE;
-	soundOptionsInfo.voipmode_grayed.generic.x = POSITION_X - 25;
+	soundOptionsInfo.voipmode_grayed.generic.x = XPOSITION - 25;
 	soundOptionsInfo.voipmode_grayed.generic.y = y;
 	soundOptionsInfo.voipmode_grayed.string = "needs fast network:";
 	soundOptionsInfo.voipmode_grayed.style = (UI_CENTER | UI_SMALLFONT);
@@ -411,7 +411,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.voipRecordMode.generic.flags = QMF_SMALLFONT;
 	soundOptionsInfo.voipRecordMode.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.voipRecordMode.generic.id = ID_RECORDMODE;
-	soundOptionsInfo.voipRecordMode.generic.x = POSITION_X;
+	soundOptionsInfo.voipRecordMode.generic.x = XPOSITION;
 	soundOptionsInfo.voipRecordMode.generic.y = y;
 	soundOptionsInfo.voipRecordMode.itemnames = recording_modes;
 
@@ -421,7 +421,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.voiceThresholdVAD.generic.flags = QMF_SMALLFONT;
 	soundOptionsInfo.voiceThresholdVAD.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.voiceThresholdVAD.generic.id = ID_VOICETHRESHOLD;
-	soundOptionsInfo.voiceThresholdVAD.generic.x = POSITION_X;
+	soundOptionsInfo.voiceThresholdVAD.generic.x = XPOSITION;
 	soundOptionsInfo.voiceThresholdVAD.generic.y = y;
 	soundOptionsInfo.voiceThresholdVAD.minvalue = 0;
 	soundOptionsInfo.voiceThresholdVAD.maxvalue = 10;
@@ -435,7 +435,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.voiceGainDuringCapture.generic.flags = QMF_SMALLFONT;
 	soundOptionsInfo.voiceGainDuringCapture.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.voiceGainDuringCapture.generic.id = ID_GAINWHILECAPTURE;
-	soundOptionsInfo.voiceGainDuringCapture.generic.x = POSITION_X;
+	soundOptionsInfo.voiceGainDuringCapture.generic.x = XPOSITION;
 	soundOptionsInfo.voiceGainDuringCapture.generic.y = y;
 	soundOptionsInfo.voiceGainDuringCapture.minvalue = 0;
 	soundOptionsInfo.voiceGainDuringCapture.maxvalue = 10;

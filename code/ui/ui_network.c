@@ -49,6 +49,8 @@ NETWORK OPTIONS MENU
 #define ID_ALLOWDOWNLOAD 15
 #define ID_BACK 16
 
+#define XPOSITION 185
+
 static const char *rate_items[] = {"Modem", "ISDN", "LAN/Cable/xDSL", 0};
 
 typedef struct {
@@ -180,13 +182,13 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.network.focuspic = NETWORK1;
 	networkOptionsInfo.network.focuspicinstead = qtrue;
 
-	y = 240 - 1 * (BIGCHAR_HEIGHT + 2);
+	y = 180 + 2 * (BIGCHAR_HEIGHT + 2);
 	networkOptionsInfo.rate.generic.type = MTYPE_SPINCONTROL;
 	networkOptionsInfo.rate.generic.name = "Data Rate:";
 	networkOptionsInfo.rate.generic.flags = QMF_SMALLFONT;
 	networkOptionsInfo.rate.generic.callback = UI_NetworkOptionsMenu_Event;
 	networkOptionsInfo.rate.generic.id = ID_RATE;
-	networkOptionsInfo.rate.generic.x = 190;
+	networkOptionsInfo.rate.generic.x = XPOSITION;
 	networkOptionsInfo.rate.generic.y = y;
 	networkOptionsInfo.rate.itemnames = rate_items;
 
@@ -196,7 +198,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.allowdownload.generic.flags = QMF_SMALLFONT;
 	networkOptionsInfo.allowdownload.generic.callback = UI_NetworkOptionsMenu_Event;
 	networkOptionsInfo.allowdownload.generic.id = ID_ALLOWDOWNLOAD;
-	networkOptionsInfo.allowdownload.generic.x = 190;
+	networkOptionsInfo.allowdownload.generic.x = XPOSITION;
 	networkOptionsInfo.allowdownload.generic.y = y;
 	networkOptionsInfo.allowdownload.generic.toolTip =
 		"Enable to automatically download custom maps / custom files needed to play on modified servers. NOTE: Custom "

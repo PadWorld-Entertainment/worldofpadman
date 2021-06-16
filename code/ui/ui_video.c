@@ -54,6 +54,8 @@ GRAPHICS OPTIONS MENU
 #define ID_SOUND 107
 #define ID_NETWORK 108
 
+#define XPOSITION 185
+
 typedef struct {
 	menuframework_s menu;
 
@@ -677,12 +679,10 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.network.focuspicinstead = qtrue;
 
 	y = 180;
-#define X_OFMAINPART 184 // 175
-
 	s_graphicsoptions.list.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.list.generic.name = "Graphics Settings:";
 	s_graphicsoptions.list.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.list.generic.x = X_OFMAINPART;
+	s_graphicsoptions.list.generic.x = XPOSITION;
 	s_graphicsoptions.list.generic.y = y;
 	s_graphicsoptions.list.generic.callback = GraphicsOptions_Event;
 	s_graphicsoptions.list.generic.id = ID_LIST;
@@ -693,7 +693,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.mode.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.mode.generic.name = "Video Mode:";
 	s_graphicsoptions.mode.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.mode.generic.x = X_OFMAINPART;
+	s_graphicsoptions.mode.generic.x = XPOSITION;
 	s_graphicsoptions.mode.generic.y = y;
 	s_graphicsoptions.mode.itemnames = resolutions;
 	s_graphicsoptions.mode.generic.callback = GraphicsOptions_Event;
@@ -704,7 +704,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.colordepth.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.colordepth.generic.name = "Color Depth:";
 	s_graphicsoptions.colordepth.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.colordepth.generic.x = X_OFMAINPART;
+	s_graphicsoptions.colordepth.generic.x = XPOSITION;
 	s_graphicsoptions.colordepth.generic.y = y;
 	s_graphicsoptions.colordepth.itemnames = colordepth_names;
 	y += BIGCHAR_HEIGHT + 2;
@@ -715,7 +715,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.fs.itemnames = enabled_names;
 	s_graphicsoptions.fs.generic.name = "Fullscreen:";
 	s_graphicsoptions.fs.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.fs.generic.x = X_OFMAINPART;
+	s_graphicsoptions.fs.generic.x = XPOSITION;
 	s_graphicsoptions.fs.generic.y = y;
 	s_graphicsoptions.fs.generic.toolTip =
 		"On: Uses entire display for game, ensure correct resolution is set to match your physical display for best "
@@ -727,7 +727,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.geometry.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.geometry.generic.name = "Geometric Detail:";
 	s_graphicsoptions.geometry.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.geometry.generic.x = X_OFMAINPART;
+	s_graphicsoptions.geometry.generic.x = XPOSITION;
 	s_graphicsoptions.geometry.generic.y = y;
 	s_graphicsoptions.geometry.itemnames = quality_names;
 	y += BIGCHAR_HEIGHT + 2;
@@ -736,7 +736,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.tq.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.tq.generic.name = "Texture Detail:";
 	s_graphicsoptions.tq.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.tq.generic.x = X_OFMAINPART;
+	s_graphicsoptions.tq.generic.x = XPOSITION;
 	s_graphicsoptions.tq.generic.y = y;
 	s_graphicsoptions.tq.itemnames = td_names;
 	s_graphicsoptions.tq.generic.toolTip = "Adjust overall texture detail levels based on graphics card performance.";
@@ -746,7 +746,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.texturebits.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.texturebits.generic.name = "Texture Quality:";
 	s_graphicsoptions.texturebits.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.texturebits.generic.x = X_OFMAINPART;
+	s_graphicsoptions.texturebits.generic.x = XPOSITION;
 	s_graphicsoptions.texturebits.generic.y = y;
 	s_graphicsoptions.texturebits.itemnames = tq_names;
 	s_graphicsoptions.texturebits.generic.toolTip = "Adjust texture detail based on graphics card performance.";
@@ -756,7 +756,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.filter.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.filter.generic.name = "Texture Filter:";
 	s_graphicsoptions.filter.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.filter.generic.x = X_OFMAINPART;
+	s_graphicsoptions.filter.generic.x = XPOSITION;
 	s_graphicsoptions.filter.generic.y = y;
 	s_graphicsoptions.filter.itemnames = filter_names;
 	s_graphicsoptions.filter.generic.toolTip = "A graphic sharpness filter. Use bilinear for lower end graphics cards. "
@@ -769,7 +769,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.ct.itemnames = enabled_names;
 	s_graphicsoptions.ct.generic.name = "Compress Textures:";
 	s_graphicsoptions.ct.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.ct.generic.x = X_OFMAINPART;
+	s_graphicsoptions.ct.generic.x = XPOSITION;
 	s_graphicsoptions.ct.generic.y = y;
 	s_graphicsoptions.ct.generic.toolTip = "Switch on to allow your graphics card to store texture data compressed if "
 										   "supported (most graphics card regardless of type will support this).";
@@ -779,7 +779,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.af.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.af.generic.name = "Anisotropy:";
 	s_graphicsoptions.af.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.af.generic.x = X_OFMAINPART;
+	s_graphicsoptions.af.generic.x = XPOSITION;
 	s_graphicsoptions.af.generic.y = y;
 	s_graphicsoptions.af.itemnames = af_names;
 	s_graphicsoptions.af.generic.toolTip = "Sharpens game textures. Not recommended for low end graphics cards. "
@@ -790,7 +790,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.aa.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.aa.generic.name = "Antialiasing:";
 	s_graphicsoptions.aa.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.aa.generic.x = X_OFMAINPART;
+	s_graphicsoptions.aa.generic.x = XPOSITION;
 	s_graphicsoptions.aa.generic.y = y;
 	s_graphicsoptions.aa.itemnames = aa_names;
 	s_graphicsoptions.aa.generic.toolTip = "Smooth out rough edges. Not recommended for low end graphics cards. "

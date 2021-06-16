@@ -54,6 +54,8 @@ DISPLAY OPTIONS MENU
 #define ID_IGNOREHWG 16
 #define ID_BACK 19
 
+#define XPOSITION 185
+
 typedef struct {
 	menuframework_s menu;
 
@@ -222,13 +224,13 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.network.focuspic = NETWORK1;
 	displayOptionsInfo.network.focuspicinstead = qtrue;
 
-	y = 230;
+	y = 180 + 2 * (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.ignoreHWG.generic.type = MTYPE_RADIOBUTTON;
 	displayOptionsInfo.ignoreHWG.generic.name = "Ignore HW-Gamma:";
 	displayOptionsInfo.ignoreHWG.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.ignoreHWG.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.ignoreHWG.generic.id = ID_IGNOREHWG;
-	displayOptionsInfo.ignoreHWG.generic.x = 175;
+	displayOptionsInfo.ignoreHWG.generic.x = XPOSITION;
 	displayOptionsInfo.ignoreHWG.generic.y = y;
 	displayOptionsInfo.ignoreHWG.curvalue = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.ignoreHWG.generic.toolTip =
@@ -242,20 +244,20 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.brightness.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.brightness.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.brightness.generic.id = ID_BRIGHTNESS;
-	displayOptionsInfo.brightness.generic.x = 175;
+	displayOptionsInfo.brightness.generic.x = XPOSITION;
 	displayOptionsInfo.brightness.generic.y = y;
 	displayOptionsInfo.brightness.minvalue = 5;
 	displayOptionsInfo.brightness.maxvalue = 20;
 	if (!uis.glconfig.deviceSupportsGamma)
 		displayOptionsInfo.brightness.generic.flags |= QMF_GRAYED;
 
-	y += BIGCHAR_HEIGHT+2;
+	y += BIGCHAR_HEIGHT + 2;
 	displayOptionsInfo.screensize.generic.type = MTYPE_SLIDER;
 	displayOptionsInfo.screensize.generic.name = "Screen Size:";
 	displayOptionsInfo.screensize.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.screensize.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.screensize.generic.id = ID_SCREENSIZE;
-	displayOptionsInfo.screensize.generic.x = 400;
+	displayOptionsInfo.screensize.generic.x = XPOSITION;
 	displayOptionsInfo.screensize.generic.y = y;
 	displayOptionsInfo.screensize.minvalue = 3;
     displayOptionsInfo.screensize.maxvalue = 10;
@@ -266,7 +268,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.anaglyph.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.anaglyph.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.anaglyph.generic.id = ID_ANAGLYPH;
-	displayOptionsInfo.anaglyph.generic.x = 175;
+	displayOptionsInfo.anaglyph.generic.x = XPOSITION;
 	displayOptionsInfo.anaglyph.generic.y = y;
 	displayOptionsInfo.anaglyph.itemnames = anaglyph_names;
 	displayOptionsInfo.anaglyph.generic.toolTip =
@@ -279,7 +281,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.greyscale.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.greyscale.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.greyscale.generic.id = ID_GREYSCALE;
-	displayOptionsInfo.greyscale.generic.x = 175;
+	displayOptionsInfo.greyscale.generic.x = XPOSITION;
 	displayOptionsInfo.greyscale.generic.y = y;
 	displayOptionsInfo.greyscale.minvalue = 0;
 	displayOptionsInfo.greyscale.maxvalue = 100;
