@@ -3037,15 +3037,15 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 #define CTL_BG_WIDTH 78
 #define CTL_BG_HEIGHT 115
 
-#define CTL_LOLLYMDLX 576 // 573
-#define CTL_LOLLYMDLY 428 // 426
-#define CTL_LOLLYMDLW 46 // 50
+#define CTL_LOLLYMDLX 573
+#define CTL_LOLLYMDLY 427
+#define CTL_LOLLYMDLW 50
 #define CTL_LOLLYMDLH 50
 
-#define CTL_STATX 612
+#define CTL_STATX 610
 #define CTL_STATY1 370
 #define CTL_STATY2 402
-#define CTL_STATWH 25
+#define CTL_STATWH 26
 
 			// draw the background
 			if (team == TEAM_RED) {
