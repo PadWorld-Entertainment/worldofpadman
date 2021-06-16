@@ -67,7 +67,7 @@ typedef struct {
 	menulist_s list;
 	menulist_s mode;
 	menulist_s tq;
-	menulist_s fs;
+	menulist_s wm;
 	menulist_s lighting;
 	menulist_s texturebits;
 	menulist_s colordepth;
@@ -83,7 +83,7 @@ typedef struct {
 
 typedef struct {
 	int mode;
-	qboolean fullscreen;
+	int wm;
 	int tq;
 	int lighting;
 	int colordepth;
@@ -250,7 +250,7 @@ GraphicsOptions_GetInitialVideo
 static void GraphicsOptions_GetInitialVideo(void) {
 	s_ivo.colordepth = s_graphicsoptions.colordepth.curvalue;
 	s_ivo.mode = s_graphicsoptions.mode.curvalue;
-	s_ivo.fullscreen = s_graphicsoptions.fs.curvalue;
+	s_ivo.wm = s_graphicsoptions.wm.curvalue;
 	s_ivo.tq = s_graphicsoptions.tq.curvalue;
 	s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
 	s_ivo.geometry = s_graphicsoptions.geometry.curvalue;
@@ -274,7 +274,7 @@ static void GraphicsOptions_CheckConfig(void) {
 			continue;
 		if (s_ivo_templates[i].mode != s_graphicsoptions.mode.curvalue)
 			continue;
-		if (s_ivo_templates[i].fullscreen != s_graphicsoptions.fs.curvalue)
+		if (s_ivo_templates[i].wm != s_graphicsoptions.wm.curvalue)
 			continue;
 		if (s_ivo_templates[i].tq != s_graphicsoptions.tq.curvalue)
 			continue;
@@ -316,7 +316,7 @@ static void GraphicsOptions_UpdateMenuItems(void) {
 	if (s_ivo.mode != s_graphicsoptions.mode.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
-	if (s_ivo.fullscreen != s_graphicsoptions.fs.curvalue) {
+	if (s_ivo.wm != s_graphicsoptions.wm.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 	if (s_ivo.tq != s_graphicsoptions.tq.curvalue) {
@@ -371,7 +371,18 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		break;
 	}
 	trap_Cvar_SetValue("r_picmip", (float)(3 - s_graphicsoptions.tq.curvalue));
-	trap_Cvar_SetValue("r_fullscreen", (float)s_graphicsoptions.fs.curvalue);
+
+	if (s_graphicsoptions.wm.curvalue == 2) {
+		trap_Cvar_SetValue("r_fullscreen", 0);
+		trap_Cvar_SetValue("r_noborder", 1);
+	} else if (s_graphicsoptions.wm.curvalue == 1) {
+		trap_Cvar_SetValue("r_fullscreen", 0);
+		trap_Cvar_SetValue("r_noborder", 0);
+	} else {
+		trap_Cvar_SetValue("r_fullscreen", 1);
+		trap_Cvar_SetValue("r_noborder", 0);
+	}
+
 	switch (s_graphicsoptions.colordepth.curvalue) {
 	case 0:
 		trap_Cvar_SetValue("r_colorbits", 0);
@@ -469,7 +480,7 @@ static void GraphicsOptions_Event(void *ptr, int event) {
 		s_graphicsoptions.texturebits.curvalue = ivo->texturebits;
 		s_graphicsoptions.geometry.curvalue = ivo->geometry;
 		s_graphicsoptions.filter.curvalue = ivo->filter;
-		s_graphicsoptions.fs.curvalue = ivo->fullscreen;
+		s_graphicsoptions.wm.curvalue = ivo->wm;
 		s_graphicsoptions.ct.curvalue = ivo->ct;
 		s_graphicsoptions.af.curvalue = ivo->af;
 		s_graphicsoptions.aa.curvalue = ivo->aa;
@@ -541,7 +552,15 @@ static void GraphicsOptions_SetMenuItems(void) {
 		}
 	}
 
-	s_graphicsoptions.fs.curvalue = UI_GetCvarInt("r_fullscreen");
+	if (trap_Cvar_VariableValue("r_fullscreen") == 0) {
+		if (trap_Cvar_VariableValue("r_noborder") == 1) {
+			s_graphicsoptions.wm.curvalue = 2;
+		} else {
+			s_graphicsoptions.wm.curvalue = 1;
+		}
+	} else {
+		s_graphicsoptions.wm.curvalue = 0;
+	}
 
 	s_graphicsoptions.tq.curvalue = 3 - UI_GetCvarInt("r_picmip");
 	if (s_graphicsoptions.tq.curvalue < 0) {
@@ -593,7 +612,7 @@ static void GraphicsOptions_SetMenuItems(void) {
 		break;
 	}
 
-	if (s_graphicsoptions.fs.curvalue == 0) {
+	if (s_graphicsoptions.wm.curvalue != 0) {
 		s_graphicsoptions.colordepth.curvalue = 0;
 	}
 
@@ -619,7 +638,7 @@ void GraphicsOptions_MenuInit(void) {
 	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
 	static const char *lighting_names[] = {"High (Lightmap)", "Low (Vertex)", NULL};
 	static const char *colordepth_names[] = {"Default", "16 bit", "32 bit", NULL};
-
+	static const char *wm_names[] = {"Off", "On (with border)", "On (borderless)", NULL};
 	static const char *filter_names[] = {"Bilinear", "Trilinear", NULL};
 	static const char *td_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
@@ -722,16 +741,15 @@ void GraphicsOptions_MenuInit(void) {
 
 	// references/modifies "r_fullscreen"
 	// s_graphicsoptions.fs.generic.type		= MTYPE_RADIOBUTTON;
-	s_graphicsoptions.fs.generic.type = MTYPE_SPINCONTROL;
-	s_graphicsoptions.fs.itemnames = enabled_names;
-	s_graphicsoptions.fs.generic.name = "Fullscreen:";
-	s_graphicsoptions.fs.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.fs.generic.x = XPOSITION;
-	s_graphicsoptions.fs.generic.y = y;
-	s_graphicsoptions.fs.generic.toolTip =
-		"On: Uses entire display for game, ensure correct resolution is set to match your physical display for best "
-		"graphic results. \nOff: Play the game in a window, change resolution to change size of window. (Not "
-		"recommended).";
+	s_graphicsoptions.wm.generic.type = MTYPE_SPINCONTROL;
+	s_graphicsoptions.wm.itemnames = wm_names;
+	s_graphicsoptions.wm.generic.name = "Window Mode:";
+	s_graphicsoptions.wm.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.wm.generic.x = XPOSITION;
+	s_graphicsoptions.wm.generic.y = y;
+	s_graphicsoptions.wm.generic.toolTip =
+		"Switch on to play the game in a window (not recommended), change resolution to change size of the window. "
+		"Choose borderless option to remove window decoration from window managers, like borders and titlebar.";
 	y += BIGCHAR_HEIGHT + 2;
 
 	// references/modifies "r_vertexLight"
@@ -848,7 +866,7 @@ void GraphicsOptions_MenuInit(void) {
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.mode);
 
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.colordepth);
-	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.fs);
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.wm);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.lighting);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.geometry);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tq);
