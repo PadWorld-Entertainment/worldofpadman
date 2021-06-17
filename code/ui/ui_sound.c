@@ -60,7 +60,7 @@ SOUND OPTIONS MENU
 #define ID_VOIPMODE 23
 #define ID_RECORDMODE 24
 
-#define XPOSITION 185
+#define XPOSITION 180
 
 static const char *recording_modes[] = {"Push to talk", "Automatic", 0};
 

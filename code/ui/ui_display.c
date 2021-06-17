@@ -54,7 +54,7 @@ DISPLAY OPTIONS MENU
 #define ID_IGNOREHWG 16
 #define ID_BACK 19
 
-#define XPOSITION 185
+#define XPOSITION 180
 
 typedef struct {
 	menuframework_s menu;

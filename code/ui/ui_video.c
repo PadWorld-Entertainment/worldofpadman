@@ -54,7 +54,7 @@ GRAPHICS OPTIONS MENU
 #define ID_SOUND 107
 #define ID_NETWORK 108
 
-#define XPOSITION 185
+#define XPOSITION 180
 
 typedef struct {
 	menuframework_s menu;
@@ -638,7 +638,7 @@ void GraphicsOptions_MenuInit(void) {
 	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
 	static const char *lighting_names[] = {"High (Lightmap)", "Low (Vertex)", NULL};
 	static const char *colordepth_names[] = {"Default", "16 bit", "32 bit", NULL};
-	static const char *wm_names[] = {"Off", "On (with border)", "On (borderless)", NULL};
+	static const char *wm_names[] = {"Off", "On (Border)", "On (No Border)", NULL};
 	static const char *filter_names[] = {"Bilinear", "Trilinear", NULL};
 	static const char *td_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
@@ -740,7 +740,7 @@ void GraphicsOptions_MenuInit(void) {
 	y += BIGCHAR_HEIGHT + 2;
 
 	// references/modifies "r_fullscreen"
-	// s_graphicsoptions.fs.generic.type		= MTYPE_RADIOBUTTON;
+	// references/modifies "r_noborder"
 	s_graphicsoptions.wm.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.wm.itemnames = wm_names;
 	s_graphicsoptions.wm.generic.name = "Window Mode:";
@@ -749,7 +749,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.wm.generic.y = y;
 	s_graphicsoptions.wm.generic.toolTip =
 		"Switch on to play the game in a window (not recommended), change resolution to change size of the window. "
-		"Choose borderless option to remove window decoration from window managers, like borders and titlebar.";
+		"Choose no border to remove window decoration from window managers, like borders and titlebar.";
 	y += BIGCHAR_HEIGHT + 2;
 
 	// references/modifies "r_vertexLight"
@@ -802,7 +802,6 @@ void GraphicsOptions_MenuInit(void) {
 	y += BIGCHAR_HEIGHT + 2;
 
 	// references/modifies "r_ext_compressed_textures"
-	// s_graphicsoptions.ct.generic.type	= MTYPE_RADIOBUTTON;
 	s_graphicsoptions.ct.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.ct.itemnames = enabled_names;
 	s_graphicsoptions.ct.generic.name = "Compress Textures:";

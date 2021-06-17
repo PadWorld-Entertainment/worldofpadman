@@ -49,7 +49,7 @@ NETWORK OPTIONS MENU
 #define ID_ALLOWDOWNLOAD 15
 #define ID_BACK 16
 
-#define XPOSITION 185
+#define XPOSITION 180
 
 static const char *rate_items[] = {"Modem", "ISDN", "LAN/Cable/xDSL", 0};
 
