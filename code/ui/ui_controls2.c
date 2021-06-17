@@ -295,8 +295,8 @@ static bind_t g_bindings[] = {
 	{"ui_help gametype", "help gametype", ID_HELP_GAMETYPE, ANIM_IDLE, 'g', -1, -1, -1},
 	{"ui_help item", "help weapons/items", ID_HELP_ITEMS, ANIM_IDLE, 'h', -1, -1, -1},
 	{"+voiprecord", "push to talk", ID_PUSH2TALK, ANIM_IDLE, 'r', -1, -1, -1},
-	{"voteyes", "vote yes", ID_VOTEYES, ANIM_IDLE, '+', K_KP_PLUS, -1, -1},
-	{"voteno", "vote no", ID_VOTENO, ANIM_IDLE, '-', K_KP_MINUS, -1, -1},
+	{"vote yes", "vote yes", ID_VOTEYES, ANIM_IDLE, '+', K_KP_PLUS, -1, -1},
+	{"vote no", "vote no", ID_VOTENO, ANIM_IDLE, '-', K_KP_MINUS, -1, -1},
 
 	{(char *)NULL, (char *)NULL, 0, 0, -1, -1, -1, -1},
 };
@@ -620,10 +620,10 @@ static void Controls_Update(void) {
 	y = 180; // 160;
 	// bk001204 - parentheses
 	for (j = 0; (control = controls[j]); j++, y += SMALLCHAR_HEIGHT) {
-		control->x = 492;
+		control->x = 472;
 		control->y = y;
-		control->left = 500 - 19 * SMALLCHAR_WIDTH;
-		control->right = 500 + 21 * SMALLCHAR_WIDTH;
+		control->left = 472 - 19 * SMALLCHAR_WIDTH;
+		control->right = 472 + 21 * SMALLCHAR_WIDTH;
 		control->top = y;
 		control->bottom = y + SMALLCHAR_HEIGHT;
 	}
@@ -733,13 +733,13 @@ static void Controls_DrawKeyBinding(void *self) {
 
 		if (s_controls.waitingforkey) {
 			UI_DrawChar(x, y, '=', UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(500, SCREEN_HEIGHT * 0.90, "Waiting for new key ... ESCAPE to cancel",
+			UI_DrawString(440, SCREEN_HEIGHT * 0.88, "Waiting for new key ... ESCAPE to cancel",
 						  UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
 		} else {
 			UI_DrawChar(x, y, 13, UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(500, SCREEN_HEIGHT * 0.88, "Press ENTER or CLICK to change", UI_SMALLFONT | UI_CENTER,
+			UI_DrawString(440, SCREEN_HEIGHT * 0.86, "Press ENTER or CLICK to change", UI_SMALLFONT | UI_CENTER,
 						  colorWhite);
-			UI_DrawString(500, SCREEN_HEIGHT * 0.92, "Press BACKSPACE to clear", UI_SMALLFONT | UI_CENTER, colorWhite);
+			UI_DrawString(500, SCREEN_HEIGHT * 0.90, "Press BACKSPACE to clear", UI_SMALLFONT | UI_CENTER, colorWhite);
 		}
 	} else {
 		if (a->generic.flags & QMF_GRAYED) {
@@ -760,7 +760,7 @@ Controls_StatusBar
 =================
 */
 static void Controls_StatusBar(void *self) {
-	UI_DrawString(500, SCREEN_HEIGHT * 0.90, "Use Arrow Keys or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
+	UI_DrawString(440, SCREEN_HEIGHT * 0.88, "Use Arrow Keys or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
 }
 
 /*
