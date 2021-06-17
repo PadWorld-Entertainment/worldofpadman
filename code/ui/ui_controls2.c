@@ -733,13 +733,12 @@ static void Controls_DrawKeyBinding(void *self) {
 
 		if (s_controls.waitingforkey) {
 			UI_DrawChar(x, y, '=', UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(440, SCREEN_HEIGHT * 0.88, "Waiting for new key ... ESCAPE to cancel",
-						  UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
+			UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Waiting for new key ...", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
+			UI_DrawString(450, SCREEN_HEIGHT * 0.89, "Press ESCAPE to cancel", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
 		} else {
 			UI_DrawChar(x, y, 13, UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(440, SCREEN_HEIGHT * 0.86, "Press ENTER or CLICK to change", UI_SMALLFONT | UI_CENTER,
-						  colorWhite);
-			UI_DrawString(500, SCREEN_HEIGHT * 0.90, "Press BACKSPACE to clear", UI_SMALLFONT | UI_CENTER, colorWhite);
+			UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Press ENTER or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
+			UI_DrawString(450, SCREEN_HEIGHT * 0.89, "Press BACKSPACE to clear", UI_SMALLFONT | UI_CENTER, colorWhite);
 		}
 	} else {
 		if (a->generic.flags & QMF_GRAYED) {
@@ -760,7 +759,7 @@ Controls_StatusBar
 =================
 */
 static void Controls_StatusBar(void *self) {
-	UI_DrawString(440, SCREEN_HEIGHT * 0.88, "Use Arrow Keys or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
+	UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Use Arrow Keys or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
 }
 
 /*
