@@ -136,7 +136,7 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		break;
 
 	case ID_SIMPLEITEMS:
-		trap_Cvar_SetValue("cg_simpleItems", displayOptionsInfo.simpleitems.curvalue);
+		trap_Cvar_SetValue("cg_simpleItems", (float)displayOptionsInfo.simpleitems.curvalue);
 		break;
 
 	case ID_BACK:
