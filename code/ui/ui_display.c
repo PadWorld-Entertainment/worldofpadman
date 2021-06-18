@@ -52,16 +52,16 @@ DISPLAY OPTIONS MENU
 #define ID_BRIGHTNESS 15
 #define ID_SCREENSIZE 16
 #define ID_SIMPLEITEMS 17
-#define ID_WALLMARKS 131
-#define ID_HIGHQUALITYSKY 129
-#define ID_LENSFLARE 154
-#define ID_DYNAMICLIGHTS 132
-#define ID_FLARES 130
+#define ID_WALLMARKS 18
+#define ID_HIGHQUALITYSKY 19
+#define ID_LENSFLARE 20
+#define ID_DYNAMICLIGHTS 21
+#define ID_FLARES 22
+#define ID_INGAMEVIDEO 23
+#define ID_ANAGLYPH 24
+#define ID_GREYSCALE 25
 
-#define ID_ANAGLYPH 18
-#define ID_GREYSCALE 19
-
-#define ID_BACK 20
+#define ID_BACK 26
 
 #define XPOSITION 180
 
@@ -82,7 +82,7 @@ typedef struct {
 	menuradiobutton_s lensFlare;
 	menuradiobutton_s dynamiclights;
 	menuradiobutton_s flares;
-
+	menuradiobutton_s ingamevideo;
 	menulist_s anaglyph;
 	menuslider_s greyscale;
 
@@ -167,6 +167,10 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 
 	case ID_FLARES:
 		trap_Cvar_SetValue("r_flares", displayOptionsInfo.flares.curvalue);
+		break;
+
+	case ID_INGAMEVIDEO:
+		trap_Cvar_SetValue("r_inGameVideo", displayOptionsInfo.ingamevideo.curvalue);
 		break;
 
 	case ID_BACK:
@@ -357,6 +361,15 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.flares.generic.x = XPOSITION;
 	displayOptionsInfo.flares.generic.y = y;
 
+	y += BIGCHAR_HEIGHT + 2;
+	displayOptionsInfo.ingamevideo.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.ingamevideo.generic.name = "Ingame Videos:";
+	displayOptionsInfo.ingamevideo.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.ingamevideo.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.ingamevideo.generic.id = ID_FLARES;
+	displayOptionsInfo.ingamevideo.generic.x = XPOSITION;
+	displayOptionsInfo.ingamevideo.generic.y = y;
+
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
 	displayOptionsInfo.anaglyph.generic.name = "Stereoscopic 3D:";
@@ -417,7 +430,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.lensFlare);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.dynamiclights);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.flares);
-
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.ingamevideo);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
 
@@ -433,6 +446,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.lensFlare.curvalue = trap_Cvar_VariableValue("cg_drawLensflare") != 0;
 	displayOptionsInfo.dynamiclights.curvalue = trap_Cvar_VariableValue("r_dynamiclight") != 0;
 	displayOptionsInfo.flares.curvalue = trap_Cvar_VariableValue("r_flares") != 0;
+	displayOptionsInfo.ingamevideo.curvalue = trap_Cvar_VariableValue("r_inGameVideo") != 0;
 	displayOptionsInfo.anaglyph.curvalue =
 		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
