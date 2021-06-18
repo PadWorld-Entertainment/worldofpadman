@@ -242,7 +242,6 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.ignoreHWG.generic.id = ID_IGNOREHWG;
 	displayOptionsInfo.ignoreHWG.generic.x = XPOSITION;
 	displayOptionsInfo.ignoreHWG.generic.y = y;
-	displayOptionsInfo.ignoreHWG.curvalue = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.ignoreHWG.generic.toolTip =
 		"If enabled you won't be able to adjust the brightness in game and will be locked and controlled by your "
 		"current graphics card and monitor options. It is recommended to leave it off so you can adjust the brightness "
@@ -336,16 +335,17 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.ignoreHWG);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
-	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.simpleitems);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.simpleitems);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
 
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.apply);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.back);
 
+	displayOptionsInfo.ignoreHWG.curvalue = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
-	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue( "cg_viewsize") / 10;
-	displayOptionsInfo.simpleitems.curvalue = trap_Cvar_VariableValue("cg_simpleItems") != 0;
+	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
+	displayOptionsInfo.simpleitems.curvalue = (UI_GetCvarInt("cg_simpleItems") != 0);
 	displayOptionsInfo.anaglyph.curvalue =
 		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
