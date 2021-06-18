@@ -50,7 +50,8 @@ DISPLAY OPTIONS MENU
 
 #define ID_IGNOREHWG 14
 #define ID_BRIGHTNESS 15
-#define ID_SCREENSIZE 16
+//#define ID_SCREENSIZE 16
+#define ID_SYNCEVERYFRAME 16
 #define ID_SIMPLEITEMS 17
 #define ID_WALLMARKS 18
 #define ID_HIGHQUALITYSKY 19
@@ -75,7 +76,8 @@ typedef struct {
 
 	menuradiobutton_s ignoreHWG;
 	menuslider_s brightness;
-	menuslider_s screensize;
+//	menuslider_s screensize;
+	menuradiobutton_s synceveryframe;
 	menuradiobutton_s simpleitems;
 	menuradiobutton_s wallmarks;
 	menuradiobutton_s highqualitysky;
@@ -141,8 +143,12 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		trap_Cvar_SetValue("r_gamma", displayOptionsInfo.brightness.curvalue / 10.0f);
 		break;
 
-	case ID_SCREENSIZE:
-		trap_Cvar_SetValue("cg_viewsize", displayOptionsInfo.screensize.curvalue * 10);
+//	case ID_SCREENSIZE:
+//		trap_Cvar_SetValue("cg_viewsize", displayOptionsInfo.screensize.curvalue * 10);
+//		break;
+//
+	case ID_SYNCEVERYFRAME:
+		trap_Cvar_SetValue("r_finish", displayOptionsInfo.synceveryframe.curvalue);
 		break;
 
 	case ID_SIMPLEITEMS:
@@ -294,7 +300,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	if (!uis.glconfig.deviceSupportsGamma)
 		displayOptionsInfo.brightness.generic.flags |= QMF_GRAYED;
 
-	y += BIGCHAR_HEIGHT + 2;
+/*	y += BIGCHAR_HEIGHT + 2;
 	displayOptionsInfo.screensize.generic.type = MTYPE_SLIDER;
 	displayOptionsInfo.screensize.generic.name = "Screen Size:";
 	displayOptionsInfo.screensize.generic.flags = QMF_SMALLFONT;
@@ -304,6 +310,17 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.screensize.generic.y = y;
 	displayOptionsInfo.screensize.minvalue = 3;
     displayOptionsInfo.screensize.maxvalue = 10;
+*/
+	y += BIGCHAR_HEIGHT + 2;
+	displayOptionsInfo.synceveryframe.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.synceveryframe.generic.name = "Sync Every Frame:";
+	displayOptionsInfo.synceveryframe.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.synceveryframe.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.synceveryframe.generic.id = ID_SYNCEVERYFRAME;
+	displayOptionsInfo.synceveryframe.generic.x = XPOSITION;
+	displayOptionsInfo.synceveryframe.generic.y = y;
+	displayOptionsInfo.synceveryframe.generic.toolTip =
+		"Also known as V-SYNC. Enable only if you're experiencing graphical horizontal tearing artifacts.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	displayOptionsInfo.simpleitems.generic.type = MTYPE_RADIOBUTTON;
@@ -423,7 +440,8 @@ static void UI_DisplayOptionsMenu_Init(void) {
 
 	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.ignoreHWG);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
-	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
+//	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.synceveryframe);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.simpleitems);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.wallmarks);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.highqualitysky);
@@ -439,7 +457,8 @@ static void UI_DisplayOptionsMenu_Init(void) {
 
 	displayOptionsInfo.ignoreHWG.curvalue = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
-	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
+//	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
+	displayOptionsInfo.synceveryframe.curvalue = trap_Cvar_VariableValue("r_finish") != 0;
 	displayOptionsInfo.simpleitems.curvalue = trap_Cvar_VariableValue("cg_simpleItems") != 0;
 	displayOptionsInfo.wallmarks.curvalue = trap_Cvar_VariableValue("cg_marks") != 0;
 	displayOptionsInfo.highqualitysky.curvalue = trap_Cvar_VariableValue("r_fastsky") == 0;
