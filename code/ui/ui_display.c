@@ -276,7 +276,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.simpleitems.generic.type = MTYPE_RADIOBUTTON;
 	displayOptionsInfo.simpleitems.generic.name = "Simple Items:";
 	displayOptionsInfo.simpleitems.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	displayOptionsInfo.simpleitems.generic.callback = Preferences_Event;
+	displayOptionsInfo.simpleitems.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.simpleitems.generic.id = ID_SIMPLEITEMS;
 	displayOptionsInfo.simpleitems.generic.x = XPOSITION;
 	displayOptionsInfo.simpleitems.generic.y = y;
