@@ -47,22 +47,24 @@ SOUND OPTIONS MENU
 #define ID_DISPLAY 11
 #define ID_SOUND 12
 #define ID_NETWORK 13
+
 #define ID_EFFECTSVOLUME 14
 #define ID_MUSICVOLUME 15
-#define ID_QUALITY 16
-#define ID_SOUNDSYSTEM 17
-#define ID_MUSICAUTOSWITCH 18
-#define ID_BACK 19
-#define ID_APPLY 20
+#define ID_DOPPLER 16
+#define ID_QUALITY 17
+#define ID_SOUNDSYSTEM 18
+#define ID_MUSICAUTOSWITCH 19
+#define ID_BACK 20
+#define ID_APPLY 21
 
-#define ID_VOICETHRESHOLD 21
-#define ID_GAINWHILECAPTURE 22
-#define ID_VOIPMODE 23
-#define ID_RECORDMODE 24
+#define ID_VOICETHRESHOLD 22
+#define ID_GAINWHILECAPTURE 23
+#define ID_VOIPMODE 24
+#define ID_RECORDMODE 25
 
 #define XPOSITION 180
 
-static const char *recording_modes[] = {"Push to talk", "Automatic", 0};
+static const char *recording_modes[] = {"Push to Talk", "Automatic", 0};
 
 #define DEFAULT_SDL_SND_SPEED 44100
 
@@ -82,6 +84,7 @@ typedef struct {
 
 	menuslider_s sfxvolume;
 	menuslider_s musicvolume;
+	menuradiobutton_s doppler;
 	menulist_s soundSystem;
 	menulist_s quality;
 	menuradiobutton_s musicautoswitch;
@@ -188,6 +191,10 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 
 	case ID_MUSICAUTOSWITCH:
 		trap_Cvar_SetValue("wop_AutoswitchSongByNextMap", (float)soundOptionsInfo.musicautoswitch.curvalue);
+		break;
+
+	case ID_DOPPLER:
+		trap_Cvar_SetValue("s_doppler", (float)soundOptionsInfo.doppler.curvalue);
 		break;
 
 	case ID_GAINWHILECAPTURE:
@@ -357,6 +364,16 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.musicvolume.minvalue = 0;
 	soundOptionsInfo.musicvolume.maxvalue = 10;
 
+	y += (BIGCHAR_HEIGHT + 2);
+	soundOptionsInfo.musicautoswitch.generic.type = MTYPE_RADIOBUTTON;
+	soundOptionsInfo.musicautoswitch.generic.name = "Auto Switch Song:";
+	soundOptionsInfo.musicautoswitch.generic.flags = QMF_SMALLFONT;
+	soundOptionsInfo.musicautoswitch.generic.callback = UI_SoundOptionsMenu_Event;
+	soundOptionsInfo.musicautoswitch.generic.id = ID_MUSICAUTOSWITCH;
+	soundOptionsInfo.musicautoswitch.generic.x = XPOSITION;
+	soundOptionsInfo.musicautoswitch.generic.y = y;
+	soundOptionsInfo.musicautoswitch.generic.toolTip = "Enable to automatically switch to the next song on map change, "
+													   "if set to off current song will restart on map change.";
 	y += BIGCHAR_HEIGHT + 2;
 	soundOptionsInfo.soundSystem.generic.type = MTYPE_SPINCONTROL;
 	soundOptionsInfo.soundSystem.generic.name = "Sound System:";
@@ -378,15 +395,13 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.quality.itemnames = quality_items;
 
 	y += (BIGCHAR_HEIGHT + 2);
-	soundOptionsInfo.musicautoswitch.generic.type = MTYPE_RADIOBUTTON;
-	soundOptionsInfo.musicautoswitch.generic.name = "Auto Switch Song:";
-	soundOptionsInfo.musicautoswitch.generic.flags = QMF_SMALLFONT;
-	soundOptionsInfo.musicautoswitch.generic.callback = UI_SoundOptionsMenu_Event;
-	soundOptionsInfo.musicautoswitch.generic.id = ID_MUSICAUTOSWITCH;
-	soundOptionsInfo.musicautoswitch.generic.x = XPOSITION;
-	soundOptionsInfo.musicautoswitch.generic.y = y;
-	soundOptionsInfo.musicautoswitch.generic.toolTip = "Enable to automatically switch to the next song on map change, "
-													   "if set to off current song will restart on map change.";
+	soundOptionsInfo.doppler.generic.type = MTYPE_RADIOBUTTON;
+	soundOptionsInfo.doppler.generic.name = "Doppler Effect:";
+	soundOptionsInfo.doppler.generic.flags = QMF_SMALLFONT;
+	soundOptionsInfo.doppler.generic.callback = UI_SoundOptionsMenu_Event;
+	soundOptionsInfo.doppler.generic.id = ID_DOPPLER;
+	soundOptionsInfo.doppler.generic.x = XPOSITION;
+	soundOptionsInfo.doppler.generic.y = y;
 
 	y += BIGCHAR_HEIGHT * 2 + 2;
 	soundOptionsInfo.voipmode.generic.type = MTYPE_RADIOBUTTON;
@@ -399,9 +414,9 @@ static void UI_SoundOptionsMenu_Init(void) {
 
 	soundOptionsInfo.voipmode_grayed.generic.type = MTYPE_TEXT;
 	soundOptionsInfo.voipmode_grayed.generic.flags = QMF_PULSE;
-	soundOptionsInfo.voipmode_grayed.generic.x = XPOSITION - 25;
+	soundOptionsInfo.voipmode_grayed.generic.x = XPOSITION - 35;
 	soundOptionsInfo.voipmode_grayed.generic.y = y;
-	soundOptionsInfo.voipmode_grayed.string = "needs fast network:";
+	soundOptionsInfo.voipmode_grayed.string = "Needs LAN/Cable/xDSL Network!";
 	soundOptionsInfo.voipmode_grayed.style = (UI_CENTER | UI_SMALLFONT);
 	soundOptionsInfo.voipmode_grayed.color = menu_text_color;
 
@@ -472,9 +487,10 @@ static void UI_SoundOptionsMenu_Init(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.network);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.sfxvolume);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicvolume);
+	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicautoswitch);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.soundSystem);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.quality);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicautoswitch);
+	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.doppler);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipmode);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipmode_grayed);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipRecordMode);
@@ -506,6 +522,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.quality.curvalue = soundOptionsInfo.quality_original;
 
 	soundOptionsInfo.musicautoswitch.curvalue = (UI_GetCvarInt("wop_AutoswitchSongByNextMap") != 0);
+	soundOptionsInfo.doppler.curvalue = (UI_GetCvarInt("s_doppler") != 0);
 	// soundOptionsInfo.voiceThresholdVAD.curvalue = trap_Cvar_VariableValue("cl_voipVADThreshold") * 10;
 	soundOptionsInfo.voiceGainDuringCapture.curvalue = trap_Cvar_VariableValue("cl_voipGainDuringCapture") * 10;
 	soundOptionsInfo.voipmode.curvalue = UI_GetCvarInt("cl_voip");
