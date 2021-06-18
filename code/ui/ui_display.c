@@ -53,6 +53,7 @@ DISPLAY OPTIONS MENU
 #define ID_SCREENSIZE 16
 #define ID_SIMPLEITEMS 17
 #define ID_WALLMARKS 131
+#define ID_HIGHQUALITYSKY 129
 
 #define ID_ANAGLYPH 18
 #define ID_GREYSCALE 19
@@ -74,6 +75,7 @@ typedef struct {
 	menuslider_s screensize;
 	menuradiobutton_s simpleitems;
 	menuradiobutton_s wallmarks;
+	menuradiobutton_s highqualitysky;
 
 	menulist_s anaglyph;
 	menuslider_s greyscale;
@@ -143,6 +145,10 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 
 	case ID_WALLMARKS:
 		trap_Cvar_SetValue("cg_marks", displayOptionsInfo.wallmarks.curvalue);
+		break;
+
+	case ID_HIGHQUALITYSKY:
+		trap_Cvar_SetValue("r_fastsky", !displayOptionsInfo.highqualitysky.curvalue);
 		break;
 
 	case ID_BACK:
@@ -297,6 +303,15 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.wallmarks.generic.y = y;
 	displayOptionsInfo.wallmarks.generic.toolTip = "Enable this to see weapon effects on surfaces.";
 
+	y += BIGCHAR_HEIGHT + 2;
+	displayOptionsInfo.highqualitysky.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.highqualitysky.generic.name = "High Quality Sky:";
+	displayOptionsInfo.highqualitysky.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.highqualitysky.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.highqualitysky.generic.id = ID_HIGHQUALITYSKY;
+	displayOptionsInfo.highqualitysky.generic.x = XPOSITION;
+	displayOptionsInfo.highqualitysky.generic.y = y;
+
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
 	displayOptionsInfo.anaglyph.generic.name = "Stereoscopic 3D:";
@@ -353,6 +368,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.simpleitems);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.wallmarks);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.highqualitysky);
 
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
@@ -365,6 +381,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
 	displayOptionsInfo.simpleitems.curvalue = trap_Cvar_VariableValue("cg_simpleItems") != 0;
 	displayOptionsInfo.wallmarks.curvalue = trap_Cvar_VariableValue("cg_marks") != 0;
+	displayOptionsInfo.highqualitysky.curvalue = trap_Cvar_VariableValue("r_fastsky") == 0;
 	displayOptionsInfo.anaglyph.curvalue =
 		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
