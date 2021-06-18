@@ -54,6 +54,7 @@ DISPLAY OPTIONS MENU
 #define ID_SIMPLEITEMS 17
 #define ID_WALLMARKS 131
 #define ID_HIGHQUALITYSKY 129
+#define ID_LENSFLARE 154
 
 #define ID_ANAGLYPH 18
 #define ID_GREYSCALE 19
@@ -76,6 +77,7 @@ typedef struct {
 	menuradiobutton_s simpleitems;
 	menuradiobutton_s wallmarks;
 	menuradiobutton_s highqualitysky;
+	menuradiobutton_s lensFlare;
 
 	menulist_s anaglyph;
 	menuslider_s greyscale;
@@ -149,6 +151,10 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 
 	case ID_HIGHQUALITYSKY:
 		trap_Cvar_SetValue("r_fastsky", !displayOptionsInfo.highqualitysky.curvalue);
+		break;
+
+	case ID_LENSFLARE:
+		trap_Cvar_Set("cg_drawLensflare", va("%d", displayOptionsInfo.lensFlare.curvalue));
 		break;
 
 	case ID_BACK:
@@ -312,6 +318,15 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.highqualitysky.generic.x = XPOSITION;
 	displayOptionsInfo.highqualitysky.generic.y = y;
 
+	y += BIGCHAR_HEIGHT + 2;
+	displayOptionsInfo.lensFlare.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.lensFlare.generic.name = "Sky Lens Flare:";
+	displayOptionsInfo.lensFlare.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.lensFlare.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.lensFlare.generic.id = ID_LENSFLARE;
+	displayOptionsInfo.lensFlare.generic.x = XPOSITION;
+	displayOptionsInfo.lensFlare.generic.y = y;
+
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
 	displayOptionsInfo.anaglyph.generic.name = "Stereoscopic 3D:";
@@ -369,6 +384,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.simpleitems);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.wallmarks);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.highqualitysky);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.lensFlare);
 
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
@@ -382,6 +398,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.simpleitems.curvalue = trap_Cvar_VariableValue("cg_simpleItems") != 0;
 	displayOptionsInfo.wallmarks.curvalue = trap_Cvar_VariableValue("cg_marks") != 0;
 	displayOptionsInfo.highqualitysky.curvalue = trap_Cvar_VariableValue("r_fastsky") == 0;
+	displayOptionsInfo.lensFlare.curvalue = trap_Cvar_VariableValue("cg_drawLensflare") != 0;
 	displayOptionsInfo.anaglyph.curvalue =
 		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
