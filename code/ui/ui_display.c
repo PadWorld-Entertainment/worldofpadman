@@ -47,12 +47,16 @@ DISPLAY OPTIONS MENU
 #define ID_DISPLAY 11
 #define ID_SOUND 12
 #define ID_NETWORK 13
-#define ID_BRIGHTNESS 14
-#define ID_SCREENSIZE 15
-#define ID_ANAGLYPH 17
-#define ID_GREYSCALE 18
-#define ID_IGNOREHWG 16
-#define ID_BACK 19
+
+#define ID_IGNOREHWG 14
+#define ID_BRIGHTNESS 15
+#define ID_SCREENSIZE 16
+#define ID_SIMPLEITEMS 17
+
+#define ID_ANAGLYPH 18
+#define ID_GREYSCALE 19
+
+#define ID_BACK 20
 
 #define XPOSITION 180
 
@@ -67,6 +71,8 @@ typedef struct {
 	menuradiobutton_s ignoreHWG;
 	menuslider_s brightness;
 	menuslider_s screensize;
+	menuradiobutton_s simpleitems;
+
 	menulist_s anaglyph;
 	menuslider_s greyscale;
 
@@ -128,7 +134,11 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 	case ID_SCREENSIZE:
 		trap_Cvar_SetValue("cg_viewsize", displayOptionsInfo.screensize.curvalue * 10);
 		break;
-		
+
+	case ID_SIMPLEITEMS:
+		trap_Cvar_SetValue("cg_simpleItems", displayOptionsInfo.simpleitems.curvalue);
+		break;
+
 	case ID_BACK:
 		UI_PopMenu();
 		break;
@@ -263,6 +273,16 @@ static void UI_DisplayOptionsMenu_Init(void) {
     displayOptionsInfo.screensize.maxvalue = 10;
 
 	y += (BIGCHAR_HEIGHT + 2);
+	displayOptionsInfo.simpleitems.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.simpleitems.generic.name = "Simple Items:";
+	displayOptionsInfo.simpleitems.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	displayOptionsInfo.simpleitems.generic.callback = Preferences_Event;
+	displayOptionsInfo.simpleitems.generic.id = ID_SIMPLEITEMS;
+	displayOptionsInfo.simpleitems.generic.x = XPOSITION;
+	displayOptionsInfo.simpleitems.generic.y = y;
+	displayOptionsInfo.simpleitems.generic.toolTip = "Enable this to see all 3d items in game replaced with 2d icons.";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
 	displayOptionsInfo.anaglyph.generic.name = "Stereoscopic 3D:";
 	displayOptionsInfo.anaglyph.generic.flags = QMF_SMALLFONT;
@@ -312,16 +332,20 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.display);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.sound);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.network);
+
 	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.ignoreHWG);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
-	Menu_AddItem( &displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize );
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
+	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.simpleitems);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
+
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.apply);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.back);
 
 	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
 	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue( "cg_viewsize") / 10;
+	displayOptionsInfo.simpleitems.curvalue = trap_Cvar_VariableValue("cg_simpleItems") != 0;
 	displayOptionsInfo.anaglyph.curvalue =
 		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
