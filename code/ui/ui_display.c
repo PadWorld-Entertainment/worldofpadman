@@ -136,7 +136,7 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		break;
 
 	case ID_SIMPLEITEMS:
-		trap_Cvar_SetValue("cg_simpleItems", (float)displayOptionsInfo.simpleitems.curvalue);
+		trap_Cvar_SetValue("cg_simpleItems", displayOptionsInfo.simpleitems.curvalue);
 		break;
 
 	case ID_BACK:
@@ -274,7 +274,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.simpleitems.generic.type = MTYPE_RADIOBUTTON;
 	displayOptionsInfo.simpleitems.generic.name = "Simple Items:";
-	displayOptionsInfo.simpleitems.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	displayOptionsInfo.simpleitems.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.simpleitems.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.simpleitems.generic.id = ID_SIMPLEITEMS;
 	displayOptionsInfo.simpleitems.generic.x = XPOSITION;
@@ -345,7 +345,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.ignoreHWG.curvalue = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
 	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
-	displayOptionsInfo.simpleitems.curvalue = (UI_GetCvarInt("cg_simpleItems") != 0);
+	displayOptionsInfo.simpleitems.curvalue = (trap_Cvar_VariableValue("cg_simpleItems") != 0);
 	displayOptionsInfo.anaglyph.curvalue =
 		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
