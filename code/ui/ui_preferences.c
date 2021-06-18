@@ -36,17 +36,9 @@ GAME OPTIONS MENU
 #define PREFERENCES_X_POS 534
 
 #define ID_CROSSHAIR 127
-#define ID_SIMPLEITEMS 128
-#define ID_HIGHQUALITYSKY 129
-#define ID_FLARES 130
-#define ID_WALLMARKS 131
-#define ID_DYNAMICLIGHTS 132
 #define ID_IDENTIFYTARGET 133
-#define ID_SYNCEVERYFRAME 134
 #define ID_FORCEMODEL 135
 #define ID_DRAWTEAMOVERLAY 136
-#define ID_ALLOWDOWNLOAD 137
-#define ID_BACK 138
 
 #define ID_FFAHUD 139
 #define ID_CONNOTIFY 140
@@ -56,7 +48,6 @@ GAME OPTIONS MENU
 #define ID_FPS 143
 #define ID_UPS 144
 #define ID_REALTIME 145
-#define ID_MORE 146
 
 #define ID_GLOWMODEL 147
 #define ID_GLOWCOLOR 148
@@ -66,22 +57,18 @@ GAME OPTIONS MENU
 #define ID_WALLHACKBALLOONS 151
 #define ID_WALLHACKHSTATION 152
 #define ID_WALLHACKSYCTELE 153
-#define ID_LENSFLARE 154
 #define ID_WALLHACKFREEZETAG 15
 
 #define NUM_CROSSHAIRS 12
+
+#define ID_MORE 146
+#define ID_BACK 138
 
 typedef struct {
 	menuframework_s menu;
 
 	menulist_s crosshair;
-	menuradiobutton_s simpleitems;
-	menuradiobutton_s flares;
-	menuradiobutton_s wallmarks;
-	menuradiobutton_s dynamiclights;
 	menuradiobutton_s identifytarget;
-	menuradiobutton_s highqualitysky;
-	menuradiobutton_s synceveryframe;
 	menuradiobutton_s forcemodel;
 	menuradiobutton_s glowmodel;
 	menuradiobutton_s drawteamoverlay;
@@ -106,7 +93,6 @@ typedef struct {
 	menuradiobutton_s whBalloons;
 	menuradiobutton_s whHStations;
 	menuradiobutton_s whSycTele;
-	menuradiobutton_s lensFlare;
 
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];
 } preferences_t;
@@ -129,19 +115,12 @@ static menucommon_s *page1_options[] = {(menucommon_s *)&s_preferences.crosshair
 										(menucommon_s *)&s_preferences.identifytarget,
 										NULL};
 
-static menucommon_s *page2_options[] = {(menucommon_s *)&s_preferences.simpleitems,
-										(menucommon_s *)&s_preferences.wallmarks,
-										(menucommon_s *)&s_preferences.dynamiclights,
-										(menucommon_s *)&s_preferences.highqualitysky,
-										(menucommon_s *)&s_preferences.flares,
-										(menucommon_s *)&s_preferences.synceveryframe,
-										(menucommon_s *)&s_preferences.whLPS,
+static menucommon_s *page2_options[] = {(menucommon_s *)&s_preferences.whLPS,
 										(menucommon_s *)&s_preferences.whTeamMates,
 										(menucommon_s *)&s_preferences.whBalloons,
 										(menucommon_s *)&s_preferences.whHStations,
 										(menucommon_s *)&s_preferences.whSycTele,
 										(menucommon_s *)&s_preferences.whFreezeTag,
-										(menucommon_s *)&s_preferences.lensFlare,
 										NULL};
 
 static const char *ffahud_names[] = {"Black", "Red",	"Blue", "Green",	"Chrome", "Whitemetal",
@@ -193,17 +172,10 @@ static void Preferences_SetMenuItems(void) {
 	s_preferences.whSycTele.curvalue = (ICON_SPRAYROOM & cg_iconsCvarValue);
 
 	s_preferences.crosshair.curvalue = (int)trap_Cvar_VariableValue("cg_drawCrosshair") % NUM_CROSSHAIRS;
-	s_preferences.simpleitems.curvalue = trap_Cvar_VariableValue("cg_simpleItems") != 0;
-	s_preferences.flares.curvalue = trap_Cvar_VariableValue("r_flares") != 0;
-	s_preferences.wallmarks.curvalue = trap_Cvar_VariableValue("cg_marks") != 0;
 	s_preferences.identifytarget.curvalue = trap_Cvar_VariableValue("cg_drawCrosshairNames") != 0;
-	s_preferences.dynamiclights.curvalue = trap_Cvar_VariableValue("r_dynamiclight") != 0;
-	s_preferences.highqualitysky.curvalue = trap_Cvar_VariableValue("r_fastsky") == 0;
-	s_preferences.synceveryframe.curvalue = trap_Cvar_VariableValue("r_finish") != 0;
 	s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue("cg_forcemodel") != 0.0f);
 	s_preferences.drawteamoverlay.curvalue = trap_Cvar_VariableValue("cg_drawTeamOverlay") != 0;
 	s_preferences.allowdownload.curvalue = trap_Cvar_VariableValue("cl_allowDownload") != 0;
-	s_preferences.lensFlare.curvalue = trap_Cvar_VariableValue("cg_drawLensflare") != 0;
 	s_preferences.glowcolor.curvalue = trap_Cvar_VariableValue("cg_glowModel"); // cg_glowModelTeam..
 	s_preferences.glowmodel.curvalue = (s_preferences.glowcolor.curvalue != 0);
 	UpdateGlowColorFlags();
@@ -250,32 +222,8 @@ static void Preferences_Event(void *ptr, int notification) {
 		trap_Cvar_SetValue("cg_drawCrosshair", s_preferences.crosshair.curvalue);
 		break;
 
-	case ID_SIMPLEITEMS:
-		trap_Cvar_SetValue("cg_simpleItems", s_preferences.simpleitems.curvalue);
-		break;
-
-	case ID_HIGHQUALITYSKY:
-		trap_Cvar_SetValue("r_fastsky", !s_preferences.highqualitysky.curvalue);
-		break;
-
-	case ID_FLARES:
-		trap_Cvar_SetValue("r_flares", s_preferences.flares.curvalue);
-		break;
-
-	case ID_WALLMARKS:
-		trap_Cvar_SetValue("cg_marks", s_preferences.wallmarks.curvalue);
-		break;
-
-	case ID_DYNAMICLIGHTS:
-		trap_Cvar_SetValue("r_dynamiclight", s_preferences.dynamiclights.curvalue);
-		break;
-
 	case ID_IDENTIFYTARGET:
 		trap_Cvar_SetValue("cg_drawCrosshairNames", s_preferences.identifytarget.curvalue);
-		break;
-
-	case ID_SYNCEVERYFRAME:
-		trap_Cvar_SetValue("r_finish", s_preferences.synceveryframe.curvalue);
 		break;
 
 	case ID_FORCEMODEL:
@@ -368,9 +316,6 @@ static void Preferences_Event(void *ptr, int notification) {
 			trap_Cvar_Set("con_notifytime", "-10");
 			break;
 		}
-		break;
-	case ID_LENSFLARE:
-		trap_Cvar_Set("cg_drawLensflare", va("%d", s_preferences.lensFlare.curvalue));
 		break;
 	case ID_MORE:
 		SwitchPage();
@@ -578,73 +523,6 @@ static void Preferences_MenuInit(void) {
 
 	// page 2
 	y = 156;
-	s_preferences.simpleitems.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.simpleitems.generic.name = "Simple Items:";
-	s_preferences.simpleitems.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.simpleitems.generic.callback = Preferences_Event;
-	s_preferences.simpleitems.generic.id = ID_SIMPLEITEMS;
-	s_preferences.simpleitems.generic.x = PREFERENCES_X_POS;
-	s_preferences.simpleitems.generic.y = y;
-	s_preferences.simpleitems.generic.toolTip = "Enable this to see all 3d items in game replaced with 2d icons.";
-
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.wallmarks.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.wallmarks.generic.name = "Marks on Walls:";
-	s_preferences.wallmarks.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.wallmarks.generic.callback = Preferences_Event;
-	s_preferences.wallmarks.generic.id = ID_WALLMARKS;
-	s_preferences.wallmarks.generic.x = PREFERENCES_X_POS;
-	s_preferences.wallmarks.generic.y = y;
-	s_preferences.wallmarks.generic.toolTip = "Enable this to see weapon effects on walls.";
-
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.dynamiclights.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.dynamiclights.generic.name = "Dynamic Lights:";
-	s_preferences.dynamiclights.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.dynamiclights.generic.callback = Preferences_Event;
-	s_preferences.dynamiclights.generic.id = ID_DYNAMICLIGHTS;
-	s_preferences.dynamiclights.generic.x = PREFERENCES_X_POS;
-	s_preferences.dynamiclights.generic.y = y;
-
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.highqualitysky.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.highqualitysky.generic.name = "High Quality Sky:";
-	s_preferences.highqualitysky.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.highqualitysky.generic.callback = Preferences_Event;
-	s_preferences.highqualitysky.generic.id = ID_HIGHQUALITYSKY;
-	s_preferences.highqualitysky.generic.x = PREFERENCES_X_POS;
-	s_preferences.highqualitysky.generic.y = y;
-
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.flares.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.flares.generic.name = "Dynamic Flares:";
-	s_preferences.flares.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.flares.generic.callback = Preferences_Event;
-	s_preferences.flares.generic.id = ID_FLARES;
-	s_preferences.flares.generic.x = PREFERENCES_X_POS;
-	s_preferences.flares.generic.y = y;
-
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.synceveryframe.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.synceveryframe.generic.name = "Sync Every Frame:";
-	s_preferences.synceveryframe.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.synceveryframe.generic.callback = Preferences_Event;
-	s_preferences.synceveryframe.generic.id = ID_SYNCEVERYFRAME;
-	s_preferences.synceveryframe.generic.x = PREFERENCES_X_POS;
-	s_preferences.synceveryframe.generic.y = y;
-	s_preferences.synceveryframe.generic.toolTip =
-		"Also known as V-SYNC. Enable only if you're experiencing graphical horizontal tearing artifacts.";
-
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.lensFlare.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.lensFlare.generic.name = "Show Lens Flare:";
-	s_preferences.lensFlare.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.lensFlare.generic.callback = Preferences_Event;
-	s_preferences.lensFlare.generic.id = ID_LENSFLARE;
-	s_preferences.lensFlare.generic.x = PREFERENCES_X_POS;
-	s_preferences.lensFlare.generic.y = y;
-
-	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whTeamMates.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.whTeamMates.generic.name = "Teammate Icon:";
 	s_preferences.whTeamMates.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -765,13 +643,6 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.glowcolor);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.identifytarget);
 	// page 2
-	Menu_AddItem(&s_preferences.menu, &s_preferences.simpleitems);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.wallmarks);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.dynamiclights);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.highqualitysky);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.flares);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.synceveryframe);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.lensFlare);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whTeamMates);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whHStations);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whSycTele);
