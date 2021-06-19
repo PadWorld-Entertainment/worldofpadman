@@ -117,7 +117,7 @@ typedef struct {
 } preferences_t;
 
 static preferences_t s_preferences;
-static qboolean page;
+//static qboolean page;
 
 static menucommon_s *g_hud_options[] = {
 	(menucommon_s *)&s_preferences.crosshair,
@@ -223,6 +223,7 @@ static void Options_Update(void) {
 	int j;
 //	menucommon_s **hide_options;
 //	menucommon_s **show_options;
+
 	menucommon_s **options;
 	menucommon_s *option;
 
@@ -234,7 +235,7 @@ static void Options_Update(void) {
 		}
 	}
 
-	options = g_option[s_preferences.section];
+	options = g_options[s_preferences.section];
 
 	// enable options in active group
 	for (j = 0; (option = options[j]); j++) {
@@ -298,17 +299,17 @@ static void Preferences_Event(void *ptr, int notification) {
 
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_HUD:
-		s_preferences.section = O_HUD
+		s_preferences.section = O_HUD;
 		Options_Update();
 		break;
 
 	case ID_CHAT:
-		s_preferences.section = O_CHAT
+		s_preferences.section = O_CHAT;
 		Options_Update();
 		break;
 
 	case ID_HELP:
-		s_preferences.section = O_HELP
+		s_preferences.section = O_HELP;
 		Options_Update();
 		break;
 
