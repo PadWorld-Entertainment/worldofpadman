@@ -39,11 +39,11 @@ GAME OPTIONS MENU
 #define HELP0 "menu/buttons/help0"
 #define HELP1 "menu/buttons/help1"
 
-// preferences sections
-#define P_HUD 0
-#define P_CHAT 1
-#define P_HELP 2
-#define P_MAX 3
+// options sections
+#define O_HUD 0
+#define O_CHAT 1
+#define O_HELP 2
+#define O_MAX 3
 
 #define ID_BACK 100
 #define ID_HUD 101
@@ -76,9 +76,8 @@ GAME OPTIONS MENU
 
 #define NUM_CROSSHAIRS 12
 
-#define ID_MORE 146
-
 #define XPOSITION 534
+#define YPOSITION 180
 
 typedef struct {
 	menuframework_s menu;
@@ -102,7 +101,6 @@ typedef struct {
 	menuradiobutton_s ups;
 	menuradiobutton_s realtime;
 
-	menutext_s more;
 	menubitmap_s back;
 
 	menulist_s glowcolor;
@@ -121,28 +119,42 @@ typedef struct {
 static preferences_t s_preferences;
 static qboolean page;
 
-static menucommon_s *page1_options[] = {(menucommon_s *)&s_preferences.crosshair,
-										(menucommon_s *)&s_preferences.drawteamoverlay,
-										(menucommon_s *)&s_preferences.ffahud,
-										(menucommon_s *)&s_preferences.con_notifytime,
-										(menucommon_s *)&s_preferences.timer,
-										(menucommon_s *)&s_preferences.timeleft,
-										(menucommon_s *)&s_preferences.realtime,
-										(menucommon_s *)&s_preferences.ups,
-										(menucommon_s *)&s_preferences.fps,
-										(menucommon_s *)&s_preferences.forcemodel,
-										(menucommon_s *)&s_preferences.glowmodel,
-										(menucommon_s *)&s_preferences.glowcolor,
-										(menucommon_s *)&s_preferences.identifytarget,
-										NULL};
+static menucommon_s *g_hud_options[] = {
+	(menucommon_s *)&s_preferences.crosshair,
+	(menucommon_s *)&s_preferences.drawteamoverlay,
+	(menucommon_s *)&s_preferences.ffahud,
+	(menucommon_s *)&s_preferences.timer,
+	(menucommon_s *)&s_preferences.timeleft,
+	(menucommon_s *)&s_preferences.realtime,
+	(menucommon_s *)&s_preferences.ups,
+	(menucommon_s *)&s_preferences.fps,
+	(menucommon_s *)&s_preferences.forcemodel,
+	(menucommon_s *)&s_preferences.glowmodel,
+	(menucommon_s *)&s_preferences.glowcolor,
+	(menucommon_s *)&s_preferences.identifytarget,
+	NULL
+};
 
-static menucommon_s *page2_options[] = {(menucommon_s *)&s_preferences.whLPS,
-										(menucommon_s *)&s_preferences.whTeamMates,
-										(menucommon_s *)&s_preferences.whBalloons,
-										(menucommon_s *)&s_preferences.whHStations,
-										(menucommon_s *)&s_preferences.whSycTele,
-										(menucommon_s *)&s_preferences.whFreezeTag,
-										NULL};
+static menucommon_s *g_chat_options[] = {
+	(menucommon_s *)&s_preferences.con_notifytime,
+	NULL
+};
+
+static menucommon_s *g_help_options[] = {
+	(menucommon_s *)&s_preferences.whLPS,
+	(menucommon_s *)&s_preferences.whTeamMates,
+	(menucommon_s *)&s_preferences.whBalloons,
+	(menucommon_s *)&s_preferences.whHStations,
+	(menucommon_s *)&s_preferences.whSycTele,
+	(menucommon_s *)&s_preferences.whFreezeTag,
+	NULL
+};
+
+static menucommon_s **g_options[] = {
+	g_hud_options,
+	g_chat_options,
+	g_help_options,
+};
 
 static const char *ffahud_names[] = {"Black", "Red",	"Blue", "Green",	"Chrome", "Whitemetal",
 									 "Rust",  "Flower", "Wood", "Airforce", NULL};
@@ -203,23 +215,40 @@ static void Preferences_SetMenuItems(void) {
 
 /*
 =================
-SwitchPage
+Options_Update
 =================
 */
-static void SwitchPage(void) {
-	menucommon_s **hide_options;
-	menucommon_s **show_options;
-	menucommon_s *option;
+static void Options_Update(void) {
+	int i;
 	int j;
+//	menucommon_s **hide_options;
+//	menucommon_s **show_options;
+	menucommon_s **options;
+	menucommon_s *option;
 
-	page = !page;
+	// disable all options in all groups
+	for (i = 0; i < O_MAX; i++) {
+		options = g_options[i];
+		for (j = 0; (option = options[j]); j++) {
+			option->flags |= (QMF_HIDDEN | QMF_INACTIVE);
+		}
+	}
+
+	options = g_option[s_preferences.section];
+
+	// enable options in active group
+	for (j = 0; (option = options[j]); j++) {
+		option->flags &= ~(QMF_GRAYED | QMF_HIDDEN | QMF_INACTIVE);
+	}
+
+/* 	page = !page;
 
 	if (!page) {
-		show_options = page1_options;
-		hide_options = page2_options;
+		show_options = g_hud_options;
+		hide_options = g_help_options;
 	} else {
-		show_options = page2_options;
-		hide_options = page1_options;
+		show_options = g_help_options;
+		hide_options = g_hud_options;
 	}
 
 	for (j = 0; (option = hide_options[j]); j++) {
@@ -229,7 +258,7 @@ static void SwitchPage(void) {
 	for (j = 0; (option = show_options[j]); j++) {
 		option->flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
-
+ */
 	UpdateGlowColorFlags();
 
 	// makes sure flags are right on the group selection controls
@@ -243,15 +272,15 @@ static void SwitchPage(void) {
 
 	// set buttons
 	switch (s_preferences.section) {
-	case P_HUD:
+	case O_HUD:
 		s_preferences.hud.generic.flags |= QMF_HIGHLIGHT;
 		break;
 
-	case P_CHAT:
+	case O_CHAT:
 		s_preferences.chat.generic.flags |= QMF_HIGHLIGHT;
 		break;
 
-	case P_HELP:
+	case O_HELP:
 		s_preferences.help.generic.flags |= QMF_HIGHLIGHT;
 		break;
 	}
@@ -269,15 +298,18 @@ static void Preferences_Event(void *ptr, int notification) {
 
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_HUD:
-		SwitchPage();
+		s_preferences.section = O_HUD
+		Options_Update();
 		break;
 
 	case ID_CHAT:
-		SwitchPage();
+		s_preferences.section = O_CHAT
+		Options_Update();
 		break;
 
 	case ID_HELP:
-		SwitchPage();
+		s_preferences.section = O_HELP
+		Options_Update();
 		break;
 
 	case ID_CROSSHAIR:
@@ -380,14 +412,9 @@ static void Preferences_Event(void *ptr, int notification) {
 		}
 		break;
 
-	case ID_MORE:
-		SwitchPage();
-		break;
-
 	case ID_BACK:
 		UI_PopMenu();
 		break;
-
 	}
 }
 
@@ -442,7 +469,6 @@ Preferences_MenuInit
 */
 static void Preferences_MenuInit(void) {
 	int y;
-	int yp1, yp2;
 
 	memset(&s_preferences, 0, sizeof(preferences_t));
 
@@ -452,6 +478,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.menu.fullscreen = qtrue;
 	s_preferences.menu.bgparts = BGP_GAMEOPTIONS | BGP_SIMPLEBG;
 
+	//menu
 	s_preferences.hud.generic.type = MTYPE_BITMAP;
 	s_preferences.hud.generic.name = HUD0;
 	s_preferences.hud.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
@@ -488,8 +515,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.help.focuspic = HELP1;
 	s_preferences.help.focuspicinstead = qtrue;
 
-	y = 156;
-	// page 1
+	y = YPOSITION;
+	// hud options
 	s_preferences.crosshair.generic.type = MTYPE_TEXT;
 	s_preferences.crosshair.generic.flags = QMF_SMALLFONT | QMF_NODEFAULTINIT | QMF_OWNERDRAW;
 	s_preferences.crosshair.generic.x = XPOSITION;
@@ -524,21 +551,6 @@ static void Preferences_MenuInit(void) {
 	s_preferences.ffahud.generic.x = XPOSITION;
 	s_preferences.ffahud.generic.y = y;
 	s_preferences.ffahud.itemnames = ffahud_names;
-
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.con_notifytime.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.con_notifytime.generic.name = "Chat:";
-	s_preferences.con_notifytime.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.con_notifytime.generic.callback = Preferences_Event;
-	s_preferences.con_notifytime.generic.id = ID_CONNOTIFY;
-	s_preferences.con_notifytime.generic.x = XPOSITION;
-	s_preferences.con_notifytime.generic.y = y;
-	s_preferences.con_notifytime.itemnames = con_notifytime_strs;
-	s_preferences.con_notifytime.generic.toolTip =
-		"Select whether you prefer "
-		"chat text that appears at the top of the screen to appear for a longer "
-		"or shorter period of time and with or without the respective players "
-		"character icon appearing next to the chat text.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.timer.generic.type = MTYPE_RADIOBUTTON;
@@ -628,10 +640,24 @@ static void Preferences_MenuInit(void) {
 		"Enable this to show the name of the player you actively have in your crosshair. Player name will disappear "
 		"once out of your crosshair.";
 
-	yp1 = y + BIGCHAR_HEIGHT + 2;
+	// chat options
+	y = YPOSITION;
+	s_preferences.con_notifytime.generic.type = MTYPE_SPINCONTROL;
+	s_preferences.con_notifytime.generic.name = "Chat:";
+	s_preferences.con_notifytime.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.con_notifytime.generic.callback = Preferences_Event;
+	s_preferences.con_notifytime.generic.id = ID_CONNOTIFY;
+	s_preferences.con_notifytime.generic.x = XPOSITION;
+	s_preferences.con_notifytime.generic.y = y;
+	s_preferences.con_notifytime.itemnames = con_notifytime_strs;
+	s_preferences.con_notifytime.generic.toolTip =
+		"Select whether you prefer "
+		"chat text that appears at the top of the screen to appear for a longer "
+		"or shorter period of time and with or without the respective players "
+		"character icon appearing next to the chat text.";
 
-	// page 2
-	y = 156;
+	// help options
+	y = YPOSITION;
 	s_preferences.whTeamMates.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.whTeamMates.generic.name = "Teammate Icon:";
 	s_preferences.whTeamMates.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -696,23 +722,6 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whFreezeTag.generic.toolTip =
 		"Show an icon over frozen teammates, visible through walls, to help you find them.";
 
-	yp2 = y + BIGCHAR_HEIGHT + 2;
-
-	// place the "more" button
-	y = MAX(yp1, yp2) + BIGCHAR_HEIGHT;
-
-	s_preferences.more.generic.type = MTYPE_TEXTS;
-	s_preferences.more.fontHeight = 20.0f;
-	s_preferences.more.generic.flags = QMF_CENTER_JUSTIFY; //|QMF_PULSEIFFOCUS;
-	s_preferences.more.generic.x = XPOSITION;
-	s_preferences.more.generic.y = y;
-	s_preferences.more.generic.id = ID_MORE;
-	s_preferences.more.generic.callback = Preferences_Event;
-	s_preferences.more.string = "More";
-	s_preferences.more.color = color_lightOrange;
-	s_preferences.more.focuscolor = color_orange;
-	s_preferences.more.style = UI_CENTER | UI_SMALLFONT;
-
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
 	s_preferences.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
@@ -737,16 +746,16 @@ static void Preferences_MenuInit(void) {
 	(menucommon_s *)&s_preferences.fps,
 	*/
 
+	// menu
 	Menu_AddItem(&s_preferences.menu, &s_preferences.back);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.hud);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.help);
 
-	// page 1
+	// hud options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.crosshair);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawteamoverlay);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.ffahud);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.con_notifytime);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.timer);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.timeleft);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.realtime);
@@ -756,7 +765,11 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.glowmodel);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.glowcolor);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.identifytarget);
-	// page 2
+
+	// chat options
+	Menu_AddItem(&s_preferences.menu, &s_preferences.con_notifytime);
+
+	// help options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whTeamMates);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whHStations);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whSycTele);
@@ -764,17 +777,14 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whLPS);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whFreezeTag);
 
-	// misc
-	Menu_AddItem(&s_preferences.menu, &s_preferences.more);
-
 	Preferences_SetMenuItems();
 
 	// initial default section
-	s_preferences.section = P_HUD;
+	s_preferences.section = O_HUD;
 
 	// show items of the first page
-	page = 1;
-	SwitchPage();
+//	page = 1;
+	Options_Update();
 }
 
 /*
@@ -807,5 +817,4 @@ UI_PreferencesMenu
 void UI_PreferencesMenu(void) {
 	Preferences_MenuInit();
 	UI_PushMenu(&s_preferences.menu);
-	Menu_SetCursorToItem(&s_preferences.menu, &s_preferences.hud);
 }
