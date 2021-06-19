@@ -722,7 +722,7 @@ typedef struct {
 // using the stringizing operator to save typing...
 #define NETF(x) #x, (size_t) & ((entityState_t *)0)->x
 
-static netField_t const entityStateFields[] = {{NETF(pos.trTime), 32},
+static const netField_t entityStateFields[] = {{NETF(pos.trTime), 32},
 											   {NETF(pos.trBase[0]), 0},
 											   {NETF(pos.trBase[1]), 0},
 											   {NETF(pos.trDelta[0]), 0},
