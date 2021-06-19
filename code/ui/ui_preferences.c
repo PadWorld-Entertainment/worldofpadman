@@ -468,7 +468,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.chat.generic.name = CHAT0;
 	s_preferences.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_preferences.chat.generic.callback = Preferences_Event;
-	s_preferences.chat.generic.id = ID_chat;
+	s_preferences.chat.generic.id = ID_CHAT;
 	s_preferences.chat.generic.x = 520;
 	s_preferences.chat.generic.y = 50;
 	s_preferences.chat.width = 80;
@@ -807,5 +807,5 @@ UI_PreferencesMenu
 void UI_PreferencesMenu(void) {
 	Preferences_MenuInit();
 	UI_PushMenu(&s_preferences.menu);
-	Menu_SetCursorToItem(&s_preferences.menu, &s_preferences.menu.hud);
+	Menu_SetCursorToItem(&s_preferences.menu, &s_preferences.hud);
 }
