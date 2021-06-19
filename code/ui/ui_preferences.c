@@ -196,7 +196,6 @@ static void Preferences_SetMenuItems(void) {
 	s_preferences.identifytarget.curvalue = trap_Cvar_VariableValue("cg_drawCrosshairNames") != 0;
 	s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue("cg_forcemodel") != 0.0f);
 	s_preferences.drawteamoverlay.curvalue = trap_Cvar_VariableValue("cg_drawTeamOverlay") != 0;
-	s_preferences.allowdownload.curvalue = trap_Cvar_VariableValue("cl_allowDownload") != 0;
 	s_preferences.glowcolor.curvalue = trap_Cvar_VariableValue("cg_glowModel"); // cg_glowModelTeam..
 	s_preferences.glowmodel.curvalue = (s_preferences.glowcolor.curvalue != 0);
 	UpdateGlowColorFlags();
@@ -453,41 +452,41 @@ static void Preferences_MenuInit(void) {
 	s_preferences.menu.fullscreen = qtrue;
 	s_preferences.menu.bgparts = BGP_GAMEOPTIONS | BGP_SIMPLEBG;
 
-	networkOptionsInfo.hud.generic.type = MTYPE_BITMAP;
-	networkOptionsInfo.hud.generic.name = HUD0;
-	networkOptionsInfo.hud.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	networkOptionsInfo.hud.generic.callback = Preferences_Event;
-	networkOptionsInfo.hud.generic.id = ID_HUD;
-	networkOptionsInfo.hud.generic.x = 420;
-	networkOptionsInfo.hud.generic.y = 40;
-	networkOptionsInfo.hud.width = 80;
-	networkOptionsInfo.hud.height = 40;
-	networkOptionsInfo.hud.focuspic = HUD1;
-	networkOptionsInfo.hud.focuspicinstead = qtrue;
+	s_preferences.hud.generic.type = MTYPE_BITMAP;
+	s_preferences.hud.generic.name = HUD0;
+	s_preferences.hud.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_preferences.hud.generic.callback = Preferences_Event;
+	s_preferences.hud.generic.id = ID_HUD;
+	s_preferences.hud.generic.x = 420;
+	s_preferences.hud.generic.y = 40;
+	s_preferences.hud.width = 80;
+	s_preferences.hud.height = 40;
+	s_preferences.hud.focuspic = HUD1;
+	s_preferences.hud.focuspicinstead = qtrue;
 
-	networkOptionsInfo.chat.generic.type = MTYPE_BITMAP;
-	networkOptionsInfo.chat.generic.name = CHAT0;
-	networkOptionsInfo.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	networkOptionsInfo.chat.generic.callback = Preferences_Event;
-	networkOptionsInfo.chat.generic.id = ID_chat;
-	networkOptionsInfo.chat.generic.x = 520;
-	networkOptionsInfo.chat.generic.y = 50;
-	networkOptionsInfo.chat.width = 80;
-	networkOptionsInfo.chat.height = 40;
-	networkOptionsInfo.chat.focuspic = CHAT1;
-	networkOptionsInfo.chat.focuspicinstead = qtrue;
+	s_preferences.chat.generic.type = MTYPE_BITMAP;
+	s_preferences.chat.generic.name = CHAT0;
+	s_preferences.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_preferences.chat.generic.callback = Preferences_Event;
+	s_preferences.chat.generic.id = ID_chat;
+	s_preferences.chat.generic.x = 520;
+	s_preferences.chat.generic.y = 50;
+	s_preferences.chat.width = 80;
+	s_preferences.chat.height = 40;
+	s_preferences.chat.focuspic = CHAT1;
+	s_preferences.chat.focuspicinstead = qtrue;
 
-	networkOptionsInfo.help.generic.type = MTYPE_BITMAP;
-	networkOptionsInfo.help.generic.name = HELP0;
-	networkOptionsInfo.help.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	networkOptionsInfo.help.generic.callback = Preferences_Event;
-	networkOptionsInfo.help.generic.id = ID_HELP;
-	networkOptionsInfo.help.generic.x = 450;
-	networkOptionsInfo.help.generic.y = 85;
-	networkOptionsInfo.help.width = 80;
-	networkOptionsInfo.help.height = 40;
-	networkOptionsInfo.help.focuspic = HELP1;
-	networkOptionsInfo.help.focuspicinstead = qtrue;
+	s_preferences.help.generic.type = MTYPE_BITMAP;
+	s_preferences.help.generic.name = HELP0;
+	s_preferences.help.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_preferences.help.generic.callback = Preferences_Event;
+	s_preferences.help.generic.id = ID_HELP;
+	s_preferences.help.generic.x = 450;
+	s_preferences.help.generic.y = 85;
+	s_preferences.help.width = 80;
+	s_preferences.help.height = 40;
+	s_preferences.help.focuspic = HELP1;
+	s_preferences.help.focuspicinstead = qtrue;
 
 	y = 156;
 	// page 1
