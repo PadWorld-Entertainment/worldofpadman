@@ -26,7 +26,7 @@ static huffman_t msgHuff;
 
 static qboolean msgInit = qfalse;
 
-int pcount[256];
+static int pcount[256];
 
 /*
 ==============================================================================
@@ -706,7 +706,7 @@ Prints out a table from the current statistics for copying to code
 */
 void MSG_ReportChangeVectors_f(void) {
 	int i;
-	for (i = 0; i < 256; i++) {
+	for (i = 0; i < ARRAY_LEN(pcount); i++) {
 		if (pcount[i]) {
 			Com_Printf("%d used %d\n", i, pcount[i]);
 		}
