@@ -304,7 +304,7 @@ GraphicsOptions_UpdateMenuItems
 =================
 */
 static void GraphicsOptions_UpdateMenuItems(void) {
-	if (s_graphicsoptions.fs.curvalue == 0) {
+	if (s_graphicsoptions.wm.curvalue != 0) {
 		s_graphicsoptions.colordepth.curvalue = 0;
 		s_graphicsoptions.colordepth.generic.flags |= QMF_GRAYED;
 	} else {
