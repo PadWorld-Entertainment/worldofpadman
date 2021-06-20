@@ -1087,7 +1087,7 @@ MSG_WriteDeltaPlayerstate
 
 =============
 */
-void MSG_WriteDeltaPlayerstate(msg_t *msg, struct playerState_s *from, struct playerState_s *to) {
+void MSG_WriteDeltaPlayerstate(msg_t *msg, const struct playerState_s *from, const struct playerState_s *to) {
 	int i;
 	playerState_t dummy;
 	int statsbits;
@@ -1096,7 +1096,7 @@ void MSG_WriteDeltaPlayerstate(msg_t *msg, struct playerState_s *from, struct pl
 	int powerupbits;
 	int numFields;
 	const netField_t *field;
-	int *fromF, *toF;
+	const int *fromF, *toF;
 	float fullFloat;
 	int trunc, lc;
 
@@ -1109,8 +1109,8 @@ void MSG_WriteDeltaPlayerstate(msg_t *msg, struct playerState_s *from, struct pl
 
 	lc = 0;
 	for (i = 0, field = playerStateFields; i < numFields; i++, field++) {
-		fromF = (int *)((byte *)from + field->offset);
-		toF = (int *)((byte *)to + field->offset);
+		fromF = (const int *)((byte *)from + field->offset);
+		toF = (const int *)((byte *)to + field->offset);
 		if (*fromF != *toF) {
 			lc = i + 1;
 		}
@@ -1121,8 +1121,8 @@ void MSG_WriteDeltaPlayerstate(msg_t *msg, struct playerState_s *from, struct pl
 	oldsize += numFields - lc;
 
 	for (i = 0, field = playerStateFields; i < lc; i++, field++) {
-		fromF = (int *)((byte *)from + field->offset);
-		toF = (int *)((byte *)to + field->offset);
+		fromF = (const int *)((byte *)from + field->offset);
+		toF = (const int *)((byte *)to + field->offset);
 
 		if (*fromF == *toF) {
 			MSG_WriteBits(msg, 0, 1); // no change
@@ -1134,7 +1134,7 @@ void MSG_WriteDeltaPlayerstate(msg_t *msg, struct playerState_s *from, struct pl
 
 		if (field->bits == 0) {
 			// float
-			fullFloat = *(float *)toF;
+			fullFloat = *(const float *)toF;
 			trunc = (int)fullFloat;
 
 			if (trunc == fullFloat && trunc + FLOAT_INT_BIAS >= 0 && trunc + FLOAT_INT_BIAS < (1 << FLOAT_INT_BITS)) {
