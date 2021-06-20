@@ -117,7 +117,6 @@ typedef struct {
 } preferences_t;
 
 static preferences_t s_preferences;
-//static qboolean page;
 
 static menucommon_s *g_hud_options[] = {
 	(menucommon_s *)&s_preferences.crosshair,
@@ -221,8 +220,6 @@ Options_Update
 static void Options_Update(void) {
 	int i;
 	int j;
-//	menucommon_s **hide_options;
-//	menucommon_s **show_options;
 
 	menucommon_s **options;
 	menucommon_s *option;
@@ -242,24 +239,6 @@ static void Options_Update(void) {
 		option->flags &= ~(QMF_GRAYED | QMF_HIDDEN | QMF_INACTIVE);
 	}
 
-/* 	page = !page;
-
-	if (!page) {
-		show_options = g_hud_options;
-		hide_options = g_help_options;
-	} else {
-		show_options = g_help_options;
-		hide_options = g_hud_options;
-	}
-
-	for (j = 0; (option = hide_options[j]); j++) {
-		option->flags |= (QMF_HIDDEN | QMF_INACTIVE);
-	}
-
-	for (j = 0; (option = show_options[j]); j++) {
-		option->flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
- */
 	UpdateGlowColorFlags();
 
 	// makes sure flags are right on the group selection controls
@@ -627,7 +606,6 @@ static void Preferences_MenuInit(void) {
 	s_preferences.glowcolor.generic.x = XPOSITION;
 	s_preferences.glowcolor.generic.y = y;
 	s_preferences.glowcolor.itemnames = glowcolor_names;
-	// query curvalue
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.identifytarget.generic.type = MTYPE_RADIOBUTTON;
@@ -735,18 +713,6 @@ static void Preferences_MenuInit(void) {
 	s_preferences.back.focuspic = BACK1;
 	s_preferences.back.focuspicinstead = qtrue;
 
-	/*
-	(menucommon_s *)&s_preferences.crosshair,
-	(menucommon_s *)&s_preferences.drawteamoverlay,
-	(menucommon_s *)&s_preferences.ffahud,
-	(menucommon_s *)&s_preferences.con_notifytime,
-	(menucommon_s *)&s_preferences.timer,
-	(menucommon_s *)&s_preferences.timeleft,
-	(menucommon_s *)&s_preferences.realtime,
-	(menucommon_s *)&s_preferences.ups,
-	(menucommon_s *)&s_preferences.fps,
-	*/
-
 	// menu
 	Menu_AddItem(&s_preferences.menu, &s_preferences.back);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.hud);
@@ -783,8 +749,6 @@ static void Preferences_MenuInit(void) {
 	// initial default section
 	s_preferences.section = O_HUD;
 
-	// show items of the first page
-//	page = 1;
 	Options_Update();
 }
 
