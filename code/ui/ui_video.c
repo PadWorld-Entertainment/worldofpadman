@@ -297,6 +297,13 @@ GraphicsOptions_UpdateMenuItems
 =================
 */
 static void GraphicsOptions_UpdateMenuItems(void) {
+	if (s_graphicsoptions.fs.curvalue == 0) {
+		s_graphicsoptions.colordepth.curvalue = 0;
+		s_graphicsoptions.colordepth.generic.flags |= QMF_GRAYED;
+	} else {
+		s_graphicsoptions.colordepth.generic.flags &= ~QMF_GRAYED;
+	}
+
 	s_graphicsoptions.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 
 	if (s_ivo.mode != s_graphicsoptions.mode.curvalue) {
