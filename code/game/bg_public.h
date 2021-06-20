@@ -181,9 +181,7 @@ typedef enum {
 	WEAPON_READY,
 	WEAPON_RAISING,
 	WEAPON_DROPPING,
-	WEAPON_FIRING
-
-	,
+	WEAPON_FIRING,
 	WEAPON_CHARGING // "loading" an imperius-shoot
 } weaponstate_t;
 
