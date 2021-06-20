@@ -1250,7 +1250,7 @@ static void CG_DrawHoldableItem(float y) {
 
 		y -= ICON_SIZE;
 		CG_DrawPic(640 - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cg_items[value].icon);
-		if (cg.snap->ps.stats[STAT_FORBIDDENITEMS] & (1 << bg_itemlist[value].giTag)) {
+		if (cg.snap->ps.stats[STAT_FORBIDDENITEMS] & (1 << itemId)) {
 			CG_DrawPic(640 - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
 		}
 
@@ -1263,8 +1263,10 @@ static void CG_DrawHoldableItem(float y) {
 			CG_DrawRect(barX, y, 10, ICON_SIZE, 1.0f, colorWhite);
 		}
 		if (itemId == HI_KILLERDUCKS || itemId == HI_BOOMIES || itemId == HI_FLOATER) {
-			CG_DrawStringExt(640 - 28, y + 8, va("%i", itemState), colorWhite, qtrue, qtrue,
-							 8, 16, 1);
+			const char *str = va("%i", itemState);
+			const int maxChars = strlen(str);
+			CG_DrawStringExt(640 - 24 - maxChars * 4, y + 8, str, colorWhite, qtrue, qtrue,
+							 8, 16, maxChars);
 		}
 	}
 }
