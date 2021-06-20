@@ -45,39 +45,38 @@ GAME OPTIONS MENU
 #define O_HELP 2
 #define O_MAX 3
 
-#define ID_BACK 100
-#define ID_HUD 101
-#define ID_CHAT 102
-#define ID_HELP 103
+#define ID_BACK 10
+#define ID_HUD 11
+#define ID_CHAT 12
+#define ID_HELP 13
 
-#define ID_CROSSHAIR 127
-#define ID_IDENTIFYTARGET 133
-#define ID_FORCEMODEL 135
-#define ID_DRAWTEAMOVERLAY 136
+#define ID_CROSSHAIR 20
+#define ID_FFAHUD 21
+#define ID_IDENTIFYTARGET 22
+#define ID_DRAWTEAMOVERLAY 23
+#define ID_TIMER 24
+#define ID_TIMELEFT 25
+#define ID_REALTIME 26
+#define ID_UPS 27
+#define ID_FPS 28
 
-#define ID_FFAHUD 139
-#define ID_CONNOTIFY 140
-#define ID_TIMELEFT 141
+#define ID_FORCEMODEL 30
+#define ID_GLOWMODEL 31
+#define ID_GLOWCOLOR 32
 
-#define ID_TIMER 142
-#define ID_FPS 143
-#define ID_UPS 144
-#define ID_REALTIME 145
+#define ID_CONNOTIFY 40
 
-#define ID_GLOWMODEL 147
-#define ID_GLOWCOLOR 148
-
-#define ID_WALLHACKLPS 149
-#define ID_WALLHACKTEAMMATES 150
-#define ID_WALLHACKBALLOONS 151
-#define ID_WALLHACKHSTATION 152
-#define ID_WALLHACKSYCTELE 153
-#define ID_WALLHACKFREEZETAG 15
+#define ID_WALLHACKTEAMMATES 50
+#define ID_WALLHACKHSTATION 51
+#define ID_WALLHACKSYCTELE 52
+#define ID_WALLHACKBALLOONS 53
+#define ID_WALLHACKLPS 54
+#define ID_WALLHACKFREEZETAG 55
 
 #define NUM_CROSSHAIRS 12
 
 #define XPOSITION 534
-#define YPOSITION 180
+#define YPOSITION 216
 
 typedef struct {
 	menuframework_s menu;
@@ -87,29 +86,28 @@ typedef struct {
 	menubitmap_s help;
 
 	menulist_s crosshair;
+	menulist_s ffahud;
 	menuradiobutton_s identifytarget;
+	menuradiobutton_s drawteamoverlay;
+	menuradiobutton_s timer;
+	menuradiobutton_s timeleft;
+	menuradiobutton_s realtime;
+	menuradiobutton_s ups;
+	menuradiobutton_s fps;
 	menuradiobutton_s forcemodel;
 	menuradiobutton_s glowmodel;
-	menuradiobutton_s drawteamoverlay;
-
-	menulist_s ffahud;
-	menulist_s con_notifytime;
-	menuradiobutton_s timeleft;
-
-	menuradiobutton_s timer;
-	menuradiobutton_s fps;
-	menuradiobutton_s ups;
-	menuradiobutton_s realtime;
-
-	menubitmap_s back;
-
 	menulist_s glowcolor;
-	menuradiobutton_s whLPS;
-	menuradiobutton_s whFreezeTag;
+
+	menulist_s con_notifytime;
+
 	menuradiobutton_s whTeamMates;
-	menuradiobutton_s whBalloons;
 	menuradiobutton_s whHStations;
 	menuradiobutton_s whSycTele;
+	menuradiobutton_s whBalloons;
+	menuradiobutton_s whLPS;
+	menuradiobutton_s whFreezeTag;
+
+	menubitmap_s back;
 
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];
 	int section;
@@ -120,8 +118,9 @@ static preferences_t s_preferences;
 
 static menucommon_s *g_hud_options[] = {
 	(menucommon_s *)&s_preferences.crosshair,
-	(menucommon_s *)&s_preferences.drawteamoverlay,
 	(menucommon_s *)&s_preferences.ffahud,
+	(menucommon_s *)&s_preferences.identifytarget,
+	(menucommon_s *)&s_preferences.drawteamoverlay,
 	(menucommon_s *)&s_preferences.timer,
 	(menucommon_s *)&s_preferences.timeleft,
 	(menucommon_s *)&s_preferences.realtime,
@@ -130,7 +129,6 @@ static menucommon_s *g_hud_options[] = {
 	(menucommon_s *)&s_preferences.forcemodel,
 	(menucommon_s *)&s_preferences.glowmodel,
 	(menucommon_s *)&s_preferences.glowcolor,
-	(menucommon_s *)&s_preferences.identifytarget,
 	NULL
 };
 
@@ -140,11 +138,11 @@ static menucommon_s *g_chat_options[] = {
 };
 
 static menucommon_s *g_help_options[] = {
-	(menucommon_s *)&s_preferences.whLPS,
 	(menucommon_s *)&s_preferences.whTeamMates,
-	(menucommon_s *)&s_preferences.whBalloons,
 	(menucommon_s *)&s_preferences.whHStations,
 	(menucommon_s *)&s_preferences.whSycTele,
+	(menucommon_s *)&s_preferences.whBalloons,
+	(menucommon_s *)&s_preferences.whLPS,
 	(menucommon_s *)&s_preferences.whFreezeTag,
 	NULL
 };
@@ -512,8 +510,30 @@ static void Preferences_MenuInit(void) {
 	s_preferences.crosshair.generic.right = XPOSITION + 48;
 
 	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.ffahud.generic.type = MTYPE_SPINCONTROL;
+	s_preferences.ffahud.generic.name = "FFA HUD Design:";
+	s_preferences.ffahud.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.ffahud.generic.callback = Preferences_Event;
+	s_preferences.ffahud.generic.id = ID_FFAHUD;
+	s_preferences.ffahud.generic.x = XPOSITION;
+	s_preferences.ffahud.generic.y = y;
+	s_preferences.ffahud.itemnames = ffahud_names;
+
+	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.identifytarget.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.identifytarget.generic.name = "Identify Target:";
+	s_preferences.identifytarget.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.identifytarget.generic.callback = Preferences_Event;
+	s_preferences.identifytarget.generic.id = ID_IDENTIFYTARGET;
+	s_preferences.identifytarget.generic.x = XPOSITION;
+	s_preferences.identifytarget.generic.y = y;
+	s_preferences.identifytarget.generic.toolTip =
+		"Enable this to show the name of the player you actively have in your crosshair. Player name will disappear "
+		"once out of your crosshair.";
+
+	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.drawteamoverlay.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.drawteamoverlay.generic.name = "Draw Team Overlay:";
+	s_preferences.drawteamoverlay.generic.name = "Team Overlay:";
 	s_preferences.drawteamoverlay.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.drawteamoverlay.generic.callback = Preferences_Event;
 	s_preferences.drawteamoverlay.generic.id = ID_DRAWTEAMOVERLAY;
@@ -521,16 +541,6 @@ static void Preferences_MenuInit(void) {
 	s_preferences.drawteamoverlay.generic.y = y;
 	s_preferences.drawteamoverlay.generic.toolTip = "Enable this to see an overview "
 													"of 4 of your team mates to the left on your HUD in a team game.";
-
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.ffahud.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.ffahud.generic.name = "FFA Hud:";
-	s_preferences.ffahud.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.ffahud.generic.callback = Preferences_Event;
-	s_preferences.ffahud.generic.id = ID_FFAHUD;
-	s_preferences.ffahud.generic.x = XPOSITION;
-	s_preferences.ffahud.generic.y = y;
-	s_preferences.ffahud.itemnames = ffahud_names;
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.timer.generic.type = MTYPE_RADIOBUTTON;
@@ -607,18 +617,6 @@ static void Preferences_MenuInit(void) {
 	s_preferences.glowcolor.generic.y = y;
 	s_preferences.glowcolor.itemnames = glowcolor_names;
 
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.identifytarget.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.identifytarget.generic.name = "Identify Target:";
-	s_preferences.identifytarget.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.identifytarget.generic.callback = Preferences_Event;
-	s_preferences.identifytarget.generic.id = ID_IDENTIFYTARGET;
-	s_preferences.identifytarget.generic.x = XPOSITION;
-	s_preferences.identifytarget.generic.y = y;
-	s_preferences.identifytarget.generic.toolTip =
-		"Enable this to show the name of the player you actively have in your crosshair. Player name will disappear "
-		"once out of your crosshair.";
-
 	// chat options
 	y = YPOSITION;
 	s_preferences.con_notifytime.generic.type = MTYPE_SPINCONTROL;
@@ -644,7 +642,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whTeamMates.generic.id = ID_WALLHACKTEAMMATES;
 	s_preferences.whTeamMates.generic.x = XPOSITION;
 	s_preferences.whTeamMates.generic.y = y;
-	s_preferences.whTeamMates.generic.toolTip = "Show a WoP logo over your teammates heads, visible through walls.";
+	s_preferences.whTeamMates.generic.toolTip = "Show a PAD logo over your teammates heads, visible through walls, to help you find them.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whHStations.generic.type = MTYPE_RADIOBUTTON;
@@ -655,7 +653,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whHStations.generic.x = XPOSITION;
 	s_preferences.whHStations.generic.y = y;
 	s_preferences.whHStations.generic.toolTip =
-		"Show an icon over evey health station, visible through walls, to help you find them.";
+		"Show a heart icon over evey health station, visible through walls, to help you find them.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whSycTele.generic.type = MTYPE_RADIOBUTTON;
@@ -666,7 +664,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whSycTele.generic.x = XPOSITION;
 	s_preferences.whSycTele.generic.y = y;
 	s_preferences.whSycTele.generic.toolTip =
-		"Show an icon over the sprayroom teleporter, visible through walls, to help you find it.";
+		"Show an arrow icon over the sprayroom teleporter in Spray Your Color, visible through walls, to help you find it.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whBalloons.generic.type = MTYPE_RADIOBUTTON;
@@ -677,7 +675,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whBalloons.generic.x = XPOSITION;
 	s_preferences.whBalloons.generic.y = y;
 	s_preferences.whBalloons.generic.toolTip =
-		"Show an icon over balloon boxes, visible through walls, to help you find them.";
+		"Show an balloon icon over balloon boxes in Big Ballon, visible through walls, to help you find them.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whLPS.generic.type = MTYPE_RADIOBUTTON;
@@ -699,7 +697,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whFreezeTag.generic.x = XPOSITION;
 	s_preferences.whFreezeTag.generic.y = y;
 	s_preferences.whFreezeTag.generic.toolTip =
-		"Show an icon over frozen teammates, visible through walls, to help you find them.";
+		"Show a freeze icon over frozen teammates, visible through walls, to help you find them.";
 
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
@@ -721,8 +719,9 @@ static void Preferences_MenuInit(void) {
 
 	// hud options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.crosshair);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.drawteamoverlay);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.ffahud);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.identifytarget);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.drawteamoverlay);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.timer);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.timeleft);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.realtime);
@@ -731,7 +730,6 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.forcemodel);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.glowmodel);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.glowcolor);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.identifytarget);
 
 	// chat options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.con_notifytime);
