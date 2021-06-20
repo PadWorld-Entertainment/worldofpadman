@@ -366,118 +366,6 @@ weightconfig_t *ReadWeightConfig(const char *filename) {
 	return config;
 }
 
-#if 0
-static qboolean WriteFuzzyWeight(FILE *fp, fuzzyseperator_t *fs) {
-	if (fs->type == WT_BALANCE) {
-		if (fprintf(fp, " return balance(") < 0)
-			return qfalse;
-		if (!WriteFloat(fp, fs->weight))
-			return qfalse;
-		if (fprintf(fp, ",") < 0)
-			return qfalse;
-		if (!WriteFloat(fp, fs->minweight))
-			return qfalse;
-		if (fprintf(fp, ",") < 0)
-			return qfalse;
-		if (!WriteFloat(fp, fs->maxweight))
-			return qfalse;
-		if (fprintf(fp, ");\n") < 0)
-			return qfalse;
-	} else {
-		if (fprintf(fp, " return ") < 0)
-			return qfalse;
-		if (!WriteFloat(fp, fs->weight))
-			return qfalse;
-		if (fprintf(fp, ";\n") < 0)
-			return qfalse;
-	}
-	return qtrue;
-}
-
-static qboolean WriteFuzzySeperators_r(FILE *fp, fuzzyseperator_t *fs, int indent) {
-	if (!WriteIndent(fp, indent))
-		return qfalse;
-	if (fprintf(fp, "switch(%d)\n", fs->index) < 0)
-		return qfalse;
-	if (!WriteIndent(fp, indent))
-		return qfalse;
-	if (fprintf(fp, "{\n") < 0)
-		return qfalse;
-	indent++;
-	do {
-		if (!WriteIndent(fp, indent))
-			return qfalse;
-		if (fs->next) {
-			if (fprintf(fp, "case %d:", fs->value) < 0)
-				return qfalse;
-		} else {
-			if (fprintf(fp, "default:") < 0)
-				return qfalse;
-		}
-		if (fs->child) {
-			if (fprintf(fp, "\n") < 0)
-				return qfalse;
-			if (!WriteIndent(fp, indent))
-				return qfalse;
-			if (fprintf(fp, "{\n") < 0)
-				return qfalse;
-			if (!WriteFuzzySeperators_r(fp, fs->child, indent + 1))
-				return qfalse;
-			if (!WriteIndent(fp, indent))
-				return qfalse;
-			if (fs->next) {
-				if (fprintf(fp, "} //end case\n") < 0)
-					return qfalse;
-			} else {
-				if (fprintf(fp, "} //end default\n") < 0)
-					return qfalse;
-			}
-		} else {
-			if (!WriteFuzzyWeight(fp, fs))
-				return qfalse;
-		}
-		fs = fs->next;
-	} while (fs);
-	indent--;
-	if (!WriteIndent(fp, indent))
-		return qfalse;
-	if (fprintf(fp, "} //end switch\n") < 0)
-		return qfalse;
-	return qtrue;
-}
-
-qboolean WriteWeightConfig(char *filename, weightconfig_t *config) {
-	int i;
-	FILE *fp;
-	weight_t *ifw;
-
-	fp = Sys_FOpen(filename, "wb");
-	if (!fp)
-		return qfalse;
-
-	for (i = 0; i < config->numweights; i++) {
-		ifw = &config->weights[i];
-		if (fprintf(fp, "\nweight \"%s\"\n", ifw->name) < 0)
-			return qfalse;
-		if (fprintf(fp, "{\n") < 0)
-			return qfalse;
-		if (ifw->firstseperator->index > 0) {
-			if (!WriteFuzzySeperators_r(fp, ifw->firstseperator, 1))
-				return qfalse;
-		} else {
-			if (!WriteIndent(fp, 1))
-				return qfalse;
-			if (!WriteFuzzyWeight(fp, ifw->firstseperator))
-				return qfalse;
-		}
-		if (fprintf(fp, "} //end weight\n") < 0)
-			return qfalse;
-	}
-	fclose(fp);
-	return qtrue;
-}
-#endif
-
 int FindFuzzyWeight(const weightconfig_t *wc, const char *name) {
 	int i;
 
@@ -495,8 +383,7 @@ static float FuzzyWeight_r(const int *inventory, const fuzzyseperator_t *fs) {
 	if (inventory[fs->index] < fs->value) {
 		if (fs->child)
 			return FuzzyWeight_r(inventory, fs->child);
-		else
-			return fs->weight;
+		return fs->weight;
 	} else if (fs->next) {
 		if (inventory[fs->index] < fs->next->value) {
 			// first weight
@@ -512,10 +399,9 @@ static float FuzzyWeight_r(const int *inventory, const fuzzyseperator_t *fs) {
 			// the scale factor
 			if (fs->next->value == MAX_INVENTORYVALUE) // is fs->next the default case?
 				return w2;							   // can't interpolate, return default weight
-			else
-				scale = (float)(inventory[fs->index] - fs->value) / (fs->next->value - fs->value);
+			scale = (float)(inventory[fs->index] - fs->value) / (fs->next->value - fs->value);
 			// scale between the two weights
-			return (1 - scale) * w1 + scale * w2;
+			return (1.0f - scale) * w1 + scale * w2;
 		}
 		return FuzzyWeight_r(inventory, fs->next);
 	}
@@ -528,8 +414,7 @@ static float FuzzyWeightUndecided_r(const int *inventory, const fuzzyseperator_t
 	if (inventory[fs->index] < fs->value) {
 		if (fs->child)
 			return FuzzyWeightUndecided_r(inventory, fs->child);
-		else
-			return fs->minweight + random() * (fs->maxweight - fs->minweight);
+		return fs->minweight + random() * (fs->maxweight - fs->minweight);
 	} else if (fs->next) {
 		if (inventory[fs->index] < fs->next->value) {
 			// first weight
@@ -545,10 +430,9 @@ static float FuzzyWeightUndecided_r(const int *inventory, const fuzzyseperator_t
 			// the scale factor
 			if (fs->next->value == MAX_INVENTORYVALUE) // is fs->next the default case?
 				return w2;							   // can't interpolate, return default weight
-			else
-				scale = (float)(inventory[fs->index] - fs->value) / (fs->next->value - fs->value);
+			scale = (float)(inventory[fs->index] - fs->value) / (fs->next->value - fs->value);
 			// scale between the two weights
-			return (1 - scale) * w1 + scale * w2;
+			return (1.0f - scale) * w1 + scale * w2;
 		}
 		return FuzzyWeightUndecided_r(inventory, fs->next);
 	}
