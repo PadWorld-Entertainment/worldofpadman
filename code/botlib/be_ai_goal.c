@@ -321,7 +321,7 @@ itemconfig_t *LoadItemConfig(const char *filename) {
 //===========================================================================
 // index to find the weight function of an iteminfo
 //===========================================================================
-static int *ItemWeightIndex(weightconfig_t *iwc, itemconfig_t *ic) {
+static int *ItemWeightIndex(const weightconfig_t *iwc, const itemconfig_t *ic) {
 	int *index, i;
 
 	// initialize item weight index

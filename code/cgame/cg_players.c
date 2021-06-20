@@ -1456,7 +1456,7 @@ static void CG_SpeedyTrail(centity_t *cent) {
 }
 
 #define TRAIL_REVIVAL_DISTANCE 20
-void CG_RevivalTrail(centity_t *cent) {
+static void CG_RevivalTrail(centity_t *cent) {
 	vec3_t origin;
 	static int last = 0;
 
