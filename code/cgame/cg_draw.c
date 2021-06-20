@@ -2437,10 +2437,10 @@ static void CG_DrawBalloonIcon(centity_t *cent) {
 		}
 	}
 
-	size = Com_Clamp(0.5, 1, (1 / (sqrt(squaredDist) * 0.002)));
+	size = Com_Clamp(0.5f, 1.0f, (1.0f / (sqrt(squaredDist) * 0.002f)));
 
 	trap_R_SetColor(iconColor);
-	CG_DrawPic((x - 16.0 * size), (y - 16.0 * size), (32.0 * size), (32.0 * size), cgs.media.bbBoxIcon);
+	CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size), cgs.media.bbBoxIcon);
 	trap_R_SetColor(NULL);
 }
 
@@ -2469,7 +2469,7 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 
 	// TODO: don't draw the icon if the healthstation is visible and close
 
-	size = Com_Clamp(0.5f, 1, (1.0f / (sqrt(squaredDist) * 0.002f)));
+	size = Com_Clamp(0.5f, 1.0f, (1.0f / (sqrt(squaredDist) * 0.002f)));
 
 	trap_R_SetColor(NULL);
 	CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size), cgs.media.healthstationIcon);
@@ -2506,10 +2506,10 @@ static void CG_DrawSprayroomIcon(centity_t *cent) {
 		}
 	}
 
-	size = Com_Clamp(0.5, 1, (1 / (sqrt(squaredDist) * 0.002)));
+	size = Com_Clamp(0.5f, 1.0f, (1.0f / (sqrt(squaredDist) * 0.002f)));
 
 	trap_R_SetColor(NULL);
-	CG_DrawPic((x - 16.0 * size), (y - 16.0 * size), (32.0 * size), (32.0 * size), cgs.media.sprayroomIcon);
+	CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size), cgs.media.sprayroomIcon);
 }
 
 static void CG_DrawBambamIcon(centity_t *cent) {
@@ -2526,11 +2526,11 @@ static void CG_DrawBambamIcon(centity_t *cent) {
 		if (CG_WorldToScreen(end, &x, &y)) {
 			float squaredDistance = DistanceSquared(start, end);
 
-			float size = Com_Clamp(0, 1, (1.f / (sqrt(squaredDistance) * 0.005)));
-			float hb_x = (x - 48.0 * size);
-			float hb_y = (y - 12.0 * size);
-			float hb_w = (96.0 * size);
-			float hb_h = (24.0 * size);
+			float size = Com_Clamp(0.0f, 1.0f, (1.0f / (sqrt(squaredDistance) * 0.005f)));
+			float hb_x = (x - 48.0f * size);
+			float hb_y = (y - 12.0f * size);
+			float hb_w = (96.0f * size);
+			float hb_h = (24.0f * size);
 			float hb_scale = cent->currentState.angles2[2]; // Bambam's scaled health is stored in this unused var :)
 			vec4_t color = {0.0f, 0.0f, 0.0f, 1.0f};
 
