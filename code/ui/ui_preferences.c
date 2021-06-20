@@ -100,6 +100,7 @@ typedef struct {
 
 	menulist_s con_notifytime;
 
+	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
 	menuradiobutton_s whHStations;
 	menuradiobutton_s whSycTele;
@@ -635,8 +636,17 @@ static void Preferences_MenuInit(void) {
 
 	// help options
 	y = YPOSITION;
+	s_preferences.whIcons.generic.type = MTYPE_TEXT;
+//	s_preferences.whIcons.generic.flags = QMF_PULSE;
+	s_preferences.whIcons.generic.x = XPOSITION - 25;
+	s_preferences.whIcons.generic.y = y;
+	s_preferences.whIcons.string = "Wallhack Icons:";
+	s_preferences.whIcons.style = (UI_CENTER | UI_SMALLFONT);
+	s_preferences.whIcons.color = menu_text_color;
+
+	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whTeamMates.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whTeamMates.generic.name = "Teammate Icon:";
+	s_preferences.whTeamMates.generic.name = "Teammate:";
 	s_preferences.whTeamMates.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.whTeamMates.generic.callback = Preferences_Event;
 	s_preferences.whTeamMates.generic.id = ID_WALLHACKTEAMMATES;
@@ -646,7 +656,7 @@ static void Preferences_MenuInit(void) {
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whHStations.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whHStations.generic.name = "Health Station Icon:";
+	s_preferences.whHStations.generic.name = "Health Station:";
 	s_preferences.whHStations.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.whHStations.generic.callback = Preferences_Event;
 	s_preferences.whHStations.generic.id = ID_WALLHACKHSTATION;
@@ -657,7 +667,7 @@ static void Preferences_MenuInit(void) {
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whSycTele.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whSycTele.generic.name = "Spray Teleporter Icon:";
+	s_preferences.whSycTele.generic.name = "Sprayroom Teleporter:";
 	s_preferences.whSycTele.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.whSycTele.generic.callback = Preferences_Event;
 	s_preferences.whSycTele.generic.id = ID_WALLHACKSYCTELE;
@@ -668,7 +678,7 @@ static void Preferences_MenuInit(void) {
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whBalloons.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whBalloons.generic.name = "Balloon Box Icon:";
+	s_preferences.whBalloons.generic.name = "Balloon Box:";
 	s_preferences.whBalloons.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.whBalloons.generic.callback = Preferences_Event;
 	s_preferences.whBalloons.generic.id = ID_WALLHACKBALLOONS;
@@ -679,7 +689,7 @@ static void Preferences_MenuInit(void) {
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whLPS.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whLPS.generic.name = "LPS Arrow Icon:";
+	s_preferences.whLPS.generic.name = "LPS Arrow:";
 	s_preferences.whLPS.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.whLPS.generic.callback = Preferences_Event;
 	s_preferences.whLPS.generic.id = ID_WALLHACKLPS;
@@ -690,7 +700,7 @@ static void Preferences_MenuInit(void) {
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whFreezeTag.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whFreezeTag.generic.name = "Freeze Tag Icon:";
+	s_preferences.whFreezeTag.generic.name = "Freeze Tag:";
 	s_preferences.whFreezeTag.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.whFreezeTag.generic.callback = Preferences_Event;
 	s_preferences.whFreezeTag.generic.id = ID_WALLHACKFREEZETAG;
@@ -735,6 +745,7 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.con_notifytime);
 
 	// help options
+	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whTeamMates);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whHStations);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whSycTele);
