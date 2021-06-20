@@ -260,7 +260,7 @@ int MSG_ReadBits(msg_t *msg, int bits) {
 void MSG_WriteChar(msg_t *sb, int c) {
 #ifdef PARANOID
 	if (c < -128 || c > 127)
-		Com_Error(ERR_FATAL, "MSG_WriteChar: range error");
+		Com_Error(ERR_FATAL, "MSG_WriteChar: range error %i", c);
 #endif
 
 	MSG_WriteBits(sb, c, 8);
@@ -269,7 +269,7 @@ void MSG_WriteChar(msg_t *sb, int c) {
 void MSG_WriteByte(msg_t *sb, int c) {
 #ifdef PARANOID
 	if (c < 0 || c > 255)
-		Com_Error(ERR_FATAL, "MSG_WriteByte: range error");
+		Com_Error(ERR_FATAL, "MSG_WriteByte: range error %i", c);
 #endif
 
 	MSG_WriteBits(sb, c, 8);
@@ -285,7 +285,7 @@ void MSG_WriteData(msg_t *buf, const void *data, int length) {
 void MSG_WriteShort(msg_t *sb, int c) {
 #ifdef PARANOID
 	if (c < ((short)0x8000) || c > (short)0x7fff)
-		Com_Error(ERR_FATAL, "MSG_WriteShort: range error");
+		Com_Error(ERR_FATAL, "MSG_WriteShort: range error: %i", c);
 #endif
 
 	MSG_WriteBits(sb, c, 16);

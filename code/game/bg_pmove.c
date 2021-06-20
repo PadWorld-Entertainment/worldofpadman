@@ -1498,11 +1498,11 @@ static void PM_Weapon(void) {
 		}
 
 		if (!(pm->ps->pm_flags & PMF_USE_ITEM_HELD)) {
-			if (bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_MEDKIT &&
-				pm->ps->stats[STAT_HEALTH] >= (pm->ps->stats[STAT_MAX_HEALTH] + 25)) {
+			const int giTag = bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag;
+			if (giTag == HI_MEDKIT && pm->ps->stats[STAT_HEALTH] >= (pm->ps->stats[STAT_MAX_HEALTH] + 25)) {
 				// don't use medkit if at max health
-			} else if (bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_FLOATER) {
-				PM_AddEvent(EV_USE_ITEM0 + HI_FLOATER);
+			} else if (giTag == HI_FLOATER) {
+				PM_AddEvent(EV_USE_ITEM0 + giTag);
 				if ((pm->ps->legsAnim & ~ANIM_TOGGLEBIT) != LEGS_FLYING ||
 					((pm->ps->legsAnim & ~ANIM_TOGGLEBIT) == LEGS_FLYING && pm->ps->legsTimer <= 0))
 					PM_ForceLegsAnim(LEGS_FLYING);
@@ -1516,11 +1516,11 @@ static void PM_Weapon(void) {
 					pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;
 				}
 				goto shootafterrspecialHI;
-			} else if (bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_KILLERDUCKS) {
+			} else if (giTag == HI_KILLERDUCKS) {
 				if (pm->ps->weaponstate != WEAPON_READY)
 					goto shootafterrspecialHI;
 
-				PM_AddEvent(EV_USE_ITEM0 + HI_KILLERDUCKS);
+				PM_AddEvent(EV_USE_ITEM0 + giTag);
 				pm->ps->stats[STAT_HOLDABLEVAR]--;
 
 				if (pm->ps->stats[STAT_HOLDABLEVAR] <= 0) {
@@ -1531,27 +1531,27 @@ static void PM_Weapon(void) {
 				pm->ps->weaponTime = 500;
 				pm->ps->weaponstate = WEAPON_FIRING;
 				goto shootafterrspecialHI;
-			} else if (bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_BOOMIES) {
+			} else if (giTag == HI_BOOMIES) {
 				if (pm->ps->weaponstate != WEAPON_READY)
 					goto shootafterrspecialHI;
 
-				PM_AddEvent(EV_USE_ITEM0 + HI_BOOMIES);
+				PM_AddEvent(EV_USE_ITEM0 + giTag);
 
 				pm->ps->weaponTime = 500;
 				pm->ps->weaponstate = WEAPON_FIRING;
 				goto shootafterrspecialHI;
-			} else if (bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_BAMBAM) {
+			} else if (giTag == HI_BAMBAM) {
 				if (pm->ps->weaponstate != WEAPON_READY)
 					goto shootafterrspecialHI;
 
-				PM_AddEvent(EV_USE_ITEM0 + HI_BAMBAM);
+				PM_AddEvent(EV_USE_ITEM0 + giTag);
 				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
 
 				pm->ps->weaponTime = 2000;
 				pm->ps->weaponstate = WEAPON_FIRING;
 			} else {
 				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
-				PM_AddEvent(EV_USE_ITEM0 + bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag);
+				PM_AddEvent(EV_USE_ITEM0 + giTag);
 				pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;
 			}
 			return;
