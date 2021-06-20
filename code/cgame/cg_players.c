@@ -1494,7 +1494,7 @@ void CG_RevivalTrail(centity_t *cent) {
 CG_TrailItem
 ===============
 */
-static void CG_TrailItem(centity_t *cent, qhandle_t hModel) {
+static void CG_TrailItem(const centity_t *cent, qhandle_t hModel) {
 	refEntity_t ent;
 	vec3_t angles;
 	vec3_t axis[3];
@@ -1519,7 +1519,7 @@ static void CG_TrailItem(centity_t *cent, qhandle_t hModel) {
 CG_PlayerFlag
 ===============
 */
-static void CG_PlayerFlag(centity_t *cent, qhandle_t hSkin, refEntity_t *torso) {
+static void CG_PlayerFlag(centity_t *cent, qhandle_t hSkin, const refEntity_t *torso) {
 	clientInfo_t *ci;
 	refEntity_t pole;
 	refEntity_t flag;
@@ -1716,9 +1716,10 @@ static void CG_PlayerPowerups(centity_t *cent, refEntity_t *torso) {
 		return;
 	}
 
+	// flight plays a looped sound
 	if (cent->currentState.eFlags & EF_FLOATER) {
 		trap_S_AddLoopingSound(cent->currentState.clientNum, cent->lerpOrigin, vec3_origin, cgs.media.flightSound);
-		CG_SmokePuff(cent->lerpOrigin, vec3_origin, 20, 0.2, 0.0, 0.4, 0.5, 2000, cg.time, 0, 0,
+		CG_SmokePuff(cent->lerpOrigin, vec3_origin, 20, 0.2f, 0.0f, 0.4f, 0.5f, 2000, cg.time, 0, 0,
 					 cgs.media.smokePuffShader);
 	}
 
@@ -1727,16 +1728,6 @@ static void CG_PlayerPowerups(centity_t *cent, refEntity_t *torso) {
 		return;
 	}
 
-	// quad gives a dlight
-
-	// ente will das es gar nicht mehr leuchtet
-	/*(original)
-		if ( powerups & ( 1 << PW_QUAD ) ) {
-			trap_R_AddLightToScene( cent->lerpOrigin, 200 + (rand()&31), 0.2f, 0.2f, 1 );
-		}
-	*/
-
-	// flight plays a looped sound
 
 	ci = &cgs.clientinfo[cent->currentState.clientNum];
 
@@ -1762,9 +1753,9 @@ static void CG_PlayerPowerups(centity_t *cent, refEntity_t *torso) {
 	}
 	// add lolly glow for any client
 	if (powerups & (1 << PW_REDFLAG)) {
-		trap_R_AddLightToScene(cent->lerpOrigin, 200 + (rand() & 31), 1.0, 0.2, 0.2);
+		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 1.0f, 0.2f, 0.2f);
 	} else if (powerups & (1 << PW_BLUEFLAG)) {
-		trap_R_AddLightToScene(cent->lerpOrigin, 200 + (rand() & 31), 0.2, 0.2, 1.0);
+		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 0.2f, 0.2f, 1.0f);
 	}
 
 	// speedy leaves smoke trails
