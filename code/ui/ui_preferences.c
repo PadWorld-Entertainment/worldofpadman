@@ -139,6 +139,7 @@ static menucommon_s *g_chat_options[] = {
 };
 
 static menucommon_s *g_help_options[] = {
+	(menucommon_s *)&s_preferences.whIcons,
 	(menucommon_s *)&s_preferences.whTeamMates,
 	(menucommon_s *)&s_preferences.whHStations,
 	(menucommon_s *)&s_preferences.whSycTele,
@@ -610,7 +611,7 @@ static void Preferences_MenuInit(void) {
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.glowcolor.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.glowcolor.generic.name = "Glowcolor:";
+	s_preferences.glowcolor.generic.name = "Glow Color:";
 	s_preferences.glowcolor.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.glowcolor.generic.callback = Preferences_Event;
 	s_preferences.glowcolor.generic.id = ID_GLOWCOLOR;
@@ -621,7 +622,7 @@ static void Preferences_MenuInit(void) {
 	// chat options
 	y = YPOSITION;
 	s_preferences.con_notifytime.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.con_notifytime.generic.name = "Chat:";
+	s_preferences.con_notifytime.generic.name = "Chat Display:";
 	s_preferences.con_notifytime.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.con_notifytime.generic.callback = Preferences_Event;
 	s_preferences.con_notifytime.generic.id = ID_CONNOTIFY;
@@ -637,10 +638,10 @@ static void Preferences_MenuInit(void) {
 	// help options
 	y = YPOSITION;
 	s_preferences.whIcons.generic.type = MTYPE_TEXT;
-//	s_preferences.whIcons.generic.flags = QMF_PULSE;
-	s_preferences.whIcons.generic.x = XPOSITION - 25;
+	s_preferences.whIcons.generic.flags = QMF_HIDDEN;
+	s_preferences.whIcons.generic.x = XPOSITION - 20;
 	s_preferences.whIcons.generic.y = y;
-	s_preferences.whIcons.string = "Wallhack Icons:";
+	s_preferences.whIcons.string = "Wallhack Icons";
 	s_preferences.whIcons.style = (UI_CENTER | UI_SMALLFONT);
 	s_preferences.whIcons.color = menu_text_color;
 
@@ -652,7 +653,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whTeamMates.generic.id = ID_WALLHACKTEAMMATES;
 	s_preferences.whTeamMates.generic.x = XPOSITION;
 	s_preferences.whTeamMates.generic.y = y;
-	s_preferences.whTeamMates.generic.toolTip = "Show a PAD logo over your teammates heads, visible through walls, to help you find them.";
+	s_preferences.whTeamMates.generic.toolTip =
+		"Show a PAD logo over your teammates heads, visible through walls, to help you find them.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whHStations.generic.type = MTYPE_RADIOBUTTON;
