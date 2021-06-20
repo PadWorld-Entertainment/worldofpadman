@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define MAX_USERMOVE 400
 
-bot_input_t *botinputs;
+static bot_input_t *botinputs;
 
 void EA_Say(int client, const char *str) {
 	botimport.BotClientCommand(client, va("say %s", str));

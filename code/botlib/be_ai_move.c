@@ -115,8 +115,6 @@ static int modeltypes[MAX_MODELS];
 static bot_movestate_t *botmovestates[MAX_CLIENTS + 1];
 
 //========================================================================
-
-//========================================================================
 int BotAllocMoveState(void) {
 	int i;
 
@@ -128,7 +126,6 @@ int BotAllocMoveState(void) {
 	}
 	return 0;
 }
-//========================================================================
 
 //========================================================================
 void BotFreeMoveState(int handle) {
@@ -143,7 +140,6 @@ void BotFreeMoveState(int handle) {
 	FreeMemory(botmovestates[handle]);
 	botmovestates[handle] = NULL;
 }
-//========================================================================
 
 //========================================================================
 static bot_movestate_t *BotMoveStateFromHandle(int handle) {
@@ -157,7 +153,6 @@ static bot_movestate_t *BotMoveStateFromHandle(int handle) {
 	}
 	return botmovestates[handle];
 }
-//========================================================================
 
 //========================================================================
 void BotInitMoveState(int handle, bot_initmove_t *initmove) {
@@ -191,7 +186,6 @@ void BotInitMoveState(int handle, bot_initmove_t *initmove) {
 	if (initmove->or_moveflags & MFL_GRAPPLEPULL)
 		ms->moveflags |= MFL_GRAPPLEPULL;
 }
-//========================================================================
 
 //========================================================================
 static float AngleDiff(float ang1, float ang2) {
@@ -368,7 +362,6 @@ static int MoverDown(aas_reachability_t *reach) {
 		return qtrue;
 	return qfalse;
 }
-//========================================================================
 
 //========================================================================
 void BotSetBrushModelTypes(void) {
