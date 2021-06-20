@@ -32,7 +32,7 @@ theora:
 #include "client.h"
 #include "snd_local.h"
 
-#define OGG_BUFFER_SIZE 8 * 1024 // 4096
+#define OGG_BUFFER_SIZE 8 * 1024
 
 typedef struct {
 	fileHandle_t ogmFile;
@@ -72,7 +72,7 @@ typedef struct {
 
 static cin_ogm_t g_ogm;
 
-int nextNeededVFrame(void);
+static int nextNeededVFrame(void);
 
 /* ####################### #######################
 
@@ -325,7 +325,6 @@ static int loadVideoFrameXvid() {
 			}
 
 			if (g_ogm.outputBufferSize < g_ogm.xvid_dec_stats.data.vol.width * g_ogm.xvid_dec_stats.data.vol.height) {
-
 				g_ogm.outputBufferSize = g_ogm.xvid_dec_stats.data.vol.width * g_ogm.xvid_dec_stats.data.vol.height;
 
 				/* Free old output buffer*/
@@ -439,36 +438,10 @@ static int loadVideoFrameTheora(void) {
 				Com_Printf("[Theora] unexpected resolution in a yuv-Frame\n");
 				r = -1;
 			} else {
-
 				Frame_yuv_to_rgb24(g_ogm.th_yuvbuffer.y, g_ogm.th_yuvbuffer.u, g_ogm.th_yuvbuffer.v,
 								   g_ogm.th_info.width, g_ogm.th_info.height, g_ogm.th_yuvbuffer.y_stride,
 								   g_ogm.th_yuvbuffer.uv_stride, yWShift, uvWShift, yHShift, uvHShift,
 								   (unsigned int *)g_ogm.outputBuffer);
-
-				/*				unsigned char*	pixelPtr = g_ogm.outputBuffer;
-								unsigned int*	pixPtr;
-								pixPtr = (unsigned int*)g_ogm.outputBuffer;
-
-								//TODO: use one yuv->rgb funktion for the hole frame (the big amout of stack
-				movement(yuv->rgb calls) couldn't be good ;) ) for(j=0;j<g_ogm.th_info.height;++j) {
-									for(i=0;i<g_ogm.th_info.width;++i) {
-				#if 1
-										// simple grayscale-output ^^
-										pixelPtr[0] =
-											pixelPtr[1] =
-											pixelPtr[2] = g_ogm.th_yuvbuffer.y[i+j*g_ogm.th_yuvbuffer.y_stride];
-										pixelPtr+=4;
-
-				#else
-										// using RoQ yuv->rgb code
-										*pixPtr++ = yuv_to_rgb24(
-				g_ogm.th_yuvbuffer.y[(i>>yWShift)+(j>>yHShift)*g_ogm.th_yuvbuffer.y_stride],
-																g_ogm.th_yuvbuffer.u[(i>>uvWShift)+(j>>uvHShift)*g_ogm.th_yuvbuffer.uv_stride],
-																g_ogm.th_yuvbuffer.v[(i>>uvWShift)+(j>>uvHShift)*g_ogm.th_yuvbuffer.uv_stride]);
-				#endif
-									}
-								}
-				*/
 
 				r = 1;
 				g_ogm.VFrameCount = th_frame;
@@ -797,7 +770,7 @@ int Cin_OGM_Init(cinematics_t *cin, const char *filename) {
 	return 0;
 }
 
-int nextNeededVFrame(void) {
+static int nextNeededVFrame(void) {
 	return (int)(g_ogm.currentTime * (ogg_int64_t)10000 / g_ogm.Vtime_unit);
 }
 
