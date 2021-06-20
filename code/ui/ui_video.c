@@ -399,7 +399,7 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_SetValue("r_depthbits", 24);
 		break;
 	}
-	trap_Cvar_SetValue( "r_vertexLight", s_graphicsoptions.lighting.curvalue );
+	trap_Cvar_SetValue("r_vertexLight", s_graphicsoptions.lighting.curvalue);
 
 	if (s_graphicsoptions.geometry.curvalue == 2) {
 		trap_Cvar_SetValue("r_lodBias", 0);
@@ -569,7 +569,7 @@ static void GraphicsOptions_SetMenuItems(void) {
 		s_graphicsoptions.tq.curvalue = 3;
 	}
 
-	s_graphicsoptions.lighting.curvalue = trap_Cvar_VariableValue( "r_vertexLight" ) != 0;
+	s_graphicsoptions.lighting.curvalue = trap_Cvar_VariableValue("r_vertexLight") != 0;
 	switch (UI_GetCvarInt("r_texturebits")) {
 	default:
 	case 0:
@@ -760,7 +760,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.lighting.generic.y = y;
 	s_graphicsoptions.lighting.itemnames = lighting_names;
 	y += BIGCHAR_HEIGHT + 2;
-	
+
 	// references/modifies "r_lodBias" & "subdivisions"
 	s_graphicsoptions.geometry.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.geometry.generic.name = "Geometric Detail:";

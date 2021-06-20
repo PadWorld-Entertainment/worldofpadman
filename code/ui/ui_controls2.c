@@ -92,7 +92,7 @@ typedef struct {
 #define ID_LEFT 9
 #define ID_RIGHT 10
 #define ID_STRAFE 11
-#define ID_LOOKUP 12	
+#define ID_LOOKUP 12
 #define ID_LOOKDOWN 13
 #define ID_MOUSELOOK 14
 #define ID_CENTERVIEW 15
@@ -129,13 +129,13 @@ typedef struct {
 #define ID_ZOOM 44
 
 // all others
-#define ID_FREELOOK	46
+#define ID_FREELOOK 46
 #define ID_INVERTMOUSE 47
 #define ID_ALWAYSRUN 48
 #define ID_AUTOSWITCH 49
 #define ID_MOUSESPEED 50
 #define ID_JOYENABLE 51
-#define ID_JOYTHRESHOLD	52
+#define ID_JOYTHRESHOLD 52
 #define ID_SMOOTHMOUSE 53
 
 #define ANIM_IDLE 0
@@ -267,7 +267,7 @@ static bind_t g_bindings[] = {
 	{"+lookup", "look up", ID_LOOKUP, ANIM_LOOKUP, K_PGDN, -1, -1, -1},
 	{"+lookdown", "look down", ID_LOOKDOWN, ANIM_LOOKDOWN, K_DEL, -1, -1, -1},
 	{"+mlook", "mouse look", ID_MOUSELOOK, ANIM_IDLE, '/', -1, -1, -1},
-	{"centerview", "center view", ID_CENTERVIEW, ANIM_IDLE,	K_END, -1, -1, -1},
+	{"centerview", "center view", ID_CENTERVIEW, ANIM_IDLE, K_END, -1, -1, -1},
 	{"+zoom", "scope", ID_ZOOM, ANIM_IDLE, -1, -1, -1, -1},
 	{"weapon 1", "PUNCHY", ID_WEAPON1, ANIM_WEAPON1, '1', -1, -1, -1},
 	{"weapon 2", "NiPPER", ID_WEAPON2, ANIM_WEAPON2, '2', -1, -1, -1},
@@ -284,7 +284,7 @@ static bind_t g_bindings[] = {
 	{"+button3", "gesture", ID_GESTURE, ANIM_GESTURE, K_MOUSE3, -1, -1, -1},
 	{"messagemode", "chat all", ID_CHAT, ANIM_CHAT, 't', -1, -1, -1},
 	{"messagemode2", "chat team", ID_CHAT2, ANIM_CHAT, -1, -1, -1, -1},
-	{"messagemode3", "chat target",	ID_CHAT3, ANIM_CHAT, -1, -1, -1, -1},
+	{"messagemode3", "chat target", ID_CHAT3, ANIM_CHAT, -1, -1, -1, -1},
 	{"messagemode4", "chat attacker", ID_CHAT4, ANIM_CHAT, -1, -1, -1, -1},
 	{"togglemenu", "ingame menu", ID_TOGGLEMENU, ANIM_IDLE, K_ESCAPE, -1, -1, -1},
 	{"wop_music", "music menu", ID_MUSIC, ANIM_IDLE, 'm', -1, -1, -1},
@@ -818,7 +818,7 @@ static void Controls_GetConfig(void) {
 	s_controls.alwaysrun.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cl_run"));
 	s_controls.autoswitch.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cg_autoswitch"));
 	s_controls.sensitivity.curvalue = UI_ClampCvar(2, 30, Controls_GetCvarValue("sensitivity"));
-	s_controls.joyenable.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("in_joystick" ));
+	s_controls.joyenable.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("in_joystick"));
 	s_controls.joythreshold.curvalue = UI_ClampCvar(0.05f, 0.75f, Controls_GetCvarValue("joy_threshold"));
 	s_controls.freelook.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cl_freelook"));
 }
@@ -1255,33 +1255,33 @@ static void Controls_MenuInit(void) {
 	s_controls.invertmouse.generic.toolTip = "Switch on to invert the directions of your mouse (not recommended).";
 
 	s_controls.lookup.generic.type = MTYPE_ACTION;
-	s_controls.lookup.generic.flags = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.lookup.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.lookup.generic.callback = Controls_ActionEvent;
 	s_controls.lookup.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.lookup.generic.id = ID_LOOKUP;
 
 	s_controls.lookdown.generic.type = MTYPE_ACTION;
-	s_controls.lookdown.generic.flags = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.lookdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.lookdown.generic.callback = Controls_ActionEvent;
 	s_controls.lookdown.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.lookdown.generic.id = ID_LOOKDOWN;
 
 	s_controls.mouselook.generic.type = MTYPE_ACTION;
-	s_controls.mouselook.generic.flags = QMF_LEFT_JUSTIFY|QMF_HIGHLIGHT_IF_FOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.mouselook.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.mouselook.generic.callback = Controls_ActionEvent;
 	s_controls.mouselook.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.mouselook.generic.id = ID_MOUSELOOK;
 
 	s_controls.freelook.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.freelook.generic.flags = QMF_SMALLFONT;
-	s_controls.freelook.generic.x = SCREEN_WIDTH/2;
+	s_controls.freelook.generic.x = SCREEN_WIDTH / 2;
 	s_controls.freelook.generic.name = "free look";
 	s_controls.freelook.generic.id = ID_FREELOOK;
 	s_controls.freelook.generic.callback = Controls_MenuEvent;
 	s_controls.freelook.generic.statusbar = Controls_StatusBar;
 
 	s_controls.centerview.generic.type = MTYPE_ACTION;
-	s_controls.centerview.generic.flags = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.centerview.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.centerview.generic.callback = Controls_ActionEvent;
 	s_controls.centerview.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.centerview.generic.id = ID_CENTERVIEW;
@@ -1296,14 +1296,14 @@ static void Controls_MenuInit(void) {
 
 	s_controls.joyenable.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.joyenable.generic.flags = QMF_SMALLFONT;
-	s_controls.joyenable.generic.x = SCREEN_WIDTH/2;
+	s_controls.joyenable.generic.x = SCREEN_WIDTH / 2;
 	s_controls.joyenable.generic.name = "joystick";
 	s_controls.joyenable.generic.id = ID_JOYENABLE;
 	s_controls.joyenable.generic.callback = Controls_MenuEvent;
 	s_controls.joyenable.generic.statusbar = Controls_StatusBar;
 
 	s_controls.joythreshold.generic.type = MTYPE_SLIDER;
-	s_controls.joythreshold.generic.x = SCREEN_WIDTH/2;
+	s_controls.joythreshold.generic.x = SCREEN_WIDTH / 2;
 	s_controls.joythreshold.generic.flags = QMF_SMALLFONT;
 	s_controls.joythreshold.generic.name = "joystick threshold";
 	s_controls.joythreshold.generic.id = ID_JOYTHRESHOLD;
@@ -1314,7 +1314,7 @@ static void Controls_MenuInit(void) {
 
 	s_controls.alwaysrun.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.alwaysrun.generic.flags = QMF_SMALLFONT;
-	s_controls.alwaysrun.generic.x = SCREEN_WIDTH/2;
+	s_controls.alwaysrun.generic.x = SCREEN_WIDTH / 2;
 	s_controls.alwaysrun.generic.name = "always run";
 	s_controls.alwaysrun.generic.id = ID_ALWAYSRUN;
 	s_controls.alwaysrun.generic.callback = Controls_MenuEvent;
@@ -1363,19 +1363,19 @@ static void Controls_MenuInit(void) {
 	s_controls.movedown.generic.id = ID_MOVEDOWN;
 
 	s_controls.turnleft.generic.type = MTYPE_ACTION;
-	s_controls.turnleft.generic.flags = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.turnleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.turnleft.generic.callback = Controls_ActionEvent;
 	s_controls.turnleft.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.turnleft.generic.id = ID_LEFT;
 
 	s_controls.turnright.generic.type = MTYPE_ACTION;
-	s_controls.turnright.generic.flags = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.turnright.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.turnright.generic.callback = Controls_ActionEvent;
 	s_controls.turnright.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.turnright.generic.id = ID_RIGHT;
 
 	s_controls.sidestep.generic.type = MTYPE_ACTION;
-	s_controls.sidestep.generic.flags = QMF_LEFT_JUSTIFY|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.sidestep.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.sidestep.generic.callback = Controls_ActionEvent;
 	s_controls.sidestep.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.sidestep.generic.id = ID_STRAFE;
@@ -1497,7 +1497,7 @@ static void Controls_MenuInit(void) {
 	s_controls.showscores.generic.id = ID_SHOWSCORES;
 
 	s_controls.togglemenu.generic.type = MTYPE_ACTION;
-	s_controls.togglemenu.generic.flags = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+	s_controls.togglemenu.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.togglemenu.generic.callback = Controls_ActionEvent;
 	s_controls.togglemenu.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.togglemenu.generic.id = ID_TOGGLEMENU;
@@ -1616,7 +1616,7 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.gesture);
 	Menu_AddItem(&s_controls.menu, &s_controls.useitem);
 	Menu_AddItem(&s_controls.menu, &s_controls.dropCart);
-	
+
 	Menu_AddItem(&s_controls.menu, &s_controls.attack);
 	Menu_AddItem(&s_controls.menu, &s_controls.zoom);
 	Menu_AddItem(&s_controls.menu, &s_controls.nextweapon);

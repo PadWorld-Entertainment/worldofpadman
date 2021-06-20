@@ -203,8 +203,8 @@ UI_DrawProportionalString2
 =================
 */
 static const struct FontData {
-	int x; // x offset in font atlas
-	int y; // y offset in font atlas
+	int x;	   // x offset in font atlas
+	int y;	   // y offset in font atlas
 	int width; // width of the character
 } propMap[128] = {
 	{0, 0, -1},
