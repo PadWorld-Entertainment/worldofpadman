@@ -65,6 +65,7 @@ GAME OPTIONS MENU
 #define ID_GLOWCOLOR 32
 
 #define ID_CONNOTIFY 40
+#define ID_TEAMCHATSONLY 41
 
 #define ID_WALLHACKTEAMMATES 50
 #define ID_WALLHACKHSTATION 51
@@ -99,6 +100,7 @@ typedef struct {
 	menulist_s glowcolor;
 
 	menulist_s con_notifytime;
+	menuradiobutton_s teamchatsonly;
 
 	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
@@ -135,6 +137,7 @@ static menucommon_s *g_hud_options[] = {
 
 static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.con_notifytime,
+	(menucommon_s *)&s_preferences.teamchatsonly,
 	NULL
 };
 
@@ -191,7 +194,7 @@ static void Preferences_SetMenuItems(void) {
 
 	s_preferences.ffahud.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopFFAhud"));
 	s_preferences.timeleft.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimeLeft"));
-
+	s_preferences.teamchatsonly.curvalue = trap_Cvar_VariableValue("cg_teamChatsOnly") != 0;
 	s_preferences.timer.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimer"));
 	s_preferences.fps.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawFPS"));
 	s_preferences.ups.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawups"));
@@ -306,6 +309,10 @@ static void Preferences_Event(void *ptr, int notification) {
 
 	case ID_FORCEMODEL:
 		trap_Cvar_SetValue("cg_forcemodel", s_preferences.forcemodel.curvalue);
+		break;
+
+	case ID_TEAMCHATSONLY:
+		trap_Cvar_SetValue("cg_teamChatsOnly", s_preferences.teamchatsonly.curvalue);
 		break;
 
 	case ID_GLOWMODEL:
@@ -635,6 +642,16 @@ static void Preferences_MenuInit(void) {
 		"or shorter period of time and with or without the respective players "
 		"character icon appearing next to the chat text.";
 
+	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.teamchatsonly.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.teamchatsonly.generic.name = "Team Chats Only:";
+	s_preferences.teamchatsonly.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.teamchatsonly.generic.callback = Preferences_Event;
+	s_preferences.teamchatsonly.generic.id = ID_TEAMCHATSONLY;
+	s_preferences.teamchatsonly.generic.x = XPOSITION;
+	s_preferences.teamchatsonly.generic.y = y;
+	s_preferences.teamchatsonly.generic.toolTip = "Enable this to force only chats from your teammates to be displayed.";
+
 	// help options
 	y = YPOSITION;
 	s_preferences.whIcons.generic.type = MTYPE_TEXT;
@@ -745,6 +762,7 @@ static void Preferences_MenuInit(void) {
 
 	// chat options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.con_notifytime);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
 
 	// help options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
