@@ -65,7 +65,8 @@ GAME OPTIONS MENU
 #define ID_GLOWCOLOR 32
 
 #define ID_CONNOTIFY 40
-#define ID_TEAMCHATSONLY 41
+#define ID_CHATBEEP 42
+#define ID_TEAMCHATSONLY 43
 
 #define ID_WALLHACKTEAMMATES 50
 #define ID_WALLHACKHSTATION 51
@@ -100,6 +101,7 @@ typedef struct {
 	menulist_s glowcolor;
 
 	menulist_s con_notifytime;
+	menuradiobutton_s chatbeep;
 	menuradiobutton_s teamchatsonly;
 
 	menutext_s whIcons;
@@ -137,6 +139,7 @@ static menucommon_s *g_hud_options[] = {
 
 static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.con_notifytime,
+	(menucommon_s *)&s_preferences.chatbeep,
 	(menucommon_s *)&s_preferences.teamchatsonly,
 	NULL
 };
@@ -194,6 +197,7 @@ static void Preferences_SetMenuItems(void) {
 
 	s_preferences.ffahud.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopFFAhud"));
 	s_preferences.timeleft.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimeLeft"));
+	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
 	s_preferences.teamchatsonly.curvalue = trap_Cvar_VariableValue("cg_teamChatsOnly") != 0;
 	s_preferences.timer.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimer"));
 	s_preferences.fps.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawFPS"));
@@ -311,6 +315,14 @@ static void Preferences_Event(void *ptr, int notification) {
 		trap_Cvar_SetValue("cg_forcemodel", s_preferences.forcemodel.curvalue);
 		break;
 
+	case ID_CHATBEEP:
+		if (s_preferences.chatbeep.curvalue == 0) {
+			trap_Cvar_SetValue("cg_chatBeep", s_preferences.chatbeep.curvalue);
+		} else {
+			trap_Cvar_SetValue("cg_chatBeep", 7);
+		}
+		break;
+
 	case ID_TEAMCHATSONLY:
 		trap_Cvar_SetValue("cg_teamChatsOnly", s_preferences.teamchatsonly.curvalue);
 		break;
@@ -340,12 +352,15 @@ static void Preferences_Event(void *ptr, int notification) {
 	case ID_TIMER:
 		trap_Cvar_SetValue("cg_drawTimer", s_preferences.timer.curvalue);
 		break;
+
 	case ID_FPS:
 		trap_Cvar_SetValue("cg_drawFPS", s_preferences.fps.curvalue);
 		break;
+
 	case ID_UPS:
 		trap_Cvar_SetValue("cg_drawUPS", s_preferences.ups.curvalue);
 		break;
+
 	case ID_REALTIME:
 		trap_Cvar_SetValue("cg_drawRealTime", s_preferences.realtime.curvalue);
 		break;
@@ -643,6 +658,16 @@ static void Preferences_MenuInit(void) {
 		"character icon appearing next to the chat text.";
 
 	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.chatbeep.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.chatbeep.generic.name = "Chat Beep Sound:";
+	s_preferences.chatbeep.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.chatbeep.generic.callback = Preferences_Event;
+	s_preferences.chatbeep.generic.id = ID_CHATBEEP;
+	s_preferences.chatbeep.generic.x = XPOSITION;
+	s_preferences.chatbeep.generic.y = y;
+	s_preferences.chatbeep.generic.toolTip = "Disable this to switch off the chat beep sound for all text chat events.";
+
+	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.teamchatsonly.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.teamchatsonly.generic.name = "Team Chats Only:";
 	s_preferences.teamchatsonly.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -762,6 +787,7 @@ static void Preferences_MenuInit(void) {
 
 	// chat options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.con_notifytime);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
 
 	// help options
