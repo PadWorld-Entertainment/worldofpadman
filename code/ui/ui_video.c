@@ -638,7 +638,7 @@ void GraphicsOptions_MenuInit(void) {
 	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
 	static const char *lighting_names[] = {"High (Lightmap)", "Low (Vertex)", NULL};
 	static const char *colordepth_names[] = {"Default", "16 bit", "32 bit", NULL};
-	static const char *wm_names[] = {"Off", "On (Border)", "On (No Border)", NULL};
+	static const char *wm_names[] = {"Off (Fullscreen)", "On (Border)", "On (No Border)", NULL};
 	static const char *filter_names[] = {"Bilinear", "Trilinear", NULL};
 	static const char *td_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
