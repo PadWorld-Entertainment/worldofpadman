@@ -744,14 +744,14 @@ static void Preferences_MenuInit(void) {
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whFreezeTag.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whFreezeTag.generic.name = "Freeze Tag:";
+	s_preferences.whFreezeTag.generic.name = "Frozen Teammate:";
 	s_preferences.whFreezeTag.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.whFreezeTag.generic.callback = Preferences_Event;
 	s_preferences.whFreezeTag.generic.id = ID_WALLHACKFREEZETAG;
 	s_preferences.whFreezeTag.generic.x = XPOSITION;
 	s_preferences.whFreezeTag.generic.y = y;
 	s_preferences.whFreezeTag.generic.toolTip =
-		"Show a freeze icon over frozen teammates, visible through walls, to help you find them.";
+		"Show a freeze icon over frozen teammates in Freeze Tag, visible through walls, to help you find them.";
 
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
