@@ -65,6 +65,7 @@ GAME OPTIONS MENU
 #define ID_GLOWCOLOR 32
 
 #define ID_CONNOTIFY 40
+#define ID_DRAWCHATICON 41
 #define ID_CHATBEEP 42
 #define ID_TEAMCHATSONLY 43
 
@@ -101,6 +102,7 @@ typedef struct {
 	menulist_s glowcolor;
 
 	menulist_s con_notifytime;
+	menuradiobutton_s drawchaticon;
 	menuradiobutton_s chatbeep;
 	menuradiobutton_s teamchatsonly;
 
@@ -139,6 +141,7 @@ static menucommon_s *g_hud_options[] = {
 
 static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.con_notifytime,
+	(menucommon_s *)&s_preferences.drawchaticon,
 	(menucommon_s *)&s_preferences.chatbeep,
 	(menucommon_s *)&s_preferences.teamchatsonly,
 	NULL
@@ -164,7 +167,7 @@ static menucommon_s **g_options[] = {
 static const char *ffahud_names[] = {"Black", "Red",	"Blue", "Green",	"Chrome", "Whitemetal",
 									 "Rust",  "Flower", "Wood", "Airforce", NULL};
 
-static const char *con_notifytime_strs[] = {"short", "long", "short (icon)", "long (icon)", NULL};
+static const char *con_notifytime_strs[] = {"Short", "Default", "Long", "Maximum", NULL};
 
 static const char *glowcolor_names[] = {S_COLOR_BLACK "Black",	   S_COLOR_RED "Red",	  S_COLOR_GREEN "Green",
 										S_COLOR_YELLOW "Yellow",   S_COLOR_BLUE "Blue",	  S_COLOR_CYAN "Cyan",
@@ -186,15 +189,19 @@ static void Preferences_SetMenuItems(void) {
 	int cg_iconsCvarValue = (int)trap_Cvar_VariableValue("cg_icons");
 
 	notify = UI_GetCvarInt("con_notifytime");
+	if (notify < 0) {
+		notify *= -1;
+	}
 	if (notify > 0 && notify <= 3)
 		s_preferences.con_notifytime.curvalue = 0;
-	else if (notify > 3)
+	else if (notify > 3 && notify <= 5)
 		s_preferences.con_notifytime.curvalue = 1;
-	else if (notify < 0 && notify >= -5)
+	else if (notify > 5 && notify <= 7)
 		s_preferences.con_notifytime.curvalue = 2;
-	else if (notify < -5)
+	else if (notify > 7)
 		s_preferences.con_notifytime.curvalue = 3;
 
+	s_preferences.drawchaticon.curvalue = trap_Cvar_VariableValue("con_notifytime") < 0;
 	s_preferences.ffahud.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopFFAhud"));
 	s_preferences.timeleft.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimeLeft"));
 	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
@@ -279,6 +286,9 @@ Preferences_Event
 =================
 */
 static void Preferences_Event(void *ptr, int notification) {
+	int notify;
+	notify = trap_Cvar_VariableValue("con_notifytime");
+
 	if (notification != QM_ACTIVATED) {
 		return;
 	}
@@ -398,19 +408,40 @@ static void Preferences_Event(void *ptr, int notification) {
 	}
 
 	case ID_CONNOTIFY:
+		if (notify < 0) {
+			notify = -1;
+		} else {
+			notify = 1;
+		}
 		switch (s_preferences.con_notifytime.curvalue) {
 		case 0:
-			trap_Cvar_Set("con_notifytime", "3");
+			notify *= 3;
+			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
 		case 1:
-			trap_Cvar_Set("con_notifytime", "8");
+			notify *= 5;
+			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
 		case 2:
-			trap_Cvar_Set("con_notifytime", "-5");
+			notify *= 7;
+			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
 		case 3:
-			trap_Cvar_Set("con_notifytime", "-10");
+			notify *= 7;
+			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
+		}
+		break;
+
+	case ID_DRAWCHATICON:
+		if ((s_preferences.drawchaticon.curvalue == 1) && (notify >= 0)) {
+			notify *= -1;
+			trap_Cvar_SetValue("con_notifytime", notify);
+		}
+
+		if ((s_preferences.drawchaticon.curvalue == 0) && (notify < 0)) {
+			notify *= -1;
+			trap_Cvar_SetValue("con_notifytime", notify);
 		}
 		break;
 
@@ -658,6 +689,16 @@ static void Preferences_MenuInit(void) {
 		"character icon appearing next to the chat text.";
 
 	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.drawchaticon.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.drawchaticon.generic.name = "Draw Chat Icon:";
+	s_preferences.drawchaticon.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.drawchaticon.generic.callback = Preferences_Event;
+	s_preferences.drawchaticon.generic.id = ID_DRAWCHATICON;
+	s_preferences.drawchaticon.generic.x = XPOSITION;
+	s_preferences.drawchaticon.generic.y = y;
+	s_preferences.drawchaticon.generic.toolTip = "Disable this to remove the sender's player icon at the beginning of the chat messages.";
+
+	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.chatbeep.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.chatbeep.generic.name = "Chat Beep Sound:";
 	s_preferences.chatbeep.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -787,6 +828,7 @@ static void Preferences_MenuInit(void) {
 
 	// chat options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.con_notifytime);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.drawchaticon);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
 
