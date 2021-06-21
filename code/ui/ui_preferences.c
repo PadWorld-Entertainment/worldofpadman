@@ -427,7 +427,7 @@ static void Preferences_Event(void *ptr, int notification) {
 			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
 		case 3:
-			notify *= 7;
+			notify *= 9;
 			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
 		}
@@ -682,11 +682,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.con_notifytime.generic.x = XPOSITION;
 	s_preferences.con_notifytime.generic.y = y;
 	s_preferences.con_notifytime.itemnames = con_notifytime_strs;
-	s_preferences.con_notifytime.generic.toolTip =
-		"Select whether you prefer "
-		"chat text that appears at the top of the screen to appear for a longer "
-		"or shorter period of time and with or without the respective players "
-		"character icon appearing next to the chat text.";
+	s_preferences.con_notifytime.generic.toolTip = "Select whether you prefer chat messages to appear short (3s), standard (5s), long (7s) or maximum (9s) at the top of the screen.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.drawchaticon.generic.type = MTYPE_RADIOBUTTON;
@@ -706,7 +702,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.chatbeep.generic.id = ID_CHATBEEP;
 	s_preferences.chatbeep.generic.x = XPOSITION;
 	s_preferences.chatbeep.generic.y = y;
-	s_preferences.chatbeep.generic.toolTip = "Disable this to switch off the chat beep sound for all text chat events.";
+	s_preferences.chatbeep.generic.toolTip = "Disable this to switch off the beep sound of all chat messages.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.teamchatsonly.generic.type = MTYPE_RADIOBUTTON;
@@ -716,7 +712,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.teamchatsonly.generic.id = ID_TEAMCHATSONLY;
 	s_preferences.teamchatsonly.generic.x = XPOSITION;
 	s_preferences.teamchatsonly.generic.y = y;
-	s_preferences.teamchatsonly.generic.toolTip = "Enable this to force only chats from your teammates to be displayed.";
+	s_preferences.teamchatsonly.generic.toolTip = "Enable this to force only chat messages from your teammates to be displayed.";
 
 	// help options
 	y = YPOSITION;
