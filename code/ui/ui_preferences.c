@@ -644,7 +644,7 @@ static void Preferences_MenuInit(void) {
 	// chat options
 	y = YPOSITION;
 	s_preferences.con_notifytime.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.con_notifytime.generic.name = "Chat Display:";
+	s_preferences.con_notifytime.generic.name = "Chat Display Time:";
 	s_preferences.con_notifytime.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.con_notifytime.generic.callback = Preferences_Event;
 	s_preferences.con_notifytime.generic.id = ID_CONNOTIFY;
