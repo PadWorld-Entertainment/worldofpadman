@@ -68,6 +68,7 @@ GAME OPTIONS MENU
 #define ID_DRAWCHATICON 41
 #define ID_CHATBEEP 42
 #define ID_TEAMCHATSONLY 43
+#define ID_NOBOTCHAT 44
 
 #define ID_WALLHACKTEAMMATES 50
 #define ID_WALLHACKHSTATION 51
@@ -105,6 +106,7 @@ typedef struct {
 	menuradiobutton_s drawchaticon;
 	menuradiobutton_s chatbeep;
 	menuradiobutton_s teamchatsonly;
+	menuradiobutton_s nobotchat;
 
 	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
@@ -144,6 +146,7 @@ static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.drawchaticon,
 	(menucommon_s *)&s_preferences.chatbeep,
 	(menucommon_s *)&s_preferences.teamchatsonly,
+	(menucommon_s *)&s_preferences.nobotchat,
 	NULL
 };
 
@@ -206,6 +209,7 @@ static void Preferences_SetMenuItems(void) {
 	s_preferences.timeleft.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimeLeft"));
 	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
 	s_preferences.teamchatsonly.curvalue = trap_Cvar_VariableValue("cg_teamChatsOnly") != 0;
+	s_preferences.nobotchat.curvalue = trap_Cvar_VariableValue("bot_nochat") == 0;
 	s_preferences.timer.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimer"));
 	s_preferences.fps.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawFPS"));
 	s_preferences.ups.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawups"));
@@ -335,6 +339,10 @@ static void Preferences_Event(void *ptr, int notification) {
 
 	case ID_TEAMCHATSONLY:
 		trap_Cvar_SetValue("cg_teamChatsOnly", s_preferences.teamchatsonly.curvalue);
+		break;
+
+	case ID_NOBOTCHAT:
+		trap_Cvar_SetValue("bot_nochat", !s_preferences.nobotchat.curvalue);
 		break;
 
 	case ID_GLOWMODEL:
@@ -714,6 +722,16 @@ static void Preferences_MenuInit(void) {
 	s_preferences.teamchatsonly.generic.y = y;
 	s_preferences.teamchatsonly.generic.toolTip = "Enable this to force only chat messages from your teammates to be displayed.";
 
+	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.nobotchat.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.nobotchat.generic.name = "Bot Chat:";
+	s_preferences.nobotchat.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.nobotchat.generic.callback = Preferences_Event;
+	s_preferences.nobotchat.generic.id = ID_NOBOTCHAT;
+	s_preferences.nobotchat.generic.x = XPOSITION;
+	s_preferences.nobotchat.generic.y = y;
+	s_preferences.nobotchat.generic.toolTip = "Disable this to prevent the bots from chatting and to silence them.";
+
 	// help options
 	y = YPOSITION;
 	s_preferences.whIcons.generic.type = MTYPE_TEXT;
@@ -827,6 +845,7 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawchaticon);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.nobotchat);
 
 	// help options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
