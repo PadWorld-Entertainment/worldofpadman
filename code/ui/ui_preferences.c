@@ -102,7 +102,7 @@ typedef struct {
 	menuradiobutton_s glowmodel;
 	menulist_s glowcolor;
 
-	menulist_s con_notifytime;
+	menulist_s connotifytime;
 	menuradiobutton_s drawchaticon;
 	menuradiobutton_s chatbeep;
 	menuradiobutton_s teamchatsonly;
@@ -142,7 +142,7 @@ static menucommon_s *g_hud_options[] = {
 };
 
 static menucommon_s *g_chat_options[] = {
-	(menucommon_s *)&s_preferences.con_notifytime,
+	(menucommon_s *)&s_preferences.connotifytime,
 	(menucommon_s *)&s_preferences.drawchaticon,
 	(menucommon_s *)&s_preferences.chatbeep,
 	(menucommon_s *)&s_preferences.teamchatsonly,
@@ -191,20 +191,20 @@ static void Preferences_SetMenuItems(void) {
 	int notify;
 	int cg_iconsCvarValue = (int)trap_Cvar_VariableValue("cg_icons");
 
-	notify = UI_GetCvarInt("con_notifytime");
+	notify = UI_GetCvarInt("connotifytime");
 	if (notify < 0) {
 		notify *= -1;
 	}
-	if (notify > 0 && notify <= 3)
-		s_preferences.con_notifytime.curvalue = 0;
-	else if (notify > 3 && notify <= 5)
-		s_preferences.con_notifytime.curvalue = 1;
-	else if (notify > 5 && notify <= 7)
-		s_preferences.con_notifytime.curvalue = 2;
-	else if (notify > 7)
-		s_preferences.con_notifytime.curvalue = 3;
+	if (notify > 0 && notify <= 2)
+		s_preferences.connotifytime.curvalue = 0;
+	else if (notify > 2 && notify <= 4)
+		s_preferences.connotifytime.curvalue = 1;
+	else if (notify > 4 && notify <= 6)
+		s_preferences.connotifytime.curvalue = 2;
+	else if (notify > 6)
+		s_preferences.connotifytime.curvalue = 3;
 
-	s_preferences.drawchaticon.curvalue = trap_Cvar_VariableValue("con_notifytime") < 0;
+	s_preferences.drawchaticon.curvalue = trap_Cvar_VariableValue("connotifytime") < 0;
 	s_preferences.ffahud.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopFFAhud"));
 	s_preferences.timeleft.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimeLeft"));
 	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
@@ -291,7 +291,7 @@ Preferences_Event
 */
 static void Preferences_Event(void *ptr, int notification) {
 	int notify;
-	notify = trap_Cvar_VariableValue("con_notifytime");
+	notify = trap_Cvar_VariableValue("connotifytime");
 
 	if (notification != QM_ACTIVATED) {
 		return;
@@ -421,21 +421,21 @@ static void Preferences_Event(void *ptr, int notification) {
 		} else {
 			notify = 1;
 		}
-		switch (s_preferences.con_notifytime.curvalue) {
+		switch (s_preferences.connotifytime.curvalue) {
 		case 0:
-			notify *= 3;
+			notify *= 2;
 			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
 		case 1:
-			notify *= 5;
+			notify *= 4;
 			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
 		case 2:
-			notify *= 7;
+			notify *= 6;
 			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
 		case 3:
-			notify *= 9;
+			notify *= 8;
 			trap_Cvar_SetValue("con_notifytime", notify);
 			break;
 		}
@@ -682,35 +682,35 @@ static void Preferences_MenuInit(void) {
 
 	// chat options
 	y = YPOSITION;
-	s_preferences.con_notifytime.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.con_notifytime.generic.name = "Chat Display Time:";
-	s_preferences.con_notifytime.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.con_notifytime.generic.callback = Preferences_Event;
-	s_preferences.con_notifytime.generic.id = ID_CONNOTIFY;
-	s_preferences.con_notifytime.generic.x = XPOSITION;
-	s_preferences.con_notifytime.generic.y = y;
-	s_preferences.con_notifytime.itemnames = con_notifytime_strs;
-	s_preferences.con_notifytime.generic.toolTip = "Select whether you prefer chat messages to appear short (3s), standard (5s), long (7s) or maximum (9s) at the top of the screen.";
+	s_preferences.connotifytime.generic.type = MTYPE_SPINCONTROL;
+	s_preferences.connotifytime.generic.name = "Notification Time:";
+	s_preferences.connotifytime.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.connotifytime.generic.callback = Preferences_Event;
+	s_preferences.connotifytime.generic.id = ID_CONNOTIFY;
+	s_preferences.connotifytime.generic.x = XPOSITION;
+	s_preferences.connotifytime.generic.y = y;
+	s_preferences.connotifytime.itemnames = con_notifytime_strs;
+	s_preferences.connotifytime.generic.toolTip = "Select whether you prefer notifications to appear short (2s), default (4s), long (6s) or maximum (8s) at the top of the screen. This is independent of the team chat display.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.drawchaticon.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.drawchaticon.generic.name = "Draw Chat Icon:";
+	s_preferences.drawchaticon.generic.name = "Draw Player Icon:";
 	s_preferences.drawchaticon.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.drawchaticon.generic.callback = Preferences_Event;
 	s_preferences.drawchaticon.generic.id = ID_DRAWCHATICON;
 	s_preferences.drawchaticon.generic.x = XPOSITION;
 	s_preferences.drawchaticon.generic.y = y;
-	s_preferences.drawchaticon.generic.toolTip = "Disable this to remove the sender's player icon at the beginning of the chat messages.";
+	s_preferences.drawchaticon.generic.toolTip = "Disable this to remove the player icon at the beginning of a chat notification.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.chatbeep.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.chatbeep.generic.name = "Chat Beep Sound:";
+	s_preferences.chatbeep.generic.name = "Play Chat Beep:";
 	s_preferences.chatbeep.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.chatbeep.generic.callback = Preferences_Event;
 	s_preferences.chatbeep.generic.id = ID_CHATBEEP;
 	s_preferences.chatbeep.generic.x = XPOSITION;
 	s_preferences.chatbeep.generic.y = y;
-	s_preferences.chatbeep.generic.toolTip = "Disable this to switch off the beep sound of all chat messages.";
+	s_preferences.chatbeep.generic.toolTip = "Disable this to switch off the beep of all chat notifications.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.teamchatsonly.generic.type = MTYPE_RADIOBUTTON;
@@ -724,7 +724,7 @@ static void Preferences_MenuInit(void) {
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.nobotchat.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.nobotchat.generic.name = "Bot Chat:";
+	s_preferences.nobotchat.generic.name = "Chatting Bots:";
 	s_preferences.nobotchat.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.nobotchat.generic.callback = Preferences_Event;
 	s_preferences.nobotchat.generic.id = ID_NOBOTCHAT;
@@ -841,7 +841,7 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.glowcolor);
 
 	// chat options
-	Menu_AddItem(&s_preferences.menu, &s_preferences.con_notifytime);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.connotifytime);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawchaticon);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
