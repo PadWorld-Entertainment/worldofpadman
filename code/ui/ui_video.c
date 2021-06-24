@@ -100,9 +100,9 @@ typedef struct {
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{2, qtrue, 3, 0, 2, 2, 1, 3, 1, qfalse, 4, 2},
-												  {2, qtrue, 3, 0, 0, 0, 1, 2, 0, qfalse, 3, 0},
-												  {1, qtrue, 2, 0, 1, 0, 0, 1, 0, qfalse, 2, 0},
+static InitialVideoOptions_s s_ivo_templates[] = {{2, qtrue, 3, 1, 2, 2, 1, 3, 1, qfalse, 4, 2},
+												  {2, qtrue, 3, 1, 0, 0, 1, 2, 0, qfalse, 3, 0},
+												  {1, qtrue, 2, 1, 1, 0, 0, 1, 0, qfalse, 2, 0},
 												  {0, qtrue, 1, 0, 1, 0, 0, 0, 0, qtrue, 0, 0},
 												  {
 													  2, qtrue, 1, 0, 0, 0, 0, 0, 0, qtrue, 0, 0 // "custom" placeholder
@@ -407,7 +407,7 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_SetValue("r_depthbits", 24);
 		break;
 	}
-	trap_Cvar_SetValue("r_vertexLight", s_graphicsoptions.lighting.curvalue);
+	trap_Cvar_SetValue("r_vertexLight", !s_graphicsoptions.lighting.curvalue);
 
 	if (s_graphicsoptions.mdetail.curvalue == 1) {
 		trap_Cvar_SetValue("r_lodBias", 0);
@@ -589,7 +589,7 @@ static void GraphicsOptions_SetMenuItems(void) {
 		s_graphicsoptions.tq.curvalue = 3;
 	}
 
-	s_graphicsoptions.lighting.curvalue = trap_Cvar_VariableValue("r_vertexLight") != 0;
+	s_graphicsoptions.lighting.curvalue = trap_Cvar_VariableValue("r_vertexLight") == 0;
 	switch (UI_GetCvarInt("r_texturebits")) {
 	default:
 	case 0:
@@ -665,7 +665,7 @@ GraphicsOptions_MenuInit
 void GraphicsOptions_MenuInit(void) {
 	static const char *tq_names[] = {"Default", "16 bit", "32 bit", NULL};
 	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
-	static const char *lighting_names[] = {"High (Lightmap)", "Low (Vertex)", NULL};
+	static const char *lighting_names[] = {"Low (Vertex)", "High (Lightmap)", NULL};
 	static const char *colordepth_names[] = {"Default", "16 bit", "32 bit", NULL};
 	static const char *wm_names[] = {"Off (Fullscreen)", "On (Border)", "On (No Border)", NULL};
 	static const char *filter_names[] = {"Bilinear", "Trilinear", NULL};
@@ -778,7 +778,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.wm.generic.x = XPOSITION;
 	s_graphicsoptions.wm.generic.y = y;
 	s_graphicsoptions.wm.generic.toolTip =
-		"Switch on to play the game in a window (not recommended), change resolution to change size of the window. "
+		"Switch on to play the game in a window, change resolution to change size of the window. "
 		"Choose no border to remove window decoration from window managers, like borders and titlebar.";
 	y += BIGCHAR_HEIGHT + 2;
 
