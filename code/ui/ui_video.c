@@ -71,7 +71,8 @@ typedef struct {
 	menulist_s lighting;
 	menulist_s texturebits;
 	menulist_s colordepth;
-	menulist_s geometry;
+	menulist_s mdetail;
+	menulist_s cdetail;
 	menulist_s filter;
 	menulist_s ct;
 	menulist_s af;
@@ -88,7 +89,8 @@ typedef struct {
 	int lighting;
 	int colordepth;
 	int texturebits;
-	int geometry;
+	int mdetail;
+	int cdetail;
 	int filter;
 	qboolean ct;
 	int af; // index to af_names!
@@ -98,12 +100,12 @@ typedef struct {
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{2, qtrue, 3, 0, 2, 2, 2, 1, qfalse, 4, 2},
-												  {2, qtrue, 3, 0, 0, 0, 1, 0, qfalse, 3, 0},
-												  {1, qtrue, 2, 0, 1, 0, 0, 0, qfalse, 2, 0},
-												  {0, qtrue, 1, 0, 1, 0, 0, 0, qtrue, 0, 0},
+static InitialVideoOptions_s s_ivo_templates[] = {{2, qtrue, 3, 0, 2, 2, 1, 3, 1, qfalse, 4, 2},
+												  {2, qtrue, 3, 0, 0, 0, 1, 2, 0, qfalse, 3, 0},
+												  {1, qtrue, 2, 0, 1, 0, 0, 1, 0, qfalse, 2, 0},
+												  {0, qtrue, 1, 0, 1, 0, 0, 0, 0, qtrue, 0, 0},
 												  {
-													  2, qtrue, 1, 0, 0, 0, 0, 0, qtrue, 0, 0 // "custom" placeholder
+													  2, qtrue, 1, 0, 0, 0, 0, 0, 0, qtrue, 0, 0 // "custom" placeholder
 												  }};
 
 #define NUM_IVO_TEMPLATES (ARRAY_LEN(s_ivo_templates))
@@ -253,7 +255,8 @@ static void GraphicsOptions_GetInitialVideo(void) {
 	s_ivo.wm = s_graphicsoptions.wm.curvalue;
 	s_ivo.tq = s_graphicsoptions.tq.curvalue;
 	s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
-	s_ivo.geometry = s_graphicsoptions.geometry.curvalue;
+	s_ivo.mdetail = s_graphicsoptions.mdetail.curvalue;
+	s_ivo.cdetail = s_graphicsoptions.cdetail.curvalue;
 	s_ivo.filter = s_graphicsoptions.filter.curvalue;
 	s_ivo.texturebits = s_graphicsoptions.texturebits.curvalue;
 	s_ivo.ct = s_graphicsoptions.ct.curvalue;
@@ -280,7 +283,9 @@ static void GraphicsOptions_CheckConfig(void) {
 			continue;
 		if (s_ivo_templates[i].lighting != s_graphicsoptions.lighting.curvalue)
 			continue;
-		if (s_ivo_templates[i].geometry != s_graphicsoptions.geometry.curvalue)
+		if (s_ivo_templates[i].mdetail != s_graphicsoptions.mdetail.curvalue)
+			continue;
+		if (s_ivo_templates[i].cdetail != s_graphicsoptions.cdetail.curvalue)
 			continue;
 		if (s_ivo_templates[i].filter != s_graphicsoptions.filter.curvalue)
 			continue;
@@ -331,7 +336,10 @@ static void GraphicsOptions_UpdateMenuItems(void) {
 	if (s_ivo.texturebits != s_graphicsoptions.texturebits.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
-	if (s_ivo.geometry != s_graphicsoptions.geometry.curvalue) {
+	if (s_ivo.mdetail != s_graphicsoptions.mdetail.curvalue) {
+		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	}
+	if (s_ivo.cdetail != s_graphicsoptions.cdetail.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 	if (s_ivo.filter != s_graphicsoptions.filter.curvalue) {
@@ -401,14 +409,25 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	}
 	trap_Cvar_SetValue("r_vertexLight", s_graphicsoptions.lighting.curvalue);
 
-	if (s_graphicsoptions.geometry.curvalue == 2) {
+	if (s_graphicsoptions.mdetail.curvalue == 1) {
 		trap_Cvar_SetValue("r_lodBias", 0);
+//	} else if (s_graphicsoptions.mdetail.curvalue == 1) {
+//		trap_Cvar_SetValue("r_lodBias", 1);
+	} else {
+		trap_Cvar_SetValue("r_lodBias", 1);	//"Low" removed for now, as WoP has no models with LOD bias 2.
+	}
+
+	if (s_graphicsoptions.cdetail.curvalue == 5) {
+		trap_Cvar_SetValue("r_subdivisions", 0);
+	} else if (s_graphicsoptions.cdetail.curvalue == 4) {
+		trap_Cvar_SetValue("r_subdivisions", 1);
+	} else if (s_graphicsoptions.cdetail.curvalue == 3) {
+		trap_Cvar_SetValue("r_subdivisions", 2);
+	} else if (s_graphicsoptions.cdetail.curvalue == 2) {
 		trap_Cvar_SetValue("r_subdivisions", 4);
-	} else if (s_graphicsoptions.geometry.curvalue == 1) {
-		trap_Cvar_SetValue("r_lodBias", 1);
+	} else if (s_graphicsoptions.cdetail.curvalue == 1) {
 		trap_Cvar_SetValue("r_subdivisions", 12);
 	} else {
-		trap_Cvar_SetValue("r_lodBias", 1);
 		trap_Cvar_SetValue("r_subdivisions", 20);
 	}
 
@@ -478,7 +497,8 @@ static void GraphicsOptions_Event(void *ptr, int event) {
 		s_graphicsoptions.lighting.curvalue = ivo->lighting;
 		s_graphicsoptions.colordepth.curvalue = ivo->colordepth;
 		s_graphicsoptions.texturebits.curvalue = ivo->texturebits;
-		s_graphicsoptions.geometry.curvalue = ivo->geometry;
+		s_graphicsoptions.mdetail.curvalue = ivo->mdetail;
+		s_graphicsoptions.cdetail.curvalue = ivo->cdetail;
 		s_graphicsoptions.filter.curvalue = ivo->filter;
 		s_graphicsoptions.wm.curvalue = ivo->wm;
 		s_graphicsoptions.ct.curvalue = ivo->ct;
@@ -590,13 +610,23 @@ static void GraphicsOptions_SetMenuItems(void) {
 	}
 
 	if (trap_Cvar_VariableValue("r_lodBias") > 0) {
-		if (trap_Cvar_VariableValue("r_subdivisions") >= 20) {
-			s_graphicsoptions.geometry.curvalue = 0;
-		} else {
-			s_graphicsoptions.geometry.curvalue = 1;
-		}
+		s_graphicsoptions.mdetail.curvalue = 0;
 	} else {
-		s_graphicsoptions.geometry.curvalue = 2;
+		s_graphicsoptions.mdetail.curvalue = 1;
+	}
+
+	if (trap_Cvar_VariableValue("r_subdivisions") < 1) {
+		s_graphicsoptions.cdetail.curvalue = 5;
+	} else if (trap_Cvar_VariableValue("r_subdivisions") < 2) {
+		s_graphicsoptions.cdetail.curvalue = 4;
+	} else if (trap_Cvar_VariableValue("r_subdivisions") < 4) {
+		s_graphicsoptions.cdetail.curvalue = 3;
+	} else if (trap_Cvar_VariableValue("r_subdivisions") < 12) {
+		s_graphicsoptions.cdetail.curvalue = 2;
+	} else if (trap_Cvar_VariableValue("r_subdivisions") < 20) {
+		s_graphicsoptions.cdetail.curvalue = 1;
+	} else {
+		s_graphicsoptions.cdetail.curvalue = 0;
 	}
 
 	switch (UI_GetCvarInt("r_colorbits")) {
@@ -634,7 +664,6 @@ GraphicsOptions_MenuInit
 */
 void GraphicsOptions_MenuInit(void) {
 	static const char *tq_names[] = {"Default", "16 bit", "32 bit", NULL};
-
 	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
 	static const char *lighting_names[] = {"High (Lightmap)", "Low (Vertex)", NULL};
 	static const char *colordepth_names[] = {"Default", "16 bit", "32 bit", NULL};
@@ -643,7 +672,8 @@ void GraphicsOptions_MenuInit(void) {
 	static const char *td_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
 	static const char *aa_names[] = {"Off", "2x", "4x", NULL};
-	static const char *quality_names[] = {"Low", "Medium", "High", NULL};
+	static const char *mdetail_names[] = {"Medium", "High", NULL};	//"Low" removed for now, as WoP has no models with LOD bias 2.
+	static const char *cdetail_names[] = {"Very Low", "Low", "Medium", "High", "Very High", "Maximum", NULL};
 	static const char *enabled_names[] = {"Off", "On", NULL};
 
 	int y;
@@ -761,13 +791,22 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.lighting.itemnames = lighting_names;
 	y += BIGCHAR_HEIGHT + 2;
 
-	// references/modifies "r_lodBias" & "subdivisions"
-	s_graphicsoptions.geometry.generic.type = MTYPE_SPINCONTROL;
-	s_graphicsoptions.geometry.generic.name = "Geometric Detail:";
-	s_graphicsoptions.geometry.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.geometry.generic.x = XPOSITION;
-	s_graphicsoptions.geometry.generic.y = y;
-	s_graphicsoptions.geometry.itemnames = quality_names;
+	// references/modifies "r_lodBias"
+	s_graphicsoptions.mdetail.generic.type = MTYPE_SPINCONTROL;
+	s_graphicsoptions.mdetail.generic.name = "Models Detail:";
+	s_graphicsoptions.mdetail.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.mdetail.generic.x = XPOSITION;
+	s_graphicsoptions.mdetail.generic.y = y;
+	s_graphicsoptions.mdetail.itemnames = mdetail_names;
+	y += BIGCHAR_HEIGHT + 2;
+
+	// references/modifies "r_subdivisions"
+	s_graphicsoptions.cdetail.generic.type = MTYPE_SPINCONTROL;
+	s_graphicsoptions.cdetail.generic.name = "Curves Detail:";
+	s_graphicsoptions.cdetail.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.cdetail.generic.x = XPOSITION;
+	s_graphicsoptions.cdetail.generic.y = y;
+	s_graphicsoptions.cdetail.itemnames = cdetail_names;
 	y += BIGCHAR_HEIGHT + 2;
 
 	// references/modifies "r_picmip"
@@ -867,7 +906,8 @@ void GraphicsOptions_MenuInit(void) {
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.colordepth);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.wm);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.lighting);
-	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.geometry);
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.mdetail);
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.cdetail);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tq);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.texturebits);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.filter);
