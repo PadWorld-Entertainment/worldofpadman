@@ -67,8 +67,8 @@ GAME OPTIONS MENU
 #define ID_CONNOTIFY 40
 #define ID_DRAWCHATICON 41
 #define ID_CHATBEEP 42
-#define ID_TEAMCHATSONLY 43
-#define ID_NOBOTCHAT 44
+#define ID_BOTCHAT 43
+#define ID_TEAMCHATSONLY 44
 
 #define ID_WALLHACKTEAMMATES 50
 #define ID_WALLHACKHSTATION 51
@@ -105,8 +105,8 @@ typedef struct {
 	menulist_s connotifytime;
 	menuradiobutton_s drawchaticon;
 	menuradiobutton_s chatbeep;
+	menuradiobutton_s botchat;
 	menuradiobutton_s teamchatsonly;
-	menuradiobutton_s nobotchat;
 
 	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
@@ -145,8 +145,8 @@ static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.connotifytime,
 	(menucommon_s *)&s_preferences.drawchaticon,
 	(menucommon_s *)&s_preferences.chatbeep,
+	(menucommon_s *)&s_preferences.botchat,
 	(menucommon_s *)&s_preferences.teamchatsonly,
-	(menucommon_s *)&s_preferences.nobotchat,
 	NULL
 };
 
@@ -170,11 +170,13 @@ static menucommon_s **g_options[] = {
 static const char *ffahud_names[] = {"Black", "Red",	"Blue", "Green",	"Chrome", "Whitemetal",
 									 "Rust",  "Flower", "Wood", "Airforce", NULL};
 
-static const char *con_notifytime_strs[] = {"Short", "Default", "Long", "Maximum", NULL};
+static const char *connotifytime_names[] = {"Short", "Default", "Long", "Maximum", NULL};
 
 static const char *glowcolor_names[] = {S_COLOR_BLACK "Black",	   S_COLOR_RED "Red",	  S_COLOR_GREEN "Green",
 										S_COLOR_YELLOW "Yellow",   S_COLOR_BLUE "Blue",	  S_COLOR_CYAN "Cyan",
 										S_COLOR_MAGENTA "Magenta", S_COLOR_WHITE "White", NULL};
+
+static const char *botchat_names[] = {"Off", "Default", "Often", NULL};
 
 static void UpdateGlowColorFlags(void) {
 	if (s_preferences.glowcolor.generic.flags & QMF_HIDDEN)
@@ -209,7 +211,17 @@ static void Preferences_SetMenuItems(void) {
 	s_preferences.timeleft.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimeLeft"));
 	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
 	s_preferences.teamchatsonly.curvalue = trap_Cvar_VariableValue("cg_teamChatsOnly") != 0;
-	s_preferences.nobotchat.curvalue = trap_Cvar_VariableValue("bot_nochat") == 0;
+
+	if (trap_Cvar_VariableValue("bot_nochat") != 1) {
+		if (trap_Cvar_VariableValue("bot_fastchat") != 0) {
+			s_preferences.botchat.curvalue = 2;
+		} else {
+			s_preferences.botchat.curvalue = 1;			
+		}
+	} else {
+		s_preferences.botchat.curvalue = 0;
+	}
+
 	s_preferences.timer.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimer"));
 	s_preferences.fps.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawFPS"));
 	s_preferences.ups.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawups"));
@@ -341,8 +353,17 @@ static void Preferences_Event(void *ptr, int notification) {
 		trap_Cvar_SetValue("cg_teamChatsOnly", s_preferences.teamchatsonly.curvalue);
 		break;
 
-	case ID_NOBOTCHAT:
-		trap_Cvar_SetValue("bot_nochat", !s_preferences.nobotchat.curvalue);
+	case ID_BOTCHAT:
+		if (s_preferences.botchat.curvalue != 0) {
+			trap_Cvar_SetValue("bot_nochat", 0);
+			if (s_preferences.botchat.curvalue == 2) {
+				trap_Cvar_SetValue("bot_fastchat", 1);
+			} else {
+				trap_Cvar_SetValue("bot_fastchat", 0);
+			}
+		} else {
+			trap_Cvar_SetValue("bot_nochat", 1);
+		}
 		break;
 
 	case ID_GLOWMODEL:
@@ -689,7 +710,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.connotifytime.generic.id = ID_CONNOTIFY;
 	s_preferences.connotifytime.generic.x = XPOSITION;
 	s_preferences.connotifytime.generic.y = y;
-	s_preferences.connotifytime.itemnames = con_notifytime_strs;
+	s_preferences.connotifytime.itemnames = connotifytime_names;
 	s_preferences.connotifytime.generic.toolTip = "Select whether you prefer notifications to appear short (2s), default (4s), long (6s) or maximum (8s) at the top of the screen. This is independent of the team chat display.";
 
 	y += BIGCHAR_HEIGHT + 2;
@@ -713,6 +734,17 @@ static void Preferences_MenuInit(void) {
 	s_preferences.chatbeep.generic.toolTip = "Disable this to switch off the beep of all chat notifications.";
 
 	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.botchat.generic.type = MTYPE_SPINCONTROL;
+	s_preferences.botchat.generic.name = "Chatting Bots:";
+	s_preferences.botchat.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.botchat.generic.callback = Preferences_Event;
+	s_preferences.botchat.generic.id = ID_NOBOTCHAT;
+	s_preferences.botchat.generic.x = XPOSITION;
+	s_preferences.botchat.generic.y = y;
+	s_preferences.botchat.itemnames = botchat_names;
+	s_preferences.botchat.generic.toolTip = "Set this to Off to prevent the bots from chatting and silence them, or set it to Often to make the bots more talkative.";
+
+	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.teamchatsonly.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.teamchatsonly.generic.name = "Team Chats Only:";
 	s_preferences.teamchatsonly.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -721,16 +753,6 @@ static void Preferences_MenuInit(void) {
 	s_preferences.teamchatsonly.generic.x = XPOSITION;
 	s_preferences.teamchatsonly.generic.y = y;
 	s_preferences.teamchatsonly.generic.toolTip = "Enable this to force only chat messages from your teammates to be displayed.";
-
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.nobotchat.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.nobotchat.generic.name = "Chatting Bots:";
-	s_preferences.nobotchat.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.nobotchat.generic.callback = Preferences_Event;
-	s_preferences.nobotchat.generic.id = ID_NOBOTCHAT;
-	s_preferences.nobotchat.generic.x = XPOSITION;
-	s_preferences.nobotchat.generic.y = y;
-	s_preferences.nobotchat.generic.toolTip = "Disable this to prevent the bots from chatting and to silence them.";
 
 	// help options
 	y = YPOSITION;
@@ -844,8 +866,8 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.connotifytime);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawchaticon);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.botchat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.nobotchat);
 
 	// help options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
