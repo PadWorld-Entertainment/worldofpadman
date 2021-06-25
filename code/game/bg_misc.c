@@ -75,7 +75,7 @@ const gitem_t bg_itemlist[] = {
 	{"item_armor_padshield",
 	 "sounds/names/powerups/padshield",
 	 {"models/powerups/armor/pad_shield", 0, 0, 0},
-	 /* icon */ "icons/armor_padshard",
+	 /* icon */ "icons/armor_padshield",
 	 /* pickup */ "PAD SHiELD",
 	 100,
 	 IT_ARMOR,
