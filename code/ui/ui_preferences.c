@@ -104,7 +104,7 @@ typedef struct {
 	menuradiobutton_s glowmodel;
 	menulist_s glowcolor;
 
-	menulist_s connotifytime;
+	menulist_s connotify;
 	menuradiobutton_s drawchaticon;
 	menuradiobutton_s chatbeep;
 	menulist_s botchat;
@@ -146,7 +146,7 @@ static menucommon_s *g_hud_options[] = {
 };
 
 static menucommon_s *g_chat_options[] = {
-	(menucommon_s *)&s_preferences.connotifytime,
+	(menucommon_s *)&s_preferences.connotify,
 	(menucommon_s *)&s_preferences.drawchaticon,
 	(menucommon_s *)&s_preferences.chatbeep,
 	(menucommon_s *)&s_preferences.botchat,
@@ -176,7 +176,7 @@ static menucommon_s **g_options[] = {
 static const char *ffahud_names[] = {"Black", "Red",	"Blue", "Green",	"Chrome", "Whitemetal",
 									 "Rust",  "Flower", "Wood", "Airforce", NULL};
 
-static const char *connotifytime_names[] = {"Short", "Default", "Long", "Maximum", NULL};
+static const char *connotify_names[] = {"Short", "Default", "Long", "Maximum", NULL};
 
 static const char *glowcolor_names[] = {S_COLOR_BLACK "Black",	   S_COLOR_RED "Red",	  S_COLOR_GREEN "Green",
 										S_COLOR_YELLOW "Yellow",   S_COLOR_BLUE "Blue",	  S_COLOR_CYAN "Cyan",
@@ -203,20 +203,20 @@ static void Preferences_SetMenuItems(void) {
 	int chattime;
 	int cg_iconsCvarValue = (int)trap_Cvar_VariableValue("cg_icons");
 
-	notify = UI_GetCvarInt("connotifytime");
+	notify = UI_GetCvarInt("con_notifytime");
 	if (notify < 0) {
 		notify *= -1;
 	}
 	if (notify > 0 && notify <= 2)
-		s_preferences.connotifytime.curvalue = 0;
+		s_preferences.connotify.curvalue = 0;
 	else if (notify > 2 && notify <= 4)
-		s_preferences.connotifytime.curvalue = 1;
+		s_preferences.connotify.curvalue = 1;
 	else if (notify > 4 && notify <= 6)
-		s_preferences.connotifytime.curvalue = 2;
+		s_preferences.connotify.curvalue = 2;
 	else if (notify > 6)
-		s_preferences.connotifytime.curvalue = 3;
+		s_preferences.connotify.curvalue = 3;
 
-	s_preferences.drawchaticon.curvalue = trap_Cvar_VariableValue("connotifytime") < 0;
+	s_preferences.drawchaticon.curvalue = trap_Cvar_VariableValue("con_notifytime") < 0;
 	s_preferences.ffahud.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopFFAhud"));
 	s_preferences.timeleft.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimeLeft"));
 	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
@@ -333,7 +333,7 @@ Preferences_Event
 */
 static void Preferences_Event(void *ptr, int notification) {
 	int notify;
-	notify = trap_Cvar_VariableValue("connotifytime");
+	notify = trap_Cvar_VariableValue("con_notifytime");
 
 	if (notification != QM_ACTIVATED) {
 		return;
@@ -506,7 +506,7 @@ static void Preferences_Event(void *ptr, int notification) {
 		} else {
 			notify = 1;
 		}
-		switch (s_preferences.connotifytime.curvalue) {
+		switch (s_preferences.connotify.curvalue) {
 		case 0:
 			notify *= 2;
 			trap_Cvar_SetValue("con_notifytime", notify);
@@ -767,15 +767,15 @@ static void Preferences_MenuInit(void) {
 
 	// chat options
 	y = YPOSITION;
-	s_preferences.connotifytime.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.connotifytime.generic.name = "Notification Time:";
-	s_preferences.connotifytime.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.connotifytime.generic.callback = Preferences_Event;
-	s_preferences.connotifytime.generic.id = ID_CONNOTIFY;
-	s_preferences.connotifytime.generic.x = XPOSITION;
-	s_preferences.connotifytime.generic.y = y;
-	s_preferences.connotifytime.itemnames = connotifytime_names;
-	s_preferences.connotifytime.generic.toolTip = "Select whether you prefer notifications to appear short (2s), default (4s), long (6s) or maximum (8s) at the top of the screen. This is independent of the team chat display.";
+	s_preferences.connotify.generic.type = MTYPE_SPINCONTROL;
+	s_preferences.connotify.generic.name = "Notification Time:";
+	s_preferences.connotify.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.connotify.generic.callback = Preferences_Event;
+	s_preferences.connotify.generic.id = ID_CONNOTIFY;
+	s_preferences.connotify.generic.x = XPOSITION;
+	s_preferences.connotify.generic.y = y;
+	s_preferences.connotify.itemnames = connotify_names;
+	s_preferences.connotify.generic.toolTip = "Select whether you prefer notifications to appear short (2s), default (4s), long (6s) or maximum (8s) at the top of the screen. This is independent of the team chat display.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.drawchaticon.generic.type = MTYPE_RADIOBUTTON;
@@ -837,7 +837,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.teamchattime.generic.id = ID_TEAMCHATTIME;
 	s_preferences.teamchattime.generic.x = XPOSITION;
 	s_preferences.teamchattime.generic.y = y;
-	s_preferences.teamchattime.itemnames = connotifytime_names;
+	s_preferences.teamchattime.itemnames = connotify_names;
 	s_preferences.teamchattime.generic.toolTip = "Select whether you prefer chat messages to appear short (2s), default (4s), long (6s) or maximum (8s) at team chat display below the team overlay.";
 
 	// help options
@@ -949,7 +949,7 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.glowcolor);
 
 	// chat options
-	Menu_AddItem(&s_preferences.menu, &s_preferences.connotifytime);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.connotify);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawchaticon);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.botchat);
