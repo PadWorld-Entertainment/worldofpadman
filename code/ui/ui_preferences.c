@@ -69,6 +69,8 @@ GAME OPTIONS MENU
 #define ID_CHATBEEP 42
 #define ID_BOTCHAT 43
 #define ID_TEAMCHATSONLY 44
+#define ID_DRAWTEAMCHAT 44
+
 
 #define ID_WALLHACKTEAMMATES 50
 #define ID_WALLHACKHSTATION 51
@@ -105,8 +107,9 @@ typedef struct {
 	menulist_s connotifytime;
 	menuradiobutton_s drawchaticon;
 	menuradiobutton_s chatbeep;
-	menuradiobutton_s botchat;
+	menulist_s botchat;
 	menuradiobutton_s teamchatsonly;
+	menulist_s drawteamchat;
 
 	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
@@ -147,6 +150,7 @@ static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.chatbeep,
 	(menucommon_s *)&s_preferences.botchat,
 	(menucommon_s *)&s_preferences.teamchatsonly,
+	(menucommon_s *)&s_preferences.drawteamchat,
 	NULL
 };
 
@@ -178,6 +182,8 @@ static const char *glowcolor_names[] = {S_COLOR_BLACK "Black",	   S_COLOR_RED "R
 
 static const char *botchat_names[] = {"Off", "Default", "Often", NULL};
 
+static const char *drawteamchat_names[] = {"Off", "Default", "Expanded", "Maximum", NULL};
+
 static void UpdateGlowColorFlags(void) {
 	if (s_preferences.glowcolor.generic.flags & QMF_HIDDEN)
 		return;
@@ -191,6 +197,7 @@ static void UpdateGlowColorFlags(void) {
 
 static void Preferences_SetMenuItems(void) {
 	int notify;
+	int chatheight;
 	int cg_iconsCvarValue = (int)trap_Cvar_VariableValue("cg_icons");
 
 	notify = UI_GetCvarInt("connotifytime");
@@ -221,6 +228,16 @@ static void Preferences_SetMenuItems(void) {
 	} else {
 		s_preferences.botchat.curvalue = 0;
 	}
+
+	chatheight = trap_Cvar_VariableValue("cg_teamChatHeight")
+	if (chatheight > 6 && chatheight <= 8)
+		s_preferences.drawteamchat.curvalue = 3;
+	else if (chatheight > 4 && chatheight <= 6)
+		s_preferences.connotifytime.curvalue = 2;
+	else if (chatheight > 0 && chatheight <= 4)
+		s_preferences.connotifytime.curvalue = 1;
+	else
+		s_preferences.connotifytime.curvalue = 0;
 
 	s_preferences.timer.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimer"));
 	s_preferences.fps.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawFPS"));
@@ -351,6 +368,22 @@ static void Preferences_Event(void *ptr, int notification) {
 
 	case ID_TEAMCHATSONLY:
 		trap_Cvar_SetValue("cg_teamChatsOnly", s_preferences.teamchatsonly.curvalue);
+		break;
+
+	case ID_DRAWTEAMCHAT:
+		switch (s_preferences.drawteamchat.curvalue) {
+		case 0:
+			trap_Cvar_SetValue("cg_teamChatHeight", 0);
+			break;
+		case 1:
+			trap_Cvar_SetValue("cg_teamChatHeight", 4);
+			break;
+		case 2:
+			trap_Cvar_SetValue("cg_teamChatHeight", 6);
+			break;
+		case 3:
+			trap_Cvar_SetValue("cg_teamChatHeight", 8);
+			break;
 		break;
 
 	case ID_BOTCHAT:
@@ -742,7 +775,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.botchat.generic.x = XPOSITION;
 	s_preferences.botchat.generic.y = y;
 	s_preferences.botchat.itemnames = botchat_names;
-	s_preferences.botchat.generic.toolTip = "Set this to Off to prevent the bots from chatting and silence them, or set it to Often to make the bots more talkative.";
+	s_preferences.botchat.generic.toolTip = "Set this to off to prevent the bots from chatting and silence them, or set it to often to make the bots more talkative.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.teamchatsonly.generic.type = MTYPE_RADIOBUTTON;
@@ -753,6 +786,18 @@ static void Preferences_MenuInit(void) {
 	s_preferences.teamchatsonly.generic.x = XPOSITION;
 	s_preferences.teamchatsonly.generic.y = y;
 	s_preferences.teamchatsonly.generic.toolTip = "Enable this to force only chat messages from your teammates to be displayed.";
+
+	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.drawteamchat.generic.type = MTYPE_SPINCONTROL;
+	s_preferences.drawteamchat.generic.name = "Team Chat Display:";
+	s_preferences.drawteamchat.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.drawteamchat.generic.callback = Preferences_Event;
+	s_preferences.drawteamchat.generic.id = ID_NOBOTCHAT;
+	s_preferences.drawteamchat.generic.x = XPOSITION;
+	s_preferences.drawteamchat.generic.y = y;
+	s_preferences.drawteamchat.itemnames = drawteamchat_names;
+	s_preferences.drawteamchat.generic.toolTip = "Select whether you prefer the team chat display to be switched off or to appear default (up to 4 lines), expanded ";
+													"(up to 6 lines), or maximum (up to 8 lines) below the team overlay.";
 
 	// help options
 	y = YPOSITION;
@@ -868,6 +913,7 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.botchat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.drawteamchat);
 
 	// help options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
