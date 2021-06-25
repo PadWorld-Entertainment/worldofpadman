@@ -196,6 +196,8 @@ vmCvar_t cg_drawBBox;
 
 vmCvar_t cg_ambient;
 
+vmCvar_t cg_ChatHeight;
+
 vmCvar_t cg_icons;
 
 // freezetag
@@ -326,6 +328,8 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_drawBBox, "cg_drawBBox", "0", CVAR_CHEAT},
 
 	{&cg_ambient, "cg_ambient", "1", CVAR_ARCHIVE},
+
+	{&cg_chatHeight, "cg_chatHeight", "4", CVAR_ARCHIVE},
 
 	// freezetag
 	{&cg_ft_thawerIconX, "cg_FT_thawerIconX", "320", CVAR_ARCHIVE},
