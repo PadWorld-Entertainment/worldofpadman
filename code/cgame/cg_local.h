@@ -479,7 +479,7 @@ typedef struct {
 
 #define MAX_PREDICTED_EVENTS 16
 
-#define MAX_CHATMESSAGES 4
+#define MAX_CHATMESSAGES 8
 
 typedef struct {
 	int clientFrame; // incremented each frame

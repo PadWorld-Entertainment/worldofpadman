@@ -196,7 +196,7 @@ vmCvar_t cg_drawBBox;
 
 vmCvar_t cg_ambient;
 
-vmCvar_t cg_ChatHeight;
+vmCvar_t cg_chatHeight;
 
 vmCvar_t cg_icons;
 
