@@ -397,6 +397,7 @@ static void Preferences_Event(void *ptr, int notification) {
 		case 3:
 			trap_Cvar_SetValue("cg_teamChatHeight", 8);
 			break;
+		}
 		break;
 
 	case ID_TEAMCHATTIME:
@@ -413,6 +414,7 @@ static void Preferences_Event(void *ptr, int notification) {
 		case 3:
 			trap_Cvar_SetValue("cg_teamChatTime", 8000);
 			break;
+		}
 		break;
 
 	case ID_BOTCHAT:
@@ -825,8 +827,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.drawteamchat.generic.x = XPOSITION;
 	s_preferences.drawteamchat.generic.y = y;
 	s_preferences.drawteamchat.itemnames = drawteamchat_names;
-	s_preferences.drawteamchat.generic.toolTip = "Select whether you prefer the team chat display to be switched off or to appear default (up to 4 lines), expanded ";
-													"(up to 6 lines), or maximum (up to 8 lines) below the team overlay.";
+	s_preferences.drawteamchat.generic.toolTip = "Select whether you prefer the team chat display to be switched off or to appear default (up to 4 lines), expanded (up to 6 lines), or maximum (up to 8 lines) below the team overlay.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.teamchattime.generic.type = MTYPE_SPINCONTROL;
