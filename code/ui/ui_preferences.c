@@ -70,7 +70,6 @@ GAME OPTIONS MENU
 #define ID_CHATBEEP 43
 #define ID_BOTCHAT 44
 #define ID_TEAMCHATSONLY 45
-#define ID_TEAMCHATTIME 46
 
 #define ID_WALLHACKTEAMMATES 50
 #define ID_WALLHACKHSTATION 51
@@ -110,7 +109,6 @@ typedef struct {
 	menuradiobutton_s chatbeep;
 	menulist_s botchat;
 	menuradiobutton_s teamchatsonly;
-	menulist_s teamchattime;
 
 	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
@@ -152,7 +150,6 @@ static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.chatbeep,
 	(menucommon_s *)&s_preferences.botchat,
 	(menucommon_s *)&s_preferences.teamchatsonly,
-	(menucommon_s *)&s_preferences.teamchattime,
 	NULL
 };
 
@@ -239,16 +236,6 @@ static void Preferences_SetMenuItems(void) {
 		s_preferences.chatheight.curvalue = 1;
 	else
 		s_preferences.chatheight.curvalue = 0;
-
-	chattime = trap_Cvar_VariableValue("cg_teamChatTime");
-	if (chattime > 0 && chattime <= 2000)
-		s_preferences.teamchattime.curvalue = 0;
-	else if (chattime > 2000 && chattime <= 4000)
-		s_preferences.teamchattime.curvalue = 1;
-	else if (chattime > 4000 && chattime <= 6000)
-		s_preferences.teamchattime.curvalue = 2;
-	else if (chattime > 6000)
-		s_preferences.teamchattime.curvalue = 3;
 
 	s_preferences.timer.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimer"));
 	s_preferences.fps.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawFPS"));
@@ -391,23 +378,6 @@ static void Preferences_Event(void *ptr, int notification) {
 			break;
 		case 3:
 			trap_Cvar_SetValue("cg_chatHeight", 8);
-			break;
-		}
-		break;
-
-	case ID_TEAMCHATTIME:
-		switch (s_preferences.teamchattime.curvalue) {
-		case 0:
-			trap_Cvar_SetValue("cg_teamChatTime", 2000);
-			break;
-		case 1:
-			trap_Cvar_SetValue("cg_teamChatTime", 4000);
-			break;
-		case 2:
-			trap_Cvar_SetValue("cg_teamChatTime", 6000);
-			break;
-		case 3:
-			trap_Cvar_SetValue("cg_teamChatTime", 8000);
 			break;
 		}
 		break;
@@ -824,17 +794,6 @@ static void Preferences_MenuInit(void) {
 	s_preferences.teamchatsonly.generic.y = y;
 	s_preferences.teamchatsonly.generic.toolTip = "Enable this to force only chat messages from your teammates to be displayed.";
 
-	y += BIGCHAR_HEIGHT + 2;
-	s_preferences.teamchattime.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.teamchattime.generic.name = "Team Chat Time:";
-	s_preferences.teamchattime.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.teamchattime.generic.callback = Preferences_Event;
-	s_preferences.teamchattime.generic.id = ID_TEAMCHATTIME;
-	s_preferences.teamchattime.generic.x = XPOSITION;
-	s_preferences.teamchattime.generic.y = y;
-	s_preferences.teamchattime.itemnames = connotify_names;
-	s_preferences.teamchattime.generic.toolTip = "Select whether you prefer chat messages to appear short (2s), default (4s), long (6s) or maximum (8s) at team chat display below the team overlay.";
-
 	// help options
 	y = YPOSITION;
 	s_preferences.whIcons.generic.type = MTYPE_TEXT;
@@ -950,7 +909,6 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.botchat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchattime);
 
 	// help options
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
