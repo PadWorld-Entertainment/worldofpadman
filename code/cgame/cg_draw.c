@@ -3290,6 +3290,7 @@ Perform all drawing needed to completely fill the screen
 void CG_DrawActive(stereoFrame_t stereoView) {
 	int ltiT, waterTime;
 	int notifytime;
+	int chatHeight;
 
 	// optionally draw the info screen instead
 	if (!cg.snap) {
@@ -3490,6 +3491,12 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 		int noprint = CG_GetCvarInt("cl_noprint");
 		// needed to calculate properly
 		notifytime *= -1;
+		// limiting max chat massages to cg_chatheight cvar
+		if (cg_chatHeight.integer < MAX_CHATMESSAGES) {
+			chatHeight = abs(cg_chatHeight.integer);
+		} else {
+			chatHeight = MAX_CHATMESSAGES;
+		}
 
 		if (cg_draw2D.integer && !(noprint) && !(trap_Key_GetCatcher() & KEYCATCH_MESSAGE)) {
 			int i = cg.lastchatmsg;
@@ -3497,7 +3504,7 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 
 			do {
 				i++;
-				if (i >= MAX_CHATMESSAGES) {
+				if (i >= chatHeight) {
 					i = 0;
 				}
 
