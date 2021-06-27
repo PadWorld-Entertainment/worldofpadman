@@ -1533,7 +1533,6 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 void CG_MissileHitPlayer(int weapon, vec3_t origin, vec3_t dir, int colorCode, int entityNum);
 void CG_ShotgunFire(entityState_t *es);
 
-void CG_SprayTrail(centity_t *cent, vec3_t start);
 void CG_GetWaterMuzzle(localEntity_t *le, centity_t *cent, vec3_t fw); // HERBY
 void CG_RailTrail(clientInfo_t *ci, vec3_t start, vec3_t end);
 void CG_GrappleTrail(centity_t *ent, const weaponInfo_t *wi);

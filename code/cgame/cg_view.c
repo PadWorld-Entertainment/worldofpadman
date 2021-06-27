@@ -346,7 +346,7 @@ static void CG_OffsetFirstPersonView(void) {
 
 	// add pitch based on fall kick
 #if 0
-	ratio = ( cg.time - cg.landTime) / FALL_TIME;
+	ratio = (cg.time - cg.landTime) / FALL_TIME;
 	if (ratio < 0)
 		ratio = 0;
 	angles[PITCH] += ratio * cg.fall_value;
@@ -414,12 +414,12 @@ static void CG_OffsetFirstPersonView(void) {
 #if 0
 	{
 #define NECK_LENGTH 8
-	vec3_t			forward, up;
+		vec3_t forward, up;
 
-	cg.refdef.vieworg[2] -= NECK_LENGTH;
-	AngleVectors( cg.refdefViewAngles, forward, NULL, up );
-	VectorMA( cg.refdef.vieworg, 3, forward, cg.refdef.vieworg );
-	VectorMA( cg.refdef.vieworg, NECK_LENGTH, up, cg.refdef.vieworg );
+		cg.refdef.vieworg[2] -= NECK_LENGTH;
+		AngleVectors(cg.refdefViewAngles, forward, NULL, up);
+		VectorMA(cg.refdef.vieworg, 3, forward, cg.refdef.vieworg);
+		VectorMA(cg.refdef.vieworg, NECK_LENGTH, up, cg.refdef.vieworg);
 	}
 #endif
 }
@@ -446,7 +446,7 @@ void CG_ZoomDown_f(void) {
 	if (cg.snap->ps.pm_flags & PMF_FOLLOW || (cgs.gametype == GT_LPS && cg.snap->ps.stats[STAT_LIVESLEFT] <= 0))
 		return;
 
-	//	trap_S_StartLocalSound(cgs.media.zoomsound,CHAN_LOCAL_SOUND);
+	//	trap_S_StartLocalSound(cgs.media.zoomsound, CHAN_LOCAL_SOUND);
 	cg.zoomSoundStat = 1;
 
 	cg.zoomedkeydown = qtrue;
@@ -512,8 +512,7 @@ static int CG_CalcFov(void) {
 		zoomFov = 5;
 
 		if (cg.zoomed) {
-			if (cg.snap->ps.weapon == WP_SPLASHER) // splasher
-			{
+			if (cg.snap->ps.weapon == WP_SPLASHER) {
 				if (cg.zoomedkeydown) {
 					f = (cg.time - cg.zoomTime) / 2000.0f;
 					cg.zoomfactor = f;
@@ -522,11 +521,10 @@ static int CG_CalcFov(void) {
 				}
 
 				fov_x = fov_x + cg.zoomfactor * (zoomFov - fov_x);
-			} else if (cg.snap->ps.weapon == WP_KMA97) // kma97
-			{
-				zoomFov = 20;
+			} else if (cg.snap->ps.weapon == WP_KMA97) {
+				zoomFov = 20.0f;
 				f = (cg.time - cg.zoomTime) / (float)ZOOM_TIME;
-				if (f > 1.0) {
+				if (f > 1.0f) {
 					fov_x = zoomFov;
 				} else {
 					fov_x = fov_x + f * (zoomFov - fov_x);
@@ -534,7 +532,7 @@ static int CG_CalcFov(void) {
 			}
 		} else {
 			f = (cg.time - cg.zoomTime) / (float)ZOOM_TIME;
-			if (f <= 1.0) {
+			if (f <= 1.0f) {
 				fov_x = zoomFov + f * (fov_x - zoomFov);
 			}
 		}
@@ -688,28 +686,24 @@ static int CG_CalcViewValues(void) {
 
 	memset(&cg.refdef, 0, sizeof(cg.refdef));
 
-	// strings for in game rendering
-	// Q_strncpyz( cg.refdef.text[0], "Park Ranger", sizeof(cg.refdef.text[0]) );
-	// Q_strncpyz( cg.refdef.text[1], "19", sizeof(cg.refdef.text[1]) );
-
 	// calculate size of 3D view
 	CG_CalcVrect();
 
 	ps = &cg.predictedPlayerState;
-	/*
-		if (cg.cameraMode) {
-			vec3_t origin, angles;
-			if (trap_getCameraInfo(cg.time, &origin, &angles)) {
-				VectorCopy(origin, cg.refdef.vieworg);
-				angles[ROLL] = 0;
-				VectorCopy(angles, cg.refdefViewAngles);
-				AnglesToAxis( cg.refdefViewAngles, cg.refdef.viewaxis );
-				return CG_CalcFov();
-			} else {
-				cg.cameraMode = qfalse;
-			}
+#if 0
+	if (cg.cameraMode) {
+		vec3_t origin, angles;
+		if (trap_getCameraInfo(cg.time, &origin, &angles)) {
+			VectorCopy(origin, cg.refdef.vieworg);
+			angles[ROLL] = 0;
+			VectorCopy(angles, cg.refdefViewAngles);
+			AnglesToAxis(cg.refdefViewAngles, cg.refdef.viewaxis);
+			return CG_CalcFov();
+		} else {
+			cg.cameraMode = qfalse;
 		}
-	*/
+	}
+#endif
 	if (cg.Cam) {
 		float fov = cg_fov.value;
 		float x;
@@ -1086,7 +1080,7 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 
 	// build the render lists
 	if (!cg.hyperspace) {
-		CG_AddPacketEntities(); // adter calcViewValues, so predicted player state is correct
+		CG_AddPacketEntities(); // after calcViewValues, so predicted player state is correct
 		CG_AddMarks();
 		CG_AddParticles();
 		CG_AddLocalEntities();

@@ -657,8 +657,8 @@ static void CG_Grapple(centity_t *cent) {
 
 #if 0 // FIXME add grapple pull sound here..?
 	// add missile sound
-	if ( weapon->missileSound ) {
-		trap_S_AddLoopingSound( cent->currentState.number, cent->lerpOrigin, vec3_origin, weapon->missileSound );
+	if (weapon->missileSound) {
+		trap_S_AddLoopingSound(cent->currentState.number, cent->lerpOrigin, vec3_origin, weapon->missileSound);
 	}
 #endif
 

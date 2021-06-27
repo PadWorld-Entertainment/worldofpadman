@@ -32,7 +32,7 @@ static qboolean CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle);
 CG_SprayTrail
 ==========================
 */
-void CG_SprayTrail(centity_t *cent, vec3_t start) {
+static void CG_SprayTrail(centity_t *cent, vec3_t start) {
 	vec4_t tmpcolor = {1.0f, 1.0f, 1.0f, 1.0f};
 	//	vec3_t	smokepos,scalevec;
 	vec3_t smokevel; // = { -5.0f, 0.0f, 0.0f };
@@ -197,13 +197,13 @@ static void CG_KMATrail(centity_t *ent, const weaponInfo_t *wi) {
 		{
 			// force team colors
 			if (cinfo->team == TEAM_BLUE) {
-				ent->trailLE->color[0] = 0.0;
-				ent->trailLE->color[1] = 0.0;
-				ent->trailLE->color[2] = 1.0;
+				ent->trailLE->color[0] = 0.0f;
+				ent->trailLE->color[1] = 0.0f;
+				ent->trailLE->color[2] = 1.0f;
 			} else {
-				ent->trailLE->color[0] = 1.0;
-				ent->trailLE->color[1] = 0.0;
-				ent->trailLE->color[2] = 0.0;
+				ent->trailLE->color[0] = 1.0f;
+				ent->trailLE->color[1] = 0.0f;
+				ent->trailLE->color[2] = 0.0f;
 			}
 		} else // free mode
 		{
