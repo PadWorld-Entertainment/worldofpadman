@@ -3520,7 +3520,7 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 					// TODO: Create a cvar for fontsize (also adjust icon-size)?
 					// TODO: This does not support newlines (see "hotfix" in CG_DrawChar() )
 					//       or linewrapping. On the other hand, long text crashes the game anyways..
-					CG_DrawStringExt((cg.chaticons[i] ? (CHAT_ICONSIZE + (2 * CHAT_PADDING)) : CHAT_PADDING),
+					CG_DrawStringExt(((cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) ? (CHAT_ICONSIZE + (2 * CHAT_PADDING)) : CHAT_PADDING),
 									 ((j * CHAT_ICONSIZE) + ((CHAT_ICONSIZE - CHAT_CHARHEIGHT) / 2)), cg.chattext[i],
 									 colorWhite, qfalse, qtrue, CHAT_CHARWIDTH, CHAT_CHARHEIGHT,
 									 strlen(cg.chattext[i]));
