@@ -3504,18 +3504,17 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 
 			do {
 				i++;
-				if (i >= chatHeight) {
+				if (i >= MAX_CHATMESSAGES) {
 					i = 0;
 				}
 
 				// skip inital messages
 				if (cg.chatmsgtime[i] && (cg.time - cg.chatmsgtime[i]) < (notifytime * 1000)) {
-// TODO: Add a new cvar cg_drawChatIcons?
 #define CHAT_ICONSIZE 14
 #define CHAT_PADDING 1
 #define CHAT_CHARHEIGHT (CHAT_ICONSIZE - (2 * CHAT_PADDING))
 #define CHAT_CHARWIDTH (CHAT_CHARHEIGHT / 2)
-					if (cg.chaticons[i]) {
+					if (cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) {
 						CG_DrawPic(CHAT_PADDING, (j * CHAT_ICONSIZE), CHAT_ICONSIZE, CHAT_ICONSIZE, cg.chaticons[i]);
 					}
 					// TODO: Create a cvar for fontsize (also adjust icon-size)?

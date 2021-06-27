@@ -1368,6 +1368,7 @@ extern vmCvar_t cg_drawBBox;
 extern vmCvar_t cg_ambient;
 
 extern vmCvar_t cg_chatHeight;
+extern vmCvar_t cg_drawChatIcon;
 
 extern vmCvar_t cg_icons;
 

@@ -213,7 +213,7 @@ static void Preferences_SetMenuItems(void) {
 	else if (notify > 6)
 		s_preferences.connotify.curvalue = 3;
 
-	s_preferences.drawchaticon.curvalue = trap_Cvar_VariableValue("con_notifytime") < 0;
+	s_preferences.drawchaticon.curvalue = trap_Cvar_VariableValue("cg_drawChatIcon") != 0;
 	s_preferences.ffahud.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopFFAhud"));
 	s_preferences.timeleft.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimeLeft"));
 	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
@@ -317,8 +317,6 @@ Preferences_Event
 =================
 */
 static void Preferences_Event(void *ptr, int notification) {
-	int notify;
-	notify = trap_Cvar_VariableValue("con_notifytime");
 
 	if (notification != QM_ACTIVATED) {
 		return;
@@ -373,10 +371,10 @@ static void Preferences_Event(void *ptr, int notification) {
 		case 0:
 			trap_Cvar_SetValue("cg_chatHeight", 4);
 			break;
-		case 2:
+		case 1:
 			trap_Cvar_SetValue("cg_chatHeight", 6);
 			break;
-		case 3:
+		case 2:
 			trap_Cvar_SetValue("cg_chatHeight", 8);
 			break;
 		}
@@ -466,41 +464,24 @@ static void Preferences_Event(void *ptr, int notification) {
 	}
 
 	case ID_CONNOTIFY:
-		if (notify < 0) {
-			notify = -1;
-		} else {
-			notify = 1;
-		}
 		switch (s_preferences.connotify.curvalue) {
 		case 0:
-			notify *= 2;
-			trap_Cvar_SetValue("con_notifytime", notify);
+			trap_Cvar_SetValue("con_notifytime", -2);
 			break;
 		case 1:
-			notify *= 4;
-			trap_Cvar_SetValue("con_notifytime", notify);
+			trap_Cvar_SetValue("con_notifytime", -4);
 			break;
 		case 2:
-			notify *= 6;
-			trap_Cvar_SetValue("con_notifytime", notify);
+			trap_Cvar_SetValue("con_notifytime", -6);
 			break;
 		case 3:
-			notify *= 8;
-			trap_Cvar_SetValue("con_notifytime", notify);
+			trap_Cvar_SetValue("con_notifytime", -8);
 			break;
 		}
 		break;
 
 	case ID_DRAWCHATICON:
-		if ((s_preferences.drawchaticon.curvalue == 1) && (notify >= 0)) {
-			notify *= -1;
-			trap_Cvar_SetValue("con_notifytime", notify);
-		}
-
-		if ((s_preferences.drawchaticon.curvalue == 0) && (notify < 0)) {
-			notify *= -1;
-			trap_Cvar_SetValue("con_notifytime", notify);
-		}
+		trap_Cvar_SetValue("cg_drawChatIcon", s_preferences.drawchaticon.curvalue);
 		break;
 
 	case ID_BACK:
