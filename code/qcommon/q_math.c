@@ -295,7 +295,7 @@ void RotatePointAroundVector(vec3_t dst, const vec3_t dir, const vec3_t point, f
 	im[2][1] = m[1][2];
 
 	memset(zrot, 0, sizeof(zrot));
-	zrot[0][0] = zrot[1][1] = zrot[2][2] = 1.0F;
+	zrot[0][0] = zrot[1][1] = zrot[2][2] = 1.0f;
 
 	rad = DEG2RAD(degrees);
 	zrot[0][0] = cos(rad);
@@ -884,7 +884,7 @@ void AngleVectors(const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up) 
 void PerpendicularVector(vec3_t dst, const vec3_t src) {
 	int pos;
 	int i;
-	float minelem = 1.0F;
+	float minelem = 1.0f;
 	vec3_t tempvec;
 
 	/*
@@ -896,8 +896,8 @@ void PerpendicularVector(vec3_t dst, const vec3_t src) {
 			minelem = fabs(src[i]);
 		}
 	}
-	tempvec[0] = tempvec[1] = tempvec[2] = 0.0F;
-	tempvec[pos] = 1.0F;
+	tempvec[0] = tempvec[1] = tempvec[2] = 0.0f;
+	tempvec[pos] = 1.0f;
 
 	/*
 	** project the point onto the plane defined by src

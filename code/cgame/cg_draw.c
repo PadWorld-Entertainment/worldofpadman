@@ -106,13 +106,13 @@ void CG_DrawHead(float x, float y, float w, float h, int clientNum, vec3_t headA
 	// offset the origin y and z to center the head
 	trap_R_ModelBounds(cm, mins, maxs);
 
-	origin[2] = -0.5 * (mins[2] + maxs[2]);
-	origin[1] = 0.5 * (mins[1] + maxs[1]);
+	origin[2] = -0.5f * (mins[2] + maxs[2]);
+	origin[1] = 0.5f * (mins[1] + maxs[1]);
 
 	// calculate distance so the head nearly fills the box
 	// assume heads are taller than wide
-	len = 0.7 * (maxs[2] - mins[2]);
-	origin[0] = len / 0.268; // len / tan( fov/2 )
+	len = 0.7f * (maxs[2] - mins[2]);
+	origin[0] = len / 0.268f; // len / tan( fov/2 )
 
 	// allow per-model tweaking
 	VectorAdd(origin, ci->headOffset, origin);
@@ -144,7 +144,6 @@ void CG_DrawFlagModel(float x, float y, float w, float h, int team, qboolean for
 	qhandle_t handle;
 
 	if (!force2D && cg_draw3dIcons.integer) {
-
 		VectorClear(angles);
 
 		cm = cgs.media.redFlagModel;
@@ -153,16 +152,16 @@ void CG_DrawFlagModel(float x, float y, float w, float h, int team, qboolean for
 		trap_R_ModelBounds(cm, mins, maxs);
 
 		// old:		origin[2] = -0.5 * ( mins[2] + maxs[2] );
-		origin[2] = -1.1 * (mins[2] + maxs[2]);
-		origin[1] = 0.5 * (mins[1] + maxs[1]);
+		origin[2] = -1.1f * (mins[2] + maxs[2]);
+		origin[1] = 0.5f * (mins[1] + maxs[1]);
 
 		// calculate distance so the flag nearly fills the box
 		// assume heads are taller than wide
-		len = 0.5 * (maxs[2] - mins[2]);
-		origin[0] = len / 0.268; // len / tan( fov/2 )
+		len = 0.5f * (maxs[2] - mins[2]);
+		origin[0] = len / 0.268f; // len / tan( fov/2 )
 
 		// old:		angles[YAW] = 60 * sin( cg.time / 2000.0 );;
-		angles[YAW] = 100 * (cg.time / 2000.0);
+		angles[YAW] = 100.0f * (cg.time / 2000.0f);
 
 		if (team == TEAM_RED) {
 			handle = cgs.media.redFlagModel;
@@ -262,17 +261,17 @@ static float CG_DrawAttacker(float y) {
 		return y;
 	}
 
-	size = ICON_SIZE * 1.25;
+	size = ICON_SIZE * 1.25f;
 
-	angles[PITCH] = 0;
-	angles[YAW] = 180;
-	angles[ROLL] = 0;
+	angles[PITCH] = 0.0f;
+	angles[YAW] = 180.0f;
+	angles[ROLL] = 0.0f;
 	CG_DrawHead(640 - size, y, size, size, clientNum, angles);
 
 	info = CG_ConfigString(CS_PLAYERS + clientNum);
 	name = Info_ValueForKey(info, "n");
 	y += size;
-	CG_DrawBigString(640 - (Q_PrintStrlen(name) * BIGCHAR_WIDTH), y, name, 0.5);
+	CG_DrawBigString(640 - (Q_PrintStrlen(name) * BIGCHAR_WIDTH), y, name, 0.5f);
 
 	return y + BIGCHAR_HEIGHT + 2;
 }
@@ -289,7 +288,7 @@ static float CG_DrawSnapshot(float y) {
 	s = va("time:%i snap:%i cmd:%i", cg.snap->serverTime, cg.latestSnapshotNum, cgs.serverCommandSequence);
 	w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
 
-	CG_DrawBigString(635 - w, y + 2, s, 1.0F);
+	CG_DrawBigString(635 - w, y + 2, s, 1.0f);
 
 	return y + BIGCHAR_HEIGHT + 4;
 }
@@ -332,7 +331,7 @@ static float CG_DrawFPS(float y) {
 		s = va("%ifps", fps);
 		w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
 
-		CG_DrawBigString(635 - w, y + 2, s, 1.0F);
+		CG_DrawBigString(635 - w, y + 2, s, 1.0f);
 	}
 
 	return y + BIGCHAR_HEIGHT + 4;
@@ -360,7 +359,7 @@ static float CG_DrawTimer(float y) {
 	s = va("%i:%i%i", mins, tens, seconds);
 	w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
 
-	CG_DrawBigString(635 - w, y + 2, s, 1.0F);
+	CG_DrawBigString(635 - w, y + 2, s, 1.0f);
 
 	return y + BIGCHAR_HEIGHT + 4;
 }
@@ -396,7 +395,7 @@ static float CG_DrawRealTime(float y) {
 	s = va("[%i:%i%i]", qtime.tm_hour, (qtime.tm_min / 10) % 10, qtime.tm_min % 10);
 	w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
 
-	CG_DrawBigString(635 - w, y + 2, s, 1.0F);
+	CG_DrawBigString(635 - w, y + 2, s, 1.0f);
 
 	return y + BIGCHAR_HEIGHT + 4;
 }
@@ -414,7 +413,7 @@ static float CG_Drawups(float y) {
 	s = va("%.0fups", cg.xyspeed);
 	w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
 
-	CG_DrawBigString(635 - w, y + 2, s, 1.0F);
+	CG_DrawBigString(635 - w, y + 2, s, 1.0f);
 
 	return y + BIGCHAR_HEIGHT + 4;
 }
@@ -664,7 +663,7 @@ static float CG_DrawBotInfo(float y_in) {
 		if (!width || width > 635)
 			break;
 		x = 635 - width;
-		CG_DrawSmallString(x, y, value, 1.0F);
+		CG_DrawSmallString(x, y, value, 1.0f);
 
 		y += SMALLCHAR_HEIGHT + 4;
 	}
@@ -1560,7 +1559,7 @@ static void CG_DrawDisconnect(void) {
 	// also add text in center of screen
 	s = "Connection Interrupted"; // bk 010215 - FIXME
 	w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
-	CG_DrawBigString(320 - w / 2, 100, s, 1.0F);
+	CG_DrawBigString(320 - w / 2, 100, s, 1.0f);
 
 	// blink the icon
 	if ((cg.time >> 9) & 1) {
@@ -2022,11 +2021,11 @@ static void CG_DrawSpectator(void) {
 	static char msgTeam[] = "press ESC and click START to join";
 	static char msgTournament[] = "waiting to play";
 
-	CG_DrawBigString(320 - 9 * 8, 440, "SPECTATOR", 1.0F);
+	CG_DrawBigString(320 - 9 * 8, 440, "SPECTATOR", 1.0f);
 	if (cgs.gametype == GT_TOURNAMENT) {
-		CG_DrawBigString(320 - strlen(msgTournament) * 8, 460, msgTournament, 1.0F);
+		CG_DrawBigString(320 - strlen(msgTournament) * 8, 460, msgTournament, 1.0f);
 	} else if (cgs.gametype >= GT_TEAM) {
-		CG_DrawBigString(320 - strlen(msgTeam) * 8, 460, msgTeam, 1.0F);
+		CG_DrawBigString(320 - strlen(msgTeam) * 8, 460, msgTeam, 1.0f);
 	}
 }
 
@@ -2092,7 +2091,7 @@ static void CG_DrawTeamVote(void) {
 	}
 	s = va("TEAMVOTE(%i):%s yes:%i no:%i", sec, cgs.teamVoteString[cs_offset], cgs.teamVoteYes[cs_offset],
 		   cgs.teamVoteNo[cs_offset]);
-	CG_DrawSmallString(0, 90, s, 1.0F);
+	CG_DrawSmallString(0, 90, s, 1.0f);
 }
 
 static qboolean CG_DrawScoreboard(void) {
@@ -2131,7 +2130,7 @@ static qboolean CG_DrawFollow(void) {
 	color[2] = 1;
 	color[3] = 1;
 
-	CG_DrawBigString(320 - 9 * 8, 24, "following", 1.0F);
+	CG_DrawBigString(320 - 9 * 8, 24, "following", 1.0f);
 
 	name = cgs.clientinfo[cg.snap->ps.clientNum].name;
 
@@ -2165,7 +2164,7 @@ static void CG_DrawAmmoWarning(void) {
 		s = "LOW AMMO WARNING";
 	}
 	w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
-	CG_DrawBigString(320 - w / 2, 64, s, 1.0F);
+	CG_DrawBigString(320 - w / 2, 64, s, 1.0f);
 }
 
 /*
@@ -2190,7 +2189,7 @@ static void CG_DrawWarmup(void) {
 	if (sec < 0) {
 		s = "Waiting for players";
 		w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
-		CG_DrawBigString(320 - w / 2, 24, s, 1.0F);
+		CG_DrawBigString(320 - w / 2, 24, s, 1.0f);
 		cg.warmupCount = 0;
 		return;
 	}

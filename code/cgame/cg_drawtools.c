@@ -749,7 +749,7 @@ void UI_DrawProportionalString(int x, int y, const char *str, int style, const v
 CG_WorldToScreen
 ================
 */
-qboolean CG_WorldToScreen(vec3_t point, float *x, float *y) {
+qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
 	vec3_t trans;
 	float xc, yc;
 	float px, py;
