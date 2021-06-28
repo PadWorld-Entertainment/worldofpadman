@@ -1,9 +1,9 @@
 #include "ui_local.h"
 
-#define ART_ARROWUP0 "menu/mods/arrowup0"
-#define ART_ARROWUP1 "menu/mods/arrowup1"
-#define ART_ARROWDOWN0 "menu/mods/arrowdown0"
-#define ART_ARROWDOWN1 "menu/mods/arrowdown1"
+#define ARROWUP0 "menu/arrows/headyel_up0"
+#define ARROWUP1 "menu/arrows/headyel_up1"
+#define ARROWDN0 "menu/arrows/headyel_dn0"
+#define ARROWDN1 "menu/arrows/headyel_dn1"
 
 #define NUM_LISTEDCLIENTS 6 // tied to the ID_CLIENTXs
 #define NAME_MAXLENGTH 32
@@ -252,8 +252,8 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.arrowup.y = 236; // 204;
 	voiceChatMenuInfo.arrowup.w = 29;
 	voiceChatMenuInfo.arrowup.h = 74;
-	voiceChatMenuInfo.arrowup.shader = trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	voiceChatMenuInfo.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWUP1);
+	voiceChatMenuInfo.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
+	voiceChatMenuInfo.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
 	voiceChatMenuInfo.arrowup.generic.callback = UI_VoiceChatMenu_UpEvent;
 	voiceChatMenuInfo.arrowup.generic.id = ID_UP;
 
@@ -262,8 +262,8 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.arrowdown.y = 406 - 74; // 374-74;
 	voiceChatMenuInfo.arrowdown.w = 29;		  // 38
 	voiceChatMenuInfo.arrowdown.h = 74;		  // 98
-	voiceChatMenuInfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	voiceChatMenuInfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+	voiceChatMenuInfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
+	voiceChatMenuInfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
 	voiceChatMenuInfo.arrowdown.generic.callback = UI_VoiceChatMenu_DownEvent;
 	voiceChatMenuInfo.arrowdown.generic.id = ID_DOWN;
 
@@ -358,10 +358,7 @@ static void UI_VoiceChatMenu_Init(void) {
 }
 
 void UI_VoiceChatMenu_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	trap_R_RegisterShaderNoMip(ART_ARROWUP1);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+
 }
 
 void UI_VoiceIngame(void) {

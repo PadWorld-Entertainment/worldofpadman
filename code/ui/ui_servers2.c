@@ -51,11 +51,11 @@ MULTIPLAYER MENU (SERVER BROWSER)
 #define DELETE1 "menu/buttons/delete1"
 #define FIGHT0 "menu/buttons/fight0"
 #define FIGHT1 "menu/buttons/fight1"
-#define ART_ARROWS_UP0 "menu/server/arrowup0"
-#define ART_ARROWS_UP1 "menu/server/arrowup1"
-#define ART_ARROWS_DOWN0 "menu/server/arrowdown0"
-#define ART_ARROWS_DOWN1 "menu/server/arrowdown1"
-#define ART_UNKNOWNMAP "menu/art/unknownmap"
+#define ARROWUP0 "menu/arrows/headyel_up0"
+#define ARROWUP1 "menu/arrows/headyel_up1"
+#define ARROWDN0 "menu/arrows/headyel_dn0"
+#define ARROWDN1 "menu/arrows/headyel_dn1"
+#define UNKNOWNMAP "menu/art/unknownmap"
 
 #define ID_MASTER 10
 #define ID_GAMETYPE 11
@@ -441,7 +441,7 @@ static void ArenaServers_UpdateMenu(void) {
 	} else {
 		// no servers found
 		if (g_arenaservers.refreshservers) {
-			Q_strncpyz(g_arenaservers.status.string, "Scanning For Servers.", MAX_STATUSLENGTH);
+			Q_strncpyz(g_arenaservers.status.string, "Scanning for servers.", MAX_STATUSLENGTH);
 			g_arenaservers.statusbar.string = "Press SPACE to stop";
 
 			// disable controls during refresh
@@ -457,9 +457,9 @@ static void ArenaServers_UpdateMenu(void) {
 			g_arenaservers.go.generic.flags |= QMF_GRAYED;
 		} else {
 			if (g_arenaservers.numqueriedservers < 0) {
-				Q_strncpyz(g_arenaservers.status.string, "No Response From Masterserver.", MAX_STATUSLENGTH);
+				Q_strncpyz(g_arenaservers.status.string, "No response from master.", MAX_STATUSLENGTH);
 			} else {
-				Q_strncpyz(g_arenaservers.status.string, "No Servers Found.", MAX_STATUSLENGTH);
+				Q_strncpyz(g_arenaservers.status.string, "No servers found.", MAX_STATUSLENGTH);
 			}
 
 			// update status bar
@@ -1476,13 +1476,12 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.hideprivate.generic.x = 320;
 	g_arenaservers.hideprivate.generic.y = y;
 
-	y += (2 * SMALLCHAR_HEIGHT);
 	g_arenaservers.list.generic.type = MTYPE_SCROLLLIST;
 	g_arenaservers.list.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	g_arenaservers.list.generic.id = ID_LIST;
 	g_arenaservers.list.generic.callback = ArenaServers_Event;
 	g_arenaservers.list.generic.x = 50;
-	g_arenaservers.list.generic.y = y;
+	g_arenaservers.list.generic.y = 316;
 	g_arenaservers.list.width = MAX_LISTBOXWIDTH;
 	g_arenaservers.list.height = 11;
 	g_arenaservers.list.itemnames = (const char **)g_arenaservers.items;
@@ -1496,15 +1495,15 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.mappic.generic.y = 66;
 	g_arenaservers.mappic.width = 128;
 	g_arenaservers.mappic.height = 96;
-	g_arenaservers.mappic.errorpic = ART_UNKNOWNMAP;
+	g_arenaservers.mappic.errorpic = UNKNOWNMAP;
 
 	g_arenaservers.up.generic.type = MTYPE_BITMAP1024S;
 	g_arenaservers.up.x = 900;
 	g_arenaservers.up.y = 319;
 	g_arenaservers.up.w = 38;
-	g_arenaservers.up.h = 100;
-	g_arenaservers.up.shader = trap_R_RegisterShaderNoMip(ART_ARROWS_UP0);
-	g_arenaservers.up.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWS_UP1);
+	g_arenaservers.up.h = 98;
+	g_arenaservers.up.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
+	g_arenaservers.up.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
 	g_arenaservers.up.generic.callback = ArenaServers_Event;
 	g_arenaservers.up.generic.id = ID_SCROLL_UP;
 
@@ -1512,9 +1511,9 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.down.x = 900;
 	g_arenaservers.down.y = 496;
 	g_arenaservers.down.w = 38;
-	g_arenaservers.down.h = 99;
-	g_arenaservers.down.shader = trap_R_RegisterShaderNoMip(ART_ARROWS_DOWN0);
-	g_arenaservers.down.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWS_DOWN1);
+	g_arenaservers.down.h = 98;
+	g_arenaservers.down.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
+	g_arenaservers.down.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
 	g_arenaservers.down.generic.callback = ArenaServers_Event;
 	g_arenaservers.down.generic.id = ID_SCROLL_DOWN;
 
@@ -1689,11 +1688,7 @@ void ArenaServers_Cache(void) {
 	trap_R_RegisterShaderNoMip(DELETE1);
 	trap_R_RegisterShaderNoMip(FIGHT0);
 	trap_R_RegisterShaderNoMip(FIGHT1);
-	trap_R_RegisterShaderNoMip(ART_ARROWS_UP0);
-	trap_R_RegisterShaderNoMip(ART_ARROWS_UP1);
-	trap_R_RegisterShaderNoMip(ART_ARROWS_DOWN0);
-	trap_R_RegisterShaderNoMip(ART_ARROWS_DOWN1);
-	trap_R_RegisterShaderNoMip(ART_UNKNOWNMAP);
+	trap_R_RegisterShaderNoMip(UNKNOWNMAP);
 
 	if (!*global_names[0]) {
 		int index;

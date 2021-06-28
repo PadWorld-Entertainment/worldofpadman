@@ -10,10 +10,10 @@ CALL VOTE MENU
 
 #include "ui_local.h"
 
-#define ART_ARROWUP0 "menu/mods/arrowup0"
-#define ART_ARROWUP1 "menu/mods/arrowup1"
-#define ART_ARROWDOWN0 "menu/mods/arrowdown0"
-#define ART_ARROWDOWN1 "menu/mods/arrowdown1"
+#define ARROWUP0 "menu/arrows/headyel_up0"
+#define ARROWUP1 "menu/arrows/headyel_up1"
+#define ARROWDN0 "menu/arrows/headyel_dn0"
+#define ARROWDN1 "menu/arrows/headyel_dn1"
 
 #define ID_BACK 10
 #define ID_GO 11
@@ -482,8 +482,8 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.arrowup.y = 300;
 	s_callVoteMenu.arrowup.w = 29;
 	s_callVoteMenu.arrowup.h = 74;
-	s_callVoteMenu.arrowup.shader = trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	s_callVoteMenu.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWUP1);
+	s_callVoteMenu.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
+	s_callVoteMenu.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
 	s_callVoteMenu.arrowup.generic.callback = UI_CallVote_UpEvent;
 	s_callVoteMenu.arrowup.generic.id = ID_UP;
 
@@ -492,8 +492,8 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.arrowdown.y = (472 - 74);
 	s_callVoteMenu.arrowdown.w = 29;
 	s_callVoteMenu.arrowdown.h = 74;
-	s_callVoteMenu.arrowdown.shader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	s_callVoteMenu.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+	s_callVoteMenu.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
+	s_callVoteMenu.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
 	s_callVoteMenu.arrowdown.generic.callback = UI_CallVote_DownEvent;
 	s_callVoteMenu.arrowdown.generic.id = ID_DOWN;
 
@@ -585,10 +585,7 @@ UI_CallVote_Cache
 =================
 */
 static void UI_CallVote_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	trap_R_RegisterShaderNoMip(ART_ARROWUP1);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+
 }
 
 /*

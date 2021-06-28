@@ -24,12 +24,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-#define ART_FIGHT0 "menu/mods/load0"
-#define ART_FIGHT1 "menu/mods/load1"
-#define ART_ARROWUP0 "menu/mods/arrowup0"
-#define ART_ARROWUP1 "menu/mods/arrowup1"
-#define ART_ARROWDOWN0 "menu/mods/arrowdown0"
-#define ART_ARROWDOWN1 "menu/mods/arrowdown1"
+#define FIGHT0 "menu/mods/load0"
+#define FIGHT1 "menu/mods/load1"
+#define ARROWUP0 "menu/arrows/headyel_up0"
+#define ARROWUP1 "menu/arrows/headyel_up1"
+#define ARROWDN0 "menu/arrows/headyel_dn0"
+#define ARROWDN1 "menu/arrows/headyel_dn1"
 
 #define MAX_MODS 64
 #define NAMEBUFSIZE (MAX_MODS * 48)
@@ -216,8 +216,8 @@ static void UI_Mods_MenuInit(void) {
 	s_mods.go.y = 350; // 633;
 	s_mods.go.w = 63;  // 184;
 	s_mods.go.h = 63;  // 113;
-	s_mods.go.shader = trap_R_RegisterShaderNoMip(ART_FIGHT0);
-	s_mods.go.mouseovershader = trap_R_RegisterShaderNoMip(ART_FIGHT1);
+	s_mods.go.shader = trap_R_RegisterShaderNoMip(FIGHT0);
+	s_mods.go.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
 	s_mods.go.generic.callback = UI_Mods_MenuEvent;
 	s_mods.go.generic.id = ID_GO;
 
@@ -226,8 +226,8 @@ static void UI_Mods_MenuInit(void) {
 	s_mods.arrowup.y = 240;
 	s_mods.arrowup.w = 38;
 	s_mods.arrowup.h = 98;
-	s_mods.arrowup.shader = trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	s_mods.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWUP1);
+	s_mods.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
+	s_mods.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
 	s_mods.arrowup.generic.callback = UI_Mods_MenuEvent;
 	s_mods.arrowup.generic.id = ID_SCROLL_UP;
 
@@ -236,8 +236,8 @@ static void UI_Mods_MenuInit(void) {
 	s_mods.arrowdown.y = 432;
 	s_mods.arrowdown.w = 38;
 	s_mods.arrowdown.h = 98;
-	s_mods.arrowdown.shader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	s_mods.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+	s_mods.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
+	s_mods.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
 	s_mods.arrowdown.generic.callback = UI_Mods_MenuEvent;
 	s_mods.arrowdown.generic.id = ID_SCROLL_DOWN;
 
@@ -268,12 +268,8 @@ UI_Mods_Cache
 void UI_ModsMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
-	trap_R_RegisterShaderNoMip(ART_FIGHT0);
-	trap_R_RegisterShaderNoMip(ART_FIGHT1);
-	trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	trap_R_RegisterShaderNoMip(ART_ARROWUP1);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+	trap_R_RegisterShaderNoMip(FIGHT0);
+	trap_R_RegisterShaderNoMip(FIGHT1);
 }
 
 /*

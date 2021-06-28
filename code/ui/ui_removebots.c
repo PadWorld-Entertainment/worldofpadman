@@ -30,10 +30,10 @@ REMOVE BOTS MENU
 
 #include "ui_local.h"
 
-#define ART_ARROWUP0 "menu/mods/arrowup0"
-#define ART_ARROWUP1 "menu/mods/arrowup1"
-#define ART_ARROWDOWN0 "menu/mods/arrowdown0"
-#define ART_ARROWDOWN1 "menu/mods/arrowdown1"
+#define ARROWUP0 "menu/arrows/headyel_up0"
+#define ARROWUP1 "menu/arrows/headyel_up1"
+#define ARROWDN0 "menu/arrows/headyel_dn0"
+#define ARROWDN1 "menu/arrows/headyel_dn1"
 
 #define NUM_BOTS 6
 
@@ -219,10 +219,7 @@ UI_RemoveBots_Cache
 =================
 */
 void UI_RemoveBots_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	trap_R_RegisterShaderNoMip(ART_ARROWUP1);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+
 }
 
 /*
@@ -294,8 +291,8 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.arrowup.y = 236;
 	removeBotsMenuInfo.arrowup.w = 29;
 	removeBotsMenuInfo.arrowup.h = 74;
-	removeBotsMenuInfo.arrowup.shader = trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	removeBotsMenuInfo.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWUP1);
+	removeBotsMenuInfo.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
+	removeBotsMenuInfo.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
 	removeBotsMenuInfo.arrowup.generic.callback = UI_RemoveBotsMenu_UpEvent;
 	removeBotsMenuInfo.arrowup.generic.id = ID_UP;
 
@@ -304,8 +301,8 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.arrowdown.y = 406 - 74;
 	removeBotsMenuInfo.arrowdown.w = 29; // 38
 	removeBotsMenuInfo.arrowdown.h = 74; // 98
-	removeBotsMenuInfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	removeBotsMenuInfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+	removeBotsMenuInfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
+	removeBotsMenuInfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
 	removeBotsMenuInfo.arrowdown.generic.callback = UI_RemoveBotsMenu_DownEvent;
 	removeBotsMenuInfo.arrowdown.generic.id = ID_DOWN;
 

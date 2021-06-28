@@ -2,12 +2,12 @@
 //
 #include "ui_local.h"
 
-#define ARROWUP0 "menu/server/arrowup0"
-#define ARROWUP1 "menu/server/arrowup1"
-#define ARROWDOWN0 "menu/server/arrowdown0"
-#define ARROWDOWN1 "menu/server/arrowdown1"
+#define ARROWUP0 "menu/arrows/headyel_up0"
+#define ARROWUP1 "menu/arrows/headyel_up1"
+#define ARROWDN0 "menu/arrows/headyel_dn0"
+#define ARROWDN1 "menu/arrows/headyel_dn1"
 
-static char *serverinfo_artlist[] = {ARROWUP0, ARROWUP1, ARROWDOWN0, ARROWDOWN1,
+static char *serverinfo_artlist[] = {ARROWUP0, ARROWUP1, ARROWDN0, ARROWDN1,
 
 									 NULL};
 
@@ -232,8 +232,8 @@ void UI_ServerInfoMenu(void) {
 	s_serverinfo.menu.draw = ServerInfo_MenuDraw;
 	s_serverinfo.menu.key = ServerInfo_MenuKey;
 	s_serverinfo.arrowup.generic.type = MTYPE_BITMAP1024S;
-	s_serverinfo.arrowup.x = 630;
-	s_serverinfo.arrowup.y = 226;
+	s_serverinfo.arrowup.x = 638;
+	s_serverinfo.arrowup.y = 236;
 	s_serverinfo.arrowup.w = 29;
 	s_serverinfo.arrowup.h = 74;
 	s_serverinfo.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
@@ -243,12 +243,12 @@ void UI_ServerInfoMenu(void) {
 	Menu_AddItem(&s_serverinfo.menu, (void *)&s_serverinfo.arrowup);
 
 	s_serverinfo.arrowdown.generic.type = MTYPE_BITMAP1024S;
-	s_serverinfo.arrowdown.x = 630;
-	s_serverinfo.arrowdown.y = 436 - 74;
+	s_serverinfo.arrowdown.x = 638;
+	s_serverinfo.arrowdown.y = 406 - 74;
 	s_serverinfo.arrowdown.w = 29; // 38
 	s_serverinfo.arrowdown.h = 74; // 98
-	s_serverinfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDOWN0);
-	s_serverinfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDOWN1);
+	s_serverinfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
+	s_serverinfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
 	s_serverinfo.arrowdown.generic.callback = ServerInfo_Event;
 	s_serverinfo.arrowdown.generic.id = ID_SCROLL_DOWN;
 	Menu_AddItem(&s_serverinfo.menu, (void *)&s_serverinfo.arrowdown);

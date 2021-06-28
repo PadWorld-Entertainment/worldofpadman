@@ -220,8 +220,8 @@ The main-init for the spraylogosys ... should be called at every vid_restart
 void Init_SprayLogoSys(void) {
 	cgs.media.spraypuff = trap_R_RegisterShader("weaponeffect/spraypuff");
 	cgs.media.spraymark = trap_R_RegisterShader("weaponeffect/spraymark");
-	cgs.media.slmenu_arrowr = trap_R_RegisterShaderNoMip("menu/spraylogo/slmenu_arrowr");
-	cgs.media.slmenu_arrowl = trap_R_RegisterShaderNoMip("menu/spraylogo/slmenu_arrowl");
+	cgs.media.slmenu_arrowr = trap_R_RegisterShaderNoMip("menu/arrow/headblu_rt0");
+	cgs.media.slmenu_arrowl = trap_R_RegisterShaderNoMip("menu/arrow/headblu_rt0");
 	cgs.media.cgwopmenu_cursor = trap_R_RegisterShaderNoMip("menu/art/3_cursor2");
 	cgs.media.chooselogo_bg = trap_R_RegisterShaderNoMip("menu/spraylogo/bg");
 	Load_Logos();
@@ -639,7 +639,7 @@ void ActiveChooseLogoMenu(void) {
 
 	//	CG_DrawStringExt(40,POSY_FIRSTLINE-26,"please select a logo ... you can use the
 	// mouse",colorWhite,qtrue,qfalse,8,16,64);
-	CG_DrawStringExt(XLL, POSY_FIRSTLINE - 26, "please select a SprayLogo ...", colorWhite, qtrue, qfalse, 8, 16, 64);
+	CG_DrawStringExt(XLL, POSY_FIRSTLINE - 26, "Please select a spray logo...", colorWhite, qtrue, qtrue, 8, 16, 64);
 
 	CursorAtLogo = -1;
 	for (i = 0, j = activepage * 8; i < 4; i++, j++) {
@@ -684,15 +684,15 @@ void ActiveChooseLogoMenu(void) {
 
 	Com_sprintf(tmpstr, sizeof(tmpstr), "%i/%i", (activepage + 1), numPages);
 	CG_DrawStringExt(320 - CG_DrawStrlen(tmpstr) * 4, ARROWY + 2, tmpstr, colorWhite, qtrue, qtrue, 8, 16, 32);
-	CG_DrawPic(270, ARROWY, 30, 20, cgs.media.slmenu_arrowl);
-	CG_DrawPic(340, ARROWY, 30, 20, cgs.media.slmenu_arrowr);
+	CG_DrawPic(250, ARROWY, 50, 20, cgs.media.slmenu_arrowl);
+	CG_DrawPic(340, ARROWY, 50, 20, cgs.media.slmenu_arrowr);
 
 	if (cgs.gametype == GT_SPRAYFFA) {
 		int numColors = 6; // sizeof(spraycolors)/sizeof(spraycolors[0]);
 		int x = XLL;
 		int y = ARROWY + 40;
 
-		CG_DrawStringExt(x, y + COLORSIZE / 2 - 8, "... or change the SprayColor:", colorWhite, qtrue, qtrue, 8, 16,
+		CG_DrawStringExt(x, y + COLORSIZE / 2 - 8, "...or change the spray color:", colorWhite, qtrue, qtrue, 8, 16,
 						 -1);
 		x += 240;
 		for (i = 0; i < numColors; ++i) {

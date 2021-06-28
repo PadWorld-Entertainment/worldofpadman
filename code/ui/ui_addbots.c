@@ -30,10 +30,10 @@ ADD BOTS MENU
 
 #include "ui_local.h"
 
-#define ART_ARROWUP0 "menu/mods/arrowup0"
-#define ART_ARROWUP1 "menu/mods/arrowup1"
-#define ART_ARROWDOWN0 "menu/mods/arrowdown0"
-#define ART_ARROWDOWN1 "menu/mods/arrowdown1"
+#define ARROWUP0 "menu/arrows/headyel_up0"
+#define ARROWUP1 "menu/arrows/headyel_up1"
+#define ARROWDN0 "menu/arrows/headyel_dn0"
+#define ARROWDN1 "menu/arrows/headyel_dn1"
 
 #define NUM_BOTS 6
 
@@ -276,8 +276,8 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.arrowup.y = 236; // 204;
 	addBotsMenuInfo.arrowup.w = 29;
 	addBotsMenuInfo.arrowup.h = 74;
-	addBotsMenuInfo.arrowup.shader = trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	addBotsMenuInfo.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWUP1);
+	addBotsMenuInfo.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
+	addBotsMenuInfo.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
 	addBotsMenuInfo.arrowup.generic.callback = UI_AddBotsMenu_UpEvent;
 	addBotsMenuInfo.arrowup.generic.id = ID_UP;
 
@@ -286,8 +286,8 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.arrowdown.y = 406 - 74; // 374-74;
 	addBotsMenuInfo.arrowdown.w = 29;		// 38
 	addBotsMenuInfo.arrowdown.h = 74;		// 98
-	addBotsMenuInfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	addBotsMenuInfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+	addBotsMenuInfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
+	addBotsMenuInfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
 	addBotsMenuInfo.arrowdown.generic.callback = UI_AddBotsMenu_DownEvent;
 	addBotsMenuInfo.arrowdown.generic.id = ID_DOWN;
 
@@ -388,10 +388,7 @@ UI_AddBots_Cache
 =================
 */
 void UI_AddBots_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_ARROWUP0);
-	trap_R_RegisterShaderNoMip(ART_ARROWUP1);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN0);
-	trap_R_RegisterShaderNoMip(ART_ARROWDOWN1);
+
 }
 
 /*
