@@ -97,6 +97,31 @@ static void UI_Mods_MenuEvent(void *ptr, int event) {
 }
 
 /*
+=================
+UI_Mods_MenuKey
+=================
+*/
+static sfxHandle_t UI_Mods_MenuKey(int key) {
+	return Menu_DefaultKey(&s_mods.menu, key);
+
+	if (key == K_MWHEELUP) {
+		ScrollList_Key(&s_mods.list, K_UPARROW);
+	}
+	if (key == K_MWHEELDOWN) {
+		ScrollList_Key(&s_mods.list, K_DOWNARROW);
+	}
+
+	if (key == K_ENTER || key == K_KP_ENTER) {
+		trap_Cvar_Set("fs_game", s_mods.fs_gameList[s_mods.list.curvalue]);
+		trap_Cvar_Set("s_wop_restarted", "0"); // damit bei padmod->anderer mod->padmod kein falscher sound bleibt
+		trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart;");
+		UI_PopMenu();
+	}
+
+	return Menu_DefaultKey(&s_mods.menu, key);
+}
+
+/*
 ===============
 UI_Mods_ParseInfos
 ===============
@@ -195,6 +220,7 @@ static void UI_Mods_MenuInit(void) {
 	UI_ModsMenu_Cache();
 
 	memset(&s_mods, 0, sizeof(mods_t));
+	s_mods.menu.key = UI_Mods_MenuKey;
 	s_mods.menu.wrapAround = qtrue;
 	s_mods.menu.fullscreen = qtrue;
 	s_mods.menu.bgparts = BGP_MODSBG | BGP_SIMPLEBG;

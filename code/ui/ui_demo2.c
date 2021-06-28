@@ -103,6 +103,20 @@ UI_DemosMenu_Key
 */
 static sfxHandle_t UI_DemosMenu_Key(int key) {
 	return Menu_DefaultKey(&s_demos.menu, key);
+
+	if (key == K_MWHEELUP) {
+		ScrollList_Key(&s_demos.list, K_UPARROW);
+	}
+	if (key == K_MWHEELDOWN) {
+		ScrollList_Key(&s_demos.list, K_DOWNARROW);
+	}
+
+	if (key == K_ENTER || key == K_KP_ENTER) {
+		UI_ForceMenuOff();
+		trap_Cmd_ExecuteText(EXEC_APPEND, va("demo %s\n", s_demos.list.itemnames[s_demos.list.curvalue]));
+	}
+
+	return Menu_DefaultKey(&s_demos.menu, key);
 }
 
 static int QDECL UI_SortDemos(const void *a, const void *b) {
