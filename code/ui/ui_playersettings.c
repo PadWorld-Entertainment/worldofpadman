@@ -896,7 +896,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.spraylogos_next.w = 40;
 	s_playersettings.spraylogos_next.h = 20;
 	s_playersettings.spraylogos_next.shader = trap_R_RegisterShaderNoMip(SARROWRT0);
-	s_playersettings.spraylogos_next.mouseovershader = trap_R_RegisterShaderNoMip(SARROWRT0);
+	s_playersettings.spraylogos_next.mouseovershader = trap_R_RegisterShaderNoMip(SARROWRT1);
 	s_playersettings.spraylogos_next.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.spraylogos_next.generic.id = ID_SLOGONEXT;
 
