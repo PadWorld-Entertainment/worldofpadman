@@ -1481,7 +1481,7 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.list.generic.id = ID_LIST;
 	g_arenaservers.list.generic.callback = ArenaServers_Event;
 	g_arenaservers.list.generic.x = 50;
-	g_arenaservers.list.generic.y = 316;
+	g_arenaservers.list.generic.y = 198;
 	g_arenaservers.list.width = MAX_LISTBOXWIDTH;
 	g_arenaservers.list.height = 11;
 	g_arenaservers.list.itemnames = (const char **)g_arenaservers.items;
