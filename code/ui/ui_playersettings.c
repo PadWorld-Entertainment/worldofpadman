@@ -24,6 +24,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
+#define BARROWLT0 "menu/arrows/bigblu_lt0"
+#define BARROWLT1 "menu/arrows/bigblu_lt1"
+#define BARROWRT0 "menu/arrows/bigblu_rt0"
+#define BARROWRT1 "menu/arrows/bigblu_rt1"
+#define BARROWUP0 "menu/arrows/bigyel_up0"
+#define BARROWUP1 "menu/arrows/bigyel_up1"
+#define BARROWDN0 "menu/arrows/bigyel_dn0"
+#define BARROWDN1 "menu/arrows/bigyel_dn1"
+#define SARROWLT0 "menu/arrows/smallyel_lt0"
+#define SARROWLT1 "menu/arrows/smallyel_lt1"
+#define SARROWRT0 "menu/arrows/smallyel_rt0"
+#define SARROWRT1 "menu/arrows/smallyel_rt1"
 
 #define ID_NAME 10
 #define ID_HANDICAP 11
@@ -734,15 +746,15 @@ static void PlayerSettings_MenuInit(void) {
 
 	s_playersettings.modelsleft.generic.type = MTYPE_BITMAP1024S;
 	s_playersettings.modelsleft.x = 34;
-	s_playersettings.modelsleft.y = 33;
+	s_playersettings.modelsleft.y = 32;
 	s_playersettings.modelsleft.w = 55;
 	s_playersettings.modelsleft.h = 117;
-	s_playersettings.modelsleft.sx = 38;
-	s_playersettings.modelsleft.sy = 38;
-	s_playersettings.modelsleft.sw = 56;
-	s_playersettings.modelsleft.sh = 117;
-	s_playersettings.modelsleft.shader = trap_R_RegisterShaderNoMip("menu/player/left");
-	s_playersettings.modelsleft.mouseovershader = trap_R_RegisterShaderNoMip("menu/player/left_mOver");
+//	s_playersettings.modelsleft.sx = 38;
+//	s_playersettings.modelsleft.sy = 38;
+//	s_playersettings.modelsleft.sw = 56;
+//	s_playersettings.modelsleft.sh = 117;
+	s_playersettings.modelsleft.shader = trap_R_RegisterShaderNoMip(BARROWLT0);
+	s_playersettings.modelsleft.mouseovershader = trap_R_RegisterShaderNoMip(BARROWLT1);
 	s_playersettings.modelsleft.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.modelsleft.generic.id = ID_MODELSLEFT;
 
@@ -753,44 +765,44 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.modelsright.y = 32;
 	s_playersettings.modelsright.w = 55;
 	s_playersettings.modelsright.h = 117;
-	s_playersettings.modelsright.sx = 933;
-	s_playersettings.modelsright.sy = 35;
-	s_playersettings.modelsright.sw = 58;
-	s_playersettings.modelsright.sh = 120;
-	s_playersettings.modelsright.shader = trap_R_RegisterShaderNoMip("menu/player/right");
-	s_playersettings.modelsright.mouseovershader = trap_R_RegisterShaderNoMip("menu/player/right_mOver");
+//	s_playersettings.modelsright.sx = 933;
+//	s_playersettings.modelsright.sy = 35;
+//	s_playersettings.modelsright.sw = 58;
+//	s_playersettings.modelsright.sh = 120;
+	s_playersettings.modelsright.shader = trap_R_RegisterShaderNoMip(BARROWRT0);
+	s_playersettings.modelsright.mouseovershader = trap_R_RegisterShaderNoMip(BARROWRT1);
 	s_playersettings.modelsright.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.modelsright.generic.id = ID_MODELSRIGHT;
 
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsright);
 
 	s_playersettings.skinup.generic.type = MTYPE_BITMAP1024S;
-	s_playersettings.skinup.x = 873;
-	s_playersettings.skinup.y = 193;
+	s_playersettings.skinup.x = 875;
+	s_playersettings.skinup.y = 190;
 	s_playersettings.skinup.w = 117;
-	s_playersettings.skinup.h = 37;
-	s_playersettings.skinup.sx = 875;
-	s_playersettings.skinup.sy = 199;
-	s_playersettings.skinup.sw = 119;
-	s_playersettings.skinup.sh = 39;
-	s_playersettings.skinup.shader = trap_R_RegisterShaderNoMip("menu/player/up");
-	s_playersettings.skinup.mouseovershader = trap_R_RegisterShaderNoMip("menu/player/up_mOver");
+	s_playersettings.skinup.h = 55;
+//	s_playersettings.skinup.sx = 875;
+//	s_playersettings.skinup.sy = 199;
+//	s_playersettings.skinup.sw = 119;
+//	s_playersettings.skinup.sh = 39;
+	s_playersettings.skinup.shader = trap_R_RegisterShaderNoMip(BARROWUP0);
+	s_playersettings.skinup.mouseovershader = trap_R_RegisterShaderNoMip(BARROWUP1);
 	s_playersettings.skinup.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skinup.generic.id = ID_SKINSUP;
 
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skinup);
 
 	s_playersettings.skindown.generic.type = MTYPE_BITMAP1024S;
-	s_playersettings.skindown.x = 871;
-	s_playersettings.skindown.y = 687;
+	s_playersettings.skindown.x = 875;
+	s_playersettings.skindown.y = 680;
 	s_playersettings.skindown.w = 117;
-	s_playersettings.skindown.h = 40;
-	s_playersettings.skindown.sx = 876;
-	s_playersettings.skindown.sy = 692;
-	s_playersettings.skindown.sw = 117;
-	s_playersettings.skindown.sh = 40;
-	s_playersettings.skindown.shader = trap_R_RegisterShaderNoMip("menu/player/down");
-	s_playersettings.skindown.mouseovershader = trap_R_RegisterShaderNoMip("menu/player/down_mOver");
+	s_playersettings.skindown.h = 55;
+//	s_playersettings.skindown.sx = 876;
+//	s_playersettings.skindown.sy = 692;
+//	s_playersettings.skindown.sw = 117;
+//	s_playersettings.skindown.sh = 40;
+	s_playersettings.skindown.shader = trap_R_RegisterShaderNoMip(BARROWDN0);
+	s_playersettings.skindown.mouseovershader = trap_R_RegisterShaderNoMip(BARROWDN1);
 	s_playersettings.skindown.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skindown.generic.id = ID_SKINSDOWN;
 
@@ -873,8 +885,8 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.spraylogos_prev.y = 570;
 	s_playersettings.spraylogos_prev.w = 40;
 	s_playersettings.spraylogos_prev.h = 20;
-	s_playersettings.spraylogos_prev.shader = trap_R_RegisterShaderNoMip("menu/smallarrow_left");
-	s_playersettings.spraylogos_prev.mouseovershader = trap_R_RegisterShaderNoMip("menu/smallarrow_leftdown");
+	s_playersettings.spraylogos_prev.shader = trap_R_RegisterShaderNoMip(SARROWLT0);
+	s_playersettings.spraylogos_prev.mouseovershader = trap_R_RegisterShaderNoMip(SARROWLT1);
 	s_playersettings.spraylogos_prev.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.spraylogos_prev.generic.id = ID_SLOGOPREV;
 
@@ -883,8 +895,8 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.spraylogos_next.y = 570;
 	s_playersettings.spraylogos_next.w = 40;
 	s_playersettings.spraylogos_next.h = 20;
-	s_playersettings.spraylogos_next.shader = trap_R_RegisterShaderNoMip("menu/smallarrow_right");
-	s_playersettings.spraylogos_next.mouseovershader = trap_R_RegisterShaderNoMip("menu/smallarrow_rightdown");
+	s_playersettings.spraylogos_next.shader = trap_R_RegisterShaderNoMip(SARROWRT0);
+	s_playersettings.spraylogos_next.mouseovershader = trap_R_RegisterShaderNoMip(SARROWRT0);
 	s_playersettings.spraylogos_next.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.spraylogos_next.generic.id = ID_SLOGONEXT;
 
