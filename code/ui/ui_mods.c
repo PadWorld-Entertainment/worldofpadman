@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-#define FIGHT0 "menu/mods/load0"
-#define FIGHT1 "menu/mods/load1"
+#define FIGHT0 "menu/buttons/play_blu0"
+#define FIGHT1 "menu/buttons/play_blu1"
 #define ARROWUP0 "menu/arrows/headyel_up0"
 #define ARROWUP1 "menu/arrows/headyel_up1"
 #define ARROWDN0 "menu/arrows/headyel_dn0"

@@ -830,7 +830,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skin_icons[0].sy = 253;
 	s_playersettings.skin_icons[0].sw = s_playersettings.skin_icons[0].sh = 138;
 	s_playersettings.skin_icons[0].shader = 0;
-	s_playersettings.skin_icons[0].shadowshader = trap_R_RegisterShaderNoMip("menu/player/sicon_shadow");
+	s_playersettings.skin_icons[0].shadowshader = trap_R_RegisterShaderNoMip("menu/art/sicon_shadow");
 	s_playersettings.skin_icons[0].generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skin_icons[0].generic.id = ID_SICON;
 
@@ -842,7 +842,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skin_icons[1].sy = 395;
 	s_playersettings.skin_icons[1].sw = s_playersettings.skin_icons[1].sh = 138;
 	s_playersettings.skin_icons[1].shader = 0;
-	s_playersettings.skin_icons[1].shadowshader = trap_R_RegisterShaderNoMip("menu/player/sicon_shadow");
+	s_playersettings.skin_icons[1].shadowshader = trap_R_RegisterShaderNoMip("menu/art/sicon_shadow");
 	s_playersettings.skin_icons[1].generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skin_icons[1].generic.id = ID_SICON + 1;
 
@@ -854,7 +854,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skin_icons[2].sy = 539;
 	s_playersettings.skin_icons[2].sw = s_playersettings.skin_icons[2].sh = 138;
 	s_playersettings.skin_icons[2].shader = 0;
-	s_playersettings.skin_icons[2].shadowshader = trap_R_RegisterShaderNoMip("menu/player/sicon_shadow");
+	s_playersettings.skin_icons[2].shadowshader = trap_R_RegisterShaderNoMip("menu/art/sicon_shadow");
 	s_playersettings.skin_icons[2].generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skin_icons[2].generic.id = ID_SICON + 2;
 

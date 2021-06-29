@@ -32,8 +32,8 @@ DEMOS MENU
 
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-#define GO0 "menu/demo/play0"
-#define GO1 "menu/demo/play1"
+#define GO0 "menu/buttons/play_yel0"
+#define GO1 "menu/buttons/play_yel1"
 #define ARROWUP0 "menu/arrows/headblu_up0"
 #define ARROWUP1 "menu/arrows/headblu_up1"
 #define ARROWDN0 "menu/arrows/headblu_dn0"

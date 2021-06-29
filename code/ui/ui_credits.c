@@ -58,7 +58,7 @@ UI_CreditMenu_Draw
 */
 static void UI_CreditMenu_Draw(void) {
 
-	UI_DrawHandlePic(0, 0, 640, 480, trap_R_RegisterShaderNoMip("menu/creditz.jpg"));
+	UI_DrawHandlePic(0, 0, 640, 480, trap_R_RegisterShaderNoMip("menu/bg/credits.jpg"));
 }
 
 /*
@@ -96,9 +96,9 @@ static sfxHandle_t UI_checkMenuExitKeys(int key) {
 ####################### ####################### ####################### ####################### #######################
 */
 
-const char *creditbgs[] = {"credits/cred001", "credits/cred002", "credits/cred003",
-						   "credits/cred004", "credits/cred005", "credits/cred006",
-						   "credits/cred007", "credits/cred008", 0};
+const char *creditbgs[] = {"menu/credits/cred001", "menu/credits/cred002", "menu/credits/cred003",
+						   "menu/credits/cred004", "menu/credits/cred005", "menu/credits/cred006",
+						   "menu/credits/cred007", "menu/credits/cred008", 0};
 
 #define MAX_CREDITPAGES 8
 
@@ -178,7 +178,7 @@ static secretmenu_t s_secretmenu;
 
 void setSecretShaderStr(void) {
 	int offset;
-	strcpy(s_secretmenu.shadername, "menu/sec");
+	strcpy(s_secretmenu.shadername, "menu/secret/sec");
 	offset = strlen(s_secretmenu.shadername);
 
 TRYAGAIN_SECSHADER:

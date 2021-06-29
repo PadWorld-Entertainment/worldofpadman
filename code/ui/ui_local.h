@@ -616,9 +616,9 @@ typedef struct {
 	music_state_t musicstate;
 	qhandle_t connectingBG;
 
-	qhandle_t pad_simpleMenuBg;
-	qhandle_t pad_menushader; //"menushader"
-	qhandle_t pad_mainframe;  //"menu/main/Background"
+	qhandle_t pad_menubgfx; // other menu bg fx shader
+	qhandle_t pad_mainbgfx; //main menu bg fx shader
+	qhandle_t pad_mainframe; 
 	qhandle_t pad_setupbg;
 	qhandle_t pad_display;
 	qhandle_t pad_defaults;

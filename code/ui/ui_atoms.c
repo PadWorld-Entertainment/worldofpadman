@@ -1330,9 +1330,9 @@ void UI_DrawMenu(menuframework_s *menu) {
 
 			if (menu->bgparts) {
 				if (menu->bgparts & BGP_MAINBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_menushader);
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_mainbgfx);
 				if (menu->bgparts & BGP_SIMPLEBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_simpleMenuBg);
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_menubgfx);
 				if (menu->bgparts & BGP_MAINFRAME)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_mainframe);
 				if (menu->bgparts & BGP_SETUPBG)

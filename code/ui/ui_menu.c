@@ -51,8 +51,8 @@ MAIN MENU
 #define MODS1 "menu/buttons/mods1"
 #define EXIT0 "menu/buttons/exit0"
 #define EXIT1 "menu/buttons/exit1"
-#define CREDITS0 "menu/main/ButtonCredits0"
-#define CREDITS1 "menu/main/ButtonCredits1"
+#define CREDITS0 "menu/buttons/credits0"
+#define CREDITS1 "menu/buttons/credits1"
 
 #define MAX_MSGLENGHT 256
 

@@ -899,7 +899,7 @@ void StartServer_Cache(void) {
 	trap_R_RegisterShaderNoMip(UNKNOWNMAP);
 
 	for (i = 0; i < 10; i++)
-		s_startserver.mapNumbers[i] = trap_R_RegisterShaderNoMip(va("menu/startserver/%i", i));
+		s_startserver.mapNumbers[i] = trap_R_RegisterShaderNoMip(va("menu/numbers/%i", i));
 
 	s_startserver.nummaps = UI_GetNumArenas();
 
@@ -1441,7 +1441,7 @@ static void UI_BotSelectMenu_DrawBotIcon(void *self) {
 	{
 		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
 			//		UI_DrawHandlePic( x, y, w, h, b->focusshader );
-			UI_DrawNamedPic(x, y, w + 8, h + 8, "menu/player/micon_shadow");
+			UI_DrawNamedPic(x, y, w + 8, h + 8, "menu/art/micon_shadow");
 		}
 
 		UI_DrawHandlePic(x, y, w, h, b->shader);
