@@ -18,11 +18,11 @@ HELP MENU
 #define ARROWRT0 "menu/arrows/headyel_rt0"
 #define ARROWRT1 "menu/arrows/headyel_rt1"
 
-#define HM_PN_W 45
-#define HM_PN_H 27
-#define HM_PN_X0 266
-#define HM_PN_X1 329
-#define HM_PN_Y 350
+#define HM_PN_W 50
+#define HM_PN_H 20
+#define HM_PN_X0 260
+#define HM_PN_X1 330
+#define HM_PN_Y 352
 
 #define HMI_GAMETYPE_W 373
 #define HMI_GAMETYPE_H 395
