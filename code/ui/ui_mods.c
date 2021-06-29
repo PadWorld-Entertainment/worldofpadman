@@ -102,7 +102,6 @@ UI_Mods_MenuKey
 =================
 */
 static sfxHandle_t UI_Mods_MenuKey(int key) {
-	return Menu_DefaultKey(&s_mods.menu, key);
 
 	if (key == K_MWHEELUP) {
 		ScrollList_Key(&s_mods.list, K_UPARROW);

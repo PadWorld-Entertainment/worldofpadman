@@ -45,8 +45,8 @@ DEMOS MENU
 #define ID_BACK 10
 #define ID_GO 11
 #define ID_LIST 12
-#define ID_RIGHT 13
-#define ID_LEFT 14
+#define ID_SCROLL_UP 13
+#define ID_SCROLL_DOWN 14
 
 typedef struct {
 	menuframework_s menu;
@@ -84,16 +84,14 @@ static void Demos_MenuEvent(void *ptr, int event) {
 		UI_PopMenu();
 		break;
 
-	case ID_LEFT:
-		//		ScrollList_Key( &s_demos.list, K_LEFTARROW );	// only !=1 columns
-		ScrollList_Key(&s_demos.list, K_PGUP); // only <=1 columns
-		break;
-
-	case ID_RIGHT:
-		//		ScrollList_Key( &s_demos.list, K_RIGHTARROW );	// only !=1 columns
-		ScrollList_Key(&s_demos.list, K_PGDN); // only <=1 columns
+	case ID_SCROLL_UP:
+		ScrollList_Key(&s_demos.list, K_DOWNARROW);
 		break;
 	}
+
+	case ID_SCROLL_DOWN:
+		ScrollList_Key(&s_demos.list, K_UPARROW);
+		break;
 }
 
 /*
@@ -102,7 +100,6 @@ UI_DemosMenu_Key
 =================
 */
 static sfxHandle_t UI_DemosMenu_Key(int key) {
-	return Menu_DefaultKey(&s_demos.menu, key);
 
 	if (key == K_MWHEELUP) {
 		ScrollList_Key(&s_demos.list, K_UPARROW);
@@ -156,7 +153,7 @@ static void Demos_MenuInit(void) {
 	s_demos.left.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
 	s_demos.left.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
 	s_demos.left.generic.callback = Demos_MenuEvent;
-	s_demos.left.generic.id = ID_LEFT;
+	s_demos.left.generic.id = ID_SCROLL_DOWN;
 
 	s_demos.right.generic.type = MTYPE_BITMAP1024S;
 	s_demos.right.x = 96;  // 561;
@@ -166,7 +163,7 @@ static void Demos_MenuInit(void) {
 	s_demos.right.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
 	s_demos.right.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
 	s_demos.right.generic.callback = Demos_MenuEvent;
-	s_demos.right.generic.id = ID_RIGHT;
+	s_demos.right.generic.id = ID_SCROLL_UP;
 
 	s_demos.back.generic.type = MTYPE_BITMAP;
 	s_demos.back.generic.name = BACK0;
