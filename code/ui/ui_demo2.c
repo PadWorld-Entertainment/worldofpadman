@@ -87,11 +87,11 @@ static void Demos_MenuEvent(void *ptr, int event) {
 	case ID_SCROLL_UP:
 		ScrollList_Key(&s_demos.list, K_DOWNARROW);
 		break;
-	}
 
 	case ID_SCROLL_DOWN:
 		ScrollList_Key(&s_demos.list, K_UPARROW);
 		break;
+	}
 }
 
 /*
