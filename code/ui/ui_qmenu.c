@@ -1871,7 +1871,7 @@ void Menu_Cache(void) {
 	uis.rb_off = trap_R_RegisterShaderNoMip("menu/art/switch_off");
 
 	uis.whiteShader = trap_R_RegisterShaderNoMip("white");
-	uis.connectingBG = trap_R_RegisterShaderNoMip("loadingscreen/connecting");
+	uis.connectingBG = trap_R_RegisterShaderNoMip("menu/bg/connecting");
 
 	uis.pad_simpleMenuBg = trap_R_RegisterShaderNoMip("simpleMenuBg");
 	uis.pad_menushader = trap_R_RegisterShaderNoMip("menushader");

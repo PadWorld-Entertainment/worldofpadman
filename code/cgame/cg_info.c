@@ -143,7 +143,7 @@ void CG_DrawInformation(void) {
 
 	trap_R_SetColor(NULL);
 
-	CG_DrawPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, trap_R_RegisterShaderNoMip("loadingscreen/connecting"));
+	CG_DrawPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, trap_R_RegisterShaderNoMip("menu/bg/connecting"));
 
 	s = Info_ValueForKey(info, "mapname");
 	levelshot = trap_R_RegisterShaderNoMip(va("levelshots/%s", s));
@@ -153,31 +153,31 @@ void CG_DrawInformation(void) {
 
 	switch (cgs.gametype) {
 	case GT_BALLOON:
-		info = "menu/help/loadinghelp_bb";
+		info = "menu/info/bb";
 		break;
 	case GT_CTF:
-		info = "menu/help/loadinghelp_ctl";
+		info = "menu/info/ctl";
 		break;
 	case GT_FFA:
-		info = "menu/help/loadinghelp_ffa";
+		info = "menu/info/ffa";
 		break;
 	case GT_LPS:
-		info = "menu/help/loadinghelp_lps";
+		info = "menu/info/lps";
 		break;
 	case GT_SPRAYFFA:
-		info = "menu/help/loadinghelp_syc";
+		info = "menu/info/syc";
 		break;
 	case GT_SPRAY:
-		info = "menu/help/loadinghelp_teamsyc";
+		info = "menu/info/syc_team";
 		break;
 	case GT_TEAM:
-		info = "menu/help/loadinghelp_teamffa";
+		info = "menu/info/ffa_team";
 		break;
 	case GT_FREEZETAG:
-		info = "menu/help/loadinghelp_freezetag";
+		info = "menu/info/ft";
 		break;
 	default:
-		info = "menu/help/loadinghelp_ffa";
+		info = "menu/info/ffa";
 		break;
 	}
 
@@ -201,6 +201,6 @@ void CG_DrawInformation(void) {
 	lh = 48;
 	CG_AdjustFrom1024(&lx, &ly, &lw, &lh);
 	trap_R_DrawStretchPic(lx, ly, lw, lh, 0, 0, cg.loadingprogress, 1,
-						  trap_R_RegisterShaderNoMip("loadingscreen/ladebalken"));
-	CG_DrawPic1024(282, 675, 460, 48, trap_R_RegisterShaderNoMip("loadingscreen/ladefenster"));
+						  trap_R_RegisterShaderNoMip("menu/art/loadingbar"));
+	CG_DrawPic1024(282, 675, 460, 48, trap_R_RegisterShaderNoMip("menu/art/loadingframe"));
 }
