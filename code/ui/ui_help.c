@@ -49,29 +49,30 @@ static helpMenuInfo_t helpMenuInfo;
 // TODO: Use short gametype names from bg
 // Order needs to match gametype_t!
 static const char *HELP_GAMETYPE[] = {
-	"help_ffa",
-	//	"help_tourney",
-	//	"help_single", // ""
-	"help_syc", "help_lps", "help_team_ffa", "help_ctl", "help_team_syc", "help_bb",
-	"help_unknown" // must be the last entry!
+	"ffa",
+	//	"tourney",
+	//	"single", // ""
+	"syc", "lps", "ffa_team", "ft", "ctl", "syc_team", "bb",
+	"unknown" // must be the last entry!
 };
 
 // Must contain an entry for each gametype_t
 // Maps gametypes to array indices of HELP_GAMETYPE
 static const int GAMETYPE_REMAP[] = {
 	0, // GT_FFA
-	7, // GT_TOURNAMENT, no help
-	7, // GT_SINGLE_PLAYER, no help
-	1, // GT_SPRAY_FFA
+	8, // GT_TOURNAMENT, no help
+	8, // GT_SINGLE_PLAYER, no help
+	1, // GT_SPRAYFFA
 	2, // GT_LPS
 	3, // GT_TEAM
-	4, // GT_CTF
-	5, // GT_SPRAY
-	6, // GT_BALLOON
-	7, // GT_MAX_GAME_TYPE, invalid thus no help
+	4, // GT_FREEZETAG
+	5, // GT_CTF
+	6, // GT_SPRAY
+	7, // GT_BALLOON
+	8, // GT_MAX_GAME_TYPE, invalid thus no help
 };
 
-static const char *HELP_ITEM[] = {"help_powerups", "help_weapons"};
+static const char *HELP_ITEM[] = {"powerups", "weapons"};
 static const unsigned int NUM_HELP_ITEM = (sizeof(HELP_ITEM) / sizeof(HELP_ITEM[0]));
 
 static int helpMax, helpMin = 0;
