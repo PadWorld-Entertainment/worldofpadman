@@ -424,7 +424,7 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 	trap_SetConfigstring(CS_VOTE_TIME, "");
 	trap_SetConfigstring(CS_VOTE_STRING, "");
 
-	level.snd_fry = G_SoundIndex("sounds/player/fry"); // FIXME standing in lava / slime
+	level.snd_fry = G_SoundIndex("sound/player/fry"); // FIXME standing in lava / slime
 
 	if (g_gametype.integer != GT_SINGLE_PLAYER && g_log.string[0]) {
 		if (g_logSync.integer) {

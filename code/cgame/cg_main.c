@@ -806,8 +806,8 @@ static void CG_RegisterSounds(void) {
 
 	cgs.media.noAmmoSound = trap_S_RegisterSound("sounds/weapons/noammo", qfalse);
 
-	cgs.media.talkSound = trap_S_RegisterSound("sounds/player/talk", qfalse);
-	cgs.media.landSound = trap_S_RegisterSound("sounds/player/land", qfalse);
+	cgs.media.talkSound = trap_S_RegisterSound("sound/player/talk", qfalse);
+	cgs.media.landSound = trap_S_RegisterSound("sound/player/land", qfalse);
 
 	cgs.media.hitSound = trap_S_RegisterSound("sounds/hit", qfalse);
 
@@ -815,9 +815,9 @@ static void CG_RegisterSounds(void) {
 	cgs.media.humiliationSound = trap_S_RegisterSound("sounds/awards/padkiller", qtrue);
 	cgs.media.padstarSound = trap_S_RegisterSound("sounds/awards/padstar", qtrue);
 
-	cgs.media.watrInSound = trap_S_RegisterSound("sounds/player/water_in", qfalse);
-	cgs.media.watrOutSound = trap_S_RegisterSound("sounds/player/water_out", qfalse);
-	cgs.media.watrUnSound = trap_S_RegisterSound("sounds/player/water_under", qfalse);
+	cgs.media.watrInSound = trap_S_RegisterSound("sound/player/water_in", qfalse);
+	cgs.media.watrOutSound = trap_S_RegisterSound("sound/player/water_out", qfalse);
+	cgs.media.watrUnSound = trap_S_RegisterSound("sound/player/water_under", qfalse);
 
 	cgs.media.jumpPadSound = trap_S_RegisterSound("sounds/world/jumppad", qfalse);
 	cgs.media.DropCartridgeSound = trap_S_RegisterSound("sounds/weapons/ammo/spraypistol/drop", qfalse);
