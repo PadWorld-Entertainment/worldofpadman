@@ -127,8 +127,10 @@ static qboolean CG_ParseAnimationFile(const char *filename, clientInfo_t *ci) {
 			}
 			if (!Q_stricmp(token, "default") || !Q_stricmp(token, "normal")) {
 				ci->footsteps = FOOTSTEP_NORMAL;
-			} else if (!Q_stricmp(token, "boot")) {
-				ci->footsteps = FOOTSTEP_BOOT;
+			} else if (!Q_stricmp(token, "spurs")) {
+				ci->footsteps = FOOTSTEP_SPURS;
+			} else if (!Q_stricmp(token, "flesh")) {
+				ci->footsteps = FOOTSTEP_FLESH;
 			} else {
 				CG_Printf("Bad footsteps param in %s: %s\n", filename, token);
 			}

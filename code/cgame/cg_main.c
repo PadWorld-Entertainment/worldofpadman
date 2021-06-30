@@ -826,16 +826,16 @@ static void CG_RegisterSounds(void) {
 	CG_ChangeLoadingProgress(0.4f);
 
 	for (i = 0; i < 4; i++) {
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/step%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/player/footsteps/step%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_NORMAL][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/boot%i", (i + 1));
-		cgs.media.footsteps[FOOTSTEP_BOOT][i] = trap_S_RegisterSound(name, qfalse);
+		Com_sprintf(name, sizeof(name), "sound/player/footsteps/spurs%i", (i + 1));
+		cgs.media.footsteps[FOOTSTEP_SPURS][i] = trap_S_RegisterSound(name, qfalse);
 
-		/*		Com_sprintf (name, sizeof(name), "sounds/player/footsteps/flesh%i", i+1);
-				cgs.media.footsteps[FOOTSTEP_FLESH][i] = trap_S_RegisterSound (name, qfalse);
+		Com_sprintf (name, sizeof(name), "sound/player/footsteps/flesh%i", i + 1);
+		cgs.media.footsteps[FOOTSTEP_FLESH][i] = trap_S_RegisterSound (name, qfalse);
 
-				Com_sprintf (name, sizeof(name), "sounds/player/footsteps/mech%i", i+1);
+		/*		Com_sprintf (name, sizeof(name), "sounds/player/footsteps/mech%i", i+1);
 				cgs.media.footsteps[FOOTSTEP_MECH][i] = trap_S_RegisterSound (name, qfalse);
 
 				Com_sprintf (name, sizeof(name), "sounds/player/footsteps/energy%i", i+1);
