@@ -841,8 +841,11 @@ static void CG_RegisterSounds(void) {
 				Com_sprintf (name, sizeof(name), "sounds/player/footsteps/energy%i", i+1);
 				cgs.media.footsteps[FOOTSTEP_ENERGY][i] = trap_S_RegisterSound (name, qfalse);
 		*/
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/splash%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/player/footsteps/splash%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(name, qfalse);
+
+		Com_sprintf(name, sizeof(name), "sound/player/footsteps/wade%i", (i + 1));
+		cgs.media.footsteps[FOOTSTEP_WADE][i] = trap_S_RegisterSound(name, qfalse);
 
 		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/clank%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_METAL][i] = trap_S_RegisterSound(name, qfalse);
