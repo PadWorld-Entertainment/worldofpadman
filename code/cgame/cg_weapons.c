@@ -510,9 +510,9 @@ NOADDITIONALMODELS:
 		for (i = 0; i <= 8; i++) {
 			cgs.media.zoomsound[i] = trap_S_RegisterSound(va("sounds/weapons/splasher/zoom0%i", i), qtrue);
 		}
-		cgs.media.zoomhud = trap_R_RegisterShaderNoMip("zoomhud");
-		cgs.media.zoomruler = trap_R_RegisterShaderNoMip("zoomruler");
-		cgs.media.zoomcompass = trap_R_RegisterShaderNoMip("zoomcompass");
+		cgs.media.zoomhud = trap_R_RegisterShaderNoMip("gfx/zoom/scope");
+		cgs.media.zoomruler = trap_R_RegisterShaderNoMip("gfx/zoom/ruler");
+		cgs.media.zoomcompass = trap_R_RegisterShaderNoMip("gfx/zoom/compass");
 		break;
 
 	case WP_KMA97:
@@ -526,7 +526,7 @@ NOADDITIONALMODELS:
 		cgs.media.kmaTrailShader = trap_R_RegisterShader("kmaTrail");
 		cgs.media.kmaBallShader = trap_R_RegisterShader("kmaBall");
 		cgs.media.smallKmaDropModel = trap_R_RegisterModel("models/weaponsfx/smallkmadrop");
-		cgs.media.zoomhud_kma = trap_R_RegisterShaderNoMip("zoomhud_kma");
+		cgs.media.zoomhud_kma = trap_R_RegisterShaderNoMip("gfx/zoom/scope_kma");
 		cgs.media.zoomKMAaura = trap_R_RegisterShader("gfx/kmazoomAura");
 		cgs.media.zoomKMAbluescreen = trap_R_RegisterShader("gfx/kmaBlueScreen");
 		break;
