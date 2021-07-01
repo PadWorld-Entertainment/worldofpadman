@@ -218,8 +218,8 @@ The main-init for the spraylogosys ... should be called at every vid_restart
 #######################
 */
 void Init_SprayLogoSys(void) {
-	cgs.media.spraypuff = trap_R_RegisterShader("weaponeffect/spraypuff");
-	cgs.media.spraymark = trap_R_RegisterShader("weaponeffect/spraymark");
+	cgs.media.spraypuff = trap_R_RegisterShader("models/weaponsfx/spraypuff");
+	cgs.media.spraymark = trap_R_RegisterShader("models/weaponsfx/spraymark");
 	cgs.media.slmenu_arrowr = trap_R_RegisterShaderNoMip("menu/arrows/headblu_rt0");
 	cgs.media.slmenu_arrowl = trap_R_RegisterShaderNoMip("menu/arrows/headblu_lt0");
 	cgs.media.cgwopmenu_cursor = trap_R_RegisterShaderNoMip("menu/art/3_cursor2");
