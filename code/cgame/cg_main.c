@@ -949,7 +949,7 @@ static void CG_RegisterGraphics(void) {
 
 	cgs.media.deferShader = trap_R_RegisterShaderNoMip("gfx/2d/defer");
 
-	cgs.media.scoreboardBG = trap_R_RegisterShaderNoMip("scoreboard/bg");
+	cgs.media.scoreboardBG = trap_R_RegisterShaderNoMip("menu/bg/scoreboard");
 	cgs.media.scoreboardName = trap_R_RegisterShaderNoMip("menu/tab/name");
 	cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip("menu/tab/ping");
 	cgs.media.scoreboardScore = trap_R_RegisterShaderNoMip("menu/tab/score");
