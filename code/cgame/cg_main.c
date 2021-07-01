@@ -943,9 +943,9 @@ static void CG_RegisterGraphics(void) {
 		cgs.media.botSkillShaders[i] = trap_R_RegisterShader(va("menu/art/skill%i", (i + 1)));
 	}
 
-	cgs.media.BloodScreenShader = trap_R_RegisterShaderNoMip("blood_screen");
-	cgs.media.BerserkerScreenShader = trap_R_RegisterShaderNoMip("berserker_screen");
-	cgs.media.WetScreenShader = trap_R_RegisterShaderNoMip("wet_screen");
+	cgs.media.BloodScreenShader = trap_R_RegisterShaderNoMip("gfx/screen/damage");
+	cgs.media.BerserkerScreenShader = trap_R_RegisterShaderNoMip("gfx/screen/puppet");
+	cgs.media.WetScreenShader = trap_R_RegisterShaderNoMip("gfx/screen/wet");
 
 	cgs.media.deferShader = trap_R_RegisterShaderNoMip("gfx/2d/defer");
 
