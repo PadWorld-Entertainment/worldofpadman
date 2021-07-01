@@ -493,7 +493,6 @@ NOADDITIONALMODELS:
 		// HERBY: BUBBLE G
 		weaponInfo->missileModel = trap_R_RegisterModel("models/weaponsfx/gum");
 		weaponInfo->flashSound[0] = trap_S_RegisterSound("sounds/weapons/bubbleg/flash", qfalse);
-		cgs.media.gumMarkShader = trap_R_RegisterShader("gumMark");
 		break;
 
 	case WP_SPLASHER:

@@ -1157,6 +1157,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.waterMarkShader = trap_R_RegisterShader("waterMark");
 	cgs.media.kmaMarkShader = trap_R_RegisterShader("kmaMark");
 	cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/foam_mrk");
+	cgs.media.gumMarkShader = trap_R_RegisterShader("gfx/damage/gum_mrk");
 
 	// register the inline models
 	cgs.numInlineModels = trap_CM_NumInlineModels();
