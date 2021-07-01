@@ -1007,8 +1007,6 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.HealthStation_Ring = trap_R_RegisterModel("models/mapobjects/pad_healthstation/pad_hs_ring");
 	cgs.media.StationLoadingRings = trap_R_RegisterModel("models/teleporter");
 
-	cgs.media.SchaumShader = trap_R_RegisterShader("boaster/schaum");
-
 	CG_ChangeLoadingProgress(0.6f);
 
 	cgs.media.hud_bl[1] = trap_R_RegisterShaderNoMip("hud/bl_red");
@@ -1158,6 +1156,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.wakeMarkShader = trap_R_RegisterShader("wake");
 	cgs.media.waterMarkShader = trap_R_RegisterShader("waterMark");
 	cgs.media.kmaMarkShader = trap_R_RegisterShader("kmaMark");
+	cgs.media.foamShader = trap_R_RegisterShader("gfx/damage/foam_mrk");
 
 	// register the inline models
 	cgs.numInlineModels = trap_CM_NumInlineModels();

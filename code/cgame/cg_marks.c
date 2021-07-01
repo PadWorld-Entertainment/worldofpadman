@@ -157,7 +157,7 @@ void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, 
 		next = mp->nextMark;
 		if (temporary)
 			break; // keep all marks if the new one is just the shadow
-		if (mp->markShader == cgs.media.SchaumShader)
+		if (mp->markShader == cgs.media.foamShader)
 			continue; // just forward the slick-ents
 		VectorSubtract(mp->origin, origin, delta);
 		if (radius <= mp->radius + 4 && VectorLength(delta) < (radius + mp->radius) * MIN_MARK_DISTANCE) {
@@ -186,7 +186,7 @@ void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, 
 	numFragments = trap_CM_MarkFragments(4, (void *)originalPoints, projection, MAX_MARK_POINTS, markPoints[0],
 										 MAX_MARK_FRAGMENTS, markFragments);
 
-	if (!numFragments && markShader == cgs.media.SchaumShader) {
+	if (!numFragments && markShader == cgs.media.foamShader) {
 		numFragments = 1;
 		markFragments->firstPoint = 0;
 		markFragments->numPoints = 4;
@@ -267,7 +267,7 @@ void CG_AddMarks(void) {
 		// still have it
 		next = mp->nextMark;
 
-		if (mp->markShader == cgs.media.SchaumShader) {
+		if (mp->markShader == cgs.media.foamShader) {
 			if (cg.time > mp->time + 10000) {
 				CG_FreeMarkPoly(mp);
 				continue;

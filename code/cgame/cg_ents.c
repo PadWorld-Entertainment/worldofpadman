@@ -161,7 +161,7 @@ static void CG_General(centity_t *cent) {
 	if (s1->weapon == 23) // extreeeeeeeeeeem-varmissbrauching =)
 	{
 		if (cent->miscTime != 1) // misbraucht ;)
-			CG_ImpactMark(/*cgs.media.energyMarkShader*/ cgs.media.SchaumShader, s1->origin, s1->angles, s1->time2,
+			CG_ImpactMark(/*cgs.media.energyMarkShader*/ cgs.media.foamShader, s1->origin, s1->angles, s1->time2,
 						  0.5f, 0.5f, 1, 1, qfalse, s1->generic1, qfalse);
 		cent->miscTime = 1;
 	}

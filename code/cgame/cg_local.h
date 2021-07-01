@@ -859,7 +859,7 @@ typedef struct {
 	qhandle_t zoomKMAaura;
 	qhandle_t zoomKMAbluescreen;
 
-	qhandle_t SchaumShader;
+	qhandle_t foamShader;
 	qhandle_t StationRingShader;
 	qhandle_t PadPowerShader;
 	qhandle_t PunchyPadPowerSkin;
