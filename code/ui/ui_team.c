@@ -26,10 +26,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "ui_local.h"
 
-#define ID_JOINRED 100
-#define ID_JOINBLUE 101
-#define ID_JOINGAME 102
-#define ID_SPECTATE 103
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
+
+#define ID_BACK 10
+#define ID_JOINRED 11
+#define ID_JOINBLUE 12
+#define ID_JOINGAME 13
+#define ID_SPECTATE 14
 
 typedef struct {
 	menuframework_s menu;
@@ -37,6 +41,7 @@ typedef struct {
 	menutext_s joinblue;
 	menutext_s joingame;
 	menutext_s spectate;
+	menubitmap_s back;
 } teammain_t;
 
 static teammain_t s_teammain;
@@ -70,6 +75,12 @@ static void TeamMain_MenuEvent(void *ptr, int event) {
 	case ID_SPECTATE:
 		trap_Cmd_ExecuteText(EXEC_APPEND, "cmd team spectator\n");
 		UI_ForceMenuOff();
+		break;
+
+	case ID_BACK:
+		if (event != QM_ACTIVATED)
+			break;
+		UI_PopMenu();
 		break;
 	}
 }
@@ -182,6 +193,18 @@ void TeamMain_MenuInit(void) {
 	s_teammain.spectate.color = colorBlack;
 	s_teammain.spectate.focuscolor = colorDkLilac;
 
+	s_teammain.back.generic.type = MTYPE_BITMAP;
+	s_teammain.back.generic.name = BACK0;
+	s_teammain.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_teammain.back.generic.x = 225;
+	s_teammain.back.generic.y = 340;
+	s_teammain.back.generic.id = ID_BACK;
+	s_teammain.back.generic.callback = TeamMain_MenuEvent;
+	s_teammain.back.width = 50;
+	s_teammain.back.height = 20;
+	s_teammain.back.focuspic = BACK1;
+	s_teammain.back.focuspicinstead = qtrue;
+
 	trap_GetConfigString(CS_SERVERINFO, info, sizeof(info));
 	gametype = atoi(Info_ValueForKey(info, "g_gametype"));
 
@@ -199,6 +222,7 @@ void TeamMain_MenuInit(void) {
 	Menu_AddItem(&s_teammain.menu, (void *)&s_teammain.joinblue);
 	Menu_AddItem(&s_teammain.menu, (void *)&s_teammain.joingame);
 	Menu_AddItem(&s_teammain.menu, (void *)&s_teammain.spectate);
+	Menu_AddItem(&s_teammain.menu, (void *)&s_teammain.back);
 }
 
 /*
@@ -207,6 +231,8 @@ TeamMain_Cache
 ===============
 */
 void TeamMain_Cache(void) {
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 }
 
 /*

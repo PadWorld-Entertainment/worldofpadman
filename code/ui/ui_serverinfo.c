@@ -2,27 +2,24 @@
 //
 #include "ui_local.h"
 
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 #define ARROWUP0 "menu/arrows/headyel_up0"
 #define ARROWUP1 "menu/arrows/headyel_up1"
 #define ARROWDN0 "menu/arrows/headyel_dn0"
 #define ARROWDN1 "menu/arrows/headyel_dn1"
 
-static char *serverinfo_artlist[] = {ARROWUP0, ARROWUP1, ARROWDN0, ARROWDN1,
-
-									 NULL};
-
-#define ID_ADD 100
-#define ID_BACK 101
-
-#define ID_SCROLL_UP 102
-#define ID_SCROLL_DOWN 103
+#define ID_BACK 10
+#define ID_ADD 11
+#define ID_SCROLL_UP 12
+#define ID_SCROLL_DOWN 13
 
 typedef struct {
 	menuframework_s menu;
 
 	menubitmap1024s_s arrowup;
 	menubitmap1024s_s arrowdown;
-	menutext_s back;
+	menubitmap_s back;
 
 	menutext_s add;
 	char info[MAX_INFO_STRING];
@@ -92,7 +89,6 @@ static void ServerInfo_Event(void *ptr, int event) {
 	case ID_BACK:
 		if (event != QM_ACTIVATED)
 			break;
-
 		UI_PopMenu();
 		break;
 
@@ -200,22 +196,6 @@ static sfxHandle_t ServerInfo_MenuKey(int key) {
 
 /*
 =================
-ServerInfo_Cache
-=================
-*/
-void ServerInfo_Cache(void) {
-	int i;
-
-	// touch all our pics
-	for (i = 0;; i++) {
-		if (!serverinfo_artlist[i])
-			break;
-		trap_R_RegisterShaderNoMip(serverinfo_artlist[i]);
-	}
-}
-
-/*
-=================
 UI_ServerInfoMenu
 =================
 */
@@ -268,17 +248,17 @@ void UI_ServerInfoMenu(void) {
 		s_serverinfo.add.generic.flags |= QMF_GRAYED;
 	}
 
-	s_serverinfo.back.generic.type = MTYPE_TEXTS;
-	s_serverinfo.back.fontHeight = 16.0f;
-	//	s_serverinfo.back.generic.flags		= QMF_PULSEIFFOCUS;
-	s_serverinfo.back.generic.callback = ServerInfo_Event;
+	s_serverinfo.back.generic.type = MTYPE_BITMAP;
+	s_serverinfo.back.generic.name = BACK0;
+	s_serverinfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_serverinfo.back.generic.x = 225;
+	s_serverinfo.back.generic.y = 340;
 	s_serverinfo.back.generic.id = ID_BACK;
-	s_serverinfo.back.generic.x = 245;
-	s_serverinfo.back.generic.y = 315;
-	s_serverinfo.back.string = "BACK";
-	s_serverinfo.back.style = UI_SMALLFONT;
-	s_serverinfo.back.color = color_black;
-	s_serverinfo.back.focuscolor = color_orange;
+	s_serverinfo.back.generic.callback = ServerInfo_Event;
+	s_serverinfo.back.width = 50;
+	s_serverinfo.back.height = 20;
+	s_serverinfo.back.focuspic = BACK1;
+	s_serverinfo.back.focuspicinstead = qtrue;
 
 	trap_GetConfigString(CS_SERVERINFO, s_serverinfo.info, MAX_INFO_STRING);
 
@@ -296,4 +276,14 @@ void UI_ServerInfoMenu(void) {
 	Menu_AddItem(&s_serverinfo.menu, (void *)&s_serverinfo.back);
 
 	UI_PushMenu(&s_serverinfo.menu);
+}
+
+/*
+=================
+ServerInfo_Cache
+=================
+*/
+void ServerInfo_Cache(void) {
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 }

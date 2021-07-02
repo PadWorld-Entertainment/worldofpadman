@@ -10,6 +10,8 @@ CALL VOTE MENU
 
 #include "ui_local.h"
 
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 #define ARROWUP0 "menu/arrows/headyel_up0"
 #define ARROWUP1 "menu/arrows/headyel_up1"
 #define ARROWDN0 "menu/arrows/headyel_dn0"
@@ -47,7 +49,7 @@ typedef struct {
 	menulist_s votetype;
 	menufield_s value;
 	menutext_s go;
-	menutext_s back;
+	menubitmap_s back;
 	menutext_s voteyes;
 	menutext_s voteno;
 	menubitmap1024s_s arrowup;
@@ -149,7 +151,6 @@ static void UI_CallVote_BackEvent(void *ptr, int event) {
 	if (event != QM_ACTIVATED) {
 		return;
 	}
-
 	UI_PopMenu();
 }
 
@@ -550,16 +551,17 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.go.color = color_black;
 	s_callVoteMenu.go.focuscolor = color_orange;
 
-	s_callVoteMenu.back.generic.type = MTYPE_TEXTS;
-	s_callVoteMenu.back.fontHeight = 16.0f;
-	s_callVoteMenu.back.generic.callback = UI_CallVote_BackEvent;
-	s_callVoteMenu.back.generic.id = ID_BACK;
-	s_callVoteMenu.back.generic.x = 230;
+	s_callVoteMenu.back.generic.type = MTYPE_BITMAP;
+	s_callVoteMenu.back.generic.name = BACK0;
+	s_callVoteMenu.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_callVoteMenu.back.generic.x = 225;
 	s_callVoteMenu.back.generic.y = 340;
-	s_callVoteMenu.back.string = "BACK";
-	s_callVoteMenu.back.style = UI_SMALLFONT;
-	s_callVoteMenu.back.color = color_black;
-	s_callVoteMenu.back.focuscolor = color_orange;
+	s_callVoteMenu.back.generic.id = ID_BACK;
+	s_callVoteMenu.back.generic.callback = UI_CallVote_BackEvent;
+	s_callVoteMenu.back.width = 50;
+	s_callVoteMenu.back.height = 20;
+	s_callVoteMenu.back.focuspic = BACK1;
+	s_callVoteMenu.back.focuspicinstead = qtrue;
 
 	Menu_AddItem(&s_callVoteMenu.menu, &s_callVoteMenu.votetype);
 	Menu_AddItem(&s_callVoteMenu.menu, &s_callVoteMenu.arrowup);
@@ -585,7 +587,8 @@ UI_CallVote_Cache
 =================
 */
 static void UI_CallVote_Cache(void) {
-
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 }
 
 /*

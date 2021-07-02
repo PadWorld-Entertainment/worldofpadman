@@ -30,6 +30,8 @@ ADD BOTS MENU
 
 #include "ui_local.h"
 
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 #define ARROWUP0 "menu/arrows/headyel_up0"
 #define ARROWUP1 "menu/arrows/headyel_up1"
 #define ARROWDN0 "menu/arrows/headyel_dn0"
@@ -62,7 +64,7 @@ typedef struct {
 	menulist_s team;
 
 	menutext_s go;
-	menutext_s back;
+	menubitmap_s back;
 	menubitmap1024s_s arrowup;
 	menubitmap1024s_s arrowdown;
 
@@ -351,17 +353,17 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.go.color = color_black;
 	addBotsMenuInfo.go.focuscolor = color_orange;
 
-	addBotsMenuInfo.back.generic.type = MTYPE_TEXTS;
-	addBotsMenuInfo.back.fontHeight = 16.0f;
-	//	addBotsMenuInfo.back.generic.flags		= QMF_PULSEIFFOCUS;
-	addBotsMenuInfo.back.generic.callback = UI_AddBotsMenu_BackEvent;
+	addBotsMenuInfo.back.generic.type = MTYPE_BITMAP;
+	addBotsMenuInfo.back.generic.name = BACK0;
+	addBotsMenuInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	addBotsMenuInfo.back.generic.x = 225;
+	addBotsMenuInfo.back.generic.y = 340;
 	addBotsMenuInfo.back.generic.id = ID_BACK;
-	addBotsMenuInfo.back.generic.x = 245;
-	addBotsMenuInfo.back.generic.y = 315;
-	addBotsMenuInfo.back.string = "BACK";
-	addBotsMenuInfo.back.style = UI_SMALLFONT;
-	addBotsMenuInfo.back.color = color_black;
-	addBotsMenuInfo.back.focuscolor = color_orange;
+	addBotsMenuInfo.back.generic.callback = UI_AddBotsMenu_BackEvent;
+	addBotsMenuInfo.back.width = 50;
+	addBotsMenuInfo.back.height = 20;
+	addBotsMenuInfo.back.focuspic = BACK1;
+	addBotsMenuInfo.back.focuspicinstead = qtrue;
 
 	addBotsMenuInfo.baseBotNum = 0;
 	addBotsMenuInfo.selectedBotNum = 0;
@@ -388,7 +390,8 @@ UI_AddBots_Cache
 =================
 */
 void UI_AddBots_Cache(void) {
-
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 }
 
 /*
