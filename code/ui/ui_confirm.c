@@ -30,14 +30,13 @@ CONFIRMATION MENU
 
 #include "ui_local.h"
 
-#define ART_CONFIRM_FRAME "menu/art/cut_frame"
-#define CONF_YES0 "menu/exit/yes0"
-#define CONF_YES1 "menu/exit/yes1"
-#define CONF_NO0 "menu/exit/no0"
-#define CONF_NO1 "menu/exit/no1"
+#define YES0 "menu/buttons/yes0_ws"
+#define YES1 "menu/buttons/yes1"
+#define NO0 "menu/buttons/no0_ws"
+#define NO1 "menu/buttons/no1"
 
-#define ID_CONFIRM_NO 10
-#define ID_CONFIRM_YES 11
+#define ID_NO 10
+#define ID_YES 11
 
 typedef struct {
 	menuframework_s menu;
@@ -46,7 +45,6 @@ typedef struct {
 	menubitmap_s no;
 	menutext_s ok;
 
-	int slashX;
 	const char *question;
 	void (*draw)(void);
 	void (*action)(qboolean result);
@@ -71,7 +69,7 @@ static void ConfirmMenu_Event(void *ptr, int event) {
 
 	UI_PopMenu();
 
-	if (((menucommon_s *)ptr)->id == ID_CONFIRM_NO) {
+	if (((menucommon_s *)ptr)->id == ID_NO) {
 		result = qfalse;
 	} else {
 		result = qtrue;
@@ -128,35 +126,16 @@ static void ConfirmMenu_Draw(void) {
 
 /*
 =================
-ConfirmMenu_Cache
-=================
-*/
-void ConfirmMenu_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_CONFIRM_FRAME);
-}
-
-/*
-=================
 UI_ConfirmMenu_Stlye
 =================
 */
 static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(void), void (*action)(qboolean result)) {
 	uiClientState_t cstate;
-	int n1, n2, n3;
-	int l1, l2, l3;
 
 	// zero set all our globals
 	memset(&s_confirm, 0, sizeof(s_confirm));
 
 	ConfirmMenu_Cache();
-
-	n1 = UI_ProportionalStringWidth("YES/NO");
-	n2 = UI_ProportionalStringWidth("YES") + PROP_GAP_WIDTH;
-	n3 = UI_ProportionalStringWidth("/") + PROP_GAP_WIDTH;
-	l1 = 320 - (n1 / 2);
-	l2 = l1 + n2;
-	l3 = l2 + n3;
-	s_confirm.slashX = l2;
 
 	s_confirm.question = question;
 	s_confirm.draw = draw;
@@ -175,27 +154,27 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 	}
 
 	s_confirm.yes.generic.type = MTYPE_BITMAP;
-	s_confirm.yes.generic.name = CONF_YES0;
+	s_confirm.yes.generic.name = YES0;
 	s_confirm.yes.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_confirm.yes.generic.callback = ConfirmMenu_Event;
-	s_confirm.yes.generic.id = ID_CONFIRM_YES;
-	s_confirm.yes.generic.x = l1 + 15;
-	s_confirm.yes.generic.y = 264;
-	s_confirm.yes.width = 43;  // 65;
-	s_confirm.yes.height = 30; // 40;
-	s_confirm.yes.focuspic = CONF_YES1;
+	s_confirm.yes.generic.id = ID_YES;
+	s_confirm.yes.generic.x = 260;
+	s_confirm.yes.generic.y = 260;
+	s_confirm.yes.width = 60;
+	s_confirm.yes.height = 30;
+	s_confirm.yes.focuspic = YES1;
 	s_confirm.yes.focuspicinstead = qtrue;
 
 	s_confirm.no.generic.type = MTYPE_BITMAP;
-	s_confirm.no.generic.name = CONF_NO0;
+	s_confirm.no.generic.name = NO0;
 	s_confirm.no.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_confirm.no.generic.callback = ConfirmMenu_Event;
-	s_confirm.no.generic.id = ID_CONFIRM_NO;
-	s_confirm.no.generic.x = l3;
-	s_confirm.no.generic.y = 264;
-	s_confirm.no.width = 33;  // 45;
-	s_confirm.no.height = 30; // 40;
-	s_confirm.no.focuspic = CONF_NO1;
+	s_confirm.no.generic.id = ID_NO;
+	s_confirm.no.generic.x = 335;
+	s_confirm.no.generic.y = 260;
+	s_confirm.no.width = 30;
+	s_confirm.no.height = 30;
+	s_confirm.no.focuspic = NO1;
 	s_confirm.no.focuspicinstead = qtrue;
 
 	Menu_AddItem(&s_confirm.menu, &s_confirm.yes);
@@ -204,6 +183,18 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 	UI_PushMenu(&s_confirm.menu);
 
 	Menu_SetCursorToItem(&s_confirm.menu, &s_confirm.no);
+}
+
+/*
+=================
+ConfirmMenu_Cache
+=================
+*/
+void ConfirmMenu_Cache(void) {
+	trap_R_RegisterShaderNoMip(YES0);
+	trap_R_RegisterShaderNoMip(YES1);
+	trap_R_RegisterShaderNoMip(NO0);
+	trap_R_RegisterShaderNoMip(NO1);
 }
 
 /*
