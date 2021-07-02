@@ -201,7 +201,7 @@ void TeamMain_MenuInit(void) {
 	s_teammain.back.generic.id = ID_BACK;
 	s_teammain.back.generic.callback = TeamMain_MenuEvent;
 	s_teammain.back.width = 50;
-	s_teammain.back.height = 20;
+	s_teammain.back.height = 25;
 	s_teammain.back.focuspic = BACK1;
 	s_teammain.back.focuspicinstead = qtrue;
 

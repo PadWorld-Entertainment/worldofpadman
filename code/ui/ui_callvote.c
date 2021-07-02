@@ -559,7 +559,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.back.generic.id = ID_BACK;
 	s_callVoteMenu.back.generic.callback = UI_CallVote_BackEvent;
 	s_callVoteMenu.back.width = 50;
-	s_callVoteMenu.back.height = 20;
+	s_callVoteMenu.back.height = 25;
 	s_callVoteMenu.back.focuspic = BACK1;
 	s_callVoteMenu.back.focuspicinstead = qtrue;
 

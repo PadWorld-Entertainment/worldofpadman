@@ -256,7 +256,7 @@ void UI_ServerInfoMenu(void) {
 	s_serverinfo.back.generic.id = ID_BACK;
 	s_serverinfo.back.generic.callback = ServerInfo_Event;
 	s_serverinfo.back.width = 50;
-	s_serverinfo.back.height = 20;
+	s_serverinfo.back.height = 25;
 	s_serverinfo.back.focuspic = BACK1;
 	s_serverinfo.back.focuspicinstead = qtrue;
 

@@ -361,7 +361,7 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.back.generic.id = ID_BACK;
 	addBotsMenuInfo.back.generic.callback = UI_AddBotsMenu_BackEvent;
 	addBotsMenuInfo.back.width = 50;
-	addBotsMenuInfo.back.height = 20;
+	addBotsMenuInfo.back.height = 25;
 	addBotsMenuInfo.back.focuspic = BACK1;
 	addBotsMenuInfo.back.focuspicinstead = qtrue;
 

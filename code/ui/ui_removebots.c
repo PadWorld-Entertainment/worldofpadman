@@ -353,7 +353,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.back.generic.id = ID_BACK;
 	removeBotsMenuInfo.back.generic.callback = UI_RemoveBotsMenu_BackEvent;
 	removeBotsMenuInfo.back.width = 50;
-	removeBotsMenuInfo.back.height = 20;
+	removeBotsMenuInfo.back.height = 25;
 	removeBotsMenuInfo.back.focuspic = BACK1;
 	removeBotsMenuInfo.back.focuspicinstead = qtrue;
 
