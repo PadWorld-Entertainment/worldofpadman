@@ -538,16 +538,15 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.voteno.color = color_black;
 	s_callVoteMenu.voteno.focuscolor = color_orange;
 
-	y = 300;
 	s_callVoteMenu.go.generic.type = MTYPE_TEXTS;
 	s_callVoteMenu.go.fontHeight = 24.0f;
 	s_callVoteMenu.go.generic.flags = QMF_RIGHT_JUSTIFY;
 	s_callVoteMenu.go.generic.callback = UI_CallVote_GoEvent;
 	s_callVoteMenu.go.generic.id = ID_GO;
-	s_callVoteMenu.go.generic.x = 360;
-	s_callVoteMenu.go.generic.y = (340 - 4);
+	s_callVoteMenu.go.generic.x = 320;
+	s_callVoteMenu.go.generic.y = 315;
 	s_callVoteMenu.go.string = "GO!";
-	s_callVoteMenu.go.style = (UI_SMALLFONT | UI_RIGHT);
+	s_callVoteMenu.go.style = (UI_CENTER | UI_SMALLFONT);
 	s_callVoteMenu.go.color = color_black;
 	s_callVoteMenu.go.focuscolor = color_orange;
 

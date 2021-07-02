@@ -340,16 +340,15 @@ static void UI_AddBotsMenu_Init(void) {
 		addBotsMenuInfo.team.generic.name = "Color:";
 	}
 
-	y += SMALLCHAR_HEIGHT;
 	addBotsMenuInfo.go.generic.type = MTYPE_TEXTS;
 	addBotsMenuInfo.go.fontHeight = 24.0f;
 	addBotsMenuInfo.go.generic.flags = QMF_RIGHT_JUSTIFY; //|QMF_PULSEIFFOCUS;
 	addBotsMenuInfo.go.generic.callback = UI_AddBotsMenu_FightEvent;
 	addBotsMenuInfo.go.generic.id = ID_GO;
-	addBotsMenuInfo.go.generic.x = 380;
-	addBotsMenuInfo.go.generic.y = y;
+	addBotsMenuInfo.go.generic.x = 320;
+	addBotsMenuInfo.go.generic.y = 315;
 	addBotsMenuInfo.go.string = "ADD";
-	addBotsMenuInfo.go.style = UI_SMALLFONT | UI_RIGHT;
+	addBotsMenuInfo.go.style = (UI_CENTER | UI_SMALLFONT);
 	addBotsMenuInfo.go.color = color_black;
 	addBotsMenuInfo.go.focuscolor = color_orange;
 

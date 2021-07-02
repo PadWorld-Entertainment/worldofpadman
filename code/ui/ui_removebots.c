@@ -326,10 +326,10 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.delete.generic.flags = QMF_RIGHT_JUSTIFY; //|QMF_PULSEIFFOCUS;
 	removeBotsMenuInfo.delete.generic.callback = UI_RemoveBotsMenu_DeleteEvent;
 	removeBotsMenuInfo.delete.generic.id = ID_DELETE;
-	removeBotsMenuInfo.delete.generic.x = 380;
-	removeBotsMenuInfo.delete.generic.y = 280;
+	removeBotsMenuInfo.delete.generic.x = 320;
+	removeBotsMenuInfo.delete.generic.y = 290;
 	removeBotsMenuInfo.delete.string = "REMOVE";
-	removeBotsMenuInfo.delete.style = UI_SMALLFONT | UI_RIGHT;
+	removeBotsMenuInfo.delete.style = (UI_CENTER | UI_SMALLFONT);
 	removeBotsMenuInfo.delete.color = color_black;
 	removeBotsMenuInfo.delete.focuscolor = color_orange;
 
@@ -338,10 +338,10 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.removeAll.generic.flags = QMF_RIGHT_JUSTIFY; //|QMF_PULSEIFFOCUS;
 	removeBotsMenuInfo.removeAll.generic.callback = UI_RemoveBotsMenu_DeleteEvent;
 	removeBotsMenuInfo.removeAll.generic.id = ID_REMOVEALL;
-	removeBotsMenuInfo.removeAll.generic.x = 380;
-	removeBotsMenuInfo.removeAll.generic.y = 280 + 26;
+	removeBotsMenuInfo.removeAll.generic.x = 320;
+	removeBotsMenuInfo.removeAll.generic.y = 290 + 26;
 	removeBotsMenuInfo.removeAll.string = "REMOVE ALL";
-	removeBotsMenuInfo.removeAll.style = UI_SMALLFONT | UI_RIGHT;
+	removeBotsMenuInfo.removeAll.style = (UI_CENTER | UI_SMALLFONT);
 	removeBotsMenuInfo.removeAll.color = color_black;
 	removeBotsMenuInfo.removeAll.focuscolor = color_orange;
 

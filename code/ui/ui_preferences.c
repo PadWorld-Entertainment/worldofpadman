@@ -197,7 +197,6 @@ static void UpdateGlowColorFlags(void) {
 static void Preferences_SetMenuItems(void) {
 	int notify;
 	int chatheight;
-	int chattime;
 	int cg_iconsCvarValue = (int)trap_Cvar_VariableValue("cg_icons");
 
 	notify = UI_GetCvarInt("con_notifytime");

@@ -30,7 +30,7 @@ typedef struct {
 	menuradiobutton_s muteAll;
 	menulist_s sendTarget;
 
-	menutext_s back;
+	menubitmap_s back;
 	menubitmap1024s_s arrowup;
 	menubitmap1024s_s arrowdown;
 
