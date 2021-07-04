@@ -540,7 +540,7 @@ static void UI_CallVoteMenu_Init(void) {
 
 	s_callVoteMenu.go.generic.type = MTYPE_TEXTS;
 	s_callVoteMenu.go.fontHeight = 24.0f;
-	s_callVoteMenu.go.generic.flags = QMF_RIGHT_JUSTIFY;
+	s_callVoteMenu.go.generic.flags = QMF_CENTER_JUSTIFY;
 	s_callVoteMenu.go.generic.callback = UI_CallVote_GoEvent;
 	s_callVoteMenu.go.generic.id = ID_GO;
 	s_callVoteMenu.go.generic.x = 320;

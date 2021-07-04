@@ -342,7 +342,7 @@ static void UI_AddBotsMenu_Init(void) {
 
 	addBotsMenuInfo.go.generic.type = MTYPE_TEXTS;
 	addBotsMenuInfo.go.fontHeight = 24.0f;
-	addBotsMenuInfo.go.generic.flags = QMF_RIGHT_JUSTIFY; //|QMF_PULSEIFFOCUS;
+	addBotsMenuInfo.go.generic.flags = QMF_CENTER_JUSTIFY; //|QMF_PULSEIFFOCUS;
 	addBotsMenuInfo.go.generic.callback = UI_AddBotsMenu_FightEvent;
 	addBotsMenuInfo.go.generic.id = ID_GO;
 	addBotsMenuInfo.go.generic.x = 320;

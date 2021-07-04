@@ -323,7 +323,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 
 	removeBotsMenuInfo.delete.generic.type = MTYPE_TEXTS;
 	removeBotsMenuInfo.delete.fontHeight = 24.0f;
-	removeBotsMenuInfo.delete.generic.flags = QMF_RIGHT_JUSTIFY; //|QMF_PULSEIFFOCUS;
+	removeBotsMenuInfo.delete.generic.flags = QMF_CENTER_JUSTIFY; //|QMF_PULSEIFFOCUS;
 	removeBotsMenuInfo.delete.generic.callback = UI_RemoveBotsMenu_DeleteEvent;
 	removeBotsMenuInfo.delete.generic.id = ID_DELETE;
 	removeBotsMenuInfo.delete.generic.x = 320;
@@ -335,7 +335,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 
 	removeBotsMenuInfo.removeAll.generic.type = MTYPE_TEXTS;
 	removeBotsMenuInfo.removeAll.fontHeight = 14.4f;
-	removeBotsMenuInfo.removeAll.generic.flags = QMF_RIGHT_JUSTIFY; //|QMF_PULSEIFFOCUS;
+	removeBotsMenuInfo.removeAll.generic.flags = QMF_CENTER_JUSTIFY; //|QMF_PULSEIFFOCUS;
 	removeBotsMenuInfo.removeAll.generic.callback = UI_RemoveBotsMenu_DeleteEvent;
 	removeBotsMenuInfo.removeAll.generic.id = ID_REMOVEALL;
 	removeBotsMenuInfo.removeAll.generic.x = 320;
