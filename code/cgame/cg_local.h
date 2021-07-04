@@ -980,8 +980,8 @@ typedef struct {
 
 	// scoreboard headers
 	qhandle_t scoreboardBG;
-	qhandle_t scoreboardlivesleft;
-	qhandle_t scoreboardscore_lives;
+	qhandle_t scoreboardLives;
+	qhandle_t scoreboardScoreLives;
 
 	qhandle_t scoreboardName;
 	qhandle_t scoreboardPing;

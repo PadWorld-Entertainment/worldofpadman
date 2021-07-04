@@ -950,10 +950,10 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.deferShader = trap_R_RegisterShaderNoMip("gfx/2d/defer");
 
 	cgs.media.scoreboardBG = trap_R_RegisterShaderNoMip("menu/bg/scoreboard");
-	cgs.media.scoreboardName = trap_R_RegisterShaderNoMip("menu/tab/name");
-	cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip("menu/tab/ping");
-	cgs.media.scoreboardScore = trap_R_RegisterShaderNoMip("menu/tab/score");
-	cgs.media.scoreboardTime = trap_R_RegisterShaderNoMip("menu/tab/time");
+	cgs.media.scoreboardName = trap_R_RegisterShaderNoMip("menu/headers/name");
+	cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip("menu/headers/ping");
+	cgs.media.scoreboardScore = trap_R_RegisterShaderNoMip("menu/headers/score");
+	cgs.media.scoreboardTime = trap_R_RegisterShaderNoMip("menu/headers/time");
 	cgs.media.voiceIcon = trap_R_RegisterShaderNoMip("hud/hint_voicechat");
 
 	if (cgs.gametype == GT_FREEZETAG) {
@@ -967,8 +967,8 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.healthstationIcon = trap_R_RegisterShaderNoMip("icons/hint_healthstation");
 
 	if (cgs.gametype == GT_LPS || cg_buildScript.integer) {
-		cgs.media.scoreboardlivesleft = trap_R_RegisterShaderNoMip("menu/tab/lives");
-		cgs.media.scoreboardscore_lives = trap_R_RegisterShaderNoMip("menu/tab/score_lives");
+		cgs.media.scoreboardLives = trap_R_RegisterShaderNoMip("menu/headers/lives");
+		cgs.media.scoreboardScoreLives = trap_R_RegisterShaderNoMip("menu/headers/scorelives");
 
 		cgs.media.lpsIcon = trap_R_RegisterShaderNoMip("icons/hint_lpsarrow");
 		cgs.media.lpsIconLead = trap_R_RegisterShaderNoMip("icons/hint_lpsarrowlead");
