@@ -1556,10 +1556,9 @@ static void UI_BotSelectMenu_Init(void) {
 		botSelectInfo.selectedbotteams[i].generic.callback = UI_BotSelectMenu_SelectBotTeam;
 	}
 
-	y = y * 768 / 480;
 	botSelectInfo.arrowup.generic.type = MTYPE_BITMAP1024S;
 	botSelectInfo.arrowup.x = 1024 - 50;
-	botSelectInfo.arrowup.y = y; // 480-(10*MAX_SELECTLISTBOTS)-20;
+	botSelectInfo.arrowup.y = 362;
 	botSelectInfo.arrowup.w = 38;
 	botSelectInfo.arrowup.h = 98;
 	botSelectInfo.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
@@ -1568,7 +1567,7 @@ static void UI_BotSelectMenu_Init(void) {
 
 	botSelectInfo.arrowdown.generic.type = MTYPE_BITMAP1024S;
 	botSelectInfo.arrowdown.x = 1024 - 50;
-	botSelectInfo.arrowdown.y = y + (25.6f * MAX_SELECTLISTBOTS) - 98; // 480+20;
+	botSelectInfo.arrowdown.y = 495;
 	botSelectInfo.arrowdown.w = 38;
 	botSelectInfo.arrowdown.h = 98;
 	botSelectInfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
