@@ -36,7 +36,9 @@ if (MSVC)
 	# 4061 explicit switch case enum mention
 	# 4242 possible loss of data (convert int to short)
 	# 4464 relative include path
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4267 /wd4244 /wd4305 /wd4820 /wd5045 /wd4668 /wd4061 /wd4242 /wd4464")
+	# 4619 warning id is not available
+	# 4245 return signed/unsigned conflict
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4267 /wd4244 /wd4305 /wd4820 /wd5045 /wd4668 /wd4061 /wd4242 /wd4464 /wd4619 /wd4245")
 	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()
 
