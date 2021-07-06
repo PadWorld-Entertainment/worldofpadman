@@ -463,7 +463,7 @@ extern void test(int tok, char set[]);
 extern void expect(int tok);
 extern void skipto(int tok, char set[]);
 extern void error(const char *, ...);
-extern int fatal(const char *, const char *, int);
+extern void fatal(const char *, const char *, int);
 extern void warning(const char *, ...);
 
 typedef void (*Apply)(void *, void *, void *);

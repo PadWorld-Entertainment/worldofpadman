@@ -70,13 +70,12 @@ void skipto(int tok, char set[]) {
 		fprint(stderr, "\n");
 }
 /* fatal - issue fatal error message and exit */
-int fatal(const char *name, const char *fmt, int n) {
+void fatal(const char *name, const char *fmt, int n) {
 	print("\n");
 	errcnt = -1;
 	error("compiler error in %s--", name);
 	fprint(stderr, fmt, n);
 	exit(EXIT_FAILURE);
-	return 0;
 }
 
 /* printtoken - print current token preceded by a space */
