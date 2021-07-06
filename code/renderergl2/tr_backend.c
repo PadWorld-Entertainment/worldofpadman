@@ -388,6 +388,7 @@ void RB_RenderDrawSurfList(drawSurf_t *drawSurfs, int numDrawSurfs) {
 	// draw everything
 	oldEntityNum = -1;
 	backEnd.currentEntity = &tr.worldEntity;
+	shader = NULL;
 	oldShader = NULL;
 	oldFogNum = -1;
 	oldDepthRange = qfalse;
