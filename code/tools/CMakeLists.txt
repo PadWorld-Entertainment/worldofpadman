@@ -1,3 +1,9 @@
+
+if (MSVC)
+	# 4456 variable shadowing
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4456 /wd4311 /wd4312 /wd4255 /wd4389 /wd4459 /wd4996 /wd4018 /wd4210 /wd4457")
+endif()
+
 add_executable(stringify stringify.c)
 add_executable(bintoc bintoc.c)
 
