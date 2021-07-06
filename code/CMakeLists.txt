@@ -194,7 +194,7 @@ function(add_qvm TARGET)
 			add_custom_command(
 				OUTPUT ${q3asm_outfile}
 				COMMAND q3lcc
-				ARGS ${compileflags} -o "${q3asm_outfile}" "\"${CMAKE_CURRENT_SOURCE_DIR}\"/${srcfile}"
+				ARGS ${compileflags} -o "\"${q3asm_outfile}\"" "\"${CMAKE_CURRENT_SOURCE_DIR}/${srcfile}\""
 				DEPENDS q3lcc ${CMAKE_CURRENT_SOURCE_DIR}/${srcfile}
 			)
 			set_source_files_properties(${q3asm_outfile} PROPERTIES GENERATED TRUE)
