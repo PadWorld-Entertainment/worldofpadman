@@ -133,7 +133,6 @@ cvar_t *r_specularMapping;
 cvar_t *r_deluxeMapping;
 cvar_t *r_parallaxMapping;
 cvar_t *r_parallaxMapOffset;
-cvar_t *r_parallaxOffset;
 cvar_t *r_parallaxMapShadows;
 cvar_t *r_cubeMapping;
 cvar_t *r_cubemapSize;
