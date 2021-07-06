@@ -2467,7 +2467,7 @@ void CG_ResetPlayerEntity(centity_t *cent) {
 	}
 }
 
-void CG_UpdateVoipTeamIDs() {
+void CG_UpdateVoipTeamIDs(void) {
 	int i;
 	int team;
 	char oldTarget[256];

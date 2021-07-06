@@ -76,7 +76,7 @@ static void *GPA(char *str) {
 CL_cURL_Init
 =================
 */
-qboolean CL_cURL_Init() {
+qboolean CL_cURL_Init(void) {
 #ifdef USE_CURL_DLOPEN
 	if (cURLLib)
 		return qtrue;

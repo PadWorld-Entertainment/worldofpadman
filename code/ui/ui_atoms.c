@@ -1309,7 +1309,7 @@ void UI_UpdateScreen(void) {
 #define WOP_INGAME_B 640
 #define WOP_INGAME_H 480
 
-void UI_DrawIngameBG() {
+void UI_DrawIngameBG(void) {
 	float wsCorrection = (uis.glconfig.vidWidth * 480.0f / (float)uis.glconfig.vidHeight) - 640.0f;
 	if (wsCorrection < 0)
 		wsCorrection = 0.0f;

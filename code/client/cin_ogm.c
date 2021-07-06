@@ -83,7 +83,7 @@ static int nextNeededVFrame(void);
 
 #define BPP 4
 
-static int init_xvid() {
+static int init_xvid(void) {
 	int ret;
 
 	xvid_gbl_init_t xvid_gbl_init;
@@ -151,7 +151,7 @@ static int dec_xvid(unsigned char *input, int input_size) {
 	return (ret);
 }
 
-static int shutdown_xvid() {
+static int shutdown_xvid(void) {
 	int ret = 0;
 
 	if (g_ogm.xvid_dec_handle)
@@ -307,7 +307,7 @@ static qboolean loadAudio(cinematics_t *cin) {
 			<0	-> error
 */
 #ifdef USE_CIN_XVID
-static int loadVideoFrameXvid() {
+static int loadVideoFrameXvid(void) {
 	int r = 0;
 	ogg_packet op;
 	int used_bytes = 0;

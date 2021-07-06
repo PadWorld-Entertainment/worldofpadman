@@ -62,7 +62,7 @@ void set_modelview_matrix(const float mv[16]) {
 	memcpy(s_modelview_matrix, mv, 64);
 }
 
-const float *getptr_modelview_matrix() {
+const float *getptr_modelview_matrix(void) {
 	return s_modelview_matrix;
 }
 

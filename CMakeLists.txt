@@ -30,7 +30,13 @@ if (MSVC)
 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /MANIFEST:NO")
 	# 4244 conversion from 'float' to 'int', possible loss of data
 	# 4305 truncation from 'double' to 'float'
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4267 /wd4244 /wd4305")
+	# 4820 padding
+	# 5045 spectre instruction
+	# 4668 unknown macro definition
+	# 4061 explicit switch case enum mention
+	# 4242 possible loss of data (convert int to short)
+	# 4464 relative include path
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4267 /wd4244 /wd4305 /wd4820 /wd5045 /wd4668 /wd4061 /wd4242 /wd4464")
 	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()
 

@@ -155,12 +155,6 @@ static void BotRecordNodeSwitch(bot_state_t *bs, const char *node, const char *s
 }
 
 // cyr
-char *LastNodeSwitch() {
-	if (numnodeswitches)
-		return nodeswitch[numnodeswitches - 1];
-	else
-		return "no switch";
-}
 
 /*
 ==================

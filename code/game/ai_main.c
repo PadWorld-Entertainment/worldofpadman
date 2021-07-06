@@ -554,7 +554,7 @@ static void ReadWaypointFile(void) {
 	ParseWaypointFile(buf);
 }
 
-void WaypointInit() {
+void WaypointInit(void) {
 	ReadWaypointFile();
 	// InitWpTravelTimes();
 }

@@ -1634,7 +1634,7 @@ static void UI_BotSelectMenu_Init(void) {
 UI_BotSelectMenu
 =================
 */
-void UI_BotSelectMenu() {
+void UI_BotSelectMenu(void) {
 	UI_BotSelectMenu_Init();
 	UI_PushMenu(&botSelectInfo.menu);
 }

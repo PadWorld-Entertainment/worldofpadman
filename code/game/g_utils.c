@@ -54,7 +54,7 @@ void AddRemap(const char *oldShader, const char *newShader, float timeOffset) {
 	}
 }
 
-const char *BuildShaderStateConfig() {
+const char *BuildShaderStateConfig(void) {
 	static char buff[MAX_STRING_CHARS * 4];
 	char out[(MAX_QPATH * 2) + 5];
 	int i;
@@ -684,7 +684,7 @@ void DebugLineDouble(vec3_t start, vec3_t end, int color) {
 	trap_DebugPolygonCreate(color, 4, morepoints);
 }
 
-void DeleteDebugLines() {
+void DeleteDebugLines(void) {
 	int i;
 	char buf[100];
 

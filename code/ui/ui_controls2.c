@@ -796,7 +796,7 @@ static void Controls_SetConfig(void) {
 	trap_Cmd_ExecuteText(EXEC_APPEND, "in_restart\n");
 }
 
-void SetDefaultBinds_onUnusedKeys() {
+void SetDefaultBinds_onUnusedKeys(void) {
 	bind_t *bindptr;
 	int i;
 	char buff[8];

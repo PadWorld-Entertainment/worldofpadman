@@ -160,7 +160,7 @@ void mumble_set_description(const char *description) {
 	mbstowcs(lm->description, description, len);
 }
 
-void mumble_unlink() {
+void mumble_unlink(void) {
 	if (!lm)
 		return;
 #ifdef WIN32

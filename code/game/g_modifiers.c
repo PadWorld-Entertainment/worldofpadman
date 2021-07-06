@@ -136,6 +136,6 @@ void Instagib_applyWeaponJumpKnockback(vec3_t origin, gentity_t *playerEnt, int 
 Returns WP_* index of the weapon that players are to be spawned
 with during instagib play
 */
-int Instagib_getSpawnWeapon() {
+int Instagib_getSpawnWeapon(void) {
 	return WP_KMA97; // for now, it's always KMA :)
 }
