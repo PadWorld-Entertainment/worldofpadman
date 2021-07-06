@@ -204,9 +204,9 @@ function(add_qvm TARGET)
 
 	set(QVM_PATH ${GAME_NAME}/vm/${TARGET}.qvm)
 	add_custom_command(
-		OUTPUT ${QVM_PATH}
+		OUTPUT "${ENGINE_BINARY_DIR}/${QVM_PATH}"
 		COMMAND q3asm
-		ARGS -o ${QVM_PATH} ${QVM_SRCS}
+		ARGS -o "${ENGINE_BINARY_DIR}/${QVM_PATH}" ${QVM_SRCS}
 		DEPENDS q3asm ${QVM_SRCS}
 	)
 	add_custom_target(qvm_${TARGET} DEPENDS ${QVM_PATH})
