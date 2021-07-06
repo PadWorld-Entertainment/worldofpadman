@@ -1,7 +1,7 @@
 
 if (MSVC)
 	# 4456 variable shadowing
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4456 /wd4311 /wd4312 /wd4255 /wd4389 /wd4459 /wd4996 /wd4018 /wd4210 /wd4457 /wd4706")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4456 /wd4311 /wd4312 /wd4255 /wd4389 /wd4459 /wd4996 /wd4018 /wd4210 /wd4457 /wd4706 /wd4710 /wd4774")
 endif()
 
 add_executable(stringify stringify.c)
