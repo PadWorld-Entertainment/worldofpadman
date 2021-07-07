@@ -209,7 +209,7 @@ function(add_qvm TARGET)
 		ARGS -o "${ENGINE_BINARY_DIR}/${QVM_PATH}" ${QVM_SRCS}
 		DEPENDS q3asm ${QVM_SRCS}
 	)
-	add_custom_target(qvm_${TARGET} DEPENDS ${QVM_PATH})
+	add_custom_target(qvm_${TARGET} DEPENDS "${ENGINE_BINARY_DIR}/${QVM_PATH}")
 	add_dependencies(${TARGET} qvm_${TARGET})
 	set_source_files_properties(${QVM_PATH} PROPERTIES GENERATED TRUE)
 	set_source_files_properties(${QVM_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/${QVM_PATH})
