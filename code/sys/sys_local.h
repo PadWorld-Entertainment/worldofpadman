@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../qcommon/qcommon.h"
 
 #ifndef DEDICATED
+#ifndef TESTS
 #ifdef USE_LOCAL_HEADERS
 #include "SDL_version.h"
 #else
@@ -38,7 +39,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #else
 #define MINSDL_PATCH 0
 #endif
-#endif
+#endif // TESTS
+#endif // DEDICATED
+
 
 // Console
 void CON_Shutdown(void);
