@@ -820,7 +820,6 @@ qboolean CantDamageTeamitem(gentity_t *target, gentity_t *attacker);
 // g_bot.c
 //
 void G_LoadBots(void);
-const char *G_GetBotInfoByNumber(int num);
 const char *G_GetBotInfoByName(const char *name);
 void G_CheckBotSpawn(void);
 void G_RemoveQueuedBotBegin(int clientNum);

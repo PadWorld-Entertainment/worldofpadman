@@ -846,19 +846,6 @@ void G_LoadBots(void) {
 
 /*
 ===============
-G_GetBotInfoByNumber
-===============
-*/
-const char *G_GetBotInfoByNumber(int num) {
-	if (num < 0 || num >= g_numBots) {
-		trap_Print(va(S_COLOR_RED "Invalid bot number: %i\n", num));
-		return NULL;
-	}
-	return g_botInfos[num];
-}
-
-/*
-===============
 G_GetBotInfoByName
 ===============
 */
