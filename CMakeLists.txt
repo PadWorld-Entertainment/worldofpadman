@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(WorldOfPadman VERSION 1.6.1 LANGUAGES C ASM)
+project(WorldOfPadman VERSION 1.7 LANGUAGES C ASM)
 
 include(CheckSymbolExists)
 include(CheckCCompilerFlag)

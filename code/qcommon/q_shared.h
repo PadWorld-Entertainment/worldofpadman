@@ -40,7 +40,7 @@ extern const int demo_protocols[];
 #define CLIENT_WINDOW_TITLE "World of Padman"
 #define CLIENT_WINDOW_MIN_TITLE PRODUCT_TITLE
 #define PRODUCT_BASE "ioq3 05180e3"
-#define PRODUCT_RELEASE "final" // "beta x" "final"/""
+#define PRODUCT_RELEASE "dev" // "beta x" "final"/""
 
 #define VERSION_INFO PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
 #define HOMEPATH_NAME_UNIX ".padman"
@@ -63,7 +63,7 @@ extern const int demo_protocols[];
 
 #ifndef PRODUCT_VERSION
 // TODO: Sync with Makefile!
-#define PRODUCT_VERSION "1.6.1"
+#define PRODUCT_VERSION "1.7"
 #endif
 
 #define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION " " PRODUCT_RELEASE
