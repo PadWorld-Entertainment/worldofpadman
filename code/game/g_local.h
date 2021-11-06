@@ -812,8 +812,8 @@ qboolean Instagib_canSpawnEntity(gentity_t *ent);
 // g_ctlitems.c
 //
 qboolean IsItemSameTeam(gentity_t *item, gentity_t *player);
-qboolean bambam_createByPlayer(gentity_t *pEnt, char *pickupName);
-qboolean boomies_createByPlayer(gentity_t *pEnt, char *pickupName);
+qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName);
+qboolean boomies_createByPlayer(gentity_t *pEnt, const char *pickupName);
 qboolean CantDamageTeamitem(gentity_t *target, gentity_t *attacker);
 
 //

@@ -82,7 +82,7 @@ qboolean CantDamageTeamitem(gentity_t *target, gentity_t *attacker) {
 	return qfalse;
 }
 
-qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, char *pickupName) {
+static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char *pickupName) {
 	int i;
 	int numBoxEnts;
 	int boxEnts[10];
@@ -319,7 +319,7 @@ static void bambam_pain(gentity_t *self, gentity_t *attacker, int damage) {
 */
 static const vec3_t bambamMin = {-22.0, -22.0, 0.0};
 static const vec3_t bambamMax = {22.0, 22.0, 38.0};
-qboolean bambam_createByPlayer(gentity_t *pEnt, char *pickupName) {
+qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 	vec3_t forward;
 	vec3_t start;
 	vec3_t end;
@@ -467,7 +467,7 @@ static void boomies_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	trace forward .... if hitting a wall, place it there ... else drop to ground
 	... doesn't handle boomies-holdable stuff!
 */
-qboolean boomies_createByPlayer(gentity_t *pEnt, char *pickupName) {
+qboolean boomies_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 	vec3_t forward;
 	vec3_t start;
 	vec3_t end;

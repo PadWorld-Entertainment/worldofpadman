@@ -2000,7 +2000,7 @@ static void BotConstructChatMessage(bot_chatstate_t *chatstate, const char *mess
 	int i;
 	char srcmessage[MAX_MESSAGE_SIZE];
 
-	strcpy(srcmessage, message);
+	Q_strncpyz(srcmessage, message, sizeof(srcmessage));
 	for (i = 0; i < 10; i++) {
 		if (!BotExpandChatMessage(chatstate->chatmessage, srcmessage, mcontext, match, vcontext, reply)) {
 			break;
