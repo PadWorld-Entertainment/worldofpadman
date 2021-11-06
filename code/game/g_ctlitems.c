@@ -235,6 +235,7 @@ static void bambam_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 			//if (VectorNormalize(dir) > 0.0f) {
 			if (tmpLen > 0.0f) {
 				VectorScale(dir, 1 / tmpLen, dir);
+				fire_bambamMissile(ent, start, dir, missileVelocity);
 				G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sounds/items/bambam/shoot"));
 
 				ent->timestamp = level.time;
