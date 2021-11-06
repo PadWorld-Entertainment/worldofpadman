@@ -42,7 +42,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #endif
 #endif
 
-#if defined(__i386__) || defined(__x86_64__)
 static void VM_Destroy_Compiled(vm_t *self);
 
 /*
@@ -1707,4 +1706,3 @@ int VM_CallCompiled(vm_t *vm, int *args) {
 
 	return opStack[opStackOfs];
 }
-#endif
