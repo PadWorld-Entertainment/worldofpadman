@@ -65,8 +65,6 @@ float scorealert[3]; // for both teams, how alarming the current situation is
 extern bot_state_t *botstates[MAX_CLIENTS];
 int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates);
 
-//
-
 // NOTE: not using a cvars which can be updated because the game should be reloaded anyway
 int gametype;	// game type
 int maxclients; // maximum number of clients
@@ -831,6 +829,20 @@ static int GetTeamFlagCarrier(int team) {
 	return -1;
 }
 
+static qboolean GetDroppedLollyGoal(int team, bot_goal_t *goal) {
+	char *itemname = (team == TEAM_RED) ? "red Lolly" : "blue Lolly";
+
+	if (trap_BotGetLevelItemGoal(-1, itemname, goal) < 0)
+		return qfalse;
+
+	// goal unreachable?
+	if (!goal->areanum || !trap_AAS_AreaReachability(goal->areanum))
+		return qfalse;
+
+	return qtrue;
+}
+
+#if 0
 static qboolean PickBoomieGoal(bot_state_t *bs) {
 	int i;
 	team_t botTeam = BotTeam(bs);
@@ -881,8 +893,9 @@ static qboolean PickBambamGoal(bot_state_t *bs) {
 	bs->teammate = best_id;
 	return qtrue;
 }
+#endif
 
-void BotCtfSeekGoals(bot_state_t *bs) {
+static void BotCtfSeekGoals(bot_state_t *bs) {
 	int flagstatus, nmyflagstatus;
 	int action = 0;
 	int carrier;
@@ -1047,19 +1060,6 @@ void BotCtfSeekGoals(bot_state_t *bs) {
 		bs->ltgtype = LTG_TEAMACCOMPANY;
 		bs->formation_dist = 3.5 * 32; // 3.5 meter
 	}
-}
-
-qboolean GetDroppedLollyGoal(int team, bot_goal_t *goal) {
-	char *itemname = (team == TEAM_RED) ? "red Lolly" : "blue Lolly";
-
-	if (trap_BotGetLevelItemGoal(-1, itemname, goal) < 0)
-		return qfalse;
-
-	// goal unreachable?
-	if (!goal->areanum || !trap_AAS_AreaReachability(goal->areanum))
-		return qfalse;
-
-	return qtrue;
 }
 
 /*
@@ -4458,7 +4458,7 @@ void BotSelectLogo(bot_state_t *bs) {
 #define BOXDEPTH 45
 
 // alternative zB BotGoalForBSPEntity
-void CheckMatrixForGoal(bot_goal_t *goal) {
+static void CheckMatrixForGoal(bot_goal_t *goal) {
 	int xmin, xmax, ymin, ymax, zmin, zmax;
 	int i, j, k;
 	int step;
@@ -4512,58 +4512,6 @@ void FixGoalArea(bot_goal_t *goal) {
 		goal->areanum = areas[0];
 	else
 		CheckMatrixForGoal(goal);
-}
-
-int CheckAreaForGoal(vec3_t origin) { // copy of BotFuzzyPointReachabilityArea
-	int firstareanum, j, x, y, z;
-	int areas[10], numareas, areanum, bestareanum;
-	float dist, bestdist;
-	vec3_t points[10], v, end;
-
-	firstareanum = 0;
-	areanum = trap_AAS_PointAreaNum(origin);
-	if (areanum) {
-		firstareanum = areanum;
-		if (trap_AAS_AreaReachability(areanum)) {
-			return areanum;
-		}
-	}
-	VectorCopy(origin, end);
-	end[2] += 4;
-	numareas = trap_AAS_TraceAreas(origin, end, areas, points, 10);
-	for (j = 0; j < numareas; j++) {
-		if (trap_AAS_AreaReachability(areas[j]))
-			return areas[j];
-	}
-	bestdist = 999999;
-	bestareanum = 0;
-	for (z = 1; z >= -1; z -= 1) {
-		for (x = 1; x >= -1; x -= 1) {
-			for (y = 1; y >= -1; y -= 1) {
-				VectorCopy(origin, end);
-				end[0] += x * 8;
-				end[1] += y * 8;
-				end[2] += z * 12;
-				numareas = trap_AAS_TraceAreas(origin, end, areas, points, 10);
-				for (j = 0; j < numareas; j++) {
-					if (trap_AAS_AreaReachability(areas[j])) {
-						VectorSubtract(points[j], origin, v);
-						dist = VectorLength(v);
-						if (dist < bestdist) {
-							bestareanum = areas[j];
-							bestdist = dist;
-						}
-					}
-					if (!firstareanum)
-						firstareanum = areas[j];
-				}
-			}
-		}
-		if (bestareanum) {
-			return bestareanum;
-		}
-	}
-	return firstareanum;
 }
 
 /*
@@ -4692,8 +4640,6 @@ void BotSetupDeathmatchAI(void) {
 			spraytele.flags = 0;
 
 			FixGoalArea(&spraytele);
-			// CheckMatrixForGoal(&spraytele);
-			// spraytele.areanum = CheckAreaForGoal(spraytele.origin);
 		}
 
 		if (level.sr_teleout) {
