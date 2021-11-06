@@ -864,7 +864,6 @@ static void PlayerSettings_MenuInit(void) {
 
 	{
 		char spraylogoName[MAX_SPRAYLOGO_NAME];
-		int i;
 
 		trap_Cvar_VariableStringBuffer("syc_logo", spraylogoName, sizeof(spraylogoName));
 

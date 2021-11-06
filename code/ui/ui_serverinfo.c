@@ -152,17 +152,17 @@ static void ServerInfo_MenuDraw(void) {
 
 			s_serverinfo.numdrawn++;
 		} else {
-			int i;
+			int j;
 
 			// TODO: Also add linebreaks for long keys?
 			UI_DrawString(230, y, key, UI_LEFT | UI_SMALLFONT, color_black);
 
-			for (i = 0; i < vallen; i += 20) {
+			for (j = 0; j < vallen; j += 20) {
 				y += SMALLCHAR_HEIGHT;
 				if (y > 260)
 					break;
 
-				UI_DrawString(230, y, va("%20.20s", &value[i]), UI_LEFT | UI_SMALLFONT, color_blue);
+				UI_DrawString(230, y, va("%20.20s", &value[j]), UI_LEFT | UI_SMALLFONT, color_blue);
 
 				s_serverinfo.numdrawn++;
 			}

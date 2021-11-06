@@ -304,7 +304,7 @@ void MusicMenu_Init(void) {
 		char playlist[4096];
 		const char *trackName;
 		const char *playlistPtr;
-		int i, t, a;
+		int i;
 
 		i = trap_FS_FOpenFile(PLAYLIST_FILENAME_S, &f, FS_READ);
 		if (!f) {
