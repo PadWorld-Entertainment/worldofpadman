@@ -299,7 +299,6 @@ typedef struct {
 } menutext_s;
 
 extern void Menu_Cache(void);
-extern void Menu_Focus(menucommon_s *m);
 extern void Menu_AddItem(menuframework_s *menu, void *item);
 extern void Menu_Draw(menuframework_s *menu);
 extern void *Menu_ItemAtCursor(menuframework_s *m);
