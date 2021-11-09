@@ -55,7 +55,14 @@ void DeathmatchScoreboardMessage(const gentity_t *ent) {
 		if (cl->pers.connected == CON_CONNECTING) {
 			ping = -1;
 		} else {
+			/* changed beryllium */
+			/*
 			ping = cl->ps.ping < 999 ? cl->ps.ping : 999;
+			*/
+
+			/* unlagged - true ping */
+			ping = ((cl->pers.realPing < 999) ? cl->pers.realPing : 999);
+			/* end beryllium */
 		}
 
 		if (cl->accuracy_shots) {
@@ -467,6 +474,11 @@ void Cmd_Kill_f(gentity_t *ent) {
 		FT_FreezePlayer(ent, ent);
 		return;
 	}
+	/* added beryllium */
+	if (LPSDeadSpec(ent->client)) {
+		return;
+	}
+	/* end beryllium */
 
 	ent->flags &= ~FL_GODMODE;
 	ent->client->ps.stats[STAT_HEALTH] = ent->health = -999;
@@ -480,36 +492,91 @@ void Cmd_Kill_f(gentity_t *ent) {
 
 /*
 =================
-BroadcastTeamChange
+BroadCastTeamChange
 
 Let everyone know about a team change
 =================
 */
-void BroadcastTeamChange(gclient_t *client, int oldTeam) {
-	if (client->sess.sessionTeam == TEAM_RED) {
-		trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " joined the red team.\n\"", client->pers.netname));
-	} else if (client->sess.sessionTeam == TEAM_BLUE) {
-		trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " joined the blue team.\n\"", client->pers.netname));
-	} else if (client->sess.sessionTeam == TEAM_SPECTATOR && oldTeam != TEAM_SPECTATOR) {
-		trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " joined the spectators.\n\"", client->pers.netname));
-	} else if (client->sess.sessionTeam == TEAM_FREE) {
-		trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " joined the battle.\n\"", client->pers.netname));
+/* changed beryllium */
+/*
+void BroadcastTeamChange( gclient_t *client, int oldTeam )
+{
+	if ( client->sess.sessionTeam == TEAM_RED ) {
+		trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " joined the red team.\n\"",
+			client->pers.netname) );
+	} else if ( client->sess.sessionTeam == TEAM_BLUE ) {
+		trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " joined the blue team.\n\"",
+		client->pers.netname));
+	} else if ( client->sess.sessionTeam == TEAM_SPECTATOR && oldTeam != TEAM_SPECTATOR ) {
+		trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " joined the spectators.\n\"",
+		client->pers.netname));
+	} else if ( client->sess.sessionTeam == TEAM_FREE ) {
+		trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " joined the battle.\n\"",
+		client->pers.netname));
 	}
 }
+*/
+void BroadcastTeamChange(gclient_t *client, int oldTeam) {
+	team_t team;
+	char *teamname;
+
+	G_assert(client);
+
+	team = client->sess.sessionTeam;
+	if (oldTeam == team) {
+		/* No change, why are we here at all? */
+		return;
+	}
+
+	switch (team) {
+	case TEAM_RED:
+	case TEAM_BLUE:
+	default:
+		/* multi fall through */
+		teamname = va("%s team", Teamname(team));
+		break;
+
+	case TEAM_SPECTATOR:
+		teamname = Teamname(team);
+		break;
+
+	case TEAM_FREE:
+		/* Try matching Teamname()'s colors */
+		teamname = S_COLOR_GREEN "battle";
+		break;
+	}
+
+	SendClientCommand(CID_ALL, CCMD_PRT,
+					  va("%s" S_COLOR_DEFAULT " joined the %s" S_COLOR_DEFAULT ".\n", client->pers.netname, teamname));
+}
+
+/* end beryllium */
+
+/* added beryllium */
+/* NOTE: In order to keep code changes minimal, just provide a wrapper with the old name and parameters */
+void SetTeam(gentity_t *ent, char *s) {
+	G_assert(ent);
+	G_assert(s);
+
+	G_SetTeam(ent, s, qtrue);
+}
+/* end beryllium */
 
 /*
 =================
 SetTeam
 =================
 */
-void SetTeam(gentity_t *ent, const char *s) {
-	int team, oldTeam;
-	gclient_t *client;
-	int clientNum;
-	spectatorState_t specState;
-	int specClient;
-	int teamLeader;
-	qboolean lpsNoLives = qfalse;
+/* changed beryllium */
+/*
+void SetTeam(gentity_t *ent, char *s) {
+	int					team, oldTeam;
+	gclient_t			*client;
+	int					clientNum;
+	spectatorState_t	specState;
+	int					specClient;
+	int					teamLeader;
+	qboolean			lpsNoLives = qfalse;
 
 	//
 	// see what change is requested
@@ -517,13 +584,179 @@ void SetTeam(gentity_t *ent, const char *s) {
 	client = ent->client;
 
 	// DeadSpec() does not really apply here, since it's meant to be universal, while this assignment is not
-	if ((g_gametype.integer == GT_LPS) && (client->sess.livesleft <= 0)) {
+	if ( ( g_gametype.integer == GT_LPS) && ( client->sess.livesleft <= 0 ) ) {
 		lpsNoLives = qtrue;
 	}
 
 	clientNum = client - level.clients;
 	specClient = 0;
 	specState = SPECTATOR_NOT;
+	if ( !Q_stricmp( s, "scoreboard" ) || !Q_stricmp( s, "score" )  ) {
+		team = TEAM_SPECTATOR;
+		specState = SPECTATOR_SCOREBOARD;
+	} else if ( !Q_stricmp( s, "follow1" ) ) {
+		team = TEAM_SPECTATOR;
+		specState = SPECTATOR_FOLLOW;
+		specClient = -1;
+	} else if ( !Q_stricmp( s, "follow2" ) ) {
+		team = TEAM_SPECTATOR;
+		specState = SPECTATOR_FOLLOW;
+		specClient = -2;
+	} else if ( !Q_stricmp( s, "spectator" ) || !Q_stricmp( s, "s" ) ) {
+		team = TEAM_SPECTATOR;
+		specState = SPECTATOR_FREE;
+	} else if ( g_gametype.integer >= GT_TEAM ) {
+		// if running a team game, assign player to one of the teams
+		specState = SPECTATOR_NOT;
+		if ( !Q_stricmp( s, "red" ) || !Q_stricmp( s, "r" ) ) {
+			team = TEAM_RED;
+		} else if ( !Q_stricmp( s, "blue" ) || !Q_stricmp( s, "b" ) ) {
+			team = TEAM_BLUE;
+		} else {
+			// pick the team with the least number of players
+			team = PickTeam( clientNum );
+		}
+
+		// freezetag
+		if (G_FreezeTag()) {
+			if (!FT_CanSwitchTeam(ent, team))
+				return;
+
+			if (ent->client->sess.sessionTeam != team)
+				FT_ThawPlayer(ent, NULL);
+		}
+
+		if (g_teamForceBalance.integer && !client->pers.localClient && !(ent->r.svFlags & SVF_BOT)) {
+			int counts[TEAM_NUM_TEAMS];
+
+			counts[TEAM_BLUE] = TeamCount( clientNum, TEAM_BLUE );
+			counts[TEAM_RED] = TeamCount( clientNum, TEAM_RED );
+
+			// We allow a spread of two
+			if ( team == TEAM_RED && counts[TEAM_RED] - counts[TEAM_BLUE] > 1 ) {
+				trap_SendServerCommand( clientNum,
+					"cp \"Red team has too many players.\n\"" );
+				return; // ignore the request
+			}
+			if ( team == TEAM_BLUE && counts[TEAM_BLUE] - counts[TEAM_RED] > 1 ) {
+				trap_SendServerCommand( clientNum,
+					"cp \"Blue team has too many players.\n\"" );
+				return; // ignore the request
+			}
+
+			// It's ok, the team we are switching to has less or same number of players
+		}
+
+	} else {
+		// force them to spectators if there aren't any spots free
+		team = TEAM_FREE;
+	}
+
+	// override decision if limiting the players
+	if ( (g_gametype.integer == GT_TOURNAMENT)
+		&& level.numNonSpectatorClients >= 2 ) {
+		team = TEAM_SPECTATOR;
+	} else if ( g_maxGameClients.integer > 0 &&
+		level.numNonSpectatorClients >= g_maxGameClients.integer ) {
+		team = TEAM_SPECTATOR;
+	}
+
+	//
+	// decide if we will allow the change
+	//
+	oldTeam = client->sess.sessionTeam;
+	if ( team == oldTeam && team != TEAM_SPECTATOR ) {
+		return;
+	}
+
+	//
+	// execute the team change
+	//
+
+	// if the player was dead leave the body
+	if ( client->ps.stats[STAT_HEALTH] <= 0 && !lpsNoLives) {
+		CopyToBodyQue(ent);
+	}
+
+	// he starts at 'base'
+	client->pers.teamState.state = TEAM_BEGIN;
+	if ( oldTeam != TEAM_SPECTATOR && !lpsNoLives) {
+		// Kill him (makes sure he loses flags, etc)
+		ent->flags &= ~FL_GODMODE;
+		ent->client->ps.stats[STAT_HEALTH] = ent->health = 0;
+		player_die (ent, ent, ent, 100000, MOD_SUICIDE);
+		RemoveOwnedItems( ent );
+	}
+
+	// they go to the end of the line for tournements
+	if(team == TEAM_SPECTATOR && oldTeam != team)
+		AddTournamentQueue(client);
+
+	client->sess.sessionTeam = team;
+	client->sess.spectatorState = specState;
+	client->sess.spectatorClient = specClient;
+
+	if(g_gametype.integer==GT_LPS)
+	{
+		if(!level.warmupTime)
+		{
+			client->sess.livesleft=-1;
+			ent->health =
+			client->ps.stats[STAT_HEALTH] = 0;
+		}
+		else
+			client->sess.livesleft = g_LPS_startlives.integer;
+	}
+
+	//noch mal aendern falls MG nicht standard waffe is
+	if(client->ps.weapon==WP_SPRAYPISTOL)
+		trap_SendServerCommand(client->ps.clientNum,va("srwc %i",WP_NIPPER));
+
+	client->sess.teamLeader = qfalse;
+	if ( team == TEAM_RED || team == TEAM_BLUE ) {
+		teamLeader = TeamLeader( team );
+		// if there is no team leader or the team leader is a bot and this client is not a bot
+		if ( teamLeader == -1 || ( !(g_entities[clientNum].r.svFlags & SVF_BOT) && (g_entities[teamLeader].r.svFlags &
+SVF_BOT) ) ) { SetLeader( team, clientNum );
+		}
+	}
+	// make sure there is a team leader on the team the player came from
+	if ( oldTeam == TEAM_RED || oldTeam == TEAM_BLUE ) {
+		CheckTeamLeader( oldTeam );
+	}
+
+	BroadcastTeamChange( client, oldTeam );
+
+	// get and distribute relevent paramters
+	ClientUserinfoChanged( clientNum );
+
+	ClientBegin( clientNum );
+}
+*/
+qboolean G_SetTeam(gentity_t *ent, char *s, qboolean force) {
+	int team, oldTeam;
+	gclient_t *client;
+	int clientNum;
+	spectatorState_t specState;
+	int specClient;
+	int teamLeader;
+	qboolean noLives = qfalse;
+
+	G_assert(ent);
+	G_assert(ent->client);
+	G_assert(s);
+
+	client = ent->client;
+
+	/* DeadSpec() does not really apply here, since it's meant to be universal, while this assignment is not */
+	if ((g_gametype.integer == GT_LPS) && (client->sess.livesleft <= 0)) {
+		noLives = qtrue;
+	}
+
+	clientNum = (client - level.clients);
+	specClient = 0;
+	specState = SPECTATOR_NOT;
+
 	if (!Q_stricmp(s, "scoreboard") || !Q_stricmp(s, "score")) {
 		team = TEAM_SPECTATOR;
 		specState = SPECTATOR_SCOREBOARD;
@@ -539,7 +772,6 @@ void SetTeam(gentity_t *ent, const char *s) {
 		team = TEAM_SPECTATOR;
 		specState = SPECTATOR_FREE;
 	} else if (g_gametype.integer >= GT_TEAM) {
-		// if running a team game, assign player to one of the teams
 		specState = SPECTATOR_NOT;
 		if (!Q_stricmp(s, "red") || !Q_stricmp(s, "r")) {
 			team = TEAM_RED;
@@ -550,67 +782,65 @@ void SetTeam(gentity_t *ent, const char *s) {
 			team = PickTeam(clientNum);
 		}
 
-		// freezetag
-		if (G_FreezeTag()) {
-			if (!FT_CanSwitchTeam(ent, team))
-				return;
-
-			if (ent->client->sess.sessionTeam != team)
-				FT_ThawPlayer(ent, NULL);
-		}
-
-		if (g_teamForceBalance.integer && !client->pers.localClient && !(ent->r.svFlags & SVF_BOT)) {
+		/* Gamecode is allowed to screw up balance */
+		if ((g_teamForceBalance.integer) && !force) {
 			int counts[TEAM_NUM_TEAMS];
 
 			counts[TEAM_BLUE] = TeamCount(clientNum, TEAM_BLUE);
 			counts[TEAM_RED] = TeamCount(clientNum, TEAM_RED);
 
 			// We allow a spread of two
-			if (team == TEAM_RED && counts[TEAM_RED] - counts[TEAM_BLUE] > 1) {
-				trap_SendServerCommand(clientNum, "cp \"Red team has too many players.\n\"");
-				return; // ignore the request
+			if ((TEAM_RED == team) && ((counts[TEAM_RED] - counts[TEAM_BLUE]) > 1)) {
+				SendClientCommand(
+					clientNum, CCMD_CP,
+					va(S_COLOR_NEGATIVE "The %s" S_COLOR_NEGATIVE " team has too many players.\n", Teamname(team)));
+				return qfalse;
+			} else if ((TEAM_BLUE == team) && ((counts[TEAM_BLUE] - counts[TEAM_RED]) > 1)) {
+				SendClientCommand(
+					clientNum, CCMD_CP,
+					va(S_COLOR_NEGATIVE "The %s" S_COLOR_NEGATIVE " team has too many players.\n", Teamname(team)));
+				return qfalse;
 			}
-			if (team == TEAM_BLUE && counts[TEAM_BLUE] - counts[TEAM_RED] > 1) {
-				trap_SendServerCommand(clientNum, "cp \"Blue team has too many players.\n\"");
-				return; // ignore the request
-			}
-
-			// It's ok, the team we are switching to has less or same number of players
 		}
-
 	} else {
-		// force them to spectators if there aren't any spots free
 		team = TEAM_FREE;
 	}
 
-	// override decision if limiting the players
-	if ((g_gametype.integer == GT_TOURNAMENT) && level.numNonSpectatorClients >= 2) {
-		team = TEAM_SPECTATOR;
-	} else if (g_maxGameClients.integer > 0 && level.numNonSpectatorClients >= g_maxGameClients.integer) {
-		team = TEAM_SPECTATOR;
+	if (!force) {
+		/* No free choice in tourney */
+		if ((GT_TOURNAMENT == g_gametype.integer) && (level.numNonSpectatorClients >= 2)) {
+			team = TEAM_SPECTATOR;
+		}
+		/* No free choice if limited playing slots */
+		else if ((g_maxGameClients.integer > 0) && (level.numNonSpectatorClients >= g_maxGameClients.integer)) {
+			team = TEAM_SPECTATOR;
+		}
 	}
 
-	//
-	// decide if we will allow the change
-	//
 	oldTeam = client->sess.sessionTeam;
-	if (team == oldTeam && team != TEAM_SPECTATOR) {
-		return;
+	if ((team == oldTeam) && (team != TEAM_SPECTATOR)) {
+		/* No real change */
+		return qfalse;
 	}
 
-	//
-	// execute the team change
-	//
+	if (!force) {
+		if (level.teamLocked[team]) {
+			/* TODO: S_COLOR_NEGATIVE and team red */
+			SendClientCommand(clientNum, CCMD_PRT,
+							  va(S_COLOR_NEGATIVE "The %s" S_COLOR_NEGATIVE " team is locked.\n", Teamname(team)));
+			return qfalse;
+		}
+	}
 
-	// if the player was dead leave the body
-	if (client->ps.stats[STAT_HEALTH] <= 0 && !lpsNoLives && client->pers.connected == CON_CONNECTED) {
+	/* If the player was dead leave the body */
+	if ((client->ps.stats[STAT_HEALTH] <= 0) && !noLives) {
 		CopyToBodyQue(ent);
 	}
 
-	// he starts at 'base'
+	/* He starts at 'base' */
 	client->pers.teamState.state = TEAM_BEGIN;
-	if (oldTeam != TEAM_SPECTATOR && !lpsNoLives) {
-		// Kill him (makes sure he loses flags, etc)
+	if ((oldTeam != TEAM_SPECTATOR) && !noLives) {
+		/* Kill him (makes sure he loses lolly, etc) */
 		ent->flags &= ~FL_GODMODE;
 		ent->client->ps.stats[STAT_HEALTH] = ent->health = 0;
 		player_die(ent, ent, ent, 100000, MOD_SUICIDE);
@@ -622,47 +852,43 @@ void SetTeam(gentity_t *ent, const char *s) {
 		AddTournamentQueue(client);
 
 	client->sess.sessionTeam = team;
+	client->sess.sessionTeam = team;
 	client->sess.spectatorState = specState;
 	client->sess.spectatorClient = specClient;
 
-	if (g_gametype.integer == GT_LPS) {
+	if (GT_LPS == g_gametype.integer) {
 		if (!level.warmupTime) {
 			client->sess.livesleft = -1;
 			ent->health = client->ps.stats[STAT_HEALTH] = 0;
-		} else
+		} else {
 			client->sess.livesleft = g_LPS_startlives.integer;
+		}
 	}
 
-	// noch mal aendern falls MG nicht standard waffe is
-	if (client->ps.weapon == WP_SPRAYPISTOL)
+	if (WP_SPRAYPISTOL == client->ps.weapon) {
 		trap_SendServerCommand(client->ps.clientNum, va("srwc %i", WP_NIPPER));
+	}
 
 	client->sess.teamLeader = qfalse;
-	if (team == TEAM_RED || team == TEAM_BLUE) {
+	if ((TEAM_RED == team) || (TEAM_BLUE == team)) {
 		teamLeader = TeamLeader(team);
-		// if there is no team leader or the team leader is a bot and this client is not a bot
-		if (teamLeader == -1 ||
+		if ((-1 == teamLeader) ||
 			(!(g_entities[clientNum].r.svFlags & SVF_BOT) && (g_entities[teamLeader].r.svFlags & SVF_BOT))) {
 			SetLeader(team, clientNum);
 		}
 	}
-	// make sure there is a team leader on the team the player came from
-	if (oldTeam == TEAM_RED || oldTeam == TEAM_BLUE) {
+	if ((TEAM_RED == oldTeam) || (TEAM_BLUE == oldTeam)) {
 		CheckTeamLeader(oldTeam);
 	}
 
 	BroadcastTeamChange(client, oldTeam);
 
-	// get and distribute relevant parameters
 	ClientUserinfoChanged(clientNum);
-
-	// client hasn't spawned yet, they sent an early team command
-	if (client->pers.connected != CON_CONNECTED) {
-		return;
-	}
-
 	ClientBegin(clientNum);
+
+	return qtrue;
 }
+/* end beryllium */
 
 /*
 =================
@@ -686,12 +912,17 @@ void StopFollowing(gentity_t *ent) {
 	ent->r.svFlags &= ~SVF_BOT;
 	ent->client->ps.clientNum = ent - g_entities;
 
-	SetClientViewAngle(ent, ent->client->ps.viewangles);
+	/* added beryllium */
+	/* Maybe this fixes wrong view? */
+	ent->client->ps.groundEntityNum = ENTITYNUM_NONE;
 
-	// don't use dead view angles
-	if (ent->client->ps.stats[STAT_HEALTH] <= 0) {
-		ent->client->ps.stats[STAT_HEALTH] = 1;
+	if (ent->client->sess.spectatorClient >= 0) {
+		gclient_t *cl;
+
+		cl = &level.clients[ent->client->sess.spectatorClient];
+		SetClientViewAngle(ent, cl->ps.viewangles);
 	}
+	/* end beryllium */
 }
 
 /*
@@ -723,7 +954,12 @@ void Cmd_Team_f(gentity_t *ent) {
 	}
 
 	if (ent->client->switchTeamTime > level.time) {
-		trap_SendServerCommand(ent - g_entities, "print \"May not switch teams more than once per 5 seconds.\n\"");
+		/* changed beryllium */
+		/*trap_SendServerCommand( ent-g_entities, "print \"May not switch teams more than once per 5 seconds.\n\"" );*/
+		/* TODO: Use proper beryllium colors and TimeToString()? */
+		trap_SendServerCommand((ent - g_entities), va("print \"May not switch teams more than once per %i seconds.\n\"",
+													  be_switchTeamTime.integer));
+		/* end beryllium*/
 		return;
 	}
 
@@ -734,9 +970,16 @@ void Cmd_Team_f(gentity_t *ent) {
 
 	trap_Argv(1, s, sizeof(s));
 
-	SetTeam(ent, s);
+	/* changed beryllium */
+	/*
+	SetTeam( ent, s );
 
 	ent->client->switchTeamTime = level.time + 5000;
+	*/
+	if (G_SetTeam(ent, s, qfalse)) {
+		ent->client->switchTeamTime = (level.time + (be_switchTeamTime.integer * 1000));
+	}
+	/* end beryllium */
 }
 
 /*
@@ -863,7 +1106,12 @@ G_Say
 ==================
 */
 
-static void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message) {
+/* changed beryllium */
+/*
+static void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message ) {
+*/
+void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message) {
+	/* end beryllium */
 	if (!other) {
 		return;
 	}
@@ -885,27 +1133,127 @@ static void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const
 		return;
 	}
 
+	/* added beryllium */
+	if (BE_CanSayTo(ent, other) == qfalse) {
+		return;
+	}
+	/* end beryllium */
+
 	trap_SendServerCommand((other - g_entities), va("say %d %ld \"%s%c%c%s\"", mode, (ent ? (ent - g_entities) : -1),
 													name, Q_COLOR_ESCAPE, color, message));
 }
 
+/* changed beryllium */
+/*
+#define EC		"\x19"
+
+void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chatText ) {
+	int			j, cid;
+	gentity_t	*other;
+	int			color;
+	char		name[64], *namesrc;
+	// don't let text be too long for malicious reasons
+	char		text[MAX_SAY_TEXT];
+	char		location[64];
+	qboolean 	realEnt;
+
+	if ( g_gametype.integer < GT_TEAM && mode == SAY_TEAM ) {
+		mode = SAY_ALL;
+	}
+
+	// server calls don't have a valid entity
+	if ( !ent ) {
+		namesrc = "server";
+		realEnt = qfalse;
+		cid = -1;
+	}
+	else {
+		namesrc = ent->client->pers.netname;
+		realEnt = qtrue;
+		cid = ent - g_entities;
+	}
+
+	//
+	if ( !realEnt && ( SAY_TEAM == mode ) ) {
+		ent = target;
+		target = NULL;
+	}
+
+	switch ( mode ) {
+		default: // fall through
+
+		case SAY_ALL:
+			G_LogPrintf( "Say: %i %s\n", cid, chatText );
+			Com_sprintf( name, sizeof( name ), "%s%c%c"EC": ", namesrc, Q_COLOR_ESCAPE, COLOR_WHITE );
+			color = COLOR_YELLOW;
+			break;
+
+		case SAY_TEAM:
+			G_LogPrintf( "SayTeam: %i %s\n", cid, chatText );
+			if ( realEnt && Team_GetLocationMsg( ent, location, sizeof( location ) ) ) {
+				Com_sprintf( name, sizeof( name ), EC"(%s%c%c"EC") (%s)"EC": ",
+							 namesrc, Q_COLOR_ESCAPE, COLOR_WHITE, location );
+			}
+			else {
+				Com_sprintf( name, sizeof( name ), EC"(%s%c%c"EC")"EC": ",
+							 namesrc, Q_COLOR_ESCAPE, COLOR_WHITE );
+			}
+			color = COLOR_CYAN;
+			break;
+
+		case SAY_TELL:
+			G_LogPrintf( "Tell: %d %ld %s\n", cid, ( target - g_entities ), chatText );
+			if ( target && ( g_gametype.integer >= GT_TEAM ) &&
+				 ( target->client->sess.sessionTeam == ent->client->sess.sessionTeam ) &&
+				 realEnt && Team_GetLocationMsg( ent, location, sizeof( location ) ) ) {
+				Com_sprintf( name, sizeof( name ), EC"[%s%c%c"EC"] (%s)"EC": ", namesrc, Q_COLOR_ESCAPE, COLOR_WHITE,
+location );
+			}
+			else {
+				Com_sprintf( name, sizeof( name ), EC"[%s%c%c"EC"]"EC": ", namesrc, Q_COLOR_ESCAPE, COLOR_WHITE );
+			}
+
+			color = COLOR_YELLOW;
+			break;
+	}
+
+	Q_strncpyz( text, chatText, sizeof(text) );
+
+	if ( target ) {
+		G_SayTo( ent, target, mode, color, name, text );
+		return;
+	}
+
+	// echo the text to the console
+	if ( g_dedicated.integer ) {
+		G_Printf( "%s%s\n", name, text);
+	}
+
+	// send it to all the apropriate clients
+	for (j = 0; j < level.maxclients; j++) {
+		other = &g_entities[j];
+		G_SayTo( ent, other, mode, color, name, text );
+	}
+}
+*/
 void G_Say(gentity_t *ent, gentity_t *target, int mode, const char *chatText) {
 	int j, cid;
 	gentity_t *other;
 	int color;
 	char name[64], *namesrc;
-	// don't let text be too long for malicious reasons
 	char text[MAX_SAY_TEXT];
 	char location[64];
 	qboolean realEnt;
+	char *locationStr = NULL;
+	team_t team;
 
-	if (g_gametype.integer < GT_TEAM && mode == SAY_TEAM) {
+	if ((g_gametype.integer < GT_TEAM) && (SAY_TEAM == mode)) {
 		mode = SAY_ALL;
 	}
 
-	// server calls don't have a valid entity
+	/* Server calls don't have a valid entity */
 	if (!ent) {
-		namesrc = "server";
+		namesrc = CHAT_SERVER_NAME;
 		realEnt = qfalse;
 		cid = -1;
 	} else {
@@ -914,65 +1262,78 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, const char *chatText) {
 		cid = ent - g_entities;
 	}
 
-	//
+	/* NOTE: "target" is used to gather team info */
 	if (!realEnt && (SAY_TEAM == mode)) {
 		ent = target;
 		target = NULL;
 	}
 
-	switch (mode) {
-	default: // fall through
+	team = (realEnt ? ent->client->sess.sessionTeam : TEAM_NUM_TEAMS);
 
+	/* If CHAT_SPECTATOR_TEAM is enabled, spectators may only talk to their team,
+	   so all other players won't see their conversation.
+	   Still allow talking to others directly.
+	*/
+	if (be_chatFlags.integer & CHAT_SPECTATOR_TEAM) {
+		if ((TEAM_SPECTATOR == team) && (SAY_TELL != mode)) {
+			mode = SAY_TEAM;
+		}
+	}
+
+	/* NOTE: Do NOT change log format! */
+	switch (mode) {
+	default: /* fall through */
 	case SAY_ALL:
 		G_LogPrintf("Say: %i %s\n", cid, chatText);
-		Com_sprintf(name, sizeof(name), "%s%c%c" EC ": ", namesrc, Q_COLOR_ESCAPE, COLOR_WHITE);
+		FormatChatName(name, sizeof(name), namesrc, mode, locationStr, team);
 		color = COLOR_YELLOW;
 		break;
 
 	case SAY_TEAM:
 		G_LogPrintf("SayTeam: %i %s\n", cid, chatText);
 		if (realEnt && Team_GetLocationMsg(ent, location, sizeof(location))) {
-			Com_sprintf(name, sizeof(name), EC "(%s%c%c" EC ") (%s)" EC ": ", namesrc, Q_COLOR_ESCAPE, COLOR_WHITE,
-						location);
-		} else {
-			Com_sprintf(name, sizeof(name), EC "(%s%c%c" EC ")" EC ": ", namesrc, Q_COLOR_ESCAPE, COLOR_WHITE);
+			locationStr = location;
 		}
+		FormatChatName(name, sizeof(name), namesrc, mode, locationStr, team);
 		color = COLOR_CYAN;
 		break;
 
 	case SAY_TELL:
 		G_LogPrintf("Tell: %d %ld %s\n", cid, (target - g_entities), chatText);
 		if (target && (g_gametype.integer >= GT_TEAM) &&
-			(target->client->sess.sessionTeam == ent->client->sess.sessionTeam) && realEnt &&
+			(target->client->sess.sessionTeam == ent->client->sess.sessionTeam) && realEnt && (target != ent) &&
 			Team_GetLocationMsg(ent, location, sizeof(location))) {
-			Com_sprintf(name, sizeof(name), EC "[%s%c%c" EC "] (%s)" EC ": ", namesrc, Q_COLOR_ESCAPE, COLOR_WHITE,
-						location);
-		} else {
-			Com_sprintf(name, sizeof(name), EC "[%s%c%c" EC "]" EC ": ", namesrc, Q_COLOR_ESCAPE, COLOR_WHITE);
+			locationStr = location;
 		}
-
+		FormatChatName(name, sizeof(name), namesrc, mode, locationStr, team);
 		color = COLOR_YELLOW;
 		break;
 	}
 
 	Q_strncpyz(text, chatText, sizeof(text));
 
+	if (BE_HideChat(ent, target, mode, color, name, text)) {
+		return;
+	}
+
 	if (target) {
+		/* Current tell implementation calls G_Say() twice if ent != target */
 		G_SayTo(ent, target, mode, color, name, text);
 		return;
 	}
 
-	// echo the text to the console
+	/* TODO: Strip EC */
 	if (g_dedicated.integer) {
 		G_Printf("%s%s\n", name, text);
 	}
 
-	// send it to all the appropriate clients
+	/* Send it to all the apropriate clients */
 	for (j = 0; j < level.maxclients; j++) {
 		other = &g_entities[j];
 		G_SayTo(ent, other, mode, color, name, text);
 	}
 }
+/* end beryllium */
 
 /*
 ==================
@@ -991,6 +1352,13 @@ static void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0) {
 	} else {
 		p = ConcatArgs(1);
 	}
+
+	/* added beryllium */
+	/* If CHAT_SWAP, make say become say_team etc. */
+	if (be_chatFlags.integer & CHAT_SWAP) {
+		mode = ((SAY_ALL == mode) ? SAY_TEAM : SAY_ALL);
+	}
+	/* end beryllium */
 
 	G_Say(ent, NULL, mode, p);
 }
@@ -1821,8 +2189,13 @@ void Cmd_EditBotInv_f(gentity_t *ent) {
 	spec_ent = &g_entities[ent->client->sess.spectatorClient];
 
 	if (spec_ent != ent) {
-		if (!(ent->r.svFlags & SVF_BOT)) {
-			trap_SendServerCommand(ent - g_entities, "print \"error: target is human \n\"");
+		/* changed beryllium */
+		/*
+		if ( !( ent->r.svFlags & SVF_BOT ) ) {
+		*/
+		if (!(spec_ent->r.svFlags & SVF_BOT)) {
+			/* end changed */
+			trap_SendServerCommand(ent - g_entities, va("print \"error: target is human \n\""));
 			return;
 		}
 
@@ -1851,19 +2224,22 @@ void ClientCommand(int clientNum) {
 	char cmd[MAX_TOKEN_CHARS];
 
 	ent = g_entities + clientNum;
-	if (!ent->client || ent->client->pers.connected != CON_CONNECTED) {
-		if (ent->client && ent->client->pers.localClient) {
-			// Handle early team command sent by UI when starting a local
-			// team play game.
-			trap_Argv(0, cmd, sizeof(cmd));
-			if (Q_stricmp(cmd, "team") == 0) {
-				Cmd_Team_f(ent);
-			}
-		}
+	/* changed beryllium */
+	/*
+	if ( !ent->client ) {
+	*/
+	if (!ent->client || (CON_DISCONNECTED == ent->client->pers.connected)) {
+		/* end beryllium */
 		return; // not fully in game yet
 	}
 
 	trap_Argv(0, cmd, sizeof(cmd));
+
+	/* added beryllium */
+	if (BE_ClientCommand(ent, cmd)) {
+		return;
+	}
+	/* end beryllium */
 
 	if (Q_stricmp(cmd, "say") == 0) {
 		Cmd_Say_f(ent, SAY_ALL, qfalse);

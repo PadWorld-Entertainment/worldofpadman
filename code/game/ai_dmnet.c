@@ -280,6 +280,12 @@ static int BotNearbyGoal(bot_state_t *bs, int tfl, bot_goal_t *ltg, float range)
 
 	ret = trap_BotChooseNBGItem(bs->gs, bs->origin, bs->inventory, tfl, ltg, range);
 
+	/* added beryllium */
+	if (BE_Bot_IllegalGoal(bs)) {
+		return 0;
+	}
+	/* end added */
+
 	if (BotGotIllegalCartGoal(bs)) // goal was dropped, so dont set ltg_time
 		return 0;
 	/*
@@ -407,6 +413,12 @@ static int BotGetItemLongTermGoal(bot_state_t *bs, int tfl, bot_goal_t *goal) {
 			trap_BotGoalName(goal->number, buf, sizeof(buf));
 			// BotAI_Print(PRT_MESSAGE, "%1.1f: new ltg %s -> %s \n", FloatTime(), buf,
 			// g_entities[goal->entitynum].classname );
+
+			/* added beryllium */
+			if (BE_Bot_IllegalGoal(bs)) {
+				return trap_BotGetTopGoal(bs->gs, goal);
+			}
+			/* end beryllium */
 
 			if (BotGotIllegalCartGoal(bs)) // goal was dropped, so dont set ltg_time
 				return trap_BotGetTopGoal(bs->gs, goal);

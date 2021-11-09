@@ -387,26 +387,92 @@ Returns qfalse if the client is dropped
 =================
 */
 qboolean ClientInactivityTimer(gclient_t *client) {
-	if (!g_inactivity.integer) {
+	/* changed beryllium */
+	/*
+	if ( ! g_inactivity.integer ) {
 		// give everyone some time, so if the operator sets g_inactivity during
 		// gameplay, everyone isn't kicked
 		client->inactivityTime = level.time + 60 * 1000;
 		client->inactivityWarning = qfalse;
-	} else if (client->pers.cmd.forwardmove || client->pers.cmd.rightmove || client->pers.cmd.upmove ||
-			   (client->pers.cmd.buttons & BUTTON_ATTACK)) {
+	} else if ( client->pers.cmd.forwardmove ||
+		client->pers.cmd.rightmove ||
+		client->pers.cmd.upmove ||
+		(client->pers.cmd.buttons & BUTTON_ATTACK) ) {
 		client->inactivityTime = level.time + g_inactivity.integer * 1000;
 		client->inactivityWarning = qfalse;
-	} else if (!client->pers.localClient) {
-		if (level.time > client->inactivityTime) {
-			trap_DropClient(client - level.clients, "Dropped due to inactivity");
+	} else if ( !client->pers.localClient ) {
+		if ( level.time > client->inactivityTime ) {
+			trap_DropClient( client - level.clients, "Dropped due to inactivity" );
 			return qfalse;
 		}
-		if (level.time > client->inactivityTime - 10000 && !client->inactivityWarning) {
+		if ( level.time > client->inactivityTime - 10000 && !client->inactivityWarning ) {
 			client->inactivityWarning = qtrue;
-			trap_SendServerCommand(client - level.clients, "cp \"Ten seconds until inactivity drop!\n\"");
+			trap_SendServerCommand( client - level.clients, "cp \"Ten seconds until inactivity drop!\n\"" );
 		}
 	}
 	return qtrue;
+	*/
+
+	if (!g_inactivity.integer) {
+		/* Give everyone some time, so if the operator sets g_inactivity during
+		   gameplay, everyone isn't kicked instantly
+		*/
+		client->pers.inactivityTime = (level.time + 60 * 1000);
+		client->pers.inactivityWarning = qfalse;
+	} else if (client->pers.cmd.forwardmove || client->pers.cmd.rightmove || client->pers.cmd.upmove ||
+			   (client->pers.cmd.buttons & BUTTON_ATTACK)) {
+		client->pers.inactivityTime = (level.time + g_inactivity.integer * 1000);
+		client->pers.inactivityWarning = qfalse;
+	} else if (!client->pers.localClient) {
+		if (level.time > client->pers.inactivityTime) {
+			if (!(be_inactivity.integer & BE_INACTIVITY_BOT) &&
+				(g_entities[client - level.clients].r.svFlags & SVF_BOT)) {
+				/* If bots do not have inactivity and this is a bot, continue */
+				return qtrue;
+			}
+
+			if (!(be_inactivity.integer & BE_INACTIVITY_SPECTATOR) && IsSpectator(client)) {
+				/* If spectators do not have inactivity and this is a spectator, continue */
+				return qtrue;
+			}
+
+			if ((be_inactivity.integer & BE_INACTIVITY_SPECTATE) && !IsSpectator(client)) {
+				/* Reset his inactivity timer, so he does not get kicked immediately */
+				/* NOTE: This needs to be done first, otherwise a kick will occur when we
+				 * enter ClientInactivityTimer() indirectly from G_SetTeam().
+				 */
+				client->pers.inactivityTime = (level.time + g_inactivity.integer * 1000);
+				client->pers.inactivityWarning = qfalse;
+				/* If this is an inactive player, move him to spectators */
+				G_SetTeam(&g_entities[client - level.clients], "spectator", qtrue);
+
+				return qtrue;
+			}
+
+			trap_DropClient(client - level.clients, "Dropped due to inactivity");
+			return qfalse;
+		}
+		if ((level.time > (client->pers.inactivityTime - 10000)) && !client->pers.inactivityWarning) {
+			client->pers.inactivityWarning = qtrue;
+
+			if (!(be_inactivity.integer & BE_INACTIVITY_SPECTATOR) && IsSpectator(client)) {
+				/* If spectators do not have inactivity and this is a spectator, continue */
+				return qtrue;
+			}
+
+			if ((be_inactivity.integer & BE_INACTIVITY_SPECTATE) && !IsSpectator(client)) {
+				SendClientCommand((client - level.clients), CCMD_CP,
+								  S_COLOR_BOLD "Ten seconds until spectator mode\n" S_COLOR_BOLD
+											   "due to inactivity!\n");
+			} else {
+				SendClientCommand((client - level.clients), CCMD_CP,
+								  S_COLOR_BOLD "Ten seconds until inactivity drop!\n");
+			}
+		}
+	}
+
+	return qtrue;
+	/* end beryllium */
 }
 
 /*
@@ -424,6 +490,10 @@ void ClientTimerActions(gentity_t *ent, int msec) {
 
 	while (client->timeResidual >= 1000) {
 		client->timeResidual -= 1000;
+
+		/* added beryllium */
+		BE_ClientTimerActions(ent);
+		/* end beryllium */
 
 		if (client->ps.powerups[PW_REVIVAL]) {
 			if (ent->health < client->ps.stats[STAT_MAX_HEALTH]) {
@@ -695,6 +765,51 @@ void ClientThink_real(gentity_t *ent) {
 		//		G_Printf("serverTime >>>>>\n" );
 	}
 
+	/* added beryllium */
+	/* unlagged - backward reconciliation #4 */
+	/* frameOffset should be about the number of milliseconds into a frame
+	   this command packet was received, depending on how fast the server
+	   does a G_RunFrame()
+	*/
+	client->frameOffset = (trap_Milliseconds() - level.frameStartTime);
+
+	/* unlagged - true ping */
+	/* Save the estimated ping in a queue for averaging later */
+
+	/* We use level.previousTime to account for 50ms lag correction.
+	   Besides, this will turn out numbers more like what players are used to.
+	*/
+	client->pers.pingsamples[client->pers.samplehead] = (level.previousTime + client->frameOffset - ucmd->serverTime);
+	client->pers.samplehead++;
+	if (client->pers.samplehead >= NUM_PING_SAMPLES) {
+		client->pers.samplehead -= NUM_PING_SAMPLES;
+	}
+
+	if (g_truePing.integer) {
+		int i, sum = 0;
+
+		for (i = 0; i < NUM_PING_SAMPLES; i++) {
+			sum += client->pers.pingsamples[i];
+		}
+
+		client->pers.realPing = sum / NUM_PING_SAMPLES;
+	} else {
+		client->pers.realPing = client->ps.ping;
+	}
+
+	/* unlagged - smooth clients #1 */
+	/*
+	   Keep track of this for later - we'll use this to decide whether or not
+	   to send extrapolated positions for this client
+	*/
+	client->lastUpdateFrame = level.framenum;
+
+	/* Make sure the true ping is over 0 - with negative cl_timenudge it can be less */
+	if (client->pers.realPing < 0) {
+		client->pers.realPing = 0;
+	}
+	/* end beryllium */
+
 	msec = ucmd->serverTime - client->ps.commandTime;
 	// following others may result in bad times, but we still want
 	// to check for follow toggles
@@ -728,8 +843,17 @@ void ClientThink_real(gentity_t *ent) {
 	}
 
 	if ((client->buttons & BUTTON_DROPCART) && !(client->oldbuttons & BUTTON_DROPCART)) {
-		Cmd_DropCartridge_f(ent);
+		Cmd_dropCartridge_f(ent);
 	}
+
+	/* added beryllium */
+	/* Do inactivity checks before spectator thinks. Otherwise clients can accumulate inactivity
+	 * as a spectator and then get dropped for inactivity once they join the game again.
+	 */
+	if (!ClientInactivityTimer(client)) {
+		return;
+	}
+	/* end beryllium */
 
 	// spectators don't do much
 	if ((client->sess.sessionTeam == TEAM_SPECTATOR) || LPSDeadSpec(client)) {
@@ -742,10 +866,14 @@ void ClientThink_real(gentity_t *ent) {
 		return;
 	}
 
+	/* changed beryllium */
+	/*
 	// check for inactivity timer, but never drop the local client of a non-dedicated server
-	if (!ClientInactivityTimer(client)) {
+	if ( !ClientInactivityTimer( client ) ) {
 		return;
 	}
+	*/
+	/* end beryllium */
 
 	// clear the rewards if time
 	if (level.time > client->rewardTime) {
@@ -801,6 +929,9 @@ void ClientThink_real(gentity_t *ent) {
 	// go through as an attack unless it actually hits something
 	if ((client->ps.weapon == WP_PUNCHY) && !(ucmd->buttons & BUTTON_TALK) && (ucmd->buttons & BUTTON_ATTACK) &&
 		(client->ps.weaponTime <= 0) && !InSprayroom(client)) {
+		/* added beryllium */
+		BE_FireWeapon(ent);
+		/* end beryllium */
 		pm.gauntletHit = CheckGauntletAttack(ent);
 	}
 
@@ -835,11 +966,27 @@ void ClientThink_real(gentity_t *ent) {
 	if (ent->client->ps.eventSequence != oldEventSequence) {
 		ent->eventTime = level.time;
 	}
+
+	/* changed beryllium */
+	/* unlagged - smooth clients #2 */
+	/*
+	   Clients no longer do extrapolation if cg_smoothClients is 1, because
+	   skip correction is all handled server-side now
+	   since that's the case, it makes no sense to store the extra info
+	   in the client's snapshot entity, so let's save a little bandwidth
+	*/
+	/*
 	if (g_smoothClients.integer) {
-		BG_PlayerStateToEntityStateExtraPolate(&ent->client->ps, &ent->s, ent->client->ps.commandTime, qtrue);
-	} else {
-		BG_PlayerStateToEntityState(&ent->client->ps, &ent->s, qtrue);
+		BG_PlayerStateToEntityStateExtraPolate( &ent->client->ps, &ent->s, ent->client->ps.commandTime, qtrue );
 	}
+	else {
+		BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qtrue );
+	}
+	*/
+
+	BG_PlayerStateToEntityState(&ent->client->ps, &ent->s, qtrue);
+	/* end beryllium */
+
 	SendPendingPredictableEvents(&ent->client->ps);
 
 	if (!(ent->client->ps.eFlags & EF_FIRING)) {
@@ -951,9 +1098,15 @@ void ClientThink(int clientNum) {
 	ent = g_entities + clientNum;
 	trap_GetUsercmd(clientNum, &ent->client->pers.cmd);
 
+	/* changed beryllium */
+	/* unlagged - smooth clients #1 */
+	/* This is handled differently now */
+	/*
 	// mark the time we got info, so we can display the
 	// phone jack if they don't get any for a while
 	ent->client->lastCmdTime = level.time;
+	*/
+	/* end beryllium */
 
 	if (!(ent->r.svFlags & SVF_BOT) && !g_synchronousClients.integer) {
 		ClientThink_real(ent);
@@ -1055,23 +1208,80 @@ void ClientEndFrame(gentity_t *ent) {
 	P_DamageFeedback(ent);
 
 	// add the EF_CONNECTION flag if we haven't gotten commands recently
-	if (level.time - ent->client->lastCmdTime > 1000) {
-		ent->client->ps.eFlags |= EF_CONNECTION;
+	/* changed beryllium */
+	/*
+	if ( level.time - ent->client->lastCmdTime > 1000 ) {
+		ent->s.eFlags |= EF_CONNECTION;
 	} else {
+		ent->s.eFlags &= ~EF_CONNECTION;
+	}
+	*/
+	/* s->eFlags gets overwritten by ps->eFlags in BG_PlayerStateToEntityState.. */
+
+	/* unlagged - smooth clients #1 */
+	/* This is handled differently now */
+	/*
+	if ( ( level.time - ent->client->lastCmdTime ) > 1000 ) {
+		ent->client->ps.eFlags |= EF_CONNECTION;
+	}
+	else {
 		ent->client->ps.eFlags &= ~EF_CONNECTION;
 	}
+	*/
+	/* end beryllium */
 
 	ent->client->ps.stats[STAT_HEALTH] = ent->health; // FIXME: get rid of ent->health...
 
 	G_SetClientSound(ent);
 
-	// set the latest infor
+	// set the latest information
+	/* changed beryllium */
+	/* unlagged - smooth clients #2 */
+	/*
+	   Clients no longer do extrapolation if cg_smoothClients is 1, because
+	   skip correction is all handled server-side now
+	   since that's the case, it makes no sense to store the extra info
+	   in the client's snapshot entity, so let's save a little bandwidth
+	*/
+	/*
 	if (g_smoothClients.integer) {
-		BG_PlayerStateToEntityStateExtraPolate(&ent->client->ps, &ent->s, ent->client->ps.commandTime, qtrue);
-	} else {
-		BG_PlayerStateToEntityState(&ent->client->ps, &ent->s, qtrue);
+		BG_PlayerStateToEntityStateExtraPolate( &ent->client->ps, &ent->s, ent->client->ps.commandTime, qtrue );
 	}
+	else {
+		BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qtrue );
+	}
+	*/
+
+	BG_PlayerStateToEntityState(&ent->client->ps, &ent->s, qtrue);
+	/* end beryllium */
+
 	SendPendingPredictableEvents(&ent->client->ps);
+
+	/* added beryllium */
+	/* unlagged - smooth clients #1 */
+	/* Mark as not missing updates initially */
+	ent->client->ps.eFlags &= ~EF_CONNECTION;
+
+	/* See how many frames the client has missed */
+	frames = (level.framenum - ent->client->lastUpdateFrame - 1);
+
+	/* Don't extrapolate more than two frames */
+	if (frames > 2) {
+		frames = 2;
+
+		/* If they missed more than two in a row, show the phone jack */
+		ent->client->ps.eFlags |= EF_CONNECTION;
+		ent->s.eFlags |= EF_CONNECTION;
+	}
+
+	/* Did the client miss any frames? */
+	if ((frames > 0) && g_smoothClients.integer) {
+		/* Yep, missed one or more, so extrapolate the player's movement */
+		G_PredictPlayerMove(ent, (float)frames / sv_fps.integer);
+		/* Save network bandwidth */
+		SnapVector(ent->s.pos.trBase);
+	}
+	/* end beryllium */
 
 	// set the bit for the reachability area the client is currently in
 	//	i = trap_AAS_PointReachabilityAreaIndex( ent->client->ps.origin );

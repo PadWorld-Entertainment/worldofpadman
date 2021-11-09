@@ -196,14 +196,19 @@ static const g_gametypeBitmap_s gametypeMap[GT_MAX_GAME_TYPE] = {
 GametypeBits
 =================
 */
-static int GametypeBits(const char *string) {
+/* changed beryllium */
+/*
+static int GametypeBits( const char *string ) {
+*/
+int GametypeBits(const char *string) {
+	/* end beryllium */
 	int bits;
-	const char *p;
-	const char *token;
+	char *p;
+	char *token;
 	int i;
 
 	bits = 0;
-	p = (const char *)string;
+	p = (char *)string;
 	while (qtrue) {
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {

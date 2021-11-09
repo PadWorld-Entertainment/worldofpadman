@@ -951,13 +951,17 @@ static void BotCtfSeekGoals(bot_state_t *bs) {
 		return;
 	}
 
-#if 0
-	if (bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BAMBAM) {
-		if (bs->ltgtype == LTG_PLANTBAMBAM)
+	/* changed beryllium */
+	/*
+	if( bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BAMBAM )
+	{
+		if( bs->ltgtype == LTG_PLANTBAMBAM )
 			return;
-		else {
+		else
+		{
 			// plant bambam
-			if (PickBambamGoal(bs)) {
+			if( PickBambamGoal(bs) )
+			{
 				bs->decisionmaker = bs->client;
 				bs->ltgtype = LTG_PLANTBAMBAM;
 				bs->teamgoal_time = FloatTime() + 120;
@@ -967,12 +971,15 @@ static void BotCtfSeekGoals(bot_state_t *bs) {
 		return;
 	}
 
-	if (bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BOOMIE) {
-		if (bs->ltgtype == LTG_PLANTBOOMIE)
+	if( bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_BOOMIE )
+	{
+		if(bs->ltgtype == LTG_PLANTBOOMIE )
 			return;
-		else {
+		else
+		{
 			// plant boomie
-			if (PickBoomieGoal(bs)) {
+			if( PickBoomieGoal(bs) )
+			{
 				bs->decisionmaker = bs->client;
 				bs->ltgtype = LTG_PLANTBOOMIE;
 				bs->teamgoal_time = FloatTime() + 120;
@@ -981,7 +988,36 @@ static void BotCtfSeekGoals(bot_state_t *bs) {
 			// no goal, choose another ltgtype
 		}
 	}
-#endif
+	*/
+
+	if (BE_Bot_UseItems()) {
+		if (MODELINDEX_BAMBAM == bs->cur_ps.stats[STAT_HOLDABLE_ITEM]) {
+			if (LTG_PLANTBAMBAM == bs->ltgtype) {
+				return;
+			} else {
+				if (PickBambamGoal(bs)) {
+					bs->decisionmaker = bs->client;
+					bs->ltgtype = LTG_PLANTBAMBAM;
+					// FIXME: Magical constant 120
+					bs->teamgoal_time = (FloatTime() + 120);
+					return;
+				}
+			}
+		} else if (MODELINDEX_BOOMIE == bs->cur_ps.stats[STAT_HOLDABLE_ITEM]) {
+			if (LTG_PLANTBOOMIE == bs->ltgtype) {
+				return;
+			} else {
+				if (PickBoomieGoal(bs)) {
+					bs->decisionmaker = bs->client;
+					bs->ltgtype = LTG_PLANTBOOMIE;
+					// FIXME: Magical constant 120
+					bs->teamgoal_time = (FloatTime() + 120);
+					return;
+				}
+			}
+		}
+	}
+	/* end beryllium */
 
 	// dont go for ctl-goals as long as bad equiped (though don't interrupt important tasks)
 	if (bs->ltgtype != LTG_PICKUPFLAG && // LTG_CAPTUREFLAG is covered above
@@ -2345,6 +2381,11 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 		if (EntityIsInvisible(&entinfo) && !EntityIsShooting(&entinfo)) {
 			continue;
 		}
+		/* added beryllium */
+		if (g_entities[i].flags & FL_NOTARGET) {
+			continue;
+		}
+		/* end beryllium */
 		// no fighting in the sprayroom please
 		if (ClientInSprayroom(i))
 			continue;
@@ -4298,6 +4339,10 @@ void BotCheckSnapshot(bot_state_t *bs) {
 		BotCheckEvents(bs, &state);
 		// check for grenades the bot should avoid
 		BotCheckForGrenades(bs, &state);
+		//
+		/* added beryllium */
+		BE_Bot_CheckEntity(bs, &state);
+		/* end added */
 	}
 	// check the player state for events
 	BotAI_GetEntityState(bs->client, &state);

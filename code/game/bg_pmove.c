@@ -1695,7 +1695,12 @@ fire:
 	pm->ps->eFlags &= ~EF_CHARGED;
 
 	// take an ammo away if not infinite
-	if (pm->ps->ammo[pm->ps->weapon] != -1) {
+	/* changed beryllium */
+	/*
+	if ( pm->ps->ammo[ pm->ps->weapon ] != -1 ) {
+	*/
+	if ((pm->ps->ammo[pm->ps->weapon] != -1) && (pm->ps->ammo[pm->ps->weapon] != UNLIMITED)) {
+		/* end beryllium */
 		pm->ps->ammo[pm->ps->weapon]--;
 	}
 

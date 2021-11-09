@@ -89,6 +89,7 @@ vmCvar_t g_LPS_flags;
 vmCvar_t g_KillerduckHealth;
 vmCvar_t nextmapBackUp;
 vmCvar_t g_transmitSVboastermissiles;
+vmCvar_t wop_storyMode;
 vmCvar_t g_suddenDeath;
 
 // freezetag
@@ -103,7 +104,65 @@ vmCvar_t g_ft_debug;
 vmCvar_t g_modInstagib;
 vmCvar_t g_modInstagib_WeaponJump;
 
+// Game Stats
+vmCvar_t g_trackGameStats;
+
 vmCvar_t g_logDamage;
+
+/* added beryllium */
+
+vmCvar_t g_beryllium;
+vmCvar_t g_version;
+
+vmCvar_t be_voteDuration;
+vmCvar_t be_allowedVotes;
+vmCvar_t be_votePause;
+vmCvar_t be_voteRate;
+vmCvar_t be_votePass;
+vmCvar_t be_maxVotes;
+
+vmCvar_t be_respawnProtect;
+
+vmCvar_t be_switchTeamTime;
+
+vmCvar_t be_maxNameChanges;
+
+vmCvar_t be_checkGUIDs;
+
+vmCvar_t be_maxConnections;
+
+vmCvar_t be_campDistance;
+
+vmCvar_t be_checkPings;
+
+/* FIXME: Merge this into wop codebase as g_oneUp */
+vmCvar_t be_oneUp;
+
+vmCvar_t be_noSecrets;
+vmCvar_t be_debugSecrets;
+
+vmCvar_t be_hideChat;
+
+vmCvar_t be_banFile;
+
+vmCvar_t g_truePing;
+
+vmCvar_t be_chatFlags;
+
+vmCvar_t be_overrideEntities;
+
+vmCvar_t be_settings;
+
+vmCvar_t be_welcomeMessage;
+
+vmCvar_t be_botFlags;
+
+vmCvar_t be_inactivity;
+
+/* unlagged - server options */
+vmCvar_t sv_fps;
+
+/* end beryllium */
 
 // bk001129 - made static to avoid aliasing
 static cvarTable_t gameCvarTable[] = {
@@ -172,6 +231,7 @@ static cvarTable_t gameCvarTable[] = {
 	{&g_allowVote, "g_allowVote", "1", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},
 	{&g_listEntity, "g_listEntity", "0", 0, 0, qfalse},
 
+	/* beryllium: NOTE: Used by unlagged */
 	{&g_smoothClients, "g_smoothClients", "1", 0, 0, qfalse},
 	/* Still causing issues, maybe use pmove_float from OpenArena instead */
 	{&pmove_fixed, "pmove_fixed", "0", CVAR_SYSTEMINFO, 0, qfalse},
@@ -204,14 +264,75 @@ static cvarTable_t gameCvarTable[] = {
 	{NULL, PLAYERINFO_TEAM, PLAYERINFO_NONE, (CVAR_SERVERINFO | CVAR_ROM), 0, qfalse},
 	{NULL, PLAYERINFO_BOT, PLAYERINFO_NONE, (CVAR_SERVERINFO | CVAR_ROM), 0, qfalse},
 
-	{&g_logDamage, "g_logDamage", "0", CVAR_ARCHIVE, 0, qfalse}};
+	{&g_logDamage, "g_logDamage", "0", CVAR_ARCHIVE, 0, qfalse},
 
-static const int gameCvarTableSize = ARRAY_LEN(gameCvarTable);
+	/* added beryllium */
 
-static void G_InitGame(int levelTime, int randomSeed, int restart);
-static void G_RunFrame(int levelTime);
-static void G_ShutdownGame(int restart);
-static void CheckExitRules(void);
+	{&g_beryllium, "g_beryllium", "v" BERYLLIUM_VERSION_S, (CVAR_SERVERINFO | CVAR_ROM), 0, qfalse},
+	/* NOTE: This is meant to allow identification of codebase and thus compatibility. */
+	{&g_version, "g_version", G_VERSION_S, CVAR_ROM, 0, qfalse},
+
+	/* FIXME: Use proper g_ instead of be_ prefix? */
+	{&be_voteDuration, "be_voteDuration", "30", CVAR_ARCHIVE, 0, qfalse},
+	/* FIXME: Keep in sync with vote command handler string array? */
+	{&be_allowedVotes, "be_allowedVotes",
+	 "/nextmap/map/map_restart/kick/clientkick/timelimit/pointlimit"
+	 "/g_gametype/setgametype/shuffleteams/",
+	 CVAR_ARCHIVE, 0, qtrue},
+	{&be_votePause, "be_votePause", "0", CVAR_ARCHIVE, 0, qfalse},
+	{&be_voteRate, "be_voteRate", "0", CVAR_ARCHIVE, 0, qfalse},
+	{&be_votePass, "be_votePass", "0.5", CVAR_ARCHIVE, 0, qfalse},
+	{&be_maxVotes, "be_maxVotes", "3", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_respawnProtect, "be_respawnProtect", "0", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_switchTeamTime, "be_switchTeamTime", "5", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_maxNameChanges, "be_maxNameChanges", "-1", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_checkGUIDs, "be_checkGUIDs", "0", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_maxConnections, "be_maxConnections", "0", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_campDistance, "be_campDistance", "0", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_checkPings, "be_checkPings", "0", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_oneUp, "be_oneUp", "0", CVAR_ARCHIVE, 0, qtrue},
+
+	{&be_noSecrets, "be_noSecrets", "0", (CVAR_ARCHIVE | CVAR_LATCH), 0, qtrue},
+	{&be_debugSecrets, "be_debugSecrets", "0", CVAR_CHEAT, 0, qfalse},
+
+	{&be_hideChat, "be_hideChat", "", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_banFile, "be_banFile", "guidbans.dat", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_chatFlags, "be_chatFlags", "0", CVAR_ARCHIVE, 0, qtrue},
+
+	{&be_overrideEntities, "be_overrideEntities", "0", CVAR_ARCHIVE, 0, qtrue},
+
+	{&be_settings, "be_settings", "0", (CVAR_ARCHIVE | CVAR_LATCH), 0, qfalse},
+
+	{&be_welcomeMessage, "be_welcomeMessage", "", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_botFlags, "be_botFlags", "0", CVAR_ARCHIVE, 0, qfalse},
+
+	{&be_inactivity, "be_inactivity", "3", CVAR_ARCHIVE, 0, qfalse},
+
+	/* unlagged - server options */
+	{&g_truePing, "g_truePing", "1", CVAR_ARCHIVE, 0, qtrue},
+	/* No CVAR_SYSTEMINFO, since WoP cgame doesn't have this */
+	{&sv_fps, "sv_fps", "20", CVAR_ARCHIVE, 0, qfalse}
+
+	/* end beryllium */
+};
+
+static int gameCvarTableSize = ARRAY_LEN(gameCvarTable);
+
+void G_InitGame(int levelTime, int randomSeed, int restart);
+void G_RunFrame(int levelTime);
+void G_ShutdownGame(int restart);
+void CheckExitRules(void);
 
 /*
 ================
@@ -384,10 +505,30 @@ void G_UpdateCvars(void) {
 				cv->modificationCount = cv->vmCvar->modificationCount;
 
 				if (cv->trackChange) {
+					/* changed beryllium */
+					/*
 					// FIXME: This will display the current value instead of the latched one
-					trap_SendServerCommand(
-						-1, va("print \"Server: %s changed to %s\n\"", cv->cvarName, cv->vmCvar->string));
+					trap_SendServerCommand( -1, va("print \"Server: %s changed to %s\n\"",
+						cv->cvarName, cv->vmCvar->string ) );
+					*/
+					if (cv->cvarFlags & CVAR_LATCH) {
+						// game is unaware of the new latched value, so just don't print it
+						SendClientCommand(
+							CID_ALL, CCMD_PRT,
+							va("Variable " S_COLOR_ITALIC "%s" S_COLOR_DEFAULT " changed.\n", cv->cvarName));
+					} else {
+						// FIXME: Don't print the new value at all?
+						SendClientCommand(CID_ALL, CCMD_PRT,
+										  va("Variable " S_COLOR_ITALIC "%s" S_COLOR_DEFAULT
+											 " changed to " S_COLOR_ITALIC "%s" S_COLOR_DEFAULT ".\n",
+											 cv->cvarName, cv->vmCvar->string));
+					}
+					/* end beryllium */
 					G_LogPrintf("CvarChange: %s %s\n", cv->cvarName, cv->vmCvar->string);
+				}
+
+				if (cv->teamShader) {
+					remapped = qtrue;
 				}
 			}
 		}
@@ -413,6 +554,9 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 	G_ProcessIPBans();
 
 	G_InitMemory();
+	/* added beryllium */
+	BE_InitMemory();
+	/* end beryllium */
 
 	// set some level globals
 	memset(&level, 0, sizeof(level));
@@ -452,6 +596,10 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 	}
 
 	G_InitWorldSession();
+
+	/* added beryllium */
+	BE_InitWorldStorage();
+	/* end beryllium */
 
 	// initialize all entities for this game
 	memset(g_entities, 0, MAX_GENTITIES * sizeof(g_entities[0]));
@@ -517,6 +665,10 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 	}
 
 	G_InitGameinfo();
+
+	/* added beryllium */
+	BE_InitBeryllium();
+	/* end beryllium */
 }
 
 /*
@@ -545,6 +697,10 @@ static void G_ShutdownGame(int restart) {
 
 	// write all the client session data so we can get it back
 	G_WriteSessionData();
+
+	/* added beryllium */
+	BE_WriteStorageData();
+	/* end beryllium */
 
 	if (trap_Cvar_VariableIntegerValue("bot_enable")) {
 		BotAIShutdown(restart);
@@ -1220,6 +1376,10 @@ void ExitLevel(void) {
 
 	// we need to do this here before changing to CON_CONNECTING
 	G_WriteSessionData();
+
+	/* added beryllium */
+	BE_WriteStorageData();
+	/* end beryllium */
 
 	// change all client states to connecting, so the early players into the
 	// next level will know the others aren't done reconnecting
@@ -2357,7 +2517,12 @@ static void G_RunFrame(int levelTime) {
 	CheckTeamStatus();
 
 	// cancel vote if timed out
+	/* changed beryllium */
+	/*
 	CheckVote();
+	*/
+	BE_CheckVote();
+	/* end beryllium */
 
 	// check team votes
 	CheckTeamVote(TEAM_RED);
@@ -2375,4 +2540,34 @@ static void G_RunFrame(int levelTime) {
 
 	if (!level.intermissiontime)
 		WoP_RunFrame();
+
+	/* added beryllium */
+
+	/* unlagged - backward reconciliation #4 */
+	/* Record the time at the end of this frame - it should be about
+	   the time the next frame begins - when the server starts
+	   accepting commands from connected clients
+	*/
+	level.frameStartTime = trap_Milliseconds();
+
+	/* end beryllium */
 }
+
+/* added beryllium */
+/* NOTE: This should be in be_util.c, but gameCvarTable is static. */
+/*
+	Returns the name used to register the cvar or NULL if not found in
+	local cvar table.
+*/
+char *NameForCvar(const vmCvar_t *vmCvar) {
+	int i;
+
+	for (i = 0; i < ARRAY_LEN(gameCvarTable); ++i) {
+		if (vmCvar == gameCvarTable[i].vmCvar) {
+			return gameCvarTable[i].cvarName;
+		}
+	}
+
+	return NULL;
+}
+/* end beryllium */
