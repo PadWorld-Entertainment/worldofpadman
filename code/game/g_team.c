@@ -66,9 +66,9 @@ int OtherTeam(int team) {
 
 const char *TeamName(int team) {
 	if (team == TEAM_RED)
-		return "RED";
+		return "RED PADS";
 	else if (team == TEAM_BLUE)
-		return "BLUE";
+		return "BLUE NOSES";
 	else if (team == TEAM_SPECTATOR)
 		return "SPECTATOR";
 	return "FREE";
@@ -317,7 +317,7 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
 		AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS, SCORE_BONUS_FRAG_CARRIER_S);
 		attacker->client->pers.teamState.fragcarrier++;
-		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s's flag carrier!\n", attacker->client->pers.netname,
+		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s's lolly carrier!\n", attacker->client->pers.netname,
 				 TeamName(team));
 
 		// the target had the flag, clear the hurt carrier

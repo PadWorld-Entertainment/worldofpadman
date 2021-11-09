@@ -256,7 +256,7 @@ static void CG_Obituary(entityState_t *ent) {
 			message = "was nipped by";
 			break;
 		case MOD_PUMPER:
-			message = "was pumped full of lead by";
+			message = "was electrocuted by";
 			message2 = "'s Pumper";
 			break;
 		case MOD_BALLOONY:
