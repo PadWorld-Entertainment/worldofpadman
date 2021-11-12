@@ -1,0 +1,504 @@
+# WoP NSIS Installer
+!verbose 3
+
+
+# General definitions
+!define VERSION "1.6.2"
+!define PRODUCTNAME "World of Padman"
+!define SHORTNAME "wop"
+!define COMPANY "Padworld Entertainment"
+!define URL "https://www.worldofpadman.net"
+!define REGKEY "SOFTWARE\${COMPANY}\${PRODUCTNAME} ${VERSION}"
+!define UNREGKEY "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCTNAME} ${VERSION}"
+!define MUI_ICON "c:\Users\Kai\Documents\World of Padman\Installer\wop.ico"
+!define MUI_UNICON "c:\Users\Kai\Documents\World of Padman\Installer\unwop.ico"
+!define FILENAME "${SHORTNAME}-${VERSION}-full-installer.exe"
+!define SRC "c:\Users\Kai\Documents\World of Padman\Installer\wop-content"
+!define SPLPIC "c:\Users\Kai\Documents\World of Padman\Installer\setup.bmp"
+!define BGPIC "c:\Users\Kai\Documents\World of Padman\Installer\screen.bmp"
+!define SIDEPIC "c:\Users\Kai\Documents\World of Padman\Installer\index.bmp"
+!define HEADPIC "c:\Users\Kai\Documents\World of Padman\Installer\header.bmp"
+!define EXTRASTUFF "c:\Users\Kai\Documents\World of Padman\Installer\wop-extras"
+
+
+# Installer attributes
+Name "${PRODUCTNAME} ${VERSION}"
+OutFile "${FILENAME}"
+InstallDir "$PROGRAMFILES64\${COMPANY}\${PRODUCTNAME} ${VERSION}"
+SetCompressor /SOLID zlib
+CRCCheck on
+XPStyle on
+ShowInstDetails hide
+ShowUninstDetails hide
+InstallDirRegKey HKLM "${REGKEY}" Path
+BrandingText /TRIMLEFT "${COMPANY}"
+RequestExecutionLevel admin
+
+
+# MultiUser
+!define MULTIUSER_EXECUTIONLEVEL Admin
+!define MULTIUSER_MUI
+!define MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_KEY "${REGKEY}"
+!define MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_VALUENAME MultiUserInstallMode
+!define MULTIUSER_INSTALLMODE_COMMANDLINE
+!define MULTIUSER_INSTALLMODE_INSTDIR "${COMPANY}\${PRODUCTNAME} ${VERSION}"
+!define MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_KEY "${REGKEY}"
+!define MULTIUSER_INSTALLMODE_INSTDIR_REGISTRY_VALUE "Path"
+
+
+# MUI
+!define MUI_ABORTWARNING
+!define MUI_CUSTOMFUNCTION_GUIINIT "CustomGUIInit"
+!define MUI_LANGDLL_REGISTRY_ROOT HKLM
+!define MUI_LANGDLL_REGISTRY_KEY "${REGKEY}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "InstallerLanguage"
+
+
+# Included files
+!include MUI2.nsh
+!include MultiUser.nsh
+!include Sections.nsh
+!include x64.nsh
+
+
+# Reserved Files
+ReserveFile "${NSISDIR}\Plugins\x86-unicode\advsplash.dll"
+ReserveFile "${NSISDIR}\Plugins\x86-unicode\BGImage.dll"
+ReserveFile "${NSISDIR}\Plugins\x86-unicode\SimpleFC.dll"
+!insertmacro MUI_RESERVEFILE_LANGDLL
+
+
+# Variables
+Var SMGroup
+
+
+# Installer pages
+
+# welcome page
+!define MUI_WELCOMEPAGE_TITLE_3LINES
+!define MUI_WELCOMEFINISHPAGE_BITMAP "${SIDEPIC}"
+!define MUI_HEADERIMAGE
+!define MUI_HEADERIMAGE_RIGHT
+!define MUI_HEADERIMAGE_BITMAP "${HEADPIC}"
+!insertmacro MUI_PAGE_WELCOME
+
+# license page
+!define MUI_LICENSEPAGE_CHECKBOX
+!insertmacro MUI_PAGE_LICENSE $(MUILicense)
+
+# directory selection page
+!define MUI_DIRECTORYPAGE_VERIFYONLEAVE
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE dirLeave
+!insertmacro MUI_PAGE_DIRECTORY
+
+# component selection page
+!define MUI_COMPONENTSPAGE_SMALLDESC
+!insertmacro MUI_PAGE_COMPONENTS
+
+# startmenu page
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "${REGKEY}"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "${COMPANY}\${PRODUCTNAME} ${VERSION}"
+!insertmacro MUI_PAGE_STARTMENU "Application" $SMGroup
+
+# installation progress page
+!insertmacro MUI_PAGE_INSTFILES
+
+# installer finish-page
+!define MUI_FINISHPAGE_TITLE_3LINES
+!define MUI_FINISHPAGE_TEXT_LARGE
+!define MUI_FINISHPAGE_NOAUTOCLOSE
+!define MUI_FINISHPAGE_RUN "$INSTDIR\wop.x86_64.exe"
+!define MUI_FINISHPAGE_RUN_NOTCHECKED
+!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\XTRAS\readme.html"
+!define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
+!define MUI_FINISHPAGE_LINK "${PRODUCTNAME} Website"
+!define MUI_FINISHPAGE_LINK_LOCATION "${URL}"
+!define MUI_FINISHPAGE_NOREBOOTSUPPORT
+!insertmacro MUI_PAGE_FINISH
+
+# uninstaller finish-page
+!define MUI_UNFINISHPAGE_NOAUTOCLOSE
+!insertmacro MUI_UNPAGE_CONFIRM
+
+# uninstaller progress page
+!insertmacro MUI_UNPAGE_INSTFILES
+
+# installer languages
+!insertmacro MUI_LANGUAGE English
+!insertmacro MUI_LANGUAGE German
+
+
+# version info (windows: file properties -> details)
+VIProductVersion 1.6.2.0
+
+VIAddVersionKey /LANG=${LANG_GERMAN} ProductName "${PRODUCTNAME}"
+VIAddVersionKey /LANG=${LANG_GERMAN} ProductVersion "${VERSION}"
+VIAddVersionKey /LANG=${LANG_GERMAN} CompanyName "${COMPANY}"
+VIAddVersionKey /LANG=${LANG_GERMAN} CompanyWebsite "${URL}"
+VIAddVersionKey /LANG=${LANG_GERMAN} FileVersion "${VERSION}"
+VIAddVersionKey /LANG=${LANG_GERMAN} FileDescription "${SHORTNAME}-${VERSION} Installer"
+VIAddVersionKey /LANG=${LANG_GERMAN} LegalCopyright "© ${COMPANY}"
+VIAddVersionKey /LANG=${LANG_GERMAN} OriginalFilename "${FILENAME}"
+
+VIAddVersionKey /LANG=${LANG_ENGLISH} ProductName "${PRODUCTNAME}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} ProductVersion "${VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} CompanyName "${COMPANY}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} CompanyWebsite "${URL}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} FileVersion "${VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} FileDescription "${SHORTNAME}-${VERSION} Installer"
+VIAddVersionKey /LANG=${LANG_ENGLISH} LegalCopyright "© ${COMPANY}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} OriginalFilename "${FILENAME}"
+
+
+# main files
+Section $(NAME_Section1) Section1
+    SectionIn RO
+    SetOverwrite on
+
+    SetOutPath "$INSTDIR"
+    File /r "${SRC}\wop"
+    File /r "${SRC}\XTRAS"
+    File "${SRC}\renderer_opengl1_x86_64.dll"
+    File "${SRC}\renderer_opengl2_x86_64.dll"
+#    File "${SRC}\renderer_vulkan_x86_64.dll"
+    File "${SRC}\SDL2.dll"
+    File "${SRC}\wop.x86_64.exe"
+    File "${SRC}\wopded.x86_64.exe"
+    
+    !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
+        SetOutPath "$SMPROGRAMS\$SMGroup"
+		WriteIniStr "$SMPROGRAMS\$SMGroup\$(VisitWebsiteLink).url" "InternetShortcut" "URL" "${URL}"
+		WriteIniStr "$SMPROGRAMS\$SMGroup\$(VisitWebsiteLink).url" "InternetShortcut" "IconFile" "$INSTDIR\XTRAS\wop.ico"
+		WriteIniStr "$SMPROGRAMS\$SMGroup\$(VisitWebsiteLink).url" "InternetShortcut" "IconIndex" "0"
+        CreateShortCut "$SMPROGRAMS\$SMGroup\$(PlayWoPLink).lnk" "$INSTDIR\wop.x86_64.exe" "" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\$(UninstallLink).lnk" "$INSTDIR\unwop.exe" "" "$INSTDIR\XTRAS\unwop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\${PRODUCTNAME} Readme.lnk" "$INSTDIR\XTRAS\readme.html" "" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateDirectory "$SMPROGRAMS\$SMGroup\Dedicated Server"
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\Spray Your Color Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-sprayyourcolour.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\Big Balloon Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-bigballoon.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\Last Pad Standing Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-lastpadstanding.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\Capture The Lolly Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-capturethelolly.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\All Gametypes Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-allgametypes.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateDirectory "$SMPROGRAMS\$SMGroup\Listen Server"
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Spray Your Color Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-sprayyourcolour.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Big Balloon Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-bigballoon.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Last Pad Standing Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-lastpadstanding.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Capture The Lolly Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-capturethelolly.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\All Gametypes Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-allgametypes.cfg" "$INSTDIR\XTRAS\wop.ico" 0   
+    !insertmacro MUI_STARTMENU_WRITE_END
+    
+    WriteRegStr HKLM "${REGKEY}\Components" Main 1
+SectionEnd
+
+
+# Linux engine and program libraries
+Section /o $(NAME_Section2) Section2
+    SetOverwrite on
+    SetOutPath "$INSTDIR"
+    File "${SRC}\wop-linux.x86_64"
+    File "${SRC}\wopded-linux.x86_64"
+    File "${SRC}\renderer_opengl1_x86_64.so"
+    File "${SRC}\renderer_opengl2_x86_64.so"
+#    File "${SRC}\renderer_vulkan_x86_64.so"
+SectionEnd
+
+
+# MacOS engine and program libraries
+Section /o $(NAME_Section3) Section3
+    SetOverwrite on
+    SetOutPath "$INSTDIR"
+    File "${SRC}\libSDL2-2.0.0.dylib"
+    File "${SRC}\wop-osx.x86_64"
+    File "${SRC}\wopded-osx.x86_64"
+    File "${SRC}\renderer_opengl1_x86_64.dylib"
+    File "${SRC}\renderer_opengl2_x86_64.dylib"
+#    File "${SRC}\renderer_vulkan_x86_64.dylib"
+SectionEnd
+
+
+# DVD box covers
+Section /o $(NAME_Section4) Section4
+    SetOverwrite on
+    SetOutPath "$INSTDIR\XTRAS"
+    File "${EXTRASTUFF}\wop_blank_dvd.zip"
+    File "${EXTRASTUFF}\wop_dvd_box_cover_english.zip"
+    File "${EXTRASTUFF}\wop_dvd_box_cover_german.zip"
+SectionEnd
+
+
+# editing files
+Section /o $(NAME_Section5) Section5
+    SetOverwrite on
+    SetOutPath "$INSTDIR\XTRAS"
+    File /r "${EXTRASTUFF}\editing files"
+SectionEnd
+
+
+# shortcuts
+Section /o $(NAME_Section6) Section6
+    CreateShortCut "$INSTDIR\${PRODUCTNAME} ${VERSION}.lnk" "$INSTDIR\wop.x86_64.exe" "" "$INSTDIR\wop.x86_64.exe" 0
+    CreateShortCut "$DESKTOP\${PRODUCTNAME} ${VERSION}.lnk" "$INSTDIR\wop.x86_64.exe" "" "$INSTDIR\wop.x86_64.exe" 0
+    CreateShortCut "$QUICKLAUNCH\${PRODUCTNAME} ${VERSION}.lnk" "$INSTDIR\wop.x86_64.exe" "" "$INSTDIR\wop.x86_64.exe" 0
+SectionEnd
+
+
+# firewall rules - requires NSIS Simple Firewall Plugin
+Section /o $(NAME_Section7) Section7
+    SimpleFC::IsFirewallServiceRunning
+    Pop $0 ; return error(1)/success(0)
+    Pop $1 ; return 1=IsRunning/0=Not Running
+    ${Switch} $1
+        ${Case} 0
+            MessageBox MB_OK $(ERR_firewall)
+            ${Break}
+        ${Case} 1
+            SimpleFC::AddApplication "${PRODUCTNAME}" "$INSTDIR\wop.x86_64.exe" 0 2 "" 1
+            SimpleFC::AddApplication "${PRODUCTNAME} Dedicated Server" "$INSTDIR\wopded.x86_64.exe" 0 2 "" 1
+            ${Break}
+    ${EndSwitch}
+SectionEnd
+
+
+; Section descriptions
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section1} $(DESC_Section1)
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section2} $(DESC_Section2)
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section3} $(DESC_Section3)
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section4} $(DESC_Section4)
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section5} $(DESC_Section5)
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section6} $(DESC_Section6)
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section7} $(DESC_Section7)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+
+Section -post SEC0001
+    SetOutPath "$INSTDIR"
+    # write application- and uninstaller-registry-keys
+    WriteRegStr HKLM "${REGKEY}" Path $INSTDIR
+    WriteUninstaller "$INSTDIR\unwop.exe"
+    WriteRegStr HKLM "${UNREGKEY}" DisplayName "${PRODUCTNAME} ${VERSION}"
+    WriteRegStr HKLM "${UNREGKEY}" DisplayVersion "${VERSION}"
+    WriteRegStr HKLM "${UNREGKEY}" Publisher "${COMPANY}"
+    WriteRegStr HKLM "${UNREGKEY}" URLInfoAbout "${URL}"
+    WriteRegStr HKLM "${UNREGKEY}" DisplayIcon "$INSTDIR\unwop.exe"
+    WriteRegStr HKLM "${UNREGKEY}" UninstallString "$INSTDIR\unwop.exe"
+    WriteRegDWORD HKLM "${UNREGKEY}" NoModify 1
+    WriteRegDWORD HKLM "${UNREGKEY}" NoRepair 1
+SectionEnd
+
+
+# Macro for selecting uninstaller sections
+!macro SELECT_UNSECTION SECTION_NAME UNSECTION_ID
+    Push $R0
+    ReadRegStr $R0 HKLM "${REGKEY}\Components" "${SECTION_NAME}"
+    StrCmp $R0 1 0 next${UNSECTION_ID}
+    !insertmacro SelectSection "${UNSECTION_ID}"
+    GoTo done${UNSECTION_ID}
+    next${UNSECTION_ID}:
+        !insertmacro UnselectSection "${UNSECTION_ID}"
+    done${UNSECTION_ID}:
+        Pop $R0
+!macroend
+
+
+# uninstaller sections
+
+# delete files
+Section /o -un.Main UNSEC0000
+    RmDir /r /REBOOTOK "$INSTDIR\XTRAS"
+    RmDir /r /REBOOTOK "$INSTDIR\wop"
+    Delete /REBOOTOK "$INSTDIR\wop.x86_64.exe"
+    Delete /REBOOTOK "$INSTDIR\wopded.x86_64.exe"
+    Delete /REBOOTOK "$INSTDIR\SDL2.dll"
+    Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.dll"
+    Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.dll"
+#    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.dll"
+    # linux
+    Delete /REBOOTOK "$INSTDIR\wop-linux.x86_64"
+    Delete /REBOOTOK "$INSTDIR\wopded-linux.x86_64"
+    Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.so"
+    Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.so"
+#    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.so"
+    # mac
+    Delete /REBOOTOK "$INSTDIR\wop-osx.x86_64"
+    Delete /REBOOTOK "$INSTDIR\wopded-osx.x86_64"
+    Delete /REBOOTOK "$INSTDIR\libSDL2-2.0.0.dylib"
+    Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.dylib"
+    Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.dylib"
+#    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.dylib"
+   
+SectionEnd
+
+# delete firewall-rules, registry-keys and shortcuts
+Section -un.post UNSEC0001
+    SimpleFC::IsFirewallServiceRunning
+    Pop $0 ; return error(1)/success(0)
+    Pop $1 ; return 1=IsRunning/0=Not Running
+    ${Switch} $1
+        ${Case} 0
+            MessageBox MB_OK $(ERR_firewall)
+            ${Break}
+        ${Case} 1
+            SimpleFC::RemoveApplication "$INSTDIR\wop.x86_64.exe"
+            SimpleFC::RemoveApplication "$INSTDIR\wopded.x86_64.exe"
+            ${Break}
+    ${EndSwitch}
+    DeleteRegKey HKLM "${REGKEY}"
+    DeleteRegKey HKLM "${UNREGKEY}"
+    Delete /REBOOTOK "$INSTDIR\${PRODUCTNAME} ${VERSION}.lnk"
+    Delete /REBOOTOK "$DESKTOP\${PRODUCTNAME} ${VERSION}.lnk"
+    Delete /REBOOTOK "$QUICKLAUNCH\${PRODUCTNAME} ${VERSION}.lnk"
+    RmDir /r /REBOOTOK "$SMPROGRAMS\$SMGroup"
+    Delete /REBOOTOK "$INSTDIR\unwop.exe"
+    RmDir /REBOOTOK $INSTDIR
+    Push $R0
+    StrCpy $R0 $SMGroup 1
+    StrCmp $R0 ">" no_smgroup
+    no_smgroup:
+        Pop $R0
+SectionEnd
+
+
+# Installer functions
+
+# splash-screen, language-select
+Function .onInit
+	${IfNot} ${RunningX64}
+		MessageBox MB_OK|MB_ICONSTOP "$(WINCHECK64)"
+		Abort
+	${EndIf}
+	InitPluginsDir
+    Push $R1
+    File "/oname=$PLUGINSDIR\spltmp.bmp" "${SPLPIC}"
+    advsplash::show 1500 1000 1000 -1 "$PLUGINSDIR\spltmp" # no .bmp extension here!
+    Pop $R1
+    Pop $R1
+    !insertmacro MUI_LANGDLL_DISPLAY
+    !insertmacro MULTIUSER_INIT
+FunctionEnd
+
+# background-image
+Function CustomGUIInit
+    Push $R1
+    Push $R2
+    BgImage::SetReturn /NOUNLOAD on
+    BgImage::SetBg /NOUNLOAD /GRADIENT 0 0 0 0 0 0
+    Pop $R1
+    Strcmp $R1 success 0 error
+    System::call "user32::GetSystemMetrics(i 0)i.R1"
+    System::call "user32::GetSystemMetrics(i 1)i.R2"
+    IntOp $R1 $R1 - 1280
+    IntOp $R1 $R1 / 2
+    IntOp $R2 $R2 - 960
+    IntOp $R2 $R2 / 2
+    File "/oname=$PLUGINSDIR\insttmp1.bmp" "${BGPIC}"
+    BGImage::AddImage /NOUNLOAD "$PLUGINSDIR\insttmp1.bmp" $R1 $R2
+    CreateFont $R1 "Verdana" 26 700 /ITALIC
+    BGImage::AddText /NOUNLOAD $(^SetupCaption) $R1 255 255 255 16 8 500 100
+    Pop $R1
+    Strcmp $R1 success 0 error
+    BGImage::Redraw /NOUNLOAD
+    Goto done
+    error:
+        MessageBox MB_OK|MB_ICONSTOP $R1
+    done:
+        Pop $R2
+        Pop $R1
+FunctionEnd
+
+# dircheck
+Function dirLeave
+  GetInstDirError $0
+  ${Switch} $0
+    ${Case} 0
+      ${Break}
+    ${Case} 1
+      MessageBox MB_OK $(ERR_dircheck1) #invalid directory
+      Abort
+      ${Break}
+    ${Case} 2
+      MessageBox MB_OK $(ERR_dircheck2) #not enough space
+      Abort
+      ${Break}
+  ${EndSwitch}
+  IfFileExists "$INSTDIR\*.*" Exists NonExists
+  Exists:
+    MessageBox MB_YESNO|MB_ICONEXCLAMATION|MB_DEFBUTTON2 $(ERR_dircheck3) IDYES +2 #dir already exists
+    Abort
+  NonExists:
+FunctionEnd
+
+# bgimage-kill
+Function .onGUIEnd
+    BGImage::Destroy
+FunctionEnd
+
+
+# Uninstaller functions
+
+Function un.onInit
+    !insertmacro MUI_STARTMENU_GETFOLDER "Application" $SMGroup
+    !insertmacro MUI_UNGETLANGUAGE
+    !insertmacro MULTIUSER_UNINIT
+    !insertmacro SELECT_UNSECTION Main ${UNSEC0000}
+FunctionEnd
+
+# uninstall farewell
+Function un.onUninstSuccess
+    HideWindow
+    MessageBox MB_OK|MB_ICONINFORMATION $(DESC_uninst)
+FunctionEnd
+
+
+#Language strings
+LicenseLangString MUILicense ${LANG_ENGLISH} "${SRC}\XTRAS\copyright_en.txt"
+LangString WINCHECK64 ${LANG_ENGLISH} "${PRODUCTNAME} only works with 64bit Windows versions.$\nUnfortunately, the installation is aborted."
+LangString UninstallLink ${LANG_ENGLISH} "Uninstall ${PRODUCTNAME} ${VERSION}"
+LangString VisitWebsiteLink ${LANG_ENGLISH} "Visit the ${PRODUCTNAME} Website"
+LangString PlayWoPLink ${LANG_ENGLISH} "Play ${PRODUCTNAME} ${VERSION}"
+LangString NAME_Section1 ${LANG_ENGLISH} "${PRODUCTNAME} program files"
+LangString DESC_Section1 ${LANG_ENGLISH} "Installs all the necessary files to play ${PRODUCTNAME}."
+LangString NAME_Section2 ${LANG_ENGLISH} "Linux engine files"
+LangString DESC_Section2 ${LANG_ENGLISH} "Installs additionally Linux engine files and program libraries."
+LangString NAME_Section3 ${LANG_ENGLISH} "MacOS engine files"
+LangString DESC_Section3 ${LANG_ENGLISH} "Installs additionally MacOS engine files and program libraries."
+LangString NAME_Section4 ${LANG_ENGLISH} "DVD box covers"
+LangString DESC_Section4 ${LANG_ENGLISH} "Places the graphics for creating your own WoP DVD box in the XTRAS directory."
+LangString NAME_Section5 ${LANG_ENGLISH} "Editing Resources"
+LangString DESC_Section5 ${LANG_ENGLISH} "Places sample maps, radiant, and customization files in XTRAS/editing-files."
+LangString NAME_Section6 ${LANG_ENGLISH} "Extra shortcuts"
+LangString DESC_Section6 ${LANG_ENGLISH} "Additionally places a shortcut on the Desktop and in the Quick Launch menu."
+LangString NAME_Section7 ${LANG_ENGLISH} "Open firewall ports"
+LangString DESC_Section7 ${LANG_ENGLISH} "Adds World of Padman to the Windows firewall rules to let you create internet servers."
+LangString ERR_dircheck1 ${LANG_ENGLISH} "This is not a valid installation path!"
+LangString ERR_dircheck2 ${LANG_ENGLISH} "There is not enough free space available!"
+LangString ERR_dircheck3 ${LANG_ENGLISH} "The target directory for installation already exists!$\nDo you still want to install ${PRODUCTNAME} into this directory?"
+LangString ERR_firewall ${LANG_ENGLISH} "The firewall service is not running!!$\nNo changes have been made."
+LangString DESC_uninst ${LANG_ENGLISH} "PADMAN and his friends packed their stuff$\nand left your computer with a heavy heart...$\n...hoping to see you again soon!"
+
+LicenseLangString MUILicense ${LANG_GERMAN} "${SRC}\XTRAS\copyright_de.txt"
+LangString WINCHECK64 ${LANG_GERMAN} "${PRODUCTNAME} funktioniert nur mit 64bit Windows Versionen.$\nLeider wird die Installation abgebrochen."
+LangString VisitWebsiteLink ${LANG_GERMAN} "${PRODUCTNAME} Webseite besuchen"
+LangString UninstallLink ${LANG_GERMAN} "${PRODUCTNAME} ${VERSION} deinstallieren"
+LangString PlayWoPLink ${LANG_GERMAN} "${PRODUCTNAME} ${VERSION} spielen"
+LangString NAME_Section1 ${LANG_GERMAN} "${PRODUCTNAME} Programmateien"
+LangString DESC_Section1 ${LANG_GERMAN} "Installiert alle notwendigen Dateien um ${PRODUCTNAME} zu spielen."
+LangString NAME_Section2 ${LANG_GERMAN} "Linux-Dateien"
+LangString DESC_Section2 ${LANG_GERMAN} "Installiert zusätzlich Linux-Engine-Dateien und Programmbibliotheken."
+LangString NAME_Section3 ${LANG_GERMAN} "MacOS-Dateien"
+LangString DESC_Section3 ${LANG_GERMAN} "Installiert zusätzlich MacOS-Engine-Dateien und Programmbibliotheken."
+LangString NAME_Section4 ${LANG_GERMAN} "DVD-Box-Cover"
+LangString DESC_Section4 ${LANG_GERMAN} "Legt die Grafiken zum Erstellen einer eigenen WoP-DVD-Box im Verzeichnis XTRAS ab."
+LangString NAME_Section5 ${LANG_GERMAN} "Editing-Ressourcen"
+LangString DESC_Section5 ${LANG_GERMAN} "Legt Beispielmaps, Radiant und Anpassungsdateien in XTRAS/editing-files ab."
+LangString NAME_Section6 ${LANG_GERMAN} "Zusätzliche Verknüpfungen"
+LangString DESC_Section6 ${LANG_GERMAN} "Erstellt zusätzlich eine Verknüpfung auf dem Desktop und in der Schnellstart-Leiste."
+LangString NAME_Section7 ${LANG_GERMAN} "Firewall öffnen"
+LangString DESC_Section7 ${LANG_GERMAN} "Fügt World of Padman den Windows-Firewall-Regeln hinzu, um Internet-Server erstellen zu können."
+LangString ERR_dircheck1 ${LANG_GERMAN} "Dies ist ein ungültiger Installationspfad!"
+LangString ERR_dircheck2 ${LANG_GERMAN} "Es steht nicht genügend freier Speicherplatz zur Verfügung!"
+LangString ERR_dircheck3 ${LANG_GERMAN} "Das Zielverzeichnis zur Installation existiert bereits!$\nMöchtest Du ${PRODUCTNAME} trotzdem in dieses Verzeichnis installieren?"
+LangString ERR_firewall ${LANG_GERMAN} "Der Firewall-Dienst läuft nicht!$\nEs wurden keine Änderungen vorgenommen."
+LangString DESC_uninst ${LANG_GERMAN} "PADMAN und seine Freunde haben ihre Sachen gepackt,$\nund schweren Herzens Deinen Rechner verlassen...$\n...in der Hoffnung, Dich bald wieder zu sehen!"
