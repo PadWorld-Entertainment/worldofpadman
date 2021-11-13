@@ -138,7 +138,7 @@ void TeamMain_MenuInit(void) {
 	s_teammain.joinred.generic.callback = TeamMain_MenuEvent;
 	s_teammain.joinred.generic.x = 320;
 	s_teammain.joinred.generic.y = y;
-	s_teammain.joinred.string = "JOIN RED";
+	s_teammain.joinred.string = "JOIN RED PADS";
 	s_teammain.joinred.style = (UI_CENTER | UI_SMALLFONT);
 	s_teammain.joinred.color = colorDkRed;
 	s_teammain.joinred.focuscolor = colorRed;
@@ -151,7 +151,7 @@ void TeamMain_MenuInit(void) {
 	s_teammain.joinblue.generic.callback = TeamMain_MenuEvent;
 	s_teammain.joinblue.generic.x = 320;
 	s_teammain.joinblue.generic.y = y;
-	s_teammain.joinblue.string = "JOIN BLUE";
+	s_teammain.joinblue.string = "JOIN BLUE NOSES";
 	s_teammain.joinblue.style = (UI_CENTER | UI_SMALLFONT);
 	s_teammain.joinblue.color = colorDkBlue;
 	s_teammain.joinblue.focuscolor = colorBlue;
