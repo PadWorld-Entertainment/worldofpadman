@@ -317,7 +317,7 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
 		AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS, SCORE_BONUS_FRAG_CARRIER_S);
 		attacker->client->pers.teamState.fragcarrier++;
-		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s's lolly carrier!\n", attacker->client->pers.netname,
+		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s' lolly carrier!\n", attacker->client->pers.netname,
 				 TeamName(team));
 
 		// the target had the flag, clear the hurt carrier
@@ -335,7 +335,7 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
 		AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS * tokens * tokens, SCORE_BONUS_FRAG_CARRIER_S);
 		attacker->client->pers.teamState.fragcarrier++;
-		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s's skull carrier!\n", attacker->client->pers.netname,
+		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s' skull carrier!\n", attacker->client->pers.netname,
 				 TeamName(team));
 
 		// the target had the flag, clear the hurt carrier
@@ -598,7 +598,7 @@ void Team_ReturnFlag(int team) {
 	if (team == TEAM_FREE) {
 		PrintMsg(NULL, "The lolly has returned!\n");
 	} else {
-		PrintMsg(NULL, "The %s lolly has returned!\n", TeamName(team));
+		PrintMsg(NULL, "The %s' lolly has returned!\n", TeamName(team));
 	}
 }
 
@@ -651,7 +651,7 @@ int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 
 	if (ent->flags & FL_DROPPED_ITEM) {
 		// hey, it's not home.  return it by teleporting it back
-		PrintMsg(NULL, "%s" S_COLOR_WHITE " returned the %s lolly!\n", cl->pers.netname, TeamName(team));
+		PrintMsg(NULL, "%s" S_COLOR_WHITE " returned the %s' lolly!\n", cl->pers.netname, TeamName(team));
 
 		AddScore(other, ent->r.currentOrigin, CTF_RECOVERY_BONUS, SCORE_BONUS_RECOVERY_S);
 
@@ -667,7 +667,7 @@ int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 	// flag, he's just won!
 	if (!cl->ps.powerups[enemy_flag])
 		return 0; // We don't have the flag
-	PrintMsg(NULL, "%s" S_COLOR_WHITE " captured the %s lolly!\n", cl->pers.netname, TeamName(OtherTeam(team)));
+	PrintMsg(NULL, "%s" S_COLOR_WHITE " captured the %s' lolly!\n", cl->pers.netname, TeamName(OtherTeam(team)));
 
 	cl->ps.powerups[enemy_flag] = 0;
 
@@ -727,7 +727,7 @@ int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 int Team_TouchEnemyFlag(gentity_t *ent, gentity_t *other, int team) {
 	gclient_t *cl = other->client;
 
-	PrintMsg(NULL, "%s" S_COLOR_WHITE " got the %s lolly!\n", other->client->pers.netname, TeamName(team));
+	PrintMsg(NULL, "%s" S_COLOR_WHITE " got the %s' lolly!\n", other->client->pers.netname, TeamName(team));
 
 	if (team == TEAM_RED)
 		cl->ps.powerups[PW_REDFLAG] = INT_MAX; // flags never expire
