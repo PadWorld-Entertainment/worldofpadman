@@ -644,7 +644,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whTeamMates.generic.id = ID_WALLHACKTEAMMATES;
 	s_preferences.whTeamMates.generic.x = PREFERENCES_X_POS;
 	s_preferences.whTeamMates.generic.y = y;
-	s_preferences.whTeamMates.generic.toolTip = "Show a WoP logo over your teammates heads, visible through walls.";
+	s_preferences.whTeamMates.generic.toolTip = "Show a PAD logo over your teammates heads, visible through walls.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whHStations.generic.type = MTYPE_RADIOBUTTON;
@@ -655,7 +655,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whHStations.generic.x = PREFERENCES_X_POS;
 	s_preferences.whHStations.generic.y = y;
 	s_preferences.whHStations.generic.toolTip =
-		"Show an icon over evey health station, visible through walls, to help you find them.";
+		"Show an icon over every health station, visible through walls, to help you find them.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whSycTele.generic.type = MTYPE_RADIOBUTTON;
