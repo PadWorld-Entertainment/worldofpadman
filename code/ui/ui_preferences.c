@@ -601,6 +601,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.crosshair.generic.left =
 		XPOSITION - ((strlen(s_preferences.crosshair.generic.name) + 1) * SMALLCHAR_WIDTH);
 	s_preferences.crosshair.generic.right = XPOSITION + 48;
+	s_preferences.crosshair.generic.toolTip =
+		"Select your favorite crosshair design.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.ffahud.generic.type = MTYPE_SPINCONTROL;
@@ -611,6 +613,9 @@ static void Preferences_MenuInit(void) {
 	s_preferences.ffahud.generic.x = XPOSITION;
 	s_preferences.ffahud.generic.y = y;
 	s_preferences.ffahud.itemnames = ffahud_names;
+	s_preferences.ffahud.generic.toolTip =
+		"Select your favorite HUD design. In a team game, the design is automatically set to "
+		"red or blue, depending on the team you join.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.identifytarget.generic.type = MTYPE_RADIOBUTTON;
@@ -621,8 +626,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.identifytarget.generic.x = XPOSITION;
 	s_preferences.identifytarget.generic.y = y;
 	s_preferences.identifytarget.generic.toolTip =
-		"Enable this to show the name of the player you actively have in your crosshair. Player name will disappear "
-		"once out of your crosshair.";
+		"Enable this to show the name of the player you actively have in your crosshair. "
+		"The player name will disappear once out of your crosshair.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.drawteamoverlay.generic.type = MTYPE_RADIOBUTTON;
@@ -632,8 +637,9 @@ static void Preferences_MenuInit(void) {
 	s_preferences.drawteamoverlay.generic.id = ID_DRAWTEAMOVERLAY;
 	s_preferences.drawteamoverlay.generic.x = XPOSITION;
 	s_preferences.drawteamoverlay.generic.y = y;
-	s_preferences.drawteamoverlay.generic.toolTip = "Enable this to see an overview "
-													"of 4 of your team mates to the left on your HUD in a team game.";
+	s_preferences.drawteamoverlay.generic.toolTip =
+		"Enable this to have an overview with additional information about up to four "
+		"teammates displayed on the left side of the HUD in a team game.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.timer.generic.type = MTYPE_RADIOBUTTON;
@@ -643,6 +649,9 @@ static void Preferences_MenuInit(void) {
 	s_preferences.timer.generic.id = ID_TIMER;
 	s_preferences.timer.generic.x = XPOSITION;
 	s_preferences.timer.generic.y = y;
+	s_preferences.timer.generic.toolTip =
+		"Enable this to get a timer with the current game time displayed in the upper "
+		"right corner of the HUD.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.timeleft.generic.type = MTYPE_RADIOBUTTON;
@@ -652,6 +661,9 @@ static void Preferences_MenuInit(void) {
 	s_preferences.timeleft.generic.id = ID_TIMELEFT;
 	s_preferences.timeleft.generic.x = XPOSITION;
 	s_preferences.timeleft.generic.y = y;
+	s_preferences.timeleft.generic.toolTip =
+		"Enable this to have the current remaining game time displayed in the upper "
+		"right corner of the HUD.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.realtime.generic.type = MTYPE_RADIOBUTTON;
@@ -661,6 +673,9 @@ static void Preferences_MenuInit(void) {
 	s_preferences.realtime.generic.id = ID_REALTIME;
 	s_preferences.realtime.generic.x = XPOSITION;
 	s_preferences.realtime.generic.y = y;
+	s_preferences.realtime.generic.toolTip =
+		"Enable this to have the current time of your system displayed in the upper "
+		"right corner of the HUD.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.ups.generic.type = MTYPE_RADIOBUTTON;
@@ -670,15 +685,21 @@ static void Preferences_MenuInit(void) {
 	s_preferences.ups.generic.id = ID_UPS;
 	s_preferences.ups.generic.x = XPOSITION;
 	s_preferences.ups.generic.y = y;
+	s_preferences.ups.generic.toolTip =
+		"Enable this to have your current speed displayed in game units per second (ups) "
+		"in the upper right corner of the HUD.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.fps.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.fps.generic.name = "Display FPS:";
+	s_preferences.fps.generic.name = "Display Frame Rate:";
 	s_preferences.fps.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.fps.generic.callback = Preferences_Event;
 	s_preferences.fps.generic.id = ID_FPS;
 	s_preferences.fps.generic.x = XPOSITION;
 	s_preferences.fps.generic.y = y;
+	s_preferences.fps.generic.toolTip =
+		"Enable this to have your current frame rate displayed in frames per second (fps) "
+		"in the upper right corner of the HUD.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.forcemodel.generic.type = MTYPE_RADIOBUTTON;
@@ -688,7 +709,9 @@ static void Preferences_MenuInit(void) {
 	s_preferences.forcemodel.generic.id = ID_FORCEMODEL;
 	s_preferences.forcemodel.generic.x = XPOSITION;
 	s_preferences.forcemodel.generic.y = y;
-	s_preferences.forcemodel.generic.toolTip = "Enable this to force seeing all opponents as your character in game.";
+	s_preferences.forcemodel.generic.toolTip = 
+		"Enable this to force all opponents to be displayed to you with your selected "
+		"character model in the game.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.glowmodel.generic.type = MTYPE_RADIOBUTTON;
@@ -698,7 +721,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.glowmodel.generic.id = ID_GLOWMODEL;
 	s_preferences.glowmodel.generic.x = XPOSITION;
 	s_preferences.glowmodel.generic.y = y;
-	s_preferences.glowmodel.generic.toolTip = "Enable this to see glowing player models.";
+	s_preferences.glowmodel.generic.toolTip = 
+		"Enable this to see glowing player models.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.glowcolor.generic.type = MTYPE_SPINCONTROL;
@@ -720,7 +744,9 @@ static void Preferences_MenuInit(void) {
 	s_preferences.connotify.generic.x = XPOSITION;
 	s_preferences.connotify.generic.y = y;
 	s_preferences.connotify.itemnames = connotify_names;
-	s_preferences.connotify.generic.toolTip = "Select whether you prefer notifications to appear short (2s), default (4s), long (6s), or maximum (8s) at the top of the screen.";
+	s_preferences.connotify.generic.toolTip = 
+		"Select whether you prefer notifications to appear short (2s), default (4s), long (6s), "
+		"or maximum (8s) at the top of the screen.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.chatheight.generic.type = MTYPE_SPINCONTROL;
@@ -731,7 +757,9 @@ static void Preferences_MenuInit(void) {
 	s_preferences.chatheight.generic.x = XPOSITION;
 	s_preferences.chatheight.generic.y = y;
 	s_preferences.chatheight.itemnames = chatheight_names;
-	s_preferences.chatheight.generic.toolTip = "Select whether you prefer notifications to appear default (up to 4 lines), expanded (up to 6 lines), or maximum (up to 8 lines) at the top of the screen.";
+	s_preferences.chatheight.generic.toolTip = 
+		"Select whether you prefer notifications to appear default (up to 4 lines), expanded "
+		"(up to 6 lines), or maximum (up to 8 lines) at the top of the screen.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.drawchaticon.generic.type = MTYPE_RADIOBUTTON;
@@ -741,7 +769,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.drawchaticon.generic.id = ID_DRAWCHATICON;
 	s_preferences.drawchaticon.generic.x = XPOSITION;
 	s_preferences.drawchaticon.generic.y = y;
-	s_preferences.drawchaticon.generic.toolTip = "Disable this to remove the player icon at the beginning of a chat notification.";
+	s_preferences.drawchaticon.generic.toolTip = 
+		"Disable this to remove the player icon at the beginning of a chat notification.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.chatbeep.generic.type = MTYPE_RADIOBUTTON;
@@ -751,7 +780,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.chatbeep.generic.id = ID_CHATBEEP;
 	s_preferences.chatbeep.generic.x = XPOSITION;
 	s_preferences.chatbeep.generic.y = y;
-	s_preferences.chatbeep.generic.toolTip = "Disable this to switch off the beep of all chat notifications.";
+	s_preferences.chatbeep.generic.toolTip = 
+		"Disable this to switch off the beep of all chat notifications.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.botchat.generic.type = MTYPE_SPINCONTROL;
@@ -762,7 +792,9 @@ static void Preferences_MenuInit(void) {
 	s_preferences.botchat.generic.x = XPOSITION;
 	s_preferences.botchat.generic.y = y;
 	s_preferences.botchat.itemnames = botchat_names;
-	s_preferences.botchat.generic.toolTip = "Set this to off to prevent the bots from chatting and silence them, or set it to often to make the bots more talkative.";
+	s_preferences.botchat.generic.toolTip = 
+		"Set this to off to prevent the bots from chatting and silence them, or set it to "
+		"often to make the bots more talkative.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.teamchatsonly.generic.type = MTYPE_RADIOBUTTON;
@@ -772,7 +804,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.teamchatsonly.generic.id = ID_TEAMCHATSONLY;
 	s_preferences.teamchatsonly.generic.x = XPOSITION;
 	s_preferences.teamchatsonly.generic.y = y;
-	s_preferences.teamchatsonly.generic.toolTip = "Enable this to force only chat messages from your teammates to be displayed.";
+	s_preferences.teamchatsonly.generic.toolTip = 
+		"Enable this to force only chat messages from your teammates to be displayed.";
 
 	// help options
 	y = YPOSITION;
@@ -793,7 +826,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whTeamMates.generic.x = XPOSITION;
 	s_preferences.whTeamMates.generic.y = y;
 	s_preferences.whTeamMates.generic.toolTip =
-		"Show a PAD logo over your teammates heads, visible through walls, to help you find them.";
+		"Enable this to display a PAD logo over your teammates heads, visible through walls, "
+		"to help you find them.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whHStations.generic.type = MTYPE_RADIOBUTTON;
@@ -804,7 +838,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whHStations.generic.x = XPOSITION;
 	s_preferences.whHStations.generic.y = y;
 	s_preferences.whHStations.generic.toolTip =
-		"Show a heart icon over evey health station, visible through walls, to help you find them.";
+		"Enable this to display a heart icon over every health station, visible through walls, "
+		"to help you find them.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whSycTele.generic.type = MTYPE_RADIOBUTTON;
@@ -815,7 +850,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whSycTele.generic.x = XPOSITION;
 	s_preferences.whSycTele.generic.y = y;
 	s_preferences.whSycTele.generic.toolTip =
-		"Show an arrow icon over the sprayroom teleporter in Spray Your Color, visible through walls, to help you find it.";
+		"Enable this to display an arrow icon over the sprayroom teleporter in Spray Your Color, "
+		"visible through walls, to help you find it.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whBalloons.generic.type = MTYPE_RADIOBUTTON;
@@ -826,7 +862,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whBalloons.generic.x = XPOSITION;
 	s_preferences.whBalloons.generic.y = y;
 	s_preferences.whBalloons.generic.toolTip =
-		"Show an balloon icon over balloon boxes in Big Ballon, visible through walls, to help you find them.";
+		"Enable this to display a balloon icon over balloon boxes in Big Ballon, "
+		"visible through walls, to help you find them.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whLPS.generic.type = MTYPE_RADIOBUTTON;
@@ -837,7 +874,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whLPS.generic.x = XPOSITION;
 	s_preferences.whLPS.generic.y = y;
 	s_preferences.whLPS.generic.toolTip =
-		"Show an arrow icon over every player in Last Pad Standing, visible through walls, to help you find them.";
+		"Enable this to display an arrow icon over every player in Last Pad Standing, "
+		"visible through walls, to help you find them.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.whFreezeTag.generic.type = MTYPE_RADIOBUTTON;
@@ -848,7 +886,8 @@ static void Preferences_MenuInit(void) {
 	s_preferences.whFreezeTag.generic.x = XPOSITION;
 	s_preferences.whFreezeTag.generic.y = y;
 	s_preferences.whFreezeTag.generic.toolTip =
-		"Show a freeze icon over frozen teammates in Freeze Tag, visible through walls, to help you find them.";
+		"Enable this to display a freeze icon over frozen teammates in Freeze Tag, "
+		"visible through walls, to help you find them.";
 
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
