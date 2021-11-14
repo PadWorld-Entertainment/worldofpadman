@@ -54,11 +54,12 @@ GAME OPTIONS MENU
 #define ID_FFAHUD 21
 #define ID_IDENTIFYTARGET 22
 #define ID_DRAWTEAMOVERLAY 23
-#define ID_TIMER 24
-#define ID_TIMELEFT 25
-#define ID_REALTIME 26
-#define ID_UPS 27
-#define ID_FPS 28
+#define ID_LAGOMETER 24
+#define ID_TIMER 25
+#define ID_TIMELEFT 26
+#define ID_REALTIME 27
+#define ID_UPS 28
+#define ID_FPS 29
 
 #define ID_FORCEMODEL 30
 #define ID_GLOWMODEL 31
@@ -94,6 +95,7 @@ typedef struct {
 	menulist_s ffahud;
 	menuradiobutton_s identifytarget;
 	menuradiobutton_s drawteamoverlay;
+	menuradiobutton_s lagometer;
 	menuradiobutton_s timer;
 	menuradiobutton_s timeleft;
 	menuradiobutton_s realtime;
@@ -132,6 +134,7 @@ static menucommon_s *g_hud_options[] = {
 	(menucommon_s *)&s_preferences.ffahud,
 	(menucommon_s *)&s_preferences.identifytarget,
 	(menucommon_s *)&s_preferences.drawteamoverlay,
+	(menucommon_s *)&s_preferences.lagometer,
 	(menucommon_s *)&s_preferences.timer,
 	(menucommon_s *)&s_preferences.timeleft,
 	(menucommon_s *)&s_preferences.realtime,
@@ -251,6 +254,7 @@ static void Preferences_SetMenuItems(void) {
 	s_preferences.identifytarget.curvalue = trap_Cvar_VariableValue("cg_drawCrosshairNames") != 0;
 	s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue("cg_forcemodel") != 0.0f);
 	s_preferences.drawteamoverlay.curvalue = trap_Cvar_VariableValue("cg_drawTeamOverlay") != 0;
+	s_preferences.lagometer.curvalue = trap_Cvar_VariableValue("cg_lagometer") != 0;
 	s_preferences.glowcolor.curvalue = trap_Cvar_VariableValue("cg_glowModel"); // cg_glowModelTeam..
 	s_preferences.glowmodel.curvalue = (s_preferences.glowcolor.curvalue != 0);
 	UpdateGlowColorFlags();
@@ -404,6 +408,10 @@ static void Preferences_Event(void *ptr, int notification) {
 
 	case ID_DRAWTEAMOVERLAY:
 		trap_Cvar_SetValue("cg_drawTeamOverlay", s_preferences.drawteamoverlay.curvalue);
+		break;
+
+	case ID_LAGOMETER:
+		trap_Cvar_SetValue("cg_lagometer", s_preferences.drawteamoverlay.curvalue);
 		break;
 
 	case ID_FFAHUD:
@@ -640,6 +648,18 @@ static void Preferences_MenuInit(void) {
 	s_preferences.drawteamoverlay.generic.toolTip =
 		"Enable this to have an overview with additional information about up to four "
 		"teammates displayed on the left side of the HUD in a team game.";
+
+	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.lagometer.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.lagometer.generic.name = "Lag-O-Meter:";
+	s_preferences.lagometer.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.lagometer.generic.callback = Preferences_Event;
+	s_preferences.lagometer.generic.id = ID_DRAWTEAMOVERLAY;
+	s_preferences.lagometer.generic.x = XPOSITION;
+	s_preferences.lagometer.generic.y = y;
+	s_preferences.lagometer.generic.toolTip =
+		"Enable this to display a lag-o-meter with two graphs to show the current quality "
+		"of your server connection in the bottom right of the HUD.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.timer.generic.type = MTYPE_RADIOBUTTON;
@@ -912,6 +932,7 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.ffahud);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.identifytarget);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawteamoverlay);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.lagometer);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.timer);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.timeleft);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.realtime);
