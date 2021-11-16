@@ -764,8 +764,6 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.modelsleft.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.modelsleft.generic.id = ID_MODELSLEFT;
 
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsleft);
-
 	s_playersettings.modelsright.generic.type = MTYPE_BITMAP1024S;
 	s_playersettings.modelsright.x = 937;
 	s_playersettings.modelsright.y = 32;
@@ -779,8 +777,6 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.modelsright.mouseovershader = trap_R_RegisterShaderNoMip("menu/player/right_mOver");
 	s_playersettings.modelsright.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.modelsright.generic.id = ID_MODELSRIGHT;
-
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsright);
 
 	s_playersettings.skinup.generic.type = MTYPE_BITMAP1024S;
 	s_playersettings.skinup.x = 873;
@@ -796,8 +792,6 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skinup.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skinup.generic.id = ID_SKINSUP;
 
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skinup);
-
 	s_playersettings.skindown.generic.type = MTYPE_BITMAP1024S;
 	s_playersettings.skindown.x = 871;
 	s_playersettings.skindown.y = 687;
@@ -812,8 +806,6 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skindown.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skindown.generic.id = ID_SKINSDOWN;
 
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skindown);
-
 	for (i = 0; i < DISPLAYED_MODELS; ++i) {
 		s_playersettings.model_icons[i].generic.type = MTYPE_BITMAP1024S;
 		s_playersettings.model_icons[i].x = 160 + i * (160 + 20);
@@ -824,8 +816,6 @@ static void PlayerSettings_MenuInit(void) {
 		s_playersettings.model_icons[i].generic.callback = PlayerSettings_MenuEvent;
 		s_playersettings.model_icons[i].generic.id = ID_MICON + i;
 		//		s_playersettings.model_icons[i].generic.flags	= QMF_SILENT;
-
-		Menu_AddItem(&s_playersettings.menu, &s_playersettings.model_icons[i]);
 	}
 
 	s_playersettings.skin_icons[0].generic.type = MTYPE_BITMAP1024S;
@@ -864,9 +854,6 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skin_icons[2].generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skin_icons[2].generic.id = ID_SICON + 2;
 
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[0]);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[1]);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[2]);
 
 	{
 		char spraylogoName[MAX_SPRAYLOGO_NAME];
@@ -906,9 +893,6 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.spraylogos_next.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.spraylogos_next.generic.id = ID_SLOGONEXT;
 
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_prev);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_next);
-
 	s_playersettings.back.generic.type = MTYPE_BITMAP;
 	s_playersettings.back.generic.name = BACK0;
 	s_playersettings.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
@@ -941,9 +925,21 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.spraycolor.height = 18;
 	s_playersettings.spraycolor.generic.id = ID_SPRAYCOLOR;
 	s_playersettings.spraycolor.generic.callback = PlayerSettings_MenuEvent;
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraycolor);
 
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsleft);
+	for (i = 0; i < DISPLAYED_MODELS; ++i) {
+		Menu_AddItem(&s_playersettings.menu, &s_playersettings.model_icons[i]);
+	}
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsright);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skinup);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[0]);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[1]);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[2]);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skindown);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_prev);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_next);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraycolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.back);
 
 	PlayerSettings_SetMenuItems();
