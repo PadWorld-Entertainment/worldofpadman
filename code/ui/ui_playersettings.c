@@ -57,6 +57,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define DISPLAYED_MODELS 4
 
+#define XPOSITION 30
+#define YPOSITION 168
+
 typedef struct {
 	menuframework_s menu;
 
@@ -64,8 +67,11 @@ typedef struct {
 	menubitmap_s framer;
 	menubitmap_s player;
 
+	menutext_s nameheader;
 	menufield_s name;
+	menutext_s handicapheader;
 	menulist_s handicap;
+	menutext_s logoheader;
 	menulist_s effects;
 
 	menubitmap_s back;
@@ -105,31 +111,20 @@ static playersettings_t s_playersettings;
 static int gamecodetoui[] = {4, 2, 3, 0, 5, 1, 6};
 static int uitogamecode[] = {4, 6, 2, 3, 1, 5, 7};
 
-#if 0
 static const char *handicap_items[] = {
 	"None",
-	"95",
 	"90",
-	"85",
 	"80",
-	"75",
 	"70",
-	"65",
 	"60",
-	"55",
 	"50",
-	"45",
 	"40",
-	"35",
 	"30",
-	"25",
 	"20",
-	"15",
 	"10",
-	"5",
 	NULL
 };
-#endif
+
 
 #define MAX_UIMODELS 96 // 32
 #define MAX_SKINS 640	// padman has 18 skins ...
@@ -258,7 +253,7 @@ static void PlayerSettings_SaveChanges(void) {
 	// handicap
 	// NOTE: We do not use this currently. Some players reported they always get handicap 5 when using the player setup
 	// menu
-	// trap_Cvar_SetValue( "handicap", 100 - s_playersettings.handicap.curvalue * 5 );
+	trap_Cvar_SetValue( "handicap", 100 - s_playersettings.handicap.curvalue * 10 );
 
 	// effects color
 	trap_Cvar_SetValue("color1", uitogamecode[s_playersettings.effects.curvalue]);
@@ -363,8 +358,8 @@ static void PlayerSettings_SetMenuItems(void) {
 	}
 
 	// handicap
-	h = Com_Clamp(5, 100, trap_Cvar_VariableValue("handicap"));
-	s_playersettings.handicap.curvalue = 20 - h / 5;
+	h = Com_Clamp(10, 100, trap_Cvar_VariableValue("handicap"));
+	s_playersettings.handicap.curvalue = 10 - h / 10;
 }
 
 static int GetSpecialSkinScore(const char *iconPath) {
@@ -588,7 +583,7 @@ static void PlayerSettings_Draw(void) {
 	i = Com_Clamp(0, (NUM_SPRAYCOLORS - 1), i);
 
 	UI_SetColor(spraycolors[i]);
-	UI_DrawHandlePic1024(76, 464, 96, 96, uis.spraylogoShaders[s_playersettings.slogo_num]);
+	UI_DrawHandlePic1024(76, 470, 96, 96, uis.spraylogoShaders[s_playersettings.slogo_num]);
 	UI_SetColor(NULL);
 
 	Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
@@ -623,8 +618,9 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 	switch (tmpid) {
 
 	case ID_HANDICAP:
-		// trap_Cvar_Set( "handicap", va( "%i", 100 - 25 * s_playersettings.handicap.curvalue ) );
+		trap_Cvar_Set( "handicap", va( "%i", 100 - 25 * s_playersettings.handicap.curvalue ) );
 		break;
+
 	case ID_BACK:
 		PlayerSettings_SaveChanges();
 		UI_PopMenu();
@@ -713,6 +709,7 @@ PlayerSettings_MenuInit
 */
 static void PlayerSettings_MenuInit(void) {
 	int i;
+	int y;
 
 	memset(&s_playersettings, 0, sizeof(playersettings_t));
 
@@ -749,64 +746,40 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.modelsleft.y = 32;
 	s_playersettings.modelsleft.w = 55;
 	s_playersettings.modelsleft.h = 117;
-//	s_playersettings.modelsleft.sx = 38;
-//	s_playersettings.modelsleft.sy = 38;
-//	s_playersettings.modelsleft.sw = 56;
-//	s_playersettings.modelsleft.sh = 117;
 	s_playersettings.modelsleft.shader = trap_R_RegisterShaderNoMip(BARROWLT0);
 	s_playersettings.modelsleft.mouseovershader = trap_R_RegisterShaderNoMip(BARROWLT1);
 	s_playersettings.modelsleft.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.modelsleft.generic.id = ID_MODELSLEFT;
-
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsleft);
 
 	s_playersettings.modelsright.generic.type = MTYPE_BITMAP1024S;
 	s_playersettings.modelsright.x = 937;
 	s_playersettings.modelsright.y = 32;
 	s_playersettings.modelsright.w = 55;
 	s_playersettings.modelsright.h = 117;
-//	s_playersettings.modelsright.sx = 933;
-//	s_playersettings.modelsright.sy = 35;
-//	s_playersettings.modelsright.sw = 58;
-//	s_playersettings.modelsright.sh = 120;
 	s_playersettings.modelsright.shader = trap_R_RegisterShaderNoMip(BARROWRT0);
 	s_playersettings.modelsright.mouseovershader = trap_R_RegisterShaderNoMip(BARROWRT1);
 	s_playersettings.modelsright.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.modelsright.generic.id = ID_MODELSRIGHT;
-
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsright);
 
 	s_playersettings.skinup.generic.type = MTYPE_BITMAP1024S;
 	s_playersettings.skinup.x = 875;
 	s_playersettings.skinup.y = 190;
 	s_playersettings.skinup.w = 117;
 	s_playersettings.skinup.h = 55;
-//	s_playersettings.skinup.sx = 875;
-//	s_playersettings.skinup.sy = 199;
-//	s_playersettings.skinup.sw = 119;
-//	s_playersettings.skinup.sh = 39;
 	s_playersettings.skinup.shader = trap_R_RegisterShaderNoMip(BARROWUP0);
 	s_playersettings.skinup.mouseovershader = trap_R_RegisterShaderNoMip(BARROWUP1);
 	s_playersettings.skinup.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skinup.generic.id = ID_SKINSUP;
-
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skinup);
 
 	s_playersettings.skindown.generic.type = MTYPE_BITMAP1024S;
 	s_playersettings.skindown.x = 875;
 	s_playersettings.skindown.y = 680;
 	s_playersettings.skindown.w = 117;
 	s_playersettings.skindown.h = 55;
-//	s_playersettings.skindown.sx = 876;
-//	s_playersettings.skindown.sy = 692;
-//	s_playersettings.skindown.sw = 117;
-//	s_playersettings.skindown.sh = 40;
 	s_playersettings.skindown.shader = trap_R_RegisterShaderNoMip(BARROWDN0);
 	s_playersettings.skindown.mouseovershader = trap_R_RegisterShaderNoMip(BARROWDN1);
 	s_playersettings.skindown.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skindown.generic.id = ID_SKINSDOWN;
-
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skindown);
 
 	for (i = 0; i < DISPLAYED_MODELS; ++i) {
 		s_playersettings.model_icons[i].generic.type = MTYPE_BITMAP1024S;
@@ -818,8 +791,6 @@ static void PlayerSettings_MenuInit(void) {
 		s_playersettings.model_icons[i].generic.callback = PlayerSettings_MenuEvent;
 		s_playersettings.model_icons[i].generic.id = ID_MICON + i;
 		//		s_playersettings.model_icons[i].generic.flags	= QMF_SILENT;
-
-		Menu_AddItem(&s_playersettings.menu, &s_playersettings.model_icons[i]);
 	}
 
 	s_playersettings.skin_icons[0].generic.type = MTYPE_BITMAP1024S;
@@ -858,10 +829,6 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skin_icons[2].generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.skin_icons[2].generic.id = ID_SICON + 2;
 
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[0]);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[1]);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[2]);
-
 	{
 		char spraylogoName[MAX_SPRAYLOGO_NAME];
 
@@ -899,9 +866,6 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.spraylogos_next.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.spraylogos_next.generic.id = ID_SLOGONEXT;
 
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_prev);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_next);
-
 	s_playersettings.back.generic.type = MTYPE_BITMAP;
 	s_playersettings.back.generic.name = BACK0;
 	s_playersettings.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
@@ -913,6 +877,14 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.back.height = 40;
 	s_playersettings.back.focuspic = BACK1;
 	s_playersettings.back.focuspicinstead = qtrue;
+
+	y = YPOSITION;
+	s_playersettings.nameheader.generic.type = MTYPE_TEXT;
+	s_playersettings.nameheader.generic.x = XPOSITION;
+	s_playersettings.nameheader.generic.y = y;
+	s_playersettings.nameheader.string = "Name:";
+	s_playersettings.nameheader.style = (UI_LEFT | UI_SMALLFONT);
+	s_playersettings.nameheader.color = color_yellow;
 
 	s_playersettings.name.generic.type = MTYPE_FIELD;
 	s_playersettings.name.generic.flags = QMF_NODEFAULTINIT;
@@ -926,6 +898,32 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.name.generic.right = 20 + 130;
 	s_playersettings.name.generic.bottom = 160 + 2 * PROP_HEIGHT;
 
+	y += 3*(BIGCHAR_HEIGHT + 2);
+	s_playersettings.handicapheader.generic.type = MTYPE_TEXT;
+	s_playersettings.handicapheader.generic.x = XPOSITION;
+	s_playersettings.handicapheader.generic.y = y;
+	s_playersettings.handicapheader.string = "Handicap:";
+	s_playersettings.handicapheader.style = (UI_LEFT | UI_SMALLFONT);
+	s_playersettings.handicapheader.color = color_yellow;
+
+	y += BIGCHAR_HEIGHT + 2;
+	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
+	s_playersettings.handicap.generic.name = "";
+	s_playersettings.handicap.generic.flags	= QMF_SMALLFONT;
+	s_playersettings.handicap.generic.id = ID_HANDICAP;
+	s_playersettings.handicap.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.handicap.generic.x	= XPOSITION;
+	s_playersettings.handicap.generic.y	= y;
+	s_playersettings.handicap.itemnames	= handicap_items;
+
+	y += 2*(BIGCHAR_HEIGHT + 2);
+	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
+	s_playersettings.logoheader.generic.x = XPOSITION;
+	s_playersettings.logoheader.generic.y = y;
+	s_playersettings.logoheader.string = "Spraylogo:";
+	s_playersettings.logoheader.style = (UI_LEFT | UI_SMALLFONT);
+	s_playersettings.logoheader.color = color_yellow;
+
 	s_playersettings.spraycolor.generic.type = MTYPE_BITMAP;
 	s_playersettings.spraycolor.generic.flags = QMF_LEFT_JUSTIFY;
 	s_playersettings.spraycolor.generic.x = 36;
@@ -934,9 +932,26 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.spraycolor.height = 18;
 	s_playersettings.spraycolor.generic.id = ID_SPRAYCOLOR;
 	s_playersettings.spraycolor.generic.callback = PlayerSettings_MenuEvent;
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraycolor);
 
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsleft);
+	for (i = 0; i < DISPLAYED_MODELS; ++i) {
+		Menu_AddItem(&s_playersettings.menu, &s_playersettings.model_icons[i]);
+	}
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsright);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skinup);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[0]);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[1]);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[2]);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skindown);
+
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicapheader);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap );
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_prev);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_next);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraycolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.back);
 
 	PlayerSettings_SetMenuItems();
