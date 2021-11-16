@@ -254,10 +254,10 @@ static void UI_Mods_MenuInit(void) {
 	UI_Mods_LoadMods();
 
 	Menu_AddItem(&s_mods.menu, &s_mods.list);
-	Menu_AddItem(&s_mods.menu, &s_mods.back);
-	Menu_AddItem(&s_mods.menu, &s_mods.go);
 	Menu_AddItem(&s_mods.menu, &s_mods.arrowup);
 	Menu_AddItem(&s_mods.menu, &s_mods.arrowdown);
+	Menu_AddItem(&s_mods.menu, &s_mods.go);
+	Menu_AddItem(&s_mods.menu, &s_mods.back);
 }
 
 /*

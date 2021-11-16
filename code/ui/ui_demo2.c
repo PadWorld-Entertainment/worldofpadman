@@ -227,8 +227,8 @@ static void Demos_MenuInit(void) {
 	Menu_AddItem(&s_demos.menu, &s_demos.list);
 	Menu_AddItem(&s_demos.menu, &s_demos.left);
 	Menu_AddItem(&s_demos.menu, &s_demos.right);
-	Menu_AddItem(&s_demos.menu, &s_demos.back);
 	Menu_AddItem(&s_demos.menu, &s_demos.go);
+	Menu_AddItem(&s_demos.menu, &s_demos.back);
 }
 
 /*
