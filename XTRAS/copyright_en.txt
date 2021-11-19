@@ -1,0 +1,15 @@
+------------
+Copyright
+------------
+
+World of Padman and its individual work of art (e.g. maps, textures, models, sounds) is protected by copyright. The copyrights belong to the respective authors of the WoP-Team (PadWorld Entertainment). 
+
+All commercial use of the World of Padman and, consequently, the individual work of art, is prohibited unless you have explicit permission from the WoP-Team. This includes, but is not limited to, mass archival on a CD-ROM, DVD and similar data media, and in commercially published compilations of every kind like books or magazines.
+
+This further includes the prohibition of copying, changing, mirroring and public reproduction in sense of a commercial use, electronic or otherwise. Changes to the game (except for the code) and consequently its individual work of art whether commercial or not, is prohibited without explicit permission by its authors. Private non-commercial copying, mirroring and even public reproduction is permitted and welcome.
+
+Some parts of the game were created with material (e.g. textures and sounds), which was acquired by the WoP-Team from different sources, with licenses that permit the use and modification of the material. In the case of infringement of third party rights, please contact us immediately so that we can respond as soon as possible. More Information regarding sounds (credits) can be found in sounds_readme.txt.
+
+The program source code is released under the GNU GENERAL PUBLIC LICENSE (Version 2, June 1991). More information regarding the GPL can be found in gpl.txt.
+
+If you have any questions or advice, feel free to contact the WoP-Team by E-Mail: team@worldofpadman.com

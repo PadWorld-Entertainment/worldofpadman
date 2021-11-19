@@ -1,0 +1,167 @@
+body {
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10pt;
+	margin:0px;
+	background:#005FFF url(pictures/readme_back.png) repeat fixed;
+	color:#FFE100;
+}
+
+div#body_top {
+	top:0px;
+	height:180px;
+}
+
+div#headerbox{
+	height:100%;
+	background-color:#FF9500;
+	color:inherit;
+	min-width:800px;
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:10px;
+	border:3px groove #003399;
+}
+
+div#headerbox_back{
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:10px;
+	height:160px;
+	background-image:url(pictures/readme02.gif);
+}
+		
+div#headerbox_wopbanner{
+	position:absolute;
+	left:246px;
+	top:33px;
+	width:412px;
+	height:139px;
+	z-index:2;
+	background-image:url(pictures/readme04.gif);
+}
+
+div#headerbox_leftlogo{
+	position:absolute;
+	left:22px;
+	top:23px;
+	width:136px;
+	height:160px;
+	z-index:2;
+	background-image:url(pictures/readme01.gif);
+}				
+
+div#headerbox_rightlogo{
+	float:right;
+	overflow:hidden;
+}
+
+.sidebox_outer {
+	padding:6px 0px 0px 0px;
+	margin:6px 0px 6px 10px;
+	width:150px;
+	background-color:#FF9500;
+	color:#000000;
+	border:3px groove #003399;
+}
+
+.sidebox_outer img {
+	border:0px;
+	padding:6px;
+}		
+
+.sidebox_inner{
+	width:90%;
+	padding:5px 0px 5px 0px;
+	color:inherit;
+	background-color:#FF6600;
+	margin:0px;
+	border:1px #000000 solid;
+}
+
+ul#navigation {
+	list-style:none;
+	margin:3px 0px 3px 0px;
+	padding:0px;
+	font-size:8pt;
+	font-weight:normal;
+	text-decoration:none;
+}
+		
+ul#navigation li a:link, ul#navigation li a:visited, ul#navigation li a:active {
+	margin:3px 0px 3px 0px;
+	text-decoration:none;
+	font-weight:bold;
+	display:block;
+	width:90%;
+	padding:1px;
+	background-color:#FFB500;
+	border:1px solid  #000000;
+	color:#FF6600;
+}
+		
+ul#navigation li a:hover {
+	border:1px solid  #FFB500;
+	background-color:#FF6600;
+	color:#FFB500;
+	font-weight:bold;
+}
+
+		
+.readme_entry {
+	position:absolute;
+	right:10px;
+	top:6px;
+	width:95%;
+	margin:0px 0px 10px 10px;
+	min-width:470px;
+}
+
+.readme_body {
+	overflow:hidden;
+	border:3px groove #000000;
+	margin: 0px 0px 10px 0px;
+	padding:0px;
+	background-color:#6699ff;
+	color:#D3DDFF;
+}	
+
+.readme_subject {
+	padding:5px;
+	margin:15px;
+	height:26px;
+	border:1px solid #000000;
+	background-color:inherit;
+	color:#ffffff;
+	background-image:url(./pictures/readme_header.gif);
+	font-size:14pt;
+	font-weight:bold;	
+	text-align:center;
+}
+
+.readme_inner {
+	margin:0px 15px 15px 15px;
+	text-align:left;
+	padding:6px;
+	border:1px solid #000000;
+	font-size:10pt;
+	min-height:65px;
+	color:inherit;
+	background-color:#003399;
+}
+
+.readme_inner a:link, .readme_inner a:visited {
+	color:#D3DDFF;
+	background-color:inherit;
+	cursor:pointer;
+}
+.readme_inner a:active, .readme_inner a:hover{
+	color:#002C84;
+	background-color:#D3DDFF;
+	cursor:pointer;
+}
+
+.readme_image {
+	margin:10px;
+	border:2px solid #ffffff;
+}
+

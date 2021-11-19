@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="readme.css">
+</head>
+
+<body>
+
+<center>
+
+<div class='readme_entry'>
+	<div class='readme_body'>
+		<div class='readme_subject'>
+				Allgemeine Informationen
+		</div>
+		<div class='readme_inner'>
+
+			<p>
+			<b><u>Botsupport</u></b>
+			<br><br>
+			World of Padman besitzt vollen Botsupport für alle Gametypes! Die Offline-Spieler werden sich freuen Spray your Color,
+			Big Balloon, Last Pad Standing und Capture the Lolly mit Bots spielen zu können. Der Botsupport funktioniert recht ordentlich und die Maps
+			wurden auch ein wenig für die Bots optimiert.
+			</p>
+
+			<p>
+			<b><u>Drop Cardridges / Drop Lolly</u></b>
+			<br><br>
+			Ihr habt etliche Cardridges gesammelt und glaubt, es nicht mehr bis zum Teleporter zu schaffen? Ihr wollt eurem Teamkollegen eine Cardridge geben,
+			damit dieser Zusatzpunkte für das Team durch Spraygod bzw. Spraykiller bekommen kann? Für diese Fälle könnt ihr unter Setup -> Controls -> Misc
+			eine Taste für das Wegwerfen einer Cardridge definieren. Dieses Feature funktioniert nicht nur im Team SyC, sondern auch in Capture the Lolly. Hier seit ihr in der Lage den Lolly an andere
+			Spieler weiterzugeben.
+			</p>
+
+			<p>
+			<b><u>Voice Chat</u></b>
+			<br><br>
+			Die alten Tage, in denen man das Keyboard quälen musste, sind vorbei, denn in der 'World of Padman' ist auch ein Voicechat mit dabei. Dieser muss über das Menü Setup -> System -> Sound
+			aktiviert werden. Dabei hat ihr dann noch die Auswahl, ob eure Stimme automatisch erkannt und übertragen werden soll oder ob ihr lieber eine Taste für das Reden belegen wollt (push to talk)
+			- ganz wie beim Walkie-Talkie. Entscheidet ihr euch für die 'push to talk'-Variante könnt ihr im Controls-Menü unter 'Misc' noch eine Taste hierfür festlegen.<br>
+			In einem Match selbst besteht darüber hinaus über das Ingame-Menü die Möglichkeit, die Lautstärke der einzelnen Spieler zu regulieren oder diese auf stumm zu stellen.
+			</p>
+
+			<p>
+			<b><u>GlowSkins</u></b>
+			<br><br>
+			Bei ernsthafen Turnieren ist es wichtig, dass man den Gegner schnell erkennt. Aus diesem Grund bietet euch 'World of Padman' die Möglichkeit, über das Menü 'Setup -> Game Options' die so
+			genannten GlowSkins zu aktivieren. Hat man dies getan, werden die Modelle der Gegner mit einem leuchtend grünen Skin versehen, sodass sie aus der Spielwelt deutlich herausstechen. Besonders
+			für Clans und actionreiche 1on1-Kämpfe ist diese Option sicherlich ein Segen, für das gesamte Grafikkonzept allerdings nicht. ;)
+			</p>
+
+			<p style='min-height:150px;'>
+			<b><u>Das Server-HUD</u></b>
+			<br><br>
+			<img style='float:left;' class='readme_image' alt='' src='pictures/misc/server_hud_kl.jpg'>
+			Das Server-HUD ist ein kleines Fenster, welches euch Dinge wie das eingestellte Pointlimit, die Rundenzeit,
+			etc. anzeigt. Eine Taste zum Ein- und Ausblenden des informativen Fensters kann in den Control-Options vergeben werden (vordefiniert ist "k").
+			</p>
+
+			<p>
+			<b><u>Warmup</u></b>
+			<br><br>
+			Der Befehl <i>g_WarmupReady</i> kann benutzt werden, damit ein Spiel nicht direkt nach dem Ladevorgang beginnt,
+			sondern ein bestimmter Anteil von Spielern sich per <i>/ready</i>-Befehl als 'spielfertig' erklärt haben muss. ->
+			Der Serveradmin kann in seiner <i>server.cfg</i> die Variable <i>g_WarmupReady</i> auf eine Zahl zwischen 0 und 1 setzen
+			(Achtung, <i>g_doWarmup</i> muss auf 1 stehen!). Ist <i>g_WarmupReady</i> auf 0 gesetzt, bedeutet das, dass das Spiel sofort beginnt.
+			Bei 1 müssen 100% der anwesenden Spieler <i>/ready</i> in die Konsole eingeben. Zudem können auch alle anderen Dezimalzahlen eingegeben werden,
+			um einen bestimmten Prozentsatz der 'fertigen' Spieler zu erzwingen.
+			<br><br>
+			<u>Beispiele:</u>
+			<br><br>
+			set g_doWarmup "1"<br>
+			set g_WarmupReady "0.5" -> 50 % müssen fertig sein
+			<br><br>
+			oder<br><br>
+			set g_doWarmup "1"<br>
+			set g_WarmupReady "0.8" -> 80 % müssen fertig sein<br><br>
+			Dieser Befehl ist vor allem bei LPS und bei Teamplay sehr zu empfehlen.
+			</p>
+
+			<p>
+			<b><u>Chat Icons</u></b>
+			<br><br>
+			Wem der Name vor dem Chattext nicht genügt und dort auch ein kleines Bild des vom Chatter verwendeten Models sehen will,
+			der kann Chaticons hinzufügen. Unter Options -> Chat könnt ihr die Chaticons aktivieren. Hier stehen euch 4 Auswählmöglichkeiten
+			zur Verfügung: 'only text' (normal und long) steht für den normalen Chat ohne Chaticons und '+icons' (normal und long) dementsprechend
+			für jenen Chat mit den Chaticons. Das normal und long gibt an wie lange die Chattexte auf dem Bildschirm zu sehen sein sollen.
+			</p>
+
+			<p>
+			<b><u>Bugs</u></b>
+			<br><br>
+			Das Spiel ist zwar seit etlichen Jahren in Entwicklung, aber das heißt nicht, dass es bugfrei ist.
+			Wie jeder Hersteller, der etwas auf sich hält, haben auch wir mit Absicht ein paar Bugs drin gelassen,
+			damit ihr was zum Suchen und Aufregen habt. Solltet ihr Bugs finden, dann schickt uns eine E-Mail, damit wir mit einem Patch rumprahlen können. *g*
+			</p>
+
+		</div>
+	</div>
+</div>
+
+</center>
+
+
+</body>
+
+</html>

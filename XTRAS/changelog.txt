@@ -1,0 +1,419 @@
+World of Padman Changelog
+
+Nov 28 2021 - VERSION: 1.6.2
+
+    * ADDED
+          o Icon vector graphic (wop.svg) for Linux (removed icon.svg)
+    * CHANGED
+          o WoP team names from 'BLUE' and 'RED' to 'BLUE NOSES' and 'RED PADS'
+          o Status message '... was pumped full of lead by ... Pumper' replaced with '... was electrocuted by ... Pumper'
+          o Status message '... fragged ... flag carrier!' replaced with '... fragged ... lolly carrier!'
+    * FIXED
+          o BAMBAMs react to enemies with animation and sound, but do not shoot projectiles
+          o Console spams status message "WARNING: music file ....ogg is not 22kHz"
+          o Menu options order in Demo, Mods and Player Settings menus
+          o Minor spelling errors in Game Options menu
+    * UPDATED
+          o Icon set (wop.ico) for Windows binaries and installer to support 16, 24, 32, 48, 96, 128, and 256 pixels
+          o Icon set (unwop.ico) for Windows installer to support 16, 24, 32, 48, 96, 128, and 256 pixels
+          o Icon set (wop.icns) for MacOSX that supports 16, 32, 64, 128, 256, 512, and 1024 pixels
+          o Code base to ioq3 1.36 Git d1d5a89 Oct 23, 2021 with associated bug fixes
+
+
+Nov 01 2021 - VERSION: 1.6.1
+
+    * ADDED
+          o Password user interface when connecting to private servers
+          o Missing q3map2 common shader entries
+          o Icon for the Windows binaries, created from the WoP SVG icon, also an icon set
+          o pk3dir feature from ioq3, useful for mappers out there
+          o IQM model format support from ioq3
+          o OpenGL2 renderer from ioq3 (but not set to default)
+          o New graphics for column headers lives and score_lives in scoreboard
+          o Re-introduction of the option to select sound quality when SDL is enabled in Sound menu
+    * CHANGED
+          o WoP now starts in given desktop resolution
+          o com_maxfps clamp range increased and set default value to 125
+          o com_hunkmegs increased from 128 MB to 512 MB (256 MB for Win32)
+          o com_zonemegs increased from 24 MB to 96 MB
+          o Floater consumption no longer dependent on client fps and increased to 8 seconds
+          o Enabling voice chat (voip) no longer requires OpenAL to be enabled
+          o Number in front of the spray logo names is skipped in the ingame menu
+          o Image loading order changed to png, tga, jpg, jpeg, pcx and bmp
+          o Joystick support improved
+          o In-game spray logo selection menu does interrupt gameplay in a local match now
+          o Disabled Color Depth option when Fullscreen mode is disabled
+          o Minor adjustement of the position of the lolly icon in the HUD
+          o Minor adjustement of the position of the balloon icon in the HUD
+          o Renamed BigBalloon to Big Balloon in the game
+    * FIXED
+          o Random crashes on PadTrash and PadGarden while playing online
+          o Drop shadow distance for engine to improve readability of text
+          o Bots spawn as spectators when g_teamForceBalance is enabled
+          o Demo menu does not show existing demo files
+          o Unwanted pulsing when rendering tooltip font in the menus
+          o Tooltip of Stereoscopic 3D option obscures some of the dropdown options in the display menu
+          o Too many textures referenced in Killerduck's explosion shader
+          o ProjectPointOnPlane for denom being zero
+          o Accept button for Ignore HW Gamma option prompting to restart in Display menu is not displayed
+          o Accept button for Use OpenAL option prompting to restart in Sound menu is not displayed
+          o Not taking WoP items into account in AAS_SetWeaponJumpAreaFlags
+          o Incorrect order of entries on second page of Game Options menu
+          o Incorrect order of entries in Start Server (Create) menu
+          o Incorrect order of entries in Sound menu
+          o Menu page buttons in Systems menu do not stay pressed when selecting other pages
+          o Multiple definitions of same default values
+          o Copy and paste error in theora libs and cflags
+          o Player menu does not show PNG skin icons
+          o Floater does not emit sound when used
+          o Fatal server crash on S_FindName: empty name
+          o Server browser shows wrong number of human players
+          o Voice chat icon visible through walls due to missing shader entry
+          o Incorrect texture assignment of the head of PadStatue Super mapobject
+          o Music playlist always restarts on map change
+          o Loading the music playlist when the dat file is too large
+          o Console spamming 'WARNING: unhandled AL error: Invalid name'
+          o File paths to respect newer scoreboard column header graphics already shipped with WoP 1.5
+          o Spelling of bot skill names Kindergarten and Flower Power
+          o Issues with gametypes being out of sync in botlib
+          o Broken and outdated links in the user readme
+    * REMOVED
+          o Unused World of Padman single player code
+          o Unused Quake 3 Arena mission pack code
+          o Unused autoupdater
+          o Unused dead code in general
+          o Unused menu fonts and shader entries
+          o PowerPC and PowerPC 64 support
+    * UPDATED
+          o Code base to ioq3 1.36 Git 2678080 Sep 27, 2021
+          o OGG pumped to version 1.3.4
+          o Vorbis pumped to version 1.3.7
+          o SDL pumped to version 2.0.14
+          o ZLIB pumped to version 1.2.11
+          o JPEG pumped to version 9d
+
+
+Dec 17 2011 - VERSION: 1.6
+
+    * ADDED
+          o 3D cross hair to QVMs when in STEREO mode
+          o 3D stereoscopic options in display menu
+          o A delay of 5 sec between dropping the lolly
+          o Cgame console now also handles [skipnotify] like the engine
+          o Cvar: cg_ambient [0|1] to control playback of ambient sounds (feature request)
+          o Cvar: cg_drawLensflare [0|1] -- toggles drawing of cgame lens flares, default 1 (feature request)
+          o Cvar: cg_timestamps [0|1|2] -- prefix console lines with time stamp. 1 for game time, 2 for real time, default 0 for none
+          o Cvar: g_logDamage [0|1] -- toggle inclusion of damage messages in the log file, default 0
+          o Cvar: g_suddenDeath [0|1] -- toggle sudden death in game types that support it, default 1
+          o HUD now displays the sender names for recent voice chat messages (feature request)
+          o Icons for loading stations and spray portals to help you find them. Icons are visible through walls (feature request)
+          o Level designers are able to set values to 'health' and 'speed' keys of loading stations
+          o Lolly icons added to scoreboard, instead of bot skill icon/handicap (feature request)
+          o Nettype info in server browser so players can see whether server is ipv6 or v4 enabled
+          o New map oregano4's Airplane
+          o New skins BadPaddy and PaddyBee for PaddyBell player model
+          o Option in Game Options menu to enable/disable icons of team mates, loading stations, spray portals, LPS arrows and BB boxes
+          o Push awards from OpenArena, e.g. when a player knocks another player into the void
+          o Quick-infos support added for menu items. A short hint is shown for selected menu items on mouse over.
+          o Variants of cross hair i and j, called k and l (feature request)
+          o Voice chat icon over player's head and in the HUD to display the sender in game (feature request)
+          o WoP program icon that is SVG format to meet free desktop specification standards (feature request)
+    * CHANGED
+          o Attempt to enforce proper net settings (cvar values) in online game play
+          o BamBam health bar appears now in team colours
+          o BB boxes are solid objects now, model path is hard code now, there is no need for level designers to set the 'model' key any more (feature request)
+          o Cvar: g_modInstagib renamed to g_instaPad
+          o Cvar: g_modInstagib_WeaponJump renamed to g_weaponJump
+          o Default sound sample rate to 44.100 Hz (was 22.050 Hz)
+          o Demo files are shown in alphabetical order and correctly now in menu
+          o Do not append a files suffix to a sound file name in target_speaker (e.g. change '.../sound.wav' to '.../sound', so OggVorbis support will work)
+          o Edited balloon capture messages in BackyardBB
+          o Finalized BamBam spread, removed cvar g_bambamSpread
+          o Made Bambams prone to Visionless
+          o Major changes to in game server browser layout: limits for ping colours; format changed to 'humans+bots/max'; maps not present locally and full slots are printed red; mods will be printed in cyan; added white space between 'Internet' and master server number; changed cvar default to hide full servers and to show private servers again
+          o Merged server info cvars Players_Red, Players_Blue and Players_Active into Players_Team
+          o Owned items (Killerducks, BamBams, Boomies) get removed on team change and disconnect
+          o Powerups behaviour while being in the spray room
+          o Re-enabled Bambam owners, Player also scores when his BamBam frags an opponent
+          o Reduced Boaster ammo bottle content to 60 (was 100)
+          o Reduced Balloony ammo bottle content to 10 (was 15)
+          o Reduced Boaster direct hit damage to 3 (was 5)
+          o Reduced PadPower damage multiplier to 2 (was 3)
+          o Replaced all old WAV ambient sound files in maps by new high quality OGG sound samples, except of ENTE's PadMaps (check XTRAS/sounds_readme.txt)
+          o Replaced default bounce sound at the rubber duck by a nice toy squeeze sound in CybBath (feature request)
+          o Revised server config files for all game types
+          o Unified BamBam and Boomies placement checks, adjusted distances, added target_push and lolly spawns
+          o Windows executables now properly use "%APPDATA%\Padman" as home path. That's the folder for screen shots, demo files etc.
+    * FIXED
+          o A check for multi-sample GL extension was missing
+          o A few issues with LPS sounds and sorting
+          o A lot of spelling mistakes
+          o Always checks point limit now, regardless of active player number; caused very high BB scores on empty servers
+          o Big Balloon capture sounds fixed so they do not play simultaneously
+          o Bots should return the flag correctly now instead of standing idle in CTL
+          o Bots navigation issues under ramps close to the lolly in CybJourney
+          o Broken log file entries, replaced ancient vsprintf calls with more secure Q_vsnprintf
+          o Dropped weapons were considered to be a weapon spawn while placing Boomies
+          o FridgeWars sparkle shader revised and removed wrong shader keyword which caused error message
+          o Friendly fire for team items (BamBams, Boomies)
+          o Hopefully Bambams can't be placed into brushwork any more
+          o Issues with BB boxes and vertex light
+          o Lagometer while demo playback is shown now correctly, taken from wolfcamQL
+          o Last char of demo file name in menu got cut off, which caused loading of the demo to fail
+          o Memmove for new size_t typedef, thanks to DevHC for reporting
+          o Minor texture issues in Hutte, TrashMap, Jail, Anteroom, PadShop, Backyard
+          o Moved text drop shadow for a better visibility of text on screen on bright background
+          o Movement prediction of frozen players
+          o Music play list reading from disk fixed, will now err on overly large files and remain silent on empty play list
+          o Music was played for a second while loading a map when the game was unable to load the play list file
+          o Padding in status command reply for long ip addresses
+          o PaddyBell holds Punchy correct now
+          o Players complained handicap would be set in player setup menu
+          o Spray room exit portal shader issue in MopAn's Jail
+          o Team overlay for spectators
+    * REMOVED
+          o CVAR_SERVERINFO bit mask from cvars which do not need it
+          o Default game type redirect of BB-maps removed. Every map (bsp-file) needs it's own entry in arena file now
+          o Menu options for center view, look up, look down, mouse look, free look, joystick, joystick threshold, always run, turn left, turn right, sidestep / turn
+          o Outdated and not used menu entry 'sound quality' from sound options
+          o Team and bot from status response since Players_ cvars are meant as a replacement
+          o UDP/UDP6 net names from in game server browser info
+          o Vertex lighting from menu options
+    * UPDATED
+          o Net protocol version number to 71. This is necessary due to the old clients sending quake3arena heartbeats and the master server not knowing the wop heartbeats.
+          o WoP radiant files: CybJourney, PadShop were missing and added Airplane in default_shaderlist.txt; entities.def: added hints for RANDOMSELECT spawnflag, 'marker' to weapon entities, 'health' and 'speed' key to loading station entity, corrected description of weapon and ammo 'count' default values, removed 'model' key from 'target_balloon' entity (check XTRAS/editing files/WoP radiant files.zip)
+          o WoP mapping files: BB sample maps because of changes in 'target_balloon' (check XTRAS/editing files/WoP mapping files.zip)
+          o Copyright information in copyright_en.txt and copyright_de.txt
+          o Code base to ioquake3 revision 2140
+
+
+Jul 26 2011 - VERSION: 1.5.1.1
+
+    * FIXED
+          o Shell injection vulnerability that allowed server operators to execute arbitrary code on linux clients
+          o dll recognition issue
+
+
+Jan 23 2011 - VERSION: 1.5.1
+
+    * CHANGED
+          o Misc: Removed superfluous dependency in libtheora.dll
+          o Misc: Disabled antialiasing and anisotropic filtering by default (not all hardware supports it)
+    * FIXED
+          o Engine: Server crashed if it got a status query during mapchange
+    * UPDATED
+          o SDL: Pumped to version 1.2.14
+
+
+Dec 27 2010 - VERSION: 1.5
+
+    * ADDED
+          o Engine: ogm video file support
+          o Music: Some new tracks to dieselkopf albums
+          o Music: PadKitchen Track to Dieselkopf Rock album
+          o Music: Painted Death by Neurological
+          o Textures: Several spelling mistakes on textures
+          o Gametypes: Wallhack symbols for BB-boxes
+          o VoIP: Voice chat support and options in settings and ingame menus
+          o XTRAS: Mapping tool support files for Radiant
+          o Powerups: Boomies holdable added for CTL and BB game modes
+          o Powerups: Bambam holdable added for CTL game mode
+          o Weapons: Injector with a new zoom effect added to all game modes using InstaPad
+          o Mapobjects: Animated raven model
+          o Mapobjects: A couple of new static mapobjects
+          o Textures: New PadBox skyboxes for platform maps
+          o Models: Support for bright skins
+          o Models: Existing model skin overhauled and tweaked
+          o Models: New head models for Padman  character model
+          o Models: BeachPad player model
+          o Models: PadPunk player model
+          o Models: PadKing player model
+          o Models: PadCho player model
+          o Models: PaddyBell player model
+          o Gametypes: InstaPad (instagib) option added to all game modes
+          o Textures: SyC new logos added
+          o Models: BB new models of balloon boxes added
+          o Gametypes: BB wallhack items for players and boxes added
+          o Gametypes: CTL game mode added
+          o Maps: Cyben's CybJourney CTL
+          o Maps: MopAn's Jail BigBalloon version
+          o Maps: Kai's FridgeWars CTL
+          o Maps: Harm's Westernset CTL
+          o Maps: ENTE's PadShop
+          o Maps: ENTE's PadCrash
+          o Maps: ENTE's PadBox CTL
+          o Maps: ENTE's PadBase CTL
+          o Maps: ENTE's PadCloister CTL
+          o Maps: ENTE's PadAsia CTL
+          o Maps: Glowstar's ColorStage CTL
+          o Menu: Ingame help screens with short explanations
+          o Menu: New option added antialiasing, anisotropy, resolutions to grafics menu
+          o Menu: New game play hints while the loading screen is shown
+          o HUD: New and additional cross hairs added
+          o HUD: New screen effect added after leaving liquids ingame
+          o Sounds: VoIP support added
+          o Sounds: New announcer sounds added (CTL)
+          o Sounds: Sounds for new player models added
+          o Bots: New bot code added, CTL support via waypoint file
+          o Bots: Bot for all new player models added
+          o Misc: Added func_door_rotating entity
+    * CHANGED
+          o Boaster: Weapon dmg values
+          o Bots: Overhauled and spell checked bot chat protocol. thx to Padster
+          o Cover: Game box arts overhauled
+          o Manual: Several additions
+          o Menu: Bot icons sorted and selection changed
+          o Menu: Player icons and skins sorted
+          o Model: PiratePad with complete new animations
+          o Model: PiratePad scaled up
+          o Model: Padman model replaced
+          o Menu: Only available screen resolutions are shown in graphics menu, sorted by aspect ratio
+          o HUD: New team overlay layout
+          o Menu: Texture details set to maximum by default
+          o Menu: Max clients set to 12 and added to create menu
+          o Menu: Server browser overhaul
+          o Powerups: PadShield armor replaced by a new model
+          o Powerups: PadShards armor overhauled
+          o Powerups: Revival new effect icon
+          o Weapons: Faster weapon change after out of ammo status
+          o Weapons: Imperius ammo load reduced
+          o Weapons: Weapon effects and skins overhauled
+          o Weapons: Boaster damage reduced
+          o LPS: new head icons, player with most lifes left gets highlighted with a red icon
+          o Textures: Round about 2000 textures reworked and replaced
+          o Textures: Shader entries cleaned
+          o Maps: All old maps overhauled
+          o Menu: Start menu Sigle and Multi replaced by Create and Join
+          o Menu: All levelshots overhauled and resized
+          o Menu: Menu background pictures overhauled 
+          o Menu: Bot menu, only default bots selectable, additional selection of default/red/blue in list
+          o Menu: Game options menu expanded
+          o Menu: New game play hints while the loading screen is shown
+          o Menu: Scoreboard overhauled
+          o Sounds: Folder structure of sound files rearranged, cleaned
+          o Bots: Bot difficulty levels lowered
+          o Misc: Net code protocol version number
+          o Misc: Woparena and wopbot changed back to arena and bot to avoid issues with sv_allowDownload and sv_dlURL
+          o Misc: Log file content overhauled and extended
+          o Misc: Fixed an issue with names of demo files under Linux
+          o Misc: Team spawn entities can be used for all team modes now
+          o Misc: WoP logo overhauled
+    * FIXED
+          o Mapping tools: Wrong home path for linux os
+          o Model: 3d person view head camera issue
+          o PadCrash_dm17: Hurt brush issue
+          o Menu: Animation abort bug in player menu
+          o Menu: Sorting skins issue in player menu
+          o Sounds: Solved a crash issue with playing mp3 while pressing N
+          o Engine: Shoot while chatting "bug" fixed
+    * UPDATED
+          o Misc: Server cfg files
+	  o Credits: Pages updated
+          o Mapping Tools: shaderlist.txt
+          o SDL: Pumped to version 1.2.13
+          o Video: Intro movie overhauled
+          o ioq3 code base
+
+
+Dec 06 2010 - VERSION: 1.2
+
+    * ADDED
+          o 1 score point is given to any player who raises a balloon in Big Balloon game mode
+          o A second PadShield in Kai's TrashMap BB version
+          o Alternative skin "MonsterHawk" for "MonsterPad" player model
+          o Boaster new kind of indirect damage, takes effect after every direct hit
+          o Console message (in magenta color) is shown to all players if someone gets a spray-award/medal in Spray your Color game modes
+          o Dynamic flares in Kai's TrashMap
+          o Mapping tool support animatable mapobjects via misc_externalmodel now
+          o Mapping tools entity keys "notLPS" and "notGametype"
+          o New DrawString function for server info ingame HUD
+          o New map GlowStar's Anteroom for all gametypes
+          o Option to enable/disable flares in setup menu
+          o Option to turn off the autobinding of unused keys (cvar: wop_AutoBindUnusedKeys)
+          o Score bubble spawns now at the balloon-box in Big Balloon game mode
+          o Score points are shown in the score board now in Big Balloon game mode
+          o Scrolling serverlist with mousewheel in server browser menu
+          o Transparancy of LPS icons vary in dependency of the players distance
+          o Two new songs to the "Green Sun" music pack "Things You See" and "80 Days"
+          o Wallhack-names fade out - effect in LPS game mode
+          o Water effects in the sewers in Kai's Trashmap BB version
+          o Wire in the light bulb in Kai's TrashMap and BB version
+          o cvar-option "wop_AutoswitchSongByNextMap (0/1)" 0: like it was till now; 1: don't restart the last song on nextmap start ...
+          o option to autoswitch song by nextmap in setup menu
+    * CHANGED
+          o Dropping cartridges is much faster now in Spray your Color game modes
+          o "overhead-stars" are not shown while being visionless
+          o "r_ignoreHWgamma" and "r_overBrightBits" changed to "0" as default (was necessary after a gamma-handling change in ioq3)
+          o Awards and medals over the players head are shown longer now (5 sec)
+          o Balloony direct damage and splash damage reduced, knockback raised slightly
+          o Blue background added if the download info screen appears in map loading screen (cl_allowdownload...)
+          o Boaster direct damage reduced
+          o Bots aim accuracy has been throttled for all bots, so skill 1 and 2 will be easier
+          o BubbleG damage reduced
+          o Cartridges now have the same graphic effects as the player in Spray your Color game modes (PadPower, PuppetMaster, Visionless)
+          o ClientConnect-line (dedicated-console and gamelog) include cl_guid and ip:port of the client now
+          o Game speed reduced
+          o Imp room concept in Kai's TrashMap
+          o Imperius ammo when weapon or bottle picked up redcued, overload consumes ammo now
+          o Imperius respawn time reduced in Kai's TrashMap
+          o Imperius secret and Imp ammo bottle removed in Cyben's CybBath BB version
+          o Jumper / Speedy effects are deactivated now when player is in the spray room
+          o Light settings overhauled in Kai's TrashMap BB version
+          o Nasty laughing when the Imp gets grabbed set to global in Kai's TrashMap
+          o Needed time for capture/counter-actions are divided by the number of players who are involved in this action in Big Balloon game mode. The more team members are in the balloon capture zone together, the less time needed to capture it!
+          o Nipper damage reduced
+          o One Imp ammo bottle removed in Kai's TrashMap
+          o PadPower respawn time reduced in Kai's TrashMap (Jumper to reach it is still untouched)
+          o PadShield respawn time reduced in Harm's Huette and BB version
+          o Player menu shows up to 96 player models now (before 32)
+          o Player spawns with 100% armor in LPS game mode
+          o Powerups, holdables, imperius, healthstation are deactivated in LPS game mode
+          o Pumper beam width halved and splash damage reduced
+          o Puppet Master 100% damage absorb removed (vulnerable like everyone else now), starts with 200% health now, starts with 200% armor now
+          o Second Imp ammo bottle in SyC-FFA mode removed in Harm's Huette
+          o Splasher respawn time set to default in MopAn's Jail
+          o Time of logos displayed on the spraywall reduced in Spray your Color game modes
+          o Wait time of the trigger to Imp room removed in Kai's TrashMap
+          o Wallhack-names removed and replaced by a simple icon in LPS game mode
+          o Weapon respawn time changed back to the default value of other game types in TDM
+          o You cannot grab more than 8 cartriges anymore in Spray your Color game modes
+          o cl_guid reactivated (the id is build from "wopkey"-file, if there isn't such a file, it will be generated with random stuff)
+          o complete itemplacement overhaul in GlowStar's Backyard and BB version
+          o door to Imp room closes earlier now in Kai's TrashMap
+          o g_q3TOpadItems default changed to 1 (redirects old mapentitynames to the new naming... so code can handle maps with q3 items/spawnpoints)
+    * FIXED
+          o 'run above the map' bug removed by setting player clip brush in Kai's TrashMap and BB version
+          o After stopping following-mode it shows normal Spec-Hud inin LPS game mode, no longer free-team-hud. Switching weapons is not possible anymore
+          o Arrow buttons to scroll server list work now in server browser menu
+          o Boaster creating too much slick-entities, also on non-plane surfaces
+          o Boaster shooting through thin brushes/walls fixed
+          o Clipbrush added to prevent players to shoot into the sprayroom in Kai's TrashMap
+          o Curl for windows-wop (external http-downloads work now for windows clients)
+          o Display now shows scores > 999 in ingame HUD
+          o Exploit to have weapons in spray room by cheating with a modified config fixed
+          o Incompatibility issue of PadCrashBB for WoP v1.2
+          o Issue with wrong team model skins fixed in Big Balloon game mode
+          o Levelshot of Kai's TrashMap BB corrected (wopmaps.woparena edited) in map menu
+          o Levelshots.shader tweaked, blurr effect removed in map loading screen
+          o Missing small levelshot of Kai's TrashMap BB in map menu
+          o Playerclip added near the jumppad on the cupboard in Harm's Diner and BB version
+          o Playerclips added to the dumbbells in Harm's Huette and BB version
+          o PuppetMaster effect overlays PadPower effect now like intended
+          o Server info hud shows the zero of the time value now (e.g. 10: 3 -> 10:03)
+          o Shooting through walls with Pumper
+          o Sniper issue of the balloonbox on the window in Harm's Diner BB
+          o Some shaders
+          o Some small fixes in the hud for spectator-following display
+          o Spawning dead bodys in the intermission-screen in LPS game mode
+          o Spawning into someone else in warmup time in LPS game mode
+          o SyC bot AI, bots now work properly in SYC. (Spraying cartridges are less attractive to bots, so they will pay more attention to weapons and powerups and start to roam more)
+          o Vote menu works correctly with warmup now (server side fix)
+          o Walking through the fence in the PadPower room in Kai's TrashMap BB version
+          o Wallhack-names of disconnected players in LPS game mode
+          o WoP-logo texture on jumppads corrected in Kai's TrashMap and BB version
+          o Wrong memory access of boaster code while shooting on non player entities (this bug caused a server-crash on windows systems)
+          o Zooming after losing last live when having Splasher in LPS game mode
+          o shader issue with ENTE's PadPack
+          o small texture bugs in Kai's TrashMap
+    * UPDATED
+          o ioq3 code base
