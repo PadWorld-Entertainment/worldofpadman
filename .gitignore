@@ -50,3 +50,6 @@ profile
 *.dll
 *.so
 *.dylib
+
+/wop.*
+/wopded.*
