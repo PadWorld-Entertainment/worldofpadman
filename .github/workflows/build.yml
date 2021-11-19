@@ -7,40 +7,6 @@ on:
 name: "Build"
 
 jobs:
-  build-make:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-18.04
-          - windows-2019
-          - macos-10.15
-    env:
-      ARCHIVE: 1
-
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v2
-
-      - name: "Install Dependencies (Linux)"
-        if: ${{ runner.os == 'Linux' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install libsdl2-dev
-
-      - name: "Install Dependencies (Windows)"
-        if: ${{ runner.os == 'Windows' }}
-        run: choco install zip
-
-      - name: "Compile"
-        run: make release
-
-      - name: "Upload artifacts"
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.os }}
-          path: build/*.zip
-
   build-cmake:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -65,9 +31,19 @@ jobs:
         run: |
           brew install sdl2
 
+      - name: "Install Dependencies (Windows)"
+        if: ${{ runner.os == 'Windows' }}
+        run: choco install zip
+
       - name: "Compile"
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install
           cmake --build .
+
+      - name: "Upload artifacts"
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.os }}
+          path: build/install/*
