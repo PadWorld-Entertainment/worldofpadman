@@ -45,3 +45,8 @@ profile
 *.sdf
 *.opensdf
 *.suo
+
+*.qvm
+*.dll
+*.so
+*.dylib
