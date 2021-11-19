@@ -1,0 +1,44 @@
+waypoint bluelolly 3073 34 698
+waypoint blueright 2267 779 88
+waypoint bluecenter 2610 23 -16
+waypoint blueleft 2392 -666 90
+waypoint redlolly -568 24 698
+waypoint redleft 126 689 90
+waypoint redcenter 86 51 -74
+waypoint redright 206 -640 92
+linkblue redlolly redleft
+linkblue redlolly redcenter
+linkblue redlolly redright
+linkblue redleft blueright
+linkblue redcenter bluecenter
+linkblue redright blueleft
+linkblue blueleft bluelolly
+linkblue bluecenter bluelolly
+linkblue blueright bluelolly
+linkred bluelolly blueleft
+linkred bluelolly bluecenter
+linkred bluelolly blueright
+linkred blueleft redright
+linkred bluecenter redcenter
+linkred blueright redleft
+linkred redleft redlolly
+linkred redcenter redlolly
+linkred redright redlolly
+/*
+bambam blue 3300 439 90
+bambam blue 3012 43 698
+bambam red -603 508 90
+bambam red -537 23 698
+boomie red -49 534 90 87 -4
+boomie red 64 -620 90 87 0
+boomie red -506 32 71 87 178
+boomie red -534 -903 442 87 170
+boomie red -637 30 698 87 -178
+boomie red -553 964 442 87 0
+boomie blue 2945 34 62 87 3
+boomie blue 2441 572 90 82 152
+boomie blue 2415 -530 90 87 -140
+boomie blue 3031 -871 442 83 15
+boomie blue 3147 42 698 87 5
+boomie blue 3042 928 442 87 62
+*/

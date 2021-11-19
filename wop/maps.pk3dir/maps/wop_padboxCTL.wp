@@ -1,0 +1,87 @@
+waypoint redlolly -470 30 1266
+waypoint redbackdoor -1355 30 1266
+waypoint redc097 -1404 1244 946
+waypoint redd033 -1241 -1163 946
+waypoint redcenter -508 41 562
+waypoint redb046 -344 -889 242
+waypoint rednotb046 -341 960 242
+waypoint redbottomback -1746 79 -13
+waypoint redinnerb046 -114 -1143 946
+waypoint redinnernotb046 -120 1218 946
+waypoint blueb046 2680 950 242
+waypoint bluecenter 2711 37 562
+waypoint bluenotb046 2713 -897 242
+waypoint bluebottomback 4061 32 -13
+waypoint blueinnerb046 2451 1187 946
+waypoint blueinnernotb046 2438 -1117 946
+waypoint blued033 3590 1246 946
+waypoint bluebackdoor 3844 34 1266
+waypoint bluec097 3636 -1174 946
+waypoint bluelolly 2821 21 1266
+waypoint redpumper -970 551 1266
+waypoint redhstation -918 -475 1266
+linkblue redlolly redinnerb046
+linkred redinnerb046 redlolly
+linkblue redlolly redinnernotb046
+linkred redinnernotb046 redlolly
+linkblue redlolly redpumper
+linkred redpumper redlolly
+linkblue redpumper redbackdoor
+linkred redbackdoor redpumper
+linkblue redlolly redhstation
+linkred redhstation redlolly
+linkblue redhstation redbackdoor
+linkred redbackdoor redhstation
+linkblue redbackdoor redc097
+linkred redc097 redbackdoor
+linkblue redbackdoor redd033
+linkred redd033 redbackdoor
+linkblue redbackdoor redbottomback
+linkblue redd033 redcenter
+linkred redcenter redd033
+linkblue redd033 redb046
+linkblue redc097 redcenter
+linkred redcenter redc097
+linkblue redc097 rednotb046
+linkblue redcenter bluecenter
+linkred bluecenter redcenter
+linkblue redcenter redb046
+linkred redb046 redcenter
+linkblue redcenter rednotb046 
+linkred rednotb046 redcenter
+linkblue redinnerb046 redb046
+linkred redb046 redinnerb046
+linkblue redinnernotb046 rednotb046
+linkred rednotb046 redinnernotb046
+linkblue redbottomback redb046
+linkblue redbottomback rednotb046
+linkblue redb046 bluenotb046
+linkred bluenotb046 redb046
+linkblue rednotb046 blueb046
+linkred blueb046 rednotb046
+linkred bluecenter blueb046
+linkblue blueb046 bluecenter
+linkred bluecenter bluenotb046
+linkblue bluenotb046 bluecenter
+linkred bluelolly bluebackdoor
+linkblue bluebackdoor bluelolly
+linkred bluelolly blueinnerb046
+linkblue blueinnerb046 bluelolly
+linkred bluelolly blueinnernotb046
+linkblue blueinnernotb046 bluelolly
+linkred bluebackdoor bluec097
+linkblue bluec097 bluebackdoor
+linkred bluebackdoor blued033
+linkblue blued033 bluebackdoor
+linkred bluec097 bluecenter
+linkblue bluecenter bluec097
+linkred bluec097 bluenotb046
+linkred blued033 bluecenter
+linkblue bluecenter blued033
+linkred blued033 blueb046
+linkred blueinnerb046 blueb046
+linkblue blueb046 blueinnerb046
+linkred blueinnernotb046 bluenotb046
+linkblue bluenotb046 blueinnernotb046
+linkred bluebottomback blueb046
+linkred bluebottomback bluenotb046

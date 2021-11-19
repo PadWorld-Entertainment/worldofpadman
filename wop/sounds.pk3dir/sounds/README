@@ -1,0 +1,26 @@
+The following sounds are not used
+
+	countdown/
+		lps/
+			one_life
+			two_lives
+			three_lives
+		dm/
+			one_frag
+			two_frags
+			three_frags
+			
+			five_points
+			ten_points
+			fifteen_points
+
+	healthstation/
+		station_still
+
+
+menu/mouse_over is silence
+world/plats/end and start are silence
+names/players/monster won't be used
+names/weapons/kma97 is the same as splasher	
+weapons/nipper and punchy should never be needed. Spraypistol uses pickup-sound
+sounds/names/powerups/bambam and boomies are missing

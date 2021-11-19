@@ -1,0 +1,91 @@
+waypoint redLolly -1768 -849 9362
+waypoint redSewer -1537 183 8588
+waypoint redDoor -1108 127 9082
+waypoint redDoorSeat -394 48 9394
+waypoint redStairsBook -663 1501 8570
+waypoint redStairsOther -618 -1170 8570
+waypoint blueLolly 3690 1031 9362
+waypoint blueSewer 3458 12 8589
+waypoint blueDoor 2878 128 9082
+waypoint blueDoorSeat 2319 38 9394
+waypoint blueStairsOther 2649 -1060 8570
+waypoint blueStairsBook 2632 1290 8570
+waypoint wellSideBook 1060 1135 8589
+waypoint wellSideOther 937 -992 8578
+waypoint wellCenter 947 98 8658
+waypoint shadowOther 944 -1973 8570
+waypoint shadowBook 957 2009 8570
+linkblue redLolly redDoor
+linkred redDoor redLolly
+linkblue redLolly redSewer
+linkred redSewer redLolly
+linkblue redDoor redDoorSeat
+linkblue redDoor redStairsBook
+linkred redStairsBook redDoor
+linkblue redDoor redStairsOther
+linkred redStairsOther redDoor
+linkblue redSewer wellSideBook
+linkred wellSideBook redSewer
+linkblue redSewer wellSideOther
+linkred wellSideOther redSewer
+linkblue redSewer wellCenter
+linkred wellCenter redSewer
+linkblue redDoorSeat wellSideBook
+linkblue redDoorSeat wellSideOther
+linkblue redDoorSeat wellCenter
+linkblue redStairsBook wellsideBook
+linkred wellSideBook redStairsBook
+linkblue redStairsBook shadowBook
+linkred shadowBook redStairsBook
+linkblue redStairsOther wellSideOther
+linkred wellSideOther redStairsOther
+linkblue redStairsOther shadowOther
+linkred shadowOther redStairsOther
+linkblue shadowOther blueStairsOther
+linkred blueStairsOther shadowOther
+linkblue wellSideOther blueStairsOther
+linkred blueStairsOther wellSideOther
+linkblue shadowBook blueStairsBook
+linkred blueStairsBook shadowBook
+linkblue wellSideBook blueStairsBook
+linkred blueStairsBook wellSideBook
+linkred blueDoorSeat wellSideBook
+linkred blueDoorSeat wellSideOther
+linkred blueDoorSeat wellCenter
+linkred blueSewer wellCenter
+linkblue wellCenter blueSewer
+linkred blueSewer wellSideBook
+linkblue wellSideBook blueSewer
+linkred blueSewer wellSideOther
+linkblue wellsideOther blueSewer
+linkred blueDoor blueDoorSeat
+linkred blueDoor blueStairsBook
+linkblue blueStairsBook blueDoor
+linkred blueDoor blueStairsOther
+linkblue blueStairsOther blueDoor
+linkred blueLolly blueSewer
+linkblue blueSewer blueLolly
+linkred blueLolly blueDoor
+linkblue blueDoor blueLolly
+/*
+boomie red -1615 450 9082 0 90
+boomie red -1191 -701 10018 87 -6
+boomie red -1707 -862 9362 87 -94
+boomie red -1004 -130 9082 79 -94
+boomie red -1029 319 9082 86 86
+boomie red -1696 470 8578 0 12 
+boomie red 3736 -345 8574 -87 -176
+boomie red 3539 -369 9082 1 69
+boomie red 3888 -356 9082 1 104
+boomie blue 3638 -274 8580 0 -161
+boomie blue 3524 -270 9082 0 -70
+boomie blue 3115 896 10018 87 179
+boomie blue 3628 1060 9362 87 91
+boomie blue 2961 -125 9082 87 -122
+boomie blue 3004 348 9082 87 103
+boomie blue -1623 556 9082 6 -107
+boomie blue -1968 565 9082 2 -82
+boomie blue -1742 526 8572 -87 167
+bambam blue 3649 514 9082
+bambam red -1606 -372 9082
+*/

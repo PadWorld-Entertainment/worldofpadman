@@ -1,0 +1,38 @@
+waypoint bluelolly 5467 -477 278
+waypoint redlolly -589 965 278
+waypoint reddoor 2006 -13 58
+waypoint bluedoor 2868 492 58
+waypoint bluecupboard 4644 1635 1018
+waypoint redcupboard 271 -1188 1018
+waypoint bluedoortop 2303 1422 1506
+waypoint reddoortop 2558 -908 1506
+
+linkblue redlolly reddoor
+linkred reddoor redlolly
+
+linkred bluelolly bluedoor
+linkblue bluedoor bluelolly
+
+linkred bluelolly bluecupboard
+linkblue bluecupboard bluelolly
+
+linkblue redlolly redcupboard
+linkred redcupboard redlolly
+
+linkred bluecupboard bluedoortop
+linkblue bluedoortop bluecupboard
+
+linkblue redcupboard reddoortop
+linkred reddoortop redcupboard
+
+linkblue reddoortop bluedoor
+linkred bluedoor reddoortop
+
+linkred bluedoortop reddoor
+linkblue reddoor bluedoortop
+
+linkred bluedoor reddoor
+linkblue reddoor bluedoor
+
+linkred bluedoortop reddoortop
+linkblue reddoortop bluedoortop

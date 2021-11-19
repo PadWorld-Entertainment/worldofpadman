@@ -1,0 +1,8 @@
+u_torso,models/wop_players/padking/default_upper.tga
+u_collar,models/wop_players/padking/default_upper.tga
+u_leftshoulder,models/wop_players/padking/default_head.tga
+u_rightshoulder,models/wop_players/padking/default_head.tga
+u_sword,models/wop_players/padking/default_upper.tga
+tag_weapon,
+tag_torso,
+tag_head,
