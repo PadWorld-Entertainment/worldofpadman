@@ -1,0 +1,277 @@
+// vanilla wop maps
+
+{
+	map      "wop_padgarden"
+	longname "PadGarden"
+	type     "ffa syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_padgarden_night"
+	longname "PadGarden Night"
+	type     "ffa lps"
+}
+
+{
+	map      "wop_padgardenBB"
+	longname "PadGarden"
+	type     "bb"
+}
+
+{
+	map      "wop_padkitchen"
+	longname "PadKitchen"
+	type     "ffa syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_padkitchenLPS"
+	longname "PadKitchen"
+	type     "lps"
+}
+
+{
+	map      "wop_padkitchenBB"
+	longname "PadKitchen"
+	type     "bb"
+}
+
+{
+	map      "wop_huette"
+	longname "Huette"
+	type     "ffa lps syc_ffa syc_tp team ft"
+} 
+
+{
+	map      "wop_huetteBB"
+	longname "Huette"
+	type     "bb"
+}
+
+{
+	map      "wop_padlibrary"
+	longname "PadLibrary"
+	type     "ffa syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_padlibraryLPS"
+	longname "PadLibrary"
+	type     "lps"
+}
+
+{
+	map      "wop_padlibraryBB"
+	longname "PadLibrary"
+	type     "bb"
+}
+
+{
+	map     "wop_padcrashBB"
+	longname "PadCrash"
+	type     "bb"
+}
+
+{
+	map      "wop_airplane"
+	longname "Airplane"
+	type     "ffa syc_ffa syc_tp team ft lps"
+}
+
+{
+	map      "wop_trashmap"
+	longname "TrashMap"
+	type     "ffa syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_trashmapBB"
+	longname "TrashMap"
+	type     "bb"
+}
+
+{
+	map      "wop_jail"
+	longname "Jail"
+	type     "ffa syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_jailBB"
+	longname "Jail"
+	type     "bb"
+}
+
+{
+	map      "wop_padship"
+	longname "PadShip"
+	type     "ffa syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_padshipBB"
+	longname "PadShip"
+	type     "bb"
+}
+
+{
+	map      "wop_backyard"
+	longname "Backyard"
+	type     "ffa lps syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_backyardBB"
+	longname "Backyard"
+	type     "bb"
+}
+
+{
+	map      "wop_padcrash"
+	longname "PadCrash"
+	type     "ffa lps team ft"
+}
+
+{
+	map      "wop_bath"
+	longname "CybBath"
+	type     "ffa syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_bathBB"
+	longname "CybBath"
+	type     "bb"
+}
+
+{
+	map      "wop_padshop"
+	longname "PadShop"
+	type     "ffa syc_ffa syc_tp team ft"
+} 
+
+{
+	map      "wop_padshopBB"
+	longname "PadShop"
+	type     "bb"
+}
+
+{
+	map      "wop_anteroom"
+	longname "Anteroom"
+	type     "ffa lps syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_anteroomBB"
+	longname "Anteroom"
+	type     "bb"
+}
+
+{
+	map      "wop_padattic"
+	longname "PadAttic"
+	type     "ffa syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_padatticLPS"
+	longname "PadAttic Night"
+	type     "lps"
+}
+
+{
+	map      "wop_padatticBB"
+	longname "PadAttic"
+	type     "bb"
+}
+
+{
+	map      "wop_cabin"
+	longname "Cabin"
+	type     "ffa lps syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_cabinBB"
+	longname "Cabin"
+	type     "bb"
+}
+
+{
+	map      "wop_diner"
+	longname "Diner"
+	type     "ffa lps syc_ffa syc_tp team ft"
+}
+
+{
+	map      "wop_dinerBB"
+	longname "Diner"
+	type     "bb"
+}
+
+{
+	map      "wop_padcrash_dm17"
+	longname "PadCrash DM17"
+	type     "ffa lps team ft"
+}
+
+{
+	map      "wop_padcloisterCTL"
+	longname "PadCloister"
+	type     "ctl"
+}
+
+{
+	map      "wop_colorstageCTL"
+	longname "ColorStage"
+	type     "ctl"
+}
+
+{
+	map      "wop_padasiaCTL"
+	longname "PadAsia"
+	type     "ctl"
+}
+
+{
+	map      "wop_westernCTL"
+	longname "Westernset"
+	type     "ctl"
+}
+
+//{
+//	map      "wop_trashmapCTL"
+//	longname "TrashMap"
+//	type     "ctl"
+//}
+
+{
+	map      "wop_padboxCTL"
+	longname "PadBox"
+	type     "ctl"
+}
+
+{
+	map      "wop_journeyCTL"
+	longname "CybJourney"
+	type      "ctl"
+}
+
+{
+	map      "wop_padbaseCTL"
+	longname "PadBase"
+	type     "ctl"
+}
+
+{
+	map      "wop_padcrashCTL"
+	longname "PadCrash"
+	type     "ctl"
+}
+
+{
+	map      "wop_fridgeCTL"
+	longname "FridgeWars"
+	type     "ctl"
+}
