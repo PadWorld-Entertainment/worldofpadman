@@ -923,24 +923,30 @@ UI_MouseEvent
 */
 void UI_MouseEvent(int dx, int dy) {
 	int i;
+	int xbias;
+	int ybias;
+
 	menucommon_s *m;
 
 	if (!uis.activemenu)
 		return;
 
+	// convert X Y bias to 640 coords
+	xbias = uis.xbias / uis.xscale;
+	ybias = uis.ybias / uis.yscale;
+	
 	// update mouse screen position
 	uis.cursorx += dx;
-	if (uis.cursorx < -uis.xbias)
-		uis.cursorx = -uis.xbias;
-	else if (uis.cursorx > SCREEN_WIDTH + uis.xbias)
-		uis.cursorx = SCREEN_WIDTH + uis.xbias;
+	if (uis.cursorx < -xbias)
+		uis.cursorx = -xbias;
+	else if (uis.cursorx > SCREEN_WIDTH + xbias)
+		uis.cursorx = SCREEN_WIDTH + xbias;
 
-	// todo: use ybias here for odd screens (and symmetry)
 	uis.cursory += dy;
-	if (uis.cursory < 0)
-		uis.cursory = 0;
-	else if (uis.cursory > SCREEN_HEIGHT)
-		uis.cursory = SCREEN_HEIGHT;
+	if (uis.cursory < -ybias)
+		uis.cursory = -ybias;
+	else if (uis.cursory > SCREEN_HEIGHT + ybias)
+		uis.cursory = SCREEN_HEIGHT + ybias;
 
 	if (uis.dropdownlist)
 		return;
@@ -1115,7 +1121,7 @@ void UI_Init(void) {
 	UI_RegisterCvars();
 
 	// not yet
-	//	WOP_LoadMenuText(UI_LOCALEFILE, qtrue);
+	// WOP_LoadMenuText(UI_LOCALEFILE, qtrue);
 
 	SetDefaultBinds_onUnusedKeys();
 
@@ -1134,19 +1140,23 @@ void UI_Init(void) {
 	trap_GetGlconfig(&uis.glconfig);
 
 	// for 640x480 virtualized screen
-	uis.xscale = uis.glconfig.vidWidth * (1.0f / 640.0f);
-	uis.yscale = uis.glconfig.vidHeight * (1.0f / 480.0f);
+	uis.xscale = uis.glconfig.vidWidth * (1.0f / (float)SCREEN_WIDTH);
+	uis.yscale = uis.glconfig.vidHeight * (1.0f / (float)SCREEN_HEIGHT);
 
-	if (uis.glconfig.vidWidth * 480 > uis.glconfig.vidHeight * 640) {
+	if (uis.glconfig.vidWidth * (float)SCREEN_HEIGHT > uis.glconfig.vidHeight * (float)SCREEN_WIDTH) {
 		// wide screen
-		uis.xbias = 0.5f * (uis.glconfig.vidWidth - (uis.glconfig.vidHeight * (640.0f / 480.0f)));
+		uis.xbias = 0.5f * (uis.glconfig.vidWidth - (uis.glconfig.vidHeight * ((float)SCREEN_WIDTH/(float)SCREEN_HEIGHT)));
 		uis.xscale = uis.yscale;
-		uis.ybias = 0;
+		uis.ybias = 0;		
 	} else {
 		// no wide screen
 		uis.xbias = 0;
-	}
 
+		// narrow screen
+		uis.ybias = 0.5 * (uis.glconfig.vidHeight - (uis.glconfig.vidWidth * ((float)SCREEN_HEIGHT/(float)SCREEN_WIDTH)));
+		uis.yscale = uis.xscale;
+	}
+/*
 	if (uis.glconfig.vidWidth * 480 < uis.glconfig.vidHeight * 640) {
 		uis.ybias = 0.5f * (uis.glconfig.vidHeight - (uis.glconfig.vidWidth * (480.0f / 640.0f)));
 		uis.yscale = uis.xscale;
@@ -1154,7 +1164,7 @@ void UI_Init(void) {
 		uis.ybias = 0;
 
 	uis.scale1024 = uis.xscale * (640.0f / 1024.0f); // uis.glconfig.vidHeight * (1.0f/768.0f);
-
+*/
 	// initialize the menu system
 	Menu_Cache();
 
@@ -1179,10 +1189,10 @@ void UI_AdjustFrom640(float *x, float *y, float *w, float *h) {
 
 void UI_AdjustFrom1024(float *x, float *y, float *w, float *h) {
 	// expect valid pointers
-	*x = *x * uis.scale1024 + uis.xbias;
-	*y = *y * uis.scale1024 + uis.ybias;
-	*w *= uis.scale1024;
-	*h *= uis.scale1024;
+	*x = *x * uis.xscale + uis.xbias; //uis.scale1024 + uis.xbias;
+	*y = *y * uis.yscale + uis.ybias; //uis.scale1024 + uis.ybias;
+	*w *= uis.xscale; //uis.scale1024;
+	*h *= uis.yscale; //uis.scale1024;
 }
 
 void UI_DrawNamedPic(float x, float y, float width, float height, const char *picname) {
@@ -1314,11 +1324,15 @@ static void UI_DrawMenu(menuframework_s *menu) {
 				UI_DrawMenu(uis.stack[uis.menusp - 2]);
 			}
 		} else if (menu->fullscreen) {
-			// draw the black background for non 4:3 resolutions
-			trap_R_SetColor(colorBlack);
-			trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 0, 0, uis.whiteShader);
-			trap_R_SetColor(NULL);
+			// clear edge if window is different aspect than UI
+			// Clearing for 4:3 xbias is handled in SCR_DrawScreenField().
+			if ( uis.xbias || uis.ybias ) {
+				trap_R_SetColor( g_color_table[0] );
+				trap_R_DrawStretchPic( 0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 0, 0, uis.whiteShader );
+				trap_R_SetColor( NULL );
+			}
 
+			// draw the background
 			if (menu->bgparts) {
 				if (menu->bgparts & BGP_MAINFX)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.mainbgfx);
