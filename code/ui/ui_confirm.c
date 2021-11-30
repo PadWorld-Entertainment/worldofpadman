@@ -38,6 +38,8 @@ CONFIRMATION MENU
 #define ID_NO 10
 #define ID_YES 11
 
+#define XPOSITION (SCREEN_WIDTH / 2)
+
 typedef struct {
 	menuframework_s menu;
 
@@ -115,7 +117,7 @@ ConfirmMenu_Draw
 */
 static void ConfirmMenu_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawStringNS(320, 204, s_confirm.question, s_confirm.style, 24, color_black);
+	UI_DrawStringNS(XPOSITION, 204, s_confirm.question, s_confirm.style, 24, color_black);
 
 	Menu_Draw(&s_confirm.menu);
 
@@ -135,7 +137,7 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 	// zero set all our globals
 	memset(&s_confirm, 0, sizeof(s_confirm));
 
-	ConfirmMenu_Cache();
+	UI_ConfirmMenu_Cache();
 
 	s_confirm.question = question;
 	s_confirm.draw = draw;
@@ -158,7 +160,7 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 	s_confirm.yes.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_confirm.yes.generic.callback = ConfirmMenu_Event;
 	s_confirm.yes.generic.id = ID_YES;
-	s_confirm.yes.generic.x = 260;
+	s_confirm.yes.generic.x = XPOSITION - 60;
 	s_confirm.yes.generic.y = 260;
 	s_confirm.yes.width = 60;
 	s_confirm.yes.height = 30;
@@ -170,7 +172,7 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 	s_confirm.no.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_confirm.no.generic.callback = ConfirmMenu_Event;
 	s_confirm.no.generic.id = ID_NO;
-	s_confirm.no.generic.x = 335;
+	s_confirm.no.generic.x = XPOSITION + 15;
 	s_confirm.no.generic.y = 260;
 	s_confirm.no.width = 30;
 	s_confirm.no.height = 30;
@@ -187,10 +189,10 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 
 /*
 =================
-ConfirmMenu_Cache
+UI_ConfirmMenu_Cache
 =================
 */
-void ConfirmMenu_Cache(void) {
+void UI_ConfirmMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(YES0);
 	trap_R_RegisterShaderNoMip(YES1);
 	trap_R_RegisterShaderNoMip(NO0);

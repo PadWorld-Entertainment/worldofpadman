@@ -30,26 +30,28 @@ TEAM ORDERS MENU
 
 #include "ui_local.h"
 
-#define ART_FRAME "menu/ingame/bg"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
 
 #define ID_LIST_BOTS 10
 #define ID_LIST_CTF_ORDERS 11
 #define ID_LIST_TEAM_ORDERS 12
 
 #define ORDER_HEIGHT 24
+#define XPOSITION (SCREEN_WIDTH / 2)
 
 typedef struct {
 	menuframework_s menu;
 
 	menulist_s list;
 
-	menutext_s back;
+	menubitmap_s back;
 
 	int gametype;
 	int numBots;
 	int selectedBot;
-	const char *bots[9];
-	char botNames[9][16];
+	const char *bots[8];
+	char botNames[8][16];
 } teamOrdersMenuInfo_t;
 
 static teamOrdersMenuInfo_t teamOrdersMenuInfo;
@@ -199,7 +201,7 @@ static void UI_TeamOrdersMenu_ListDraw(void *self) {
 
 	hasfocus = (l->generic.parent->cursor == l->generic.menuPosition);
 
-	x = 320; // l->generic.x;
+	x = l->generic.x;
 	y = l->generic.y;
 	for (i = 0; i < l->numitems; i++) {
 		style = UI_LEFT | UI_SMALLFONT | UI_CENTER;
@@ -269,7 +271,7 @@ static void UI_TeamOrdersMenu_BuildBotList(void) {
 	char botTeam;
 	char info[MAX_INFO_STRING];
 
-	for (n = 0; n < 9; n++) {
+	for (n = 0; n < 8; n++) {
 		teamOrdersMenuInfo.bots[n] = teamOrdersMenuInfo.botNames[n];
 	}
 
@@ -285,7 +287,7 @@ static void UI_TeamOrdersMenu_BuildBotList(void) {
 	trap_GetConfigString(CS_PLAYERS + cs.clientNum, info, MAX_INFO_STRING);
 	playerTeam = *Info_ValueForKey(info, "t");
 
-	for (n = 0; n < numPlayers && teamOrdersMenuInfo.numBots < 9; n++) {
+	for (n = 0; n < numPlayers && teamOrdersMenuInfo.numBots < 8; n++) {
 		trap_GetConfigString(CS_PLAYERS + n, info, MAX_INFO_STRING);
 
 		if (n == cs.clientNum) {
@@ -316,7 +318,7 @@ static void UI_TeamOrdersMenu_BuildBotList(void) {
 */
 static void TeamOrderMenu_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(320, 110, "TEAM ORDERS", UI_CENTER | UI_SMALLFONT, color_black);
+	UI_DrawProportionalString(XPOSITION, 110, "TEAM ORDERS", UI_CENTER | UI_SMALLFONT, color_black);
 
 	// standard menu drawing
 	Menu_Draw(&teamOrdersMenuInfo.menu);
@@ -342,25 +344,26 @@ static void UI_TeamOrdersMenu_Init(void) {
 	teamOrdersMenuInfo.list.generic.flags = QMF_PULSEIFFOCUS;
 	teamOrdersMenuInfo.list.generic.ownerdraw = UI_TeamOrdersMenu_ListDraw;
 	teamOrdersMenuInfo.list.generic.callback = UI_TeamOrdersMenu_ListEvent;
-	teamOrdersMenuInfo.list.generic.x = 320 - 64;
-	teamOrdersMenuInfo.list.generic.y = 140; // 120;
+	teamOrdersMenuInfo.list.generic.x = XPOSITION;
+	teamOrdersMenuInfo.list.generic.y = 140;
 
-	teamOrdersMenuInfo.back.generic.type = MTYPE_TEXTS;
-	teamOrdersMenuInfo.back.fontHeight = 16.0f;
-	teamOrdersMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
+	teamOrdersMenuInfo.back.generic.type = MTYPE_BITMAP;
+	teamOrdersMenuInfo.back.generic.name = BACK0;
+	teamOrdersMenuInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	teamOrdersMenuInfo.back.generic.x = XPOSITION - 95;
+	teamOrdersMenuInfo.back.generic.y = 340;
 	teamOrdersMenuInfo.back.generic.callback = UI_TeamOrdersMenu_BackEvent;
-	teamOrdersMenuInfo.back.generic.x = 245;
-	teamOrdersMenuInfo.back.generic.y = 315;
-	teamOrdersMenuInfo.back.string = "BACK";
-	teamOrdersMenuInfo.back.style = UI_SMALLFONT;
-	teamOrdersMenuInfo.back.color = color_black;
+	teamOrdersMenuInfo.back.width = 50;
+	teamOrdersMenuInfo.back.height = 25;
+	teamOrdersMenuInfo.back.focuspic = BACK1;
+	teamOrdersMenuInfo.back.focuspicinstead = qtrue;
 
 	Menu_AddItem(&teamOrdersMenuInfo.menu, &teamOrdersMenuInfo.list);
 	Menu_AddItem(&teamOrdersMenuInfo.menu, &teamOrdersMenuInfo.back);
 
-	teamOrdersMenuInfo.list.generic.left = 220;
+	teamOrdersMenuInfo.list.generic.left = XPOSITION - 100;
 	teamOrdersMenuInfo.list.generic.top = teamOrdersMenuInfo.list.generic.y;
-	teamOrdersMenuInfo.list.generic.right = 420;
+	teamOrdersMenuInfo.list.generic.right = XPOSITION + 100;
 	UI_TeamOrdersMenu_SetList(ID_LIST_BOTS);
 }
 
@@ -370,7 +373,8 @@ UI_TeamOrdersMenu_Cache
 =================
 */
 void UI_TeamOrdersMenu_Cache(void) {
-	trap_R_RegisterShaderNoMip(ART_FRAME);
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
 }
 
 /*

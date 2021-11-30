@@ -64,7 +64,7 @@ EFFECTS OPTIONS MENU
 #define ID_SUNRAYS 21
 #define ID_DLIGHTMODE 22
 
-#define XPOSITION 180
+#define XPOSITION 220
 #define YPOSITION 198
 
 typedef struct {
@@ -373,8 +373,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	effectsOptionsInfo.graphics.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.graphics.generic.id = ID_GRAPHICS;
-	effectsOptionsInfo.graphics.generic.x = 16;
-	effectsOptionsInfo.graphics.generic.y = 37;
+	effectsOptionsInfo.graphics.generic.x = XPOSITION - 144;
+	effectsOptionsInfo.graphics.generic.y = 43;
 	effectsOptionsInfo.graphics.width = 160;
 	effectsOptionsInfo.graphics.height = 40;
 	effectsOptionsInfo.graphics.focuspic = GRAPHICS1;
@@ -385,8 +385,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	effectsOptionsInfo.display.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.display.generic.id = ID_DISPLAY;
-	effectsOptionsInfo.display.generic.x = 169;
-	effectsOptionsInfo.display.generic.y = 30;
+	effectsOptionsInfo.display.generic.x = XPOSITION + 9;
+	effectsOptionsInfo.display.generic.y = 36;
 	effectsOptionsInfo.display.width = 120;
 	effectsOptionsInfo.display.height = 40;
 	effectsOptionsInfo.display.focuspic = DISPLAY1;
@@ -397,8 +397,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	effectsOptionsInfo.sound.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.sound.generic.id = ID_SOUND;
-	effectsOptionsInfo.sound.generic.x = 36;
-	effectsOptionsInfo.sound.generic.y = 79;
+	effectsOptionsInfo.sound.generic.x = XPOSITION - 124;
+	effectsOptionsInfo.sound.generic.y = 85;
 	effectsOptionsInfo.sound.width = 120;
 	effectsOptionsInfo.sound.height = 40;
 	effectsOptionsInfo.sound.focuspic = SOUND1;
@@ -409,8 +409,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	effectsOptionsInfo.network.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.network.generic.id = ID_NETWORK;
-	effectsOptionsInfo.network.generic.x = 142;
-	effectsOptionsInfo.network.generic.y = 82;
+	effectsOptionsInfo.network.generic.x = XPOSITION - 18;
+	effectsOptionsInfo.network.generic.y = 88;
 	effectsOptionsInfo.network.width = 160;
 	effectsOptionsInfo.network.height = 40;
 	effectsOptionsInfo.network.focuspic = NETWORK1;
@@ -587,28 +587,28 @@ static void UI_EffectsOptions_MenuInit(void) {
 		"Select whether dynamic lights should be brightening (default) the scene, "
 		"lightening (without shadows), or lightening and cast shadows.";
 
-	effectsOptionsInfo.apply.generic.type = MTYPE_BITMAP;
-	effectsOptionsInfo.apply.generic.name = ACCEPT0;
-	effectsOptionsInfo.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
-	effectsOptionsInfo.apply.generic.callback = UI_EffectsOptions_Event;
-	effectsOptionsInfo.apply.generic.id = ID_APPLY;
-	effectsOptionsInfo.apply.generic.x = 512;
-	effectsOptionsInfo.apply.generic.y = 440;
-	effectsOptionsInfo.apply.width = 120;
-	effectsOptionsInfo.apply.height = 40;
-	effectsOptionsInfo.apply.focuspic = ACCEPT1;
-
 	effectsOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.back.generic.name = BACK0;
 	effectsOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	effectsOptionsInfo.back.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.back.generic.id = ID_BACK;
 	effectsOptionsInfo.back.generic.x = 8;
-	effectsOptionsInfo.back.generic.y = 440;
+	effectsOptionsInfo.back.generic.y = 446;
 	effectsOptionsInfo.back.width = 80;
 	effectsOptionsInfo.back.height = 40;
 	effectsOptionsInfo.back.focuspic = BACK1;
 	effectsOptionsInfo.back.focuspicinstead = qtrue;
+
+	effectsOptionsInfo.apply.generic.type = MTYPE_BITMAP;
+	effectsOptionsInfo.apply.generic.name = ACCEPT0;
+	effectsOptionsInfo.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
+	effectsOptionsInfo.apply.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.apply.generic.id = ID_APPLY;
+	effectsOptionsInfo.apply.generic.x = 736;
+	effectsOptionsInfo.apply.generic.y = 446;
+	effectsOptionsInfo.apply.width = 120;
+	effectsOptionsInfo.apply.height = 40;
+	effectsOptionsInfo.apply.focuspic = ACCEPT1;
 
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.graphics);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.display);
@@ -629,8 +629,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.dlightMode);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.sunRays);
 
-	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.apply);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.back);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.apply);
 
 	UI_EffectsOptions_SetMenuItems();
 }

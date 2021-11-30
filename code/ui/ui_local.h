@@ -32,6 +32,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../client/keycodes.h"
 #include "../game/bg_public.h"
 
+// For only widescreen menu SCREEN_* must be seprate values for UI, CGame, and Client.
+#undef SCREEN_WIDTH
+#undef SCREEN_HEIGHT
+#define SCREEN_WIDTH 864
+#define SCREEN_HEIGHT 486
+
 typedef void (*voidfunc_f)(void);
 
 extern vmCvar_t ui_ffa_fraglimit;
@@ -122,7 +128,6 @@ extern vmCvar_t cl_renderer;
 #define MTYPE_TEXT 7
 #define MTYPE_SCROLLLIST 8
 
-#define MTYPE_BITMAP1024S 11 // pic in 1024x768 with shadow(S)
 #define MTYPE_TEXTS 12		 // sizeable(S) text
 
 #define QMF_BLINK ((unsigned int)0x00000001)
@@ -175,7 +180,6 @@ extern vmCvar_t cl_renderer;
 #define BGP_SELECTBOTS 0x004000
 #define BGP_MENUFX 0x008000
 #define BGP_LASTMENU 0x010000
-#define BGP_SPECIFYPASS 0x020000
 
 typedef struct _tag_menuframework {
 	int cursor;
@@ -288,15 +292,6 @@ typedef struct {
 
 typedef struct {
 	menucommon_s generic;
-	qhandle_t shader;
-	qhandle_t shadowshader;
-	qhandle_t mouseovershader;
-	int x, y, w, h;		// 1024!
-	int sx, sy, sw, sh; // shadow x/y/w/h ... 1024!
-} menubitmap1024s_s;
-
-typedef struct {
-	menucommon_s generic;
 	char *string;
 	int style;
 	const float *color;
@@ -372,22 +367,21 @@ extern void UI_UpdateCvars(void);
 //
 // ui_menu.c
 //
-extern void MainMenu_Cache(void);
+extern void UI_MainMenu_Cache(void);
 extern void UI_MainMenu(void);
 
 //
 // ui_credits.c
 //
-extern void UI_CreditMenu(void);
 extern void UI_Credit_Cache(void);
-extern void UI_BigCredits_Cache(void);
-extern void UI_InitBigCredits(void);
-extern void UI_SecretMenu(void);
+extern void UI_CreditMenu(void);
+extern void UI_WopCredits_Cache(void);
+extern void UI_WopCreditsMenu(void);
 
 //
 // ui_ingame.c
 //
-extern void InGame_Cache(void);
+extern void UI_InGame_Cache(void);
 extern void UI_InGameMenu(void);
 
 //
@@ -396,20 +390,20 @@ extern void UI_InGameMenu(void);
 extern void UI_CallVoteMenu(void);
 
 //
-// ui_music.c
+// ui_musicbox.c
 //
-void MusicMenu_Init(void);
-void MusicMenu_Shutdown(void);
-void MusicMenu_Open(void);
-void MusicMenu_Cache(void);
-void Music_Check(void);
-void Music_TriggerRestart(void);
-void Music_NextTrack(void);
+void UI_MusicBox_Init(void);
+void UI_MusicBox_Shutdown(void);
+void UI_MusicBox_Open(void);
+void UI_MusicBox_Cache(void);
+void UI_MusicBox_Check(void);
+void UI_MusicBox_TriggerRestart(void);
+void UI_MusicBox_NextTrack(void);
 
 //
 // ui_confirm.c
 //
-extern void ConfirmMenu_Cache(void);
+extern void UI_ConfirmMenu_Cache(void);
 extern void UI_ConfirmMenu(const char *question, void (*draw)(void), void (*action)(qboolean result));
 
 //
@@ -417,13 +411,13 @@ extern void UI_ConfirmMenu(const char *question, void (*draw)(void), void (*acti
 //
 extern void UI_SetupMenu_Cache(void);
 extern void UI_SetupMenu(void);
-extern void SetupDefaultMenu_Cache(void);
+extern void UI_SetupDefaultMenu_Cache(void);
 
 //
 // ui_team.c
 //
 extern void UI_TeamMainMenu(void);
-extern void TeamMain_Cache(void);
+extern void UI_TeamMain_Cache(void);
 
 //
 // ui_connect.c
@@ -434,14 +428,14 @@ extern void UI_DrawConnectScreen(qboolean overlay);
 // ui_controls.c
 //
 extern void UI_ControlsMenu(void);
-extern void Controls_Cache(void);
-extern void SetDefaultBinds_onUnusedKeys(void);
+extern void UI_Controls_Cache(void);
+extern void UI_SetDefaultBinds_onUnusedKeys(void);
 
 //
 // ui_demos.c
 //
 extern void UI_DemosMenu(void);
-extern void Demos_Cache(void);
+extern void UI_Demos_Cache(void);
 
 //
 // ui_mods.c
@@ -467,10 +461,16 @@ extern void UI_PreferencesMenu(void);
 extern void UI_Preferences_Cache(void);
 
 //
+// ui_secret.c
+//
+extern void UI_SecretMenu(void);
+extern void UI_Secret_Cache(void);
+
+//
 // ui_specifyserver.c
 //
 extern void UI_SpecifyServerMenu(void);
-extern void SpecifyServer_Cache(void);
+extern void UI_SpecifyServer_Cache(void);
 
 //
 // ui_servers.c
@@ -492,7 +492,7 @@ extern void UI_SelectBots_Cache(void);
 // ui_serverinfo.c
 //
 extern void UI_ServerInfoMenu(void);
-extern void ServerInfo_Cache(void);
+extern void UI_ServerInfo_Cache(void);
 
 //
 // ui_video.c
@@ -628,7 +628,6 @@ typedef struct {
 	qhandle_t modsbg;
 	qhandle_t demosbg;
 	qhandle_t specifybg;
-	qhandle_t specifypassbg;
 	qhandle_t preferencesbg;
 	qhandle_t startserverbg;
 	qhandle_t selectbotsbg;
@@ -647,8 +646,6 @@ typedef struct {
 	float yscale;
 	float xbias;
 	float ybias;
-
-	float scale1024;
 
 	qboolean demoversion;
 	qboolean firstdraw;
@@ -669,8 +666,6 @@ extern void UI_DrawRect(float x, float y, float width, float height, const float
 extern void UI_StartMusic(void);
 extern void UI_StartCreditMusic(void);
 extern void UI_StopMusic(void);
-extern void UI_AdjustFrom1024(float *x, float *y, float *w, float *h);
-extern void UI_DrawHandlePic1024(float x, float y, float w, float h, qhandle_t hShader);
 extern void UI_ModelIcon(const char *modelAndSkin, char *iconName, int SizeOfIconName);
 extern void UI_DrawStringNS(int x, int y, const char *str, int style, float fontsize, const vec4_t color);
 extern void UI_DrawIngameBG(void);

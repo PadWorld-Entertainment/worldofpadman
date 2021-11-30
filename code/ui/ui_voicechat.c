@@ -11,14 +11,16 @@
 #define NAME_MAXLENGTH 32
 
 #define ID_BACK 10
-#define ID_UP 11
-#define ID_DOWN 12
+#define ID_SCROLL_UP 11
+#define ID_SCROLL_DOWN 12
 #define ID_CLIENT0 13
 #define ID_CLIENT1 14
 #define ID_CLIENT2 15
 #define ID_CLIENT3 16
 #define ID_CLIENT4 17
 #define ID_CLIENT5 18
+
+#define XPOSITION (SCREEN_WIDTH / 2)
 
 typedef struct {
 	menuframework_s menu;
@@ -31,8 +33,8 @@ typedef struct {
 	menulist_s sendTarget;
 
 	menubitmap_s back;
-	menubitmap1024s_s arrowup;
-	menubitmap1024s_s arrowdown;
+	menubitmap_s arrowup;
+	menubitmap_s arrowdown;
 
 	char displayClientNames[NUM_LISTEDCLIENTS][NAME_MAXLENGTH];
 	int numDisplayed;	   // how many of the display slots do we use atm
@@ -143,7 +145,7 @@ static sfxHandle_t UI_VoiceChatMenu_Key(int key) {
 
 static void UI_VoiceChatMenu_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(320, 110, "VOICE CHAT", UI_CENTER | UI_SMALLFONT, color_black);
+	UI_DrawProportionalString(XPOSITION, 110, "VOICE CHAT", UI_CENTER | UI_SMALLFONT, color_black);
 
 	// standard menu drawing
 	Menu_Draw(&voiceChatMenuInfo.menu);
@@ -248,32 +250,36 @@ static void UI_VoiceChatMenu_Init(void) {
 	UI_VoiceChatMenu_InitClients();
 	UI_VoiceChatMenu_SetClientNames();
 
-	voiceChatMenuInfo.arrowup.generic.type = MTYPE_BITMAP1024S;
-	voiceChatMenuInfo.arrowup.x = 638;
-	voiceChatMenuInfo.arrowup.y = 236; // 204;
-	voiceChatMenuInfo.arrowup.w = 29;
-	voiceChatMenuInfo.arrowup.h = 74;
-	voiceChatMenuInfo.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
-	voiceChatMenuInfo.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
+	voiceChatMenuInfo.arrowup.generic.type = MTYPE_BITMAP;
+	voiceChatMenuInfo.arrowup.generic.name = ARROWUP0;
+	voiceChatMenuInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	voiceChatMenuInfo.arrowup.generic.callback = UI_VoiceChatMenu_UpEvent;
-	voiceChatMenuInfo.arrowup.generic.id = ID_UP;
+	voiceChatMenuInfo.arrowup.generic.id = ID_SCROLL_UP;
+	voiceChatMenuInfo.arrowup.generic.x = XPOSITION + 80;
+	voiceChatMenuInfo.arrowup.generic.y = 142;
+	voiceChatMenuInfo.arrowup.width = 22;
+	voiceChatMenuInfo.arrowup.height = 50;
+	voiceChatMenuInfo.arrowup.focuspic = ARROWUP1;
+	voiceChatMenuInfo.arrowup.focuspicinstead = qtrue;
 
-	voiceChatMenuInfo.arrowdown.generic.type = MTYPE_BITMAP1024S;
-	voiceChatMenuInfo.arrowdown.x = 638;
-	voiceChatMenuInfo.arrowdown.y = 406 - 74; // 374-74;
-	voiceChatMenuInfo.arrowdown.w = 29;		  // 38
-	voiceChatMenuInfo.arrowdown.h = 74;		  // 98
-	voiceChatMenuInfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
-	voiceChatMenuInfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
+	voiceChatMenuInfo.arrowdown.generic.type = MTYPE_BITMAP;
+	voiceChatMenuInfo.arrowdown.generic.name = ARROWDN0;
+	voiceChatMenuInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	voiceChatMenuInfo.arrowdown.generic.callback = UI_VoiceChatMenu_DownEvent;
-	voiceChatMenuInfo.arrowdown.generic.id = ID_DOWN;
+	voiceChatMenuInfo.arrowdown.generic.id = ID_SCROLL_DOWN;
+	voiceChatMenuInfo.arrowdown.generic.x = XPOSITION + 80;
+	voiceChatMenuInfo.arrowdown.generic.y = 208;
+	voiceChatMenuInfo.arrowdown.width = 22;
+	voiceChatMenuInfo.arrowdown.height = 50;
+	voiceChatMenuInfo.arrowdown.focuspic = ARROWDN1;
+	voiceChatMenuInfo.arrowdown.focuspicinstead = qtrue;
 
 	for (n = 0, y = 140; n < voiceChatMenuInfo.numDisplayed; n++, y += 20) {
 		voiceChatMenuInfo.displayClients[n].generic.type = MTYPE_TEXTS;
 		voiceChatMenuInfo.displayClients[n].fontHeight = 20.0f;
-		voiceChatMenuInfo.displayClients[n].generic.flags = QMF_LEFT_JUSTIFY; //|QMF_PULSEIFFOCUS;
+		voiceChatMenuInfo.displayClients[n].generic.flags = QMF_LEFT_JUSTIFY;
 		voiceChatMenuInfo.displayClients[n].generic.id = ID_CLIENT0 + n;
-		voiceChatMenuInfo.displayClients[n].generic.x = 250;
+		voiceChatMenuInfo.displayClients[n].generic.x = XPOSITION - 70;
 		voiceChatMenuInfo.displayClients[n].generic.y = y;
 		voiceChatMenuInfo.displayClients[n].generic.callback = UI_VoiceChatMenu_SelectEvent;
 		voiceChatMenuInfo.displayClients[n].string = voiceChatMenuInfo.displayClientNames[n];
@@ -287,7 +293,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.gain.generic.name = "Volume";
 	voiceChatMenuInfo.gain.generic.flags = QMF_BLUESTYLE | QMF_GRAYED;
 	voiceChatMenuInfo.gain.generic.callback = UI_VoiceChatMenu_GainSliderEvent;
-	voiceChatMenuInfo.gain.generic.x = 315;
+	voiceChatMenuInfo.gain.generic.x = XPOSITION - 5;
 	voiceChatMenuInfo.gain.generic.y = y;
 	voiceChatMenuInfo.gain.minvalue = 0;
 	voiceChatMenuInfo.gain.maxvalue = 10;
@@ -298,16 +304,16 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.mute.generic.name = "Mute";
 	voiceChatMenuInfo.mute.generic.flags = QMF_BLUESTYLE | QMF_SMALLFONT | QMF_GRAYED;
 	voiceChatMenuInfo.mute.generic.callback = UI_VoiceChatMenu_MuteEvent;
-	voiceChatMenuInfo.mute.generic.x = 315;
+	voiceChatMenuInfo.mute.generic.x = XPOSITION - 5;
 	voiceChatMenuInfo.mute.generic.y = y;
 	voiceChatMenuInfo.mute.curvalue = 0;
 
 	y += SMALLCHAR_HEIGHT + 2;
 	voiceChatMenuInfo.muteAll.generic.type = MTYPE_RADIOBUTTON;
-	voiceChatMenuInfo.muteAll.generic.name = "Mute all";
+	voiceChatMenuInfo.muteAll.generic.name = "Mute All";
 	voiceChatMenuInfo.muteAll.generic.flags = QMF_BLUESTYLE | QMF_SMALLFONT;
 	voiceChatMenuInfo.muteAll.generic.callback = UI_VoiceChatMenu_MuteAllEvent;
-	voiceChatMenuInfo.muteAll.generic.x = 315;
+	voiceChatMenuInfo.muteAll.generic.x = XPOSITION - 5;
 	voiceChatMenuInfo.muteAll.generic.y = y;
 	voiceChatMenuInfo.muteAll.curvalue = (trap_GetVoiceMuteAll() != 0);
 
@@ -316,7 +322,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.sendTarget.generic.name = "Talk To:";
 	voiceChatMenuInfo.sendTarget.generic.flags = QMF_SMALLFONT;
 	voiceChatMenuInfo.sendTarget.generic.callback = UI_VoiceChatMenu_sendTargetEvent;
-	voiceChatMenuInfo.sendTarget.generic.x = 315;
+	voiceChatMenuInfo.sendTarget.generic.x = XPOSITION - 5;
 	voiceChatMenuInfo.sendTarget.generic.y = y;
 	voiceChatMenuInfo.sendTarget.itemnames = sendTarget_names;
 
@@ -336,7 +342,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.back.generic.type = MTYPE_BITMAP;
 	voiceChatMenuInfo.back.generic.name = BACK0;
 	voiceChatMenuInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	voiceChatMenuInfo.back.generic.x = 225;
+	voiceChatMenuInfo.back.generic.x = XPOSITION - 95;
 	voiceChatMenuInfo.back.generic.y = 340;
 	voiceChatMenuInfo.back.generic.id = ID_BACK;
 	voiceChatMenuInfo.back.generic.callback = UI_VoiceChatMenu_BackEvent;
@@ -359,6 +365,10 @@ static void UI_VoiceChatMenu_Init(void) {
 }
 
 void UI_VoiceChatMenu_Cache(void) {
+	trap_R_RegisterShaderNoMip(ARROWUP0);
+	trap_R_RegisterShaderNoMip(ARROWUP1);
+	trap_R_RegisterShaderNoMip(ARROWDN0);
+	trap_R_RegisterShaderNoMip(ARROWDN1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 }

@@ -33,11 +33,12 @@ MAIN MENU
 #define ID_CREATE 10
 #define ID_JOIN 11
 #define ID_SETUP 12
-#define ID_DEMOS 13
-#define ID_MODS 14
-#define ID_EXIT 15
-#define ID_CREDITS 16
-#define ID_SECRET 17
+#define ID_MUSIC 13
+#define ID_DEMOS 14
+#define ID_MODS 15
+#define ID_EXIT 16
+#define ID_CREDITS 17
+#define ID_SECRET 18
 
 #define CREATE0 "menu/buttons/create0"
 #define CREATE1 "menu/buttons/create1"
@@ -45,6 +46,8 @@ MAIN MENU
 #define JOIN1 "menu/buttons/join1"
 #define SETUP0 "menu/buttons/setup0"
 #define SETUP1 "menu/buttons/setup1"
+#define MUSIC0 "menu/buttons/music0"
+#define MUSIC1 "menu/buttons/music1"
 #define DEMOS0 "menu/buttons/demos0"
 #define DEMOS1 "menu/buttons/demos1"
 #define MODS0 "menu/buttons/mods0"
@@ -62,6 +65,7 @@ typedef struct {
 	menubitmap_s Create;
 	menubitmap_s Join;
 	menubitmap_s Setup;
+	menubitmap_s Music;
 	menubitmap_s Demos;
 	menubitmap_s Mods;
 	menubitmap_s Exit;
@@ -104,6 +108,9 @@ static void Main_MenuEvent(void *ptr, int event) {
 		UI_SetupMenu();
 		break;
 
+	case ID_MUSIC:
+		break;
+
 	case ID_DEMOS:
 		UI_DemosMenu();
 		break;
@@ -113,7 +120,7 @@ static void Main_MenuEvent(void *ptr, int event) {
 		break;
 
 	case ID_CREDITS:
-		UI_InitBigCredits();
+		UI_WopCreditsMenu();
 		break;
 
 	case ID_SECRET:
@@ -128,16 +135,18 @@ static void Main_MenuEvent(void *ptr, int event) {
 
 /*
 ===============
-MainMenu_Cache
+UI_MainMenu_Cache
 ===============
 */
-void MainMenu_Cache(void) {
+void UI_MainMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(CREATE0);
 	trap_R_RegisterShaderNoMip(CREATE1);
 	trap_R_RegisterShaderNoMip(JOIN0);
 	trap_R_RegisterShaderNoMip(JOIN1);
 	trap_R_RegisterShaderNoMip(SETUP0);
 	trap_R_RegisterShaderNoMip(SETUP1);
+	trap_R_RegisterShaderNoMip(MUSIC0);
+	trap_R_RegisterShaderNoMip(MUSIC1);
 	trap_R_RegisterShaderNoMip(DEMOS0);
 	trap_R_RegisterShaderNoMip(DEMOS1);
 	trap_R_RegisterShaderNoMip(MODS0);
@@ -233,7 +242,7 @@ void UI_MainMenu(void) {
 	memset(&s_errorMessage, 0, sizeof(errorMessage_t));
 
 	// com_errorMessage would need that too
-	MainMenu_Cache();
+	UI_MainMenu_Cache();
 
 	trap_Cvar_VariableStringBuffer("com_errorMessage", s_errorMessage.errorMessage,
 								   sizeof(s_errorMessage.errorMessage));
@@ -260,7 +269,7 @@ void UI_MainMenu(void) {
 	s_main.Create.generic.type = MTYPE_BITMAP;
 	s_main.Create.generic.name = CREATE0;
 	s_main.Create.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Create.generic.x = 502;
+	s_main.Create.generic.x = 700;
 	s_main.Create.generic.y = 140;
 	s_main.Create.generic.id = ID_CREATE;
 	s_main.Create.generic.callback = Main_MenuEvent;
@@ -268,94 +277,108 @@ void UI_MainMenu(void) {
 	s_main.Create.height = 40;
 	s_main.Create.focuspic = CREATE1;
 	s_main.Create.focuspicinstead = qtrue;
-	Menu_AddItem(&s_main.menu, &s_main.Create);
 
 	s_main.Join.generic.type = MTYPE_BITMAP;
 	s_main.Join.generic.name = JOIN0;
 	s_main.Join.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Join.generic.x = 518;
-	s_main.Join.generic.y = 175;
+	s_main.Join.generic.x = 720;
+	s_main.Join.generic.y = 176;
 	s_main.Join.generic.id = ID_JOIN;
 	s_main.Join.generic.callback = Main_MenuEvent;
 	s_main.Join.width = 80;
 	s_main.Join.height = 40;
 	s_main.Join.focuspic = JOIN1;
 	s_main.Join.focuspicinstead = qtrue;
-	Menu_AddItem(&s_main.menu, &s_main.Join);
 
 	s_main.Setup.generic.type = MTYPE_BITMAP;
 	s_main.Setup.generic.name = SETUP0;
 	s_main.Setup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Setup.generic.x = 496;
-	s_main.Setup.generic.y = 210;
+	s_main.Setup.generic.x = 700;
+	s_main.Setup.generic.y = 212;
 	s_main.Setup.generic.id = ID_SETUP;
 	s_main.Setup.generic.callback = Main_MenuEvent;
 	s_main.Setup.width = 120;
 	s_main.Setup.height = 40;
 	s_main.Setup.focuspic = SETUP1;
 	s_main.Setup.focuspicinstead = qtrue;
-	Menu_AddItem(&s_main.menu, &s_main.Setup);
+
+	s_main.Music.generic.type = MTYPE_BITMAP;
+	s_main.Music.generic.name = MUSIC0;
+	s_main.Music.generic.flags = QMF_LEFT_JUSTIFY | QMF_INACTIVE; //QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.Music.generic.x = 710;
+	s_main.Music.generic.y = 248;
+	s_main.Music.generic.id = ID_MUSIC;
+	s_main.Music.generic.callback = Main_MenuEvent;
+	s_main.Music.width = 120;
+	s_main.Music.height = 40;
+	s_main.Music.focuspic = MUSIC1;
+	s_main.Music.focuspicinstead = qtrue;
 
 	s_main.Demos.generic.type = MTYPE_BITMAP;
 	s_main.Demos.generic.name = DEMOS0;
 	s_main.Demos.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Demos.generic.x = 510;
-	s_main.Demos.generic.y = 245;
+	s_main.Demos.generic.x = 700;
+	s_main.Demos.generic.y = 284;
 	s_main.Demos.generic.id = ID_DEMOS;
 	s_main.Demos.generic.callback = Main_MenuEvent;
 	s_main.Demos.width = 120;
 	s_main.Demos.height = 40;
 	s_main.Demos.focuspic = DEMOS1;
 	s_main.Demos.focuspicinstead = qtrue;
-	Menu_AddItem(&s_main.menu, &s_main.Demos);
 
 	s_main.Mods.generic.type = MTYPE_BITMAP;
 	s_main.Mods.generic.name = MODS0;
 	s_main.Mods.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Mods.generic.x = 516;
-	s_main.Mods.generic.y = 280;
+	s_main.Mods.generic.x = 728;
+	s_main.Mods.generic.y = 320;
 	s_main.Mods.generic.id = ID_MODS;
 	s_main.Mods.generic.callback = Main_MenuEvent;
 	s_main.Mods.width = 80;
 	s_main.Mods.height = 40;
 	s_main.Mods.focuspic = MODS1;
 	s_main.Mods.focuspicinstead = qtrue;
-	Menu_AddItem(&s_main.menu, &s_main.Mods);
 
 	s_main.Exit.generic.type = MTYPE_BITMAP;
 	s_main.Exit.generic.name = EXIT0;
 	s_main.Exit.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	s_main.Exit.generic.x = 530;
-	s_main.Exit.generic.y = 315;
+	s_main.Exit.generic.x = 720;
+	s_main.Exit.generic.y = 356;
 	s_main.Exit.generic.id = ID_EXIT;
 	s_main.Exit.generic.callback = Main_MenuEvent;
 	s_main.Exit.width = 80;
 	s_main.Exit.height = 40;
 	s_main.Exit.focuspic = EXIT1;
 	s_main.Exit.focuspicinstead = qtrue;
-	Menu_AddItem(&s_main.menu, &s_main.Exit);
 
 	s_main.Credits.generic.type = MTYPE_BITMAP;
 	s_main.Credits.generic.name = CREDITS0;
 	s_main.Credits.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_main.Credits.generic.x = 505;
-	s_main.Credits.generic.y = 420;
+	s_main.Credits.generic.x = 704;
+	s_main.Credits.generic.y = 445;
 	s_main.Credits.generic.id = ID_CREDITS;
 	s_main.Credits.generic.callback = Main_MenuEvent;
-	s_main.Credits.width = 120;
-	s_main.Credits.height = 40;
+	s_main.Credits.width = 105;
+	s_main.Credits.height = 35;
 	s_main.Credits.focuspic = CREDITS1;
 	s_main.Credits.focuspicinstead = qtrue;
-	Menu_AddItem(&s_main.menu, &s_main.Credits);
 
 	s_main.Secret.generic.type = MTYPE_BITMAP;
 	s_main.Secret.generic.flags = QMF_MOUSEONLY | QMF_SILENT | QMF_HIDDEN;
-	s_main.Secret.generic.x = 129;
-	s_main.Secret.generic.y = 431;
+	s_main.Secret.generic.x = 160;
+	s_main.Secret.generic.y = 394;
 	s_main.Secret.generic.id = ID_SECRET;
 	s_main.Secret.generic.callback = Main_MenuEvent;
-	s_main.Secret.width = 22;
-	s_main.Secret.height = 22;
+	s_main.Secret.width = 55;
+	s_main.Secret.height = 55;
+
+	Menu_AddItem(&s_main.menu, &s_main.Create);
+	Menu_AddItem(&s_main.menu, &s_main.Join);
+	Menu_AddItem(&s_main.menu, &s_main.Setup);
+	Menu_AddItem(&s_main.menu, &s_main.Music);
+	Menu_AddItem(&s_main.menu, &s_main.Demos);
+	Menu_AddItem(&s_main.menu, &s_main.Mods);
+	Menu_AddItem(&s_main.menu, &s_main.Exit);
+	Menu_AddItem(&s_main.menu, &s_main.Credits);
 	Menu_AddItem(&s_main.menu, &s_main.Secret);
 
 	trap_Key_SetCatcher(KEYCATCH_UI);

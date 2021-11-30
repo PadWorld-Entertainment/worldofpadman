@@ -292,57 +292,6 @@ static void Bitmap_Draw(menubitmap_s *b) {
 
 /*
 =================
-Bitmap1024S_Init
-=================
-*/
-static void Bitmap1024S_Init(menubitmap1024s_s *b) {
-	int x;
-	int y;
-	int w;
-	int h;
-
-	x = b->x;
-	y = b->y;
-	w = b->w;
-	h = b->h;
-	if (w < 0) {
-		w = -w;
-	}
-	if (h < 0) {
-		h = -h;
-	}
-
-	b->generic.left = x * 0.625f;
-	b->generic.right = (x + w) * 0.625f;
-	b->generic.top = y * 0.625f;
-	b->generic.bottom = (y + h) * 0.625f;
-}
-
-/*
-=================
-Bitmap1024S_Draw
-=================
-*/
-static void Bitmap1024S_Draw(menubitmap1024s_s *b) {
-	if (b->mouseovershader) {
-		if (b->sw > 0 && b->shadowshader != 0)
-			UI_DrawHandlePic1024(b->sx, b->sy, b->sw, b->sh, b->shadowshader);
-
-		if (Menu_ItemAtCursor(b->generic.parent) == b)
-			UI_DrawHandlePic1024(b->x, b->y, b->w, b->h, b->mouseovershader);
-		else
-			UI_DrawHandlePic1024(b->x, b->y, b->w, b->h, b->shader);
-	} else {
-		if (!(Menu_ItemAtCursor(b->generic.parent) == b) && b->sw > 0) {
-			UI_DrawHandlePic1024(b->sx, b->sy, b->sw, b->sh, b->shadowshader);
-		}
-
-		UI_DrawHandlePic1024(b->x, b->y, b->w, b->h, b->shader);
-	}
-}
-
-/*
-=================
 Action_Init
 =================
 */
@@ -1323,9 +1272,6 @@ void Menu_InitItem(menucommon_s *item) {
 		ScrollList_Init((menulist_s *)item);
 		break;
 
-	case MTYPE_BITMAP1024S:
-		Bitmap1024S_Init((menubitmap1024s_s *)item);
-		break;
 	case MTYPE_TEXTS:
 		TextS_Init((menutext_s *)item);
 		break;
@@ -1637,9 +1583,6 @@ void Menu_Draw(menuframework_s *menu) {
 				ScrollList_Draw((menulist_s *)itemptr);
 				break;
 
-			case MTYPE_BITMAP1024S:
-				Bitmap1024S_Draw((menubitmap1024s_s *)itemptr);
-				break;
 			case MTYPE_TEXTS:
 				TextS_Draw((menutext_s *)itemptr);
 				break;
@@ -1911,7 +1854,6 @@ void Menu_Cache(void) {
 	uis.modsbg = trap_R_RegisterShaderNoMip("menu/bg/mods");
 	uis.demosbg = trap_R_RegisterShaderNoMip("menu/bg/demos");
 	uis.specifybg = trap_R_RegisterShaderNoMip("menu/bg/specify");
-	uis.specifypassbg = trap_R_RegisterShaderNoMip("menu/bg/password");
 	uis.preferencesbg = trap_R_RegisterShaderNoMip("menu/bg/preferences");
 	uis.startserverbg = trap_R_RegisterShaderNoMip("menu/bg/startserver");
 	uis.selectbotsbg = trap_R_RegisterShaderNoMip("menu/bg/selectbots");

@@ -47,7 +47,6 @@ typedef struct {
 	const char *command;
 	const char *label;
 	int id;
-	int anim;
 	int defaultbind1;
 	int defaultbind2;
 	int bind1;
@@ -148,32 +147,8 @@ typedef struct {
 #define ID_MOUSEACCELSTYLE 68
 #define ID_MOUSEACCELOFFSET 69
 
-#define ANIM_IDLE 0
-#define ANIM_RUN 1
-#define ANIM_WALK 2
-#define ANIM_BACK 3
-#define ANIM_JUMP 4
-#define ANIM_CROUCH 5
-#define ANIM_STEPLEFT 6
-#define ANIM_STEPRIGHT 7
-#define ANIM_TURNLEFT 8
-#define ANIM_TURNRIGHT 9
-#define ANIM_LOOKUP 10
-#define ANIM_LOOKDOWN 11
-#define ANIM_WEAPON1 12
-#define ANIM_WEAPON2 13
-#define ANIM_WEAPON3 14
-#define ANIM_WEAPON4 15
-#define ANIM_WEAPON5 16
-#define ANIM_WEAPON6 17
-#define ANIM_WEAPON7 18
-#define ANIM_WEAPON8 19
-#define ANIM_WEAPON9 20
-#define ANIM_WEAPON10 21
-#define ANIM_ATTACK 22
-#define ANIM_GESTURE 23
-#define ANIM_DIE 24
-#define ANIM_CHAT 25
+#define XPOSITION 630
+#define YPOSITION 180
 
 typedef struct {
 	menuframework_s menu;
@@ -271,62 +246,62 @@ static controls_t s_controls;
 static vec4_t controls_binding_color = {1.00f, 1.00f, 0.00f, 1.00f};
 
 static bind_t g_bindings[] = {
-	{"+speed", "Run/Walk:", ID_SPEED, ANIM_RUN, K_SHIFT, -1, -1, -1},
-	{"+forward", "Walk Forward:", ID_FORWARD, ANIM_WALK, K_UPARROW, 'w', -1, -1},
-	{"+back", "Backpedal:", ID_BACKPEDAL, ANIM_BACK, K_DOWNARROW, 's', -1, -1},
-	{"+moveleft", "Step Left:", ID_MOVELEFT, ANIM_STEPLEFT, ',', 'a', -1, -1},
-	{"+moveright", "Step Right:", ID_MOVERIGHT, ANIM_STEPRIGHT, '.', 'd', -1, -1},
-	{"+moveup", "Up/Jump:", ID_MOVEUP, ANIM_JUMP, K_SPACE, -1, -1, -1},
-	{"+movedown", "Down/Crouch:", ID_MOVEDOWN, ANIM_CROUCH, 'c', -1, -1, -1},
-	{"+left", "Turn Left:", ID_LEFT, ANIM_TURNLEFT, K_LEFTARROW, -1, -1, -1},
-	{"+right", "Turn Right:", ID_RIGHT, ANIM_TURNRIGHT, K_RIGHTARROW, -1, -1, -1},
-	{"+strafe", "Sidestep/Turn:", ID_STRAFE, ANIM_IDLE, K_ALT, -1, -1, -1},
-	{"+button2", "Activate/Use Item:", ID_USEITEM, ANIM_IDLE, K_ENTER, 'e', -1, -1},
-	{"dropCartridge", "Drop Item:", ID_DROPCART, ANIM_IDLE, K_BACKSPACE, 'f', -1, -1},
+	{"+speed", "Run/Walk:", ID_SPEED, K_SHIFT, -1, -1, -1},
+	{"+forward", "Walk Forward:", ID_FORWARD, K_UPARROW, 'w', -1, -1},
+	{"+back", "Backpedal:", ID_BACKPEDAL, K_DOWNARROW, 's', -1, -1},
+	{"+moveleft", "Step Left:", ID_MOVELEFT, ',', 'a', -1, -1},
+	{"+moveright", "Step Right:", ID_MOVERIGHT, '.', 'd', -1, -1},
+	{"+moveup", "Up/Jump:", ID_MOVEUP, K_SPACE, -1, -1, -1},
+	{"+movedown", "Down/Crouch:", ID_MOVEDOWN, 'c', -1, -1, -1},
+	{"+left", "Turn Left:", ID_LEFT, K_LEFTARROW, -1, -1, -1},
+	{"+right", "Turn Right:", ID_RIGHT, K_RIGHTARROW, -1, -1, -1},
+	{"+strafe", "Sidestep/Turn:", ID_STRAFE, K_ALT, -1, -1, -1},
+	{"+button2", "Activate/Use Item:", ID_USEITEM, K_ENTER, 'e', -1, -1},
+	{"dropCartridge", "Drop Item:", ID_DROPCART, K_BACKSPACE, 'f', -1, -1},
 
-	{"+lookup", "Look Up:", ID_LOOKUP, ANIM_LOOKUP, K_PGDN, -1, -1, -1},
-	{"+lookdown", "Look Down:", ID_LOOKDOWN, ANIM_LOOKDOWN, K_DEL, -1, -1, -1},
-	{"+mlook", "Mouse Look:", ID_MOUSELOOK, ANIM_IDLE, '/', -1, -1, -1},
-	{"centerview", "Center View:", ID_CENTERVIEW, ANIM_IDLE, K_END, -1, -1, -1},
-	{"toggle cg_thirdPerson", "3rd Person View:", ID_3RDPERSON, ANIM_IDLE, K_HOME, K_KP_5, -1, -1},
+	{"+lookup", "Look Up:", ID_LOOKUP, K_PGDN, -1, -1, -1},
+	{"+lookdown", "Look Down:", ID_LOOKDOWN, K_DEL, -1, -1, -1},
+	{"+mlook", "Mouse Look:", ID_MOUSELOOK, '/', -1, -1, -1},
+	{"centerview", "Center View:", ID_CENTERVIEW, K_END, -1, -1, -1},
+	{"toggle cg_thirdPerson", "3rd Person View:", ID_3RDPERSON, K_HOME, K_KP_5, -1, -1},
 
-	{"+attack", "Attack:", ID_ATTACK, ANIM_ATTACK, K_MOUSE1, K_CTRL, -1, -1},
-	{"+zoom", "Scope:", ID_ZOOM, ANIM_IDLE, K_MOUSE2, 'x', -1, -1},
-	{"weapnext", "Next Weapon:", ID_WEAPNEXT, ANIM_IDLE, K_MWHEELDOWN, ']', -1, -1},
-	{"weapprev", "Previous Weapon:", ID_WEAPPREV, ANIM_IDLE, K_MWHEELUP, '[', -1, -1},
-	{"weapon 1", "PUNCHY:", ID_WEAPON1, ANIM_WEAPON1, '1', -1, -1, -1},
-	{"weapon 2", "NiPPER:", ID_WEAPON2, ANIM_WEAPON2, '2', -1, -1, -1},
-	{"weapon 3", "PUMPER:", ID_WEAPON3, ANIM_WEAPON3, '3', -1, -1, -1},
-	{"weapon 4", "BALLOONY:", ID_WEAPON4, ANIM_WEAPON4, '4', -1, -1, -1},
-	{"weapon 5", "BETTY:", ID_WEAPON5, ANIM_WEAPON5, '5', -1, -1, -1},
-	{"weapon 6", "BOASTER:", ID_WEAPON6, ANIM_WEAPON6, '6', -1, -1, -1},
-	{"weapon 7", "SPLASHER:", ID_WEAPON7, ANIM_WEAPON7, '7', -1, -1, -1},
-	{"weapon 8", "BUBBLE G.:", ID_WEAPON8, ANIM_WEAPON8, '8', -1, -1, -1},
-	{"weapon 9", "IMPERiUS:", ID_WEAPON9, ANIM_WEAPON9, '9', -1, -1, -1},
+	{"+attack", "Attack:", ID_ATTACK, K_MOUSE1, K_CTRL, -1, -1},
+	{"+zoom", "Scope:", ID_ZOOM, K_MOUSE2, 'x', -1, -1},
+	{"weapnext", "Next Weapon:", ID_WEAPNEXT,  K_MWHEELDOWN, ']', -1, -1},
+	{"weapprev", "Previous Weapon:", ID_WEAPPREV, K_MWHEELUP, '[', -1, -1},
+	{"weapon 1", "PUNCHY:", ID_WEAPON1, '1', -1, -1, -1},
+	{"weapon 2", "NiPPER:", ID_WEAPON2, '2', -1, -1, -1},
+	{"weapon 3", "PUMPER:", ID_WEAPON3, '3', -1, -1, -1},
+	{"weapon 4", "BALLOONY:", ID_WEAPON4, '4', -1, -1, -1},
+	{"weapon 5", "BETTY:", ID_WEAPON5, '5', -1, -1, -1},
+	{"weapon 6", "BOASTER:", ID_WEAPON6, '6', -1, -1, -1},
+	{"weapon 7", "SPLASHER:", ID_WEAPON7, '7', -1, -1, -1},
+	{"weapon 8", "BUBBLE G.:", ID_WEAPON8, '8', -1, -1, -1},
+	{"weapon 9", "IMPERiUS:", ID_WEAPON9, '9', -1, -1, -1},
 
-	{"messagemode", "Chat All:", ID_CHAT1, ANIM_CHAT, 't', -1, -1, -1},
-	{"messagemode2", "Chat Team:", ID_CHAT2, ANIM_CHAT, 'y', 'z', -1, -1},
-	{"messagemode3", "Chat Target:", ID_CHAT3, ANIM_CHAT, 'u', -1, -1, -1},
-	{"messagemode4", "Chat Attacker:", ID_CHAT4, ANIM_CHAT, 'i', -1, -1, -1},
-	{"+voiprecord", "Push to Talk:", ID_PUSH2TALK, ANIM_IDLE, 'r', -1, -1, -1},
-	{"+button3", "Gesture:", ID_GESTURE, ANIM_GESTURE, K_MOUSE3, 'q', -1, -1},
-	{"ui_teamorders", "Team Orders:", ID_TEAMORDERS, ANIM_IDLE, K_F3, -1, -1, -1},
+	{"messagemode", "Chat All:", ID_CHAT1, 't', -1, -1, -1},
+	{"messagemode2", "Chat Team:", ID_CHAT2, 'y', 'z', -1, -1},
+	{"messagemode3", "Chat Target:", ID_CHAT3, 'u', -1, -1, -1},
+	{"messagemode4", "Chat Attacker:", ID_CHAT4, 'i', -1, -1, -1},
+	{"+voiprecord", "Push to Talk:", ID_PUSH2TALK, 'r', -1, -1, -1},
+	{"+button3", "Gesture:", ID_GESTURE, K_MOUSE3, 'q', -1, -1},
+	{"ui_teamorders", "Team Orders:", ID_TEAMORDERS, K_F3, -1, -1, -1},
 
-	{"+scores", "Scoreboard:", ID_SHOWSCORES, ANIM_IDLE, K_TAB, -1, -1, -1},
-	{"togglemenu", "Ingame Menu:", ID_TOGGLEMENU, ANIM_IDLE, K_ESCAPE, -1, -1, -1},
-	{"minimize", "Minimize Game:", ID_MINIMIZEGAME, ANIM_IDLE, K_PGUP, -1, -1, -1},
-	{"wop_music", "Music Player:", ID_MUSIC, ANIM_IDLE, 'm', -1, -1, -1},
-	{"ui_help gametype", "Help Gametype:", ID_HELP_GAMETYPE, ANIM_IDLE, 'g', -1, -1, -1},
-	{"ui_help item", "Help Weapons/Items:", ID_HELP_ITEMS, ANIM_IDLE, 'h', -1, -1, -1},
-	{"toggle cg_drawServerInfos", "Server Info:", ID_SERVERINFO, ANIM_IDLE, 'k', -1, -1, -1},
-	{"wop_nextsong", "Skip to Next Song:", ID_NEXTSONG, ANIM_IDLE, 'n', -1, -1, -1},
-	{"toggle cl_autoRecordDemo 1, 0;stoprecord", "Autorecord Demo:", ID_RECORDDEMO, ANIM_IDLE, 'o', -1, -1, -1},
-	{"toggle g_synchronousClients", "Sync Clients:", ID_SYNCCLIENTS, ANIM_IDLE, 'p', -1, -1, -1},
-	{"vote yes", "Vote Yes:", ID_VOTEYES, ANIM_IDLE, K_F1, K_KP_PLUS, -1, -1},
-	{"vote no", "Vote No:", ID_VOTENO, ANIM_IDLE, K_F2, K_KP_MINUS, -1, -1},
-	{"screenshot", "Screenshot:", ID_SCREENSHOT, ANIM_IDLE, K_F12, -1, -1, -1},
+	{"+scores", "Scoreboard:", ID_SHOWSCORES, K_TAB, -1, -1, -1},
+	{"togglemenu", "Ingame Menu:", ID_TOGGLEMENU, K_ESCAPE, -1, -1, -1},
+	{"minimize", "Minimize Game:", ID_MINIMIZEGAME, K_PGUP, -1, -1, -1},
+	{"wop_music", "Music Player:", ID_MUSIC, 'm', -1, -1, -1},
+	{"ui_help gametype", "Help Gametype:", ID_HELP_GAMETYPE, 'g', -1, -1, -1},
+	{"ui_help item", "Help Weapons/Items:", ID_HELP_ITEMS, 'h', -1, -1, -1},
+	{"toggle cg_drawServerInfos", "Server Info:", ID_SERVERINFO, 'k', -1, -1, -1},
+	{"wop_nextsong", "Skip to Next Song:", ID_NEXTSONG, 'n', -1, -1, -1},
+	{"toggle cl_autoRecordDemo 1, 0;stoprecord", "Autorecord Demo:", ID_RECORDDEMO, 'o', -1, -1, -1},
+	{"toggle g_synchronousClients", "Sync Clients:", ID_SYNCCLIENTS, 'p', -1, -1, -1},
+	{"vote yes", "Vote Yes:", ID_VOTEYES, K_F1, K_KP_PLUS, -1, -1},
+	{"vote no", "Vote No:", ID_VOTENO, K_F2, K_KP_MINUS, -1, -1},
+	{"screenshot", "Screenshot:", ID_SCREENSHOT, K_F12, -1, -1, -1},
 
-	{(char *)NULL, (char *)NULL, 0, 0, -1, -1, -1, -1},
+	{(char *)NULL, (char *)NULL, 0, 0, -1, -1, -1},
 };
 
 static configcvar_t g_configcvars[] =
@@ -502,142 +477,13 @@ static float Controls_GetCvarValue(char *name) {
 
 /*
 =================
-Controls_UpdateModel
-=================
-*/
-static void Controls_UpdateModel(int anim) {
-	VectorClear(s_controls.playerViewangles);
-	VectorClear(s_controls.playerMoveangles);
-	s_controls.playerViewangles[YAW] = 180 - 30;
-	s_controls.playerMoveangles[YAW] = s_controls.playerViewangles[YAW];
-	s_controls.playerLegs = LEGS_IDLE;
-	s_controls.playerTorso = TORSO_STAND;
-	s_controls.playerWeapon = -1;
-	s_controls.playerChat = qfalse;
-
-	switch (anim) {
-	case ANIM_RUN:
-		s_controls.playerLegs = LEGS_RUN;
-		break;
-
-	case ANIM_WALK:
-		s_controls.playerLegs = LEGS_WALK;
-		break;
-
-	case ANIM_BACK:
-		s_controls.playerLegs = LEGS_BACK;
-		break;
-
-	case ANIM_JUMP:
-		s_controls.playerLegs = LEGS_JUMP;
-		break;
-
-	case ANIM_CROUCH:
-		s_controls.playerLegs = LEGS_IDLECR;
-		break;
-
-	case ANIM_TURNLEFT:
-		s_controls.playerViewangles[YAW] += 90;
-		break;
-
-	case ANIM_TURNRIGHT:
-		s_controls.playerViewangles[YAW] -= 90;
-		break;
-
-	case ANIM_STEPLEFT:
-		s_controls.playerLegs = LEGS_WALK;
-		s_controls.playerMoveangles[YAW] = s_controls.playerViewangles[YAW] + 90;
-		break;
-
-	case ANIM_STEPRIGHT:
-		s_controls.playerLegs = LEGS_WALK;
-		s_controls.playerMoveangles[YAW] = s_controls.playerViewangles[YAW] - 90;
-		break;
-
-	case ANIM_LOOKUP:
-		s_controls.playerViewangles[PITCH] = -45;
-		break;
-
-	case ANIM_LOOKDOWN:
-		s_controls.playerViewangles[PITCH] = 45;
-		break;
-
-	case ANIM_WEAPON1:
-		s_controls.playerWeapon = WP_PUNCHY;
-		break;
-
-	case ANIM_WEAPON2:
-		s_controls.playerWeapon = WP_NIPPER;
-		break;
-
-	case ANIM_WEAPON3:
-		s_controls.playerWeapon = WP_PUMPER;
-		break;
-
-	case ANIM_WEAPON4:
-		s_controls.playerWeapon = WP_BALLOONY;
-		break;
-
-	case ANIM_WEAPON5:
-		s_controls.playerWeapon = WP_BETTY;
-		break;
-
-	case ANIM_WEAPON6:
-		s_controls.playerWeapon = WP_BOASTER;
-		break;
-
-	case ANIM_WEAPON7:
-		s_controls.playerWeapon = WP_SPLASHER;
-		break;
-
-	case ANIM_WEAPON8:
-		s_controls.playerWeapon = WP_BUBBLEG;
-		break;
-
-	case ANIM_WEAPON9:
-		s_controls.playerWeapon = WP_IMPERIUS;
-		break;
-
-	case ANIM_WEAPON10:
-		s_controls.playerWeapon = WP_GRAPPLING_HOOK;
-		break;
-
-	case ANIM_ATTACK:
-		s_controls.playerTorso = TORSO_ATTACK;
-		break;
-
-	case ANIM_GESTURE:
-		s_controls.playerTorso = TORSO_GESTURE;
-		break;
-
-	case ANIM_DIE:
-		s_controls.playerLegs = BOTH_DEATH1;
-		s_controls.playerTorso = BOTH_DEATH1;
-		s_controls.playerWeapon = WP_NONE;
-		break;
-
-	case ANIM_CHAT:
-		s_controls.playerChat = qtrue;
-		break;
-
-	default:
-		break;
-	}
-
-	UI_PlayerInfo_SetInfo(&s_controls.playerinfo, s_controls.playerLegs, s_controls.playerTorso,
-						  s_controls.playerViewangles, s_controls.playerMoveangles, s_controls.playerWeapon,
-						  s_controls.playerChat);
-}
-
-/*
-=================
 Controls_Update
 =================
 */
 static void Controls_Update(void) {
 	int i;
 	int j;
-	int y;
+	int x, y;
 	menucommon_s **controls;
 	menucommon_s *control;
 
@@ -659,13 +505,14 @@ static void Controls_Update(void) {
 	}
 
 	// position controls
-	y = 180; // 160;
+	y = YPOSITION;
+	x = XPOSITION;
 	// bk001204 - parentheses
 	for (j = 0; (control = controls[j]); j++, y += SMALLCHAR_HEIGHT) {
-		control->x = 472;
+		control->x = 622;
 		control->y = y;
-		control->left = 472 - 19 * SMALLCHAR_WIDTH;
-		control->right = 472 + 21 * SMALLCHAR_WIDTH;
+		control->left = x - 19 * SMALLCHAR_WIDTH;
+		control->right = x + 21 * SMALLCHAR_WIDTH;
 		control->top = y;
 		control->bottom = y + SMALLCHAR_HEIGHT;
 	}
@@ -790,12 +637,12 @@ static void Controls_DrawKeyBinding(void *self) {
 
 		if (s_controls.waitingforkey) {
 			UI_DrawChar(x, y, '=', UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Waiting for new key ...", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
-			UI_DrawString(450, SCREEN_HEIGHT * 0.89, "Press ESCAPE to cancel", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
+			UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.86, "Waiting for new key ...", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
+			UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.89, "Press ESCAPE to cancel", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
 		} else {
 			UI_DrawChar(x, y, FONT_ASCII_TRIANGLE, UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Press ENTER or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
-			UI_DrawString(450, SCREEN_HEIGHT * 0.89, "Press BACKSPACE to clear", UI_SMALLFONT | UI_CENTER, colorWhite);
+			UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.86, "Press ENTER or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
+			UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.89, "Press BACKSPACE to clear", UI_SMALLFONT | UI_CENTER, colorWhite);
 		}
 	} else {
 		if (a->generic.flags & QMF_GRAYED) {
@@ -816,7 +663,7 @@ Controls_StatusBar
 =================
 */
 static void Controls_StatusBar(void *self) {
-	UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Use Arrow Keys or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
+	UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.86, "Use Arrow Keys or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
 }
 
 /*
@@ -924,7 +771,7 @@ static void Controls_SetConfig(void) {
 	trap_Cmd_ExecuteText(EXEC_APPEND, "in_restart\n");
 }
 
-void SetDefaultBinds_onUnusedKeys(void) {
+void UI_SetDefaultBinds_onUnusedKeys(void) {
 	bind_t *bindptr;
 	int i;
 	char buff[8];
@@ -1230,11 +1077,7 @@ Controls_ActionEvent
 =================
 */
 static void Controls_ActionEvent(void *ptr, int event) {
-	if (event == QM_LOSTFOCUS) {
-		Controls_UpdateModel(ANIM_IDLE);
-	} else if (event == QM_GOTFOCUS) {
-		Controls_UpdateModel(g_bindings[((menucommon_s *)ptr)->id].anim);
-	} else if ((event == QM_ACTIVATED) && !s_controls.waitingforkey) {
+	if ((event == QM_ACTIVATED) && !s_controls.waitingforkey) {
 		s_controls.waitingforkey = 1;
 		Controls_Update();
 	}
@@ -1249,7 +1092,7 @@ static void Controls_MenuInit(void) {
 		// zero set all our globals
 	memset(&s_controls, 0, sizeof(s_controls));
 
-	Controls_Cache();
+	UI_Controls_Cache();
 
 	s_controls.menu.key = Controls_MenuKey;
 	s_controls.menu.wrapAround = qtrue;
@@ -1260,7 +1103,7 @@ static void Controls_MenuInit(void) {
 	s_controls.looking.generic.type = MTYPE_BITMAP;
 	s_controls.looking.generic.name = LOOK0;
 	s_controls.looking.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.looking.generic.x = 422;
+	s_controls.looking.generic.x = XPOSITION - 78;
 	s_controls.looking.generic.y = 28;
 	s_controls.looking.generic.id = ID_LOOKING;
 	s_controls.looking.generic.callback = Controls_MenuEvent;
@@ -1272,7 +1115,7 @@ static void Controls_MenuInit(void) {
 	s_controls.movement.generic.type = MTYPE_BITMAP;
 	s_controls.movement.generic.name = MOVEMENT0;
 	s_controls.movement.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.movement.generic.x = 508;
+	s_controls.movement.generic.x = XPOSITION + 8;
 	s_controls.movement.generic.y = 43;
 	s_controls.movement.generic.id = ID_MOVEMENT;
 	s_controls.movement.generic.callback = Controls_MenuEvent;
@@ -1284,7 +1127,7 @@ static void Controls_MenuInit(void) {
 	s_controls.weapons.generic.type = MTYPE_BITMAP;
 	s_controls.weapons.generic.name = WEAPONS0;
 	s_controls.weapons.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.weapons.generic.x = 376;
+	s_controls.weapons.generic.x = XPOSITION - 124;
 	s_controls.weapons.generic.y = 69;
 	s_controls.weapons.generic.id = ID_WEAPONS;
 	s_controls.weapons.generic.callback = Controls_MenuEvent;
@@ -1296,7 +1139,7 @@ static void Controls_MenuInit(void) {
 	s_controls.chat.generic.type = MTYPE_BITMAP;
 	s_controls.chat.generic.name = CHAT0;
 	s_controls.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.chat.generic.x = 518;
+	s_controls.chat.generic.x = XPOSITION + 18;
 	s_controls.chat.generic.y = 88;
 	s_controls.chat.generic.id = ID_CHAT;
 	s_controls.chat.generic.callback = Controls_MenuEvent;
@@ -1308,7 +1151,7 @@ static void Controls_MenuInit(void) {
 	s_controls.misc.generic.type = MTYPE_BITMAP;
 	s_controls.misc.generic.name = MISC0;
 	s_controls.misc.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.misc.generic.x = 432;
+	s_controls.misc.generic.x = XPOSITION - 78;
 	s_controls.misc.generic.y = 110;
 	s_controls.misc.generic.id = ID_MISC;
 	s_controls.misc.generic.callback = Controls_MenuEvent;
@@ -1320,8 +1163,8 @@ static void Controls_MenuInit(void) {
 	s_controls.back.generic.type = MTYPE_BITMAP;
 	s_controls.back.generic.name = BACK0;
 	s_controls.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	s_controls.back.generic.x = 552;
-	s_controls.back.generic.y = 440;
+	s_controls.back.generic.x = 776;
+	s_controls.back.generic.y = 446;
 	s_controls.back.generic.id = ID_BACK;
 	s_controls.back.generic.callback = Controls_MenuEvent;
 	s_controls.back.width = 80;
@@ -1330,7 +1173,6 @@ static void Controls_MenuInit(void) {
 	s_controls.back.focuspicinstead = qtrue;
 
 	s_controls.sensitivity.generic.type = MTYPE_SLIDER;
-	s_controls.sensitivity.generic.x = SCREEN_WIDTH / 2;
 	s_controls.sensitivity.generic.flags = QMF_SMALLFONT;
 	s_controls.sensitivity.generic.name = "Mouse Sensitivity:";
 	s_controls.sensitivity.generic.id = ID_MOUSESPEED;
@@ -1340,7 +1182,6 @@ static void Controls_MenuInit(void) {
 	s_controls.sensitivity.generic.statusbar = Controls_StatusBar;
 
 	s_controls.maccelfactor.generic.type = MTYPE_SLIDER;
-	s_controls.maccelfactor.generic.x = SCREEN_WIDTH / 2;
 	s_controls.maccelfactor.generic.flags = QMF_SMALLFONT;
 	s_controls.maccelfactor.generic.name = "Mouse Acceleration:";
 	s_controls.maccelfactor.generic.id = ID_MOUSEACCELFACTOR;
@@ -1351,7 +1192,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.maccelstyle.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.maccelstyle.generic.flags = QMF_SMALLFONT;
-	s_controls.maccelstyle.generic.x = SCREEN_WIDTH / 2;
 	s_controls.maccelstyle.generic.name = "Accel. Offset Style:";
 	s_controls.maccelstyle.generic.id = ID_MOUSEACCELSTYLE;
 	s_controls.maccelstyle.generic.callback = Controls_MenuEvent;
@@ -1359,7 +1199,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.macceloffset.generic.type = MTYPE_SLIDER;
 	s_controls.macceloffset.generic.flags = QMF_SMALLFONT;
-	s_controls.macceloffset.generic.x = SCREEN_WIDTH / 2;
 	s_controls.macceloffset.generic.name = "Acceleration Offset:";
 	s_controls.macceloffset.generic.id = ID_MOUSEACCELOFFSET;
 	s_controls.macceloffset.generic.callback = Controls_MenuEvent;
@@ -1369,7 +1208,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.smoothmouse.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.smoothmouse.generic.flags = QMF_SMALLFONT;
-	s_controls.smoothmouse.generic.x = SCREEN_WIDTH / 2;
 	s_controls.smoothmouse.generic.name = "Smooth Mouse:";
 	s_controls.smoothmouse.generic.id = ID_SMOOTHMOUSE;
 	s_controls.smoothmouse.generic.callback = Controls_MenuEvent;
@@ -1378,7 +1216,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.invertmouse.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.invertmouse.generic.flags = QMF_SMALLFONT;
-	s_controls.invertmouse.generic.x = SCREEN_WIDTH / 2;
 	s_controls.invertmouse.generic.name = "Invert Mouse:";
 	s_controls.invertmouse.generic.id = ID_INVERTMOUSE;
 	s_controls.invertmouse.generic.callback = Controls_MenuEvent;
@@ -1405,7 +1242,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.freelook.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.freelook.generic.flags = QMF_SMALLFONT;
-	s_controls.freelook.generic.x = SCREEN_WIDTH / 2;
 	s_controls.freelook.generic.name = "Free Look:";
 	s_controls.freelook.generic.id = ID_FREELOOK;
 	s_controls.freelook.generic.callback = Controls_MenuEvent;
@@ -1427,14 +1263,12 @@ static void Controls_MenuInit(void) {
 
 	s_controls.joyenable.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.joyenable.generic.flags = QMF_SMALLFONT;
-	s_controls.joyenable.generic.x = SCREEN_WIDTH / 2;
 	s_controls.joyenable.generic.name = "Joystick:";
 	s_controls.joyenable.generic.id = ID_JOYENABLE;
 	s_controls.joyenable.generic.callback = Controls_MenuEvent;
 	s_controls.joyenable.generic.statusbar = Controls_StatusBar;
 
 	s_controls.joythreshold.generic.type = MTYPE_SLIDER;
-	s_controls.joythreshold.generic.x = SCREEN_WIDTH / 2;
 	s_controls.joythreshold.generic.flags = QMF_SMALLFONT;
 	s_controls.joythreshold.generic.name = "Joystick Threshold:";
 	s_controls.joythreshold.generic.id = ID_JOYTHRESHOLD;
@@ -1445,7 +1279,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.alwaysrun.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.alwaysrun.generic.flags = QMF_SMALLFONT;
-	s_controls.alwaysrun.generic.x = SCREEN_WIDTH / 2;
 	s_controls.alwaysrun.generic.name = "Always Run:";
 	s_controls.alwaysrun.generic.id = ID_ALWAYSRUN;
 	s_controls.alwaysrun.generic.callback = Controls_MenuEvent;
@@ -1819,9 +1652,6 @@ static void Controls_MenuInit(void) {
 	// initialize the current config
 	Controls_GetConfig();
 
-	// intialize the weapons
-	//	Controls_InitWeapons ();
-
 	// initial default section
 	s_controls.section = C_LOOKING;
 
@@ -1831,10 +1661,10 @@ static void Controls_MenuInit(void) {
 
 /*
 =================
-Controls_Cache
+UI_Controls_Cache
 =================
 */
-void Controls_Cache(void) {
+void UI_Controls_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(LOOK0);
