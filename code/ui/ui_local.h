@@ -32,12 +32,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../client/keycodes.h"
 #include "../game/bg_public.h"
 
-// SCREEN_WIDTH and SCREEN_HEIGHT should be max for UI_AdjustFrom640().
-// However for (only) widescreen menu SCREEN_* must be seprate values for UI, CGame, and Client. So redefine it here.
+// For only widescreen menu SCREEN_* must be seprate values for UI, CGame, and Client.
 #undef SCREEN_WIDTH
 #undef SCREEN_HEIGHT
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
+#define SCREEN_WIDTH 864
+#define SCREEN_HEIGHT 468
 
 typedef void (*voidfunc_f)(void);
 
