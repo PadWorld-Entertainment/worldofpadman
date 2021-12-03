@@ -934,7 +934,7 @@ void UI_MouseEvent(int dx, int dy) {
 	// convert X Y bias to 640 coords
 	xbias = uis.xbias / uis.xscale;
 	ybias = uis.ybias / uis.yscale;
-	
+
 	// update mouse screen position
 	uis.cursorx += dx;
 	if (uis.cursorx < -xbias)
@@ -1326,10 +1326,10 @@ static void UI_DrawMenu(menuframework_s *menu) {
 		} else if (menu->fullscreen) {
 			// clear edge if window is different aspect than UI
 			// Clearing for 4:3 xbias is handled in SCR_DrawScreenField().
-			if ( uis.xbias || uis.ybias ) {
-				trap_R_SetColor( g_color_table[0] );
-				trap_R_DrawStretchPic( 0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 0, 0, uis.whiteShader );
-				trap_R_SetColor( NULL );
+			if (uis.xbias || uis.ybias) {
+				trap_R_SetColor(g_color_table[0]);
+				trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 0, 0, uis.whiteShader);
+				trap_R_SetColor(NULL);
 			}
 
 			// draw the background
