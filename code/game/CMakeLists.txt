@@ -1,4 +1,4 @@
-project(game)
+project(qagame)
 set(SRCS
 	g_main.c
 	ai_chat.c
