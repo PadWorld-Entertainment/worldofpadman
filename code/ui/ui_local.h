@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #undef SCREEN_WIDTH
 #undef SCREEN_HEIGHT
 #define SCREEN_WIDTH 864
-#define SCREEN_HEIGHT 468
+#define SCREEN_HEIGHT 486
 
 typedef void (*voidfunc_f)(void);
 
