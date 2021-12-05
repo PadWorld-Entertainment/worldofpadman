@@ -111,8 +111,9 @@ static void SetupDefaultMenu_Event(void *ptr, int event) {
 }
 
 static void SetupDefaultMenu_Draw(void) {
-	UI_DrawStringNS(320 - 145, 380, "This will reset *^1ALL^3* options", UI_LEFT, 20, color_yellow);
-	UI_DrawStringNS(320, 380 + 22, "to their default values.", UI_CENTER, 20, color_yellow);
+	UI_DrawProportionalString(2 * (SCREEN_WIDTH / 3), 260, "SET TO DEFAULTS?", (UI_CENTER | UI_SMALLFONT), color_white);
+	UI_DrawStringNS(2 * (SCREEN_WIDTH / 3) + 20, 380, "This will reset *^1ALL^3* options", UI_CENTER, 20, color_yellow);
+	UI_DrawStringNS(2 * (SCREEN_WIDTH / 3), 380 + 22, "to their default values.", UI_CENTER, 20, color_yellow);
 	Menu_Draw(&setupDefaultMenu.menu);
 }
 
