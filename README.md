@@ -1,4 +1,4 @@
-# World Of Padman
+# World of PADMAN
 
 [![Actions Status](https://github.com/PadWorld-Entertainment/worldofpadman/workflows/Build/badge.svg)](https://github.com/PadWorld-Entertainment/worldofpadman/actions)
 
