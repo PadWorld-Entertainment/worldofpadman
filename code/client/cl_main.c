@@ -3269,8 +3269,8 @@ void CL_Init(void) {
 
 	cl_guidServerUniq = Cvar_Get("cl_guidServerUniq", "1", CVAR_ARCHIVE);
 
-	// ~ ` ^ as keys and characters
-	cl_consoleKeys = Cvar_Get("cl_consoleKeys", "~ ` ^ 0x7e 0x60 0x5e", CVAR_ARCHIVE);
+	// ~ and ` as keys and characters
+	cl_consoleKeys = Cvar_Get("cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
 
 	// userinfo
 	Cvar_Get("name", "PadPlayer", CVAR_USERINFO | CVAR_ARCHIVE);
