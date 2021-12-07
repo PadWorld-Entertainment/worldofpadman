@@ -114,8 +114,15 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to health station\"");
 				return qfalse;
 			}
-		} else if (otherEnt->s.eType == ET_ITEM &&
-				   (otherEnt->item->giTag == PW_REDFLAG || otherEnt->item->giTag == PW_BLUEFLAG)) {
+		}
+		/* changed beryllium */
+		/*
+		else if( otherEnt->s.eType == ET_ITEM &&
+			( otherEnt->item->giTag == PW_REDFLAG || otherEnt->item->giTag == PW_BLUEFLAG ) )
+		{
+		*/
+		else if ((ET_ITEM == otherEnt->s.eType) && (IT_TEAM == otherEnt->item->giType)) {
+			/* end changed */
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(256)) {
 				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to lolly base\"");
@@ -186,10 +193,17 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 
 #define BAMBAM_IDLE_THINKTIME (20 * 1000) // idle -> zzz
 static void bambam_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
+
 	if (!other->client)
 		return;
 	if (!ent->team)
 		return;
+
+	/* added beryllium */
+	if (other->flags & FL_NOTARGET) {
+		return;
+	}
+	/* end beryllium */
 
 	if (!IsItemSameTeam(ent, other) && (ent->timestamp == 0 || (level.time - ent->timestamp) > 100)) {
 		trace_t tr;
@@ -326,6 +340,16 @@ qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 	vec3_t tmpAngles;
 	trace_t tr;
 
+	/* changed beryllium */
+	/*
+	vec3_t boxMins = {-128, -128, -30};
+	vec3_t boxMaxs = {128, 128, 64};
+	int boxEnts[10];
+	int numBoxEnts;
+	int i;
+	*/
+	/* end beryllium */
+
 	gentity_t *entBam;
 
 	if (MAX_TEAM_BAMBAMS <= level.numBambams[pEnt->client->sess.sessionTeam]) {
@@ -455,6 +479,12 @@ static void boomies_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	if (!other->client) {
 		return;
 	}
+
+	/* added beryllium */
+	if (other->flags & FL_NOTARGET) {
+		return;
+	}
+	/* end beryllium */
 
 	if (!IsItemSameTeam(ent, other)) {
 		// EXPLODE! goes the wiesel

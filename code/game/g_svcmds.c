@@ -447,7 +447,17 @@ static void Svcmd_Tell_f(void) {
 	G_Say(NULL, target, SAY_TELL, ConcatArgs(2));
 }
 
-typedef enum { CCMD_MP, CCMD_CP, CCMD_PRINT } clientCommand_t;
+/* changed beryllium */
+/* NOTE: beryllium also uses an enum with the same name and value names */
+/*
+typedef enum {
+	CCMD_MP,
+	CCMD_CP,
+	CCMD_PRINT
+} clientCommand_t;
+*/
+/* end beryllium */
+
 /*
 ===================
 Svcmd_ClientCommand_f
@@ -791,6 +801,12 @@ qboolean ConsoleCommand(void) {
 
 	trap_Argv(0, cmd, sizeof(cmd));
 
+	/* added beryllium */
+	if (BE_ConsoleCommand(cmd)) {
+		return qtrue;
+	}
+	/* end beryllium */
+
 	if (Q_stricmp(cmd, "entitylist") == 0) {
 		Svcmd_EntityList_f();
 		return qtrue;
@@ -898,9 +914,15 @@ qboolean ConsoleCommand(void) {
 			return qtrue;
 		}
 
+		/* changed beryllium */
+		/* This "feature" is annoying, disable say text, but still print a message */
+		/*
 		// everything else will also be printed to clients
-		trap_SendServerCommand(-1, va("print \"server: %s\n\"", ConcatArgs(0)));
+		trap_SendServerCommand( -1, va("print \"server: %s\n\"", ConcatArgs(0) ) );
 		return qtrue;
+		*/
+		G_Printf("Unknown game command: %s\n", ConcatArgs(0));
+		/* end beryllium */
 	}
 
 	return qfalse;

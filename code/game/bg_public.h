@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 //(original)#define	GAME_VERSION		BASEGAME "-1"
 #define GAME_VERSION "padcode 1.153"
+/* beryllium: This should be used to prevent using e.g. v1.5 qvm with v1.6 */
 
 #define DEFAULT_GRAVITY 800
 
@@ -853,3 +854,12 @@ enum { ICON_ARROW = 1, ICON_BALLOON = 2, ICON_TEAMMATE = 4, ICON_HEALTHSTATION =
 
 #define ICON_ALL (ICON_ARROW | ICON_BALLOON | ICON_TEAMMATE | ICON_HEALTHSTATION | ICON_SPRAYROOM | ICON_FREEZETAG)
 // Don't forget to update cg_icons in cg_main.c as well
+
+/* added beryllium */
+
+int G_FrameMsec(void);
+
+#define UNLIMITED 999
+#define AMMOLESS -1
+
+/* end beryllium */

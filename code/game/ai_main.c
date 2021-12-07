@@ -2061,7 +2061,13 @@ int BotAIStartFrame(int time) {
 				continue;
 			}
 			// do not update missiles	// cyr, but do update ducks !
+			/* changed beryllium */
+			/*
 			if (ent->s.eType == ET_MISSILE && ent->s.weapon != WP_KILLERDUCKS) {
+			*/
+			if ((ET_MISSILE == ent->s.eType) && (ent->s.weapon != WP_KILLERDUCKS) &&
+				(ent->s.weapon != WP_GRAPPLING_HOOK)) {
+				/* end beryllium */
 				trap_BotLibUpdateEntity(i, NULL);
 				continue;
 			}
@@ -2230,7 +2236,13 @@ static int BotInitLibrary(void) {
 	// home directory
 	trap_Cvar_VariableStringBuffer("fs_homepath", buf, sizeof(buf));
 	if (strlen(buf))
-		trap_BotLibVarSet("homedir", buf);
+		trap_BotLibVarSet("cddir", buf);
+
+	/* added beryllium */
+	trap_BotLibVarSet("offhandgrapple", "0");
+	trap_BotLibVarSet("weapindex_grapple", va("%d", WP_GRAPPLING_HOOK));
+	/* end beryllium */
+
 	// setup the bot library
 	return trap_BotLibSetup();
 }

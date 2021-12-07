@@ -121,7 +121,17 @@ void G_InitSessionData(gclient_t *client, char *userinfo) {
 				if (g_maxGameClients.integer > 0 && level.numNonSpectatorClients >= g_maxGameClients.integer) {
 					sess->sessionTeam = TEAM_SPECTATOR;
 				} else {
+					/* changed beryllium */
+					/*
 					sess->sessionTeam = TEAM_FREE;
+					*/
+					/* TODO: Move this into a function */
+					if (level.teamLocked[TEAM_FREE]) {
+						sess->sessionTeam = TEAM_SPECTATOR;
+					} else {
+						sess->sessionTeam = TEAM_FREE;
+					}
+					/* end beryllium */
 				}
 				break;
 			case GT_TOURNAMENT:
@@ -129,6 +139,7 @@ void G_InitSessionData(gclient_t *client, char *userinfo) {
 				if (level.numNonSpectatorClients >= 2) {
 					sess->sessionTeam = TEAM_SPECTATOR;
 				} else {
+					/* beryllium: Locking teams in TOURNAMENT most likely breaks waiting queue */
 					sess->sessionTeam = TEAM_FREE;
 				}
 				break;

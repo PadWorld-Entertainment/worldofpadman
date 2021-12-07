@@ -284,6 +284,18 @@ typedef struct {
 #define MAX_NETNAME 36
 #define MAX_VOTE_COUNT 3
 
+/* added beryllium */
+/* FIXME: This should go into be_vote.h, which is included too late */
+typedef enum { VOTE_NONE, VOTE_YES, VOTE_NO, VOTE_DONTCARE } vote_t;
+
+/* FIXME: These should go into berylliums headers, which are included too late */
+#define NET_ADDRSTRMAXLEN 48 /* NOTE: Must match NET_ADDRSTRMAXLEN in qcommon.h */
+#define GUIDSTRMAXLEN 33	 /* NOTE: Length must match max result of Com_MD5File() / cl_guid */
+
+/* unlagged - true ping */
+#define NUM_PING_SAMPLES 64
+/* end beryllium */
+
 // client data that stays across multiple respawns, but is cleared
 // on each level change or team change at ClientBegin()
 typedef struct {
@@ -302,7 +314,50 @@ typedef struct {
 	qboolean teamInfo;			 // send team overlay updates?
 	qboolean frozen;
 	qboolean ftLateJoin;
+
+	/* added beryllium */
+	/* FIXME: Use unsigned int? */
+	int voteTime;
+	vote_t voted;
+
+	int nameChanges;
+	int nameChangeTime;
+
+	char guid[GUIDSTRMAXLEN];
+	char ip[NET_ADDRSTRMAXLEN];
+
+	int campCounter;
+	vec3_t campPosition;
+
+	int connectionCounter;
+
+	int lifeShards;
+
+	int inactivityTime;
+	qboolean inactivityWarning;
+
+	qboolean isProtected;
+
+	/* unlagged - true ping */
+	int realPing;
+	int pingsamples[NUM_PING_SAMPLES];
+	int samplehead;
+	/* end beryllium */
 } clientPersistant_t;
+
+/* added beryllium */
+
+/* FIXME: This should be in beryllium's headers, which are included too late */
+/* NOTE: This data remains over nextmap/map_restart and different gametypes. It's
+		 basically an extension of clientSession_t.
+*/
+typedef struct {
+	qboolean ignoreList[MAX_CLIENTS];
+	qboolean firstTime;
+	qboolean sawGreeting;
+} clientStorage_t;
+
+/* end beryllium */
 
 // this structure is cleared on each ClientSpawn(),
 // except for 'client->pers' and 'client->sess'
@@ -334,9 +389,15 @@ struct gclient_s {
 	int balloonTime;
 	gentity_t *balloonEnt;
 
-	int lastCmdTime; // level.time of last usercmd_t, for EF_CONNECTION
-					 // we can't just use pers.lastCommand.time, because
-					 // of the g_sycronousclients case
+	/* unlagged - smooth clients #1 */
+	/* This is handled differently now */
+	/*
+	int			lastCmdTime;		// level.time of last usercmd_t, for EF_CONNECTION
+									// we can't just use pers.lastCommand.time, because
+									// of the g_sycronousclients case
+	*/
+	/* end unlagged - smooth clients #1 */
+
 	int buttons;
 	int oldbuttons;
 	int latched_buttons;
@@ -365,10 +426,15 @@ struct gclient_s {
 	int lasthurt_mod;	   // type of damage the client did
 
 	// timers
-	int respawnTime;			// can respawn when time > this, force after g_forcerespwan
-	int inactivityTime;			// kick players when time > this
-	qboolean inactivityWarning; // qtrue if the five seoond warning has been given
-	int rewardTime;				// clear the EF_AWARD_IMPRESSIVE, etc when time > this
+	int respawnTime; // can respawn when time > this, force after g_forcerespwan
+	/* changed beryllium */
+	/* These are cleared on each spawn, moved to clientPersistant_t */
+	/*
+	int			inactivityTime;		// kick players when time > this
+	qboolean	inactivityWarning;	// qtrue if the five seoond warning has been given
+	*/
+	/* end beryllium */
+	int rewardTime; // clear the EF_AWARD_IMPRESSIVE, etc when time > this
 
 	int airOutTime;
 
@@ -396,6 +462,18 @@ struct gclient_s {
 	int freezeTime;
 	int freezeCount;
 	int lastProgressTime;
+
+	/* added beryllium */
+	clientStorage_t storage;
+
+	/* unlagged - backward reconciliation #1 */
+	/* NOTE: We don't do any backward reconciliation, this is needed for g_truePing */
+	int frameOffset;
+
+	/* unlagged - smooth clients #1 */
+	/* The last frame number we got an update from this client */
+	int lastUpdateFrame;
+	/* end beryllium */
 };
 
 //
@@ -752,7 +830,11 @@ qboolean OnSameTeam(gentity_t *ent1, gentity_t *ent2);
 void Team_CheckDroppedItem(gentity_t *dropped);
 int Team_GetFlagStatus(int team);
 qboolean CheckObeliskAttack(gentity_t *obelisk, gentity_t *attacker);
-__attribute__((format(printf, 2, 3))) void QDECL PrintMsg(gentity_t *ent, const char *fmt, ...);
+/* changed beryllium */
+/*
+void QDECL PrintMsg( gentity_t *ent, const char *fmt, ... );
+*/
+/* end beryllium */
 
 //
 // g_mem.c
@@ -1149,3 +1231,20 @@ int trap_GeneticParentsAndChildSelection(int numranks, float *ranks, int *parent
 
 void trap_SnapVector(float *v);
 int trap_AAS_BestReachableArea(vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalorigin);
+
+/* added beryllium */
+
+/* Included here, because of dependencies */
+#include "g_beryllium.h"
+#include "be_util.h"
+#include "be_vote.h"
+#include "be_cmds.h"
+#include "be_svcmds.h"
+#include "be_storage.h"
+#include "be_alloc.h"
+
+// unlagged - g_unlagged.c
+void G_PredictPlayerMove(gentity_t *ent, float frametime);
+// unlagged - g_unlagged.c
+
+/* end beryllium */

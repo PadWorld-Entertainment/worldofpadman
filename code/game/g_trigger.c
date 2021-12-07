@@ -138,6 +138,12 @@ static void trigger_push_touch(gentity_t *self, gentity_t *other, trace_t *trace
 		return;
 	}
 
+	/* added beryllium */
+	if (other->client && other->client->hook) {
+		return;
+	}
+	/* end beryllium */
+
 	BG_TouchJumpPad(&other->client->ps, &self->s);
 }
 
@@ -232,7 +238,15 @@ void SP_target_push(gentity_t *self) {
 	G_SetMovedir(self->s.angles, self->s.origin2);
 	VectorScale(self->s.origin2, self->speed, self->s.origin2);
 
-	self->noise_index = G_SoundIndex("sounds/world/jumppad");
+	if (self->spawnflags & 1) {
+		self->noise_index = G_SoundIndex("sounds/world/jumppad");
+	}
+	/* added beryllium */
+	else {
+		/* Hm, there should be a sound, use an arbitrary one for debugging. */
+		self->noise_index = G_SoundIndex("sounds/world/jumppad");
+	}
+	/* end beryllium */
 
 	if (self->target) {
 		VectorCopy(self->s.origin, self->r.absmin);
@@ -314,6 +328,17 @@ static void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t 
 		G_Printf("Couldn't find teleporter destination\n");
 		return;
 	}
+
+	/* added beryllium */
+	if (be_debugSecrets.integer) {
+		/* FIXME: G_assert ent, other? */
+		SendClientCommand((other - g_entities), CCMD_PRT, va("Using %s\n", self->target));
+	}
+
+	if (!BE_CanUseTeleporter(self, other)) {
+		return;
+	}
+	/* end beryllium */
 
 	TeleportPlayer(other, dest->s.origin, dest->s.angles);
 }

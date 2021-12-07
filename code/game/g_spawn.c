@@ -393,53 +393,99 @@ typedef struct {
 	const char *r; // replace
 } replacePair_t;
 
-static const replacePair_t q3ToWopItems[] = {{"weapon_gauntlet", "weapon_punchy"},
-											 {"weapon_machinegun", "weapon_nipper"},
-											 {"weapon_shotgun", "weapon_pumper"},
-											 {"weapon_lightning", "weapon_boaster"},
-											 {"weapon_railgun", "weapon_splasher"},
-											 {"weapon_plasmagun", "weapon_bubbleg"},
-											 {"weapon_grenadelauncher", "weapon_balloony"},
-											 {"weapon_rocketlauncher", "weapon_betty"},
-											 {"weapon_bfg", "weapon_imperius"},
+replacePair_t q3ToWopItems[] = {{"weapon_gauntlet", "weapon_punchy"},
+								{"weapon_machinegun", "weapon_nipper"},
+								{"weapon_shotgun", "weapon_pumper"},
+								{"weapon_lightning", "weapon_boaster"},
+								{"weapon_railgun", "weapon_splasher"},
+								{"weapon_plasmagun", "weapon_bubbleg"},
+								{"weapon_grenadelauncher", "weapon_balloony"},
+								{"weapon_rocketlauncher", "weapon_betty"},
+								{"weapon_bfg", "weapon_imperius"},
 
-											 {"ammo_shells", "ammo_pumper"},
-											 {"ammo_bullets", "ammo_nipper"},
-											 {"ammo_grenades", "ammo_balloony"},
-											 {"ammo_cells", "ammo_bubbleg"},
-											 {"ammo_lightning", "ammo_boaster"},
-											 {"ammo_rockets", "ammo_betty"},
-											 {"ammo_slugs", "ammo_splasher"},
-											 {"ammo_bfg", "ammo_imperius"},
+								{"ammo_shells", "ammo_pumper"},
+								{"ammo_bullets", "ammo_nipper"},
+								{"ammo_grenades", "ammo_balloony"},
+								{"ammo_cells", "ammo_bubbleg"},
+								{"ammo_lightning", "ammo_boaster"},
+								{"ammo_rockets", "ammo_betty"},
+								{"ammo_slugs", "ammo_splasher"},
+								{"ammo_bfg", "ammo_imperius"},
 
-											 {"item_quad", "item_padpower"},
-											 {"item_enviro", "item_climber"},
-											 {"item_hast", "item_speedy"},
-											 {"item_flight", "item_jump"},
-											 {"item_invis", "item_visionless"},
-											 {"item_regen", "item_revival"},
-											 {"item_armor_body", "item_armor_padshield"},
+								{"item_quad", "item_padpower"},
+								/* changed beryllium */
+								/*
+								{ "item_enviro",	"item_climber"			},
+								{ "item_hast",		"item_speedy"			},
+								*/
+								{"item_haste", "item_speedy"},
+								/* end beryllium */
+								{"item_flight", "item_jump"},
+								{"item_invis", "item_visionless"},
+								{"item_regen", "item_revival"},
+								{"item_armor_body", "item_armor_padshield"},
 
-											 {"team_CTF_redflag", "team_CTL_redlolly"},
-											 {"team_CTF_blueflag", "team_CTL_bluelolly"},
-											 {"team_CTF_redplayer", "team_redplayer"},
-											 {"team_CTF_blueplayer", "team_blueplayer"},
-											 {"team_CTF_redspawn", "team_redspawn"},
-											 {"team_CTF_bluespawn", "team_bluespawn"},
-											 {NULL, NULL}};
+								{"team_CTF_redflag", "team_CTL_redlolly"},
+								{"team_CTF_blueflag", "team_CTL_bluelolly"},
+								{"team_CTF_redplayer", "team_redplayer"},
+								{"team_CTF_blueplayer", "team_blueplayer"},
+								{"team_CTF_redspawn", "team_redspawn"},
+								{"team_CTF_bluespawn", "team_bluespawn"},
+								{NULL, NULL}};
 
-static const replacePair_t shortMarkernames[] = {{"black", "models/mapobjects/pad_weaponmarker/pad_wepm_black_bg"},
-												 {"blue", "models/mapobjects/pad_weaponmarker/pad_wepm_blue_bg"},
-												 {"green", "models/mapobjects/pad_weaponmarker/pad_wepm_green_gg"},
-												 {"purple", "models/mapobjects/pad_weaponmarker/pad_wepm_green_bg"},
-												 {"orange", "models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg"},
-												 {NULL, NULL}};
+replacePair_t shortMarkernames[] = {{"black", "models/mapobjects/pad_weaponmarker/pad_wepm_black_bg.md3"},
+									{"blue", "models/mapobjects/pad_weaponmarker/pad_wepm_blue_bg.md3"},
+									{"green", "models/mapobjects/pad_weaponmarker/pad_wepm_green_gg.md3"},
+									{"purple", "models/mapobjects/pad_weaponmarker/pad_wepm_green_bg.md3"},
+									{"orange", "models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg.md3"},
+									{NULL, NULL}};
 
-static const replacePair_t spawnpointReplacements[] = {{"team_redplayer", "info_player_deathmatch"},
-													   {"team_blueplayer", "info_player_deathmatch"},
-													   {"team_redspawn", "info_player_deathmatch"},
-													   {"team_bluespawn", "info_player_deathmatch"},
-													   {NULL, NULL}};
+replacePair_t spawnpointReplacements[] = {{"team_redplayer", "info_player_deathmatch"},
+										  {"team_blueplayer", "info_player_deathmatch"},
+										  {"team_redspawn", "info_player_deathmatch"},
+										  {"team_bluespawn", "info_player_deathmatch"},
+										  {NULL, NULL}};
+
+/* added beryllium */
+
+/*
+	Returns whether value includes gametype.
+	If g_q3Items is enabled, will also check against Q3 gametype names.
+*/
+static qboolean G_ValueIncludesGametype(const char *value, gametype_t gametype) {
+	const char *gametypeName;
+	char *s;
+
+	// Order needs to match gametype_t of WoP
+	static const char *gametypeNames[] = {"ffa",  "tournament", "single", "spray",	"lps",
+										  "team", "ctl",		"sptp",	  "balloon"};
+	static const char *gametypeNamesQ3[] = {"ffa", "tournament", "single", NULL, NULL, "team", "ctf", NULL, NULL};
+
+	if ((gametype < GT_FFA) || (gametype >= GT_MAX_GAME_TYPE)) {
+		return qfalse;
+	}
+	gametypeName = gametypeNames[gametype];
+
+	s = strstr(value, gametypeName);
+	if (!s) {
+		if (g_q3Items.integer) {
+			gametypeName = gametypeNamesQ3[gametype];
+			if (NULL == gametypeName) {
+				return qfalse;
+			}
+
+			s = strstr(value, gametypeName);
+			if (s) {
+				return qtrue;
+			}
+		}
+
+		return qfalse;
+	}
+
+	return qtrue;
+}
+/* end beryllium */
 
 /*
 ===================
@@ -452,13 +498,18 @@ level.spawnVars[], then call the class specific spawn function
 static void G_SpawnGEntityFromSpawnVars(void) {
 	int i;
 	gentity_t *ent;
-	const char *s;
-	const char *value;
-	const char *gametypeName;
-	const gitem_t *item;
+	char *value;
+	gitem_t *item;
+	/* changed beryllium */
+	/*
+	char		*s;
+	const char	*gametypeName;
+	gitem_t		*item;
 
 	static const char *gametypeNames[] = {"ffa",  "tournament", "single", "spray", "lps",
 										  "team", "freeze",		"ctl",	  "sptp",  "balloon"};
+	*/
+	/* end beryllium */
 
 	// get the next free entity
 	ent = G_Spawn();
@@ -471,6 +522,11 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	if (g_q3Items.integer) {
 		for (i = 0; q3ToWopItems[i].s; i++) {
 			if (Q_stricmp(ent->classname, q3ToWopItems[i].s) == 0) {
+				/* added beryllium */
+				G_DPrintf("spawning (q3 items): Replacing entity " S_COLOR_ITALIC "%s" S_COLOR_DEFAULT
+						  " with " S_COLOR_ITALIC "%s" S_COLOR_DEFAULT ".\n",
+						  ent->classname, q3ToWopItems[i].r);
+				/* end beryllium */
 				ent->classname = (char *)q3ToWopItems[i].r;
 				break;
 			}
@@ -547,29 +603,50 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		return;
 	}
 
-	if (G_SpawnString("gametype", NULL, &value)) {
-		if (g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE) {
+	/* changed beryllium */
+	/*
+	if( G_SpawnString( "gametype", NULL, &value ) ) {
+		if( g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE ) {
 			gametypeName = gametypeNames[g_gametype.integer];
 
-			s = strstr(value, gametypeName);
-			if (!s) {
-				G_FreeEntity(ent);
+			s = strstr( value, gametypeName );
+			if( !s ) {
+				G_FreeEntity( ent );
 				return;
 			}
+		}
+	}
+
+	if( G_SpawnString( "notGametype", NULL, &value ) ) {
+		if( g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE ) {
+			gametypeName = gametypeNames[g_gametype.integer];
+
+			s = strstr( value, gametypeName );
+			if( s ) {
+				G_FreeEntity( ent );
+				return;
+			}
+		}
+	}
+	*/
+	if (G_SpawnString("gametype", NULL, &value)) {
+		if (!G_ValueIncludesGametype(value, g_gametype.integer)) {
+			G_DPrintf("spawning: Not spawning " S_COLOR_ITALIC "%s" S_COLOR_DEFAULT " due to gametype key.\n",
+					  ent->classname);
+			G_FreeEntity(ent);
+			return;
 		}
 	}
 
 	if (G_SpawnString("notGametype", NULL, &value)) {
-		if (g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE) {
-			gametypeName = gametypeNames[g_gametype.integer];
-
-			s = strstr(value, gametypeName);
-			if (s) {
-				G_FreeEntity(ent);
-				return;
-			}
+		if (G_ValueIncludesGametype(value, g_gametype.integer)) {
+			G_DPrintf("spawning: Not spawning " S_COLOR_ITALIC "%s" S_COLOR_DEFAULT " due to notGametype key.\n",
+					  ent->classname);
+			G_FreeEntity(ent);
+			return;
 		}
 	}
+	/* end beryllium */
 
 	for (item = (bg_itemlist + 1); item->classname; item++) {
 		if (strcmp(item->classname, ent->classname) == 0) {
@@ -678,7 +755,12 @@ static qboolean G_ParseSpawnVars(void) {
 	level.numSpawnVarChars = 0;
 
 	// parse the opening brace
-	if (!trap_GetEntityToken(com_token, sizeof(com_token))) {
+	/* changed beryllium */
+	/*
+	if ( !trap_GetEntityToken( com_token, sizeof( com_token ) ) ) {
+	*/
+	if (!BE_GetEntityToken(com_token, sizeof(com_token))) {
+		/* end beryllium */
 		// end of spawn string
 		return qfalse;
 	}
@@ -689,7 +771,12 @@ static qboolean G_ParseSpawnVars(void) {
 	// go through all the key / value pairs
 	while (1) {
 		// parse key
-		if (!trap_GetEntityToken(keyname, sizeof(keyname))) {
+		/* changed beryllium */
+		/*
+		if ( !trap_GetEntityToken( keyname, sizeof( keyname ) ) ) {
+		*/
+		if (!BE_GetEntityToken(keyname, sizeof(keyname))) {
+			/* end beryllium */
 			G_Error("G_ParseSpawnVars: EOF without closing brace");
 		}
 
@@ -698,7 +785,12 @@ static qboolean G_ParseSpawnVars(void) {
 		}
 
 		// parse value
-		if (!trap_GetEntityToken(com_token, sizeof(com_token))) {
+		/* changed beryllium */
+		/*
+		if ( !trap_GetEntityToken( com_token, sizeof( com_token ) ) ) {
+		*/
+		if (!BE_GetEntityToken(com_token, sizeof(com_token))) {
+			/* end beryllium */
 			G_Error("G_ParseSpawnVars: EOF without closing brace");
 		}
 
@@ -813,6 +905,10 @@ void G_SpawnEntitiesFromString(void) {
 	level.numSpawnVars = 0;
 	level.sr_tl_tele = NULL;
 
+	/* added beryllium */
+	BE_PreSpawnEntities();
+	/* end beryllium */
+
 	// the worldspawn is not an actual entity, but it still
 	// has a "spawn" function to perform any global setup
 	// needed by a level (setting configstrings or cvars, etc)
@@ -825,6 +921,10 @@ void G_SpawnEntitiesFromString(void) {
 	while (G_ParseSpawnVars()) {
 		G_SpawnGEntityFromSpawnVars();
 	}
+
+	/* added beryllium */
+	BE_PostSpawnEntities();
+	/* end beryllium */
 
 	level.spawning = qfalse; // any future calls to G_Spawn*() will be errors
 }

@@ -487,6 +487,10 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 		}
 	}
 
+	/* added beryllium */
+	BE_ClientKilled(self);
+	/* end beryllium */
+
 	// if client is in a nodrop area, don't drop anything (but return CTF flags!)
 	contents = trap_PointContents(self->r.currentOrigin, -1);
 	if (!(contents & CONTENTS_NODROP) && !level.cammode) {
@@ -682,6 +686,17 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	// shootable doors / buttons don't actually have any health
 	if (targ->s.eType == ET_MOVER) {
 		if (targ->use && (targ->moverState == MOVER_POS1 || targ->moverState == ROTATOR_POS1)) {
+			/* added beryllium */
+			if (be_debugSecrets.integer) {
+				/* FIXME: G_assert ent, other? */
+				SendClientCommand((attacker - g_entities), CCMD_PRT, va("Shooting %s\n", targ->target));
+			}
+
+			if (!BE_CanUseMover(targ, attacker)) {
+				return;
+			}
+			/* end beryllium */
+
 			targ->use(targ, inflictor, attacker);
 		}
 		return;
@@ -833,6 +848,12 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	if (damage < 1) {
 		damage = 1;
 	}
+
+	/* added beryllium */
+	/* FIXME: Call earlier? The minimum damage of 1 is a problem here */
+	BE_Damage(targ, inflictor, attacker, dir, point, &damage, &dflags, &mod);
+	/* end beryllium */
+
 	take = damage;
 
 	// save some from armor

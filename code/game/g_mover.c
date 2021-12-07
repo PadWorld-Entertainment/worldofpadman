@@ -684,7 +684,14 @@ void Use_BinaryMover(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	if (ent->moverState == MOVER_POS1) {
 		// start moving 50 msec later, becase if this was player
 		// triggered, level.time hasn't been advanced yet
-		MatchTeam(ent, MOVER_1TO2, level.time + 50);
+		/* changed beryllium */
+		/* Respect the variable nature of sv_fps */
+		/*
+		MatchTeam( ent, MOVER_1TO2, level.time + 50 );
+		*/
+
+		MatchTeam(ent, MOVER_1TO2, (level.time + G_FrameMsec()));
+		/* end beryllium */
 
 		// starting sound
 		if (ent->sound1to2) {
@@ -759,13 +766,30 @@ void Use_BinaryMover(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 		return;
 	}
 
+	/* changed beryllium */
+	/*
 	// if all the way up, just delay before coming down
-	if (ent->moverState == ROTATOR_POS2) {
-		if (ent->spawnflags & FDR_RETURN) {
+	if ( ent->moverState == ROTATOR_POS2 ) {
+		if ( ent->spawnflags & FDR_RETURN ) {
 			ent->nextthink = level.time + ent->wait;
 		}
 		return;
 	}
+	*/
+
+	if (ROTATOR_POS2 == ent->moverState) {
+		/* Just delay before coming down. */
+		if (ent->spawnflags & FDR_RETURN) {
+			ent->nextthink = level.time + ent->wait;
+		}
+		/* Come down right now. */
+		if (ent->spawnflags & FDR_TOGGLE) {
+			ReturnToApos1(ent);
+		}
+
+		return;
+	}
+	/* end beryllium */
 
 	// only partway down before reversing
 	if (ent->moverState == ROTATOR_2TO1) {
@@ -1460,6 +1484,17 @@ void Touch_Button(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	if (!other->client) {
 		return;
 	}
+
+	/* added beryllium */
+	if (be_debugSecrets.integer) {
+		/* FIXME: G_assert ent, other? */
+		SendClientCommand((other - g_entities), CCMD_PRT, va("Touching %s\n", ent->target));
+	}
+
+	if (!BE_CanUseMover(ent, other)) {
+		return;
+	}
+	/* end beryllium */
 
 	if (ent->moverState == MOVER_POS1) {
 		Use_BinaryMover(ent, other, other);
