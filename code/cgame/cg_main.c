@@ -956,7 +956,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip("menu/headers/ping");
 	cgs.media.scoreboardScore = trap_R_RegisterShaderNoMip("menu/headers/score");
 	cgs.media.scoreboardTime = trap_R_RegisterShaderNoMip("menu/headers/time");
-	cgs.media.voiceIcon = trap_R_RegisterShaderNoMip("hud/hint_voicechat");
+	cgs.media.voiceIcon = trap_R_RegisterShaderNoMip("icons/hint_voicechat");
 
 	if (cgs.gametype == GT_FREEZETAG) {
 		cgs.media.FreezeScreenShader = trap_R_RegisterShaderNoMip("gfx/screen/ice");
