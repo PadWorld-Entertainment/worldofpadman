@@ -11,3 +11,7 @@
 # License
 
 See [copyright](XTRAS/copyright_en.txt)
+
+# Thanks
+
+Thanks to everyone involved with [ioq3](https://github.com/ioquake/ioq3).
