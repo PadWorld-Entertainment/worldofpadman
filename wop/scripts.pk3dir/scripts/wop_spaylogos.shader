@@ -1,4 +1,6 @@
-"spraylogos/01_wop"
+// World of Padman spray logos shader
+
+spraylogos/01_wop
 {
 	nopicmip
 	{
@@ -9,7 +11,7 @@
 	}
 }
 
-"spraylogos/02_cross"
+spraylogos/02_cross
 {
 	nopicmip
 	{
@@ -20,7 +22,7 @@
 	}
 }
 
-"spraylogos/03_smile"
+spraylogos/03_smile
 {
 	nopicmip
 	{
@@ -31,7 +33,7 @@
 	}
 }
 
-"spraylogos/04_padman"
+spraylogos/04_padman
 {
 	nopicmip
 	{
@@ -76,19 +78,18 @@ spraylogos/07_skull
 }
 
 
-spraylogos/08_clowns
+spraylogos/08_clown
 {
 	nopicmip
 	{
-		map spraylogos/08_clowns
+		map spraylogos/08_clown
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
 	}
 }
 
-
-"spraylogos/09_sketch"
+spraylogos/09_sketch
 {
 	nopicmip
 	{
@@ -99,7 +100,7 @@ spraylogos/08_clowns
 	}
 }
 
-"spraylogos/10_yinyan"
+spraylogos/10_yinyan
 {
 	nopicmip
 	{
@@ -110,7 +111,7 @@ spraylogos/08_clowns
 	}
 }
 
-"spraylogos/11_splash"
+spraylogos/11_splash
 {
 	nopicmip
 	{
@@ -121,7 +122,7 @@ spraylogos/08_clowns
 	}
 }
 
-"spraylogos/12_heart"
+spraylogos/12_heart
 {
 	nopicmip
 	{
@@ -165,7 +166,6 @@ spraylogos/15_padlogo
 	}
 }
 
-
 spraylogos/16_moon
 {
 	nopicmip
@@ -176,7 +176,6 @@ spraylogos/16_moon
 		alphaGen vertex
 	}
 }
-
 
 spraylogos/18_padbunny
 {
@@ -189,7 +188,6 @@ spraylogos/18_padbunny
 	}
 }
 
-
 spraylogos/19_ankh
 {
 	nopicmip
@@ -200,7 +198,6 @@ spraylogos/19_ankh
 		alphaGen vertex
 	}
 }
-
 
 spraylogos/20_anarchie
 {
@@ -213,7 +210,6 @@ spraylogos/20_anarchie
 	}
 }
 
-
 spraylogos/21_apple
 {
 	nopicmip
@@ -224,7 +220,6 @@ spraylogos/21_apple
 		alphaGen vertex
 	}
 }
-
 
 spraylogos/22_lips
 {
@@ -248,7 +243,6 @@ spraylogos/23_alien
 	}
 }
 
-
 spraylogos/24_hand
 {
 	nopicmip
@@ -259,7 +253,6 @@ spraylogos/24_hand
 		alphaGen vertex
 	}
 }
-
 
 spraylogos/25_hairspray
 {
@@ -272,7 +265,6 @@ spraylogos/25_hairspray
 	}
 }
 
-
 spraylogos/26_spooky
 {
 	nopicmip
@@ -283,7 +275,6 @@ spraylogos/26_spooky
 		alphaGen vertex
 	}
 }
-
 
 spraylogos/27_ugly
 {
@@ -296,7 +287,6 @@ spraylogos/27_ugly
 	}
 }
 
-
 spraylogos/28_moddb
 {
 	nopicmip
@@ -308,6 +298,16 @@ spraylogos/28_moddb
 	}
 }
 
+spraylogos/29_greensun
+{
+	nopicmip
+	{
+		map spraylogos/29_greensun
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
 
 spraylogos/30_dieselkopf
 {
@@ -320,7 +320,6 @@ spraylogos/30_dieselkopf
 	}
 }
 
-
 spraylogos/31_atom
 {
 	nopicmip
@@ -331,7 +330,6 @@ spraylogos/31_atom
 		alphaGen vertex
 	}
 }
-
 
 spraylogos/32_turtle
 {
@@ -344,7 +342,6 @@ spraylogos/32_turtle
 	}
 }
 
-
 spraylogos/33_spawnpoint
 {
 	nopicmip
@@ -355,7 +352,6 @@ spraylogos/33_spawnpoint
 		alphaGen vertex
 	}
 }
-
 
 spraylogos/34_cartridge
 {
@@ -368,7 +364,6 @@ spraylogos/34_cartridge
 	}
 }
 
-
 spraylogos/35_666
 {
 	nopicmip
@@ -379,7 +374,6 @@ spraylogos/35_666
 		alphaGen vertex
 	}
 }
-
 
 spraylogos/37_devilskull
 {
@@ -392,7 +386,6 @@ spraylogos/37_devilskull
 	}
 }
 
-
 spraylogos/38_target
 {
 	nopicmip
@@ -404,18 +397,16 @@ spraylogos/38_target
 	}
 }
 
-
-spraylogos/39_greensun
+spraylogos/39_modio
 {
 	nopicmip
 	{
-		map spraylogos/39_greensun
+		map spraylogos/39_modio
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
 	}
 }
-
 
 spraylogos/40_dog
 {
@@ -428,7 +419,6 @@ spraylogos/40_dog
 	}
 }
 
-
 spraylogos/41_water
 {
 	nopicmip
@@ -440,8 +430,6 @@ spraylogos/41_water
 	}
 }
 
-
-
 spraylogos/42_peace
 {
 	nopicmip
@@ -452,23 +440,3 @@ spraylogos/42_peace
 		alphaGen vertex
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
