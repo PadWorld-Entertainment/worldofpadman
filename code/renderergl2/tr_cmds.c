@@ -366,6 +366,11 @@ void RE_BeginFrame(stereoFrame_t stereoFrame) {
 	//
 	// gamma stuff
 	//
+	// we set the r_overBrightBits value to 0 if you also ignore the hardware gamma
+	// see https://github.com/PadWorld-Entertainment/worldofpadman/issues/115
+	if (r_ignorehwgamma->integer == 0 && r_overBrightBits->integer != 0) {
+		ri.Cvar_Set("r_overBrightBits", "0");
+	}
 	if (r_gamma->modified) {
 		r_gamma->modified = qfalse;
 
