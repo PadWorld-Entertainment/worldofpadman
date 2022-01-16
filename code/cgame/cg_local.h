@@ -649,7 +649,6 @@ typedef struct {
 
 	// attacking player
 	int attackerTime;
-	int voiceTime;
 
 	// reward medals
 	int rewardStack;
@@ -1845,6 +1844,7 @@ void trap_startCamera(int time);
 qboolean trap_getCameraInfo(int time, vec3_t *origin, vec3_t *angles);
 
 qboolean trap_GetEntityToken(char *buffer, int bufferSize);
+void trap_GetVoipTimes(int *times);
 
 void CG_ClearParticles(void);
 void CG_AddParticles(void);
