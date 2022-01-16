@@ -520,11 +520,9 @@ static float CG_DrawMessages(float y) {
 //:HERBY:ee
 
 /*
-#######################
-
-  CG_DrawServerInfos
-
-#######################
+==============
+CG_DrawServerInfos
+==============
 */
 static const char *gametype_strs[] = {
 	GAMETYPE_NAME_SHORT(GT_FFA),	   GAMETYPE_NAME_SHORT(GT_TOURNAMENT),	 GAMETYPE_NAME_SHORT(GT_SINGLE_PLAYER),
@@ -534,7 +532,6 @@ static const char *gametype_strs[] = {
 
 static float CG_DrawServerInfos(float y) {
 	const char *s;
-	//	char tmpstr[MAX_CVAR_VALUE_STRING];//256
 	int tmpi;
 	float scrollLen;
 	vec4_t tblack33 = {0.0f, 0.0f, 0.0f, 0.33f};
@@ -578,20 +575,6 @@ static float CG_DrawServerInfos(float y) {
 		if (tmpi <= 18)
 			CG_DrawStringExt(640 - xpos + 2, y, s, colorWhite, qfalse, qfalse, 8, 16, 18);
 		else {
-			/*			if(tmpi>(255-2*18)) tmpi=219;
-
-						memset(tmpstr,' ',18);
-						Q_strncpyz((tmpstr+18),s,tmpi+1);
-						memset((tmpstr+tmpi+18),' ',18);
-						tmpstr[tmpi+2*18]='\0';
-
-						tmpi=(cg.time/175)%(tmpi+18);
-
-						CG_DrawStringExt(640-xpos+2,y,tmpstr+tmpi,colorWhite,qfalse,qfalse,8,16,18);
-			*/
-
-			// scrollwidth ~> chars*8 + 2*framewidth
-			// 150 + 8*tmpi + somespace
 			DrawStringWithCutFrame(640 - ((cg.time % ((200 + 8 * tmpi) * 20)) / 20.0f), y, s, colorWhite, 8, 16,
 								   640 - xpos + 2, 0, 640 - 1, 480);
 		}
@@ -601,28 +584,18 @@ static float CG_DrawServerInfos(float y) {
 	y += 2;
 
 	y += SMALLCHAR_HEIGHT;
-	//	trap_Cvar_VariableStringBuffer("g_gametype",tmpstr,MAX_CVAR_VALUE_STRING);
 	tmpi = cgs.gametype;
 	tmpi = (tmpi < 0 || tmpi >= GT_MAX_GAME_TYPE) ? GT_MAX_GAME_TYPE : tmpi;
 	CG_DrawStringExt(640 - xpos + 2, y, va("gametype: %s", gametype_strs[tmpi]), colorWhite, qfalse, qfalse, 8, 16, 18);
 
 	y += SMALLCHAR_HEIGHT;
-	//	trap_Cvar_VariableStringBuffer("mapname",tmpstr,MAX_CVAR_VALUE_STRING);//<-- geht scheinbar nur local o_O
 	scrollLen = tmpi = strlen(cgs.shortmapname) - 13;
-	/*	if(tmpi>0)
-			tmpi=(int)( (float)(tmpi)*(0.5f+0.5f*sin(0.01f/scrollLen*cg.time)) );
-		else
-			tmpi=0;
-		CG_DrawStringExt(640-xpos+2,y,va("map: ^5%-13s", (cgs.shortmapname+tmpi)),colorWhite,qfalse,qfalse,8,16,18);
-	*/
 	CG_DrawStringExt(640 - xpos + 2, y, "map: ", colorWhite, qfalse, qfalse, 8, 16, 18);
 	if (scrollLen > 0)
 		DrawStringWithCutFrame(640 - xpos + 45 - (8 * scrollLen * (0.5f + 0.5f * sin(0.01f / scrollLen * cg.time))), y,
 							   cgs.shortmapname, colorCyan, 8, 16, 640 - xpos + 8 * 5, 0, 640 - 1, 480);
 	else
 		CG_DrawStringExt(640 - xpos + 42, y, cgs.shortmapname, colorCyan, qfalse, qfalse, 8, 16, 18);
-
-	//	trap_Cvar_VariableStringBuffer("pointlimit",tmpstr,MAX_CVAR_VALUE_STRING);
 
 	if ((cgs.gametype != GT_LPS) || (cgs.lpsflags & LPSF_PPOINTLIMIT)) {
 		y += SMALLCHAR_HEIGHT;
@@ -637,7 +610,6 @@ static float CG_DrawServerInfos(float y) {
 	}
 
 	y += SMALLCHAR_HEIGHT;
-	//	trap_Cvar_VariableStringBuffer("timelimit",tmpstr,MAX_CVAR_VALUE_STRING);
 	CG_DrawStringExt(640 - xpos + 2, y, va("timelimit: ^2%i", cgs.timelimit), colorWhite, qfalse, qfalse, 8, 16, 18);
 
 	return y + SMALLCHAR_HEIGHT + 2;
@@ -645,7 +617,6 @@ static float CG_DrawServerInfos(float y) {
 
 static float CG_DrawBotInfo(float y_in) {
 	const char *info;
-	// char	key[MAX_INFO_KEY];
 	char value[MAX_INFO_VALUE];
 	int width, x, y;
 
@@ -686,7 +657,7 @@ static void CG_WoPTeamOverlay(void) {
 	int i, j;
 	int slotID;
 	int maxSlots;
-	float itemh; // old/test: = (WOPTEAMOVERLAY_H-WOPTOL_HSPLIT*(cnt-1))/cnt;
+	float itemh;
 	vec4_t hcolor;
 	const char *loc;
 	qboolean withLocLine = qfalse;
@@ -719,7 +690,7 @@ static void CG_WoPTeamOverlay(void) {
 		hcolor[1] = 0.0f;
 		hcolor[2] = 0.0f;
 		hcolor[3] = 0.33f;
-	} else { // if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE )
+	} else {
 		hcolor[0] = 0.0f;
 		hcolor[1] = 0.0f;
 		hcolor[2] = 1.0f;
@@ -869,7 +840,6 @@ static float CG_DrawVoiceNames(float y) {
 /*
 =====================
 CG_DrawUpperRight
-
 =====================
 */
 static void CG_DrawUpperRight(stereoFrame_t stereoFrame) {
@@ -1145,8 +1115,8 @@ static void CG_DrawTeamInfo(void) {
 	vec4_t hcolor;
 	int chatHeight;
 
-#define CHATLOC_Y 360 // bottom end
-#define CHATLOC_X 0
+	const float CHATLOC_Y = 360.0f; // bottom end
+	const float CHATLOC_X = 0.0f;
 
 	if (cg_teamChatHeight.integer < TEAMCHAT_HEIGHT)
 		chatHeight = cg_teamChatHeight.integer;
@@ -1179,10 +1149,6 @@ static void CG_DrawTeamInfo(void) {
 			hcolor[3] = 0.33f;
 		}
 
-		/*		trap_R_SetColor( hcolor );
-				CG_DrawPic( CHATLOC_X, CHATLOC_Y - h, 640, h, cgs.media.teamStatusBar );
-				trap_R_SetColor( NULL );
-		*/
 		CG_FillRect(CHATLOC_X, CHATLOC_Y - h, 640, h, hcolor);
 
 		hcolor[0] = hcolor[1] = hcolor[2] = 1.0f;
@@ -1222,8 +1188,7 @@ static void CG_DrawReward(void) {
 			cg.rewardTime = cg.time;
 			cg.rewardStack--;
 			color = CG_FadeColor(cg.rewardTime, REWARD_TIME);
-			if (cg.rewardSound[0] !=
-				cgs.media.impressiveSound) // etwas umstaendlich (aber so braucht man wenig neuen src ;)
+			if (cg.rewardSound[0] != cgs.media.impressiveSound) // little bit awkward but needs less new code
 				trap_S_StartLocalSound(cg.rewardSound[0], CHAN_ANNOUNCER);
 		} else {
 			return;
@@ -1231,21 +1196,6 @@ static void CG_DrawReward(void) {
 	}
 
 	trap_R_SetColor(color);
-
-	/*
-	count = cg.rewardCount[0]/10;				// number of big rewards to draw
-
-	if (count) {
-		y = 4;
-		x = 320 - count * ICON_SIZE;
-		for ( i = 0 ; i < count ; i++ ) {
-			CG_DrawPic( x, y, (ICON_SIZE*2)-4, (ICON_SIZE*2)-4, cg.rewardShader[0] );
-			x += (ICON_SIZE*2);
-		}
-	}
-
-	count = cg.rewardCount[0] - count*10;		// number of small rewards to draw
-	*/
 
 	if (cg.rewardCount[0] >= 10) {
 		y = 56;
@@ -1255,7 +1205,6 @@ static void CG_DrawReward(void) {
 		x = (SCREEN_WIDTH - SMALLCHAR_WIDTH * CG_DrawStrlen(buf)) / 2;
 		CG_DrawStringExt(x, y + ICON_SIZE, buf, color, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 	} else {
-
 		count = cg.rewardCount[0];
 
 		y = 56;
@@ -1937,7 +1886,7 @@ static qboolean CG_DrawFollow(void) {
 
 	name = cgs.clientinfo[cg.snap->ps.clientNum].name;
 
-	x = 0.5 * (640 - 16 * CG_DrawStrlen(name));
+	x = 0.5f * (float)(640 - 16 * CG_DrawStrlen(name));
 
 	CG_DrawStringExt(x, 40, name, color, qtrue, qtrue, 16, 32, 0);
 
@@ -2180,8 +2129,7 @@ static void CG_GetBalloonColor(int index, vec4_t color) {
 	static const vec4_t blue = {0.0f, 0.0f, 1.0f, 1.0f};
 	static const vec4_t white = {1.0f, 1.0f, 1.0f, 1.0f};
 	static const vec4_t yellow = {1.0f, 0.9f, 0.1f, 1.0f};
-	// FIXME: Make this buffer safe
-	char status = cgs.balloonState[index];
+	char status = (index >= 0 && index < MAX_BALLOONS) ? cgs.balloonState[index] : '\0';
 
 	switch (status) {
 	case '0':
@@ -2206,7 +2154,7 @@ static void CG_GetBalloonColor(int index, vec4_t color) {
 		return;
 	}
 
-	if (((cg.time / 400) & 1) && ((('a' + TEAM_RED - 1) == status) || (('a' + TEAM_BLUE - 1) == status))) {
+	if (((cg.time / 400) & 1) && (('a' + TEAM_RED - 1) == status || ('a' + TEAM_BLUE - 1) == status)) {
 		// flicker if not fully captured
 		Vector4Copy(white, color);
 	}
@@ -2363,8 +2311,8 @@ static void CG_FreezeTagThawerProgressBar(void) {
 	int segmentwidth = 10;
 	int distance = 5;
 
-	vec4_t blue = {0.75f, 0.75f, 0.75f, 1.0f};
-	vec4_t orange = {0.75f, 0.0f, 0.0f, 1.0f};
+	static const vec4_t blue = {0.75f, 0.75f, 0.75f, 1.0f};
+	static const vec4_t orange = {0.75f, 0.0f, 0.0f, 1.0f};
 	int i;
 
 	x = cg_ft_thawerIconX.integer;
@@ -2402,8 +2350,8 @@ static void CG_FreezeTagFrozen(void) {
 	vec4_t teamcolor;
 	const char *message;
 
-	vec4_t blue = {0.75f, 0.75f, 0.75f, 1.0f};
-	vec4_t orange = {0.75f, 0.0f, 0.0f, 1.0f};
+	static const vec4_t blue = {0.75f, 0.75f, 0.75f, 1.0f};
+	static const vec4_t orange = {0.75f, 0.0f, 0.0f, 1.0f};
 	int i;
 
 	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
@@ -3141,6 +3089,7 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 	int ltiT, waterTime;
 	int notifytime;
 	int chatHeight;
+	int WETSCREEN_FADETIME = 3000;
 
 	// optionally draw the info screen instead
 	if (!cg.snap) {
@@ -3275,7 +3224,6 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 
 	ltiT = cgs.clientinfo[cg.snap->ps.clientNum].lastTeleInTime;
 	waterTime = cgs.clientinfo[cg.snap->ps.clientNum].lastWaterClearTime;
-#define WETSCREEN_FADETIME 3000 // hm.. where could this go.. :X
 
 	// teleport effect
 	if (!cg.renderingThirdPerson && !(cg.snap->ps.eFlags & EF_DEAD) && ltiT && cg.time - ltiT < 500) {
@@ -3361,10 +3309,10 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 
 				// skip inital messages
 				if (cg.chatmsgtime[i] && (cg.time - cg.chatmsgtime[i]) < (notifytime * 1000)) {
-#define CHAT_ICONSIZE 14
-#define CHAT_PADDING 1
-#define CHAT_CHARHEIGHT (CHAT_ICONSIZE - (2 * CHAT_PADDING))
-#define CHAT_CHARWIDTH (CHAT_CHARHEIGHT / 2)
+					const float CHAT_ICONSIZE = 14;
+					const float CHAT_PADDING = 1;
+					const float CHAT_CHARHEIGHT = (CHAT_ICONSIZE - (2 * CHAT_PADDING));
+					const float CHAT_CHARWIDTH = (CHAT_CHARHEIGHT / 2);
 					if (cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) {
 						CG_DrawPic(CHAT_PADDING, (j * CHAT_ICONSIZE), CHAT_ICONSIZE, CHAT_ICONSIZE, cg.chaticons[i]);
 					}
