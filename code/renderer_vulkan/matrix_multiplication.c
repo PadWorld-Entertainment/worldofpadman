@@ -53,11 +53,11 @@ float VectorLen(const float v[3]) {
 }
 
 void Mat4Identity(float out[16]) {
-	memcpy(out, s_Identity4x4, 64);
+	Com_Memcpy(out, s_Identity4x4, sizeof(s_Identity4x4));
 }
 
 void Mat4Translation(float vec[3], float out[16]) {
-	memcpy(out, s_Identity4x4, 64);
+	Com_Memcpy(out, s_Identity4x4, sizeof(s_Identity4x4));
 
 	out[12] = vec[0];
 	out[13] = vec[1];

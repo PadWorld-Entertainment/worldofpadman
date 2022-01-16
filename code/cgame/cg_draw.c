@@ -3490,7 +3490,7 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 		int noprint = CG_GetCvarInt("cl_noprint");
 		// needed to calculate properly
 		notifytime *= -1;
-		// limiting max chat massages to cg_chatheight cvar
+		// limiting max chat messages to cg_chatheight cvar
 		if (cg_chatHeight.integer < MAX_CHATMESSAGES) {
 			chatHeight = abs(cg_chatHeight.integer);
 		} else {
