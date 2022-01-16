@@ -13,6 +13,7 @@
 !define MUI_UNICON "@ROOT_DIR@\misc\unwop.ico"
 !define FILENAME "${SHORTNAME}-${VERSION}-full-installer.exe"
 !define SRC "@ROOT_DIR@"
+!define BUILD "@CMAKE_BINARY_DIR@"
 !define SPLPIC "@CMAKE_CURRENT_SOURCE_DIR@\setup.bmp"
 !define BGPIC "@CMAKE_CURRENT_SOURCE_DIR@\screen.bmp"
 !define SIDEPIC "@CMAKE_CURRENT_SOURCE_DIR@\index.bmp"
@@ -158,7 +159,9 @@ Section $(NAME_Section1) Section1
     SetOverwrite on
 
     SetOutPath "$INSTDIR"
-    File /r "${SRC}\wop"
+    File "${BUILD}\wop\*.pk3"
+    File "${SRC}\wop\*.cfg"
+    File "${BUILD}\xmas\*.pk3"
     File /r "${SRC}\XTRAS"
     File "${SRC}\renderer_opengl1_x86_64.dll"
     File "${SRC}\renderer_opengl2_x86_64.dll"
