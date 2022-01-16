@@ -3501,6 +3501,7 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 			int i = cg.lastchatmsg;
 			int j = 0;
 
+			// TODO: chatHeight should be used here!
 			do {
 				i++;
 				if (i >= MAX_CHATMESSAGES) {
