@@ -2792,226 +2792,244 @@ static void CG_DrawEntityIcons(void) {
 }
 
 static void CG_DrawSprayYourColor(int team, int hudnum) {
-	if ((cgs.gametype == GT_SPRAY || cgs.gametype == GT_SPRAYFFA) && team != TEAM_SPECTATOR) {
-		float x = 548 + 16;
-		float y = 367 + 58;
-		float w = 54;
-		float h = 54;
-		vec3_t tmporigin, tmpangles;
-		int carts;
+	float x = 548 + 16;
+	float y = 367 + 58;
+	float w = 54;
+	float h = 54;
+	vec3_t tmporigin, tmpangles;
+	int carts;
 
-		tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
-
-		tmporigin[0] = 70;
-		//			tmpangles[1] = (float)( cg.time & 3999 ) * 0.09f;// 360/4000=0.09...//( cg.time & 2047 ) * 360 /
-		// 2048.0f;
-		tmpangles[1] = (float)(cg.time) * 0.09f;
-
-		if (team == TEAM_BLUE)
-			CG_Draw3DModel(x, y, w, h, cg_items[cgs.media.blueCartridgeEntNum].models[0], 0, tmporigin, tmpangles,
-							1.0f, NULL);
-		else if (team == TEAM_RED)
-			CG_Draw3DModel(x, y, w, h, cg_items[cgs.media.redCartridgeEntNum].models[0], 0, tmporigin, tmpangles,
-							1.0f, NULL);
-		else
-			CG_Draw3DModel(x, y, w, h, cg_items[cgs.media.neutralCartridgeEntNum].models[0], 0, tmporigin,
-							tmpangles, 1.0f, NULL);
-
-		x = 548;
-		y = 367;
-		w = 92;
-		h = 113;
-		CG_AdjustFrom640(&x, &y, &w, &h);
-		trap_R_DrawStretchPic(x, y, w, h, 0, 0, 1, 1, cgs.media.hud_br[hudnum]);
-
-		carts = cg.snap->ps.ammo[WP_SPRAYPISTOL];
-
-		CG_DrawPic(548 + 78, 367 + 15, 9, 9, carts > 0 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-		CG_DrawPic(548 + 78, 367 + 26, 9, 9, carts > 1 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-		CG_DrawPic(548 + 78, 367 + 38, 9, 9, carts > 2 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-		CG_DrawPic(548 + 78, 367 + 49, 9, 9, carts > 3 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-
-		CG_DrawPic(548 + 78, 367 + 60, 9, 9, carts > 4 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-		CG_DrawPic(548 + 78, 367 + 72, 9, 9, carts > 5 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-		CG_DrawPic(548 + 78, 367 + 83, 9, 9, carts > 6 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-		CG_DrawPic(548 + 78, 367 + 94, 9, 9, carts > 7 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	if (team == TEAM_SPECTATOR) {
+		return;
 	}
+	if (cgs.gametype != GT_SPRAY && cgs.gametype != GT_SPRAYFFA) {
+		return;
+	}
+
+	tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
+
+	tmporigin[0] = 70;
+	tmpangles[1] = (float)(cg.time) * 0.09f;
+
+	if (team == TEAM_BLUE)
+		CG_Draw3DModel(x, y, w, h, cg_items[cgs.media.blueCartridgeEntNum].models[0], 0, tmporigin, tmpangles,
+						1.0f, NULL);
+	else if (team == TEAM_RED)
+		CG_Draw3DModel(x, y, w, h, cg_items[cgs.media.redCartridgeEntNum].models[0], 0, tmporigin, tmpangles,
+						1.0f, NULL);
+	else
+		CG_Draw3DModel(x, y, w, h, cg_items[cgs.media.neutralCartridgeEntNum].models[0], 0, tmporigin,
+						tmpangles, 1.0f, NULL);
+
+	x = 548;
+	y = 367;
+	w = 92;
+	h = 113;
+	CG_AdjustFrom640(&x, &y, &w, &h);
+	trap_R_DrawStretchPic(x, y, w, h, 0, 0, 1, 1, cgs.media.hud_br[hudnum]);
+
+	carts = cg.snap->ps.ammo[WP_SPRAYPISTOL];
+
+	CG_DrawPic(548 + 78, 367 + 15, 9, 9, carts > 0 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(548 + 78, 367 + 26, 9, 9, carts > 1 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(548 + 78, 367 + 38, 9, 9, carts > 2 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(548 + 78, 367 + 49, 9, 9, carts > 3 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+
+	CG_DrawPic(548 + 78, 367 + 60, 9, 9, carts > 4 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(548 + 78, 367 + 72, 9, 9, carts > 5 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(548 + 78, 367 + 83, 9, 9, carts > 6 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(548 + 78, 367 + 94, 9, 9, carts > 7 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
 }
 
 static void CG_DrawBigBallon(int team) {
-	if (cgs.gametype == GT_BALLOON && team != TEAM_SPECTATOR) {
-		static const vec4_t yellow = {1.0f, 0.9f, 0.1f, 1.0f};
-		static const vec4_t orange = {1.0f, 0.4f, 0.1f, 1.0f};
-		vec4_t iconColor;
-		int i;
+	static const vec4_t yellow = {1.0f, 0.9f, 0.1f, 1.0f};
+	static const vec4_t orange = {1.0f, 0.4f, 0.1f, 1.0f};
+	vec4_t iconColor;
+	int i;
 
-		// draw hud icon
-		for (i = 0; i < MAX_BALLOONS; i++) {
-			CG_GetBalloonColor(i, iconColor);
-			trap_R_SetColor(iconColor);
-			CG_DrawPic((640 - 35), (480 - 34 - 36 * i), 28, 28, cgs.media.hud_balloon);
-		}
-		trap_R_SetColor(NULL);
-
-		// draw status bar
-		i = cg.predictedPlayerState.stats[STAT_BALLOONTIME];
-		if (i) {
-			if (i > 0)
-				trap_R_SetColor(yellow);
-			else {
-				i = -i;
-				trap_R_SetColor(orange);
-			}
-			if (i > 11)
-				i = 11;
-			CG_DrawPic(640 - 55, 480 - 5 - i * 3.1f, 8, i * 3.1f, cgs.media.hud_balloon_bar);
-		}
-		trap_R_SetColor(NULL);
-
-		// draw the background
-		if (team == TEAM_RED)
-			CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_red);
-		else
-			CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_blue);
+	if (team == TEAM_SPECTATOR) {
+		return;
 	}
+	if (cgs.gametype != GT_BALLOON) {
+		return;
+	}
+
+	// draw hud icon
+	for (i = 0; i < MAX_BALLOONS; i++) {
+		CG_GetBalloonColor(i, iconColor);
+		trap_R_SetColor(iconColor);
+		CG_DrawPic((640 - 35), (480 - 34 - 36 * i), 28, 28, cgs.media.hud_balloon);
+	}
+	trap_R_SetColor(NULL);
+
+	// draw status bar
+	i = cg.predictedPlayerState.stats[STAT_BALLOONTIME];
+	if (i) {
+		if (i > 0)
+			trap_R_SetColor(yellow);
+		else {
+			i = -i;
+			trap_R_SetColor(orange);
+		}
+		if (i > 11)
+			i = 11;
+		CG_DrawPic(640 - 55, 480 - 5 - i * 3.1f, 8, i * 3.1f, cgs.media.hud_balloon_bar);
+	}
+	trap_R_SetColor(NULL);
+
+	// draw the background
+	if (team == TEAM_RED)
+		CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_red);
+	else
+		CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_blue);
 }
 
 static void CG_DrawCTF(int team) {
-	if (cgs.gametype == GT_CTF && team != TEAM_SPECTATOR) {
-		// TODO: clarify whether position(red/blue) is fixed or per team?
-		//			CG_DrawFlagModel(605,375,30,30,TEAM_RED,qfalse);
+	const float CTL_BG_WIDTH = 78;
+	const float CTL_BG_HEIGHT = 115;
+	const float CTL_LOLLYMDLX = 573;
+	const float CTL_LOLLYMDLY = 427;
+	const float CTL_LOLLYMDLW = 50;
+	const float CTL_LOLLYMDLH = 50;
+	const float CTL_STATX = 610;
+	const float CTL_STATY1 = 370;
+	const float CTL_STATY2 = 402;
+	const float CTL_STATWH = 26;
 
-		//			CG_DrawFlagModel(605,445,30,30,TEAM_BLUE,qfalse);
+	if (team == TEAM_SPECTATOR) {
+		return;
+	}
+	if (cgs.gametype != GT_CTF) {
+		return;
+	}
+	// TODO: clarify whether position(red/blue) is fixed or per team?
+	//			CG_DrawFlagModel(605,375,30,30,TEAM_RED,qfalse);
+	//			CG_DrawFlagModel(605,445,30,30,TEAM_BLUE,qfalse);
 
-#define CTL_BG_WIDTH 78
-#define CTL_BG_HEIGHT 115
+	// draw the background
+	if (team == TEAM_RED) {
+		if (!cgs.media.hud_CTL_bg_red) { // keep old stuff, as fallback
+			CG_DrawPic(605, 375, 25, 25, cgs.media.redFlagShader[cgs.redflag]);
+			CG_DrawPic(605, 445, 25, 25, cgs.media.blueFlagShader[cgs.blueflag]);
 
-#define CTL_LOLLYMDLX 573
-#define CTL_LOLLYMDLY 427
-#define CTL_LOLLYMDLW 50
-#define CTL_LOLLYMDLH 50
+			if (cg.predictedPlayerState.powerups[PW_BLUEFLAG])
+				CG_DrawFlagModel(602, 407, 35, 35, TEAM_BLUE, qfalse);
 
-#define CTL_STATX 610
-#define CTL_STATY1 370
-#define CTL_STATY2 402
-#define CTL_STATWH 26
-
-		// draw the background
-		if (team == TEAM_RED) {
-			if (!cgs.media.hud_CTL_bg_red) { // keep old stuff, as fallback
-				CG_DrawPic(605, 375, 25, 25, cgs.media.redFlagShader[cgs.redflag]);
-				CG_DrawPic(605, 445, 25, 25, cgs.media.blueFlagShader[cgs.blueflag]);
-
-				if (cg.predictedPlayerState.powerups[PW_BLUEFLAG])
-					CG_DrawFlagModel(602, 407, 35, 35, TEAM_BLUE, qfalse);
-
-				CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_red);
-			} else {
-				CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[cgs.redflag]);
-				CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[cgs.blueflag]);
-
-				if (cg.predictedPlayerState.powerups[PW_BLUEFLAG])
-					CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_BLUE, qfalse);
-
-				CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT,
-							cgs.media.hud_CTL_bg_red);
-			}
+			CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_red);
 		} else {
-			if (!cgs.media.hud_CTL_bg_blue) { // keep old stuff, as fallback
-				CG_DrawPic(605, 375, 25, 25, cgs.media.blueFlagShader[cgs.blueflag]);
-				CG_DrawPic(605, 445, 25, 25, cgs.media.redFlagShader[cgs.redflag]);
+			CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[cgs.redflag]);
+			CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[cgs.blueflag]);
 
-				if (cg.predictedPlayerState.powerups[PW_REDFLAG])
-					CG_DrawFlagModel(602, 407, 35, 35, TEAM_RED, qfalse);
+			if (cg.predictedPlayerState.powerups[PW_BLUEFLAG])
+				CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_BLUE, qfalse);
 
-				CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_blue);
-			} else {
-				CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[cgs.blueflag]);
-				CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[cgs.redflag]);
+			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT,
+						cgs.media.hud_CTL_bg_red);
+		}
+	} else {
+		if (!cgs.media.hud_CTL_bg_blue) { // keep old stuff, as fallback
+			CG_DrawPic(605, 375, 25, 25, cgs.media.blueFlagShader[cgs.blueflag]);
+			CG_DrawPic(605, 445, 25, 25, cgs.media.redFlagShader[cgs.redflag]);
 
-				if (cg.predictedPlayerState.powerups[PW_REDFLAG])
-					CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_RED, qfalse);
+			if (cg.predictedPlayerState.powerups[PW_REDFLAG])
+				CG_DrawFlagModel(602, 407, 35, 35, TEAM_RED, qfalse);
 
-				CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT,
-							cgs.media.hud_CTL_bg_blue);
-			}
+			CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_blue);
+		} else {
+			CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[cgs.blueflag]);
+			CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[cgs.redflag]);
+
+			if (cg.predictedPlayerState.powerups[PW_REDFLAG])
+				CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_RED, qfalse);
+
+			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT,
+						cgs.media.hud_CTL_bg_blue);
 		}
 	}
 }
 
 static void CG_DrawLastPadStanding(void) {
-	if ((cgs.gametype == GT_LPS) && !(cgs.lpsflags & LPSF_NOARROWS) && (cg_icons.integer & ICON_ARROW)) {
-		int i;
-		int mostLives;
+	int i;
+	int mostLives;
 
-		// Since we are playing, there is at least one client
-		mostLives = cg.scores[0].livesleft;
-		// With LPSF_PPOINTLIMIT, first players are those
-		// with highest score ( from previous rounds ).
-		// Thus we need to iterate through all scores
-		// to find the current highest number of lives.
-		// TODO: Use lpsIconLead for the one with most lives as well?
-		if (cgs.lpsflags & LPSF_PPOINTLIMIT) {
-			for (i = 0; i < cg.numScores; i++) {
-				if (cg.scores[i].livesleft > mostLives) {
-					mostLives = cg.scores[i].livesleft;
-				}
+	if ((cg_icons.integer & ICON_ARROW) == 0) {
+		return;
+	}
+	if ((cgs.lpsflags & LPSF_NOARROWS)) {
+		return;
+	}
+
+	if (cgs.gametype != GT_LPS) {
+		return;
+	}
+
+	// Since we are playing, there is at least one client
+	mostLives = cg.scores[0].livesleft;
+	// With LPSF_PPOINTLIMIT, first players are those
+	// with highest score ( from previous rounds ).
+	// Thus we need to iterate through all scores
+	// to find the current highest number of lives.
+	// TODO: Use lpsIconLead for the one with most lives as well?
+	if (cgs.lpsflags & LPSF_PPOINTLIMIT) {
+		for (i = 0; i < cg.numScores; i++) {
+			if (cg.scores[i].livesleft > mostLives) {
+				mostLives = cg.scores[i].livesleft;
 			}
 		}
+	}
 
-		for (i = 0; i < cg.numScores; i++) {
-			score_t *score = &cg.scores[i];
-			clientInfo_t *ci = &cgs.clientinfo[score->client];
-			vec4_t strColor = {1.0, 1.0, 1.0, 1.0};
+	for (i = 0; i < cg.numScores; i++) {
+		score_t *score = &cg.scores[i];
+		clientInfo_t *ci = &cgs.clientinfo[score->client];
+		vec4_t strColor = {1.0, 1.0, 1.0, 1.0};
 
-			// FIXME: Magical constants!
-			if ((ci->lastPosSaveTime > 0) && ((cg.time - ci->lastPosSaveTime) < 1500)) {
-				float x, y;
-				float squaredDistance;
+		// FIXME: Magical constants!
+		if ((ci->lastPosSaveTime > 0) && ((cg.time - ci->lastPosSaveTime) < 1500)) {
+			float x, y;
+			float squaredDistance;
 
-				// fading out, if the player disappeared
-				strColor[3] = ((1500 - (cg.time - ci->lastPosSaveTime)) / 1000);
+			// fading out, if the player disappeared
+			strColor[3] = ((1500 - (cg.time - ci->lastPosSaveTime)) / 1000);
+			if (strColor[3] > 1.0) {
+				strColor[3] = 1.0;
+			} else if (strColor[3] < 0.0) {
+				strColor[3] = 0.0;
+			}
+
+			// FIXME: Remove cg_LPSwallhackAlpha
+			strColor[3] *= cg_LPSwallhackAlpha.value;
+
+			// FIXME: Calculate_2DOf3D is more than ugly!
+			squaredDistance = Calculate_2DOf3D(ci->curPos, &cg.refdef, &x, &y);
+			if (squaredDistance) {
+				float size;
+
+				size = (1 / (sqrt(squaredDistance) * 0.002));
+				if (size > 1.0) {
+					size = 1.0;
+				} else if (size < 0.5) {
+					size = 0.5;
+				}
+
+				// FIXME: Remove cg_LPSwallhackSize
+				size *= cg_LPSwallhackSize.value;
+
+				strColor[3] *= (0.3 + 0.7 * (1 / (1 + squaredDistance * 0.000004)));
 				if (strColor[3] > 1.0) {
 					strColor[3] = 1.0;
-				} else if (strColor[3] < 0.0) {
-					strColor[3] = 0.0;
 				}
 
-				// FIXME: Remove cg_LPSwallhackAlpha
-				strColor[3] *= cg_LPSwallhackAlpha.value;
+				trap_R_SetColor(strColor);
 
-				// FIXME: Calculate_2DOf3D is more than ugly!
-				squaredDistance = Calculate_2DOf3D(ci->curPos, &cg.refdef, &x, &y);
-				if (squaredDistance) {
-					float size;
-
-					size = (1 / (sqrt(squaredDistance) * 0.002));
-					if (size > 1.0) {
-						size = 1.0;
-					} else if (size < 0.5) {
-						size = 0.5;
-					}
-
-					// FIXME: Remove cg_LPSwallhackSize
-					size *= cg_LPSwallhackSize.value;
-
-					strColor[3] *= (0.3 + 0.7 * (1 / (1 + squaredDistance * 0.000004)));
-					if (strColor[3] > 1.0) {
-						strColor[3] = 1.0;
-					}
-
-					trap_R_SetColor(strColor);
-
-					if (score->livesleft < mostLives) {
-						CG_DrawPic((x - 16.0 * size), (y - 16.0 * size), (32.0 * size), (32.0 * size),
-									cgs.media.lpsIcon);
-					} else {
-						CG_DrawPic((x - 16.0 * size), (y - 16.0 * size), (32.0 * size), (32.0 * size),
-									cgs.media.lpsIconLead);
-					}
-
-					trap_R_SetColor(NULL);
+				if (score->livesleft < mostLives) {
+					CG_DrawPic((x - 16.0 * size), (y - 16.0 * size), (32.0 * size), (32.0 * size),
+								cgs.media.lpsIcon);
+				} else {
+					CG_DrawPic((x - 16.0 * size), (y - 16.0 * size), (32.0 * size), (32.0 * size),
+								cgs.media.lpsIconLead);
 				}
+
+				trap_R_SetColor(NULL);
 			}
 		}
 	}
