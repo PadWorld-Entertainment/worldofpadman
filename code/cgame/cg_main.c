@@ -92,6 +92,8 @@ vmCvar_t cg_drawFPS;
 vmCvar_t cg_drawSnapshot;
 vmCvar_t cg_draw3dIcons;
 vmCvar_t cg_drawIcons;
+vmCvar_t cg_mapInfoTime;
+vmCvar_t cg_showMapInfo;
 vmCvar_t cg_drawAmmoWarning;
 vmCvar_t cg_drawCrosshair;
 vmCvar_t cg_drawCrosshairNames;
@@ -227,6 +229,8 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_drawSnapshot, "cg_drawSnapshot", "0", CVAR_ARCHIVE},
 	{&cg_draw3dIcons, "cg_draw3dIcons", "1", CVAR_ARCHIVE},
 	{&cg_drawIcons, "cg_drawIcons", "1", CVAR_ARCHIVE},
+	{&cg_mapInfoTime, "cg_mapinfotime", "8000", CVAR_ARCHIVE},
+	{&cg_showMapInfo, "cg_showmapinfo", "1", CVAR_ARCHIVE},
 	{&cg_drawAmmoWarning, "cg_drawAmmoWarning", "1", CVAR_ARCHIVE},
 	{&cg_drawAttacker, "cg_drawAttacker", "1", CVAR_ARCHIVE},
 	{&cg_drawCrosshair, "cg_drawCrosshair", "1", CVAR_ARCHIVE},
