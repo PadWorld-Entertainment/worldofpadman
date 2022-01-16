@@ -2680,7 +2680,7 @@ static void CG_DrawBigBallon(int team) {
 		CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_blue);
 }
 
-static void CG_DrawCTF(int team) {
+static void CG_DrawCaptureTheLolly(int team) {
 	const float CTL_BG_WIDTH = 78;
 	const float CTL_BG_HEIGHT = 115;
 	const float CTL_LOLLYMDLX = 573;
@@ -2937,7 +2937,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	CG_DrawEntityIcons();
 	CG_DrawSprayYourColorCartridges(team, hudnum);
 	CG_DrawBigBallon(team);
-	CG_DrawCTF(team);
+	CG_DrawCaptureTheLolly(team);
 	CG_DrawLastPadStanding();
 
 	cg.scoreBoardShowing = CG_DrawScoreboard();
