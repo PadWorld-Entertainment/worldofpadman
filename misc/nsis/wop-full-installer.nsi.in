@@ -1,24 +1,23 @@
 # WoP NSIS Installer
 !verbose 3
 
-
 # General definitions
-!define VERSION "1.6.2"
-!define PRODUCTNAME "World of Padman"
+!define VERSION "@PROJECT_VERSION@"
+!define PRODUCTNAME "@PROJECT_NAME@"
 !define SHORTNAME "wop"
 !define COMPANY "Padworld Entertainment"
 !define URL "https://www.worldofpadman.net"
 !define REGKEY "SOFTWARE\${COMPANY}\${PRODUCTNAME} ${VERSION}"
 !define UNREGKEY "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCTNAME} ${VERSION}"
-!define MUI_ICON "c:\Users\Kai\Documents\World of Padman\Installer\wop.ico"
-!define MUI_UNICON "c:\Users\Kai\Documents\World of Padman\Installer\unwop.ico"
+!define MUI_ICON "@ROOT_DIR@\misc\wop.ico"
+!define MUI_UNICON "@ROOT_DIR@\misc\unwop.ico"
 !define FILENAME "${SHORTNAME}-${VERSION}-full-installer.exe"
-!define SRC "c:\Users\Kai\Documents\World of Padman\Installer\wop-content"
-!define SPLPIC "c:\Users\Kai\Documents\World of Padman\Installer\setup.bmp"
-!define BGPIC "c:\Users\Kai\Documents\World of Padman\Installer\screen.bmp"
-!define SIDEPIC "c:\Users\Kai\Documents\World of Padman\Installer\index.bmp"
-!define HEADPIC "c:\Users\Kai\Documents\World of Padman\Installer\header.bmp"
-!define EXTRASTUFF "c:\Users\Kai\Documents\World of Padman\Installer\wop-extras"
+!define SRC "@ROOT_DIR@"
+!define SPLPIC "@CMAKE_CURRENT_SOURCE_DIR@\setup.bmp"
+!define BGPIC "@CMAKE_CURRENT_SOURCE_DIR@\screen.bmp"
+!define SIDEPIC "@CMAKE_CURRENT_SOURCE_DIR@\index.bmp"
+!define HEADPIC "@CMAKE_CURRENT_SOURCE_DIR@\header.bmp"
+!define EXTRASTUFF "@ROOT_DIR@/XTRAS"
 
 
 # Installer attributes
@@ -28,6 +27,7 @@ InstallDir "$PROGRAMFILES64\${COMPANY}\${PRODUCTNAME} ${VERSION}"
 SetCompressor /SOLID zlib
 CRCCheck on
 XPStyle on
+Unicode True
 ShowInstDetails hide
 ShowUninstDetails hide
 InstallDirRegKey HKLM "${REGKEY}" Path
@@ -139,7 +139,7 @@ VIAddVersionKey /LANG=${LANG_GERMAN} CompanyName "${COMPANY}"
 VIAddVersionKey /LANG=${LANG_GERMAN} CompanyWebsite "${URL}"
 VIAddVersionKey /LANG=${LANG_GERMAN} FileVersion "${VERSION}"
 VIAddVersionKey /LANG=${LANG_GERMAN} FileDescription "${SHORTNAME}-${VERSION} Installer"
-VIAddVersionKey /LANG=${LANG_GERMAN} LegalCopyright "© ${COMPANY}"
+VIAddVersionKey /LANG=${LANG_GERMAN} LegalCopyright "Â© ${COMPANY}"
 VIAddVersionKey /LANG=${LANG_GERMAN} OriginalFilename "${FILENAME}"
 
 VIAddVersionKey /LANG=${LANG_ENGLISH} ProductName "${PRODUCTNAME}"
@@ -148,7 +148,7 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} CompanyName "${COMPANY}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} CompanyWebsite "${URL}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} FileVersion "${VERSION}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} FileDescription "${SHORTNAME}-${VERSION} Installer"
-VIAddVersionKey /LANG=${LANG_ENGLISH} LegalCopyright "© ${COMPANY}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} LegalCopyright "Â© ${COMPANY}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} OriginalFilename "${FILENAME}"
 
 
@@ -162,16 +162,16 @@ Section $(NAME_Section1) Section1
     File /r "${SRC}\XTRAS"
     File "${SRC}\renderer_opengl1_x86_64.dll"
     File "${SRC}\renderer_opengl2_x86_64.dll"
-#    File "${SRC}\renderer_vulkan_x86_64.dll"
+    File "${SRC}\renderer_vulkan_x86_64.dll"
     File "${SRC}\SDL2.dll"
     File "${SRC}\wop.x86_64.exe"
     File "${SRC}\wopded.x86_64.exe"
-    
+
     !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
         SetOutPath "$SMPROGRAMS\$SMGroup"
-		WriteIniStr "$SMPROGRAMS\$SMGroup\$(VisitWebsiteLink).url" "InternetShortcut" "URL" "${URL}"
-		WriteIniStr "$SMPROGRAMS\$SMGroup\$(VisitWebsiteLink).url" "InternetShortcut" "IconFile" "$INSTDIR\XTRAS\wop.ico"
-		WriteIniStr "$SMPROGRAMS\$SMGroup\$(VisitWebsiteLink).url" "InternetShortcut" "IconIndex" "0"
+        WriteIniStr "$SMPROGRAMS\$SMGroup\$(VisitWebsiteLink).url" "InternetShortcut" "URL" "${URL}"
+        WriteIniStr "$SMPROGRAMS\$SMGroup\$(VisitWebsiteLink).url" "InternetShortcut" "IconFile" "$INSTDIR\XTRAS\wop.ico"
+        WriteIniStr "$SMPROGRAMS\$SMGroup\$(VisitWebsiteLink).url" "InternetShortcut" "IconIndex" "0"
         CreateShortCut "$SMPROGRAMS\$SMGroup\$(PlayWoPLink).lnk" "$INSTDIR\wop.x86_64.exe" "" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\$(UninstallLink).lnk" "$INSTDIR\unwop.exe" "" "$INSTDIR\XTRAS\unwop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\${PRODUCTNAME} Readme.lnk" "$INSTDIR\XTRAS\readme.html" "" "$INSTDIR\XTRAS\wop.ico" 0
@@ -186,12 +186,11 @@ Section $(NAME_Section1) Section1
         CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Big Balloon Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-bigballoon.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Last Pad Standing Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-lastpadstanding.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Capture The Lolly Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-capturethelolly.cfg" "$INSTDIR\XTRAS\wop.ico" 0
-        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\All Gametypes Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-allgametypes.cfg" "$INSTDIR\XTRAS\wop.ico" 0   
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\All Gametypes Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-allgametypes.cfg" "$INSTDIR\XTRAS\wop.ico" 0
     !insertmacro MUI_STARTMENU_WRITE_END
-    
+
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd
-
 
 # Linux engine and program libraries
 Section /o $(NAME_Section2) Section2
@@ -201,7 +200,7 @@ Section /o $(NAME_Section2) Section2
     File "${SRC}\wopded-linux.x86_64"
     File "${SRC}\renderer_opengl1_x86_64.so"
     File "${SRC}\renderer_opengl2_x86_64.so"
-#    File "${SRC}\renderer_vulkan_x86_64.so"
+    File "${SRC}\renderer_vulkan_x86_64.so"
 SectionEnd
 
 
@@ -214,7 +213,7 @@ Section /o $(NAME_Section3) Section3
     File "${SRC}\wopded-osx.x86_64"
     File "${SRC}\renderer_opengl1_x86_64.dylib"
     File "${SRC}\renderer_opengl2_x86_64.dylib"
-#    File "${SRC}\renderer_vulkan_x86_64.dylib"
+    File "${SRC}\renderer_vulkan_x86_64.dylib"
 SectionEnd
 
 
@@ -314,21 +313,21 @@ Section /o -un.Main UNSEC0000
     Delete /REBOOTOK "$INSTDIR\SDL2.dll"
     Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.dll"
     Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.dll"
-#    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.dll"
+    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.dll"
     # linux
     Delete /REBOOTOK "$INSTDIR\wop-linux.x86_64"
     Delete /REBOOTOK "$INSTDIR\wopded-linux.x86_64"
     Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.so"
     Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.so"
-#    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.so"
+    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.so"
     # mac
     Delete /REBOOTOK "$INSTDIR\wop-osx.x86_64"
     Delete /REBOOTOK "$INSTDIR\wopded-osx.x86_64"
     Delete /REBOOTOK "$INSTDIR\libSDL2-2.0.0.dylib"
     Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.dylib"
     Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.dylib"
-#    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.dylib"
-   
+    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.dylib"
+
 SectionEnd
 
 # delete firewall-rules, registry-keys and shortcuts
@@ -365,11 +364,11 @@ SectionEnd
 
 # splash-screen, language-select
 Function .onInit
-	${IfNot} ${RunningX64}
-		MessageBox MB_OK|MB_ICONSTOP "$(WINCHECK64)"
-		Abort
-	${EndIf}
-	InitPluginsDir
+    ${IfNot} ${RunningX64}
+        MessageBox MB_OK|MB_ICONSTOP "$(WINCHECK64)"
+        Abort
+    ${EndIf}
+    InitPluginsDir
     Push $R1
     File "/oname=$PLUGINSDIR\spltmp.bmp" "${SPLPIC}"
     advsplash::show 1500 1000 1000 -1 "$PLUGINSDIR\spltmp" # no .bmp extension here!
@@ -486,19 +485,19 @@ LangString PlayWoPLink ${LANG_GERMAN} "${PRODUCTNAME} ${VERSION} spielen"
 LangString NAME_Section1 ${LANG_GERMAN} "${PRODUCTNAME} Programmateien"
 LangString DESC_Section1 ${LANG_GERMAN} "Installiert alle notwendigen Dateien um ${PRODUCTNAME} zu spielen."
 LangString NAME_Section2 ${LANG_GERMAN} "Linux-Dateien"
-LangString DESC_Section2 ${LANG_GERMAN} "Installiert zusätzlich Linux-Engine-Dateien und Programmbibliotheken."
+LangString DESC_Section2 ${LANG_GERMAN} "Installiert zusÃ¤tzlich Linux-Engine-Dateien und Programmbibliotheken."
 LangString NAME_Section3 ${LANG_GERMAN} "MacOS-Dateien"
-LangString DESC_Section3 ${LANG_GERMAN} "Installiert zusätzlich MacOS-Engine-Dateien und Programmbibliotheken."
+LangString DESC_Section3 ${LANG_GERMAN} "Installiert zusÃ¤tzlich MacOS-Engine-Dateien und Programmbibliotheken."
 LangString NAME_Section4 ${LANG_GERMAN} "DVD-Box-Cover"
 LangString DESC_Section4 ${LANG_GERMAN} "Legt die Grafiken zum Erstellen einer eigenen WoP-DVD-Box im Verzeichnis XTRAS ab."
 LangString NAME_Section5 ${LANG_GERMAN} "Editing-Ressourcen"
 LangString DESC_Section5 ${LANG_GERMAN} "Legt Beispielmaps, Radiant und Anpassungsdateien in XTRAS/editing-files ab."
-LangString NAME_Section6 ${LANG_GERMAN} "Zusätzliche Verknüpfungen"
-LangString DESC_Section6 ${LANG_GERMAN} "Erstellt zusätzlich eine Verknüpfung auf dem Desktop und in der Schnellstart-Leiste."
-LangString NAME_Section7 ${LANG_GERMAN} "Firewall öffnen"
-LangString DESC_Section7 ${LANG_GERMAN} "Fügt World of Padman den Windows-Firewall-Regeln hinzu, um Internet-Server erstellen zu können."
-LangString ERR_dircheck1 ${LANG_GERMAN} "Dies ist ein ungültiger Installationspfad!"
-LangString ERR_dircheck2 ${LANG_GERMAN} "Es steht nicht genügend freier Speicherplatz zur Verfügung!"
-LangString ERR_dircheck3 ${LANG_GERMAN} "Das Zielverzeichnis zur Installation existiert bereits!$\nMöchtest Du ${PRODUCTNAME} trotzdem in dieses Verzeichnis installieren?"
-LangString ERR_firewall ${LANG_GERMAN} "Der Firewall-Dienst läuft nicht!$\nEs wurden keine Änderungen vorgenommen."
+LangString NAME_Section6 ${LANG_GERMAN} "ZusÃ¤tzliche VerknÃ¼pfungen"
+LangString DESC_Section6 ${LANG_GERMAN} "Erstellt zusÃ¤tzlich eine VerknÃ¼pfung auf dem Desktop und in der Schnellstart-Leiste."
+LangString NAME_Section7 ${LANG_GERMAN} "Firewall Ã¶ffnen"
+LangString DESC_Section7 ${LANG_GERMAN} "FÃ¼gt World of Padman den Windows-Firewall-Regeln hinzu, um Internet-Server erstellen zu kÃ¶nnen."
+LangString ERR_dircheck1 ${LANG_GERMAN} "Dies ist ein ungÃ¼ltiger Installationspfad!"
+LangString ERR_dircheck2 ${LANG_GERMAN} "Es steht nicht genÃ¼gend freier Speicherplatz zur VerfÃ¼gung!"
+LangString ERR_dircheck3 ${LANG_GERMAN} "Das Zielverzeichnis zur Installation existiert bereits!$\nMÃ¶chtest Du ${PRODUCTNAME} trotzdem in dieses Verzeichnis installieren?"
+LangString ERR_firewall ${LANG_GERMAN} "Der Firewall-Dienst lÃ¤uft nicht!$\nEs wurden keine Ã„nderungen vorgenommen."
 LangString DESC_uninst ${LANG_GERMAN} "PADMAN und seine Freunde haben ihre Sachen gepackt,$\nund schweren Herzens Deinen Rechner verlassen...$\n...in der Hoffnung, Dich bald wieder zu sehen!"

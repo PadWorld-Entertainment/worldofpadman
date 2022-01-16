@@ -75,3 +75,4 @@ check_compiler_flag(-Werror-implicit-function-declaration)
 
 add_subdirectory(libs)
 add_subdirectory(code)
+add_subdirectory(misc)
