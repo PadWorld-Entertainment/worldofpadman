@@ -1683,7 +1683,7 @@ static void CG_DrawLagometer(void) {
 	trap_R_SetColor(NULL);
 
 	if (cg_nopredict.integer || cg_synchronousClients.integer) {
-		CG_DrawBigString(x, y, "snc", 1.0);
+		CG_DrawBigString(x, y, "snc", 1.0f);
 	}
 
 	CG_DrawDisconnect();
@@ -2791,7 +2791,40 @@ static void CG_DrawEntityIcons(void) {
 	}
 }
 
-static void CG_DrawSprayYourColor(int team, int hudnum) {
+static void CG_DrawSprayYourColor(void) {
+	if (((cgs.gametype == GT_SPRAYFFA) || (cgs.gametype == GT_SPRAY)) &&
+		(cg.snap->ps.stats[STAT_SPRAYROOMSECS] <= 12)) {
+		static int lastsprayroomtime = 0;
+		int tmpi;
+
+		// NOTE: STAT_SPRAYROOMSECS is ( level.maxsprayroomtime + 1 )
+
+		tmpi = cg.snap->ps.stats[STAT_SPRAYROOMSECS];
+
+		if (lastsprayroomtime != tmpi) {
+			if ((tmpi > 0) && (tmpi <= 10)) {
+				trap_S_StartLocalSound(cgs.media.CountDown_CountDown[(tmpi - 1)], CHAN_ANNOUNCER);
+			} else if (tmpi == 12) {
+				trap_S_StartLocalSound(cgs.media.CountDown_TenSecondsToLeave, CHAN_ANNOUNCER);
+			}
+
+			lastsprayroomtime = tmpi;
+		}
+
+		if ((tmpi > 0) && (tmpi <= 10)) {
+			vec4_t tmpcolor = {1.0f, 0.0f, 0.0f, 1.0f};
+
+			tmpcolor[1] = tmpcolor[2] = (float)(0.25 + (0.25 * sin(cg.time * 0.02)));
+
+			CG_DrawStringExt((320 - 64), 100, "You have", colorWhite, qtrue, qfalse, 16, 32, 0);
+			CG_DrawStringExt((320 - 8), 132, va("%i", tmpi), tmpcolor, qtrue, qfalse, 16, 32, 0);
+			CG_DrawStringExt((320 - 56), 164, "seconds", colorWhite, qtrue, qfalse, 16, 32, 0);
+			CG_DrawStringExt((320 - 144), 196, "to leave this room!", colorWhite, qtrue, qfalse, 16, 32, 0);
+		}
+	}
+}
+
+static void CG_DrawSprayYourColorCartridges(int team, int hudnum) {
 	float x = 548 + 16;
 	float y = 367 + 58;
 	float w = 54;
@@ -3002,21 +3035,19 @@ static void CG_DrawLastPadStanding(void) {
 			// FIXME: Calculate_2DOf3D is more than ugly!
 			squaredDistance = Calculate_2DOf3D(ci->curPos, &cg.refdef, &x, &y);
 			if (squaredDistance) {
-				float size;
-
-				size = (1 / (sqrt(squaredDistance) * 0.002));
-				if (size > 1.0) {
-					size = 1.0;
+				float size = (float)(1.0 / (sqrt(squaredDistance) * 0.002));
+				if (size > 1.0f) {
+					size = 1.0f;
 				} else if (size < 0.5) {
-					size = 0.5;
+					size = 0.5f;
 				}
 
 				// FIXME: Remove cg_LPSwallhackSize
 				size *= cg_LPSwallhackSize.value;
 
-				strColor[3] *= (0.3 + 0.7 * (1 / (1 + squaredDistance * 0.000004)));
-				if (strColor[3] > 1.0) {
-					strColor[3] = 1.0;
+				strColor[3] *= (float)(0.3 + 0.7 * (1 / (1 + squaredDistance * 0.000004)));
+				if (strColor[3] > 1.0f) {
+					strColor[3] = 1.0f;
 				}
 
 				trap_R_SetColor(strColor);
@@ -3061,36 +3092,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	else if (cgs.gametype == GT_LPS && cgs.clientinfo[cg.clientNum].team == TEAM_FREE)
 		CG_DrawStringExt(320 - 4 * 23, 90, "Waiting for next Round!", colorGreen, qtrue, qfalse, 8, 16, 32);
 
-	if (((cgs.gametype == GT_SPRAYFFA) || (cgs.gametype == GT_SPRAY)) &&
-		(cg.snap->ps.stats[STAT_SPRAYROOMSECS] <= 12)) {
-		static int lastsprayroomtime = 0;
-		int tmpi;
-
-		// NOTE: STAT_SPRAYROOMSECS is ( level.maxsprayroomtime + 1 )
-
-		tmpi = cg.snap->ps.stats[STAT_SPRAYROOMSECS];
-
-		if (lastsprayroomtime != tmpi) {
-			if ((tmpi > 0) && (tmpi <= 10)) {
-				trap_S_StartLocalSound(cgs.media.CountDown_CountDown[(tmpi - 1)], CHAN_ANNOUNCER);
-			} else if (tmpi == 12) {
-				trap_S_StartLocalSound(cgs.media.CountDown_TenSecondsToLeave, CHAN_ANNOUNCER);
-			}
-
-			lastsprayroomtime = tmpi;
-		}
-
-		if ((tmpi > 0) && (tmpi <= 10)) {
-			vec4_t tmpcolor = {1.0f, 0.0f, 0.0f, 1.0f};
-
-			tmpcolor[1] = tmpcolor[2] = (float)(0.25 + (0.25 * sin(cg.time * 0.02)));
-
-			CG_DrawStringExt((320 - 64), 100, "You have", colorWhite, qtrue, qfalse, 16, 32, 0);
-			CG_DrawStringExt((320 - 8), 132, va("%i", tmpi), tmpcolor, qtrue, qfalse, 16, 32, 0);
-			CG_DrawStringExt((320 - 56), 164, "seconds", colorWhite, qtrue, qfalse, 16, 32, 0);
-			CG_DrawStringExt((320 - 144), 196, "to leave this room!", colorWhite, qtrue, qfalse, 16, 32, 0);
-		}
-	}
+	CG_DrawSprayYourColor();
 
 	if (cgs.gametype >= GT_TEAM) {
 		hudnum = cg.snap->ps.persistant[PERS_TEAM];
@@ -3170,7 +3172,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	CG_HudDrawHead();
 	CG_HudDrawHealthAndArmor(hudnum);
 	CG_DrawEntityIcons();
-	CG_DrawSprayYourColor(team, hudnum);
+	CG_DrawSprayYourColorCartridges(team, hudnum);
 	CG_DrawBigBallon(team);
 	CG_DrawCTF(team);
 	CG_DrawLastPadStanding();
