@@ -542,16 +542,17 @@ static float CG_DrawServerInfos(float y) {
 	int numLines;
 
 	if (!cg_drawServerInfos.integer) {
-		if (xpos > 0)
+		if (xpos > 0) {
 			xpos -= (cg.frametime / 2);
-		else {
+		} else {
 			xpos = 0;
 			return y;
 		}
-	} else if (xpos < 150)
+	} else if (xpos < 150) {
 		xpos += (cg.frametime / 2);
-	else
+	} else {
 		xpos = 150;
+	}
 
 	s = CG_ConfigString(CS_MOTD);
 
@@ -826,23 +827,23 @@ CG_DrawTeamOverlay
 =================
 */
 
-static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
+static float CG_DrawTeamOverlay(float y, qboolean right, qboolean upper) {
 	int x, w, h, xx;
 	int i, j, len;
 	const char *p;
-	vec4_t		hcolor;
+	vec4_t hcolor;
 	int pwidth, lwidth;
 	int plyrs;
 	char st[16];
 	clientInfo_t *ci;
-	gitem_t	*item;
+	gitem_t *item;
 	int ret_y, count;
 
-	if ( !cg_drawTeamOverlay.integer ) {
+	if (!cg_drawTeamOverlay.integer) {
 		return y;
 	}
 
-	if ( cg.snap->ps.persistant[PERS_TEAM] != TEAM_RED && cg.snap->ps.persistant[PERS_TEAM] != TEAM_BLUE ) {
+	if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_RED && cg.snap->ps.persistant[PERS_TEAM] != TEAM_BLUE) {
 		return y; // Not on any team
 	}
 
@@ -853,7 +854,7 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 	count = (numSortedTeamPlayers > 8) ? 8 : numSortedTeamPlayers;
 	for (i = 0; i < count; i++) {
 		ci = cgs.clientinfo + sortedTeamPlayers[i];
-		if ( ci->infoValid && ci->team == cg.snap->ps.persistant[PERS_TEAM]) {
+		if (ci->infoValid && ci->team == cg.snap->ps.persistant[PERS_TEAM]) {
 			plyrs++;
 			len = CG_DrawStrlen(ci->name);
 			if (len > pwidth)
@@ -883,21 +884,21 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 
 	w = (pwidth + lwidth + 4 + 7) * TINYCHAR_WIDTH;
 
-	if ( right )
+	if (right)
 		x = 640 - w;
 	else
 		x = 0;
 
 	h = plyrs * TINYCHAR_HEIGHT;
 
-	if ( upper ) {
+	if (upper) {
 		ret_y = y + h;
 	} else {
 		y -= h;
 		ret_y = y;
 	}
 
-	if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED ) {
+	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
 		hcolor[0] = 1.0f;
 		hcolor[1] = 0.0f;
 		hcolor[2] = 0.0f;
@@ -908,68 +909,58 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 		hcolor[2] = 1.0f;
 		hcolor[3] = 0.33f;
 	}
-/*	trap_R_SetColor( hcolor );
-	CG_DrawPic( x, y, w, h, cgs.media.teamStatusBar );
-	trap_R_SetColor( NULL );
-*/
-	CG_FillRect(x,y,w,h,hcolor);
+	/*	trap_R_SetColor( hcolor );
+		CG_DrawPic( x, y, w, h, cgs.media.teamStatusBar );
+		trap_R_SetColor( NULL );
+	*/
+	CG_FillRect(x, y, w, h, hcolor);
 
 	for (i = 0; i < count; i++) {
 		ci = cgs.clientinfo + sortedTeamPlayers[i];
-		if ( ci->infoValid && ci->team == cg.snap->ps.persistant[PERS_TEAM]) {
+		if (ci->infoValid && ci->team == cg.snap->ps.persistant[PERS_TEAM]) {
 
 			hcolor[0] = hcolor[1] = hcolor[2] = hcolor[3] = 1.0;
 
 			xx = x + TINYCHAR_WIDTH;
 
-			CG_DrawStringExt( xx, y,
-				ci->name, hcolor, qfalse, qfalse,
-				TINYCHAR_WIDTH, TINYCHAR_HEIGHT, TEAM_OVERLAY_MAXNAME_WIDTH);
+			CG_DrawStringExt(xx, y, ci->name, hcolor, qfalse, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
+							 TEAM_OVERLAY_MAXNAME_WIDTH);
 
 			if (lwidth) {
 				p = CG_ConfigString(CS_LOCATIONS + ci->location);
 				if (!p || !*p)
 					p = "unknown";
-//				len = CG_DrawStrlen(p);
-//				if (len > lwidth)
-//					len = lwidth;
+				//				len = CG_DrawStrlen(p);
+				//				if (len > lwidth)
+				//					len = lwidth;
 
-//				xx = x + TINYCHAR_WIDTH * 2 + TINYCHAR_WIDTH * pwidth +
-//					((lwidth/2 - len/2) * TINYCHAR_WIDTH);
+				//				xx = x + TINYCHAR_WIDTH * 2 + TINYCHAR_WIDTH * pwidth +
+				//					((lwidth/2 - len/2) * TINYCHAR_WIDTH);
 				xx = x + TINYCHAR_WIDTH * 2 + TINYCHAR_WIDTH * pwidth;
-				CG_DrawStringExt( xx, y,
-					p, hcolor, qfalse, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
-					TEAM_OVERLAY_MAXLOCATION_WIDTH);
+				CG_DrawStringExt(xx, y, p, hcolor, qfalse, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
+								 TEAM_OVERLAY_MAXLOCATION_WIDTH);
 			}
 
-			CG_GetColorForHealth( ci->health, ci->armor, hcolor );
+			CG_GetColorForHealth(ci->health, ci->armor, hcolor);
 
-			Com_sprintf (st, sizeof(st), "%3i %3i", ci->health,	ci->armor);
+			Com_sprintf(st, sizeof(st), "%3i %3i", ci->health, ci->armor);
 
-			xx = x + TINYCHAR_WIDTH * 3 +
-				TINYCHAR_WIDTH * pwidth + TINYCHAR_WIDTH * lwidth;
+			xx = x + TINYCHAR_WIDTH * 3 + TINYCHAR_WIDTH * pwidth + TINYCHAR_WIDTH * lwidth;
 
-			CG_DrawStringExt( xx, y,
-				st, hcolor, qfalse, qfalse,
-				TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
+			CG_DrawStringExt(xx, y, st, hcolor, qfalse, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
 
 			// draw weapon icon
 			xx += TINYCHAR_WIDTH * 3;
 
-			if ( cg_weapons[ci->curWeapon].weaponIcon )
-			{
-				if(ci->curWeapon==WP_SPRAYPISTOL && ci->team==TEAM_BLUE)
-					CG_DrawPic( xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
-						cgs.media.blueSpraypistolicon );
-				else if(ci->curWeapon==WP_SPRAYPISTOL && ci->team==TEAM_FREE)
-					CG_DrawPic( xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
-						cgs.media.neutralSpraypistolicon );
+			if (cg_weapons[ci->curWeapon].weaponIcon) {
+				if (ci->curWeapon == WP_SPRAYPISTOL && ci->team == TEAM_BLUE)
+					CG_DrawPic(xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, cgs.media.blueSpraypistolicon);
+				else if (ci->curWeapon == WP_SPRAYPISTOL && ci->team == TEAM_FREE)
+					CG_DrawPic(xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, cgs.media.neutralSpraypistolicon);
 				else
-					CG_DrawPic( xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
-						cg_weapons[ci->curWeapon].weaponIcon );
+					CG_DrawPic(xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, cg_weapons[ci->curWeapon].weaponIcon);
 			} else {
-				CG_DrawPic( xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
-					cgs.media.deferShader );
+				CG_DrawPic(xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, cgs.media.deferShader);
 			}
 
 			// Draw powerup icons
@@ -981,11 +972,10 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 			for (j = 0; j <= PW_NUM_POWERUPS; j++) {
 				if (ci->powerups & (1 << j)) {
 
-					item = BG_FindItemForPowerup( j );
+					item = BG_FindItemForPowerup(j);
 
 					if (item) {
-						CG_DrawPic( xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT,
-						trap_R_RegisterShader( item->icon ) );
+						CG_DrawPic(xx, y, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, trap_R_RegisterShader(item->icon));
 						if (right) {
 							xx -= TINYCHAR_WIDTH;
 						} else {
@@ -1000,7 +990,6 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 	}
 
 	return ret_y;
-//#endif
 }
 #endif
 
@@ -1084,8 +1073,7 @@ static void CG_DrawUpperRight(stereoFrame_t stereoFrame) {
 	if (cg_drawTimeLeft.integer) {
 		y = CG_DrawTimeLeft(y);
 	}
-	//	if(cg_drawServerInfos.integer) // <-- moved into the function
-	{ y = CG_DrawServerInfos(y); }
+	y = CG_DrawServerInfos(y);
 	//:HERBY:ea
 	if (cg_drawMessages.integer) {
 		y = CG_DrawMessages(y);
