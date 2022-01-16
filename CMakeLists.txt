@@ -55,14 +55,37 @@ endif()
 
 add_compile_definitions(PRODUCT_VERSION="${CMAKE_PROJECT_VERSION}")
 
-macro(check_compiler_flag flag)
+function(check_compiler_flag flag)
   string(REGEX REPLACE "[-=+]" "_" _flag ${flag})
   string(TOUPPER ${_flag} _flagfinal)
   check_c_compiler_flag("${flag}" COMPILER_SUPPORTS_${_flagfinal})
   if (COMPILER_SUPPORTS_${_flagfinal})
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flag}")
   endif()
-endmacro()
+endfunction()
+
+add_custom_target(pk3)
+
+find_program(ZIP NAMES zip)
+
+function(compress_pk3 TARGET)
+  foreach (PK3DIR ${ARGN})
+    set(_dir ${PK3DIR}.pk3dir)
+    set(_file ${PK3DIR}.pk3)
+    add_custom_command(
+      OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${_file}"
+      COMMAND ${ZIP} -r9q ${CMAKE_CURRENT_BINARY_DIR}/${_file} .
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${_dir}"
+      COMMENT "Create pk3 for ${PK3DIR}"
+      VERBATIM
+    )
+    add_custom_target(pk3-${TARGET}-${PK3DIR}
+      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_file}
+      COMMENT "Generate pk3 for ${PK3DIR}"
+    )
+    add_dependencies(pk3 pk3-${TARGET}-${PK3DIR})
+  endforeach()
+endfunction()
 
 check_compiler_flag(-Wformat=2)
 check_compiler_flag(-Wno-format-zero-length)
@@ -75,4 +98,6 @@ check_compiler_flag(-Werror-implicit-function-declaration)
 
 add_subdirectory(libs)
 add_subdirectory(code)
+add_subdirectory(wop)
+add_subdirectory(xmas)
 add_subdirectory(misc)
