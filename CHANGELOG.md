@@ -3,33 +3,53 @@
 ## Version: 1.7.0 (tba.)
 
 - ADDED
-	- Freeze Tag (ft) game mode and realated assets
-	- Support for new water level 'wading' in knee deep water and footstep sounds
+	- Freeze Tag (ft) game mode and related assets
+	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
+	- Support for individual player model footsteps 'flesh' (PaddyBell and BeachPad) and 'spurs' (PadCho)
 	- Spraylogo for mod.io
+	- Lighting option to the Graphics menu to switch between Vertex and Lightmap
+	- Borderless Window Mode option to the Graphics menu
+	- Option to enable/disable Doppler Effect to the Sound menu
+	- Option to enable/disable Ingame Videos to Display menu to be able to switch off video shaders in maps
+	- Option to enable/disable Team Chats Only to Chat menu to be able hide chats of non-team players in team game modes
+	- Option to enable/disable playing the Chat Beep to Chat menu to be able switch off the squeeze toy sound for chat notifications
+	- Option to enable/disable Bots chatting or to make them chatting more often to Chat menu
+	- Option to adjust the Notification Space to 4, 6 or 8 lines in Chat menu
+	- Option to enable/disable the Lag-O-Meter to the HUD menu
+	- New cvar `cg_fovAspectAdjust` [0|1] to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 - CHANGED
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
-	- Game Options menu to three pages layout to support more options for HUD, Chat and Help
+	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions` in 6 steps (20, 12, 4, 2, 1, 0) now. New default is 4.
+	- Fullscreen option in Graphics menu to Window Mode to support new borderless window mode.
 	- Map selection/preview to cycle three ingame pictures (shader animation)
+	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options.
+	- Allocation of options Sync Every Frame, Simple Items, Marks on Walls, High Quality Sky, Sky Lens Flare, Dynamic Lights, Dynamic Flares, from Game Options menu to Display menu
+	- Game Options menu to three pages layout to support more options for HUD, Chat and Help
+	- Allocation of all wallhack icon options to new Help menu
+	- Allocation of all HUD related options to new HUD menu
+	- Chat option in Game Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately.
+	- Notification Time option in Chat menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
+	- Playersettings menu to list first all PadCharacters followed by custom player models
 - FIXED
 	- Path entry of voice chat icon
 	- Being unable to use ^ key to enter color tags
 - REMOVED
-	- Green Sun music pack (available as extra download)
+	- Green Sun music pack, will stay available as extra download
 	- ^ key to open / close the console
 	- Not used menu assets (textures)
 	- Not used roq video files
-	- Removed file suffixes from shader entries (let the engine decide)
+	- Removed file suffixes from shader entries to let the engine decide
 	- Not used and outdated BETTY explosion textures
-	- Spraylogos of dead sites and partners (Desura, PlanetQuake etc.)
+	- Spraylogos of dead sites and partners like Desura and PlanetQuake
 - UPDATED
 	- Spraylogos with HQ versions
 	- Scoreboard headers with HQ versions
 	- Menu buttons with HQ versions
 	- Footstep sounds with HQ versions
 	- Common player sounds like frying, landing, jumping in, out and under water
-	- Roq version of WoP intro in 4:3 ratio with HQ version (for in map video shader)
-	- Map selection/preview screenhots with better quality
+	- Roq version of WoP intro in 4:3 ratio with a HQ version for display in maps via video shader
+	- Map selection/preview screenshots with better quality
 	- Menu music loop with 44kHz version and slightly longer
 	- Icons for weapons, ammo, powerups, medals etc. updated with HQ versions
 
@@ -74,10 +94,10 @@
 	- Number in front of the spray logo names is skipped in the ingame menu
 	- Image loading order changed to png, tga, jpg, jpeg, pcx and bmp
 	- Joystick support improved
-	- In-game spray logo selection menu does interrupt gameplay in a local match now
+	- In-game spray logo selection menu does interrupt game play in a local match now
 	- Disabled Color Depth option when Fullscreen mode is disabled
-	- Minor adjustement of the position of the lolly icon in the HUD
-	- Minor adjustement of the position of the balloon icon in the HUD
+	- Minor adjustment of the position of the lolly icon in the HUD
+	- Minor adjustment of the position of the balloon icon in the HUD
 	- Renamed BigBalloon to Big Balloon in the game
 - FIXED
 	- Random crashes on PadTrash and PadGarden while playing online
@@ -240,7 +260,7 @@
 
 - ADDED
 	- Engine: ogm video file support
-	- Music: Some new tracks to dieselkopf albums
+	- Music: Some new tracks to Dieselkopf albums
 	- Music: PadKitchen Track to Dieselkopf Rock album
 	- Music: Painted Death by Neurological
 	- Textures: Several spelling mistakes on textures
