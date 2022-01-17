@@ -1322,7 +1322,7 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 
 	// load a few needed things before we do any screen updates
 	cgs.media.charsetShader = trap_R_RegisterShader("gfx/2d/WoPascii");
-	cgs.media.charsetProp = trap_R_RegisterShaderNoMip("menu/art/font1_prop");
+	cgs.media.charsetProp = trap_R_RegisterShaderNoMip("gfx/2d/fontmenu");
 	cgs.media.whiteShader = trap_R_RegisterShader("white");
 
 	CG_RegisterCvars();
