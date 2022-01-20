@@ -16,7 +16,7 @@
 	- Option to enable/disable Bots chatting or to make them chatting more often to Chat menu
 	- Option to adjust the Notification Space to 4, 6 or 8 lines in Chat menu
 	- Option to enable/disable the Lag-O-Meter to the HUD menu
-	- New cvar `cg_fovAspectAdjust` [0|1] to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
+	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 - CHANGED
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
@@ -30,7 +30,7 @@
 	- Allocation of all HUD related options to new HUD menu
 	- Chat option in Game Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately.
 	- Notification Time option in Chat menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
-	- Playersettings menu to list first all PadCharacters followed by custom player models
+	- Player Settings menu to list first all PadCharacters followed by custom player models
 - FIXED
 	- Path entry of voice chat icon
 	- Being unable to use ^ key to enter color tags
@@ -41,9 +41,10 @@
 	- Not used roq video files
 	- Removed file suffixes from shader entries to let the engine decide
 	- Not used and outdated BETTY explosion textures
-	- Spraylogos of dead sites and partners like Desura and PlanetQuake
+	- Spray logos of dead sites and partners like Desura and PlanetQuake
 - UPDATED
-	- Spraylogos with HQ versions
+	- UI menu font texture with HQ version
+	- Spray logos with HQ versions
 	- Scoreboard headers with HQ versions
 	- Menu buttons with HQ versions
 	- Footstep sounds with HQ versions
