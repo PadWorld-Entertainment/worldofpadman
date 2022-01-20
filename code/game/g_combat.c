@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "g_local.h"
 
 /*
-#######################
+============
 BerserkerCheck
-#######################
+============
 */
 void BerserkerCheck(gentity_t *ent) {
 	if (!ent->client)
@@ -64,7 +64,7 @@ void ScorePlum(gentity_t *ent, vec3_t origin, int score) {
 	// only send this temp entity to a single client
 	plum->r.svFlags |= SVF_SINGLECLIENT;
 	plum->r.singleClient = ent->s.number;
-	//
+
 	plum->s.otherEntityNum = ent->s.number;
 	plum->s.time = score;
 }
@@ -87,7 +87,7 @@ void AddScore(gentity_t *ent, vec3_t origin, int score, char *reason) {
 	// show score plum
 	if (score > 0) // Ente doesn't like the -1(-5) with his new pics
 		ScorePlum(ent, origin, score);
-	//
+
 	ent->client->ps.persistant[PERS_SCORE] += score;
 	if (g_gametype.integer == GT_TEAM || g_gametype.integer == GT_FREEZETAG)
 		level.teamScores[ent->client->ps.persistant[PERS_TEAM]] += score;
@@ -263,6 +263,8 @@ static const char *modNames[] = {
 	"MOD_FALLING",		   "MOD_SUICIDE", "MOD_TARGET_LASER", "MOD_TRIGGER_HURT",	 "MOD_GRAPPLE",
 
 	"MOD_BAMBAM",		   "MOD_BOOMIES"};
+
+CASSERT(ARRAY_LEN(modNames) == MOD_MEANSOFDEATH_MAX);
 
 /*
 ==================

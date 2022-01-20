@@ -459,6 +459,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 
 	static const char *gametypeNames[] = {"ffa",  "tournament", "single", "spray", "lps",
 										  "team", "freeze",		"ctl",	  "sptp",  "balloon"};
+	CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
 
 	// get the next free entity
 	ent = G_Spawn();

@@ -206,8 +206,8 @@ static void CG_Obituary(entityState_t *ent) {
 
 		if (cgs.gametype < GT_TEAM) {
 			if (cgs.gametype == GT_LPS) {
-				// bg_public.h(115):typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
 				const char *gender_strings[] = {"he", "she", "it", 0};
+				CASSERT(ARRAY_LEN(gender_strings) == GENDER_MAX + 1);
 
 				gender = ci->gender;
 				if (gender > 2 || gender < 0)

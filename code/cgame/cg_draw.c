@@ -529,6 +529,7 @@ static const char *gametype_strs[] = {
 	GAMETYPE_NAME_SHORT(GT_SPRAYFFA),  GAMETYPE_NAME_SHORT(GT_LPS),			 GAMETYPE_NAME_SHORT(GT_TEAM),
 	GAMETYPE_NAME_SHORT(GT_FREEZETAG), GAMETYPE_NAME_SHORT(GT_CTF),			 GAMETYPE_NAME_SHORT(GT_SPRAY),
 	GAMETYPE_NAME_SHORT(GT_BALLOON),   GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE)};
+CASSERT(ARRAY_LEN(gametype_strs) == GT_MAX_GAME_TYPE + 1);
 
 static float CG_DrawServerInfos(float y) {
 	const char *s;
@@ -2977,6 +2978,7 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 			GAMETYPE_NAME(GT_SPRAYFFA),	 GAMETYPE_NAME(GT_LPS),			 GAMETYPE_NAME(GT_TEAM),
 			GAMETYPE_NAME(GT_FREEZETAG), GAMETYPE_NAME(GT_CTF),			 GAMETYPE_NAME(GT_SPRAY),
 			GAMETYPE_NAME(GT_BALLOON),	 GAMETYPE_NAME(GT_MAX_GAME_TYPE)};
+		CASSERT(ARRAY_LEN(gametype_strs) == GT_MAX_GAME_TYPE + 1);
 
 		const int fadeOutTime = 3000;
 		if (cg.time - cg.first2dtime < cg_mapInfoTime.integer - fadeOutTime)

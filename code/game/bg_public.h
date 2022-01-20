@@ -157,7 +157,7 @@ typedef enum {
 
 int convertGTStringToGTNumber(const char *argStr);
 
-typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
+typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER, GENDER_MAX } gender_t;
 
 /*
 ===================================================================================
@@ -708,7 +708,9 @@ typedef enum {
 	MOD_GRAPPLE, // should be unused
 
 	MOD_BAMBAM,
-	MOD_BOOMIES
+	MOD_BOOMIES,
+
+	MOD_MEANSOFDEATH_MAX
 } meansOfDeath_t;
 
 //---------------------------------------------------------
