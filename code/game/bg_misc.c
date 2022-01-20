@@ -928,126 +928,122 @@ void BG_EvaluateTrajectoryDelta(const trajectory_t *tr, int atTime, vec3_t resul
 	}
 }
 
-char *eventnames[] = {"EV_NONE",
+const char *entity_event_names[] = {"EV_NONE",
 
-					  "EV_FOOTSTEP",
-					  "EV_FOOTSTEP_METAL",
-					  "EV_FOOTSPLASH",
-					  "EV_FOOTWADE",
-					  "EV_SWIM",
+									"EV_FOOTSTEP",
+									"EV_FOOTSTEP_METAL",
+									"EV_FOOTSPLASH",
+									"EV_FOOTWADE",
+									"EV_SWIM",
 
-					  "EV_STEP_4",
-					  "EV_STEP_8",
-					  "EV_STEP_12",
-					  "EV_STEP_16",
+									"EV_STEP_4",
+									"EV_STEP_8",
+									"EV_STEP_12",
+									"EV_STEP_16",
 
-					  "EV_FALL_SHORT",
-					  "EV_FALL_MEDIUM",
-					  "EV_FALL_FAR",
+									"EV_FALL_SHORT",
+									"EV_FALL_MEDIUM",
+									"EV_FALL_FAR",
 
-					  "EV_JUMP_PAD", // boing sound at origin", jump sound on player
+									"EV_JUMP_PAD", // boing sound at origin", jump sound on player
 
-					  "EV_JUMP",
-					  "EV_WATER_TOUCH", // foot touches
-					  "EV_WATER_LEAVE", // foot leaves
-					  "EV_WATER_UNDER", // head touches
-					  "EV_WATER_CLEAR", // head leaves
+									"EV_JUMP",
+									"EV_WATER_TOUCH", // foot touches
+									"EV_WATER_LEAVE", // foot leaves
+									"EV_WATER_UNDER", // head touches
+									"EV_WATER_CLEAR", // head leaves
 
-					  "EV_ITEM_PICKUP",		   // normal item pickups are predictable
-					  "EV_GLOBAL_ITEM_PICKUP", // powerup / team sounds are broadcast to everyone
+									"EV_ITEM_PICKUP",		 // normal item pickups are predictable
+									"EV_GLOBAL_ITEM_PICKUP", // powerup / team sounds are broadcast to everyone
 
-					  "EV_NOAMMO",
-					  "EV_CHANGE_WEAPON",
-					  "EV_FIRE_WEAPON",
+									"EV_NOAMMO",
+									"EV_CHANGE_WEAPON",
+									"EV_FIRE_WEAPON",
 
-					  "EV_IMPERIUS_EXPLODE", // HERBY ... nagut eigentlich von mir ;P
+									"EV_IMPERIUS_EXPLODE", // HERBY ... nagut eigentlich von mir ;P
 
-					  "EV_USE_ITEM0",
-					  "EV_USE_ITEM1",
-					  "EV_USE_ITEM2",
-					  "EV_USE_ITEM3",
-					  "EV_USE_ITEM4",
-					  "EV_USE_ITEM5",
-					  "EV_USE_ITEM6",
-					  "EV_USE_ITEM7",
-					  "EV_USE_ITEM8",
-					  "EV_USE_ITEM9",
-					  "EV_USE_ITEM10",
-					  "EV_USE_ITEM11",
-					  "EV_USE_ITEM12",
-					  "EV_USE_ITEM13",
-					  "EV_USE_ITEM14",
-					  "EV_USE_ITEM15",
+									"EV_USE_ITEM0",
+									"EV_USE_ITEM1",
+									"EV_USE_ITEM2",
+									"EV_USE_ITEM3",
+									"EV_USE_ITEM4",
+									"EV_USE_ITEM5",
+									"EV_USE_ITEM6",
+									"EV_USE_ITEM7",
+									"EV_USE_ITEM8",
+									"EV_USE_ITEM9",
+									"EV_USE_ITEM10",
+									"EV_USE_ITEM11",
+									"EV_USE_ITEM12",
+									"EV_USE_ITEM13",
+									"EV_USE_ITEM14",
+									"EV_USE_ITEM15",
 
-					  "EV_ITEM_RESPAWN",
-					  "EV_ITEM_POP",
-					  "EV_PLAYER_TELEPORT_IN",
-					  "EV_PLAYER_TELEPORT_OUT",
+									"EV_ITEM_RESPAWN",
+									"EV_ITEM_POP",
+									"EV_PLAYER_TELEPORT_IN",
+									"EV_PLAYER_TELEPORT_OUT",
 
-					  "EV_PLAYER_TELEPORT_RED_IN",
-					  "EV_PLAYER_TELEPORT_RED_OUT",
-					  "EV_PLAYER_TELEPORT_BLUE_IN",
-					  "EV_PLAYER_TELEPORT_BLUE_OUT",
+									"EV_PLAYER_TELEPORT_RED_IN",
+									"EV_PLAYER_TELEPORT_RED_OUT",
+									"EV_PLAYER_TELEPORT_BLUE_IN",
+									"EV_PLAYER_TELEPORT_BLUE_OUT",
 
-					  "EV_DROP_CARTRIDGE",
+									"EV_DROP_CARTRIDGE",
 
-					  "EV_GRENADE_BOUNCE", // eventParm will be the soundindex
+									"EV_GRENADE_BOUNCE", // eventParm will be the soundindex
 
-					  "EV_STICKY_BOUNCE", // HERBY
+									"EV_STICKY_BOUNCE", // HERBY
 
-					  "EV_GENERAL_SOUND",
-					  "EV_GLOBAL_SOUND", // no attenuation
-					  "EV_GLOBAL_TEAM_SOUND",
+									"EV_GENERAL_SOUND",
+									"EV_GLOBAL_SOUND", // no attenuation
+									"EV_GLOBAL_TEAM_SOUND",
 
-					  "EV_MISSILE_HIT",
-					  "EV_MISSILE_MISS",
-					  "EV_MISSILE_MISS_METAL",
-					  "EV_RAILTRAIL",
-					  "EV_SHOTGUN",
+									"EV_MISSILE_HIT",
+									"EV_MISSILE_MISS",
+									"EV_MISSILE_MISS_METAL",
+									"EV_RAILTRAIL",
+									"EV_SHOTGUN",
 
-					  "EV_SPRAYLOGO",
+									"EV_SPRAYLOGO",
 
-					  "EV_PAIN",
-					  "EV_DEATH1",
-					  "EV_DEATH2",
-					  "EV_DEATH3",
-					  "EV_OBITUARY",
+									"EV_PAIN",
+									"EV_DEATH1",
+									"EV_DEATH2",
+									"EV_DEATH3",
+									"EV_OBITUARY",
 
-					  "EV_POWERUP_REVIVAL",
-					  "EV_POWERUP_PADPOWER",
+									"EV_POWERUP_REVIVAL",
+									"EV_POWERUP_PADPOWER",
 
-					  "EV_GIB_PLAYER", // gib a previously living player
-					  "EV_SCOREPLUM",  // score plum
+									"EV_GIB_PLAYER", // gib a previously living player
+									"EV_SCOREPLUM",	 // score plum
 
-					  "EV_DEBUG_LINE",
-					  "EV_STOPLOOPINGSOUND",
-					  "EV_TAUNT"
+									"EV_DEBUG_LINE",
+									"EV_STOPLOOPINGSOUND",
+									"EV_TAUNT",
 
-					  ,
-					  "EV_HEHE1",
-					  "EV_HEHE2"
+									"EV_HEHE1",
+									"EV_HEHE2",
 
-					  ,
-					  "EV_FOOTSTEP_CARPET",
-					  "EV_FOOTSTEP_LATTICE",
-					  "EV_FOOTSTEP_SAND",
-					  "EV_FOOTSTEP_SOFT",
-					  "EV_FOOTSTEP_WOOD",
-					  "EV_FOOTSTEP_SNOW"
+									"EV_FOOTSTEP_CARPET",
+									"EV_FOOTSTEP_LATTICE",
+									"EV_FOOTSTEP_SAND",
+									"EV_FOOTSTEP_SOFT",
+									"EV_FOOTSTEP_WOOD",
+									"EV_FOOTSTEP_SNOW",
 
-					  ,
-					  "EV_BAMBAM_EXPLOSION",
-					  "EV_BOOMIES_EXPLOSION"
+									"EV_BAMBAM_EXPLOSION",
+									"EV_BOOMIES_EXPLOSION",
 
-					  ,
-					  "EV_TAUNT_YES",
-					  "EV_TAUNT_NO",
-					  "EV_TAUNT_FOLLOWME",
-					  "EV_TAUNT_GETFLAG",
-					  "EV_TAUNT_GUARDBASE",
-					  "EV_TAUNT_PATROL"
+									"EV_TAUNT_YES",
+									"EV_TAUNT_NO",
+									"EV_TAUNT_FOLLOWME",
+									"EV_TAUNT_GETFLAG",
+									"EV_TAUNT_GUARDBASE",
+									"EV_TAUNT_PATROL"};
 
-};
+CASSERT(ARRAY_LEN(entity_event_names) == EV_MAX);
 
 /*
 ===============
@@ -1068,10 +1064,10 @@ void BG_AddPredictableEventToPlayerstate(int newEvent, int eventParm, playerStat
 		if (atof(buf) != 0) {
 #ifdef QAGAME
 			Com_Printf(" game event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/,
-					   ps->eventSequence, eventnames[newEvent], eventParm);
+					   ps->eventSequence, entity_event_names[newEvent], eventParm);
 #else
 			Com_Printf("Cgame event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/,
-					   ps->eventSequence, eventnames[newEvent], eventParm);
+					   ps->eventSequence, entity_event_names[newEvent], eventParm);
 #endif
 		}
 	}

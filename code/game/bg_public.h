@@ -551,9 +551,12 @@ typedef enum {
 	EV_TAUNT_FOLLOWME,
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
-	EV_TAUNT_PATROL
+	EV_TAUNT_PATROL,
 
+	EV_MAX
 } entity_event_t;
+
+extern const char *entity_event_names[];
 
 typedef enum {
 	GTS_RED_CAPTURE,

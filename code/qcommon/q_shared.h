@@ -235,6 +235,7 @@ typedef int clipHandle_t;
 
 #define ARRAY_LEN(x) (sizeof(x) / sizeof(*(x)))
 #define STRARRAY_LEN(x) (ARRAY_LEN(x) - 1)
+#define CASSERT(x) extern int ASSERT_COMPILE[((x) != 0) * 2 - 1]
 
 // angle indexes
 #define PITCH 0 // up / down
