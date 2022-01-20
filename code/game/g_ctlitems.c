@@ -88,6 +88,7 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 	int boxEnts[10];
 	vec3_t boxMins = {-128, -128, -30};
 	vec3_t boxMaxs = {128, 128, 64};
+	const int clientNum = pEnt - g_entities;
 
 	VectorAdd(spot, boxMins, boxMins);
 	VectorAdd(spot, boxMaxs, boxMaxs);
@@ -99,26 +100,26 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 		if (otherEnt->s.eType == ET_BOOMIES) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(64)) {
-				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to BOOMiE\"");
+				trap_SendServerCommand(clientNum, "cp \"Too close to BOOMiE\"");
 				return qfalse;
 			}
 		} else if (otherEnt->s.eType == ET_ITEM && otherEnt->item->giType == IT_WEAPON) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if ((distSqr < Square(64)) && !(otherEnt->flags & FL_DROPPED_ITEM)) {
-				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to weapon spawnpoint\"");
+				trap_SendServerCommand(clientNum, "cp \"Too close to weapon spawnpoint\"");
 				return qfalse;
 			}
 		} else if (otherEnt->s.eType == ET_STATION) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to health station\"");
+				trap_SendServerCommand(clientNum, "cp \"Too close to health station\"");
 				return qfalse;
 			}
 		} else if (otherEnt->s.eType == ET_ITEM &&
 				   (otherEnt->item->giTag == PW_REDFLAG || otherEnt->item->giTag == PW_BLUEFLAG)) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(256)) {
-				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to lolly base\"");
+				trap_SendServerCommand(clientNum, "cp \"Too close to lolly base\"");
 				return qfalse;
 			}
 		} else if (otherEnt->s.eType == ET_PUSH_TRIGGER) {
@@ -130,27 +131,27 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 			VectorScale(origin, 0.5, origin);
 			distSqr = DistanceSquared(origin, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to jump pad\"");
+				trap_SendServerCommand(clientNum, "cp \"Too close to jump pad\"");
 				return qfalse;
 			}
 		} else if (!Q_stricmp(otherEnt->classname, "target_push")) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to jump pad\"");
+				trap_SendServerCommand(clientNum, "cp \"Too close to jump pad\"");
 				return qfalse;
 			}
 		} else if (!Q_stricmp(otherEnt->classname, "target_position") ||
 				   !Q_stricmp(otherEnt->classname, "misc_teleporter_dest")) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to teleporter exit\"");
+				trap_SendServerCommand(clientNum, "cp \"Too close to teleporter exit\"");
 				return qfalse;
 			}
 		} else if (!Q_stricmp(otherEnt->classname, "info_player_start") ||
 				   !Q_stricmp(otherEnt->classname, "info_player_deathmatch")) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to spawn point\"");
+				trap_SendServerCommand(clientNum, "cp \"Too close to spawn point\"");
 				return qfalse;
 			}
 		} else if (!Q_stricmp(otherEnt->classname, "trigger_balloonzone")) {
@@ -162,7 +163,7 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 			VectorScale(origin, 0.5, origin);
 			distSqr = DistanceSquared(origin, spot);
 			if (distSqr < Square(128)) {
-				trap_SendServerCommand((pEnt - g_entities), "cp \"Too close to balloon\"");
+				trap_SendServerCommand(clientNum, "cp \"Too close to balloon\"");
 				return qfalse;
 			}
 		}
@@ -197,9 +198,10 @@ static void bambam_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		vec3_t end;
 		float tmpLen;
 		float missileVelocity = SPEED_BAMBAM;
+		const int clientNum = ent - g_entities;
 
 		VectorCopy(ent->s.pos.trBase, start);
-		start[2] += 64.0;
+		start[2] += 64.0f;
 
 		//		BG_EvaluateTrajectory(&other->s.pos,level.time+50, end );
 		VectorSubtract(other->s.pos.trBase, start, end); // 'end' temporary used for distance calculation
@@ -212,7 +214,7 @@ static void bambam_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		}
 
 		VectorMA(other->s.pos.trBase, (tmpLen / missileVelocity), other->s.pos.trDelta, end);
-		trap_Trace(&tr, start, NULL, NULL, end, ent - g_entities, MASK_SHOT);
+		trap_Trace(&tr, start, NULL, NULL, end, clientNum, MASK_SHOT);
 
 		if (tr.fraction == 1.0f || tr.entityNum == (other - g_entities)) {
 			vec3_t dir;
@@ -266,7 +268,6 @@ static void bambam_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker
 }
 
 static void bambam_think(gentity_t *ent) {
-
 	switch (ent->s.generic1) {
 	case BBS_INACTIVE:
 		ent->s.generic1 = BBS_BUILDING;
@@ -317,8 +318,8 @@ static void bambam_pain(gentity_t *self, gentity_t *attacker, int damage) {
 	returns false if it fails
 	... doesn't handle bambam-holdable stuff!
 */
-static const vec3_t bambamMin = {-22.0, -22.0, 0.0};
-static const vec3_t bambamMax = {22.0, 22.0, 38.0};
+static const vec3_t bambamMin = {-22.0f, -22.0f, 0.0f};
+static const vec3_t bambamMax = {22.0f, 22.0f, 38.0f};
 qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 	vec3_t forward;
 	vec3_t start;
@@ -327,9 +328,10 @@ qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 	trace_t tr;
 
 	gentity_t *entBam;
+	const int clientNum = pEnt - g_entities;
 
 	if (MAX_TEAM_BAMBAMS <= level.numBambams[pEnt->client->sess.sessionTeam]) {
-		trap_SendServerCommand(pEnt - g_entities, va("cp \"Your team has reached its %s limit.\n\"", pickupName));
+		trap_SendServerCommand(clientNum, va("cp \"Your team has reached its %s limit.\n\"", pickupName));
 		return qfalse;
 	}
 
@@ -338,19 +340,19 @@ qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 	AngleVectors(tmpAngles, forward, NULL, NULL);
 
 	VectorCopy(pEnt->s.pos.trBase, start);
-	start[2] += pEnt->client->ps.viewheight;
-	VectorMA(start, 64.0, forward, end);
+	start[2] += (float)pEnt->client->ps.viewheight;
+	VectorMA(start, 64.0f, forward, end);
 
-	trap_Trace(&tr, start, bambamMin, bambamMax, end, (pEnt - g_entities), MASK_SHOT);
+	trap_Trace(&tr, start, bambamMin, bambamMax, end, clientNum, MASK_SHOT);
 	if (tr.allsolid || tr.startsolid) {
-		trap_SendServerCommand((pEnt - g_entities), va("cp \"Can't build %s here\"", pickupName));
+		trap_SendServerCommand(clientNum, va("cp \"Can't build %s here\"", pickupName));
 		return qfalse;
 	}
 
 	// Make a trace without bbox, since there are problems with bbox size/curves and wrong startsolid results
-	trap_Trace(&tr, start, NULL, NULL, tr.endpos, (pEnt - g_entities), MASK_SHOT);
+	trap_Trace(&tr, start, NULL, NULL, tr.endpos, clientNum, MASK_SHOT);
 	if (tr.fraction != 1.0) {
-		trap_SendServerCommand((pEnt - g_entities), va("cp \"Can't build %s here\"", pickupName));
+		trap_SendServerCommand(clientNum, va("cp \"Can't build %s here\"", pickupName));
 		return qfalse;
 	}
 
@@ -361,7 +363,7 @@ qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 	trap_Trace(&tr, start, bambamMin, bambamMax, end, ENTITYNUM_NONE, MASK_SHOT);
 
 	if (tr.allsolid || tr.startsolid || tr.fraction >= 1.f || tr.entityNum != ENTITYNUM_WORLD) {
-		trap_SendServerCommand((pEnt - g_entities), va("cp \"Can't build %s here\"", pickupName));
+		trap_SendServerCommand(clientNum, va("cp \"Can't build %s here\"", pickupName));
 		return qfalse;
 	}
 
@@ -472,24 +474,25 @@ qboolean boomies_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 	vec3_t start;
 	vec3_t end;
 	trace_t tr;
+	const int clientNum = pEnt - g_entities;
 
 	if (MAX_TEAM_BOOMIES <= level.numBoomies[pEnt->client->sess.sessionTeam]) {
-		trap_SendServerCommand(pEnt - g_entities, va("cp \"Your team has reached its %s limit.\n\"",
+		trap_SendServerCommand(clientNum, va("cp \"Your team has reached its %s limit.\n\"",
 													 pickupName)); // should be item->pickup_name
 		return qfalse;
 	}
 
 	VectorCopy(pEnt->s.pos.trBase, start);
-	start[2] += pEnt->client->ps.viewheight;
+	start[2] += (float)pEnt->client->ps.viewheight;
 
 	AngleVectors(pEnt->s.apos.trBase, forward, NULL, NULL);
 
 	// VectorMA(v, s, b, o) ... (o)[0]=(v)[0]+(b)[0]*(s)
 	VectorMA(start, 64.0f, forward, end);
 
-	trap_Trace(&tr, start, NULL, NULL, end, (pEnt - g_entities), MASK_SHOT);
+	trap_Trace(&tr, start, NULL, NULL, end, clientNum, MASK_SHOT);
 	if (tr.allsolid || tr.startsolid) {
-		trap_SendServerCommand((pEnt - g_entities),
+		trap_SendServerCommand(clientNum,
 							   va("cp \"Can't build %s here\"", pickupName)); // should be item->pickup_name
 		return qfalse;
 	}
@@ -548,7 +551,7 @@ qboolean boomies_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 		return qtrue;
 	}
 
-	trap_SendServerCommand((pEnt - g_entities),
+	trap_SendServerCommand(clientNum,
 						   va("cp \"Can't build %s here\"", pickupName)); // should be item->pickup_name
 
 	return qfalse;
