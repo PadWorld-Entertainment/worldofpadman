@@ -553,7 +553,7 @@ typedef enum {
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
 
-	EV_MAX
+	EV_EVENT_MAX
 } entity_event_t;
 
 extern const char *entity_event_names[];

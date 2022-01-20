@@ -818,12 +818,9 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 	return qfalse;
 }
 
-//======================================================================
-
 /*
 ================
 BG_EvaluateTrajectory
-
 ================
 */
 void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result) {
@@ -864,9 +861,9 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result) {
 		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
 
 		if (tr->trType == TR_GRAVITY)
-			result[2] -= 0.5 * DEFAULT_GRAVITY * deltaTime * deltaTime; // FIXME: local gravity...
+			result[2] -= 0.5f * DEFAULT_GRAVITY * deltaTime * deltaTime; // FIXME: local gravity...
 		else
-			result[2] -= 0.5 * LOW_GRAVITY * deltaTime * deltaTime; // FIXME: local gravity...
+			result[2] -= 0.5f * LOW_GRAVITY * deltaTime * deltaTime; // FIXME: local gravity...
 
 		break;
 	default:
@@ -897,7 +894,7 @@ void BG_EvaluateTrajectoryDelta(const trajectory_t *tr, int atTime, vec3_t resul
 	case TR_SINE:
 		deltaTime = (atTime - tr->trTime) / (float)tr->trDuration;
 		phase = cos(deltaTime * M_PI * 2); // derivative of sin = cos
-		phase *= 0.5;
+		phase *= 0.5f;
 		VectorScale(tr->trDelta, phase, result);
 		break;
 	case TR_LINEAR_STOP:
@@ -1043,7 +1040,7 @@ const char *entity_event_names[] = {"EV_NONE",
 									"EV_TAUNT_GUARDBASE",
 									"EV_TAUNT_PATROL"};
 
-CASSERT(ARRAY_LEN(entity_event_names) == EV_MAX);
+CASSERT(ARRAY_LEN(entity_event_names) == EV_EVENT_MAX);
 
 /*
 ===============
