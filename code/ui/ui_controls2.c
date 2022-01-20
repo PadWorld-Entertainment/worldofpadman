@@ -692,40 +692,35 @@ Controls_DrawKeyBinding
 =================
 */
 static void Controls_DrawKeyBinding(void *self) {
-	menuaction_s *a;
-	int x;
-	int y;
-	int b1;
-	int b2;
-	qboolean c;
+	const menuaction_s *a = (menuaction_s *)self;
+	const int x = a->generic.x;
+	const int y = a->generic.y;
+	const int b1 = g_bindings[a->generic.id].bind1;
 	char name[32];
-	char name2[32];
 
-	a = (menuaction_s *)self;
+	if (g_bindings[a->generic.id].id != a->generic.id) {
+		trap_Error("Index and id is out of sync");
+	}
 
-	x = a->generic.x;
-	y = a->generic.y;
+	if (b1 == -1) {
+		Q_strncpyz(name, "???", sizeof(name));
+	} else {
+		const int b2 = g_bindings[a->generic.id].bind2;
+		char name2[32];
 
-	c = (Menu_ItemAtCursor(a->generic.parent) == a);
-
-	b1 = g_bindings[a->generic.id].bind1;
-	if (b1 == -1)
-		strcpy(name, "???");
-	else {
 		trap_Key_KeynumToStringBuf(b1, name, sizeof(name));
 		Q_strupr(name);
 
-		b2 = g_bindings[a->generic.id].bind2;
 		if (b2 != -1) {
-			trap_Key_KeynumToStringBuf(b2, name2, sizeof(name));
+			trap_Key_KeynumToStringBuf(b2, name2, sizeof(name2));
 			Q_strupr(name2);
 
-			strcat(name, " or ");
-			strcat(name, name2);
+			Q_strcat(name, sizeof(name), " or ");
+			Q_strcat(name, sizeof(name), name2);
 		}
 	}
 
-	if (c) {
+	if (Menu_ItemAtCursor(a->generic.parent) == a) {
 		UI_FillRect(a->generic.left, a->generic.top, a->generic.right - a->generic.left + 1,
 					a->generic.bottom - a->generic.top + 1, listbar_color);
 
