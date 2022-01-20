@@ -2935,7 +2935,6 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 
 	CG_HudDrawHead();
 	CG_HudDrawHealthAndArmor(hudnum);
-	CG_DrawEntityIcons();
 	CG_DrawSprayYourColorCartridges(team, hudnum);
 	CG_DrawBigBallon(team);
 	CG_DrawCaptureTheLolly(team);
@@ -2961,6 +2960,8 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 	if (cg_draw2D.integer == 0) {
 		return;
 	}
+
+	CG_DrawEntityIcons();
 
 	if (cg_cineHideHud.integer) {
 		CG_DrawCenterString();
