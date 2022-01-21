@@ -3,7 +3,7 @@
 [![GitHub tag](https://img.shields.io/github/v/tag/padworld-entertainment/worldofpadman?logo=github)](https://github.com/PadWorld-Entertainment/worldofpadman/tags)
 [![GitHub release](https://img.shields.io/github/v/release/padworld-entertainment/worldofpadman?logo=github)](https://github.com/PadWorld-Entertainment/worldofpadman/releases/latest)
 [![GitHub workflow](https://github.com/padworld-entertainment/worldofpadman/actions/workflows/build.yml/badge.svg)](https://github.com/PadWorld-Entertainment/worldofpadman/actions)
-[![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/padworld-entertainment/worldofpadman/2?logo=github)](https://github.com/PadWorld-Entertainment/worldofpadman/milestones/2)
+[![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/padworld-entertainment/worldofpadman/2?logo=github)](https://github.com/PadWorld-Entertainment/worldofpadman/milestone/2)
 
 [![Discord online](https://img.shields.io/discord/590829990514262038?label=join&logo=discord&style=social)](http://discord.worldofpadman.net)
 [![Twitter follower](https://img.shields.io/twitter/follow/worldofpadman?label=follow&style=social)](https://twitter.com/world_of_padman)
