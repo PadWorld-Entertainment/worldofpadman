@@ -2961,7 +2961,9 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 		return;
 	}
 
-	CG_DrawEntityIcons();
+	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+		CG_DrawEntityIcons();
+	}
 
 	if (cg_cineHideHud.integer) {
 		CG_DrawCenterString();
