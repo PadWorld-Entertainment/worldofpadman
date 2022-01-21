@@ -17,17 +17,20 @@ World of PADMAN is an incredibly carefully designed and colorful freeware fun sh
 
 ## License
 
-Any commercial use of World of PADMAN and its individual works of art created by PadWorld Entertainment is prohibited unless you have explicit permission of PadWorld Entertainment. Further information and regulation is provided in [COPYING.md](COPYING.md).
+The WoP Team (PadWorld Entertainment) agrees that any commercial use of World of PADMAN and its individual works of art created by PadWorld Entertainment is prohibited without express consent and permission in written form. Further information and regulation is provided in [COPYING.md](COPYING.md).
 
-The source code of World of PADMAN is published under the [GNU General Public License (Version 2, June 1991)](GPL-2.0.md) and the corresponding rules apply. This does not apply to World of PADMAN's individual artwork such as maps, textures, models, sounds, etc. These assets are the property of their respective authors and are protected by copyright.
+The source code of World of PADMAN is published under the [GNU General Public License (Version 2, June 1991)](GPL-2.0.md) and the corresponding rules apply. This does not apply to World of PADMAN's individual works of art such as maps, textures, models, sounds, etc. These assets are the property of their respective authors and are protected by copyright.
 
-PadWorld Entertainment allows the use and editing of its own assets for custom maps and mods if they are created and published for World of PADMAN only and without any commercial purpose. Credits should be given in all cases.
-
-Some parts of World of PADMAN were created with contents acquired by PadWorld Entertainment from various sources, with licenses that allow its use and modification. Nevertheless, if any infringement of third party rights is detected, please contact us immediately (<team@worldofpadman.net>). For more information about third-party content used in World of PADMAN and related licenses, please refer to [LICENSES.md](LICENSES.md).
+Some parts of World of PADMAN were created with contents acquired by PadWorld Entertainment from various sources, with licenses that allow its use and modification. For more information about third-party content used in World of PADMAN and related licenses, please refer to [LICENSES.md](LICENSES.md).
 
 ## Security
 
 **Please do not report security vulnerabilities through public GitHub issues.** If you believe you have found a security vulnerability in any of our repositories please follow instructions provided in [SECURITY.md](SECURITY.md).
+
+## Contributing
+
+If you want to contribute to the further development of World of PADMAN by creating issues or pull requests, please see the information in [CONTRIBUTING.md](CONTRIBUTING.md). PadWorld Entertainment follows and applies the Code of Conduct as described in [Contributor Covenant,
+version 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct).
 
 ## Credits
 

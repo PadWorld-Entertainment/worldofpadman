@@ -1,12 +1,12 @@
-# Security
+# Security Information
 
-[PadWorld Entertainment](https://github.com/PadWorld-Entertainment) takes the security of World of PADMAN seriously, which includes all source code repositories managed through our GitHub organization. If you believe you have found a security vulnerability in any of our repositories please report it to us as described below.
+PadWorld Entertainment takes the security of World of PADMAN seriously, which includes all source code repositories managed through our [GitHub organization](https://github.com/PadWorld-Entertainment). If you believe you have found a security vulnerability in any of our repositories please report it to us as described below.
 
 ## Reporting Security Issues
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-Instead, please report them directly to PadWorld Entertainment by sending an email to [team@worldofpadman.net](mailto:team@worldofpadman.net). We will response as soon as possible. If for some reason you do not receive a response, please follow up via email to ensure we received your original message.
+Instead, please report them directly to PadWorld Entertainment by sending an email to <team@worldofpadman.net>. We will response as soon as possible. If for some reason you do not receive a response, please follow up via email to ensure we received your original message.
 
 Please include the requested information listed below (as much as you can provide) to help us better understand the nature and scope of the possible issue:
 

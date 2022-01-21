@@ -1,6 +1,6 @@
 # World of PADMAN Assets Licenses
 
-This file contains a list of assets that are used in World of PADMAN. It lists the respective path to the file within the wop directory or PK3 files, the associated license or terms of use, the original author and the source with internet link if available. Most of the external third party files were modified by PadWorld Entertainment according to their license. If several files from different sources were combined to one file, it is listed several times. This list makes no claim to be complete and is subject to constant change as World of PADMAN continues to develop.
+This file contains a list of assets that are used in World of PADMAN. It lists the respective path to the file within the wop directory or PK3 files, the associated license or terms of use, the original author, and the source with internet link if available. Most of the external third party files were modified by PadWorld Entertainment according to their license. If several files from different sources were combined to one file, it is listed several times. This list makes no claim to be complete and is subject to constant change as World of PADMAN continues to develop.
 
 File path | License | Author | Source
 --------- | ------- | ------ | ------
