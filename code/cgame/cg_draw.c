@@ -3300,15 +3300,19 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 		} else {
 			chatHeight = MAX_CHATMESSAGES;
 		}
+		if (chatHeight <= 0) {
+			noprint = qtrue;
+		}
 
-		if (cg_draw2D.integer && !(noprint) && !(trap_Key_GetCatcher() & KEYCATCH_MESSAGE)) {
+
+		if (cg_draw2D.integer && !noprint && !(trap_Key_GetCatcher() & KEYCATCH_MESSAGE)) {
 			int i = cg.lastchatmsg;
 			int j = 0;
 
 			// TODO: chatHeight should be used here!
 			do {
 				i++;
-				if (i >= MAX_CHATMESSAGES) {
+				if (i >= chatHeight) {
 					i = 0;
 				}
 
