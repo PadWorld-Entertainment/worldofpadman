@@ -1,0 +1,81 @@
+
+// entity 0
+{
+"classname" "worldspawn"
+"message" "wop_balloonmap"
+}
+// entity 1
+{
+"classname" "target_balloon"
+"targetname" "balloon1"
+"origin" "-136 84 16"
+}
+// entity 2
+{
+"classname" "trigger_balloonzone"
+"message" "Balloon on location 1"
+"target" "balloon1"
+// brush 0
+{
+( -200 -52 0 ) ( -272 20 0 ) ( -236 -16 192 ) common/trigger 1 5 0 -0.5 0.5 0 0 0
+( -272 148 0 ) ( -200 220 0 ) ( -236 184 192 ) common/trigger 1 5 0 -0.5 0.5 0 0 0
+( -72 220 0 ) ( 0 148 0 ) ( -36 184 192 ) common/trigger 1 5 0 -0.5 0.5 0 0 0
+( 0 20 0 ) ( -72 -52 0 ) ( -36 -16 192 ) common/trigger 1 5 0 -0.5 0.5 0 0 0
+( -124 164 192 ) ( -52 164 192 ) ( -52 76 192 ) common/trigger 55 14 0 -0.5 0.5 0 0 0
+( -100 100 0 ) ( -100 188 0 ) ( -172 188 0 ) common/trigger 55 14 0 -0.5 0.5 0 0 0
+( -108 -52 176 ) ( -180 -52 176 ) ( -180 -52 248 ) common/trigger 56 51 180 0.5 0.5 0 0 0
+( -272 80 64 ) ( -272 168 64 ) ( -272 168 136 ) common/trigger 48 48 0 0.5 -0.5 0 0 0
+( -140 220 1576 ) ( -68 220 1576 ) ( -68 220 1648 ) common/trigger 56 51 180 0.5 0.5 0 0 0
+( 0 172 1504 ) ( 0 84 1504 ) ( 0 84 1576 ) common/trigger 48 48 0 0.5 -0.5 0 0 0
+}
+}
+// entity 3
+{
+"classname" "target_balloon"
+"origin" "208 143 16"
+"targetname" "balloon2"
+}
+// entity 4
+{
+"classname" "trigger_balloonzone"
+"target" "balloon2"
+"message" "Balloon on location 2"
+// brush 0
+{
+( 144 7 0 ) ( 72 79 0 ) ( 108 43 192 ) common/trigger 55 6 0 -0.5 0.5 0 0 0
+( 72 207 0 ) ( 144 279 0 ) ( 108 243 192 ) common/trigger 55 6 0 -0.5 0.5 0 0 0
+( 272 279 0 ) ( 344 207 0 ) ( 308 243 192 ) common/trigger 55 6 0 -0.5 0.5 0 0 0
+( 344 79 0 ) ( 272 7 0 ) ( 308 43 192 ) common/trigger 55 6 0 -0.5 0.5 0 0 0
+( 220 223 192 ) ( 292 223 192 ) ( 292 135 192 ) common/trigger 38 4 0 -0.5 0.5 0 0 0
+( 244 159 0 ) ( 244 247 0 ) ( 172 247 0 ) common/trigger 38 4 0 -0.5 0.5 0 0 0
+( 236 7 176 ) ( 164 7 176 ) ( 164 7 248 ) common/trigger 40 50 180 0.5 0.5 0 0 0
+( 72 139 64 ) ( 72 227 64 ) ( 72 227 136 ) common/trigger 58 48 0 0.5 -0.5 0 0 0
+( 204 279 1576 ) ( 276 279 1576 ) ( 276 279 1648 ) common/trigger 40 50 180 0.5 0.5 0 0 0
+( 344 231 1504 ) ( 344 143 1504 ) ( 344 143 1576 ) common/trigger 58 48 0 0.5 -0.5 0 0 0
+}
+}
+// entity 5
+{
+"classname" "target_balloon"
+"targetname" "balloon3"
+"origin" "81 -159 16"
+}
+// entity 6
+{
+"classname" "trigger_balloonzone"
+"message" "Balloon on location 3"
+"target" "balloon3"
+// brush 0
+{
+( 17 -295 0 ) ( -55 -223 0 ) ( -19 -259 192 ) common/trigger 27 5 0 -0.5 0.5 0 0 0
+( -55 -95 0 ) ( 17 -23 0 ) ( -19 -59 192 ) common/trigger 27 5 0 -0.5 0.5 0 0 0
+( 145 -23 0 ) ( 217 -95 0 ) ( 181 -59 192 ) common/trigger 27 5 0 -0.5 0.5 0 0 0
+( 217 -223 0 ) ( 145 -295 0 ) ( 181 -259 192 ) common/trigger 27 5 0 -0.5 0.5 0 0 0
+( 93 -79 192 ) ( 165 -79 192 ) ( 165 -167 192 ) common/trigger 41 40 0 -0.5 0.5 0 0 0
+( 117 -143 0 ) ( 117 -55 0 ) ( 45 -55 0 ) common/trigger 41 40 0 -0.5 0.5 0 0 0
+( 109 -295 176 ) ( 37 -295 176 ) ( 37 -295 248 ) common/trigger 42 51 180 0.5 0.5 0 0 0
+( -55 -163 64 ) ( -55 -75 64 ) ( -55 -75 136 ) common/trigger 22 48 0 0.5 -0.5 0 0 0
+( 77 -23 1576 ) ( 149 -23 1576 ) ( 149 -23 1648 ) common/trigger 42 51 180 0.5 0.5 0 0 0
+( 217 -71 1504 ) ( 217 -159 1504 ) ( 217 -159 1576 ) common/trigger 22 48 0 0.5 -0.5 0 0 0
+}
+}
