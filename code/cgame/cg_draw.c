@@ -3258,15 +3258,7 @@ static void CG_DrawChat(void) {
 		return;
 	}
 	noprint = CG_GetCvarInt("cl_noprint");
-	if (noprint) {
-		return;
-	}
 
-	if (trap_Key_GetCatcher() & KEYCATCH_MESSAGE) {
-		return;
-	}
-	// needed to calculate properly
-	notifytime *= -1;
 	// limiting max chat messages to cg_chatheight cvar
 	if (cg_chatHeight.integer < MAX_CHATMESSAGES) {
 		chatHeight = abs(cg_chatHeight.integer);
@@ -3276,6 +3268,17 @@ static void CG_DrawChat(void) {
 	if (chatHeight <= 0) {
 		noprint = qtrue;
 	}
+
+	if (noprint) {
+		return;
+	}
+
+	if (trap_Key_GetCatcher() & KEYCATCH_MESSAGE) {
+		return;
+	}
+
+	// needed to calculate properly
+	notifytime *= -1;
 
 	do {
 		i++;
@@ -3287,21 +3290,24 @@ static void CG_DrawChat(void) {
 		if (j >= chatHeight) {
 			// this is adding some extra time to those chat entries that were not visible before...
 			cg.chatmsgtime[i] = cg.time;
-		} else if (cg.chatmsgtime[i] && (cg.time - cg.chatmsgtime[i]) < (notifytime * 1000)) {
-			const float CHAT_ICONSIZE = 14;
-			const float CHAT_PADDING = 1;
-			const float CHAT_CHARHEIGHT = (CHAT_ICONSIZE - (2 * CHAT_PADDING));
-			const float CHAT_CHARWIDTH = (CHAT_CHARHEIGHT / 2);
+		} else if (cg.chatmsgtime[i] && cg.time - cg.chatmsgtime[i] < notifytime * 1000) {
+			const int iconSize = 14;
+			const int padding = 1;
+			const int charHeight = iconSize - (2 * padding);
+			const int charWidth = charHeight / 2;
+			const int iconY = j * iconSize;
+			const int textY = iconY + ((iconSize - charHeight) / 2);
+			int x = padding;
+
 			if (cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) {
-				CG_DrawPic(CHAT_PADDING, (j * CHAT_ICONSIZE), CHAT_ICONSIZE, CHAT_ICONSIZE, cg.chaticons[i]);
+				CG_DrawPic((float)x, (float)(j * iconSize), (float)iconSize, (float)iconSize, cg.chaticons[i]);
+				x += iconSize + padding;
 			}
 			// TODO: Create a cvar for fontsize (also adjust icon-size)?
 			// TODO: This does not support newlines (see "hotfix" in CG_DrawChar() )
 			//       or linewrapping. On the other hand, long text crashes the game anyways..
-			CG_DrawStringExt(((cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) ? (CHAT_ICONSIZE + (2 * CHAT_PADDING)) : CHAT_PADDING),
-								((j * CHAT_ICONSIZE) + ((CHAT_ICONSIZE - CHAT_CHARHEIGHT) / 2)), cg.chattext[i],
-								colorWhite, qfalse, qtrue, CHAT_CHARWIDTH, CHAT_CHARHEIGHT,
-								strlen(cg.chattext[i]));
+			CG_DrawStringExt(x, textY, cg.chattext[i], colorWhite, qfalse, qtrue, charWidth, charHeight,
+							 (int)strlen(cg.chattext[i]));
 
 			j++;
 		}
@@ -3358,11 +3364,11 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 	CG_DrawChat();
 
 	if (cg_cineDrawLetterBox.integer) {
-		vec4_t color = {0, 0, 0, 1}; // black
-		int height = 70;
+		const vec4_t color = {0, 0, 0, 1}; // black
+		float height = 70.0f;
 
-		CG_FillRect(0, 0, 640, height, color);
-		CG_FillRect(0, 480 - height, 640, height, color);
+		CG_FillRect(0.0f, 0.0f, 640.0f, height, color);
+		CG_FillRect(0.0f, 480.0f - height, 640.0f, height, color);
 	}
 
 	// FIXME? move it, so it isn't usable outside of cutscenes

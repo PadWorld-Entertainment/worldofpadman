@@ -163,19 +163,6 @@ typedef struct {
 // local entities are created as a result of events or predicted actions,
 // and live independently from all server transmitted entities
 
-typedef struct markPoly_s {
-	struct markPoly_s *prevMark, *nextMark;
-	int time;
-	qhandle_t markShader;
-	qboolean alphaFade; // fade alpha instead of rgb
-	float color[4];
-	poly_t poly;
-	polyVert_t verts[MAX_VERTS_ON_POLY];
-
-	vec3_t origin;
-	float radius;
-} markPoly_t;
-
 typedef enum {
 	LE_MARK,
 	LE_EXPLOSION,
@@ -1250,7 +1237,6 @@ extern cg_t cg;
 extern centity_t cg_entities[MAX_GENTITIES];
 extern weaponInfo_t cg_weapons[MAX_WEAPONS];
 extern itemInfo_t cg_items[MAX_ITEMS];
-extern markPoly_t cg_markPolys[MAX_MARK_POLYS];
 
 extern vmCvar_t cg_centertime;
 extern vmCvar_t cg_runpitch;
@@ -1635,7 +1621,6 @@ void DumpPolyInfo(void);
 // cg_lensflare.c
 //
 void Init_LensFlareSys(void);
-void AddLFToDrawList(const char *lfname, vec3_t origin, vec3_t dir);
 void AddLFsToScreen(void);
 
 //

@@ -32,11 +32,24 @@ MARK POLYS
 ===================================================================
 */
 
-#define MIN_MARK_DISTANCE 0.5 // HERBY
+#define MIN_MARK_DISTANCE 0.5f // HERBY
 
-markPoly_t cg_activeMarkPolys; // double linked list
-markPoly_t *cg_freeMarkPolys;  // single linked list
-markPoly_t cg_markPolys[MAX_MARK_POLYS];
+typedef struct markPoly_s {
+	struct markPoly_s *prevMark, *nextMark;
+	int time;
+	qhandle_t markShader;
+	qboolean alphaFade; // fade alpha instead of rgb
+	float color[4];
+	poly_t poly;
+	polyVert_t verts[MAX_VERTS_ON_POLY];
+
+	vec3_t origin;
+	float radius;
+} markPoly_t;
+
+static markPoly_t cg_activeMarkPolys; // double linked list
+static markPoly_t *cg_freeMarkPolys;  // single linked list
+static markPoly_t cg_markPolys[MAX_MARK_POLYS];
 static int markTotal;
 
 /*
@@ -64,9 +77,9 @@ void CG_InitMarkPolys(void) {
 CG_FreeMarkPoly
 ==================
 */
-void CG_FreeMarkPoly(markPoly_t *le) {
+static void CG_FreeMarkPoly(markPoly_t *le) {
 	if (!le->prevMark) {
-		CG_Error("CG_FreeLocalEntity: not active");
+		CG_Error("CG_FreeMarkPoly: not active");
 	}
 
 	// remove from the doubly linked active list
@@ -85,7 +98,7 @@ CG_AllocMark
 Will allways succeed, even if it requires freeing an old active mark
 ===================
 */
-markPoly_t *CG_AllocMark(void) {
+static markPoly_t *CG_AllocMark(void) {
 	markPoly_t *le;
 	int time;
 
@@ -194,10 +207,10 @@ void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, 
 			VectorCopy(originalPoints[i], markPoints[i]);
 	}
 
-	colors[0] = red * 255;
-	colors[1] = green * 255;
-	colors[2] = blue * 255;
-	colors[3] = alpha * 255;
+	colors[0] = (byte)(red * 255.0f);
+	colors[1] = (byte)(green * 255.0f);
+	colors[2] = (byte)(blue * 255.0f);
+	colors[3] = (byte)(alpha * 255.0f);
 
 	for (i = 0, mf = markFragments; i < numFragments; i++, mf++) {
 		polyVert_t *v;
@@ -215,8 +228,8 @@ void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, 
 			VectorCopy(markPoints[mf->firstPoint + j], v->xyz);
 
 			VectorSubtract(v->xyz, origin, delta);
-			v->st[0] = 0.5 + DotProduct(delta, axis[1]) * texCoordScale;
-			v->st[1] = 0.5 + DotProduct(delta, axis[2]) * texCoordScale;
+			v->st[0] = 0.5f + DotProduct(delta, axis[1]) * texCoordScale;
+			v->st[1] = 0.5f + DotProduct(delta, axis[2]) * texCoordScale;
 			*(int *)v->modulate = *(int *)colors;
 		}
 

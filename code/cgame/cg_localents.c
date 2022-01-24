@@ -27,9 +27,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "cg_local.h"
 
 #define MAX_LOCAL_ENTITIES 512
-localEntity_t cg_localEntities[MAX_LOCAL_ENTITIES];
-localEntity_t cg_activeLocalEntities; // double linked list
-localEntity_t *cg_freeLocalEntities;  // single linked list
+static localEntity_t cg_localEntities[MAX_LOCAL_ENTITIES];
+static localEntity_t cg_activeLocalEntities; // double linked list
+static localEntity_t *cg_freeLocalEntities;  // single linked list
 
 /*
 ===================
@@ -55,7 +55,7 @@ void CG_InitLocalEntities(void) {
 CG_FreeLocalEntity
 ==================
 */
-void CG_FreeLocalEntity(localEntity_t *le) {
+static void CG_FreeLocalEntity(localEntity_t *le) {
 	if (!le->prev) {
 		CG_Error("CG_FreeLocalEntity: not active");
 	}
@@ -161,7 +161,7 @@ static void CG_ReflectVelocity(localEntity_t *le, trace_t *trace) {
 CG_AddFragment
 ================
 */
-void CG_AddFragment(localEntity_t *le) {
+static void CG_AddFragment(localEntity_t *le) {
 	vec3_t newOrigin;
 	trace_t trace;
 
@@ -242,7 +242,7 @@ These only do simple scaling or modulation before passing to the renderer
 CG_AddFadeRGB
 ====================
 */
-void CG_AddFadeRGB(localEntity_t *le) {
+static void CG_AddFadeRGB(localEntity_t *le) {
 	refEntity_t *re;
 	float c;
 
@@ -264,7 +264,7 @@ void CG_AddFadeRGB(localEntity_t *le) {
 CG_AddSprayTrailFade
 ====================
 */
-void CG_AddSprayTrailFade(localEntity_t *le) {
+static void CG_AddSprayTrailFade(localEntity_t *le) {
 	refEntity_t *re;
 	float c;
 
@@ -464,10 +464,10 @@ static void CG_AddExplosion(localEntity_t *ex) {
 		float light;
 
 		light = (float)(cg.time - ex->startTime) / (ex->endTime - ex->startTime);
-		if (light < 0.5) {
-			light = 1.0;
+		if (light < 0.5f) {
+			light = 1.0f;
 		} else {
-			light = 1.0 - (light - 0.5) * 2;
+			light = 1.0f - (light - 0.5f) * 2.0f;
 		}
 		light = ex->light * light;
 		trap_R_AddLightToScene(ent->origin, light, ex->lightColor[0], ex->lightColor[1], ex->lightColor[2]);
@@ -487,16 +487,16 @@ static void CG_AddSpriteExplosion(localEntity_t *le) {
 
 	c = (le->endTime - cg.time) / (float)(le->endTime - le->startTime);
 	if (c > 1) {
-		c = 1.0; // can happen during connection problems
+		c = 1.0f; // can happen during connection problems
 	}
 
 	re.shaderRGBA[0] = 0xff;
 	re.shaderRGBA[1] = 0xff;
 	re.shaderRGBA[2] = 0xff;
-	re.shaderRGBA[3] = 0xff * c * 0.33;
+	re.shaderRGBA[3] = 0xff * c * 0.33f;
 
 	re.reType = RT_SPRITE;
-	re.radius = 42 * (1.0 - c) + 30;
+	re.radius = 42.0f * (1.0f - c) + 30.0f;
 
 	trap_R_AddRefEntityToScene(&re);
 
@@ -505,10 +505,10 @@ static void CG_AddSpriteExplosion(localEntity_t *le) {
 		float light;
 
 		light = (float)(cg.time - le->startTime) / (le->endTime - le->startTime);
-		if (light < 0.5) {
-			light = 1.0;
+		if (light < 0.5f) {
+			light = 1.0f;
 		} else {
-			light = 1.0 - (light - 0.5) * 2;
+			light = 1.0f - (light - 0.5f) * 2.0f;
 		}
 		light = le->light * light;
 		trap_R_AddLightToScene(re.origin, light, le->lightColor[0], le->lightColor[1], le->lightColor[2]);
@@ -523,7 +523,7 @@ CG_AddTrail
 #define TRAIL_TEXSCALE 0.005
 // FADETIME declared in cg_local.h
 
-void CG_AddTrail(localEntity_t *le) {
+static void CG_AddTrail(localEntity_t *le) {
 	vec3_t endPos, startPos;
 	vec3_t endDir, startDir, beamDir;
 	vec3_t endDelta, startDelta;
@@ -605,7 +605,7 @@ void CG_AddTrail(localEntity_t *le) {
 CG_AddTrailTracedRGB
 ====================
 */
-void CG_AddTrailTracedRGB(localEntity_t *le) {
+static void CG_AddTrailTracedRGB(localEntity_t *le) {
 	vec3_t endPos, startPos;
 	vec3_t endDir, startDir, beamDir;
 	vec3_t endDelta, startDelta;
@@ -702,7 +702,7 @@ void CG_AddTrailTracedRGB(localEntity_t *le) {
 CG_CalcNormAxis
 ====================
 */
-void CG_CalcNormAxis(const vec3_t dir, vec3_t axis[3]) {
+static void CG_CalcNormAxis(const vec3_t dir, vec3_t axis[3]) {
 	vec3_t adir;
 
 	// forward vector is the dir
@@ -739,7 +739,7 @@ CG_AddWaterBeam
 #define BOASTER_TEARDIST 128
 // FADETIME declared in cg_local.h
 
-void CG_AddWaterBeam(localEntity_t *le) {
+static void CG_AddWaterBeam(localEntity_t *le) {
 	vec3_t endPos, startPos;
 	vec3_t endDir, startDir, beamDir;
 	vec3_t endDelta, startDelta;
@@ -967,7 +967,7 @@ CG_AddPumperTrail
 #define PUMPER_DELTA_PHI (M_PI / 5)
 #define PUMPER_DELTA_POS 16
 
-void CG_AddPumperTrail(localEntity_t *le) {
+static void CG_AddPumperTrail(localEntity_t *le) {
 	vec3_t axis[3];
 	vec3_t beamDir, rot;
 	vec3_t newDelta, lastDelta;
@@ -1047,7 +1047,7 @@ void CG_AddPumperTrail(localEntity_t *le) {
 	} while (pos < dist);
 }
 
-void CG_AddBoomiesExplosion(localEntity_t *le) {
+static void CG_AddBoomiesExplosion(localEntity_t *le) {
 	refEntity_t *re;
 	float frac;
 
@@ -1074,10 +1074,10 @@ void CG_AddBoomiesExplosion(localEntity_t *le) {
 		trap_R_AddRefEntityToScene( re );
 	*/
 	// render the sphere
-	if (frac > 0.3) {
-		frac = (frac - 0.3) * 3;
-		if (frac > 1.0)
-			frac = 1.0;
+	if (frac > 0.3f) {
+		frac = (frac - 0.3f) * 3;
+		if (frac > 1.0f)
+			frac = 1.0f;
 		re->reType = RT_MODEL;
 		re->customShader = 0;
 		re->hModel = cgs.media.boomiesSphereModel;
@@ -1091,7 +1091,7 @@ void CG_AddBoomiesExplosion(localEntity_t *le) {
 CG_AddImperiusBoom
 ====================
 */
-void CG_AddImperiusBoom(localEntity_t *le) {
+static void CG_AddImperiusBoom(localEntity_t *le) {
 	refEntity_t *re;
 	float frac;
 
@@ -1101,7 +1101,7 @@ void CG_AddImperiusBoom(localEntity_t *le) {
 
 	// resize
 	AnglesToAxis(le->angles.trBase, re->axis);
-	AxisScale(re->axis, 10 * (1.05 - frac), re->axis);
+	AxisScale(re->axis, 10.0f * (1.05f - frac), re->axis);
 
 	// render the core
 	re->reType = RT_SPRITE;
@@ -1118,10 +1118,10 @@ void CG_AddImperiusBoom(localEntity_t *le) {
 	trap_R_AddRefEntityToScene(re);
 
 	// render the sphere
-	if (frac > 0.3) {
-		frac = (frac - 0.3) * 3;
-		if (frac > 1.0)
-			frac = 1.0;
+	if (frac > 0.3f) {
+		frac = (frac - 0.3f) * 3.0f;
+		if (frac > 1.0f)
+			frac = 1.0f;
 		re->hModel = cgs.media.imperiusSphereModel;
 		re->shaderRGBA[0] = re->shaderRGBA[1] = re->shaderRGBA[2] = 255 * frac;
 		trap_R_AddRefEntityToScene(re);
@@ -1133,7 +1133,7 @@ void CG_AddImperiusBoom(localEntity_t *le) {
 CG_AddImperiusRings
 ====================
 */
-void CG_AddImperiusRings(localEntity_t *le) {
+static void CG_AddImperiusRings(localEntity_t *le) {
 	refEntity_t *re;
 	vec3_t axis[3];
 	float c, s;
@@ -1147,7 +1147,7 @@ void CG_AddImperiusRings(localEntity_t *le) {
 	re->shaderRGBA[2] = le->color[2] * c;
 	re->shaderRGBA[3] = le->color[3] * c;
 
-	s = 0.1 + (cg.time - le->startTime) * le->lifeRate * 0.3;
+	s = 0.1f + (cg.time - le->startTime) * le->lifeRate * 0.3;
 	AxisCopy(re->axis, axis);
 	AxisScale(axis, s, re->axis);
 
@@ -1161,7 +1161,7 @@ void CG_AddImperiusRings(localEntity_t *le) {
 CG_AddTeleffect
 ====================
 */
-void CG_AddTeleffect(localEntity_t *le) {
+static void CG_AddTeleffect(localEntity_t *le) {
 	refEntity_t *re;
 	float frac;
 
@@ -1186,7 +1186,7 @@ CG_AddScorePlum
 */
 #define NUMBER_SIZE 8
 
-void CG_AddScorePlum(localEntity_t *le) {
+static void CG_AddScorePlum(localEntity_t *le) {
 	refEntity_t *re;
 	vec3_t origin, delta, dir, vec, up = {0, 0, 1};
 	float c, len;
@@ -1263,12 +1263,9 @@ void CG_AddScorePlum(localEntity_t *le) {
 	}
 }
 
-//==============================================================================
-
 /*
 ===================
 CG_AddLocalEntities
-
 ===================
 */
 void CG_AddLocalEntities(void) {

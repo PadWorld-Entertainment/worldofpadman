@@ -99,24 +99,14 @@ static char tmpString[MAX_TMPSTRING];
 static char nextscript[128];
 
 static void StrEndWork(void) {
-	//	char	offsetstr[32];
-
-	if (tmpstrl == 0) // tmpString[0]=='\0')
-	{
+	if (tmpstrl == 0) {
 		next_tmpstr = NT_NORMAL;
 		return;
 	}
 
-	/*
-		memset(&offsetstr,' ',sizeof(offsetstr));
-		offsetstr[parserlvl*3]='\0';
-
-		Com_Printf("%s\"%s\"\n",offsetstr,tmpString);
-	*/
 	switch (parserlvl) {
 	case PL_BASE:
-		//		Com_Printf("scriptname:\"%s\"\n",tmpString);
-		strcpy(nextscript, tmpString);
+		Q_strncpyz(nextscript, tmpString, sizeof(nextscript));
 		break;
 	case PL_LF:
 		switch (next_tmpstr) {
@@ -130,52 +120,6 @@ static void StrEndWork(void) {
 
 			next_tmpstr = NT_NORMAL;
 			break;
-			/* gibt's nicht mehr aber falls ich noch mal was vor die flares machen will, so als beispiel ;)
-						if(!Q_stricmp(tmpString,"ob_shader"))
-						{ next_tmpstr=NT_OB_SHADER; }
-						else if(!Q_stricmp(tmpString,"ob_color"))
-						{ next_tmpstr=NT_OB_COLOR_R; }
-						else if(!Q_stricmp(tmpString,"ob_area"))
-						{ next_tmpstr=NT_OB_AREA; }
-						else if(!Q_stricmp(tmpString,"ob_size"))
-						{ next_tmpstr=NT_OB_SIZE; }
-						break;
-					case NT_OB_SHADER:
-						strcpy(lfmem[numlfs-1].ob_shadername,tmpString);
-
-						next_tmpstr=NT_NORMAL;
-						break;
-					case NT_OB_COLOR_R:
-						lfmem[numlfs-1].ob_color[0]=atof(tmpString);
-
-						next_tmpstr=NT_OB_COLOR_G;
-						break;
-					case NT_OB_COLOR_G:
-						lfmem[numlfs-1].ob_color[1]=atof(tmpString);
-
-						next_tmpstr=NT_OB_COLOR_B;
-						break;
-					case NT_OB_COLOR_B:
-						lfmem[numlfs-1].ob_color[2]=atof(tmpString);
-
-						next_tmpstr=NT_OB_COLOR_A;
-						break;
-					case NT_OB_COLOR_A:
-						lfmem[numlfs-1].ob_color[3]=atof(tmpString);
-
-						next_tmpstr=NT_NORMAL;
-						break;
-					case NT_OB_AREA:
-						lfmem[numlfs-1].ob_area=atof(tmpString);
-
-						next_tmpstr=NT_NORMAL;
-						break;
-					case NT_OB_SIZE:
-						lfmem[numlfs-1].ob_size=atof(tmpString);
-
-						next_tmpstr=NT_NORMAL;
-						break;
-			*/
 		default:
 			break;
 		}
@@ -208,7 +152,7 @@ static void StrEndWork(void) {
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_SHADER:
-			strcpy(lfmem[numlfs - 1].firstflare->shadername, tmpString);
+			Q_strncpyz(lfmem[numlfs - 1].firstflare->shadername, tmpString, sizeof(lfmem[numlfs - 1].firstflare->shadername));
 
 			next_tmpstr = NT_NORMAL;
 			break;
@@ -312,7 +256,7 @@ static void StrEndWork(void) {
 }
 
 #define MAX_LFSCRIPTSIZE 8192 //-> like arenas-file loader
-void LF_Parser(const char *scriptname) {
+static void LF_Parser(const char *scriptname) {
 	fileHandle_t f;
 	int i;
 	qboolean inString;
@@ -386,7 +330,7 @@ void LF_Parser(const char *scriptname) {
 					return;
 				}
 
-				strcpy(lfmem[numlfs].lfname, nextscript);
+				Q_strncpyz(lfmem[numlfs].lfname, nextscript, sizeof(lfmem[numlfs].lfname));
 				lfmem[numlfs].viewsize = 1.0f;
 				numlfs++;
 				break;
@@ -455,14 +399,14 @@ this function will search lensflare-scripts in "lensflarelist" and call the pars
 #######################
 */
 #define MAX_LFFILES 40 // I hope this is enough
-void Load_LFfiles(void) {
+static void Load_LFfiles(void) {
 	int i, scriptsfound;
 	char *scriptnamelist[MAX_LFFILES];
 	char scriptnamestr[1024];
 	char *tmpchrptr;
 
 	// get the filelist (created in the ui ... ui_gameinfo.c)
-	trap_Cvar_VariableStringBuffer("lensflarelist", scriptnamestr, 1024);
+	trap_Cvar_VariableStringBuffer("lensflarelist", scriptnamestr, sizeof(scriptnamestr));
 
 	// scan liststring for scriptnames
 	if (scriptnamestr[0] != '\0') {
@@ -508,7 +452,7 @@ void Init_LensFlareSys(void) {
 	Q_strncpyz(tmpstr, cg_skyLensflare.string, sizeof(tmpstr));
 	if (tmpstr[0] != '\0') {
 		sscanf(tmpstr, "%f %f %f", &cg.skylensflare_dir[0], &cg.skylensflare_dir[1], &cg.skylensflare_dir[2]);
-		strcpy(cg.skylensflare, (char *)(strchr(tmpstr, '>') + 1));
+		Q_strncpyz(cg.skylensflare, (char *)(strchr(tmpstr, '>') + 1), sizeof(cg.skylensflare));
 	} else
 		cg.skylensflare[0] = '\0';
 
@@ -551,6 +495,7 @@ void Init_LensFlareSys(void) {
 
 	Load_LFfiles();
 }
+
 // loading all lensflare-scripts (filelist by ui)
 // VV ... VV //get a info from the server which flares will be used(I don't know how I will make this exactly ...
 // especially if I use ent-flares) ... I think I will inform me of the fixed lens and load the ent-lens depending on the
@@ -568,7 +513,7 @@ AddLFToDrawList
 TODO: write some info ;)
 #######################
 */
-void AddLFToDrawList(const char *lfname, vec3_t origin, vec3_t dir) {
+static void AddLFToDrawList(const char *lfname, vec3_t origin, vec3_t dir) {
 	int i;
 
 	if (IFDA_firstempty == MAX_SCREENLFS)
@@ -746,10 +691,11 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 				else
 					tmpalpha2 = lfalpha * (1.0f - prozDirLenSquared / lfmem[lfid].viewsize);
 			}
-		} else if (lfalpha < 0.0f)
+		} else if (lfalpha < 0.0f) {
 			continue;
-		else
+		} else {
 			tmpalpha2 = lfalpha;
+		}
 
 		tmpalpha = tmpflare->color[3];
 		tmpflare->color[3] *= tmpalpha2;
@@ -762,15 +708,6 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 
 		switch (tmpflare->special) {
 		default:
-			/*
-						trap_R_SetColor(tmpflare->color);
-						tmpflare->radius*=prozSize;
-						trap_R_DrawStretchPic((320.0f+dir[0]*tmpflare->pos)-tmpflare->radius,(240.0f-dir[1]*tmpflare->pos)-tmpflare->radius,tmpflare->radius*2.0f,tmpflare->radius*2.0f,0,0,1,1,tmpflare->shader);
-						tmpflare->radius*=invprozSize;
-						trap_R_SetColor(NULL);
-						break;
-					case SF_TURNING:
-			*/
 			{
 				float tmpf = 0;
 				vec2_t tmpdir;
@@ -839,20 +776,6 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 			float tmpf = 0;
 
 			if (tmpflare->turnstyle[1] != 0.0f) {
-				/* old
-									tmpf=sqrt(dir[0]*dir[0]+dir[1]*dir[1]);
-									if(tmpf)
-									{
-										ndir[0]=dir[0]/tmpf;
-										ndir[1]=dir[1]/tmpf;
-									}
-									else
-									{
-										ndir[0]=1;
-										ndir[1]=0;
-										//break;
-									}
-				*/
 				tmpf = sqrt(dir[0] * dir[0] + dir[1] * dir[1]);
 
 				if (tmpf) {
