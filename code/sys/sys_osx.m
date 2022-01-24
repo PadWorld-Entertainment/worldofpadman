@@ -99,18 +99,18 @@ Discovers if passed dir is suffixed with the directory structure of a Mac OS X
 the result is returned. If not, dir is returned untouched.
 =================
 */
-char *Sys_StripAppBundle( char *dir )
+char *Sys_StripAppBundle(char *dir)
 {
 	static char cwd[MAX_OSPATH];
 
 	Q_strncpyz(cwd, dir, sizeof(cwd));
-	if(strcmp(Sys_Basename(cwd), "MacOS"))
+	if (strcmp(Sys_Basename(cwd), "MacOS"))
 		return dir;
 	Q_strncpyz(cwd, Sys_Dirname(cwd), sizeof(cwd));
-	if(strcmp(Sys_Basename(cwd), "Contents"))
+	if (strcmp(Sys_Basename(cwd), "Contents"))
 		return dir;
 	Q_strncpyz(cwd, Sys_Dirname(cwd), sizeof(cwd));
-	if(!strstr(Sys_Basename(cwd), ".app"))
+	if (!strstr(Sys_Basename(cwd), ".app"))
 		return dir;
 	Q_strncpyz(cwd, Sys_Dirname(cwd), sizeof(cwd));
 	return cwd;

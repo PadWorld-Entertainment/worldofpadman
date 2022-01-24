@@ -1,11 +1,9 @@
 [Unit]
-Description=This service spawns an ioquake3 Internet server
-# A map will need to be loaded for players to be able to join.
-# For additional settings see http://wiki.ioquake3.org/Sys_Admin_Guide
+Description=This service spawns a World Of Padman Internet server
 
 [Service]
-User=q3a
-ExecStart=/usr/local/games/worldofpadman/wopded.x86_64 +set dedicated 2
+User=wop
+ExecStart=/usr/local/games/worldofpadman/wopded.x86_64 +set dedicated 2 +exec server-settings.cfg +vstr nextmap
 Restart=on-abort
 
 [Install]

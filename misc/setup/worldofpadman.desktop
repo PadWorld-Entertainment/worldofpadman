@@ -1,9 +1,10 @@
 [Desktop Entry]
-Name=ioquake3
-Exec=ioquake3
-Icon=quake3
+Name=World Of Padman
+Exec=worldofpadman %u
+Icon=wop
 Type=Application
 Terminal=false
 Encoding=UTF-8
 Categories=Game;ActionGame;
+MimeType=x-scheme-handler/worldofpadman;
 X-SuSE-translate=false

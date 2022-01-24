@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
   <key>CFBundleDevelopmentRegion</key>
-  <string>en-US</string>
+  <string>en</string>
   <key>CFBundleExecutable</key>
   <string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
   <key>CFBundleIdentifier</key>
@@ -16,6 +16,27 @@
   <string>@_EXE_TARGET@</string>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
+  <key>CFBundleShortVersionString</key>
+  <string>@CMAKE_PROJECT_VERSION@</string>
+  <key>CFBundleSignature</key>
+  <string>????</string>
+  <key>CFBundleVersion</key>
+  <string>@CMAKE_PROJECT_VERSION@</string>
+  <key>CGDisableCoalescedUpdates</key>
+  <true/>
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleURLName</key>
+      <string>@_EXE_TARGET@</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>worldofpadman</string>
+      </array>
+    </dict>
+  </array>
+  <key>NSPrincipalClass</key>
+  <string>NSApplication</string>
   <key>NSHighResolutionCapable</key>
   <true/>
   <key>NSRequiresAquaSystemAppearance</key>
