@@ -83,15 +83,15 @@ FBO_t *FBO_Create(const char *name, int width, int height) {
 	}
 
 	if (width <= 0 || width > glRefConfig.maxRenderbufferSize) {
-		ri.Error(ERR_DROP, "FBO_Create: bad width %i", width);
+		ri.Error(ERR_DROP, "FBO_Create: bad width %i (%s)", width, name);
 	}
 
 	if (height <= 0 || height > glRefConfig.maxRenderbufferSize) {
-		ri.Error(ERR_DROP, "FBO_Create: bad height %i", height);
+		ri.Error(ERR_DROP, "FBO_Create: bad height %i (%s)", height, name);
 	}
 
 	if (tr.numFBOs == MAX_FBOS) {
-		ri.Error(ERR_DROP, "FBO_Create: MAX_FBOS hit");
+		ri.Error(ERR_DROP, "FBO_Create: MAX_FBOS hit (%s)", name);
 	}
 
 	fbo = tr.fbos[tr.numFBOs] = ri.Hunk_Alloc(sizeof(*fbo), h_low);
