@@ -77,7 +77,7 @@ function(wop_add_library)
 		set(ARCH x86_64)
 	endif()
 
-	set(OUTPUTNAME "${_LIB_TARGET}${ARCH}")
+	set(OUTPUTNAME "${_LIB_TARGET}_${ARCH}")
 	set(LIB_BINARY_DIR "${ENGINE_BINARY_DIR}")
 	if (_LIB_GAME)
 		set(LIB_BINARY_DIR "${GAME_BINARY_DIR}")
