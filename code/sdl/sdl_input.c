@@ -387,8 +387,6 @@ static keyNum_t IN_TranslateSDLToQ3Key(SDL_Keysym *keysym, qboolean down) {
 			key = K_SYSREQ;
 			break;
 		case SDLK_MENU:
-			key = K_MENU;
-			break;
 		case SDLK_APPLICATION:
 			key = K_MENU;
 			break;
