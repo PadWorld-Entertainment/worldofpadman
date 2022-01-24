@@ -3083,36 +3083,7 @@ static void CG_DrawTourneyScoreboard(void) {
 	CG_DrawOldTourneyScoreboard();
 }
 
-/*
-=====================
-CG_DrawActive
-
-Perform all drawing needed to completely fill the screen
-=====================
-*/
-void CG_DrawActive(stereoFrame_t stereoView) {
-	int ltiT, waterTime;
-	int notifytime;
-	int chatHeight;
-	int WETSCREEN_FADETIME = 3000;
-
-	// optionally draw the info screen instead
-	if (!cg.snap) {
-		CG_DrawInformation();
-		return;
-	}
-
-	// optionally draw the tournement scoreboard instead
-	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR && (cg.snap->ps.pm_flags & PMF_SCOREBOARD)) {
-		CG_DrawTourneyScoreboard();
-		return;
-	}
-
-	// clear around the rendered view if sized down
-	CG_TileClear();
-
-	/// draw kma zoom bluescreen-effect (this need to be in real 3d, so it can be overlayed by a higher sorted
-	/// shader-aura)
+static void CG_DrawKMABlueScreenEffect(void) {
 	if (cg.zoomed && cg.snap->ps.weapon == WP_KMA97 && cgs.media.zoomKMAbluescreen) {
 		float xscale, yscale;
 		polyVert_t verts[4];
@@ -3126,8 +3097,8 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 		VectorMA(cg.refdef.vieworg, 5, cg.refdef.viewaxis[0], verts[0].xyz);
 		VectorCopy(verts[0].xyz, verts[2].xyz);
 
-		xscale = tan(cg.refdef.fov_x * 0.5f * M_PI / 180.0f) * 5;
-		yscale = tan(cg.refdef.fov_y * 0.5f * M_PI / 180.0f) * 5;
+		xscale = (float)tan(cg.refdef.fov_x * 0.5f * M_PI / 180.0f) * 5;
+		yscale = (float)tan(cg.refdef.fov_y * 0.5f * M_PI / 180.0f) * 5;
 
 		VectorMA(verts[0].xyz, -xscale, cg.refdef.viewaxis[1], verts[0].xyz);
 		VectorMA(verts[2].xyz, xscale, cg.refdef.viewaxis[1], verts[2].xyz);
@@ -3143,22 +3114,9 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 		// old shader: cgs.media.whiteShader
 		trap_R_AddPolyToScene(cgs.media.zoomKMAbluescreen, 4, verts);
 	}
+}
 
-	if (stereoView != STEREO_CENTER)
-		CG_DrawCrosshair3D();
-
-	// draw 3D view
-	trap_R_RenderScene(&cg.refdef);
-
-	//	CG_Printf("org={%1.3f|%1.3f|%1.3f}\n",cg.refdef.vieworg[0],cg.refdef.vieworg[1],cg.refdef.vieworg[2]);
-	if (cg_printDir.integer) {
-		CG_Printf("dir={%1.3f|%1.3f|%1.3f}\n", cg.refdef.viewaxis[0][0], cg.refdef.viewaxis[0][1],
-				  cg.refdef.viewaxis[0][2]);
-	}
-
-	AddLFsToScreen();
-
-	// zoom specific drawing
+static void CG_DrawZoom(void) {
 	if (cg.zoomed) {
 		trace_t tr;
 		vec3_t tmpv3;
@@ -3222,13 +3180,12 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 			}
 		}
 	}
+}
 
-	// *******************
-	// FULLSCREEN EFFECTS
-	// *******************
-
-	ltiT = cgs.clientinfo[cg.snap->ps.clientNum].lastTeleInTime;
-	waterTime = cgs.clientinfo[cg.snap->ps.clientNum].lastWaterClearTime;
+static void CG_DrawFullscreenEffects(void) {
+	const int WETSCREEN_FADETIME = 3000;
+	const int ltiT = cgs.clientinfo[cg.snap->ps.clientNum].lastTeleInTime;
+	const int waterTime = cgs.clientinfo[cg.snap->ps.clientNum].lastWaterClearTime;
 
 	// teleport effect
 	if (!cg.renderingThirdPerson && !(cg.snap->ps.eFlags & EF_DEAD) && ltiT && cg.time - ltiT < 500) {
@@ -3281,11 +3238,11 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 		trap_R_DrawStretchPic(cg.refdef.x, cg.refdef.y, cg.refdef.width, cg.refdef.height, 0, 0, 1, 1,
 							  cgs.media.FreezeScreenShader);
 	}
+}
 
-	// ******************
-
-	// draw status bar and other floating elements
-	CG_Draw2D(stereoView);
+static void CG_DrawChat(void) {
+	int notifytime;
+	int chatHeight;
 
 	// Draw chat messages and icons
 	notifytime = CG_GetCvarInt("con_notifytime");
@@ -3338,6 +3295,56 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 			} while (i != cg.lastchatmsg);
 		}
 	}
+}
+
+/*
+=====================
+CG_DrawActive
+
+Perform all drawing needed to completely fill the screen
+=====================
+*/
+void CG_DrawActive(stereoFrame_t stereoView) {
+	// optionally draw the info screen instead
+	if (!cg.snap) {
+		CG_DrawInformation();
+		return;
+	}
+
+	// optionally draw the tournement scoreboard instead
+	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR && (cg.snap->ps.pm_flags & PMF_SCOREBOARD)) {
+		CG_DrawTourneyScoreboard();
+		return;
+	}
+
+	// clear around the rendered view if sized down
+	CG_TileClear();
+
+	/// draw kma zoom bluescreen-effect (this need to be in real 3d, so it can be overlayed by a higher sorted
+	/// shader-aura)
+	CG_DrawKMABlueScreenEffect();
+
+	if (stereoView != STEREO_CENTER)
+		CG_DrawCrosshair3D();
+
+	// draw 3D view
+	trap_R_RenderScene(&cg.refdef);
+
+	if (cg_printDir.integer) {
+		CG_Printf("dir={%1.3f|%1.3f|%1.3f}\n", cg.refdef.viewaxis[0][0], cg.refdef.viewaxis[0][1],
+				  cg.refdef.viewaxis[0][2]);
+	}
+
+	AddLFsToScreen();
+
+	CG_DrawZoom();
+
+	CG_DrawFullscreenEffects();
+
+	// draw status bar and other floating elements
+	CG_Draw2D(stereoView);
+
+	CG_DrawChat();
 
 	if (cg_cineDrawLetterBox.integer) {
 		vec4_t color = {0, 0, 0, 1}; // black
