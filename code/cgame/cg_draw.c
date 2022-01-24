@@ -3243,58 +3243,69 @@ static void CG_DrawFullscreenEffects(void) {
 static void CG_DrawChat(void) {
 	int notifytime;
 	int chatHeight;
+	int noprint;
+	int i = cg.lastchatmsg;
+	int j = 0;
+
+	if (!cg_draw2D.integer) {
+		return;
+	}
 
 	// Draw chat messages and icons
 	notifytime = CG_GetCvarInt("con_notifytime");
 	// We draw console messages ourself, if >0 it's engine's task!
-	if (notifytime <= 0) {
-		int noprint = CG_GetCvarInt("cl_noprint");
-		// needed to calculate properly
-		notifytime *= -1;
-		// limiting max chat messages to cg_chatheight cvar
-		if (cg_chatHeight.integer < MAX_CHATMESSAGES) {
-			chatHeight = abs(cg_chatHeight.integer);
-		} else {
-			chatHeight = MAX_CHATMESSAGES;
-		}
-		if (chatHeight <= 0) {
-			noprint = qtrue;
-		}
-
-
-		if (cg_draw2D.integer && !noprint && !(trap_Key_GetCatcher() & KEYCATCH_MESSAGE)) {
-			int i = cg.lastchatmsg;
-			int j = 0;
-
-			// TODO: chatHeight should be used here!
-			do {
-				i++;
-				if (i >= chatHeight) {
-					i = 0;
-				}
-
-				// skip inital messages
-				if (cg.chatmsgtime[i] && (cg.time - cg.chatmsgtime[i]) < (notifytime * 1000)) {
-					const float CHAT_ICONSIZE = 14;
-					const float CHAT_PADDING = 1;
-					const float CHAT_CHARHEIGHT = (CHAT_ICONSIZE - (2 * CHAT_PADDING));
-					const float CHAT_CHARWIDTH = (CHAT_CHARHEIGHT / 2);
-					if (cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) {
-						CG_DrawPic(CHAT_PADDING, (j * CHAT_ICONSIZE), CHAT_ICONSIZE, CHAT_ICONSIZE, cg.chaticons[i]);
-					}
-					// TODO: Create a cvar for fontsize (also adjust icon-size)?
-					// TODO: This does not support newlines (see "hotfix" in CG_DrawChar() )
-					//       or linewrapping. On the other hand, long text crashes the game anyways..
-					CG_DrawStringExt(((cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) ? (CHAT_ICONSIZE + (2 * CHAT_PADDING)) : CHAT_PADDING),
-									 ((j * CHAT_ICONSIZE) + ((CHAT_ICONSIZE - CHAT_CHARHEIGHT) / 2)), cg.chattext[i],
-									 colorWhite, qfalse, qtrue, CHAT_CHARWIDTH, CHAT_CHARHEIGHT,
-									 strlen(cg.chattext[i]));
-
-					j++;
-				}
-			} while (i != cg.lastchatmsg);
-		}
+	if (notifytime > 0) {
+		return;
 	}
+	noprint = CG_GetCvarInt("cl_noprint");
+	if (noprint) {
+		return;
+	}
+
+	if (trap_Key_GetCatcher() & KEYCATCH_MESSAGE) {
+		return;
+	}
+	// needed to calculate properly
+	notifytime *= -1;
+	// limiting max chat messages to cg_chatheight cvar
+	if (cg_chatHeight.integer < MAX_CHATMESSAGES) {
+		chatHeight = abs(cg_chatHeight.integer);
+	} else {
+		chatHeight = MAX_CHATMESSAGES;
+	}
+	if (chatHeight <= 0) {
+		noprint = qtrue;
+	}
+
+	do {
+		i++;
+		if (i >= MAX_CHATMESSAGES) {
+			i = 0;
+		}
+
+		// skip inital messages
+		if (j >= chatHeight) {
+			// this is adding some extra time to those chat entries that were not visible before...
+			cg.chatmsgtime[i] = cg.time;
+		} else if (cg.chatmsgtime[i] && (cg.time - cg.chatmsgtime[i]) < (notifytime * 1000)) {
+			const float CHAT_ICONSIZE = 14;
+			const float CHAT_PADDING = 1;
+			const float CHAT_CHARHEIGHT = (CHAT_ICONSIZE - (2 * CHAT_PADDING));
+			const float CHAT_CHARWIDTH = (CHAT_CHARHEIGHT / 2);
+			if (cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) {
+				CG_DrawPic(CHAT_PADDING, (j * CHAT_ICONSIZE), CHAT_ICONSIZE, CHAT_ICONSIZE, cg.chaticons[i]);
+			}
+			// TODO: Create a cvar for fontsize (also adjust icon-size)?
+			// TODO: This does not support newlines (see "hotfix" in CG_DrawChar() )
+			//       or linewrapping. On the other hand, long text crashes the game anyways..
+			CG_DrawStringExt(((cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) ? (CHAT_ICONSIZE + (2 * CHAT_PADDING)) : CHAT_PADDING),
+								((j * CHAT_ICONSIZE) + ((CHAT_ICONSIZE - CHAT_CHARHEIGHT) / 2)), cg.chattext[i],
+								colorWhite, qfalse, qtrue, CHAT_CHARWIDTH, CHAT_CHARHEIGHT,
+								strlen(cg.chattext[i]));
+
+			j++;
+		}
+	} while (i != cg.lastchatmsg);
 }
 
 /*
