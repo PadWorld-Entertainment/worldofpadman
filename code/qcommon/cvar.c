@@ -273,6 +273,13 @@ static const char *Cvar_Validate(cvar_t *var, const char *value, qboolean warn) 
 	return value;
 }
 
+static const char *Cvar_GetEnvName(const char *in) {
+	static char name[128];
+	Com_sprintf(name, sizeof(name), BASEGAME "_%s", in);
+	Q_strupr(name);
+	return name;
+}
+
 /*
 ============
 Cvar_Get
@@ -283,6 +290,7 @@ The flags will be or'ed in if the variable exists.
 */
 cvar_t *Cvar_Get(const char *var_name, const char *var_value, int flags) {
 	cvar_t *var;
+	const char *env_value;
 	long hash;
 	int index;
 
@@ -395,7 +403,12 @@ cvar_t *Cvar_Get(const char *var_name, const char *var_value, int flags) {
 		cvar_numIndexes = index + 1;
 
 	var->name = CopyString(var_name);
-	var->string = CopyString(var_value);
+	env_value = getenv(Cvar_GetEnvName(var_name));
+	if (env_value != NULL) {
+		var->string = CopyString(env_value);
+	} else {
+		var->string = CopyString(var_value);
+	}
 	var->modified = qtrue;
 	var->modificationCount = 1;
 	var->value = atof(var->string);
