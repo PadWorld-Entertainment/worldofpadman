@@ -47,7 +47,7 @@ function(wop_add_debuggger TARGET)
 	if (${DEBUGGER} MATCHES "gdb")
 		add_custom_target(${TARGET}-debug)
 		add_custom_command(TARGET ${TARGET}-debug
-			COMMAND ${GDB_EXECUTABLE} -ex run --args $<TARGET_FILE:${TARGET}>
+			COMMAND ${GDB_EXECUTABLE} -ex run --args $<TARGET_FILE:${TARGET}> +set vm_game 0 +set vm_cgame 0 +set vm_ui 0 +set sv_pure 0 +set ttycon 0 +set com_ansiColor 0
 			COMMENT "Starting debugger session for ${TARGET}"
 			USES_TERMINAL
 			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -56,7 +56,7 @@ function(wop_add_debuggger TARGET)
 	elseif (${DEBUGGER} MATCHES "lldb")
 		add_custom_target(${TARGET}-debug)
 		add_custom_command(TARGET ${TARGET}-debug
-			COMMAND CG_CONTEXT_SHOW_BACKTRACE=1 ${LLDB_EXECUTABLE} -b -o run $<TARGET_FILE:${TARGET}>
+			COMMAND CG_CONTEXT_SHOW_BACKTRACE=1 ${LLDB_EXECUTABLE} -b -o run $<TARGET_FILE:${TARGET}> +set vm_game 0 +set vm_cgame 0 +set vm_ui 0 +set sv_pure 0 +set ttycon 0 +set com_ansiColor 0
 			COMMENT "Starting debugger session for ${TARGET}"
 			USES_TERMINAL
 			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -77,7 +77,7 @@ function(wop_add_library)
 		set(ARCH x86_64)
 	endif()
 
-	set(OUTPUTNAME "${_LIB_TARGET}_${ARCH}")
+	set(OUTPUTNAME "${_LIB_TARGET}${ARCH}")
 	set(LIB_BINARY_DIR "${ENGINE_BINARY_DIR}")
 	if (_LIB_GAME)
 		set(LIB_BINARY_DIR "${GAME_BINARY_DIR}")
@@ -175,7 +175,7 @@ function(wop_add_executable)
 	install(TARGETS ${_EXE_TARGET} DESTINATION "${ENGINE_BINARY_DIR}" COMPONENT wop)
 
 	add_custom_target(${_EXE_TARGET}-run
-		COMMAND $<TARGET_FILE:${_EXE_TARGET}>
+		COMMAND $<TARGET_FILE:${_EXE_TARGET}> +set sv_pure 0
 		USES_TERMINAL
 		DEPENDS ${_EXE_TARGET}
 		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
