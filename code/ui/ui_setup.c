@@ -52,12 +52,12 @@ SETUP MENU
 
 typedef struct {
 	menuframework_s menu;
-	menubitmap_s Player;
-	menubitmap_s Controls;
-	menubitmap_s System;
-	menubitmap_s Options;
-	menubitmap_s Defaults;
-	menubitmap_s Back;
+	menubitmap_s player;
+	menubitmap_s controls;
+	menubitmap_s system;
+	menubitmap_s options;
+	menubitmap_s defaults;
+	menubitmap_s back;
 } setupMenuInfo_t;
 
 static setupMenuInfo_t setupMenuInfo;
@@ -78,13 +78,12 @@ static setupMenuInfo_t setupMenuInfo;
 #define YES1 "menu/buttons/yes1"
 #define NO0 "menu/buttons/no0"
 #define NO1 "menu/buttons/no1"
-// BACK0, BACK1 used from SETUP MENU
 
 typedef struct {
 	menuframework_s menu;
-	menubitmap_s Yes;
-	menubitmap_s No;
-	menubitmap_s Back;
+	menubitmap_s yes;
+	menubitmap_s no;
+	menubitmap_s back;
 } setupDefaultMenu_t;
 
 static setupDefaultMenu_t setupDefaultMenu;
@@ -100,7 +99,6 @@ static void SetupDefaultMenu_Event(void *ptr, int event) {
 
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_DEFAULT_YES:
-		//		UI_PopMenu();
 		trap_Cmd_ExecuteText(EXEC_APPEND, "exec default.cfg\n");
 		trap_Cmd_ExecuteText(EXEC_APPEND, "cvar_restart\n");
 		trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
@@ -120,6 +118,28 @@ static void SetupDefaultMenu_Draw(void) {
 
 /*
 #######################
+SetupDefaultMenu_Key
+#######################
+*/
+static sfxHandle_t SetupDefaultMenu_Key(int key) {
+	switch (key) {
+
+	case 'n':
+	case 'N':
+		SetupDefaultMenu_Event(&setupDefaultMenu.no, QM_ACTIVATED);
+		break;
+
+	case 'y':
+	case 'Y':
+		SetupDefaultMenu_Event(&setupDefaultMenu.yes, QM_ACTIVATED);
+		break;
+	}
+
+	return Menu_DefaultKey(&setupDefaultMenu.menu, key);
+}
+
+/*
+#######################
 SetupDefaultMenu_Init
 #######################
 */
@@ -127,49 +147,51 @@ static void SetupDefaultMenu_Init(void) {
 	SetupDefaultMenu_Cache();
 
 	memset(&setupDefaultMenu, 0, sizeof(setupDefaultMenu));
+	setupDefaultMenu.menu.key = SetupDefaultMenu_Key;
 	setupDefaultMenu.menu.draw = SetupDefaultMenu_Draw;
 	setupDefaultMenu.menu.wrapAround = qtrue;
 	setupDefaultMenu.menu.fullscreen = qtrue;
 	setupDefaultMenu.menu.bgparts = BGP_DEFAULTSBG | BGP_SIMPLEBG;
 
-	setupDefaultMenu.Yes.generic.type = MTYPE_BITMAP;
-	setupDefaultMenu.Yes.generic.name = YES0;
-	setupDefaultMenu.Yes.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupDefaultMenu.Yes.generic.x = 380; // 349;
-	setupDefaultMenu.Yes.generic.y = 284; // 241;
-	setupDefaultMenu.Yes.generic.id = ID_DEFAULT_YES;
-	setupDefaultMenu.Yes.generic.callback = SetupDefaultMenu_Event;
-	setupDefaultMenu.Yes.width = 80;
-	setupDefaultMenu.Yes.height = 40;
-	setupDefaultMenu.Yes.focuspic = YES1;
-	setupDefaultMenu.Yes.focuspicinstead = qtrue;
-	Menu_AddItem(&setupDefaultMenu.menu, &setupDefaultMenu.Yes);
+	setupDefaultMenu.yes.generic.type = MTYPE_BITMAP;
+	setupDefaultMenu.yes.generic.name = YES0;
+	setupDefaultMenu.yes.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupDefaultMenu.yes.generic.x = 380; // 349;
+	setupDefaultMenu.yes.generic.y = 284; // 241;
+	setupDefaultMenu.yes.generic.id = ID_DEFAULT_YES;
+	setupDefaultMenu.yes.generic.callback = SetupDefaultMenu_Event;
+	setupDefaultMenu.yes.width = 80;
+	setupDefaultMenu.yes.height = 40;
+	setupDefaultMenu.yes.focuspic = YES1;
+	setupDefaultMenu.yes.focuspicinstead = qtrue;
 
-	setupDefaultMenu.No.generic.type = MTYPE_BITMAP;
-	setupDefaultMenu.No.generic.name = NO0;
-	setupDefaultMenu.No.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupDefaultMenu.No.generic.x = 497; // 449;
-	setupDefaultMenu.No.generic.y = 284; // 241;
-	setupDefaultMenu.No.generic.id = ID_DEFAULT_NO;
-	setupDefaultMenu.No.generic.callback = SetupDefaultMenu_Event;
-	setupDefaultMenu.No.width = 40;
-	setupDefaultMenu.No.height = 40;
-	setupDefaultMenu.No.focuspic = NO1;
-	setupDefaultMenu.No.focuspicinstead = qtrue;
-	Menu_AddItem(&setupDefaultMenu.menu, &setupDefaultMenu.No);
+	setupDefaultMenu.no.generic.type = MTYPE_BITMAP;
+	setupDefaultMenu.no.generic.name = NO0;
+	setupDefaultMenu.no.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupDefaultMenu.no.generic.x = 497; // 449;
+	setupDefaultMenu.no.generic.y = 284; // 241;
+	setupDefaultMenu.no.generic.id = ID_DEFAULT_NO;
+	setupDefaultMenu.no.generic.callback = SetupDefaultMenu_Event;
+	setupDefaultMenu.no.width = 40;
+	setupDefaultMenu.no.height = 40;
+	setupDefaultMenu.no.focuspic = NO1;
+	setupDefaultMenu.no.focuspicinstead = qtrue;
 
-	setupDefaultMenu.Back.generic.type = MTYPE_BITMAP;
-	setupDefaultMenu.Back.generic.name = BACK0;
-	setupDefaultMenu.Back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	setupDefaultMenu.Back.generic.x = 8;
-	setupDefaultMenu.Back.generic.y = 440;
-	setupDefaultMenu.Back.generic.id = ID_DEFAULT_BACK;
-	setupDefaultMenu.Back.generic.callback = SetupDefaultMenu_Event;
-	setupDefaultMenu.Back.width = 80;
-	setupDefaultMenu.Back.height = 40;
-	setupDefaultMenu.Back.focuspic = BACK1;
-	setupDefaultMenu.Back.focuspicinstead = qtrue;
-	Menu_AddItem(&setupDefaultMenu.menu, &setupDefaultMenu.Back);
+	setupDefaultMenu.back.generic.type = MTYPE_BITMAP;
+	setupDefaultMenu.back.generic.name = BACK0;
+	setupDefaultMenu.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	setupDefaultMenu.back.generic.x = 8;
+	setupDefaultMenu.back.generic.y = 440;
+	setupDefaultMenu.back.generic.id = ID_DEFAULT_BACK;
+	setupDefaultMenu.back.generic.callback = SetupDefaultMenu_Event;
+	setupDefaultMenu.back.width = 80;
+	setupDefaultMenu.back.height = 40;
+	setupDefaultMenu.back.focuspic = BACK1;
+	setupDefaultMenu.back.focuspicinstead = qtrue;
+
+	Menu_AddItem(&setupDefaultMenu.menu, &setupDefaultMenu.yes);
+	Menu_AddItem(&setupDefaultMenu.menu, &setupDefaultMenu.no);
+	Menu_AddItem(&setupDefaultMenu.menu, &setupDefaultMenu.back);
 
 	UI_PushMenu(&setupDefaultMenu.menu);
 }
@@ -238,85 +260,85 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.menu.noPushSelect = qtrue;
 	setupMenuInfo.menu.bgparts = BGP_SETUPBG | BGP_SIMPLEBG;
 
-	setupMenuInfo.Player.generic.type = MTYPE_BITMAP;
-	setupMenuInfo.Player.generic.name = PLAYER0;
-	setupMenuInfo.Player.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.Player.generic.x = 42;
-	setupMenuInfo.Player.generic.y = 46;
-	setupMenuInfo.Player.generic.id = ID_CUSTOMIZEPLAYER;
-	setupMenuInfo.Player.generic.callback = UI_SetupMenu_Event;
-	setupMenuInfo.Player.width = 120;
-	setupMenuInfo.Player.height = 40;
-	setupMenuInfo.Player.focuspic = PLAYER1;
-	setupMenuInfo.Player.focuspicinstead = qtrue;
-	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.Player);
+	setupMenuInfo.player.generic.type = MTYPE_BITMAP;
+	setupMenuInfo.player.generic.name = PLAYER0;
+	setupMenuInfo.player.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupMenuInfo.player.generic.x = 42;
+	setupMenuInfo.player.generic.y = 46;
+	setupMenuInfo.player.generic.id = ID_CUSTOMIZEPLAYER;
+	setupMenuInfo.player.generic.callback = UI_SetupMenu_Event;
+	setupMenuInfo.player.width = 120;
+	setupMenuInfo.player.height = 40;
+	setupMenuInfo.player.focuspic = PLAYER1;
+	setupMenuInfo.player.focuspicinstead = qtrue;
+	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.player);
 
-	setupMenuInfo.Controls.generic.type = MTYPE_BITMAP;
-	setupMenuInfo.Controls.generic.name = CONTROLS0;
-	setupMenuInfo.Controls.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.Controls.generic.x = 30;
-	setupMenuInfo.Controls.generic.y = 87;
-	setupMenuInfo.Controls.generic.id = ID_CUSTOMIZECONTROLS;
-	setupMenuInfo.Controls.generic.callback = UI_SetupMenu_Event;
-	setupMenuInfo.Controls.width = 160;
-	setupMenuInfo.Controls.height = 40;
-	setupMenuInfo.Controls.focuspic = CONTROLS1;
-	setupMenuInfo.Controls.focuspicinstead = qtrue;
-	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.Controls);
+	setupMenuInfo.controls.generic.type = MTYPE_BITMAP;
+	setupMenuInfo.controls.generic.name = CONTROLS0;
+	setupMenuInfo.controls.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupMenuInfo.controls.generic.x = 30;
+	setupMenuInfo.controls.generic.y = 87;
+	setupMenuInfo.controls.generic.id = ID_CUSTOMIZECONTROLS;
+	setupMenuInfo.controls.generic.callback = UI_SetupMenu_Event;
+	setupMenuInfo.controls.width = 160;
+	setupMenuInfo.controls.height = 40;
+	setupMenuInfo.controls.focuspic = CONTROLS1;
+	setupMenuInfo.controls.focuspicinstead = qtrue;
+	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.controls);
 
-	setupMenuInfo.System.generic.type = MTYPE_BITMAP;
-	setupMenuInfo.System.generic.name = SYSTEM0;
-	setupMenuInfo.System.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.System.generic.x = 59;
-	setupMenuInfo.System.generic.y = 127;
-	setupMenuInfo.System.generic.id = ID_SYSTEMCONFIG;
-	setupMenuInfo.System.generic.callback = UI_SetupMenu_Event;
-	setupMenuInfo.System.width = 120;
-	setupMenuInfo.System.height = 40;
-	setupMenuInfo.System.focuspic = SYSTEM1;
-	setupMenuInfo.System.focuspicinstead = qtrue;
-	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.System);
+	setupMenuInfo.system.generic.type = MTYPE_BITMAP;
+	setupMenuInfo.system.generic.name = SYSTEM0;
+	setupMenuInfo.system.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupMenuInfo.system.generic.x = 59;
+	setupMenuInfo.system.generic.y = 127;
+	setupMenuInfo.system.generic.id = ID_SYSTEMCONFIG;
+	setupMenuInfo.system.generic.callback = UI_SetupMenu_Event;
+	setupMenuInfo.system.width = 120;
+	setupMenuInfo.system.height = 40;
+	setupMenuInfo.system.focuspic = SYSTEM1;
+	setupMenuInfo.system.focuspicinstead = qtrue;
+	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.system);
 
-	setupMenuInfo.Options.generic.type = MTYPE_BITMAP;
-	setupMenuInfo.Options.generic.name = OPTIONS0;
-	setupMenuInfo.Options.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.Options.generic.x = 41;
-	setupMenuInfo.Options.generic.y = 167;
-	setupMenuInfo.Options.generic.id = ID_GAME;
-	setupMenuInfo.Options.generic.callback = UI_SetupMenu_Event;
-	setupMenuInfo.Options.width = 120;
-	setupMenuInfo.Options.height = 40;
-	setupMenuInfo.Options.focuspic = OPTIONS1;
-	setupMenuInfo.Options.focuspicinstead = qtrue;
-	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.Options);
+	setupMenuInfo.options.generic.type = MTYPE_BITMAP;
+	setupMenuInfo.options.generic.name = OPTIONS0;
+	setupMenuInfo.options.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupMenuInfo.options.generic.x = 41;
+	setupMenuInfo.options.generic.y = 167;
+	setupMenuInfo.options.generic.id = ID_GAME;
+	setupMenuInfo.options.generic.callback = UI_SetupMenu_Event;
+	setupMenuInfo.options.width = 120;
+	setupMenuInfo.options.height = 40;
+	setupMenuInfo.options.focuspic = OPTIONS1;
+	setupMenuInfo.options.focuspicinstead = qtrue;
+	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.options);
 
 	if (!trap_Cvar_VariableValue("cl_paused")) {
-		setupMenuInfo.Defaults.generic.type = MTYPE_BITMAP;
-		setupMenuInfo.Defaults.generic.name = DEFAULTS0;
-		setupMenuInfo.Defaults.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-		setupMenuInfo.Defaults.generic.x = 41;
-		setupMenuInfo.Defaults.generic.y = 207;
-		setupMenuInfo.Defaults.generic.id = ID_DEFAULTS;
-		setupMenuInfo.Defaults.generic.callback = UI_SetupMenu_Event;
-		setupMenuInfo.Defaults.width = 160;
-		setupMenuInfo.Defaults.height = 40;
-		setupMenuInfo.Defaults.focuspic = DEFAULTS1;
-		setupMenuInfo.Defaults.focuspicinstead = qtrue;
-		Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.Defaults);
+		setupMenuInfo.defaults.generic.type = MTYPE_BITMAP;
+		setupMenuInfo.defaults.generic.name = DEFAULTS0;
+		setupMenuInfo.defaults.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+		setupMenuInfo.defaults.generic.x = 41;
+		setupMenuInfo.defaults.generic.y = 207;
+		setupMenuInfo.defaults.generic.id = ID_DEFAULTS;
+		setupMenuInfo.defaults.generic.callback = UI_SetupMenu_Event;
+		setupMenuInfo.defaults.width = 160;
+		setupMenuInfo.defaults.height = 40;
+		setupMenuInfo.defaults.focuspic = DEFAULTS1;
+		setupMenuInfo.defaults.focuspicinstead = qtrue;
+		Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.defaults);
 	}
 
-	setupMenuInfo.Back.generic.type = MTYPE_BITMAP;
-	setupMenuInfo.Back.generic.name = BACK0;
-	setupMenuInfo.Back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	setupMenuInfo.Back.generic.x = 8;
-	setupMenuInfo.Back.generic.y = 440;
-	setupMenuInfo.Back.generic.id = ID_BACK;
-	setupMenuInfo.Back.generic.callback = UI_SetupMenu_Event;
-	setupMenuInfo.Back.width = 80;
-	setupMenuInfo.Back.height = 40;
-	setupMenuInfo.Back.focuspic = BACK1;
-	setupMenuInfo.Back.focuspicinstead = qtrue;
-	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.Back);
+	setupMenuInfo.back.generic.type = MTYPE_BITMAP;
+	setupMenuInfo.back.generic.name = BACK0;
+	setupMenuInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	setupMenuInfo.back.generic.x = 8;
+	setupMenuInfo.back.generic.y = 440;
+	setupMenuInfo.back.generic.id = ID_BACK;
+	setupMenuInfo.back.generic.callback = UI_SetupMenu_Event;
+	setupMenuInfo.back.width = 80;
+	setupMenuInfo.back.height = 40;
+	setupMenuInfo.back.focuspic = BACK1;
+	setupMenuInfo.back.focuspicinstead = qtrue;
+	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.back);
 }
 
 /*
