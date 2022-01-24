@@ -83,11 +83,11 @@ FBO_t *FBO_Create(const char *name, int width, int height) {
 	}
 
 	if (width <= 0 || width > glRefConfig.maxRenderbufferSize) {
-		ri.Error(ERR_DROP, "FBO_Create: bad width %i (%s)", width, name);
+		ri.Error(ERR_DROP, "FBO_Create: bad width %i/%i (%s)", width, glRefConfig.maxRenderbufferSize, name);
 	}
 
 	if (height <= 0 || height > glRefConfig.maxRenderbufferSize) {
-		ri.Error(ERR_DROP, "FBO_Create: bad height %i (%s)", height, name);
+		ri.Error(ERR_DROP, "FBO_Create: bad height %i/%i (%s)", height, glRefConfig.maxRenderbufferSize, name);
 	}
 
 	if (tr.numFBOs == MAX_FBOS) {
