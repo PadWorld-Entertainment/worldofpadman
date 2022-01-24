@@ -121,7 +121,7 @@ void Main_MenuEvent(void *ptr, int event) {
 		break;
 
 	case ID_EXIT:
-		ExitMenu_Init();
+		UI_CreditMenu();
 		break;
 	}
 }

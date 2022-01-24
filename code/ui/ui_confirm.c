@@ -30,9 +30,9 @@ CONFIRMATION MENU
 
 #include "ui_local.h"
 
-#define YES0 "menu/buttons/yes0_ws"
+#define YES0 "menu/buttons/yes0"
 #define YES1 "menu/buttons/yes1"
-#define NO0 "menu/buttons/no0_ws"
+#define NO0 "menu/buttons/no0"
 #define NO1 "menu/buttons/no1"
 
 #define ID_NO 10

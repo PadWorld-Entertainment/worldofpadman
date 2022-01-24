@@ -10,7 +10,6 @@ set(SRCS
 	ui_credits.c
 	ui_demo2.c
 	ui_display.c
-	ui_exit.c
 	ui_gameinfo.c
 	ui_help.c
 	ui_ingame.c

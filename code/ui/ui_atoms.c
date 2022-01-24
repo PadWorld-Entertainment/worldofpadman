@@ -1341,8 +1341,6 @@ void UI_DrawMenu(menuframework_s *menu) {
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_display);
 				if (menu->bgparts & BGP_DEFAULTSBG)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_defaults);
-				if (menu->bgparts & BGP_EXITBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_exitbg);
 				if (menu->bgparts & BGP_CONTROLBG)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_controlbg);
 				if (menu->bgparts & BGP_PLAYERBG)

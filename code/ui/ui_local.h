@@ -371,12 +371,6 @@ extern void MainMenu_Cache(void);
 extern void UI_MainMenu(void);
 
 //
-// ui_exit.c
-//
-extern void ExitMenu_Init(void);
-extern void ExitMenu_Cache(void);
-
-//
 // ui_credits.c
 //
 extern void UI_CreditMenu(void);
@@ -622,7 +616,6 @@ typedef struct {
 	qhandle_t pad_setupbg;
 	qhandle_t pad_display;
 	qhandle_t pad_defaults;
-	qhandle_t pad_exitbg;
 	qhandle_t pad_controlbg;
 	qhandle_t pad_playerbg;
 	qhandle_t pad_server2bg;
