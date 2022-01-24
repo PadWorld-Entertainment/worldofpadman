@@ -24,8 +24,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "cg_local.h"
 
-//#define WOLF_PARTICLES
-
 #define BLOODRED 2
 #define EMISIVEFADE 3
 #define GREY75 4
@@ -91,34 +89,15 @@ typedef enum {
 #define MAX_SHADER_ANIMS 32
 #define MAX_SHADER_ANIM_FRAMES 64
 
-#ifndef WOLF_PARTICLES
 static char *shaderAnimNames[MAX_SHADER_ANIMS] = {"explode1", NULL};
 static qhandle_t shaderAnims[MAX_SHADER_ANIMS][MAX_SHADER_ANIM_FRAMES];
 static int shaderAnimCounts[MAX_SHADER_ANIMS] = {23};
 static float shaderAnimSTRatio[MAX_SHADER_ANIMS] = {1.0f};
 static int numShaderAnims;
-// done.
-#else
-static char *shaderAnimNames[MAX_SHADER_ANIMS] = {"explode1",		 "blacksmokeanim",
-												  "twiltb2",		 "expblue",
-												  "blacksmokeanimb", // uses 'explode1' sequence
-												  "blood",			 NULL};
-static qhandle_t shaderAnims[MAX_SHADER_ANIMS][MAX_SHADER_ANIM_FRAMES];
-static int shaderAnimCounts[MAX_SHADER_ANIMS] = {
-	23, 25, 45, 25, 23, 5,
-};
-static float shaderAnimSTRatio[MAX_SHADER_ANIMS] = {
-	1.405f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-};
-#endif
 
 #define PARTICLE_GRAVITY 40
 
-#ifdef WOLF_PARTICLES
-#define MAX_PARTICLES 1024 * 8
-#else
 #define MAX_PARTICLES 1024
-#endif
 
 cparticle_t *active_particles, *free_particles;
 cparticle_t particles[MAX_PARTICLES];
@@ -304,11 +283,7 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org, float alpha) {
 		vec3_t rr, ru;
 		vec3_t rotate_ang;
 
-#ifdef WOLF_PARTICLES
-		VectorSet(color, 1.0, 1.0, 1.0);
-#else
 		VectorSet(color, 1.0, 1.0, 0.5);
-#endif
 		time = cg.time - p->time;
 		time2 = p->endtime - p->time;
 		ratio = time / time2;
@@ -1170,11 +1145,7 @@ void CG_ParticleExplosion(char *animStr, vec3_t origin, vec3_t vel, int duration
 	p->next = active_particles;
 	active_particles = p;
 	p->time = cg.time;
-#ifdef WOLF_PARTICLES
-	p->alpha = 1.0;
-#else
-	p->alpha = 0.5;
-#endif
+	p->alpha = 0.5f;
 	p->alphavel = 0;
 
 	if (duration < 0) {

@@ -73,16 +73,12 @@ typedef struct {
 	qhandle_t starts[3];
 } spritehandles_t;
 
-spritehandles_t spritehandles;
-// ^^ vars ^^
+static spritehandles_t spritehandles;
 
-// vv init vv
 /*
-#######################
+====================
 Init_SpriteParticles
-
-
-#######################
+====================
 */
 void Init_SpriteParticles(void) {
 	int i;
@@ -117,9 +113,8 @@ void Init_SpriteParticles(void) {
 	spritehandles.starts[1] = trap_R_RegisterShader("sprites/star02");
 	spritehandles.starts[2] = trap_R_RegisterShader("sprites/star03");
 }
-// ^^ init ^^
-// vv main vv
-void Free_SpriteParticle(sparticle_t *p) {
+
+static void Free_SpriteParticle(sparticle_t *p) {
 	changeshader_t *tmpcsh;
 	changecolor_t *tmpcc;
 	changesize_t *tmpcsi;
@@ -131,21 +126,21 @@ void Free_SpriteParticle(sparticle_t *p) {
 
 	while (p->csh) {
 		tmpcsh = p->csh->next;
-		memset(p->csh, 0, sizeof(changeshader_t));
+		memset(p->csh, 0, sizeof(*p->csh));
 		p->csh->next = freecsh;
 		freecsh = p->csh;
 		p->csh = tmpcsh;
 	}
 	while (p->cc) {
 		tmpcc = p->cc->next;
-		memset(p->cc, 0, sizeof(changecolor_t));
+		memset(p->cc, 0, sizeof(*p->cc));
 		p->cc->next = freecc;
 		freecc = p->cc;
 		p->cc = tmpcc;
 	}
 	while (p->csi) {
 		tmpcsi = p->csi->next;
-		memset(p->csi, 0, sizeof(changesize_t));
+		memset(p->csi, 0, sizeof(*p->csi));
 		p->csi->next = freecsi;
 		freecsi = p->csi;
 		p->csi = tmpcsi;
@@ -161,7 +156,7 @@ void Free_SpriteParticle(sparticle_t *p) {
 	if (p->next)
 		p->next->prev = p->prev;
 
-	memset(p, 0, sizeof(sparticle_t));
+	memset(p, 0, sizeof(*p));
 
 	p->next = freep;
 	freep = p;
@@ -334,7 +329,7 @@ static void CheckCurrentStats(sparticle_t *p) {
 	if (p->csh && cg.time >= p->starttime + p->csh->time) {
 		p->currentshader = p->csh->shader;
 		tmpP = p->csh->next;
-		memset(p->csh, 0, sizeof(changeshader_t));
+		memset(p->csh, 0, sizeof(*p->csh));
 		p->csh->next = freecsh;
 		freecsh = p->csh;
 		p->csh = tmpP;
@@ -357,7 +352,7 @@ static void CheckCurrentStats(sparticle_t *p) {
 
 		if (cg.time >= p->starttime + p->cc->time) {
 			tmpP = p->cc->next;
-			memset(p->cc, 0, sizeof(changecolor_t));
+			memset(p->cc, 0, sizeof(*p->cc));
 			p->cc->next = freecc;
 			freecc = p->cc;
 			p->cc = tmpP;
@@ -453,9 +448,6 @@ static void AddSpriteParticleToScene(sparticle_t *p) {
 
 void Main_SpriteParticles(void) {
 	sparticle_t *p, *tmp;
-	//	int i;
-
-	//	i=0;
 
 	for (p = firstp; p != NULL; p = p->next) {
 		if (p->endtime < cg.time) {
@@ -468,10 +460,5 @@ void Main_SpriteParticles(void) {
 		}
 		CheckCurrentStats(p);
 		AddSpriteParticleToScene(p);
-		//		i++;
 	}
-	//	Com_Printf("%i SpriteParticles\n",i);
 }
-// ^^ main ^^
-// vv shut vv
-// ^^ shut ^^
