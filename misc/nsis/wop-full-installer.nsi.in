@@ -263,6 +263,16 @@ Section /o $(NAME_Section7) Section7
 SectionEnd
 
 
+# Protocol handler for wop://connect/<host>:<port>
+Section $(NAME_Section8) Section8
+    WriteRegStr SHCTX "Software\Classes\worldofpadman" "CustomUrlApplication" "$INSTDIR\wop.x86_64.exe"
+    WriteRegStr SHCTX "Software\Classes\worldofpadman" "CustomUrlArguments" '"%1"'
+    WriteRegStr SHCTX "Software\Classes\worldofpadman" "URL Protocol" ""
+    WriteRegStr SHCTX "Software\Classes\worldofpadman\DefaultIcon" "" "$INSTDIR\wop.x86_64.exe,0"
+    WriteRegStr SHCTX "Software\Classes\worldofpadman\shell\open\command" "" '"$INSTDIR\wop.x86_64.exe" "%1"'
+SectionEnd
+
+
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${Section1} $(DESC_Section1)
@@ -272,6 +282,7 @@ SectionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${Section5} $(DESC_Section5)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section6} $(DESC_Section6)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section7} $(DESC_Section7)
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section8} $(DESC_Section8)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -309,6 +320,8 @@ SectionEnd
 
 # delete files
 Section /o -un.Main UNSEC0000
+    DeleteRegKey SHCTX "Software\Classes\worldofpadman"
+
     RmDir /r /REBOOTOK "$INSTDIR\XTRAS"
     RmDir /r /REBOOTOK "$INSTDIR\wop"
     Delete /REBOOTOK "$INSTDIR\wop.x86_64.exe"
@@ -474,6 +487,8 @@ LangString NAME_Section6 ${LANG_ENGLISH} "Extra shortcuts"
 LangString DESC_Section6 ${LANG_ENGLISH} "Additionally places a shortcut on the Desktop and in the Quick Launch menu."
 LangString NAME_Section7 ${LANG_ENGLISH} "Open firewall ports"
 LangString DESC_Section7 ${LANG_ENGLISH} "Adds World of Padman to the Windows firewall rules to let you create internet servers."
+LangString NAME_Section8 ${LANG_ENGLISH} "Protocol handler"
+LangString DESC_Section8 ${LANG_ENGLISH} "The protocol handler lets you connect to a game by clicking a link in a web browser."
 LangString ERR_dircheck1 ${LANG_ENGLISH} "This is not a valid installation path!"
 LangString ERR_dircheck2 ${LANG_ENGLISH} "There is not enough free space available!"
 LangString ERR_dircheck3 ${LANG_ENGLISH} "The target directory for installation already exists!$\nDo you still want to install ${PRODUCTNAME} into this directory?"
@@ -499,6 +514,8 @@ LangString NAME_Section6 ${LANG_GERMAN} "Zusätzliche Verknüpfungen"
 LangString DESC_Section6 ${LANG_GERMAN} "Erstellt zusätzlich eine Verknüpfung auf dem Desktop und in der Schnellstart-Leiste."
 LangString NAME_Section7 ${LANG_GERMAN} "Firewall öffnen"
 LangString DESC_Section7 ${LANG_GERMAN} "Fügt World of Padman den Windows-Firewall-Regeln hinzu, um Internet-Server erstellen zu können."
+LangString NAME_Section8 ${LANG_GERMAN} "Protocol Handler"
+LangString DESC_Section8 ${LANG_GERMAN} "Ermöglicht es durch Klick auf einen Link direkt zu einem Spiel zu verbinden."
 LangString ERR_dircheck1 ${LANG_GERMAN} "Dies ist ein ungültiger Installationspfad!"
 LangString ERR_dircheck2 ${LANG_GERMAN} "Es steht nicht genügend freier Speicherplatz zur Verfügung!"
 LangString ERR_dircheck3 ${LANG_GERMAN} "Das Zielverzeichnis zur Installation existiert bereits!$\nMöchtest Du ${PRODUCTNAME} trotzdem in dieses Verzeichnis installieren?"

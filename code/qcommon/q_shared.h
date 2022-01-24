@@ -52,6 +52,7 @@ extern const int demo_protocols[];
 #define GAMENAME_FOR_MASTER "WorldofPadman"
 #define CINEMATICS_LOGO "idlogo.ogm"
 #define CINEMATICS_INTRO "intro.ogm"
+#define PROTOCOL_HANDLER "worldofpadman"
 
 // Heartbeat for dpmaster protocol. You shouldn't change this unless you know what you're doing
 #define HEARTBEAT_FOR_MASTER "DarkPlaces"

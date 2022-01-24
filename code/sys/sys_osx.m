@@ -115,3 +115,44 @@ char *Sys_StripAppBundle( char *dir )
 	Q_strncpyz(cwd, Sys_Dirname(cwd), sizeof(cwd));
 	return cwd;
 }
+
+#ifdef PROTOCOL_HANDLER
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+@implementation AppDelegate
+- (void)handleAppleEvent:(NSAppleEventDescriptor *)event
+		  withReplyEvent:(NSAppleEventDescriptor *)replyEvent {
+	NSString *input =
+		[[event paramDescriptorForKeyword:keyDirectObject] stringValue];
+	char str[input.length];
+	strcpy(str, input.UTF8String);
+
+	char *command = Sys_ParseProtocolUri(str);
+	if (command == NULL) {
+		return;
+	}
+	int bufsize = strlen(command) + 1;
+	Com_QueueEvent(0, SE_CONSOLE, 0, 0, bufsize, (void *)command);
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+	[NSApp stop:nil];
+}
+@end
+
+void Sys_InitProtocolHandler() {
+	[NSApplication sharedApplication];
+
+	AppDelegate *appDelegate = [AppDelegate new];
+	NSAppleEventManager *sharedAppleEventManager = [NSAppleEventManager new];
+	[sharedAppleEventManager
+	  setEventHandler:appDelegate
+		  andSelector:@selector(handleAppleEvent:withReplyEvent:)
+		forEventClass:kInternetEventClass
+		   andEventID:kAEGetURL];
+
+	[NSApp setDelegate:appDelegate];
+	[NSApp run];
+}
+#endif
