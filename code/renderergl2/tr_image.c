@@ -1951,7 +1951,7 @@ image_t *R_CreateImage2(const char *name, byte *pic, int width, int height, GLen
 	image->type = type;
 	image->flags = flags;
 
-	strcpy(image->imgName, name);
+	Q_strncpyz(image->imgName, name, sizeof(image->imgName));
 
 	image->width = width;
 	image->height = height;
