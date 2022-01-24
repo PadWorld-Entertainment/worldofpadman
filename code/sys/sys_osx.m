@@ -141,7 +141,7 @@ char *Sys_StripAppBundle(char *dir)
 }
 @end
 
-void Sys_InitProtocolHandler() {
+void Sys_InitProtocolHandler(void) {
 	[NSApplication sharedApplication];
 
 	AppDelegate *appDelegate = [AppDelegate new];

@@ -48,7 +48,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../qcommon/qcommon.h"
 
 #if defined(PROTOCOL_HANDLER) && defined(__APPLE__)
-void Sys_InitProtocolHandler();
+void Sys_InitProtocolHandler(void);
 #endif
 
 static char binaryPath[MAX_OSPATH] = {0};
@@ -605,28 +605,26 @@ At the moment only the "connect" command is supported.
 #ifdef PROTOCOL_HANDLER
 char *Sys_ParseProtocolUri(char *uri) {
 	// Both "quake3://" and "quake3:" can be used
-	char *command;
-	if (strstr(uri, PROTOCOL_HANDLER "://") == uri) {
-		command = uri + strlen(PROTOCOL_HANDLER "://");
-	} else if (strstr(uri, PROTOCOL_HANDLER ":") == uri) {
-		command = uri + strlen(PROTOCOL_HANDLER ":");
-	} else {
+	char *command, *arg;
+	int i;
+	if (Q_strncmp(uri, PROTOCOL_HANDLER ":", strlen(PROTOCOL_HANDLER ":"))) {
 		Com_Printf("Sys_ParseProtocolUri: unsupported protocol.\n");
 		return NULL;
 	}
-	if (command[0] == '\0') {
-		return NULL;
+	command = uri + strlen(PROTOCOL_HANDLER ":");
+	if (!Q_strncmp(command, "//", strlen("//"))) {
+		command += strlen("//");
 	}
 	Com_Printf("Sys_ParseProtocolUri: %s\n", command);
 
 	// At the moment, only "connect/hostname:port" is supported
 	// For safety reasons, the "hostname:port" part can only
-	// contain characters from [a-zA-Z0-9.:-]
-	if (strstr(command, "connect/") != command) {
+	// contain characters from: a-zA-Z0-9.:-[]
+	if (Q_strncmp(command, "connect/", strlen("connect/"))) {
 		Com_Printf("Sys_ParseProtocolUri: unsupported command.\n");
 		return NULL;
 	}
-	char *arg = strchr(command, '/');
+	arg = strchr(command, '/');
 	if (arg == NULL || arg[1] == '\0' || arg[1] == '?') {
 		Com_Printf("Sys_ParseProtocolUri: missing argument.\n");
 		return NULL;
@@ -635,7 +633,7 @@ char *Sys_ParseProtocolUri(char *uri) {
 	arg++;
 
 	// Check for any unsupported characters
-	for (int i = 0; arg[i] != '\0'; i++) {
+	for (i = 0; arg[i] != '\0'; i++) {
 		if (arg[i] == '?') {
 			// For forwards compatibility, any query string parameters are ignored (e.g. "?password=abcd")
 			// However, these are not passed on macOS, so it may be a bad idea to add them.
@@ -643,7 +641,8 @@ char *Sys_ParseProtocolUri(char *uri) {
 			break;
 		}
 
-		if (isalpha(arg[i]) == 0 && isdigit(arg[i]) == 0 && arg[i] != '.' && arg[i] != ':' && arg[i] != '-') {
+		if (isalpha(arg[i]) == 0 && isdigit(arg[i]) == 0 && arg[i] != '.' && arg[i] != ':' && arg[i] != '-' &&
+			arg[i] != '[' && arg[i] != ']') {
 			Com_Printf("Sys_ParseProtocolUri: hostname contains unsupported characters.\n");
 			return NULL;
 		}
