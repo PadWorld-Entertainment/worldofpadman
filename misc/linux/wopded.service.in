@@ -3,7 +3,7 @@ Description=This service spawns a World Of Padman Internet server
 
 [Service]
 User=wop
-ExecStart=/usr/local/games/worldofpadman/wopded.x86_64 +set dedicated 2 +exec server-settings.cfg +vstr nextmap
+ExecStart=@CMAKE_INSTALL_PREFIX@/bin/@OUTPUTNAME@ +set dedicated 2 +exec server-settings.cfg +vstr nextmap
 Restart=on-abort
 
 [Install]
