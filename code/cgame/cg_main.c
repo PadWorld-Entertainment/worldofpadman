@@ -474,70 +474,13 @@ int CG_LastAttacker(void) {
 
 void QDECL CG_Printf(const char *msg, ...) {
 	va_list argptr;
-	char text[1024];
+	char text[MAX_SAY_TEXT];
 	char timestamp[16];
-	char buff[1024];
-
-	// FIXME: Buffer sizes need to be adjusted. Also note that chattext is only MAX_SAY_TEXT long
+	char buff[MAX_SAY_TEXT];
 
 	va_start(argptr, msg);
 	Q_vsnprintf(text, sizeof(text), msg, argptr);
 	va_end(argptr);
-
-#if 0
-	{
-
-		char *msgptr;
-		int msglen;
-		qboolean firstpart;
-		int lastcolor;
-		char *tmpcp, *tmpcp2;
-
-		msgptr = text;
-		msglen = strlen(text);
-		firstpart = qtrue;
-		lastcolor = -1;
-
-		do {
-			cg.lastchatmsg++;
-			if (cg.lastchatmsg > MAX_CHATMESSAGES) {
-				cg.lastchatmsg = 0;
-			}
-
-			if (lastcolor == -1)
-				Q_strncpyz(cg.chattext[cg.lastchatmsg], msgptr, 70); // old:62 //61 Zeichen + '\0'
-			else {
-				cg.chattext[cg.lastchatmsg][0] = '^';
-				cg.chattext[cg.lastchatmsg][1] = lastcolor;
-				Q_strncpyz((cg.chattext[cg.lastchatmsg] + 2), msgptr, 70);
-			}
-
-			if (!firstpart || cg.time != cg.chatmsgtime[cg.lastchatmsg]) {
-				cg.chaticons[cg.lastchatmsg] = 0;
-				cg.chatmsgtime[cg.lastchatmsg] = cg.time;
-			}
-
-			msgptr += 70;
-			msglen -= 70;
-			firstpart = qfalse;
-
-			tmpcp2 = NULL;
-			tmpcp = cg.chattext[cg.lastchatmsg];
-			while (tmpcp = strchr(tmpcp + 1, '^')) {
-				tmpcp2 = tmpcp;
-			}
-			if (tmpcp2 != NULL) {
-				if (tmpcp2[1] >= '0' && tmpcp2[1] <= '9')
-					lastcolor = tmpcp2[1];
-				else if (tmpcp2[1] = '^')
-					tmpcp++;
-			}
-
-		} while (msglen > 0);
-
-		cg.chattext[cg.lastchatmsg][strlen(cg.chattext[cg.lastchatmsg]) - 1] = '\0'; // da ist noch ein '_' am ende
-	}
-#endif
 
 	// If we draw messages ourself (with player icons etc.),
 	// when con_notifytime is negative,
