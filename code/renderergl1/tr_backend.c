@@ -621,7 +621,7 @@ RB_SetGL2D
 
 ================
 */
-void RB_SetGL2D(void) {
+static void RB_SetGL2D(void) {
 	backEnd.projection2D = qtrue;
 
 	// set 2D virtual screen size
@@ -965,7 +965,7 @@ RB_SwapBuffers
 
 =============
 */
-const void *RB_SwapBuffers(const void *data) {
+static const void *RB_SwapBuffers(const void *data) {
 	const swapBuffersCommand_t *cmd;
 
 	// finish any 2D drawing if needed

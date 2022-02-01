@@ -65,7 +65,7 @@ UNCOMPRESSING BONES
 #define MC_POS_V33 ((((MC_BITS_X + MC_BITS_Y + MC_BITS_Z + MC_BITS_VECT * 8)) / 8))
 #define MC_SHIFT_V33 ((((MC_BITS_X + MC_BITS_Y + MC_BITS_Z + MC_BITS_VECT * 8) % 8)))
 
-void MC_UnCompress(float mat[3][4], const unsigned char *comp) {
+static void MC_UnCompress(float mat[3][4], const unsigned char *comp) {
 	int val;
 
 	val = (int)((unsigned short *)(comp))[0];

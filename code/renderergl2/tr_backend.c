@@ -275,7 +275,7 @@ Any mirrored or portaled views have already been drawn, so prepare
 to actually render the visible surfaces for this view
 =================
 */
-void RB_BeginDrawingView(void) {
+static void RB_BeginDrawingView(void) {
 	int clearBits = 0;
 
 	// sync with gl if needed
@@ -551,7 +551,7 @@ RB_SetGL2D
 
 ================
 */
-void RB_SetGL2D(void) {
+static void RB_SetGL2D(void) {
 	mat4_t matrix;
 	int width, height;
 
@@ -1244,7 +1244,7 @@ RB_SwapBuffers
 
 =============
 */
-const void *RB_SwapBuffers(const void *data) {
+static const void *RB_SwapBuffers(const void *data) {
 	const swapBuffersCommand_t *cmd;
 
 	// finish any 2D drawing if needed
