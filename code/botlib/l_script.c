@@ -581,7 +581,7 @@ void NumberValue(char *string, int subtype, unsigned long int *intvalue, float *
 	}
 }
 
-int PS_ReadNumber(script_t *script, token_t *token) {
+static int PS_ReadNumber(script_t *script, token_t *token) {
 	int len = 0, i;
 	int octal, dot;
 	char c;
