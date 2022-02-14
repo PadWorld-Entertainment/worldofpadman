@@ -1259,7 +1259,7 @@ static void Controls_MenuInit(void) {
 	s_controls.menu.wrapAround = qtrue;
 	s_controls.menu.fullscreen = qtrue;
 	s_controls.menu.noPushSelect = qtrue;
-	s_controls.menu.bgparts = BGP_CONTROLBG | BGP_SIMPLEBG;
+	s_controls.menu.bgparts = BGP_CONTROLS | BGP_MENUFX;
 
 	s_controls.looking.generic.type = MTYPE_BITMAP;
 	s_controls.looking.generic.name = LOOK0;

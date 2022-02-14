@@ -152,7 +152,7 @@ void SpecifyServer_MenuInit(void) {
 
 	s_specifyserver.menu.wrapAround = qtrue;
 	s_specifyserver.menu.fullscreen = qtrue;
-	s_specifyserver.menu.bgparts = BGP_SPECIFYBG | BGP_SIMPLEBG;
+	s_specifyserver.menu.bgparts = BGP_SPECIFY | BGP_MENUFX;
 
 	s_specifyserver.domain.generic.type = MTYPE_FIELD;
 	s_specifyserver.domain.generic.name = "";

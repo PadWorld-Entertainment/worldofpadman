@@ -686,7 +686,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.menu.wrapAround = qtrue;
 	s_graphicsoptions.menu.fullscreen = qtrue;
 	s_graphicsoptions.menu.draw = GraphicsOptions_MenuDraw;
-	s_graphicsoptions.menu.bgparts = BGP_SYSTEMBG | BGP_SIMPLEBG;
+	s_graphicsoptions.menu.bgparts = BGP_SYSTEM | BGP_MENUFX;
 
 	s_graphicsoptions.graphics.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.graphics.generic.name = GRAPHICS0;

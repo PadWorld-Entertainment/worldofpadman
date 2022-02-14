@@ -724,7 +724,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.menu.fullscreen = qtrue;
 	s_playersettings.chosenskins[1] = ps_playericons.lastskinicon[0];
 	s_playersettings.menu.draw = PlayerSettings_Draw;
-	s_playersettings.menu.bgparts = BGP_PLAYERBG;
+	s_playersettings.menu.bgparts = BGP_PLAYER;
 
 	s_playersettings.item_null.generic.type = MTYPE_BITMAP;
 	s_playersettings.item_null.generic.flags = QMF_LEFT_JUSTIFY | QMF_MOUSEONLY | QMF_SILENT;

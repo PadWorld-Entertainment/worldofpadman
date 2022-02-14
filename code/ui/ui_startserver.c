@@ -8,11 +8,6 @@
 
 #include "ui_local.h"
 
-/*
-BGP_STARTSERVERMAPS
-BGP_STARTSERVERBOTS
-*/
-
 #define FIGHT0 "menu/buttons/fight0"
 #define FIGHT1 "menu/buttons/fight1"
 #define ARROWLT0 "menu/arrows/headblu_lt0"
@@ -656,7 +651,7 @@ static void StartServer_MenuInit(void) {
 
 	s_startserver.menu.wrapAround = qtrue;
 	s_startserver.menu.fullscreen = qtrue;
-	s_startserver.menu.bgparts = BGP_STARTSERVERMAPS | BGP_SIMPLEBG;
+	s_startserver.menu.bgparts = BGP_STARTSERVER | BGP_MENUFX;
 	s_startserver.menu.draw = StartServer_Draw;
 
 	s_startserver.gametype.generic.type = MTYPE_SPINCONTROL;
@@ -1459,7 +1454,7 @@ static void UI_BotSelectMenu_Init(void) {
 	memset(&botSelectInfo, 0, sizeof(botSelectInfo));
 	botSelectInfo.menu.wrapAround = qtrue;
 	botSelectInfo.menu.fullscreen = qtrue;
-	botSelectInfo.menu.bgparts = BGP_STARTSERVERBOTS | BGP_SIMPLEBG;
+	botSelectInfo.menu.bgparts = BGP_SELECTBOTS | BGP_MENUFX;
 
 	UI_BotSelectMenu_Cache();
 

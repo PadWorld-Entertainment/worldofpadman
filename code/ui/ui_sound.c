@@ -292,7 +292,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.menu.wrapAround = qtrue;
 	soundOptionsInfo.menu.fullscreen = qtrue;
 	soundOptionsInfo.menu.draw = SoundOptions_MenuDraw;
-	soundOptionsInfo.menu.bgparts = BGP_SYSTEMBG | BGP_SIMPLEBG;
+	soundOptionsInfo.menu.bgparts = BGP_SYSTEM | BGP_MENUFX;
 
 	soundOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.graphics.generic.name = GRAPHICS0;

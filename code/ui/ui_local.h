@@ -151,24 +151,24 @@ extern vmCvar_t wop_AutoBindUnusedKeys;
 #define QM_LOSTFOCUS 2
 #define QM_ACTIVATED 3
 
-#define BGP_MAINBG 0x000001
-#define BGP_MAINFRAME 0x000002
-#define BGP_SETUPBG 0x000004
-#define BGP_SYSTEMBG 0x000008
-#define BGP_DEFAULTSBG 0x000010
+#define BGP_MAINFX 0x000001
+#define BGP_MAIN 0x000002
+#define BGP_SETUP 0x000004
+#define BGP_SYSTEM 0x000008
+#define BGP_DEFAULTS 0x000010
 #define BGP_EXITBG 0x000020
-#define BGP_CONTROLBG 0x000040
-#define BGP_PLAYERBG 0x000080
-#define BGP_SERVER2BG 0x000100
-#define BGP_MODSBG 0x000200
-#define BGP_DEMOBG 0x000400
-#define BGP_SPECIFYBG 0x000800
+#define BGP_CONTROLS 0x000040
+#define BGP_PLAYER 0x000080
+#define BGP_SERVERS 0x000100
+#define BGP_MODS 0x000200
+#define BGP_DEMOS 0x000400
+#define BGP_SPECIFY 0x000800
 #define BGP_GAMEOPTIONS 0x001000
-#define BGP_STARTSERVERMAPS 0x002000
-#define BGP_STARTSERVERBOTS 0x004000
-#define BGP_SIMPLEBG 0x008000
+#define BGP_STARTSERVER 0x002000
+#define BGP_SELECTBOTS 0x004000
+#define BGP_MENUFX 0x008000
 #define BGP_LASTMENU 0x010000
-#define BGP_SPECIFYPASSBG 0x020000
+#define BGP_SPECIFYPASS 0x020000
 
 typedef struct _tag_menuframework {
 	int cursor;
@@ -425,7 +425,7 @@ extern void TeamMain_Cache(void);
 extern void UI_DrawConnectScreen(qboolean overlay);
 
 //
-// ui_controls2.c
+// ui_controls.c
 //
 extern void UI_ControlsMenu(void);
 extern void Controls_Cache(void);
@@ -467,7 +467,7 @@ extern void UI_SpecifyServerMenu(void);
 extern void SpecifyServer_Cache(void);
 
 //
-// ui_servers2.c
+// ui_servers.c
 //
 #define MAX_FAVORITESERVERS 16
 
@@ -608,25 +608,25 @@ typedef struct {
 	menulist_s *dropdownlist;
 	vec4_t dropdownxywh;
 	music_state_t musicstate;
-	qhandle_t connectingBG;
+	qhandle_t connectbg;
 
-	qhandle_t pad_menubgfx; // other menu bg fx shader
-	qhandle_t pad_mainbgfx; //main menu bg fx shader
-	qhandle_t pad_mainframe; 
-	qhandle_t pad_setupbg;
-	qhandle_t pad_display;
-	qhandle_t pad_defaults;
-	qhandle_t pad_controlbg;
-	qhandle_t pad_playerbg;
-	qhandle_t pad_server2bg;
-	qhandle_t pad_modsbg;
-	qhandle_t pad_demobg;
-	qhandle_t pad_specifybg;
-	qhandle_t pad_specifypassbg;
-	qhandle_t pad_gameoptionsbg;
-	qhandle_t pad_startservermaps;
-	qhandle_t pad_startserverbots;
-	qhandle_t pad_ingamebg;
+	qhandle_t menubgfx; // other menu bg fx shader
+	qhandle_t mainbgfx; // main menu bg fx shader
+	qhandle_t mainbg;
+	qhandle_t setupbg;
+	qhandle_t systembg;
+	qhandle_t defaultsbg;
+	qhandle_t controlsbg;
+	qhandle_t playerbg;
+	qhandle_t serversbg;
+	qhandle_t modsbg;
+	qhandle_t demosbg;
+	qhandle_t specifybg;
+	qhandle_t specifypassbg;
+	qhandle_t gameoptionsbg;
+	qhandle_t startserverbg;
+	qhandle_t selectbotsbg;
+	qhandle_t ingamebg;
 
 	char spraylogoNames[MAX_SPRAYLOGOS_LOADED][MAX_SPRAYLOGO_NAME];
 	qhandle_t spraylogoShaders[MAX_SPRAYLOGOS_LOADED];

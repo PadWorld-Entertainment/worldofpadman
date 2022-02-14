@@ -1313,7 +1313,7 @@ void UI_DrawIngameBG(void) {
 		wsCorrection = 0.0f;
 
 	UI_DrawHandlePic(WOP_INGAME_X - (wsCorrection * 0.5f), WOP_INGAME_Y, WOP_INGAME_B + wsCorrection, WOP_INGAME_H,
-					 uis.pad_ingamebg);
+					 uis.ingamebg);
 }
 
 void UI_DrawMenu(menuframework_s *menu) {
@@ -1329,38 +1329,38 @@ void UI_DrawMenu(menuframework_s *menu) {
 			trap_R_SetColor(NULL);
 
 			if (menu->bgparts) {
-				if (menu->bgparts & BGP_MAINBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_mainbgfx);
-				if (menu->bgparts & BGP_SIMPLEBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_menubgfx);
-				if (menu->bgparts & BGP_MAINFRAME)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_mainframe);
-				if (menu->bgparts & BGP_SETUPBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_setupbg);
-				if (menu->bgparts & BGP_SYSTEMBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_display);
-				if (menu->bgparts & BGP_DEFAULTSBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_defaults);
-				if (menu->bgparts & BGP_CONTROLBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_controlbg);
-				if (menu->bgparts & BGP_PLAYERBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_playerbg);
-				if (menu->bgparts & BGP_SERVER2BG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_server2bg);
-				if (menu->bgparts & BGP_MODSBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_modsbg);
-				if (menu->bgparts & BGP_DEMOBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_demobg);
-				if (menu->bgparts & BGP_SPECIFYBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_specifybg);
-				if (menu->bgparts & BGP_SPECIFYPASSBG)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_specifypassbg);
+				if (menu->bgparts & BGP_MAINFX)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.mainbgfx);
+				if (menu->bgparts & BGP_MENUFX)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.menubgfx);
+				if (menu->bgparts & BGP_MAIN)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.mainbg);
+				if (menu->bgparts & BGP_SETUP)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.setupbg);
+				if (menu->bgparts & BGP_SYSTEM)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.systembg);
+				if (menu->bgparts & BGP_DEFAULTS)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.defaultsbg);
+				if (menu->bgparts & BGP_CONTROLS)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.controlsbg);
+				if (menu->bgparts & BGP_PLAYER)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.playerbg);
+				if (menu->bgparts & BGP_SERVERS)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.serversbg);
+				if (menu->bgparts & BGP_MODS)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.modsbg);
+				if (menu->bgparts & BGP_DEMOS)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.demosbg);
+				if (menu->bgparts & BGP_SPECIFY)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.specifybg);
+				if (menu->bgparts & BGP_SPECIFYPASS)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.specifypassbg);
 				if (menu->bgparts & BGP_GAMEOPTIONS)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_gameoptionsbg);
-				if (menu->bgparts & BGP_STARTSERVERMAPS)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_startservermaps);
-				if (menu->bgparts & BGP_STARTSERVERBOTS)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.pad_startserverbots);
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.gameoptionsbg);
+				if (menu->bgparts & BGP_STARTSERVER)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.startserverbg);
+				if (menu->bgparts & BGP_SELECTBOTS)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.selectbotsbg);
 			} else {
 				UI_FillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, colorBlack);
 			}

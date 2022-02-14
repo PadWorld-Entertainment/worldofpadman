@@ -224,7 +224,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.menu.wrapAround = qtrue;
 	displayOptionsInfo.menu.fullscreen = qtrue;
 	displayOptionsInfo.menu.draw = DisplayOptions_MenuDraw;
-	displayOptionsInfo.menu.bgparts = BGP_SYSTEMBG | BGP_SIMPLEBG;
+	displayOptionsInfo.menu.bgparts = BGP_SYSTEM | BGP_MENUFX;
 
 	displayOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.graphics.generic.name = GRAPHICS0;

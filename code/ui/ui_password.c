@@ -106,7 +106,7 @@ static void SpecifyPassword_MenuInit(void) {
 
 	s_specifypassword.menu.wrapAround = qtrue;
 	s_specifypassword.menu.fullscreen = qtrue;
-	s_specifypassword.menu.bgparts = BGP_SPECIFYPASSBG | BGP_SIMPLEBG;
+	s_specifypassword.menu.bgparts = BGP_SPECIFYPASS | BGP_MENUFX;
 
 	s_specifypassword.password.generic.type = MTYPE_FIELD;
 	s_specifypassword.password.generic.name = "";

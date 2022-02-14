@@ -222,7 +222,7 @@ static void UI_Mods_MenuInit(void) {
 	s_mods.menu.key = UI_Mods_MenuKey;
 	s_mods.menu.wrapAround = qtrue;
 	s_mods.menu.fullscreen = qtrue;
-	s_mods.menu.bgparts = BGP_MODSBG | BGP_SIMPLEBG;
+	s_mods.menu.bgparts = BGP_MODS | BGP_MENUFX;
 
 	s_mods.back.generic.type = MTYPE_BITMAP;
 	s_mods.back.generic.name = BACK0;

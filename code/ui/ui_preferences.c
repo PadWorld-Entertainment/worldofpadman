@@ -563,7 +563,7 @@ static void Preferences_MenuInit(void) {
 
 	s_preferences.menu.wrapAround = qtrue;
 	s_preferences.menu.fullscreen = qtrue;
-	s_preferences.menu.bgparts = BGP_GAMEOPTIONS | BGP_SIMPLEBG;
+	s_preferences.menu.bgparts = BGP_GAMEOPTIONS | BGP_MENUFX;
 
 	//menu
 	s_preferences.hud.generic.type = MTYPE_BITMAP;

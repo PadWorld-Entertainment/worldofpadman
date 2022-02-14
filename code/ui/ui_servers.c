@@ -1406,7 +1406,7 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.menu.wrapAround = qtrue;
 	g_arenaservers.menu.draw = ArenaServers_MenuDraw;
 	g_arenaservers.menu.key = ArenaServers_MenuKey;
-	g_arenaservers.menu.bgparts = (BGP_SERVER2BG | BGP_SIMPLEBG);
+	g_arenaservers.menu.bgparts = (BGP_SERVERS | BGP_MENUFX);
 
 	numMasters = ArenaServers_ConstructMasterList();
 

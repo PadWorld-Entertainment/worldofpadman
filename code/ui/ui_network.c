@@ -132,7 +132,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	UI_NetworkOptionsMenu_Cache();
 	networkOptionsInfo.menu.wrapAround = qtrue;
 	networkOptionsInfo.menu.fullscreen = qtrue;
-	networkOptionsInfo.menu.bgparts = BGP_SYSTEMBG | BGP_SIMPLEBG;
+	networkOptionsInfo.menu.bgparts = BGP_SYSTEM | BGP_MENUFX;
 
 	networkOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.graphics.generic.name = GRAPHICS0;

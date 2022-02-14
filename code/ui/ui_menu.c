@@ -254,7 +254,7 @@ void UI_MainMenu(void) {
 	s_main.menu.key = Main_MenuKey;
 	s_main.menu.fullscreen = qtrue;
 	s_main.menu.wrapAround = qtrue;
-	s_main.menu.bgparts = BGP_MAINBG | BGP_MAINFRAME;
+	s_main.menu.bgparts = BGP_MAIN | BGP_MAINFX;
 	s_main.menu.noPushSelect = qtrue;
 
 	s_main.Create.generic.type = MTYPE_BITMAP;

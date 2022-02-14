@@ -1872,25 +1872,25 @@ void Menu_Cache(void) {
 	uis.rb_off = trap_R_RegisterShaderNoMip("menu/art/switch_off");
 
 	uis.whiteShader = trap_R_RegisterShaderNoMip("white");
-	uis.connectingBG = trap_R_RegisterShaderNoMip("menu/bg/connecting");
+	uis.connectbg = trap_R_RegisterShaderNoMip("menu/bg/connecting");
 
-	uis.pad_menubgfx = trap_R_RegisterShaderNoMip("menubgfx");
-	uis.pad_mainbgfx = trap_R_RegisterShaderNoMip("mainbgfx");
-	uis.pad_mainframe = trap_R_RegisterShaderNoMip("menu/bg/main");
-	uis.pad_setupbg = trap_R_RegisterShaderNoMip("menu/bg/setup");
-	uis.pad_display = trap_R_RegisterShaderNoMip("menu/bg/system");
-	uis.pad_defaults = trap_R_RegisterShaderNoMip("menu/bg/default");
-	uis.pad_controlbg = trap_R_RegisterShaderNoMip("menu/bg/controls");
-	uis.pad_playerbg = trap_R_RegisterShaderNoMip("menu/bg/player");
-	uis.pad_server2bg = trap_R_RegisterShaderNoMip("menu/bg/servers");
-	uis.pad_modsbg = trap_R_RegisterShaderNoMip("menu/bg/mods");
-	uis.pad_demobg = trap_R_RegisterShaderNoMip("menu/bg/demos");
-	uis.pad_specifybg = trap_R_RegisterShaderNoMip("menu/bg/specify");
-	uis.pad_specifypassbg = trap_R_RegisterShaderNoMip("menu/bg/password");
-	uis.pad_gameoptionsbg = trap_R_RegisterShaderNoMip("menu/bg/gameoptions");
-	uis.pad_startservermaps = trap_R_RegisterShaderNoMip("menu/bg/startserver");
-	uis.pad_startserverbots = trap_R_RegisterShaderNoMip("menu/bg/selectbots");
-	uis.pad_ingamebg = trap_R_RegisterShaderNoMip("menu/bg/ingame");
+	uis.menubgfx = trap_R_RegisterShaderNoMip("menu/bg/menubgfx");
+	uis.mainbgfx = trap_R_RegisterShaderNoMip("menu/bg/mainbgfx");
+	uis.mainbg = trap_R_RegisterShaderNoMip("menu/bg/main");
+	uis.setupbg = trap_R_RegisterShaderNoMip("menu/bg/setup");
+	uis.systembg = trap_R_RegisterShaderNoMip("menu/bg/system");
+	uis.defaultsbg = trap_R_RegisterShaderNoMip("menu/bg/defaults");
+	uis.controlsbg = trap_R_RegisterShaderNoMip("menu/bg/controls");
+	uis.playerbg = trap_R_RegisterShaderNoMip("menu/bg/player");
+	uis.serversbg = trap_R_RegisterShaderNoMip("menu/bg/servers");
+	uis.modsbg = trap_R_RegisterShaderNoMip("menu/bg/mods");
+	uis.demosbg = trap_R_RegisterShaderNoMip("menu/bg/demos");
+	uis.specifybg = trap_R_RegisterShaderNoMip("menu/bg/specify");
+	uis.specifypassbg = trap_R_RegisterShaderNoMip("menu/bg/password");
+	uis.gameoptionsbg = trap_R_RegisterShaderNoMip("menu/bg/gameoptions");
+	uis.startserverbg = trap_R_RegisterShaderNoMip("menu/bg/startserver");
+	uis.selectbotsbg = trap_R_RegisterShaderNoMip("menu/bg/selectbots");
+	uis.ingamebg = trap_R_RegisterShaderNoMip("menu/bg/ingame");
 
 	menu_switch_sound = trap_S_RegisterSound("sounds/menu/menu_switch", qfalse);
 	menu_click_sound = trap_S_RegisterSound("sounds/menu/mouse_click", qfalse);

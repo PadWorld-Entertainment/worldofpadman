@@ -151,7 +151,7 @@ static void SetupDefaultMenu_Init(void) {
 	setupDefaultMenu.menu.draw = SetupDefaultMenu_Draw;
 	setupDefaultMenu.menu.wrapAround = qtrue;
 	setupDefaultMenu.menu.fullscreen = qtrue;
-	setupDefaultMenu.menu.bgparts = BGP_DEFAULTSBG | BGP_SIMPLEBG;
+	setupDefaultMenu.menu.bgparts = BGP_DEFAULTS | BGP_MENUFX;
 
 	setupDefaultMenu.yes.generic.type = MTYPE_BITMAP;
 	setupDefaultMenu.yes.generic.name = YES0;
@@ -258,7 +258,7 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.menu.fullscreen = qtrue;
 
 	setupMenuInfo.menu.noPushSelect = qtrue;
-	setupMenuInfo.menu.bgparts = BGP_SETUPBG | BGP_SIMPLEBG;
+	setupMenuInfo.menu.bgparts = BGP_SETUP | BGP_MENUFX;
 
 	setupMenuInfo.player.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.player.generic.name = PLAYER0;

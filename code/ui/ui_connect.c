@@ -187,13 +187,12 @@ void UI_DrawConnectScreen(qboolean overlay) {
 		// draw the dialog background
 		UI_SetColor(color_white);
 
-		// UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.connectingBG );
+		// UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.connectbg );
 		// stretch it like in cgame ...
 		if (*downloadName)
-			trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 1, 1,
-								  uis.pad_menubgfx);
+			trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 1, 1, uis.menubgfx);
 		else
-			trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 1, 1, uis.connectingBG);
+			trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 1, 1, uis.connectbg);
 	} else {
 		return; // doppelt over lay O_o
 	}

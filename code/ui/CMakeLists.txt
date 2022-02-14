@@ -6,7 +6,7 @@ set(SRCS
 	ui_callvote.c
 	ui_confirm.c
 	ui_connect.c
-	ui_controls2.c
+	ui_controls.c
 	ui_credits.c
 	ui_demo2.c
 	ui_display.c
@@ -25,7 +25,7 @@ set(SRCS
 	ui_qmenu.c
 	ui_removebots.c
 	ui_serverinfo.c
-	ui_servers2.c
+	ui_servers.c
 	ui_setup.c
 	ui_sound.c
 	ui_specifyserver.c

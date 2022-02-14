@@ -2,7 +2,7 @@
 // MAiN MENU BG FX
 // =================
 
-mainbgfx
+menu/bg/mainbgfx
 {
 	nomipmaps
 	{
@@ -17,7 +17,7 @@ mainbgfx
 // OTHER MENU BG FX
 // =================
 
-menubgfx
+menu/bg/menubgfx
 {
 	nomipmaps
 	{
