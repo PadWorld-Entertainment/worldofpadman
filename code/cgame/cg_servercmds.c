@@ -563,8 +563,7 @@ static void CG_ServerCommand(void) {
 	// say $mode $cid $text
 	if (!strcmp(cmd, "say")) {
 		int mode = atoi(CG_Argv(1));
-		// Always print SAY_TELL
-		if (cg_teamChatsOnly.integer && (mode == SAY_ALL)) {
+		if (cgs.gametype >= GT_TEAM && cg_teamChatsOnly.integer && (mode == SAY_ALL)) {
 			return;
 		}
 
