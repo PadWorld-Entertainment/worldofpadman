@@ -409,12 +409,12 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	}
 	trap_Cvar_SetValue("r_vertexLight", !s_graphicsoptions.lighting.curvalue);
 
-	if (s_graphicsoptions.mdetail.curvalue == 1) {
+	if (s_graphicsoptions.mdetail.curvalue == 2) {
 		trap_Cvar_SetValue("r_lodBias", 0);
-//	} else if (s_graphicsoptions.mdetail.curvalue == 1) {
-//		trap_Cvar_SetValue("r_lodBias", 1);
+	} else if (s_graphicsoptions.mdetail.curvalue == 1) {
+		trap_Cvar_SetValue("r_lodBias", 1);
 	} else {
-		trap_Cvar_SetValue("r_lodBias", 1);	//"Low" removed for now, as WoP has no models with LOD bias 2.
+		trap_Cvar_SetValue("r_lodBias", 2);
 	}
 
 	if (s_graphicsoptions.cdetail.curvalue == 3) {
@@ -605,10 +605,12 @@ static void GraphicsOptions_SetMenuItems(void) {
 		s_graphicsoptions.filter.curvalue = 1;
 	}
 
-	if (trap_Cvar_VariableValue("r_lodBias") > 0) {
-		s_graphicsoptions.mdetail.curvalue = 0;
-	} else {
+	if (trap_Cvar_VariableValue("r_lodBias") < 1) {
+		s_graphicsoptions.mdetail.curvalue = 2;
+	} else if (trap_Cvar_VariableValue("r_lodBias") < 2) {
 		s_graphicsoptions.mdetail.curvalue = 1;
+	} else {
+		s_graphicsoptions.mdetail.curvalue = 0;
 	}
 
 	if (trap_Cvar_VariableValue("r_subdivisions") < 4) {
@@ -664,7 +666,7 @@ void GraphicsOptions_MenuInit(void) {
 	static const char *td_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
 	static const char *aa_names[] = {"Off", "2x", "4x", NULL};
-	static const char *mdetail_names[] = {"Medium", "High", NULL};	//"Low" removed for now, as WoP has no models with LOD bias 2.
+	static const char *mdetail_names[] = {"Low", "Medium", "High", NULL};
 	static const char *cdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *enabled_names[] = {"Off", "On", NULL};
 
