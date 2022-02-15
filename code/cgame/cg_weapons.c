@@ -181,7 +181,6 @@ CG_KMATrail
 static void CG_KMATrail(centity_t *ent, const weaponInfo_t *wi) {
 	clientInfo_t *cinfo;
 	entityState_t *es;
-	// byte				colorRGBA;
 
 	es = &ent->currentState;
 	cinfo = &cgs.clientinfo[es->clientNum];
@@ -248,7 +247,7 @@ static void CG_ImperiusTrail(centity_t *ent, const weaponInfo_t *wi) {
 	BG_EvaluateTrajectory(&ent->currentState.pos, cg.time, origin);
 	ent->trailTime = cg.time;
 
-	memset(&re, 0, sizeof(refEntity_t));
+	memset(&re, 0, sizeof(re));
 	VectorCopy(origin, re.origin);
 	re.reType = RT_SPRITE;
 	re.customShader = cgs.media.imperiusCoreShader;
@@ -267,8 +266,8 @@ static void CG_ImperiusTrail(centity_t *ent, const weaponInfo_t *wi) {
 		ring->refEntity.shaderTime = cg.time / 1000.0f;
 		ring->startTime = cg.time - 20;
 		ring->endTime = cg.time + wi->wiTrailTime - 20;
-		ring->lifeRate = 1.0 / (ring->endTime - ring->startTime);
-		ring->color[0] = ring->color[1] = ring->color[2] = ring->color[3] = 1.0;
+		ring->lifeRate = 1.0f / (ring->endTime - ring->startTime);
+		ring->color[0] = ring->color[1] = ring->color[2] = ring->color[3] = 1.0f;
 
 		VectorCopy(altPos, ring->refEntity.origin);
 
@@ -474,7 +473,6 @@ NOADDITIONALMODELS:
 	case WP_BALLOONY:
 		// HERBY: Balloony defs
 		weaponInfo->missileModel = trap_R_RegisterModel("models/weaponsfx/balloon");
-		//		weaponInfo->missileTrailFunc = CG_GrenadeTrail;
 		weaponInfo->wiTrailTime = 700;
 		weaponInfo->trailRadius = 12;
 		weaponInfo->flashSound[0] = trap_S_RegisterSound("sounds/weapons/balloony/flash", qfalse);
@@ -638,11 +636,9 @@ VIEW WEAPON
 /*
 =================
 CG_MapTorsoToWeaponFrame
-
 =================
 */
 static int CG_MapTorsoToWeaponFrame(clientInfo_t *ci, int frame) {
-
 	// change weapon
 	if (frame >= ci->animations[TORSO_DROP].firstFrame && frame < ci->animations[TORSO_DROP].firstFrame + 9) {
 		return frame - ci->animations[TORSO_DROP].firstFrame + 6;
@@ -829,7 +825,7 @@ void CG_GetWaterMuzzle(localEntity_t *le, centity_t *cent, vec3_t fw) {
 CG_MachinegunSpinAngle
 ======================
 */
-#define SPIN_SPEED 0.9
+#define SPIN_SPEED 0.9f
 #define COAST_TIME 1000
 static float CG_MachinegunSpinAngle(centity_t *cent) {
 	int delta;
@@ -844,7 +840,7 @@ static float CG_MachinegunSpinAngle(centity_t *cent) {
 			delta = COAST_TIME;
 		}
 
-		speed = 0.5 * (SPIN_SPEED + (float)(COAST_TIME - delta) / COAST_TIME);
+		speed = 0.5f * (SPIN_SPEED + (float)(COAST_TIME - delta) / COAST_TIME);
 		angle = cent->pe.barrelAngle + delta * speed;
 	}
 
@@ -880,7 +876,6 @@ static void CG_AddWeaponWithPowerups(refEntity_t *gun, int powerups, int weap) {
 				trap_R_AddRefEntityToScene(gun);
 
 				gun->customShader = cgs.media.BerserkerAura;
-				//				gun->shaderRGBA[0]=0xff;ent->shaderRGBA[1]=ent->shaderRGBA[2]=0;
 			}
 		}
 	}
@@ -896,7 +891,7 @@ The main player will have this called for BOTH cases, so effects like light and
 sound should only be done on the world model case.
 =============
 */
-void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent, int team) {
+void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t *cent, int team) {
 	refEntity_t gun;
 	refEntity_t barrel;
 	refEntity_t flash;
@@ -904,7 +899,6 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent,
 	weapon_t weaponNum;
 	weaponInfo_t *weapon;
 	centity_t *nonPredictedCent;
-	//	int	col;
 
 	weaponNum = cent->currentState.weapon;
 
@@ -918,7 +912,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent,
 	gun.renderfx = parent->renderfx;
 
 	if (cent->currentState.eFlags & (EF_DEAD | EF_NOLIFESLEFT))
-		cent->currentState.eFlags &= ~EF_FIRING; // vielleicht hilft das gegen den boaster strahl bei toten =/
+		cent->currentState.eFlags &= ~EF_FIRING; // maybe this fixes the boaster beam for killed ents
 
 	gun.hModel = weapon->weaponModel;
 	if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE)
@@ -953,27 +947,16 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent,
 		gun.frame = 0;
 		break;
 	case WP_SPLASHER:
-		//		gun.frame=(int)(((float)(cg.time - cent->muzzleFlashTime))*0.022f);
 		gun.frame = (int)((cg.time - cent->muzzleFlashTime) / 45); // 45.454545 ... woher hatte ich die zahl o_O
 		if (gun.frame > 23)
 			gun.frame = 0;
 
-		//		if(gun.frame<29)
-		//			gun.frame=gun.frame%29;
-		//		else
-		//			gun.frame=0;
-
 		break;
 	case WP_PUNCHY:
 		// 0.022 f/ms
-		//		gun.frame=((int)(cg.time*0.022f))%29;
 		if (cent->currentState.eFlags & EF_FIRING)
-			//			gun.frame=(((int)(cg.time*0.022f))%32)+28;//29-60
-			//			gun.frame=((cg.time/45)%32)+28;//29-60
 			gun.frame = ((int)(cg.time * 0.035f) % 15) + 44; // 45-60
 		else
-			//			gun.frame=((int)(cg.time*0.022f))%28;//1-28
-			//			gun.frame=(cg.time/45)%28;//1-28
 			gun.frame = (int)(cg.time * 0.022f) % 44; // 1-44
 
 		break;
@@ -1146,7 +1129,7 @@ CG_AddViewWeapon
 Add the weapon, and flash for the player's view
 ==============
 */
-void CG_AddViewWeapon(playerState_t *ps) {
+void CG_AddViewWeapon(const playerState_t *ps) {
 	refEntity_t hand;
 	centity_t *cent;
 	clientInfo_t *ci;
