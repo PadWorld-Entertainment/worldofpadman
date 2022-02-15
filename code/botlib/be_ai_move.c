@@ -2309,7 +2309,7 @@ static void BotShowRoute(vec3_t org, bot_goal_t *goal) {
 	static int avoidreach[MAX_AVOIDREACH];
 	static float avoidreachtimes[MAX_AVOIDREACH];
 	static int avoidreachtries[MAX_AVOIDREACH];
-	int reachnum, resultFlags;
+	int reachnum;
 	aas_reachability_t reach;
 
 	startarea = AAS_PointAreaNum(org);
@@ -2322,7 +2322,7 @@ static void BotShowRoute(vec3_t org, bot_goal_t *goal) {
 			break;
 		}
 		reachnum = BotGetReachabilityToGoal(curorigin, curarea, 0, 0, avoidreach, avoidreachtimes, avoidreachtries,
-											goal, TFL_DEFAULT | TFL_FUNCBOB, NULL, 0, &resultFlags);
+											goal, TFL_DEFAULT | TFL_FUNCBOB, NULL, 0, NULL);
 
 		AAS_ReachabilityFromNum(reachnum, &reach);
 
