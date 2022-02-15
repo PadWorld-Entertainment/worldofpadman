@@ -29,9 +29,9 @@
 #include "jversion.h"
 #include "jerror.h"
 
-#include <stdlib.h>
 
 #ifndef EXIT_FAILURE		/* define exit() codes if not provided */
+#include <stdlib.h> // exit
 #define EXIT_FAILURE  1
 #endif
 
