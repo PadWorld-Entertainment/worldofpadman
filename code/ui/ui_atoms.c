@@ -1147,7 +1147,7 @@ void UI_Init(void) {
 		// wide screen
 		uis.xbias = 0.5f * (uis.glconfig.vidWidth - (uis.glconfig.vidHeight * ((float)SCREEN_WIDTH/(float)SCREEN_HEIGHT)));
 		uis.xscale = uis.yscale;
-		uis.ybias = 0;		
+		uis.ybias = 0;
 	} else {
 		// no wide screen
 		uis.xbias = 0;
