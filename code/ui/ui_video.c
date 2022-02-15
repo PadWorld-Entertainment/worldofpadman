@@ -417,11 +417,7 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_SetValue("r_lodBias", 1);	//"Low" removed for now, as WoP has no models with LOD bias 2.
 	}
 
-	if (s_graphicsoptions.cdetail.curvalue == 5) {
-		trap_Cvar_SetValue("r_subdivisions", 0);
-	} else if (s_graphicsoptions.cdetail.curvalue == 4) {
-		trap_Cvar_SetValue("r_subdivisions", 1);
-	} else if (s_graphicsoptions.cdetail.curvalue == 3) {
+	if (s_graphicsoptions.cdetail.curvalue == 3) {
 		trap_Cvar_SetValue("r_subdivisions", 2);
 	} else if (s_graphicsoptions.cdetail.curvalue == 2) {
 		trap_Cvar_SetValue("r_subdivisions", 4);
@@ -615,11 +611,7 @@ static void GraphicsOptions_SetMenuItems(void) {
 		s_graphicsoptions.mdetail.curvalue = 1;
 	}
 
-	if (trap_Cvar_VariableValue("r_subdivisions") < 1) {
-		s_graphicsoptions.cdetail.curvalue = 5;
-	} else if (trap_Cvar_VariableValue("r_subdivisions") < 2) {
-		s_graphicsoptions.cdetail.curvalue = 4;
-	} else if (trap_Cvar_VariableValue("r_subdivisions") < 4) {
+	if (trap_Cvar_VariableValue("r_subdivisions") < 4) {
 		s_graphicsoptions.cdetail.curvalue = 3;
 	} else if (trap_Cvar_VariableValue("r_subdivisions") < 12) {
 		s_graphicsoptions.cdetail.curvalue = 2;
@@ -673,7 +665,7 @@ void GraphicsOptions_MenuInit(void) {
 	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
 	static const char *aa_names[] = {"Off", "2x", "4x", NULL};
 	static const char *mdetail_names[] = {"Medium", "High", NULL};	//"Low" removed for now, as WoP has no models with LOD bias 2.
-	static const char *cdetail_names[] = {"Very Low", "Low", "Medium", "High", "Very High", "Maximum", NULL};
+	static const char *cdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *enabled_names[] = {"Off", "On", NULL};
 
 	int y;
