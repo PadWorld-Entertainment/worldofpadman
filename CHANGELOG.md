@@ -5,7 +5,7 @@
 - ADDED
 	- Freeze Tag (ft) game mode and related assets
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
-	- Support for individual player model footsteps 'flesh' (PaddyBell and BeachPad) and 'spurs' (PadCho)
+	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- Spraylogo for mod.io
 	- Lighting option to the Graphics menu to switch between Vertex and Lightmap
 	- Borderless Window Mode option to the Graphics menu
@@ -14,13 +14,15 @@
 	- Option to enable/disable Team Chats Only to Chat menu to be able hide chats of non-team players in team game modes
 	- Option to enable/disable playing the Chat Beep to Chat menu to be able switch off the squeeze toy sound for chat notifications
 	- Option to enable/disable Bots chatting or to make them chatting more often to Chat menu
-	- Option to adjust the Notification Space to 4, 6 or 8 lines in Chat menu
+	- Option to adjust the Notification Space to 4, 6 or 8 lines in Chat menu via new cvar `cg_chatheight`, default is 4
 	- Option to enable/disable the Lag-O-Meter to the HUD menu
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
+	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
+	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
 - CHANGED
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
-	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions` in 6 steps (20, 12, 4, 2, 1, 0) now. New default is 4.
+	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps.
 	- Fullscreen option in Graphics menu to Window Mode to support new borderless window mode.
 	- Map selection/preview to cycle three ingame pictures (shader animation)
 	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options.
@@ -36,12 +38,13 @@
 	- Being unable to use ^ key to enter color tags
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
-	- ^ key to open / close the console
-	- Not used menu assets (textures)
+	- ^ key to open/close the console
+	- Not used menu textures
 	- Not used roq video files
-	- Removed file suffixes from shader entries to let the engine decide
+	- File suffixes from shader entries to let the engine decide
 	- Not used and outdated BETTY explosion textures
 	- Spray logos of dead sites and partners like Desura and PlanetQuake
+	- Exit screen (when clicking the Exit button in the main menu) with confirmation query and related assets
 - UPDATED
 	- UI menu font texture with HQ version
 	- Spray logos with HQ versions
@@ -53,6 +56,7 @@
 	- Map selection/preview screenshots with better quality
 	- Menu music loop with 44kHz version and slightly longer
 	- Icons for weapons, ammo, powerups, medals etc. updated with HQ versions
+	- Common textures with HQ versions and common shader entries to support more modern q3map2 functionalities, e.g. watercaulk
 
 
 ## Version 1.6.2 (Nov 28 2021)
