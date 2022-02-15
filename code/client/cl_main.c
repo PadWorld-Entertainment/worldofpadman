@@ -1020,10 +1020,11 @@ void CL_PlayDemo_f(void) {
 
 			Q_strncpyz(retry, arg, len + 1);
 			retry[len] = '\0';
-			protocol = CL_WalkDemoExt(retry, name, &clc.demofile);
+			CL_WalkDemoExt(retry, name, &clc.demofile);
 		}
-	} else
-		protocol = CL_WalkDemoExt(arg, name, &clc.demofile);
+	} else {
+		CL_WalkDemoExt(arg, name, &clc.demofile);
+	}
 
 	if (!clc.demofile) {
 		Com_Error(ERR_DROP, "couldn't open %s", name);
