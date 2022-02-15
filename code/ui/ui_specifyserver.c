@@ -86,10 +86,8 @@ void SpecifyServer_DrawField(void *self) {
 	const float *color;
 	int n;
 	int basex, x, y;
-	//	vec4_t			highlight_color = {0.00f, 0.00f, 0.00f, 1.00f};
 	const float *highlight_color = text_color_highlight;
 	const vec4_t bg_color = {1.00f, 1.00f, 1.00f, 0.50f};
-	//	float*			bg_color = listbar_color;
 
 	f = (menufield_s *)self;
 	y = f->generic.y;
@@ -97,10 +95,8 @@ void SpecifyServer_DrawField(void *self) {
 	focus = (f->generic.parent->cursor == f->generic.menuPosition);
 
 	style = UI_LEFT | UI_SMALLFONT;
-	color = text_color_normal;
 
 	txt = f->field.buffer;
-	//	color = g_color_table[ColorIndex(COLOR_WHITE)];
 	if (focus)
 		color = highlight_color;
 	else
@@ -150,7 +146,7 @@ SpecifyServer_MenuInit
 */
 void SpecifyServer_MenuInit(void) {
 	// zero set all our globals
-	memset(&s_specifyserver, 0, sizeof(specifyserver_t));
+	memset(&s_specifyserver, 0, sizeof(s_specifyserver));
 
 	SpecifyServer_Cache();
 

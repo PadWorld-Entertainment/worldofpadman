@@ -512,8 +512,6 @@ static void UI_CallVoteMenu_Init(void) {
 		s_callVoteMenu.listitems[n].style = (UI_LEFT | UI_SMALLFONT);
 	}
 
-	y = 270;
-
 	s_callVoteMenu.voteyes.generic.type = MTYPE_TEXTS;
 	s_callVoteMenu.voteyes.fontHeight = 32.0f;
 	s_callVoteMenu.voteyes.generic.flags = QMF_LEFT_JUSTIFY;

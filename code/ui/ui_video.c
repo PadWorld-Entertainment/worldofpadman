@@ -865,7 +865,6 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.aa.itemnames = aa_names;
 	s_graphicsoptions.aa.generic.toolTip = "Smooth out rough edges. Not recommended for low end graphics cards. "
 										   "Requires high graphics card performance and memory!";
-	y += (BIGCHAR_HEIGHT + 2);
 
 	s_graphicsoptions.back.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.back.generic.name = BACK0;
