@@ -374,6 +374,7 @@ extern void UI_MainMenu(void);
 // ui_credits.c
 //
 extern void UI_CreditMenu(void);
+extern void UI_Credit_Cache(void);
 extern void UI_BigCredits_Cache(void);
 extern void UI_InitBigCredits(void);
 extern void UI_SecretMenu(void);

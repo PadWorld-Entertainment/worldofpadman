@@ -75,13 +75,19 @@ void UI_CreditMenu(void) {
 
 	memset(&s_credits, 0, sizeof(s_credits));
 
+	UI_Credit_Cache();
+
 	s_credits.menu.draw = UI_CreditMenu_Draw;
 	s_credits.menu.key = UI_CreditMenu_Key;
 	s_credits.menu.fullscreen = qtrue;
 	UI_PushMenu(&s_credits.menu);
 }
 
-static sfxHandle_t UI_checkMenuExitKeys(int key) {
+void UI_Credit_Cache(void) {
+	trap_R_RegisterShaderNoMip("menu/bg/credits");
+}
+
+static sfxHandle_t UI_CheckMenuExitKeys(int key) {
 	if (key == K_MOUSE2 || key == K_ESCAPE) {
 		UI_StopMusic(); // -> durch refresh sollte automatisch wieder der normale starten
 	}
@@ -119,7 +125,7 @@ void UI_BigCredits_Cache(void) {
 		trap_R_RegisterShaderNoMip(creditbgs[i]);
 }
 
-void UI_BigCreditsAction(void *ptr, int event) {
+static void UI_BigCreditsAction(void *ptr, int event) {
 	if (event != QM_ACTIVATED) {
 		return;
 	}
@@ -141,7 +147,7 @@ void UI_InitBigCredits(void) {
 	UI_BigCredits_Cache();
 
 	s_bigcredits.menu.fullscreen = qtrue;
-	s_bigcredits.menu.key = UI_checkMenuExitKeys;
+	s_bigcredits.menu.key = UI_CheckMenuExitKeys;
 
 	s_bigcredits.bgpic.generic.type = MTYPE_BITMAP;
 	s_bigcredits.bgpic.generic.name = creditbgs[0];
@@ -176,7 +182,7 @@ typedef struct {
 
 static secretmenu_t s_secretmenu;
 
-void setSecretShaderStr(void) {
+static void UI_SetSecretShaderStr(void) {
 	int offset;
 	strcpy(s_secretmenu.shadername, "menu/secret/sec");
 	offset = strlen(s_secretmenu.shadername);
@@ -188,7 +194,8 @@ TRYAGAIN_SECSHADER:
 
 	if (trap_R_RegisterShaderNoMip(s_secretmenu.shadername))
 		return;
-	else if (s_secretmenu.currentpage) {
+
+	if (s_secretmenu.currentpage) {
 		s_secretmenu.currentpage = 0;
 		goto TRYAGAIN_SECSHADER;
 	} else {
@@ -198,15 +205,14 @@ TRYAGAIN_SECSHADER:
 	}
 }
 
-void UI_SecretAction(void *ptr, int event) {
+static void UI_SecretAction(void *ptr, int event) {
 	if (event != QM_ACTIVATED) {
 		return;
 	}
 
 	s_secretmenu.currentpage++;
-	setSecretShaderStr();
+	UI_SetSecretShaderStr();
 
-	//	s_secretmenu.bgpic.generic.name			= s_secretmenu.shadername;
 	s_secretmenu.bgpic.shader = 0;
 
 	trap_S_StartLocalSound(menu_switch_sound, CHAN_LOCAL_SOUND);
@@ -237,11 +243,11 @@ void UI_SecretMenu(void) {
 
 	UI_StartCreditMusic();
 
-	setSecretShaderStr();
+	UI_SetSecretShaderStr();
 
 	s_secretmenu.menu.fullscreen = qtrue;
 	s_secretmenu.menu.draw = Secret_MenuDraw;
-	s_secretmenu.menu.key = UI_checkMenuExitKeys;
+	s_secretmenu.menu.key = UI_CheckMenuExitKeys;
 
 	s_secretmenu.bgpic.generic.type = MTYPE_BITMAP;
 	s_secretmenu.bgpic.generic.name = s_secretmenu.shadername;
