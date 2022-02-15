@@ -27,9 +27,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 static portable_samplepair_t paintbuffer[PAINTBUFFER_SIZE];
 static int snd_vol;
 
-int *snd_p;
-int snd_linear_count;
-short *snd_out;
+static int *snd_p;
+static int snd_linear_count;
+static short *snd_out;
 
 #if !id386 // if configured not to use asm
 
