@@ -1497,6 +1497,42 @@ static void CG_RevivalTrail(centity_t *cent) {
 
 /*
 ===============
+CG_BreathPuffs
+===============
+*/
+static void CG_BreathPuffs( centity_t *cent, refEntity_t *head) {
+	clientInfo_t *ci;
+	vec3_t up, origin;
+	int contents;
+
+	ci = &cgs.clientinfo[ cent->currentState.number ];
+
+	if (!cg_enableBreath.integer) {
+		return;
+	}
+	if ( cent->currentState.number == cg.snap->ps.clientNum && !cg.renderingThirdPerson) {
+		return;
+	}
+	if ( cent->currentState.eFlags & EF_DEAD ) {
+		return;
+	}
+	contents = CG_PointContents( head->origin, 0 );
+	if ( contents & ( CONTENTS_WATER | CONTENTS_SLIME | CONTENTS_LAVA ) ) {
+		return;
+	}
+	if ( ci->breathPuffTime > cg.time ) {
+		return;
+	}
+
+	VectorSet( up, 0, 0, 8 );
+	VectorMA(head->origin, 8, head->axis[0], origin);
+	VectorMA(origin, -4, head->axis[2], origin);
+	CG_SmokePuff( origin, up, 16, 1, 1, 1, 0.66f, 1500, cg.time, cg.time + 400, LEF_PUFF_DONT_SCALE, cgs.media.smokePuffShader );
+	ci->breathPuffTime = cg.time + 2000;
+}
+
+/*
+===============
 CG_TrailItem
 ===============
 */
@@ -2421,6 +2457,8 @@ void CG_Player(centity_t *cent) {
 	head.renderfx = renderfx;
 
 	CG_AddRefEntityWithPowerups(&head, &cent->currentState, ci->team);
+
+	CG_BreathPuffs(cent, &head);
 
 	// reset values to real values - dead corpses
 	cent->lerpOrigin[2] = lerpOrigin2Backup;
