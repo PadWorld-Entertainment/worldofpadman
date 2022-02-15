@@ -102,7 +102,7 @@ void MSG_WriteDeltaUsercmdKey(msg_t *msg, int key, usercmd_t *from, usercmd_t *t
 void MSG_ReadDeltaUsercmdKey(msg_t *msg, int key, usercmd_t *from, usercmd_t *to);
 
 void MSG_WriteDeltaEntity(msg_t *msg, struct entityState_s *from, struct entityState_s *to, qboolean force);
-void MSG_ReadDeltaEntity(msg_t *msg, entityState_t *from, entityState_t *to, int number);
+void MSG_ReadDeltaEntity(msg_t *msg, const struct entityState_s *from, struct entityState_s *to, int number);
 
 void MSG_WriteDeltaPlayerstate(msg_t *msg, const struct playerState_s *from, const struct playerState_s *to);
 void MSG_ReadDeltaPlayerstate(msg_t *msg, struct playerState_s *from, struct playerState_s *to);

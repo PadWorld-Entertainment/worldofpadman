@@ -906,11 +906,12 @@ If the delta removes the entity, entityState_t->number will be set to MAX_GENTIT
 Can go from either a baseline or a previous packet_entity
 ==================
 */
-void MSG_ReadDeltaEntity(msg_t *msg, entityState_t *from, entityState_t *to, int number) {
+void MSG_ReadDeltaEntity(msg_t *msg, const entityState_t *from, entityState_t *to, int number) {
 	int i, lc;
 	int numFields;
 	const netField_t *field;
-	int *fromF, *toF;
+	const int *fromF;
+	int *toF;
 	int print;
 	int trunc;
 	int startBit, endBit;
@@ -961,7 +962,7 @@ void MSG_ReadDeltaEntity(msg_t *msg, entityState_t *from, entityState_t *to, int
 	to->number = number;
 
 	for (i = 0, field = entityStateFields; i < lc; i++, field++) {
-		fromF = (int *)((byte *)from + field->offset);
+		fromF = (const int *)((const byte *)from + field->offset);
 		toF = (int *)((byte *)to + field->offset);
 
 		if (!MSG_ReadBits(msg, 1)) {
@@ -1001,7 +1002,6 @@ void MSG_ReadDeltaEntity(msg_t *msg, entityState_t *from, entityState_t *to, int
 					}
 				}
 			}
-			//			pcount[i]++;
 		}
 	}
 	for (i = lc, field = &entityStateFields[lc]; i < numFields; i++, field++) {
