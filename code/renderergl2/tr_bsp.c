@@ -2480,7 +2480,7 @@ void R_LoadEnvironmentJson(const char *baseName) {
 	for (i = 0; i < tr.numCubemaps; i++) {
 		cubemap_t *cubemap = &tr.cubemaps[i];
 		const char *cubemapJson, *keyValueJson, *indexes[3];
-		int j;
+		int j, n;
 
 		cubemapJson = JSON_ArrayGetValue(cubemapArrayJson, bufferEnd, i);
 
@@ -2489,9 +2489,11 @@ void R_LoadEnvironmentJson(const char *baseName) {
 			cubemap->name[0] = '\0';
 
 		keyValueJson = JSON_ObjectGetNamedValue(cubemapJson, bufferEnd, "Position");
-		JSON_ArrayGetIndex(keyValueJson, bufferEnd, indexes, 3);
-		for (j = 0; j < 3; j++)
+		n = JSON_ArrayGetIndex(keyValueJson, bufferEnd, indexes, 3);
+		for (j = 0; j < n; j++)
 			cubemap->origin[j] = JSON_ValueGetFloat(indexes[j], bufferEnd);
+		for (j = n; j < 3; j++)
+			cubemap->origin[j] = 0.0f;
 
 		cubemap->parallaxRadius = 1000.0f;
 		keyValueJson = JSON_ObjectGetNamedValue(cubemapJson, bufferEnd, "Radius");
