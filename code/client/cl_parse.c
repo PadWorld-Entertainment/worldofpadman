@@ -23,14 +23,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "client.h"
 
-char *svc_strings[256] = {
+static const char *svc_strings[] = {
 	"svc_bad",
 
 	"svc_nop",		"svc_gamestate", "svc_configstring", "svc_baseline",  "svc_serverCommand",
-	"svc_download", "svc_snapshot",	 "svc_EOF",			 "svc_voipSpeex", "svc_voipOpus",
+	"svc_download", "svc_snapshot",	 "svc_EOF",			 "svc_voipSpeex", "svc_voipOpus"
 };
+CASSERT(ARRAY_LEN(svc_strings) == svc_max);
 
-void SHOWNET(msg_t *msg, char *s) {
+static void SHOWNET(msg_t *msg, const char *s) {
 	if (cl_shownet->integer >= 2) {
 		Com_Printf("%3i:%s\n", msg->readcount - 1, s);
 	}
@@ -838,7 +839,7 @@ void CL_ParseServerMessage(msg_t *msg) {
 		}
 
 		if (cl_shownet->integer >= 2) {
-			if ((cmd < 0) || (!svc_strings[cmd])) {
+			if (cmd < 0 || cmd >= ARRAY_LEN(svc_strings)) {
 				Com_Printf("%3i:BAD CMD %i\n", msg->readcount - 1, cmd);
 			} else {
 				SHOWNET(msg, svc_strings[cmd]);
