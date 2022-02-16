@@ -122,12 +122,11 @@ endif()
 
 project(renderer_vulkan)
 wop_add_library(TARGET ${PROJECT_NAME} SRCS ${SRCS})
-set(LIBS jpeg ${SDL2_LIBRARIES})
+set(LIBS jpeg SDL2::SDL2)
 if (MSVC)
 	list(APPEND LIBS ws2_32 winmm psapi gdi32 ole32)
 endif()
 target_link_libraries(${PROJECT_NAME} ${LIBS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
 
 set(RENDERER_DEFINES)
 if (USE_RENDERER_DLOPEN)
