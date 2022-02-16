@@ -79,14 +79,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SURF_NODLIGHT 0x20000	 // don't dlight even if solid (solid lava, skies)
 #define SURF_DUST 0x40000		 // leave a dust trail when walking on this surface
 
-#define SURF_CARPETSTEPS 0x0080000
-#define SURF_LATTICESTEPS 0x0100000
-#define SURF_SANDSTEPS 0x0200000
-#define SURF_SOFTSTEPS 0x0400000
-#define SURF_WOODSTEPS 0x0800000
-#define SURF_SNOWSTEPS 0x1000000
+#define SURF_CARPETSTEPS 0x0080000      // footsteps sound like walking on carpet
+#define SURF_LATTICESTEPS 0x0100000     // footsteps sound like walking on lattice
+#define SURF_SANDSTEPS 0x0200000        // footsteps sound like walking on sand
+#define SURF_SOFTSTEPS 0x0400000        // footsteps sound like walking on soft material
+#define SURF_WOODSTEPS 0x0800000        // footsteps sound like walking on wood
+#define SURF_SNOWSTEPS 0x1000000        // footsteps sound like walking on snow
+#define SURF_SPLASHSTEPS 0x2000000      // footsteps sound like walking on water, like on a puddle
 /*
-0x2000000
 0x4000000
 0x8000000
 0x10000000

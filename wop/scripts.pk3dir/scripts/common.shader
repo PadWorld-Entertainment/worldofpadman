@@ -237,6 +237,19 @@ textures/common/softclip		// causes footstep sounds like walking on soft surface
 	surfaceparm softsteps
 }
 
+textures/common/splashclip		// causes footstep sounds like walking on water surfaces, like a puddle
+{
+	qer_trans 0.40
+	surfaceparm nodraw
+	surfaceparm nolightmap
+	surfaceparm nonsolid
+	surfaceparm trans
+	surfaceparm nomarks
+	surfaceparm noimpact
+	surfaceparm playerclip
+	surfaceparm splashsteps
+}
+
 textures/common/weapclip		// blocks bots, players, AND bullets, replaces full_clip
 {
 	qer_trans 0.40

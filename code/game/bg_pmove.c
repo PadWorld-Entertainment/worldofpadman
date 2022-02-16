@@ -885,6 +885,8 @@ static int PM_FootstepForSurface(void) {
 		return EV_FOOTSTEP_WOOD;
 	if (pml.groundTrace.surfaceFlags & SURF_SNOWSTEPS)
 		return EV_FOOTSTEP_SNOW;
+	if (pml.groundTrace.surfaceFlags & SURF_SPLASHSTEPS)
+		return EV_FOOTSPLASH;
 
 	return EV_FOOTSTEP;
 }
