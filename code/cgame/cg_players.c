@@ -2205,52 +2205,6 @@ void CG_AddRefEntityWithPowerups(refEntity_t *ent, entityState_t *state, int tea
 }
 
 /*
-=================
-CG_LightVerts
-=================
-*/
-int CG_LightVerts(vec3_t normal, int numVerts, polyVert_t *verts) {
-	int i, j;
-	float incoming;
-	vec3_t ambientLight;
-	vec3_t lightDir;
-	vec3_t directedLight;
-
-	trap_R_LightForPoint(verts[0].xyz, ambientLight, directedLight, lightDir);
-
-	for (i = 0; i < numVerts; i++) {
-		incoming = DotProduct(normal, lightDir);
-		if (incoming <= 0) {
-			verts[i].modulate[0] = ambientLight[0];
-			verts[i].modulate[1] = ambientLight[1];
-			verts[i].modulate[2] = ambientLight[2];
-			verts[i].modulate[3] = 255;
-			continue;
-		}
-		j = (ambientLight[0] + incoming * directedLight[0]);
-		if (j > 255) {
-			j = 255;
-		}
-		verts[i].modulate[0] = j;
-
-		j = (ambientLight[1] + incoming * directedLight[1]);
-		if (j > 255) {
-			j = 255;
-		}
-		verts[i].modulate[1] = j;
-
-		j = (ambientLight[2] + incoming * directedLight[2]);
-		if (j > 255) {
-			j = 255;
-		}
-		verts[i].modulate[2] = j;
-
-		verts[i].modulate[3] = 255;
-	}
-	return qtrue;
-}
-
-/*
 ===============
 CG_AddStars
 ===============
@@ -2262,7 +2216,7 @@ CG_AddStars
 #define STAR_AMPLITUDE 1.5
 #define STAR_SHADEROFS 0.05
 
-void CG_AddStars(int clientNum, vec3_t origin, int num, float alpha) {
+static void CG_AddStars(int clientNum, vec3_t origin, int num, float alpha) {
 	refEntity_t star;
 	float phi;
 	int i, offset;
@@ -2467,16 +2421,16 @@ void CG_Player(centity_t *cent) {
 	// add stars if dead
 	if (cent->currentState.eFlags & (EF_DEAD | EF_HURT) && !(cent->currentState.powerups & (1 << PW_VISIONLESS))) {
 		int stars = 0;
-		float alpha = 1.0;
+		float alpha = 1.0f;
 
 		stars += ((cent->currentState.eFlags & EF_DEAD) ? 3 : 0);
 		stars += ((cent->currentState.eFlags & EF_HURT) ? 3 : 0);
 
 		if ((cent->currentState.eFlags & EF_DEAD) && cent->currentState.time) {
 			if (stateTime <= 1000) {
-				alpha = (1.0 - stateTime / 1000.0);
+				alpha = (float)(1.0 - stateTime / 1000.0);
 			} else {
-				alpha = 0.0;
+				alpha = 0.0f;
 			}
 		}
 		CG_AddStars(cent->currentState.number, head.origin, stars, alpha);
