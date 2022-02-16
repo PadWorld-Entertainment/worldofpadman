@@ -465,7 +465,6 @@ static void CG_MapRestart(void) {
 
 	CG_InitLocalEntities();
 	CG_InitMarkPolys();
-	CG_ClearParticles();
 
 	Init_SprayLogoSys();
 

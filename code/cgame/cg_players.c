@@ -23,9 +23,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cg_players.c -- handle the media and animation for player entities
 #include "cg_local.h"
 
-char *cg_customSoundNames[MAX_CUSTOM_SOUNDS] = {"*death1",	 "*death2",	  "*death3",	"*jump1",	 "*pain25_1",
-												"*pain50_1", "*pain75_1", "*pain100_1", "*falling1", "*gasp",
-												"*drown",	 "*fall1",	  "*taunt",		"*hehe1",	 "*hehe2"};
+static const char *cg_customSoundNames[MAX_CUSTOM_SOUNDS] = {
+	"*death1",	 "*death2", "*death3", "*jump1", "*pain25_1", "*pain50_1", "*pain75_1", "*pain100_1",
+	"*falling1", "*gasp",	"*drown",  "*fall1", "*taunt",	  "*hehe1",	   "*hehe2"};
 
 /*
 ================

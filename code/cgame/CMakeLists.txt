@@ -14,7 +14,6 @@ set(SRCS
 	cg_localents.c
 	cg_marks.c
 	cg_misc.c
-	cg_particles.c
 	cg_players.c
 	cg_playerstate.c
 	cg_predict.c

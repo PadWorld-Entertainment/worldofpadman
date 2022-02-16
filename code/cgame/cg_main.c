@@ -1133,20 +1133,6 @@ static void CG_RegisterGraphics(void) {
 		}
 		cgs.gameModels[i] = trap_R_RegisterModel(modelName);
 	}
-
-	CG_ClearParticles();
-	/*
-		for (i=1; i<MAX_PARTICLES_AREAS; i++)
-		{
-			{
-				int rval;
-
-				rval = CG_NewParticleArea ( CS_PARTICLES + i);
-				if (!rval)
-					break;
-			}
-		}
-	*/
 }
 
 /*
