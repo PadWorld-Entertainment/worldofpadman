@@ -1533,6 +1533,48 @@ static void CG_BreathPuffs(const centity_t *cent, const refEntity_t *head) {
 
 /*
 ===============
+CG_DustTrail
+===============
+*/
+static void CG_DustTrail(centity_t *cent) {
+	int anim;
+	vec3_t end, vel;
+	trace_t tr;
+
+	if (!cg_enableDust.integer)
+		return;
+
+	if (cent->dustTrailTime > cg.time) {
+		return;
+	}
+
+	anim = cent->pe.legs.animationNumber & ~ANIM_TOGGLEBIT;
+	if (anim != LEGS_LANDB && anim != LEGS_LAND) {
+		return;
+	}
+
+	cent->dustTrailTime += 40;
+	if (cent->dustTrailTime < cg.time) {
+		cent->dustTrailTime = cg.time;
+	}
+
+	VectorCopy(cent->currentState.pos.trBase, end);
+	end[2] -= 64;
+	CG_Trace(&tr, cent->currentState.pos.trBase, NULL, NULL, end, cent->currentState.number, MASK_PLAYERSOLID);
+
+	if (!(tr.surfaceFlags & SURF_DUST))
+		return;
+
+	VectorCopy(cent->currentState.pos.trBase, end);
+	end[2] -= 16;
+
+	VectorSet(vel, 0, 0, -30);
+	CG_SmokePuff(end, vel, 24, .8f, .8f, 0.7f, 0.33f, 500, cg.time, 0, 0,
+					cgs.media.smokePuffShader);
+}
+
+/*
+===============
 CG_TrailItem
 ===============
 */

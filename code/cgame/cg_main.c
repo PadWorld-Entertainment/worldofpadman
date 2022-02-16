@@ -165,6 +165,7 @@ vmCvar_t cg_bigFont;
 vmCvar_t cg_noTaunt;
 vmCvar_t cg_noProjectileTrail;
 vmCvar_t cg_enableBreath;
+vmCvar_t cg_enableDust;
 
 vmCvar_t cg_correctedWeaponPos;
 vmCvar_t cg_drawRealTime;
@@ -300,6 +301,7 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_noTaunt, "cg_noTaunt", "0", CVAR_ARCHIVE},
 	{&cg_noProjectileTrail, "cg_noProjectileTrail", "0", CVAR_ARCHIVE},
 	{&cg_enableBreath, "g_enableBreath", "0", CVAR_SERVERINFO},
+	{&cg_enableDust, "g_enableDust", "0", CVAR_SERVERINFO},
 	{&cg_smallFont, "ui_smallFont", "0.25", CVAR_ARCHIVE},
 	{&cg_bigFont, "ui_bigFont", "0.4", CVAR_ARCHIVE},
 

@@ -81,6 +81,7 @@ vmCvar_t pmove_fixed;
 vmCvar_t pmove_msec;
 vmCvar_t g_listEntity;
 vmCvar_t g_enableBreath;
+vmCvar_t g_enableDust;
 
 vmCvar_t g_q3Items;
 vmCvar_t g_sky;
@@ -173,7 +174,8 @@ static cvarTable_t gameCvarTable[] = {
 	{&g_allowVote, "g_allowVote", "1", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},
 	{&g_listEntity, "g_listEntity", "0", 0, 0, qfalse},
 	{&g_enableBreath, "g_enableBreath", "0", CVAR_SERVERINFO, 0, qfalse},
-
+	{&g_enableDust, "g_enableDust", "0", CVAR_SERVERINFO, 0, qfalse},
+	
 	{&g_smoothClients, "g_smoothClients", "1", 0, 0, qfalse},
 	/* Still causing issues, maybe use pmove_float from OpenArena instead */
 	{&pmove_fixed, "pmove_fixed", "0", CVAR_SYSTEMINFO, 0, qfalse},

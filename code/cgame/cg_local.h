@@ -1322,6 +1322,7 @@ extern vmCvar_t cg_bigFont;
 extern vmCvar_t cg_noTaunt;
 extern vmCvar_t cg_noProjectileTrail;
 extern vmCvar_t cg_enableBreath;
+extern vmCvar_t cg_enableDust;
 
 extern vmCvar_t cg_correctedWeaponPos;
 extern vmCvar_t cg_drawRealTime;

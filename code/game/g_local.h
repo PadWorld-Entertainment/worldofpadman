@@ -915,6 +915,7 @@ extern vmCvar_t g_smoothClients;
 extern vmCvar_t pmove_fixed;
 extern vmCvar_t pmove_msec;
 extern vmCvar_t g_enableBreath;
+extern vmCvar_t g_enableDust;
 
 extern vmCvar_t g_q3Items;
 extern vmCvar_t g_sky;
