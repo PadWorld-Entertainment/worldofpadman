@@ -53,3 +53,4 @@ profile
 
 /wop.*
 /wopded.*
+/libSDL2*
