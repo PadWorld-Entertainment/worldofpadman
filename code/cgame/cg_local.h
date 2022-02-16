@@ -1600,7 +1600,6 @@ void CG_ShaderStateChanged(void);
 //
 void CG_Respawn(void);
 void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops);
-void CG_CheckChangedPredictableEvents(playerState_t *ps);
 
 //
 // cg_rautelib.c
@@ -1616,7 +1615,7 @@ void AddLogosToScene(void);
 void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float radius, clientInfo_t *ci);
 qhandle_t FindLogoForSpraying(const clientInfo_t *ci);
 void ActiveChooseLogoMenu(void);
-void DumpPolyInfo(void);
+void CG_DumpPolyInfo(void);
 
 //
 // cg_lensflare.c

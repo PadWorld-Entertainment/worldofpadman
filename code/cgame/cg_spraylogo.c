@@ -14,7 +14,7 @@
 #define MAX_LOADEDLOGOS 64
 
 typedef struct {
-	char name[32];		  // the name of the logo (filename ;) ... I hope this is enough
+	char name[MAX_SPRAYLOGO_NAME];		  // the name of the logo (filename ;) ... I hope this is enough
 	qhandle_t logohandle; // the qhandle of the logo shader
 } loadedlogo_t;
 
@@ -51,11 +51,11 @@ static logoPoly_t logoPolys[MAX_LOGO_POLYS];
 // cvar:"logolist"
 // vv INIT-stuff vv
 
-int PP2ID(logoPoly_t *p) {
+static int PP2ID(logoPoly_t *p) {
 	return (p) ? p - logoPolys : -1;
 }
 
-void DumpPolyInfo(void) {
+void CG_DumpPolyInfo(void) {
 	int i;
 	logoPoly_t *p;
 
@@ -95,7 +95,7 @@ Init_LogoPolyList
 This will clean all logopolys and put them into the freelist
 #######################
 */
-void Init_LogoPolyList(void) {
+static void Init_LogoPolyList(void) {
 	int i;
 
 	// clean =)
@@ -120,7 +120,7 @@ Sort_Logos
 This will sort the Logo list (using some Q-Sort code)
 #######################
 */
-void Sort_Logos(loadedlogo_t arr[], int lidx, int ridx) {
+static void Sort_Logos(loadedlogo_t arr[], int lidx, int ridx) {
 	loadedlogo_t buffer;
 	int e, k, mid;
 
@@ -158,7 +158,7 @@ Load_Logos
 This function loads all logos which were found with the ui-function(ui_gameinfo.c)
 #######################
 */
-void Load_Logos(void) {
+static void Load_Logos(void) {
 	int i, logosfound;
 	char *logonamelist[MAX_LOADEDLOGOS];
 	char logonamestr[1024];
@@ -198,7 +198,7 @@ void Load_Logos(void) {
 	if (logosfound > MAX_LOADEDLOGOS)
 		logosfound = MAX_LOADEDLOGOS;
 	for (i = 0; i < logosfound; i++) {
-		Com_sprintf(loadedlogos_array[i].name, 32, "%s", logonamelist[i]);
+		Com_sprintf(loadedlogos_array[i].name, sizeof(loadedlogos_array[i].name), "%s", logonamelist[i]);
 		loadedlogos_array[i].logohandle = trap_R_RegisterShader(va("spraylogos/%s", logonamelist[i]));
 		// if we get a 0-handle we use the default logo ... this will happen if we want to use an unpure file on a pure
 		// server
@@ -229,16 +229,13 @@ void Init_SprayLogoSys(void) {
 
 	menu_click_sound = trap_S_RegisterSound("sounds/menu/mouse_click", qfalse);
 }
-// ^^ INIT-stuff ^^
-// vv ACTIVE-stuff vv
+
 /*
 #######################
 Free_LogoPoly
-
-TODO: write some info ;)
 #######################
 */
-void Free_LogoPoly(logoPoly_t *lp) {
+static void Free_LogoPoly(logoPoly_t *lp) {
 	if (!lp) {
 		Com_Printf(S_COLOR_RED "ERROR: Free_LogoPoly get a NULL pointer\n");
 		return;
@@ -272,7 +269,7 @@ this function can return NULL if there is an big error !!!!! ... this will lead 
 TODO: write some more info ;)
 #######################
 */
-logoPoly_t *Alloc_LogoPoly(void) {
+static logoPoly_t *Alloc_LogoPoly(void) {
 	logoPoly_t *lp;
 
 	if (freeLogoPolys) {
@@ -307,6 +304,12 @@ logoPoly_t *Alloc_LogoPoly(void) {
 	return lp;
 }
 
+// I took this from the mark code(the defs)
+// I think this is too much (but I will keep it ...) ... why is it too much: the save list has only 256 elements
+// (so with a complex surface there is only space for 2 logos)
+#define MAX_LOGO_FRAGMENTS 128
+#define MAX_LOGO_POINTS 384
+
 /*
 #######################
 Add_LogoToDrawList
@@ -316,17 +319,10 @@ dir -> a normal of the logo (pointing away from the wall)
 shader -> the shader-handle so we know what to draw ;)
 radius -> this will be a fixed value (but I don't want to fix it here)
 ci -> the clientInfo of the sprayer, so we know the team(for tp spray) and the color(for ffa spray)
+
+FIXME: Radius is not fixed at all! RGBA should be passed explicitly, not via clientinfo
 #######################
 */
-
-// FIXME: Radius is not fixed at all! RGBA should be passed explicitly, not via clientinfo
-
-// I took this from the mark code(the defs)
-#define MAX_LOGO_FRAGMENTS                                                                                             \
-	128 // I think this is too much (but I will keep it ...) ... why is it too much: the save list has only 256 elements
-		// (so with a complex surface there is only space for 2 logos)
-#define MAX_LOGO_POINTS 384
-
 void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float radius, clientInfo_t *ci) {
 	vec3_t LogoPoints[4]; // the 4 points of the unsplited logo
 	vec3_t projection;	  // a vec for projecting the logo at the wall
@@ -340,7 +336,6 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 	logoPoly_t *tmplp;
 	int level;
 
-	// I tryed to write an own code ... // ??? -.-
 	VectorNormalize2(dir, axis[0]);
 
 	if (axis[0][2] == 1.0f) {
@@ -380,15 +375,6 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 		axis[2][2] *= -1.0f;
 	}
 
-	// create the full polygon
-	/*
-		for ( i = 0 ; i < 3 ; i++ ) {
-			LogoPoints[0][i] = origin[i] - radius * axis[1][i] - radius * axis[2][i];
-			LogoPoints[1][i] = origin[i] + radius * axis[1][i] - radius * axis[2][i];
-			LogoPoints[2][i] = origin[i] + radius * axis[1][i] + radius * axis[2][i];
-			LogoPoints[3][i] = origin[i] - radius * axis[1][i] + radius * axis[2][i];
-		}
-	*/
 	// unwind the loop
 	LogoPoints[0][0] = origin[0] - radius * axis[1][0] - radius * axis[2][0];
 	LogoPoints[0][1] = origin[1] - radius * axis[1][1] - radius * axis[2][1];
@@ -437,7 +423,6 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 		if (tmplp->level >= level && ((tmplp->center[0] - origin[0]) * (tmplp->center[0] - origin[0]) +
 									  (tmplp->center[1] - origin[1]) * (tmplp->center[1] - origin[1]) +
 									  (tmplp->center[2] - origin[2]) * (tmplp->center[2] - origin[2]))
-										 //			< (radius+tmplp->radius)*(radius+tmplp->radius) )
 										 < (radius + tmplp->radius) * (radius + tmplp->radius) * 2) {
 			level = tmplp->level + 1;
 		}
@@ -448,10 +433,8 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 	numFragments = trap_CM_MarkFragments(4, (void *)LogoPoints, projection, MAX_LOGO_POINTS, LogoFragmentPoints[0],
 										 MAX_LOGO_FRAGMENTS, LogoFragments);
 
-	//	for ( i = 0, lf = LogoFragments ; i < numFragments ; i++, lf++ ) {
 	for (i = 0; i < numFragments; i++) {
 		polyVert_t *v;
-		//		polyVert_t	verts[MAX_VERTS_ON_POLY];
 		logoPoly_t *lp;
 
 		lf = &LogoFragments[i];
@@ -469,14 +452,12 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 		lp->radius = radius;
 		lp->level = level;
 
-		//		for ( j = 0, v = lp->verts; j < lf->numPoints ; j++, v++ ) {
 		for (j = 0; j < lf->numPoints; j++) {
 			vec3_t delta;
 
 			v = &lp->verts[j];
 
 			// calculate the texturecoordinates (took this code from mark func)
-			//			VectorCopy( LogoFragmentPoints[lf->firstPoint + j], v->xyz );
 			// copy origin and move a bit away from the wall (because we can't use polygonoffset in the shader)
 			v->xyz[0] = LogoFragmentPoints[lf->firstPoint + j][0] + dir[0] * (0.1f + 0.01f * (float)(level));
 			v->xyz[1] = LogoFragmentPoints[lf->firstPoint + j][1] + dir[1] * (0.1f + 0.01f * (float)(level));
@@ -485,7 +466,7 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 			VectorSubtract(v->xyz, origin, delta);
 			v->st[0] = 0.5f + DotProduct(delta, axis[1]) * texCoordScale;
 			v->st[1] = 0.5f + DotProduct(delta, axis[2]) * texCoordScale;
-			v->st[0] += level * 10.0f; // "missbrauch" ... level-info into the engine ^^
+			v->st[0] += level * 10.0f; // TODO ... level-info into the engine ^^
 
 			memcpy(&v->modulate, &color, sizeof(color));
 		}
@@ -500,16 +481,14 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 	}
 }
 
-/*
-#######################
-AddLogosToScene
-
-TODO: write some info ;)
-#######################
-*/
 #define LOGOFADEOUT_DONOTHING 90000 // 180000
 #define LOGOFADEOUT_FINISH 120000	// 240000
 
+/*
+#######################
+AddLogosToScene
+#######################
+*/
 void AddLogosToScene(void) {
 	logoPoly_t *lp, *tmplp;
 	float fadeout;
@@ -550,19 +529,13 @@ void AddLogosToScene(void) {
 	// if (tmplp != lastdrawLogoPolys) { Com_Printf(S_COLOR_RED "last drawn Logo wasn't lastdrawLogoPolys-ptr\n"); }
 }
 
-qboolean CursorInBox(int x, int y, int w, int h) {
+static qboolean CursorInBox(int x, int y, int w, int h) {
 	if (cgs.cursorX >= x && cgs.cursorX <= x + w && cgs.cursorY >= y && cgs.cursorY <= y + h)
 		return qtrue;
 	else
 		return qfalse;
 }
-/*
-#######################
-ActiveChooseLogoMenu
 
-TODO: write some info ;)
-#######################
-*/
 #define POSY_FIRSTLINE 100
 #define POSY_SECONDLINE 200 // 260
 
@@ -588,6 +561,11 @@ static const char *SkipNumber(const char *logoName) {
 	return logoName;
 }
 
+/*
+#######################
+ActiveChooseLogoMenu
+#######################
+*/
 void ActiveChooseLogoMenu(void) {
 	vec4_t tblack33 = {0.0f, 0.0f, 0.0f, 0.33f};
 	int i, j, catcher, CursorAtLogo, numPages;
@@ -615,19 +593,12 @@ void ActiveChooseLogoMenu(void) {
 		spraycolor = spraycolors[(int)(colorchar[0] - '0')];
 	}
 
-	/*
-		UI_SetColor(spraycolors[(int)(colorchar[0]-'0')]);
-		UI_DrawHandlePic1024(76,464,96,96,uis.logo_handles[s_playersettings.slogo_num]);
-		UI_SetColor(NULL);
-	*/
 	catcher = trap_Key_GetCatcher();
 	if (!(catcher & KEYCATCH_CGAME))
 		trap_Key_SetCatcher(catcher | KEYCATCH_CGAME);
 
 	numPages = (int)ceil((float)loadedlogos * 0.125f); // 1/8->0.125
 
-	//	CG_FillRect(20,20,600,440,tblack33);
-	//	CG_DrawRect(20,20,600,440,1,colorBlack);
 	if (cgs.media.chooselogo_bg == 0) {
 		CG_FillRect(XLL - GAP, 60, 640 - 2 * (XLL - GAP), 320, tblack33);
 		CG_DrawRect(XLL - GAP, 60, 640 - 2 * (XLL - GAP), 320, 1, colorBlack);
@@ -635,10 +606,6 @@ void ActiveChooseLogoMenu(void) {
 		CG_DrawPic(XLL - GAP - 10, 60 - 10, 640 - 2 * (XLL - GAP) + 20, 320 + 20, cgs.media.chooselogo_bg);
 	}
 
-	//	CG_DrawStringExt(300,40,va("loaded=%i",loadedlogos),colorWhite,qtrue,qfalse,8,16,32);
-
-	//	CG_DrawStringExt(40,POSY_FIRSTLINE-26,"please select a logo ... you can use the
-	// mouse",colorWhite,qtrue,qfalse,8,16,64);
 	CG_DrawStringExt(XLL, POSY_FIRSTLINE - 26, "Please select a spray logo...", colorWhite, qtrue, qtrue, 8, 16, 64);
 
 	CursorAtLogo = -1;
@@ -654,8 +621,6 @@ void ActiveChooseLogoMenu(void) {
 		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
 						 POSY_FIRSTLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8, 16,
 						 32);
-		//		if((cgs.cursorX>XLL+i*(LOGOSIZE+GAP) && cgs.cursorX<XLL+LOGOSIZE+i*(LOGOSIZE+GAP)) &&
-		//			(cgs.cursorY>POSY_FIRSTLINE && cgs.cursorY<POSY_FIRSTLINE+LOGOSIZE+26))
 		if (CursorInBox(XLL + i * (LOGOSIZE + GAP), POSY_FIRSTLINE, LOGOSIZE, LOGOSIZE + 26))
 			CursorAtLogo = j;
 
@@ -670,13 +635,9 @@ void ActiveChooseLogoMenu(void) {
 		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
 						 POSY_SECONDLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8,
 						 16, 32);
-		//		if((cgs.cursorX>XLL+i*(LOGOSIZE+GAP) && cgs.cursorX<XLL+LOGOSIZE+i*(LOGOSIZE+GAP)) &&
-		//			(cgs.cursorY>POSY_SECONDLINE && cgs.cursorY<POSY_SECONDLINE+LOGOSIZE+26))
 		if (CursorInBox(XLL + i * (LOGOSIZE + GAP), POSY_SECONDLINE, LOGOSIZE, LOGOSIZE + 26))
 			CursorAtLogo = (j + 4);
 	}
-
-	//	CG_DrawStringExt(20,20,va("Cursor@Logo=%i", CursorAtLogo),colorWhite,qtrue,qtrue,8,16,32);
 
 	if (CursorAtLogo != -1)
 		CG_DrawRect(XLL + (CursorAtLogo % 4) * (LOGOSIZE + GAP),
@@ -773,19 +734,9 @@ void ActiveChooseLogoMenu(void) {
 
 qhandle_t FindLogoForSpraying(const clientInfo_t *ci) {
 	int i;
-	char tmpstr[32];
+	char tmpstr[MAX_SPRAYLOGO_NAME];
 
-	/*
-		if(cgs.gametype==GT_SPRAY)
-		{
-			if(ci->team==TEAM_RED)
-				trap_Cvar_VariableStringBuffer("g_redspraylogo",tmpstr,32); //<-- kann nur auf localhost gehen ;)
-			else
-				trap_Cvar_VariableStringBuffer("g_bluespraylogo",tmpstr,32); //<-- kann nur auf localhost gehen ;)
-		}
-		else
-	*/
-	strcpy(tmpstr, ci->spraylogo);
+	Q_strncpyz(tmpstr, ci->spraylogo, sizeof(tmpstr));
 
 	if (!*tmpstr)
 		return cgs.media.defaultspraylogo;
@@ -797,8 +748,3 @@ qhandle_t FindLogoForSpraying(const clientInfo_t *ci) {
 
 	return cgs.media.defaultspraylogo;
 }
-// a function for vote/choose a logo ... this should be a 2d-menu (but I want to keep this in the cg ...)
-// ^^ ACTIVE-stuff ^^
-// vv SHUTDOWN-stuff vv
-// don't know if I need to shutdown something
-// ^^ SHUTDOWN-stuff ^^

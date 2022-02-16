@@ -253,7 +253,7 @@ CG_TouchItem
 ===================
 */
 static void CG_TouchItem(centity_t *cent) {
-	const 	gitem_t *item;
+	const gitem_t *item;
 
 	if (!cg_predictItems.integer) {
 		return;
@@ -587,9 +587,6 @@ void CG_PredictPlayerState(void) {
 
 		// add push trigger movement effects
 		CG_TouchTriggerPrediction();
-
-		// check for predictable events that changed from previous predictions
-		// CG_CheckChangedPredictableEvents(&cg.predictedPlayerState);
 	}
 
 	if (cg_showmiss.integer > 1) {

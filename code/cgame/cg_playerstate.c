@@ -34,7 +34,7 @@ CG_CheckAmmo
 If the ammo has gone low enough to generate the warning, play a sound
 ==============
 */
-void CG_CheckAmmo(void) {
+static void CG_CheckAmmo(void) {
 	int i;
 	int total;
 	int previous;
@@ -84,7 +84,7 @@ void CG_CheckAmmo(void) {
 CG_DamageFeedback
 ==============
 */
-void CG_DamageFeedback(int yawByte, int pitchByte, int damage) {
+static void CG_DamageFeedback(int yawByte, int pitchByte, int damage) {
 	float left, front, up;
 	float kick;
 	int health;
@@ -199,7 +199,7 @@ void CG_Respawn(void) {
 CG_CheckPlayerstateEvents
 ==============
 */
-void CG_CheckPlayerstateEvents(playerState_t *ps, playerState_t *ops) {
+static void CG_CheckPlayerstateEvents(playerState_t *ps, playerState_t *ops) {
 	int i;
 	int event;
 	centity_t *cent;
@@ -235,46 +235,10 @@ void CG_CheckPlayerstateEvents(playerState_t *ps, playerState_t *ops) {
 
 /*
 ==================
-CG_CheckChangedPredictableEvents
-==================
-*/
-void CG_CheckChangedPredictableEvents(playerState_t *ps) {
-	int i;
-	int event;
-	centity_t *cent;
-
-	cent = &cg.predictedPlayerEntity;
-	for (i = ps->eventSequence - MAX_PS_EVENTS; i < ps->eventSequence; i++) {
-		//
-		if (i >= cg.eventSequence) {
-			continue;
-		}
-		// if this event is not further back in than the maximum predictable events we remember
-		if (i > cg.eventSequence - MAX_PREDICTED_EVENTS) {
-			// if the new playerstate event is different from a previously predicted one
-			if (ps->events[i & (MAX_PS_EVENTS - 1)] != cg.predictableEvents[i & (MAX_PREDICTED_EVENTS - 1)]) {
-
-				event = ps->events[i & (MAX_PS_EVENTS - 1)];
-				cent->currentState.event = event;
-				cent->currentState.eventParm = ps->eventParms[i & (MAX_PS_EVENTS - 1)];
-				CG_EntityEvent(cent, cent->lerpOrigin);
-
-				cg.predictableEvents[i & (MAX_PREDICTED_EVENTS - 1)] = event;
-
-				if (cg_showmiss.integer) {
-					CG_Printf("WARNING: changed predicted event\n");
-				}
-			}
-		}
-	}
-}
-
-/*
-==================
 pushReward
 ==================
 */
-static void pushReward(sfxHandle_t sfx, qhandle_t shader, int rewardCount) {
+static void CG_PushReward(sfxHandle_t sfx, qhandle_t shader, int rewardCount) {
 	if (cg.rewardStack < (MAX_REWARDSTACK - 1)) {
 		cg.rewardStack++;
 		cg.rewardSound[cg.rewardStack] = sfx;
@@ -288,7 +252,7 @@ static void pushReward(sfxHandle_t sfx, qhandle_t shader, int rewardCount) {
 CG_CheckLocalSounds
 ==================
 */
-void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
+static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 	int highScore;
 	qboolean reward = qfalse;
 	sfxHandle_t sfx;
@@ -320,29 +284,29 @@ void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 	// reward sounds
 	if (ps->persistant[PERS_EXCELLENT_COUNT] != ops->persistant[PERS_EXCELLENT_COUNT]) {
 		sfx = cgs.media.excellentSound;
-		pushReward(sfx, cgs.media.medalExcellent, ps->persistant[PERS_EXCELLENT_COUNT]);
+		CG_PushReward(sfx, cgs.media.medalExcellent, ps->persistant[PERS_EXCELLENT_COUNT]);
 		reward = qtrue;
 		// Com_Printf("excellent\n");
 	}
 	if ((ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF00) != (ops->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF00)) {
 		sfx = cgs.media.spraygodSound;
-		pushReward(sfx, cgs.media.medalSpraygod, (ps->persistant[PERS_SPRAYAWARDS_COUNT] >> 8));
+		CG_PushReward(sfx, cgs.media.medalSpraygod, (ps->persistant[PERS_SPRAYAWARDS_COUNT] >> 8));
 		reward = qtrue;
 	}
 	if ((ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF) != (ops->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF)) {
 		sfx = cgs.media.spraykillerSound;
-		pushReward(sfx, cgs.media.medalSpraykiller, ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF);
+		CG_PushReward(sfx, cgs.media.medalSpraykiller, ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF);
 		reward = qtrue;
 	}
 
 	if (ps->persistant[PERS_CAPTURES] != ops->persistant[PERS_CAPTURES]) {
 		sfx = cgs.media.padstarSound;
-		pushReward(sfx, cgs.media.medalPadStar, ps->persistant[PERS_CAPTURES]);
+		CG_PushReward(sfx, cgs.media.medalPadStar, ps->persistant[PERS_CAPTURES]);
 		reward = qtrue;
 	}
 	if (ps->persistant[PERS_GAUNTLET_FRAG_COUNT] != ops->persistant[PERS_GAUNTLET_FRAG_COUNT]) {
 		sfx = cgs.media.humiliationSound;
-		pushReward(sfx, cgs.media.medalGauntlet, ps->persistant[PERS_GAUNTLET_FRAG_COUNT]);
+		CG_PushReward(sfx, cgs.media.medalGauntlet, ps->persistant[PERS_GAUNTLET_FRAG_COUNT]);
 		reward = qtrue;
 		// Com_Printf("gauntlet frag\n");
 	}
@@ -366,7 +330,6 @@ void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 
 	// lead changes
 	if (!reward) {
-		//
 		if (!cg.warmup && !cg_cineHideHud.integer) {
 			// never play lead changes during warmup
 			if (ps->persistant[PERS_RANK] != ops->persistant[PERS_RANK]) {
@@ -441,7 +404,6 @@ void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 /*
 ===============
 CG_TransitionPlayerState
-
 ===============
 */
 void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops) {

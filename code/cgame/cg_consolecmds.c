@@ -312,7 +312,7 @@ static consoleCommand_t commands[] = {{"testgun", CG_TestGun_f},
 									  {"dropTeamItem", CG_DropCartridge_f},
 									  {"freecamsetpos", Cmd_SetFreecamPos_f},
 									  {"freecam", CG_Cam},
-									  {"spraydump", DumpPolyInfo}};
+									  {"spraydump", CG_DumpPolyInfo}};
 
 /*
 =================

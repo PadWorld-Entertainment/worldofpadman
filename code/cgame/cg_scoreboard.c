@@ -133,7 +133,6 @@ static void CG_DrawClientScore(int y, score_t *score, float *color, float fade, 
 		if (ci->handicap < 100 && !ci->botSkill) {
 			CG_DrawSmallStringColor(iconx, y + SMALLCHAR_HEIGHT / 2, string, color);
 		} else {
-			//			CG_DrawSmallStringColor( iconx, y, string, color );
 			CG_DrawStringExt(iconx, y, string, color, qfalse, qfalse, 8, fontHeight, 10);
 		}
 	}
@@ -584,7 +583,7 @@ static void CG_CenterGiantLine(float y, const char *string) {
 	color[2] = 1;
 	color[3] = 1;
 
-	x = 0.5 * (640 - GIANT_WIDTH * CG_DrawStrlen(string));
+	x = 0.5f * (640 - GIANT_WIDTH * CG_DrawStrlen(string));
 
 	CG_DrawStringExt(x, y, string, color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 }
