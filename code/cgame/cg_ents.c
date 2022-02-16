@@ -39,7 +39,7 @@ void CG_PositionEntityOnTag(refEntity_t *entity, const refEntity_t *parent, qhan
 	orientation_t lerped;
 
 	// lerp the tag
-	trap_R_LerpTag(&lerped, parentModel, parent->oldframe, parent->frame, 1.0 - parent->backlerp, tagName);
+	trap_R_LerpTag(&lerped, parentModel, parent->oldframe, parent->frame, 1.0f - parent->backlerp, tagName);
 
 	// FIXME: allow origin offsets along tag?
 	VectorCopy(parent->origin, entity->origin);
@@ -68,7 +68,7 @@ void CG_PositionRotatedEntityOnTag(refEntity_t *entity, const refEntity_t *paren
 
 	// AxisClear( entity->axis );
 	// lerp the tag
-	trap_R_LerpTag(&lerped, parentModel, parent->oldframe, parent->frame, 1.0 - parent->backlerp, tagName);
+	trap_R_LerpTag(&lerped, parentModel, parent->oldframe, parent->frame, 1.0f - parent->backlerp, tagName);
 
 	// FIXME: allow origin offsets along tag?
 	VectorCopy(parent->origin, entity->origin);
@@ -138,10 +138,10 @@ static void CG_EntityEffects(centity_t *cent) {
 		float i, r, g, b;
 
 		cl = cent->currentState.constantLight;
-		r = (float)(cl & 0xFF) / 255.0;
-		g = (float)((cl >> 8) & 0xFF) / 255.0;
-		b = (float)((cl >> 16) & 0xFF) / 255.0;
-		i = (float)((cl >> 24) & 0xFF) * 4.0;
+		r = (float)(cl & 0xFF) / 255.0f;
+		g = (float)((cl >> 8) & 0xFF) / 255.0f;
+		b = (float)((cl >> 16) & 0xFF) / 255.0f;
+		i = (float)((cl >> 24) & 0xFF) * 4.0f;
 		trap_R_AddLightToScene(cent->lerpOrigin, i, r, g, b);
 	}
 }
@@ -267,7 +267,7 @@ static void CG_Item(centity_t *cent) {
 	}
 
 	// items bob up and down continuously
-	scale = 0.005 + cent->currentState.number * 0.00001;
+	scale = 0.005f + cent->currentState.number * 0.00001f;
 	cent->lerpOrigin[2] += 4 + cos((cg.time + 1000) * scale) * 4;
 
 	memset(&ent, 0, sizeof(ent));
@@ -326,7 +326,7 @@ static void CG_Item(centity_t *cent) {
 		VectorScale(ent.axis[2], frac, ent.axis[2]);
 		ent.nonNormalizedAxes = qtrue;
 	} else {
-		frac = 1.0;
+		frac = 1.0f;
 	}
 
 	// items without glow textures need to keep a minimum light value
