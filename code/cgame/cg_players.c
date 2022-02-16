@@ -2456,6 +2456,8 @@ void CG_Player(centity_t *cent) {
 
 	CG_BreathPuffs(cent, &head);
 
+	CG_DustTrail(cent);
+
 	// reset values to real values - dead corpses
 	cent->lerpOrigin[2] = lerpOrigin2Backup;
 	cent->lerpAngles[YAW] = angleYawBackup;
