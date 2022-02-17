@@ -195,33 +195,8 @@ Section $(NAME_Section1) Section1
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd
 
-# Linux engine and program libraries
-Section /o $(NAME_Section2) Section2
-    SetOverwrite on
-    SetOutPath "$INSTDIR"
-    File "${SRC}\wop-linux.x86_64"
-    File "${SRC}\wopded-linux.x86_64"
-    File "${SRC}\renderer_opengl1_x86_64.so"
-    File "${SRC}\renderer_opengl2_x86_64.so"
-    File "${SRC}\renderer_vulkan_x86_64.so"
-SectionEnd
-
-
-# MacOS engine and program libraries
-Section /o $(NAME_Section3) Section3
-    SetOverwrite on
-    SetOutPath "$INSTDIR"
-    File "${SRC}\libSDL2-2.0.0.dylib"
-    File "${SRC}\wop-osx.x86_64"
-    File "${SRC}\wopded-osx.x86_64"
-    File "${SRC}\renderer_opengl1_x86_64.dylib"
-    File "${SRC}\renderer_opengl2_x86_64.dylib"
-    File "${SRC}\renderer_vulkan_x86_64.dylib"
-SectionEnd
-
-
 # DVD box covers
-Section /o $(NAME_Section4) Section4
+Section /o $(NAME_Section2) Section2
     SetOverwrite on
     SetOutPath "$INSTDIR\XTRAS"
     File "${EXTRASTUFF}\wop_blank_dvd.zip"
@@ -231,7 +206,7 @@ SectionEnd
 
 
 # editing files
-Section /o $(NAME_Section5) Section5
+Section /o $(NAME_Section3) Section3
     SetOverwrite on
     SetOutPath "$INSTDIR\XTRAS"
     File /r "${EXTRASTUFF}\editing files"
@@ -239,7 +214,7 @@ SectionEnd
 
 
 # shortcuts
-Section /o $(NAME_Section6) Section6
+Section /o $(NAME_Section4) Section4
     CreateShortCut "$INSTDIR\${PRODUCTNAME} ${VERSION}.lnk" "$INSTDIR\wop.x86_64.exe" "" "$INSTDIR\wop.x86_64.exe" 0
     CreateShortCut "$DESKTOP\${PRODUCTNAME} ${VERSION}.lnk" "$INSTDIR\wop.x86_64.exe" "" "$INSTDIR\wop.x86_64.exe" 0
     CreateShortCut "$QUICKLAUNCH\${PRODUCTNAME} ${VERSION}.lnk" "$INSTDIR\wop.x86_64.exe" "" "$INSTDIR\wop.x86_64.exe" 0
@@ -247,7 +222,7 @@ SectionEnd
 
 
 # firewall rules - requires NSIS Simple Firewall Plugin
-Section /o $(NAME_Section7) Section7
+Section /o $(NAME_Section5) Section5
     SimpleFC::IsFirewallServiceRunning
     Pop $0 ; return error(1)/success(0)
     Pop $1 ; return 1=IsRunning/0=Not Running
@@ -280,9 +255,6 @@ SectionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${Section3} $(DESC_Section3)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section4} $(DESC_Section4)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section5} $(DESC_Section5)
-    !insertmacro MUI_DESCRIPTION_TEXT ${Section6} $(DESC_Section6)
-    !insertmacro MUI_DESCRIPTION_TEXT ${Section7} $(DESC_Section7)
-    !insertmacro MUI_DESCRIPTION_TEXT ${Section8} $(DESC_Section8)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -330,19 +302,6 @@ Section /o -un.Main UNSEC0000
     Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.dll"
     Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.dll"
     Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.dll"
-    # linux
-    Delete /REBOOTOK "$INSTDIR\wop-linux.x86_64"
-    Delete /REBOOTOK "$INSTDIR\wopded-linux.x86_64"
-    Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.so"
-    Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.so"
-    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.so"
-    # mac
-    Delete /REBOOTOK "$INSTDIR\wop-osx.x86_64"
-    Delete /REBOOTOK "$INSTDIR\wopded-osx.x86_64"
-    Delete /REBOOTOK "$INSTDIR\libSDL2-2.0.0.dylib"
-    Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.dylib"
-    Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.dylib"
-    Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.dylib"
 
 SectionEnd
 
@@ -475,20 +434,16 @@ LangString VisitWebsiteLink ${LANG_ENGLISH} "Visit the ${PRODUCTNAME} Website"
 LangString PlayWoPLink ${LANG_ENGLISH} "Play ${PRODUCTNAME} ${VERSION}"
 LangString NAME_Section1 ${LANG_ENGLISH} "${PRODUCTNAME} program files"
 LangString DESC_Section1 ${LANG_ENGLISH} "Installs all the necessary files to play ${PRODUCTNAME}."
-LangString NAME_Section2 ${LANG_ENGLISH} "Linux engine files"
-LangString DESC_Section2 ${LANG_ENGLISH} "Installs additionally Linux engine files and program libraries."
-LangString NAME_Section3 ${LANG_ENGLISH} "MacOS engine files"
-LangString DESC_Section3 ${LANG_ENGLISH} "Installs additionally MacOS engine files and program libraries."
-LangString NAME_Section4 ${LANG_ENGLISH} "DVD box covers"
-LangString DESC_Section4 ${LANG_ENGLISH} "Places the graphics for creating your own WoP DVD box in the XTRAS directory."
-LangString NAME_Section5 ${LANG_ENGLISH} "Editing Resources"
-LangString DESC_Section5 ${LANG_ENGLISH} "Places sample maps, radiant, and customization files in XTRAS/editing-files."
-LangString NAME_Section6 ${LANG_ENGLISH} "Extra shortcuts"
-LangString DESC_Section6 ${LANG_ENGLISH} "Additionally places a shortcut on the Desktop and in the Quick Launch menu."
-LangString NAME_Section7 ${LANG_ENGLISH} "Open firewall ports"
-LangString DESC_Section7 ${LANG_ENGLISH} "Adds World of Padman to the Windows firewall rules to let you create internet servers."
-LangString NAME_Section8 ${LANG_ENGLISH} "Protocol handler"
-LangString DESC_Section8 ${LANG_ENGLISH} "The protocol handler lets you connect to a game by clicking a link in a web browser."
+LangString NAME_Section2 ${LANG_ENGLISH} "DVD box covers"
+LangString DESC_Section2 ${LANG_ENGLISH} "Places the graphics for creating your own WoP DVD box in the XTRAS directory."
+LangString NAME_Section3 ${LANG_ENGLISH} "Editing Resources"
+LangString DESC_Section3 ${LANG_ENGLISH} "Places sample maps, radiant, and customization files in XTRAS/editing-files."
+LangString NAME_Section4 ${LANG_ENGLISH} "Extra shortcuts"
+LangString DESC_Section4 ${LANG_ENGLISH} "Additionally places a shortcut on the Desktop and in the Quick Launch menu."
+LangString NAME_Section5 ${LANG_ENGLISH} "Open firewall ports"
+LangString DESC_Section5 ${LANG_ENGLISH} "Adds World of Padman to the Windows firewall rules to let you create internet servers."
+LangString NAME_Section6 ${LANG_ENGLISH} "Enable protocol handler"
+LangString DESC_Section6 ${LANG_ENGLISH} "Enables the start of the game and the connection to an online match by clicking on a web link."
 LangString ERR_dircheck1 ${LANG_ENGLISH} "This is not a valid installation path!"
 LangString ERR_dircheck2 ${LANG_ENGLISH} "There is not enough free space available!"
 LangString ERR_dircheck3 ${LANG_ENGLISH} "The target directory for installation already exists!$\nDo you still want to install ${PRODUCTNAME} into this directory?"
@@ -502,20 +457,16 @@ LangString UninstallLink ${LANG_GERMAN} "${PRODUCTNAME} ${VERSION} deinstalliere
 LangString PlayWoPLink ${LANG_GERMAN} "${PRODUCTNAME} ${VERSION} spielen"
 LangString NAME_Section1 ${LANG_GERMAN} "${PRODUCTNAME} Programmateien"
 LangString DESC_Section1 ${LANG_GERMAN} "Installiert alle notwendigen Dateien um ${PRODUCTNAME} zu spielen."
-LangString NAME_Section2 ${LANG_GERMAN} "Linux-Dateien"
-LangString DESC_Section2 ${LANG_GERMAN} "Installiert zusätzlich Linux-Engine-Dateien und Programmbibliotheken."
-LangString NAME_Section3 ${LANG_GERMAN} "MacOS-Dateien"
-LangString DESC_Section3 ${LANG_GERMAN} "Installiert zusätzlich MacOS-Engine-Dateien und Programmbibliotheken."
-LangString NAME_Section4 ${LANG_GERMAN} "DVD-Box-Cover"
-LangString DESC_Section4 ${LANG_GERMAN} "Legt die Grafiken zum Erstellen einer eigenen WoP-DVD-Box im Verzeichnis XTRAS ab."
-LangString NAME_Section5 ${LANG_GERMAN} "Editing-Ressourcen"
-LangString DESC_Section5 ${LANG_GERMAN} "Legt Beispielmaps, Radiant und Anpassungsdateien in XTRAS/editing-files ab."
-LangString NAME_Section6 ${LANG_GERMAN} "Zusätzliche Verknüpfungen"
-LangString DESC_Section6 ${LANG_GERMAN} "Erstellt zusätzlich eine Verknüpfung auf dem Desktop und in der Schnellstart-Leiste."
-LangString NAME_Section7 ${LANG_GERMAN} "Firewall öffnen"
-LangString DESC_Section7 ${LANG_GERMAN} "Fügt World of Padman den Windows-Firewall-Regeln hinzu, um Internet-Server erstellen zu können."
-LangString NAME_Section8 ${LANG_GERMAN} "Protocol Handler"
-LangString DESC_Section8 ${LANG_GERMAN} "Ermöglicht es durch Klick auf einen Link direkt zu einem Spiel zu verbinden."
+LangString NAME_Section2 ${LANG_GERMAN} "DVD-Box-Cover"
+LangString DESC_Section2 ${LANG_GERMAN} "Legt die Grafiken zum Erstellen einer eigenen WoP-DVD-Box im Verzeichnis XTRAS ab."
+LangString NAME_Section3 ${LANG_GERMAN} "Editing-Ressourcen"
+LangString DESC_Section3 ${LANG_GERMAN} "Legt Beispielmaps, Radiant und Anpassungsdateien in XTRAS/editing-files ab."
+LangString NAME_Section4 ${LANG_GERMAN} "Zusätzliche Verknüpfungen"
+LangString DESC_Section4 ${LANG_GERMAN} "Erstellt zusätzlich eine Verknüpfung auf dem Desktop und in der Schnellstart-Leiste."
+LangString NAME_Section5 ${LANG_GERMAN} "Firewall öffnen"
+LangString DESC_Section5 ${LANG_GERMAN} "Fügt World of Padman den Windows-Firewall-Regeln hinzu, um Internet-Server erstellen zu können."
+LangString NAME_Section6 ${LANG_GERMAN} "Protokoll-Handler aktivieren"
+LangString DESC_Section6 ${LANG_GERMAN} "Ermöglicht den Spielstart und die Verbindung zu einem Online-Match durch Anklicken eines Weblinks."
 LangString ERR_dircheck1 ${LANG_GERMAN} "Dies ist ein ungültiger Installationspfad!"
 LangString ERR_dircheck2 ${LANG_GERMAN} "Es steht nicht genügend freier Speicherplatz zur Verfügung!"
 LangString ERR_dircheck3 ${LANG_GERMAN} "Das Zielverzeichnis zur Installation existiert bereits!$\nMöchtest Du ${PRODUCTNAME} trotzdem in dieses Verzeichnis installieren?"
