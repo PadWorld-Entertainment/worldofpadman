@@ -66,7 +66,13 @@ endfunction()
 
 add_custom_target(pk3)
 
-find_program(ZIP NAMES zip)
+set(ZIP_7z "a")
+set(ZIP_zip "-r9q")
+find_program(ZIP NAMES zip 7z HINTS "$ENV{ProgramFiles}/7-Zip")
+if (ZIP)
+  get_filename_component(zip_binary ${ZIP} NAME_WE)
+  set(ZIP_ARGS ${ZIP_${zip_binary}})
+endif()
 
 function(compress_pk3 TARGET)
   foreach (PK3DIR ${ARGN})
@@ -74,13 +80,13 @@ function(compress_pk3 TARGET)
     set(_file ${PK3DIR}.pk3)
     add_custom_command(
       OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${_file}"
-      COMMAND ${ZIP} -r9q ${CMAKE_CURRENT_BINARY_DIR}/${_file} .
+      COMMAND "${ZIP}" ${ZIP_ARGS} "${CMAKE_CURRENT_BINARY_DIR}/${_file}" .
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${_dir}"
       COMMENT "Create pk3 for ${PK3DIR}"
       VERBATIM
     )
     add_custom_target(pk3-${TARGET}-${PK3DIR}
-      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_file}
+      DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${_file}"
       COMMENT "Generate pk3 for ${PK3DIR}"
     )
     add_dependencies(pk3 pk3-${TARGET}-${PK3DIR})
