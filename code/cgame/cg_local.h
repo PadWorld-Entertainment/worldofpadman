@@ -954,12 +954,11 @@ typedef struct {
 
 	// special effects models
 	qhandle_t teleportEffectModel;
-	//	qhandle_t	teleportEffectShader;
 
+	//	qhandle_t	teleportEffectShader;
 	qhandle_t teleportEffectBlueShader;
 	qhandle_t teleportEffectRedShader;
 	qhandle_t teleportEffectGreenShader;
-
 	qhandle_t teleEffectFPBlueShader;
 	qhandle_t teleEffectFPRedShader;
 	qhandle_t teleEffectFPGreenShader;
@@ -968,11 +967,12 @@ typedef struct {
 	qhandle_t scoreboardBG;
 	qhandle_t scoreboardLives;
 	qhandle_t scoreboardScoreLives;
-
 	qhandle_t scoreboardName;
 	qhandle_t scoreboardPing;
 	qhandle_t scoreboardScore;
 	qhandle_t scoreboardTime;
+	qhandle_t scoreboardMedal;
+
 	qhandle_t voiceIcon;
 
 	// medals shown during gameplay
