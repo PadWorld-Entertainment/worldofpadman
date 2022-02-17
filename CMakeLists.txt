@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.12)
 project(WorldOfPadman VERSION 1.7 LANGUAGES C ASM)
 
 include(CheckSymbolExists)
@@ -75,9 +75,10 @@ if (ZIP)
 endif()
 
 function(compress_pk3 TARGET)
+  add_custom_target(pk3-${TARGET})
   foreach (PK3DIR ${ARGN})
     set(_dir ${PK3DIR}.pk3dir)
-    set(_file ${PK3DIR}.pk3)
+    set(_file ${PK3DIR}-${CMAKE_PROJECT_VERSION}.pk3)
     add_custom_command(
       OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${_file}"
       COMMAND "${ZIP}" ${ZIP_ARGS} "${CMAKE_CURRENT_BINARY_DIR}/${_file}" .
@@ -89,8 +90,9 @@ function(compress_pk3 TARGET)
       DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${_file}"
       COMMENT "Generate pk3 for ${PK3DIR}"
     )
-    add_dependencies(pk3 pk3-${TARGET}-${PK3DIR})
+    add_dependencies(pk3-${TARGET} pk3-${TARGET}-${PK3DIR})
   endforeach()
+  add_dependencies(pk3 pk3-${TARGET})
 endfunction()
 
 check_compiler_flag(-Wformat=2)
