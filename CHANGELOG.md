@@ -15,10 +15,14 @@
 	- Option to enable/disable playing the Chat Beep to Chat menu to be able switch off the squeeze toy sound for chat notifications
 	- Option to enable/disable Bots chatting or to make them chatting more often to Chat menu
 	- Option to adjust the Notification Space to 4, 6 or 8 lines in Chat menu via new cvar `cg_chatheight`, default is 4
+	- Option to enable/disable player chat icon separately from notification time
 	- Option to enable/disable the Lag-O-Meter to the HUD menu
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
 	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
+	- New surface parameter `splashsteps` for splashy footstep sounds and common shader `splashclip` with texture
+	- Dust trail feature from Q3 Team Arena for textures with surface parameter `dust`. Creates a small dust cloud when a player lands on surface. Enter `enableDust 1` to a map's worldspawn.
+	- Frost breath feature from Q3 Team Arena to simulate cold environments. Creates a small cloud of condensed breath in front of players head. Enter `enableBreath 1` to a map's worldspawn to enable this feature for the whole map.
 - CHANGED
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
@@ -56,7 +60,12 @@
 	- Map selection/preview screenshots with better quality
 	- Menu music loop with 44kHz version and slightly longer
 	- Icons for weapons, ammo, powerups, medals etc. updated with HQ versions
-	- Common textures with HQ versions and common shader entries to support more modern q3map2 functionalities, e.g. watercaulk
+	- Common textures with HQ versions and q3map2 shader entries to support watercaulk, lavacaulk, slimecaulk etc.
+	- OPUS to version 1.3.1
+	- OPUSFILE to version 0.12
+	- OGG to version 1.3.5
+	- SDL to version 2.0.20
+	- JPEG to version 9e
 
 
 ## Version 1.6.2 (Nov 28 2021)
@@ -77,6 +86,7 @@
 	- Icon set (unwop.ico) for Windows installer to support 16, 24, 32, 48, 96, 128, and 256 pixels
 	- Icon set (wop.icns) for MacOSX that supports 16, 32, 64, 128, 256, 512, and 1024 pixels
 	- Code base to [ioq3 1.36 Git d1d5a89](https://github.com/ioquake/ioq3/commit/d1d5a89aad5673fa465a6ea6973195d7e981dd94) with associated features and bug fixes
+
 
 ## Version 1.6.1 (Nov 01 2021)
 
@@ -143,12 +153,13 @@
 	- Unused menu fonts and shader entries
 	- PowerPC and PowerPC 64 support
 - UPDATED
-	- OGG pumped to version 1.3.4
-	- Vorbis pumped to version 1.3.7
-	- SDL pumped to version 2.0.14
-	- ZLIB pumped to version 1.2.11
-	- JPEG pumped to version 9d
+	- OGG to version 1.3.4
+	- Vorbis to version 1.3.7
+	- SDL to version 2.0.14
+	- ZLIB to version 1.2.11
+	- JPEG to version 9d
 	- Code base to [ioq3 1.36 Git 2678080](https://github.com/ioquake/ioq3/commit/26780805c80c597c3c4209234385979d548d8380) with associated features and bug fixes
+
 
 ## Version 1.6.0 (Dec 17, 2011)
 
@@ -243,6 +254,7 @@
 	- Copyright information in copyright_en.txt and copyright_de.txt
 	- Code base to ioq3 1.36 rev. 2140 with associated features and bug fixes
 
+
 ## Version 1.5.1.1 (Jul 26, 2011)
 
 - FIXED
@@ -258,7 +270,7 @@
 - FIXED
 	- Engine: Server crashed if it got a status query during mapchange
 - UPDATED
-	- SDL: Pumped to version 1.2.14
+	- SDL to version 1.2.14
 
 
 ## Version 1.5.0 (Dec 27, 2010)
