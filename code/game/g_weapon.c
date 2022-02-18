@@ -30,23 +30,6 @@ static vec3_t forward, right, up;
 static vec3_t muzzle;
 
 /*
-================
-G_BounceProjectile
-================
-*/
-void G_BounceProjectile(vec3_t start, vec3_t impact, vec3_t dir, vec3_t endout) {
-	vec3_t v, newv;
-	float dot;
-
-	VectorSubtract(impact, start, v);
-	dot = DotProduct(v, dir);
-	VectorMA(v, -2 * dot, dir, newv);
-
-	VectorNormalize(newv);
-	VectorMA(impact, 8192, newv, endout);
-}
-
-/*
 ======================================================================
 
 GAUNTLET
@@ -140,7 +123,7 @@ void SnapVectorTowards(vec3_t v, vec3_t to) {
 	}
 }
 
-void weapon_nipper_fire(gentity_t *ent) {
+static void weapon_nipper_fire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_nipper(ent, muzzle, forward);
@@ -175,7 +158,7 @@ SHOTGUN
 */
 
 // new: g_combat.c(line ~830) 2x knockback with pumper
-void weapon_supershotgun_fire(gentity_t *ent) {
+static void weapon_supershotgun_fire(gentity_t *ent) {
 	vec3_t end;
 	trace_t trace;
 	gentity_t *tent;
@@ -240,7 +223,7 @@ GRENADE LAUNCHER
 ======================================================================
 */
 
-void weapon_grenadelauncher_fire(gentity_t *ent) {
+static void weapon_grenadelauncher_fire(gentity_t *ent) {
 	gentity_t *m;
 
 	// extra vertical velocity
@@ -260,7 +243,7 @@ ROCKET
 ======================================================================
 */
 
-void Weapon_RocketLauncher_Fire(gentity_t *ent) {
+static void Weapon_RocketLauncher_Fire(gentity_t *ent) {
 	gentity_t *m;
 
 	vec3_t start;
@@ -280,26 +263,10 @@ PLASMA GUN
 ======================================================================
 */
 
-void Weapon_Plasmagun_Fire(gentity_t *ent) {
+static void Weapon_Plasmagun_Fire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_bubbleg(ent, muzzle, forward); // HERBY: fire bubble gum
-	m->damage *= s_quadFactor;
-	m->splashDamage *= s_quadFactor;
-}
-
-/*
-======================================================================
-
-KiLLERDUCKS
-
-======================================================================
-*/
-
-void Weapon_KillerDucks_Fire(gentity_t *ent) {
-	gentity_t *m;
-
-	m = fire_duck(ent, muzzle, forward);
 	m->damage *= s_quadFactor;
 	m->splashDamage *= s_quadFactor;
 }
@@ -317,7 +284,7 @@ RAILGUN
 weapon_railgun_fire
 =================
 */
-void weapon_railgun_fire(gentity_t *ent) {
+static void weapon_railgun_fire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_splasher(ent, muzzle, forward);
@@ -333,7 +300,7 @@ GRAPPLING HOOK
 ======================================================================
 */
 
-void Weapon_GrapplingHook_Fire(gentity_t *ent) {
+static void Weapon_GrapplingHook_Fire(gentity_t *ent) {
 	if (!ent->client->fireHeld && !ent->client->hook)
 		fire_grapple(ent, muzzle, forward);
 
@@ -370,7 +337,7 @@ LIGHTNING GUN
 ======================================================================
 */
 
-void Weapon_LightningFire(gentity_t *ent) {
+static void Weapon_LightningFire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_boaster(ent, muzzle, forward);
@@ -385,7 +352,7 @@ KMA / Kiss My Ass 97
 
 ======================================================================
 */
-void Weapon_KMA_Fire(gentity_t *ent) {
+static void Weapon_KMA_Fire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_kma(ent, muzzle, forward);
@@ -438,7 +405,7 @@ static void check_sprayawards(gentity_t *ent) {
 	}
 }
 
-void weapon_spraypistol_fire(gentity_t *ent) {
+static void weapon_spraypistol_fire(gentity_t *ent) {
 	vec3_t end, tmpv3;
 	trace_t tr;
 	gentity_t *tent;
@@ -578,7 +545,7 @@ CalcMuzzlePointOrigin
 set muzzle location relative to pivoting eye
 ===============
 */
-void CalcMuzzlePointOrigin(gentity_t *ent, vec3_t origin, vec3_t forward, vec3_t right, vec3_t up, vec3_t muzzlePoint) {
+static void CalcMuzzlePointOrigin(gentity_t *ent, vec3_t origin, vec3_t forward, vec3_t right, vec3_t up, vec3_t muzzlePoint) {
 	VectorCopy(ent->s.pos.trBase, muzzlePoint);
 	muzzlePoint[2] += ent->client->ps.viewheight;
 	VectorMA(muzzlePoint, 14, forward, muzzlePoint);
