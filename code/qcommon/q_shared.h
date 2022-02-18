@@ -64,7 +64,7 @@ extern const int demo_protocols[];
 
 #ifndef PRODUCT_VERSION
 // TODO: Sync with Makefile!
-#define PRODUCT_VERSION "1.7"
+#define PRODUCT_VERSION "1.7.0"
 #endif
 
 #define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION " " PRODUCT_RELEASE
