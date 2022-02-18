@@ -1085,6 +1085,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.medalSpraygod = trap_R_RegisterShaderNoMip("icons/medal_spraygod");
 	cgs.media.medalSpraykiller = trap_R_RegisterShaderNoMip("icons/medal_spraykiller");
 	cgs.media.medalPadStar = trap_R_RegisterShaderNoMip("icons/medal_padstar");
+	cgs.media.medalPadHero = trap_R_RegisterShaderNoMip("icons/medal_padhero");
 
 	memset(cg_items, 0, sizeof(cg_items));
 	memset(cg_weapons, 0, sizeof(cg_weapons));

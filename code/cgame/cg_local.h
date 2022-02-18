@@ -983,6 +983,7 @@ typedef struct {
 	qhandle_t medalSpraykiller;
 
 	qhandle_t medalPadStar;
+	qhandle_t medalPadHero;
 
 	sfxHandle_t berserkerPunchyLoop;
 
