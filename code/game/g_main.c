@@ -175,7 +175,7 @@ static cvarTable_t gameCvarTable[] = {
 	{&g_listEntity, "g_listEntity", "0", 0, 0, qfalse},
 	{&g_enableBreath, "g_enableBreath", "0", CVAR_SERVERINFO, 0, qfalse},
 	{&g_enableDust, "g_enableDust", "0", CVAR_SERVERINFO, 0, qfalse},
-	
+
 	{&g_smoothClients, "g_smoothClients", "1", 0, 0, qfalse},
 	/* Still causing issues, maybe use pmove_float from OpenArena instead */
 	{&pmove_fixed, "pmove_fixed", "0", CVAR_SYSTEMINFO, 0, qfalse},
@@ -1142,7 +1142,7 @@ void BeginIntermission(void) {
 			continue;
 		// respawn if dead
 		if (client->health <= 0) {
-			respawn(client);
+			G_Respawn(client);
 		}
 		MoveClientToIntermission(client);
 	}

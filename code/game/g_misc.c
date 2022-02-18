@@ -338,7 +338,7 @@ static void InitShooter_Finish(gentity_t *ent) {
 	ent->nextthink = 0;
 }
 
-void InitShooter(gentity_t *ent, int weapon) {
+static void InitShooter(gentity_t *ent, int weapon) {
 	ent->use = Use_Shooter;
 	ent->s.weapon = weapon;
 

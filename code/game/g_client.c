@@ -104,7 +104,7 @@ Find the spot that we DON'T want to use
 ================
 */
 #define MAX_SPAWN_POINTS 128
-gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from) {
+static gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from) {
 	gentity_t *spot;
 	vec3_t delta;
 	float dist, nearestDist;
@@ -203,7 +203,7 @@ go to a random point that doesn't telefrag
 ================
 */
 #define MAX_SPAWN_POINTS 128
-gentity_t *SelectRandomDeathmatchSpawnPoint(qboolean isbot) {
+static gentity_t *SelectRandomDeathmatchSpawnPoint(qboolean isbot) {
 	gentity_t *spot;
 	int count;
 	int selection;
@@ -459,7 +459,7 @@ After sitting around for five seconds, fall into the ground and disappear
 wop: we no longer sink ... we fly XD (this is done on the clientside, to make it smooth)
 =============
 */
-void BodySink(gentity_t *ent) {
+static void BodySink(gentity_t *ent) {
 	if (LPSFinalDead(&level.clients[ent->s.otherEntityNum2]) &&
 		(level.clients[ent->s.otherEntityNum2].pers.connected == CON_CONNECTED)) {
 		ent->nextthink = (level.time + 5000);
@@ -593,10 +593,10 @@ void SetClientViewAngle(gentity_t *ent, vec3_t angle) {
 
 /*
 ================
-respawn
+G_Respawn
 ================
 */
-void respawn(gentity_t *ent) {
+void G_Respawn(gentity_t *ent) {
 	gentity_t *tent;
 
 	CopyToBodyQue(ent);
@@ -685,26 +685,6 @@ team_t PickTeam(int ignoreClientNum) {
 	}
 	return TEAM_BLUE;
 }
-
-/*
-===========
-ForceClientSkin
-
-Forces a client's skin (for teamplay)
-===========
-*/
-/*
-static void ForceClientSkin( gclient_t *client, char *model, const char *skin ) {
-	char *p;
-
-	if ((p = strrchr(model, '/')) != 0) {
-		*p = 0;
-	}
-
-	Q_strcat(model, MAX_QPATH, "/");
-	Q_strcat(model, MAX_QPATH, skin);
-}
-*/
 
 /*
 ===========

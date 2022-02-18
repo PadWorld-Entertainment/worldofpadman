@@ -42,10 +42,6 @@ static botSpawnQueue_t botSpawnQueue[BOT_SPAWN_QUEUE_DEPTH];
 
 static vmCvar_t bot_minplayers;
 
-extern gentity_t *podium1;
-extern gentity_t *podium2;
-extern gentity_t *podium3;
-
 float trap_Cvar_VariableValue(const char *var_name) {
 	char buf[128];
 

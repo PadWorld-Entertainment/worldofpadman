@@ -26,9 +26,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "g_local.h"
 
-gentity_t *podium1;
-gentity_t *podium2;
-gentity_t *podium3;
+static gentity_t *podium1;
+static gentity_t *podium2;
+static gentity_t *podium3;
 
 /*
 ==================
