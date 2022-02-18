@@ -87,7 +87,7 @@ surfaceparm trans
 surfaceparm alphashadow	
 nopicmip
 	{
-	map textures/pad_o4texs/gurtschlossA.TGA
+	map textures/pad_o4texs/gurtschlossA.tga
 	blendFunc GL_ONE GL_ZERO
 	alphaFunc GE128
 	depthWrite
@@ -108,7 +108,7 @@ surfaceparm alphashadow
 cull none
 nopicmip
 	{
-	map textures/pad_o4texs/gurtschlossC.TGA
+	map textures/pad_o4texs/gurtschlossC.tga
 	blendFunc GL_ONE GL_ZERO
 	alphaFunc GE128
 	depthWrite
@@ -240,13 +240,13 @@ textures/pad_o4texs/redlight
 //-----------------------------------------------------------------
 textures/pad_o4texs/blinkgruen1
 {
-	qer_editorimage textures/pad_o4texs/blinkgruen.JPG
+	qer_editorimage textures/pad_o4texs/blinkgruen.jpg
 	surfaceparm trans
 	qer_trans .6
 	cull none
 	surfaceparm nomipmaps
 	{
-		map textures/pad_o4texs/blinkgruen.JPG
+		map textures/pad_o4texs/blinkgruen.jpg
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave Square 0 1 0 1.99
 	}
@@ -254,13 +254,13 @@ textures/pad_o4texs/blinkgruen1
 
 textures/pad_o4texs/blinkgruen2
 {
-	qer_editorimage textures/pad_o4texs/blinkgruen.JPG
+	qer_editorimage textures/pad_o4texs/blinkgruen.jpg
 	surfaceparm trans
 	qer_trans .6
 	cull none
 	surfaceparm nomipmaps
 	{
-		map textures/pad_o4texs/blinkgruen.JPG
+		map textures/pad_o4texs/blinkgruen.jpg
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave Square 0 1 0 2.51
 	}
@@ -268,13 +268,13 @@ textures/pad_o4texs/blinkgruen2
 
 textures/pad_o4texs/blinkgruen3
 {
-	qer_editorimage textures/pad_o4texs/blinkgruen.JPG
+	qer_editorimage textures/pad_o4texs/blinkgruen.jpg
 	surfaceparm trans
 	qer_trans .6
 	cull none
 	surfaceparm nomipmaps
 	{
-		map textures/pad_o4texs/blinkgruen.JPG
+		map textures/pad_o4texs/blinkgruen.jpg
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave Square 0 1 0 3.07
 	}
@@ -282,13 +282,13 @@ textures/pad_o4texs/blinkgruen3
 
 textures/pad_o4texs/blinkgruen4
 {
-	qer_editorimage textures/pad_o4texs/blinkgruen.JPG
+	qer_editorimage textures/pad_o4texs/blinkgruen.jpg
 	surfaceparm trans
 	qer_trans .6
 	cull none
 	surfaceparm nomipmaps
 	{
-		map textures/pad_o4texs/blinkgruen.JPG
+		map textures/pad_o4texs/blinkgruen.jpg
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave Square 0 1 0 3.53
 	}
@@ -296,13 +296,13 @@ textures/pad_o4texs/blinkgruen4
 
 textures/pad_o4texs/blinkgruen5
 {
-	qer_editorimage textures/pad_o4texs/blinkgruen.JPG
+	qer_editorimage textures/pad_o4texs/blinkgruen.jpg
 	surfaceparm trans
 	qer_trans .6
 	cull none
 	surfaceparm nomipmaps
 	{
-		map textures/pad_o4texs/blinkgruen.JPG
+		map textures/pad_o4texs/blinkgruen.jpg
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave Square 0 1 0 3.97
 	}
@@ -310,13 +310,13 @@ textures/pad_o4texs/blinkgruen5
 
 textures/pad_o4texs/blinkblauring
 {
-	qer_editorimage textures/pad_o4texs/blinkblauring.JPG
+	qer_editorimage textures/pad_o4texs/blinkblauring.jpg
 	surfaceparm trans
 	qer_trans .6
 	cull none
 	surfaceparm nomipmaps
 	{
-		map textures/pad_o4texs/blinkblauring.JPG
+		map textures/pad_o4texs/blinkblauring.jpg
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave Sin 0 1 0 0.25
 	}
