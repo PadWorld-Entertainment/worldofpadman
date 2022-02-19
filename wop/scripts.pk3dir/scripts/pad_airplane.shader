@@ -63,7 +63,7 @@ nopicmip
 textures/pad_o4texs/danke_maxmustermann
 {
 surfaceparm trans
-surfaceparm alphashadow	
+surfaceparm alphashadow
 cull none
 nopicmip
 	{
@@ -84,10 +84,10 @@ nopicmip
 textures/pad_o4texs/gurtschlossA
 {
 surfaceparm trans
-surfaceparm alphashadow	
+surfaceparm alphashadow
 nopicmip
 	{
-	map textures/pad_o4texs/gurtschlossA.tga
+	map textures/pad_o4texs/gurtschlossa.tga
 	blendFunc GL_ONE GL_ZERO
 	alphaFunc GE128
 	depthWrite
@@ -104,11 +104,11 @@ nopicmip
 textures/pad_o4texs/gurtschlossC
 {
 surfaceparm trans
-surfaceparm alphashadow	
+surfaceparm alphashadow
 cull none
 nopicmip
 	{
-	map textures/pad_o4texs/gurtschlossC.tga
+	map textures/pad_o4texs/gurtschlossc.tga
 	blendFunc GL_ONE GL_ZERO
 	alphaFunc GE128
 	depthWrite
@@ -125,7 +125,7 @@ nopicmip
 textures/pad_o4texs/sechseck
 {
 surfaceparm trans
-surfaceparm alphashadow	
+surfaceparm alphashadow
 cull none
 nopicmip
 	{
@@ -147,7 +147,7 @@ nopicmip
 textures/pad_o4texs/serviette
 {
 surfaceparm trans
-surfaceparm alphashadow	
+surfaceparm alphashadow
 cull none
 nopicmip
 	{
@@ -333,7 +333,7 @@ textures/pad_o4texs/rubikrot
 		Map textures/pad_o4texs/rubikrot.tga
 		blendFunc GL_ONE GL_ONE
 		rgbgen wave sin 0 1 0 1.01
-	}	
+	}
 }
 
 
@@ -348,7 +348,7 @@ textures/pad_o4texs/rubikgruen
 		Map textures/pad_o4texs/rubikgruen.tga
 		blendFunc GL_ONE GL_ONE
 		rgbgen wave sin 0 1 0 1.03
-	}	
+	}
 }
 
 
@@ -363,7 +363,7 @@ textures/pad_o4texs/rubikblau
 		Map textures/pad_o4texs/rubikblau.tga
 		blendFunc GL_ONE GL_ONE
 		rgbgen wave sin 0 1 0 1.07
-	}	
+	}
 }
 
 
@@ -378,7 +378,7 @@ textures/pad_o4texs/rubikgelb
 		Map textures/pad_o4texs/rubikgelb.tga
 		blendFunc GL_ONE GL_ONE
 		rgbgen wave sin 0 1 0 1.09
-	}	
+	}
 }
 
 
@@ -393,7 +393,7 @@ textures/pad_o4texs/rubikorange
 		Map textures/pad_o4texs/rubikorange.tga
 		blendFunc GL_ONE GL_ONE
 		rgbgen wave sin 0 1 0 1.13
-	}	
+	}
 }
 
 
@@ -408,7 +408,7 @@ textures/pad_o4texs/rubikweiss
 		Map textures/pad_o4texs/rubikweiss.tga
 		blendFunc GL_ONE GL_ONE
 		rgbgen wave sin 0 1 0 1.27
-	}	
+	}
 }
 
 
@@ -435,19 +435,19 @@ surfaceparm nonsolid
 
 textures/pad_o4texs/Cabin-dispA
 {
-qer_editorimage textures/pad_o4texs/Cabin-dispA.tga
+qer_editorimage textures/pad_o4texs/cabin-dispa.tga
 q3map_surfacelight 10
 	{
 	map $lightmap
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/Cabin-dispA.tga
+	map textures/pad_o4texs/cabin-dispa.tga
 	blendFunc filter
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/Cabin-dispB.tga
+	map textures/pad_o4texs/cabin-dispb.tga
 	blendFunc add
 	}
 }
@@ -672,7 +672,7 @@ qer_trans 	0.5
 }
 
 //-----------------------------------------------------------------
-//Texturen die auf Flächen draufgepappt werden
+//Texturen die auf Flaechen draufgepappt werden
 //zB Grafitti
 //-----------------------------------------------------------------
 
@@ -684,7 +684,7 @@ qer_trans .6
 cull none
 surfaceparm nomipmaps
 	{
-	map textures/pad_o4texs/AcmeTires.tga
+	map textures/pad_o4texs/acmetires.tga
 	blendFunc GL_DST_COLOR GL_ONE
 	}
 }
@@ -717,7 +717,7 @@ surfaceparm trans
 }
 
 //-----------------------------------------------------------------
-//Texturen die bestimmte Schrittgeräusche haben
+//Texturen die bestimmte Schrittgeraeusche haben
 //zB Teppich
 //-----------------------------------------------------------------
 
@@ -746,7 +746,7 @@ surfaceparm carpetsteps
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p008Leder.jpg
+	map textures/pad_o4texs/p008leder.jpg
 	blendFunc GL_DST_COLOR GL_ZERO
 	rgbGen identity
 	}
@@ -760,7 +760,7 @@ surfaceparm carpetsteps
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p002Leder.jpg
+	map textures/pad_o4texs/p002leder.jpg
 	blendFunc GL_DST_COLOR GL_ZERO
 	rgbGen identity
 	}
@@ -777,7 +777,7 @@ surfaceparm metalsteps
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p888AluGeb.jpg
+	map textures/pad_o4texs/p888alugeb.jpg
 	blendFunc GL_DST_COLOR GL_ZERO
 	rgbGen identity
 	}
@@ -791,7 +791,7 @@ surfaceparm metalsteps
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p001AluGeb.jpg
+	map textures/pad_o4texs/p001alugeb.jpg
 	blendFunc GL_DST_COLOR GL_ZERO
 	rgbGen identity
 	}
@@ -837,7 +837,7 @@ textures/pad_o4texs/p002Holz
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p002Holz.jpg
+	map textures/pad_o4texs/p002holz.jpg
 	blendFunc GL_DST_COLOR GL_ZERO
 	rgbGen identity
 	}
@@ -851,7 +851,7 @@ surfaceparm woodsteps
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p008Holz.jpg
+	map textures/pad_o4texs/p008holz.jpg
 	blendFunc GL_DST_COLOR GL_ZERO
 	rgbGen identity
 	}
@@ -865,7 +865,7 @@ surfaceparm woodsteps
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p009Holz.jpg
+	map textures/pad_o4texs/p009holz.jpg
 	blendFunc GL_DST_COLOR GL_ZERO
 	rgbGen identity
 	}
@@ -879,7 +879,7 @@ surfaceparm woodsteps
 	rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p039Holz.jpg
+	map textures/pad_o4texs/p039holz.jpg
 	blendFunc GL_DST_COLOR GL_ZERO
 	rgbGen identity
 	}
