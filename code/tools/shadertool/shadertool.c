@@ -194,6 +194,7 @@ static int validateShader(const char *filename, const char *pk3dir, const char *
 				}
 			}
 			// TODO animMap
+			// TODO skyparms _ft _bk _rt _lf _up _dn
 
 			if (depth == 0) {
 				break;
