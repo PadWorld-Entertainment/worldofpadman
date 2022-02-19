@@ -2,6 +2,37 @@
 #include <stdio.h>
 #include <string.h>
 
+typedef struct {
+	int fileofs, filelen;
+} lump_t;
+
+#define LUMP_ENTITIES 0
+#define LUMP_SHADERS 1
+#define LUMP_PLANES 2
+#define LUMP_NODES 3
+#define LUMP_LEAFS 4
+#define LUMP_LEAFSURFACES 5
+#define LUMP_LEAFBRUSHES 6
+#define LUMP_MODELS 7
+#define LUMP_BRUSHES 8
+#define LUMP_BRUSHSIDES 9
+#define LUMP_DRAWVERTS 10
+#define LUMP_DRAWINDEXES 11
+#define LUMP_FOGS 12
+#define LUMP_SURFACES 13
+#define LUMP_LIGHTMAPS 14
+#define LUMP_LIGHTGRID 15
+#define LUMP_VISIBILITY 16
+#define HEADER_LUMPS 17
+#define BSP_VERSION 46
+
+typedef struct {
+	int ident;
+	int version;
+
+	lump_t lumps[HEADER_LUMPS];
+} dheader_t;
+
 #define MAX_TOKEN_CHARS 1024
 
 static int com_tokenline = 0;
@@ -116,21 +147,30 @@ static void Q_strncpyz(char *dest, const char *src, int destsize) {
 	dest[destsize - 1] = 0;
 }
 
-static int validateTexture(const char *shaderName, const char *shaderfilename, const char *pk3dir, const char *filename) {
+static void sanitizeFilename(char *in) {
+	int i;
+	int l = (int)strlen(in);
+	for (i = 0; i < l; ++i) {
+		if (in[i] == '\\') {
+			in[i] = '/';
+		}
+	}
+}
+
+static int validateSound(const char* filename, const char *pk3dir, const char *sound) {
 	FILE *fp;
 	char buf[1024];
 	char basename[1024];
 	int len;
-	static const char *ext[] = {"jpg", "png", "tga", NULL};
-	static const char *searchpaths[] = {"gfx.pk3dir", "maps.pk3dir", "menu.pk3dir", "models.pk3dir", "textures.pk3dir", NULL};
-	static const char *skyparms[] = {"", "_ft", "_bk", "_rt", "_lf", "_up", "_dn"};
+	static const char *ext[] = {"wav", "ogg", "opus", NULL};
+	static const char *searchpaths[] = {"sound.pk3dir", NULL};
 	static const char *subdirs[] = {".", "../wop"};
 
-	if (filename[0] == '$' || filename[0] == '*') {
+	if (sound[0] == '*') {
 		return 0;
 	}
 
-	Q_strncpyz(basename, filename, sizeof(basename));
+	Q_strncpyz(basename, sound, sizeof(basename));
 	len = strlen(basename);
 	if (len <= 3) {
 		return 0;
@@ -140,78 +180,68 @@ static int validateTexture(const char *shaderName, const char *shaderfilename, c
 		basename[len - 4] = '\0';
 	}
 
+	sanitizeFilename(basename);
+
 	// no extension in filename - append supported extensions and check for for those
 	for (const char **e = ext; *e; ++e) {
 		for (const char **searchpath = searchpaths; *searchpath; ++searchpath) {
-			for (const char **s = skyparms; *s; ++s) {
-				for (const char **sd = subdirs; *sd; ++sd) {
-					snprintf(buf, sizeof(buf), "%s/%s/%s/%s%s.%s", pk3dir, *sd, *searchpath, basename, *s, *e);
-					if ((fp = fopen(buf, "r")) != NULL) {
-						fclose(fp);
-						return 0;
-					}
+			for (const char **sd = subdirs; *sd; ++sd) {
+				snprintf(buf, sizeof(buf), "%s/%s/%s/%s.%s", pk3dir, *sd, *searchpath, basename, *e);
+				if ((fp = fopen(buf, "r")) != NULL) {
+					fclose(fp);
+					return 0;
 				}
 			}
 		}
 	}
 
-	printf("%s:%i: error in shader %s: %s not found\n", shaderfilename, com_tokenline, shaderName, filename);
+	printf("%s: error in bsp: sound file %s not found\n", filename, sound);
 	return 1;
 }
 
-static int validateShader(const char *filename, const char *pk3dir, const char *buf) {
+static int validateEntityString(const char* filename, const char *pk3dir, const char *entitystring) {
 	int error = 0;
-	printf("Validate shader %s\n", filename);
-	int depth = 0;
 	for (;;) {
-		char shaderName[64] = {0};
-
-		const char *token = COM_ParseExt(&buf);
+		const char *token = COM_ParseExt(&entitystring);
 		if (!token[0]) {
 			break;
 		}
-
-		Q_strncpyz(shaderName, token, sizeof(shaderName));
-
-		token = COM_ParseExt(&buf);
-		if (token[0] != '{' || token[1] != '\0') {
-			printf("%s:%i: error missing opening brace\n", filename, com_tokenline);
-			return 1;
-		}
-
-		depth = 1;
-		for (;;) {
-			token = COM_ParseExt(&buf);
+		if (!strcmp(token, "noise")) {
+			token = COM_ParseExt(&entitystring);
 			if (!token[0]) {
-				break;
+				printf("%s: error unexpected end of entity string found\n", filename);
+				return 1;
 			}
-			if (token[0] == '{') {
-				depth++;
-			} else if (token[0] == '}') {
-				depth--;
-			} else if (!strcmp(token, "map") || !strcmp(token, "qer_editorimage") ||
-					   !strcmp(token, "q3map_lightimage") || !strcmp(token, "skyparms")) {
-				token = COM_ParseExt(&buf);
-				if (!token[0]) {
-					printf("%s:%i: error unexpected end of shader found\n", filename, com_tokenline);
-					return 1;
-				}
-				if (validateTexture(shaderName, filename, pk3dir, token) != 0) {
-					error = 1;
-				}
-			}
-			// TODO animMap
-
-			if (depth == 0) {
-				break;
+			if (validateSound(filename, pk3dir, token) != 0) {
+				error = 1;
 			}
 		}
 	}
-	if (depth != 0) {
-		printf("%s:%i: error unmatched brackets\n", filename, com_tokenline);
-		error = 1;
-	}
+
 	return error;
+}
+
+static int validateBsp(const char *filename, const char *pk3dir, const void *buf) {
+	const dheader_t header = *(dheader_t *)buf;
+	const lump_t *l;
+	char *entityString;
+	printf("Validate bsp %s\n", filename);
+	if (header.version != BSP_VERSION) {
+		printf("%s: error invalid bsp version found: %i\n", filename, header.version);
+		return 1;
+	}
+
+	l = &header.lumps[LUMP_ENTITIES];
+	entityString = (char*)malloc(l->filelen);
+	Q_strncpyz(entityString, (const char*)((unsigned char*)buf + l->fileofs), l->filelen);
+
+	if (validateEntityString(filename, pk3dir, entityString) != 0) {
+		free(entityString);
+		return 1;
+	}
+
+	free(entityString);
+	return 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -222,7 +252,7 @@ int main(int argc, char *argv[]) {
 	FILE *fp;
 
 	if (argc != 3) {
-		printf("Usage: shadertool <path-to-textures-pk3dir> <path-to.shader>\n");
+		printf("Usage: bsptool <path-to-game-dir> <path-to.bsp>\n");
 		return 1;
 	}
 
@@ -253,13 +283,11 @@ int main(int argc, char *argv[]) {
 	source = (char *)malloc(bufsize + 1);
 	size_t newLen = fread(source, 1, bufsize, fp);
 	if (ferror(fp) != 0) {
-		perror("Error: failed to read shader file. ");
+		perror("Error: failed to read bsp file. ");
 		return 1;
 	}
 
-	source[newLen++] = '\0';
-
-	if (validateShader(filename, pk3dir, source) == 0) {
+	if (validateBsp(filename, pk3dir, source) == 0) {
 		free(source);
 		return 0;
 	}

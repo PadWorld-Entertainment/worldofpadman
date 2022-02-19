@@ -54,3 +54,54 @@ set(SHADERS
 foreach (SHADER ${SHADERS})
     shader_validation(wop ${SHADER})
 endforeach()
+
+set(BSPS
+    wop_padlibrary.bsp
+    wop_padattic.bsp
+    wop_padkitchenLPS.bsp
+    wop_padkitchen.bsp
+    wop_journeyCTL.bsp
+    wop_dinerBB.bsp
+    wop_padgardenBB.bsp
+    wop_padcrashBB.bsp
+    wop_cabin.bsp
+    wop_colorstageCTL.bsp
+    wop_padshopBB.bsp
+    wop_westernCTL.bsp
+    wop_padgarden_night.bsp
+    wop_cabinBB.bsp
+    wop_padlibraryBB.bsp
+    wop_padgarden.bsp
+    wop_padatticLPS.bsp
+    wop_bath.bsp
+    wop_backyardBB.bsp
+    wop_jailBB.bsp
+    wop_padasiaCTL.bsp
+    wop_anteroom.bsp
+    wop_padboxCTL.bsp
+    wop_backyard.bsp
+    wop_huette.bsp
+    wop_jail.bsp
+    wop_padkitchenBB.bsp
+    wop_padcrashCTL.bsp
+    wop_anteroomBB.bsp
+    wop_padatticBB.bsp
+    wop_padlibraryLPS.bsp
+    wop_padshipBB.bsp
+    wop_padbaseCTL.bsp
+    wop_fridgeCTL.bsp
+    wop_padshop.bsp
+    wop_padcloisterCTL.bsp
+    wop_trashmapBB.bsp
+    wop_padcrash.bsp
+    wop_padship.bsp
+    wop_huetteBB.bsp
+    wop_bathBB.bsp
+    wop_diner.bsp
+    wop_trashmap.bsp
+    wop_padcrash_dm17.bsp
+    wop_airplane.bsp
+)
+foreach (BSP ${BSPS})
+    bsp_validation(wop ${BSP})
+endforeach()

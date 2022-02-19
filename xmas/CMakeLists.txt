@@ -26,3 +26,10 @@ set(SHADERS
 foreach (SHADER ${SHADERS})
     shader_validation(xmas ${SHADER})
 endforeach()
+
+set(BSPS
+    weinacht.bsp
+)
+foreach (BSP ${BSPS})
+    bsp_validation(wop ${BSP})
+endforeach()

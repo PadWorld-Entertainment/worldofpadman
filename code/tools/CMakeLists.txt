@@ -81,3 +81,4 @@ set(Q3LCC_SRCS
 add_executable(q3lcc ${Q3LCC_SRCS})
 add_dependencies(q3lcc q3cpp q3rcc)
 add_subdirectory(shadertool)
+add_subdirectory(bsptool)
