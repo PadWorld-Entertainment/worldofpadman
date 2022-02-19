@@ -122,6 +122,7 @@ static int validateTexture(const char *shaderfilename, const char *pk3dir, const
 	int len;
 	static const char *ext[] = {"jpg", "png", "tga", NULL};
 	static const char *searchpaths[] = {"gfx.pk3dir", "maps.pk3dir", "menu.pk3dir", "models.pk3dir", "textures.pk3dir", NULL};
+	static const char *skyparms[] = {"", "_ft", "_bk", "_rt", "_lf", "_up", "_dn"};
 
 	if (filename[0] == '$' || filename[0] == '*') {
 		return 0;
@@ -140,10 +141,12 @@ static int validateTexture(const char *shaderfilename, const char *pk3dir, const
 	// no extension in filename - append supported extensions and check for for those
 	for (const char **e = ext; *e; ++e) {
 		for (const char **searchpath = searchpaths; *searchpath; ++searchpath) {
-			snprintf(buf, sizeof(buf), "%s/%s/%s.%s", pk3dir, *searchpath, basename, *e);
-			if ((fp = fopen(buf, "r")) != NULL) {
-				fclose(fp);
-				return 0;
+			for (const char **s = skyparms; *s; ++s) {
+				snprintf(buf, sizeof(buf), "%s/%s/%s%s.%s", pk3dir, *searchpath, basename, *s, *e);
+				if ((fp = fopen(buf, "r")) != NULL) {
+					fclose(fp);
+					return 0;
+				}
 			}
 		}
 	}
@@ -194,7 +197,6 @@ static int validateShader(const char *filename, const char *pk3dir, const char *
 				}
 			}
 			// TODO animMap
-			// TODO skyparms _ft _bk _rt _lf _up _dn
 
 			if (depth == 0) {
 				break;
