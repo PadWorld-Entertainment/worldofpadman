@@ -41,6 +41,8 @@ jobs:
           cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install
           cmake --build .
+          cmake --build . --target bsp-validation
+          cmake --build . --target shader-validation
           cmake --install .
 
       - name: "Upload artifacts"
