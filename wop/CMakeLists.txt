@@ -11,3 +11,49 @@ set(PK3DIRS
     music
 )
 compress_pk3(wop ${PK3DIRS})
+
+set(SHADERS
+    pad_airplane.shader
+    q3map2_wop_dinerBB.shader
+    pad_cyb.shader
+    pad_asia.shader
+    q3map2_wop_diner.shader
+    pad_harm.shader
+    wop_weapons.shader
+    wop_icons.shader
+    pad_bookroom.shader
+    pad_steps.shader
+    wop_maps.arena
+    pad_cloister.shader
+    wop_menu.shader
+    pad_effects.shader
+    wop_powerups.shader
+    wop_weaponsfx.shader
+    common.shader
+    pad_gfx.shader
+    photoshop.lensflare
+    pad_pirate.shader
+    pad_journey.shader
+    wop_spaylogos.shader
+    pad_garden.shader
+    pad_kitchen.shader
+    pad_glowmaps.shader
+    pad_mapobjects.shader
+    pad_jail.shader
+    wop_playermodels.bot
+    pad_fridge.shader
+    wop_playermodels.shader
+    wop_glowmodels.shader
+    pad_shop.shader
+    wop_levelshots.shader
+    pad_tex02.shader
+    pad_harmwestern.shader
+    q3map2_wop_trashmap.shader
+    wop_code.shader
+    pad_attic.shader
+    pad_trash.shader
+    pad_gamemodels.shader
+)
+foreach (SHADER ${SHADERS})
+    shader_validation(${SHADER})
+endforeach()

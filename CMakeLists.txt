@@ -65,6 +65,7 @@ function(check_compiler_flag flag)
 endfunction()
 
 add_custom_target(pk3)
+add_custom_target(shader-validation)
 
 set(ZIP_7z "a")
 set(ZIP_zip "-r9q")
@@ -73,6 +74,19 @@ if (ZIP)
   get_filename_component(zip_binary ${ZIP} NAME_WE)
   set(ZIP_ARGS ${ZIP_${zip_binary}})
 endif()
+
+function(shader_validation SHADER)
+  set(SHADERPATH "${CMAKE_CURRENT_SOURCE_DIR}/scripts.pk3dir/scripts/${SHADER}")
+  string(REGEX REPLACE "[/ ]" "_" targetname ${SHADERPATH})
+  get_filename_component(filename ${SHADERPATH} NAME)
+  add_custom_target(${targetname}
+    COMMENT "Validate ${SHADERPATH}"
+    COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}"
+    DEPENDS shadertool "${SHADERPATH}"
+    VERBATIM
+  )
+  add_dependencies(shader-validation ${targetname})
+endfunction()
 
 function(compress_pk3 TARGET)
   add_custom_target(pk3-${TARGET})
