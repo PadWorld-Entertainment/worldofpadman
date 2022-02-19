@@ -31,5 +31,5 @@ set(BSPS
     weinacht.bsp
 )
 foreach (BSP ${BSPS})
-    bsp_validation(wop ${BSP})
+    bsp_validation(xmas ${BSP})
 endforeach()
