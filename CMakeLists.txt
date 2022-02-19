@@ -77,7 +77,7 @@ endif()
 
 function(shader_validation SHADER)
   set(SHADERPATH "${CMAKE_CURRENT_SOURCE_DIR}/scripts.pk3dir/scripts/${SHADER}")
-  string(REGEX REPLACE "[/ ]" "_" targetname ${SHADERPATH})
+  string(REGEX REPLACE "[/ :]" "_" targetname ${SHADERPATH})
   get_filename_component(filename ${SHADERPATH} NAME)
   add_custom_target(${targetname}
     COMMENT "Validate ${SHADERPATH}"
