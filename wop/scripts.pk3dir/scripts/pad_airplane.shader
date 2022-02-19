@@ -4,15 +4,14 @@
 
 textures/pad_o4texs/ueberdenwolken
 {
-qer_editorimage textures/pad_o4texs/ueberdenwolken
-surfaceparm noimpact
-surfaceparm nolightmap
-q3map_lightimage textures/pad_o4texs/124
-q3map_sun	0.925 0.949 1 120 60 20
-q3map_surfacelight 200
-skyparms env/ueberdenwolken - -
+	qer_editorimage textures/pad_o4texs/ueberdenwolken
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	q3map_lightimage textures/pad_o4texs/124
+	q3map_sun	0.925 0.949 1 120 60 20
+	q3map_surfacelight 200
+	skyparms env/ueberdenwolken - -
 }
-
 
 //-----------------------------------------------------------------
 // einfache Texturen mit (ALPHA)Transparenz
@@ -20,148 +19,148 @@ skyparms env/ueberdenwolken - -
 
 textures/pad_o4texs/danke_erklaert_de
 {
-surfaceparm trans
-surfaceparm alphashadow
-cull none
-nopicmip
+	surfaceparm trans
+	surfaceparm alphashadow
+	cull none
+	nopicmip
 	{
-	map textures/pad_o4texs/danke_erklaert_de
-	blendFunc GL_ONE GL_ZERO
-	alphaFunc GE128
-	depthWrite
-	rgbGen identity
+		map textures/pad_o4texs/danke_erklaert_de
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		depthWrite
+		rgbGen identity
 	}
 	{
-	map $lightmap
-	rgbGen identity
-	blendFunc GL_DST_COLOR GL_ZERO
-	depthFunc equal
+		map $lightmap
+		rgbGen identity
+		blendFunc GL_DST_COLOR GL_ZERO
+		depthFunc equal
 	}
 }
 
 textures/pad_o4texs/danke_noctuagraphics
 {
-surfaceparm trans
-surfaceparm alphashadow
-cull none
-nopicmip
+	surfaceparm trans
+	surfaceparm alphashadow
+	cull none
+	nopicmip
 	{
-	map textures/pad_o4texs/danke_noctuagraphics
-	blendFunc GL_ONE GL_ZERO
-	alphaFunc GE128
-	depthWrite
-	rgbGen identity
+		map textures/pad_o4texs/danke_noctuagraphics
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		depthWrite
+		rgbGen identity
 	}
 	{
-	map $lightmap
-	rgbGen identity
-	blendFunc GL_DST_COLOR GL_ZERO
-	depthFunc equal
+		map $lightmap
+		rgbGen identity
+		blendFunc GL_DST_COLOR GL_ZERO
+		depthFunc equal
 	}
 }
 
 textures/pad_o4texs/danke_maxmustermann
 {
-surfaceparm trans
-surfaceparm alphashadow
-cull none
-nopicmip
+	surfaceparm trans
+	surfaceparm alphashadow
+	cull none
+	nopicmip
 	{
-	map textures/pad_o4texs/danke_maxmustermann
-	blendFunc GL_ONE GL_ZERO
-	alphaFunc GE128
-	depthWrite
-	rgbGen identity
+		map textures/pad_o4texs/danke_maxmustermann
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		depthWrite
+		rgbGen identity
 	}
 	{
-	map $lightmap
-	rgbGen identity
-	blendFunc GL_DST_COLOR GL_ZERO
-	depthFunc equal
+		map $lightmap
+		rgbGen identity
+		blendFunc GL_DST_COLOR GL_ZERO
+		depthFunc equal
 	}
 }
 
 textures/pad_o4texs/gurtschlossA
 {
-surfaceparm trans
-surfaceparm alphashadow
-nopicmip
+	surfaceparm trans
+	surfaceparm alphashadow
+	nopicmip
 	{
-	map textures/pad_o4texs/gurtschlossa
-	blendFunc GL_ONE GL_ZERO
-	alphaFunc GE128
-	depthWrite
-	rgbGen identity
+		map textures/pad_o4texs/gurtschlossa
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		depthWrite
+		rgbGen identity
 	}
 	{
-	map $lightmap
-	rgbGen identity
-	blendFunc GL_DST_COLOR GL_ZERO
-	depthFunc equal
+		map $lightmap
+		rgbGen identity
+		blendFunc GL_DST_COLOR GL_ZERO
+		depthFunc equal
 	}
 }
 
 textures/pad_o4texs/gurtschlossC
 {
-surfaceparm trans
-surfaceparm alphashadow
-cull none
-nopicmip
+	surfaceparm trans
+	surfaceparm alphashadow
+	cull none
+	nopicmip
 	{
-	map textures/pad_o4texs/gurtschlossc
-	blendFunc GL_ONE GL_ZERO
-	alphaFunc GE128
-	depthWrite
-	rgbGen identity
+		map textures/pad_o4texs/gurtschlossc
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		depthWrite
+		rgbGen identity
 	}
 	{
-	map $lightmap
-	rgbGen identity
-	blendFunc GL_DST_COLOR GL_ZERO
-	depthFunc equal
+		map $lightmap
+		rgbGen identity
+		blendFunc GL_DST_COLOR GL_ZERO
+		depthFunc equal
 	}
 }
 
 textures/pad_o4texs/sechseck
 {
-surfaceparm trans
-surfaceparm alphashadow
-cull none
-nopicmip
+	surfaceparm trans
+	surfaceparm alphashadow
+	cull none
+	nopicmip
 	{
-	map textures/pad_o4texs/sechseck
-	blendFunc GL_ONE GL_ZERO
-	alphaFunc GE128
-	depthWrite
-	rgbGen identity
+		map textures/pad_o4texs/sechseck
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		depthWrite
+		rgbGen identity
 	}
 	{
-	map $lightmap
-	rgbGen identity
-	blendFunc GL_DST_COLOR GL_ZERO
-	depthFunc equal
+		map $lightmap
+		rgbGen identity
+		blendFunc GL_DST_COLOR GL_ZERO
+		depthFunc equal
 	}
 }
 
 
 textures/pad_o4texs/serviette
 {
-surfaceparm trans
-surfaceparm alphashadow
-cull none
-nopicmip
+	surfaceparm trans
+	surfaceparm alphashadow
+	cull none
+	nopicmip
 	{
-	map textures/pad_o4texs/serviette
-	blendFunc GL_ONE GL_ZERO
-	alphaFunc GE128
-	depthWrite
-	rgbGen identity
+		map textures/pad_o4texs/serviette
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		depthWrite
+		rgbGen identity
 	}
 	{
-	map $lightmap
-	rgbGen identity
-	blendFunc GL_DST_COLOR GL_ZERO
-	depthFunc equal
+		map $lightmap
+		rgbGen identity
+		blendFunc GL_DST_COLOR GL_ZERO
+		depthFunc equal
 	}
 }
 
@@ -418,9 +417,9 @@ textures/pad_o4texs/rubikweiss
 
 textures/pad_o4texs/p032nonsolid
 {
-qer_editorimage textures/pad_o4texs/p032nonsolid
-surfaceparm nomarks
-surfaceparm nonsolid
+	qer_editorimage textures/pad_o4texs/p032nonsolid
+	surfaceparm nomarks
+	surfaceparm nonsolid
 	{
 		map $lightmap
 		rgbGen identity
@@ -435,191 +434,191 @@ surfaceparm nonsolid
 
 textures/pad_o4texs/Cabin-dispA
 {
-qer_editorimage textures/pad_o4texs/cabin-dispa
-q3map_surfacelight 10
+	qer_editorimage textures/pad_o4texs/cabin-dispa
+	q3map_surfacelight 10
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/cabin-dispa
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/cabin-dispa
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/cabin-dispb
-	blendFunc add
+		map textures/pad_o4texs/cabin-dispb
+		blendFunc add
 	}
 }
 
 textures/pad_o4texs/airplanecockpit001
 {
-qer_editorimage textures/pad_o4texs/airplanecockpit001
-q3map_surfacelight 5
+	qer_editorimage textures/pad_o4texs/airplanecockpit001
+	q3map_surfacelight 5
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit001
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/airplanecockpit001
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit001b
-	blendFunc add
+		map textures/pad_o4texs/airplanecockpit001b
+		blendFunc add
 	}
 }
 
 textures/pad_o4texs/airplanecockpit002
 {
-qer_editorimage textures/pad_o4texs/airplanecockpit002
-q3map_surfacelight 10
+	qer_editorimage textures/pad_o4texs/airplanecockpit002
+	q3map_surfacelight 10
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit002
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/airplanecockpit002
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit002b
-	blendFunc add
+		map textures/pad_o4texs/airplanecockpit002b
+		blendFunc add
 	}
 }
 
 textures/pad_o4texs/airplanecockpit010
 {
-qer_editorimage textures/pad_o4texs/airplanecockpit010
-q3map_surfacelight 10
+	qer_editorimage textures/pad_o4texs/airplanecockpit010
+	q3map_surfacelight 10
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit010
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/airplanecockpit010
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit010b
-	blendFunc add
+		map textures/pad_o4texs/airplanecockpit010b
+		blendFunc add
 	}
 }
 
 textures/pad_o4texs/airplanecockpit011
 {
-qer_editorimage textures/pad_o4texs/airplanecockpit011
-q3map_surfacelight 10
+	qer_editorimage textures/pad_o4texs/airplanecockpit011
+	q3map_surfacelight 10
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit011
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/airplanecockpit011
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit011b
-	blendFunc add
+		map textures/pad_o4texs/airplanecockpit011b
+		blendFunc add
 	}
 }
 
 textures/pad_o4texs/airplanecockpit014
 {
-qer_editorimage textures/pad_o4texs/airplanecockpit014
-q3map_surfacelight 10
+	qer_editorimage textures/pad_o4texs/airplanecockpit014
+	q3map_surfacelight 10
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit014
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/airplanecockpit014
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit014b
-	blendFunc add
+		map textures/pad_o4texs/airplanecockpit014b
+		blendFunc add
 	}
 }
 
 textures/pad_o4texs/airplanecockpit015
 {
-qer_editorimage textures/pad_o4texs/airplanecockpit015
-q3map_surfacelight 10
+	qer_editorimage textures/pad_o4texs/airplanecockpit015
+	q3map_surfacelight 10
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit015
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/airplanecockpit015
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit015b
-	blendFunc add
+		map textures/pad_o4texs/airplanecockpit015b
+		blendFunc add
 	}
 }
 
 textures/pad_o4texs/airplanecockpit016
 {
-qer_editorimage textures/pad_o4texs/airplanecockpit016
-q3map_surfacelight 10
+	qer_editorimage textures/pad_o4texs/airplanecockpit016
+	q3map_surfacelight 10
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit016
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/airplanecockpit016
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit016b
-	blendFunc add
+		map textures/pad_o4texs/airplanecockpit016b
+		blendFunc add
 	}
 }
 
 textures/pad_o4texs/airplanecockpit020
 {
-qer_editorimage textures/pad_o4texs/airplanecockpit020
-q3map_surfacelight 10
+	qer_editorimage textures/pad_o4texs/airplanecockpit020
+	q3map_surfacelight 10
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit020
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/airplanecockpit020
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit020b
-	blendFunc add
+		map textures/pad_o4texs/airplanecockpit020b
+		blendFunc add
 	}
 }
 
 textures/pad_o4texs/airplanecockpit022
 {
-qer_editorimage textures/pad_o4texs/airplanecockpit022
-q3map_surfacelight 10
+	qer_editorimage textures/pad_o4texs/airplanecockpit022
+	q3map_surfacelight 10
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit022
-	blendFunc filter
-	rgbGen identity
+		map textures/pad_o4texs/airplanecockpit022
+		blendFunc filter
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/airplanecockpit022b
-	blendFunc add
+		map textures/pad_o4texs/airplanecockpit022b
+		blendFunc add
 	}
 }
 
@@ -630,20 +629,20 @@ q3map_surfacelight 10
 textures/pad_o4texs/patschefinger
 {
 	{
-	rgbGen identity
-	map $lightmap
+		rgbGen identity
+		map $lightmap
 	}
 	{
-	map textures/pad_o4texs/001
-	blendFunc GL_DST_COLOR GL_SRC_ALPHA
-	rgbGen identity
-	alphaGen lightingSpecular
+		map textures/pad_o4texs/001
+		blendFunc GL_DST_COLOR GL_SRC_ALPHA
+		rgbGen identity
+		alphaGen lightingSpecular
 	}
 	{
-	map textures/pad_o4texs/badspiegel
-	tcgen environment
-	blendFunc GL_ONE GL_ONE
-	rgbGen identity
+		map textures/pad_o4texs/badspiegel
+		tcgen environment
+		blendFunc GL_ONE GL_ONE
+		rgbGen identity
 	}
 }
 
@@ -653,21 +652,21 @@ textures/pad_o4texs/patschefinger
 
 textures/pad_o4texs/glass-nonglare-001
 {
-surfaceparm trans
-qer_trans 	0.5
+	surfaceparm trans
+	qer_trans 	0.5
 	{
-	map textures/pad_o4texs/glass-nonglare-001
-	blendFunc GL_ONE GL_ONE
+		map textures/pad_o4texs/glass-nonglare-001
+		blendFunc GL_ONE GL_ONE
 	}
 }
 
 textures/pad_o4texs/glass-nonglare-002
 {
-surfaceparm trans
-qer_trans 	0.5
+	surfaceparm trans
+	qer_trans 	0.5
 	{
-	map textures/pad_o4texs/glass-nonglare-002
-	blendFunc GL_ONE GL_ONE
+		map textures/pad_o4texs/glass-nonglare-002
+		blendFunc GL_ONE GL_ONE
 	}
 }
 
@@ -678,41 +677,41 @@ qer_trans 	0.5
 
 textures/pad_o4texs/AcmeTires
 {
-qer_editorimage textures/pad_o4texs/AcmeTires
-surfaceparm trans
-qer_trans .6
-cull none
-surfaceparm nomipmaps
+	qer_editorimage textures/pad_o4texs/acmetires
+	surfaceparm trans
+	qer_trans .6
+	cull none
+	surfaceparm nomipmaps
 	{
-	map textures/pad_o4texs/acmetires
-	blendFunc GL_DST_COLOR GL_ONE
+		map textures/pad_o4texs/acmetires
+		blendFunc GL_DST_COLOR GL_ONE
 	}
 }
 
 textures/pad_o4texs/lueftergitter
 {
-surfaceparm trans
+	surfaceparm trans
 	{
-	map textures/pad_o4texs/lueftergitter
-	blendfunc filter
+		map textures/pad_o4texs/lueftergitter
+		blendfunc filter
 	}
 }
 
 textures/pad_o4texs/lueftergitter2
 {
-surfaceparm trans
+	surfaceparm trans
 	{
-	map textures/pad_o4texs/lueftergitter2
-	blendfunc filter
+		map textures/pad_o4texs/lueftergitter2
+		blendfunc filter
 	}
 }
 
 textures/pad_o4texs/lueftergitter3
 {
-surfaceparm trans
+	surfaceparm trans
 	{
-	map textures/pad_o4texs/lueftergitter3
-	blendfunc filter
+		map textures/pad_o4texs/lueftergitter3
+		blendfunc filter
 	}
 }
 
@@ -726,43 +725,43 @@ surfaceparm trans
 
 textures/pad_o4texs/teppich
 {
-surfaceparm carpetsteps
+	surfaceparm carpetsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/teppich
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/teppich
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
 textures/pad_o4texs/p008Leder
 {
-surfaceparm carpetsteps
+	surfaceparm carpetsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p008leder
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/p008leder
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
 textures/pad_o4texs/p002Leder
 {
-surfaceparm carpetsteps
+	surfaceparm carpetsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p002leder
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/p002leder
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
@@ -771,58 +770,58 @@ surfaceparm carpetsteps
 
 textures/pad_o4texs/p888AluGeb
 {
-surfaceparm metalsteps
+	surfaceparm metalsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p888alugeb
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/p888alugeb
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
 textures/pad_o4texs/p001AluGeb
 {
-surfaceparm metalsteps
+	surfaceparm metalsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p001alugeb
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/p001alugeb
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
 textures/pad_o4texs/zinc01
 {
-surfaceparm metalsteps
+	surfaceparm metalsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/zinc01
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/zinc01
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
 textures/pad_o4texs/metalstep063
 {
-qer_editorimage textures/pad_o4texs/metalstep063
-surfaceparm metalsteps
+	qer_editorimage textures/pad_o4texs/metalstep063
+	surfaceparm metalsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/063
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/063
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
@@ -833,54 +832,54 @@ textures/pad_o4texs/p002Holz
 {
 	surfaceparm woodsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p002holz
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/p002holz
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
 textures/pad_o4texs/p008Holz
 {
-surfaceparm woodsteps
+	surfaceparm woodsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p008holz
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/p008holz
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
 textures/pad_o4texs/p009Holz
 {
-surfaceparm woodsteps
+	surfaceparm woodsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p009holz
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/p009holz
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
 
 textures/pad_o4texs/p039Holz
 {
-surfaceparm woodsteps
+	surfaceparm woodsteps
 	{
-	map $lightmap
-	rgbGen identity
+		map $lightmap
+		rgbGen identity
 	}
 	{
-	map textures/pad_o4texs/p039holz
-	blendFunc GL_DST_COLOR GL_ZERO
-	rgbGen identity
+		map textures/pad_o4texs/p039holz
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
 	}
 }
