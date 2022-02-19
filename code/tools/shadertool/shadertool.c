@@ -161,14 +161,14 @@ static int validateShader(const char *filename, const char *pk3dir, const char *
 
 		const char *token = COM_ParseExt(&buf);
 		if (!token[0]) {
-			return 1;
+			return 0;
 		}
 
 		Q_strncpyz(shaderName, token, sizeof(shaderName));
 
 		token = COM_ParseExt(&buf);
 		if (token[0] != '{' || token[1] != '\0') {
-			printf("WARNING: missing opening brace\n");
+			printf("%s: error missing opening brace\n", filename);
 			return 1;
 		}
 
@@ -186,6 +186,7 @@ static int validateShader(const char *filename, const char *pk3dir, const char *
 					   !strcmp(token, "q3map_lightimage") || !strcmp(token, "skyparms")) {
 				token = COM_ParseExt(&buf);
 				if (!token[0]) {
+					printf("%s: error unexpected end of shader found\n", filename);
 					return 1;
 				}
 				if (validateTexture(filename, pk3dir, token) != 0) {
