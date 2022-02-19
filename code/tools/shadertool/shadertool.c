@@ -5,13 +5,16 @@
 #define MAX_TOKEN_CHARS 1024
 
 static int com_tokenline = 0;
-static int com_lines;
+static int com_lines = 0;
 static char com_token[MAX_TOKEN_CHARS];
 
 static const char *SkipWhitespace(const char *data) {
 	char c;
 
 	while ((c = *data) <= ' ') {
+		if (c == '\n') {
+			com_lines++;
+		}
 		if (!c) {
 			return NULL;
 		}
@@ -46,16 +49,14 @@ static const char *COM_ParseExt(const char **data_p) {
 		}
 
 		c = *data;
-
-		// skip double slash comments
 		if (c == '/' && data[1] == '/') {
+			// skip double slash comments
 			data += 2;
 			while (*data && *data != '\n') {
 				data++;
 			}
-		}
-		// skip /* */ comments
-		else if (c == '/' && data[1] == '*') {
+		} else if (c == '/' && data[1] == '*') {
+			// skip /* */ comments
 			data += 2;
 			while (*data && (*data != '*' || data[1] != '/')) {
 				if (*data == '\n') {
@@ -115,7 +116,7 @@ static void Q_strncpyz(char *dest, const char *src, int destsize) {
 	dest[destsize - 1] = 0;
 }
 
-static int validateTexture(const char *shaderfilename, const char *pk3dir, const char *filename) {
+static int validateTexture(const char *shaderName, const char *shaderfilename, const char *pk3dir, const char *filename) {
 	FILE *fp;
 	char buf[1024];
 	char basename[1024];
@@ -151,7 +152,7 @@ static int validateTexture(const char *shaderfilename, const char *pk3dir, const
 		}
 	}
 
-	printf("%s: error %s not found\n", shaderfilename, filename);
+	printf("%s:%i: error in shader %s: %s not found\n", shaderfilename, com_tokenline, shaderName, filename);
 	return 1;
 }
 
@@ -171,7 +172,7 @@ static int validateShader(const char *filename, const char *pk3dir, const char *
 
 		token = COM_ParseExt(&buf);
 		if (token[0] != '{' || token[1] != '\0') {
-			printf("%s: error missing opening brace\n", filename);
+			printf("%s:%i: error missing opening brace\n", filename, com_tokenline);
 			return 1;
 		}
 
@@ -189,10 +190,10 @@ static int validateShader(const char *filename, const char *pk3dir, const char *
 					   !strcmp(token, "q3map_lightimage") || !strcmp(token, "skyparms")) {
 				token = COM_ParseExt(&buf);
 				if (!token[0]) {
-					printf("%s: error unexpected end of shader found\n", filename);
+					printf("%s;%i: error unexpected end of shader found\n", filename, com_tokenline);
 					return 1;
 				}
-				if (validateTexture(filename, pk3dir, token) != 0) {
+				if (validateTexture(shaderName, filename, pk3dir, token) != 0) {
 					error = 1;
 				}
 			}
@@ -204,7 +205,7 @@ static int validateShader(const char *filename, const char *pk3dir, const char *
 		}
 	}
 	if (depth != 0) {
-		printf("%s: error unmatched brackets\n", filename);
+		printf("%s:%i: error unmatched brackets\n", filename, com_tokenline);
 		error = 1;
 	}
 	return error;
