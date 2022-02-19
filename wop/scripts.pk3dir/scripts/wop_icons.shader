@@ -368,6 +368,15 @@ icons/medal_excellent
 	}
 }
 
+icons/medal_padhero
+{
+	nopicmip
+	{
+		map icons/medal_padhero
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+	}
+}
+
 icons/medal_padstar
 {
 	nopicmip
