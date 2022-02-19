@@ -24,5 +24,5 @@ set(SHADERS
     spraypistol.shader
 )
 foreach (SHADER ${SHADERS})
-    shader_validation(${SHADER})
+    shader_validation(xmas ${SHADER})
 endforeach()

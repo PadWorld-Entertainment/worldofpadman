@@ -75,14 +75,16 @@ if (ZIP)
   set(ZIP_ARGS ${ZIP_${zip_binary}})
 endif()
 
-function(shader_validation SHADER)
+function(shader_validation GAME SHADER)
   set(SHADERPATH "${CMAKE_CURRENT_SOURCE_DIR}/scripts.pk3dir/scripts/${SHADER}")
-  string(REGEX REPLACE "[/ :]" "_" targetname ${SHADERPATH})
+  set(targetname "shader-${GAME}-${SHADER}")
+  get_filename_component(targetname ${targetname} NAME_WLE)
   get_filename_component(filename ${SHADERPATH} NAME)
   add_custom_target(${targetname}
     COMMENT "Validate ${SHADERPATH}"
     COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}"
     DEPENDS shadertool "${SHADERPATH}"
+    SOURCES "${SHADERPATH}"
     VERBATIM
   )
   add_dependencies(shader-validation ${targetname})

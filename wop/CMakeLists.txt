@@ -23,7 +23,6 @@ set(SHADERS
     wop_icons.shader
     pad_bookroom.shader
     pad_steps.shader
-    wop_maps.arena
     pad_cloister.shader
     wop_menu.shader
     pad_effects.shader
@@ -31,7 +30,6 @@ set(SHADERS
     wop_weaponsfx.shader
     common.shader
     pad_gfx.shader
-    photoshop.lensflare
     pad_pirate.shader
     pad_journey.shader
     wop_spaylogos.shader
@@ -40,7 +38,6 @@ set(SHADERS
     pad_glowmaps.shader
     pad_mapobjects.shader
     pad_jail.shader
-    wop_playermodels.bot
     pad_fridge.shader
     wop_playermodels.shader
     wop_glowmodels.shader
@@ -55,5 +52,5 @@ set(SHADERS
     pad_gamemodels.shader
 )
 foreach (SHADER ${SHADERS})
-    shader_validation(${SHADER})
+    shader_validation(wop ${SHADER})
 endforeach()
