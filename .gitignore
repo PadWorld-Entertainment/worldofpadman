@@ -18,7 +18,6 @@ Makefile.local
 .AppleDouble
 .DS_Store
 .LSOverride
-Icon?
 
 # Xcode
 ####################
