@@ -6,13 +6,13 @@ models/wop_players/padman/default_goggles
 {
      cull disable
         {
-                map models/wop_players/padman/default_head.tga
+                map models/wop_players/padman/default_head
 		alphaFunc ge128
 	        rgbGen lightingDiffuse
         }
 	{
-                map models/wop_players/padman/pad_fx.tga
-		//map textures/effects/envmapdimb.tga
+                map models/wop_players/padman/pad_fx
+		//map textures/effects/envmapdimb
 		blendfunc GL_DST_ALPHA GL_DST_ALPHA
                 tcgen environment
 		rgbGen lightingDiffuse
@@ -26,10 +26,10 @@ models/wop_players/padman/default_cape
      	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
         {
-                map models/wop_players/padman/default_body.tga
+                map models/wop_players/padman/default_body
                 rgbGen identity
         }
-	
+
 }
 
 models/wop_players/padman/default_head
@@ -38,19 +38,19 @@ models/wop_players/padman/default_head
 	nomipmaps
 	cull none
         {
-                map models/wop_players/padman/default_head.tga
+                map models/wop_players/padman/default_head
 	  //alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
         }
         {
-                map models/wop_players/padman/default_head.tga
+                map models/wop_players/padman/default_head
 	  alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
@@ -63,24 +63,24 @@ models/wop_players/padman/default_body
 	nomipmaps
 	cull none
 	{
-		map models/wop_players/padman/default_body.tga
+		map models/wop_players/padman/default_body
 		//alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
 	}
 	{
- 		map models/wop_players/padman/default_body.tga
+ 		map models/wop_players/padman/default_body
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
-	
+
 }
 
 models/wop_players/padman/body_blue
@@ -89,24 +89,24 @@ models/wop_players/padman/body_blue
 	nomipmaps
 	cull none
 	{
-		map models/wop_players/padman/body_blue.tga
+		map models/wop_players/padman/body_blue
 		//alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
 	}
 	{
- 		map models/wop_players/padman/body_blue.tga
+ 		map models/wop_players/padman/body_blue
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
-	
+
 }
 
 models/wop_players/padman/cape_blue
@@ -114,10 +114,10 @@ models/wop_players/padman/cape_blue
      	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
         {
-                map models/wop_players/padman/body_blue.tga
+                map models/wop_players/padman/body_blue
                 rgbGen identity
         }
-	
+
 }
 
 models/wop_players/padman/body_red
@@ -126,24 +126,24 @@ models/wop_players/padman/body_red
 	nomipmaps
 	cull none
 	{
-		map models/wop_players/padman/body_red.tga
+		map models/wop_players/padman/body_red
 		//alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
 	}
 	{
- 		map models/wop_players/padman/body_red.tga
+ 		map models/wop_players/padman/body_red
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
-	
+
 }
 
 
@@ -152,10 +152,10 @@ models/wop_players/padman/cape_red
      	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
         {
-                map models/wop_players/padman/body_red.tga
+                map models/wop_players/padman/body_red
                 rgbGen identity
         }
-	
+
 }
 
 
@@ -179,19 +179,19 @@ models/wop_players/padman/padra_cape
      	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
         {
-                map models/wop_players/padman/padra_body.tga
+                map models/wop_players/padman/padra_body
 		alphaFunc ge128
                 rgbGen identity
         }
-	
+
 }
 
 models/wop_players/padman/padra_head
 {
-    
+
     cull disable
         {
-                map models/wop_players/padman/padra_head.tga
+                map models/wop_players/padman/padra_head
                 alphaFunc GE128
 		rgbGen lightingdiffuse
         }
@@ -202,19 +202,19 @@ models/wop_players/padman/padra_cape_blue
      	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
         {
-                map models/wop_players/padman/padra_body_blue.tga
+                map models/wop_players/padman/padra_body_blue
 		alphaFunc ge128
                 rgbGen identity
         }
-	
+
 }
 
 models/wop_players/padman/padra_head_blue
 {
-    
+
     cull disable
         {
-                map models/wop_players/padman/padra_head_blue.tga
+                map models/wop_players/padman/padra_head_blue
                 alphaFunc GE128
 		rgbGen lightingdiffuse
         }
@@ -225,19 +225,19 @@ models/wop_players/padman/padra_cape_red
      	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
         {
-                map models/wop_players/padman/padra_body_red.tga
+                map models/wop_players/padman/padra_body_red
 		alphaFunc ge128
                 rgbGen identity
         }
-	
+
 }
 
 models/wop_players/padman/padra_head_red
 {
-    
+
     cull disable
         {
-                map models/wop_players/padman/padra_head_red.tga
+                map models/wop_players/padman/padra_head_red
                 alphaFunc GE128
 		rgbGen lightingdiffuse
         }
@@ -252,12 +252,12 @@ models/wop_players/padman/padrock_goggles
 {
      cull disable
         {
-                map models/wop_players/padman/padrock_head.tga
+                map models/wop_players/padman/padrock_head
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		map models/wop_players/padman/pad_fx.tga
+		map models/wop_players/padman/pad_fx
 		blendfunc GL_DST_ALPHA GL_DST_ALPHA
 		tcgen environment
 		rgbGen lightingDiffuse
@@ -269,12 +269,12 @@ models/wop_players/padman/padrock_goggles_blue
 {
      cull disable
         {
-                map models/wop_players/padman/padrock_head_blue.tga
+                map models/wop_players/padman/padrock_head_blue
 		alphaFunc ge128
      	        rgbGen lightingDiffuse
         }
 	{
-                map models/wop_players/padman/pad_fx.tga
+                map models/wop_players/padman/pad_fx
 		blendfunc GL_DST_ALPHA GL_DST_ALPHA
                 tcgen environment
 		rgbGen lightingDiffuse
@@ -287,12 +287,12 @@ models/wop_players/padman/padrock_goggles_red
 {
      cull disable
         {
-                map models/wop_players/padman/padrock_head_red.tga
+                map models/wop_players/padman/padrock_head_red
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
 	{
-                map models/wop_players/padman/pad_fx.tga
+                map models/wop_players/padman/pad_fx
 		blendfunc GL_DST_ALPHA GL_DST_ALPHA
                 tcgen environment
 		rgbGen lightingDiffuse
@@ -308,10 +308,10 @@ models/wop_players/padman/padrock_goggles_red
 
 models/wop_players/padman/padsoldier_head
 {
-    
+
     cull disable
         {
-                map models/wop_players/padman/padsoldier_head.tga
+                map models/wop_players/padman/padsoldier_head
                 alphaFunc GE128
 		rgbGen lightingdiffuse
         }
@@ -319,10 +319,10 @@ models/wop_players/padman/padsoldier_head
 
 models/wop_players/padman/padsoldier_head_blue
 {
-    
+
     cull disable
         {
-                map models/wop_players/padman/padsoldier_head_blue.tga
+                map models/wop_players/padman/padsoldier_head_blue
                 alphaFunc GE128
 		rgbGen lightingdiffuse
         }
@@ -331,10 +331,10 @@ models/wop_players/padman/padsoldier_head_blue
 
 models/wop_players/padman/padsoldier_head_red
 {
-    
+
     cull disable
         {
-                map models/wop_players/padman/padsoldier_head_red.tga
+                map models/wop_players/padman/padsoldier_head_red
                 alphaFunc GE128
 		rgbGen lightingdiffuse
         }
@@ -347,10 +347,10 @@ models/wop_players/padman/padsoldier_head_red
 
 models/wop_players/padman/stonepad_head
 {
-    
+
     cull disable
         {
-                map models/wop_players/padman/stonepad_head.tga
+                map models/wop_players/padman/stonepad_head
                 alphaFunc GE128
 		rgbGen lightingdiffuse
         }
@@ -358,10 +358,10 @@ models/wop_players/padman/stonepad_head
 
 models/wop_players/padman/stonepad_head_blue
 {
-    
+
     cull disable
         {
-                map models/wop_players/padman/stonepad_head_blue.tga
+                map models/wop_players/padman/stonepad_head_blue
                 alphaFunc GE128
 		rgbGen lightingdiffuse
         }
@@ -369,10 +369,10 @@ models/wop_players/padman/stonepad_head_blue
 
 models/wop_players/padman/stonepad_head_red
 {
-    
+
     cull disable
         {
-                map models/wop_players/padman/stonepad_head_red.tga
+                map models/wop_players/padman/stonepad_head_red
                 alphaFunc GE128
 		rgbGen lightingdiffuse
         }
@@ -387,12 +387,12 @@ models/wop_players/padman/superpad_goggles
 {
      cull disable
         {
-                map models/wop_players/padman/superpad_head.tga
+                map models/wop_players/padman/superpad_head
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		map models/wop_players/padman/pad_fx.tga
+		map models/wop_players/padman/pad_fx
 		blendfunc GL_DST_ALPHA GL_DST_ALPHA
 		tcgen environment
 		rgbGen lightingDiffuse
@@ -406,19 +406,19 @@ models/wop_players/padman/superpad_head
 	nomipmaps
 	cull none
         {
-                map models/wop_players/padman/superpad_head.tga
+                map models/wop_players/padman/superpad_head
 	  //alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
         }
         {
-                map models/wop_players/padman/superpad_head.tga
+                map models/wop_players/padman/superpad_head
 	  alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
@@ -430,19 +430,19 @@ models/wop_players/padman/superpad_body
 	nomipmaps
 	cull none
         {
-                map models/wop_players/padman/superpad_body.tga
+                map models/wop_players/padman/superpad_body
 	  //alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
         }
         {
-                map models/wop_players/padman/superpad_body.tga
+                map models/wop_players/padman/superpad_body
 	  alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
@@ -453,23 +453,23 @@ models/wop_players/padman/superpad_cape
      	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
         {
-                map models/wop_players/padman/superpad_body.tga
+                map models/wop_players/padman/superpad_body
 		alphaFunc ge128
                 rgbGen identity
         }
-	
+
 }
 
 models/wop_players/padman/superpad_goggles_blue
 {
      cull disable
         {
-                map models/wop_players/padman/superpad_head_blue.tga
+                map models/wop_players/padman/superpad_head_blue
 		alphaFunc ge128
      	        rgbGen lightingDiffuse
         }
         {
-		map models/wop_players/padman/pad_fx.tga
+		map models/wop_players/padman/pad_fx
 		blendfunc GL_DST_ALPHA GL_DST_ALPHA
 		tcgen environment
 		rgbGen lightingDiffuse
@@ -482,11 +482,11 @@ models/wop_players/padman/superpad_cape_blue
      	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
         {
-                map models/wop_players/padman/superpad_body_blue.tga
+                map models/wop_players/padman/superpad_body_blue
 		alphaFunc ge128
                 rgbGen identity
         }
-	
+
 }
 
 models/wop_players/padman/superpad_head_blue
@@ -495,19 +495,19 @@ models/wop_players/padman/superpad_head_blue
 	nomipmaps
 	cull none
         {
-                map models/wop_players/padman/superpad_head_blue.tga
+                map models/wop_players/padman/superpad_head_blue
 	  //alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
         }
         {
-                map models/wop_players/padman/superpad_head_blue.tga
+                map models/wop_players/padman/superpad_head_blue
 	  alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
@@ -519,19 +519,19 @@ models/wop_players/padman/superpad_body_blue
 	nomipmaps
 	cull none
         {
-                map models/wop_players/padman/superpad_body_blue.tga
+                map models/wop_players/padman/superpad_body_blue
 	  //alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
         }
         {
-                map models/wop_players/padman/superpad_body_blue.tga
+                map models/wop_players/padman/superpad_body_blue
 	  alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
@@ -541,12 +541,12 @@ models/wop_players/padman/superpad_goggles_red
 {
      cull disable
         {
-                map models/wop_players/padman/superpad_head_red.tga
+                map models/wop_players/padman/superpad_head_red
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
         {
-		map models/wop_players/padman/pad_fx.tga
+		map models/wop_players/padman/pad_fx
 		blendfunc GL_DST_ALPHA GL_DST_ALPHA
 		tcgen environment
 		rgbGen lightingDiffuse
@@ -559,11 +559,11 @@ models/wop_players/padman/superpad_cape_red
      	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
         {
-                map models/wop_players/padman/superpad_body_red.tga
+                map models/wop_players/padman/superpad_body_red
 		alphaFunc ge128
                 rgbGen identity
         }
-	
+
 }
 
 models/wop_players/padman/superpad_head_red
@@ -572,19 +572,19 @@ models/wop_players/padman/superpad_head_red
 	nomipmaps
 	cull none
         {
-                map models/wop_players/padman/superpad_head_red.tga
+                map models/wop_players/padman/superpad_head_red
 	  //alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
         }
         {
-                map models/wop_players/padman/superpad_head_red.tga
+                map models/wop_players/padman/superpad_head_red
 	  alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
@@ -596,19 +596,19 @@ models/wop_players/padman/superpad_body_red
 	nomipmaps
 	cull none
         {
-                map models/wop_players/padman/superpad_body_red.tga
+                map models/wop_players/padman/superpad_body_red
 	  //alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
         }
         {
-                map models/wop_players/padman/superpad_body_red.tga
+                map models/wop_players/padman/superpad_body_red
 	  alphaFunc ge128
 	  rgbGen lightingDiffuse
         }
@@ -623,29 +623,29 @@ models/wop_players/monster/monsterhawk_body
 {
      cull disable
         {
-                map models/wop_players/monster/monsterhawk_body.tga
+                map models/wop_players/monster/monsterhawk_body
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/monster/monsterhawk_body_blue
 {
      	cull disable
         {
-                map models/wop_players/monster/monsterhawk_body_blue.tga
+                map models/wop_players/monster/monsterhawk_body_blue
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
-	
+
 }
 
 models/wop_players/monster/monsterhawk_body_red
 {
      cull disable
         {
-                map models/wop_players/monster/monsterhawk_body_red.tga
+                map models/wop_players/monster/monsterhawk_body_red
 		alphaFunc ge128
      	        rgbGen lightingDiffuse
         }
@@ -656,18 +656,18 @@ models/wop_players/monster/monsterhawk_head
 {
      	cull disable
         {
-                map models/wop_players/monster/monsterhawk_head.tga
+                map models/wop_players/monster/monsterhawk_head
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
-	
+
 }
 
 models/wop_players/monster/monsterhawk_head_blue
 {
      cull disable
         {
-                map models/wop_players/monster/monsterhawk_head_blue.tga
+                map models/wop_players/monster/monsterhawk_head_blue
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
@@ -678,11 +678,11 @@ models/wop_players/monster/monsterhawk_head_red
 {
      	cull disable
         {
-                map models/wop_players/monster/monsterhawk_head_red.tga
+                map models/wop_players/monster/monsterhawk_head_red
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
-	
+
 }
 
 
@@ -694,11 +694,11 @@ models/wop_players/monster/monsterhawk_head_red
 //{
 //     cull disable
 //        {
-//                map models/wop_players/monsterpad/monsterhawk_upper.tga
+//                map models/wop_players/monsterpad/monsterhawk_upper
 //		alphaFunc ge128
 //		rgbGen lightingDiffuse
 //        }
-// 
+//
 //}
 //
 //
@@ -706,11 +706,11 @@ models/wop_players/monster/monsterhawk_head_red
 //{
 //     	cull disable
 //        {
-//                map models/wop_players/monsterpad/monsterhawk_upper_blue.tga
+//                map models/wop_players/monsterpad/monsterhawk_upper_blue
 //		alphaFunc ge128
 //                rgbGen lightingDiffuse
 //        }
-//	
+//
 //}
 //
 //
@@ -718,7 +718,7 @@ models/wop_players/monster/monsterhawk_head_red
 //{
 //     cull disable
 //        {
-//                map models/wop_players/monsterpad/monsterhawk_upper_red.tga
+//                map models/wop_players/monsterpad/monsterhawk_upper_red
 //		alphaFunc ge128
 //     	        rgbGen lightingDiffuse
 //        }
@@ -728,11 +728,11 @@ models/wop_players/monster/monsterhawk_head_red
 //{
 //     	cull disable
 //        {
-//                map models/wop_players/monsterpad/monsterhawk_head.tga
+//                map models/wop_players/monsterpad/monsterhawk_head
 //		alphaFunc ge128
 //                rgbGen lightingDiffuse
 //        }
-//	
+//
 //}
 //
 //
@@ -741,7 +741,7 @@ models/wop_players/monster/monsterhawk_head_red
 //{
 //     cull disable
 //        {
-//                map models/wop_players/monsterpad/monsterhawk_head_blue.tga
+//                map models/wop_players/monsterpad/monsterhawk_head_blue
 //		alphaFunc ge128
 //                rgbGen lightingDiffuse
 //        }
@@ -752,11 +752,11 @@ models/wop_players/monster/monsterhawk_head_red
 //{
 //     	cull disable
 //        {
-//                map models/wop_players/monsterpad/monsterhawk_head_red.tga
+//                map models/wop_players/monsterpad/monsterhawk_head_red
 //		alphaFunc ge128
 //                rgbGen lightingDiffuse
 //        }
-//	
+//
 //}
 
 
@@ -768,99 +768,99 @@ models/wop_players/padking/default_head
 {
      cull disable
         {
-                map models/wop_players/padking/default_head.tga
+                map models/wop_players/padking/default_head
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/default_lower
 {
      cull disable
         {
-                map models/wop_players/padking/default_lower.tga
+                map models/wop_players/padking/default_lower
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/default_upper
 {
      cull disable
         {
-                map models/wop_players/padking/default_upper.tga
+                map models/wop_players/padking/default_upper
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/head_red
 {
      cull disable
         {
-                map models/wop_players/padking/head_red.tga
+                map models/wop_players/padking/head_red
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/lower_red
 {
      cull disable
         {
-                map models/wop_players/padking/lower_red.tga
+                map models/wop_players/padking/lower_red
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/upper_red
 {
      cull disable
         {
-                map models/wop_players/padking/upper_red.tga
+                map models/wop_players/padking/upper_red
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/head_blue
 {
      cull disable
         {
-                map models/wop_players/padking/head_blue.tga
+                map models/wop_players/padking/head_blue
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/lower_blue
 {
      cull disable
         {
-                map models/wop_players/padking/lower_blue.tga
+                map models/wop_players/padking/lower_blue
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/upper_blue
 {
      cull disable
         {
-                map models/wop_players/padking/upper_blue.tga
+                map models/wop_players/padking/upper_blue
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 
@@ -872,47 +872,47 @@ models/wop_players/padking/head_padknight
 {
      cull disable
         {
-                map models/wop_players/padking/head_padknight.tga
+                map models/wop_players/padking/head_padknight
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/padknight_feather
 {
      cull none
         {
-                map models/wop_players/padking/head_padknight.tga
+                map models/wop_players/padking/head_padknight
 		alphaFunc GE128
 		rgbGen identityLighting
         }
         {
-                map models/wop_players/padking/head_padknight.tga
+                map models/wop_players/padking/head_padknight
 		blendfunc gl_src_alpha gl_one_minus_src_alpha
 		//rgbGen lightingDiffuse
 		rgbGen identityLighting
         }
- 
+
 }
 
 models/wop_players/padking/lower_padknight
 {
      cull disable
         {
-                map models/wop_players/padking/lower_padknight.tga
+                map models/wop_players/padking/lower_padknight
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/upper_padknight
 {
      cull disable
         {
-                map models/wop_players/padking/upper_padknight.tga
+                map models/wop_players/padking/upper_padknight
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 
@@ -920,47 +920,47 @@ models/wop_players/padking/padknight_head_red
 {
      cull disable
         {
-                map 	models/wop_players/padking/padknight_head_red.tga
+                map 	models/wop_players/padking/padknight_head_red
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/padknight_feather_red
 {
      cull none
         {
-                map models/wop_players/padking/padknight_head_red.tga
+                map models/wop_players/padking/padknight_head_red
 		alphaFunc GE128
 		rgbGen identityLighting
         }
         {
-                map models/wop_players/padking/padknight_head_red.tga
+                map models/wop_players/padking/padknight_head_red
 		blendfunc gl_src_alpha gl_one_minus_src_alpha
 		//rgbGen lightingDiffuse
 		rgbGen identityLighting
         }
- 
+
 }
 
 models/wop_players/padking/padknight_lower_red
 {
      cull disable
         {
-                map models/wop_players/padking/padknight_lower_red.tga
+                map models/wop_players/padking/padknight_lower_red
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/padknight_upper_red
 {
      cull disable
         {
-                map models/wop_players/padking/padknight_upper_red.tga
+                map models/wop_players/padking/padknight_upper_red
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 
@@ -968,47 +968,47 @@ models/wop_players/padking/padknight_head_blue
 {
      cull disable
         {
-                map models/wop_players/padking/padknight_head_blue.tga
+                map models/wop_players/padking/padknight_head_blue
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/padknight_feather_blue
 {
      cull none
         {
-                map models/wop_players/padking/padknight_head_blue.tga
+                map models/wop_players/padking/padknight_head_blue
 		alphaFunc GE128
 		rgbGen identityLighting
         }
         {
-                map models/wop_players/padking/padknight_head_blue.tga
+                map models/wop_players/padking/padknight_head_blue
 		blendfunc gl_src_alpha gl_one_minus_src_alpha
 		//rgbGen lightingDiffuse
 		rgbGen identityLighting
         }
- 
+
 }
 
 models/wop_players/padking/padknight_lower_blue
 {
      cull disable
         {
-                map models/wop_players/padking/padknight_lower_blue.tga
+                map models/wop_players/padking/padknight_lower_blue
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padking/padknight_upper_blue
 {
      cull disable
         {
-                map models/wop_players/padking/padknight_upper_blue.tga
+                map models/wop_players/padking/padknight_upper_blue
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 
@@ -1020,12 +1020,12 @@ models/wop_players/padpunk/default_goggles
 {
      cull disable
         {
-                map models/wop_players/padpunk/default_legs.tga
+                map models/wop_players/padpunk/default_legs
 		alphaFunc ge128
 	        rgbGen lightingDiffuse
         }
 	{
-                map models/wop_players/padman/pad_fx.tga
+                map models/wop_players/padman/pad_fx
 		blendfunc GL_DST_ALPHA GL_DST_ALPHA
                 tcgen environment
 		rgbGen lightingDiffuse
@@ -1043,33 +1043,33 @@ models/wop_players/padcho/lower_default
 {
      cull disable
         {
-                map models/wop_players/padcho/lower_default.tga
+                map models/wop_players/padcho/lower_default
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padcho/lower_red
 {
      cull disable
         {
-                map models/wop_players/padcho/lower_red.tga
+                map models/wop_players/padcho/lower_red
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 models/wop_players/padcho/lower_blue
 {
      cull disable
         {
-                map models/wop_players/padcho/lower_blue.tga
+                map models/wop_players/padcho/lower_blue
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
- 
+
 }
 
 
@@ -1081,19 +1081,19 @@ models/wop_players/piratepad/spooky_head_default
 {
      cull disable
         {
-                map models/wop_players/piratepad/spooky_head_default.tga
+                map models/wop_players/piratepad/spooky_head_default
 	blendfunc GL_ONE GL_ZERO
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		
-                map models/wop_players/piratepad/beam.tga
+
+                map models/wop_players/piratepad/beam
                 tcMod scroll -5 -.3
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen lightingDiffuse
-	}    
+	}
 
 
 }
@@ -1102,38 +1102,38 @@ models/wop_players/piratepad/spooky_head_red
 {
      cull disable
         {
-                map models/wop_players/piratepad/spooky_head_red.tga
+                map models/wop_players/piratepad/spooky_head_red
 	blendfunc GL_ONE GL_ZERO
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		
-                map models/wop_players/piratepad/beam.tga
+
+                map models/wop_players/piratepad/beam
                 tcMod scroll -5 -.3
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen lightingDiffuse
-	}    
+	}
 }
 
 models/wop_players/piratepad/spooky_head_blue
 {
      cull disable
         {
-                map models/wop_players/piratepad/spooky_head_blue.tga
+                map models/wop_players/piratepad/spooky_head_blue
 	blendfunc GL_ONE GL_ZERO
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		
-                map models/wop_players/piratepad/beam.tga
+
+                map models/wop_players/piratepad/beam
                 tcMod scroll -5 -.3
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen lightingDiffuse
-	}    
+	}
 }
 
 models/wop_players/piratepad/spooky_torso_default
@@ -1141,19 +1141,19 @@ models/wop_players/piratepad/spooky_torso_default
 
     cull disable
         {
-                map models/wop_players/piratepad/spooky_torso_default.tga
+                map models/wop_players/piratepad/spooky_torso_default
 	blendfunc GL_ONE GL_ZERO
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		
-                map models/wop_players/piratepad/beam.tga
+
+                map models/wop_players/piratepad/beam
                 tcMod scroll -5 -.3
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen lightingDiffuse
-	}    
+	}
 }
 
 models/wop_players/piratepad/spooky_torso_red
@@ -1161,19 +1161,19 @@ models/wop_players/piratepad/spooky_torso_red
 
     cull disable
         {
-                map models/wop_players/piratepad/spooky_torso_red.tga
+                map models/wop_players/piratepad/spooky_torso_red
 	blendfunc GL_ONE GL_ZERO
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		
-                map models/wop_players/piratepad/beam.tga
+
+                map models/wop_players/piratepad/beam
                 tcMod scroll -5 -.3
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen lightingDiffuse
-	}    
+	}
 }
 
 models/wop_players/piratepad/spooky_torso_blue
@@ -1181,79 +1181,79 @@ models/wop_players/piratepad/spooky_torso_blue
 
     cull disable
         {
-                map models/wop_players/piratepad/spooky_torso_blue.tga
+                map models/wop_players/piratepad/spooky_torso_blue
 	blendfunc GL_ONE GL_ZERO
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		
-                map models/wop_players/piratepad/beam.tga
+
+                map models/wop_players/piratepad/beam
                 tcMod scroll -5 -.3
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen lightingDiffuse
-	}    
+	}
 }
 
 models/wop_players/piratepad/spooky_legs_default
 {
-    
+
     cull disable
         {
-                map models/wop_players/piratepad/spooky_legs_default.tga
+                map models/wop_players/piratepad/spooky_legs_default
 	blendfunc GL_ONE GL_ZERO
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		
-                map models/wop_players/piratepad/beam.tga
+
+                map models/wop_players/piratepad/beam
                 tcMod scroll -5 -.3
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen lightingDiffuse
-	}    
+	}
 }
 
 models/wop_players/piratepad/spooky_legs_red
 {
-    
+
     cull disable
         {
-                map models/wop_players/piratepad/spooky_legs_red.tga
+                map models/wop_players/piratepad/spooky_legs_red
 	blendfunc GL_ONE GL_ZERO
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		
-                map models/wop_players/piratepad/beam.tga
+
+                map models/wop_players/piratepad/beam
                 tcMod scroll -5 -.3
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen lightingDiffuse
-	}    
+	}
 }
 
 models/wop_players/piratepad/spooky_legs_blue
 {
-    
+
     cull disable
         {
-                map models/wop_players/piratepad/spooky_legs_blue.tga
+                map models/wop_players/piratepad/spooky_legs_blue
 	blendfunc GL_ONE GL_ZERO
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
         {
-		
-                map models/wop_players/piratepad/beam.tga
+
+                map models/wop_players/piratepad/beam
                 tcMod scroll -5 -.3
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen lightingDiffuse
-	}    
+	}
 }
 
 
@@ -1268,20 +1268,20 @@ models/wop_players/padgirl/padbabebody
 	nomipmaps
 	cull none
 	{
-		map models/wop_players/padgirl/padbabebody.tga
+		map models/wop_players/padgirl/padbabebody
 		//alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
                             rgbGen lightingdiffuse
 	}
 	{
-		map models/wop_players/padgirl/padbabebody.tga
+		map models/wop_players/padgirl/padbabebody
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
@@ -1292,19 +1292,19 @@ models/wop_players/padgirl/padbabe_blue_body
               cull disable
 
 	{
-		map models/wop_players/padgirl/padbabe_blue_body.tga
+		map models/wop_players/padgirl/padbabe_blue_body
 		//alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
                             rgbGen lightingdiffuse
 	}
 	{
-		map models/wop_players/padgirl/padbabe_blue_body.tga
+		map models/wop_players/padgirl/padbabe_blue_body
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
@@ -1316,19 +1316,19 @@ models/wop_players/padgirl/padbabe_red_body
 	nomipmaps
 
 	{
-		map models/wop_players/padgirl/padbabe_red_body.tga
+		map models/wop_players/padgirl/padbabe_red_body
 		//alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
                             rgbGen lightingdiffuse
 	}
 	{
-		map models/wop_players/padgirl/padbabe_red_body.tga
+		map models/wop_players/padgirl/padbabe_red_body
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
@@ -1345,20 +1345,20 @@ models/wop_players/padgirl/padgrlbd
 	nomipmaps
 	cull none
 	{
-		map models/wop_players/padgirl/padgrlbd.tga
+		map models/wop_players/padgirl/padgrlbd
 		//alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
 		rgbGen lightingdiffuse
 	}
 	{
-		map models/wop_players/padgirl/padgrlbd.tga
+		map models/wop_players/padgirl/padgrlbd
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
@@ -1369,19 +1369,19 @@ models/wop_players/padgirl/padgrlbd_blue
         cull disable
 
 	{
-		map models/wop_players/padgirl/padgrlbd_blue.tga
+		map models/wop_players/padgirl/padgrlbd_blue
 		//alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
                             rgbGen lightingdiffuse
 	}
 	{
-		map models/wop_players/padgirl/padgrlbd_blue.tga
+		map models/wop_players/padgirl/padgrlbd_blue
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
@@ -1392,19 +1392,19 @@ models/wop_players/padgirl/padgrlbd_red
 	nopicmip
 	nomipmaps
 	{
-		map models/wop_players/padgirl/padgrlbd_red.tga
+		map models/wop_players/padgirl/padgrlbd_red
 		//alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
                             rgbGen lightingdiffuse
 	}
 	{
-		map models/wop_players/padgirl/padgrlbd_red.tga
+		map models/wop_players/padgirl/padgrlbd_red
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
@@ -1419,7 +1419,7 @@ models/wop_players/paddybell/default_wings
 {
      cull none
         {
-                map models/wop_players/paddybell/default_body.tga
+                map models/wop_players/paddybell/default_body
 		blendfunc blend
 		rgbGen lightingdiffuse
         }
@@ -1429,7 +1429,7 @@ models/wop_players/paddybell/default_wings_red
 {
      cull none
         {
-                map models/wop_players/paddybell/default_body_red.tga
+                map models/wop_players/paddybell/default_body_red
 		blendfunc blend
 		rgbGen lightingdiffuse
         }
@@ -1439,7 +1439,7 @@ models/wop_players/paddybell/default_wings_blue
 {
      cull none
         {
-                map models/wop_players/paddybell/default_body_blue.tga
+                map models/wop_players/paddybell/default_body_blue
 		blendfunc blend
 		rgbGen lightingdiffuse
         }
@@ -1454,7 +1454,7 @@ models/wop_players/paddybell/badpaddy_wings
 {
      cull none
         {
-                map models/wop_players/paddybell/badpaddy_body.tga
+                map models/wop_players/paddybell/badpaddy_body
 		blendfunc blend
 		rgbGen lightingdiffuse
         }
@@ -1464,7 +1464,7 @@ models/wop_players/paddybell/badpaddy_wings_blue
 {
      cull none
         {
-                map models/wop_players/paddybell/badpaddy_body_blue.tga
+                map models/wop_players/paddybell/badpaddy_body_blue
 		blendfunc blend
 		rgbGen lightingdiffuse
         }
@@ -1480,18 +1480,18 @@ models/wop_players/paddybell/paddybee_head
 	nopicmip
 	nomipmaps
 	{
-		map models/wop_players/paddybell/paddybee_head.tga
+		map models/wop_players/paddybell/paddybee_head
 		rgbGen lightingdiffuse
 	}
 	{
-		map textures/pad_gfx02/tinpad3a.tga
+		map textures/pad_gfx02/tinpad3a
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
                 rgbGen lightingdiffuse
 	}
 	{
-		map models/wop_players/paddybell/paddybee_head.tga
+		map models/wop_players/paddybell/paddybee_head
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
@@ -1503,18 +1503,18 @@ models/wop_players/paddybell/paddybee_head_red
 	nopicmip
 	nomipmaps
 	{
-		map models/wop_players/paddybell/paddybee_head_red.tga
+		map models/wop_players/paddybell/paddybee_head_red
 		rgbGen lightingdiffuse
 	}
 	{
-		map textures/pad_gfx02/tinpad3a.tga
+		map textures/pad_gfx02/tinpad3a
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
                 rgbGen lightingdiffuse
 	}
 	{
-		map models/wop_players/paddybell/paddybee_head_red.tga
+		map models/wop_players/paddybell/paddybee_head_red
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
@@ -1525,18 +1525,18 @@ models/wop_players/paddybell/paddybee_head_blue
 	nopicmip
 	nomipmaps
 	{
-		map models/wop_players/paddybell/paddybee_head_blue.tga
+		map models/wop_players/paddybell/paddybee_head_blue
 		rgbGen lightingdiffuse
 	}
 	{
-		map textures/pad_gfx02/tinpad3a.tga
+		map textures/pad_gfx02/tinpad3a
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
                 rgbGen lightingdiffuse
 	}
 	{
-		map models/wop_players/paddybell/paddybee_head_blue.tga
+		map models/wop_players/paddybell/paddybee_head_blue
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
@@ -1546,7 +1546,7 @@ models/wop_players/paddybell/paddybee_wings
 {
      cull disable
         {
-                map models/wop_players/paddybell/paddybee_body.tga
+                map models/wop_players/paddybell/paddybee_body
 		blendfunc blend
 		rgbGen lightingdiffuse
         }
@@ -1556,7 +1556,7 @@ models/wop_players/paddybell/paddybee_wings_red
 {
      cull disable
         {
-                map models/wop_players/paddybell/paddybee_body_red.tga
+                map models/wop_players/paddybell/paddybee_body_red
 		blendfunc blend
 		rgbGen lightingdiffuse
         }
@@ -1566,7 +1566,7 @@ models/wop_players/paddybell/paddybee_wings_blue
 {
      cull disable
         {
-                map models/wop_players/paddybell/paddybee_body_blue.tga
+                map models/wop_players/paddybell/paddybee_body_blue
 		blendfunc blend
 		rgbGen lightingdiffuse
         }

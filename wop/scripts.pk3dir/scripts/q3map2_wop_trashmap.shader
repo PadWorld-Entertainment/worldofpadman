@@ -8,17 +8,17 @@ wop_trashmap/AA0C0A6AD2AEEAFBCA6FC2A618745986
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0022.tga
+		map maps/wop_trashmap/lm_0022
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -30,17 +30,17 @@ wop_trashmap/C9F02C6E291F2CF74FA569E51223E0EE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0016.tga
+		map maps/wop_trashmap/lm_0016
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -52,17 +52,17 @@ wop_trashmap/736D32B740F28546D86081A868AF9891
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0020.tga
+		map maps/wop_trashmap/lm_0020
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -74,17 +74,17 @@ wop_trashmap/31A9FC418A6B5FEE321B02B18249D21D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0017.tga
+		map maps/wop_trashmap/lm_0017
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -96,17 +96,17 @@ wop_trashmap/EFBA601DDD4BECDB031ADD9B8A0210D6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0018.tga
+		map maps/wop_trashmap/lm_0018
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -118,17 +118,17 @@ wop_trashmap/3D7339D9DB115F353E8CEBD6A14F6FE4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0016.tga
+		map maps/wop_trashmap/lm_0016
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -140,17 +140,17 @@ wop_trashmap/FCA589916D63F0047658A1EC9B38E8CD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0021.tga
+		map maps/wop_trashmap/lm_0021
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -162,17 +162,17 @@ wop_trashmap/1BC81295E9435A9F5548442D052A70C7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0017.tga
+		map maps/wop_trashmap/lm_0017
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -184,17 +184,17 @@ wop_trashmap/5F91327CBF9D877B91882BA5BC37BF8B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0037.tga
+		map maps/wop_trashmap/lm_0037
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -206,17 +206,17 @@ wop_trashmap/9049D74DFACA1B0A2D22128EE6A1EC82
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0036.tga
+		map maps/wop_trashmap/lm_0036
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -228,17 +228,17 @@ wop_trashmap/167EE43282004290B67CDF88492A7EE0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0044.tga
+		map maps/wop_trashmap/lm_0044
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -250,17 +250,17 @@ wop_trashmap/D7CE0993AB4D30F8BFD1F5746C5D392A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0026.tga
+		map maps/wop_trashmap/lm_0026
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -272,17 +272,17 @@ wop_trashmap/1BF7E78F81EBF88747639AC7ECF6896E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0002.tga
+		map maps/wop_trashmap/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/gumkabel.tga
+		map textures/pad_garden/gumkabel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -294,17 +294,17 @@ wop_trashmap/3796CE82491FA0E3B5C7CBAF40F13E88
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/gumkabel.tga
+		map textures/pad_garden/gumkabel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -316,17 +316,17 @@ wop_trashmap/C67BBD78C184B42E8D3A097276486675
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0045.tga
+		map maps/wop_trashmap/lm_0045
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -338,17 +338,17 @@ wop_trashmap/60F3CE577519DF8106ADE14176B9751F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0043.tga
+		map maps/wop_trashmap/lm_0043
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -360,7 +360,7 @@ wop_trashmap/77C0DDF1C8E7FA6534C087946C80CDAD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -371,7 +371,7 @@ wop_trashmap/77C0DDF1C8E7FA6534C087946C80CDAD
 	}
 
 	{
-		map textures/pad_jail/pad_jail_pipes1.tga
+		map textures/pad_jail/pad_jail_pipes1
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -383,17 +383,17 @@ wop_trashmap/998A8994365CF2EA16359A2F1082DC7C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0010.tga
+		map maps/wop_trashmap/lm_0010
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_pipes1.tga
+		map textures/pad_jail/pad_jail_pipes1
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -405,17 +405,17 @@ wop_trashmap/2B8F894F5AB6BA2C079DDF21B7ADD606
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0011.tga
+		map maps/wop_trashmap/lm_0011
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_pipes1.tga
+		map textures/pad_jail/pad_jail_pipes1
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -427,17 +427,17 @@ wop_trashmap/62D5D692F5454BC03D39888C6F76DABD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0014.tga
+		map maps/wop_trashmap/lm_0014
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -449,17 +449,17 @@ wop_trashmap/3A74709375FE366A7D8D1FCC554CDC97
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_basket_metal.tga
+		map textures/pad_jail/pad_jail_basket_metal
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -471,17 +471,17 @@ wop_trashmap/879BD93C33A2BE9970989C8789852F67
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0044.tga
+		map maps/wop_trashmap/lm_0044
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_plakat.tga
+		map textures/pad_trash/kb_plakat
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -493,10 +493,10 @@ wop_trashmap/1E7E727DF15EA25C733D3E942683FF47
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -504,7 +504,7 @@ wop_trashmap/1E7E727DF15EA25C733D3E942683FF47
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -516,7 +516,7 @@ wop_trashmap/78FA596B71B0CDB34C4C426B1B3E34A9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -527,7 +527,7 @@ wop_trashmap/78FA596B71B0CDB34C4C426B1B3E34A9
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -539,17 +539,17 @@ wop_trashmap/13C96029998FB8FF6FD0877119F31CAB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -561,17 +561,17 @@ wop_trashmap/94BF9B634D5420084844E1F38F92D948
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0002.tga
+		map maps/wop_trashmap/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -583,17 +583,17 @@ wop_trashmap/B89C115CFE226C3124F1282AF1FC1D8C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_gfx02/git04.tga
+		map textures/pad_gfx02/git04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -605,17 +605,17 @@ wop_trashmap/D2148D3FFE9B578048D2213E01341FBF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_metal10_keyhole.tga
+		map textures/pad_jail/pad_jail_metal10_keyhole
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -627,17 +627,17 @@ wop_trashmap/98A6FF76D71773B37546DAACC4155723
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0009.tga
+		map maps/wop_trashmap/lm_0009
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_metal10_keyhole.tga
+		map textures/pad_jail/pad_jail_metal10_keyhole
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -649,17 +649,17 @@ wop_trashmap/77007A23D876152050FD41758C5AD50E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0034.tga
+		map maps/wop_trashmap/lm_0034
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -671,17 +671,17 @@ wop_trashmap/B01A7CD0F842FFA5ADDBE7BC593BEC8A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -693,17 +693,17 @@ wop_trashmap/CB6884D700CFB8BD314509F5CD540F55
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0032.tga
+		map maps/wop_trashmap/lm_0032
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -715,17 +715,17 @@ wop_trashmap/1A36D38CC7AD04704642C0A99D765030
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0037.tga
+		map maps/wop_trashmap/lm_0037
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -737,17 +737,17 @@ wop_trashmap/9E46EFBE5B568F0499BB2833E8509059
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -759,17 +759,17 @@ wop_trashmap/4FD7DEEA32595EB55CA5805398C0401A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -781,17 +781,17 @@ wop_trashmap/7F83172D557DAF92030933508E8C7CB4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0061.tga
+		map maps/wop_trashmap/lm_0061
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_western/metalrollup0026.tga
+		map textures/pad_western/metalrollup0026
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -803,17 +803,17 @@ wop_trashmap/308E909E431F66BAA58A608BAC77F3EA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0059.tga
+		map maps/wop_trashmap/lm_0059
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_western/metalrollup0026.tga
+		map textures/pad_western/metalrollup0026
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -825,17 +825,17 @@ wop_trashmap/028E56D118FB2801A372AF4E5D191441
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0041.tga
+		map maps/wop_trashmap/lm_0041
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_rand.tga
+		map textures/pad_trash/kb_pflaster_rand
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -847,17 +847,17 @@ wop_trashmap/1EF2C9762DF26AB658BBD2F52E7F9ED5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0009.tga
+		map maps/wop_trashmap/lm_0009
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -869,17 +869,17 @@ wop_trashmap/ED752B49A29A8FA67ECB7E19CC092C80
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -891,7 +891,7 @@ wop_trashmap/E4838EEC17D36C36D82F43B2C443C656
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -902,7 +902,7 @@ wop_trashmap/E4838EEC17D36C36D82F43B2C443C656
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -914,7 +914,7 @@ wop_trashmap/C2C4F9A665AF0A976FE4DAAF90277C6B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -925,7 +925,7 @@ wop_trashmap/C2C4F9A665AF0A976FE4DAAF90277C6B
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -937,10 +937,10 @@ wop_trashmap/687D744DD421434CBF61446346D65391
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0029.tga
+		map maps/wop_trashmap/lm_0029
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -948,7 +948,7 @@ wop_trashmap/687D744DD421434CBF61446346D65391
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -960,17 +960,17 @@ wop_trashmap/2D76E41D4491F3861AB7F6570AC8E2D7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0029.tga
+		map maps/wop_trashmap/lm_0029
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -982,17 +982,17 @@ wop_trashmap/4C140FFABA313143DD5CA9F9BA651A3D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0028.tga
+		map maps/wop_trashmap/lm_0028
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1004,7 +1004,7 @@ wop_trashmap/5F1535811F5D5B55B679B5F4726FA463
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -1015,7 +1015,7 @@ wop_trashmap/5F1535811F5D5B55B679B5F4726FA463
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1027,7 +1027,7 @@ wop_trashmap/A99E67C7280CCBA74E0EDDB0FD43B1BA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -1038,7 +1038,7 @@ wop_trashmap/A99E67C7280CCBA74E0EDDB0FD43B1BA
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1050,17 +1050,17 @@ wop_trashmap/BEEBC0502CCEE37131568CA7B03C07A4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_sockel.tga
+		map textures/pad_trash/kb_mauerwerk_sockel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1072,17 +1072,17 @@ wop_trashmap/3316F86910B9AEECF8F68AFF958E6C33
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1094,10 +1094,10 @@ wop_trashmap/21921152DD842779F9F091F7D5AD287F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0016.tga
+		map maps/wop_trashmap/lm_0016
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -1105,7 +1105,7 @@ wop_trashmap/21921152DD842779F9F091F7D5AD287F
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1117,17 +1117,17 @@ wop_trashmap/E669897485816964C01CAABBE8620E9D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0030.tga
+		map maps/wop_trashmap/lm_0030
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1139,17 +1139,17 @@ wop_trashmap/EA179465B6777EF43EE5569FE4B2D06D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0032.tga
+		map maps/wop_trashmap/lm_0032
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1161,17 +1161,17 @@ wop_trashmap/E9F1BE7B1CF3C887E5BEEFBF463C19FA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0033.tga
+		map maps/wop_trashmap/lm_0033
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1183,17 +1183,17 @@ wop_trashmap/365E154ACAF0827415D253A3FAB5E630
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0039.tga
+		map maps/wop_trashmap/lm_0039
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1205,17 +1205,17 @@ wop_trashmap/48CB66688773EB2BE188E1263855BCDF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0020.tga
+		map maps/wop_trashmap/lm_0020
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1227,17 +1227,17 @@ wop_trashmap/94A7DDC3C5B2C5A305028C7364897A81
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1249,10 +1249,10 @@ wop_trashmap/81D21B12CFD62A8876A100BA70194FA4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -1260,7 +1260,7 @@ wop_trashmap/81D21B12CFD62A8876A100BA70194FA4
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1272,10 +1272,10 @@ wop_trashmap/CBB789A6EFE7A5D767DFB86BBBDCF228
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -1283,7 +1283,7 @@ wop_trashmap/CBB789A6EFE7A5D767DFB86BBBDCF228
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1295,17 +1295,17 @@ wop_trashmap/494FC9FB49CAE85AC29DB3394D8F6A70
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1317,17 +1317,17 @@ wop_trashmap/12E9782617BA3AA4AD411640312F3050
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0041.tga
+		map maps/wop_trashmap/lm_0041
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_gross.tga
+		map textures/pad_trash/kb_pflaster_gross
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1339,17 +1339,17 @@ wop_trashmap/7223E27A88FB5B6B60E4D018273479AD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1361,17 +1361,17 @@ wop_trashmap/B459F502B47AECB2B4D86B1F48B8F07E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0044.tga
+		map maps/wop_trashmap/lm_0044
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1383,17 +1383,17 @@ wop_trashmap/AB2C513157F161B09428D4BA80AF7EBA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0047.tga
+		map maps/wop_trashmap/lm_0047
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1405,17 +1405,17 @@ wop_trashmap/2548FAEEC3CC5A9F5AF79789773D64C6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0053.tga
+		map maps/wop_trashmap/lm_0053
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1427,17 +1427,17 @@ wop_trashmap/EC04C2BB6110C0311C63EE31274BD4AD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1449,17 +1449,17 @@ wop_trashmap/66818CAFC3AB02E74F7BB48C5E588F01
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0041.tga
+		map maps/wop_trashmap/lm_0041
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1471,17 +1471,17 @@ wop_trashmap/3AFF556373E1A8B30C18B70468FF810C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0030.tga
+		map maps/wop_trashmap/lm_0030
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1493,17 +1493,17 @@ wop_trashmap/5701DDB9A98EE1776628F53B8BF8A342
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0045.tga
+		map maps/wop_trashmap/lm_0045
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1515,17 +1515,17 @@ wop_trashmap/F38CAA3AE6BD3DBCE0664C394BFC47F1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0056.tga
+		map maps/wop_trashmap/lm_0056
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1537,17 +1537,17 @@ wop_trashmap/900FA1A4ABAABAF0B0EC5AB486B42A41
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0010.tga
+		map maps/wop_trashmap/lm_0010
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1559,17 +1559,17 @@ wop_trashmap/338308BCAB92FE3D43FEADD2F6778420
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1581,17 +1581,17 @@ wop_trashmap/4F9AD84C7EC6A32614B1B8A1AD0A72B4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0018.tga
+		map maps/wop_trashmap/lm_0018
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1603,17 +1603,17 @@ wop_trashmap/6B1FEE16637CC4F3F8344472DC0BC45A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0038.tga
+		map maps/wop_trashmap/lm_0038
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1625,17 +1625,17 @@ wop_trashmap/51C49EF55953E4745736E6365DF6BD44
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0036.tga
+		map maps/wop_trashmap/lm_0036
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1647,17 +1647,17 @@ wop_trashmap/6A4E9ACC4C12127374A6267771991549
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0035.tga
+		map maps/wop_trashmap/lm_0035
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1669,17 +1669,17 @@ wop_trashmap/0FA52168DB2EB1EC3712AE240F55EF4E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0043.tga
+		map maps/wop_trashmap/lm_0043
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1691,17 +1691,17 @@ wop_trashmap/486C75F2F8752A1B55CB1FAEF41FD147
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0037.tga
+		map maps/wop_trashmap/lm_0037
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1713,17 +1713,17 @@ wop_trashmap/1D29863BA07B23548B71F4B3FD56C460
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0034.tga
+		map maps/wop_trashmap/lm_0034
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1735,17 +1735,17 @@ wop_trashmap/F91408F94A809F1B25FF7CF6676EBDDA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0040.tga
+		map maps/wop_trashmap/lm_0040
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1757,17 +1757,17 @@ wop_trashmap/6B375B7C4EF057EA9AE422B0CC66DC31
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0041.tga
+		map maps/wop_trashmap/lm_0041
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1779,17 +1779,17 @@ wop_trashmap/12F14AAA0312B5DB1C1D5B37E23ED048
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1801,17 +1801,17 @@ wop_trashmap/16FEE2586FA63094C31285FF748D15BC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0018.tga
+		map maps/wop_trashmap/lm_0018
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1823,17 +1823,17 @@ wop_trashmap/9526F1E8ED5BC080F70F4B6E1BEB97D5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0053.tga
+		map maps/wop_trashmap/lm_0053
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1845,10 +1845,10 @@ wop_trashmap/E432D50BBCE0B6B85000EF4ECBFFAB94
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -1856,7 +1856,7 @@ wop_trashmap/E432D50BBCE0B6B85000EF4ECBFFAB94
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1868,17 +1868,17 @@ wop_trashmap/EC412D2D530748F15820D64A5A27D566
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1890,17 +1890,17 @@ wop_trashmap/C6D298E02DBE7FBB7C2F1127BE08D5BF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0049.tga
+		map maps/wop_trashmap/lm_0049
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1912,10 +1912,10 @@ wop_trashmap/FD7E79F8F334564BFAB6B9D3FAA16760
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0046.tga
+		map maps/wop_trashmap/lm_0046
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -1923,7 +1923,7 @@ wop_trashmap/FD7E79F8F334564BFAB6B9D3FAA16760
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1935,17 +1935,17 @@ wop_trashmap/1E5428AF25C8683B4339206C29B6A344
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1957,17 +1957,17 @@ wop_trashmap/365E62162BCE025245178A3F09D19B38
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1979,17 +1979,17 @@ wop_trashmap/0CA90F65664F4F7B40A2AD8EDAE1E60E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2001,17 +2001,17 @@ wop_trashmap/A9B7B7A764D091322044750DA2D4131E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0015.tga
+		map maps/wop_trashmap/lm_0015
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2023,17 +2023,17 @@ wop_trashmap/39CB3D8D2B203DBB831ED148ACB4008C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0021.tga
+		map maps/wop_trashmap/lm_0021
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2045,17 +2045,17 @@ wop_trashmap/0981EAAD08DB34187F3079FDB364C4F0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0013.tga
+		map maps/wop_trashmap/lm_0013
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2067,17 +2067,17 @@ wop_trashmap/9666B15A55B3DB35ACE2B6D22C0F1D17
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0018.tga
+		map maps/wop_trashmap/lm_0018
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2089,17 +2089,17 @@ wop_trashmap/F5856178581FC4C9F5F7A8A2E32457B0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0016.tga
+		map maps/wop_trashmap/lm_0016
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2111,17 +2111,17 @@ wop_trashmap/BC3FA47417576A39903BEEE3004FA3FE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2133,17 +2133,17 @@ wop_trashmap/8E1838191DF0DA43A82407ACA9AFD4B4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0020.tga
+		map maps/wop_trashmap/lm_0020
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2155,17 +2155,17 @@ wop_trashmap/68C40B21DC1958BFD66EC6B147778C0B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0028.tga
+		map maps/wop_trashmap/lm_0028
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2177,17 +2177,17 @@ wop_trashmap/F4EECA8E8961AE6AE311B4325BA975C1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0053.tga
+		map maps/wop_trashmap/lm_0053
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2199,17 +2199,17 @@ wop_trashmap/82FD5BC844C383C998976E3116CCAFAF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0024.tga
+		map maps/wop_trashmap/lm_0024
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2221,17 +2221,17 @@ wop_trashmap/6A4B38E851707E56224646BF6301CAFB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0025.tga
+		map maps/wop_trashmap/lm_0025
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2243,10 +2243,10 @@ wop_trashmap/BE1DD9F4378EECC3C08971C1E49688D6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0025.tga
+		map maps/wop_trashmap/lm_0025
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -2254,7 +2254,7 @@ wop_trashmap/BE1DD9F4378EECC3C08971C1E49688D6
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2266,17 +2266,17 @@ wop_trashmap/C85C973ACEFC72BB37980EC271B5F1E1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2288,10 +2288,10 @@ wop_trashmap/F145203D945FFBE464ACFFE1CC92C1F1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0025.tga
+		map maps/wop_trashmap/lm_0025
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -2299,7 +2299,7 @@ wop_trashmap/F145203D945FFBE464ACFFE1CC92C1F1
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2311,7 +2311,7 @@ wop_trashmap/5D9F53F3A2945798AE6D6677DD527704
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -2322,7 +2322,7 @@ wop_trashmap/5D9F53F3A2945798AE6D6677DD527704
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2334,10 +2334,10 @@ wop_trashmap/BA810E9BC29B3881044F1BC857E4B4A2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0024.tga
+		map maps/wop_trashmap/lm_0024
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -2345,7 +2345,7 @@ wop_trashmap/BA810E9BC29B3881044F1BC857E4B4A2
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2357,10 +2357,10 @@ wop_trashmap/3E619850A280B4815695CA0139CCE3AE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0025.tga
+		map maps/wop_trashmap/lm_0025
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -2368,7 +2368,7 @@ wop_trashmap/3E619850A280B4815695CA0139CCE3AE
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2380,10 +2380,10 @@ wop_trashmap/BE5F1AE42C2B6068618BEFD9ED18CC42
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0024.tga
+		map maps/wop_trashmap/lm_0024
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -2391,7 +2391,7 @@ wop_trashmap/BE5F1AE42C2B6068618BEFD9ED18CC42
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2403,10 +2403,10 @@ wop_trashmap/BEF3E204C0113CCEDE8F4E7CCE066760
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -2414,7 +2414,7 @@ wop_trashmap/BEF3E204C0113CCEDE8F4E7CCE066760
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2426,10 +2426,10 @@ wop_trashmap/5117DDBF1459AD845EC3868D6567B8CF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0024.tga
+		map maps/wop_trashmap/lm_0024
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -2437,7 +2437,7 @@ wop_trashmap/5117DDBF1459AD845EC3868D6567B8CF
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2449,17 +2449,17 @@ wop_trashmap/45BC7A08B1C5B5AD1966F4954F7A9035
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0041.tga
+		map maps/wop_trashmap/lm_0041
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2471,17 +2471,17 @@ wop_trashmap/65C30478FBC675322D6B632785FA77A2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0032.tga
+		map maps/wop_trashmap/lm_0032
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2493,17 +2493,17 @@ wop_trashmap/727414BF9C06FCCC2A67156E65610B5B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0046.tga
+		map maps/wop_trashmap/lm_0046
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2515,17 +2515,17 @@ wop_trashmap/C61C88A0586DA266BE667DC863ED0D5F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2537,17 +2537,17 @@ wop_trashmap/33063884E6503169F791FD781A6E09F4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0025.tga
+		map maps/wop_trashmap/lm_0025
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2559,17 +2559,17 @@ wop_trashmap/7EFC14D78B5CDC11748762FDC2E830A7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2581,17 +2581,17 @@ wop_trashmap/928E6AC87E9FA58DF01A5CEA5C7334BD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/gumkabel.tga
+		map textures/pad_garden/gumkabel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2603,17 +2603,17 @@ wop_trashmap/7D01695A4495E8AAB05266DD961C718E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/gumkabel.tga
+		map textures/pad_garden/gumkabel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2625,17 +2625,17 @@ wop_trashmap/C77548BC361631D8C60DDD676A2B04CF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2647,17 +2647,17 @@ wop_trashmap/343C9D2515CA088AB36C3645485B3E91
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_teelicht_side.tga
+		map textures/pad_trash/kb_teelicht_side
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2669,17 +2669,17 @@ wop_trashmap/55542BD9A42B84904368C5A5FA16F8AF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_teelicht_side.tga
+		map textures/pad_trash/kb_teelicht_side
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2691,17 +2691,17 @@ wop_trashmap/96A5C3E06179E308DF02513BC1A0DF46
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0013.tga
+		map maps/wop_trashmap/lm_0013
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_pipes1.tga
+		map textures/pad_jail/pad_jail_pipes1
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2713,17 +2713,17 @@ wop_trashmap/8C283D1011D27227EB52AAD34F6F4345
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0006.tga
+		map maps/wop_trashmap/lm_0006
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_gfx02/git04.tga
+		map textures/pad_gfx02/git04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2735,17 +2735,17 @@ wop_trashmap/EC24598BFC4D88D347DC2E0B30E2CEFB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0014.tga
+		map maps/wop_trashmap/lm_0014
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_pipes1.tga
+		map textures/pad_jail/pad_jail_pipes1
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2757,17 +2757,17 @@ wop_trashmap/E05F086960185B13705E2E726E1F64C4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2779,17 +2779,17 @@ wop_trashmap/7AA9F7DCC9FD69016BC9EBF60A9DFD6E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0014.tga
+		map maps/wop_trashmap/lm_0014
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_tex/col06b.tga
+		map textures/pad_tex/col06b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2801,17 +2801,17 @@ wop_trashmap/D36519F1089C064821572430CAB44830
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0013.tga
+		map maps/wop_trashmap/lm_0013
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_tex/col06b.tga
+		map textures/pad_tex/col06b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2823,17 +2823,17 @@ wop_trashmap/3F4D62DD6A6D08EECBC8CFEE81A933D7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2845,7 +2845,7 @@ wop_trashmap/56C5304881452D6387EA638BF365DC13
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -2856,7 +2856,7 @@ wop_trashmap/56C5304881452D6387EA638BF365DC13
 	}
 
 	{
-		map textures/pad_garden/gumkabel.tga
+		map textures/pad_garden/gumkabel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2868,17 +2868,17 @@ wop_trashmap/28FBA4CF1E3C3E9CE18D5743D75CB39A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/gumkabel.tga
+		map textures/pad_garden/gumkabel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2890,17 +2890,17 @@ wop_trashmap/158863E930E231F5843E80C4EDA289F8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0047.tga
+		map maps/wop_trashmap/lm_0047
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2912,17 +2912,17 @@ wop_trashmap/8E3B365BA984F770C107798F127DD686
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0044.tga
+		map maps/wop_trashmap/lm_0044
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2934,17 +2934,17 @@ wop_trashmap/0D70F4DD3B84E90CBC65D39D4EE66D90
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2956,17 +2956,17 @@ wop_trashmap/57BFD349CFCAEB4FDCF1B9DC8C7743F2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2978,17 +2978,17 @@ wop_trashmap/ACA76B70A12BE78CA134F63C6CA0B21C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0053.tga
+		map maps/wop_trashmap/lm_0053
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3000,17 +3000,17 @@ wop_trashmap/B85ED63F7F1463CE126C0138052592F1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3022,17 +3022,17 @@ wop_trashmap/7F74AA81B43F28F617BA0CECD58C9400
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0046.tga
+		map maps/wop_trashmap/lm_0046
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3044,17 +3044,17 @@ wop_trashmap/C44211B13A5E6BEE18BAF7D865430FE4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0063.tga
+		map maps/wop_trashmap/lm_0063
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3066,17 +3066,17 @@ wop_trashmap/7EBF4CF9C7FF11180AB893C6BD0F8F97
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0049.tga
+		map maps/wop_trashmap/lm_0049
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3088,17 +3088,17 @@ wop_trashmap/3168DD5A88B85776D2762AD6A7BF69B9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3110,17 +3110,17 @@ wop_trashmap/C5671DA50C2A92EA4A2561D4FC9D52E6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3132,17 +3132,17 @@ wop_trashmap/3223010581D5572F6E01DAE7E7243509
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_basket_metal.tga
+		map textures/pad_jail/pad_jail_basket_metal
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3154,17 +3154,17 @@ wop_trashmap/25027646735B3362DE54004840EEBDD3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3176,17 +3176,17 @@ wop_trashmap/DF64C4811980479E569FE9D920CF8A2F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0006.tga
+		map maps/wop_trashmap/lm_0006
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3198,17 +3198,17 @@ wop_trashmap/B15ED899C6710AB1380C2A09CAB4C576
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0011.tga
+		map maps/wop_trashmap/lm_0011
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3220,17 +3220,17 @@ wop_trashmap/DFC1BAE2C67D8280DCDDE41D0D0B455E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3242,17 +3242,17 @@ wop_trashmap/DF67A0244BB8D41461D81A21D1A64B5D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0007.tga
+		map maps/wop_trashmap/lm_0007
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3264,17 +3264,17 @@ wop_trashmap/7A271004DBAD063C8B8DECDA7981037A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3286,17 +3286,17 @@ wop_trashmap/E5E36E6F435864AD5F4A3A47CA03D52C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0010.tga
+		map maps/wop_trashmap/lm_0010
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3308,17 +3308,17 @@ wop_trashmap/09900660F2015133663A0B172F0C417C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0036.tga
+		map maps/wop_trashmap/lm_0036
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3330,17 +3330,17 @@ wop_trashmap/29628BE0C4B94E7E7D3F1F432010AC49
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0037.tga
+		map maps/wop_trashmap/lm_0037
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3352,17 +3352,17 @@ wop_trashmap/9E196705AA977AAA9A80C6E86234C822
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0034.tga
+		map maps/wop_trashmap/lm_0034
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3374,17 +3374,17 @@ wop_trashmap/DBA803B52B3D486475B1629DC58C08FF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_attic/besen02.tga
+		map textures/pad_attic/besen02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3396,7 +3396,7 @@ wop_trashmap/87B895662C037CA141A8170BF47005CB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -3407,7 +3407,7 @@ wop_trashmap/87B895662C037CA141A8170BF47005CB
 	}
 
 	{
-		map textures/pad_attic/besen01.tga
+		map textures/pad_attic/besen01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3419,10 +3419,10 @@ wop_trashmap/08E8394BBD6C1DA51EB1E7963C3C6201
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -3430,7 +3430,7 @@ wop_trashmap/08E8394BBD6C1DA51EB1E7963C3C6201
 	}
 
 	{
-		map textures/pad_attic/besen01.tga
+		map textures/pad_attic/besen01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3442,10 +3442,10 @@ wop_trashmap/DC2DB3BED9733CAF5DE9A85BAE6ED0C7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -3453,7 +3453,7 @@ wop_trashmap/DC2DB3BED9733CAF5DE9A85BAE6ED0C7
 	}
 
 	{
-		map textures/pad_attic/besen01.tga
+		map textures/pad_attic/besen01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3465,7 +3465,7 @@ wop_trashmap/39C3A710ED2BE20D86DF33D1252DA7B9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -3476,7 +3476,7 @@ wop_trashmap/39C3A710ED2BE20D86DF33D1252DA7B9
 	}
 
 	{
-		map textures/pad_attic/besen01.tga
+		map textures/pad_attic/besen01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3488,7 +3488,7 @@ wop_trashmap/5035AE016C7AB81243D896157432C8D5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -3499,7 +3499,7 @@ wop_trashmap/5035AE016C7AB81243D896157432C8D5
 	}
 
 	{
-		map textures/pad_attic/besen01.tga
+		map textures/pad_attic/besen01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3511,17 +3511,17 @@ wop_trashmap/4353A72EE8224B2C2EF8F197675D1A73
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0058.tga
+		map maps/wop_trashmap/lm_0058
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_plakat.tga
+		map textures/pad_trash/kb_plakat
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3533,17 +3533,17 @@ wop_trashmap/0ECA290CFB83D68465E0AE8870CF691A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3555,10 +3555,10 @@ wop_trashmap/E627714553539954AD92FA8EE77302C9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -3566,7 +3566,7 @@ wop_trashmap/E627714553539954AD92FA8EE77302C9
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3578,17 +3578,17 @@ wop_trashmap/9BA304F888B563746EE5F83B0227FF0C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3600,17 +3600,17 @@ wop_trashmap/439AC075E1DC26D1B63112DC71DF8C9B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3622,7 +3622,7 @@ wop_trashmap/ACFB3A38FE143B5F8D89F708BE93C3A9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -3633,7 +3633,7 @@ wop_trashmap/ACFB3A38FE143B5F8D89F708BE93C3A9
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3645,10 +3645,10 @@ wop_trashmap/5D86C61EEFA9CA1BC38B81DB9443854E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -3656,7 +3656,7 @@ wop_trashmap/5D86C61EEFA9CA1BC38B81DB9443854E
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3668,17 +3668,17 @@ wop_trashmap/3ED6125040C1C92DFC99D8E8FECE5925
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_door/door13.tga
+		map textures/pad_door/door13
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3690,17 +3690,17 @@ wop_trashmap/3EF993515737DDA95C729CFE2ADC6E72
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0009.tga
+		map maps/wop_trashmap/lm_0009
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_gfx02/git04.tga
+		map textures/pad_gfx02/git04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3712,17 +3712,17 @@ wop_trashmap/0740E36F2830F319BEA308B988485CB0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0010.tga
+		map maps/wop_trashmap/lm_0010
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_gfx02/git04.tga
+		map textures/pad_gfx02/git04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3734,17 +3734,17 @@ wop_trashmap/3807C3407B51B251EBCC8E4E69E2217D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_fountain/wall_04b.tga
+		map textures/pad_fountain/wall_04b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3756,17 +3756,17 @@ wop_trashmap/DA2D041EB7D0F623DFA6EEFB06EB598E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_fountain/wall_04b.tga
+		map textures/pad_fountain/wall_04b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3778,10 +3778,10 @@ wop_trashmap/B431EF7264CD8867C0D67EA3FD41F030
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0002.tga
+		map maps/wop_trashmap/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -3789,7 +3789,7 @@ wop_trashmap/B431EF7264CD8867C0D67EA3FD41F030
 	}
 
 	{
-		map textures/pad_fountain/wall_04b.tga
+		map textures/pad_fountain/wall_04b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3801,17 +3801,17 @@ wop_trashmap/7B8AA4A45EB4D19B4CBA09ECC93BB3D4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz_red.tga
+		map textures/pad_trash/kb_rauhputz_red
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3823,17 +3823,17 @@ wop_trashmap/C058CB1490DC0A7D9BDDB1A8A1F862F8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0013.tga
+		map maps/wop_trashmap/lm_0013
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_metal10_keyhole.tga
+		map textures/pad_jail/pad_jail_metal10_keyhole
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3845,17 +3845,17 @@ wop_trashmap/CD075A0CCFF7D204DB601F0D22EDBA6A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_sign_06.tga
+		map textures/pad_trash/kb_sign_06
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3867,17 +3867,17 @@ wop_trashmap/A98A08FBA43F70987586FA6C3E7DE8E6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_mittel.tga
+		map textures/pad_trash/kb_pflaster_mittel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3889,17 +3889,17 @@ wop_trashmap/AB972CC019760111957C7CB96F1B065F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0045.tga
+		map maps/wop_trashmap/lm_0045
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3911,17 +3911,17 @@ wop_trashmap/B2CD72348BD2E56F850529C3096F36C1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0044.tga
+		map maps/wop_trashmap/lm_0044
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3933,17 +3933,17 @@ wop_trashmap/B95BB7F7A98419D6625C760773E01251
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0069.tga
+		map maps/wop_trashmap/lm_0069
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3955,17 +3955,17 @@ wop_trashmap/90C45A211731DD748DD97E9380D62F5E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0068.tga
+		map maps/wop_trashmap/lm_0068
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3977,17 +3977,17 @@ wop_trashmap/E343091849AACEFFFA477D2E210CAED4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0059.tga
+		map maps/wop_trashmap/lm_0059
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -3999,17 +3999,17 @@ wop_trashmap/4A7D2E802C100644F662D3443ABE5435
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0063.tga
+		map maps/wop_trashmap/lm_0063
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4021,10 +4021,10 @@ wop_trashmap/4939C05E94141E6FAC7CBEEC56C4D0C2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -4032,7 +4032,7 @@ wop_trashmap/4939C05E94141E6FAC7CBEEC56C4D0C2
 	}
 
 	{
-		map textures/pad_trash/kb_schachtdeckel.tga
+		map textures/pad_trash/kb_schachtdeckel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4044,17 +4044,17 @@ wop_trashmap/F402C01D96915DFF10B7532888EF34F5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0076.tga
+		map maps/wop_trashmap/lm_0076
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_western/metalrollup0026.tga
+		map textures/pad_western/metalrollup0026
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4066,17 +4066,17 @@ wop_trashmap/789B894244551E3F65178909BB4263E6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0080.tga
+		map maps/wop_trashmap/lm_0080
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_western/metalrollup0026.tga
+		map textures/pad_western/metalrollup0026
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4088,17 +4088,17 @@ wop_trashmap/D850CAFF03A4C163F99D29A4C42808CC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0078.tga
+		map maps/wop_trashmap/lm_0078
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_western/metalrollup0026.tga
+		map textures/pad_western/metalrollup0026
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4110,17 +4110,17 @@ wop_trashmap/0387C7CE9A8D62B5786E65F50ED7D876
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_rand.tga
+		map textures/pad_trash/kb_pflaster_rand
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4132,17 +4132,17 @@ wop_trashmap/162ABED5788D10C08039E79C9380D96E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0011.tga
+		map maps/wop_trashmap/lm_0011
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4154,7 +4154,7 @@ wop_trashmap/AF99AC8928C853E555ACF947588BC195
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -4165,7 +4165,7 @@ wop_trashmap/AF99AC8928C853E555ACF947588BC195
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4177,17 +4177,17 @@ wop_trashmap/A5544270BDA7FE0352C3106C181083A5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0040.tga
+		map maps/wop_trashmap/lm_0040
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4199,17 +4199,17 @@ wop_trashmap/CCCDFB582581A504BF890B595F700DE8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0041.tga
+		map maps/wop_trashmap/lm_0041
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4221,17 +4221,17 @@ wop_trashmap/1B04C8E9BAA7886A8E6AE7F33A57E02B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0038.tga
+		map maps/wop_trashmap/lm_0038
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4243,17 +4243,17 @@ wop_trashmap/5B371D142119C6D7C5B4CA1EA95C4284
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0036.tga
+		map maps/wop_trashmap/lm_0036
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4265,17 +4265,17 @@ wop_trashmap/9F03DDAEBE9688B14B3293587E589084
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0037.tga
+		map maps/wop_trashmap/lm_0037
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4287,17 +4287,17 @@ wop_trashmap/CFE0B3CDB3F73B5CCAA4E4CB880C435E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0040.tga
+		map maps/wop_trashmap/lm_0040
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_sockel.tga
+		map textures/pad_trash/kb_mauerwerk_sockel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4309,17 +4309,17 @@ wop_trashmap/60AA2CE401BE887A1026B589316DECCE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0040.tga
+		map maps/wop_trashmap/lm_0040
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4331,17 +4331,17 @@ wop_trashmap/31CE11B31045872F4519260C4FE66E3A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0044.tga
+		map maps/wop_trashmap/lm_0044
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4353,17 +4353,17 @@ wop_trashmap/4DFBCB9831A5095C397CBF0687E9CFD4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0041.tga
+		map maps/wop_trashmap/lm_0041
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4375,17 +4375,17 @@ wop_trashmap/EBB4E30E0EC0C8942CF0455608598106
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0037.tga
+		map maps/wop_trashmap/lm_0037
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4397,17 +4397,17 @@ wop_trashmap/F2FDF6634FD0DB3AAB90368D5924002A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0045.tga
+		map maps/wop_trashmap/lm_0045
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4419,17 +4419,17 @@ wop_trashmap/B267FB958ADE6279CA7956B2018981D1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4441,17 +4441,17 @@ wop_trashmap/B8E60A3C98EBD840CFA4B1C6E5C2F498
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0038.tga
+		map maps/wop_trashmap/lm_0038
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4463,17 +4463,17 @@ wop_trashmap/644777D0C52D217B1568BE77CB6D822C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0029.tga
+		map maps/wop_trashmap/lm_0029
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4485,17 +4485,17 @@ wop_trashmap/9A97140CA0C59F1661623EF3DE6C2AF8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0049.tga
+		map maps/wop_trashmap/lm_0049
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4507,7 +4507,7 @@ wop_trashmap/67E25AEB4C9BCA4BA028694F973489EE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -4518,7 +4518,7 @@ wop_trashmap/67E25AEB4C9BCA4BA028694F973489EE
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4530,7 +4530,7 @@ wop_trashmap/2FAA383EBC301B25F12E55EA16923E24
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -4541,7 +4541,7 @@ wop_trashmap/2FAA383EBC301B25F12E55EA16923E24
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4553,17 +4553,17 @@ wop_trashmap/A1EDCB4BFA6D29F8CB23464064E7DB0E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0007.tga
+		map maps/wop_trashmap/lm_0007
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4575,17 +4575,17 @@ wop_trashmap/37C82B60B2C06A85B4BE0C70C0101E65
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4597,17 +4597,17 @@ wop_trashmap/EDFB4A5C05B1329F6C74ABA5CAAE47A2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0006.tga
+		map maps/wop_trashmap/lm_0006
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4619,17 +4619,17 @@ wop_trashmap/1076209EB07B68761995D679BD81B259
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4641,17 +4641,17 @@ wop_trashmap/596C00DDDD1F522C6AAB530FA275193E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0002.tga
+		map maps/wop_trashmap/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4663,10 +4663,10 @@ wop_trashmap/F232E6A4CB7378269D742E87E18E620D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0002.tga
+		map maps/wop_trashmap/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -4674,7 +4674,7 @@ wop_trashmap/F232E6A4CB7378269D742E87E18E620D
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4686,10 +4686,10 @@ wop_trashmap/3369F7FF65C1D0836C36BA306F32B980
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -4697,7 +4697,7 @@ wop_trashmap/3369F7FF65C1D0836C36BA306F32B980
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4709,17 +4709,17 @@ wop_trashmap/7BB27BCD089A2AA7401FBDA9A9F494C2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_01.tga
+		map textures/pad_trash/kb_mauerwerk_01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4731,17 +4731,17 @@ wop_trashmap/88C7AEF04F5BFF3F192C65F204CD77C1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0047.tga
+		map maps/wop_trashmap/lm_0047
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_01.tga
+		map textures/pad_trash/kb_mauerwerk_01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4753,17 +4753,17 @@ wop_trashmap/1C9BAFDBE4CDD7B7176A674CC11CBA54
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0049.tga
+		map maps/wop_trashmap/lm_0049
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_01.tga
+		map textures/pad_trash/kb_mauerwerk_01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4775,17 +4775,17 @@ wop_trashmap/F5D92FC94216275617CEF99D5A9955DA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0029.tga
+		map maps/wop_trashmap/lm_0029
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4797,17 +4797,17 @@ wop_trashmap/6690ACC166857E30F8E99064F553F3F7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0028.tga
+		map maps/wop_trashmap/lm_0028
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4819,17 +4819,17 @@ wop_trashmap/4E364DEE9A49B85C63A6FA327ACB8341
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0027.tga
+		map maps/wop_trashmap/lm_0027
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4841,17 +4841,17 @@ wop_trashmap/5618DAD39C72B58D63216D1CBB8BF59D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_gross.tga
+		map textures/pad_trash/kb_pflaster_gross
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4863,17 +4863,17 @@ wop_trashmap/115627A3C615333B93557D87BC827D4C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0015.tga
+		map maps/wop_trashmap/lm_0015
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart04b.tga
+		map textures/pad_objects/cart04b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4885,10 +4885,10 @@ wop_trashmap/B54EE508B9667E92A7CF0E0F293B9CE7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0015.tga
+		map maps/wop_trashmap/lm_0015
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -4896,7 +4896,7 @@ wop_trashmap/B54EE508B9667E92A7CF0E0F293B9CE7
 	}
 
 	{
-		map textures/pad_objects/cart05.tga
+		map textures/pad_objects/cart05
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4908,17 +4908,17 @@ wop_trashmap/CF073D75E70B2D691007C79DF0C3DCB3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0015.tga
+		map maps/wop_trashmap/lm_0015
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart04c.tga
+		map textures/pad_objects/cart04c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4930,17 +4930,17 @@ wop_trashmap/3308CD9204CE913A91575C741C442633
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0015.tga
+		map maps/wop_trashmap/lm_0015
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart10c.tga
+		map textures/pad_objects/cart10c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4952,17 +4952,17 @@ wop_trashmap/CD1B1AA1D388FB8113F45FD3156A1B96
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0015.tga
+		map maps/wop_trashmap/lm_0015
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart12c.tga
+		map textures/pad_objects/cart12c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4974,7 +4974,7 @@ wop_trashmap/F77170B67129BBFA83E5C7A53CF5E506
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -4985,7 +4985,7 @@ wop_trashmap/F77170B67129BBFA83E5C7A53CF5E506
 	}
 
 	{
-		map textures/pad_objects/cart12c.tga
+		map textures/pad_objects/cart12c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -4997,10 +4997,10 @@ wop_trashmap/160A13A1CD167AD4E65ED078B9E3E011
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0071.tga
+		map maps/wop_trashmap/lm_0071
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -5008,7 +5008,7 @@ wop_trashmap/160A13A1CD167AD4E65ED078B9E3E011
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5020,7 +5020,7 @@ wop_trashmap/EBC075D8FEA52F7A36FA6D26A18E00A9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -5031,7 +5031,7 @@ wop_trashmap/EBC075D8FEA52F7A36FA6D26A18E00A9
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5043,17 +5043,17 @@ wop_trashmap/6A2759D286CE7B202CC93AF7E5F2EE8F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0041.tga
+		map maps/wop_trashmap/lm_0041
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5065,17 +5065,17 @@ wop_trashmap/C9135FA1DAA720F414EFDD4585B37CA7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0059.tga
+		map maps/wop_trashmap/lm_0059
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5087,10 +5087,10 @@ wop_trashmap/C3D5BA9ED69B2C1342F0A2C26CDE7080
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -5098,7 +5098,7 @@ wop_trashmap/C3D5BA9ED69B2C1342F0A2C26CDE7080
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5110,17 +5110,17 @@ wop_trashmap/F4407D4603DFE7F2ECE2ADFB36856271
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0066.tga
+		map maps/wop_trashmap/lm_0066
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5132,17 +5132,17 @@ wop_trashmap/9B108D3F82522BBE89FD282ECEAAFDE7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0007.tga
+		map maps/wop_trashmap/lm_0007
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5154,17 +5154,17 @@ wop_trashmap/47303ABDF9B26C255B3CC0E2DC6F8B87
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0062.tga
+		map maps/wop_trashmap/lm_0062
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5176,17 +5176,17 @@ wop_trashmap/FBCF10C538D5727F021F4B3525C984B8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0045.tga
+		map maps/wop_trashmap/lm_0045
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5198,17 +5198,17 @@ wop_trashmap/5EAAD5FE69E9022FB9C5A4CCA9641186
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0060.tga
+		map maps/wop_trashmap/lm_0060
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5220,17 +5220,17 @@ wop_trashmap/3C1C482F0F46F04F9E6E374AF947B51F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5242,17 +5242,17 @@ wop_trashmap/A23F83B7E4C817C5E4B3D7AA5988C573
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5264,17 +5264,17 @@ wop_trashmap/8D538954FE2028586A15360EECD2B08A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0053.tga
+		map maps/wop_trashmap/lm_0053
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5286,17 +5286,17 @@ wop_trashmap/EB586BEAE93A6F501C8D6FD2AF9A52EA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5308,17 +5308,17 @@ wop_trashmap/40EA164CAF9D65F11D3C1EBD296EA3D9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0040.tga
+		map maps/wop_trashmap/lm_0040
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5330,17 +5330,17 @@ wop_trashmap/1DCB98CFDE96A157B718BF8F846B818B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0034.tga
+		map maps/wop_trashmap/lm_0034
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5352,17 +5352,17 @@ wop_trashmap/52291F3A735F5E9314ABF7BD72F1C00A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0035.tga
+		map maps/wop_trashmap/lm_0035
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5374,17 +5374,17 @@ wop_trashmap/B832D9938DF679166C766594721503C7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0063.tga
+		map maps/wop_trashmap/lm_0063
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5396,17 +5396,17 @@ wop_trashmap/9B216E3FC08EF36A4E8F1BCCEBAF5FF9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0064.tga
+		map maps/wop_trashmap/lm_0064
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5418,17 +5418,17 @@ wop_trashmap/FE7D1548809F02A05BCDD0582E7212C7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0053.tga
+		map maps/wop_trashmap/lm_0053
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5440,17 +5440,17 @@ wop_trashmap/486B9C6D2B56E795F9E53693F4F5A46E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0069.tga
+		map maps/wop_trashmap/lm_0069
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5462,17 +5462,17 @@ wop_trashmap/42D78335E70C380917989370FC58AF13
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0068.tga
+		map maps/wop_trashmap/lm_0068
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5484,17 +5484,17 @@ wop_trashmap/5BD6ADC9951C084F518F841DA6055B5C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0064.tga
+		map maps/wop_trashmap/lm_0064
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5506,17 +5506,17 @@ wop_trashmap/415DE0904A19B7482B272FD2744CB66B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0046.tga
+		map maps/wop_trashmap/lm_0046
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5528,17 +5528,17 @@ wop_trashmap/29C0F630BA5CD6E0C95FCA08F39A0968
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0058.tga
+		map maps/wop_trashmap/lm_0058
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5550,17 +5550,17 @@ wop_trashmap/4B863A924ABB42758C8FC356C63FC034
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0059.tga
+		map maps/wop_trashmap/lm_0059
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5572,17 +5572,17 @@ wop_trashmap/A44D39524D7FD8919C27ACA6569B6A8B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0074.tga
+		map maps/wop_trashmap/lm_0074
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5594,17 +5594,17 @@ wop_trashmap/DA2079CA22544C9267FDD1A56570B662
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0066.tga
+		map maps/wop_trashmap/lm_0066
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5616,17 +5616,17 @@ wop_trashmap/781CFBB6B5087E16CDB16777DCC76A4B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0015.tga
+		map maps/wop_trashmap/lm_0015
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5638,17 +5638,17 @@ wop_trashmap/E9A5597FE7D10740DB1679B836233010
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0060.tga
+		map maps/wop_trashmap/lm_0060
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5660,17 +5660,17 @@ wop_trashmap/E151229209BB23007615C3E4B804891F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5682,17 +5682,17 @@ wop_trashmap/8CE2DEE49C3D94AD941F17A14185C8B3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0053.tga
+		map maps/wop_trashmap/lm_0053
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5704,17 +5704,17 @@ wop_trashmap/DA46E3A14A6DC7EF50C19C09D9FFDFEB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0059.tga
+		map maps/wop_trashmap/lm_0059
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5726,17 +5726,17 @@ wop_trashmap/28E5EC75635530C2DDEEF313425E8CD2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0063.tga
+		map maps/wop_trashmap/lm_0063
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5748,17 +5748,17 @@ wop_trashmap/3DADBF9CB3C1A0AEA8E2DDC225383031
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0049.tga
+		map maps/wop_trashmap/lm_0049
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5770,17 +5770,17 @@ wop_trashmap/147E173FE9EA825CB47BA5426FC9FD14
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0064.tga
+		map maps/wop_trashmap/lm_0064
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5792,17 +5792,17 @@ wop_trashmap/3CDCB1252DD121A0492B2E4E906C10D8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0043.tga
+		map maps/wop_trashmap/lm_0043
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5814,17 +5814,17 @@ wop_trashmap/23C86D6D2EB5A4A713DD4E0FC8C8262E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5836,10 +5836,10 @@ wop_trashmap/E0D301A8691353C57615F6C11FA1B476
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -5847,7 +5847,7 @@ wop_trashmap/E0D301A8691353C57615F6C11FA1B476
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5859,17 +5859,17 @@ wop_trashmap/59CB13F7FBC826C6CA6572B048725C0C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0069.tga
+		map maps/wop_trashmap/lm_0069
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5881,17 +5881,17 @@ wop_trashmap/97717CFABB7FEF441D9C3610E3F8443C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0068.tga
+		map maps/wop_trashmap/lm_0068
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5903,17 +5903,17 @@ wop_trashmap/052807621D8F15EBD6565537BD41A837
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0071.tga
+		map maps/wop_trashmap/lm_0071
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5925,17 +5925,17 @@ wop_trashmap/F0D001D12DCEBDCE7885859509FFB1B2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0070.tga
+		map maps/wop_trashmap/lm_0070
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5947,17 +5947,17 @@ wop_trashmap/C20CFE2F0E46557FAF989B8D774EB890
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5969,17 +5969,17 @@ wop_trashmap/5E5C1455889B7BEB6C0A2AF84A0C4BC1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0022.tga
+		map maps/wop_trashmap/lm_0022
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -5991,17 +5991,17 @@ wop_trashmap/6AC907128E81D8A193F84F6EBC505434
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0053.tga
+		map maps/wop_trashmap/lm_0053
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6013,17 +6013,17 @@ wop_trashmap/87B62B9433A729C3ADF07AE4F87D720C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0045.tga
+		map maps/wop_trashmap/lm_0045
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6035,17 +6035,17 @@ wop_trashmap/8F5F9457BA4B084EC22910BFA041ADB0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6057,17 +6057,17 @@ wop_trashmap/CB7971C8BA8E57438DD0C1149656FB8E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0047.tga
+		map maps/wop_trashmap/lm_0047
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6079,17 +6079,17 @@ wop_trashmap/39C534BB1D39965247CA5BC43E8D6632
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0049.tga
+		map maps/wop_trashmap/lm_0049
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6101,17 +6101,17 @@ wop_trashmap/7B32EBB42DA159A7EB4196893DE5D9D0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0042.tga
+		map maps/wop_trashmap/lm_0042
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6123,17 +6123,17 @@ wop_trashmap/BC5221ED0B5EE61D9AB0246AF10AD22D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6145,17 +6145,17 @@ wop_trashmap/F115C02D445B1C7805B55F13A4BA4747
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0044.tga
+		map maps/wop_trashmap/lm_0044
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6167,17 +6167,17 @@ wop_trashmap/EE4719646DB047D3B8D48D23642070A4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6189,17 +6189,17 @@ wop_trashmap/5D693C2A2A9930ECF21B04EDBE7627BB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6211,17 +6211,17 @@ wop_trashmap/40DFCC47124FBCBBA6518783E3E12907
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0046.tga
+		map maps/wop_trashmap/lm_0046
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6233,17 +6233,17 @@ wop_trashmap/9DB8A11E738E702E7508C15D12C01250
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6255,17 +6255,17 @@ wop_trashmap/50F2A5ECE068C5D2A7AAB13897F7260F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6277,17 +6277,17 @@ wop_trashmap/19E4001A244CBEDB04D3644BE8B66538
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6299,17 +6299,17 @@ wop_trashmap/190C6AEBDF2843F4839C270C97D09573
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6321,10 +6321,10 @@ wop_trashmap/ADC3D28D7869CDEF70DE015AAB7CD6CD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -6332,7 +6332,7 @@ wop_trashmap/ADC3D28D7869CDEF70DE015AAB7CD6CD
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6344,17 +6344,17 @@ wop_trashmap/A87DF018D33555889AADD615A045B297
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0007.tga
+		map maps/wop_trashmap/lm_0007
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6366,17 +6366,17 @@ wop_trashmap/87C5486FAECBEB8D41160A568DCE0B6D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0022.tga
+		map maps/wop_trashmap/lm_0022
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6388,17 +6388,17 @@ wop_trashmap/FB40EAD5E610AD3A607572A8064C2221
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0068.tga
+		map maps/wop_trashmap/lm_0068
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6410,17 +6410,17 @@ wop_trashmap/657C00C25F03226D01E2F8B690A0B2D9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0067.tga
+		map maps/wop_trashmap/lm_0067
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6432,17 +6432,17 @@ wop_trashmap/4A1E63D0D3A7D33AD09973D3770CD73D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0069.tga
+		map maps/wop_trashmap/lm_0069
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6454,17 +6454,17 @@ wop_trashmap/EA1F813867D7D4968D6C20AE01ACF7A3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0064.tga
+		map maps/wop_trashmap/lm_0064
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6476,17 +6476,17 @@ wop_trashmap/75A97575D53B0C296E4F4E5B1A1D6A97
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0058.tga
+		map maps/wop_trashmap/lm_0058
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6498,17 +6498,17 @@ wop_trashmap/9E23D6489F3D793F6F1DB86D8E041DC8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0062.tga
+		map maps/wop_trashmap/lm_0062
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6520,17 +6520,17 @@ wop_trashmap/1BA600499A3C058F0A06B8C3536143CD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0070.tga
+		map maps/wop_trashmap/lm_0070
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6542,17 +6542,17 @@ wop_trashmap/6B61CDB023090FD177DEA950C86C977F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6564,17 +6564,17 @@ wop_trashmap/ED906303FB7ECE8DF898677F443ACA81
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6586,17 +6586,17 @@ wop_trashmap/808250DABECC7F751C4FEF4CE4846FB1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6608,17 +6608,17 @@ wop_trashmap/A5BB532B4840A3719FBE174928C47FF1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0059.tga
+		map maps/wop_trashmap/lm_0059
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6630,17 +6630,17 @@ wop_trashmap/19A662F73B4D8C35365C60748C2DB7A3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6652,17 +6652,17 @@ wop_trashmap/C590DD6A908EDC67612F6555680E8FC8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0019.tga
+		map maps/wop_trashmap/lm_0019
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6674,17 +6674,17 @@ wop_trashmap/B3521E538099A3F198E811F67E28BEC3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0022.tga
+		map maps/wop_trashmap/lm_0022
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6696,10 +6696,10 @@ wop_trashmap/C26FACF8145B461DF0026116EE8493E1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0021.tga
+		map maps/wop_trashmap/lm_0021
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -6707,7 +6707,7 @@ wop_trashmap/C26FACF8145B461DF0026116EE8493E1
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6719,17 +6719,17 @@ wop_trashmap/D04F7C7E7252F06634421B5AA8C7C453
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0017.tga
+		map maps/wop_trashmap/lm_0017
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6741,10 +6741,10 @@ wop_trashmap/B84F16EA52EBD01605F6C3FCAAE87F28
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0019.tga
+		map maps/wop_trashmap/lm_0019
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -6752,7 +6752,7 @@ wop_trashmap/B84F16EA52EBD01605F6C3FCAAE87F28
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6764,7 +6764,7 @@ wop_trashmap/C0E60AE72C4CEB55137FF9E16F0D460F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -6775,7 +6775,7 @@ wop_trashmap/C0E60AE72C4CEB55137FF9E16F0D460F
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6787,17 +6787,17 @@ wop_trashmap/074DA06B48FA51A2C8312A85997800FD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6809,17 +6809,17 @@ wop_trashmap/8C76ADF7291EF7390D62250E0CF64607
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0006.tga
+		map maps/wop_trashmap/lm_0006
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6831,10 +6831,10 @@ wop_trashmap/0AA825E663E460688EDF5514679A4882
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0018.tga
+		map maps/wop_trashmap/lm_0018
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -6842,7 +6842,7 @@ wop_trashmap/0AA825E663E460688EDF5514679A4882
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6854,10 +6854,10 @@ wop_trashmap/1901BAE46B570BF6A84A2D18DC67D840
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0020.tga
+		map maps/wop_trashmap/lm_0020
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -6865,7 +6865,7 @@ wop_trashmap/1901BAE46B570BF6A84A2D18DC67D840
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6877,10 +6877,10 @@ wop_trashmap/07565CAB80082EADBCB0AE83714D0815
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -6888,7 +6888,7 @@ wop_trashmap/07565CAB80082EADBCB0AE83714D0815
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6900,17 +6900,17 @@ wop_trashmap/D232B0D325A29A83C40006CF935CDC98
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0026.tga
+		map maps/wop_trashmap/lm_0026
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6922,17 +6922,17 @@ wop_trashmap/B5169A51E4D8E1F1465504DC009AFDC8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0022.tga
+		map maps/wop_trashmap/lm_0022
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6944,17 +6944,17 @@ wop_trashmap/25F994DD82BDC370F37E50DB81A3EFA3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0027.tga
+		map maps/wop_trashmap/lm_0027
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6966,7 +6966,7 @@ wop_trashmap/E768A1389C6E381D66CB3C9BBF3557D3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -6977,7 +6977,7 @@ wop_trashmap/E768A1389C6E381D66CB3C9BBF3557D3
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -6989,7 +6989,7 @@ wop_trashmap/F69EE371ADAA6B53CAE0D686DB7AB6B1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7000,7 +7000,7 @@ wop_trashmap/F69EE371ADAA6B53CAE0D686DB7AB6B1
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7012,10 +7012,10 @@ wop_trashmap/130CFFEB438810360F98B88970E8A745
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7023,7 +7023,7 @@ wop_trashmap/130CFFEB438810360F98B88970E8A745
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7035,17 +7035,17 @@ wop_trashmap/5B30636FFC8FE97C34359DD56C05B378
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0019.tga
+		map maps/wop_trashmap/lm_0019
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7057,17 +7057,17 @@ wop_trashmap/D1E26A33C4205B12D169A308B8F500D7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0033.tga
+		map maps/wop_trashmap/lm_0033
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7079,17 +7079,17 @@ wop_trashmap/0BADFCFDBA1A12E07FD2C0CEC8434C57
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0047.tga
+		map maps/wop_trashmap/lm_0047
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7101,17 +7101,17 @@ wop_trashmap/4F5BD43DF56D906AECA3DF93BBDDECFC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7123,17 +7123,17 @@ wop_trashmap/2C3333DEBC4DE5AE63B52B65BF62303A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0039.tga
+		map maps/wop_trashmap/lm_0039
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7145,17 +7145,17 @@ wop_trashmap/914A196467D9A9BB1FC9F13C6C4743A8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7167,17 +7167,17 @@ wop_trashmap/F8E16F362E5F44C7E893F4DC1D4E341C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7189,17 +7189,17 @@ wop_trashmap/9B69B33D75120C9089E940CF3497B28E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_teelicht_side.tga
+		map textures/pad_trash/kb_teelicht_side
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7211,17 +7211,17 @@ wop_trashmap/A248C8FB01162316E0764F89E254101B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_teelicht_side.tga
+		map textures/pad_trash/kb_teelicht_side
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7233,17 +7233,17 @@ wop_trashmap/E89FE9F00674DB7FF339E5A4886716EC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0058.tga
+		map maps/wop_trashmap/lm_0058
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7255,17 +7255,17 @@ wop_trashmap/E897E1837CA75323DFE606C4ABF1415A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7277,17 +7277,17 @@ wop_trashmap/C422DEF6A11C2515DCE82A3880B08B57
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7299,17 +7299,17 @@ wop_trashmap/5FEE01DF4FB93AAC1F19A1C71674600B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0026.tga
+		map maps/wop_trashmap/lm_0026
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7321,17 +7321,17 @@ wop_trashmap/200D3FD670E93FD451071AE110F9EB6B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0025.tga
+		map maps/wop_trashmap/lm_0025
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7343,10 +7343,10 @@ wop_trashmap/E5835EEC98F5FA1F9742A8E5BE981E9B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7354,7 +7354,7 @@ wop_trashmap/E5835EEC98F5FA1F9742A8E5BE981E9B
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7366,10 +7366,10 @@ wop_trashmap/2B88E6BCA171CBC3CB4E7FD9C87648D2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0047.tga
+		map maps/wop_trashmap/lm_0047
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7377,7 +7377,7 @@ wop_trashmap/2B88E6BCA171CBC3CB4E7FD9C87648D2
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7389,17 +7389,17 @@ wop_trashmap/F3DBF9B7E1DF07AF04EFD9F3B19E1024
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0010.tga
+		map maps/wop_trashmap/lm_0010
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_basket_metal.tga
+		map textures/pad_jail/pad_jail_basket_metal
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7411,17 +7411,17 @@ wop_trashmap/4793A646C4347ED3C00F8ACBE1AB89C1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0002.tga
+		map maps/wop_trashmap/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7433,17 +7433,17 @@ wop_trashmap/E130067B2AF98831F6164D94968EBDDE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0009.tga
+		map maps/wop_trashmap/lm_0009
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7455,17 +7455,17 @@ wop_trashmap/52B92F50D096890905368824FC6C48F5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/windowboard02.tga
+		map textures/pad_garden/windowboard02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7477,17 +7477,17 @@ wop_trashmap/5E54F0FB1EF08A28AE0C5BAAF16993A4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0032.tga
+		map maps/wop_trashmap/lm_0032
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7499,10 +7499,10 @@ wop_trashmap/7FFE48132148789CA7A369E234D7F793
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0037.tga
+		map maps/wop_trashmap/lm_0037
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7510,7 +7510,7 @@ wop_trashmap/7FFE48132148789CA7A369E234D7F793
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7522,10 +7522,10 @@ wop_trashmap/A6C81C0C32D4CEB1B70D7DF1642EFFB6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0037.tga
+		map maps/wop_trashmap/lm_0037
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7533,7 +7533,7 @@ wop_trashmap/A6C81C0C32D4CEB1B70D7DF1642EFFB6
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7545,7 +7545,7 @@ wop_trashmap/8928F22C20DACB37AC8D85F8DF349F0B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7556,7 +7556,7 @@ wop_trashmap/8928F22C20DACB37AC8D85F8DF349F0B
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7568,7 +7568,7 @@ wop_trashmap/AE56DB07F86A70E5BE7D454F2EBF3C09
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7579,7 +7579,7 @@ wop_trashmap/AE56DB07F86A70E5BE7D454F2EBF3C09
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7591,7 +7591,7 @@ wop_trashmap/3C56BFA5EB2040AB32C0AA14EFCA0356
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7602,7 +7602,7 @@ wop_trashmap/3C56BFA5EB2040AB32C0AA14EFCA0356
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7614,7 +7614,7 @@ wop_trashmap/C11D1C2F1CE7BD615338191C38C6EE15
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7625,7 +7625,7 @@ wop_trashmap/C11D1C2F1CE7BD615338191C38C6EE15
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7637,10 +7637,10 @@ wop_trashmap/6358974D2DC8C5D418EE2790F3BCCF23
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0037.tga
+		map maps/wop_trashmap/lm_0037
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7648,7 +7648,7 @@ wop_trashmap/6358974D2DC8C5D418EE2790F3BCCF23
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7660,7 +7660,7 @@ wop_trashmap/E4917707598A1E1D7D2AEB36F6D4FCDB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7671,7 +7671,7 @@ wop_trashmap/E4917707598A1E1D7D2AEB36F6D4FCDB
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7683,7 +7683,7 @@ wop_trashmap/D55B204BC127AADFDD07AA70FB39BF47
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7694,7 +7694,7 @@ wop_trashmap/D55B204BC127AADFDD07AA70FB39BF47
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7706,7 +7706,7 @@ wop_trashmap/0D952094CE6931C2365CD1FF935BFD06
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7717,7 +7717,7 @@ wop_trashmap/0D952094CE6931C2365CD1FF935BFD06
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7729,17 +7729,17 @@ wop_trashmap/DC96C30EE59D5E203005D827BF1CABE8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0035.tga
+		map maps/wop_trashmap/lm_0035
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7751,10 +7751,10 @@ wop_trashmap/5766DAA9E35D26BC569C956B158EBDE4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0033.tga
+		map maps/wop_trashmap/lm_0033
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7762,7 +7762,7 @@ wop_trashmap/5766DAA9E35D26BC569C956B158EBDE4
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7774,10 +7774,10 @@ wop_trashmap/02F8AD38567434E543574DA8131A3CA7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0032.tga
+		map maps/wop_trashmap/lm_0032
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7785,7 +7785,7 @@ wop_trashmap/02F8AD38567434E543574DA8131A3CA7
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7797,10 +7797,10 @@ wop_trashmap/32917F552F28E304A9855DF6A5B9149D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7808,7 +7808,7 @@ wop_trashmap/32917F552F28E304A9855DF6A5B9149D
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7820,10 +7820,10 @@ wop_trashmap/16BB8426E5D52532A4B78FC19ED0A7F0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7831,7 +7831,7 @@ wop_trashmap/16BB8426E5D52532A4B78FC19ED0A7F0
 	}
 
 	{
-		map textures/pad_attic/besen02.tga
+		map textures/pad_attic/besen02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7843,7 +7843,7 @@ wop_trashmap/B53A621C970F6C45EDAE4BA2ACE1F33D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7854,7 +7854,7 @@ wop_trashmap/B53A621C970F6C45EDAE4BA2ACE1F33D
 	}
 
 	{
-		map textures/pad_attic/besen02.tga
+		map textures/pad_attic/besen02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7866,10 +7866,10 @@ wop_trashmap/B5F3178B8B64B748B5F2477AAD8A7B3A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7877,7 +7877,7 @@ wop_trashmap/B5F3178B8B64B748B5F2477AAD8A7B3A
 	}
 
 	{
-		map textures/pad_attic/besen01.tga
+		map textures/pad_attic/besen01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7889,17 +7889,17 @@ wop_trashmap/4D374F7C09C127479EB93EBB6777B94B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0059.tga
+		map maps/wop_trashmap/lm_0059
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_plakat.tga
+		map textures/pad_trash/kb_plakat
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7911,10 +7911,10 @@ wop_trashmap/2D665EC497B97FA51E49D7A0E07424D8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -7922,7 +7922,7 @@ wop_trashmap/2D665EC497B97FA51E49D7A0E07424D8
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7934,7 +7934,7 @@ wop_trashmap/66CBDA0D483289C1B70102C4C82666AF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -7945,7 +7945,7 @@ wop_trashmap/66CBDA0D483289C1B70102C4C82666AF
 	}
 
 	{
-		map textures/pad_garden/metallegb.tga
+		map textures/pad_garden/metallegb
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7957,17 +7957,17 @@ wop_trashmap/A7E0CBF3F4F4C195372E8855216140D6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0002.tga
+		map maps/wop_trashmap/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_fountain/wall_04b.tga
+		map textures/pad_fountain/wall_04b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -7979,17 +7979,17 @@ wop_trashmap/0E8EB749DF06B27A5B2FB12F4C79C393
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz_red.tga
+		map textures/pad_trash/kb_rauhputz_red
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8001,7 +8001,7 @@ wop_trashmap/E623C017E256177D85AD355C20613726
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -8012,7 +8012,7 @@ wop_trashmap/E623C017E256177D85AD355C20613726
 	}
 
 	{
-		map textures/pad_jail/pad_jail_metal10_keyhole.tga
+		map textures/pad_jail/pad_jail_metal10_keyhole
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8024,7 +8024,7 @@ wop_trashmap/E631153396D824A859A9D21CCE10DC53
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -8035,7 +8035,7 @@ wop_trashmap/E631153396D824A859A9D21CCE10DC53
 	}
 
 	{
-		map textures/pad_jail/pad_jail_metal10_keyhole.tga
+		map textures/pad_jail/pad_jail_metal10_keyhole
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8047,10 +8047,10 @@ wop_trashmap/F4672544A68C5A5FA3C79BD56EA5914C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -8058,7 +8058,7 @@ wop_trashmap/F4672544A68C5A5FA3C79BD56EA5914C
 	}
 
 	{
-		map textures/pad_trash/kb_sign_06.tga
+		map textures/pad_trash/kb_sign_06
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8070,17 +8070,17 @@ wop_trashmap/DB9D94D7CEF6AEE7D0A1DD405B15FEC0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_mittel.tga
+		map textures/pad_trash/kb_pflaster_mittel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8092,10 +8092,10 @@ wop_trashmap/485C4D8B25CA0E6A28FC7D34A2DE21D8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0045.tga
+		map maps/wop_trashmap/lm_0045
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -8103,7 +8103,7 @@ wop_trashmap/485C4D8B25CA0E6A28FC7D34A2DE21D8
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8115,10 +8115,10 @@ wop_trashmap/FB2652592B5F3D338EE55220FD589A17
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0039.tga
+		map maps/wop_trashmap/lm_0039
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -8126,7 +8126,7 @@ wop_trashmap/FB2652592B5F3D338EE55220FD589A17
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8138,17 +8138,17 @@ wop_trashmap/4D1B83F1245CE32B22DB5EAE8D4DA06E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0058.tga
+		map maps/wop_trashmap/lm_0058
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8160,17 +8160,17 @@ wop_trashmap/1E99B940E54DBDB61BDAE4039705F6C1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8182,17 +8182,17 @@ wop_trashmap/210184A4C862037A53086D4FFED1AF0B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0065.tga
+		map maps/wop_trashmap/lm_0065
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8204,17 +8204,17 @@ wop_trashmap/80491396EBC4431B2FF25718116DED2B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0041.tga
+		map maps/wop_trashmap/lm_0041
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8226,17 +8226,17 @@ wop_trashmap/3555C7FCA3D53D3B412608883BD68FE6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8248,17 +8248,17 @@ wop_trashmap/33A6F4712760A22C2BE6190134D58259
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0064.tga
+		map maps/wop_trashmap/lm_0064
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_schachtdeckel.tga
+		map textures/pad_trash/kb_schachtdeckel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8270,17 +8270,17 @@ wop_trashmap/7A444C9E6DB8BF1BF67F572FDC8182D0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0079.tga
+		map maps/wop_trashmap/lm_0079
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_western/metalrollup0026.tga
+		map textures/pad_western/metalrollup0026
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8292,17 +8292,17 @@ wop_trashmap/3AE18A92AF4B7F288427B5985D46C93B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0077.tga
+		map maps/wop_trashmap/lm_0077
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_western/metalrollup0026.tga
+		map textures/pad_western/metalrollup0026
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8314,7 +8314,7 @@ wop_trashmap/D2B216B091A59C2DCFABDE499F0CE2BB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -8325,7 +8325,7 @@ wop_trashmap/D2B216B091A59C2DCFABDE499F0CE2BB
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8337,7 +8337,7 @@ wop_trashmap/B803DED738D00FD66F98E6DD35790E30
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -8348,7 +8348,7 @@ wop_trashmap/B803DED738D00FD66F98E6DD35790E30
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8360,17 +8360,17 @@ wop_trashmap/A9F8BD797B7B866EEBB75B41168DC88A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0039.tga
+		map maps/wop_trashmap/lm_0039
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8382,17 +8382,17 @@ wop_trashmap/F03B4BE99EA2C32B227BC2C528818A26
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0033.tga
+		map maps/wop_trashmap/lm_0033
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8404,7 +8404,7 @@ wop_trashmap/E37DADF85E5E2258E066087BF991D77F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -8415,7 +8415,7 @@ wop_trashmap/E37DADF85E5E2258E066087BF991D77F
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8427,17 +8427,17 @@ wop_trashmap/01CFBFAE62DEAECF324DC03F6A5A7DA9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0042.tga
+		map maps/wop_trashmap/lm_0042
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8449,17 +8449,17 @@ wop_trashmap/F18440625DC6F97B9D9A2E0F447A348F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8471,17 +8471,17 @@ wop_trashmap/32C25DA3080BCD2712C2504E8DB82348
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0047.tga
+		map maps/wop_trashmap/lm_0047
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8493,17 +8493,17 @@ wop_trashmap/8FCED067E02B7832DEDB6A7870E6A0BF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0053.tga
+		map maps/wop_trashmap/lm_0053
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8515,17 +8515,17 @@ wop_trashmap/4C7F9CF66B85B36DD51E14D0FF2800C1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0046.tga
+		map maps/wop_trashmap/lm_0046
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8537,17 +8537,17 @@ wop_trashmap/D458113B70C700055AFA99BCED02080C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0024.tga
+		map maps/wop_trashmap/lm_0024
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8559,7 +8559,7 @@ wop_trashmap/FE9FEC7A805F51304923207DCCA5B0AD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -8570,7 +8570,7 @@ wop_trashmap/FE9FEC7A805F51304923207DCCA5B0AD
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8582,7 +8582,7 @@ wop_trashmap/ACEE9BA35E6C4E9F59ACA2DE36684F75
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -8593,7 +8593,7 @@ wop_trashmap/ACEE9BA35E6C4E9F59ACA2DE36684F75
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8605,7 +8605,7 @@ wop_trashmap/24A3896F51FECD190A263D2AFB690C8A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -8616,7 +8616,7 @@ wop_trashmap/24A3896F51FECD190A263D2AFB690C8A
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8628,17 +8628,17 @@ wop_trashmap/14638556C6D4F04D9D57DFC3E2AFD07E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_01.tga
+		map textures/pad_trash/kb_mauerwerk_01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8650,17 +8650,17 @@ wop_trashmap/3FF0A7989B57299018DD538E60A2A90E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_01.tga
+		map textures/pad_trash/kb_mauerwerk_01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8672,17 +8672,17 @@ wop_trashmap/7EB77CF035B350E8B83EF622ECDD4FB3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8694,17 +8694,17 @@ wop_trashmap/F11FEA5B95B524B134280CC09512003B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0025.tga
+		map maps/wop_trashmap/lm_0025
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8716,17 +8716,17 @@ wop_trashmap/F3A28CB37E356E8A4BF916ABFA9F0DC2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0030.tga
+		map maps/wop_trashmap/lm_0030
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8738,7 +8738,7 @@ wop_trashmap/410AE1AC2112EAA296D025AE6BC5DEC8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -8749,7 +8749,7 @@ wop_trashmap/410AE1AC2112EAA296D025AE6BC5DEC8
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8761,17 +8761,17 @@ wop_trashmap/B5C16D7114E9E2EE47462E374EB2C11C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0014.tga
+		map maps/wop_trashmap/lm_0014
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart04b.tga
+		map textures/pad_objects/cart04b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8783,17 +8783,17 @@ wop_trashmap/7FC9AD0AED2EA7217CAC4625646BC837
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0017.tga
+		map maps/wop_trashmap/lm_0017
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart04b.tga
+		map textures/pad_objects/cart04b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8805,17 +8805,17 @@ wop_trashmap/E8D80CCB936595CF838EB0B2660685B0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0016.tga
+		map maps/wop_trashmap/lm_0016
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart04b.tga
+		map textures/pad_objects/cart04b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8827,17 +8827,17 @@ wop_trashmap/C324C16B353BEF6B36911659425F52CF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0015.tga
+		map maps/wop_trashmap/lm_0015
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart05.tga
+		map textures/pad_objects/cart05
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8849,17 +8849,17 @@ wop_trashmap/FEE81142484B8EB741F6C9325D366115
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0017.tga
+		map maps/wop_trashmap/lm_0017
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart04c.tga
+		map textures/pad_objects/cart04c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8871,17 +8871,17 @@ wop_trashmap/9965CC2D5B360FE65E75F13D925FCE0B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0014.tga
+		map maps/wop_trashmap/lm_0014
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart10c.tga
+		map textures/pad_objects/cart10c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8893,17 +8893,17 @@ wop_trashmap/A6D1DAADB63C44A9088E2AFC0F55D0F0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0016.tga
+		map maps/wop_trashmap/lm_0016
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart12c.tga
+		map textures/pad_objects/cart12c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8915,17 +8915,17 @@ wop_trashmap/9512C5802B2E70B6C29D1E621E3142F7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0017.tga
+		map maps/wop_trashmap/lm_0017
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart12c.tga
+		map textures/pad_objects/cart12c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8937,17 +8937,17 @@ wop_trashmap/60B3CAADDDB0A0A22EB24C284CD57907
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0060.tga
+		map maps/wop_trashmap/lm_0060
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8959,17 +8959,17 @@ wop_trashmap/64B06FCEF710F2DA3C9C5F58F05516F5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0073.tga
+		map maps/wop_trashmap/lm_0073
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -8981,10 +8981,10 @@ wop_trashmap/F7F899AED46249D3CF4DA72855120A30
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -8992,7 +8992,7 @@ wop_trashmap/F7F899AED46249D3CF4DA72855120A30
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9004,17 +9004,17 @@ wop_trashmap/898E5CE82C9A66619F5A014A203CC6C0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0072.tga
+		map maps/wop_trashmap/lm_0072
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9026,17 +9026,17 @@ wop_trashmap/A595A85871AF5299A077E8B13439D527
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0065.tga
+		map maps/wop_trashmap/lm_0065
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9048,17 +9048,17 @@ wop_trashmap/84720AE3BADDB71B94ACDD22D3A39353
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0006.tga
+		map maps/wop_trashmap/lm_0006
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9070,17 +9070,17 @@ wop_trashmap/AE9065B06DBD977F8C24CE2006B7E4FC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0063.tga
+		map maps/wop_trashmap/lm_0063
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9092,17 +9092,17 @@ wop_trashmap/43B4C788DE7BA8A949A210A1F2134D08
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9114,17 +9114,17 @@ wop_trashmap/2AD43EF5CF1C9D23A1546EF23D016ECB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0061.tga
+		map maps/wop_trashmap/lm_0061
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9136,17 +9136,17 @@ wop_trashmap/AE474073F119611ACF0351D25AC96AA6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0058.tga
+		map maps/wop_trashmap/lm_0058
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9158,17 +9158,17 @@ wop_trashmap/ABBB00F97215463A9E57C56D67396E71
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0032.tga
+		map maps/wop_trashmap/lm_0032
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9180,17 +9180,17 @@ wop_trashmap/8BAFC794ECBB6A24E3815A29EE8BBA51
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9202,17 +9202,17 @@ wop_trashmap/749285F083EF3405763052B7EF75059A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9224,17 +9224,17 @@ wop_trashmap/F88D8DB24A4B493CB4BA2386DAB6E090
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0066.tga
+		map maps/wop_trashmap/lm_0066
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9246,17 +9246,17 @@ wop_trashmap/AEEC475A07A023A534C8FC49414B7B8F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9268,17 +9268,17 @@ wop_trashmap/03D5CCBDA9905C1575BFD60A247A29AA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0033.tga
+		map maps/wop_trashmap/lm_0033
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9290,17 +9290,17 @@ wop_trashmap/2631B080BC239B0BF2333DE56FC13099
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0071.tga
+		map maps/wop_trashmap/lm_0071
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9312,17 +9312,17 @@ wop_trashmap/C5BD70EE42018DF4251200B0D746DD61
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0027.tga
+		map maps/wop_trashmap/lm_0027
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9334,17 +9334,17 @@ wop_trashmap/B79666F29725C3F935A9F2B6B2070FCC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9356,17 +9356,17 @@ wop_trashmap/1FA80052E1C978EDDC31EB74C8842EF7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0054.tga
+		map maps/wop_trashmap/lm_0054
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9378,17 +9378,17 @@ wop_trashmap/9FAC2BDF45CCA9FAD3A3C6CDA959C55A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9400,17 +9400,17 @@ wop_trashmap/6BB5E0B7683B82DF1F768593BD525B89
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0062.tga
+		map maps/wop_trashmap/lm_0062
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9422,17 +9422,17 @@ wop_trashmap/73AD21539A93D536860EAE7CB316457D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9444,17 +9444,17 @@ wop_trashmap/177181057E7363505C2C80BC303CB116
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9466,17 +9466,17 @@ wop_trashmap/75D5666E92FCA0E22C956064C17FF608
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0067.tga
+		map maps/wop_trashmap/lm_0067
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9488,17 +9488,17 @@ wop_trashmap/F023CB4400EB67340829EBC9D0244BB1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0060.tga
+		map maps/wop_trashmap/lm_0060
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9510,10 +9510,10 @@ wop_trashmap/A410B0ABE7369D35B8F10116D01B1639
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0058.tga
+		map maps/wop_trashmap/lm_0058
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -9521,7 +9521,7 @@ wop_trashmap/A410B0ABE7369D35B8F10116D01B1639
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9533,17 +9533,17 @@ wop_trashmap/03BC1FDEE6B9A27CBC200C8FDF461F5D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0070.tga
+		map maps/wop_trashmap/lm_0070
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9555,17 +9555,17 @@ wop_trashmap/DAE792E7F117E80DE020B739C2312F16
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0065.tga
+		map maps/wop_trashmap/lm_0065
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9577,17 +9577,17 @@ wop_trashmap/72CFD42B38EC163F182CBA88D5C0CC2C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9599,17 +9599,17 @@ wop_trashmap/01074045883069D8E14B44FAB7135441
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0016.tga
+		map maps/wop_trashmap/lm_0016
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9621,17 +9621,17 @@ wop_trashmap/2858D3E94E9CF9E82554C9E9BA1AE90D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0061.tga
+		map maps/wop_trashmap/lm_0061
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9643,17 +9643,17 @@ wop_trashmap/43E202DEB7870E7197E38208CBE148DE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0065.tga
+		map maps/wop_trashmap/lm_0065
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9665,10 +9665,10 @@ wop_trashmap/692924C5830BFBBEAA869838EC49E25A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -9676,7 +9676,7 @@ wop_trashmap/692924C5830BFBBEAA869838EC49E25A
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9688,17 +9688,17 @@ wop_trashmap/7433081A5A3D91599457746CDC7C356F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0019.tga
+		map maps/wop_trashmap/lm_0019
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9710,17 +9710,17 @@ wop_trashmap/91212738D152B09C2034AE54387A6D0E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0017.tga
+		map maps/wop_trashmap/lm_0017
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9732,17 +9732,17 @@ wop_trashmap/E395938EB021C13CC4ED2BC6BA3E33A9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9754,17 +9754,17 @@ wop_trashmap/B31D8E0F97E5BECB050E9C6BAC9ACFDA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9776,10 +9776,10 @@ wop_trashmap/52AAFBDC1AF217D4B8320082B1FDE2BB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -9787,7 +9787,7 @@ wop_trashmap/52AAFBDC1AF217D4B8320082B1FDE2BB
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9799,17 +9799,17 @@ wop_trashmap/09FDB8BC965C968655448FF324CC71DC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0006.tga
+		map maps/wop_trashmap/lm_0006
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9821,17 +9821,17 @@ wop_trashmap/9314C90198A704289DC7FBDBAD00910A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9843,17 +9843,17 @@ wop_trashmap/CED732306839B93C410A902A651EF511
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0072.tga
+		map maps/wop_trashmap/lm_0072
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9865,17 +9865,17 @@ wop_trashmap/7D4DC7E2AAEFD88AAFA92D5686AE6D4C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0073.tga
+		map maps/wop_trashmap/lm_0073
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9887,17 +9887,17 @@ wop_trashmap/AD8E85678ED4FE0B32A32BB899041699
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0075.tga
+		map maps/wop_trashmap/lm_0075
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9909,17 +9909,17 @@ wop_trashmap/4E80064939997BFB712F76F17C0197A4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0036.tga
+		map maps/wop_trashmap/lm_0036
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9931,17 +9931,17 @@ wop_trashmap/EB9C76013199840CE9FEBE937B28AEE7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9953,17 +9953,17 @@ wop_trashmap/229B7633FAC71EDD05F4D19DFBAB461B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9975,17 +9975,17 @@ wop_trashmap/A00B7D4E9F45942729B6AEC7270C5674
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0056.tga
+		map maps/wop_trashmap/lm_0056
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -9997,10 +9997,10 @@ wop_trashmap/05BE8A31BDE51ED28A0BA885544E5F56
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10008,7 +10008,7 @@ wop_trashmap/05BE8A31BDE51ED28A0BA885544E5F56
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10020,10 +10020,10 @@ wop_trashmap/16393405672634C2F964C9CF95C8C1AF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0047.tga
+		map maps/wop_trashmap/lm_0047
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10031,7 +10031,7 @@ wop_trashmap/16393405672634C2F964C9CF95C8C1AF
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10043,7 +10043,7 @@ wop_trashmap/DE66A33A8D3411F55250389B124971DF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -10054,7 +10054,7 @@ wop_trashmap/DE66A33A8D3411F55250389B124971DF
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10066,10 +10066,10 @@ wop_trashmap/BDF76304E156B06D7B44EAE0B175164F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10077,7 +10077,7 @@ wop_trashmap/BDF76304E156B06D7B44EAE0B175164F
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10089,17 +10089,17 @@ wop_trashmap/DE3CE5CC9432461C4B68D50C23373861
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10111,10 +10111,10 @@ wop_trashmap/D2DB0EDEAB396A76C09E0A7AC24A2FCA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10122,7 +10122,7 @@ wop_trashmap/D2DB0EDEAB396A76C09E0A7AC24A2FCA
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10134,17 +10134,17 @@ wop_trashmap/F839C703E4916A5F68ACC8D2EDB9152D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0006.tga
+		map maps/wop_trashmap/lm_0006
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10156,17 +10156,17 @@ wop_trashmap/E76D15B6F68D1CC3FBB14D23394C3BE6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0009.tga
+		map maps/wop_trashmap/lm_0009
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10178,17 +10178,17 @@ wop_trashmap/D00B60CB960C4AE86F22B479775A2928
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10200,10 +10200,10 @@ wop_trashmap/FF1BA7AD9A25000ADB305C2260FFC6B4
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0071.tga
+		map maps/wop_trashmap/lm_0071
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10211,7 +10211,7 @@ wop_trashmap/FF1BA7AD9A25000ADB305C2260FFC6B4
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10223,17 +10223,17 @@ wop_trashmap/11BE994886B4C7C45E1F519CAFBEDE73
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0065.tga
+		map maps/wop_trashmap/lm_0065
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10245,17 +10245,17 @@ wop_trashmap/F53A80F31A78C9DA72CBB8B0C7CDCD4D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0071.tga
+		map maps/wop_trashmap/lm_0071
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10267,10 +10267,10 @@ wop_trashmap/54A565A885EF3025964C6DF43E07774A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0068.tga
+		map maps/wop_trashmap/lm_0068
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10278,7 +10278,7 @@ wop_trashmap/54A565A885EF3025964C6DF43E07774A
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10290,17 +10290,17 @@ wop_trashmap/0331514A87675DE4A151C9584C659FB7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0007.tga
+		map maps/wop_trashmap/lm_0007
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10312,17 +10312,17 @@ wop_trashmap/C63537700AF80B4514E0D0AEABF85DF2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0019.tga
+		map maps/wop_trashmap/lm_0019
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10334,10 +10334,10 @@ wop_trashmap/A83C6363A96AE686F167B6AE010B232B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0020.tga
+		map maps/wop_trashmap/lm_0020
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10345,7 +10345,7 @@ wop_trashmap/A83C6363A96AE686F167B6AE010B232B
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10357,17 +10357,17 @@ wop_trashmap/B6991D8E4EEF92C9B6352FB050DB4731
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0024.tga
+		map maps/wop_trashmap/lm_0024
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10379,17 +10379,17 @@ wop_trashmap/E0712AD7EDEE3FC8FBCEC0FAD86F2DC1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0025.tga
+		map maps/wop_trashmap/lm_0025
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10401,17 +10401,17 @@ wop_trashmap/50DCF9C17BA7DECF29CF89160D42E379
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0007.tga
+		map maps/wop_trashmap/lm_0007
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10423,10 +10423,10 @@ wop_trashmap/ED4881EB7BEF8F4D8868FFDFE1BEB8E3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0019.tga
+		map maps/wop_trashmap/lm_0019
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10434,7 +10434,7 @@ wop_trashmap/ED4881EB7BEF8F4D8868FFDFE1BEB8E3
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10446,10 +10446,10 @@ wop_trashmap/879902EC2A7F612405850AF31CD4DDFA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0020.tga
+		map maps/wop_trashmap/lm_0020
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10457,7 +10457,7 @@ wop_trashmap/879902EC2A7F612405850AF31CD4DDFA
 	}
 
 	{
-		map textures/pad_trash/kb_beton_nass.tga
+		map textures/pad_trash/kb_beton_nass
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10469,17 +10469,17 @@ wop_trashmap/FDE06E22CDD4EEAF911A3447663ADAB9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10491,17 +10491,17 @@ wop_trashmap/DF15BC27ED01398C222319AF0AA4CDE5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0021.tga
+		map maps/wop_trashmap/lm_0021
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10513,10 +10513,10 @@ wop_trashmap/9BAC22FA18DB27C9E07A71E2F7B4DDC6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0023.tga
+		map maps/wop_trashmap/lm_0023
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10524,7 +10524,7 @@ wop_trashmap/9BAC22FA18DB27C9E07A71E2F7B4DDC6
 	}
 
 	{
-		map textures/pad_trash/kb_container_04.tga
+		map textures/pad_trash/kb_container_04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10536,17 +10536,17 @@ wop_trashmap/40230F3214CD3381B5F94DDAFE0260E5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0019.tga
+		map maps/wop_trashmap/lm_0019
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10558,17 +10558,17 @@ wop_trashmap/89A1B82D95D844DF484EF50582C4959A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0035.tga
+		map maps/wop_trashmap/lm_0035
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10580,10 +10580,10 @@ wop_trashmap/33C33AEBD062078D3D92C92CA360F403
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0003.tga
+		map maps/wop_trashmap/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10591,7 +10591,7 @@ wop_trashmap/33C33AEBD062078D3D92C92CA360F403
 	}
 
 	{
-		map textures/pad_garden/gumkabel.tga
+		map textures/pad_garden/gumkabel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10603,17 +10603,17 @@ wop_trashmap/B4C6A207FF53D3FEF21AF5B197C71DBA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0049.tga
+		map maps/wop_trashmap/lm_0049
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_teelicht_side.tga
+		map textures/pad_trash/kb_teelicht_side
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10625,17 +10625,17 @@ wop_trashmap/9A031C8DC4AF5787260938D514A6FA22
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0007.tga
+		map maps/wop_trashmap/lm_0007
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_gfx02/git04.tga
+		map textures/pad_gfx02/git04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10647,17 +10647,17 @@ wop_trashmap/4ABD1E4CB6BF51F25935BB51BD31129C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0049.tga
+		map maps/wop_trashmap/lm_0049
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pvc.tga
+		map textures/pad_trash/kb_pvc
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10669,17 +10669,17 @@ wop_trashmap/3465B80B11B58BAE614D0EC79403F610
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0015.tga
+		map maps/wop_trashmap/lm_0015
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_tex/col06b.tga
+		map textures/pad_tex/col06b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10691,17 +10691,17 @@ wop_trashmap/78B1E6ED5969C126DDD4914B13F0D18A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0032.tga
+		map maps/wop_trashmap/lm_0032
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10713,17 +10713,17 @@ wop_trashmap/8ECB1EDE9FCFD01A9C7EBE6456952CC6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0030.tga
+		map maps/wop_trashmap/lm_0030
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10735,17 +10735,17 @@ wop_trashmap/2D0E75E69EF7CD94B425E4646F8F110B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0058.tga
+		map maps/wop_trashmap/lm_0058
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_redrope.tga
+		map textures/pad_trash/kb_redrope
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10757,17 +10757,17 @@ wop_trashmap/B7FA7C562FC0C3FAC8FCD1555F51DFAD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0009.tga
+		map maps/wop_trashmap/lm_0009
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_basket_metal.tga
+		map textures/pad_jail/pad_jail_basket_metal
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10779,7 +10779,7 @@ wop_trashmap/E5BBB679DCBC2480619E3C7499D53FD0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -10790,7 +10790,7 @@ wop_trashmap/E5BBB679DCBC2480619E3C7499D53FD0
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10802,17 +10802,17 @@ wop_trashmap/6449A41741218F48AF50DFEB5AFBBAEB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0029.tga
+		map maps/wop_trashmap/lm_0029
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10824,17 +10824,17 @@ wop_trashmap/F0D8764A08E5FA5E3B2FC1DEDDC54154
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10846,7 +10846,7 @@ wop_trashmap/D66DB694B55711406812448C8777A2AB
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -10857,7 +10857,7 @@ wop_trashmap/D66DB694B55711406812448C8777A2AB
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10869,17 +10869,17 @@ wop_trashmap/9DFB6D4C3721CD336DC0C96FA534A43E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0033.tga
+		map maps/wop_trashmap/lm_0033
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10891,10 +10891,10 @@ wop_trashmap/C85373FE77C1D335F288CFB221E11643
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10902,7 +10902,7 @@ wop_trashmap/C85373FE77C1D335F288CFB221E11643
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10914,10 +10914,10 @@ wop_trashmap/C37E99C6E233F57CF25B532FA344BA0A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10925,7 +10925,7 @@ wop_trashmap/C37E99C6E233F57CF25B532FA344BA0A
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10937,10 +10937,10 @@ wop_trashmap/416A021772499F46F501DC5FAD651ACF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0031.tga
+		map maps/wop_trashmap/lm_0031
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10948,7 +10948,7 @@ wop_trashmap/416A021772499F46F501DC5FAD651ACF
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10960,10 +10960,10 @@ wop_trashmap/11C4F18A54C8F53C0E54AE5D27DE5ED9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0030.tga
+		map maps/wop_trashmap/lm_0030
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10971,7 +10971,7 @@ wop_trashmap/11C4F18A54C8F53C0E54AE5D27DE5ED9
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -10983,10 +10983,10 @@ wop_trashmap/AD655A953F2829DEBBD6EC4E841ACDF7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0034.tga
+		map maps/wop_trashmap/lm_0034
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -10994,7 +10994,7 @@ wop_trashmap/AD655A953F2829DEBBD6EC4E841ACDF7
 	}
 
 	{
-		map textures/pad_trash/kb_geroell.tga
+		map textures/pad_trash/kb_geroell
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11006,10 +11006,10 @@ wop_trashmap/E08AD781A22F4FBE9155C0E2DC369F73
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0001.tga
+		map maps/wop_trashmap/lm_0001
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -11017,7 +11017,7 @@ wop_trashmap/E08AD781A22F4FBE9155C0E2DC369F73
 	}
 
 	{
-		map textures/pad_attic/besen02.tga
+		map textures/pad_attic/besen02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11029,17 +11029,17 @@ wop_trashmap/6C5CACAB28117A3629C7AE886952E354
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_gfx02/git04.tga
+		map textures/pad_gfx02/git04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11051,17 +11051,17 @@ wop_trashmap/99745C2875E264E0D580AFB72EB70673
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0012.tga
+		map maps/wop_trashmap/lm_0012
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_metal10_keyhole.tga
+		map textures/pad_jail/pad_jail_metal10_keyhole
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11073,7 +11073,7 @@ wop_trashmap/083842DFB3AFA450808DF3D3035CC677
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -11084,7 +11084,7 @@ wop_trashmap/083842DFB3AFA450808DF3D3035CC677
 	}
 
 	{
-		map textures/pad_jail/pad_jail_metal10_keyhole.tga
+		map textures/pad_jail/pad_jail_metal10_keyhole
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11096,10 +11096,10 @@ wop_trashmap/B61BE158424BB344B3B9ED5C95749820
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0013.tga
+		map maps/wop_trashmap/lm_0013
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -11107,7 +11107,7 @@ wop_trashmap/B61BE158424BB344B3B9ED5C95749820
 	}
 
 	{
-		map textures/pad_jail/pad_jail_metal10_keyhole.tga
+		map textures/pad_jail/pad_jail_metal10_keyhole
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11119,17 +11119,17 @@ wop_trashmap/A261C1DFFC20D6550D751C662E1741DA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0011.tga
+		map maps/wop_trashmap/lm_0011
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_jail/pad_jail_metal10_keyhole.tga
+		map textures/pad_jail/pad_jail_metal10_keyhole
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11141,10 +11141,10 @@ wop_trashmap/4B315BD68A16CBFBE51E5F96CCBCFA97
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -11152,7 +11152,7 @@ wop_trashmap/4B315BD68A16CBFBE51E5F96CCBCFA97
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_mittel.tga
+		map textures/pad_trash/kb_pflaster_mittel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11164,17 +11164,17 @@ wop_trashmap/52B6BE133CA1A3156915DBD0DF170BE7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0039.tga
+		map maps/wop_trashmap/lm_0039
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11186,17 +11186,17 @@ wop_trashmap/666B42655B2B635D6F80A637F1C9BBE8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0040.tga
+		map maps/wop_trashmap/lm_0040
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11208,7 +11208,7 @@ wop_trashmap/1286F8949FB84B60D1DB9D3AA1567836
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -11219,7 +11219,7 @@ wop_trashmap/1286F8949FB84B60D1DB9D3AA1567836
 	}
 
 	{
-		map textures/pad_trash/kb_mauer.tga
+		map textures/pad_trash/kb_mauer
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11231,17 +11231,17 @@ wop_trashmap/332E041EB6FF94B5FD8D261DECE87ECD
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0064.tga
+		map maps/wop_trashmap/lm_0064
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11253,17 +11253,17 @@ wop_trashmap/9393BF49F6E4A8133134CEED7022D34E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0071.tga
+		map maps/wop_trashmap/lm_0071
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11275,17 +11275,17 @@ wop_trashmap/35D2C512FDE79C7D2D7AF840B30B2783
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0062.tga
+		map maps/wop_trashmap/lm_0062
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone044big.tga
+		map textures/pad_wallout/wall_stone044big
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11297,17 +11297,17 @@ wop_trashmap/1999D928C606D846B599B5EEC775323A
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0060.tga
+		map maps/wop_trashmap/lm_0060
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_schachtdeckel.tga
+		map textures/pad_trash/kb_schachtdeckel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11319,17 +11319,17 @@ wop_trashmap/1EDB0BD6C830B96587319C1386771071
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0081.tga
+		map maps/wop_trashmap/lm_0081
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_western/metalrollup0026.tga
+		map textures/pad_western/metalrollup0026
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11341,17 +11341,17 @@ wop_trashmap/A596BE78A7DBD58A7F32D6C958B9D3A2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0013.tga
+		map maps/wop_trashmap/lm_0013
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11363,17 +11363,17 @@ wop_trashmap/33FD02F4213D048CD89E5B7CDAA6F1DE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0012.tga
+		map maps/wop_trashmap/lm_0012
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11385,7 +11385,7 @@ wop_trashmap/E0EA9B54962BA0F011879B7B59C2801C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -11396,7 +11396,7 @@ wop_trashmap/E0EA9B54962BA0F011879B7B59C2801C
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11408,7 +11408,7 @@ wop_trashmap/A4C55AE2321658532E13ED5EB6BC24FE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -11419,7 +11419,7 @@ wop_trashmap/A4C55AE2321658532E13ED5EB6BC24FE
 	}
 
 	{
-		map textures/pad_trash/kb_kaputtputz.tga
+		map textures/pad_trash/kb_kaputtputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11431,17 +11431,17 @@ wop_trashmap/70844D4CDB0BFE62D65E7343F72B9C02
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11453,17 +11453,17 @@ wop_trashmap/84C1B11203262D51F0674A309ABF5A21
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_02.tga
+		map textures/pad_trash/kb_mauerwerk_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11475,7 +11475,7 @@ wop_trashmap/573553B548C27077A298740343FBB0F2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -11486,7 +11486,7 @@ wop_trashmap/573553B548C27077A298740343FBB0F2
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11498,10 +11498,10 @@ wop_trashmap/D5A38D30EAB0773F976770BCDA2F6142
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -11509,7 +11509,7 @@ wop_trashmap/D5A38D30EAB0773F976770BCDA2F6142
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11521,10 +11521,10 @@ wop_trashmap/B90BD40BCAD94871F6F97A510CB927A6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0002.tga
+		map maps/wop_trashmap/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -11532,7 +11532,7 @@ wop_trashmap/B90BD40BCAD94871F6F97A510CB927A6
 	}
 
 	{
-		map textures/pad_garden/oldwall_512.tga
+		map textures/pad_garden/oldwall_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11544,7 +11544,7 @@ wop_trashmap/78D7C0FFB84783CE1793D59CDB715A28
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -11555,7 +11555,7 @@ wop_trashmap/78D7C0FFB84783CE1793D59CDB715A28
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_01.tga
+		map textures/pad_trash/kb_mauerwerk_01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11567,17 +11567,17 @@ wop_trashmap/080625AF0F3DC7FBD0E4A2797C5708B6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0046.tga
+		map maps/wop_trashmap/lm_0046
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_mauerwerk_01.tga
+		map textures/pad_trash/kb_mauerwerk_01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11589,17 +11589,17 @@ wop_trashmap/BC7ADB1B496C37B280D3542ECAD34066
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0026.tga
+		map maps/wop_trashmap/lm_0026
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11611,17 +11611,17 @@ wop_trashmap/2DBCAB4CE94C1F5ED6D18C26F0A32202
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0024.tga
+		map maps/wop_trashmap/lm_0024
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_dach.tga
+		map textures/pad_trash/kb_dach
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11633,17 +11633,17 @@ wop_trashmap/0921A180B9D2D428FACA36650371D463
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0014.tga
+		map maps/wop_trashmap/lm_0014
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart04c.tga
+		map textures/pad_objects/cart04c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11655,17 +11655,17 @@ wop_trashmap/004C56403838FB21E43A9FC19F51E379
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0014.tga
+		map maps/wop_trashmap/lm_0014
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_objects/cart12c.tga
+		map textures/pad_objects/cart12c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11677,10 +11677,10 @@ wop_trashmap/DF48F7A576F9D0900ABAB095287E34FA
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0050.tga
+		map maps/wop_trashmap/lm_0050
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -11688,7 +11688,7 @@ wop_trashmap/DF48F7A576F9D0900ABAB095287E34FA
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11700,17 +11700,17 @@ wop_trashmap/CA336F3D43B5E89F3EB02C513075B9F7
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0058.tga
+		map maps/wop_trashmap/lm_0058
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11722,17 +11722,17 @@ wop_trashmap/EB67C9C306F8269E5BEE233B33200427
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0005.tga
+		map maps/wop_trashmap/lm_0005
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone054.tga
+		map textures/pad_wallout/wall_stone054
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11744,17 +11744,17 @@ wop_trashmap/4ADDEB14C71658D3EDBACC0A09C49532
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0051.tga
+		map maps/wop_trashmap/lm_0051
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11766,17 +11766,17 @@ wop_trashmap/5D2349574723A40D5C0390E76E29A00D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0052.tga
+		map maps/wop_trashmap/lm_0052
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_rauhputz.tga
+		map textures/pad_trash/kb_rauhputz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11788,17 +11788,17 @@ wop_trashmap/83376CBADBC1F418AC11084EE83F87A9
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0019.tga
+		map maps/wop_trashmap/lm_0019
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11810,17 +11810,17 @@ wop_trashmap/C3968C871134939F203BDCC3CCCD9CA8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0057.tga
+		map maps/wop_trashmap/lm_0057
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11832,17 +11832,17 @@ wop_trashmap/0068DD422A2B7058254546922CF89B1D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0069.tga
+		map maps/wop_trashmap/lm_0069
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11854,17 +11854,17 @@ wop_trashmap/0CB86F9AE01623C7F81CD0DFCE0AA6BC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11876,17 +11876,17 @@ wop_trashmap/D9A77494EA15C0DBC2D881DD036B9B32
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0062.tga
+		map maps/wop_trashmap/lm_0062
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone040.tga
+		map textures/pad_wallout/wall_stone040
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11898,17 +11898,17 @@ wop_trashmap/BB00103A86F6ECFE3B6EA20FC6950060
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0019.tga
+		map maps/wop_trashmap/lm_0019
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11920,17 +11920,17 @@ wop_trashmap/D5412519A542EE0D19A5D7429952B0D2
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0033.tga
+		map maps/wop_trashmap/lm_0033
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11942,17 +11942,17 @@ wop_trashmap/AA8551A21402DB7FF4ED940A06B12ECC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0024.tga
+		map maps/wop_trashmap/lm_0024
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11964,17 +11964,17 @@ wop_trashmap/FFFC92CF07ED1441C1481868DDD3D0F0
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0040.tga
+		map maps/wop_trashmap/lm_0040
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -11986,17 +11986,17 @@ wop_trashmap/1C122E4C0DB4E8EC2B3647ED02B31A2B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0066.tga
+		map maps/wop_trashmap/lm_0066
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone001a.tga
+		map textures/pad_wallout/wall_stone001a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12008,10 +12008,10 @@ wop_trashmap/9980131267325AEBAEB099C98DBBCC49
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -12019,7 +12019,7 @@ wop_trashmap/9980131267325AEBAEB099C98DBBCC49
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12031,17 +12031,17 @@ wop_trashmap/C34933D774009A3528C59E736F173DB8
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0009.tga
+		map maps/wop_trashmap/lm_0009
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12053,17 +12053,17 @@ wop_trashmap/F5C63A0E94D70A7F2D4BF4EC516D39E1
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0044.tga
+		map maps/wop_trashmap/lm_0044
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12075,17 +12075,17 @@ wop_trashmap/B53A281C82FA8696222843C70F09810D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0014.tga
+		map maps/wop_trashmap/lm_0014
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12097,17 +12097,17 @@ wop_trashmap/8972368E89601155A847045C2738210D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0055.tga
+		map maps/wop_trashmap/lm_0055
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12119,17 +12119,17 @@ wop_trashmap/0DA69B345398339E2AA3084CB71BA78C
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0035.tga
+		map maps/wop_trashmap/lm_0035
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12141,17 +12141,17 @@ wop_trashmap/B3AA2B1C4372FFFFC789611DFC627621
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0034.tga
+		map maps/wop_trashmap/lm_0034
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12163,17 +12163,17 @@ wop_trashmap/5DACCDD45F4AC411D7DB8C95B1F9BD88
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0048.tga
+		map maps/wop_trashmap/lm_0048
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wallstone_001.tga
+		map textures/pad_wallout/wallstone_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12185,17 +12185,17 @@ wop_trashmap/E3ADB92B3968BA86FAB3515924DDFE05
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0039.tga
+		map maps/wop_trashmap/lm_0039
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_trash/kb_pflaster_klein.tga
+		map textures/pad_trash/kb_pflaster_klein
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12207,10 +12207,10 @@ wop_trashmap/DED8B60D7A74DDA50E7DFB446A8D4089
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0008.tga
+		map maps/wop_trashmap/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -12218,7 +12218,7 @@ wop_trashmap/DED8B60D7A74DDA50E7DFB446A8D4089
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12230,10 +12230,10 @@ wop_trashmap/8022EB9235942582E9A5B25AAE623894
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0004.tga
+		map maps/wop_trashmap/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -12241,7 +12241,7 @@ wop_trashmap/8022EB9235942582E9A5B25AAE623894
 	}
 
 	{
-		map textures/pad_garden/rostii.tga
+		map textures/pad_garden/rostii
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12253,10 +12253,10 @@ wop_trashmap/B4ABA020E13ECA0E4C4639FF75D902A3
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0070.tga
+		map maps/wop_trashmap/lm_0070
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
@@ -12264,7 +12264,7 @@ wop_trashmap/B4ABA020E13ECA0E4C4639FF75D902A3
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12276,7 +12276,7 @@ wop_trashmap/386560D7F845F0FF222CD9E934ECA2D6
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -12287,7 +12287,7 @@ wop_trashmap/386560D7F845F0FF222CD9E934ECA2D6
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -12299,17 +12299,17 @@ wop_trashmap/A0DB9C4759597A05339965ED16F1AD3F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_trashmap/lm_0066.tga
+		map maps/wop_trashmap/lm_0066
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wallout/wall_stone030.tga
+		map textures/pad_wallout/wall_stone030
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}

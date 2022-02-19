@@ -276,7 +276,7 @@ textures/common/woodclip		// causes footstep sounds like walking on wood
 // DONOT & NO
 // =================
 
-textures/common/donotenter		// bots are not blocked, but they avoid and try to leave those areas 
+textures/common/donotenter		// bots are not blocked, but they avoid and try to leave those areas
 {
 	qer_trans 0.50
 	surfaceparm nodraw
@@ -418,7 +418,7 @@ textures/common/hintskip		// same as skip, but name changed to allow Radiant to 
 
 textures/common/invisible		// solid and transparent polygons, which casts shadows
 {
-	surfaceparm nolightmap			
+	surfaceparm nolightmap
 	{
 		map textures/common/invisible
 		alphaFunc GE128
@@ -433,7 +433,7 @@ textures/common/mirror1			// clear mirror surface, use with misc_portal_surface 
 	surfaceparm nolightmap
 	portal
 	{
-		map textures/common/mirror1.tga
+		map textures/common/mirror1
 		blendfunc GL_ONE GL_ONE_MINUS_SRC_ALPHA
 		depthWrite
 	}
@@ -461,7 +461,7 @@ textures/common/portal			// same as mirror1
 	surfaceparm nolightmap
 	portal
 	{
-		map textures/common/mirror1.tga
+		map textures/common/mirror1
 		tcMod turb 0 0.25 0 0.05
 		blendfunc GL_ONE GL_ONE_MINUS_SRC_ALPHA
 		depthWrite

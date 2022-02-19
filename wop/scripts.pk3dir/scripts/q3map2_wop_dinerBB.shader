@@ -8,7 +8,7 @@ wop_dinerBB/B611A673C803C59F4667C56491997A4B
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
 		map $lightmap
@@ -19,7 +19,7 @@ wop_dinerBB/B611A673C803C59F4667C56491997A4B
 	}
 
 	{
-		map textures/pad_harm/sitzbank01b_white2.tga
+		map textures/pad_harm/sitzbank01b_white2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -31,17 +31,17 @@ wop_dinerBB/32A7EA3E3BE65C22737B5826B98C1E6D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0008.tga
+		map maps/wop_dinerBB/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wood/wood026a.tga
+		map textures/pad_wood/wood026a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -53,17 +53,17 @@ wop_dinerBB/DC04DA76CD2321B81A5538F754E56C84
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0003.tga
+		map maps/wop_dinerBB/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_harm/dinerground2.tga
+		map textures/pad_harm/dinerground2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -75,17 +75,17 @@ wop_dinerBB/25D25655530F2E12DA2440933C41F3B5
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0003.tga
+		map maps/wop_dinerBB/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_harm/dinerground.tga
+		map textures/pad_harm/dinerground
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -97,17 +97,17 @@ wop_dinerBB/FE0A9852BD4F9CA60374DFA304B17B2F
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0008.tga
+		map maps/wop_dinerBB/lm_0008
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wood/wood019a.tga
+		map textures/pad_wood/wood019a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -119,17 +119,17 @@ wop_dinerBB/5651E6EF702DF1BBCE508DF7EC93B60D
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0002.tga
+		map maps/wop_dinerBB/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_harm/metalline01b.tga
+		map textures/pad_harm/metalline01b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -141,17 +141,17 @@ wop_dinerBB/73666EB0C2CF8B408755B1B321908BBE
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0004.tga
+		map maps/wop_dinerBB/lm_0004
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_harm/sitzbank01b_white2.tga
+		map textures/pad_harm/sitzbank01b_white2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -163,17 +163,17 @@ wop_dinerBB/F3D2A53FC41ED309C0060609282F06DC
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0007.tga
+		map maps/wop_dinerBB/lm_0007
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wood/wood026a.tga
+		map textures/pad_wood/wood026a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -185,17 +185,17 @@ wop_dinerBB/8AE756171F8382B448B29289FE8276AF
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0006.tga
+		map maps/wop_dinerBB/lm_0006
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wood/wood026a.tga
+		map textures/pad_wood/wood026a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -207,17 +207,17 @@ wop_dinerBB/CEBF3BC23BF6DE2A5357F95C558ED68E
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0002.tga
+		map maps/wop_dinerBB/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_harm/dinerground2.tga
+		map textures/pad_harm/dinerground2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -229,17 +229,17 @@ wop_dinerBB/E36377B5DB63EB32A015811D5F19AE77
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0002.tga
+		map maps/wop_dinerBB/lm_0002
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_harm/dinerground.tga
+		map textures/pad_harm/dinerground
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -251,17 +251,17 @@ wop_dinerBB/B23B4B85E20CDD394FD2DA508C158415
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0007.tga
+		map maps/wop_dinerBB/lm_0007
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wood/wood019a.tga
+		map textures/pad_wood/wood019a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -273,17 +273,17 @@ wop_dinerBB/5697DAA32CC15DE50BAB541221CBC442
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0003.tga
+		map maps/wop_dinerBB/lm_0003
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_harm/metalline01b.tga
+		map textures/pad_harm/metalline01b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -295,17 +295,17 @@ wop_dinerBB/FE361E195E08AEA7D95AB512D23EA346
 		map $lightmap
 		rgbGen identity
 	}
-	
+
 	// Q3Map2 custom lightstyle stage(s)
 	{
-		map maps/wop_dinerBB/lm_0000.tga
+		map maps/wop_dinerBB/lm_0000
 		blendFunc GL_SRC_ALPHA GL_ONE
 		rgbGen wave noise 0.5 1 0 5.37 // style 1
 		tcGen lightmap
 	}
 
 	{
-		map textures/pad_wood/wood026a.tga
+		map textures/pad_wood/wood026a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}

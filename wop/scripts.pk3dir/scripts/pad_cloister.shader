@@ -1,10 +1,10 @@
 textures/pad_fountain/utopiaatoll
 {
-        qer_editorimage textures/pad_fountain/utopiaatoll.tga
+        qer_editorimage textures/pad_fountain/utopiaatoll
 
 	surfaceparm noimpact
-	surfaceparm nolightmap             
-                q3map_lightimage textures/pad_fountain/orange02.tga
+	surfaceparm nolightmap
+                q3map_lightimage textures/pad_fountain/orange02
 	q3map_sun	1.000000 0.828885 0.672267 220 100 90
 	q3map_surfacelight 300
 
@@ -16,15 +16,15 @@ textures/pad_fountain/utopiaatoll
 textures/pad_fountain/ground01
 {
 q3map_nonplanar
-q3map_shadeangle 60 l	
+q3map_shadeangle 60 l
 surfaceparm sandsteps
-qer_editorimage textures/pad_fountain/ground01.tga
+qer_editorimage textures/pad_fountain/ground01
 {
 map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/ground01.tga
+map textures/pad_fountain/ground01
 blendFunc filter
 }
 }
@@ -34,15 +34,15 @@ blendFunc filter
 textures/pad_fountain/stone_01b
 {
 q3map_nonplanar
-q3map_shadeangle 60 l	
+q3map_shadeangle 60 l
 surfaceparm sandsteps
-qer_editorimage textures/pad_fountain/stone_01b.tga
+qer_editorimage textures/pad_fountain/stone_01b
 {
 map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/stone_01b.tga
+map textures/pad_fountain/stone_01b
 blendFunc filter
 }
 }
@@ -51,15 +51,15 @@ blendFunc filter
 textures/pad_fountain/roughwall008_512
 {
 q3map_nonplanar
-q3map_shadeangle 60 l	
+q3map_shadeangle 60 l
 surfaceparm sandsteps
-qer_editorimage textures/pad_fountain/roughwall008_512.tga
+qer_editorimage textures/pad_fountain/roughwall008_512
 {
 map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/roughwall008_512.tga
+map textures/pad_fountain/roughwall008_512
 blendFunc filter
 }
 }
@@ -73,7 +73,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/tep003_512.tga
+map textures/pad_fountain/tep003_512
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -88,7 +88,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/dekostoff.tga
+map textures/pad_fountain/dekostoff
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -103,7 +103,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/balken01_512.tga
+map textures/pad_fountain/balken01_512
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -117,7 +117,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/balken01_end.tga
+map textures/pad_fountain/balken01_end
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -132,7 +132,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/blue_woood001old.tga
+map textures/pad_fountain/blue_woood001old
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -146,7 +146,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/red_woood001old.tga
+map textures/pad_fountain/red_woood001old
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -160,7 +160,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/woodleiste01.tga
+map textures/pad_fountain/woodleiste01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -175,7 +175,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/woodleiste02.tga
+map textures/pad_fountain/woodleiste02
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -189,7 +189,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_fountain/woodchair01.tga
+map textures/pad_fountain/woodchair01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -198,14 +198,14 @@ rgbGen identity
 
 textures/pad_fountain/seicurve
 {
-          qer_editorimage textures/pad_fountain/seilbrunnen.tga
-           surfaceparm nonsolid		
+          qer_editorimage textures/pad_fountain/seilbrunnen
+           surfaceparm nonsolid
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_fountain/seilbrunnen.tga
+		map textures/pad_fountain/seilbrunnen
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -213,14 +213,14 @@ textures/pad_fountain/seicurve
 
 textures/pad_fountain/oldmetalcurve
 {
-          qer_editorimage textures/pad_fountain/oldmetal.tga
-           surfaceparm nonsolid		
+          qer_editorimage textures/pad_fountain/oldmetal
+           surfaceparm nonsolid
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_fountain/oldmetal.tga
+		map textures/pad_fountain/oldmetal
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}

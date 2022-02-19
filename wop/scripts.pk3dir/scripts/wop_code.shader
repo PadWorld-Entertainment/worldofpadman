@@ -6,8 +6,8 @@
 //spraypuff
 models/weaponsfx/spraypuff { {  map models/weaponsfx/spraypuff  blendFunc blend  rgbGen vertex  alphaGen vertex } }
 
-powerupeffect/puff { {  map powerupeffect/puff.tga  blendFunc blend  rgbGen vertex  alphaGen vertex } }
-powerupeffect/revival { {  map powerupeffect/heart_noalpha.tga  blendFunc add  rgbGen vertex  alphaGen vertex } }
+powerupeffect/puff { {  map powerupeffect/puff  blendFunc blend  rgbGen vertex  alphaGen vertex } }
+powerupeffect/revival { {  map powerupeffect/heart_noalpha  blendFunc add  rgbGen vertex  alphaGen vertex } }
 
 //spraymark ... I will use the spraypuff =)
 models/weaponsfx/spraymark { polygonoffset {  map models/weaponsfx/spraypuff  blendFunc blend  rgbGen vertex  alphaGen vertex } }
@@ -21,7 +21,7 @@ gfx/2d/WoPascii
 	nopicmip
 	nomipmaps
 	{
-		map gfx/2d/WoPascii.tga
+		map gfx/2d/WoPascii
 		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		rgbgen vertex
 	}
@@ -94,14 +94,14 @@ teleEffectBlueFP
 {
 	cull none
 	{
-		map models/weaponsfx/teleflash.tga
+		map models/weaponsfx/teleflash
 		blendFunc add
 		rgbGen vertex
 		tcMod scale 3 3
 		tcMod scroll 1.2 1.9
 	}
 	{
-		map models/weaponsfx/teleflash.tga
+		map models/weaponsfx/teleflash
 		blendFunc add
 		rgbGen vertex
 		tcMod scale 4 4
@@ -113,14 +113,14 @@ teleEffectRedFP
 {
 	cull none
 	{
-		map models/weaponsfx/redteleflash.tga
+		map models/weaponsfx/redteleflash
 		blendFunc add
 		rgbGen vertex
 		tcMod scale 3 3
 		tcMod scroll 1.2 1.9
 	}
 	{
-		map models/weaponsfx/redteleflash.tga
+		map models/weaponsfx/redteleflash
 		blendFunc add
 		rgbGen vertex
 		tcMod scale 4 4
@@ -132,14 +132,14 @@ teleEffectGreenFP
 {
 	cull none
 	{
-		map models/weaponsfx/greenteleflash.tga
+		map models/weaponsfx/greenteleflash
 		blendFunc add
 		rgbGen vertex
 		tcMod scale 3 3
 		tcMod scroll 1.2 1.9
 	}
 	{
-		map models/weaponsfx/greenteleflash.tga
+		map models/weaponsfx/greenteleflash
 		blendFunc add
 		rgbGen vertex
 		tcMod scale 4 4
@@ -155,7 +155,7 @@ gfx/damage/bullet_mrk
 {
 	polygonOffset
 	{
-		map gfx/damage/bullet_mrk.tga
+		map gfx/damage/bullet_mrk
 		blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
 		rgbGen exactVertex
 	}
@@ -165,7 +165,7 @@ gfx/damage/burn_med_mrk
 {
 	polygonOffset
 	{
-		map gfx/damage/burn_med_mrk.tga
+		map gfx/damage/burn_med_mrk
 		blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
 		rgbGen exactVertex
 	}
@@ -175,7 +175,7 @@ gfx/damage/hole_lg_mrk
 {
 	polygonOffset
 	{
-		map gfx/damage/hole_lg_mrk.tga
+		map gfx/damage/hole_lg_mrk
 		blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
 		rgbGen exactVertex
 	}
@@ -185,7 +185,7 @@ gfx/damage/plasma_mrk
 {
 	polygonOffset
 	{
-		map gfx/damage/plasma_mrk.tga
+		map gfx/damage/plasma_mrk
 		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		rgbGen vertex
 		alphaGen vertex
@@ -196,7 +196,7 @@ gfx/damage/snow_mrk
 {
 	polygonOffset
 	{
-		map gfx/damage/burn_med_mrk.tga
+		map gfx/damage/burn_med_mrk
 		blendFunc add
 		rgbGen vertex
 		alphaGen vertex
@@ -234,7 +234,7 @@ gfx/kmazoomAura
 {
 	sort nearest
 	{
-		map $whiteimage 
+		map $whiteimage
 		blendfunc GL_ONE_MINUS_DST_COLOR GL_ONE_MINUS_SRC_COLOR
 	}
 }
@@ -243,7 +243,7 @@ gfx/kmaBlueScreen
 {
 	sort 14
 	{
-		map $whiteimage 
+		map $whiteimage
 		blendfunc blend
 		alphaGen const 0.5
 		rgbGen const ( 0.0 0.0 0.50 )
@@ -262,7 +262,7 @@ disconnected
 {
 	nopicmip
 	{
-		map gfx/2d/net.tga
+		map gfx/2d/net
 	}
 }
 
@@ -271,10 +271,10 @@ markShadow
 {
 	polygonOffset
 	{
-		map marks/shadow.tga
+		map marks/shadow
 		blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
 		rgbGen exactVertex
-	}	
+	}
 }
 
 // projectionShadow is used for cheap squashed model shadows
@@ -286,28 +286,28 @@ projectionShadow
 		map			*white
 		blendFunc GL_ONE GL_ZERO
 		rgbGen wave square 0 0 0 0				// just solid black
-	}	
+	}
 }
 
 // wake is the mark on water surfaces for paddling players
 wake
 {
 	{
-		clampmap marks/splash.tga
+		clampmap marks/splash
 		blendFunc GL_ONE GL_ONE
 		rgbGen vertex
                 tcmod rotate 150
                 tcMod stretch sin .9 0.1 0 0.7
 		rgbGen wave sin .7 .3 .25 .5
-	}	
+	}
         {
-		clampmap marks/splash.tga
+		clampmap marks/splash
 		blendFunc GL_ONE GL_ONE
 		rgbGen vertex
                 tcmod rotate -130
                 tcMod stretch sin .9 0.05 0 0.9
 		rgbGen wave sin .7 .3 .25 .4
-	}	
+	}
 }
 
 waterBubble
@@ -316,7 +316,7 @@ waterBubble
 	cull none
 	entityMergable		// allow all the sprites to be merged together
 	{
-		map sprites/bubble.tga
+		map sprites/bubble
 		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		rgbGen		vertex
 		alphaGen	vertex
@@ -329,7 +329,7 @@ gfx/2d/bigchars
 	nopicmip
 	nomipmaps
 	{
-		map gfx/2d/bigchars.tga
+		map gfx/2d/bigchars
 		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		rgbgen vertex
 	}

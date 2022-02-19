@@ -5,34 +5,34 @@ models/mapobjects/pad_teleporter/pad_baseglow
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_teleporter/padlogo.tga
+	qer_editorimage models/mapobjects/pad_teleporter/padlogo
 	{
-		map models/mapobjects/pad_teleporter/padlogo.tga
+		map models/mapobjects/pad_teleporter/padlogo
 		rgbGen lightingDiffuse
 	}
 	{
-		map models/mapobjects/pad_teleporter/pad_baseglow.tga
+		map models/mapobjects/pad_teleporter/pad_baseglow
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
                 rgbGen lightingdiffuse
 	}
 	{
-		map models/mapobjects/pad_teleporter/padlogo.tga
+		map models/mapobjects/pad_teleporter/padlogo
 		blendFunc add
 		rgbGen wave sin .5 .5 0 .35
-		
+
 	}
 	{
-		map models/mapobjects/pad_teleporter/pad_baseglow.tga
+		map models/mapobjects/pad_teleporter/pad_baseglow
 		blendFunc add
 		rgbGen wave sin .5 .5 0 .35
-		
+
 	}
 }
 
@@ -43,20 +43,20 @@ models/mapobjects/pad_teleporter/padsphere_orange
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nonsolid
-	q3map_lightimage models/mapobjects/pad_teleporter/padsphereor.tga
+	q3map_lightimage models/mapobjects/pad_teleporter/padsphereor
 	q3map_surfacelight 200
 
-	cull disable 
+	cull disable
     	{
-		map models/mapobjects/pad_teleporter/padsphereor.tga
+		map models/mapobjects/pad_teleporter/padsphereor
                	blendfunc GL_ONE GL_ONE
-		tcMod scale 2 2	
+		tcMod scale 2 2
                	tcMod scroll .2 .2
 		rgbGen lightingdiffuse
        }
 
 	{
-               	map textures/pad_gfx02/padmapsphere01.jpg
+               	map textures/pad_gfx02/padmapsphere01
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                	tcMod scroll .1 -.1
@@ -64,7 +64,7 @@ models/mapobjects/pad_teleporter/padsphere_orange
        	}
 
 	{
-               	map textures/pad_gfx02/padmapsphere02.jpg
+               	map textures/pad_gfx02/padmapsphere02
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                	tcMod scroll -.1 .1
@@ -78,8 +78,8 @@ models/mapobjects/pad_teleporter/padsphere_orange
 models/mapobjects/pad_teleporter/padsphere_blue
 {
 	{
-		map textures/pad_gfx02/tinpad2c.tga
-                //map textures/sfx/specular.tga
+		map textures/pad_gfx02/tinpad2c
+                //map textures/sfx/specular
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
 	}
@@ -93,20 +93,20 @@ models/mapobjects/pad_teleporter/padsphere_purple
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nonsolid
-	q3map_lightimage models/mapobjects/pad_teleporter/padspherepu.tga
+	q3map_lightimage models/mapobjects/pad_teleporter/padspherepu
 	q3map_surfacelight 200
 
-	cull disable 
+	cull disable
     	{
-		map models/mapobjects/pad_teleporter/padspherepu.tga
+		map models/mapobjects/pad_teleporter/padspherepu
                	blendfunc GL_ONE GL_ONE
-		tcMod scale 2 2	
+		tcMod scale 2 2
                	tcMod scroll .2 .2
 		rgbGen lightingdiffuse
        }
 
 	{
-               	map textures/pad_gfx02/padmapspherepu01.jpg
+               	map textures/pad_gfx02/padmapspherepu01
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                	tcMod scroll .1 -.1
@@ -114,7 +114,7 @@ models/mapobjects/pad_teleporter/padsphere_purple
        	}
 
 	{
-               	map textures/pad_gfx02/padmapspherepu02.jpg
+               	map textures/pad_gfx02/padmapspherepu02
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                	tcMod scroll -.1 .1
@@ -132,20 +132,20 @@ models/mapobjects/pad_teleporter/padsphere_pink
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nonsolid
-	q3map_lightimage models/mapobjects/pad_teleporter/padspherepi.tga
+	q3map_lightimage models/mapobjects/pad_teleporter/padspherepi
 	q3map_surfacelight 200
 
-	cull disable 
+	cull disable
     	{
-		map models/mapobjects/pad_teleporter/padspherepi.tga
+		map models/mapobjects/pad_teleporter/padspherepi
                	blendfunc GL_ONE GL_ONE
-		tcMod scale 2 2	
+		tcMod scale 2 2
                	tcMod scroll .2 .2
 		rgbGen lightingdiffuse
        }
 
 	{
-               	map textures/pad_gfx02/padmapspherepi01.jpg
+               	map textures/pad_gfx02/padmapspherepi01
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                	tcMod scroll .1 -.1
@@ -153,7 +153,7 @@ models/mapobjects/pad_teleporter/padsphere_pink
        	}
 
 	{
-               	map textures/pad_gfx02/padmapspherepi02.jpg
+               	map textures/pad_gfx02/padmapspherepi02
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                	tcMod scroll -.1 .1
@@ -171,20 +171,20 @@ models/mapobjects/pad_teleporter/padsphere_yellow
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nonsolid
-	q3map_lightimage models/mapobjects/pad_teleporter/padsphereyel.tga
+	q3map_lightimage models/mapobjects/pad_teleporter/padsphereyel
 	q3map_surfacelight 200
 
-	cull disable 
+	cull disable
     	{
-		map models/mapobjects/pad_teleporter/padsphereyel.tga
+		map models/mapobjects/pad_teleporter/padsphereyel
                	blendfunc GL_ONE GL_ONE
-		tcMod scale 2 2	
+		tcMod scale 2 2
                	tcMod scroll .2 .2
 		rgbGen lightingdiffuse
        }
 
 	{
-               	map textures/pad_gfx02/padmapsphereyel01.jpg
+               	map textures/pad_gfx02/padmapsphereyel01
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                	tcMod scroll .1 -.1
@@ -192,7 +192,7 @@ models/mapobjects/pad_teleporter/padsphere_yellow
        	}
 
 	{
-               	map textures/pad_gfx02/padmapsphereyel02.jpg
+               	map textures/pad_gfx02/padmapsphereyel02
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                	tcMod scroll -.1 .1
@@ -205,15 +205,15 @@ models/mapobjects/pad_teleporter/padsphere_yellow
 models/mapobjects/pad_teleporter/pad_base
 {
 	nopicmip
-	nomipmaps 
-	qer_editorimage models/mapobjects/pad_teleporter/pad_base.tga
+	nomipmaps
+	qer_editorimage models/mapobjects/pad_teleporter/pad_base
 	{
-		map models/mapobjects/pad_teleporter/pad_base.tga
+		map models/mapobjects/pad_teleporter/pad_base
 		alphaFunc ge128
 		rgbGen lightingDiffuse
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
@@ -229,7 +229,7 @@ models/mapobjects/pad_teleporter/snow
 {
 	cull none
 	{
-		map models/mapobjects/pad_teleporter/snow.tga
+		map models/mapobjects/pad_teleporter/snow
 		blendfunc add
 		tcMod scroll -.25 0
 	}
@@ -239,12 +239,12 @@ models/mapobjects/pad_teleporter/pad_teleporter_base
 {
 
 	{
-		map textures/pad_gfx02/padmapyel3.tga
+		map textures/pad_gfx02/padmapyel3
 		tcGen environment
 		blendfunc GL_ONE GL_ZERO
 		tcmod scale .8 .8
                 rgbGen identity
-		
+
 	}
 	{
 		map models/mapobjects/pad_teleporter/pad_teleporter_base
@@ -252,7 +252,7 @@ models/mapobjects/pad_teleporter/pad_teleporter_base
 		alphaFunc Ge128
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment

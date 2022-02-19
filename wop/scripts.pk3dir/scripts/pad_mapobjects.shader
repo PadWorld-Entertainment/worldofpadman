@@ -9,7 +9,7 @@ models/mapobjects/gummybears/greengum
 {
 
 	{
-                map models/mapobjects/gummybears/greengum.tga
+                map models/mapobjects/gummybears/greengum
 		tcGen environment
 		blendfunc GL_ONE GL_ONE
         }
@@ -21,7 +21,7 @@ models/mapobjects/gummybears/redgum
 {
 
 	{
-                map models/mapobjects/gummybears/redgum.tga
+                map models/mapobjects/gummybears/redgum
 		tcGen environment
 		blendfunc GL_ONE GL_ONE
         }
@@ -33,7 +33,7 @@ models/mapobjects/gummybears/redgum
 models/mapobjects/gummybears/yellowgum
 {
 	{
-                map models/mapobjects/gummybears/yellowgum.tga
+                map models/mapobjects/gummybears/yellowgum
 		tcGen environment
 		blendfunc GL_ONE GL_ONE
         }
@@ -46,7 +46,7 @@ models/mapobjects/gummybears/yellowgum
 models/mapobjects/gummybears/orangegum
 {
 	{
-                map models/mapobjects/gummybears/orangegum.tga
+                map models/mapobjects/gummybears/orangegum
 		tcGen environment
 		blendfunc GL_ONE GL_ONE
         }
@@ -65,9 +65,9 @@ models/mapobjects/pad_cake/pad_cakeplatetop
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_cake/plate001.tga
+	qer_editorimage models/mapobjects/pad_cake/plate001
 	{
-		map models/mapobjects/pad_cake/plate001.tga
+		map models/mapobjects/pad_cake/plate001
 		rgbGen vertex
 	}
 	{
@@ -76,7 +76,7 @@ models/mapobjects/pad_cake/pad_cakeplatetop
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
@@ -89,9 +89,9 @@ models/mapobjects/pad_cake/pad_cakeplaterim
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_cake/plate_pack005.tga
+	qer_editorimage models/mapobjects/pad_cake/plate_pack005
 	{
-		map models/mapobjects/pad_cake/plate_pack005.tga
+		map models/mapobjects/pad_cake/plate_pack005
 		rgbGen vertex
 	}
 	{
@@ -100,7 +100,7 @@ models/mapobjects/pad_cake/pad_cakeplaterim
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
@@ -113,9 +113,9 @@ models/mapobjects/pad_cake/pad_cakestandbase
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_cake/plate_under.tga
+	qer_editorimage models/mapobjects/pad_cake/plate_under
 	{
-		map models/mapobjects/pad_cake/plate_under.tga
+		map models/mapobjects/pad_cake/plate_under
         	rgbGen vertex
 	}
 	{
@@ -124,7 +124,7 @@ models/mapobjects/pad_cake/pad_cakestandbase
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
@@ -138,7 +138,7 @@ models/mapobjects/pad_cake/pad_cake
 	nomipmaps
 
 	{
-		map models/mapobjects/pad_cake/pad_cake.tga
+		map models/mapobjects/pad_cake/pad_cake
 		rgbGen vertex
 	}
 	{
@@ -157,7 +157,7 @@ models/mapobjects/pad_cake/pad_cakeglass
 	sort additive
 
 	{
-		map models/mapobjects/pad_cake/pad_cakeglass.tga
+		map models/mapobjects/pad_cake/pad_cakeglass
 		tcGen environment
 		blendfunc GL_ONE GL_ONE
 		rgbGen vertex
@@ -168,7 +168,7 @@ models/mapobjects/pad_cake/pad_cakeglass
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		tcGen environment
 		blendfunc GL_ONE GL_ONE
 		rgbGen vertex
@@ -190,7 +190,7 @@ models/mapobjects/pad_condiments/saltandpepper
 	//sort 16
 
 	{
-		map models/mapobjects/pad_condiments/saltandpepper.tga
+		map models/mapobjects/pad_condiments/saltandpepper
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -201,7 +201,7 @@ models/mapobjects/pad_condiments/saltandpepper
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -217,7 +217,7 @@ models/mapobjects/pad_condiments/sugar
 	//sort 16
 
 	{
-		map models/mapobjects/pad_condiments/sugar.tga
+		map models/mapobjects/pad_condiments/sugar
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -228,7 +228,7 @@ models/mapobjects/pad_condiments/sugar
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -248,7 +248,7 @@ models/mapobjects/pad_cups/cup001
 	//sort 16
 
 	{
-		map models/mapobjects/pad_cups/cup001.tga
+		map models/mapobjects/pad_cups/cup001
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -259,7 +259,7 @@ models/mapobjects/pad_cups/cup001
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -274,7 +274,7 @@ models/mapobjects/pad_cups/cup002
 	//sort 16
 
 	{
-		map models/mapobjects/pad_cups/cup002.tga
+		map models/mapobjects/pad_cups/cup002
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -285,7 +285,7 @@ models/mapobjects/pad_cups/cup002
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -301,7 +301,7 @@ models/mapobjects/pad_cups/cup003
 	//sort 16
 
 	{
-		map models/mapobjects/pad_cups/cup003.tga
+		map models/mapobjects/pad_cups/cup003
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -312,7 +312,7 @@ models/mapobjects/pad_cups/cup003
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -328,7 +328,7 @@ models/mapobjects/pad_cups/cup004
 	//sort 16
 
 	{
-		map models/mapobjects/pad_cups/cup004.tga
+		map models/mapobjects/pad_cups/cup004
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -339,7 +339,7 @@ models/mapobjects/pad_cups/cup004
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -355,7 +355,7 @@ models/mapobjects/pad_cups/cup_under
 	//sort 16
 
 	{
-		map models/mapobjects/pad_cups/cup_under.tga
+		map models/mapobjects/pad_cups/cup_under
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -366,7 +366,7 @@ models/mapobjects/pad_cups/cup_under
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -382,7 +382,7 @@ models/mapobjects/pad_cups/handle
 	//sort 16
 
 	{
-		map models/mapobjects/pad_cups/handle.tga
+		map models/mapobjects/pad_cups/handle
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -393,7 +393,7 @@ models/mapobjects/pad_cups/handle
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -409,7 +409,7 @@ models/mapobjects/pad_plates/plate001
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate001.tga
+		map models/mapobjects/pad_plates/plate001
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -420,7 +420,7 @@ models/mapobjects/pad_plates/plate001
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -436,7 +436,7 @@ models/mapobjects/pad_plates/plate002
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate002.tga
+		map models/mapobjects/pad_plates/plate002
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -447,7 +447,7 @@ models/mapobjects/pad_plates/plate002
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -463,7 +463,7 @@ models/mapobjects/pad_plates/plate003
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate003.tga
+		map models/mapobjects/pad_plates/plate003
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -474,7 +474,7 @@ models/mapobjects/pad_plates/plate003
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -490,7 +490,7 @@ models/mapobjects/pad_plates/plate004
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate004.tga
+		map models/mapobjects/pad_plates/plate004
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -501,7 +501,7 @@ models/mapobjects/pad_plates/plate004
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -517,7 +517,7 @@ models/mapobjects/pad_plates/plate005
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate005.tga
+		map models/mapobjects/pad_plates/plate005
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -528,7 +528,7 @@ models/mapobjects/pad_plates/plate005
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -544,7 +544,7 @@ models/mapobjects/pad_plates/plate_pack003
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_pack003.tga
+		map models/mapobjects/pad_plates/plate_pack003
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -555,7 +555,7 @@ models/mapobjects/pad_plates/plate_pack003
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -571,7 +571,7 @@ models/mapobjects/pad_plates/plate_pack004
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_pack004.tga
+		map models/mapobjects/pad_plates/plate_pack004
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -582,7 +582,7 @@ models/mapobjects/pad_plates/plate_pack004
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -598,7 +598,7 @@ models/mapobjects/pad_plates/plate_pack005
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_pack005.tga
+		map models/mapobjects/pad_plates/plate_pack005
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -609,7 +609,7 @@ models/mapobjects/pad_plates/plate_pack005
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -625,7 +625,7 @@ models/mapobjects/pad_plates/plate_pack
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_pack.tga
+		map models/mapobjects/pad_plates/plate_pack
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -636,7 +636,7 @@ models/mapobjects/pad_plates/plate_pack
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -652,7 +652,7 @@ models/mapobjects/pad_plates/plate_under
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_under.tga
+		map models/mapobjects/pad_plates/plate_under
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -663,7 +663,7 @@ models/mapobjects/pad_plates/plate_under
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -679,7 +679,7 @@ models/mapobjects/pad_plates/plate_coffee002
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_coffee002.tga
+		map models/mapobjects/pad_plates/plate_coffee002
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -690,7 +690,7 @@ models/mapobjects/pad_plates/plate_coffee002
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -706,7 +706,7 @@ models/mapobjects/pad_plates/plate_coffee003
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_coffee003.tga
+		map models/mapobjects/pad_plates/plate_coffee003
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -717,7 +717,7 @@ models/mapobjects/pad_plates/plate_coffee003
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -733,7 +733,7 @@ models/mapobjects/pad_plates/plate_coffee004
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_coffee004.tga
+		map models/mapobjects/pad_plates/plate_coffee004
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -744,7 +744,7 @@ models/mapobjects/pad_plates/plate_coffee004
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -760,7 +760,7 @@ models/mapobjects/pad_plates/plate_coffee005
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_coffee005.tga
+		map models/mapobjects/pad_plates/plate_coffee005
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -771,7 +771,7 @@ models/mapobjects/pad_plates/plate_coffee005
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -787,7 +787,7 @@ models/mapobjects/pad_plates/plate_coffeeblue
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_coffeeblue.tga
+		map models/mapobjects/pad_plates/plate_coffeeblue
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -798,7 +798,7 @@ models/mapobjects/pad_plates/plate_coffeeblue
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -814,7 +814,7 @@ models/mapobjects/pad_plates/plate_coffeered
 	//sort 16
 
 	{
-		map models/mapobjects/pad_plates/plate_coffeered.tga
+		map models/mapobjects/pad_plates/plate_coffeered
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -825,7 +825,7 @@ models/mapobjects/pad_plates/plate_coffeered
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -841,7 +841,7 @@ models/mapobjects/pad_maple/maple
 	//sort 16
 
 	{
-		map models/mapobjects/pad_maple/maple.tga
+		map models/mapobjects/pad_maple/maple
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -852,7 +852,7 @@ models/mapobjects/pad_maple/maple
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -868,7 +868,7 @@ models/mapobjects/pad_cutlery/knifefork
 	//sort 16
 
 	{
-		map models/mapobjects/pad_cutlery/knifefork.tga
+		map models/mapobjects/pad_cutlery/knifefork
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -879,7 +879,7 @@ models/mapobjects/pad_cutlery/knifefork
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -895,7 +895,7 @@ models/mapobjects/pad_tins/coke1
 	//sort 16
 
 	{
-		map models/mapobjects/pad_tins/coke1.tga
+		map models/mapobjects/pad_tins/coke1
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -906,7 +906,7 @@ models/mapobjects/pad_tins/coke1
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -921,7 +921,7 @@ models/mapobjects/pad_tins/cola_bottom
 	//sort 16
 
 	{
-		map models/mapobjects/pad_tins/cola_bottom.tga
+		map models/mapobjects/pad_tins/cola_bottom
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -932,7 +932,7 @@ models/mapobjects/pad_tins/cola_bottom
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -947,7 +947,7 @@ models/mapobjects/pad_tins/cola_top
 	//sort 16
 
 	{
-		map models/mapobjects/pad_tins/cola_top.tga
+		map models/mapobjects/pad_tins/cola_top
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -958,7 +958,7 @@ models/mapobjects/pad_tins/cola_top
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -974,7 +974,7 @@ models/mapobjects/pad_tins/pupsi
 	//sort 16
 
 	{
-		map models/mapobjects/pad_tins/pupsi.tga
+		map models/mapobjects/pad_tins/pupsi
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -985,7 +985,7 @@ models/mapobjects/pad_tins/pupsi
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -1003,7 +1003,7 @@ models/mapobjects/pad_cutlery/pad_cup01
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup001.tga
+		map models/mapobjects/pad_cutlery/pad_cup001
 		rgbGen Vertex
 	}
 
@@ -1014,7 +1014,7 @@ models/mapobjects/pad_cutlery/pad_cup02
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup001.tga
+		map models/mapobjects/pad_cutlery/pad_cup001
 		rgbGen Vertex
 	}
 
@@ -1026,7 +1026,7 @@ models/mapobjects/pad_cutlery/pad_cup03
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup002.tga
+		map models/mapobjects/pad_cutlery/pad_cup002
 		rgbGen Vertex
 	}
 
@@ -1038,7 +1038,7 @@ models/mapobjects/pad_cutlery/pad_cup04
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup002.tga
+		map models/mapobjects/pad_cutlery/pad_cup002
 		rgbGen Vertex
 	}
 
@@ -1050,7 +1050,7 @@ models/mapobjects/pad_cutlery/pad_cup05
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup003.tga
+		map models/mapobjects/pad_cutlery/pad_cup003
 		rgbGen Vertex
 	}
 
@@ -1062,7 +1062,7 @@ models/mapobjects/pad_cutlery/pad_cup06
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup003.tga
+		map models/mapobjects/pad_cutlery/pad_cup003
 		rgbGen Vertex
 	}
 
@@ -1073,7 +1073,7 @@ models/mapobjects/pad_cutlery/pad_cup07
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup004.tga
+		map models/mapobjects/pad_cutlery/pad_cup004
 		rgbGen Vertex
 	}
 
@@ -1085,7 +1085,7 @@ models/mapobjects/pad_cutlery/pad_cup08
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup004.tga
+		map models/mapobjects/pad_cutlery/pad_cup004
 		rgbGen Vertex
 	}
 
@@ -1097,7 +1097,7 @@ models/mapobjects/pad_cutlery/pad_cup01_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup001.tga
+		map models/mapobjects/pad_cutlery/pad_cup001
 		rgbGen Vertex
 	}
 
@@ -1108,7 +1108,7 @@ models/mapobjects/pad_cutlery/pad_cup02_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup001.tga
+		map models/mapobjects/pad_cutlery/pad_cup001
 		rgbGen Vertex
 	}
 
@@ -1120,7 +1120,7 @@ models/mapobjects/pad_cutlery/pad_cup03_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup002.tga
+		map models/mapobjects/pad_cutlery/pad_cup002
 		rgbGen Vertex
 	}
 
@@ -1132,7 +1132,7 @@ models/mapobjects/pad_cutlery/pad_cup04_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup002.tga
+		map models/mapobjects/pad_cutlery/pad_cup002
 		rgbGen Vertex
 	}
 
@@ -1144,7 +1144,7 @@ models/mapobjects/pad_cutlery/pad_cup05_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup003.tga
+		map models/mapobjects/pad_cutlery/pad_cup003
 		rgbGen Vertex
 	}
 
@@ -1156,7 +1156,7 @@ models/mapobjects/pad_cutlery/pad_cup06_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup003.tga
+		map models/mapobjects/pad_cutlery/pad_cup003
 		rgbGen Vertex
 	}
 
@@ -1167,7 +1167,7 @@ models/mapobjects/pad_cutlery/pad_cup07_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup004.tga
+		map models/mapobjects/pad_cutlery/pad_cup004
 		rgbGen Vertex
 	}
 
@@ -1179,7 +1179,7 @@ models/mapobjects/pad_cutlery/pad_cup08_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup004.tga
+		map models/mapobjects/pad_cutlery/pad_cup004
 		rgbGen Vertex
 	}
 
@@ -1197,7 +1197,7 @@ models/mapobjects/pad_ducks/pad_duck
 	//sort 16
 
 	{
-		map models/mapobjects/pad_ducks/pad_duck.tga
+		map models/mapobjects/pad_ducks/pad_duck
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -1208,7 +1208,7 @@ models/mapobjects/pad_ducks/pad_duck
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -1227,9 +1227,9 @@ models/mapobjects/pad_fish/flame_angel
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_fish/flame_angel.tga
+	qer_editorimage models/mapobjects/pad_fish/flame_angel
 	{
-		map models/mapobjects/pad_fish/flame_angel.tga
+		map models/mapobjects/pad_fish/flame_angel
 		rgbGen lightingdiffuse
 
 	}
@@ -1242,9 +1242,9 @@ models/mapobjects/pad_fish/flame_angel_fins
 	nopicmip
 	nomipmaps
 	cull none
-                qer_editorimage models/mapobjects/pad_fish/flame_angel.tga
+                qer_editorimage models/mapobjects/pad_fish/flame_angel
 	{
-		map models/mapobjects/pad_fish/flame_angel.tga
+		map models/mapobjects/pad_fish/flame_angel
 		blendfunc GL_ONE GL_ONE
 		rgbGen lightingdiffuse
 
@@ -1257,9 +1257,9 @@ models/mapobjects/pad_fish/flame_angel02
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_fish/new_fish02.tga
+	qer_editorimage models/mapobjects/pad_fish/new_fish02
 	{
-		map models/mapobjects/pad_fish/new_fish02.tga
+		map models/mapobjects/pad_fish/new_fish02
 		rgbGen lightingdiffuse
 
 	}
@@ -1272,9 +1272,9 @@ models/mapobjects/pad_fish/flame_angel_fins02
 	nopicmip
 	nomipmaps
 	cull none
-	qer_editorimage models/mapobjects/pad_fish/new_fish02.tga
+	qer_editorimage models/mapobjects/pad_fish/new_fish02
 	{
-		map models/mapobjects/pad_fish/new_fish02.tga
+		map models/mapobjects/pad_fish/new_fish02
 		blendfunc GL_ONE GL_ONE
 		rgbGen lightingdiffuse
 
@@ -1286,9 +1286,9 @@ models/mapobjects/pad_fish/flame_angel05
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_fish/new_fish05.tga
+	qer_editorimage models/mapobjects/pad_fish/new_fish05
 	{
-		map models/mapobjects/pad_fish/new_fish05.tga
+		map models/mapobjects/pad_fish/new_fish05
 		rgbGen lightingdiffuse
 
 	}
@@ -1301,9 +1301,9 @@ models/mapobjects/pad_fish/flame_angel_fins05
         nopicmip
 	nomipmaps
 	cull none
-	qer_editorimage models/mapobjects/pad_fish/new_fish05.tga
+	qer_editorimage models/mapobjects/pad_fish/new_fish05
 	{
-		map models/mapobjects/pad_fish/new_fish05.tga
+		map models/mapobjects/pad_fish/new_fish05
 		blendfunc GL_ONE GL_ONE
 		rgbGen lightingdiffuse
 
@@ -1324,7 +1324,7 @@ models/mapobjects/pad_lamps/gooseneck
 	//sort 16
 
 	{
-		map models/mapobjects/pad_lamps/gooseneck.tga
+		map models/mapobjects/pad_lamps/gooseneck
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -1335,7 +1335,7 @@ models/mapobjects/pad_lamps/gooseneck
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -1351,7 +1351,7 @@ models/mapobjects/pad_lamps/gooseneck2
 	//sort 16
 
 	{
-		map models/mapobjects/pad_lamps/gooseneck2.tga
+		map models/mapobjects/pad_lamps/gooseneck2
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -1362,7 +1362,7 @@ models/mapobjects/pad_lamps/gooseneck2
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -1382,7 +1382,7 @@ models/mapobjects/padmousetrap/padmousetrap
         surfaceparm nolightmap
 	surfaceparm nomarks
 	{
-	map models/mapobjects/padmousetrap/padmousetrap.tga
+	map models/mapobjects/padmousetrap/padmousetrap
 	rgbGen vertex
 	}
 }
@@ -1395,48 +1395,48 @@ models/mapobjects/padmousetrap/padmousetrap
 
 models/mapobjects/pad_books/pad_openbook_rp
 {
-	qer_editorimage models/mapobjects/pad_books/pad_openbook.tga
+	qer_editorimage models/mapobjects/pad_books/pad_openbook
 	surfaceparm nolightmap
 	surfaceparm nonsolid
 	cull twosided
 	{
-		map models/mapobjects/pad_books/pad_openbook.tga
+		map models/mapobjects/pad_books/pad_openbook
 		rgbGen vertex
         }
 }
 
 models/mapobjects/pad_books/pad_openbook_rpwop
 {
-	qer_editorimage models/mapobjects/pad_books/pad_openbook_wop.tga
+	qer_editorimage models/mapobjects/pad_books/pad_openbook_wop
 	surfaceparm nolightmap
 	surfaceparm nonsolid
 	cull twosided
 	{
-		map models/mapobjects/pad_books/pad_openbook_wop.tga
+		map models/mapobjects/pad_books/pad_openbook_wop
 		rgbGen vertex
         }
 }
 
 models/mapobjects/pad_books/pad_openbook_pir1
 {
-	qer_editorimage models/mapobjects/pad_books/pad_openbook_pir1.tga
+	qer_editorimage models/mapobjects/pad_books/pad_openbook_pir1
 	surfaceparm nolightmap
 	surfaceparm nonsolid
 	cull twosided
 	{
-		map models/mapobjects/pad_books/pad_openbook_pir1.tga
+		map models/mapobjects/pad_books/pad_openbook_pir1
 		rgbGen vertex
         }
 }
 
 models/mapobjects/pad_books/pad_openbook_pir2
 {
-	qer_editorimage models/mapobjects/pad_books/pad_openbook_pir2.tga
+	qer_editorimage models/mapobjects/pad_books/pad_openbook_pir2
 	surfaceparm nolightmap
 	surfaceparm nonsolid
 	cull twosided
 	{
-		map models/mapobjects/pad_books/pad_openbook_pir2.tga
+		map models/mapobjects/pad_books/pad_openbook_pir2
 		rgbGen vertex
         }
 }
@@ -1447,7 +1447,7 @@ models/mapobjects/pad_books/glow/pad_openbook_glow
    nopicmip
    nomipmaps
    {
-      map models/mapobjects/pad_books/glow/pad_openbook_glow.tga
+      map models/mapobjects/pad_books/glow/pad_openbook_glow
       alphaFunc GE128
       rgbGen vertex
    }
@@ -1467,7 +1467,7 @@ models/mapobjects/pad_sunflower/sunhead
 	nopicmip
 	nomipmaps
 	{
-		map models/mapobjects/pad_sunflower/sunhead.tga
+		map models/mapobjects/pad_sunflower/sunhead
 		alphaFunc GE128
 		rgbGen vertex
 	}
@@ -1479,7 +1479,7 @@ models/mapobjects/pad_sunflower/sunleaf1
 	nopicmip
 	nomipmaps
 	{
-		map models/mapobjects/pad_sunflower/sunleaf1.tga
+		map models/mapobjects/pad_sunflower/sunleaf1
 		alphaFunc GE128
 		rgbGen vertex
 	}
@@ -1491,7 +1491,7 @@ models/mapobjects/pad_sunflower/sunleaf2
 	nopicmip
 	nomipmaps
 	{
-		map models/mapobjects/pad_sunflower/sunleaf2.tga
+		map models/mapobjects/pad_sunflower/sunleaf2
 		alphaFunc GE128
 		rgbGen vertex
 	}
@@ -1510,23 +1510,23 @@ models/mapobjects/pad_pc/pad_tft_screen
    	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nonsolid
-	q3map_lightimage models/mapobjects/pad_pc/pad_tft.tga
+	q3map_lightimage models/mapobjects/pad_pc/pad_tft
 	q3map_surfacelight 10
 	nopicmip
 
        	{
-               	animmap .3 models/mapobjects/pad_pc/screen01.tga models/mapobjects/pad_pc/screen02.tga models/mapobjects/pad_pc/screen03.tga models/mapobjects/pad_pc/screen04.tga models/mapobjects/pad_pc/screen05.tga
+               	animmap .3 models/mapobjects/pad_pc/screen01 models/mapobjects/pad_pc/screen02 models/mapobjects/pad_pc/screen03 models/mapobjects/pad_pc/screen04 models/mapobjects/pad_pc/screen05
                	rgbgen identity
        	}
 	{
-		map models/mapobjects/padtv/scanline.tga
+		map models/mapobjects/padtv/scanline
 		blendfunc blend
 		rgbGen identity
 		tcMod scroll 0 -0.035
 		tcMod scale 45 45
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
         	tcGen environment
                 blendfunc GL_ONE GL_ONE
                 rgbGen identity
@@ -1550,7 +1550,7 @@ models/mapobjects/pad_nascars/padcar_orange
 	//sort 16
 
 	{
-		map models/mapobjects/pad_nascars/padcar_orange.tga
+		map models/mapobjects/pad_nascars/padcar_orange
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -1561,7 +1561,7 @@ models/mapobjects/pad_nascars/padcar_orange
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -1577,7 +1577,7 @@ models/mapobjects/pad_nascars/padcar_black
 	//sort 16
 
 	{
-		map models/mapobjects/pad_nascars/padcar_black.tga
+		map models/mapobjects/pad_nascars/padcar_black
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -1588,7 +1588,7 @@ models/mapobjects/pad_nascars/padcar_black
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -1604,7 +1604,7 @@ models/mapobjects/pad_nascars/padcar_muster
 	//sort 16
 
 	{
-		map models/mapobjects/pad_nascars/padcar_muster.tga
+		map models/mapobjects/pad_nascars/padcar_muster
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -1615,7 +1615,7 @@ models/mapobjects/pad_nascars/padcar_muster
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -1635,7 +1635,7 @@ models/mapobjects/ente/padgold_goggles
 	nopicmip
 	nomipmaps
 	{
-		map models/mapobjects/ente/padgold_head.tga
+		map models/mapobjects/ente/padgold_head
 		rgbGen Vertex
 		depthWrite
 		alphaFunc GE128
@@ -1646,10 +1646,10 @@ models/mapobjects/ente/padgold_goggles
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
-                rgbGen vertex //identity //lightingDiffuse //makes effect darker		
+                rgbGen vertex //identity //lightingDiffuse //makes effect darker
 }
 }
 
@@ -1659,7 +1659,7 @@ models/mapobjects/ente/padgold_cape
 	nopicmip
 	nomipmaps
 	{
-		map models/mapobjects/ente/padgold_body.tga
+		map models/mapobjects/ente/padgold_body
 		rgbGen Vertex
         }
 	{
@@ -1668,10 +1668,10 @@ models/mapobjects/ente/padgold_cape
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
-                rgbGen vertex //identity //lightingDiffuse //makes effect darker	
+                rgbGen vertex //identity //lightingDiffuse //makes effect darker
 }
 }
 
@@ -1684,7 +1684,7 @@ models/mapobjects/ente/padgold_body
 	//sort 16
 
 	{
-		map models/mapobjects/ente/padgold_body.tga
+		map models/mapobjects/ente/padgold_body
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -1695,7 +1695,7 @@ models/mapobjects/ente/padgold_body
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -1710,7 +1710,7 @@ models/mapobjects/ente/padgold_head
 	//sort 16
 
 	{
-		map models/mapobjects/ente/padgold_head.tga
+		map models/mapobjects/ente/padgold_head
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -1721,7 +1721,7 @@ models/mapobjects/ente/padgold_head
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -1740,7 +1740,7 @@ models/mapobjects/ente/padwinner_goggles
 {
 	cull disable
 	{
-		map models/mapobjects/ente/padwinner_head.tga
+		map models/mapobjects/ente/padwinner_head
 		rgbGen Vertex
 		depthWrite
 		alphaFunc GE128
@@ -1752,7 +1752,7 @@ models/mapobjects/ente/padwinner_cape
 	cull disable
 	deformVertexes wave 100 sin 0 0.2 3 1
 	{
-		map models/mapobjects/ente/padwinner_body.tga
+		map models/mapobjects/ente/padwinner_body
 		rgbGen Vertex
 	}
 }
@@ -1767,7 +1767,7 @@ models/mapobjects/padtv/tv01
 {
 	nopicmip
 	{
-		map models/mapobjects/padtv/screen.tga
+		map models/mapobjects/padtv/screen
 		rgbGen Vertex
 	}
 	{
@@ -1777,14 +1777,14 @@ models/mapobjects/padtv/tv01
 		rgbGen identity
 	}
 	{
-		map models/mapobjects/padtv/scanline.tga
+		map models/mapobjects/padtv/scanline
 		blendfunc blend
 		rgbGen identity
 		tcMod scroll 0 -0.035
 		tcMod scale 45 45
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
         	tcGen environment
                 blendfunc GL_ONE GL_ONE
                 rgbGen identity
@@ -1800,23 +1800,23 @@ models/mapobjects/padtv/tv02
    	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nonsolid
-	q3map_lightimage models/mapobjects/padtv/tv004.tga
+	q3map_lightimage models/mapobjects/padtv/tv004
 	q3map_surfacelight 100
 	nopicmip
 
        	{
-               	animmap .4 models/mapobjects/padtv/tv001.tga models/mapobjects/padtv/tv003.tga models/mapobjects/padtv/tv001.tga models/mapobjects/padtv/tv004.tga models/mapobjects/padtv/tv006.tga models/mapobjects/padtv/tv001.tga models/mapobjects/padtv/tv005.tga
+               	animmap .4 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv003 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv004 models/mapobjects/padtv/tv006 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv005
                	rgbgen identity
        	}
 	{
-		map models/mapobjects/padtv/scanline.tga
+		map models/mapobjects/padtv/scanline
 		blendfunc blend
 		rgbGen identity
 		tcMod scroll 0 -0.035
 		tcMod scale 45 45
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
         	tcGen environment
                 blendfunc GL_ONE GL_ONE
                 rgbGen identity
@@ -1836,13 +1836,13 @@ models/mapobjects/pad_ducktape/ducktape
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_ducktape/ducktape.tga
+	qer_editorimage models/mapobjects/pad_ducktape/ducktape
 	{
-		map models/mapobjects/pad_ducktape/ducktape.tga
+		map models/mapobjects/pad_ducktape/ducktape
 		rgbGen vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.2 0.2
 		tcGen environment
@@ -1859,13 +1859,13 @@ models/mapobjects/pad_sink/caps
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_sink/caps.jpg
+	qer_editorimage models/mapobjects/pad_sink/caps
 	{
-		map models/mapobjects/pad_sink/caps.jpg
+		map models/mapobjects/pad_sink/caps
 		rgbGen vertex
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.2 0.2
 		tcGen environment
@@ -1877,13 +1877,13 @@ models/mapobjects/pad_sink/tap
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_sink/tap.jpg
+	qer_editorimage models/mapobjects/pad_sink/tap
 	{
-		map models/mapobjects/pad_sink/tap.jpg
+		map models/mapobjects/pad_sink/tap
 		rgbGen vertex
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.5 0.5
 		tcGen environment
@@ -1895,13 +1895,13 @@ models/mapobjects/pad_sink/wastepipe
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_sink/sinkback.jpg
+	qer_editorimage models/mapobjects/pad_sink/sinkback
 	{
-		map models/mapobjects/pad_sink/sinkback.jpg
+		map models/mapobjects/pad_sink/sinkback
 		rgbGen vertex
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.4 0.4
 		tcGen environment
@@ -1913,14 +1913,14 @@ models/mapobjects/pad_sink/sink
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_sink/sinkback.jpg
+	qer_editorimage models/mapobjects/pad_sink/sinkback
 	{
-		map models/mapobjects/pad_sink/sinkback.jpg
+		map models/mapobjects/pad_sink/sinkback
 		rgbGen vertex
 
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.6 0.6
 		tcGen environment
@@ -1934,14 +1934,14 @@ models/mapobjects/pad_sink/sinkdoublesided
 	nopicmip
 	nomipmaps
 	cull disable
-	qer_editorimage models/mapobjects/pad_sink/sinkback.jpg
+	qer_editorimage models/mapobjects/pad_sink/sinkback
 	{
-		map models/mapobjects/pad_sink/sinkback.jpg
+		map models/mapobjects/pad_sink/sinkback
 		rgbGen vertex
 
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.6 0.6
 		tcGen environment
@@ -1959,9 +1959,9 @@ models/mapobjects/pad_clothes/prisonjacket
     cull disable
 	//deformVertexes wave 100 sin 0 0.2 3 1
 	deformVertexes wave 100 sin 3 0.2 3 0.5
-	qer_editorimage models/mapobjects/pad_clothes/prisonjacket.jpg
+	qer_editorimage models/mapobjects/pad_clothes/prisonjacket
 	{
-		map models/mapobjects/pad_clothes/prisonjacket.jpg
+		map models/mapobjects/pad_clothes/prisonjacket
 		rgbGen vertex
 	}
 }
@@ -1969,9 +1969,9 @@ models/mapobjects/pad_clothes/prisonjacket
 models/mapobjects/pad_clothes/prisonjacketfixedpoint
 {
     cull disable
-	qer_editorimage models/mapobjects/pad_clothes/prisonjacket.jpg
+	qer_editorimage models/mapobjects/pad_clothes/prisonjacket
 	{
-		map models/mapobjects/pad_clothes/prisonjacket.jpg
+		map models/mapobjects/pad_clothes/prisonjacket
 		rgbGen vertex
 	}
 }
@@ -1983,9 +1983,9 @@ models/mapobjects/pad_clothes/prisonjacketfixedpoint
 models/mapobjects/pad_clothes/sock_grey
 {
     cull disable
-	qer_editorimage models/mapobjects/pad_clothes/sock_grey.jpg
+	qer_editorimage models/mapobjects/pad_clothes/sock_grey
 	{
-		map models/mapobjects/pad_clothes/sock_grey.jpg
+		map models/mapobjects/pad_clothes/sock_grey
 		rgbGen vertex
 	}
 }
@@ -1993,9 +1993,9 @@ models/mapobjects/pad_clothes/sock_grey
 models/mapobjects/pad_clothes/sock_grey2
 {
     cull disable
-	qer_editorimage models/mapobjects/pad_clothes/sock_grey2.jpg
+	qer_editorimage models/mapobjects/pad_clothes/sock_grey2
 	{
-		map models/mapobjects/pad_clothes/sock_grey2.jpg
+		map models/mapobjects/pad_clothes/sock_grey2
 		rgbGen vertex
 	}
 }
@@ -2003,9 +2003,9 @@ models/mapobjects/pad_clothes/sock_grey2
 models/mapobjects/pad_clothes/sock_grey3
 {
     cull disable
-	qer_editorimage models/mapobjects/pad_clothes/sock_grey3.jpg
+	qer_editorimage models/mapobjects/pad_clothes/sock_grey3
 	{
-		map models/mapobjects/pad_clothes/sock_grey3.jpg
+		map models/mapobjects/pad_clothes/sock_grey3
 		rgbGen vertex
 	}
 }
@@ -2019,14 +2019,14 @@ models/mapobjects/pad_items/toothbrush_blackred
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_items/toothbrush_blackred.jpg
+	qer_editorimage models/mapobjects/pad_items/toothbrush_blackred
 	{
-		map models/mapobjects/pad_items/toothbrush_blackred.jpg
+		map models/mapobjects/pad_items/toothbrush_blackred
 		rgbGen vertex
 
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.6 0.6
 		tcGen environment
@@ -2038,14 +2038,14 @@ models/mapobjects/pad_items/toothbrush_blackblue
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_items/toothbrush_blackblue.jpg
+	qer_editorimage models/mapobjects/pad_items/toothbrush_blackblue
 	{
-		map models/mapobjects/pad_items/toothbrush_blackblue.jpg
+		map models/mapobjects/pad_items/toothbrush_blackblue
 		rgbGen vertex
 
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.6 0.6
 		tcGen environment
@@ -2058,14 +2058,14 @@ models/mapobjects/pad_items/toothbrush_blackorange
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_items/toothbrush_blackorange.jpg
+	qer_editorimage models/mapobjects/pad_items/toothbrush_blackorange
 	{
-		map models/mapobjects/pad_items/toothbrush_blackorange.jpg
+		map models/mapobjects/pad_items/toothbrush_blackorange
 		rgbGen vertex
 
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.6 0.6
 		tcGen environment
@@ -2077,14 +2077,14 @@ models/mapobjects/pad_items/toothbrush_blackpurple
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_items/toothbrush_blackpurple.jpg
+	qer_editorimage models/mapobjects/pad_items/toothbrush_blackpurple
 	{
-		map models/mapobjects/pad_items/toothbrush_blackpurple.jpg
+		map models/mapobjects/pad_items/toothbrush_blackpurple
 		rgbGen vertex
 
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.6 0.6
 		tcGen environment
@@ -2096,14 +2096,14 @@ models/mapobjects/pad_items/toothbrush_blackcyan
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_items/toothbrush_blackcyan.jpg
+	qer_editorimage models/mapobjects/pad_items/toothbrush_blackcyan
 	{
-		map models/mapobjects/pad_items/toothbrush_blackcyan.jpg
+		map models/mapobjects/pad_items/toothbrush_blackcyan
 		rgbGen vertex
 
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.6 0.6
 		tcGen environment
@@ -2116,14 +2116,14 @@ models/mapobjects/pad_items/toothbrush_blackgreen
 {
 	nopicmip
 	nomipmaps
-	qer_editorimage models/mapobjects/pad_items/toothbrush_blackgreen.jpg
+	qer_editorimage models/mapobjects/pad_items/toothbrush_blackgreen
 	{
-		map models/mapobjects/pad_items/toothbrush_blackgreen.jpg
+		map models/mapobjects/pad_items/toothbrush_blackgreen
 		rgbGen vertex
 
 	}
 	{
-		map textures/pad_gfx02/invispad.jpg
+		map textures/pad_gfx02/invispad
 		blendfunc GL_ONE GL_ONE
 		tcmod scale 0.6 0.6
 		tcGen environment
@@ -2145,7 +2145,7 @@ models/mapobjects/pad_bath/electric_toothbrush
 	//sort 16
 
 	{
-		map models/mapobjects/pad_bath/electric_toothbrush.tga
+		map models/mapobjects/pad_bath/electric_toothbrush
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -2156,7 +2156,7 @@ models/mapobjects/pad_bath/electric_toothbrush
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -2177,7 +2177,7 @@ models/mapobjects/pad_bath/deocan1
 	//sort 16
 
 	{
-		map models/mapobjects/pad_bath/deocan1.tga
+		map models/mapobjects/pad_bath/deocan1
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -2188,7 +2188,7 @@ models/mapobjects/pad_bath/deocan1
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -2209,7 +2209,7 @@ models/mapobjects/pad_bath/toothpaste
 	//sort 16
 
 	{
-		map models/mapobjects/pad_bath/toothpaste.tga
+		map models/mapobjects/pad_bath/toothpaste
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -2220,7 +2220,7 @@ models/mapobjects/pad_bath/toothpaste
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -2239,7 +2239,7 @@ models/mapobjects/pad_bath/ointment
 	//sort 16
 
 	{
-		map models/mapobjects/pad_bath/ointment.tga
+		map models/mapobjects/pad_bath/ointment
 		//blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		//alphaFunc GE128
 		rgbGen vertex // identity //vertex
@@ -2250,7 +2250,7 @@ models/mapobjects/pad_bath/ointment
 		blendfunc filter
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex //identity //lightingDiffuse //makes effect darker
@@ -2268,7 +2268,7 @@ models/mapobjects/pad_ddmix/padlibrary/bookend
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/padlibrary/bookend.tga
+		map models/mapobjects/pad_ddmix/padlibrary/bookend
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2283,7 +2283,7 @@ models/mapobjects/pad_ddmix/chess/chess_white
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/chess/chess_white.tga
+		map models/mapobjects/pad_ddmix/chess/chess_white
 		rgbGen Vertex
 	}
 	{
@@ -2292,7 +2292,7 @@ models/mapobjects/pad_ddmix/chess/chess_white
 		tcGen environment
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -2304,7 +2304,7 @@ models/mapobjects/pad_ddmix/chess/chess_black
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/chess/chess_black.tga
+		map models/mapobjects/pad_ddmix/chess/chess_black
 		rgbGen Vertex
 	}
 	{
@@ -2313,7 +2313,7 @@ models/mapobjects/pad_ddmix/chess/chess_black
 		tcGen environment
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -2325,7 +2325,7 @@ models/mapobjects/pad_ddmix/padlibrary/bookend_shader
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/padlibrary/bookend_shader.tga
+		map models/mapobjects/pad_ddmix/padlibrary/bookend_shader
 		rgbGen Vertex
 	}
 	{
@@ -2334,7 +2334,7 @@ models/mapobjects/pad_ddmix/padlibrary/bookend_shader
 		tcGen environment
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -2351,7 +2351,7 @@ models/mapobjects/pad_ddmix/padship/bottle
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/padship/bottle.tga
+		map models/mapobjects/pad_ddmix/padship/bottle
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -2363,7 +2363,7 @@ models/mapobjects/pad_ddmix/padship/bottle
 		tcGen lightmap
 	}
 	{
-		map textures/pad_gfx02/invispad.tga
+		map textures/pad_gfx02/invispad
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -2382,7 +2382,7 @@ models/mapobjects/pad_ddmix/plants/flower_pink
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/flower_pink.tga
+		map models/mapobjects/pad_ddmix/plants/flower_pink
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2394,7 +2394,7 @@ models/mapobjects/pad_ddmix/plants/tulip1
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/tulip1.tga
+		map models/mapobjects/pad_ddmix/plants/tulip1
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2407,7 +2407,7 @@ models/mapobjects/pad_ddmix/plants/water_lily
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/water_lily.tga
+		map models/mapobjects/pad_ddmix/plants/water_lily
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2419,7 +2419,7 @@ models/mapobjects/pad_ddmix/plants/fern
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/fern.tga
+		map models/mapobjects/pad_ddmix/plants/fern
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2431,7 +2431,7 @@ models/mapobjects/pad_ddmix/plants/flower_yellow
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/flower_yellow.tga
+		map models/mapobjects/pad_ddmix/plants/flower_yellow
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2444,7 +2444,7 @@ models/mapobjects/pad_ddmix/plants/waterplant1
 	nomipmaps
 	deformVertexes wave 194 sin 0 2 0 0.3
 	{
-		map models/mapobjects/pad_ddmix/plants/waterplant1.tga
+		map models/mapobjects/pad_ddmix/plants/waterplant1
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2457,7 +2457,7 @@ models/mapobjects/pad_ddmix/plants/ikebana_red
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/ikebana_red.tga
+		map models/mapobjects/pad_ddmix/plants/ikebana_red
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2470,7 +2470,7 @@ models/mapobjects/pad_ddmix/plants/ikebana_blue
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/ikebana_blue.tga
+		map models/mapobjects/pad_ddmix/plants/ikebana_blue
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2486,11 +2486,11 @@ models/mapobjects/pad_ddmix/diner/can_top
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/diner/can_top.tga
+		map models/mapobjects/pad_ddmix/diner/can_top
 		rgbGen Vertex
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
@@ -2507,12 +2507,12 @@ models/mapobjects/pad_ddmix/diner/coffee_pot
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/diner/coffee_pot.tga
+		map models/mapobjects/pad_ddmix/diner/coffee_pot
 		blendfunc add
 		rgbGen Vertex
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
@@ -2527,7 +2527,7 @@ models/mapobjects/pad_ddmix/padkitchen/towel
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/padkitchen/towel.tga
+		map models/mapobjects/pad_ddmix/padkitchen/towel
 		rgbGen Vertex
 	}
 }
@@ -2536,7 +2536,7 @@ models/mapobjects/pad_ddmix/padkitchen/towel_kitchen
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/padkitchen/towel_kitchen.tga
+		map models/mapobjects/pad_ddmix/padkitchen/towel_kitchen
 		rgbGen Vertex
 	}
 }
@@ -2545,7 +2545,7 @@ models/mapobjects/pad_ddmix/padkitchen/towel_bath_blue
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/padkitchen/towel_bath_blue.tga
+		map models/mapobjects/pad_ddmix/padkitchen/towel_bath_blue
 		rgbGen Vertex
 	}
 }
@@ -2554,7 +2554,7 @@ models/mapobjects/pad_ddmix/padkitchen/towel_bath_pink
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/padkitchen/towel_bath_pink.tga
+		map models/mapobjects/pad_ddmix/padkitchen/towel_bath_pink
 		rgbGen Vertex
 	}
 }
@@ -2571,7 +2571,7 @@ models/mapobjects/pad_ddmix/mix/matches
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/mix/matches.tga
+		map models/mapobjects/pad_ddmix/mix/matches
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2582,12 +2582,12 @@ models/mapobjects/pad_ddmix/mix/matchbook_diner
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/mix/matchbook_diner.tga
+		map models/mapobjects/pad_ddmix/mix/matchbook_diner
 		rgbGen Vertex
 		alphaFunc GE128
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
@@ -2598,12 +2598,12 @@ models/mapobjects/pad_ddmix/mix/matchbook_doomdragon
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/mix/matchbook_doomdragon.tga
+		map models/mapobjects/pad_ddmix/mix/matchbook_doomdragon
 		rgbGen Vertex
 		alphaFunc GE128
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
@@ -2614,12 +2614,12 @@ models/mapobjects/pad_ddmix/mix/matchbook_padman
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/mix/matchbook_padman.tga
+		map models/mapobjects/pad_ddmix/mix/matchbook_padman
 		rgbGen Vertex
 		alphaFunc GE128
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
@@ -2631,7 +2631,7 @@ models/mapobjects/pad_ddmix/plants/bonsai
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/bonsai.tga
+		map models/mapobjects/pad_ddmix/plants/bonsai
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2647,17 +2647,17 @@ models/mapobjects/pad_ddmix/anteroom/vase
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/anteroom/vase.tga
+		map models/mapobjects/pad_ddmix/anteroom/vase
 		blendfunc blend
 		rgbGen Vertex
 	}
 	{
-		map models/mapobjects/pad_ddmix/anteroom/vase.tga
+		map models/mapobjects/pad_ddmix/anteroom/vase
 		blendfunc add
 		rgbGen Vertex
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
@@ -2669,12 +2669,12 @@ models/mapobjects/pad_ddmix/anteroom/water_vase
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/anteroom/water_vase.tga
+		map models/mapobjects/pad_ddmix/anteroom/water_vase
 		blendfunc add
 		rgbGen Vertex
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
@@ -2690,7 +2690,7 @@ models/mapobjects/pad_ddmix/jail/snowman
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/jail/snowman.tga
+		map models/mapobjects/pad_ddmix/jail/snowman
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2706,7 +2706,7 @@ models/mapobjects/pad_ddmix/diner/tunnellamp
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/diner/tunnellamp.tga
+		map models/mapobjects/pad_ddmix/diner/tunnellamp
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2722,7 +2722,7 @@ models/mapobjects/pad_ddmix/diner/light
 	nomipmaps
 	q3map_surfacelight 1000
 	{
-		map models/mapobjects/pad_ddmix/diner/light.tga
+		map models/mapobjects/pad_ddmix/diner/light
 		rgbGen identity
 		tcGen lightmap
 	}
@@ -2734,7 +2734,7 @@ models/mapobjects/pad_ddmix/plants/cane
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/cane.tga
+		map models/mapobjects/pad_ddmix/plants/cane
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2749,7 +2749,7 @@ models/mapobjects/pad_ddmix/anteroom/injection
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/anteroom/injection.tga
+		map models/mapobjects/pad_ddmix/anteroom/injection
 		rgbGen Vertex
 	}
 	{
@@ -2758,7 +2758,7 @@ models/mapobjects/pad_ddmix/anteroom/injection
 		tcGen environment
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -2775,7 +2775,7 @@ models/mapobjects/pad_ddmix/attic/kaspad
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/attic/kaspad.tga
+		map models/mapobjects/pad_ddmix/attic/kaspad
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2790,7 +2790,7 @@ models/mapobjects/pad_ddmix/trashcan/lamp_house_day
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/lamp_house_day.tga
+		map models/mapobjects/pad_ddmix/trashcan/lamp_house_day
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2800,10 +2800,10 @@ models/mapobjects/pad_ddmix/trashcan/lamp_house_glass_day
 {
 	surfaceparm nolightmap
 	{
-		map models/mapobjects/pad_ddmix/trashcan/lamp_house_glass_day.tga
+		map models/mapobjects/pad_ddmix/trashcan/lamp_house_glass_day
 	}
 	{
-		map models/mapobjects/pad_ddmix/trashcan/reflection.tga
+		map models/mapobjects/pad_ddmix/trashcan/reflection
 		blendfunc add
 		tcGen environment
 	}
@@ -2814,7 +2814,7 @@ models/mapobjects/pad_ddmix/trashcan/lamp_house_night
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/lamp_house_night.tga
+		map models/mapobjects/pad_ddmix/trashcan/lamp_house_night
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -2822,12 +2822,12 @@ models/mapobjects/pad_ddmix/trashcan/lamp_house_night
 
 models/mapobjects/pad_ddmix/trashcan/lamp_house_glass_night
 {
-	q3map_lightimage models/mapobjects/pad_ddmix/trashcan/lamp_house_glass_night.tga
+	q3map_lightimage models/mapobjects/pad_ddmix/trashcan/lamp_house_glass_night
 	q3map_surfacelight 50000
 	{
 		map $lightmap
 		rgbGen identity
-		map models/mapobjects/pad_ddmix/trashcan/lamp_house_glass_night.tga
+		map models/mapobjects/pad_ddmix/trashcan/lamp_house_glass_night
 	}
 }
 
@@ -2836,7 +2836,7 @@ models/mapobjects/pad_ddmix/trashcan/lamp_house_lightrays
 	surfaceparm nolightmap
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/lamp_house_lightrays.tga
+		map models/mapobjects/pad_ddmix/trashcan/lamp_house_lightrays
 		blendfunc add
 	}
 }
@@ -2845,7 +2845,7 @@ models/mapobjects/pad_ddmix/trashcan/lamp_sewer_dirty
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/lamp_sewer_dirty.tga
+		map models/mapobjects/pad_ddmix/trashcan/lamp_sewer_dirty
 	}
 }
 
@@ -2853,27 +2853,27 @@ models/mapobjects/pad_ddmix/trashcan/lamp_sewer_unlit
 {
 	surfaceparm nolightmap
 	{
-		map models/mapobjects/pad_ddmix/trashcan/lamp_sewer_unlit.tga
+		map models/mapobjects/pad_ddmix/trashcan/lamp_sewer_unlit
 	}
 }
 
 models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit
 {
 	surfaceparm nolightmap
-	q3map_lightimage models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit.tga
+	q3map_lightimage models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit
 	q3map_surfacelight 50000
 	{
-		map models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit.tga
+		map models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit
 	}
 }
 
 models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit2
 {
 	surfaceparm nolightmap
-	q3map_lightimage models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit.tga
+	q3map_lightimage models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit
 	q3map_surfacelight 25000
 	{
-		map models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit.tga
+		map models/mapobjects/pad_ddmix/trashcan/lamp_sewer_lit
 	}
 }
 
@@ -2887,12 +2887,12 @@ models/mapobjects/pad_ddmix/diner/glass01
 	sort additive
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_highlight.tga
+		map models/mapobjects/pad_ddmix/diner/glass_highlight
 		blendfunc add
 		tcGen environment
 	}
@@ -2904,12 +2904,12 @@ models/mapobjects/pad_ddmix/diner/glass_highlight_small
 	sort additive
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_highlight_small.tga
+		map models/mapobjects/pad_ddmix/diner/glass_highlight_small
 		blendfunc add
 		tcGen environment
 	}
@@ -2921,17 +2921,17 @@ models/mapobjects/pad_ddmix/diner/glass_rings
 	sort additive
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_rings.tga
+		map models/mapobjects/pad_ddmix/diner/glass_rings
 		blendfunc blend
 		rgbGen Vertex
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_highlight.tga
+		map models/mapobjects/pad_ddmix/diner/glass_highlight
 		blendfunc add
 		tcGen environment
 	}
@@ -2942,23 +2942,23 @@ models/mapobjects/pad_ddmix/diner/glass_betty
 	surfaceparm trans
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_betty.tga
+		map models/mapobjects/pad_ddmix/diner/glass_betty
 		blendfunc blend
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_betty.tga
+		map models/mapobjects/pad_ddmix/diner/glass_betty
 		blendfunc blend
 		rgbGen Vertex
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_highlight.tga
+		map models/mapobjects/pad_ddmix/diner/glass_highlight
 		blendfunc add
 		tcGen environment
 	}
@@ -2970,19 +2970,19 @@ models/mapobjects/pad_ddmix/diner/glass_sunrise
 	sort additive
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_sunrise.tga
+		map models/mapobjects/pad_ddmix/diner/glass_sunrise
 		blendfunc blend
 		rgbGen Vertex
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_highlight.tga
+		map models/mapobjects/pad_ddmix/diner/glass_highlight
 		blendfunc add
 		tcGen environment
 	}
@@ -2994,19 +2994,19 @@ models/mapobjects/pad_ddmix/diner/glass_midnight
 	surfaceparm trans
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_midnight.tga
+		map models/mapobjects/pad_ddmix/diner/glass_midnight
 		blendfunc blend
 		rgbGen Vertex
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass01.tga
+		map models/mapobjects/pad_ddmix/diner/glass01
 		blendfunc add
 		tcGen environment
 	}
 	{
-		map models/mapobjects/pad_ddmix/diner/glass_highlight.tga
+		map models/mapobjects/pad_ddmix/diner/glass_highlight
 		blendfunc add
 		tcGen environment
 	}
@@ -3020,11 +3020,11 @@ models/mapobjects/pad_ddmix/cabin/telescope
 {
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/cabin/telescope.tga
+		map models/mapobjects/pad_ddmix/cabin/telescope
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3035,12 +3035,12 @@ models/mapobjects/pad_ddmix/cabin/occulars
 {
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/cabin/occulars.tga
+		map models/mapobjects/pad_ddmix/cabin/occulars
 		tcMod scale 0.8 0.8
 		tcGen environment
 	}
 	{
-		map models/mapobjects/pad_ddmix/cabin/occulars2.tga
+		map models/mapobjects/pad_ddmix/cabin/occulars2
 		blendfunc blend
 		rgbGen Vertex
 		alphaFunc GE128
@@ -3058,7 +3058,7 @@ models/mapobjects/pad_ddmix/effects/FireBigA
 	surfaceparm trans
 	cull disable
 	{
-		animmap 10 models/mapobjects/pad_ddmix/effects/FireBigA.tga models/mapobjects/pad_ddmix/effects/FireBigB.tga models/mapobjects/pad_ddmix/effects/FireBigC.tga models/mapobjects/pad_ddmix/effects/FireBigD.tga models/mapobjects/pad_ddmix/effects/FireBigE.tga models/mapobjects/pad_ddmix/effects/FireBigF.tga models/mapobjects/pad_ddmix/effects/FireBigG.tga models/mapobjects/pad_ddmix/effects/FireBigH.tga
+		animmap 10 models/mapobjects/pad_ddmix/effects/FireBigA models/mapobjects/pad_ddmix/effects/FireBigB models/mapobjects/pad_ddmix/effects/FireBigC models/mapobjects/pad_ddmix/effects/FireBigD models/mapobjects/pad_ddmix/effects/FireBigE models/mapobjects/pad_ddmix/effects/FireBigF models/mapobjects/pad_ddmix/effects/FireBigG models/mapobjects/pad_ddmix/effects/FireBigH
 		blendfunc add
 		rgbGen wave inversesawtooth 1 3 1 3
 	}
@@ -3072,18 +3072,18 @@ models/mapobjects/pad_ddmix/ghostpad/ghostpad
 {
 	surfaceparm trans
 	{
-		map models/mapobjects/pad_ddmix/ghostpad/ghostpad.tga
+		map models/mapobjects/pad_ddmix/ghostpad/ghostpad
 		blendfunc blend
 		rgbGen Vertex
 		depthWrite
 	}
 	{
-		map models/mapobjects/pad_ddmix/ghostpad/ghostpad.tga
+		map models/mapobjects/pad_ddmix/ghostpad/ghostpad
 		blendfunc add
 		rgbGen Vertex
 	}
 	{
-		map models/mapobjects/pad_ddmix/ghostpad/ghostpad.tga
+		map models/mapobjects/pad_ddmix/ghostpad/ghostpad
 		blendfunc add
 		rgbGen Vertex
 	}
@@ -3096,11 +3096,11 @@ models/mapobjects/pad_ddmix/ghostpad/ghostpad
 models/mapobjects/pad_ddmix/anteroom/medical_case
 {
 	{
-		map models/mapobjects/pad_ddmix/anteroom/medical_case.tga
+		map models/mapobjects/pad_ddmix/anteroom/medical_case
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3110,11 +3110,11 @@ models/mapobjects/pad_ddmix/anteroom/medical_case
 models/mapobjects/pad_ddmix/anteroom/black_case
 {
 	{
-		map models/mapobjects/pad_ddmix/anteroom/black_case.tga
+		map models/mapobjects/pad_ddmix/anteroom/black_case
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3124,11 +3124,11 @@ models/mapobjects/pad_ddmix/anteroom/black_case
 models/mapobjects/pad_ddmix/anteroom/metal_suitcase
 {
 	{
-		map models/mapobjects/pad_ddmix/anteroom/metal_suitcase.tga
+		map models/mapobjects/pad_ddmix/anteroom/metal_suitcase
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3138,11 +3138,11 @@ models/mapobjects/pad_ddmix/anteroom/metal_suitcase
 models/mapobjects/pad_ddmix/anteroom/silver_case
 {
 	{
-		map models/mapobjects/pad_ddmix/anteroom/silver_case.tga
+		map models/mapobjects/pad_ddmix/anteroom/silver_case
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3158,7 +3158,7 @@ models/mapobjects/pad_ddmix/padship/shiplamp_light
 	cull disable
 	q3map_surfacelight 60
 	{
-		map models/mapobjects/pad_ddmix/padship/shiplamp_light.tga
+		map models/mapobjects/pad_ddmix/padship/shiplamp_light
 	}
 }
 
@@ -3170,11 +3170,11 @@ models/mapobjects/pad_ddmix/padship/valve
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/padship/valve.tga
+		map models/mapobjects/pad_ddmix/padship/valve
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad2c.tga
+		map textures/pad_gfx02/tinpad2c
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3189,11 +3189,11 @@ models/mapobjects/pad_ddmix/attic/pumper
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/attic/pumper.tga
+		map models/mapobjects/pad_ddmix/attic/pumper
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3204,11 +3204,11 @@ models/mapobjects/pad_ddmix/attic/tubes
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/attic/tubes.tga
+		map models/mapobjects/pad_ddmix/attic/tubes
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3225,7 +3225,7 @@ models/mapobjects/pad_ddmix/trashcan/tree1_twigs
 	cull disable
 	//deformVertexes wave 194 sin 0 2 0 0.3
 	{
-		map models/mapobjects/pad_ddmix/trashcan/tree1_twigs.tga
+		map models/mapobjects/pad_ddmix/trashcan/tree1_twigs
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3237,7 +3237,7 @@ models/mapobjects/pad_ddmix/trashcan/tree1_leaves
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/tree1_leaves.tga
+		map models/mapobjects/pad_ddmix/trashcan/tree1_leaves
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3248,7 +3248,7 @@ models/mapobjects/pad_ddmix/trashcan/tree2_leaves
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/tree2_leaves.tga
+		map models/mapobjects/pad_ddmix/trashcan/tree2_leaves
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3259,7 +3259,7 @@ models/mapobjects/pad_ddmix/trashcan/tree3_twigs
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/tree3_twigs.tga
+		map models/mapobjects/pad_ddmix/trashcan/tree3_twigs
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3270,7 +3270,7 @@ models/mapobjects/pad_ddmix/trashcan/tree4_leaves
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/tree4_leaves.tga
+		map models/mapobjects/pad_ddmix/trashcan/tree4_leaves
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3281,7 +3281,7 @@ models/mapobjects/pad_ddmix/trashcan/grass
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/grass.tga
+		map models/mapobjects/pad_ddmix/trashcan/grass
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3292,7 +3292,7 @@ models/mapobjects/pad_ddmix/trashcan/bush
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/trashcan/bush.tga
+		map models/mapobjects/pad_ddmix/trashcan/bush
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3307,7 +3307,7 @@ models/mapobjects/pad_ddmix/castle/padking
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/castle/padking.tga
+		map models/mapobjects/pad_ddmix/castle/padking
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3323,7 +3323,7 @@ models/mapobjects/pad_ddmix/castle/turul
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/castle/turul.tga
+		map models/mapobjects/pad_ddmix/castle/turul
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3338,7 +3338,7 @@ models/mapobjects/pad_ddmix/castle/knightshield
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/castle/knightshield.tga
+		map models/mapobjects/pad_ddmix/castle/knightshield
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3355,7 +3355,7 @@ models/mapobjects/pad_cloister/groundplant
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_cloister/groundplant.tga
+		map models/mapobjects/pad_cloister/groundplant
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3370,7 +3370,7 @@ models/mapobjects/pad_cloister/cloister_lamp
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_cloister/cloister_lamp.tga
+		map models/mapobjects/pad_cloister/cloister_lamp
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3387,7 +3387,7 @@ models/mapobjects/pad_cloister/fern_brown
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_cloister/fern_brown.tga
+		map models/mapobjects/pad_cloister/fern_brown
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3403,7 +3403,7 @@ models/mapobjects/pad_cloister/cane_brown
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_cloister/cane_brown.tga
+		map models/mapobjects/pad_cloister/cane_brown
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3416,11 +3416,11 @@ models/mapobjects/pad_cloister/cane_brown
 models/mapobjects/pad_train/toilet_ceramic
 {
 	{
-		map models/mapobjects/pad_train/ttoilet.tga
+		map models/mapobjects/pad_train/ttoilet
 		rgbGen vertex
 	}
 	{
-		map textures/pad_gfx02/ceramic.tga
+		map textures/pad_gfx02/ceramic
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3430,11 +3430,11 @@ models/mapobjects/pad_train/toilet_ceramic
 models/mapobjects/pad_train/toilet_plastic_shiny
 {
 	{
-		map models/mapobjects/pad_train/ttoilet.tga
+		map models/mapobjects/pad_train/ttoilet
 		rgbGen vertex
 	}
 	{
-		map textures/pad_gfx02/plastic_shiny.tga
+		map textures/pad_gfx02/plastic_shiny
 		blendfunc add
 		rgbGen vertex
 		tcGen environment
@@ -3444,7 +3444,7 @@ models/mapobjects/pad_train/toilet_plastic_shiny
 models/mapobjects/pad_train/toilet_plastic_matte
 {
 	{
-		map models/mapobjects/pad_train/ttoilet.tga
+		map models/mapobjects/pad_train/ttoilet
 		rgbGen vertex
 	}
 }
@@ -3452,11 +3452,11 @@ models/mapobjects/pad_train/toilet_plastic_matte
 models/mapobjects/pad_train/toilet_metal
 {
 	{
-		map models/mapobjects/pad_train/ttoilet.tga
+		map models/mapobjects/pad_train/ttoilet
 		rgbGen vertex
 	}
 	{
-		map textures/pad_gfx02/metal_test.tga
+		map textures/pad_gfx02/metal_test
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3466,11 +3466,11 @@ models/mapobjects/pad_train/toilet_metal
 models/mapobjects/pad_train/tdoorhandle
 {
 	{
-		map models/mapobjects/pad_train/tdoorhandle.tga
+		map models/mapobjects/pad_train/tdoorhandle
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3480,11 +3480,11 @@ models/mapobjects/pad_train/tdoorhandle
 models/mapobjects/pad_train/ehammer_metal
 {
 	{
-		map models/mapobjects/pad_train/ehammer.tga
+		map models/mapobjects/pad_train/ehammer
 		rgbGen Vertex
 	}
 	{
-		map textures/pad_gfx02/metal_test.tga
+		map textures/pad_gfx02/metal_test
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3494,35 +3494,35 @@ models/mapobjects/pad_train/ehammer_metal
 models/mapobjects/ente/deadalien
 {
 	{
-		map models/mapobjects/ente/deadalien.tga
+		map models/mapobjects/ente/deadalien
 		rgbGen identity
 	}
         {
-                map textures/pad_gfx02/tinpad3.tga
+                map textures/pad_gfx02/tinpad3
 		blendfunc add
                 rgbGen Vertex
 		tcGen environment
         }
         nomipmaps
         {
-		map models/mapobjects/ente/deadalien_light.tga
+		map models/mapobjects/ente/deadalien_light
 		rgbGen identity
 		blendFunc filter
 	}
 }
 models/mapobjects/ente/deadalien_glass
 {
-	surfaceparm trans	
+	surfaceparm trans
 	cull none
 	surfaceparm nolightmap
         {
-		map models/mapobjects/ente/blendomatic.tga
+		map models/mapobjects/ente/blendomatic
 		rgbGen const ( 0.0 0.2 0.6 )
 		blendFunc blend
                 tcGen environment
 	}
         {
-		map textures/pad_gfx/glass_dark.tga
+		map textures/pad_gfx/glass_dark
                 tcgen environment
 		blendFunc add
 		rgbGen identity
@@ -3532,11 +3532,11 @@ models/mapobjects/ente/deadalien_glass
 models/mapobjects/pad_train/soapdispenser
 {
 	{
-		map models/mapobjects/pad_train/soapdispenser.tga
+		map models/mapobjects/pad_train/soapdispenser
 		rgbGen identity
 	}
         {
-                map textures/pad_gfx02/tinpad4.tga
+                map textures/pad_gfx02/tinpad4
 		blendfunc add
                 rgbGen Vertex
 		tcGen environment
@@ -3545,11 +3545,11 @@ models/mapobjects/pad_train/soapdispenser
 models/mapobjects/pad_train/soapdispenser_window
 {
   {
-		map models/mapobjects/pad_train/soapdispenser.tga
+		map models/mapobjects/pad_train/soapdispenser
 		rgbGen identity
 	}
   {
-    map textures/pad_gfx/glass_bright.tga
+    map textures/pad_gfx/glass_bright
 		blendfunc add
     rgbGen Vertex
 		tcGen environment
@@ -3560,18 +3560,18 @@ models/mapobjects/pad_train/ptoweldispenser
 {
   cull none
   {
-    map models/mapobjects/pad_train/ptoweldispenser.tga
+    map models/mapobjects/pad_train/ptoweldispenser
     rgbGen identity
   }
 }
 models/mapobjects/pad_train/ptoweldispenser_shiny
 {
 	{
-		map models/mapobjects/pad_train/ptoweldispenser.tga
+		map models/mapobjects/pad_train/ptoweldispenser
 		rgbGen identity
 	}
   {
-    map textures/pad_gfx02/tinpad4.tga
+    map textures/pad_gfx02/tinpad4
 		blendfunc add
     rgbGen Vertex
 		tcGen environment
@@ -3588,7 +3588,7 @@ models/mapobjects/pad_actionfigures/plastic
 	surfaceparm trans
 	cull disable
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc gl_one gl_one_minus_src_color
 		rgbGen identity
 		tcGen environment
@@ -3598,7 +3598,7 @@ models/mapobjects/pad_actionfigures/plastic
 models/mapobjects/pad_actionfigures/fig_pumper
 {
 	{
-		map models/weapons2/pumper/pumper.tga
+		map models/weapons2/pumper/pumper
 		rgbGen Vertex
 	}
 }
@@ -3606,7 +3606,7 @@ models/mapobjects/pad_actionfigures/fig_pumper
 models/mapobjects/pad_actionfigures/fig_pumpertubes
 {
 	{
-		map models/weapons2/pumper/tubes.tga
+		map models/weapons2/pumper/tubes
 		rgbGen Vertex
 	}
 }
@@ -3614,7 +3614,7 @@ models/mapobjects/pad_actionfigures/fig_pumpertubes
 models/mapobjects/pad_actionfigures/fig_splasher
 {
 	{
-		map models/weapons2/splasher/splasher.tga
+		map models/weapons2/splasher/splasher
 		rgbGen Vertex
 	}
 }
@@ -3622,7 +3622,7 @@ models/mapobjects/pad_actionfigures/fig_splasher
 models/mapobjects/pad_actionfigures/fig_frontface
 {
 	{
-		map models/weapons2/splasher/new_frontface.tga
+		map models/weapons2/splasher/new_frontface
 		rgbGen Vertex
 	}
 }
@@ -3630,7 +3630,7 @@ models/mapobjects/pad_actionfigures/fig_frontface
 models/mapobjects/pad_actionfigures/fig_splasherwater
 {
 	{
-		map textures/pad_gfx02/padmapplas.jpg
+		map textures/pad_gfx02/padmapplas
 		blendfunc GL_ONE GL_ZERO
 		tcMod turb 0 .6 0 .2
 		tcmod scale .4 .4
@@ -3638,7 +3638,7 @@ models/mapobjects/pad_actionfigures/fig_splasherwater
 		//rgbGen lightingdiffuse //identity
 	}
 	{
-		map textures/pad_gfx02/padmapblue2.jpg
+		map textures/pad_gfx02/padmapblue2
 		blendfunc GL_ONE GL_ONE
 		tcMod turb 0 .7 0 .3
 		tcmod scale .2 .2
@@ -3646,7 +3646,7 @@ models/mapobjects/pad_actionfigures/fig_splasherwater
 		//rgbGen lightingdiffuse
 	}
 	{
-		map textures/pad_gfx02/padmapblue.jpg
+		map textures/pad_gfx02/padmapblue
 		blendFunc GL_ONE GL_ONE
 		tcGen environment
 		tcMod scroll -.3 0
@@ -3664,7 +3664,7 @@ models/mapobjects/pad_actionfigures/fig_splasherwater
 models/mapobjects/pad_actionfigures/padgrlhd
 {
 	{
-		map models/wop_players/padgirl/padgrlhd.tga
+		map models/wop_players/padgirl/padgrlhd
 		rgbGen Vertex
 	}
 }
@@ -3672,7 +3672,7 @@ models/mapobjects/pad_actionfigures/padgrlhd
 models/mapobjects/pad_actionfigures/padgrlbd
 {
 	{
-		map models/wop_players/padgirl/padgrlbd.tga
+		map models/wop_players/padgirl/padgrlbd
 		rgbGen Vertex
 	}
 }
@@ -3685,7 +3685,7 @@ models/mapobjects/pad_actionfigures/padgrlbd
 models/mapobjects/pad_actionfigures/lilhead
 {
 	{
-		map models/wop_players/padlilly/lilhead.tga
+		map models/wop_players/padlilly/lilhead
 		rgbGen Vertex
 	}
 }
@@ -3693,7 +3693,7 @@ models/mapobjects/pad_actionfigures/lilhead
 models/mapobjects/pad_actionfigures/lilbody
 {
 	{
-		map models/wop_players/padlilly/lilbody.tga
+		map models/wop_players/padlilly/lilbody
 		rgbGen Vertex
 	}
 }
@@ -3706,7 +3706,7 @@ models/mapobjects/pad_actionfigures/lilbody
 models/mapobjects/pad_westernset/colt
 {
 	{
-		map models/mapobjects/pad_westernset/colt.tga
+		map models/mapobjects/pad_westernset/colt
 		rgbGen Vertex
 	}
 	{
@@ -3715,7 +3715,7 @@ models/mapobjects/pad_westernset/colt
 		tcGen environment
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3726,7 +3726,7 @@ models/mapobjects/pad_westernset/camera_screens
 {
 	nomipmaps
 	{
-		map models/mapobjects/pad_westernset/camera_screens.tga
+		map models/mapobjects/pad_westernset/camera_screens
 		tcMod scale 0.8 0.8
 		tcGen environment
 	}
@@ -3735,7 +3735,7 @@ models/mapobjects/pad_westernset/camera_screens
 models/mapobjects/pad_westernset/directors_chair_wood
 {
 	{
-		map models/mapobjects/pad_westernset/directors_chair_wood.tga
+		map models/mapobjects/pad_westernset/directors_chair_wood
 		rgbGen Vertex
 	}
 	{
@@ -3744,7 +3744,7 @@ models/mapobjects/pad_westernset/directors_chair_wood
 		tcGen environment
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen Vertex
 		tcGen environment
@@ -3756,7 +3756,7 @@ models/mapobjects/pad_westernset/directors_chair_cloth
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_westernset/directors_chair_cloth.tga
+		map models/mapobjects/pad_westernset/directors_chair_cloth
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3767,7 +3767,7 @@ models/mapobjects/pad_westernset/actors_chair_cloth
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_westernset/actors_chair_cloth.tga
+		map models/mapobjects/pad_westernset/actors_chair_cloth
 		rgbGen Vertex
 		alphaFunc GE128
 	}
@@ -3777,7 +3777,7 @@ models/mapobjects/pad_westernset/spotlight
 {
 	cull disable
 	{
-		map models/mapobjects/pad_westernset/spotlight.tga
+		map models/mapobjects/pad_westernset/spotlight
 		rgbGen Vertex
 	}
 }
@@ -3787,7 +3787,7 @@ models/mapobjects/pad_westernset/spotlight_front
 	cull disable
 	q3map_surfacelight 60
 	{
-		map models/mapobjects/pad_westernset/spotlight_front.tga
+		map models/mapobjects/pad_westernset/spotlight_front
 	}
 }
 
@@ -3797,11 +3797,11 @@ models/mapobjects/pad_westernset/sheriff_badge
 	cull none
 
 	{
-		map models/mapobjects/pad_westernset/sheriff_badge.tga
+		map models/mapobjects/pad_westernset/sheriff_badge
 		rgbGen vertex
         }
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc GL_ONE GL_ONE
 		tcGen environment
                 rgbGen vertex
@@ -3817,7 +3817,7 @@ models/mapobjects/pad_fruits/citrus_leaf
 	surfaceparm alphashadow
 	cull disable
 	{
-		map models/mapobjects/pad_fruits/citrus.tga
+		map models/mapobjects/pad_fruits/citrus
 		rgbGen vertex
 		alphaFunc GE128
 	}
@@ -3832,22 +3832,22 @@ models/mapobjects/pad_statues/statue_super_head
 {
   cull none
   {
-//    map models/wop_players/padman/default_head.tga
-    map models/mapobjects/ente/padwinner_head.tga	//head still needs reference to old padwinner statue texture for correct alignment ~Kai-Li 
+//    map models/wop_players/padman/default_head
+    map models/mapobjects/ente/padwinner_head	//head still needs reference to old padwinner statue texture for correct alignment ~Kai-Li
   }
 }
 
 models/mapobjects/pad_statues/statue_super_hands
 {
   {
-    map models/wop_players/padman/default_head.tga
+    map models/wop_players/padman/default_head
   }
 }
 
 models/mapobjects/pad_statues/statue_super_shoes
 {
   {
-    map models/wop_players/padman/default_head.tga
+    map models/wop_players/padman/default_head
   }
 }
 
@@ -3855,7 +3855,7 @@ models/mapobjects/pad_statues/statue_super_shades
 {
   cull none
   {
-    map models/wop_players/padman/default_head.tga
+    map models/wop_players/padman/default_head
   }
 }
 
@@ -3863,7 +3863,7 @@ models/mapobjects/pad_statues/statue_super_shades
 models/mapobjects/pad_statues/statue_super_neck
 {
   {
-    map models/wop_players/padman/default_body.tga
+    map models/wop_players/padman/default_body
   }
 }
 
@@ -3871,28 +3871,28 @@ models/mapobjects/pad_statues/statue_super_cape
 {
   cull none
   {
-    map models/wop_players/padman/default_body.tga
+    map models/wop_players/padman/default_body
   }
-} 
+}
 
 models/mapobjects/pad_statues/statue_super_suit
 {
   {
-    map models/wop_players/padman/default_body.tga
+    map models/wop_players/padman/default_body
   }
 }
 
 models/mapobjects/pad_statues/statue_super_buckle
 {
   {
-    map models/wop_players/padman/default_head.tga
+    map models/wop_players/padman/default_head
   }
 }
 
 models/mapobjects/pad_statues/statue_super_button
 {
   {
-    map models/wop_players/padman/default_head.tga
+    map models/wop_players/padman/default_head
   }
 }
 
@@ -3909,7 +3909,7 @@ models/mapobjects/pad_ddmix/plants/fern_singleplayer
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/fern_singleplayer.tga
+		map models/mapobjects/pad_ddmix/plants/fern_singleplayer
 		rgbGen exactVertex
 		alphaFunc GE128
 	}
@@ -3923,7 +3923,7 @@ models/mapobjects/pad_ddmix/plants/bonsai_singleplayer
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/bonsai_singleplayer.tga
+		map models/mapobjects/pad_ddmix/plants/bonsai_singleplayer
 		rgbGen exactVertex
 		alphaFunc GE128
 	}
@@ -3936,7 +3936,7 @@ models/mapobjects/pad_ddmix/padkitchen/towel01_singleplayer
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/padkitchen/towel01_singleplayer.tga
+		map models/mapobjects/pad_ddmix/padkitchen/towel01_singleplayer
 		rgbGen exactVertex
 	}
 }
@@ -3947,7 +3947,7 @@ models/mapobjects/pad_ddmix/padkitchen/towel02_singleplayer
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/padkitchen/towel02_singleplayer.tga
+		map models/mapobjects/pad_ddmix/padkitchen/towel02_singleplayer
 		rgbGen exactVertex
 	}
 }
@@ -3959,7 +3959,7 @@ models/mapobjects/pad_ddmix/castle/kshield_singleplayer
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/castle/kshield_singleplayer.tga
+		map models/mapobjects/pad_ddmix/castle/kshield_singleplayer
 		rgbGen exactVertex
 		alphaFunc GE128
 	}
@@ -3971,7 +3971,7 @@ models/mapobjects/pad_ddmix/castle/padking_singleplayer
 {
 	cull disable
 	{
-		map models/mapobjects/pad_ddmix/castle/padking_singleplayer.tga
+		map models/mapobjects/pad_ddmix/castle/padking_singleplayer
 		rgbGen exactVertex
 		alphaFunc GE128
 	}
@@ -3983,11 +3983,11 @@ models/mapobjects/pad_ddmix/castle/padking_singleplayer
 models/mapobjects/pad_clothes/sock01_singleplayer
 {
     cull disable
-	qer_editorimage models/mapobjects/pad_clothes/sock01_singleplayer.jpg
+	qer_editorimage models/mapobjects/pad_clothes/sock01_singleplayer
 	{
-		map models/mapobjects/pad_clothes/sock01_singleplayer.jpg
+		map models/mapobjects/pad_clothes/sock01_singleplayer
 		rgbGen exactVertex
-	}	
+	}
 }
 
 //SOCK02
@@ -3995,11 +3995,11 @@ models/mapobjects/pad_clothes/sock01_singleplayer
 models/mapobjects/pad_clothes/sock02_singleplayer
 {
     cull disable
-	qer_editorimage models/mapobjects/pad_clothes/sock02_singleplayer.jpg
+	qer_editorimage models/mapobjects/pad_clothes/sock02_singleplayer
 	{
-		map models/mapobjects/pad_clothes/sock02_singleplayer.jpg
+		map models/mapobjects/pad_clothes/sock02_singleplayer
 		rgbGen exactVertex
-	}	
+	}
 }
 
 //TULPi1
@@ -4010,7 +4010,7 @@ models/mapobjects/pad_ddmix/plants/tulip1_singleplayer
 	cull disable
 	nomipmaps
 	{
-		map models/mapobjects/pad_ddmix/plants/tulip1_singleplayer.tga
+		map models/mapobjects/pad_ddmix/plants/tulip1_singleplayer
 		rgbGen exactVertex
 		alphaFunc GE128
 	}
@@ -4025,9 +4025,9 @@ models/mapobjects/pad_sunflower/sunhead_single
 {
 	cull none
 	nopicmip
-	nomipmaps 
+	nomipmaps
 	{
-		map models/mapobjects/pad_sunflower/sunhead_single.tga
+		map models/mapobjects/pad_sunflower/sunhead_single
 		alphaFunc GE128
 		rgbGen exactvertex
 	}
@@ -4037,9 +4037,9 @@ models/mapobjects/pad_sunflower/sunleaf1_single
 {
 	cull none
 	nopicmip
-	nomipmaps 
+	nomipmaps
 	{
-		map models/mapobjects/pad_sunflower/sunleaf1_single.tga
+		map models/mapobjects/pad_sunflower/sunleaf1_single
 		alphaFunc GE128
 		rgbGen exactvertex
 	}
@@ -4049,9 +4049,9 @@ models/mapobjects/pad_sunflower/sunleaf2_single
 {
 	cull none
 	nopicmip
-	nomipmaps 
+	nomipmaps
 	{
-		map models/mapobjects/pad_sunflower/sunleaf2_single.tga
+		map models/mapobjects/pad_sunflower/sunleaf2_single
 		alphaFunc GE128
 		rgbGen exactvertex
 	}
@@ -4063,23 +4063,23 @@ models/mapobjects/ente/padshop_tft_screen
    	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nonsolid
-	q3map_lightimage models/mapobjects/pad_pc/pad_tft.tga
+	q3map_lightimage models/mapobjects/pad_pc/pad_tft
 	q3map_surfacelight 10
 	nopicmip
 
        	{
-               	animmap .3 models/mapobjects/ente/screen01.tga models/mapobjects/ente/screen02.tga models/mapobjects/ente/screen03.tga models/mapobjects/ente/screen04.tga models/mapobjects/ente/screen05.tga
+               	animmap .3 models/mapobjects/ente/screen01 models/mapobjects/ente/screen02 models/mapobjects/ente/screen03 models/mapobjects/ente/screen04 models/mapobjects/ente/screen05
                	rgbgen identity
        	}
 	{
-		map models/mapobjects/padtv/scanline.tga
+		map models/mapobjects/padtv/scanline
 		blendfunc blend
 		rgbGen identity
 		tcMod scroll 0 -0.035
 		tcMod scale 45 45
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
         	tcGen environment
                 blendfunc GL_ONE GL_ONE
                 rgbGen identity

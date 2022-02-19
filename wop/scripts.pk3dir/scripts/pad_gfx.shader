@@ -7,18 +7,18 @@ textures/pad_gfx/blobfx
 	surfaceparm nonsolid
 	cull twosided
 
-	deformVertexes wave 30 sin 0 5 0 0.2 
-	deformVertexes wave 100 sin 0 4 0 0.1 
+	deformVertexes wave 30 sin 0 5 0 0.2
+	deformVertexes wave 100 sin 0 4 0 0.1
 	tessSize 48
 	qer_trans 0.5
 	{
-		map textures/pad_gfx/blobfx.tga
+		map textures/pad_gfx/blobfx
 		tcGen environment
                 tcMod turb 0 0.35 0 0.25
                 tcmod scroll -0.6 -0.8
 	}
 	{
-		map textures/pad_gfx/blobfx.tga
+		map textures/pad_gfx/blobfx
 		tcGen environment
                 tcMod turb 0 0.25 0 0.5
                 tcmod scroll 1 1
@@ -31,14 +31,14 @@ textures/pad_gfx/blobfx
 //=======================================================
 textures/pad_gfx/glass_bright
 {
-	qer_editorimage textures/pad_gfx/glass_bright.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass_bright
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass_bright.tga
+		map textures/pad_gfx/glass_bright
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -48,19 +48,19 @@ textures/pad_gfx/glass_bright
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 textures/pad_gfx/glass_normal
 {
-	qer_editorimage textures/pad_gfx/glass_normal.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass_normal
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass_normal.tga
+		map textures/pad_gfx/glass_normal
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -70,19 +70,19 @@ textures/pad_gfx/glass_normal
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 textures/pad_gfx/glass_dark
 {
-	qer_editorimage textures/pad_gfx/glass_dark.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass_dark
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass_dark.tga
+		map textures/pad_gfx/glass_dark
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -92,20 +92,20 @@ textures/pad_gfx/glass_dark
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 
 textures/pad_gfx/glass_blue
 {
-	qer_editorimage textures/pad_gfx/glass_blue.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass_blue
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass_blue.tga
+		map textures/pad_gfx/glass_blue
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -115,20 +115,20 @@ textures/pad_gfx/glass_blue
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 
 textures/pad_gfx/glass_red
 {
-	qer_editorimage textures/pad_gfx/glass_red.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass_red
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass_red.tga
+		map textures/pad_gfx/glass_red
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -138,20 +138,20 @@ textures/pad_gfx/glass_red
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 
 textures/pad_gfx/glass_green
 {
-	qer_editorimage textures/pad_gfx/glass_green.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass_green
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass_green.tga
+		map textures/pad_gfx/glass_green
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -161,20 +161,20 @@ textures/pad_gfx/glass_green
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 
 textures/pad_gfx/glass2_bright
 {
-	qer_editorimage textures/pad_gfx/glass2_bright.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass2_bright
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass2_bright.tga
+		map textures/pad_gfx/glass2_bright
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -184,19 +184,19 @@ textures/pad_gfx/glass2_bright
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 textures/pad_gfx/glass2_normal
 {
-	qer_editorimage textures/pad_gfx/glass2_normal.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass2_normal
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass2_normal.tga
+		map textures/pad_gfx/glass2_normal
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -206,19 +206,19 @@ textures/pad_gfx/glass2_normal
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 textures/pad_gfx/glass2_dark
 {
-	qer_editorimage textures/pad_gfx/glass2_dark.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass2_dark
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass2_dark.tga
+		map textures/pad_gfx/glass2_dark
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -228,20 +228,20 @@ textures/pad_gfx/glass2_dark
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 
 textures/pad_gfx/glass2_blue
 {
-	qer_editorimage textures/pad_gfx/glass2_blue.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass2_blue
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass2_blue.tga
+		map textures/pad_gfx/glass2_blue
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -251,20 +251,20 @@ textures/pad_gfx/glass2_blue
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 
 textures/pad_gfx/glass2_red
 {
-	qer_editorimage textures/pad_gfx/glass2_red.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass2_red
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass2_red.tga
+		map textures/pad_gfx/glass2_red
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -274,20 +274,20 @@ textures/pad_gfx/glass2_red
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 
 textures/pad_gfx/glass2_green
 {
-	qer_editorimage textures/pad_gfx/glass2_green.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_gfx/glass2_green
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_gfx/glass2_green.tga
+		map textures/pad_gfx/glass2_green
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -297,7 +297,7 @@ textures/pad_gfx/glass2_green
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 //=======================================================
@@ -311,7 +311,7 @@ textures/pad_gfx/flare
     surfaceparm nolightmap
     cull none
           {
-            clampmap textures/pad_gfx/flare.tga
+            clampmap textures/pad_gfx/flare
             blendFunc GL_ONE GL_ONE
           }
 }
@@ -323,13 +323,13 @@ textures/pad_gfx/flare
 
 textures/pad_gfx/lack
 {
-	qer_editorimage textures/pad_gfx/lack.tga
+	qer_editorimage textures/pad_gfx/lack
 	{
-		map textures/pad_gfx/lack.tga
+		map textures/pad_gfx/lack
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
         	tcGen environment
                 blendfunc add
                 rgbGen identity
@@ -347,13 +347,13 @@ textures/pad_gfx/lack
 
 textures/pad_gfx/window
 {
-	qer_editorimage textures/pad_gfx/window.tga
+	qer_editorimage textures/pad_gfx/window
 	{
-		map textures/pad_gfx/window.tga
+		map textures/pad_gfx/window
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
         	tcGen environment
                 blendfunc add
                 rgbGen identity
@@ -368,13 +368,13 @@ textures/pad_gfx/window
 
 textures/pad_gfx/lack_blue
 {
-	qer_editorimage textures/pad_gfx/lack_blue.tga
+	qer_editorimage textures/pad_gfx/lack_blue
 	{
-		map textures/pad_gfx/lack_blue.tga
+		map textures/pad_gfx/lack_blue
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
         	tcGen environment
                 blendfunc add
                 rgbGen identity
@@ -389,13 +389,13 @@ textures/pad_gfx/lack_blue
 
 textures/pad_gfx/lack_green
 {
-	qer_editorimage textures/pad_gfx/lack_green.tga
+	qer_editorimage textures/pad_gfx/lack_green
 	{
-		map textures/pad_gfx/lack_green.tga
+		map textures/pad_gfx/lack_green
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
         	tcGen environment
                 blendfunc add
                 rgbGen identity
@@ -410,13 +410,13 @@ textures/pad_gfx/lack_green
 
 textures/pad_gfx/lack_red
 {
-	qer_editorimage textures/pad_gfx/lack_red.tga
+	qer_editorimage textures/pad_gfx/lack_red
 	{
-		map textures/pad_gfx/lack_red.tga
+		map textures/pad_gfx/lack_red
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
         	tcGen environment
                 blendfunc add
                 rgbGen identity
@@ -434,7 +434,7 @@ textures/pad_gfx/lack_red
 
 textures/pad_gfx/snow
 {
-	qer_editorimage textures/pad_gfx/snow.tga
+	qer_editorimage textures/pad_gfx/snow
 	deformVertexes autosprite2
 	surfaceparm nolightmap
 	surfaceparm nomarks
@@ -443,12 +443,12 @@ textures/pad_gfx/snow
 	cull disable
 	qer_trans 0.5
 	{
-		map textures/pad_gfx/snow.tga
+		map textures/pad_gfx/snow
 		blendFunc add
 		rgbGen identity
 		tcMod scroll 0.1 -0.6
 		tcMod turb 0.1 0.25 0 -0.1
-	} 
+	}
 }
 
 //=======================================================
@@ -457,8 +457,8 @@ textures/pad_gfx/snow
 
 textures/pad_gfx/water_static
 {
-	qer_editorimage textures/pad_gfx/water_01.tga
-	q3map_lightimage textures/pad_gfx/water_02.tga
+	qer_editorimage textures/pad_gfx/water_01
+	q3map_lightimage textures/pad_gfx/water_02
 	surfaceparm nodrop
 	surfaceparm noimpact
 	//surfaceparm nolightmap
@@ -471,10 +471,10 @@ textures/pad_gfx/water_static
 	cull disable
 	qer_trans 0.5
 	q3map_globaltexture
-	
+
 
 	{
-		map textures/pad_gfx/water_01.tga
+		map textures/pad_gfx/water_01
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0.2 0.1 1 0.05
@@ -486,8 +486,8 @@ textures/pad_gfx/water_static
 
 textures/pad_gfx/water
 {
-	qer_editorimage textures/pad_gfx/water_02.tga
-	q3map_lightimage textures/pad_gfx/water_02.tga
+	qer_editorimage textures/pad_gfx/water_02
+	q3map_lightimage textures/pad_gfx/water_02
 	surfaceparm nodrop
 	surfaceparm noimpact
 	// surfaceparm nolightmap
@@ -495,13 +495,13 @@ textures/pad_gfx/water
 	surfaceparm nonsolid
 	surfaceparm trans
 	cull disable
-	deformVertexes wave 30 sin 0 4 0 0.2 
-	deformVertexes wave 100 sin 0 4 0 0.7 
+	deformVertexes wave 30 sin 0 4 0 0.2
+	deformVertexes wave 100 sin 0 4 0 0.7
 	tessSize 48
 	qer_trans 0.5
-	
+
 	{
-		map textures/liquids/pool2.tga
+		map textures/liquids/pool2
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0.4 0.3 1 0.05
@@ -512,13 +512,13 @@ textures/pad_gfx/water
 
 textures/pad_gfx/schaum_static
 {
-	cull disable	 
-        surfaceparm nomarks 
-        surfaceparm trans 
-        sort additive	
+	cull disable
+        surfaceparm nomarks
+        surfaceparm trans
+        sort additive
 	qer_trans 0.5
 	{
-		map textures/pad_gfx/schaum_static.tga
+		map textures/pad_gfx/schaum_static
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0.1 0.05 0 0.5
@@ -527,15 +527,15 @@ textures/pad_gfx/schaum_static
 
 textures/pad_gfx/schaum1
 {
-	qer_editorimage textures/pad_gfx/schaum.tga
+	qer_editorimage textures/pad_gfx/schaum
 	deformVertexes autosprite
-	cull disable	 
-        surfaceparm nomarks 
-        surfaceparm trans 
-        sort additive	
+	cull disable
+        surfaceparm nomarks
+        surfaceparm trans
+        sort additive
 	qer_trans 0.5
 	{
-		map textures/pad_gfx/schaum.tga
+		map textures/pad_gfx/schaum
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0.1 0.05 0 0.95
@@ -543,7 +543,7 @@ textures/pad_gfx/schaum1
 
 	}
 	{
-		map textures/pad_gfx/schaum.tga
+		map textures/pad_gfx/schaum
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0.8 0.08 1 -0.64
@@ -554,15 +554,15 @@ textures/pad_gfx/schaum1
 
 textures/pad_gfx/schaum2
 {
-	qer_editorimage textures/pad_gfx/schaum.tga
+	qer_editorimage textures/pad_gfx/schaum
 	deformVertexes autosprite
-	cull disable	 
-        surfaceparm nomarks 
-        surfaceparm trans 
-        sort additive	
+	cull disable
+        surfaceparm nomarks
+        surfaceparm trans
+        sort additive
 	qer_trans 0.5
 	{
-		map textures/pad_gfx/schaum.tga
+		map textures/pad_gfx/schaum
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0.1 0.07 0 -0.9
@@ -570,7 +570,7 @@ textures/pad_gfx/schaum2
 		tcmod scale 0.75 0.75
 	}
 	{
-		map textures/pad_gfx/schaum.tga
+		map textures/pad_gfx/schaum
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0.8 0.03 1 -1
@@ -582,15 +582,15 @@ textures/pad_gfx/schaum2
 
 textures/pad_gfx/schaum3
 {
-	qer_editorimage textures/pad_gfx/schaum.tga
+	qer_editorimage textures/pad_gfx/schaum
 	deformVertexes autosprite
-	cull disable	 
-        surfaceparm nomarks 
-        surfaceparm trans 
-        sort additive	
+	cull disable
+        surfaceparm nomarks
+        surfaceparm trans
+        sort additive
 	qer_trans 0.5
 	{
-		map textures/pad_gfx/schaum.tga
+		map textures/pad_gfx/schaum
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0.1 0.06 0 -0.4
@@ -598,7 +598,7 @@ textures/pad_gfx/schaum3
 		tcmod scale 0.75 0.75
 	}
 	{
-		map textures/pad_gfx/schaum.tga
+		map textures/pad_gfx/schaum
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0.8 0.04 1 -0.8
@@ -614,7 +614,7 @@ textures/pad_gfx/schaum3
 
 textures/pad_gfx02/flow01
 {
-        qer_editorimage textures/pad_gfx02/flow01.tga
+        qer_editorimage textures/pad_gfx02/flow01
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -622,7 +622,7 @@ textures/pad_gfx02/flow01
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/flow01.tga
+		map textures/pad_gfx02/flow01
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -639,7 +639,7 @@ textures/pad_gfx02/flow01
 
 textures/pad_gfx02/flow02
 {
-        qer_editorimage textures/pad_gfx02/flow02.tga
+        qer_editorimage textures/pad_gfx02/flow02
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -647,7 +647,7 @@ textures/pad_gfx02/flow02
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/flow02.tga
+		map textures/pad_gfx02/flow02
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -664,7 +664,7 @@ textures/pad_gfx02/flow02
 
 textures/pad_gfx02/flow04
 {
-        qer_editorimage textures/pad_gfx02/flow04.tga
+        qer_editorimage textures/pad_gfx02/flow04
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -672,7 +672,7 @@ textures/pad_gfx02/flow04
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/flow04.tga
+		map textures/pad_gfx02/flow04
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -689,7 +689,7 @@ textures/pad_gfx02/flow04
 
 textures/pad_gfx02/cact03
 {
-        qer_editorimage textures/pad_gfx02/cact03.tga
+        qer_editorimage textures/pad_gfx02/cact03
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -697,7 +697,7 @@ textures/pad_gfx02/cact03
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/cact03.tga
+		map textures/pad_gfx02/cact03
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -714,7 +714,7 @@ textures/pad_gfx02/cact03
 
 textures/pad_gfx02/busch
 {
-        qer_editorimage textures/pad_gfx02/busch.tga
+        qer_editorimage textures/pad_gfx02/busch
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -722,7 +722,7 @@ textures/pad_gfx02/busch
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/busch.tga
+		map textures/pad_gfx02/busch
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -740,7 +740,7 @@ textures/pad_gfx02/busch
 
 textures/pad_gfx02/sun
 {
-        qer_editorimage textures/pad_gfx02/sun.tga
+        qer_editorimage textures/pad_gfx02/sun
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -748,7 +748,7 @@ textures/pad_gfx02/sun
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/sun.tga
+		map textures/pad_gfx02/sun
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -765,7 +765,7 @@ textures/pad_gfx02/sun
 
 textures/pad_gfx02/blatt01
 {
-        qer_editorimage textures/pad_gfx02/blatt01.tga
+        qer_editorimage textures/pad_gfx02/blatt01
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -773,7 +773,7 @@ textures/pad_gfx02/blatt01
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/blatt01.tga
+		map textures/pad_gfx02/blatt01
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -798,7 +798,7 @@ textures/pad_gfx02/lighty02
     q3map_surfacelight 3000
     surfaceparm nolightmap
     {
-        map textures/pad_gfx02/lighty02.tga
+        map textures/pad_gfx02/lighty02
     }
 }
 
@@ -808,7 +808,7 @@ textures/pad_gfx02/lighty03
     q3map_surfacelight 2500
     surfaceparm nolightmap
     {
-        map textures/pad_gfx02/lighty03.tga
+        map textures/pad_gfx02/lighty03
     }
 }
 
@@ -818,7 +818,7 @@ textures/pad_gfx02/lighty
     q3map_surfacelight 2000
     surfaceparm nolightmap
     {
-        map textures/pad_gfx02/lighty.tga
+        map textures/pad_gfx02/lighty
     }
 }
 
@@ -828,7 +828,7 @@ textures/pad_gfx02/light_blue
     q3map_surfacelight 2000
     surfaceparm nolightmap
     {
-        map textures/pad_gfx02/light_blue.tga
+        map textures/pad_gfx02/light_blue
     }
 }
 
@@ -838,7 +838,7 @@ textures/pad_gfx02/light_green
     q3map_surfacelight 2000
     surfaceparm nolightmap
     {
-        map textures/pad_gfx02/light_green.tga
+        map textures/pad_gfx02/light_green
     }
 }
 
@@ -848,7 +848,7 @@ textures/pad_gfx02/light_green2
     q3map_surfacelight 1400
     surfaceparm nolightmap
     {
-        map textures/pad_gfx02/light_green2.tga
+        map textures/pad_gfx02/light_green2
     }
 }
 
@@ -859,7 +859,7 @@ textures/pad_gfx02/light_white
     q3map_surfacelight 2000
     surfaceparm nolightmap
     {
-        map textures/pad_gfx02/light_white.tga
+        map textures/pad_gfx02/light_white
     }
 }
 
@@ -871,7 +871,7 @@ textures/pad_gfx02/light_white
 
 textures/pad_gfx02/padp
 {
-        qer_editorimage textures/pad_gfx02/padp.tga
+        qer_editorimage textures/pad_gfx02/padp
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -879,7 +879,7 @@ textures/pad_gfx02/padp
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/padp.tga
+		map textures/pad_gfx02/padp
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -896,7 +896,7 @@ textures/pad_gfx02/padp
 
 textures/pad_gfx02/teller
 {
-        qer_editorimage textures/pad_gfx02/teller.tga
+        qer_editorimage textures/pad_gfx02/teller
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -904,7 +904,7 @@ textures/pad_gfx02/teller
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/teller.tga
+		map textures/pad_gfx02/teller
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -922,7 +922,7 @@ textures/pad_gfx02/teller
 
 textures/pad_gfx02/rollo
 {
-        qer_editorimage textures/pad_gfx02/rollo.tga
+        qer_editorimage textures/pad_gfx02/rollo
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -930,7 +930,7 @@ textures/pad_gfx02/rollo
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/rollo.tga
+		map textures/pad_gfx02/rollo
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -947,7 +947,7 @@ textures/pad_gfx02/rollo
 
 textures/pad_gfx02/rolloB
 {
-        qer_editorimage textures/pad_gfx02/rolloB.tga
+        qer_editorimage textures/pad_gfx02/rolloB
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -955,7 +955,7 @@ textures/pad_gfx02/rolloB
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/rolloB.tga
+		map textures/pad_gfx02/rolloB
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -972,7 +972,7 @@ textures/pad_gfx02/rolloB
 
 textures/pad_gfx02/rollo2B
 {
-        qer_editorimage textures/pad_gfx02/rollo2B.tga
+        qer_editorimage textures/pad_gfx02/rollo2B
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -980,7 +980,7 @@ textures/pad_gfx02/rollo2B
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/rollo2B.tga
+		map textures/pad_gfx02/rollo2B
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -999,7 +999,7 @@ textures/pad_gfx02/rollo2B
 
 textures/pad_gfx02/faden05
 {
-        qer_editorimage textures/pad_gfx02/faden05.tga
+        qer_editorimage textures/pad_gfx02/faden05
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -1007,7 +1007,7 @@ textures/pad_gfx02/faden05
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/faden05.tga
+		map textures/pad_gfx02/faden05
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -1019,7 +1019,7 @@ textures/pad_gfx02/faden05
 		blendFunc GL_DST_COLOR GL_ZERO
 		depthFunc equal
 	}
-}   
+}
 
 
 
@@ -1031,7 +1031,7 @@ textures/pad_gfx02/faden05
 
 textures/pad_gfx02/gitter01
 {
-        qer_editorimage textures/pad_gfx02/git01.tga
+        qer_editorimage textures/pad_gfx02/git01
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -1039,7 +1039,7 @@ textures/pad_gfx02/gitter01
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/git01.tga
+		map textures/pad_gfx02/git01
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -1051,11 +1051,11 @@ textures/pad_gfx02/gitter01
 		blendFunc GL_DST_COLOR GL_ZERO
 		depthFunc equal
 	}
-}   
+}
 
 textures/pad_gfx02/gitter03
 {
-        qer_editorimage textures/pad_gfx02/git03.tga
+        qer_editorimage textures/pad_gfx02/git03
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -1063,7 +1063,7 @@ textures/pad_gfx02/gitter03
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/git03.tga
+		map textures/pad_gfx02/git03
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -1075,12 +1075,12 @@ textures/pad_gfx02/gitter03
 		blendFunc GL_DST_COLOR GL_ZERO
 		depthFunc equal
 	}
-}   
+}
 
 
 textures/pad_gfx02/gitter04
 {
-        qer_editorimage textures/pad_gfx02/git04.tga
+        qer_editorimage textures/pad_gfx02/git04
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -1088,7 +1088,7 @@ textures/pad_gfx02/gitter04
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/git04.tga
+		map textures/pad_gfx02/git04
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -1100,13 +1100,13 @@ textures/pad_gfx02/gitter04
 		blendFunc GL_DST_COLOR GL_ZERO
 		depthFunc equal
 	}
-}   
-   
+}
+
 
 
 textures/pad_gfx02/zaun02
 {
-        qer_editorimage textures/pad_gfx02/zaun02.tga
+        qer_editorimage textures/pad_gfx02/zaun02
     	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -1114,7 +1114,7 @@ textures/pad_gfx02/zaun02
 	cull none
         nopicmip
 	{
-		map textures/pad_gfx02/zaun02.tga
+		map textures/pad_gfx02/zaun02
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -1126,7 +1126,7 @@ textures/pad_gfx02/zaun02
 		blendFunc GL_DST_COLOR GL_ZERO
 		depthFunc equal
 	}
-}   
+}
 
 
 //=======================================================
@@ -1135,13 +1135,13 @@ textures/pad_gfx02/zaun02
 
 textures/pad_gfx02/plas01
 {
-	qer_editorimage textures/pad_gfx02/plas01.tga
+	qer_editorimage textures/pad_gfx02/plas01
 	{
-		map textures/pad_gfx02/plas01.tga
+		map textures/pad_gfx02/plas01
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
         	tcGen environment
                 blendfunc add
                 rgbGen identity
@@ -1156,13 +1156,13 @@ textures/pad_gfx02/plas01
 
 textures/pad_gfx02/plas02
 {
-	qer_editorimage textures/pad_gfx02/plas02.tga
+	qer_editorimage textures/pad_gfx02/plas02
 	{
-		map textures/pad_gfx02/plas02.tga
+		map textures/pad_gfx02/plas02
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
         	tcGen environment
                 blendfunc add
                 rgbGen identity
@@ -1176,13 +1176,13 @@ textures/pad_gfx02/plas02
 
 textures/pad_gfx02/plas07
 {
-	qer_editorimage textures/pad_gfx02/plas07.tga
+	qer_editorimage textures/pad_gfx02/plas07
 	{
-		map textures/pad_gfx02/plas07.tga
+		map textures/pad_gfx02/plas07
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
         	tcGen environment
                 blendfunc add
                 rgbGen identity
@@ -1203,25 +1203,25 @@ textures/pad_gfx02/col01
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/col01.tga
+		map textures/pad_gfx02/col01
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/col01.tga
+		map textures/pad_gfx02/col01
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}   
+}
 
 
 textures/pad_gfx02/col02
@@ -1232,25 +1232,25 @@ textures/pad_gfx02/col02
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/col02.tga
+		map textures/pad_gfx02/col02
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/col02.tga
+		map textures/pad_gfx02/col02
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}   
+}
 
 
 textures/pad_gfx02/col03
@@ -1261,25 +1261,25 @@ textures/pad_gfx02/col03
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/col03.tga
+		map textures/pad_gfx02/col03
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/col03.tga
+		map textures/pad_gfx02/col03
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}   
+}
 
 
 textures/pad_gfx02/col04
@@ -1290,25 +1290,25 @@ textures/pad_gfx02/col04
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/col04.tga
+		map textures/pad_gfx02/col04
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/col04.tga
+		map textures/pad_gfx02/col04
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}   
+}
 
 
 
@@ -1324,25 +1324,25 @@ textures/pad_gfx02/metal01
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal01.tga
+		map textures/pad_gfx02/metal01
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal01.tga
+		map textures/pad_gfx02/metal01
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}       
+}
 
 
 textures/pad_gfx02/metal02
@@ -1353,25 +1353,25 @@ textures/pad_gfx02/metal02
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal02.tga
+		map textures/pad_gfx02/metal02
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal02.tga
+		map textures/pad_gfx02/metal02
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}    
+}
 
 
 textures/pad_gfx02/metal03
@@ -1382,25 +1382,25 @@ textures/pad_gfx02/metal03
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal03.tga
+		map textures/pad_gfx02/metal03
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal03.tga
+		map textures/pad_gfx02/metal03
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}      
+}
 
 
 
@@ -1412,25 +1412,25 @@ textures/pad_gfx02/metal04
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal04.tga
+		map textures/pad_gfx02/metal04
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal04.tga
+		map textures/pad_gfx02/metal04
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}   
+}
 
 
 
@@ -1443,28 +1443,28 @@ textures/pad_gfx02/metal05
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal05.tga
+		map textures/pad_gfx02/metal05
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal05.tga
+		map textures/pad_gfx02/metal05
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}    
+}
 
 
-          
+
 
 textures/pad_gfx02/metal06
 {
@@ -1474,25 +1474,25 @@ textures/pad_gfx02/metal06
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal06.tga
+		map textures/pad_gfx02/metal06
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal06.tga
+		map textures/pad_gfx02/metal06
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}     
+}
 
 
 textures/pad_gfx02/metal06b
@@ -1503,25 +1503,25 @@ textures/pad_gfx02/metal06b
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal06b.tga
+		map textures/pad_gfx02/metal06b
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal06b.tga
+		map textures/pad_gfx02/metal06b
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}     
+}
 
 
 
@@ -1534,25 +1534,25 @@ textures/pad_gfx02/metal08
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal08.tga
+		map textures/pad_gfx02/metal08
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal08.tga
+		map textures/pad_gfx02/metal08
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}   
+}
 
 
 textures/pad_gfx02/metal09
@@ -1563,25 +1563,25 @@ textures/pad_gfx02/metal09
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal09.tga
+		map textures/pad_gfx02/metal09
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal09.tga
+		map textures/pad_gfx02/metal09
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}         
+}
 
 
 
@@ -1593,25 +1593,25 @@ textures/pad_gfx02/metal10
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal10.tga
+		map textures/pad_gfx02/metal10
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal10.tga
+		map textures/pad_gfx02/metal10
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-}     
+}
 
 
 textures/pad_gfx02/metal11
@@ -1622,20 +1622,20 @@ textures/pad_gfx02/metal11
 		map $lightmap
 	}
 	{
-		map textures/pad_gfx02/metal11.tga
+		map textures/pad_gfx02/metal11
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
         {
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-       
+
         {
-		map textures/pad_gfx02/metal11.tga
+		map textures/pad_gfx02/metal11
 		//blendFunc GL_ONE GL_ONE
                 blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
@@ -1646,30 +1646,30 @@ textures/pad_gfx02/metal11
 //=======================================================
 //Water
 //=======================================================
-        
+
 textures/pad_gfx02/wat01
 	{
-		qer_editorimage textures/pad_gfx02/wat01.tga
+		qer_editorimage textures/pad_gfx02/wat01
 		qer_trans .5
 		q3map_globaltexture
 		surfaceparm trans
 		surfaceparm nonsolid
 		surfaceparm water
-	
+
 		cull disable
-		deformVertexes wave 64 sin .5 .5 0 .5	
-		
-		{ 
-			map textures/pad_gfx02/wat02.tga
+		deformVertexes wave 64 sin .5 .5 0 .5
+
+		{
+			map textures/pad_gfx02/wat02
 			blendFunc GL_dst_color GL_one
 			rgbgen identity
 			tcmod scale .5 .5
 			tcmod transform 1.5 0 1.5 1 1 2
 			tcmod scroll -.05 .001
 		}
-	
-		{ 
-			map textures/pad_gfx02/wat03.tga
+
+		{
+			map textures/pad_gfx02/wat03
 			blendFunc GL_dst_color GL_one
 			rgbgen identity
 			tcmod scale .5 .5
@@ -1677,49 +1677,49 @@ textures/pad_gfx02/wat01
 			tcmod scroll .025 -.001
 		}
 
-		{ 
-			map textures/pad_gfx02/wat01.tga
+		{
+			map textures/pad_gfx02/wat01
 			blendFunc GL_dst_color GL_one
 			rgbgen identity
 			tcmod scale .25 .5
 			tcmod scroll .001 .025
 		}
-	
+
 		{
 			map $lightmap
 			blendFunc GL_dst_color GL_zero
-			rgbgen identity		
+			rgbgen identity
 		}
-	
 
-	}        
+
+	}
 
 
 
 textures/pad_gfx02/wat04
 
 {
-		qer_editorimage textures/pad_gfx02/wat04.tga
+		qer_editorimage textures/pad_gfx02/wat04
 		qer_trans .5
 		q3map_globaltexture
 		surfaceparm trans
 		surfaceparm nonsolid
 		surfaceparm water
-	
+
 		cull disable
-		deformVertexes wave 64 sin .5 .5 0 .5	
-		
-		{ 
-			map textures/pad_gfx02/wat05.tga
+		deformVertexes wave 64 sin .5 .5 0 .5
+
+		{
+			map textures/pad_gfx02/wat05
 			blendFunc GL_dst_color GL_one
 			rgbgen identity
 			tcmod scale .5 .5
 			tcmod transform 1.5 0 1.5 1 1 2
 			tcmod scroll -.05 .001
 		}
-	
-		{ 
-			map textures/pad_gfx02/wat06.tga
+
+		{
+			map textures/pad_gfx02/wat06
 			blendFunc GL_dst_color GL_one
 			rgbgen identity
 			tcmod scale .5 .5
@@ -1727,22 +1727,22 @@ textures/pad_gfx02/wat04
 			tcmod scroll .025 -.001
 		}
 
-		{ 
-			map textures/pad_gfx02/wat04.tga
+		{
+			map textures/pad_gfx02/wat04
 			blendFunc GL_dst_color GL_one
 			rgbgen identity
 			tcmod scale .25 .5
 			tcmod scroll .001 .025
 		}
-	
+
 		{
 			map $lightmap
 			blendFunc GL_dst_color GL_zero
-			rgbgen identity		
+			rgbgen identity
 		}
-	
 
-	}                                                                                                                                                                              
+
+	}
 
 //=======================================================
 //webs
@@ -1757,7 +1757,7 @@ textures/pad_gfx02b/cweb_m01drk
     cull disable
     deformVertexes wave 10 sin 0 2 0 0.2
     {
-        map textures/pad_gfx02b/cweb_m01drk.tga
+        map textures/pad_gfx02b/cweb_m01drk
         blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
         rgbGen vertex
     }
@@ -1775,7 +1775,7 @@ textures/pad_gfx02b/cweb_m01a
     cull disable
     deformVertexes wave 10 sin 0 2 0 0.2
     {
-        map textures/pad_gfx02b/cweb_m01a.tga
+        map textures/pad_gfx02b/cweb_m01a
         blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
         rgbGen vertex
     }
@@ -1792,13 +1792,13 @@ textures/pad_gfx02b/latern
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
-    
-     
+
+
         {
-                map textures/pad_gfx02b/latern.tga
+                map textures/pad_gfx02b/latern
                 alphaFunc GE128
 		depthWrite
 		rgbGen vertex
@@ -1821,23 +1821,23 @@ textures/pad_gfx02b/latern
 
 textures/pad_gfx02b/desk04
 {
-	q3map_lightimage textures/pad_gfx02b/desk04.tga
+	q3map_lightimage textures/pad_gfx02b/desk04
 	q3map_surfacelight 70
 
         {
-		map textures/pad_gfx02b/desk04.tga
+		map textures/pad_gfx02b/desk04
 		rgbGen identity
 	}
-	
+
         {
-		map textures/pad_gfx02b/comp_line02.tga
+		map textures/pad_gfx02b/comp_line02
 		blendfunc add
 		rgbGen identity
 		tcmod scroll 0 1
 	}
 
         {
-		map textures/pad_gfx02b/compsnowb.tga
+		map textures/pad_gfx02b/compsnowb
 	        blendfunc add
                 rgbGen identity
 		tcmod scroll 3 3
@@ -1860,14 +1860,14 @@ textures/pad_gfx02b/desk04
 
 textures/pad_gfx02b/git001b
 {
-     qer_editorimage textures/pad_gfx02b/git001b.tga   
+     qer_editorimage textures/pad_gfx02b/git001b
      cull none
      surfaceparm alphashadow
-     surfaceparm playerclip	
+     surfaceparm playerclip
      surfaceparm nomarks
      nopicmip
      {
-                map textures/pad_gfx02b/git001b.tga
+                map textures/pad_gfx02b/git001b
                 blendFunc GL_ONE GL_ZERO
                 alphaFunc GE128
 		depthWrite
@@ -1887,13 +1887,13 @@ textures/pad_gfx02b/git001d
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
-    
-     
+
+
         {
-                map textures/pad_gfx02b/git001d.tga
+                map textures/pad_gfx02b/git001d
                 alphaFunc GE128
 		depthWrite
 		rgbGen vertex
@@ -1914,13 +1914,13 @@ textures/pad_gfx02b/git005
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
-    
-     
+
+
         {
-                map textures/pad_gfx02b/git005.tga
+                map textures/pad_gfx02b/git005
                 alphaFunc GE128
 		depthWrite
 		rgbGen vertex
@@ -1939,16 +1939,16 @@ textures/pad_gfx02b/git005
 
 
 textures/pad_gfx02b/watblack
-{	
-	qer_editorimage textures/pad_gfx02b/watblack.tga
-	q3map_lightimage textures/pad_gfx02b/watblack.tga
+{
+	qer_editorimage textures/pad_gfx02b/watblack
+	q3map_lightimage textures/pad_gfx02b/watblack
 	q3map_globaltexture
 	qer_trans .5
 
 	surfaceparm noimpact
 	surfaceparm slime
 	surfaceparm nolightmap
-	surfaceparm trans		
+	surfaceparm trans
 
 	q3map_surfacelight 20
 	tessSize 32
@@ -1957,35 +1957,35 @@ textures/pad_gfx02b/watblack
 	deformVertexes wave 100 sin 0 1 .2 .3
 
 	{
-		map textures/pad_gfx02b/watblackb.tga
+		map textures/pad_gfx02b/watblackb
 		tcMod turb .3 .2 1 .05
 		tcMod scroll .025 .025
 	}
-	
+
 	{
-		map textures/pad_gfx02b/watblack.tga
+		map textures/pad_gfx02b/watblack
 		blendfunc GL_ONE GL_ONE
 		tcMod turb .2 .1 1 .05
 		tcMod scale .5 .5
 		tcMod scroll .02 .02
 	}
-	
+
 
 }
 
 
 
 textures/pad_gfx02b/watyell
-{	
-	qer_editorimage textures/pad_gfx02b/watyell.tga
-	q3map_lightimage textures/pad_gfx02b/watyell.tga
+{
+	qer_editorimage textures/pad_gfx02b/watyell
+	q3map_lightimage textures/pad_gfx02b/watyell
 	q3map_globaltexture
 	qer_trans .5
 
 	surfaceparm noimpact
 	surfaceparm slime
 	surfaceparm nolightmap
-	surfaceparm trans		
+	surfaceparm trans
 
 	q3map_surfacelight 20
 	tessSize 32
@@ -1994,19 +1994,19 @@ textures/pad_gfx02b/watyell
 	deformVertexes wave 100 sin 0 1 .2 .3
 
 	{
-		map textures/pad_gfx02b/watyellow.tga
+		map textures/pad_gfx02b/watyellow
 		tcMod turb .3 .2 1 .05
 		tcMod scroll .025 .025
 	}
-	
+
 	{
-		map textures/pad_gfx02b/watyell.tga
+		map textures/pad_gfx02b/watyell
 		blendfunc GL_ONE GL_ONE
 		tcMod turb .2 .1 1 .05
 		tcMod scale .5 .5
 		tcMod scroll .02 .02
 	}
-	
+
 
 }
 
@@ -2014,134 +2014,134 @@ textures/pad_gfx02b/watyell
 
 textures/pad_gfx02b/beam_yellow
 {
-        surfaceparm trans	
-        surfaceparm nomarks	
+        surfaceparm trans
+        surfaceparm nomarks
         surfaceparm nonsolid
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nomipmaps
         //nopicmip
 	{
-		map textures/pad_gfx02b/beam_yellow.tga
+		map textures/pad_gfx02b/beam_yellow
                 tcMod Scroll .4 0
                 blendFunc add
         }
-     
+
 }
 
 
 textures/pad_gfx02b/beam_red
 {
-        surfaceparm trans	
-        surfaceparm nomarks	
+        surfaceparm trans
+        surfaceparm nomarks
         surfaceparm nonsolid
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nomipmaps
         //nopicmip
 	{
-		map textures/pad_gfx02b/beam_red.tga
+		map textures/pad_gfx02b/beam_red
                 tcMod Scroll .4 0
                 blendFunc add
         }
-     
+
 }
 
 
 textures/pad_gfx02b/beam_blue
 {
-        surfaceparm trans	
-        surfaceparm nomarks	
+        surfaceparm trans
+        surfaceparm nomarks
         surfaceparm nonsolid
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nomipmaps
         //nopicmip
 	{
-		map textures/pad_gfx02b/beam_blue.tga
+		map textures/pad_gfx02b/beam_blue
                 tcMod Scroll .4 0
                 blendFunc add
         }
-     
+
 }
 
 
 textures/pad_gfx02b/beam_grey
 {
-        surfaceparm trans	
-        surfaceparm nomarks	
+        surfaceparm trans
+        surfaceparm nomarks
         surfaceparm nonsolid
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nomipmaps
         //nopicmip
 	{
-		map textures/pad_gfx02b/beam_grey.tga
+		map textures/pad_gfx02b/beam_grey
                 tcMod Scroll .4 0
                 blendFunc add
         }
-     
+
 }
 
 
 textures/pad_gfx02b/beam_purple
 {
-        surfaceparm trans	
-        surfaceparm nomarks	
+        surfaceparm trans
+        surfaceparm nomarks
         surfaceparm nonsolid
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nomipmaps
         //nopicmip
 	{
-		map textures/pad_gfx02b/beam_purple.tga
+		map textures/pad_gfx02b/beam_purple
                 tcMod Scroll .4 0
                 blendFunc add
         }
-     
+
 }
 
 
 textures/pad_gfx02b/beam_brown
 {
-        surfaceparm trans	
-        surfaceparm nomarks	
+        surfaceparm trans
+        surfaceparm nomarks
         surfaceparm nonsolid
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nomipmaps
         //nopicmip
 	{
-		map textures/pad_gfx02b/beam_brown.tga
+		map textures/pad_gfx02b/beam_brown
                 tcMod Scroll .4 0
                 blendFunc add
         }
-     
+
 }
 
 
 textures/pad_gfx02b/beam_green
 {
-        surfaceparm trans	
-        surfaceparm nomarks	
+        surfaceparm trans
+        surfaceparm nomarks
         surfaceparm nonsolid
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nomipmaps
         //nopicmip
 	{
-		map textures/pad_gfx02b/beam_green.tga
+		map textures/pad_gfx02b/beam_green
                 tcMod Scroll .4 0
                 blendFunc add
         }
-     
+
 }
 
 
 
 textures/pad_gfx02b/hotlava1
 {
-	qer_editorimage textures/pad_gfx02b/hotlava2d.tga
+	qer_editorimage textures/pad_gfx02b/hotlava2d
 	q3map_globaltexture
 	surfaceparm trans
 	surfaceparm nonsolid
@@ -2150,13 +2150,13 @@ textures/pad_gfx02b/hotlava1
 	surfaceparm nolightmap
 	q3map_surfacelight 200
 	cull disable
-	
+
 	tesssize 128
 	cull disable
 	deformVertexes wave 100 sin 3 2 .1 0.1
-	
+
 	{
-		map textures/pad_gfx02b/hotlava2d.tga
+		map textures/pad_gfx02b/hotlava2d
 		tcMod turb 0 .2 0 .1
 	}
 }
@@ -2165,7 +2165,7 @@ textures/pad_gfx02b/hotlava1
 
 textures/pad_gfx02b/greenlava
 {
-	qer_editorimage textures/pad_gfx02b/greenlava.tga
+	qer_editorimage textures/pad_gfx02b/greenlava
 	q3map_globaltexture
 	surfaceparm trans
 	surfaceparm nonsolid
@@ -2174,13 +2174,13 @@ textures/pad_gfx02b/greenlava
 	surfaceparm nolightmap
 	q3map_surfacelight 200
 	cull disable
-	
+
 	tesssize 128
 	cull disable
 	deformVertexes wave 100 sin 3 2 .1 0.1
-	
+
 	{
-		map textures/pad_gfx02b/greenlava.tga
+		map textures/pad_gfx02b/greenlava
 		tcMod turb 0 .2 0 .1
 	}
 }
@@ -2190,8 +2190,8 @@ textures/pad_gfx02b/greenlava
 
 textures/pad_gfx02b/hotlava2
 {
-	
-	qer_editorimage textures/pad_gfx02b/hotlava2.tga
+
+	qer_editorimage textures/pad_gfx02b/hotlava2
 	q3map_globaltexture
 	surfaceparm trans
 	surfaceparm nonsolid
@@ -2200,13 +2200,13 @@ textures/pad_gfx02b/hotlava2
 	surfaceparm nolightmap
 	q3map_surfacelight 300
 	cull disable
-	
+
 	tesssize 128
 	cull disable
 	deformVertexes wave 100 sin 3 2 .1 0.1
-	
+
         {
-		map textures/pad_gfx02b/hotmatsch.tga
+		map textures/pad_gfx02b/hotmatsch
                 tcmod scale .2 .2
                 tcmod scroll .04 .03
                 tcMod turb 0 .1 0 .01
@@ -2214,7 +2214,7 @@ textures/pad_gfx02b/hotlava2
                 rgbGen identity
 	}
 	{
-		map textures/pad_gfx02b/hotlava2.tga
+		map textures/pad_gfx02b/hotlava2
                 blendfunc blend
 		tcMod turb 0 .2 0 .1
 	}
@@ -2223,16 +2223,16 @@ textures/pad_gfx02b/hotlava2
 
 
 textures/pad_gfx02b/hotlava3
-{	
-	qer_editorimage textures/pad_gfx02b/hotlava2d.tga
-	q3map_lightimage textures/pad_gfx02b/hotmatsch.tga
+{
+	qer_editorimage textures/pad_gfx02b/hotlava2d
+	q3map_lightimage textures/pad_gfx02b/hotmatsch
 	q3map_globaltexture
 	qer_trans .5
 
 	surfaceparm noimpact
 	surfaceparm lava
 	surfaceparm nolightmap
-	surfaceparm trans		
+	surfaceparm trans
 
 	q3map_surfacelight 20
 	tessSize 128
@@ -2241,19 +2241,19 @@ textures/pad_gfx02b/hotlava3
 	deformVertexes wave 100 sin 0 1 .2 .3
 
 	{
-		map textures/pad_gfx02b/hotlava2d.tga
+		map textures/pad_gfx02b/hotlava2d
 		tcMod turb .3 .2 1 .05
 		tcMod scroll .025 .025
 	}
-	
+
 	{
-		map textures/pad_gfx02b/hotmatsch.tga
+		map textures/pad_gfx02b/hotmatsch
 		blendfunc GL_ONE GL_ONE
 		tcMod turb .2 .1 1 .05
 		tcMod scale .5 .5
 		tcMod scroll .02 .02
 	}
-	
+
 
 }
 
@@ -2261,7 +2261,7 @@ textures/pad_gfx02b/hotlava3
 
 textures/pad_gfx02b/padfog_yel
 {
-		qer_editorimage textures/pad_gfx02b/padfog_yel.tga
+		qer_editorimage textures/pad_gfx02b/padfog_yel
 		surfaceparm	trans
 		surfaceparm	nonsolid
 		surfaceparm	fog
@@ -2273,7 +2273,7 @@ textures/pad_gfx02b/padfog_yel
 
 textures/pad_gfx02b/padfog_yel02
 {
-		qer_editorimage textures/pad_gfx02b/padfog_yel.tga
+		qer_editorimage textures/pad_gfx02b/padfog_yel
 		surfaceparm	trans
 		surfaceparm	nonsolid
 		surfaceparm	fog
@@ -2285,7 +2285,7 @@ textures/pad_gfx02b/padfog_yel02
 
 textures/pad_gfx02b/padfog_red
 {
-		qer_editorimage textures/pad_gfx02b/padfog_red.tga
+		qer_editorimage textures/pad_gfx02b/padfog_red
 		surfaceparm	trans
 		surfaceparm	nonsolid
 		surfaceparm	fog
@@ -2297,8 +2297,8 @@ textures/pad_gfx02b/padfog_red
 
 textures/pad_gfx02b/padfog_red02
 {
-	q3map_lightimage textures/pad_gfx02b/hotmatsch.tga	
-	qer_editorimage textures/pad_gfx02b/padfog_red02.tga
+	q3map_lightimage textures/pad_gfx02b/hotmatsch
+	qer_editorimage textures/pad_gfx02b/padfog_red02
 	q3map_surfacelight 30
 	q3map_lightsubdivide 32
 
@@ -2314,7 +2314,7 @@ textures/pad_gfx02b/padfog_red02
 
 textures/pad_gfx02b/padfog_red03
 {
-		qer_editorimage textures/pad_gfx02b/padfog_red.tga
+		qer_editorimage textures/pad_gfx02b/padfog_red
 		surfaceparm	trans
 		surfaceparm	nonsolid
 		surfaceparm	fog
@@ -2327,7 +2327,7 @@ textures/pad_gfx02b/padfog_red03
 
 textures/pad_gfx02b/padfog_green
 {
-		qer_editorimage textures/pad_gfx02b/padfog_green.tga
+		qer_editorimage textures/pad_gfx02b/padfog_green
 		surfaceparm	trans
 		surfaceparm	nonsolid
 		surfaceparm	fog
@@ -2339,7 +2339,7 @@ textures/pad_gfx02b/padfog_green
 
 textures/pad_gfx02b/padfog_green02
 {
-		qer_editorimage textures/pad_gfx02b/padfog_green.tga
+		qer_editorimage textures/pad_gfx02b/padfog_green
 		surfaceparm	trans
 		surfaceparm	nonsolid
 		surfaceparm	fog
@@ -2351,7 +2351,7 @@ textures/pad_gfx02b/padfog_green02
 
 textures/pad_gfx02b/padfog_grey
 {
-		qer_editorimage textures/pad_gfx02b/padfog_grey.tga
+		qer_editorimage textures/pad_gfx02b/padfog_grey
 		surfaceparm	trans
 		surfaceparm	nonsolid
 		surfaceparm	fog
@@ -2364,7 +2364,7 @@ textures/pad_gfx02b/padfog_grey
 
 textures/pad_gfx02b/padfog_blue
 {
-		qer_editorimage textures/pad_gfx02b/padfog_blue.tga
+		qer_editorimage textures/pad_gfx02b/padfog_blue
 		surfaceparm	trans
 		surfaceparm	nonsolid
 		surfaceparm	fog
@@ -2377,7 +2377,7 @@ textures/pad_gfx02b/padfog_blue
 
 textures/pad_gfx02b/padfog_grey02
 {
-		qer_editorimage textures/pad_gfx02b/padfog_grey.tga
+		qer_editorimage textures/pad_gfx02b/padfog_grey
 		surfaceparm	trans
 		surfaceparm	nonsolid
 		surfaceparm	fog
@@ -2398,7 +2398,7 @@ textures/pad_gfx02b/padmove05
 		rgbGen identity
 	}
 	{
-		map textures/pad_gfx02b/padmove05.tga
+		map textures/pad_gfx02b/padmove05
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -2410,14 +2410,14 @@ textures/pad_gfx02b/padflagred02
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
      deformVertexes wave 30 sin 0 3 0 .2
      deformVertexes wave 100 sin 0 3 0 .7
-     
+
         {
-                map textures/pad_gfx02b/padflagred02.tga
+                map textures/pad_gfx02b/padflagred02
                 alphaFunc GE128
 		depthWrite
 		rgbGen vertex
@@ -2437,14 +2437,14 @@ textures/pad_gfx02b/padflagblue02
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
      deformVertexes wave 30 sin 0 3 0 .2
      deformVertexes wave 100 sin 0 3 0 .7
-     
+
         {
-                map textures/pad_gfx02b/padflagblue02.tga
+                map textures/pad_gfx02b/padflagblue02
                 alphaFunc GE128
 		depthWrite
 		rgbGen vertex
@@ -2465,14 +2465,14 @@ textures/pad_gfx02b/old_padflagred
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
      deformVertexes wave 30 sin 0 3 0 .2
      deformVertexes wave 100 sin 0 3 0 .7
-     
+
         {
-                map textures/pad_gfx02b/old_padflagred.tga
+                map textures/pad_gfx02b/old_padflagred
                 alphaFunc GE128
 		depthWrite
 		rgbGen vertex
@@ -2493,14 +2493,14 @@ textures/pad_gfx02b/old_padflaggreen
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
      deformVertexes wave 30 sin 0 3 0 .2
      deformVertexes wave 100 sin 0 3 0 .7
-     
+
         {
-                map textures/pad_gfx02b/old_padflaggreen.tga
+                map textures/pad_gfx02b/old_padflaggreen
                 alphaFunc GE128
 		depthWrite
 		rgbGen vertex
@@ -2520,14 +2520,14 @@ textures/pad_gfx02b/old_padflagblack
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
      deformVertexes wave 30 sin 0 3 0 .2
      deformVertexes wave 100 sin 0 3 0 .7
-     
+
         {
-                map textures/pad_gfx02b/old_padflagblack.tga
+                map textures/pad_gfx02b/old_padflagblack
                 alphaFunc GE128
 		depthWrite
 		rgbGen vertex
@@ -2545,7 +2545,7 @@ textures/pad_gfx02b/old_padflagblack
 
 textures/pad_metal/targetlight
 {
-	qer_editorimage textures/pad_metal/targetlight.tga
+	qer_editorimage textures/pad_metal/targetlight
 	q3map_surfacelight 200
               q3map_flareShader flareShader
 //	light 1
@@ -2555,12 +2555,12 @@ textures/pad_metal/targetlight
 		rgbGen identity
 	}
 	{
-		map textures/pad_metal/targetlight.tga
+		map textures/pad_metal/targetlight
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
 	{
-		map textures/pad_metal/target_flash.tga
+		map textures/pad_metal/target_flash
 		//tcMod scale 0.5 0.5
 		blendfunc GL_ONE GL_ONE
 	}
@@ -2570,7 +2570,7 @@ textures/pad_metal/targetlight
 
 textures/pad_flowerfx/grass4_move
 {
-	qer_editorimage textures/pad_flowerfx/pad_leaf4.tga
+	qer_editorimage textures/pad_flowerfx/pad_leaf4
 	deformVertexes wave 194 sin 0 2 0 .2
 	deformVertexes wave 30 sin 0 1 0 .3
 	deformVertexes wave 194 sin 0 1 0 .1
@@ -2579,7 +2579,7 @@ textures/pad_flowerfx/grass4_move
 	cull none
 
 	{
-		map textures/pad_flowerfx/pad_leaf4.tga
+		map textures/pad_flowerfx/pad_leaf4
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -2596,7 +2596,7 @@ textures/pad_flowerfx/grass4_move
 
 textures/pad_flowerfx/grass2_move
 {
-	qer_editorimage textures/pad_flowerfx/pad_leaf2.tga
+	qer_editorimage textures/pad_flowerfx/pad_leaf2
 	deformVertexes wave 194 sin 0 2 0 .2
 	deformVertexes wave 30 sin 0 1 0 .3
 	deformVertexes wave 194 sin 0 1 0 .1
@@ -2605,7 +2605,7 @@ textures/pad_flowerfx/grass2_move
 	cull none
 
 	{
-		map textures/pad_flowerfx/pad_leaf2.tga
+		map textures/pad_flowerfx/pad_leaf2
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -2622,7 +2622,7 @@ textures/pad_flowerfx/grass2_move
 
 textures/pad_flowerfx/leaf04_move
 {
-	qer_editorimage textures/pad_flowerfx/blatt.tga
+	qer_editorimage textures/pad_flowerfx/blatt
 	deformVertexes wave 194 sin 0 2 0 .2
 	deformVertexes wave 30 sin 0 1 0 .3
 	deformVertexes wave 194 sin 0 1 0 .1
@@ -2631,7 +2631,7 @@ textures/pad_flowerfx/leaf04_move
 	cull none
 
 	{
-		map textures/pad_flowerfx/blatt.tga
+		map textures/pad_flowerfx/blatt
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -2648,12 +2648,12 @@ textures/pad_flowerfx/leaf04_move
 
 textures/pad_flowerfx/sprite_leaf2
 {
-	qer_editorimage textures/pad_flowerfx/pad_leaf2.tga
+	qer_editorimage textures/pad_flowerfx/pad_leaf2
 	cull disable
 	deformvertexes autosprite
 
 {
-	map textures/pad_flowerfx/pad_leaf2.tga
+	map textures/pad_flowerfx/pad_leaf2
 	blendFunc blend
       alphaFunc GE128
 	depthWrite
@@ -2668,18 +2668,18 @@ textures/pad_flowerfx/sprite_leaf2
 
 textures/pad_petesky/utopiaatoll
 {
-        qer_editorimage textures/pad_petesky/utopiaatoll.tga
+        qer_editorimage textures/pad_petesky/utopiaatoll
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange01.tga
+        q3map_lightimage textures/pad_petesky/orange01
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
         skyparms env/utopiaatoll512 - -
 //       {
-//		map textures/pad_petesky/utopiaatoll.tga
+//		map textures/pad_petesky/utopiaatoll
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -2689,18 +2689,18 @@ textures/pad_petesky/utopiaatoll
 
 textures/pad_petesky/urban-terror
 {
-        qer_editorimage textures/pad_petesky/urban-terror.tga
+        qer_editorimage textures/pad_petesky/urban-terror
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange2.tga
+        q3map_lightimage textures/pad_petesky/orange2
 	q3map_sun	1.000000 0.718471 0.616587 200 60 225
 	q3map_surfacelight 200
 
         skyparms env/urban-terror512 - -
 //       {
-//		map textures/pad_petesky/urban-terror.tga
+//		map textures/pad_petesky/urban-terror
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -2710,18 +2710,18 @@ textures/pad_petesky/urban-terror
 
 textures/pad_petesky/poltergeist
 {
-        qer_editorimage textures/pad_petesky/poltergeist.tga
+        qer_editorimage textures/pad_petesky/poltergeist
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/blue01.tga
+        q3map_lightimage textures/pad_petesky/blue01
 	q3map_sun	0.434981 0.749839 1.000000 260 340 50
 	q3map_surfacelight 400
 
         skyparms env/pf-poltergeist512 - -
 //       {
-//		map textures/pad_petesky/poltergeist.tga
+//		map textures/pad_petesky/poltergeist
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -2731,18 +2731,18 @@ textures/pad_petesky/poltergeist
 
 textures/pad_petesky/pf-tornado-alley
 {
-        qer_editorimage textures/pad_petesky/pf-tornado-alley.tga
+        qer_editorimage textures/pad_petesky/pf-tornado-alley
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/grey.tga
+        q3map_lightimage textures/pad_petesky/grey
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
         skyparms env/pf-tornado-alley512 - -
 //       {
-//		map textures/pad_petesky/pf-tornado-alley.tga
+//		map textures/pad_petesky/pf-tornado-alley
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -2752,12 +2752,12 @@ textures/pad_petesky/pf-tornado-alley
 
 textures/pad_petesky/morning_alley
 {
-             qer_editorimage textures/pad_petesky/morning_alley.tga
+             qer_editorimage textures/pad_petesky/morning_alley
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-              q3map_lightimage textures/pad_petesky/orange2.tga
+              q3map_lightimage textures/pad_petesky/orange2
 	q3map_sun	1.000000 0.862213 0.247457 330 340 50
 	q3map_surfacelight 400
 
@@ -2768,18 +2768,18 @@ textures/pad_petesky/morning_alley
 
 textures/pad_petesky/sep
 {
-        qer_editorimage textures/pad_petesky/sep.tga
+        qer_editorimage textures/pad_petesky/sep
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange.tga
+        q3map_lightimage textures/pad_petesky/orange
 	q3map_sun	0.266383 0.274632 0.358662 94 48 75
 	q3map_surfacelight 280
 
         skyparms env/sep512 - -
 //       {
-//		map textures/pad_petesky/sep.tga
+//		map textures/pad_petesky/sep
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -2789,18 +2789,18 @@ textures/pad_petesky/sep
 
 textures/pad_petesky/morning-madness
 {
-        qer_editorimage textures/pad_petesky/morning-madness.tga
+        qer_editorimage textures/pad_petesky/morning-madness
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange2.tga
+        q3map_lightimage textures/pad_petesky/orange2
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
         skyparms env/pc-morning-madness512 - -
 //       {
-//		map textures/pad_petesky/morning-madness.tga
+//		map textures/pad_petesky/morning-madness
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -2810,18 +2810,18 @@ textures/pad_petesky/morning-madness
 
 textures/pad_petesky/sist
 {
-        qer_editorimage textures/pad_petesky/sist.tga
+        qer_editorimage textures/pad_petesky/sist
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange01.tga
+        q3map_lightimage textures/pad_petesky/orange01
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
         skyparms env/sist512 - -
 //       {
-//		map textures/pad_petesky/sist.tga
+//		map textures/pad_petesky/sist
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2

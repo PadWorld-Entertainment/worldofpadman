@@ -3,19 +3,19 @@ textures/pad_glowsky/padbox
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
-        q3map_lightimage textures/pad_glowsky/padbox_white.tga
+        q3map_lightimage textures/pad_glowsky/padbox_white
 	q3map_sun	1 1 1 100 -58 58
 	q3map_surfacelight 90
 
         skyparms env/padboxglow - -
        {
-		map textures/pad_glowsky/sky.tga
+		map textures/pad_glowsky/sky
 		blendfunc GL_ONE GL_ONE
 		tcMod scroll 0.01 0.02
 		tcMod scale 1 2
 	}
        {
-		map textures/pad_glowsky/sky2.tga
+		map textures/pad_glowsky/sky2
 		blendfunc GL_ONE GL_ONE
 		tcMod scroll -0.02 -0.01
 		tcMod scale 1 2
@@ -27,18 +27,18 @@ textures/pad_glowsky/padbox
 
 textures/pad_glowsky/utopiaatoll
 {
-        qer_editorimage textures/pad_glowsky/utopiaatoll.tga
+        qer_editorimage textures/pad_glowsky/utopiaatoll
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_glowsky/orange01.tga
+        q3map_lightimage textures/pad_glowsky/orange01
 	q3map_sun	0.266383 0.274632 0.358662 150 60 85
 	q3map_surfacelight 200
 
         skyparms env/utopiaatoll512 - -
 //       {
-//		map textures/pad_glowsky/utopiaatoll.tga
+//		map textures/pad_glowsky/utopiaatoll
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -47,18 +47,18 @@ textures/pad_glowsky/utopiaatoll
 
 textures/pad_petesky/wolfl
 {
-        qer_editorimage textures/pad_petesky/wolf.tga
+        qer_editorimage textures/pad_petesky/wolf
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/grey.tga
+        q3map_lightimage textures/pad_petesky/grey
 //	q3map_sun	0.266383 0.274632 0.358662 150 60 85
 	q3map_surfacelight 20
 
         skyparms env/wolf-pack512 - -
 //       {
-//		map textures/pad_petesky/wolfl.tga
+//		map textures/pad_petesky/wolfl
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -67,18 +67,18 @@ textures/pad_petesky/wolfl
 
 textures/pad_glowsky/urban-terror
 {
-        qer_editorimage textures/pad_glowsky/urban-terror.tga
+        qer_editorimage textures/pad_glowsky/urban-terror
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_glowsky/orange03.tga
+        q3map_lightimage textures/pad_glowsky/orange03
 	q3map_sun	0.266383 0.274632 0.358662 90 90 90
 	q3map_surfacelight 20
 
         skyparms env/urban-terror512 - -
 //       {
-//		map textures/pad_glowsky/urban-terror.tga
+//		map textures/pad_glowsky/urban-terror
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -87,18 +87,18 @@ textures/pad_glowsky/urban-terror
 
 textures/pad_glowsky/sandtrap
 {
-        qer_editorimage textures/pad_glowsky/sandtrap.tga
+        qer_editorimage textures/pad_glowsky/sandtrap
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_glowsky/blue.tga
+        q3map_lightimage textures/pad_glowsky/blue
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 2
 
         skyparms env/sandtrap512 - -
 //       {
-//		map textures/pad_glowsky/sandtrap.tga
+//		map textures/pad_glowsky/sandtrap
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -110,14 +110,14 @@ textures/pad_glowsky/sandtrap
 
 textures/pad_glowsky/gglass03
 {
-	qer_editorimage textures/pad_glowsky/gglass03.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_glowsky/gglass03
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_glowsky/gglass03.tga
+		map textures/pad_glowsky/gglass03
                 blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
@@ -126,20 +126,20 @@ textures/pad_glowsky/gglass03
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 
 textures/pad_glowsky/gglass01
 {
-	qer_editorimage textures/pad_glowsky/gglass01.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_glowsky/gglass01
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_glowsky/gglass01.tga
+		map textures/pad_glowsky/gglass01
                 blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
@@ -148,20 +148,20 @@ textures/pad_glowsky/gglass01
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 
 textures/pad_glowsky/gglass02
 {
-	qer_editorimage textures/pad_glowsky/gglass02.tga
-        surfaceparm trans	
+	qer_editorimage textures/pad_glowsky/gglass02
+        surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
-     
+
         {
-		map textures/pad_glowsky/gglass02.tga
+		map textures/pad_glowsky/gglass02
                 blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
@@ -170,23 +170,23 @@ textures/pad_glowsky/gglass02
 		rgbGen identity
 		blendFunc filter
 	}
-           
+
 }
 
 textures/pad_backyard/pf-tornado-alley
 {
-        qer_editorimage textures/pad_backyard/pf-tornado-alley.tga
+        qer_editorimage textures/pad_backyard/pf-tornado-alley
 
 
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_backyard/grey.tga
+        q3map_lightimage textures/pad_backyard/grey
 	q3map_sun	0.266383 0.274632 0.358662 100 230 70
 	q3map_surfacelight 175
 
         skyparms env/pf-tornado-alley512 - -
 //       {
-//		map textures/pad_backyard/pf-tornado-alley.tga
+//		map textures/pad_backyard/pf-tornado-alley
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -196,12 +196,12 @@ textures/pad_backyard/pf-tornado-alley
 
 textures/pad_glowsky/glass
 {
-   qer_editorimage   textures/pad_glowsky/glass.tga
+   qer_editorimage   textures/pad_glowsky/glass
               surfaceparm trans
    q3map_nolightmap
    q3map_onlyvertexlighting
     {
-        map textures/pad_glowsky/glass.tga
+        map textures/pad_glowsky/glass
         blendFunc GL_ONE GL_ONE
     }
 }
@@ -209,57 +209,57 @@ textures/pad_glowsky/glass
 
 textures/glowstar/glas
 {
-	qer_editorimage textures/colors/greygreen.tga
+	qer_editorimage textures/colors/greygreen
 	cull back
 	{
-		map textures/colors/greygreen.tga
+		map textures/colors/greygreen
 		blendfunc add
 	}
 	{
-		map textures/pad_gfx/env2.tga
+		map textures/pad_gfx/env2
 		blendfunc filter
-		tcGen environment 
+		tcGen environment
 	}
 }
 
 textures/glowstar/greenglas
 {
-	qer_editorimage textures/colors/greygreen.tga
+	qer_editorimage textures/colors/greygreen
 	cull back
 	{
-		map textures/colors/greygreen.tga
+		map textures/colors/greygreen
 		blendfunc add
 	}
 	{
-		map textures/pad_gfx/env2.tga
+		map textures/pad_gfx/env2
 		blendfunc filter
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map textures/colors/greygreen.tga
+		map textures/colors/greygreen
 		blendfunc filter
 	}
 }
 
 textures/glowstar/milchglas
 {
-	qer_editorimage textures/colors/greygreen.tga
+	qer_editorimage textures/colors/greygreen
 	cull back
 	{
-		map textures/colors/greygreen.tga
+		map textures/colors/greygreen
 		blendfunc add
 	}
 	{
-		map textures/pad_gfx/env2.tga
+		map textures/pad_gfx/env2
 		blendfunc filter
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map textures/colors/greygreen.tga
+		map textures/colors/greygreen
 		blendfunc filter
 	}
 	{
-		map textures/colors/greygreen.tga
+		map textures/colors/greygreen
 		blendfunc blend
 	}
 }
@@ -273,28 +273,28 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_glow/liege.tga
+map textures/pad_glow/liege
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-}  
+}
 
 
 textures/pad_glow/marble01
 {
-	qer_editorimage textures/pad_glow/marble01.tga
-	
+	qer_editorimage textures/pad_glow/marble01
+
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_glow/marble01.tga
+		map textures/pad_glow/marble01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -303,19 +303,19 @@ textures/pad_glow/marble01
 
 textures/pad_glow/marble04
 {
-	qer_editorimage textures/pad_glow/marble04.tga
-	
+	qer_editorimage textures/pad_glow/marble04
+
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_glow/marble04.tga
+		map textures/pad_glow/marble04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -324,19 +324,19 @@ textures/pad_glow/marble04
 
 textures/pad_glow/marble06
 {
-	qer_editorimage textures/pad_glow/marble06.tga
-	
+	qer_editorimage textures/pad_glow/marble06
+
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_glow/marble06.tga
+		map textures/pad_glow/marble06
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -346,19 +346,19 @@ textures/pad_glow/marble06
 
 textures/pad_glow/marble07
 {
-	qer_editorimage textures/pad_glow/marble07.tga
-	
+	qer_editorimage textures/pad_glow/marble07
+
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_glow/marble07.tga
+		map textures/pad_glow/marble07
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -368,19 +368,19 @@ textures/pad_glow/marble07
 
 textures/pad_glow/marble08
 {
-	qer_editorimage textures/pad_glow/marble08.tga
-	
+	qer_editorimage textures/pad_glow/marble08
+
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_glow/marble08.tga
+		map textures/pad_glow/marble08
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -390,19 +390,19 @@ textures/pad_glow/marble08
 
 textures/pad_glow/marble21
 {
-	qer_editorimage textures/pad_glow/marble21.tga
-	
+	qer_editorimage textures/pad_glow/marble21
+
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_glow/marble21.tga
+		map textures/pad_glow/marble21
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -412,19 +412,19 @@ textures/pad_glow/marble21
 
 textures/pad_glow/marble27
 {
-	qer_editorimage textures/pad_glow/marble27.tga
-	
+	qer_editorimage textures/pad_glow/marble27
+
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_glow/marble27.tga
+		map textures/pad_glow/marble27
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -434,15 +434,15 @@ textures/pad_glow/marble27
 
 textures/pad_cabin/Moni
 {
-	q3map_lightimage textures/pad_cabin/Moni.tga
+	q3map_lightimage textures/pad_cabin/Moni
 	q3map_surfacelight 20
 
         {
-		map textures/pad_cabin/Moni.tga
+		map textures/pad_cabin/Moni
 		rgbGen identity
 	}
-	
-       
+
+
 	{
 		map $lightmap
 		tcgen environment
@@ -460,11 +460,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/Holz00y.tga
+map textures/pad_backyard/Holz00y
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_backyard/Holz00z
 {
@@ -474,11 +474,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/Holz00y.tga
+map textures/pad_backyard/Holz00y
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_backyard/planke02
 {
@@ -488,11 +488,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/planke02.tga
+map textures/pad_backyard/planke02
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_backyard/wood0a
 {
@@ -502,11 +502,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0a.tga
+map textures/pad_backyard/wood0a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_backyard/wood0b
 {
@@ -516,11 +516,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0b.tga
+map textures/pad_backyard/wood0b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 
@@ -532,11 +532,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0c.tga
+map textures/pad_backyard/wood0c
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 textures/pad_backyard/wood0d
@@ -547,7 +547,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0d.tga
+map textures/pad_backyard/wood0d
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -562,11 +562,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0e.tga
+map textures/pad_backyard/wood0e
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-}  
+}
 
 
 textures/pad_backyard/wood0f
@@ -577,11 +577,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0f.tga
+map textures/pad_backyard/wood0f
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 textures/pad_backyard/wood0g
@@ -592,11 +592,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0g.tga
+map textures/pad_backyard/wood0g
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 textures/pad_backyard/wood0h
@@ -607,11 +607,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0h.tga
+map textures/pad_backyard/wood0h
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 textures/pad_backyard/wood0i
@@ -622,11 +622,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0i.tga
+map textures/pad_backyard/wood0i
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 textures/pad_backyard/wood0j
@@ -637,11 +637,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood0j.tga
+map textures/pad_backyard/wood0j
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 
@@ -653,11 +653,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood01.tga
+map textures/pad_backyard/wood01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 textures/pad_backyard/wood02
@@ -668,11 +668,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/wood02.tga
+map textures/pad_backyard/wood02
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 
@@ -684,11 +684,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/glow_rost01.tga
+map textures/pad_backyard/glow_rost01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 textures/pad_backyard/metal02
@@ -699,11 +699,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/metal02.tga
+map textures/pad_backyard/metal02
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_backyard/metal04
 {
@@ -713,11 +713,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/metal04.tga
+map textures/pad_backyard/metal04
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_backyard/metal06
 {
@@ -727,7 +727,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/metal06.tga
+map textures/pad_backyard/metal06
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -741,11 +741,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/Metal01.tga
+map textures/pad_backyard/Metal01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-}  
+}
 
 textures/pad_backyard/Metal2
 {
@@ -755,11 +755,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/Metal2.tga
+map textures/pad_backyard/Metal2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_backyard/rau
 {
@@ -769,12 +769,12 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/rau.tga
+map textures/pad_backyard/rau
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
- 
+}
+
 
 
 textures/pad_cabin/darkrost
@@ -785,11 +785,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/darkrost.tga
+map textures/pad_cabin/darkrost
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 
 textures/pad_cabin/metal
@@ -800,11 +800,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/metal.tga
+map textures/pad_cabin/metal
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_cabin/metal1
 {
@@ -814,7 +814,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/metal1.tga
+map textures/pad_cabin/metal1
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -828,11 +828,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/metall.tga
+map textures/pad_cabin/metall
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-}  
+}
 
 
 textures/pad_cabin/rost001
@@ -843,7 +843,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/rost001.tga
+map textures/pad_cabin/rost001
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -857,7 +857,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/fensterbank.tga
+map textures/pad_cabin/fensterbank
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -871,11 +871,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/wood0a.tga
+map textures/pad_cabin/wood0a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-}    
+}
 
 textures/pad_cabin/wood0b
 {
@@ -885,11 +885,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/wood0b.tga
+map textures/pad_cabin/wood0b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-}   
+}
 
 textures/pad_cabin/wood0c
 {
@@ -899,11 +899,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/wood0c.tga
+map textures/pad_cabin/wood0c
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-}  
+}
 
 textures/pad_cabin/wood0d
 {
@@ -913,11 +913,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_cabin/wood0d.tga
+map textures/pad_cabin/wood0d
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-}    
+}
 
 textures/pad_glow/wallcol016
 {
@@ -927,11 +927,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_glow/wallcol016.tga
+map textures/pad_glow/wallcol016
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_glow/wallcol017
 {
@@ -941,23 +941,23 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_glow/wallcol017.tga
+map textures/pad_glow/wallcol017
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
-} 
+}
 
 textures/pad_glowsky/glowscreen
 {
-	q3map_lightimage textures/pad_glowsky/glowscreen.tga
+	q3map_lightimage textures/pad_glowsky/glowscreen
 	q3map_surfacelight 20
 
         {
-		map textures/pad_glowsky/glowscreen.tga
+		map textures/pad_glowsky/glowscreen
 		rgbGen identity
 	}
-	
-       
+
+
 	{
 		map $lightmap
 		tcgen environment
@@ -970,19 +970,19 @@ textures/pad_glowsky/glowscreen
 
 textures/pad_glow/metal_old
 {
-	qer_editorimage textures/pad_glow/metal_old.tga
-	
+	qer_editorimage textures/pad_glow/metal_old
+
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_glow/metal_old.tga
+		map textures/pad_glow/metal_old
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
