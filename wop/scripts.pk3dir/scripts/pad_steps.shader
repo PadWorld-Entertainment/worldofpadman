@@ -8,7 +8,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/border_a.tga
+map textures/pad_metal/border_a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -22,7 +22,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/borderalu_a.tga
+map textures/pad_metal/borderalu_a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -36,7 +36,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/borderfloor_a.tga
+map textures/pad_metal/borderfloor_a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -50,7 +50,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/ground_a.tga
+map textures/pad_metal/ground_a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -64,7 +64,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/ground_b.tga
+map textures/pad_metal/ground_b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -79,7 +79,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/ground_c.tga
+map textures/pad_metal/ground_c
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -93,7 +93,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/testlvlbase.tga
+map textures/pad_metal/testlvlbase
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -107,7 +107,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/wallmet_d.tga
+map textures/pad_metal/wallmet_d
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -121,7 +121,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/wallmet_b.tga
+map textures/pad_metal/wallmet_b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -135,7 +135,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/wallsteal_a.tga
+map textures/pad_metal/wallsteal_a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -149,7 +149,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/yb1.tga
+map textures/pad_metal/yb1
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -163,7 +163,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_metal/yb2.tga
+map textures/pad_metal/yb2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -179,7 +179,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_floorin/metalfloor001.tga
+map textures/pad_floorin/metalfloor001
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -193,7 +193,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_floorin/floor034.tga
+map textures/pad_floorin/floor034
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -207,7 +207,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_floorin/floor034b.tga
+map textures/pad_floorin/floor034b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -224,7 +224,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_floorout/guli2.tga
+map textures/pad_floorout/guli2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -238,7 +238,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_floorout/gas1.tga
+map textures/pad_floorout/gas1
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -254,7 +254,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/burgfloor001.tga
+map textures/pad_maps/burgfloor001
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -268,7 +268,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/schrank01d.tga
+map textures/pad_maps/schrank01d
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -285,7 +285,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/nature05.tga
+map textures/pad_nature/nature05
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -300,7 +300,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/nature07.tga
+map textures/pad_nature/nature07
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -314,7 +314,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/nature15.tga
+map textures/pad_nature/nature15
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -328,7 +328,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/sand001.tga
+map textures/pad_nature/sand001
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -343,7 +343,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/sand001b.tga
+map textures/pad_nature/sand001b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -358,7 +358,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/sand002a.tga
+map textures/pad_nature/sand002a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -372,7 +372,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/sand003.tga
+map textures/pad_nature/sand003
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -386,7 +386,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/sand003a.tga
+map textures/pad_nature/sand003a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -400,7 +400,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/sand005.tga
+map textures/pad_nature/sand005
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -415,7 +415,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/sand007.tga
+map textures/pad_nature/sand007
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -430,7 +430,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/sand08.tga
+map textures/pad_nature/sand08
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -444,7 +444,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/stone06.tga
+map textures/pad_nature/stone06
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -458,7 +458,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_nature/stone07.tga
+map textures/pad_nature/stone07
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -474,7 +474,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_objects/obj009.tga
+map textures/pad_objects/obj009
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -488,7 +488,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_objects/ofen2.tga
+map textures/pad_objects/ofen2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -502,7 +502,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_objects/heiz01.tga
+map textures/pad_objects/heiz01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -516,7 +516,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_objects/heizung.tga
+map textures/pad_objects/heizung
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -531,7 +531,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_objects/obj074.tga
+map textures/pad_objects/obj074
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -548,7 +548,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_objects02/metalu.tga
+map textures/pad_objects02/metalu
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -562,7 +562,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_objects02/pflaster.tga
+map textures/pad_objects02/pflaster
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -580,7 +580,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_pete/mp-tree-stumpb.tga
+map textures/pad_pete/mp-tree-stumpb
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -595,7 +595,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_pete/mp-wood2b.tga
+map textures/pad_pete/mp-wood2b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -610,7 +610,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_pete/mp-wood7.tga
+map textures/pad_pete/mp-wood7
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -624,7 +624,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_pete/mp-wood9.tga
+map textures/pad_pete/mp-wood9
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -640,7 +640,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile01.tga
+map textures/pad_textile/textile01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -654,7 +654,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile01b.tga
+map textures/pad_textile/textile01b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -669,7 +669,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile02c.tga
+map textures/pad_textile/textile02c
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -684,7 +684,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile03.tga
+map textures/pad_textile/textile03
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -698,7 +698,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile03b.tga
+map textures/pad_textile/textile03b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -713,7 +713,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile03e.tga
+map textures/pad_textile/textile03e
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -727,7 +727,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile04.tga
+map textures/pad_textile/textile04
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -741,7 +741,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile04c.tga
+map textures/pad_textile/textile04c
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -756,7 +756,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile05.tga
+map textures/pad_textile/textile05
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -771,7 +771,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile05d.tga
+map textures/pad_textile/textile05d
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -786,7 +786,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile05f.tga
+map textures/pad_textile/textile05f
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -801,7 +801,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile07.tga
+map textures/pad_textile/textile07
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -815,7 +815,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile08.tga
+map textures/pad_textile/textile08
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -829,7 +829,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile10.tga
+map textures/pad_textile/textile10
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -843,7 +843,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile11.tga
+map textures/pad_textile/textile11
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -857,7 +857,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile12.tga
+map textures/pad_textile/textile12
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -871,7 +871,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile13c.tga
+map textures/pad_textile/textile13c
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -885,7 +885,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile14.tga
+map textures/pad_textile/textile14
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -899,7 +899,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile16b.tga
+map textures/pad_textile/textile16b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -914,7 +914,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile17.tga
+map textures/pad_textile/textile17
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -928,7 +928,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile18c.tga
+map textures/pad_textile/textile18c
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -942,7 +942,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile18g.tga
+map textures/pad_textile/textile18g
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -956,7 +956,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/textile19.tga
+map textures/pad_textile/textile19
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -971,7 +971,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/leather001.tga
+map textures/pad_textile/leather001
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -986,7 +986,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_textile/leather002.tga
+map textures/pad_textile/leather002
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1003,7 +1003,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wallin/wall_defect.tga
+map textures/pad_wallin/wall_defect
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1019,7 +1019,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wallout/rost001.tga
+map textures/pad_wallout/rost001
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1033,7 +1033,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wallout/rost001small.tga
+map textures/pad_wallout/rost001small
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1048,7 +1048,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wallout/rost002small.tga
+map textures/pad_wallout/rost002small
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1063,7 +1063,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wallout/rost003small.tga
+map textures/pad_wallout/rost003small
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1078,7 +1078,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wallout/rost004small.tga
+map textures/pad_wallout/rost004small
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1092,7 +1092,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wallout/rost005_256.tga
+map textures/pad_wallout/rost005_256
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1106,7 +1106,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wallout/rost005_512.tga
+map textures/pad_wallout/rost005_512
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1121,7 +1121,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wallout/wall_rost01.tga
+map textures/pad_wallout/wall_rost01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1138,7 +1138,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodfloor/2parq13.tga
+map textures/pad_woodfloor/2parq13
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1153,7 +1153,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodfloor/2parq51.tga
+map textures/pad_woodfloor/2parq51
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1168,7 +1168,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodfloor/2parq61.tga
+map textures/pad_woodfloor/2parq61
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1182,7 +1182,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodfloor/2parq62.tga
+map textures/pad_woodfloor/2parq62
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1196,7 +1196,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodfloor/2parq75.tga
+map textures/pad_woodfloor/2parq75
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1214,7 +1214,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/oldwood001.tga
+map textures/pad_wood/oldwood001
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1228,7 +1228,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/oldwood002.tga
+map textures/pad_wood/oldwood002
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1242,7 +1242,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/oldwood003.tga
+map textures/pad_wood/oldwood003
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1256,7 +1256,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/oldwood004.tga
+map textures/pad_wood/oldwood004
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1271,7 +1271,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/planke10.tga
+map textures/pad_wood/planke10
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1285,7 +1285,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/span128.tga
+map textures/pad_wood/span128
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1299,7 +1299,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood002_small.tga
+map textures/pad_wood/wood002_small
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1313,7 +1313,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood002black.tga
+map textures/pad_wood/wood002black
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1327,7 +1327,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood002blue.tga
+map textures/pad_wood/wood002blue
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1341,7 +1341,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood002brown.tga
+map textures/pad_wood/wood002brown
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1355,7 +1355,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood002brown1.tga
+map textures/pad_wood/wood002brown1
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1369,7 +1369,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood002green.tga
+map textures/pad_wood/wood002green
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1383,7 +1383,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood002purple.tga
+map textures/pad_wood/wood002purple
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1397,7 +1397,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood002red.tga
+map textures/pad_wood/wood002red
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1411,7 +1411,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood003.tga
+map textures/pad_wood/wood003
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1425,7 +1425,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood004.tga
+map textures/pad_wood/wood004
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1439,7 +1439,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood004brown.tga
+map textures/pad_wood/wood004brown
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1453,7 +1453,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood004brownbig.tga
+map textures/pad_wood/wood004brownbig
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1467,7 +1467,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood006.tga
+map textures/pad_wood/wood006
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1481,7 +1481,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood006b.tga
+map textures/pad_wood/wood006b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1495,7 +1495,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood006brown.tga
+map textures/pad_wood/wood006brown
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1509,7 +1509,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood008.tga
+map textures/pad_wood/wood008
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1523,7 +1523,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood008darker.tga
+map textures/pad_wood/wood008darker
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1537,7 +1537,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood008normal.tga
+map textures/pad_wood/wood008normal
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1551,7 +1551,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood010.tga
+map textures/pad_wood/wood010
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1566,7 +1566,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood012.tga
+map textures/pad_wood/wood012
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1580,7 +1580,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood014.tga
+map textures/pad_wood/wood014
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1594,7 +1594,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood016.tga
+map textures/pad_wood/wood016
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1608,7 +1608,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017.tga
+map textures/pad_wood/wood017
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1622,7 +1622,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017S.tga
+map textures/pad_wood/wood017S
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1636,7 +1636,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017Sbrown.tga
+map textures/pad_wood/wood017Sbrown
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1650,7 +1650,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017Sgreen.tga
+map textures/pad_wood/wood017Sgreen
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1664,7 +1664,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017Sred.tga
+map textures/pad_wood/wood017Sred
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1678,7 +1678,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017Sbrown.tga
+map textures/pad_wood/wood017Sbrown
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1692,7 +1692,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood018.tga
+map textures/pad_wood/wood018
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1706,7 +1706,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood019.tga
+map textures/pad_wood/wood019
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1720,7 +1720,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood020big.tga
+map textures/pad_wood/wood020big
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1734,7 +1734,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood020blackbig.tga
+map textures/pad_wood/wood020blackbig
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1748,7 +1748,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood020blacksmall.tga
+map textures/pad_wood/wood020blacksmall
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1763,7 +1763,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood026.tga
+map textures/pad_wood/wood026
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1777,7 +1777,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood028.tga
+map textures/pad_wood/wood028
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1791,7 +1791,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood032.tga
+map textures/pad_wood/wood032
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1805,7 +1805,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood033.tga
+map textures/pad_wood/wood033
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1819,7 +1819,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood034.tga
+map textures/pad_wood/wood034
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1833,7 +1833,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood035.tga
+map textures/pad_wood/wood035
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1848,7 +1848,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood037.tga
+map textures/pad_wood/wood037
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1862,7 +1862,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood038.tga
+map textures/pad_wood/wood038
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1876,7 +1876,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood039.tga
+map textures/pad_wood/wood039
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1890,7 +1890,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood040.tga
+map textures/pad_wood/wood040
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1904,7 +1904,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood043.tga
+map textures/pad_wood/wood043
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1918,7 +1918,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood045.tga
+map textures/pad_wood/wood045
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1932,7 +1932,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood045blu.tga
+map textures/pad_wood/wood045blu
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1946,7 +1946,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood046.tga
+map textures/pad_wood/wood046
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1960,7 +1960,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood047.tga
+map textures/pad_wood/wood047
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1974,7 +1974,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood048.tga
+map textures/pad_wood/wood048
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1988,7 +1988,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood049.tga
+map textures/pad_wood/wood049
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2002,7 +2002,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood051.tga
+map textures/pad_wood/wood051
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2017,7 +2017,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood066.tga
+map textures/pad_wood/wood066
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2032,7 +2032,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood068.tga
+map textures/pad_wood/wood068
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2047,7 +2047,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood074.tga
+map textures/pad_wood/wood074
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2061,7 +2061,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood076.tga
+map textures/pad_wood/wood076
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2075,7 +2075,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood077.tga
+map textures/pad_wood/wood077
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2089,7 +2089,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood078.tga
+map textures/pad_wood/wood078
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2103,7 +2103,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood091.tga
+map textures/pad_wood/wood091
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2117,7 +2117,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood092.tga
+map textures/pad_wood/wood092
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2131,7 +2131,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood093.tga
+map textures/pad_wood/wood093
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2144,7 +2144,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood093b.tga
+map textures/pad_wood/wood093b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2158,7 +2158,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood093c.tga
+map textures/pad_wood/wood093c
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2172,7 +2172,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood095.tga
+map textures/pad_wood/wood095
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2186,7 +2186,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood096b.tga
+map textures/pad_wood/wood096b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2201,7 +2201,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood4a.tga
+map textures/pad_wood/wood4a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2216,7 +2216,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood4ahell.tga
+map textures/pad_wood/wood4ahell
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2231,7 +2231,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood4arot.tga
+map textures/pad_wood/wood4arot
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2249,7 +2249,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest_head003.tga
+map textures/pad_woodobjects/chest_head003
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2264,7 +2264,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest_side.tga
+map textures/pad_woodobjects/chest_side
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2278,7 +2278,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest_side_1.tga
+map textures/pad_woodobjects/chest_side_1
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2292,7 +2292,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest_side_2.tga
+map textures/pad_woodobjects/chest_side_2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2306,7 +2306,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest002.tga
+map textures/pad_woodobjects/chest002
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2320,7 +2320,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest002b.tga
+map textures/pad_woodobjects/chest002b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2334,7 +2334,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest003.tga
+map textures/pad_woodobjects/chest003
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2348,7 +2348,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest004.tga
+map textures/pad_woodobjects/chest004
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2362,7 +2362,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest004b.tga
+map textures/pad_woodobjects/chest004b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2376,7 +2376,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest01_2.tga
+map textures/pad_woodobjects/chest01_2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2390,7 +2390,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest01_2_1.tga
+map textures/pad_woodobjects/chest01_2_1
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2404,7 +2404,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest01_2_2.tga
+map textures/pad_woodobjects/chest01_2_2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2419,7 +2419,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest01_3_1.tga
+map textures/pad_woodobjects/chest01_3_1
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2433,7 +2433,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest01_3_2.tga
+map textures/pad_woodobjects/chest01_3_2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2448,7 +2448,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest01_5.tga
+map textures/pad_woodobjects/chest01_5
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2463,7 +2463,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest01_6.tga
+map textures/pad_woodobjects/chest01_6
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2479,7 +2479,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/chest01_7.tga
+map textures/pad_woodobjects/chest01_7
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2494,7 +2494,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/strokematch.tga
+map textures/pad_woodobjects/strokematch
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2509,7 +2509,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/tablewood.tga
+map textures/pad_woodobjects/tablewood
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2524,7 +2524,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_woodobjects/wood19s.tga
+map textures/pad_woodobjects/wood19s
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2541,7 +2541,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/Barrel01_256x128.tga
+map textures/pad_western/Barrel01_256x128
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2556,7 +2556,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/Barrel01_256x128_blue.tga
+map textures/pad_western/Barrel01_256x128_blue
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2571,7 +2571,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/Barrel01_256x128_red.tga
+map textures/pad_western/Barrel01_256x128_red
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2586,7 +2586,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/Barrel02_256x256.tga
+map textures/pad_western/Barrel02_256x256
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2601,7 +2601,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/wood_roof128c.tga
+map textures/pad_western/wood_roof128c
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2616,7 +2616,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/wood_trimh64e.tga
+map textures/pad_western/wood_trimh64e
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2631,7 +2631,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/wood_trimv64d.tga
+map textures/pad_western/wood_trimv64d
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2646,7 +2646,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/wood_trimv128b.tga
+map textures/pad_western/wood_trimv128b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2661,7 +2661,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/woodgrain128a.tga
+map textures/pad_western/woodgrain128a
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2676,7 +2676,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/woodv256d.tga
+map textures/pad_western/woodv256d
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -2691,7 +2691,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/westernsand.tga
+map textures/pad_western/westernsand
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }

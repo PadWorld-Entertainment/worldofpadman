@@ -5,12 +5,12 @@
 waterExplosion
 {
 	{
-		animmap 5 models/weaponsfx/waterboom1.jpg models/weaponsfx/waterboom2.jpg models/weaponsfx/waterboom3.jpg
+		animmap 5 models/weaponsfx/waterboom1 models/weaponsfx/waterboom2 models/weaponsfx/waterboom3
 		blendFunc add
 		rgbGen wave inversesawtooth 0 1 0 5
 	}
 	{
-		animmap 5 models/weaponsfx/waterboom2.jpg models/weaponsfx/waterboom3.jpg models/weaponsfx/waterboom1.jpg
+		animmap 5 models/weaponsfx/waterboom2 models/weaponsfx/waterboom3 models/weaponsfx/waterboom1
 		blendFunc add
 		rgbGen wave sawtooth 0 1 0 5
 	}
@@ -20,7 +20,7 @@ models/weaponsfx/drop
 {
 	cull none
 	{
-		map models/weaponsfx/drop.jpg
+		map models/weaponsfx/drop
 		blendFunc add
 		rgbGen wave inversesawtooth 0 1 0 1.2
 	}
@@ -31,12 +31,12 @@ waterSplash
 {
 	cull disable
 	{
-		animmap 5 models/weaponsfx/water_splash_1.jpg models/weaponsfx/water_splash_2.jpg models/weaponsfx/water_splash_3.jpg gfx/colors/black.tga
+		animmap 5 models/weaponsfx/water_splash_1 models/weaponsfx/water_splash_2 models/weaponsfx/water_splash_3 gfx/colors/black
 		rgbGen wave inversesawtooth 0 1 0 5
 		blendfunc add
 	}
 	{
-		animmap 5 models/weaponsfx/water_splash_2.jpg models/weaponsfx/water_splash_3.jpg gfx/colors/black.tga gfx/colors/black.tga
+		animmap 5 models/weaponsfx/water_splash_2 models/weaponsfx/water_splash_3 gfx/colors/black gfx/colors/black
 		rgbGen wave sawtooth 0 1 0 5
 		blendfunc add
 	}
@@ -46,7 +46,7 @@ models/weaponsfx/balloony_drop
 {
 	cull none
 	{
-		map models/weaponsfx/balloony_drop.tga
+		map models/weaponsfx/balloony_drop
 		blendFunc add
 		rgbGen wave inversesawtooth 0 1 0 1.2
 	}
@@ -59,12 +59,12 @@ models/weaponsfx/balloony_drop
 fireBall
 {
 	{
-		animmap 10 models/weaponsfx/fireballs1.jpg models/weaponsfx/fireballs2.jpg models/weaponsfx/fireballs3.jpg
+		animmap 10 models/weaponsfx/fireballs1 models/weaponsfx/fireballs2 models/weaponsfx/fireballs3
 		blendFunc add
 		rgbGen wave inversesawtooth 0 1 0 10
 	}
 	{
-		animmap 3 models/weaponsfx/fireballs2.jpg models/weaponsfx/fireballs3.jpg models/weaponsfx/fireballs1.jpg
+		animmap 3 models/weaponsfx/fireballs2 models/weaponsfx/fireballs3 models/weaponsfx/fireballs1
 		blendFunc add
 		rgbGen wave sawtooth 0 1 0 10
 	}
@@ -73,13 +73,13 @@ fireBall
 fireTrail
 {
 	{
-		map models/weaponsfx/firetrail.jpg
+		map models/weaponsfx/firetrail
 		blendFunc add
 		rgbGen vertex
 		tcMod scroll 1.6 0
 	}
 	{
-		map models/weaponsfx/firetrail.jpg
+		map models/weaponsfx/firetrail
 		blendFunc add
 		rgbGen vertex
 		tcMod scale 2.1 1
@@ -93,12 +93,12 @@ fireExplosion
 {
 	cull disable
 	{
-		animmap 8 models/weaponsfx/bettyboom_1.tga models/weaponsfx/bettyboom_2.tga models/weaponsfx/bettyboom_3.tga models/weaponsfx/bettyboom_4.tga models/weaponsfx/bettyboom_5.tga models/weaponsfx/bettyboom_6.tga models/weaponsfx/bettyboom_7.tga models/weaponsfx/bettyboom_8.tga
+		animmap 8 models/weaponsfx/bettyboom_1 models/weaponsfx/bettyboom_2 models/weaponsfx/bettyboom_3 models/weaponsfx/bettyboom_4 models/weaponsfx/bettyboom_5 models/weaponsfx/bettyboom_6 models/weaponsfx/bettyboom_7 models/weaponsfx/bettyboom_8
 		rgbGen wave inversesawtooth 0 1 0 8
 		blendfunc add
 	}
 	{
-		animmap 8 models/weaponsfx/bettyboom_2.tga models/weaponsfx/bettyboom_3.tga models/weaponsfx/bettyboom_4.tga models/weaponsfx/bettyboom_5.tga models/weaponsfx/bettyboom_6.tga models/weaponsfx/bettyboom_7.tga models/weaponsfx/bettyboom_8.tga models/weaponsfx/black.tga
+		animmap 8 models/weaponsfx/bettyboom_2 models/weaponsfx/bettyboom_3 models/weaponsfx/bettyboom_4 models/weaponsfx/bettyboom_5 models/weaponsfx/bettyboom_6 models/weaponsfx/bettyboom_7 models/weaponsfx/bettyboom_8 models/weaponsfx/black
 		rgbGen wave sawtooth 0 1 0 8
 		blendfunc add
 	}
@@ -109,7 +109,7 @@ models/weaponsfx/firedrop
 {
 	cull none
 	{
-		map models/weaponsfx/firedrop.jpg
+		map models/weaponsfx/firedrop
 		blendFunc add
 	}
 }
@@ -124,7 +124,7 @@ waterBeam
 	nopicmip
 	nomipmaps
 	{
-		map models/weaponsfx/waterbeam.jpg
+		map models/weaponsfx/waterbeam
 		blendFunc add
 		rgbGen vertex
 	}
@@ -134,7 +134,7 @@ boasterExplosion
 {
 	cull none
 	{
-		clampmap models/weaponsfx/boasterboom.jpg
+		clampmap models/weaponsfx/boasterboom
 		blendfunc add
         tcMod stretch sawtooth .2 1.2 0 2.0
         rgbGen wave inversesawtooth 0 1 0 2.0
@@ -151,17 +151,17 @@ pumperTrail
 	nopicmip
 	nomipmaps
 	{
-		map models/weaponsfx/pumpertrail.jpg
+		map models/weaponsfx/pumpertrail
 		blendFunc add
 		rgbGen vertex
 	}
-}		
+}
 
 models/weaponsfx/flash
 {
 	cull none
 	{
-		animmap 9 models/weaponsfx/flash0.tga models/weaponsfx/flash1.tga models/weaponsfx/flash2.tga
+		animmap 9 models/weaponsfx/flash0 models/weaponsfx/flash1 models/weaponsfx/flash2
 		blendFunc add
 		tcMod turb 0 0.01 0 11
 		rgbGen wave inversesawtooth 0 1 0 1.2
@@ -176,17 +176,17 @@ models/weaponsfx/flash
 waterTrail
 {
 	{
-		map models/weaponsfx/watertrail.jpg
+		map models/weaponsfx/watertrail
 		blendFunc add
 		rgbGen vertex
 		tcMod scroll 1.6 0
 	}
 }
-	
+
 waterBall
 {
 	{
-		map models/weaponsfx/waterball.jpg
+		map models/weaponsfx/waterball
 		blendFunc add
 	}
 }
@@ -195,13 +195,13 @@ waterMark
 {
 	polygonOffset
 	{
-		map models/weaponsfx/waterball.tga
+		map models/weaponsfx/waterball
 		blendfunc add
 		rgbGen vertex
 	}
 }
-	
-	
+
+
 // =================
 // NIPPER
 // =================
@@ -209,7 +209,7 @@ waterMark
 nipperBall
 {
 	{
-		map models/weaponsfx/nipperball.jpg
+		map models/weaponsfx/nipperball
 		blendFunc add
 	}
 }
@@ -217,7 +217,7 @@ nipperBall
 nipperWave
 {
 	{
-		map models/weaponsfx/nipperwave.tga
+		map models/weaponsfx/nipperwave
 		blendFunc add
         rgbGen wave inversesawtooth 0 1 0 1.5
 	}
@@ -230,7 +230,7 @@ nipperWave
 models/weaponsfx/impsphere
 {
 	{
-		map models/weaponsfx/impsphere.tga
+		map models/weaponsfx/impsphere
 		blendFunc add
 		rgbGen entity
 		tcMod scroll 0.5 0.7
@@ -241,7 +241,7 @@ models/weaponsfx/impring
 {
 	cull none
 	{
-		map models/weaponsfx/impring.tga
+		map models/weaponsfx/impring
 		blendFunc add
 		rgbGen entity
 	}
@@ -251,7 +251,7 @@ models/weaponsfx/impbeam
 {
 	cull none
 	{
-		map models/weaponsfx/impbeam.tga
+		map models/weaponsfx/impbeam
 		blendFunc add
 		rgbGen entity
 	}
@@ -261,7 +261,7 @@ imperiusCore
 {
 	cull none
 	{
-		map models/weaponsfx/impcore.tga
+		map models/weaponsfx/impcore
 		blendFunc add
 		rgbGen entity
 	}
@@ -271,7 +271,7 @@ imperiusRing
 {
 	cull none
 	{
-		map models/weaponsfx/impring.tga
+		map models/weaponsfx/impring
 		blendFunc add
 		rgbGen entity
 	}
@@ -286,7 +286,7 @@ models/weaponsfx/gum
 {
 	cull none
 	{
-		map models/weaponsfx/gum.tga
+		map models/weaponsfx/gum
 		rgbGen entity
 	}
 }
@@ -300,7 +300,7 @@ kmaTrail
 	sort nearest
 	cull disable
 	{
-		map models/weaponsfx/kmatrail.jpg
+		map models/weaponsfx/kmatrail
 		blendfunc add
 		rgbGen Vertex
 	}
@@ -310,7 +310,7 @@ kmaMark
 {
 	polygonOffset
 	{
-		map gfx/damage/kma_mrk.tga
+		map gfx/damage/kma_mrk
 		blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
 		rgbGen exactVertex
 	}
@@ -321,7 +321,7 @@ models/weaponsfx/smallkmadrop
 {
 	cull none
 	{
-		map models/weaponsfx/smallkmadrop.jpg
+		map models/weaponsfx/smallkmadrop
 		blendFunc add
 		rgbGen wave inversesawtooth 0 1 0 1.2
 	}
@@ -333,19 +333,19 @@ models/weapons2/kma97/kma97_flash
 	sort additive
 	cull disable
 	{
-		clampmap models/weapons2/kma97/f_kma97.jpg
-		blendfunc GL_ONE GL_ONE         
-                tcmod rotate 360              
+		clampmap models/weapons2/kma97/f_kma97
+		blendfunc GL_ONE GL_ONE
+                tcmod rotate 360
 		rgbGen entity
         }
         {
-		clampmap models/weapons2/kma97/f_kma97.jpg
+		clampmap models/weapons2/kma97/f_kma97
 		blendfunc GL_ONE GL_ONE
                 tcmod rotate -129
 		//tcMod stretch sin .8 0.10 0 .7
 		rgbGen entity
         }
-     
+
 }
 
 // =================
@@ -356,7 +356,7 @@ models/weaponsfx/star
 {
 	cull none
 	{
-		map models/weaponsfx/star.tga
+		map models/weaponsfx/star
 		blendFunc blend
 	}
 }
@@ -365,14 +365,14 @@ teleEffect
 {
 	cull none
 	{
-		map models/weaponsfx/teleflash.tga
+		map models/weaponsfx/teleflash
 		blendFunc add
 		rgbGen entity
 		tcMod scale 3 3
 		tcMod scroll 1.2 1.9
 	}
 	{
-		map models/weaponsfx/teleflash.tga
+		map models/weaponsfx/teleflash
 		blendFunc add
 		rgbGen entity
 		tcMod scale 4 4
@@ -388,14 +388,14 @@ teleEffectRed
 {
 	cull none
 	{
-		map models/weaponsfx/redteleflash.tga
+		map models/weaponsfx/redteleflash
 		blendFunc add
 		rgbGen entity
 		tcMod scale 3 3
 		tcMod scroll 1.2 1.9
 	}
 	{
-		map models/weaponsfx/redteleflash.tga
+		map models/weaponsfx/redteleflash
 		blendFunc add
 		rgbGen entity
 		tcMod scale 4 4
@@ -408,14 +408,14 @@ teleEffectGreen
 {
 	cull none
 	{
-		map models/weaponsfx/greenteleflash.tga
+		map models/weaponsfx/greenteleflash
 		blendFunc add
 		rgbGen entity
 		tcMod scale 3 3
 		tcMod scroll 1.2 1.9
 	}
 	{
-		map models/weaponsfx/greenteleflash.tga
+		map models/weaponsfx/greenteleflash
 		blendFunc add
 		rgbGen entity
 		tcMod scale 4 4
@@ -432,13 +432,13 @@ newDuckExplosion
 {
 	cull disable
 	{
-		animmap 10 models/weaponsfx/duckexp_1.jpg models/weaponsfx/duckexp_2.jpg models/weaponsfx/duckexp_3.jpg models/weaponsfx/duckexp_4.jpg models/weaponsfx/duckexp_5.jpg models/weaponsfx/duckexp_6.jpg models/weaponsfx/duckexp_7.jpg models/weaponsfx/duckexp_8.jpg
+		animmap 10 models/weaponsfx/duckexp_1 models/weaponsfx/duckexp_2 models/weaponsfx/duckexp_3 models/weaponsfx/duckexp_4 models/weaponsfx/duckexp_5 models/weaponsfx/duckexp_6 models/weaponsfx/duckexp_7 models/weaponsfx/duckexp_8
 		rgbGen wave inversesawtooth 0 1 0 10
 		blendfunc add
 	}
 	cull disable
 	{
-		animmap 10 models/weaponsfx/duckexp_2.jpg models/weaponsfx/duckexp_3.jpg models/weaponsfx/duckexp_4.jpg models/weaponsfx/duckexp_5.jpg models/weaponsfx/duckexp_6.jpg models/weaponsfx/duckexp_7.jpg models/weaponsfx/duckexp_8.jpg gfx/colors/black.jpg
+		animmap 10 models/weaponsfx/duckexp_2 models/weaponsfx/duckexp_3 models/weaponsfx/duckexp_4 models/weaponsfx/duckexp_5 models/weaponsfx/duckexp_6 models/weaponsfx/duckexp_7 models/weaponsfx/duckexp_8 gfx/colors/black
 		rgbGen wave sawtooth 0 1 0 10
 		blendfunc add
 	}
@@ -448,14 +448,14 @@ newDuckExplosion
 // BAMBAM
 bambamMissileRed {
 	{
-		map "models/weaponsfx/bambamball_red.jpg"
+		map "models/weaponsfx/bambamball_red"
 		blendFunc add
 	}
 }
 
 bambamMissileBlue {
 	{
-		map "models/weaponsfx/bambamball_blue.jpg"
+		map "models/weaponsfx/bambamball_blue"
 		blendFunc add
 	}
 }

@@ -9,7 +9,7 @@ textures/pad_teehouse/paper
     q3map_surfacelight 80
     surfaceparm nolightmap
     {
-        map textures/pad_teehouse/paper.tga
+        map textures/pad_teehouse/paper
     }
 }
 
@@ -18,7 +18,7 @@ textures/pad_teehouse/reispaper_512
     q3map_surfacelight 80
     surfaceparm nolightmap
     {
-        map textures/pad_teehouse/reispaper_512.tga
+        map textures/pad_teehouse/reispaper_512
     }
 }
 
@@ -28,7 +28,7 @@ textures/pad_teehouse/paper2_blue
     q3map_surfacelight 70
     surfaceparm nolightmap
     {
-        map textures/pad_teehouse/paper2_blue.tga
+        map textures/pad_teehouse/paper2_blue
     }
 }
 
@@ -37,7 +37,7 @@ textures/pad_teehouse/paper2_blue_dark
     q3map_surfacelight 70
     surfaceparm nolightmap
     {
-        map textures/pad_teehouse/paper2_blue_dark.tga
+        map textures/pad_teehouse/paper2_blue_dark
     }
 }
 
@@ -47,7 +47,7 @@ textures/pad_teehouse/paper2_red
     q3map_surfacelight 70
     surfaceparm nolightmap
     {
-        map textures/pad_teehouse/paper2_red.tga
+        map textures/pad_teehouse/paper2_red
     }
 }
 
@@ -57,7 +57,7 @@ textures/pad_teehouse/paper2_red_dark
     q3map_surfacelight 70
     surfaceparm nolightmap
     {
-        map textures/pad_teehouse/paper2_red_dark.tga
+        map textures/pad_teehouse/paper2_red_dark
     }
 }
 
@@ -66,7 +66,7 @@ textures/pad_teehouse/paper_yellow
     q3map_surfacelight 70
     surfaceparm nolightmap
     {
-        map textures/pad_teehouse/paper_yellow.tga
+        map textures/pad_teehouse/paper_yellow
     }
 }
 
@@ -84,7 +84,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/bambusfloor.tga
+map textures/pad_teehouse/bambusfloor
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -99,7 +99,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/shogi02.tga
+map textures/pad_teehouse/shogi02
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -113,7 +113,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/shogi03.tga
+map textures/pad_teehouse/shogi03
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -127,7 +127,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/wood_black.tga
+map textures/pad_teehouse/wood_black
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -141,7 +141,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/wood01.tga
+map textures/pad_teehouse/wood01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -155,7 +155,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/tee_untersetzer.tga
+map textures/pad_teehouse/tee_untersetzer
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -169,7 +169,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/tatami_border_red_dark.tga
+map textures/pad_teehouse/tatami_border_red_dark
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -183,7 +183,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/tatami_border_red.tga
+map textures/pad_teehouse/tatami_border_red
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -197,7 +197,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/tatami_border_blue_dark.tga
+map textures/pad_teehouse/tatami_border_blue_dark
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -211,7 +211,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/tatami_border_blue.tga
+map textures/pad_teehouse/tatami_border_blue
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -225,7 +225,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/tatami_border_green.tga
+map textures/pad_teehouse/tatami_border_green
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -239,7 +239,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/geflecht_blue.tga
+map textures/pad_teehouse/geflecht_blue
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -253,7 +253,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/geflecht_red.tga
+map textures/pad_teehouse/geflecht_red
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -267,7 +267,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/red_border.tga
+map textures/pad_teehouse/red_border
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -282,7 +282,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/flower_red2.tga
+map textures/pad_teehouse/flower_red2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -296,7 +296,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/flower_blue2.tga
+map textures/pad_teehouse/flower_blue2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -310,7 +310,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/flower_blue3.tga
+map textures/pad_teehouse/flower_blue3
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -324,7 +324,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/flower_red3.tga
+map textures/pad_teehouse/flower_red3
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -338,7 +338,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/flower_red4.tga
+map textures/pad_teehouse/flower_red4
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -352,7 +352,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/flower_blue4.tga
+map textures/pad_teehouse/flower_blue4
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -364,20 +364,20 @@ rgbGen identity
 
 textures/pad_teehouse/art04
 {
-	qer_editorimage textures/pad_teehouse/art04.tga
+	qer_editorimage textures/pad_teehouse/art04
         surfaceparm woodsteps
 	{
-		map textures/pad_teehouse/art04.tga
+		map textures/pad_teehouse/art04
 		rgbGen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad2c.tga
+		map textures/pad_gfx02/tinpad2c
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
 	}
@@ -385,20 +385,20 @@ textures/pad_teehouse/art04
 
 textures/pad_teehouse/art06
 {
-	qer_editorimage textures/pad_teehouse/art06.tga
+	qer_editorimage textures/pad_teehouse/art06
         surfaceparm woodsteps
 	{
-		map textures/pad_teehouse/art06.tga
+		map textures/pad_teehouse/art06
 		rgbGen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad3a.tga
+		map textures/pad_gfx02/tinpad3a
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
 	}
@@ -407,19 +407,19 @@ textures/pad_teehouse/art06
 
 textures/pad_teehouse/cupboarder_red
 {
-	qer_editorimage textures/pad_teehouse/cupboarder_red.tga
+	qer_editorimage textures/pad_teehouse/cupboarder_red
 	{
-		map textures/pad_teehouse/cupboarder_red.tga
+		map textures/pad_teehouse/cupboarder_red
 		rgbGen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad2c.tga
+		map textures/pad_gfx02/tinpad2c
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
 	}
@@ -427,19 +427,19 @@ textures/pad_teehouse/cupboarder_red
 
 textures/pad_teehouse/cupboarder2_red
 {
-	qer_editorimage textures/pad_teehouse/cupboarder2_red.tga
+	qer_editorimage textures/pad_teehouse/cupboarder2_red
 	{
-		map textures/pad_teehouse/cupboarder2_red.tga
+		map textures/pad_teehouse/cupboarder2_red
 		rgbGen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad2c.tga
+		map textures/pad_gfx02/tinpad2c
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
 	}
@@ -448,19 +448,19 @@ textures/pad_teehouse/cupboarder2_red
 
 textures/pad_teehouse/cupboarder_blue
 {
-	qer_editorimage textures/pad_teehouse/cupboarder_blue.tga
+	qer_editorimage textures/pad_teehouse/cupboarder_blue
 	{
-		map textures/pad_teehouse/cupboarder_blue.tga
+		map textures/pad_teehouse/cupboarder_blue
 		rgbGen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad2c.tga
+		map textures/pad_gfx02/tinpad2c
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
 	}
@@ -468,19 +468,19 @@ textures/pad_teehouse/cupboarder_blue
 
 textures/pad_teehouse/cupboarder2_blue
 {
-	qer_editorimage textures/pad_teehouse/cupboarder2_blue.tga
+	qer_editorimage textures/pad_teehouse/cupboarder2_blue
 	{
-		map textures/pad_teehouse/cupboarder2_blue.tga
+		map textures/pad_teehouse/cupboarder2_blue
 		rgbGen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad2c.tga
+		map textures/pad_gfx02/tinpad2c
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
 	}
@@ -489,19 +489,19 @@ textures/pad_teehouse/cupboarder2_blue
 
 textures/pad_teehouse/flower_red
 {
-	qer_editorimage textures/pad_teehouse/flower_red.tga
+	qer_editorimage textures/pad_teehouse/flower_red
 	{
-		map textures/pad_teehouse/flower_red.tga
+		map textures/pad_teehouse/flower_red
 		rgbGen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad2c.tga
+		map textures/pad_gfx02/tinpad2c
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
 	}
@@ -509,19 +509,19 @@ textures/pad_teehouse/flower_red
 
 textures/pad_teehouse/flower_blue
 {
-	qer_editorimage textures/pad_teehouse/flower_blue.tga
+	qer_editorimage textures/pad_teehouse/flower_blue
 	{
-		map textures/pad_teehouse/flower_blue.tga
+		map textures/pad_teehouse/flower_blue
 		rgbGen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad2c.tga
+		map textures/pad_gfx02/tinpad2c
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
 	}
@@ -535,13 +535,13 @@ textures/pad_teehouse/bambuspinsel
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
-    
-     
+
+
         {
-                map textures/pad_teehouse/bambuspinsel.tga
+                map textures/pad_teehouse/bambuspinsel
                 alphaFunc GE128
 		depthWrite
 		rgbGen identity
@@ -560,13 +560,13 @@ textures/pad_teehouse/kirschbluete
 {
      cull disable
      surfaceparm alphashadow
-     surfaceparm trans	
+     surfaceparm trans
      surfaceparm nomarks
      tessSize 64
-    
-     
+
+
         {
-                map textures/pad_teehouse/kirschbluete.tga
+                map textures/pad_teehouse/kirschbluete
                 alphaFunc GE128
 		depthWrite
 		rgbGen identity
@@ -591,27 +591,27 @@ textures/pad_teehouse/matcha02
 {
 q3map_nonplanar
 q3map_shadeangle 60 l
-qer_editorimage textures/pad_teehouse/matcha02.tga
+qer_editorimage textures/pad_teehouse/matcha02
 surfaceparm sandsteps
 {
 map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_teehouse/matcha02.tga
+map textures/pad_teehouse/matcha02
 blendFunc filter
 }
 }
 
 
 textures/pad_teehouse/color_red
-{    
-     surfaceparm	nomarks   
+{
+     surfaceparm	nomarks
      surfaceparm	trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_teehouse/color_red.tga
+		map textures/pad_teehouse/color_red
                		blendFunc add
 		rgbGen vertex
 	}
@@ -619,13 +619,13 @@ textures/pad_teehouse/color_red
 
 
 textures/pad_teehouse/color_blue
-{    
-     surfaceparm	nomarks   
+{
+     surfaceparm	nomarks
      surfaceparm	trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_teehouse/color_blue.tga
+		map textures/pad_teehouse/color_blue
                		blendFunc add
 		rgbGen vertex
 	}
@@ -633,13 +633,13 @@ textures/pad_teehouse/color_blue
 
 
 textures/pad_teehouse/goldlogo
-{    
-     surfaceparm	nomarks   
+{
+     surfaceparm	nomarks
      surfaceparm	trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_teehouse/goldlogo.tga
+		map textures/pad_teehouse/goldlogo
                		blendFunc add
 		rgbGen vertex
 	}

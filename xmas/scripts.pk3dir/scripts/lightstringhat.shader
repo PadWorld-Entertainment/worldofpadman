@@ -2,7 +2,7 @@ models/hats/lightstringhat
 {
 	cull none
 	{
-	map models/hats/lightstringhat.tga
+	map models/hats/lightstringhat
 	rgbGen lightingDiffuse
 	}
 }
@@ -10,7 +10,7 @@ models/hats/lightstringhat
 models/hats/light01
 {
 	{
-	animMap 1 models/hats/light01.tga models/hats/light02.tga
+	animMap 1 models/hats/light01 models/hats/light02
 	rgbGen identity
 	}
 }

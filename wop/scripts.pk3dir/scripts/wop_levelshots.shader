@@ -105,7 +105,7 @@ levelshots/wop_bathBB
 		map levelshots/wop_bath
 	}
 }
-	
+
 levelshots/wop_bathBBA
 {
 	nomipmaps
@@ -237,7 +237,7 @@ levelshots/wop_huetteBB
 		map levelshots/wop_huette
 		}
 	}
-	
+
 levelshots/wop_huetteBBA
 {
 	nomipmaps

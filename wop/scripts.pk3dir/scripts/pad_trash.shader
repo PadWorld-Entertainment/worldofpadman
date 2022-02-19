@@ -1,336 +1,336 @@
 textures/pad_trash/kb_fenster_02day
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f01.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f01
 	{
-		map textures/pad_trash/kb_fenster_b01.tga
+		map textures/pad_trash/kb_fenster_b01
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map textures/pad_trash/kb_fenster_f01.tga
+		map textures/pad_trash/kb_fenster_f01
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 }
 
 textures/pad_trash/kb_fenster_02nite
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f01.tga
-	q3map_lightimage textures/pad_trash/kb_fenster_g01.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f01
+	q3map_lightimage textures/pad_trash/kb_fenster_g01
 	q3map_surfacelight 150
 	q3map_backsplash 0 0
 	{
-		map textures/pad_trash/kb_fenster_b01.tga
+		map textures/pad_trash/kb_fenster_b01
 	}
 	{
-		map textures/pad_trash/kb_fenster_f01.tga
+		map textures/pad_trash/kb_fenster_f01
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
-		map textures/pad_trash/kb_fenster_g01.tga
+		map textures/pad_trash/kb_fenster_g01
 		blendfunc add
 	}
 }
 
 textures/pad_trash/kb_fenster_03day
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f02.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f02
 	{
-		map textures/pad_trash/kb_fenster_b02.tga
+		map textures/pad_trash/kb_fenster_b02
 	}
 	{
-		map textures/pad_gfx/glass_bright.tga
+		map textures/pad_gfx/glass_bright
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map textures/pad_trash/kb_fenster_f02.tga
+		map textures/pad_trash/kb_fenster_f02
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 }
 
 textures/pad_trash/kb_fenster_03nite
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f02.tga
-	q3map_lightimage textures/pad_trash/kb_fenster_g02.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f02
+	q3map_lightimage textures/pad_trash/kb_fenster_g02
 	q3map_surfacelight 150
 	q3map_backsplash 0 0
 	{
-		map textures/pad_trash/kb_fenster_b02.tga
+		map textures/pad_trash/kb_fenster_b02
 	}
 	{
-		map textures/pad_trash/kb_fenster_f02.tga
+		map textures/pad_trash/kb_fenster_f02
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
-		map textures/pad_trash/kb_fenster_g02.tga
+		map textures/pad_trash/kb_fenster_g02
 		blendfunc add
 	}
 }
 
 textures/pad_trash/kb_fenster_04day
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f01.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f01
 	{
-		map textures/pad_trash/kb_fenster_b03.tga
+		map textures/pad_trash/kb_fenster_b03
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map textures/pad_trash/kb_fenster_f01.tga
+		map textures/pad_trash/kb_fenster_f01
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 }
 
 textures/pad_trash/kb_fenster_04nite
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f01.tga
-	q3map_lightimage textures/pad_trash/kb_fenster_g03.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f01
+	q3map_lightimage textures/pad_trash/kb_fenster_g03
 	q3map_surfacelight 100
 	q3map_backsplash 0 0
 	{
-		map textures/pad_trash/kb_fenster_b03.tga
+		map textures/pad_trash/kb_fenster_b03
 	}
 	{
-		map textures/pad_trash/kb_fenster_f01.tga
+		map textures/pad_trash/kb_fenster_f01
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
-		map textures/pad_trash/kb_fenster_g03.tga
+		map textures/pad_trash/kb_fenster_g03
 		blendfunc add
 	}
 }
 
 textures/pad_trash/kb_fenster_05day
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f02.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f02
 	{
-		map textures/pad_trash/kb_fenster_b04.tga
+		map textures/pad_trash/kb_fenster_b04
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map textures/pad_trash/kb_fenster_f02.tga
+		map textures/pad_trash/kb_fenster_f02
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 }
 
 textures/pad_trash/kb_fenster_05nite
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f02.tga
-	q3map_lightimage textures/pad_trash/kb_fenster_g04.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f02
+	q3map_lightimage textures/pad_trash/kb_fenster_g04
 	q3map_surfacelight 100
 	q3map_backsplash 0 0
 	{
-		map textures/pad_trash/kb_fenster_b04.tga
+		map textures/pad_trash/kb_fenster_b04
 	}
 	{
-		map textures/pad_trash/kb_fenster_f02.tga
+		map textures/pad_trash/kb_fenster_f02
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
-		map textures/pad_trash/kb_fenster_g04.tga
+		map textures/pad_trash/kb_fenster_g04
 		blendfunc add
 	}
 }
 
 textures/pad_trash/kb_fenster_06day
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f03.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f03
 	{
-		map textures/pad_trash/kb_fenster_b05.tga
+		map textures/pad_trash/kb_fenster_b05
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map textures/pad_trash/kb_fenster_f03.tga
+		map textures/pad_trash/kb_fenster_f03
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 }
 
 textures/pad_trash/kb_fenster_06nite
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f03.tga
-	q3map_lightimage textures/pad_trash/kb_fenster_g05.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f03
+	q3map_lightimage textures/pad_trash/kb_fenster_g05
 	q3map_surfacelight 120
 	q3map_backsplash 0 0
 	{
-		map textures/pad_trash/kb_fenster_b05.tga
+		map textures/pad_trash/kb_fenster_b05
 	}
 	{
-		map textures/pad_trash/kb_fenster_f03.tga
+		map textures/pad_trash/kb_fenster_f03
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
-		map textures/pad_trash/kb_fenster_g05.tga
+		map textures/pad_trash/kb_fenster_g05
 		blendfunc add
 	}
 }
 
 textures/pad_trash/kb_fenster_10day
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f10.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f10
 	{
-		map textures/pad_trash/kb_fenster_b10.tga
+		map textures/pad_trash/kb_fenster_b10
 	}
 	{
-		map textures/pad_gfx02/tinpad3.tga
+		map textures/pad_gfx02/tinpad3
 		blendfunc add
 		rgbGen identity
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map textures/pad_trash/kb_fenster_f10.tga
+		map textures/pad_trash/kb_fenster_f10
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 }
 
 textures/pad_trash/kb_fenster_10nite
 {
-	qer_editorimage textures/pad_trash/kb_fenster_f10.tga
-	q3map_lightimage textures/pad_trash/kb_fenster_g05.tga
+	qer_editorimage textures/pad_trash/kb_fenster_f10
+	q3map_lightimage textures/pad_trash/kb_fenster_g05
 	q3map_surfacelight 300
 	q3map_backsplash 0 0
 	{
-		map textures/pad_trash/kb_fenster_b10.tga
+		map textures/pad_trash/kb_fenster_b10
 	}
 	{
-		map textures/pad_trash/kb_fenster_f10.tga
+		map textures/pad_trash/kb_fenster_f10
 		depthWrite
 		alphaFunc GE128
 		//rgbGen vertex
 		//blendfunc blend
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
-		map textures/pad_trash/kb_fenster_g10.tga
+		map textures/pad_trash/kb_fenster_g10
 		blendfunc add
 	}
 }
 
 textures/pad_trash/kb_flame
 {
-	qer_editorimage textures/pad_pirate/flame1.tga
+	qer_editorimage textures/pad_pirate/flame1
 	surfaceparm nolightmap
 	surfaceparm nomarks
 	surfaceparm trans
@@ -338,25 +338,25 @@ textures/pad_trash/kb_flame
 	deformVertexes autosprite2
 	q3map_surfacelight 50
 	{
-		animmap 3 textures/pad_pirate/flame1.tga textures/pad_pirate/flame2.tga textures/pad_pirate/flame3.tga textures/pad_pirate/flame2.tga 
+		animmap 3 textures/pad_pirate/flame1 textures/pad_pirate/flame2 textures/pad_pirate/flame3 textures/pad_pirate/flame2
 		blendfunc add
-		rgbGen wave inversesawtooth 0 1 0 10 
+		rgbGen wave inversesawtooth 0 1 0 10
 	}
 	{
-		animmap 3 textures/pad_pirate/flame2.tga textures/pad_pirate/flame3.tga textures/pad_pirate/flame2.tga textures/pad_pirate/flame1.tga 
+		animmap 3 textures/pad_pirate/flame2 textures/pad_pirate/flame3 textures/pad_pirate/flame2 textures/pad_pirate/flame1
 		blendfunc add
-		rgbGen wave sawtooth 0 1 0 10 
+		rgbGen wave sawtooth 0 1 0 10
 	}
 	{
-		map textures/pad_pirate/flameball.tga
+		map textures/pad_pirate/flameball
 		blendfunc add
-		rgbGen wave sin 0.6 0.2 0 0.6 
+		rgbGen wave sin 0.6 0.2 0 0.6
 	}
 }
 
 textures/pad_trash/kb_flatterband
 {
-	qer_editorimage textures/pad_trash/kb_pylone1.tga
+	qer_editorimage textures/pad_trash/kb_pylone1
 	surfaceparm nomarks
 	surfaceparm noimpact
 	surfaceparm nonsolid
@@ -369,7 +369,7 @@ textures/pad_trash/kb_flatterband
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_pylone1.tga
+		map textures/pad_trash/kb_pylone1
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -377,21 +377,21 @@ textures/pad_trash/kb_flatterband
 
 textures/pad_trash/kb_maschendrahtzaun
 {
-	qer_editorimage textures/pad_jail/jail2_maschendrahtzaun.tga
+	qer_editorimage textures/pad_jail/jail2_maschendrahtzaun
 	surfaceparm alphashadow
 	surfaceparm trans
 	surfaceparm nomarks
 	cull disable
 	nopicmip
 	{
-		map textures/pad_jail/jail2_maschendrahtzaun.tga
+		map textures/pad_jail/jail2_maschendrahtzaun
 		tcmod scale 2 2
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -407,13 +407,13 @@ textures/pad_trash/kb_bauzaun
 	cull disable
 	nopicmip
 	{
-		map textures/pad_trash/kb_bauzaun.tga
+		map textures/pad_trash/kb_bauzaun
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -422,20 +422,20 @@ textures/pad_trash/kb_bauzaun
 
 textures/pad_trash/kb_grate
 {
-	qer_editorimage textures/pad_trash/kb_grate.tga
+	qer_editorimage textures/pad_trash/kb_grate
 	surfaceparm alphashadow
 	surfaceparm trans
 	surfaceparm nomarks
 	cull disable
 	nopicmip
 	{
-		map textures/pad_trash/kb_grate.tga
+		map textures/pad_trash/kb_grate
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -450,13 +450,13 @@ textures/pad_trash/kb_verzierung
 	cull disable
 	nopicmip
 	{
-		map textures/pad_trash/kb_verzierung.tga
+		map textures/pad_trash/kb_verzierung
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -471,13 +471,13 @@ textures/pad_trash/kb_verzierung2
 	cull disable
 	nopicmip
 	{
-		map textures/pad_trash/kb_verzierung2.tga
+		map textures/pad_trash/kb_verzierung2
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -492,13 +492,13 @@ textures/pad_trash/kb_verzierung3
 	cull disable
 	nopicmip
 	{
-		map textures/pad_trash/kb_verzierung3.tga
+		map textures/pad_trash/kb_verzierung3
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -512,13 +512,13 @@ textures/pad_trash/kb_spraywallblue
 	cull disable
 	nopicmip
 	{
-		map textures/pad_trash/kb_spraywallblue.tga
+		map textures/pad_trash/kb_spraywallblue
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -532,13 +532,13 @@ textures/pad_trash/kb_spraywallred
 	cull disable
 	nopicmip
 	{
-		map textures/pad_trash/kb_spraywallred.tga
+		map textures/pad_trash/kb_spraywallred
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -547,20 +547,20 @@ textures/pad_trash/kb_spraywallred
 
 textures/pad_trash/kb_green_02
 {
-	qer_editorimage textures/pad_gfx02/busch.tga
+	qer_editorimage textures/pad_gfx02/busch
 	surfaceparm alphashadow
 	surfaceparm trans
 	surfaceparm nomarks
 	cull disable
 	nopicmip
 	{
-		map textures/pad_gfx02/busch.tga
+		map textures/pad_gfx02/busch
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -570,20 +570,20 @@ textures/pad_trash/kb_green_02
 
 textures/pad_trash/kb_green_03
 {
-	qer_editorimage models\mapobjects\pad_ddmix\trashcan\bush.tga
+	qer_editorimage models\mapobjects\pad_ddmix\trashcan\bush
 	surfaceparm alphashadow
 	surfaceparm trans
 	surfaceparm nomarks
 	cull disable
 	nopicmip
 	{
-		map models\mapobjects\pad_ddmix\trashcan\bush.tga
+		map models\mapobjects\pad_ddmix\trashcan\bush
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 		blendfunc filter
 		depthFunc equal
@@ -592,59 +592,59 @@ textures/pad_trash/kb_green_03
 
 textures/pad_trash/kb_sand
 {
-	qer_editorimage textures/pad_trash/kb_sand.tga
-	surfaceparm sandsteps	
+	qer_editorimage textures/pad_trash/kb_sand
+	surfaceparm sandsteps
 	q3map_nonplanar
 	q3map_shadeangle 60
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
-		map textures/pad_trash/kb_sand.tga
+		map textures/pad_trash/kb_sand
 		blendfunc filter
 	}
 }
 
 textures/pad_trash/kb_laubboden_01
 {
-	qer_editorimage textures/pad_trash/kb_laubboden_01.tga
-	surfaceparm sandsteps	
+	qer_editorimage textures/pad_trash/kb_laubboden_01
+	surfaceparm sandsteps
 	q3map_nonplanar
 	q3map_shadeangle 60
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
-		map textures/pad_trash/kb_laubboden_01.tga
+		map textures/pad_trash/kb_laubboden_01
 		blendfunc filter
 	}
 }
 
 textures/pad_trash/kb_muell
 {
-	qer_editorimage textures/pad_trash/kb_muell.tga
-	surfaceparm softsteps	
+	qer_editorimage textures/pad_trash/kb_muell
+	surfaceparm softsteps
 	q3map_nonplanar
 	q3map_shadeangle 60
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
-		map textures/pad_trash/kb_muell.tga
+		map textures/pad_trash/kb_muell
 		blendfunc filter
 	}
 }
 
 textures/pad_trash/kb_dirtywater
 {
-	qer_editorimage textures/pad_trash/dirtywater3.tga
-	q3map_lightimage textures/pad_trash/dirtywater2.tga
+	qer_editorimage textures/pad_trash/dirtywater3
+	q3map_lightimage textures/pad_trash/dirtywater2
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	surfaceparm nolightmap
@@ -655,13 +655,13 @@ textures/pad_trash/kb_dirtywater
 	q3map_globaltexture
 	q3map_surfacelight 40
 	{
-		map textures/pad_trash/dirtywater1.tga
+		map textures/pad_trash/dirtywater1
 		blendfunc filter
 		tcMod scale 0.5 0.5
 		tcMod scroll 0.07 0
 	}
 	{
-		map textures/pad_trash/dirtywater3.tga
+		map textures/pad_trash/dirtywater3
 		blendfunc add
 		rgbGen identity
 		tcMod scale 0.5 0.5
@@ -669,7 +669,7 @@ textures/pad_trash/kb_dirtywater
 		tcMod turb 0.2 0.1 0.1 0.05
 	}
 	{
-		map textures/pad_trash/dirtywater2.tga
+		map textures/pad_trash/dirtywater2
 		blendfunc filter
 		rgbGen identity
 		tcMod scale 0.5 0.5
@@ -680,8 +680,8 @@ textures/pad_trash/kb_dirtywater
 
 textures/pad_trash/kb_dirtywater_fog
 {
-	qer_editorimage textures/pad_trash/dirtywater3.tga
-	q3map_lightimage textures/pad_trash/dirtywater2.tga
+	qer_editorimage textures/pad_trash/dirtywater3
+	q3map_lightimage textures/pad_trash/dirtywater2
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	surfaceparm nolightmap
@@ -693,13 +693,13 @@ textures/pad_trash/kb_dirtywater_fog
 	q3map_surfacelight 40
 	fogparms ( .211 .231 .094 ) 650
 	{
-		map textures/pad_trash/dirtywater1.tga
+		map textures/pad_trash/dirtywater1
 		blendfunc filter
 		tcMod scale 0.5 0.5
 		tcMod scroll 0.07 0
 	}
 	{
-		map textures/pad_trash/dirtywater3.tga
+		map textures/pad_trash/dirtywater3
 		blendfunc add
 		rgbGen identity
 		tcMod scale 0.5 0.5
@@ -707,7 +707,7 @@ textures/pad_trash/kb_dirtywater_fog
 		tcMod turb 0.2 0.1 0.1 0.05
 	}
 	{
-		map textures/pad_trash/dirtywater2.tga
+		map textures/pad_trash/dirtywater2
 		blendfunc filter
 		rgbGen identity
 		tcMod scale 0.5 0.5
@@ -718,7 +718,7 @@ textures/pad_trash/kb_dirtywater_fog
 
 textures/pad_trash/kb_dirtywaterfall
 {
-	qer_editorimage textures/pad_trash/dirtywaterfall.tga
+	qer_editorimage textures/pad_trash/dirtywaterfall
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	surfaceparm trans
@@ -727,14 +727,14 @@ textures/pad_trash/kb_dirtywaterfall
 	qer_trans 0.8
 	q3map_globaltexture
 	{
-		map textures/pad_trash/dirtywater3.tga
+		map textures/pad_trash/dirtywater3
 		blendfunc add
 		tcMod scale 0.5 0.5
 		tcMod turb 0.25 0.03 0 0.5
 		tcMod scroll 0 -0.2
 	}
 	{
-		map textures/pad_trash/dirtywaterfall.tga
+		map textures/pad_trash/dirtywaterfall
 		blendfunc filter
 		tcMod scale 0.5 0.5
 		tcMod turb 0.25 0.03 0 0.5
@@ -743,78 +743,78 @@ textures/pad_trash/kb_dirtywaterfall
 }
 
 textures/pad_trash/kb_gas
-{    
-     surfaceparm nomarks   
+{
+     surfaceparm nomarks
      surfaceparm trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_trash/kb_gas.tga
+		map textures/pad_trash/kb_gas
                	blendFunc blend
 		rgbGen vertex
 	}
 }
 
 textures/pad_trash/kb_hydrant
-{    
-     surfaceparm nomarks   
+{
+     surfaceparm nomarks
      surfaceparm trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_trash/kb_hydrant.tga
+		map textures/pad_trash/kb_hydrant
                	blendFunc blend
 		rgbGen vertex
 	}
 }
 
 textures/pad_trash/kb_sign_01
-{    
-     surfaceparm nomarks   
+{
+     surfaceparm nomarks
      surfaceparm trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_trash/kb_sign_01.tga
+		map textures/pad_trash/kb_sign_01
                	blendFunc blend
 		rgbGen vertex
 	}
 }
 
 textures/pad_trash/kb_sign_03
-{    
-     surfaceparm nomarks   
+{
+     surfaceparm nomarks
      surfaceparm trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_trash/kb_sign_03.tga
+		map textures/pad_trash/kb_sign_03
                	blendFunc blend
 		rgbGen vertex
 	}
 }
 
 textures/pad_trash/kb_sign_04
-{    
-     surfaceparm nomarks   
+{
+     surfaceparm nomarks
      surfaceparm trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_trash/kb_sign_04.tga
+		map textures/pad_trash/kb_sign_04
                	blendFunc blend
 		rgbGen vertex
 	}
 }
 
 textures/pad_trash/kb_sign_05
-{    
-     surfaceparm nomarks   
+{
+     surfaceparm nomarks
      surfaceparm trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_trash/kb_sign_05.tga
+		map textures/pad_trash/kb_sign_05
                	blendFunc blend
 		rgbGen vertex
 	}
@@ -827,55 +827,55 @@ textures/pad_trash/kb_sign_07
 	cull disable
 	nopicmip
 	{
-		map textures/pad_trash/kb_sign_07.tga
+		map textures/pad_trash/kb_sign_07
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 		depthFunc equal
 	}
 }
 
 textures/pad_trash/kb_donotfeed
-{    
-     qer_editorimage textures/pad_trash/donotfeed.tga
-     surfaceparm nomarks   
+{
+     qer_editorimage textures/pad_trash/donotfeed
+     surfaceparm nomarks
      surfaceparm trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_trash/donotfeed.tga
+		map textures/pad_trash/donotfeed
                	blendFunc blend
 		rgbGen vertex
 	}
 }
 
 textures/pad_trash/kb_kanaldeckel
-{    
-     surfaceparm nomarks   
+{
+     surfaceparm nomarks
      surfaceparm trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_trash/kb_kanaldeckel.tga
+		map textures/pad_trash/kb_kanaldeckel
                	blendFunc blend
 		rgbGen vertex
 	}
 }
 
 textures/pad_poster/greensun
-{    
-     surfaceparm nomarks   
+{
+     surfaceparm nomarks
      surfaceparm trans
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_poster/poster.tga
+		map textures/pad_poster/poster
                	blendFunc blend
 		rgbGen vertex
 	}
@@ -883,117 +883,117 @@ textures/pad_poster/greensun
 
 textures/pad_trash/kb_light_15000
 {
-	qer_editorimage textures/pad_trash/kb_light_on.tga
-	q3map_lightimage textures/colors/white.tga
+	qer_editorimage textures/pad_trash/kb_light_on
+	q3map_lightimage textures/colors/white
 	surfaceparm nolightmap
 	q3map_surfacelight 15000
 	q3map_flareShader flareShader
 	{
-		map textures/pad_trash/kb_light_on.tga
+		map textures/pad_trash/kb_light_on
 	}
 }
 
 textures/pad_trash/kb_light_25000
 {
-	qer_editorimage textures/pad_trash/kb_light_on.tga
-	q3map_lightimage textures/colors/white.tga
+	qer_editorimage textures/pad_trash/kb_light_on
+	q3map_lightimage textures/colors/white
 	surfaceparm nolightmap
 	q3map_surfacelight 25000
 	q3map_flareShader flareShader
 	{
-		map textures/pad_trash/kb_light_on.tga
+		map textures/pad_trash/kb_light_on
 	}
 }
 
 textures/pad_trash/kb_light2_15000
 {
-	qer_editorimage textures/pad_trash/kb_light2_on.tga
-	q3map_lightimage textures/colors/white.tga
+	qer_editorimage textures/pad_trash/kb_light2_on
+	q3map_lightimage textures/colors/white
 	surfaceparm nolightmap
 	q3map_surfacelight 15000
 	{
-		map textures/pad_trash/kb_light2_on.tga
+		map textures/pad_trash/kb_light2_on
 	}
 }
 
 textures/pad_trash/kb_dirtywatercalm_lit
-{ 
-        qer_editorimage textures/pad_trash/dirtywater3.tga 
-        qer_trans 0.5 
-        q3map_globaltexture 
+{
+        qer_editorimage textures/pad_trash/dirtywater3
+        qer_trans 0.5
+        q3map_globaltexture
 	surfaceparm noimpact
-        surfaceparm trans 
-        surfaceparm nolightmap 
-        surfaceparm nonsolid 
-        surfaceparm water 
+        surfaceparm trans
+        surfaceparm nolightmap
+        surfaceparm nonsolid
+        surfaceparm water
 	q3map_surfacelight 30
-        cull disable 
+        cull disable
 
-        { 
-               map textures/pad_trash/dirtywater3.tga 
+        {
+               map textures/pad_trash/dirtywater3
 	       tcMod scale 0.5 0.5
-               tcMod turb 0.2 0.1 1 0.015 
-               tcMod scroll 0.001 0.001 
-               blendfunc add 
-               rgbGen identity 
+               tcMod turb 0.2 0.1 1 0.015
+               tcMod scroll 0.001 0.001
+               blendfunc add
+               rgbGen identity
 
-        } 
+        }
 	{
-		map textures/pad_trash/dirtywater2.tga
+		map textures/pad_trash/dirtywater2
 		blendfunc filter
 		rgbGen identity
 		tcMod turb 0.2 0.1 1 0.05
 		tcMod scroll 0.01 0.01
 	}
-} 
+}
 
 textures/pad_trash/kb_dirtywatercalm_unlit
-{ 
-        qer_editorimage textures/pad_trash/dirtywater3.tga 
-        qer_trans 0.5 
-        q3map_globaltexture 
+{
+        qer_editorimage textures/pad_trash/dirtywater3
+        qer_trans 0.5
+        q3map_globaltexture
 	surfaceparm noimpact
-        surfaceparm trans 
-        surfaceparm nolightmap 
-        surfaceparm nonsolid 
-        surfaceparm water 
-        cull disable 
+        surfaceparm trans
+        surfaceparm nolightmap
+        surfaceparm nonsolid
+        surfaceparm water
+        cull disable
 
-        { 
-               map textures/pad_trash/dirtywater3.tga 
+        {
+               map textures/pad_trash/dirtywater3
 	       tcMod scale 0.5 0.5
-               tcMod turb 0.2 0.1 1 0.015 
-               tcMod scroll 0.001 0.001 
-               blendfunc add 
-               rgbGen identity 
+               tcMod turb 0.2 0.1 1 0.015
+               tcMod scroll 0.001 0.001
+               blendfunc add
+               rgbGen identity
 
-        } 
+        }
 	{
-		map textures/pad_trash/dirtywater2.tga
+		map textures/pad_trash/dirtywater2
 		blendfunc filter
 		rgbGen identity
 		tcMod turb 0.2 0.1 1 0.05
 		tcMod scroll 0.01 0.01
 	}
-} 
+}
 
 textures/pad_trash/kb_holzscheit
 {
-	qer_editorimage textures/pad_trash/kb_holzscheit_base.tga
+	qer_editorimage textures/pad_trash/kb_holzscheit_base
 	surfaceparm nomarks
 	surfaceparm woodsteps
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_holzscheit_base.tga
+		map textures/pad_trash/kb_holzscheit_base
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_holzscheit_blend.tga
-		rgbGen wave sin 0.1 0.2 0 0.15 
+		map textures/pad_trash/kb_holzscheit_blend
+		rgbGen wave sin 0.1 0.2 0 0.15
 		blendfunc GL_ONE GL_ONE
 	}
 }
@@ -1003,28 +1003,28 @@ textures/pad_trash/kb_feuer
 	surfaceparm trans
 	surfaceparm nomarks
 	surfaceparm nonsolid
-	qer_editorimage textures/pad_garden/sflame1.tga
+	qer_editorimage textures/pad_garden/sflame1
 	q3map_surfacelight 1500
 	surfaceparm nolightmap
 	cull none
 
 	{
-		animMap 10 textures/pad_garden/sflame1.tga textures/pad_garden/sflame2.tga textures/pad_garden/sflame3.tga textures/pad_garden/sflame4.tga textures/pad_garden/sflame5.tga textures/pad_garden/sflame6.tga textures/pad_garden/sflame7.tga textures/pad_garden/sflame8.tga
+		animMap 10 textures/pad_garden/sflame1 textures/pad_garden/sflame2 textures/pad_garden/sflame3 textures/pad_garden/sflame4 textures/pad_garden/sflame5 textures/pad_garden/sflame6 textures/pad_garden/sflame7 textures/pad_garden/sflame8
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave inverseSawtooth 0 1 0 10
-		
-	}	
+
+	}
 	{
-		animMap 10 textures/pad_garden/sflame2.tga textures/pad_garden/sflame3.tga textures/pad_garden/sflame4.tga textures/pad_garden/sflame5.tga textures/pad_garden/sflame6.tga textures/pad_garden/sflame7.tga textures/pad_garden/sflame8.tga textures/pad_garden/sflame1.tga
+		animMap 10 textures/pad_garden/sflame2 textures/pad_garden/sflame3 textures/pad_garden/sflame4 textures/pad_garden/sflame5 textures/pad_garden/sflame6 textures/pad_garden/sflame7 textures/pad_garden/sflame8 textures/pad_garden/sflame1
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave sawtooth 0 1 0 10
-	}	
+	}
 
 
 	{
-		map textures/pad_garden/sflameball.tga
+		map textures/pad_garden/sflameball
 		blendFunc GL_ONE GL_ONE
-		rgbGen wave sin .6 .2 0 .6	
+		rgbGen wave sin .6 .2 0 .6
 	}
 }
 
@@ -1032,13 +1032,13 @@ textures/pad_trash/wallstone_001we
 {
 	tessSize 64
 	deformVertexes normal 1 5
-	qer_editorimage textures/pad_wallout/wallstone_001.tga
+	qer_editorimage textures/pad_wallout/wallstone_001
         {
-		map textures/pad_wallout/wallstone_001.tga
-                rgbGen identity    
+		map textures/pad_wallout/wallstone_001
+                rgbGen identity
         }
         {
-		map textures/pad_trash/kb_reflection.tga
+		map textures/pad_trash/kb_reflection
                 Blendfunc add
 		tcgen environment
 		rgbgen wave sin .3 0 0 0
@@ -1056,13 +1056,13 @@ textures/pad_trash/wallstone_002we
 {
 	tessSize 128
 	deformVertexes normal 1 5
-	qer_editorimage textures/pad_garden/rostii.tga
+	qer_editorimage textures/pad_garden/rostii
         {
-		map textures/pad_garden/rostii.tga
-                rgbGen identity    
+		map textures/pad_garden/rostii
+                rgbGen identity
         }
         {
-		map textures/pad_trash/kb_reflection.tga
+		map textures/pad_trash/kb_reflection
                 Blendfunc add
 		tcgen environment
 		rgbgen wave sin .3 0 0 0
@@ -1080,13 +1080,13 @@ textures/pad_trash/rost_we
 {
 	tessSize 128
 	deformVertexes normal 1 5
-	qer_editorimage textures/pad_jail/pad_jail_metal1.tga
+	qer_editorimage textures/pad_jail/pad_jail_metal1
         {
-		map textures/pad_jail/pad_jail_metal1.tga
-                rgbGen identity    
+		map textures/pad_jail/pad_jail_metal1
+                rgbGen identity
         }
         {
-		map textures/pad_trash/kb_reflection.tga
+		map textures/pad_trash/kb_reflection
                 Blendfunc add
 		tcgen environment
 		rgbgen wave sin .3 0 0 0
@@ -1101,14 +1101,14 @@ textures/pad_trash/rost_we
 }
 
 textures/pad_trash/kb_greensun
-{    
-     	qer_editorimage textures/pad_poster/greensun.tga
-	surfaceparm nomarks   
+{
+     	qer_editorimage textures/pad_poster/greensun
+	surfaceparm nomarks
      	surfaceparm trans
      	surfaceparm pointlight
      	polygonOffset
         {
-		map textures/pad_poster/greensun.tga
+		map textures/pad_poster/greensun
                	blendFunc blend
 		rgbGen vertex
 	}
@@ -1124,11 +1124,11 @@ textures/pad_trash/kb_container_01
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_container_01.tga
+		map textures/pad_trash/kb_container_01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-} 
+}
 
 textures/pad_trash/kb_container_02
 {
@@ -1138,11 +1138,11 @@ textures/pad_trash/kb_container_02
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_container_02.tga
+		map textures/pad_trash/kb_container_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-} 
+}
 
 textures/pad_trash/kb_container_03
 {
@@ -1152,7 +1152,7 @@ textures/pad_trash/kb_container_03
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_container_03.tga
+		map textures/pad_trash/kb_container_03
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1166,7 +1166,7 @@ textures/pad_trash/kb_deckel
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_deckel.tga
+		map textures/pad_trash/kb_deckel
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1180,11 +1180,11 @@ textures/pad_trash/kb_stirnholz
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_stirnholz.tga
+		map textures/pad_trash/kb_stirnholz
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-} 
+}
 
 textures/pad_trash/kb_metallboden
 {
@@ -1194,7 +1194,7 @@ textures/pad_trash/kb_metallboden
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_metallboden.tga
+		map textures/pad_trash/kb_metallboden
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1208,7 +1208,7 @@ textures/pad_trash/kb_pylone1
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_pylone1.tga
+		map textures/pad_trash/kb_pylone1
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1222,7 +1222,7 @@ textures/pad_trash/kb_pylone2
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_pylone2.tga
+		map textures/pad_trash/kb_pylone2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1236,7 +1236,7 @@ textures/pad_trash/kb_tor_links
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_tor_links.tga
+		map textures/pad_trash/kb_tor_links
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1250,7 +1250,7 @@ textures/pad_trash/kb_tor_rechts
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_tor_rechts.tga
+		map textures/pad_trash/kb_tor_rechts
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1264,7 +1264,7 @@ textures/pad_trash/kb_tor_trim
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_tor_trim.tga
+		map textures/pad_trash/kb_tor_trim
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1278,7 +1278,7 @@ textures/pad_trash/kb_vent_01
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_vent_01.tga
+		map textures/pad_trash/kb_vent_01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1292,7 +1292,7 @@ textures/pad_trash/kb_vent_02
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_vent_02.tga
+		map textures/pad_trash/kb_vent_02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1306,7 +1306,7 @@ textures/pad_trash/kb_vent_03
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_vent_03.tga
+		map textures/pad_trash/kb_vent_03
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1320,7 +1320,7 @@ textures/pad_trash/kb_verteilerkasten_back
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_verteilerkasten_back.tga
+		map textures/pad_trash/kb_verteilerkasten_back
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1334,7 +1334,7 @@ textures/pad_trash/kb_verteilerkasten_front
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_verteilerkasten_front.tga
+		map textures/pad_trash/kb_verteilerkasten_front
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1348,7 +1348,7 @@ textures/pad_trash/kb_verteilerkasten_sideleft
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_verteilerkasten_sideleft.tga
+		map textures/pad_trash/kb_verteilerkasten_sideleft
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1362,7 +1362,7 @@ textures/pad_trash/kb_verteilerkasten_sideright
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_verteilerkasten_sideright.tga
+		map textures/pad_trash/kb_verteilerkasten_sideright
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1376,7 +1376,7 @@ textures/pad_trash/kb_wellblech
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_wellblech.tga
+		map textures/pad_trash/kb_wellblech
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1390,7 +1390,7 @@ textures/pad_trash/kb_schuttcontainer1
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_schuttcontainer1.tga
+		map textures/pad_trash/kb_schuttcontainer1
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1404,7 +1404,7 @@ textures/pad_trash/kb_schuttcontainer2
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_schuttcontainer2.tga
+		map textures/pad_trash/kb_schuttcontainer2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1418,7 +1418,7 @@ textures/pad_trash/kb_feuerleiter
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_feuerleiter.tga
+		map textures/pad_trash/kb_feuerleiter
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1426,14 +1426,14 @@ textures/pad_trash/kb_feuerleiter
 
 textures/pad_trash/kb_rinne
 {
-		qer_editorimage textures/pad_jail/jail2_leuchte1.tga
+		qer_editorimage textures/pad_jail/jail2_leuchte1
 		surfaceparm metalsteps
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_jail/jail2_leuchte1.tga
+		map textures/pad_jail/jail2_leuchte1
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1447,7 +1447,7 @@ textures/pad_trash/kb_fabrik
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_fabrik.tga
+		map textures/pad_trash/kb_fabrik
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1455,14 +1455,14 @@ textures/pad_trash/kb_fabrik
 
 textures/pad_trash/kb_achtung
 {
-		qer_editorimage textures/pad_trash/kb_sign_05.tga
+		qer_editorimage textures/pad_trash/kb_sign_05
 		surfaceparm metalsteps
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_sign_05.tga
+		map textures/pad_trash/kb_sign_05
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1476,7 +1476,7 @@ textures/pad_trash/kb_fass01
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_fass01.tga
+		map textures/pad_trash/kb_fass01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1490,7 +1490,7 @@ textures/pad_trash/kb_fass02
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_fass02.tga
+		map textures/pad_trash/kb_fass02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1504,7 +1504,7 @@ textures/pad_trash/kb_traeger01
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_traeger01.tga
+		map textures/pad_trash/kb_traeger01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1518,7 +1518,7 @@ textures/pad_trash/kb_traeger02
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_traeger02.tga
+		map textures/pad_trash/kb_traeger02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1532,7 +1532,7 @@ textures/pad_trash/kb_ablaufgitter
 		rgbGen identity
 	}
 	{
-		map textures/pad_trash/kb_ablaufgitter.tga
+		map textures/pad_trash/kb_ablaufgitter
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -1542,7 +1542,7 @@ textures/pad_trash/kb_ablaufgitter
 
 textures/pad_trash/trash_skybox_night
 {
-	qer_editorimage env/pc-friday-13th-512_ft.tga
+	qer_editorimage env/pc-friday-13th-512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
@@ -1552,8 +1552,8 @@ textures/pad_trash/trash_skybox_night
 
 textures/pad_trash/trash_skybox_day
 {
-	qer_editorimage env/padcity512_ft.tga
-	q3map_lightimage textures/pad_garden/brightyell.tga
+	qer_editorimage env/padcity512_ft
+	q3map_lightimage textures/pad_garden/brightyell
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
@@ -1564,8 +1564,8 @@ textures/pad_trash/trash_skybox_day
 
 textures/pad_trash/trash_skybox_evening
 {
-        qer_editorimage env/pc-morning-madness512_ft.tga
-        q3map_lightimage textures/pad_petesky/orange2.tga
+        qer_editorimage env/pc-morning-madness512_ft
+        q3map_lightimage textures/pad_petesky/orange2
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky

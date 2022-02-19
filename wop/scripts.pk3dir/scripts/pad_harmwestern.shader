@@ -1,6 +1,6 @@
 textures/pad_western/boden01
 {
-   qer_editorimage textures/pad_western/boden01.tga
+   qer_editorimage textures/pad_western/boden01
    surfaceparm sandsteps
 
    q3map_nonplanar
@@ -12,11 +12,11 @@ textures/pad_western/boden01
    q3map_alphaMod dotproduct2 ( 0.0 0.0 0.75 )
    q3map_lightmapSampleSize 16
   {
-     map textures/pad_western/boden01.tga   // Primary
+     map textures/pad_western/boden01   // Primary
      rgbGen identity
   }
   {
-     map textures/pad_western/boden02.tga   // Secondary
+     map textures/pad_western/boden02   // Secondary
      blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
      //alphaFunc GE128
      rgbGen identity
@@ -115,7 +115,7 @@ textures/pad_harm/utopiaatoll512_ft
     q3map_surfacelight 150
     surfaceparm nolightmap
     {
-        map textures/pad_harm/utopiaatoll512_ft.tga
+        map textures/pad_harm/utopiaatoll512_ft
     }
 }
 
@@ -124,7 +124,7 @@ textures/pad_harm/utopiaatoll512_lf
     q3map_surfacelight 150
     surfaceparm nolightmap
     {
-        map textures/pad_harm/utopiaatoll512_lf.tga
+        map textures/pad_harm/utopiaatoll512_lf
     }
 }
 
@@ -139,7 +139,7 @@ textures/pad_harm/notausgang
     q3map_surfacelight 300
     surfaceparm nolightmap
     {
-        map textures/pad_harm/notausgang.tga
+        map textures/pad_harm/notausgang
     }
 }
 
@@ -149,7 +149,7 @@ textures/pad_harm/notausganglight
     q3map_surfacelight 300
     surfaceparm nolightmap
     {
-        map textures/pad_harm/notausganglight.tga
+        map textures/pad_harm/notausganglight
     }
 }
 
@@ -164,7 +164,7 @@ textures/pad_western/studioa
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_western/studioa.tga
+		map textures/pad_western/studioa
                	blendFunc blend
 		rgbGen vertex
 	}
@@ -177,7 +177,7 @@ textures/pad_western/studiob
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_western/studiob.tga
+		map textures/pad_western/studiob
                	blendFunc blend
 		rgbGen vertex
 	}
@@ -190,7 +190,7 @@ textures/pad_western/dressingroom
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_western/dressingroom.tga
+		map textures/pad_western/dressingroom
                	blendFunc blend
 		rgbGen vertex
 	}
@@ -203,7 +203,7 @@ textures/pad_western/djdick
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_western/djdick.tga
+		map textures/pad_western/djdick
                	blendFunc blend
 		rgbGen vertex
 	}
@@ -216,7 +216,7 @@ textures/pad_western/westernmovie
      surfaceparm pointlight
      polygonOffset
         {
-		map textures/pad_western/westernmovie.tga
+		map textures/pad_western/westernmovie
                	blendFunc blend
 		rgbGen vertex
 	}

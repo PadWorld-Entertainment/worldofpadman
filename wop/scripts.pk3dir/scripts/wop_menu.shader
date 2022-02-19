@@ -10,7 +10,7 @@ mainbgfx
 		tcMod rotate 7
 		tcMod turb .1 .1 .1 .1
 		alphaGen Vertex
-	}  
+	}
 }
 
 // =================
