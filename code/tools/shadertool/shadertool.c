@@ -161,7 +161,7 @@ static int validateShader(const char *filename, const char *pk3dir, const char *
 
 		const char *token = COM_ParseExt(&buf);
 		if (!token[0]) {
-			return 0;
+			break;
 		}
 
 		Q_strncpyz(shaderName, token, sizeof(shaderName));
