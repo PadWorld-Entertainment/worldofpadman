@@ -121,7 +121,7 @@ static int validateTexture(const char *shaderfilename, const char *pk3dir, const
 	char basename[1024];
 	int len;
 	static const char *ext[] = {"jpg", "png", "tga", NULL};
-	static const char *searchpaths[] = {"textures.pk3dir", "maps.pk3dir", NULL};
+	static const char *searchpaths[] = {"gfx.pk3dir", "maps.pk3dir", "menu.pk3dir", "models.pk3dir", "textures.pk3dir", NULL};
 
 	if (filename[0] == '$' || filename[0] == '*') {
 		return 0;
