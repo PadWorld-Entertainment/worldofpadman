@@ -83,9 +83,9 @@ function(shader_validation GAME SHADER)
   get_filename_component(filename ${SHADERPATH} NAME)
   add_custom_target(${targetname}
     COMMENT "Validate ${SHADERPATH}"
-    COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}"
+    COMMAND "$<TARGET_FILE:shadertool>" "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}"
     DEPENDS shadertool "${SHADERPATH}"
-    WORKING_DIRECTORY $<TARGET_FILE_DIR:shadertool>
+    WORKING_DIRECTORY "$<TARGET_FILE_DIR:shadertool>"
     SOURCES "${SHADERPATH}"
     VERBATIM
   )
@@ -99,9 +99,9 @@ function(bsp_validation GAME BSP)
   get_filename_component(filename ${BSPPATH} NAME)
   add_custom_target(${targetname}
     COMMENT "Validate ${BSPPATH}"
-    COMMAND $<TARGET_FILE:bsptool> "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}"
+    COMMAND "$<TARGET_FILE:bsptool>" "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}"
     DEPENDS bsptool "${BSPPATH}"
-    WORKING_DIRECTORY $<TARGET_FILE_DIR:bsptool>
+    WORKING_DIRECTORY "$<TARGET_FILE_DIR:bsptool>"
     SOURCES "${BSPPATH}"
     VERBATIM
   )
