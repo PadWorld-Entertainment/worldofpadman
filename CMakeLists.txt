@@ -85,6 +85,7 @@ function(shader_validation GAME SHADER)
     COMMENT "Validate ${SHADERPATH}"
     COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}"
     DEPENDS shadertool "${SHADERPATH}"
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:shadertool>
     SOURCES "${SHADERPATH}"
     VERBATIM
   )
@@ -100,6 +101,7 @@ function(bsp_validation GAME BSP)
     COMMENT "Validate ${BSPPATH}"
     COMMAND $<TARGET_FILE:bsptool> "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}"
     DEPENDS bsptool "${BSPPATH}"
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:bsptool>
     SOURCES "${BSPPATH}"
     VERBATIM
   )
