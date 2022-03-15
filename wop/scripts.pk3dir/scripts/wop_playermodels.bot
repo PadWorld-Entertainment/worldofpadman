@@ -186,7 +186,7 @@ spraylogo	30_dieselkopf
 
 {
 name		MonsterPad
-funname         "^0M^2o^0n^2s^0t^2e^0r^2P^0a^2d"
+funname     "^0M^2o^0n^2s^0t^2e^0r^2P^0a^2d"
 model		monster
 aifile		bots/padman_c.c
 spraylogo	27_ugly
@@ -220,6 +220,19 @@ spraylogo	38_target
 
 
 // =================
+// PADKNiGHT
+// =================
+
+{
+name		PadKnight
+model		padking/padknight
+funname  	"^4Pad^2Knight"
+aifile		bots/padman_c.c
+spraylogo	33_spawnpoint
+}
+
+
+// =================
 // BEACHPAD
 // =================
 
@@ -237,8 +250,8 @@ spraylogo	41_water
 // =================
 
 {
-name		 PadPunk
-model		 padpunk
+name		PadPunk
+model		padpunk
 funname  	"^3Pad^5Punk"
 aifile	 	bots/padman_c.c
 spraylogo	20_anarchie
