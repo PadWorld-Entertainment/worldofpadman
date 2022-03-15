@@ -4,7 +4,7 @@ spraylogos/01_wop
 {
 	nopicmip
 	{
-		map "spraylogos/01_wop"
+		map spraylogos/01_wop
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
@@ -15,7 +15,7 @@ spraylogos/02_cross
 {
 	nopicmip
 	{
-		map "spraylogos/02_cross"
+		map spraylogos/02_cross
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
@@ -26,10 +26,10 @@ spraylogos/03_smile
 {
 	nopicmip
 	{
-		map "spraylogos/03_smile"
+		map spraylogos/03_smile
 		blendfunc blend
-		rgbGen Vertex
-		alphaGen Vertex
+		rgbGen vertex
+		alphaGen vertex
 	}
 }
 
@@ -37,10 +37,10 @@ spraylogos/04_padman
 {
 	nopicmip
 	{
-		map "spraylogos/04_padman"
+		map spraylogos/04_padman
 		blendfunc blend
-		rgbGen Vertex
-		alphaGen Vertex
+		rgbGen vertex
+		alphaGen vertex
 	}
 }
 
@@ -93,7 +93,7 @@ spraylogos/09_sketch
 {
 	nopicmip
 	{
-		map "spraylogos/09_sketch"
+		map spraylogos/09_sketch
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
@@ -104,7 +104,7 @@ spraylogos/10_yinyan
 {
 	nopicmip
 	{
-		map "spraylogos/10_yinyan"
+		map spraylogos/10_yinyan
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
@@ -115,7 +115,7 @@ spraylogos/11_splash
 {
 	nopicmip
 	{
-		map "spraylogos/11_splash"
+		map spraylogos/11_splash
 		blendfunc blend
 		rgbGen Vertex
 		alphaGen Vertex
@@ -126,7 +126,7 @@ spraylogos/12_heart
 {
 	nopicmip
 	{
-		map "spraylogos/12_heart"
+		map spraylogos/12_heart
 		blendfunc blend
 		rgbGen Vertex
 		alphaGen Vertex

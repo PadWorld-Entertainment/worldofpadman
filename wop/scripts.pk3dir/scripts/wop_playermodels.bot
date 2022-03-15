@@ -59,7 +59,7 @@ name		Padilla
 funname		"^3P^2a^3d^2ill^3a"
 model		padlilly/padilla
 aifile		bots/padlilly_c.c
-spraylogo	39_greensun
+spraylogo	29_greensun
 }
 
 
@@ -163,7 +163,7 @@ name		FatPad
 model		fatpad
 funname  	"Fat^1Pad"
 aifile		bots/padman_c.c
-spraylogo	08_clowns
+spraylogo	08_clown
 }
 
 
@@ -254,7 +254,7 @@ name		PadCho
 model		padcho
 funname  	"^2Pad^6Cho"
 aifile	 	bots/padman_c.c
-spraylogo	40_cross
+spraylogo	02_cross
 }
 
 
@@ -321,4 +321,3 @@ funname  	"^2Paddy^3Bee"
 aifile		bots/paddy_c.c
 spraylogo	21_apple
 }
-
