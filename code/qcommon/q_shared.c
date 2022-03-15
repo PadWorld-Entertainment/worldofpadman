@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define PROTOCOL_LEGACY_VERSION 68
 // 1.31 - 67
 
-const int demo_protocols[] = {66, 67, PROTOCOL_LEGACY_VERSION, 69, 70, PROTOCOL_VERSION, 0};
+const int demo_protocols[] = {66, 67, PROTOCOL_LEGACY_VERSION, 69, 70, 71, PROTOCOL_VERSION, 0};
 
 // ^[0-9a-zA-Z]
 qboolean Q_IsColorString(const char *p) {
