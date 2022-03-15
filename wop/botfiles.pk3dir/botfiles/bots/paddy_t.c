@@ -63,7 +63,7 @@ chat "padlilly"
 	type "level_end_lose" //initiated when a level ends and the bot is last in the rankings
 	{
 		"I guess I had that coming.";
-		"Wow, many ladykillers in the World of Padman... I love you too.";
+		"Wow, many ladykillers in the World of PADMAN... I love you too.";
 		"Have fun storming the PadWorld.";
 		"Good luck, ", 2, ". But I think Padman is going to toast your grandma.";
 		// 0 = bot name

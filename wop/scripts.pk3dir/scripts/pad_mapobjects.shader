@@ -2262,7 +2262,7 @@ models/mapobjects/pad_bath/ointment
 // BOOKEND
 // =================
 
-//shaders for doomdragons mapobjects for world of padman
+//shaders for doomdragons mapobjects for World of PADMAN
 models/mapobjects/pad_ddmix/padlibrary/bookend
 {
 	cull disable
@@ -3302,7 +3302,7 @@ models/mapobjects/pad_ddmix/trashcan/bush
 // PADKiNG
 // =================
 
-//shaders for doomdragons mapobjects for world of padman
+//shaders for doomdragons mapobjects for World of PADMAN
 models/mapobjects/pad_ddmix/castle/padking
 {
 	cull disable

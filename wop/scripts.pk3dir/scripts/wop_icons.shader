@@ -1,4 +1,4 @@
-// World of Padman icons shader
+// World of PADMAN icons shader
 // Icons used in the world without a shader will be seen through walls!
 // Icons with shader listed here cannot change color set by the engine!
 

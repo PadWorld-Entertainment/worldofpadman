@@ -67,7 +67,7 @@ IDI_ICON1               ICON    DISCARDABLE     "misc/wop.ico"
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_STRING1             "World of Padman"
+    IDS_STRING1             "World of PADMAN"
 END
 
 /////////////////////////////////////////////////////////////////////////////

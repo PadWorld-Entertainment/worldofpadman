@@ -151,7 +151,7 @@
 	- Issues with gametypes being out of sync in botlib
 	- Broken and outdated links in the user readme
 - REMOVED
-	- Unused World of Padman single player code
+	- Unused World of PADMAN single player code
 	- Unused Quake 3 Arena mission pack code
 	- Unused auto updater
 	- Unused dead code in general

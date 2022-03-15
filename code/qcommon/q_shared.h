@@ -37,7 +37,7 @@ extern const int demo_protocols[];
 #define PRODUCT_NAME "wop"
 #define PRODUCT_TITLE "WoP"
 #define BASEGAME "wop" // TODO: Use this in Makefile
-#define CLIENT_WINDOW_TITLE "World of Padman"
+#define CLIENT_WINDOW_TITLE "World of PADMAN"
 #define CLIENT_WINDOW_MIN_TITLE PRODUCT_TITLE
 #define PRODUCT_BASE "ioq3 05180e3"
 #define PRODUCT_RELEASE "dev" // "beta x" "final"/""

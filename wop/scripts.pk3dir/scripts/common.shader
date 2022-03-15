@@ -1,4 +1,4 @@
-// World of Padman common shader
+// World of PADMAN common shader
 // Contains mostly shaders for map editor support and q3map2 features
 
 // =================

@@ -1,4 +1,4 @@
-// World of Padman levelshots shader
+// World of PADMAN levelshots shader
 // Containing shaders for animated map preview pictures.
 // Also redirecting levelshots for map variants which do not have their own.
 

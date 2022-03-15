@@ -1,4 +1,4 @@
-// World of Padman spray logos shader
+// World of PADMAN spray logos shader
 
 spraylogos/01_wop
 {

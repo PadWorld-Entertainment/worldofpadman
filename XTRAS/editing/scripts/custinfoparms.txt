@@ -1,4 +1,4 @@
-// World of Padman custom infoparm file
+// World of PADMAN custom infoparm file
 // 
 // Custom Contentsflags 
 { 

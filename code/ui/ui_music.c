@@ -1,5 +1,5 @@
 /*
-	World of Padman - Music player and menu
+	World of PADMAN - Music player and menu
 */
 
 /*
