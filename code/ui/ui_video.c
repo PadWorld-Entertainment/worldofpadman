@@ -665,7 +665,7 @@ void GraphicsOptions_MenuInit(void) {
 	static const char *filter_names[] = {"Bilinear", "Trilinear", NULL};
 	static const char *td_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
-	static const char *aa_names[] = {"Off", "2x", "4x", NULL};
+	static const char *aa_names[] = {"Off", "2x", "4x", "8x", NULL};
 	static const char *mdetail_names[] = {"Low", "Medium", "High", NULL};
 	static const char *cdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *enabled_names[] = {"Off", "On", NULL};
