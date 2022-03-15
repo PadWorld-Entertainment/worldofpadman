@@ -23,23 +23,28 @@
 	- New surface parameter `splashsteps` for splashy footstep sounds and common shader `splashclip` with texture
 	- Dust trail feature from Q3 Team Arena for textures with surface parameter `dust`. Creates a small dust cloud when a player lands on surface. Enter `enableDust 1` to a map's worldspawn.
 	- Frost breath feature from Q3 Team Arena to simulate cold environments. Creates a small cloud of condensed breath in front of players head. Enter `enableBreath 1` to a map's worldspawn to enable this feature for the whole map.
+	- PadKnight bot to the game and shown in the Select Bots menu
+	- Possibility to set Antialiasing to 8x in Graphics menu
 - CHANGED
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
-	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps.
-	- Fullscreen option in Graphics menu to Window Mode to support new borderless window mode.
+	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps
+	- Fullscreen option in Graphics menu to Window Mode to support new borderless window mode
 	- Map selection/preview to cycle three ingame pictures (shader animation)
-	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options.
+	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options
 	- Allocation of options Sync Every Frame, Simple Items, Marks on Walls, High Quality Sky, Sky Lens Flare, Dynamic Lights, Dynamic Flares, from Game Options menu to Display menu
 	- Game Options menu to three pages layout to support more options for HUD, Chat and Help
 	- Allocation of all wallhack icon options to new Help menu
 	- Allocation of all HUD related options to new HUD menu
-	- Chat option in Game Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately.
+	- Chat option in Game Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately
 	- Notification Time option in Chat menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
 	- Player Settings menu to list first all PadCharacters followed by custom player models
 - FIXED
-	- Path entry of voice chat icon
+	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use ^ key to enter color tags
+	- Anisotropy and Antialiasing options in Graphics menu are displayed as 4x after video restart, although 2x was selected before
+	- Antialiasing option in Graphics menu is always displayed as Off after WoP restart, although 2x or more was selected before
+	- Wrong spray logo name allocation for Spooky and PadCho	- 
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
 	- ^ key to open/close the console
