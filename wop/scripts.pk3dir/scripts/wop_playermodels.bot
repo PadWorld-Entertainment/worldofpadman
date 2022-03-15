@@ -293,7 +293,7 @@ name		Spooky
 model		piratepad/spooky
 funname  	"^4Spooky"
 aifile		bots/padman_c.c
-spraylogo	07_spooky
+spraylogo	26_spooky
 }
 
 
