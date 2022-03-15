@@ -26,6 +26,9 @@
 	- PadKnight bot to the game and shown in the Select Bots menu
 	- Possibility to set Antialiasing to 8x in Graphics menu
 - CHANGED
+	- Network protocol version number to 72 to avoid problems due to incompatibilities with previous WoP versions
+	- Home path to `worldofpadman` for all operating systems to unify them
+	- Title of the game uniformly to `World of PADMAN` everywhere
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
 	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps
