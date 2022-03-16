@@ -170,6 +170,7 @@ static void vk_createRenderPass(VkDevice device) {
 	//  swap chain images.
 	attachments[0].format = vk.surface_format.format;
 	//  have something with the multisampling
+	// TODO: support r_ext_multisample
 	attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
 	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 	attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;

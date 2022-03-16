@@ -56,7 +56,7 @@ void vk_initialize(void) {
 	//
 	vk_createVertexBuffer();
 	vk_createIndexBuffer();
-	;
+
 	//
 	// Shader modules.
 	//
