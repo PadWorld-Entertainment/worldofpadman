@@ -637,7 +637,7 @@ void Team_DroppedFlagThink(gentity_t *ent) {
 Team_DroppedFlagThink
 ==============
 */
-int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
+static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 	int i;
 	gentity_t *player;
 	gclient_t *cl = other->client;
