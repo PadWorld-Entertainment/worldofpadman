@@ -431,7 +431,7 @@ Return value must be freed with ri.Hunk_FreeTempMemory()
 ==================
 */
 
-byte *RB_ReadPixels(int x, int y, int width, int height, size_t *offset, int *padlen) {
+static byte *RB_ReadPixels(int x, int y, int width, int height, size_t *offset, int *padlen) {
 	byte *buffer, *bufstart;
 	int padwidth, linelen;
 	GLint packAlign;
@@ -459,7 +459,7 @@ byte *RB_ReadPixels(int x, int y, int width, int height, size_t *offset, int *pa
 RB_TakeScreenshot
 ==================
 */
-void RB_TakeScreenshot(int x, int y, int width, int height, char *fileName) {
+static void RB_TakeScreenshot(int x, int y, int width, int height, char *fileName) {
 	byte *allbuf, *buffer;
 	byte *srcptr, *destptr;
 	byte *endline, *endmem;
@@ -517,8 +517,7 @@ void RB_TakeScreenshot(int x, int y, int width, int height, char *fileName) {
 RB_TakeScreenshotJPEG
 ==================
 */
-
-void RB_TakeScreenshotJPEG(int x, int y, int width, int height, char *fileName) {
+static void RB_TakeScreenshotJPEG(int x, int y, int width, int height, char *fileName) {
 	byte *buffer;
 	size_t offset = 0, memcount;
 	int padlen;
@@ -561,7 +560,7 @@ const void *RB_TakeScreenshotCmd(const void *data) {
 R_TakeScreenshot
 ==================
 */
-void R_TakeScreenshot(int x, int y, int width, int height, char *name, qboolean jpeg) {
+static void R_TakeScreenshot(int x, int y, int width, int height, char *name, qboolean jpeg) {
 	static char fileName[MAX_OSPATH]; // bad things if two screenshots per frame?
 	screenshotCommand_t *cmd;
 
@@ -585,7 +584,7 @@ void R_TakeScreenshot(int x, int y, int width, int height, char *name, qboolean 
 R_ScreenshotFilename
 ==================
 */
-void R_ScreenshotFilename(int lastNumber, char *fileName) {
+static void R_ScreenshotFilename(int lastNumber, char *fileName) {
 	int a, b, c, d;
 
 	if (lastNumber < 0 || lastNumber > 9999) {
@@ -609,7 +608,7 @@ void R_ScreenshotFilename(int lastNumber, char *fileName) {
 R_ScreenshotFilename
 ==================
 */
-void R_ScreenshotFilenameJPEG(int lastNumber, char *fileName) {
+static void R_ScreenshotFilenameJPEG(int lastNumber, char *fileName) {
 	int a, b, c, d;
 
 	if (lastNumber < 0 || lastNumber > 9999) {
