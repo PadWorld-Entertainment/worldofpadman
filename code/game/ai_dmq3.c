@@ -2964,12 +2964,8 @@ void BotCheckAttack(bot_state_t *bs) {
 			}
 		}
 	}
-	//
-	//
 	VectorSubtract(bs->aimtarget, bs->eye, dir);
-	//
 	if (bs->weaponnum == WP_PUNCHY) {
-
 		if (VectorLengthSquared(dir) > Square(60)) {
 			return;
 		}
@@ -2978,7 +2974,6 @@ void BotCheckAttack(bot_state_t *bs) {
 		fov = 120;
 	else
 		fov = 50;
-	//
 	vectoangles(dir, angles);
 	if (!InFieldOfVision(bs->viewangles, fov, angles))
 		return;
