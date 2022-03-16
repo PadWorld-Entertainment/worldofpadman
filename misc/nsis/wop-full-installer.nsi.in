@@ -167,6 +167,7 @@ Section $(NAME_Section1) Section1
     File "${SRC}\renderer_opengl2_x86_64.dll"
     File "${SRC}\renderer_vulkan_x86_64.dll"
     File "${SRC}\SDL2.dll"
+    File "${SRC}\OpenAL32.dll"
     File "${SRC}\wop.x86_64.exe"
     File "${SRC}\wopded.x86_64.exe"
 
@@ -299,6 +300,7 @@ Section /o -un.Main UNSEC0000
     Delete /REBOOTOK "$INSTDIR\wop.x86_64.exe"
     Delete /REBOOTOK "$INSTDIR\wopded.x86_64.exe"
     Delete /REBOOTOK "$INSTDIR\SDL2.dll"
+    Delete /REBOOTOK "$INSTDIR\OpenAL32.dll"
     Delete /REBOOTOK "$INSTDIR\renderer_opengl1_x86_64.dll"
     Delete /REBOOTOK "$INSTDIR\renderer_opengl2_x86_64.dll"
     Delete /REBOOTOK "$INSTDIR\renderer_vulkan_x86_64.dll"

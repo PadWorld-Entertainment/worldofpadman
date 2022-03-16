@@ -56,7 +56,6 @@ update-openal:
 	$(call UPDATE_GIT,openal,https://github.com/kcat/openal-soft.git -b 1.21.1)
 	curl https://www.openal-soft.org/openal-binaries/openal-soft-1.21.1-bin.zip -o $(UPDATEDIR)/openal-soft-bin.zip
 	unzip -o $(UPDATEDIR)/openal-soft-bin.zip -d $(UPDATEDIR)
-	cp $(UPDATEDIR)/openal-soft-1.21.1-bin/bin/Win32/soft_oal.dll libs/libs/win32/OpenAL32.dll
-	cp $(UPDATEDIR)/openal-soft-1.21.1-bin/bin/Win64/soft_oal.dll libs/libs/win64/OpenAL64.dll
-	chmod -x libs/libs/win*/*.dll
+	cp $(UPDATEDIR)/openal-soft-1.21.1-bin/bin/Win64/soft_oal.dll libs/libs/win64/OpenAL32.dll
+	chmod -x libs/libs/win64/OpenAL32.dll
 	cp -r $(UPDATEDIR)/openal.sync/include/AL/* libs/AL
