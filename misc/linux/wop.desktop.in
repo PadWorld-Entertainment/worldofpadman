@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=World Of Padman
-Exec=@CMAKE_INSTALL_PREFIX@/bin/@OUTPUTNAME@ %u
+Exec=@CMAKE_INSTALL_PREFIX@/bin/@OUTPUTNAME@ --uri %u
 Icon=wop
 Type=Application
 Terminal=false

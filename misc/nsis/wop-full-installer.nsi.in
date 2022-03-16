@@ -244,7 +244,7 @@ Section $(NAME_Section8) Section8
     WriteRegStr SHCTX "Software\Classes\worldofpadman" "CustomUrlArguments" '"%1"'
     WriteRegStr SHCTX "Software\Classes\worldofpadman" "URL Protocol" ""
     WriteRegStr SHCTX "Software\Classes\worldofpadman\DefaultIcon" "" "$INSTDIR\wop.x86_64.exe,0"
-    WriteRegStr SHCTX "Software\Classes\worldofpadman\shell\open\command" "" '"$INSTDIR\wop.x86_64.exe" "%1"'
+    WriteRegStr SHCTX "Software\Classes\worldofpadman\shell\open\command" "" '"$INSTDIR\wop.x86_64.exe" --uri "%1"'
 SectionEnd
 
 

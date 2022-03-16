@@ -65,5 +65,6 @@ void Sys_AnsiColorPrint(const char *msg);
 int Sys_PID(void);
 qboolean Sys_PIDIsRunning(int pid);
 #ifdef PROTOCOL_HANDLER
-char *Sys_ParseProtocolUri(char *uri);
+char *Sys_InitProtocolHandler(void);
+char *Sys_ParseProtocolUri(const char *uri);
 #endif
