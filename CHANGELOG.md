@@ -13,6 +13,7 @@
 	- Option to enable/disable Ingame Videos to Display menu to be able to switch off video shaders in maps
 	- Option to enable/disable Team Chats Only to Chat menu to be able hide chats of non-team players in team game modes
 	- Option to enable/disable playing the Chat Beep to Chat menu to be able switch off the squeeze toy sound for chat notifications
+	- Option to enable/disable the Taunt Gesture of other players and the sound that comes with it to Chat menu
 	- Option to enable/disable Bots chatting or to make them chatting more often to Chat menu
 	- Option to adjust the Notification Space to 4, 6 or 8 lines in Chat menu via new cvar `cg_chatheight`, default is 4
 	- Option to enable/disable player chat icon separately from notification time

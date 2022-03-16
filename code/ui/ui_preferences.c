@@ -69,8 +69,9 @@ GAME OPTIONS MENU
 #define ID_CHATHEIGHT 41
 #define ID_DRAWCHATICON 42
 #define ID_CHATBEEP 43
-#define ID_BOTCHAT 44
-#define ID_TEAMCHATSONLY 45
+#define ID_TAUNT 44
+#define ID_BOTCHAT 45
+#define ID_TEAMCHATSONLY 46
 
 #define ID_WALLHACKTEAMMATES 50
 #define ID_WALLHACKHSTATION 51
@@ -109,6 +110,7 @@ typedef struct {
 	menulist_s chatheight;
 	menuradiobutton_s drawchaticon;
 	menuradiobutton_s chatbeep;
+	menuradiobutton_s taunt;
 	menulist_s botchat;
 	menuradiobutton_s teamchatsonly;
 
@@ -151,6 +153,7 @@ static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.chatheight,
 	(menucommon_s *)&s_preferences.drawchaticon,
 	(menucommon_s *)&s_preferences.chatbeep,
+	(menucommon_s *)&s_preferences.taunt,
 	(menucommon_s *)&s_preferences.botchat,
 	(menucommon_s *)&s_preferences.teamchatsonly,
 	NULL
@@ -219,6 +222,7 @@ static void Preferences_SetMenuItems(void) {
 	s_preferences.ffahud.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopFFAhud"));
 	s_preferences.timeleft.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawTimeLeft"));
 	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
+	s_preferences.taunt.curvalue = trap_Cvar_VariableValue("cg_noTaunt") == 0;
 	s_preferences.teamchatsonly.curvalue = trap_Cvar_VariableValue("cg_teamChatsOnly") != 0;
 
 	if (trap_Cvar_VariableValue("bot_nochat") != 1) {
@@ -363,6 +367,10 @@ static void Preferences_Event(void *ptr, int notification) {
 		} else {
 			trap_Cvar_SetValue("cg_chatBeep", 7);
 		}
+		break;
+
+	case ID_TAUNT:
+		trap_Cvar_SetValue("cg_noTaunt", !s_preferences.taunt.curvalue);
 		break;
 
 	case ID_TEAMCHATSONLY:
@@ -804,6 +812,17 @@ static void Preferences_MenuInit(void) {
 		"Disable this to switch off the beep of all chat notifications.";
 
 	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.taunt.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.taunt.generic.name = "Taunt Gesture:";
+	s_preferences.taunt.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.taunt.generic.callback = Preferences_Event;
+	s_preferences.taunt.generic.id = ID_TAUNT;
+	s_preferences.taunt.generic.x = XPOSITION;
+	s_preferences.taunt.generic.y = y;
+	s_preferences.taunt.generic.toolTip = 
+		"Disable this to switch off the taunt gesture of other players.";
+
+	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.botchat.generic.type = MTYPE_SPINCONTROL;
 	s_preferences.botchat.generic.name = "Chatting Bots:";
 	s_preferences.botchat.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -947,6 +966,7 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatheight);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawchaticon);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.taunt);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.botchat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
 
