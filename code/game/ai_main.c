@@ -1063,7 +1063,6 @@ add link back into ExitLevel?
 ==============
 */
 void BotInterbreedEndMatch(void) {
-
 	if (!bot_interbreed)
 		return;
 	bot_interbreedmatchcount++;
@@ -1121,7 +1120,7 @@ BotEntityInfo
 */
 void BotEntityInfo(int entnum, aas_entityinfo_t *info) {
 	if (entnum < 0 || entnum >= MAX_GENTITIES) {
-		memset(info, 0, sizeof(aas_entityinfo_t));
+		memset(info, 0, sizeof(*info));
 		if (bot_developer.integer)
 			BotAI_Print(PRT_ERROR, "BotEntityInfo: entnum out of range: %d\n", entnum);
 	} else
@@ -1152,7 +1151,7 @@ float AngleDifference(float ang1, float ang2) {
 BotChangeViewAngle
 ==============
 */
-float BotChangeViewAngle(float angle, float ideal_angle, float speed) {
+static float BotChangeViewAngle(float angle, float ideal_angle, float speed) {
 	float move;
 
 	angle = AngleMod(angle);
@@ -1182,7 +1181,7 @@ float BotChangeViewAngle(float angle, float ideal_angle, float speed) {
 BotChangeViewAngles
 ==============
 */
-void BotChangeViewAngles(bot_state_t *bs, float thinktime) {
+static void BotChangeViewAngles(bot_state_t *bs, float thinktime) {
 	float diff, factor, maxchange, anglespeed, disired_speed;
 	int i;
 
@@ -1244,13 +1243,13 @@ void BotChangeViewAngles(bot_state_t *bs, float thinktime) {
 BotInputToUserCommand
 ==============
 */
-void BotInputToUserCommand(bot_input_t *bi, usercmd_t *ucmd, int delta_angles[3], int time) {
+static void BotInputToUserCommand(bot_input_t *bi, usercmd_t *ucmd, int delta_angles[3], int time) {
 	vec3_t angles, forward, right;
 	short temp;
 	int j, forwardmv, rightmv, upmv;
 
 	// clear the whole structure
-	memset(ucmd, 0, sizeof(usercmd_t));
+	memset(ucmd, 0, sizeof(*ucmd));
 	// the duration for the user command in milli seconds
 	ucmd->serverTime = time;
 	//
