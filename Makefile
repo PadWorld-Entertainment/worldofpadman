@@ -51,3 +51,12 @@ update-sdl2:
 	$(call UPDATE_GIT,sdl2,https://github.com/libsdl-org/SDL.git)
 	rm -rf libs/SDL2/src/* libs/SDL2/include/* libs/SDL2/cmake/*
 	cp -r $(UPDATEDIR)/sdl2.sync/* libs/SDL2
+
+update-openal:
+	$(call UPDATE_GIT,openal,https://github.com/kcat/openal-soft.git -b 1.21.1)
+	curl https://www.openal-soft.org/openal-binaries/openal-soft-1.21.1-bin.zip -o $(UPDATEDIR)/openal-soft-bin.zip
+	unzip -o $(UPDATEDIR)/openal-soft-bin.zip -d $(UPDATEDIR)
+	cp $(UPDATEDIR)/openal-soft-1.21.1-bin/bin/Win32/soft_oal.dll libs/libs/win32/OpenAL32.dll
+	cp $(UPDATEDIR)/openal-soft-1.21.1-bin/bin/Win64/soft_oal.dll libs/libs/win64/OpenAL64.dll
+	chmod -x libs/libs/win*/*.dll
+	cp -r $(UPDATEDIR)/openal.sync/include/AL/* libs/AL
