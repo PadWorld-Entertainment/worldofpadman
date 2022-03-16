@@ -57,6 +57,7 @@
 	- Not used and outdated BETTY explosion textures
 	- Spray logos of dead sites and partners like Desura and PlanetQuake
 	- Exit screen (when clicking the Exit button in the main menu) with confirmation query and related assets
+	- Unused and dead code in general
 - UPDATED
 	- UI menu font texture with HQ version
 	- Spray logos with HQ versions
@@ -72,8 +73,9 @@
 	- OPUS to version 1.3.1
 	- OPUSFILE to version 0.12
 	- OGG to version 1.3.5
-	- SDL to version 2.0.20
+	- SDL to version 2.0.21
 	- JPEG to version 9e
+	- OpenAL soft to version 1.21.1
 
 
 ## Version 1.6.2 (Nov 28 2021)
