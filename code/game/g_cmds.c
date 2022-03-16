@@ -1164,6 +1164,12 @@ void Cmd_CallVote_f(gentity_t *ent) {
 
 	// special case for g_gametype, check for bad values
 	if (!Q_stricmp(arg1, "g_gametype")) {
+		static const char *gametypeNames[GT_MAX_GAME_TYPE] = {
+			GAMETYPE_NAME(GT_FFA),	 GAMETYPE_NAME(GT_TOURNAMENT), GAMETYPE_NAME(GT_SINGLE_PLAYER), GAMETYPE_NAME(GT_SPRAYFFA),
+			GAMETYPE_NAME(GT_LPS),	 GAMETYPE_NAME(GT_TEAM),	   GAMETYPE_NAME(GT_FREEZETAG),		GAMETYPE_NAME(GT_CTF),
+			GAMETYPE_NAME(GT_SPRAY), GAMETYPE_NAME(GT_BALLOON)};
+		CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
+
 		i = atoi(arg2);
 		if (i == GT_SINGLE_PLAYER || i < GT_FFA || i >= GT_MAX_GAME_TYPE) {
 			trap_SendServerCommand(ent - g_entities, "print \"Invalid gametype.\n\"");
@@ -1171,7 +1177,7 @@ void Cmd_CallVote_f(gentity_t *ent) {
 		}
 
 		Com_sprintf(level.voteString, sizeof(level.voteString), "set g_gametype %i", i);
-		Com_sprintf(level.voteDisplayString, sizeof(level.voteDisplayString), "Gametype %s", GametypeName(i));
+		Com_sprintf(level.voteDisplayString, sizeof(level.voteDisplayString), "Gametype %s", gametypeNames[i]);
 	} else if (!Q_stricmp(arg1, "map")) {
 		// special case for map changes, we want to reset the nextmap setting
 		// this allows a player to change maps, but not upset the map rotation

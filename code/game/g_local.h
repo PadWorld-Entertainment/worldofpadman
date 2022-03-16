@@ -608,9 +608,6 @@ void SetAward(gclient_t *client, award_t award);
 
 void RemoveOwnedItems(gentity_t *client);
 
-const char *GametypeName(gametype_t gametype);
-const char *GametypeNameShort(gametype_t gametype);
-
 //
 // g_combat.c
 //

@@ -1984,7 +1984,7 @@ static void CG_PlayerSprites(const centity_t *cent) {
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_PADHERO) {
-		CG_PlayerFloatSprite( cent, cgs.media.medalPadHero, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalPadHero, qfalse);
 		return;
 	}
 

@@ -695,8 +695,8 @@ void DeleteDebugLines(void) {
 	}
 }
 
-static char *AwardName(award_t award) {
-	char *name;
+static const char *AwardName(award_t award) {
+	const char *name;
 
 	switch (award) {
 	case AWARD_EXCELLENT:
@@ -770,33 +770,6 @@ void RemoveOwnedItems(gentity_t *client) {
 			}
 		}
 	}
-}
-
-static const char *gametypeNames[GT_MAX_GAME_TYPE] = {
-	GAMETYPE_NAME(GT_FFA),	 GAMETYPE_NAME(GT_TOURNAMENT), GAMETYPE_NAME(GT_SINGLE_PLAYER), GAMETYPE_NAME(GT_SPRAYFFA),
-	GAMETYPE_NAME(GT_LPS),	 GAMETYPE_NAME(GT_TEAM),	   GAMETYPE_NAME(GT_FREEZETAG),		GAMETYPE_NAME(GT_CTF),
-	GAMETYPE_NAME(GT_SPRAY), GAMETYPE_NAME(GT_BALLOON)};
-
-const char *GametypeName(gametype_t gametype) {
-	if ((gametype < GT_FFA) || (gametype >= GT_MAX_GAME_TYPE)) {
-		return "invalid gametype";
-	}
-
-	return gametypeNames[gametype];
-}
-
-static const char *gametypeNamesShort[GT_MAX_GAME_TYPE] = {
-	GAMETYPE_NAME_SHORT(GT_FFA),	   GAMETYPE_NAME_SHORT(GT_TOURNAMENT), GAMETYPE_NAME_SHORT(GT_SINGLE_PLAYER),
-	GAMETYPE_NAME_SHORT(GT_SPRAYFFA),  GAMETYPE_NAME_SHORT(GT_LPS),		   GAMETYPE_NAME_SHORT(GT_TEAM),
-	GAMETYPE_NAME_SHORT(GT_FREEZETAG), GAMETYPE_NAME_SHORT(GT_CTF),		   GAMETYPE_NAME_SHORT(GT_SPRAY),
-	GAMETYPE_NAME_SHORT(GT_BALLOON)};
-
-const char *GametypeNameShort(gametype_t gametype) {
-	if ((gametype < GT_FFA) || (gametype >= GT_MAX_GAME_TYPE)) {
-		return "invalid gametype";
-	}
-
-	return gametypeNamesShort[gametype];
 }
 
 /*
