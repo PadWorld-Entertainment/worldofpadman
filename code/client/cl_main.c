@@ -1472,7 +1472,7 @@ CL_Reconnect_f
 
 ================
 */
-void CL_Reconnect_f(void) {
+static void CL_Reconnect_f(void) {
 	if (!strlen(cl_reconnectArgs))
 		return;
 	Cvar_Set("ui_singlePlayerActive", "0");
@@ -1485,7 +1485,7 @@ CL_Connect_f
 
 ================
 */
-void CL_Connect_f(void) {
+static void CL_Connect_f(void) {
 	char server[MAX_OSPATH];
 	const char *serverString;
 	int argc = Cmd_Argc();
