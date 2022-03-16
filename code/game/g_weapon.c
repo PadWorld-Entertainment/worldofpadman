@@ -123,9 +123,9 @@ void SnapVectorTowards(vec3_t v, vec3_t to) {
 
 	for (i = 0; i < 3; i++) {
 		if (to[i] <= v[i]) {
-			v[i] = (int)v[i];
+			v[i] = floor(v[i]);
 		} else {
-			v[i] = (int)v[i] + 1;
+			v[i] = ceil(v[i]);
 		}
 	}
 }
