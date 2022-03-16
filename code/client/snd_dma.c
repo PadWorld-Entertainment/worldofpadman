@@ -283,7 +283,7 @@ static sfx_t *S_FindName(const char *name) {
 
 	sfx = &s_knownSfx[i];
 	Com_Memset(sfx, 0, sizeof(*sfx));
-	strcpy(sfx->soundName, name);
+	Q_strncpyz(sfx->soundName, name, sizeof(sfx->soundName));
 
 	sfx->next = sfxHash[hash];
 	sfxHash[hash] = sfx;
