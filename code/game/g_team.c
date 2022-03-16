@@ -358,9 +358,9 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		attacker->client->pers.teamState.carrierdefense++;
 		targ->client->pers.teamState.lasthurtcarrier = 0;
 
-		attacker->client->ps.persistant[PERS_DEFEND_COUNT]++;
+		attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
 		// add the sprite over the player's head
-		SetAward(attacker->client, AWARD_DEFEND);
+		SetAward(attacker->client, AWARD_PADHERO);
 
 		return;
 	}
@@ -373,9 +373,9 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		attacker->client->pers.teamState.carrierdefense++;
 		targ->client->pers.teamState.lasthurtcarrier = 0;
 
-		attacker->client->ps.persistant[PERS_DEFEND_COUNT]++;
+		attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
 		// add the sprite over the player's head
-		SetAward(attacker->client, AWARD_DEFEND);
+		SetAward(attacker->client, AWARD_PADHERO);
 
 		return;
 	}
@@ -426,9 +426,9 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		AddScore(attacker, targ->r.currentOrigin, CTF_FLAG_DEFENSE_BONUS, SCORE_BONUS_DEFENSE_S);
 		attacker->client->pers.teamState.basedefense++;
 
-		attacker->client->ps.persistant[PERS_DEFEND_COUNT]++;
+		attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
 		// add the sprite over the player's head
-		SetAward(attacker->client, AWARD_DEFEND);
+		SetAward(attacker->client, AWARD_PADHERO);
 
 		return;
 	}
@@ -445,9 +445,9 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 			AddScore(attacker, targ->r.currentOrigin, CTF_CARRIER_PROTECT_BONUS, SCORE_BONUS_CARRIER_PROTECT_S);
 			attacker->client->pers.teamState.carrierdefense++;
 
-			attacker->client->ps.persistant[PERS_DEFEND_COUNT]++;
+			attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
 			// add the sprite over the player's head
-			SetAward(attacker->client, AWARD_DEFEND);
+			SetAward(attacker->client, AWARD_PADHERO);
 
 			return;
 		}
@@ -705,17 +705,17 @@ int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 				AddScore(player, ent->r.currentOrigin, CTF_RETURN_FLAG_ASSIST_BONUS, SCORE_BONUS_ASSIST_RETURN_S);
 				other->client->pers.teamState.assists++;
 
-				player->client->ps.persistant[PERS_ASSIST_COUNT]++;
+				player->client->ps.persistant[PERS_PADACE_COUNT]++;
 				// add the sprite over the player's head
-				SetAward(player->client, AWARD_ASSIST);
+				SetAward(player->client, AWARD_PADACE);
 			} else if (player->client->pers.teamState.lastfraggedcarrier + CTF_FRAG_CARRIER_ASSIST_TIMEOUT >
 					   level.time) {
 				AddScore(player, ent->r.currentOrigin, CTF_FRAG_CARRIER_ASSIST_BONUS,
 						 SCORE_BONUS_ASSIST_FRAG_CARRIER_S);
 				other->client->pers.teamState.assists++;
-				player->client->ps.persistant[PERS_ASSIST_COUNT]++;
+				player->client->ps.persistant[PERS_PADACE_COUNT]++;
 				// add the sprite over the player's head
-				SetAward(player->client, AWARD_ASSIST);
+				SetAward(player->client, AWARD_PADACE);
 			}
 		}
 	}

@@ -286,29 +286,41 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 		sfx = cgs.media.excellentSound;
 		CG_PushReward(sfx, cgs.media.medalExcellent, ps->persistant[PERS_EXCELLENT_COUNT]);
 		reward = qtrue;
-		// Com_Printf("excellent\n");
+		// Com_Printf("Excellent award\n");
 	}
 	if ((ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF00) != (ops->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF00)) {
 		sfx = cgs.media.spraygodSound;
 		CG_PushReward(sfx, cgs.media.medalSpraygod, (ps->persistant[PERS_SPRAYAWARDS_COUNT] >> 8));
 		reward = qtrue;
+		// Com_Printf("SprayGod award\n");
 	}
 	if ((ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF) != (ops->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF)) {
 		sfx = cgs.media.spraykillerSound;
 		CG_PushReward(sfx, cgs.media.medalSpraykiller, ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF);
 		reward = qtrue;
+		// Com_Printf("SprayKiller award\n");
 	}
-
 	if (ps->persistant[PERS_CAPTURES] != ops->persistant[PERS_CAPTURES]) {
 		sfx = cgs.media.padstarSound;
 		CG_PushReward(sfx, cgs.media.medalPadStar, ps->persistant[PERS_CAPTURES]);
 		reward = qtrue;
+		// Com_Printf("PadStar award\n");
 	}
 	if (ps->persistant[PERS_GAUNTLET_FRAG_COUNT] != ops->persistant[PERS_GAUNTLET_FRAG_COUNT]) {
 		sfx = cgs.media.humiliationSound;
 		CG_PushReward(sfx, cgs.media.medalGauntlet, ps->persistant[PERS_GAUNTLET_FRAG_COUNT]);
 		reward = qtrue;
-		// Com_Printf("gauntlet frag\n");
+		// Com_Printf("SnackAttack award\n");
+	}
+	if (ps->persistant[PERS_PADHERO_COUNT] != ops->persistant[PERS_PADHERO_COUNT]) {
+		CG_PushReward(cgs.media.padheroSound, cgs.media.medalPadHero, ps->persistant[PERS_PADHERO_COUNT]);
+		reward = qtrue;
+		//Com_Printf("PadHero award\n");
+	}
+	if (ps->persistant[PERS_PADACE_COUNT] != ops->persistant[PERS_PADACE_COUNT]) {
+		CG_PushReward(cgs.media.padaceSound, cgs.media.medalPadAce, ps->persistant[PERS_PADACE_COUNT]);
+		reward = qtrue;
+		//Com_Printf("PadAce award\n");
 	}
 	// if any of the player event bits changed
 	if (ps->persistant[PERS_PLAYEREVENTS] != ops->persistant[PERS_PLAYEREVENTS]) {

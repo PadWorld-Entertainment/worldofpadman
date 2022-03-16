@@ -764,6 +764,8 @@ static void CG_RegisterSounds(void) {
 
 	cgs.media.excellentSound = trap_S_RegisterSound("sounds/awards/excellent", qtrue);
 	cgs.media.humiliationSound = trap_S_RegisterSound("sounds/awards/padkiller", qtrue);
+	cgs.media.padheroSound = trap_S_RegisterSound("sounds/awards/padhero", qtrue);
+	cgs.media.padaceSound = trap_S_RegisterSound("sounds/awards/padace", qtrue);
 	cgs.media.padstarSound = trap_S_RegisterSound("sounds/awards/padstar", qtrue);
 
 	cgs.media.watrInSound = trap_S_RegisterSound("sound/player/water_in", qfalse);
@@ -1084,8 +1086,9 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.medalGauntlet = trap_R_RegisterShaderNoMip("icons/medal_snackattack");
 	cgs.media.medalSpraygod = trap_R_RegisterShaderNoMip("icons/medal_spraygod");
 	cgs.media.medalSpraykiller = trap_R_RegisterShaderNoMip("icons/medal_spraykiller");
-	cgs.media.medalPadStar = trap_R_RegisterShaderNoMip("icons/medal_padstar");
 	cgs.media.medalPadHero = trap_R_RegisterShaderNoMip("icons/medal_padhero");
+	cgs.media.medalPadAce = trap_R_RegisterShaderNoMip("icons/medal_padace");
+	cgs.media.medalPadStar = trap_R_RegisterShaderNoMip("icons/medal_padstar");
 
 	memset(cg_items, 0, sizeof(cg_items));
 	memset(cg_weapons, 0, sizeof(cg_weapons));

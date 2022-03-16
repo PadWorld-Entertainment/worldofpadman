@@ -703,7 +703,7 @@ static char *AwardName(award_t award) {
 		name = "excellent";
 		break;
 	case AWARD_GAUNTLET:
-		name = "gauntlet";
+		name = "snackattack";
 		break;
 	case AWARD_CAP:
 		name = "cap";
@@ -711,11 +711,11 @@ static char *AwardName(award_t award) {
 	case AWARD_IMPRESSIVE:
 		name = "impressive";
 		break;
-	case AWARD_DEFEND:
-		name = "defend";
+	case AWARD_PADHERO:
+		name = "padhero";
 		break;
-	case AWARD_ASSIST:
-		name = "assist";
+	case AWARD_PADACE:
+		name = "padace";
 		break;
 	case AWARD_DENIED:
 		name = "denied";

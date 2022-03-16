@@ -294,16 +294,14 @@ typedef struct {
 	int scoreFlags;
 	int powerUps;
 	int accuracy;
-
 	int spraygod;
 	int spraykiller;
+	int padhero;
+	int padace;
 	int livesleft;
-
 	int impressiveCount;
 	int excellentCount;
-	int guantletCount;
-	int defendCount;
-	int assistCount;
+	int gauntletCount;
 	int captures;
 	qboolean perfect;
 	int team;
@@ -978,12 +976,11 @@ typedef struct {
 	// medals shown during gameplay
 	qhandle_t medalExcellent;
 	qhandle_t medalGauntlet;
-
 	qhandle_t medalSpraygod;
 	qhandle_t medalSpraykiller;
-
-	qhandle_t medalPadStar;
 	qhandle_t medalPadHero;
+	qhandle_t medalPadAce;
+	qhandle_t medalPadStar;
 
 	sfxHandle_t berserkerPunchyLoop;
 
@@ -1058,12 +1055,13 @@ typedef struct {
 	sfxHandle_t impressiveSound;
 	sfxHandle_t excellentSound;
 	sfxHandle_t humiliationSound;
-
 	sfxHandle_t firstImpressiveSound;
 	sfxHandle_t firstExcellentSound;
 	sfxHandle_t firstHumiliationSound;
 	sfxHandle_t spraygodSound;
 	sfxHandle_t spraykillerSound;
+	sfxHandle_t padheroSound;
+	sfxHandle_t padaceSound;
 	sfxHandle_t padstarSound;
 
 	sfxHandle_t takenLeadSound;

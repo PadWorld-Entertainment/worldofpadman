@@ -1983,6 +1983,16 @@ static void CG_PlayerSprites(const centity_t *cent) {
 		return;
 	}
 
+	if (cent->currentState.eFlags & EF_AWARD_PADHERO) {
+		CG_PlayerFloatSprite( cent, cgs.media.medalPadHero, qfalse);
+		return;
+	}
+
+	if (cent->currentState.eFlags & EF_AWARD_PADACE) {
+		CG_PlayerFloatSprite(cent, cgs.media.medalPadAce, qfalse);
+		return;
+	}
+
 	if (cent->currentState.eFlags & EF_AWARD_CAP) {
 		CG_PlayerFloatSprite(cent, cgs.media.medalPadStar, qfalse);
 		return;

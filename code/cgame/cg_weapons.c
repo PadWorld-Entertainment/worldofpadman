@@ -928,7 +928,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 		// add weapon ready sound
 		cent->pe.lightningFiring = qfalse;
 		if ((cent->currentState.eFlags & EF_FIRING) && weapon->firingSound) {
-			// lightning gun and guantlet make a different sound when fire is held down
+			// lightning gun and gauntlet make a different sound when fire is held down
 			if (weaponNum == WP_PUNCHY && cent->currentState.powerups & (1 << PW_BERSERKER))
 				trap_S_AddLoopingSound(cent->currentState.number, cent->lerpOrigin, vec3_origin,
 									   cgs.media.berserkerPunchyLoop);

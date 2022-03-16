@@ -74,7 +74,7 @@ void DeathmatchScoreboardMessage(const gentity_t *ent) {
 					cl->ps.persistant[PERS_SCORE], ping, (level.time - cl->pers.enterTime) / 60000, scoreFlags,
 					g_entities[level.sortedClients[i]].s.powerups, accuracy, cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
 					cl->ps.persistant[PERS_EXCELLENT_COUNT], cl->ps.persistant[PERS_GAUNTLET_FRAG_COUNT],
-					cl->ps.persistant[PERS_DEFEND_COUNT], cl->ps.persistant[PERS_ASSIST_COUNT], perfect,
+					cl->ps.persistant[PERS_PADHERO_COUNT], cl->ps.persistant[PERS_PADACE_COUNT], perfect,
 					cl->ps.persistant[PERS_CAPTURES], (cl->ps.persistant[PERS_SPRAYAWARDS_COUNT] >> 8),
 					cl->ps.persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF,
 					(cl->sess.livesleft < 0 ? 0 : cl->sess.livesleft));
@@ -296,17 +296,17 @@ static void Cmd_Give_f(gentity_t *ent) {
 			((ent->client->ps.persistant[PERS_SPRAYAWARDS_COUNT] + 1) & 0xFF);
 		return;
 	}
-	if (Q_stricmp(name, "gauntletaward") == 0) {
+	if (Q_stricmp(name, "snackattack") == 0) {
 		ent->client->ps.persistant[PERS_GAUNTLET_FRAG_COUNT]++;
 		BerserkerCheck(ent);
 		return;
 	}
-	if (Q_stricmp(name, "defend") == 0) {
-		ent->client->ps.persistant[PERS_DEFEND_COUNT]++;
+	if (Q_stricmp(name, "padhero") == 0) {
+		ent->client->ps.persistant[PERS_PADHERO_COUNT]++;
 		return;
 	}
-	if (Q_stricmp(name, "assist") == 0) {
-		ent->client->ps.persistant[PERS_ASSIST_COUNT]++;
+	if (Q_stricmp(name, "padace") == 0) {
+		ent->client->ps.persistant[PERS_PADACE_COUNT]++;
 		return;
 	}
 

@@ -1663,7 +1663,7 @@ shootafterrspecialHI:
 
 	// start the animation even if out of ammo
 	if (pm->ps->weapon == WP_PUNCHY) {
-		// the guantlet only "fires" when it actually hits something
+		// the gauntlet only "fires" when it actually hits something
 		if (!pm->gauntletHit) {
 			pm->ps->weaponTime = 0;
 			pm->ps->weaponstate = WEAPON_READY;

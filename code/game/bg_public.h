@@ -293,9 +293,9 @@ typedef enum {
 	// player awards tracking
 	PERS_IMPRESSIVE_COUNT,	  // two railgun hits in a row
 	PERS_EXCELLENT_COUNT,	  // two successive kills in a short amount of time
-	PERS_DEFEND_COUNT,		  // defend awards
-	PERS_ASSIST_COUNT,		  // assist awards
-	PERS_GAUNTLET_FRAG_COUNT, // kills with the guantlet
+	PERS_PADHERO_COUNT,		  // padhero awards
+	PERS_PADACE_COUNT,		  // padace awards
+	PERS_GAUNTLET_FRAG_COUNT, // kills with the gauntlet
 	PERS_CAPTURES			  // captures
 
 	,
@@ -325,8 +325,8 @@ typedef enum {
 #define EF_CONNECTION 0x00002000	   // draw a connection trouble sprite
 #define EF_VOTED 0x00004000			   // already cast a vote
 #define EF_AWARD_IMPRESSIVE 0x00008000 // draw an impressive sprite
-#define EF_AWARD_DEFEND 0x00010000	   // draw a defend sprite
-#define EF_AWARD_ASSIST 0x00020000	   // draw a assist sprite
+#define EF_AWARD_PADHERO 0x00010000	   // draw a padhero sprite
+#define EF_AWARD_PADACE 0x00020000	   // draw a padace sprite
 #define EF_AWARD_DENIED 0x00040000	   // denied
 #define EF_TEAMVOTED 0x00080000		   // already cast a team vote
 
@@ -336,7 +336,7 @@ typedef enum {
 #define EF_NOLIFESLEFT 0x00800000 //
 
 #define REMOVE_AWARDFLAGS                                                                                              \
-	~(EF_AWARD_IMPRESSIVE | EF_AWARD_EXCELLENT | EF_AWARD_GAUNTLET | EF_AWARD_ASSIST | EF_AWARD_DEFEND |               \
+	~(EF_AWARD_IMPRESSIVE | EF_AWARD_EXCELLENT | EF_AWARD_GAUNTLET | EF_AWARD_PADACE | EF_AWARD_PADHERO |               \
 	  EF_AWARD_CAP | EF_AWARD_SPRAYGOD | EF_AWARD_SPRAYKILLER)
 
 // NOTE: may not have more than 16

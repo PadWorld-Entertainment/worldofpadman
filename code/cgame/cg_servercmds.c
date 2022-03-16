@@ -60,9 +60,9 @@ static void CG_ParseScores(void) {
 		cg.scores[i].accuracy = atoi(CG_Argv(i * 17 + 10));
 		cg.scores[i].impressiveCount = atoi(CG_Argv(i * 17 + 11));
 		cg.scores[i].excellentCount = atoi(CG_Argv(i * 17 + 12));
-		cg.scores[i].guantletCount = atoi(CG_Argv(i * 17 + 13));
-		cg.scores[i].defendCount = atoi(CG_Argv(i * 17 + 14));
-		cg.scores[i].assistCount = atoi(CG_Argv(i * 17 + 15));
+		cg.scores[i].gauntletCount = atoi(CG_Argv(i * 17 + 13));
+		cg.scores[i].padhero = atoi(CG_Argv(i * 17 + 14));
+		cg.scores[i].padace = atoi(CG_Argv(i * 17 + 15));
 		cg.scores[i].perfect = atoi(CG_Argv(i * 17 + 16));
 		cg.scores[i].captures = atoi(CG_Argv(i * 17 + 17));
 		cg.scores[i].spraygod = atoi(CG_Argv(i * 17 + 18)); // noch mal ändern ... oder stimmt das doch?
