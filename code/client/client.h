@@ -303,8 +303,6 @@ typedef struct {
 } serverInfo_t;
 
 typedef struct {
-	qboolean cddialog; // bring up the cd needed dialog next frame
-
 	// when the server clears the hunk, all of these must be restarted
 	qboolean rendererStarted;
 	qboolean soundStarted;

@@ -301,8 +301,7 @@ typedef enum {
 	ERR_FATAL,			  // exit the entire game with a popup window
 	ERR_DROP,			  // print to console and disconnect from game
 	ERR_SERVERDISCONNECT, // don't kill server
-	ERR_DISCONNECT,		  // client disconnected from the server
-	ERR_NEED_CD			  // pop up the need-cd dialog
+	ERR_DISCONNECT		  // client disconnected from the server
 } errorParm_t;
 
 // font rendering values used by ui and cgame

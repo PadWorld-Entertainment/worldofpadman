@@ -948,9 +948,6 @@ void CL_MapLoading(void);
 // so when they are typed in at the console, they will need to be forwarded.
 void CL_ForwardCommandToServer(const char *string);
 
-// bring up the "need a cd to play" dialog
-void CL_CDDialog(void);
-
 // dump all memory on an error
 void CL_FlushMemory(void);
 

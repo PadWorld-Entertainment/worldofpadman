@@ -158,20 +158,7 @@ static int noGameRestart = qfalse;
 
 extern void SV_BotFrame(int time);
 void CL_CheckForResend(void);
-void CL_ShowIP_f(void);
-void CL_ServerStatus_f(void);
 void CL_ServerStatusResponse(netadr_t from, msg_t *msg);
-
-/*
-===============
-CL_CDDialog
-
-Called by Com_Error when a cd is needed
-===============
-*/
-void CL_CDDialog(void) {
-	cls.cddialog = qtrue; // start it next frame
-}
 
 #ifdef USE_MUMBLE
 static void CL_UpdateMumble(void) {
@@ -1441,7 +1428,7 @@ CONSOLE COMMANDS
 CL_ForwardToServer_f
 ==================
 */
-void CL_ForwardToServer_f(void) {
+static void CL_ForwardToServer_f(void) {
 	if (clc.state != CA_ACTIVE || clc.demoplaying) {
 		Com_Printf("Not connected to a server.\n");
 		return;
@@ -1825,7 +1812,7 @@ void CL_ReferencedPK3List_f(void) {
 CL_Configstrings_f
 ==================
 */
-void CL_Configstrings_f(void) {
+static void CL_Configstrings_f(void) {
 	int i;
 	int ofs;
 
@@ -1848,7 +1835,7 @@ void CL_Configstrings_f(void) {
 CL_Clientinfo_f
 ==============
 */
-void CL_Clientinfo_f(void) {
+static void CL_Clientinfo_f(void) {
 	Com_Printf("--------- Client Information ---------\n");
 	Com_Printf("state: %i\n", clc.state);
 	Com_Printf("Server: %s\n", clc.servername);
@@ -1866,8 +1853,7 @@ CL_DownloadsComplete
 Called when all downloading has been completed
 =================
 */
-void CL_DownloadsComplete(void) {
-
+static void CL_DownloadsComplete(void) {
 #ifdef USE_CURL
 	// if we downloaded with cURL
 	if (clc.cURLUsed) {
@@ -1940,8 +1926,7 @@ Requests a file to download from the server.  Stores it in the current
 game directory.
 =================
 */
-void CL_BeginDownload(const char *localName, const char *remoteName) {
-
+static void CL_BeginDownload(const char *localName, const char *remoteName) {
 	Com_DPrintf("***** CL_BeginDownload *****\n"
 				"Localname: %s\n"
 				"Remotename: %s\n"
@@ -2167,7 +2152,7 @@ CL_MotdPacket
 
 ===================
 */
-void CL_MotdPacket(netadr_t from) {
+static void CL_MotdPacket(netadr_t from) {
 #ifdef UPDATE_SERVER_NAME
 	char *challenge;
 	const char *info;
@@ -2197,7 +2182,7 @@ void CL_MotdPacket(netadr_t from) {
 CL_InitServerInfo
 ===================
 */
-void CL_InitServerInfo(serverInfo_t *server, netadr_t *address) {
+static void CL_InitServerInfo(serverInfo_t *server, netadr_t *address) {
 	server->adr = *address;
 	server->clients = 0;
 	server->hostName[0] = '\0';
@@ -2221,7 +2206,7 @@ void CL_InitServerInfo(serverInfo_t *server, netadr_t *address) {
 CL_ServersResponsePacket
 ===================
 */
-void CL_ServersResponsePacket(const netadr_t *from, msg_t *msg, qboolean extended) {
+static void CL_ServersResponsePacket(const netadr_t *from, msg_t *msg, qboolean extended) {
 	int i, j, count, total;
 	netadr_t addresses[MAX_SERVERSPERPACKET];
 	int numservers;
@@ -2336,7 +2321,7 @@ CL_ConnectionlessPacket
 Responses to broadcasts, etc
 =================
 */
-void CL_ConnectionlessPacket(netadr_t from, msg_t *msg) {
+static void CL_ConnectionlessPacket(netadr_t from, msg_t *msg) {
 	const char *s;
 	const char *c;
 	int challenge = 0;
@@ -2555,7 +2540,7 @@ CL_CheckTimeout
 
 ==================
 */
-void CL_CheckTimeout(void) {
+static void CL_CheckTimeout(void) {
 	//
 	// check timeout
 	//
@@ -2595,7 +2580,7 @@ CL_CheckUserinfo
 
 ==================
 */
-void CL_CheckUserinfo(void) {
+static void CL_CheckUserinfo(void) {
 	// don't add reliable commands when not yet connected
 	if (clc.state < CA_CONNECTED)
 		return;
@@ -2618,7 +2603,6 @@ CL_Frame
 ==================
 */
 void CL_Frame(int msec) {
-
 	if (!com_cl_running->integer) {
 		return;
 	}
@@ -2642,11 +2626,7 @@ void CL_Frame(int msec) {
 	}
 #endif
 
-	if (cls.cddialog) {
-		// bring up the cd error dialog if needed
-		cls.cddialog = qfalse;
-		VM_Call(uivm, UI_SET_ACTIVE_MENU, UIMENU_NEED_CD);
-	} else if (clc.state == CA_DISCONNECTED && !(Key_GetCatcher() & KEYCATCH_UI) && !com_sv_running->integer && uivm) {
+	if (clc.state == CA_DISCONNECTED && !(Key_GetCatcher() & KEYCATCH_UI) && !com_sv_running->integer && uivm) {
 		// if disconnected, bring up the menu
 		S_StopAllSounds();
 		VM_Call(uivm, UI_SET_ACTIVE_MENU, UIMENU_MAIN);
@@ -2800,7 +2780,7 @@ void CL_ShutdownRef(void) {
 CL_InitRenderer
 ============
 */
-void CL_InitRenderer(void) {
+static void CL_InitRenderer(void) {
 	// this sets up the renderer and calls R_Init
 	re.BeginRegistration(&cls.glconfig);
 
@@ -2863,7 +2843,7 @@ void CL_StartHunkUsers(qboolean rendererOnly) {
 CL_RefMalloc
 ============
 */
-void *CL_RefMalloc(int size) {
+static void *CL_RefMalloc(int size) {
 	return Z_TagMalloc(size, TAG_RENDERER);
 }
 
@@ -2984,7 +2964,7 @@ void CL_InitRef(void) {
 
 //===========================================================================================
 
-void CL_SetModel_f(void) {
+static void CL_SetModel_f(void) {
 	const char *arg;
 	char name[256];
 
@@ -3008,7 +2988,7 @@ video
 video [filename]
 ===============
 */
-void CL_Video_f(void) {
+static void CL_Video_f(void) {
 	char filename[MAX_OSPATH];
 	int i, last;
 
@@ -3055,8 +3035,98 @@ void CL_Video_f(void) {
 CL_StopVideo_f
 ===============
 */
-void CL_StopVideo_f(void) {
+static void CL_StopVideo_f(void) {
 	CL_CloseAVI();
+}
+
+/*
+===================
+CL_GetServerStatus
+===================
+*/
+static serverStatus_t *CL_GetServerStatus(netadr_t from) {
+	int i, oldest, oldestTime;
+
+	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
+		if (NET_CompareAdr(from, cl_serverStatusList[i].address)) {
+			return &cl_serverStatusList[i];
+		}
+	}
+	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
+		if (cl_serverStatusList[i].retrieved) {
+			return &cl_serverStatusList[i];
+		}
+	}
+	oldest = -1;
+	oldestTime = 0;
+	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
+		if (oldest == -1 || cl_serverStatusList[i].startTime < oldestTime) {
+			oldest = i;
+			oldestTime = cl_serverStatusList[i].startTime;
+		}
+	}
+	return &cl_serverStatusList[oldest];
+}
+/*
+==================
+CL_ServerStatus_f
+==================
+*/
+static void CL_ServerStatus_f(void) {
+	netadr_t to, *toptr = NULL;
+	const char *server;
+	serverStatus_t *serverStatus;
+	int argc;
+	netadrtype_t family = NA_UNSPEC;
+
+	argc = Cmd_Argc();
+
+	if (argc != 2 && argc != 3) {
+		if (clc.state != CA_ACTIVE || clc.demoplaying) {
+			Com_Printf("Not connected to a server.\n");
+			Com_Printf("usage: serverstatus [-4|-6] server\n");
+			return;
+		}
+
+		toptr = &clc.serverAddress;
+	}
+
+	if (!toptr) {
+		Com_Memset(&to, 0, sizeof(netadr_t));
+
+		if (argc == 2)
+			server = Cmd_Argv(1);
+		else {
+			if (!strcmp(Cmd_Argv(1), "-4"))
+				family = NA_IP;
+			else if (!strcmp(Cmd_Argv(1), "-6"))
+				family = NA_IP6;
+			else
+				Com_Printf("warning: only -4 or -6 as address type understood.\n");
+
+			server = Cmd_Argv(2);
+		}
+
+		toptr = &to;
+		if (!NET_StringToAdr(server, toptr, family))
+			return;
+	}
+
+	NET_OutOfBandPrint(NS_CLIENT, *toptr, "getstatus");
+
+	serverStatus = CL_GetServerStatus(*toptr);
+	serverStatus->address = *toptr;
+	serverStatus->print = qtrue;
+	serverStatus->pending = qtrue;
+}
+
+/*
+==================
+CL_ShowIP_f
+==================
+*/
+static void CL_ShowIP_f(void) {
+	Sys_ShowIP();
 }
 
 /*
@@ -3096,7 +3166,7 @@ static void CL_GenerateQKey(void) {
 	}
 }
 
-void CL_Sayto_f(void) {
+static void CL_Sayto_f(void) {
 	const char *rawname;
 	char name[MAX_NAME_LENGTH];
 	char cleanName[MAX_NAME_LENGTH];
@@ -3565,35 +3635,6 @@ void CL_ServerInfoPacket(netadr_t from, msg_t *msg) {
 		}
 		Com_Printf("%s: %s", NET_AdrToStringwPort(from), info);
 	}
-}
-
-/*
-===================
-CL_GetServerStatus
-===================
-*/
-serverStatus_t *CL_GetServerStatus(netadr_t from) {
-	int i, oldest, oldestTime;
-
-	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
-		if (NET_CompareAdr(from, cl_serverStatusList[i].address)) {
-			return &cl_serverStatusList[i];
-		}
-	}
-	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
-		if (cl_serverStatusList[i].retrieved) {
-			return &cl_serverStatusList[i];
-		}
-	}
-	oldest = -1;
-	oldestTime = 0;
-	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
-		if (oldest == -1 || cl_serverStatusList[i].startTime < oldestTime) {
-			oldest = i;
-			oldestTime = cl_serverStatusList[i].startTime;
-		}
-	}
-	return &cl_serverStatusList[oldest];
 }
 
 /*
@@ -4171,66 +4212,4 @@ qboolean CL_UpdateVisiblePings_f(int source) {
 	}
 
 	return status;
-}
-
-/*
-==================
-CL_ServerStatus_f
-==================
-*/
-void CL_ServerStatus_f(void) {
-	netadr_t to, *toptr = NULL;
-	const char *server;
-	serverStatus_t *serverStatus;
-	int argc;
-	netadrtype_t family = NA_UNSPEC;
-
-	argc = Cmd_Argc();
-
-	if (argc != 2 && argc != 3) {
-		if (clc.state != CA_ACTIVE || clc.demoplaying) {
-			Com_Printf("Not connected to a server.\n");
-			Com_Printf("usage: serverstatus [-4|-6] server\n");
-			return;
-		}
-
-		toptr = &clc.serverAddress;
-	}
-
-	if (!toptr) {
-		Com_Memset(&to, 0, sizeof(netadr_t));
-
-		if (argc == 2)
-			server = Cmd_Argv(1);
-		else {
-			if (!strcmp(Cmd_Argv(1), "-4"))
-				family = NA_IP;
-			else if (!strcmp(Cmd_Argv(1), "-6"))
-				family = NA_IP6;
-			else
-				Com_Printf("warning: only -4 or -6 as address type understood.\n");
-
-			server = Cmd_Argv(2);
-		}
-
-		toptr = &to;
-		if (!NET_StringToAdr(server, toptr, family))
-			return;
-	}
-
-	NET_OutOfBandPrint(NS_CLIENT, *toptr, "getstatus");
-
-	serverStatus = CL_GetServerStatus(*toptr);
-	serverStatus->address = *toptr;
-	serverStatus->print = qtrue;
-	serverStatus->pending = qtrue;
-}
-
-/*
-==================
-CL_ShowIP_f
-==================
-*/
-void CL_ShowIP_f(void) {
-	Sys_ShowIP();
 }
