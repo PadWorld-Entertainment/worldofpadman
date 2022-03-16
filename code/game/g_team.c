@@ -256,7 +256,7 @@ void Team_CheckDroppedItem(gentity_t *dropped) {
 Team_ForceGesture
 ================
 */
-void Team_ForceGesture(int team) {
+static void Team_ForceGesture(int team) {
 	int i;
 	gentity_t *ent;
 
@@ -482,7 +482,7 @@ void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker) {
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
 }
 
-gentity_t *Team_ResetFlag(int team) {
+static gentity_t *Team_ResetFlag(int team) {
 	char *c;
 	gentity_t *ent, *rent = NULL;
 
@@ -515,14 +515,14 @@ gentity_t *Team_ResetFlag(int team) {
 	return rent;
 }
 
-void Team_ResetFlags(void) {
+static void Team_ResetFlags(void) {
 	if (g_gametype.integer == GT_CTF) {
 		Team_ResetFlag(TEAM_RED);
 		Team_ResetFlag(TEAM_BLUE);
 	}
 }
 
-void Team_ReturnFlagSound(gentity_t *ent, int team) {
+static void Team_ReturnFlagSound(gentity_t *ent, int team) {
 	gentity_t *te;
 
 	if (ent == NULL) {
@@ -539,7 +539,7 @@ void Team_ReturnFlagSound(gentity_t *ent, int team) {
 	te->r.svFlags |= SVF_BROADCAST;
 }
 
-void Team_TakeFlagSound(gentity_t *ent, int team) {
+static void Team_TakeFlagSound(gentity_t *ent, int team) {
 	gentity_t *te;
 
 	if (ent == NULL) {
@@ -576,7 +576,7 @@ void Team_TakeFlagSound(gentity_t *ent, int team) {
 	te->r.svFlags |= SVF_BROADCAST;
 }
 
-void Team_CaptureFlagSound(gentity_t *ent, int team) {
+static void Team_CaptureFlagSound(gentity_t *ent, int team) {
 	gentity_t *te;
 
 	if (ent == NULL) {
@@ -725,7 +725,7 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 	return 0; // Do not respawn this automatically
 }
 
-int Team_TouchEnemyFlag(gentity_t *ent, gentity_t *other, int team) {
+static int Team_TouchEnemyFlag(gentity_t *ent, gentity_t *other, int team) {
 	gclient_t *cl = other->client;
 
 	PrintMsg(NULL, "%s" S_COLOR_WHITE " got the %s' lolly!\n", other->client->pers.netname, TeamName(team));
@@ -769,7 +769,7 @@ Team_GetLocation
 Report a location for the player. Uses placed nearby target_location entities
 ============
 */
-gentity_t *Team_GetLocation(gentity_t *ent) {
+static gentity_t *Team_GetLocation(gentity_t *ent) {
 	gentity_t *eloc, *best;
 	float bestlen, len;
 	vec3_t origin;
