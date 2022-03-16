@@ -64,7 +64,14 @@ qboolean CheckGauntletAttack(gentity_t *ent) {
 		return qfalse;
 	}
 
+	if (ent->client->noclip) {
+		return qfalse;
+	}
+
 	traceEnt = &g_entities[tr.entityNum];
+	if (traceEnt->client->noclip) {
+		return qfalse;
+	}
 
 	// send blood impact
 	if (traceEnt->takedamage && traceEnt->client) {
