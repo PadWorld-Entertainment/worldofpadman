@@ -6,17 +6,17 @@
 	- Freeze Tag (ft) game mode and related assets
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
-	- Spraylogo for mod.io
+	- Spray logo for mod.io, quake3 (reintroduced)
 	- Lighting option to the Graphics menu to switch between Vertex and Lightmap
 	- Borderless Window Mode option to the Graphics menu
 	- Option to enable/disable Doppler Effect to the Sound menu
-	- Option to enable/disable Ingame Videos to Display menu to be able to switch off video shaders in maps
-	- Option to enable/disable Team Chats Only to Chat menu to be able hide chats of non-team players in team game modes
-	- Option to enable/disable playing the Chat Beep to Chat menu to be able switch off the squeeze toy sound for chat notifications
-	- Option to enable/disable the Taunt Gesture of other players and the sound that comes with it to Chat menu
+	- Option to enable/disable Ingame Videos (video shaders in maps) to Display menu
+	- Option to enable/disable Team Chats Only to Chat menu to hide chats of non-team players, works only in team game modes
+	- Option to enable/disable playing the Chat Beep to Chat menu to switch on/off the squeeze toy sound of chat notifications
+	- Option to enable/disable the Display Gesture of other players and the sound that comes with it to Chat menu
 	- Option to enable/disable Bots chatting or to make them chatting more often to Chat menu
 	- Option to adjust the Notification Space to 4, 6 or 8 lines in Chat menu via new cvar `cg_chatheight`, default is 4
-	- Option to enable/disable player chat icon separately from notification time
+	- Option to enable/disable player chat icon separately from notification time in the Chat menu
 	- Option to enable/disable the Lag-O-Meter to the HUD menu
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
@@ -26,6 +26,7 @@
 	- Frost breath feature from Q3 Team Arena to simulate cold environments. Creates a small cloud of condensed breath in front of players head. Enter `enableBreath 1` to a map's worldspawn to enable this feature for the whole map.
 	- PadKnight bot to the game and shown in the Select Bots menu
 	- Possibility to set Antialiasing to 8x in Graphics menu
+	- Missing default keyboard mapping in Controls menu and synced with default.cfg 
 - CHANGED
 	- Network protocol version number to 72 to avoid problems due to incompatibilities with previous WoP versions
 	- Home path to `worldofpadman` for all operating systems to unify them
@@ -43,12 +44,17 @@
 	- Chat option in Game Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately
 	- Notification Time option in Chat menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
 	- Player Settings menu to list first all PadCharacters followed by custom player models
+	- JPEG quality set to 100% for creating screenshots and avi videos
+	- Headline of Team ingame menu changed to Start like listed in ingame main menu
+	- Headline of Voice ingame menu changed to Voice Chat like listed in ingame main menu
+	- Default keyboard mapping in a few spots: `q`/`mouse3` for gesture (was undefined); `e`/`enter` for use item; `f`/`backspace` for drop item (cartridge/lolly); `p` for 3rd person view (was `u`); `y`/`mouse2` for scope/zoom (was `mouse3`); `y`/`z` for chat team (was undefined); `u` chat target (was undefined); `i` for chat attacker (was undefined)
 - FIXED
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use ^ key to enter color tags
 	- Anisotropy and Antialiasing options in Graphics menu are displayed as 4x after video restart, although 2x was selected before
 	- Antialiasing option in Graphics menu is always displayed as Off after WoP restart, although 2x or more was selected before
-	- Wrong spray logo name allocation for Spooky and PadCho	- 
+	- Wrong spray logo name allocation for Spooky and PadCho
+	- Fail to load OpenAL library on Windows 64bit systems
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
 	- ^ key to open/close the console
