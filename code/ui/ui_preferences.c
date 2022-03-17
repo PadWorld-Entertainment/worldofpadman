@@ -813,14 +813,14 @@ static void Preferences_MenuInit(void) {
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.taunt.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.taunt.generic.name = "Taunt Gesture:";
+	s_preferences.taunt.generic.name = "Display Gesture:";
 	s_preferences.taunt.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.taunt.generic.callback = Preferences_Event;
 	s_preferences.taunt.generic.id = ID_TAUNT;
 	s_preferences.taunt.generic.x = XPOSITION;
 	s_preferences.taunt.generic.y = y;
 	s_preferences.taunt.generic.toolTip = 
-		"Disable this to switch off the taunt gesture of other players.";
+		"Disable this to not display gestures of other players.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.botchat.generic.type = MTYPE_SPINCONTROL;
