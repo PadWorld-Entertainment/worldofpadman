@@ -1983,7 +1983,7 @@ static cvar_t *s_alCapture;
 
 #ifndef ALDRIVER_DEFAULT
 #if defined(_WIN64)
-#define ALDRIVER_DEFAULT "OpenAL64.dll"
+#define ALDRIVER_DEFAULT "OpenAL32.dll"
 #elif defined(_WIN32)
 #define ALDRIVER_DEFAULT "OpenAL32.dll"
 #elif defined(__APPLE__)
