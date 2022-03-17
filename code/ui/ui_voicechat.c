@@ -143,7 +143,7 @@ static sfxHandle_t UI_VoiceChatMenu_Key(int key) {
 
 static void UI_VoiceChatMenu_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(320, 110, "VOICE", UI_CENTER | UI_SMALLFONT, color_black);
+	UI_DrawProportionalString(320, 110, "VOICE CHAT", UI_CENTER | UI_SMALLFONT, color_black);
 
 	// standard menu drawing
 	Menu_Draw(&voiceChatMenuInfo.menu);

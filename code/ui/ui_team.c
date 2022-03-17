@@ -117,7 +117,7 @@ static sfxHandle_t TeamMain_Key(int key) {
 
 static void TeamMain_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(320, 110, "TEAM", (UI_CENTER | UI_SMALLFONT), color_black);
+	UI_DrawProportionalString(320, 110, "START", (UI_CENTER | UI_SMALLFONT), color_black);
 
 	Menu_Draw(&s_teammain.menu);
 }
