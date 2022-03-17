@@ -323,19 +323,6 @@ waterBubble
 	}
 }
 
-// normally we use "gfx/2d/WoPascii" ...
-gfx/2d/bigchars
-{
-	nopicmip
-	nomipmaps
-	{
-		map gfx/2d/bigchars
-		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
-		rgbgen vertex
-	}
-}
-
-
 // brauch ich "console"(aus gfx.shader) noch? ... ich find es nirgends, aber es wird geladen O_o
 // neuste gfx.shader -> pak5.pk3
 
@@ -360,4 +347,3 @@ bbox_nocull {
 		rgbGen vertex
 	}
 }
-
