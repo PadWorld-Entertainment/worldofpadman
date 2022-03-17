@@ -59,7 +59,7 @@ name		Padilla
 funname		"^3P^2a^3d^2ill^3a"
 model		padlilly/padilla
 aifile		bots/padlilly_c.c
-spraylogo	29_greensun
+spraylogo	39_greensun
 }
 
 
@@ -241,7 +241,7 @@ name		BeachPad
 model		beachpad
 funname  	"^2Beach^5Pad"
 aifile		bots/padman_c.c
-spraylogo	41_water
+spraylogo	42_water
 }
 
 
@@ -254,7 +254,7 @@ name		PadPunk
 model		padpunk
 funname  	"^3Pad^5Punk"
 aifile	 	bots/padman_c.c
-spraylogo	20_anarchie
+spraylogo	36_anarchie
 }
 
 

@@ -177,6 +177,17 @@ spraylogos/16_moon
 	}
 }
 
+spraylogos/17_niceguy
+{
+	nopicmip
+	{
+		map spraylogos/17_niceguy
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
 spraylogos/18_padbunny
 {
 	nopicmip
@@ -199,11 +210,11 @@ spraylogos/19_ankh
 	}
 }
 
-spraylogos/20_anarchie
+spraylogos/20_quake3
 {
 	nopicmip
 	{
-		map spraylogos/20_anarchie
+		map spraylogos/20_quake3
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
@@ -298,11 +309,11 @@ spraylogos/28_moddb
 	}
 }
 
-spraylogos/29_greensun
+spraylogos/29_modio
 {
 	nopicmip
 	{
-		map spraylogos/29_greensun
+		map spraylogos/29_modio
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
@@ -375,6 +386,17 @@ spraylogos/35_666
 	}
 }
 
+spraylogos/36_anarchie
+{
+	nopicmip
+	{
+		map spraylogos/36_anarchie
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
 spraylogos/37_devilskull
 {
 	nopicmip
@@ -397,11 +419,11 @@ spraylogos/38_target
 	}
 }
 
-spraylogos/39_modio
+spraylogos/39_greensun
 {
 	nopicmip
 	{
-		map spraylogos/39_modio
+		map spraylogos/39_greensun
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
@@ -419,22 +441,22 @@ spraylogos/40_dog
 	}
 }
 
-spraylogos/41_water
+spraylogos/41_peace
 {
 	nopicmip
 	{
-		map spraylogos/41_water
+		map spraylogos/41_peace
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
 	}
 }
 
-spraylogos/42_peace
+spraylogos/42_water
 {
 	nopicmip
 	{
-		map spraylogos/42_peace
+		map spraylogos/42_water
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
