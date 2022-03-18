@@ -60,13 +60,13 @@ static void CG_ParseScores(void) {
 		cg.scores[i].accuracy = atoi(CG_Argv(i * 17 + 10));
 		cg.scores[i].impressiveCount = atoi(CG_Argv(i * 17 + 11));
 		cg.scores[i].excellentCount = atoi(CG_Argv(i * 17 + 12));
-		cg.scores[i].gauntletCount = atoi(CG_Argv(i * 17 + 13));
-		cg.scores[i].padhero = atoi(CG_Argv(i * 17 + 14));
-		cg.scores[i].padace = atoi(CG_Argv(i * 17 + 15));
+		cg.scores[i].snackattackCount = atoi(CG_Argv(i * 17 + 13));
+		cg.scores[i].padheroCount = atoi(CG_Argv(i * 17 + 14));
+		cg.scores[i].padaceCount = atoi(CG_Argv(i * 17 + 15));
 		cg.scores[i].perfect = atoi(CG_Argv(i * 17 + 16));
 		cg.scores[i].captures = atoi(CG_Argv(i * 17 + 17));
-		cg.scores[i].spraygod = atoi(CG_Argv(i * 17 + 18)); // noch mal ändern ... oder stimmt das doch?
-		cg.scores[i].spraykiller = atoi(CG_Argv(i * 17 + 19));
+		cg.scores[i].spraygodCount = atoi(CG_Argv(i * 17 + 18));
+		cg.scores[i].spraykillerCount = atoi(CG_Argv(i * 17 + 19));
 		cg.scores[i].livesleft = atoi(CG_Argv(i * 17 + 20));
 
 		if (cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS) {
