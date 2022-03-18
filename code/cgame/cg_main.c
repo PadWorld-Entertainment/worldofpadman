@@ -1083,7 +1083,7 @@ static void CG_RegisterGraphics(void) {
 	}
 
 	cgs.media.medalExcellent = trap_R_RegisterShaderNoMip("icons/medal_excellent");
-	cgs.media.medalGauntlet = trap_R_RegisterShaderNoMip("icons/medal_snackattack");
+	cgs.media.medalSnackAttack = trap_R_RegisterShaderNoMip("icons/medal_snackattack");
 	cgs.media.medalSpraygod = trap_R_RegisterShaderNoMip("icons/medal_spraygod");
 	cgs.media.medalSpraykiller = trap_R_RegisterShaderNoMip("icons/medal_spraykiller");
 	cgs.media.medalPadHero = trap_R_RegisterShaderNoMip("icons/medal_padhero");

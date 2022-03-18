@@ -1966,8 +1966,8 @@ static void CG_PlayerSprites(const centity_t *cent) {
 		return;
 	}
 
-	if (cent->currentState.eFlags & EF_AWARD_GAUNTLET) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalGauntlet, qfalse);
+	if (cent->currentState.eFlags & EF_AWARD_SNACKATTACK) {
+		CG_PlayerFloatSprite(cent, cgs.media.medalSnackAttack, qfalse);
 		return;
 	}
 

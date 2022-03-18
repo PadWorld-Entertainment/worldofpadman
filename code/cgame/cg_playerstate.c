@@ -309,9 +309,9 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 		reward = qtrue;
 		// Com_Printf("PadStar award\n");
 	}
-	if (ps->persistant[PERS_GAUNTLET_FRAG_COUNT] != ops->persistant[PERS_GAUNTLET_FRAG_COUNT]) {
+	if (ps->persistant[PERS_SNACKATTACK_COUNT] != ops->persistant[PERS_SNACKATTACK_COUNT]) {
 		sfx = cgs.media.humiliationSound;
-		CG_PushReward(sfx, cgs.media.medalGauntlet, ps->persistant[PERS_GAUNTLET_FRAG_COUNT]);
+		CG_PushReward(sfx, cgs.media.medalSnackAttack, ps->persistant[PERS_SNACKATTACK_COUNT]);
 		reward = qtrue;
 		// Com_Printf("SnackAttack award\n");
 	}

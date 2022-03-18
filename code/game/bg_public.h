@@ -295,7 +295,7 @@ typedef enum {
 	PERS_EXCELLENT_COUNT,	  // two successive kills in a short amount of time
 	PERS_PADHERO_COUNT,		  // padhero awards
 	PERS_PADACE_COUNT,		  // padace awards
-	PERS_GAUNTLET_FRAG_COUNT, // kills with the gauntlet
+	PERS_SNACKATTACK_COUNT,   // snackattack awards
 	PERS_CAPTURES			  // captures
 
 	,
@@ -313,7 +313,7 @@ typedef enum {
 #define EF_PLAYER_EVENT 0x00000010
 #define EF_BOUNCE 0x00000010		 // for missiles
 #define EF_BOUNCE_HALF 0x00000020	 // for missiles
-#define EF_AWARD_GAUNTLET 0x00000040 // draw a gauntlet sprite
+#define EF_AWARD_SNACKATTACK 0x00000040 // draw a snackattack sprite
 #define EF_NODRAW 0x00000080		 // may have an event, but no model (unspawned items)
 #define EF_FIRING 0x00000100		 // for lightning gun
 
@@ -336,7 +336,7 @@ typedef enum {
 #define EF_NOLIFESLEFT 0x00800000 //
 
 #define REMOVE_AWARDFLAGS                                                                                              \
-	~(EF_AWARD_IMPRESSIVE | EF_AWARD_EXCELLENT | EF_AWARD_GAUNTLET | EF_AWARD_PADACE | EF_AWARD_PADHERO |               \
+	~(EF_AWARD_IMPRESSIVE | EF_AWARD_EXCELLENT | EF_AWARD_SNACKATTACK | EF_AWARD_PADACE | EF_AWARD_PADHERO |               \
 	  EF_AWARD_CAP | EF_AWARD_SPRAYGOD | EF_AWARD_SPRAYKILLER)
 
 // NOTE: may not have more than 16

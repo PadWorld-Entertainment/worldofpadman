@@ -33,7 +33,7 @@ void BerserkerCheck(gentity_t *ent) {
 	if (!ent->client)
 		return;
 
-	if (!(ent->client->ps.persistant[PERS_GAUNTLET_FRAG_COUNT] % 5)) {
+	if (!(ent->client->ps.persistant[PERS_SNACKATTACK_COUNT] % 5)) {
 		const gitem_t *it;
 		gentity_t *it_ent;
 		trace_t trace;
@@ -445,12 +445,12 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 			if (meansOfDeath == MOD_PUNCHY) {
 				// play humiliation on player
 				if (!attacker->client->ps.powerups[PW_BERSERKER]) {
-					attacker->client->ps.persistant[PERS_GAUNTLET_FRAG_COUNT]++;
+					attacker->client->ps.persistant[PERS_SNACKATTACK_COUNT]++;
 					BerserkerCheck(attacker);
 				}
 
 				// add the sprite over the player's head
-				SetAward(attacker->client, AWARD_GAUNTLET);
+				SetAward(attacker->client, AWARD_SNACKATTACK);
 
 				// also play humiliation on target
 				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_GAUNTLETREWARD;

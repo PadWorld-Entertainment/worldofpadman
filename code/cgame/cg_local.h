@@ -975,7 +975,7 @@ typedef struct {
 
 	// medals shown during gameplay
 	qhandle_t medalExcellent;
-	qhandle_t medalGauntlet;
+	qhandle_t medalSnackAttack;
 	qhandle_t medalSpraygod;
 	qhandle_t medalSpraykiller;
 	qhandle_t medalPadHero;

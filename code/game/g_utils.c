@@ -702,7 +702,7 @@ static const char *AwardName(award_t award) {
 	case AWARD_EXCELLENT:
 		name = "excellent";
 		break;
-	case AWARD_GAUNTLET:
+	case AWARD_SNACKATTACK:
 		name = "snackattack";
 		break;
 	case AWARD_CAP:
