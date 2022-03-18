@@ -96,15 +96,14 @@ typedef struct {
 
 static startserver_t s_startserver;
 
-// NOTE: The different order is intentional, thus the remapping
-static const char *gametype_items[] = {GAMETYPE_NAME(GT_SPRAYFFA), GAMETYPE_NAME(GT_SPRAY),		GAMETYPE_NAME(GT_CTF),
-									   GAMETYPE_NAME(GT_BALLOON),  GAMETYPE_NAME(GT_LPS),		GAMETYPE_NAME(GT_FFA),
-									   GAMETYPE_NAME(GT_TEAM),	   GAMETYPE_NAME(GT_FREEZETAG), NULL};
+static const char *gametype_items[] = {GAMETYPE_NAME(GT_FFA), GAMETYPE_NAME(GT_TEAM), GAMETYPE_NAME(GT_SPRAYFFA),
+										GAMETYPE_NAME(GT_SPRAY), GAMETYPE_NAME(GT_CTF), GAMETYPE_NAME(GT_BALLOON),
+										GAMETYPE_NAME(GT_LPS), GAMETYPE_NAME(GT_FREEZETAG), NULL};
 
-static int gametype_remap[] = {GT_SPRAYFFA, GT_SPRAY, GT_CTF, GT_BALLOON, GT_LPS, GT_FFA, GT_TEAM, GT_FREEZETAG};
+static int gametype_remap[] = {GT_FFA, GT_TEAM, GT_SPRAYFFA, GT_SPRAY, GT_CTF, GT_BALLOON, GT_LPS, GT_FREEZETAG};
 // NOTE: Maps g_gametype to gametype_items. Make sure these are defined for all GT_MAX_GAME_TYPE-1 gametypes
 //       and remap to something reasonable for gametypes that do not have an entry in gametype_items.
-static int gametype_remap2[] = {5, 5, 5, 0, 4, 6, 2, 1, 3, 3};
+static int gametype_remap2[] = {0, 0, 0, 2, 6, 1, 7, 4, 3, 5};
 static const char *teamstrs[] = {"free", "Red", "Blue", "spectator", 0};
 
 // static void UI_ServerOptionsMenu( qboolean multiplayer );
