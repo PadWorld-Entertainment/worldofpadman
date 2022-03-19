@@ -676,13 +676,14 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 
 	// Increase the team's score
 	AddTeamScore(ent->s.pos.trBase, other->client->sess.sessionTeam, SCORE_CAPTURE, SCORE_BONUS_CAPTURE_S);
-	//	Team_ForceGesture(other->client->sess.sessionTeam);
+	//	Team_ForceGesture(other->client->sess.sessionTeam) -->	Why???
 
 	other->client->pers.teamState.captures++;
 	// add the sprite over the player's head
 	SetAward(other->client, AWARD_CAP);
 
 	other->client->ps.persistant[PERS_CAPTURES]++;
+// Compared to vQ3 something is missing here --> Why???
 
 	// other gets another 10 frag bonus
 	AddScore(other, ent->r.currentOrigin, CTF_CAPTURE_BONUS, SCORE_BONUS_CAPTURE_S);
@@ -708,6 +709,7 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 				player->client->ps.persistant[PERS_PADACE_COUNT]++;
 				// add the sprite over the player's head
 				SetAward(player->client, AWARD_PADACE);
+// Compared to vQ3 something is missing here --> Why???
 			}
 			if (player->client->pers.teamState.lastfraggedcarrier + CTF_FRAG_CARRIER_ASSIST_TIMEOUT >
 					   level.time) {
@@ -717,10 +719,13 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 				player->client->ps.persistant[PERS_PADACE_COUNT]++;
 				// add the sprite over the player's head
 				SetAward(player->client, AWARD_PADACE);
+// Compared to vQ3 something is missing here --> Why???
 			}
 		}
 	}
 	Team_ResetFlags();
+
+// Compared to vQ3 something is missing here --> Why???
 
 	return 0; // Do not respawn this automatically
 }
