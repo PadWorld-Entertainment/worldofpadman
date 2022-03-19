@@ -1082,13 +1082,13 @@ static void CG_RegisterGraphics(void) {
 		cgs.media.teleEffectFPRedShader = trap_R_RegisterShader("teleEffectRedFP");
 	}
 
-	cgs.media.medalExcellent = trap_R_RegisterShaderNoMip("icons/medal_excellent");
-	cgs.media.medalSnackAttack = trap_R_RegisterShaderNoMip("icons/medal_snackattack");
-	cgs.media.medalSpraygod = trap_R_RegisterShaderNoMip("icons/medal_spraygod");
-	cgs.media.medalSpraykiller = trap_R_RegisterShaderNoMip("icons/medal_spraykiller");
-	cgs.media.medalPadHero = trap_R_RegisterShaderNoMip("icons/medal_padhero");
-	cgs.media.medalPadAce = trap_R_RegisterShaderNoMip("icons/medal_padace");
-	cgs.media.medalPadStar = trap_R_RegisterShaderNoMip("icons/medal_padstar");
+	cgs.media.medalExcellent = trap_R_RegisterShaderNoMip("medal_excellent");
+	cgs.media.medalSnackAttack = trap_R_RegisterShaderNoMip("medal_snackattack");
+	cgs.media.medalSpraygod = trap_R_RegisterShaderNoMip("medal_spraygod");
+	cgs.media.medalSpraykiller = trap_R_RegisterShaderNoMip("medal_spraykiller");
+	cgs.media.medalPadHero = trap_R_RegisterShaderNoMip("medal_padhero");
+	cgs.media.medalPadAce = trap_R_RegisterShaderNoMip("medal_padace");
+	cgs.media.medalPadStar = trap_R_RegisterShaderNoMip("medal_padstar");
 
 	memset(cg_items, 0, sizeof(cg_items));
 	memset(cg_weapons, 0, sizeof(cg_weapons));
