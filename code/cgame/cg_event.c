@@ -157,11 +157,11 @@ static void CG_Obituary(entityState_t *ent) {
 		switch (mod) {
 		case MOD_BALLOONY_SPLASH:
 			if (gender == GENDER_FEMALE)
-				message = "tripped on her own Waterbomb";
+				message = "tripped on her own water bomb";
 			else if (gender == GENDER_NEUTER)
-				message = "tripped on its own Waterbomb";
+				message = "tripped on its own water bomb";
 			else
-				message = "tripped on his own Waterbomb";
+				message = "tripped on his own water bomb";
 			break;
 		case MOD_BETTY_SPLASH:
 			if (gender == GENDER_FEMALE)
@@ -261,11 +261,11 @@ static void CG_Obituary(entityState_t *ent) {
 			break;
 		case MOD_BALLOONY:
 			message = "was flattened by";
-			message2 = "'s Water Bomb";
+			message2 = "'s water bomb";
 			break;
 		case MOD_BALLOONY_SPLASH:
 			message = "was drowned by";
-			message2 = "'s Water Bomb";
+			message2 = "'s water bomb";
 			break;
 		case MOD_BETTY:
 			message = "was fried from";
@@ -289,7 +289,7 @@ static void CG_Obituary(entityState_t *ent) {
 			break;
 		case MOD_IMPERIUS:
 		case MOD_IMPERIUS_SPLASH:
-			message = "couldnt survive the impact from";
+			message = "couldn't survive the impact from";
 			message2 = "'s Imperius";
 			break;
 		case MOD_KILLERDUCKS:
@@ -306,7 +306,7 @@ static void CG_Obituary(entityState_t *ent) {
 			break;
 		case MOD_BOOMIES:
 			message = "tried to look at";
-			message2 = "'s Boomies too closely";
+			message2 = "'s Boomie too closely";
 			break;
 		case MOD_INJECTOR:
 			message = "was pricked by";
