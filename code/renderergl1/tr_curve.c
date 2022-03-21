@@ -174,7 +174,7 @@ static void MakeMeshNormals(int width, int height, drawVert_t ctrl[MAX_GRID_SIZE
 						break; // edge of patch
 					}
 					VectorSubtract(ctrl[y][x].xyz, base, temp);
-					if (VectorNormalize2(temp, temp) == 0) {
+					if (VectorNormalize(temp) < 0.001f) {
 						continue; // degenerate edge, get more dist
 					} else {
 						good[k] = qtrue;
@@ -190,7 +190,7 @@ static void MakeMeshNormals(int width, int height, drawVert_t ctrl[MAX_GRID_SIZE
 					continue; // didn't get two points
 				}
 				CrossProduct(around[(k + 1) & 7], around[k], normal);
-				if (VectorNormalize2(normal, normal) == 0) {
+				if (VectorNormalize(temp) < 0.001f) {
 					continue;
 				}
 				VectorAdd(normal, sum, sum);
