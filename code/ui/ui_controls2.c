@@ -269,7 +269,7 @@ static bind_t g_bindings[] = {
 	{"+lookdown", "Look Down", ID_LOOKDOWN, ANIM_LOOKDOWN, K_DEL, -1, -1, -1},
 	{"+mlook", "Mouse Look", ID_MOUSELOOK, ANIM_IDLE, '/', -1, -1, -1},
 	{"centerview", "Center View", ID_CENTERVIEW, ANIM_IDLE, K_END, -1, -1, -1},
-	{"toggle cg_thirdPerson", "3rd Person View", ID_3RDPERSON, ANIM_IDLE, 'p', -1, -1, -1},
+	{"toggle cg_thirdPerson", "3rd Person View", ID_3RDPERSON, ANIM_IDLE, K_HOME, K_KP_5, -1, -1},
 
 	{"+attack", "Attack", ID_ATTACK, ANIM_ATTACK, K_MOUSE1, K_CTRL, -1, -1},
 	{"+zoom", "Scope", ID_ZOOM, ANIM_IDLE, K_MOUSE2, 'x', -1, -1},

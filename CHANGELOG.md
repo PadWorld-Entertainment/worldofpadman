@@ -47,7 +47,7 @@
 	- JPEG quality set to 100% for creating screenshots and avi videos
 	- Headline of Team ingame menu changed to Start like listed in ingame main menu
 	- Headline of Voice ingame menu changed to Voice Chat like listed in ingame main menu
-	- Default keyboard mapping in a few spots: `q`/`mouse3` for gesture (was undefined); `e`/`enter` for use item; `f`/`backspace` for drop item (cartridge/lolly); `p` for 3rd person view (was `u`); `x`/`mouse2` for scope/zoom (was `mouse3`); `y`/`z` for chat team (was undefined); `u` chat target (was undefined); `i` for chat attacker (was undefined)
+	- Default keyboard mapping in a few spots: `q`/`mouse3` for gesture (was undefined); `e`/`enter` for use item; `f`/`backspace` for drop item (cartridge/lolly); `home/kp_5` for 3rd person view (was `u`); `x`/`mouse2` for scope/zoom (was `mouse3`); `y`/`z` for chat team (was undefined); `u` chat target (was undefined); `i` for chat attacker (was undefined)
 - FIXED
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use ^ key to enter color tags
