@@ -287,7 +287,7 @@ static bind_t g_bindings[] = {
 
 	{"+scores", "Scoreboard", ID_SHOWSCORES, ANIM_IDLE, K_TAB, -1, -1, -1},
 	{"togglemenu", "Ingame Menu", ID_TOGGLEMENU, ANIM_IDLE, K_ESCAPE, -1, -1, -1},
-	{"wop_music", "Music Menu", ID_MUSIC, ANIM_IDLE, 'm', -1, -1, -1},
+	{"wop_music", "Music Player", ID_MUSIC, ANIM_IDLE, 'm', -1, -1, -1},
 	{"ui_help gametype", "Help Gametype", ID_HELP_GAMETYPE, ANIM_IDLE, 'g', -1, -1, -1},
 	{"ui_help item", "Help Weapons/Items", ID_HELP_ITEMS, ANIM_IDLE, 'h', -1, -1, -1},
 	{"toggle cg_drawServerInfos", "Server Info", ID_SERVERINFO, ANIM_IDLE, 'k', -1, -1, -1},
@@ -1426,7 +1426,7 @@ static void Controls_MenuInit(void) {
 	s_controls.autoswitch.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.autoswitch.generic.flags = QMF_SMALLFONT;
 	s_controls.autoswitch.generic.x = SCREEN_WIDTH / 2;
-	s_controls.autoswitch.generic.name = "Autoswitch Weapons";
+	s_controls.autoswitch.generic.name = "Autoswitch Weapon";
 	s_controls.autoswitch.generic.id = ID_AUTOSWITCH;
 	s_controls.autoswitch.generic.callback = Controls_MenuEvent;
 	s_controls.autoswitch.generic.statusbar = Controls_StatusBar;
