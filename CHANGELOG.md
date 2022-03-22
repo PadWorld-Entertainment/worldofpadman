@@ -6,7 +6,7 @@
 	- Freeze Tag (ft) game mode and related assets
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
-	- Spray logo for mod.io, quake3 (reintroduced)
+	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones
 	- Lighting option to the Graphics menu to switch between Vertex and Lightmap
 	- Borderless Window Mode option to the Graphics menu
 	- Option to enable/disable Doppler Effect to the Sound menu
@@ -47,7 +47,7 @@
 	- JPEG quality set to 100% for creating screenshots and avi videos
 	- Headline of Team ingame menu changed to Start like listed in ingame main menu
 	- Headline of Voice ingame menu changed to Voice Chat like listed in ingame main menu
-	- Default keyboard mapping in a few spots: `q`/`mouse3` for gesture (was undefined); `e`/`enter` for use item; `f`/`backspace` for drop item (cartridge/lolly); `p` for 3rd person view (was `u`); `y`/`mouse2` for scope/zoom (was `mouse3`); `y`/`z` for chat team (was undefined); `u` chat target (was undefined); `i` for chat attacker (was undefined)
+	- Default keyboard mapping in a few spots: `q`/`mouse3` for gesture (was undefined); `e`/`enter` for use item; `f`/`backspace` for drop item (cartridge/lolly); `p` for 3rd person view (was `u`); `x`/`mouse2` for scope/zoom (was `mouse3`); `y`/`z` for chat team (was undefined); `u` chat target (was undefined); `i` for chat attacker (was undefined)
 - FIXED
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use ^ key to enter color tags
@@ -55,6 +55,7 @@
 	- Antialiasing option in Graphics menu is always displayed as Off after WoP restart, although 2x or more was selected before
 	- Wrong spray logo name allocation for Spooky and PadCho
 	- Fail to load OpenAL library on Windows 64bit systems
+	- Setting the spray logo via the Player Settings menu during a match has no effect
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
 	- ^ key to open/close the console
@@ -62,7 +63,7 @@
 	- Not used roq video files
 	- File suffixes from shader entries to let the engine decide
 	- Not used and outdated BETTY explosion textures
-	- Spray logos of dead sites and partners like Desura and PlanetQuake
+	- Spray logos of dead sites and partners exp, desura, pqcom, turtle
 	- Exit screen (when clicking the Exit button in the main menu) with confirmation query and related assets
 	- Unused and dead code in general
 - UPDATED
