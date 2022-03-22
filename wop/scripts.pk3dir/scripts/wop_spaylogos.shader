@@ -177,11 +177,11 @@ spraylogos/16_moon
 	}
 }
 
-spraylogos/17_niceguy
+spraylogos/17_drpad
 {
 	nopicmip
 	{
-		map spraylogos/17_niceguy
+		map spraylogos/17_drpad
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
