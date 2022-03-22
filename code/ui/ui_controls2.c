@@ -130,6 +130,7 @@ typedef struct {
 #define ID_NEXTSONG 42
 #define ID_VOTEYES 43
 #define ID_VOTENO 44
+#define ID_SCREENSHOT 45
 
 // all others
 #define ID_FREELOOK 46
@@ -234,6 +235,7 @@ typedef struct {
 	menuaction_s nextSong;
 	menuaction_s voteyes;
 	menuaction_s voteno;
+	menuaction_s screenshot;
 
 	playerInfo_t playerinfo;
 	qboolean changesmade;
@@ -306,6 +308,7 @@ static bind_t g_bindings[] = {
 	{"wop_nextsong", "Skip to Next Song", ID_NEXTSONG, ANIM_IDLE, 'n', -1, -1, -1},
 	{"vote yes", "Vote Yes", ID_VOTEYES, ANIM_IDLE, K_F1, K_KP_PLUS, -1, -1},
 	{"vote no", "Vote No", ID_VOTENO, ANIM_IDLE, K_F2, K_KP_MINUS, -1, -1},
+	{"screenshotJPEG", "Screenshot", ID_SCREENSHOT, ANIM_IDLE, K_F12, -1, -1, -1},
 
 	{(char *)NULL, (char *)NULL, 0, 0, -1, -1, -1, -1},
 };
@@ -393,6 +396,7 @@ static menucommon_s *g_misc_controls[] = {
 	(menucommon_s *)&s_controls.nextSong,
 	(menucommon_s *)&s_controls.voteyes,
 	(menucommon_s *)&s_controls.voteno,
+	(menucommon_s *)&s_controls.screenshot,
 	NULL,
 };
 
@@ -1619,6 +1623,13 @@ static void Controls_MenuInit(void) {
 	s_controls.voteno.generic.id = ID_VOTENO;
 	s_controls.voteno.generic.toolTip = "Cast a no vote to a vote in progress (votes appear top left of the screen).";
 
+	s_controls.screenshot.generic.type = MTYPE_ACTION;
+	s_controls.screenshot.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.screenshot.generic.callback = Controls_ActionEvent;
+	s_controls.screenshot.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.screenshot.generic.id = ID_SCREENSHOT;
+	s_controls.screenshot.generic.toolTip = "Press this key to take and save a screenshot.";
+
 	Menu_AddItem(&s_controls.menu, &s_controls.looking);
 	Menu_AddItem(&s_controls.menu, &s_controls.movement);
 	Menu_AddItem(&s_controls.menu, &s_controls.weapons);
@@ -1682,6 +1693,7 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.nextSong);
 	Menu_AddItem(&s_controls.menu, &s_controls.voteyes);
 	Menu_AddItem(&s_controls.menu, &s_controls.voteno);
+	Menu_AddItem(&s_controls.menu, &s_controls.screenshot);
 
 	Menu_AddItem(&s_controls.menu, &s_controls.back);
 
