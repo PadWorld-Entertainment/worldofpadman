@@ -38,6 +38,8 @@ CONTROLS MENU
 #define MOVEMENT1 "menu/buttons/move1"
 #define WEAPONS0 "menu/buttons/shoot0"
 #define WEAPONS1 "menu/buttons/shoot1"
+#define CHAT0 "menu/buttons/chat0"
+#define CHAT1 "menu/buttons/chat1"
 #define MISC0 "menu/buttons/misc0"
 #define MISC1 "menu/buttons/misc1"
 
@@ -67,17 +69,19 @@ typedef struct {
 #define C_MOVEMENT 0
 #define C_LOOKING 1
 #define C_WEAPONS 2
-#define C_MISC 3
-#define C_MAX 4
+#define C_CHAT 3
+#define C_MISC 4
+#define C_MAX 5
 
 #define ID_MOVEMENT 100
 #define ID_LOOKING 101
 #define ID_WEAPONS 102
-#define ID_MISC 103
-#define ID_DEFAULTS 104
-#define ID_BACK 105
-#define ID_SAVEANDEXIT 106
-#define ID_EXIT 107
+#define ID_CHAT 103
+#define ID_MISC 104
+#define ID_DEFAULTS 105
+#define ID_BACK 106
+#define ID_SAVEANDEXIT 107
+#define ID_EXIT 108
 
 // bindable actions
 
@@ -91,38 +95,38 @@ typedef struct {
 #define ID_LEFT 7
 #define ID_RIGHT 8
 #define ID_STRAFE 9
-#define ID_GESTURE 10
-#define ID_USEITEM 11
-#define ID_DROPCART 12
-#define ID_LOOKUP 13
-#define ID_LOOKDOWN 14
-#define ID_MOUSELOOK 15
-#define ID_CENTERVIEW 16
-#define ID_3RDPERSON 17
-#define ID_ATTACK 18
-#define ID_ZOOM 19
-#define ID_WEAPNEXT 20
-#define ID_WEAPPREV 21
-#define ID_WEAPON1 22
-#define ID_WEAPON2 23
-#define ID_WEAPON3 24
-#define ID_WEAPON4 25
-#define ID_WEAPON5 26
-#define ID_WEAPON6 27
-#define ID_WEAPON7 28
-#define ID_WEAPON8 29
-#define ID_WEAPON9 30
-#define ID_SHOWSCORES 31
-#define ID_TOGGLEMENU 32
-#define ID_MUSIC 33
-#define ID_HELP_GAMETYPE 34
-#define ID_HELP_ITEMS 35
-#define ID_SERVERINFO 36
-#define ID_CHAT 37
-#define ID_CHAT2 38
-#define ID_CHAT3 39
-#define ID_CHAT4 40
-#define ID_PUSH2TALK 41
+#define ID_USEITEM 10
+#define ID_DROPCART 11
+#define ID_LOOKUP 12
+#define ID_LOOKDOWN 13
+#define ID_MOUSELOOK 14
+#define ID_CENTERVIEW 15
+#define ID_3RDPERSON 16
+#define ID_ATTACK 17
+#define ID_ZOOM 18
+#define ID_WEAPNEXT 19
+#define ID_WEAPPREV 20
+#define ID_WEAPON1 21
+#define ID_WEAPON2 22
+#define ID_WEAPON3 23
+#define ID_WEAPON4 24
+#define ID_WEAPON5 25
+#define ID_WEAPON6 26
+#define ID_WEAPON7 27
+#define ID_WEAPON8 28
+#define ID_WEAPON9 29
+#define ID_CHAT1 30
+#define ID_CHAT2 31
+#define ID_CHAT3 32
+#define ID_CHAT4 33
+#define ID_PUSH2TALK 34
+#define ID_GESTURE 35
+#define ID_SHOWSCORES 36
+#define ID_TOGGLEMENU 37
+#define ID_MUSIC 38
+#define ID_HELP_GAMETYPE 39
+#define ID_HELP_ITEMS 40
+#define ID_SERVERINFO 41
 #define ID_NEXTSONG 42
 #define ID_VOTEYES 43
 #define ID_VOTENO 44
@@ -170,6 +174,7 @@ typedef struct {
 	menubitmap_s movement;
 	menubitmap_s looking;
 	menubitmap_s weapons;
+	menubitmap_s chat;
 	menubitmap_s misc;
 
 	menuradiobutton_s alwaysrun;
@@ -183,7 +188,6 @@ typedef struct {
 	menuaction_s turnleft;
 	menuaction_s turnright;
 	menuaction_s sidestep;
-	menuaction_s gesture;
 	menuaction_s useitem;
 	menuaction_s dropCart;
 
@@ -214,17 +218,19 @@ typedef struct {
 	menuaction_s plasma;
 	menuaction_s bfg;
 
+	menuaction_s chat1;
+	menuaction_s chat2;
+	menuaction_s chat3;
+	menuaction_s chat4;
+	menuaction_s pushToTalk;
+	menuaction_s gesture;
+
 	menuaction_s showscores;
 	menuaction_s togglemenu;
 	menuaction_s music;
 	menuaction_s helpGametype;
 	menuaction_s helpItems;
 	menuaction_s ServerInfo;
-	menuaction_s chat;
-	menuaction_s chat2;
-	menuaction_s chat3;
-	menuaction_s chat4;
-	menuaction_s pushToTalk;
 	menuaction_s nextSong;
 	menuaction_s voteyes;
 	menuaction_s voteno;
@@ -261,7 +267,6 @@ static bind_t g_bindings[] = {
 	{"+left", "Turn Left", ID_LEFT, ANIM_TURNLEFT, K_LEFTARROW, -1, -1, -1},
 	{"+right", "Turn Right", ID_RIGHT, ANIM_TURNRIGHT, K_RIGHTARROW, -1, -1, -1},
 	{"+strafe", "Sidestep/Turn", ID_STRAFE, ANIM_IDLE, K_ALT, -1, -1, -1},
-	{"+button3", "Gesture", ID_GESTURE, ANIM_GESTURE, K_MOUSE3, 'q', -1, -1},
 	{"+button2", "Use Item", ID_USEITEM, ANIM_IDLE, K_ENTER, 'e', -1, -1},
 	{"dropCartridge", "Drop Item", ID_DROPCART, ANIM_IDLE, K_BACKSPACE, 'f', -1, -1},
 
@@ -285,17 +290,19 @@ static bind_t g_bindings[] = {
 	{"weapon 8", "BUBBLE G.", ID_WEAPON8, ANIM_WEAPON8, '8', -1, -1, -1},
 	{"weapon 9", "IMPERiUS", ID_WEAPON9, ANIM_WEAPON9, '9', -1, -1, -1},
 
+	{"messagemode", "Chat All", ID_CHAT1, ANIM_CHAT, 't', -1, -1, -1},
+	{"messagemode2", "Chat Team", ID_CHAT2, ANIM_CHAT, 'y', 'z', -1, -1},
+	{"messagemode3", "Chat Target", ID_CHAT3, ANIM_CHAT, 'u', -1, -1, -1},
+	{"messagemode4", "Chat Attacker", ID_CHAT4, ANIM_CHAT, 'i', -1, -1, -1},
+	{"+voiprecord", "Push to Talk", ID_PUSH2TALK, ANIM_IDLE, 'r', -1, -1, -1},
+	{"+button3", "Gesture", ID_GESTURE, ANIM_GESTURE, K_MOUSE3, 'q', -1, -1},
+
 	{"+scores", "Scoreboard", ID_SHOWSCORES, ANIM_IDLE, K_TAB, -1, -1, -1},
 	{"togglemenu", "Ingame Menu", ID_TOGGLEMENU, ANIM_IDLE, K_ESCAPE, -1, -1, -1},
 	{"wop_music", "Music Player", ID_MUSIC, ANIM_IDLE, 'm', -1, -1, -1},
 	{"ui_help gametype", "Help Gametype", ID_HELP_GAMETYPE, ANIM_IDLE, 'g', -1, -1, -1},
 	{"ui_help item", "Help Weapons/Items", ID_HELP_ITEMS, ANIM_IDLE, 'h', -1, -1, -1},
 	{"toggle cg_drawServerInfos", "Server Info", ID_SERVERINFO, ANIM_IDLE, 'k', -1, -1, -1},
-	{"messagemode", "Chat All", ID_CHAT, ANIM_CHAT, 't', -1, -1, -1},
-	{"messagemode2", "Chat Team", ID_CHAT2, ANIM_CHAT, 'y', 'z', -1, -1},
-	{"messagemode3", "Chat Target", ID_CHAT3, ANIM_CHAT, 'u', -1, -1, -1},
-	{"messagemode4", "Chat Attacker", ID_CHAT4, ANIM_CHAT, 'i', -1, -1, -1},
-	{"+voiprecord", "Push to Talk", ID_PUSH2TALK, ANIM_IDLE, 'r', -1, -1, -1},
 	{"wop_nextsong", "Skip to Next Song", ID_NEXTSONG, ANIM_IDLE, 'n', -1, -1, -1},
 	{"vote yes", "Vote Yes", ID_VOTEYES, ANIM_IDLE, K_F1, K_KP_PLUS, -1, -1},
 	{"vote no", "Vote No", ID_VOTENO, ANIM_IDLE, K_F2, K_KP_MINUS, -1, -1},
@@ -328,7 +335,6 @@ static menucommon_s *g_movement_controls[] = {
 	(menucommon_s *)&s_controls.turnleft,
 	(menucommon_s *)&s_controls.turnright,
 	(menucommon_s *)&s_controls.sidestep,
-	(menucommon_s *)&s_controls.gesture,
 	(menucommon_s *)&s_controls.useitem,
 	(menucommon_s *)&s_controls.dropCart,
 	NULL
@@ -367,6 +373,16 @@ static menucommon_s *g_looking_controls[] = {
 	NULL,
 };
 
+static menucommon_s *g_chat_controls[] = {
+	(menucommon_s *)&s_controls.chat1,
+	(menucommon_s *)&s_controls.chat2,
+	(menucommon_s *)&s_controls.chat3,
+	(menucommon_s *)&s_controls.chat4,
+	(menucommon_s *)&s_controls.pushToTalk,
+	(menucommon_s *)&s_controls.gesture,
+	NULL,
+};
+
 static menucommon_s *g_misc_controls[] = {
 	(menucommon_s *)&s_controls.showscores,
 	(menucommon_s *)&s_controls.togglemenu,
@@ -374,11 +390,6 @@ static menucommon_s *g_misc_controls[] = {
 	(menucommon_s *)&s_controls.helpGametype,
 	(menucommon_s *)&s_controls.helpItems,
 	(menucommon_s *)&s_controls.ServerInfo,
-	(menucommon_s *)&s_controls.chat,
-	(menucommon_s *)&s_controls.chat2,
-	(menucommon_s *)&s_controls.chat3,
-	(menucommon_s *)&s_controls.chat4,
-	(menucommon_s *)&s_controls.pushToTalk,
 	(menucommon_s *)&s_controls.nextSong,
 	(menucommon_s *)&s_controls.voteyes,
 	(menucommon_s *)&s_controls.voteno,
@@ -389,6 +400,7 @@ static menucommon_s **g_controls[] = {
 	g_movement_controls,
 	g_looking_controls,
 	g_weapons_controls,
+	g_chat_controls,
 	g_misc_controls,
 };
 
@@ -654,11 +666,13 @@ static void Controls_Update(void) {
 	s_controls.looking.generic.flags &= ~(QMF_GRAYED | QMF_HIGHLIGHT | QMF_HIGHLIGHT_IF_FOCUS);
 	s_controls.movement.generic.flags &= ~(QMF_GRAYED | QMF_HIGHLIGHT | QMF_HIGHLIGHT_IF_FOCUS);
 	s_controls.weapons.generic.flags &= ~(QMF_GRAYED | QMF_HIGHLIGHT | QMF_HIGHLIGHT_IF_FOCUS);
+	s_controls.chat.generic.flags &= ~(QMF_GRAYED | QMF_HIGHLIGHT | QMF_HIGHLIGHT_IF_FOCUS);
 	s_controls.misc.generic.flags &= ~(QMF_GRAYED | QMF_HIGHLIGHT | QMF_HIGHLIGHT_IF_FOCUS);
 
 	s_controls.looking.generic.flags |= QMF_HIGHLIGHT_IF_FOCUS;
 	s_controls.movement.generic.flags |= QMF_HIGHLIGHT_IF_FOCUS;
 	s_controls.weapons.generic.flags |= QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.chat.generic.flags |= QMF_HIGHLIGHT_IF_FOCUS;
 	s_controls.misc.generic.flags |= QMF_HIGHLIGHT_IF_FOCUS;
 
 	// set buttons
@@ -673,6 +687,10 @@ static void Controls_Update(void) {
 
 	case C_WEAPONS:
 		s_controls.weapons.generic.flags |= QMF_HIGHLIGHT;
+		break;
+
+	case C_CHAT:
+		s_controls.chat.generic.flags |= QMF_HIGHLIGHT;
 		break;
 
 	case C_MISC:
@@ -1081,6 +1099,13 @@ static void Controls_MenuEvent(void *ptr, int event) {
 		}
 		break;
 
+	case ID_CHAT:
+		if (event == QM_ACTIVATED) {
+			s_controls.section = C_CHAT;
+			Controls_Update();
+		}
+		break;
+
 	case ID_MISC:
 		if (event == QM_ACTIVATED) {
 			s_controls.section = C_MISC;
@@ -1166,8 +1191,8 @@ static void Controls_MenuInit(void) {
 	s_controls.looking.generic.type = MTYPE_BITMAP;
 	s_controls.looking.generic.name = LOOK0;
 	s_controls.looking.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.looking.generic.x = 412;
-	s_controls.looking.generic.y = 40;
+	s_controls.looking.generic.x = 422;
+	s_controls.looking.generic.y = 28;
 	s_controls.looking.generic.id = ID_LOOKING;
 	s_controls.looking.generic.callback = Controls_MenuEvent;
 	s_controls.looking.width = 80;
@@ -1178,8 +1203,8 @@ static void Controls_MenuInit(void) {
 	s_controls.movement.generic.type = MTYPE_BITMAP;
 	s_controls.movement.generic.name = MOVEMENT0;
 	s_controls.movement.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.movement.generic.x = 500;
-	s_controls.movement.generic.y = 45;
+	s_controls.movement.generic.x = 508;
+	s_controls.movement.generic.y = 43;
 	s_controls.movement.generic.id = ID_MOVEMENT;
 	s_controls.movement.generic.callback = Controls_MenuEvent;
 	s_controls.movement.width = 80;
@@ -1190,8 +1215,8 @@ static void Controls_MenuInit(void) {
 	s_controls.weapons.generic.type = MTYPE_BITMAP;
 	s_controls.weapons.generic.name = WEAPONS0;
 	s_controls.weapons.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.weapons.generic.x = 390;
-	s_controls.weapons.generic.y = 84;
+	s_controls.weapons.generic.x = 376;
+	s_controls.weapons.generic.y = 69;
 	s_controls.weapons.generic.id = ID_WEAPONS;
 	s_controls.weapons.generic.callback = Controls_MenuEvent;
 	s_controls.weapons.width = 120;
@@ -1199,11 +1224,23 @@ static void Controls_MenuInit(void) {
 	s_controls.weapons.focuspic = WEAPONS1;
 	s_controls.weapons.focuspicinstead = qtrue;
 
+	s_controls.chat.generic.type = MTYPE_BITMAP;
+	s_controls.chat.generic.name = CHAT0;
+	s_controls.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.chat.generic.x = 518;
+	s_controls.chat.generic.y = 88;
+	s_controls.chat.generic.id = ID_CHAT;
+	s_controls.chat.generic.callback = Controls_MenuEvent;
+	s_controls.chat.width = 80;
+	s_controls.chat.height = 40;
+	s_controls.chat.focuspic = CHAT1;
+	s_controls.chat.focuspicinstead = qtrue;
+
 	s_controls.misc.generic.type = MTYPE_BITMAP;
 	s_controls.misc.generic.name = MISC0;
 	s_controls.misc.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.misc.generic.x = 508;
-	s_controls.misc.generic.y = 90;
+	s_controls.misc.generic.x = 432;
+	s_controls.misc.generic.y = 110;
 	s_controls.misc.generic.id = ID_MISC;
 	s_controls.misc.generic.callback = Controls_MenuEvent;
 	s_controls.misc.width = 80;
@@ -1385,13 +1422,6 @@ static void Controls_MenuInit(void) {
 	s_controls.useitem.generic.toolTip = "Press this key in game to throw killerducks / use floater / deploy bambam "
 										 "and place boomies (you must look at the ground to place a boomie).";
 
-	s_controls.gesture.generic.type = MTYPE_ACTION;
-	s_controls.gesture.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
-	s_controls.gesture.generic.callback = Controls_ActionEvent;
-	s_controls.gesture.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.gesture.generic.id = ID_GESTURE;
-	s_controls.gesture.generic.toolTip = "Press this key in game to taunt other players.";
-
 	s_controls.dropCart.generic.type = MTYPE_ACTION;
 	s_controls.dropCart.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.dropCart.generic.callback = Controls_ActionEvent;
@@ -1487,6 +1517,39 @@ static void Controls_MenuInit(void) {
 	s_controls.bfg.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.bfg.generic.id = ID_WEAPON9;
 
+	s_controls.chat1.generic.type = MTYPE_ACTION;
+	s_controls.chat1.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.chat1.generic.callback = Controls_ActionEvent;
+	s_controls.chat1.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.chat1.generic.id = ID_CHAT1;
+	s_controls.chat1.generic.toolTip =
+		"Press this key in game before typing a message to text chat to all players in the game.";
+
+	s_controls.chat2.generic.type = MTYPE_ACTION;
+	s_controls.chat2.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.chat2.generic.callback = Controls_ActionEvent;
+	s_controls.chat2.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.chat2.generic.id = ID_CHAT2;
+
+	s_controls.chat3.generic.type = MTYPE_ACTION;
+	s_controls.chat3.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.chat3.generic.callback = Controls_ActionEvent;
+	s_controls.chat3.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.chat3.generic.id = ID_CHAT3;
+
+	s_controls.chat4.generic.type = MTYPE_ACTION;
+	s_controls.chat4.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.chat4.generic.callback = Controls_ActionEvent;
+	s_controls.chat4.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.chat4.generic.id = ID_CHAT4;
+
+	s_controls.gesture.generic.type = MTYPE_ACTION;
+	s_controls.gesture.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.gesture.generic.callback = Controls_ActionEvent;
+	s_controls.gesture.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.gesture.generic.id = ID_GESTURE;
+	s_controls.gesture.generic.toolTip = "Press this key in game to taunt other players.";
+
 	s_controls.showscores.generic.type = MTYPE_ACTION;
 	s_controls.showscores.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.showscores.generic.callback = Controls_ActionEvent;
@@ -1528,32 +1591,6 @@ static void Controls_MenuInit(void) {
 	s_controls.ServerInfo.generic.id = ID_SERVERINFO;
 	s_controls.ServerInfo.generic.toolTip = "Press this key in game to display server settings information.";
 
-	s_controls.chat.generic.type = MTYPE_ACTION;
-	s_controls.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
-	s_controls.chat.generic.callback = Controls_ActionEvent;
-	s_controls.chat.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.chat.generic.id = ID_CHAT;
-	s_controls.chat.generic.toolTip =
-		"Press this key in game before typing a message to text chat to all players in the game.";
-
-	s_controls.chat2.generic.type = MTYPE_ACTION;
-	s_controls.chat2.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
-	s_controls.chat2.generic.callback = Controls_ActionEvent;
-	s_controls.chat2.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.chat2.generic.id = ID_CHAT2;
-
-	s_controls.chat3.generic.type = MTYPE_ACTION;
-	s_controls.chat3.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
-	s_controls.chat3.generic.callback = Controls_ActionEvent;
-	s_controls.chat3.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.chat3.generic.id = ID_CHAT3;
-
-	s_controls.chat4.generic.type = MTYPE_ACTION;
-	s_controls.chat4.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
-	s_controls.chat4.generic.callback = Controls_ActionEvent;
-	s_controls.chat4.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.chat4.generic.id = ID_CHAT4;
-
 	s_controls.nextSong.generic.type = MTYPE_ACTION;
 	s_controls.nextSong.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.nextSong.generic.callback = Controls_ActionEvent;
@@ -1585,6 +1622,7 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.looking);
 	Menu_AddItem(&s_controls.menu, &s_controls.movement);
 	Menu_AddItem(&s_controls.menu, &s_controls.weapons);
+	Menu_AddItem(&s_controls.menu, &s_controls.chat);
 	Menu_AddItem(&s_controls.menu, &s_controls.misc);
 
 	Menu_AddItem(&s_controls.menu, &s_controls.sensitivity);
@@ -1610,7 +1648,6 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.turnleft);
 	Menu_AddItem(&s_controls.menu, &s_controls.turnright);
 	Menu_AddItem(&s_controls.menu, &s_controls.sidestep);
-	Menu_AddItem(&s_controls.menu, &s_controls.gesture);
 	Menu_AddItem(&s_controls.menu, &s_controls.useitem);
 	Menu_AddItem(&s_controls.menu, &s_controls.dropCart);
 
@@ -1629,17 +1666,19 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.plasma);
 	Menu_AddItem(&s_controls.menu, &s_controls.bfg);
 
+	Menu_AddItem(&s_controls.menu, &s_controls.gesture);
+	Menu_AddItem(&s_controls.menu, &s_controls.chat1);
+	Menu_AddItem(&s_controls.menu, &s_controls.chat2);
+	Menu_AddItem(&s_controls.menu, &s_controls.chat3);
+	Menu_AddItem(&s_controls.menu, &s_controls.chat4);
+	Menu_AddItem(&s_controls.menu, &s_controls.pushToTalk);
+
 	Menu_AddItem(&s_controls.menu, &s_controls.showscores);
 	Menu_AddItem(&s_controls.menu, &s_controls.togglemenu);
 	Menu_AddItem(&s_controls.menu, &s_controls.music);
 	Menu_AddItem(&s_controls.menu, &s_controls.helpGametype);
 	Menu_AddItem(&s_controls.menu, &s_controls.helpItems);
 	Menu_AddItem(&s_controls.menu, &s_controls.ServerInfo);
-	Menu_AddItem(&s_controls.menu, &s_controls.chat);
-	Menu_AddItem(&s_controls.menu, &s_controls.chat2);
-	Menu_AddItem(&s_controls.menu, &s_controls.chat3);
-	Menu_AddItem(&s_controls.menu, &s_controls.chat4);
-	Menu_AddItem(&s_controls.menu, &s_controls.pushToTalk);
 	Menu_AddItem(&s_controls.menu, &s_controls.nextSong);
 	Menu_AddItem(&s_controls.menu, &s_controls.voteyes);
 	Menu_AddItem(&s_controls.menu, &s_controls.voteno);
@@ -1670,13 +1709,14 @@ Controls_Cache
 void Controls_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
-
 	trap_R_RegisterShaderNoMip(LOOK0);
 	trap_R_RegisterShaderNoMip(LOOK1);
 	trap_R_RegisterShaderNoMip(MOVEMENT0);
 	trap_R_RegisterShaderNoMip(MOVEMENT1);
 	trap_R_RegisterShaderNoMip(WEAPONS0);
 	trap_R_RegisterShaderNoMip(WEAPONS1);
+	trap_R_RegisterShaderNoMip(CHAT0);
+	trap_R_RegisterShaderNoMip(CHAT1);
 	trap_R_RegisterShaderNoMip(MISC0);
 	trap_R_RegisterShaderNoMip(MISC1);
 }
