@@ -386,11 +386,11 @@ spraylogos/35_666
 	}
 }
 
-spraylogos/36_anarchie
+spraylogos/36_anarchy
 {
 	nopicmip
 	{
-		map spraylogos/36_anarchie
+		map spraylogos/36_anarchy
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex

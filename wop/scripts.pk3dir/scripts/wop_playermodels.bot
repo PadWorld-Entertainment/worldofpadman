@@ -254,7 +254,7 @@ name		PadPunk
 model		padpunk
 funname  	"^3Pad^5Punk"
 aifile	 	bots/padman_c.c
-spraylogo	36_anarchie
+spraylogo	36_anarchy
 }
 
 
