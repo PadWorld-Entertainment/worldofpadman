@@ -7,17 +7,22 @@
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones
-	- Lighting option to the Graphics menu to switch between Vertex and Lightmap
-	- Borderless Window Mode option to the Graphics menu
-	- Option to enable/disable Doppler Effect to the Sound menu
-	- Option to enable/disable Ingame Videos (video shaders in maps) to Display menu
-	- Option to enable/disable Team Chats Only to Chat menu to hide chats of non-team players, works only in team game modes
-	- Option to enable/disable playing the Chat Beep to Chat menu to switch on/off the squeeze toy sound of chat notifications
-	- Option to enable/disable the Display Gesture of other players and the sound that comes with it to Chat menu
-	- Option to enable/disable Bots chatting or to make them chatting more often to Chat menu
-	- Option to adjust the Notification Space to 4, 6 or 8 lines in Chat menu via new cvar `cg_chatheight`, default is 4
-	- Option to enable/disable player chat icon separately from notification time in the Chat menu
-	- Option to enable/disable the Lag-O-Meter to the HUD menu
+	- Option to switch Lighting to Vertex or Lightmap to Graphics page of System menu
+	- Option to switch Window Mode to Off (Fullscreen), On (Border) or On (Borderless) to Graphics page of System menu
+	- Option to enable/disable Doppler Effect to Sound page of System menu
+	- Option to enable/disable Ingame Videos (video shaders in maps) to Display page of System menu
+	- New page for Chat related options to Options menu and moved all chat related options there to make space on other pages
+	- Option to enable/disable Team Chats Only to Chat page of Options menu to hide chats of non-team players, works only in team game modes
+	- Option to enable/disable playing the Chat Beep to Chat page of Options menu to switch on/off the squeeze toy sound of chat notifications
+	- Option to enable/disable the Display Gesture of other players and the sound that comes with it to Chat page of Options menu
+	- Option to enable/disable Bots chatting or to make them chatting more often to Chat page of Options menu
+	- Option to adjust the Notification Space to 4, 6 or 8 lines to Chat page of Options menu via new cvar `cg_chatheight`, default is 4
+	- Option to enable/disable player chat icon separately from notification time Chat page of Options menu
+	- Option to enable/disable the Lag-O-Meter to H.U.D. page of Options menu
+	- New page for Chat related options to Controls menu and moved all chat related controls there to make space on other pages
+	- Option to adjust the key mapping for taking a Screenshot `F12` (default) to Misc page of Controls menu
+	- Option to enable/disable Autorecord Demo `o` (default) to Misc page of Controls menu 
+	- Option to enable/disable Sync Clients `p` (default) to Misc page of Controls menu
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
 	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
@@ -26,7 +31,8 @@
 	- Frost breath feature from Q3 Team Arena to simulate cold environments. Creates a small cloud of condensed breath in front of players head. Enter `enableBreath 1` to a map's worldspawn to enable this feature for the whole map.
 	- PadKnight bot to the game and shown in the Select Bots menu
 	- Possibility to set Antialiasing to 8x in Graphics menu
-	- Missing default keyboard mapping in Controls menu and synced with default.cfg 
+	- Missing default keyboard mapping in Controls menu and synced with default.cfg
+	- New mapping for f-keys via default.cfg (for developers and level designers): hide/show H.U.D. `F5`; hide/show gun `F6`; hide/show wire frames (cheat protected) `F7`; hide/show lightmap `F8`; hide/show render load information (cheat protected) `F9`; enable/disable noclip (cheat protected) `F10`; enable/disable god mode and give all items (cheat protected) `F11`
 - CHANGED
 	- Network protocol version number to 72 to avoid problems due to incompatibilities with previous WoP versions
 	- Home path to `worldofpadman` for all operating systems to unify them
@@ -34,10 +40,10 @@
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
 	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps
-	- Fullscreen option in Graphics menu to Window Mode to support new borderless window mode
+	- Fullscreen option on Graphics page of Setup menu to Window Mode to support new borderless window mode
 	- Map selection/preview to cycle three ingame pictures (shader animation)
 	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options
-	- Allocation of options Sync Every Frame, Simple Items, Marks on Walls, High Quality Sky, Sky Lens Flare, Dynamic Lights, Dynamic Flares, from Game Options menu to Display menu
+	- Allocation of options Sync Every Frame, Simple Items, Marks on Walls, High Quality Sky, Sky Lens Flare, Dynamic Lights, Dynamic Flares, from Game Options menu to Display page of System menu
 	- Game Options menu to three pages layout to support more options for HUD, Chat and Help
 	- Allocation of all wallhack icon options to new Help menu
 	- Allocation of all HUD related options to new HUD menu
@@ -47,7 +53,7 @@
 	- JPEG quality set to 100% for creating screenshots and avi videos
 	- Headline of Team ingame menu changed to Start like listed in ingame main menu
 	- Headline of Voice ingame menu changed to Voice Chat like listed in ingame main menu
-	- Default keyboard mapping in a few spots: `q`/`mouse3` for gesture (was undefined); `e`/`enter` for use item; `f`/`backspace` for drop item (cartridge/lolly); `home/kp_5` for 3rd person view (was `u`); `x`/`mouse2` for scope/zoom (was `mouse3`); `y`/`z` for chat team (was undefined); `u` chat target (was undefined); `i` for chat attacker (was undefined)
+	- Default keyboard mapping in a few spots: `q`/`mouse3` for gesture (was undefined); `e`/`enter` for use item; `f`/`backspace` for drop item (cartridge/lolly); `home/kp_5` for 3rd person view (was `u`); `x`/`mouse2` for scope/zoom (was `mouse3`); `y`/`z` for chat team (was undefined); `u` chat target (was undefined); `i` for chat attacker (was undefined); `F12` for taking a screenshot (was `F11`).
 - FIXED
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use ^ key to enter color tags
