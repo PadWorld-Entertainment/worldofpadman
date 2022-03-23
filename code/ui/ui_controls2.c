@@ -128,19 +128,21 @@ typedef struct {
 #define ID_HELP_ITEMS 40
 #define ID_SERVERINFO 41
 #define ID_NEXTSONG 42
-#define ID_VOTEYES 43
-#define ID_VOTENO 44
-#define ID_SCREENSHOT 45
+#define ID_RECORDDEMO 43
+#define ID_SYNCCLIENTS 44
+#define ID_VOTEYES 45
+#define ID_VOTENO 46
+#define ID_SCREENSHOT 47
 
 // all others
-#define ID_FREELOOK 46
-#define ID_INVERTMOUSE 47
-#define ID_ALWAYSRUN 48
-#define ID_AUTOSWITCH 49
-#define ID_MOUSESPEED 50
-#define ID_JOYENABLE 51
-#define ID_JOYTHRESHOLD 52
-#define ID_SMOOTHMOUSE 53
+#define ID_FREELOOK 60
+#define ID_INVERTMOUSE 61
+#define ID_ALWAYSRUN 62
+#define ID_AUTOSWITCH 63
+#define ID_MOUSESPEED 64
+#define ID_JOYENABLE 65
+#define ID_JOYTHRESHOLD 66
+#define ID_SMOOTHMOUSE 67
 
 #define ANIM_IDLE 0
 #define ANIM_RUN 1
@@ -233,6 +235,8 @@ typedef struct {
 	menuaction_s helpItems;
 	menuaction_s ServerInfo;
 	menuaction_s nextSong;
+	menuaction_s recorddemo;
+	menuaction_s syncclients;
 	menuaction_s voteyes;
 	menuaction_s voteno;
 	menuaction_s screenshot;
@@ -306,6 +310,8 @@ static bind_t g_bindings[] = {
 	{"ui_help item", "Help Weapons/Items", ID_HELP_ITEMS, ANIM_IDLE, 'h', -1, -1, -1},
 	{"toggle cg_drawServerInfos", "Server Info", ID_SERVERINFO, ANIM_IDLE, 'k', -1, -1, -1},
 	{"wop_nextsong", "Skip to Next Song", ID_NEXTSONG, ANIM_IDLE, 'n', -1, -1, -1},
+	{"toggle cl_autoRecordDemo 1, 0;stoprecord", "Autorecord Demo", ID_RECORDDEMO, ANIM_IDLE, 'o', -1, -1, -1},
+	{"toggle g_synchronousClients", "Sync Clients", ID_SYNCCLIENTS, ANIM_IDLE, 'p', -1, -1, -1},
 	{"vote yes", "Vote Yes", ID_VOTEYES, ANIM_IDLE, K_F1, K_KP_PLUS, -1, -1},
 	{"vote no", "Vote No", ID_VOTENO, ANIM_IDLE, K_F2, K_KP_MINUS, -1, -1},
 	{"screenshotJPEG", "Screenshot", ID_SCREENSHOT, ANIM_IDLE, K_F12, -1, -1, -1},
@@ -394,6 +400,8 @@ static menucommon_s *g_misc_controls[] = {
 	(menucommon_s *)&s_controls.helpItems,
 	(menucommon_s *)&s_controls.ServerInfo,
 	(menucommon_s *)&s_controls.nextSong,
+	(menucommon_s *)&s_controls.recorddemo,
+	(menucommon_s *)&s_controls.syncclients,
 	(menucommon_s *)&s_controls.voteyes,
 	(menucommon_s *)&s_controls.voteno,
 	(menucommon_s *)&s_controls.screenshot,
@@ -1547,6 +1555,14 @@ static void Controls_MenuInit(void) {
 	s_controls.chat4.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.chat4.generic.id = ID_CHAT4;
 
+	s_controls.pushToTalk.generic.type = MTYPE_ACTION;
+	s_controls.pushToTalk.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.pushToTalk.generic.callback = Controls_ActionEvent;
+	s_controls.pushToTalk.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.pushToTalk.generic.id = ID_PUSH2TALK;
+	s_controls.pushToTalk.generic.toolTip = "Press and hold this key to talk to other players through your microphone. "
+											"This is not required if your microphone setting is set to open.";
+
 	s_controls.gesture.generic.type = MTYPE_ACTION;
 	s_controls.gesture.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.gesture.generic.callback = Controls_ActionEvent;
@@ -1601,13 +1617,19 @@ static void Controls_MenuInit(void) {
 	s_controls.nextSong.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.nextSong.generic.id = ID_NEXTSONG;
 
-	s_controls.pushToTalk.generic.type = MTYPE_ACTION;
-	s_controls.pushToTalk.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
-	s_controls.pushToTalk.generic.callback = Controls_ActionEvent;
-	s_controls.pushToTalk.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.pushToTalk.generic.id = ID_PUSH2TALK;
-	s_controls.pushToTalk.generic.toolTip = "Press and hold this key to talk to other players through your microphone. "
-											"This is not required if your microphone setting is set to open.";
+	s_controls.recorddemo.generic.type = MTYPE_ACTION;
+	s_controls.recorddemo.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.recorddemo.generic.callback = Controls_ActionEvent;
+	s_controls.recorddemo.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.recorddemo.generic.id = ID_RECORDDEMO;
+
+	s_controls.syncclients.generic.type = MTYPE_ACTION;
+	s_controls.syncclients.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.syncclients.generic.callback = Controls_ActionEvent;
+	s_controls.syncclients.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.syncclients.generic.id = ID_SYNCCLIENTS;
+	s_controls.syncclients.generic.toolTip = "Press this key before recording demos ingame, if necessary. It can help make the recordings smoother. "
+											"Press again to disable afterwards for smoother game play, when playing normally and not recording demos.";
 
 	s_controls.voteyes.generic.type = MTYPE_ACTION;
 	s_controls.voteyes.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
@@ -1691,6 +1713,8 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.helpItems);
 	Menu_AddItem(&s_controls.menu, &s_controls.ServerInfo);
 	Menu_AddItem(&s_controls.menu, &s_controls.nextSong);
+	Menu_AddItem(&s_controls.menu, &s_controls.recorddemo);
+	Menu_AddItem(&s_controls.menu, &s_controls.syncclients);
 	Menu_AddItem(&s_controls.menu, &s_controls.voteyes);
 	Menu_AddItem(&s_controls.menu, &s_controls.voteno);
 	Menu_AddItem(&s_controls.menu, &s_controls.screenshot);
