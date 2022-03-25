@@ -121,18 +121,19 @@ typedef struct {
 #define ID_CHAT4 33
 #define ID_PUSH2TALK 34
 #define ID_GESTURE 35
-#define ID_SHOWSCORES 36
-#define ID_TOGGLEMENU 37
-#define ID_MUSIC 38
-#define ID_HELP_GAMETYPE 39
-#define ID_HELP_ITEMS 40
-#define ID_SERVERINFO 41
-#define ID_NEXTSONG 42
-#define ID_RECORDDEMO 43
-#define ID_SYNCCLIENTS 44
-#define ID_VOTEYES 45
-#define ID_VOTENO 46
-#define ID_SCREENSHOT 47
+#define ID_TEAMORDERS 36
+#define ID_SHOWSCORES 37
+#define ID_TOGGLEMENU 38
+#define ID_MUSIC 39
+#define ID_HELP_GAMETYPE 40
+#define ID_HELP_ITEMS 41
+#define ID_SERVERINFO 42
+#define ID_NEXTSONG 43
+#define ID_RECORDDEMO 44
+#define ID_SYNCCLIENTS 45
+#define ID_VOTEYES 46
+#define ID_VOTENO 47
+#define ID_SCREENSHOT 48
 
 // all others
 #define ID_FREELOOK 60
@@ -227,6 +228,7 @@ typedef struct {
 	menuaction_s chat4;
 	menuaction_s pushToTalk;
 	menuaction_s gesture;
+	menuaction_s teamorders;
 
 	menuaction_s showscores;
 	menuaction_s togglemenu;
@@ -302,6 +304,7 @@ static bind_t g_bindings[] = {
 	{"messagemode4", "Chat Attacker", ID_CHAT4, ANIM_CHAT, 'i', -1, -1, -1},
 	{"+voiprecord", "Push to Talk", ID_PUSH2TALK, ANIM_IDLE, 'r', -1, -1, -1},
 	{"+button3", "Gesture", ID_GESTURE, ANIM_GESTURE, K_MOUSE3, 'q', -1, -1},
+	{"ui_teamorders", "Team Orders", ID_TEAMORDERS, ANIM_IDLE, K_F3, -1, -1, -1},
 
 	{"+scores", "Scoreboard", ID_SHOWSCORES, ANIM_IDLE, K_TAB, -1, -1, -1},
 	{"togglemenu", "Ingame Menu", ID_TOGGLEMENU, ANIM_IDLE, K_ESCAPE, -1, -1, -1},
@@ -389,6 +392,7 @@ static menucommon_s *g_chat_controls[] = {
 	(menucommon_s *)&s_controls.chat4,
 	(menucommon_s *)&s_controls.pushToTalk,
 	(menucommon_s *)&s_controls.gesture,
+	(menucommon_s *)&s_controls.teamorders,
 	NULL,
 };
 
@@ -1570,6 +1574,13 @@ static void Controls_MenuInit(void) {
 	s_controls.gesture.generic.id = ID_GESTURE;
 	s_controls.gesture.generic.toolTip = "Press this key in game to taunt other players.";
 
+	s_controls.teamorders.generic.type = MTYPE_ACTION;
+	s_controls.teamorders.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.teamorders.generic.callback = Controls_ActionEvent;
+	s_controls.teamorders.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.teamorders.generic.id = ID_TEAMORDERS;
+	s_controls.teamorders.generic.toolTip = "Press this button to enter the team orders menu while playing the game.";
+
 	s_controls.showscores.generic.type = MTYPE_ACTION;
 	s_controls.showscores.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.showscores.generic.callback = Controls_ActionEvent;
@@ -1699,12 +1710,13 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.plasma);
 	Menu_AddItem(&s_controls.menu, &s_controls.bfg);
 
-	Menu_AddItem(&s_controls.menu, &s_controls.gesture);
 	Menu_AddItem(&s_controls.menu, &s_controls.chat1);
 	Menu_AddItem(&s_controls.menu, &s_controls.chat2);
 	Menu_AddItem(&s_controls.menu, &s_controls.chat3);
 	Menu_AddItem(&s_controls.menu, &s_controls.chat4);
 	Menu_AddItem(&s_controls.menu, &s_controls.pushToTalk);
+	Menu_AddItem(&s_controls.menu, &s_controls.gesture);
+	Menu_AddItem(&s_controls.menu, &s_controls.teamorders);
 
 	Menu_AddItem(&s_controls.menu, &s_controls.showscores);
 	Menu_AddItem(&s_controls.menu, &s_controls.togglemenu);
