@@ -1368,7 +1368,7 @@ typedef enum {
 #define GLYPH_START 0
 #define GLYPH_END 255
 #define GLYPH_CHARSTART 32
-#define GLYPH_CHAREND 127
+#define GLYPH_CHAREND 255
 #define GLYPHS_PER_FONT GLYPH_END - GLYPH_START + 1
 typedef struct {
 	int height;		 // number of scan lines
