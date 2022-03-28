@@ -21,8 +21,8 @@
 	- Option to enable/disable the Lag-O-Meter to H.U.D. page of Options menu
 	- New page for Chat related options to Controls menu and moved all chat related controls there to make space on other pages
 	- Option to adjust the key mapping for taking a Screenshot `F12` (default) to Misc page of Controls menu
-	- Option to enable/disable Autorecord Demo `o` (default) to Misc page of Controls menu 
-	- Option to enable/disable Sync Clients `p` (default) to Misc page of Controls menu
+	- Option to enable/disable Autorecord Demo `O` (default) to Misc page of Controls menu 
+	- Option to enable/disable Sync Clients `P` (default) to Misc page of Controls menu
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
 	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
@@ -53,7 +53,7 @@
 	- JPEG quality set to 100% for creating screenshots and avi videos
 	- Headline of Team ingame menu changed to Start like listed in ingame main menu
 	- Headline of Voice ingame menu changed to Voice Chat like listed in ingame main menu
-	- Default keyboard mapping in a few spots: `q`/`mouse3` for gesture (was undefined); `e`/`enter` for use item; `f`/`backspace` for drop item (cartridge/lolly); `home/kp_5` for 3rd person view (was `u`); `x`/`mouse2` for scope/zoom (was `mouse3`); `y`/`z` for chat team (was undefined); `u` chat target (was undefined); `i` for chat attacker (was undefined); `F12` for taking a screenshot (was `F11`).
+	- Default keyboard mapping in a few spots: `Q`/`MOUSE3` for gesture (was undefined); `E`/`ENTER` for use item; `F`/`BACKSPACE` for drop item (cartridge/lolly); `HOME`/`KP5` for 3rd person view (was `U`); `X`/`MOUSE2` for scope/zoom (was `MOUSE3`); `Y`/`Z` for chat team (was undefined); `U` chat target (was undefined); `I` for chat attacker (was undefined); `F12` for taking a screenshot (was `F11`).
 - FIXED
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use ^ key to enter color tags
