@@ -872,9 +872,9 @@ static void CG_RegisterGraphics(void) {
 	int i;
 	char items[MAX_ITEMS + 1];
 	static const char *sb_nums[11] = {
-		"gfx/2d/numbers/zero_32b",	"gfx/2d/numbers/one_32b",  "gfx/2d/numbers/two_32b",   "gfx/2d/numbers/three_32b",
-		"gfx/2d/numbers/four_32b",	"gfx/2d/numbers/five_32b", "gfx/2d/numbers/six_32b",   "gfx/2d/numbers/seven_32b",
-		"gfx/2d/numbers/eight_32b", "gfx/2d/numbers/nine_32b", "gfx/2d/numbers/minus_32b",
+		"gfx/numbers/zero",	"gfx/numbers/one",  "gfx/numbers/two",   "gfx/numbers/three",
+		"gfx/numbers/four",	"gfx/numbers/five", "gfx/numbers/six",   "gfx/numbers/seven",
+		"gfx/numbers/eight", "gfx/numbers/nine", "gfx/numbers/minus",
 	};
 
 	// clear any references to old media
