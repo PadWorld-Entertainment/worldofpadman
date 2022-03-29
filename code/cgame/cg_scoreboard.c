@@ -156,12 +156,7 @@ static void CG_DrawClientScore(int y, score_t *score, float *color, float fade, 
 				Com_sprintf(string, sizeof(string), "%5i %4i %4i", score->livesleft, score->ping, score->time);
 			}
 		}
-		// Personal scores are not important in team based games!
-		else if (cgs.gametype >= GT_TEAM) {
-			Com_sprintf(string, sizeof(string), "      %4i %4i", score->ping, score->time);
-		} else {
-			Com_sprintf(string, sizeof(string), "%5i %4i %4i", score->score, score->ping, score->time);
-		}
+		Com_sprintf(string, sizeof(string), "%5i %4i %4i", score->score, score->ping, score->time);
 	}
 
 	// highlight your position
@@ -420,11 +415,8 @@ qboolean CG_DrawOldScoreboard(void) {
 			CG_DrawPic(180, y, 64, 32, cgs.media.scoreboardLives);
 		}
 	}
-	// Personal scores are not important in team based games!
-	else if (cgs.gametype < GT_TEAM) {
-		CG_DrawPic(176, y, 64, 32, cgs.media.scoreboardScore);
-	}
 
+	CG_DrawPic(176, y, 64, 32, cgs.media.scoreboardScore);
 	CG_DrawPic(264, y, 64, 32, cgs.media.scoreboardPing);
 	CG_DrawPic(342, y, 64, 32, cgs.media.scoreboardTime);
 	CG_DrawPic(412, y, 64, 32, cgs.media.scoreboardName);
