@@ -637,13 +637,13 @@ void CG_DrawOldTourneyScoreboard(void) {
 		//
 		// teamplay scoreboard
 		//
-		CG_DrawStringExt(8, y, "Red Team", color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
+		CG_DrawStringExt(8, y, "Red Pads", color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 		s = va("%i", cg.teamScores[0]);
 		CG_DrawStringExt(632 - GIANT_WIDTH * strlen(s), y, s, color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 
 		y += 64;
 
-		CG_DrawStringExt(8, y, "Blue Team", color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
+		CG_DrawStringExt(8, y, "Blue Noses", color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 		s = va("%i", cg.teamScores[1]);
 		CG_DrawStringExt(632 - GIANT_WIDTH * strlen(s), y, s, color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 	} else {

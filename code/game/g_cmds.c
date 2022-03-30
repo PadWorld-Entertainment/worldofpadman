@@ -492,9 +492,9 @@ Let everyone know about a team change
 */
 void BroadcastTeamChange(gclient_t *client, int oldTeam) {
 	if (client->sess.sessionTeam == TEAM_RED) {
-		trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " joined the red team.\n\"", client->pers.netname));
+		trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " joined the Red Pads.\n\"", client->pers.netname));
 	} else if (client->sess.sessionTeam == TEAM_BLUE) {
-		trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " joined the blue team.\n\"", client->pers.netname));
+		trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " joined the Blue Noses.\n\"", client->pers.netname));
 	} else if (client->sess.sessionTeam == TEAM_SPECTATOR && oldTeam != TEAM_SPECTATOR) {
 		trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " joined the spectators.\n\"", client->pers.netname));
 	} else if (client->sess.sessionTeam == TEAM_FREE) {
@@ -572,11 +572,11 @@ void SetTeam(gentity_t *ent, const char *s) {
 
 			// We allow a spread of two
 			if (team == TEAM_RED && counts[TEAM_RED] - counts[TEAM_BLUE] > 1) {
-				trap_SendServerCommand(clientNum, "cp \"Red team has too many players.\n\"");
+				trap_SendServerCommand(clientNum, "cp \"Red Pads have too many players.\n\"");
 				return; // ignore the request
 			}
 			if (team == TEAM_BLUE && counts[TEAM_BLUE] - counts[TEAM_RED] > 1) {
-				trap_SendServerCommand(clientNum, "cp \"Blue team has too many players.\n\"");
+				trap_SendServerCommand(clientNum, "cp \"Blue Noses have too many players.\n\"");
 				return; // ignore the request
 			}
 
@@ -712,10 +712,10 @@ static void Cmd_Team_f(gentity_t *ent) {
 		oldTeam = ent->client->sess.sessionTeam;
 		switch (oldTeam) {
 		case TEAM_BLUE:
-			trap_SendServerCommand(ent - g_entities, "print \"Blue team\n\"");
+			trap_SendServerCommand(ent - g_entities, "print \"Blue Noses\n\"");
 			break;
 		case TEAM_RED:
-			trap_SendServerCommand(ent - g_entities, "print \"Red team\n\"");
+			trap_SendServerCommand(ent - g_entities, "print \"Red Pads\n\"");
 			break;
 		case TEAM_FREE:
 			trap_SendServerCommand(ent - g_entities, "print \"Free team\n\"");
