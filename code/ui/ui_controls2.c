@@ -1279,7 +1279,7 @@ static void Controls_MenuInit(void) {
 	s_controls.sensitivity.generic.type = MTYPE_SLIDER;
 	s_controls.sensitivity.generic.x = SCREEN_WIDTH / 2;
 	s_controls.sensitivity.generic.flags = QMF_SMALLFONT;
-	s_controls.sensitivity.generic.name = "Mouse Speed";
+	s_controls.sensitivity.generic.name = "Mouse Sensitivity";
 	s_controls.sensitivity.generic.id = ID_MOUSESPEED;
 	s_controls.sensitivity.generic.callback = Controls_MenuEvent;
 	s_controls.sensitivity.minvalue = 2;
