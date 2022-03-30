@@ -267,7 +267,8 @@ static void InGame_MenuInit(void) {
 	s_ingame.teamorders.generic.id = ID_TEAMORDERS;
 	s_ingame.teamorders.generic.callback = InGame_Event; 
 	s_ingame.teamorders.string = "TEAM ORDERS";
-	s_ingame.teamorders.color = color_orange;
+	s_ingame.teamorders.color = color_black;
+	s_ingame.teamorders.focuscolor = color_orange;
 	s_ingame.teamorders.style = UI_CENTER | UI_SMALLFONT;
 	if(!(trap_Cvar_VariableValue("g_gametype") >= GT_TEAM)) {
 		s_ingame.teamorders.generic.flags |= QMF_GRAYED;
