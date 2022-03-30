@@ -144,6 +144,9 @@ typedef struct {
 #define ID_JOYENABLE 65
 #define ID_JOYTHRESHOLD 66
 #define ID_SMOOTHMOUSE 67
+#define ID_MOUSEACCELFACTOR 68
+#define ID_MOUSEACCELSTYLE 69
+#define ID_MOUSEACCELOFFSET 70
 
 #define ANIM_IDLE 0
 #define ANIM_RUN 1
@@ -196,6 +199,7 @@ typedef struct {
 	menuaction_s dropCart;
 
 	menuslider_s sensitivity;
+	menulist_s maccelfactor;
 	menuradiobutton_s smoothmouse;
 	menuradiobutton_s invertmouse;
 	menuaction_s lookup;
@@ -256,6 +260,7 @@ typedef struct {
 	int playerWeapon;
 	qboolean playerChat;
 
+	int maf; // index to maf_names!
 	menubitmap_s back;
 	menutext_s name;
 } controls_t;
@@ -328,6 +333,7 @@ static configcvar_t g_configcvars[] =
 	{"m_pitch",	0, 0},
 	{"cg_autoswitch", 0, 0},
 	{"sensitivity", 0, 0},
+	{"cl_mouseAccel", 0, 0},
 	{"in_joystick", 0, 0},
 	{"joy_threshold", 0, 0},
 	{"m_filter", 0,	0},
@@ -372,6 +378,7 @@ static menucommon_s *g_weapons_controls[] = {
 
 static menucommon_s *g_looking_controls[] = {
 	(menucommon_s *)&s_controls.sensitivity,
+	(menucommon_s *)&s_controls.maccelfactor,
 	(menucommon_s *)&s_controls.smoothmouse,
 	(menucommon_s *)&s_controls.invertmouse,
 	(menucommon_s *)&s_controls.lookup,
@@ -849,6 +856,7 @@ static void Controls_GetConfig(void) {
 	s_controls.alwaysrun.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cl_run"));
 	s_controls.autoswitch.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cg_autoswitch"));
 	s_controls.sensitivity.curvalue = UI_ClampCvar(2, 30, Controls_GetCvarValue("sensitivity"));
+	s_controls.maccelfactor.curvalue = UI_ClampCvar(0, 10, Controls_GetCvarValue("cl_mouseAccel"));
 	s_controls.joyenable.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("in_joystick"));
 	s_controls.joythreshold.curvalue = UI_ClampCvar(0.05f, 0.75f, Controls_GetCvarValue("joy_threshold"));
 	s_controls.freelook.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cl_freelook"));
@@ -888,6 +896,7 @@ static void Controls_SetConfig(void) {
 	trap_Cvar_SetValue("cl_run", s_controls.alwaysrun.curvalue);
 	trap_Cvar_SetValue("cg_autoswitch", s_controls.autoswitch.curvalue);
 	trap_Cvar_SetValue("sensitivity", s_controls.sensitivity.curvalue);
+	trap_Cvar_SetValue("cl_mouseAccel", s_controls.maccelfactor.curvalue);
 	trap_Cvar_SetValue("in_joystick", s_controls.joyenable.curvalue);
 	trap_Cvar_SetValue("joy_threshold", s_controls.joythreshold.curvalue);
 	trap_Cvar_SetValue("cl_freelook", s_controls.freelook.curvalue);
@@ -949,6 +958,7 @@ static void Controls_SetDefaults(void) {
 	s_controls.smoothmouse.curvalue = Controls_GetCvarDefault("m_filter");
 	s_controls.autoswitch.curvalue = Controls_GetCvarDefault("cg_autoswitch");
 	s_controls.sensitivity.curvalue = Controls_GetCvarDefault("sensitivity");
+	s_controls.maccelfactor.curvalue = Controls_GetCvarDefault("cl_mouseAccel");
 	s_controls.joyenable.curvalue = Controls_GetCvarDefault("in_joystick");
 	s_controls.joythreshold.curvalue = Controls_GetCvarDefault("joy_threshold");
 	s_controls.freelook.curvalue = Controls_GetCvarDefault("cl_freelook");
@@ -1158,6 +1168,9 @@ static void Controls_MenuEvent(void *ptr, int event) {
 
 	case ID_FREELOOK:
 	case ID_MOUSESPEED:
+	case ID_MOUSEACCELFACTOR:
+	case ID_MOUSEACCELSTYLE:
+	case ID_MOUSEACCELOFFSET:
 	case ID_INVERTMOUSE:
 	case ID_SMOOTHMOUSE:
 	case ID_ALWAYSRUN:
@@ -1193,7 +1206,9 @@ Controls_MenuInit
 =================
 */
 static void Controls_MenuInit(void) {
-	// zero set all our globals
+	static const char *maf_names[] = {"Off", "1x", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", NULL};
+	
+		// zero set all our globals
 	memset(&s_controls, 0, sizeof(s_controls));
 
 	Controls_Cache();
@@ -1286,6 +1301,14 @@ static void Controls_MenuInit(void) {
 	s_controls.sensitivity.maxvalue = 30;
 	s_controls.sensitivity.generic.statusbar = Controls_StatusBar;
 
+	s_controls.maccelfactor.generic.type = MTYPE_SPINCONTROL;
+	s_controls.maccelfactor.generic.x = SCREEN_WIDTH / 2;
+	s_controls.maccelfactor.generic.flags = QMF_SMALLFONT;
+	s_controls.maccelfactor.generic.name = "Mouse Acceleration";
+	s_controls.maccelfactor.generic.id = ID_MOUSEACCELFACTOR;
+	s_controls.maccelfactor.generic.callback = Controls_MenuEvent;
+	s_controls.maccelfactor.itemnames = maf_names;
+	
 	s_controls.smoothmouse.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.smoothmouse.generic.flags = QMF_SMALLFONT;
 	s_controls.smoothmouse.generic.x = SCREEN_WIDTH / 2;
@@ -1670,6 +1693,7 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.misc);
 
 	Menu_AddItem(&s_controls.menu, &s_controls.sensitivity);
+	Menu_AddItem(&s_controls.menu, &s_controls.maccelfactor);
 	Menu_AddItem(&s_controls.menu, &s_controls.smoothmouse);
 	Menu_AddItem(&s_controls.menu, &s_controls.invertmouse);
 	Menu_AddItem(&s_controls.menu, &s_controls.lookup);
