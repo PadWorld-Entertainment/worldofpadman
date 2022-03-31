@@ -199,7 +199,7 @@ typedef struct {
 	menuaction_s dropCart;
 
 	menuslider_s sensitivity;
-	menulist_s maccelfactor;
+	menuslider_s maccelfactor;
 	menuradiobutton_s maccelstyle;
 	menuslider_s macceloffset;
 	menuradiobutton_s smoothmouse;
@@ -262,7 +262,6 @@ typedef struct {
 	int playerWeapon;
 	qboolean playerChat;
 
-	int maf; // index to maf_names!
 	menubitmap_s back;
 	menutext_s name;
 } controls_t;
@@ -1241,8 +1240,6 @@ Controls_MenuInit
 =================
 */
 static void Controls_MenuInit(void) {
-	static const char *maf_names[] = {"Off", "1x", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", NULL};
-	
 		// zero set all our globals
 	memset(&s_controls, 0, sizeof(s_controls));
 
@@ -1336,13 +1333,14 @@ static void Controls_MenuInit(void) {
 	s_controls.sensitivity.maxvalue = 30;
 	s_controls.sensitivity.generic.statusbar = Controls_StatusBar;
 
-	s_controls.maccelfactor.generic.type = MTYPE_SPINCONTROL;
+	s_controls.maccelfactor.generic.type = MTYPE_SLIDER;
 	s_controls.maccelfactor.generic.x = SCREEN_WIDTH / 2;
 	s_controls.maccelfactor.generic.flags = QMF_SMALLFONT;
 	s_controls.maccelfactor.generic.name = "Mouse Acceleration:";
 	s_controls.maccelfactor.generic.id = ID_MOUSEACCELFACTOR;
 	s_controls.maccelfactor.generic.callback = Controls_MenuEvent;
-	s_controls.maccelfactor.itemnames = maf_names;
+	s_controls.maccelfactor.minvalue = 0;
+	s_controls.maccelfactor.maxvalue = 10;
 	s_controls.maccelfactor.generic.statusbar = Controls_StatusBar;
 
 	s_controls.maccelstyle.generic.type = MTYPE_RADIOBUTTON;
