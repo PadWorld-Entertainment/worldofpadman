@@ -727,10 +727,20 @@ static void Controls_Update(void) {
 		break;
 	}
 
-	// special case :/
+	// special cases :/
 	if (0 == UI_GetCvarInt("cl_voip") || 1 == UI_GetCvarInt("cl_voipUseVAD")) {
 		s_controls.pushToTalk.generic.flags |= QMF_GRAYED;
 	}
+
+	if (s_controls.maccelfactor.curvalue == 0) {
+		s_controls.maccelstyle.curvalue = 0;
+		s_controls.maccelstyle.generic.flags |= QMF_GRAYED;
+	}
+
+	if (s_controls.maccelfactor.curvalue == 0 || s_controls.maccelstyle.curvalue == 0) {
+		s_controls.macceloffset.generic.flags |= QMF_GRAYED;
+	}
+
 }
 
 /*
@@ -1160,7 +1170,7 @@ static void Controls_MenuEvent(void *ptr, int event) {
 	case ID_BACK:
 		if (event == QM_ACTIVATED) {
 			if (s_controls.changesmade)
-				Controls_SetConfig();
+			Controls_SetConfig();
 			UI_PopMenu();
 		}
 		break;
@@ -1181,7 +1191,19 @@ static void Controls_MenuEvent(void *ptr, int event) {
 	case ID_FREELOOK:
 	case ID_MOUSESPEED:
 	case ID_MOUSEACCELFACTOR:
+		if (event == QM_ACTIVATED) {
+			s_controls.changesmade = qtrue;
+			Controls_Update();
+		}
+		break;
+
 	case ID_MOUSEACCELSTYLE:
+		if (event == QM_ACTIVATED) {
+			s_controls.changesmade = qtrue;
+			Controls_Update();
+		}
+		break;
+
 	case ID_MOUSEACCELOFFSET:
 	case ID_INVERTMOUSE:
 	case ID_SMOOTHMOUSE:
@@ -1320,7 +1342,8 @@ static void Controls_MenuInit(void) {
 	s_controls.maccelfactor.generic.id = ID_MOUSEACCELFACTOR;
 	s_controls.maccelfactor.generic.callback = Controls_MenuEvent;
 	s_controls.maccelfactor.itemnames = maf_names;
-	
+	s_controls.maccelfactor.generic.statusbar = Controls_StatusBar;
+
 	s_controls.maccelstyle.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.maccelstyle.generic.flags = QMF_SMALLFONT;
 	s_controls.maccelstyle.generic.x = SCREEN_WIDTH / 2;
