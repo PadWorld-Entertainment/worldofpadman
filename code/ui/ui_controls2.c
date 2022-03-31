@@ -1169,8 +1169,9 @@ static void Controls_MenuEvent(void *ptr, int event) {
 
 	case ID_BACK:
 		if (event == QM_ACTIVATED) {
-			if (s_controls.changesmade)
-			Controls_SetConfig();
+			if (s_controls.changesmade) {
+				Controls_SetConfig();
+			}
 			UI_PopMenu();
 		}
 		break;
@@ -1757,8 +1758,8 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.freelook);
 	Menu_AddItem(&s_controls.menu, &s_controls.centerview);
 	Menu_AddItem(&s_controls.menu, &s_controls.thirdPerson);
-//	Menu_AddItem(&s_controls.menu, &s_controls.joyenable);
-//	Menu_AddItem(&s_controls.menu, &s_controls.joythreshold);
+	Menu_AddItem(&s_controls.menu, &s_controls.joyenable);
+	Menu_AddItem(&s_controls.menu, &s_controls.joythreshold);
 
 	Menu_AddItem(&s_controls.menu, &s_controls.alwaysrun);
 	Menu_AddItem(&s_controls.menu, &s_controls.run);
