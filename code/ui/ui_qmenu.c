@@ -635,6 +635,7 @@ static void Slider_Draw(menuslider_s *s) {
 	// draw slider
 	UI_SetColor(color);
 	UI_DrawHandlePic(x + SMALLCHAR_WIDTH, y + 4, 96, 8, sliderBar);
+	UI_DrawStringNS(x + SMALLCHAR_WIDTH + 100, y + 2, va("%.1f", s->curvalue), UI_LEFT, 12, menu_text_color);
 	UI_SetColor(NULL);
 
 	// clamp thumb
