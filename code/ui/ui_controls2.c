@@ -731,12 +731,12 @@ static void Controls_Update(void) {
 		s_controls.pushToTalk.generic.flags |= QMF_GRAYED;
 	}
 
-	if (s_controls.maccelfactor.curvalue == 0) {
+	if (s_controls.maccelfactor.curvalue <= 0) {
 		s_controls.maccelstyle.curvalue = 0;
 		s_controls.maccelstyle.generic.flags |= QMF_GRAYED;
 	}
 
-	if (s_controls.maccelfactor.curvalue == 0 || s_controls.maccelstyle.curvalue == 0) {
+	if (s_controls.maccelfactor.curvalue <= 0 || s_controls.maccelstyle.curvalue == 0) {
 		s_controls.macceloffset.generic.flags |= QMF_GRAYED;
 	}
 
@@ -1358,7 +1358,7 @@ static void Controls_MenuInit(void) {
 	s_controls.macceloffset.generic.id = ID_MOUSEACCELOFFSET;
 	s_controls.macceloffset.generic.callback = Controls_MenuEvent;
 	s_controls.macceloffset.minvalue = 0.001f;
-	s_controls.macceloffset.maxvalue = 50.0f;
+	s_controls.macceloffset.maxvalue = 50000.0f;
 	s_controls.macceloffset.generic.statusbar = Controls_StatusBar;
 
 	s_controls.smoothmouse.generic.type = MTYPE_RADIOBUTTON;
