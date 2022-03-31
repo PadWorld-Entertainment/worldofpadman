@@ -740,6 +740,10 @@ static void Controls_Update(void) {
 		s_controls.macceloffset.generic.flags |= QMF_GRAYED;
 	}
 
+	if (s_controls.joyenable.curvalue <= 0) {
+		s_controls.joythreshold.generic.flags |= QMF_GRAYED;
+	}
+
 }
 
 /*
@@ -1210,6 +1214,12 @@ static void Controls_MenuEvent(void *ptr, int event) {
 	case ID_ALWAYSRUN:
 	case ID_AUTOSWITCH:
 	case ID_JOYENABLE:
+		if (event == QM_ACTIVATED) {
+			s_controls.changesmade = qtrue;
+			Controls_Update();
+		}
+		break;
+
 	case ID_JOYTHRESHOLD:
 		if (event == QM_ACTIVATED) {
 			s_controls.changesmade = qtrue;
