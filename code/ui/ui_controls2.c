@@ -200,6 +200,8 @@ typedef struct {
 
 	menuslider_s sensitivity;
 	menulist_s maccelfactor;
+	menuradiobutton_s maccelstyle;
+	menuslider_s macceloffset;
 	menuradiobutton_s smoothmouse;
 	menuradiobutton_s invertmouse;
 	menuaction_s lookup;
@@ -334,6 +336,8 @@ static configcvar_t g_configcvars[] =
 	{"cg_autoswitch", 0, 0},
 	{"sensitivity", 0, 0},
 	{"cl_mouseAccel", 0, 0},
+	{"cl_mouseAccelStyle", 0, 0},
+	{"cl_mouseAccelOffset", 0, 0},
 	{"in_joystick", 0, 0},
 	{"joy_threshold", 0, 0},
 	{"m_filter", 0,	0},
@@ -379,6 +383,8 @@ static menucommon_s *g_weapons_controls[] = {
 static menucommon_s *g_looking_controls[] = {
 	(menucommon_s *)&s_controls.sensitivity,
 	(menucommon_s *)&s_controls.maccelfactor,
+	(menucommon_s *)&s_controls.maccelstyle,
+	(menucommon_s *)&s_controls.macceloffset,
 	(menucommon_s *)&s_controls.smoothmouse,
 	(menucommon_s *)&s_controls.invertmouse,
 	(menucommon_s *)&s_controls.lookup,
@@ -857,6 +863,8 @@ static void Controls_GetConfig(void) {
 	s_controls.autoswitch.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cg_autoswitch"));
 	s_controls.sensitivity.curvalue = UI_ClampCvar(2, 30, Controls_GetCvarValue("sensitivity"));
 	s_controls.maccelfactor.curvalue = UI_ClampCvar(0, 10, Controls_GetCvarValue("cl_mouseAccel"));
+	s_controls.maccelstyle.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cl_mouseAccelStyle"));
+	s_controls.macceloffset.curvalue = UI_ClampCvar(0.001f, 50000.0f, Controls_GetCvarValue("cl_mouseAccelOffset"));
 	s_controls.joyenable.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("in_joystick"));
 	s_controls.joythreshold.curvalue = UI_ClampCvar(0.05f, 0.75f, Controls_GetCvarValue("joy_threshold"));
 	s_controls.freelook.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cl_freelook"));
@@ -897,6 +905,8 @@ static void Controls_SetConfig(void) {
 	trap_Cvar_SetValue("cg_autoswitch", s_controls.autoswitch.curvalue);
 	trap_Cvar_SetValue("sensitivity", s_controls.sensitivity.curvalue);
 	trap_Cvar_SetValue("cl_mouseAccel", s_controls.maccelfactor.curvalue);
+	trap_Cvar_SetValue("cl_mouseAccelStyle", s_controls.maccelstyle.curvalue);
+	trap_Cvar_SetValue("cl_mouseAccelOffset", s_controls.macceloffset.curvalue);
 	trap_Cvar_SetValue("in_joystick", s_controls.joyenable.curvalue);
 	trap_Cvar_SetValue("joy_threshold", s_controls.joythreshold.curvalue);
 	trap_Cvar_SetValue("cl_freelook", s_controls.freelook.curvalue);
@@ -959,6 +969,8 @@ static void Controls_SetDefaults(void) {
 	s_controls.autoswitch.curvalue = Controls_GetCvarDefault("cg_autoswitch");
 	s_controls.sensitivity.curvalue = Controls_GetCvarDefault("sensitivity");
 	s_controls.maccelfactor.curvalue = Controls_GetCvarDefault("cl_mouseAccel");
+	s_controls.maccelstyle.curvalue = Controls_GetCvarDefault("cl_mouseAccelStyle");
+	s_controls.macceloffset.curvalue = Controls_GetCvarDefault("cl_mouseAccelOffset");
 	s_controls.joyenable.curvalue = Controls_GetCvarDefault("in_joystick");
 	s_controls.joythreshold.curvalue = Controls_GetCvarDefault("joy_threshold");
 	s_controls.freelook.curvalue = Controls_GetCvarDefault("cl_freelook");
@@ -1309,6 +1321,24 @@ static void Controls_MenuInit(void) {
 	s_controls.maccelfactor.generic.callback = Controls_MenuEvent;
 	s_controls.maccelfactor.itemnames = maf_names;
 	
+	s_controls.maccelstyle.generic.type = MTYPE_RADIOBUTTON;
+	s_controls.maccelstyle.generic.flags = QMF_SMALLFONT;
+	s_controls.maccelstyle.generic.x = SCREEN_WIDTH / 2;
+	s_controls.maccelstyle.generic.name = "Accel. Offset Style";
+	s_controls.maccelstyle.generic.id = ID_MOUSEACCELSTYLE;
+	s_controls.maccelstyle.generic.callback = Controls_MenuEvent;
+	s_controls.maccelstyle.generic.statusbar = Controls_StatusBar;
+
+	s_controls.macceloffset.generic.type = MTYPE_SLIDER;
+	s_controls.macceloffset.generic.flags = QMF_SMALLFONT;
+	s_controls.macceloffset.generic.x = SCREEN_WIDTH / 2;
+	s_controls.macceloffset.generic.name = "Acceleration Offset";
+	s_controls.macceloffset.generic.id = ID_MOUSEACCELOFFSET;
+	s_controls.macceloffset.generic.callback = Controls_MenuEvent;
+	s_controls.macceloffset.minvalue = 0.001f;
+	s_controls.macceloffset.maxvalue = 50.0f;
+	s_controls.macceloffset.generic.statusbar = Controls_StatusBar;
+
 	s_controls.smoothmouse.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.smoothmouse.generic.flags = QMF_SMALLFONT;
 	s_controls.smoothmouse.generic.x = SCREEN_WIDTH / 2;
@@ -1694,6 +1724,8 @@ static void Controls_MenuInit(void) {
 
 	Menu_AddItem(&s_controls.menu, &s_controls.sensitivity);
 	Menu_AddItem(&s_controls.menu, &s_controls.maccelfactor);
+	Menu_AddItem(&s_controls.menu, &s_controls.maccelstyle);
+	Menu_AddItem(&s_controls.menu, &s_controls.macceloffset);
 	Menu_AddItem(&s_controls.menu, &s_controls.smoothmouse);
 	Menu_AddItem(&s_controls.menu, &s_controls.invertmouse);
 	Menu_AddItem(&s_controls.menu, &s_controls.lookup);
@@ -1702,8 +1734,8 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.freelook);
 	Menu_AddItem(&s_controls.menu, &s_controls.centerview);
 	Menu_AddItem(&s_controls.menu, &s_controls.thirdPerson);
-	Menu_AddItem(&s_controls.menu, &s_controls.joyenable);
-	Menu_AddItem(&s_controls.menu, &s_controls.joythreshold);
+//	Menu_AddItem(&s_controls.menu, &s_controls.joyenable);
+//	Menu_AddItem(&s_controls.menu, &s_controls.joythreshold);
 
 	Menu_AddItem(&s_controls.menu, &s_controls.alwaysrun);
 	Menu_AddItem(&s_controls.menu, &s_controls.run);
