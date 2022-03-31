@@ -272,59 +272,59 @@ static controls_t s_controls;
 static vec4_t controls_binding_color = {1.00f, 1.00f, 0.00f, 1.00f};
 
 static bind_t g_bindings[] = {
-	{"+speed", "Run/Walk", ID_SPEED, ANIM_RUN, K_SHIFT, -1, -1, -1},
-	{"+forward", "Walk Forward", ID_FORWARD, ANIM_WALK, K_UPARROW, 'w', -1, -1},
-	{"+back", "Backpedal", ID_BACKPEDAL, ANIM_BACK, K_DOWNARROW, 's', -1, -1},
-	{"+moveleft", "Step Left", ID_MOVELEFT, ANIM_STEPLEFT, ',', 'a', -1, -1},
-	{"+moveright", "Step Right", ID_MOVERIGHT, ANIM_STEPRIGHT, '.', 'd', -1, -1},
-	{"+moveup", "Up/Jump", ID_MOVEUP, ANIM_JUMP, K_SPACE, -1, -1, -1},
-	{"+movedown", "Down/Crouch", ID_MOVEDOWN, ANIM_CROUCH, 'c', -1, -1, -1},
-	{"+left", "Turn Left", ID_LEFT, ANIM_TURNLEFT, K_LEFTARROW, -1, -1, -1},
-	{"+right", "Turn Right", ID_RIGHT, ANIM_TURNRIGHT, K_RIGHTARROW, -1, -1, -1},
-	{"+strafe", "Sidestep/Turn", ID_STRAFE, ANIM_IDLE, K_ALT, -1, -1, -1},
-	{"+button2", "Use Item", ID_USEITEM, ANIM_IDLE, K_ENTER, 'e', -1, -1},
-	{"dropCartridge", "Drop Item", ID_DROPCART, ANIM_IDLE, K_BACKSPACE, 'f', -1, -1},
+	{"+speed", "Run/Walk:", ID_SPEED, ANIM_RUN, K_SHIFT, -1, -1, -1},
+	{"+forward", "Walk Forward:", ID_FORWARD, ANIM_WALK, K_UPARROW, 'w', -1, -1},
+	{"+back", "Backpedal:", ID_BACKPEDAL, ANIM_BACK, K_DOWNARROW, 's', -1, -1},
+	{"+moveleft", "Step Left:", ID_MOVELEFT, ANIM_STEPLEFT, ',', 'a', -1, -1},
+	{"+moveright", "Step Right:", ID_MOVERIGHT, ANIM_STEPRIGHT, '.', 'd', -1, -1},
+	{"+moveup", "Up/Jump:", ID_MOVEUP, ANIM_JUMP, K_SPACE, -1, -1, -1},
+	{"+movedown", "Down/Crouch:", ID_MOVEDOWN, ANIM_CROUCH, 'c', -1, -1, -1},
+	{"+left", "Turn Left:", ID_LEFT, ANIM_TURNLEFT, K_LEFTARROW, -1, -1, -1},
+	{"+right", "Turn Right:", ID_RIGHT, ANIM_TURNRIGHT, K_RIGHTARROW, -1, -1, -1},
+	{"+strafe", "Sidestep/Turn:", ID_STRAFE, ANIM_IDLE, K_ALT, -1, -1, -1},
+	{"+button2", "Activate/Use Item:", ID_USEITEM, ANIM_IDLE, K_ENTER, 'e', -1, -1},
+	{"dropCartridge", "Drop Item:", ID_DROPCART, ANIM_IDLE, K_BACKSPACE, 'f', -1, -1},
 
-	{"+lookup", "Look Up", ID_LOOKUP, ANIM_LOOKUP, K_PGDN, -1, -1, -1},
-	{"+lookdown", "Look Down", ID_LOOKDOWN, ANIM_LOOKDOWN, K_DEL, -1, -1, -1},
-	{"+mlook", "Mouse Look", ID_MOUSELOOK, ANIM_IDLE, '/', -1, -1, -1},
-	{"centerview", "Center View", ID_CENTERVIEW, ANIM_IDLE, K_END, -1, -1, -1},
-	{"toggle cg_thirdPerson", "3rd Person View", ID_3RDPERSON, ANIM_IDLE, K_HOME, K_KP_5, -1, -1},
+	{"+lookup", "Look Up:", ID_LOOKUP, ANIM_LOOKUP, K_PGDN, -1, -1, -1},
+	{"+lookdown", "Look Down:", ID_LOOKDOWN, ANIM_LOOKDOWN, K_DEL, -1, -1, -1},
+	{"+mlook", "Mouse Look:", ID_MOUSELOOK, ANIM_IDLE, '/', -1, -1, -1},
+	{"centerview", "Center View:", ID_CENTERVIEW, ANIM_IDLE, K_END, -1, -1, -1},
+	{"toggle cg_thirdPerson", "3rd Person View:", ID_3RDPERSON, ANIM_IDLE, K_HOME, K_KP_5, -1, -1},
 
-	{"+attack", "Attack", ID_ATTACK, ANIM_ATTACK, K_MOUSE1, K_CTRL, -1, -1},
-	{"+zoom", "Scope", ID_ZOOM, ANIM_IDLE, K_MOUSE2, 'x', -1, -1},
-	{"weapnext", "Next Weapon", ID_WEAPNEXT, ANIM_IDLE, K_MWHEELDOWN, ']', -1, -1},
-	{"weapprev", "Previous Weapon", ID_WEAPPREV, ANIM_IDLE, K_MWHEELUP, '[', -1, -1},
-	{"weapon 1", "PUNCHY", ID_WEAPON1, ANIM_WEAPON1, '1', -1, -1, -1},
-	{"weapon 2", "NiPPER", ID_WEAPON2, ANIM_WEAPON2, '2', -1, -1, -1},
-	{"weapon 3", "PUMPER", ID_WEAPON3, ANIM_WEAPON3, '3', -1, -1, -1},
-	{"weapon 4", "BALLOONY", ID_WEAPON4, ANIM_WEAPON4, '4', -1, -1, -1},
-	{"weapon 5", "BETTY", ID_WEAPON5, ANIM_WEAPON5, '5', -1, -1, -1},
-	{"weapon 6", "BOASTER", ID_WEAPON6, ANIM_WEAPON6, '6', -1, -1, -1},
-	{"weapon 7", "SPLASHER", ID_WEAPON7, ANIM_WEAPON7, '7', -1, -1, -1},
-	{"weapon 8", "BUBBLE G.", ID_WEAPON8, ANIM_WEAPON8, '8', -1, -1, -1},
-	{"weapon 9", "IMPERiUS", ID_WEAPON9, ANIM_WEAPON9, '9', -1, -1, -1},
+	{"+attack", "Attack:", ID_ATTACK, ANIM_ATTACK, K_MOUSE1, K_CTRL, -1, -1},
+	{"+zoom", "Scope:", ID_ZOOM, ANIM_IDLE, K_MOUSE2, 'x', -1, -1},
+	{"weapnext", "Next Weapon:", ID_WEAPNEXT, ANIM_IDLE, K_MWHEELDOWN, ']', -1, -1},
+	{"weapprev", "Previous Weapon:", ID_WEAPPREV, ANIM_IDLE, K_MWHEELUP, '[', -1, -1},
+	{"weapon 1", "PUNCHY:", ID_WEAPON1, ANIM_WEAPON1, '1', -1, -1, -1},
+	{"weapon 2", "NiPPER:", ID_WEAPON2, ANIM_WEAPON2, '2', -1, -1, -1},
+	{"weapon 3", "PUMPER:", ID_WEAPON3, ANIM_WEAPON3, '3', -1, -1, -1},
+	{"weapon 4", "BALLOONY:", ID_WEAPON4, ANIM_WEAPON4, '4', -1, -1, -1},
+	{"weapon 5", "BETTY:", ID_WEAPON5, ANIM_WEAPON5, '5', -1, -1, -1},
+	{"weapon 6", "BOASTER:", ID_WEAPON6, ANIM_WEAPON6, '6', -1, -1, -1},
+	{"weapon 7", "SPLASHER:", ID_WEAPON7, ANIM_WEAPON7, '7', -1, -1, -1},
+	{"weapon 8", "BUBBLE G.:", ID_WEAPON8, ANIM_WEAPON8, '8', -1, -1, -1},
+	{"weapon 9", "IMPERiUS:", ID_WEAPON9, ANIM_WEAPON9, '9', -1, -1, -1},
 
-	{"messagemode", "Chat All", ID_CHAT1, ANIM_CHAT, 't', -1, -1, -1},
-	{"messagemode2", "Chat Team", ID_CHAT2, ANIM_CHAT, 'y', 'z', -1, -1},
-	{"messagemode3", "Chat Target", ID_CHAT3, ANIM_CHAT, 'u', -1, -1, -1},
-	{"messagemode4", "Chat Attacker", ID_CHAT4, ANIM_CHAT, 'i', -1, -1, -1},
-	{"+voiprecord", "Push to Talk", ID_PUSH2TALK, ANIM_IDLE, 'r', -1, -1, -1},
-	{"+button3", "Gesture", ID_GESTURE, ANIM_GESTURE, K_MOUSE3, 'q', -1, -1},
-	{"ui_teamorders", "Team Orders", ID_TEAMORDERS, ANIM_IDLE, K_F3, -1, -1, -1},
+	{"messagemode", "Chat All:", ID_CHAT1, ANIM_CHAT, 't', -1, -1, -1},
+	{"messagemode2", "Chat Team:", ID_CHAT2, ANIM_CHAT, 'y', 'z', -1, -1},
+	{"messagemode3", "Chat Target:", ID_CHAT3, ANIM_CHAT, 'u', -1, -1, -1},
+	{"messagemode4", "Chat Attacker:", ID_CHAT4, ANIM_CHAT, 'i', -1, -1, -1},
+	{"+voiprecord", "Push to Talk:", ID_PUSH2TALK, ANIM_IDLE, 'r', -1, -1, -1},
+	{"+button3", "Gesture:", ID_GESTURE, ANIM_GESTURE, K_MOUSE3, 'q', -1, -1},
+	{"ui_teamorders", "Team Orders:", ID_TEAMORDERS, ANIM_IDLE, K_F3, -1, -1, -1},
 
-	{"+scores", "Scoreboard", ID_SHOWSCORES, ANIM_IDLE, K_TAB, -1, -1, -1},
-	{"togglemenu", "Ingame Menu", ID_TOGGLEMENU, ANIM_IDLE, K_ESCAPE, -1, -1, -1},
-	{"wop_music", "Music Player", ID_MUSIC, ANIM_IDLE, 'm', -1, -1, -1},
-	{"ui_help gametype", "Help Gametype", ID_HELP_GAMETYPE, ANIM_IDLE, 'g', -1, -1, -1},
-	{"ui_help item", "Help Weapons/Items", ID_HELP_ITEMS, ANIM_IDLE, 'h', -1, -1, -1},
-	{"toggle cg_drawServerInfos", "Server Info", ID_SERVERINFO, ANIM_IDLE, 'k', -1, -1, -1},
-	{"wop_nextsong", "Skip to Next Song", ID_NEXTSONG, ANIM_IDLE, 'n', -1, -1, -1},
-	{"toggle cl_autoRecordDemo 1, 0;stoprecord", "Autorecord Demo", ID_RECORDDEMO, ANIM_IDLE, 'o', -1, -1, -1},
-	{"toggle g_synchronousClients", "Sync Clients", ID_SYNCCLIENTS, ANIM_IDLE, 'p', -1, -1, -1},
-	{"vote yes", "Vote Yes", ID_VOTEYES, ANIM_IDLE, K_F1, K_KP_PLUS, -1, -1},
-	{"vote no", "Vote No", ID_VOTENO, ANIM_IDLE, K_F2, K_KP_MINUS, -1, -1},
-	{"screenshotJPEG", "Screenshot", ID_SCREENSHOT, ANIM_IDLE, K_F12, -1, -1, -1},
+	{"+scores", "Scoreboard:", ID_SHOWSCORES, ANIM_IDLE, K_TAB, -1, -1, -1},
+	{"togglemenu", "Ingame Menu:", ID_TOGGLEMENU, ANIM_IDLE, K_ESCAPE, -1, -1, -1},
+	{"wop_music", "Music Player:", ID_MUSIC, ANIM_IDLE, 'm', -1, -1, -1},
+	{"ui_help gametype", "Help Gametype:", ID_HELP_GAMETYPE, ANIM_IDLE, 'g', -1, -1, -1},
+	{"ui_help item", "Help Weapons/Items:", ID_HELP_ITEMS, ANIM_IDLE, 'h', -1, -1, -1},
+	{"toggle cg_drawServerInfos", "Server Info:", ID_SERVERINFO, ANIM_IDLE, 'k', -1, -1, -1},
+	{"wop_nextsong", "Skip to Next Song:", ID_NEXTSONG, ANIM_IDLE, 'n', -1, -1, -1},
+	{"toggle cl_autoRecordDemo 1, 0;stoprecord", "Autorecord Demo:", ID_RECORDDEMO, ANIM_IDLE, 'o', -1, -1, -1},
+	{"toggle g_synchronousClients", "Sync Clients:", ID_SYNCCLIENTS, ANIM_IDLE, 'p', -1, -1, -1},
+	{"vote yes", "Vote Yes:", ID_VOTEYES, ANIM_IDLE, K_F1, K_KP_PLUS, -1, -1},
+	{"vote no", "Vote No:", ID_VOTENO, ANIM_IDLE, K_F2, K_KP_MINUS, -1, -1},
+	{"screenshotJPEG", "Screenshot:", ID_SCREENSHOT, ANIM_IDLE, K_F12, -1, -1, -1},
 
 	{(char *)NULL, (char *)NULL, 0, 0, -1, -1, -1, -1},
 };
@@ -1328,7 +1328,7 @@ static void Controls_MenuInit(void) {
 	s_controls.sensitivity.generic.type = MTYPE_SLIDER;
 	s_controls.sensitivity.generic.x = SCREEN_WIDTH / 2;
 	s_controls.sensitivity.generic.flags = QMF_SMALLFONT;
-	s_controls.sensitivity.generic.name = "Mouse Sensitivity";
+	s_controls.sensitivity.generic.name = "Mouse Sensitivity:";
 	s_controls.sensitivity.generic.id = ID_MOUSESPEED;
 	s_controls.sensitivity.generic.callback = Controls_MenuEvent;
 	s_controls.sensitivity.minvalue = 2;
@@ -1338,7 +1338,7 @@ static void Controls_MenuInit(void) {
 	s_controls.maccelfactor.generic.type = MTYPE_SPINCONTROL;
 	s_controls.maccelfactor.generic.x = SCREEN_WIDTH / 2;
 	s_controls.maccelfactor.generic.flags = QMF_SMALLFONT;
-	s_controls.maccelfactor.generic.name = "Mouse Acceleration";
+	s_controls.maccelfactor.generic.name = "Mouse Acceleration:";
 	s_controls.maccelfactor.generic.id = ID_MOUSEACCELFACTOR;
 	s_controls.maccelfactor.generic.callback = Controls_MenuEvent;
 	s_controls.maccelfactor.itemnames = maf_names;
@@ -1347,7 +1347,7 @@ static void Controls_MenuInit(void) {
 	s_controls.maccelstyle.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.maccelstyle.generic.flags = QMF_SMALLFONT;
 	s_controls.maccelstyle.generic.x = SCREEN_WIDTH / 2;
-	s_controls.maccelstyle.generic.name = "Accel. Offset Style";
+	s_controls.maccelstyle.generic.name = "Accel. Offset Style:";
 	s_controls.maccelstyle.generic.id = ID_MOUSEACCELSTYLE;
 	s_controls.maccelstyle.generic.callback = Controls_MenuEvent;
 	s_controls.maccelstyle.generic.statusbar = Controls_StatusBar;
@@ -1355,7 +1355,7 @@ static void Controls_MenuInit(void) {
 	s_controls.macceloffset.generic.type = MTYPE_SLIDER;
 	s_controls.macceloffset.generic.flags = QMF_SMALLFONT;
 	s_controls.macceloffset.generic.x = SCREEN_WIDTH / 2;
-	s_controls.macceloffset.generic.name = "Acceleration Offset";
+	s_controls.macceloffset.generic.name = "Acceleration Offset:";
 	s_controls.macceloffset.generic.id = ID_MOUSEACCELOFFSET;
 	s_controls.macceloffset.generic.callback = Controls_MenuEvent;
 	s_controls.macceloffset.minvalue = 0.001f;
@@ -1365,7 +1365,7 @@ static void Controls_MenuInit(void) {
 	s_controls.smoothmouse.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.smoothmouse.generic.flags = QMF_SMALLFONT;
 	s_controls.smoothmouse.generic.x = SCREEN_WIDTH / 2;
-	s_controls.smoothmouse.generic.name = "Smooth Mouse";
+	s_controls.smoothmouse.generic.name = "Smooth Mouse:";
 	s_controls.smoothmouse.generic.id = ID_SMOOTHMOUSE;
 	s_controls.smoothmouse.generic.callback = Controls_MenuEvent;
 	s_controls.smoothmouse.generic.statusbar = Controls_StatusBar;
@@ -1374,7 +1374,7 @@ static void Controls_MenuInit(void) {
 	s_controls.invertmouse.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.invertmouse.generic.flags = QMF_SMALLFONT;
 	s_controls.invertmouse.generic.x = SCREEN_WIDTH / 2;
-	s_controls.invertmouse.generic.name = "Invert Mouse";
+	s_controls.invertmouse.generic.name = "Invert Mouse:";
 	s_controls.invertmouse.generic.id = ID_INVERTMOUSE;
 	s_controls.invertmouse.generic.callback = Controls_MenuEvent;
 	s_controls.invertmouse.generic.statusbar = Controls_StatusBar;
@@ -1401,7 +1401,7 @@ static void Controls_MenuInit(void) {
 	s_controls.freelook.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.freelook.generic.flags = QMF_SMALLFONT;
 	s_controls.freelook.generic.x = SCREEN_WIDTH / 2;
-	s_controls.freelook.generic.name = "Free Look";
+	s_controls.freelook.generic.name = "Free Look:";
 	s_controls.freelook.generic.id = ID_FREELOOK;
 	s_controls.freelook.generic.callback = Controls_MenuEvent;
 	s_controls.freelook.generic.statusbar = Controls_StatusBar;
@@ -1423,7 +1423,7 @@ static void Controls_MenuInit(void) {
 	s_controls.joyenable.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.joyenable.generic.flags = QMF_SMALLFONT;
 	s_controls.joyenable.generic.x = SCREEN_WIDTH / 2;
-	s_controls.joyenable.generic.name = "Joystick";
+	s_controls.joyenable.generic.name = "Joystick:";
 	s_controls.joyenable.generic.id = ID_JOYENABLE;
 	s_controls.joyenable.generic.callback = Controls_MenuEvent;
 	s_controls.joyenable.generic.statusbar = Controls_StatusBar;
@@ -1431,7 +1431,7 @@ static void Controls_MenuInit(void) {
 	s_controls.joythreshold.generic.type = MTYPE_SLIDER;
 	s_controls.joythreshold.generic.x = SCREEN_WIDTH / 2;
 	s_controls.joythreshold.generic.flags = QMF_SMALLFONT;
-	s_controls.joythreshold.generic.name = "Joystick Threshold";
+	s_controls.joythreshold.generic.name = "Joystick Threshold:";
 	s_controls.joythreshold.generic.id = ID_JOYTHRESHOLD;
 	s_controls.joythreshold.generic.callback = Controls_MenuEvent;
 	s_controls.joythreshold.minvalue = 0.05f;
@@ -1441,7 +1441,7 @@ static void Controls_MenuInit(void) {
 	s_controls.alwaysrun.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.alwaysrun.generic.flags = QMF_SMALLFONT;
 	s_controls.alwaysrun.generic.x = SCREEN_WIDTH / 2;
-	s_controls.alwaysrun.generic.name = "Always Run";
+	s_controls.alwaysrun.generic.name = "Always Run:";
 	s_controls.alwaysrun.generic.id = ID_ALWAYSRUN;
 	s_controls.alwaysrun.generic.callback = Controls_MenuEvent;
 	s_controls.alwaysrun.generic.statusbar = Controls_StatusBar;
@@ -1548,7 +1548,7 @@ static void Controls_MenuInit(void) {
 	s_controls.autoswitch.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.autoswitch.generic.flags = QMF_SMALLFONT;
 	s_controls.autoswitch.generic.x = SCREEN_WIDTH / 2;
-	s_controls.autoswitch.generic.name = "Autoswitch Weapon";
+	s_controls.autoswitch.generic.name = "Autoswitch Weapon:";
 	s_controls.autoswitch.generic.id = ID_AUTOSWITCH;
 	s_controls.autoswitch.generic.callback = Controls_MenuEvent;
 	s_controls.autoswitch.generic.statusbar = Controls_StatusBar;
