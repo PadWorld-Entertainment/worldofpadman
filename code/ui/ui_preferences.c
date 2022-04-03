@@ -539,7 +539,7 @@ static void Crosshair_Draw(void *self) {
 		// draw cursor
 		UI_FillRect(s->generic.left, s->generic.top, s->generic.right - s->generic.left + 1,
 					s->generic.bottom - s->generic.top + 1, listbar_color);
-		UI_DrawChar(x, y, 13, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
+		UI_DrawChar(x, y, 31, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
 	}
 
 	UI_DrawString(x - SMALLCHAR_WIDTH, y, s->generic.name, style | UI_RIGHT, color);

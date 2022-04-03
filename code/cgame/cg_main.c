@@ -1257,7 +1257,7 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 	cgs.serverCommandSequence = serverCommandSequence;
 
 	// load a few needed things before we do any screen updates
-	cgs.media.charsetShader = trap_R_RegisterShader("gfx/2d/WoPascii");
+	cgs.media.charsetShader = trap_R_RegisterShader("fontascii");
 	cgs.media.charsetProp = trap_R_RegisterShaderNoMip("gfx/2d/fontmenu");
 	cgs.media.whiteShader = trap_R_RegisterShader("white");
 

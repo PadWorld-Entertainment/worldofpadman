@@ -362,7 +362,7 @@ void MenuField_Draw(menufield_s *f) {
 		else
 			UI_FillRect(f->generic.left, f->generic.top, f->generic.right - f->generic.left + 1,
 						f->generic.bottom - f->generic.top + 1, listbar_color);
-		UI_DrawChar(x, y, 13, UI_CENTER | UI_BLINK | style, color);
+		UI_DrawChar(x, y, 31, UI_CENTER | UI_BLINK | style, color);
 	}
 
 	if (f->generic.name) {

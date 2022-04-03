@@ -105,9 +105,9 @@ void SpecifyServer_DrawField(void *self) {
 	// draw cursor if we have focus
 	if (focus) {
 		if (trap_Key_GetOverstrikeMode()) {
-			c = 11;
+			c = 30;
 		} else {
-			c = 10;
+			c = 95;
 		}
 
 		UI_FillRect(f->generic.x, f->generic.y, f->field.widthInChars * SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, bg_color);

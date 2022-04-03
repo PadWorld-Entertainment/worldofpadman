@@ -2785,7 +2785,7 @@ static void CL_InitRenderer(void) {
 	re.BeginRegistration(&cls.glconfig);
 
 	// load character sets
-	cls.charsetShader = re.RegisterShader("gfx/2d/WoPascii");
+	cls.charsetShader = re.RegisterShader("fontascii");
 	cls.whiteShader = re.RegisterShader("white");
 	cls.consoleShader = re.RegisterShader("console");
 	g_console_field_width = cls.glconfig.vidWidth / SMALLCHAR_WIDTH - 2;

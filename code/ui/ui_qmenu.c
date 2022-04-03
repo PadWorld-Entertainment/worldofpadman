@@ -403,7 +403,7 @@ static void Action_Draw(menuaction_s *a) {
 
 	if (a->generic.parent->cursor == a->generic.menuPosition) {
 		// draw cursor
-		UI_DrawChar(x - BIGCHAR_WIDTH, y, 13, UI_LEFT | UI_BLINK, color);
+		UI_DrawChar(x - BIGCHAR_WIDTH, y, 31, UI_LEFT | UI_BLINK, color);
 	}
 }
 
@@ -504,7 +504,7 @@ static void RadioButton_Draw(menuradiobutton_s *rb) {
 		else
 			UI_FillRect(rb->generic.left, rb->generic.top, rb->generic.right - rb->generic.left + 1,
 						rb->generic.bottom - rb->generic.top + 1, listbar_color);
-		UI_DrawChar(x, y, 13, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
+		UI_DrawChar(x, y, 31, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
 	}
 
 	if (rb->generic.name)
@@ -889,7 +889,7 @@ static void SpinControl_Draw(const menulist_s *s) {
 		else
 			UI_FillRect(s->generic.left, s->generic.top, s->generic.right - s->generic.left + 1,
 						s->generic.bottom - s->generic.top + 1, listbar_color);
-		UI_DrawChar(x, y, 13, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
+		UI_DrawChar(x, y, 31, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
 	}
 
 	UI_DrawString(x - SMALLCHAR_WIDTH, y, s->generic.name, UI_RIGHT | (style & ~UI_PULSE), color);
@@ -1865,7 +1865,7 @@ Menu_Cache
 =================
 */
 void Menu_Cache(void) {
-	uis.charsetShader = trap_R_RegisterShaderNoMip("gfx/2d/WoPascii");
+	uis.charsetShader = trap_R_RegisterShaderNoMip("fontascii");
 	uis.charsetProp = trap_R_RegisterShaderNoMip("gfx/2d/fontmenu");
 	uis.cursor = trap_R_RegisterShaderNoMip("menu/art/3_cursor2");
 	uis.rb_on = trap_R_RegisterShaderNoMip("menu/art/switch_on");

@@ -13,16 +13,16 @@ powerupeffect/revival { {  map powerupeffect/heart_noalpha  blendFunc add  rgbGe
 models/weaponsfx/spraymark { polygonoffset {  map models/weaponsfx/spraypuff  blendFunc blend  rgbGen vertex  alphaGen vertex } }
 
 // =================
-// WoPascii
+// WoP ASCII FONT
 // =================
 
-gfx/2d/WoPascii
+fontascii
 {
 	nopicmip
 	nomipmaps
 	{
-		map gfx/2d/WoPascii
-		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		map gfx/2d/fontascii
+		blendFunc blend
 		rgbgen vertex
 	}
 }

@@ -194,9 +194,9 @@ static void PlayerSettings_DrawName(void *self) {
 	// draw cursor if we have focus
 	if (focus) {
 		if (trap_Key_GetOverstrikeMode()) {
-			c = 11;
+			c = 30;
 		} else {
-			c = 10;
+			c = 95;
 		}
 
 		style &= ~UI_PULSE;
