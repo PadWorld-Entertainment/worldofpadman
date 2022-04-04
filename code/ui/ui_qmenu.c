@@ -403,7 +403,7 @@ static void Action_Draw(menuaction_s *a) {
 
 	if (a->generic.parent->cursor == a->generic.menuPosition) {
 		// draw cursor
-		UI_DrawChar(x - BIGCHAR_WIDTH, y, 31, UI_LEFT | UI_BLINK, color);
+		UI_DrawChar(x - BIGCHAR_WIDTH, y, FONT_ASCII_TRIANGLE, UI_LEFT | UI_BLINK, color);
 	}
 }
 
@@ -504,7 +504,7 @@ static void RadioButton_Draw(menuradiobutton_s *rb) {
 		else
 			UI_FillRect(rb->generic.left, rb->generic.top, rb->generic.right - rb->generic.left + 1,
 						rb->generic.bottom - rb->generic.top + 1, listbar_color);
-		UI_DrawChar(x, y, 31, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
+		UI_DrawChar(x, y, FONT_ASCII_TRIANGLE, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
 	}
 
 	if (rb->generic.name)
@@ -889,7 +889,7 @@ static void SpinControl_Draw(const menulist_s *s) {
 		else
 			UI_FillRect(s->generic.left, s->generic.top, s->generic.right - s->generic.left + 1,
 						s->generic.bottom - s->generic.top + 1, listbar_color);
-		UI_DrawChar(x, y, 31, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
+		UI_DrawChar(x, y, FONT_ASCII_TRIANGLE, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
 	}
 
 	UI_DrawString(x - SMALLCHAR_WIDTH, y, s->generic.name, UI_RIGHT | (style & ~UI_PULSE), color);

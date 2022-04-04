@@ -383,9 +383,9 @@ static void Field_VariableSizeDraw(field_t *edit, int x, int y, int width, int s
 		}
 
 		if (key_overstrikeMode) {
-			cursorChar = 30;
+			cursorChar = FONT_ASCII_FULLBLOCK;
 		} else {
-			cursorChar = 95;
+			cursorChar = FONT_ASCII_UNDERLINE;
 		}
 
 		i = drawLen - strlen(str);

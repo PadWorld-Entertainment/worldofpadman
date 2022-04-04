@@ -793,7 +793,7 @@ static void Controls_DrawKeyBinding(void *self) {
 			UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Waiting for new key ...", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
 			UI_DrawString(450, SCREEN_HEIGHT * 0.89, "Press ESCAPE to cancel", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
 		} else {
-			UI_DrawChar(x, y, 31, UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
+			UI_DrawChar(x, y, FONT_ASCII_TRIANGLE, UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
 			UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Press ENTER or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
 			UI_DrawString(450, SCREEN_HEIGHT * 0.89, "Press BACKSPACE to clear", UI_SMALLFONT | UI_CENTER, colorWhite);
 		}
