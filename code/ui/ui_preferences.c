@@ -428,7 +428,7 @@ static void Preferences_Event(void *ptr, int notification) {
 		break;
 
 	case ID_LAGOMETER:
-		trap_Cvar_SetValue("cg_lagometer", s_preferences.drawteamoverlay.curvalue);
+		trap_Cvar_SetValue("cg_lagometer", s_preferences.lagometer.curvalue);
 		break;
 
 	case ID_VOIPMETER:
@@ -675,7 +675,7 @@ static void Preferences_MenuInit(void) {
 	s_preferences.lagometer.generic.name = "Lag-O-Meter:";
 	s_preferences.lagometer.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.lagometer.generic.callback = Preferences_Event;
-	s_preferences.lagometer.generic.id = ID_DRAWTEAMOVERLAY;
+	s_preferences.lagometer.generic.id = ID_LAGOMETER;
 	s_preferences.lagometer.generic.x = XPOSITION;
 	s_preferences.lagometer.generic.y = y;
 	s_preferences.lagometer.generic.toolTip =
