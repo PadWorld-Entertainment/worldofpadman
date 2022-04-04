@@ -8,7 +8,7 @@ set(SRCS
 	ui_connect.c
 	ui_controls.c
 	ui_credits.c
-	ui_demo2.c
+	ui_demos.c
 	ui_display.c
 	ui_gameinfo.c
 	ui_help.c

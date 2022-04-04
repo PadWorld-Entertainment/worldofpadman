@@ -433,7 +433,7 @@ extern void Controls_Cache(void);
 extern void SetDefaultBinds_onUnusedKeys(void);
 
 //
-// ui_demo2.c
+// ui_demos.c
 //
 extern void UI_DemosMenu(void);
 extern void Demos_Cache(void);
