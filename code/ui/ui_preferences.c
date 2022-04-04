@@ -55,15 +55,16 @@ GAME OPTIONS MENU
 #define ID_IDENTIFYTARGET 22
 #define ID_DRAWTEAMOVERLAY 23
 #define ID_LAGOMETER 24
-#define ID_TIMER 25
-#define ID_TIMELEFT 26
-#define ID_REALTIME 27
-#define ID_UPS 28
-#define ID_FPS 29
+#define ID_VOIPMETER 25
+#define ID_TIMER 26
+#define ID_TIMELEFT 27
+#define ID_REALTIME 28
+#define ID_UPS 29
+#define ID_FPS 30
 
-#define ID_FORCEMODEL 30
-#define ID_GLOWMODEL 31
-#define ID_GLOWCOLOR 32
+#define ID_FORCEMODEL 31
+#define ID_GLOWMODEL 32
+#define ID_GLOWCOLOR 33
 
 #define ID_CONNOTIFY 40
 #define ID_CHATHEIGHT 41
@@ -97,6 +98,7 @@ typedef struct {
 	menuradiobutton_s identifytarget;
 	menuradiobutton_s drawteamoverlay;
 	menuradiobutton_s lagometer;
+	menuradiobutton_s voipmeter;
 	menuradiobutton_s timer;
 	menuradiobutton_s timeleft;
 	menuradiobutton_s realtime;
@@ -137,6 +139,7 @@ static menucommon_s *g_hud_options[] = {
 	(menucommon_s *)&s_preferences.identifytarget,
 	(menucommon_s *)&s_preferences.drawteamoverlay,
 	(menucommon_s *)&s_preferences.lagometer,
+	(menucommon_s *)&s_preferences.voipmeter,
 	(menucommon_s *)&s_preferences.timer,
 	(menucommon_s *)&s_preferences.timeleft,
 	(menucommon_s *)&s_preferences.realtime,
@@ -259,6 +262,7 @@ static void Preferences_SetMenuItems(void) {
 	s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue("cg_forcemodel") != 0.0f);
 	s_preferences.drawteamoverlay.curvalue = trap_Cvar_VariableValue("cg_drawTeamOverlay") != 0;
 	s_preferences.lagometer.curvalue = trap_Cvar_VariableValue("cg_lagometer") != 0;
+	s_preferences.voipmeter.curvalue = trap_Cvar_VariableValue("cl_voipShowMeter") != 0;
 	s_preferences.glowcolor.curvalue = trap_Cvar_VariableValue("cg_glowModel"); // cg_glowModelTeam..
 	s_preferences.glowmodel.curvalue = (s_preferences.glowcolor.curvalue != 0);
 	UpdateGlowColorFlags();
@@ -315,6 +319,11 @@ static void Options_Update(void) {
 	case O_HELP:
 		s_preferences.help.generic.flags |= QMF_HIGHLIGHT;
 		break;
+	}
+
+	// special case
+	if (UI_GetCvarInt("cl_voip") == 0) {
+		s_preferences.voipmeter.generic.flags |= QMF_GRAYED;
 	}
 }
 
@@ -420,6 +429,10 @@ static void Preferences_Event(void *ptr, int notification) {
 
 	case ID_LAGOMETER:
 		trap_Cvar_SetValue("cg_lagometer", s_preferences.drawteamoverlay.curvalue);
+		break;
+
+	case ID_VOIPMETER:
+		trap_Cvar_SetValue("cl_voipShowMeter", s_preferences.voipmeter.curvalue);
 		break;
 
 	case ID_FFAHUD:
@@ -668,6 +681,17 @@ static void Preferences_MenuInit(void) {
 	s_preferences.lagometer.generic.toolTip =
 		"Enable this to display a lag-o-meter with two graphs to show the current quality "
 		"of your server connection in the bottom right of the HUD.";
+
+	y += BIGCHAR_HEIGHT + 2;
+	s_preferences.voipmeter.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.voipmeter.generic.name = "VOIP Volume Meter:";
+	s_preferences.voipmeter.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.voipmeter.generic.callback = Preferences_Event;
+	s_preferences.voipmeter.generic.id = ID_VOIPMETER;
+	s_preferences.voipmeter.generic.x = XPOSITION;
+	s_preferences.voipmeter.generic.y = y;
+	s_preferences.voipmeter.generic.toolTip =
+		"Disable this option to not display the VOIP volume meter during voice recording via the microphone.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_preferences.timer.generic.type = MTYPE_RADIOBUTTON;
@@ -952,6 +976,7 @@ static void Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.identifytarget);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawteamoverlay);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.lagometer);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.voipmeter);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.timer);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.timeleft);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.realtime);
