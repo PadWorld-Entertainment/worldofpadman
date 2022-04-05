@@ -43,37 +43,36 @@ SOUND OPTIONS MENU
 #define ACCEPT0 "menu/buttons/accept"
 #define ACCEPT1 "menu/buttons/accept"
 
-#define ID_GRAPHICS 10
-#define ID_DISPLAY 11
-#define ID_SOUND 12
-#define ID_NETWORK 13
+#define ID_GRAPHICS 100
+#define ID_DISPLAY 101
+#define ID_SOUND 102
+#define ID_NETWORK 103
+#define ID_BACK 104
+#define ID_APPLY 105
 
-#define ID_EFFECTSVOLUME 14
-#define ID_MUSICVOLUME 15
+#define ID_EFFECTSVOLUME 10
+#define ID_MUSICVOLUME 11
+#define ID_MUSICAUTOSWITCH 12
+#define ID_AUTOMUTE 13
+#define ID_SOUNDSYSTEM 14
+#define ID_QUALITY 15
 #define ID_DOPPLER 16
-#define ID_QUALITY 17
-#define ID_SOUNDSYSTEM 18
-#define ID_MUSICAUTOSWITCH 19
-#define ID_BACK 20
-#define ID_APPLY 21
 
-#define ID_VOICETHRESHOLD 22
-#define ID_GAINWHILECAPTURE 23
-#define ID_VOIPMODE 24
-#define ID_RECORDMODE 25
+#define ID_VOIPMODE 17
+#define ID_RECORDMODE 18
+#define ID_VOICETHRESHOLD 19
+#define ID_GAINWHILECAPTURE 20
 
 #define XPOSITION 180
-
-static const char *recording_modes[] = {"Push to Talk", "Automatic", 0};
-
 #define DEFAULT_SDL_SND_SPEED 44100
-
-static const char *quality_items[] = {"Low", "Medium", "High", NULL};
-
 #define UISND_SDL 0
 #define UISND_OPENAL 1
 
+static const char *automute_items[] = {"Never (Off)", "When Unfocused", "When Minimized", "Always (Both)", NULL};
+static const char *quality_items[] = {"Low", "Medium", "High", NULL};
+static const char *recording_items[] = {"Push to Talk", "Automatic", 0};
 static const char *soundSystem_items[] = {"SDL", "OpenAL", NULL};
+
 typedef struct {
 	menuframework_s menu;
 
@@ -84,10 +83,11 @@ typedef struct {
 
 	menuslider_s sfxvolume;
 	menuslider_s musicvolume;
-	menuradiobutton_s doppler;
+	menulist_s automute;
+	menuradiobutton_s musicautoswitch;
 	menulist_s soundSystem;
 	menulist_s quality;
-	menuradiobutton_s musicautoswitch;
+	menuradiobutton_s doppler;
 
 	menuradiobutton_s voipmode;
 	menulist_s voipRecordMode;
@@ -188,6 +188,26 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 	case ID_MUSICVOLUME:
 		trap_Cvar_SetValue("s_musicvolume", soundOptionsInfo.musicvolume.curvalue / 10);
 		break;
+
+	case ID_AUTOMUTE:
+		switch (soundOptionsInfo.automute.curvalue) {
+		case 0:
+			trap_Cvar_SetValue("s_muteWhenUnfocused", 0);
+			trap_Cvar_SetValue("s_muteWhenMinimized", 0);
+			break;
+		case 1:
+			trap_Cvar_SetValue("s_muteWhenUnfocused", 1);
+			trap_Cvar_SetValue("s_muteWhenMinimized", 0);
+			break;
+		case 2:
+			trap_Cvar_SetValue("s_muteWhenUnfocused", 0);
+			trap_Cvar_SetValue("s_muteWhenMinimized", 1);
+			break;
+		case 3:
+			trap_Cvar_SetValue("s_muteWhenUnfocused", 1);
+			trap_Cvar_SetValue("s_muteWhenMinimized", 1);
+			break;
+		}
 
 	case ID_MUSICAUTOSWITCH:
 		trap_Cvar_SetValue("wop_AutoswitchSongByNextMap", (float)soundOptionsInfo.musicautoswitch.curvalue);
@@ -374,6 +394,17 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.musicautoswitch.generic.y = y;
 	soundOptionsInfo.musicautoswitch.generic.toolTip = "Enable to automatically switch to the next song on map change, "
 													   "if set to off current song will restart on map change.";
+
+	y += BIGCHAR_HEIGHT + 2;
+	soundOptionsInfo.automute.generic.type = MTYPE_SPINCONTROL;
+	soundOptionsInfo.automute.generic.name = "Auto Mute Sound:";
+	soundOptionsInfo.automute.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	soundOptionsInfo.automute.generic.callback = UI_SoundOptionsMenu_Event;
+	soundOptionsInfo.automute.generic.id = ID_AUTOMUTE;
+	soundOptionsInfo.automute.generic.x = XPOSITION;
+	soundOptionsInfo.automute.generic.y = y;
+	soundOptionsInfo.automute.itemnames = automute_items;
+
 	y += BIGCHAR_HEIGHT + 2;
 	soundOptionsInfo.soundSystem.generic.type = MTYPE_SPINCONTROL;
 	soundOptionsInfo.soundSystem.generic.name = "Sound System:";
@@ -428,7 +459,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.voipRecordMode.generic.id = ID_RECORDMODE;
 	soundOptionsInfo.voipRecordMode.generic.x = XPOSITION;
 	soundOptionsInfo.voipRecordMode.generic.y = y;
-	soundOptionsInfo.voipRecordMode.itemnames = recording_modes;
+	soundOptionsInfo.voipRecordMode.itemnames = recording_items;
 
 	y += BIGCHAR_HEIGHT + 2;
 	soundOptionsInfo.voiceThresholdVAD.generic.type = MTYPE_SLIDER;
@@ -488,6 +519,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.sfxvolume);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicvolume);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicautoswitch);
+	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.automute);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.soundSystem);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.quality);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.doppler);
@@ -501,6 +533,16 @@ static void UI_SoundOptionsMenu_Init(void) {
 
 	soundOptionsInfo.sfxvolume.curvalue = trap_Cvar_VariableValue("s_volume") * 10;
 	soundOptionsInfo.musicvolume.curvalue = trap_Cvar_VariableValue("s_musicvolume") * 10;
+
+	if (trap_Cvar_VariableValue("s_muteWhenUnfocused") == 1 && trap_Cvar_VariableValue("s_muteWhenMinimized") == 1) {
+		soundOptionsInfo.automute.curvalue = 3;
+	} else if (trap_Cvar_VariableValue("s_muteWhenUnfocused") == 0 && trap_Cvar_VariableValue("s_muteWhenMinimized") == 1) {
+		soundOptionsInfo.automute.curvalue = 2;
+	} else if (trap_Cvar_VariableValue("s_muteWhenUnfocused") == 1 && trap_Cvar_VariableValue("s_muteWhenMinimized") == 0) {
+		soundOptionsInfo.automute.curvalue = 1;
+	} else {
+		soundOptionsInfo.automute.curvalue = 0;
+	}
 
 	if (trap_Cvar_VariableValue("s_useOpenAL"))
 		soundOptionsInfo.soundSystem_original = UISND_OPENAL;
