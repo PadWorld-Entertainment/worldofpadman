@@ -124,16 +124,17 @@ typedef struct {
 #define ID_TEAMORDERS 36
 #define ID_SHOWSCORES 37
 #define ID_TOGGLEMENU 38
-#define ID_MUSIC 39
-#define ID_HELP_GAMETYPE 40
-#define ID_HELP_ITEMS 41
-#define ID_SERVERINFO 42
-#define ID_NEXTSONG 43
-#define ID_RECORDDEMO 44
-#define ID_SYNCCLIENTS 45
-#define ID_VOTEYES 46
-#define ID_VOTENO 47
-#define ID_SCREENSHOT 48
+#define ID_MINIMIZEGAME 39
+#define ID_MUSIC 40
+#define ID_HELP_GAMETYPE 41
+#define ID_HELP_ITEMS 42
+#define ID_SERVERINFO 43
+#define ID_NEXTSONG 44
+#define ID_RECORDDEMO 45
+#define ID_SYNCCLIENTS 46
+#define ID_VOTEYES 47
+#define ID_VOTENO 48
+#define ID_SCREENSHOT 49
 
 // all others
 #define ID_FREELOOK 60
@@ -238,6 +239,7 @@ typedef struct {
 
 	menuaction_s showscores;
 	menuaction_s togglemenu;
+	menuaction_s minimizegame;
 	menuaction_s music;
 	menuaction_s helpGametype;
 	menuaction_s helpItems;
@@ -314,6 +316,7 @@ static bind_t g_bindings[] = {
 
 	{"+scores", "Scoreboard:", ID_SHOWSCORES, ANIM_IDLE, K_TAB, -1, -1, -1},
 	{"togglemenu", "Ingame Menu:", ID_TOGGLEMENU, ANIM_IDLE, K_ESCAPE, -1, -1, -1},
+	{"minimize", "Minimize Game:", ID_MINIMIZEGAME, ANIM_IDLE, K_PGUP, -1, -1, -1},
 	{"wop_music", "Music Player:", ID_MUSIC, ANIM_IDLE, 'm', -1, -1, -1},
 	{"ui_help gametype", "Help Gametype:", ID_HELP_GAMETYPE, ANIM_IDLE, 'g', -1, -1, -1},
 	{"ui_help item", "Help Weapons/Items:", ID_HELP_ITEMS, ANIM_IDLE, 'h', -1, -1, -1},
@@ -411,6 +414,7 @@ static menucommon_s *g_chat_controls[] = {
 static menucommon_s *g_misc_controls[] = {
 	(menucommon_s *)&s_controls.showscores,
 	(menucommon_s *)&s_controls.togglemenu,
+	(menucommon_s *)&s_controls.minimizegame,
 	(menucommon_s *)&s_controls.music,
 	(menucommon_s *)&s_controls.helpGametype,
 	(menucommon_s *)&s_controls.helpItems,
@@ -1678,6 +1682,12 @@ static void Controls_MenuInit(void) {
 	s_controls.togglemenu.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.togglemenu.generic.id = ID_TOGGLEMENU;
 
+	s_controls.minimizegame.generic.type = MTYPE_ACTION;
+	s_controls.minimizegame.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS | QMF_GRAYED | QMF_HIDDEN;
+	s_controls.minimizegame.generic.callback = Controls_ActionEvent;
+	s_controls.minimizegame.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.minimizegame.generic.id = ID_MINIMIZEGAME;
+
 	s_controls.music.generic.type = MTYPE_ACTION;
 	s_controls.music.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
 	s_controls.music.generic.callback = Controls_ActionEvent;
@@ -1808,6 +1818,7 @@ static void Controls_MenuInit(void) {
 
 	Menu_AddItem(&s_controls.menu, &s_controls.showscores);
 	Menu_AddItem(&s_controls.menu, &s_controls.togglemenu);
+	Menu_AddItem(&s_controls.menu, &s_controls.minimizegame);
 	Menu_AddItem(&s_controls.menu, &s_controls.music);
 	Menu_AddItem(&s_controls.menu, &s_controls.helpGametype);
 	Menu_AddItem(&s_controls.menu, &s_controls.helpItems);
