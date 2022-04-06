@@ -68,7 +68,6 @@ SOUND OPTIONS MENU
 #define UISND_SDL 0
 #define UISND_OPENAL 1
 
-static const char *automute_items[] = {"Never (Off)", "When Unfocused", "When Minimized", "Always (Both)", NULL};
 static const char *quality_items[] = {"Low", "Medium", "High", NULL};
 static const char *recording_items[] = {"Push to Talk", "Automatic", 0};
 static const char *soundSystem_items[] = {"SDL", "OpenAL", NULL};
@@ -83,7 +82,7 @@ typedef struct {
 
 	menuslider_s sfxvolume;
 	menuslider_s musicvolume;
-	menulist_s automute;
+	menuradiobutton_s automute;
 	menuradiobutton_s musicautoswitch;
 	menulist_s soundSystem;
 	menulist_s quality;
@@ -196,14 +195,6 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 			trap_Cvar_SetValue("s_muteWhenMinimized", 0);
 			break;
 		case 1:
-			trap_Cvar_SetValue("s_muteWhenUnfocused", 1);
-			trap_Cvar_SetValue("s_muteWhenMinimized", 0);
-			break;
-		case 2:
-			trap_Cvar_SetValue("s_muteWhenUnfocused", 0);
-			trap_Cvar_SetValue("s_muteWhenMinimized", 1);
-			break;
-		case 3:
 			trap_Cvar_SetValue("s_muteWhenUnfocused", 1);
 			trap_Cvar_SetValue("s_muteWhenMinimized", 1);
 			break;
@@ -396,14 +387,15 @@ static void UI_SoundOptionsMenu_Init(void) {
 													   "if set to off current song will restart on map change.";
 
 	y += BIGCHAR_HEIGHT + 2;
-	soundOptionsInfo.automute.generic.type = MTYPE_SPINCONTROL;
+	soundOptionsInfo.automute.generic.type = MTYPE_RADIOBUTTON;
 	soundOptionsInfo.automute.generic.name = "Auto Mute Sound:";
 	soundOptionsInfo.automute.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	soundOptionsInfo.automute.generic.callback = UI_SoundOptionsMenu_Event;
 	soundOptionsInfo.automute.generic.id = ID_AUTOMUTE;
 	soundOptionsInfo.automute.generic.x = XPOSITION;
 	soundOptionsInfo.automute.generic.y = y;
-	soundOptionsInfo.automute.itemnames = automute_items;
+	soundOptionsInfo.automute.generic.toolTip = "Enable this option to automatically mute the sound when the game window "
+												"loses focus or is minimized.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	soundOptionsInfo.soundSystem.generic.type = MTYPE_SPINCONTROL;
@@ -534,11 +526,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.sfxvolume.curvalue = trap_Cvar_VariableValue("s_volume") * 10;
 	soundOptionsInfo.musicvolume.curvalue = trap_Cvar_VariableValue("s_musicvolume") * 10;
 
-	if (trap_Cvar_VariableValue("s_muteWhenUnfocused") == 1 && trap_Cvar_VariableValue("s_muteWhenMinimized") == 1) {
-		soundOptionsInfo.automute.curvalue = 3;
-	} else if (trap_Cvar_VariableValue("s_muteWhenUnfocused") == 0 && trap_Cvar_VariableValue("s_muteWhenMinimized") == 1) {
-		soundOptionsInfo.automute.curvalue = 2;
-	} else if (trap_Cvar_VariableValue("s_muteWhenUnfocused") == 1 && trap_Cvar_VariableValue("s_muteWhenMinimized") == 0) {
+	if (trap_Cvar_VariableValue("s_muteWhenUnfocused") == 1 || trap_Cvar_VariableValue("s_muteWhenMinimized") == 1) {
 		soundOptionsInfo.automute.curvalue = 1;
 	} else {
 		soundOptionsInfo.automute.curvalue = 0;
