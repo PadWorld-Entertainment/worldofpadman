@@ -1,5 +1,8 @@
 project(ui)
 set(SRCS
+	ui_local.h
+	ui_public.h
+	ui_shared.h
 	ui_main.c
 	ui_addbots.c
 	ui_atoms.c
