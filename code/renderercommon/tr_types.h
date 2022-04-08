@@ -213,6 +213,11 @@ typedef struct {
 	qboolean isFullscreen;
 	qboolean stereoEnabled;
 	qboolean smpActive; // UNUSED, present for compatibility
+
+	qboolean textureFilterAnisotropic;
+	qboolean haveClampToEdge;
+	int maxAnisotropy;
+	float displayAspect;
 } glconfig_t;
 
 typedef byte color4ub_t[4];

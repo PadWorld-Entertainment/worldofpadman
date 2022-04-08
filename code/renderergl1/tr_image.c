@@ -722,14 +722,14 @@ static void Upload32(unsigned *data, int width, int height, qboolean mipmap, qbo
 done:
 
 	if (mipmap) {
-		if (textureFilterAnisotropic)
+		if (glConfig.textureFilterAnisotropic)
 			qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT,
-							 (GLint)Com_Clamp(1, maxAnisotropy, r_ext_max_anisotropy->integer));
+							 (GLint)Com_Clamp(1, glConfig.maxAnisotropy, r_ext_max_anisotropy->integer));
 
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, gl_filter_min);
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, gl_filter_max);
 	} else {
-		if (textureFilterAnisotropic)
+		if (glConfig.textureFilterAnisotropic)
 			qglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
 
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -781,7 +781,7 @@ image_t *R_CreateImage(const char *name, byte *pic, int width, int height, imgTy
 	image->width = width;
 	image->height = height;
 	if (flags & IMGFLAG_CLAMPTOEDGE)
-		glWrapClampMode = haveClampToEdge ? GL_CLAMP_TO_EDGE : GL_CLAMP;
+		glWrapClampMode = glConfig.haveClampToEdge ? GL_CLAMP_TO_EDGE : GL_CLAMP;
 	else
 		glWrapClampMode = GL_REPEAT;
 

@@ -122,8 +122,8 @@ static int GLimp_CompareModes(const void *a, const void *b) {
 	float aspectB = (float)modeB->w / (float)modeB->h;
 	int areaA = modeA->w * modeA->h;
 	int areaB = modeB->w * modeB->h;
-	float aspectDiffA = fabs(aspectA - displayAspect);
-	float aspectDiffB = fabs(aspectB - displayAspect);
+	float aspectDiffA = fabs(aspectA - glConfig.displayAspect);
+	float aspectDiffB = fabs(aspectB - glConfig.displayAspect);
 	float aspectDiffsDiff = aspectDiffA - aspectDiffB;
 
 	if (aspectDiffsDiff > ASPECT_EPSILON)
@@ -390,9 +390,9 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 	}
 
 	if (display >= 0 && SDL_GetDesktopDisplayMode(display, &desktopMode) == 0) {
-		displayAspect = (float)desktopMode.w / (float)desktopMode.h;
+		glConfig.displayAspect = (float)desktopMode.w / (float)desktopMode.h;
 
-		ri.Printf(PRINT_ALL, "Display aspect: %.3f\n", displayAspect);
+		ri.Printf(PRINT_ALL, "Display aspect: %.3f\n", glConfig.displayAspect);
 	} else {
 		Com_Memset(&desktopMode, 0, sizeof(SDL_DisplayMode));
 
@@ -836,16 +836,16 @@ static void GLimp_InitExtensions(qboolean fixedFunction) {
 		}
 	}
 
-	textureFilterAnisotropic = qfalse;
+	glConfig.textureFilterAnisotropic = qfalse;
 	if (SDL_GL_ExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
 		if (r_ext_texture_filter_anisotropic->integer) {
-			qglGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, (GLint *)&maxAnisotropy);
-			if (maxAnisotropy <= 0) {
+			qglGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, (GLint *)&glConfig.maxAnisotropy);
+			if (glConfig.maxAnisotropy <= 0) {
 				ri.Printf(PRINT_ALL, "...GL_EXT_texture_filter_anisotropic not properly supported!\n");
-				maxAnisotropy = 0;
+				glConfig.maxAnisotropy = 0;
 			} else {
-				ri.Printf(PRINT_ALL, "...using GL_EXT_texture_filter_anisotropic (max: %i)\n", maxAnisotropy);
-				textureFilterAnisotropic = qtrue;
+				ri.Printf(PRINT_ALL, "...using GL_EXT_texture_filter_anisotropic (max: %i)\n", glConfig.maxAnisotropy);
+				glConfig.textureFilterAnisotropic = qtrue;
 			}
 		} else {
 			ri.Printf(PRINT_ALL, "...ignoring GL_EXT_texture_filter_anisotropic\n");
@@ -854,11 +854,11 @@ static void GLimp_InitExtensions(qboolean fixedFunction) {
 		ri.Printf(PRINT_ALL, "...GL_EXT_texture_filter_anisotropic not found\n");
 	}
 
-	haveClampToEdge = qfalse;
+	glConfig.haveClampToEdge = qfalse;
 	if (QGL_VERSION_ATLEAST(1, 2) || QGLES_VERSION_ATLEAST(1, 0) ||
 		SDL_GL_ExtensionSupported("GL_SGIS_texture_edge_clamp")) {
 		ri.Printf(PRINT_ALL, "...using GL_SGIS_texture_edge_clamp\n");
-		haveClampToEdge = qtrue;
+		glConfig.haveClampToEdge = qtrue;
 	} else {
 		ri.Printf(PRINT_ALL, "...GL_SGIS_texture_edge_clamp not found\n");
 	}

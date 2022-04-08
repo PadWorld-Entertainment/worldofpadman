@@ -25,11 +25,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../renderercommon/tr_shared.h"
 
 glconfig_t glConfig;
-qboolean textureFilterAnisotropic = qfalse;
-int maxAnisotropy = 0;
-float displayAspect = 0.0f;
-qboolean haveClampToEdge = qfalse;
-
 glstate_t glState;
 
 static void GfxInfo_f(void);
@@ -1178,11 +1173,6 @@ void RE_Shutdown(qboolean destroyWindow) {
 		GLimp_Shutdown();
 
 		Com_Memset(&glConfig, 0, sizeof(glConfig));
-		textureFilterAnisotropic = qfalse;
-		maxAnisotropy = 0;
-		displayAspect = 0.0f;
-		haveClampToEdge = qfalse;
-
 		Com_Memset(&glState, 0, sizeof(glState));
 	}
 
