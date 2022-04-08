@@ -46,7 +46,7 @@ typedef struct {
 
 static voiceChatMenuInfo_t voiceChatMenuInfo;
 
-static const char *sendTarget_names[] = {"all", "team", 0};
+static const char *sendTarget_items[] = {"all", "none", "attacker", "crosshair", "spatial", NULL};
 
 static void UI_VoiceChatMenu_SetClientNames(void) {
 	int i, j;
@@ -199,7 +199,7 @@ static void UI_VoiceChatMenu_sendTargetEvent(void *ptr, int event) {
 	if (val < 0 || val >= 2) // hardcoded array size :/
 		return;
 
-	trap_Cvar_Set("cl_voipSendTarget", sendTarget_names[voiceChatMenuInfo.sendTarget.curvalue]);
+	trap_Cvar_Set("cl_voipSendTarget", sendTarget_items[voiceChatMenuInfo.sendTarget.curvalue]);
 }
 
 static void UI_VoiceChatMenu_InitClients(void) {
@@ -318,7 +318,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.sendTarget.generic.callback = UI_VoiceChatMenu_sendTargetEvent;
 	voiceChatMenuInfo.sendTarget.generic.x = 315;
 	voiceChatMenuInfo.sendTarget.generic.y = y;
-	voiceChatMenuInfo.sendTarget.itemnames = sendTarget_names;
+	voiceChatMenuInfo.sendTarget.itemnames = sendTarget_items;
 
 	trap_Cvar_VariableStringBuffer("cl_voipSendTarget", sendTargetValue, sizeof(sendTargetValue));
 	i = 0;
