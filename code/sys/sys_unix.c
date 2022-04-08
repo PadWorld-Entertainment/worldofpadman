@@ -67,7 +67,7 @@ char *Sys_DefaultHomePath(void) {
 			if (com_homepath->string[0])
 				Q_strcat(homePath, sizeof(homePath), com_homepath->string);
 			else
-				Q_strcat(homePath, sizeof(homePath), HOMEPATH_NAME_MAXOSX);
+				Q_strcat(homePath, sizeof(homePath), HOMEPATH_NAME_MACOSX);
 		}
 #else
 		if ((p = getenv("XDG_DATA_HOME")) != NULL) {
