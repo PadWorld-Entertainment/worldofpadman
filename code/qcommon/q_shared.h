@@ -318,6 +318,8 @@ typedef enum {
 #define BLINK_DIVISOR 200
 #define PULSE_DIVISOR 75
 
+#define SPRAYROOM_CONSTANT 0x23
+
 #define UI_LEFT 0x00000000 // default
 #define UI_CENTER 0x00000001
 #define UI_RIGHT 0x00000002

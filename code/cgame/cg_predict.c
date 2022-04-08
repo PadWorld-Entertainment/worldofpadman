@@ -368,10 +368,9 @@ static void CG_TouchTriggerPrediction(void) {
 		}
 
 		if (ent->eType == ET_TELEPORT_TRIGGER && (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ||
-												  cg.snap->ps.ammo[WP_SPRAYPISTOL] || ent->generic1 != 0x23)) {
+												  cg.snap->ps.ammo[WP_SPRAYPISTOL] || ent->generic1 != SPRAYROOM_CONSTANT)) {
 			// the hyperspace-effect is realy ugly ... and it can only be seen, if there are big lags or high ping
-			//			cg.hyperspace = qtrue;
-
+			// cg.hyperspace = qtrue;
 		} else if (ent->eType == ET_PUSH_TRIGGER) {
 			BG_TouchJumpPad(&cg.predictedPlayerState, ent);
 		}

@@ -2543,8 +2543,8 @@ static void CG_DrawEntityIcons(void) {
 			CG_DrawHealthstationIcon(cent);
 			break;
 		case ET_TELEPORT_TRIGGER:
-			// Magical constant is set for sprayroom teleporter in SP_trigger_teleport
-			if (0x23 == cent->currentState.generic1) {
+			// constant is set for sprayroom teleporter in SP_trigger_teleport
+			if (SPRAYROOM_CONSTANT == cent->currentState.generic1) {
 				CG_DrawSprayroomIcon(cent);
 			}
 			break;

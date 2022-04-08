@@ -973,7 +973,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			color[3] = 1.0f;
 
 			// Hit a spraywall
-			if (es->generic1 == 0x23) {
+			if (es->generic1 == SPRAYROOM_CONSTANT) {
 				logohandle = FindLogoForSpraying(ci);
 				Add_LogoToDrawList(es->pos.trBase, dir, logohandle, radius, ci);
 			} else {

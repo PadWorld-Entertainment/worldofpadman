@@ -318,7 +318,11 @@ static void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t 
 	TeleportPlayer(other, dest->s.origin, dest->s.angles);
 }
 
-/*QUAKED trigger_teleport (.5 .5 .5) ? SPECTATOR
+#define TELEPORT_SPECTATORS_ONLY 1
+#define TELEPORT_ENTER_SPRAYROOM 2
+#define TELEPORT_LEAVE_SPRAYROOM 4
+
+/*QUAKED trigger_teleport (.5 .5 .5) ? SPECTATORS_ONLY ENTER_SPRAYROOM LEAVE_SPRAYROOM
 Allows client side prediction of teleportation events.
 Must point at a target_position, which will be the teleport destination.
 
@@ -331,7 +335,7 @@ void SP_trigger_teleport(gentity_t *self) {
 
 	// unlike other triggers, we need to send this one to the client
 	// unless is a spectator trigger
-	if (self->spawnflags & 1) {
+	if (self->spawnflags & TELEPORT_SPECTATORS_ONLY) {
 		self->r.svFlags |= SVF_NOCLIENT;
 	} else {
 		self->r.svFlags &= ~SVF_NOCLIENT;
@@ -339,15 +343,15 @@ void SP_trigger_teleport(gentity_t *self) {
 
 	// Mark as sprayroom teleporter if ENTER_SPRAYROOM is set.
 	// Used for clientside prediction etc.
-	if (self->spawnflags & 0x2) {
-		self->s.generic1 = 0x23;
+	if (self->spawnflags & TELEPORT_ENTER_SPRAYROOM) {
+		self->s.generic1 = SPRAYROOM_CONSTANT;
 		self->s.origin2[0] = (self->r.absmin[0] + self->r.absmax[0]) * 0.5f;
 		self->s.origin2[1] = (self->r.absmin[1] + self->r.absmax[1]) * 0.5f;
 		self->s.origin2[2] = (self->r.absmin[2] + self->r.absmax[2]) * 0.5f;
 		level.sr_tele = self;
 	}
 
-	else if (self->spawnflags & 4) {
+	else if (self->spawnflags & TELEPORT_LEAVE_SPRAYROOM) {
 		level.sr_teleout = self;
 	}
 

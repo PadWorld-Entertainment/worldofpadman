@@ -491,7 +491,7 @@ static void weapon_spraypistol_fire(gentity_t *ent) {
 
 	// Hit a spraywall
 	if (tr.entityNum != ENTITYNUM_WORLD) {
-		tent->s.generic1 = 0x23; // ungebrauchte vars tut man missbrauchen ;)
+		tent->s.generic1 = SPRAYROOM_CONSTANT;
 	}
 }
 
