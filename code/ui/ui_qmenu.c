@@ -55,7 +55,7 @@ static const vec4_t pulse_color = {1.00f, 1.00f, 1.00f, 1.00f};
 const vec4_t text_color_disabled = {0.50f, 0.50f, 0.50f, 1.00f}; // light gray
 const vec4_t text_color_normal = {1.00f, 1.00f, 0.00f, 1.00f};
 const vec4_t text_color_highlight = {1.00f, 0.33f, 0.00f, 1.00f}; //{0.00f, 1.00f, 0.00f, 1.00f};
-const vec4_t listbar_color = {1.00f, 1.00f, 1.00f, 0.50f};		//{0.00f, 1.00f, 0.00f, 0.30f};
+const vec4_t listbar_color = {1.00f, 1.00f, 1.00f, 0.50f};		  //{0.00f, 1.00f, 0.00f, 0.30f};
 
 const vec4_t text_color_ignormal = {0.00f, 0.00f, 0.00f, 1.00f};
 const vec4_t text_color_ighighlight = {0.40f, 0.00f, 0.40f, 1.00f};

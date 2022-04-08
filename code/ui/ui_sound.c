@@ -394,8 +394,9 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.automute.generic.id = ID_AUTOMUTE;
 	soundOptionsInfo.automute.generic.x = XPOSITION;
 	soundOptionsInfo.automute.generic.y = y;
-	soundOptionsInfo.automute.generic.toolTip = "Enable this option to automatically mute the sound when the game window "
-												"loses focus or is minimized.";
+	soundOptionsInfo.automute.generic.toolTip =
+		"Enable this option to automatically mute the sound when the game window "
+		"loses focus or is minimized.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	soundOptionsInfo.soundSystem.generic.type = MTYPE_SPINCONTROL;
@@ -553,7 +554,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 
 	soundOptionsInfo.musicautoswitch.curvalue = (UI_GetCvarInt("wop_AutoswitchSongByNextMap") != 0);
 	soundOptionsInfo.doppler.curvalue = (UI_GetCvarInt("s_doppler") != 0);
-	// soundOptionsInfo.voiceThresholdVAD.curvalue = trap_Cvar_VariableValue("cl_voipVADThreshold") * 10;
+	soundOptionsInfo.voiceThresholdVAD.curvalue = trap_Cvar_VariableValue("cl_voipVADThreshold") * 10;
 	soundOptionsInfo.voiceGainDuringCapture.curvalue = trap_Cvar_VariableValue("cl_voipGainDuringCapture") * 10;
 	soundOptionsInfo.voipmode.curvalue = UI_GetCvarInt("cl_voip");
 	soundOptionsInfo.voipRecordMode.curvalue = UI_GetCvarInt("cl_voipUseVAD");
