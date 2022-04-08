@@ -29,6 +29,7 @@ set(SRCS
 	../renderercommon/tr_image_png.c
 	../renderercommon/tr_image_tga.c
 	../renderercommon/tr_noise.c
+	../renderercommon/tr_shared.c
 	../sdl/sdl_gamma.c
 	../sdl/sdl_glimp.c
 )

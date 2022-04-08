@@ -7,6 +7,9 @@
 #include "tr_imageprocess.h"
 #include "tr_config.h"
 #include "ref_import.h"
+
+#include "../renderercommon/tr_shared.h"
+
 /*
 ==============================================================================
 
@@ -428,17 +431,7 @@ void R_ScreenShot_f(void) {
 		}
 		// scan for a free number
 		for (; lastNumber <= 9999; lastNumber++) {
-			// R_ScreenshotFilename( lastNumber, checkname );
-
-			int a, b, c, d;
-
-			a = lastNumber / 1000;
-			b = lastNumber % 1000 / 100;
-			c = lastNumber % 100 / 10;
-			d = lastNumber % 10;
-
-			snprintf(checkname, sizeof(checkname), "screenshots/shot%i%i%i%i.tga", a, b, c, d);
-
+			R_ScreenshotFilename(lastNumber, checkname, sizeof(checkname), "tga");
 			if (!ri.FS_FileExists(checkname)) {
 				break; // file doesn't exist
 			}

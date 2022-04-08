@@ -71,6 +71,7 @@ set(SRCS
 	../renderercommon/tr_image_pcx.c
 	../renderercommon/tr_image_png.c
 	../renderercommon/tr_image_tga.c
+	../renderercommon/tr_shared.c
 	tr_noise.c
 )
 

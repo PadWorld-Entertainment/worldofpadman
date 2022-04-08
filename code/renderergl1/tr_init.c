@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // tr_init.c -- functions that are not called every frame
 
 #include "tr_local.h"
+#include "../renderercommon/tr_shared.h"
 
 glconfig_t glConfig;
 qboolean textureFilterAnisotropic = qfalse;
@@ -489,54 +490,6 @@ static void R_TakeScreenshot(int x, int y, int width, int height, char *name, qb
 }
 
 /*
-==================
-R_ScreenshotFilename
-==================
-*/
-static void R_ScreenshotFilename(int lastNumber, char *fileName) {
-	int a, b, c, d;
-
-	if (lastNumber < 0 || lastNumber > 9999) {
-		Com_sprintf(fileName, MAX_OSPATH, "screenshots/shot9999.tga");
-		return;
-	}
-
-	a = lastNumber / 1000;
-	lastNumber -= a * 1000;
-	b = lastNumber / 100;
-	lastNumber -= b * 100;
-	c = lastNumber / 10;
-	lastNumber -= c * 10;
-	d = lastNumber;
-
-	Com_sprintf(fileName, MAX_OSPATH, "screenshots/shot%i%i%i%i.tga", a, b, c, d);
-}
-
-/*
-==================
-R_ScreenshotFilename
-==================
-*/
-static void R_ScreenshotFilenameJPEG(int lastNumber, char *fileName) {
-	int a, b, c, d;
-
-	if (lastNumber < 0 || lastNumber > 9999) {
-		Com_sprintf(fileName, MAX_OSPATH, "screenshots/shot9999.jpg");
-		return;
-	}
-
-	a = lastNumber / 1000;
-	lastNumber -= a * 1000;
-	b = lastNumber / 100;
-	lastNumber -= b * 100;
-	c = lastNumber / 10;
-	lastNumber -= c * 10;
-	d = lastNumber;
-
-	Com_sprintf(fileName, MAX_OSPATH, "screenshots/shot%i%i%i%i.jpg", a, b, c, d);
-}
-
-/*
 ====================
 R_LevelShot
 
@@ -645,7 +598,7 @@ void R_ScreenShot_f(void) {
 		}
 		// scan for a free number
 		for (; lastNumber <= 9999; lastNumber++) {
-			R_ScreenshotFilename(lastNumber, checkname);
+			R_ScreenshotFilename(lastNumber, checkname, sizeof(checkname), "tga");
 
 			if (!ri.FS_FileExists(checkname)) {
 				break; // file doesn't exist
@@ -697,8 +650,7 @@ void R_ScreenShotJPEG_f(void) {
 		}
 		// scan for a free number
 		for (; lastNumber <= 9999; lastNumber++) {
-			R_ScreenshotFilenameJPEG(lastNumber, checkname);
-
+			R_ScreenshotFilename(lastNumber, checkname, sizeof(checkname), "jpg");
 			if (!ri.FS_FileExists(checkname)) {
 				break; // file doesn't exist
 			}
