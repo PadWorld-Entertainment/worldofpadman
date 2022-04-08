@@ -35,13 +35,13 @@ GRAPHICS OPTIONS MENU
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
 #define GRAPHICS0 "menu/buttons/graphics0"
-#define GRASHICS1 "menu/buttons/graphics1"
+#define GRAPHICS1 "menu/buttons/graphics1"
 #define DISPLAY0 "menu/buttons/display0"
 #define DISPLAY1 "menu/buttons/display1"
 #define SOUND0 "menu/buttons/sound0"
 #define SOUND1 "menu/buttons/sound1"
-#define NETWORK0 "menu/buttons/network0"
-#define NETWORK1 "menu/buttons/network1"
+#define NETWORK0 "menu/buttons/netvoip0"
+#define NETWORK1 "menu/buttons/netvoip1"
 #define ACCEPT0 "menu/buttons/accept"
 #define ACCEPT1 "menu/buttons/accept"
 
@@ -697,7 +697,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.graphics.generic.y = 37;
 	s_graphicsoptions.graphics.width = 160;
 	s_graphicsoptions.graphics.height = 40;
-	s_graphicsoptions.graphics.focuspic = GRASHICS1;
+	s_graphicsoptions.graphics.focuspic = GRAPHICS1;
 	s_graphicsoptions.graphics.focuspicinstead = qtrue;
 
 	s_graphicsoptions.display.generic.type = MTYPE_BITMAP;
@@ -928,7 +928,7 @@ void GraphicsOptions_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(GRAPHICS0);
-	trap_R_RegisterShaderNoMip(GRASHICS1);
+	trap_R_RegisterShaderNoMip(GRAPHICS1);
 	trap_R_RegisterShaderNoMip(DISPLAY0);
 	trap_R_RegisterShaderNoMip(DISPLAY1);
 	trap_R_RegisterShaderNoMip(SOUND0);

@@ -33,13 +33,13 @@ SOUND OPTIONS MENU
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
 #define GRAPHICS0 "menu/buttons/graphics0"
-#define GRASHICS1 "menu/buttons/graphics1"
+#define GRAPHICS1 "menu/buttons/graphics1"
 #define DISPLAY0 "menu/buttons/display0"
 #define DISPLAY1 "menu/buttons/display1"
 #define SOUND0 "menu/buttons/sound0"
 #define SOUND1 "menu/buttons/sound1"
-#define NETWORK0 "menu/buttons/network0"
-#define NETWORK1 "menu/buttons/network1"
+#define NETWORK0 "menu/buttons/netvoip0"
+#define NETWORK1 "menu/buttons/netvoip1"
 #define ACCEPT0 "menu/buttons/accept"
 #define ACCEPT1 "menu/buttons/accept"
 
@@ -58,18 +58,12 @@ SOUND OPTIONS MENU
 #define ID_QUALITY 15
 #define ID_DOPPLER 16
 
-#define ID_VOIPMODE 17
-#define ID_RECORDMODE 18
-#define ID_VOICETHRESHOLD 19
-#define ID_GAINWHILECAPTURE 20
-
 #define XPOSITION 180
 #define DEFAULT_SDL_SND_SPEED 44100
 #define UISND_SDL 0
 #define UISND_OPENAL 1
 
 static const char *quality_items[] = {"Low", "Medium", "High", NULL};
-static const char *recording_items[] = {"Push to Talk", "Automatic", 0};
 static const char *soundSystem_items[] = {"SDL", "OpenAL", NULL};
 
 typedef struct {
@@ -88,12 +82,6 @@ typedef struct {
 	menulist_s quality;
 	menuradiobutton_s doppler;
 
-	menuradiobutton_s voipmode;
-	menulist_s voipRecordMode;
-	menutext_s voipmode_grayed;
-	menuslider_s voiceThresholdVAD;
-	menuslider_s voiceGainDuringCapture;
-
 	menubitmap_s apply;
 	menubitmap_s back;
 
@@ -103,54 +91,6 @@ typedef struct {
 
 static soundOptionsInfo_t soundOptionsInfo;
 
-static void UI_SoundOptionsMenu_Update(void) {
-	// openAL and a high rate are conditions for all voip settings
-	qboolean disableVoip = 25000 > trap_Cvar_VariableValue("rate");
-	// voip is a condition for voip volume
-	qboolean voipOff = (0 == soundOptionsInfo.voipmode.curvalue);
-	// automatic recording is a condition for voip threshold
-	qboolean hideVADThreshold = (0 == soundOptionsInfo.voipRecordMode.curvalue);
-	int y;
-
-	if (disableVoip) {
-		soundOptionsInfo.voipmode_grayed.generic.flags &= ~QMF_HIDDEN;
-		soundOptionsInfo.voipmode.generic.flags |= QMF_GRAYED;
-		soundOptionsInfo.voipRecordMode.generic.flags |= QMF_GRAYED;
-		soundOptionsInfo.voiceThresholdVAD.generic.flags |= QMF_GRAYED;
-		soundOptionsInfo.voiceGainDuringCapture.generic.flags |= QMF_GRAYED;
-	} else {
-		soundOptionsInfo.voipmode_grayed.generic.flags |= QMF_HIDDEN;
-		soundOptionsInfo.voipmode.generic.flags &= ~QMF_GRAYED;
-
-		if (voipOff) {
-			soundOptionsInfo.voipRecordMode.generic.flags |= QMF_GRAYED;
-			soundOptionsInfo.voiceThresholdVAD.generic.flags |= QMF_GRAYED;
-			soundOptionsInfo.voiceGainDuringCapture.generic.flags |= QMF_GRAYED;
-		} else {
-			soundOptionsInfo.voipRecordMode.generic.flags &= ~QMF_GRAYED;
-			soundOptionsInfo.voiceGainDuringCapture.generic.flags &= ~QMF_GRAYED;
-
-			if (hideVADThreshold)
-				soundOptionsInfo.voiceThresholdVAD.generic.flags |= QMF_GRAYED;
-			else
-				soundOptionsInfo.voiceThresholdVAD.generic.flags &= ~QMF_GRAYED;
-		}
-	}
-
-	// move voip settings down to make space for the voipmode_grayed text
-	// or move them back up
-	y = soundOptionsInfo.voipmode_grayed.generic.y;
-	if (disableVoip) {
-		y += BIGCHAR_HEIGHT + 2;
-	}
-	soundOptionsInfo.voipmode.generic.y = y;
-	y += BIGCHAR_HEIGHT + 2;
-	soundOptionsInfo.voipRecordMode.generic.y = y;
-	y += BIGCHAR_HEIGHT + 2;
-	soundOptionsInfo.voiceThresholdVAD.generic.y = y;
-	y += BIGCHAR_HEIGHT + 2;
-	soundOptionsInfo.voiceGainDuringCapture.generic.y = y;
-}
 /*
 =================
 UI_SoundOptionsMenu_Event
@@ -208,22 +148,6 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 		trap_Cvar_SetValue("s_doppler", (float)soundOptionsInfo.doppler.curvalue);
 		break;
 
-	case ID_GAINWHILECAPTURE:
-		trap_Cvar_SetValue("cl_voipGainDuringCapture", soundOptionsInfo.voiceGainDuringCapture.curvalue / 10);
-		break;
-
-	case ID_VOIPMODE:
-		trap_Cvar_SetValue("cl_voip", (float)soundOptionsInfo.voipmode.curvalue);
-		break;
-
-	case ID_RECORDMODE:
-		trap_Cvar_SetValue("cl_voipUseVAD", (float)soundOptionsInfo.voipRecordMode.curvalue);
-		break;
-
-	case ID_VOICETHRESHOLD:
-		trap_Cvar_SetValue("cl_voipVADThreshold", soundOptionsInfo.voiceThresholdVAD.curvalue / 10);
-		break;
-
 	case ID_BACK:
 		UI_PopMenu();
 		break;
@@ -262,7 +186,6 @@ static void UI_SoundOptionsMenu_Event(void *ptr, int event) {
 		break;
 	}
 
-	UI_SoundOptionsMenu_Update();
 }
 
 static void SoundOptions_UpdateMenuItems(void) {
@@ -314,7 +237,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.graphics.generic.y = 37;
 	soundOptionsInfo.graphics.width = 160;
 	soundOptionsInfo.graphics.height = 40;
-	soundOptionsInfo.graphics.focuspic = GRASHICS1;
+	soundOptionsInfo.graphics.focuspic = GRAPHICS1;
 	soundOptionsInfo.graphics.focuspicinstead = qtrue;
 
 	soundOptionsInfo.display.generic.type = MTYPE_BITMAP;
@@ -427,61 +350,6 @@ static void UI_SoundOptionsMenu_Init(void) {
 	soundOptionsInfo.doppler.generic.x = XPOSITION;
 	soundOptionsInfo.doppler.generic.y = y;
 
-	y += BIGCHAR_HEIGHT * 2 + 2;
-	soundOptionsInfo.voipmode.generic.type = MTYPE_RADIOBUTTON;
-	soundOptionsInfo.voipmode.generic.name = "Voice Chat:";
-	soundOptionsInfo.voipmode.generic.flags = QMF_SMALLFONT;
-	soundOptionsInfo.voipmode.generic.callback = UI_SoundOptionsMenu_Event;
-	soundOptionsInfo.voipmode.generic.id = ID_VOIPMODE;
-	soundOptionsInfo.voipmode.generic.x = XPOSITION;
-	soundOptionsInfo.voipmode.generic.y = y;
-
-	soundOptionsInfo.voipmode_grayed.generic.type = MTYPE_TEXT;
-	soundOptionsInfo.voipmode_grayed.generic.flags = QMF_PULSE;
-	soundOptionsInfo.voipmode_grayed.generic.x = XPOSITION - 35;
-	soundOptionsInfo.voipmode_grayed.generic.y = y;
-	soundOptionsInfo.voipmode_grayed.string = "Needs LAN/Cable/xDSL Network!";
-	soundOptionsInfo.voipmode_grayed.style = (UI_CENTER | UI_SMALLFONT);
-	soundOptionsInfo.voipmode_grayed.color = menu_text_color;
-
-	y += BIGCHAR_HEIGHT + 2;
-	soundOptionsInfo.voipRecordMode.generic.type = MTYPE_SPINCONTROL;
-	soundOptionsInfo.voipRecordMode.generic.name = "Voice Recording:";
-	soundOptionsInfo.voipRecordMode.generic.flags = QMF_SMALLFONT;
-	soundOptionsInfo.voipRecordMode.generic.callback = UI_SoundOptionsMenu_Event;
-	soundOptionsInfo.voipRecordMode.generic.id = ID_RECORDMODE;
-	soundOptionsInfo.voipRecordMode.generic.x = XPOSITION;
-	soundOptionsInfo.voipRecordMode.generic.y = y;
-	soundOptionsInfo.voipRecordMode.itemnames = recording_items;
-
-	y += BIGCHAR_HEIGHT + 2;
-	soundOptionsInfo.voiceThresholdVAD.generic.type = MTYPE_SLIDER;
-	soundOptionsInfo.voiceThresholdVAD.generic.name = "Voice Threshold:";
-	soundOptionsInfo.voiceThresholdVAD.generic.flags = QMF_SMALLFONT;
-	soundOptionsInfo.voiceThresholdVAD.generic.callback = UI_SoundOptionsMenu_Event;
-	soundOptionsInfo.voiceThresholdVAD.generic.id = ID_VOICETHRESHOLD;
-	soundOptionsInfo.voiceThresholdVAD.generic.x = XPOSITION;
-	soundOptionsInfo.voiceThresholdVAD.generic.y = y;
-	soundOptionsInfo.voiceThresholdVAD.minvalue = 0;
-	soundOptionsInfo.voiceThresholdVAD.maxvalue = 10;
-	soundOptionsInfo.voiceThresholdVAD.generic.toolTip =
-		"If microphone option is set to open use this to adjust the sensitivity of the open microphone, mid to high "
-		"setting recommended if using this method.";
-
-	y += BIGCHAR_HEIGHT + 2;
-	soundOptionsInfo.voiceGainDuringCapture.generic.type = MTYPE_SLIDER;
-	soundOptionsInfo.voiceGainDuringCapture.generic.name = "Capture Volume:";
-	soundOptionsInfo.voiceGainDuringCapture.generic.flags = QMF_SMALLFONT;
-	soundOptionsInfo.voiceGainDuringCapture.generic.callback = UI_SoundOptionsMenu_Event;
-	soundOptionsInfo.voiceGainDuringCapture.generic.id = ID_GAINWHILECAPTURE;
-	soundOptionsInfo.voiceGainDuringCapture.generic.x = XPOSITION;
-	soundOptionsInfo.voiceGainDuringCapture.generic.y = y;
-	soundOptionsInfo.voiceGainDuringCapture.minvalue = 0;
-	soundOptionsInfo.voiceGainDuringCapture.maxvalue = 10;
-	soundOptionsInfo.voiceGainDuringCapture.generic.toolTip =
-		"This is the volume of audio coming out of your speakers while you are recording sound for transmission. This "
-		"prevents audio feedback and echo. If you're using headphones, you don't need to turn this down.";
-
 	soundOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.back.generic.name = BACK0;
 	soundOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
@@ -509,6 +377,7 @@ static void UI_SoundOptionsMenu_Init(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.display);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.sound);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.network);
+
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.sfxvolume);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicvolume);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicautoswitch);
@@ -516,18 +385,14 @@ static void UI_SoundOptionsMenu_Init(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.soundSystem);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.quality);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.doppler);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipmode);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipmode_grayed);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voipRecordMode);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voiceThresholdVAD);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.voiceGainDuringCapture);
+
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.back);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.apply);
 
 	soundOptionsInfo.sfxvolume.curvalue = trap_Cvar_VariableValue("s_volume") * 10;
 	soundOptionsInfo.musicvolume.curvalue = trap_Cvar_VariableValue("s_musicvolume") * 10;
 
-	if (trap_Cvar_VariableValue("s_muteWhenUnfocused") == 1 || trap_Cvar_VariableValue("s_muteWhenMinimized") == 1) {
+	if (trap_Cvar_VariableValue("s_muteWhenUnfocused") || trap_Cvar_VariableValue("s_muteWhenMinimized")) {
 		soundOptionsInfo.automute.curvalue = 1;
 	} else {
 		soundOptionsInfo.automute.curvalue = 0;
@@ -554,12 +419,6 @@ static void UI_SoundOptionsMenu_Init(void) {
 
 	soundOptionsInfo.musicautoswitch.curvalue = (UI_GetCvarInt("wop_AutoswitchSongByNextMap") != 0);
 	soundOptionsInfo.doppler.curvalue = (UI_GetCvarInt("s_doppler") != 0);
-	soundOptionsInfo.voiceThresholdVAD.curvalue = trap_Cvar_VariableValue("cl_voipVADThreshold") * 10;
-	soundOptionsInfo.voiceGainDuringCapture.curvalue = trap_Cvar_VariableValue("cl_voipGainDuringCapture") * 10;
-	soundOptionsInfo.voipmode.curvalue = UI_GetCvarInt("cl_voip");
-	soundOptionsInfo.voipRecordMode.curvalue = UI_GetCvarInt("cl_voipUseVAD");
-
-	UI_SoundOptionsMenu_Update();
 }
 
 /*
@@ -571,7 +430,7 @@ void UI_SoundOptionsMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(GRAPHICS0);
-	trap_R_RegisterShaderNoMip(GRASHICS1);
+	trap_R_RegisterShaderNoMip(GRAPHICS1);
 	trap_R_RegisterShaderNoMip(DISPLAY0);
 	trap_R_RegisterShaderNoMip(DISPLAY1);
 	trap_R_RegisterShaderNoMip(SOUND0);
