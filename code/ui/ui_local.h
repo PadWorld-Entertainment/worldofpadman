@@ -344,10 +344,6 @@ extern const vec4_t text_color_bluenormal;
 extern const vec4_t text_color_bluehighlight;
 extern const vec4_t listbar_bluecolor;
 
-extern char *ui_medalNames[];
-extern char *ui_medalPicNames[];
-extern char *ui_medalSounds[];
-
 //
 // ui_mfield.c
 //
