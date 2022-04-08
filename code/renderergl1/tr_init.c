@@ -371,7 +371,7 @@ static byte *RB_ReadPixels(int x, int y, int width, int height, size_t *offset, 
 RB_TakeScreenshot
 ==================
 */
-static void RB_TakeScreenshot(int x, int y, int width, int height, char *fileName) {
+static void RB_TakeScreenshot(int x, int y, int width, int height, const char *fileName) {
 	byte *allbuf, *buffer;
 	byte *srcptr, *destptr;
 	byte *endline, *endmem;
@@ -430,7 +430,7 @@ RB_TakeScreenshotJPEG
 ==================
 */
 
-static void RB_TakeScreenshotJPEG(int x, int y, int width, int height, char *fileName) {
+static void RB_TakeScreenshotJPEG(int x, int y, int width, int height, const char *fileName) {
 	byte *buffer;
 	size_t offset = 0, memcount;
 	int padlen;

@@ -2380,7 +2380,7 @@ void RE_SetColor(const float *rgba);
 void RE_StretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader);
 void RE_BeginFrame(stereoFrame_t stereoFrame);
 void RE_EndFrame(int *frontEndMsec, int *backEndMsec);
-void RE_SaveJPG(char *filename, int quality, int image_width, int image_height, unsigned char *image_buffer,
+void RE_SaveJPG(const char *filename, int quality, int image_width, int image_height, unsigned char *image_buffer,
 				int padding);
 size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_width, int image_height,
 						  byte *image_buffer, int padding);
