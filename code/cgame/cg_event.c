@@ -1090,9 +1090,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	case EV_DEATH1:
 	case EV_DEATH2:
 	case EV_DEATH3:
-		// TODO: temporary disabled - see https://github.com/PadWorld-Entertainment/worldofpadman/issues/36
-		// missing sounds in wop - once we have them - we should activate this.
-		if (0 && CG_WaterLevel(cent) == WL_DIVING) {
+		if (CG_WaterLevel(cent) == WL_DIVING) {
 			trap_S_StartSound(NULL, es->number, CHAN_VOICE, CG_CustomSound(es->number, "*drown"));
 		} else {
 			trap_S_StartSound(NULL, es->number, CHAN_VOICE,

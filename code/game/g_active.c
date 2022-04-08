@@ -123,11 +123,6 @@ static void P_WorldEffects(gentity_t *ent) {
 				if (ent->damage > 15)
 					ent->damage = 15;
 
-				// play a gurp sound instead of a normal pain sound
-				if (ent->health <= ent->damage) {
-					G_Sound(ent, CHAN_VOICE, G_SoundIndex("*drown"));
-				}
-
 				// don't play a normal pain sound
 				ent->pain_debounce_time = level.time + 200;
 
