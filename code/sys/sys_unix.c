@@ -59,21 +59,34 @@ char *Sys_DefaultHomePath(void) {
 	char *p;
 
 	if (!*homePath && com_homepath != NULL) {
-		if ((p = getenv("HOME")) != NULL) {
-			Com_sprintf(homePath, sizeof(homePath), "%s%c", p, PATH_SEP);
 #ifdef __APPLE__
-			Q_strcat(homePath, sizeof(homePath), "Library/Application Support/");
+		if ((p = getenv("HOME")) != NULL) {
+			Com_sprintf(homePath, sizeof(homePath), "%s%cLibrary%cApplication Support%c", p, PATH_SEP, PATH_SEP,
+						PATH_SEP);
 
 			if (com_homepath->string[0])
 				Q_strcat(homePath, sizeof(homePath), com_homepath->string);
 			else
-				Q_strcat(homePath, sizeof(homePath), HOMEPATH_NAME_MACOSX);
+				Q_strcat(homePath, sizeof(homePath), HOMEPATH_NAME_MAXOSX);
+		}
 #else
+		if ((p = getenv("XDG_DATA_HOME")) != NULL) {
+			Com_sprintf(homePath, sizeof(homePath), "%s%c", p, PATH_SEP);
+		} else if ((p = getenv("HOME")) != NULL) {
+			Com_sprintf(homePath, sizeof(homePath), "%s%c.local%cshare%c", p, PATH_SEP, PATH_SEP, PATH_SEP);
+		}
+
+		if (*homePath) {
 			if (com_homepath->string[0])
 				Q_strcat(homePath, sizeof(homePath), com_homepath->string);
 			else
 				Q_strcat(homePath, sizeof(homePath), HOMEPATH_NAME_UNIX);
+		}
 #endif
+
+		if (!*homePath) {
+			Com_Printf("Unable to detect home path\n");
+			return NULL;
 		}
 	}
 
