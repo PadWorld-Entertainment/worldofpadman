@@ -388,7 +388,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.voipMode.itemnames = voipMode_items;
 	networkOptionsInfo.voipMode.generic.toolTip =
 		"Set this to off to completely disable the VoIP chat. You will neither be able to transmit voice nor hear other "
-		"people talking. The Default setting is the built-in VoiP support. When you set to Mumble, you can link Mumble "
+		"people talking. The default setting is the built-in VoiP support. When you set to Mumble, you can link Mumble "
 		"as an external program but you must start it before starting WoP.";
 
 	y += (BIGCHAR_HEIGHT + 2);

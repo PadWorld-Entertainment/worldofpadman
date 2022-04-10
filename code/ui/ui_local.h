@@ -163,7 +163,7 @@ extern vmCvar_t wop_AutoBindUnusedKeys;
 #define BGP_MODS 0x000200
 #define BGP_DEMOS 0x000400
 #define BGP_SPECIFY 0x000800
-#define BGP_GAMEOPTIONS 0x001000
+#define BGP_PREFERENCES 0x001000
 #define BGP_STARTSERVER 0x002000
 #define BGP_SELECTBOTS 0x004000
 #define BGP_MENUFX 0x008000
@@ -456,7 +456,7 @@ extern void PlayerSettings_Cache(void);
 // ui_preferences.c
 //
 extern void UI_PreferencesMenu(void);
-extern void Preferences_Cache(void);
+extern void UI_Preferences_Cache(void);
 
 //
 // ui_specifyserver.c
@@ -621,7 +621,7 @@ typedef struct {
 	qhandle_t demosbg;
 	qhandle_t specifybg;
 	qhandle_t specifypassbg;
-	qhandle_t gameoptionsbg;
+	qhandle_t preferencesbg;
 	qhandle_t startserverbg;
 	qhandle_t selectbotsbg;
 	qhandle_t ingamebg;

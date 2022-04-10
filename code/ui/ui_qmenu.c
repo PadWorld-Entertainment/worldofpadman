@@ -1822,7 +1822,7 @@ void Menu_Cache(void) {
 	uis.demosbg = trap_R_RegisterShaderNoMip("menu/bg/demos");
 	uis.specifybg = trap_R_RegisterShaderNoMip("menu/bg/specify");
 	uis.specifypassbg = trap_R_RegisterShaderNoMip("menu/bg/password");
-	uis.gameoptionsbg = trap_R_RegisterShaderNoMip("menu/bg/gameoptions");
+	uis.preferencesbg = trap_R_RegisterShaderNoMip("menu/bg/preferences");
 	uis.startserverbg = trap_R_RegisterShaderNoMip("menu/bg/startserver");
 	uis.selectbotsbg = trap_R_RegisterShaderNoMip("menu/bg/selectbots");
 	uis.ingamebg = trap_R_RegisterShaderNoMip("menu/bg/ingame");

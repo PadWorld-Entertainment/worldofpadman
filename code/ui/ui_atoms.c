@@ -1039,7 +1039,7 @@ void UI_Cache_f(void) {
 	PlayerSettings_Cache();
 	Controls_Cache();
 	Demos_Cache();
-	Preferences_Cache();
+	UI_Preferences_Cache();
 	ServerInfo_Cache();
 	SpecifyServer_Cache();
 	ArenaServers_Cache();
@@ -1357,8 +1357,8 @@ void UI_DrawMenu(menuframework_s *menu) {
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.specifybg);
 				if (menu->bgparts & BGP_SPECIFYPASS)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.specifypassbg);
-				if (menu->bgparts & BGP_GAMEOPTIONS)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.gameoptionsbg);
+				if (menu->bgparts & BGP_PREFERENCES)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.preferencesbg);
 				if (menu->bgparts & BGP_STARTSERVER)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.startserverbg);
 				if (menu->bgparts & BGP_SELECTBOTS)

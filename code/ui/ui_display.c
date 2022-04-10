@@ -50,17 +50,9 @@ DISPLAY OPTIONS MENU
 
 #define ID_IGNOREHWG 14
 #define ID_BRIGHTNESS 15
-//#define ID_SCREENSIZE 16
-#define ID_SYNCEVERYFRAME 16
-#define ID_SIMPLEITEMS 17
-#define ID_WALLMARKS 18
-#define ID_HIGHQUALITYSKY 19
-#define ID_LENSFLARE 20
-#define ID_DYNAMICLIGHTS 21
-#define ID_FLARES 22
-#define ID_INGAMEVIDEO 23
-#define ID_ANAGLYPH 24
-#define ID_GREYSCALE 25
+#define ID_SCREENSIZE 16
+#define ID_ANAGLYPH 17
+#define ID_GREYSCALE 18
 
 #define ID_BACK 26
 
@@ -76,15 +68,7 @@ typedef struct {
 
 	menuradiobutton_s ignoreHWG;
 	menuslider_s brightness;
-//	menuslider_s screensize;
-	menuradiobutton_s synceveryframe;
-	menuradiobutton_s simpleitems;
-	menuradiobutton_s wallmarks;
-	menuradiobutton_s highqualitysky;
-	menuradiobutton_s lensFlare;
-	menuradiobutton_s dynamiclights;
-	menuradiobutton_s flares;
-	menuradiobutton_s ingamevideo;
+	menuslider_s screensize;
 	menulist_s anaglyph;
 	menuslider_s greyscale;
 
@@ -94,7 +78,7 @@ typedef struct {
 
 static displayOptionsInfo_t displayOptionsInfo;
 
-static const char *anaglyph_names[] = {"off",	   "red-cyan", "red-blue",	"red-green",
+static const char *anaglyph_names[] = {"off", "red-cyan", "red-blue", "red-green",
 									   "cyan-red", "blue-red", "green-red", NULL};
 
 static void ApplyPressed(void *unused, int notification) {
@@ -143,40 +127,8 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		trap_Cvar_SetValue("r_gamma", displayOptionsInfo.brightness.curvalue / 10.0f);
 		break;
 
-//	case ID_SCREENSIZE:
-//		trap_Cvar_SetValue("cg_viewsize", displayOptionsInfo.screensize.curvalue * 10);
-//		break;
-//
-	case ID_SYNCEVERYFRAME:
-		trap_Cvar_SetValue("r_finish", displayOptionsInfo.synceveryframe.curvalue);
-		break;
-
-	case ID_SIMPLEITEMS:
-		trap_Cvar_SetValue("cg_simpleItems", displayOptionsInfo.simpleitems.curvalue);
-		break;
-
-	case ID_WALLMARKS:
-		trap_Cvar_SetValue("cg_marks", displayOptionsInfo.wallmarks.curvalue);
-		break;
-
-	case ID_HIGHQUALITYSKY:
-		trap_Cvar_SetValue("r_fastsky", !displayOptionsInfo.highqualitysky.curvalue);
-		break;
-
-	case ID_LENSFLARE:
-		trap_Cvar_Set("cg_drawLensflare", va("%d", displayOptionsInfo.lensFlare.curvalue));
-		break;
-
-	case ID_DYNAMICLIGHTS:
-		trap_Cvar_SetValue("r_dynamiclight", displayOptionsInfo.dynamiclights.curvalue);
-		break;
-
-	case ID_FLARES:
-		trap_Cvar_SetValue("r_flares", displayOptionsInfo.flares.curvalue);
-		break;
-
-	case ID_INGAMEVIDEO:
-		trap_Cvar_SetValue("r_inGameVideo", displayOptionsInfo.ingamevideo.curvalue);
+	case ID_SCREENSIZE:
+		trap_Cvar_SetValue("cg_viewsize", displayOptionsInfo.screensize.curvalue * 10);
 		break;
 
 	case ID_BACK:
@@ -300,7 +252,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	if (!uis.glconfig.deviceSupportsGamma)
 		displayOptionsInfo.brightness.generic.flags |= QMF_GRAYED;
 
-/*	y += BIGCHAR_HEIGHT + 2;
+	y += BIGCHAR_HEIGHT + 2;
 	displayOptionsInfo.screensize.generic.type = MTYPE_SLIDER;
 	displayOptionsInfo.screensize.generic.name = "Screen Size:";
 	displayOptionsInfo.screensize.generic.flags = QMF_SMALLFONT;
@@ -310,82 +262,6 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.screensize.generic.y = y;
 	displayOptionsInfo.screensize.minvalue = 3;
     displayOptionsInfo.screensize.maxvalue = 10;
-*/
-	y += BIGCHAR_HEIGHT + 2;
-	displayOptionsInfo.synceveryframe.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.synceveryframe.generic.name = "Sync Every Frame:";
-	displayOptionsInfo.synceveryframe.generic.flags = QMF_SMALLFONT;
-	displayOptionsInfo.synceveryframe.generic.callback = UI_DisplayOptionsMenu_Event;
-	displayOptionsInfo.synceveryframe.generic.id = ID_SYNCEVERYFRAME;
-	displayOptionsInfo.synceveryframe.generic.x = XPOSITION;
-	displayOptionsInfo.synceveryframe.generic.y = y;
-	displayOptionsInfo.synceveryframe.generic.toolTip =
-		"Also known as V-SYNC. Enable only if you're experiencing graphical horizontal tearing artifacts.";
-
-	y += BIGCHAR_HEIGHT + 2;
-	displayOptionsInfo.simpleitems.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.simpleitems.generic.name = "Simple Items:";
-	displayOptionsInfo.simpleitems.generic.flags = QMF_SMALLFONT;
-	displayOptionsInfo.simpleitems.generic.callback = UI_DisplayOptionsMenu_Event;
-	displayOptionsInfo.simpleitems.generic.id = ID_SIMPLEITEMS;
-	displayOptionsInfo.simpleitems.generic.x = XPOSITION;
-	displayOptionsInfo.simpleitems.generic.y = y;
-	displayOptionsInfo.simpleitems.generic.toolTip = "Enable this to see all 3d items replaced with 2d icons.";
-
-	y += BIGCHAR_HEIGHT + 2;
-	displayOptionsInfo.wallmarks.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.wallmarks.generic.name = "Marks on Walls:";
-	displayOptionsInfo.wallmarks.generic.flags = QMF_SMALLFONT;
-	displayOptionsInfo.wallmarks.generic.callback = UI_DisplayOptionsMenu_Event;
-	displayOptionsInfo.wallmarks.generic.id = ID_WALLMARKS;
-	displayOptionsInfo.wallmarks.generic.x = XPOSITION;
-	displayOptionsInfo.wallmarks.generic.y = y;
-	displayOptionsInfo.wallmarks.generic.toolTip = "Enable this to see weapon effects on surfaces.";
-
-	y += BIGCHAR_HEIGHT + 2;
-	displayOptionsInfo.highqualitysky.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.highqualitysky.generic.name = "High Quality Sky:";
-	displayOptionsInfo.highqualitysky.generic.flags = QMF_SMALLFONT;
-	displayOptionsInfo.highqualitysky.generic.callback = UI_DisplayOptionsMenu_Event;
-	displayOptionsInfo.highqualitysky.generic.id = ID_HIGHQUALITYSKY;
-	displayOptionsInfo.highqualitysky.generic.x = XPOSITION;
-	displayOptionsInfo.highqualitysky.generic.y = y;
-
-	y += BIGCHAR_HEIGHT + 2;
-	displayOptionsInfo.lensFlare.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.lensFlare.generic.name = "Sky Lens Flare:";
-	displayOptionsInfo.lensFlare.generic.flags = QMF_SMALLFONT;
-	displayOptionsInfo.lensFlare.generic.callback = UI_DisplayOptionsMenu_Event;
-	displayOptionsInfo.lensFlare.generic.id = ID_LENSFLARE;
-	displayOptionsInfo.lensFlare.generic.x = XPOSITION;
-	displayOptionsInfo.lensFlare.generic.y = y;
-
-	y += BIGCHAR_HEIGHT + 2;
-	displayOptionsInfo.dynamiclights.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.dynamiclights.generic.name = "Dynamic Lights:";
-	displayOptionsInfo.dynamiclights.generic.flags = QMF_SMALLFONT;
-	displayOptionsInfo.dynamiclights.generic.callback = UI_DisplayOptionsMenu_Event;
-	displayOptionsInfo.dynamiclights.generic.id = ID_DYNAMICLIGHTS;
-	displayOptionsInfo.dynamiclights.generic.x = XPOSITION;
-	displayOptionsInfo.dynamiclights.generic.y = y;
-
-	y += BIGCHAR_HEIGHT + 2;
-	displayOptionsInfo.flares.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.flares.generic.name = "Dynamic Flares:";
-	displayOptionsInfo.flares.generic.flags = QMF_SMALLFONT;
-	displayOptionsInfo.flares.generic.callback = UI_DisplayOptionsMenu_Event;
-	displayOptionsInfo.flares.generic.id = ID_FLARES;
-	displayOptionsInfo.flares.generic.x = XPOSITION;
-	displayOptionsInfo.flares.generic.y = y;
-
-	y += BIGCHAR_HEIGHT + 2;
-	displayOptionsInfo.ingamevideo.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.ingamevideo.generic.name = "Ingame Videos:";
-	displayOptionsInfo.ingamevideo.generic.flags = QMF_SMALLFONT;
-	displayOptionsInfo.ingamevideo.generic.callback = UI_DisplayOptionsMenu_Event;
-	displayOptionsInfo.ingamevideo.generic.id = ID_FLARES;
-	displayOptionsInfo.ingamevideo.generic.x = XPOSITION;
-	displayOptionsInfo.ingamevideo.generic.y = y;
 
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
@@ -441,14 +317,6 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.ignoreHWG);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
 //	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
-	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.synceveryframe);
-	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.simpleitems);
-	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.wallmarks);
-	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.highqualitysky);
-	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.lensFlare);
-	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.dynamiclights);
-	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.flares);
-	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.ingamevideo);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
 
@@ -457,15 +325,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 
 	displayOptionsInfo.ignoreHWG.curvalue = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
-//	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
-	displayOptionsInfo.synceveryframe.curvalue = trap_Cvar_VariableValue("r_finish") != 0;
-	displayOptionsInfo.simpleitems.curvalue = trap_Cvar_VariableValue("cg_simpleItems") != 0;
-	displayOptionsInfo.wallmarks.curvalue = trap_Cvar_VariableValue("cg_marks") != 0;
-	displayOptionsInfo.highqualitysky.curvalue = trap_Cvar_VariableValue("r_fastsky") == 0;
-	displayOptionsInfo.lensFlare.curvalue = trap_Cvar_VariableValue("cg_drawLensflare") != 0;
-	displayOptionsInfo.dynamiclights.curvalue = trap_Cvar_VariableValue("r_dynamiclight") != 0;
-	displayOptionsInfo.flares.curvalue = trap_Cvar_VariableValue("r_flares") != 0;
-	displayOptionsInfo.ingamevideo.curvalue = trap_Cvar_VariableValue("r_inGameVideo") != 0;
+	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
 	displayOptionsInfo.anaglyph.curvalue =
 		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
