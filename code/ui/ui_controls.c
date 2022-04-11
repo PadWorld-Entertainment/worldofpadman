@@ -883,7 +883,7 @@ static void Controls_GetConfig(void) {
 	s_controls.maccelstyle.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cl_mouseAccelStyle"));
 	s_controls.macceloffset.curvalue = UI_ClampCvar(0.001f, 50000.0f, Controls_GetCvarValue("cl_mouseAccelOffset"));
 	s_controls.joyenable.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("in_joystick"));
-	s_controls.joythreshold.curvalue = UI_ClampCvar(0.05f, 0.75f, Controls_GetCvarValue("joy_threshold"));
+	s_controls.joythreshold.curvalue = UI_ClampCvar(0.05f, 0.75f, Controls_GetCvarValue("joy_threshold")) * 100;
 	s_controls.freelook.curvalue = UI_ClampCvar(0, 1, Controls_GetCvarValue("cl_freelook"));
 }
 
@@ -925,7 +925,7 @@ static void Controls_SetConfig(void) {
 	trap_Cvar_SetValue("cl_mouseAccelStyle", s_controls.maccelstyle.curvalue);
 	trap_Cvar_SetValue("cl_mouseAccelOffset", s_controls.macceloffset.curvalue);
 	trap_Cvar_SetValue("in_joystick", s_controls.joyenable.curvalue);
-	trap_Cvar_SetValue("joy_threshold", s_controls.joythreshold.curvalue);
+	trap_Cvar_SetValue("joy_threshold", s_controls.joythreshold.curvalue / 100);
 	trap_Cvar_SetValue("cl_freelook", s_controls.freelook.curvalue);
 	trap_Cmd_ExecuteText(EXEC_APPEND, "in_restart\n");
 }
@@ -989,7 +989,7 @@ static void Controls_SetDefaults(void) {
 	s_controls.maccelstyle.curvalue = Controls_GetCvarDefault("cl_mouseAccelStyle");
 	s_controls.macceloffset.curvalue = Controls_GetCvarDefault("cl_mouseAccelOffset");
 	s_controls.joyenable.curvalue = Controls_GetCvarDefault("in_joystick");
-	s_controls.joythreshold.curvalue = Controls_GetCvarDefault("joy_threshold");
+	s_controls.joythreshold.curvalue = Controls_GetCvarDefault("joy_threshold") * 100;
 	s_controls.freelook.curvalue = Controls_GetCvarDefault("cl_freelook");
 }
 
@@ -1447,8 +1447,8 @@ static void Controls_MenuInit(void) {
 	s_controls.joythreshold.generic.name = "Joystick Threshold:";
 	s_controls.joythreshold.generic.id = ID_JOYTHRESHOLD;
 	s_controls.joythreshold.generic.callback = Controls_MenuEvent;
-	s_controls.joythreshold.minvalue = 0.05f;
-	s_controls.joythreshold.maxvalue = 0.75f;
+	s_controls.joythreshold.minvalue = 5;
+	s_controls.joythreshold.maxvalue = 75;
 	s_controls.joythreshold.generic.statusbar = Controls_StatusBar;
 
 	s_controls.alwaysrun.generic.type = MTYPE_RADIOBUTTON;
