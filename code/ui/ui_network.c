@@ -95,10 +95,10 @@ static networkOptionsInfo_t networkOptionsInfo;
 
 /*
 =================
-UI_NetworkOptionsMenu_SendTargetUpdate
+UI_NetworkOptions_SendTargetUpdate
 =================
 */
-static void UI_NetworkOptionsMenu_SendTargetUpdate(void) {
+static void UI_NetworkOptions_SendTargetUpdate(void) {
 	int i;
 	const char **s;
 	char voipSendTarget[MAX_CVAR_VALUE_STRING];
@@ -130,10 +130,45 @@ static void UI_NetworkOptionsMenu_SendTargetUpdate(void) {
 
 /*
 =================
-UI_NetworkOptionsMenu_Update
+UI_NetworkOptions_SetMenuItems
 =================
 */
-static void UI_NetworkOptionsMenu_Update(void) {
+static void UI_NetworkOptions_SetMenuItems(void) {
+	int rate;
+
+	rate = trap_Cvar_VariableValue("rate");
+	if (rate <= 4000) {
+		networkOptionsInfo.rate.curvalue = 0;
+	} else if (rate <= 5000) {
+		networkOptionsInfo.rate.curvalue = 1;
+	} else {
+		networkOptionsInfo.rate.curvalue = 2;
+	}
+
+	networkOptionsInfo.allowDownload.curvalue = (trap_Cvar_VariableValue("cl_allowDownload") != 0);
+
+	if (!trap_Cvar_VariableValue("cl_voip") && trap_Cvar_VariableValue("cl_useMumble")) {
+		networkOptionsInfo.voipMode.curvalue = 2;
+	} else if (trap_Cvar_VariableValue("cl_voip") && !trap_Cvar_VariableValue("cl_useMumble")) {
+		networkOptionsInfo.voipMode.curvalue = 1;
+	} else {
+		networkOptionsInfo.voipMode.curvalue = 0;
+	}
+
+	networkOptionsInfo.voipVADmode.curvalue = UI_GetCvarInt("cl_voipUseVAD");
+	networkOptionsInfo.voipVADthreshold.curvalue = trap_Cvar_VariableValue("cl_voipVADThreshold") * 100;
+	networkOptionsInfo.voipGainDuringCapture.curvalue = trap_Cvar_VariableValue("cl_voipGainDuringCapture") * 100;
+	networkOptionsInfo.voipCaptureMult.curvalue = trap_Cvar_VariableValue("cl_voipCaptureMult");
+	networkOptionsInfo.mumbleScale.curvalue = trap_Cvar_VariableValue("cl_mumbleScale") * 1000;
+
+}
+
+/*
+=================
+UI_NetworkOptions_UpdateMenuItems
+=================
+*/
+static void UI_NetworkOptions_UpdateMenuItems(void) {
 
 	// high rate enabled is condition for all voip settings
 	if (trap_Cvar_VariableValue("rate") < 25000) {
@@ -176,7 +211,7 @@ static void UI_NetworkOptionsMenu_Update(void) {
 			} else {
 				networkOptionsInfo.voipVADthreshold.generic.flags &= ~QMF_GRAYED;
 			}
-			UI_NetworkOptionsMenu_SendTargetUpdate();
+			UI_NetworkOptions_SendTargetUpdate();
 		} else {
 			// voipMode is set to off
 			networkOptionsInfo.voipVADmode.generic.flags |= QMF_HIDDEN;
@@ -191,10 +226,10 @@ static void UI_NetworkOptionsMenu_Update(void) {
 
 /*
 =================
-UI_NetworkOptionsMenu_Event
+UI_NetworkOptions_Event
 =================
 */
-static void UI_NetworkOptionsMenu_Event(void *ptr, int event) {
+static void UI_NetworkOptions_Event(void *ptr, int event) {
 	if (event != QM_ACTIVATED) {
 		return;
 	}
@@ -276,21 +311,20 @@ static void UI_NetworkOptionsMenu_Event(void *ptr, int event) {
 		break;
 	}
 	
-	UI_NetworkOptionsMenu_Update();
+	UI_NetworkOptions_UpdateMenuItems();
 }
 
 /*
 ===============
-UI_NetworkOptionsMenu_Init
+UI_NetworkOptions_MenuInit
 ===============
 */
-static void UI_NetworkOptionsMenu_Init(void) {
+static void UI_NetworkOptions_MenuInit(void) {
 	int y;
-	int rate;
 
 	memset(&networkOptionsInfo, 0, sizeof(networkOptionsInfo));
 
-	UI_NetworkOptionsMenu_Cache();
+	UI_NetworkOptions_Cache();
 	networkOptionsInfo.menu.wrapAround = qtrue;
 	networkOptionsInfo.menu.fullscreen = qtrue;
 	networkOptionsInfo.menu.bgparts = BGP_SYSTEM | BGP_MENUFX;
@@ -298,7 +332,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.graphics.generic.name = GRAPHICS0;
 	networkOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	networkOptionsInfo.graphics.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.graphics.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.graphics.generic.id = ID_GRAPHICS;
 	networkOptionsInfo.graphics.generic.x = 16;
 	networkOptionsInfo.graphics.generic.y = 37;
@@ -310,7 +344,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.display.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.display.generic.name = DISPLAY0;
 	networkOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	networkOptionsInfo.display.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.display.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.display.generic.id = ID_DISPLAY;
 	networkOptionsInfo.display.generic.x = 169;
 	networkOptionsInfo.display.generic.y = 30;
@@ -322,7 +356,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.sound.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.sound.generic.name = SOUND0;
 	networkOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	networkOptionsInfo.sound.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.sound.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.sound.generic.id = ID_SOUND;
 	networkOptionsInfo.sound.generic.x = 36;
 	networkOptionsInfo.sound.generic.y = 79;
@@ -334,7 +368,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.network.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.network.generic.name = NETWORK0;
 	networkOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
-	networkOptionsInfo.network.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.network.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.network.generic.id = ID_NETWORK;
 	networkOptionsInfo.network.generic.x = 142;
 	networkOptionsInfo.network.generic.y = 82;
@@ -347,7 +381,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.rate.generic.type = MTYPE_SPINCONTROL;
 	networkOptionsInfo.rate.generic.name = "Data Rate:";
 	networkOptionsInfo.rate.generic.flags = QMF_SMALLFONT;
-	networkOptionsInfo.rate.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.rate.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.rate.generic.id = ID_RATE;
 	networkOptionsInfo.rate.generic.x = XPOSITION;
 	networkOptionsInfo.rate.generic.y = y;
@@ -360,7 +394,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.allowDownload.generic.type = MTYPE_RADIOBUTTON;
 	networkOptionsInfo.allowDownload.generic.name = "Auto Download:";
 	networkOptionsInfo.allowDownload.generic.flags = QMF_SMALLFONT;
-	networkOptionsInfo.allowDownload.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.allowDownload.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.allowDownload.generic.id = ID_ALLOWDOWNLOAD;
 	networkOptionsInfo.allowDownload.generic.x = XPOSITION;
 	networkOptionsInfo.allowDownload.generic.y = y;
@@ -381,7 +415,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.voipMode.generic.type = MTYPE_SPINCONTROL;
 	networkOptionsInfo.voipMode.generic.name = "VoIP Chat:";
 	networkOptionsInfo.voipMode.generic.flags = QMF_SMALLFONT;
-	networkOptionsInfo.voipMode.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.voipMode.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.voipMode.generic.id = ID_VOIPMODE;
 	networkOptionsInfo.voipMode.generic.x = XPOSITION;
 	networkOptionsInfo.voipMode.generic.y = y;
@@ -395,7 +429,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.voipVADmode.generic.type = MTYPE_SPINCONTROL;
 	networkOptionsInfo.voipVADmode.generic.name = "Capture Mode:";
 	networkOptionsInfo.voipVADmode.generic.flags = QMF_SMALLFONT;
-	networkOptionsInfo.voipVADmode.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.voipVADmode.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.voipVADmode.generic.id = ID_VOIPVADMODE;
 	networkOptionsInfo.voipVADmode.generic.x = XPOSITION;
 	networkOptionsInfo.voipVADmode.generic.y = y;
@@ -408,7 +442,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.mumbleScale.generic.type = MTYPE_SLIDER;
 	networkOptionsInfo.mumbleScale.generic.name = "Distance Scale:";
 	networkOptionsInfo.mumbleScale.generic.flags = QMF_SMALLFONT;
-	networkOptionsInfo.mumbleScale.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.mumbleScale.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.mumbleScale.generic.id = ID_VOIPCAPTUREMULT;
 	networkOptionsInfo.mumbleScale.generic.x = XPOSITION;
 	networkOptionsInfo.mumbleScale.generic.y = y;
@@ -422,7 +456,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.voipVADthreshold.generic.type = MTYPE_SLIDER;
 	networkOptionsInfo.voipVADthreshold.generic.name = "Capture Threshold:";
 	networkOptionsInfo.voipVADthreshold.generic.flags = QMF_SMALLFONT;
-	networkOptionsInfo.voipVADthreshold.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.voipVADthreshold.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.voipVADthreshold.generic.id = ID_VOIPVADTHRESHOLD;
 	networkOptionsInfo.voipVADthreshold.generic.x = XPOSITION;
 	networkOptionsInfo.voipVADthreshold.generic.y = y;
@@ -437,7 +471,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.voipGainDuringCapture.generic.type = MTYPE_SLIDER;
 	networkOptionsInfo.voipGainDuringCapture.generic.name = "Speakers Volume:";
 	networkOptionsInfo.voipGainDuringCapture.generic.flags = QMF_SMALLFONT;
-	networkOptionsInfo.voipGainDuringCapture.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.voipGainDuringCapture.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.voipGainDuringCapture.generic.id = ID_VOIPCAPTUREGAIN;
 	networkOptionsInfo.voipGainDuringCapture.generic.x = XPOSITION;
 	networkOptionsInfo.voipGainDuringCapture.generic.y = y;
@@ -452,7 +486,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.voipCaptureMult.generic.type = MTYPE_SLIDER;
 	networkOptionsInfo.voipCaptureMult.generic.name = "Voice Amplifier:";
 	networkOptionsInfo.voipCaptureMult.generic.flags = QMF_SMALLFONT;
-	networkOptionsInfo.voipCaptureMult.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.voipCaptureMult.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.voipCaptureMult.generic.id = ID_VOIPCAPTUREMULT;
 	networkOptionsInfo.voipCaptureMult.generic.x = XPOSITION;
 	networkOptionsInfo.voipCaptureMult.generic.y = y;
@@ -468,7 +502,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.voipSendTarget.generic.type = MTYPE_SPINCONTROL;
 	networkOptionsInfo.voipSendTarget.generic.name = "Send Target:";
 	networkOptionsInfo.voipSendTarget.generic.flags = QMF_SMALLFONT;
-	networkOptionsInfo.voipSendTarget.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.voipSendTarget.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.voipSendTarget.generic.id = ID_VOIPSENDTARGET;
 	networkOptionsInfo.voipSendTarget.generic.x = XPOSITION;
 	networkOptionsInfo.voipSendTarget.generic.y = y;
@@ -477,7 +511,7 @@ static void UI_NetworkOptionsMenu_Init(void) {
 	networkOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.back.generic.name = BACK0;
 	networkOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	networkOptionsInfo.back.generic.callback = UI_NetworkOptionsMenu_Event;
+	networkOptionsInfo.back.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.back.generic.id = ID_BACK;
 	networkOptionsInfo.back.generic.x = 8;
 	networkOptionsInfo.back.generic.y = 440;
@@ -504,40 +538,16 @@ static void UI_NetworkOptionsMenu_Init(void) {
 
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.back);
 
-	rate = trap_Cvar_VariableValue("rate");
-	if (rate <= 4000) {
-		networkOptionsInfo.rate.curvalue = 0;
-	} else if (rate <= 5000) {
-		networkOptionsInfo.rate.curvalue = 1;
-	} else {
-		networkOptionsInfo.rate.curvalue = 2;
-	}
-
-	networkOptionsInfo.allowDownload.curvalue = (trap_Cvar_VariableValue("cl_allowDownload") != 0);
-
-	if (!trap_Cvar_VariableValue("cl_voip") && trap_Cvar_VariableValue("cl_useMumble")) {
-		networkOptionsInfo.voipMode.curvalue = 2;
-	} else if (trap_Cvar_VariableValue("cl_voip") && !trap_Cvar_VariableValue("cl_useMumble")) {
-		networkOptionsInfo.voipMode.curvalue = 1;
-	} else {
-		networkOptionsInfo.voipMode.curvalue = 0;
-	}
-
-	networkOptionsInfo.voipVADmode.curvalue = UI_GetCvarInt("cl_voipUseVAD");
-	networkOptionsInfo.voipVADthreshold.curvalue = trap_Cvar_VariableValue("cl_voipVADThreshold") * 100;
-	networkOptionsInfo.voipGainDuringCapture.curvalue = trap_Cvar_VariableValue("cl_voipGainDuringCapture") * 100;
-	networkOptionsInfo.voipCaptureMult.curvalue = trap_Cvar_VariableValue("cl_voipCaptureMult");
-	networkOptionsInfo.mumbleScale.curvalue = trap_Cvar_VariableValue("cl_mumbleScale") * 1000;
-
-	UI_NetworkOptionsMenu_Update();
+	UI_NetworkOptions_SetMenuItems();
+	UI_NetworkOptions_UpdateMenuItems();
 }
 
 /*
 ===============
-UI_NetworkOptionsMenu_Cache
+UI_NetworkOptions_Cache
 ===============
 */
-void UI_NetworkOptionsMenu_Cache(void) {
+void UI_NetworkOptions_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(GRAPHICS0);
@@ -556,7 +566,7 @@ UI_NetworkOptionsMenu
 ===============
 */
 void UI_NetworkOptionsMenu(void) {
-	UI_NetworkOptionsMenu_Init();
+	UI_NetworkOptions_MenuInit();
 	UI_PushMenu(&networkOptionsInfo.menu);
 	Menu_SetCursorToItem(&networkOptionsInfo.menu, &networkOptionsInfo.network);
 }

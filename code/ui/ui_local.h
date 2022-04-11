@@ -828,7 +828,7 @@ void UI_SoundOptionsMenu(void);
 //
 // ui_network.c
 //
-void UI_NetworkOptionsMenu_Cache(void);
+void UI_NetworkOptions_Cache(void);
 void UI_NetworkOptionsMenu(void);
 
 //
