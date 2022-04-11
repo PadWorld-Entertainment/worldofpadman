@@ -863,6 +863,33 @@ static void ScrollList_Init(menulist_s *l) {
 	}
 }
 
+void ParseMenuListItems(char *input, menulist_s *output, int maxItems, char separator, const char *selection, const char *empty) {
+	size_t len = strlen(input);
+	size_t i;
+	int deviceCount = 0;
+	const char *name = input;
+
+	output->numitems = 0;
+	for (i = 0; i < len; ++i) {
+		if (input[i] == separator) {
+			input[i] = '\0';
+			if (selection && !strcmp(selection, name)) {
+				output->curvalue = output->numitems;
+			}
+			output->itemnames[output->numitems++] = name;
+			if (output->numitems >= maxItems) {
+				break;
+			}
+			name = &input[i + 1];
+		}
+	}
+	if (output->numitems == 0) {
+		output->itemnames[0] = empty;
+		output->numitems = 1;
+	}
+	Menu_InitItem((menucommon_s *)output);
+}
+
 /*
 =================
 ScrollList_Key
@@ -1264,6 +1291,52 @@ static void ScrollList_Draw(const menulist_s *l) {
 	}
 }
 
+void Menu_InitItem(menucommon_s *item) {
+	switch (item->type) {
+	case MTYPE_ACTION:
+		Action_Init((menuaction_s *)item);
+		break;
+
+	case MTYPE_FIELD:
+		MenuField_Init((menufield_s *)item);
+		break;
+
+	case MTYPE_SPINCONTROL:
+		SpinControl_Init((menulist_s *)item);
+		break;
+
+	case MTYPE_RADIOBUTTON:
+		RadioButton_Init((menuradiobutton_s *)item);
+		break;
+
+	case MTYPE_SLIDER:
+		Slider_Init((menuslider_s *)item);
+		break;
+
+	case MTYPE_BITMAP:
+		Bitmap_Init((menubitmap_s *)item);
+		break;
+
+	case MTYPE_TEXT:
+		Text_Init((menutext_s *)item);
+		break;
+
+	case MTYPE_SCROLLLIST:
+		ScrollList_Init((menulist_s *)item);
+		break;
+
+	case MTYPE_BITMAP1024S:
+		Bitmap1024S_Init((menubitmap1024s_s *)item);
+		break;
+	case MTYPE_TEXTS:
+		TextS_Init((menutext_s *)item);
+		break;
+
+	default:
+		trap_Error(va("Menu_AddItem: unknown type %d", item->type));
+	}
+}
+
 /*
 =================
 Menu_AddItem
@@ -1283,49 +1356,7 @@ void Menu_AddItem(menuframework_s *menu, void *item) {
 	// perform any item specific initializations
 	itemptr = (menucommon_s *)item;
 	if (!(itemptr->flags & QMF_NODEFAULTINIT)) {
-		switch (itemptr->type) {
-		case MTYPE_ACTION:
-			Action_Init((menuaction_s *)item);
-			break;
-
-		case MTYPE_FIELD:
-			MenuField_Init((menufield_s *)item);
-			break;
-
-		case MTYPE_SPINCONTROL:
-			SpinControl_Init((menulist_s *)item);
-			break;
-
-		case MTYPE_RADIOBUTTON:
-			RadioButton_Init((menuradiobutton_s *)item);
-			break;
-
-		case MTYPE_SLIDER:
-			Slider_Init((menuslider_s *)item);
-			break;
-
-		case MTYPE_BITMAP:
-			Bitmap_Init((menubitmap_s *)item);
-			break;
-
-		case MTYPE_TEXT:
-			Text_Init((menutext_s *)item);
-			break;
-
-		case MTYPE_SCROLLLIST:
-			ScrollList_Init((menulist_s *)item);
-			break;
-
-		case MTYPE_BITMAP1024S:
-			Bitmap1024S_Init((menubitmap1024s_s *)item);
-			break;
-		case MTYPE_TEXTS:
-			TextS_Init((menutext_s *)item);
-			break;
-
-		default:
-			trap_Error(va("Menu_AddItem: unknown type %d", itemptr->type));
-		}
+		Menu_InitItem(itemptr);
 	}
 
 	menu->nitems++;

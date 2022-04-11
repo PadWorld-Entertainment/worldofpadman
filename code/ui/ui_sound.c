@@ -70,6 +70,7 @@ SOUND OPTIONS MENU
 
 #define XPOSITION 180
 #define YPOSITION 180 + 36
+#define MAX_DEVICES 128
 
 static const char *quality_items[] = {"Low", "Medium", "High", NULL};
 static const char *soundSystem_items[] = {"SDL", "OpenAL", NULL};
@@ -89,7 +90,7 @@ typedef struct {
 	menuradiobutton_s musicautoswitch;
 	menuradiobutton_s doppler;
 	menulist_s soundSystem;
-	menulist_s outputdevice;
+	menulist_s device;
 	menulist_s inputdevice;
 	menulist_s quality;
 	menuradiobutton_s alprecache;
@@ -102,7 +103,13 @@ typedef struct {
 
 	int soundSystem_original;
 	int quality_original;
+	int inputdevice_original;
+	int device_original;
 
+	char *deviceslist[MAX_DEVICES];
+	char *inputdeviceslist[MAX_DEVICES];
+	char devicenames[16384];
+	char inputdevicenames[16384];
 } soundOptionsInfo_t;
 
 static soundOptionsInfo_t soundOptionsInfo;
@@ -115,6 +122,39 @@ UI_SoundOptions_SetMenuItems
 static void UI_SoundOptions_SetMenuItems(void) {
 	int speed;
 	int sources;
+	char currentDevice[512];
+	char currentInputDevice[512];
+
+	if (trap_Cvar_VariableValue("s_useOpenAL"))
+		soundOptionsInfo.soundSystem_original = UISND_OPENAL;
+	else
+		soundOptionsInfo.soundSystem_original = UISND_SDL;
+
+	if (soundOptionsInfo.soundSystem_original == UISND_OPENAL) {
+		trap_Cvar_VariableStringBuffer("s_alAvailableInputDevices", soundOptionsInfo.inputdevicenames,
+									   sizeof(soundOptionsInfo.inputdevicenames));
+		trap_Cvar_VariableStringBuffer("s_alAvailableDevices", soundOptionsInfo.devicenames,
+									   sizeof(soundOptionsInfo.devicenames));
+		trap_Cvar_VariableStringBuffer("s_alDevice", currentDevice, sizeof(currentDevice));
+		trap_Cvar_VariableStringBuffer("s_alInputDevice", currentInputDevice, sizeof(currentInputDevice));
+	} else {
+		trap_Cvar_VariableStringBuffer("s_sdlAvailableInputDevices", soundOptionsInfo.inputdevicenames,
+									   sizeof(soundOptionsInfo.inputdevicenames));
+		trap_Cvar_VariableStringBuffer("s_sdlAvailableDevices", soundOptionsInfo.devicenames,
+									   sizeof(soundOptionsInfo.devicenames));
+		trap_Cvar_VariableStringBuffer("s_sdlDevice", currentDevice, sizeof(currentDevice));
+		trap_Cvar_VariableStringBuffer("s_sdlInputDevice", currentInputDevice, sizeof(currentInputDevice));
+	}
+	soundOptionsInfo.device.itemnames = (const char **)soundOptionsInfo.deviceslist;
+	soundOptionsInfo.inputdevice.itemnames = (const char **)soundOptionsInfo.inputdeviceslist;
+
+	ParseMenuListItems(soundOptionsInfo.inputdevicenames, &soundOptionsInfo.inputdevice, MAX_DEVICES, '\n', currentInputDevice,
+					   "No input device found.");
+	ParseMenuListItems(soundOptionsInfo.devicenames, &soundOptionsInfo.device, MAX_DEVICES, '\n', currentDevice,
+					   "No output device found.");
+
+	soundOptionsInfo.inputdevice_original = soundOptionsInfo.inputdevice.curvalue;
+	soundOptionsInfo.device_original = soundOptionsInfo.device.curvalue;
 
 	soundOptionsInfo.sfxvolume.curvalue = trap_Cvar_VariableValue("s_volume") * 100;
 	soundOptionsInfo.musicvolume.curvalue = trap_Cvar_VariableValue("s_musicvolume") * 100;
@@ -127,11 +167,6 @@ static void UI_SoundOptions_SetMenuItems(void) {
 	}
 
 	soundOptionsInfo.doppler.curvalue = (UI_GetCvarInt("s_doppler") != 0);
-
-	if (trap_Cvar_VariableValue("s_useOpenAL"))
-		soundOptionsInfo.soundSystem_original = UISND_OPENAL;
-	else
-		soundOptionsInfo.soundSystem_original = UISND_SDL;
 
 	soundOptionsInfo.soundSystem.curvalue = soundOptionsInfo.soundSystem_original;
 
@@ -163,7 +198,6 @@ static void UI_SoundOptions_SetMenuItems(void) {
 
 	soundOptionsInfo.aldopplerfactor.curvalue = trap_Cvar_VariableValue("s_alDopplerFactor");
 	soundOptionsInfo.aldopplerspeed.curvalue = trap_Cvar_VariableValue("s_alDopplerSpeed");
-
 }
 
 /*
@@ -172,8 +206,7 @@ UI_SoundOptions_UpdateMenuItems
 =================
 */
 static void UI_SoundOptions_UpdateMenuItems(void) {
-
-	// SDL enabled is a condition to show SDL and to hide AL options 
+	// SDL enabled is a condition to show SDL and to hide AL options
 	if (soundOptionsInfo.soundSystem.curvalue == UISND_SDL) {
 		soundOptionsInfo.quality.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 		soundOptionsInfo.alprecache.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
@@ -182,10 +215,10 @@ static void UI_SoundOptions_UpdateMenuItems(void) {
 		soundOptionsInfo.aldopplerspeed.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 	} else {
 		soundOptionsInfo.quality.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
-			soundOptionsInfo.alprecache.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-			soundOptionsInfo.alsources.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-			soundOptionsInfo.aldopplerfactor.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-			soundOptionsInfo.aldopplerspeed.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+		soundOptionsInfo.alprecache.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+		soundOptionsInfo.alsources.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+		soundOptionsInfo.aldopplerfactor.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+		soundOptionsInfo.aldopplerspeed.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 
 		// Doppler effect enabled is a condition to activate doppler effect options
 		if (soundOptionsInfo.doppler.curvalue != 0) {
@@ -199,13 +232,25 @@ static void UI_SoundOptions_UpdateMenuItems(void) {
 
 	soundOptionsInfo.apply.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 
-	if (soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue) {
+	if (soundOptionsInfo.inputdevice_original != soundOptionsInfo.inputdevice.curvalue) {
 		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (soundOptionsInfo.quality_original != soundOptionsInfo.quality.curvalue) {
+	} else if (soundOptionsInfo.device_original != soundOptionsInfo.device.curvalue) {
+		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue) {
+		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (soundOptionsInfo.quality_original != soundOptionsInfo.quality.curvalue) {
 		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 
+	if (soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue) {
+		soundOptionsInfo.device.generic.flags |= QMF_GRAYED;
+		soundOptionsInfo.inputdevice.generic.flags |= QMF_GRAYED;
+		//soundOptionsInfo.inputdevice.generic.toolTip = soundOptionsInfo.device.generic.toolTip = "Device listing is disabled until sound system change was applied";
+	} else {
+		soundOptionsInfo.device.generic.flags &= ~QMF_GRAYED;
+		soundOptionsInfo.inputdevice.generic.flags &= ~QMF_GRAYED;
+		//soundOptionsInfo.inputdevice.generic.toolTip = soundOptionsInfo.device.generic.toolTip = NULL;
+	}
 }
 
 /*
@@ -266,8 +311,6 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 		break;
 
 	case ID_OUTPUTDEVICE:
-		break;
-
 	case ID_INPUTDEVICE:
 		break;
 
@@ -306,8 +349,12 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 	case ID_APPLY:
 		// Check if something changed that requires the sound system to be restarted.
 		if (soundOptionsInfo.quality_original != soundOptionsInfo.quality.curvalue ||
-			soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue) {
+			soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue ||
+			soundOptionsInfo.device_original != soundOptionsInfo.device.curvalue ||
+			soundOptionsInfo.inputdevice_original != soundOptionsInfo.inputdevice.curvalue) {
 			int speed;
+			const char *deviceCvar;
+			const char *inputdeviceCvar;
 
 			switch (soundOptionsInfo.quality.curvalue) {
 			default:
@@ -328,6 +375,25 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 			trap_Cvar_SetValue("s_sdlSpeed", speed);
 			soundOptionsInfo.quality_original = soundOptionsInfo.quality.curvalue;
 
+			if (soundOptionsInfo.soundSystem_original == soundOptionsInfo.soundSystem.curvalue) {
+				if (soundOptionsInfo.soundSystem.curvalue == UISND_OPENAL) {
+					deviceCvar = "s_alDevice";
+					inputdeviceCvar = "s_alInputDevice";
+				} else {
+					deviceCvar = "s_sdlDevice";
+					inputdeviceCvar = "s_sdlInputDevice";
+				}
+
+				if (soundOptionsInfo.device.curvalue >= 0 && soundOptionsInfo.device.curvalue < soundOptionsInfo.device.numitems) {
+					trap_Cvar_Set(deviceCvar, soundOptionsInfo.device.itemnames[soundOptionsInfo.device.curvalue]);
+					soundOptionsInfo.device_original = soundOptionsInfo.device.curvalue;
+				}
+				if (soundOptionsInfo.inputdevice.curvalue >= 0 && soundOptionsInfo.inputdevice.curvalue < soundOptionsInfo.inputdevice.numitems) {
+					trap_Cvar_Set(inputdeviceCvar, soundOptionsInfo.inputdevice.itemnames[soundOptionsInfo.inputdevice.curvalue]);
+					soundOptionsInfo.inputdevice_original = soundOptionsInfo.inputdevice.curvalue;
+				}
+			}
+
 			trap_Cvar_SetValue("s_useOpenAL", (soundOptionsInfo.soundSystem.curvalue == UISND_OPENAL));
 			soundOptionsInfo.soundSystem_original = soundOptionsInfo.soundSystem.curvalue;
 
@@ -336,7 +402,6 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 		}
 		break;
 	}
-
 }
 
 /*
@@ -478,14 +543,13 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.soundSystem.itemnames = soundSystem_items;
 
 	y += (BIGCHAR_HEIGHT + 2);
-	soundOptionsInfo.outputdevice.generic.type = MTYPE_SPINCONTROL;
-	soundOptionsInfo.outputdevice.generic.name = "Output Device:";
-	soundOptionsInfo.outputdevice.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
-	soundOptionsInfo.outputdevice.generic.callback = UI_SoundOptions_Event;
-	soundOptionsInfo.outputdevice.generic.id = ID_OUTPUTDEVICE;
-	soundOptionsInfo.outputdevice.generic.x = XPOSITION;
-	soundOptionsInfo.outputdevice.generic.y = y;
-//	soundOptionsInfo.outputdevice.itemnames = trap_Cvar_VariableValue("s_alAvailableDevices");		TODO! It's not that simple. ;)
+	soundOptionsInfo.device.generic.type = MTYPE_SPINCONTROL;
+	soundOptionsInfo.device.generic.name = "Output Device:";
+	soundOptionsInfo.device.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	soundOptionsInfo.device.generic.callback = UI_SoundOptions_Event;
+	soundOptionsInfo.device.generic.id = ID_OUTPUTDEVICE;
+	soundOptionsInfo.device.generic.x = XPOSITION;
+	soundOptionsInfo.device.generic.y = y;
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.inputdevice.generic.type = MTYPE_SPINCONTROL;
@@ -495,7 +559,6 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.inputdevice.generic.id = ID_INPUTDEVICE;
 	soundOptionsInfo.inputdevice.generic.x = XPOSITION;
 	soundOptionsInfo.inputdevice.generic.y = y;
-//	soundOptionsInfo.inputdevice.itemnames = trap_Cvar_VariableValue("s_alAvailableInputDevices");	TODO! It's not that simple. ;)
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.quality.generic.type = MTYPE_SPINCONTROL;
@@ -581,7 +644,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.automute);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.doppler);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.soundSystem);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.outputdevice);
+	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.device);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.inputdevice);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.quality);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.alprecache);
@@ -593,7 +656,6 @@ static void UI_SoundOptions_MenuInit(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.apply);
 
 	UI_SoundOptions_SetMenuItems();
-
 }
 
 /*
