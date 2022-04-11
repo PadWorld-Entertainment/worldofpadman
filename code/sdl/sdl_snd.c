@@ -155,6 +155,19 @@ static void SNDDMA_PrintAudiospec(const char *str, const SDL_AudioSpec *spec) {
 	Com_Printf("  Channels: %d\n", (int)spec->channels);
 }
 
+void SNDDMA_SoundInfo(void) {
+	int count, i;
+	count = SDL_GetNumAudioDevices(SDL_FALSE);
+	for (i = 0; i < count; ++i) {
+		Com_Printf("Audio output device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
+	}
+
+	count = SDL_GetNumAudioDevices(SDL_TRUE);
+	for (i = 0; i < count; ++i) {
+		Com_Printf("Audio input device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
+	}
+}
+
 /*
 ===============
 SNDDMA_Init
