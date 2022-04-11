@@ -190,9 +190,9 @@ static void UI_Mods_LoadMods(void) {
 	s_mods.descriptionPtr = s_mods.description;
 	s_mods.fs_gamePtr = s_mods.fs_game;
 
-	// always start off with baseq3
+	// always start off with wop
 	s_mods.list.numitems = 1;
-	s_mods.list.itemnames[0] = s_mods.descriptionList[0] = "World of PADMAN"; // changed for WoP-Engine
+	s_mods.list.itemnames[0] = s_mods.descriptionList[0] = "World of PADMAN";
 	s_mods.fs_gameList[0] = "";
 
 	numdirs = trap_FS_GetFileList("$modlist", "", dirlist, sizeof(dirlist));
