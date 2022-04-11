@@ -285,15 +285,15 @@ static void UI_NetworkOptions_Event(void *ptr, int event) {
 		break;
 
 	case ID_VOIPVADTHRESHOLD:
-		trap_Cvar_SetValue("cl_voipVADThreshold", networkOptionsInfo.voipVADthreshold.curvalue / 100);
+		trap_Cvar_SetValue("cl_voipVADThreshold", (float)((int)networkOptionsInfo.voipVADthreshold.curvalue) / 100);
 		break;
 
 	case ID_VOIPCAPTUREGAIN:
-		trap_Cvar_SetValue("cl_voipGainDuringCapture", networkOptionsInfo.voipGainDuringCapture.curvalue / 100);
+		trap_Cvar_SetValue("cl_voipGainDuringCapture", (float)((int)networkOptionsInfo.voipGainDuringCapture.curvalue) / 100);
 		break;
 
 	case ID_VOIPCAPTUREMULT:
-		trap_Cvar_SetValue("cl_voipCaptureMult", networkOptionsInfo.voipCaptureMult.curvalue);
+		trap_Cvar_SetValue("cl_voipCaptureMult", (int)networkOptionsInfo.voipCaptureMult.curvalue);
 		break;
 
 	case ID_VOIPSENDTARGET:
@@ -303,7 +303,7 @@ static void UI_NetworkOptions_Event(void *ptr, int event) {
 		break;
 
 	case ID_MUMBLESCALE:
-		trap_Cvar_SetValue("cl_mumbleScale", networkOptionsInfo.mumbleScale.curvalue / 1000);
+		trap_Cvar_SetValue("cl_mumbleScale", (float)((int)networkOptionsInfo.mumbleScale.curvalue) / 1000);
 		break;
 
 	case ID_BACK:
@@ -443,7 +443,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.mumbleScale.generic.name = "Distance Scale:";
 	networkOptionsInfo.mumbleScale.generic.flags = QMF_SMALLFONT;
 	networkOptionsInfo.mumbleScale.generic.callback = UI_NetworkOptions_Event;
-	networkOptionsInfo.mumbleScale.generic.id = ID_VOIPCAPTUREMULT;
+	networkOptionsInfo.mumbleScale.generic.id = ID_MUMBLESCALE;
 	networkOptionsInfo.mumbleScale.generic.x = XPOSITION;
 	networkOptionsInfo.mumbleScale.generic.y = y;
 	networkOptionsInfo.mumbleScale.minvalue = 0;
@@ -491,12 +491,11 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.voipCaptureMult.generic.x = XPOSITION;
 	networkOptionsInfo.voipCaptureMult.generic.y = y;
 	networkOptionsInfo.voipCaptureMult.minvalue = 0;
-	networkOptionsInfo.voipCaptureMult.maxvalue = 5;
+	networkOptionsInfo.voipCaptureMult.maxvalue = 10;
 	networkOptionsInfo.voipCaptureMult.generic.toolTip =
 		"This multiplies recorded audio by the set value after denoising. Defaults to 2 to double the volume of "
 		"your voice. This is to make you more audible if denoising eats away too much data. Set this to 1.0 to "
 		"get no change, less to be quieter.";
-
 
 	y += BIGCHAR_HEIGHT + 2;
 	networkOptionsInfo.voipSendTarget.generic.type = MTYPE_SPINCONTROL;
