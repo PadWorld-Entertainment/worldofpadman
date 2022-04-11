@@ -311,7 +311,16 @@ static void UI_NetworkOptions_Event(void *ptr, int event) {
 		break;
 	}
 	
+}
+
+/*
+===============
+UI_NetworkOptions_MenuDraw
+===============
+*/
+static void UI_NetworkOptions_MenuDraw(void) {
 	UI_NetworkOptions_UpdateMenuItems();
+	Menu_Draw(&networkOptionsInfo.menu);
 }
 
 /*
@@ -327,6 +336,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 	UI_NetworkOptions_Cache();
 	networkOptionsInfo.menu.wrapAround = qtrue;
 	networkOptionsInfo.menu.fullscreen = qtrue;
+	networkOptionsInfo.menu.draw = UI_NetworkOptions_MenuDraw;
 	networkOptionsInfo.menu.bgparts = BGP_SYSTEM | BGP_MENUFX;
 
 	networkOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
@@ -538,7 +548,6 @@ static void UI_NetworkOptions_MenuInit(void) {
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.back);
 
 	UI_NetworkOptions_SetMenuItems();
-	UI_NetworkOptions_UpdateMenuItems();
 }
 
 /*
