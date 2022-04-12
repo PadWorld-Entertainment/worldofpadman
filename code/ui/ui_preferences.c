@@ -335,10 +335,10 @@ static void UI_Preferences_SetMenuItems(void) {
 
 /*
 =================
-UI_Preferences_Update
+UI_Preferences_UpdateMenuItems
 =================
 */
-static void UI_Preferences_Update(void) {
+static void UI_Preferences_UpdateMenuItems(void) {
 	int i;
 	int j;
 
@@ -412,22 +412,22 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_HUD:
 		s_preferences.section = O_HUD;
-		UI_Preferences_Update();
+		UI_Preferences_UpdateMenuItems();
 		break;
 
 	case ID_GAME:
 		s_preferences.section = O_GAME;
-		UI_Preferences_Update();
+		UI_Preferences_UpdateMenuItems();
 		break;
 
 	case ID_CHAT:
 		s_preferences.section = O_CHAT;
-		UI_Preferences_Update();
+		UI_Preferences_UpdateMenuItems();
 		break;
 
 	case ID_HELP:
 		s_preferences.section = O_HELP;
-		UI_Preferences_Update();
+		UI_Preferences_UpdateMenuItems();
 		break;
 
 	case ID_CROSSHAIR:
@@ -640,10 +640,10 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 
 /*
 =================
-Crosshair_Draw
+UI_Preferences_CrosshairDraw
 =================
 */
-static void Crosshair_Draw(void *self) {
+static void UI_Preferences_CrosshairDraw(void *self) {
 	menulist_s *s;
 	const float *color;
 	int x, y;
@@ -755,7 +755,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.crosshair.generic.y = y;
 	s_preferences.crosshair.generic.name = "Crosshair:";
 	s_preferences.crosshair.generic.callback = UI_Preferences_Event;
-	s_preferences.crosshair.generic.ownerdraw = Crosshair_Draw;
+	s_preferences.crosshair.generic.ownerdraw = UI_Preferences_CrosshairDraw;
 	s_preferences.crosshair.generic.id = ID_CROSSHAIR;
 	s_preferences.crosshair.generic.top = y - 4;
 	s_preferences.crosshair.generic.bottom = y + 20;
@@ -1293,7 +1293,7 @@ static void UI_Preferences_MenuInit(void) {
 	// initial default section
 	s_preferences.section = O_HUD;
 
-	UI_Preferences_Update();
+	UI_Preferences_UpdateMenuItems();
 }
 
 /*
