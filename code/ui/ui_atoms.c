@@ -1047,7 +1047,7 @@ void UI_Cache_f(void) {
 
 	GraphicsOptions_Cache();
 	UI_DisplayOptionsMenu_Cache();
-	UI_SoundOptionsMenu_Cache();
+	UI_SoundOptions_Cache();
 	UI_NetworkOptions_Cache();
 	TeamMain_Cache();
 	UI_AddBots_Cache();

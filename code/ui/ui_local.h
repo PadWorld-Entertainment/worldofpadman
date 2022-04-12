@@ -822,7 +822,7 @@ void UI_DisplayOptionsMenu(void);
 //
 // ui_sound.c
 //
-void UI_SoundOptionsMenu_Cache(void);
+void UI_SoundOptions_Cache(void);
 void UI_SoundOptionsMenu(void);
 
 //
