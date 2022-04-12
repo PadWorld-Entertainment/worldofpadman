@@ -57,7 +57,6 @@ NETWORK OPTIONS MENU
 #define ID_VOIPSENDTARGET 17
 #define ID_MUMBLESCALE 18
 
-
 #define XPOSITION 180
 
 static const char *rate_items[] = {"Modem", "ISDN", "LAN/Cable/xDSL", NULL};
@@ -65,6 +64,7 @@ static const char *voipMode_items[] = {"Off", "Built-in", "Mumble", NULL};
 static const char *capture_items[] = {"Push to Talk", "Automatic", NULL};
 static const char *sendTarget_items[] = {"all", "none", "attacker", "crosshair", "spatial", NULL};
 static const char *sendTarget_custom[] = {"Custom Setting", NULL};
+static const char *null_items[] = {NULL};
 
 typedef struct {
 	menuframework_s menu;
@@ -84,7 +84,7 @@ typedef struct {
 	menuslider_s voipCaptureMult;
 	menulist_s voipSendTarget;
 	menuslider_s mumbleScale;
-	
+
 	menubitmap_s back;
 
 	qboolean voipCustomSendTarget;
@@ -160,7 +160,6 @@ static void UI_NetworkOptions_SetMenuItems(void) {
 	networkOptionsInfo.voipGainDuringCapture.curvalue = trap_Cvar_VariableValue("cl_voipGainDuringCapture") * 100;
 	networkOptionsInfo.voipCaptureMult.curvalue = trap_Cvar_VariableValue("cl_voipCaptureMult");
 	networkOptionsInfo.mumbleScale.curvalue = trap_Cvar_VariableValue("cl_mumbleScale") * 1000;
-
 }
 
 /*
@@ -196,7 +195,7 @@ static void UI_NetworkOptions_UpdateMenuItems(void) {
 			networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN;
 			networkOptionsInfo.mumbleScale.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 
-		// voipMode is set to Built-in
+			// voipMode is set to Built-in
 		} else if (trap_Cvar_VariableValue("cl_voip") && !trap_Cvar_VariableValue("cl_useMumble")) {
 			networkOptionsInfo.voipVADmode.generic.flags &= ~QMF_HIDDEN;
 			networkOptionsInfo.voipVADthreshold.generic.flags &= ~QMF_HIDDEN;
@@ -310,7 +309,6 @@ static void UI_NetworkOptions_Event(void *ptr, int event) {
 		UI_PopMenu();
 		break;
 	}
-	
 }
 
 /*
@@ -515,8 +513,10 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.voipSendTarget.generic.id = ID_VOIPSENDTARGET;
 	networkOptionsInfo.voipSendTarget.generic.x = XPOSITION;
 	networkOptionsInfo.voipSendTarget.generic.y = y;
+	networkOptionsInfo.voipSendTarget.itemnames = null_items;
+
 	networkOptionsInfo.voipCustomSendTarget = qtrue;
-	
+
 	networkOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.back.generic.name = BACK0;
 	networkOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
