@@ -86,6 +86,8 @@ PREFERENCES MENU
 #define ID_GESTURE 54
 #define ID_BOTCHAT 55
 #define ID_TEAMCHATSONLY 56
+#define ID_CONAUTOCHAT 57
+#define ID_CONAUTOCLEAR 58
 
 #define ID_ICONTEAMMATE 70
 #define ID_ICONHSTATION 71
@@ -139,6 +141,8 @@ typedef struct {
 	menuradiobutton_s gesture;
 	menulist_s botchat;
 	menuradiobutton_s teamchatsonly;
+	menuradiobutton_s conautochat;
+	menuradiobutton_s conautoclear;
 
 	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
@@ -196,6 +200,8 @@ static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.gesture,
 	(menucommon_s *)&s_preferences.botchat,
 	(menucommon_s *)&s_preferences.teamchatsonly,
+	(menucommon_s *)&s_preferences.conautochat,
+	(menucommon_s *)&s_preferences.conautoclear,
 	NULL
 };
 
@@ -303,6 +309,8 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
 	s_preferences.gesture.curvalue = trap_Cvar_VariableValue("cg_noTaunt") == 0;
 	s_preferences.teamchatsonly.curvalue = trap_Cvar_VariableValue("cg_teamChatsOnly") != 0;
+	s_preferences.conautochat.curvalue = trap_Cvar_VariableValue("con_autochat") != 0;
+	s_preferences.conautoclear.curvalue = trap_Cvar_VariableValue("con_autoclear") != 0;
 
 	if (trap_Cvar_VariableValue("bot_nochat") != 1) {
 		if (trap_Cvar_VariableValue("bot_fastchat") != 0) {
@@ -569,6 +577,14 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 
 	case ID_TEAMCHATSONLY:
 		trap_Cvar_SetValue("cg_teamChatsOnly", s_preferences.teamchatsonly.curvalue);
+		break;
+
+	case ID_CONAUTOCHAT:
+		trap_Cvar_SetValue("con_autochat", s_preferences.conautochat.curvalue);
+		break;
+
+	case ID_CONAUTOCLEAR:
+		trap_Cvar_SetValue("con_autoclear", s_preferences.conautoclear.curvalue);
 		break;
 
 	case ID_BOTCHAT:
@@ -1106,6 +1122,29 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.teamchatsonly.generic.toolTip = 
 		"Enable to force only chat messages from your teammates to be displayed. Deault is off.";
 
+	y += 2 * (BIGCHAR_HEIGHT + 2);
+	s_preferences.conautochat.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.conautochat.generic.name = "Console Auto Chat:";
+	s_preferences.conautochat.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.conautochat.generic.callback = UI_Preferences_Event;
+	s_preferences.conautochat.generic.id = ID_CONAUTOCHAT;
+	s_preferences.conautochat.generic.x = XPOSITION;
+	s_preferences.conautochat.generic.y = y;
+	s_preferences.conautochat.generic.toolTip = 
+		"Disable to prevent sending console input text as chat when there is not a slash at "
+		"the beginning. Deault is on.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	s_preferences.conautoclear.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.conautoclear.generic.name = "Console Auto Clear:";
+	s_preferences.conautoclear.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.conautoclear.generic.callback = UI_Preferences_Event;
+	s_preferences.conautoclear.generic.id = ID_CONAUTOCLEAR;
+	s_preferences.conautoclear.generic.x = XPOSITION;
+	s_preferences.conautoclear.generic.y = y;
+	s_preferences.conautoclear.generic.toolTip = 
+		"Disable to prevent clearing console input text when console is closed. Deault is on.";
+
 	// help options
 	y = YPOSITION;
 	s_preferences.whIcons.generic.type = MTYPE_TEXT;
@@ -1238,6 +1277,8 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.gesture);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.botchat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.conautochat);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.conautoclear);
 
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whTeamMates);
