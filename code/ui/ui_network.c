@@ -64,7 +64,7 @@ static const char *voipMode_items[] = {"Off", "Built-in", "Mumble", NULL};
 static const char *capture_items[] = {"Push to Talk", "Automatic", NULL};
 static const char *sendTarget_items[] = {"all", "none", "attacker", "crosshair", "spatial", NULL};
 static const char *sendTarget_custom[] = {"Custom Setting", NULL};
-static const char *null_items[] = {NULL};
+static const char *net_null_items[] = {NULL};
 
 typedef struct {
 	menuframework_s menu;
@@ -118,14 +118,14 @@ static void UI_NetworkOptions_SendTargetUpdate(void) {
 				"'Crosshair' to send to the people currently in your crosshair. "
 				"'Spatial' to talk to all people in hearing range. "
 				"NOTE: See ingame VoIP chat menu for more options.";
-			SpinControl_Init(&networkOptionsInfo.voipSendTarget);
+			Menu_InitItem((menucommon_s *)&networkOptionsInfo.voipSendTarget);
 			return;
 		}
 	}
 	networkOptionsInfo.voipSendTarget.itemnames = sendTarget_custom;
 	networkOptionsInfo.voipSendTarget.generic.flags |= QMF_GRAYED;
 	networkOptionsInfo.voipCustomSendTarget = qtrue;
-	SpinControl_Init(&networkOptionsInfo.voipSendTarget);
+	Menu_InitItem((menucommon_s *)&networkOptionsInfo.voipSendTarget);
 }
 
 /*
@@ -513,7 +513,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.voipSendTarget.generic.id = ID_VOIPSENDTARGET;
 	networkOptionsInfo.voipSendTarget.generic.x = XPOSITION;
 	networkOptionsInfo.voipSendTarget.generic.y = y;
-	networkOptionsInfo.voipSendTarget.itemnames = null_items;
+	networkOptionsInfo.voipSendTarget.itemnames = net_null_items;
 
 	networkOptionsInfo.voipCustomSendTarget = qtrue;
 

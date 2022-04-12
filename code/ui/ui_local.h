@@ -308,7 +308,6 @@ extern void Menu_SetCursor(menuframework_s *s, int cursor);
 extern void Menu_SetCursorToItem(menuframework_s *m, void *ptr);
 extern sfxHandle_t Menu_DefaultKey(menuframework_s *s, int key);
 extern sfxHandle_t ScrollList_Key(menulist_s *l, int key);
-extern void SpinControl_Init(menulist_s *s);
 extern void ParseMenuListItems(char *input, menulist_s *output, int maxItems, char separator, const char *selection, const char *empty);
 
 extern sfxHandle_t menu_move_sound;

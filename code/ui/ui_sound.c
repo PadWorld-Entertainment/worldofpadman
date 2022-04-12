@@ -75,7 +75,7 @@ SOUND OPTIONS MENU
 static const char *quality_items[] = {"Low", "Medium", "High", NULL};
 static const char *soundSystem_items[] = {"SDL", "OpenAL", NULL};
 static const char *alSources_items[] = {"Low (32)", "Medium (64)", "High (96)", "Maximum (128)", NULL};
-static const char *null_items[] = {NULL};
+static const char *snd_null_items[] = {NULL};
 
 typedef struct {
 	menuframework_s menu;
@@ -551,7 +551,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.device.generic.id = ID_OUTPUTDEVICE;
 	soundOptionsInfo.device.generic.x = XPOSITION;
 	soundOptionsInfo.device.generic.y = y;
-	soundOptionsInfo.device.itemnames = null_items;
+	soundOptionsInfo.device.itemnames = snd_null_items;
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.inputdevice.generic.type = MTYPE_SPINCONTROL;
@@ -561,7 +561,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.inputdevice.generic.id = ID_INPUTDEVICE;
 	soundOptionsInfo.inputdevice.generic.x = XPOSITION;
 	soundOptionsInfo.inputdevice.generic.y = y;
-	soundOptionsInfo.inputdevice.itemnames = null_items;
+	soundOptionsInfo.inputdevice.itemnames = snd_null_items;
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.quality.generic.type = MTYPE_SPINCONTROL;

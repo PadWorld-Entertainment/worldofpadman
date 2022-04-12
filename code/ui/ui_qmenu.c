@@ -665,7 +665,7 @@ static void Slider_Draw(menuslider_s *s) {
 SpinControl_Init
 =================
 */
-void SpinControl_Init(menulist_s *s) {
+static void SpinControl_Init(menulist_s *s) {
 	int len;
 	int l;
 	const char *str;
