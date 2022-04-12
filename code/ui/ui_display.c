@@ -43,20 +43,21 @@ DISPLAY OPTIONS MENU
 #define ACCEPT0 "menu/buttons/accept"
 #define ACCEPT1 "menu/buttons/accept"
 
-#define ID_GRAPHICS 10
-#define ID_DISPLAY 11
-#define ID_SOUND 12
-#define ID_NETWORK 13
+#define ID_GRAPHICS 100
+#define ID_DISPLAY 101
+#define ID_SOUND 102
+#define ID_NETWORK 103
+#define ID_BACK 104
 
 #define ID_IGNOREHWG 14
 #define ID_BRIGHTNESS 15
 #define ID_SCREENSIZE 16
-#define ID_ANAGLYPH 17
-#define ID_GREYSCALE 18
-
-#define ID_BACK 26
+#define ID_MAXFPS 17
+#define ID_ANAGLYPH 18
+#define ID_GREYSCALE 19
 
 #define XPOSITION 180
+#define YPOSITION 180 + 36
 
 typedef struct {
 	menuframework_s menu;
@@ -69,6 +70,7 @@ typedef struct {
 	menuradiobutton_s ignoreHWG;
 	menuslider_s brightness;
 	menuslider_s screensize;
+	menuradiobutton_s maxfps;
 	menulist_s anaglyph;
 	menuslider_s greyscale;
 
@@ -129,6 +131,19 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 
 	case ID_SCREENSIZE:
 		trap_Cvar_SetValue("cg_viewsize", displayOptionsInfo.screensize.curvalue * 10);
+		break;
+
+	case ID_MAXFPS:
+		switch (displayOptionsInfo.maxfps.curvalue) {
+		case 0:
+			trap_Cvar_SetValue("com_maxfpsUnfocused", 0);
+			trap_Cvar_SetValue("com_maxfpsMinimized", 0);
+			break;
+		case 1:
+			trap_Cvar_SetValue("com_maxfpsUnfocused", 30);
+			trap_Cvar_SetValue("com_maxfpsMinimized", 5);
+			break;
+		}
 		break;
 
 	case ID_BACK:
@@ -226,7 +241,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.network.focuspic = NETWORK1;
 	displayOptionsInfo.network.focuspicinstead = qtrue;
 
-	y = 180 + 2 * (BIGCHAR_HEIGHT + 2);
+	y = YPOSITION;
 	displayOptionsInfo.ignoreHWG.generic.type = MTYPE_RADIOBUTTON;
 	displayOptionsInfo.ignoreHWG.generic.name = "Ignore HW-Gamma:";
 	displayOptionsInfo.ignoreHWG.generic.flags = QMF_SMALLFONT;
@@ -262,6 +277,19 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.screensize.generic.y = y;
 	displayOptionsInfo.screensize.minvalue = 3;
     displayOptionsInfo.screensize.maxvalue = 10;
+
+	y += (BIGCHAR_HEIGHT + 2);
+	displayOptionsInfo.maxfps.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.maxfps.generic.name = "Max FPS:";
+	displayOptionsInfo.maxfps.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	displayOptionsInfo.maxfps.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.maxfps.generic.id = ID_MAXFPS;
+	displayOptionsInfo.maxfps.generic.x = XPOSITION;
+	displayOptionsInfo.maxfps.generic.y = y;
+	displayOptionsInfo.maxfps.generic.toolTip =
+		"Enable this option to automatically limit the frames per second when the game window "
+		"loses focus (30 fps) or is minimized (5 fps). This may help to reduce your graphics"
+		"card load while you are not playing the game";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
@@ -317,6 +345,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.ignoreHWG);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
 //	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.maxfps);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
 
@@ -326,6 +355,13 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.ignoreHWG.curvalue = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
 	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
+
+	if ((trap_Cvar_VariableValue("com_maxfpsUnfocused") != 0 || trap_Cvar_VariableValue("com_maxfpsMinimized") != 0)) {
+		displayOptionsInfo.maxfps.curvalue = 1;
+	} else {
+		displayOptionsInfo.maxfps.curvalue = 0;
+	}
+
 	displayOptionsInfo.anaglyph.curvalue =
 		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
