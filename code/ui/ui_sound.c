@@ -462,6 +462,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.sfxvolume.generic.y = y;
 	soundOptionsInfo.sfxvolume.minvalue = 0;
 	soundOptionsInfo.sfxvolume.maxvalue = 100;
+	soundOptionsInfo.sfxvolume.generic.toolTip = 
+		"Use this to adjust the game effects volume to your needs. Default is 50.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.musicvolume.generic.type = MTYPE_SLIDER;
@@ -473,6 +475,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.musicvolume.generic.y = y;
 	soundOptionsInfo.musicvolume.minvalue = 0;
 	soundOptionsInfo.musicvolume.maxvalue = 100;
+	soundOptionsInfo.musicvolume.generic.toolTip = 
+		"Use this to adjust the game music volume to your needs. Default is 20.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.musicautoswitch.generic.type = MTYPE_RADIOBUTTON;
@@ -482,8 +486,10 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.musicautoswitch.generic.id = ID_MUSICAUTOSWITCH;
 	soundOptionsInfo.musicautoswitch.generic.x = XPOSITION;
 	soundOptionsInfo.musicautoswitch.generic.y = y;
-	soundOptionsInfo.musicautoswitch.generic.toolTip = "Enable to automatically switch to the next song on map change, "
-													   "if set to off current song will restart on map change.";
+	soundOptionsInfo.musicautoswitch.generic.toolTip = 
+		"Enable to automatically switch to the next song on map change. This can "
+		"help with particularly long tracks to prevent the same song from being "
+		"played over and over again.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.automute.generic.type = MTYPE_RADIOBUTTON;
@@ -494,8 +500,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.automute.generic.x = XPOSITION;
 	soundOptionsInfo.automute.generic.y = y;
 	soundOptionsInfo.automute.generic.toolTip =
-		"Enable this option to automatically mute the sound when the game window "
-		"loses focus or is minimized.";
+		"Enable to automatically mute the sound when the game window loses focus "
+		"or is minimized. Default is off.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.doppler.generic.type = MTYPE_RADIOBUTTON;
@@ -505,6 +511,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.doppler.generic.id = ID_DOPPLER;
 	soundOptionsInfo.doppler.generic.x = XPOSITION;
 	soundOptionsInfo.doppler.generic.y = y;
+	soundOptionsInfo.doppler.generic.toolTip =
+		"Disable to switch off the doppler sound effect. Default is on.";
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.soundSystem.generic.type = MTYPE_SPINCONTROL;
