@@ -56,13 +56,11 @@ SOUND OPTIONS MENU
 #define ID_AUTOMUTE 13
 #define ID_DOPPLER 14
 #define ID_SOUNDSYSTEM 15
-#define ID_OUTPUTDEVICE 16
+#define ID_DEVICE 16
 #define ID_INPUTDEVICE 17
 #define ID_QUALITY 18
 #define ID_ALPRECACHE 19
 #define ID_ALSOURCES 20
-#define ID_ALDOPPLERFACTOR 21
-#define ID_ALDOPPLERSPEED 22
 
 #define DEFAULT_SDL_SND_SPEED 44100
 #define UISND_SDL 0
@@ -96,8 +94,6 @@ typedef struct {
 	menulist_s quality;
 	menuradiobutton_s alprecache;
 	menulist_s alsources;
-	menuslider_s aldopplerfactor;
-	menuslider_s aldopplerspeed;
 
 	menubitmap_s apply;
 	menubitmap_s back;
@@ -197,8 +193,6 @@ static void UI_SoundOptions_SetMenuItems(void) {
 		soundOptionsInfo.alsources.curvalue = 3;
 	}
 
-	soundOptionsInfo.aldopplerfactor.curvalue = trap_Cvar_VariableValue("s_alDopplerFactor");
-	soundOptionsInfo.aldopplerspeed.curvalue = trap_Cvar_VariableValue("s_alDopplerSpeed");
 }
 
 /*
@@ -212,23 +206,10 @@ static void UI_SoundOptions_UpdateMenuItems(void) {
 		soundOptionsInfo.quality.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 		soundOptionsInfo.alprecache.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 		soundOptionsInfo.alsources.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
-		soundOptionsInfo.aldopplerfactor.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
-		soundOptionsInfo.aldopplerspeed.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 	} else {
 		soundOptionsInfo.quality.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 		soundOptionsInfo.alprecache.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 		soundOptionsInfo.alsources.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-		soundOptionsInfo.aldopplerfactor.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-		soundOptionsInfo.aldopplerspeed.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-
-		// Doppler effect enabled is a condition to activate doppler effect options
-		if (soundOptionsInfo.doppler.curvalue != 0) {
-			soundOptionsInfo.aldopplerfactor.generic.flags &= ~QMF_GRAYED;
-			soundOptionsInfo.aldopplerspeed.generic.flags &= ~QMF_GRAYED;
-		} else {
-			soundOptionsInfo.aldopplerfactor.generic.flags |= QMF_GRAYED;
-			soundOptionsInfo.aldopplerspeed.generic.flags |= QMF_GRAYED;
-		}
 	}
 
 	soundOptionsInfo.apply.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
@@ -311,7 +292,7 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 		trap_Cvar_SetValue("s_doppler", (float)soundOptionsInfo.doppler.curvalue);
 		break;
 
-	case ID_OUTPUTDEVICE:
+	case ID_DEVICE:
 	case ID_INPUTDEVICE:
 		break;
 
@@ -334,14 +315,6 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 			trap_Cvar_SetValue("s_alSources", 128);
 			break;
 		}
-
-	case ID_ALDOPPLERFACTOR:
-		trap_Cvar_SetValue("s_alDopplerFactor", (int)soundOptionsInfo.aldopplerfactor.curvalue);
-		break;
-
-	case ID_ALDOPPLERSPEED:
-		trap_Cvar_SetValue("s_alDopplerSpeed", (int)soundOptionsInfo.aldopplerspeed.curvalue);
-		break;
 
 	case ID_BACK:
 		UI_PopMenu();
@@ -533,7 +506,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.doppler.generic.x = XPOSITION;
 	soundOptionsInfo.doppler.generic.y = y;
 
-	y += (BIGCHAR_HEIGHT + 2);
+	y += 2 * (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.soundSystem.generic.type = MTYPE_SPINCONTROL;
 	soundOptionsInfo.soundSystem.generic.name = "Sound System:";
 	soundOptionsInfo.soundSystem.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
@@ -548,7 +521,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.device.generic.name = "Output Device:";
 	soundOptionsInfo.device.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	soundOptionsInfo.device.generic.callback = UI_SoundOptions_Event;
-	soundOptionsInfo.device.generic.id = ID_OUTPUTDEVICE;
+	soundOptionsInfo.device.generic.id = ID_DEVICE;
 	soundOptionsInfo.device.generic.x = XPOSITION;
 	soundOptionsInfo.device.generic.y = y;
 	soundOptionsInfo.device.itemnames = snd_null_items;
@@ -591,28 +564,6 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.alsources.generic.y = y;
 	soundOptionsInfo.alsources.itemnames = alSources_items;
 
-	y += (BIGCHAR_HEIGHT + 2);
-	soundOptionsInfo.aldopplerfactor.generic.type = MTYPE_SLIDER;
-	soundOptionsInfo.aldopplerfactor.generic.name = "Doppler Factor:";
-	soundOptionsInfo.aldopplerfactor.generic.flags = QMF_SMALLFONT;
-	soundOptionsInfo.aldopplerfactor.generic.callback = UI_SoundOptions_Event;
-	soundOptionsInfo.aldopplerfactor.generic.id = ID_ALDOPPLERFACTOR;
-	soundOptionsInfo.aldopplerfactor.generic.x = XPOSITION;
-	soundOptionsInfo.aldopplerfactor.generic.y = y;
-	soundOptionsInfo.aldopplerfactor.minvalue = 0;
-	soundOptionsInfo.aldopplerfactor.maxvalue = 5;
-
-	y += (BIGCHAR_HEIGHT + 2);
-	soundOptionsInfo.aldopplerspeed.generic.type = MTYPE_SLIDER;
-	soundOptionsInfo.aldopplerspeed.generic.name = "Doppler Speed:";
-	soundOptionsInfo.aldopplerspeed.generic.flags = QMF_SMALLFONT;
-	soundOptionsInfo.aldopplerspeed.generic.callback = UI_SoundOptions_Event;
-	soundOptionsInfo.aldopplerspeed.generic.id = ID_ALDOPPLERSPEED;
-	soundOptionsInfo.aldopplerspeed.generic.x = XPOSITION;
-	soundOptionsInfo.aldopplerspeed.generic.y = y;
-	soundOptionsInfo.aldopplerspeed.minvalue = 0;
-	soundOptionsInfo.aldopplerspeed.maxvalue = 20000;
-
 	soundOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.back.generic.name = BACK0;
 	soundOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
@@ -652,8 +603,6 @@ static void UI_SoundOptions_MenuInit(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.quality);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.alprecache);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.alsources);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.aldopplerfactor);
-	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.aldopplerspeed);
 
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.back);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.apply);
