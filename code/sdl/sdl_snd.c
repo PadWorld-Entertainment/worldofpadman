@@ -158,7 +158,7 @@ static void SNDDMA_PrintAudiospec(const char *str, const SDL_AudioSpec *spec) {
 }
 
 void SNDDMA_SoundInfo(void) {
-	Com_Printf("Output device: %s", s_sdlDevice->string);
+	Com_Printf("Output device: %s\n", s_sdlDevice->string);
 	Com_Printf("Available Devices:\n%s", s_sdlAvailableDevices->string);
 #ifdef USE_VOIP
 	Com_Printf("Input Device: %s\n", s_sdlInputDevice->string);
@@ -299,6 +299,7 @@ qboolean SNDDMA_Init(void) {
 #endif
 	else {
 		count = SDL_GetNumAudioDevices(1);
+		devicenames[0] = '\0';
 		for (i = 0; i < count; ++i) {
 			const char *name = SDL_GetAudioDeviceName(i, 1);
 			if (name) {
