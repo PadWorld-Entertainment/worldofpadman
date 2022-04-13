@@ -281,6 +281,7 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 			trap_Cvar_SetValue("s_muteWhenMinimized", 1);
 			break;
 		}
+		break;
 
 	case ID_MUSICAUTOSWITCH:
 		trap_Cvar_SetValue("wop_AutoswitchSongByNextMap", (float)soundOptionsInfo.musicautoswitch.curvalue);
@@ -313,6 +314,7 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 			trap_Cvar_SetValue("s_alSources", 128);
 			break;
 		}
+		break;
 
 	case ID_BACK:
 		UI_PopMenu();
@@ -462,8 +464,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.sfxvolume.maxvalue = 100;
 	soundOptionsInfo.sfxvolume.generic.toolTip = 
 		"Use this to adjust the game effects volume to your needs. Default is 50. "
-		"With SDL active this is the master volume and also affects the music volume. "
-		"With OpenAL active effects and music volume are independent.";
+		"NOTE: With SDL active this is the master volume and also affects the music "
+		"volume. With OpenAL active effects and music volume are independent.";
 	
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.musicvolume.generic.type = MTYPE_SLIDER;
@@ -477,8 +479,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.musicvolume.maxvalue = 100;
 	soundOptionsInfo.musicvolume.generic.toolTip = 
 		"Use this to adjust the game music volume to your needs. Default is 20. "
-		"With SDL active the music volume is also influenced by effects volume. "
-		"With OpenAL active music and effects volume are independent.";
+		"NOTE: With SDL active the music volume is also influenced by effects "
+		"volume. With OpenAL active music and effects volume are independent.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.musicautoswitch.generic.type = MTYPE_RADIOBUTTON;
@@ -567,8 +569,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.quality.itemnames = quality_items;
 	soundOptionsInfo.quality.generic.toolTip =
 		"Select the desired sound quality of the SDL sound system between low "
-		"(11kHz), medium (22kHz) and high (44kHz), the default. Selecting a "
-		"lower quality level can save system resources.";
+		"(11kHz), medium (22kHz) and high (44kHz), the default. NOTE: "
+		"Selecting a lower quality level can save system resources.";
 
 	soundOptionsInfo.alprecache.generic.type = MTYPE_RADIOBUTTON;
 	soundOptionsInfo.alprecache.generic.name = "Precache Sounds:";
@@ -593,7 +595,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.alsources.generic.toolTip =
 		"Select the total number of allocated sources (memory) of the OpenAL sound "
 		"system between low (32), medium (64), high (96) and maximum (128). Default "
-		"is high (96). Selecting a lower value can save system resources.";
+		"is high (96). NOTE: Selecting a lower value can save system resources.";
 
 	soundOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.back.generic.name = BACK0;
