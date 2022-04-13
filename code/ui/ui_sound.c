@@ -227,11 +227,9 @@ static void UI_SoundOptions_UpdateMenuItems(void) {
 	if (soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue) {
 		soundOptionsInfo.device.generic.flags |= QMF_GRAYED;
 		soundOptionsInfo.inputdevice.generic.flags |= QMF_GRAYED;
-		//soundOptionsInfo.inputdevice.generic.toolTip = soundOptionsInfo.device.generic.toolTip = "Device listing is disabled until sound system change was applied";
 	} else {
 		soundOptionsInfo.device.generic.flags &= ~QMF_GRAYED;
 		soundOptionsInfo.inputdevice.generic.flags &= ~QMF_GRAYED;
-		//soundOptionsInfo.inputdevice.generic.toolTip = soundOptionsInfo.device.generic.toolTip = NULL;
 	}
 }
 
@@ -463,8 +461,10 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.sfxvolume.minvalue = 0;
 	soundOptionsInfo.sfxvolume.maxvalue = 100;
 	soundOptionsInfo.sfxvolume.generic.toolTip = 
-		"Use this to adjust the game effects volume to your needs. Default is 50.";
-
+		"Use this to adjust the game effects volume to your needs. Default is 50. "
+		"With SDL active this is the master volume and also affects the music volume. "
+		"With OpenAL active effects and music volume are independent.";
+	
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.musicvolume.generic.type = MTYPE_SLIDER;
 	soundOptionsInfo.musicvolume.generic.name = "Music Volume:";
@@ -476,7 +476,9 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.musicvolume.minvalue = 0;
 	soundOptionsInfo.musicvolume.maxvalue = 100;
 	soundOptionsInfo.musicvolume.generic.toolTip = 
-		"Use this to adjust the game music volume to your needs. Default is 20.";
+		"Use this to adjust the game music volume to your needs. Default is 20. "
+		"With SDL active the music volume is also influenced by effects volume. "
+		"With OpenAL active music and effects volume are independent.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.musicautoswitch.generic.type = MTYPE_RADIOBUTTON;
@@ -523,6 +525,10 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.soundSystem.generic.x = XPOSITION;
 	soundOptionsInfo.soundSystem.generic.y = y;
 	soundOptionsInfo.soundSystem.itemnames = soundSystem_items;
+	soundOptionsInfo.soundSystem.generic.toolTip =
+		"Select a desired sound system. Requires a restart via the Accept button. "
+		"Default is OpenAL. NOTE: If OpenAL cannot be loaded, the sound system will "
+		"be reset to SDL as a fallback option.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.device.generic.type = MTYPE_SPINCONTROL;
@@ -533,6 +539,9 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.device.generic.x = XPOSITION;
 	soundOptionsInfo.device.generic.y = y;
 	soundOptionsInfo.device.itemnames = snd_null_items;
+	soundOptionsInfo.device.generic.toolTip =
+		"Select a desired sound output device, if available. NOTE: The option goes "
+		"inactive if the sound system has been changed recently.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.inputdevice.generic.type = MTYPE_SPINCONTROL;
@@ -543,6 +552,9 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.inputdevice.generic.x = XPOSITION;
 	soundOptionsInfo.inputdevice.generic.y = y;
 	soundOptionsInfo.inputdevice.itemnames = snd_null_items;
+	soundOptionsInfo.inputdevice.generic.toolTip =
+		"Select a desired sound input device, if available. NOTE: The option goes "
+		"inactive if the sound system has been changed recently.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.quality.generic.type = MTYPE_SPINCONTROL;
@@ -553,6 +565,10 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.quality.generic.x = XPOSITION;
 	soundOptionsInfo.quality.generic.y = y;
 	soundOptionsInfo.quality.itemnames = quality_items;
+	soundOptionsInfo.quality.generic.toolTip =
+		"Select the desired sound quality of the SDL sound system between low "
+		"(11kHz), medium (22kHz) and high (44kHz), the default. Selecting a "
+		"lower quality level can save system resources.";
 
 	soundOptionsInfo.alprecache.generic.type = MTYPE_RADIOBUTTON;
 	soundOptionsInfo.alprecache.generic.name = "Precache Sounds:";
@@ -561,6 +577,9 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.alprecache.generic.id = ID_ALPRECACHE;
 	soundOptionsInfo.alprecache.generic.x = XPOSITION;
 	soundOptionsInfo.alprecache.generic.y = y;
+	soundOptionsInfo.alprecache.generic.toolTip =
+		"Disable to prevent the OpenAL sound system from caching sounds before "
+		"use. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.alsources.generic.type = MTYPE_SPINCONTROL;
@@ -571,6 +590,10 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.alsources.generic.x = XPOSITION;
 	soundOptionsInfo.alsources.generic.y = y;
 	soundOptionsInfo.alsources.itemnames = alSources_items;
+	soundOptionsInfo.alsources.generic.toolTip =
+		"Select the total number of allocated sources (memory) of the OpenAL sound "
+		"system between low (32), medium (64), high (96) and maximum (128). Default "
+		"is high (96). Selecting a lower value can save system resources.";
 
 	soundOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.back.generic.name = BACK0;
