@@ -53,9 +53,10 @@ DISPLAY OPTIONS MENU
 #define ID_BRIGHTNESS 15
 #define ID_SCREENSIZE 16
 #define ID_WINDOWMODE 17
-#define ID_MAXFPS 18
-#define ID_ANAGLYPH 19
-#define ID_GREYSCALE 20
+#define ID_RESIZE 18
+#define ID_MAXFPS 19
+#define ID_ANAGLYPH 20
+#define ID_GREYSCALE 21
 
 #define XPOSITION 180
 #define YPOSITION 180 + 36
@@ -72,6 +73,7 @@ typedef struct {
 	menuslider_s brightness;
 	menuslider_s screensize;
 	menulist_s windowmode;	
+	menuradiobutton_s resize;
 	menuradiobutton_s maxfps;
 	menulist_s anaglyph;
 	menuslider_s greyscale;
@@ -80,6 +82,7 @@ typedef struct {
 	menubitmap_s back;
 
 	int windowmode_original;
+	int resize_original;
 
 } displayOptionsInfo_t;
 
@@ -95,7 +98,6 @@ static void ApplyPressed(void *unused, int notification) {
 		return;
 
 	trap_Cvar_SetValue("r_ignorehwgamma", (float)displayOptionsInfo.ignoreHWG.curvalue);
-	trap_Cvar_SetValue("r_greyscale", (displayOptionsInfo.greyscale.curvalue / 100.0f));
 
 	if (displayOptionsInfo.windowmode.curvalue == 2) {
 		trap_Cvar_SetValue("r_fullscreen", 0);
@@ -108,8 +110,11 @@ static void ApplyPressed(void *unused, int notification) {
 		trap_Cvar_SetValue("r_noborder", 0);
 	}
 
+	trap_Cvar_SetValue("r_allowResize", displayOptionsInfo.resize.curvalue);
+	trap_Cvar_SetValue("r_greyscale", (displayOptionsInfo.greyscale.curvalue / 100.0f));
+
 	// hide the button and do the vid restart
-	displayOptionsInfo.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+	displayOptionsInfo.apply.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 	trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
 }
 /*
@@ -124,8 +129,10 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_DISPLAY:
-	case ID_GREYSCALE:
 	case ID_IGNOREHWG:
+	case ID_WINDOWMODE:
+	case ID_RESIZE:
+	case ID_GREYSCALE:
 		break;
 
 	case ID_GRAPHICS:
@@ -183,6 +190,8 @@ static void DisplayOptions_UpdateMenuItems(void) {
 	displayOptionsInfo.apply.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 
 	if (displayOptionsInfo.windowmode_original != displayOptionsInfo.windowmode.curvalue) {
+		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (displayOptionsInfo.resize_original != displayOptionsInfo.resize.curvalue) {
 		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (UI_GetCvarInt("r_ignorehwgamma") != displayOptionsInfo.ignoreHWG.curvalue) {
 		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
@@ -263,16 +272,16 @@ static void UI_DisplayOptionsMenu_Init(void) {
 
 	y = YPOSITION;
 	displayOptionsInfo.ignoreHWG.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.ignoreHWG.generic.name = "Ignore HW-Gamma:";
+	displayOptionsInfo.ignoreHWG.generic.name = "Ignore HW Gamma:";
 	displayOptionsInfo.ignoreHWG.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.ignoreHWG.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.ignoreHWG.generic.id = ID_IGNOREHWG;
 	displayOptionsInfo.ignoreHWG.generic.x = XPOSITION;
 	displayOptionsInfo.ignoreHWG.generic.y = y;
 	displayOptionsInfo.ignoreHWG.generic.toolTip =
-		"If enabled you won't be able to adjust the brightness in game and will be locked and controlled by your "
-		"current graphics card and monitor options. It is recommended to leave it off so you can adjust the brightness "
-		"via the slider if necessary.";
+		"Enable to control the brightness via your current graphics card and monitor options. "
+		"Default is off. NOTE: This will disable the brightness slider and you will no longer "
+		"be able to adjust the brightness ingame if necessary.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	displayOptionsInfo.brightness.generic.type = MTYPE_SLIDER;
@@ -303,27 +312,41 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.windowmode.generic.name = "Window Mode:";
 	displayOptionsInfo.windowmode.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.windowmode.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.windowmode.generic.id = ID_WINDOWMODE;
 	displayOptionsInfo.windowmode.generic.x = XPOSITION;
 	displayOptionsInfo.windowmode.generic.y = y;
 	displayOptionsInfo.windowmode.itemnames = wm_names;
 	displayOptionsInfo.windowmode.generic.toolTip =
-		"Switch on to play the game in a window, change resolution to change size of the window. "
-		"Choose no border to remove window decoration from window managers, like borders and titlebar.";
+		"Enable to play the game in a window. Change video mode in graphics options section "
+		"to change the size of the window, when resizable window option is disabled. Choose "
+		"no border to remove window decoration like borders and titlebar. Default is off.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	displayOptionsInfo.resize.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.resize.generic.name = "Resizable Window:";
+	displayOptionsInfo.resize.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	displayOptionsInfo.resize.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.resize.generic.id = ID_RESIZE;
+	displayOptionsInfo.resize.generic.x = XPOSITION;
+	displayOptionsInfo.resize.generic.y = y;
+	displayOptionsInfo.resize.generic.toolTip =
+		"Enable to make the game window resizable in window mode. Default is off. NOTE: To reset "
+		"the window size and game resolution select another video mode in graphics options section." ;
 
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.maxfps.generic.type = MTYPE_RADIOBUTTON;
-	displayOptionsInfo.maxfps.generic.name = "Max FPS:";
+	displayOptionsInfo.maxfps.generic.name = "Limit Frame Rate:";
 	displayOptionsInfo.maxfps.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	displayOptionsInfo.maxfps.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.maxfps.generic.id = ID_MAXFPS;
 	displayOptionsInfo.maxfps.generic.x = XPOSITION;
 	displayOptionsInfo.maxfps.generic.y = y;
 	displayOptionsInfo.maxfps.generic.toolTip =
-		"Enable this option to automatically limit the frames per second when the game window "
-		"loses focus (30 fps) or is minimized (5 fps). This may help to reduce your graphics"
-		"card load while you are not playing the game";
+		"Enable to limit the frame rate when the game window loses focus (30 fps) or is minimized "
+		"(5 fps). Default is off. NOTE: This may help to reduce your graphics card load while you "
+		"are not playing the game.";
 
-	y += (BIGCHAR_HEIGHT + 2);
+	y += 2 * (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
 	displayOptionsInfo.anaglyph.generic.name = "Stereoscopic 3D:";
 	displayOptionsInfo.anaglyph.generic.flags = QMF_SMALLFONT;
@@ -378,6 +401,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
 //	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.windowmode);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.resize);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.maxfps);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
@@ -399,6 +423,9 @@ static void UI_DisplayOptionsMenu_Init(void) {
 		displayOptionsInfo.windowmode_original = 0;
 	}
 	displayOptionsInfo.windowmode.curvalue = displayOptionsInfo.windowmode_original;
+	
+	displayOptionsInfo.resize_original = trap_Cvar_VariableValue("r_allowResize");
+	displayOptionsInfo.resize.curvalue = displayOptionsInfo.resize_original;
 
 	if ((trap_Cvar_VariableValue("com_maxfpsUnfocused") != 0 || trap_Cvar_VariableValue("com_maxfpsMinimized") != 0)) {
 		displayOptionsInfo.maxfps.curvalue = 1;
