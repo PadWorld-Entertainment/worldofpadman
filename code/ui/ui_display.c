@@ -52,9 +52,10 @@ DISPLAY OPTIONS MENU
 #define ID_IGNOREHWG 14
 #define ID_BRIGHTNESS 15
 #define ID_SCREENSIZE 16
-#define ID_MAXFPS 17
-#define ID_ANAGLYPH 18
-#define ID_GREYSCALE 19
+#define ID_WINDOWMODE 17
+#define ID_MAXFPS 18
+#define ID_ANAGLYPH 19
+#define ID_GREYSCALE 20
 
 #define XPOSITION 180
 #define YPOSITION 180 + 36
@@ -70,15 +71,21 @@ typedef struct {
 	menuradiobutton_s ignoreHWG;
 	menuslider_s brightness;
 	menuslider_s screensize;
+	menulist_s windowmode;	
 	menuradiobutton_s maxfps;
 	menulist_s anaglyph;
 	menuslider_s greyscale;
 
 	menubitmap_s apply;
 	menubitmap_s back;
+
+	int windowmode_original;
+
 } displayOptionsInfo_t;
 
 static displayOptionsInfo_t displayOptionsInfo;
+
+static const char *wm_names[] = {"Off (Fullscreen)", "On (Border)", "On (No Border)", NULL};
 
 static const char *anaglyph_names[] = {"off", "red-cyan", "red-blue", "red-green",
 									   "cyan-red", "blue-red", "green-red", NULL};
@@ -89,6 +96,17 @@ static void ApplyPressed(void *unused, int notification) {
 
 	trap_Cvar_SetValue("r_ignorehwgamma", (float)displayOptionsInfo.ignoreHWG.curvalue);
 	trap_Cvar_SetValue("r_greyscale", (displayOptionsInfo.greyscale.curvalue / 100.0f));
+
+	if (displayOptionsInfo.windowmode.curvalue == 2) {
+		trap_Cvar_SetValue("r_fullscreen", 0);
+		trap_Cvar_SetValue("r_noborder", 1);
+	} else if (displayOptionsInfo.windowmode.curvalue == 1) {
+		trap_Cvar_SetValue("r_fullscreen", 0);
+		trap_Cvar_SetValue("r_noborder", 0);
+	} else {
+		trap_Cvar_SetValue("r_fullscreen", 1);
+		trap_Cvar_SetValue("r_noborder", 0);
+	}
 
 	// hide the button and do the vid restart
 	displayOptionsInfo.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
@@ -162,9 +180,11 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 }
 
 static void DisplayOptions_UpdateMenuItems(void) {
-	displayOptionsInfo.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+	displayOptionsInfo.apply.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 
-	if (UI_GetCvarInt("r_ignorehwgamma") != displayOptionsInfo.ignoreHWG.curvalue) {
+	if (displayOptionsInfo.windowmode_original != displayOptionsInfo.windowmode.curvalue) {
+		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (UI_GetCvarInt("r_ignorehwgamma") != displayOptionsInfo.ignoreHWG.curvalue) {
 		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (UI_GetCvarInt("r_greyscale") != displayOptionsInfo.greyscale.curvalue) {
 		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
@@ -279,6 +299,18 @@ static void UI_DisplayOptionsMenu_Init(void) {
     displayOptionsInfo.screensize.maxvalue = 10;
 
 	y += (BIGCHAR_HEIGHT + 2);
+	displayOptionsInfo.windowmode.generic.type = MTYPE_SPINCONTROL;
+	displayOptionsInfo.windowmode.generic.name = "Window Mode:";
+	displayOptionsInfo.windowmode.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.windowmode.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.windowmode.generic.x = XPOSITION;
+	displayOptionsInfo.windowmode.generic.y = y;
+	displayOptionsInfo.windowmode.itemnames = wm_names;
+	displayOptionsInfo.windowmode.generic.toolTip =
+		"Switch on to play the game in a window, change resolution to change size of the window. "
+		"Choose no border to remove window decoration from window managers, like borders and titlebar.";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.maxfps.generic.type = MTYPE_RADIOBUTTON;
 	displayOptionsInfo.maxfps.generic.name = "Max FPS:";
 	displayOptionsInfo.maxfps.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
@@ -345,6 +377,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.ignoreHWG);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
 //	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.windowmode);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.maxfps);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
@@ -355,6 +388,17 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.ignoreHWG.curvalue = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
 	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
+
+	if (trap_Cvar_VariableValue("r_fullscreen") == 0) {
+		if (trap_Cvar_VariableValue("r_noborder") == 1) {
+			displayOptionsInfo.windowmode_original = 2;
+		} else {
+			displayOptionsInfo.windowmode_original = 1;
+		}
+	} else {
+		displayOptionsInfo.windowmode_original = 0;
+	}
+	displayOptionsInfo.windowmode.curvalue = displayOptionsInfo.windowmode_original;
 
 	if ((trap_Cvar_VariableValue("com_maxfpsUnfocused") != 0 || trap_Cvar_VariableValue("com_maxfpsMinimized") != 0)) {
 		displayOptionsInfo.maxfps.curvalue = 1;
