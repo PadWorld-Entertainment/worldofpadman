@@ -88,6 +88,7 @@ typedef struct {
 	menuradiobutton_s automute;
 	menuradiobutton_s musicautoswitch;
 	menuradiobutton_s doppler;
+	menutext_s soundSystemHint;
 	menulist_s soundSystem;
 	menulist_s device;
 	menulist_s inputdevice;
@@ -201,6 +202,16 @@ UI_SoundOptions_UpdateMenuItems
 =================
 */
 static void UI_SoundOptions_UpdateMenuItems(void) {
+	char buf[128];
+
+	// If OpenAL failed to load show warning
+	trap_Cvar_VariableStringBuffer("s_backend", buf, sizeof(buf));
+	if ((!Q_stricmp(buf, "base")) && (trap_Cvar_VariableValue("s_useOpenAL") != 0)) {
+		soundOptionsInfo.soundSystemHint.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else {
+		soundOptionsInfo.soundSystemHint.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
+	}
+
 	// SDL enabled is a condition to show SDL and to hide AL options
 	if (soundOptionsInfo.soundSystem.curvalue == UISND_SDL) {
 		soundOptionsInfo.quality.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
@@ -518,7 +529,16 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.doppler.generic.toolTip =
 		"Disable to switch off the doppler sound effect. Default is on.";
 
-	y += 2 * (BIGCHAR_HEIGHT + 2);
+	y += (BIGCHAR_HEIGHT + 2);
+	soundOptionsInfo.soundSystemHint.generic.type = MTYPE_TEXT;
+	soundOptionsInfo.soundSystemHint.generic.flags = QMF_PULSE;
+	soundOptionsInfo.soundSystemHint.generic.x = XPOSITION - 25;
+	soundOptionsInfo.soundSystemHint.generic.y = y;
+	soundOptionsInfo.soundSystemHint.string = "OpenAL sound system failed to load!";
+	soundOptionsInfo.soundSystemHint.style = UI_CENTER | UI_SMALLFONT;
+	soundOptionsInfo.soundSystemHint.color = menu_text_color;
+
+	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.soundSystem.generic.type = MTYPE_SPINCONTROL;
 	soundOptionsInfo.soundSystem.generic.name = "Sound System:";
 	soundOptionsInfo.soundSystem.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
@@ -630,6 +650,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.musicautoswitch);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.automute);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.doppler);
+	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.soundSystemHint);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.soundSystem);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.device);
 	Menu_AddItem(&soundOptionsInfo.menu, (void *)&soundOptionsInfo.inputdevice);
