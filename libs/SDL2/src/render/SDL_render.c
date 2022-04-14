@@ -580,10 +580,10 @@ QueueCmdFillRects(SDL_Renderer *renderer, const SDL_FRect * rects, const int cou
                 if (retval < 0) {
                     cmd->command = SDL_RENDERCMD_NO_OP;
                 }
-
-                SDL_small_free(xy, isstack1);
-                SDL_small_free(indices, isstack2);
             }
+            SDL_small_free(xy, isstack1);
+            SDL_small_free(indices, isstack2);
+            
         } else {
             retval = renderer->QueueFillRects(renderer, cmd, rects, count);
             if (retval < 0) {
@@ -698,7 +698,17 @@ SDL_RendererEventWatch(void *userdata, SDL_Event *event)
                 renderer->WindowEvent(renderer, &event->window);
             }
 
-            if (event->window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+            /* In addition to size changes, we also want to do this block for
+             * moves as well, for two reasons:
+             *
+             * 1. The window could be moved to a new display, which has a new
+             *    DPI and therefore a new window/drawable ratio
+             * 2. For whatever reason, the viewport can get messed up during
+             *    window movement (this has been observed on macOS), so this is
+             *    also a good opportunity to force viewport updates
+             */
+            if (event->window.event == SDL_WINDOWEVENT_SIZE_CHANGED ||
+                event->window.event == SDL_WINDOWEVENT_MOVED) {
                 /* Make sure we're operating on the default render target */
                 SDL_Texture *saved_target = SDL_GetRenderTarget(renderer);
                 if (saved_target) {
@@ -728,19 +738,12 @@ SDL_RendererEventWatch(void *userdata, SDL_Event *event)
                         SDL_GetWindowSize(renderer->window, &w, &h);
                     }
 
-                    if (renderer->target) {
-                        renderer->viewport_backup.x = 0;
-                        renderer->viewport_backup.y = 0;
-                        renderer->viewport_backup.w = (float) w;
-                        renderer->viewport_backup.h = (float) h;
-                    } else {
-                        renderer->viewport.x = 0;
-                        renderer->viewport.y = 0;
-                        renderer->viewport.w = (float) w;
-                        renderer->viewport.h = (float) h;
-                        QueueCmdSetViewport(renderer);
-                        FlushRenderCommandsIfNotBatching(renderer);
-                    }
+                    renderer->viewport.x = 0;
+                    renderer->viewport.y = 0;
+                    renderer->viewport.w = (float) w;
+                    renderer->viewport.h = (float) h;
+                    QueueCmdSetViewport(renderer);
+                    FlushRenderCommandsIfNotBatching(renderer);
                 }
 
                 if (saved_target) {
@@ -1100,6 +1103,13 @@ SDL_Renderer *
 SDL_GetRenderer(SDL_Window * window)
 {
     return (SDL_Renderer *)SDL_GetWindowData(window, SDL_WINDOWRENDERDATA);
+}
+
+SDL_Window *
+SDL_RenderGetWindow(SDL_Renderer *renderer)
+{
+    CHECK_RENDERER_MAGIC(renderer, NULL);
+    return renderer->window;
 }
 
 int
@@ -1592,10 +1602,11 @@ SDL_SetTextureScaleMode(SDL_Texture * texture, SDL_ScaleMode scaleMode)
     CHECK_TEXTURE_MAGIC(texture, -1);
 
     renderer = texture->renderer;
-    renderer->SetTextureScaleMode(renderer, texture, scaleMode);
     texture->scaleMode = scaleMode;
     if (texture->native) {
         return SDL_SetTextureScaleMode(texture->native, scaleMode);
+    } else {
+        renderer->SetTextureScaleMode(renderer, texture, scaleMode);
     }
     return 0;
 }
@@ -2252,6 +2263,8 @@ SDL_SetRenderTarget(SDL_Renderer *renderer, SDL_Texture *texture)
 SDL_Texture *
 SDL_GetRenderTarget(SDL_Renderer *renderer)
 {
+    CHECK_RENDERER_MAGIC(renderer, NULL);
+
     return renderer->target;
 }
 
@@ -3145,9 +3158,10 @@ SDL_RenderDrawLinesF(SDL_Renderer * renderer,
                     num_vertices, indices, num_indices, size_indices,
                     1.0f, 1.0f);
 
-            SDL_small_free(xy, isstack1);
-            SDL_small_free(indices, isstack2);
         }
+
+        SDL_small_free(xy, isstack1);
+        SDL_small_free(indices, isstack2);
 
     } else if (renderer->scale.x != 1.0f || renderer->scale.y != 1.0f) {
         retval = RenderDrawLinesWithRectsF(renderer, points, count);
@@ -3380,60 +3394,6 @@ SDL_RenderFillRectsF(SDL_Renderer * renderer,
     SDL_small_free(frects, isstack);
 
     return retval < 0 ? retval : FlushRenderCommandsIfNotBatching(renderer);
-}
-
-/* !!! FIXME: move this to a public API if we want to do float versions of all of these later */
-SDL_FORCE_INLINE SDL_bool SDL_FRectEmpty(const SDL_FRect *r)
-{
-    return ((!r) || (r->w <= 0.0f) || (r->h <= 0.0f)) ? SDL_TRUE : SDL_FALSE;
-}
-
-/* !!! FIXME: move this to a public API if we want to do float versions of all of these later */
-static SDL_bool
-SDL_HasIntersectionF(const SDL_FRect * A, const SDL_FRect * B)
-{
-    float Amin, Amax, Bmin, Bmax;
-
-    if (!A) {
-        SDL_InvalidParamError("A");
-        return SDL_FALSE;
-    }
-
-    if (!B) {
-        SDL_InvalidParamError("B");
-        return SDL_FALSE;
-    }
-
-    /* Special cases for empty rects */
-    if (SDL_FRectEmpty(A) || SDL_FRectEmpty(B)) {
-        return SDL_FALSE;
-    }
-
-    /* Horizontal intersection */
-    Amin = A->x;
-    Amax = Amin + A->w;
-    Bmin = B->x;
-    Bmax = Bmin + B->w;
-    if (Bmin > Amin)
-        Amin = Bmin;
-    if (Bmax < Amax)
-        Amax = Bmax;
-    if (Amax <= Amin)
-        return SDL_FALSE;
-
-    /* Vertical intersection */
-    Amin = A->y;
-    Amax = Amin + A->h;
-    Bmin = B->y;
-    Bmax = Bmin + B->h;
-    if (Bmin > Amin)
-        Amin = Bmin;
-    if (Bmax < Amax)
-        Amax = Bmax;
-    if (Amax <= Amin)
-        return SDL_FALSE;
-
-    return SDL_TRUE;
 }
 
 int
@@ -4231,7 +4191,11 @@ SDL_RenderReadPixels(SDL_Renderer * renderer, const SDL_Rect * rect,
     FlushRenderCommands(renderer);  /* we need to render before we read the results. */
 
     if (!format) {
-        format = SDL_GetWindowPixelFormat(renderer->window);
+        if (renderer->target == NULL) {
+            format = SDL_GetWindowPixelFormat(renderer->window);
+        } else {
+            format = renderer->target->format;
+        }
     }
 
     real_rect.x = (int)SDL_floor(renderer->viewport.x);
