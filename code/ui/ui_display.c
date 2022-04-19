@@ -93,8 +93,8 @@ static displayOptionsInfo_t displayOptionsInfo;
 
 static const char *wm_names[] = {"Off (Fullscreen)", "On (Border)", "On (No Border)", NULL};
 
-static const char *anaglyph_names[] = {"off", "red-cyan", "red-blue", "red-green",
-									   "cyan-red", "blue-red", "green-red", NULL};
+static const char *anaglyph_names[] = {"Off", "Red-Cyan", "Red-Blue", "Red-Green", "Green-Magenta", 
+									   "Cyan-Red", "Blue-Red", "Green-Red", "Magenta-Green", NULL};
 
 static void ApplyPressed(void *unused, int notification) {
 	if (notification != QM_ACTIVATED)
@@ -368,7 +368,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
-	displayOptionsInfo.anaglyph.generic.name = "Stereoscopic 3D:";
+	displayOptionsInfo.anaglyph.generic.name = "Anaglyph 3D Mode:";
 	displayOptionsInfo.anaglyph.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.anaglyph.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.anaglyph.generic.id = ID_ANAGLYPH;
@@ -376,8 +376,8 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.anaglyph.generic.y = y;
 	displayOptionsInfo.anaglyph.itemnames = anaglyph_names;
 	displayOptionsInfo.anaglyph.generic.toolTip =
-		"Switch on to play in 3D with the appriopriate glasses. Ensure the correct filter option you select matches "
-		"that of your glasses or the effect won't work at all.";
+		"Enable to play the game in anaglyph 3D mode with the appriopriate glasses. Default is "
+		"off. NOTE: Ensure the correct filter option you select matches that of your glasses.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.greyscale.generic.type = MTYPE_SLIDER;
