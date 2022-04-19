@@ -979,7 +979,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.ingamevideo.generic.name = "Ingame Videos:";
 	s_preferences.ingamevideo.generic.flags = QMF_SMALLFONT;
 	s_preferences.ingamevideo.generic.callback = UI_Preferences_Event;
-	s_preferences.ingamevideo.generic.id = ID_FLARES;
+	s_preferences.ingamevideo.generic.id = ID_INGAMEVIDEO;
 	s_preferences.ingamevideo.generic.x = XPOSITION;
 	s_preferences.ingamevideo.generic.y = y;
 	s_preferences.ingamevideo.generic.toolTip =
