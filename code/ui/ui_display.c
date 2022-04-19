@@ -441,7 +441,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 
 	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.ignoreHWG);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
-//	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.vsync);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.windowmode);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.resize);
