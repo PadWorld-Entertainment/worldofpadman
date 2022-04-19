@@ -236,17 +236,6 @@ static const char *botchat_items[] = {"Off", "Default", "Often", NULL};
 
 static const char *chatheight_items[] = {"Default", "Expanded", "Maximum", NULL};
 
-static void UpdateGlowColorFlags(void) {
-	if (s_preferences.glowcolor.generic.flags & QMF_HIDDEN)
-		return;
-
-	if (0 == s_preferences.glowmodel.curvalue) {
-		s_preferences.glowcolor.generic.flags |= (QMF_GRAYED);
-	} else {
-		s_preferences.glowcolor.generic.flags &= ~(QMF_GRAYED);
-	}
-}
-
 /*
 =================
 UI_Preferences_SetMenuItems
@@ -279,8 +268,8 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.ingamevideo.curvalue = trap_Cvar_VariableValue("r_inGameVideo") != 0;
 	s_preferences.synceveryframe.curvalue = trap_Cvar_VariableValue("r_finish") != 0;
 	s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue("cg_forcemodel") != 0);
-	s_preferences.glowmodel.curvalue = (s_preferences.glowcolor.curvalue != 0);
 	s_preferences.glowcolor.curvalue = trap_Cvar_VariableValue("cg_glowModel"); // cg_glowModelTeam..
+	s_preferences.glowmodel.curvalue = (s_preferences.glowcolor.curvalue != 0);
 
 	notify = UI_GetCvarInt("con_notifytime");
 	if (notify < 0) {
@@ -329,8 +318,6 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.whFreezeTag.curvalue = (ICON_FREEZETAG & cg_iconsCvarValue);
 	s_preferences.whHStations.curvalue = (ICON_HEALTHSTATION & cg_iconsCvarValue);
 	s_preferences.whSycTele.curvalue = (ICON_SPRAYROOM & cg_iconsCvarValue);
-
-	UpdateGlowColorFlags();
 }
 
 /*
@@ -359,8 +346,6 @@ static void UI_Preferences_UpdateMenuItems(void) {
 	for (j = 0; (option = options[j]); j++) {
 		option->flags &= ~(QMF_GRAYED | QMF_HIDDEN | QMF_INACTIVE);
 	}
-
-	UpdateGlowColorFlags();
 
 	// makes sure flags are right on the group selection controls
 	s_preferences.hud.generic.flags &= ~(QMF_GRAYED | QMF_HIGHLIGHT | QMF_HIGHLIGHT_IF_FOCUS);
@@ -392,9 +377,13 @@ static void UI_Preferences_UpdateMenuItems(void) {
 		break;
 	}
 
-	// special case
+	// special cases
 	if (UI_GetCvarInt("cl_voip") == 0) {
 		s_preferences.voipmeter.generic.flags |= QMF_GRAYED;
+	}
+
+	if (s_preferences.glowmodel.curvalue == 0) {
+		s_preferences.glowcolor.generic.flags |= QMF_GRAYED;
 	}
 }
 
@@ -525,7 +514,7 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 		} else {
 			trap_Cvar_SetValue("cg_glowModel", s_preferences.glowcolor.curvalue); // default green enemies only
 		}
-		UpdateGlowColorFlags();
+		UI_Preferences_UpdateMenuItems();
 		break;
 
 	case ID_CONNOTIFY:
@@ -903,7 +892,7 @@ static void UI_Preferences_MenuInit(void) {
 	y = YPOSITION;
 	s_preferences.simpleitems.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.simpleitems.generic.name = "Simple Items:";
-	s_preferences.simpleitems.generic.flags = QMF_SMALLFONT;
+	s_preferences.simpleitems.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.simpleitems.generic.callback = UI_Preferences_Event;
 	s_preferences.simpleitems.generic.id = ID_SIMPLEITEMS;
 	s_preferences.simpleitems.generic.x = XPOSITION;
@@ -916,7 +905,7 @@ static void UI_Preferences_MenuInit(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.wallmarks.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.wallmarks.generic.name = "Marks on Walls:";
-	s_preferences.wallmarks.generic.flags = QMF_SMALLFONT;
+	s_preferences.wallmarks.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.wallmarks.generic.callback = UI_Preferences_Event;
 	s_preferences.wallmarks.generic.id = ID_WALLMARKS;
 	s_preferences.wallmarks.generic.x = XPOSITION;
@@ -928,7 +917,7 @@ static void UI_Preferences_MenuInit(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.dynamiclights.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.dynamiclights.generic.name = "Dynamic Lights:";
-	s_preferences.dynamiclights.generic.flags = QMF_SMALLFONT;
+	s_preferences.dynamiclights.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.dynamiclights.generic.callback = UI_Preferences_Event;
 	s_preferences.dynamiclights.generic.id = ID_DYNAMICLIGHTS;
 	s_preferences.dynamiclights.generic.x = XPOSITION;
@@ -940,7 +929,7 @@ static void UI_Preferences_MenuInit(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.flares.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.flares.generic.name = "Dynamic Flares:";
-	s_preferences.flares.generic.flags = QMF_SMALLFONT;
+	s_preferences.flares.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.flares.generic.callback = UI_Preferences_Event;
 	s_preferences.flares.generic.id = ID_FLARES;
 	s_preferences.flares.generic.x = XPOSITION;
@@ -953,7 +942,7 @@ static void UI_Preferences_MenuInit(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.highqualitysky.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.highqualitysky.generic.name = "High Quality Sky:";
-	s_preferences.highqualitysky.generic.flags = QMF_SMALLFONT;
+	s_preferences.highqualitysky.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.highqualitysky.generic.callback = UI_Preferences_Event;
 	s_preferences.highqualitysky.generic.id = ID_HIGHQUALITYSKY;
 	s_preferences.highqualitysky.generic.x = XPOSITION;
@@ -965,7 +954,7 @@ static void UI_Preferences_MenuInit(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.lensFlare.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.lensFlare.generic.name = "Sky Lens Flare:";
-	s_preferences.lensFlare.generic.flags = QMF_SMALLFONT;
+	s_preferences.lensFlare.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.lensFlare.generic.callback = UI_Preferences_Event;
 	s_preferences.lensFlare.generic.id = ID_LENSFLARE;
 	s_preferences.lensFlare.generic.x = XPOSITION;
@@ -977,7 +966,7 @@ static void UI_Preferences_MenuInit(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.ingamevideo.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.ingamevideo.generic.name = "Ingame Videos:";
-	s_preferences.ingamevideo.generic.flags = QMF_SMALLFONT;
+	s_preferences.ingamevideo.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.ingamevideo.generic.callback = UI_Preferences_Event;
 	s_preferences.ingamevideo.generic.id = ID_INGAMEVIDEO;
 	s_preferences.ingamevideo.generic.x = XPOSITION;
@@ -989,7 +978,7 @@ static void UI_Preferences_MenuInit(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.synceveryframe.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.synceveryframe.generic.name = "Sync Every Frame:";
-	s_preferences.synceveryframe.generic.flags = QMF_SMALLFONT;
+	s_preferences.synceveryframe.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.synceveryframe.generic.callback = UI_Preferences_Event;
 	s_preferences.synceveryframe.generic.id = ID_SYNCEVERYFRAME;
 	s_preferences.synceveryframe.generic.x = XPOSITION;
@@ -1015,7 +1004,7 @@ static void UI_Preferences_MenuInit(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.glowmodel.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.glowmodel.generic.name = "Glowing Player Skins:";
-	s_preferences.glowmodel.generic.flags = (QMF_SMALLFONT | QMF_HIDDEN);
+	s_preferences.glowmodel.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.glowmodel.generic.callback = UI_Preferences_Event;
 	s_preferences.glowmodel.generic.id = ID_GLOWMODEL;
 	s_preferences.glowmodel.generic.x = XPOSITION;
@@ -1289,11 +1278,10 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whFreezeTag);
 
 	UI_Preferences_SetMenuItems();
+	UI_Preferences_UpdateMenuItems();
 
 	// initial default section
 	s_preferences.section = O_HUD;
-
-	UI_Preferences_UpdateMenuItems();
 }
 
 /*
