@@ -57,7 +57,8 @@ DISPLAY OPTIONS MENU
 #define ID_RESIZE 19
 #define ID_MAXFPS 20
 #define ID_ANAGLYPH 21
-#define ID_GREYSCALE 22
+#define ID_SWAPCOLORS 22
+#define ID_GREYSCALE 23
 
 #define XPOSITION 180
 #define YPOSITION 180 + 36
@@ -78,6 +79,7 @@ typedef struct {
 	menuradiobutton_s resize;
 	menuradiobutton_s maxfps;
 	menulist_s anaglyph;
+	menuradiobutton_s swapcolors;
 	menuslider_s greyscale;
 
 	menubitmap_s apply;
@@ -93,8 +95,8 @@ static displayOptionsInfo_t displayOptionsInfo;
 
 static const char *wm_names[] = {"Off (Fullscreen)", "On (Border)", "On (No Border)", NULL};
 
-static const char *anaglyph_names[] = {"Off", "Red-Cyan", "Red-Blue", "Red-Green", "Green-Magenta", 
-									   "Cyan-Red", "Blue-Red", "Green-Red", "Magenta-Green", NULL};
+static const char *anaglyph_names[] = {"Off", "Red-Cyan", "Red-Blue", "Red-Green", 
+										"Green-Magenta", NULL};
 
 static void ApplyPressed(void *unused, int notification) {
 	if (notification != QM_ACTIVATED)
@@ -177,17 +179,25 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 		}
 		break;
 
-	case ID_BACK:
-		UI_PopMenu();
-		break;
-
 	case ID_ANAGLYPH:
-		trap_Cvar_SetValue("r_anaglyphMode", (float)displayOptionsInfo.anaglyph.curvalue);
+	case ID_SWAPCOLORS:
+		if ((displayOptionsInfo.anaglyph.curvalue != 0) && (displayOptionsInfo.swapcolors.curvalue != 0)) {
+			trap_Cvar_SetValue("r_anaglyphMode", displayOptionsInfo.anaglyph.curvalue + 4);
+		} else {
+			trap_Cvar_SetValue("r_anaglyphMode", displayOptionsInfo.anaglyph.curvalue);
+		}
+
 		if (!displayOptionsInfo.anaglyph.curvalue) {
 			displayOptionsInfo.greyscale.generic.flags |= QMF_GRAYED;
+			displayOptionsInfo.swapcolors.generic.flags |= QMF_GRAYED;
 		} else {
 			displayOptionsInfo.greyscale.generic.flags &= ~QMF_GRAYED;
+			displayOptionsInfo.swapcolors.generic.flags &= ~QMF_GRAYED;
 		}
+		break;
+
+	case ID_BACK:
+		UI_PopMenu();
 		break;
 	}
 }
@@ -221,6 +231,7 @@ UI_DisplayOptionsMenu_Init
 */
 static void UI_DisplayOptionsMenu_Init(void) {
 	int y;
+	int anaglyphMode;
 
 	memset(&displayOptionsInfo, 0, sizeof(displayOptionsInfo));
 
@@ -291,7 +302,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 		"Default is off. NOTE: This will disable the brightness slider and you will no longer "
 		"be able to adjust the brightness ingame if necessary.";
 
-	y += BIGCHAR_HEIGHT + 2;
+	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.brightness.generic.type = MTYPE_SLIDER;
 	displayOptionsInfo.brightness.generic.name = "Brightness:";
 	displayOptionsInfo.brightness.generic.flags = QMF_SMALLFONT;
@@ -304,7 +315,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	if (!uis.glconfig.deviceSupportsGamma)
 		displayOptionsInfo.brightness.generic.flags |= QMF_GRAYED;
 
-	y += BIGCHAR_HEIGHT + 2;
+	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.screensize.generic.type = MTYPE_SLIDER;
 	displayOptionsInfo.screensize.generic.name = "Screen Size:";
 	displayOptionsInfo.screensize.generic.flags = QMF_SMALLFONT;
@@ -344,7 +355,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.resize.generic.type = MTYPE_RADIOBUTTON;
 	displayOptionsInfo.resize.generic.name = "Resizable Window:";
-	displayOptionsInfo.resize.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	displayOptionsInfo.resize.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.resize.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.resize.generic.id = ID_RESIZE;
 	displayOptionsInfo.resize.generic.x = XPOSITION;
@@ -356,7 +367,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.maxfps.generic.type = MTYPE_RADIOBUTTON;
 	displayOptionsInfo.maxfps.generic.name = "Limit Frame Rate:";
-	displayOptionsInfo.maxfps.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	displayOptionsInfo.maxfps.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.maxfps.generic.callback = UI_DisplayOptionsMenu_Event;
 	displayOptionsInfo.maxfps.generic.id = ID_MAXFPS;
 	displayOptionsInfo.maxfps.generic.x = XPOSITION;
@@ -378,6 +389,17 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.anaglyph.generic.toolTip =
 		"Enable to play the game in anaglyph 3D mode with the appriopriate glasses. Default is "
 		"off. NOTE: Ensure the correct filter option you select matches that of your glasses.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	displayOptionsInfo.swapcolors.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.swapcolors.generic.name = "Swap Colors:";
+	displayOptionsInfo.swapcolors.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.swapcolors.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.swapcolors.generic.id = ID_SWAPCOLORS;
+	displayOptionsInfo.swapcolors.generic.x = XPOSITION;
+	displayOptionsInfo.swapcolors.generic.y = y;
+	displayOptionsInfo.swapcolors.generic.toolTip =
+		"Enable to swap the anaglyph 3D mode colors for left and right eye.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.greyscale.generic.type = MTYPE_SLIDER;
@@ -425,6 +447,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.resize);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.maxfps);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.swapcolors);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
 
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.apply);
@@ -457,12 +480,20 @@ static void UI_DisplayOptionsMenu_Init(void) {
 		displayOptionsInfo.maxfps.curvalue = 0;
 	}
 
-	displayOptionsInfo.anaglyph.curvalue =
-		Com_Clamp(0, (ARRAY_LEN(anaglyph_names) - 1), trap_Cvar_VariableValue("r_anaglyphMode"));
+	anaglyphMode = Com_Clamp(0, 8, trap_Cvar_VariableValue("r_anaglyphMode"));
+	if (anaglyphMode > 4) {
+		anaglyphMode -= 4;
+		displayOptionsInfo.swapcolors.curvalue = 1;
+	} else {
+		displayOptionsInfo.swapcolors.curvalue = 0;
+	}
+	displayOptionsInfo.anaglyph.curvalue = anaglyphMode;
+
 	displayOptionsInfo.greyscale.curvalue = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
 
 	if (!displayOptionsInfo.anaglyph.curvalue) {
 		displayOptionsInfo.greyscale.generic.flags |= QMF_GRAYED;
+		displayOptionsInfo.swapcolors.generic.flags |= QMF_GRAYED;
 	}
 }
 
