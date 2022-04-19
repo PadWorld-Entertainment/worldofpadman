@@ -52,11 +52,12 @@ DISPLAY OPTIONS MENU
 #define ID_IGNOREHWG 14
 #define ID_BRIGHTNESS 15
 #define ID_SCREENSIZE 16
-#define ID_WINDOWMODE 17
-#define ID_RESIZE 18
-#define ID_MAXFPS 19
-#define ID_ANAGLYPH 20
-#define ID_GREYSCALE 21
+#define ID_VSYNC 17
+#define ID_WINDOWMODE 18
+#define ID_RESIZE 19
+#define ID_MAXFPS 20
+#define ID_ANAGLYPH 21
+#define ID_GREYSCALE 22
 
 #define XPOSITION 180
 #define YPOSITION 180 + 36
@@ -72,6 +73,7 @@ typedef struct {
 	menuradiobutton_s ignoreHWG;
 	menuslider_s brightness;
 	menuslider_s screensize;
+	menuradiobutton_s vsync;
 	menulist_s windowmode;	
 	menuradiobutton_s resize;
 	menuradiobutton_s maxfps;
@@ -81,6 +83,7 @@ typedef struct {
 	menubitmap_s apply;
 	menubitmap_s back;
 
+	int vsync_original;
 	int windowmode_original;
 	int resize_original;
 
@@ -98,6 +101,7 @@ static void ApplyPressed(void *unused, int notification) {
 		return;
 
 	trap_Cvar_SetValue("r_ignorehwgamma", (float)displayOptionsInfo.ignoreHWG.curvalue);
+	trap_Cvar_SetValue("r_swapInterval", displayOptionsInfo.vsync.curvalue);
 
 	if (displayOptionsInfo.windowmode.curvalue == 2) {
 		trap_Cvar_SetValue("r_fullscreen", 0);
@@ -117,6 +121,7 @@ static void ApplyPressed(void *unused, int notification) {
 	displayOptionsInfo.apply.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 	trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
 }
+
 /*
 =================
 UI_DisplayOptionsMenu_Event
@@ -130,6 +135,7 @@ static void UI_DisplayOptionsMenu_Event(void *ptr, int event) {
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_DISPLAY:
 	case ID_IGNOREHWG:
+	case ID_VSYNC:
 	case ID_WINDOWMODE:
 	case ID_RESIZE:
 	case ID_GREYSCALE:
@@ -190,6 +196,8 @@ static void DisplayOptions_UpdateMenuItems(void) {
 	displayOptionsInfo.apply.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 
 	if (displayOptionsInfo.windowmode_original != displayOptionsInfo.windowmode.curvalue) {
+		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (displayOptionsInfo.vsync_original != displayOptionsInfo.vsync.curvalue) {
 		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (displayOptionsInfo.resize_original != displayOptionsInfo.resize.curvalue) {
 		displayOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
@@ -308,6 +316,18 @@ static void UI_DisplayOptionsMenu_Init(void) {
     displayOptionsInfo.screensize.maxvalue = 10;
 
 	y += (BIGCHAR_HEIGHT + 2);
+	displayOptionsInfo.vsync.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.vsync.generic.name = "Vertical Sync:";
+	displayOptionsInfo.vsync.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.vsync.generic.callback = UI_DisplayOptionsMenu_Event;
+	displayOptionsInfo.vsync.generic.id = ID_VSYNC;
+	displayOptionsInfo.vsync.generic.x = XPOSITION;
+	displayOptionsInfo.vsync.generic.y = y;
+	displayOptionsInfo.vsync.generic.toolTip =
+		"Enable to force the game to follow the refresh rate of your monitor (VSync), "
+		"which may reduce image tearing problems. Default is off.";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.windowmode.generic.type = MTYPE_SPINCONTROL;
 	displayOptionsInfo.windowmode.generic.name = "Window Mode:";
 	displayOptionsInfo.windowmode.generic.callback = UI_DisplayOptionsMenu_Event;
@@ -400,6 +420,7 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, &displayOptionsInfo.ignoreHWG);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.brightness);
 //	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screensize);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.vsync);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.windowmode);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.resize);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.maxfps);
@@ -412,6 +433,9 @@ static void UI_DisplayOptionsMenu_Init(void) {
 	displayOptionsInfo.ignoreHWG.curvalue = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
 	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
+
+	displayOptionsInfo.vsync_original = trap_Cvar_VariableValue("r_swapInterval");
+	displayOptionsInfo.vsync.curvalue = displayOptionsInfo.vsync_original;
 
 	if (trap_Cvar_VariableValue("r_fullscreen") == 0) {
 		if (trap_Cvar_VariableValue("r_noborder") == 1) {
