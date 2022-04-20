@@ -817,7 +817,7 @@ void UI_SaveConfigMenu(void);
 //
 // ui_display.c
 //
-void UI_DisplayOptionsMenu_Cache(void);
+void UI_DisplayOptions_Cache(void);
 void UI_DisplayOptionsMenu(void);
 
 //

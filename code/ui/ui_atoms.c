@@ -1046,7 +1046,7 @@ void UI_Cache_f(void) {
 	StartServer_Cache();
 
 	GraphicsOptions_Cache();
-	UI_DisplayOptionsMenu_Cache();
+	UI_DisplayOptions_Cache();
 	UI_SoundOptions_Cache();
 	UI_NetworkOptions_Cache();
 	TeamMain_Cache();
