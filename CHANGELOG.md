@@ -3,26 +3,45 @@
 ## Version: 1.7.0 (tba.)
 
 - ADDED
-	- Freeze Tag (ft) game mode and related assets
+	- Freeze Tag (ft) game mode and related assets like weapon effects
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones
 	- Option to switch Lighting to Vertex or Lightmap to Graphics page of System menu
-	- Option to switch Window Mode to Off (Fullscreen), On (Border) or On (Borderless) to Graphics page of System menu
+	- Option to switch Window Mode to Off (Fullscreen), On (Border) or On (Borderless) to Display page of System menu
+	- Option to enable/disable Resizable Window to Display page of System menu
+	- Option to enable/disable Vertical Sync (VSync) to Display page of System menu to allow resizing of the game window
+	- Option to enable/disable Limit Frame Rate to Display page of System menu to limit the frame rate when game window is minimized or out of focus 
+	- Option to select magenta-green anaglyph 3D mode from the list in Display page of System menu 
+	- Option to enable/disable Swap Colors to Display page of System menu to swap colors of anaglyph 3D modes 
 	- Option to enable/disable Doppler Effect to Sound page of System menu
-	- Option to enable/disable Ingame Videos (video shaders in maps) to Display page of System menu
-	- New page for Chat related options to Options menu and moved all chat related options there to make space on other pages
+	- Option to enable/disable Auto Mute to Sound page of System menu to mute the sound when game window is minimized or out of focus
+	- Options to select sound Output and Input Devices to Sound page of System menu
+	- Option to enable/disable OpenAL Precache to Sound page of System menu
+	- Option to adjust OpenAL Sources Allocation (memory) to Sound page of System menu
+	- A warning to Sound page of System menu if OpenAL as default sound system failed to load
+	- Option to switch VoIP support to Mumble support to link with external program Net/VoIP page of System menu
+	- Option to adjust Distance Scale to Net/VoIP page of System menu if Mumble support activated
+	- Option to adjust VoIP Voice Amplifier (multiplier) to Net/VoIP page of System menu
+	- Option to adjust Send Target to Net/VoIP page of System menu
+	- Option to enable/disable the Lag-O-Meter to HUD page of Options menu
+	- Option to enable/disable the VoIP Volume Meter to HUD page of Options menu
+	- Option to enable/disable Indicate Health to HUD page of Options menu crosshair indicates the health status of the player by changing the color
+	- Option to enable/disable Ingame Videos (video shaders in maps) to Game page of Options menu
 	- Option to enable/disable Team Chats Only to Chat page of Options menu to hide chats of non-team players, works only in team game modes
 	- Option to enable/disable playing the Chat Beep to Chat page of Options menu to switch on/off the squeeze toy sound of chat notifications
 	- Option to enable/disable the Display Gesture of other players and the sound that comes with it to Chat page of Options menu
 	- Option to enable/disable Bots chatting or to make them chatting more often to Chat page of Options menu
 	- Option to adjust the Notification Space to 4, 6 or 8 lines to Chat page of Options menu via new cvar `cg_chatheight`, default is 4
 	- Option to enable/disable player chat icon separately from notification time Chat page of Options menu
-	- Option to enable/disable the Lag-O-Meter to H.U.D. page of Options menu
+	- Option to enable/disable Console Auto Chat to Chat page of Options menu to prevent console input text to be interpreted as chat
+	- Option to enable/disable Console Auto Clear to Chat page of Options menu to prevent console to get cleared after being closed
 	- New page for Chat related options to Controls menu and moved all chat related controls there to make space on other pages
+	- Options to adjust mouse acceleration and offset to Look page of Controls menu
 	- Option to adjust the key mapping for taking a Screenshot `F12` (default) to Misc page of Controls menu
-	- Option to enable/disable Autorecord Demo `O` (default) to Misc page of Controls menu 
+	- Option to enable/disable Autorecord Demo `O` (default) to Misc page of Controls menu
 	- Option to enable/disable Sync Clients `P` (default) to Misc page of Controls menu
+	- New mapping for f-keys via default.cfg (for developers and level designers): hide/show HUD `F5`; hide/show gun `F6`; hide/show wire frames (cheat protected) `F7`; hide/show lightmap `F8`; hide/show render load information (cheat protected) `F9`; enable/disable noclip (cheat protected) `F10`; enable/disable god mode and give all items (cheat protected) `F11`
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
 	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
@@ -32,7 +51,6 @@
 	- PadKnight bot to the game and shown in the Select Bots menu
 	- Possibility to set Antialiasing to 8x in Graphics menu
 	- Missing default keyboard mapping in Controls menu and synced with default.cfg
-	- New mapping for f-keys via default.cfg (for developers and level designers): hide/show H.U.D. `F5`; hide/show gun `F6`; hide/show wire frames (cheat protected) `F7`; hide/show lightmap `F8`; hide/show render load information (cheat protected) `F9`; enable/disable noclip (cheat protected) `F10`; enable/disable god mode and give all items (cheat protected) `F11`
 - CHANGED
 	- Network protocol version number to 72 to avoid problems due to incompatibilities with previous WoP versions
 	- Home path to `worldofpadman` for all operating systems to unify them
@@ -43,25 +61,39 @@
 	- Fullscreen option on Graphics page of Setup menu to Window Mode to support new borderless window mode
 	- Map selection/preview to cycle three ingame pictures (shader animation)
 	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options
-	- Allocation of options Sync Every Frame, Simple Items, Marks on Walls, High Quality Sky, Sky Lens Flare, Dynamic Lights, Dynamic Flares, from Game Options menu to Display page of System menu
-	- Game Options menu to three pages layout to support more options for HUD, Chat and Help
-	- Allocation of all wallhack icon options to new Help menu
-	- Allocation of all HUD related options to new HUD menu
-	- Chat option in Game Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately
+	- Options menu to four pages layout to support more options and reallocation of all options to HUD, Game, Chat and Help according their functionality
+	- Chat option in Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately
 	- Notification Time option in Chat menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
+	- Anaglyph 3D modes to list the modes 1 to 4, modes 5 to 8 are enabled by enabling the new Color Swap option
+	- Network options to Net/VoIP options and moved all VoIP related options from Sound options to Net/VoIP options in System menu
+	- Net/VoIP and Sound options to hide not necessary options depending on VoIP Support or Sound System selection (instead showing them in grey)
+	- Menu slider controls to scale to 100s values instead of 10s values where useful
+	- Menu slider controls to show the user input value next to it
 	- Player Settings menu to list first all PadCharacters followed by custom player models
+	- Ingame Voice Chat menu to support new send target options: `attacker`, `crosshair` and `spatial` (default)
 	- JPEG quality set to 100% for creating screenshots and avi videos
 	- Headline of Team ingame menu changed to Start like listed in ingame main menu
 	- Headline of Voice ingame menu changed to Voice Chat like listed in ingame main menu
 	- Default keyboard mapping in a few spots: `Q`/`MOUSE3` for gesture (was undefined); `E`/`ENTER` for use item; `F`/`BACKSPACE` for drop item (cartridge/lolly); `HOME`/`KP5` for 3rd person view (was `U`); `X`/`MOUSE2` for scope/zoom (was `MOUSE3`); `Y`/`Z` for chat team (was undefined); `U` chat target (was undefined); `I` for chat attacker (was undefined); `F12` for taking a screenshot (was `F11`).
+	- Dynamic flares are now enabled by default
+	- Team names to Blue Noses and Red Pads everywhere in the game
+	- Scoreboard to show personal scores in team based games again
+	- Team Orders ingame menu entry to be shown again
 - FIXED
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use ^ key to enter color tags
 	- Anisotropy and Antialiasing options in Graphics menu are displayed as 4x after video restart, although 2x was selected before
 	- Antialiasing option in Graphics menu is always displayed as Off after WoP restart, although 2x or more was selected before
+	- Selection of Cyan-red in Display menu always enables magenta-green anaglyph mode. The list offers now magenta-green as a new mode
+	- Enabling Greyscale in Display menu always causes the apply button to be shown even after game restart and without changes made afterwards
+	- Sync Every Frame tooltip in Game options menu mistakes the option for VSync. This option has nothing to do with VSync.
 	- Wrong spray logo name allocation for Spooky and PadCho
 	- Fail to load OpenAL library on Windows 64bit systems
 	- Setting the spray logo via the Player Settings menu during a match has no effect
+	- Team Overlay always shown as disabled in Options menu when set to defaults due to wrong defined cvar default value
+	- Incorrect assignment of the drowning sound to the selected player model
+	- Voice Threshold slider not showing the input value
+	- Menu music loop to be played when calling Team Orders menu via hotkey
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
 	- ^ key to open/close the console
@@ -73,10 +105,12 @@
 	- Exit screen (when clicking the Exit button in the main menu) with confirmation query and related assets
 	- Unused and dead code in general
 - UPDATED
+	- All tooltips in the menus and options wording where useful
 	- UI menu font texture with HQ version
 	- Spray logos with HQ versions
 	- Scoreboard headers with HQ versions
 	- Menu buttons with HQ versions
+	- Score numbers with HQ versions
 	- Footstep sounds with HQ versions
 	- Common player sounds like frying, landing, jumping in, out and under water
 	- Roq version of WoP intro in 4:3 ratio with a HQ version for display in maps via video shader
