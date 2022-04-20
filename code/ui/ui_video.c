@@ -45,16 +45,16 @@ GRAPHICS OPTIONS MENU
 #define ACCEPT0 "menu/buttons/accept"
 #define ACCEPT1 "menu/buttons/accept"
 
-#define ID_BACK2 101
-#define ID_FULLSCREEN 102
-#define ID_LIST 103
-#define ID_MODE 104
-#define ID_GRAPHICS 105
-#define ID_DISPLAY 106
-#define ID_SOUND 107
-#define ID_NETWORK 108
+#define ID_GRAPHICS 100
+#define ID_DISPLAY 101
+#define ID_SOUND 102
+#define ID_NETWORK 103
+#define ID_BACK 104
+
+#define ID_LIST 10
 
 #define XPOSITION 180
+#define YPOSITION 180
 
 typedef struct {
 	menuframework_s menu;
@@ -66,6 +66,7 @@ typedef struct {
 
 	menulist_s list;
 	menulist_s mode;
+	menulist_s renderer;
 	menulist_s tq;
 	menulist_s lighting;
 	menulist_s texturebits;
@@ -83,6 +84,7 @@ typedef struct {
 
 typedef struct {
 	int mode;
+	int renderer;
 	int tq;
 	int lighting;
 	int colordepth;
@@ -98,12 +100,12 @@ typedef struct {
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{2, 3, 1, 2, 2, 1, 3, 1, qfalse, 4, 2},
-												  {2, 3, 1, 0, 0, 1, 2, 0, qfalse, 3, 0},
-												  {1, 2, 1, 1, 0, 0, 1, 0, qfalse, 2, 0},
-												  {0, 1, 0, 1, 0, 0, 0, 0, qtrue, 0, 0},
+static InitialVideoOptions_s s_ivo_templates[] = {{2, 0, 3, 1, 2, 2, 1, 3, 1, qfalse, 4, 2},
+												  {2, 0, 3, 1, 0, 0, 1, 2, 0, qfalse, 3, 0},
+												  {1, 0, 2, 1, 1, 0, 0, 1, 0, qfalse, 2, 0},
+												  {0, 0, 1, 0, 1, 0, 0, 0, 0, qtrue, 0, 0},
 												  {
-													  2, 1, 0, 0, 0, 0, 0, 0, qtrue, 0, 0 // "custom" placeholder
+													  2, 0, 1, 0, 0, 0, 0, 0, 0, qtrue, 0, 0 // "custom" placeholder
 												  }};
 
 #define NUM_IVO_TEMPLATES (ARRAY_LEN(s_ivo_templates))
@@ -122,7 +124,7 @@ int power(int x, int y) {
 
 static const char *builtinResolutions[] = {"640x480",	"800x600",	 "1024x768",  "1152x864",  "1280x720",	"1280x800",
 										   "1280x960",	"1280x1024", "1366x768",  "1440x900",  "1600x900",	"1600x1200",
-										   "1680x1050", "1920x1080", "1920x1200", "2048x1536", "2560x1600", 0};
+										   "1680x1050", "1920x1080", "1920x1200", "2048x1536", "2560x1600", NULL};
 
 static const char *knownRatios[][2] = {{"1.25:1", "5:4"},	{"1.33:1", "4:3"}, {"1.50:1", "3:2"},  {"1.56:1", "14:9"},
 									   {"1.60:1", "16:10"}, {"1.67:1", "5:3"}, {"1.78:1", "16:9"}, {NULL, NULL}};
@@ -248,8 +250,9 @@ GraphicsOptions_GetInitialVideo
 =================
 */
 static void GraphicsOptions_GetInitialVideo(void) {
-	s_ivo.colordepth = s_graphicsoptions.colordepth.curvalue;
 	s_ivo.mode = s_graphicsoptions.mode.curvalue;
+	s_ivo.renderer = s_graphicsoptions.renderer.curvalue;
+	s_ivo.colordepth = s_graphicsoptions.colordepth.curvalue;
 	s_ivo.tq = s_graphicsoptions.tq.curvalue;
 	s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
 	s_ivo.mdetail = s_graphicsoptions.mdetail.curvalue;
@@ -273,6 +276,8 @@ static void GraphicsOptions_CheckConfig(void) {
 		if (s_ivo_templates[i].colordepth != s_graphicsoptions.colordepth.curvalue)
 			continue;
 		if (s_ivo_templates[i].mode != s_graphicsoptions.mode.curvalue)
+			continue;
+		if (s_ivo_templates[i].renderer != s_graphicsoptions.renderer.curvalue)
 			continue;
 		if (s_ivo_templates[i].tq != s_graphicsoptions.tq.curvalue)
 			continue;
@@ -312,38 +317,29 @@ static void GraphicsOptions_UpdateMenuItems(void) {
 	}
 
 	s_graphicsoptions.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
-
 	if (s_ivo.mode != s_graphicsoptions.mode.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.tq != s_graphicsoptions.tq.curvalue) {
+	} else if (s_ivo.renderer != s_graphicsoptions.renderer.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.lighting != s_graphicsoptions.lighting.curvalue) {
+	} else if (s_ivo.tq != s_graphicsoptions.tq.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.colordepth != s_graphicsoptions.colordepth.curvalue) {
+	} else if (s_ivo.lighting != s_graphicsoptions.lighting.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.texturebits != s_graphicsoptions.texturebits.curvalue) {
+	} else if (s_ivo.colordepth != s_graphicsoptions.colordepth.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.mdetail != s_graphicsoptions.mdetail.curvalue) {
+	} else if (s_ivo.texturebits != s_graphicsoptions.texturebits.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.cdetail != s_graphicsoptions.cdetail.curvalue) {
+	} else if (s_ivo.mdetail != s_graphicsoptions.mdetail.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.filter != s_graphicsoptions.filter.curvalue) {
+	} else if (s_ivo.cdetail != s_graphicsoptions.cdetail.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.ct != s_graphicsoptions.ct.curvalue) {
+	} else if (s_ivo.filter != s_graphicsoptions.filter.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.af != s_graphicsoptions.af.curvalue) {
+	} else if (s_ivo.ct != s_graphicsoptions.ct.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	}
-	if (s_ivo.aa != s_graphicsoptions.aa.curvalue) {
+	} else if (s_ivo.af != s_graphicsoptions.af.curvalue) {
+		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (s_ivo.aa != s_graphicsoptions.aa.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 
@@ -468,6 +464,7 @@ static void GraphicsOptions_Event(void *ptr, int event) {
 	case ID_LIST:
 		ivo = &s_ivo_templates[s_graphicsoptions.list.curvalue];
 		s_graphicsoptions.mode.curvalue = ivo->mode;
+		s_graphicsoptions.renderer.curvalue = ivo->mode;
 		s_graphicsoptions.tq.curvalue = ivo->tq;
 		s_graphicsoptions.lighting.curvalue = ivo->lighting;
 		s_graphicsoptions.colordepth.curvalue = ivo->colordepth;
@@ -478,10 +475,6 @@ static void GraphicsOptions_Event(void *ptr, int event) {
 		s_graphicsoptions.ct.curvalue = ivo->ct;
 		s_graphicsoptions.af.curvalue = ivo->af;
 		s_graphicsoptions.aa.curvalue = ivo->aa;
-		break;
-
-	case ID_BACK2:
-		UI_PopMenu();
 		break;
 
 	case ID_GRAPHICS:
@@ -500,6 +493,10 @@ static void GraphicsOptions_Event(void *ptr, int event) {
 	case ID_NETWORK:
 		UI_PopMenu();
 		UI_NetworkOptionsMenu();
+		break;
+
+	case ID_BACK:
+		UI_PopMenu();
 		break;
 	}
 }
@@ -631,6 +628,7 @@ GraphicsOptions_MenuInit
 ================
 */
 void GraphicsOptions_MenuInit(void) {
+	static const char *renderer_names[] = {"OpenGL1", "OpenGL2", "Vulkan", NULL};
 	static const char *tq_names[] = {"Default", "16 bit", "32 bit", NULL};
 	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
 	static const char *lighting_names[] = {"Low (Vertex)", "High (Lightmap)", NULL};
@@ -705,124 +703,131 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.network.focuspic = NETWORK1;
 	s_graphicsoptions.network.focuspicinstead = qtrue;
 
-	y = 180;
+	y = YPOSITION;
 	s_graphicsoptions.list.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.list.generic.name = "Graphics Settings:";
 	s_graphicsoptions.list.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.list.generic.x = XPOSITION;
-	s_graphicsoptions.list.generic.y = y;
 	s_graphicsoptions.list.generic.callback = GraphicsOptions_Event;
 	s_graphicsoptions.list.generic.id = ID_LIST;
+	s_graphicsoptions.list.generic.x = XPOSITION;
+	s_graphicsoptions.list.generic.y = y;
 	s_graphicsoptions.list.itemnames = s_graphics_options_names;
-	y += 2 * (BIGCHAR_HEIGHT + 2);
 
+	y += 2 * (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_mode"
 	s_graphicsoptions.mode.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.mode.generic.name = "Video Mode:";
 	s_graphicsoptions.mode.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.mode.itemnames = resolutions;
 	s_graphicsoptions.mode.generic.x = XPOSITION;
 	s_graphicsoptions.mode.generic.y = y;
-	s_graphicsoptions.mode.itemnames = resolutions;
-	s_graphicsoptions.mode.generic.callback = GraphicsOptions_Event;
-	s_graphicsoptions.mode.generic.id = ID_MODE;
-	y += BIGCHAR_HEIGHT + 2;
 
+	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "cl_renderer"
+	s_graphicsoptions.renderer.generic.type = MTYPE_SPINCONTROL;
+	s_graphicsoptions.renderer.generic.name = "Renderer:";
+	s_graphicsoptions.renderer.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.renderer.itemnames = renderer_names;
+	s_graphicsoptions.renderer.generic.x = XPOSITION;
+	s_graphicsoptions.renderer.generic.y = y;
+
+	y += (BIGCHAR_HEIGHT + 2);
 	// references "r_colorbits"
 	s_graphicsoptions.colordepth.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.colordepth.generic.name = "Color Depth:";
 	s_graphicsoptions.colordepth.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.colordepth.itemnames = colordepth_names;
 	s_graphicsoptions.colordepth.generic.x = XPOSITION;
 	s_graphicsoptions.colordepth.generic.y = y;
-	s_graphicsoptions.colordepth.itemnames = colordepth_names;
-	y += BIGCHAR_HEIGHT + 2;
 
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_vertexLight"
 	s_graphicsoptions.lighting.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.lighting.generic.name = "Lighting:";
 	s_graphicsoptions.lighting.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.lighting.itemnames = lighting_names;
 	s_graphicsoptions.lighting.generic.x = XPOSITION;
 	s_graphicsoptions.lighting.generic.y = y;
-	s_graphicsoptions.lighting.itemnames = lighting_names;
-	y += BIGCHAR_HEIGHT + 2;
 
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_lodBias"
 	s_graphicsoptions.mdetail.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.mdetail.generic.name = "Models Detail:";
 	s_graphicsoptions.mdetail.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.mdetail.itemnames = mdetail_names;
 	s_graphicsoptions.mdetail.generic.x = XPOSITION;
 	s_graphicsoptions.mdetail.generic.y = y;
-	s_graphicsoptions.mdetail.itemnames = mdetail_names;
-	y += BIGCHAR_HEIGHT + 2;
 
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_subdivisions"
 	s_graphicsoptions.cdetail.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.cdetail.generic.name = "Curves Detail:";
 	s_graphicsoptions.cdetail.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.cdetail.itemnames = cdetail_names;
 	s_graphicsoptions.cdetail.generic.x = XPOSITION;
 	s_graphicsoptions.cdetail.generic.y = y;
-	s_graphicsoptions.cdetail.itemnames = cdetail_names;
-	y += BIGCHAR_HEIGHT + 2;
 
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_picmip"
 	s_graphicsoptions.tq.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.tq.generic.name = "Texture Detail:";
 	s_graphicsoptions.tq.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.tq.itemnames = td_names;
 	s_graphicsoptions.tq.generic.x = XPOSITION;
 	s_graphicsoptions.tq.generic.y = y;
-	s_graphicsoptions.tq.itemnames = td_names;
 	s_graphicsoptions.tq.generic.toolTip = "Adjust overall texture detail levels based on graphics card performance.";
-	y += BIGCHAR_HEIGHT + 2;
 
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_textureBits"
 	s_graphicsoptions.texturebits.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.texturebits.generic.name = "Texture Quality:";
 	s_graphicsoptions.texturebits.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.texturebits.itemnames = tq_names;
 	s_graphicsoptions.texturebits.generic.x = XPOSITION;
 	s_graphicsoptions.texturebits.generic.y = y;
-	s_graphicsoptions.texturebits.itemnames = tq_names;
 	s_graphicsoptions.texturebits.generic.toolTip = "Adjust texture detail based on graphics card performance.";
-	y += BIGCHAR_HEIGHT + 2;
 
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_textureMode"
 	s_graphicsoptions.filter.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.filter.generic.name = "Texture Filter:";
 	s_graphicsoptions.filter.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.filter.itemnames = filter_names;
 	s_graphicsoptions.filter.generic.x = XPOSITION;
 	s_graphicsoptions.filter.generic.y = y;
-	s_graphicsoptions.filter.itemnames = filter_names;
 	s_graphicsoptions.filter.generic.toolTip = "A graphic sharpness filter. Use bilinear for lower end graphics cards. "
 											   "Use Trilinear for mid to higher range graphics cards.";
-	y += BIGCHAR_HEIGHT + 2;
 
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_compressed_textures"
 	s_graphicsoptions.ct.generic.type = MTYPE_SPINCONTROL;
-	s_graphicsoptions.ct.itemnames = enabled_names;
 	s_graphicsoptions.ct.generic.name = "Compress Textures:";
 	s_graphicsoptions.ct.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.ct.itemnames = enabled_names;
 	s_graphicsoptions.ct.generic.x = XPOSITION;
 	s_graphicsoptions.ct.generic.y = y;
 	s_graphicsoptions.ct.generic.toolTip = "Switch on to allow your graphics card to store texture data compressed if "
 										   "supported (most graphics card regardless of type will support this).";
-	y += BIGCHAR_HEIGHT + 2;
 
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_max_anisotropy"
 	s_graphicsoptions.af.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.af.generic.name = "Anisotropy:";
 	s_graphicsoptions.af.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.af.itemnames = af_names;
 	s_graphicsoptions.af.generic.x = XPOSITION;
 	s_graphicsoptions.af.generic.y = y;
-	s_graphicsoptions.af.itemnames = af_names;
 	s_graphicsoptions.af.generic.toolTip = "Sharpens game textures. Not recommended for low end graphics cards. "
 										   "Requires high graphics card performance and memory!";
-	y += (BIGCHAR_HEIGHT + 2);
 
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_max_multisampling"
 	s_graphicsoptions.aa.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.aa.generic.name = "Antialiasing:";
 	s_graphicsoptions.aa.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.aa.itemnames = aa_names;
 	s_graphicsoptions.aa.generic.x = XPOSITION;
 	s_graphicsoptions.aa.generic.y = y;
-	s_graphicsoptions.aa.itemnames = aa_names;
 	s_graphicsoptions.aa.generic.toolTip = "Smooth out rough edges. Not recommended for low end graphics cards. "
 										   "Requires high graphics card performance and memory!";
 
@@ -830,7 +835,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.back.generic.name = BACK0;
 	s_graphicsoptions.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_graphicsoptions.back.generic.callback = GraphicsOptions_Event;
-	s_graphicsoptions.back.generic.id = ID_BACK2;
+	s_graphicsoptions.back.generic.id = ID_BACK;
 	s_graphicsoptions.back.generic.x = 8;
 	s_graphicsoptions.back.generic.y = 440;
 	s_graphicsoptions.back.width = 80;
@@ -855,7 +860,7 @@ void GraphicsOptions_MenuInit(void) {
 
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.list);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.mode);
-
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.renderer);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.colordepth);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.lighting);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.mdetail);
