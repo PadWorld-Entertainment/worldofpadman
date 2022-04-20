@@ -109,8 +109,8 @@ static void UI_DisplayOptions_SetMenuItems(void) {
 	displayOptionsInfo.ignorehwg_original = UI_GetCvarInt("r_ignorehwgamma");
 	displayOptionsInfo.ignoreHWG.curvalue = displayOptionsInfo.ignorehwg_original;
 
-	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 10;
-	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize") / 10;
+	displayOptionsInfo.brightness.curvalue = trap_Cvar_VariableValue("r_gamma") * 100.0f;
+	displayOptionsInfo.screensize.curvalue = trap_Cvar_VariableValue("cg_viewsize");
 
 	displayOptionsInfo.vsync_original = trap_Cvar_VariableValue("r_swapInterval");
 	displayOptionsInfo.vsync.curvalue = displayOptionsInfo.vsync_original;
@@ -144,7 +144,7 @@ static void UI_DisplayOptions_SetMenuItems(void) {
 	}
 	displayOptionsInfo.anaglyph.curvalue = anaglyphMode;
 
-	displayOptionsInfo.greyscale_original = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100));
+	displayOptionsInfo.greyscale_original = Com_Clamp(0, 100, (trap_Cvar_VariableValue("r_greyscale") * 100.0f));
 	displayOptionsInfo.greyscale.curvalue = displayOptionsInfo.greyscale_original;
 }
 
@@ -218,11 +218,11 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 		break;
 
 	case ID_BRIGHTNESS:
-		trap_Cvar_SetValue("r_gamma", displayOptionsInfo.brightness.curvalue / 10.0f);
+		trap_Cvar_SetValue("r_gamma", (float)((int)displayOptionsInfo.brightness.curvalue / 100));
 		break;
 
 	case ID_SCREENSIZE:
-		trap_Cvar_SetValue("cg_viewsize", displayOptionsInfo.screensize.curvalue * 10);
+		trap_Cvar_SetValue("cg_viewsize", (float)displayOptionsInfo.screensize.curvalue);
 		break;
 
 	case ID_MAXFPS:
@@ -258,7 +258,7 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 			displayOptionsInfo.resize_original != displayOptionsInfo.resize.curvalue ||
 			displayOptionsInfo.greyscale_original != displayOptionsInfo.greyscale.curvalue) {
 		
-			trap_Cvar_SetValue("r_ignorehwgamma", (float)displayOptionsInfo.ignoreHWG.curvalue);
+			trap_Cvar_SetValue("r_ignorehwgamma", displayOptionsInfo.ignoreHWG.curvalue);
 			trap_Cvar_SetValue("r_swapInterval", displayOptionsInfo.vsync.curvalue);
 
 			if (displayOptionsInfo.windowmode.curvalue == 2) {
@@ -273,7 +273,7 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 			}
 
 			trap_Cvar_SetValue("r_allowResize", displayOptionsInfo.resize.curvalue);
-			trap_Cvar_SetValue("r_greyscale", (displayOptionsInfo.greyscale.curvalue / 100.0f));
+			trap_Cvar_SetValue("r_greyscale", (float)((int)displayOptionsInfo.greyscale.curvalue / 100));
 
 			UI_ForceMenuOff();
 			trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
@@ -377,8 +377,11 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.brightness.generic.id = ID_BRIGHTNESS;
 	displayOptionsInfo.brightness.generic.x = XPOSITION;
 	displayOptionsInfo.brightness.generic.y = y;
-	displayOptionsInfo.brightness.minvalue = 5;
-	displayOptionsInfo.brightness.maxvalue = 20;
+	displayOptionsInfo.brightness.minvalue = 50;
+	displayOptionsInfo.brightness.maxvalue = 200;
+	displayOptionsInfo.brightness.generic.toolTip =
+		"Use this to adjust the brightness of the game to your needs. Default is 100. "
+		"NOTE: With ignore hardware gamma enabled the brightness slider is disabled.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.screensize.generic.type = MTYPE_SLIDER;
@@ -388,8 +391,12 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.screensize.generic.id = ID_SCREENSIZE;
 	displayOptionsInfo.screensize.generic.x = XPOSITION;
 	displayOptionsInfo.screensize.generic.y = y;
-	displayOptionsInfo.screensize.minvalue = 3;
-    displayOptionsInfo.screensize.maxvalue = 10;
+	displayOptionsInfo.screensize.minvalue = 30;
+    displayOptionsInfo.screensize.maxvalue = 100;
+	displayOptionsInfo.screensize.generic.toolTip =
+		"Use this to adjust the size of the 3D world screen within the game window. "
+		"This would allow to write part of HUD infos outside that part of the screen."
+		"Default is 100. NOTE: A smaller screen size can save system resources.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.vsync.generic.type = MTYPE_RADIOBUTTON;
@@ -414,7 +421,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.windowmode.itemnames = wm_names;
 	displayOptionsInfo.windowmode.generic.toolTip =
 		"Enable to play the game in a window. Change video mode in graphics options section "
-		"to change the size of the window, when resizable window option is disabled. Choose "
+		"to change the size of the window, when resizable window option is disabled. Select "
 		"no border to remove window decoration like borders and titlebar. Default is off.";
 
 	y += (BIGCHAR_HEIGHT + 2);
@@ -427,7 +434,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.resize.generic.y = y;
 	displayOptionsInfo.resize.generic.toolTip =
 		"Enable to make the game window resizable in window mode. Default is off. NOTE: To reset "
-		"the window size and game resolution select another video mode in graphics options section." ;
+		"the window size and game resolution select another video mode in graphics options section.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.maxfps.generic.type = MTYPE_RADIOBUTTON;
@@ -476,6 +483,10 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.greyscale.generic.y = y;
 	displayOptionsInfo.greyscale.minvalue = 0;
 	displayOptionsInfo.greyscale.maxvalue = 100;
+	displayOptionsInfo.greyscale.generic.toolTip =
+		"Use this to desaturate the colors in the game. A value of 100 replaces all colors "
+		"with shades of gray. Default is 0. NOTE: Reducing the colors in the game can improve "
+		"the operation of the anaglyph 3D modes.";
 
 	displayOptionsInfo.apply.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.apply.generic.name = ACCEPT0;
