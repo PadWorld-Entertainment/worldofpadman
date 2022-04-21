@@ -58,7 +58,7 @@ UI_CreditMenu_Draw
 */
 static void UI_CreditMenu_Draw(void) {
 
-	UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, trap_R_RegisterShaderNoMip("menu/bg/credits"));
+	UI_DrawHandlePic(0, 0, 640, 480, trap_R_RegisterShaderNoMip("menu/bg/credits.jpg"));
 }
 
 /*
