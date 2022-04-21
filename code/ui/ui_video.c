@@ -413,8 +413,10 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	trap_Cvar_SetValue("r_ext_compressed_textures", s_graphicsoptions.ct.curvalue);
 
 	if (s_graphicsoptions.af.curvalue > 0) {
+		trap_Cvar_Set("r_ext_texture_filter_anisotropic", "1");
 		trap_Cvar_SetValue("r_ext_max_anisotropy", power(2, s_graphicsoptions.af.curvalue));
 	} else {
+		trap_Cvar_Set("r_ext_texture_filter_anisotropic", "0");
 		trap_Cvar_Set("r_ext_max_anisotropy", "0");
 	}
 
@@ -612,10 +614,12 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 		s_graphicsoptions.aa.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_multisample")));
 	}
 
-	if (trap_Cvar_VariableValue("r_ext_max_anisotropy") > 2) {
-		s_graphicsoptions.af.curvalue = ceil(sqrt(trap_Cvar_VariableValue("r_ext_max_anisotropy")));
-	} else if (trap_Cvar_VariableValue("r_ext_max_anisotropy") > 0) {
-		s_graphicsoptions.af.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_max_anisotropy")));
+	if (trap_Cvar_VariableValue("r_ext_texture_filter_anisotropic")) {
+		if (trap_Cvar_VariableValue("r_ext_max_anisotropy") > 2) {
+			s_graphicsoptions.af.curvalue = ceil(sqrt(trap_Cvar_VariableValue("r_ext_max_anisotropy")));
+		} else {
+			s_graphicsoptions.af.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_max_anisotropy")));
+		}
 	} else {
 		s_graphicsoptions.af.curvalue = 0;
 	}
