@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #include "ui_local.h"
 
-void GraphicsOptions_MenuInit(void);
+void UI_GraphicsOptions_MenuInit(void);
 
 /*
 =======================================================================
@@ -140,10 +140,10 @@ static qboolean resolutionsDetected = qfalse;
 
 /*
 =================
-GraphicsOptions_FindBuiltinResolution
+UI_GraphicsOptions_FindBuiltinResolution
 =================
 */
-static int GraphicsOptions_FindBuiltinResolution(int mode) {
+static int UI_GraphicsOptions_FindBuiltinResolution(int mode) {
 	int i;
 
 	if (!resolutionsDetected)
@@ -162,10 +162,10 @@ static int GraphicsOptions_FindBuiltinResolution(int mode) {
 
 /*
 =================
-GraphicsOptions_FindDetectedResolution
+UI_GraphicsOptions_FindDetectedResolution
 =================
 */
-static int GraphicsOptions_FindDetectedResolution(int mode) {
+static int UI_GraphicsOptions_FindDetectedResolution(int mode) {
 	int i;
 	int len;
 
@@ -186,10 +186,10 @@ static int GraphicsOptions_FindDetectedResolution(int mode) {
 
 /*
 =================
-GraphicsOptions_GetAspectRatios
+UI_GraphicsOptions_GetAspectRatios
 =================
 */
-static void AddAspectRatios(void) {
+static void UI_GraphicsOptions_GetAspectRatios(void) {
 	int i, r;
 
 	// add aspect ratio to the resolution strings
@@ -219,10 +219,10 @@ static void AddAspectRatios(void) {
 
 /*
 =================
-GraphicsOptions_GetResolutions
+UI_GraphicsOptions_GetResolutions
 =================
 */
-static void GraphicsOptions_GetResolutions(void) {
+static void UI_GraphicsOptions_GetResolutions(void) {
 	Q_strncpyz(resbuf, UI_Cvar_VariableString("r_availableModes"), sizeof(resbuf));
 	if (*resbuf) {
 		char *s = resbuf;
@@ -241,15 +241,15 @@ static void GraphicsOptions_GetResolutions(void) {
 		}
 	}
 
-	AddAspectRatios();
+	UI_GraphicsOptions_GetAspectRatios();
 }
 
 /*
 =================
-GraphicsOptions_GetInitialVideo
+UI_GraphicsOptions_GetInitialVideo
 =================
 */
-static void GraphicsOptions_GetInitialVideo(void) {
+static void UI_GraphicsOptions_GetInitialVideo(void) {
 	s_ivo.mode = s_graphicsoptions.mode.curvalue;
 	s_ivo.renderer = s_graphicsoptions.renderer.curvalue;
 	s_ivo.colordepth = s_graphicsoptions.colordepth.curvalue;
@@ -266,10 +266,10 @@ static void GraphicsOptions_GetInitialVideo(void) {
 
 /*
 =================
-GraphicsOptions_CheckConfig
+UI_GraphicsOptions_CheckConfig
 =================
 */
-static void GraphicsOptions_CheckConfig(void) {
+static void UI_GraphicsOptions_CheckConfig(void) {
 	int i;
 
 	for (i = 0; i < (NUM_IVO_TEMPLATES - 1); i++) {
@@ -305,10 +305,10 @@ static void GraphicsOptions_CheckConfig(void) {
 
 /*
 =================
-GraphicsOptions_UpdateMenuItems
+UI_GraphicsOptions_UpdateMenuItems
 =================
 */
-static void GraphicsOptions_UpdateMenuItems(void) {
+static void UI_GraphicsOptions_UpdateMenuItems(void) {
 	if (UI_GetCvarInt("r_fullscreen") == 0) {
 		s_graphicsoptions.colordepth.curvalue = 0;
 		s_graphicsoptions.colordepth.generic.flags |= QMF_GRAYED;
@@ -343,15 +343,15 @@ static void GraphicsOptions_UpdateMenuItems(void) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 
-	GraphicsOptions_CheckConfig();
+	UI_GraphicsOptions_CheckConfig();
 }
 
 /*
 =================
-GraphicsOptions_ApplyChanges
+UI_GraphicsOptions_ApplyChanges
 =================
 */
-static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
+static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	if (notification != QM_ACTIVATED)
 		return;
 
@@ -431,7 +431,7 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 			s_graphicsoptions.mode.curvalue >= sizeof(detectedResolutions) / sizeof(detectedResolutions[0]))
 			s_graphicsoptions.mode.curvalue = 0;
 
-		mode = GraphicsOptions_FindBuiltinResolution(s_graphicsoptions.mode.curvalue);
+		mode = UI_GraphicsOptions_FindBuiltinResolution(s_graphicsoptions.mode.curvalue);
 		if (mode == -1) {
 			char w[16], h[16];
 			Q_strncpyz(w, detectedResolutions[s_graphicsoptions.mode.curvalue], sizeof(w));
@@ -450,10 +450,10 @@ static void GraphicsOptions_ApplyChanges(void *unused, int notification) {
 
 /*
 =================
-GraphicsOptions_Event
+UI_GraphicsOptions_Event
 =================
 */
-static void GraphicsOptions_Event(void *ptr, int event) {
+static void UI_GraphicsOptions_Event(void *ptr, int event) {
 	InitialVideoOptions_s *ivo;
 
 	if (event != QM_ACTIVATED) {
@@ -503,23 +503,22 @@ static void GraphicsOptions_Event(void *ptr, int event) {
 
 /*
 ================
-GraphicsOptions_MenuDraw
+UI_GraphicsOptions_MenuDraw
 ================
 */
-void GraphicsOptions_MenuDraw(void) {
+void UI_GraphicsOptions_MenuDraw(void) {
 	// APSFIX - rework this
-	GraphicsOptions_UpdateMenuItems();
-
+	UI_GraphicsOptions_UpdateMenuItems();
 	Menu_Draw(&s_graphicsoptions.menu);
 }
 
 /*
 =================
-GraphicsOptions_SetMenuItems
+UI_GraphicsOptions_SetMenuItems
 =================
 */
-static void GraphicsOptions_SetMenuItems(void) {
-	s_graphicsoptions.mode.curvalue = GraphicsOptions_FindDetectedResolution(UI_GetCvarInt("r_mode"));
+static void UI_GraphicsOptions_SetMenuItems(void) {
+	s_graphicsoptions.mode.curvalue = UI_GraphicsOptions_FindDetectedResolution(UI_GetCvarInt("r_mode"));
 
 	if (s_graphicsoptions.mode.curvalue < 0) {
 		if (resolutionsDetected) {
@@ -624,10 +623,10 @@ static void GraphicsOptions_SetMenuItems(void) {
 
 /*
 ================
-GraphicsOptions_MenuInit
+UI_GraphicsOptions_MenuInit
 ================
 */
-void GraphicsOptions_MenuInit(void) {
+void UI_GraphicsOptions_MenuInit(void) {
 	static const char *renderer_names[] = {"OpenGL1", "OpenGL2", "Vulkan", NULL};
 	static const char *tq_names[] = {"Default", "16 bit", "32 bit", NULL};
 	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
@@ -646,19 +645,19 @@ void GraphicsOptions_MenuInit(void) {
 	// zero set all our globals
 	memset(&s_graphicsoptions, 0, sizeof(graphicsoptions_t));
 
-	GraphicsOptions_GetResolutions();
+	UI_GraphicsOptions_GetResolutions();
 
-	GraphicsOptions_Cache();
+	UI_GraphicsOptions_Cache();
 
 	s_graphicsoptions.menu.wrapAround = qtrue;
 	s_graphicsoptions.menu.fullscreen = qtrue;
-	s_graphicsoptions.menu.draw = GraphicsOptions_MenuDraw;
+	s_graphicsoptions.menu.draw = UI_GraphicsOptions_MenuDraw;
 	s_graphicsoptions.menu.bgparts = BGP_SYSTEM | BGP_MENUFX;
 
 	s_graphicsoptions.graphics.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.graphics.generic.name = GRAPHICS0;
 	s_graphicsoptions.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
-	s_graphicsoptions.graphics.generic.callback = GraphicsOptions_Event;
+	s_graphicsoptions.graphics.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.graphics.generic.id = ID_GRAPHICS;
 	s_graphicsoptions.graphics.generic.x = 16;
 	s_graphicsoptions.graphics.generic.y = 37;
@@ -670,7 +669,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.display.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.display.generic.name = DISPLAY0;
 	s_graphicsoptions.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_graphicsoptions.display.generic.callback = GraphicsOptions_Event;
+	s_graphicsoptions.display.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.display.generic.id = ID_DISPLAY;
 	s_graphicsoptions.display.generic.x = 169;
 	s_graphicsoptions.display.generic.y = 30;
@@ -682,7 +681,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.sound.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.sound.generic.name = SOUND0;
 	s_graphicsoptions.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_graphicsoptions.sound.generic.callback = GraphicsOptions_Event;
+	s_graphicsoptions.sound.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.sound.generic.id = ID_SOUND;
 	s_graphicsoptions.sound.generic.x = 36;
 	s_graphicsoptions.sound.generic.y = 79;
@@ -694,7 +693,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.network.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.network.generic.name = NETWORK0;
 	s_graphicsoptions.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_graphicsoptions.network.generic.callback = GraphicsOptions_Event;
+	s_graphicsoptions.network.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.network.generic.id = ID_NETWORK;
 	s_graphicsoptions.network.generic.x = 142;
 	s_graphicsoptions.network.generic.y = 82;
@@ -707,7 +706,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.list.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.list.generic.name = "Graphics Settings:";
 	s_graphicsoptions.list.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.list.generic.callback = GraphicsOptions_Event;
+	s_graphicsoptions.list.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.list.generic.id = ID_LIST;
 	s_graphicsoptions.list.generic.x = XPOSITION;
 	s_graphicsoptions.list.generic.y = y;
@@ -834,7 +833,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.back.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.back.generic.name = BACK0;
 	s_graphicsoptions.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	s_graphicsoptions.back.generic.callback = GraphicsOptions_Event;
+	s_graphicsoptions.back.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.back.generic.id = ID_BACK;
 	s_graphicsoptions.back.generic.x = 8;
 	s_graphicsoptions.back.generic.y = 440;
@@ -846,7 +845,7 @@ void GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.apply.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.apply.generic.name = ACCEPT0;
 	s_graphicsoptions.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
-	s_graphicsoptions.apply.generic.callback = GraphicsOptions_ApplyChanges;
+	s_graphicsoptions.apply.generic.callback = UI_GraphicsOptions_ApplyChanges;
 	s_graphicsoptions.apply.generic.x = 512;
 	s_graphicsoptions.apply.generic.y = 440;
 	s_graphicsoptions.apply.width = 120;
@@ -875,16 +874,16 @@ void GraphicsOptions_MenuInit(void) {
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.back);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.apply);
 
-	GraphicsOptions_SetMenuItems();
-	GraphicsOptions_GetInitialVideo();
+	UI_GraphicsOptions_SetMenuItems();
+	UI_GraphicsOptions_GetInitialVideo();
 }
 
 /*
 =================
-GraphicsOptions_Cache
+UI_GraphicsOptions_Cache
 =================
 */
-void GraphicsOptions_Cache(void) {
+void UI_GraphicsOptions_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(GRAPHICS0);
@@ -905,7 +904,7 @@ UI_GraphicsOptionsMenu
 =================
 */
 void UI_GraphicsOptionsMenu(void) {
-	GraphicsOptions_MenuInit();
+	UI_GraphicsOptions_MenuInit();
 	UI_PushMenu(&s_graphicsoptions.menu);
 	Menu_SetCursorToItem(&s_graphicsoptions.menu, &s_graphicsoptions.graphics);
 }

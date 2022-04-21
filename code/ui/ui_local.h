@@ -491,7 +491,7 @@ extern void ServerInfo_Cache(void);
 // ui_video.c
 //
 extern void UI_GraphicsOptionsMenu(void);
-extern void GraphicsOptions_Cache(void);
+extern void UI_GraphicsOptions_Cache(void);
 
 //
 // ui_players.c
