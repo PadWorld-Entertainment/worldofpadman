@@ -75,7 +75,6 @@ typedef struct {
 	menulist_s tquality;
 	menulist_s tfilter;
 	menuradiobutton_s ct;
-	menulist_s af;
 	menulist_s aa;
 
 	menubitmap_s apply;
@@ -93,18 +92,17 @@ typedef struct {
 	int tquality;
 	int tfilter;
 	qboolean ct;
-	int af;
 	int aa;
 } InitialVideoOptions_s;
 
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{3, 0, 2, 1, 2, 3, 3, 2, 1, qfalse, 2, 2},	// Maximum
-												  {2, 0, 2, 1, 2, 2, 2, 2, 1, qfalse, 1, 1},	// Quality
-												  {1, 0, 0, 1, 1, 1, 1, 0, 1, qfalse, 0, 0},	// Performance
-												  {0, 0, 1, 0, 0, 0, 0, 0, 0, qtrue, 0, 0},		// Minimum
-												  {3, 0, 0, 1, 1, 2, 0, 0, 0, qfalse, 0, 0}};	// Custom
+static InitialVideoOptions_s s_ivo_templates[] = {{3, 0, 2, 1, 2, 3, 3, 2, 3, qfalse, 2},	// Maximum
+												  {2, 0, 2, 1, 2, 2, 2, 2, 2, qfalse, 1},	// Quality
+												  {1, 0, 0, 1, 1, 1, 1, 0, 1, qfalse, 0},	// Performance
+												  {0, 0, 1, 0, 0, 0, 0, 0, 0, qtrue, 0},	// Minimum
+												  {3, 0, 0, 1, 1, 2, 0, 0, 0, qfalse, 0}};	// Custom
 
 #define NUM_IVO_TEMPLATES (ARRAY_LEN(s_ivo_templates))
 
@@ -258,7 +256,6 @@ static void UI_GraphicsOptions_GetInitialVideo(void) {
 	s_ivo.tquality = s_graphicsoptions.tquality.curvalue;
 	s_ivo.tfilter = s_graphicsoptions.tfilter.curvalue;
 	s_ivo.ct = s_graphicsoptions.ct.curvalue;
-	s_ivo.af = s_graphicsoptions.af.curvalue;
 	s_ivo.aa = s_graphicsoptions.aa.curvalue;
 }
 
@@ -290,8 +287,6 @@ static void UI_GraphicsOptions_CheckConfig(void) {
 		if (s_ivo_templates[i].tfilter != s_graphicsoptions.tfilter.curvalue)
 			continue;
 		if (s_ivo_templates[i].ct != s_graphicsoptions.ct.curvalue)
-			continue;
-		if (s_ivo_templates[i].af != s_graphicsoptions.af.curvalue)
 			continue;
 		if (s_ivo_templates[i].aa != s_graphicsoptions.aa.curvalue)
 			continue;
@@ -336,8 +331,6 @@ static void UI_GraphicsOptions_UpdateMenuItems(void) {
 	} else if (s_ivo.tfilter != s_graphicsoptions.tfilter.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.ct != s_graphicsoptions.ct.curvalue) {
-		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (s_ivo.af != s_graphicsoptions.af.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.aa != s_graphicsoptions.aa.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
@@ -404,21 +397,19 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_SetValue("r_subdivisions", 20);
 	}
 
-	if (s_graphicsoptions.tfilter.curvalue) {
-		trap_Cvar_Set("r_textureMode", "GL_LINEAR_MIPMAP_LINEAR");
+	if (s_graphicsoptions.tfilter.curvalue > 1) {
+		trap_Cvar_Set("r_ext_texture_filter_anisotropic", "1");
+		trap_Cvar_SetValue("r_ext_max_anisotropy", power(2, s_graphicsoptions.tfilter.curvalue - 1));
 	} else {
+		trap_Cvar_Set("r_ext_texture_filter_anisotropic", "0");
+		trap_Cvar_Set("r_ext_max_anisotropy", "2");
 		trap_Cvar_Set("r_textureMode", "GL_LINEAR_MIPMAP_NEAREST");
+		if (s_graphicsoptions.tfilter.curvalue) {
+			trap_Cvar_Set("r_textureMode", "GL_LINEAR_MIPMAP_LINEAR");
+		}
 	}
 
 	trap_Cvar_SetValue("r_ext_compressed_textures", s_graphicsoptions.ct.curvalue);
-
-	if (s_graphicsoptions.af.curvalue > 0) {
-		trap_Cvar_Set("r_ext_texture_filter_anisotropic", "1");
-		trap_Cvar_SetValue("r_ext_max_anisotropy", power(2, s_graphicsoptions.af.curvalue));
-	} else {
-		trap_Cvar_Set("r_ext_texture_filter_anisotropic", "0");
-		trap_Cvar_Set("r_ext_max_anisotropy", "0");
-	}
 
 	if (s_graphicsoptions.aa.curvalue > 0) {
 		trap_Cvar_SetValue("r_ext_multisample", power(2, s_graphicsoptions.aa.curvalue));
@@ -475,7 +466,6 @@ static void UI_GraphicsOptions_Event(void *ptr, int event) {
 		s_graphicsoptions.tquality.curvalue = ivo->tquality;
 		s_graphicsoptions.tfilter.curvalue = ivo->tfilter;
 		s_graphicsoptions.ct.curvalue = ivo->ct;
-		s_graphicsoptions.af.curvalue = ivo->af;
 		s_graphicsoptions.aa.curvalue = ivo->aa;
 		break;
 
@@ -565,11 +555,20 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 		break;
 	}
 
-	if (!Q_stricmp(UI_Cvar_VariableString("r_textureMode"), "GL_LINEAR_MIPMAP_NEAREST")) {
-		s_graphicsoptions.tfilter.curvalue = 0;
+	if (trap_Cvar_VariableValue("r_ext_texture_filter_anisotropic")) {
+		if (trap_Cvar_VariableValue("r_ext_max_anisotropy") > 2) {
+			s_graphicsoptions.tfilter.curvalue = 1 + ceil(sqrt(trap_Cvar_VariableValue("r_ext_max_anisotropy")));
+		} else {
+			s_graphicsoptions.tfilter.curvalue = 1 + floor(sqrt(trap_Cvar_VariableValue("r_ext_max_anisotropy")));
+		}
 	} else {
-		s_graphicsoptions.tfilter.curvalue = 1;
+		if (Q_stricmp(UI_Cvar_VariableString("r_textureMode"), "GL_LINEAR_MIPMAP_NEAREST")) {
+			s_graphicsoptions.tfilter.curvalue = 1;
+		} else {
+			s_graphicsoptions.tfilter.curvalue = 0;
+		}
 	}
+
 
 	if (trap_Cvar_VariableValue("r_lodBias") < 1) {
 		s_graphicsoptions.mdetail.curvalue = 2;
@@ -613,16 +612,6 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 	} else {
 		s_graphicsoptions.aa.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_multisample")));
 	}
-
-	if (trap_Cvar_VariableValue("r_ext_texture_filter_anisotropic")) {
-		if (trap_Cvar_VariableValue("r_ext_max_anisotropy") > 2) {
-			s_graphicsoptions.af.curvalue = ceil(sqrt(trap_Cvar_VariableValue("r_ext_max_anisotropy")));
-		} else {
-			s_graphicsoptions.af.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_max_anisotropy")));
-		}
-	} else {
-		s_graphicsoptions.af.curvalue = 0;
-	}
 }
 
 /*
@@ -639,8 +628,8 @@ void UI_GraphicsOptions_MenuInit(void) {
 	static const char *cdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *tdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *tquality_names[] = {"Default", "16 bit", "32 bit", NULL};
-	static const char *tfilter_names[] = {"Bilinear", "Trilinear", NULL};
-	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
+	static const char *tfilter_names[] = {"Bilinear", "Trilinear", "Anisotropic (2x)", "Anisotropic (4x)", 
+											"Anisotropic (8x)", "Anisotropic (16x)", NULL};
 	static const char *aa_names[] = {"Off", "2x", "4x", "8x", NULL};
 
 	int y;
@@ -831,8 +820,8 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.tfilter.generic.x = XPOSITION;
 	s_graphicsoptions.tfilter.generic.y = y;
 	s_graphicsoptions.tfilter.generic.toolTip =
-		"Select a desired texture filtering method, bilinear or trilinear. Default is trilinear. "
-		"Selecting bilinear results in less texture sharpness but can save  system resources.";
+		"Select a desired texture filtering method bilinear, trilinear or anisotropic. Default "
+		"is trilinear. Selecting anisotropic above 4x can lead to a high graphics card load.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_compressed_textures"
@@ -846,19 +835,6 @@ void UI_GraphicsOptions_MenuInit(void) {
 		"Default is off. This can reduce graphics card memory usage on weak systems.";
 
 	y += (BIGCHAR_HEIGHT + 2);
-	// references/modifies "r_ext_max_anisotropy"
-	s_graphicsoptions.af.generic.type = MTYPE_SPINCONTROL;
-	s_graphicsoptions.af.generic.name = "Anisotropy:";
-	s_graphicsoptions.af.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.af.itemnames = af_names;
-	s_graphicsoptions.af.generic.x = XPOSITION;
-	s_graphicsoptions.af.generic.y = y;
-	s_graphicsoptions.af.generic.toolTip =
-		"Enable to switch on anisotropic texture filtering at a desired level. Default is off. "
-		"Selecting higher levels results in better texture sharpness but can lead to a higher "
-		"graphics card load.";
-
-	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_max_multisampling"
 	s_graphicsoptions.aa.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.aa.generic.name = "Antialiasing:";
@@ -868,7 +844,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.aa.generic.y = y;
 	s_graphicsoptions.aa.generic.toolTip =
 		"Enable to switch on multisample antialiasing (MSAA) at a desired level. Default is "
-		"off. Selecting higher levels results in better render quality but can lead to a higher "
+		"off. Selecting higher levels results in better render quality but can lead to a high "
 		"graphics card load.";
 
 	s_graphicsoptions.back.generic.type = MTYPE_BITMAP;
@@ -909,7 +885,6 @@ void UI_GraphicsOptions_MenuInit(void) {
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tquality);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tfilter);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.ct);
-	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.af);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.aa);
 
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.back);
