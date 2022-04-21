@@ -47,7 +47,7 @@ function(wop_add_debuggger TARGET)
 	if (${DEBUGGER} MATCHES "gdb")
 		add_custom_target(${TARGET}-debug)
 		add_custom_command(TARGET ${TARGET}-debug
-			COMMAND ${GDB_EXECUTABLE} -ex run --args $<TARGET_FILE:${TARGET}> +set vm_game 0 +set vm_cgame 0 +set vm_ui 0 +set sv_pure 0 +set ttycon 0 +set com_ansiColor 0
+			COMMAND ${GDB_EXECUTABLE} -ex run --args $<TARGET_FILE:${TARGET}> +set vm_game 0 +set vm_cgame 0 +set vm_ui 0 +set sv_pure 0 +set ttycon 0 +set com_ansiColor 0 +set developer 1
 			COMMENT "Starting debugger session for ${TARGET}"
 			USES_TERMINAL
 			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -56,7 +56,7 @@ function(wop_add_debuggger TARGET)
 	elseif (${DEBUGGER} MATCHES "lldb")
 		add_custom_target(${TARGET}-debug)
 		add_custom_command(TARGET ${TARGET}-debug
-			COMMAND CG_CONTEXT_SHOW_BACKTRACE=1 ${LLDB_EXECUTABLE} -b -o run $<TARGET_FILE:${TARGET}> +set vm_game 0 +set vm_cgame 0 +set vm_ui 0 +set sv_pure 0 +set ttycon 0 +set com_ansiColor 0
+			COMMAND CG_CONTEXT_SHOW_BACKTRACE=1 ${LLDB_EXECUTABLE} -b -o run $<TARGET_FILE:${TARGET}> +set vm_game 0 +set vm_cgame 0 +set vm_ui 0 +set sv_pure 0 +set ttycon 0 +set com_ansiColor 0 +set developer 1
 			COMMENT "Starting debugger session for ${TARGET}"
 			USES_TERMINAL
 			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
