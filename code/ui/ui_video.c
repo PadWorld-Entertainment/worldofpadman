@@ -67,14 +67,14 @@ typedef struct {
 	menulist_s list;
 	menulist_s mode;
 	menulist_s renderer;
-	menulist_s tdetail;
-	menulist_s lighting;
-	menulist_s tquality;
 	menulist_s colordepth;
+	menulist_s lighting;
 	menulist_s mdetail;
 	menulist_s cdetail;
+	menulist_s tdetail;
+	menulist_s tquality;
 	menulist_s tfilter;
-	menulist_s ct;
+	menuradiobutton_s ct;
 	menulist_s af;
 	menulist_s aa;
 
@@ -85,28 +85,26 @@ typedef struct {
 typedef struct {
 	int mode;
 	int renderer;
-	int tdetail;
-	int lighting;
 	int colordepth;
-	int tquality;
+	int lighting;
 	int mdetail;
 	int cdetail;
+	int tdetail;
+	int tquality;
 	int tfilter;
 	qboolean ct;
-	int af; // index to af_names!
-	int aa; // index to aa_names!
+	int af;
+	int aa;
 } InitialVideoOptions_s;
 
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{2, 0, 3, 1, 2, 2, 1, 3, 1, qfalse, 4, 2},
-												  {2, 0, 3, 1, 0, 0, 1, 2, 0, qfalse, 3, 0},
-												  {1, 0, 2, 1, 1, 0, 0, 1, 0, qfalse, 2, 0},
-												  {0, 0, 1, 0, 1, 0, 0, 0, 0, qtrue, 0, 0},
-												  {
-													  2, 0, 1, 0, 0, 0, 0, 0, 0, qtrue, 0, 0 // "custom" placeholder
-												  }};
+static InitialVideoOptions_s s_ivo_templates[] = {{3, 0, 2, 1, 2, 3, 3, 2, 1, qfalse, 3, 2},	// Maximum
+												  {2, 0, 2, 1, 2, 2, 2, 2, 1, qfalse, 2, 1},	// Quality
+												  {1, 0, 0, 1, 1, 1, 1, 0, 0, qfalse, 1, 0},	// Performance
+												  {0, 0, 1, 0, 0, 0, 0, 0, 0, qtrue, 0, 0},		// Minimum
+												  {3, 0, 0, 1, 1, 2, 0, 0, 0, qfalse, 0, 0}};	// Custom
 
 #define NUM_IVO_TEMPLATES (ARRAY_LEN(s_ivo_templates))
 
@@ -122,8 +120,8 @@ int power(int x, int y) {
 	return result;
 }
 
-static const char *builtinResolutions[] = {"640x480",	"800x600",	 "1024x768",  "1152x864",  "1280x720",	"1280x800",
-										   "1280x960",	"1280x1024", "1366x768",  "1440x900",  "1600x900",	"1600x1200",
+static const char *builtinResolutions[] = {"640x480", "800x600", "1024x768", "1152x864", "1280x720", "1280x800",
+										   "1280x960", "1280x1024", "1366x768", "1440x900", "1600x900", "1600x1200",
 										   "1680x1050", "1920x1080", "1920x1200", "2048x1536", "2560x1600", NULL};
 
 static const char *knownRatios[][2] = {{"1.25:1", "5:4"},	{"1.33:1", "4:3"}, {"1.50:1", "3:2"},  {"1.56:1", "14:9"},
@@ -253,12 +251,12 @@ static void UI_GraphicsOptions_GetInitialVideo(void) {
 	s_ivo.mode = s_graphicsoptions.mode.curvalue;
 	s_ivo.renderer = s_graphicsoptions.renderer.curvalue;
 	s_ivo.colordepth = s_graphicsoptions.colordepth.curvalue;
-	s_ivo.tdetail = s_graphicsoptions.tdetail.curvalue;
 	s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
 	s_ivo.mdetail = s_graphicsoptions.mdetail.curvalue;
 	s_ivo.cdetail = s_graphicsoptions.cdetail.curvalue;
-	s_ivo.tfilter = s_graphicsoptions.tfilter.curvalue;
+	s_ivo.tdetail = s_graphicsoptions.tdetail.curvalue;
 	s_ivo.tquality = s_graphicsoptions.tquality.curvalue;
+	s_ivo.tfilter = s_graphicsoptions.tfilter.curvalue;
 	s_ivo.ct = s_graphicsoptions.ct.curvalue;
 	s_ivo.af = s_graphicsoptions.af.curvalue;
 	s_ivo.aa = s_graphicsoptions.aa.curvalue;
@@ -273,13 +271,11 @@ static void UI_GraphicsOptions_CheckConfig(void) {
 	int i;
 
 	for (i = 0; i < (NUM_IVO_TEMPLATES - 1); i++) {
-		if (s_ivo_templates[i].colordepth != s_graphicsoptions.colordepth.curvalue)
-			continue;
 		if (s_ivo_templates[i].mode != s_graphicsoptions.mode.curvalue)
 			continue;
 		if (s_ivo_templates[i].renderer != s_graphicsoptions.renderer.curvalue)
 			continue;
-		if (s_ivo_templates[i].tdetail != s_graphicsoptions.tdetail.curvalue)
+		if (s_ivo_templates[i].colordepth != s_graphicsoptions.colordepth.curvalue)
 			continue;
 		if (s_ivo_templates[i].lighting != s_graphicsoptions.lighting.curvalue)
 			continue;
@@ -287,6 +283,10 @@ static void UI_GraphicsOptions_CheckConfig(void) {
 			continue;
 		if (s_ivo_templates[i].cdetail != s_graphicsoptions.cdetail.curvalue)
 			continue;
+		if (s_ivo_templates[i].tdetail != s_graphicsoptions.tdetail.curvalue)
+			continue;
+//		if (s_ivo_templates[i].tquality != s_graphicsoptions.tquality.curvalue)
+//			continue;
 		if (s_ivo_templates[i].tfilter != s_graphicsoptions.tfilter.curvalue)
 			continue;
 		if (s_ivo_templates[i].ct != s_graphicsoptions.ct.curvalue)
@@ -321,17 +321,17 @@ static void UI_GraphicsOptions_UpdateMenuItems(void) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.renderer != s_graphicsoptions.renderer.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (s_ivo.tdetail != s_graphicsoptions.tdetail.curvalue) {
-		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (s_ivo.lighting != s_graphicsoptions.lighting.curvalue) {
-		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.colordepth != s_graphicsoptions.colordepth.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (s_ivo.tquality != s_graphicsoptions.tquality.curvalue) {
+	} else if (s_ivo.lighting != s_graphicsoptions.lighting.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.mdetail != s_graphicsoptions.mdetail.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.cdetail != s_graphicsoptions.cdetail.curvalue) {
+		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (s_ivo.tdetail != s_graphicsoptions.tdetail.curvalue) {
+		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (s_ivo.tquality != s_graphicsoptions.tquality.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.tfilter != s_graphicsoptions.tfilter.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
@@ -464,13 +464,13 @@ static void UI_GraphicsOptions_Event(void *ptr, int event) {
 	case ID_LIST:
 		ivo = &s_ivo_templates[s_graphicsoptions.list.curvalue];
 		s_graphicsoptions.mode.curvalue = ivo->mode;
-		s_graphicsoptions.renderer.curvalue = ivo->mode;
-		s_graphicsoptions.tdetail.curvalue = ivo->tdetail;
-		s_graphicsoptions.lighting.curvalue = ivo->lighting;
+		s_graphicsoptions.renderer.curvalue = ivo->renderer;
 		s_graphicsoptions.colordepth.curvalue = ivo->colordepth;
-		s_graphicsoptions.tquality.curvalue = ivo->tquality;
+		s_graphicsoptions.lighting.curvalue = ivo->lighting;
 		s_graphicsoptions.mdetail.curvalue = ivo->mdetail;
 		s_graphicsoptions.cdetail.curvalue = ivo->cdetail;
+		s_graphicsoptions.tdetail.curvalue = ivo->tdetail;
+		s_graphicsoptions.tquality.curvalue = ivo->tquality;
 		s_graphicsoptions.tfilter.curvalue = ivo->tfilter;
 		s_graphicsoptions.ct.curvalue = ivo->ct;
 		s_graphicsoptions.af.curvalue = ivo->af;
@@ -627,18 +627,17 @@ UI_GraphicsOptions_MenuInit
 ================
 */
 void UI_GraphicsOptions_MenuInit(void) {
+	static const char *templates_names[] = {"Maximum", "Quality", "Performance", "Minimum", "Custom", NULL};
 	static const char *renderer_names[] = {"OpenGL1", "OpenGL2", "Vulkan", NULL};
-	static const char *tquality_names[] = {"Default", "16 bit", "32 bit", NULL};
-	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
+	static const char *colordepth_names[] = {"Desktop", "16 bit", "32 bit", NULL};
 	static const char *lighting_names[] = {"Low (Vertex)", "High (Lightmap)", NULL};
-	static const char *colordepth_names[] = {"Default", "16 bit", "32 bit", NULL};
-	static const char *filter_names[] = {"Bilinear", "Trilinear", NULL};
-	static const char *tdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
-	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
-	static const char *aa_names[] = {"Off", "2x", "4x", "8x", NULL};
 	static const char *mdetail_names[] = {"Low", "Medium", "High", NULL};
 	static const char *cdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
-	static const char *enabled_names[] = {"Off", "On", NULL};
+	static const char *tdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
+	static const char *tquality_names[] = {"Default", "16 bit", "32 bit", NULL};
+	static const char *tfilter_names[] = {"Bilinear", "Trilinear", NULL};
+	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
+	static const char *aa_names[] = {"Off", "2x", "4x", "8x", NULL};
 
 	int y;
 
@@ -710,7 +709,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.list.generic.id = ID_LIST;
 	s_graphicsoptions.list.generic.x = XPOSITION;
 	s_graphicsoptions.list.generic.y = y;
-	s_graphicsoptions.list.itemnames = s_graphics_options_names;
+	s_graphicsoptions.list.itemnames = templates_names;
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_mode"
@@ -791,7 +790,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.tfilter.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.tfilter.generic.name = "Texture Filter:";
 	s_graphicsoptions.tfilter.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.tfilter.itemnames = filter_names;
+	s_graphicsoptions.tfilter.itemnames = tfilter_names;
 	s_graphicsoptions.tfilter.generic.x = XPOSITION;
 	s_graphicsoptions.tfilter.generic.y = y;
 	s_graphicsoptions.tfilter.generic.toolTip = "A graphic sharpness filter. Use bilinear for lower end graphics cards. "
@@ -799,10 +798,9 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_compressed_textures"
-	s_graphicsoptions.ct.generic.type = MTYPE_SPINCONTROL;
+	s_graphicsoptions.ct.generic.type = MTYPE_RADIOBUTTON;
 	s_graphicsoptions.ct.generic.name = "Compress Textures:";
 	s_graphicsoptions.ct.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.ct.itemnames = enabled_names;
 	s_graphicsoptions.ct.generic.x = XPOSITION;
 	s_graphicsoptions.ct.generic.y = y;
 	s_graphicsoptions.ct.generic.toolTip = "Switch on to allow your graphics card to store texture data compressed if "
