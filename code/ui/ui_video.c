@@ -710,6 +710,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.list.generic.x = XPOSITION;
 	s_graphicsoptions.list.generic.y = y;
 	s_graphicsoptions.list.itemnames = templates_names;
+	s_graphicsoptions.list.generic.toolTip =
+		"Select a suitable template from the list. Maximum will set all values to high or "
+		"maximum except anisotropy and antialiasing. Minimum will set everything to low or "
+		"off. Quality and Performance offer a good compromise in one direction or the other.";
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_mode"
@@ -719,6 +723,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.mode.itemnames = resolutions;
 	s_graphicsoptions.mode.generic.x = XPOSITION;
 	s_graphicsoptions.mode.generic.y = y;
+	s_graphicsoptions.mode.generic.toolTip =
+		"The game usually determines the correct resolution automatically upon the first "
+		"start. However, you can also manually select a suitable resolution from the list "
+		"of possible resolutions.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "cl_renderer"
@@ -728,6 +736,9 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.renderer.itemnames = renderer_names;
 	s_graphicsoptions.renderer.generic.x = XPOSITION;
 	s_graphicsoptions.renderer.generic.y = y;
+	s_graphicsoptions.renderer.generic.toolTip =
+		"Select a desired renderer. Default is OpenGL1. OpenGL2 offers more features and "
+		"effects but can lead to a higher graphics card load. Vulkan is still experimental.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references "r_colorbits"
@@ -737,6 +748,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.colordepth.itemnames = colordepth_names;
 	s_graphicsoptions.colordepth.generic.x = XPOSITION;
 	s_graphicsoptions.colordepth.generic.y = y;
+	s_graphicsoptions.colordepth.generic.toolTip =
+		"Select a desired color depth, 16 or 32 bit. Default is desktop. The color depth is "
+		"then determined based on the current desktop setting. Selecting a lower color depth "
+		"value can save system resources. NOTE: This option is disabled in window mode.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_vertexLight"
@@ -746,6 +761,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.lighting.itemnames = lighting_names;
 	s_graphicsoptions.lighting.generic.x = XPOSITION;
 	s_graphicsoptions.lighting.generic.y = y;
+	s_graphicsoptions.lighting.generic.toolTip =
+		"Select a desired lighting method. Default is high (Lightmap). It enables advanced "
+		"shaders and dynamic lighting effects in the game. Low (Vertex) instead offers a "
+		"poor and flat lighting quality but can save system resources.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_lodBias"
@@ -755,6 +774,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.mdetail.itemnames = mdetail_names;
 	s_graphicsoptions.mdetail.generic.x = XPOSITION;
 	s_graphicsoptions.mdetail.generic.y = y;
+	s_graphicsoptions.mdetail.generic.toolTip =
+		"Select a desired models detail. Default is high. It enables the game to load high "
+		"quality models on lower distances. Setting a lower level causes models with less "
+		"polygons to be loaded but can save system resources.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_subdivisions"
@@ -764,6 +787,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.cdetail.itemnames = cdetail_names;
 	s_graphicsoptions.cdetail.generic.x = XPOSITION;
 	s_graphicsoptions.cdetail.generic.y = y;
+	s_graphicsoptions.cdetail.generic.toolTip =
+		"Select a desired curves detail. Default is high. It enables the game to smooth out "
+		"curved patches on lower distances. Setting a lower level causes curved patches to "
+		"look less smooth but can save system resources.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_picmip"
@@ -773,7 +800,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.tdetail.itemnames = tdetail_names;
 	s_graphicsoptions.tdetail.generic.x = XPOSITION;
 	s_graphicsoptions.tdetail.generic.y = y;
-	s_graphicsoptions.tdetail.generic.toolTip = "Adjust overall texture detail levels based on graphics card performance.";
+	s_graphicsoptions.tdetail.generic.toolTip =
+		"Select a desired texture detail. Default is high. It enables the game to adjust the "
+		"texture quality. Setting a lower level causes textures to look flat but can save "
+		"system resources.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_textureBits"
@@ -783,7 +813,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.tquality.itemnames = tquality_names;
 	s_graphicsoptions.tquality.generic.x = XPOSITION;
 	s_graphicsoptions.tquality.generic.y = y;
-	s_graphicsoptions.tquality.generic.toolTip = "Adjust texture detail based on graphics card performance.";
+	s_graphicsoptions.tquality.generic.toolTip =
+		"Select a desired texture quality, 16 or 32 bit. Default means the texture quality is "
+		"then determined by the engine. Selecting a lower texture quality can save system "
+		"resources.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_textureMode"
@@ -793,8 +826,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.tfilter.itemnames = tfilter_names;
 	s_graphicsoptions.tfilter.generic.x = XPOSITION;
 	s_graphicsoptions.tfilter.generic.y = y;
-	s_graphicsoptions.tfilter.generic.toolTip = "A graphic sharpness filter. Use bilinear for lower end graphics cards. "
-											   "Use Trilinear for mid to higher range graphics cards.";
+	s_graphicsoptions.tfilter.generic.toolTip =
+		"Select a desired texture filtering method, bilinear or trilinear. Default is bilinear. "
+		"Selecting trilinear results in better texture sharpness but can lead to a higher "
+		"graphics card load.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_compressed_textures"
@@ -803,8 +838,9 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.ct.generic.flags = QMF_SMALLFONT;
 	s_graphicsoptions.ct.generic.x = XPOSITION;
 	s_graphicsoptions.ct.generic.y = y;
-	s_graphicsoptions.ct.generic.toolTip = "Switch on to allow your graphics card to store texture data compressed if "
-										   "supported (most graphics card regardless of type will support this).";
+	s_graphicsoptions.ct.generic.toolTip =
+		"Enable to allow the graphics card to store texture data compressed if supported. "
+		"Default is off. This can reduce graphics card memory usage on weak systems.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_max_anisotropy"
@@ -814,8 +850,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.af.itemnames = af_names;
 	s_graphicsoptions.af.generic.x = XPOSITION;
 	s_graphicsoptions.af.generic.y = y;
-	s_graphicsoptions.af.generic.toolTip = "Sharpens game textures. Not recommended for low end graphics cards. "
-										   "Requires high graphics card performance and memory!";
+	s_graphicsoptions.af.generic.toolTip =
+		"Enable to switch on anisotropic texture filtering at a desired level. Default is 2x. "
+		"Selecting higher levels results in better texture sharpness but can lead to a higher "
+		"graphics card load.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_max_multisampling"
@@ -825,8 +863,10 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.aa.itemnames = aa_names;
 	s_graphicsoptions.aa.generic.x = XPOSITION;
 	s_graphicsoptions.aa.generic.y = y;
-	s_graphicsoptions.aa.generic.toolTip = "Smooth out rough edges. Not recommended for low end graphics cards. "
-										   "Requires high graphics card performance and memory!";
+	s_graphicsoptions.aa.generic.toolTip =
+		"Enable to switch on multisample antialiasing (MSAA) at a desired level. Default is "
+		"off. Selecting higher levels results in better render quality but can lead to a higher "
+		"graphics card load.";
 
 	s_graphicsoptions.back.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.back.generic.name = BACK0;
