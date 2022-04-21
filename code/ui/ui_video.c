@@ -67,13 +67,13 @@ typedef struct {
 	menulist_s list;
 	menulist_s mode;
 	menulist_s renderer;
-	menulist_s tq;
+	menulist_s tdetail;
 	menulist_s lighting;
-	menulist_s texturebits;
+	menulist_s tquality;
 	menulist_s colordepth;
 	menulist_s mdetail;
 	menulist_s cdetail;
-	menulist_s filter;
+	menulist_s tfilter;
 	menulist_s ct;
 	menulist_s af;
 	menulist_s aa;
@@ -85,13 +85,13 @@ typedef struct {
 typedef struct {
 	int mode;
 	int renderer;
-	int tq;
+	int tdetail;
 	int lighting;
 	int colordepth;
-	int texturebits;
+	int tquality;
 	int mdetail;
 	int cdetail;
-	int filter;
+	int tfilter;
 	qboolean ct;
 	int af; // index to af_names!
 	int aa; // index to aa_names!
@@ -253,12 +253,12 @@ static void UI_GraphicsOptions_GetInitialVideo(void) {
 	s_ivo.mode = s_graphicsoptions.mode.curvalue;
 	s_ivo.renderer = s_graphicsoptions.renderer.curvalue;
 	s_ivo.colordepth = s_graphicsoptions.colordepth.curvalue;
-	s_ivo.tq = s_graphicsoptions.tq.curvalue;
+	s_ivo.tdetail = s_graphicsoptions.tdetail.curvalue;
 	s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
 	s_ivo.mdetail = s_graphicsoptions.mdetail.curvalue;
 	s_ivo.cdetail = s_graphicsoptions.cdetail.curvalue;
-	s_ivo.filter = s_graphicsoptions.filter.curvalue;
-	s_ivo.texturebits = s_graphicsoptions.texturebits.curvalue;
+	s_ivo.tfilter = s_graphicsoptions.tfilter.curvalue;
+	s_ivo.tquality = s_graphicsoptions.tquality.curvalue;
 	s_ivo.ct = s_graphicsoptions.ct.curvalue;
 	s_ivo.af = s_graphicsoptions.af.curvalue;
 	s_ivo.aa = s_graphicsoptions.aa.curvalue;
@@ -279,7 +279,7 @@ static void UI_GraphicsOptions_CheckConfig(void) {
 			continue;
 		if (s_ivo_templates[i].renderer != s_graphicsoptions.renderer.curvalue)
 			continue;
-		if (s_ivo_templates[i].tq != s_graphicsoptions.tq.curvalue)
+		if (s_ivo_templates[i].tdetail != s_graphicsoptions.tdetail.curvalue)
 			continue;
 		if (s_ivo_templates[i].lighting != s_graphicsoptions.lighting.curvalue)
 			continue;
@@ -287,7 +287,7 @@ static void UI_GraphicsOptions_CheckConfig(void) {
 			continue;
 		if (s_ivo_templates[i].cdetail != s_graphicsoptions.cdetail.curvalue)
 			continue;
-		if (s_ivo_templates[i].filter != s_graphicsoptions.filter.curvalue)
+		if (s_ivo_templates[i].tfilter != s_graphicsoptions.tfilter.curvalue)
 			continue;
 		if (s_ivo_templates[i].ct != s_graphicsoptions.ct.curvalue)
 			continue;
@@ -321,19 +321,19 @@ static void UI_GraphicsOptions_UpdateMenuItems(void) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.renderer != s_graphicsoptions.renderer.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (s_ivo.tq != s_graphicsoptions.tq.curvalue) {
+	} else if (s_ivo.tdetail != s_graphicsoptions.tdetail.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.lighting != s_graphicsoptions.lighting.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.colordepth != s_graphicsoptions.colordepth.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (s_ivo.texturebits != s_graphicsoptions.texturebits.curvalue) {
+	} else if (s_ivo.tquality != s_graphicsoptions.tquality.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.mdetail != s_graphicsoptions.mdetail.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.cdetail != s_graphicsoptions.cdetail.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (s_ivo.filter != s_graphicsoptions.filter.curvalue) {
+	} else if (s_ivo.tfilter != s_graphicsoptions.tfilter.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.ct != s_graphicsoptions.ct.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
@@ -355,7 +355,7 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	if (notification != QM_ACTIVATED)
 		return;
 
-	switch (s_graphicsoptions.texturebits.curvalue) {
+	switch (s_graphicsoptions.tquality.curvalue) {
 	case 0:
 		trap_Cvar_SetValue("r_texturebits", 0);
 		break;
@@ -366,7 +366,7 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_SetValue("r_texturebits", 32);
 		break;
 	}
-	trap_Cvar_SetValue("r_picmip", (float)(3 - s_graphicsoptions.tq.curvalue));
+	trap_Cvar_SetValue("r_picmip", (float)(3 - s_graphicsoptions.tdetail.curvalue));
 
 	switch (s_graphicsoptions.colordepth.curvalue) {
 	case 0:
@@ -404,7 +404,7 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_SetValue("r_subdivisions", 20);
 	}
 
-	if (s_graphicsoptions.filter.curvalue) {
+	if (s_graphicsoptions.tfilter.curvalue) {
 		trap_Cvar_Set("r_textureMode", "GL_LINEAR_MIPMAP_LINEAR");
 	} else {
 		trap_Cvar_Set("r_textureMode", "GL_LINEAR_MIPMAP_NEAREST");
@@ -465,13 +465,13 @@ static void UI_GraphicsOptions_Event(void *ptr, int event) {
 		ivo = &s_ivo_templates[s_graphicsoptions.list.curvalue];
 		s_graphicsoptions.mode.curvalue = ivo->mode;
 		s_graphicsoptions.renderer.curvalue = ivo->mode;
-		s_graphicsoptions.tq.curvalue = ivo->tq;
+		s_graphicsoptions.tdetail.curvalue = ivo->tdetail;
 		s_graphicsoptions.lighting.curvalue = ivo->lighting;
 		s_graphicsoptions.colordepth.curvalue = ivo->colordepth;
-		s_graphicsoptions.texturebits.curvalue = ivo->texturebits;
+		s_graphicsoptions.tquality.curvalue = ivo->tquality;
 		s_graphicsoptions.mdetail.curvalue = ivo->mdetail;
 		s_graphicsoptions.cdetail.curvalue = ivo->cdetail;
-		s_graphicsoptions.filter.curvalue = ivo->filter;
+		s_graphicsoptions.tfilter.curvalue = ivo->tfilter;
 		s_graphicsoptions.ct.curvalue = ivo->ct;
 		s_graphicsoptions.af.curvalue = ivo->af;
 		s_graphicsoptions.aa.curvalue = ivo->aa;
@@ -542,31 +542,31 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 		}
 	}
 
-	s_graphicsoptions.tq.curvalue = 3 - UI_GetCvarInt("r_picmip");
-	if (s_graphicsoptions.tq.curvalue < 0) {
-		s_graphicsoptions.tq.curvalue = 0;
-	} else if (s_graphicsoptions.tq.curvalue > 3) {
-		s_graphicsoptions.tq.curvalue = 3;
+	s_graphicsoptions.tdetail.curvalue = 3 - UI_GetCvarInt("r_picmip");
+	if (s_graphicsoptions.tdetail.curvalue < 0) {
+		s_graphicsoptions.tdetail.curvalue = 0;
+	} else if (s_graphicsoptions.tdetail.curvalue > 3) {
+		s_graphicsoptions.tdetail.curvalue = 3;
 	}
 
 	s_graphicsoptions.lighting.curvalue = trap_Cvar_VariableValue("r_vertexLight") == 0;
 	switch (UI_GetCvarInt("r_texturebits")) {
 	default:
 	case 0:
-		s_graphicsoptions.texturebits.curvalue = 0;
+		s_graphicsoptions.tquality.curvalue = 0;
 		break;
 	case 16:
-		s_graphicsoptions.texturebits.curvalue = 1;
+		s_graphicsoptions.tquality.curvalue = 1;
 		break;
 	case 32:
-		s_graphicsoptions.texturebits.curvalue = 2;
+		s_graphicsoptions.tquality.curvalue = 2;
 		break;
 	}
 
 	if (!Q_stricmp(UI_Cvar_VariableString("r_textureMode"), "GL_LINEAR_MIPMAP_NEAREST")) {
-		s_graphicsoptions.filter.curvalue = 0;
+		s_graphicsoptions.tfilter.curvalue = 0;
 	} else {
-		s_graphicsoptions.filter.curvalue = 1;
+		s_graphicsoptions.tfilter.curvalue = 1;
 	}
 
 	if (trap_Cvar_VariableValue("r_lodBias") < 1) {
@@ -628,12 +628,12 @@ UI_GraphicsOptions_MenuInit
 */
 void UI_GraphicsOptions_MenuInit(void) {
 	static const char *renderer_names[] = {"OpenGL1", "OpenGL2", "Vulkan", NULL};
-	static const char *tq_names[] = {"Default", "16 bit", "32 bit", NULL};
+	static const char *tquality_names[] = {"Default", "16 bit", "32 bit", NULL};
 	static const char *s_graphics_options_names[] = {"High Quality", "Normal", "Fast", "Faster", "Custom", NULL};
 	static const char *lighting_names[] = {"Low (Vertex)", "High (Lightmap)", NULL};
 	static const char *colordepth_names[] = {"Default", "16 bit", "32 bit", NULL};
 	static const char *filter_names[] = {"Bilinear", "Trilinear", NULL};
-	static const char *td_names[] = {"Low", "Medium", "High", "Maximum", NULL};
+	static const char *tdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *af_names[] = {"Off", "2x", "4x", "8x", "16x", NULL};
 	static const char *aa_names[] = {"Off", "2x", "4x", "8x", NULL};
 	static const char *mdetail_names[] = {"Low", "Medium", "High", NULL};
@@ -768,33 +768,33 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_picmip"
-	s_graphicsoptions.tq.generic.type = MTYPE_SPINCONTROL;
-	s_graphicsoptions.tq.generic.name = "Texture Detail:";
-	s_graphicsoptions.tq.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.tq.itemnames = td_names;
-	s_graphicsoptions.tq.generic.x = XPOSITION;
-	s_graphicsoptions.tq.generic.y = y;
-	s_graphicsoptions.tq.generic.toolTip = "Adjust overall texture detail levels based on graphics card performance.";
+	s_graphicsoptions.tdetail.generic.type = MTYPE_SPINCONTROL;
+	s_graphicsoptions.tdetail.generic.name = "Texture Detail:";
+	s_graphicsoptions.tdetail.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.tdetail.itemnames = tdetail_names;
+	s_graphicsoptions.tdetail.generic.x = XPOSITION;
+	s_graphicsoptions.tdetail.generic.y = y;
+	s_graphicsoptions.tdetail.generic.toolTip = "Adjust overall texture detail levels based on graphics card performance.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_textureBits"
-	s_graphicsoptions.texturebits.generic.type = MTYPE_SPINCONTROL;
-	s_graphicsoptions.texturebits.generic.name = "Texture Quality:";
-	s_graphicsoptions.texturebits.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.texturebits.itemnames = tq_names;
-	s_graphicsoptions.texturebits.generic.x = XPOSITION;
-	s_graphicsoptions.texturebits.generic.y = y;
-	s_graphicsoptions.texturebits.generic.toolTip = "Adjust texture detail based on graphics card performance.";
+	s_graphicsoptions.tquality.generic.type = MTYPE_SPINCONTROL;
+	s_graphicsoptions.tquality.generic.name = "Texture Quality:";
+	s_graphicsoptions.tquality.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.tquality.itemnames = tquality_names;
+	s_graphicsoptions.tquality.generic.x = XPOSITION;
+	s_graphicsoptions.tquality.generic.y = y;
+	s_graphicsoptions.tquality.generic.toolTip = "Adjust texture detail based on graphics card performance.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_textureMode"
-	s_graphicsoptions.filter.generic.type = MTYPE_SPINCONTROL;
-	s_graphicsoptions.filter.generic.name = "Texture Filter:";
-	s_graphicsoptions.filter.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.filter.itemnames = filter_names;
-	s_graphicsoptions.filter.generic.x = XPOSITION;
-	s_graphicsoptions.filter.generic.y = y;
-	s_graphicsoptions.filter.generic.toolTip = "A graphic sharpness filter. Use bilinear for lower end graphics cards. "
+	s_graphicsoptions.tfilter.generic.type = MTYPE_SPINCONTROL;
+	s_graphicsoptions.tfilter.generic.name = "Texture Filter:";
+	s_graphicsoptions.tfilter.generic.flags = QMF_SMALLFONT;
+	s_graphicsoptions.tfilter.itemnames = filter_names;
+	s_graphicsoptions.tfilter.generic.x = XPOSITION;
+	s_graphicsoptions.tfilter.generic.y = y;
+	s_graphicsoptions.tfilter.generic.toolTip = "A graphic sharpness filter. Use bilinear for lower end graphics cards. "
 											   "Use Trilinear for mid to higher range graphics cards.";
 
 	y += (BIGCHAR_HEIGHT + 2);
@@ -864,9 +864,9 @@ void UI_GraphicsOptions_MenuInit(void) {
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.lighting);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.mdetail);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.cdetail);
-	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tq);
-	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.texturebits);
-	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.filter);
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tdetail);
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tquality);
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tfilter);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.ct);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.af);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.aa);
