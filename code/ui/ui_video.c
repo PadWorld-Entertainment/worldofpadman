@@ -100,9 +100,9 @@ typedef struct {
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{3, 0, 2, 1, 2, 3, 3, 2, 1, qfalse, 3, 2},	// Maximum
-												  {2, 0, 2, 1, 2, 2, 2, 2, 1, qfalse, 2, 1},	// Quality
-												  {1, 0, 0, 1, 1, 1, 1, 0, 0, qfalse, 1, 0},	// Performance
+static InitialVideoOptions_s s_ivo_templates[] = {{3, 0, 2, 1, 2, 3, 3, 2, 1, qfalse, 2, 2},	// Maximum
+												  {2, 0, 2, 1, 2, 2, 2, 2, 1, qfalse, 1, 1},	// Quality
+												  {1, 0, 0, 1, 1, 1, 1, 0, 1, qfalse, 0, 0},	// Performance
 												  {0, 0, 1, 0, 0, 0, 0, 0, 0, qtrue, 0, 0},		// Minimum
 												  {3, 0, 0, 1, 1, 2, 0, 0, 0, qfalse, 0, 0}};	// Custom
 
@@ -819,8 +819,8 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.tquality.generic.y = y;
 	s_graphicsoptions.tquality.generic.toolTip =
 		"Select a desired texture quality, 16 or 32 bit. Default means the texture quality is "
-		"then determined by the engine. Selecting a lower texture quality can save system "
-		"resources.";
+		"then determined by the graphics driver. Selecting a lower texture quality can save "
+		"system resources.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_textureMode"
@@ -831,9 +831,8 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.tfilter.generic.x = XPOSITION;
 	s_graphicsoptions.tfilter.generic.y = y;
 	s_graphicsoptions.tfilter.generic.toolTip =
-		"Select a desired texture filtering method, bilinear or trilinear. Default is bilinear. "
-		"Selecting trilinear results in better texture sharpness but can lead to a higher "
-		"graphics card load.";
+		"Select a desired texture filtering method, bilinear or trilinear. Default is trilinear. "
+		"Selecting bilinear results in less texture sharpness but can save  system resources.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ext_compressed_textures"
@@ -855,7 +854,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.af.generic.x = XPOSITION;
 	s_graphicsoptions.af.generic.y = y;
 	s_graphicsoptions.af.generic.toolTip =
-		"Enable to switch on anisotropic texture filtering at a desired level. Default is 2x. "
+		"Enable to switch on anisotropic texture filtering at a desired level. Default is off. "
 		"Selecting higher levels results in better texture sharpness but can lead to a higher "
 		"graphics card load.";
 
