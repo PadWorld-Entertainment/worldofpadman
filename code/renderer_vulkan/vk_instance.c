@@ -389,7 +389,9 @@ static void vk_selectSurfaceFormat(void) {
 	// "vk.surface" is the surface that will be associated with the swapchain.
 	// "vk.surface" must be a valid VkSurfaceKHR handle
 	VK_CHECK(qvkGetPhysicalDeviceSurfaceFormatsKHR(vk.physical_device, vk.surface, &nSurfmt, NULL));
-	assert(nSurfmt > 0);
+	if (nSurfmt <= 0) {
+		ri.Error(ERR_FATAL, "Vulkan: no surface formats found");
+	}
 
 	pSurfFmts = (VkSurfaceFormatKHR *)ri.Hunk_AllocateTempMemory(nSurfmt * sizeof(VkSurfaceFormatKHR));
 
@@ -486,7 +488,7 @@ static void vk_selectQueueFamilyForPresentation(void) {
 	// types of queues that originate from differnet queue families and
 	// each family of queues allows only a subset of commands.
 	// For example, there could be a queue family allows processing of
-	// compute commands or one that only allows memory thansfer related
+	// compute commands or one that only allows memory transfer related
 	// commands. We need to check which queue families are supported by
 	// the device and which one of these supports the commands that we use.
 	uint32_t i;
