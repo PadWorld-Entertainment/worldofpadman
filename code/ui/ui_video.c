@@ -727,7 +727,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.list.itemnames = templates_names;
 	s_graphicsoptions.list.generic.toolTip =
 		"Select a suitable template from the list. Maximum will set all values to high or "
-		"maximum except anisotropy and antialiasing. Minimum will set everything to low or "
+		"maximum except Texture Filter and Antialiasing. Minimum will set everything to low or "
 		"off. Quality and Performance offer a good compromise in one direction or the other.";
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
