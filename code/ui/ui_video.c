@@ -98,7 +98,8 @@ typedef struct {
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{3, 0, 2, 1, 2, 3, 3, 2, 3, qfalse, 2},	// Maximum
+static InitialVideoOptions_s s_ivo_templates[] = {{3, 1, 2, 1, 2, 3, 3, 2, 5, qfalse, 3},	// Can it run WoP?
+												  {3, 0, 2, 1, 2, 3, 3, 2, 3, qfalse, 2},	// Maximum
 												  {2, 0, 2, 1, 2, 2, 2, 2, 2, qfalse, 1},	// Quality
 												  {1, 0, 0, 1, 1, 1, 1, 0, 1, qfalse, 0},	// Performance
 												  {0, 0, 1, 0, 0, 0, 0, 0, 0, qtrue, 0},	// Minimum
@@ -642,7 +643,7 @@ UI_GraphicsOptions_MenuInit
 ================
 */
 void UI_GraphicsOptions_MenuInit(void) {
-	static const char *templates_names[] = {"Maximum", "Quality", "Performance", "Minimum", "Custom", NULL};
+	static const char *templates_names[] = {"Can it run WoP?", "Maximum", "Quality", "Performance", "Minimum", "Custom", NULL};
 	static const char *renderer_names[] = {"OpenGL1", "OpenGL2", "Vulkan", NULL};
 	static const char *colordepth_names[] = {"Desktop", "16 bit", "32 bit", NULL};
 	static const char *lighting_names[] = {"Low (Vertex)", "High (Lightmap)", NULL};
