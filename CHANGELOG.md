@@ -87,9 +87,10 @@
 	- Being unable to use ^ key to enter color tags
 	- Anisotropy and Antialiasing options in Graphics menu are displayed as 4x after video restart, although 2x was selected before
 	- Anisotropy option in Graphics menu not working at all and option always displayed as Off after WoP restart, although 2x or more was selected before
-	- Selection of Cyan-red in Display menu always enables magenta-green anaglyph mode. The list offers now magenta-green as a new mode
+	- Selection of cyan-red in Display menu always enables magenta-green anaglyph mode. The list offers now magenta-green as a new mode
 	- Enabling Greyscale in Display menu always causes the apply button to be shown even after game restart and without changes made afterwards
 	- Sync Every Frame tooltip in Game options menu mistakes the option for VSync. This option has nothing to do with VSync.
+	- Glowing Player Model option in Game options cannot keep enabled status when Glowing Skin Color black is selected
 	- Wrong spray logo name allocation for Spooky and PadCho
 	- Fail to load OpenAL library on Windows 64bit systems
 	- Setting the spray logo via the Player Settings menu during a match has no effect

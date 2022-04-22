@@ -268,8 +268,8 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.ingamevideo.curvalue = trap_Cvar_VariableValue("r_inGameVideo") != 0;
 	s_preferences.synceveryframe.curvalue = trap_Cvar_VariableValue("r_finish") != 0;
 	s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue("cg_forcemodel") != 0);
+	s_preferences.glowmodel.curvalue = Q_stricmp(UI_Cvar_VariableString("cg_glowModel"), "");
 	s_preferences.glowcolor.curvalue = trap_Cvar_VariableValue("cg_glowModel"); // cg_glowModelTeam..
-	s_preferences.glowmodel.curvalue = (s_preferences.glowcolor.curvalue != 0);
 
 	notify = UI_GetCvarInt("con_notifytime");
 	if (notify < 0) {
@@ -382,7 +382,7 @@ static void UI_Preferences_UpdateMenuItems(void) {
 		s_preferences.voipmeter.generic.flags |= QMF_GRAYED;
 	}
 
-	if (s_preferences.glowmodel.curvalue == 0) {
+	if (!Q_stricmp(UI_Cvar_VariableString("cg_glowModel"), "")) {
 		s_preferences.glowcolor.generic.flags |= QMF_GRAYED;
 	}
 }
@@ -1003,20 +1003,20 @@ static void UI_Preferences_MenuInit(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.glowmodel.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.glowmodel.generic.name = "Glowing Player Skins:";
+	s_preferences.glowmodel.generic.name = "Glowing Player Models:";
 	s_preferences.glowmodel.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.glowmodel.generic.callback = UI_Preferences_Event;
 	s_preferences.glowmodel.generic.id = ID_GLOWMODEL;
 	s_preferences.glowmodel.generic.x = XPOSITION;
 	s_preferences.glowmodel.generic.y = y;
 	s_preferences.glowmodel.generic.toolTip = 
-		"Enable to force all players to be displayed with glowing player skins. This always refers to the "
-		"default player skin and not a skin color you have selected in the player settings menu. Default "
-		"is off.";
+		"Enable to force all players to be displayed with glowing player models. This always refers to the "
+		"default player model skin and not a skin color you have selected in the player settings menu. "
+		"Default is off.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.glowcolor.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.glowcolor.generic.name = "Glow Color:";
+	s_preferences.glowcolor.generic.name = "Glowing Skin Color:";
 	s_preferences.glowcolor.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.glowcolor.generic.callback = UI_Preferences_Event;
 	s_preferences.glowcolor.generic.id = ID_GLOWCOLOR;
@@ -1024,7 +1024,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.glowcolor.generic.y = y;
 	s_preferences.glowcolor.itemnames = glowcolor_items;
 	s_preferences.glowcolor.generic.toolTip = 
-		"Select a desired glow skin color. NOTE: In team gametypes, the color is always set to red "
+		"Select a desired glowing skin color. NOTE: In team gametypes, the color is always set to red "
 		"or blue depending on which team you join.";
 
 	// chat options

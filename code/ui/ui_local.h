@@ -88,6 +88,10 @@ extern vmCvar_t s_wop_restarted;
 extern vmCvar_t con_notifytime;
 extern vmCvar_t wop_AutoswitchSongByNextMap;
 extern vmCvar_t wop_AutoBindUnusedKeys;
+extern vmCvar_t cg_drawChatIcon;
+extern vmCvar_t cg_chatBeep;
+extern vmCvar_t cg_glowModel;
+extern vmCvar_t cl_renderer;
 
 //
 // locals

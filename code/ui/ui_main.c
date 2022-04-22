@@ -160,6 +160,7 @@ vmCvar_t wop_AutoswitchSongByNextMap;
 vmCvar_t wop_AutoBindUnusedKeys;
 vmCvar_t cg_drawChatIcon;
 vmCvar_t cg_chatBeep;
+vmCvar_t cg_glowModel;
 vmCvar_t cl_renderer;
 
 // bk001129 - made static to avoid aliasing.
@@ -222,6 +223,7 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&con_notifytime, "con_notifytime", "-4", CVAR_ARCHIVE},
 								  {&cg_drawChatIcon, "cg_drawChatIcon", "1", CVAR_ARCHIVE},
 								  {&cg_chatBeep, "cg_chatBeep", "7", CVAR_ARCHIVE},
+								  {&cg_glowModel, "cg_glowModel", "", CVAR_ARCHIVE},
 								  {&wop_AutoswitchSongByNextMap, "wop_AutoswitchSongByNextMap", "0", CVAR_ARCHIVE},
 								  {&wop_AutoBindUnusedKeys, "wop_AutoBindUnusedKeys", "1", CVAR_ARCHIVE},
 								  {&cl_renderer, "cl_renderer", "opengl1", CVAR_ARCHIVE}};
