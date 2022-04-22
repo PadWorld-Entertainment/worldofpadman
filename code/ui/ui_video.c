@@ -102,7 +102,7 @@ static InitialVideoOptions_s s_ivo_templates[] = {{3, 0, 2, 1, 2, 3, 3, 2, 3, qf
 												  {2, 0, 2, 1, 2, 2, 2, 2, 2, qfalse, 1},	// Quality
 												  {1, 0, 0, 1, 1, 1, 1, 0, 1, qfalse, 0},	// Performance
 												  {0, 0, 1, 0, 0, 0, 0, 0, 0, qtrue, 0},	// Minimum
-												  {3, 0, 0, 1, 1, 2, 0, 0, 0, qfalse, 0}};	// Custom
+												  {3, 0, 0, 1, 2, 2, 2, 0, 1, qfalse, 0}};	// Custom
 
 #define NUM_IVO_TEMPLATES (ARRAY_LEN(s_ivo_templates))
 
@@ -348,6 +348,18 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	if (notification != QM_ACTIVATED)
 		return;
 
+	switch (s_graphicsoptions.renderer.curvalue) {
+	case 0:
+		trap_Cvar_Set("cl_renderer", "opengl1");
+		break;
+	case 1:
+		trap_Cvar_Set("cl_renderer", "opengl2");
+		break;
+	case 2:
+		trap_Cvar_Set("cl_renderer", "vulkan");
+		break;
+	}
+
 	switch (s_graphicsoptions.tquality.curvalue) {
 	case 0:
 		trap_Cvar_SetValue("r_texturebits", 0);
@@ -359,6 +371,7 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_SetValue("r_texturebits", 32);
 		break;
 	}
+
 	trap_Cvar_SetValue("r_picmip", (float)(3 - s_graphicsoptions.tdetail.curvalue));
 
 	switch (s_graphicsoptions.colordepth.curvalue) {
@@ -510,6 +523,7 @@ UI_GraphicsOptions_SetMenuItems
 =================
 */
 static void UI_GraphicsOptions_SetMenuItems(void) {
+
 	s_graphicsoptions.mode.curvalue = UI_GraphicsOptions_FindDetectedResolution(UI_GetCvarInt("r_mode"));
 
 	if (s_graphicsoptions.mode.curvalue < 0) {
@@ -534,6 +548,14 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 		}
 	}
 
+	if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "vulkan")) {
+		s_graphicsoptions.renderer.curvalue = 2;
+	} else if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2")) {
+		s_graphicsoptions.renderer.curvalue = 1;
+	} else {
+		s_graphicsoptions.renderer.curvalue = 0;
+	}
+
 	s_graphicsoptions.tdetail.curvalue = 3 - UI_GetCvarInt("r_picmip");
 	if (s_graphicsoptions.tdetail.curvalue < 0) {
 		s_graphicsoptions.tdetail.curvalue = 0;
@@ -542,6 +564,7 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 	}
 
 	s_graphicsoptions.lighting.curvalue = trap_Cvar_VariableValue("r_vertexLight") == 0;
+
 	switch (UI_GetCvarInt("r_texturebits")) {
 	default:
 	case 0:
@@ -568,7 +591,6 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 			s_graphicsoptions.tfilter.curvalue = 0;
 		}
 	}
-
 
 	if (trap_Cvar_VariableValue("r_lodBias") < 1) {
 		s_graphicsoptions.mdetail.curvalue = 2;
@@ -812,7 +834,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 		"system resources.";
 
 	y += (BIGCHAR_HEIGHT + 2);
-	// references/modifies "r_textureMode"
+	// references/modifies "r_textureMode", "r_ext_texture_filter_anisotropic", r_ext_max_anisotropy
 	s_graphicsoptions.tfilter.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.tfilter.generic.name = "Texture Filter:";
 	s_graphicsoptions.tfilter.generic.flags = QMF_SMALLFONT;
