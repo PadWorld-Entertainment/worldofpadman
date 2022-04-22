@@ -136,7 +136,7 @@ static int VKimp_SetMode(int mode, qboolean fullscreen) {
 
 	display_mode_count = SDL_GetNumDisplayModes(r_displayIndex->integer);
 	if (display_mode_count < 1) {
-		ri.Printf(PRINT_ALL, " SDL_GetNumDisplayModes failed: %s", SDL_GetError());
+		ri.Printf(PRINT_ALL, " SDL_GetNumDisplayModes failed: %s\n", SDL_GetError());
 	}
 
 	tmp = SDL_GetDesktopDisplayMode(r_displayIndex->integer, &desktopMode);
