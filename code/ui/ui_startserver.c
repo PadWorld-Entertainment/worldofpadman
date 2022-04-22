@@ -55,8 +55,8 @@ typedef struct {
 	menulist_s gametype;
 	menubitmap_s mappics[MAX_MAPSPERPAGE];
 	//	menubitmap_s	mapbuttons[MAX_MAPSPERPAGE];
-	menubitmap1024s_s arrowleft;
-	menubitmap1024s_s arrowright;
+	menubitmap_s arrowleft;
+	menubitmap_s arrowright;
 
 	menulist_s dedicated;
 	menufield_s timelimit;
@@ -234,6 +234,24 @@ static void StartServer_Update(void) {
 
 		// set the map name
 		//		strcpy( s_startserver.mapname.string, s_startserver.maplist[s_startserver.currentmap] );
+	}
+
+	if (s_startserver.maxpages > 1) {
+		s_startserver.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_startserver.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_startserver.arrowleft.generic.flags |= QMF_GRAYED;
+		s_startserver.arrowright.generic.flags |= QMF_GRAYED;
+
+		if (s_startserver.page > 0) {
+			s_startserver.arrowleft.generic.flags &= ~QMF_GRAYED;
+		}
+
+		if (s_startserver.page < (s_startserver.maxpages - 1)) {
+			s_startserver.arrowright.generic.flags &= ~QMF_GRAYED;
+		}
+	} else {
+		s_startserver.arrowleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		s_startserver.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 
 	//	Q_strupr( s_startserver.mapname.string );
@@ -685,25 +703,29 @@ static void StartServer_MenuInit(void) {
 		s_startserver.mappics[i].generic.ownerdraw = StartServer_LevelshotDraw;
 	}
 
-	s_startserver.arrowleft.generic.type = MTYPE_BITMAP1024S;
-	s_startserver.arrowleft.x = (308 - 10 - 98);
-	s_startserver.arrowleft.y = 640;
-	s_startserver.arrowleft.w = 98;
-	s_startserver.arrowleft.h = 38;
-	s_startserver.arrowleft.shader = trap_R_RegisterShaderNoMip(ARROWLT0);
-	s_startserver.arrowleft.mouseovershader = trap_R_RegisterShaderNoMip(ARROWLT1);
-	s_startserver.arrowleft.generic.callback = StartServer_MenuEvent;
+	s_startserver.arrowleft.generic.type = MTYPE_BITMAP;
+	s_startserver.arrowleft.generic.name = ARROWLT0;
+	s_startserver.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_startserver.arrowleft.generic.x = 128;
+	s_startserver.arrowleft.generic.y = 399;
 	s_startserver.arrowleft.generic.id = ID_PREVPAGE;
+	s_startserver.arrowleft.generic.callback = StartServer_MenuEvent;
+	s_startserver.arrowleft.width = 60;
+	s_startserver.arrowleft.height = 25;
+	s_startserver.arrowleft.focuspic = ARROWLT1;
+	s_startserver.arrowleft.focuspicinstead = qtrue;
 
-	s_startserver.arrowright.generic.type = MTYPE_BITMAP1024S;
-	s_startserver.arrowright.x = (308 + 10);
-	s_startserver.arrowright.y = 640;
-	s_startserver.arrowright.w = 98;
-	s_startserver.arrowright.h = 38;
-	s_startserver.arrowright.shader = trap_R_RegisterShaderNoMip(ARROWRT0);
-	s_startserver.arrowright.mouseovershader = trap_R_RegisterShaderNoMip(ARROWRT1);
-	s_startserver.arrowright.generic.callback = StartServer_MenuEvent;
+	s_startserver.arrowright.generic.type = MTYPE_BITMAP;
+	s_startserver.arrowright.generic.name = ARROWRT0;
+	s_startserver.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_startserver.arrowright.generic.x = 198;
+	s_startserver.arrowright.generic.y = 399;
 	s_startserver.arrowright.generic.id = ID_NEXTPAGE;
+	s_startserver.arrowright.generic.callback = StartServer_MenuEvent;
+	s_startserver.arrowright.width = 60;
+	s_startserver.arrowright.height = 25;
+	s_startserver.arrowright.focuspic = ARROWRT1;
+	s_startserver.arrowright.focuspicinstead = qtrue;
 
 	s_startserver.back.generic.type = MTYPE_BITMAP;
 	s_startserver.back.generic.name = BACK0;
@@ -955,14 +977,14 @@ typedef struct {
 	menubitmap_s pics[MAX_MODELSPERPAGE];
 	menubitmap_s picbuttons[MAX_MODELSPERPAGE];
 	menutext_s picnames[MAX_MODELSPERPAGE];
-	menubitmap1024s_s arrowleft;
-	menubitmap1024s_s arrowright;
+	menubitmap_s arrowleft;
+	menubitmap_s arrowright;
 
 	menutext_s selectedbotnames[MAX_SELECTLISTBOTS];
 	menutext_s selectedbotteams[MAX_SELECTLISTBOTS];
 
-	menubitmap1024s_s arrowup;
-	menubitmap1024s_s arrowdown;
+	menubitmap_s arrowup;
+	menubitmap_s arrowdown;
 
 	menulist_s BotSkill;
 	menutext_s slotsleft;
@@ -1070,21 +1092,21 @@ static void UI_BotSelectMenu_UpdateGrid(void) {
 	botSelectInfo.picbuttons[i].generic.flags &= ~QMF_PULSEIFFOCUS;
 
 	if (botSelectInfo.numpages > 1) {
+		botSelectInfo.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		botSelectInfo.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		botSelectInfo.arrowleft.generic.flags |= QMF_GRAYED;
+		botSelectInfo.arrowright.generic.flags |= QMF_GRAYED;
+
 		if (botSelectInfo.modelpage > 0) {
-			botSelectInfo.arrowleft.generic.flags &= ~QMF_INACTIVE;
-		} else {
-			botSelectInfo.arrowleft.generic.flags |= QMF_INACTIVE;
+			botSelectInfo.arrowleft.generic.flags &= ~QMF_GRAYED;
 		}
 
 		if (botSelectInfo.modelpage < (botSelectInfo.numpages - 1)) {
-			botSelectInfo.arrowright.generic.flags &= ~QMF_INACTIVE;
-		} else {
-			botSelectInfo.arrowright.generic.flags |= QMF_INACTIVE;
+			botSelectInfo.arrowright.generic.flags &= ~QMF_GRAYED;
 		}
 	} else {
-		// hide left/right markers
-		botSelectInfo.arrowleft.generic.flags |= QMF_INACTIVE;
-		botSelectInfo.arrowright.generic.flags |= QMF_INACTIVE;
+		botSelectInfo.arrowleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		botSelectInfo.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 }
 
@@ -1307,6 +1329,14 @@ UI_BotSelectMenu_Cache
 =================
 */
 void UI_BotSelectMenu_Cache(void) {
+	trap_R_RegisterShaderNoMip(ARROWLT0);
+	trap_R_RegisterShaderNoMip(ARROWLT1);
+	trap_R_RegisterShaderNoMip(ARROWRT0);
+	trap_R_RegisterShaderNoMip(ARROWRT1);
+	trap_R_RegisterShaderNoMip(ARROWUP0);
+	trap_R_RegisterShaderNoMip(ARROWUP1);
+	trap_R_RegisterShaderNoMip(ARROWDN0);
+	trap_R_RegisterShaderNoMip(ARROWDN1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(BOTSELECT_SELECT);
@@ -1504,25 +1534,27 @@ static void UI_BotSelectMenu_Init(void) {
 		y += (64 + 21);
 	}
 
-	botSelectInfo.arrowleft.generic.type = MTYPE_BITMAP1024S;
-	botSelectInfo.arrowleft.x = 352 - 20 - 98;
-	botSelectInfo.arrowleft.y = 640;
-	botSelectInfo.arrowleft.w = 98;
-	botSelectInfo.arrowleft.h = 38;
-	botSelectInfo.arrowleft.shader = trap_R_RegisterShaderNoMip(ARROWLT0);
-	botSelectInfo.arrowleft.mouseovershader = trap_R_RegisterShaderNoMip(ARROWLT1);
+	botSelectInfo.arrowleft.generic.type = MTYPE_BITMAP;
+	botSelectInfo.arrowleft.generic.name = ARROWLT0;
+	botSelectInfo.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	botSelectInfo.arrowleft.generic.x = 148;
+	botSelectInfo.arrowleft.generic.y = 400;
 	botSelectInfo.arrowleft.generic.callback = UI_BotSelectMenu_LeftEvent;
-	//	botSelectInfo.arrowleft.generic.id			= ID_PREVPAGE;
+	botSelectInfo.arrowleft.width = 60;
+	botSelectInfo.arrowleft.height = 25;
+	botSelectInfo.arrowleft.focuspic = ARROWLT1;
+	botSelectInfo.arrowleft.focuspicinstead = qtrue;
 
-	botSelectInfo.arrowright.generic.type = MTYPE_BITMAP1024S;
-	botSelectInfo.arrowright.x = 352 + 20;
-	botSelectInfo.arrowright.y = 640;
-	botSelectInfo.arrowright.w = 98;
-	botSelectInfo.arrowright.h = 38;
-	botSelectInfo.arrowright.shader = trap_R_RegisterShaderNoMip(ARROWRT0);
-	botSelectInfo.arrowright.mouseovershader = trap_R_RegisterShaderNoMip(ARROWRT1);
+	botSelectInfo.arrowright.generic.type = MTYPE_BITMAP;
+	botSelectInfo.arrowright.generic.name = ARROWRT0;
+	botSelectInfo.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	botSelectInfo.arrowright.generic.x = 232;
+	botSelectInfo.arrowright.generic.y = 400;
 	botSelectInfo.arrowright.generic.callback = UI_BotSelectMenu_RightEvent;
-	//	botSelectInfo.arrowright.generic.id			= ID_NEXTPAGE;
+	botSelectInfo.arrowright.width = 60;
+	botSelectInfo.arrowright.height = 25;
+	botSelectInfo.arrowright.focuspic = ARROWRT1;
+	botSelectInfo.arrowright.focuspicinstead = qtrue;
 
 	y = (350 - MAX_SELECTLISTBOTS * 16 + 64);
 
@@ -1550,23 +1582,27 @@ static void UI_BotSelectMenu_Init(void) {
 		botSelectInfo.selectedbotteams[i].generic.callback = UI_BotSelectMenu_SelectBotTeam;
 	}
 
-	botSelectInfo.arrowup.generic.type = MTYPE_BITMAP1024S;
-	botSelectInfo.arrowup.x = 1024 - 50;
-	botSelectInfo.arrowup.y = 362;
-	botSelectInfo.arrowup.w = 38;
-	botSelectInfo.arrowup.h = 98;
-	botSelectInfo.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
-	botSelectInfo.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
+	botSelectInfo.arrowup.generic.type = MTYPE_BITMAP;
+	botSelectInfo.arrowup.generic.name = ARROWUP0;
+	botSelectInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	botSelectInfo.arrowup.generic.x = 608;
+	botSelectInfo.arrowup.generic.y = 228;
 	botSelectInfo.arrowup.generic.callback = UI_BotSelectMenu_ListUp;
+	botSelectInfo.arrowup.width = 25;
+	botSelectInfo.arrowup.height = 60;
+	botSelectInfo.arrowup.focuspic = ARROWUP1;
+	botSelectInfo.arrowup.focuspicinstead = qtrue;
 
-	botSelectInfo.arrowdown.generic.type = MTYPE_BITMAP1024S;
-	botSelectInfo.arrowdown.x = 1024 - 50;
-	botSelectInfo.arrowdown.y = 495;
-	botSelectInfo.arrowdown.w = 38;
-	botSelectInfo.arrowdown.h = 98;
-	botSelectInfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
-	botSelectInfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
+	botSelectInfo.arrowdown.generic.type = MTYPE_BITMAP;
+	botSelectInfo.arrowdown.generic.name = ARROWDN0;
+	botSelectInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	botSelectInfo.arrowdown.generic.x = 608;
+	botSelectInfo.arrowdown.generic.y = 310;
 	botSelectInfo.arrowdown.generic.callback = UI_BotSelectMenu_ListDown;
+	botSelectInfo.arrowdown.width = 25;
+	botSelectInfo.arrowdown.height = 60;
+	botSelectInfo.arrowdown.focuspic = ARROWDN1;
+	botSelectInfo.arrowdown.focuspicinstead = qtrue;
 
 	botSelectInfo.BotSkill.generic.type = MTYPE_SPINCONTROL;
 	botSelectInfo.BotSkill.generic.flags = QMF_SMALLFONT;
