@@ -310,8 +310,36 @@ static void vk_loadGlobalFunctions(void) {
 
 ////////////////////////////////
 
+static const char *renderer_name(const VkPhysicalDeviceProperties *props) {
+	static char buf[sizeof(props->deviceName) + 64];
+	const char *device_type;
+
+	switch (props->deviceType) {
+	case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
+		device_type = "Integrated";
+		break;
+	case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
+		device_type = "Discrete";
+		break;
+	case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
+		device_type = "Virtual";
+		break;
+	case VK_PHYSICAL_DEVICE_TYPE_CPU:
+		device_type = "CPU";
+		break;
+	default:
+		device_type = "OTHER";
+		break;
+	}
+
+	Com_sprintf(buf, sizeof(buf), "%s %s, 0x%04x", device_type, props->deviceName, props->deviceID);
+
+	return buf;
+}
+
 static void vk_selectPhysicalDevice(void) {
 	VkPhysicalDevice *pPhyDev;
+	int i, device_index = -1;
 
 	// After initializing the Vulkan library through a VkInstance
 	// we need to look for and select a graphics card in the system
@@ -329,12 +357,22 @@ static void vk_selectPhysicalDevice(void) {
 
 	// TODO: multi graphic cards selection support
 	VK_CHECK(qvkEnumeratePhysicalDevices(vk.instance, &gpu_count, pPhyDev));
-	// For demo app we just grab the first physical device
-	vk.physical_device = pPhyDev[0];
+	for (i = 0; i < gpu_count; i++) {
+		VkPhysicalDeviceProperties props;
+		qvkGetPhysicalDeviceProperties(pPhyDev[i], &props);
+		ri.Printf(PRINT_ALL, " %i: %s\n", i, renderer_name(&props));
+		if (device_index == -1 && props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+			device_index = i;
+		} else if (device_index == -2 && props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
+			device_index = i;
+		}
+	}
+
+	vk.physical_device = pPhyDev[device_index];
 
 	ri.Hunk_FreeTempMemory(pPhyDev);
 
-	ri.Printf(PRINT_ALL, " Total %d graphics card, the first one is choosed. \n", gpu_count);
+	ri.Printf(PRINT_ALL, " Total %d graphics card, %i is choosed.\n", gpu_count, device_index);
 
 	ri.Printf(PRINT_ALL, " Get physical device memory properties: vk.devMemProperties \n");
 	qvkGetPhysicalDeviceMemoryProperties(vk.physical_device, &vk.devMemProperties);
