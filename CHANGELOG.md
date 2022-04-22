@@ -7,6 +7,7 @@
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones
+	- Option to switch renderer from OpenGL1 to OpenGL2 or Vulkan in Graphics menu
 	- Option to switch Lighting to Vertex or Lightmap to Graphics page of System menu
 	- Option to switch Window Mode to Off (Fullscreen), On (Border) or On (Borderless) to Display page of System menu
 	- Option to enable/disable Resizable Window to Display page of System menu
@@ -57,7 +58,9 @@
 	- Title of the game uniformly to `World of PADMAN` everywhere
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
+	- Graphics Settings option in Graphics menu to provide a template list with updated settings
 	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps
+	- Merged Anisotropy option with Texture Filter option in Graphics menu
 	- Fullscreen option on Graphics page of Setup menu to Window Mode to support new borderless window mode
 	- Map selection/preview to cycle three ingame pictures (shader animation)
 	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options
@@ -83,7 +86,7 @@
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use ^ key to enter color tags
 	- Anisotropy and Antialiasing options in Graphics menu are displayed as 4x after video restart, although 2x was selected before
-	- Antialiasing option in Graphics menu is always displayed as Off after WoP restart, although 2x or more was selected before
+	- Anisotropy option in Graphics menu not working at all and option always displayed as Off after WoP restart, although 2x or more was selected before
 	- Selection of Cyan-red in Display menu always enables magenta-green anaglyph mode. The list offers now magenta-green as a new mode
 	- Enabling Greyscale in Display menu always causes the apply button to be shown even after game restart and without changes made afterwards
 	- Sync Every Frame tooltip in Game options menu mistakes the option for VSync. This option has nothing to do with VSync.
