@@ -141,26 +141,32 @@ static int GametypeBits(const char *string) {
 			bits |= 1 << GT_FREEZETAG;
 			continue;
 		}
+
 		if (Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_FREEZETAG)) == 0) {
 			bits |= 1 << GT_FREEZETAG;
 			continue;
 		}
+
 		if (Q_stricmp(token, "ctf") == 0 || Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_CTF)) == 0) {
 			bits |= 1 << GT_CTF;
 			continue;
 		}
+
 		if (Q_stricmp(token, "SyC_ffa") == 0) {
 			bits |= 1 << GT_SPRAYFFA;
 			continue;
 		}
+
 		if (Q_stricmp(token, "SyC_tp") == 0) {
 			bits |= 1 << GT_SPRAY;
 			continue;
 		}
+
 		if (Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_LPS)) == 0) {
 			bits |= 1 << GT_LPS;
 			continue;
 		}
+
 		if (Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_BALLOON)) == 0) {
 			bits |= 1 << GT_BALLOON;
 			continue;
@@ -194,46 +200,18 @@ static void StartServer_Update(void) {
 		}
 		Com_sprintf(focuspicnames[i], sizeof(focuspicnames[i]), "levelshots/%sB", s_startserver.maplist[top + i]);
 
-		s_startserver.mappics[i].generic.flags &= ~(QMF_HIGHLIGHT | QMF_INACTIVE | QMF_HIDDEN);
+		s_startserver.mappics[i].generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		s_startserver.mappics[i].generic.name = picname[i];
 		s_startserver.mappics[i].shader = 0;
 
 		s_startserver.mappics[i].focuspic = focuspicnames[i];
 		s_startserver.mappics[i].focusshader = 0;
-
-		// reset
-		//		s_startserver.mapbuttons[i].generic.flags |= QMF_PULSEIFFOCUS;
-		//		s_startserver.mapbuttons[i].generic.flags &= ~QMF_INACTIVE;
 	}
 
 	for (; i < MAX_MAPSPERPAGE; i++) {
-		s_startserver.mappics[i].generic.flags &= ~QMF_HIGHLIGHT;
 		s_startserver.mappics[i].generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 		s_startserver.mappics[i].generic.name = NULL;
 		s_startserver.mappics[i].shader = 0;
-
-		// disable
-		//		s_startserver.mapbuttons[i].generic.flags &= ~QMF_PULSEIFFOCUS;
-		//		s_startserver.mapbuttons[i].generic.flags |= QMF_INACTIVE;
-	}
-
-	// no servers to start
-	if (!s_startserver.nummaps) {
-		//		s_startserver.next.generic.flags |= QMF_INACTIVE;//noch den fight-button einbinden ;)
-
-		// set the map name
-		//		strcpy( s_startserver.mapname.string, "NO MAPS FOUND" );
-	} else if (s_startserver.currentmap != -1) {
-		// set the highlight
-		//		s_startserver.next.generic.flags &= ~QMF_INACTIVE;
-		i = s_startserver.currentmap - top;
-		if (i >= 0 && i < MAX_MAPSPERPAGE) {
-			s_startserver.mappics[i].generic.flags |= QMF_HIGHLIGHT;
-			//			s_startserver.mapbuttons[i].generic.flags &= ~QMF_PULSEIFFOCUS;
-		}
-
-		// set the map name
-		//		strcpy( s_startserver.mapname.string, s_startserver.maplist[s_startserver.currentmap] );
 	}
 
 	if (s_startserver.maxpages > 1) {
@@ -259,8 +237,6 @@ static void StartServer_Update(void) {
 	} else {
 		s_startserver.fight.generic.flags |= QMF_GRAYED;
 	}
-
-	//	Q_strupr( s_startserver.mapname.string );
 }
 
 /*
@@ -275,7 +251,6 @@ static void StartServer_MapEvent(void *ptr, int event) {
 
 	if (event == QM_GOTFOCUS) {
 		s_startserver.currentmap = currentmap;
-
 		return;
 	}
 
@@ -363,7 +338,6 @@ static void StartServer_GametypeEvent(void *ptr, int event) {
 		Q_strncpyz(s_startserver.maplist[s_startserver.nummaps], Info_ValueForKey(info, "map"), MAX_NAMELENGTH);
 		Q_strncpyz(s_startserver.longnamemaplist[s_startserver.nummaps], Info_ValueForKey(info, "longname"),
 				   MAX_LONGNAMELENGTH);
-		// Q_strupr( s_startserver.maplist[s_startserver.nummaps] );
 		s_startserver.mapGamebits[s_startserver.nummaps] = gamebits;
 		++s_startserver.nummaps;
 		if (s_startserver.nummaps >= MAX_SERVERMAPS)
@@ -441,7 +415,6 @@ static void StartServer_MenuEvent(void *ptr, int event) {
 			int friendlyfire;
 			int instagib;
 			int pure;
-			//			int		skill;
 			int n;
 			char buf[64];
 
@@ -458,18 +431,6 @@ static void StartServer_MenuEvent(void *ptr, int event) {
 			instagib = s_startserver.instagib.curvalue;
 			pure = s_startserver.pure.curvalue;
 			gametype = gametype_remap[s_startserver.gametype.curvalue];
-			//			skill		 = s_startserver.botSkill.curvalue + 1;
-
-			// set maxclients
-			//			for( n = 0, maxclients = 0; n < PLAYER_SLOTS; n++ ) {
-			//				if( s_serveroptions.playerType[n].curvalue == 2 ) {
-			//					continue;
-			//				}
-			//				if( (s_serveroptions.playerType[n].curvalue == 1) && (s_serveroptions.playerNameBuffers[n][0] ==
-			//0) ) { 					continue;
-			//				}
-			//				maxclients++;
-			//			}
 
 			switch (gametype) {
 			case GT_FFA:
@@ -516,20 +477,13 @@ static void StartServer_MenuEvent(void *ptr, int event) {
 
 				Com_sprintf(buffer, 16, "automaploop%i", n);
 
-				//			trap_Cvar_Create(buffer,
-				//				va("map %s; set nextmap vstr
-				//automaploop%i",s_startserver.maplist[s_startserver.maploop[n]],s_startserver.maploop[n+1]==-1?0:n+1),
-				//				CVAR_ARCHIVE|CVAR_ROM);
 				trap_Cvar_Set(buffer, va("map %s; set nextmap vstr automaploop%i",
 										 s_startserver.maplist[s_startserver.maploop[n]],
 										 s_startserver.maploop[n + 1] == -1 ? 0 : n + 1));
 			}
 
-			trap_Cmd_ExecuteText(EXEC_APPEND, "wait ; wait ; vstr automaploop0\n");
-
 			// the wait commands will allow the dedicated to take effect
-			//			trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait ; wait ; map %s\n",
-			//s_startserver.maplist[s_startserver.currentmap] ) );
+			trap_Cmd_ExecuteText(EXEC_APPEND, "wait ; wait ; vstr automaploop0\n");
 
 			// add bots
 			trap_Cmd_ExecuteText(EXEC_APPEND, "wait 3\n");
@@ -538,12 +492,6 @@ static void StartServer_MenuEvent(void *ptr, int event) {
 							s_startserver.botskill, teamstrs[s_startserver.selectbotinfos[n].team]);
 				trap_Cmd_ExecuteText(EXEC_APPEND, buf);
 			}
-
-			//			// set player's team
-			//			if( dedicated == 0 && gametype >= GT_TEAM ) {
-			//				trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait 5; team %s\n",
-			//playerTeam_list[s_serveroptions.playerTeam[0].curvalue] ) );
-			//			}
 		}
 		break;
 
@@ -612,7 +560,6 @@ static void StartServer_LevelshotDraw(void *self) {
 
 	x += b->width / 2;
 	y += 4;
-	//	UI_DrawString( x, y, s_startserver.maplist[n], UI_CENTER|UI_SMALLFONT, color_white );
 	if (Menu_ItemAtCursor(b->generic.parent) == b) {
 		// Draw mapname in UPPERCASE, maplist remains untouched so "map mapname" still works
 		// TODO: Only do strupr once and save into list while initialising
@@ -679,7 +626,6 @@ static void StartServer_MenuInit(void) {
 	s_startserver.menu.draw = StartServer_Draw;
 
 	s_startserver.gametype.generic.type = MTYPE_SPINCONTROL;
-	//	s_startserver.gametype.generic.name		= "Game Type:";
 	s_startserver.gametype.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
 	s_startserver.gametype.generic.callback = StartServer_GametypeEvent;
 	s_startserver.gametype.generic.id = ID_GAMETYPE;
@@ -704,7 +650,6 @@ static void StartServer_MenuInit(void) {
 		s_startserver.mappics[i].generic.y = y;
 		s_startserver.mappics[i].width = 128;
 		s_startserver.mappics[i].height = 96;
-		//		s_startserver.mappics[i].focuspic			= GAMESERVER_SELECTED;
 		s_startserver.mappics[i].errorpic = UNKNOWNMAP;
 		s_startserver.mappics[i].generic.ownerdraw = StartServer_LevelshotDraw;
 	}
@@ -825,7 +770,6 @@ static void StartServer_MenuInit(void) {
 	s_startserver.StartLives.generic.flags = QMF_NUMBERSONLY | QMF_SMALLFONT;
 	s_startserver.StartLives.generic.x = OPTIONS_XPOS;
 	s_startserver.StartLives.generic.y = y;
-	//	s_startserver.StartLives.generic.statusbar  = ServerOptions_StatusBar;
 	s_startserver.StartLives.field.widthInChars = 3;
 	s_startserver.StartLives.field.maxchars = 3;
 
