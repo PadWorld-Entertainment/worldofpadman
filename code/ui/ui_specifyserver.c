@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define FIGHT0 "menu/buttons/fight0"
 #define FIGHT1 "menu/buttons/fight1"
 
-#define ID_SPECIFYSERVERBACK 102
-#define ID_SPECIFYSERVERGO 103
+#define ID_BACK 102
+#define ID_FIGHT 103
 
 static char *specifyserver_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NULL};
 
@@ -40,11 +40,24 @@ typedef struct {
 	menuframework_s menu;
 	menufield_s domain;
 	menufield_s port;
-	menubitmap1024s_s go;
+	menubitmap_s fight;
 	menubitmap_s back;
 } specifyserver_t;
 
 static specifyserver_t s_specifyserver;
+
+/*
+=================
+UI_SpecifyServer_UpdateMenuItems
+=================
+*/
+static void UI_SpecifyServer_UpdateMenuItems(void) {
+	if ((s_specifyserver.domain.field.buffer[0]) && (s_specifyserver.port.field.buffer[0])) {
+		s_specifyserver.fight.generic.flags &= ~QMF_GRAYED;
+	} else {
+		s_specifyserver.fight.generic.flags |= QMF_GRAYED;
+	}
+}
 
 /*
 =================
@@ -55,7 +68,7 @@ static void SpecifyServer_Event(void *ptr, int event) {
 	char buff[256];
 
 	switch (((menucommon_s *)ptr)->id) {
-	case ID_SPECIFYSERVERGO:
+	case ID_FIGHT:
 		if (event != QM_ACTIVATED)
 			break;
 
@@ -68,7 +81,7 @@ static void SpecifyServer_Event(void *ptr, int event) {
 		}
 		break;
 
-	case ID_SPECIFYSERVERBACK:
+	case ID_BACK:
 		if (event != QM_ACTIVATED)
 			break;
 
@@ -82,7 +95,7 @@ void SpecifyServer_DrawField(void *self) {
 	qboolean focus;
 	int style;
 	char *txt;
-	char c;
+	char cursorChar;
 	const float *color;
 	int n;
 	int basex, x, y;
@@ -105,15 +118,15 @@ void SpecifyServer_DrawField(void *self) {
 	// draw cursor if we have focus
 	if (focus) {
 		if (trap_Key_GetOverstrikeMode()) {
-			c = FONT_ASCII_FULLBLOCK;
+			cursorChar = FONT_ASCII_FULLBLOCK;
 		} else {
-			c = FONT_ASCII_UNDERLINE;
+			cursorChar = FONT_ASCII_UNDERLINE;
 		}
 
 		UI_FillRect(f->generic.x, f->generic.y, f->field.widthInChars * SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, bg_color);
 
 		style |= UI_BLINK;
-		UI_DrawChar(basex + f->field.cursor * SMALLCHAR_WIDTH, y, c, style, highlight_color);
+		UI_DrawChar(basex + f->field.cursor * SMALLCHAR_WIDTH, y, cursorChar, style, highlight_color);
 		style &= ~UI_BLINK;
 	}
 
@@ -123,7 +136,7 @@ void SpecifyServer_DrawField(void *self) {
 	}
 
 	x = basex;
-	while ((c = *txt) != 0) {
+	while ((cursorChar = *txt) != 0) {
 		if (!focus && Q_IsColorString(txt)) {
 			n = ColorIndex(*(txt + 1));
 			if (n == 0) {
@@ -133,10 +146,11 @@ void SpecifyServer_DrawField(void *self) {
 			txt += 2;
 			continue;
 		}
-		UI_DrawChar(x, y, c, style, color);
+		UI_DrawChar(x, y, cursorChar, style, color);
 		txt++;
 		x += SMALLCHAR_WIDTH;
 	}
+	UI_SpecifyServer_UpdateMenuItems();
 }
 
 /*
@@ -177,26 +191,28 @@ void SpecifyServer_MenuInit(void) {
 	s_specifyserver.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_specifyserver.back.generic.x = 8;
 	s_specifyserver.back.generic.y = 440;
-	s_specifyserver.back.generic.id = ID_SPECIFYSERVERBACK;
+	s_specifyserver.back.generic.id = ID_BACK;
 	s_specifyserver.back.generic.callback = SpecifyServer_Event;
 	s_specifyserver.back.width = 80;
 	s_specifyserver.back.height = 40;
 	s_specifyserver.back.focuspic = BACK1;
 	s_specifyserver.back.focuspicinstead = qtrue;
 
-	s_specifyserver.go.generic.type = MTYPE_BITMAP1024S;
-	s_specifyserver.go.x = 870; // 820;
-	s_specifyserver.go.y = 660; // 620;
-	s_specifyserver.go.w = 135; // 187;
-	s_specifyserver.go.h = 97;	// 134;
-	s_specifyserver.go.shader = trap_R_RegisterShaderNoMip(FIGHT0);
-	s_specifyserver.go.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
-	s_specifyserver.go.generic.callback = SpecifyServer_Event;
-	s_specifyserver.go.generic.id = ID_SPECIFYSERVERGO;
+	s_specifyserver.fight.generic.type = MTYPE_BITMAP;
+	s_specifyserver.fight.generic.name = FIGHT0;
+	s_specifyserver.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_specifyserver.fight.generic.callback = SpecifyServer_Event;
+	s_specifyserver.fight.generic.id = ID_FIGHT;
+	s_specifyserver.fight.focuspic = FIGHT1;
+	s_specifyserver.fight.generic.x = 545;
+	s_specifyserver.fight.generic.y = 414;
+	s_specifyserver.fight.width = 80;
+	s_specifyserver.fight.height = 60;
+	s_specifyserver.fight.focuspicinstead = qtrue;
 
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.domain);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.port);
-	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.go);
+	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.fight);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.back);
 
 	Com_sprintf(s_specifyserver.port.field.buffer, 6, "%i", 27960);
