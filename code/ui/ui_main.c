@@ -189,7 +189,7 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&ui_browserOnlyHumans, "ui_browserOnlyHumans", "1", CVAR_ARCHIVE},
 								  {&ui_browserHidePrivate, "ui_browserHidePrivate", "0", CVAR_ARCHIVE},
 
-								  {&ui_createGametype, "ui_createGametype", "3", 0},
+								  {&ui_createGametype, "ui_createGametype", "0", 0},
 
 								  {&ui_drawCrosshair, "cg_drawCrosshair", "1", CVAR_ARCHIVE},
 								  {&ui_drawCrosshairNames, "cg_drawCrosshairNames", "1", CVAR_ARCHIVE},

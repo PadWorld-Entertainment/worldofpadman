@@ -635,8 +635,6 @@ static void StartServer_MenuInit(void) {
 	s_startserver.gametype.generic.ownerdraw = GameType_Draw;
 	s_startserver.gametype.curvalue = gametype_remap2[(int)Com_Clamp(
 		0, (sizeof(gametype_remap2) / sizeof(gametype_remap[0]) - 1), trap_Cvar_VariableValue("ui_createGametype"))];
-	// NOTE: Old behaviour: Always select sycffa
-	//	s_startserver.gametype.curvalue			= 0;
 
 	for (i = 0; i < MAX_MAPSPERPAGE; i++) {
 		x = (i % MAX_MAPCOLS) * (128 + 10) + 60;
