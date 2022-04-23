@@ -605,7 +605,7 @@ StartServer_MenuInit
 =================
 */
 
-static const char *dedicated_list[] = {"No", "LAN", "Internet", 0};
+static const char *dedicated_list[] = {"No", "LAN", "Internet", NULL};
 
 static void StartServer_MenuInit(void) {
 	int i;

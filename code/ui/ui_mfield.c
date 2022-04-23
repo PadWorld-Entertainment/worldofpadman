@@ -73,9 +73,9 @@ void MField_Draw(mfield_t *edit, int x, int y, int style, const vec4_t color) {
 	}
 
 	if (trap_Key_GetOverstrikeMode()) {
-		cursorChar = 11;
+		cursorChar = FONT_ASCII_FULLBLOCK;
 	} else {
-		cursorChar = 10;
+		cursorChar = FONT_ASCII_UNDERLINE;
 	}
 
 	style &= ~UI_PULSE;
