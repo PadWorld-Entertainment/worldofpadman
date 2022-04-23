@@ -71,7 +71,7 @@ typedef struct {
 	menubitmap_s selectbots;
 
 	menubitmap_s back;
-	menubitmap1024s_s fight;
+	menubitmap_s fight;
 
 	menubitmap_s item_null;
 
@@ -252,6 +252,12 @@ static void StartServer_Update(void) {
 	} else {
 		s_startserver.arrowleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 		s_startserver.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	}
+
+	if (s_startserver.maploop[0] != -1) {
+		s_startserver.fight.generic.flags &= ~QMF_GRAYED;
+	} else {
+		s_startserver.fight.generic.flags |= QMF_GRAYED;
 	}
 
 	//	Q_strupr( s_startserver.mapname.string );
@@ -836,15 +842,17 @@ static void StartServer_MenuInit(void) {
 	s_startserver.selectbots.height = 24;
 	s_startserver.selectbots.focuspicinstead = qtrue;
 
-	s_startserver.fight.generic.type = MTYPE_BITMAP1024S;
-	s_startserver.fight.x = 870; // 845;
-	s_startserver.fight.y = 660; // 658;
-	s_startserver.fight.w = 135;
-	s_startserver.fight.h = 97;
-	s_startserver.fight.shader = trap_R_RegisterShaderNoMip(FIGHT0);
-	s_startserver.fight.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
+	s_startserver.fight.generic.type = MTYPE_BITMAP;
+	s_startserver.fight.generic.name = FIGHT0;
+	s_startserver.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_startserver.fight.generic.callback = StartServer_MenuEvent;
 	s_startserver.fight.generic.id = ID_STARTSERVER;
+	s_startserver.fight.focuspic = FIGHT1;
+	s_startserver.fight.generic.x = 545;
+	s_startserver.fight.generic.y = 414;
+	s_startserver.fight.width = 80;
+	s_startserver.fight.height = 60;
+	s_startserver.fight.focuspicinstead = qtrue;
 
 	s_startserver.item_null.generic.type = MTYPE_BITMAP;
 	s_startserver.item_null.generic.flags = QMF_LEFT_JUSTIFY | QMF_MOUSEONLY | QMF_SILENT;
