@@ -32,15 +32,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define FIGHT0 "menu/buttons/fight0"
 #define FIGHT1 "menu/buttons/fight1"
 
-#define ID_SPECIFYPASSWORDBACK 102
-#define ID_SPECIFYPASSWORDGO 103
+#define ID_BACK 102
+#define ID_FIGHT 103
 
 static char *specifypassword_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NULL};
 
 typedef struct {
 	menuframework_s menu;
 	menufield_s password;
-	menubitmap1024s_s go;
+	menubitmap_s fight;
 	menubitmap_s back;
 
 	const char *connectstring;
@@ -51,12 +51,25 @@ static specifypassword_t s_specifypassword;
 
 /*
 =================
+UI_SpecifyPassword_UpdateMenuItems
+=================
+*/
+static void UI_SpecifyPassword_UpdateMenuItems(void) {
+	if (s_specifypassword.password.field.buffer[0]) {
+		s_specifypassword.fight.generic.flags &= ~QMF_GRAYED;
+	} else {
+		s_specifypassword.fight.generic.flags |= QMF_GRAYED;
+	}
+}
+
+/*
+=================
 SpecifyPassword_Event
 =================
 */
 static void SpecifyPassword_Event(void *ptr, int event) {
 	switch (((menucommon_s *)ptr)->id) {
-	case ID_SPECIFYPASSWORDGO:
+	case ID_FIGHT:
 		if (event != QM_ACTIVATED)
 			break;
 
@@ -66,7 +79,7 @@ static void SpecifyPassword_Event(void *ptr, int event) {
 		}
 		break;
 
-	case ID_SPECIFYPASSWORDBACK:
+	case ID_BACK:
 		if (event != QM_ACTIVATED)
 			break;
 
@@ -123,25 +136,27 @@ static void SpecifyPassword_MenuInit(void) {
 	s_specifypassword.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_specifypassword.back.generic.x = 8;
 	s_specifypassword.back.generic.y = 440;
-	s_specifypassword.back.generic.id = ID_SPECIFYPASSWORDBACK;
+	s_specifypassword.back.generic.id = ID_BACK;
 	s_specifypassword.back.generic.callback = SpecifyPassword_Event;
 	s_specifypassword.back.width = 80;
 	s_specifypassword.back.height = 40;
 	s_specifypassword.back.focuspic = BACK1;
 	s_specifypassword.back.focuspicinstead = qtrue;
 
-	s_specifypassword.go.generic.type = MTYPE_BITMAP1024S;
-	s_specifypassword.go.x = 870;
-	s_specifypassword.go.y = 660;
-	s_specifypassword.go.w = 135;
-	s_specifypassword.go.h = 97;
-	s_specifypassword.go.shader = trap_R_RegisterShaderNoMip(FIGHT0);
-	s_specifypassword.go.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
-	s_specifypassword.go.generic.callback = SpecifyPassword_Event;
-	s_specifypassword.go.generic.id = ID_SPECIFYPASSWORDGO;
+	s_specifypassword.fight.generic.type = MTYPE_BITMAP;
+	s_specifypassword.fight.generic.name = FIGHT0;
+	s_specifypassword.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_specifypassword.fight.generic.callback = SpecifyPassword_Event;
+	s_specifypassword.fight.generic.id = ID_FIGHT;
+	s_specifypassword.fight.focuspic = FIGHT1;
+	s_specifypassword.fight.generic.x = 545;
+	s_specifypassword.fight.generic.y = 414;
+	s_specifypassword.fight.width = 80;
+	s_specifypassword.fight.height = 60;
+	s_specifypassword.fight.focuspicinstead = qtrue;
 
 	Menu_AddItem(&s_specifypassword.menu, &s_specifypassword.password);
-	Menu_AddItem(&s_specifypassword.menu, &s_specifypassword.go);
+	Menu_AddItem(&s_specifypassword.menu, &s_specifypassword.fight);
 	Menu_AddItem(&s_specifypassword.menu, &s_specifypassword.back);
 }
 
