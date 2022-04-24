@@ -37,7 +37,7 @@
 	- Option to enable/disable player chat icon separately from notification time Chat page of Options menu
 	- Option to enable/disable Console Auto Chat to Chat page of Options menu to prevent console input text to be interpreted as chat
 	- Option to enable/disable Console Auto Clear to Chat page of Options menu to prevent console to get cleared after being closed
-	- New page for Chat related options to Controls menu and moved all chat related controls there to make space on other pages
+	- Option to enable/disable Menu Tooltips to Help page of Options menu
 	- Options to adjust mouse acceleration and offset to Look page of Controls menu
 	- Option to adjust the key mapping for taking a Screenshot `F12` (default) to Misc page of Controls menu
 	- Option to enable/disable Autorecord Demo `O` (default) to Misc page of Controls menu
@@ -60,11 +60,12 @@
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
 	- Graphics Settings option in Graphics menu to provide a template list with updated settings
 	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps
-	- Merged Anisotropy option with Texture Filter option in Graphics menu
+	- Anisotropy option to be merged with Texture Filter option into a single menu entry in Graphics menu
 	- Fullscreen option on Graphics page of Setup menu to Window Mode to support new borderless window mode
 	- Map selection/preview to cycle three ingame pictures (shader animation)
 	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options
 	- Options menu to four pages layout to support more options and reallocation of all options to HUD, Game, Chat and Help according their functionality
+	- Glowing Player Model option and Glowing Skin Color to be combined into a single entry on Game page of Options menu
 	- Chat option in Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately
 	- Notification Time option in Chat menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
 	- Anaglyph 3D modes to list the modes 1 to 4, modes 5 to 8 are enabled by enabling the new Color Swap option
@@ -73,6 +74,8 @@
 	- Menu slider controls to scale to 100s values instead of 10s values where useful
 	- Menu slider controls to show the user input value next to it
 	- Player Settings menu to list first all PadCharacters followed by custom player models
+	- Fight button in the menu only works if a map is selected, a server with  address and port or password is specified in the related menus
+	- Arrow buttons indicate now if first/last page/list entry is reached in the related menus by being disabled
 	- Ingame Voice Chat menu to support new send target options: `attacker`, `crosshair` and `spatial` (default)
 	- JPEG quality set to 100% for creating screenshots and avi videos
 	- Headline of Team ingame menu changed to Start like listed in ingame main menu
