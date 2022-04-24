@@ -307,6 +307,7 @@ extern void Menu_Cache(void);
 extern void Menu_AddItem(menuframework_s *menu, void *item);
 extern void Menu_InitItem(menucommon_s *item);
 extern void Menu_Draw(menuframework_s *menu);
+extern void Menu_DrawField(menufield_s *field);
 extern void *Menu_ItemAtCursor(menuframework_s *m);
 extern sfxHandle_t Menu_ActivateItem(menuframework_s *s, menucommon_s *item);
 extern void Menu_SetCursor(menuframework_s *s, int cursor);

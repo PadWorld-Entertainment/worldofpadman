@@ -90,66 +90,8 @@ static void SpecifyServer_Event(void *ptr, int event) {
 	}
 }
 
-void SpecifyServer_DrawField(void *self) {
-	menufield_s *f;
-	qboolean focus;
-	int style;
-	char *txt;
-	char cursorChar;
-	const float *color;
-	int n;
-	int basex, x, y;
-	const float *highlight_color = text_color_highlight;
-	const vec4_t bg_color = {1.00f, 1.00f, 1.00f, 0.50f};
-
-	f = (menufield_s *)self;
-	y = f->generic.y;
-	basex = f->generic.x + (f->field.widthInChars - Q_PrintStrlen(f->field.buffer)) / 2 * SMALLCHAR_WIDTH;
-	focus = (f->generic.parent->cursor == f->generic.menuPosition);
-
-	style = UI_LEFT | UI_SMALLFONT;
-
-	txt = f->field.buffer;
-	if (focus)
-		color = highlight_color;
-	else
-		color = text_color_normal;
-
-	// draw cursor if we have focus
-	if (focus) {
-		if (trap_Key_GetOverstrikeMode()) {
-			cursorChar = FONT_ASCII_FULLBLOCK;
-		} else {
-			cursorChar = FONT_ASCII_UNDERLINE;
-		}
-
-		UI_FillRect(f->generic.x, f->generic.y, f->field.widthInChars * SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, bg_color);
-
-		style |= UI_BLINK;
-		UI_DrawChar(basex + f->field.cursor * SMALLCHAR_WIDTH, y, cursorChar, style, highlight_color);
-		style &= ~UI_BLINK;
-	}
-
-	if (focus) {
-		style |= UI_PULSE;
-		color = highlight_color;
-	}
-
-	x = basex;
-	while ((cursorChar = *txt) != 0) {
-		if (!focus && Q_IsColorString(txt)) {
-			n = ColorIndex(*(txt + 1));
-			if (n == 0) {
-				n = 7;
-			}
-			color = g_color_table[n];
-			txt += 2;
-			continue;
-		}
-		UI_DrawChar(x, y, cursorChar, style, color);
-		txt++;
-		x += SMALLCHAR_WIDTH;
-	}
+static void SpecifyServer_DrawField(void *self) {
+	Menu_DrawField((menufield_s *)self);
 	UI_SpecifyServer_UpdateMenuItems();
 }
 
