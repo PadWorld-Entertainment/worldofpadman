@@ -77,7 +77,6 @@ PREFERENCES MENU
 #define ID_SYNCEVERYFRAME 37
 #define ID_FORCEMODEL 38
 #define ID_GLOWMODEL 39
-#define ID_GLOWCOLOR 40
 
 #define ID_CONNOTIFY 50
 #define ID_CHATHEIGHT 51
@@ -132,8 +131,7 @@ typedef struct {
 	menuradiobutton_s ingamevideo;
 	menuradiobutton_s synceveryframe;
 	menuradiobutton_s forcemodel;
-	menuradiobutton_s glowmodel;
-	menulist_s glowcolor;
+	menulist_s glowmodel;
 
 	menulist_s connotify;
 	menulist_s chatheight;
@@ -190,7 +188,6 @@ static menucommon_s *g_game_options[] = {
 	(menucommon_s *)&s_preferences.synceveryframe,
 	(menucommon_s *)&s_preferences.forcemodel,
 	(menucommon_s *)&s_preferences.glowmodel,
-	(menucommon_s *)&s_preferences.glowcolor,
 	NULL
 };
 
@@ -231,9 +228,10 @@ static const char *ffahudtheme_items[] = {"Black", "Red", "Blue", "Green", "Chro
 
 static const char *connotify_items[] = {"Short", "Default", "Long", "Maximum", NULL};
 
-static const char *glowcolor_items[] = {S_COLOR_BLACK "Black", S_COLOR_RED "Red", S_COLOR_GREEN "Green",
-										S_COLOR_YELLOW "Yellow", S_COLOR_BLUE "Blue", S_COLOR_CYAN "Cyan",
-										S_COLOR_MAGENTA "Magenta", S_COLOR_WHITE "White", NULL};
+static const char *glowmodel_items[] = {S_COLOR_YELLOW "None", S_COLOR_BLACK "Black", S_COLOR_RED "Red",
+										S_COLOR_GREEN "Green", S_COLOR_YELLOW "Yellow", S_COLOR_BLUE "Blue",
+										S_COLOR_CYAN "Cyan", S_COLOR_MAGENTA "Magenta", S_COLOR_WHITE "White",
+										NULL};
 
 static const char *botchat_items[] = {"Off", "Default", "Often", NULL};
 
@@ -271,8 +269,12 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.ingamevideo.curvalue = trap_Cvar_VariableValue("r_inGameVideo") != 0;
 	s_preferences.synceveryframe.curvalue = trap_Cvar_VariableValue("r_finish") != 0;
 	s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue("cg_forcemodel") != 0);
-	s_preferences.glowmodel.curvalue = Q_stricmp(UI_Cvar_VariableString("cg_glowModel"), "");
-	s_preferences.glowcolor.curvalue = trap_Cvar_VariableValue("cg_glowModel"); // cg_glowModelTeam..
+
+	if (!Q_stricmp(UI_Cvar_VariableString("cg_glowModel"), "")) {
+		s_preferences.glowmodel.curvalue = 0;
+	} else {
+		s_preferences.glowmodel.curvalue = (trap_Cvar_VariableValue("cg_glowModel") + 1);
+	}
 
 	notify = UI_GetCvarInt("con_notifytime");
 	if (notify < 0) {
@@ -385,10 +387,6 @@ static void UI_Preferences_UpdateMenuItems(void) {
 	// special cases
 	if (UI_GetCvarInt("cl_voip") == 0) {
 		s_preferences.voipmeter.generic.flags |= QMF_GRAYED;
-	}
-
-	if (!Q_stricmp(UI_Cvar_VariableString("cg_glowModel"), "")) {
-		s_preferences.glowcolor.generic.flags |= QMF_GRAYED;
 	}
 }
 
@@ -513,11 +511,10 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 		break;
 
 	case ID_GLOWMODEL:
-	case ID_GLOWCOLOR:
 		if (s_preferences.glowmodel.curvalue == 0) {
 			trap_Cvar_Set("cg_glowModel", "");
 		} else {
-			trap_Cvar_SetValue("cg_glowModel", s_preferences.glowcolor.curvalue); // default green enemies only
+			trap_Cvar_SetValue("cg_glowModel", s_preferences.glowmodel.curvalue - 1);
 		}
 		UI_Preferences_UpdateMenuItems();
 		break;
@@ -1011,30 +1008,17 @@ static void UI_Preferences_MenuInit(void) {
 		"resources. Default is off.";
 
 	y += (BIGCHAR_HEIGHT + 2);
-	s_preferences.glowmodel.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.glowmodel.generic.type = MTYPE_SPINCONTROL;
 	s_preferences.glowmodel.generic.name = "Glowing Player Models:";
 	s_preferences.glowmodel.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.glowmodel.generic.callback = UI_Preferences_Event;
 	s_preferences.glowmodel.generic.id = ID_GLOWMODEL;
 	s_preferences.glowmodel.generic.x = XPOSITION;
 	s_preferences.glowmodel.generic.y = y;
+	s_preferences.glowmodel.itemnames = glowmodel_items;
 	s_preferences.glowmodel.generic.toolTip = 
-		"Enable to force all players to be displayed with glowing player models. This always refers to the "
-		"default player model skin and not a skin color you have selected in the player settings menu. "
-		"Default is off.";
-
-	y += (BIGCHAR_HEIGHT + 2);
-	s_preferences.glowcolor.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.glowcolor.generic.name = "Glowing Skin Color:";
-	s_preferences.glowcolor.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.glowcolor.generic.callback = UI_Preferences_Event;
-	s_preferences.glowcolor.generic.id = ID_GLOWCOLOR;
-	s_preferences.glowcolor.generic.x = XPOSITION;
-	s_preferences.glowcolor.generic.y = y;
-	s_preferences.glowcolor.itemnames = glowcolor_items;
-	s_preferences.glowcolor.generic.toolTip = 
-		"Select a desired glowing skin color. NOTE: In team gametypes, the color is always set to red "
-		"or blue depending on which team you join.";
+		"Enable to force all players to be displayed with glowing player models in the desired skin color. "
+		"Default is none. NOTE: In team gametypes, the glowing color is always set to red or blue.";
 
 	// chat options
 	y = YPOSITION;
@@ -1277,7 +1261,6 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.synceveryframe);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.forcemodel);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.glowmodel);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.glowcolor);
 
 	Menu_AddItem(&s_preferences.menu, &s_preferences.connotify);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatheight);
