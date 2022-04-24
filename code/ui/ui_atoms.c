@@ -458,9 +458,9 @@ void UI_DrawProportionalString(int x, int y, const char *str, int style, const v
 	}
 
 	if (style & UI_INVERSE) {
-		drawcolor[0] = color[0] * 0.7;
-		drawcolor[1] = color[1] * 0.7;
-		drawcolor[2] = color[2] * 0.7;
+		drawcolor[0] = color[0] * 0.7f;
+		drawcolor[1] = color[1] * 0.7f;
+		drawcolor[2] = color[2] * 0.7f;
 		drawcolor[3] = color[3];
 		UI_DrawProportionalString2(x, y, str, drawcolor, sizeScale, uis.charsetProp);
 		return;
@@ -700,9 +700,9 @@ static void UI_DrawString2(int x, int y, const char *str, const vec4_t color, in
 
 		ch = *s & 255;
 		if (ch != ' ') {
-			frow = (ch >> 4) * 0.0625;
-			fcol = (ch & 15) * 0.0625;
-			trap_R_DrawStretchPic(ax, ay, aw, ah, fcol, frow, fcol + 0.0625, frow + 0.0625, uis.charsetShader);
+			frow = (ch >> 4) * 0.0625f;
+			fcol = (ch & 15) * 0.0625f;
+			trap_R_DrawStretchPic(ax, ay, aw, ah, fcol, frow, fcol + 0.0625f, frow + 0.0625f, uis.charsetShader);
 		}
 
 		ax += aw;
@@ -737,10 +737,10 @@ void UI_DrawString(int x, int y, const char *str, int style, const vec4_t color)
 	charh = CharHeightForStringStyle(style);
 
 	if (style & UI_PULSE) {
-		lowlight[0] = 0.8 * color[0];
-		lowlight[1] = 0.8 * color[1];
-		lowlight[2] = 0.8 * color[2];
-		lowlight[3] = 0.8 * color[3];
+		lowlight[0] = 0.8f * color[0];
+		lowlight[1] = 0.8f * color[1];
+		lowlight[2] = 0.8f * color[2];
+		lowlight[3] = 0.8f * color[3];
 		UI_LerpColor(color, lowlight, newcolor, (float)(0.5 + 0.5 * sin(uis.realtime / PULSE_DIVISOR)));
 	} else {
 		Vector4Copy(color, newcolor);
@@ -805,10 +805,10 @@ void UI_DrawStringNS(int x, int y, const char *str, int style, float fontsize, c
 	}
 
 	if (style & UI_PULSE) {
-		lowlight[0] = 0.8 * color[0];
-		lowlight[1] = 0.8 * color[1];
-		lowlight[2] = 0.8 * color[2];
-		lowlight[3] = 0.8 * color[3];
+		lowlight[0] = 0.8f * color[0];
+		lowlight[1] = 0.8f * color[1];
+		lowlight[2] = 0.8f * color[2];
+		lowlight[3] = 0.8f * color[3];
 		UI_LerpColor(color, lowlight, newcolor, 0.5 + 0.5 * sin(uis.realtime / PULSE_DIVISOR));
 		drawcolor = newcolor;
 	} else
@@ -862,20 +862,6 @@ qboolean UI_IsFullscreen(void) {
 
 	return qfalse;
 }
-
-#if 0
-static void NeedCDAction( qboolean result ) {
-	if ( !result ) {
-		trap_Cmd_ExecuteText( EXEC_APPEND, "quit\n" );
-	}
-}
-
-static void NeedCDKeyAction( qboolean result ) {
-	if ( !result ) {
-		trap_Cmd_ExecuteText( EXEC_APPEND, "quit\n" );
-	}
-}
-#endif
 
 void UI_SetActiveMenu(uiMenuCommand_t menu) {
 	// this should be the ONLY way the menu system is brought up
@@ -1151,7 +1137,7 @@ void UI_Init(void) {
 
 	if (uis.glconfig.vidWidth * 480 > uis.glconfig.vidHeight * 640) {
 		// wide screen
-		uis.xbias = 0.5 * (uis.glconfig.vidWidth - (uis.glconfig.vidHeight * (640.0f / 480.0f)));
+		uis.xbias = 0.5f * (uis.glconfig.vidWidth - (uis.glconfig.vidHeight * (640.0f / 480.0f)));
 		uis.xscale = uis.yscale;
 		uis.ybias = 0;
 	} else {
