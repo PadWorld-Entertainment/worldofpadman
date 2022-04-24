@@ -1617,8 +1617,9 @@ void Menu_Draw(menuframework_s *menu) {
 	if (itemptr) {
 		if (itemptr->statusbar)
 			itemptr->statusbar((void *)itemptr);
-
-		UI_DrawToolTip(itemptr);
+		if (trap_Cvar_VariableValue("ui_drawToolTip") != 0) {
+			UI_DrawToolTip(itemptr);
+		}
 	}
 
 	if (uis.dropdownlist) {

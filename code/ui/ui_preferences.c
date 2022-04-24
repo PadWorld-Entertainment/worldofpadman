@@ -89,12 +89,13 @@ PREFERENCES MENU
 #define ID_CONAUTOCHAT 57
 #define ID_CONAUTOCLEAR 58
 
-#define ID_ICONTEAMMATE 70
-#define ID_ICONHSTATION 71
-#define ID_ICONSYCTELE 72
-#define ID_ICONBALLOON 73
-#define ID_ICONLPSARROW 74
-#define ID_ICONFREEZETAG 75
+#define ID_DRAWTOOLTIP 70
+#define ID_ICONTEAMMATE 71
+#define ID_ICONHSTATION 72
+#define ID_ICONSYCTELE 73
+#define ID_ICONBALLOON 74
+#define ID_ICONLPSARROW 75
+#define ID_ICONFREEZETAG 76
 
 #define NUM_CROSSHAIRS 12
 
@@ -144,6 +145,7 @@ typedef struct {
 	menuradiobutton_s conautochat;
 	menuradiobutton_s conautoclear;
 
+	menuradiobutton_s drawtooltip;
 	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
 	menuradiobutton_s whHStations;
@@ -206,6 +208,7 @@ static menucommon_s *g_chat_options[] = {
 };
 
 static menucommon_s *g_help_options[] = {
+	(menucommon_s *)&s_preferences.drawtooltip,
 	(menucommon_s *)&s_preferences.whIcons,
 	(menucommon_s *)&s_preferences.whTeamMates,
 	(menucommon_s *)&s_preferences.whHStations,
@@ -310,6 +313,8 @@ static void UI_Preferences_SetMenuItems(void) {
 	} else {
 		s_preferences.botchat.curvalue = 0;
 	}
+
+	s_preferences.drawtooltip.curvalue = trap_Cvar_VariableValue("ui_drawToolTip") != 0;
 
 	cg_iconsCvarValue = (int)trap_Cvar_VariableValue("cg_icons");
 	s_preferences.whLPS.curvalue = (ICON_ARROW & cg_iconsCvarValue);
@@ -587,6 +592,10 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 		} else {
 			trap_Cvar_SetValue("bot_nochat", 1);
 		}
+		break;
+
+	case ID_DRAWTOOLTIP:
+		trap_Cvar_SetValue("ui_drawToolTip", s_preferences.drawtooltip.curvalue);
 		break;
 
 	case ID_ICONLPSARROW:
@@ -1136,6 +1145,17 @@ static void UI_Preferences_MenuInit(void) {
 
 	// help options
 	y = YPOSITION;
+	s_preferences.drawtooltip.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.drawtooltip.generic.name = "Menu Tooltips:";
+	s_preferences.drawtooltip.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.drawtooltip.generic.callback = UI_Preferences_Event;
+	s_preferences.drawtooltip.generic.id = ID_DRAWTOOLTIP;
+	s_preferences.drawtooltip.generic.x = XPOSITION;
+	s_preferences.drawtooltip.generic.y = y;
+	s_preferences.drawtooltip.generic.toolTip =
+		"Disable to not show those wonderful tooltips in the menu. Default is on.";
+
+	y += 2 * (BIGCHAR_HEIGHT + 2);
 	s_preferences.whIcons.generic.type = MTYPE_TEXT;
 	s_preferences.whIcons.generic.flags = QMF_HIDDEN;
 	s_preferences.whIcons.generic.x = XPOSITION - 20;
@@ -1269,6 +1289,7 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.conautochat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.conautoclear);
 
+	Menu_AddItem(&s_preferences.menu, &s_preferences.drawtooltip);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whTeamMates);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whHStations);

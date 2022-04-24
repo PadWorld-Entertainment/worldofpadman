@@ -60,6 +60,7 @@ extern vmCvar_t ui_browserOnlyHumans;
 extern vmCvar_t ui_browserHidePrivate;
 
 extern vmCvar_t ui_createGametype;
+extern vmCvar_t ui_drawToolTip;
 
 extern vmCvar_t ui_drawCrosshair;
 extern vmCvar_t ui_drawCrosshairNames;
