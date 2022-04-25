@@ -861,7 +861,6 @@ void StartServer_Cache(void) {
 	trap_R_RegisterShaderNoMip(SELECTBOTS1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
-
 	trap_R_RegisterShaderNoMip(UNKNOWNMAP);
 
 	for (i = 0; i < 10; i++)
@@ -905,13 +904,11 @@ BOT SELECT MENU *****
 =============================================================================
 */
 
-#define BOTSELECT_SELECT "menu/art/opponents_select"
-#define BOTSELECT_SELECTED "menu/art/opponents_selected"
 #define ARROWUP0 "menu/arrows/headyel_up0"
 #define ARROWUP1 "menu/arrows/headyel_up1"
 #define ARROWDN0 "menu/arrows/headyel_dn0"
 #define ARROWDN1 "menu/arrows/headyel_dn1"
-// BACK0, BACK1 used from start server menu
+#define ICONSHADOW "menu/art/micon_shadow"
 
 #define PLAYERGRID_COLS 4 // 3
 #define PLAYERGRID_ROWS 4
@@ -925,8 +922,6 @@ typedef struct {
 	menutext_s banner;
 
 	menubitmap_s pics[MAX_MODELSPERPAGE];
-	menubitmap_s picbuttons[MAX_MODELSPERPAGE];
-	menutext_s picnames[MAX_MODELSPERPAGE];
 	menubitmap_s arrowleft;
 	menubitmap_s arrowright;
 
@@ -1022,24 +1017,16 @@ static void UI_BotSelectMenu_UpdateGrid(void) {
 			Q_strncpyz(botSelectInfo.botnames[i], Info_ValueForKey(info, "name"), 16);
 			Q_CleanStr(botSelectInfo.botnames[i]);
 			botSelectInfo.pics[i].generic.name = botSelectInfo.boticons[i];
-			botSelectInfo.picnames[i].color = color_orange;
-			botSelectInfo.picbuttons[i].generic.flags &= ~QMF_INACTIVE;
 		} else {
 			// dead slot
 			botSelectInfo.pics[i].generic.name = NULL;
-			botSelectInfo.picbuttons[i].generic.flags |= QMF_INACTIVE;
 			botSelectInfo.botnames[i][0] = 0;
 		}
-
-		botSelectInfo.pics[i].generic.flags &= ~QMF_HIGHLIGHT;
 		botSelectInfo.pics[i].shader = 0;
-		botSelectInfo.picbuttons[i].generic.flags |= QMF_PULSEIFFOCUS;
 	}
 
 	// set selected model
 	i = botSelectInfo.selectedmodel % MAX_MODELSPERPAGE;
-	botSelectInfo.pics[i].generic.flags |= QMF_HIGHLIGHT;
-	botSelectInfo.picbuttons[i].generic.flags &= ~QMF_PULSEIFFOCUS;
 
 	if (botSelectInfo.numpages > 1) {
 		botSelectInfo.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
@@ -1059,44 +1046,6 @@ static void UI_BotSelectMenu_UpdateGrid(void) {
 		botSelectInfo.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 }
-
-#if 0
-/*
-=================
-UI_BotSelectMenu_Default
-=================
-*/
-static void UI_BotSelectMenu_Default( char *bot ) {
-	const char	*botInfo;
-	const char	*test;
-	int			n;
-	int			i;
-
-	for( n = 0; n < botSelectInfo.numBots; n++ ) {
-		botInfo = UI_GetBotInfoByNumber( n );
-		test = Info_ValueForKey( botInfo, "name" );
-		if( Q_stricmp( bot, test ) == 0 ) {
-			break;
-		}
-	}
-	if( n == botSelectInfo.numBots ) {
-		botSelectInfo.selectedmodel = 0;
-		return;
-	}
-
-	for( i = 0; i < botSelectInfo.numBots; i++ ) {
-		if( botSelectInfo.sortedBotNums[i] == n ) {
-			break;
-		}
-	}
-	if( i == botSelectInfo.numBots ) {
-		botSelectInfo.selectedmodel = 0;
-		return;
-	}
-
-	botSelectInfo.selectedmodel = i;
-}
-#endif
 
 /*
 =================
@@ -1138,7 +1087,6 @@ int getNumSelectedBots(void) {
 			numBots++;
 		}
 	}
-
 	return numBots;
 }
 
@@ -1229,15 +1177,8 @@ static void UI_BotSelectMenu_BotEvent(void *ptr, int event) {
 		return;
 	}
 
-	for (i = 0; i < (PLAYERGRID_ROWS * PLAYERGRID_COLS); i++) {
-		botSelectInfo.pics[i].generic.flags &= ~QMF_HIGHLIGHT;
-		botSelectInfo.picbuttons[i].generic.flags |= QMF_PULSEIFFOCUS;
-	}
-
 	// set selected
 	i = ((menucommon_s *)ptr)->id;
-	botSelectInfo.pics[i].generic.flags |= QMF_HIGHLIGHT;
-	botSelectInfo.picbuttons[i].generic.flags &= ~QMF_PULSEIFFOCUS;
 	botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_MODELSPERPAGE + i;
 
 	if (getSlotsLeft() <= 0) {
@@ -1289,8 +1230,7 @@ void UI_BotSelectMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(ARROWDN1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
-	trap_R_RegisterShaderNoMip(BOTSELECT_SELECT);
-	trap_R_RegisterShaderNoMip(BOTSELECT_SELECTED);
+	trap_R_RegisterShaderNoMip(ICONSHADOW);
 }
 
 /*
@@ -1393,8 +1333,6 @@ static void UI_BotSelectMenu_DrawBotIcon(void *self) {
 	float y;
 	float w;
 	float h;
-	//	vec4_t	tempcolor;
-	//	float*	color;
 
 	x = b->generic.x;
 	y = b->generic.y;
@@ -1408,16 +1346,11 @@ static void UI_BotSelectMenu_DrawBotIcon(void *self) {
 			b->shader = trap_R_RegisterShaderNoMip(b->errorpic);
 	}
 
-	//	if (b->focuspic && !b->focusshader)
-	//		b->focusshader = trap_R_RegisterShaderNoMip( b->focuspic );
-
-	if (b->shader) // wenn kein icon da ist soll auch kein shadow da sein
+	if (b->shader) // if there is no icon there should also be no shadow
 	{
 		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
-			//		UI_DrawHandlePic( x, y, w, h, b->focusshader );
-			UI_DrawNamedPic(x, y, w + 8, h + 8, "menu/art/micon_shadow");
+			UI_DrawNamedPic(x, y, w + 8, h + 8, ICONSHADOW);
 		}
-
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 	}
 }
@@ -1443,42 +1376,15 @@ static void UI_BotSelectMenu_Init(void) {
 		x = 51;
 		for (j = 0; j < PLAYERGRID_COLS; j++, k++) {
 			botSelectInfo.pics[k].generic.type = MTYPE_BITMAP;
-			//			botSelectInfo.pics[k].generic.flags				= QMF_LEFT_JUSTIFY|QMF_INACTIVE;
 			botSelectInfo.pics[k].generic.flags = QMF_LEFT_JUSTIFY;
 			botSelectInfo.pics[k].generic.x = x;
 			botSelectInfo.pics[k].generic.y = y;
 			botSelectInfo.pics[k].generic.name = botSelectInfo.boticons[k];
 			botSelectInfo.pics[k].width = 64;
 			botSelectInfo.pics[k].height = 64;
-			botSelectInfo.pics[k].focuspic = BOTSELECT_SELECTED;
-			botSelectInfo.pics[k].focuscolor = colorRed;
 			botSelectInfo.pics[k].generic.callback = UI_BotSelectMenu_BotEvent;
 			botSelectInfo.pics[k].generic.id = k;
 			botSelectInfo.pics[k].generic.ownerdraw = UI_BotSelectMenu_DrawBotIcon;
-
-			botSelectInfo.picbuttons[k].generic.type = MTYPE_BITMAP;
-			botSelectInfo.picbuttons[k].generic.flags = QMF_LEFT_JUSTIFY | QMF_NODEFAULTINIT | QMF_PULSEIFFOCUS;
-			botSelectInfo.picbuttons[k].generic.callback = UI_BotSelectMenu_BotEvent;
-			botSelectInfo.picbuttons[k].generic.id = k;
-			botSelectInfo.picbuttons[k].generic.x = x - 16;
-			botSelectInfo.picbuttons[k].generic.y = y - 16;
-			botSelectInfo.picbuttons[k].generic.left = x;
-			botSelectInfo.picbuttons[k].generic.top = y;
-			botSelectInfo.picbuttons[k].generic.right = x + 64;
-			botSelectInfo.picbuttons[k].generic.bottom = y + 64;
-			botSelectInfo.picbuttons[k].width = 128;
-			botSelectInfo.picbuttons[k].height = 128;
-			botSelectInfo.picbuttons[k].focuspic = BOTSELECT_SELECT;
-			botSelectInfo.picbuttons[k].focuscolor = colorRed;
-
-			botSelectInfo.picnames[k].generic.type = MTYPE_TEXT;
-			botSelectInfo.picnames[k].generic.flags = QMF_SMALLFONT;
-			botSelectInfo.picnames[k].generic.x = x + 32;
-			botSelectInfo.picnames[k].generic.y = y + 64;
-			botSelectInfo.picnames[k].string = botSelectInfo.botnames[k];
-			botSelectInfo.picnames[k].color = color_orange;
-			botSelectInfo.picnames[k].style = UI_CENTER | UI_SMALLFONT;
-
 			x += (64 + 27);
 		}
 		y += (64 + 21);
@@ -1583,8 +1489,6 @@ static void UI_BotSelectMenu_Init(void) {
 
 	for (i = 0; i < MAX_MODELSPERPAGE; i++) {
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.pics[i]);
-		//		Menu_AddItem( &botSelectInfo.menu,	&botSelectInfo.picbuttons[i] );
-		//		Menu_AddItem( &botSelectInfo.menu,	&botSelectInfo.picnames[i] );
 	}
 
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.arrowleft);
@@ -1601,7 +1505,6 @@ static void UI_BotSelectMenu_Init(void) {
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.back);
 
 	UI_BotSelectMenu_BuildList();
-	//	UI_BotSelectMenu_Default( bot );
 	UI_BotSelectMenu_UpdateList(); // selectbot-list
 	botSelectInfo.modelpage = botSelectInfo.selectedmodel / MAX_MODELSPERPAGE;
 	UI_BotSelectMenu_UpdateGrid();
