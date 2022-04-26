@@ -10,8 +10,8 @@
 	- Option to switch renderer from OpenGL1 to OpenGL2 or Vulkan in Graphics menu
 	- Option to switch Lighting to Vertex or Lightmap to Graphics page of System menu
 	- Option to switch Window Mode to Off (Fullscreen), On (Border) or On (Borderless) to Display page of System menu
-	- Option to enable/disable Resizable Window to Display page of System menu
-	- Option to enable/disable Vertical Sync (VSync) to Display page of System menu to allow resizing of the game window
+	- Option to enable/disable Resizable Window to Display page of System menu to allow resizing of the game window
+	- Option to enable/disable Vertical Sync (VSync) to Display page of System menu to limit the frame rate to display refresh rate
 	- Option to enable/disable Limit Frame Rate to Display page of System menu to limit the frame rate when game window is minimized or out of focus 
 	- Option to select magenta-green anaglyph 3D mode from the list in Display page of System menu 
 	- Option to enable/disable Swap Colors to Display page of System menu to swap colors of anaglyph 3D modes 
@@ -21,11 +21,11 @@
 	- Option to enable/disable OpenAL Precache to Sound page of System menu
 	- Option to adjust OpenAL Sources Allocation (memory) to Sound page of System menu
 	- A warning to Sound page of System menu if OpenAL as default sound system failed to load
-	- Option to switch VoIP support to Mumble support to link with external program Net/VoIP page of System menu
-	- Option to adjust Distance Scale to Net/VoIP page of System menu if Mumble support activated
+	- Option to switch VoIP support to Mumble support to link with external program to Net/VoIP page of System menu
+	- Option to adjust Distance Scale to Net/VoIP page of System menu if Mumble support is enabled
 	- Option to adjust VoIP Voice Amplifier (multiplier) to Net/VoIP page of System menu
 	- Option to adjust Send Target to Net/VoIP page of System menu
-	- Option to enable/disable the Lag-O-Meter to HUD page of Options menu
+	- Option to enable/disable the Lagometer to HUD page of Options menu
 	- Option to enable/disable the VoIP Volume Meter to HUD page of Options menu
 	- Option to enable/disable Indicate Health to HUD page of Options menu crosshair indicates the health status of the player by changing the color
 	- Option to enable/disable Ingame Videos (video shaders in maps) to Game page of Options menu
@@ -50,49 +50,50 @@
 	- Dust trail feature from Q3 Team Arena for textures with surface parameter `dust`. Creates a small dust cloud when a player lands on surface. Enter `enableDust 1` to a map's worldspawn.
 	- Frost breath feature from Q3 Team Arena to simulate cold environments. Creates a small cloud of condensed breath in front of players head. Enter `enableBreath 1` to a map's worldspawn to enable this feature for the whole map.
 	- PadKnight bot to the game and shown in the Select Bots menu
-	- Possibility to set Antialiasing to 8x in Graphics menu
+	- Possibility to set Antialiasing (MSAA) to 8x on Graphics page of System menu
 	- Missing default keyboard mapping in Controls menu and synced with default.cfg
 - CHANGED
-	- Network protocol version number to 72 to avoid problems due to incompatibilities with previous WoP versions
+	- Network protocol version number to 72 to avoid issues due to incompatibilities with previous WoP versions
 	- Home path to `worldofpadman` for all operating systems to unify them
 	- Title of the game uniformly to `World of PADMAN` everywhere
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
-	- Graphics Settings option in Graphics menu to provide a template list with updated settings
-	- Geometric Detail option in Graphics menu to be split in Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps
-	- Anisotropy option to be merged with Texture Filter option into a single menu entry in Graphics menu
-	- Fullscreen option on Graphics page of Setup menu to Window Mode to support new borderless window mode
-	- Map selection/preview to cycle three ingame pictures (shader animation)
+	- Map selection/preview to cycle three ingame pictures via shader animation 
+	- Graphics Settings option on Graphics page of System menu to provide a template list with useful and updated settings
+	- Geometric Detail option in Graphics menu to be split into Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps
+	- Anisotropy option to be merged with Texture Filter option into a single menu entry on Graphics page of System menu
+	- Name of Fullscreen option on Graphics page of Setup menu to Window Mode, also supporting new borderless window mode and moved to Display page of System menu 
+	- Anaglyph 3D modes on Display page of System menu to list the modes 1 to 4, modes 5 to 8 are enabled by enabling the new Color Swap option
+	- name of Network page of System menu to Net/VoIP and moved all VoIP related options from Sound page of System menu to Net/VoIP
+	- Net/VoIP and Sound options to hide not necessary options depending on selected VoIP Support or Sound System (instead of showing them greyed)
 	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options
 	- Options menu to four pages layout to support more options and reallocation of all options to HUD, Game, Chat and Help according their functionality
 	- Glowing Player Model option and Glowing Skin Color to be combined into a single entry on Game page of Options menu
-	- Chat option in Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately
-	- Notification Time option in Chat menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
-	- Anaglyph 3D modes to list the modes 1 to 4, modes 5 to 8 are enabled by enabling the new Color Swap option
-	- Network options to Net/VoIP options and moved all VoIP related options from Sound options to Net/VoIP options in System menu
-	- Net/VoIP and Sound options to hide not necessary options depending on VoIP Support or Sound System selection (instead showing them in grey)
+	- Chat option on Chat page of Options menu to be split in Notification Time and Draw Player Icon to be able to set notification time and player icon separately
+	- Notification Time option on Chat page of Options menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
 	- Menu slider controls to scale to 100s values instead of 10s values where useful
 	- Menu slider controls to show the user input value next to it
 	- Player Settings menu to list first all PadCharacters followed by custom player models
-	- Fight button in the menu only works if a map is selected, a server with  address and port or password is specified in the related menus
-	- Arrow buttons indicate now if first/last page/list entry is reached in the related menus by being disabled
+	- Fight button in the menus only works if a map is selected, a server is selected or specified with address, port, or password in the related menus
+	- Arrow buttons in the menus indicate now if first/last page/list entry is reached in the related menus by being disabled or hidden
 	- Ingame Voice Chat menu to support new send target options: `attacker`, `crosshair` and `spatial` (default)
 	- JPEG quality set to 100% for creating screenshots and avi videos
 	- Headline of Team ingame menu changed to Start like listed in ingame main menu
 	- Headline of Voice ingame menu changed to Voice Chat like listed in ingame main menu
 	- Default keyboard mapping in a few spots: `Q`/`MOUSE3` for gesture (was undefined); `E`/`ENTER` for use item; `F`/`BACKSPACE` for drop item (cartridge/lolly); `HOME`/`KP5` for 3rd person view (was `U`); `X`/`MOUSE2` for scope/zoom (was `MOUSE3`); `Y`/`Z` for chat team (was undefined); `U` chat target (was undefined); `I` for chat attacker (was undefined); `F12` for taking a screenshot (was `F11`).
-	- Dynamic flares are now enabled by default
+	- Dynamic flares to be enabled by default `r_flares [1|0]` 
 	- Team names to Blue Noses and Red Pads everywhere in the game
 	- Scoreboard to show personal scores in team based games again
+	- Gametype list in Create menu to list FFA gametypes first and FFA being default (was SYC)
 	- Team Orders ingame menu entry to be shown again
 - FIXED
 	- Path entry of voice chat icon and icon not shown during voice chat
-	- Being unable to use ^ key to enter color tags
-	- Anisotropy and Antialiasing options in Graphics menu are displayed as 4x after video restart, although 2x was selected before
-	- Anisotropy option in Graphics menu not working at all and option always displayed as Off after WoP restart, although 2x or more was selected before
-	- Selection of cyan-red in Display menu always enables magenta-green anaglyph mode. The list offers now magenta-green as a new mode
-	- Enabling Greyscale in Display menu always causes the apply button to be shown even after game restart and without changes made afterwards
-	- Sync Every Frame tooltip in Game options menu mistakes the option for VSync. This option has nothing to do with VSync.
+	- Being unable to use ^ key to enter color tags in Player Seetings menu or console
+	- Anisotropy and Antialiasing options in Graphics menu to be displayed as 4x after video restart, although 2x was selected before
+	- Anisotropy option in Graphics menu not working at all and option always to be displayed as Off after WoP restart, although 2x or more was selected before
+	- Selection of cyan-red in Display menu always enables magenta-green anaglyph mode, magenta-green mode was not respected as new mode in the list
+	- Enabling Greyscale in Display menu always causes the Apply button to be shown even after game restart and without changes made afterwards
+	- Sync Every Frame tooltip in Game options menu to mistake the option for VSync. This option has nothing to do with VSync.
 	- Glowing Player Model option in Game options cannot keep enabled status when Glowing Skin Color black is selected
 	- Wrong spray logo name allocation for Spooky and PadCho
 	- Fail to load OpenAL library on Windows 64bit systems
@@ -103,7 +104,7 @@
 	- Menu music loop to be played when calling Team Orders menu via hotkey
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
-	- ^ key to open/close the console
+	- `^` key to open/close the console
 	- Not used menu textures
 	- Not used roq video files
 	- File suffixes from shader entries to let the engine decide
@@ -112,7 +113,7 @@
 	- Exit screen (when clicking the Exit button in the main menu) with confirmation query and related assets
 	- Unused and dead code in general
 - UPDATED
-	- All tooltips in the menus and options wording where useful
+	- All tooltips in the menus and wording of menu entries where useful
 	- UI menu font texture with HQ version
 	- Spray logos with HQ versions
 	- Scoreboard headers with HQ versions
