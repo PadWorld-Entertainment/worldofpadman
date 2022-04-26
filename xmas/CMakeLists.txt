@@ -20,7 +20,6 @@ set(SHADERS
     padmodel.shader
     pad_teleporter.shader
     pad_waterbottle.shader
-    sometestlogos.shader
     spraypistol.shader
 )
 foreach (SHADER ${SHADERS})
