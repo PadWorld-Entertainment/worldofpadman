@@ -483,9 +483,9 @@ extern void ArenaServers_Cache(void);
 // ui_startserver2.c
 //
 extern void UI_StartServerMenu(qboolean multiplayer);
-extern void StartServer_Cache(void);
-extern void UI_BotSelectMenu(void);
-extern void UI_BotSelectMenu_Cache(void);
+extern void UI_StartServer_Cache(void);
+extern void UI_SelectBotsMenu(void);
+extern void UI_SelectBots_Cache(void);
 
 //
 // ui_serverinfo.c

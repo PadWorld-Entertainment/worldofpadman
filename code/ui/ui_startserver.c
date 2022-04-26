@@ -1,9 +1,9 @@
 /*
-####################### ####################### ####################### ####################### #######################
+=======================================================================
 
-  StartServer2 by #@ ... should replace the vq3-startserver
+START SERVER MENU
 
-####################### ####################### ####################### ####################### #######################
+=======================================================================
 */
 
 #include "ui_local.h"
@@ -105,10 +105,10 @@ static const char *teamstrs[] = {"free", "Red", "Blue", "spectator", 0};
 
 /*
 =================
-GametypeBits
+UI_StartServer_GametypeBits
 =================
 */
-static int GametypeBits(const char *string) {
+static int UI_StartServer_GametypeBits(const char *string) {
 	int bits;
 	const char *p;
 	const char *token;
@@ -178,10 +178,10 @@ static int GametypeBits(const char *string) {
 
 /*
 =================
-StartServer_Update
+UI_StartServer_Update
 =================
 */
-static void StartServer_Update(void) {
+static void UI_StartServer_Update(void) {
 	int i;
 	int top;
 	static char picname[MAX_MAPSPERPAGE][64];
@@ -241,10 +241,10 @@ static void StartServer_Update(void) {
 
 /*
 =================
-StartServer_MapEvent
+UI_StartServer_MapEvent
 =================
 */
-static void StartServer_MapEvent(void *ptr, int event) {
+static void UI_StartServer_MapEvent(void *ptr, int event) {
 	int i, tmpi, currentmap;
 
 	currentmap = (s_startserver.page * MAX_MAPSPERPAGE) + (((menucommon_s *)ptr)->id - ID_PICTURES);
@@ -278,15 +278,15 @@ static void StartServer_MapEvent(void *ptr, int event) {
 		}
 	}
 
-	StartServer_Update();
+	UI_StartServer_Update();
 }
 
 /*
 =================
-StartServer_GametypeEvent
+UI_StartServer_GametypeEvent
 =================
 */
-static void StartServer_GametypeEvent(void *ptr, int event) {
+static void UI_StartServer_GametypeEvent(void *ptr, int event) {
 	int i, j;
 	int count;
 	int gamebits;
@@ -330,7 +330,7 @@ static void StartServer_GametypeEvent(void *ptr, int event) {
 	for (i = 0; i < count; i++) {
 		info = UI_GetArenaInfoByNumber(i);
 
-		gamebits = GametypeBits(Info_ValueForKey(info, "type"));
+		gamebits = UI_StartServer_GametypeBits(Info_ValueForKey(info, "type"));
 		if (!(gamebits & matchbits)) {
 			continue;
 		}
@@ -371,15 +371,15 @@ static void StartServer_GametypeEvent(void *ptr, int event) {
 	}
 DOUBLEBRAKE:
 
-	StartServer_Update();
+	UI_StartServer_Update();
 }
 
 /*
 =================
-StartServer_MenuEvent
+UI_StartServer_MenuEvent
 =================
 */
-static void StartServer_MenuEvent(void *ptr, int event) {
+static void UI_StartServer_MenuEvent(void *ptr, int event) {
 	if (event != QM_ACTIVATED) {
 		return;
 	}
@@ -388,19 +388,19 @@ static void StartServer_MenuEvent(void *ptr, int event) {
 	case ID_PREVPAGE:
 		if (s_startserver.page > 0) {
 			s_startserver.page--;
-			StartServer_Update();
+			UI_StartServer_Update();
 		}
 		break;
 
 	case ID_NEXTPAGE:
 		if (s_startserver.page < s_startserver.maxpages - 1) {
 			s_startserver.page++;
-			StartServer_Update();
+			UI_StartServer_Update();
 		}
 		break;
 
 	case ID_SELECTBOTS:
-		UI_BotSelectMenu();
+		UI_SelectBotsMenu();
 		break;
 
 	case ID_STARTSERVER:
@@ -503,10 +503,10 @@ static void StartServer_MenuEvent(void *ptr, int event) {
 
 /*
 ===============
-StartServer_LevelshotDraw
+UI_StartServer_LevelshotDraw
 ===============
 */
-static void StartServer_LevelshotDraw(void *self) {
+static void UI_StartServer_LevelshotDraw(void *self) {
 	menubitmap_s *b;
 	int x;
 	int y;
@@ -572,12 +572,22 @@ static void StartServer_LevelshotDraw(void *self) {
 		UI_DrawStringNS(x, y, s_startserver.longnamemaplist[n], UI_CENTER, 14.0f, color_white);
 }
 
-static void StartServer_Draw(void) {
+/*
+=================
+UI_StartServer_MenuDraw
+=================
+*/
+static void UI_StartServer_MenuDraw(void) {
 	// standard menu drawing
 	Menu_Draw(&s_startserver.menu);
 }
 
-static void GameType_Draw(void *voidptr) {
+/*
+=================
+UI_StartServer_GameTypeDraw
+=================
+*/
+static void UI_StartServer_GameTypeDraw(void *voidptr) {
 	const float *color;
 	int x, y;
 	int style;
@@ -601,13 +611,13 @@ static void GameType_Draw(void *voidptr) {
 
 /*
 =================
-StartServer_MenuInit
+UI_StartServer_MenuInit
 =================
 */
 
 static const char *dedicated_list[] = {"No", "LAN", "Internet", NULL};
 
-static void StartServer_MenuInit(void) {
+static void UI_StartServer_MenuInit(void) {
 	int i;
 	int x;
 	int y;
@@ -618,21 +628,21 @@ static void StartServer_MenuInit(void) {
 	for (i = 0; i < MAX_MAPSINLOOP; i++)
 		s_startserver.maploop[i] = -1;
 
-	StartServer_Cache();
+	UI_StartServer_Cache();
 
 	s_startserver.menu.wrapAround = qtrue;
 	s_startserver.menu.fullscreen = qtrue;
 	s_startserver.menu.bgparts = BGP_STARTSERVER | BGP_MENUFX;
-	s_startserver.menu.draw = StartServer_Draw;
+	s_startserver.menu.draw = UI_StartServer_MenuDraw;
 
 	s_startserver.gametype.generic.type = MTYPE_SPINCONTROL;
 	s_startserver.gametype.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
-	s_startserver.gametype.generic.callback = StartServer_GametypeEvent;
+	s_startserver.gametype.generic.callback = UI_StartServer_GametypeEvent;
 	s_startserver.gametype.generic.id = ID_GAMETYPE;
 	s_startserver.gametype.generic.x = 300;
 	s_startserver.gametype.generic.y = 430;
 	s_startserver.gametype.itemnames = gametype_items;
-	s_startserver.gametype.generic.ownerdraw = GameType_Draw;
+	s_startserver.gametype.generic.ownerdraw = UI_StartServer_GameTypeDraw;
 	s_startserver.gametype.curvalue = gametype_remap2[(int)Com_Clamp(
 		0, (sizeof(gametype_remap2) / sizeof(gametype_remap[0]) - 1), trap_Cvar_VariableValue("ui_createGametype"))];
 
@@ -643,13 +653,13 @@ static void StartServer_MenuInit(void) {
 		s_startserver.mappics[i].generic.type = MTYPE_BITMAP;
 		s_startserver.mappics[i].generic.flags = QMF_LEFT_JUSTIFY;
 		s_startserver.mappics[i].generic.id = ID_PICTURES + i;
-		s_startserver.mappics[i].generic.callback = StartServer_MapEvent;
+		s_startserver.mappics[i].generic.callback = UI_StartServer_MapEvent;
 		s_startserver.mappics[i].generic.x = x;
 		s_startserver.mappics[i].generic.y = y;
 		s_startserver.mappics[i].width = 128;
 		s_startserver.mappics[i].height = 96;
 		s_startserver.mappics[i].errorpic = UNKNOWNMAP;
-		s_startserver.mappics[i].generic.ownerdraw = StartServer_LevelshotDraw;
+		s_startserver.mappics[i].generic.ownerdraw = UI_StartServer_LevelshotDraw;
 	}
 
 	s_startserver.arrowleft.generic.type = MTYPE_BITMAP;
@@ -658,7 +668,7 @@ static void StartServer_MenuInit(void) {
 	s_startserver.arrowleft.generic.x = 128;
 	s_startserver.arrowleft.generic.y = 399;
 	s_startserver.arrowleft.generic.id = ID_PREVPAGE;
-	s_startserver.arrowleft.generic.callback = StartServer_MenuEvent;
+	s_startserver.arrowleft.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.arrowleft.width = 60;
 	s_startserver.arrowleft.height = 25;
 	s_startserver.arrowleft.focuspic = ARROWLT1;
@@ -670,7 +680,7 @@ static void StartServer_MenuInit(void) {
 	s_startserver.arrowright.generic.x = 198;
 	s_startserver.arrowright.generic.y = 399;
 	s_startserver.arrowright.generic.id = ID_NEXTPAGE;
-	s_startserver.arrowright.generic.callback = StartServer_MenuEvent;
+	s_startserver.arrowright.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.arrowright.width = 60;
 	s_startserver.arrowright.height = 25;
 	s_startserver.arrowright.focuspic = ARROWRT1;
@@ -679,7 +689,7 @@ static void StartServer_MenuInit(void) {
 	s_startserver.back.generic.type = MTYPE_BITMAP;
 	s_startserver.back.generic.name = BACK0;
 	s_startserver.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	s_startserver.back.generic.callback = StartServer_MenuEvent;
+	s_startserver.back.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.back.generic.id = ID_STARTSERVERBACK;
 	s_startserver.back.focuspic = BACK1;
 	s_startserver.back.generic.x = 8;
@@ -775,7 +785,7 @@ static void StartServer_MenuInit(void) {
 	s_startserver.selectbots.generic.type = MTYPE_BITMAP;
 	s_startserver.selectbots.generic.name = SELECTBOTS0;
 	s_startserver.selectbots.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_startserver.selectbots.generic.callback = StartServer_MenuEvent;
+	s_startserver.selectbots.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.selectbots.generic.id = ID_SELECTBOTS;
 	s_startserver.selectbots.focuspic = SELECTBOTS1;
 	s_startserver.selectbots.generic.x = OPTIONS_XPOS - 70;
@@ -787,7 +797,7 @@ static void StartServer_MenuInit(void) {
 	s_startserver.fight.generic.type = MTYPE_BITMAP;
 	s_startserver.fight.generic.name = FIGHT0;
 	s_startserver.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_startserver.fight.generic.callback = StartServer_MenuEvent;
+	s_startserver.fight.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.fight.generic.id = ID_STARTSERVER;
 	s_startserver.fight.focuspic = FIGHT1;
 	s_startserver.fight.generic.x = 545;
@@ -838,15 +848,15 @@ static void StartServer_MenuInit(void) {
 	Q_strncpyz(s_startserver.StartLives.field.buffer, UI_Cvar_VariableString("g_LPS_startlives"),
 			   sizeof(s_startserver.StartLives.field.buffer));
 
-	StartServer_GametypeEvent(NULL, QM_ACTIVATED);
+	UI_StartServer_GametypeEvent(NULL, QM_ACTIVATED);
 }
 
 /*
 =================
-StartServer_Cache
+UI_StartServer_Cache
 =================
 */
-void StartServer_Cache(void) {
+void UI_StartServer_Cache(void) {
 	int i;
 	const char *info;
 	char picname[MAX_QPATH];
@@ -872,7 +882,7 @@ void StartServer_Cache(void) {
 		info = UI_GetArenaInfoByNumber(i);
 
 		Q_strncpyz(s_startserver.maplist[i], Info_ValueForKey(info, "map"), sizeof(s_startserver.maplist[i]));
-		s_startserver.mapGamebits[i] = GametypeBits(Info_ValueForKey(info, "type"));
+		s_startserver.mapGamebits[i] = UI_StartServer_GametypeBits(Info_ValueForKey(info, "type"));
 
 		Com_sprintf(picname, sizeof(picname), "levelshots/%sA", s_startserver.maplist[i]);
 		if (!trap_R_RegisterShaderNoMip(picname)) {
@@ -891,17 +901,17 @@ UI_StartServerMenu
 =================
 */
 void UI_StartServerMenu(qboolean multiplayer) {
-	StartServer_MenuInit();
+	UI_StartServer_MenuInit();
 	s_startserver.multiplayer = multiplayer;
 	UI_PushMenu(&s_startserver.menu);
 }
 
 /*
-=============================================================================
+=======================================================================
 
-BOT SELECT MENU *****
+SELECT BOTS MENU
 
-=============================================================================
+=======================================================================
 */
 
 #define ARROWUP0 "menu/arrows/headyel_up0"
@@ -953,10 +963,10 @@ static const char *botSkill_list[] = {"Kindergarten", "Flower Power", "Mosquito 
 
 /*
 =================
-UI_BotSelectMenu_BuildList
+UI_SelectBots_BuildList
 =================
 */
-static void UI_BotSelectMenu_BuildList(void) {
+static void UI_SelectBots_BuildList(void) {
 	int n;
 
 	botSelectInfo.modelpage = 0;
@@ -977,10 +987,10 @@ static void UI_BotSelectMenu_BuildList(void) {
 
 /*
 =================
-ServerPlayerIcon
+UI_SelectBots_ServerPlayerIcon
 =================
 */
-static void ServerPlayerIcon(const char *modelAndSkin, char *iconName, int iconNameMaxSize) {
+static void UI_SelectBots_ServerPlayerIcon(const char *modelAndSkin, char *iconName, int iconNameMaxSize) {
 	char *skin;
 	char model[MAX_QPATH];
 
@@ -1001,10 +1011,10 @@ static void ServerPlayerIcon(const char *modelAndSkin, char *iconName, int iconN
 
 /*
 =================
-UI_BotSelectMenu_UpdateGrid
+UI_SelectBots_UpdateGrid
 =================
 */
-static void UI_BotSelectMenu_UpdateGrid(void) {
+static void UI_SelectBots_UpdateGrid(void) {
 	const char *info;
 	int i;
 	int j;
@@ -1013,7 +1023,7 @@ static void UI_BotSelectMenu_UpdateGrid(void) {
 	for (i = 0; i < (PLAYERGRID_ROWS * PLAYERGRID_COLS); i++, j++) {
 		if (j < botSelectInfo.numBots) {
 			info = UI_GetBotInfoByNumber(botSelectInfo.sortedBotNums[j]);
-			ServerPlayerIcon(Info_ValueForKey(info, "model"), botSelectInfo.boticons[i], MAX_QPATH);
+			UI_SelectBots_ServerPlayerIcon(Info_ValueForKey(info, "model"), botSelectInfo.boticons[i], MAX_QPATH);
 			Q_strncpyz(botSelectInfo.botnames[i], Info_ValueForKey(info, "name"), 16);
 			Q_CleanStr(botSelectInfo.botnames[i]);
 			botSelectInfo.pics[i].generic.name = botSelectInfo.boticons[i];
@@ -1049,37 +1059,42 @@ static void UI_BotSelectMenu_UpdateGrid(void) {
 
 /*
 =================
-UI_BotSelectMenu_LeftEvent
+UI_SelectBots_LeftEvent
 =================
 */
-static void UI_BotSelectMenu_LeftEvent(void *ptr, int event) {
+static void UI_SelectBots_LeftEvent(void *ptr, int event) {
 	if (event != QM_ACTIVATED) {
 		return;
 	}
 	if (botSelectInfo.modelpage > 0) {
 		botSelectInfo.modelpage--;
 		botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_MODELSPERPAGE;
-		UI_BotSelectMenu_UpdateGrid();
+		UI_SelectBots_UpdateGrid();
 	}
 }
 
 /*
 =================
-UI_BotSelectMenu_RightEvent
+UI_SelectBots_RightEvent
 =================
 */
-static void UI_BotSelectMenu_RightEvent(void *ptr, int event) {
+static void UI_SelectBots_RightEvent(void *ptr, int event) {
 	if (event != QM_ACTIVATED) {
 		return;
 	}
 	if (botSelectInfo.modelpage < botSelectInfo.numpages - 1) {
 		botSelectInfo.modelpage++;
 		botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_MODELSPERPAGE;
-		UI_BotSelectMenu_UpdateGrid();
+		UI_SelectBots_UpdateGrid();
 	}
 }
 
-int getNumSelectedBots(void) {
+/*
+=================
+UI_SelectBots_GetNumSelectedBots
+=================
+*/
+int UI_SelectBots_GetNumSelectedBots(void) {
 	int i, numBots = 0;
 
 	for (i = 0; i < MAX_SELECTBOTS; i++) {
@@ -1090,18 +1105,28 @@ int getNumSelectedBots(void) {
 	return numBots;
 }
 
-int getSlotsLeft(void) {
+/*
+=================
+UI_SelectBots_GetSlotsLeft
+=================
+*/
+int UI_SelectBots_GetSlotsLeft(void) {
 	int maxclients = atoi(s_startserver.maxclients.field.buffer);
 
 	if (s_startserver.dedicated.curvalue == 0) {
 		// running locally
-		return (maxclients - getNumSelectedBots() - 1);
+		return (maxclients - UI_SelectBots_GetNumSelectedBots() - 1);
 	} else {
-		return (maxclients - getNumSelectedBots());
+		return (maxclients - UI_SelectBots_GetNumSelectedBots());
 	}
 }
 
-void UI_BotSelectMenu_UpdateList(void) {
+/*
+=================
+UI_SelectBots_UpdateList
+=================
+*/
+void UI_SelectBots_UpdateList(void) {
 	int i, j;
 	char *tmpptr;
 
@@ -1162,15 +1187,15 @@ void UI_BotSelectMenu_UpdateList(void) {
 			botSelectInfo.selectedbotteams[i].generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 		}
 	}
-	botSelectInfo.slotsleft.string = va("Open Slots: %2d", getSlotsLeft());
+	botSelectInfo.slotsleft.string = va("Open Slots: %2d", UI_SelectBots_GetSlotsLeft());
 }
 
 /*
 =================
-UI_BotSelectMenu_BotEvent
+UI_SelectBots_BotEvent
 =================
 */
-static void UI_BotSelectMenu_BotEvent(void *ptr, int event) {
+static void UI_SelectBots_BotEvent(void *ptr, int event) {
 	int i, j;
 
 	if (event != QM_ACTIVATED) {
@@ -1181,7 +1206,7 @@ static void UI_BotSelectMenu_BotEvent(void *ptr, int event) {
 	i = ((menucommon_s *)ptr)->id;
 	botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_MODELSPERPAGE + i;
 
-	if (getSlotsLeft() <= 0) {
+	if (UI_SelectBots_GetSlotsLeft() <= 0) {
 		return;
 	}
 
@@ -1199,15 +1224,15 @@ static void UI_BotSelectMenu_BotEvent(void *ptr, int event) {
 
 		break;
 	}
-	UI_BotSelectMenu_UpdateList();
+	UI_SelectBots_UpdateList();
 }
 
 /*
 =================
-UI_BotSelectMenu_BackEvent
+UI_SelectBots_BackEvent
 =================
 */
-static void UI_BotSelectMenu_BackEvent(void *ptr, int event) {
+static void UI_SelectBots_BackEvent(void *ptr, int event) {
 	if (event != QM_ACTIVATED) {
 		return;
 	}
@@ -1216,10 +1241,10 @@ static void UI_BotSelectMenu_BackEvent(void *ptr, int event) {
 
 /*
 =================
-UI_BotSelectMenu_Cache
+UI_SelectBots_Cache
 =================
 */
-void UI_BotSelectMenu_Cache(void) {
+void UI_SelectBots_Cache(void) {
 	trap_R_RegisterShaderNoMip(ARROWLT0);
 	trap_R_RegisterShaderNoMip(ARROWLT1);
 	trap_R_RegisterShaderNoMip(ARROWRT0);
@@ -1235,10 +1260,10 @@ void UI_BotSelectMenu_Cache(void) {
 
 /*
 =================
-UI_BotSelectMenu_SelectBotName
+UI_SelectBots_SelectBotName
 =================
 */
-static void UI_BotSelectMenu_SelectBotName(void *ptr, int event) {
+static void UI_SelectBots_SelectBotName(void *ptr, int event) {
 	selectbotinfo_t tmpcpy;
 	int i;
 
@@ -1255,15 +1280,15 @@ static void UI_BotSelectMenu_SelectBotName(void *ptr, int event) {
 		memcpy(&s_startserver.selectbotinfos[i], &s_startserver.selectbotinfos[i + 1], sizeof(selectbotinfo_t));
 		memcpy(&s_startserver.selectbotinfos[i + 1], &tmpcpy, sizeof(selectbotinfo_t));
 	}
-	UI_BotSelectMenu_UpdateList();
+	UI_SelectBots_UpdateList();
 }
 
 /*
-#######################
-UI_BotSelectMenu_SelectBotTeam
-#######################
+=================
+UI_SelectBots_SelectBotTeam
+=================
 */
-static void UI_BotSelectMenu_SelectBotTeam(void *ptr, int event) {
+static void UI_SelectBots_SelectBotTeam(void *ptr, int event) {
 	int i;
 	if (event != QM_ACTIVATED)
 		return;
@@ -1282,52 +1307,57 @@ static void UI_BotSelectMenu_SelectBotTeam(void *ptr, int event) {
 		s_startserver.selectbotinfos[i].team = t;
 	}
 
-	UI_BotSelectMenu_UpdateList();
+	UI_SelectBots_UpdateList();
 }
 
 /*
-#######################
-UI_BotSelectMenu_ListUp
-#######################
+=================
+UI_SelectBots_ListUp
+=================
 */
-static void UI_BotSelectMenu_ListUp(void *ptr, int event) {
+static void UI_SelectBots_ListUp(void *ptr, int event) {
 	if (event != QM_ACTIVATED)
 		return;
 
 	if (botSelectInfo.topbot > 0)
 		botSelectInfo.topbot--;
 
-	UI_BotSelectMenu_UpdateList();
+	UI_SelectBots_UpdateList();
 }
 
 /*
-#######################
-UI_BotSelectMenu_ListDown
-#######################
+=================
+UI_SelectBots_ListDown
+=================
 */
-static void UI_BotSelectMenu_ListDown(void *ptr, int event) {
+static void UI_SelectBots_ListDown(void *ptr, int event) {
 	if (event != QM_ACTIVATED)
 		return;
 
 	if (botSelectInfo.topbot < MAX_SELECTBOTS - MAX_SELECTLISTBOTS)
 		botSelectInfo.topbot++;
 
-	UI_BotSelectMenu_UpdateList();
+	UI_SelectBots_UpdateList();
 }
 
 /*
-#######################
-UI_BotSelectMenu_BotSkillChanged
-#######################
+=================
+UI_SelectBots_BotSkillChanged
+=================
 */
-static void UI_BotSelectMenu_BotSkillChanged(void *ptr, int event) {
+static void UI_SelectBots_BotSkillChanged(void *ptr, int event) {
 	if (event != QM_ACTIVATED)
 		return;
 
 	s_startserver.botskill = ((menulist_s *)ptr)->curvalue + 1;
 }
 
-static void UI_BotSelectMenu_DrawBotIcon(void *self) {
+/*
+=================
+UI_SelectBots_DrawBotIcon
+=================
+*/
+static void UI_SelectBots_DrawBotIcon(void *self) {
 	menubitmap_s *b = (menubitmap_s *)self;
 	float x;
 	float y;
@@ -1356,11 +1386,11 @@ static void UI_BotSelectMenu_DrawBotIcon(void *self) {
 }
 
 /*
-#######################
-UI_BotSelectMenu_Init
-#######################
+=================
+UI_SelectBots_MenuInit
+=================
 */
-static void UI_BotSelectMenu_Init(void) {
+static void UI_SelectBots_MenuInit(void) {
 	int i, j, k;
 	int x, y;
 
@@ -1369,7 +1399,7 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.menu.fullscreen = qtrue;
 	botSelectInfo.menu.bgparts = BGP_SELECTBOTS | BGP_MENUFX;
 
-	UI_BotSelectMenu_Cache();
+	UI_SelectBots_Cache();
 
 	y = 54;
 	for (i = 0, k = 0; i < PLAYERGRID_ROWS; i++) {
@@ -1382,9 +1412,9 @@ static void UI_BotSelectMenu_Init(void) {
 			botSelectInfo.pics[k].generic.name = botSelectInfo.boticons[k];
 			botSelectInfo.pics[k].width = 64;
 			botSelectInfo.pics[k].height = 64;
-			botSelectInfo.pics[k].generic.callback = UI_BotSelectMenu_BotEvent;
+			botSelectInfo.pics[k].generic.callback = UI_SelectBots_BotEvent;
 			botSelectInfo.pics[k].generic.id = k;
-			botSelectInfo.pics[k].generic.ownerdraw = UI_BotSelectMenu_DrawBotIcon;
+			botSelectInfo.pics[k].generic.ownerdraw = UI_SelectBots_DrawBotIcon;
 			x += (64 + 27);
 		}
 		y += (64 + 21);
@@ -1395,7 +1425,7 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	botSelectInfo.arrowleft.generic.x = 148;
 	botSelectInfo.arrowleft.generic.y = 400;
-	botSelectInfo.arrowleft.generic.callback = UI_BotSelectMenu_LeftEvent;
+	botSelectInfo.arrowleft.generic.callback = UI_SelectBots_LeftEvent;
 	botSelectInfo.arrowleft.width = 60;
 	botSelectInfo.arrowleft.height = 25;
 	botSelectInfo.arrowleft.focuspic = ARROWLT1;
@@ -1406,7 +1436,7 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	botSelectInfo.arrowright.generic.x = 232;
 	botSelectInfo.arrowright.generic.y = 400;
-	botSelectInfo.arrowright.generic.callback = UI_BotSelectMenu_RightEvent;
+	botSelectInfo.arrowright.generic.callback = UI_SelectBots_RightEvent;
 	botSelectInfo.arrowright.width = 60;
 	botSelectInfo.arrowright.height = 25;
 	botSelectInfo.arrowright.focuspic = ARROWRT1;
@@ -1424,7 +1454,7 @@ static void UI_BotSelectMenu_Init(void) {
 		botSelectInfo.selectedbotnames[i].color = color_white;
 		botSelectInfo.selectedbotnames[i].focuscolor = color_orange;
 		botSelectInfo.selectedbotnames[i].generic.id = i;
-		botSelectInfo.selectedbotnames[i].generic.callback = UI_BotSelectMenu_SelectBotName;
+		botSelectInfo.selectedbotnames[i].generic.callback = UI_SelectBots_SelectBotName;
 
 		botSelectInfo.selectedbotteams[i].generic.type = MTYPE_TEXTS;
 		botSelectInfo.selectedbotteams[i].fontHeight = 16.0f;
@@ -1435,7 +1465,7 @@ static void UI_BotSelectMenu_Init(void) {
 		botSelectInfo.selectedbotteams[i].color = color_blue;
 		botSelectInfo.selectedbotteams[i].focuscolor = color_white;
 		botSelectInfo.selectedbotteams[i].generic.id = i;
-		botSelectInfo.selectedbotteams[i].generic.callback = UI_BotSelectMenu_SelectBotTeam;
+		botSelectInfo.selectedbotteams[i].generic.callback = UI_SelectBots_SelectBotTeam;
 	}
 
 	botSelectInfo.arrowup.generic.type = MTYPE_BITMAP;
@@ -1443,7 +1473,7 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	botSelectInfo.arrowup.generic.x = 608;
 	botSelectInfo.arrowup.generic.y = 228;
-	botSelectInfo.arrowup.generic.callback = UI_BotSelectMenu_ListUp;
+	botSelectInfo.arrowup.generic.callback = UI_SelectBots_ListUp;
 	botSelectInfo.arrowup.width = 25;
 	botSelectInfo.arrowup.height = 60;
 	botSelectInfo.arrowup.focuspic = ARROWUP1;
@@ -1454,7 +1484,7 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	botSelectInfo.arrowdown.generic.x = 608;
 	botSelectInfo.arrowdown.generic.y = 310;
-	botSelectInfo.arrowdown.generic.callback = UI_BotSelectMenu_ListDown;
+	botSelectInfo.arrowdown.generic.callback = UI_SelectBots_ListDown;
 	botSelectInfo.arrowdown.width = 25;
 	botSelectInfo.arrowdown.height = 60;
 	botSelectInfo.arrowdown.focuspic = ARROWDN1;
@@ -1467,12 +1497,12 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.BotSkill.generic.y = 420;
 	botSelectInfo.BotSkill.itemnames = botSkill_list;
 	botSelectInfo.BotSkill.curvalue = 1;
-	botSelectInfo.BotSkill.generic.callback = UI_BotSelectMenu_BotSkillChanged;
+	botSelectInfo.BotSkill.generic.callback = UI_SelectBots_BotSkillChanged;
 	s_startserver.botskill = 2;
 
 	botSelectInfo.slotsleft.generic.type = MTYPE_TEXTS;
 	botSelectInfo.slotsleft.generic.flags = QMF_SMALLFONT;
-	botSelectInfo.slotsleft.string = va("Open Slots: %2d", getSlotsLeft());
+	botSelectInfo.slotsleft.string = va("Open Slots: %2d", UI_SelectBots_GetSlotsLeft());
 	botSelectInfo.slotsleft.generic.x = 430;
 	botSelectInfo.slotsleft.generic.y = 440;
 	botSelectInfo.slotsleft.color = color_yellow;
@@ -1480,7 +1510,7 @@ static void UI_BotSelectMenu_Init(void) {
 	botSelectInfo.back.generic.type = MTYPE_BITMAP;
 	botSelectInfo.back.generic.name = BACK0;
 	botSelectInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	botSelectInfo.back.generic.callback = UI_BotSelectMenu_BackEvent;
+	botSelectInfo.back.generic.callback = UI_SelectBots_BackEvent;
 	botSelectInfo.back.generic.x = 552;
 	botSelectInfo.back.generic.y = 440;
 	botSelectInfo.back.width = 80;
@@ -1504,18 +1534,18 @@ static void UI_BotSelectMenu_Init(void) {
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.slotsleft);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.back);
 
-	UI_BotSelectMenu_BuildList();
-	UI_BotSelectMenu_UpdateList(); // selectbot-list
+	UI_SelectBots_BuildList();
+	UI_SelectBots_UpdateList(); // selectbot-list
 	botSelectInfo.modelpage = botSelectInfo.selectedmodel / MAX_MODELSPERPAGE;
-	UI_BotSelectMenu_UpdateGrid();
+	UI_SelectBots_UpdateGrid();
 }
 
 /*
 =================
-UI_BotSelectMenu
+UI_SelectBotsMenu
 =================
 */
-void UI_BotSelectMenu(void) {
-	UI_BotSelectMenu_Init();
+void UI_SelectBotsMenu(void) {
+	UI_SelectBots_MenuInit();
 	UI_PushMenu(&botSelectInfo.menu);
 }

@@ -1043,7 +1043,7 @@ void UI_Cache_f(void) {
 	ServerInfo_Cache();
 	SpecifyServer_Cache();
 	ArenaServers_Cache();
-	StartServer_Cache();
+	UI_StartServer_Cache();
 
 	UI_GraphicsOptions_Cache();
 	UI_DisplayOptions_Cache();
@@ -1058,7 +1058,7 @@ void UI_Cache_f(void) {
 	UI_BigCredits_Cache();
 	UI_Credit_Cache();
 
-	UI_BotSelectMenu_Cache();
+	UI_SelectBots_Cache();
 	UI_ModsMenu_Cache();
 }
 
@@ -1454,7 +1454,7 @@ qboolean UI_CursorInRect(int x, int y, int width, int height) {
 /*
 #######################
 UI_ModelIcon
-based on ServerPlayerIcon(ui_startserver.c)
+based on UI_SelectBots_ServerPlayerIcon(ui_startserver.c)
 #######################
 */
 void UI_ModelIcon(const char *modelAndSkin, char *iconName, int SizeOfIconName) {
