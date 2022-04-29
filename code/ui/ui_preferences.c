@@ -248,7 +248,7 @@ static void UI_Preferences_SetMenuItems(void) {
 	int cg_iconsCvarValue;
 
 	s_preferences.crosshair.curvalue = (int)trap_Cvar_VariableValue("cg_drawCrosshair") % NUM_CROSSHAIRS;
-	s_preferences.indicatehealth.curvalue = trap_Cvar_VariableValue("cg_drawCrosshairHealth") != 0;
+	s_preferences.indicatehealth.curvalue = trap_Cvar_VariableValue("cg_crosshairHealth") != 0;
 	s_preferences.identifytarget.curvalue = trap_Cvar_VariableValue("cg_drawCrosshairNames") != 0;
 	s_preferences.ffahudtheme.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopffahud"));
 	s_preferences.teamoverlay.curvalue = trap_Cvar_VariableValue("cg_drawTeamOverlay") != 0;
@@ -431,7 +431,7 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 		break;
 
 	case ID_INDICATEHEALTH:
-		trap_Cvar_SetValue("cg_drawCrosshairHealth", s_preferences.indicatehealth.curvalue);
+		trap_Cvar_SetValue("cg_crosshairHealth", s_preferences.indicatehealth.curvalue);
 		break;
 
 	case ID_IDENTIFYTARGET:
