@@ -222,7 +222,7 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 		break;
 
 	case ID_SCREENSIZE:
-		trap_Cvar_SetValue("cg_viewsize", (float)displayOptionsInfo.screensize.curvalue);
+		trap_Cvar_SetValue("cg_viewsize", (int)displayOptionsInfo.screensize.curvalue);
 		break;
 
 	case ID_MAXFPS:
