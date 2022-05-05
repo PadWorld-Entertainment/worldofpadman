@@ -98,8 +98,8 @@ typedef struct {
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{3, 1, 0, 1, 2, 3, 3, 2, 5, qfalse, 3},	// Can it run WoP?
-												  {3, 0, 0, 1, 2, 3, 3, 2, 3, qfalse, 2},	// Maximum
+static InitialVideoOptions_s s_ivo_templates[] = {{3, 1, 0, 1, 3, 3, 3, 2, 5, qfalse, 3},	// Can it run WoP?
+												  {3, 0, 0, 1, 3, 3, 3, 2, 3, qfalse, 2},	// Maximum
 												  {2, 0, 0, 1, 2, 2, 2, 2, 2, qfalse, 1},	// Quality
 												  {1, 0, 0, 1, 1, 1, 1, 0, 1, qfalse, 0},	// Performance
 												  {0, 0, 0, 0, 0, 0, 0, 1, 0, qtrue, 0},	// Minimum
@@ -393,7 +393,9 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	}
 	trap_Cvar_SetValue("r_vertexLight", !s_graphicsoptions.lighting.curvalue);
 
-	if (s_graphicsoptions.mdetail.curvalue == 2) {
+	if (s_graphicsoptions.mdetail.curvalue == 3) {
+		trap_Cvar_SetValue("r_lodBias", -2);
+	} else if (s_graphicsoptions.mdetail.curvalue == 2) {
 		trap_Cvar_SetValue("r_lodBias", 0);
 	} else if (s_graphicsoptions.mdetail.curvalue == 1) {
 		trap_Cvar_SetValue("r_lodBias", 1);
@@ -593,7 +595,9 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 		}
 	}
 
-	if (trap_Cvar_VariableValue("r_lodBias") < 1) {
+	if (trap_Cvar_VariableValue("r_lodBias") < 0) {
+		s_graphicsoptions.mdetail.curvalue = 3;
+	} else if (trap_Cvar_VariableValue("r_lodBias") < 1) {
 		s_graphicsoptions.mdetail.curvalue = 2;
 	} else if (trap_Cvar_VariableValue("r_lodBias") < 2) {
 		s_graphicsoptions.mdetail.curvalue = 1;
@@ -647,7 +651,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	static const char *renderer_names[] = {"OpenGL1", "OpenGL2", "Vulkan", NULL};
 	static const char *colordepth_names[] = {"Desktop", "16 bit", "32 bit", NULL};
 	static const char *lighting_names[] = {"Low (Vertex)", "High (Lightmap)", NULL};
-	static const char *mdetail_names[] = {"Low", "Medium", "High", NULL};
+	static const char *mdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *cdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *tdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *tquality_names[] = {"Default", "16 bit", "32 bit", NULL};
@@ -793,7 +797,8 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.mdetail.generic.toolTip =
 		"Select a desired models detail. Default is high. It enables the game to load high "
 		"quality models on lower distances. Setting a lower level causes models with less "
-		"polygons to be loaded but can save system resources.";
+		"polygons to be loaded but can save system resources. Setting maximum always results "
+		"in high quality models regardless of the distance.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_subdivisions"
