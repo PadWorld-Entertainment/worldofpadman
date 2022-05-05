@@ -98,11 +98,11 @@ typedef struct {
 static InitialVideoOptions_s s_ivo;
 static graphicsoptions_t s_graphicsoptions;
 
-static InitialVideoOptions_s s_ivo_templates[] = {{3, 1, 2, 1, 2, 3, 3, 2, 5, qfalse, 3},	// Can it run WoP?
-												  {3, 0, 2, 1, 2, 3, 3, 2, 3, qfalse, 2},	// Maximum
-												  {2, 0, 2, 1, 2, 2, 2, 2, 2, qfalse, 1},	// Quality
+static InitialVideoOptions_s s_ivo_templates[] = {{3, 1, 0, 1, 2, 3, 3, 2, 5, qfalse, 3},	// Can it run WoP?
+												  {3, 0, 0, 1, 2, 3, 3, 2, 3, qfalse, 2},	// Maximum
+												  {2, 0, 0, 1, 2, 2, 2, 2, 2, qfalse, 1},	// Quality
 												  {1, 0, 0, 1, 1, 1, 1, 0, 1, qfalse, 0},	// Performance
-												  {0, 0, 1, 0, 0, 0, 0, 0, 0, qtrue, 0},	// Minimum
+												  {0, 0, 0, 0, 0, 0, 0, 1, 0, qtrue, 0},	// Minimum
 												  {3, 0, 0, 1, 2, 2, 2, 0, 1, qfalse, 0}};	// Custom
 
 #define NUM_IVO_TEMPLATES (ARRAY_LEN(s_ivo_templates))
