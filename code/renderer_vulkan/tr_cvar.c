@@ -127,7 +127,7 @@ void R_Register(void) {
 
 	r_nocurves = ri.Cvar_Get("r_nocurves", "0", CVAR_CHEAT);
 	r_drawworld = ri.Cvar_Get("r_drawworld", "1", CVAR_CHEAT);
-	r_lightmap = ri.Cvar_Get("r_lightmap", "0", 0);
+	r_lightmap = ri.Cvar_Get("r_lightmap", "0", CVAR_CHEAT);
 	r_portalOnly = ri.Cvar_Get("r_portalOnly", "0", CVAR_TEMP);
 
 	r_norefresh = ri.Cvar_Get("r_norefresh", "0", CVAR_CHEAT);
