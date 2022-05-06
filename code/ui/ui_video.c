@@ -308,10 +308,16 @@ UI_GraphicsOptions_UpdateMenuItems
 */
 static void UI_GraphicsOptions_UpdateMenuItems(void) {
 	if (UI_GetCvarInt("r_fullscreen") == 0) {
-		s_graphicsoptions.colordepth.curvalue = 0;
 		s_graphicsoptions.colordepth.generic.flags |= QMF_GRAYED;
 	} else {
 		s_graphicsoptions.colordepth.generic.flags &= ~QMF_GRAYED;
+	}
+
+	if (Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2") ||
+		(s_graphicsoptions.renderer.curvalue != 1)) {
+		s_graphicsoptions.effects.generic.flags |= QMF_GRAYED;
+	} else {
+		s_graphicsoptions.effects.generic.flags &= ~QMF_GRAYED;
 	}
 
 	s_graphicsoptions.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
@@ -884,7 +890,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_graphicsoptions.effects.generic.type = MTYPE_TEXTS;
-	s_graphicsoptions.effects.string = "Effects Settings";
+	s_graphicsoptions.effects.string = "Advanced Effects";
 	s_graphicsoptions.effects.fontHeight = 20.0f;
 	s_graphicsoptions.effects.generic.flags = QMF_CENTER_JUSTIFY;
 	s_graphicsoptions.effects.generic.x = XPOSITION;

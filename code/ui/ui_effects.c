@@ -52,8 +52,11 @@ EFFECTS OPTIONS MENU
 
 #define ID_HDR 10
 #define ID_SSAO 11
-#define ID_SUNSHADOWS 12
-#define ID_SUNLIGHTMODE 13
+#define ID_AUTOEXPOSURE 12
+#define ID_SUNSHADOWS 13
+#define ID_SUNLIGHTMODE 14
+#define ID_SHADOWFILTER 15
+#define ID_SHADOWMAPSIZE 16
 
 #define XPOSITION 180
 #define YPOSITION 180 + 36
@@ -68,8 +71,11 @@ typedef struct {
 
 	menuradiobutton_s hdr;
 	menuradiobutton_s ssao;
+	menuradiobutton_s autoExposure;
 	menuradiobutton_s sunShadows;
 	menulist_s sunlightMode;
+	menulist_s shadowFilter;
+	menulist_s shadowMapSize;
 
 	menubitmap_s apply;
 	menubitmap_s back;
@@ -78,6 +84,8 @@ typedef struct {
 	int ssao_original;
 	int sunShadows_original;
 	int sunlightMode_original;
+	int shadowFilter_original;
+	int shadowMapSize_original;
 } effectsOptionsInfo_t;
 
 static effectsOptionsInfo_t effectsOptionsInfo;
@@ -95,6 +103,8 @@ static void UI_EffectsOptions_SetMenuItems(void) {
 	effectsOptionsInfo.ssao_original = UI_GetCvarInt("r_ssao");
 	effectsOptionsInfo.ssao.curvalue = effectsOptionsInfo.ssao_original;
 
+	effectsOptionsInfo.autoExposure.curvalue = UI_GetCvarInt("r_autoExposure");
+
 	effectsOptionsInfo.sunShadows_original = UI_GetCvarInt("r_sunShadows");
 	effectsOptionsInfo.sunShadows.curvalue = effectsOptionsInfo.sunShadows_original;
 
@@ -106,6 +116,26 @@ static void UI_EffectsOptions_SetMenuItems(void) {
 		effectsOptionsInfo.sunlightMode_original = 1;
 	}
 	effectsOptionsInfo.sunlightMode.curvalue = effectsOptionsInfo.sunlightMode_original;
+
+	if (UI_GetCvarInt("r_shadowFilter") > 1) {
+		effectsOptionsInfo.shadowFilter_original = 2;
+	} else if (UI_GetCvarInt("r_shadowFilter") < 1) {
+		effectsOptionsInfo.shadowFilter_original = 0;
+	} else {
+		effectsOptionsInfo.shadowFilter_original = 1;
+	}
+	effectsOptionsInfo.shadowFilter.curvalue = effectsOptionsInfo.shadowFilter_original;
+
+	if (trap_Cvar_VariableValue("r_shadowMapSize") > 2048) {
+		effectsOptionsInfo.shadowMapSize_original = 3;
+	} else if (trap_Cvar_VariableValue("r_shadowMapSize") > 1024) {
+		effectsOptionsInfo.shadowMapSize_original = 2;
+	} else if (trap_Cvar_VariableValue("r_shadowMapSize") > 512) {
+		effectsOptionsInfo.shadowMapSize_original = 1;
+	} else {
+		effectsOptionsInfo.shadowMapSize_original = 0;
+	}
+	effectsOptionsInfo.shadowMapSize.curvalue = effectsOptionsInfo.shadowMapSize_original;
 }
 
 /*
@@ -115,6 +145,12 @@ UI_EffectsOptions_UpdateMenuItems
 */
 static void UI_EffectsOptions_UpdateMenuItems(void) {
 
+	if (!effectsOptionsInfo.hdr.curvalue) {
+		effectsOptionsInfo.autoExposure.generic.flags |= QMF_GRAYED;
+	} else {
+		effectsOptionsInfo.autoExposure.generic.flags &= ~QMF_GRAYED;
+	}
+
 	effectsOptionsInfo.apply.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 	if (effectsOptionsInfo.hdr_original != effectsOptionsInfo.hdr.curvalue) {
 		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
@@ -123,6 +159,10 @@ static void UI_EffectsOptions_UpdateMenuItems(void) {
 	} else if (effectsOptionsInfo.sunShadows_original != effectsOptionsInfo.sunShadows.curvalue) {
 		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (effectsOptionsInfo.sunlightMode_original != effectsOptionsInfo.sunlightMode.curvalue) {
+		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (effectsOptionsInfo.shadowFilter_original != effectsOptionsInfo.shadowFilter.curvalue) {
+		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+	} else if (effectsOptionsInfo.shadowMapSize_original != effectsOptionsInfo.shadowMapSize.curvalue) {
 		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 }
@@ -142,6 +182,8 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 	case ID_SSAO:
 	case ID_SUNSHADOWS:
 	case ID_SUNLIGHTMODE:
+	case ID_SHADOWFILTER:
+	case ID_SHADOWMAPSIZE:
 		break;
 
 	case ID_GRAPHICS:
@@ -164,6 +206,10 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 		UI_NetworkOptionsMenu();
 		break;
 
+	case ID_AUTOEXPOSURE:
+		trap_Cvar_SetValue("r_autoExposure", effectsOptionsInfo.autoExposure.curvalue);
+		break;
+
 	case ID_BACK:
 		UI_PopMenu();
 		break;
@@ -172,7 +218,9 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 		if ((effectsOptionsInfo.hdr_original != effectsOptionsInfo.hdr.curvalue) ||
 			(effectsOptionsInfo.ssao_original != effectsOptionsInfo.ssao.curvalue) ||
 			(effectsOptionsInfo.sunShadows_original != effectsOptionsInfo.sunShadows.curvalue) ||
-			(effectsOptionsInfo.sunlightMode_original != effectsOptionsInfo.sunlightMode.curvalue)) {
+			(effectsOptionsInfo.sunlightMode_original != effectsOptionsInfo.sunlightMode.curvalue) ||
+			(effectsOptionsInfo.shadowFilter_original != effectsOptionsInfo.shadowFilter.curvalue) ||
+			(effectsOptionsInfo.shadowMapSize_original != effectsOptionsInfo.shadowMapSize.curvalue)) {
 
 			trap_Cvar_SetValue("r_hdr", effectsOptionsInfo.hdr.curvalue);
 			trap_Cvar_SetValue("r_ssao", effectsOptionsInfo.ssao.curvalue);
@@ -185,6 +233,24 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 				trap_Cvar_SetValue("r_sunlightMode", 0);
 			} else {
 				trap_Cvar_SetValue("r_sunlightMode", 1);
+			}
+
+			if (effectsOptionsInfo.shadowFilter.curvalue > 1) {
+				trap_Cvar_SetValue("r_shadowFilter", 2);
+			} else if (effectsOptionsInfo.shadowFilter.curvalue < 1) {
+				trap_Cvar_SetValue("r_shadowFilter", 0);
+			} else {
+				trap_Cvar_SetValue("r_shadowFilter", 1);
+			}
+
+			if (effectsOptionsInfo.shadowMapSize.curvalue == 3) {
+				trap_Cvar_SetValue("r_shadowMapSize", 4096);
+			} else if (effectsOptionsInfo.shadowMapSize.curvalue == 2) {
+				trap_Cvar_SetValue("r_shadowMapSize", 2048);
+			} else if (effectsOptionsInfo.shadowMapSize.curvalue == 1) {
+				trap_Cvar_SetValue("r_shadowMapSize", 1024);
+			} else {
+				trap_Cvar_SetValue("r_shadowMapSize", 512);
 			}
 
 			UI_ForceMenuOff();
@@ -211,6 +277,8 @@ UI_EffectsOptions_MenuInit
 */
 static void UI_EffectsOptions_MenuInit(void) {
 	static const char *sunlightMode_items[] = {"Off", "Dynamic", "Hybrid", NULL};
+	static const char *shadowFilter_items[] = {"Off", "Default", "Maximum", NULL};
+	static const char *shadowMapSize_items[] = {"Low", "Medium", "High", "Maximum", NULL};
 	int y;
 
 	memset(&effectsOptionsInfo, 0, sizeof(effectsOptionsInfo));
@@ -223,7 +291,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	effectsOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.graphics.generic.name = GRAPHICS0;
-	effectsOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	effectsOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	effectsOptionsInfo.graphics.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.graphics.generic.id = ID_GRAPHICS;
 	effectsOptionsInfo.graphics.generic.x = 16;
@@ -235,7 +303,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	effectsOptionsInfo.display.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.display.generic.name = DISPLAY0;
-	effectsOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
+	effectsOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	effectsOptionsInfo.display.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.display.generic.id = ID_DISPLAY;
 	effectsOptionsInfo.display.generic.x = 169;
@@ -294,6 +362,18 @@ static void UI_EffectsOptions_MenuInit(void) {
 		"";
 
 	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "r_autoExposure"
+	effectsOptionsInfo.autoExposure.generic.type = MTYPE_RADIOBUTTON;
+	effectsOptionsInfo.autoExposure.generic.name = "Auto Exposure:";
+	effectsOptionsInfo.autoExposure.generic.flags = QMF_SMALLFONT;
+	effectsOptionsInfo.autoExposure.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.autoExposure.generic.id = ID_AUTOEXPOSURE;
+	effectsOptionsInfo.autoExposure.generic.x = XPOSITION;
+	effectsOptionsInfo.autoExposure.generic.y = y;
+	effectsOptionsInfo.autoExposure.generic.toolTip =
+		"";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_sunShadows"
 	effectsOptionsInfo.sunShadows.generic.type = MTYPE_RADIOBUTTON;
 	effectsOptionsInfo.sunShadows.generic.name = "Sunlight & Shadows:";
@@ -316,6 +396,32 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.sunlightMode.generic.x = XPOSITION;
 	effectsOptionsInfo.sunlightMode.generic.y = y;
 	effectsOptionsInfo.sunlightMode.generic.toolTip =
+		"";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "r_shadowFilter"
+	effectsOptionsInfo.shadowFilter.generic.type = MTYPE_SPINCONTROL;
+	effectsOptionsInfo.shadowFilter.generic.name = "Filter Shadows:";
+	effectsOptionsInfo.shadowFilter.generic.flags = QMF_SMALLFONT;
+	effectsOptionsInfo.shadowFilter.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.shadowFilter.generic.id = ID_SHADOWFILTER;
+	effectsOptionsInfo.shadowFilter.itemnames = shadowFilter_items;
+	effectsOptionsInfo.shadowFilter.generic.x = XPOSITION;
+	effectsOptionsInfo.shadowFilter.generic.y = y;
+	effectsOptionsInfo.shadowFilter.generic.toolTip =
+		"";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "r_shadowMapSize"
+	effectsOptionsInfo.shadowMapSize.generic.type = MTYPE_SPINCONTROL;
+	effectsOptionsInfo.shadowMapSize.generic.name = "Shadows Quality:";
+	effectsOptionsInfo.shadowMapSize.generic.flags = QMF_SMALLFONT;
+	effectsOptionsInfo.shadowMapSize.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.shadowMapSize.generic.id = ID_SHADOWMAPSIZE;
+	effectsOptionsInfo.shadowMapSize.itemnames = shadowMapSize_items;
+	effectsOptionsInfo.shadowMapSize.generic.x = XPOSITION;
+	effectsOptionsInfo.shadowMapSize.generic.y = y;
+	effectsOptionsInfo.shadowMapSize.generic.toolTip =
 		"";
 
 	effectsOptionsInfo.apply.generic.type = MTYPE_BITMAP;
@@ -348,8 +454,11 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.hdr);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.ssao);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.autoExposure);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.sunShadows);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.sunlightMode);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.shadowFilter);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.shadowMapSize);
 
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.apply);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.back);
