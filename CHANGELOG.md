@@ -7,8 +7,10 @@
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones
-	- Option to switch renderer from OpenGL1 to OpenGL2 or Vulkan in Graphics menu
+	- Option to switch renderer from OpenGL1 to OpenGL2 or Vulkan to Graphics page of System menu
 	- Option to switch Lighting to Vertex or Lightmap to Graphics page of System menu
+ 	- Option to set Models Detail to Graphics page of System menu to set `r_lodbias [2|1|0|-2]` now in 4 steps, -2 will always render high quality models regardless of distance
+	- Option to set the Screen Size within the game window to Display page of System menu
 	- Option to switch Window Mode to Off (Fullscreen), On (Border) or On (Borderless) to Display page of System menu
 	- Option to enable/disable Resizable Window to Display page of System menu to allow resizing of the game window
 	- Option to enable/disable Vertical Sync (VSync) to Display page of System menu to limit the frame rate to display refresh rate
@@ -60,7 +62,7 @@
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
 	- Map selection/preview to cycle three ingame pictures via shader animation 
 	- Graphics Settings option on Graphics page of System menu to provide a template list with useful and updated settings
-	- Geometric Detail option in Graphics menu to be split into Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4) while `r_lodbias [2|1|0]` can still only be set in 3 steps
+	- Geometric Detail option in Graphics menu to be split into Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|1]` in 4 steps now (new default is 4)
 	- Anisotropy option to be merged with Texture Filter option into a single menu entry on Graphics page of System menu
 	- Name of Fullscreen option on Graphics page of Setup menu to Window Mode, also supporting new borderless window mode and moved to Display page of System menu 
 	- Anaglyph 3D modes on Display page of System menu to list the modes 1 to 4, modes 5 to 8 are enabled by enabling the new Color Swap option
@@ -86,6 +88,7 @@
 	- Scoreboard to show personal scores in team based games again
 	- Gametype list in Create menu to list FFA gametypes first and FFA being default (was SYC)
 	- Team Orders ingame menu entry to be shown again
+	- Cvar `r_lightmap [1|0]` to be cheat protected now
 - FIXED
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use ^ key to enter color tags in Player Seetings menu or console
@@ -102,6 +105,7 @@
 	- Incorrect assignment of the drowning sound to the selected player model
 	- Voice Threshold slider not showing the input value
 	- Menu music loop to be played when calling Team Orders menu via hotkey
+	- View size (screen size) functionality and added missing backtile asset
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
 	- `^` key to open/close the console
