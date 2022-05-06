@@ -50,6 +50,7 @@ GRAPHICS OPTIONS MENU
 #define ID_SOUND 102
 #define ID_NETWORK 103
 #define ID_BACK 104
+#define ID_EFFECTS 105
 
 #define ID_LIST 10
 
@@ -76,6 +77,7 @@ typedef struct {
 	menulist_s tfilter;
 	menuradiobutton_s ct;
 	menulist_s aa;
+	menutext_s effects;
 
 	menubitmap_s apply;
 	menubitmap_s back;
@@ -503,6 +505,11 @@ static void UI_GraphicsOptions_Event(void *ptr, int event) {
 		UI_NetworkOptionsMenu();
 		break;
 
+	case ID_EFFECTS:
+		UI_PopMenu();
+		UI_EffectsOptionsMenu();
+		break;
+
 	case ID_BACK:
 		UI_PopMenu();
 		break;
@@ -875,6 +882,19 @@ void UI_GraphicsOptions_MenuInit(void) {
 		"off. Selecting higher levels results in better render quality but can lead to a high "
 		"graphics card load.";
 
+	y += (BIGCHAR_HEIGHT + 2);
+	s_graphicsoptions.effects.generic.type = MTYPE_TEXTS;
+	s_graphicsoptions.effects.string = "Effects Settings";
+	s_graphicsoptions.effects.fontHeight = 20.0f;
+	s_graphicsoptions.effects.generic.flags = QMF_CENTER_JUSTIFY;
+	s_graphicsoptions.effects.generic.x = XPOSITION;
+	s_graphicsoptions.effects.generic.y = y;
+	s_graphicsoptions.effects.generic.id = ID_EFFECTS;
+	s_graphicsoptions.effects.generic.callback = UI_GraphicsOptions_Event;
+	s_graphicsoptions.effects.color = color_lightOrange;
+	s_graphicsoptions.effects.focuscolor = color_orange;
+	s_graphicsoptions.effects.style = UI_CENTER | UI_SMALLFONT;
+	
 	s_graphicsoptions.back.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.back.generic.name = BACK0;
 	s_graphicsoptions.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
@@ -914,6 +934,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tfilter);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.ct);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.aa);
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.effects);
 
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.back);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.apply);

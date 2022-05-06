@@ -549,6 +549,8 @@ void UI_DisplayOptions_Cache(void) {
 	trap_R_RegisterShaderNoMip(SOUND1);
 	trap_R_RegisterShaderNoMip(NETWORK0);
 	trap_R_RegisterShaderNoMip(NETWORK1);
+	trap_R_RegisterShaderNoMip(ACCEPT0);
+	trap_R_RegisterShaderNoMip(ACCEPT1);
 }
 
 /*
