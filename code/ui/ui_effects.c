@@ -53,10 +53,15 @@ EFFECTS OPTIONS MENU
 #define ID_HDR 10
 #define ID_SSAO 11
 #define ID_AUTOEXPOSURE 12
-#define ID_SUNSHADOWS 13
-#define ID_SUNLIGHTMODE 14
-#define ID_SHADOWFILTER 15
-#define ID_SHADOWMAPSIZE 16
+#define ID_NORMMAPS 13
+#define ID_SPECMAPS 14
+#define ID_PARAMAPS 15
+#define ID_DELUMAPS 16
+#define ID_SUNSHADOWS 17
+#define ID_SUNLIGHTMODE 18
+#define ID_SHADOWFILTER 19
+#define ID_SHADOWMAPSIZE 20
+#define ID_DLIGHTMODE 21
 
 #define XPOSITION 180
 #define YPOSITION 180 + 36
@@ -72,20 +77,30 @@ typedef struct {
 	menuradiobutton_s hdr;
 	menuradiobutton_s ssao;
 	menuradiobutton_s autoExposure;
+	menuradiobutton_s normMaps;
+	menuradiobutton_s specMaps;
+	menuradiobutton_s paraMaps;
+	menuradiobutton_s deluMaps;
 	menuradiobutton_s sunShadows;
 	menulist_s sunlightMode;
 	menulist_s shadowFilter;
 	menulist_s shadowMapSize;
+	menulist_s dlightMode;
 
 	menubitmap_s apply;
 	menubitmap_s back;
 
 	int hdr_original;
 	int ssao_original;
+	int normMaps_original;
+	int specMaps_original;
+	int paraMaps_original;
+	int deluMaps_original;
 	int sunShadows_original;
 	int sunlightMode_original;
 	int shadowFilter_original;
 	int shadowMapSize_original;
+	int dlightMode_original;
 } effectsOptionsInfo_t;
 
 static effectsOptionsInfo_t effectsOptionsInfo;
@@ -96,6 +111,10 @@ UI_EffectsOptions_SetMenuItems
 =================
 */
 static void UI_EffectsOptions_SetMenuItems(void) {
+	int sunlight;
+	int sfilter;
+	int smapsize;
+	int dlight;
 
 	effectsOptionsInfo.hdr_original = UI_GetCvarInt("r_hdr");
 	effectsOptionsInfo.hdr.curvalue = effectsOptionsInfo.hdr_original;
@@ -105,37 +124,62 @@ static void UI_EffectsOptions_SetMenuItems(void) {
 
 	effectsOptionsInfo.autoExposure.curvalue = UI_GetCvarInt("r_autoExposure");
 
+	effectsOptionsInfo.normMaps_original = UI_GetCvarInt("r_normalMapping");
+	effectsOptionsInfo.normMaps.curvalue = effectsOptionsInfo.normMaps_original;
+
+	effectsOptionsInfo.specMaps_original = UI_GetCvarInt("r_specularMapping");
+	effectsOptionsInfo.specMaps.curvalue = effectsOptionsInfo.specMaps_original;
+
+	effectsOptionsInfo.paraMaps_original = UI_GetCvarInt("r_parallaxMapping");
+	effectsOptionsInfo.paraMaps.curvalue = effectsOptionsInfo.paraMaps_original;
+
+	effectsOptionsInfo.deluMaps_original = UI_GetCvarInt("r_deluxeMapping");
+	effectsOptionsInfo.deluMaps.curvalue = effectsOptionsInfo.deluMaps_original;
+
 	effectsOptionsInfo.sunShadows_original = UI_GetCvarInt("r_sunShadows");
 	effectsOptionsInfo.sunShadows.curvalue = effectsOptionsInfo.sunShadows_original;
 
-	if (UI_GetCvarInt("r_sunlightMode") > 1) {
+	sunlight = UI_GetCvarInt("r_sunlightMode");
+	if (sunlight > 1) {
 		effectsOptionsInfo.sunlightMode_original = 2;
-	} else if (UI_GetCvarInt("r_sunlightMode") < 1) {
+	} else if (sunlight < 1) {
 		effectsOptionsInfo.sunlightMode_original = 0;
 	} else {
 		effectsOptionsInfo.sunlightMode_original = 1;
 	}
 	effectsOptionsInfo.sunlightMode.curvalue = effectsOptionsInfo.sunlightMode_original;
 
-	if (UI_GetCvarInt("r_shadowFilter") > 1) {
+	sfilter = UI_GetCvarInt("r_shadowFilter");
+	if (sfilter > 1) {
 		effectsOptionsInfo.shadowFilter_original = 2;
-	} else if (UI_GetCvarInt("r_shadowFilter") < 1) {
+	} else if (sfilter < 1) {
 		effectsOptionsInfo.shadowFilter_original = 0;
 	} else {
 		effectsOptionsInfo.shadowFilter_original = 1;
 	}
 	effectsOptionsInfo.shadowFilter.curvalue = effectsOptionsInfo.shadowFilter_original;
 
-	if (trap_Cvar_VariableValue("r_shadowMapSize") > 2048) {
+	smapsize = trap_Cvar_VariableValue("r_shadowMapSize");
+	if (smapsize > 2048) {
 		effectsOptionsInfo.shadowMapSize_original = 3;
-	} else if (trap_Cvar_VariableValue("r_shadowMapSize") > 1024) {
+	} else if (smapsize > 1024) {
 		effectsOptionsInfo.shadowMapSize_original = 2;
-	} else if (trap_Cvar_VariableValue("r_shadowMapSize") > 512) {
+	} else if (smapsize > 512) {
 		effectsOptionsInfo.shadowMapSize_original = 1;
 	} else {
 		effectsOptionsInfo.shadowMapSize_original = 0;
 	}
 	effectsOptionsInfo.shadowMapSize.curvalue = effectsOptionsInfo.shadowMapSize_original;
+
+	dlight = UI_GetCvarInt("r_dlightMode");
+	if (dlight > 1) {
+		effectsOptionsInfo.dlightMode_original = 2;
+	} else if (dlight < 1) {
+		effectsOptionsInfo.dlightMode_original = 0;
+	} else {
+		effectsOptionsInfo.dlightMode_original = 1;
+	}
+	effectsOptionsInfo.dlightMode.curvalue = effectsOptionsInfo.dlightMode_original;
 }
 
 /*
@@ -152,17 +196,17 @@ static void UI_EffectsOptions_UpdateMenuItems(void) {
 	}
 
 	effectsOptionsInfo.apply.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
-	if (effectsOptionsInfo.hdr_original != effectsOptionsInfo.hdr.curvalue) {
-		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (effectsOptionsInfo.ssao_original != effectsOptionsInfo.ssao.curvalue) {
-		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (effectsOptionsInfo.sunShadows_original != effectsOptionsInfo.sunShadows.curvalue) {
-		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (effectsOptionsInfo.sunlightMode_original != effectsOptionsInfo.sunlightMode.curvalue) {
-		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (effectsOptionsInfo.shadowFilter_original != effectsOptionsInfo.shadowFilter.curvalue) {
-		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (effectsOptionsInfo.shadowMapSize_original != effectsOptionsInfo.shadowMapSize.curvalue) {
+	if ((effectsOptionsInfo.hdr_original != effectsOptionsInfo.hdr.curvalue) ||
+		(effectsOptionsInfo.ssao_original != effectsOptionsInfo.ssao.curvalue) ||
+		(effectsOptionsInfo.normMaps.curvalue != effectsOptionsInfo.normMaps_original) ||
+		(effectsOptionsInfo.specMaps.curvalue != effectsOptionsInfo.specMaps_original) ||
+		(effectsOptionsInfo.paraMaps.curvalue != effectsOptionsInfo.paraMaps_original) ||
+		(effectsOptionsInfo.deluMaps.curvalue != effectsOptionsInfo.deluMaps_original) ||
+		(effectsOptionsInfo.sunShadows_original != effectsOptionsInfo.sunShadows.curvalue) ||
+		(effectsOptionsInfo.sunlightMode_original != effectsOptionsInfo.sunlightMode.curvalue) ||
+		(effectsOptionsInfo.shadowFilter_original != effectsOptionsInfo.shadowFilter.curvalue) ||
+		(effectsOptionsInfo.shadowMapSize_original != effectsOptionsInfo.shadowMapSize.curvalue) ||
+		(effectsOptionsInfo.dlightMode.curvalue != effectsOptionsInfo.dlightMode_original)) {
 		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 }
@@ -180,10 +224,15 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_HDR:
 	case ID_SSAO:
+	case ID_NORMMAPS:
+	case ID_SPECMAPS:
+	case ID_PARAMAPS:
+	case ID_DELUMAPS:
 	case ID_SUNSHADOWS:
 	case ID_SUNLIGHTMODE:
 	case ID_SHADOWFILTER:
 	case ID_SHADOWMAPSIZE:
+	case ID_DLIGHTMODE:
 		break;
 
 	case ID_GRAPHICS:
@@ -217,13 +266,23 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 	case ID_APPLY:
 		if ((effectsOptionsInfo.hdr_original != effectsOptionsInfo.hdr.curvalue) ||
 			(effectsOptionsInfo.ssao_original != effectsOptionsInfo.ssao.curvalue) ||
+			(effectsOptionsInfo.normMaps.curvalue != effectsOptionsInfo.normMaps_original) ||
+			(effectsOptionsInfo.specMaps.curvalue != effectsOptionsInfo.specMaps_original) ||
+			(effectsOptionsInfo.paraMaps.curvalue != effectsOptionsInfo.paraMaps_original) ||
+			(effectsOptionsInfo.deluMaps.curvalue != effectsOptionsInfo.deluMaps_original) ||
 			(effectsOptionsInfo.sunShadows_original != effectsOptionsInfo.sunShadows.curvalue) ||
 			(effectsOptionsInfo.sunlightMode_original != effectsOptionsInfo.sunlightMode.curvalue) ||
 			(effectsOptionsInfo.shadowFilter_original != effectsOptionsInfo.shadowFilter.curvalue) ||
-			(effectsOptionsInfo.shadowMapSize_original != effectsOptionsInfo.shadowMapSize.curvalue)) {
+			(effectsOptionsInfo.shadowMapSize_original != effectsOptionsInfo.shadowMapSize.curvalue) ||
+			(effectsOptionsInfo.dlightMode.curvalue != effectsOptionsInfo.dlightMode_original)) {
 
 			trap_Cvar_SetValue("r_hdr", effectsOptionsInfo.hdr.curvalue);
 			trap_Cvar_SetValue("r_ssao", effectsOptionsInfo.ssao.curvalue);
+			trap_Cvar_SetValue("r_normalMapping", effectsOptionsInfo.normMaps.curvalue);
+			trap_Cvar_SetValue("r_specularMapping", effectsOptionsInfo.specMaps.curvalue);
+			trap_Cvar_SetValue("r_parallaxMapping", effectsOptionsInfo.paraMaps.curvalue);
+			trap_Cvar_SetValue("r_deluxeMapping", effectsOptionsInfo.deluMaps.curvalue);
+
 			trap_Cvar_SetValue("r_sunShadows", effectsOptionsInfo.sunShadows.curvalue);
 			trap_Cvar_SetValue("r_sunlightMode", effectsOptionsInfo.sunlightMode.curvalue);
 
@@ -253,6 +312,14 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 				trap_Cvar_SetValue("r_shadowMapSize", 512);
 			}
 
+			if (effectsOptionsInfo.dlightMode.curvalue > 1) {
+				trap_Cvar_SetValue("r_dlightMode", 2);
+			} else if (effectsOptionsInfo.dlightMode.curvalue < 1) {
+				trap_Cvar_SetValue("r_dlightMode", 0);
+			} else {
+				trap_Cvar_SetValue("r_dlightMode", 1);
+			}
+
 			UI_ForceMenuOff();
 			trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
 		}
@@ -279,6 +346,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 	static const char *sunlightMode_items[] = {"Off", "Dynamic", "Hybrid", NULL};
 	static const char *shadowFilter_items[] = {"Off", "Default", "Maximum", NULL};
 	static const char *shadowMapSize_items[] = {"Low", "Medium", "High", "Maximum", NULL};
+	static const char *dlightMode_items[] = {"Brightening", "Lightening", "Light & Shadow", NULL};
 	int y;
 
 	memset(&effectsOptionsInfo, 0, sizeof(effectsOptionsInfo));
@@ -347,7 +415,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.hdr.generic.x = XPOSITION;
 	effectsOptionsInfo.hdr.generic.y = y;
 	effectsOptionsInfo.hdr.generic.toolTip =
-		"";
+		"Disable to switch off scene rendering with high dynamic range. Default is on. "
+		"NOTE: Needs to be activated for the automatic exposure effect.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_ssao"
@@ -359,7 +428,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.ssao.generic.x = XPOSITION;
 	effectsOptionsInfo.ssao.generic.y = y;
 	effectsOptionsInfo.ssao.generic.toolTip =
-		"";
+		"Enable screen-space ambient occlusion to achieve realistic shading. Default is off. "
+		"NOTE: This effect currently eats framerate and has some visible artifacts.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_autoExposure"
@@ -371,7 +441,56 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.autoExposure.generic.x = XPOSITION;
 	effectsOptionsInfo.autoExposure.generic.y = y;
 	effectsOptionsInfo.autoExposure.generic.toolTip =
-		"";
+		"Disable to switch off automatic exposure based on scene brightness. This will stop "
+		"adjusting the brightness depending on current light level. Default is on.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "r_normalMapping"
+	effectsOptionsInfo.normMaps.generic.type = MTYPE_RADIOBUTTON;
+	effectsOptionsInfo.normMaps.generic.name = "Normal Mapping:";
+	effectsOptionsInfo.normMaps.generic.flags = QMF_SMALLFONT;
+	effectsOptionsInfo.normMaps.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.normMaps.generic.id = ID_NORMMAPS;
+	effectsOptionsInfo.normMaps.generic.x = XPOSITION;
+	effectsOptionsInfo.normMaps.generic.y = y;
+	effectsOptionsInfo.normMaps.generic.toolTip =
+		"Disable to switch off normal mapping for textures that support it. Default is on.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "r_specularMapping"
+	effectsOptionsInfo.specMaps.generic.type = MTYPE_RADIOBUTTON;
+	effectsOptionsInfo.specMaps.generic.name = "Specular Mapping:";
+	effectsOptionsInfo.specMaps.generic.flags = QMF_SMALLFONT;
+	effectsOptionsInfo.specMaps.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.specMaps.generic.id = ID_SPECMAPS;
+	effectsOptionsInfo.specMaps.generic.x = XPOSITION;
+	effectsOptionsInfo.specMaps.generic.y = y;
+	effectsOptionsInfo.specMaps.generic.toolTip =
+		"Disable to switch off specular mapping for textures that support it. Default is on.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "r_parallaxMapping"
+	effectsOptionsInfo.paraMaps.generic.type = MTYPE_RADIOBUTTON;
+	effectsOptionsInfo.paraMaps.generic.name = "Parallax Mapping:";
+	effectsOptionsInfo.paraMaps.generic.flags = QMF_SMALLFONT;
+	effectsOptionsInfo.paraMaps.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.paraMaps.generic.id = ID_PARAMAPS;
+	effectsOptionsInfo.paraMaps.generic.x = XPOSITION;
+	effectsOptionsInfo.paraMaps.generic.y = y;
+	effectsOptionsInfo.paraMaps.generic.toolTip =
+		"Enable parallax mapping for textures that support it. Default is off.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "r_deluxeMapping"
+	effectsOptionsInfo.deluMaps.generic.type = MTYPE_RADIOBUTTON;
+	effectsOptionsInfo.deluMaps.generic.name = "Deluxe Mapping:";
+	effectsOptionsInfo.deluMaps.generic.flags = QMF_SMALLFONT;
+	effectsOptionsInfo.deluMaps.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.deluMaps.generic.id = ID_DELUMAPS;
+	effectsOptionsInfo.deluMaps.generic.x = XPOSITION;
+	effectsOptionsInfo.deluMaps.generic.y = y;
+	effectsOptionsInfo.deluMaps.generic.toolTip =
+		"Disable to switch off deluxe mapping in maps. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_sunShadows"
@@ -383,7 +502,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.sunShadows.generic.x = XPOSITION;
 	effectsOptionsInfo.sunShadows.generic.y = y;
 	effectsOptionsInfo.sunShadows.generic.toolTip =
-		"";
+		"Disable dynamic sunlight and cascaded shadow maps. Default is on. "
+		"NOTE: The skybox shader of a map must support this for it to work.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_sunlightMode"
@@ -396,7 +516,10 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.sunlightMode.generic.x = XPOSITION;
 	effectsOptionsInfo.sunlightMode.generic.y = y;
 	effectsOptionsInfo.sunlightMode.generic.toolTip =
-		"";
+		"Select the method used to add sunlight to the scene. Off for none, "
+		"dynamic (default) to multiply lit areas by light scale, and shadowed "
+		"areas by ambient scale, or hybrid to add light respecting the baked "
+		"lightmap.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_shadowFilter"
@@ -409,7 +532,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.shadowFilter.generic.x = XPOSITION;
 	effectsOptionsInfo.shadowFilter.generic.y = y;
 	effectsOptionsInfo.shadowFilter.generic.toolTip =
-		"";
+		"Set it to off to disable filtering shadows, or set to maximum to "
+		"smooth shadows as much as possible.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_shadowMapSize"
@@ -422,7 +546,23 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.shadowMapSize.generic.x = XPOSITION;
 	effectsOptionsInfo.shadowMapSize.generic.y = y;
 	effectsOptionsInfo.shadowMapSize.generic.toolTip =
-		"";
+		"Select a desired shadow quality by defining the size of the shadow "
+		"map: low (512), medium (1024), high (2048), and maximum (4096). "
+		"Default is medium.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "r_dlightMode"
+	effectsOptionsInfo.dlightMode.generic.type = MTYPE_SPINCONTROL;
+	effectsOptionsInfo.dlightMode.generic.name = "Dynamic Light Mode:";
+	effectsOptionsInfo.dlightMode.generic.flags = QMF_SMALLFONT;
+	effectsOptionsInfo.dlightMode.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.dlightMode.generic.id = ID_DLIGHTMODE;
+	effectsOptionsInfo.dlightMode.itemnames = dlightMode_items;
+	effectsOptionsInfo.dlightMode.generic.x = XPOSITION;
+	effectsOptionsInfo.dlightMode.generic.y = y;
+	effectsOptionsInfo.dlightMode.generic.toolTip =
+		"Select whether dynamic lights should be brightening (default) the scene, "
+		"lightening (without shadows), or lightening and cast shadows.";
 
 	effectsOptionsInfo.apply.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.apply.generic.name = ACCEPT0;
@@ -455,10 +595,15 @@ static void UI_EffectsOptions_MenuInit(void) {
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.hdr);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.ssao);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.autoExposure);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.normMaps);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.specMaps);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.paraMaps);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.deluMaps);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.sunShadows);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.sunlightMode);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.shadowFilter);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.shadowMapSize);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.dlightMode);
 
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.apply);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.back);
