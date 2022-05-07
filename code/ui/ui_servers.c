@@ -1460,7 +1460,7 @@ static void ArenaServers_MenuInit(void) {
 
 	y += SMALLCHAR_HEIGHT;
 	g_arenaservers.onlyhumans.generic.type = MTYPE_RADIOBUTTON;
-	g_arenaservers.onlyhumans.generic.name = "Only humans:";
+	g_arenaservers.onlyhumans.generic.name = "Humans Only:";
 	g_arenaservers.onlyhumans.generic.flags = (QMF_PULSEIFFOCUS | QMF_SMALLFONT);
 	g_arenaservers.onlyhumans.generic.callback = ArenaServers_Event;
 	g_arenaservers.onlyhumans.generic.id = ID_ONLY_HUMANS;
@@ -1469,7 +1469,7 @@ static void ArenaServers_MenuInit(void) {
 
 	y += SMALLCHAR_HEIGHT;
 	g_arenaservers.hideprivate.generic.type = MTYPE_RADIOBUTTON;
-	g_arenaservers.hideprivate.generic.name = "Hide private:";
+	g_arenaservers.hideprivate.generic.name = "Hide Private:";
 	g_arenaservers.hideprivate.generic.flags = (QMF_PULSEIFFOCUS | QMF_SMALLFONT);
 	g_arenaservers.hideprivate.generic.callback = ArenaServers_Event;
 	g_arenaservers.hideprivate.generic.id = ID_HIDE_PRIVATE;
@@ -1552,7 +1552,7 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.addAllFav.generic.id = ID_ADDALLTOFAV;
 	g_arenaservers.addAllFav.generic.x = 460;
 	g_arenaservers.addAllFav.generic.y = 48;
-	g_arenaservers.addAllFav.string = "Add all to Favorites";
+	g_arenaservers.addAllFav.string = "Add All to Favorites";
 	g_arenaservers.addAllFav.style = UI_SMALLFONT;
 	g_arenaservers.addAllFav.color = color_orange;
 	g_arenaservers.addAllFav.focuscolor = color_red;
