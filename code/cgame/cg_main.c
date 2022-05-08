@@ -731,11 +731,22 @@ static void CG_RegisterSounds(void) {
 			cgs.media.youHaveLollySound = trap_S_RegisterSound("sound/feedback/teamplay/you_lolly", qtrue);
 			cgs.media.stolenLollySound = trap_S_RegisterSound("sound/feedback/teamplay/stolen_lolly", qfalse);
 
+		}
+
+		if (cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
+			cgs.media.neutralFlagReturnedSound = trap_S_RegisterSound("sounds/gametype/ctl/return_opponent", qtrue );
+			// Todo Kai: get replacements for those sounds and adjust paths
+			cgs.media.yourTeamTookTheFlagSound = trap_S_RegisterSound("sound/teamplay/voc_team_1flag", qtrue );
+			cgs.media.enemyTookTheFlagSound = trap_S_RegisterSound("sound/teamplay/voc_enemy_1flag", qtrue );
+		}
+
+		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF) || cg_buildScript.integer) {
+			// Todo Kai: check what other sounds from CTF we also need in 1FCTF
 			cgs.media.bambamExplosionSound = trap_S_RegisterSound("sound/items/bambam/explosion", qfalse);
 			cgs.media.bambamMissileImpact = trap_S_RegisterSound("sound/items/bambam/impact", qfalse);
 		}
 
-		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_BALLOON) || cg_buildScript.integer) {
+		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF) || (cgs.gametype == GT_BALLOON) || cg_buildScript.integer) {
 			cgs.media.boomiesExplosionSound = trap_S_RegisterSound("sound/items/boomies/explosion", qfalse);
 			cgs.media.almostCapture = trap_S_RegisterSound("sound/feedback/better_luck", qtrue);	// ToDo: find new sound
 		}
@@ -1020,7 +1031,11 @@ static void CG_RegisterGraphics(void) {
 			cgs.media.hud_bk_balloon_blue = trap_R_RegisterShaderNoMip("hud/bk_balloon_blue");
 			cgs.media.hud_balloon = trap_R_RegisterShaderNoMip("icons/hud_balloon");
 			cgs.media.hud_balloon_bar = trap_R_RegisterShaderNoMip("hud/balloonbar");
-		} else if (cgs.gametype == GT_CTF || cg_buildScript.integer) {
+			cgs.media.boomiesSphereModel = trap_R_RegisterModel("models/weaponsfx/boomiessphere");
+			cgs.media.boomiesCoreShader = trap_R_RegisterShader("boomiesCore");
+		} 
+		
+		if (cgs.gametype == GT_CTF || cg_buildScript.integer) {
 			cgs.media.hud_CTL_bg_red = trap_R_RegisterShaderNoMip("hud/CTL_red");
 			cgs.media.hud_CTL_bg_blue = trap_R_RegisterShaderNoMip("hud/CTL_blue");
 
@@ -1049,7 +1064,16 @@ static void CG_RegisterGraphics(void) {
 			cgs.media.bambamHealthIcon = trap_R_RegisterShaderNoMip("models/weapons2/bambam/bamhealth02");
 		}
 
-		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_BALLOON) || cg_buildScript.integer) {
+		if ( cgs.gametype == GT_1FCTF || cg_buildScript.integer ) {
+			cgs.media.hud_CTL_bg_red = trap_R_RegisterShaderNoMip("hud/1LCTL_red");
+			cgs.media.hud_CTL_bg_blue = trap_R_RegisterShaderNoMip("hud/1LCTL_blue");
+			cgs.media.neutralFlagModel = trap_R_RegisterModel("models/ctl/lollipop_green");
+			cgs.media.neutralflagShader[0] = trap_R_RegisterShaderNoMip("icons/hud_lolly_green1");
+			cgs.media.neutralflagShader[1] = trap_R_RegisterShaderNoMip("icons/hud_lolly_green2");
+			cgs.media.neutralflagShader[2] = trap_R_RegisterShaderNoMip("icons/hud_lolly_green3");
+		}
+
+		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF) || (cgs.gametype == GT_BALLOON) || cg_buildScript.integer) {
 			cgs.media.boomiesSphereModel = trap_R_RegisterModel("models/weaponsfx/boomiessphere");
 			cgs.media.boomiesCoreShader = trap_R_RegisterShader("boomiesCore");
 		}

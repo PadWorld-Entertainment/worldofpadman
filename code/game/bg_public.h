@@ -110,7 +110,6 @@ typedef enum {
 	GT_FFA,			  // free for all
 	GT_TOURNAMENT,	  // one on one tournament
 	GT_SINGLE_PLAYER, // single player ffa
-
 	GT_SPRAYFFA, // spray logo ffa GT
 	GT_LPS,
 	GT_CATCH, // catch the killerduck
@@ -118,12 +117,11 @@ typedef enum {
 	//-- team games go after this --
 
 	GT_TEAM, // team deathmatch
-	GT_FREEZETAG,
-	GT_CTF, // capture the flag
-
+	GT_FREEZETAG, // freeze tag
+	GT_CTF,	 // capture the flag
+	GT_1FCTF, // one flag CTF
 	GT_SPRAY, // spray logo GT
-
-	GT_BALLOON, // Big Balloon
+	GT_BALLOON, // big balloon
 
 	GT_MAX_GAME_TYPE
 } gametype_t;
@@ -136,10 +134,11 @@ typedef enum {
 #define GTN__GT_LPS "Last Pad Standing"
 #define GTN__GT_CATCH "Catch The Killerduck"
 #define GTN__GT_TEAM "Free For All Team"
+#define GTN__GT_FREEZETAG "Freeze Tag"
 #define GTN__GT_CTF "Capture The Lolly"
+#define GTN__GT_1FCTF "One Lolly CTL"
 #define GTN__GT_SPRAY "Spray Your Color Team"
 #define GTN__GT_BALLOON "Big Balloon"
-#define GTN__GT_FREEZETAG "Freeze Tag"
 #define GTN__GT_MAX_GAME_TYPE "Unknown"
 
 #define GTN_S__GT_FFA "FFA"
@@ -150,6 +149,7 @@ typedef enum {
 #define GTN_S__GT_CATCH "CTKD"
 #define GTN_S__GT_TEAM "TFFA"
 #define GTN_S__GT_CTF "CTL"
+#define GTN_S__GT_1FCTF "1LCTL"
 #define GTN_S__GT_SPRAY "TSYC"
 #define GTN_S__GT_BALLOON "BB"
 #define GTN_S__GT_FREEZETAG "FT"
@@ -347,6 +347,7 @@ typedef enum {
 
 	PW_REDFLAG,
 	PW_BLUEFLAG,
+	PW_NEUTRALFLAG,
 
 	PW_FREEZE,
 

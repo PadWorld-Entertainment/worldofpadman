@@ -584,6 +584,20 @@ const gitem_t bg_itemlist[] = {
 	 /* precache */ "",
 	 /* sounds */ ""},
 
+	/*QUAKED team_CTL_neutrallolly (1 0 1) (-16 -16 -16) (16 16 16)
+	Only in One Lolly CTL games
+	*/
+	{"team_CTL_neutrallolly",
+	 NULL,
+	 {"models/ctl/lollipop_green", 0, 0, 0},
+	 /* icon */ "icons/hud_lolly_green1",
+	 /* pickup */ "neutral Lolly",
+	 0,
+	 IT_TEAM,
+	 PW_NEUTRALFLAG,
+	 /* precache */ "",
+	 /* sounds */ ""},
+
 	/*QUAKED weapon_kma97 ( .3 .3 1 ) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_kma97", // "Kiss My Ass 97"
@@ -786,6 +800,22 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 		return qtrue; // powerups are always picked up
 
 	case IT_TEAM: // team items, such as flags
+		if(gametype == GT_1FCTF) {
+			// neutral flag can always be picked up
+			if(item->giTag == PW_NEUTRALFLAG) {
+				return qtrue;
+			}
+			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
+				if (item->giTag == PW_BLUEFLAG  && ps->powerups[PW_NEUTRALFLAG]) {
+					return qtrue;
+				}
+			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
+				if (item->giTag == PW_REDFLAG  && ps->powerups[PW_NEUTRALFLAG]) {
+					return qtrue;
+				}
+			}
+		}
+
 		if (gametype == GT_CTF) {
 			// ent->modelindex2 is non-zero on items if they are dropped
 			// we need to know this because we can pick up our dropped flag (and return it)
@@ -1300,6 +1330,9 @@ int convertGTStringToGTNumber(const char *argStr) {
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_CTF)) ||
 			   (strstr(buf, "CAPTURE") && (strstr(buf, "LOLLY") || strstr(buf, "LOLLI" /*pop"*/)))) {
 		gt = GT_CTF;
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_1FCTF)) ||
+			   (strstr(buf, "ONE") && (strstr(buf, "CTL")))) {
+		gt = GT_1FCTF;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_TOURNAMENT)) || strstr(buf, "TOURNAMENT") || strstr(buf, "TOURNEY")) {
 		gt = GT_TOURNAMENT;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_TEAM)) || strstr(buf, "TP") || strstr(buf, "TEAM") ||

@@ -1075,11 +1075,19 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 				if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
 					CG_AddBufferedSound(cgs.media.takenOpponentSound);
 					// "voc_"-sound:
-					CG_AddBufferedSound(cgs.media.enemyTookYourLollySound);
+					if (cgs.gametype == GT_1FCTF) {
+						CG_AddBufferedSound(cgs.media.yourTeamTookTheFlagSound);
+					} else {
+						CG_AddBufferedSound(cgs.media.enemyTookYourLollySound);
+					}
 				} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
 					CG_AddBufferedSound(cgs.media.takenYourTeamSound);
 					// "voc_"-sound:
-					CG_AddBufferedSound(cgs.media.yourTeamTookEnemyLollySound);
+					if (cgs.gametype == GT_1FCTF) {
+						CG_AddBufferedSound(cgs.media.enemyTookTheFlagSound);
+					} else {
+						CG_AddBufferedSound(cgs.media.yourTeamTookEnemyLollySound);
+					}
 				}
 			}
 			break;
@@ -1090,11 +1098,19 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 				if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
 					CG_AddBufferedSound(cgs.media.takenOpponentSound);
 					// "voc_"-sound:
-					CG_AddBufferedSound(cgs.media.enemyTookYourLollySound);
+					if (cgs.gametype == GT_1FCTF) {
+						CG_AddBufferedSound(cgs.media.yourTeamTookTheFlagSound);
+					} else {
+						CG_AddBufferedSound(cgs.media.enemyTookYourLollySound);
+					}
 				} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
 					CG_AddBufferedSound(cgs.media.takenYourTeamSound);
 					// "voc_"-sound:
-					CG_AddBufferedSound(cgs.media.yourTeamTookEnemyLollySound);
+					if (cgs.gametype == GT_1FCTF) {
+						CG_AddBufferedSound( cgs.media.enemyTookTheFlagSound );
+					} else {
+						CG_AddBufferedSound(cgs.media.yourTeamTookEnemyLollySound);
+					}
 				}
 			}
 			break;

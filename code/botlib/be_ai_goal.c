@@ -89,7 +89,8 @@ typedef struct campspot_s {
 typedef enum {
 	BOTLIB_GT_SINGLE_PLAYER,
 	BOTLIB_GT_FFA,
-	BOTLIB_GT_TEAM
+	BOTLIB_GT_TEAM,
+	BOTLIB_GT_1FCTF,
 } botgametype_t;
 
 typedef struct levelitem_s {

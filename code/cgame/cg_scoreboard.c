@@ -108,6 +108,7 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 		}
 	} else
 	// draw the handicap or bot skill marker (unless player has lolly)
+	// ToDo Kai: Draw the neutral flag
 	if (ci->powerups & (1 << PW_REDFLAG)) {
 		if (cg_drawIcons.integer) {
 			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_RED, qfalse);

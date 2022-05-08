@@ -613,7 +613,7 @@ gentity_t *LaunchItem(const gitem_t *item, const vec3_t origin, const vec3_t vel
 
 	dropped->s.eFlags |= EF_BOUNCE_HALF;
 	// Special case for CTF flags
-	if (g_gametype.integer == GT_CTF && item->giType == IT_TEAM) {
+	if ((g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF) && (item->giType == IT_TEAM)) {
 		dropped->think = Team_DroppedFlagThink;
 		dropped->nextthink = (level.time + RESPAWN_DROPPED_FLAG * 1000);
 		Team_CheckDroppedItem(dropped);
@@ -769,6 +769,24 @@ void G_CheckTeamItems(void) {
 		item = BG_FindItem("blue Lolly");
 		if (!item || !itemRegistered[item - bg_itemlist]) {
 			Com_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_bluelolly in map");
+		}
+	}
+
+	if( g_gametype.integer == GT_1FCTF ) {
+		gitem_t	*item;
+
+		// check for all three flags
+		item = BG_FindItem( "Red Lolly" );
+		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
+			Com_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_redlolly in map");
+		}
+		item = BG_FindItem( "Blue Lolly" );
+		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
+			Com_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_bluelolly in map");
+		}
+		item = BG_FindItem( "Neutral Lolly" );
+		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
+			Com_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_neutrallolly in map");
 		}
 	}
 }

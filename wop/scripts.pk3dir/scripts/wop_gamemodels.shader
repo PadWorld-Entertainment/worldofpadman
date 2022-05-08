@@ -221,6 +221,40 @@ models/ctl/b_sticker_ribbon
 	}
 }
 
+models/ctl/g_lollipop
+{
+	cull disable
+	{
+		map models/ctl/g_lollipop
+		rgbGen identity
+	}
+	{
+		map models/mapobjects/pad_ddmix/diner/glass01
+		blendfunc add
+		tcGen environment
+	}
+}
+
+models/ctl/g_sticker_ribbon
+{
+	cull disable
+	{
+		map models/ctl/g_chromic
+		rgbGen identity
+		alphaFunc GE128
+	}
+	{
+		map models/ctl/g_chromic
+		tcGen environment
+		depthFunc equal
+	}
+	{
+		map models/ctl/g_sticker_ribbon
+		depthFunc equal
+		alphaFunc GE128
+	}
+}
+
 // =================
 // BiGBALLOON
 // =================

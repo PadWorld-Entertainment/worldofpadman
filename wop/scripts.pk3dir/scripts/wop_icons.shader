@@ -591,3 +591,30 @@ icons/hud_lolly_red3
 		blendFunc blend
 	}
 }
+
+icons/hud_lolly_green1
+{
+	nopicmip
+	{
+		map icons/hud_lolly_green1
+		blendFunc blend
+	}
+}
+
+icons/hud_lolly_green2
+{
+	nopicmip
+	{
+		map icons/hud_lolly_green2
+		blendFunc blend
+	}
+}
+
+icons/hud_lolly_green3
+{
+	nopicmip
+	{
+		map icons/hud_lolly_green3
+		blendFunc blend
+	}
+}
