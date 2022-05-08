@@ -1018,8 +1018,6 @@ static void CG_RegisterGraphics(void) {
 			cgs.media.hud_bk_balloon_blue = trap_R_RegisterShaderNoMip("hud/bk_balloon_blue");
 			cgs.media.hud_balloon = trap_R_RegisterShaderNoMip("icons/hud_balloon");
 			cgs.media.hud_balloon_bar = trap_R_RegisterShaderNoMip("hud/balloonbar");
-			cgs.media.boomiesSphereModel = trap_R_RegisterModel("models/weaponsfx/boomiessphere");
-			cgs.media.boomiesCoreShader = trap_R_RegisterShader("boomiesCore");
 		} else if (cgs.gametype == GT_CTF || cg_buildScript.integer) {
 			cgs.media.hud_CTL_bg_red = trap_R_RegisterShaderNoMip("hud/CTL_red");
 			cgs.media.hud_CTL_bg_blue = trap_R_RegisterShaderNoMip("hud/CTL_blue");
