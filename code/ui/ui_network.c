@@ -292,7 +292,11 @@ static void UI_NetworkOptions_Event(void *ptr, int event) {
 		break;
 
 	case ID_VOIPCAPTUREMULT:
-		trap_Cvar_SetValue("cl_voipCaptureMult", (int)networkOptionsInfo.voipCaptureMult.curvalue);
+		if (networkOptionsInfo.voipCaptureMult.curvalue <= 0) {
+			trap_Cvar_SetValue("cl_voipCaptureMult", 0.1);
+		} else {
+			trap_Cvar_SetValue("cl_voipCaptureMult", (float)networkOptionsInfo.voipCaptureMult.curvalue);
+		}
 		break;
 
 	case ID_VOIPSENDTARGET:
@@ -498,11 +502,11 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.voipCaptureMult.generic.id = ID_VOIPCAPTUREMULT;
 	networkOptionsInfo.voipCaptureMult.generic.x = XPOSITION;
 	networkOptionsInfo.voipCaptureMult.generic.y = y;
-	networkOptionsInfo.voipCaptureMult.minvalue = 0;
-	networkOptionsInfo.voipCaptureMult.maxvalue = 10;
+	networkOptionsInfo.voipCaptureMult.minvalue = 0.1;
+	networkOptionsInfo.voipCaptureMult.maxvalue = 5;
 	networkOptionsInfo.voipCaptureMult.generic.toolTip =
 		"This multiplies recorded audio by the set value after denoising. Defaults to 2 to double the volume of "
-		"your voice. This is to make you more audible if denoising eats away too much data. Set this to 1.0 to "
+		"your voice. This is to make you more audible if denoising eats away too much data. Set this to 1 to "
 		"get no change, less to be quieter.";
 
 	y += BIGCHAR_HEIGHT + 2;
