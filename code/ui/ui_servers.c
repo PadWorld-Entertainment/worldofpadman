@@ -91,9 +91,10 @@ JOIN MENU (SERVER BROWSER)
 #define GAMES_LPS 3
 #define GAMES_TDM 4
 #define GAMES_CTL 5
-#define GAMES_TSYC 6
-#define GAMES_BB 7
-#define GAMES_FT 8
+#define GAMES_1LCTL 6
+#define GAMES_TSYC 7
+#define GAMES_BB 8
+#define GAMES_FT 9
 
 #define GLOBAL_ITEM_NAME "Internet"
 
@@ -108,6 +109,7 @@ static const char *servertype_items[] = {"All",
 										 GAMETYPE_NAME(GT_TEAM),
 										 GAMETYPE_NAME(GT_FREEZETAG),
 										 GAMETYPE_NAME(GT_CTF),
+										 GAMETYPE_NAME(GT_1FCTF),
 										 GAMETYPE_NAME(GT_SPRAY),
 										 GAMETYPE_NAME(GT_BALLOON),
 										 NULL};
@@ -124,6 +126,7 @@ static char *gamenames[] = {GAMETYPE_NAME_SHORT(GT_FFA),
 							GAMETYPE_NAME_SHORT(GT_TEAM),
 							GAMETYPE_NAME_SHORT(GT_FREEZETAG),
 							GAMETYPE_NAME_SHORT(GT_CTF),
+							GAMETYPE_NAME_SHORT(GT_1FCTF),
 							GAMETYPE_NAME_SHORT(GT_SPRAY),
 							GAMETYPE_NAME_SHORT(GT_BALLOON),
 							GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE),
@@ -549,6 +552,12 @@ static void UI_ArenaServers_UpdateMenu(void) {
 
 		case GAMES_CTL:
 			if (servernodeptr->gametype != GT_CTF) {
+				continue;
+			}
+			break;
+
+		case GAMES_1LCTL:
+			if (servernodeptr->gametype != GT_1FCTF) {
 				continue;
 			}
 			break;
@@ -1118,6 +1127,10 @@ static void UI_ArenaServers_StartRefresh(void) {
 
 		case GAMES_CTL:
 			Q_strncpyz(myargs, " ctl", sizeof(myargs));
+			break;
+
+		case GAMES_1LCTL:
+			Q_strncpyz(myargs, " 1lctl", sizeof(myargs));
 			break;
 
 		case GAMES_TSYC:
