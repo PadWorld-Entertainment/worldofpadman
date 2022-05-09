@@ -96,6 +96,7 @@ MULTIPLAYER MENU (SERVER BROWSER)
 #define GAMES_CTL 5
 #define GAMES_TSYC 6
 #define GAMES_BB 7
+#define GAMES_FT 8
 
 #define GLOBAL_ITEM_NAME "Internet"
 
@@ -554,6 +555,12 @@ static void ArenaServers_UpdateMenu(void) {
 
 		case GAMES_BB:
 			if (servernodeptr->gametype != GT_BALLOON) {
+				continue;
+			}
+			break;
+
+		case GAMES_FT:
+			if (servernodeptr->gametype != GT_FREEZETAG) {
 				continue;
 			}
 			break;
@@ -1113,6 +1120,10 @@ static void ArenaServers_StartRefresh(void) {
 
 		case GAMES_BB:
 			Q_strncpyz(myargs, " bb", sizeof(myargs));
+			break;
+
+		case GAMES_FT:
+			Q_strncpyz(myargs, " ft", sizeof(myargs));
 			break;
 		}
 
