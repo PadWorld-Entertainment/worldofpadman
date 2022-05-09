@@ -668,8 +668,8 @@ static void Team_ResetFlags(void) {
 		Team_ResetFlag(TEAM_BLUE);
 	}
 
-	else if(g_gametype.integer == GT_1FCTF) {
-		Team_ResetFlag( TEAM_FREE );
+	else if (g_gametype.integer == GT_1FCTF) {
+		Team_ResetFlag(TEAM_FREE);
 	}
 }
 
@@ -758,8 +758,8 @@ void Team_FreeEntity(const gentity_t *ent) {
 		Team_ReturnFlag(TEAM_RED);
 	} else if (ent->item->giTag == PW_BLUEFLAG) {
 		Team_ReturnFlag(TEAM_BLUE);
-	} else if( ent->item->giTag == PW_NEUTRALFLAG ) {
-		Team_ReturnFlag( TEAM_FREE );
+	} else if (ent->item->giTag == PW_NEUTRALFLAG) {
+		Team_ReturnFlag(TEAM_FREE);
 	}
 }
 
@@ -779,7 +779,7 @@ void Team_DroppedFlagThink(gentity_t *ent) {
 		team = TEAM_RED;
 	} else if (ent->item->giTag == PW_BLUEFLAG) {
 		team = TEAM_BLUE;
-	} else if( ent->item->giTag == PW_NEUTRALFLAG ) {
+	} else if (ent->item->giTag == PW_NEUTRALFLAG) {
 		team = TEAM_FREE;
 	}
 
@@ -797,7 +797,7 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 	gclient_t *cl = other->client;
 	int enemy_flag;
 
-	if(g_gametype.integer == GT_1FCTF) {
+	if (g_gametype.integer == GT_1FCTF) {
 		enemy_flag = PW_NEUTRALFLAG;
 	} else {
 		if (cl->sess.sessionTeam == TEAM_RED) {
@@ -821,8 +821,8 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 	// flag, he's just won!
 	if (!cl->ps.powerups[enemy_flag])
 		return 0; // We don't have the flag
-	if( g_gametype.integer == GT_1FCTF ) {
-		PrintMsg( NULL, "%s" S_COLOR_WHITE " captured the lolly!\n", cl->pers.netname );
+	if (g_gametype.integer == GT_1FCTF) {
+		PrintMsg( NULL, "%s" S_COLOR_WHITE " captured the lolly!\n", cl->pers.netname);
 	} else {
 		PrintMsg(NULL, "%s" S_COLOR_WHITE " captured the %s' lolly!\n", cl->pers.netname, TeamName(OtherTeam(team)));
 	}
@@ -883,16 +883,16 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 static int Team_TouchEnemyFlag(gentity_t *ent, gentity_t *other, int team) {
 	gclient_t *cl = other->client;
 
-	if(g_gametype.integer == GT_1FCTF) {
-		PrintMsg (NULL, "%s" S_COLOR_WHITE " got the lolly!\n", other->client->pers.netname );
+	if (g_gametype.integer == GT_1FCTF) {
+		PrintMsg (NULL, "%s" S_COLOR_WHITE " got the lolly!\n", other->client->pers.netname);
 
 		cl->ps.powerups[PW_NEUTRALFLAG] = INT_MAX; // flags never expire
 
-		if( team == TEAM_RED ) {
-			Team_SetFlagStatus( TEAM_FREE, FLAG_TAKEN_RED );
+		if (team == TEAM_RED) {
+			Team_SetFlagStatus(TEAM_FREE, FLAG_TAKEN_RED);
 		}
 		else {
-			Team_SetFlagStatus( TEAM_FREE, FLAG_TAKEN_BLUE );
+			Team_SetFlagStatus(TEAM_FREE, FLAG_TAKEN_BLUE);
 		}
 	} else {
 		PrintMsg(NULL, "%s" S_COLOR_WHITE " got the %s' lolly!\n", other->client->pers.netname, TeamName(team));

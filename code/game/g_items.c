@@ -772,20 +772,20 @@ void G_CheckTeamItems(void) {
 		}
 	}
 
-	if( g_gametype.integer == GT_1FCTF ) {
-		gitem_t	*item;
+	if(g_gametype.integer == GT_1FCTF) {
+		const gitem_t *item;
 
 		// check for all three flags
-		item = BG_FindItem( "Red Lolly" );
-		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
+		item = BG_FindItem("red Lolly");
+		if (!item || !itemRegistered[item - bg_itemlist]) {
 			Com_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_redlolly in map");
 		}
-		item = BG_FindItem( "Blue Lolly" );
-		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
+		item = BG_FindItem("blue Lolly");
+		if (!item || !itemRegistered[item - bg_itemlist]) {
 			Com_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_bluelolly in map");
 		}
-		item = BG_FindItem( "Neutral Lolly" );
-		if ( !item || !itemRegistered[ item - bg_itemlist ] ) {
+		item = BG_FindItem("neutral Lolly");
+		if (!item || !itemRegistered[item - bg_itemlist]) {
 			Com_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_neutrallolly in map");
 		}
 	}

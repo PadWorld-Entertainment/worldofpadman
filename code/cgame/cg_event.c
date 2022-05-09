@@ -1107,7 +1107,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 					CG_AddBufferedSound(cgs.media.takenYourTeamSound);
 					// "voc_"-sound:
 					if (cgs.gametype == GT_1FCTF) {
-						CG_AddBufferedSound( cgs.media.enemyTookTheFlagSound );
+						CG_AddBufferedSound(cgs.media.enemyTookTheFlagSound);
 					} else {
 						CG_AddBufferedSound(cgs.media.yourTeamTookEnemyLollySound);
 					}

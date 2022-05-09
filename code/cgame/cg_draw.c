@@ -2013,7 +2013,7 @@ static void CG_DrawWarmup(void) {
 			s = GAMETYPE_NAME(GT_FREEZETAG);
 		} else if (cgs.gametype == GT_CTF) {
 			s = GAMETYPE_NAME(GT_CTF);
-		} else if ( cgs.gametype == GT_1FCTF ) {
+		} else if (cgs.gametype == GT_1FCTF) {
 			s = GAMETYPE_NAME(GT_1FCTF);
 		} else {
 			s = "";

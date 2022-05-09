@@ -734,10 +734,10 @@ static void CG_RegisterSounds(void) {
 		}
 
 		if (cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
-			cgs.media.neutralFlagReturnedSound = trap_S_RegisterSound("sounds/gametype/ctl/return_opponent", qtrue );
+			cgs.media.neutralFlagReturnedSound = trap_S_RegisterSound("sounds/gametype/ctl/return_opponent", qtrue);
 			// Todo Kai: get replacements for those sounds and adjust paths
-			cgs.media.yourTeamTookTheFlagSound = trap_S_RegisterSound("sound/teamplay/voc_team_1flag", qtrue );
-			cgs.media.enemyTookTheFlagSound = trap_S_RegisterSound("sound/teamplay/voc_enemy_1flag", qtrue );
+			cgs.media.yourTeamTookTheFlagSound = trap_S_RegisterSound("sound/teamplay/voc_team_1flag", qtrue);
+			cgs.media.enemyTookTheFlagSound = trap_S_RegisterSound("sound/teamplay/voc_enemy_1flag", qtrue);
 		}
 
 		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF) || cg_buildScript.integer) {

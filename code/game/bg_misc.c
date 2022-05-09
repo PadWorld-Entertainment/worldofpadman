@@ -800,7 +800,7 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 		return qtrue; // powerups are always picked up
 
 	case IT_TEAM: // team items, such as flags
-		if(gametype == GT_1FCTF) {
+		if (gametype == GT_1FCTF) {
 			// neutral flag can always be picked up
 			if(item->giTag == PW_NEUTRALFLAG) {
 				return qtrue;
