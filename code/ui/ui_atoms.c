@@ -1028,7 +1028,7 @@ void UI_Cache_f(void) {
 	UI_Preferences_Cache();
 	ServerInfo_Cache();
 	SpecifyServer_Cache();
-	ArenaServers_Cache();
+	UI_ArenaServers_Cache();
 	UI_StartServer_Cache();
 
 	UI_GraphicsOptions_Cache();

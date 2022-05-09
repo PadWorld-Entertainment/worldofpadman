@@ -477,7 +477,7 @@ extern void SpecifyServer_Cache(void);
 #define MAX_FAVORITESERVERS 16
 
 extern void UI_ArenaServersMenu(void);
-extern void ArenaServers_Cache(void);
+extern void UI_ArenaServers_Cache(void);
 
 //
 // ui_startserver2.c
