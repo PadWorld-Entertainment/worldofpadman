@@ -138,7 +138,6 @@ static int UI_StartServer_GametypeBits(const char *string) {
 
 		if (Q_stricmp(token, "team") == 0) {
 			bits |= 1 << GT_TEAM;
-			bits |= 1 << GT_FREEZETAG;
 			continue;
 		}
 
