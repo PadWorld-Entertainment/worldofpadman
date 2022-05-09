@@ -178,7 +178,7 @@ typedef struct {
 	menubitmap_s refresh;
 	menubitmap_s specify;
 	menubitmap_s remove;
-	menubitmap1024s_s go;
+	menubitmap_s fight;
 
 	pinglist_t pinglist[MAX_PINGREQUESTS];
 	table_t table[MAX_LISTBOXITEMS];
@@ -429,7 +429,7 @@ static void ArenaServers_UpdateMenu(void) {
 			g_arenaservers.showfull.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.list.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.refresh.generic.flags &= ~QMF_GRAYED;
-			g_arenaservers.go.generic.flags &= ~QMF_GRAYED;
+			g_arenaservers.fight.generic.flags &= ~QMF_GRAYED;
 
 			// update status bar
 			if (g_servertype >= UIAS_GLOBAL_START && g_servertype <= UIAS_GLOBAL_MAX)
@@ -455,7 +455,7 @@ static void ArenaServers_UpdateMenu(void) {
 			g_arenaservers.showfull.generic.flags |= QMF_GRAYED;
 			g_arenaservers.list.generic.flags |= QMF_GRAYED;
 			g_arenaservers.refresh.generic.flags |= QMF_GRAYED;
-			g_arenaservers.go.generic.flags |= QMF_GRAYED;
+			g_arenaservers.fight.generic.flags |= QMF_GRAYED;
 		} else {
 			if (g_arenaservers.numqueriedservers < 0) {
 				Q_strncpyz(g_arenaservers.status.string, "No response from master.", MAX_STATUSLENGTH);
@@ -479,7 +479,7 @@ static void ArenaServers_UpdateMenu(void) {
 			g_arenaservers.showfull.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.list.generic.flags |= QMF_GRAYED;
 			g_arenaservers.refresh.generic.flags &= ~QMF_GRAYED;
-			g_arenaservers.go.generic.flags |= QMF_GRAYED;
+			g_arenaservers.fight.generic.flags |= QMF_GRAYED;
 		}
 
 		// zero out list box
@@ -1615,15 +1615,17 @@ static void ArenaServers_MenuInit(void) {
 	g_arenaservers.remove.focuspic = DELETE1;
 	g_arenaservers.remove.focuspicinstead = qtrue;
 
-	g_arenaservers.go.generic.type = MTYPE_BITMAP1024S;
-	g_arenaservers.go.x = 870;
-	g_arenaservers.go.y = 660;
-	g_arenaservers.go.w = 135;
-	g_arenaservers.go.h = 97;
-	g_arenaservers.go.shader = trap_R_RegisterShaderNoMip(FIGHT0);
-	g_arenaservers.go.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
-	g_arenaservers.go.generic.callback = ArenaServers_Event;
-	g_arenaservers.go.generic.id = ID_CONNECT;
+	g_arenaservers.fight.generic.type = MTYPE_BITMAP;
+	g_arenaservers.fight.generic.name = FIGHT0;
+	g_arenaservers.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	g_arenaservers.fight.generic.callback = ArenaServers_Event;
+	g_arenaservers.fight.generic.id = ID_CONNECT;
+	g_arenaservers.fight.focuspic = FIGHT1;
+	g_arenaservers.fight.generic.x = 545;
+	g_arenaservers.fight.generic.y = 414;
+	g_arenaservers.fight.width = 80;
+	g_arenaservers.fight.height = 60;
+	g_arenaservers.fight.focuspicinstead = qtrue;
 
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.master);
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.gametype);
@@ -1646,7 +1648,7 @@ static void ArenaServers_MenuInit(void) {
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.specify);
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.refresh);
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.remove);
-	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.go);
+	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.fight);
 
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.back);
 
