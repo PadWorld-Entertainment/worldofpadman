@@ -735,10 +735,10 @@ void FinishSpawningItem(gentity_t *ent) {
 	}
 
 	if (ent->item->giType == IT_HOLDABLE) {
-		if ((ent->item->giTag == HI_BAMBAM) && (g_gametype.integer != GT_CTF)) {
+		if ((ent->item->giTag == HI_BAMBAM) && (g_gametype.integer != GT_CTF) && (g_gametype.integer != GT_1FCTF)) {
 			return;
 		} else if ((ent->item->giTag == HI_BOOMIES) &&
-				   ((g_gametype.integer != GT_CTF) && (g_gametype.integer != GT_BALLOON))) {
+				   ((g_gametype.integer != GT_CTF) && (g_gametype.integer != GT_1FCTF) && (g_gametype.integer != GT_BALLOON))) {
 			return;
 		}
 	}
