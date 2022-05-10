@@ -1064,7 +1064,7 @@ static void CG_RegisterGraphics(void) {
 			cgs.media.bambamHealthIcon = trap_R_RegisterShaderNoMip("models/weapons2/bambam/bamhealth02");
 		}
 
-		if ( cgs.gametype == GT_1FCTF || cg_buildScript.integer ) {
+		if (cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
 			cgs.media.hud_1LCTL_bg_red = trap_R_RegisterShaderNoMip("hud/1LCTL_red");
 			cgs.media.hud_1LCTL_bg_blue = trap_R_RegisterShaderNoMip("hud/1LCTL_blue");
 			cgs.media.neutralFlagModel = trap_R_RegisterModel("models/ctl/lollipop_green");
@@ -1073,7 +1073,7 @@ static void CG_RegisterGraphics(void) {
 			cgs.media.neutralflagShader[2] = trap_R_RegisterShaderNoMip("icons/hud_lolly_green3");
 		}
 
-		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF) || (cgs.gametype == GT_BALLOON) || cg_buildScript.integer) {
+		if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cgs.gametype == GT_BALLOON || cg_buildScript.integer) {
 			cgs.media.boomiesSphereModel = trap_R_RegisterModel("models/weaponsfx/boomiessphere");
 			cgs.media.boomiesCoreShader = trap_R_RegisterShader("boomiesCore");
 		}

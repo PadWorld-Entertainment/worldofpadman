@@ -772,7 +772,7 @@ void G_CheckTeamItems(void) {
 		}
 	}
 
-	if(g_gametype.integer == GT_1FCTF) {
+	if (g_gametype.integer == GT_1FCTF) {
 		const gitem_t *item;
 
 		// check for all three flags

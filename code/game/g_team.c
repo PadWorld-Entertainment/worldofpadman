@@ -666,9 +666,7 @@ static void Team_ResetFlags(void) {
 	if (g_gametype.integer == GT_CTF) {
 		Team_ResetFlag(TEAM_RED);
 		Team_ResetFlag(TEAM_BLUE);
-	}
-
-	else if (g_gametype.integer == GT_1FCTF) {
+	} else if (g_gametype.integer == GT_1FCTF) {
 		Team_ResetFlag(TEAM_FREE);
 	}
 }
@@ -890,8 +888,7 @@ static int Team_TouchEnemyFlag(gentity_t *ent, gentity_t *other, int team) {
 
 		if (team == TEAM_RED) {
 			Team_SetFlagStatus(TEAM_FREE, FLAG_TAKEN_RED);
-		}
-		else {
+		} else {
 			Team_SetFlagStatus(TEAM_FREE, FLAG_TAKEN_BLUE);
 		}
 	} else {

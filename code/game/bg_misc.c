@@ -802,15 +802,15 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 	case IT_TEAM: // team items, such as flags
 		if (gametype == GT_1FCTF) {
 			// neutral flag can always be picked up
-			if(item->giTag == PW_NEUTRALFLAG) {
+			if (item->giTag == PW_NEUTRALFLAG) {
 				return qtrue;
 			}
 			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
-				if (item->giTag == PW_BLUEFLAG  && ps->powerups[PW_NEUTRALFLAG]) {
+				if (item->giTag == PW_BLUEFLAG && ps->powerups[PW_NEUTRALFLAG]) {
 					return qtrue;
 				}
 			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
-				if (item->giTag == PW_REDFLAG  && ps->powerups[PW_NEUTRALFLAG]) {
+				if (item->giTag == PW_REDFLAG && ps->powerups[PW_NEUTRALFLAG]) {
 					return qtrue;
 				}
 			}

@@ -291,7 +291,7 @@ static void CG_TouchItem(centity_t *cent) {
 
 	// Special case for flags.
 	// We don't predict touching our own flag
-	if(cgs.gametype == GT_1FCTF) {
+	if (cgs.gametype == GT_1FCTF) {
 		if(item->giType == IT_TEAM && item->giTag != PW_NEUTRALFLAG) {
 			return;
 		}
