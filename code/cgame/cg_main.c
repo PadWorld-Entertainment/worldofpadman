@@ -1065,8 +1065,8 @@ static void CG_RegisterGraphics(void) {
 		}
 
 		if ( cgs.gametype == GT_1FCTF || cg_buildScript.integer ) {
-			cgs.media.hud_CTL_bg_red = trap_R_RegisterShaderNoMip("hud/1LCTL_red");
-			cgs.media.hud_CTL_bg_blue = trap_R_RegisterShaderNoMip("hud/1LCTL_blue");
+			cgs.media.hud_1LCTL_bg_red = trap_R_RegisterShaderNoMip("hud/1LCTL_red");
+			cgs.media.hud_1LCTL_bg_blue = trap_R_RegisterShaderNoMip("hud/1LCTL_blue");
 			cgs.media.neutralFlagModel = trap_R_RegisterModel("models/ctl/lollipop_green");
 			cgs.media.neutralflagShader[0] = trap_R_RegisterShaderNoMip("icons/hud_lolly_green1");
 			cgs.media.neutralflagShader[1] = trap_R_RegisterShaderNoMip("icons/hud_lolly_green2");
