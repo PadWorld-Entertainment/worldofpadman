@@ -1329,7 +1329,7 @@ static void CG_DrawDisconnect(void) {
 		x = (640 - 48 - 94);
 	} else if (cgs.gametype == GT_BALLOON) {
 		x = (640 - 48 - 64);
-	} else if (cgs.gametype == GT_CTF) {
+	} else if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF)) {
 		x = (640 - 48 - 78);
 	} else {
 		x = (640 - 48);
@@ -1369,7 +1369,7 @@ static void CG_DrawLagometer(void) {
 		x = (640 - 48 - 94);
 	} else if (cgs.gametype == GT_BALLOON) {
 		x = (640 - 48 - 64);
-	} else if (cgs.gametype == GT_CTF) {
+	} else if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF)) {
 		x = (640 - 48 - 78);
 	} else {
 		x = (640 - 48);
