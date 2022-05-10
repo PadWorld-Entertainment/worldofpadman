@@ -76,7 +76,7 @@ typedef struct {
 	menuslider_s brightness;
 	menuslider_s screensize;
 	menuradiobutton_s vsync;
-	menulist_s windowmode;	
+	menulist_s windowmode;
 	menuradiobutton_s resize;
 	menuradiobutton_s maxfps;
 	menulist_s anaglyph;
@@ -125,7 +125,7 @@ static void UI_DisplayOptions_SetMenuItems(void) {
 		displayOptionsInfo.windowmode_original = 0;
 	}
 	displayOptionsInfo.windowmode.curvalue = displayOptionsInfo.windowmode_original;
-	
+
 	displayOptionsInfo.resize_original = trap_Cvar_VariableValue("r_allowResize");
 	displayOptionsInfo.resize.curvalue = displayOptionsInfo.resize_original;
 
@@ -250,14 +250,14 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 	case ID_BACK:
 		UI_PopMenu();
 		break;
-	
+
 	case ID_APPLY:
 		if (displayOptionsInfo.ignorehwg_original != displayOptionsInfo.ignoreHWG.curvalue ||
 			displayOptionsInfo.windowmode_original != displayOptionsInfo.windowmode.curvalue ||
 			displayOptionsInfo.vsync_original != displayOptionsInfo.vsync.curvalue ||
 			displayOptionsInfo.resize_original != displayOptionsInfo.resize.curvalue ||
 			displayOptionsInfo.greyscale_original != displayOptionsInfo.greyscale.curvalue) {
-		
+
 			trap_Cvar_SetValue("r_ignorehwgamma", displayOptionsInfo.ignoreHWG.curvalue);
 			trap_Cvar_SetValue("r_swapInterval", displayOptionsInfo.vsync.curvalue);
 

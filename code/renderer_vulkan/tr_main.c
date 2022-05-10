@@ -118,7 +118,7 @@ typedef struct {
 */
 void R_RotateForEntity(const trRefEntity_t *const ent, const viewParms_t *const viewParms, orientationr_t *const or) {
 	float glMatrix[16] QALIGN(16);
-	
+
 	if (ent->e.reType != RT_MODEL) {
 		* or = viewParms->world;
 		return;

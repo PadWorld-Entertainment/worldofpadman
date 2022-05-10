@@ -310,7 +310,7 @@ static void UI_Preferences_SetMenuItems(void) {
 		if (trap_Cvar_VariableValue("bot_fastchat") != 0) {
 			s_preferences.botchat.curvalue = 2;
 		} else {
-			s_preferences.botchat.curvalue = 1;			
+			s_preferences.botchat.curvalue = 1;
 		}
 	} else {
 		s_preferences.botchat.curvalue = 0;
@@ -1002,7 +1002,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.forcemodel.generic.id = ID_FORCEMODEL;
 	s_preferences.forcemodel.generic.x = XPOSITION;
 	s_preferences.forcemodel.generic.y = y;
-	s_preferences.forcemodel.generic.toolTip = 
+	s_preferences.forcemodel.generic.toolTip =
 		"Enable to force all opponents to be displayed in the game with your selected character model. "
 		"In team-based gametypes, this then only affects the opposing team. This also should save system "
 		"resources. Default is off.";
@@ -1016,7 +1016,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.glowmodel.generic.x = XPOSITION;
 	s_preferences.glowmodel.generic.y = y;
 	s_preferences.glowmodel.itemnames = glowmodel_items;
-	s_preferences.glowmodel.generic.toolTip = 
+	s_preferences.glowmodel.generic.toolTip =
 		"Enable to force all players to be displayed with glowing player models in the desired skin color. "
 		"Default is none. NOTE: In team gametypes, the glowing color is always set to red or blue.";
 
@@ -1030,7 +1030,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.connotify.generic.x = XPOSITION;
 	s_preferences.connotify.generic.y = y;
 	s_preferences.connotify.itemnames = connotify_items;
-	s_preferences.connotify.generic.toolTip = 
+	s_preferences.connotify.generic.toolTip =
 		"Select whether you prefer notifications to appear short (2s), default (4s), long (6s), "
 		"or maximum (8s) at the top of the screen.";
 
@@ -1043,7 +1043,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.chatheight.generic.x = XPOSITION;
 	s_preferences.chatheight.generic.y = y;
 	s_preferences.chatheight.itemnames = chatheight_items;
-	s_preferences.chatheight.generic.toolTip = 
+	s_preferences.chatheight.generic.toolTip =
 		"Select whether you prefer notifications to appear default (up to 4 lines), expanded "
 		"(up to 6 lines), or maximum (up to 8 lines) at the top of the screen.";
 
@@ -1055,7 +1055,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.chaticon.generic.id = ID_CHATICON;
 	s_preferences.chaticon.generic.x = XPOSITION;
 	s_preferences.chaticon.generic.y = y;
-	s_preferences.chaticon.generic.toolTip = 
+	s_preferences.chaticon.generic.toolTip =
 		"Disable to hide the player icon at the beginning of a chat notification. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
@@ -1066,7 +1066,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.chatbeep.generic.id = ID_CHATBEEP;
 	s_preferences.chatbeep.generic.x = XPOSITION;
 	s_preferences.chatbeep.generic.y = y;
-	s_preferences.chatbeep.generic.toolTip = 
+	s_preferences.chatbeep.generic.toolTip =
 		"Disable to switch off the beep of all chat notifications. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
@@ -1077,7 +1077,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.gesture.generic.id = ID_GESTURE;
 	s_preferences.gesture.generic.x = XPOSITION;
 	s_preferences.gesture.generic.y = y;
-	s_preferences.gesture.generic.toolTip = 
+	s_preferences.gesture.generic.toolTip =
 		"Disable this to not display gestures of other players. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
@@ -1089,7 +1089,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.botchat.generic.x = XPOSITION;
 	s_preferences.botchat.generic.y = y;
 	s_preferences.botchat.itemnames = botchat_items;
-	s_preferences.botchat.generic.toolTip = 
+	s_preferences.botchat.generic.toolTip =
 		"Set to off to prevent the bots from chatting and silence them, or set it to "
 		"often to make the bots more talkative.";
 
@@ -1101,7 +1101,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.teamchatsonly.generic.id = ID_TEAMCHATSONLY;
 	s_preferences.teamchatsonly.generic.x = XPOSITION;
 	s_preferences.teamchatsonly.generic.y = y;
-	s_preferences.teamchatsonly.generic.toolTip = 
+	s_preferences.teamchatsonly.generic.toolTip =
 		"Enable to force only chat messages from your teammates to be displayed. Deault is off.";
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
@@ -1112,7 +1112,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.conautochat.generic.id = ID_CONAUTOCHAT;
 	s_preferences.conautochat.generic.x = XPOSITION;
 	s_preferences.conautochat.generic.y = y;
-	s_preferences.conautochat.generic.toolTip = 
+	s_preferences.conautochat.generic.toolTip =
 		"Disable to prevent sending console input text as chat when there is not a slash at "
 		"the beginning. Deault is on.";
 
@@ -1124,7 +1124,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.conautoclear.generic.id = ID_CONAUTOCLEAR;
 	s_preferences.conautoclear.generic.x = XPOSITION;
 	s_preferences.conautoclear.generic.y = y;
-	s_preferences.conautoclear.generic.toolTip = 
+	s_preferences.conautoclear.generic.toolTip =
 		"Disable to prevent clearing console input text when console is closed. Deault is on.";
 
 	// help options

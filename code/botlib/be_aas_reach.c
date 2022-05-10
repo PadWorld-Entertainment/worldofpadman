@@ -374,7 +374,7 @@ int AAS_BestReachableArea(vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalor
 			{
 				Log_Write("point %f %f %f in area %d but trace startsolid", start[0], start[1], start[2], areanum);
 				AAS_DrawPermanentCross(start, 4, LINECOLOR_RED);
-			} 
+			}
 			botimport.Print(PRT_MESSAGE, "AAS_BestReachableArea: start solid\n");
 #endif
 			VectorCopy(start, goalorigin);

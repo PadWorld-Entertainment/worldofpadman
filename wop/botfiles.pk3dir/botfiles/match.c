@@ -19,7 +19,7 @@ MTCONTEXT_INITIALTEAMCHAT
 	// usefull for testing item reachability
 	EC"("|EC"[", NETNAME, EC")"|EC"]", PLACE, EC": collect ", ITEM = (MSG_GETITEM, 0);
 	EC"("|EC"[", NETNAME, EC")"|EC"]", PLACE, EC": ", ADDRESSEE, " collect ", ITEM = (MSG_GETITEM, ST_ADDRESSED);
-	
+
 	// usefull for debugging
 	EC"("|EC"[", NETNAME, EC")"|EC"]", PLACE, EC": ", ADDRESSEE, " catch me" = (MSG_CATCHME, ST_ADDRESSED);
 

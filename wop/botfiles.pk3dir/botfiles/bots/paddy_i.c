@@ -1,7 +1,7 @@
 //===========================================================================
 //
 // Name:			paddy_i.c
-// Function:		
+// Function:
 // Programmer:		Mr Elusive (MrElusive@idsoftware.com)
 // Last update:		1999-09-08
 // Tab Size:		4 (real tabs)

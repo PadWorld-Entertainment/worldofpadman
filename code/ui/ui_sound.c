@@ -473,11 +473,11 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.sfxvolume.generic.y = y;
 	soundOptionsInfo.sfxvolume.minvalue = 0;
 	soundOptionsInfo.sfxvolume.maxvalue = 100;
-	soundOptionsInfo.sfxvolume.generic.toolTip = 
+	soundOptionsInfo.sfxvolume.generic.toolTip =
 		"Use this to adjust the game effects volume to your needs. Default is 50. "
 		"NOTE: With SDL active this is the master volume and also affects the music "
 		"volume. With OpenAL active effects and music volume are independent.";
-	
+
 	y += (BIGCHAR_HEIGHT + 2);
 	soundOptionsInfo.musicvolume.generic.type = MTYPE_SLIDER;
 	soundOptionsInfo.musicvolume.generic.name = "Music Volume:";
@@ -488,7 +488,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.musicvolume.generic.y = y;
 	soundOptionsInfo.musicvolume.minvalue = 0;
 	soundOptionsInfo.musicvolume.maxvalue = 100;
-	soundOptionsInfo.musicvolume.generic.toolTip = 
+	soundOptionsInfo.musicvolume.generic.toolTip =
 		"Use this to adjust the game music volume to your needs. Default is 20. "
 		"NOTE: With SDL active the music volume is also influenced by effects "
 		"volume. With OpenAL active music and effects volume are independent.";
@@ -501,7 +501,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.musicautoswitch.generic.id = ID_MUSICAUTOSWITCH;
 	soundOptionsInfo.musicautoswitch.generic.x = XPOSITION;
 	soundOptionsInfo.musicautoswitch.generic.y = y;
-	soundOptionsInfo.musicautoswitch.generic.toolTip = 
+	soundOptionsInfo.musicautoswitch.generic.toolTip =
 		"Enable to automatically switch to the next song on map change. This can "
 		"help with particularly long tracks to prevent the same song from being "
 		"played over and over again.";

@@ -195,7 +195,7 @@ void R_MipMap2(const unsigned char *in, uint32_t inWidth, uint32_t inHeight, uns
 		out[0] = in[0];
 		return;
 	}
-	
+
 	// ri.Printf (PRINT_ALL, "\n---R_MipMap2---\n");
 	// Not run time funs, can be used for best view effects
 

@@ -795,7 +795,7 @@ static void pgreg(int reg_num, int arg_index, int flt)
 }
 
 static void pimm(unsigned int val, int bits, int shift, int sgned, int arg_index)
-	
+
 {
 	val >>= shift;
 	val &= ((1 << bits) - 1);

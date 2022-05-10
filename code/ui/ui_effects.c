@@ -262,7 +262,7 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 	case ID_BACK:
 		UI_PopMenu();
 		break;
-	
+
 	case ID_APPLY:
 		if ((effectsOptionsInfo.hdr_original != effectsOptionsInfo.hdr.curvalue) ||
 			(effectsOptionsInfo.ssao_original != effectsOptionsInfo.ssao.curvalue) ||

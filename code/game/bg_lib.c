@@ -742,7 +742,7 @@ double atan2( double y, double x ) {
 		}
 	}
 
-	return base + dir * i * ( M_PI/2048); 
+	return base + dir * i * ( M_PI/2048);
 }
 
 #endif

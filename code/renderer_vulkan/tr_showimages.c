@@ -24,7 +24,7 @@ void RB_ShowImages(image_t **const pImg, unsigned int N) {
 	backEnd.projection2D = qtrue;
 
 	vk_clearColorAttachments(black);
-	
+
 	R_GetWinResolution(&width, &height);
 
 	w = width / 20;

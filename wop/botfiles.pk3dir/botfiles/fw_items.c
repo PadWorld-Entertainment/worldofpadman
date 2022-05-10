@@ -236,7 +236,7 @@ weight "weapon_pumper"{
 		case 1:	return W_SHOTGUN;	// bot has no weap
 		case 100:{		// bot is barely equiped with weapons
 			switch(INVENTORY_PUMPER){
-			
+
 				case 1: return $evalfloat( W_SHOTGUN * FAC_LUXUS1 ) ;
 				default:{
 					switch( INVENTORY_PUMPERAMMO ){
@@ -248,7 +248,7 @@ weight "weapon_pumper"{
 				}
 			}
 		}
-		
+
 		default:{	// bot is well equiped with weapons
 			switch(INVENTORY_PUMPER){
 				case 1: return $evalfloat( W_SHOTGUN * FAC_LUXUS2 ) ;
@@ -588,7 +588,7 @@ weight "weapon_spraypistol"{ return 0; }
 weight "item_botroam"{	return 1; } //end weight
 
 // flag carrier should show less interest in returning his own teams flag
-weight "team_CTL_redlolly"{ 
+weight "team_CTL_redlolly"{
 /*	switch( INVENTORY_BLUEFLAG){
 		case 1:{
 			return 1000;
@@ -596,7 +596,7 @@ weight "team_CTL_redlolly"{
 		default:{
 			return 200;
 		}
-	} 
+	}
 */
 	return 4000;
 }
@@ -609,7 +609,7 @@ weight "team_CTL_bluelolly"{
 		default:{
 			return 200;
 		}
-	} 
+	}
 */
 	return 4000;
 }

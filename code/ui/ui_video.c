@@ -668,7 +668,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	static const char *cdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *tdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
 	static const char *tquality_names[] = {"Default", "16 bit", "32 bit", NULL};
-	static const char *tfilter_names[] = {"Bilinear", "Trilinear", "Anisotropic (2x)", "Anisotropic (4x)", 
+	static const char *tfilter_names[] = {"Bilinear", "Trilinear", "Anisotropic (2x)", "Anisotropic (4x)",
 											"Anisotropic (8x)", "Anisotropic (16x)", NULL};
 	static const char *aa_names[] = {"Off", "2x", "4x", "8x", NULL};
 
@@ -900,7 +900,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.effects.color = color_lightOrange;
 	s_graphicsoptions.effects.focuscolor = color_orange;
 	s_graphicsoptions.effects.style = UI_CENTER | UI_SMALLFONT;
-	
+
 	s_graphicsoptions.back.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.back.generic.name = BACK0;
 	s_graphicsoptions.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;

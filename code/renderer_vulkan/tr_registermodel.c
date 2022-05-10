@@ -89,7 +89,7 @@ qhandle_t RE_RegisterModel(const char *name) {
 			ri.Printf(PRINT_WARNING, " %s format not support now. \n ", name);
 		}
 	} else {
-		uint32_t i; 
+		uint32_t i;
 		ri.Printf(PRINT_WARNING,
 				  "RegisterModel: %s without extention. "
 				  " Try and find a suitable match using all the model formats supported\n",

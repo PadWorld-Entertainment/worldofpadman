@@ -177,7 +177,7 @@ chat "padlilly"
 
 	type "death_praise" //praise initiated when the bot died
 	{
-		
+
 			"Wooo! Looks like some new competition has moved into town.";
 			"Oh my! MonsterPad look OUT!";
 			"Padman better keep an eye on his ~rear view mirror now.";

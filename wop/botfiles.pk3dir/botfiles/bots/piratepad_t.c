@@ -137,7 +137,7 @@ chat "visor"
 		"I've gone and made a mess of myself again.";
 		DEATH_SUICIDE0;
 		DEATH_SUICIDE2;
-	} //end type 
+	} //end type
 
 	type "death_gauntlet"
 	{
@@ -153,7 +153,7 @@ chat "visor"
 		"I hate campers. I really do.";
 		"Did ~Xian show you how to do that?";
 		DEATH_RAIL1;
-	} //end type 
+	} //end type
 
 	type "death_bfg"
 	{
@@ -185,7 +185,7 @@ chat "visor"
 	//================================================================
 	//================================================================
 
-	type "kill_rail" 
+	type "kill_rail"
 	{
 		"Yessssss!!";
 		"Gotcha!";
@@ -207,7 +207,7 @@ chat "visor"
 		"Stand aside, kid. Whoops. Too late.";
 		"Nothing but memories left there.";
 		TELEFRAGGED0;
-		TELEFRAGGED2;	
+		TELEFRAGGED2;
 	} //end type
 
 	type "kill_insult"

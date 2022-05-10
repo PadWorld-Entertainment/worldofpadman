@@ -112,7 +112,7 @@ chat "padman"
 	type "kill_rail"{
 	"SPLASH...hehe.";
 	}
-	
+
 	type "kill_telefrag"{
 	"Oops, I didn't see you there! ;)";
 	}

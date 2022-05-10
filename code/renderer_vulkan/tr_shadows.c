@@ -231,9 +231,9 @@ overlap and double darken.
 void RB_ShadowFinish(void) {
 	int i = 0;
 	static const float tmp[16] = {
-		1, 0, 0, 0, 
-		0, 1, 0, 0, 
-		0, 0, 1, 0, 
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
 		0, 0, 0, 1};
 
 	if (r_shadows->integer != 2) {

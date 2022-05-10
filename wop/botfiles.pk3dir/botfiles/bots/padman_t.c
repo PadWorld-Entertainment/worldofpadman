@@ -18,7 +18,7 @@ chat "padman"
                 "Is anybody here..?";
                 "Yeah, PADGiRL is shopping now and so I have time to frag you.";
                 "So tell me your question..what? this isn't a game show..??!";
-                "Ok, in germany we say, Hallo, schoen Dich zu sehen..!"; 
+                "Ok, in germany we say, Hallo, schoen Dich zu sehen..!";
                 "Hey freaks, PADLILLY wants me to make big holes in your bodies.";
 		"/set mode idkfa .. ack! that wasn't supposed to come up as chat text.";
 		HELLO5;
@@ -35,7 +35,7 @@ chat "padman"
 	type "level_start"
 	{
 		LEVEL_START0;
-		"Hold still, this won't hurt a bit."; 
+		"Hold still, this won't hurt a bit.";
                 "I need a gun, a big gun..!";
                 "Oh, only girls here..hehe.";
                 "Don't run, Don't jump, only hold still. It's better for me to frag you..";
@@ -107,7 +107,7 @@ chat "padman"
 		"glurblbhfpgh..";
 		DEATH_TELEFRAGGED1;
 		DEATH_TELEFRAGGED2;
-	} //end type 
+	} //end type
 
 	type "death_lava"
 	{
@@ -120,7 +120,7 @@ chat "padman"
 
 	type "death_slime"
 	{
-                "Hey, come on, good body-slime here..hehe"; 
+                "Hey, come on, good body-slime here..hehe";
 		"ew, can't get that nasty taste out of my mouth.";
 		"yum.."; //VOICE RANDOM_2
 		"yuck. this slime tastes gross.";
@@ -192,13 +192,13 @@ chat "padman"
 
 	type "death_praise"
 	{
-		"Maybe you should go make tea and scones and sit this round out.";  
+		"Maybe you should go make tea and scones and sit this round out.";
 		"Hey what are the cheat codes in multiplayer anyway? Is it IDKFA?";
 		"Nice shooting ", 0, " but it's only one frag.";
 		"You need to get out more.";
 		"Show me what you've got ", 0, " and I'll pretend like I'm impressed.";
 	} //end type
-	
+
 	//================================================================
 	//================================================================
 
@@ -224,7 +224,7 @@ chat "padman"
                 "Eat this..!";
                 "Sorry, that was a test with my new laser light..hehe";
 		"I love it when you explode in a puff of red mist like that"; //VOICE RANDOM_1
-	} //end type 
+	} //end type
 
 	type "kill_insult"
 	{
@@ -251,7 +251,7 @@ chat "padman"
 		"You blend in with the gibs like a chameleon ", 0, ".";
 		"We'll make a man out of you yet, ", 0, ".";
 	} //end type
-	
+
 	//================================================================
 	//================================================================
 
@@ -273,7 +273,7 @@ chat "padman"
 	type "random_misc"
 	{
 		"My Glasses are getting misty, does anybody have some windex?"; //VOICE RANDOM_1
-		"Wait! Stop the game! I think I left the oven on."; //VOICE RANDOM_2 
+		"Wait! Stop the game! I think I left the oven on."; //VOICE RANDOM_2
 		"Wow, it's hotter than hell here"; // VOICE RANDOM_4
 		"You want the best, you get the best."; // VOICE TAUNT_04
                 "Come on and die, sucker..!";
@@ -285,6 +285,6 @@ chat "padman"
 		"Imagine if this was all just some elaborate simulation. Nah, it couldn't be..";
 		"run little man, run.";
 	} //end type/end type
-	
+
 } //end chat padman
 

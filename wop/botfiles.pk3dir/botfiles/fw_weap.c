@@ -73,7 +73,7 @@ weight "Balloony"
 						case 1: return $evalint( W_GRENADELAUNCHER * 0.1 );		// <---
 						case 200: return $evalint(W_GRENADELAUNCHER * 2 );
 						case 800: return $evalint(W_GRENADELAUNCHER * 0.1 );
-						default: return 1;		
+						default: return 1;
 					} //end switch
 				} //end default
 			} //end switch
