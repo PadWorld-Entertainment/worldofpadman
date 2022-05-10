@@ -1038,8 +1038,8 @@ static void Cmd_Tell_f(gentity_t *ent) {
 static char *gc_orders[] = {"hold your position", "hold this position", "come here", "cover me",
 							"guard location",	  "search and destroy", "report"};
 
-	int player;
 static void Cmd_GameCommand_f(gentity_t *ent) {
+	int player;
 	int order;
 	char str[MAX_TOKEN_CHARS];
 
