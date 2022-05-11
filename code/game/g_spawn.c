@@ -361,6 +361,7 @@ static const replacePair_t q3ToWopItems[] = {{"weapon_gauntlet", "weapon_punchy"
 
 											 {"team_CTF_redflag", "team_CTL_redlolly"},
 											 {"team_CTF_blueflag", "team_CTL_bluelolly"},
+											 {"team_CTF_neutralflag", "team_CTL_neutrallolly"},
 											 {"team_CTF_redplayer", "team_redplayer"},
 											 {"team_CTF_blueplayer", "team_blueplayer"},
 											 {"team_CTF_redspawn", "team_redspawn"},
