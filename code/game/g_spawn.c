@@ -471,14 +471,19 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		}
 	}
 
-	// remove lollies if we aren't in CTL
-	// FIXME: Should mappers do this via gametype spawnvar (also for balloons, lps items etc) ?
-	if (g_gametype.integer != GT_CTF &&
+	// remove red and blue lollies if we aren't in CTL and 1LCTL
+	if (g_gametype.integer != GT_CTF && g_gametype.integer != GT_1FCTF &&
 		(!Q_stricmp(ent->classname, "team_CTL_redlolly") || !Q_stricmp(ent->classname, "team_CTL_bluelolly"))) {
 		G_FreeEntity(ent);
 		return;
 	}
 
+	// remove neutral lolly if we aren't in 1LCTL
+	if (g_gametype.integer != GT_1FCTF && !Q_stricmp(ent->classname, "team_CTL_neutrallolly")) {
+		G_FreeEntity(ent);
+		return;
+	}
+	
 	if (!IsSyc()) {
 		G_SpawnInt("onlyspraygt", "0", &i);
 		if (i) {
