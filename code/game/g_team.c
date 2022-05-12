@@ -917,7 +917,7 @@ int Pickup_Team(gentity_t *ent, gentity_t *other) {
 		team = TEAM_RED;
 	} else if (strcmp(ent->classname, "team_CTL_bluelolly") == 0) {
 		team = TEAM_BLUE;
-	} else if (strcmp(ent->classname, "team_CTL_neutralflag") == 0) {
+	} else if (strcmp(ent->classname, "team_CTL_neutrallolly") == 0) {
 		team = TEAM_FREE;
 	} else {
 		PrintMsg(other, "Don't know what team the lolly is on.\n");
