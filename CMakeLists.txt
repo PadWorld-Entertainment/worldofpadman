@@ -46,6 +46,12 @@ if (MSVC)
 	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()
 
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+	add_compile_definitions(NDEBUG)
+else()
+	add_compile_definitions(DEBUG)
+endif()
+
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 if (APPLE)
