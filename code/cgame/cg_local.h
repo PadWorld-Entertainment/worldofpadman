@@ -820,8 +820,6 @@ typedef struct {
 
 	qhandle_t hud_CTL_bg_red;
 	qhandle_t hud_CTL_bg_blue;
-	qhandle_t hud_1LCTL_bg_red;
-	qhandle_t hud_1LCTL_bg_blue;
 
 	qhandle_t hud_teammarker;
 	qhandle_t hud_shieldbar;
