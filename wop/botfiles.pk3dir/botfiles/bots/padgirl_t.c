@@ -26,9 +26,9 @@ chat "padgirl"
 	type "game_exit" //initiated when the bot exits the game
 	{
 		"Hey sweetheart, that was a funny game.";
-                "It's time to say goodbye.";
+		"It's time to say goodbye.";
 		// 0 = bot name
-		//4 = level's title
+		// 4 = level's title
 	} //end type
 
 	type "level_start" //initiated when a new level starts
@@ -36,7 +36,6 @@ chat "padgirl"
 		"Alright, let's see what ya got.";
 		"It's time for a hot girl to lay down the law here.";
 		"Time for boom-boom-betty kisses.";
-
 		// 0 = bot name
 	} //end type
 
@@ -44,7 +43,6 @@ chat "padgirl"
 	{
 		"You are not a gentleman.";
 		"Can we try that again, ", 2, "? Warm up time is over now.";
-
 		// 0 = bot name
 		// 1 = random opponent
 		// 2 = opponent in first place
@@ -76,7 +74,7 @@ chat "padgirl"
 	{
 		"Now that was nice ", 0, ", didn't you see my chat icon?";
 		"Keep that up and you'll be REAL popular here.";
-                "You stupid Chatkiller.";
+		"You stupid Chatkiller.";
 		//0 = shooter
 	} //end type
 
@@ -85,7 +83,6 @@ chat "padgirl"
 		"Yes I'm a girl, but I'm tougher than I look, sweetheart";
 		"Hey, make love, not War.";
 		"Just a flesh wound.";
-
 		//0 = shooter
 	} //end type
 
@@ -171,19 +168,17 @@ chat "padgirl"
 		"Was that REALLY your best shot?";
 		"I ought to charge by the hour for this.";
 		"So... you're up to what ... 3 frags an hour?";
-
 		// 0 = enemy name
 	} //end type
 
 	type "death_praise" //praise initiated when the bot died
 	{
-
-			"Wooo! Looks like some new competition has moved into town.";
-			"Oh my! MonsterPad look OUT!";
-			"Padman better keep an eye on his ~rear view mirror now.";
-			"PadGirl can't coast along on her good looks anymore.";
-			"I'd say that this train is bound for glory.";
-			"Sorry. I'm not much of a challenge.";
+		"Wooo! Looks like some new competition has moved into town.";
+		"Oh my! MonsterPad look OUT!";
+		"Padman better keep an eye on his ~rear view mirror now.";
+		"PadGirl can't coast along on her good looks anymore.";
+		"I'd say that this train is bound for glory.";
+		"Sorry. I'm not much of a challenge.";
 		// 0 = enemy name
 	} //end type
 
@@ -235,7 +230,6 @@ chat "padgirl"
 	{
 		"You blow up real pretty.";
 		"Were you trying to give me an easy frag there, ", 0, "?";
-
 		// 0 = enemy name
 	} //end type
 
@@ -244,13 +238,12 @@ chat "padgirl"
 
 	type "random_insult" //insult initiated randomly (just when the bot feels like it)
 	{
-	"Remember to take the training wheels off before you leave, ", 0, ".";
-	"What a coincidence. My grandmother said she whupped your behind just last week.";
-	"There must be worse nicknames than 'Ol' Harmless.'";
-	one_liners;
-	"Any time you want to start the fight, just let me know.";
-	"Big clue here. Don't quit your day job, ", 0, ".";
-
+		"Remember to take the training wheels off before you leave, ", 0, ".";
+		"What a coincidence. My grandmother said she whupped your behind just last week.";
+		"There must be worse nicknames than 'Ol' Harmless.'";
+		one_liners;
+		"Any time you want to start the fight, just let me know.";
+		"Big clue here. Don't quit your day job, ", 0, ".";
 		// 0 = name of randomly chosen player
 		// 1 = last victim name
 	} //end type

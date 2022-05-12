@@ -223,7 +223,7 @@ weight "ammo_pumper"{
 				case 20: return 5;
 				default: return 0;
 			} // end switch
-        }
+		}
 	} //end switch
 } //end weight
 
