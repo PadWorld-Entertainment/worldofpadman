@@ -3438,7 +3438,7 @@ static void AAS_SetWeaponJumpAreaFlags(void) {
 // check if the bot can rocketjump from area1 to area2
 
 //===========================================================================
-int AAS_Reachability_WeaponJump(int area1num, int area2num) {
+static int AAS_Reachability_WeaponJump(int area1num, int area2num) {
 	int face2num, i, n, ret, visualize;
 	float speed, zvel;
 	// float hordist;
