@@ -254,6 +254,8 @@ void Team_CheckDroppedItem(const gentity_t *dropped) {
 		Team_SetFlagStatus(TEAM_RED, FLAG_DROPPED);
 	} else if (dropped->item->giTag == PW_BLUEFLAG) {
 		Team_SetFlagStatus(TEAM_BLUE, FLAG_DROPPED);
+	} else if (dropped->item->giTag == PW_NEUTRALFLAG) {
+		Team_SetFlagStatus(TEAM_FREE, FLAG_DROPPED);
 	}
 }
 
