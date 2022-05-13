@@ -280,7 +280,8 @@ static void CheckAlmostLollyCapture(gentity_t *self, gentity_t *attacker) {
 	char *classname;
 
 	// if this player was carrying a lolly (flag)
-	if (self->client->ps.powerups[PW_REDFLAG] || self->client->ps.powerups[PW_BLUEFLAG]) {
+	if (self->client->ps.powerups[PW_REDFLAG] || self->client->ps.powerups[PW_BLUEFLAG] || 
+		self->client->ps.powerups[PW_NEUTRALFLAG]) {
 		// get the goal flag this player should have been going for
 		if (self->client->sess.sessionTeam == TEAM_BLUE) {
 			classname = "team_CTL_bluelolly";
