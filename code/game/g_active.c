@@ -532,6 +532,9 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 			} else if (client->ps.powerups[PW_BLUEFLAG]) {
 				item = BG_FindItemForPowerup(PW_BLUEFLAG);
 				j = PW_BLUEFLAG;
+			} else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
+				item = BG_FindItemForPowerup(PW_NEUTRALFLAG);
+				j = PW_NEUTRALFLAG;
 			}
 
 			if (item) {
