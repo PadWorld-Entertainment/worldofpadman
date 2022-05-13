@@ -108,7 +108,6 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 		}
 	} else
 	// draw the handicap or bot skill marker (unless player has lolly)
-	// ToDo Kai: Draw the neutral flag
 	if (ci->powerups & (1 << PW_REDFLAG)) {
 		if (cg_drawIcons.integer) {
 			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_RED, qfalse);
@@ -116,6 +115,10 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	} else if (ci->powerups & (1 << PW_BLUEFLAG)) {
 		if (cg_drawIcons.integer) {
 			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_BLUE, qfalse);
+		}
+	} else if (ci->powerups & (1 << PW_NEUTRALFLAG)) {
+		if (cg_drawIcons.integer) {
+			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_FREE, qfalse);
 		}
 	} else {
 		if (ci->botSkill > 0 && ci->botSkill <= 5) {
