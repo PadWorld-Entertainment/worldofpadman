@@ -1002,9 +1002,10 @@ static void CG_WoPTeamOverlay(void) {
 			DrawStringWithCutFrame(x + 46 + 11, y + 14, va("%i", ci->numCartridges), colorWhite, 8, 10, x, y, x + w,
 								   y + h);
 			break;
-		case GT_CTF:	// ToDo Kai: Add the 1FCTF lolly icon
+		case GT_1FCTF:
+		case GT_CTF:
 			for (j = 0; j <= PW_NUM_POWERUPS; j++) {
-				if (j != PW_REDFLAG && j != PW_BLUEFLAG)
+				if (j != PW_REDFLAG && j != PW_BLUEFLAG && j != PW_NEUTRALFLAG)
 					continue;
 
 				if (ci->powerups & (1 << j)) {
