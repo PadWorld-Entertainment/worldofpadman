@@ -1653,6 +1653,9 @@ static void G_DropFlags(gentity_t *ent) {
 	} else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
 		item = BG_FindItemForPowerup(PW_BLUEFLAG);
 		j = PW_BLUEFLAG;
+	} else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
+		item = BG_FindItemForPowerup(PW_NEUTRALFLAG);
+		j = PW_NEUTRALFLAG;
 	} else {
 		return;
 	}
@@ -1730,7 +1733,7 @@ void Cmd_DropTeamItem_f(gentity_t *ent) {
 
 	if (g_gametype.integer == GT_SPRAY) {
 		G_DropCartridges(ent);
-	} else if (g_gametype.integer == GT_CTF) {
+	} else if (g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF) {
 		G_DropFlags(ent);
 	} else if (g_gametype.integer == GT_CATCH) {
 		G_DropKillerDucks(ent);
