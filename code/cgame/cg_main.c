@@ -724,13 +724,10 @@ static void CG_RegisterSounds(void) {
 			cgs.media.returnOpponentSound = trap_S_RegisterSound("sound/feedback/teamplay/lollyreturn_enemy", qtrue);
 			cgs.media.takenYourTeamSound = trap_S_RegisterSound("sound/feedback/teamplay/lollytaken_team", qtrue);
 			cgs.media.takenOpponentSound = trap_S_RegisterSound("sound/feedback/teamplay/lollytaken_enemy", qtrue);
-			cgs.media.redLollyReturnedSound = trap_S_RegisterSound("sound/feedback/teamplay/red_returned", qtrue);
-			cgs.media.blueLollyReturnedSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_returned", qtrue);
+			cgs.media.redLollyReturnedSound = trap_S_RegisterSound("sound/feedback/teamplay/red_lolly_returned", qtrue);
+			cgs.media.blueLollyReturnedSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_lolly_returned", qtrue);
 			cgs.media.enemyTookYourLollySound = trap_S_RegisterSound("sound/feedback/teamplay/enemy_lolly", qtrue);
 			cgs.media.yourTeamTookEnemyLollySound = trap_S_RegisterSound("sound/feedback/teamplay/team_lolly", qtrue);
-			cgs.media.youHaveLollySound = trap_S_RegisterSound("sound/feedback/teamplay/you_lolly", qtrue);
-			cgs.media.stolenLollySound = trap_S_RegisterSound("sound/feedback/teamplay/stolen_lolly", qfalse);
-
 		}
 
 		if (cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
@@ -741,7 +738,10 @@ static void CG_RegisterSounds(void) {
 		}
 
 		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF) || cg_buildScript.integer) {
-			// Todo Kai: check what other sounds from CTF we also need in 1FCTF
+			cgs.media.captureYourTeamSound = trap_S_RegisterSound("sound/feedback/teamplay/lollycapture_team", qtrue);
+			cgs.media.captureOpponentSound = trap_S_RegisterSound("sound/feedback/teamplay/lollycapture_enemy", qtrue);
+			cgs.media.stolenLollySound = trap_S_RegisterSound("sound/feedback/teamplay/stolen_lolly", qfalse);
+			cgs.media.youHaveLollySound = trap_S_RegisterSound("sound/feedback/teamplay/you_lolly", qtrue);
 			cgs.media.bambamExplosionSound = trap_S_RegisterSound("sound/items/bambam/explosion", qfalse);
 			cgs.media.bambamMissileImpact = trap_S_RegisterSound("sound/items/bambam/impact", qfalse);
 		}
