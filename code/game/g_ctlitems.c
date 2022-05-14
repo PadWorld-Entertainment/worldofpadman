@@ -116,7 +116,8 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 				return qfalse;
 			}
 		} else if (otherEnt->s.eType == ET_ITEM &&
-				   (otherEnt->item->giTag == PW_REDFLAG || otherEnt->item->giTag == PW_BLUEFLAG)) {
+				   (otherEnt->item->giTag == PW_REDFLAG || otherEnt->item->giTag == PW_BLUEFLAG	||
+				   	otherEnt->item->giTag == PW_NEUTRALFLAG)) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(256)) {
 				trap_SendServerCommand(clientNum, "cp \"Too close to lolly base\"");
