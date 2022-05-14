@@ -61,10 +61,11 @@ EFFECTS OPTIONS MENU
 #define ID_SUNLIGHTMODE 18
 #define ID_SHADOWFILTER 19
 #define ID_SHADOWMAPSIZE 20
-#define ID_DLIGHTMODE 21
+#define ID_SUNRAYS 21
+#define ID_DLIGHTMODE 22
 
 #define XPOSITION 180
-#define YPOSITION 180 + 36
+#define YPOSITION 198
 
 typedef struct {
 	menuframework_s menu;
@@ -85,6 +86,7 @@ typedef struct {
 	menulist_s sunlightMode;
 	menulist_s shadowFilter;
 	menulist_s shadowMapSize;
+	menuradiobutton_s sunRays;
 	menulist_s dlightMode;
 
 	menubitmap_s apply;
@@ -97,6 +99,7 @@ typedef struct {
 	int paraMaps_original;
 	int deluMaps_original;
 	int sunShadows_original;
+	int sunRays_original;
 	int sunlightMode_original;
 	int shadowFilter_original;
 	int shadowMapSize_original;
@@ -171,6 +174,9 @@ static void UI_EffectsOptions_SetMenuItems(void) {
 	}
 	effectsOptionsInfo.shadowMapSize.curvalue = effectsOptionsInfo.shadowMapSize_original;
 
+	effectsOptionsInfo.sunRays_original = UI_GetCvarInt("r_drawSunRays");
+	effectsOptionsInfo.sunRays.curvalue = effectsOptionsInfo.sunRays_original;
+
 	dlight = UI_GetCvarInt("r_dlightMode");
 	if (dlight > 1) {
 		effectsOptionsInfo.dlightMode_original = 2;
@@ -206,6 +212,7 @@ static void UI_EffectsOptions_UpdateMenuItems(void) {
 		(effectsOptionsInfo.sunlightMode_original != effectsOptionsInfo.sunlightMode.curvalue) ||
 		(effectsOptionsInfo.shadowFilter_original != effectsOptionsInfo.shadowFilter.curvalue) ||
 		(effectsOptionsInfo.shadowMapSize_original != effectsOptionsInfo.shadowMapSize.curvalue) ||
+		(effectsOptionsInfo.sunRays_original != effectsOptionsInfo.sunRays.curvalue) ||
 		(effectsOptionsInfo.dlightMode.curvalue != effectsOptionsInfo.dlightMode_original)) {
 		effectsOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
@@ -229,6 +236,7 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 	case ID_PARAMAPS:
 	case ID_DELUMAPS:
 	case ID_SUNSHADOWS:
+	case ID_SUNRAYS:
 	case ID_SUNLIGHTMODE:
 	case ID_SHADOWFILTER:
 	case ID_SHADOWMAPSIZE:
@@ -274,6 +282,7 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 			(effectsOptionsInfo.sunlightMode_original != effectsOptionsInfo.sunlightMode.curvalue) ||
 			(effectsOptionsInfo.shadowFilter_original != effectsOptionsInfo.shadowFilter.curvalue) ||
 			(effectsOptionsInfo.shadowMapSize_original != effectsOptionsInfo.shadowMapSize.curvalue) ||
+			(effectsOptionsInfo.sunRays_original != effectsOptionsInfo.sunRays.curvalue) ||
 			(effectsOptionsInfo.dlightMode.curvalue != effectsOptionsInfo.dlightMode_original)) {
 
 			trap_Cvar_SetValue("r_hdr", effectsOptionsInfo.hdr.curvalue);
@@ -311,6 +320,8 @@ static void UI_EffectsOptions_Event(void *ptr, int event) {
 			} else {
 				trap_Cvar_SetValue("r_shadowMapSize", 512);
 			}
+
+			trap_Cvar_SetValue("r_drawSunRays", effectsOptionsInfo.sunRays.curvalue);
 
 			if (effectsOptionsInfo.dlightMode.curvalue > 1) {
 				trap_Cvar_SetValue("r_dlightMode", 2);
@@ -551,6 +562,18 @@ static void UI_EffectsOptions_MenuInit(void) {
 		"Default is medium.";
 
 	y += (BIGCHAR_HEIGHT + 2);
+	// references/modifies "r_drawSunRays"
+	effectsOptionsInfo.sunRays.generic.type = MTYPE_RADIOBUTTON;
+	effectsOptionsInfo.sunRays.generic.name = "Dynamic Sun Rays:";
+	effectsOptionsInfo.sunRays.generic.flags = QMF_SMALLFONT;
+	effectsOptionsInfo.sunRays.generic.callback = UI_EffectsOptions_Event;
+	effectsOptionsInfo.sunRays.generic.id = ID_SUNRAYS;
+	effectsOptionsInfo.sunRays.generic.x = XPOSITION;
+	effectsOptionsInfo.sunRays.generic.y = y;
+	effectsOptionsInfo.sunRays.generic.toolTip =
+		"Enable to draw a dynamic sun rays effect. Default is off.";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_dlightMode"
 	effectsOptionsInfo.dlightMode.generic.type = MTYPE_SPINCONTROL;
 	effectsOptionsInfo.dlightMode.generic.name = "Dynamic Light Mode:";
@@ -604,6 +627,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.shadowFilter);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.shadowMapSize);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.dlightMode);
+	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.sunRays);
 
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.apply);
 	Menu_AddItem(&effectsOptionsInfo.menu, (void *)&effectsOptionsInfo.back);

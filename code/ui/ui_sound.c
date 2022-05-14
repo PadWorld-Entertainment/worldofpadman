@@ -67,7 +67,7 @@ SOUND OPTIONS MENU
 #define UISND_OPENAL 1
 
 #define XPOSITION 180
-#define YPOSITION 180 + 36
+#define YPOSITION 198
 #define MAX_DEVICES 128
 
 static const char *quality_items[] = {"Low", "Medium", "High", NULL};

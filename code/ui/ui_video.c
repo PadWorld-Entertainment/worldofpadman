@@ -55,7 +55,7 @@ GRAPHICS OPTIONS MENU
 #define ID_LIST 10
 
 #define XPOSITION 180
-#define YPOSITION 180
+#define YPOSITION 198
 
 typedef struct {
 	menuframework_s menu;
@@ -748,7 +748,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 		"maximum except Texture Filter and Antialiasing. Minimum will set everything to low or "
 		"off. Quality and Performance offer a good compromise in one direction or the other.";
 
-	y += 2 * (BIGCHAR_HEIGHT + 2);
+	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_mode"
 	s_graphicsoptions.mode.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.mode.generic.name = "Video Mode:";

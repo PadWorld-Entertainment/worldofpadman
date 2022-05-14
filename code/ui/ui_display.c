@@ -62,7 +62,7 @@ DISPLAY OPTIONS MENU
 #define ID_GREYSCALE 23
 
 #define XPOSITION 180
-#define YPOSITION 180 + 36
+#define YPOSITION 198
 
 typedef struct {
 	menuframework_s menu;

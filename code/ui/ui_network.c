@@ -58,6 +58,7 @@ NETWORK OPTIONS MENU
 #define ID_MUMBLESCALE 18
 
 #define XPOSITION 180
+#define YPOSITION 198
 
 static const char *rate_items[] = {"Modem", "ISDN", "LAN/Cable/xDSL", NULL};
 static const char *voipMode_items[] = {"Off", "Built-in", "Mumble", NULL};
@@ -389,7 +390,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.network.focuspic = NETWORK1;
 	networkOptionsInfo.network.focuspicinstead = qtrue;
 
-	y = 180 + 2 * (BIGCHAR_HEIGHT + 2);
+	y = YPOSITION;
 	networkOptionsInfo.rate.generic.type = MTYPE_SPINCONTROL;
 	networkOptionsInfo.rate.generic.name = "Data Rate:";
 	networkOptionsInfo.rate.generic.flags = QMF_SMALLFONT;
