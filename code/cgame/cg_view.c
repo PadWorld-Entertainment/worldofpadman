@@ -445,6 +445,10 @@ void CG_ZoomDown_f(void) {
 
 	if (cg.zoomed) {
 		cg.zoomed = qfalse;
+		if (cg.wasThirdPerson) {
+			trap_Cvar_Set("cg_thirdPerson", "1");
+			cg.wasThirdPerson = qfalse;
+		}
 		cg.zoomTime = cg.time;
 		return;
 	}
@@ -454,6 +458,11 @@ void CG_ZoomDown_f(void) {
 
 	if (cg.snap->ps.pm_flags & PMF_FOLLOW || (cgs.gametype == GT_LPS && cg.snap->ps.stats[STAT_LIVESLEFT] <= 0))
 		return;
+
+	if (cg.renderingThirdPerson) {
+		trap_Cvar_Set("cg_thirdPerson", "0");
+		cg.wasThirdPerson = qtrue;
+	}
 
 	//	trap_S_StartLocalSound(cgs.media.zoomsound, CHAN_LOCAL_SOUND);
 	cg.zoomSoundStat = 1;
@@ -469,8 +478,13 @@ void CG_ZoomUp_f(void) {
 
 	cg.zoomSoundStat = 0; // stop sound
 	cg.zoomedkeydown = qfalse;
-	if (cg.snap->ps.weapon == WP_KMA97)
+	if (cg.snap->ps.weapon == WP_KMA97) {
 		cg.zoomed = qfalse;
+		if (cg.wasThirdPerson) {
+			trap_Cvar_Set("cg_thirdPerson", "1");
+			cg.wasThirdPerson = qfalse;
+		}
+	}
 }
 
 /*
