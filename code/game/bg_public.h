@@ -406,7 +406,9 @@ typedef enum {
 	WP_KILLERDUCKS,	   // isn't a real weapon ... but we use it to build the KDs like missiles
 	WP_BAMBAM_MISSILE, // isn't a real weapon ... but the clientside missile code is based on weaponNr
 
-	WP_NUM_WEAPONS
+	WP_NUM_WEAPONS,
+
+	WP_BOASTER_SPECIAL_VAR = 23 // hack
 } weapon_t;
 
 // flags for g_LPS_flags for GT_LPS

@@ -158,8 +158,7 @@ static void CG_General(centity_t *cent) {
 	s1 = &cent->currentState;
 
 	// Boaster-Slik-ents ... don't know why I coded this stuff in such a ugly way (without a new ent-type)
-	if (s1->weapon == 23) // extreeeeeeeeeeem-varmissbrauching =)
-	{
+	if (s1->weapon == WP_BOASTER_SPECIAL_VAR) {
 		if (cent->miscTime != 1) // misbraucht ;)
 			CG_ImpactMark(/*cgs.media.energyMarkShader*/ cgs.media.foamMarkShader, s1->origin, s1->angles, s1->time2,
 						  0.5f, 0.5f, 1, 1, qfalse, s1->generic1, qfalse);

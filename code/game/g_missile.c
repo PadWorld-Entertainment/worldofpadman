@@ -580,7 +580,7 @@ static void launch_slickent(vec3_t origin, float size, vec3_t normal) {
 	slickent->touch = touch_slickent;
 	slickent->r.svFlags = SVF_USE_CURRENT_ORIGIN /*|SVF_CAPSULE*/;
 	slickent->s.eType = ET_GENERAL; // ET_MOVER;
-	slickent->s.weapon = 23; //... dann missbrauch ich eben die var *muhaha* ... extreeeeem-varmissbrauching :ugly: - see CG_General
+	slickent->s.weapon = WP_BOASTER_SPECIAL_VAR; // See CG_General
 	slickent->s.generic1 = (int)size; // missssssssssssbrauch =)
 	slickent->s.time2 = 360 * random();
 	VectorCopy(origin, slickent->s.origin);
