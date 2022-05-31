@@ -1740,15 +1740,9 @@ static void CG_PlayerPowerups(centity_t *cent, refEntity_t *torso) {
 		if (powerups & (1 << PW_BLUEFLAG)) {
 			CG_TrailItem(cent, cgs.media.blueFlagModel);
 		}
-
 		// neutral lolly
 		if (powerups & (1 << PW_NEUTRALFLAG) ) {
-			if (ci->newAnims) {
-				CG_PlayerFlag(cent, cgs.media.neutralFlagFlapSkin, torso);
-			}
-			else {
-				CG_TrailItem(cent, cgs.media.neutralFlagModel);
-			}
+			CG_TrailItem(cent, cgs.media.neutralFlagModel);
 		}
 	}
 	// add lolly glow for any client
