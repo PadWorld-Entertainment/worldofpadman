@@ -761,6 +761,16 @@ static void CG_WoPTeamOverlay(void) {
 				}
 			}
 			break;
+		case GT_FREEZETAG:
+			for (j = 0; j <= PW_NUM_POWERUPS; j++) {
+				if (j != PW_FREEZE)
+					continue;
+
+				if (ci->powerups & (1 << j)) {
+					CG_DrawPic(x + 46, y + 14, 10, 10, cgs.media.freezeIconShader);
+				}
+			}
+			break;
 		default:
 			break;
 		}
