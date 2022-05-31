@@ -737,7 +737,7 @@ static void CG_RegisterSounds(void) {
 			cgs.media.enemyTookTheFlagSound = trap_S_RegisterSound("sound/teamplay/voc_enemy_1flag", qtrue);
 		}
 
-		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF) || cg_buildScript.integer) {
+		if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
 			cgs.media.captureYourTeamSound = trap_S_RegisterSound("sound/feedback/teamplay/lollycapture_team", qtrue);
 			cgs.media.captureOpponentSound = trap_S_RegisterSound("sound/feedback/teamplay/lollycapture_enemy", qtrue);
 			cgs.media.stolenLollySound = trap_S_RegisterSound("sound/feedback/teamplay/stolen_lolly", qfalse);
@@ -746,7 +746,7 @@ static void CG_RegisterSounds(void) {
 			cgs.media.bambamMissileImpact = trap_S_RegisterSound("sound/items/bambam/impact", qfalse);
 		}
 
-		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_1FCTF) || (cgs.gametype == GT_BALLOON) || cg_buildScript.integer) {
+		if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cgs.gametype == GT_BALLOON || cg_buildScript.integer) {
 			cgs.media.boomiesExplosionSound = trap_S_RegisterSound("sound/items/boomies/explosion", qfalse);
 			cgs.media.almostCapture = trap_S_RegisterSound("sound/feedback/better_luck", qtrue);	// ToDo: find new sound
 		}
