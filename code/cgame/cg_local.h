@@ -148,8 +148,6 @@ typedef struct {
 	int painDirection; // flip from 0 to 1
 	int lightningFiring;
 
-	// railgun trail spawning
-	vec3_t railgunImpact;
 	qboolean railgunFlash;
 
 	// machinegun spinning
