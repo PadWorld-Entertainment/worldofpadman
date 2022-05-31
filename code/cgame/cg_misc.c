@@ -190,7 +190,6 @@ static void CG_ColorByEntityType(int eType, byte colors[4]) {
 		break;
 
 		// ET_GRAPPLE
-		// ET_TEAM
 		// ET_EXPLOSION
 		// ET_BALLOON
 		// ET_BAMBAM
