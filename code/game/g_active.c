@@ -762,6 +762,8 @@ void ClientThink_real(gentity_t *ent) {
 		client->ps.pm_type = PM_DEAD;
 	} else if (FT_ClientIsFrozen(client)) {
 		client->ps.pm_type = PM_FROZEN;
+		// don't allow to fire any weapon
+		ucmd->buttons &= ~BUTTON_ATTACK;
 	} else {
 		client->ps.pm_type = PM_NORMAL;
 	}
