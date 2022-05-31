@@ -37,7 +37,7 @@ GAUNTLET
 ======================================================================
 */
 
-void Weapon_Gauntlet(gentity_t *ent) {
+void Weapon_PunchyFire(gentity_t *ent) {
 }
 
 /*
@@ -100,37 +100,7 @@ qboolean CheckGauntletAttack(gentity_t *ent) {
 	return qtrue;
 }
 
-/*
-======================================================================
-
-MACHINEGUN
-
-======================================================================
-*/
-
-/*
-======================
-SnapVectorTowards
-
-Round a vector to integers for more efficient network
-transmission, but make sure that it rounds towards a given point
-rather than blindly truncating.  This prevents it from truncating
-into a wall.
-======================
-*/
-void SnapVectorTowards(vec3_t v, vec3_t to) {
-	int i;
-
-	for (i = 0; i < 3; i++) {
-		if (to[i] <= v[i]) {
-			v[i] = floor(v[i]);
-		} else {
-			v[i] = ceil(v[i]);
-		}
-	}
-}
-
-static void weapon_nipper_fire(gentity_t *ent) {
+static void Weapon_NipperFire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_nipper(ent, muzzle, forward);
@@ -138,15 +108,7 @@ static void weapon_nipper_fire(gentity_t *ent) {
 	m->splashDamage *= s_quadFactor;
 }
 
-/*
-======================================================================
-
-BFG
-
-======================================================================
-*/
-
-void BFG_Fire(gentity_t *ent) {
+void Weapon_ImperiusFire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_bfg(ent, muzzle, forward);
@@ -156,16 +118,8 @@ void BFG_Fire(gentity_t *ent) {
 	//	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
 }
 
-/*
-======================================================================
-
-SHOTGUN
-
-======================================================================
-*/
-
 // new: g_combat.c(line ~830) 2x knockback with pumper
-static void weapon_supershotgun_fire(gentity_t *ent) {
+static void Weapon_PumperFire(gentity_t *ent) {
 	vec3_t end;
 	trace_t trace;
 	gentity_t *tent;
@@ -222,15 +176,7 @@ static void weapon_supershotgun_fire(gentity_t *ent) {
 	tent->s.clientNum = ent->s.clientNum;
 }
 
-/*
-======================================================================
-
-GRENADE LAUNCHER
-
-======================================================================
-*/
-
-static void weapon_grenadelauncher_fire(gentity_t *ent) {
+static void Weapon_BalloonyFire(gentity_t *ent) {
 	gentity_t *m;
 
 	// extra vertical velocity
@@ -242,15 +188,7 @@ static void weapon_grenadelauncher_fire(gentity_t *ent) {
 	m->splashDamage *= s_quadFactor;
 }
 
-/*
-======================================================================
-
-ROCKET
-
-======================================================================
-*/
-
-static void Weapon_RocketLauncher_Fire(gentity_t *ent) {
+static void Weapon_BettyFire(gentity_t *ent) {
 	gentity_t *m;
 
 	vec3_t start;
@@ -262,15 +200,7 @@ static void Weapon_RocketLauncher_Fire(gentity_t *ent) {
 	m->splashDamage *= s_quadFactor;
 }
 
-/*
-======================================================================
-
-PLASMA GUN
-
-======================================================================
-*/
-
-static void Weapon_Plasmagun_Fire(gentity_t *ent) {
+static void Weapon_BuggleGFire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_bubbleg(ent, muzzle, forward); // HERBY: fire bubble gum
@@ -291,7 +221,7 @@ RAILGUN
 weapon_railgun_fire
 =================
 */
-static void weapon_railgun_fire(gentity_t *ent) {
+static void Weapon_SplasherFire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_splasher(ent, muzzle, forward);
@@ -307,7 +237,7 @@ GRAPPLING HOOK
 ======================================================================
 */
 
-static void Weapon_GrapplingHook_Fire(gentity_t *ent) {
+static void Weapon_GrapplingHookFire(gentity_t *ent) {
 	if (!ent->client->fireHeld && !ent->client->hook)
 		fire_grapple(ent, muzzle, forward);
 
@@ -339,12 +269,12 @@ void Weapon_HookThink(gentity_t *ent) {
 /*
 ======================================================================
 
-LIGHTNING GUN
+BOASTER
 
 ======================================================================
 */
 
-static void Weapon_LightningFire(gentity_t *ent) {
+static void Weapon_BoasterFire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_boaster(ent, muzzle, forward);
@@ -359,7 +289,7 @@ KMA / Kiss My Ass 97
 
 ======================================================================
 */
-static void Weapon_KMA_Fire(gentity_t *ent) {
+static void Weapon_KMAFire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_kma(ent, muzzle, forward);
@@ -412,7 +342,7 @@ static void check_sprayawards(gentity_t *ent) {
 	}
 }
 
-static void weapon_spraypistol_fire(gentity_t *ent) {
+static void Weapon_SpraypistolFire(gentity_t *ent) {
 	vec3_t end, tmpv3;
 	trace_t tr;
 	gentity_t *tent;
@@ -585,46 +515,43 @@ void FireWeapon(gentity_t *ent) {
 	// fire the specific weapon
 	switch (ent->s.weapon) {
 	case WP_PUNCHY:
-		Weapon_Gauntlet(ent);
+		Weapon_PunchyFire(ent);
 		break;
 	case WP_BOASTER:
-		Weapon_LightningFire(ent);
+		Weapon_BoasterFire(ent);
 		break;
 	case WP_PUMPER:
-		weapon_supershotgun_fire(ent);
+		Weapon_PumperFire(ent);
 		break;
 	case WP_NIPPER:
-		weapon_nipper_fire(ent);
+		Weapon_NipperFire(ent);
 		break;
 	case WP_BALLOONY:
-		weapon_grenadelauncher_fire(ent);
+		Weapon_BalloonyFire(ent);
 		break;
 	case WP_BETTY:
-		Weapon_RocketLauncher_Fire(ent);
+		Weapon_BettyFire(ent);
 		break;
 	case WP_BUBBLEG:
-		Weapon_Plasmagun_Fire(ent);
+		Weapon_BuggleGFire(ent);
 		break;
 	case WP_SPLASHER:
-		weapon_railgun_fire(ent);
+		Weapon_SplasherFire(ent);
 		break;
 	case WP_IMPERIUS:
-		BFG_Fire(ent);
+		Weapon_ImperiusFire(ent);
 		break;
 	case WP_KMA97: // "Kiss My Ass 97"
-		Weapon_KMA_Fire(ent);
+		Weapon_KMAFire(ent);
 		break;
-
 	case WP_GRAPPLING_HOOK:
-		Weapon_GrapplingHook_Fire(ent);
+		Weapon_GrapplingHookFire(ent);
 		break;
-
 	case WP_SPRAYPISTOL:
-		weapon_spraypistol_fire(ent);
+		Weapon_SpraypistolFire(ent);
 		break;
-
 	default:
-		// FIXME		G_Error( "Bad ent->s.weapon" );
+		// FIXME G_Error("Bad ent->s.weapon");
 		break;
 	}
 }

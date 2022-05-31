@@ -121,7 +121,27 @@ int G_SoundIndex(const char *name) {
 	return G_FindConfigstringIndex(name, CS_SOUNDS, MAX_SOUNDS, qtrue);
 }
 
-//=====================================================================
+/*
+======================
+SnapVectorTowards
+
+Round a vector to integers for more efficient network
+transmission, but make sure that it rounds towards a given point
+rather than blindly truncating.  This prevents it from truncating
+into a wall.
+======================
+*/
+void SnapVectorTowards(vec3_t v, const vec3_t to) {
+	int i;
+
+	for (i = 0; i < 3; i++) {
+		if (to[i] <= v[i]) {
+			v[i] = floor(v[i]);
+		} else {
+			v[i] = ceil(v[i]);
+		}
+	}
+}
 
 /*
 ================
