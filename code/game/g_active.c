@@ -381,7 +381,7 @@ ClientInactivityTimer
 Returns qfalse if the client is dropped
 =================
 */
-qboolean ClientInactivityTimer(gclient_t *client) {
+static qboolean ClientInactivityTimer(gclient_t *client) {
 	if (!g_inactivity.integer) {
 		// give everyone some time, so if the operator sets g_inactivity during
 		// gameplay, everyone isn't kicked
@@ -475,7 +475,7 @@ Events will be passed on to the clients for presentation,
 but any server game effects are handled here
 ================
 */
-void ClientEvents(gentity_t *ent, int oldEventSequence) {
+static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 	int i, j;
 	int event;
 	gclient_t *client;
@@ -515,11 +515,11 @@ void ClientEvents(gentity_t *ent, int oldEventSequence) {
 						break;
 			*/
 		case EV_FIRE_WEAPON:
-			FireWeapon(ent);
+			G_FireWeapon(ent);
 			break;
 
 		case EV_IMPERIUS_EXPLODE:
-			explode_imperius(ent);
+			G_ImperiusExplode(ent);
 			break;
 
 		case EV_USE_ITEM1: // teleporter
@@ -568,7 +568,7 @@ void ClientEvents(gentity_t *ent, int oldEventSequence) {
 			AngleVectors(ent->client->ps.viewangles, forward, right, up);
 
 			CalcMuzzlePoint(ent, forward, right, up, muzzle);
-			fire_duck(ent, muzzle, forward);
+			fire_killerducks(ent, muzzle, forward);
 		} break;
 
 		// HI_BAMBAM

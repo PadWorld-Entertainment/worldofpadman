@@ -637,14 +637,14 @@ void G_RunExplosion(gentity_t *ent);
 gentity_t *fire_boaster(gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_nipper(gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_splasher(gentity_t *self, vec3_t start, vec3_t aimdir);
-gentity_t *explode_imperius(gentity_t *self);
+gentity_t *G_ImperiusExplode(gentity_t *self);
 
-gentity_t *fire_duck(gentity_t *self, vec3_t start, vec3_t aimdir);
+gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_bambamMissile(gentity_t *self, vec3_t start, vec3_t dir, float velocity);
 
 gentity_t *fire_bubbleg(gentity_t *self, vec3_t start, vec3_t dir);
-gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t aimdir);
-gentity_t *fire_rocket(gentity_t *self, vec3_t start, vec3_t dir);
+gentity_t *fire_balloony(gentity_t *self, vec3_t start, vec3_t aimdir);
+gentity_t *fire_betty(gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_bfg(gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_grapple(gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_kma(gentity_t *self, vec3_t start, vec3_t dir);
@@ -703,7 +703,7 @@ int convertGTStringToGTNumber(const char *argStr);
 //
 // g_weapon.c
 //
-void FireWeapon(gentity_t *ent);
+void G_FireWeapon(gentity_t *ent);
 
 //
 // g_cmds.c

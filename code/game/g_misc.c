@@ -289,7 +289,7 @@ void SP_misc_portal_camera(gentity_t *ent) {
 ======================================================================
 */
 
-void Use_Shooter(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_Shooter(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	vec3_t dir;
 	float deg;
 	vec3_t up, right;
@@ -316,16 +316,16 @@ void Use_Shooter(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 
 	switch (ent->s.weapon) {
 	case WP_BALLOONY:
-		fire_grenade(ent, ent->s.origin, dir);
+		fire_balloony(ent, ent->s.origin, dir);
 		break;
 	case WP_BETTY:
-		fire_rocket(ent, ent->s.origin, dir);
+		fire_betty(ent, ent->s.origin, dir);
 		break;
 	case WP_BUBBLEG:
 		fire_bubbleg(ent, ent->s.origin, dir);
 		break;
 	case WP_KILLERDUCKS:
-		fire_duck(ent, ent->s.origin, dir);
+		fire_killerducks(ent, ent->s.origin, dir);
 		break;
 	}
 
@@ -347,7 +347,7 @@ static void InitShooter(gentity_t *ent, int weapon) {
 	G_SetMovedir(ent->s.angles, ent->movedir);
 
 	if (!ent->random) {
-		ent->random = 1.0;
+		ent->random = 1.0f;
 	}
 	ent->random = sin(M_PI * ent->random / 180);
 	// target might be a moving object, so we can't set movedir for it

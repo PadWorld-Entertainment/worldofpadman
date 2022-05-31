@@ -1814,7 +1814,7 @@ void EditPlayerInventory(gentity_t *ent, int arg_offset) {
 		AngleVectors(ent->client->ps.viewangles, forward, right, up);
 		CalcMuzzlePoint(ent, forward, right, up, muzzle);
 		// fire
-		fire_duck(ent, muzzle, forward);
+		fire_killerducks(ent, muzzle, forward);
 	}
 }
 

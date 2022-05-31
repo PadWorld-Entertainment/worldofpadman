@@ -183,7 +183,7 @@ static void Weapon_BalloonyFire(gentity_t *ent) {
 	forward[2] += 0.2f;
 	VectorNormalize(forward);
 
-	m = fire_grenade(ent, muzzle, forward);
+	m = fire_balloony(ent, muzzle, forward);
 	m->damage *= s_quadFactor;
 	m->splashDamage *= s_quadFactor;
 }
@@ -195,7 +195,7 @@ static void Weapon_BettyFire(gentity_t *ent) {
 
 	VectorMA(muzzle, 5, right, start);
 	VectorMA(start, -5, up, start);
-	m = fire_rocket(ent, start, forward);
+	m = fire_betty(ent, start, forward);
 	m->damage *= s_quadFactor;
 	m->splashDamage *= s_quadFactor;
 }
@@ -425,8 +425,6 @@ static void Weapon_SpraypistolFire(gentity_t *ent) {
 	}
 }
 
-//======================================================================
-
 /*
 ===============
 LogAccuracyHit
@@ -495,7 +493,7 @@ static void CalcMuzzlePointOrigin(gentity_t *ent, vec3_t origin, vec3_t forward,
 FireWeapon
 ===============
 */
-void FireWeapon(gentity_t *ent) {
+void G_FireWeapon(gentity_t *ent) {
 	if (ent->client->ps.powerups[PW_PADPOWER]) {
 		s_quadFactor = g_quadfactor.value;
 	} else {

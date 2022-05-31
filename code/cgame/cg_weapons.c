@@ -716,7 +716,7 @@ static void CG_CalculateWeaponPosition(vec3_t origin, vec3_t angles) {
 
 /*
 ===============
-CG_LightningBolt
+CG_BoasterFire
 
 Origin will be the exact tag point, which is slightly
 different than the muzzle point used for determining hits.
@@ -725,7 +725,7 @@ so the endpoint will reflect the simulated strike (lagging the predicted
 angle)
 ===============
 */
-static void CG_LightningBolt(centity_t *cent, vec3_t origin) {
+static void CG_BoasterFire(centity_t *cent, vec3_t origin) {
 	localEntity_t *le;
 	vec3_t forward, right;
 	vec3_t muzzlePoint;
@@ -1112,8 +1112,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	trap_R_AddRefEntityToScene(&flash);
 
 	if (ps || cg.renderingThirdPerson || cent->currentState.number != cg.predictedPlayerState.clientNum) {
-		// add lightning bolt
-		CG_LightningBolt(nonPredictedCent, flash.origin);
+		CG_BoasterFire(nonPredictedCent, flash.origin);
 
 		if (weapon->flashDlightColor[0] || weapon->flashDlightColor[1] || weapon->flashDlightColor[2]) {
 			trap_R_AddLightToScene(flash.origin, 300 + (rand() & 31), weapon->flashDlightColor[0],
@@ -1164,7 +1163,7 @@ void CG_AddViewWeapon(const playerState_t *ps) {
 			// special hack for lightning gun...
 			VectorCopy(cg.refdef.vieworg, origin);
 			VectorMA(origin, -8, cg.refdef.viewaxis[2], origin);
-			CG_LightningBolt(&cg_entities[ps->clientNum], origin);
+			CG_BoasterFire(&cg_entities[ps->clientNum], origin);
 		}
 		return;
 	}
@@ -1675,7 +1674,7 @@ CG_MissileHitWall
 Caused by an EV_MISSILE_MISS event, or directly by local bullet tracing
 =================
 */
-// FIXME: why do we use the clientNum-var so strange? ��
+// FIXME: why do we use the clientNum-var so strange?
 void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int colorCode, impactSound_t soundType) {
 	qhandle_t mod;
 	qhandle_t mark;

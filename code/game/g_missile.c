@@ -573,7 +573,7 @@ static void launch_slickent(vec3_t origin, float size, vec3_t normal) {
 	slickent->r.mins[0] = -size * 1.25f;
 	slickent->r.mins[1] = -size * 1.25f;
 	slickent->r.mins[2] = -size * 0.5f;
-	slickent->classname = "slickent";		 // bei den missils steht da auch nur mist =)
+	slickent->classname = "slickent";		 // bei den missiles steht da auch nur mist =)
 	slickent->r.contents = CONTENTS_TRIGGER; // CONTENTS_SOLID;
 	slickent->nextthink = level.time + 10000;
 	slickent->think = think_slickent;
@@ -933,7 +933,7 @@ static void duck_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, 
 fire_duck
 #######################
 */
-gentity_t *fire_duck(gentity_t *self, vec3_t start, vec3_t dir) {
+gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 	gentity_t *bolt;
 	trace_t tr;
 
@@ -1003,7 +1003,7 @@ gentity_t *fire_duck(gentity_t *self, vec3_t start, vec3_t dir) {
 fire_grenade
 =================
 */
-gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir) {
+gentity_t *fire_balloony(gentity_t *self, vec3_t start, vec3_t dir) {
 	gentity_t *bolt;
 
 	VectorNormalize(dir);
@@ -1093,7 +1093,7 @@ gentity_t *fire_bfg(gentity_t *self, vec3_t start, vec3_t dir) {
 explode_imperius
 =================
 */
-gentity_t *explode_imperius(gentity_t *self) {
+gentity_t *G_ImperiusExplode(gentity_t *self) {
 	gentity_t *bolt;
 	vec3_t origin, forward;
 
@@ -1128,7 +1128,7 @@ gentity_t *explode_imperius(gentity_t *self) {
 fire_rocket
 =================
 */
-gentity_t *fire_rocket(gentity_t *self, vec3_t start, vec3_t dir) {
+gentity_t *fire_betty(gentity_t *self, vec3_t start, vec3_t dir) {
 	gentity_t *bolt;
 
 	VectorNormalize(dir);
