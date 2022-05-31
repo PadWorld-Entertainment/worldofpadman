@@ -913,7 +913,6 @@ static void CG_InterpolateEntityPosition(centity_t *cent) {
 /*
 ===============
 CG_CalcEntityLerpPositions
-
 ===============
 */
 static void CG_CalcEntityLerpPositions(centity_t *cent) {
@@ -949,32 +948,6 @@ static void CG_CalcEntityLerpPositions(centity_t *cent) {
 	if (cent != &cg.predictedPlayerEntity) {
 		CG_AdjustPositionForMover(cent->lerpOrigin, cent->currentState.groundEntityNum, cg.snap->serverTime, cg.time,
 								  cent->lerpOrigin, cent->lerpAngles, cent->lerpAngles);
-	}
-}
-
-/*
-===============
-CG_TeamBase
-===============
-*/
-static void CG_TeamBase(centity_t *cent) {
-	refEntity_t model;
-
-	if (cgs.gametype == GT_CTF) {
-		// show the flag base
-		memset(&model, 0, sizeof(model));
-		model.reType = RT_MODEL;
-		VectorCopy(cent->lerpOrigin, model.lightingOrigin);
-		VectorCopy(cent->lerpOrigin, model.origin);
-		AnglesToAxis(cent->currentState.angles, model.axis);
-		if (cent->currentState.modelindex == TEAM_RED) {
-			model.hModel = cgs.media.redFlagBaseModel;
-		} else if (cent->currentState.modelindex == TEAM_BLUE) {
-			model.hModel = cgs.media.blueFlagBaseModel;
-		} else {
-			model.hModel = cgs.media.neutralFlagBaseModel;
-		}
-		trap_R_AddRefEntityToScene(&model);
 	}
 }
 
@@ -1262,7 +1235,6 @@ static void CG_DrawBoomies(centity_t *cent) {
 /*
 ===============
 CG_AddCEntity
-
 ===============
 */
 static void CG_AddCEntity(centity_t *cent) {
@@ -1315,9 +1287,6 @@ static void CG_AddCEntity(centity_t *cent) {
 		break;
 	case ET_GRAPPLE:
 		CG_Grapple(cent);
-		break;
-	case ET_TEAM:
-		CG_TeamBase(cent);
 		break;
 	case ET_BALLOON:
 		CG_Balloon(cent);
