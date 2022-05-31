@@ -215,10 +215,10 @@ void FT_FreezePlayer(gentity_t *player, gentity_t *other) {
 	FT_AnnounceFreeze(player->client, other_client);
 	CalculateRanks();
 
-	if (!other->client) {
-		G_LogPrintf("Freeze: %s by %s\n", player->client->pers.netname, "<world>");
-	} else {
+	if (other && other->client) {
 		G_LogPrintf("Freeze: %s by %s\n", player->client->pers.netname, other->client->pers.netname);
+	} else {
+		G_LogPrintf("Freeze: %s by %s\n", player->client->pers.netname, "<world>");
 	}
 }
 
