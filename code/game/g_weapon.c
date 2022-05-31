@@ -69,7 +69,7 @@ qboolean CheckGauntletAttack(gentity_t *ent) {
 	}
 
 	traceEnt = &g_entities[tr.entityNum];
-	if (traceEnt->client->noclip) {
+	if (traceEnt->client && traceEnt->client->noclip) {
 		return qfalse;
 	}
 
