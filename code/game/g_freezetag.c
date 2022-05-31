@@ -125,15 +125,15 @@ static void FT_PushThawerAway(const gentity_t *player, gentity_t *thawer, int di
 
 	VectorSubtract(thawer->client->ps.origin, player->client->ps.origin, dir);
 	VectorNormalize(dir);
-	dir[2] += 0.5;
+	dir[2] += 0.5f;
 	VectorNormalize(dir);
 	VectorScale(dir, 40, vel);
 	VectorAdd(thawer->client->ps.velocity, vel, thawer->client->ps.velocity);
 }
 
-/*
-	returns qtrue if we are in FreezeTag
-*/
+/**
+ * @returns qtrue if we are in FreezeTag
+ */
 qboolean G_FreezeTag() {
 	return g_gametype.integer == GT_FREEZETAG;
 }
@@ -146,9 +146,9 @@ static void G_checkPlayerThawerDistance(const gentity_t *player, gentity_t *thaw
 	}
 }
 
-/*
-	returns qtrue if the client is frozen
-*/
+/**
+ * @returns qtrue if the client is frozen
+ */
 qboolean FT_ClientIsFrozen(const gclient_t *client) {
 	if (!client)
 		return qfalse;
@@ -158,14 +158,14 @@ qboolean FT_ClientIsFrozen(const gclient_t *client) {
 			G_Printf("FT_clientIsFrozen: client->pers.frozen: %i\n", client->pers.frozen);
 		}
 		return client->pers.frozen;
-	} else if (client->ps.powerups[PW_FREEZE] > level.time) {
-		return qtrue;
-	} else {
-		if (g_ft_debug.integer >= 2) {
-			G_Printf("FT_clientIsFrozen: qfalse\n");
-		}
-		return qfalse;
 	}
+	if (client->ps.powerups[PW_FREEZE] > level.time) {
+		return qtrue;
+	}
+	if (g_ft_debug.integer >= 2) {
+		G_Printf("FT_clientIsFrozen: qfalse\n");
+	}
+	return qfalse;
 }
 
 qboolean FT_PlayerIsFrozen(gentity_t *player) {
@@ -222,14 +222,14 @@ void FT_FreezePlayer(gentity_t *player, gentity_t *other) {
 	}
 }
 
-/*
-Sets the Player back into an unfrozen state, meaning he can deal and recieve damage,
-move about etc normally.
-player's health is recharged to FT_THAWED_HEATRECHARGE
-player's ammo amount is back to what it was befor getting frozen
-
-Called most likely when a teammate successfully went through the thawing process.
-*/
+/**
+ * Sets the Player back into an unfrozen state, meaning he can deal and recieve damage,
+ * move about etc normally.
+ * player's health is recharged to FT_THAWED_HEATRECHARGE
+ * player's ammo amount is back to what it was befor getting frozen
+ *
+ * Called most likely when a teammate successfully went through the thawing process.
+ */
 void FT_ThawPlayer(gentity_t *player, gentity_t *other) {
 	if (!player || !player->client)
 		return;
@@ -339,12 +339,12 @@ void FT_ProgressThawing(gentity_t *player, gentity_t *thawer) {
 #if 0
 	// send progress to the thawer
 	if (level.time - thawer->client->lastProgressTime > 500) {
-		// trap_SendServerCommand( thawer - g_entities, va( "cp \"^7thawing\n[^2%s^7%s^7]\n\"", buffer, buffer2 ));
+		// trap_SendServerCommand(thawer - g_entities, va("cp \"^7thawing\n[^2%s^7%s^7]\n\"", buffer, buffer2));
 		thawer->client->lastProgressTime = level.time;
 	}
 	// send progress to the frozen player
 	if (level.time - player->client->lastProgressTime > 500) {
-		// trap_SendServerCommand( player - g_entities, va( "cp \"^7thawing\n[^2%s^7%s^7]\n\"", buffer, buffer2 ));
+		// trap_SendServerCommand(player - g_entities, va("cp \"^7thawing\n[^2%s^7%s^7]\n\"", buffer, buffer2));
 		player->client->lastProgressTime = level.time;
 	}
 #endif
@@ -353,7 +353,7 @@ void FT_ProgressThawing(gentity_t *player, gentity_t *thawer) {
 	if (level.time - player->client->freezeTime > THAWING_TIMESTEP) {
 		player->client->freezeTime = level.time;
 		player->client->freezeCount--;
-		// player->client->ps.powerups[ PW_FREEZE ] = player->client->freezeCount * 1000000;
+		// player->client->ps.powerups[PW_FREEZE] = player->client->freezeCount * 1000000;
 		player->client->ps.stats[STAT_CHILL] = player->client->freezeCount;
 	}
 
@@ -365,7 +365,7 @@ void FT_ProgressThawing(gentity_t *player, gentity_t *thawer) {
 	G_checkPlayerThawerDistance(player, thawer); // make sure they don't get stuck in eachother
 
 	if (level.time - thawer->client->lastProgressTime > 500)
-		thawer->client->ps.stats[ STAT_CHILL ] = 0;
+		thawer->client->ps.stats[STAT_CHILL] = 0;
 	else
 #endif
 	thawer->client->ps.stats[STAT_CHILL] = player->client->ps.stats[STAT_CHILL];
