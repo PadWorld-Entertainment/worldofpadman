@@ -1290,10 +1290,10 @@ int convertGTStringToGTNumber(const char *argStr) {
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_TEAM)) || strstr(buf, "TP") || strstr(buf, "TEAM") ||
 			   strstr(buf, "TDM")) {
 		gt = GT_TEAM;
-	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_FFA)) || strstr(buf, "FREE") || strstr(buf, "DM")) {
-		gt = GT_FFA;
 	} else if (strstr(argStr, GAMETYPE_NAME_SHORT(GT_FREEZETAG)) || strstr(argStr, "FREEZE")) {
 		gt = GT_FREEZETAG;
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_FFA)) || strstr(buf, "FREE") || strstr(buf, "DM")) {
+		gt = GT_FFA;
 	}
 
 	return gt;
