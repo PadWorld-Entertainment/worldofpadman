@@ -197,7 +197,7 @@ static char *BotLastClientInRankings(void) {
 BotRandomOpponentName
 ==================
 */
-static char *BotRandomOpponentName(bot_state_t *bs) {
+static char *BotRandomOpponentName(const bot_state_t *bs) {
 	int i, count;
 	char buf[MAX_INFO_STRING];
 	int opponents[MAX_CLIENTS], numopponents;
@@ -993,7 +993,7 @@ float BotChatTime(bot_state_t *bs) {
 BotChatTest
 ==================
 */
-void BotChatTest(bot_state_t *bs) {
+void BotChatTest(const bot_state_t *bs) {
 	char name[32];
 	//	char *weap;
 	int num, i;

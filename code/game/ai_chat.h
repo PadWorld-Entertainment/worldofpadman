@@ -55,4 +55,4 @@ int BotChat_Random(bot_state_t *bs);
 // time the selected chat takes to type in
 float BotChatTime(bot_state_t *bs);
 // test the initial bot chats
-void BotChatTest(bot_state_t *bs);
+void BotChatTest(const bot_state_t *bs);

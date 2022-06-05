@@ -85,7 +85,7 @@ int BotWantsToHelp(bot_state_t *bs);
 // the bot will perform attack movements
 bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl);
 // returns true if the bot and the entity are in the same team
-int BotSameTeam(bot_state_t *bs, int entnum);
+int BotSameTeam(const bot_state_t *bs, int entnum);
 // returns true if teamplay is on
 int TeamPlayIsOn(void);
 // get the number of visible teammates and enemies

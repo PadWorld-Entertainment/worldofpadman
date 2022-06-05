@@ -754,7 +754,7 @@ int BotAI_GetSnapshotEntity(int clientNum, int sequence, entityState_t *state) {
 BotAI_BotInitialChat
 ==================
 */
-void QDECL BotAI_BotInitialChat(bot_state_t *bs, const char *type, ...) {
+void QDECL BotAI_BotInitialChat(const bot_state_t *bs, const char *type, ...) {
 	int i, mcontext;
 	va_list ap;
 	char *p;

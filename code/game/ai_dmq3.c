@@ -2027,7 +2027,7 @@ bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl) {
 BotSameTeam
 ==================
 */
-int BotSameTeam(bot_state_t *bs, int entnum) {
+int BotSameTeam(const bot_state_t *bs, int entnum) {
 	gclient_t *otherclient;
 	gclient_t *botclient;
 
