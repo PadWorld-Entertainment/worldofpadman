@@ -560,7 +560,7 @@ int G_SoundIndex(const char *name);
 void G_TeamCommand(team_t team, char *cmd);
 void G_KillBox(gentity_t *ent);
 gentity_t *G_Find(gentity_t *from, int fieldofs, const char *match);
-gentity_t *G_PickTarget(char *targetname);
+gentity_t *G_PickTarget(const char *targetname);
 void G_UseTargets(gentity_t *ent, gentity_t *activator);
 void G_SetMovedir(vec3_t angles, vec3_t movedir);
 
@@ -581,10 +581,8 @@ float vectoyaw(const vec3_t vec);
 void G_AddPredictableEvent(gentity_t *ent, int event, int eventParm);
 void G_AddEvent(gentity_t *ent, int event, int eventParm);
 void G_SetOrigin(gentity_t *ent, vec3_t origin);
-void AddRemap(const char *oldShader, const char *newShader, float timeOffset);
 const char *BuildShaderStateConfig(void);
 
-int DebugLine(vec3_t start, vec3_t end, int color);
 void DebugLineDouble(vec3_t start, vec3_t end, int color);
 void DeleteDebugLines(void);
 

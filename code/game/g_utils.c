@@ -35,20 +35,20 @@ typedef struct {
 int remapCount = 0;
 shaderRemap_t remappedShaders[MAX_SHADER_REMAPS];
 
-void AddRemap(const char *oldShader, const char *newShader, float timeOffset) {
+static void AddRemap(const char *oldShader, const char *newShader, float timeOffset) {
 	int i;
 
 	for (i = 0; i < remapCount; i++) {
 		if (Q_stricmp(oldShader, remappedShaders[i].oldShader) == 0) {
 			// found it, just update this one
-			strcpy(remappedShaders[i].newShader, newShader);
+			Q_strncpyz(remappedShaders[i].newShader, newShader, sizeof(remappedShaders[i].newShader));
 			remappedShaders[i].timeOffset = timeOffset;
 			return;
 		}
 	}
 	if (remapCount < MAX_SHADER_REMAPS) {
-		strcpy(remappedShaders[remapCount].newShader, newShader);
-		strcpy(remappedShaders[remapCount].oldShader, oldShader);
+		Q_strncpyz(remappedShaders[remapCount].newShader, newShader, sizeof(remappedShaders[remapCount].newShader));
+		Q_strncpyz(remappedShaders[remapCount].oldShader, oldShader, sizeof(remappedShaders[remapCount].oldShader));
 		remappedShaders[remapCount].timeOffset = timeOffset;
 		remapCount++;
 	}
@@ -171,11 +171,10 @@ the matching string at fieldofs (use the FOFS() macro) in the structure.
 
 Searches beginning at the entity after from, or the beginning if NULL
 NULL will be returned if the end of the list is reached.
-
 =============
 */
 gentity_t *G_Find(gentity_t *from, int fieldofs, const char *match) {
-	char *s;
+	const char *s;
 
 	if (!from)
 		from = g_entities;
@@ -185,7 +184,7 @@ gentity_t *G_Find(gentity_t *from, int fieldofs, const char *match) {
 	for (; from < &g_entities[level.num_entities]; from++) {
 		if (!from->inuse)
 			continue;
-		s = *(char **)((byte *)from + fieldofs);
+		s = *(const char **)((const byte *)from + fieldofs);
 		if (!s)
 			continue;
 		if (!Q_stricmp(s, match))
@@ -204,7 +203,7 @@ Selects a random entity from among the targets
 */
 #define MAXCHOICES 32
 
-gentity_t *G_PickTarget(char *targetname) {
+gentity_t *G_PickTarget(const char *targetname) {
 	gentity_t *ent = NULL;
 	int num_choices = 0;
 	gentity_t *choice[MAXCHOICES];
@@ -634,41 +633,12 @@ void G_SetOrigin(gentity_t *ent, vec3_t origin) {
 
 /*
 ================
-DebugLine
+DebugLineDouble
 
   debug polygons only work when running a local game
   with r_debugSurface set to 2
 ================
 */
-int DebugLine(vec3_t start, vec3_t end, int color) {
-	vec3_t points[4], dir, cross, up = {0, 0, 1};
-	float dot;
-
-	VectorCopy(start, points[0]);
-	VectorCopy(start, points[1]);
-	// points[1][2] -= 2;
-	VectorCopy(end, points[2]);
-	// points[2][2] -= 2;
-	VectorCopy(end, points[3]);
-
-	VectorSubtract(end, start, dir);
-	VectorNormalize(dir);
-	dot = DotProduct(dir, up);
-	if (dot > 0.99 || dot < -0.99)
-		VectorSet(cross, 1, 0, 0);
-	else
-		CrossProduct(dir, up, cross);
-
-	VectorNormalize(cross);
-
-	VectorMA(points[0], 2, cross, points[0]);
-	VectorMA(points[1], -2, cross, points[1]);
-	VectorMA(points[2], -2, cross, points[2]);
-	VectorMA(points[3], 2, cross, points[3]);
-
-	return trap_DebugPolygonCreate(color, 4, points);
-}
-
 void DebugLineDouble(vec3_t start, vec3_t end, int color) {
 	vec3_t points[4], morepoints[4], dir, cross, up = {0, 0, 1};
 	float dot;
