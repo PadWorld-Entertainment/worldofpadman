@@ -390,7 +390,7 @@ qboolean IsMyBalloon(int team, bot_goal_t *goal) {
 	return ((team == TEAM_RED && state == '1') || (team == TEAM_BLUE && state == '2'));
 }
 
-qboolean BotPickUnCappedBalloon(bot_state_t *bs) {
+static qboolean BotPickUnCappedBalloon(bot_state_t *bs) {
 	float rnd, step;
 	int i;
 	int ballindex;
@@ -428,7 +428,7 @@ qboolean BotPickUnCappedBalloon(bot_state_t *bs) {
 	return qtrue;
 }
 
-qboolean BotPickBestBalloonGoal(bot_state_t *bs) {
+static qboolean BotPickBestBalloonGoal(bot_state_t *bs) {
 	int i, j;
 	int index;
 	int state;
@@ -632,7 +632,7 @@ static void BotFreezeTagSeekGoals(bot_state_t *bs) {
 								   EasyClientName(bs->teammate, buf, sizeof(buf))));
 }
 
-qboolean BotWantsCarts(bot_state_t *bs, int *mate) {
+static qboolean BotWantsCarts(bot_state_t *bs, int *mate) {
 	int i, ccandidates, cand[MAX_CLIENTS];
 
 	// check mates for carts periodically (1sec)
@@ -708,7 +708,7 @@ qboolean BotWantsCarts(bot_state_t *bs, int *mate) {
 	return qfalse;
 }
 
-void BotSyCSeekGoals(bot_state_t *bs) {
+static void BotSyCSeekGoals(bot_state_t *bs) {
 	if (ClientInSprayroom(bs->client)) {
 		// got ammo and not rushing ?
 		if (bs->inventory[INVENTORY_SPRAYPISTOLAMMO] && bs->ltgtype != LTG_RUSHBASE) {
