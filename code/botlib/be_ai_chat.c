@@ -491,7 +491,6 @@ static void BotDumpSynonymList(bot_synonymlist_t *synlist) {
 }
 #endif
 
-#if 0
 static bot_synonymlist_t *BotLoadSynonyms(const char *filename) {
 	int pass, size, contextlevel, numsynonyms;
 	unsigned long int context, contextstack[32];
@@ -632,7 +631,6 @@ static bot_synonymlist_t *BotLoadSynonyms(const char *filename) {
 
 	return synlist;
 }
-#endif
 
 //===========================================================================
 // replace all the synonyms in the string
@@ -793,7 +791,6 @@ static void BotDumpRandomStringList(bot_randomlist_t *randomlist) {
 	}
 }
 #endif
-#if 0
 
 static bot_randomlist_t *BotLoadRandomStrings(const char *filename) {
 	int pass, size;
@@ -887,7 +884,6 @@ static bot_randomlist_t *BotLoadRandomStrings(const char *filename) {
 
 	return randomlist;
 }
-#endif
 
 static const char *RandomString(const char *name) {
 	bot_randomlist_t *random;
@@ -1332,7 +1328,6 @@ static void BotCheckInitialChatIntegrity(bot_chat_t *chat) {
 	}
 }
 
-#if 0
 static void BotCheckReplyChatIntegrity(bot_replychat_t *replychat) {
 	bot_replychat_t *rp;
 	bot_chatmessage_t *cm;
@@ -1349,7 +1344,6 @@ static void BotCheckReplyChatIntegrity(bot_replychat_t *replychat) {
 		FreeMemory(s);
 	}
 }
-#endif
 
 #if 0
 static void BotDumpReplyChat(bot_replychat_t *replychat) {
@@ -1430,7 +1424,6 @@ static void BotFreeReplyChat(bot_replychat_t *replychat) {
 	}
 }
 
-#if 0
 static void BotCheckValidReplyChatKeySet(source_t *source, bot_replychatkey_t *keys) {
 	int allprefixed, hasvariableskey, hasstringkey;
 	bot_matchpiece_t *m;
@@ -1514,9 +1507,7 @@ static void BotCheckValidReplyChatKeySet(source_t *source, bot_replychatkey_t *k
 							  "invalid when outputting one of the chat messages");
 	}
 }
-#endif
 
-#if 0
 static bot_replychat_t *BotLoadReplyChat(const char *filename) {
 	char chatmessagestring[MAX_MESSAGE_SIZE];
 	char namebuffer[MAX_MESSAGE_SIZE];
@@ -1662,7 +1653,6 @@ static bot_replychat_t *BotLoadReplyChat(const char *filename) {
 
 	return replychatlist;
 }
-#endif
 
 #if 0
 static void BotDumpInitialChat(bot_chat_t *chat) {
@@ -2005,7 +1995,7 @@ static void BotConstructChatMessage(bot_chatstate_t *chatstate, const char *mess
 		if (!BotExpandChatMessage(chatstate->chatmessage, srcmessage, mcontext, match, vcontext, reply)) {
 			break;
 		}
-		strcpy(srcmessage, chatstate->chatmessage);
+		Q_strncpyz(srcmessage, chatstate->chatmessage, sizeof(srcmessage));
 	}
 	if (i >= 10) {
 		botimport.Print(PRT_WARNING, "too many expansions in chat message\n");
@@ -2479,7 +2469,6 @@ int BotSetupChatAI(void) {
 	int starttime = Sys_MilliSeconds();
 #endif // DEBUG
 
-#if 0
 	file = LibVarString("synfile", "syn.c");
 	synonyms = BotLoadSynonyms(file);
 
@@ -2493,10 +2482,6 @@ int BotSetupChatAI(void) {
 		file = LibVarString("rchatfile", "rchat.c");
 		replychats = BotLoadReplyChat(file);
 	}
-#else
-	file = LibVarString("matchfile", "match.c");
-	matchtemplates = BotLoadMatchTemplates(file);
-#endif
 
 	InitConsoleMessageHeap();
 

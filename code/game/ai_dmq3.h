@@ -72,6 +72,8 @@ char *ClientName(int client, char *name, int size);
 char *EasyClientName(int client, char *name, int size);
 // returns the skin used by the client
 char *ClientSkin(int client, char *skin, int size);
+// returns the appropriate synonym context for the current game type and situation
+int BotSynonymContext(const bot_state_t *bs);
 // selection of goals for teamplay
 void BotTeamGoals(bot_state_t *bs, int retreat);
 // returns the aggression of the bot in the range [0, 100]
@@ -113,7 +115,7 @@ int BotPopFromActivateGoalStack(bot_state_t *bs);
 // clear the activate goal stack
 void BotClearActivateGoalStack(bot_state_t *bs);
 // returns the team the bot is in
-int BotTeam(bot_state_t *bs);
+int BotTeam(const bot_state_t *bs);
 // retuns the opposite team of the bot
 int BotOppositeTeam(bot_state_t *bs);
 // remember the last ordered task

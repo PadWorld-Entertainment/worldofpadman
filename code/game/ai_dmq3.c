@@ -211,7 +211,7 @@ qboolean IsBoomie(int ent) {
 BotTeam
 ==================
 */
-int BotTeam(bot_state_t *bs) {
+int BotTeam(const bot_state_t *bs) {
 	gclient_t *client;
 
 	if (bs->client < 0 || bs->client >= MAX_CLIENTS) {
@@ -1229,6 +1229,24 @@ char *EasyClientName(int client, char *buf, int size) {
 	strncpy(buf, name, size - 1);
 	buf[size - 1] = '\0';
 	return buf;
+}
+
+/*
+==================
+BotSynonymContext
+==================
+*/
+int BotSynonymContext(const bot_state_t *bs) {
+	int context;
+
+	context = CONTEXT_NORMAL | CONTEXT_NEARBYITEM | CONTEXT_NAMES;
+	if (gametype == GT_CTF) {
+		if (BotTeam(bs) == TEAM_RED)
+			context |= CONTEXT_CTFREDTEAM;
+		else
+			context |= CONTEXT_CTFBLUETEAM;
+	}
+	return context;
 }
 
 /*
@@ -4053,11 +4071,90 @@ BotCheckConsoleMessages
 ==================
 */
 static void BotCheckConsoleMessages(bot_state_t *bs) {
-	int handle;
+	char botname[MAX_NETNAME], message[MAX_MESSAGE_SIZE], netname[MAX_NETNAME], *ptr;
+	float chat_reply;
+	int context, handle;
 	bot_consolemessage_t m;
+	bot_match_t match;
+
+	// the name of this bot
+	ClientName(bs->client, botname, sizeof(botname));
 
 	while ((handle = trap_BotNextConsoleMessage(bs->cs, &m)) != 0) {
-		BotMatchMessage(bs, m.message);
+		// if the chat state is flooded with messages the bot will read them quickly
+		if (trap_BotNumConsoleMessages(bs->cs) < 10) {
+			// if it is a chat message the bot needs some time to read it
+			if (m.type == CMS_CHAT && m.time > FloatTime() - (1 + random()))
+				break;
+		}
+
+		ptr = m.message;
+		// if it is a chat message then don't unify white spaces and don't
+		// replace synonyms in the netname
+		if (m.type == CMS_CHAT) {
+			if (trap_BotFindMatch(m.message, &match, MTCONTEXT_REPLYCHAT)) {
+				ptr = m.message + match.variables[MESSAGE].offset;
+			}
+		}
+		// unify the white spaces in the message
+		trap_UnifyWhiteSpaces(ptr);
+		// replace synonyms in the right context
+		context = BotSynonymContext(bs);
+		trap_BotReplaceSynonyms(ptr, context);
+		// if there's no match
+		if (!BotMatchMessage(bs, m.message)) {
+			// if it is a chat message
+			if (m.type == CMS_CHAT && !bot_nochat.integer) {
+				if (!trap_BotFindMatch(m.message, &match, MTCONTEXT_REPLYCHAT)) {
+					trap_BotRemoveConsoleMessage(bs->cs, handle);
+					continue;
+				}
+				// don't use eliza chats with team messages
+				if (match.subtype & ST_TEAM) {
+					trap_BotRemoveConsoleMessage(bs->cs, handle);
+					continue;
+				}
+
+				trap_BotMatchVariable(&match, NETNAME, netname, sizeof(netname));
+				trap_BotMatchVariable(&match, MESSAGE, message, sizeof(message));
+				// if this is a message from the bot self
+				if (bs->client == ClientFromName(netname)) {
+					trap_BotRemoveConsoleMessage(bs->cs, handle);
+					continue;
+				}
+				// unify the message
+				trap_UnifyWhiteSpaces(message);
+
+				trap_Cvar_Update(&bot_testrchat);
+				if (bot_testrchat.integer) {
+					trap_BotLibVarSet("bot_testrchat", "1");
+					// if bot replies with a chat message
+					if (trap_BotReplyChat(bs->cs, message, context, CONTEXT_REPLY, NULL, NULL, NULL, NULL, NULL, NULL,
+										  botname, netname)) {
+						BotAI_Print(PRT_MESSAGE, "------------------------\n");
+					} else {
+						BotAI_Print(PRT_MESSAGE, "**** no valid reply ****\n");
+					}
+				}
+				// if at a valid chat position and not chatting already and not in teamplay
+				else if (bs->ainode != AINode_Stand && BotValidChatPosition(bs) && !TeamPlayIsOn()) {
+					chat_reply = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CHAT_REPLY, 0, 1);
+					if (random() < 1.5 / (NumBots() + 1) && random() < chat_reply) {
+						// if bot replies with a chat message
+						if (trap_BotReplyChat(bs->cs, message, context, CONTEXT_REPLY, NULL, NULL, NULL, NULL, NULL,
+											  NULL, botname, netname)) {
+							// remove the console message
+							trap_BotRemoveConsoleMessage(bs->cs, handle);
+							bs->stand_time = FloatTime() + BotChatTime(bs);
+							AIEnter_Stand(bs, "BotCheckConsoleMessages: reply chat");
+							// EA_Say(bs->client, bs->cs.chatmessage);
+							break;
+						}
+					}
+				}
+			}
+		}
+		// remove the console message
 		trap_BotRemoveConsoleMessage(bs->cs, handle);
 	}
 }

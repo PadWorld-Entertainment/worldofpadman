@@ -1500,7 +1500,7 @@ static void AIEnter_Observer(bot_state_t *bs, const char *s) {
 AINode_Stand
 ==================
 */
-static int AINode_Stand(bot_state_t *bs) {
+int AINode_Stand(bot_state_t *bs) {
 	// if the bot's health decreased
 	if (bs->lastframe_health > bs->inventory[INVENTORY_HEALTH]) {
 		if (BotChat_HitTalking(bs)) {

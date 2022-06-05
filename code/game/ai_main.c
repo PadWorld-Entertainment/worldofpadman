@@ -772,7 +772,7 @@ void QDECL BotAI_BotInitialChat(const bot_state_t *bs, const char *type, ...) {
 	}
 	va_end(ap);
 
-	mcontext = CONTEXT_NORMAL | CONTEXT_NEARBYITEM | CONTEXT_NAMES;
+	mcontext = BotSynonymContext(bs);
 
 	trap_BotInitialChat(bs->cs, type, mcontext, vars[0], vars[1], vars[2], vars[3], vars[4], vars[5], vars[6], vars[7]);
 }
@@ -1125,6 +1125,15 @@ void BotEntityInfo(int entnum, aas_entityinfo_t *info) {
 			BotAI_Print(PRT_ERROR, "BotEntityInfo: entnum out of range: %d\n", entnum);
 	} else
 		trap_AAS_EntityInfo(entnum, info);
+}
+
+/*
+==============
+NumBots
+==============
+*/
+int NumBots(void) {
+	return numbots;
 }
 
 /*

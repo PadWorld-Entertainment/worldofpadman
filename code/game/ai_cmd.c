@@ -238,7 +238,7 @@ int NumPlayersOnSameTeam(bot_state_t *bs) {
 BotAddressedToBot
 ==================
 */
-int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
+static int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 	char addressedto[MAX_MESSAGE_SIZE];
 	char netname[MAX_MESSAGE_SIZE];
 	// char name[MAX_MESSAGE_SIZE];
@@ -269,12 +269,21 @@ int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 		}
 
 		return qfalse;
+	} else {
+		bot_match_t tellmatch;
+
+		tellmatch.type = 0;
+		// if this message wasn't directed solely to this bot
+		if (!trap_BotFindMatch(match->string, &tellmatch, MTCONTEXT_REPLYCHAT) || tellmatch.type != MSG_CHATTELL) {
+			// make sure not everyone reacts to this message
+			if (random() > (float)1.0 / (NumPlayersOnSameTeam(bs) - 1))
+				return qfalse;
+		}
 	}
-	// not addressed, take it
 	return qtrue;
 }
 
-void BotMatch_WrongWall(bot_state_t *bs, bot_match_t *match) {
+static void BotMatch_WrongWall(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];
 	char buf[MAX_INFO_STRING];
 	int client;
@@ -382,7 +391,7 @@ static void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 #endif
 }
 
-void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match) {
+static void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];
 	int client;
 
@@ -414,7 +423,7 @@ void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match) {
 BotMatch_GetItem
 ==================
 */
-void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
+static void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
 	char itemname[MAX_MESSAGE_SIZE];
 	char netname[MAX_MESSAGE_SIZE];
 	int client;
@@ -593,7 +602,7 @@ int BotMatchMessage(bot_state_t *bs, const char *message) {
 		BotMatch_WrongWall(bs, &match);
 		break;
 	}
-	case MSG_GOFORBALLOON:{				//someone calling for company
+	case MSG_GOFORBALLOON: {				//someone calling for company
 		BotMatch_GoForBalloon(bs, &match);
 		break;
 	}
