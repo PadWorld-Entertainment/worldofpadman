@@ -2205,7 +2205,8 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 	vec3_t iconPos;
 	float size, x, y;
 	float squaredDist;
-
+	trace_t trace;
+	
 	if (!(cg_icons.integer & ICON_HEALTHSTATION)) {
 		return;
 	}
@@ -2224,7 +2225,13 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 		return;
 	}
 
-	// TODO: don't draw the icon if the healthstation is visible and close
+	// don't draw the icon if the healthstation is visible and close
+	CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin, cg.snap->ps.clientNum, MASK_OPAQUE);
+	if (1.0 == trace.fraction) {
+		if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin) < Square(250)) {
+			return;
+		}
+	}
 
 	size = Com_Clamp(0.5f, 1.0f, (1.0f / (sqrt(squaredDist) * 0.002f)));
 
