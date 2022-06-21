@@ -414,9 +414,10 @@ qboolean CG_DrawOldScoreboard(void) {
 		} else {
 			CG_DrawPic(180, y, 64, 32, cgs.media.scoreboardLives);
 		}
+	} else {
+		CG_DrawPic(176, y, 64, 32, cgs.media.scoreboardScore);
 	}
 
-	CG_DrawPic(176, y, 64, 32, cgs.media.scoreboardScore);
 	CG_DrawPic(264, y, 64, 32, cgs.media.scoreboardPing);
 	CG_DrawPic(342, y, 64, 32, cgs.media.scoreboardTime);
 	CG_DrawPic(412, y, 64, 32, cgs.media.scoreboardName);
