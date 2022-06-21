@@ -2206,7 +2206,7 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 	float size, x, y;
 	float squaredDist;
 	trace_t trace;
-	
+
 	if (!(cg_icons.integer & ICON_HEALTHSTATION)) {
 		return;
 	}
@@ -2967,7 +2967,7 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 		return;
 	}
 
-	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+	if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR) {
 		CG_DrawEntityIcons();
 	}
 
