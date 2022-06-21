@@ -177,8 +177,6 @@ vmCvar_t cg_drawServerInfos;
 vmCvar_t cg_drawTimeLeft;
 vmCvar_t cg_thirdPersonAutoSwitch;
 vmCvar_t cg_bigScoreType;
-vmCvar_t cg_LPSwallhackSize;
-vmCvar_t cg_LPSwallhackAlpha;
 
 vmCvar_t cg_cineHideHud; // FIXME: would be better to rename it to "cutscene"-mode
 vmCvar_t cg_cineDrawLetterBox;
@@ -316,8 +314,6 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_drawTimeLeft, "cg_drawTimeLeft", "0", CVAR_ARCHIVE},
 	{&cg_thirdPersonAutoSwitch, "cg_thirdPersonAutoSwitch", "0", CVAR_ARCHIVE},
 	{&cg_bigScoreType, "cg_bigScoreType", "0", 0},
-	{&cg_LPSwallhackSize, "cg_LPSwallhackSize", "1.0", CVAR_ARCHIVE},
-	{&cg_LPSwallhackAlpha, "cg_LPSwallhackAlpha", "1.0", CVAR_ARCHIVE},
 
 	{&cg_cineHideHud, "cg_CINE_hideHUD", "0", CVAR_TEMP},
 	{&cg_cineDrawLetterBox, "cg_CINE_drawLetterBox", "0", CVAR_TEMP},

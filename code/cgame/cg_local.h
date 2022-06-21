@@ -1332,8 +1332,6 @@ extern vmCvar_t cg_drawServerInfos;
 extern vmCvar_t cg_drawTimeLeft;
 extern vmCvar_t cg_thirdPersonAutoSwitch;
 extern vmCvar_t cg_bigScoreType;
-extern vmCvar_t cg_LPSwallhackSize;
-extern vmCvar_t cg_LPSwallhackAlpha;
 
 extern vmCvar_t cg_cineHideHud;
 extern vmCvar_t cg_cineDrawLetterBox;

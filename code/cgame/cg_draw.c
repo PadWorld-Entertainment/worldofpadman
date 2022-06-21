@@ -2798,9 +2798,6 @@ static void CG_DrawLastPadStanding(void) {
 				strColor[3] = 0.0;
 			}
 
-			// FIXME: Remove cg_LPSwallhackAlpha
-			strColor[3] *= cg_LPSwallhackAlpha.value;
-
 			// FIXME: Calculate_2DOf3D is more than ugly!
 			squaredDistance = Calculate_2DOf3D(ci->curPos, &cg.refdef, &x, &y);
 			if (squaredDistance) {
@@ -2810,9 +2807,6 @@ static void CG_DrawLastPadStanding(void) {
 				} else if (size < 0.5) {
 					size = 0.5f;
 				}
-
-				// FIXME: Remove cg_LPSwallhackSize
-				size *= cg_LPSwallhackSize.value;
 
 				strColor[3] *= (float)(0.3 + 0.7 * (1 / (1 + squaredDistance * 0.000004)));
 				if (strColor[3] > 1.0f) {
