@@ -90,11 +90,11 @@ PREFERENCES MENU
 
 #define ID_DRAWTOOLTIP 70
 #define ID_ICONTEAMMATE 71
-#define ID_ICONHSTATION 72
-#define ID_ICONSYCTELE 73
-#define ID_ICONBALLOON 74
-#define ID_ICONLPSARROW 75
-#define ID_ICONFREEZETAG 76
+#define ID_ICONFROZENMATE 72
+#define ID_ICONLPSFOE 73
+#define ID_ICONHSTATION 74
+#define ID_ICONSYCTELE 75
+#define ID_ICONBALLOON 76
 
 #define NUM_CROSSHAIRS 12
 
@@ -146,11 +146,11 @@ typedef struct {
 	menuradiobutton_s drawtooltip;
 	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
+	menuradiobutton_s whFrozenMates;
+	menuradiobutton_s whLPSfoe;
 	menuradiobutton_s whHStations;
 	menuradiobutton_s whSycTele;
 	menuradiobutton_s whBalloons;
-	menuradiobutton_s whLPS;
-	menuradiobutton_s whFreezeTag;
 
 	menubitmap_s back;
 
@@ -208,11 +208,11 @@ static menucommon_s *g_help_options[] = {
 	(menucommon_s *)&s_preferences.drawtooltip,
 	(menucommon_s *)&s_preferences.whIcons,
 	(menucommon_s *)&s_preferences.whTeamMates,
+	(menucommon_s *)&s_preferences.whFrozenMates,
+	(menucommon_s *)&s_preferences.whLPSfoe,
 	(menucommon_s *)&s_preferences.whHStations,
 	(menucommon_s *)&s_preferences.whSycTele,
 	(menucommon_s *)&s_preferences.whBalloons,
-	(menucommon_s *)&s_preferences.whLPS,
-	(menucommon_s *)&s_preferences.whFreezeTag,
 	NULL
 };
 
@@ -319,12 +319,12 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.drawtooltip.curvalue = trap_Cvar_VariableValue("ui_drawToolTip") != 0;
 
 	cg_iconsCvarValue = (int)trap_Cvar_VariableValue("cg_icons");
-	s_preferences.whLPS.curvalue = (ICON_ARROW & cg_iconsCvarValue);
+	s_preferences.whLPSfoe.curvalue = (ICON_ARROW & cg_iconsCvarValue);
 	s_preferences.whBalloons.curvalue = (ICON_BALLOON & cg_iconsCvarValue);
 	s_preferences.whTeamMates.curvalue = (ICON_TEAMMATE & cg_iconsCvarValue);
-	s_preferences.whFreezeTag.curvalue = (ICON_FREEZETAG & cg_iconsCvarValue);
 	s_preferences.whHStations.curvalue = (ICON_HEALTHSTATION & cg_iconsCvarValue);
 	s_preferences.whSycTele.curvalue = (ICON_SPRAYROOM & cg_iconsCvarValue);
+	s_preferences.whFrozenMates.curvalue = (ICON_FREEZETAG & cg_iconsCvarValue);
 }
 
 /*
@@ -595,16 +595,16 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 		trap_Cvar_SetValue("ui_drawToolTip", s_preferences.drawtooltip.curvalue);
 		break;
 
-	case ID_ICONLPSARROW:
+	case ID_ICONLPSFOE:
 	case ID_ICONTEAMMATE:
 	case ID_ICONBALLOON:
-	case ID_ICONFREEZETAG:
+	case ID_ICONFROZENMATE:
 	case ID_ICONHSTATION:
 	case ID_ICONSYCTELE: {
 		// this is only necessary if cg_icons contains flags that we don't cover here
 		int icons = (UI_GetCvarInt("cg_icons") & ~ICON_ALL);
 
-		if (s_preferences.whLPS.curvalue) {
+		if (s_preferences.whLPSfoe.curvalue) {
 			icons |= ICON_ARROW;
 		}
 		if (s_preferences.whBalloons.curvalue) {
@@ -613,14 +613,14 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 		if (s_preferences.whTeamMates.curvalue) {
 			icons |= ICON_TEAMMATE;
 		}
-		if (s_preferences.whFreezeTag.curvalue) {
-			icons |= ICON_FREEZETAG;
-		}
 		if (s_preferences.whHStations.curvalue) {
 			icons |= ICON_HEALTHSTATION;
 		}
 		if (s_preferences.whSycTele.curvalue) {
 			icons |= ICON_SPRAYROOM;
+		}
+		if (s_preferences.whFrozenMates.curvalue) {
+			icons |= ICON_FREEZETAG;
 		}
 
 		trap_Cvar_SetValue("cg_icons", icons);
@@ -1102,7 +1102,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.teamchatsonly.generic.x = XPOSITION;
 	s_preferences.teamchatsonly.generic.y = y;
 	s_preferences.teamchatsonly.generic.toolTip =
-		"Enable to force only chat messages from your teammates to be displayed. Deault is off.";
+		"Enable to force only chat messages from your teammates to be displayed. Default is off.";
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
 	s_preferences.conautochat.generic.type = MTYPE_RADIOBUTTON;
@@ -1114,7 +1114,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.conautochat.generic.y = y;
 	s_preferences.conautochat.generic.toolTip =
 		"Disable to prevent sending console input text as chat when there is not a slash at "
-		"the beginning. Deault is on.";
+		"the beginning. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.conautoclear.generic.type = MTYPE_RADIOBUTTON;
@@ -1125,7 +1125,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.conautoclear.generic.x = XPOSITION;
 	s_preferences.conautoclear.generic.y = y;
 	s_preferences.conautoclear.generic.toolTip =
-		"Disable to prevent clearing console input text when console is closed. Deault is on.";
+		"Disable to prevent clearing console input text when console is closed. Default is on.";
 
 	// help options
 	y = YPOSITION;
@@ -1150,15 +1150,42 @@ static void UI_Preferences_MenuInit(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whTeamMates.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whTeamMates.generic.name = "Teammate:";
+	s_preferences.whTeamMates.generic.name = "Teammate/Friend:";
 	s_preferences.whTeamMates.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.whTeamMates.generic.callback = UI_Preferences_Event;
 	s_preferences.whTeamMates.generic.id = ID_ICONTEAMMATE;
 	s_preferences.whTeamMates.generic.x = XPOSITION;
 	s_preferences.whTeamMates.generic.y = y;
 	s_preferences.whTeamMates.generic.toolTip =
-		"Enable to display a PAD logo over your teammates heads, visible through walls, "
-		"to help you find them. Deault is off.";
+		"Enable this to display a PAD logo above your teammates, visible "
+		"through walls, to help you find them in team based game modes. "
+		"Default is off.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	s_preferences.whFrozenMates.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.whFrozenMates.generic.name = "Frozen Teammate:";
+	s_preferences.whFrozenMates.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.whFrozenMates.generic.callback = UI_Preferences_Event;
+	s_preferences.whFrozenMates.generic.id = ID_ICONFROZENMATE;
+	s_preferences.whFrozenMates.generic.x = XPOSITION;
+	s_preferences.whFrozenMates.generic.y = y;
+	s_preferences.whFrozenMates.generic.toolTip =
+		"Enable this to display a freeze icon above your frozen teammates, "
+		"visible through walls, to help you find them in Freeze Tag game mode. "
+		"Default is off.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	s_preferences.whLPSfoe.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.whLPSfoe.generic.name = "LPS Opponent/Foe:";
+	s_preferences.whLPSfoe.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.whLPSfoe.generic.callback = UI_Preferences_Event;
+	s_preferences.whLPSfoe.generic.id = ID_ICONLPSFOE;
+	s_preferences.whLPSfoe.generic.x = XPOSITION;
+	s_preferences.whLPSfoe.generic.y = y;
+	s_preferences.whLPSfoe.generic.toolTip =
+		"Enable this to display an arrow icon above all opposing players, "
+		"visible through walls, to help you find them in Last Pad Standing "
+		"game mode. Default is off.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whHStations.generic.type = MTYPE_RADIOBUTTON;
@@ -1169,8 +1196,8 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whHStations.generic.x = XPOSITION;
 	s_preferences.whHStations.generic.y = y;
 	s_preferences.whHStations.generic.toolTip =
-		"Enable to display a heart icon over every health station, visible through walls, "
-		"to help you find them. Deault is off.";
+		"Enable to display a heart icon above every health station, visible "
+		"through walls, to help you find them. Default is off.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whSycTele.generic.type = MTYPE_RADIOBUTTON;
@@ -1181,8 +1208,9 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whSycTele.generic.x = XPOSITION;
 	s_preferences.whSycTele.generic.y = y;
 	s_preferences.whSycTele.generic.toolTip =
-		"Enable to display an arrow icon over the sprayroom teleporter in Spray Your Color, "
-		"visible through walls, to help you find it. Deault is off.";
+		"Enable to display an arrow icon above the sprayroom teleporter, visible "
+		"through walls, to help you find it in Spray Your Color game modes. "
+		"Default is off.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whBalloons.generic.type = MTYPE_RADIOBUTTON;
@@ -1193,32 +1221,9 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whBalloons.generic.x = XPOSITION;
 	s_preferences.whBalloons.generic.y = y;
 	s_preferences.whBalloons.generic.toolTip =
-		"Enable to display a balloon icon over balloon boxes in Big Balloon, "
-		"visible through walls, to help you find them. Deault is off.";
-
-	y += (BIGCHAR_HEIGHT + 2);
-	s_preferences.whLPS.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whLPS.generic.name = "LPS Arrow:";
-	s_preferences.whLPS.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.whLPS.generic.callback = UI_Preferences_Event;
-	s_preferences.whLPS.generic.id = ID_ICONLPSARROW;
-	s_preferences.whLPS.generic.x = XPOSITION;
-	s_preferences.whLPS.generic.y = y;
-	s_preferences.whLPS.generic.toolTip =
-		"Enable this to display an arrow icon over every player in Last Pad Standing, "
-		"visible through walls, to help you find them. Deault is off.";
-
-	y += (BIGCHAR_HEIGHT + 2);
-	s_preferences.whFreezeTag.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whFreezeTag.generic.name = "Frozen Teammate:";
-	s_preferences.whFreezeTag.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
-	s_preferences.whFreezeTag.generic.callback = UI_Preferences_Event;
-	s_preferences.whFreezeTag.generic.id = ID_ICONFREEZETAG;
-	s_preferences.whFreezeTag.generic.x = XPOSITION;
-	s_preferences.whFreezeTag.generic.y = y;
-	s_preferences.whFreezeTag.generic.toolTip =
-		"Enable this to display a freeze icon over frozen teammates in Freeze Tag, "
-		"visible through walls, to help you find them. Deault is off.";
+		"Enable to display a balloon icon above balloon boxes, visible "
+		"through walls, to help you find them in Big Balloon game mode. "
+		"Default is off.";
 
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
@@ -1275,11 +1280,11 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawtooltip);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whTeamMates);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.whFrozenMates);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.whLPSfoe);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whHStations);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whSycTele);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whBalloons);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.whLPS);
-	Menu_AddItem(&s_preferences.menu, &s_preferences.whFreezeTag);
 
 	UI_Preferences_SetMenuItems();
 	UI_Preferences_UpdateMenuItems();
