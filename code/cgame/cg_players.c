@@ -2009,7 +2009,7 @@ static void CG_PlayerSprites(const centity_t *cent) {
 	if (!(cent->currentState.eFlags & EF_DEAD) && cg.snap->ps.persistant[PERS_TEAM] == team &&
 		cgs.gametype >= GT_TEAM) {
 		if (cg_drawFriend.integer) {
-			qboolean wallhack = (cg_icons.integer & ICON_TEAMMATE) && cgs.gametype == GT_BALLOON;
+			qboolean wallhack = (cg_icons.integer & ICON_TEAMMATE);
 			CG_PlayerFloatSprite(cent, cgs.media.friendShader, wallhack);
 		}
 		return;
