@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 static const char *cg_customSoundNames[MAX_CUSTOM_SOUNDS] = {
 	"*death1",	 "*death2", "*death3", "*jump1", "*pain25_1", "*pain50_1", "*pain75_1", "*pain100_1",
-	"*falling1", "*gasp",	"*drown",  "*fall1", "*taunt",	  "*hehe1",	   "*hehe2"};
+	"*falling1", "*gasp",	"*drown",  "*fall1", "*taunt", "*hehe1", "*hehe2"};
 
 /*
 ================
@@ -46,7 +46,7 @@ sfxHandle_t CG_CustomSound(int clientNum, const char *soundName) {
 	}
 	ci = &cgs.clientinfo[clientNum];
 
-	// Backwards compability; "*falling1.wav" etc. should still work
+	// Backwards compatibility; "*falling1.wav" etc. should still work
 	COM_StripExtension(soundName, soundBaseName, sizeof(soundBaseName));
 
 	for (i = 0; i < MAX_CUSTOM_SOUNDS && cg_customSoundNames[i]; i++) {
@@ -597,9 +597,10 @@ This will usually be deferred to a safe time
 ===================
 */
 static void CG_LoadClientInfo(int clientNum, clientInfo_t *ci) {
-	const char *dir, *fallback;
+	const char *dirModel, *dirSkin, *fallback;
 	int i, modelloaded;
 	char teamname[MAX_QPATH];
+	char *ptr;
 
 	teamname[0] = 0;
 	modelloaded = qtrue;
@@ -634,8 +635,14 @@ static void CG_LoadClientInfo(int clientNum, clientInfo_t *ci) {
 	}
 
 	// sounds
-	dir = ci->modelName;
+	dirModel = ci->modelName;
+	dirSkin = ci->skinName;
 	fallback = (cgs.gametype >= GT_TEAM) ? DEFAULT_TEAM_MODEL : DEFAULT_MODEL;
+
+	// remove team skin name endings to receive the pure skin name
+	if ((ptr = strstr(dirSkin, "_blue")) || (ptr = strstr(dirSkin, "_red"))) {
+		*ptr = '\0';
+	}
 
 	for (i = 0; i < MAX_CUSTOM_SOUNDS; i++) {
 		const char *s = cg_customSoundNames[i];
@@ -645,7 +652,16 @@ static void CG_LoadClientInfo(int clientNum, clientInfo_t *ci) {
 		ci->sounds[i] = 0;
 		// if the model didn't load use the sounds of the default model
 		if (modelloaded) {
-			ci->sounds[i] = trap_S_RegisterSound(va("sounds/wop_player/%s/%s", dir, s + 1), qfalse);
+			// if the skin is not the default, red or blue skin try to load a special sound for the skin
+			if ((Q_stricmp(dirSkin, DEFAULT_SKIN) != 0) && (Q_stricmp(dirSkin, "red") != 0) &&
+				(Q_stricmp(dirSkin, "blue") != 0)) {
+				// first try directly with the skin name
+				ci->sounds[i] = trap_S_RegisterSound(va("sounds/wop_player/%s/%s", dirSkin, s + 1), qfalse);
+			}
+			// if this fails try with the loaded model name
+			if (!ci->sounds[i]) {
+				ci->sounds[i] = trap_S_RegisterSound(va("sounds/wop_player/%s/%s", dirModel, s + 1), qfalse);
+			}
 		}
 		if (!ci->sounds[i]) {
 			ci->sounds[i] = trap_S_RegisterSound(va("sounds/wop_player/%s/%s", fallback, s + 1), qfalse);
