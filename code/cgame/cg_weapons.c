@@ -911,7 +911,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	gun.shadowPlane = parent->shadowPlane;
 	gun.renderfx = parent->renderfx;
 
-	if (cent->currentState.eFlags & (EF_DEAD | EF_NOLIFESLEFT))
+	if (cent->currentState.eFlags & (EF_DEAD | EF_NOLIFESLEFT) || cent->currentState.powerups & (1 << PW_FREEZE))
 		cent->currentState.eFlags &= ~EF_FIRING; // maybe this fixes the boaster beam for killed ents
 
 	gun.hModel = weapon->weaponModel;
