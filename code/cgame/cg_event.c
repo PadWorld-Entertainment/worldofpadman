@@ -620,7 +620,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		break;
 	case EV_FALL_MEDIUM:
 		// use normal pain sound
-		trap_S_StartSound(NULL, es->number, CHAN_VOICE, CG_CustomSound(es->number, "*pain100_1"));
+		trap_S_StartSound(NULL, es->number, CHAN_VOICE, CG_CustomSound(es->number, "*pain100"));
 		if (clientNum == cg.predictedPlayerState.clientNum) {
 			// smooth landing z changes
 			cg.landChange = -16;
