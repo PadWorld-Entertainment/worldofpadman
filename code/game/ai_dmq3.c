@@ -4170,7 +4170,7 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 			break;
 		}
 		trap_GetConfigstring(CS_SOUNDS + state->eventParm, buf, sizeof(buf));
-		if (!strcmp(buf, "sounds/items/powerup_respawn")) {
+		if (!strcmp(buf, "sound/items/powerup/respawn")) {
 			// powerup respawned... go get it
 			BotGoForPowerups(bs);
 		}

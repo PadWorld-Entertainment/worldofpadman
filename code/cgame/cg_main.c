@@ -633,8 +633,8 @@ static void CG_RegisterSounds(void) {
 	cgs.media.countFightSound = trap_S_RegisterSound("sounds/gametype/your_game", qtrue);
 
 	cgs.media.pickupSound = trap_S_RegisterSound("sounds/weapons/weapon_pickup", qfalse);
-	cgs.media.HIpickupSound = trap_S_RegisterSound("sounds/items/holdable_pickup", qfalse);
-	cgs.media.ARpickupSound = trap_S_RegisterSound("sounds/items/armor/padshield_pickup", qfalse);
+	cgs.media.HIpickupSound = trap_S_RegisterSound("sound/items/holdable/pickup", qfalse);
+	cgs.media.ARpickupSound = trap_S_RegisterSound("sound/items/padshield/pickup", qfalse);
 
 	cgs.media.suddenDeathSound = trap_S_RegisterSound("sounds/gametype/sudden_death", qtrue);
 
@@ -735,22 +735,22 @@ static void CG_RegisterSounds(void) {
 			cgs.media.stolenlollySound = trap_S_RegisterSound("sounds/gametype/ctl/lolly_stolen", qfalse);
 			cgs.media.youHaveFlagSound = trap_S_RegisterSound("sounds/gametype/ctl/lolly_you", qtrue);
 
-			cgs.media.bambamExplosionSound = trap_S_RegisterSound("sounds/items/bambam/explosion", qfalse);
-			cgs.media.bambamMissileImpact = trap_S_RegisterSound("sounds/items/bambam/impact", qfalse);
+			cgs.media.bambamExplosionSound = trap_S_RegisterSound("sound/items/bambam/explosion", qfalse);
+			cgs.media.bambamMissileImpact = trap_S_RegisterSound("sound/items/bambam/impact", qfalse);
 		}
 
 		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_BALLOON) || cg_buildScript.integer) {
-			cgs.media.boomiesExplosionSound = trap_S_RegisterSound("sounds/items/boomies/explosion", qfalse);
+			cgs.media.boomiesExplosionSound = trap_S_RegisterSound("sound/items/boomies/explosion", qfalse);
 		}
 	}
 
 	cgs.media.selectSound = trap_S_RegisterSound("sounds/weapons/change", qfalse);
-	cgs.media.wearOffSound = trap_S_RegisterSound("sounds/items/powerup_end", qfalse);
-	cgs.media.useNothingSound = trap_S_RegisterSound("sounds/items/holdable_nothing", qfalse);
+	cgs.media.wearOffSound = trap_S_RegisterSound("sound/items/powerup/end", qfalse);
+	cgs.media.useNothingSound = trap_S_RegisterSound("sound/items/holdable/nothing", qfalse);
 
 	cgs.media.teleInSound = trap_S_RegisterSound("sounds/world/teleporter_in", qfalse);
 	cgs.media.teleOutSound = trap_S_RegisterSound("sounds/world/teleporter_out", qfalse);
-	cgs.media.respawnSound = trap_S_RegisterSound("sounds/items/item_respawn", qfalse);
+	cgs.media.respawnSound = trap_S_RegisterSound("sound/items/respawn", qfalse);
 
 	cgs.media.noAmmoSound = trap_S_RegisterSound("sounds/weapons/noammo", qfalse);
 
@@ -771,7 +771,7 @@ static void CG_RegisterSounds(void) {
 
 	cgs.media.jumpPadSound = trap_S_RegisterSound("sounds/world/jumppad", qfalse);
 	cgs.media.DropCartridgeSound = trap_S_RegisterSound("sounds/weapons/ammo/spraypistol/drop", qfalse);
-	cgs.media.jumperSound = trap_S_RegisterSound("sounds/items/jumper/boing", qfalse);
+	cgs.media.jumperSound = trap_S_RegisterSound("sound/items/jumper/boing", qfalse);
 
 	CG_ChangeLoadingProgress(0.4f);
 
@@ -840,20 +840,20 @@ static void CG_RegisterSounds(void) {
 	}
 
 	// FIXME: only needed with item
-	cgs.media.flightSound = trap_S_RegisterSound("sounds/items/floater/flight", qfalse);
-	cgs.media.quadSound = trap_S_RegisterSound("sounds/items/padpower/damage3", qfalse);
+	cgs.media.flightSound = trap_S_RegisterSound("sound/items/floater/flight", qfalse);
+	cgs.media.quadSound = trap_S_RegisterSound("sound/items/padpower/damage3", qfalse);
 	cgs.media.BettyExplosion = trap_S_RegisterSound("sounds/weapons/betty/explosion", qfalse);
 	cgs.media.pumperexpSound = trap_S_RegisterSound("sounds/weapons/pumper/explosion", qfalse);
 
-	cgs.media.regenSound = trap_S_RegisterSound("sounds/items/revival/heartbeat", qfalse);
-	cgs.media.n_healthSound = trap_S_RegisterSound("sounds/items/powerup_pickup", qfalse);
+	cgs.media.regenSound = trap_S_RegisterSound("sound/items/revival/heartbeat", qfalse);
+	cgs.media.n_healthSound = trap_S_RegisterSound("sound/items/powerup/pickup", qfalse);
 
 	cgs.media.station_start = trap_S_RegisterSound("sounds/healthstation/station_start", qfalse);
 	cgs.media.station_loop = trap_S_RegisterSound("sounds/healthstation/station_loop", qfalse);
 	cgs.media.station_end = trap_S_RegisterSound("sounds/healthstation/station_end", qfalse);
 	cgs.media.station_empty = trap_S_RegisterSound("sounds/healthstation/station_empty", qfalse);
 
-	cgs.media.speedyTaunt = trap_S_RegisterSound("sounds/items/speedy/trumpet", qfalse);
+	cgs.media.speedyTaunt = trap_S_RegisterSound("sound/items/speedy/honk", qfalse);
 }
 
 //===================================================================================

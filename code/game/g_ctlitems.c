@@ -238,7 +238,7 @@ static void bambam_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 			if (tmpLen > 0.0f) {
 				VectorScale(dir, 1 / tmpLen, dir);
 				fire_bambamMissile(ent, start, dir, missileVelocity);
-				G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sounds/items/bambam/shoot"));
+				G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sound/items/bambam/shoot"));
 
 				ent->timestamp = level.time;
 			}
@@ -305,7 +305,7 @@ static void bambam_think(gentity_t *ent) {
 	}
 
 	if (ent->s.generic1 == BBS_ZZZ) {
-		G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sounds/items/bambam/zzz"));
+		G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sound/items/bambam/zzz"));
 	}
 }
 
@@ -411,7 +411,7 @@ qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 
 	trap_LinkEntity(entBam);
 
-	G_AddEvent(entBam, EV_GENERAL_SOUND, G_SoundIndex("sounds/items/bambam/start"));
+	G_AddEvent(entBam, EV_GENERAL_SOUND, G_SoundIndex("sound/items/bambam/setup"));
 
 	level.numBambams[pEnt->client->sess.sessionTeam]++;
 
@@ -542,7 +542,7 @@ qboolean boomies_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 
 		trap_LinkEntity(ent);
 
-		G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sounds/items/boomies/start"));
+		G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sound/items/boomies/setup"));
 
 		level.numBoomies[pEnt->client->sess.sessionTeam]++;
 

@@ -399,7 +399,7 @@ void RespawnItem(gentity_t *ent) {
 		} else {
 			te = G_TempEntity(ent->s.pos.trBase, EV_GLOBAL_SOUND);
 		}
-		te->s.eventParm = G_SoundIndex("sounds/items/powerup_respawn");
+		te->s.eventParm = G_SoundIndex("sound/items/powerup/respawn");
 		te->r.svFlags |= SVF_BROADCAST;
 	}
 
@@ -837,7 +837,7 @@ void G_SpawnItem(gentity_t *ent, const gitem_t *item) {
 	ent->physicsBounce = 0.5f; // items are bouncy
 
 	if (item->giType == IT_POWERUP) {
-		G_SoundIndex("sounds/items/powerup_respawn");
+		G_SoundIndex("sound/items/powerup/respawn");
 		G_SpawnFloat("noglobalsound", "0", &ent->speed);
 	}
 }

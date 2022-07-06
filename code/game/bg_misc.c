@@ -60,7 +60,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED item_armor_shard (1 .5 0) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"item_armor_shard",
-	 "sounds/items/armor/padshard_pickup",
+	 "sound/items/padshard/pickup",
 	 {"models/powerups/armor/pad_shard", 0, 0, 0},
 	 /* icon */ "icons/armor_padshard",
 	 /* pickup */ "PAD SHARD",
@@ -473,7 +473,7 @@ const gitem_t bg_itemlist[] = {
 		IT_POWERUP,
 		PW_PADPOWER,
 		/* precache */ "",
-		/* sounds */ "sounds/items/padpower/damage3" // noch aendern
+		/* sounds */ "sound/items/padpower/damage3" // noch aendern
 	},
 
 	/*QUAKED item_climber (.8 0 .8) (-16 -16 -16) (16 16 16) suspended
@@ -539,7 +539,7 @@ const gitem_t bg_itemlist[] = {
 	 IT_POWERUP,
 	 PW_REVIVAL,
 	 /* precache */ "",
-	 /* sounds */ "sounds/items/revival/heartbeat"},
+	 /* sounds */ "sound/items/revival/heartbeat"},
 
 	/*QUAKED item_berserker (1 0 0) (-16 -16 -16) (16 16 16) suspended
 	 */
