@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "cg_local.h"
 
 static const char *cg_customSoundNames[MAX_CUSTOM_SOUNDS] = {
-	"*death1",	 "*death2", "*death3", "*jump1", "*pain25_1", "*pain50_1", "*pain75_1", "*pain100_1",
-	"*falling1", "*gasp",	"*drown",  "*fall1", "*taunt", "*hehe1", "*hehe2"};
+	"*death1",	 "*death2", "*death3", "*jump", "*pain25", "*pain50", "*pain75", "*pain100",
+	"*falling", "*gasp",	"*drown",  "*fall", "*taunt", "*hehe1", "*hehe2"};
 
 /*
 ================
@@ -46,7 +46,7 @@ sfxHandle_t CG_CustomSound(int clientNum, const char *soundName) {
 	}
 	ci = &cgs.clientinfo[clientNum];
 
-	// Backwards compatibility; "*falling1.wav" etc. should still work
+	// Backwards compatibility; "*falling.wav" etc. should still work
 	COM_StripExtension(soundName, soundBaseName, sizeof(soundBaseName));
 
 	for (i = 0; i < MAX_CUSTOM_SOUNDS && cg_customSoundNames[i]; i++) {
@@ -656,15 +656,15 @@ static void CG_LoadClientInfo(int clientNum, clientInfo_t *ci) {
 			if ((Q_stricmp(dirSkin, DEFAULT_SKIN) != 0) && (Q_stricmp(dirSkin, "red") != 0) &&
 				(Q_stricmp(dirSkin, "blue") != 0)) {
 				// first try directly with the skin name
-				ci->sounds[i] = trap_S_RegisterSound(va("sounds/wop_player/%s/%s", dirSkin, s + 1), qfalse);
+				ci->sounds[i] = trap_S_RegisterSound(va("sound/padplayer/%s/%s", dirSkin, s + 1), qfalse);
 			}
 			// if this fails try with the loaded model name
 			if (!ci->sounds[i]) {
-				ci->sounds[i] = trap_S_RegisterSound(va("sounds/wop_player/%s/%s", dirModel, s + 1), qfalse);
+				ci->sounds[i] = trap_S_RegisterSound(va("sound/padplayer/%s/%s", dirModel, s + 1), qfalse);
 			}
 		}
 		if (!ci->sounds[i]) {
-			ci->sounds[i] = trap_S_RegisterSound(va("sounds/wop_player/%s/%s", fallback, s + 1), qfalse);
+			ci->sounds[i] = trap_S_RegisterSound(va("sound/padplayer/%s/%s", fallback, s + 1), qfalse);
 		}
 	}
 

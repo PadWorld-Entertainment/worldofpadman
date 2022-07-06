@@ -73,7 +73,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED item_armor_padshield (1 .5 0) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"item_armor_padshield",
-	 "sounds/names/powerups/padshield",
+	 "sound/feedback/powerups/padshield",
 	 {"models/powerups/armor/pad_shield", 0, 0, 0},
 	 /* icon */ "icons/armor_padshield",
 	 /* pickup */ "PAD SHiELD",
@@ -90,7 +90,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_punchy (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_punchy",
-	 "sounds/names/weapons/punchy",
+	 "sound/feedback/weapons/punchy",
 	 {"models/weapons2/punchy/punchy", 0, 0, 0},
 	 /* icon */ "icons/weapon_punchy",
 	 /* pickup */ "PUNCHY",
@@ -103,7 +103,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_nipper (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_nipper",
-	 "sounds/names/weapons/nipper",
+	 "sound/feedback/weapons/nipper",
 	 {"models/weapons2/nipper/nipper", 0, 0, 0},
 	 /* icon */ "icons/weapon_nipper",
 	 /* pickup */ "NiPPER",
@@ -116,7 +116,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_boaster (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_boaster",
-	 "sounds/names/weapons/boaster",
+	 "sound/feedback/weapons/boaster",
 	 {"models/weapons2/boaster/boaster", 0, 0, 0},
 	 /* icon */ "icons/weapon_boaster",
 	 /* pickup */ "BOASTER",
@@ -129,7 +129,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_splasher (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_splasher",
-	 "sounds/names/weapons/splasher",
+	 "sound/feedback/weapons/splasher",
 	 //        { "models/weapons2/railgun/railgun",
 	 {"models/weapons2/splasher/splasher", 0, 0, 0},
 	 /* icon */ "icons/weapon_splasher",
@@ -143,7 +143,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_bubbleg (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_bubbleg",
-	 "sounds/names/weapons/bubbleg",
+	 "sound/feedback/weapons/bubbleg",
 	 {"models/weapons2/bubbleg/bubbleg", 0, 0, 0},
 	 /* icon */ "icons/weapon_bubbleg",
 	 /* pickup */ "BUBBLE.G.",
@@ -156,7 +156,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_balloony (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_balloony",
-	 "sounds/names/weapons/balloony",
+	 "sound/feedback/weapons/balloony",
 	 {"models/weapons2/balloony/balloony", 0, 0, 0},
 	 /* icon */ "icons/weapon_balloony",
 	 /* pickup */ "BALLOONY",
@@ -169,7 +169,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_betty (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_betty",
-	 "sounds/names/weapons/betty",
+	 "sound/feedback/weapons/betty",
 	 {"models/weapons2/betty/betty", 0, 0, 0},
 	 /* icon */ "icons/weapon_betty",
 	 /* pickup */ "BETTY",
@@ -182,7 +182,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_pumper (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_pumper",
-	 "sounds/names/weapons/pumper",
+	 "sound/feedback/weapons/pumper",
 	 {"models/weapons2/pumper/pumper", 0, 0, 0},
 	 /* icon */ "icons/weapon_pumper",
 	 /* pickup */ "PUMPER",
@@ -195,7 +195,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_imperius (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_imperius",
-	 "sounds/names/weapons/imperius",
+	 "sound/feedback/weapons/imperius",
 	 {"models/weapons2/imperius/imperius", 0, 0, 0},
 	 /* icon */ "icons/weapon_imperius",
 	 /* pickup */ "IMPERiUS",
@@ -208,7 +208,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_killerducks (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_killerducks",
-	 "sounds/names/weapons/killerducks",
+	 "sound/feedback/powerups/killerducks",
 	 {"models/weapons2/killerducks/pad_killerduck_pu", 0, 0, 0},
 	 /* icon */ "icons/killerducks",
 	 /* pickup */ "KiLLERDUCKS WEAPON",
@@ -406,7 +406,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED holdable_floater (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"holdable_floater",
-	 "sounds/names/powerups/floater",
+	 "sound/feedback/powerups/floater",
 	 {"models/powerups/instant/floater", "models/powerups/instant/floater_ring", 0, 0},
 	 /* icon */ "icons/holdable_floater",
 	 /* pickup */ "FLOATER",
@@ -419,7 +419,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED holdable_killerducks (1 .5 0) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"holdable_killerducks",
-	 "sounds/names/weapons/killerducks",
+	 "sound/feedback/powerups/killerducks",
 	 {"models/weapons2/killerducks/pad_killerduck_pu", "models/powerups/instant/killerducks_ring", 0, 0},
 	 /* icon */ "icons/holdable_killerducks",
 	 /* pickup */ "KiLLERDUCKS",
@@ -433,7 +433,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED holdable_floater (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"holdable_bambam",
-	 "sounds/names/powerups/bambam",
+	 "sound/feedback/powerups/bambam",
 	 {"models/powerups/instant/bambam", "models/powerups/instant/bambam_ring", 0, 0},
 	 /* icon */ "icons/holdable_bambam",
 	 /* pickup */ "BAMBAM",
@@ -446,7 +446,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED holdable_floater (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"holdable_boomies",
-	 "sounds/names/powerups/boomies",
+	 "sound/feedback/powerups/boomies",
 	 {"models/powerups/instant/boomies", "models/powerups/instant/boomies_ring", 0, 0},
 	 /* icon */ "icons/holdable_boomies",
 	 /* pickup */ "BOOMiES",
@@ -465,7 +465,7 @@ const gitem_t bg_itemlist[] = {
 	 */
 	{
 		"item_padpower",
-		"sounds/names/powerups/padpower",
+		"sound/feedback/powerups/padpower",
 		{"models/powerups/instant/padpower", "models/powerups/instant/padpower_ring", 0, 0},
 		/* icon */ "icons/powerup_padpower",
 		/* pickup */ "PADPOWER",
@@ -479,7 +479,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED item_climber (.8 0 .8) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"item_climber",
-	 "sounds/names/powerups/climber",
+	 "sound/feedback/powerups/climber",
 	 {"models/powerups/instant/climber", "models/powerups/instant/climber_ring", 0, 0},
 	 /* icon */ "icons/climber",
 	 /* pickup */ "CLiMBER",
@@ -492,7 +492,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED item_speedy (1 1 0) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"item_speedy",
-	 "sounds/names/powerups/speedy",
+	 "sound/feedback/powerups/speedy",
 	 {"models/powerups/instant/speedy", "models/powerups/instant/speedy_ring", 0, 0},
 	 /* icon */ "icons/powerup_speedy",
 	 /* pickup */ "SPEEDY",
@@ -505,7 +505,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED item_jumper (0 1 0) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"item_jumper",
-	 "sounds/names/powerups/jumper",
+	 "sound/feedback/powerups/jumper",
 	 {"models/powerups/instant/jumper", "models/powerups/instant/jumper_ring", 0, 0},
 	 /* icon */ "icons/powerup_jumper",
 	 /* pickup */ "JUMPER",
@@ -518,7 +518,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED item_visionless (.4 .4 .4) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"item_visionless",
-	 "sounds/names/powerups/visionless",
+	 "sound/feedback/powerups/visionless",
 	 {"models/powerups/instant/visionless", "models/powerups/instant/visionless_ring", 0, 0},
 	 /* icon */ "icons/powerup_visionless",
 	 /* pickup */ "ViSiONLESS",
@@ -531,7 +531,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED item_revival (1 0 0) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"item_revival",
-	 "sounds/names/powerups/revival",
+	 "sound/feedback/powerups/revival",
 	 {"models/powerups/instant/revival", "models/powerups/instant/revival_ring", 0, 0},
 	 /* icon */ "icons/powerup_revival",
 	 /* pickup */ "REViVAL",
@@ -587,7 +587,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_kma97 ( .3 .3 1 ) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_kma97", // "Kiss My Ass 97"
-	 "sounds/names/weapons/kma97",
+	 "sound/feedback/weapons/injector",
 	 {"models/weapons2/kma97/kma97", 0, 0, 0},
 	 /* icon */ "icons/weapon_injector",
 	 /* pickup */ "KMA97",

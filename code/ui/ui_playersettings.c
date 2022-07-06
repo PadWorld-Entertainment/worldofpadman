@@ -665,7 +665,7 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 				Q_strncpyz(tmp, ps_playericons.modelskins[i].name, 64);
 				if ((chrptr = strchr(tmp, '/')) != NULL)
 					*chrptr = '\0';
-				trap_S_StartLocalSound(trap_S_RegisterSound(va("sounds/names/players/%s", Q_strlwr(tmp)), qfalse),
+				trap_S_StartLocalSound(trap_S_RegisterSound(va("sound/feedback/players/%s", Q_strlwr(tmp)), qfalse),
 									   CHAN_LOCAL_SOUND);
 
 				trap_Cvar_Set("model", ps_playericons.modelskins[i].name);

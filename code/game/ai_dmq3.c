@@ -4228,7 +4228,7 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 			// check out the sound
 			trap_GetConfigstring(CS_SOUNDS + state->eventParm, buf, sizeof(buf));
 			// if falling into a death pit
-			if (!strcmp(buf, "*falling1")) {
+			if (!strcmp(buf, "*falling")) {
 				// if the bot has a personal teleporter
 				if (bs->inventory[INVENTORY_TELEPORTER] > 0) {
 					// use the holdable item

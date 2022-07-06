@@ -489,21 +489,21 @@ void CG_PainEvent(centity_t *cent, int health) {
 	}
 
 	if (health < 25) {
-		snd = "*pain25_1";
+		snd = "*pain25";
 	} else if (health < 50) {
-		snd = "*pain50_1";
+		snd = "*pain50";
 	} else if (health < 75) {
-		snd = "*pain75_1";
+		snd = "*pain75";
 	} else {
-		snd = "*pain100_1";
+		snd = "*pain100";
 	}
 #if 0
 	// play a gurp sound instead of a normal pain sound
 	if (CG_WaterLevel(cent) == WL_DIVING) {
 		if (rand() & 1) {
-			trap_S_StartSound(NULL, cent->currentState.number, CHAN_VOICE, CG_CustomSound(cent->currentState.number, "sound/player/gurp1"));
+			trap_S_StartSound(NULL, cent->currentState.number, CHAN_VOICE, CG_CustomSound(cent->currentState.number, "sound/padplayer/gurp1"));
 		} else {
-			trap_S_StartSound(NULL, cent->currentState.number, CHAN_VOICE, CG_CustomSound(cent->currentState.number, "sound/player/gurp2"));
+			trap_S_StartSound(NULL, cent->currentState.number, CHAN_VOICE, CG_CustomSound(cent->currentState.number, "sound/padplayer/gurp2"));
 		}
 	} else
 #endif
@@ -628,7 +628,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		}
 		break;
 	case EV_FALL_FAR:
-		trap_S_StartSound(NULL, es->number, CHAN_AUTO, CG_CustomSound(es->number, "*fall1"));
+		trap_S_StartSound(NULL, es->number, CHAN_AUTO, CG_CustomSound(es->number, "*fall"));
 		cent->pe.painTime = cg.time; // don't play a pain sound right after this
 		if (clientNum == cg.predictedPlayerState.clientNum) {
 			// smooth landing z changes
@@ -682,11 +682,11 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 
 		// boing sound at origin, jump sound on player
 		trap_S_StartSound(cent->lerpOrigin, -1, CHAN_VOICE, cgs.media.jumpPadSound);
-		trap_S_StartSound(NULL, es->number, CHAN_VOICE, CG_CustomSound(es->number, "*jump1"));
+		trap_S_StartSound(NULL, es->number, CHAN_VOICE, CG_CustomSound(es->number, "*jump"));
 		break;
 
 	case EV_JUMP:
-		trap_S_StartSound(NULL, es->number, CHAN_VOICE, CG_CustomSound(es->number, "*jump1"));
+		trap_S_StartSound(NULL, es->number, CHAN_VOICE, CG_CustomSound(es->number, "*jump"));
 		if (cg_entities[es->number].currentState.powerups & (1 << PW_JUMPER))
 			trap_S_StartSound(NULL, es->number, CHAN_ITEM, cgs.media.jumperSound);
 		break;

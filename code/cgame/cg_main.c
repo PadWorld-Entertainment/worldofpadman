@@ -619,17 +619,17 @@ static void CG_RegisterSounds(void) {
 	char name[MAX_QPATH];
 	const char *soundName;
 
-	cgs.media.CountDown_FiveMinutesToPlay = trap_S_RegisterSound("sounds/countdown/five_minutes", qtrue);
-	cgs.media.CountDown_OneMinuteToPlay = trap_S_RegisterSound("sounds/countdown/one_minute", qtrue);
-	cgs.media.CountDown_GameOver = trap_S_RegisterSound("sounds/countdown/game_over", qtrue);
+	cgs.media.CountDown_FiveMinutesToPlay = trap_S_RegisterSound("sound/feedback/countdown/5_minutes", qtrue);
+	cgs.media.CountDown_OneMinuteToPlay = trap_S_RegisterSound("sound/feedback/countdown/1_minute", qtrue);
+	cgs.media.CountDown_GameOver = trap_S_RegisterSound("sound/feedback/countdown/game_over", qtrue);
 
 	cgs.media.Announcer_Welcome[0] = trap_S_RegisterSound("sounds/gametype/welcome_padworld", qtrue);
 	cgs.media.Announcer_Welcome[1] = trap_S_RegisterSound("sounds/gametype/welcome", qtrue);
 	cgs.media.Announcer_Welcome[2] = trap_S_RegisterSound("sounds/gametype/lets_rock", qtrue);
 
-	cgs.media.count3Sound = trap_S_RegisterSound("sounds/countdown/numbers/three", qtrue);
-	cgs.media.count2Sound = trap_S_RegisterSound("sounds/countdown/numbers/two", qtrue);
-	cgs.media.count1Sound = trap_S_RegisterSound("sounds/countdown/numbers/one", qtrue);
+	cgs.media.count3Sound = trap_S_RegisterSound("sound/feedback/numbers/three", qtrue);
+	cgs.media.count2Sound = trap_S_RegisterSound("sound/feedback/numbers/two", qtrue);
+	cgs.media.count1Sound = trap_S_RegisterSound("sound/feedback/numbers/one", qtrue);
 	cgs.media.countFightSound = trap_S_RegisterSound("sounds/gametype/your_game", qtrue);
 
 	cgs.media.pickupSound = trap_S_RegisterSound("sounds/weapons/weapon_pickup", qfalse);
@@ -652,23 +652,23 @@ static void CG_RegisterSounds(void) {
 		cgs.media.CountDown_CountDown[0] = cgs.media.count1Sound;
 		cgs.media.CountDown_CountDown[1] = cgs.media.count2Sound;
 		cgs.media.CountDown_CountDown[2] = cgs.media.count3Sound;
-		cgs.media.CountDown_CountDown[3] = trap_S_RegisterSound("sounds/countdown/numbers/four", qtrue);
-		cgs.media.CountDown_CountDown[4] = trap_S_RegisterSound("sounds/countdown/numbers/five", qtrue);
-		cgs.media.CountDown_CountDown[5] = trap_S_RegisterSound("sounds/countdown/numbers/six", qtrue);
-		cgs.media.CountDown_CountDown[6] = trap_S_RegisterSound("sounds/countdown/numbers/seven", qtrue);
-		cgs.media.CountDown_CountDown[7] = trap_S_RegisterSound("sounds/countdown/numbers/eight", qtrue);
-		cgs.media.CountDown_CountDown[8] = trap_S_RegisterSound("sounds/countdown/numbers/nine", qtrue);
-		cgs.media.CountDown_CountDown[9] = trap_S_RegisterSound("sounds/countdown/numbers/ten", qtrue);
-		cgs.media.CountDown_TenSecondsToLeave = trap_S_RegisterSound("sounds/countdown/syc/leave", qtrue);
+		cgs.media.CountDown_CountDown[3] = trap_S_RegisterSound("sound/feedback/numbers/four", qtrue);
+		cgs.media.CountDown_CountDown[4] = trap_S_RegisterSound("sound/feedback/numbers/five", qtrue);
+		cgs.media.CountDown_CountDown[5] = trap_S_RegisterSound("sound/feedback/numbers/six", qtrue);
+		cgs.media.CountDown_CountDown[6] = trap_S_RegisterSound("sound/feedback/numbers/seven", qtrue);
+		cgs.media.CountDown_CountDown[7] = trap_S_RegisterSound("sound/feedback/numbers/eight", qtrue);
+		cgs.media.CountDown_CountDown[8] = trap_S_RegisterSound("sound/feedback/numbers/nine", qtrue);
+		cgs.media.CountDown_CountDown[9] = trap_S_RegisterSound("sound/feedback/numbers/ten", qtrue);
+		cgs.media.CountDown_TenSecondsToLeave = trap_S_RegisterSound("sound/feedback/countdown/10_seconds_to_leave", qtrue);
 
-		cgs.media.spraygodSound = trap_S_RegisterSound("sounds/gametype/syc/spraygod", qtrue);
-		cgs.media.spraykillerSound = trap_S_RegisterSound("sounds/gametype/syc/spraykiller", qtrue);
+		cgs.media.spraygodSound = trap_S_RegisterSound("sound/feedback/awards/spraygod", qtrue);
+		cgs.media.spraykillerSound = trap_S_RegisterSound("sound/feedback/awards/spraykiller", qtrue);
 	}
 
 	if (cgs.gametype == GT_SPRAYFFA || cg_buildScript.integer) {
-		cgs.media.oneLogoLeft = trap_S_RegisterSound("sounds/countdown/syc/one_logo", qtrue);
-		cgs.media.twoLogosLeft = trap_S_RegisterSound("sounds/countdown/syc/two_logos", qtrue);
-		cgs.media.threeLogosLeft = trap_S_RegisterSound("sounds/countdown/syc/three_logos", qtrue);
+		cgs.media.oneLogoLeft = trap_S_RegisterSound("sound/feedback/countdown/1_logo", qtrue);
+		cgs.media.twoLogosLeft = trap_S_RegisterSound("sound/feedback/countdown/2_logos", qtrue);
+		cgs.media.threeLogosLeft = trap_S_RegisterSound("sound/feedback/countdown/3_logos", qtrue);
 	}
 
 	if (cgs.gametype < GT_TEAM || cg_buildScript.integer) {
@@ -681,9 +681,9 @@ static void CG_RegisterSounds(void) {
 
 	if (cgs.gametype < GT_CTF || cg_buildScript.integer) {
 		if (cgs.gametype != GT_SPRAYFFA || cg_buildScript.integer) {
-			cgs.media.oneFragSound = trap_S_RegisterSound("sounds/countdown/dm/one_point", qtrue);
-			cgs.media.twoFragSound = trap_S_RegisterSound("sounds/countdown/dm/two_points", qtrue);
-			cgs.media.threeFragSound = trap_S_RegisterSound("sounds/countdown/dm/three_points", qtrue);
+			cgs.media.oneFragSound = trap_S_RegisterSound("sound/feedback/countdown/1_point", qtrue);
+			cgs.media.twoFragSound = trap_S_RegisterSound("sound/feedback/countdown/2_points", qtrue);
+			cgs.media.threeFragSound = trap_S_RegisterSound("sound/feedback/countdown/3_points", qtrue);
 		}
 	}
 
@@ -754,20 +754,20 @@ static void CG_RegisterSounds(void) {
 
 	cgs.media.noAmmoSound = trap_S_RegisterSound("sounds/weapons/noammo", qfalse);
 
-	cgs.media.talkSound = trap_S_RegisterSound("sound/player/talk", qfalse);
-	cgs.media.landSound = trap_S_RegisterSound("sound/player/land", qfalse);
+	cgs.media.talkSound = trap_S_RegisterSound("sound/padplayer/talk", qfalse);
+	cgs.media.landSound = trap_S_RegisterSound("sound/padplayer/land", qfalse);
 
-	cgs.media.hitSound = trap_S_RegisterSound("sounds/hit", qfalse);
+	cgs.media.hitSound = trap_S_RegisterSound("sound/feedback/hit", qfalse);
 
-	cgs.media.excellentSound = trap_S_RegisterSound("sounds/awards/excellent", qtrue);
-	cgs.media.humiliationSound = trap_S_RegisterSound("sounds/awards/padkiller", qtrue);
-	cgs.media.padheroSound = trap_S_RegisterSound("sounds/awards/padhero", qtrue);
-	cgs.media.padaceSound = trap_S_RegisterSound("sounds/awards/padace", qtrue);
-	cgs.media.padstarSound = trap_S_RegisterSound("sounds/awards/padstar", qtrue);
+	cgs.media.excellentSound = trap_S_RegisterSound("sound/feedback/awards/excellent", qtrue);
+	cgs.media.humiliationSound = trap_S_RegisterSound("sound/feedback/awards/snackattack", qtrue);
+	cgs.media.padheroSound = trap_S_RegisterSound("sound/feedback/awards/padhero", qtrue);
+	cgs.media.padaceSound = trap_S_RegisterSound("sound/feedback/awards/padace", qtrue);
+	cgs.media.padstarSound = trap_S_RegisterSound("sound/feedback/awards/padstar", qtrue);
 
-	cgs.media.watrInSound = trap_S_RegisterSound("sound/player/water_in", qfalse);
-	cgs.media.watrOutSound = trap_S_RegisterSound("sound/player/water_out", qfalse);
-	cgs.media.watrUnSound = trap_S_RegisterSound("sound/player/water_under", qfalse);
+	cgs.media.watrInSound = trap_S_RegisterSound("sound/padplayer/water_in", qfalse);
+	cgs.media.watrOutSound = trap_S_RegisterSound("sound/padplayer/water_out", qfalse);
+	cgs.media.watrUnSound = trap_S_RegisterSound("sound/padplayer/water_under", qfalse);
 
 	cgs.media.jumpPadSound = trap_S_RegisterSound("sounds/world/jumppad", qfalse);
 	cgs.media.DropCartridgeSound = trap_S_RegisterSound("sounds/weapons/ammo/spraypistol/drop", qfalse);
@@ -776,46 +776,46 @@ static void CG_RegisterSounds(void) {
 	CG_ChangeLoadingProgress(0.4f);
 
 	for (i = 0; i < 4; i++) {
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/step%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/step%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_NORMAL][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/spurs%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/spurs%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_SPURS][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf (name, sizeof(name), "sound/player/footsteps/flesh%i", i + 1);
+		Com_sprintf (name, sizeof(name), "sound/padplayer/footsteps/flesh%i", i + 1);
 		cgs.media.footsteps[FOOTSTEP_FLESH][i] = trap_S_RegisterSound (name, qfalse);
 
-		/*		Com_sprintf (name, sizeof(name), "sounds/player/footsteps/mech%i", i+1);
+		/*		Com_sprintf (name, sizeof(name), "sound/padplayer/footsteps/mech%i", i+1);
 				cgs.media.footsteps[FOOTSTEP_MECH][i] = trap_S_RegisterSound (name, qfalse);
 
-				Com_sprintf (name, sizeof(name), "sounds/player/footsteps/energy%i", i+1);
+				Com_sprintf (name, sizeof(name), "sound/padplayer/footsteps/energy%i", i+1);
 				cgs.media.footsteps[FOOTSTEP_ENERGY][i] = trap_S_RegisterSound (name, qfalse);
 		*/
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/splash%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/splash%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/wade%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/wade%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_WADE][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/clank%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/clank%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_METAL][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/carpet%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/carpet%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/lattice%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/lattice%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_LATTICE][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/sand%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/sand%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_SAND][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/soft%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/soft%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_SOFT][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/wood%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/wood%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_WOOD][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sounds/player/footsteps/snowstep%i", (i + 1));
+		Com_sprintf(name, sizeof(name), "sound/padplayer/footsteps/snowstep%i", (i + 1));
 		cgs.media.footsteps[FOOTSTEP_SNOW][i] = trap_S_RegisterSound(name, qfalse);
 	}
 

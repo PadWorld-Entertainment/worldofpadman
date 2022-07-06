@@ -20,7 +20,4 @@ The following sounds are not used
 
 menu/mouse_over is silence
 world/plats/end and start are silence
-names/players/monster won't be used
-names/weapons/kma97 is the same as splasher	
 weapons/nipper and punchy should never be needed. Spraypistol uses pickup-sound
-sounds/names/powerups/bambam and boomies are missing
