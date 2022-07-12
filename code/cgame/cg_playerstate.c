@@ -371,13 +371,13 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 			trap_S_StartLocalSound(cgs.media.suddenDeathSound, CHAN_ANNOUNCER); // TODO maybe change
 		} else if (!cg.warmup && !(cg.timelimitWarnings & 8) && msec > (cgs.timelimit * 60 - 1) * 1000) {
 			cg.timelimitWarnings |= 1 | 2 | 8;
-			trap_S_StartLocalSound(cgs.media.CountDown_GameOver, CHAN_ANNOUNCER);
+			trap_S_StartLocalSound(cgs.media.gameOverSound, CHAN_ANNOUNCER);
 		} else if (!(cg.timelimitWarnings & 2) && msec > (cgs.timelimit - 1) * 60 * 1000) {
 			cg.timelimitWarnings |= 1 | 2;
-			trap_S_StartLocalSound(cgs.media.CountDown_OneMinuteToPlay, CHAN_ANNOUNCER);
+			trap_S_StartLocalSound(cgs.media.oneMinuteToPlaySound, CHAN_ANNOUNCER);
 		} else if (cgs.timelimit > 5 && !(cg.timelimitWarnings & 1) && msec > (cgs.timelimit - 5) * 60 * 1000) {
 			cg.timelimitWarnings |= 1;
-			trap_S_StartLocalSound(cgs.media.CountDown_FiveMinutesToPlay, CHAN_ANNOUNCER);
+			trap_S_StartLocalSound(cgs.media.fiveMinutesToPlaySound, CHAN_ANNOUNCER);
 		}
 	}
 

@@ -658,7 +658,7 @@ static void CG_ServerCommand(void) {
 
 		case CLIENT_DO_IT_SPRAYED_ON_WRONG_WALL:
 			i = atoi(CG_Argv(2));
-			trap_S_StartLocalSound(cgs.media.wrongLogo[i], CHAN_ANNOUNCER);
+			trap_S_StartLocalSound(cgs.media.wrongSprayWallSound[i], CHAN_ANNOUNCER);
 			break;
 
 		case CLIENT_DO_IT_LPS_LOST:

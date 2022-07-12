@@ -2579,9 +2579,9 @@ static void CG_DrawSprayYourColor(void) {
 
 		if (lastsprayroomtime != tmpi) {
 			if ((tmpi > 0) && (tmpi <= 10)) {
-				trap_S_StartLocalSound(cgs.media.CountDown_CountDown[(tmpi - 1)], CHAN_ANNOUNCER);
+				trap_S_StartLocalSound(cgs.media.countSprayRoomSound[(tmpi - 1)], CHAN_ANNOUNCER);
 			} else if (tmpi == 12) {
-				trap_S_StartLocalSound(cgs.media.CountDown_TenSecondsToLeave, CHAN_ANNOUNCER);
+				trap_S_StartLocalSound(cgs.media.tenSecondsToLeaveSound, CHAN_ANNOUNCER);
 			}
 
 			lastsprayroomtime = tmpi;

@@ -926,7 +926,7 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 
 		trap_RealTime(&qtime);
 		// random ist im ersten frame kein zufall
-		trap_S_StartLocalSound(cgs.media.Announcer_Welcome[(int)(qtime.tm_sec) % 3], CHAN_ANNOUNCER);
+		trap_S_StartLocalSound(cgs.media.welcomeSound[(int)(qtime.tm_sec) % 3], CHAN_ANNOUNCER);
 	}
 
 	// update cg.predictedPlayerState

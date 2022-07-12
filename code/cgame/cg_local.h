@@ -1014,13 +1014,13 @@ typedef struct {
 	sfxHandle_t DropCartridgeSound;
 	sfxHandle_t jumperSound;
 
-	sfxHandle_t CountDown_CountDown[10];
-	sfxHandle_t CountDown_FiveMinutesToPlay;
-	sfxHandle_t CountDown_GameOver;
-	sfxHandle_t CountDown_OneMinuteToPlay;
-	sfxHandle_t CountDown_TenSecondsToLeave;
+	sfxHandle_t countSprayRoomSound[10];
+	sfxHandle_t fiveMinutesToPlaySound;
+	sfxHandle_t gameOverSound;
+	sfxHandle_t oneMinuteToPlaySound;
+	sfxHandle_t tenSecondsToLeaveSound;
 
-	sfxHandle_t Announcer_Welcome[3];
+	sfxHandle_t welcomeSound[3];
 	sfxHandle_t Announcer_SRfrag[2];
 	sfxHandle_t Announcer_SprayYourColor;
 
@@ -1036,7 +1036,7 @@ typedef struct {
 	sfxHandle_t twoLogosLeft;
 	sfxHandle_t threeLogosLeft;
 
-	sfxHandle_t wrongLogo[4];
+	sfxHandle_t wrongSprayWallSound[4];
 	sfxHandle_t loseFFASound;
 	sfxHandle_t winLPSSounds[2];
 	sfxHandle_t YouLooseSound; // for lps round-loose

@@ -619,24 +619,21 @@ static void CG_RegisterSounds(void) {
 	char name[MAX_QPATH];
 	const char *soundName;
 
-	cgs.media.CountDown_FiveMinutesToPlay = trap_S_RegisterSound("sound/feedback/countdown/5_minutes", qtrue);
-	cgs.media.CountDown_OneMinuteToPlay = trap_S_RegisterSound("sound/feedback/countdown/1_minute", qtrue);
-	cgs.media.CountDown_GameOver = trap_S_RegisterSound("sound/feedback/countdown/game_over", qtrue);
-
-	cgs.media.Announcer_Welcome[0] = trap_S_RegisterSound("sounds/gametype/welcome_padworld", qtrue);
-	cgs.media.Announcer_Welcome[1] = trap_S_RegisterSound("sounds/gametype/welcome", qtrue);
-	cgs.media.Announcer_Welcome[2] = trap_S_RegisterSound("sounds/gametype/lets_rock", qtrue);
-
+	cgs.media.fiveMinutesToPlaySound = trap_S_RegisterSound("sound/feedback/countdown/5_minutes", qtrue);
+	cgs.media.oneMinuteToPlaySound = trap_S_RegisterSound("sound/feedback/countdown/1_minute", qtrue);
+	cgs.media.gameOverSound = trap_S_RegisterSound("sound/feedback/game_over", qtrue);
+	cgs.media.suddenDeathSound = trap_S_RegisterSound("sound/feedback/sudden_death", qtrue);
+	cgs.media.welcomeSound[0] = trap_S_RegisterSound("sound/feedback/welcome_padworld", qtrue);
+	cgs.media.welcomeSound[1] = trap_S_RegisterSound("sound/feedback/welcome", qtrue);
+	cgs.media.welcomeSound[2] = trap_S_RegisterSound("sound/feedback/lets_rock", qtrue);
 	cgs.media.count3Sound = trap_S_RegisterSound("sound/feedback/numbers/three", qtrue);
 	cgs.media.count2Sound = trap_S_RegisterSound("sound/feedback/numbers/two", qtrue);
 	cgs.media.count1Sound = trap_S_RegisterSound("sound/feedback/numbers/one", qtrue);
-	cgs.media.countFightSound = trap_S_RegisterSound("sounds/gametype/your_game", qtrue);
+	cgs.media.countFightSound = trap_S_RegisterSound("sound/feedback/make_your_game", qtrue);
 
 	cgs.media.pickupSound = trap_S_RegisterSound("sounds/weapons/weapon_pickup", qfalse);
 	cgs.media.HIpickupSound = trap_S_RegisterSound("sound/items/holdable/pickup", qfalse);
 	cgs.media.ARpickupSound = trap_S_RegisterSound("sound/items/padshield/pickup", qfalse);
-
-	cgs.media.suddenDeathSound = trap_S_RegisterSound("sounds/gametype/sudden_death", qtrue);
 
 	if ((cgs.gametype == GT_SPRAYFFA || cgs.gametype == GT_SPRAY) || cg_buildScript.integer) {
 		cgs.media.Announcer_SRfrag[0] = trap_S_RegisterSound("sounds/gametype/syc/nice_day", qtrue);
@@ -644,22 +641,22 @@ static void CG_RegisterSounds(void) {
 
 		cgs.media.Announcer_SprayYourColor = trap_S_RegisterSound("sounds/gametype/syc/syc", qtrue);
 
-		cgs.media.wrongLogo[0] = trap_S_RegisterSound("sounds/gametype/syc/colorblind", qtrue);
-		cgs.media.wrongLogo[1] = trap_S_RegisterSound("sounds/gametype/syc/omg", qtrue);
-		cgs.media.wrongLogo[2] = trap_S_RegisterSound("sounds/gametype/syc/stupid_sprayer", qtrue);
-		cgs.media.wrongLogo[3] = trap_S_RegisterSound("sounds/gametype/syc/who_is", qtrue);
+		cgs.media.wrongSprayWallSound[0] = trap_S_RegisterSound("sounds/gametype/syc/colorblind", qtrue);
+		cgs.media.wrongSprayWallSound[1] = trap_S_RegisterSound("sounds/gametype/syc/omg", qtrue);
+		cgs.media.wrongSprayWallSound[2] = trap_S_RegisterSound("sounds/gametype/syc/stupid_sprayer", qtrue);
+		cgs.media.wrongSprayWallSound[3] = trap_S_RegisterSound("sounds/gametype/syc/who_is", qtrue);
 
-		cgs.media.CountDown_CountDown[0] = cgs.media.count1Sound;
-		cgs.media.CountDown_CountDown[1] = cgs.media.count2Sound;
-		cgs.media.CountDown_CountDown[2] = cgs.media.count3Sound;
-		cgs.media.CountDown_CountDown[3] = trap_S_RegisterSound("sound/feedback/numbers/four", qtrue);
-		cgs.media.CountDown_CountDown[4] = trap_S_RegisterSound("sound/feedback/numbers/five", qtrue);
-		cgs.media.CountDown_CountDown[5] = trap_S_RegisterSound("sound/feedback/numbers/six", qtrue);
-		cgs.media.CountDown_CountDown[6] = trap_S_RegisterSound("sound/feedback/numbers/seven", qtrue);
-		cgs.media.CountDown_CountDown[7] = trap_S_RegisterSound("sound/feedback/numbers/eight", qtrue);
-		cgs.media.CountDown_CountDown[8] = trap_S_RegisterSound("sound/feedback/numbers/nine", qtrue);
-		cgs.media.CountDown_CountDown[9] = trap_S_RegisterSound("sound/feedback/numbers/ten", qtrue);
-		cgs.media.CountDown_TenSecondsToLeave = trap_S_RegisterSound("sound/feedback/countdown/10_seconds_to_leave", qtrue);
+		cgs.media.countSprayRoomSound[0] = cgs.media.count1Sound;
+		cgs.media.countSprayRoomSound[1] = cgs.media.count2Sound;
+		cgs.media.countSprayRoomSound[2] = cgs.media.count3Sound;
+		cgs.media.countSprayRoomSound[3] = trap_S_RegisterSound("sound/feedback/numbers/four", qtrue);
+		cgs.media.countSprayRoomSound[4] = trap_S_RegisterSound("sound/feedback/numbers/five", qtrue);
+		cgs.media.countSprayRoomSound[5] = trap_S_RegisterSound("sound/feedback/numbers/six", qtrue);
+		cgs.media.countSprayRoomSound[6] = trap_S_RegisterSound("sound/feedback/numbers/seven", qtrue);
+		cgs.media.countSprayRoomSound[7] = trap_S_RegisterSound("sound/feedback/numbers/eight", qtrue);
+		cgs.media.countSprayRoomSound[8] = trap_S_RegisterSound("sound/feedback/numbers/nine", qtrue);
+		cgs.media.countSprayRoomSound[9] = trap_S_RegisterSound("sound/feedback/numbers/ten", qtrue);
+		cgs.media.tenSecondsToLeaveSound = trap_S_RegisterSound("sound/feedback/countdown/10_seconds_to_leave", qtrue);
 
 		cgs.media.spraygodSound = trap_S_RegisterSound("sound/feedback/awards/spraygod", qtrue);
 		cgs.media.spraykillerSound = trap_S_RegisterSound("sound/feedback/awards/spraykiller", qtrue);
