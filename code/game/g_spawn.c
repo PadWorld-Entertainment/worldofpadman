@@ -65,6 +65,7 @@ qboolean G_SpawnVector(const char *key, const char *defaultString, float *out) {
 	qboolean present;
 
 	present = G_SpawnString(key, defaultString, &s);
+	out[0] = out[1] = out[2] = 0.0f;
 	sscanf(s, "%f %f %f", &out[0], &out[1], &out[2]);
 	return present;
 }
@@ -760,6 +761,7 @@ static void SP_worldspawn(void) {
 		vec3_t tmpv3;
 
 		G_SpawnString("skylensflare_dir", "10 10 10", &s);
+		tmpv3[0] = tmpv3[1] = tmpv3[2] = 0.0f;
 		sscanf(s, "%f %f %f", &tmpv3[0], &tmpv3[1], &tmpv3[2]);
 		VectorNormalize(tmpv3);
 

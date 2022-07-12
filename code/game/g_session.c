@@ -67,9 +67,9 @@ Called on a reconnect
 void G_ReadSessionData(gclient_t *client) {
 	char s[MAX_STRING_CHARS];
 	const char *var;
-	int teamLeader;
-	int spectatorState;
-	int sessionTeam;
+	int teamLeader = 0;
+	int spectatorState = 0;
+	int sessionTeam = 0;
 
 	var = va("session%ld", client - level.clients);
 	trap_Cvar_VariableStringBuffer(var, s, sizeof(s));
