@@ -160,7 +160,7 @@ static void P_WorldEffects(gentity_t *ent) {
 G_SetClientSound
 ===============
 */
-void G_SetClientSound(gentity_t *ent) {
+static void G_SetClientSound(gentity_t *ent) {
 	if (ent->waterlevel != WL_NOT && (ent->watertype & (CONTENTS_LAVA | CONTENTS_SLIME))) {
 		ent->client->ps.loopSound = level.snd_fry;
 	} else {
@@ -864,24 +864,26 @@ static void ClientThink_real(gentity_t *ent) {
 	}
 
 	// freezetag
-	if (G_FreezeTag() && FT_PlayerIsFrozen(ent)) {
-		if (!FT_MatchInProgress())
-			FT_ThawPlayer(ent, NULL);
-	} else if (G_FreezeTag()) {
-		gentity_t *frozenPlayer = FT_NearestFrozenPlayer(ent);
-		if (frozenPlayer) {
-			if (FT_InThawingRange(ent, frozenPlayer))
-				FT_ProgressThawing(frozenPlayer, ent);
-		}
+	if (G_FreezeTag()) {
+		if (FT_PlayerIsFrozen(ent)) {
+			if (!FT_MatchInProgress())
+				FT_ThawPlayer(ent, NULL);
+		} else {
+			gentity_t *frozenPlayer = FT_NearestFrozenPlayer(ent);
+			if (frozenPlayer) {
+				if (FT_InThawingRange(ent, frozenPlayer))
+					FT_ProgressThawing(frozenPlayer, ent);
+			}
 
-		// not thawing for a while, let the client know
-		if (level.time - ent->client->lastProgressTime > 1000)
-			ent->client->ps.stats[STAT_CHILL] = 0;
+			// not thawing for a while, let the client know
+			if (level.time - ent->client->lastProgressTime > 1000)
+				ent->client->ps.stats[STAT_CHILL] = 0;
 
-		// freeze player that joined too late
-		if (ent->client->pers.ftLateJoin) {
-			FT_FreezePlayer(ent, NULL);
-			ent->client->pers.ftLateJoin = qfalse;
+			// freeze player that joined too late
+			if (ent->client->pers.ftLateJoin) {
+				FT_FreezePlayer(ent, NULL);
+				ent->client->pers.ftLateJoin = qfalse;
+			}
 		}
 	}
 
@@ -969,7 +971,7 @@ SpectatorClientEndFrame
 
 ==================
 */
-void SpectatorClientEndFrame(gentity_t *ent) {
+static void SpectatorClientEndFrame(gentity_t *ent) {
 	gclient_t *cl;
 
 	// if we are doing a chase cam or a remote view, grab the latest info
