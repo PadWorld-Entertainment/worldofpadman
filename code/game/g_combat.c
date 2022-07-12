@@ -271,7 +271,7 @@ CASSERT(ARRAY_LEN(modNames) == MOD_MEANSOFDEATH_MAX);
 CheckAlmostCapture
 ==================
 */
-void CheckAlmostCapture(gentity_t *self, gentity_t *attacker) {
+static void CheckAlmostCapture(gentity_t *self, gentity_t *attacker) {
 	gentity_t *ent;
 	vec3_t dir;
 	char *classname;
@@ -702,19 +702,22 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	}
 
 	// freezetag
-	if (G_FreezeTag() && FT_PlayerIsFrozen(targ)) {
-		if (mod == MOD_TRIGGER_HURT) {
-			FT_RelocateToNearestSpawnPoint(targ);
-			FT_FreezePlayer(targ, attacker);
-		}
-		return;
-	} else if (G_FreezeTag() && FT_PlayerIsFrozen(attacker)) {
-		if (mod == MOD_PUNCHY)
+	if (G_FreezeTag()) {
+		if (FT_PlayerIsFrozen(targ)) {
+			if (mod == MOD_TRIGGER_HURT) {
+				FT_RelocateToNearestSpawnPoint(targ);
+				FT_FreezePlayer(targ, attacker);
+			}
 			return;
-	} else if (G_FreezeTag() && mod == MOD_TELEFRAG) {
-		FT_FreezePlayer(targ, attacker);
-		FT_RelocateToNearestSpawnPoint(targ);
-		return;
+		} else if (FT_PlayerIsFrozen(attacker)) {
+			if (mod == MOD_PUNCHY) {
+				return;
+			}
+		} else if (mod == MOD_TELEFRAG) {
+			FT_FreezePlayer(targ, attacker);
+			FT_RelocateToNearestSpawnPoint(targ);
+			return;
+		}
 	}
 
 	if (!dir) {
@@ -812,7 +815,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		if ((dflags & DAMAGE_RADIUS) || (mod == MOD_FALLING)) {
 			return;
 		}
-		damage *= 0.5;
+		damage *= 0.5f;
 	}
 
 	// add to the attacker's hit counter (if the target isn't a general entity like a prox mine)
@@ -829,7 +832,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	// always give half damage if hurting self
 	// calculated after knockback, so rocket jumping works
 	if (targ == attacker) {
-		damage *= 0.5;
+		damage *= 0.5f;
 	}
 
 	if (damage < 1) {
@@ -943,29 +946,29 @@ static qboolean CanDamage(const gentity_t *targ, const vec3_t origin) {
 	// this should probably check in the plane of projection,
 	// rather than in world coordinate, and also include Z
 	VectorCopy(midpoint, dest);
-	dest[0] += 15.0;
-	dest[1] += 15.0;
+	dest[0] += 15.0f;
+	dest[1] += 15.0f;
 	trap_Trace(&tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID);
 	if (tr.fraction == 1.0)
 		return qtrue;
 
 	VectorCopy(midpoint, dest);
-	dest[0] += 15.0;
-	dest[1] -= 15.0;
+	dest[0] += 15.0f;
+	dest[1] -= 15.0f;
 	trap_Trace(&tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID);
 	if (tr.fraction == 1.0)
 		return qtrue;
 
 	VectorCopy(midpoint, dest);
-	dest[0] -= 15.0;
-	dest[1] += 15.0;
+	dest[0] -= 15.0f;
+	dest[1] += 15.0f;
 	trap_Trace(&tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID);
 	if (tr.fraction == 1.0)
 		return qtrue;
 
 	VectorCopy(midpoint, dest);
-	dest[0] -= 15.0;
-	dest[1] -= 15.0;
+	dest[0] -= 15.0f;
+	dest[1] -= 15.0f;
 	trap_Trace(&tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID);
 	if (tr.fraction == 1.0)
 		return qtrue;
