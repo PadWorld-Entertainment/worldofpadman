@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //(original)#define	GIB_HEALTH			-40
 
 #define LOW_GRAVITY 400
-#define GIB_HEALTH -200
+#define GIB_HEALTH (-200)
 
 #define ARMOR_PROTECTION 0.66
 
@@ -52,14 +52,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define LIGHTNING_RANGE 768
 
-#define SCORE_NOT_PRESENT -9999 // for the CS_SCORES[12] when only one player is present
+#define SCORE_NOT_PRESENT (-9999) // for the CS_SCORES[12] when only one player is present
 
 #define VOTE_TIME 30000 // 30 seconds before vote times out
 
-#define MINS_Z -24
+#define MINS_Z (-24)
 #define DEFAULT_VIEWHEIGHT 26
 #define CROUCH_VIEWHEIGHT 12
-#define DEAD_VIEWHEIGHT -16
+#define DEAD_VIEWHEIGHT (-16)
 
 //
 // config strings are a general means of communicating variable length strings
