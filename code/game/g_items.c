@@ -630,7 +630,7 @@ Use_Item
 Respawn the item
 ================
 */
-void Use_Item(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_Item(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	RespawnItem(ent);
 }
 
@@ -710,7 +710,7 @@ void FinishSpawningItem(gentity_t *ent) {
 	trap_LinkEntity(ent);
 }
 
-qboolean itemRegistered[MAX_ITEMS];
+static qboolean itemRegistered[MAX_ITEMS];
 
 /*
 ==================
@@ -845,10 +845,9 @@ void G_SpawnItem(gentity_t *ent, const gitem_t *item) {
 /*
 ================
 G_BounceItem
-
 ================
 */
-void G_BounceItem(gentity_t *ent, trace_t *trace) {
+static void G_BounceItem(gentity_t *ent, trace_t *trace) {
 	vec3_t velocity;
 	float dot;
 	int hitTime;

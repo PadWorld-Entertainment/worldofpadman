@@ -411,7 +411,7 @@ ClientTimerActions
 Actions that happen once a second
 ==================
 */
-void ClientTimerActions(gentity_t *ent, int msec) {
+static void ClientTimerActions(gentity_t *ent, int msec) {
 	gclient_t *client;
 
 	client = ent->client;
@@ -452,7 +452,7 @@ void ClientTimerActions(gentity_t *ent, int msec) {
 ClientIntermissionThink
 ====================
 */
-void ClientIntermissionThink(gclient_t *client) {
+static void ClientIntermissionThink(gclient_t *client) {
 	client->ps.eFlags &= ~EF_TALK;
 	client->ps.eFlags &= ~EF_FIRING;
 
@@ -664,7 +664,7 @@ If "g_synchronousClients 1" is set, this will be called exactly
 once for each server frame, which makes for smooth demo recording.
 ==============
 */
-void ClientThink_real(gentity_t *ent) {
+static void ClientThink_real(gentity_t *ent) {
 	gclient_t *client;
 	pmove_t pm;
 	int oldEventSequence;
