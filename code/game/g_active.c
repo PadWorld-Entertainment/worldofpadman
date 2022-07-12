@@ -527,10 +527,10 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 			item = NULL;
 			j = 0;
 
-			if (ent->client->ps.powerups[PW_REDFLAG]) {
+			if (client->ps.powerups[PW_REDFLAG]) {
 				item = BG_FindItemForPowerup(PW_REDFLAG);
 				j = PW_REDFLAG;
-			} else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
+			} else if (client->ps.powerups[PW_BLUEFLAG]) {
 				item = BG_FindItemForPowerup(PW_BLUEFLAG);
 				j = PW_BLUEFLAG;
 			}
@@ -538,26 +538,26 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 			if (item) {
 				drop = Drop_Item(ent, item, 0);
 				// decide how many seconds it has left
-				drop->count = (ent->client->ps.powerups[j] - level.time) / 1000;
+				drop->count = (client->ps.powerups[j] - level.time) / 1000;
 				if (drop->count < 1) {
 					drop->count = 1;
 				}
 
-				ent->client->ps.powerups[j] = 0;
+				client->ps.powerups[j] = 0;
 			}
 
-			SelectSpawnPoint(ent->client->ps.origin, origin, angles, qfalse);
+			SelectSpawnPoint(client->ps.origin, origin, angles, qfalse);
 			TeleportPlayer(ent, origin, angles);
 			break;
 
 		case EV_USE_ITEM2: // medkit
-			ent->health = ent->client->ps.stats[STAT_MAX_HEALTH] + 25;
+			ent->health = client->ps.stats[STAT_MAX_HEALTH] + 25;
 
 			break;
 
 		case EV_USE_ITEM3:																		  // HI_FLOATER
-			if (ent->client->ps.velocity[2] < 512.0f)											  //<256
-				ent->client->ps.velocity[2] += 900.0f * (1.0f / (float)(G_GetCvarInt("sv_fps"))); // noch zu testen
+			if (client->ps.velocity[2] < 512.0f)											  //<256
+				client->ps.velocity[2] += 900.0f * (1.0f / (float)(G_GetCvarInt("sv_fps"))); // noch zu testen
 
 			break;
 
@@ -565,7 +565,7 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 		{
 			vec3_t forward, right, up, muzzle;
 
-			AngleVectors(ent->client->ps.viewangles, forward, right, up);
+			AngleVectors(client->ps.viewangles, forward, right, up);
 
 			CalcMuzzlePoint(ent, forward, right, up, muzzle);
 			fire_killerducks(ent, muzzle, forward);
@@ -599,9 +599,9 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 					if (boomies_createByPlayer(ent, item->pickup_name)) {
 						client->ps.stats[STAT_HOLDABLEVAR]--;
 						if (client->ps.stats[STAT_HOLDABLEVAR] <= 0) {
-							ent->client->ps.pm_flags |= PMF_USE_ITEM_HELD;
-							ent->client->ps.stats[STAT_HOLDABLEVAR] = 0;
-							ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+							client->ps.pm_flags |= PMF_USE_ITEM_HELD;
+							client->ps.stats[STAT_HOLDABLEVAR] = 0;
+							client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 						}
 					}
 				}
