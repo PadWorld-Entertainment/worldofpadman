@@ -845,10 +845,10 @@ static void CG_RegisterSounds(void) {
 	cgs.media.regenSound = trap_S_RegisterSound("sound/items/revival/heartbeat", qfalse);
 	cgs.media.n_healthSound = trap_S_RegisterSound("sound/items/powerup/pickup", qfalse);
 
-	cgs.media.station_start = trap_S_RegisterSound("sounds/healthstation/station_start", qfalse);
-	cgs.media.station_loop = trap_S_RegisterSound("sounds/healthstation/station_loop", qfalse);
-	cgs.media.station_end = trap_S_RegisterSound("sounds/healthstation/station_end", qfalse);
-	cgs.media.station_empty = trap_S_RegisterSound("sounds/healthstation/station_empty", qfalse);
+	cgs.media.station_start = trap_S_RegisterSound("sound/healthstation/station_start", qfalse);
+	cgs.media.station_loop = trap_S_RegisterSound("sound/healthstation/station_loop", qfalse);
+	cgs.media.station_end = trap_S_RegisterSound("sound/healthstation/station_end", qfalse);
+	cgs.media.station_empty = trap_S_RegisterSound("sound/healthstation/station_empty", qfalse);
 
 	cgs.media.speedyTaunt = trap_S_RegisterSound("sound/items/speedy/honk", qfalse);
 }

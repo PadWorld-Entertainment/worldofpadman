@@ -1,9 +1,3 @@
-The following sounds are not used
-
-	healthstation/
-		station_still
-
-
 menu/mouse_over is silence
 world/plats/end and start are silence
 weapons/nipper and punchy should never be needed. Spraypistol uses pickup-sound

@@ -67,7 +67,7 @@ static void Think_ReloadStation(gentity_t *ent) {
 		ent->s.angles2[2] = 1.0f;
 
 		te = G_TempEntity(ent->s.pos.trBase, EV_GENERAL_SOUND);
-		te->s.eventParm = G_SoundIndex("sounds/healthstation/station_reloaded");
+		te->s.eventParm = G_SoundIndex("sound/healthstation/station_reloaded");
 		te->r.svFlags |= SVF_BROADCAST;
 
 		ent->pos2[0] = 0.0f;
@@ -96,7 +96,7 @@ static void Touch_ReloadStation(gentity_t *ent, gentity_t *other, trace_t *trace
 
 		if (ent->pos1[0] + 2000 < level.time) {
 			te = G_TempEntity(ent->s.pos.trBase, EV_GENERAL_SOUND);
-			te->s.eventParm = G_SoundIndex("sounds/healthstation/full_energy");
+			te->s.eventParm = G_SoundIndex("sound/healthstation/full_energy");
 			te->r.svFlags |= SVF_BROADCAST;
 			ent->pos1[0] = (float)level.time;
 		}
@@ -180,8 +180,8 @@ void SP_station_health(gentity_t *ent) {
 	ent->count = count;
 
 	// cache sounds
-	G_SoundIndex("sounds/healthstation/full_energy");
-	G_SoundIndex("sounds/healthstation/station_reloaded");
+	G_SoundIndex("sound/healthstation/full_energy");
+	G_SoundIndex("sound/healthstation/station_reloaded");
 
 	ent->s.apos.trDuration = ent->health;
 	ent->s.angles2[2] = ((float)ent->health / ent->damage);
