@@ -623,19 +623,17 @@ void BotTestSolid(vec3_t origin);
 SendPendingPredictableEvents
 ==============
 */
-void SendPendingPredictableEvents(playerState_t *ps) {
-	gentity_t *t;
-	int event, seq;
-	int extEvent, number;
-
+static void SendPendingPredictableEvents(playerState_t *ps) {
 	// if there are still events pending
 	if (ps->entityEventSequence < ps->eventSequence) {
+		gentity_t *t;
+		int number;
 		// create a temporary entity for this event which is sent to everyone
 		// except the client who generated the event
-		seq = ps->entityEventSequence & (MAX_PS_EVENTS - 1);
-		event = ps->events[seq] | ((ps->entityEventSequence & 3) << 8);
+		const int seq = ps->entityEventSequence & (MAX_PS_EVENTS - 1);
+		const int event = ps->events[seq] | ((ps->entityEventSequence & 3) << 8);
 		// set external event to zero before calling BG_PlayerStateToEntityState
-		extEvent = ps->externalEvent;
+		const int extEvent = ps->externalEvent;
 		ps->externalEvent = 0;
 		// create temporary entity for event
 		t = G_TempEntity(ps->origin, event);
