@@ -2578,7 +2578,7 @@ static void CG_DrawSprayYourColor(void) {
 		tmpi = cg.snap->ps.stats[STAT_SPRAYROOMSECS];
 
 		if (lastsprayroomtime != tmpi) {
-			if ((tmpi > 0) && (tmpi <= 10)) {
+			if ((tmpi > 0) && (tmpi <= ARRAY_LEN(cgs.media.countSprayRoomSound))) {
 				trap_S_StartLocalSound(cgs.media.countSprayRoomSound[(tmpi - 1)], CHAN_ANNOUNCER);
 			} else if (tmpi == 12) {
 				trap_S_StartLocalSound(cgs.media.tenSecondsToLeaveSound, CHAN_ANNOUNCER);
@@ -2587,7 +2587,7 @@ static void CG_DrawSprayYourColor(void) {
 			lastsprayroomtime = tmpi;
 		}
 
-		if ((tmpi > 0) && (tmpi <= 10)) {
+		if ((tmpi > 0) && (tmpi <= ARRAY_LEN(cgs.media.countSprayRoomSound))) {
 			vec4_t tmpcolor = {1.0f, 0.0f, 0.0f, 1.0f};
 
 			tmpcolor[1] = tmpcolor[2] = (float)(0.25 + (0.25 * sin(cg.time * 0.02)));
