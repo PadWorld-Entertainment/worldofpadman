@@ -912,7 +912,7 @@ void UI_KeyEvent(int key, int down) {
 	else
 		s = Menu_DefaultKey(uis.activemenu, key);
 
-	if ((s > 0) && (s != menu_null_sound))
+	if ((s > 0) && (s != menuNullSound))
 		trap_S_StartLocalSound(s, CHAN_LOCAL_SOUND);
 }
 
@@ -983,7 +983,7 @@ void UI_MouseEvent(int dx, int dy) {
 				((menucommon_s *)(uis.activemenu->items[uis.activemenu->cursor_prev]))->flags &= ~QMF_HASMOUSEFOCUS;
 
 			if (!(((menucommon_s *)(uis.activemenu->items[uis.activemenu->cursor]))->flags & QMF_SILENT)) {
-				trap_S_StartLocalSound(menu_move_sound, CHAN_LOCAL_SOUND);
+				trap_S_StartLocalSound(menuMoveSound, CHAN_LOCAL_SOUND);
 			}
 		}
 

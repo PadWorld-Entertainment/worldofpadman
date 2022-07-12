@@ -316,12 +316,11 @@ extern sfxHandle_t Menu_DefaultKey(menuframework_s *s, int key);
 extern sfxHandle_t ScrollList_Key(menulist_s *l, int key);
 extern void ParseMenuListItems(char *input, menulist_s *output, int maxItems, char separator, const char *selection, const char *empty);
 
-extern sfxHandle_t menu_move_sound;
-extern sfxHandle_t menu_switch_sound;
-extern sfxHandle_t menu_click_sound;
-
-extern sfxHandle_t menu_buzz_sound;
-extern sfxHandle_t menu_null_sound;
+extern sfxHandle_t menuMoveSound;
+extern sfxHandle_t menuSwitchSound;
+extern sfxHandle_t menuClickSound;
+extern sfxHandle_t menuBuzzSound;
+extern sfxHandle_t menuNullSound;
 extern sfxHandle_t weaponChangeSound;
 extern const vec4_t menu_text_color;
 extern const vec4_t menu_grayed_color;

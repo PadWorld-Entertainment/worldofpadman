@@ -1343,14 +1343,14 @@ UI_ArenaServers_MenuKey
 static sfxHandle_t UI_ArenaServers_MenuKey(int key) {
 	if (key == K_SPACE && g_arenaservers.refreshservers) {
 		UI_ArenaServers_StopRefresh();
-		return menu_move_sound;
+		return menuMoveSound;
 	}
 
 	if ((key == K_DEL || key == K_KP_DEL) && (g_servertype == UIAS_FAVORITES) &&
 		(Menu_ItemAtCursor(&g_arenaservers.menu) == &g_arenaservers.list)) {
 		UI_ArenaServers_Remove();
 		UI_ArenaServers_UpdateMenu();
-		return menu_move_sound;
+		return menuMoveSound;
 	}
 
 	if (key == K_MOUSE2 || key == K_ESCAPE) {

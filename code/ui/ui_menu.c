@@ -151,7 +151,7 @@ void MainMenu_Cache(void) {
 sfxHandle_t ErrorMessage_Key(int key) {
 	trap_Cvar_Set("com_errorMessage", "");
 	UI_MainMenu();
-	return (menu_null_sound);
+	return (menuNullSound);
 }
 
 /*

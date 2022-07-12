@@ -137,7 +137,7 @@ static void UI_BigCreditsAction(void *ptr, int event) {
 	s_bigcredits.bgpic.generic.name = creditbgs[s_bigcredits.currentpage];
 	s_bigcredits.bgpic.shader = 0;
 
-	trap_S_StartLocalSound(menu_switch_sound, CHAN_LOCAL_SOUND);
+	trap_S_StartLocalSound(menuSwitchSound, CHAN_LOCAL_SOUND);
 }
 
 void UI_InitBigCredits(void) {
@@ -215,7 +215,7 @@ static void UI_SecretAction(void *ptr, int event) {
 
 	s_secretmenu.bgpic.shader = 0;
 
-	trap_S_StartLocalSound(menu_switch_sound, CHAN_LOCAL_SOUND);
+	trap_S_StartLocalSound(menuSwitchSound, CHAN_LOCAL_SOUND);
 }
 
 static void Secret_MenuDraw(void) {

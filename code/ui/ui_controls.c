@@ -1030,7 +1030,7 @@ static sfxHandle_t Controls_MenuKey(int key) {
 		case K_ESCAPE:
 			s_controls.waitingforkey = qfalse;
 			Controls_Update();
-			return menu_null_sound;
+			return menuNullSound;
 
 		case '`':
 			goto ignorekey;
@@ -1092,7 +1092,7 @@ static sfxHandle_t Controls_MenuKey(int key) {
 
 	if (found) {
 		Controls_Update();
-		return menu_null_sound;
+		return menuNullSound;
 	}
 
 ignorekey:

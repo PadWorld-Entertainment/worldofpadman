@@ -21,7 +21,7 @@ typedef struct {
 static loadedlogo_t loadedlogos_array[MAX_LOADEDLOGOS];
 static int loadedlogos;
 
-static sfxHandle_t menu_click_sound;
+static sfxHandle_t menuClickSound;
 
 // drawing-stuff
 #define MAX_LOGO_POLYS 256 // like marks
@@ -227,7 +227,7 @@ void Init_SprayLogoSys(void) {
 	Load_Logos();
 	Init_LogoPolyList();
 
-	menu_click_sound = trap_S_RegisterSound("sounds/menu/mouse_click", qfalse);
+	menuClickSound = trap_S_RegisterSound("sound/feedback/menu/click", qfalse);
 }
 
 /*
@@ -669,21 +669,21 @@ void ActiveChooseLogoMenu(void) {
 
 	if (cgs.lastusedkey == K_MOUSE1 && lastklicktime + 500 < cg.millis) {
 		if (CursorAtLogo != -1) {
-			trap_S_StartLocalSound(menu_click_sound, CHAN_LOCAL_SOUND);
+			trap_S_StartLocalSound(menuClickSound, CHAN_LOCAL_SOUND);
 
 			trap_Cvar_Set("syc_logo", loadedlogos_array[CursorAtLogo].name);
 			trap_SendClientCommand(va("selectlogo \"%s\"\n", loadedlogos_array[CursorAtLogo].name));
 			trap_Key_SetCatcher(catcher & ~KEYCATCH_CGAME);
 			cg.wantSelectLogo = qfalse;
 		} else if (mouseOverColor != -1) {
-			trap_S_StartLocalSound(menu_click_sound, CHAN_LOCAL_SOUND);
+			trap_S_StartLocalSound(menuClickSound, CHAN_LOCAL_SOUND);
 
 			trap_Cvar_Set("syc_color", va("%d", mouseOverColor));
 		} else {
 			// right arrow
 			if (cgs.cursorX > 270 && cgs.cursorX < 300 && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 20)) {
 				if (activepage > 0) {
-					trap_S_StartLocalSound(menu_click_sound, CHAN_LOCAL_SOUND);
+					trap_S_StartLocalSound(menuClickSound, CHAN_LOCAL_SOUND);
 
 					--activepage;
 				}
@@ -691,7 +691,7 @@ void ActiveChooseLogoMenu(void) {
 			// left arrow
 			else if (cgs.cursorX > 340 && cgs.cursorX < 370 && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 20)) {
 				if (activepage < (numPages - 1)) {
-					trap_S_StartLocalSound(menu_click_sound, CHAN_LOCAL_SOUND);
+					trap_S_StartLocalSound(menuClickSound, CHAN_LOCAL_SOUND);
 
 					++activepage;
 				}

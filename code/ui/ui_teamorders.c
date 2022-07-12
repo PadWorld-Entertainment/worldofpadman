@@ -149,10 +149,10 @@ sfxHandle_t UI_TeamOrdersMenu_Key(int key) {
 
 			if (l->generic.callback) {
 				l->generic.callback(l, QM_ACTIVATED);
-				return menu_move_sound;
+				return menuMoveSound;
 			}
 		}
-		return menu_null_sound;
+		return menuNullSound;
 
 	case K_KP_UPARROW:
 	case K_UPARROW:
@@ -163,7 +163,7 @@ sfxHandle_t UI_TeamOrdersMenu_Key(int key) {
 		} else {
 			l->curvalue--;
 		}
-		return menu_move_sound;
+		return menuMoveSound;
 
 	case K_KP_DOWNARROW:
 	case K_DOWNARROW:
@@ -175,7 +175,7 @@ sfxHandle_t UI_TeamOrdersMenu_Key(int key) {
 		} else {
 			l->curvalue++;
 		}
-		return menu_move_sound;
+		return menuMoveSound;
 	}
 
 	return Menu_DefaultKey(&teamOrdersMenuInfo.menu, key);

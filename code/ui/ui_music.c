@@ -488,7 +488,7 @@ static void MusicMenu_Draw(void) {
 
 		if ((uis.realtime - musicMenu.switchTime) > 1000) {
 			if (MUSICSWITCH_OUT == musicMenu.switchState) {
-				trap_S_StartLocalSound(menu_switch_sound, CHAN_LOCAL_SOUND);
+				trap_S_StartLocalSound(menuSwitchSound, CHAN_LOCAL_SOUND);
 				musicMenu.switchState = MUSICSWITCH_IN;
 				musicMenu.switchTime = uis.realtime;
 

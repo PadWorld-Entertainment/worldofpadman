@@ -27,12 +27,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **********************************************************************/
 #include "ui_local.h"
 
-sfxHandle_t menu_move_sound;
-sfxHandle_t menu_switch_sound;
-sfxHandle_t menu_click_sound;
-
-sfxHandle_t menu_buzz_sound;
-sfxHandle_t menu_null_sound;
+sfxHandle_t menuMoveSound;
+sfxHandle_t menuSwitchSound;
+sfxHandle_t menuClickSound;
+sfxHandle_t menuBuzzSound;
+sfxHandle_t menuNullSound;
 sfxHandle_t weaponChangeSound;
 
 static qhandle_t sliderBar;
@@ -452,7 +451,7 @@ static sfxHandle_t RadioButton_Key(menuradiobutton_s *rb, int key) {
 		if (rb->generic.callback)
 			rb->generic.callback(rb, QM_ACTIVATED);
 
-		return (menu_move_sound);
+		return (menuMoveSound);
 	}
 
 	// key not handled
@@ -559,7 +558,7 @@ static sfxHandle_t Slider_Key(menuslider_s *s, int key) {
 		else if (s->curvalue > s->maxvalue)
 			s->curvalue = s->maxvalue;
 		if (s->curvalue != oldvalue)
-			sound = menu_move_sound;
+			sound = menuMoveSound;
 		else
 			sound = 0;
 	} break;
@@ -568,18 +567,18 @@ static sfxHandle_t Slider_Key(menuslider_s *s, int key) {
 	case K_LEFTARROW:
 		if (s->curvalue > s->minvalue) {
 			s->curvalue--;
-			sound = menu_move_sound;
+			sound = menuMoveSound;
 		} else
-			sound = menu_buzz_sound;
+			sound = menuBuzzSound;
 		break;
 
 	case K_KP_RIGHTARROW:
 	case K_RIGHTARROW:
 		if (s->curvalue < s->maxvalue) {
 			s->curvalue++;
-			sound = menu_move_sound;
+			sound = menuMoveSound;
 		} else
-			sound = menu_buzz_sound;
+			sound = menuBuzzSound;
 		break;
 
 	default:
@@ -739,7 +738,7 @@ static sfxHandle_t SpinControl_Key(menulist_s *s, int key) {
 			s->curvalue++;
 			if (s->curvalue >= s->numitems)
 				s->curvalue = 0;
-			sound = menu_click_sound;
+			sound = menuClickSound;
 		} else {
 			uis.dropdownlist = s;
 			if (s->generic.right > 640)
@@ -756,7 +755,7 @@ static sfxHandle_t SpinControl_Key(menulist_s *s, int key) {
 
 			uis.dropdownxywh[2] = s->dropdown_len; // s->generic.right-s->generic.x-SMALLCHAR_WIDTH;
 
-			return menu_click_sound; // return damit kein callback aufgerufen wird
+			return menuClickSound; // return damit kein callback aufgerufen wird
 		}
 		break;
 
@@ -765,7 +764,7 @@ static sfxHandle_t SpinControl_Key(menulist_s *s, int key) {
 		s->curvalue--;
 		if (s->curvalue < 0)
 			s->curvalue = s->numitems - 1;
-		sound = menu_move_sound;
+		sound = menuMoveSound;
 		break;
 	}
 
@@ -928,13 +927,13 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 
 					if (l->oldvalue != l->curvalue && l->generic.callback) {
 						l->generic.callback(l, QM_GOTFOCUS);
-						return (menu_move_sound);
+						return (menuMoveSound);
 					}
 				}
 			}
 
 			// absorbed, silent sound effect
-			return (menu_null_sound);
+			return (menuNullSound);
 		}
 		break;
 
@@ -946,9 +945,9 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 
 		if (l->oldvalue != l->curvalue && l->generic.callback) {
 			l->generic.callback(l, QM_GOTFOCUS);
-			return (menu_move_sound);
+			return (menuMoveSound);
 		}
-		return (menu_buzz_sound);
+		return (menuBuzzSound);
 
 	case K_KP_END:
 	case K_END:
@@ -965,14 +964,14 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 
 		if (l->oldvalue != l->curvalue && l->generic.callback) {
 			l->generic.callback(l, QM_GOTFOCUS);
-			return (menu_move_sound);
+			return (menuMoveSound);
 		}
-		return (menu_buzz_sound);
+		return (menuBuzzSound);
 
 	case K_PGUP:
 	case K_KP_PGUP:
 		if (l->columns > 1) {
-			return menu_null_sound;
+			return menuNullSound;
 		}
 
 		if (l->curvalue > 0) {
@@ -987,14 +986,14 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 			if (l->generic.callback)
 				l->generic.callback(l, QM_GOTFOCUS);
 
-			return (menu_move_sound);
+			return (menuMoveSound);
 		}
-		return (menu_buzz_sound);
+		return (menuBuzzSound);
 
 	case K_PGDN:
 	case K_KP_PGDN:
 		if (l->columns > 1) {
-			return menu_null_sound;
+			return menuNullSound;
 		}
 
 		if (l->curvalue < l->numitems - 1) {
@@ -1009,13 +1008,13 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 			if (l->generic.callback)
 				l->generic.callback(l, QM_GOTFOCUS);
 
-			return (menu_move_sound);
+			return (menuMoveSound);
 		}
-		return (menu_buzz_sound);
+		return (menuBuzzSound);
 
 	case K_MWHEELUP:
 		if (l->columns > 1) {
-			return menu_null_sound;
+			return menuNullSound;
 		}
 
 		if (l->top > 0) {
@@ -1030,13 +1029,13 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 				l->generic.callback(l, QM_GOTFOCUS);
 
 			// make scrolling silent
-			return (menu_null_sound);
+			return (menuNullSound);
 		}
-		return (menu_buzz_sound);
+		return (menuBuzzSound);
 
 	case K_MWHEELDOWN:
 		if (l->columns > 1) {
-			return menu_null_sound;
+			return menuNullSound;
 		}
 
 		if (l->top < l->numitems - l->height) {
@@ -1051,14 +1050,14 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 				l->generic.callback(l, QM_GOTFOCUS);
 
 			// make scrolling silent
-			return (menu_null_sound);
+			return (menuNullSound);
 		}
-		return (menu_buzz_sound);
+		return (menuBuzzSound);
 
 	case K_KP_UPARROW:
 	case K_UPARROW:
 		if (l->curvalue == 0) {
-			return menu_buzz_sound;
+			return menuBuzzSound;
 		}
 
 		l->oldvalue = l->curvalue;
@@ -1082,12 +1081,12 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 			l->generic.callback(l, QM_GOTFOCUS);
 		}
 
-		return (menu_move_sound);
+		return (menuMoveSound);
 
 	case K_KP_DOWNARROW:
 	case K_DOWNARROW:
 		if (l->curvalue == l->numitems - 1) {
-			return menu_buzz_sound;
+			return menuBuzzSound;
 		}
 
 		l->oldvalue = l->curvalue;
@@ -1108,16 +1107,16 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 			l->generic.callback(l, QM_GOTFOCUS);
 		}
 
-		return menu_move_sound;
+		return menuMoveSound;
 
 	case K_KP_LEFTARROW:
 	case K_LEFTARROW:
 		if (l->columns == 1) {
-			return menu_null_sound;
+			return menuNullSound;
 		}
 
 		if (l->curvalue < l->height) {
-			return menu_buzz_sound;
+			return menuBuzzSound;
 		}
 
 		l->oldvalue = l->curvalue;
@@ -1131,18 +1130,18 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 			l->generic.callback(l, QM_GOTFOCUS);
 		}
 
-		return menu_move_sound;
+		return menuMoveSound;
 
 	case K_KP_RIGHTARROW:
 	case K_RIGHTARROW:
 		if (l->columns == 1) {
-			return menu_null_sound;
+			return menuNullSound;
 		}
 
 		c = l->curvalue + l->height;
 
 		if (c >= l->numitems) {
-			return menu_buzz_sound;
+			return menuBuzzSound;
 		}
 
 		l->oldvalue = l->curvalue;
@@ -1156,7 +1155,7 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 			l->generic.callback(l, QM_GOTFOCUS);
 		}
 
-		return menu_move_sound;
+		return menuMoveSound;
 	}
 
 	// cycle look for ascii key inside list items
@@ -1191,14 +1190,14 @@ sfxHandle_t ScrollList_Key(menulist_s *l, int key) {
 				l->curvalue = j;
 				if (l->generic.callback)
 					l->generic.callback(l, QM_GOTFOCUS);
-				return (menu_move_sound);
+				return (menuMoveSound);
 			}
 
-			return (menu_buzz_sound);
+			return (menuBuzzSound);
 		}
 	}
 
-	return (menu_buzz_sound);
+	return (menuBuzzSound);
 }
 
 /*
@@ -1729,7 +1728,7 @@ sfxHandle_t Menu_ActivateItem(menuframework_s *s, menucommon_s *item) {
 	if (item->callback) {
 		item->callback(item, QM_ACTIVATED);
 		if (!(item->flags & QMF_SILENT)) {
-			return menu_click_sound;
+			return menuClickSound;
 		}
 	}
 
@@ -1774,7 +1773,7 @@ sfxHandle_t Menu_DefaultKey(menuframework_s *m, int key) {
 	case K_MOUSE2:
 	case K_ESCAPE:
 		UI_PopMenu();
-		return menu_null_sound;
+		return menuNullSound;
 	}
 
 	if (!m || !m->nitems)
@@ -1831,7 +1830,7 @@ sfxHandle_t Menu_DefaultKey(menuframework_s *m, int key) {
 		Menu_AdjustCursor(m, -1);
 		if (cursor_prev != m->cursor) {
 			Menu_CursorMoved(m);
-			sound = menu_move_sound;
+			sound = menuMoveSound;
 		}
 		break;
 
@@ -1844,7 +1843,7 @@ sfxHandle_t Menu_DefaultKey(menuframework_s *m, int key) {
 		Menu_AdjustCursor(m, 1);
 		if (cursor_prev != m->cursor) {
 			Menu_CursorMoved(m);
-			sound = menu_move_sound;
+			sound = menuMoveSound;
 		}
 		break;
 
@@ -1919,14 +1918,14 @@ void Menu_Cache(void) {
 	uis.selectbotsbg = trap_R_RegisterShaderNoMip("menu/bg/selectbots");
 	uis.ingamebg = trap_R_RegisterShaderNoMip("menu/bg/ingame");
 
-	menu_switch_sound = trap_S_RegisterSound("sounds/menu/menu_switch", qfalse);
-	menu_click_sound = trap_S_RegisterSound("sounds/menu/mouse_click", qfalse);
-	menu_move_sound = trap_S_RegisterSound("sounds/menu/mouse_over", qfalse);
-	menu_buzz_sound = trap_S_RegisterSound("sounds/menu/menu_error", qfalse);
+	menuSwitchSound = trap_S_RegisterSound("sound/feedback/menu/switch", qfalse);
+	menuClickSound = trap_S_RegisterSound("sound/feedback/menu/click", qfalse);
+	menuMoveSound = trap_S_RegisterSound("sound/feedback/menu/move", qfalse);
+	menuBuzzSound = trap_S_RegisterSound("sounds/feedback/menu/buzz", qfalse);
 	weaponChangeSound = trap_S_RegisterSound("sounds/weapons/change", qfalse);
 
 	// need a nonzero sound, make an empty sound for this
-	menu_null_sound = -1;
+	menuNullSound = -1;
 
 	sliderBar = trap_R_RegisterShaderNoMip("menu/art/slider2");
 	sliderButton_0 = trap_R_RegisterShaderNoMip("menu/art/sliderbutt_0");
