@@ -470,11 +470,11 @@ static void CG_MapRestart(void) {
 
 	Init_SpriteParticles();
 
-	// make sure the "3 frags left" warnings play again
+	// make sure the warnings play again
 	cg.fraglimitWarnings = 0;
-
 	cg.timelimitWarnings = 0;
-
+	cg.lifelimitWarnings = 0;
+	
 	cg.rewardTime = 0;
 	cg.rewardStack = 0;
 	cg.intermissionStarted = qfalse;

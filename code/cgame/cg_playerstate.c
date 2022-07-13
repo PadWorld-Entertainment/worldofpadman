@@ -257,6 +257,7 @@ CG_CheckLocalSounds
 */
 static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 	int highScore;
+	int livesLeft;
 	qboolean reward = qfalse;
 	sfxHandle_t sfx;
 
@@ -391,13 +392,13 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 		if (cgs.gametype == GT_SPRAYFFA) {
 			if (!(cg.fraglimitWarnings & 4) && highScore + 5 >= cgs.fraglimit) {
 				cg.fraglimitWarnings |= 1 | 2 | 4;
-				CG_AddBufferedSound(cgs.media.oneLogoLeft);
+				CG_AddBufferedSound(cgs.media.oneLogoSound);
 			} else if (cgs.fraglimit > 2 && !(cg.fraglimitWarnings & 2) && highScore + 10 >= cgs.fraglimit) {
 				cg.fraglimitWarnings |= 1 | 2;
-				CG_AddBufferedSound(cgs.media.twoLogosLeft);
+				CG_AddBufferedSound(cgs.media.twoLogosSound);
 			} else if (cgs.fraglimit > 3 && !(cg.fraglimitWarnings & 1) && highScore + 15 >= cgs.fraglimit) {
 				cg.fraglimitWarnings |= 1;
-				CG_AddBufferedSound(cgs.media.threeLogosLeft);
+				CG_AddBufferedSound(cgs.media.threeLogosSound);
 			}
 			return;
 		}
@@ -412,12 +413,28 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 			CG_AddBufferedSound(cgs.media.oneFragSound);
 		} else if (cgs.fraglimit > 2 && !(cg.fraglimitWarnings & 2) && highScore == (cgs.fraglimit - 2)) {
 			cg.fraglimitWarnings |= 1 | 2;
-			CG_AddBufferedSound(cgs.media.twoFragSound);
+			CG_AddBufferedSound(cgs.media.twoFragsSound);
 		} else if (cgs.fraglimit > 3 && !(cg.fraglimitWarnings & 1) && highScore == (cgs.fraglimit - 3)) {
 			cg.fraglimitWarnings |= 1;
-			CG_AddBufferedSound(cgs.media.threeFragSound);
+			CG_AddBufferedSound(cgs.media.threeFragsSound);
 		}
 	}
+
+	//lifelimit warnings
+	if (cgs.lpsStartLives > 0 && (cgs.gametype == GT_LPS) && !(cgs.lpsflags & LPSF_PPOINTLIMIT)) {
+		livesLeft = (cg.snap->ps.stats[STAT_LIVESLEFT]);
+		if (!(cg.lifelimitWarnings & 4) && livesLeft == 1) {
+			cg.lifelimitWarnings |= 1 | 2 | 4;
+			CG_AddBufferedSound(cgs.media.oneLifeSound);
+		} else if (cgs.lpsStartLives > 2 && !(cg.lifelimitWarnings & 2) && livesLeft == 2) {
+			cg.lifelimitWarnings |= 1 | 2;
+			CG_AddBufferedSound(cgs.media.twoLivesSound);
+		} else if (cgs.lpsStartLives > 3 && !(cg.lifelimitWarnings & 1) && livesLeft == 3) {
+			cg.lifelimitWarnings |= 1;
+			CG_AddBufferedSound(cgs.media.threeLivesSound);
+		}
+	}
+
 }
 
 /*

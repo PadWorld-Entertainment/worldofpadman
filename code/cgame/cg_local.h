@@ -501,7 +501,8 @@ typedef struct {
 
 	int timelimitWarnings; // 5 min, 1 min, overtime
 	int fraglimitWarnings;
-
+	int lifelimitWarnings;
+	
 	qboolean wantSelectLogo;
 	int handleInputMillis;
 
@@ -1032,10 +1033,6 @@ typedef struct {
 	sfxHandle_t balloonDestroyedSound;
 	//:HERBY:ee
 
-	sfxHandle_t oneLogoLeft;
-	sfxHandle_t twoLogosLeft;
-	sfxHandle_t threeLogosLeft;
-
 	sfxHandle_t wrongSprayWallSound[4];
 	sfxHandle_t loseFFASound;
 	sfxHandle_t youWinSound[2];
@@ -1043,9 +1040,15 @@ typedef struct {
 
 	sfxHandle_t suddenDeathSound;
 
-	sfxHandle_t threeFragSound;
-	sfxHandle_t twoFragSound;
+	sfxHandle_t threeFragsSound;
+	sfxHandle_t twoFragsSound;
 	sfxHandle_t oneFragSound;
+	sfxHandle_t threeLogosSound;
+	sfxHandle_t twoLogosSound;
+	sfxHandle_t oneLogoSound;
+	sfxHandle_t threeLivesSound;
+	sfxHandle_t twoLivesSound;
+	sfxHandle_t oneLifeSound;
 
 	sfxHandle_t hitSound;
 	sfxHandle_t hitSoundHighArmor;

@@ -661,9 +661,9 @@ static void CG_RegisterSounds(void) {
 	}
 
 	if (cgs.gametype == GT_SPRAYFFA || cg_buildScript.integer) {
-		cgs.media.oneLogoLeft = trap_S_RegisterSound("sound/feedback/countdown/1_logo", qtrue);
-		cgs.media.twoLogosLeft = trap_S_RegisterSound("sound/feedback/countdown/2_logos", qtrue);
-		cgs.media.threeLogosLeft = trap_S_RegisterSound("sound/feedback/countdown/3_logos", qtrue);
+		cgs.media.oneLogoSound = trap_S_RegisterSound("sound/feedback/countdown/1_logo", qtrue);
+		cgs.media.twoLogosSound = trap_S_RegisterSound("sound/feedback/countdown/2_logos", qtrue);
+		cgs.media.threeLogosSound = trap_S_RegisterSound("sound/feedback/countdown/3_logos", qtrue);
 	}
 
 	if (cgs.gametype < GT_TEAM || cg_buildScript.integer) {
@@ -676,12 +676,15 @@ static void CG_RegisterSounds(void) {
 	if (cgs.gametype < GT_CTF || cg_buildScript.integer) {
 		if (cgs.gametype != GT_SPRAYFFA || cg_buildScript.integer) {
 			cgs.media.oneFragSound = trap_S_RegisterSound("sound/feedback/countdown/1_point", qtrue);
-			cgs.media.twoFragSound = trap_S_RegisterSound("sound/feedback/countdown/2_points", qtrue);
-			cgs.media.threeFragSound = trap_S_RegisterSound("sound/feedback/countdown/3_points", qtrue);
+			cgs.media.twoFragsSound = trap_S_RegisterSound("sound/feedback/countdown/2_points", qtrue);
+			cgs.media.threeFragsSound = trap_S_RegisterSound("sound/feedback/countdown/3_points", qtrue);
 		}
 	}
 
 	if (cgs.gametype == GT_LPS || cg_buildScript.integer) {
+		cgs.media.oneLifeSound = trap_S_RegisterSound("sound/feedback/countdown/1_life", qtrue);
+		cgs.media.twoLivesSound = trap_S_RegisterSound("sound/feedback/countdown/2_lives", qtrue);
+		cgs.media.threeLivesSound = trap_S_RegisterSound("sound/feedback/countdown/3_lives", qtrue);
 		cgs.media.youWinSound[0] = trap_S_RegisterSound("sound/feedback/you_win", qtrue);
 		cgs.media.youWinSound[1] = trap_S_RegisterSound("sound/feedback/congratulations", qtrue);
 		cgs.media.youLoseSound[0] = trap_S_RegisterSound("sound/feedback/you_lose", qtrue);
