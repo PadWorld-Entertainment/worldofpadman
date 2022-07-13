@@ -1921,7 +1921,7 @@ void Menu_Cache(void) {
 	menuSwitchSound = trap_S_RegisterSound("sound/feedback/menu/switch", qfalse);
 	menuClickSound = trap_S_RegisterSound("sound/feedback/menu/click", qfalse);
 	menuMoveSound = trap_S_RegisterSound("sound/feedback/menu/move", qfalse);
-	menuBuzzSound = trap_S_RegisterSound("sounds/feedback/menu/buzz", qfalse);
+	menuBuzzSound = trap_S_RegisterSound("sound/feedback/menu/buzz", qfalse);
 	weaponChangeSound = trap_S_RegisterSound("sounds/weapons/change", qfalse);
 
 	// need a nonzero sound, make an empty sound for this
