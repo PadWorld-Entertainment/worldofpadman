@@ -526,7 +526,7 @@ static void move_killerducks(gentity_t *ent) {
 	//	}
 
 	if ((tr.entityNum == opfer) && (ent->s.time2 <= level.time)) {
-		G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sounds/weapons/killerducks/bite"));
+		G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sound/items/killerducks/bite"));
 		// TODO: Add dir
 		G_Damage(&g_entities[opfer], NULL, ent->parent, NULL, NULL, DAMAGE_KILLERDUCKS_BITE, 0, ent->methodOfDeath);
 		ent->s.time2 = (level.time + 1000);

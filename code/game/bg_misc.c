@@ -225,7 +225,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED weapon_spraypistol (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"weapon_spraypistol",
-	 "sounds/weapons/weapon_pickup",
+	 "sound/weapons/pickup_weapon",
 	 {"models/weapons2/spraypistol/spraypistol", 0, 0, 0},
 	 /* icon */ "icons/weapon_spraypistol_red",
 	 /* pickup */ "Spray Pistol",
@@ -242,7 +242,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_pumper (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_pumper",
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/powerups/ammo/pumper_am", 0, 0, 0},
 	 /* icon */ "icons/ammo_pumper",
 	 /* pickup */ "PUMPER AMMO",
@@ -255,7 +255,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_nipper (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_nipper",
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/powerups/ammo/nipper_am", 0, 0, 0},
 	 /* icon */ "icons/ammo_nipper",
 	 /* pickup */ "NiPPER AMMO",
@@ -268,7 +268,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_balloony (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_balloony",
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/powerups/ammo/balloony_am", 0, 0, 0},
 	 /* icon */ "icons/ammo_balloony",
 	 /* pickup */ "BALLOONY AMMO",
@@ -281,7 +281,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_bubbleg (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_bubbleg",
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/powerups/ammo/bubbleg_am", 0, 0, 0},
 	 /* icon */ "icons/ammo_bubbleg",
 	 /* pickup */ "BUBBLE.G. AMMO",
@@ -294,7 +294,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_boaster (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_boaster",
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/powerups/ammo/boaster_am", 0, 0, 0},
 	 /* icon */ "icons/ammo_boaster",
 	 /* pickup */ "BOASTER AMMO",
@@ -307,7 +307,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_betty (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_betty",
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/powerups/ammo/betty_am", 0, 0, 0},
 	 /* icon */ "icons/ammo_betty",
 	 /* pickup */ "BETTY AMMO",
@@ -320,7 +320,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_splasher (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_splasher",
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/powerups/ammo/splasher_am", 0, 0, 0},
 	 /* icon */ "icons/ammo_splasher",
 	 /* pickup */ "SPLASHER AMMO",
@@ -333,7 +333,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_imperius (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_imperius",
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/powerups/ammo/imperius_am", 0, 0, 0},
 	 /* icon */ "icons/ammo_imperius",
 	 /* pickup */ "IMPERiUS AMMO",
@@ -346,7 +346,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_killerducks (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_killerducks",
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/weapons2/killerducks/pad_killerduck_pu", 0, 0, 0},
 	 /* icon */ "icons/killerducks",
 	 /* pickup */ "KiLLERDUCKS AMMO",
@@ -363,7 +363,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_spray_r (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_spray_r",
-	 "sounds/weapons/ammo/spraypistol/cartridges",
+	 "sound/weapons/pickup_cartridge",
 	 {"models/weapons2/spraypistol/cart_red", 0, 0, 0},
 	 /* icon */ "icons/ammo_spraypistol_red",
 	 /* pickup */ "red Cartridge", // if changing this string, you will have to change some other code!!!
@@ -376,7 +376,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_spray_b (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_spray_b",
-	 "sounds/weapons/ammo/spraypistol/cartridges",
+	 "sound/weapons/pickup_cartridge",
 	 {"models/weapons2/spraypistol/cart_blue", 0, 0, 0},
 	 /* icon */ "icons/ammo_spraypistol_blue",
 	 /* pickup */ "blue Cartridge", // if changing this string, you will have to change some other code!!!
@@ -389,7 +389,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_spray_n (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_spray_n",
-	 "sounds/weapons/ammo/spraypistol/cartridges",
+	 "sound/weapons/pickup_cartridge",
 	 {"models/weapons2/spraypistol/cart_neutral", 0, 0, 0},
 	 /* icon */ "icons/ammo_spraypistol_neutral",
 	 /* pickup */ "neutral Cartridge", // if changing this string, you will have to change some other code!!!
@@ -544,7 +544,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED item_berserker (1 0 0) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"item_berserker",
-	 "sounds/weapons/punchy/berserker",
+	 "sound/items/puppetmaster",
 	 {0, //"models/powerups/instant/revival",
 	  0, //"models/powerups/instant/revival_ring",
 	  0, 0},
@@ -600,7 +600,7 @@ const gitem_t bg_itemlist[] = {
 	/*QUAKED ammo_kma97 (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 	 */
 	{"ammo_kma97", // "Kiss My Ass 97"
-	 "sounds/weapons/ammo/ammo_pickup",
+	 "sound/weapons/pickup_ammo",
 	 {"models/powerups/ammo/kma97_am", 0, 0, 0},
 	 /* icon */ "icons/icona_kma97",
 	 /* pickup */ "KMA97 AMMO",

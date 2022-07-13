@@ -630,7 +630,7 @@ static void CG_RegisterSounds(void) {
 	cgs.media.count2Sound = trap_S_RegisterSound("sound/feedback/numbers/two", qtrue);
 	cgs.media.count1Sound = trap_S_RegisterSound("sound/feedback/numbers/one", qtrue);
 	cgs.media.countFightSound = trap_S_RegisterSound("sound/feedback/make_game", qtrue);
-	cgs.media.pickupSound = trap_S_RegisterSound("sounds/weapons/weapon_pickup", qfalse);
+	cgs.media.pickupSound = trap_S_RegisterSound("sound/weapons/pickup_weapon", qfalse);
 	cgs.media.HIpickupSound = trap_S_RegisterSound("sound/items/holdable/pickup", qfalse);
 	cgs.media.ARpickupSound = trap_S_RegisterSound("sound/items/padshield/pickup", qfalse);
 
@@ -736,15 +736,15 @@ static void CG_RegisterSounds(void) {
 		}
 	}
 
-	cgs.media.selectSound = trap_S_RegisterSound("sounds/weapons/change", qfalse);
+	cgs.media.selectSound = trap_S_RegisterSound("sound/weapons/change", qfalse);
 	cgs.media.wearOffSound = trap_S_RegisterSound("sound/items/powerup/end", qfalse);
 	cgs.media.useNothingSound = trap_S_RegisterSound("sound/items/holdable/nothing", qfalse);
 
-	cgs.media.teleInSound = trap_S_RegisterSound("sounds/world/teleporter_in", qfalse);
-	cgs.media.teleOutSound = trap_S_RegisterSound("sounds/world/teleporter_out", qfalse);
+	cgs.media.teleInSound = trap_S_RegisterSound("sound/world/portals/in", qfalse);
+	cgs.media.teleOutSound = trap_S_RegisterSound("sound/world/portals/out", qfalse);
 	cgs.media.respawnSound = trap_S_RegisterSound("sound/items/respawn", qfalse);
 
-	cgs.media.noAmmoSound = trap_S_RegisterSound("sounds/weapons/noammo", qfalse);
+	cgs.media.noAmmoSound = trap_S_RegisterSound("sound/weapons/noammo", qfalse);
 
 	cgs.media.talkSound = trap_S_RegisterSound("sound/padplayer/talk", qfalse);
 	cgs.media.landSound = trap_S_RegisterSound("sound/padplayer/land", qfalse);
@@ -761,8 +761,8 @@ static void CG_RegisterSounds(void) {
 	cgs.media.watrOutSound = trap_S_RegisterSound("sound/padplayer/water_out", qfalse);
 	cgs.media.watrUnSound = trap_S_RegisterSound("sound/padplayer/water_under", qfalse);
 
-	cgs.media.jumpPadSound = trap_S_RegisterSound("sounds/world/jumppad", qfalse);
-	cgs.media.DropCartridgeSound = trap_S_RegisterSound("sounds/weapons/ammo/spraypistol/drop", qfalse);
+	cgs.media.jumpPadSound = trap_S_RegisterSound("sound/world/jumppad", qfalse);
+	cgs.media.dropItemSound = trap_S_RegisterSound("sound/items/drop", qfalse);
 	cgs.media.jumperSound = trap_S_RegisterSound("sound/items/jumper/boing", qfalse);
 
 	CG_ChangeLoadingProgress(0.4f);
@@ -834,8 +834,8 @@ static void CG_RegisterSounds(void) {
 	// FIXME: only needed with item
 	cgs.media.flightSound = trap_S_RegisterSound("sound/items/floater/flight", qfalse);
 	cgs.media.quadSound = trap_S_RegisterSound("sound/items/padpower/damage3", qfalse);
-	cgs.media.BettyExplosion = trap_S_RegisterSound("sounds/weapons/betty/explosion", qfalse);
-	cgs.media.pumperexpSound = trap_S_RegisterSound("sounds/weapons/pumper/explosion", qfalse);
+	cgs.media.BettyExplosion = trap_S_RegisterSound("sound/weapons/betty/explosion", qfalse);
+	cgs.media.pumperexpSound = trap_S_RegisterSound("sound/weapons/pumper/explosion", qfalse);
 
 	cgs.media.regenSound = trap_S_RegisterSound("sound/items/revival/heartbeat", qfalse);
 	cgs.media.n_healthSound = trap_S_RegisterSound("sound/items/powerup/pickup", qfalse);

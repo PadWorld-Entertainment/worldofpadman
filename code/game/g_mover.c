@@ -1121,8 +1121,8 @@ void SP_func_door(gentity_t *ent) {
 	vec3_t size;
 	float lip;
 
-	ent->sound1to2 = ent->sound2to1 = G_SoundIndex("sounds/world/doors/start");
-	ent->soundPos1 = ent->soundPos2 = G_SoundIndex("sounds/world/doors/end");
+	ent->sound1to2 = ent->sound2to1 = G_SoundIndex("sound/world/doors/start");
+	ent->soundPos1 = ent->soundPos2 = G_SoundIndex("sound/world/doors/end");
 
 	ent->blocked = Blocked_Door;
 
@@ -1214,8 +1214,8 @@ check either the X_AXIS or Y_AXIS box to change that.
 "notsingle" when set to 1, entity will not spawn in Single Player mode (bot play mode)
 */
 void SP_func_door_rotating(gentity_t *ent) {
-	ent->sound1to2 = ent->sound2to1 = G_SoundIndex("sounds/world/doors/start");
-	ent->soundPos1 = ent->soundPos2 = G_SoundIndex("sounds/world/doors/end");
+	ent->sound1to2 = ent->sound2to1 = G_SoundIndex("sound/world/doors/start");
+	ent->soundPos1 = ent->soundPos2 = G_SoundIndex("sound/world/doors/end");
 
 	ent->blocked = Blocked_Door;
 
@@ -1402,8 +1402,8 @@ Plats are always drawn in the extended position so they will light correctly.
 void SP_func_plat(gentity_t *ent) {
 	float lip, height;
 
-	ent->sound1to2 = ent->sound2to1 = G_SoundIndex("sounds/world/plats/start");
-	ent->soundPos1 = ent->soundPos2 = G_SoundIndex("sounds/world/plats/end");
+	ent->sound1to2 = ent->sound2to1 = G_SoundIndex("sound/world/plats/start");
+	ent->soundPos1 = ent->soundPos2 = G_SoundIndex("sound/world/plats/end");
 
 	VectorClear(ent->s.angles);
 
@@ -1486,7 +1486,7 @@ void SP_func_button(gentity_t *ent) {
 	vec3_t size;
 	float lip;
 
-	ent->sound1to2 = G_SoundIndex("sounds/world/switches/button");
+	ent->sound1to2 = G_SoundIndex("sound/world/switches/button");
 
 	if (!ent->speed) {
 		ent->speed = 40;

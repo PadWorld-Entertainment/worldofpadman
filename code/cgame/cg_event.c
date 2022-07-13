@@ -849,7 +849,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		break;
 
 	case EV_DROP_CARTRIDGE:
-		trap_S_StartSound(NULL, es->number, CHAN_AUTO, cgs.media.DropCartridgeSound);
+		trap_S_StartSound(NULL, es->number, CHAN_AUTO, cgs.media.dropItemSound);
 		break;
 
 	case EV_ITEM_POP:

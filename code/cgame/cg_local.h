@@ -1012,7 +1012,7 @@ typedef struct {
 	sfxHandle_t fallSound;
 	sfxHandle_t jumpPadSound;
 
-	sfxHandle_t DropCartridgeSound;
+	sfxHandle_t dropItemSound;
 	sfxHandle_t jumperSound;
 
 	sfxHandle_t countSprayRoomSound[10];
