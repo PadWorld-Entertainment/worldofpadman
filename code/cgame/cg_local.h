@@ -1097,13 +1097,13 @@ typedef struct {
 	sfxHandle_t takenOpponentSound;
 
 	// voc_ sounds:
-	sfxHandle_t redFlagReturnedSound;
-	sfxHandle_t blueFlagReturnedSound;
-	sfxHandle_t yourTeamTookEnemyFlagSound;
-	sfxHandle_t enemyTookYourFlagSound;
-	sfxHandle_t youHaveFlagSound;
+	sfxHandle_t redLollyReturnedSound;
+	sfxHandle_t blueLollyReturnedSound;
+	sfxHandle_t yourTeamTookEnemyLollySound;
+	sfxHandle_t enemyTookYourLollySound;
+	sfxHandle_t youHaveLollySound;
 
-	sfxHandle_t stolenlollySound;
+	sfxHandle_t stolenLollySound;
 	//	sfxHandle_t holyShitSound;
 
 	// tournament sounds

@@ -711,22 +711,18 @@ static void CG_RegisterSounds(void) {
 		cgs.media.blueScoredSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_scores", qtrue);
 
 		if (cgs.gametype == GT_CTF || cg_buildScript.integer) {
-			cgs.media.captureYourTeamSound = trap_S_RegisterSound("sounds/gametype/ctl/capture_team", qtrue);
-			cgs.media.captureOpponentSound = trap_S_RegisterSound("sounds/gametype/ctl/capture_opponent", qtrue);
-
-			cgs.media.returnYourTeamSound = trap_S_RegisterSound("sounds/gametype/ctl/return_team", qtrue);
-			cgs.media.returnOpponentSound = trap_S_RegisterSound("sounds/gametype/ctl/return_opponent", qtrue);
-
-			cgs.media.takenYourTeamSound = trap_S_RegisterSound("sounds/gametype/ctl/taken_team", qtrue);
-			cgs.media.takenOpponentSound = trap_S_RegisterSound("sounds/gametype/ctl/taken_opponent", qtrue);
-
-			cgs.media.redFlagReturnedSound = trap_S_RegisterSound("sounds/gametype/ctl/red_returned", qtrue);
-			cgs.media.blueFlagReturnedSound = trap_S_RegisterSound("sounds/gametype/ctl/blue_returned", qtrue);
-			cgs.media.enemyTookYourFlagSound = trap_S_RegisterSound("sounds/gametype/ctl/enemy_lolly", qtrue);
-			cgs.media.yourTeamTookEnemyFlagSound = trap_S_RegisterSound("sounds/gametype/ctl/team_lolly", qtrue);
-
-			cgs.media.stolenlollySound = trap_S_RegisterSound("sounds/gametype/ctl/lolly_stolen", qfalse);
-			cgs.media.youHaveFlagSound = trap_S_RegisterSound("sounds/gametype/ctl/lolly_you", qtrue);
+			cgs.media.captureYourTeamSound = trap_S_RegisterSound("sound/feedback/teamplay/lollycapture_yourteam", qtrue);
+			cgs.media.captureOpponentSound = trap_S_RegisterSound("sound/feedback/teamplay/lollycapture_opponent", qtrue);
+			cgs.media.returnYourTeamSound = trap_S_RegisterSound("sound/feedback/teamplay/lollyreturn_yourteam", qtrue);
+			cgs.media.returnOpponentSound = trap_S_RegisterSound("sound/feedback/teamplay/lollyreturn_opponent", qtrue);
+			cgs.media.takenYourTeamSound = trap_S_RegisterSound("sound/feedback/teamplay/lollytaken_yourteam", qtrue);
+			cgs.media.takenOpponentSound = trap_S_RegisterSound("sound/feedback/teamplay/lollytaken_opponent", qtrue);
+			cgs.media.redLollyReturnedSound = trap_S_RegisterSound("sound/feedback/teamplay/red_lolly_returned", qtrue);
+			cgs.media.blueLollyReturnedSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_lolly_returned", qtrue);
+			cgs.media.enemyTookYourLollySound = trap_S_RegisterSound("sound/feedback/teamplay/enemy_lolly", qtrue);
+			cgs.media.yourTeamTookEnemyLollySound = trap_S_RegisterSound("sound/feedback/teamplay/team_lolly", qtrue);
+			cgs.media.youHaveLollySound = trap_S_RegisterSound("sound/feedback/teamplay/you_lolly", qtrue);
+			cgs.media.stolenLollySound = trap_S_RegisterSound("sound/feedback/teamplay/stolen_lolly", qfalse);
 
 			cgs.media.bambamExplosionSound = trap_S_RegisterSound("sound/items/bambam/explosion", qfalse);
 			cgs.media.bambamMissileImpact = trap_S_RegisterSound("sound/items/bambam/impact", qfalse);

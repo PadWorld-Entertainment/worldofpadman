@@ -734,7 +734,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			if (item->giType == IT_POWERUP) {
 				trap_S_StartSound(NULL, es->number, CHAN_AUTO, cgs.media.n_healthSound);
 			} else if (item->giType == IT_TEAM) {
-				trap_S_StartSound(NULL, es->number, CHAN_AUTO, cgs.media.stolenlollySound);
+				trap_S_StartSound(NULL, es->number, CHAN_AUTO, cgs.media.stolenLollySound);
 			} else if (item->giType != IT_PERSISTANT_POWERUP) {
 				if (item->giType == IT_WEAPON)
 					trap_S_StartSound(NULL, es->number, CHAN_AUTO, cgs.media.pickupSound);
@@ -1014,7 +1014,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			else
 				CG_AddBufferedSound(cgs.media.returnOpponentSound);
 			// "voc_"-sound:
-			CG_AddBufferedSound(cgs.media.blueFlagReturnedSound);
+			CG_AddBufferedSound(cgs.media.blueLollyReturnedSound);
 			break;
 		case GTS_BLUE_RETURN: // CTF red flag returned, 1FCTF: neutral flag returned
 			if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE)
@@ -1022,7 +1022,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			else
 				CG_AddBufferedSound(cgs.media.returnOpponentSound);
 			// "voc_"-sound:
-			CG_AddBufferedSound(cgs.media.redFlagReturnedSound);
+			CG_AddBufferedSound(cgs.media.redLollyReturnedSound);
 			break;
 
 		case GTS_RED_TAKEN: // CTF: red team took blue flag, 1FCTF: blue team took the neutral flag
@@ -1032,11 +1032,11 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 				if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
 					CG_AddBufferedSound(cgs.media.takenOpponentSound);
 					// "voc_"-sound:
-					CG_AddBufferedSound(cgs.media.enemyTookYourFlagSound);
+					CG_AddBufferedSound(cgs.media.enemyTookYourLollySound);
 				} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
 					CG_AddBufferedSound(cgs.media.takenYourTeamSound);
 					// "voc_"-sound:
-					CG_AddBufferedSound(cgs.media.yourTeamTookEnemyFlagSound);
+					CG_AddBufferedSound(cgs.media.yourTeamTookEnemyLollySound);
 				}
 			}
 			break;
@@ -1047,11 +1047,11 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 				if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
 					CG_AddBufferedSound(cgs.media.takenOpponentSound);
 					// "voc_"-sound:
-					CG_AddBufferedSound(cgs.media.enemyTookYourFlagSound);
+					CG_AddBufferedSound(cgs.media.enemyTookYourLollySound);
 				} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
 					CG_AddBufferedSound(cgs.media.takenYourTeamSound);
 					// "voc_"-sound:
-					CG_AddBufferedSound(cgs.media.yourTeamTookEnemyFlagSound);
+					CG_AddBufferedSound(cgs.media.yourTeamTookEnemyLollySound);
 				}
 			}
 			break;
