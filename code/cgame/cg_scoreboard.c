@@ -197,7 +197,7 @@ static void CG_DrawClientScore(int y, score_t *score, float *color, float fade, 
 			// FIXME: These should be events caused by game
 			if ((cg.snap->ps.pm_type == PM_INTERMISSION) && !cg.playedIntermissionMsg) {
 				if ((cgs.gametype == GT_LPS) && (rank == 0)) {
-					trap_S_StartLocalSound(cgs.media.winLPSSounds[(int)(random() * 1.9999f)], CHAN_ANNOUNCER);
+					trap_S_StartLocalSound(cgs.media.youWinSound[(int)(random() * 1.9999f)], CHAN_ANNOUNCER);
 				} else if (((rank + 1) == cg.scoreTeamCount[TEAM_FREE]) && (cg.scoreTeamCount[TEAM_FREE] > 1)) {
 					trap_S_StartLocalSound(cgs.media.loseFFASound, CHAN_ANNOUNCER);
 				}

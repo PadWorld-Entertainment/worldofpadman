@@ -991,8 +991,8 @@ typedef struct {
 	sfxHandle_t BalloonyExplosion;
 	sfxHandle_t BettyExplosion;
 	//:HERBY:ea
-	sfxHandle_t ballonAufblasSound;
-	sfxHandle_t ballonPlatztSound;
+	sfxHandle_t balloonInflateSound;
+	sfxHandle_t balloonBurstSound;
 	//:HERBY:ee
 
 	// sounds
@@ -1021,15 +1021,15 @@ typedef struct {
 	sfxHandle_t tenSecondsToLeaveSound;
 
 	sfxHandle_t welcomeSound[3];
-	sfxHandle_t Announcer_SRfrag[2];
-	sfxHandle_t Announcer_SprayYourColor;
+	sfxHandle_t byeSprayRoomSound[2];
+	sfxHandle_t sprayYourColorSound;
 
 	//:HERBY:ea
-	sfxHandle_t Announcer_RedBalloon;
-	sfxHandle_t Announcer_BlueBalloon;
-	sfxHandle_t Announcer_BigBalloonRed;
-	sfxHandle_t Announcer_BigBalloonBlue;
-	sfxHandle_t Announcer_BalloonDestroyed;
+	sfxHandle_t redBalloonSound;
+	sfxHandle_t blueBalloonSound;
+	sfxHandle_t redBigBalloonSound;
+	sfxHandle_t blueBigBalloonSound;
+	sfxHandle_t balloonDestroyedSound;
 	//:HERBY:ee
 
 	sfxHandle_t oneLogoLeft;
@@ -1038,8 +1038,8 @@ typedef struct {
 
 	sfxHandle_t wrongSprayWallSound[4];
 	sfxHandle_t loseFFASound;
-	sfxHandle_t winLPSSounds[2];
-	sfxHandle_t YouLooseSound; // for lps round-loose
+	sfxHandle_t youWinSound[2];
+	sfxHandle_t youLoseSound[2];
 
 	sfxHandle_t suddenDeathSound;
 

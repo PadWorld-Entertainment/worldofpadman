@@ -255,9 +255,9 @@ void CG_UpdateBalloonStates(const char *str) {
 		if (team == '1' || team == '2') {
 			// announce
 			if (team == '1')
-				trap_S_StartLocalSound(cgs.media.Announcer_BigBalloonRed, CHAN_ANNOUNCER);
+				trap_S_StartLocalSound(cgs.media.redBigBalloonSound, CHAN_ANNOUNCER);
 			else if (team == '2')
-				trap_S_StartLocalSound(cgs.media.Announcer_BigBalloonBlue, CHAN_ANNOUNCER);
+				trap_S_StartLocalSound(cgs.media.blueBigBalloonSound, CHAN_ANNOUNCER);
 
 			// copy the new string
 			Q_strncpyz(cgs.balloonState, str, sizeof(cgs.balloonState));
@@ -269,13 +269,13 @@ void CG_UpdateBalloonStates(const char *str) {
 			if (str[i] != cgs.balloonState[i]) {
 				switch (str[i]) {
 				case '0':
-					CG_AddBufferedSound(cgs.media.Announcer_BalloonDestroyed);
+					CG_AddBufferedSound(cgs.media.balloonDestroyedSound);
 					break;
 				case '1':
-					CG_AddBufferedSound(cgs.media.Announcer_RedBalloon);
+					CG_AddBufferedSound(cgs.media.redBalloonSound);
 					break;
 				case '2':
-					CG_AddBufferedSound(cgs.media.Announcer_BlueBalloon);
+					CG_AddBufferedSound(cgs.media.blueBalloonSound);
 					break;
 
 				default:
@@ -653,7 +653,7 @@ static void CG_ServerCommand(void) {
 		switch (id) {
 		case CLIENT_DO_IT_SPRAYROOM_GOODBYE:
 			i = (int)(random() * 1.9999f);
-			trap_S_StartLocalSound(cgs.media.Announcer_SRfrag[i], CHAN_ANNOUNCER);
+			trap_S_StartLocalSound(cgs.media.byeSprayRoomSound[i], CHAN_ANNOUNCER);
 			break;
 
 		case CLIENT_DO_IT_SPRAYED_ON_WRONG_WALL:
@@ -662,8 +662,8 @@ static void CG_ServerCommand(void) {
 			break;
 
 		case CLIENT_DO_IT_LPS_LOST:
-			trap_S_StartLocalSound(cgs.media.YouLooseSound, CHAN_ANNOUNCER);
-			trap_S_StartLocalSound(cgs.media.YouLooseSound, CHAN_ANNOUNCER);
+			i = (int)(random() * 1.9999f);
+			trap_S_StartLocalSound(cgs.media.youLoseSound[i], CHAN_ANNOUNCER);
 			break;
 
 		// TODO: Remove!

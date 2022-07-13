@@ -629,23 +629,12 @@ static void CG_RegisterSounds(void) {
 	cgs.media.count3Sound = trap_S_RegisterSound("sound/feedback/numbers/three", qtrue);
 	cgs.media.count2Sound = trap_S_RegisterSound("sound/feedback/numbers/two", qtrue);
 	cgs.media.count1Sound = trap_S_RegisterSound("sound/feedback/numbers/one", qtrue);
-	cgs.media.countFightSound = trap_S_RegisterSound("sound/feedback/make_your_game", qtrue);
-
+	cgs.media.countFightSound = trap_S_RegisterSound("sound/feedback/make_game", qtrue);
 	cgs.media.pickupSound = trap_S_RegisterSound("sounds/weapons/weapon_pickup", qfalse);
 	cgs.media.HIpickupSound = trap_S_RegisterSound("sound/items/holdable/pickup", qfalse);
 	cgs.media.ARpickupSound = trap_S_RegisterSound("sound/items/padshield/pickup", qfalse);
 
 	if ((cgs.gametype == GT_SPRAYFFA || cgs.gametype == GT_SPRAY) || cg_buildScript.integer) {
-		cgs.media.Announcer_SRfrag[0] = trap_S_RegisterSound("sounds/gametype/syc/nice_day", qtrue);
-		cgs.media.Announcer_SRfrag[1] = trap_S_RegisterSound("sounds/gametype/syc/goodbye", qtrue);
-
-		cgs.media.Announcer_SprayYourColor = trap_S_RegisterSound("sounds/gametype/syc/syc", qtrue);
-
-		cgs.media.wrongSprayWallSound[0] = trap_S_RegisterSound("sounds/gametype/syc/colorblind", qtrue);
-		cgs.media.wrongSprayWallSound[1] = trap_S_RegisterSound("sounds/gametype/syc/omg", qtrue);
-		cgs.media.wrongSprayWallSound[2] = trap_S_RegisterSound("sounds/gametype/syc/stupid_sprayer", qtrue);
-		cgs.media.wrongSprayWallSound[3] = trap_S_RegisterSound("sounds/gametype/syc/who_is", qtrue);
-
 		cgs.media.countSprayRoomSound[0] = cgs.media.count1Sound;
 		cgs.media.countSprayRoomSound[1] = cgs.media.count2Sound;
 		cgs.media.countSprayRoomSound[2] = cgs.media.count3Sound;
@@ -656,10 +645,19 @@ static void CG_RegisterSounds(void) {
 		cgs.media.countSprayRoomSound[7] = trap_S_RegisterSound("sound/feedback/numbers/eight", qtrue);
 		cgs.media.countSprayRoomSound[8] = trap_S_RegisterSound("sound/feedback/numbers/nine", qtrue);
 		cgs.media.countSprayRoomSound[9] = trap_S_RegisterSound("sound/feedback/numbers/ten", qtrue);
-		cgs.media.tenSecondsToLeaveSound = trap_S_RegisterSound("sound/feedback/countdown/10_seconds_to_leave", qtrue);
-
+		cgs.media.tenSecondsToLeaveSound = trap_S_RegisterSound("sound/feedback/ten_seconds", qtrue);
+		cgs.media.byeSprayRoomSound[0] = trap_S_RegisterSound("sound/feedback/nice_day", qtrue);
+		cgs.media.byeSprayRoomSound[1] = trap_S_RegisterSound("sound/feedback/goodbye", qtrue);
+		cgs.media.sprayYourColorSound = trap_S_RegisterSound("sound/feedback/spray_color", qtrue);
 		cgs.media.spraygodSound = trap_S_RegisterSound("sound/feedback/awards/spraygod", qtrue);
 		cgs.media.spraykillerSound = trap_S_RegisterSound("sound/feedback/awards/spraykiller", qtrue);
+	}
+
+	if (cgs.gametype == GT_SPRAY || cg_buildScript.integer) {
+		cgs.media.wrongSprayWallSound[0] = trap_S_RegisterSound("sound/feedback/teamplay/colorblind_sprayer", qtrue);
+		cgs.media.wrongSprayWallSound[1] = trap_S_RegisterSound("sound/feedback/teamplay/omg_spray", qtrue);
+		cgs.media.wrongSprayWallSound[2] = trap_S_RegisterSound("sound/feedback/teamplay/stupid_sprayer", qtrue);
+		cgs.media.wrongSprayWallSound[3] = trap_S_RegisterSound("sound/feedback/teamplay/who_is_stupid_sprayer", qtrue);
 	}
 
 	if (cgs.gametype == GT_SPRAYFFA || cg_buildScript.integer) {
@@ -669,11 +667,10 @@ static void CG_RegisterSounds(void) {
 	}
 
 	if (cgs.gametype < GT_TEAM || cg_buildScript.integer) {
-		cgs.media.loseFFASound = trap_S_RegisterSound("sounds/gametype/dm/better_luck", qtrue);
-
-		cgs.media.takenLeadSound = trap_S_RegisterSound("sounds/gametype/dm/lead_taken", qtrue);
-		cgs.media.tiedLeadSound = trap_S_RegisterSound("sounds/gametype/dm/lead_tied", qtrue);
-		cgs.media.lostLeadSound = trap_S_RegisterSound("sounds/gametype/dm/lead_lost", qtrue);
+		cgs.media.loseFFASound = trap_S_RegisterSound("sound/feedback/better_luck", qtrue);
+		cgs.media.takenLeadSound = trap_S_RegisterSound("sound/feedback/lead_taken", qtrue);
+		cgs.media.tiedLeadSound = trap_S_RegisterSound("sound/feedback/lead_tied", qtrue);
+		cgs.media.lostLeadSound = trap_S_RegisterSound("sound/feedback/lead_lost", qtrue);
 	}
 
 	if (cgs.gametype < GT_CTF || cg_buildScript.integer) {
@@ -685,34 +682,33 @@ static void CG_RegisterSounds(void) {
 	}
 
 	if (cgs.gametype == GT_LPS || cg_buildScript.integer) {
-		cgs.media.winLPSSounds[0] = trap_S_RegisterSound("sounds/gametype/lps/you_win", qtrue);
-		cgs.media.winLPSSounds[1] = trap_S_RegisterSound("sounds/gametype/lps/won_night", qtrue);
-		cgs.media.YouLooseSound = trap_S_RegisterSound("sounds/gametype/lps/you_lose", qtrue);
+		cgs.media.youWinSound[0] = trap_S_RegisterSound("sound/feedback/you_win", qtrue);
+		cgs.media.youWinSound[1] = trap_S_RegisterSound("sound/feedback/congratulations", qtrue);
+		cgs.media.youLoseSound[0] = trap_S_RegisterSound("sound/feedback/you_lose", qtrue);
+		cgs.media.youLoseSound[1] = trap_S_RegisterSound("sound/feedback/better_luck", qtrue);
 	}
 
 	if (cgs.gametype == GT_BALLOON || cg_buildScript.integer) {
-		cgs.media.Announcer_RedBalloon = trap_S_RegisterSound("sounds/gametype/bb/red_balloon", qtrue);
-		cgs.media.Announcer_BlueBalloon = trap_S_RegisterSound("sounds/gametype/bb/blue_balloon", qtrue);
-		cgs.media.Announcer_BigBalloonRed = trap_S_RegisterSound("sounds/gametype/bb/bigballoon_red", qtrue);
-		cgs.media.Announcer_BigBalloonBlue = trap_S_RegisterSound("sounds/gametype/bb/bigballoon_blue", qtrue);
-		cgs.media.Announcer_BalloonDestroyed = trap_S_RegisterSound("sounds/gametype/bb/balloon_destroyed", qtrue);
-
-		cgs.media.ballonAufblasSound = trap_S_RegisterSound("sounds/gametype/bb/balloon_inflate", qfalse);
-		cgs.media.ballonPlatztSound = trap_S_RegisterSound("sounds/gametype/bb/balloon_burst", qfalse);
+		cgs.media.redBalloonSound = trap_S_RegisterSound("sound/feedback/teamplay/red_balloon", qtrue);
+		cgs.media.blueBalloonSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_balloon", qtrue);
+		cgs.media.redBigBalloonSound = trap_S_RegisterSound("sound/feedback/teamplay/red_bigballoon", qtrue);
+		cgs.media.blueBigBalloonSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_bigballoon", qtrue);
+		cgs.media.balloonDestroyedSound = trap_S_RegisterSound("sound/feedback/teamplay/balloon_destroyed", qtrue);
+		cgs.media.balloonInflateSound = trap_S_RegisterSound("sound/feedback/teamplay/balloon_inflate", qfalse);
+		cgs.media.balloonBurstSound = trap_S_RegisterSound("sound/feedback/teamplay/balloon_burst", qfalse);
 	}
 
 	if (cgs.gametype >= GT_TEAM || cg_buildScript.integer) {
-		cgs.media.redLeadsSound[0] = trap_S_RegisterSound("sounds/gametype/team/red_leads", qtrue);
-		cgs.media.redLeadsSound[1] = trap_S_RegisterSound("sounds/gametype/team/red_rules", qtrue);
-		cgs.media.redLeadsSound[2] = trap_S_RegisterSound("sounds/gametype/team/red_best", qtrue);
-		cgs.media.blueLeadsSound[0] = trap_S_RegisterSound("sounds/gametype/team/blue_leads", qtrue);
-		cgs.media.blueLeadsSound[1] = trap_S_RegisterSound("sounds/gametype/team/blue_rules", qtrue);
-		cgs.media.blueLeadsSound[2] = trap_S_RegisterSound("sounds/gametype/team/blue_best", qtrue);
-		cgs.media.teamsTiedSound = trap_S_RegisterSound("sounds/gametype/team/teams_tied", qtrue);
-		cgs.media.hitTeamSound = trap_S_RegisterSound("sounds/gametype/team/hit_teammate", qtrue);
-
-		cgs.media.redScoredSound = trap_S_RegisterSound("sounds/gametype/team/red_rules", qtrue);
-		cgs.media.blueScoredSound = trap_S_RegisterSound("sounds/gametype/team/blue_rules", qtrue);
+		cgs.media.redLeadsSound[0] = trap_S_RegisterSound("sound/feedback/teamplay/red_leads", qtrue);
+		cgs.media.redLeadsSound[1] = trap_S_RegisterSound("sound/feedback/teamplay/red_rules", qtrue);
+		cgs.media.redLeadsSound[2] = trap_S_RegisterSound("sound/feedback/teamplay/red_best", qtrue);
+		cgs.media.blueLeadsSound[0] = trap_S_RegisterSound("sound/feedback/teamplay/blue_leads", qtrue);
+		cgs.media.blueLeadsSound[1] = trap_S_RegisterSound("sound/feedback/teamplay/blue_rules", qtrue);
+		cgs.media.blueLeadsSound[2] = trap_S_RegisterSound("sound/feedback/teamplay/blue_best", qtrue);
+		cgs.media.teamsTiedSound = trap_S_RegisterSound("sound/feedback/teamplay/teams_tied", qtrue);
+		cgs.media.hitTeamSound = trap_S_RegisterSound("sound/feedback/hit_teammate", qtrue);
+		cgs.media.redScoredSound = trap_S_RegisterSound("sound/feedback/teamplay/red_scores", qtrue);
+		cgs.media.blueScoredSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_scores", qtrue);
 
 		if (cgs.gametype == GT_CTF || cg_buildScript.integer) {
 			cgs.media.captureYourTeamSound = trap_S_RegisterSound("sounds/gametype/ctl/capture_team", qtrue);

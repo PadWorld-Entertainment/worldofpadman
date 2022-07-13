@@ -993,7 +993,7 @@ static void CG_Balloon(centity_t *cent) {
 			s1->time = 4000;
 		if (s1->frame != cent->muzzleFlashTime) {
 			if (cent->lastweaponframe == 0)
-				trap_S_StartSound(s1->origin, s1->number, CHAN_AUTO, cgs.media.ballonAufblasSound);
+				trap_S_StartSound(s1->origin, s1->number, CHAN_AUTO, cgs.media.balloonInflateSound);
 			cent->lastweaponframe = cent->muzzleFlashTime;
 			cent->muzzleFlashTime = s1->frame;
 			cent->miscTime = cg.time;
@@ -1011,7 +1011,7 @@ static void CG_Balloon(centity_t *cent) {
 	} else {
 		// don't interpolate around frame 0
 		if (cent->muzzleFlashTime)
-			trap_S_StartSound(s1->origin, s1->number, CHAN_AUTO, cgs.media.ballonPlatztSound);
+			trap_S_StartSound(s1->origin, s1->number, CHAN_AUTO, cgs.media.balloonBurstSound);
 		cent->muzzleFlashTime = 0;
 	}
 
