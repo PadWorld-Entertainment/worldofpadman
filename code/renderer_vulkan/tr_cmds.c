@@ -510,13 +510,9 @@ void R_IssueRenderCommands(qboolean runPerformanceCounters) {
 			data += sizeof(swapBuffersCommand_t);
 		} break;
 
-		case RC_SCREENSHOT: {
-			const screenshotCommand_t *const cmd = (const screenshotCommand_t *)data;
-
-			RB_TakeScreenshot(cmd->width, cmd->height, cmd->fileName, cmd->jpeg);
-
-			data += sizeof(screenshotCommand_t);
-		} break;
+		case RC_SCREENSHOT:
+			data = RB_TakeScreenshotCmd(data);
+			break;
 
 		case RC_VIDEOFRAME: {
 			const videoFrameCommand_t *const cmd = (const videoFrameCommand_t *)data;

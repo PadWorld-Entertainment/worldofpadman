@@ -22,6 +22,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef TR_SHARED_H
 #define TR_SHARED_H
 
-void R_ScreenshotFilename(int lastNumber, char *fileName, int size, const char *ext);
+void R_ScreenshotFilename(int lastNumber, char *fileName, const char *ext);
 
 #endif

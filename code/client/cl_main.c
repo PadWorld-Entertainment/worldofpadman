@@ -2853,6 +2853,43 @@ int CL_ScaledMilliseconds(void) {
 
 /*
 ============
+CL_GetModDescription
+============
+*/
+static void CL_GetModDescription(char *buf, int bufLength) {
+	FS_GetModDescription(FS_GetCurrentGameDir(), buf, bufLength);
+}
+
+/*
+============
+CL_GetMapTitle
+============
+*/
+static void CL_GetMapTitle(char *buf, int bufLength) {
+	Q_strncpyz(buf, cl.gameState.stringData + cl.gameState.stringOffsets[CS_MESSAGE], bufLength);
+}
+
+/*
+============
+CL_GetPlayerLocation
+============
+*/
+static void CL_GetPlayerLocation(char *buf, int bufLength) {
+	playerState_t *ps;
+
+	if (clc.state != CA_ACTIVE || !cl.snap.valid) {
+		Q_strncpyz(buf, "Unknown", bufLength);
+		return;
+	}
+
+	ps = &cl.snap.ps;
+	Com_sprintf(buf, bufLength, "X:%d Y:%d Z:%d A:%d", (int)ps->origin[0],
+			(int)ps->origin[1], (int)ps->origin[2],
+			(int)(ps->viewangles[YAW]+360)%360);
+}
+
+/*
+============
 CL_InitRef
 ============
 */
@@ -2924,6 +2961,7 @@ void CL_InitRef(void) {
 	ri.Cvar_CheckRange = Cvar_CheckRange;
 	ri.Cvar_SetDescription = Cvar_SetDescription;
 	ri.Cvar_VariableIntegerValue = Cvar_VariableIntegerValue;
+	ri.Cvar_VariableStringBuffer = Cvar_VariableStringBuffer;
 
 	// cinematic stuff
 
@@ -2943,6 +2981,13 @@ void CL_InitRef(void) {
 	ri.Sys_GLimpSafeInit = Sys_GLimpSafeInit;
 	ri.Sys_GLimpInit = Sys_GLimpInit;
 	ri.Sys_LowPhysicalMemory = Sys_LowPhysicalMemory;
+
+	ri.zlib_compress = compress;
+	ri.zlib_crc32 = crc32;
+
+	ri.CL_GetModDescription = CL_GetModDescription;
+	ri.CL_GetMapTitle = CL_GetMapTitle;
+	ri.CL_GetPlayerLocation = CL_GetPlayerLocation;
 
 	ret = GetRefAPI(REF_API_VERSION, &ri);
 

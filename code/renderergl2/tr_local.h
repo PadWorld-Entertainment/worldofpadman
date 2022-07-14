@@ -2279,6 +2279,12 @@ typedef struct {
 	int numDrawSurfs;
 } drawSurfsCommand_t;
 
+typedef enum {
+	ST_TGA,
+	ST_JPEG,
+	ST_PNG
+} screenshotType_e;
+
 typedef struct {
 	int commandId;
 	int x;
@@ -2286,7 +2292,7 @@ typedef struct {
 	int width;
 	int height;
 	const char *fileName;
-	qboolean jpeg;
+	screenshotType_e type;
 } screenshotCommand_t;
 
 typedef struct {
@@ -2379,6 +2385,12 @@ void RE_SetColor(const float *rgba);
 void RE_StretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader);
 void RE_BeginFrame(stereoFrame_t stereoFrame);
 void RE_EndFrame(int *frontEndMsec, int *backEndMsec);
+void RE_SavePNG(const char *filename, int width, int height, byte *data, int padding);
+void RE_SaveJPG(const char *filename, int quality, int image_width, int image_height, unsigned char *image_buffer,
+				int padding);
+size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_width, int image_height,
+						  byte *image_buffer, int padding);
+void RE_SaveTGA(const char *filename, int image_width, int image_height, byte *image_buffer, int padding);
 void RE_TakeVideoFrame(int width, int height, byte *captureBuffer, byte *encodeBuffer, qboolean motionJpeg);
 
 #endif // TR_LOCAL_H

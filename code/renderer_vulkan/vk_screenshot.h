@@ -5,7 +5,14 @@
 #include "vulkan/vulkan_core.h"
 
 void R_ScreenShotJPEG_f(void);
-void R_ScreenShot_f(void);
+void R_ScreenShotPNG_f(void);
+void R_ScreenShotTGA_f(void);
+
+typedef enum {
+	ST_TGA,
+	ST_JPEG,
+	ST_PNG
+} screenshotType_e;
 
 typedef struct {
 	int commandId;
@@ -14,7 +21,8 @@ typedef struct {
 	int width;
 	int height;
 	char *fileName;
-	qboolean jpeg;
+
+	screenshotType_e type;
 } screenshotCommand_t;
 
 typedef struct {
@@ -27,6 +35,6 @@ typedef struct {
 } videoFrameCommand_t;
 
 void RB_TakeVideoFrameCmd(const videoFrameCommand_t *const cmd);
-void RB_TakeScreenshot(int width, int height, const char *fileName, VkBool32 isJpeg);
+const void *RB_TakeScreenshotCmd(const void *data);
 
 #endif

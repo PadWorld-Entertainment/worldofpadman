@@ -206,92 +206,104 @@ extern size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int 
 extern void RE_SaveJPG(const char *filename, int quality, int image_width, int image_height, unsigned char *image_buffer,
 					   int padding);
 
-void RB_TakeScreenshot(int width, int height, const char *fileName, VkBool32 isJpeg) {
+static void RB_TakeScreenshotJPEG(int width, int height, const char *fileName) {
 	const uint32_t cnPixels = width * height;
 	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
 
-	if (isJpeg) {
+	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
 
-		// unsigned char *buffer;
-		// size_t offset = 0, memcount;
-		// int padlen;
-		// memcount = (width * 3 + padlen) * height;
-		// RE_SaveJPG(fileName, 90, width, height, buffer + offset, padlen);
-		unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
+	vk_read_pixels(pImg, width, height);
 
-		vk_read_pixels(pImg, width, height);
+	// but why this is need ? why the readed image got fliped about Y ???
+	imgFlipY(pImg, width, height);
 
-		// but why this is need ? why the readed image got fliped about Y ???
-		imgFlipY(pImg, width, height);
+	// Remove alpha channel and rbg <-> bgr
+	{
+		unsigned char *pSrc = pImg;
+		unsigned char *pDst = pImg;
 
-		// Remove alpha channel and rbg <-> bgr
-		{
-			unsigned char *pSrc = pImg;
-			unsigned char *pDst = pImg;
-
-			uint32_t i;
-			for (i = 0; i < cnPixels; i++) {
-				pSrc[0] = pDst[2];
-				pSrc[1] = pDst[1];
-				pSrc[2] = pDst[0];
-				pSrc += 3;
-				pDst += 4;
-			}
-		}
-
-		RE_SaveJPG(fileName, 90, width, height, pImg, 0);
-
-		ri.Hunk_FreeTempMemory(pImg);
-
-		// bufSize = RE_SaveJPGToBuffer(out, bufSize, 90, width, height, pImg, padding);
-		// ri.FS_WriteFile(filename, out, bufSize);
-	} else {
-		// const uint32_t cnPixels = width * height;
-		const uint32_t imgSize = 18 + cnPixels * 3;
 		uint32_t i;
-
-		unsigned char *const pBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(imgSize + cnPixels * 4);
-		unsigned char *const buffer_ptr = pBuffer + 18;
-		unsigned char *const pImg = pBuffer + imgSize;
-
-		vk_read_pixels(pImg, width, height);
-
-		// but why this is need ? why the readed image got fliped about Y ???
-		imgFlipY(pImg, width, height);
-
-		memset(pBuffer, 0, 18);
-		pBuffer[2] = 2; // uncompressed type
-		pBuffer[12] = width & 255;
-		pBuffer[13] = width >> 8;
-		pBuffer[14] = height & 255;
-		pBuffer[15] = height >> 8;
-		pBuffer[16] = 24; // pixel size
-
-		//    VkBool32 need_swizzle = (
-		//            vk.surface_format.format == VK_FORMAT_B8G8R8A8_SRGB ||
-		//            vk.surface_format.format == VK_FORMAT_B8G8R8A8_UNORM ||
-		//           vk.surface_format.format == VK_FORMAT_B8G8R8A8_SNORM );
-
-		if (0) {
-			for (i = 0; i < cnPixels; i++) {
-				buffer_ptr[i * 3] = *(pImg + i * 4 + 2);
-				buffer_ptr[i * 3 + 1] = *(pImg + i * 4 + 1);
-				buffer_ptr[i * 3 + 2] = *(pImg + i * 4);
-			}
-		} else {
-			for (i = 0; i < cnPixels; i++) {
-				buffer_ptr[i * 3] = *(pImg + i * 4);
-				buffer_ptr[i * 3 + 1] = *(pImg + i * 4 + 1);
-				buffer_ptr[i * 3 + 2] = *(pImg + i * 4 + 2);
-			}
+		for (i = 0; i < cnPixels; i++) {
+			pSrc[0] = pDst[2];
+			pSrc[1] = pDst[1];
+			pSrc[2] = pDst[0];
+			pSrc += 3;
+			pDst += 4;
 		}
-		ri.FS_WriteFile(fileName, pBuffer, imgSize);
-
-		ri.Hunk_FreeTempMemory(pBuffer);
 	}
+
+	RE_SaveJPG(fileName, 90, width, height, pImg, 0);
+
+	ri.Hunk_FreeTempMemory(pImg);
 }
 
-static void R_TakeScreenshot(int x, int y, int width, int height, char *name, qboolean jpeg) {
+static void RB_TakeScreenshotTGA(int width, int height, const char *fileName) {
+	const uint32_t cnPixels = width * height;
+	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
+
+	// const uint32_t cnPixels = width * height;
+	const uint32_t imgSize = 18 + cnPixels * 3;
+	uint32_t i;
+
+	unsigned char *const pBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(imgSize + cnPixels * 4);
+	unsigned char *const buffer_ptr = pBuffer + 18;
+	unsigned char *const pImg = pBuffer + imgSize;
+
+	vk_read_pixels(pImg, width, height);
+
+	// but why this is need ? why the readed image got fliped about Y ???
+	imgFlipY(pImg, width, height);
+
+	memset(pBuffer, 0, 18);
+	pBuffer[2] = 2; // uncompressed type
+	pBuffer[12] = width & 255;
+	pBuffer[13] = width >> 8;
+	pBuffer[14] = height & 255;
+	pBuffer[15] = height >> 8;
+	pBuffer[16] = 24; // pixel size
+
+	//    VkBool32 need_swizzle = (
+	//            vk.surface_format.format == VK_FORMAT_B8G8R8A8_SRGB ||
+	//            vk.surface_format.format == VK_FORMAT_B8G8R8A8_UNORM ||
+	//           vk.surface_format.format == VK_FORMAT_B8G8R8A8_SNORM );
+
+	if (0) {
+		for (i = 0; i < cnPixels; i++) {
+			buffer_ptr[i * 3] = *(pImg + i * 4 + 2);
+			buffer_ptr[i * 3 + 1] = *(pImg + i * 4 + 1);
+			buffer_ptr[i * 3 + 2] = *(pImg + i * 4);
+		}
+	} else {
+		for (i = 0; i < cnPixels; i++) {
+			buffer_ptr[i * 3] = *(pImg + i * 4);
+			buffer_ptr[i * 3 + 1] = *(pImg + i * 4 + 1);
+			buffer_ptr[i * 3 + 2] = *(pImg + i * 4 + 2);
+		}
+	}
+	ri.FS_WriteFile(fileName, pBuffer, imgSize);
+
+	ri.Hunk_FreeTempMemory(pBuffer);
+}
+
+const void *RB_TakeScreenshotCmd(const void *data) {
+	const screenshotCommand_t *cmd;
+
+	cmd = (const screenshotCommand_t *)data;
+
+	if (cmd->type == ST_TGA)
+		RB_TakeScreenshotTGA(cmd->width, cmd->height, cmd->fileName);
+	else if (cmd->type == ST_JPEG)
+		RB_TakeScreenshotJPEG(cmd->width, cmd->height, cmd->fileName);
+#if 0
+	// TODO
+	else if (cmd->type == ST_PNG)
+		RB_TakeScreenshotPNG(cmd->x, cmd->y, cmd->width, cmd->height, cmd->fileName);
+#endif
+
+	return (const void *)(cmd + 1);
+}
+
+static void R_TakeScreenshot(int x, int y, int width, int height, char *name, screenshotType_e type) {
 	static char fileName[MAX_OSPATH] = {0}; // bad things if two screenshots per frame?
 
 	screenshotCommand_t *cmd = (screenshotCommand_t *)R_GetCommandBuffer(sizeof(*cmd));
@@ -310,7 +322,7 @@ static void R_TakeScreenshot(int x, int y, int width, int height, char *name, qb
 	strncpy(fileName, name, sizeof(fileName));
 
 	cmd->fileName = fileName;
-	cmd->jpeg = jpeg;
+	cmd->type = type;
 }
 
 /*
@@ -389,25 +401,17 @@ static void R_LevelShot(int W, int H) {
 	ri.Printf(PRINT_ALL, "Wrote %s\n", checkname);
 }
 
-/*
-==================
-R_ScreenShot_f
-
-screenshot
-screenshot [silent]
-screenshot [levelshot]
-screenshot [filename]
-
-Doesn't print the pacifier message if there is a second arg
-==================
-*/
-void R_ScreenShot_f(void) {
+static void R_Screenshot(screenshotType_e type) {
 	char checkname[MAX_OSPATH];
 	static int lastNumber = -1;
 	qboolean silent;
 
 	int W;
 	int H;
+
+	static const char *exts[] = {
+		".tga", ".jpg", ".png"
+	};
 
 	R_GetWinResolution(&W, &H);
 
@@ -424,7 +428,7 @@ void R_ScreenShot_f(void) {
 
 	if (ri.Cmd_Argc() == 2 && !silent) {
 		// explicit filename
-		snprintf(checkname, sizeof(checkname), "screenshots/%s.tga", ri.Cmd_Argv(1));
+		snprintf(checkname, MAX_OSPATH, "screenshots/%s%s", ri.Cmd_Argv(1), exts[type]);
 	} else {
 		// scan for a free filename
 
@@ -435,7 +439,7 @@ void R_ScreenShot_f(void) {
 		}
 		// scan for a free number
 		for (; lastNumber <= 9999; lastNumber++) {
-			R_ScreenshotFilename(lastNumber, checkname, sizeof(checkname), "tga");
+			R_ScreenshotFilename(lastNumber, checkname, exts[type]);
 			if (!ri.FS_FileExists(checkname)) {
 				break; // file doesn't exist
 			}
@@ -449,73 +453,35 @@ void R_ScreenShot_f(void) {
 		lastNumber++;
 	}
 
-	R_TakeScreenshot(0, 0, W, H, checkname, qfalse);
+	R_TakeScreenshot(0, 0, W, H, checkname, type);
 
 	if (!silent) {
 		ri.Printf(PRINT_ALL, "Wrote %s\n", checkname);
 	}
 }
 
+/*
+==================
+R_ScreenShot_f
+
+screenshot
+screenshot [silent]
+screenshot [levelshot]
+screenshot [filename]
+
+Doesn't print the pacifier message if there is a second arg
+==================
+*/
+void R_ScreenShotTGA_f(void) {
+	R_Screenshot(ST_TGA);
+}
+
 void R_ScreenShotJPEG_f(void) {
-	char checkname[MAX_OSPATH];
-	static int lastNumber = -1;
-	qboolean silent;
+	R_Screenshot(ST_JPEG);
+}
 
-	int W;
-	int H;
-
-	R_GetWinResolution(&W, &H);
-
-	if (!strcmp(ri.Cmd_Argv(1), "levelshot")) {
-		R_LevelShot(W, H);
-		return;
-	}
-
-	if (!strcmp(ri.Cmd_Argv(1), "silent")) {
-		silent = qtrue;
-	} else {
-		silent = qfalse;
-	}
-
-	if (ri.Cmd_Argc() == 2 && !silent) {
-		// explicit filename
-		snprintf(checkname, sizeof(checkname), "screenshots/%s.jpg", ri.Cmd_Argv(1));
-	} else {
-		// scan for a free filename
-
-		// if we have saved a previous screenshot, don't scan
-		// again, because recording demo avis can involve
-		// thousands of shots
-		if (lastNumber == -1) {
-			lastNumber = 0;
-		}
-		// scan for a free number
-		for (; lastNumber <= 9999; lastNumber++) {
-			int a, b, c, d;
-
-			a = lastNumber / 1000;
-			lastNumber -= a * 1000;
-			b = lastNumber / 100;
-			lastNumber -= b * 100;
-			c = lastNumber / 10;
-			lastNumber -= c * 10;
-			d = lastNumber;
-
-			snprintf(checkname, sizeof(checkname), "screenshots/shot%i%i%i%i.jpg", a, b, c, d);
-
-			if (!ri.FS_FileExists(checkname)) {
-				break; // file doesn't exist
-			}
-		}
-
-		lastNumber++;
-	}
-
-	R_TakeScreenshot(0, 0, W, H, checkname, qtrue);
-
-	if (!silent) {
-		ri.Printf(PRINT_ALL, "Wrote %s\n", checkname);
-	}
+void R_ScreenShotPNG_f(void) {
+	R_Screenshot(ST_PNG);
 }
 
 void RB_TakeVideoFrameCmd(const videoFrameCommand_t *const cmd) {
