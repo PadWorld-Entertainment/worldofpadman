@@ -311,7 +311,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 		// Com_Printf("PadStar award\n");
 	}
 	if (ps->persistant[PERS_SNACKATTACK_COUNT] != ops->persistant[PERS_SNACKATTACK_COUNT]) {
-		sfx = cgs.media.humiliationSound;
+		sfx = cgs.media.snackattackSound;
 		CG_PushReward(sfx, cgs.media.medalSnackAttack, ps->persistant[PERS_SNACKATTACK_COUNT]);
 		reward = qtrue;
 		// Com_Printf("SnackAttack award\n");
@@ -330,7 +330,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 	if (ps->persistant[PERS_PLAYEREVENTS] != ops->persistant[PERS_PLAYEREVENTS]) {
 		if ((ps->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_GAUNTLETREWARD) !=
 			(ops->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_GAUNTLETREWARD)) {
-			trap_S_StartLocalSound(cgs.media.humiliationSound, CHAN_ANNOUNCER);
+			trap_S_StartLocalSound(cgs.media.snackattackSound, CHAN_ANNOUNCER);
 
 			reward = qtrue; // nur noch beim gauntlet
 		}

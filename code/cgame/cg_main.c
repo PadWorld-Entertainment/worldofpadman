@@ -752,7 +752,7 @@ static void CG_RegisterSounds(void) {
 	cgs.media.hitSound = trap_S_RegisterSound("sound/feedback/hit", qfalse);
 
 	cgs.media.excellentSound = trap_S_RegisterSound("sound/feedback/awards/excellent", qtrue);
-	cgs.media.humiliationSound = trap_S_RegisterSound("sound/feedback/awards/snackattack", qtrue);
+	cgs.media.snackattackSound = trap_S_RegisterSound("sound/feedback/awards/snackattack", qtrue);
 	cgs.media.padheroSound = trap_S_RegisterSound("sound/feedback/awards/padhero", qtrue);
 	cgs.media.padaceSound = trap_S_RegisterSound("sound/feedback/awards/padace", qtrue);
 	cgs.media.padstarSound = trap_S_RegisterSound("sound/feedback/awards/padstar", qtrue);

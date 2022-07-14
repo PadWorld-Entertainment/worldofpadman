@@ -1056,7 +1056,7 @@ typedef struct {
 	sfxHandle_t hitTeamSound;
 	sfxHandle_t impressiveSound;
 	sfxHandle_t excellentSound;
-	sfxHandle_t humiliationSound;
+	sfxHandle_t snackattackSound;
 	sfxHandle_t spraygodSound;
 	sfxHandle_t spraykillerSound;
 	sfxHandle_t padheroSound;
