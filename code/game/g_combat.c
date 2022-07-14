@@ -293,9 +293,9 @@ static void CheckAlmostCapture(gentity_t *self, gentity_t *attacker) {
 			// if the player was *very* close
 			VectorSubtract(self->client->ps.origin, ent->s.origin, dir);
 			if (VectorLength(dir) < 200) {
-				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_HOLYSHIT;
+				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
 				if (attacker->client) {
-					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_HOLYSHIT;
+					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
 				}
 			}
 		}
@@ -325,9 +325,9 @@ static void CheckAlmostScored(gentity_t *self, gentity_t *attacker) {
 			// if the player was *very* close
 			VectorSubtract(self->client->ps.origin, ent->s.origin, dir);
 			if (VectorLength(dir) < 200) {
-				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_HOLYSHIT;
+				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
 				if (attacker->client) {
-					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_HOLYSHIT;
+					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
 				}
 			}
 		}

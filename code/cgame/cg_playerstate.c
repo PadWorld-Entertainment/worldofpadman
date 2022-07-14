@@ -331,9 +331,12 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 		if ((ps->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_GAUNTLETREWARD) !=
 			(ops->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_GAUNTLETREWARD)) {
 			trap_S_StartLocalSound(cgs.media.snackattackSound, CHAN_ANNOUNCER);
-
-			reward = qtrue; // nur noch beim gauntlet
 		}
+		else if ((ps->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_ALMOSTCAPTURE) !=
+			(ops->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_ALMOSTCAPTURE)) {
+			trap_S_StartLocalSound(cgs.media.almostCapture, CHAN_ANNOUNCER);
+		}
+		reward = qtrue;
 	}
 
 	// check for flag pickup

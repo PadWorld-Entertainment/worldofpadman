@@ -1102,9 +1102,8 @@ typedef struct {
 	sfxHandle_t yourTeamTookEnemyLollySound;
 	sfxHandle_t enemyTookYourLollySound;
 	sfxHandle_t youHaveLollySound;
-
 	sfxHandle_t stolenLollySound;
-	//	sfxHandle_t holyShitSound;
+	sfxHandle_t almostCapture;
 
 	// tournament sounds
 	sfxHandle_t count3Sound;
