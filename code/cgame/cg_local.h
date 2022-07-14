@@ -1081,12 +1081,12 @@ typedef struct {
 	// voc_ sounds:
 	sfxHandle_t redLollyReturnedSound;
 	sfxHandle_t blueLollyReturnedSound;
-	sfxHandle_t neutralFlagReturnedSound;
+	sfxHandle_t neutralLollyReturnedSound;
 	sfxHandle_t enemyTookYourLollySound;
 	sfxHandle_t yourTeamTookEnemyLollySound;
 	sfxHandle_t youHaveLollySound;
-	sfxHandle_t enemyTookTheFlagSound;
-	sfxHandle_t yourTeamTookTheFlagSound;
+	sfxHandle_t enemyTookTheLollySound;
+	sfxHandle_t yourTeamTookTheLollySound;
 
 	sfxHandle_t stolenLollySound;
 	sfxHandle_t almostCapture;

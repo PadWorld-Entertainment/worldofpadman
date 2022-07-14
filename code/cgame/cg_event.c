@@ -1076,7 +1076,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 					CG_AddBufferedSound(cgs.media.takenOpponentSound);
 					// "voc_"-sound:
 					if (cgs.gametype == GT_1FCTF) {
-						CG_AddBufferedSound(cgs.media.yourTeamTookTheFlagSound);
+						CG_AddBufferedSound(cgs.media.yourTeamTookTheLollySound);
 					} else {
 						CG_AddBufferedSound(cgs.media.enemyTookYourLollySound);
 					}
@@ -1084,7 +1084,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 					CG_AddBufferedSound(cgs.media.takenYourTeamSound);
 					// "voc_"-sound:
 					if (cgs.gametype == GT_1FCTF) {
-						CG_AddBufferedSound(cgs.media.enemyTookTheFlagSound);
+						CG_AddBufferedSound(cgs.media.enemyTookTheLollySound);
 					} else {
 						CG_AddBufferedSound(cgs.media.yourTeamTookEnemyLollySound);
 					}
@@ -1099,7 +1099,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 					CG_AddBufferedSound(cgs.media.takenOpponentSound);
 					// "voc_"-sound:
 					if (cgs.gametype == GT_1FCTF) {
-						CG_AddBufferedSound(cgs.media.yourTeamTookTheFlagSound);
+						CG_AddBufferedSound(cgs.media.yourTeamTookTheLollySound);
 					} else {
 						CG_AddBufferedSound(cgs.media.enemyTookYourLollySound);
 					}
@@ -1107,7 +1107,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 					CG_AddBufferedSound(cgs.media.takenYourTeamSound);
 					// "voc_"-sound:
 					if (cgs.gametype == GT_1FCTF) {
-						CG_AddBufferedSound(cgs.media.enemyTookTheFlagSound);
+						CG_AddBufferedSound(cgs.media.enemyTookTheLollySound);
 					} else {
 						CG_AddBufferedSound(cgs.media.yourTeamTookEnemyLollySound);
 					}

@@ -726,15 +726,14 @@ static void CG_RegisterSounds(void) {
 			cgs.media.takenOpponentSound = trap_S_RegisterSound("sound/feedback/teamplay/lollytaken_enemy", qtrue);
 			cgs.media.redLollyReturnedSound = trap_S_RegisterSound("sound/feedback/teamplay/red_lolly_returned", qtrue);
 			cgs.media.blueLollyReturnedSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_lolly_returned", qtrue);
-			cgs.media.enemyTookYourLollySound = trap_S_RegisterSound("sound/feedback/teamplay/enemy_lolly", qtrue);
 			cgs.media.yourTeamTookEnemyLollySound = trap_S_RegisterSound("sound/feedback/teamplay/team_lolly", qtrue);
+			cgs.media.enemyTookYourLollySound = trap_S_RegisterSound("sound/feedback/teamplay/enemy_lolly", qtrue);
 		}
 
 		if (cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
-			cgs.media.neutralFlagReturnedSound = trap_S_RegisterSound("sounds/gametype/ctl/return_opponent", qtrue);
-			// Todo Kai: get replacements for those sounds and adjust paths
-			cgs.media.yourTeamTookTheFlagSound = trap_S_RegisterSound("sound/teamplay/voc_team_1flag", qtrue);
-			cgs.media.enemyTookTheFlagSound = trap_S_RegisterSound("sound/teamplay/voc_enemy_1flag", qtrue);
+			cgs.media.neutralLollyReturnedSound = trap_S_RegisterSound("sound/feedback/teamplay/lollyreturn_opponent", qtrue);
+			cgs.media.yourTeamTookTheLollySound = trap_S_RegisterSound("sound/feedback/teamplay/team_1lolly", qtrue);
+			cgs.media.enemyTookTheLollySound = trap_S_RegisterSound("sound/feedback/teamplay/enemy_1lolly", qtrue);
 		}
 
 		if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
