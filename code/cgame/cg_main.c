@@ -657,7 +657,7 @@ static void CG_RegisterSounds(void) {
 		cgs.media.wrongSprayWallSound[0] = trap_S_RegisterSound("sound/feedback/teamplay/colorblind_sprayer", qtrue);
 		cgs.media.wrongSprayWallSound[1] = trap_S_RegisterSound("sound/feedback/teamplay/omg_spray", qtrue);
 		cgs.media.wrongSprayWallSound[2] = trap_S_RegisterSound("sound/feedback/teamplay/stupid_sprayer", qtrue);
-		cgs.media.wrongSprayWallSound[3] = trap_S_RegisterSound("sound/feedback/teamplay/who_is_stupid_sprayer", qtrue);
+		cgs.media.wrongSprayWallSound[3] = trap_S_RegisterSound("sound/feedback/teamplay/who_is_sprayer", qtrue);
 	}
 
 	if (cgs.gametype == GT_SPRAYFFA || cg_buildScript.integer) {
