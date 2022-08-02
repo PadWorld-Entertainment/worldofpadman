@@ -184,6 +184,7 @@ vmCvar_t cg_cineDrawLetterBox;
 
 vmCvar_t cg_glowModel;
 vmCvar_t cg_glowModelTeam;
+vmCvar_t cg_advHitSound;
 
 vmCvar_t cg_warmupReady;
 vmCvar_t cg_curWarmupReady;
@@ -322,6 +323,7 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 
 	{&cg_glowModel, "cg_glowModel", "", CVAR_ARCHIVE},
 	{&cg_glowModelTeam, "cg_glowModelTeam", "", CVAR_ARCHIVE},
+	{&cg_advHitSound, "cg_advHitSound", "0", CVAR_ARCHIVE},
 
 	/* NOTE: We can't easily extend CS_WARMUP as SV_MapRestart_f() directly sets it */
 	{&cg_warmupReady, "g_warmupReady", "", CVAR_SYSTEMINFO},
@@ -753,6 +755,8 @@ static void CG_RegisterSounds(void) {
 	cgs.media.landSound = trap_S_RegisterSound("sound/padplayer/land", qfalse);
 
 	cgs.media.hitSound = trap_S_RegisterSound("sound/feedback/hit", qfalse);
+	cgs.media.hitShieldSound = trap_S_RegisterSound("sound/feedback/hit_shield", qfalse );
+	cgs.media.hitNoShieldSound = trap_S_RegisterSound("sound/feedback/hit_noshield", qfalse );
 
 	cgs.media.excellentSound = trap_S_RegisterSound("sound/feedback/awards/excellent", qtrue);
 	cgs.media.snackattackSound = trap_S_RegisterSound("sound/feedback/awards/snackattack", qtrue);

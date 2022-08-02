@@ -256,6 +256,8 @@ CG_CheckLocalSounds
 ==================
 */
 static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
+	int health, armor;
+	int advHitSound;
 	qboolean reward = qfalse;
 
 	// don't play the sounds if the player just changed teams
@@ -265,7 +267,16 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 
 	// hit changes
 	if (ps->persistant[PERS_HITS] > ops->persistant[PERS_HITS]) {
-		trap_S_StartLocalSound(cgs.media.hitSound, CHAN_LOCAL_SOUND);
+		armor  = ps->persistant[PERS_ATTACKEE_ARMOR] & 0xff;
+		health = ps->persistant[PERS_ATTACKEE_ARMOR] >> 8;
+		advHitSound = cg_advHitSound.integer;
+		if (armor > 50 && advHitSound) {
+			trap_S_StartLocalSound(cgs.media.hitShieldSound, CHAN_LOCAL_SOUND);
+		} else if (!armor && advHitSound) {
+			trap_S_StartLocalSound(cgs.media.hitNoShieldSound, CHAN_LOCAL_SOUND);
+		} else {
+			trap_S_StartLocalSound(cgs.media.hitSound, CHAN_LOCAL_SOUND);
+		}
 	} else if (ps->persistant[PERS_HITS] < ops->persistant[PERS_HITS]) {
 		trap_S_StartLocalSound(cgs.media.hitTeamSound, CHAN_LOCAL_SOUND);
 	}
