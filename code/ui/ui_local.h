@@ -48,6 +48,8 @@ extern vmCvar_t ui_ctf_capturelimit;
 extern vmCvar_t ui_ctf_timelimit;
 extern vmCvar_t ui_ctf_friendly;
 
+extern vmCvar_t ui_lps_startlives;
+
 extern vmCvar_t ui_arenasFile;
 extern vmCvar_t ui_botsFile;
 

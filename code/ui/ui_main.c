@@ -112,6 +112,8 @@ vmCvar_t ui_ctf_capturelimit;
 vmCvar_t ui_ctf_timelimit;
 vmCvar_t ui_ctf_friendly;
 
+vmCvar_t ui_lps_startlives;
+
 vmCvar_t ui_arenasFile;
 vmCvar_t ui_botsFile;
 
@@ -178,6 +180,8 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&ui_ctf_capturelimit, "ui_ctf_capturelimit", "8", CVAR_ARCHIVE},
 								  {&ui_ctf_timelimit, "ui_ctf_timelimit", "30", CVAR_ARCHIVE},
 								  {&ui_ctf_friendly, "ui_ctf_friendly", "0", CVAR_ARCHIVE},
+
+								  {&ui_lps_startlives, "ui_lps_startlives", "10", CVAR_ARCHIVE},
 
 								  {&ui_arenasFile, "g_arenasFile", "", CVAR_INIT | CVAR_ROM},
 								  {&ui_botsFile, "g_botsFile", "", CVAR_INIT | CVAR_ROM},

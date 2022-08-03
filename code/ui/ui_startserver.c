@@ -66,7 +66,7 @@ typedef struct {
 	menuradiobutton_s instagib;
 	menufield_s hostname;
 	menuradiobutton_s pure;
-	menufield_s StartLives;
+	menufield_s startlives;
 
 	menubitmap_s selectbots;
 
@@ -314,9 +314,9 @@ static void UI_StartServer_GametypeEvent(void *ptr, int event) {
 		s_startserver.friendlyfire.generic.flags |= QMF_GRAYED;
 
 	if (gametype_remap[s_startserver.gametype.curvalue] == GT_LPS)
-		s_startserver.StartLives.generic.flags &= ~QMF_GRAYED;
+		s_startserver.startlives.generic.flags &= ~QMF_GRAYED;
 	else
-		s_startserver.StartLives.generic.flags |= QMF_GRAYED;
+		s_startserver.startlives.generic.flags |= QMF_GRAYED;
 
 	count = UI_GetNumArenas();
 	s_startserver.nummaps = 0;
@@ -408,6 +408,7 @@ static void UI_StartServer_MenuEvent(void *ptr, int event) {
 		{
 			int timelimit;
 			int fraglimit;
+			int lifelimit;
 			int maxclients;
 			int dedicated;
 			int gametype;
@@ -424,6 +425,7 @@ static void UI_StartServer_MenuEvent(void *ptr, int event) {
 
 			timelimit = atoi(s_startserver.timelimit.field.buffer);
 			fraglimit = atoi(s_startserver.fraglimit.field.buffer);
+			lifelimit = atoi(s_startserver.startlives.field.buffer);
 			maxclients = atoi(s_startserver.maxclients.field.buffer);
 			dedicated = s_startserver.dedicated.curvalue;
 			friendlyfire = s_startserver.friendlyfire.curvalue;
@@ -454,17 +456,19 @@ static void UI_StartServer_MenuEvent(void *ptr, int event) {
 				trap_Cvar_SetValue("ui_ctf_timelimit", timelimit);
 				trap_Cvar_SetValue("ui_ctf_friendlt", friendlyfire);
 				break;
+
+			case GT_LPS:
+				trap_Cvar_SetValue("ui_lps_startlives", lifelimit);
+				break;
 			}
 
 			trap_Cvar_SetValue("sv_maxclients", Com_Clamp(1, MAX_CLIENTS, maxclients));
 			trap_Cvar_SetValue("dedicated", Com_Clamp(0, 2, dedicated));
 			trap_Cvar_SetValue("timelimit", Com_Clamp(0, timelimit, timelimit));
 			trap_Cvar_SetValue("pointlimit", Com_Clamp(0, fraglimit, fraglimit));
-			//			trap_Cvar_SetValue ("capturelimit", Com_Clamp( 0, flaglimit, flaglimit ) );
+			trap_Cvar_SetValue("g_LPS_startlives", Com_Clamp(1, lifelimit, lifelimit));
 			trap_Cvar_SetValue("g_friendlyfire", friendlyfire);
 			trap_Cvar_SetValue("g_instaPad", instagib);
-			if (gametype == GT_LPS)
-				trap_Cvar_Set("g_LPS_startlives", s_startserver.StartLives.field.buffer);
 			trap_Cvar_SetValue("sv_pure", pure);
 			trap_Cvar_Set("sv_hostname", s_startserver.hostname.field.buffer);
 
@@ -765,20 +769,20 @@ static void UI_StartServer_MenuInit(void) {
 	y += BIGCHAR_HEIGHT + 2;
 	s_startserver.maxclients.generic.type = MTYPE_FIELD;
 	s_startserver.maxclients.generic.name = "Player Slots:";
-	s_startserver.maxclients.generic.flags = (QMF_NUMBERSONLY | QMF_SMALLFONT);
+	s_startserver.maxclients.generic.flags = QMF_NUMBERSONLY | QMF_SMALLFONT;
 	s_startserver.maxclients.generic.x = OPTIONS_XPOS;
 	s_startserver.maxclients.generic.y = y;
 	s_startserver.maxclients.field.widthInChars = 2;
 	s_startserver.maxclients.field.maxchars = 2;
 
 	y += BIGCHAR_HEIGHT + 2;
-	s_startserver.StartLives.generic.type = MTYPE_FIELD;
-	s_startserver.StartLives.generic.name = "Start Lives:";
-	s_startserver.StartLives.generic.flags = QMF_NUMBERSONLY | QMF_SMALLFONT;
-	s_startserver.StartLives.generic.x = OPTIONS_XPOS;
-	s_startserver.StartLives.generic.y = y;
-	s_startserver.StartLives.field.widthInChars = 3;
-	s_startserver.StartLives.field.maxchars = 3;
+	s_startserver.startlives.generic.type = MTYPE_FIELD;
+	s_startserver.startlives.generic.name = "Start Lives:";
+	s_startserver.startlives.generic.flags = QMF_NUMBERSONLY | QMF_SMALLFONT;
+	s_startserver.startlives.generic.x = OPTIONS_XPOS;
+	s_startserver.startlives.generic.y = y;
+	s_startserver.startlives.field.widthInChars = 3;
+	s_startserver.startlives.field.maxchars = 3;
 
 	y += BIGCHAR_HEIGHT + 4;
 	s_startserver.selectbots.generic.type = MTYPE_BITMAP;
@@ -830,7 +834,7 @@ static void UI_StartServer_MenuInit(void) {
 	Menu_AddItem(&s_startserver.menu, &s_startserver.fraglimit);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.timelimit);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.maxclients);
-	Menu_AddItem(&s_startserver.menu, &s_startserver.StartLives);
+	Menu_AddItem(&s_startserver.menu, &s_startserver.startlives);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.selectbots);
 
 	Menu_AddItem(&s_startserver.menu, &s_startserver.fight);
@@ -844,8 +848,8 @@ static void UI_StartServer_MenuInit(void) {
 			   sizeof(s_startserver.fraglimit.field.buffer));
 	Q_strncpyz(s_startserver.maxclients.field.buffer, UI_Cvar_VariableString("sv_maxclients"),
 			   sizeof(s_startserver.maxclients.field.buffer));
-	Q_strncpyz(s_startserver.StartLives.field.buffer, UI_Cvar_VariableString("g_LPS_startlives"),
-			   sizeof(s_startserver.StartLives.field.buffer));
+	Q_strncpyz(s_startserver.startlives.field.buffer, UI_Cvar_VariableString("ui_lps_startlives"),
+			   sizeof(s_startserver.startlives.field.buffer));
 
 	UI_StartServer_GametypeEvent(NULL, QM_ACTIVATED);
 }
