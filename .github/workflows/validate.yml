@@ -14,6 +14,11 @@ jobs:
       - name: "Checkout"
         uses: nschloe/action-cached-lfs-checkout@v1
 
+      - name: "Install Dependencies (Linux)"
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsdl2-dev
+
       - name: "Validate"
         run: |
           mkdir build
