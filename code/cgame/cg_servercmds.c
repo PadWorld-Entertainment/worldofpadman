@@ -474,7 +474,7 @@ static void CG_MapRestart(void) {
 	cg.fraglimitWarnings = 0;
 	cg.timelimitWarnings = 0;
 	cg.lifelimitWarnings = 0;
-	
+
 	cg.rewardTime = 0;
 	cg.rewardStack = 0;
 	cg.intermissionStarted = qfalse;

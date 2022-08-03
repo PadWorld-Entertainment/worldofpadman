@@ -502,7 +502,7 @@ typedef struct {
 	int timelimitWarnings; // 5 min, 1 min, overtime
 	int fraglimitWarnings;
 	int lifelimitWarnings;
-	
+
 	qboolean wantSelectLogo;
 	int handleInputMillis;
 
