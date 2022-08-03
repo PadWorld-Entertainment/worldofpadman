@@ -420,7 +420,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 
 	// lifelimit warnings
 	if (cgs.lpsStartLives > 0 && cgs.gametype == GT_LPS && !(cgs.lpsflags & LPSF_PPOINTLIMIT)) {
-		const int livesLeft = cg.snap->ps.stats[STAT_LIVESLEFT];
+		const int livesLeft = ps->stats[STAT_LIVESLEFT];
 		if (!(cg.lifelimitWarnings & 4) && livesLeft == 1) {
 			cg.lifelimitWarnings |= 1 | 2 | 4;
 			CG_AddBufferedSound(cgs.media.oneLifeSound);

@@ -529,7 +529,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	const char *s;
 	int clientNum;
 	clientInfo_t *ci;
-	weaponInfo_t *wi; // HERBY
+	const weaponInfo_t *wi; // HERBY
 
 	es = &cent->currentState;
 	event = es->event & ~EV_EVENT_BITS;
