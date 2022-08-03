@@ -33,6 +33,12 @@ typedef struct {
 	lump_t lumps[HEADER_LUMPS];
 } dheader_t;
 
+typedef struct {
+	char shader[64];
+	int surfaceFlags;
+	int contentFlags;
+} dshader_t;
+
 #define MAX_TOKEN_CHARS 1024
 
 static int com_tokenline = 0;
@@ -221,6 +227,42 @@ static int validateEntityString(const char* filename, const char *pk3dir, const 
 	return error;
 }
 
+static int validateTexture(const char *shaderName, const char *bspfilename, const char *pk3dir) {
+	FILE *fp;
+	char buf[1024];
+	char basename[1024];
+	int len;
+	static const char *ext[] = {"jpg", "png", "tga", NULL};
+	static const char *searchpaths[] = {"models.pk3dir", "textures.pk3dir", NULL};
+	static const char *subdirs[] = {".", "../wop", "../xmas"};
+
+	Q_strncpyz(basename, shaderName, sizeof(basename));
+	len = strlen(basename);
+	if (len <= 3) {
+		return 0;
+	}
+	// remove extension
+	if (basename[len - 4] == '.') {
+		basename[len - 4] = '\0';
+	}
+
+	// no extension in filename - append supported extensions and check for for those
+	for (const char **e = ext; *e; ++e) {
+		for (const char **searchpath = searchpaths; *searchpath; ++searchpath) {
+			for (const char **sd = subdirs; *sd; ++sd) {
+				snprintf(buf, sizeof(buf), "%s/%s/%s/%s.%s", pk3dir, *sd, *searchpath, basename, *e);
+				if ((fp = fopen(buf, "r")) != NULL) {
+					fclose(fp);
+					return 0;
+				}
+			}
+		}
+	}
+
+	printf("%s: error in bsp: shader '%s' not found\n", bspfilename, shaderName);
+	return 1;
+}
+
 static int validateBsp(const char *filename, const char *pk3dir, const void *buf) {
 	const dheader_t header = *(dheader_t *)buf;
 	printf("Validate bsp %s\n", filename);
@@ -229,22 +271,36 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 		return 1;
 	}
 
+	int errors = 0;
 	{
 		const lump_t *l = &header.lumps[LUMP_ENTITIES];
 		char *entityString = (char*)malloc(l->filelen);
 		Q_strncpyz(entityString, (const char*)((unsigned char*)buf + l->fileofs), l->filelen);
 
 		if (validateEntityString(filename, pk3dir, entityString) != 0) {
-			free(entityString);
-			return 1;
+			++errors;
 		}
-
 		free(entityString);
 	}
 	{
-		// TODO: validate shaders/textures in surfaces and patches
+		const lump_t *l = &header.lumps[LUMP_SHADERS];
+		dshader_t *shaders = (dshader_t *)(void *)((unsigned char*)buf + l->fileofs);
+		const int count = l->filelen / sizeof(*shaders);
+		int i;
+
+		if (l->filelen % sizeof(*shaders)) {
+			printf("%s: error in bsp: shader lump size found\n", filename);
+			++errors;
+		} else {
+			for (i = 0; i < count; ++i) {
+				const char *shader = shaders[i].shader;
+				if (validateTexture(shader, filename, pk3dir) == 0) {
+					++errors;
+				}
+			}
+		}
 	}
-	return 0;
+	return errors;
 }
 
 int main(int argc, char *argv[]) {
