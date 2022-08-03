@@ -1,0 +1,23 @@
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+name: "Validate"
+
+jobs:
+  validate:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: "Checkout"
+        uses: nschloe/action-cached-lfs-checkout@v1
+
+      - name: "Validate"
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DBUILD_CLIENT=OFF -DBUILD_SERVER=OFF -DBUILD_RENDERER_OPENGL2=OFF -DBUILD_RENDERER_VULKAN=OFF
+          cmake --build . --target bsp-validation
+          cmake --build . --target shader-validation
