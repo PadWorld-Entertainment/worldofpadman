@@ -68,12 +68,12 @@ typedef struct SDL_evdevlist_item
     int fd;
 
     /* TODO: use this for every device, not just touchscreen */
-    int out_of_sync;
+    SDL_bool out_of_sync;
 
     /* TODO: expand on this to have data for every possible class (mouse,
        keyboard, touchpad, etc.). Also there's probably some things in here we
        can pull out to the SDL_evdevlist_item i.e. name */
-    int is_touchscreen;
+    SDL_bool is_touchscreen;
     struct {
         char* name;
 
@@ -96,8 +96,12 @@ typedef struct SDL_evdevlist_item
 
     } * touchscreen_data;
 
+    /* Mouse state */
     SDL_bool high_res_wheel;
     SDL_bool high_res_hwheel;
+    SDL_bool relative_mouse;
+    int mouse_x, mouse_y;
+    int mouse_wheel, mouse_hwheel;
 
     struct SDL_evdevlist_item *next;
 } SDL_evdevlist_item;
@@ -225,11 +229,7 @@ static void SDL_EVDEV_udev_callback(SDL_UDEV_deviceevent udev_event, int udev_cl
 
     switch(udev_event) {
     case SDL_UDEV_DEVICEADDED:
-        if (udev_class & SDL_UDEV_DEVICE_TOUCHPAD) {
-            udev_class |= SDL_UDEV_DEVICE_TOUCHSCREEN;
-        }
-
-        if (!(udev_class & (SDL_UDEV_DEVICE_MOUSE | SDL_UDEV_DEVICE_KEYBOARD | SDL_UDEV_DEVICE_TOUCHSCREEN)))
+        if (!(udev_class & (SDL_UDEV_DEVICE_MOUSE | SDL_UDEV_DEVICE_KEYBOARD | SDL_UDEV_DEVICE_TOUCHSCREEN | SDL_UDEV_DEVICE_TOUCHPAD)))
             return;
 
         if ((udev_class & SDL_UDEV_DEVICE_JOYSTICK))
@@ -283,9 +283,9 @@ SDL_EVDEV_Poll(void)
                     if (events[i].code >= BTN_MOUSE && events[i].code < BTN_MOUSE + SDL_arraysize(EVDEV_MouseButtons)) {
                         mouse_button = events[i].code - BTN_MOUSE;
                         if (events[i].value == 0) {
-                            SDL_SendMouseButton(mouse->focus, mouse->mouseID, SDL_RELEASED, EVDEV_MouseButtons[mouse_button]);
+                            SDL_SendMouseButton(mouse->focus, (SDL_MouseID)item->fd, SDL_RELEASED, EVDEV_MouseButtons[mouse_button]);
                         } else if (events[i].value == 1) {
-                            SDL_SendMouseButton(mouse->focus, mouse->mouseID, SDL_PRESSED, EVDEV_MouseButtons[mouse_button]);
+                            SDL_SendMouseButton(mouse->focus, (SDL_MouseID)item->fd, SDL_PRESSED, EVDEV_MouseButtons[mouse_button]);
                         }
                         break;
                     }
@@ -361,16 +361,20 @@ SDL_EVDEV_Poll(void)
                             if (item->touchscreen_data->max_slots != 1)
                                 break;
                             item->touchscreen_data->slots[0].x = events[i].value;
-                        } else
-                            SDL_SendMouseMotion(mouse->focus, mouse->mouseID, SDL_FALSE, events[i].value, mouse->y);
+                        } else if (!item->relative_mouse) {
+                            /* FIXME: Normalize to input device's reported input range (EVIOCGABS) */
+                            item->mouse_x = events[i].value;
+                        }
                         break;
                     case ABS_Y:
                         if (item->is_touchscreen) {
                             if (item->touchscreen_data->max_slots != 1)
                                 break;
                             item->touchscreen_data->slots[0].y = events[i].value;
-                        } else
-                            SDL_SendMouseMotion(mouse->focus, mouse->mouseID, SDL_FALSE, mouse->x, events[i].value);
+                        } else if (!item->relative_mouse) {
+                            /* FIXME: Normalize to input device's reported input range (EVIOCGABS) */
+                            item->mouse_y = events[i].value;
+                        }
                         break;
                     default:
                         break;
@@ -379,26 +383,28 @@ SDL_EVDEV_Poll(void)
                 case EV_REL:
                     switch(events[i].code) {
                     case REL_X:
-                        SDL_SendMouseMotion(mouse->focus, mouse->mouseID, SDL_TRUE, events[i].value, 0);
+                        if (item->relative_mouse)
+                            item->mouse_x += events[i].value;
                         break;
                     case REL_Y:
-                        SDL_SendMouseMotion(mouse->focus, mouse->mouseID, SDL_TRUE, 0, events[i].value);
+                        if (item->relative_mouse)
+                            item->mouse_y += events[i].value;
                         break;
                     case REL_WHEEL:
                         if (!item->high_res_wheel)
-                            SDL_SendMouseWheel(mouse->focus, mouse->mouseID, 0, events[i].value, SDL_MOUSEWHEEL_NORMAL);
+                            item->mouse_wheel += events[i].value;
                         break;
                     case REL_WHEEL_HI_RES:
                         SDL_assert(item->high_res_wheel);
-                        SDL_SendMouseWheel(mouse->focus, mouse->mouseID, 0, events[i].value / 120.0f, SDL_MOUSEWHEEL_NORMAL);
+                        item->mouse_wheel += events[i].value;
                         break;
                     case REL_HWHEEL:
                         if (!item->high_res_hwheel)
-                            SDL_SendMouseWheel(mouse->focus, mouse->mouseID, events[i].value, 0, SDL_MOUSEWHEEL_NORMAL);
+                            item->mouse_hwheel += events[i].value;
                         break;
                     case REL_HWHEEL_HI_RES:
                         SDL_assert(item->high_res_hwheel);
-                        SDL_SendMouseWheel(mouse->focus, mouse->mouseID, events[i].value / 120.0f, 0, SDL_MOUSEWHEEL_NORMAL);
+                        item->mouse_hwheel += events[i].value;
                         break;
                     default:
                         break;
@@ -407,6 +413,19 @@ SDL_EVDEV_Poll(void)
                 case EV_SYN:
                     switch (events[i].code) {
                     case SYN_REPORT:
+                        /* Send mouse axis changes together to ensure consistency and reduce event processing overhead */
+                        if (item->mouse_x != 0 || item->mouse_y != 0) {
+                            SDL_SendMouseMotion(mouse->focus, (SDL_MouseID)item->fd, item->relative_mouse, item->mouse_x, item->mouse_y);
+                            item->mouse_x = item->mouse_y = 0;
+                        }
+                        if (item->mouse_wheel != 0 || item->mouse_hwheel != 0) {
+                            SDL_SendMouseWheel(mouse->focus, (SDL_MouseID)item->fd,
+                                               item->mouse_hwheel / (item->high_res_hwheel ? 120.0f : 1.0f),
+                                               item->mouse_wheel / (item->high_res_wheel ? 120.0f : 1.0f),
+                                               SDL_MOUSEWHEEL_NORMAL);
+                            item->mouse_wheel = item->mouse_hwheel = 0;
+                        }
+
                         if (!item->is_touchscreen) /* FIXME: temp hack */
                             break;
 
@@ -447,11 +466,11 @@ SDL_EVDEV_Poll(void)
                         }
 
                         if (item->out_of_sync)
-                            item->out_of_sync = 0;
+                            item->out_of_sync = SDL_FALSE;
                         break;
                     case SYN_DROPPED:
                         if (item->is_touchscreen)
-                            item->out_of_sync = 1;
+                            item->out_of_sync = SDL_TRUE;
                         SDL_EVDEV_sync_device(item);
                         break;
                     default:
@@ -490,7 +509,7 @@ SDL_EVDEV_translate_keycode(int keycode)
 
 #ifdef SDL_USE_LIBUDEV
 static int
-SDL_EVDEV_init_touchscreen(SDL_evdevlist_item* item)
+SDL_EVDEV_init_touchscreen(SDL_evdevlist_item* item, int udev_class)
 {
     int ret, i;
     unsigned long xreq, yreq;
@@ -577,7 +596,7 @@ SDL_EVDEV_init_touchscreen(SDL_evdevlist_item* item)
     }
 
     ret = SDL_AddTouch(item->fd, /* I guess our fd is unique enough */
-        SDL_TOUCH_DEVICE_DIRECT,
+        (udev_class & SDL_UDEV_DEVICE_TOUCHPAD) ? SDL_TOUCH_DEVICE_INDIRECT_ABSOLUTE : SDL_TOUCH_DEVICE_DIRECT,
         item->touchscreen_data->name);
     if (ret < 0) {
         SDL_free(item->touchscreen_data->slots);
@@ -760,14 +779,16 @@ SDL_EVDEV_device_added(const char *dev_path, int udev_class)
     }
 
     if (ioctl(item->fd, EVIOCGBIT(EV_REL, sizeof(relbit)), relbit) >= 0) {
+        item->relative_mouse = test_bit(REL_X, relbit) && test_bit(REL_Y, relbit);
         item->high_res_wheel = test_bit(REL_WHEEL_HI_RES, relbit);
         item->high_res_hwheel = test_bit(REL_HWHEEL_HI_RES, relbit);
     }
 
-    if (udev_class & SDL_UDEV_DEVICE_TOUCHSCREEN) {
-        item->is_touchscreen = 1;
+    /* For now, we just treat a touchpad like a touchscreen */
+    if (udev_class & (SDL_UDEV_DEVICE_TOUCHSCREEN | SDL_UDEV_DEVICE_TOUCHPAD)) {
+        item->is_touchscreen = SDL_TRUE;
 
-        if ((ret = SDL_EVDEV_init_touchscreen(item)) < 0) {
+        if ((ret = SDL_EVDEV_init_touchscreen(item, udev_class)) < 0) {
             close(item->fd);
             SDL_free(item->path);
             SDL_free(item);
