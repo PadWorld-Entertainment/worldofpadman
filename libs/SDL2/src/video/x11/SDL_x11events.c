@@ -729,11 +729,27 @@ isReparentNotify(Display *display, XEvent *ev, XPointer arg)
         ev->xreparent.serial == unmap->serial;
 }
 
+static int
+XLookupStringAsUTF8(XKeyEvent *event_struct, char *buffer_return, int bytes_buffer, KeySym *keysym_return, XComposeStatus *status_in_out)
+{
+    int result = X11_XLookupString(event_struct, buffer_return, bytes_buffer, keysym_return, status_in_out);
+    if (result > 0) {
+        char *utf8_text = SDL_iconv_string("UTF-8", "ISO-8859-1", buffer_return, result);
+        if (utf8_text) {
+            SDL_strlcpy(buffer_return, utf8_text, bytes_buffer);
+            SDL_free(utf8_text);
+            return SDL_strlen(buffer_return);
+        } else {
+            return 0;
+        }
+    }
+    return result;
+}
+
 static void
 X11_DispatchEvent(_THIS, XEvent *xevent)
 {
     SDL_VideoData *videodata = (SDL_VideoData *) _this->driverdata;
-    XkbEvent* xkbEvent = (XkbEvent*) xevent;
     Display *display;
     SDL_WindowData *data;
     int orig_event_type;
@@ -786,6 +802,12 @@ X11_DispatchEvent(_THIS, XEvent *xevent)
     }
 #endif
 
+#if SDL_VIDEO_DRIVER_X11_XRANDR
+    if (videodata->xrandr_event_base && (xevent->type == (videodata->xrandr_event_base + RRNotify))) {
+        X11_HandleXRandREvent(_this, xevent);
+    }
+#endif
+
     /* Send a SDL_SYSWMEVENT if the application wants them */
     if (SDL_GetEventState(SDL_SYSWMEVENT) == SDL_ENABLE) {
         SDL_SysWMmsg wmmsg;
@@ -820,11 +842,13 @@ X11_DispatchEvent(_THIS, XEvent *xevent)
     if (!data) {
         /* The window for KeymapNotify, etc events is 0 */
         if (xevent->type == KeymapNotify) {
+#ifdef DEBUG_XEVENTS
+            printf("window %p: KeymapNotify!\n", data);
+#endif
             if (SDL_GetKeyboardFocus() != NULL) {
                 X11_ReconcileKeyboardState(_this);
             }
-        } else if (xevent->type == MappingNotify ||
-                   (xevent->type == videodata->xkb_event && xkbEvent->any.xkb_type == XkbStateNotify)) {
+        } else if (xevent->type == MappingNotify) {
             /* Has the keyboard layout changed? */
             const int request = xevent->xmapping.request;
 
@@ -835,8 +859,7 @@ X11_DispatchEvent(_THIS, XEvent *xevent)
                 X11_XRefreshKeyboardMapping(&xevent->xmapping);
             }
 
-            X11_UpdateKeymap(_this);
-            SDL_SendKeymapChangedEvent();
+            X11_UpdateKeymap(_this, SDL_TRUE);
         } else if (xevent->type == PropertyNotify && videodata && videodata->windowlist) {
             char* name_of_atom = X11_XGetAtomName(display, xevent->xproperty.atom);
 
@@ -1021,7 +1044,7 @@ X11_DispatchEvent(_THIS, XEvent *xevent)
             SDL_bool handled_by_ime = SDL_FALSE;
 
 #ifdef DEBUG_XEVENTS
-            printf("window %p: %s (X11 keycode = 0x%X)\n" data, (xevent->type == KeyPress ? "KeyPress" : "KeyRelease"),  xevent->xkey.keycode);
+            printf("window %p: %s (X11 keycode = 0x%X)\n", data, (xevent->type == KeyPress ? "KeyPress" : "KeyRelease"), xevent->xkey.keycode);
 #endif
 #if 1
             if (videodata->key_layout[keycode] == SDL_SCANCODE_UNKNOWN && keycode) {
@@ -1041,10 +1064,10 @@ X11_DispatchEvent(_THIS, XEvent *xevent)
                 X11_Xutf8LookupString(data->ic, &xevent->xkey, text, sizeof(text),
                                   &keysym, &status);
             } else {
-                X11_XLookupString(&xevent->xkey, text, sizeof(text), &keysym, NULL);
+                XLookupStringAsUTF8(&xevent->xkey, text, sizeof(text), &keysym, NULL);
             }
 #else
-            X11_XLookupString(&xevent->xkey, text, sizeof(text), &keysym, NULL);
+            XLookupStringAsUTF8(&xevent->xkey, text, sizeof(text), &keysym, NULL);
 #endif
 
 #ifdef SDL_USE_IME
@@ -1058,7 +1081,7 @@ X11_DispatchEvent(_THIS, XEvent *xevent)
                     if (xevent->xkey.keycode != videodata->filter_code || xevent->xkey.time != videodata->filter_time) {
                         SDL_SendKeyboardKey(SDL_PRESSED, videodata->key_layout[keycode]);
                     }
-                    if(*text) {
+                    if (*text) {
                         SDL_SendKeyboardText(text);
                     }
                 } else {
@@ -1449,17 +1472,6 @@ X11_DispatchEvent(_THIS, XEvent *xevent)
                     }
                 }
 
-                /* FULLSCREEN_DESKTOP encompasses two bits: SDL_WINDOW_FULLSCREEN, plus a bit to note it's FULLSCREEN_DESKTOP */
-                if (changed & SDL_WINDOW_FULLSCREEN_DESKTOP) {
-                    SDL_VideoDisplay *viddisplay = SDL_GetDisplayForWindow(data->window);
-                    const Uint32 fsmasked = flags & SDL_WINDOW_FULLSCREEN_DESKTOP;
-                    data->window->flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
-                    data->window->flags |= fsmasked;
-                    if (viddisplay) {
-                        viddisplay->fullscreen_window = fsmasked ? data->window : NULL;
-                    }
-                }
-
                 if (changed & SDL_WINDOW_MAXIMIZED) {
                     if (flags & SDL_WINDOW_MAXIMIZED) {
                         SDL_SendWindowEvent(data->window, SDL_WINDOWEVENT_MAXIMIZED, 0, 0);
@@ -1474,8 +1486,7 @@ X11_DispatchEvent(_THIS, XEvent *xevent)
                    icon). Since it changes the XKLAVIER_STATE property, we
                    notice and reinit our keymap here. This might not be the
                    right approach, but it seems to work. */
-                X11_UpdateKeymap(_this);
-                SDL_SendKeymapChangedEvent();
+                X11_UpdateKeymap(_this, SDL_TRUE);
             } else if (xevent->xproperty.atom == videodata->_NET_FRAME_EXTENTS) {
                 Atom type;
                 int format;

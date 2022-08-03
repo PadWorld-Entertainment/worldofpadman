@@ -248,7 +248,8 @@ typedef enum
     SDL_GL_FRAMEBUFFER_SRGB_CAPABLE,
     SDL_GL_CONTEXT_RELEASE_BEHAVIOR,
     SDL_GL_CONTEXT_RESET_NOTIFICATION,
-    SDL_GL_CONTEXT_NO_ERROR
+    SDL_GL_CONTEXT_NO_ERROR,
+    SDL_GL_FLOATBUFFERS
 } SDL_GLattr;
 
 typedef enum
@@ -443,6 +444,15 @@ extern DECLSPEC int SDLCALL SDL_GetDisplayUsableBounds(int displayIndex, SDL_Rec
  *
  * A failure of this function usually means that either no DPI information is
  * available or the `displayIndex` is out of range.
+ *
+ * **WARNING**: This reports the DPI that the hardware reports, and it is not
+ * always reliable! It is almost always better to use SDL_GetWindowSize() to
+ * find the window size, which might be in logical points instead of pixels,
+ * and then SDL_GL_GetDrawableSize(), SDL_Vulkan_GetDrawableSize(),
+ * SDL_Metal_GetDrawableSize(), or SDL_GetRendererOutputSize(), and compare
+ * the two values to get an actual scaling value between the two. We will be
+ * rethinking how high-dpi details should be managed in SDL3 to make things
+ * more consistent, reliable, and clear.
  *
  * \param displayIndex the index of the display from which DPI information
  *                     should be queried
@@ -697,7 +707,10 @@ extern DECLSPEC Uint32 SDLCALL SDL_GetWindowPixelFormat(SDL_Window * window);
  * in pixels may differ from its size in screen coordinates on platforms with
  * high-DPI support (e.g. iOS and macOS). Use SDL_GetWindowSize() to query the
  * client area's size in screen coordinates, and SDL_GL_GetDrawableSize() or
- * SDL_GetRendererOutputSize() to query the drawable size in pixels.
+ * SDL_GetRendererOutputSize() to query the drawable size in pixels. Note that
+ * when this flag is set, the drawable size can vary after the window is
+ * created and should be queried after major window events such as when the
+ * window is resized or moved between displays.
  *
  * If the window is set fullscreen, the width and height parameters `w` and
  * `h` will not be used. However, invalid size parameters (e.g. too large) may
@@ -2009,13 +2022,8 @@ extern DECLSPEC void SDLCALL SDL_GL_GetDrawableSize(SDL_Window * window, int *w,
  * retry the call with 1 for the interval.
  *
  * Adaptive vsync is implemented for some glX drivers with
- * GLX_EXT_swap_control_tear:
- *
- * https://www.opengl.org/registry/specs/EXT/glx_swap_control_tear.txt
- *
- * and for some Windows drivers with WGL_EXT_swap_control_tear:
- *
- * https://www.opengl.org/registry/specs/EXT/wgl_swap_control_tear.txt
+ * GLX_EXT_swap_control_tear, and for some Windows drivers with
+ * WGL_EXT_swap_control_tear.
  *
  * Read more on the Khronos wiki:
  * https://www.khronos.org/opengl/wiki/Swap_Interval#Adaptive_Vsync
