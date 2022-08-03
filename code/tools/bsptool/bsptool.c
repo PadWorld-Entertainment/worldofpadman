@@ -223,24 +223,27 @@ static int validateEntityString(const char* filename, const char *pk3dir, const 
 
 static int validateBsp(const char *filename, const char *pk3dir, const void *buf) {
 	const dheader_t header = *(dheader_t *)buf;
-	const lump_t *l;
-	char *entityString;
 	printf("Validate bsp %s\n", filename);
 	if (header.version != BSP_VERSION) {
 		printf("%s: error invalid bsp version found: %i\n", filename, header.version);
 		return 1;
 	}
 
-	l = &header.lumps[LUMP_ENTITIES];
-	entityString = (char*)malloc(l->filelen);
-	Q_strncpyz(entityString, (const char*)((unsigned char*)buf + l->fileofs), l->filelen);
+	{
+		const lump_t *l = &header.lumps[LUMP_ENTITIES];
+		char *entityString = (char*)malloc(l->filelen);
+		Q_strncpyz(entityString, (const char*)((unsigned char*)buf + l->fileofs), l->filelen);
 
-	if (validateEntityString(filename, pk3dir, entityString) != 0) {
+		if (validateEntityString(filename, pk3dir, entityString) != 0) {
+			free(entityString);
+			return 1;
+		}
+
 		free(entityString);
-		return 1;
 	}
-
-	free(entityString);
+	{
+		// TODO: validate shaders/textures in surfaces and patches
+	}
 	return 0;
 }
 
