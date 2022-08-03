@@ -46,6 +46,9 @@ if (MSVC)
 	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()
 
+enable_testing()
+set(CTEST_TEST_TIMEOUT 1800)
+
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
 	add_compile_definitions(NDEBUG)
 else()
@@ -71,8 +74,6 @@ function(check_compiler_flag flag)
 endfunction()
 
 add_custom_target(pk3)
-add_custom_target(shader-validation)
-add_custom_target(bsp-validation)
 
 set(ZIP_7z "a")
 set(ZIP_zip "-r9q")
@@ -87,15 +88,10 @@ function(shader_validation GAME SHADER)
   set(targetname "shader-${GAME}-${SHADER}")
   get_filename_component(targetname ${targetname} NAME_WLE)
   get_filename_component(filename ${SHADERPATH} NAME)
-  add_custom_target(${targetname}
-    COMMENT "Validate ${SHADERPATH}"
-    COMMAND "$<TARGET_FILE:shadertool>" "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}"
-    DEPENDS shadertool "${SHADERPATH}"
+  add_test(NAME ${targetname}
+    COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}"
     WORKING_DIRECTORY "$<TARGET_FILE_DIR:shadertool>"
-    SOURCES "${SHADERPATH}"
-    VERBATIM
   )
-  add_dependencies(shader-validation ${targetname})
 endfunction()
 
 function(bsp_validation GAME BSP)
@@ -103,15 +99,10 @@ function(bsp_validation GAME BSP)
   set(targetname "bsp-${GAME}-${BSP}")
   get_filename_component(targetname ${targetname} NAME_WLE)
   get_filename_component(filename ${BSPPATH} NAME)
-  add_custom_target(${targetname}
-    COMMENT "Validate ${BSPPATH}"
-    COMMAND "$<TARGET_FILE:bsptool>" "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}"
-    DEPENDS bsptool "${BSPPATH}"
+  add_test(NAME ${targetname}
+    COMMAND $<TARGET_FILE:bsptool> "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}"
     WORKING_DIRECTORY "$<TARGET_FILE_DIR:bsptool>"
-    SOURCES "${BSPPATH}"
-    VERBATIM
   )
-  add_dependencies(bsp-validation ${targetname})
 endfunction()
 
 function(compress_pk3 TARGET)

@@ -24,5 +24,6 @@ jobs:
           mkdir build
           cd build
           cmake .. -DBUILD_CLIENT=OFF -DBUILD_SERVER=OFF -DBUILD_RENDERER_OPENGL2=OFF -DBUILD_RENDERER_VULKAN=OFF
-          cmake --build . --target bsp-validation
-          cmake --build . --target shader-validation
+          cmake --build . --target bsptool
+          cmake --build . --target shadertool
+          ctest --output-on-failure
