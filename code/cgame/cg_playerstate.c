@@ -256,10 +256,7 @@ CG_CheckLocalSounds
 ==================
 */
 static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
-	int highScore;
-	int livesLeft;
 	qboolean reward = qfalse;
-	sfxHandle_t sfx;
 
 	// don't play the sounds if the player just changed teams
 	if (ps->persistant[PERS_TEAM] != ops->persistant[PERS_TEAM]) {
@@ -287,31 +284,31 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 
 	// reward sounds
 	if (ps->persistant[PERS_EXCELLENT_COUNT] != ops->persistant[PERS_EXCELLENT_COUNT]) {
-		sfx = cgs.media.excellentSound;
+		sfxHandle_t sfx = cgs.media.excellentSound;
 		CG_PushReward(sfx, cgs.media.medalExcellent, ps->persistant[PERS_EXCELLENT_COUNT]);
 		reward = qtrue;
 		// Com_Printf("Excellent award\n");
 	}
 	if ((ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF00) != (ops->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF00)) {
-		sfx = cgs.media.spraygodSound;
+		sfxHandle_t sfx = cgs.media.spraygodSound;
 		CG_PushReward(sfx, cgs.media.medalSpraygod, (ps->persistant[PERS_SPRAYAWARDS_COUNT] >> 8));
 		reward = qtrue;
 		// Com_Printf("SprayGod award\n");
 	}
 	if ((ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF) != (ops->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF)) {
-		sfx = cgs.media.spraykillerSound;
+		sfxHandle_t sfx = cgs.media.spraykillerSound;
 		CG_PushReward(sfx, cgs.media.medalSpraykiller, ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF);
 		reward = qtrue;
 		// Com_Printf("SprayKiller award\n");
 	}
 	if (ps->persistant[PERS_CAPTURES] != ops->persistant[PERS_CAPTURES]) {
-		sfx = cgs.media.padstarSound;
+		sfxHandle_t sfx = cgs.media.padstarSound;
 		CG_PushReward(sfx, cgs.media.medalPadStar, ps->persistant[PERS_CAPTURES]);
 		reward = qtrue;
 		// Com_Printf("PadStar award\n");
 	}
 	if (ps->persistant[PERS_SNACKATTACK_COUNT] != ops->persistant[PERS_SNACKATTACK_COUNT]) {
-		sfx = cgs.media.snackattackSound;
+		sfxHandle_t sfx = cgs.media.snackattackSound;
 		CG_PushReward(sfx, cgs.media.medalSnackAttack, ps->persistant[PERS_SNACKATTACK_COUNT]);
 		reward = qtrue;
 		// Com_Printf("SnackAttack award\n");
@@ -367,9 +364,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 
 	// timelimit warnings
 	if (cgs.timelimit > 0) {
-		int msec;
-
-		msec = cg.time - cgs.levelStartTime;
+		const int msec = cg.time - cgs.levelStartTime;
 		if (!(cg.timelimitWarnings & 4) && msec > (cgs.timelimit * 60 + 2) * 1000) {
 			cg.timelimitWarnings |= 1 | 2 | 4;
 			trap_S_StartLocalSound(cgs.media.suddenDeathSound, CHAN_ANNOUNCER); // TODO maybe change
@@ -387,7 +382,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 
 	// fraglimit warnings
 	if (cgs.fraglimit > 0 && cgs.gametype < GT_CTF) {
-		highScore = cgs.scores1;
+		int highScore = cgs.scores1;
 		if (cgs.gametype == GT_TEAM && cgs.scores2 > highScore) {
 			highScore = cgs.scores2;
 		}
@@ -425,7 +420,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 
 	// lifelimit warnings
 	if (cgs.lpsStartLives > 0 && cgs.gametype == GT_LPS && !(cgs.lpsflags & LPSF_PPOINTLIMIT)) {
-		livesLeft = cg.snap->ps.stats[STAT_LIVESLEFT];
+		const int livesLeft = cg.snap->ps.stats[STAT_LIVESLEFT];
 		if (!(cg.lifelimitWarnings & 4) && livesLeft == 1) {
 			cg.lifelimitWarnings |= 1 | 2 | 4;
 			CG_AddBufferedSound(cgs.media.oneLifeSound);
