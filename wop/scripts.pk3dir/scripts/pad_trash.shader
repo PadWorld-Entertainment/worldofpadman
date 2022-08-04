@@ -593,6 +593,7 @@ textures/pad_trash/kb_green_03
 textures/pad_trash/kb_sand
 {
 	qer_editorimage textures/pad_trash/kb_sand
+	surfaceparm dust
 	surfaceparm sandsteps
 	q3map_nonplanar
 	q3map_shadeangle 60
@@ -610,6 +611,7 @@ textures/pad_trash/kb_sand
 textures/pad_trash/kb_laubboden_01
 {
 	qer_editorimage textures/pad_trash/kb_laubboden_01
+	surfaceparm dust
 	surfaceparm sandsteps
 	q3map_nonplanar
 	q3map_shadeangle 60
