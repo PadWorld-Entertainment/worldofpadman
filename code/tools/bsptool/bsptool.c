@@ -227,7 +227,7 @@ static int validateEntityString(const char* filename, const char *pk3dir, const 
 	return error;
 }
 
-static int validateTexture(const char *shaderName, const char *bspfilename, const char *pk3dir) {
+static int validateShader(const char *shaderName, const char *bspfilename, const char *pk3dir) {
 	FILE *fp;
 	char buf[1024];
 	char basename[1024];
@@ -282,7 +282,7 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 		}
 		free(entityString);
 	}
-	{
+	if (0) { // TODO: load all shaders and parse the ids
 		const lump_t *l = &header.lumps[LUMP_SHADERS];
 		dshader_t *shaders = (dshader_t *)(void *)((unsigned char*)buf + l->fileofs);
 		const int count = l->filelen / sizeof(*shaders);
@@ -294,7 +294,7 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 		} else {
 			for (i = 0; i < count; ++i) {
 				const char *shader = shaders[i].shader;
-				if (validateTexture(shader, filename, pk3dir) == 0) {
+				if (validateShader(shader, filename, pk3dir) == 0) {
 					++errors;
 				}
 			}
