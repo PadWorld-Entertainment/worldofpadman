@@ -463,27 +463,6 @@ textures/pad_trash/kb_verzierung
 	}
 }
 
-textures/pad_trash/kb_verzierung2
-{
-	surfaceparm alphashadow
-	surfaceparm trans
-	surfaceparm nomarks
-	cull disable
-	nopicmip
-	{
-		map textures/pad_trash/kb_verzierung2
-		rgbGen identity
-		depthWrite
-		alphaFunc GE128
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendfunc filter
-		depthFunc equal
-	}
-}
-
 textures/pad_trash/kb_verzierung3
 {
 	surfaceparm alphashadow
@@ -570,14 +549,14 @@ textures/pad_trash/kb_green_02
 
 textures/pad_trash/kb_green_03
 {
-	qer_editorimage models\mapobjects\pad_ddmix\trashcan\bush
+	qer_editorimage models/mapobjects/pad_ddmix/trashcan/bush
 	surfaceparm alphashadow
 	surfaceparm trans
 	surfaceparm nomarks
 	cull disable
 	nopicmip
 	{
-		map models\mapobjects\pad_ddmix\trashcan\bush
+		map models/mapobjects/pad_ddmix/trashcan/bush
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128
@@ -872,13 +851,13 @@ textures/pad_trash/kb_kanaldeckel
 
 textures/pad_poster/greensun
 {
-     surfaceparm nomarks
-     surfaceparm trans
-     surfaceparm pointlight
-     polygonOffset
-        {
-		map textures/pad_poster/poster
-               	blendFunc blend
+	surfaceparm nomarks
+	surfaceparm trans
+	surfaceparm pointlight
+	polygonOffset
+	{
+		map textures/pad_poster/greensun
+		blendFunc blend
 		rgbGen vertex
 	}
 }
@@ -1104,14 +1083,14 @@ textures/pad_trash/rost_we
 
 textures/pad_trash/kb_greensun
 {
-     	qer_editorimage textures/pad_poster/greensun
+	qer_editorimage textures/pad_poster/greensun
 	surfaceparm nomarks
-     	surfaceparm trans
-     	surfaceparm pointlight
-     	polygonOffset
-        {
+	surfaceparm trans
+	surfaceparm pointlight
+	polygonOffset
+	{
 		map textures/pad_poster/greensun
-               	blendFunc blend
+		blendFunc blend
 		rgbGen vertex
 	}
 }
