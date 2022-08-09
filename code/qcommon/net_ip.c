@@ -151,7 +151,7 @@ static int numIP;
 NET_ErrorString
 ====================
 */
-char *NET_ErrorString(void) {
+static char *NET_ErrorString(void) {
 #ifdef _WIN32
 	// FIXME: replace with FormatMessage?
 	switch (socketError) {
@@ -522,7 +522,7 @@ NET_GetPacket
 Receive one packet
 ==================
 */
-qboolean NET_GetPacket(netadr_t *net_from, msg_t *net_message, fd_set *fdr) {
+static qboolean NET_GetPacket(netadr_t *net_from, msg_t *net_message, fd_set *fdr) {
 	int ret;
 	struct sockaddr_storage from;
 	socklen_t fromlen;
@@ -781,7 +781,7 @@ void Sys_ShowIP(void) {
 NET_IPSocket
 ====================
 */
-SOCKET NET_IPSocket(char *net_interface, int port, int *err) {
+static SOCKET NET_IPSocket(char *net_interface, int port, int *err) {
 	SOCKET newsocket;
 	struct sockaddr_in address;
 	ioctlarg_t _true = 1;
@@ -844,7 +844,7 @@ SOCKET NET_IPSocket(char *net_interface, int port, int *err) {
 NET_IP6Socket
 ====================
 */
-SOCKET NET_IP6Socket(char *net_interface, int port, struct sockaddr_in6 *bindto, int *err) {
+static SOCKET NET_IP6Socket(char *net_interface, int port, struct sockaddr_in6 *bindto, int *err) {
 	SOCKET newsocket;
 	struct sockaddr_in6 address;
 	ioctlarg_t _true = 1;
@@ -921,7 +921,7 @@ NET_SetMulticast
 Set the current multicast group
 ====================
 */
-void NET_SetMulticast6(void) {
+static void NET_SetMulticast6(void) {
 	struct sockaddr_in6 addr;
 
 	if (!*net_mcast6addr->string ||
@@ -1013,7 +1013,7 @@ void NET_LeaveMulticast6(void) {
 NET_OpenSocks
 ====================
 */
-void NET_OpenSocks(int port) {
+static void NET_OpenSocks(int port) {
 	struct sockaddr_in address;
 	struct hostent *h;
 	int len;
@@ -1098,8 +1098,8 @@ void NET_OpenSocks(int port) {
 		int plen;
 
 		// build the request
-		ulen = strlen(net_socksUsername->string);
-		plen = strlen(net_socksPassword->string);
+		ulen = (int)strlen(net_socksUsername->string);
+		plen = (int)strlen(net_socksPassword->string);
 
 		buf[0] = 1; // username/password authentication version
 		buf[1] = ulen;
@@ -1282,7 +1282,7 @@ static void NET_GetLocalAddress(void) {
 NET_OpenIP
 ====================
 */
-void NET_OpenIP(void) {
+static void NET_OpenIP(void) {
 	int i;
 	int err;
 	int port;
@@ -1531,7 +1531,7 @@ Called from NET_Sleep which uses select() to determine which sockets have seen a
 ====================
 */
 
-void NET_Event(fd_set *fdr) {
+static void NET_Event(fd_set *fdr) {
 	byte bufData[MAX_MSGLEN + 1];
 	netadr_t from = {0};
 	msg_t netmsg;

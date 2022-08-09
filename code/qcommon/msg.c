@@ -561,7 +561,7 @@ int kbitmask[32] = {
 	0x01FFFFFF, 0x03FFFFFF, 0x07FFFFFF, 0x0FFFFFFF, 0x1FFFFFFF, 0x3FFFFFFF, 0x7FFFFFFF, 0xFFFFFFFF,
 };
 
-void MSG_WriteDeltaKey(msg_t *msg, int key, int oldV, int newV, int bits) {
+static void MSG_WriteDeltaKey(msg_t *msg, int key, int oldV, int newV, int bits) {
 	if (oldV == newV) {
 		MSG_WriteBits(msg, 0, 1);
 		return;
@@ -570,14 +570,15 @@ void MSG_WriteDeltaKey(msg_t *msg, int key, int oldV, int newV, int bits) {
 	MSG_WriteBits(msg, newV ^ key, bits);
 }
 
-int MSG_ReadDeltaKey(msg_t *msg, int key, int oldV, int bits) {
+static int MSG_ReadDeltaKey(msg_t *msg, int key, int oldV, int bits) {
 	if (MSG_ReadBits(msg, 1)) {
 		return MSG_ReadBits(msg, bits) ^ (key & kbitmask[bits - 1]);
 	}
 	return oldV;
 }
 
-void MSG_WriteDeltaKeyFloat(msg_t *msg, int key, float oldV, float newV) {
+#if 0
+static void MSG_WriteDeltaKeyFloat(msg_t *msg, int key, float oldV, float newV) {
 	floatint_t fi;
 	if (oldV == newV) {
 		MSG_WriteBits(msg, 0, 1);
@@ -588,7 +589,7 @@ void MSG_WriteDeltaKeyFloat(msg_t *msg, int key, float oldV, float newV) {
 	MSG_WriteBits(msg, fi.i ^ key, 32);
 }
 
-float MSG_ReadDeltaKeyFloat(msg_t *msg, int key, float oldV) {
+static float MSG_ReadDeltaKeyFloat(msg_t *msg, int key, float oldV) {
 	if (MSG_ReadBits(msg, 1)) {
 		floatint_t fi;
 
@@ -597,6 +598,7 @@ float MSG_ReadDeltaKeyFloat(msg_t *msg, int key, float oldV) {
 	}
 	return oldV;
 }
+#endif
 
 /*
 ============================================================================

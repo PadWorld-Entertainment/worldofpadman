@@ -201,7 +201,7 @@ CM_BoundBrush
 
 =================
 */
-void CM_BoundBrush(cbrush_t *b) {
+static void CM_BoundBrush(cbrush_t *b) {
 	b->bounds[0][0] = -b->sides[0].plane->dist;
 	b->bounds[1][0] = b->sides[1].plane->dist;
 
@@ -515,11 +515,11 @@ static void CMod_LoadPatches(const lump_t *surfs, const lump_t *verts) {
 
 //==================================================================
 
-unsigned CM_LumpChecksum(lump_t *lump) {
+static unsigned CM_LumpChecksum(lump_t *lump) {
 	return LittleLong(Com_BlockChecksum(cmod_base + lump->fileofs, lump->filelen));
 }
 
-unsigned CM_Checksum(dheader_t *header) {
+static unsigned CM_Checksum(dheader_t *header) {
 	unsigned checksums[16];
 	checksums[0] = CM_LumpChecksum(&header->lumps[LUMP_SHADERS]);
 	checksums[1] = CM_LumpChecksum(&header->lumps[LUMP_LEAFS]);

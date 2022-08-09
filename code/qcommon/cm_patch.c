@@ -1228,7 +1228,7 @@ CM_TracePointThroughPatchCollide
   special case for point traces because the patch collide "brushes" have no volume
 ====================
 */
-void CM_TracePointThroughPatchCollide(traceWork_t *tw, const struct patchCollide_s *pc) {
+static void CM_TracePointThroughPatchCollide(traceWork_t *tw, const struct patchCollide_s *pc) {
 	qboolean frontFacing[MAX_PATCH_PLANES];
 	float intersection[MAX_PATCH_PLANES];
 	float intersect;

@@ -116,7 +116,7 @@ static float CM_DistanceFromLineSquared(const vec3_t p, const vec3_t lp1, const 
 CM_VectorDistanceSquared
 ================
 */
-float CM_VectorDistanceSquared(vec3_t p1, vec3_t p2) {
+static float CM_VectorDistanceSquared(vec3_t p1, vec3_t p2) {
 	vec3_t dir;
 
 	VectorSubtract(p2, p1, dir);

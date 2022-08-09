@@ -413,7 +413,7 @@ qboolean NET_GetLoopPacket(netsrc_t sock, netadr_t *net_from, msg_t *net_message
 	return qtrue;
 }
 
-void NET_SendLoopPacket(netsrc_t sock, int length, const void *data, netadr_t to) {
+static void NET_SendLoopPacket(netsrc_t sock, int length, const void *data, netadr_t to) {
 	int i;
 	loopback_t *loop;
 
@@ -482,7 +482,6 @@ void NET_FlushPacketQueue(void) {
 }
 
 void NET_SendPacket(netsrc_t sock, int length, const void *data, netadr_t to) {
-
 	// sequenced packets are shown in netchan, so just show oob
 	if (showpackets->integer && *(int *)data == -1) {
 		Com_Printf("send packet %4i\n", length);

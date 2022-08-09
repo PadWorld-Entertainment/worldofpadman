@@ -388,7 +388,7 @@ Com_ParseCommandLine
 Break it up into multiple console lines
 ==================
 */
-void Com_ParseCommandLine(char *commandLine) {
+static void Com_ParseCommandLine(char *commandLine) {
 	int inq = 0;
 	com_consoleLines[0] = commandLine;
 	com_numConsoleLines = 1;

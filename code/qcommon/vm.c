@@ -329,7 +329,7 @@ Dlls will call this directly
 
 ============
 */
-intptr_t QDECL VM_DllSyscall(intptr_t arg, ...) {
+static intptr_t QDECL VM_DllSyscall(intptr_t arg, ...) {
 #if !id386 || defined __clang__
 	// rcg010206 - see commentary above
 	intptr_t args[MAX_VMSYSCALL_ARGS];
