@@ -69,7 +69,7 @@ function(check_compiler_flag flag)
   string(TOUPPER ${_flag} _flagfinal)
   check_c_compiler_flag("${flag}" COMPILER_SUPPORTS_${_flagfinal})
   if (COMPILER_SUPPORTS_${_flagfinal})
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flag}")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flag}" PARENT_SCOPE)
   endif()
 endfunction()
 
