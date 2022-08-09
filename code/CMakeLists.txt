@@ -8,6 +8,12 @@ endif()
 
 check_compiler_flag(-Wall)
 check_compiler_flag(-Wextra)
+check_compiler_flag(-Wpedantic)
+check_compiler_flag(-Wshadow)
+check_compiler_flag(-Wpointer-arith)
+check_compiler_flag(-Wcast-qual)
+check_compiler_flag(-Wstrict-prototypes)
+check_compiler_flag(-Wmissing-prototypes)
 check_compiler_flag(-Wno-unused-parameter)
 check_compiler_flag(-Wno-sign-compare)
 
