@@ -1003,7 +1003,7 @@ models/mapobjects/pad_cups/pad_cup01
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup001
+		map models/mapobjects/pad_cups/cup001
 		rgbGen Vertex
 	}
 
@@ -1014,7 +1014,7 @@ models/mapobjects/pad_cups/pad_cup02
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup001
+		map models/mapobjects/pad_cups/cup001
 		rgbGen Vertex
 	}
 
@@ -1026,7 +1026,7 @@ models/mapobjects/pad_cups/pad_cup03
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup002
+		map models/mapobjects/pad_cups/cup002
 		rgbGen Vertex
 	}
 
@@ -1038,7 +1038,7 @@ models/mapobjects/pad_cups/pad_cup04
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup002
+		map models/mapobjects/pad_cups/cup002
 		rgbGen Vertex
 	}
 
@@ -1050,7 +1050,7 @@ models/mapobjects/pad_cups/pad_cup05
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup003
+		map models/mapobjects/pad_cups/cup003
 		rgbGen Vertex
 	}
 
@@ -1062,7 +1062,7 @@ models/mapobjects/pad_cups/pad_cup06
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup003
+		map models/mapobjects/pad_cups/cup003
 		rgbGen Vertex
 	}
 
@@ -1073,7 +1073,7 @@ models/mapobjects/pad_cups/pad_cup07
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup004
+		map models/mapobjects/pad_cups/cup004
 		rgbGen Vertex
 	}
 
@@ -1085,7 +1085,7 @@ models/mapobjects/pad_cups/pad_cup08
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup004
+		map models/mapobjects/pad_cups/cup004
 		rgbGen Vertex
 	}
 
@@ -1097,7 +1097,7 @@ models/mapobjects/pad_cups/pad_cup01_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup001
+		map models/mapobjects/pad_cups/cup001
 		rgbGen Vertex
 	}
 
@@ -1108,7 +1108,7 @@ models/mapobjects/pad_cups/pad_cup02_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup001
+		map models/mapobjects/pad_cups/cup001
 		rgbGen Vertex
 	}
 
@@ -1120,7 +1120,7 @@ models/mapobjects/pad_cups/pad_cup03_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup002
+		map models/mapobjects/pad_cups/cup002
 		rgbGen Vertex
 	}
 
@@ -1132,7 +1132,7 @@ models/mapobjects/pad_cups/pad_cup04_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup002
+		map models/mapobjects/pad_cups/cup002
 		rgbGen Vertex
 	}
 
@@ -1144,7 +1144,7 @@ models/mapobjects/pad_cups/pad_cup05_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup003
+		map models/mapobjects/pad_cups/cup003
 		rgbGen Vertex
 	}
 
@@ -1156,7 +1156,7 @@ models/mapobjects/pad_cups/pad_cup06_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup003
+		map models/mapobjects/pad_cups/cup003
 		rgbGen Vertex
 	}
 
@@ -1167,7 +1167,7 @@ models/mapobjects/pad_cups/pad_cup07_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup004
+		map models/mapobjects/pad_cups/cup004
 		rgbGen Vertex
 	}
 
@@ -1179,7 +1179,7 @@ models/mapobjects/pad_cups/pad_cup08_upd
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cups/pad_cup004
+		map models/mapobjects/pad_cups/cup004
 		rgbGen Vertex
 	}
 
