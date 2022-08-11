@@ -193,7 +193,7 @@ void SP_trigger_push(gentity_t *self) {
 	self->r.svFlags &= ~SVF_NOCLIENT;
 
 	// make sure the client precaches this sound
-	G_SoundIndex("sound/world/jumppad");
+	G_SoundIndex("sound/world/triggers/push");
 
 	self->s.eType = ET_PUSH_TRIGGER;
 	self->touch = trigger_push_touch;
@@ -232,7 +232,7 @@ void SP_target_push(gentity_t *self) {
 	G_SetMovedir(self->s.angles, self->s.origin2);
 	VectorScale(self->s.origin2, self->speed, self->s.origin2);
 
-	self->noise_index = G_SoundIndex("sound/world/jumppad");
+	self->noise_index = G_SoundIndex("sound/world/triggers/push");
 
 	if (self->target) {
 		VectorCopy(self->s.origin, self->r.absmin);
@@ -356,7 +356,7 @@ void SP_trigger_teleport(gentity_t *self) {
 	}
 
 	// make sure the client precaches this sound
-	G_SoundIndex("sound/world/jumppad");
+	G_SoundIndex("sound/world/triggers/push");
 
 	self->s.eType = ET_TELEPORT_TRIGGER;
 	self->touch = trigger_teleporter_touch;
