@@ -2533,7 +2533,7 @@ rgbGen identity
 
 //==========pad_western===========
 
-textures/pad_western/Barrel01_256x128
+textures/pad_western/barrel01_256x128_blue
 {
 surfaceparm woodsteps
 {
@@ -2541,14 +2541,14 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/Barrel01_256x128
+map textures/pad_western/barrel01_256x128_blue
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
 
 
-textures/pad_western/Barrel01_256x128_blue
+textures/pad_western/barrel01_256x128_red
 {
 surfaceparm woodsteps
 {
@@ -2556,14 +2556,14 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/Barrel01_256x128_blue
+map textures/pad_western/barrel01_256x128_red
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
 
 
-textures/pad_western/Barrel01_256x128_red
+textures/pad_western/barrel02_256x256
 {
 surfaceparm woodsteps
 {
@@ -2571,22 +2571,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_western/Barrel01_256x128_red
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_western/Barrel02_256x256
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_western/Barrel02_256x256
+map textures/pad_western/barrel02_256x256
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }

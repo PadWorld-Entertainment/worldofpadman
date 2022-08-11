@@ -208,8 +208,8 @@ models/powerups/instant/yellflare
 // =================
 
 // ToDo!?!
-// "powerups/berserkerPunchy" -> punchy skin/shader f¸r berserker-powerup (falls nicht vorhanden bekommt die punchy die berserkerAura )
-// "powerups/padpowerPunchy" -> extra skin/shader f¸r punchy bei padpower (falls nicht vorhanden wird normaler padpower-shader benutzt)
+// "powerups/berserkerPunchy" -> punchy skin/shader f√ºr berserker-powerup (falls nicht vorhanden bekommt die punchy die berserkerAura )
+// "powerups/padpowerPunchy" -> extra skin/shader f√ºr punchy bei padpower (falls nicht vorhanden wird normaler padpower-shader benutzt)
 
 powerups/berserkerAura
 {
@@ -865,25 +865,6 @@ models/weapons2/bambam/bambam
 		tcmod scale .5 .5
 		tcGen environment
                 rgbGen lightingdiffuse
-	}
-}
-
-bambamBall
-{
-	{
-		map models/weaponsfx/bambamball
-		blendFunc add
-	}
-}
-
-
-models/weaponsfx/bambamdrop
-{
-	cull none
-	{
-		map models/weaponsfx/bambamdrop
-		blendFunc add
-		rgbGen wave inversesawtooth 0 1 0 1.2
 	}
 }
 

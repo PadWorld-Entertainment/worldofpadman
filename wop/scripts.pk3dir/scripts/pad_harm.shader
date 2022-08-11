@@ -93,7 +93,7 @@ textures/pad_harm/orange
 
 
 //=======================================================
-// leicht gl‰nzendes Metall
+// leicht gl√§nzendes Metall
 //=======================================================
 textures/pad_harm/metal06x
 {
@@ -167,20 +167,6 @@ textures/pad_harm/metal06bnew
 // Neonschilder
 //=======================================================
 
-textures/pad_harm/closed
-{
-    qer_trans 0.8
-    surfaceparm alphashadow
-    surfaceparm nomarks
-    surfaceparm nonsolid
-    cull disable
-    {
-        map textures/pad_harm/closed
-        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
-        RgbGen identityLighting
-    }
-}
-
 textures/pad_harm/nocigs
 {
     qer_trans 0.8
@@ -210,7 +196,6 @@ textures/pad_harm/open_neon
     }
 }
 
-
 textures/pad_harm/route66
 {
     qer_trans 0.8
@@ -224,42 +209,6 @@ textures/pad_harm/route66
         RgbGen identityLighting
     }
 }
-
-//=======================================================
-//Monitor Screens
-//=======================================================
-
-
-textures/pad_harm/pad_harm01
-{
-	q3map_lightimage textures/pad_harm/pad_harm01
-	q3map_surfacelight 100
-
-	{
-		map textures/pad_harm/pad_harm01
-		rgbGen identity
-	}
-	{
-		map textures/pad_gfx02/comp_line
-		blendfunc add
-		rgbGen identity
-		tcmod scroll 0 1
-	}
-
-	{
-		map $lightmap
-		rgbGen identity
-		blendfunc gl_dst_color gl_zero
-	}
-	{
-		map $lightmap
-		tcgen environment
-		tcmod scale .5 .5
-		rgbGen wave sin .25 0 0 0
-		blendfunc add
-	}
-}
-
 
 //=======================================================
 // Milchglas
@@ -442,34 +391,6 @@ textures/pad_harm/metal06x2
      }
 }
 
-textures/pad_harm/sitzbank01b
-{
-   surfaceparm softsteps
-     {
-        map $lightmap
-        rgbGen identity
-     }
-     {
-        map textures/pad_harm/sitzbank01b
-        blendFunc GL_DST_COLOR GL_ZERO
-        rgbGen identity
-     }
-}
-
-textures/pad_harm/sitzbank01b_black
-{
-   surfaceparm softsteps
-     {
-        map $lightmap
-        rgbGen identity
-     }
-     {
-        map textures/pad_harm/sitzbank01b_black
-        blendFunc GL_DST_COLOR GL_ZERO
-        rgbGen identity
-     }
-}
-
 textures/pad_harm/sitzbank01b_white
 {
    surfaceparm softsteps
@@ -483,7 +404,6 @@ textures/pad_harm/sitzbank01b_white
         rgbGen identity
      }
 }
-
 
 textures/pad_harm/sitzup
 {
@@ -590,7 +510,7 @@ textures/pad_harm/water
 
 
 //=======================================================
-//Weiﬂer Tele
+//Wei√üer Tele
 //=======================================================
 
 textures/pad_harm/padtele_white
@@ -620,7 +540,7 @@ textures/pad_harm/padtele_white
 }
 
 //=======================================================
-//Blasen f¸r Aquarium
+//Blasen f√ºr Aquarium
 //=======================================================
 
 textures/pad_harm/bubbles2_1
@@ -897,7 +817,7 @@ blendFunc filter
 
 
 //=======================================================
-//Haribow‰nde weicher
+//Haribow√§nde weicher
 //=======================================================
 
 textures/pad_objects02/haribo4
@@ -1020,86 +940,6 @@ textures/pad_poster/poster002
 	}
 }
 
-textures/pad_harm/gold_haley
-{
-	qer_editorimage textures/pad_harm/gold_haley
-	{
-		map textures/pad_harm/gold_haley
-		rgbGen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad3
-		blendfunc add
-		rgbGen identity
-		tcGen environment
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-	}
-}
-
-textures/pad_harm/gold_buddy
-{
-	qer_editorimage textures/pad_harm/gold_buddy
-	{
-		map textures/pad_harm/gold_buddy
-		rgbGen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad3
-		blendfunc add
-		rgbGen identity
-		tcGen environment
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-	}
-}
-
-textures/pad_harm/gold_elvis
-{
-	qer_editorimage textures/pad_harm/gold_elvis
-	{
-		map textures/pad_harm/gold_elvis
-		rgbGen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad3
-		blendfunc add
-		rgbGen identity
-		tcGen environment
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-	}
-}
-
-textures/pad_harm/gold_monroe
-{
-	qer_editorimage textures/pad_harm/gold_monroe
-	{
-		map textures/pad_harm/gold_monroe
-		rgbGen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad3
-		blendfunc add
-		rgbGen identity
-		tcGen environment
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-	}
-}
-
 
 //=======================================================
 //Skybox
@@ -1107,85 +947,26 @@ textures/pad_harm/gold_monroe
 
 textures/pad_harmsky/padcity
 {
-        qer_editorimage textures/pad_harmsky/padcity
-
-
+    qer_editorimage env/padcity512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/white
+	q3map_lightimage textures/pad_petesky/white
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 100
-
-        skyparms env/padcity512 - -
-//       {
-//		map textures/pad_petesky/padcity
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+    
+	skyparms env/padcity512 - -
 }
-
-
-
-textures/pad_harmsky/morning-madness
-{
-        qer_editorimage textures/pad_harmsky/morning-madness
-
-
-	surfaceparm noimpact
-	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange02
-	q3map_sun	0.368 -0.886 0.258 100 50 55
-	q3map_surfacelight 600
-
-        skyparms env/pc-morning-madness512 - -
-//       {
-//		map textures/pad_petesky/morning-madness
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
-}
-
-textures/pad_harmsky/harmnight-life
-{
-        qer_editorimage textures/pad_harmsky/harmnight-life
-
-
-	surfaceparm noimpact
-	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/white02
-	q3map_sun	0.266383 0.274632 0.358662 50 50 55
-	q3map_surfacelight 50
-
-        skyparms env/pc-night-life512 - -
-//       {
-//		map textures/pad_petesky/night-life
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
-}
-
 
 textures/pad_harmsky/harmpc-ground-zero512
 {
-        qer_editorimage textures/pad_harmsky/harmpc-ground-zero512
-
-
+    qer_editorimage env/pc-ground-zero512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/white02
+	q3map_lightimage textures/pad_petesky/white02
 	q3map_sun	0.266383 0.274632 0.358662 20 50 55
 	q3map_surfacelight 10
 
-        skyparms env/pc-ground-zero512 - -
-//       {
-//		map textures/pad_petesky/pc-ground-zero512
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+    skyparms env/pc-ground-zero512 - -
 }
 
 

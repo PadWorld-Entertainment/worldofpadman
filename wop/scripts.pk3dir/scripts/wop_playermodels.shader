@@ -356,28 +356,6 @@ models/wop_players/padman/stonepad_head
         }
 }
 
-models/wop_players/padman/stonepad_head_blue
-{
-
-    cull disable
-        {
-                map models/wop_players/padman/stonepad_head_blue
-                alphaFunc GE128
-		rgbGen lightingdiffuse
-        }
-}
-
-models/wop_players/padman/stonepad_head_red
-{
-
-    cull disable
-        {
-                map models/wop_players/padman/stonepad_head_red
-                alphaFunc GE128
-		rgbGen lightingdiffuse
-        }
-}
-
 
 // =================
 // SUPERPAD

@@ -994,192 +994,192 @@ models/mapobjects/pad_tins/pupsi
 
 
 // =================
-// CUTLERY
+// CUPS
 // =================
 
 
-models/mapobjects/pad_cutlery/pad_cup01
+models/mapobjects/pad_cups/pad_cup01
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup001
+		map models/mapobjects/pad_cups/pad_cup001
 		rgbGen Vertex
 	}
 
 }
 
-models/mapobjects/pad_cutlery/pad_cup02
+models/mapobjects/pad_cups/pad_cup02
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup001
-		rgbGen Vertex
-	}
-
-}
-
-
-models/mapobjects/pad_cutlery/pad_cup03
-{
-	surfaceparm noimpact
-	surfaceparm nonsolid
-	{
-		map models/mapobjects/pad_cutlery/pad_cup002
+		map models/mapobjects/pad_cups/pad_cup001
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup04
+models/mapobjects/pad_cups/pad_cup03
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup002
+		map models/mapobjects/pad_cups/pad_cup002
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup05
+models/mapobjects/pad_cups/pad_cup04
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup003
+		map models/mapobjects/pad_cups/pad_cup002
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup06
+models/mapobjects/pad_cups/pad_cup05
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup003
-		rgbGen Vertex
-	}
-
-}
-
-models/mapobjects/pad_cutlery/pad_cup07
-{
-	surfaceparm noimpact
-	surfaceparm nonsolid
-	{
-		map models/mapobjects/pad_cutlery/pad_cup004
+		map models/mapobjects/pad_cups/pad_cup003
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup08
+models/mapobjects/pad_cups/pad_cup06
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup004
+		map models/mapobjects/pad_cups/pad_cup003
+		rgbGen Vertex
+	}
+
+}
+
+models/mapobjects/pad_cups/pad_cup07
+{
+	surfaceparm noimpact
+	surfaceparm nonsolid
+	{
+		map models/mapobjects/pad_cups/pad_cup004
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup01_upd
+models/mapobjects/pad_cups/pad_cup08
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup001
-		rgbGen Vertex
-	}
-
-}
-
-models/mapobjects/pad_cutlery/pad_cup02_upd
-{
-	surfaceparm noimpact
-	surfaceparm nonsolid
-	{
-		map models/mapobjects/pad_cutlery/pad_cup001
+		map models/mapobjects/pad_cups/pad_cup004
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup03_upd
+models/mapobjects/pad_cups/pad_cup01_upd
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup002
+		map models/mapobjects/pad_cups/pad_cup001
+		rgbGen Vertex
+	}
+
+}
+
+models/mapobjects/pad_cups/pad_cup02_upd
+{
+	surfaceparm noimpact
+	surfaceparm nonsolid
+	{
+		map models/mapobjects/pad_cups/pad_cup001
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup04_upd
+models/mapobjects/pad_cups/pad_cup03_upd
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup002
+		map models/mapobjects/pad_cups/pad_cup002
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup05_upd
+models/mapobjects/pad_cups/pad_cup04_upd
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup003
+		map models/mapobjects/pad_cups/pad_cup002
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup06_upd
+models/mapobjects/pad_cups/pad_cup05_upd
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup003
-		rgbGen Vertex
-	}
-
-}
-
-models/mapobjects/pad_cutlery/pad_cup07_upd
-{
-	surfaceparm noimpact
-	surfaceparm nonsolid
-	{
-		map models/mapobjects/pad_cutlery/pad_cup004
+		map models/mapobjects/pad_cups/pad_cup003
 		rgbGen Vertex
 	}
 
 }
 
 
-models/mapobjects/pad_cutlery/pad_cup08_upd
+models/mapobjects/pad_cups/pad_cup06_upd
 {
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	{
-		map models/mapobjects/pad_cutlery/pad_cup004
+		map models/mapobjects/pad_cups/pad_cup003
+		rgbGen Vertex
+	}
+
+}
+
+models/mapobjects/pad_cups/pad_cup07_upd
+{
+	surfaceparm noimpact
+	surfaceparm nonsolid
+	{
+		map models/mapobjects/pad_cups/pad_cup004
+		rgbGen Vertex
+	}
+
+}
+
+
+models/mapobjects/pad_cups/pad_cup08_upd
+{
+	surfaceparm noimpact
+	surfaceparm nonsolid
+	{
+		map models/mapobjects/pad_cups/pad_cup004
 		rgbGen Vertex
 	}
 
@@ -1791,9 +1791,6 @@ models/mapobjects/padtv/tv01
 	}
 
 }
-
-
-
 
 models/mapobjects/padtv/tv02
 {
@@ -3065,31 +3062,6 @@ models/mapobjects/pad_ddmix/effects/FireBigA
 }
 
 // =================
-// GHOSTPAD
-// =================
-
-models/mapobjects/pad_ddmix/ghostpad/ghostpad
-{
-	surfaceparm trans
-	{
-		map models/mapobjects/pad_ddmix/ghostpad/ghostpad
-		blendfunc blend
-		rgbGen Vertex
-		depthWrite
-	}
-	{
-		map models/mapobjects/pad_ddmix/ghostpad/ghostpad
-		blendfunc add
-		rgbGen Vertex
-	}
-	{
-		map models/mapobjects/pad_ddmix/ghostpad/ghostpad
-		blendfunc add
-		rgbGen Vertex
-	}
-}
-
-// =================
 // CASE
 // =================
 
@@ -3895,168 +3867,6 @@ models/mapobjects/pad_statues/statue_super_button
     map models/wop_players/padman/default_head
   }
 }
-
-
-// =================
-// SiNGLEPLAYER MAPOBJECTS
-// =================
-
-//FERN
-
-models/mapobjects/pad_ddmix/plants/fern_singleplayer
-{
-	surfaceparm alphashadow
-	cull disable
-	nomipmaps
-	{
-		map models/mapobjects/pad_ddmix/plants/fern_singleplayer
-		rgbGen exactVertex
-		alphaFunc GE128
-	}
-}
-
-//BONSAi
-
-models/mapobjects/pad_ddmix/plants/bonsai_singleplayer
-{
-	surfaceparm alphashadow
-	cull disable
-	nomipmaps
-	{
-		map models/mapobjects/pad_ddmix/plants/bonsai_singleplayer
-		rgbGen exactVertex
-		alphaFunc GE128
-	}
-}
-
-
-//TOWEL01
-
-models/mapobjects/pad_ddmix/padkitchen/towel01_singleplayer
-{
-	cull disable
-	{
-		map models/mapobjects/pad_ddmix/padkitchen/towel01_singleplayer
-		rgbGen exactVertex
-	}
-}
-
-//TOWEL02
-
-models/mapobjects/pad_ddmix/padkitchen/towel02_singleplayer
-{
-	cull disable
-	{
-		map models/mapobjects/pad_ddmix/padkitchen/towel02_singleplayer
-		rgbGen exactVertex
-	}
-}
-
-
-//KNiGHTSHiELD
-
-models/mapobjects/pad_ddmix/castle/kshield_singleplayer
-{
-	cull disable
-	{
-		map models/mapobjects/pad_ddmix/castle/kshield_singleplayer
-		rgbGen exactVertex
-		alphaFunc GE128
-	}
-}
-
-//PADKiNG
-
-models/mapobjects/pad_ddmix/castle/padking_singleplayer
-{
-	cull disable
-	{
-		map models/mapobjects/pad_ddmix/castle/padking_singleplayer
-		rgbGen exactVertex
-		alphaFunc GE128
-	}
-}
-
-
-//SOCK01
-
-models/mapobjects/pad_clothes/sock01_singleplayer
-{
-    cull disable
-	qer_editorimage models/mapobjects/pad_clothes/sock01_singleplayer
-	{
-		map models/mapobjects/pad_clothes/sock01_singleplayer
-		rgbGen exactVertex
-	}
-}
-
-//SOCK02
-
-models/mapobjects/pad_clothes/sock02_singleplayer
-{
-    cull disable
-	qer_editorimage models/mapobjects/pad_clothes/sock02_singleplayer
-	{
-		map models/mapobjects/pad_clothes/sock02_singleplayer
-		rgbGen exactVertex
-	}
-}
-
-//TULPi1
-
-models/mapobjects/pad_ddmix/plants/tulip1_singleplayer
-{
-	surfaceparm alphashadow
-	cull disable
-	nomipmaps
-	{
-		map models/mapobjects/pad_ddmix/plants/tulip1_singleplayer
-		rgbGen exactVertex
-		alphaFunc GE128
-	}
-}
-
-
-//SUNFLOWER
-
-//models/mapobjects/pad_sunflower/sunflower_single.md3
-
-models/mapobjects/pad_sunflower/sunhead_single
-{
-	cull none
-	nopicmip
-	nomipmaps
-	{
-		map models/mapobjects/pad_sunflower/sunhead_single
-		alphaFunc GE128
-		rgbGen exactvertex
-	}
-}
-
-models/mapobjects/pad_sunflower/sunleaf1_single
-{
-	cull none
-	nopicmip
-	nomipmaps
-	{
-		map models/mapobjects/pad_sunflower/sunleaf1_single
-		alphaFunc GE128
-		rgbGen exactvertex
-	}
-}
-
-models/mapobjects/pad_sunflower/sunleaf2_single
-{
-	cull none
-	nopicmip
-	nomipmaps
-	{
-		map models/mapobjects/pad_sunflower/sunleaf2_single
-		alphaFunc GE128
-		rgbGen exactvertex
-	}
-}
-
 
 models/mapobjects/ente/padshop_tft_screen
 {

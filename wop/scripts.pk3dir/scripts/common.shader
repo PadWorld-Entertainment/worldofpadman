@@ -439,22 +439,6 @@ textures/common/mirror1			// clear mirror surface, use with misc_portal_surface 
 	}
 }
 
-textures/common/mirror2			// dirty mirror surface, use with misc_portal_surface enity
-{
-	qer_editorimage textures/common/mirror
-	surfaceparm nolightmap
-	portal
-	{
-		map textures/common/mirror1
-		blendfunc GL_ONE GL_ONE_MINUS_SRC_ALPHA
-		depthWrite
-	}
-    {
-		map textures/sfx/mirror
-		blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
-    }
-}
-
 textures/common/portal			// same as mirror1
 {
 	qer_editorimage textures/common/mirror

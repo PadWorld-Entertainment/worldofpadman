@@ -2,62 +2,12 @@
 //lights
 //==============================
 
-
-
-textures/pad_teehouse/paper
-{
-    q3map_surfacelight 80
-    surfaceparm nolightmap
-    {
-        map textures/pad_teehouse/paper
-    }
-}
-
 textures/pad_teehouse/reispaper_512
 {
     q3map_surfacelight 80
     surfaceparm nolightmap
     {
         map textures/pad_teehouse/reispaper_512
-    }
-}
-
-
-textures/pad_teehouse/paper2_blue
-{
-    q3map_surfacelight 70
-    surfaceparm nolightmap
-    {
-        map textures/pad_teehouse/paper2_blue
-    }
-}
-
-textures/pad_teehouse/paper2_blue_dark
-{
-    q3map_surfacelight 70
-    surfaceparm nolightmap
-    {
-        map textures/pad_teehouse/paper2_blue_dark
-    }
-}
-
-
-textures/pad_teehouse/paper2_red
-{
-    q3map_surfacelight 70
-    surfaceparm nolightmap
-    {
-        map textures/pad_teehouse/paper2_red
-    }
-}
-
-
-textures/pad_teehouse/paper2_red_dark
-{
-    q3map_surfacelight 70
-    surfaceparm nolightmap
-    {
-        map textures/pad_teehouse/paper2_red_dark
     }
 }
 
