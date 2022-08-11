@@ -107,27 +107,28 @@ textures/pad_western/western_alpha_100   // Secondary texture ONLY
 
 
 //====================================
-//Leinw‰nde geben etwas licht ab
+//Leinw√§nde geben etwas Licht ab
 //====================================
 
 textures/pad_harm/utopiaatoll512_ft
 {
-    q3map_surfacelight 150
-    surfaceparm nolightmap
-    {
-        map textures/pad_harm/utopiaatoll512_ft
-    }
+   qer_editorimage env/utopiaatoll512_ft
+   q3map_surfacelight 150
+   surfaceparm nolightmap
+   {
+      map env/utopiaatoll512_ft
+   }
 }
 
 textures/pad_harm/utopiaatoll512_lf
 {
-    q3map_surfacelight 150
-    surfaceparm nolightmap
-    {
-        map textures/pad_harm/utopiaatoll512_lf
-    }
+   qer_editorimage env/utopiaatoll512_lf
+   q3map_surfacelight 150
+   surfaceparm nolightmap
+   {
+      map env/utopiaatoll512_lf
+   }
 }
-
 
 
 //=======================================================
