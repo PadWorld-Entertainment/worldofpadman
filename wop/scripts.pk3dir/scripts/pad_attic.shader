@@ -294,7 +294,7 @@ textures/pad_attic/milchglass_2
 		tcGen environment
 	}
 	{
-		map texturespad_attic/greyblue
+		map textures/pad_attic/greyblue
 		blendfunc filter
 	}
 }
@@ -332,20 +332,6 @@ rgbGen identity
 }
 {
 map textures/pad_attic/balken
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_attic/balken
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_attic/balken02
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
