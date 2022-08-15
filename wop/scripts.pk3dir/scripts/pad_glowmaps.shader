@@ -1,20 +1,21 @@
 textures/pad_glowsky/padbox
 {
+	q3map_editorimage env/padboxglow_up
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
-        q3map_lightimage textures/pad_glowsky/padbox_white
+	q3map_lightimage textures/pad_glowsky/padbox_white
 	q3map_sun	1 1 1 100 -58 58
 	q3map_surfacelight 90
 
-        skyparms env/padboxglow - -
-       {
+	skyparms env/padboxglow - -
+	{
 		map textures/pad_glowsky/sky
 		blendfunc GL_ONE GL_ONE
 		tcMod scroll 0.01 0.02
 		tcMod scale 1 2
 	}
-       {
+	{
 		map textures/pad_glowsky/sky2
 		blendfunc GL_ONE GL_ONE
 		tcMod scroll -0.02 -0.01
@@ -22,90 +23,53 @@ textures/pad_glowsky/padbox
 	}
 }
 
-
-
-
 textures/pad_glowsky/utopiaatoll
 {
-        qer_editorimage textures/pad_glowsky/utopiaatoll
-
-
+	qer_editorimage env/utopiaatoll512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_glowsky/orange01
+	q3map_lightimage textures/pad_glowsky/orange01
 	q3map_sun	0.266383 0.274632 0.358662 150 60 85
 	q3map_surfacelight 200
 
-        skyparms env/utopiaatoll512 - -
-//       {
-//		map textures/pad_glowsky/utopiaatoll
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/utopiaatoll512 - -
 }
 
 textures/pad_petesky/wolfl
 {
-        qer_editorimage textures/pad_petesky/wolf
-
-
+	qer_editorimage env/wolf-pack512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/grey
+	q3map_lightimage textures/pad_petesky/grey
 //	q3map_sun	0.266383 0.274632 0.358662 150 60 85
 	q3map_surfacelight 20
 
-        skyparms env/wolf-pack512 - -
-//       {
-//		map textures/pad_petesky/wolfl
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/wolf-pack512 - -
 }
 
 textures/pad_glowsky/urban-terror
 {
-        qer_editorimage textures/pad_glowsky/urban-terror
-
-
+	qer_editorimage env/urban-terror512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_glowsky/orange03
+	q3map_lightimage textures/pad_glowsky/orange03
 	q3map_sun	0.266383 0.274632 0.358662 90 90 90
 	q3map_surfacelight 20
 
-        skyparms env/urban-terror512 - -
-//       {
-//		map textures/pad_glowsky/urban-terror
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/urban-terror512 - -
 }
 
 textures/pad_glowsky/sandtrap
 {
-        qer_editorimage textures/pad_glowsky/sandtrap
-
-
+	qer_editorimage env/sandtrap512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_glowsky/blue
+	q3map_lightimage textures/pad_glowsky/blue
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 2
 
-        skyparms env/sandtrap512 - -
-//       {
-//		map textures/pad_glowsky/sandtrap
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/sandtrap512 - -
 }
-
-
 
 
 textures/pad_glowsky/gglass03

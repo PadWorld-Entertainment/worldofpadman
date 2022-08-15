@@ -452,7 +452,7 @@ textures/pad_gfx/snow
 }
 
 //=======================================================
-//spülwasser + zubehör :)
+//spï¿½lwasser + zubehï¿½r :)
 //=======================================================
 
 textures/pad_gfx/water_static
@@ -2668,162 +2668,96 @@ textures/pad_flowerfx/sprite_leaf2
 
 textures/pad_petesky/utopiaatoll
 {
-        qer_editorimage textures/pad_petesky/utopiaatoll
-
-
+	qer_editorimage env/utopiaatoll512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange01
+	q3map_lightimage textures/pad_petesky/orange01
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
-        skyparms env/utopiaatoll512 - -
-//       {
-//		map textures/pad_petesky/utopiaatoll
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/utopiaatoll512 - -
 }
-
 
 textures/pad_petesky/urban-terror
 {
-        qer_editorimage textures/pad_petesky/urban-terror
-
-
+	qer_editorimage env/urban-terror512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange2
+	q3map_lightimage textures/pad_petesky/orange2
 	q3map_sun	1.000000 0.718471 0.616587 200 60 225
 	q3map_surfacelight 200
 
-        skyparms env/urban-terror512 - -
-//       {
-//		map textures/pad_petesky/urban-terror
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/urban-terror512 - -
 }
-
 
 textures/pad_petesky/poltergeist
 {
-        qer_editorimage textures/pad_petesky/poltergeist
-
-
+	qer_editorimage env/pf-poltergeist512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/blue01
+	q3map_lightimage textures/pad_petesky/blue01
 	q3map_sun	0.434981 0.749839 1.000000 260 340 50
 	q3map_surfacelight 400
 
-        skyparms env/pf-poltergeist512 - -
-//       {
-//		map textures/pad_petesky/poltergeist
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/pf-poltergeist512 - -
 }
-
 
 textures/pad_petesky/pf-tornado-alley
 {
-        qer_editorimage textures/pad_petesky/pf-tornado-alley
-
-
+	qer_editorimage env/pf-tornado-alley512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/grey
+	q3map_lightimage textures/pad_petesky/grey
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
-        skyparms env/pf-tornado-alley512 - -
-//       {
-//		map textures/pad_petesky/pf-tornado-alley
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/pf-tornado-alley512 - -
 }
-
 
 textures/pad_petesky/morning_alley
 {
-             qer_editorimage textures/pad_petesky/morning_alley
-
-
+	qer_editorimage env/morning_alley512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-              q3map_lightimage textures/pad_petesky/orange2
+	q3map_lightimage textures/pad_petesky/orange2
 	q3map_sun	1.000000 0.862213 0.247457 330 340 50
 	q3map_surfacelight 400
 
-             skyparms env/morning_alley512 - -
+	skyparms env/morning_alley512 - -
 }
-
-
 
 textures/pad_petesky/sep
 {
-        qer_editorimage textures/pad_petesky/sep
-
-
+	qer_editorimage env/sep512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange
+	q3map_lightimage textures/pad_petesky/orange
 	q3map_sun	0.266383 0.274632 0.358662 94 48 75
 	q3map_surfacelight 280
 
-        skyparms env/sep512 - -
-//       {
-//		map textures/pad_petesky/sep
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/sep512 - -
 }
-
 
 textures/pad_petesky/morning-madness
 {
-        qer_editorimage textures/pad_petesky/morning-madness
-
-
+	qer_editorimage env/pc-morning-madness512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange2
+	q3map_lightimage textures/pad_petesky/orange2
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
-        skyparms env/pc-morning-madness512 - -
-//       {
-//		map textures/pad_petesky/morning-madness
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/pc-morning-madness512 - -
 }
-
 
 textures/pad_petesky/sist
 {
-        qer_editorimage textures/pad_petesky/sist
-
-
+	qer_editorimage env/sist512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_petesky/orange01
+	q3map_lightimage textures/pad_petesky/orange01
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
-        skyparms env/sist512 - -
-//       {
-//		map textures/pad_petesky/sist
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/sist512 - -
 }

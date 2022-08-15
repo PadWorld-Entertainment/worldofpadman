@@ -1528,6 +1528,7 @@ textures/pad_trash/trash_skybox_night
 	surfaceparm nolightmap
 	surfaceparm sky
 	q3map_sun 0.47451 0.576471 1 55 210 60
+
 	skyParms env/pc-friday-13th-512 128 -
 }
 
@@ -1540,16 +1541,18 @@ textures/pad_trash/trash_skybox_day
 	surfaceparm sky
 	q3map_sun 1 1 0.9 150 210 68
 	q3map_surfacelight 300
+
 	skyParms env/padcity512 128 -
 }
 
 textures/pad_trash/trash_skybox_evening
 {
-        qer_editorimage env/pc-morning-madness512_ft
-        q3map_lightimage textures/pad_petesky/orange2
+	qer_editorimage env/pc-morning-madness512_ft
+	q3map_lightimage textures/pad_petesky/orange2
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
 	q3map_surfacelight 200
-        skyparms env/pc-morning-madness512 128 -
+
+	skyparms env/pc-morning-madness512 128 -
 }

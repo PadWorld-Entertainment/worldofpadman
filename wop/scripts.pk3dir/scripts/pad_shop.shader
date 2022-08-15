@@ -334,22 +334,14 @@ textures/pad_shop/d_sky1
 
 textures/pad_shop/pc-ground-zero512
 {
-        qer_editorimage textures/pad_shop/pc-ground-zero512
-
-
+	qer_editorimage env/pc-ground-zero512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_shop/blue
+	q3map_lightimage textures/pad_shop/blue
 	q3map_sun	0.266383 0.274632 0.358662 20 50 55
 	q3map_surfacelight 300
 
-        skyparms env/pc-ground-zero512 - -
-//       {
-//		map textures/pad_petesky/pc-ground-zero512
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/pc-ground-zero512 - -
 }
 
 
