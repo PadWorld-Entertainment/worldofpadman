@@ -7,27 +7,6 @@ textures/pad_shop/light_blue
     }
 }
 
-textures/pad_shop/lampi001
-{
-	qer_editorimage textures/pad_shop/lampi001
-	surfaceparm metalsteps
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_shop/lampi001
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad4
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
-
 textures/pad_shop/marslava
 {
 	qer_editorimage textures/pad_shop/marslava
@@ -1112,28 +1091,6 @@ textures/pad_shop/game_missingb
 	}
 	{
 		map textures/pad_shop/game_missingb
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad4
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
-
-
-textures/pad_shop/game_nolf1c
-{
-	qer_editorimage textures/pad_shop/game_nolf1c
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_shop/game_nolf1c
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
