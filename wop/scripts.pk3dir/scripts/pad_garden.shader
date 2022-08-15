@@ -1827,22 +1827,6 @@ textures/pad_garden/radio005
 	}
 }
 
-textures/pad_garden/borderfloor_a
-{
-          qer_editorimage textures/pad_garden/borderfloor_a
-           surfaceparm nonsolid
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/borderfloor_a
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-}
-
-
 textures/pad_garden/rostdoorcurve
 {
           qer_editorimage textures/pad_garden/rostdoorsmall
