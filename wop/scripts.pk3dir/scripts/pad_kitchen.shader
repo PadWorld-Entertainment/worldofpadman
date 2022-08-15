@@ -345,25 +345,18 @@ textures/pad_kitchen/metal02
 	}
 }
 
-
-
-
 textures/pad_kitchen/urban-chaos
 {
-        qer_editorimage textures/pad_kitchen/urban-chaos
-
-
+	qer_editorimage env/urban-chaos512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
 //	surfaceparm sky
-              q3map_lightimage textures/pad_kitchen/white02
+	q3map_lightimage textures/pad_kitchen/white
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 240
 
-        skyparms env/urban-chaos512 - -
-
+	skyparms env/urban-chaos512 - -
 }
-
 
 textures/pad_kitchen/micro
 {
@@ -1750,7 +1743,7 @@ rgbGen identity
 }
 }
 
-textures/pad_kitchen/cup_border2brown
+textures/pad_kitchen/cup_border2brown06
 {
 surfaceparm woodsteps
 {
@@ -1758,7 +1751,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_kitchen/cup_border2brown
+map textures/pad_kitchen/cup_border2brown06
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1821,7 +1814,7 @@ rgbGen identity
 }
 
 
-textures/pad_kitchen/flowpot003
+textures/pad_kitchen/flowpot003b
 {
 surfaceparm woodsteps
 {
@@ -1829,7 +1822,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_kitchen/flowpot003
+map textures/pad_kitchen/flowpot003b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
