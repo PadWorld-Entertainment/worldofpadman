@@ -865,7 +865,7 @@ textures/pad_poster/greensun
 textures/pad_trash/kb_light_15000
 {
 	qer_editorimage textures/pad_trash/kb_light_on
-	q3map_lightimage textures/colors/white
+	q3map_lightimage textures/colors/hex_ffffffff
 	surfaceparm nolightmap
 	q3map_surfacelight 15000
 	q3map_flareShader flareShader
@@ -877,7 +877,7 @@ textures/pad_trash/kb_light_15000
 textures/pad_trash/kb_light_25000
 {
 	qer_editorimage textures/pad_trash/kb_light_on
-	q3map_lightimage textures/colors/white
+	q3map_lightimage textures/colors/hex_ffffffff
 	surfaceparm nolightmap
 	q3map_surfacelight 25000
 	q3map_flareShader flareShader
@@ -889,7 +889,7 @@ textures/pad_trash/kb_light_25000
 textures/pad_trash/kb_light2_15000
 {
 	qer_editorimage textures/pad_trash/kb_light2_on
-	q3map_lightimage textures/colors/white
+	q3map_lightimage textures/colors/hex_ffffffff
 	surfaceparm nolightmap
 	q3map_surfacelight 15000
 	{
@@ -1548,7 +1548,7 @@ textures/pad_trash/trash_skybox_day
 textures/pad_trash/trash_skybox_evening
 {
 	qer_editorimage env/pc-morning-madness512_ft
-	q3map_lightimage textures/pad_petesky/orange2
+	q3map_lightimage textures/colors/hex_ff9860ff
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky

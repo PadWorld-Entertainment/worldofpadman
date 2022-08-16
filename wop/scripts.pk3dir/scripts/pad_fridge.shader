@@ -367,7 +367,7 @@ textures/pad_fridge/kb_feta02
 textures/pad_fridge/kb_eisfachlight_2500
 {
 	qer_editorimage textures/pad_fridge/kb_eisfachlight
-	q3map_lightimage textures/colors/white
+	q3map_lightimage textures/colors/hex_ffffffff
 	q3map_surfacelight 2500
 	q3map_backsplash 15 128
 	{

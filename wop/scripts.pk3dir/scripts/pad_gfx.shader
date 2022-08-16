@@ -2683,7 +2683,7 @@ textures/pad_petesky/urban-terror
 	qer_editorimage env/urban-terror512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/orange2
+	q3map_lightimage textures/colors/hex_ff9860ff
 	q3map_sun	1.000000 0.718471 0.616587 200 60 225
 	q3map_surfacelight 200
 
@@ -2695,7 +2695,7 @@ textures/pad_petesky/poltergeist
 	qer_editorimage env/pf-poltergeist512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/blue01
+	q3map_lightimage textures/colors/hex_5b7c97ff
 	q3map_sun	0.434981 0.749839 1.000000 260 340 50
 	q3map_surfacelight 400
 
@@ -2707,7 +2707,7 @@ textures/pad_petesky/pf-tornado-alley
 	qer_editorimage env/pf-tornado-alley512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/grey
+	q3map_lightimage textures/colors/hex_5d5d5dff
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
@@ -2719,7 +2719,7 @@ textures/pad_petesky/morning_alley
 	qer_editorimage env/morning_alley512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/orange2
+	q3map_lightimage textures/colors/hex_ff9860ff
 	q3map_sun	1.000000 0.862213 0.247457 330 340 50
 	q3map_surfacelight 400
 
@@ -2731,7 +2731,7 @@ textures/pad_petesky/sep
 	qer_editorimage env/sep512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/orange
+	q3map_lightimage textures/colors/hex_ff6600ff
 	q3map_sun	0.266383 0.274632 0.358662 94 48 75
 	q3map_surfacelight 280
 
@@ -2743,7 +2743,7 @@ textures/pad_petesky/morning-madness
 	qer_editorimage env/pc-morning-madness512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/orange2
+	q3map_lightimage textures/colors/hex_ff9860ff
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 

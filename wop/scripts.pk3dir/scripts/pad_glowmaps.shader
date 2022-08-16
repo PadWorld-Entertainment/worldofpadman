@@ -40,7 +40,7 @@ textures/pad_petesky/wolfl
 	qer_editorimage env/wolf-pack512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/grey
+	q3map_lightimage textures/colors/hex_5d5d5dff
 //	q3map_sun	0.266383 0.274632 0.358662 150 60 85
 	q3map_surfacelight 20
 
@@ -139,44 +139,35 @@ textures/pad_glowsky/gglass02
 
 textures/pad_backyard/pf-tornado-alley
 {
-        qer_editorimage textures/pad_backyard/pf-tornado-alley
-
-
+	qer_editorimage pf-tornado-alley512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_backyard/grey
-	q3map_sun	0.266383 0.274632 0.358662 100 230 70
+	q3map_lightimage textures/colors/hex_373737ff
+	q3map_sun 0.266383 0.274632 0.358662 100 230 70
 	q3map_surfacelight 175
 
-        skyparms env/pf-tornado-alley512 - -
-//       {
-//		map textures/pad_backyard/pf-tornado-alley
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/pf-tornado-alley512 - -
 }
 
 
 textures/pad_glowsky/glass
 {
-   qer_editorimage   textures/pad_glowsky/glass
-              surfaceparm trans
-   q3map_nolightmap
-   q3map_onlyvertexlighting
-    {
-        map textures/pad_glowsky/glass
-        blendFunc GL_ONE GL_ONE
-    }
+	qer_editorimage textures/pad_glowsky/glass
+	surfaceparm trans
+	q3map_nolightmap
+	q3map_onlyvertexlighting
+	{
+		map textures/pad_glowsky/glass
+		blendFunc GL_ONE GL_ONE
+	}
 }
 
-
-textures/glowstar/glas
+textures/pad_glow/glass
 {
-	qer_editorimage textures/colors/greygreen
+	qer_editorimage textures/colors/hex_87aba380
 	cull back
 	{
-		map textures/colors/greygreen
+		map textures/colors/hex_87aba380
 		blendfunc add
 	}
 	{
@@ -186,12 +177,12 @@ textures/glowstar/glas
 	}
 }
 
-textures/glowstar/greenglas
+textures/pad_glow/greenglas
 {
-	qer_editorimage textures/colors/greygreen
+	qer_editorimage textures/colors/hex_87aba380
 	cull back
 	{
-		map textures/colors/greygreen
+		map textures/colors/hex_87aba380
 		blendfunc add
 	}
 	{
@@ -200,17 +191,17 @@ textures/glowstar/greenglas
 		tcGen environment
 	}
 	{
-		map textures/colors/greygreen
+		map textures/colors/hex_87aba380
 		blendfunc filter
 	}
 }
 
-textures/glowstar/milchglas
+textures/pad_glow/milchglas
 {
-	qer_editorimage textures/colors/greygreen
+	qer_editorimage textures/colors/hex_87aba380
 	cull back
 	{
-		map textures/colors/greygreen
+		map textures/colors/hex_87aba380
 		blendfunc add
 	}
 	{
@@ -219,11 +210,11 @@ textures/glowstar/milchglas
 		tcGen environment
 	}
 	{
-		map textures/colors/greygreen
+		map textures/colors/hex_87aba380
 		blendfunc filter
 	}
 	{
-		map textures/colors/greygreen
+		map textures/colors/hex_87aba380
 		blendfunc blend
 	}
 }

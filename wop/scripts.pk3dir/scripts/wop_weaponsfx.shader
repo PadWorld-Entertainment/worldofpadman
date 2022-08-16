@@ -31,12 +31,12 @@ waterSplash
 {
 	cull disable
 	{
-		animmap 5 models/weaponsfx/water_splash_1 models/weaponsfx/water_splash_2 models/weaponsfx/water_splash_3 gfx/colors/black
+		animmap 5 models/weaponsfx/water_splash_1 models/weaponsfx/water_splash_2 models/weaponsfx/water_splash_3 textures/colors/hex_000000ff
 		rgbGen wave inversesawtooth 0 1 0 5
 		blendfunc add
 	}
 	{
-		animmap 5 models/weaponsfx/water_splash_2 models/weaponsfx/water_splash_3 gfx/colors/black gfx/colors/black
+		animmap 5 models/weaponsfx/water_splash_2 models/weaponsfx/water_splash_3 textures/colors/hex_000000ff textures/colors/hex_000000ff
 		rgbGen wave sawtooth 0 1 0 5
 		blendfunc add
 	}
@@ -438,7 +438,7 @@ newDuckExplosion
 	}
 	cull disable
 	{
-		animmap 10 models/weaponsfx/duckexp_2 models/weaponsfx/duckexp_3 models/weaponsfx/duckexp_4 models/weaponsfx/duckexp_5 models/weaponsfx/duckexp_6 models/weaponsfx/duckexp_7 models/weaponsfx/duckexp_8 gfx/colors/black
+		animmap 10 models/weaponsfx/duckexp_2 models/weaponsfx/duckexp_3 models/weaponsfx/duckexp_4 models/weaponsfx/duckexp_5 models/weaponsfx/duckexp_6 models/weaponsfx/duckexp_7 models/weaponsfx/duckexp_8 textures/colors/hex_000000ff
 		rgbGen wave sawtooth 0 1 0 10
 		blendfunc add
 	}
