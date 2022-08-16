@@ -863,20 +863,15 @@ static void CG_AddWeaponWithPowerups(refEntity_t *gun, int powerups, int weap) {
 		gun->customShader = cgs.media.invisShader;
 	} else {
 		if (powerups & (1 << PW_PADPOWER)) {
-			if (weap == WP_PUNCHY && cgs.media.PunchyPadPowerSkin)
-				gun->customSkin = cgs.media.PunchyPadPowerSkin;
+			if (weap == WP_PUNCHY && cgs.media.PadPowerPunchySkin)
+				gun->customSkin = cgs.media.PadPowerPunchySkin;
 			else
 				gun->customShader = cgs.media.PadPowerShader;
 			gun->shaderRGBA[0] = gun->shaderRGBA[1] = gun->shaderRGBA[2] = 0xff;
 		}
 		if (powerups & (1 << PW_BERSERKER) && weap == WP_PUNCHY) {
-			if (cgs.media.BerserkerPunchy)
-				gun->customSkin = cgs.media.BerserkerPunchy;
-			else {
-				trap_R_AddRefEntityToScene(gun);
-
-				gun->customShader = cgs.media.BerserkerAura;
-			}
+			trap_R_AddRefEntityToScene(gun);
+			gun->customShader = cgs.media.BerserkerAura;
 		}
 	}
 	trap_R_AddRefEntityToScene(gun);

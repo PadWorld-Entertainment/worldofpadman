@@ -1,10 +1,10 @@
 w_hand,powerups/padpower
 w_eyes,powerups/padpower
-w_botteeth,punchySkins/padPowerpunchy_teeth
+w_botteeth,models/weapons2/punchy/teeth_pp
 w_handend,powerups/padpower
 w_lowerjaw,powerups/padpower
 w_faceleftnose,powerups/padpower
-w_topteeth,punchySkins/padPowerpunchy_teeth
+w_topteeth,models/weapons2/punchy/teeth_pp
 w_botinnermouth,powerups/padpower
 w_inntopmouth,powerups/padpower
 w_tophand,powerups/padpower

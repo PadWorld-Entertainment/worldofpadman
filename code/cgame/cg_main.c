@@ -941,9 +941,8 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.invisShader = trap_R_RegisterShader("powerups/invisibility");
 
 	cgs.media.PadPowerShader = trap_R_RegisterShader("powerups/padpower");
-	cgs.media.PunchyPadPowerSkin = trap_R_RegisterSkin("punchySkins/PadPowerPunchy.skin");
+	cgs.media.PadPowerPunchySkin = trap_R_RegisterSkin("models/weapons2/punchy/punchy_pp.skin");
 	cgs.media.BerserkerAura = trap_R_RegisterShader("powerups/berserkerAura");
-	cgs.media.BerserkerPunchy = trap_R_RegisterSkin("punchySkins/BerserkerPunchy.skin");
 	cgs.media.deadfadeSkin = trap_R_RegisterShader("deadfadeSkin");
 
 	cgs.media.StationRingShader = trap_R_RegisterShader("station/ring");

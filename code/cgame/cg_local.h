@@ -846,8 +846,7 @@ typedef struct {
 	qhandle_t foamMarkShader;
 	qhandle_t StationRingShader;
 	qhandle_t PadPowerShader;
-	qhandle_t PunchyPadPowerSkin;
-	qhandle_t BerserkerPunchy;
+	qhandle_t PadPowerPunchySkin;
 	qhandle_t BerserkerAura;
 	qhandle_t deadfadeSkin;
 	sfxHandle_t station_start;

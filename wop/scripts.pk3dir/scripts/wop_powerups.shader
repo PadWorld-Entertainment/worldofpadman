@@ -96,7 +96,6 @@ models/weapons2/killerducks/key
 	}
 }
 
-
 models/weapons2/killerducks/duckwheel
 {
 	nopicmip
@@ -207,10 +206,6 @@ models/powerups/instant/yellflare
 // PUPPETMASTER
 // =================
 
-// ToDo!?!
-// "powerups/berserkerPunchy" -> punchy skin/shader für berserker-powerup (falls nicht vorhanden bekommt die punchy die berserkerAura )
-// "powerups/padpowerPunchy" -> extra skin/shader für punchy bei padpower (falls nicht vorhanden wird normaler padpower-shader benutzt)
-
 powerups/berserkerAura
 {
 	//vq3-quad: wave 100 sin 3 0 0 0
@@ -229,6 +224,26 @@ powerups/berserkerAura
 	}
 }
 
+models/weapons2/punchy/teeth_pp
+{
+	nopicmip
+	nomipmaps
+	cull none
+	{
+		map models/weapons2/punchy/teeth_pp
+		alphaFunc GE128
+		depthWrite
+		rgbGen lightingdiffuse
+	}
+	{
+		map textures/pad_gfx02/invispad
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .3 .3
+		tcGen environment
+		rgbGen lightingdiffuse
+	}
+}
+
 deadfadeSkin
 {
 	{
@@ -238,30 +253,6 @@ deadfadeSkin
 		alphaGen entity
 		blendfunc blend
 	}
-}
-
-
-
-
-punchySkins/padPowerpunchy_teeth
-{
-	nopicmip
-	nomipmaps
-	cull none
-	{
-                map punchySkins/padPowerTeeth
-		alphaFunc GE128
-		depthWrite
-		rgbGen lightingdiffuse
-        }
-	{
-		map textures/pad_gfx02/invispad
-		blendfunc GL_ONE GL_ONE
-		tcmod scale .3 .3
-		tcGen environment
-                rgbGen lightingdiffuse
-	}
-
 }
 
 // =================
