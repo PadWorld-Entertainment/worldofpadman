@@ -1814,21 +1814,6 @@ rgbGen identity
 }
 
 
-textures/pad_kitchen/flowpot003b
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_kitchen/flowpot003b
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
 textures/pad_kitchen/kitborder02small
 {
 surfaceparm woodsteps
@@ -1842,9 +1827,3 @@ blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
-
-
-
-
-
-
