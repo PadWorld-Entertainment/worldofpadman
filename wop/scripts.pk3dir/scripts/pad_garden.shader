@@ -312,43 +312,26 @@ textures/pad_garden/padflagblue
 
 textures/pad_garden/fort-pad
 {
-        qer_editorimage textures/pad_garden/fort-pad
-
-
+	qer_editorimage env/fort-pad512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-              q3map_lightimage textures/pad_garden/brightyell
-	q3map_sun	1.000000 0.913939 0.701350 390 220 40
+	q3map_lightimage textures/colors/hex_ffffe5ff
+	q3map_sun 1.000000 0.913939 0.701350 390 220 40
 	q3map_surfacelight 250
 
-        skyparms env/fort-pad512 - -
-//       {
-//		map textures/pad_garden/fort-pad
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/fort-pad512 - -
 }
-
 
 textures/pad_garden/polter_geist
 {
-        qer_editorimage textures/pad_garden/polter_geist
-
-
+	qer_editorimage env/pf-garden512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-              q3map_lightimage textures/pad_garden/darkblue
-	q3map_sun	0.404654 0.474220 1.000000 330 220 50
+	q3map_lightimage textures/colors/hex_1c1ac7ff
+	q3map_sun 0.404654 0.474220 1.000000 330 220 50
 	q3map_surfacelight 160
 
-        skyparms env/pf-garden512 - -
-//       {
-//		map textures/pad_garden/polter_geist
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/pf-garden512 - -
 }
 
 

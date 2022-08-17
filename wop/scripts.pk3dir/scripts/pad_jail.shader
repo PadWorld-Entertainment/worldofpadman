@@ -2074,23 +2074,16 @@ textures/pad_jail/pad_jail_sprayroom2_lightred1
 textures/pad_jail/pad_jail_sky4
 {
 	qer_editorimage textures/pad_jail/pad_jail_sky4
-       	//q3map_lightimage textures/pad_jail/jail_sprayroom4_envcolor
 	q3map_globaltexture
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        	surfaceparm sky
+	surfaceparm sky
 	q3map_sunExt 0.68 0.82 0.86 40 -300 27.4 2 1
 	q3map_lightRGB 0.7 0.8 1.0
 	q3map_lightmapFilterRadius 0 64
 	q3map_skyLight 38 3
 
-	//q3map_sun 0.64 0.66 0.64 90 -300 30.6
-	//q3map_surfacelight 70
-	//nopicmip
-	//nomipmaps
-
-                skyparms env/jail_sprayroom3 - -
-
+	skyparms env/jail_sprayroom3 - -
 }
 
 // ***********************************************************
@@ -2100,20 +2093,18 @@ textures/pad_jail/pad_jail_sky4
 // ***********************************************************
 textures/pad_jail/pad_jail_envcolor
 {
-        	qer_editorimage textures/pad_jail/pad_jail_envcolor
-	q3map_lightimage textures/pad_jail/pad_jail_envcolor
+	qer_editorimage env/padcity-hilton512_ft
+	q3map_lightimage textures/colors/hex_d1a76bff
 	q3map_globaltexture
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        	surfaceparm sky
-	//q3map_sun	1 1 1 120 50 55
-	//q3map_surfacelight 300
+	surfaceparm sky
 	q3map_sunExt 0.68 0.82 0.86 40 -300 27.4 2 1
 	q3map_lightRGB 0.7 0.8 1.0
 	q3map_lightmapFilterRadius 0 64
 	q3map_skyLight 38 3
 
-                skyparms env/padcity-hilton512 - -
+	skyparms env/padcity-hilton512 - -
 }
 
 

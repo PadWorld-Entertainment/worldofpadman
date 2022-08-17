@@ -1,17 +1,14 @@
 textures/pad_fountain/utopiaatoll
 {
-        qer_editorimage textures/pad_fountain/utopiaatoll
-
+	qer_editorimage env/utopiaatoll512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-                q3map_lightimage textures/pad_fountain/orange02
-	q3map_sun	1.000000 0.828885 0.672267 220 100 90
+	q3map_lightimage textures/colors/hex_dbac7fff
+	q3map_sun 1.000000 0.828885 0.672267 220 100 90
 	q3map_surfacelight 300
 
-        skyparms env/utopiaatoll512 - -
-
-	}
-
+	skyparms env/utopiaatoll512 - -
+}
 
 textures/pad_fountain/ground01
 {

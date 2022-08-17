@@ -1535,7 +1535,7 @@ textures/pad_trash/trash_skybox_night
 textures/pad_trash/trash_skybox_day
 {
 	qer_editorimage env/padcity512_ft
-	q3map_lightimage textures/pad_garden/brightyell
+	q3map_lightimage textures/colors/hex_ffffe5ff
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky

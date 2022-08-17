@@ -316,8 +316,8 @@ textures/pad_shop/pc-ground-zero512
 	qer_editorimage env/pc-ground-zero512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_shop/blue
-	q3map_sun	0.266383 0.274632 0.358662 20 50 55
+	q3map_lightimage textures/colors/hex_2f8fcfff
+	q3map_sun 0.266383 0.274632 0.358662 20 50 55
 	q3map_surfacelight 300
 
 	skyparms env/pc-ground-zero512 - -
@@ -400,25 +400,24 @@ textures/pad_shop/sparks
 	}
 }
 
-
 textures/pad_shop/padnight
 {
+	qer_editorimage env/mercury512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
-        q3map_lightimage textures/pad_shop/red
-	q3map_sun	1 1 1 100 -58 58
+	q3map_lightimage textures/colors/hex_cc0000ff
+	q3map_sun 1 1 1 100 -58 58
 	q3map_surfacelight 100
 
-        skyparms env/mercury512 - -
-       {
+	skyparms env/mercury512 - -
+	{
 		map textures/pad_shop/skystuff
 		blendfunc GL_ONE GL_ONE
 		tcMod scroll 0.07 0.09
 		tcMod scale 3 2
 	}
 }
-
 
 textures/pad_shop/lavafall
 {

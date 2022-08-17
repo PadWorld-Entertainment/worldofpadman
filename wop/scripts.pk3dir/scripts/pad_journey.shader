@@ -169,10 +169,10 @@ textures/pad_journey/mirror_06
 
 textures/pad_journey/milchglass02
 {
-	qer_editorimage textures/pad_journey/greywhite
+	qer_editorimage textures/colors/hex_afb1b5ff
 	cull back
 	{
-		map textures/pad_journey/greywhite
+		map textures/colors/hex_afb1b5ff
 		blendfunc add
 	}
 	{

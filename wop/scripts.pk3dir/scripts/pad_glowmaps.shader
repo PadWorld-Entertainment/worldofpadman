@@ -59,18 +59,6 @@ textures/pad_glowsky/urban-terror
 	skyparms env/urban-terror512 - -
 }
 
-textures/pad_glowsky/sandtrap
-{
-	qer_editorimage env/sandtrap512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/pad_glowsky/blue
-	q3map_sun 0.266383 0.274632 0.358662 100 50 55
-	q3map_surfacelight 2
-
-	skyparms env/sandtrap512 - -
-}
-
 textures/pad_glowsky/gglass03
 {
 	qer_editorimage textures/pad_glowsky/gglass03
