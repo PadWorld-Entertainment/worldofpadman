@@ -573,25 +573,18 @@ rgbGen identity
 
 textures/pad_shop/alienmoni
 {
-              surfaceparm trans
+	qer_editorimage textures/pad_shop/alienmoni01
+	surfaceparm trans
 	q3map_nolightmap
 	q3map_surfacelight 40
-	qer_editorimage textures/pad_shop/alienmoni01
-
-
 	{
-		animMap 3 textures/pad_shop/alienmoni01 textures/pad_shop/alienmoni02 textures/pad_shop/alienmoni03 textures/pad_shop/alienmoni04 textures/pad_shop/alienmoni05 textures/pad_shop/alienmoni06 textures/pad_shop/alienmoni09 textures/pad_shop/alienmoni09
+		animMap 2 textures/pad_shop/alienmoni01 textures/pad_shop/alienmoni02 textures/pad_shop/alienmoni03 textures/pad_shop/alienmoni04 textures/pad_shop/alienmoni05 textures/pad_shop/alienmoni06 textures/pad_shop/alienmoni07 textures/pad_shop/alienmoni08 textures/pad_shop/alienmoni09 textures/pad_shop/alienmoni09
 		blendFunc GL_ONE GL_ONE
-
-
 	}
 	{
-		animMap 3 textures/pad_shop/alienmoni01 textures/pad_shop/alienmoni02 textures/pad_shop/alienmoni03 textures/pad_shop/alienmoni04 textures/pad_shop/alienmoni05 textures/pad_shop/alienmoni06 textures/pad_shop/alienmoni09 textures/pad_shop/alienmoni09
+		animMap 2 textures/pad_shop/alienmoni01 textures/pad_shop/alienmoni02 textures/pad_shop/alienmoni03 textures/pad_shop/alienmoni04 textures/pad_shop/alienmoni05 textures/pad_shop/alienmoni06 textures/pad_shop/alienmoni07 textures/pad_shop/alienmoni08 textures/pad_shop/alienmoni09 textures/pad_shop/alienmoni09
 		blendFunc GL_ONE GL_ONE
-
 	}
-
-
 	{
 		map textures/pad_shop/alienmoniball
 		blendFunc GL_ONE GL_ONE
@@ -602,7 +595,7 @@ textures/pad_shop/alienmoni
 		blendfunc add
 		rgbGen identity
 		tcmod scroll 0 -1
-              }
+	}
 	{
 		map textures/pad_shop/line02
 		blendfunc add
