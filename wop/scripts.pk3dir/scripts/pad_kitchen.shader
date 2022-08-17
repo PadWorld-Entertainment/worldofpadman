@@ -351,7 +351,7 @@ textures/pad_kitchen/urban-chaos
 	surfaceparm noimpact
 	surfaceparm nolightmap
 //	surfaceparm sky
-	q3map_lightimage textures/pad_kitchen/white
+	q3map_lightimage textures/colors/hex_ffffffff
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 240
 

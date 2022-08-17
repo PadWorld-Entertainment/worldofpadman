@@ -2671,8 +2671,8 @@ textures/pad_petesky/utopiaatoll
 	qer_editorimage env/utopiaatoll512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/orange01
-	q3map_sun	0.266383 0.274632 0.358662 100 50 55
+	q3map_lightimage textures/colors/hex_ffcfafff
+	q3map_sun 0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
 	skyparms env/utopiaatoll512 - -
@@ -2684,7 +2684,7 @@ textures/pad_petesky/urban-terror
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/colors/hex_ff9860ff
-	q3map_sun	1.000000 0.718471 0.616587 200 60 225
+	q3map_sun 1.000000 0.718471 0.616587 200 60 225
 	q3map_surfacelight 200
 
 	skyparms env/urban-terror512 - -
@@ -2696,7 +2696,7 @@ textures/pad_petesky/poltergeist
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/colors/hex_5b7c97ff
-	q3map_sun	0.434981 0.749839 1.000000 260 340 50
+	q3map_sun 0.434981 0.749839 1.000000 260 340 50
 	q3map_surfacelight 400
 
 	skyparms env/pf-poltergeist512 - -
@@ -2708,7 +2708,7 @@ textures/pad_petesky/pf-tornado-alley
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/colors/hex_5d5d5dff
-	q3map_sun	0.266383 0.274632 0.358662 100 50 55
+	q3map_sun 0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
 	skyparms env/pf-tornado-alley512 - -
@@ -2720,7 +2720,7 @@ textures/pad_petesky/morning_alley
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/colors/hex_ff9860ff
-	q3map_sun	1.000000 0.862213 0.247457 330 340 50
+	q3map_sun 1.000000 0.862213 0.247457 330 340 50
 	q3map_surfacelight 400
 
 	skyparms env/morning_alley512 - -
@@ -2732,7 +2732,7 @@ textures/pad_petesky/sep
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/colors/hex_ff6600ff
-	q3map_sun	0.266383 0.274632 0.358662 94 48 75
+	q3map_sun 0.266383 0.274632 0.358662 94 48 75
 	q3map_surfacelight 280
 
 	skyparms env/sep512 - -
@@ -2744,7 +2744,7 @@ textures/pad_petesky/morning-madness
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/colors/hex_ff9860ff
-	q3map_sun	0.266383 0.274632 0.358662 100 50 55
+	q3map_sun 0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
 	skyparms env/pc-morning-madness512 - -
@@ -2755,8 +2755,8 @@ textures/pad_petesky/sist
 	qer_editorimage env/sist512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/orange01
-	q3map_sun	0.266383 0.274632 0.358662 100 50 55
+	q3map_lightimage textures/colors/hex_ffcfafff
+	q3map_sun 0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
 	skyparms env/sist512 - -

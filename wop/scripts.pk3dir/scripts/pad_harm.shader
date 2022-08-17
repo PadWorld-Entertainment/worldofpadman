@@ -950,7 +950,7 @@ textures/pad_harmsky/padcity
     qer_editorimage env/padcity512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/white
+	q3map_lightimage textures/colors/hex_ffffffff
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 100
     
@@ -962,7 +962,7 @@ textures/pad_harmsky/harmpc-ground-zero512
     qer_editorimage env/pc-ground-zero512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/white02
+	q3map_lightimage textures/colors/hex_ffffffff
 	q3map_sun	0.266383 0.274632 0.358662 20 50 55
 	q3map_surfacelight 10
 
