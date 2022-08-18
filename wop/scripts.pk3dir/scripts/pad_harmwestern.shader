@@ -1,37 +1,3 @@
-textures/pad_western/boden01
-{
-   qer_editorimage textures/pad_western/boden01
-   surfaceparm sandsteps
-
-   q3map_nonplanar
-   q3map_shadeangle 60
-   q3map_lightmapAxis z
-       q3map_lightmapmergable
-   //q3map_globaltexture
-   //q3map_tcGen ivector ( 256 0 0 ) ( 0 256 0 )
-   q3map_alphaMod dotproduct2 ( 0.0 0.0 0.75 )
-   q3map_lightmapSampleSize 16
-  {
-     map textures/pad_western/boden01   // Primary
-     rgbGen identity
-  }
-  {
-     map textures/pad_western/boden02   // Secondary
-     blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
-     //alphaFunc GE128
-     rgbGen identity
-     alphaGen vertex
-     detail
-  }
-  {
-     map $lightmap
-     blendFunc GL_DST_COLOR GL_ZERO
-     rgbGen identity
-  }
-}
-
-
-
 textures/pad_western/western_alpha_000   // Primary texture ONLY
 {
    qer_editorimage textures/common/alpha_000
@@ -192,32 +158,6 @@ textures/pad_western/dressingroom
      polygonOffset
         {
 		map textures/pad_western/dressingroom
-               	blendFunc blend
-		rgbGen vertex
-	}
-}
-
-textures/pad_western/djdick
-{
-     surfaceparm nomarks
-     surfaceparm trans
-     surfaceparm pointlight
-     polygonOffset
-        {
-		map textures/pad_western/djdick
-               	blendFunc blend
-		rgbGen vertex
-	}
-}
-
-textures/pad_western/westernmovie
-{
-     surfaceparm nomarks
-     surfaceparm trans
-     surfaceparm pointlight
-     polygonOffset
-        {
-		map textures/pad_western/westernmovie
                	blendFunc blend
 		rgbGen vertex
 	}

@@ -623,42 +623,6 @@ textures/pad_pirate/coral
 }
 
 
-\\textures/pad_pirate/pglass01b
-{
-	q3map_nolightmap
-	q3map_onlyvertexlighting
-    {
-        map textures/pad_pirate/pglass01b
-        blendFunc GL_ONE GL_ONE
-        rgbgen exactVertex
-    }
-}
-
-
-\\textures/pad_pirate/pglass02b
-{
-	q3map_nolightmap
-	q3map_onlyvertexlighting
-    {
-        map textures/pad_pirate/pglass02b
-        blendFunc GL_ONE GL_ONE
-        rgbgen exactVertex
-    }
-}
-
-
-\\textures/pad_pirate/pglass03b
-{
-	q3map_nolightmap
-	q3map_onlyvertexlighting
-    {
-        map textures/pad_pirate/pglass03b
-        blendFunc GL_ONE GL_ONE
-        rgbgen exactVertex
-    }
-}
-
-
 textures/pad_pirate/pglass03
 {
 	qer_editorimage textures/pad_pirate/pglass03
@@ -1803,20 +1767,6 @@ rgbGen identity
 }
 }
 
-textures/pad_pirate/wood038fleck
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_pirate/wood038fleck
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
 
 textures/pad_pirate/canon1024
 {
@@ -2311,10 +2261,10 @@ textures/pad_pirate/korkycurve
 
 textures/pad_pirate/telescopecurve01
 {
-          qer_editorimage textures/pad_pirate/telescope01
-           surfaceparm nonsolid
+	qer_editorimage textures/pad_pirate/telescope01
+	surfaceparm nonsolid
 	{
-		map textures/pad_pirate/lelescope01
+		map textures/pad_pirate/telescope01
 		rgbGen identity
 	}
 	{

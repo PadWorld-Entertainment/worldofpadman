@@ -134,96 +134,6 @@ textures/pad_jail/pad_jail2_notrespas
 
 // ********************************************************
 // *
-// *   MopAn's Jail:  Smoke for flame
-// *
-// ********************************************************
-textures/pad_jail/jail2_particle_smoke_1
-{
-qer_editorimage textures/pad_jail/jail2_particle_smoke
-surfaceparm noimpact
-surfaceparm nolightmap
-cull none
-surfaceparm trans
-surfaceparm nonsolid
-surfaceparm nodlight
-deformvertexes autosprite
-deformvertexes move 10.166071 11.198917 62.942745 sawtooth 0 1 0.121937 0.227738
-{
-clampmap textures/pad_jail/jail2_particle_smoke
-tcMod rotate 5.604267
-AlphaGen wave sawtooth 0.319630 -0.219630 0.121937 0.227738
-rgbGen wave sawtooth 0.463366 -0.363366 0.121937 0.227738
-tcMod stretch sawtooth 0.763891 -0.219559 0.121937 0.227738
-blendfunc add
-}
-}
-
-textures/pad_jail/jail2_particle_smoke_2
-{
-qer_editorimage textures/pad_jail/jail2_particle_smoke
-surfaceparm noimpact
-surfaceparm nolightmap
-cull none
-surfaceparm trans
-surfaceparm nonsolid
-surfaceparm nodlight
-deformvertexes autosprite
-deformvertexes move -3.046631 -1.555318 55.872883 sawtooth 0 1 0.386862 0.233563
-{
-clampmap textures/pad_jail/jail2_particle_smoke
-tcMod rotate 8.344829
-AlphaGen wave sawtooth 0.319910 -0.219910 0.386862 0.233563
-rgbGen wave sawtooth 0.404959 -0.304959 0.386862 0.233563
-tcMod stretch sawtooth 0.783605 -0.159169 0.386862 0.233563
-blendfunc add
-}
-}
-
-textures/pad_jail/jail2_particle_smoke_3
-{
-qer_editorimage textures/pad_jail/jail2_particle_smoke
-surfaceparm noimpact
-surfaceparm nolightmap
-cull none
-surfaceparm trans
-surfaceparm nonsolid
-surfaceparm nodlight
-deformvertexes autosprite
-deformvertexes move 5.571293 0.980481 50.410496 sawtooth 0 1 0.484167 0.227243
-{
-clampmap textures/pad_jail/jail2_particle_smoke
-tcMod rotate 21.780907
-AlphaGen wave sawtooth 0.448894 -0.348894 0.484167 0.227243
-rgbGen wave sawtooth 0.414078 -0.314078 0.484167 0.227243
-tcMod stretch sawtooth 0.633186 -0.031315 0.484167 0.227243
-blendfunc add
-}
-}
-
-textures/pad_jail/jail2_particle_smoke_4
-{
-qer_editorimage textures/pad_jail/jail2_particle_smoke
-surfaceparm noimpact
-surfaceparm nolightmap
-cull none
-surfaceparm trans
-surfaceparm nonsolid
-surfaceparm nodlight
-deformvertexes autosprite
-deformvertexes move 0.342040 -8.377625 51.995224 sawtooth 0 1 0.388644 0.232534
-{
-clampmap textures/pad_jail/jail2_particle_smoke
-tcMod rotate 13.214972
-AlphaGen wave sawtooth 0.423014 -0.323014 0.388644 0.232534
-rgbGen wave sawtooth 0.322834 -0.222834 0.388644 0.232534
-tcMod stretch sawtooth 0.743455 -0.086926 0.388644 0.232534
-blendfunc add
-}
-}
-
-
-// ********************************************************
-// *
 // *   MopAn's Jail:  flame small (little above original big flames)
 // *
 // ********************************************************
@@ -1944,136 +1854,34 @@ blendfunc add
 }
 
 
-
 textures/pad_jail/pad_jail_sprayroom2_telefield
 {
 	qer_trans 0.6
-	qer_editorimage textures/pad_jail/pad_jail_sprayroom2_telefield2
-	//q3map_lightimage textures/pad_jail/pad_jail_sprayroom2_telefield2
-        	//q3map_surfacelight 300
+	qer_editorimage textures/pad_jail/pad_jail_sprayroom2_telefield
 	q3map_globaltexture
 	surfaceparm nolightmap
 	surfaceparm trans
 	surfaceparm nomarks
 	cull twosided
-
-	//tessSize 64
-	//cull disable
-	//polygonOffset
-	//deformVertexes wave 64 sin .5 .5 0 .5
-	//deformVertexes wave 100 sin 4 3 0 0.3
-
-
 	{
 		map textures/pad_jail/pad_jail_sprayroom2_telefield
 		blendfunc add
-		//blendFunc GL_ONE_MINUS_SRC_ALPHA GL_SRC_ALPHA
-		//tcMod scroll 0.005 -0.0125
 		tcmod scroll .04 .03
-               		//tcMod turb 0 .1 0 .01
 		tcMod transform 0.25 0 0 0.25 0.1075 0.1075
-		//tcMod turb 0.6 .8 2 1
-
 		rgbGen identity
-		//tcgen environment
 	}
 
 }
-
-textures/pad_jail/pad_jail_sprayroom2_telefield3
-{
-	qer_editorimage textures/pad_jail/pad_jail_sprayroom2_telefield3
-	q3map_globaltexture
-	qer_trans 0.6
-	surfaceparm slick
-	surfaceparm nolightmap
-	surfaceparm trans
-	surfaceparm nomarks
-	cull twosided
-	{
-		map textures/pad_jail/pad_jail_sprayroom2_telefield3
-		blendfunc GL_DST_COLOR GL_ONE
-		tcMod scale .75 .75
-		rgbgen identity
-	}
-}
-
-// ********************************************************
-// *
-// *   MopAn's Jail:  mystical light -> by MopAn
-// *
-// ********************************************************
-
-textures/pad_jail/pad_jail_sprayroom2_lightred1
-{
-	q3map_lightimage textures/pad_jail/pad_jail_lightred
-	qer_editorimage textures/pad_jail/pad_jail_lightred1
-	q3map_globaltexture
-	surfaceparm nonsolid
-	surfaceparm trans
-	surfaceparm nomarks
-	q3map_lightsubdivide 128
-	q3map_surfacelight 150
-	cull none
-	//deformVertexes autosprite
-	tesssize 128
-	{
-		clampmap textures/pad_jail/pad_jail_lightred1
-		tcMod rotate -11
-		blendFunc add
-	}
-	{
-		clampmap textures/pad_jail/pad_jail_lightred2
-		tcMod rotate 8
-		blendFunc add
-	}
-}
-
-
 
 // ********************************************************
 // *
 // *   sky -> 1. by ydnar, 2. by MopAn
 // *
 // ********************************************************
-//textures/pad_jail/sky2
-//{
-//	qer_editorimage textures/pad_jail/sky_arc_masked
-//
-//	q3map_sunExt 1 1 1 140 -35 25 2 1
-//
-//	q3map_lightRGB 0.7 0.8 1.0
-//	q3map_lightmapFilterRadius 0 64
-//	q3map_skyLight 90 3
-//
-//	surfaceparm sky
-//	surfaceparm noimpact
-//	surfaceparm nolightmap
-//
-//	skyparms textures/env/sky 1024 -
-//
-//	nopicmip
-//	nomipmaps
-//
-//	{
-//		map textures/pad_jail/sky_clouds
-//		tcMod scale 3 3
-//		tcMod scroll 0.005 -0.0125
-//		rgbGen identityLighting
-//	}
-//	{
-//		map textures/pad_jail/sky_arc_masked
-//		blendFunc GL_ONE_MINUS_SRC_ALPHA GL_SRC_ALPHA
-//		tcMod transform 0.25 0 0 0.25 0.1075 0.1075
-//		rgbGen identityLighting
-//	}
-//}
-
-
 
 textures/pad_jail/pad_jail_sky4
 {
-	qer_editorimage textures/pad_jail/pad_jail_sky4
+	qer_editorimage env/jail_sprayroom3_ft
 	q3map_globaltexture
 	surfaceparm noimpact
 	surfaceparm nolightmap
@@ -2449,27 +2257,6 @@ textures/pad_jail/pad_jail_fly2
                 blendfunc gl_src_alpha gl_one_minus_src_alpha
 }
  }
-
-
-textures/pad_jail/pad_jail_butterfly
-{
-	qer_editorimage textures/pad_jail/pad_jail_butterfly
-	surfaceparm nodamage
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	surfaceparm nomarks
-	surfaceparm nonsolid
-	surfaceparm trans
-	deformVertexes wave 12 sin 0 18 0 3.2
-	deformVertexes move 4 4 4 sin 0 1 0.75 0.5
-	tessSize 16
-        	cull disable
-	{
-		map textures/pad_jail/pad_jail_butterfly
-		blendfunc blend
-		rgbGen identity
-	}
-}
 
 textures/pad_jail/pad_jail_bat
 {
@@ -2948,32 +2735,6 @@ blendfunc add
 // *   MopAn's Jail:  Floor2_slimy -> by MopAn
 // *
 // ********************************************************
-textures/pad_jail/pad_jail_floor2_slimy
-{
-     	qer_editorimage textures/pad_jail/pad_jail_floor2_slimy
-	//surfaceparm metalsteps
-                {
-		map textures/pad_jail/pad_jail_slimy
-                	blendFunc GL_ONE GL_ZERO
-               		tcMod scroll .01 .03
-                	tcMod turb 0 0.05 0 .05
-	}
-                {
-		map textures/pad_gfx02/tinpad
-                	blendFunc GL_ONE GL_ONE
-                	tcGen environment
-       	}
-               {
-		map textures/pad_jail/pad_jail_floor2_slimy
-                	blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
-		rgbGen identity
-	}
-        	{
-		map $lightmap
-                	blendFunc GL_DST_COLOR GL_ONE_MINUS_DST_ALPHA
-		rgbGen identity
-	}
-}
 
 textures/pad_jail/pad_jail2_redfloor_water
 {
@@ -3024,22 +2785,6 @@ textures/pad_jail/pad_jail_tele_stripes
 	}
 }
 
-textures/pad_jail/pad_jail_teleentry
-{
-	qer_editorimage textures/pad_jail/pad_jail_teleentry
-	surfaceparm noimpact
-	surfaceparm nomarks
-	surfaceparm trans
-	surfaceparm nonsolid
-	surfaceparm nolightmap
-	cull disable
-	{
-		map textures/pad_jail/pad_jail_teleentry
-		blendfunc add
-		rgbGen wave sin 0.4 0.2 0 0.2
-	}
-}
-
 // ********************************************************
 // *
 // *   MopAn's Jail:  pad_metal -> wallrast_a - blend-effect by MopAn
@@ -3080,22 +2825,6 @@ textures/pad_jail/pad_jail_busch
 
 	{
 		map textures/pad_jail/pad_jail_busch
-		rgbGen vertex
-		alphaFunc GE128
-		blendFunc GL_ONE GL_ZERO
-	}
-}
-
-textures/pad_jail/pad_jail_blatt
-{
-	surfaceparm nonsolid
-	surfaceparm trans
-	surfaceparm nomarks
-	surfaceparm noimpact
-	cull disable
-	deformVertexes wave 100 sin 3 5 .1 0.1
-	{
-		map textures/pad_jail/pad_jail_blatt
 		rgbGen vertex
 		alphaFunc GE128
 		blendFunc GL_ONE GL_ZERO
@@ -3516,27 +3245,6 @@ textures/pad_jail/jail2_krippgitter
 }
 
 
-textures/pad_jail/pad_jail_vine
-{
-	qer_editorimage textures/pad_jail/pad_jail_vine
-	cull disable
-    	surfaceparm alphashadow
-  	{
-		map textures/pad_jail/pad_jail_vine
-		tcMod scale 1.0 1.0
-		blendFunc GL_ONE GL_ZERO
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		blendFunc GL_DST_COLOR GL_ZERO
-		depthFunc equal
-		rgbGen identity
-	}
-}
-
 textures/pad_jail/pad_jail_zink_geruest_tools
 {
 
@@ -3841,20 +3549,6 @@ textures/pad_jail/pad_jail_metalfloor1
 	}
 }
 
-textures/pad_jail/pad_jail_metalfloor1_zink
-{
-	surfaceparm metalsteps
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_jail/pad_jail_metalfloor1_zink
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-}
-
 textures/pad_jail/pad_jail_metal11
 {
 	surfaceparm metalsteps
@@ -4122,41 +3816,6 @@ textures/pad_poster/poster036
 }
 
 
-textures/pad_poster/posterX003
-{
-	surfaceparm noimpact
-	surfaceparm nonsolid
-	surfaceparm trans
-	polygonOffset
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_poster/posterX003
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-}
-
-textures/pad_poster/posterX004
-{
-	surfaceparm noimpact
-	surfaceparm nonsolid
-	surfaceparm trans
-	polygonOffset
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_poster/posterX004
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-}
-
-
 textures/pad_jail/pad_jail_pinup1
 {
 	surfaceparm noimpact
@@ -4212,19 +3871,6 @@ textures/pad_jail/pad_jail_jack
      polygonOffset
         {
 		map textures/pad_jail/pad_jail_jack
-               		blendFunc add
-		rgbGen vertex
-	}
-}
-
-textures/pad_jail/pad_jail_kratzer
-{
-     surfaceparm	nomarks
-     surfaceparm	trans
-     surfaceparm pointlight
-     polygonOffset
-        {
-		map textures/pad_jail/pad_jail_kratzer
                		blendFunc add
 		rgbGen vertex
 	}
@@ -4297,20 +3943,6 @@ textures/pad_jail/wanted_pad1
 		rgbGen identity
 	}
 }
-
-textures/pad_jail/pad_jail_padsymbol
-{
-     surfaceparm	nomarks
-     surfaceparm	trans
-     surfaceparm pointlight
-
-        {
-		map textures/pad_jail/pad_jail_padsymbol
-               		blendFunc add
-		rgbGen wave sin 0.4 0.2 0 0.2
-	}
-}
-
 
 textures/pad_jail/jail2_farbkleks
 {
@@ -4399,19 +4031,6 @@ textures/pad_jail/pad_jail_dirt1f
      polygonOffset
         {
 		map textures/pad_jail/pad_jail_dirt1f
-               		blendFunc add
-		rgbGen vertex
-	}
-}
-
-textures/pad_jail/pad_jail_observation
-{
-     surfaceparm	nomarks
-     surfaceparm	trans
-     surfaceparm pointlight
-     polygonOffset
-        {
-		map textures/pad_jail/pad_jail_observation
                		blendFunc add
 		rgbGen vertex
 	}

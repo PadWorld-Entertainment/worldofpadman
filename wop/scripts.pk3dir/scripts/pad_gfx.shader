@@ -452,78 +452,8 @@ textures/pad_gfx/snow
 }
 
 //=======================================================
-//sp�lwasser + zubeh�r :)
+//Spülwasser + Zubehör :)
 //=======================================================
-
-textures/pad_gfx/water_static
-{
-	qer_editorimage textures/pad_gfx/water_01
-	q3map_lightimage textures/pad_gfx/water_02
-	surfaceparm nodrop
-	surfaceparm noimpact
-	//surfaceparm nolightmap
-	surfaceparm nomarks
-	surfaceparm nonsolid
-	surfaceparm water
-	surfaceparm trans
-	surfaceparm fog
-	fogparms ( 0 0.27 0.42 ) 500
-	cull disable
-	qer_trans 0.5
-	q3map_globaltexture
-
-
-	{
-		map textures/pad_gfx/water_01
-		blendfunc add
-		rgbGen identity
-		tcMod turb 0.2 0.1 1 0.05
-		tcMod scale 0.5 0.5
-		tcMod scroll 0.01 0.01
-	}
-
-}
-
-textures/pad_gfx/water
-{
-	qer_editorimage textures/pad_gfx/water_02
-	q3map_lightimage textures/pad_gfx/water_02
-	surfaceparm nodrop
-	surfaceparm noimpact
-	// surfaceparm nolightmap
-	surfaceparm nomarks
-	surfaceparm nonsolid
-	surfaceparm trans
-	cull disable
-	deformVertexes wave 30 sin 0 4 0 0.2
-	deformVertexes wave 100 sin 0 4 0 0.7
-	tessSize 48
-	qer_trans 0.5
-
-	{
-		map textures/liquids/pool2
-		blendfunc add
-		rgbGen identity
-		tcMod turb 0.4 0.3 1 0.05
-		tcMod scale 0.5 0.5
-		tcMod scroll 0.01 1.4
-	}
-}
-
-textures/pad_gfx/schaum_static
-{
-	cull disable
-        surfaceparm nomarks
-        surfaceparm trans
-        sort additive
-	qer_trans 0.5
-	{
-		map textures/pad_gfx/schaum_static
-		blendfunc add
-		rgbGen identity
-		tcMod turb 0.1 0.05 0 0.5
-	}
-}
 
 textures/pad_gfx/schaum1
 {
@@ -612,31 +542,6 @@ textures/pad_gfx/schaum3
 //Flowers
 //=======================================================
 
-textures/pad_gfx02/flow01
-{
-        qer_editorimage textures/pad_gfx02/flow01
-    	surfaceparm trans
-	surfaceparm alphashadow
-	surfaceparm playerclip
-   	surfaceparm nonsolid
-	cull none
-        nopicmip
-	{
-		map textures/pad_gfx02/flow01
-		blendFunc GL_ONE GL_ZERO
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc GL_DST_COLOR GL_ZERO
-		depthFunc equal
-	}
-}
-
-
 textures/pad_gfx02/flow02
 {
         qer_editorimage textures/pad_gfx02/flow02
@@ -660,7 +565,6 @@ textures/pad_gfx02/flow02
 		depthFunc equal
 	}
 }
-
 
 textures/pad_gfx02/flow04
 {
@@ -686,32 +590,6 @@ textures/pad_gfx02/flow04
 	}
 }
 
-
-textures/pad_gfx02/cact03
-{
-        qer_editorimage textures/pad_gfx02/cact03
-    	surfaceparm trans
-	surfaceparm alphashadow
-	surfaceparm playerclip
-   	surfaceparm nonsolid
-	cull none
-        nopicmip
-	{
-		map textures/pad_gfx02/cact03
-		blendFunc GL_ONE GL_ZERO
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc GL_DST_COLOR GL_ZERO
-		depthFunc equal
-	}
-}
-
-
 textures/pad_gfx02/busch
 {
         qer_editorimage textures/pad_gfx02/busch
@@ -735,33 +613,6 @@ textures/pad_gfx02/busch
 		depthFunc equal
 	}
 }
-
-
-
-textures/pad_gfx02/sun
-{
-        qer_editorimage textures/pad_gfx02/sun
-    	surfaceparm trans
-	surfaceparm alphashadow
-	surfaceparm playerclip
-   	surfaceparm nonsolid
-	cull none
-        nopicmip
-	{
-		map textures/pad_gfx02/sun
-		blendFunc GL_ONE GL_ZERO
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc GL_DST_COLOR GL_ZERO
-		depthFunc equal
-	}
-}
-
 
 textures/pad_gfx02/blatt01
 {
@@ -868,7 +719,6 @@ textures/pad_gfx02/light_white
 //Mixed stuff
 //=======================================================
 
-
 textures/pad_gfx02/padp
 {
         qer_editorimage textures/pad_gfx02/padp
@@ -892,33 +742,6 @@ textures/pad_gfx02/padp
 		depthFunc equal
 	}
 }
-
-
-textures/pad_gfx02/teller
-{
-        qer_editorimage textures/pad_gfx02/teller
-    	surfaceparm trans
-	surfaceparm alphashadow
-	surfaceparm playerclip
-   	surfaceparm nonsolid
-	cull none
-        nopicmip
-	{
-		map textures/pad_gfx02/teller
-		blendFunc GL_ONE GL_ZERO
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc GL_DST_COLOR GL_ZERO
-		depthFunc equal
-	}
-}
-
-
 
 textures/pad_gfx02/rollo
 {

@@ -126,7 +126,7 @@ textures/pad_glowsky/gglass02
 
 textures/pad_backyard/pf-tornado-alley
 {
-	qer_editorimage pf-tornado-alley512_ft
+	qer_editorimage env/pf-tornado-alley512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/colors/hex_373737ff
@@ -394,229 +394,6 @@ textures/pad_cabin/Moni
 	}
 }
 
-textures/pad_backyard/Holz00y
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/Holz00y
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_backyard/Holz00z
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/Holz00y
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_backyard/planke02
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/planke02
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_backyard/wood0a
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0a
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_backyard/wood0b
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0b
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-
-textures/pad_backyard/wood0c
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0c
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_backyard/wood0d
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0d
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_backyard/wood0e
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0e
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_backyard/wood0f
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0f
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_backyard/wood0g
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0g
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_backyard/wood0h
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0h
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_backyard/wood0i
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0i
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_backyard/wood0j
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood0j
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-
-textures/pad_backyard/wood01
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood01
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_backyard/wood02
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/wood02
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
 
 textures/pad_backyard/glow_rost01
 {
@@ -632,8 +409,7 @@ rgbGen identity
 }
 }
 
-
-textures/pad_backyard/metal02
+textures/pad_backyard/metall1
 {
 surfaceparm metalsteps
 {
@@ -641,13 +417,13 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/metal02
+map textures/pad_backyard/metall1
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
 
-textures/pad_backyard/metal04
+textures/pad_backyard/metall2
 {
 surfaceparm metalsteps
 {
@@ -655,69 +431,11 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_backyard/metal04
+map textures/pad_backyard/metall2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
-
-textures/pad_backyard/metal06
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/metal06
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_backyard/Metal1
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/Metal01
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_backyard/Metal2
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/Metal2
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_backyard/rau
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/rau
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
 
 textures/pad_cabin/darkrost
 {
@@ -733,64 +451,6 @@ rgbGen identity
 }
 }
 
-
-textures/pad_cabin/metal
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/metal
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_cabin/metal1
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/metal1
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_cabin/metall
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/metall
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-
-textures/pad_cabin/rost001
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/rost001
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
 textures/pad_cabin/fensterbank
 {
 surfaceparm woodsteps
@@ -800,62 +460,6 @@ rgbGen identity
 }
 {
 map textures/pad_cabin/fensterbank
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_cabin/wood0a
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/wood0a
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_cabin/wood0b
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/wood0b
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_cabin/wood0c
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/wood0c
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_cabin/wood0d
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/wood0d
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
