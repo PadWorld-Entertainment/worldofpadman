@@ -214,7 +214,7 @@ powerups/berserkerAura
 	{
 		//map $whiteimage
 		//map textures/pad_gfx02/invispad
-		map textures/effects/berserkerAura
+		map gfx/puppetfx
 		blendfunc add
 		tcMod turb 0 0.15 0 0.25
 		//rgbGen entity
@@ -248,7 +248,7 @@ deadfadeSkin
 {
 	{
 //		map $whiteimage
-		animmap 10 textures/effects/death1 textures/effects/death2 textures/effects/death3
+		animmap 10 gfx/deathfx1 gfx/deathfx2 gfx/deathfx3
 		rgbGen const ( 0.411765 0.580392 0.992157 )
 		alphaGen entity
 		blendfunc blend
