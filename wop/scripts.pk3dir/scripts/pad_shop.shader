@@ -336,37 +336,6 @@ textures/pad_shop/terrain_0
 	}
 }
 
-textures/pad_shop/terrain_1
-{
-	surfaceparm nolightmap
-	q3map_novertexshadows
-	q3map_forcesunlight
-	{
-		map textures/pad_shop/planetstoneb
-		rgbGen vertex
-		tcmod scale 0.352 0.352
-	}
-}
-
-textures/pad_shop/terrain_0to1
-{
-	surfaceparm nolightmap
-	q3map_novertexshadows
-	q3map_forcesunlight
-	{
-		map textures/pad_shop/planetstone
-		rgbGen vertex
-		alphaGen vertex
-		tcmod scale 0.352 0.352
-	}
-	{
-		map textures/pad_shop/planetstoneb
-		rgbGen vertex
-		alphaGen vertex
-		tcmod scale 0.352 0.352
-		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
-	}
-}
 
 textures/pad_shop/terrain_vertex
 {
