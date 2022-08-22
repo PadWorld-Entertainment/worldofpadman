@@ -6412,138 +6412,134 @@ textures/pad_wop/padbubble
 	}
 }
 
+
 // =================
-// WoP JUMP
+// WoP JUMPPAD MARKER
 // =================
 
-textures/pad_wop/padjump_red
+textures/pad_wop/padjump_yellow
 {
-
-        q3map_surfacelight	30
-
+	q3map_surfacelight 30
 	surfaceparm	trans
 	surfaceparm nonsolid
-             	surfaceparm nomarks
+	surfaceparm nomarks
 	surfaceparm nolightmap
 	cull none
-
 	{
-		Map textures/pad_wop/padjump_red
+		Map textures/pad_wop/padjump_yellow
 		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 0 1 0 1
-                //tcMod rotate 103
+		rgbgen wave triangle 0 1 0 1
 	}
 	{
-		Map textures/pad_wop/padjump_red2
+		Map textures/pad_wop/padjump_yellow2
 		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 1 1 0 1
-               //tcMod rotate -140
+		rgbgen wave triangle 1 1 0 1
 	}
 }
 
-
 textures/pad_wop/padjump_blue
 {
-
-        q3map_surfacelight	30
-
+	q3map_surfacelight 30
 	surfaceparm	trans
 	surfaceparm nonsolid
-             	surfaceparm nomarks
+	surfaceparm nomarks
 	surfaceparm nolightmap
 	cull none
-
 	{
 		Map textures/pad_wop/padjump_blue
 		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 0 1 0 1
-                //tcMod rotate 103
+		rgbgen wave triangle 0 1 0 1
 	}
 	{
 		Map textures/pad_wop/padjump_blue2
 		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 1 1 0 1
-               //tcMod rotate -140
-	}
-}
-
-textures/pad_wop/padjump_purple
-{
-
-        q3map_surfacelight	30
-
-	surfaceparm	trans
-	surfaceparm nonsolid
-             	surfaceparm nomarks
-	surfaceparm nolightmap
-	cull none
-
-	{
-		Map textures/pad_wop/padjump_purple
-		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 0 1 0 1
-                //tcMod rotate 103
-	}
-	{
-		Map textures/pad_wop/padjump_purple2
-		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 1 1 0 1
-               //tcMod rotate -140
+		rgbgen wave triangle 1 1 0 1
 	}
 }
 
 textures/pad_wop/padjump_green
 {
-
-        q3map_surfacelight	30
-
+	q3map_surfacelight 30
 	surfaceparm	trans
 	surfaceparm nonsolid
-             	surfaceparm nomarks
+	surfaceparm nomarks
 	surfaceparm nolightmap
 	cull none
-
 	{
 		Map textures/pad_wop/padjump_green
 		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 0 1 0 1
-                //tcMod rotate 103
+		rgbgen wave triangle 0 1 0 1
 	}
 	{
 		Map textures/pad_wop/padjump_green2
 		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 1 1 0 1
-               //tcMod rotate -140
+		rgbgen wave triangle 1 1 0 1
 	}
 }
 
-textures/pad_wop/padjump_yellow
+textures/pad_wop/padjump_purple
 {
-
-        q3map_surfacelight	30
-
+	q3map_surfacelight 30
 	surfaceparm	trans
 	surfaceparm nonsolid
-             	surfaceparm nomarks
+	surfaceparm nomarks
 	surfaceparm nolightmap
 	cull none
-
 	{
-		Map textures/pad_wop/padjump_yellow
+		Map textures/pad_wop/padjump_purple
 		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 0 1 0 1
-                //tcMod rotate 103
+		rgbgen wave triangle 0 1 0 1
 	}
 	{
-		Map textures/pad_wop/padjump_yellow2
+		Map textures/pad_wop/padjump_purple2
 		blendFunc GL_ONE GL_ONE
-                rgbgen wave triangle 1 1 0 1
-               //tcMod rotate -140
+		rgbgen wave triangle 1 1 0 1
 	}
 }
 
+textures/pad_wop/padjump_red
+{
+	q3map_surfacelight 30
+	surfaceparm	trans
+	surfaceparm nonsolid
+	surfaceparm nomarks
+	surfaceparm nolightmap
+	cull none
+	{
+		Map textures/pad_wop/padjump_red
+		blendFunc GL_ONE GL_ONE
+		rgbgen wave triangle 0 1 0 1
+	}
+	{
+		Map textures/pad_wop/padjump_red2
+		blendFunc GL_ONE GL_ONE
+		rgbgen wave triangle 1 1 0 1
+	}
+}
+
+textures/pad_wop/padjump_white
+{
+	q3map_surfacelight 30
+	surfaceparm	trans
+	surfaceparm nonsolid
+	surfaceparm nomarks
+	surfaceparm nolightmap
+	cull none
+	{
+		Map textures/pad_wop/padjump_white
+		blendFunc GL_ONE GL_ONE
+		rgbgen wave triangle 0 1 0 1
+	}
+	{
+		Map textures/pad_wop/padjump_white2
+		blendFunc GL_ONE GL_ONE
+		rgbgen wave triangle 1 1 0 1
+	}
+}
+
+
 // =================
-// WoP Tele
+// WoP TELEPORT MARKER
 // =================
 
 textures/pad_wop/padtele
@@ -6552,30 +6548,28 @@ textures/pad_wop/padtele
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nonsolid
-              surfaceparm trans
-	q3map_lightimage textures/pad_wop/padtele
+	surfaceparm trans
+	q3map_lightimage textures/pad_wop/padtele_yellow
 	q3map_surfacelight 100
-
 	{
-		map textures/pad_wop/padtele_electric
+		map textures/pad_wop/padtele_yellow2
 		blendFunc add
-                	rgbgen wave triangle 1.8 2 0 7
-                	tcMod scroll 0 -1
+		rgbgen wave triangle 1.8 2 0 7
+		tcMod scroll 0 -1
 	}
 	{
-		map textures/pad_wop/padtele_electric
+		map textures/pad_wop/padtele_yellow2
 		blendFunc add
-                	rgbgen wave triangle 1 1.1 1 5
-                	tcMod scale  -1 1.5
-                	tcMod scroll 0 1.5
+		rgbgen wave triangle 1 1.1 1 5
+		tcMod scale -1 1.5
+		tcMod scroll 0 1.5
 	}
 	{
-		map textures/pad_wop/padtele
+		map textures/pad_wop/padtele_yellow
 		blendFunc add
-                	rgbgen wave triangle 2 1.4 3 7.7
-                	tcMod scroll 0 0.8
+		rgbgen wave triangle 2 1.4 3 7.7
+		tcMod scroll 0 0.8
 	}
-
 }
 
 textures/pad_wop/padtele_blue
@@ -6584,30 +6578,28 @@ textures/pad_wop/padtele_blue
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nonsolid
-              surfaceparm trans
+	surfaceparm trans
 	q3map_lightimage textures/pad_wop/padtele_blue
 	q3map_surfacelight 100
-
 	{
-		map textures/pad_wop/padtele_electric_blue
+		map textures/pad_wop/padtele_blue2
 		blendFunc add
-                	rgbgen wave triangle 1.8 2 0 7
-                	tcMod scroll 0 -1
+		rgbgen wave triangle 1.8 2 0 7
+		tcMod scroll 0 -1
 	}
 	{
-		map textures/pad_wop/padtele_electric_blue
+		map textures/pad_wop/padtele_blue2
 		blendFunc add
-                	rgbgen wave triangle 1 1.1 1 5
-                	tcMod scale  -1 1.5
-                	tcMod scroll 0 1.5
+		rgbgen wave triangle 1 1.1 1 5
+		tcMod scale -1 1.5
+		tcMod scroll 0 1.5
 	}
 	{
 		map textures/pad_wop/padtele_blue
 		blendFunc add
-                	rgbgen wave triangle 2 1.4 3 7.7
-                	tcMod scroll 0 0.8
+		rgbgen wave triangle 2 1.4 3 7.7
+		tcMod scroll 0 0.8
 	}
-
 }
 
 textures/pad_wop/padtele_green
@@ -6616,30 +6608,28 @@ textures/pad_wop/padtele_green
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nonsolid
-              surfaceparm trans
+	surfaceparm trans
 	q3map_lightimage textures/pad_wop/padtele_green
 	q3map_surfacelight 100
-
 	{
-		map textures/pad_wop/padtele_electric_green
+		map textures/pad_wop/padtele_green2
 		blendFunc add
-                	rgbgen wave triangle 1.8 2 0 7
-                	tcMod scroll 0 -1
+		rgbgen wave triangle 1.8 2 0 7
+		tcMod scroll 0 -1
 	}
 	{
-		map textures/pad_wop/padtele_electric_green
+		map textures/pad_wop/padtele_green2
 		blendFunc add
-                	rgbgen wave triangle 1 1.1 1 5
-                	tcMod scale  -1 1.5
-                	tcMod scroll 0 1.5
+		rgbgen wave triangle 1 1.1 1 5
+		tcMod scale -1 1.5
+		tcMod scroll 0 1.5
 	}
 	{
 		map textures/pad_wop/padtele_green
 		blendFunc add
-                	rgbgen wave triangle 2 1.4 3 7.7
-                	tcMod scroll 0 0.8
+		rgbgen wave triangle 2 1.4 3 7.7
+		tcMod scroll 0 0.8
 	}
-
 }
 
 textures/pad_wop/padtele_purple
@@ -6648,30 +6638,28 @@ textures/pad_wop/padtele_purple
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nonsolid
-              surfaceparm trans
+	surfaceparm trans
 	q3map_lightimage textures/pad_wop/padtele_red
 	q3map_surfacelight 100
-
 	{
-		map textures/pad_wop/padtele_electric_purple
+		map textures/pad_wop/padtele_purple2
 		blendFunc add
-                	rgbgen wave triangle 1.8 2 0 7
-                	tcMod scroll 0 -1
+		rgbgen wave triangle 1.8 2 0 7
+		tcMod scroll 0 -1
 	}
 	{
-		map textures/pad_wop/padtele_electric_purple
+		map textures/pad_wop/padtele_purple2
 		blendFunc add
-                	rgbgen wave triangle 1 1.1 1 5
-                	tcMod scale  -1 1.5
-                	tcMod scroll 0 1.5
+		rgbgen wave triangle 1 1.1 1 5
+		tcMod scale -1 1.5
+		tcMod scroll 0 1.5
 	}
 	{
 		map textures/pad_wop/padtele_purple
 		blendFunc add
-                	rgbgen wave triangle 2 1.4 3 7.7
-                	tcMod scroll 0 0.8
+		rgbgen wave triangle 2 1.4 3 7.7
+		tcMod scroll 0 0.8
 	}
-
 }
 
 textures/pad_wop/padtele_red
@@ -6680,30 +6668,58 @@ textures/pad_wop/padtele_red
 	surfaceparm nolightmap
 	cull none
 	surfaceparm nonsolid
-              surfaceparm trans
+	surfaceparm trans
 	q3map_lightimage textures/pad_wop/padtele_red
 	q3map_surfacelight 100
-
 	{
-		map textures/pad_wop/padtele_electric_red
+		map textures/pad_wop/padtele_red2
 		blendFunc add
-                	rgbgen wave triangle 1.8 2 0 7
-                	tcMod scroll 0 -1
+		rgbgen wave triangle 1.8 2 0 7
+		tcMod scroll 0 -1
 	}
 	{
-		map textures/pad_wop/padtele_electric_red
+		map textures/pad_wop/padtele_red2
 		blendFunc add
-                	rgbgen wave triangle 1 1.1 1 5
-                	tcMod scale  -1 1.5
-                	tcMod scroll 0 1.5
+		rgbgen wave triangle 1 1.1 1 5
+		tcMod scale -1 1.5
+		tcMod scroll 0 1.5
 	}
 	{
 		map textures/pad_wop/padtele_red
 		blendFunc add
-                	rgbgen wave triangle 2 1.4 3 7.7
-                	tcMod scroll 0 0.8
+		rgbgen wave triangle 2 1.4 3 7.7
+		tcMod scroll 0 0.8
 	}
+}
 
+textures/pad_wop/padtele_white
+{
+	surfaceparm nomarks
+	surfaceparm nolightmap
+	cull none
+	surfaceparm nonsolid
+	surfaceparm trans
+	q3map_lightimage textures/pad_wop/padtele_white
+	q3map_surfacelight 100
+	{
+		map textures/pad_wop/padtele_white2
+		blendFunc add
+		rgbgen wave triangle 1.8 2 0 7
+		tcMod scroll 0 -1
+	}
+	{
+		map textures/pad_wop/padtele_white2
+		blendFunc add
+		rgbgen wave triangle 1 1.1 1 5
+		tcMod scale -1 1.5
+		tcMod scroll 0 1.5
+	}
+	{
+		map textures/pad_wop/padtele_white
+		blendFunc add
+		rgbgen wave triangle 2 1.4 3 7.7
+		tcMod scroll 0 0.8
+	}
 }
 
 

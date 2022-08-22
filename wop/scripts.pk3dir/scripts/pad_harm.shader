@@ -510,36 +510,6 @@ textures/pad_harm/water
 
 
 //=======================================================
-//Weißer Tele
-//=======================================================
-
-textures/pad_harm/padtele_white
-{
-	cull none
-	q3map_lightimage textures/pad_harm/padtele_white
-	q3map_surfacelight 100
-
-	{
-		map textures/pad_harm/padtele_electric_white
-		blendfunc add
-		rgbGen wave square .25 .25 0 2.5
-		tcmod scale 1 1
-		tcMod scroll 1 1
-	}
-
-
-
-	{
-		map textures/pad_harm/padtele_white
-		blendfunc add
-		rgbgen wave square 0 1 0 3
-		tcmod scale 1 1
-		tcMod scroll -2 1
-	}
-
-}
-
-//=======================================================
 //Blasen für Aquarium
 //=======================================================
 
