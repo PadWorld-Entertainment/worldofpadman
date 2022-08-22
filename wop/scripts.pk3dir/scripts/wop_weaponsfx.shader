@@ -26,7 +26,6 @@ models/weaponsfx/drop
 	}
 }
 
-
 waterSplash
 {
 	cull disable
@@ -51,6 +50,7 @@ models/weaponsfx/balloony_drop
 		rgbGen wave inversesawtooth 0 1 0 1.2
 	}
 }
+
 
 // =================
 // BOOM BOOM BETTY
@@ -88,7 +88,6 @@ fireTrail
 
 }
 
-
 fireExplosion
 {
 	cull disable
@@ -104,7 +103,6 @@ fireExplosion
 	}
 }
 
-
 models/weaponsfx/firedrop
 {
 	cull none
@@ -113,6 +111,7 @@ models/weaponsfx/firedrop
 		blendFunc add
 	}
 }
+
 
 // =================
 // BOASTER
@@ -140,6 +139,7 @@ boasterExplosion
         rgbGen wave inversesawtooth 0 1 0 2.0
 	}
 }
+
 
 // =================
 // PUMPER
@@ -223,6 +223,7 @@ nipperWave
 	}
 }
 
+
 // =================
 // IMPERIUS
 // =================
@@ -291,6 +292,7 @@ models/weaponsfx/gum
 	}
 }
 
+
 // =================
 // KMA97
 // =================
@@ -316,7 +318,6 @@ kmaMark
 	}
 }
 
-
 models/weaponsfx/smallkmadrop
 {
 	cull none
@@ -326,7 +327,6 @@ models/weaponsfx/smallkmadrop
 		rgbGen wave inversesawtooth 0 1 0 1.2
 	}
 }
-
 
 models/weapons2/kma97/kma97_flash
 {
@@ -347,6 +347,7 @@ models/weapons2/kma97/kma97_flash
         }
 
 }
+
 
 // =================
 // MISC
@@ -380,6 +381,7 @@ teleEffect
 	}
 }
 
+
 // =================
 // TELEPORT
 // =================
@@ -402,7 +404,6 @@ teleEffectRed
 		tcMod scroll -0.9 1.3
 	}
 }
-
 
 teleEffectGreen
 {
@@ -432,20 +433,23 @@ newDuckExplosion
 {
 	cull disable
 	{
-		animmap 10 models/weaponsfx/duckexp_1 models/weaponsfx/duckexp_2 models/weaponsfx/duckexp_3 models/weaponsfx/duckexp_4 models/weaponsfx/duckexp_5 models/weaponsfx/duckexp_6 models/weaponsfx/duckexp_7 models/weaponsfx/duckexp_8
+		animmap 10 models/weaponsfx/duckexp_1 models/weaponsfx/duckexp_2 models/weaponsfx/duckexp_3 models/weaponsfx/duckexp_4 models/weaponsfx/duckexp_5 models/weaponsfx/duckexp_6 models/weaponsfx/duckexp_7 models/weaponsfx/duckexp_8 textures/colors/hex_000000ff
 		rgbGen wave inversesawtooth 0 1 0 10
 		blendfunc add
 	}
 	cull disable
 	{
-		animmap 10 models/weaponsfx/duckexp_2 models/weaponsfx/duckexp_3 models/weaponsfx/duckexp_4 models/weaponsfx/duckexp_5 models/weaponsfx/duckexp_6 models/weaponsfx/duckexp_7 models/weaponsfx/duckexp_8 textures/colors/hex_000000ff
+		animmap 10 models/weaponsfx/duckexp_2 models/weaponsfx/duckexp_3 models/weaponsfx/duckexp_4 models/weaponsfx/duckexp_5 models/weaponsfx/duckexp_6 models/weaponsfx/duckexp_7 models/weaponsfx/duckexp_8 textures/colors/hex_000000ff textures/colors/hex_000000ff
 		rgbGen wave sawtooth 0 1 0 10
 		blendfunc add
 	}
 }
 
 
+// =================
 // BAMBAM
+// =================
+
 bambamMissileRed {
 	{
 		map "models/weaponsfx/bambamball_red"
@@ -459,5 +463,3 @@ bambamMissileBlue {
 		blendFunc add
 	}
 }
-
-
