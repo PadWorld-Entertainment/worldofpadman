@@ -336,6 +336,7 @@ void DrawPic2Color(float x, float y, float w, float h, float s1, float t1, float
 	DrawPoly(&poly);
 }
 
+#if 0
 /*
 #######################
 FillRect2Color
@@ -459,6 +460,7 @@ void DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3, ve
 	DrawLine(x2, y2, x3, y3, 1, color);
 	DrawLine(x3, y3, x1, y1, 1, color);
 }
+#endif
 
 /*
 #######################
@@ -527,7 +529,7 @@ void Draw4VertsPic(float x1, float y1, float x2, float y2, float x3, float y3, f
 AddCharToScene
 #######################
 */
-void AddCharToScene(float x, float y, int ch, vec4_t color, vec2_t vec_w, vec2_t vec_h) {
+static void AddCharToScene(float x, float y, int ch, vec4_t color, vec2_t vec_w, vec2_t vec_h) {
 	poly_t poly;
 	polyVert_t verts[4];
 	//	vec2_t		vec_w,vec_h;
@@ -614,7 +616,7 @@ void AddCharToScene(float x, float y, int ch, vec4_t color, vec2_t vec_w, vec2_t
 //#define TURNORIGIN_MIDDLELEFT		2
 //#define TURNORIGIN_MIDDLECENTER	3
 
-int colorAndPosinc(const char *str, int *spos, float *tmpColor, qboolean forceColor) {
+static int colorAndPosinc(const char *str, int *spos, float *tmpColor, qboolean forceColor) {
 	int posInc = 1;
 	int i = *spos;
 
@@ -636,7 +638,7 @@ int colorAndPosinc(const char *str, int *spos, float *tmpColor, qboolean forceCo
 DrawTurnableString
 #######################
 */
-void DrawTurnableStringFC(float x, float y, const char *s, vec4_t color, float charHeight, float angle, int turnorigin,
+static void DrawTurnableStringFC(float x, float y, const char *s, vec4_t color, float charHeight, float angle, int turnorigin,
 						  qboolean forceColor) {
 	vec2_t vec_w, vec_h;
 	int i, j, sLen;
@@ -756,7 +758,7 @@ static void DrawCharWithCutFrame(float x, float y, char ch, float w, float h, fl
  * fr frame rightedge
  * fb frame bottomedge
  */
-void DrawStringWithCutFrameFC(float x, float y, const char *str, vec4_t color, float cW, float cH, float fl, float ft,
+static void DrawStringWithCutFrameFC(float x, float y, const char *str, vec4_t color, float cW, float cH, float fl, float ft,
 							  float fr, float fb, qboolean forceColor) {
 	int i, sLen;
 	float j = 0.0f;

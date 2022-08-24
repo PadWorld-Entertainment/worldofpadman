@@ -94,7 +94,7 @@ static void Cutscene2d_ResetAll(void) {
 	}
 }
 
-void CG_Cutscene2d_Init(void) {
+static void CG_Cutscene2d_Init(void) {
 	if (cutscene2d_initialized)
 		return;
 

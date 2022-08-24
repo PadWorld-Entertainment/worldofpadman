@@ -312,7 +312,7 @@ static void CG_AddMoveScaleFade(localEntity_t *le) {
 		}
 		if (!(le->leFlags & LEF_AXIS_ALIGNED)) {
 			// model looks in flight direction
-			vec3_t delta, angles;
+			vec3_t angles;
 
 			BG_EvaluateTrajectoryDelta(&le->pos, cg.time, delta);
 			vectoangles(delta, angles);

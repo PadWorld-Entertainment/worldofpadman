@@ -1052,15 +1052,13 @@ void Sys_ShowIP(void);
 FILE *Sys_FOpen(const char *ospath, const char *mode);
 qboolean Sys_Mkdir(const char *path);
 FILE *Sys_Mkfifo(const char *ospath);
-char *Sys_Cwd(void);
+const char *Sys_Cwd(void);
 void Sys_SetDefaultInstallPath(const char *path);
-char *Sys_DefaultInstallPath(void);
+const char *Sys_DefaultInstallPath(void);
 char *Sys_SteamPath(void);
 char *Sys_GogPath(void);
 
-#ifdef __APPLE__
-char *Sys_DefaultAppPath(void);
-#endif
+const char *Sys_DefaultAppPath(void);
 
 void Sys_SetDefaultHomePath(const char *path);
 char *Sys_DefaultHomePath(void);

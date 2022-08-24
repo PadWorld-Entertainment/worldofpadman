@@ -34,7 +34,7 @@ CG_Draw3DModel
 
 ================
 */
-void CG_Draw3DModel(float x, float y, float w, float h, qhandle_t model, qhandle_t skin, vec3_t origin, vec3_t angles,
+static void CG_Draw3DModel(float x, float y, float w, float h, qhandle_t model, qhandle_t skin, vec3_t origin, vec3_t angles,
 					float scale, byte rgba[4]) {
 	refdef_t refdef;
 	refEntity_t ent;
@@ -984,6 +984,7 @@ static float CG_DrawPowerups(float y) {
 	return y;
 }
 
+#if 0
 int CG_DrawCartridgeStatus(int y) {
 	char s1[16];
 	vec4_t bgcolor = {1.0f, 0.33f, 0.0f, 0.33f};
@@ -1019,6 +1020,7 @@ int CG_DrawCartridgeStatus(int y) {
 
 	return y;
 }
+#endif
 
 /*
 ===================
@@ -2098,7 +2100,7 @@ static void DrawBigScore(int y, int score) {
 // half captured -> alternate between white and team color
 // uncaptured -> white
 // something is wrong: yellow
-void CG_GetBalloonStateColor(entityState_t *s, vec4_t col) {
+static void CG_GetBalloonStateColor(entityState_t *s, vec4_t col) {
 	static const vec4_t red = {1.0f, 0.0f, 0.0f, 1.0f};
 	static const vec4_t blue = {0.0f, 0.0f, 1.0f, 1.0f};
 	static const vec4_t white = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -2982,12 +2984,12 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 		int lenOfDrawStr, tmpi;
 		vec4_t twhite = {1.0f, 1.0f, 1.0f, 1.0f};
 		const char *s;
-		const char *gametype_strs[] = {
+		const char *gametype_longstrs[] = {
 			GAMETYPE_NAME(GT_FFA),		 GAMETYPE_NAME(GT_TOURNAMENT),	 GAMETYPE_NAME(GT_SINGLE_PLAYER),
 			GAMETYPE_NAME(GT_SPRAYFFA),	 GAMETYPE_NAME(GT_LPS),			 GAMETYPE_NAME(GT_TEAM),
 			GAMETYPE_NAME(GT_FREEZETAG), GAMETYPE_NAME(GT_CTF),			 GAMETYPE_NAME(GT_SPRAY),
 			GAMETYPE_NAME(GT_BALLOON),	 GAMETYPE_NAME(GT_MAX_GAME_TYPE)};
-		CASSERT(ARRAY_LEN(gametype_strs) == GT_MAX_GAME_TYPE + 1);
+		CASSERT(ARRAY_LEN(gametype_longstrs) == GT_MAX_GAME_TYPE + 1);
 
 		const int fadeOutTime = 3000;
 		if (cg.time - cg.first2dtime < cg_mapInfoTime.integer - fadeOutTime)
@@ -2997,9 +2999,9 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 
 		tmpi = cgs.gametype;
 		tmpi = (tmpi < 0 || tmpi >= GT_MAX_GAME_TYPE) ? GT_MAX_GAME_TYPE : tmpi;
-		lenOfDrawStr = strlen(gametype_strs[tmpi]);
-		CG_DrawStringExt(320 - lenOfDrawStr * 6, 240 - 26, gametype_strs[tmpi], twhite, qfalse, qfalse, 12, 24, 30);
-		CG_DrawStringExt(320 - lenOfDrawStr * 6, 240 - 26, gametype_strs[tmpi], twhite, qfalse, qfalse, 12, 24, 30);
+		lenOfDrawStr = strlen(gametype_longstrs[tmpi]);
+		CG_DrawStringExt(320 - lenOfDrawStr * 6, 240 - 26, gametype_longstrs[tmpi], twhite, qfalse, qfalse, 12, 24, 30);
+		CG_DrawStringExt(320 - lenOfDrawStr * 6, 240 - 26, gametype_longstrs[tmpi], twhite, qfalse, qfalse, 12, 24, 30);
 
 		s = CG_ConfigString(CS_MESSAGE); // longmapname (or the msg from the mapper ;) )
 		lenOfDrawStr = strlen(s);

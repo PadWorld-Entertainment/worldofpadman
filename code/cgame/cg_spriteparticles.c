@@ -120,7 +120,7 @@ static void Free_SpriteParticle(sparticle_t *p) {
 	changesize_t *tmpcsi;
 
 	if (p < &pmem[0] || p > &pmem[MAX_PARTICLES - 1]) {
-		Com_Error(ERR_FATAL, "free spriteparticle got a wrong pointer (%p)\n", p);
+		Com_Error(ERR_FATAL, "free spriteparticle got a wrong pointer (%p)\n", (const void*)p);
 		return;
 	}
 

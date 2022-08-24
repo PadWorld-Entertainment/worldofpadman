@@ -153,7 +153,7 @@ CG_DrawChar
 Coordinates and size in 640*480 virtual screen size
 ===============
 */
-void CG_DrawChar(int x, int y, int width, int height, int ch) {
+static void CG_DrawChar(int x, int y, int width, int height, int ch) {
 	int row, col;
 	float frow, fcol;
 	float size;

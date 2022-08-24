@@ -249,7 +249,7 @@ static void CG_Cam(void) {
 	VectorCopy(cg.refdefViewAngles, cg.CamAngles);
 }
 
-void Cmd_SetFreecamPos_f(void) {
+static void Cmd_SetFreecamPos_f(void) {
 	vec3_t origin, angles;
 	char buffer[MAX_TOKEN_CHARS];
 	int i;

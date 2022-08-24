@@ -239,8 +239,7 @@ void CG_ShaderStateChanged(void) {
 CG_UpdateBalloonStates
 ================
 */
-void CG_UpdateBalloonStates(const char *str) {
-
+static void CG_UpdateBalloonStates(const char *str) {
 	if (str[0]) {
 		char team;
 		int i;

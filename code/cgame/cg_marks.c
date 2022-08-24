@@ -150,7 +150,6 @@ void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, 
 	vec3_t markPoints[MAX_MARK_POINTS];
 	vec3_t projection;
 	markPoly_t *mp, *next;
-	vec3_t delta;
 
 	if (!cg_addMarks.integer) {
 		return;
@@ -167,6 +166,7 @@ void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, 
 	// HERBY: Bubble G overdraw fix
 	mp = cg_activeMarkPolys.nextMark;
 	for (; mp != &cg_activeMarkPolys; mp = next) {
+		vec3_t delta;
 		next = mp->nextMark;
 		if (temporary)
 			break; // keep all marks if the new one is just the shadow

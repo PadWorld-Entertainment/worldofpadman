@@ -1948,7 +1948,7 @@ void CG_ShotgunFire(entityState_t *es) {
 
 	{
 		localEntity_t *le;
-		vec3_t delta, right;
+		vec3_t delta;
 		int i;
 
 		// calculate correct positions for double rails

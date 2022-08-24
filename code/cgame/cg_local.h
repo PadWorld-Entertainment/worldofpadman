@@ -1453,8 +1453,6 @@ void CG_DrawActive(stereoFrame_t stereoView);
 void CG_DrawFlagModel(float x, float y, float w, float h, int team, qboolean force2D);
 void CG_DrawTeamBackground(int x, int y, int w, int h, float alpha, int team);
 void CG_SetPrintString(int type, const char *p);
-void CG_Draw3DModel(float x, float y, float w, float h, qhandle_t model, qhandle_t skin, vec3_t origin, vec3_t angles,
-					float scale, byte rgba[4]);
 
 //
 // cg_player.c
