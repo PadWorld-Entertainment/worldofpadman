@@ -68,7 +68,7 @@ static void Sys_SetBinaryPath(const char *path) {
 Sys_BinaryPath
 =================
 */
-char *Sys_BinaryPath(void) {
+static const char *Sys_BinaryPath(void) {
 	return binaryPath;
 }
 
@@ -86,7 +86,7 @@ void Sys_SetDefaultInstallPath(const char *path) {
 Sys_DefaultInstallPath
 =================
 */
-char *Sys_DefaultInstallPath(void) {
+const char *Sys_DefaultInstallPath(void) {
 	if (*installPath)
 		return installPath;
 	else
@@ -98,7 +98,7 @@ char *Sys_DefaultInstallPath(void) {
 Sys_DefaultAppPath
 =================
 */
-char *Sys_DefaultAppPath(void) {
+const char *Sys_DefaultAppPath(void) {
 	return Sys_BinaryPath();
 }
 
@@ -109,7 +109,7 @@ Sys_In_Restart_f
 Restart the input subsystem
 =================
 */
-void Sys_In_Restart_f(void) {
+static void Sys_In_Restart_f(void) {
 #ifndef DEDICATED
 	if (!SDL_WasInit(SDL_INIT_VIDEO)) {
 		Com_Printf("in_restart: Cannot restart input while video is shutdown\n");
@@ -438,6 +438,7 @@ static __attribute__ ((format (printf, 1, 2))) void Sys_Warn( char *warning, ...
 }
 #endif
 
+#if 0
 /*
 ============
 Sys_FileTime
@@ -453,6 +454,7 @@ int Sys_FileTime(char *path) {
 
 	return buf.st_mtime;
 }
+#endif
 
 /*
 =================
@@ -580,7 +582,7 @@ void *Sys_LoadGameDll(const char *name, vmMainProc *entryPoint,
 Sys_ParseArgs
 =================
 */
-void Sys_ParseArgs(int argc, char **argv) {
+static void Sys_ParseArgs(int argc, char **argv) {
 	if (argc == 2) {
 		if (!strcmp(argv[1], "--version") || !strcmp(argv[1], "-v")) {
 #ifdef DEDICATED

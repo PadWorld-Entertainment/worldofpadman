@@ -172,7 +172,7 @@ void CON_Shutdown(void) {
 Hist_Add
 ==================
 */
-void Hist_Add(field_t *field) {
+static void Hist_Add(const field_t *field) {
 	int i;
 
 	// Don't save blank lines in history.
@@ -199,7 +199,7 @@ void Hist_Add(field_t *field) {
 Hist_Prev
 ==================
 */
-field_t *Hist_Prev(void) {
+static field_t *Hist_Prev(void) {
 	int hist_prev;
 	assert(hist_count <= CON_HISTORY);
 	assert(hist_count >= 0);
@@ -218,7 +218,7 @@ field_t *Hist_Prev(void) {
 Hist_Next
 ==================
 */
-field_t *Hist_Next(void) {
+static field_t *Hist_Next(void) {
 	assert(hist_count <= CON_HISTORY);
 	assert(hist_count >= 0);
 	assert(hist_current >= -1);
@@ -240,7 +240,7 @@ set attributes if user did CTRL+Z and then does fg again.
 ==================
 */
 
-void CON_SigCont(int signum) {
+static void CON_SigCont(int signum) {
 	CON_Init();
 }
 

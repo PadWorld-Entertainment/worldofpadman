@@ -84,7 +84,7 @@ unsigned int _controlfp(unsigned int new, unsigned int mask);
 #define FPUCWMASK (FPUCWMASK1 | _MCW_PC)
 #endif
 
-void Sys_SetFloatEnv(void) {
+static void Sys_SetFloatEnv(void) {
 	_controlfp(FPUCW, FPUCWMASK);
 }
 
@@ -379,7 +379,7 @@ FILE *Sys_Mkfifo(const char *ospath) {
 Sys_Cwd
 ==============
 */
-char *Sys_Cwd(void) {
+const char *Sys_Cwd(void) {
 	static char cwd[MAX_OSPATH];
 
 	_getcwd(cwd, sizeof(cwd) - 1);
