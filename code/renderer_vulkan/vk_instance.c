@@ -257,7 +257,7 @@ static void vk_createInstance(void) {
 		ri.Error(ERR_FATAL, "%d, returned by qvkCreateInstance.", e);
 	}
 
-	ri.Hunk_FreeTempMemory(ppInstanceExt);
+	ri.Hunk_FreeTempMemory((void*)ppInstanceExt);
 	ri.Hunk_FreeTempMemory(pInsExt);
 }
 
