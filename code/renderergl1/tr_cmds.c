@@ -69,7 +69,7 @@ static void R_PerformanceCounters(void) {
 R_IssueRenderCommands
 ====================
 */
-void R_IssueRenderCommands(qboolean runPerformanceCounters) {
+static void R_IssueRenderCommands(qboolean runPerformanceCounters) {
 	renderCommandList_t *cmdList;
 
 	cmdList = &backEndData->commands;
@@ -184,8 +184,6 @@ void RE_SetColor(const float *rgba) {
 	}
 	cmd->commandId = RC_SET_COLOR;
 	if (!rgba) {
-		static float colorWhite[4] = {1, 1, 1, 1};
-
 		rgba = colorWhite;
 	}
 

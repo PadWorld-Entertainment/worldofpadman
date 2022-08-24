@@ -158,6 +158,7 @@ static void R_ColorShiftLightingFloats(float in[4], float out[4]) {
 	out[3] = in[3];
 }
 
+#if 0
 // Modified from http://graphicrants.blogspot.jp/2009/04/rgbm-color-encoding.html
 void ColorToRGBM(const vec3_t color, unsigned char rgbm[4]) {
 	vec3_t sample;
@@ -178,8 +179,9 @@ void ColorToRGBM(const vec3_t color, unsigned char rgbm[4]) {
 	rgbm[1] = (unsigned char)(sample[1] * 255);
 	rgbm[2] = (unsigned char)(sample[2] * 255);
 }
+#endif
 
-void ColorToRGB16(const vec3_t color, uint16_t rgb16[3]) {
+static void ColorToRGB16(const vec3_t color, uint16_t rgb16[3]) {
 	rgb16[0] = color[0] * 65535.0f + 0.5f;
 	rgb16[1] = color[1] * 65535.0f + 0.5f;
 	rgb16[2] = color[2] * 65535.0f + 0.5f;
@@ -588,7 +590,7 @@ static shader_t *ShaderForShaderNum(int shaderNum, int lightmapNum) {
 	return shader;
 }
 
-void LoadDrawVertToSrfVert(srfVert_t *s, drawVert_t *d, int realLightmapNum, float hdrVertColors[3], vec3_t *bounds) {
+static void LoadDrawVertToSrfVert(srfVert_t *s, drawVert_t *d, int realLightmapNum, float hdrVertColors[3], vec3_t *bounds) {
 	vec4_t v;
 
 	s->xyz[0] = LittleFloat(d->xyz[0]);
@@ -924,7 +926,7 @@ R_MergedWidthPoints
 returns true if there are grid points merged on a width edge
 =================
 */
-int R_MergedWidthPoints(srfBspSurface_t *grid, int offset) {
+static int R_MergedWidthPoints(srfBspSurface_t *grid, int offset) {
 	int i, j;
 
 	for (i = 1; i < grid->width - 1; i++) {
@@ -948,7 +950,7 @@ R_MergedHeightPoints
 returns true if there are grid points merged on a height edge
 =================
 */
-int R_MergedHeightPoints(srfBspSurface_t *grid, int offset) {
+static int R_MergedHeightPoints(srfBspSurface_t *grid, int offset) {
 	int i, j;
 
 	for (i = 1; i < grid->height - 1; i++) {
@@ -974,7 +976,7 @@ NOTE: never sync LoD through grid edges with merged points!
 FIXME: write generalized version that also avoids cracks between a patch and one that meets half way?
 =================
 */
-void R_FixSharedVertexLodError_r(int start, srfBspSurface_t *grid1) {
+static void R_FixSharedVertexLodError_r(int start, srfBspSurface_t *grid1) {
 	int j, k, l, m, n, offset1, offset2, touch;
 	srfBspSurface_t *grid2;
 
@@ -1131,7 +1133,7 @@ This function assumes that all patches in one group are nicely stitched together
 If this is not the case this function will still do its job but won't fix the highest LoD cracks.
 =================
 */
-void R_FixSharedVertexLodError(void) {
+static void R_FixSharedVertexLodError(void) {
 	int i;
 	srfBspSurface_t *grid1;
 
@@ -1156,7 +1158,7 @@ void R_FixSharedVertexLodError(void) {
 R_StitchPatches
 ===============
 */
-int R_StitchPatches(int grid1num, int grid2num) {
+static int R_StitchPatches(int grid1num, int grid2num) {
 	float *v1, *v2;
 	srfBspSurface_t *grid1, *grid2;
 	int k, l, m, n, offset1, offset2, row, column;
@@ -1595,7 +1597,7 @@ of the patch (on the same row or column) the vertices will not be joined and cra
 might still appear at that side.
 ===============
 */
-int R_TryStitchingPatch(int grid1num) {
+static int R_TryStitchingPatch(int grid1num) {
 	int j, numstitches;
 	srfBspSurface_t *grid1, *grid2;
 
@@ -1630,7 +1632,7 @@ int R_TryStitchingPatch(int grid1num) {
 R_StitchAllPatches
 ===============
 */
-void R_StitchAllPatches(void) {
+static void R_StitchAllPatches(void) {
 	int i, stitched, numstitches;
 	srfBspSurface_t *grid1;
 
@@ -1661,7 +1663,7 @@ void R_StitchAllPatches(void) {
 R_MovePatchSurfacesToHunk
 ===============
 */
-void R_MovePatchSurfacesToHunk(void) {
+static void R_MovePatchSurfacesToHunk(void) {
 	int i;
 	srfBspSurface_t *grid;
 
@@ -2159,7 +2161,7 @@ R_LoadLightGrid
 
 ================
 */
-void R_LoadLightGrid(lump_t *l) {
+static void R_LoadLightGrid(lump_t *l) {
 	int i;
 	vec3_t maxs;
 	int numGridPoints;
@@ -2261,7 +2263,7 @@ void R_LoadLightGrid(lump_t *l) {
 R_LoadEntities
 ================
 */
-void R_LoadEntities(lump_t *l) {
+static void R_LoadEntities(lump_t *l) {
 	const char *p, *token, *s;
 	char keyname[MAX_TOKEN_CHARS];
 	char value[MAX_TOKEN_CHARS];
@@ -2434,7 +2436,7 @@ static qboolean R_ParseSpawnVars(char *spawnVarChars, int maxSpawnVarChars, int 
 	return qtrue;
 }
 
-void R_LoadEnvironmentJson(const char *baseName) {
+static void R_LoadEnvironmentJson(const char *baseName) {
 	char filename[MAX_QPATH];
 
 	union {
@@ -2504,7 +2506,7 @@ void R_LoadEnvironmentJson(const char *baseName) {
 	ri.FS_FreeFile(buffer.v);
 }
 
-void R_LoadCubemapEntities(char *cubemapEntityName) {
+static void R_LoadCubemapEntities(char *cubemapEntityName) {
 	char spawnVarChars[2048];
 	int numSpawnVars;
 	const char *spawnVars[MAX_SPAWN_VARS][2];
@@ -2563,7 +2565,7 @@ void R_LoadCubemapEntities(char *cubemapEntityName) {
 	}
 }
 
-void R_AssignCubemapsToWorldSurfaces(void) {
+static void R_AssignCubemapsToWorldSurfaces(void) {
 	world_t *w;
 	int i;
 
@@ -2589,7 +2591,7 @@ void R_AssignCubemapsToWorldSurfaces(void) {
 	}
 }
 
-void R_LoadCubemaps(void) {
+static void R_LoadCubemaps(void) {
 	int i;
 	imgFlags_t flags = IMGFLAG_CLAMPTOEDGE | IMGFLAG_MIPMAP | IMGFLAG_NOLIGHTSCALE | IMGFLAG_CUBEMAP;
 
@@ -2603,7 +2605,7 @@ void R_LoadCubemaps(void) {
 	}
 }
 
-void R_RenderMissingCubemaps(void) {
+static void R_RenderMissingCubemaps(void) {
 	int i, j;
 	imgFlags_t flags =
 		IMGFLAG_NO_COMPRESSION | IMGFLAG_CLAMPTOEDGE | IMGFLAG_MIPMAP | IMGFLAG_NOLIGHTSCALE | IMGFLAG_CUBEMAP;
@@ -2623,7 +2625,7 @@ void R_RenderMissingCubemaps(void) {
 	}
 }
 
-void R_CalcVertexLightDirs(void) {
+static void R_CalcVertexLightDirs(void) {
 	int i, k;
 	msurface_t *surface;
 
@@ -2751,7 +2753,6 @@ void RE_LoadWorldMap(const char *name) {
 		world_t *w;
 		uint8_t *primaryLightGrid, *data;
 		int lightGridSize;
-		int i;
 
 		w = &s_worldData;
 
@@ -2796,19 +2797,18 @@ void RE_LoadWorldMap(const char *name) {
 		}
 
 		if (0) {
-			int i;
-			byte *buffer = ri.Malloc(w->lightGridBounds[0] * w->lightGridBounds[1] * 3 + 18);
+			byte *lightGridBuffer = ri.Malloc(w->lightGridBounds[0] * w->lightGridBounds[1] * 3 + 18);
 			byte *out;
 			uint8_t *in;
 			char fileName[MAX_QPATH];
 
-			Com_Memset(buffer, 0, 18);
-			buffer[2] = 2; // uncompressed type
-			buffer[12] = w->lightGridBounds[0] & 255;
-			buffer[13] = w->lightGridBounds[0] >> 8;
-			buffer[14] = w->lightGridBounds[1] & 255;
-			buffer[15] = w->lightGridBounds[1] >> 8;
-			buffer[16] = 24; // pixel size
+			Com_Memset(lightGridBuffer, 0, 18);
+			lightGridBuffer[2] = 2; // uncompressed type
+			lightGridBuffer[12] = w->lightGridBounds[0] & 255;
+			lightGridBuffer[13] = w->lightGridBounds[0] >> 8;
+			lightGridBuffer[14] = w->lightGridBounds[1] & 255;
+			lightGridBuffer[15] = w->lightGridBounds[1] >> 8;
+			lightGridBuffer[16] = 24; // pixel size
 
 			in = primaryLightGrid;
 			for (i = 0; i < w->lightGridBounds[2]; i++) {
@@ -2816,7 +2816,7 @@ void RE_LoadWorldMap(const char *name) {
 
 				Com_sprintf(fileName, sizeof(fileName), "primarylg%d.tga", i);
 
-				out = buffer + 18;
+				out = lightGridBuffer + 18;
 				for (j = 0; j < w->lightGridBounds[0] * w->lightGridBounds[1]; j++) {
 					if (*in == 1) {
 						*out++ = 255;
@@ -2834,10 +2834,10 @@ void RE_LoadWorldMap(const char *name) {
 					in++;
 				}
 
-				ri.FS_WriteFile(fileName, buffer, w->lightGridBounds[0] * w->lightGridBounds[1] * 3 + 18);
+				ri.FS_WriteFile(fileName, lightGridBuffer, w->lightGridBounds[0] * w->lightGridBounds[1] * 3 + 18);
 			}
 
-			ri.Free(buffer);
+			ri.Free(lightGridBuffer);
 		}
 
 		for (i = 0; i < w->numWorldSurfaces; i++) {

@@ -366,7 +366,7 @@ static void RB_BeginDrawingView(void) {
 RB_RenderDrawSurfList
 ==================
 */
-void RB_RenderDrawSurfList(drawSurf_t *drawSurfs, int numDrawSurfs) {
+static void RB_RenderDrawSurfList(drawSurf_t *drawSurfs, int numDrawSurfs) {
 	shader_t *shader, *oldShader;
 	int fogNum, oldFogNum;
 	int entityNum, oldEntityNum;
@@ -695,7 +695,7 @@ RB_SetColor
 
 =============
 */
-const void *RB_SetColor(const void *data) {
+static const void *RB_SetColor(const void *data) {
 	const setColorCommand_t *cmd;
 
 	cmd = (const setColorCommand_t *)data;
@@ -713,7 +713,7 @@ const void *RB_SetColor(const void *data) {
 RB_StretchPic
 =============
 */
-const void *RB_StretchPic(const void *data) {
+static const void *RB_StretchPic(const void *data) {
 	const stretchPicCommand_t *cmd;
 	shader_t *shader;
 	int numVerts, numIndexes;
@@ -797,7 +797,7 @@ RB_DrawSurfs
 
 =============
 */
-const void *RB_DrawSurfs(const void *data) {
+static const void *RB_DrawSurfs(const void *data) {
 	const drawSurfsCommand_t *cmd;
 	qboolean isShadowView;
 
@@ -1095,7 +1095,7 @@ RB_DrawBuffer
 
 =============
 */
-const void *RB_DrawBuffer(const void *data) {
+static const void *RB_DrawBuffer(const void *data) {
 	const drawBufferCommand_t *cmd;
 
 	cmd = (const drawBufferCommand_t *)data;
@@ -1182,7 +1182,7 @@ RB_ColorMask
 
 =============
 */
-const void *RB_ColorMask(const void *data) {
+static const void *RB_ColorMask(const void *data) {
 	const colorMaskCommand_t *cmd = data;
 
 	// finish any 2D drawing if needed
@@ -1208,7 +1208,7 @@ RB_ClearDepth
 
 =============
 */
-const void *RB_ClearDepth(const void *data) {
+static const void *RB_ClearDepth(const void *data) {
 	const clearDepthCommand_t *cmd = data;
 
 	// finish any 2D drawing if needed
@@ -1310,7 +1310,7 @@ RB_CapShadowMap
 
 =============
 */
-const void *RB_CapShadowMap(const void *data) {
+static const void *RB_CapShadowMap(const void *data) {
 	const capShadowmapCommand_t *cmd = data;
 
 	// finish any 2D drawing if needed
@@ -1343,7 +1343,7 @@ RB_PostProcess
 
 =============
 */
-const void *RB_PostProcess(const void *data) {
+static const void *RB_PostProcess(const void *data) {
 	const postProcessCommand_t *cmd = data;
 	FBO_t *srcFbo;
 	ivec4_t srcBox, dstBox;
@@ -1482,54 +1482,52 @@ const void *RB_PostProcess(const void *data) {
 #endif
 
 	if (0 && r_sunlightMode->integer) {
-		ivec4_t dstBox;
-		VectorSet4(dstBox, 0, glConfig.vidHeight - 128, 128, 128);
-		FBO_BlitFromTexture(tr.sunShadowDepthImage[0], NULL, NULL, NULL, dstBox, NULL, NULL, 0);
-		VectorSet4(dstBox, 128, glConfig.vidHeight - 128, 128, 128);
-		FBO_BlitFromTexture(tr.sunShadowDepthImage[1], NULL, NULL, NULL, dstBox, NULL, NULL, 0);
-		VectorSet4(dstBox, 256, glConfig.vidHeight - 128, 128, 128);
-		FBO_BlitFromTexture(tr.sunShadowDepthImage[2], NULL, NULL, NULL, dstBox, NULL, NULL, 0);
-		VectorSet4(dstBox, 384, glConfig.vidHeight - 128, 128, 128);
-		FBO_BlitFromTexture(tr.sunShadowDepthImage[3], NULL, NULL, NULL, dstBox, NULL, NULL, 0);
+		ivec4_t dstBoxSunLight;
+		VectorSet4(dstBoxSunLight, 0, glConfig.vidHeight - 128, 128, 128);
+		FBO_BlitFromTexture(tr.sunShadowDepthImage[0], NULL, NULL, NULL, dstBoxSunLight, NULL, NULL, 0);
+		VectorSet4(dstBoxSunLight, 128, glConfig.vidHeight - 128, 128, 128);
+		FBO_BlitFromTexture(tr.sunShadowDepthImage[1], NULL, NULL, NULL, dstBoxSunLight, NULL, NULL, 0);
+		VectorSet4(dstBoxSunLight, 256, glConfig.vidHeight - 128, 128, 128);
+		FBO_BlitFromTexture(tr.sunShadowDepthImage[2], NULL, NULL, NULL, dstBoxSunLight, NULL, NULL, 0);
+		VectorSet4(dstBoxSunLight, 384, glConfig.vidHeight - 128, 128, 128);
+		FBO_BlitFromTexture(tr.sunShadowDepthImage[3], NULL, NULL, NULL, dstBoxSunLight, NULL, NULL, 0);
 	}
 
 	if (0 && r_shadows->integer == 4) {
-		ivec4_t dstBox;
-		VectorSet4(dstBox, 512 + 0, glConfig.vidHeight - 128, 128, 128);
-		FBO_BlitFromTexture(tr.pshadowMaps[0], NULL, NULL, NULL, dstBox, NULL, NULL, 0);
-		VectorSet4(dstBox, 512 + 128, glConfig.vidHeight - 128, 128, 128);
-		FBO_BlitFromTexture(tr.pshadowMaps[1], NULL, NULL, NULL, dstBox, NULL, NULL, 0);
-		VectorSet4(dstBox, 512 + 256, glConfig.vidHeight - 128, 128, 128);
-		FBO_BlitFromTexture(tr.pshadowMaps[2], NULL, NULL, NULL, dstBox, NULL, NULL, 0);
-		VectorSet4(dstBox, 512 + 384, glConfig.vidHeight - 128, 128, 128);
-		FBO_BlitFromTexture(tr.pshadowMaps[3], NULL, NULL, NULL, dstBox, NULL, NULL, 0);
+		ivec4_t dstBoxShadows;
+		VectorSet4(dstBoxShadows, 512 + 0, glConfig.vidHeight - 128, 128, 128);
+		FBO_BlitFromTexture(tr.pshadowMaps[0], NULL, NULL, NULL, dstBoxShadows, NULL, NULL, 0);
+		VectorSet4(dstBoxShadows, 512 + 128, glConfig.vidHeight - 128, 128, 128);
+		FBO_BlitFromTexture(tr.pshadowMaps[1], NULL, NULL, NULL, dstBoxShadows, NULL, NULL, 0);
+		VectorSet4(dstBoxShadows, 512 + 256, glConfig.vidHeight - 128, 128, 128);
+		FBO_BlitFromTexture(tr.pshadowMaps[2], NULL, NULL, NULL, dstBoxShadows, NULL, NULL, 0);
+		VectorSet4(dstBoxShadows, 512 + 384, glConfig.vidHeight - 128, 128, 128);
+		FBO_BlitFromTexture(tr.pshadowMaps[3], NULL, NULL, NULL, dstBoxShadows, NULL, NULL, 0);
 	}
 
 	if (0) {
-		ivec4_t dstBox;
-		VectorSet4(dstBox, 256, glConfig.vidHeight - 256, 256, 256);
-		FBO_BlitFromTexture(tr.renderDepthImage, NULL, NULL, NULL, dstBox, NULL, NULL, 0);
-		VectorSet4(dstBox, 512, glConfig.vidHeight - 256, 256, 256);
-		FBO_BlitFromTexture(tr.screenShadowImage, NULL, NULL, NULL, dstBox, NULL, NULL, 0);
+		ivec4_t dstBoxDepth;
+		VectorSet4(dstBoxDepth, 256, glConfig.vidHeight - 256, 256, 256);
+		FBO_BlitFromTexture(tr.renderDepthImage, NULL, NULL, NULL, dstBoxDepth, NULL, NULL, 0);
+		VectorSet4(dstBoxDepth, 512, glConfig.vidHeight - 256, 256, 256);
+		FBO_BlitFromTexture(tr.screenShadowImage, NULL, NULL, NULL, dstBoxDepth, NULL, NULL, 0);
 	}
 
 	if (0) {
-		ivec4_t dstBox;
-		VectorSet4(dstBox, 256, glConfig.vidHeight - 256, 256, 256);
-		FBO_BlitFromTexture(tr.sunRaysImage, NULL, NULL, NULL, dstBox, NULL, NULL, 0);
+		ivec4_t dstBoxSunRays;
+		VectorSet4(dstBoxSunRays, 256, glConfig.vidHeight - 256, 256, 256);
+		FBO_BlitFromTexture(tr.sunRaysImage, NULL, NULL, NULL, dstBoxSunRays, NULL, NULL, 0);
 	}
 
 #if 0
-	if (r_cubeMapping->integer && tr.numCubemaps)
-	{
-		ivec4_t dstBox;
-		int cubemapIndex = R_CubemapForPoint( backEnd.viewParms.or.origin );
+	if (r_cubeMapping->integer && tr.numCubemaps) {
+		ivec4_t dstBoxCubemap;
+		int cubemapIndex = R_CubemapForPoint(backEnd.viewParms.or.origin);
 
-		if (cubemapIndex)
-		{
-			VectorSet4(dstBox, 0, glConfig.vidHeight - 256, 256, 256);
-			//FBO_BlitFromTexture(tr.renderCubeImage, NULL, NULL, NULL, dstBox, &tr.testcubeShader, NULL, 0);
-			FBO_BlitFromTexture(tr.cubemaps[cubemapIndex - 1].image, NULL, NULL, NULL, dstBox, &tr.testcubeShader, NULL, 0);
+		if (cubemapIndex) {
+			VectorSet4(dstBoxCubemap, 0, glConfig.vidHeight - 256, 256, 256);
+			//FBO_BlitFromTexture(tr.renderCubeImage, NULL, NULL, NULL, dstBoxCubemap, &tr.testcubeShader, NULL, 0);
+			FBO_BlitFromTexture(tr.cubemaps[cubemapIndex - 1].image, NULL, NULL, NULL, dstBoxCubemap, &tr.testcubeShader, NULL, 0);
 		}
 	}
 #endif
@@ -1548,7 +1546,7 @@ RB_ExportCubemaps
 
 =============
 */
-const void *RB_ExportCubemaps(const void *data) {
+static const void *RB_ExportCubemaps(const void *data) {
 	const exportCubemapsCommand_t *cmd = data;
 
 	// finish any 2D drawing if needed

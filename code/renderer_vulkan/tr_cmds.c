@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "vk_instance.h"
 #include "vk_screenshot.h"
 #include "vk_shade_geometry.h"
+#include "render_export.h"
 
 static renderCommandList_t BE_Commands;
 
@@ -313,7 +314,7 @@ static void RB_RenderDrawSurfList(drawSurf_t *drawSurfs, int numDrawSurfs) {
 	RB_ShadowFinish();
 }
 
-void RB_StretchPic(const stretchPicCommand_t *const cmd) {
+static void RB_StretchPic(const stretchPicCommand_t *const cmd) {
 	uint32_t numIndexes;
 	unsigned int n0;
 	unsigned int n1;

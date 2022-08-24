@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "tr_local.h"
 #include "tr_shader.h"
 #include "vk_image.h"
+#include "render_export.h"
 /*
 
 Loads and prepares a map file for scene rendering.
@@ -532,7 +533,7 @@ R_MergedWidthPoints
 returns true if there are grid points merged on a width edge
 =================
 */
-int R_MergedWidthPoints(srfGridMesh_t *grid, int offset) {
+static int R_MergedWidthPoints(srfGridMesh_t *grid, int offset) {
 	int i, j;
 
 	for (i = 1; i < grid->width - 1; i++) {
@@ -556,7 +557,7 @@ R_MergedHeightPoints
 returns true if there are grid points merged on a height edge
 =================
 */
-int R_MergedHeightPoints(srfGridMesh_t *grid, int offset) {
+static int R_MergedHeightPoints(srfGridMesh_t *grid, int offset) {
 	int i, j;
 
 	for (i = 1; i < grid->height - 1; i++) {
@@ -582,7 +583,7 @@ NOTE: never sync LoD through grid edges with merged points!
 FIXME: write generalized version that also avoids cracks between a patch and one that meets half way?
 =================
 */
-void R_FixSharedVertexLodError_r(int start, srfGridMesh_t *grid1) {
+static void R_FixSharedVertexLodError_r(int start, srfGridMesh_t *grid1) {
 	int j, k, l, m, n, offset1, offset2, touch;
 	srfGridMesh_t *grid2;
 
@@ -739,7 +740,7 @@ This function assumes that all patches in one group are nicely stitched together
 If this is not the case this function will still do its job but won't fix the highest LoD cracks.
 =================
 */
-void R_FixSharedVertexLodError(void) {
+static void R_FixSharedVertexLodError(void) {
 	int i;
 	srfGridMesh_t *grid1;
 
@@ -764,7 +765,7 @@ void R_FixSharedVertexLodError(void) {
 R_StitchPatches
 ===============
 */
-int R_StitchPatches(int grid1num, int grid2num) {
+static int R_StitchPatches(int grid1num, int grid2num) {
 	float *v1, *v2;
 	srfGridMesh_t *grid1, *grid2;
 	int k, l, m, n, offset1, offset2, row, column;
@@ -1203,7 +1204,7 @@ of the patch (on the same row or column) the vertices will not be joined and cra
 might still appear at that side.
 ===============
 */
-int R_TryStitchingPatch(int grid1num) {
+static int R_TryStitchingPatch(int grid1num) {
 	int j, numstitches;
 	srfGridMesh_t *grid1, *grid2;
 
@@ -1238,7 +1239,7 @@ int R_TryStitchingPatch(int grid1num) {
 R_StitchAllPatches
 ===============
 */
-void R_StitchAllPatches(void) {
+static void R_StitchAllPatches(void) {
 	int i, stitched, numstitches;
 	srfGridMesh_t *grid1;
 
@@ -1269,7 +1270,7 @@ void R_StitchAllPatches(void) {
 R_MovePatchSurfacesToHunk
 ===============
 */
-void R_MovePatchSurfacesToHunk(void) {
+static void R_MovePatchSurfacesToHunk(void) {
 	int i, size;
 	srfGridMesh_t *grid, *hunkgrid;
 
@@ -1701,7 +1702,7 @@ static void R_LoadFogs(lump_t *l, lump_t *brushesLump, lump_t *sidesLump) {
 	}
 }
 
-void R_LoadLightGrid(lump_t *l) {
+static void R_LoadLightGrid(lump_t *l) {
 	int i;
 	vec3_t maxs;
 	int numGridPoints;
@@ -1745,7 +1746,7 @@ void R_LoadLightGrid(lump_t *l) {
 
 void RE_RemapShader(const char *oldShader, const char *newShader, const char *timeOffset);
 
-void R_LoadEntities(lump_t *l) {
+static void R_LoadEntities(lump_t *l) {
 	const char *p;
 	const char *token;
 	const char *s;
