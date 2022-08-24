@@ -291,7 +291,7 @@ Generally we don't want who's listening to change during a transmission,
 so this is only called when the key is first pressed
 ===============
 */
-void CL_VoipParseTargets(void) {
+static void CL_VoipParseTargets(void) {
 	const char *target = cl_voipSendTarget->string;
 	char *end;
 	int val;
@@ -609,7 +609,7 @@ void CL_StopRecord_f(void) {
 CL_DemoFilename
 ==================
 */
-void CL_DemoFilename(int number, char *fileName, int fileNameSize) {
+static void CL_DemoFilename(int number, char *fileName, int fileNameSize) {
 	int a, b, c, d;
 
 	if (number < 0 || number > 9999)
@@ -636,7 +636,7 @@ Begins recording a demo from the current position
 ====================
 */
 static char demoName[MAX_QPATH]; // compiler bug workaround
-void CL_Record_f(void) {
+static void CL_Record_f(void) {
 	char name[MAX_OSPATH];
 	byte bufData[MAX_MSGLEN];
 	msg_t buf;
@@ -803,7 +803,7 @@ static float CL_DemoFrameDurationSDev(void) {
 CL_DemoCompleted
 =================
 */
-void CL_DemoCompleted(void) {
+static void CL_DemoCompleted(void) {
 	char buffer[MAX_STRING_CHARS];
 
 	if (cl_timedemo && cl_timedemo->integer) {
@@ -961,7 +961,7 @@ demo <demoname>
 
 ====================
 */
-void CL_PlayDemo_f(void) {
+static void CL_PlayDemo_f(void) {
 	char name[MAX_OSPATH];
 	char arg[MAX_OSPATH];
 	char *ext_test;
@@ -1114,7 +1114,7 @@ CL_ClearMemory
 Called by Com_GameRestart
 =================
 */
-void CL_ClearMemory(qboolean shutdownRef) {
+static void CL_ClearMemory(qboolean shutdownRef) {
 	// shutdown all the client stuff
 	CL_ShutdownAll(shutdownRef);
 
@@ -1386,7 +1386,7 @@ CL_RequestMotd
 
 ===================
 */
-void CL_RequestMotd(void) {
+static void CL_RequestMotd(void) {
 #ifdef UPDATE_SERVER_NAME
 	char info[MAX_INFO_STRING];
 
@@ -1626,7 +1626,7 @@ CL_Rcon_f
   an unconnected command.
 =====================
 */
-void CL_Rcon_f(void) {
+static void CL_Rcon_f(void) {
 	char message[MAX_RCON_MESSAGE];
 	netadr_t to;
 
@@ -1675,7 +1675,7 @@ void CL_Rcon_f(void) {
 CL_SendPureChecksums
 =================
 */
-void CL_SendPureChecksums(void) {
+static void CL_SendPureChecksums(void) {
 	char cMsg[MAX_INFO_VALUE];
 
 	// if we are pure we need to send back a command with our referenced pk3 checksums
@@ -1689,7 +1689,7 @@ void CL_SendPureChecksums(void) {
 CL_ResetPureClientAtServer
 =================
 */
-void CL_ResetPureClientAtServer(void) {
+static void CL_ResetPureClientAtServer(void) {
 	CL_AddReliableCommand("vdr", qfalse);
 }
 
@@ -1794,7 +1794,7 @@ void CL_Snd_Restart_f(void) {
 CL_PK3List_f
 ==================
 */
-void CL_OpenedPK3List_f(void) {
+static void CL_OpenedPK3List_f(void) {
 	Com_Printf("Opened PK3 Names: %s\n", FS_LoadedPakNames());
 }
 
@@ -1803,7 +1803,7 @@ void CL_OpenedPK3List_f(void) {
 CL_PureList_f
 ==================
 */
-void CL_ReferencedPK3List_f(void) {
+static void CL_ReferencedPK3List_f(void) {
 	Com_Printf("Referenced PK3 Names: %s\n", FS_ReferencedPakNames());
 }
 
@@ -2884,7 +2884,7 @@ void CL_InitRef(void) {
 		Com_Error(ERR_FATAL, "Failed to load renderer");
 	}
 
-	GetRefAPI = Sys_LoadFunction(rendererLib, "GetRefAPI");
+	GetRefAPI = (GetRefAPI_t)Sys_LoadFunction(rendererLib, "GetRefAPI");
 	if (!GetRefAPI) {
 		Com_Error(ERR_FATAL, "Can't load symbol GetRefAPI: '%s'", Sys_LibraryError());
 	}
@@ -4018,7 +4018,7 @@ int CL_GetPingQueueCount(void) {
 CL_GetFreePing
 ==================
 */
-ping_t *CL_GetFreePing(void) {
+static ping_t *CL_GetFreePing(void) {
 	ping_t *pingptr;
 	ping_t *best;
 	int oldest;
