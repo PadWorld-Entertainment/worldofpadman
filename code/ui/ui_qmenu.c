@@ -865,7 +865,6 @@ static void ScrollList_Init(menulist_s *l) {
 void ParseMenuListItems(char *input, menulist_s *output, int maxItems, char separator, const char *selection, const char *empty) {
 	size_t len = strlen(input);
 	size_t i;
-	int deviceCount = 0;
 	const char *name = input;
 
 	output->numitems = 0;
