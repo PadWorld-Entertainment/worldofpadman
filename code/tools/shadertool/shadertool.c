@@ -82,7 +82,7 @@ static const char *COM_ParseExt(const char **data_p) {
 			c = *data++;
 			if (c == '\"' || !c) {
 				com_token[len] = 0;
-				*data_p = (char *)data;
+				*data_p = (const char *)data;
 				return com_token;
 			}
 			if (c == '\n') {
@@ -107,7 +107,7 @@ static const char *COM_ParseExt(const char **data_p) {
 
 	com_token[len] = 0;
 
-	*data_p = (char *)data;
+	*data_p = (const char *)data;
 	return com_token;
 }
 
