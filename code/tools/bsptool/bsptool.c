@@ -345,6 +345,9 @@ int main(int argc, char *argv[]) {
 		perror("Error: failed to read bsp file. ");
 		return 1;
 	}
+	if (bufsize != newLen) {
+		printf("Error: failed to read the complete bsp file.\n");
+	}
 
 	if (validateBsp(filename, pk3dir, source) == 0) {
 		free(source);
