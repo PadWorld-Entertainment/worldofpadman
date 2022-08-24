@@ -274,7 +274,7 @@ char *Com_MD5File(const char *fn, int length, const char *prefix, int prefix_len
 	MD5Init(&md5);
 
 	if (prefix_len && *prefix)
-		MD5Update(&md5, (unsigned char *)prefix, prefix_len);
+		MD5Update(&md5, (const unsigned char *)prefix, prefix_len);
 
 	for (;;) {
 		r = FS_Read(buffer, sizeof(buffer), f);

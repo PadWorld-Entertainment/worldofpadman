@@ -282,7 +282,7 @@ static void EmitMovEAXStack(vm_t *vm, int andit) {
 	}
 }
 
-void EmitMovECXStack(vm_t *vm) {
+static void EmitMovECXStack(vm_t *vm) {
 	if (!jlabel) {
 		if (LastCommand == LAST_COMMAND_MOV_STACK_EAX) // mov [edi + ebx * 4], eax
 		{
@@ -301,7 +301,7 @@ void EmitMovECXStack(vm_t *vm) {
 	EmitString("8B 0C 9F"); // mov ecx, dword ptr [edi + ebx * 4]
 }
 
-void EmitMovEDXStack(vm_t *vm, int andit) {
+static void EmitMovEDXStack(vm_t *vm, int andit) {
 	if (!jlabel) {
 		if (LastCommand == LAST_COMMAND_MOV_STACK_EAX) { // mov dword ptr [edi + ebx * 4], eax
 			compiledOfs -= 3;
@@ -427,8 +427,7 @@ EmitCallRel
 Relative call to vm->codeBase + callOfs
 =================
 */
-
-void EmitCallRel(vm_t *vm, int callOfs) {
+static void EmitCallRel(vm_t *vm, int callOfs) {
 	EmitString("E8"); // call 0x12345678
 	Emit4(callOfs - compiledOfs - 4);
 }
@@ -439,8 +438,7 @@ EmitCallDoSyscall
 Call to DoSyscall()
 =================
 */
-
-int EmitCallDoSyscall(vm_t *vm) {
+static int EmitCallDoSyscall(vm_t *vm) {
 	// use edx register to store DoSyscall address
 	EmitRexString(0x48, "BA"); // mov edx, DoSyscall
 	EmitPtr(DoSyscall);
@@ -508,7 +506,6 @@ EmitCallErrJump
 Emit the code that triggers execution of the jump violation handler
 =================
 */
-
 static void EmitCallErrJump(vm_t *vm, int sysCallOfs) {
 	EmitString("B8"); // mov eax, 0x12345678
 	Emit4(VM_JMP_VIOLATION);
@@ -522,8 +519,7 @@ EmitCallProcedure
 VM OP_CALL procedure for call destinations obtained at runtime
 =================
 */
-
-int EmitCallProcedure(vm_t *vm, int sysCallOfs) {
+static int EmitCallProcedure(vm_t *vm, int sysCallOfs) {
 	int jmpSystemCall, jmpBadAddr;
 	int retval;
 
@@ -578,8 +574,7 @@ EmitJumpIns
 Jump to constant instruction number
 =================
 */
-
-void EmitJumpIns(vm_t *vm, const char *jmpop, int cdest) {
+static void EmitJumpIns(vm_t *vm, const char *jmpop, int cdest) {
 	JUSED(cdest);
 
 	EmitString(jmpop); // j??? 0x12345678
@@ -597,8 +592,7 @@ EmitCallIns
 Call to constant instruction number
 =================
 */
-
-void EmitCallIns(vm_t *vm, int cdest) {
+static void EmitCallIns(vm_t *vm, int cdest) {
 	JUSED(cdest);
 
 	EmitString("E8"); // call 0x12345678
@@ -616,8 +610,7 @@ EmitCallConst
 Call to constant instruction number or syscall
 =================
 */
-
-void EmitCallConst(vm_t *vm, int cdest, int callProcOfsSyscall) {
+static void EmitCallConst(vm_t *vm, int cdest, int callProcOfsSyscall) {
 	if (cdest < 0) {
 		EmitString("B8"); // mov eax, cdest
 		Emit4(cdest);
@@ -633,7 +626,7 @@ EmitBranchConditions
 Emits x86 branch condition as given in op
 =================
 */
-void EmitBranchConditions(vm_t *vm, int op) {
+static void EmitBranchConditions(vm_t *vm, int op) {
 	switch (op) {
 	case OP_EQ:
 		EmitJumpIns(vm, "0F 84", Constant4()); // je 0x12345678
@@ -675,8 +668,7 @@ Constant values for immediately following instructions may be translated to imme
 instead of opStack operations, which will save expensive operations on memory
 =================
 */
-
-qboolean ConstOptimize(vm_t *vm, int callProcOfsSyscall) {
+static qboolean ConstOptimize(vm_t *vm, int callProcOfsSyscall) {
 	int v;
 	int op1;
 

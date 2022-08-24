@@ -515,6 +515,7 @@ static void CMod_LoadPatches(const lump_t *surfs, const lump_t *verts) {
 
 //==================================================================
 
+#if 0
 static unsigned CM_LumpChecksum(lump_t *lump) {
 	return LittleLong(Com_BlockChecksum(cmod_base + lump->fileofs, lump->filelen));
 }
@@ -535,6 +536,7 @@ static unsigned CM_Checksum(dheader_t *header) {
 
 	return LittleLong(Com_BlockChecksum(checksums, 11 * 4));
 }
+#endif
 
 /*
 ==================

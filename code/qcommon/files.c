@@ -987,8 +987,7 @@ FS_IsExt
 Return qtrue if ext matches file extension filename
 ===========
 */
-
-qboolean FS_IsExt(const char *filename, const char *ext, int namelen) {
+static qboolean FS_IsExt(const char *filename, const char *ext, int namelen) {
 	int extlen;
 
 	extlen = strlen(ext);
@@ -1008,8 +1007,7 @@ FS_IsDemoExt
 Return qtrue if filename has a demo extension
 ===========
 */
-
-qboolean FS_IsDemoExt(const char *filename, int namelen) {
+static qboolean FS_IsDemoExt(const char *filename, int namelen) {
 	char *ext_test;
 	int index, protocol;
 
@@ -1039,7 +1037,7 @@ Returns filesize and an open FILE pointer.
 */
 extern qboolean com_fullyInitialized;
 
-long FS_FOpenFileReadDir(const char *filename, searchpath_t *search, fileHandle_t *file, qboolean uniqueFILE,
+static long FS_FOpenFileReadDir(const char *filename, searchpath_t *search, fileHandle_t *file, qboolean uniqueFILE,
 						 qboolean unpure) {
 	long hash;
 	pack_t *pak;
@@ -1434,7 +1432,7 @@ Properly handles partial writes
 int FS_Write(const void *buffer, int len, fileHandle_t h) {
 	int block, remaining;
 	int written;
-	byte *buf;
+	const byte *buf;
 	int tries;
 	FILE *f;
 
@@ -1447,7 +1445,7 @@ int FS_Write(const void *buffer, int len, fileHandle_t h) {
 	}
 
 	f = FS_FileForHandle(h);
-	buf = (byte *)buffer;
+	buf = (const byte *)buffer;
 
 	remaining = len;
 	tries = 0;
@@ -2471,7 +2469,7 @@ int FS_GetModList(char *listbuf, int bufsize) {
 FS_Dir_f
 ================
 */
-void FS_Dir_f(void) {
+static void FS_Dir_f(void) {
 	const char *path;
 	const char *extension;
 	char **dirnames;
@@ -2507,7 +2505,7 @@ void FS_Dir_f(void) {
 FS_ConvertPath
 ===========
 */
-void FS_ConvertPath(char *s) {
+static void FS_ConvertPath(char *s) {
 	while (*s) {
 		if (*s == '\\' || *s == ':') {
 			*s = '/';
@@ -2523,7 +2521,7 @@ FS_PathCmp
 Ignore case and seprator char distinctions
 ===========
 */
-int FS_PathCmp(const char *s1, const char *s2) {
+static int FS_PathCmp(const char *s1, const char *s2) {
 	int c1, c2;
 
 	do {
@@ -2560,7 +2558,7 @@ int FS_PathCmp(const char *s1, const char *s2) {
 FS_SortFileList
 ================
 */
-void FS_SortFileList(char **filelist, int numfiles) {
+static void FS_SortFileList(char **filelist, int numfiles) {
 	int i, j, k, numsortedfiles;
 	char **sortedlist;
 
@@ -2588,7 +2586,7 @@ void FS_SortFileList(char **filelist, int numfiles) {
 FS_NewDir_f
 ================
 */
-void FS_NewDir_f(void) {
+static void FS_NewDir_f(void) {
 	const char *filter;
 	char **dirnames;
 	int ndirs;
@@ -2619,10 +2617,9 @@ void FS_NewDir_f(void) {
 /*
 ============
 FS_Path_f
-
 ============
 */
-void FS_Path_f(void) {
+static void FS_Path_f(void) {
 	searchpath_t *s;
 	int i;
 
@@ -2655,7 +2652,7 @@ void FS_Path_f(void) {
 FS_TouchFile_f
 ============
 */
-void FS_TouchFile_f(void) {
+static void FS_TouchFile_f(void) {
 	fileHandle_t f;
 
 	if (Cmd_Argc() != 2) {
@@ -2674,7 +2671,6 @@ void FS_TouchFile_f(void) {
 FS_Which
 ============
 */
-
 qboolean FS_Which(const char *filename, void *searchPath) {
 	searchpath_t *search = searchPath;
 
@@ -2696,7 +2692,7 @@ qboolean FS_Which(const char *filename, void *searchPath) {
 FS_Which_f
 ============
 */
-void FS_Which_f(void) {
+static void FS_Which_f(void) {
 	searchpath_t *search;
 	const char *filename;
 
@@ -2724,8 +2720,8 @@ void FS_Which_f(void) {
 //===========================================================================
 
 static int QDECL paksort(const void *a, const void *b) {
-	const char *aa = *(const char **)a;
-	const char *bb = *(const char **)b;
+	const char *aa = *(const char *const *)a;
+	const char *bb = *(const char *const *)b;
 	return FS_PathCmp(aa, bb);
 }
 

@@ -1228,7 +1228,7 @@ static int s_smallZoneTotal;
 Com_Meminfo_f
 =================
 */
-void Com_Meminfo_f(void) {
+static void Com_Meminfo_f(void) {
 	memblock_t *block;
 	int zoneBytes, zoneBlocks;
 	int smallZoneBytes;
@@ -1364,7 +1364,7 @@ void Com_TouchMemory(void) {
 Com_InitZoneMemory
 =================
 */
-void Com_InitSmallZoneMemory(void) {
+static void Com_InitSmallZoneMemory(void) {
 	s_smallZoneTotal = 512 * 1024;
 	smallzone = calloc(s_smallZoneTotal, 1);
 	if (!smallzone) {
@@ -1373,7 +1373,7 @@ void Com_InitSmallZoneMemory(void) {
 	Z_ClearZone(smallzone, s_smallZoneTotal);
 }
 
-void Com_InitZoneMemory(void) {
+static void Com_InitZoneMemory(void) {
 	const cvar_t *cv;
 
 	// Please note: com_zoneMegs can only be set on the command line, and
@@ -1403,7 +1403,7 @@ void Com_InitZoneMemory(void) {
 Hunk_Log
 =================
 */
-void Hunk_Log(void) {
+static void Hunk_Log(void) {
 	hunkblock_t *block;
 	char buf[4096];
 	int size, numBlocks;
@@ -1434,7 +1434,7 @@ void Hunk_Log(void) {
 Hunk_SmallLog
 =================
 */
-void Hunk_SmallLog(void) {
+static void Hunk_SmallLog(void) {
 	hunkblock_t *block, *block2;
 	char buf[4096];
 	int size, locsize, numBlocks;
@@ -1977,7 +1977,7 @@ static sysEvent_t Com_GetSystemEvent(void) {
 Com_GetRealEvent
 =================
 */
-sysEvent_t Com_GetRealEvent(void) {
+static sysEvent_t Com_GetRealEvent(void) {
 	int r;
 	sysEvent_t ev;
 
@@ -2253,7 +2253,7 @@ Com_Setenv_f
 For controlling environment variables
 ==================
 */
-void Com_Setenv_f(void) {
+static void Com_Setenv_f(void) {
 	int argc = Cmd_Argc();
 	const char *arg1 = Cmd_Argv(1);
 
@@ -2278,8 +2278,7 @@ Com_ExecuteCfg
 For controlling environment variables
 ==================
 */
-
-void Com_ExecuteCfg(void) {
+static void Com_ExecuteCfg(void) {
 	Cbuf_ExecuteText(EXEC_NOW, "exec default.cfg\n");
 	Cbuf_Execute(); // Always execute after exec to prevent text buffer overflowing
 
@@ -2348,7 +2347,7 @@ Expose possibility to change current running mod to the user
 ==================
 */
 
-void Com_GameRestart_f(void) {
+static void Com_GameRestart_f(void) {
 	Cvar_Set("fs_game", Cmd_Argv(1));
 
 	Com_GameRestart(0, qtrue);
@@ -2630,7 +2629,7 @@ Com_ReadFromPipe
 Read whatever is in com_pipefile, if anything, and execute it
 ===============
 */
-void Com_ReadFromPipe(void) {
+static void Com_ReadFromPipe(void) {
 	static char buf[MAX_STRING_CHARS];
 	static int accu = 0;
 	int read;
@@ -2670,7 +2669,7 @@ void Com_ReadFromPipe(void) {
 
 //==================================================================
 
-void Com_WriteConfigToFile(const char *filename) {
+static void Com_WriteConfigToFile(const char *filename) {
 	fileHandle_t f;
 
 	f = FS_FOpenFileWrite(filename);
@@ -2692,7 +2691,7 @@ Com_WriteConfiguration
 Writes key bindings and archived cvars to config file if modified
 ===============
 */
-void Com_WriteConfiguration(void) {
+static void Com_WriteConfiguration(void) {
 	// if we are quiting without fully initializing, make sure
 	// we don't write out anything
 	if (!com_fullyInitialized) {
@@ -3472,7 +3471,7 @@ void Field_CompletePlayerName(const char **names, int nameCount) {
 }
 
 int QDECL Com_strCompare(const void *a, const void *b) {
-	const char **pa = (const char **)a;
-	const char **pb = (const char **)b;
+	const char *const *pa = (const char *const *)a;
+	const char *const *pb = (const char *const *)b;
 	return strcmp(*pa, *pb);
 }

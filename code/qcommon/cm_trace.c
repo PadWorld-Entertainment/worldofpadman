@@ -111,6 +111,7 @@ static float CM_DistanceFromLineSquared(const vec3_t p, const vec3_t lp1, const 
 	return VectorLengthSquared(t);
 }
 
+#if 0
 /*
 ================
 CM_VectorDistanceSquared
@@ -122,6 +123,7 @@ static float CM_VectorDistanceSquared(vec3_t p1, vec3_t p2) {
 	VectorSubtract(p2, p1, dir);
 	return VectorLengthSquared(dir);
 }
+#endif
 
 /*
 ================

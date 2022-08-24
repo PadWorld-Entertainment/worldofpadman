@@ -344,9 +344,9 @@ static void CM_FloodArea_r(int areaNum, int floodnum) {
 /*
 ====================
 CM_FloodAreaConnections
-
 ====================
 */
+void CM_FloodAreaConnections(void);
 void CM_FloodAreaConnections(void) {
 	int i;
 	cArea_t *area;

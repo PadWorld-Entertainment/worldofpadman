@@ -894,7 +894,6 @@ void Hunk_ClearTempMemory(void);
 void *Hunk_AllocateTempMemory(int size);
 void Hunk_FreeTempMemory(void *buf);
 int Hunk_MemoryRemaining(void);
-void Hunk_Log(void);
 
 void Com_TouchMemory(void);
 

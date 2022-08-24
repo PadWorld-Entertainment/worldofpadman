@@ -278,7 +278,7 @@ void MSG_WriteByte(msg_t *sb, int c) {
 void MSG_WriteData(msg_t *buf, const void *data, int length) {
 	int i;
 	for (i = 0; i < length; i++) {
-		MSG_WriteByte(buf, ((byte *)data)[i]);
+		MSG_WriteByte(buf, ((const byte *)data)[i]);
 	}
 }
 
@@ -353,9 +353,11 @@ void MSG_WriteBigString(msg_t *sb, const char *s) {
 	}
 }
 
+#if 0
 void MSG_WriteAngle(msg_t *sb, float f) {
 	MSG_WriteByte(sb, (int)(f * 256 / 360) & 255);
 }
+#endif
 
 void MSG_WriteAngle16(msg_t *sb, float f) {
 	MSG_WriteShort(sb, ANGLE2SHORT(f));
@@ -995,7 +997,7 @@ void MSG_ReadDeltaEntity(msg_t *msg, const entityState_t *from, entityState_t *t
 		}
 	}
 	for (i = lc, field = &entityStateFields[lc]; i < numFields; i++, field++) {
-		fromF = (int *)((byte *)from + field->offset);
+		fromF = (const int *)((const byte *)from + field->offset);
 		toF = (int *)((byte *)to + field->offset);
 		// no change
 		*toF = *fromF;
@@ -1099,8 +1101,8 @@ void MSG_WriteDeltaPlayerstate(msg_t *msg, const struct playerState_s *from, con
 
 	lc = 0;
 	for (i = 0, field = playerStateFields; i < numFields; i++, field++) {
-		fromF = (const int *)((byte *)from + field->offset);
-		toF = (const int *)((byte *)to + field->offset);
+		fromF = (const int *)((const byte *)from + field->offset);
+		toF = (const int *)((const byte *)to + field->offset);
 		if (*fromF != *toF) {
 			lc = i + 1;
 		}
@@ -1111,8 +1113,8 @@ void MSG_WriteDeltaPlayerstate(msg_t *msg, const struct playerState_s *from, con
 	oldsize += numFields - lc;
 
 	for (i = 0, field = playerStateFields; i < lc; i++, field++) {
-		fromF = (const int *)((byte *)from + field->offset);
-		toF = (const int *)((byte *)to + field->offset);
+		fromF = (const int *)((const byte *)from + field->offset);
+		toF = (const int *)((const byte *)to + field->offset);
 
 		if (*fromF == *toF) {
 			MSG_WriteBits(msg, 0, 1); // no change

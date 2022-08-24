@@ -79,12 +79,12 @@ Netchan_Setup
 called to open a channel to a remote system
 ==============
 */
-void Netchan_Setup(netsrc_t sock, netchan_t *chan, netadr_t adr, int qport, int challenge, qboolean compat) {
+void Netchan_Setup(netsrc_t sock, netchan_t *chan, netadr_t adr, int channelport, int challenge, qboolean compat) {
 	Com_Memset(chan, 0, sizeof(*chan));
 
 	chan->sock = sock;
 	chan->remoteAddress = adr;
-	chan->qport = qport;
+	chan->qport = channelport;
 	chan->incomingSequence = 0;
 	chan->outgoingSequence = 1;
 	chan->challenge = challenge;
@@ -483,7 +483,7 @@ void NET_FlushPacketQueue(void) {
 
 void NET_SendPacket(netsrc_t sock, int length, const void *data, netadr_t to) {
 	// sequenced packets are shown in netchan, so just show oob
-	if (showpackets->integer && *(int *)data == -1) {
+	if (showpackets->integer && *(const int *)data == -1) {
 		Com_Printf("send packet %4i\n", length);
 	}
 

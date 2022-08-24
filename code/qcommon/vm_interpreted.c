@@ -99,7 +99,8 @@ static ID_INLINE int loadWord(void *addr) {
 }
 #endif
 
-char *VM_Indent(vm_t *vm) {
+#ifdef DEBUG_VM
+static char *VM_Indent(vm_t *vm) {
 	static char *string = "                                        ";
 	if (vm->callLevel > 20) {
 		return string;
@@ -107,7 +108,7 @@ char *VM_Indent(vm_t *vm) {
 	return string + 2 * (20 - vm->callLevel);
 }
 
-void VM_StackTrace(vm_t *vm, int programCounter, int programStack) {
+static void VM_StackTrace(vm_t *vm, int programCounter, int programStack) {
 	int count;
 
 	count = 0;
@@ -117,6 +118,7 @@ void VM_StackTrace(vm_t *vm, int programCounter, int programStack) {
 		programCounter = *(int *)&vm->dataBase[programStack];
 	} while (programCounter != -1 && ++count < 32);
 }
+#endif
 
 /*
 ====================
