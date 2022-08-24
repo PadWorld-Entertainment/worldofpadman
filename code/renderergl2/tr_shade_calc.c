@@ -104,7 +104,7 @@ RB_CalcDeformVertexes
 
 ========================
 */
-void RB_CalcDeformVertexes(deformStage_t *ds) {
+static void RB_CalcDeformVertexes(deformStage_t *ds) {
 	int i;
 	vec3_t offset;
 	float scale;
@@ -147,7 +147,7 @@ RB_CalcDeformNormals
 Wiggle the normals for wavy environment mapping
 =========================
 */
-void RB_CalcDeformNormals(deformStage_t *ds) {
+static void RB_CalcDeformNormals(deformStage_t *ds) {
 	int i;
 	float scale;
 	float *xyz = (float *)tess.xyz;
@@ -185,7 +185,7 @@ RB_CalcBulgeVertexes
 
 ========================
 */
-void RB_CalcBulgeVertexes(deformStage_t *ds) {
+static void RB_CalcBulgeVertexes(deformStage_t *ds) {
 	int i;
 	const float *st = (const float *)tess.texCoords[0];
 	float *xyz = (float *)tess.xyz;
@@ -218,7 +218,7 @@ RB_CalcMoveVertexes
 A deformation that can move an entire surface along a wave path
 ======================
 */
-void RB_CalcMoveVertexes(deformStage_t *ds) {
+static void RB_CalcMoveVertexes(deformStage_t *ds) {
 	int i;
 	float *xyz;
 	float *table;
@@ -245,7 +245,7 @@ DeformText
 Change a polygon into a bunch of text polygons
 =============
 */
-void DeformText(const char *text) {
+static void DeformText(const char *text) {
 	int i;
 	vec3_t origin, width, height;
 	int len;
@@ -285,7 +285,7 @@ void DeformText(const char *text) {
 	VectorScale(width, height[2] * -0.75f, width);
 
 	// determine the starting position
-	len = strlen(text);
+	len = (int)strlen(text);
 	VectorMA(origin, (len - 1), width, origin);
 
 	// clear the shader indexes
