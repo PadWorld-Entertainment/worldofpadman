@@ -1621,7 +1621,7 @@ static void S_AL_RawSamples(int stream, int samples, int rate, int width, int ch
 	streamBufIndex[stream] = (streamBufIndex[stream] + 1) % streamNumBuffers[stream];
 
 	// Fill buffer
-	qalBufferData(buffer, format, (ALvoid *)data, (samples * width * channels), rate);
+	qalBufferData(buffer, format, (const ALvoid *)data, (samples * width * channels), rate);
 
 	// Shove the data onto the streamSource
 	qalSourceQueueBuffers(streamSources[stream], 1, &buffer);
@@ -2149,12 +2149,12 @@ static void S_AL_Capture(int samples, byte *data) {
 		qalcCaptureSamples(alCaptureDevice, data, samples);
 }
 
-void S_AL_StopCapture(void) {
+static void S_AL_StopCapture(void) {
 	if (alCaptureDevice != NULL)
 		qalcCaptureStop(alCaptureDevice);
 }
 
-void S_AL_MasterGain(float gain) {
+static void S_AL_MasterGain(float gain) {
 	qalListenerf(AL_GAIN, gain);
 }
 #endif

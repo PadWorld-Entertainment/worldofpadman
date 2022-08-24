@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 CL_Netchan_TransmitNextFragment
 =================
 */
-qboolean CL_Netchan_TransmitNextFragment(netchan_t *chan) {
+static qboolean CL_Netchan_TransmitNextFragment(netchan_t *chan) {
 	if (chan->unsentFragments) {
 		Netchan_TransmitNextFragment(chan);
 		return qtrue;

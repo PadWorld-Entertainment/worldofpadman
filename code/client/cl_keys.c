@@ -589,7 +589,7 @@ Console_Key
 Handles history and console scrollback
 ====================
 */
-void Console_Key(int key) {
+static void Console_Key(int key) {
 	// ctrl-L clears screen
 	if (key == 'l' && keys[K_CTRL].down) {
 		Cbuf_AddText("clear\n");
@@ -730,8 +730,7 @@ Message_Key
 In game talk message
 ================
 */
-void Message_Key(int key) {
-
+static void Message_Key(int key) {
 	char buffer[MAX_STRING_CHARS];
 
 	if (key == K_ESCAPE) {
@@ -932,7 +931,7 @@ int Key_GetKey(const char *binding) {
 Key_Unbind_f
 ===================
 */
-void Key_Unbind_f(void) {
+static void Key_Unbind_f(void) {
 	int b;
 
 	if (Cmd_Argc() != 2) {
@@ -954,7 +953,7 @@ void Key_Unbind_f(void) {
 Key_Unbindall_f
 ===================
 */
-void Key_Unbindall_f(void) {
+static void Key_Unbindall_f(void) {
 	int i;
 
 	for (i = 0; i < MAX_KEYS; i++)
@@ -967,7 +966,7 @@ void Key_Unbindall_f(void) {
 Key_Bind_f
 ===================
 */
-void Key_Bind_f(void) {
+static void Key_Bind_f(void) {
 	int i, c, b;
 	char cmd[1024];
 
@@ -1027,7 +1026,7 @@ Key_Bindlist_f
 
 ============
 */
-void Key_Bindlist_f(void) {
+static void Key_Bindlist_f(void) {
 	int i;
 
 	for (i = 0; i < MAX_KEYS; i++) {
@@ -1128,7 +1127,7 @@ CL_ParseBinding
 Execute the commands in the bind string
 ===================
 */
-void CL_ParseBinding(int key, qboolean down, unsigned time) {
+static void CL_ParseBinding(int key, qboolean down, unsigned time) {
 	char buf[MAX_STRING_CHARS], *p = buf, *end;
 	qboolean allCommands, allowUpCmds;
 
@@ -1179,7 +1178,7 @@ CL_KeyDownEvent
 Called by CL_KeyEvent to handle a keypress
 ===================
 */
-void CL_KeyDownEvent(int key, unsigned time) {
+static void CL_KeyDownEvent(int key, unsigned time) {
 	keys[key].down = qtrue;
 	keys[key].repeats++;
 	if (keys[key].repeats == 1)
@@ -1269,7 +1268,7 @@ CL_KeyUpEvent
 Called by CL_KeyEvent to handle a keyrelease
 ===================
 */
-void CL_KeyUpEvent(int key, unsigned time) {
+static void CL_KeyUpEvent(int key, unsigned time) {
 	keys[key].repeats = 0;
 	keys[key].down = qfalse;
 	anykeydown--;

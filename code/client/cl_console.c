@@ -85,7 +85,7 @@ void Con_ToggleConsole_f(void) {
 Con_ToggleMenu_f
 ===================
 */
-void Con_ToggleMenu_f(void) {
+static void Con_ToggleMenu_f(void) {
 	CL_KeyEvent(K_ESCAPE, qtrue, Sys_Milliseconds());
 	CL_KeyEvent(K_ESCAPE, qfalse, Sys_Milliseconds());
 }
@@ -95,7 +95,7 @@ void Con_ToggleMenu_f(void) {
 Con_MessageMode_f
 ================
 */
-void Con_MessageMode_f(void) {
+static void Con_MessageMode_f(void) {
 	chat_playerNum = -1;
 	chat_team = qfalse;
 	Field_Clear(&chatField);
@@ -109,7 +109,7 @@ void Con_MessageMode_f(void) {
 Con_MessageMode2_f
 ================
 */
-void Con_MessageMode2_f(void) {
+static void Con_MessageMode2_f(void) {
 	chat_playerNum = -1;
 	chat_team = qtrue;
 	Field_Clear(&chatField);
@@ -122,7 +122,7 @@ void Con_MessageMode2_f(void) {
 Con_MessageMode3_f
 ================
 */
-void Con_MessageMode3_f(void) {
+static void Con_MessageMode3_f(void) {
 	chat_playerNum = VM_Call(cgvm, CG_CROSSHAIR_PLAYER);
 	if (chat_playerNum < 0 || chat_playerNum >= MAX_CLIENTS) {
 		chat_playerNum = -1;
@@ -139,7 +139,7 @@ void Con_MessageMode3_f(void) {
 Con_MessageMode4_f
 ================
 */
-void Con_MessageMode4_f(void) {
+static void Con_MessageMode4_f(void) {
 	chat_playerNum = VM_Call(cgvm, CG_LAST_ATTACKER);
 	if (chat_playerNum < 0 || chat_playerNum >= MAX_CLIENTS) {
 		chat_playerNum = -1;
@@ -173,7 +173,7 @@ Con_Dump_f
 Save the console contents out to a file
 ================
 */
-void Con_Dump_f(void) {
+static void Con_Dump_f(void) {
 	int l, x, i;
 	short *line;
 	fileHandle_t f;
@@ -320,7 +320,7 @@ void Con_CheckResize(void) {
 Cmd_CompleteTxtName
 ==================
 */
-void Cmd_CompleteTxtName(const char *args, int argNum) {
+static void Cmd_CompleteTxtName(const char *args, int argNum) {
 	if (argNum == 2) {
 		Field_CompleteFilename("", "txt", qfalse, qtrue);
 	}
@@ -378,7 +378,7 @@ void Con_Shutdown(void) {
 Con_Linefeed
 ===============
 */
-void Con_Linefeed(qboolean skipnotify) {
+static void Con_Linefeed(qboolean skipnotify) {
 	int i;
 
 	// mark time for transparent overlay
@@ -434,7 +434,7 @@ void CL_ConsolePrint(const char *txt) {
 
 	color = ColorIndex(COLOR_WHITE);
 
-	while ((c = *((unsigned char *)txt)) != 0) {
+	while ((c = *((const unsigned char *)txt)) != 0) {
 		if (Q_IsColorString(txt)) {
 			color = ColorIndex(*(txt + 1));
 			txt += 2;
@@ -501,7 +501,7 @@ Con_DrawInput
 Draw the editline after a ] prompt
 ================
 */
-void Con_DrawInput(void) {
+static void Con_DrawInput(void) {
 	int y;
 
 	if (clc.state != CA_DISCONNECTED && !(Key_GetCatcher() & KEYCATCH_CONSOLE)) {
@@ -592,7 +592,7 @@ Con_DrawSolidConsole
 Draws the console with the solid background
 ================
 */
-void Con_DrawSolidConsole(float frac) {
+static void Con_DrawSolidConsole(float frac) {
 	int i, x, y;
 	int rows;
 	short *text;

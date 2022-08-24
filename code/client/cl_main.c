@@ -2884,7 +2884,7 @@ void CL_InitRef(void) {
 		Com_Error(ERR_FATAL, "Failed to load renderer");
 	}
 
-	GetRefAPI = (GetRefAPI_t)Sys_LoadFunction(rendererLib, "GetRefAPI");
+	GetRefAPI = Sys_LoadFunction(rendererLib, "GetRefAPI");
 	if (!GetRefAPI) {
 		Com_Error(ERR_FATAL, "Can't load symbol GetRefAPI: '%s'", Sys_LibraryError());
 	}

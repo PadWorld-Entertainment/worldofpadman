@@ -44,7 +44,7 @@ snd_codec_t opus_codec = {
 // callbacks for opusfile
 
 // fread() replacement
-int S_OggOpus_Callback_read(void *datasource, unsigned char *ptr, int size) {
+static int S_OggOpus_Callback_read(void *datasource, unsigned char *ptr, int size) {
 	snd_stream_t *stream;
 	int bytesRead = 0;
 
@@ -83,7 +83,7 @@ int S_OggOpus_Callback_read(void *datasource, unsigned char *ptr, int size) {
 }
 
 // fseek() replacement
-int S_OggOpus_Callback_seek(void *datasource, opus_int64 offset, int whence) {
+static int S_OggOpus_Callback_seek(void *datasource, opus_int64 offset, int whence) {
 	snd_stream_t *stream;
 	int retVal = 0;
 
@@ -155,13 +155,13 @@ int S_OggOpus_Callback_seek(void *datasource, opus_int64 offset, int whence) {
 }
 
 // fclose() replacement
-int S_OggOpus_Callback_close(void *datasource) {
+static int S_OggOpus_Callback_close(void *datasource) {
 	// we do nothing here and close all things manually in S_OggOpus_CodecCloseStream()
 	return 0;
 }
 
 // ftell() replacement
-opus_int64 S_OggOpus_Callback_tell(void *datasource) {
+static opus_int64 S_OggOpus_Callback_tell(void *datasource) {
 	snd_stream_t *stream;
 
 	// check if input is valid

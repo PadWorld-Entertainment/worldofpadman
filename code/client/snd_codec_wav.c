@@ -103,7 +103,7 @@ static int S_FindRIFFChunk(fileHandle_t f, char *chunk) {
 S_ByteSwapRawSamples
 =================
 */
-static void S_ByteSwapRawSamples(int samples, int width, int s_channels, const byte *data) {
+static void S_ByteSwapRawSamples(int samples, int width, int s_channels, byte *data) {
 	int i;
 
 	if (width != 2) {
@@ -117,7 +117,7 @@ static void S_ByteSwapRawSamples(int samples, int width, int s_channels, const b
 		samples <<= 1;
 	}
 	for (i = 0; i < samples; i++) {
-		((short *)data)[i] = LittleShort(((short *)data)[i]);
+		((short *)data)[i] = LittleShort(((const short *)data)[i]);
 	}
 }
 

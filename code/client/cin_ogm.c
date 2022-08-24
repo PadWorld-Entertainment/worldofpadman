@@ -562,7 +562,7 @@ typedef struct {
 	} sh;
 } stream_header_t;
 
-qboolean isPowerOf2(int x) {
+static qboolean isPowerOf2(int x) {
 	int bitsSet = 0;
 	int i;
 

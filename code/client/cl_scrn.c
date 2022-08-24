@@ -291,7 +291,7 @@ int SCR_GetBigStringWidth(const char *str) {
 SCR_DrawDemoRecording
 =================
 */
-void SCR_DrawDemoRecording(void) {
+static void SCR_DrawDemoRecording(void) {
 	char string[1024];
 	int pos;
 
@@ -314,7 +314,7 @@ void SCR_DrawDemoRecording(void) {
 SCR_DrawVoipMeter
 =================
 */
-void SCR_DrawVoipMeter(void) {
+static void SCR_DrawVoipMeter(void) {
 	char buffer[16];
 	char string[256];
 	int limit, i;
@@ -373,7 +373,7 @@ void SCR_DebugGraph(float value) {
 SCR_DrawDebugGraph
 ==============
 */
-void SCR_DrawDebugGraph(void) {
+static void SCR_DrawDebugGraph(void) {
 	int a, x, y, w, i, h;
 	float v;
 
@@ -425,7 +425,7 @@ SCR_DrawScreenField
 This will be called twice if rendering in stereo mode
 ==================
 */
-void SCR_DrawScreenField(stereoFrame_t stereoFrame) {
+static void SCR_DrawScreenField(stereoFrame_t stereoFrame) {
 	qboolean uiFullscreen;
 
 	re.BeginFrame(stereoFrame);

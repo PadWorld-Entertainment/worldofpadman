@@ -33,7 +33,7 @@ static short *snd_out;
 
 #if !id386 // if configured not to use asm
 
-void S_WriteLinearBlastStereo16(void) {
+static void S_WriteLinearBlastStereo16(void) {
 	int i;
 	int val;
 
@@ -105,7 +105,7 @@ LClampDone2:
 
 #endif
 
-void S_TransferStereo16(unsigned long *pbuf, int endtime) {
+static void S_TransferStereo16(unsigned long *pbuf, int endtime) {
 	int lpos;
 	int ls_paintedtime;
 
@@ -138,10 +138,9 @@ void S_TransferStereo16(unsigned long *pbuf, int endtime) {
 /*
 ===================
 S_TransferPaintBuffer
-
 ===================
 */
-void S_TransferPaintBuffer(int endtime) {
+static void S_TransferPaintBuffer(int endtime) {
 	int out_idx;
 	int count;
 	int *p;
@@ -330,7 +329,7 @@ static void S_PaintChannelFrom16(channel_t *ch, const sfx_t *sc, int count, int 
 	S_PaintChannelFrom16_scalar(ch, sc, count, sampleOffset, bufferOffset);
 }
 
-void S_PaintChannelFromWavelet(channel_t *ch, sfx_t *sc, int count, int sampleOffset, int bufferOffset) {
+static void S_PaintChannelFromWavelet(channel_t *ch, sfx_t *sc, int count, int sampleOffset, int bufferOffset) {
 	int data;
 	int leftvol, rightvol;
 	int i;
@@ -372,7 +371,7 @@ void S_PaintChannelFromWavelet(channel_t *ch, sfx_t *sc, int count, int sampleOf
 	}
 }
 
-void S_PaintChannelFromADPCM(channel_t *ch, sfx_t *sc, int count, int sampleOffset, int bufferOffset) {
+static void S_PaintChannelFromADPCM(channel_t *ch, sfx_t *sc, int count, int sampleOffset, int bufferOffset) {
 	int data;
 	int leftvol, rightvol;
 	int i;
@@ -419,7 +418,7 @@ void S_PaintChannelFromADPCM(channel_t *ch, sfx_t *sc, int count, int sampleOffs
 	}
 }
 
-void S_PaintChannelFromMuLaw(channel_t *ch, sfx_t *sc, int count, int sampleOffset, int bufferOffset) {
+static void S_PaintChannelFromMuLaw(channel_t *ch, sfx_t *sc, int count, int sampleOffset, int bufferOffset) {
 	int data;
 	int leftvol, rightvol;
 	int i;

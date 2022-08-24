@@ -555,7 +555,7 @@ static int LAN_ServerIsVisible(int source, int n) {
 LAN_UpdateVisiblePings
 =======================
 */
-qboolean LAN_UpdateVisiblePings(int source) {
+static qboolean LAN_UpdateVisiblePings(int source) {
 	return CL_UpdateVisiblePings_f(source);
 }
 
@@ -564,7 +564,7 @@ qboolean LAN_UpdateVisiblePings(int source) {
 LAN_GetServerStatus
 ====================
 */
-int LAN_GetServerStatus(char *serverAddress, char *serverStatus, int maxLen) {
+static int LAN_GetServerStatus(char *serverAddress, char *serverStatus, int maxLen) {
 	return CL_ServerStatus(serverAddress, serverStatus, maxLen);
 }
 
@@ -683,7 +683,7 @@ CL_UISystemCalls
 The ui module is making a system call
 ====================
 */
-intptr_t CL_UISystemCalls(intptr_t *args) {
+static intptr_t CL_UISystemCalls(intptr_t *args) {
 	switch (args[0]) {
 	case UI_ERROR:
 		Com_Error(ERR_DROP, "%s", (const char *)VMA(1));

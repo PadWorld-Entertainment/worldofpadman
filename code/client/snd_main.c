@@ -41,58 +41,58 @@ static soundInterface_t si;
 S_ValidateInterface
 =================
 */
-static qboolean S_ValidSoundInterface(soundInterface_t *si) {
-	if (!si->Shutdown)
+static qboolean S_ValidSoundInterface(soundInterface_t *soundInterface) {
+	if (!soundInterface->Shutdown)
 		return qfalse;
-	if (!si->StartSound)
+	if (!soundInterface->StartSound)
 		return qfalse;
-	if (!si->StartLocalSound)
+	if (!soundInterface->StartLocalSound)
 		return qfalse;
-	if (!si->StartBackgroundTrack)
+	if (!soundInterface->StartBackgroundTrack)
 		return qfalse;
-	if (!si->StopBackgroundTrack)
+	if (!soundInterface->StopBackgroundTrack)
 		return qfalse;
-	if (!si->RawSamples)
+	if (!soundInterface->RawSamples)
 		return qfalse;
-	if (!si->StopAllSounds)
+	if (!soundInterface->StopAllSounds)
 		return qfalse;
-	if (!si->ClearLoopingSounds)
+	if (!soundInterface->ClearLoopingSounds)
 		return qfalse;
-	if (!si->AddLoopingSound)
+	if (!soundInterface->AddLoopingSound)
 		return qfalse;
-	if (!si->AddRealLoopingSound)
+	if (!soundInterface->AddRealLoopingSound)
 		return qfalse;
-	if (!si->StopLoopingSound)
+	if (!soundInterface->StopLoopingSound)
 		return qfalse;
-	if (!si->Respatialize)
+	if (!soundInterface->Respatialize)
 		return qfalse;
-	if (!si->UpdateEntityPosition)
+	if (!soundInterface->UpdateEntityPosition)
 		return qfalse;
-	if (!si->Update)
+	if (!soundInterface->Update)
 		return qfalse;
-	if (!si->DisableSounds)
+	if (!soundInterface->DisableSounds)
 		return qfalse;
-	if (!si->BeginRegistration)
+	if (!soundInterface->BeginRegistration)
 		return qfalse;
-	if (!si->RegisterSound)
+	if (!soundInterface->RegisterSound)
 		return qfalse;
-	if (!si->ClearSoundBuffer)
+	if (!soundInterface->ClearSoundBuffer)
 		return qfalse;
-	if (!si->SoundInfo)
+	if (!soundInterface->SoundInfo)
 		return qfalse;
-	if (!si->SoundList)
+	if (!soundInterface->SoundList)
 		return qfalse;
 
 #ifdef USE_VOIP
-	if (!si->StartCapture)
+	if (!soundInterface->StartCapture)
 		return qfalse;
-	if (!si->AvailableCaptureSamples)
+	if (!soundInterface->AvailableCaptureSamples)
 		return qfalse;
-	if (!si->Capture)
+	if (!soundInterface->Capture)
 		return qfalse;
-	if (!si->StopCapture)
+	if (!soundInterface->StopCapture)
 		return qfalse;
-	if (!si->MasterGain)
+	if (!soundInterface->MasterGain)
 		return qfalse;
 #endif
 
@@ -307,7 +307,7 @@ void S_ClearSoundBuffer(void) {
 S_SoundInfo
 =================
 */
-void S_SoundInfo(void) {
+static void S_SoundInfo(void) {
 	if (si.SoundInfo) {
 		si.SoundInfo();
 	}
@@ -318,7 +318,7 @@ void S_SoundInfo(void) {
 S_SoundList
 =================
 */
-void S_SoundList(void) {
+static void S_SoundList(void) {
 	if (si.SoundList) {
 		si.SoundList();
 	}
@@ -389,7 +389,7 @@ void S_MasterGain(float gain) {
 S_Play_f
 =================
 */
-void S_Play_f(void) {
+static void S_Play_f(void) {
 	int i;
 	int c;
 	sfxHandle_t h;
@@ -433,7 +433,7 @@ static void S_CompleteMusicName(const char *args, int argNum) {
 S_Music_f
 =================
 */
-void S_Music_f(void) {
+static void S_Music_f(void) {
 	int c;
 
 	if (!si.StartBackgroundTrack) {
@@ -457,7 +457,7 @@ void S_Music_f(void) {
 S_Music_f
 =================
 */
-void S_StopMusic_f(void) {
+static void S_StopMusic_f(void) {
 	if (!si.StopBackgroundTrack)
 		return;
 

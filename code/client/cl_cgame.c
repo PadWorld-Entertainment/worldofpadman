@@ -40,7 +40,7 @@ extern qboolean getCameraInfo(int time, vec3_t *origin, vec3_t *angles);
 CL_GetGameState
 ====================
 */
-void CL_GetGameState(gameState_t *gs) {
+static void CL_GetGameState(gameState_t *gs) {
 	*gs = cl.gameState;
 }
 
@@ -49,7 +49,7 @@ void CL_GetGameState(gameState_t *gs) {
 CL_GetGlconfig
 ====================
 */
-void CL_GetGlconfig(glconfig_t *glconfig) {
+static void CL_GetGlconfig(glconfig_t *glconfig) {
 	*glconfig = cls.glconfig;
 }
 
@@ -58,7 +58,7 @@ void CL_GetGlconfig(glconfig_t *glconfig) {
 CL_GetUserCmd
 ====================
 */
-qboolean CL_GetUserCmd(int cmdNumber, usercmd_t *ucmd) {
+static qboolean CL_GetUserCmd(int cmdNumber, usercmd_t *ucmd) {
 	// cmds[cmdNumber] is the last properly generated command
 
 	// can't return anything that we haven't created yet
@@ -77,28 +77,8 @@ qboolean CL_GetUserCmd(int cmdNumber, usercmd_t *ucmd) {
 	return qtrue;
 }
 
-int CL_GetCurrentCmdNumber(void) {
+static int CL_GetCurrentCmdNumber(void) {
 	return cl.cmdNumber;
-}
-
-/*
-====================
-CL_GetParseEntityState
-====================
-*/
-qboolean CL_GetParseEntityState(int parseEntityNumber, entityState_t *state) {
-	// can't return anything that hasn't been parsed yet
-	if (parseEntityNumber >= cl.parseEntitiesNum) {
-		Com_Error(ERR_DROP, "CL_GetParseEntityState: %i >= %i", parseEntityNumber, cl.parseEntitiesNum);
-	}
-
-	// can't return anything that has been overwritten in the circular buffer
-	if (parseEntityNumber <= cl.parseEntitiesNum - MAX_PARSE_ENTITIES) {
-		return qfalse;
-	}
-
-	*state = cl.parseEntities[parseEntityNumber & (MAX_PARSE_ENTITIES - 1)];
-	return qtrue;
 }
 
 /*
@@ -106,7 +86,7 @@ qboolean CL_GetParseEntityState(int parseEntityNumber, entityState_t *state) {
 CL_GetCurrentSnapshotNumber
 ====================
 */
-void CL_GetCurrentSnapshotNumber(int *snapshotNumber, int *serverTime) {
+static void CL_GetCurrentSnapshotNumber(int *snapshotNumber, int *serverTime) {
 	*snapshotNumber = cl.snap.messageNum;
 	*serverTime = cl.snap.serverTime;
 }
@@ -116,7 +96,7 @@ void CL_GetCurrentSnapshotNumber(int *snapshotNumber, int *serverTime) {
 CL_GetSnapshot
 ====================
 */
-qboolean CL_GetSnapshot(int snapshotNumber, snapshot_t *snapshot) {
+static qboolean CL_GetSnapshot(int snapshotNumber, snapshot_t *snapshot) {
 	clSnapshot_t *clSnap;
 	int i, count;
 
@@ -168,7 +148,7 @@ qboolean CL_GetSnapshot(int snapshotNumber, snapshot_t *snapshot) {
 CL_SetUserCmdValue
 =====================
 */
-void CL_SetUserCmdValue(int userCmdValue, float sensitivityScale) {
+static void CL_SetUserCmdValue(int userCmdValue, float sensitivityScale) {
 	cl.cgameUserCmdValue = userCmdValue;
 	cl.cgameSensitivity = sensitivityScale;
 }
@@ -178,7 +158,7 @@ void CL_SetUserCmdValue(int userCmdValue, float sensitivityScale) {
 CL_AddCgameCommand
 =====================
 */
-void CL_AddCgameCommand(const char *cmdName) {
+static void CL_AddCgameCommand(const char *cmdName) {
 	Cmd_AddCommand(cmdName, NULL);
 }
 
@@ -187,7 +167,7 @@ void CL_AddCgameCommand(const char *cmdName) {
 CL_ConfigstringModified
 =====================
 */
-void CL_ConfigstringModified(void) {
+static void CL_ConfigstringModified(void) {
 	char *old, *s;
 	int i, index;
 	char *dup;
@@ -249,7 +229,7 @@ CL_GetServerCommand
 Set up argc/argv for the given command
 ===================
 */
-qboolean CL_GetServerCommand(int serverCommandNumber) {
+static qboolean CL_GetServerCommand(int serverCommandNumber) {
 	const char *s;
 	const char *cmd;
 	static char bigConfigString[BIG_INFO_STRING];
@@ -363,13 +343,13 @@ CL_CM_LoadMap
 Just adds default parameters that cgame doesn't need to know about
 ====================
 */
-void CL_CM_LoadMap(const char *mapname) {
+static void CL_CM_LoadMap(const char *mapname) {
 	int checksum;
 
 	CM_LoadMap(mapname, qtrue, &checksum);
 }
 
-void CL_GetVoipTimes(int *times) {
+static void CL_GetVoipTimes(int *times) {
 	memcpy(times, clc.voipLastPacket, sizeof(int) * MAX_CLIENTS);
 }
 
@@ -403,7 +383,7 @@ CL_CgameSystemCalls
 The cgame module is making a system call
 ====================
 */
-intptr_t CL_CgameSystemCalls(intptr_t *args) {
+static intptr_t CL_CgameSystemCalls(intptr_t *args) {
 	switch (args[0]) {
 	case CG_PRINT:
 		Com_Printf("%s", (const char *)VMA(1));
@@ -791,6 +771,7 @@ void CL_CGameRendering(stereoFrame_t stereo) {
 	VM_Debug(0);
 }
 
+#define RESET_TIME 500
 /*
 =================
 CL_AdjustTimeDelta
@@ -810,10 +791,7 @@ prevents massive overadjustment during times of significant packet loss
 or bursted delayed packets.
 =================
 */
-
-#define RESET_TIME 500
-
-void CL_AdjustTimeDelta(void) {
+static void CL_AdjustTimeDelta(void) {
 	int newDelta;
 	int deltaDelta;
 
