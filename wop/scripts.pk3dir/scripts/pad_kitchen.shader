@@ -602,53 +602,6 @@ textures/pad_kitchen/lighty
 }
 
 
-textures/pad_kitchen/modder01
-{
-		qer_editorimage textures/pad_kitchen/modder01
-		qer_trans 0.5
-		q3map_globaltexture
-		surfaceparm trans
-		surfaceparm nonsolid
-		surfaceparm water
-		cull disable
-
-{
-
-		map textures/pad_kitchen/modder01
-		blendFunc GL_dst_color GL_one
-		rgbgen identity
-		tcmod scale 0.70 0.70
-		tcmod transform 1.2 0 1.2 1 1 2
-		tcmod scroll -.05 .001
-	}
-
-{
-		map textures/pad_kitchen/modder02
-		blendFunc GL_dst_color GL_one
-		rgbgen identity
-		tcmod scale 0.5 0.5
-		tcmod transform 0 1.2 1 1.2 2 1
-		tcmod scroll .025 -.001
-	}
-
-{
-		map textures/pad_kitchen/modder01
-		blendFunc GL_dst_color GL_one
-		rgbgen identity
-		tcmod scale .25 .5
-		tcmod scroll .001 .025
-	}
-
-{
-		map $lightmap
-		blendFunc GL_dst_color GL_zero
-		rgbgen identity
-	}
-}
-
-
-
-
 textures/pad_kitchen/moddersmall
 {
         qer_editorimage textures/pad_kitchen/modder03small

@@ -1797,32 +1797,6 @@ rgbGen identity
 }
 
 
-
-textures/pad_pirate/waterdecke
-{
-	tessSize 64
-	deformVertexes normal 1 1
-	qer_editorimage textures/pad_pirate/holzdecke
-        {
-		map textures/pad_pirate/holzdecke
-                rgbGen identity
-        }
-        {
-		map textures/pad_pirate/waterreflection
-                Blendfunc add
-		tcgen environment
-		rgbgen wave sin .2 0 0 0
-		tcmod scale 1 1
-		tcMod scroll .1 .2
-	}
-        {
-		map $lightmap
-                blendFunc filter
-		rgbGen identity
-	}
-}
-
-
 textures/pad_pirate/candleflare
 {
     deformVertexes autoSprite
