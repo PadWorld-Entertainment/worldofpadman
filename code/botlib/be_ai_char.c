@@ -75,8 +75,7 @@ bot_character_t *botcharacters[MAX_CLIENTS + 1];
 
 //========================================================================
 
-//========================================================================
-bot_character_t *BotCharacterFromHandle(int handle) {
+static bot_character_t *BotCharacterFromHandle(int handle) {
 	if (handle <= 0 || handle > MAX_CLIENTS) {
 		botimport.Print(PRT_FATAL, "character handle %d out of range\n", handle);
 		return NULL;
@@ -88,7 +87,7 @@ bot_character_t *BotCharacterFromHandle(int handle) {
 	return botcharacters[handle];
 }
 
-void BotDumpCharacter(bot_character_t *ch) {
+static void BotDumpCharacter(bot_character_t *ch) {
 	int i;
 
 	Log_Write("%s\n", ch->filename);
@@ -111,8 +110,7 @@ void BotDumpCharacter(bot_character_t *ch) {
 }
 //========================================================================
 
-//========================================================================
-void BotFreeCharacterStrings(bot_character_t *ch) {
+static void BotFreeCharacterStrings(bot_character_t *ch) {
 	int i;
 
 	for (i = 0; i < MAX_CHARACTERISTICS; i++) {
@@ -123,8 +121,7 @@ void BotFreeCharacterStrings(bot_character_t *ch) {
 }
 //========================================================================
 
-//========================================================================
-void BotFreeCharacter2(int handle) {
+static void BotFreeCharacter2(int handle) {
 	if (handle <= 0 || handle > MAX_CLIENTS) {
 		botimport.Print(PRT_FATAL, "character handle %d out of range\n", handle);
 		return;
@@ -139,14 +136,13 @@ void BotFreeCharacter2(int handle) {
 }
 //========================================================================
 
-//========================================================================
 void BotFreeCharacter(int handle) {
 	if (!LibVarGetValue("bot_reloadcharacters"))
 		return;
 	BotFreeCharacter2(handle);
 }
 
-void BotDefaultCharacteristics(bot_character_t *ch, bot_character_t *defaultch) {
+static void BotDefaultCharacteristics(bot_character_t *ch, bot_character_t *defaultch) {
 	int i;
 
 	for (i = 0; i < MAX_CHARACTERISTICS; i++) {
@@ -498,7 +494,7 @@ int BotLoadCharacter(const char *charfile, float skill) {
 	return handle;
 }
 
-int CheckCharacteristicIndex(int character, int index) {
+static int CheckCharacteristicIndex(int character, int index) {
 	bot_character_t *ch;
 
 	ch = BotCharacterFromHandle(character);

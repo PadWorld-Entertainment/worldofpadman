@@ -661,6 +661,7 @@ static void AAS_FloodAreas_r(int areanum, int cluster, int *done) {
 	}
 }
 
+void AAS_FloodAreas(vec3_t origin);
 void AAS_FloodAreas(vec3_t origin) {
 	int areanum, cluster, *done;
 

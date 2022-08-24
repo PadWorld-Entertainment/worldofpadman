@@ -239,11 +239,11 @@ void AAS_JumpReachRunStart(aas_reachability_t *reach, vec3_t runstart) {
 		VectorCopy(start, runstart);
 	}
 }
-//===========================================================================
-// returns the Z velocity when rocket jumping at the origin
 
 //===========================================================================
-float AAS_WeaponJumpZVelocity(vec3_t origin, float radiusdamage) {
+// returns the Z velocity when rocket jumping at the origin
+//===========================================================================
+static float AAS_WeaponJumpZVelocity(vec3_t origin, float radiusdamage) {
 	vec3_t kvel, v, start, end, forward, right, viewangles, dir;
 	float mass, knockback, points;
 	vec3_t rocketoffset = {8, 8, -8};
@@ -298,11 +298,11 @@ float AAS_BFGJumpZVelocity(vec3_t origin) {
 	// bfg radius damage is 1000 (p_weapon.c: weapon_bfg_fire)
 	return AAS_WeaponJumpZVelocity(origin, 120);
 }
-//===========================================================================
-// applies ground friction to the given velocity
 
 //===========================================================================
-void AAS_Accelerate(vec3_t velocity, float frametime, vec3_t wishdir, float wishspeed, float accel) {
+// applies ground friction to the given velocity
+//===========================================================================
+static void AAS_Accelerate(vec3_t velocity, float frametime, vec3_t wishdir, float wishspeed, float accel) {
 	// q2 style
 	int i;
 	float addspeed, accelspeed, currentspeed;
@@ -321,11 +321,11 @@ void AAS_Accelerate(vec3_t velocity, float frametime, vec3_t wishdir, float wish
 		velocity[i] += accelspeed * wishdir[i];
 	}
 }
-//===========================================================================
-// applies ground friction to the given velocity
 
 //===========================================================================
-void AAS_ApplyFriction(vec3_t vel, float friction, float stopspeed, float frametime) {
+// applies ground friction to the given velocity
+//===========================================================================
+static void AAS_ApplyFriction(vec3_t vel, float friction, float stopspeed, float frametime) {
 	float speed, control, newspeed;
 
 	// horizontal speed
@@ -868,7 +868,8 @@ int AAS_ClientMovementHitBBox(struct aas_clientmove_s *move, int entnum, const v
 										maxframes, frametime, SE_HITBOUNDINGBOX, 0, mins, maxs, visualize);
 }
 
-void AAS_TestMovementPrediction(int entnum, vec3_t origin, vec3_t dir) {
+#if 0
+static void AAS_TestMovementPrediction(int entnum, vec3_t origin, vec3_t dir) {
 	vec3_t velocity, cmdmove;
 	aas_clientmove_t move;
 
@@ -885,16 +886,16 @@ void AAS_TestMovementPrediction(int entnum, vec3_t origin, vec3_t dir) {
 		botimport.Print(PRT_MESSAGE, "leave ground\n");
 	}
 }
+#endif
+
 //===========================================================================
 // calculates the horizontal velocity needed to perform a jump from start
 // to end
-
 // Parameter:			zvel	: z velocity for jump
 //						start	: start position of jump
 //						end		: end position of jump
 //						*speed	: returned speed for jump
 // Returns:				qfalse if too high or too far from start to end
-
 //===========================================================================
 int AAS_HorizontalVelocityForJump(float zvel, vec3_t start, vec3_t end, float *velocity) {
 	float phys_gravity, phys_maxvelocity;

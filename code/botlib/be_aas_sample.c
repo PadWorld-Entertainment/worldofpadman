@@ -117,7 +117,7 @@ void AAS_FreeAASLinkHeap(void) {
 	aasworld.linkheapsize = 0;
 }
 
-aas_link_t *AAS_AllocAASLink(void) {
+static aas_link_t *AAS_AllocAASLink(void) {
 	aas_link_t *link;
 
 	link = aasworld.freelinks;
@@ -138,7 +138,7 @@ aas_link_t *AAS_AllocAASLink(void) {
 	return link;
 }
 
-void AAS_DeAllocAASLink(aas_link_t *link) {
+static void AAS_DeAllocAASLink(aas_link_t *link) {
 	if (aasworld.freelinks)
 		aasworld.freelinks->prev_ent = link;
 	link->prev_ent = NULL;
@@ -162,9 +162,9 @@ void AAS_FreeAASLinkedEntities(void) {
 		FreeMemory(aasworld.arealinkedentities);
 	aasworld.arealinkedentities = NULL;
 }
+
 //===========================================================================
 // returns the AAS area the point is in
-
 //===========================================================================
 int AAS_PointAreaNum(vec3_t point) {
 	int nodenum;
@@ -278,6 +278,8 @@ int AAS_PointPresenceType(vec3_t point) {
 		return PRESENCE_NONE;
 	return aasworld.areasettings[areanum].presencetype;
 }
+
+#if 0
 //===========================================================================
 // calculates the minimum distance between the origin of the box and the
 // given plane when both will collide on the given side of the plane
@@ -288,9 +290,8 @@ int AAS_PointPresenceType(vec3_t point) {
 // side		=	side of the plane we want to calculate the distance from
 //					0 normal vector side
 //					1 not normal vector side
-
 //===========================================================================
-vec_t AAS_BoxOriginDistanceFromPlane(vec3_t normal, vec3_t mins, vec3_t maxs, int side) {
+static vec_t AAS_BoxOriginDistanceFromPlane(vec3_t normal, vec3_t mins, vec3_t maxs, int side) {
 	vec3_t v1, v2;
 	int i;
 
@@ -324,8 +325,9 @@ vec_t AAS_BoxOriginDistanceFromPlane(vec3_t normal, vec3_t mins, vec3_t maxs, in
 	//	VectorNegate(normal, v2);
 	return DotProduct(v1, v2);
 }
+#endif
 
-qboolean AAS_AreaEntityCollision(int areanum, vec3_t start, vec3_t end, int presencetype, int passent,
+static qboolean AAS_AreaEntityCollision(int areanum, vec3_t start, vec3_t end, int presencetype, int passent,
 								 aas_trace_t *trace) {
 	int collision;
 	vec3_t boxmins, boxmaxs;
@@ -974,7 +976,7 @@ aas_face_t *AAS_TraceEndFace(aas_trace_t *trace) {
 	return firstface;
 }
 
-int AAS_BoxOnPlaneSide2(vec3_t absmins, vec3_t absmaxs, aas_plane_t *p) {
+static int AAS_BoxOnPlaneSide2(vec3_t absmins, vec3_t absmaxs, aas_plane_t *p) {
 	int i, sides;
 	float dist1, dist2;
 	vec3_t corners[2];

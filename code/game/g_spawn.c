@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 
 #include "g_local.h"
+#include "g_spawn.h"
 
 qboolean G_SpawnString(const char *key, const char *defaultString, const char **out) {
 	int i;
@@ -111,75 +112,7 @@ typedef struct {
 	void (*spawn)(gentity_t *ent);
 } spawn_t;
 
-void SP_info_player_start(gentity_t *ent);
-void SP_info_player_deathmatch(gentity_t *ent);
-void SP_info_player_intermission(gentity_t *ent);
-
-void SP_func_plat(gentity_t *ent);
-void SP_func_static(gentity_t *ent);
-void SP_func_rotating(gentity_t *ent);
-void SP_func_bobbing(gentity_t *ent);
-void SP_func_pendulum(gentity_t *ent);
-void SP_func_button(gentity_t *ent);
-void SP_func_door(gentity_t *ent);
-void SP_func_train(gentity_t *ent);
-void SP_func_timer(gentity_t *self);
-void SP_func_door_rotating(gentity_t *ent);
-
-void SP_station_health(gentity_t *ent);
-void SP_misc_sprayroomtl_teleporter(gentity_t *ent);
-void SP_misc_externalmodel(gentity_t *ent);
-
-void SP_trigger_always(gentity_t *ent);
-void SP_trigger_multiple(gentity_t *ent);
-void SP_trigger_push(gentity_t *ent);
-void SP_trigger_teleport(gentity_t *ent);
-void SP_trigger_hurt(gentity_t *ent);
-
-void SP_trigger_balloonzone(gentity_t *ent);
-void SP_trigger_exit(gentity_t *self);
-void SP_trigger_forbiddenitems(gentity_t *self);
-
-void SP_target_balloon(gentity_t *ent);
-
-void SP_target_remove_powerups(gentity_t *ent);
-void SP_target_give(gentity_t *ent);
-void SP_target_delay(gentity_t *ent);
-void SP_target_speaker(gentity_t *ent);
-void SP_target_print(gentity_t *ent);
-void SP_target_script(gentity_t *ent);
-void SP_target_laser(gentity_t *self);
-void SP_target_score(gentity_t *ent);
-void SP_target_teleporter(gentity_t *ent);
-void SP_target_relay(gentity_t *ent);
-void SP_target_kill(gentity_t *ent);
-void SP_target_position(gentity_t *ent);
-void SP_target_location(gentity_t *ent);
-void SP_target_push(gentity_t *ent);
-
-void SP_light(gentity_t *self);
-void SP_info_null(gentity_t *self);
-void SP_info_notnull(gentity_t *self);
-void SP_info_camp(gentity_t *self);
-void SP_path_corner(gentity_t *self);
-
-void SP_misc_teleporter_dest(gentity_t *self);
-void SP_misc_model(gentity_t *ent);
-void SP_misc_portal_camera(gentity_t *ent);
-void SP_misc_portal_surface(gentity_t *ent);
-
-void SP_shooter_rocket(gentity_t *ent);
-void SP_shooter_plasma(gentity_t *ent);
-void SP_shooter_grenade(gentity_t *ent);
-void SP_shooter_killerduck(gentity_t *ent);
-
-void SP_team_CTF_redplayer(gentity_t *ent);
-void SP_team_CTF_blueplayer(gentity_t *ent);
-
-void SP_team_CTF_redspawn(gentity_t *ent);
-void SP_team_CTF_bluespawn(gentity_t *ent);
-
-void SP_item_botroam(gentity_t *ent) {
+static void SP_item_botroam(gentity_t *ent) {
 	//	int i;
 }
 
@@ -473,7 +406,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	if (g_q3Items.integer) {
 		for (i = 0; q3ToWopItems[i].s; i++) {
 			if (Q_stricmp(ent->classname, q3ToWopItems[i].s) == 0) {
-				ent->classname = (char *)q3ToWopItems[i].r;
+				ent->classname = (const char *)q3ToWopItems[i].r;
 				break;
 			}
 		}
@@ -483,7 +416,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	if (g_gametype.integer < GT_TEAM) {
 		for (i = 0; spawnpointReplacements[i].s; i++) {
 			if (Q_stricmp(ent->classname, spawnpointReplacements[i].s) == 0) {
-				ent->classname = (char *)spawnpointReplacements[i].r;
+				ent->classname = (const char *)spawnpointReplacements[i].r;
 				break;
 			}
 		}
@@ -608,16 +541,16 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		trap_Trace(&tr, ent->s.origin, min, max, trEnd, ENTITYNUM_NONE, MASK_SHOT);
 
 		if (!tr.startsolid && tr.fraction != 1.0f) {
-			gentity_t *marker_ent;
-			marker_ent = G_Spawn();
+			gentity_t *marker_ent = G_Spawn();
 
 			marker_ent->classname = "misc_externalmodel";
 			for (i = 0; shortMarkernames[i].s != NULL; ++i) {
 				if (!Q_stricmp(value, shortMarkernames[i].s))
-					marker_ent->model = (char *)shortMarkernames[i].r;
+					marker_ent->model = G_NewString(shortMarkernames[i].r);
 			}
-			if (marker_ent->model == NULL)
+			if (marker_ent->model == NULL) {
 				marker_ent->model = G_NewString(value);
+			}
 			marker_ent->s.modelindex = G_ModelIndex(marker_ent->model);
 
 			VectorCopy(ent->s.angles, marker_ent->s.angles);
@@ -646,10 +579,8 @@ G_AddSpawnVarToken
 ====================
 */
 static char *G_AddSpawnVarToken(const char *string) {
-	int l;
 	char *dest;
-
-	l = strlen(string);
+	const int l = strlen(string);
 	if (level.numSpawnVarChars + l + 1 > MAX_SPAWN_VARS_CHARS) {
 		G_Error("G_AddSpawnVarToken: MAX_SPAWN_VARS_CHARS");
 	}

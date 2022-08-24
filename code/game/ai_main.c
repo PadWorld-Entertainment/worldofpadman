@@ -829,7 +829,7 @@ void BotTestAAS(vec3_t origin) {
 	}
 }
 
-void BotAddInfoLtg(bot_state_t *bs) {
+static void BotAddInfoLtg(bot_state_t *bs) {
 	// G_Printf("ltg: %i\n",i);
 	switch (bs->ltgtype) {
 	case 0: {
@@ -1837,7 +1837,7 @@ int BotAILoadMap(int restart) {
 	return qtrue;
 }
 
-gentity_t *BotFindHumanPlayer(void) {
+static gentity_t *BotFindHumanPlayer(void) {
 	int i;
 	for (i = 0; i < level.maxclients; i++) {
 		if (level.clients[i].pers.connected != CON_CONNECTED)

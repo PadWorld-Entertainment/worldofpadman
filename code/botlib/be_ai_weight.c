@@ -549,6 +549,7 @@ void ScaleWeight(weightconfig_t *config, char *name, float scale) {
 	}
 }
 
+#if 0
 static void ScaleFuzzySeperatorBalanceRange_r(fuzzyseperator_t *fs, float scale) {
 	if (fs->child) {
 		ScaleFuzzySeperatorBalanceRange_r(fs->child, scale);
@@ -576,6 +577,7 @@ void ScaleFuzzyBalanceRange(weightconfig_t *config, float scale) {
 		ScaleFuzzySeperatorBalanceRange_r(config->weights[i].firstseperator, scale);
 	}
 }
+#endif
 
 static int InterbreedFuzzySeperator_r(fuzzyseperator_t *fs1, fuzzyseperator_t *fs2, fuzzyseperator_t *fsout) {
 	if (fs1->child) {

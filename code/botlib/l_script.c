@@ -162,8 +162,6 @@ char basefolder[MAX_QPATH];
 #endif
 
 //===========================================================================
-
-//===========================================================================
 static void PS_CreatePunctuationTable(script_t *script, punctuation_t *punctuations) {
 	int i;
 	punctuation_t *p, *lastp, *newp;
@@ -197,7 +195,6 @@ static void PS_CreatePunctuationTable(script_t *script, punctuation_t *punctuati
 		}
 	}
 }
-//===========================================================================
 
 //===========================================================================
 const char *PunctuationFromNum(script_t *script, int num) {
@@ -209,7 +206,6 @@ const char *PunctuationFromNum(script_t *script, int num) {
 	}
 	return "unknown punctuation";
 }
-//===========================================================================
 
 //===========================================================================
 void QDECL ScriptError(script_t *script, const char *fmt, ...) {
@@ -232,7 +228,6 @@ void QDECL ScriptError(script_t *script, const char *fmt, ...) {
 	Log_Print("error: file %s, line %d: %s\n", script->filename, script->line, text);
 #endif // BSPC
 }
-//===========================================================================
 
 //===========================================================================
 void QDECL ScriptWarning(script_t *script, const char *fmt, ...) {
@@ -255,7 +250,6 @@ void QDECL ScriptWarning(script_t *script, const char *fmt, ...) {
 	Log_Print("warning: file %s, line %d: %s\n", script->filename, script->line, text);
 #endif // BSPC
 }
-//===========================================================================
 
 //===========================================================================
 void SetScriptPunctuations(script_t *script, punctuation_t *p) {
@@ -270,12 +264,12 @@ void SetScriptPunctuations(script_t *script, punctuation_t *p) {
 	else
 		script->punctuations = default_punctuations;
 }
+
 //============================================================================
 // Reads spaces, tabs, C-like comments etc.
 // When a newline character is found the scripts line counter is increased.
-
 //============================================================================
-int PS_ReadWhiteSpace(script_t *script) {
+static int PS_ReadWhiteSpace(script_t *script) {
 	while (1) {
 		// skip white space
 		while (*script->script_p <= ' ') {
@@ -326,12 +320,10 @@ int PS_ReadWhiteSpace(script_t *script) {
 }
 //============================================================================
 // Reads an escape character.
-
 // Parameter:				script		: script to read from
 //								ch				: place to store the read escape character
-
 //============================================================================
-int PS_ReadEscapeCharacter(script_t *script, char *ch) {
+static int PS_ReadEscapeCharacter(script_t *script, char *ch) {
 	int c, val, i;
 
 	// step over the leading '\\'
@@ -431,7 +423,7 @@ int PS_ReadEscapeCharacter(script_t *script, char *ch) {
 // Returns:					qtrue when a string was read successfully
 
 //============================================================================
-int PS_ReadString(script_t *script, token_t *token, int quote) {
+static int PS_ReadString(script_t *script, token_t *token, int quote) {
 	int len, tmpline;
 	char *tmpscript_p;
 
@@ -506,7 +498,7 @@ int PS_ReadString(script_t *script, token_t *token, int quote) {
 	return 1;
 }
 
-int PS_ReadName(script_t *script, token_t *token) {
+static int PS_ReadName(script_t *script, token_t *token) {
 	int len = 0;
 	char c;
 
@@ -525,7 +517,7 @@ int PS_ReadName(script_t *script, token_t *token) {
 	return 1;
 }
 
-void NumberValue(char *string, int subtype, unsigned long int *intvalue, float *floatvalue) {
+static void NumberValue(char *string, int subtype, unsigned long int *intvalue, float *floatvalue) {
 	unsigned long int dotfound = 0;
 
 	*intvalue = 0;
@@ -672,7 +664,8 @@ static int PS_ReadNumber(script_t *script, token_t *token) {
 	return 1;
 }
 
-int PS_ReadLiteral(script_t *script, token_t *token) {
+#if 0
+static int PS_ReadLiteral(script_t *script, token_t *token) {
 	token->type = TT_LITERAL;
 	// first quote
 	token->string[0] = *script->script_p++;
@@ -706,8 +699,9 @@ int PS_ReadLiteral(script_t *script, token_t *token) {
 
 	return 1;
 }
+#endif
 
-int PS_ReadPunctuation(script_t *script, token_t *token) {
+static int PS_ReadPunctuation(script_t *script, token_t *token) {
 	int len;
 	const char *p;
 	punctuation_t *punc;
@@ -738,7 +732,7 @@ int PS_ReadPunctuation(script_t *script, token_t *token) {
 	return 0;
 }
 
-int PS_ReadPrimitive(script_t *script, token_t *token) {
+static int PS_ReadPrimitive(script_t *script, token_t *token) {
 	int len;
 
 	len = 0;
@@ -1055,11 +1049,12 @@ int EndOfScript(script_t *script) {
 	return script->script_p >= script->end_p;
 }
 
-int NumLinesCrossed(script_t *script) {
+#if 0
+static int NumLinesCrossed(script_t *script) {
 	return script->line - script->lastline;
 }
 
-int ScriptSkipTo(script_t *script, char *value) {
+static int ScriptSkipTo(script_t *script, char *value) {
 	int len;
 	char firstchar;
 
@@ -1076,6 +1071,8 @@ int ScriptSkipTo(script_t *script, char *value) {
 		script->script_p++;
 	} while (1);
 }
+#endif
+
 #ifndef BOTLIB
 
 int FileLength(FILE *fp) {

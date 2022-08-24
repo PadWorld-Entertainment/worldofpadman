@@ -142,7 +142,6 @@ qboolean GetCTLFlagGoal(int team, bot_goal_t *goal);
 #define MAX_HSTATIONS 8
 
 extern int gametype;   // game type
-extern int maxclients; // maximum number of clients
 
 extern vmCvar_t bot_fastchat;
 extern vmCvar_t bot_nochat;

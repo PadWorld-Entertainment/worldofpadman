@@ -311,7 +311,7 @@ int WriteFloat(FILE *fp, float value) {
 
 static int WriteStructWithIndent(FILE *fp, const structdef_t *def, const char *structure, int indent) {
 	int i, num;
-	void *p;
+	const void *p;
 	const fielddef_t *fd;
 
 	if (!WriteIndent(fp, indent))
@@ -326,7 +326,7 @@ static int WriteStructWithIndent(FILE *fp, const structdef_t *def, const char *s
 			return qfalse;
 		if (fprintf(fp, "%s\t", fd->name) < 0)
 			return qfalse;
-		p = (void *)(structure + fd->offset);
+		p = (const void *)(structure + fd->offset);
 		if (fd->type & FT_ARRAY) {
 			num = fd->maxarray;
 			if (fprintf(fp, "{") < 0)
@@ -337,33 +337,33 @@ static int WriteStructWithIndent(FILE *fp, const structdef_t *def, const char *s
 		while (num-- > 0) {
 			switch (fd->type & FT_TYPE) {
 			case FT_CHAR: {
-				if (fprintf(fp, "%d", *(char *)p) < 0)
+				if (fprintf(fp, "%d", *(const char *)p) < 0)
 					return qfalse;
-				p = (char *)p + sizeof(char);
+				p = (const char *)p + sizeof(char);
 				break;
 			}
 			case FT_INT: {
-				if (fprintf(fp, "%d", *(int *)p) < 0)
+				if (fprintf(fp, "%d", *(const int *)p) < 0)
 					return qfalse;
-				p = (char *)p + sizeof(int);
+				p = (const char *)p + sizeof(int);
 				break;
 			}
 			case FT_FLOAT: {
-				if (!WriteFloat(fp, *(float *)p))
+				if (!WriteFloat(fp, *(const float *)p))
 					return qfalse;
-				p = (char *)p + sizeof(float);
+				p = (const char *)p + sizeof(float);
 				break;
 			}
 			case FT_STRING: {
-				if (fprintf(fp, "\"%s\"", (char *)p) < 0)
+				if (fprintf(fp, "\"%s\"", (const char *)p) < 0)
 					return qfalse;
-				p = (char *)p + MAX_STRINGFIELD;
+				p = (const char *)p + MAX_STRINGFIELD;
 				break;
 			}
 			case FT_STRUCT: {
 				if (!WriteStructWithIndent(fp, fd->substruct, structure, indent))
 					return qfalse;
-				p = (char *)p + fd->substruct->size;
+				p = (const char *)p + fd->substruct->size;
 				break;
 			}
 			}

@@ -184,7 +184,7 @@ static void G_AddRandomBot(int team) {
 G_RemoveRandomBot
 ===============
 */
-int G_RemoveRandomBot(int team) {
+static int G_RemoveRandomBot(int team) {
 	int i;
 	char netname[36];
 	gclient_t *cl;
@@ -213,7 +213,7 @@ int G_RemoveRandomBot(int team) {
 G_CountHumanPlayers
 ===============
 */
-int G_CountHumanPlayers(int team) {
+static int G_CountHumanPlayers(int team) {
 	int i, num;
 	gclient_t *cl;
 
@@ -241,7 +241,7 @@ G_CountBotPlayers
 Check connected and connecting (delay join) bots.
 ===============
 */
-int G_CountBotPlayers(int team) {
+static int G_CountBotPlayers(int team) {
 	int i, n, num;
 	gclient_t *cl;
 
@@ -276,7 +276,7 @@ int G_CountBotPlayers(int team) {
 G_CheckMinimumPlayers
 ===============
 */
-void G_CheckMinimumPlayers(void) {
+static void G_CheckMinimumPlayers(void) {
 	int minplayers;
 	int humanplayers, botplayers;
 	static int checkminimumplayers_time;

@@ -60,7 +60,8 @@ void QDECL AAS_Error(char *fmt, ...) {
 	botimport.Print(PRT_FATAL, "%s", str);
 }
 
-char *AAS_StringFromIndex(char *indexname, char *stringindex[], int numindexes, int index) {
+#if 0
+static char *AAS_StringFromIndex(char *indexname, char *stringindex[], int numindexes, int index) {
 	if (!aasworld.indexessetup) {
 		botimport.Print(PRT_ERROR, "%s: index %d not setup\n", indexname, index);
 		return "";
@@ -78,7 +79,7 @@ char *AAS_StringFromIndex(char *indexname, char *stringindex[], int numindexes, 
 	return stringindex[index];
 }
 
-int AAS_IndexFromString(char *indexname, char *stringindex[], int numindexes, char *string) {
+static int AAS_IndexFromString(char *indexname, char *stringindex[], int numindexes, char *string) {
 	int i;
 	if (!aasworld.indexessetup) {
 		botimport.Print(PRT_ERROR, "%s: index not setup \"%s\"\n", indexname, string);
@@ -93,15 +94,15 @@ int AAS_IndexFromString(char *indexname, char *stringindex[], int numindexes, ch
 	return 0;
 }
 
-char *AAS_ModelFromIndex(int index) {
+static char *AAS_ModelFromIndex(int index) {
 	return AAS_StringFromIndex("ModelFromIndex", &aasworld.configstrings[CS_MODELS], MAX_MODELS, index);
 }
 
-int AAS_IndexFromModel(char *modelname) {
+static int AAS_IndexFromModel(char *modelname) {
 	return AAS_IndexFromString("IndexFromModel", &aasworld.configstrings[CS_MODELS], MAX_MODELS, modelname);
 }
 
-void AAS_UpdateStringIndexes(int numconfigstrings, char *configstrings[]) {
+static void AAS_UpdateStringIndexes(int numconfigstrings, char *configstrings[]) {
 	int i;
 	// set string pointers and copy the strings
 	for (i = 0; i < numconfigstrings; i++) {
@@ -113,6 +114,7 @@ void AAS_UpdateStringIndexes(int numconfigstrings, char *configstrings[]) {
 	}
 	aasworld.indexessetup = qtrue;
 }
+#endif
 
 int AAS_Loaded(void) {
 	return aasworld.loaded;
@@ -133,7 +135,7 @@ void AAS_SetInitialized(void) {
 #endif
 }
 
-void AAS_ContinueInit(float time) {
+static void AAS_ContinueInit(float time) {
 	// if no AAS file loaded
 	if (!aasworld.loaded)
 		return;
@@ -165,7 +167,7 @@ void AAS_ContinueInit(float time) {
 }
 
 // cyr
-void ShowReachesFrom(void) {
+static void ShowReachesFrom(void) {
 	int reachnum, areanum;
 	aas_reachability_t reach;
 	vec3_t origin;
@@ -194,7 +196,7 @@ void ShowReachesFrom(void) {
 	}
 }
 
-void ShowReachesTo(void) {
+static void ShowReachesTo(void) {
 	int areanum;
 	aas_reachability_t *reach;
 	//	vec3_t origin;
@@ -227,7 +229,6 @@ void ShowReachesTo(void) {
 
 //===========================================================================
 // called at the start of every frame
-
 //===========================================================================
 int AAS_StartFrame(float time) {
 	aasworld.time = time;
@@ -318,7 +319,7 @@ void AAS_ProjectPointOntoVector(vec3_t point, vec3_t vStart, vec3_t vEnd, vec3_t
 	VectorMA(vStart, DotProduct(pVec, vec), vec, vProj);
 }
 
-int AAS_LoadFiles(const char *mapname) {
+static int AAS_LoadFiles(const char *mapname) {
 	int errnum;
 	char aasfile[MAX_QPATH];
 

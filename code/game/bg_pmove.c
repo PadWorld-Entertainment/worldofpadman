@@ -1842,7 +1842,7 @@ PmoveSingle
 */
 void trap_SnapVector(float *v);
 
-void PmoveSingle(pmove_t *pmove) {
+static void PmoveSingle(pmove_t *pmove) {
 	pm = pmove;
 
 	// this counter lets us debug movement problems with a journal

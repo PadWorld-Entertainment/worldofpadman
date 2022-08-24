@@ -50,6 +50,7 @@ void EA_SayTeam(int client, const char *str) {
 	botimport.BotClientCommand(client, va("say_team %s", str));
 }
 
+#if 0
 void EA_Tell(int client, int clientto, const char *str) {
 	botimport.BotClientCommand(client, va("tell %d, %s", clientto, str));
 }
@@ -69,6 +70,7 @@ void EA_UseInv(int client, const char *inv) {
 void EA_DropInv(int client, const char *inv) {
 	botimport.BotClientCommand(client, va("invdrop %s", inv));
 }
+#endif
 
 void EA_Gesture(int client) {
 	bot_input_t *bi;

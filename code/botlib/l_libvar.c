@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // list with library variables
 libvar_t *libvarlist = NULL;
 
-float LibVarStringValue(const char *string) {
+static float LibVarStringValue(const char *string) {
 	int dotfound = 0;
 	float value = 0;
 
@@ -60,7 +60,7 @@ float LibVarStringValue(const char *string) {
 	return value;
 }
 
-libvar_t *LibVarAlloc(const char *var_name) {
+static libvar_t *LibVarAlloc(const char *var_name) {
 	libvar_t *v;
 
 	v = (libvar_t *)GetMemory(sizeof(libvar_t));
@@ -73,7 +73,7 @@ libvar_t *LibVarAlloc(const char *var_name) {
 	return v;
 }
 
-void LibVarDeAlloc(libvar_t *v) {
+static void LibVarDeAlloc(libvar_t *v) {
 	if (v->string)
 		FreeMemory(v->string);
 	FreeMemory(v->name);

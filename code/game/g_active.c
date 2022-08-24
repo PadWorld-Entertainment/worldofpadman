@@ -175,7 +175,7 @@ static void G_SetClientSound(gentity_t *ent) {
 ClientImpacts
 ==============
 */
-void ClientImpacts(gentity_t *ent, pmove_t *pm) {
+static void ClientImpacts(gentity_t *ent, pmove_t *pm) {
 	int i, j;
 	trace_t trace;
 	gentity_t *other;
@@ -327,7 +327,7 @@ void G_TouchTriggers(gentity_t *ent) {
 SpectatorThink
 =================
 */
-void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
+static void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 	pmove_t pm;
 	gclient_t *client;
 
@@ -483,7 +483,6 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 	//	vec3_t	dir;
 	vec3_t origin, angles;
 	//	qboolean	fired;
-	const gitem_t *item;
 	gentity_t *drop;
 
 	client = ent->client;
@@ -522,9 +521,9 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 			G_ImperiusExplode(ent);
 			break;
 
-		case EV_USE_ITEM1: // teleporter
+		case EV_USE_ITEM1: { // teleporter
 			// drop flags in CTF
-			item = NULL;
+			const gitem_t *item = NULL;
 			j = 0;
 
 			if (client->ps.powerups[PW_REDFLAG]) {
@@ -549,6 +548,7 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 			SelectSpawnPoint(client->ps.origin, origin, angles, qfalse);
 			TeleportPlayer(ent, origin, angles);
 			break;
+		}
 
 		case EV_USE_ITEM2: // medkit
 			ent->health = client->ps.stats[STAT_MAX_HEALTH] + 25;

@@ -136,7 +136,7 @@ FIXME: add stuff like "upper rocket launcher"
 "the rl near the railgun", "lower grenade launcher" etc.
 ==================
 */
-int BotGetItemTeamGoal(char *goalname, bot_goal_t *goal) {
+static int BotGetItemTeamGoal(char *goalname, bot_goal_t *goal) {
 	int i;
 
 	if (!strlen(goalname))
@@ -159,7 +159,7 @@ int BotGetItemTeamGoal(char *goalname, bot_goal_t *goal) {
 BotGetMessageTeamGoal
 ==================
 */
-int BotGetMessageTeamGoal(bot_state_t *bs, char *goalname, bot_goal_t *goal) {
+static int BotGetMessageTeamGoal(bot_state_t *bs, char *goalname, bot_goal_t *goal) {
 	if (BotGetItemTeamGoal(goalname, goal))
 		return qtrue;
 	return qfalse;
@@ -170,7 +170,7 @@ int BotGetMessageTeamGoal(bot_state_t *bs, char *goalname, bot_goal_t *goal) {
 FindClientByName
 ==================
 */
-int FindClientByName(char *name) {
+static int FindClientByName(char *name) {
 	int i;
 	char buf[MAX_INFO_STRING];
 
@@ -187,12 +187,13 @@ int FindClientByName(char *name) {
 	return -1;
 }
 
+#if 0
 /*
 ==================
 FindEnemyByName
 ==================
 */
-int FindEnemyByName(bot_state_t *bs, char *name) {
+static int FindEnemyByName(bot_state_t *bs, char *name) {
 	int i;
 	char buf[MAX_INFO_STRING];
 
@@ -218,7 +219,7 @@ int FindEnemyByName(bot_state_t *bs, char *name) {
 NumPlayersOnSameTeam
 ==================
 */
-int NumPlayersOnSameTeam(bot_state_t *bs) {
+static int NumPlayersOnSameTeam(bot_state_t *bs) {
 	int i, num;
 	char buf[MAX_INFO_STRING];
 
@@ -232,13 +233,14 @@ int NumPlayersOnSameTeam(bot_state_t *bs) {
 	}
 	return num;
 }
+#endif
 
 /*
 ==================
 BotAddressedToBot
 ==================
 */
-int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
+static int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 	char addressedto[MAX_MESSAGE_SIZE];
 	char netname[MAX_MESSAGE_SIZE];
 	// char name[MAX_MESSAGE_SIZE];
@@ -274,7 +276,7 @@ int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 	return qtrue;
 }
 
-void BotMatch_WrongWall(bot_state_t *bs, bot_match_t *match) {
+static void BotMatch_WrongWall(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];
 	char buf[MAX_INFO_STRING];
 	int client;
@@ -382,7 +384,7 @@ static void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 #endif
 }
 
-void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match) {
+static void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match) {
 	char netname[MAX_MESSAGE_SIZE];
 	int client;
 
@@ -414,7 +416,7 @@ void BotMatch_CatchMe(bot_state_t *bs, bot_match_t *match) {
 BotMatch_GetItem
 ==================
 */
-void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
+static void BotMatch_GetItem(bot_state_t *bs, bot_match_t *match) {
 	char itemname[MAX_MESSAGE_SIZE];
 	char netname[MAX_MESSAGE_SIZE];
 	int client;

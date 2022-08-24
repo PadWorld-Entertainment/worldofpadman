@@ -245,7 +245,7 @@ void G_ProcessIPBans(void) {
 Svcmd_AddIP_f
 =================
 */
-void Svcmd_AddIP_f(void) {
+static void Svcmd_AddIP_f(void) {
 	char str[MAX_TOKEN_CHARS];
 
 	if (trap_Argc() < 2) {
@@ -263,7 +263,7 @@ void Svcmd_AddIP_f(void) {
 Svcmd_RemoveIP_f
 =================
 */
-void Svcmd_RemoveIP_f(void) {
+static void Svcmd_RemoveIP_f(void) {
 	ipFilter_t f;
 	int i;
 	char str[MAX_TOKEN_CHARS];
@@ -296,7 +296,7 @@ void Svcmd_RemoveIP_f(void) {
 Svcmd_EntityList_f
 ===================
 */
-void Svcmd_EntityList_f(void) {
+static void Svcmd_EntityList_f(void) {
 	int e;
 	gentity_t *check;
 
@@ -355,7 +355,7 @@ void Svcmd_EntityList_f(void) {
 	}
 }
 
-gclient_t *ClientForString(const char *s) {
+static gclient_t *ClientForString(const char *s) {
 	gclient_t *cl;
 	int i;
 	int idnum;
@@ -504,7 +504,7 @@ Svcmd_ForceTeam_f
 forceteam <player> <team>
 ===================
 */
-void Svcmd_ForceTeam_f(void) {
+static void Svcmd_ForceTeam_f(void) {
 	gclient_t *cl;
 	char str[MAX_TOKEN_CHARS];
 
@@ -537,11 +537,11 @@ static void Svcmd_SetGameType_f(void) {
 		Com_Printf("Error: Couldn't find a GameType with \"%s\"\n", argStr);
 }
 
-void Svcmd_StopCam(void) {
+static void Svcmd_StopCam(void) {
 	level.cammode = qfalse;
 }
 
-qboolean FileExists(char *fname) {
+static qboolean FileExists(char *fname) {
 	fileHandle_t f;
 	trap_FS_FOpenFile(fname, &f, FS_READ);
 	if (!f)
@@ -552,7 +552,7 @@ qboolean FileExists(char *fname) {
 	}
 }
 
-void Svcmd_StartCam(void) {
+static void Svcmd_StartCam(void) {
 	char map[MAX_QPATH];
 	char serverinfo[MAX_INFO_STRING];
 	char path[MAX_QPATH];
@@ -568,7 +568,7 @@ void Svcmd_StartCam(void) {
 	level.cammode = qtrue;
 }
 
-void FreezePlayers(qboolean on) {
+static void FreezePlayers(qboolean on) {
 	int i;
 	for (i = 0; i < level.maxclients; i++) {
 		if (level.clients[i].pers.connected != CON_CONNECTED)
@@ -581,7 +581,7 @@ void FreezePlayers(qboolean on) {
 
 void EditPlayerInventory(gentity_t *ent, int arg_offset);
 
-void Svcmd_CamCmd(void) {
+static void Svcmd_CamCmd(void) {
 	char buf[MAX_TOKEN_CHARS];
 	char cmd[MAX_TOKEN_CHARS];
 	char name[MAX_TOKEN_CHARS];

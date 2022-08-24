@@ -202,6 +202,7 @@ static float AngleDiff(float ang1, float ang2) {
 	return diff;
 }
 
+int BotFuzzyPointReachabilityArea(vec3_t origin);
 int BotFuzzyPointReachabilityArea(vec3_t origin) {
 	int firstareanum, j, x, y, z;
 	int areas[10], numareas, areanum, bestareanum;
@@ -542,6 +543,9 @@ void BotAddAvoidSpot(int movestate, vec3_t origin, float radius, int type) {
 	ms->numavoidspots++;
 }
 
+int BotGetReachabilityToGoal(vec3_t origin, int areanum, int lastgoalareanum, int lastareanum, int *avoidreach,
+							 float *avoidreachtimes, int *avoidreachtries, bot_goal_t *goal, int travelflags,
+							 struct bot_avoidspot_s *avoidspots, int numavoidspots, int *flags);
 int BotGetReachabilityToGoal(vec3_t origin, int areanum, int lastgoalareanum, int lastareanum, int *avoidreach,
 							 float *avoidreachtimes, int *avoidreachtries, bot_goal_t *goal, int travelflags,
 							 struct bot_avoidspot_s *avoidspots, int numavoidspots, int *flags) {

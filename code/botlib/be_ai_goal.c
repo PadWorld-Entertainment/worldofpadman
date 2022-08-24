@@ -210,7 +210,7 @@ void GetNextItemNumber(int *ent, int *goal) {
 
 // cyr}
 
-bot_goalstate_t *BotGoalStateFromHandle(int handle) {
+static bot_goalstate_t *BotGoalStateFromHandle(int handle) {
 	if (handle <= 0 || handle > MAX_CLIENTS) {
 		botimport.Print(PRT_FATAL, "goal state handle %d out of range\n", handle);
 		return NULL;
@@ -252,7 +252,7 @@ void BotMutateGoalFuzzyLogic(int goalstate, float range) {
 	EvolveWeightConfig(gs->itemweightconfig);
 }
 
-itemconfig_t *LoadItemConfig(const char *filename) {
+static itemconfig_t *LoadItemConfig(const char *filename) {
 	int max_iteminfo;
 	token_t token;
 	char path[MAX_QPATH];

@@ -1072,7 +1072,7 @@ static void Cmd_Where_f(gentity_t *ent) {
 Cmd_CallVote_f
 ==================
 */
-void Cmd_CallVote_f(gentity_t *ent) {
+static void Cmd_CallVote_f(gentity_t *ent) {
 	int i;
 	char arg1[MAX_STRING_TOKENS];
 	char arg2[MAX_STRING_TOKENS];
@@ -1319,7 +1319,7 @@ void Cmd_CallVote_f(gentity_t *ent) {
 Cmd_Vote_f
 ==================
 */
-void Cmd_Vote_f(gentity_t *ent) {
+static void Cmd_Vote_f(gentity_t *ent) {
 	char msg[64];
 
 	if (!level.voteTime) {
@@ -1353,12 +1353,13 @@ void Cmd_Vote_f(gentity_t *ent) {
 	// for players entering or leaving
 }
 
+#if 0
 /*
 ==================
 Cmd_CallTeamVote_f
 ==================
 */
-void Cmd_CallTeamVote_f(gentity_t *ent) {
+static void Cmd_CallTeamVote_f(gentity_t *ent) {
 	int i, team, cs_offset;
 	char arg1[MAX_STRING_TOKENS];
 	char arg2[MAX_STRING_TOKENS];
@@ -1493,7 +1494,7 @@ void Cmd_CallTeamVote_f(gentity_t *ent) {
 Cmd_TeamVote_f
 ==================
 */
-void Cmd_TeamVote_f(gentity_t *ent) {
+static void Cmd_TeamVote_f(gentity_t *ent) {
 	int team, cs_offset;
 	char msg[64];
 
@@ -1535,13 +1536,14 @@ void Cmd_TeamVote_f(gentity_t *ent) {
 	// a majority will be determined in TeamCheckVote, which will also account
 	// for players entering or leaving
 }
+#endif
 
 /*
 =================
 Cmd_SetViewpos_f
 =================
 */
-void Cmd_SetViewpos_f(gentity_t *ent) {
+static void Cmd_SetViewpos_f(gentity_t *ent) {
 	vec3_t origin, angles;
 	char buffer[MAX_TOKEN_CHARS];
 	int i;
@@ -1572,7 +1574,7 @@ void Cmd_SetViewpos_f(gentity_t *ent) {
 Cmd_Stats_f
 =================
 */
-void Cmd_Stats_f(gentity_t *ent) {
+static void Cmd_Stats_f(gentity_t *ent) {
 	int i;
 	char buffer[3072];
 
@@ -1594,7 +1596,7 @@ void Cmd_Stats_f(gentity_t *ent) {
 Cmd_SelectLogo_f
 #######################
 */
-void Cmd_SelectLogo_f(gentity_t *ent) {
+static void Cmd_SelectLogo_f(gentity_t *ent) {
 	// FIXME: This might needs some checks. Should not be empty or contain spaces
 	trap_Argv(1, ent->client->sess.selectedlogo, sizeof(ent->client->sess.selectedlogo));
 
@@ -1609,7 +1611,7 @@ void Cmd_SelectLogo_f(gentity_t *ent) {
 Cmd_ReadyToFight_f
 #######################
 */
-void Cmd_ReadyToFight_f(gentity_t *ent) {
+static void Cmd_ReadyToFight_f(gentity_t *ent) {
 	ent->client->readyToFight = qtrue;
 }
 
@@ -1618,7 +1620,7 @@ void Cmd_ReadyToFight_f(gentity_t *ent) {
 Cmd_TeamReady_f
 #######################
 */
-void Cmd_TeamReady_f(gentity_t *ent) {
+static void Cmd_TeamReady_f(gentity_t *ent) {
 	int i;
 
 	if (g_gametype.integer < GT_TEAM)
@@ -1722,6 +1724,7 @@ void Cmd_DropCartridge_f(gentity_t *ent) {
 }
 
 // cyr{
+void EditPlayerInventory(gentity_t *ent, int arg_offset);
 void EditPlayerInventory(gentity_t *ent, int arg_offset) {
 	char itstr[MAX_TOKEN_CHARS];
 	char arg[MAX_TOKEN_CHARS];
@@ -1818,7 +1821,7 @@ void EditPlayerInventory(gentity_t *ent, int arg_offset) {
 	}
 }
 
-void Cmd_EditBotInv_f(gentity_t *ent) {
+static void Cmd_EditBotInv_f(gentity_t *ent) {
 	gentity_t *ent2;
 	int i;
 	gentity_t *spec_ent;

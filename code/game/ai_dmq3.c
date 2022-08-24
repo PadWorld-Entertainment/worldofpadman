@@ -67,7 +67,6 @@ int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates);
 
 // NOTE: not using a cvars which can be updated because the game should be reloaded anyway
 int gametype;	// game type
-int maxclients; // maximum number of clients
 
 vmCvar_t bot_fastchat;
 vmCvar_t bot_nochat;
@@ -125,21 +124,17 @@ int BotGetNumClientCarts(bot_state_t *bs, int clientnum) {
 		return 0;
 }
 
-int BotGetVisTeamPlayers(bot_state_t *bs, int *players, int maxplayers, qboolean sameteam) {
+static int BotGetVisTeamPlayers(bot_state_t *bs, int *players, int maxplayers, qboolean sameteam) {
 	int i, numplayers;
 	// char buf[MAX_INFO_STRING];
-	static int maxclients;
 	aas_entityinfo_t entinfo;
 	float alertness, easyfragger;
 
 	alertness = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_ALERTNESS, 0, 1);
 	easyfragger = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_EASY_FRAGGER, 0, 1);
 
-	if (!maxclients)
-		maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
-
 	numplayers = 0;
-	for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
+	for (i = 0; i < level.maxclients; i++) {
 		float squaredist, vis;
 		vec3_t dir;
 
@@ -269,7 +264,7 @@ qboolean EntityIsDead(aas_entityinfo_t *entinfo) {
 	return qtrue;
 }
 
-qboolean EntityCarriesCarts(aas_entityinfo_t *entinfo) {
+static qboolean EntityCarriesCarts(aas_entityinfo_t *entinfo) {
 	if (entinfo->type != ET_PLAYER)
 		return qfalse;
 	return (g_entities[entinfo->number].client->ps.ammo[WP_SPRAYPISTOL]);
@@ -794,14 +789,10 @@ static void BotSyCRetreatGoals(bot_state_t *bs) {
 
 // returns which "number" in the team is this bot (will be used for some fake teamplay ;P)
 static int BotNumberInTeam(bot_state_t *bs) {
-	static int maxclients = 0;
 	int i;
 	int r = 0;
 
-	if (!maxclients)
-		maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
-
-	for (i = 0; i < maxclients && i < MAX_CLIENTS; ++i) {
+	for (i = 0; i < level.maxclients; ++i) {
 		if (i == bs->client)
 			break;
 
@@ -817,7 +808,7 @@ static int GetTeamFlagCarrier(int team) {
 	int i;
 	int pu = (team == TEAM_RED) ? PW_REDFLAG : PW_BLUEFLAG;
 
-	for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
+	for (i = 0; i < level.maxclients; i++) {
 		// valid client?
 		if (!g_entities[i].inuse || !g_entities[i].client)
 			continue;
@@ -830,7 +821,7 @@ static int GetTeamFlagCarrier(int team) {
 }
 
 static qboolean GetDroppedLollyGoal(int team, bot_goal_t *goal) {
-	char *itemname = (team == TEAM_RED) ? "red Lolly" : "blue Lolly";
+	const char *itemname = (team == TEAM_RED) ? "red Lolly" : "blue Lolly";
 
 	if (trap_BotGetLevelItemGoal(-1, itemname, goal) < 0)
 		return qfalse;
@@ -1149,11 +1140,8 @@ ClientFromName
 int ClientFromName(const char *name) {
 	int i;
 	char buf[MAX_INFO_STRING];
-	static int maxclients;
 
-	if (!maxclients)
-		maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
-	for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
+	for (i = 0; i < level.maxclients; i++) {
 		trap_GetConfigstring(CS_PLAYERS + i, buf, sizeof(buf));
 		Q_CleanStr(buf);
 		if (!Q_stricmp(Info_ValueForKey(buf, "n"), name))
@@ -1336,7 +1324,7 @@ void BotSetupForMovement(bot_state_t *bs) {
 BotUpdateInventory
 ==================
 */
-int BotCalcWeapEquip(bot_state_t *bs, int weapid, int ammoid, int snapammo) {
+static int BotCalcWeapEquip(bot_state_t *bs, int weapid, int ammoid, int snapammo) {
 	int ammo;
 
 	if (bs->inventory[weapid]) {
@@ -1433,7 +1421,7 @@ void BotUpdateBattleInventory(bot_state_t *bs, int enemy) {
 
 #define KILLER_DIST 350
 // cyr{
-void BotUseKillerducks(bot_state_t *bs) {
+static void BotUseKillerducks(bot_state_t *bs) {
 	int enemies, teammates;
 
 	// abuse: inv_time wird bei jedem check und USE gesetzt
@@ -1537,7 +1525,7 @@ void BotBattleUseItems(bot_state_t *bs) {
 BotSetTeleportTime
 ==================
 */
-void BotSetTeleportTime(bot_state_t *bs) {
+static void BotSetTeleportTime(bot_state_t *bs) {
 	if ((bs->cur_ps.eFlags ^ bs->last_eFlags) & EF_TELEPORT_BIT) {
 		bs->teleport_time = FloatTime();
 	}
@@ -1656,12 +1644,13 @@ float BotAggression(bot_state_t *bs) {
 	return 0;
 }
 
+#if 0
 /*
 ==================
 BotFeelingBad
 ==================
 */
-float BotFeelingBad(bot_state_t *bs) {
+static float BotFeelingBad(bot_state_t *bs) {
 	if (bs->weaponnum == WP_PUNCHY) {
 		return 100;
 	}
@@ -1676,6 +1665,7 @@ float BotFeelingBad(bot_state_t *bs) {
 	}
 	return 0;
 }
+#endif
 
 /*
 ==================
@@ -2198,7 +2188,7 @@ float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int
 }
 
 // cyr{
-qboolean EnemyFitsWell(bot_state_t *bs, aas_entityinfo_t *entinfo, int curenemy) {
+static qboolean EnemyFitsWell(bot_state_t *bs, aas_entityinfo_t *entinfo, int curenemy) {
 	aas_entityinfo_t curenemyinfo;
 	vec3_t dir1, dir2;
 	float l1, l2;
@@ -2294,7 +2284,7 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 	}
 
 	if (ClientInSprayroom(bs->client) && bs->inventory[INVENTORY_SPRAYPISTOLAMMO]) {
-		vec3_t target, dir;
+		vec3_t target;
 		bot_goal_t *goal;
 		bsp_trace_t trace;
 
@@ -2324,7 +2314,7 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 	} else if (ClientInSprayroom(bs->client)) // after spraying all carts, attack no players nor walls
 		return qfalse;
 
-	for (i = 0; i < maxclients && i < MAX_CLIENTS; i++) {
+	for (i = 0; i < level.maxclients; i++) {
 		if (i == bs->client) {
 			continue;
 		}
@@ -3051,7 +3041,7 @@ BotCheckChargedImp
   choose the one with the least splash dmg
 */
 // cyr_zIMP {
-float CheckSplash(bot_state_t *bs, weaponinfo_t *wi, vec3_t view) {
+static float CheckSplash(bot_state_t *bs, weaponinfo_t *wi, vec3_t view) {
 	vec3_t start, end, forward, right;
 	vec3_t mins = {-8, -8, -8}, maxs = {8, 8, 8};
 	bsp_trace_t trace;
@@ -3167,7 +3157,7 @@ void BotMapScripts(bot_state_t *bs) {
 
 	trap_GetServerinfo(info, sizeof(info));
 
-	strncpy(mapname, Info_ValueForKey(info, "mapname"), sizeof(mapname) - 1);
+	Q_strncpyz(mapname, Info_ValueForKey(info, "mapname"), sizeof(mapname));
 	mapname[sizeof(mapname) - 1] = '\0';
 
 	// cyr{
@@ -3190,12 +3180,12 @@ void BotMapScripts(bot_state_t *bs) {
 BotSetMovedir
 ==================
 */
-static vec3_t VEC_UP = {0, -1, 0};
-static vec3_t MOVEDIR_UP = {0, 0, 1};
-static vec3_t VEC_DOWN = {0, -2, 0};
-static vec3_t MOVEDIR_DOWN = {0, 0, -1};
+static const vec3_t VEC_UP = {0, -1, 0};
+static const vec3_t MOVEDIR_UP = {0, 0, 1};
+static const vec3_t VEC_DOWN = {0, -2, 0};
+static const vec3_t MOVEDIR_DOWN = {0, 0, -1};
 
-void BotSetMovedir(vec3_t angles, vec3_t movedir) {
+static void BotSetMovedir(vec3_t angles, vec3_t movedir) {
 	if (VectorCompare(angles, VEC_UP)) {
 		VectorCopy(MOVEDIR_UP, movedir);
 	} else if (VectorCompare(angles, VEC_DOWN)) {
@@ -3212,7 +3202,7 @@ BotModelMinsMaxs
 this is ugly
 ==================
 */
-int BotModelMinsMaxs(int modelindex, int eType, int contents, vec3_t mins, vec3_t maxs) {
+static int BotModelMinsMaxs(int modelindex, int eType, int contents, vec3_t mins, vec3_t maxs) {
 	gentity_t *ent;
 	int i;
 
@@ -3247,7 +3237,7 @@ int BotModelMinsMaxs(int modelindex, int eType, int contents, vec3_t mins, vec3_
 BotFuncButtonGoal
 ==================
 */
-int BotFuncButtonActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *activategoal) {
+static int BotFuncButtonActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *activategoal) {
 	int i, areas[10], numareas, modelindex, entitynum;
 	char model[128];
 	float lip, dist, health, angle;
@@ -3405,7 +3395,7 @@ int BotFuncButtonActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *a
 BotFuncDoorGoal
 ==================
 */
-int BotFuncDoorActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *activategoal) {
+static int BotFuncDoorActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *activategoal) {
 	int modelindex, entitynum;
 	char model[MAX_INFO_STRING];
 	vec3_t mins, maxs, origin, angles;
@@ -3440,7 +3430,7 @@ int BotFuncDoorActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *act
 BotTriggerMultipleGoal
 ==================
 */
-int BotTriggerMultipleActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *activategoal) {
+static int BotTriggerMultipleActivateGoal(bot_state_t *bs, int bspent, bot_activategoal_t *activategoal) {
 	int i, areas[10], numareas, modelindex, entitynum;
 	char model[128];
 	vec3_t start, end, mins, maxs, angles;
@@ -3507,7 +3497,7 @@ int BotPopFromActivateGoalStack(bot_state_t *bs) {
 BotPushOntoActivateGoalStack
 ==================
 */
-int BotPushOntoActivateGoalStack(bot_state_t *bs, bot_activategoal_t *activategoal) {
+static int BotPushOntoActivateGoalStack(bot_state_t *bs, bot_activategoal_t *activategoal) {
 	int i, best;
 	float besttime;
 
@@ -3562,7 +3552,7 @@ void BotEnableActivateGoalAreas(bot_activategoal_t *activategoal, int enable) {
 BotIsGoingToActivateEntity
 ==================
 */
-int BotIsGoingToActivateEntity(bot_state_t *bs, int entitynum) {
+static int BotIsGoingToActivateEntity(bot_state_t *bs, int entitynum) {
 	bot_activategoal_t *a;
 	int i;
 
@@ -3595,7 +3585,7 @@ BotGetActivateGoal
 */
 //#define OBSTACLEDEBUG
 
-int BotGetActivateGoal(bot_state_t *bs, int entitynum, bot_activategoal_t *activategoal) {
+static int BotGetActivateGoal(bot_state_t *bs, int entitynum, bot_activategoal_t *activategoal) {
 	int i, ent, cur_entities[10], spawnflags, modelindex, areas[MAX_ACTIVATEAREAS * 2], numareas, t;
 	char model[MAX_INFO_STRING], tmpmodel[128];
 	char target[128], classname[128];
@@ -3789,7 +3779,7 @@ int BotGetActivateGoal(bot_state_t *bs, int entitynum, bot_activategoal_t *activ
 BotGoForActivateGoal
 ==================
 */
-int BotGoForActivateGoal(bot_state_t *bs, bot_activategoal_t *activategoal) {
+static int BotGoForActivateGoal(bot_state_t *bs, bot_activategoal_t *activategoal) {
 	aas_entityinfo_t activateinfo;
 
 	activategoal->inuse = qtrue;
@@ -3815,12 +3805,13 @@ int BotGoForActivateGoal(bot_state_t *bs, bot_activategoal_t *activategoal) {
 	}
 }
 
+#if 0
 /*
 ==================
 BotPrintActivateGoalInfo
 ==================
 */
-void BotPrintActivateGoalInfo(bot_state_t *bs, bot_activategoal_t *activategoal, int bspent) {
+static void BotPrintActivateGoalInfo(bot_state_t *bs, bot_activategoal_t *activategoal, int bspent) {
 	char netname[MAX_NETNAME];
 	char classname[128];
 	char buf[128];
@@ -3838,13 +3829,14 @@ void BotPrintActivateGoalInfo(bot_state_t *bs, bot_activategoal_t *activategoal,
 	}
 	trap_EA_Say(bs->client, buf);
 }
+#endif
 
 /*
 ==================
 BotRandomMove
 ==================
 */
-void BotRandomMove(bot_state_t *bs, bot_moveresult_t *moveresult) {
+static void BotRandomMove(bot_state_t *bs, bot_moveresult_t *moveresult) {
 	vec3_t dir, angles;
 
 	angles[0] = 0;
@@ -4067,8 +4059,7 @@ static void BotCheckConsoleMessages(bot_state_t *bs) {
 BotCheckEvents
 ==================
 */
-void BotCheckForGrenades(bot_state_t *bs, entityState_t *state) {
-
+static void BotCheckForGrenades(bot_state_t *bs, entityState_t *state) {
 	// if this is not a grenade
 	if (state->eType != ET_MISSILE || state->weapon != WP_BALLOONY)
 		return;
@@ -4082,7 +4073,7 @@ void BotCheckForGrenades(bot_state_t *bs, entityState_t *state) {
 BotCheckEvents
 ==================
 */
-void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
+static void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 	int event;
 	char buf[128];
 
@@ -4282,7 +4273,7 @@ void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 BotCheckSnapshot
 ==================
 */
-void BotCheckSnapshot(bot_state_t *bs) {
+static void BotCheckSnapshot(bot_state_t *bs) {
 	int ent;
 	entityState_t state;
 
@@ -4310,7 +4301,7 @@ void BotCheckSnapshot(bot_state_t *bs) {
 BotCheckAir
 ==================
 */
-void BotCheckAir(bot_state_t *bs) {
+static void BotCheckAir(bot_state_t *bs) {
 	if (trap_AAS_PointContents(bs->eye) & (CONTENTS_WATER | CONTENTS_SLIME | CONTENTS_LAVA))
 		return;
 	// we have air this frame
@@ -4318,8 +4309,7 @@ void BotCheckAir(bot_state_t *bs) {
 }
 
 // any gametype specific map contents missing?
-qboolean MissingMapConts(void) {
-
+static qboolean MissingMapConts(void) {
 	if (gametype == GT_BALLOON)
 		return (level.numBalloons == 0);
 
@@ -4496,7 +4486,7 @@ static void CheckMatrixForGoal(bot_goal_t *goal) {
 	}
 }
 
-void FixGoalArea(bot_goal_t *goal) {
+static void FixGoalArea(bot_goal_t *goal) {
 	vec3_t start, end;
 	int numareas, areas[10];
 
@@ -4522,7 +4512,6 @@ void BotSetupDeathmatchAI(void) {
 	gentity_t *pent;
 
 	gametype = trap_Cvar_VariableIntegerValue("g_gametype");
-	maxclients = trap_Cvar_VariableIntegerValue("sv_maxclients");
 
 	trap_Cvar_Register(&bot_fastchat, "bot_fastchat", "0", 0);
 	trap_Cvar_Register(&bot_nochat, "bot_nochat", "0", 0);

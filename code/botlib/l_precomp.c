@@ -1140,7 +1140,7 @@ void PC_RemoveAllGlobalDefines(void) {
 	}
 }
 
-define_t *PC_CopyDefine(source_t *source, define_t *define) {
+static define_t *PC_CopyDefine(source_t *source, define_t *define) {
 	define_t *newdefine;
 	token_t *token, *newtoken, *lasttoken;
 
@@ -1179,7 +1179,7 @@ define_t *PC_CopyDefine(source_t *source, define_t *define) {
 	return newdefine;
 }
 
-void PC_AddGlobalDefinesToSource(source_t *source) {
+static void PC_AddGlobalDefinesToSource(source_t *source) {
 	define_t *define, *newdefine;
 
 	for (define = globaldefines; define; define = define->next) {
@@ -1193,7 +1193,7 @@ void PC_AddGlobalDefinesToSource(source_t *source) {
 	}
 }
 
-int PC_Directive_if_def(source_t *source, int type) {
+static int PC_Directive_if_def(source_t *source, int type) {
 	token_t token;
 	define_t *d;
 	int skip;
@@ -1217,15 +1217,15 @@ int PC_Directive_if_def(source_t *source, int type) {
 	return qtrue;
 }
 
-int PC_Directive_ifdef(source_t *source) {
+static int PC_Directive_ifdef(source_t *source) {
 	return PC_Directive_if_def(source, INDENT_IFDEF);
 }
 
-int PC_Directive_ifndef(source_t *source) {
+static int PC_Directive_ifndef(source_t *source) {
 	return PC_Directive_if_def(source, INDENT_IFNDEF);
 }
 
-int PC_Directive_else(source_t *source) {
+static int PC_Directive_else(source_t *source) {
 	int type, skip;
 
 	PC_PopIndent(source, &type, &skip);
@@ -1241,7 +1241,7 @@ int PC_Directive_else(source_t *source) {
 	return qtrue;
 }
 
-int PC_Directive_endif(source_t *source) {
+static int PC_Directive_endif(source_t *source) {
 	int type, skip;
 
 	PC_PopIndent(source, &type, &skip);
@@ -1266,7 +1266,7 @@ typedef struct value_s {
 	struct value_s *prev, *next;
 } value_t;
 
-int PC_OperatorPriority(int op) {
+static int PC_OperatorPriority(int op) {
 	switch (op) {
 	case P_MUL:
 		return 15;
@@ -1346,7 +1346,7 @@ int PC_OperatorPriority(int op) {
 		op = &operator_heap[numoperators++];
 #define FreeOperator(op)
 
-int PC_EvaluateTokens(source_t *source, token_t *tokens, signed long int *intvalue, float *floatvalue, int integer) {
+static int PC_EvaluateTokens(source_t *source, token_t *tokens, signed long int *intvalue, float *floatvalue, int integer) {
 	operator_t *o, *firstoperator, *lastoperator;
 	value_t *v, *firstvalue, *lastvalue, *v1, *v2;
 	token_t *t;
@@ -1795,7 +1795,7 @@ int PC_EvaluateTokens(source_t *source, token_t *tokens, signed long int *intval
 	return qfalse;
 }
 
-int PC_Evaluate(source_t *source, signed long int *intvalue, float *floatvalue, int integer) {
+static int PC_Evaluate(source_t *source, signed long int *intvalue, float *floatvalue, int integer) {
 	token_t token, *firsttoken, *lasttoken;
 	token_t *t, *nexttoken;
 	define_t *define;
@@ -1887,7 +1887,7 @@ int PC_Evaluate(source_t *source, signed long int *intvalue, float *floatvalue, 
 	return qtrue;
 }
 
-int PC_DollarEvaluate(source_t *source, signed long int *intvalue, float *floatvalue, int integer) {
+static int PC_DollarEvaluate(source_t *source, signed long int *intvalue, float *floatvalue, int integer) {
 	int indent, defined = qfalse;
 	token_t token, *firsttoken, *lasttoken;
 	token_t *t, *nexttoken;
@@ -1990,7 +1990,7 @@ int PC_DollarEvaluate(source_t *source, signed long int *intvalue, float *floatv
 	return qtrue;
 }
 
-int PC_Directive_elif(source_t *source) {
+static int PC_Directive_elif(source_t *source) {
 	signed long int value;
 	int type, skip;
 
@@ -2006,7 +2006,7 @@ int PC_Directive_elif(source_t *source) {
 	return qtrue;
 }
 
-int PC_Directive_if(source_t *source) {
+static int PC_Directive_if(source_t *source) {
 	signed long int value;
 	int skip;
 
@@ -2017,12 +2017,12 @@ int PC_Directive_if(source_t *source) {
 	return qtrue;
 }
 
-int PC_Directive_line(source_t *source) {
+static int PC_Directive_line(source_t *source) {
 	SourceError(source, "#line directive not supported");
 	return qfalse;
 }
 
-int PC_Directive_error(source_t *source) {
+static int PC_Directive_error(source_t *source) {
 	token_t token;
 
 	strcpy(token.string, "");
@@ -2031,7 +2031,7 @@ int PC_Directive_error(source_t *source) {
 	return qfalse;
 }
 
-int PC_Directive_pragma(source_t *source) {
+static int PC_Directive_pragma(source_t *source) {
 	token_t token;
 
 	SourceWarning(source, "#pragma directive not supported");
@@ -2040,7 +2040,7 @@ int PC_Directive_pragma(source_t *source) {
 	return qtrue;
 }
 
-void UnreadSignToken(source_t *source) {
+static void UnreadSignToken(source_t *source) {
 	token_t token;
 
 	token.line = source->scriptstack->line;
@@ -2053,7 +2053,7 @@ void UnreadSignToken(source_t *source) {
 	PC_UnreadSourceToken(source, &token);
 }
 
-int PC_Directive_eval(source_t *source) {
+static int PC_Directive_eval(source_t *source) {
 	signed long int value;
 	token_t token;
 
@@ -2073,7 +2073,7 @@ int PC_Directive_eval(source_t *source) {
 	return qtrue;
 }
 
-int PC_Directive_evalfloat(source_t *source) {
+static int PC_Directive_evalfloat(source_t *source) {
 	float value;
 	token_t token;
 
@@ -2092,14 +2092,14 @@ int PC_Directive_evalfloat(source_t *source) {
 	return qtrue;
 }
 
-directive_t directives[20] = {
+static const directive_t directives[20] = {
 	{"if", PC_Directive_if},		   {"ifdef", PC_Directive_ifdef},		  {"ifndef", PC_Directive_ifndef},
 	{"elif", PC_Directive_elif},	   {"else", PC_Directive_else},			  {"endif", PC_Directive_endif},
 	{"include", PC_Directive_include}, {"define", PC_Directive_define},		  {"undef", PC_Directive_undef},
 	{"line", PC_Directive_line},	   {"error", PC_Directive_error},		  {"pragma", PC_Directive_pragma},
 	{"eval", PC_Directive_eval},	   {"evalfloat", PC_Directive_evalfloat}, {NULL, NULL}};
 
-int PC_ReadDirective(source_t *source) {
+static int PC_ReadDirective(source_t *source) {
 	token_t token;
 	int i;
 
@@ -2127,7 +2127,7 @@ int PC_ReadDirective(source_t *source) {
 	return qfalse;
 }
 
-int PC_DollarDirective_evalint(source_t *source) {
+static int PC_DollarDirective_evalint(source_t *source) {
 	signed long int value;
 	token_t token;
 
@@ -2154,7 +2154,7 @@ int PC_DollarDirective_evalint(source_t *source) {
 	return qtrue;
 }
 
-int PC_DollarDirective_evalfloat(source_t *source) {
+static int PC_DollarDirective_evalfloat(source_t *source) {
 	float value;
 	token_t token;
 
@@ -2180,10 +2180,10 @@ int PC_DollarDirective_evalfloat(source_t *source) {
 	return qtrue;
 }
 
-directive_t dollardirectives[20] = {
+static const directive_t dollardirectives[20] = {
 	{"evalint", PC_DollarDirective_evalint}, {"evalfloat", PC_DollarDirective_evalfloat}, {NULL, NULL}};
 
-int PC_ReadDollarDirective(source_t *source) {
+static int PC_ReadDollarDirective(source_t *source) {
 	token_t token;
 	int i;
 

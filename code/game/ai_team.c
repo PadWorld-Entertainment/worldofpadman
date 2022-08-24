@@ -54,6 +54,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "match.h"
 
+int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates);
+
 #if USE_TEAMAI
 
 // cyr{
@@ -115,33 +117,6 @@ static int BotNumTeamMates(bot_state_t *bs) {
 		}
 	}
 	return numplayers;
-}
-
-static int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
-	int i, numteammates;
-	char buf[MAX_INFO_STRING];
-
-	// G_Printf("mates: ");
-
-	numteammates = 0;
-	for (i = 0; i < level.maxclients; i++) {
-		trap_GetConfigstring(CS_PLAYERS + i, buf, sizeof(buf));
-		// if no config string or no name
-		if (!strlen(buf) || !strlen(Info_ValueForKey(buf, "n")))
-			continue;
-		// skip spectators
-		if (atoi(Info_ValueForKey(buf, "t")) == TEAM_SPECTATOR)
-			continue;
-
-		if (BotSameTeam(bs, i)) {
-			teammates[numteammates++] = i;
-			if (numteammates >= maxteammates)
-				break;
-			// G_Printf("/%s ", Info_ValueForKey(buf, "n"));
-		}
-	}
-	// G_Printf("\n %d mates \n", numteammates);
-	return numteammates;
 }
 
 /*

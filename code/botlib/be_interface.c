@@ -69,7 +69,8 @@ int Sys_MilliSeconds(void) {
 	return clock() * 1000 / CLOCKS_PER_SEC;
 }
 
-qboolean ValidClientNumber(int num, char *str) {
+#if 0
+static qboolean ValidClientNumber(int num, char *str) {
 	if (num < 0 || num > botlibglobals.maxclients) {
 		// weird: the disabled stuff results in a crash
 		botimport.Print(PRT_ERROR, "%s: invalid client number %d, [0, %d]\n", str, num, botlibglobals.maxclients);
@@ -77,8 +78,9 @@ qboolean ValidClientNumber(int num, char *str) {
 	}
 	return qtrue;
 }
+#endif
 
-qboolean ValidEntityNumber(int num, char *str) {
+static qboolean ValidEntityNumber(int num, char *str) {
 	if (num < 0 || num > botlibglobals.maxentities) {
 		botimport.Print(PRT_ERROR, "%s: invalid entity number %d, [0, %d]\n", str, num, botlibglobals.maxentities);
 		return qfalse;
@@ -94,7 +96,7 @@ static qboolean BotLibSetup(const char *str) {
 	return qtrue;
 }
 
-int Export_BotLibSetup(void) {
+static int Export_BotLibSetup(void) {
 	int errnum;
 
 	botDeveloper = LibVarGetValue("bot_developer");
@@ -155,7 +157,7 @@ int Export_BotLibSetup(void) {
 	return BLERR_NOERROR;
 }
 
-int Export_BotLibShutdown(void) {
+static int Export_BotLibShutdown(void) {
 	if (!BotLibSetup("BotLibShutdown"))
 		return BLERR_LIBRARYNOTSETUP;
 #ifndef DEMO
@@ -192,12 +194,12 @@ int Export_BotLibShutdown(void) {
 	return BLERR_NOERROR;
 }
 
-int Export_BotLibVarSet(const char *var_name, const char *value) {
+static int Export_BotLibVarSet(const char *var_name, const char *value) {
 	LibVarSet(var_name, value);
 	return BLERR_NOERROR;
 }
 
-int Export_BotLibVarGet(const char *var_name, char *value, int size) {
+static int Export_BotLibVarGet(const char *var_name, char *value, int size) {
 	const char *varvalue;
 
 	varvalue = LibVarGetString(var_name);
@@ -205,13 +207,13 @@ int Export_BotLibVarGet(const char *var_name, char *value, int size) {
 	return BLERR_NOERROR;
 }
 
-int Export_BotLibStartFrame(float time) {
+static int Export_BotLibStartFrame(float time) {
 	if (!BotLibSetup("BotStartFrame"))
 		return BLERR_LIBRARYNOTSETUP;
 	return AAS_StartFrame(time);
 }
 
-int Export_BotLibLoadMap(const char *mapname) {
+static int Export_BotLibLoadMap(const char *mapname) {
 #ifdef DEBUG
 	int starttime = Sys_MilliSeconds();
 #endif
@@ -266,10 +268,11 @@ static int BotExportTest(int parm0, char *parm1, vec3_t parm2, vec3_t parm3) {
 	static int area = -1;
 	static int line[2];
 	int newarea, i, highlightarea, flood;
-	vec3_t eye, forward, right, end, origin;
+	vec3_t eye, forward, right, origin;
+	//vec3_t end;
+#if 0
 	vec3_t mins = {-16, -16, -24};
 	vec3_t maxs = {16, 16, 32};
-#if 0
 	int reachnum;
 	vec3_t bottomcenter;
 	aas_trace_t trace;
@@ -491,7 +494,7 @@ static int BotExportTest(int parm0, char *parm1, vec3_t parm2, vec3_t parm3) {
 	// get the eye 24 units up
 	eye[2] += 24;
 	// get the end point for the line to be traced
-	VectorMA(eye, 800, forward, end);
+	//VectorMA(eye, 800, forward, end);
 
 	// AAS_TestMovementPrediction(1, parm2, forward);
 

@@ -21,6 +21,7 @@ s.angles2[2] => health in the station (0: leer, 1:voll ... wird in der cgame gen
 */
 
 #include "g_local.h"
+#include "g_spawn.h"
 
 #define HEALTHSTATION_DEFAULT_HEALTH 300
 #define HEALTHSTATION_DEFAULT_RATE 2

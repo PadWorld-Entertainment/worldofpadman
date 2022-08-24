@@ -115,7 +115,7 @@ static ID_INLINE int AAS_ClusterAreaNum(int cluster, int areanum) {
 	}
 }
 
-void AAS_InitTravelFlagFromType(void) {
+static void AAS_InitTravelFlagFromType(void) {
 	int i;
 
 	for (i = 0; i < MAX_TRAVELTYPES; i++) {
@@ -160,7 +160,7 @@ int AAS_TravelFlagForType(int traveltype) {
 	return AAS_TravelFlagForType_inline(traveltype);
 }
 
-void AAS_UnlinkCache(aas_routingcache_t *cache) {
+static void AAS_UnlinkCache(aas_routingcache_t *cache) {
 	if (cache->time_next)
 		cache->time_next->time_prev = cache->time_prev;
 	else
@@ -173,7 +173,7 @@ void AAS_UnlinkCache(aas_routingcache_t *cache) {
 	cache->time_prev = NULL;
 }
 
-void AAS_LinkCache(aas_routingcache_t *cache) {
+static void AAS_LinkCache(aas_routingcache_t *cache) {
 	if (aasworld.newestcache) {
 		aasworld.newestcache->time_next = cache;
 		cache->time_prev = aasworld.newestcache;
@@ -185,13 +185,13 @@ void AAS_LinkCache(aas_routingcache_t *cache) {
 	aasworld.newestcache = cache;
 }
 
-void AAS_FreeRoutingCache(aas_routingcache_t *cache) {
+static void AAS_FreeRoutingCache(aas_routingcache_t *cache) {
 	AAS_UnlinkCache(cache);
 	routingcachesize -= cache->size;
 	FreeMemory(cache);
 }
 
-void AAS_RemoveRoutingCacheInCluster(int clusternum) {
+static void AAS_RemoveRoutingCacheInCluster(int clusternum) {
 	int i;
 	aas_routingcache_t *cache, *nextcache;
 	aas_cluster_t *cluster;
@@ -208,7 +208,7 @@ void AAS_RemoveRoutingCacheInCluster(int clusternum) {
 	}
 }
 
-void AAS_RemoveRoutingCacheUsingArea(int areanum) {
+static void AAS_RemoveRoutingCacheUsingArea(int areanum) {
 	int i, clusternum;
 	aas_routingcache_t *cache, *nextcache;
 
@@ -261,7 +261,7 @@ static ID_INLINE float AAS_RoutingTime(void) {
 	return AAS_Time();
 }
 
-int AAS_GetAreaContentsTravelFlags(int areanum) {
+static int AAS_GetAreaContentsTravelFlags(int areanum) {
 	int contents, tfl;
 
 	contents = aasworld.areasettings[areanum].contents;
@@ -293,7 +293,7 @@ int AAS_AreaContentsTravelFlags(int areanum) {
 	return aasworld.areacontentstravelflags[areanum];
 }
 
-void AAS_InitAreaContentsTravelFlags(void) {
+static void AAS_InitAreaContentsTravelFlags(void) {
 	int i;
 
 	if (aasworld.areacontentstravelflags)
@@ -305,7 +305,7 @@ void AAS_InitAreaContentsTravelFlags(void) {
 	}
 }
 
-void AAS_CreateReversedReachability(void) {
+static void AAS_CreateReversedReachability(void) {
 	int i, n;
 	aas_reversedlink_t *revlink;
 	aas_reachability_t *reach;
@@ -377,7 +377,7 @@ unsigned short int AAS_AreaTravelTime(int areanum, vec3_t start, vec3_t end) {
 	return intdist;
 }
 
-void AAS_CalculateAreaTravelTimes(void) {
+static void AAS_CalculateAreaTravelTimes(void) {
 	int i, l, n, size;
 	char *ptr;
 	vec3_t end;
@@ -436,7 +436,7 @@ void AAS_CalculateAreaTravelTimes(void) {
 #endif
 }
 
-int AAS_PortalMaxTravelTime(int portalnum) {
+static int AAS_PortalMaxTravelTime(int portalnum) {
 	int l, n, t, maxt;
 	aas_portal_t *portal;
 	aas_reversedreachability_t *revreach;
@@ -983,14 +983,13 @@ void AAS_FreeRoutingCaches(void) {
 		FreeMemory(aasworld.areacontentstravelflags);
 	aasworld.areacontentstravelflags = NULL;
 }
+
+#if 0
 //===========================================================================
 // update the given routing cache
-
 // Parameter:			areacache		: routing cache to update
-
 //===========================================================================
-
-void ClusterCacheHeapPrint(void) {
+static void ClusterCacheHeapPrint(void) {
 	int i;
 	Log_Write("Heap( ");
 	for (i = 0; i < aasworld.clusterCacheHeapSize; i++)
@@ -998,6 +997,7 @@ void ClusterCacheHeapPrint(void) {
 				  aasworld.clusterCacheHeap[i]->tmptraveltime);
 	Log_Write(")[%d]\n", aasworld.clusterCacheHeapSize);
 }
+#endif
 
 static int ClusterCacheHeapLeftChild(int nodeID) {
 	return 2 * nodeID + 1;

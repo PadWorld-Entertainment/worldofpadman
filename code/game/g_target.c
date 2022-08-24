@@ -21,13 +21,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "g_local.h"
+#include "g_spawn.h"
 
 //==========================================================
 
 /*QUAKED target_give (1 0 0) (-8 -8 -8) (8 8 8)
 Gives the activator all the items pointed to.
 */
-void Use_Target_Give(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_Target_Give(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	gentity_t *t;
 	trace_t trace;
 
@@ -63,7 +64,7 @@ void SP_target_give(gentity_t *ent) {
 takes away all the activators powerups.
 Used to drop flight powerups into death puts.
 */
-void Use_target_remove_powerups(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_target_remove_powerups(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	if (!activator->client) {
 		return;
 	}
@@ -87,11 +88,11 @@ void SP_target_remove_powerups(gentity_t *ent) {
 "wait" seconds to pause before firing targets.
 "random" delay variance, total delay = delay +/- random seconds
 */
-void Think_Target_Delay(gentity_t *ent) {
+static void Think_Target_Delay(gentity_t *ent) {
 	G_UseTargets(ent, ent->activator);
 }
 
-void Use_Target_Delay(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_Target_Delay(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	ent->nextthink = level.time + (ent->wait + ent->random * crandom()) * 1000;
 	ent->think = Think_Target_Delay;
 	ent->activator = activator;
@@ -116,7 +117,7 @@ void SP_target_delay(gentity_t *ent) {
 
 The activator is given this many points.
 */
-void Use_Target_Score(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_Target_Score(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	AddScore(activator, ent->r.currentOrigin, ent->count, SCORE_TARGET_SCORE_S);
 }
 
@@ -133,7 +134,7 @@ void SP_target_score(gentity_t *ent) {
 "message"	text to print
 If "private", only the activator gets the message.  If no checks, all clients get the message.
 */
-void Use_Target_Print(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_Target_Print(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	if (activator->client && (ent->spawnflags & 4)) {
 		trap_SendServerCommand(activator - g_entities, va("cp \"%s\"", ent->message));
 		return;
@@ -156,7 +157,7 @@ void SP_target_print(gentity_t *ent) {
 	ent->use = Use_Target_Print;
 }
 
-void Use_Target_Script(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_Target_Script(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	if ((g_dedicated.integer != 0) || (g_gametype.integer != GT_SINGLE_PLAYER)) {
 		// Entity is meant to be used in local singleplayer maps only, due to security implications
 		return;
@@ -184,7 +185,7 @@ Multiple identical looping sounds will just increase volume without any speed co
 "wait" : Seconds between auto triggerings, 0 = don't auto trigger
 "random"	wait variance, default is 0
 */
-void Use_Target_Speaker(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+static void Use_Target_Speaker(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	if (ent->spawnflags & 3) { // looping sound toggles
 		if (ent->s.loopSound)
 			ent->s.loopSound = 0; // turn it off
@@ -248,7 +249,7 @@ void SP_target_speaker(gentity_t *ent) {
 /*QUAKED target_laser (0 .5 .8) (-8 -8 -8) (8 8 8) START_ON
 When triggered, fires a laser.  You can either set a target or a direction.
 */
-void target_laser_think(gentity_t *self) {
+static void target_laser_think(gentity_t *self) {
 	vec3_t end;
 	trace_t tr;
 	vec3_t point;
@@ -278,18 +279,18 @@ void target_laser_think(gentity_t *self) {
 	self->nextthink = level.time + FRAMETIME;
 }
 
-void target_laser_on(gentity_t *self) {
+static void target_laser_on(gentity_t *self) {
 	if (!self->activator)
 		self->activator = self;
 	target_laser_think(self);
 }
 
-void target_laser_off(gentity_t *self) {
+static void target_laser_off(gentity_t *self) {
 	trap_UnlinkEntity(self);
 	self->nextthink = 0;
 }
 
-void target_laser_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+static void target_laser_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	self->activator = activator;
 	if (self->nextthink > 0)
 		target_laser_off(self);
@@ -297,7 +298,7 @@ void target_laser_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 		target_laser_on(self);
 }
 
-void target_laser_start(gentity_t *self) {
+static void target_laser_start(gentity_t *self) {
 	gentity_t *ent;
 
 	self->s.eType = ET_BEAM;
@@ -333,7 +334,7 @@ void SP_target_laser(gentity_t *self) {
 
 //==========================================================
 
-void target_teleporter_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+static void target_teleporter_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	gentity_t *dest;
 
 	if (!activator->client)
@@ -364,7 +365,7 @@ This doesn't perform any actions except fire its targets.
 The activator can be forced to be from a certain team.
 if RANDOM is checked, only one of the targets will be fired, not all of them
 */
-void target_relay_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+static void target_relay_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	if ((self->spawnflags & 1) && activator->client && activator->client->sess.sessionTeam != TEAM_RED) {
 		return;
 	}
@@ -392,7 +393,7 @@ void SP_target_relay(gentity_t *self) {
 /*QUAKED target_kill (.5 .5 .5) (-8 -8 -8) (8 8 8)
 Kills the activator.
 */
-void target_kill_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+static void target_kill_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	G_Damage(activator, NULL, NULL, NULL, NULL, 100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 }
 
