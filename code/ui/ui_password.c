@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_BACK 102
 #define ID_FIGHT 103
 
-static char *specifypassword_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NULL};
+static const char *specifypassword_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NULL};
 
 typedef struct {
 	menuframework_s menu;

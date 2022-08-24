@@ -127,7 +127,7 @@ static void UI_TeamOrdersMenu_SetList(int id) {
 UI_TeamOrdersMenu_Key
 =================
 */
-sfxHandle_t UI_TeamOrdersMenu_Key(int key) {
+static sfxHandle_t UI_TeamOrdersMenu_Key(int key) {
 	menulist_s *l;
 	int x;
 	int y;

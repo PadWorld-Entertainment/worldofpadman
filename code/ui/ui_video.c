@@ -111,7 +111,7 @@ static InitialVideoOptions_s s_ivo_templates[] = {{3, 1, 0, 1, 3, 3, 3, 2, 5, qf
 
 // x^y
 // FIXME: Overflow!
-int power(int x, int y) {
+static int power(int x, int y) {
 	int i, result = 1;
 
 	for (i = 0; i < y; i++) {
@@ -527,7 +527,7 @@ static void UI_GraphicsOptions_Event(void *ptr, int event) {
 UI_GraphicsOptions_MenuDraw
 ================
 */
-void UI_GraphicsOptions_MenuDraw(void) {
+static void UI_GraphicsOptions_MenuDraw(void) {
 	// APSFIX - rework this
 	UI_GraphicsOptions_UpdateMenuItems();
 	Menu_Draw(&s_graphicsoptions.menu);

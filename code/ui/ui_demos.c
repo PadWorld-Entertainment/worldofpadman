@@ -119,8 +119,8 @@ static sfxHandle_t UI_DemosMenu_Key(int key) {
 static int QDECL UI_SortDemos(const void *a, const void *b) {
 	const char *ac, *bc;
 
-	ac = *(const char **)a;
-	bc = *(const char **)b;
+	ac = *(const char *const *)a;
+	bc = *(const char *const *)b;
 
 	// FIXME: NULL
 	return Q_stricmp(ac, bc);

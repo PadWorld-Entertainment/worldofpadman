@@ -290,11 +290,11 @@ UI_ArenaServers_Compare
 static int QDECL UI_ArenaServers_Compare(const void *arg1, const void *arg2) {
 	float f1;
 	float f2;
-	servernode_t *t1;
-	servernode_t *t2;
+	const servernode_t *t1;
+	const servernode_t *t2;
 
-	t1 = (servernode_t *)arg1;
-	t2 = (servernode_t *)arg2;
+	t1 = (const servernode_t *)arg1;
+	t2 = (const servernode_t *)arg2;
 
 	switch (g_sortkey) {
 	case SORT_HOST:
@@ -1152,7 +1152,7 @@ static void UI_ArenaServers_StartRefresh(void) {
 UI_ArenaServers_SaveChanges
 =================
 */
-void UI_ArenaServers_SaveChanges(void) {
+static void UI_ArenaServers_SaveChanges(void) {
 	int i;
 
 	for (i = 0; i < g_arenaservers.numfavoriteaddresses; i++)
@@ -1167,7 +1167,7 @@ void UI_ArenaServers_SaveChanges(void) {
 UI_ArenaServers_Sort
 =================
 */
-void UI_ArenaServers_Sort(int type) {
+static void UI_ArenaServers_Sort(int type) {
 	if (g_sortkey == type) {
 		return;
 	}
@@ -1181,8 +1181,7 @@ void UI_ArenaServers_Sort(int type) {
 UI_ArenaServers_SetType
 =================
 */
-
-int UI_ArenaServers_SetType(int type) {
+static int UI_ArenaServers_SetType(int type) {
 	g_servertype = type;
 
 	if (type == UIAS_FAVORITES) {

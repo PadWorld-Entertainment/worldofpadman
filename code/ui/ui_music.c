@@ -200,10 +200,10 @@ static void Playlist_AddAllTracks(qboolean init) {
 }
 
 static int QDECL SortTracks(const void *a, const void *b) {
-	trackInfo_t *ta, *tb;
+	const trackInfo_t *ta, *tb;
 
-	ta = (trackInfo_t *)a;
-	tb = (trackInfo_t *)b;
+	ta = (const trackInfo_t *)a;
+	tb = (const trackInfo_t *)b;
 
 	return Q_stricmp(ta->file, tb->file);
 }

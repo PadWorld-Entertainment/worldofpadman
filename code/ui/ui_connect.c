@@ -251,6 +251,7 @@ void UI_DrawConnectScreen(qboolean overlay) {
 	// password required / connection rejected information goes here
 }
 
+#if 0
 /*
 ===================
 UI_KeyConnect
@@ -262,3 +263,4 @@ void UI_KeyConnect(int key) {
 		return;
 	}
 }
+#endif

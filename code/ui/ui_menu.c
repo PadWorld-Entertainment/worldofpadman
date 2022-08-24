@@ -86,7 +86,7 @@ static errorMessage_t s_errorMessage;
 Main_MenuEvent
 =================
 */
-void Main_MenuEvent(void *ptr, int event) {
+static void Main_MenuEvent(void *ptr, int event) {
 	if (event != QM_ACTIVATED) {
 		return;
 	}
@@ -148,7 +148,7 @@ void MainMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(CREDITS1);
 }
 
-sfxHandle_t ErrorMessage_Key(int key) {
+static sfxHandle_t ErrorMessage_Key(int key) {
 	trap_Cvar_Set("com_errorMessage", "");
 	UI_MainMenu();
 	return (menuNullSound);
@@ -196,7 +196,7 @@ static void Main_MenuDraw(void) {
 	}
 }
 
-sfxHandle_t Main_MenuKey(int key) {
+static sfxHandle_t Main_MenuKey(int key) {
 	if (key == K_ESCAPE || key == K_MOUSE2)
 		return 0;
 

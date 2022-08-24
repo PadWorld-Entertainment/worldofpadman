@@ -1365,7 +1365,7 @@ void Menu_AddItem(menuframework_s *menu, void *item) {
 Menu_CursorMoved
 =================
 */
-void Menu_CursorMoved(menuframework_s *m) {
+static void Menu_CursorMoved(menuframework_s *m) {
 	void (*callback)(void *self, int notification);
 
 	if (m->cursor_prev == m->cursor)

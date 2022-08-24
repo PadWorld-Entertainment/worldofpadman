@@ -1097,7 +1097,7 @@ static void UI_SelectBots_RightEvent(void *ptr, int event) {
 UI_SelectBots_GetNumSelectedBots
 =================
 */
-int UI_SelectBots_GetNumSelectedBots(void) {
+static int UI_SelectBots_GetNumSelectedBots(void) {
 	int i, numBots = 0;
 
 	for (i = 0; i < MAX_SELECTBOTS; i++) {
@@ -1113,7 +1113,7 @@ int UI_SelectBots_GetNumSelectedBots(void) {
 UI_SelectBots_GetSlotsLeft
 =================
 */
-int UI_SelectBots_GetSlotsLeft(void) {
+static int UI_SelectBots_GetSlotsLeft(void) {
 	int maxclients = atoi(s_startserver.maxclients.field.buffer);
 
 	if (s_startserver.dedicated.curvalue == 0) {
@@ -1129,7 +1129,7 @@ int UI_SelectBots_GetSlotsLeft(void) {
 UI_SelectBots_UpdateList
 =================
 */
-void UI_SelectBots_UpdateList(void) {
+static void UI_SelectBots_UpdateList(void) {
 	int i, j;
 	char *tmpptr;
 

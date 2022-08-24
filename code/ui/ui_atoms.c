@@ -481,7 +481,7 @@ void UI_DrawProportionalString(int x, int y, const char *str, int style, const v
 	UI_DrawProportionalString2(x, y, str, color, sizeScale, uis.charsetProp);
 }
 
-int CharWidthForStringStyle(int style) {
+static int CharWidthForStringStyle(int style) {
 	if (style & UI_SMALLFONT)
 		return SMALLCHAR_WIDTH;
 
@@ -491,7 +491,7 @@ int CharWidthForStringStyle(int style) {
 	return BIGCHAR_WIDTH;
 }
 
-int CharHeightForStringStyle(int style) {
+static int CharHeightForStringStyle(int style) {
 	if (style & UI_SMALLFONT)
 		return SMALLCHAR_HEIGHT;
 
@@ -1013,6 +1013,7 @@ const char *UI_Cvar_VariableString(const char *var_name) {
 	return buffer;
 }
 
+#if 0
 /*
 =================
 UI_Cache
@@ -1048,6 +1049,7 @@ void UI_Cache_f(void) {
 	UI_SelectBots_Cache();
 	UI_ModsMenu_Cache();
 }
+#endif
 
 /*
 =================
@@ -1305,7 +1307,7 @@ void UI_DrawIngameBG(void) {
 					 uis.ingamebg);
 }
 
-void UI_DrawMenu(menuframework_s *menu) {
+static void UI_DrawMenu(menuframework_s *menu) {
 	if (menu) {
 		if (menu->bgparts & BGP_LASTMENU) {
 			if (uis.menusp - 2 > 0) {
@@ -1489,8 +1491,8 @@ int QDECL BotListCompare(const void *arg1, const void *arg2) {
 	const char *info1, *info2;
 	const char *name1, *name2;
 
-	num1 = *(int *)arg1;
-	num2 = *(int *)arg2;
+	num1 = *(const int *)arg1;
+	num2 = *(const int *)arg2;
 
 	info1 = UI_GetBotInfoByNumber(num1);
 	info2 = UI_GetBotInfoByNumber(num2);

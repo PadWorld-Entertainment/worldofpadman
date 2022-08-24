@@ -127,7 +127,7 @@ static void TeamMain_Draw(void) {
 TeamMain_MenuInit
 ===============
 */
-void TeamMain_MenuInit(void) {
+static void TeamMain_MenuInit(void) {
 	int y;
 	int gametype;
 	char info[MAX_INFO_STRING];
