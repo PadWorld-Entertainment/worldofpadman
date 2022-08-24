@@ -1761,19 +1761,17 @@ models/mapobjects/ente/padwinner_cape
 // TELEViSION
 // =================
 
-//padtv for 1 tv screen atm
-
 models/mapobjects/padtv/tv01
 {
+	qer_editorimage models/mapobjects/padtv/tv001
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	surfaceparm nonsolid
+	q3map_lightimage textures/colors/hex_abbfdbff
+	q3map_surfacelight 100
 	nopicmip
 	{
-		map models/mapobjects/padtv/screen
-		rgbGen Vertex
-	}
-	{
-		videomap pad_test.roq //pad_test.roq //blinkeye.roq //end.roq //pad_test.roq
-		blendfunc add
-		//tcMod scale .25 .25
+		animMap .4 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv003 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv004 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv006 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv005
 		rgbGen identity
 	}
 	{
@@ -1785,26 +1783,25 @@ models/mapobjects/padtv/tv01
 	}
 	{
 		map textures/pad_gfx02/tinpad3
-        	tcGen environment
-                blendfunc GL_ONE GL_ONE
-                rgbGen identity
+		tcGen environment
+		blendfunc GL_ONE GL_ONE
+		rgbGen identity
 	}
-
 }
 
 models/mapobjects/padtv/tv02
 {
-   	surfaceparm noimpact
+	qer_editorimage models/mapobjects/padtv/tv001
+	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nonsolid
-	q3map_lightimage models/mapobjects/padtv/tv004
+	q3map_lightimage textures/colors/hex_abbfdbff
 	q3map_surfacelight 100
 	nopicmip
-
-       	{
-               	animmap .4 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv003 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv004 models/mapobjects/padtv/tv006 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv005
-               	rgbgen identity
-       	}
+	{
+		animMap .4 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv003 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv004 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv006 models/mapobjects/padtv/tv001 models/mapobjects/padtv/tv005
+		rgbGen identity
+	}
 	{
 		map models/mapobjects/padtv/scanline
 		blendfunc blend
@@ -1814,9 +1811,9 @@ models/mapobjects/padtv/tv02
 	}
 	{
 		map textures/pad_gfx02/tinpad3
-        	tcGen environment
-                blendfunc GL_ONE GL_ONE
-                rgbGen identity
+		tcGen environment
+		blendfunc GL_ONE GL_ONE
+		rgbGen identity
 	}
 }
 
