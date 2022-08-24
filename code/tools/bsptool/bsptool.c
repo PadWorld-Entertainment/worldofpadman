@@ -119,7 +119,7 @@ static const char *COM_ParseExt(const char **data_p) {
 			c = *data++;
 			if (c == '\"' || !c) {
 				com_token[len] = 0;
-				*data_p = (char *)data;
+				*data_p = (const char *)data;
 				return com_token;
 			}
 			if (c == '\n') {
@@ -144,7 +144,7 @@ static const char *COM_ParseExt(const char **data_p) {
 
 	com_token[len] = 0;
 
-	*data_p = (char *)data;
+	*data_p = (const char *)data;
 	return com_token;
 }
 
@@ -264,7 +264,7 @@ static int validateShader(const char *shaderName, const char *bspfilename, const
 }
 
 static int validateBsp(const char *filename, const char *pk3dir, const void *buf) {
-	const dheader_t header = *(dheader_t *)buf;
+	const dheader_t header = *(const dheader_t *)buf;
 	printf("Validate bsp %s\n", filename);
 	if (header.version != BSP_VERSION) {
 		printf("%s: error invalid bsp version found: %i\n", filename, header.version);
@@ -275,7 +275,7 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 	{
 		const lump_t *l = &header.lumps[LUMP_ENTITIES];
 		char *entityString = (char*)malloc(l->filelen);
-		Q_strncpyz(entityString, (const char*)((unsigned char*)buf + l->fileofs), l->filelen);
+		Q_strncpyz(entityString, (const char*)((const unsigned char*)buf + l->fileofs), l->filelen);
 
 		if (validateEntityString(filename, pk3dir, entityString) != 0) {
 			++errors;
@@ -284,7 +284,7 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 	}
 	if (0) { // TODO: load all shaders and parse the ids
 		const lump_t *l = &header.lumps[LUMP_SHADERS];
-		dshader_t *shaders = (dshader_t *)(void *)((unsigned char*)buf + l->fileofs);
+		const dshader_t *shaders = (const dshader_t *)(const void *)((const unsigned char*)buf + l->fileofs);
 		const int count = l->filelen / sizeof(*shaders);
 		int i;
 
