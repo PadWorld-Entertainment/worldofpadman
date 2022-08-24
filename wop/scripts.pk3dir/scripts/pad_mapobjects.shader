@@ -2335,35 +2335,6 @@ models/mapobjects/pad_ddmix/padlibrary/bookend_shader
 	}
 }
 
-// =================
-// SHiP BOTTLE
-// =================
-
-models/mapobjects/pad_ddmix/padship/bottle
-{
-	sort additive
-	cull disable
-	nomipmaps
-	{
-		map models/mapobjects/pad_ddmix/padship/bottle
-		blendfunc add
-		rgbGen Vertex
-		tcGen environment
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-		tcGen lightmap
-	}
-	{
-		map textures/pad_gfx02/invispad
-		blendfunc add
-		rgbGen Vertex
-		tcGen environment
-	}
-}
-
 
 // =================
 // FLOWER
