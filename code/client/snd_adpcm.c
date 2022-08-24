@@ -34,11 +34,11 @@ OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "snd_local.h"
 
 /* Intel ADPCM step variation table */
-static int indexTable[16] = {
+static const int indexTable[16] = {
 	-1, -1, -1, -1, 2, 4, 6, 8, -1, -1, -1, -1, 2, 4, 6, 8,
 };
 
-static int stepsizeTable[89] = {
+static const int stepsizeTable[89] = {
 	7,	  8,	 9,		10,	   11,	  12,	 13,	14,	   16,	  17,	 19,	21,	   23,	  25,	28,
 	31,	  34,	 37,	41,	   45,	  50,	 55,	60,	   66,	  73,	 80,	88,	   97,	  107,	118,
 	130,  143,	 157,	173,   190,	  209,	 230,	253,   279,	  307,	 337,	371,   408,	  449,	494,
@@ -147,8 +147,8 @@ void S_AdpcmEncode(short indata[], char outdata[], int len, struct adpcm_state *
 	state->index = index;
 }
 
-/* static */ void S_AdpcmDecode(const char indata[], short *outdata, int len, struct adpcm_state *state) {
-	signed char *inp; /* Input buffer pointer */
+static void S_AdpcmDecode(const char indata[], short *outdata, int len, struct adpcm_state *state) {
+	const signed char *inp; /* Input buffer pointer */
 	int outp;		  /* output buffer pointer */
 	int sign;		  /* Current adpcm sign bit */
 	int delta;		  /* Current adpcm output value */
@@ -160,7 +160,7 @@ void S_AdpcmEncode(short indata[], char outdata[], int len, struct adpcm_state *
 	int bufferstep;	  /* toggle between inputbuffer/input */
 
 	outp = 0;
-	inp = (signed char *)indata;
+	inp = (const signed char *)indata;
 
 	valpred = state->sample;
 	index = state->index;
