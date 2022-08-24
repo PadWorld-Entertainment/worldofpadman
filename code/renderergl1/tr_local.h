@@ -1546,7 +1546,7 @@ void RE_TakeVideoFrame(int width, int height, byte *captureBuffer, byte *encodeB
 void R_DrawElements(int numIndexes, const glIndex_t *indexes);
 void VectorArrayNormalize(vec4_t *normals, unsigned int count);
 
-#ifdef idppc_altivec
+#if idppc_altivec
 void LerpMeshVertexes_altivec(md3Surface_t *surf, float backlerp);
 void ProjectDlightTexture_altivec(void);
 void RB_CalcDiffuseColor_altivec(unsigned char *colors);
