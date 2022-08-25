@@ -235,28 +235,6 @@ blendfunc blend
 }
 
 
-textures/pad_garden/firedrops02
-{
-		qer_editorimage textures/pad_garden/firedrops
-		surfaceparm noimpact
-		surfaceparm nolightmap
-		cull none
-		surfaceparm trans
-		surfaceparm nonsolid
-		surfaceparm nodlight
-		deformvertexes autosprite
-		deformvertexes move 0.000043 0.000000 -1100 sawtooth 0 1 0.800000 3
-	{
-		clampmap textures/pad_garden/firedrops
-		tcMod rotate 0.000000
-		AlphaGen wave sawtooth 0.000000 8.000000 0.800000 0.129033
-		rgbGen wave sawtooth 1.000000 0.000000 0.800000 0.129033
-		tcMod stretch sawtooth 1.000000 0.000000 0.800000 0.129033
-		blendfunc blend
-	}
-}
-
-
 textures/pad_garden/padflagred
 {
      cull disable
@@ -1545,18 +1523,6 @@ textures/pad_garden/red_flame256
 }
 
 
-textures/pad_garden/poolfog_green
-{
-		qer_editorimage textures/pad_gfx02b/padfog_green
-		surfaceparm	trans
-		surfaceparm	nonsolid
-		surfaceparm	fog
-		surfaceparm	nolightmap
-
-		fogparms ( .211 .231 .094 ) 650
-}
-
-
 textures/pad_garden/ship00
 {
 	qer_editorimage textures/pad_garden/ship00
@@ -1840,22 +1806,6 @@ textures/pad_metal/testlvlcurve
 	}
 }
 
-textures/pad_floorin/metalfloorcurve
-{
-          qer_editorimage textures/pad_floorin/metalfloor001
-           surfaceparm nonsolid
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_floorin/metalfloor001
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-}
-
-
 textures/pad_wallout/wall_stonecurve
 {
           qer_editorimage textures/pad_wallout/wall_stone043
@@ -1870,12 +1820,3 @@ textures/pad_wallout/wall_stonecurve
 		rgbGen identity
 	}
 }
-
-
-
-
-
-
-
-
-
