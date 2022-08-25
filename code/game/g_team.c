@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 
 #include "g_local.h"
+#include "g_spawn.h"
+#include "g_team.h"
 
 typedef struct teamgame_s {
 	float last_flag_capture;
@@ -251,6 +253,7 @@ void Team_CheckDroppedItem(gentity_t *dropped) {
 	}
 }
 
+#if 0
 /*
 ================
 Team_ForceGesture
@@ -272,6 +275,7 @@ static void Team_ForceGesture(int team) {
 		ent->flags |= FL_FORCE_GESTURE;
 	}
 }
+#endif
 
 /*
 ================

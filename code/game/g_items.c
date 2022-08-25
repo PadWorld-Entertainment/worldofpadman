@@ -47,7 +47,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 //======================================================================
 
-int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
+static int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 	int quantity;
 	int i;
 	gclient_t *client;
@@ -125,7 +125,7 @@ int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 
 //======================================================================
 
-int Pickup_Holdable(gentity_t *ent, gentity_t *other) {
+static int Pickup_Holdable(gentity_t *ent, gentity_t *other) {
 	int count = 0;
 
 	if (ent->count > 0) {
@@ -202,7 +202,7 @@ void Add_Ammo(gentity_t *ent, int weapon, int count) {
 	}
 }
 
-int Pickup_Ammo(gentity_t *ent, gentity_t *other) {
+static int Pickup_Ammo(gentity_t *ent, gentity_t *other) {
 	int quantity;
 
 	if (ent->count) {
@@ -257,7 +257,7 @@ int Pickup_Ammo(gentity_t *ent, gentity_t *other) {
 
 //======================================================================
 
-int Pickup_Weapon(gentity_t *ent, gentity_t *other) {
+static int Pickup_Weapon(gentity_t *ent, gentity_t *other) {
 	int quantity;
 
 	if (ent->count < 0) {
@@ -299,7 +299,7 @@ int Pickup_Weapon(gentity_t *ent, gentity_t *other) {
 
 //======================================================================
 
-int Pickup_Health(gentity_t *ent, gentity_t *other) {
+static int Pickup_Health(gentity_t *ent, gentity_t *other) {
 	int max;
 	int quantity;
 
@@ -332,7 +332,7 @@ int Pickup_Health(gentity_t *ent, gentity_t *other) {
 
 //======================================================================
 
-int Pickup_Armor(gentity_t *ent, gentity_t *other) {
+static int Pickup_Armor(gentity_t *ent, gentity_t *other) {
 	other->client->ps.stats[STAT_ARMOR] += ent->item->quantity;
 	if (other->client->ps.stats[STAT_ARMOR] > other->client->ps.stats[STAT_MAX_HEALTH] * 2) {
 		other->client->ps.stats[STAT_ARMOR] = other->client->ps.stats[STAT_MAX_HEALTH] * 2;

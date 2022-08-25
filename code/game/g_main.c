@@ -376,7 +376,7 @@ static void G_RegisterCvars(void) {
 G_UpdateCvars
 =================
 */
-void G_UpdateCvars(void) {
+static void G_UpdateCvars(void) {
 	int i;
 	cvarTable_t *cv;
 
@@ -719,10 +719,10 @@ SortRanks
 =============
 */
 static int QDECL SortRanks(const void *a, const void *b) {
-	gclient_t *ca, *cb;
+	const gclient_t *ca, *cb;
 
-	ca = &level.clients[*(int *)a];
-	cb = &level.clients[*(int *)b];
+	ca = &level.clients[*(const int *)a];
+	cb = &level.clients[*(const int *)b];
 
 	// sort special clients last
 	if (ca->sess.spectatorState == SPECTATOR_SCOREBOARD || ca->sess.spectatorClient < 0) {
@@ -795,10 +795,10 @@ LPS_NOPOINTS:
 }
 
 static int QDECL SortRanksLPS(const void *a, const void *b) {
-	gclient_t *ca, *cb;
+	const gclient_t *ca, *cb;
 
-	ca = &level.clients[*(int *)a];
-	cb = &level.clients[*(int *)b];
+	ca = &level.clients[*(const int *)a];
+	cb = &level.clients[*(const int *)b];
 
 	// sort special clients last
 	if (ca->sess.spectatorState == SPECTATOR_SCOREBOARD || ca->sess.spectatorClient < 0) {
@@ -1160,7 +1160,7 @@ or moved to a new level based on the "nextmap" cvar
 
 =============
 */
-void ExitLevel(void) {
+static void ExitLevel(void) {
 	int i;
 	gclient_t *cl;
 
@@ -1277,7 +1277,7 @@ LogExit
 Append information about this game to the log file
 ================
 */
-void LogExit(const char *string) {
+static void LogExit(const char *string) {
 	int i, numSorted;
 	gclient_t *cl;
 	G_LogPrintf("Exit: %s\n", string);

@@ -37,7 +37,7 @@ GAUNTLET
 ======================================================================
 */
 
-void Weapon_PunchyFire(gentity_t *ent) {
+static void Weapon_PunchyFire(gentity_t *ent) {
 }
 
 /*
@@ -108,7 +108,7 @@ static void Weapon_NipperFire(gentity_t *ent) {
 	m->splashDamage *= s_quadFactor;
 }
 
-void Weapon_ImperiusFire(gentity_t *ent) {
+static void Weapon_ImperiusFire(gentity_t *ent) {
 	gentity_t *m;
 
 	m = fire_bfg(ent, muzzle, forward);

@@ -30,7 +30,7 @@ G_BounceMissile
 
 ================
 */
-void G_BounceMissile(gentity_t *ent, trace_t *trace) {
+static void G_BounceMissile(gentity_t *ent, trace_t *trace) {
 	vec3_t velocity;
 	float dot;
 	int hitTime;
@@ -72,7 +72,7 @@ G_ExplodeMissile
 Explode a missile without an impact
 ================
 */
-void G_ExplodeMissile(gentity_t *ent) {
+static void G_ExplodeMissile(gentity_t *ent) {
 	vec3_t dir;
 	vec3_t origin;
 
@@ -109,7 +109,7 @@ void G_ExplodeMissile(gentity_t *ent) {
 G_MissileImpact
 ================
 */
-void G_MissileImpact(gentity_t *ent, trace_t *trace) {
+static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
 	gentity_t *other;
 	qboolean hitClient = qfalse;
 	other = &g_entities[trace->entityNum];
@@ -411,7 +411,6 @@ static void move_killerducks(gentity_t *ent) {
 		//		PM_ClipVelocity (ent->s.pos.trDelta, tr.plane.normal, ent->s.pos.trDelta, OVERCLIP );
 		float backoff;
 		float change;
-		int i;
 
 		backoff = DotProduct(ent->s.pos.trDelta, tr.plane.normal);
 

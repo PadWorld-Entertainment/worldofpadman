@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "g_local.h"
+#include "g_spawn.h"
 
 // g_client.c -- client functions that don't happen every frame
 
@@ -104,6 +105,7 @@ Find the spot that we DON'T want to use
 ================
 */
 #define MAX_SPAWN_POINTS 128
+#if 0
 static gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from) {
 	gentity_t *spot;
 	vec3_t delta;
@@ -126,6 +128,7 @@ static gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from) {
 
 	return nearestSpot;
 }
+#endif
 
 // this should be used by the instaGib-Bots to have any idea where they could run to
 // previously they used the normal spawn-code, but this is a real heavy-weight-call
@@ -203,6 +206,7 @@ go to a random point that doesn't telefrag
 ================
 */
 #define MAX_SPAWN_POINTS 128
+#if 0
 static gentity_t *SelectRandomDeathmatchSpawnPoint(qboolean isbot) {
 	gentity_t *spot;
 	int count;
@@ -232,6 +236,7 @@ static gentity_t *SelectRandomDeathmatchSpawnPoint(qboolean isbot) {
 	selection = rand() % count;
 	return spots[selection];
 }
+#endif
 
 /*
 ===========
@@ -921,10 +926,10 @@ char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 	// if a player reconnects quickly after a disconnect, the client disconnect may never be called, thus flag can get
 	// lost in the ether
 	if (ent->inuse) {
-		const int clientNum = (int)(ent - g_entities);
-		G_LogPrintf("Forcing disconnect on active client: %i\n", clientNum);
+		const int entNum = (int)(ent - g_entities);
+		G_LogPrintf("Forcing disconnect on active client: %i\n", entNum);
 		// so lets just fix up anything that should happen on a disconnect
-		ClientDisconnect(clientNum);
+		ClientDisconnect(entNum);
 	}
 
 	// they can connect

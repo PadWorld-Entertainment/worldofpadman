@@ -57,7 +57,7 @@ void BerserkerCheck(gentity_t *ent) {
 ScorePlum
 ============
 */
-void ScorePlum(gentity_t *ent, vec3_t origin, int score) {
+static void ScorePlum(gentity_t *ent, vec3_t origin, int score) {
 	gentity_t *plum;
 
 	plum = G_TempEntity(origin, EV_SCOREPLUM);
@@ -223,7 +223,7 @@ void TossClientItems(gentity_t *self) {
 LookAtKiller
 ==================
 */
-void LookAtKiller(gentity_t *self, gentity_t *inflictor, gentity_t *attacker) {
+static void LookAtKiller(gentity_t *self, gentity_t *inflictor, gentity_t *attacker) {
 	vec3_t dir;
 
 	if (attacker && attacker != self) {
@@ -544,9 +544,9 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 
 	{
 		// normal death
-		static int i;
+		static int deathAnimationIndex;
 
-		switch (i) {
+		switch (deathAnimationIndex) {
 		case 0:
 			anim = BOTH_DEATH1;
 			break;
@@ -568,13 +568,13 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 		self->client->ps.legsAnim = ((self->client->ps.legsAnim & ANIM_TOGGLEBIT) ^ ANIM_TOGGLEBIT) | anim;
 		self->client->ps.torsoAnim = ((self->client->ps.torsoAnim & ANIM_TOGGLEBIT) ^ ANIM_TOGGLEBIT) | anim;
 
-		G_AddEvent(self, EV_DEATH1 + i, killer);
+		G_AddEvent(self, EV_DEATH1 + deathAnimationIndex, killer);
 
 		// the body can still be gibbed
 		self->die = body_die;
 
 		// globally cycle through the different death animations
-		i = (i + 1) % 3;
+		deathAnimationIndex = (deathAnimationIndex + 1) % 3;
 	}
 
 	trap_LinkEntity(self);

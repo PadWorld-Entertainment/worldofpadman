@@ -33,7 +33,7 @@ void Sys_Error(const char *error, ...) {
 void Sys_SigHandler(int signal) {
 }
 
-char *Sys_DefaultInstallPath(void) {
+const char *Sys_DefaultInstallPath(void) {
 	return ".";
 }
 

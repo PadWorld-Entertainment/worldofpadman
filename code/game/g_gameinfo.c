@@ -145,12 +145,13 @@ const char *G_GetArenaInfoByMap(const char *map) {
 	return NULL;
 }
 
+#if 0
 /*
 ===============
 G_GetArenaInfoByNumber
 ===============
 */
-const char *G_GetArenaInfoByNumber(int num) {
+static const char *G_GetArenaInfoByNumber(int num) {
 	int n;
 	const char *value;
 
@@ -168,6 +169,7 @@ const char *G_GetArenaInfoByNumber(int num) {
 
 	return NULL;
 }
+#endif
 
 /*
 ===============
