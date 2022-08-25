@@ -234,15 +234,6 @@ textures/pad_bookroom/globusmass
 	}
 }
 
-textures/pad_bookroom/lightyy
-{
-	q3map_surfacelight 5
-	surfaceparm nolightmap
-	{
-		map textures/pad_bookroom/lightyy
-	}
-}
-
 textures/pad_bookroom/telepaddy
 {
 	surfaceparm nolightmap
@@ -567,54 +558,6 @@ textures/pad_bookroom/portal
 		tcmod scroll .01 .03
 	}
 }
-
-
-textures/pad_bookroom/hotlava
-{
-	qer_editorimage textures/pad_bookroom/hotlava
-	q3map_globaltexture
-	surfaceparm trans
-	//surfaceparm nonsolid
-	surfaceparm noimpact
-	surfaceparm lava
-	surfaceparm nolightmap
-	q3map_surfacelight 80
-	cull disable
-
-	tesssize 128
-	cull disable
-	//deformVertexes wave 100 sin 3 2 .1 0.1
-
-	{
-		map textures/pad_bookroom/hotlava
-		tcMod turb 0 .2 0 .1
-	}
-}
-
-
-textures/pad_bookroom/rostgitter
-{
-	cull disable
-	surfaceparm alphashadow
-	surfaceparm trans
-	surfaceparm nomarks
-	surfaceparm latticesteps
-	tessSize 64
-
-	{
-		map textures/pad_bookroom/rostgitter
-		alphaFunc GE128
-		depthWrite
-		rgbGen vertex
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc filter
-		depthFunc equal
-	}
-}
-
 
 textures/pad_bookroom/doc_poe_kid
 {
