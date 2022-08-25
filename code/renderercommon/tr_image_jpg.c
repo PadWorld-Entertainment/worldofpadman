@@ -114,7 +114,7 @@ void R_LoadJPG(const char *filename, unsigned char **pic, int *width, int *heigh
 	 * requires it in order to read binary files.
 	 */
 
-	len = ri.FS_ReadFile((char *)filename, &fbuffer.v);
+	len = ri.FS_ReadFile(filename, &fbuffer.v);
 	if (!fbuffer.b || len < 0) {
 		return;
 	}

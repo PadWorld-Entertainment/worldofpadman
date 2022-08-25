@@ -245,7 +245,7 @@ static struct BufferedFile *ReadBufferedFile(const char *name) {
 	 *  Read the file.
 	 */
 
-	BF->Length = ri.FS_ReadFile((char *)name, &buffer.v);
+	BF->Length = ri.FS_ReadFile(name, &buffer.v);
 	BF->Buffer = buffer.b;
 
 	/*
