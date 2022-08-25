@@ -1160,7 +1160,8 @@ or moved to a new level based on the "nextmap" cvar
 
 =============
 */
-static void ExitLevel(void) {
+void ExitLevel(void);
+void ExitLevel(void) {
 	int i;
 	gclient_t *cl;
 
@@ -1277,7 +1278,8 @@ LogExit
 Append information about this game to the log file
 ================
 */
-static void LogExit(const char *string) {
+void LogExit(const char *string);
+void LogExit(const char *string) {
 	int i, numSorted;
 	gclient_t *cl;
 	G_LogPrintf("Exit: %s\n", string);
