@@ -1441,23 +1441,13 @@ textures/pad_bookroom/gelan001b
 	}
 }
 
-
 textures/pad_bookroom/frost-bite
 {
-	qer_editorimage textures/pad_bookroom/frost_bite
-
-
+	qer_editorimage env/frost-bite512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_bookroom/frost_color
-	q3map_sun	0.754360 0.959199 1.000000 300 50 55
+	q3map_lightimage textures/colors/hex_5b88c8ff
+	q3map_sun 0.754360 0.959199 1.000000 300 50 55
 	q3map_surfacelight 300
-
 	skyparms env/frost-bite512 - -
-//	{
-//		map textures/pad_bookroom/frost-bite
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
 }
