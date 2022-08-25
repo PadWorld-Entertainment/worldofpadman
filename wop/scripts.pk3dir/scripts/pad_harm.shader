@@ -163,6 +163,20 @@ textures/pad_harm/metal06bnew
 	}
 }
 
+textures/pad_harm/metalline03b
+{
+	surfaceparm metalsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_harm/metalline03b
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
+}
+
 //=======================================================
 // Neonschilder
 //=======================================================

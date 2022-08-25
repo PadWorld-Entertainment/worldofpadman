@@ -42,9 +42,9 @@ textures/pad_cyb/mirroreng_02
 
 textures/pad_cyb/plas_white
 {
-	qer_editorimage textures/pad_cyb/plas_white
+	qer_editorimage textures/colors/hex_ffffffff
 	{
-		map textures/pad_cyb/plas_white
+		map textures/colors/hex_ffffffff
 		rgbGen identity
 	}
 	{
@@ -399,20 +399,6 @@ rgbGen identity
 }
 {
 map textures/pad_objects02/pad_tuch
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_harm/metalline03b
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_harm/metalline03b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
