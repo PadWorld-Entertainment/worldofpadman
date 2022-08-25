@@ -267,10 +267,10 @@ textures/pad_attic/flareyel
 
 textures/pad_attic/milchglass_1
 {
-	qer_editorimage textures/pad_attic/greyblue
+	qer_editorimage textures/colors/hex_919f9f80
 	cull back
 	{
-		map textures/pad_attic/greyblue
+		map textures/colors/hex_919f9f80
 		blendfunc add
 	}
 	{
