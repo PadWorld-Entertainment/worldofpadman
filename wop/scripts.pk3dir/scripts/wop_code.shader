@@ -347,3 +347,197 @@ bbox_nocull {
 		rgbGen vertex
 	}
 }
+
+// =================
+// LENSFLARE SPRiTES
+// =================
+
+lfsprites/ball
+{
+	{
+		map		lfsprites/ball
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/cring1
+{
+	{
+		map		lfsprites/cring1
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/cross1
+{
+	{
+		map		lfsprites/cross1
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/cross2
+{
+	{
+		map		lfsprites/cross2
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/BigDisc
+{
+	{
+		map		lfsprites/BigDisc
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/disc1
+{
+	{
+		map		lfsprites/disc1
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/disc2
+{
+	{
+		map		lfsprites/disc2
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/disc3
+{
+	{
+		map		lfsprites/disc3
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/ring1
+{
+	{
+		map		lfsprites/ring1
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/ring2
+{
+	{
+		map		lfsprites/ring2
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/star1
+{
+	{
+		map		lfsprites/star1
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/star2
+{
+	{
+		map		lfsprites/star2
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/BigStar
+{
+	{
+		map		lfsprites/BigStar
+		blendfunc	add
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/sun1
+{
+	{
+		map		lfsprites/sun1
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/sun2
+{
+	{
+		map		lfsprites/sun2
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/sun3
+{
+	{
+		map		lfsprites/sun3
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/pentagon1
+{
+	{
+		map		lfsprites/pentagon1
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/pentagon2
+{
+	{
+		map		lfsprites/pentagon2
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+lfsprites/pentagon3
+{
+	{
+		map		lfsprites/pentagon3
+		blendfunc	blend
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}

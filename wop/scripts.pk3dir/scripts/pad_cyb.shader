@@ -459,7 +459,7 @@ textures/pad_cyb/marble_toilet002
 		rgbgen identity
 	}
 	{
-		map textures/pad_effects/pad_marblefx1
+		map textures/pad_marble/marblefx1
 		tcgen environment
 		blendfunc add
 		rgbgen identity
