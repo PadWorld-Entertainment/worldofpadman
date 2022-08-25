@@ -181,34 +181,6 @@ rgbGen identity
 }
 }
 
-textures/pad_teehouse/geflecht_blue
-{
-surfaceparm carpetsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_teehouse/geflecht_blue
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_teehouse/geflecht_red
-{
-surfaceparm carpetsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_teehouse/geflecht_red
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
 textures/pad_teehouse/red_border
 {
 surfaceparm carpetsteps
@@ -247,34 +219,6 @@ rgbGen identity
 }
 {
 map textures/pad_teehouse/flower_blue2
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_teehouse/flower_blue3
-{
-surfaceparm carpetsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_teehouse/flower_blue3
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_teehouse/flower_red3
-{
-surfaceparm carpetsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_teehouse/flower_red3
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
