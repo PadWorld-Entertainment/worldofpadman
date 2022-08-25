@@ -280,48 +280,6 @@ textures/pad_attic/milchglass_1
 	}
 }
 
-textures/pad_attic/milchglass_2
-{
-	qer_editorimage textures/pad_attic/greyblue
-	cull back
-	{
-		map textures/pad_attic/greyblue
-		blendfunc add
-	}
-	{
-		map textures/pad_gfx/env2
-		blendfunc filter
-		tcGen environment
-	}
-	{
-		map textures/pad_attic/greyblue
-		blendfunc filter
-	}
-}
-
-textures/pad_attic/milchglass_3
-{
-	qer_editorimage textures/pad_attic/greyblue
-	cull back
-	{
-		map textures/pad_attic/greyblue
-		blendfunc add
-	}
-	{
-		map textures/pad_gfx/env2
-		blendfunc filter
-		tcGen environment
-	}
-	{
-		map textures/pad_attic/greyblue
-		blendfunc filter
-	}
-	{
-		map textures/pad_attic/greyblue
-		blendfunc blend
-	}
-}
-
 
 textures/pad_attic/balken
 {
