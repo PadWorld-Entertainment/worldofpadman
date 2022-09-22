@@ -232,7 +232,7 @@ but not on every player enter or exit.
 */
 #define HEARTBEAT_MSEC (300 * 1000)
 #define MASTERDNS_MSEC (24 * 60 * 60 * 1000)
-void SV_MasterHeartbeat(const char *message) {
+static void SV_MasterHeartbeat(const char *message) {
 	static netadr_t adr[MAX_MASTER_SERVERS][2]; // [2] for v4 and v6 address for the same address string.
 	int i;
 	int res;
@@ -586,7 +586,7 @@ Responds with a short info message that should be enough to determine
 if a user is interested in a server to do a full status
 ================
 */
-void SVC_Info(netadr_t from) {
+static void SVC_Info(netadr_t from) {
 	int i, count, humans;
 	const char *gamedir;
 	char infostring[MAX_INFO_STRING];

@@ -45,7 +45,7 @@ R_CullLocalBox
 Returns CULL_IN, CULL_CLIP, or CULL_OUT
 =================
 */
-int R_CullLocalBox(vec3_t bounds[2]) {
+int R_CullLocalBox(const vec3_t bounds[2]) {
 	int i, j;
 	vec3_t transformed[8];
 	float dists[8];
@@ -171,17 +171,19 @@ void R_LocalPointToWorld(vec3_t local, vec3_t world) {
 		local[0] * tr.or.axis[0][2] + local[1] * tr.or.axis[1][2] + local[2] * tr.or.axis[2][2] + tr.or.origin[2];
 }
 
+#if 0
 /*
 =================
 R_WorldToLocal
 
 =================
 */
-void R_WorldToLocal(vec3_t world, vec3_t local) {
+static void R_WorldToLocal(vec3_t world, vec3_t local) {
 	local[0] = DotProduct(world, tr.or.axis[0]);
 	local[1] = DotProduct(world, tr.or.axis[1]);
 	local[2] = DotProduct(world, tr.or.axis[2]);
 }
+#endif
 
 /*
 ==========================
@@ -315,7 +317,7 @@ R_RotateForViewer
 Sets up the modelview matrix for a given viewParm
 =================
 */
-void R_RotateForViewer(void) {
+static void R_RotateForViewer(void) {
 	float viewerMatrix[16];
 	vec3_t origin;
 
@@ -415,7 +417,7 @@ Set up the culling frustum planes for the current view using the results we got 
 the projection matrix.
 =================
 */
-void R_SetupFrustum(viewParms_t *dest, float xmin, float xmax, float ymax, float zProj, float stereoSep) {
+static void R_SetupFrustum(viewParms_t *dest, float xmin, float xmax, float ymax, float zProj, float stereoSep) {
 	vec3_t ofsorigin;
 	float oppleg, adjleg, length;
 	int i;
@@ -525,7 +527,7 @@ R_SetupProjectionZ
 Sets the z-component transformation part in the projection matrix
 ===============
 */
-void R_SetupProjectionZ(viewParms_t *dest) {
+static void R_SetupProjectionZ(viewParms_t *dest) {
 	float zNear, zFar, depth;
 
 	zNear = r_znear->value;
@@ -543,7 +545,7 @@ void R_SetupProjectionZ(viewParms_t *dest) {
 R_MirrorPoint
 =================
 */
-void R_MirrorPoint(vec3_t in, orientation_t *surface, orientation_t *camera, vec3_t out) {
+static void R_MirrorPoint(vec3_t in, orientation_t *surface, orientation_t *camera, vec3_t out) {
 	int i;
 	vec3_t local;
 	vec3_t transformed;

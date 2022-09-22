@@ -755,7 +755,7 @@ delivered in the next packet, but saving a header and
 getting more delta compression will reduce total bandwidth.
 =================
 */
-qboolean CL_ReadyToSendPacket(void) {
+static qboolean CL_ReadyToSendPacket(void) {
 	int oldPacketNum;
 	int delta;
 

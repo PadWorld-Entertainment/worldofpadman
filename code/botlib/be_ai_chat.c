@@ -2425,6 +2425,7 @@ void BotSetChatName(int chatstate, const char *name, int client) {
 	Q_strncpyz(cs->name, name, sizeof(cs->name));
 }
 
+#if 0
 void BotResetChatAI(void) {
 	bot_replychat_t *rchat;
 	bot_chatmessage_t *m;
@@ -2435,6 +2436,7 @@ void BotResetChatAI(void) {
 		}
 	}
 }
+#endif
 
 int BotAllocChatState(void) {
 	int i;

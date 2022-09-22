@@ -531,7 +531,7 @@ SV_BotInitBotLib
 ==================
 */
 // cyr{
-void SV_SetBotInfoString(const char *cs) {
+static void SV_SetBotInfoString(const char *cs) {
 	SV_SetConfigstring(CS_BOTINFO, cs);
 }
 // cyr}

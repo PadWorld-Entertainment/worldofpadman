@@ -53,6 +53,7 @@ int AINode_Battle_NBG(bot_state_t *bs);
 void AIEnter_Reachtest(bot_state_t *bs, char *s);
 int AINode_Reachtest(bot_state_t *bs);
 int AINode_Cam(bot_state_t *bs);
+int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates);
 
 void BotResetNodeSwitches(void);
 void BotDumpNodeSwitches(bot_state_t *bs);

@@ -452,6 +452,7 @@ extern cvar_t *cl_voip;
 
 void CL_Init(void);
 void CL_AddReliableCommand(const char *cmd, qboolean isDisconnectCmd);
+int CL_ScaledMilliseconds(void);
 
 void CL_StartHunkUsers(qboolean rendererOnly);
 

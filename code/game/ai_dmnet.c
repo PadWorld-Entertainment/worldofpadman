@@ -915,7 +915,6 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 	if (gametype == GT_CTF) {
 		if (bs->ltgtype == LTG_CAPTUREFLAG) {
 			bot_goal_t *base_flag = NULL;
-			int tt;
 			int flagstatus;
 
 			// if not carrying the flag anymore, or timer hits
@@ -938,7 +937,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 
 				// go for items if your flag is not at base
 				if (flagstatus != FLAG_ATBASE) {
-					tt = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, base_flag->areanum, bs->tfl);
+					int tt = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, base_flag->areanum, bs->tfl);
 					if (tt < 400) {
 						bs->rushbaseaway_time = FloatTime() + 30;
 					}
@@ -1344,7 +1343,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 BotLongTermGoal
 ==================
 */
-int BotLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t *goal) {
+static int BotLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t *goal) {
 	return BotGetLongTermGoal(bs, tfl, retreat, goal);
 
 /* lead teammate... disabled atm ... make this a LTG when putting it back in */
@@ -1522,7 +1521,7 @@ static int AINode_Stand(bot_state_t *bs) {
 	return qtrue;
 }
 
-int AINode_Frozen(bot_state_t *bs) {
+static int AINode_Frozen(bot_state_t *bs) {
 	if (BotIsObserver(bs)) {
 		AIEnter_Observer(bs, "frozen: observer");
 		return qfalse;
@@ -1551,7 +1550,7 @@ int AINode_Frozen(bot_state_t *bs) {
 	return qtrue;
 }
 
-void AIEnterFrozen(bot_state_t *bs, char *s) {
+static void AIEnterFrozen(bot_state_t *bs, char *s) {
 	BotRecordNodeSwitch(bs, "frozen", "", s);
 	bs->ainode = AINode_Frozen;
 	bs->teammessage_time = 0;
@@ -1632,7 +1631,7 @@ int AINode_Respawn(bot_state_t *bs) {
 BotSelectActivateWeapon
 ==================
 */
-int BotSelectActivateWeapon(bot_state_t *bs) {
+static int BotSelectActivateWeapon(bot_state_t *bs) {
 	if (bs->inventory[INVENTORY_NIPPER] > 0 && bs->inventory[INVENTORY_NIPPERAMMO] > 0)
 		return WEAPONINDEX_NIPPER;
 	else if (bs->inventory[INVENTORY_PUMPER] > 0 && bs->inventory[INVENTORY_PUMPERAMMO] > 0)
@@ -2011,7 +2010,7 @@ int AINode_Seek_NBG(bot_state_t *bs) {
 }
 
 // cyr{
-qboolean BotDefendsCapturedBalloon(bot_state_t *bs) {
+static qboolean BotDefendsCapturedBalloon(bot_state_t *bs) {
 	int index, state;
 
 	if (gametype != GT_BALLOON || bs->ltgtype != LTG_DEFENDKEYAREA)
@@ -2026,7 +2025,7 @@ qboolean BotDefendsCapturedBalloon(bot_state_t *bs) {
 		return qfalse;
 }
 
-void CheckHealth(bot_state_t *bs) {
+static void CheckHealth(bot_state_t *bs) {
 	int i, dist, bestdist, bestnum, health, maxH;
 	float res;
 
@@ -2102,14 +2101,14 @@ void CheckHealth(bot_state_t *bs) {
 	return bs;
 }*/
 
-bot_state_t *BotStateForEntNum(int ent) {
+static bot_state_t *BotStateForEntNum(int ent) {
 	if (!g_entities[ent].inuse || !g_entities[ent].client || !(g_entities[ent].r.svFlags & SVF_BOT))
 		return NULL;
 
 	return botstates[ent];
 }
 
-void Pos2Goal(vec3_t pos, bot_goal_t *goal) {
+static void Pos2Goal(vec3_t pos, bot_goal_t *goal) {
 	VectorCopy(pos, goal->origin);
 	goal->areanum = BotPointAreaNum(pos);
 	VectorSet(goal->mins, -8, -8, -8);
@@ -2445,7 +2444,7 @@ void AIEnter_Battle_Fight(bot_state_t *bs, char *s) {
 AIEnter_Battle_Fight
 ==================
 */
-void AIEnter_Battle_SuicidalFight(bot_state_t *bs, char *s) {
+static void AIEnter_Battle_SuicidalFight(bot_state_t *bs, char *s) {
 	BotRecordNodeSwitch(bs, "battle fight", "", s);
 	trap_BotResetLastAvoidReach(bs->ms);
 	bs->ainode = AINode_Battle_Fight;

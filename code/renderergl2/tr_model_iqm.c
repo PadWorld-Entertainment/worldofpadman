@@ -1121,7 +1121,7 @@ R_ComputeIQMFogNum
 
 =================
 */
-int R_ComputeIQMFogNum(iqmData_t *data, trRefEntity_t *ent) {
+static int R_ComputeIQMFogNum(iqmData_t *data, trRefEntity_t *ent) {
 	int i, j;
 	fog_t *fog;
 	const vec_t *bounds;

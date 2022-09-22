@@ -63,7 +63,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 float scorealert[3]; // for both teams, how alarming the current situation is
 extern bot_state_t *botstates[MAX_CLIENTS];
-int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates);
 
 // NOTE: not using a cvars which can be updated because the game should be reloaded anyway
 int gametype;	// game type

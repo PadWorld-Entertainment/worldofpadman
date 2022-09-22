@@ -1688,6 +1688,7 @@ void trap_SendConsoleCommand(const char *text);
 // register a command name so the console can perform command completion.
 // FIXME: replace this with a normal console command "defineCommand"?
 void trap_AddCommand(const char *cmdName);
+void trap_RemoveCommand(const char *cmdName);
 
 // send a string to the server over the network
 void trap_SendClientCommand(const char *s);
@@ -1700,10 +1701,13 @@ void trap_CM_LoadMap(const char *mapname);
 int trap_CM_NumInlineModels(void);
 clipHandle_t trap_CM_InlineModel(int index); // 0 = world, 1+ = bmodels
 clipHandle_t trap_CM_TempBoxModel(const vec3_t mins, const vec3_t maxs);
+clipHandle_t trap_CM_TempCapsuleModel(const vec3_t mins, const vec3_t maxs);
 int trap_CM_PointContents(const vec3_t p, clipHandle_t model);
 int trap_CM_TransformedPointContents(const vec3_t p, clipHandle_t model, const vec3_t origin, const vec3_t angles);
 void trap_CM_BoxTrace(trace_t *results, const vec3_t start, const vec3_t end, const vec3_t mins, const vec3_t maxs,
 					  clipHandle_t model, int brushmask);
+void trap_CM_CapsuleTrace(trace_t *results, const vec3_t start, const vec3_t end, const vec3_t mins, const vec3_t maxs,
+					clipHandle_t model, int brushmask);
 void trap_CM_TransformedBoxTrace(trace_t *results, const vec3_t start, const vec3_t end, const vec3_t mins,
 								 const vec3_t maxs, clipHandle_t model, int brushmask, const vec3_t origin,
 								 const vec3_t angles);

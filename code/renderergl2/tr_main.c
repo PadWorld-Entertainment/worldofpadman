@@ -186,7 +186,7 @@ R_CullLocalBox
 Returns CULL_IN, CULL_CLIP, or CULL_OUT
 =================
 */
-int R_CullLocalBox(vec3_t localBounds[2]) {
+int R_CullLocalBox(const vec3_t localBounds[2]) {
 #if 0
 	int		i, j;
 	vec3_t	transformed[8];
@@ -385,17 +385,19 @@ void R_LocalPointToWorld(const vec3_t local, vec3_t world) {
 		local[0] * tr.or.axis[0][2] + local[1] * tr.or.axis[1][2] + local[2] * tr.or.axis[2][2] + tr.or.origin[2];
 }
 
+#if 0
 /*
 =================
 R_WorldToLocal
 
 =================
 */
-void R_WorldToLocal(const vec3_t world, vec3_t local) {
+static void R_WorldToLocal(const vec3_t world, vec3_t local) {
 	local[0] = DotProduct(world, tr.or.axis[0]);
 	local[1] = DotProduct(world, tr.or.axis[1]);
 	local[2] = DotProduct(world, tr.or.axis[2]);
 }
+#endif
 
 /*
 ==========================

@@ -21,8 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 // tr_flares.c
 #include "ref_import.h"
-
-#include "tr_local.h"
+#include "tr_flares.h"
 
 extern cvar_t *r_flares;
 
@@ -283,7 +282,7 @@ FLARE BACK END
 RB_TestFlare
 ==================
 
-void RB_TestFlare( flare_t *f ) {
+static void RB_TestFlare( flare_t *f ) {
 	float			depth;
 	qboolean		visible;
 	float			fade;

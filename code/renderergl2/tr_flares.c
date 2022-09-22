@@ -266,7 +266,7 @@ FLARE BACK END
 RB_TestFlare
 ==================
 */
-void RB_TestFlare(flare_t *f) {
+static void RB_TestFlare(flare_t *f) {
 	float depth;
 	qboolean visible;
 	float fade;

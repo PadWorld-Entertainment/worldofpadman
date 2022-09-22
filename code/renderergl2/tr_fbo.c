@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 R_CheckFBO
 =============
 */
-qboolean R_CheckFBO(const FBO_t *fbo) {
+static qboolean R_CheckFBO(const FBO_t *fbo) {
 	GLenum code = qglCheckNamedFramebufferStatusEXT(fbo->frameBuffer, GL_FRAMEBUFFER);
 
 	if (code == GL_FRAMEBUFFER_COMPLETE)
@@ -75,7 +75,7 @@ qboolean R_CheckFBO(const FBO_t *fbo) {
 FBO_Create
 ============
 */
-FBO_t *FBO_Create(const char *name, int width, int height) {
+static FBO_t *FBO_Create(const char *name, int width, int height) {
 	FBO_t *fbo;
 
 	if (strlen(name) >= MAX_QPATH) {
@@ -110,7 +110,7 @@ FBO_t *FBO_Create(const char *name, int width, int height) {
 FBO_CreateBuffer
 =================
 */
-void FBO_CreateBuffer(FBO_t *fbo, int format, int index, int multisample) {
+static void FBO_CreateBuffer(FBO_t *fbo, int format, int index, int multisample) {
 	uint32_t *pRenderBuffer;
 	GLenum attachment;
 	qboolean absent;
@@ -420,7 +420,7 @@ void FBO_Shutdown(void) {
 R_FBOList_f
 ============
 */
-void R_FBOList_f(void) {
+static void R_FBOList_f(void) {
 	int i;
 	FBO_t *fbo;
 
