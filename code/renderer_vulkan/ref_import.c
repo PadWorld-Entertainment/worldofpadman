@@ -1,3 +1,4 @@
+#include "ref_import.h"
 #include "../qcommon/q_shared.h"
 #include "../renderercommon/tr_public.h"
 

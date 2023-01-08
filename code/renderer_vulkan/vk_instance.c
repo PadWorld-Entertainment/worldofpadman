@@ -121,7 +121,7 @@ PFN_vkQueuePresentKHR qvkQueuePresentKHR;
 
 #ifndef NDEBUG
 
-VKAPI_ATTR VkBool32 VKAPI_CALL vk_DebugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT object_type,
+static VKAPI_ATTR VkBool32 VKAPI_CALL vk_DebugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT object_type,
 												uint64_t object, size_t location, int32_t message_code,
 												const char *layer_prefix, const char *message, void *user_data) {
 	ri.Printf(PRINT_WARNING, "%s\n", message);

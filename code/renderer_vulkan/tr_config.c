@@ -1,6 +1,7 @@
 #include "ref_import.h"
 #include "tr_cvar.h"
 #include "tr_local.h"
+#include "tr_config.h"
 
 #include "../renderercommon/tr_types.h"
 

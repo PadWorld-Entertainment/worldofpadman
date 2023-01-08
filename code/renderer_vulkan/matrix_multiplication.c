@@ -63,20 +63,8 @@ void Mat4Translation(float vec[3], float out[16]) {
 	out[13] = vec[1];
 	out[14] = vec[2];
 }
-//
-// NOTE; out = b * a ???
-// a, b and c are specified in column-major order
-//
-void myGlMultMatrix(const float A[16], const float B[16], float out[16]) {
-	int i, j;
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 4; j++) {
-			out[i * 4 + j] = A[i * 4 + 0] * B[0 * 4 + j] + A[i * 4 + 1] * B[1 * 4 + j] + A[i * 4 + 2] * B[2 * 4 + j] +
-							 A[i * 4 + 3] * B[3 * 4 + j];
-		}
-	}
-}
 
+#ifndef __x86_64__
 void MatrixMultiply4x4(const float A[16], const float B[16], float out[16]) {
 	out[0] = A[0] * B[0] + A[1] * B[4] + A[2] * B[8] + A[3] * B[12];
 	out[1] = A[0] * B[1] + A[1] * B[5] + A[2] * B[9] + A[3] * B[13];
@@ -98,6 +86,7 @@ void MatrixMultiply4x4(const float A[16], const float B[16], float out[16]) {
 	out[14] = A[12] * B[2] + A[13] * B[6] + A[14] * B[10] + A[15] * B[14];
 	out[15] = A[12] * B[3] + A[13] * B[7] + A[14] * B[11] + A[15] * B[15];
 }
+#endif
 
 /*
  * NOTE; out = B * A in math
@@ -242,58 +231,6 @@ void FastNormalize1f(float v[3]) {
 	v[0] = v[0] * invLen;
 	v[1] = v[1] * invLen;
 	v[2] = v[2] * invLen;
-}
-
-void FastNormalize2f(const float *v, float *out) {
-	// writing it this way allows gcc to recognize that rsqrt can be used
-	float invLen = 1.0f / sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-
-	out[0] = v[0] * invLen;
-	out[1] = v[1] * invLen;
-	out[2] = v[2] * invLen;
-}
-
-// use Rodrigue's rotation formula
-// dir are not assumed to be unit vector
-void PointRotateAroundVector(float *res, const float *vec, const float *p, const float degrees) {
-	float rad = DEG2RAD(degrees);
-	float cos_th = cos(rad);
-	float sin_th = sin(rad);
-	float k[3];
-	float d;
-
-	// writing it this way allows gcc to recognize that rsqrt can be used
-	float invLen = 1.0f / sqrtf(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
-	k[0] = vec[0] * invLen;
-	k[1] = vec[1] * invLen;
-	k[2] = vec[2] * invLen;
-
-	d = (1 - cos_th) * (p[0] * k[0] + p[1] * k[1] + p[2] * k[2]);
-
-	res[0] = sin_th * (k[1] * p[2] - k[2] * p[1]);
-	res[1] = sin_th * (k[2] * p[0] - k[0] * p[2]);
-	res[2] = sin_th * (k[0] * p[1] - k[1] * p[0]);
-
-	res[0] += cos_th * p[0] + d * k[0];
-	res[1] += cos_th * p[1] + d * k[1];
-	res[2] += cos_th * p[2] + d * k[2];
-}
-
-// vector k are assumed to be unit
-void RotateAroundUnitVector(float *res, const float *k, const float *p, const float degrees) {
-	float rad = DEG2RAD(degrees);
-	float cos_th = cos(rad);
-	float sin_th = sin(rad);
-
-	float d = (1 - cos_th) * (p[0] * k[0] + p[1] * k[1] + p[2] * k[2]);
-
-	res[0] = sin_th * (k[1] * p[2] - k[2] * p[1]);
-	res[1] = sin_th * (k[2] * p[0] - k[0] * p[2]);
-	res[2] = sin_th * (k[0] * p[1] - k[1] * p[0]);
-
-	res[0] += cos_th * p[0] + d * k[0];
-	res[1] += cos_th * p[1] + d * k[1];
-	res[2] += cos_th * p[2] + d * k[2];
 }
 
 // note: vector forward are NOT assumed to be nornalized,

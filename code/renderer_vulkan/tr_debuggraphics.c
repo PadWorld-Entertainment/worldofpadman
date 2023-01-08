@@ -3,12 +3,13 @@
 #include "tr_backend.h"
 #include "tr_cvar.h"
 #include "tr_globals.h"
+#include "tr_debuggraphics.h"
 #include "vk_image.h"
 #include "vk_instance.h"
 #include "vk_pipelines.h"
 #include "vk_shade_geometry.h"
 
-void R_DebugPolygon(int color, int numPoints, float *points) {
+static void R_DebugPolygon(int color, int numPoints, float *points) {
 	int i;
 	// In Vulkan we don't have GL_POLYGON + GLS_POLYMODE_LINE equivalent,
 	// so we use lines to draw polygon outlines.This approach has additional

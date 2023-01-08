@@ -1531,13 +1531,13 @@ static void R_AddEntitySurface(int entityNum) {
 				R_AddDrawSurf(&entitySurface, tr.defaultShader, 0, 0, 0, 0);
 				break;
 			default:
-				ri.Error(ERR_DROP, "R_AddEntitySurfaces: Bad modeltype");
+				ri.Error(ERR_DROP, "R_AddEntitySurface: Bad modeltype");
 				break;
 			}
 		}
 		break;
 	default:
-		ri.Error(ERR_DROP, "R_AddEntitySurfaces: Bad reType");
+		ri.Error(ERR_DROP, "R_AddEntitySurface: Bad reType");
 	}
 }
 

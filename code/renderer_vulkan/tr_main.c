@@ -330,7 +330,7 @@ static void R_SetupFrustum(viewParms_t *const pViewParams) {
 R_PlaneForSurface
 =============
 */
-void R_PlaneForSurface(surfaceType_t *surfType, cplane_t *plane) {
+static void R_PlaneForSurface(surfaceType_t *surfType, cplane_t *plane) {
 	srfTriangles_t *tri;
 	srfPoly_t *poly;
 	drawVert_t *v1, *v2, *v3;
@@ -696,7 +696,7 @@ R_SpriteFogNum
 See if a sprite is inside a fog volume
 =================
 */
-int R_SpriteFogNum(trRefEntity_t *ent) {
+static int R_SpriteFogNum(trRefEntity_t *ent) {
 	int i, j;
 	fog_t *fog;
 
@@ -736,7 +736,7 @@ qsort replacement
 
 =================
 */
-void SWAP_DRAW_SURF(void *a, void *b) {
+static void SWAP_DRAW_SURF(void *a, void *b) {
 	char buf[sizeof(drawSurf_t)];
 	memcpy(buf, a, sizeof(drawSurf_t));
 	memcpy(a, b, sizeof(drawSurf_t));
@@ -768,7 +768,7 @@ static void shortsort(drawSurf_t *lo, drawSurf_t *hi) {
 FIXME: this was lifted and modified from the microsoft lib source...
  */
 
-void qsortFast(void *base, unsigned num, unsigned width) {
+static void qsortFast(void *base, unsigned num, unsigned width) {
 	char *lo, *hi;		 /* ends of sub-array currently sorting */
 	char *mid;			 /* points to middle of subarray */
 	char *loguy, *higuy; /* traveling pointers for partition step */
@@ -989,7 +989,7 @@ static void R_SortDrawSurfs(drawSurf_t *drawSurfs, int numDrawSurfs) {
 	R_AddDrawSurfCmd(drawSurfs, numDrawSurfs);
 }
 
-void R_AddEntitySurfaces(viewParms_t *const pViewParam) {
+static void R_AddEntitySurfaces(viewParms_t *const pViewParam) {
 	// entities that will have procedurally generated surfaces will just
 	// point at this for their sorting surface
 	static surfaceType_t entitySurface = SF_ENTITY;
@@ -1194,5 +1194,6 @@ void R_RenderView(viewParms_t *parms) {
 	}
 }
 
+void R_IssuePendingRenderCommands(void);
 void R_IssuePendingRenderCommands(void) {
 }

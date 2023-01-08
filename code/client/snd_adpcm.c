@@ -46,7 +46,7 @@ static const int stepsizeTable[89] = {
 	2272, 2499,	 2749,	3024,  3327,  3660,	 4026,	4428,  4871,  5358,	 5894,	6484,  7132,  7845, 8630,
 	9493, 10442, 11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767};
 
-void S_AdpcmEncode(short indata[], char outdata[], int len, struct adpcm_state *state) {
+static void S_AdpcmEncode(short indata[], char outdata[], int len, struct adpcm_state *state) {
 	short *inp;		   /* Input buffer pointer */
 	signed char *outp; /* output buffer pointer */
 	int val;		   /* Current input sample value */
