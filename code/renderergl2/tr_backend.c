@@ -1047,7 +1047,7 @@ static const void *RB_DrawSurfs(const void *data) {
 		RB_RenderDrawSurfList(cmd->drawSurfs, cmd->numDrawSurfs);
 
 		if (r_drawSun->integer) {
-			RB_DrawSun(0.1, tr.sunShader);
+			RB_DrawSun(0.1f, tr.sunShader);
 		}
 
 		if (glRefConfig.framebufferObject && r_drawSunRays->integer) {
@@ -1062,7 +1062,7 @@ static const void *RB_DrawSurfs(const void *data) {
 				qglBeginQuery(GL_SAMPLES_PASSED, tr.sunFlareQuery[tr.sunFlareQueryIndex]);
 			}
 
-			RB_DrawSun(0.3, tr.sunFlareShader);
+			RB_DrawSun(0.3f, tr.sunFlareShader);
 
 			if (glRefConfig.occlusionQuery) {
 				qglEndQuery(GL_SAMPLES_PASSED);

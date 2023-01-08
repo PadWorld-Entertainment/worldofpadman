@@ -827,7 +827,7 @@ void GfxInfo_f(void) {
 			ri.Printf(PRINT_ALL, "%s ", qglGetStringi(GL_EXTENSIONS, i));
 		}
 	} else {
-		R_PrintLongString((char *)qglGetString(GL_EXTENSIONS));
+		R_PrintLongString(qglGetString(GL_EXTENSIONS));
 	}
 	ri.Printf(PRINT_ALL, "\n");
 	ri.Printf(PRINT_ALL, "GL_MAX_TEXTURE_SIZE: %d\n", glConfig.maxTextureSize);

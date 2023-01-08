@@ -1081,7 +1081,7 @@ qboolean R_LoadIQM(model_t *mod, void *buffer, int filesize, const char *mod_nam
 R_CullIQM
 =============
 */
-static int R_CullIQM(iqmData_t *data, trRefEntity_t *ent) {
+static int R_CullIQM(const iqmData_t *data, const trRefEntity_t *ent) {
 	vec3_t bounds[2];
 	vec_t *oldBounds, *newBounds;
 	int i;
@@ -1121,9 +1121,9 @@ R_ComputeIQMFogNum
 
 =================
 */
-static int R_ComputeIQMFogNum(iqmData_t *data, trRefEntity_t *ent) {
+static int R_ComputeIQMFogNum(const iqmData_t *data, const trRefEntity_t *ent) {
 	int i, j;
-	fog_t *fog;
+	const fog_t *fog;
 	const vec_t *bounds;
 	const vec_t defaultBounds[6] = {-8, -8, -8, 8, 8, 8};
 	vec3_t diag, center;
@@ -1180,7 +1180,7 @@ void R_AddIQMSurfaces(trRefEntity_t *ent) {
 	int fogNum;
 	int cubemapIndex;
 	shader_t *shader;
-	skin_t *skin;
+	const skin_t *skin;
 
 	data = tr.currentModel->modelData;
 	surface = data->surfaces;
@@ -1276,7 +1276,7 @@ void R_AddIQMSurfaces(trRefEntity_t *ent) {
 	}
 }
 
-static void ComputePoseMats(iqmData_t *data, int frame, int oldframe, float backlerp, float *poseMats) {
+static void ComputePoseMats(const iqmData_t *data, int frame, int oldframe, float backlerp, float *poseMats) {
 	iqmTransform_t relativeJoints[IQM_MAX_JOINTS];
 	iqmTransform_t *relativeJoint;
 	const iqmTransform_t *pose;
@@ -1361,18 +1361,18 @@ RB_AddIQMSurfaces
 Compute vertices for this model surface
 =================
 */
-void RB_IQMSurfaceAnim(surfaceType_t *surface) {
-	srfIQModel_t *surf = (srfIQModel_t *)surface;
-	iqmData_t *data = surf->data;
+void RB_IQMSurfaceAnim(const surfaceType_t *surface) {
+	const srfIQModel_t *surf = (const srfIQModel_t *)surface;
+	const iqmData_t *data = surf->data;
 	float poseMats[IQM_MAX_JOINTS * 12];
 	float influenceVtxMat[SHADER_MAX_VERTEXES * 12];
 	float influenceNrmMat[SHADER_MAX_VERTEXES * 9];
 	int i;
 
-	float *xyz;
-	float *normal;
-	float *tangent;
-	float *texCoords;
+	const float *xyz;
+	const float *normal;
+	const float *tangent;
+	const float *texCoords;
 	byte *color;
 	vec4_t *outXYZ;
 	int16_t *outNormal;
@@ -1461,7 +1461,7 @@ void RB_IQMSurfaceAnim(surfaceType_t *surface) {
 				vtxMat[10] = blendWeights[0] * poseMats[12 * data->influenceBlendIndexes[4 * influence + 0] + 10];
 				vtxMat[11] = blendWeights[0] * poseMats[12 * data->influenceBlendIndexes[4 * influence + 0] + 11];
 
-				for (j = 1; j < 4; j++) {
+				for (j = 1; j < ARRAY_LEN(blendWeights); j++) {
 					if (blendWeights[j] <= 0.0f) {
 						break;
 					}
@@ -1577,7 +1577,7 @@ void RB_IQMSurfaceAnim(surfaceType_t *surface) {
 RB_IQMSurfaceAnimVao
 =================
 */
-void RB_IQMSurfaceAnimVao(srfVaoIQModel_t *surface) {
+void RB_IQMSurfaceAnimVao(const srfVaoIQModel_t *surface) {
 	iqmData_t *data = surface->iqmData;
 
 	if (ShaderRequiresCPUDeforms(tess.shader)) {

@@ -1434,7 +1434,7 @@ static const infoParm_t infoParms[] = {
 	{"origin", 1, 0, CONTENTS_ORIGIN},				 // center of rotating brushes
 	{"trans", 0, 0, CONTENTS_TRANSLUCENT},			 // don't eat contained surfaces
 	{"detail", 0, 0, CONTENTS_DETAIL},				 // don't include in structural bsp
-	{"structural", 0, 0, CONTENTS_STRUCTURAL},		 // force into structural bsp even if trnas
+	{"structural", 0, 0, CONTENTS_STRUCTURAL},		 // force into structural bsp even if trans
 	{"areaportal", 1, 0, CONTENTS_AREAPORTAL},		 // divides areas
 	{"clusterportal", 1, 0, CONTENTS_CLUSTERPORTAL}, // for bots
 	{"donotenter", 1, 0, CONTENTS_DONOTENTER},		 // for bots
@@ -2353,7 +2353,7 @@ static void FixRenderCommandList(int newShader) {
 SortNewShader
 
 Positions the most recently created shader in the tr.sortedShaders[]
-array so that the shader->sort key is sorted reletive to the other
+array so that the shader->sort key is sorted relative to the other
 shaders.
 
 Sets shader->sortedIndex
@@ -2393,7 +2393,7 @@ static shader_t *GeneratePermanentShader(void) {
 	int i, b;
 	int size, hash;
 
-	if (tr.numShaders == MAX_SHADERS) {
+	if (tr.numShaders >= MAX_SHADERS) {
 		ri.Printf(PRINT_WARNING, "WARNING: GeneratePermanentShader - MAX_SHADERS hit\n");
 		return tr.defaultShader;
 	}
@@ -2868,7 +2868,7 @@ shader_t *R_FindShader(const char *name, int lightmapIndex, qboolean mipRawImage
 	image_t *image;
 	shader_t *sh;
 
-	if (name[0] == 0) {
+	if (name[0] == '\0') {
 		return tr.defaultShader;
 	}
 
@@ -3130,6 +3130,11 @@ way to ask for different implicit lighting modes (vertex, lightmap, etc)
 qhandle_t RE_RegisterShader(const char *name) {
 	shader_t *sh;
 
+	if (!name) {
+		ri.Printf(PRINT_ALL, "NULL shader\n");
+		return 0;
+	}
+
 	if (strlen(name) >= MAX_QPATH) {
 		ri.Printf(PRINT_ALL, "Shader name exceeds MAX_QPATH\n");
 		return 0;
@@ -3209,7 +3214,7 @@ A second parameter will cause it to print in sorted order
 void R_ShaderList_f(void) {
 	int i;
 	int count;
-	shader_t *shader;
+	const shader_t *shader;
 
 	ri.Printf(PRINT_ALL, "-----------------------\n");
 

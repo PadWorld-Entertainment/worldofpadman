@@ -22,21 +22,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // tr_vbo.c
 #include "tr_local.h"
 
-void R_VaoPackTangent(int16_t *out, vec4_t v) {
+void R_VaoPackTangent(int16_t *out, const vec4_t v) {
 	out[0] = v[0] * 32767.0f + (v[0] > 0.0f ? 0.5f : -0.5f);
 	out[1] = v[1] * 32767.0f + (v[1] > 0.0f ? 0.5f : -0.5f);
 	out[2] = v[2] * 32767.0f + (v[2] > 0.0f ? 0.5f : -0.5f);
 	out[3] = v[3] * 32767.0f + (v[3] > 0.0f ? 0.5f : -0.5f);
 }
 
-void R_VaoPackNormal(int16_t *out, vec3_t v) {
+void R_VaoPackNormal(int16_t *out, const vec3_t v) {
 	out[0] = v[0] * 32767.0f + (v[0] > 0.0f ? 0.5f : -0.5f);
 	out[1] = v[1] * 32767.0f + (v[1] > 0.0f ? 0.5f : -0.5f);
 	out[2] = v[2] * 32767.0f + (v[2] > 0.0f ? 0.5f : -0.5f);
 	out[3] = 0;
 }
 
-void R_VaoPackColor(uint16_t *out, vec4_t c) {
+void R_VaoPackColor(uint16_t *out, const vec4_t c) {
 	out[0] = c[0] * 65535.0f + 0.5f;
 	out[1] = c[1] * 65535.0f + 0.5f;
 	out[2] = c[2] * 65535.0f + 0.5f;

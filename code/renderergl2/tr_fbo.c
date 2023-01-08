@@ -415,6 +415,7 @@ void FBO_Shutdown(void) {
 	}
 }
 
+#if 0
 /*
 ============
 R_FBOList_f
@@ -440,9 +441,10 @@ static void R_FBOList_f(void) {
 
 	ri.Printf(PRINT_ALL, " %i FBOs\n", tr.numFBOs);
 }
+#endif
 
 void FBO_BlitFromTexture(struct image_s *src, vec4_t inSrcTexCorners, vec2_t inSrcTexScale, FBO_t *dst,
-						 ivec4_t inDstBox, struct shaderProgram_s *shaderProgram, vec4_t inColor, int blend) {
+						 ivec4_t inDstBox, struct shaderProgram_s *shaderProgram, const vec4_t inColor, int blend) {
 	ivec4_t dstBox;
 	vec4_t color;
 	vec4_t quadVerts[4];
@@ -533,7 +535,7 @@ void FBO_BlitFromTexture(struct image_s *src, vec4_t inSrcTexCorners, vec2_t inS
 }
 
 void FBO_Blit(FBO_t *src, ivec4_t inSrcBox, vec2_t srcTexScale, FBO_t *dst, ivec4_t dstBox,
-			  struct shaderProgram_s *shaderProgram, vec4_t color, int blend) {
+			  struct shaderProgram_s *shaderProgram, const vec4_t color, int blend) {
 	vec4_t srcTexCorners;
 
 	if (!src) {

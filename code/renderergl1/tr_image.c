@@ -950,7 +950,7 @@ image_t *R_FindImageFile(const char *name, imgType_t type, imgFlags_t flags) {
 		return NULL;
 	}
 
-	image = R_CreateImage((char *)name, pic, width, height, type, flags, 0);
+	image = R_CreateImage(name, pic, width, height, type, flags, 0);
 	ri.Free(pic);
 	return image;
 }

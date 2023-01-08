@@ -264,7 +264,7 @@ int R_MarkFragments(int numPoints, const vec3_t *points, const vec3_t projection
 	vec3_t clipPoints[2][MAX_VERTS_ON_POLY];
 	int numClipPoints;
 	float *v;
-	srfBspSurface_t *cv;
+	const srfBspSurface_t *cv;
 	glIndex_t *tri;
 	srfVert_t *dv;
 	vec3_t normal;

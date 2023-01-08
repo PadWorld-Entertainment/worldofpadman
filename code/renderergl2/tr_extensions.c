@@ -41,7 +41,7 @@ void GLimp_InitExtraExtensions(void) {
 
 	// Check if we need Intel graphics specific fixes.
 	glRefConfig.intelGraphics = qfalse;
-	if (strstr((char *)qglGetString(GL_RENDERER), "Intel"))
+	if (strstr((char*)qglGetString(GL_RENDERER), "Intel"))
 		glRefConfig.intelGraphics = qtrue;
 
 		// set DSA fallbacks
@@ -131,7 +131,7 @@ void GLimp_InitExtraExtensions(void) {
 	if (1) {
 		char version[256];
 
-		Q_strncpyz(version, (char *)qglGetString(GL_SHADING_LANGUAGE_VERSION), sizeof(version));
+		Q_strncpyz(version, qglGetString(GL_SHADING_LANGUAGE_VERSION), sizeof(version));
 
 		sscanf(version, "%d.%d", &glRefConfig.glslMajorVersion, &glRefConfig.glslMinorVersion);
 

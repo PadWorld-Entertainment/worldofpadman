@@ -45,16 +45,16 @@ void R_GammaCorrect(byte *buffer, int bufSize) {
 }
 
 typedef struct {
-	char *name;
+	const char *name;
 	int minimize, maximize;
 } textureMode_t;
 
-textureMode_t modes[] = {{"GL_NEAREST", GL_NEAREST, GL_NEAREST},
-						 {"GL_LINEAR", GL_LINEAR, GL_LINEAR},
-						 {"GL_NEAREST_MIPMAP_NEAREST", GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST},
-						 {"GL_LINEAR_MIPMAP_NEAREST", GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR},
-						 {"GL_NEAREST_MIPMAP_LINEAR", GL_NEAREST_MIPMAP_LINEAR, GL_NEAREST},
-						 {"GL_LINEAR_MIPMAP_LINEAR", GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR}};
+static const textureMode_t modes[] = {{"GL_NEAREST", GL_NEAREST, GL_NEAREST},
+									  {"GL_LINEAR", GL_LINEAR, GL_LINEAR},
+									  {"GL_NEAREST_MIPMAP_NEAREST", GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST},
+									  {"GL_LINEAR_MIPMAP_NEAREST", GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR},
+									  {"GL_NEAREST_MIPMAP_LINEAR", GL_NEAREST_MIPMAP_LINEAR, GL_NEAREST},
+									  {"GL_LINEAR_MIPMAP_LINEAR", GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR}};
 
 /*
 ================
@@ -153,8 +153,8 @@ void R_ImageList_f(void) {
 
 	for (i = 0; i < tr.numImages; i++) {
 		image_t *image = tr.images[i];
-		char *format = "????   ";
-		char *sizeSuffix;
+		const char *format = "????   ";
+		const char *sizeSuffix;
 		int estSize;
 		int displaySize;
 
@@ -1209,7 +1209,7 @@ Scale up the pixel values in a texture to increase the
 lighting range
 ================
 */
-void R_LightScaleTexture(byte *in, int inwidth, int inheight, qboolean only_gamma) {
+static void R_LightScaleTexture(byte *in, int inwidth, int inheight, qboolean only_gamma) {
 	if (only_gamma) {
 		if (!glConfig.deviceSupportsGamma) {
 			int i, c;
@@ -1918,8 +1918,8 @@ R_CreateImage2
 This is the only way any image_t are created
 ================
 */
-image_t *R_CreateImage2(const char *name, byte *pic, int width, int height, GLenum picFormat, int numMips,
-						imgType_t type, imgFlags_t flags, int internalFormat) {
+static image_t *R_CreateImage2(const char *name, byte *pic, int width, int height, GLenum picFormat, int numMips,
+							   imgType_t type, imgFlags_t flags, int internalFormat) {
 	byte *resampledBuffer = NULL;
 	image_t *image;
 	qboolean isLightmap = qfalse, scaled = qfalse;
@@ -2076,16 +2076,16 @@ void R_UpdateSubImage(image_t *image, byte *pic, int x, int y, int width, int he
 void R_LoadDDS(const char *filename, byte **pic, int *width, int *height, GLenum *picFormat, int *numMips);
 
 typedef struct {
-	char *ext;
+	const char *ext;
 	void (*ImageLoader)(const char *, unsigned char **, int *, int *);
 } imageExtToLoaderMap_t;
 
 // Note that the ordering indicates the order of preference used
 // when there are multiple images of different formats available
-static imageExtToLoaderMap_t imageLoaders[] = {{"png", R_LoadPNG},	{"tga", R_LoadTGA}, {"jpg", R_LoadJPG},
-											   {"jpeg", R_LoadJPG}, {"pcx", R_LoadPCX}, {"bmp", R_LoadBMP}};
+static const imageExtToLoaderMap_t imageLoaders[] = {{"png", R_LoadPNG},  {"tga", R_LoadTGA}, {"jpg", R_LoadJPG},
+													 {"jpeg", R_LoadJPG}, {"pcx", R_LoadPCX}, {"bmp", R_LoadBMP}};
 
-static int numImageLoaders = ARRAY_LEN(imageLoaders);
+static const int numImageLoaders = ARRAY_LEN(imageLoaders);
 
 /*
 =================
@@ -2095,13 +2095,13 @@ Loads any of the supported image types into a canonical
 32 bit format.
 =================
 */
-void R_LoadImage(const char *name, byte **pic, int *width, int *height, GLenum *picFormat, int *numMips) {
+static void R_LoadImage(const char *name, byte **pic, int *width, int *height, GLenum *picFormat, int *numMips) {
 	qboolean orgNameFailed = qfalse;
 	int orgLoader = -1;
 	int i;
 	char localName[MAX_QPATH];
 	const char *ext;
-	char *altName;
+	const char *altName;
 
 	*pic = NULL;
 	*width = 0;
@@ -2109,7 +2109,7 @@ void R_LoadImage(const char *name, byte **pic, int *width, int *height, GLenum *
 	*picFormat = GL_RGBA8;
 	*numMips = 0;
 
-	Q_strncpyz(localName, name, MAX_QPATH);
+	Q_strncpyz(localName, name, sizeof(localName));
 
 	ext = COM_GetExtension(localName);
 
@@ -2333,7 +2333,7 @@ image_t *R_FindImageFile(const char *name, imgType_t type, imgFlags_t flags) {
 			flags &= ~IMGFLAG_MIPMAP;
 	}
 
-	image = R_CreateImage2((char *)name, pic, width, height, picFormat, picNumMips, type, flags, 0);
+	image = R_CreateImage2(name, pic, width, height, picFormat, picNumMips, type, flags, 0);
 	ri.Free(pic);
 	return image;
 }
@@ -2383,7 +2383,7 @@ void R_InitFogTable(void) {
 	exp = 0.5;
 
 	for (i = 0; i < FOG_TABLE_SIZE; i++) {
-		d = pow((float)i / (FOG_TABLE_SIZE - 1), exp);
+		d = powf((float)i / (FOG_TABLE_SIZE - 1), exp);
 
 		tr.fogTable[i] = d;
 	}
@@ -2483,7 +2483,7 @@ static void R_CreateDefaultImage(void) {
 R_CreateBuiltinImages
 ==================
 */
-void R_CreateBuiltinImages(void) {
+static void R_CreateBuiltinImages(void) {
 	int x, y;
 	byte data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
@@ -2511,7 +2511,7 @@ void R_CreateBuiltinImages(void) {
 
 	tr.identityLightImage = R_CreateImage("*identityLight", (byte *)data, 8, 8, IMGTYPE_COLORALPHA, IMGFLAG_NONE, 0);
 
-	for (x = 0; x < MAX_VIDEO_HANDLES; x++) {
+	for (x = 0; x < ARRAY_LEN(tr.scratchImage); x++) {
 		// scratchimage is usually used for cinematic drawing
 		tr.scratchImage[x] = R_CreateImage("*scratch", (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, IMGTYPE_COLORALPHA,
 										   IMGFLAG_PICMIP | IMGFLAG_CLAMPTOEDGE, 0);
@@ -2660,7 +2660,7 @@ void R_SetColorMappings(void) {
 		if (g == 1) {
 			inf = i;
 		} else {
-			inf = 255 * pow(i / 255.0f, 1.0f / g) + 0.5f;
+			inf = 255 * powf(i / 255.0f, 1.0f / g) + 0.5f;
 		}
 
 		if (inf < 0) {
@@ -2733,9 +2733,9 @@ This is unfortunate, but the skin files aren't
 compatible with our normal parsing rules.
 ==================
 */
-static char *CommaParse(char **data_p) {
+static char *CommaParse(const char **data_p) {
 	int c = 0, len;
-	char *data;
+	const char *data;
 	static char com_token[MAX_TOKEN_CHARS];
 
 	data = *data_p;
@@ -2791,7 +2791,7 @@ static char *CommaParse(char **data_p) {
 			c = *data++;
 			if (c == '\"' || !c) {
 				com_token[len] = 0;
-				*data_p = (char *)data;
+				*data_p = data;
 				return com_token;
 			}
 			if (len < MAX_TOKEN_CHARS - 1) {
@@ -2813,7 +2813,7 @@ static char *CommaParse(char **data_p) {
 
 	com_token[len] = 0;
 
-	*data_p = (char *)data;
+	*data_p = data;
 	return com_token;
 }
 
@@ -2832,8 +2832,8 @@ qhandle_t RE_RegisterSkin(const char *name) {
 		char *c;
 		void *v;
 	} text;
-	char *text_p;
-	char *token;
+	const char *text_p;
+	const char *token;
 	char surfName[MAX_QPATH];
 	int totalSurfaces;
 

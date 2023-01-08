@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 trGlobals_t tr;
 
-static float s_flipMatrix[16] = {
+static const float s_flipMatrix[16] = {
 	// convert from our coordinate system (looking down X)
 	// to OpenGL's coordinate system (looking down -Z)
 	0, 0, -1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1};
@@ -364,7 +364,7 @@ R_LocalNormalToWorld
 
 =================
 */
-void R_LocalNormalToWorld(const vec3_t local, vec3_t world) {
+static void R_LocalNormalToWorld(const vec3_t local, vec3_t world) {
 	world[0] = local[0] * tr.or.axis[0][0] + local[1] * tr.or.axis[1][0] + local[2] * tr.or.axis[2][0];
 	world[1] = local[0] * tr.or.axis[0][1] + local[1] * tr.or.axis[1][1] + local[2] * tr.or.axis[2][1];
 	world[2] = local[0] * tr.or.axis[0][2] + local[1] * tr.or.axis[1][2] + local[2] * tr.or.axis[2][2];
@@ -445,7 +445,7 @@ myGlMultMatrix
 
 ==========================
 */
-void myGlMultMatrix(const float *a, const float *b, float *out) {
+static void myGlMultMatrix(const float *a, const float *b, float *out) {
 	int i, j;
 
 	for (i = 0; i < 4; i++) {
@@ -532,7 +532,7 @@ R_RotateForViewer
 Sets up the modelview matrix for a given viewParm
 =================
 */
-void R_RotateForViewer(void) {
+static void R_RotateForViewer(void) {
 	float viewerMatrix[16];
 	vec3_t origin;
 
@@ -632,7 +632,8 @@ Set up the culling frustum planes for the current view using the results we got 
 the projection matrix.
 =================
 */
-void R_SetupFrustum(viewParms_t *dest, float xmin, float xmax, float ymax, float zProj, float zFar, float stereoSep) {
+static void R_SetupFrustum(viewParms_t *dest, float xmin, float xmax, float ymax, float zProj, float zFar,
+						   float stereoSep) {
 	vec3_t ofsorigin;
 	float oppleg, adjleg, length;
 	int i;
@@ -754,13 +755,11 @@ R_SetupProjectionZ
 Sets the z-component transformation part in the projection matrix
 ===============
 */
-void R_SetupProjectionZ(viewParms_t *dest) {
-	float zNear, zFar, depth;
+static void R_SetupProjectionZ(viewParms_t *dest) {
+	const float zNear = r_znear->value;
+	const float zFar = dest->zFar;
 
-	zNear = r_znear->value;
-	zFar = dest->zFar;
-
-	depth = zFar - zNear;
+	const float depth = zFar - zNear;
 
 	dest->projectionMatrix[2] = 0;
 	dest->projectionMatrix[6] = 0;
@@ -804,7 +803,7 @@ void R_SetupProjectionZ(viewParms_t *dest) {
 R_SetupProjectionOrtho
 ===============
 */
-void R_SetupProjectionOrtho(viewParms_t *dest, vec3_t viewBounds[2]) {
+static void R_SetupProjectionOrtho(viewParms_t *dest, vec3_t viewBounds[2]) {
 	float xmin, xmax, ymin, ymax, znear, zfar;
 	// viewParms_t *dest = &tr.viewParms;
 	int i;
@@ -877,7 +876,7 @@ void R_SetupProjectionOrtho(viewParms_t *dest, vec3_t viewBounds[2]) {
 R_MirrorPoint
 =================
 */
-void R_MirrorPoint(vec3_t in, orientation_t *surface, orientation_t *camera, vec3_t out) {
+static void R_MirrorPoint(const vec3_t in, const orientation_t *surface, const orientation_t *camera, vec3_t out) {
 	int i;
 	vec3_t local;
 	vec3_t transformed;
@@ -894,7 +893,7 @@ void R_MirrorPoint(vec3_t in, orientation_t *surface, orientation_t *camera, vec
 	VectorAdd(transformed, camera->origin, out);
 }
 
-void R_MirrorVector(vec3_t in, orientation_t *surface, orientation_t *camera, vec3_t out) {
+static void R_MirrorVector(const vec3_t in, const orientation_t *surface, const orientation_t *camera, vec3_t out) {
 	int i;
 	float d;
 
@@ -910,10 +909,10 @@ void R_MirrorVector(vec3_t in, orientation_t *surface, orientation_t *camera, ve
 R_PlaneForSurface
 =============
 */
-void R_PlaneForSurface(surfaceType_t *surfType, cplane_t *plane) {
-	srfBspSurface_t *tri;
-	srfPoly_t *poly;
-	srfVert_t *v1, *v2, *v3;
+static void R_PlaneForSurface(const surfaceType_t *surfType, cplane_t *plane) {
+	const srfBspSurface_t *tri;
+	const srfPoly_t *poly;
+	const srfVert_t *v1, *v2, *v3;
 	vec4_t plane4;
 
 	if (!surfType) {
@@ -923,10 +922,10 @@ void R_PlaneForSurface(surfaceType_t *surfType, cplane_t *plane) {
 	}
 	switch (*surfType) {
 	case SF_FACE:
-		*plane = ((srfBspSurface_t *)surfType)->cullPlane;
+		*plane = ((const srfBspSurface_t *)surfType)->cullPlane;
 		return;
 	case SF_TRIANGLES:
-		tri = (srfBspSurface_t *)surfType;
+		tri = (const srfBspSurface_t *)surfType;
 		v1 = tri->verts + tri->indexes[0];
 		v2 = tri->verts + tri->indexes[1];
 		v3 = tri->verts + tri->indexes[2];
@@ -935,7 +934,7 @@ void R_PlaneForSurface(surfaceType_t *surfType, cplane_t *plane) {
 		plane->dist = plane4[3];
 		return;
 	case SF_POLY:
-		poly = (srfPoly_t *)surfType;
+		poly = (const srfPoly_t *)surfType;
 		PlaneFromPoints(plane4, poly->verts[0].xyz, poly->verts[1].xyz, poly->verts[2].xyz);
 		VectorCopy(plane4, plane->normal);
 		plane->dist = plane4[3];
@@ -957,8 +956,8 @@ be moving and rotating.
 Returns qtrue if it should be mirrored
 =================
 */
-qboolean R_GetPortalOrientations(drawSurf_t *drawSurf, int entityNum, orientation_t *surface, orientation_t *camera,
-								 vec3_t pvsOrigin, qboolean *mirror) {
+static qboolean R_GetPortalOrientations(const drawSurf_t *drawSurf, int entityNum, orientation_t *surface,
+										orientation_t *camera, vec3_t pvsOrigin, qboolean *mirror) {
 	int i;
 	cplane_t originalPlane, plane;
 	trRefEntity_t *e;
@@ -1221,7 +1220,7 @@ R_MirrorViewBySurface
 Returns qtrue if another view has been rendered
 ========================
 */
-qboolean R_MirrorViewBySurface(drawSurf_t *drawSurf, int entityNum) {
+static qboolean R_MirrorViewBySurface(const drawSurf_t *drawSurf, int entityNum) {
 	vec4_t clipDest[128];
 	viewParms_t newParms;
 	viewParms_t oldParms;
@@ -1282,9 +1281,9 @@ R_SpriteFogNum
 See if a sprite is inside a fog volume
 =================
 */
-int R_SpriteFogNum(trRefEntity_t *ent) {
+static int R_SpriteFogNum(const trRefEntity_t *ent) {
 	int i, j;
-	fog_t *fog;
+	const fog_t *fog;
 
 	if (tr.refdef.rdflags & RDF_NOWORLDMODEL) {
 		return 0;
@@ -1325,14 +1324,14 @@ DRAWSURF SORTING
 R_Radix
 ===============
 */
-static ID_INLINE void R_Radix(int byte, int size, drawSurf_t *source, drawSurf_t *dest) {
+static ID_INLINE void R_Radix(int byte, int size, const drawSurf_t *source, drawSurf_t *dest) {
 	int count[256] = {0};
 	int index[256];
 	int i;
-	unsigned char *sortKey = NULL;
-	unsigned char *end = NULL;
+	const unsigned char *sortKey = NULL;
+	const unsigned char *end = NULL;
 
-	sortKey = ((unsigned char *)&source[0].sort) + byte;
+	sortKey = ((const unsigned char *)&source[0].sort) + byte;
 	end = sortKey + (size * sizeof(drawSurf_t));
 	for (; sortKey < end; sortKey += sizeof(drawSurf_t))
 		++count[*sortKey];
@@ -1342,7 +1341,7 @@ static ID_INLINE void R_Radix(int byte, int size, drawSurf_t *source, drawSurf_t
 	for (i = 1; i < 256; ++i)
 		index[i] = index[i - 1] + count[i - 1];
 
-	sortKey = ((unsigned char *)&source[0].sort) + byte;
+	sortKey = ((const unsigned char *)&source[0].sort) + byte;
 	for (i = 0; i < size; ++i, sortKey += sizeof(drawSurf_t))
 		dest[index[*sortKey]++] = source[i];
 }
@@ -1410,7 +1409,7 @@ void R_DecomposeSort(unsigned sort, int *entityNum, shader_t **shader, int *fogN
 R_SortDrawSurfs
 =================
 */
-void R_SortDrawSurfs(drawSurf_t *drawSurfs, int numDrawSurfs) {
+static void R_SortDrawSurfs(drawSurf_t *drawSurfs, int numDrawSurfs) {
 	shader_t *shader;
 	int fogNum;
 	int entityNum;
@@ -1478,7 +1477,7 @@ static void R_AddEntitySurface(int entityNum) {
 
 	//
 	// the weapon model must be handled special --
-	// we don't want the hacked weapon position showing in
+	// we don't want the hacked first person weapon position showing in
 	// mirrors, because the true body position will already be drawn
 	//
 	if ((ent->e.renderfx & RF_FIRST_PERSON) && (tr.viewParms.flags & VPF_NOVIEWMODEL)) {
@@ -1547,7 +1546,7 @@ static void R_AddEntitySurface(int entityNum) {
 R_AddEntitySurfaces
 =============
 */
-void R_AddEntitySurfaces(void) {
+static void R_AddEntitySurfaces(void) {
 	int i;
 
 	if (!r_drawentities->integer) {
@@ -1563,7 +1562,7 @@ void R_AddEntitySurfaces(void) {
 R_GenerateDrawSurfs
 ====================
 */
-void R_GenerateDrawSurfs(void) {
+static void R_GenerateDrawSurfs(void) {
 	R_AddWorldSurfaces();
 
 	R_AddPolygonSurfaces();
@@ -1590,7 +1589,7 @@ void R_GenerateDrawSurfs(void) {
 R_DebugPolygon
 ================
 */
-void R_DebugPolygon(int color, int numPoints, float *points) {
+static void R_DebugPolygon(int color, int numPoints, float *points) {
 	// FIXME: implement this
 #if 0
 	int		i;
@@ -1626,7 +1625,7 @@ R_DebugGraphics
 Visualization aid for movement clipping debugging
 ====================
 */
-void R_DebugGraphics(void) {
+static void R_DebugGraphics(void) {
 	if (tr.refdef.rdflags & RDF_NOWORLDMODEL) {
 		return;
 	}
@@ -1649,7 +1648,7 @@ A view may be either the actual camera view,
 or a mirror / remote location
 ================
 */
-void R_RenderView(viewParms_t *parms) {
+void R_RenderView(const viewParms_t *parms) {
 	int firstDrawSurf;
 	int numDrawSurfs;
 

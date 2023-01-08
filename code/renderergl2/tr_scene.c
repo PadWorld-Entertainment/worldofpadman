@@ -88,7 +88,7 @@ Adds all the scene's polys into this view's drawsurf list
 void R_AddPolygonSurfaces(void) {
 	int i;
 	shader_t *sh;
-	srfPoly_t *poly;
+	const srfPoly_t *poly;
 	int fogMask;
 
 	tr.currentEntityNum = REFENTITYNUM_WORLD;
@@ -111,7 +111,7 @@ void RE_AddPolyToScene(qhandle_t hShader, int numVerts, const polyVert_t *verts,
 	srfPoly_t *poly;
 	int i, j;
 	int fogIndex;
-	fog_t *fog;
+	const fog_t *fog;
 	vec3_t bounds[2];
 
 	if (!tr.registered) {
@@ -304,8 +304,8 @@ void RE_BeginScene(const refdef_t *fd) {
 		// compare the area bits
 		areaDiff = 0;
 		for (i = 0; i < MAX_MAP_AREA_BYTES / 4; i++) {
-			areaDiff |= ((int *)tr.refdef.areamask)[i] ^ ((int *)fd->areamask)[i];
-			((int *)tr.refdef.areamask)[i] = ((int *)fd->areamask)[i];
+			areaDiff |= ((const int *)tr.refdef.areamask)[i] ^ ((const int *)fd->areamask)[i];
+			((int *)tr.refdef.areamask)[i] = ((const int *)fd->areamask)[i];
 		}
 
 		if (areaDiff) {

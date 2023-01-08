@@ -36,7 +36,7 @@ POLYGON TO BOX SIDE PROJECTION
 ===================================================================================
 */
 
-static vec3_t sky_clip[6] = {{1, 1, 0}, {1, -1, 0}, {0, -1, 1}, {0, 1, 1}, {1, 0, 1}, {-1, 0, 1}};
+static const vec3_t sky_clip[6] = {{1, 1, 0}, {1, -1, 0}, {0, -1, 1}, {0, 1, 1}, {1, 0, 1}, {-1, 0, 1}};
 
 static float sky_mins[2][6], sky_maxs[2][6];
 static float sky_min, sky_max;
@@ -53,7 +53,7 @@ static void AddSkyPolygon(int nump, vec3_t vecs) {
 	int axis;
 	float *vp;
 	// s = [0]/[2], t = [1]/[2]
-	static int vec_to_st[6][3] = {
+	static const int vec_to_st[6][3] = {
 		{-2, 3, 1},
 		{2, 3, -1},
 
@@ -131,7 +131,7 @@ ClipSkyPolygon
 ================
 */
 static void ClipSkyPolygon(int nump, vec3_t vecs, int stage) {
-	float *norm;
+	const float *norm;
 	float *v;
 	qboolean front, back;
 	float d, e;
@@ -229,7 +229,7 @@ static void ClearSkyBox(void) {
 RB_ClipSkyPolygons
 ================
 */
-void RB_ClipSkyPolygons(shaderCommands_t *input) {
+static void RB_ClipSkyPolygons(const shaderCommands_t *input) {
 	vec3_t p[5]; // need one extra point for clipping
 	int i, j;
 
@@ -258,7 +258,7 @@ CLOUD VERTEX GENERATION
 */
 static void MakeSkyVec(float s, float t, int axis, float outSt[2], vec3_t outXYZ) {
 	// 1 = s, 2 = t, 3 = 2048
-	static int st_to_vec[6][3] = {
+	static const int st_to_vec[6][3] = {
 		{3, -1, 2},	 {-3, 1, 2},
 
 		{1, 3, 2},	 {-1, -3, 2},
@@ -308,7 +308,7 @@ static void MakeSkyVec(float s, float t, int axis, float outSt[2], vec3_t outXYZ
 	}
 }
 
-static int sky_texorder[6] = {0, 2, 1, 3, 4, 5};
+static const int sky_texorder[6] = {0, 2, 1, 3, 4, 5};
 static vec3_t s_skyPoints[SKY_SUBDIVISIONS + 1][SKY_SUBDIVISIONS + 1];
 static float s_skyTexCoords[SKY_SUBDIVISIONS + 1][SKY_SUBDIVISIONS + 1][2];
 
@@ -413,7 +413,7 @@ static void DrawSkySide(struct image_s *image, const int mins[2], const int maxs
 	tess.firstIndex = 0;
 }
 
-static void DrawSkyBox(shader_t *shader) {
+static void DrawSkyBox(const shader_t *shader) {
 	int i;
 
 	sky_min = 0;
@@ -602,9 +602,9 @@ static void FillCloudBox(const shader_t *shader, int stage) {
 /*
 ** R_BuildCloudData
 */
-void R_BuildCloudData(shaderCommands_t *input) {
+static void R_BuildCloudData(const shaderCommands_t *input) {
 	int i;
-	shader_t *shader;
+	const shader_t *shader;
 
 	shader = input->shader;
 

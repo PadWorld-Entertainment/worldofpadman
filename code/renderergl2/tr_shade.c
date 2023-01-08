@@ -57,7 +57,7 @@ R_BindAnimatedImageToTMU
 
 =================
 */
-static void R_BindAnimatedImageToTMU(textureBundle_t *bundle, int tmu) {
+static void R_BindAnimatedImageToTMU(const textureBundle_t *bundle, int tmu) {
 	int64_t index;
 
 	if (bundle->isVideoMap) {
@@ -97,7 +97,7 @@ DrawTris
 Draws triangle outlines for debugging
 ================
 */
-static void DrawTris(shaderCommands_t *input) {
+static void DrawTris(const shaderCommands_t *input) {
 	GL_BindToTMU(tr.whiteImage, TB_COLORMAP);
 
 	GL_State(GLS_POLYMODE_LINE | GLS_DEPTHMASK_TRUE);
@@ -127,7 +127,7 @@ DrawNormals
 Draws vertex normals for debugging
 ================
 */
-static void DrawNormals(shaderCommands_t *input) {
+static void DrawNormals(const shaderCommands_t *input) {
 	// FIXME: implement this
 }
 
@@ -324,7 +324,7 @@ static void ProjectDlightTexture(void) {
 	ComputeDeformValues(&deformGen, deformParams);
 
 	for (l = 0; l < backEnd.refdef.num_dlights; l++) {
-		dlight_t *dl;
+		const dlight_t *dl;
 		shaderProgram_t *sp;
 		vec4_t vector;
 
@@ -385,7 +385,7 @@ static void ProjectDlightTexture(void) {
 	}
 }
 
-static void ComputeShaderColors(shaderStage_t *pStage, vec4_t baseColor, vec4_t vertColor, int blend) {
+static void ComputeShaderColors(const shaderStage_t *pStage, vec4_t baseColor, vec4_t vertColor, int blend) {
 	qboolean isBlend = ((blend & GLS_SRCBLEND_BITS) == GLS_SRCBLEND_DST_COLOR) ||
 					   ((blend & GLS_SRCBLEND_BITS) == GLS_SRCBLEND_ONE_MINUS_DST_COLOR) ||
 					   ((blend & GLS_DSTBLEND_BITS) == GLS_DSTBLEND_SRC_COLOR) ||
@@ -395,7 +395,7 @@ static void ComputeShaderColors(shaderStage_t *pStage, vec4_t baseColor, vec4_t 
 
 	float overbright = (isBlend || is2DDraw) ? 1.0f : (float)(1 << tr.overbrightBits);
 
-	fog_t *fog;
+	const fog_t *fog;
 
 	baseColor[0] = baseColor[1] = baseColor[2] = baseColor[3] = 1.0f;
 
@@ -432,28 +432,28 @@ static void ComputeShaderColors(shaderStage_t *pStage, vec4_t baseColor, vec4_t 
 	case CGEN_FOG:
 		fog = tr.world->fogs + tess.fogNum;
 
-		baseColor[0] = ((unsigned char *)(&fog->colorInt))[0] / 255.0f;
-		baseColor[1] = ((unsigned char *)(&fog->colorInt))[1] / 255.0f;
-		baseColor[2] = ((unsigned char *)(&fog->colorInt))[2] / 255.0f;
-		baseColor[3] = ((unsigned char *)(&fog->colorInt))[3] / 255.0f;
+		baseColor[0] = ((const unsigned char *)(&fog->colorInt))[0] / 255.0f;
+		baseColor[1] = ((const unsigned char *)(&fog->colorInt))[1] / 255.0f;
+		baseColor[2] = ((const unsigned char *)(&fog->colorInt))[2] / 255.0f;
+		baseColor[3] = ((const unsigned char *)(&fog->colorInt))[3] / 255.0f;
 		break;
 	case CGEN_WAVEFORM:
 		baseColor[0] = baseColor[1] = baseColor[2] = RB_CalcWaveColorSingle(&pStage->rgbWave);
 		break;
 	case CGEN_ENTITY:
 		if (backEnd.currentEntity) {
-			baseColor[0] = ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[0] / 255.0f;
-			baseColor[1] = ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[1] / 255.0f;
-			baseColor[2] = ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[2] / 255.0f;
-			baseColor[3] = ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[3] / 255.0f;
+			baseColor[0] = ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[0] / 255.0f;
+			baseColor[1] = ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[1] / 255.0f;
+			baseColor[2] = ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[2] / 255.0f;
+			baseColor[3] = ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[3] / 255.0f;
 		}
 		break;
 	case CGEN_ONE_MINUS_ENTITY:
 		if (backEnd.currentEntity) {
-			baseColor[0] = 1.0f - ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[0] / 255.0f;
-			baseColor[1] = 1.0f - ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[1] / 255.0f;
-			baseColor[2] = 1.0f - ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[2] / 255.0f;
-			baseColor[3] = 1.0f - ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[3] / 255.0f;
+			baseColor[0] = 1.0f - ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[0] / 255.0f;
+			baseColor[1] = 1.0f - ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[1] / 255.0f;
+			baseColor[2] = 1.0f - ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[2] / 255.0f;
+			baseColor[3] = 1.0f - ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[3] / 255.0f;
 		}
 		break;
 	case CGEN_IDENTITY:
@@ -481,13 +481,13 @@ static void ComputeShaderColors(shaderStage_t *pStage, vec4_t baseColor, vec4_t 
 		break;
 	case AGEN_ENTITY:
 		if (backEnd.currentEntity) {
-			baseColor[3] = ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[3] / 255.0f;
+			baseColor[3] = ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[3] / 255.0f;
 		}
 		vertColor[3] = 0.0f;
 		break;
 	case AGEN_ONE_MINUS_ENTITY:
 		if (backEnd.currentEntity) {
-			baseColor[3] = 1.0f - ((unsigned char *)backEnd.currentEntity->e.shaderRGBA)[3] / 255.0f;
+			baseColor[3] = 1.0f - ((const unsigned char *)backEnd.currentEntity->e.shaderRGBA)[3] / 255.0f;
 		}
 		vertColor[3] = 0.0f;
 		break;
@@ -524,7 +524,7 @@ static void ComputeShaderColors(shaderStage_t *pStage, vec4_t baseColor, vec4_t 
 
 static void ComputeFogValues(vec4_t fogDistanceVector, vec4_t fogDepthVector, float *eyeT) {
 	// from RB_CalcFogTexCoords()
-	fog_t *fog;
+	const fog_t *fog;
 	vec3_t local;
 
 	if (!tess.fogNum)
@@ -557,7 +557,7 @@ static void ComputeFogValues(vec4_t fogDistanceVector, vec4_t fogDepthVector, fl
 	}
 }
 
-static void ComputeFogColorMask(shaderStage_t *pStage, vec4_t fogColorMask) {
+static void ComputeFogColorMask(const shaderStage_t *pStage, vec4_t fogColorMask) {
 	switch (pStage->adjustColorsForFog) {
 	case ACFF_MODULATE_RGB:
 		fogColorMask[0] = fogColorMask[1] = fogColorMask[2] = 1.0f;
@@ -600,7 +600,7 @@ static void ForwardDlight(void) {
 	ComputeFogValues(fogDistanceVector, fogDepthVector, &eyeT);
 
 	for (l = 0; l < backEnd.refdef.num_dlights; l++) {
-		dlight_t *dl;
+		const dlight_t *dl;
 		shaderProgram_t *sp;
 		vec4_t vector;
 		vec4_t texMatrix;
@@ -750,7 +750,7 @@ static void ProjectPshadowVBOGLSL(void) {
 	int deformGen;
 	vec5_t deformParams;
 
-	shaderCommands_t *input = &tess;
+	const shaderCommands_t *input = &tess;
 
 	if (!backEnd.refdef.num_pshadows) {
 		return;
@@ -818,7 +818,7 @@ Blends a fog texture on top of everything else
 ===================
 */
 static void RB_FogPass(void) {
-	fog_t *fog;
+	const fog_t *fog;
 	vec4_t color;
 	vec4_t fogDistanceVector, fogDepthVector = {0, 0, 0, 0};
 	float eyeT = 0;
@@ -863,10 +863,10 @@ static void RB_FogPass(void) {
 		GLSL_SetUniformFloat(sp, UNIFORM_TIME, tess.shaderTime);
 	}
 
-	color[0] = ((unsigned char *)(&fog->colorInt))[0] / 255.0f;
-	color[1] = ((unsigned char *)(&fog->colorInt))[1] / 255.0f;
-	color[2] = ((unsigned char *)(&fog->colorInt))[2] / 255.0f;
-	color[3] = ((unsigned char *)(&fog->colorInt))[3] / 255.0f;
+	color[0] = ((const unsigned char *)(&fog->colorInt))[0] / 255.0f;
+	color[1] = ((const unsigned char *)(&fog->colorInt))[1] / 255.0f;
+	color[2] = ((const unsigned char *)(&fog->colorInt))[2] / 255.0f;
+	color[3] = ((const unsigned char *)(&fog->colorInt))[3] / 255.0f;
 	GLSL_SetUniformVec4(sp, UNIFORM_COLOR, color);
 
 	ComputeFogValues(fogDistanceVector, fogDepthVector, &eyeT);
@@ -885,7 +885,7 @@ static void RB_FogPass(void) {
 	R_DrawElements(tess.numIndexes, tess.firstIndex);
 }
 
-static unsigned int RB_CalcShaderVertexAttribs(shaderCommands_t *input) {
+static unsigned int RB_CalcShaderVertexAttribs(const shaderCommands_t *input) {
 	unsigned int vertexAttribs = input->shader->vertexAttribs;
 
 	if (glState.vertexAnimation) {
@@ -899,7 +899,7 @@ static unsigned int RB_CalcShaderVertexAttribs(shaderCommands_t *input) {
 	return vertexAttribs;
 }
 
-static void RB_IterateStagesGeneric(shaderCommands_t *input) {
+static void RB_IterateStagesGeneric(const shaderCommands_t *input) {
 	int stage;
 
 	vec4_t fogDistanceVector, fogDepthVector = {0, 0, 0, 0};
@@ -1244,7 +1244,7 @@ static void RB_IterateStagesGeneric(shaderCommands_t *input) {
 	}
 }
 
-static void RB_RenderShadowmap(shaderCommands_t *input) {
+static void RB_RenderShadowmap(const shaderCommands_t *input) {
 	int deformGen;
 	vec5_t deformParams;
 
@@ -1304,7 +1304,7 @@ static void RB_RenderShadowmap(shaderCommands_t *input) {
 ** RB_StageIteratorGeneric
 */
 void RB_StageIteratorGeneric(void) {
-	shaderCommands_t *input;
+	const shaderCommands_t *input;
 	unsigned int vertexAttribs = 0;
 
 	input = &tess;
@@ -1441,7 +1441,7 @@ void RB_StageIteratorGeneric(void) {
 ** RB_EndSurface
 */
 void RB_EndSurface(void) {
-	shaderCommands_t *input;
+	const shaderCommands_t *input;
 
 	input = &tess;
 

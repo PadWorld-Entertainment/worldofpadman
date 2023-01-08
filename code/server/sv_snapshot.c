@@ -241,10 +241,8 @@ SV_QsortEntityNumbers
 =======================
 */
 static int QDECL SV_QsortEntityNumbers(const void *a, const void *b) {
-	int *ea, *eb;
-
-	ea = (int *)a;
-	eb = (int *)b;
+	const int *ea = (const int *)a;
+	const int *eb = (const int *)b;
 
 	if (*ea == *eb) {
 		Com_Error(ERR_DROP, "SV_QsortEntityStates: duplicated entity");
