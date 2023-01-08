@@ -14,7 +14,7 @@ jobs:
       matrix:
         platform:
         - { name: Ubuntu,  os: ubuntu-20.04 }
-        - { name: Windows, os: windows-2019 }
+        - { name: Windows, os: windows-2019, env_var: 'env VULKAN_SDK=C:\Vulkan\1.2.182.0' }
         - { name: MacOS10, os: macos-10.15 }
         - { name: MacOS11, os: macos-11 }
 
@@ -26,19 +26,20 @@ jobs:
         if: ${{ runner.os == 'Linux' }}
         run: |
           sudo apt-get update
-          sudo apt-get install libsdl2-dev
+          sudo apt-get install libsdl2-dev glslang-tools libvulkan-dev
 
       - name: "Install Dependencies (OSX)"
         if: ${{ runner.os == 'macOS' }}
         run: |
-          HOMEBREW_NO_AUTO_UPDATE=1 brew install sdl2
+          HOMEBREW_NO_AUTO_UPDATE=1 brew install sdl2 glslang molten-vk vulkan-headers
 
       - name: "Install Dependencies (Windows)"
         if: ${{ runner.os == 'Windows' }}
-        run: choco install zip
+        run: choco install zip vulkan-sdk
 
       - name: "Compile"
         run: |
+          ${{ matrix.platform.env_var }}
           mkdir build
           cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install
