@@ -21,14 +21,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #include "qasm-inline.h"
+#include "../qcommon/q_shared.h"
 
-#if defined(__i386__) || defined(__x86_64__)
-static const unsigned short fpucw = 0x0C7F;
-
+#if idx64
 /*
  * GNU inline asm ftol conversion functions using SSE or FPU
  */
-
 long qftolsse(float f) {
 	long retval;
 
@@ -48,6 +46,9 @@ int qvmftolsse(void) {
 
 	return retval;
 }
+
+#elif id386
+static const unsigned short fpucw = 0x0C7F;
 
 long qftolx87(float f) {
 	long retval;
