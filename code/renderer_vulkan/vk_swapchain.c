@@ -1,6 +1,7 @@
 #include "vkimpl.h"
 #include "ref_import.h"
 #include "tr_cvar.h"
+#include "vk_swapchain.h"
 #include "vk_instance.h"
 
 /*

@@ -7,6 +7,7 @@
 #include "vk_pipelines.h"
 #include "vk_shade_geometry.h"
 #include "vk_shaders.h"
+#include "vk_init.h"
 
 // vk_init have nothing to do with tr_init
 // vk_instance should be small

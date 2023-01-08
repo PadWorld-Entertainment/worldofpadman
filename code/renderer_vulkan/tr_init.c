@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "tr_globals.h"
 #include "tr_local.h"
 #include "tr_model.h"
+#include "render_export.h"
 
 #include "vk_init.h"
 
@@ -40,7 +41,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 extern void RE_ClearScene(void);
 
-void R_Init(void) {
+static void R_Init(void) {
 	int i;
 
 	ri.Printf(PRINT_ALL, "----- R_Init -----\n");

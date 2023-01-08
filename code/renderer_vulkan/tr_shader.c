@@ -1799,6 +1799,7 @@ shader_t *GeneratePermanentShader(void) {
 	return newShader;
 }
 
+extern void setDefaultShader(void);
 void setDefaultShader(void) {
 	shader.defaultShader = qtrue;
 }

@@ -7,6 +7,7 @@
 #include "tr_imageprocess.h"
 #include "tr_config.h"
 #include "ref_import.h"
+#include "render_export.h"
 
 #include "../renderercommon/tr_shared.h"
 

@@ -1,5 +1,6 @@
 #include "tr_config.h"
 #include "tr_backend.h"
+#include "tr_showimages.h"
 #include "vk_pipelines.h"
 #include "vk_shade_geometry.h"
 

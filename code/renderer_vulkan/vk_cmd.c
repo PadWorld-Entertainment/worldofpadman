@@ -1,5 +1,7 @@
 #include "vkimpl.h"
 #include "vk_instance.h"
+#include "vk_cmd.h"
+
 //  ===============  Command Buffer Lifecycle ====================
 // Each command buffer is always in one of the following states:
 //

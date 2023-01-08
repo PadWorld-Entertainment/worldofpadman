@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "tr_cvar.h"
 #include "tr_globals.h"
 #include "tr_local.h"
+#include "render_export.h"
 
 #define DLIGHT_AT_RADIUS 16
 // at the edge of a dlight's influence, this amount of light will be added

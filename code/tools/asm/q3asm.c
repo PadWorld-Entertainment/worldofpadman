@@ -792,7 +792,7 @@ static void HackToSegment(segmentName_t seg) {
 
 //#define STAT(L) report("STAT " L "\n");
 #define STAT(L)
-#define ASM(O) int TryAssemble##O()
+#define ASM(O) static int TryAssemble##O()
 
 /*
   These clauses were moved out from AssembleLine() to allow reordering of if's.
@@ -1241,7 +1241,7 @@ static void AssembleLine(void) {
 InitTables
 ==============
 */
-void InitTables(void) {
+static void InitTables(void) {
 	int i;
 
 	symtable = hashtable_new(symtablelen);

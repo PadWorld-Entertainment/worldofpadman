@@ -216,7 +216,7 @@ void TransformModelToClip(const float src[3], const float *pMatModel, const floa
 	}
 }
 
-void VectorCross(const float v1[3], const float v2[3], float cross[3]) {
+static void VectorCross(const float v1[3], const float v2[3], float cross[3]) {
 	cross[0] = v1[1] * v2[2] - v1[2] * v2[1];
 	cross[1] = v1[2] * v2[0] - v1[0] * v2[2];
 	cross[2] = v1[0] * v2[1] - v1[1] * v2[0];

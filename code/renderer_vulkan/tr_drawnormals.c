@@ -1,5 +1,6 @@
 #include "tr_backend.h"
 #include "tr_globals.h"
+#include "tr_drawnormals.h"
 #include "vk_pipelines.h"
 #include "vk_shade_geometry.h"
 

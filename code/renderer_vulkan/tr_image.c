@@ -32,6 +32,7 @@ SKINS
 #include "tr_globals.h"
 #include "tr_local.h"
 #include "tr_shader.h"
+#include "render_export.h"
 
 /*
 ==================

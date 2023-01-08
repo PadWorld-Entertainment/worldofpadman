@@ -2,6 +2,7 @@
 #include "tr_globals.h"
 #include "tr_local.h"
 #include "tr_model.h"
+#include "render_export.h"
 
 typedef struct {
 	const char *ext;

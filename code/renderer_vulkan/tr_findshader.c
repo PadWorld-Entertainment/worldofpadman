@@ -7,6 +7,7 @@
 #include "tr_printmat.h"
 #include "tr_globals.h"
 #include "tr_shader.h"
+#include "render_export.h"
 
 #define MAX_SHADERTEXT_HASH 2048
 static const char **shaderTextHashTable[MAX_SHADERTEXT_HASH] = {0};
@@ -293,39 +294,6 @@ qhandle_t RE_RegisterShaderNoMip(const char *name) {
 	return sh->index;
 }
 
-qhandle_t R_RegisterShaderFromImage(const char *name, int lightmapIndex, image_t *image, qboolean mipRawImage) {
-	int hash = generateHashValue(name, FILE_HASH_SIZE);
-
-	//
-	// see if the shader is already loaded
-	//
-	shader_t *sh = hashTable[hash];
-	while (sh) {
-		// NOTE: if there was no shader or image available with the name strippedName
-		// then a default shader is created with lightmapIndex == LIGHTMAP_NONE, so we
-		// have to check all default shaders otherwise for every call to R_FindShader
-		// with that same strippedName a new default shader is created.
-		if ((sh->lightmapIndex == lightmapIndex || sh->defaultShader) &&
-			// index by name
-			!Q_stricmp(sh->name, name)) {
-			// match found
-			return sh->index;
-		}
-
-		sh = sh->next;
-	}
-
-	R_SetTheShader(name, lightmapIndex);
-
-	//
-	// create the default shading commands
-	//
-	R_CreateDefaultShadingCmds(name, image);
-
-	sh = FinishShader();
-	return sh->index;
-}
-
 /*
 ====================
 ScanAndLoadShaderFiles
@@ -334,7 +302,6 @@ Finds and loads all .shader files, combining them into
 a single large text block that can be scanned for shader names
 =====================
 */
-
 static void BuildSingleLargeBuffer(char *buffers[], const int nShaderFiles, const int sum) {
 	int n = nShaderFiles - 1;
 	char *textEnd;
