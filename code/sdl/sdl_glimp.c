@@ -116,22 +116,21 @@ GLimp_CompareModes
 */
 static int GLimp_CompareModes(const void *a, const void *b) {
 	const float ASPECT_EPSILON = 0.001f;
-	SDL_Rect *modeA = (SDL_Rect *)a;
-	SDL_Rect *modeB = (SDL_Rect *)b;
-	float aspectA = (float)modeA->w / (float)modeA->h;
-	float aspectB = (float)modeB->w / (float)modeB->h;
-	int areaA = modeA->w * modeA->h;
-	int areaB = modeB->w * modeB->h;
-	float aspectDiffA = fabs(aspectA - glConfig.displayAspect);
-	float aspectDiffB = fabs(aspectB - glConfig.displayAspect);
-	float aspectDiffsDiff = aspectDiffA - aspectDiffB;
+	const SDL_Rect *modeA = (const SDL_Rect *)a;
+	const SDL_Rect *modeB = (const SDL_Rect *)b;
+	const float aspectA = (float)modeA->w / (float)modeA->h;
+	const float aspectB = (float)modeB->w / (float)modeB->h;
+	const int areaA = modeA->w * modeA->h;
+	const int areaB = modeB->w * modeB->h;
+	const float aspectDiffA = fabs(aspectA - glConfig.displayAspect);
+	const float aspectDiffB = fabs(aspectB - glConfig.displayAspect);
+	const float aspectDiffsDiff = aspectDiffA - aspectDiffB;
 
 	if (aspectDiffsDiff > ASPECT_EPSILON)
 		return 1;
 	else if (aspectDiffsDiff < -ASPECT_EPSILON)
 		return -1;
-	else
-		return areaA - areaB;
+	return areaA - areaB;
 }
 
 /*
@@ -229,7 +228,7 @@ static qboolean GLimp_GetProcAddresses(qboolean fixedFunction) {
 #define GLE(ret, name, ...) qgl##name = gl #name;
 #else
 #define GLE(ret, name, ...)                                                                                            \
-	qgl##name = (name##proc *)SDL_GL_GetProcAddress("gl" #name);                                                       \
+	*(void **) (&qgl##name) = SDL_GL_GetProcAddress("gl" #name);                                                       \
 	if (qgl##name == NULL) {                                                                                           \
 		ri.Printf(PRINT_ALL, "ERROR: Missing OpenGL function %s\n", "gl" #name);                                       \
 		success = qfalse;                                                                                              \
@@ -681,7 +680,7 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 
 	GLimp_DetectAvailableModes();
 
-	glstring = (char *)qglGetString(GL_RENDERER);
+	glstring = (const char *)qglGetString(GL_RENDERER);
 	ri.Printf(PRINT_ALL, "GL_RENDERER: %s\n", glstring);
 
 	return RSERR_OK;
@@ -795,9 +794,9 @@ static void GLimp_InitExtensions(qboolean fixedFunction) {
 		qglClientActiveTextureARB = NULL;
 		if (SDL_GL_ExtensionSupported("GL_ARB_multitexture")) {
 			if (r_ext_multitexture->value) {
-				qglMultiTexCoord2fARB = SDL_GL_GetProcAddress("glMultiTexCoord2fARB");
-				qglActiveTextureARB = SDL_GL_GetProcAddress("glActiveTextureARB");
-				qglClientActiveTextureARB = SDL_GL_GetProcAddress("glClientActiveTextureARB");
+				*(void**)(&qglMultiTexCoord2fARB) = SDL_GL_GetProcAddress("glMultiTexCoord2fARB");
+				*(void**)(&qglActiveTextureARB) = SDL_GL_GetProcAddress("glActiveTextureARB");
+				*(void**)(&qglClientActiveTextureARB) = SDL_GL_GetProcAddress("glClientActiveTextureARB");
 
 				if (qglActiveTextureARB) {
 					GLint glint = 0;
@@ -823,8 +822,8 @@ static void GLimp_InitExtensions(qboolean fixedFunction) {
 		if (SDL_GL_ExtensionSupported("GL_EXT_compiled_vertex_array")) {
 			if (r_ext_compiled_vertex_array->value) {
 				ri.Printf(PRINT_ALL, "...using GL_EXT_compiled_vertex_array\n");
-				qglLockArraysEXT = (void(APIENTRY *)(GLint, GLint))SDL_GL_GetProcAddress("glLockArraysEXT");
-				qglUnlockArraysEXT = (void(APIENTRY *)(void))SDL_GL_GetProcAddress("glUnlockArraysEXT");
+				*(void**)(&qglLockArraysEXT) = SDL_GL_GetProcAddress("glLockArraysEXT");
+				*(void**)(&qglUnlockArraysEXT) = SDL_GL_GetProcAddress("glUnlockArraysEXT");
 				if (!qglLockArraysEXT || !qglUnlockArraysEXT) {
 					ri.Error(ERR_FATAL, "bad getprocaddress");
 				}
@@ -921,23 +920,23 @@ success:
 	glConfig.deviceSupportsGamma = !r_ignorehwgamma->integer && SDL_SetWindowBrightness(SDL_window, 1.0f) >= 0;
 
 	// get our config strings
-	Q_strncpyz(glConfig.vendor_string, (char *)qglGetString(GL_VENDOR), sizeof(glConfig.vendor_string));
-	Q_strncpyz(glConfig.renderer_string, (char *)qglGetString(GL_RENDERER), sizeof(glConfig.renderer_string));
+	Q_strncpyz(glConfig.vendor_string, (const char *)qglGetString(GL_VENDOR), sizeof(glConfig.vendor_string));
+	Q_strncpyz(glConfig.renderer_string, (const char *)qglGetString(GL_RENDERER), sizeof(glConfig.renderer_string));
 	if (*glConfig.renderer_string && glConfig.renderer_string[strlen(glConfig.renderer_string) - 1] == '\n')
 		glConfig.renderer_string[strlen(glConfig.renderer_string) - 1] = 0;
-	Q_strncpyz(glConfig.version_string, (char *)qglGetString(GL_VERSION), sizeof(glConfig.version_string));
+	Q_strncpyz(glConfig.version_string, (const char *)qglGetString(GL_VERSION), sizeof(glConfig.version_string));
 
 	// manually create extension list if using OpenGL 3
 	if (qglGetStringi) {
-		int i, numExtensions, extensionLength, listLength;
+		int i, numExtensions, listLength;
 		const char *extension;
 
 		qglGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
 		listLength = 0;
 
 		for (i = 0; i < numExtensions; i++) {
-			extension = (char *)qglGetStringi(GL_EXTENSIONS, i);
-			extensionLength = strlen(extension);
+			extension = (const char *)qglGetStringi(GL_EXTENSIONS, i);
+			int extensionLength = strlen(extension);
 
 			if ((listLength + extensionLength + 1) >= sizeof(glConfig.extensions_string))
 				break;
@@ -951,7 +950,7 @@ success:
 			listLength += extensionLength;
 		}
 	} else {
-		Q_strncpyz(glConfig.extensions_string, (char *)qglGetString(GL_EXTENSIONS), sizeof(glConfig.extensions_string));
+		Q_strncpyz(glConfig.extensions_string, (const char *)qglGetString(GL_EXTENSIONS), sizeof(glConfig.extensions_string));
 	}
 
 	// initialize extensions
