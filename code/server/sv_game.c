@@ -74,7 +74,7 @@ SV_GameSendServerCommand
 Sends a command string to a client
 ===============
 */
-void SV_GameSendServerCommand(int clientNum, const char *text) {
+static void SV_GameSendServerCommand(int clientNum, const char *text) {
 	if (clientNum == -1) {
 		SV_SendServerCommand(NULL, "%s", text);
 	} else {
