@@ -80,6 +80,7 @@ void GL_SelectTexture(int unit) {
 	glState.currenttmu = unit;
 }
 
+#if 0
 /*
 ** GL_BindMultitexture
 */
@@ -106,6 +107,7 @@ void GL_BindMultitexture(image_t *image0, GLuint env0, image_t *image1, GLuint e
 		qglBindTexture(GL_TEXTURE_2D, texnum0);
 	}
 }
+#endif
 
 /*
 ** GL_Cull

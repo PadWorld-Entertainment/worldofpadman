@@ -23,7 +23,7 @@ static const imageExtToLoaderMap_t imageLoaders[6] = {{"png", R_LoadPNG},  {"tga
 
 static const int numImageLoaders = 6;
 
-void R_LoadImage(const char *name, unsigned char **pic, uint32_t *width, uint32_t *height) {
+void R_LoadImage(const char *name, unsigned char **pic, int *width, int *height) {
 	int orgLoader = -1;
 	int i;
 	char localName[128] = {0};

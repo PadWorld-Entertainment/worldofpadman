@@ -131,7 +131,7 @@ void GLimp_InitExtraExtensions(void) {
 	if (1) {
 		char version[256];
 
-		Q_strncpyz(version, qglGetString(GL_SHADING_LANGUAGE_VERSION), sizeof(version));
+		Q_strncpyz(version, (const char *)qglGetString(GL_SHADING_LANGUAGE_VERSION), sizeof(version));
 
 		sscanf(version, "%d.%d", &glRefConfig.glslMajorVersion, &glRefConfig.glslMinorVersion);
 

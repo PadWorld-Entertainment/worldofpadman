@@ -126,7 +126,7 @@ void Error(const char *error, ...) {
 
 #else
 
-static void _printf(const char *format, ...);
+static void _printf(const char *format, ...) __attribute__((format(printf, 1, 2)));
 
 /*
 =================

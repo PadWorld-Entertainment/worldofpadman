@@ -37,9 +37,6 @@ orientation of the bone in the base frame to the orientation in this
 frame.
 
 */
-
-extern int R_ComputeLOD(trRefEntity_t *ent);
-
 static int R_MDRCullModel(mdrHeader_t *header, trRefEntity_t *ent) {
 	vec3_t bounds[2];
 	int i;

@@ -24,6 +24,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __CMDLIB__
 #define __CMDLIB__
 
+#ifndef __GNUC__
+#ifndef __attribute__
+#define __attribute__(x)
+#endif
+#endif
+
 #ifdef _MSC_VER
 #pragma warning(disable : 4244) // MIPS
 #pragma warning(disable : 4136) // X86
@@ -80,7 +86,7 @@ extern char gamedir[1024];
 
 double I_FloatTime(void);
 
-void Error(const char *error, ...);
+void Error(const char *error, ...) __attribute__((noreturn, format(printf, 1, 2)));
 int CheckParm(const char *check);
 
 FILE *SafeOpenWrite(const char *filename);
@@ -113,7 +119,7 @@ extern qboolean archive;
 extern char archivedir[1024];
 
 extern qboolean verbose;
-void qprintf(const char *format, ...);
+void qprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
 
 void ExpandWildcards(int *argc, char ***argv);
 

@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
 
+#if 0
 typedef struct {
 	int i2;
 	int facing;
@@ -60,7 +61,6 @@ static void R_AddEdgeDef(int i1, int i2, int facing) {
 
 static void R_RenderShadowEdges(void) {
 	// FIXME: implement this
-#if 0
 	int		i;
 
 #if 0
@@ -139,8 +139,8 @@ static void R_RenderShadowEdges(void) {
 		}
 	}
 #endif
-#endif
 }
+#endif
 
 /*
 =================

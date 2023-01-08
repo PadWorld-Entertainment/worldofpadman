@@ -339,7 +339,7 @@ Scale up the pixel values in a texture to increase the
 lighting range
 ================
 */
-void R_LightScaleTexture(unsigned *in, int inwidth, int inheight, qboolean only_gamma) {
+static void R_LightScaleTexture(unsigned *in, int inwidth, int inheight, qboolean only_gamma) {
 	if (only_gamma) {
 		if (!glConfig.deviceSupportsGamma) {
 			int i, c;
@@ -841,7 +841,7 @@ Loads any of the supported image types into a canonical
 32 bit format.
 =================
 */
-void R_LoadImage(const char *name, byte **pic, int *width, int *height) {
+static void R_LoadImage(const char *name, byte **pic, int *width, int *height) {
 	qboolean orgNameFailed = qfalse;
 	int orgLoader = -1;
 	int i;
@@ -1100,7 +1100,7 @@ static void R_CreateDefaultImage(void) {
 R_CreateBuiltinImages
 ==================
 */
-void R_CreateBuiltinImages(void) {
+static void R_CreateBuiltinImages(void) {
 	int x, y;
 	byte data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 

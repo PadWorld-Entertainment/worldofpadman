@@ -1537,9 +1537,6 @@ static const void *RB_PostProcess(const void *data) {
 	return (const void *)(cmd + 1);
 }
 
-// FIXME: put this function declaration elsewhere
-void R_SaveDDS(const char *filename, byte *pic, int width, int height, int depth);
-
 /*
 =============
 RB_ExportCubemaps

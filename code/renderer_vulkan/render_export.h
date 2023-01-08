@@ -5,6 +5,8 @@
 #include "../renderercommon/tr_public.h"
 #include "../renderercommon/tr_types.h"
 
+refexport_t *R_Export(void);
+
 // Total 30 exported function
 
 void RE_Shutdown(qboolean destroyWindow);

@@ -134,6 +134,10 @@ IMAGE LOADERS
 =============================================================
 */
 
+void RE_SaveJPG(const char *filename, int quality, int image_width, int image_height, unsigned char *image_buffer,
+				int padding);
+size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_width, int image_height,
+						  byte *image_buffer, int padding);
 void R_LoadBMP(const char *name, byte **pic, int *width, int *height);
 void R_LoadJPG(const char *name, byte **pic, int *width, int *height);
 void R_LoadPCX(const char *name, byte **pic, int *width, int *height);

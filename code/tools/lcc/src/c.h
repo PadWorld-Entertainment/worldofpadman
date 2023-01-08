@@ -5,6 +5,13 @@
 #include <limits.h>
 #include <string.h>
 
+extern void input_init(int, char *[]);
+extern void main_init(int, char *[]);
+extern void prof_init(int, char *[]);
+extern void trace_init(int, char *[]);
+extern void type_init(int, char *[]);
+extern void init(int argc, char *argv[]);
+
 #define NEW(p, a) ((p) = allocate(sizeof *(p), (a)))
 #define NEW0(p, a) memset(NEW((p), (a)), 0, sizeof *(p))
 #define isaddrop(op) (specific(op) == ADDRG + P || specific(op) == ADDRL + P || specific(op) == ADDRF + P)
@@ -509,7 +516,6 @@ extern void print(const char *, ...);
 extern List append(void *x, List list);
 extern int length(List list);
 extern void *ltov(List *list, unsigned a);
-extern void init(int, char *[]);
 
 extern Type typename(void);
 extern void checklab(Symbol p, void *cl);

@@ -210,7 +210,7 @@ R_ComputeFogNum
 
 =================
 */
-int R_ComputeFogNum(md3Header_t *header, trRefEntity_t *ent) {
+static int R_ComputeFogNum(md3Header_t *header, trRefEntity_t *ent) {
 	int i, j;
 	fog_t *fog;
 	md3Frame_t *md3Frame;

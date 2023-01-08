@@ -19,7 +19,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-time_t reproducible_time(void) {
+static time_t reproducible_time(void) {
 	char *source_date_epoch;
 	time_t t;
 	if ((source_date_epoch = getenv("SOURCE_DATE_EPOCH")) == NULL ||

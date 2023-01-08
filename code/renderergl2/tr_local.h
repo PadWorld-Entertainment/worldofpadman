@@ -2363,6 +2363,9 @@ extern int max_polyverts;
 
 extern backEndData_t *backEndData; // the second one may not be allocated
 
+void R_SaveDDS(const char *filename, byte *pic, int width, int height, int depth);
+void R_LoadDDS(const char *filename, byte **pic, int *width, int *height, GLenum *picFormat, int *numMips);
+
 void *R_GetCommandBuffer(int bytes);
 void RB_ExecuteRenderCommands(const void *data);
 
@@ -2376,10 +2379,6 @@ void RE_SetColor(const float *rgba);
 void RE_StretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader);
 void RE_BeginFrame(stereoFrame_t stereoFrame);
 void RE_EndFrame(int *frontEndMsec, int *backEndMsec);
-void RE_SaveJPG(const char *filename, int quality, int image_width, int image_height, unsigned char *image_buffer,
-				int padding);
-size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_width, int image_height,
-						  byte *image_buffer, int padding);
 void RE_TakeVideoFrame(int width, int height, byte *captureBuffer, byte *encodeBuffer, qboolean motionJpeg);
 
 #endif // TR_LOCAL_H

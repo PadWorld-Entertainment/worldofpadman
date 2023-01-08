@@ -39,27 +39,6 @@ refimport_t ri;
 surfaceType_t entitySurface = SF_ENTITY;
 
 /*
-================
-R_CompareVert
-================
-*/
-qboolean R_CompareVert(srfVert_t *v1, srfVert_t *v2, qboolean checkST) {
-	int i;
-
-	for (i = 0; i < 3; i++) {
-		if (floor(v1->xyz[i] + 0.1) != floor(v2->xyz[i] + 0.1)) {
-			return qfalse;
-		}
-
-		if (checkST && ((v1->st[0] != v2->st[0]) || (v1->st[1] != v2->st[1]))) {
-			return qfalse;
-		}
-	}
-
-	return qtrue;
-}
-
-/*
 =============
 R_CalcTexDirs
 

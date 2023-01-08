@@ -39,8 +39,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "tr_backend.h"
 #include "tr_fog.h"
 
-extern void RE_ClearScene(void);
-
 static void R_Init(void) {
 	int i;
 

@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "matrix_multiplication.h"
 #include "ref_import.h"
+#include "render_export.h"
 #include "tr_cvar.h"
 #include "tr_globals.h"
 #include "tr_light.h"

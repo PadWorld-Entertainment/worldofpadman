@@ -956,7 +956,7 @@ static void GfxInfo_f(void) {
 			ri.Printf(PRINT_ALL, "%s ", qglGetStringi(GL_EXTENSIONS, i));
 		}
 	} else {
-		R_PrintLongString(qglGetString(GL_EXTENSIONS));
+		R_PrintLongString((const char *)qglGetString(GL_EXTENSIONS));
 	}
 	ri.Printf(PRINT_ALL, "\n");
 	ri.Printf(PRINT_ALL, "GL_MAX_TEXTURE_SIZE: %d\n", glConfig.maxTextureSize);
@@ -1048,7 +1048,7 @@ static void GfxMemInfo_f(void) {
 R_Register
 ===============
 */
-void R_Register(void) {
+static void R_Register(void) {
 #ifdef USE_RENDERER_DLOPEN
 	com_altivec = ri.Cvar_Get("com_altivec", "1", CVAR_ARCHIVE);
 #endif

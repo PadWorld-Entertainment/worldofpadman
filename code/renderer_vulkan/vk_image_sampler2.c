@@ -38,12 +38,14 @@ struct Vk_Sampler_Def {
 #define GL_LINEAR_MIPMAP_LINEAR 0x2703
 #endif
 
+#if 0
 static const textureMode_t texModes[] = {{"GL_NEAREST", GL_NEAREST, GL_NEAREST},
 										 {"GL_LINEAR", GL_LINEAR, GL_LINEAR},
 										 {"GL_NEAREST_MIPMAP_NEAREST", GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST},
 										 {"GL_LINEAR_MIPMAP_NEAREST", GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR},
 										 {"GL_NEAREST_MIPMAP_LINEAR", GL_NEAREST_MIPMAP_LINEAR, GL_NEAREST},
 										 {"GL_LINEAR_MIPMAP_LINEAR", GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR}};
+#endif
 
 /*
   The maximum number of sampler objects which can be simultaneously created on a device
@@ -72,6 +74,7 @@ void vk_free_sampler(void) {
 	s_NumSamplers = 0;
 }
 
+#if 0
 void vk_set_sampler(int m) {
 	if (m >= 6) {
 		ri.Printf(PRINT_ALL, "bad filter name\n");
@@ -80,6 +83,7 @@ void vk_set_sampler(int m) {
 
 	ri.Cvar_Set("r_textureMode", texModes[m].name);
 }
+#endif
 
 VkSampler vk_find_sampler(VkBool32 mipmap, VkBool32 repeat_texture) {
 	struct Vk_Sampler_Def sampler_def;

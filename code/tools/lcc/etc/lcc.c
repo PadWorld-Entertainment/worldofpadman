@@ -4,6 +4,7 @@
  */
 static char rcsid[] = "Id: dummy rcsid";
 
+#include "lcc.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -20,6 +21,12 @@ static char rcsid[] = "Id: dummy rcsid";
 
 #ifndef TEMPDIR
 #define TEMPDIR "/tmp"
+#endif
+
+#ifndef __GNUC__
+#ifndef __attribute__
+#define __attribute__(x)
+#endif
 #endif
 
 typedef struct list *List;
@@ -49,7 +56,7 @@ extern int main(int, char *[]);
 extern char *replace(const char *, int, int);
 static void rm(List);
 extern char *strsave(const char *);
-extern char *stringf(const char *, ...);
+extern char *stringf(const char *, ...) __attribute__((format(printf, 1, 2)));
 extern int suffix(char *, char *[], int);
 extern char *tempname(char *);
 
@@ -77,8 +84,6 @@ static char **av;						 /* argument vector */
 char *tempdir = TEMPDIR;				 /* directory for temporary files */
 static char *progname;
 static List lccinputs; /* list of input directories */
-
-extern void UpdatePaths(const char *lccBinary);
 
 int main(int argc, char *argv[]) {
 	int i, j, nf;
@@ -338,7 +343,7 @@ static int callsys(char **av) {
 			argv[j++] = av[i];
 		if (s != NULL) {
 			if (s > av[i])
-				argv[j++] = stringf("%.*s", s - av[i], av[i]);
+				argv[j++] = stringf("%.*s", (int)(s - av[i]), av[i]);
 			if (s[1] != '\0')
 				av[i] = s + 1;
 			else

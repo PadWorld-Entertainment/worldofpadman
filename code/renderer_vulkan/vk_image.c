@@ -7,6 +7,7 @@
 #include "vk_cmd.h"
 #include "vk_image_sampler.h"
 #include "vk_instance.h"
+#include "render_export.h"
 
 #define IMAGE_CHUNK_SIZE (64 * 1024 * 1024)
 
@@ -412,7 +413,7 @@ static void vk_createImageViewAndDescriptorSet(image_t *pImage) {
 	// the size is the size of the MVP.
 }
 
-image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t width, const uint32_t height,
+image_t *R_CreateImage(const char *name, byte *pic, int width, int height,
 					   VkBool32 isMipMap, VkBool32 allowPicmip, int glWrapClampMode) {
 	image_t *pImage;
 	const unsigned int max_texture_size = 2048;
@@ -613,7 +614,7 @@ image_t *R_CreateImage(const char *name, unsigned char *pic, const uint32_t widt
 image_t *R_FindImageFile(const char *name, VkBool32 mipmap, VkBool32 allowPicmip, int glWrapClampMode) {
 	image_t *image;
 	int hash;
-	uint32_t width = 0, height = 0;
+	int width = 0, height = 0;
 	unsigned char *pic = NULL;
 
 	if (name == NULL) {

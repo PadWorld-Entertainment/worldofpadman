@@ -334,6 +334,7 @@ static void RB_TestFlare( flare_t *f ) {
 	size = backEnd.viewParms.viewportWidth * (r_flareSize->value / (distance * -2.0f));
 */
 
+#if 0
 /*
  * As flare sizes stay nearly constant with increasing distance we must decrease the intensity
  * to achieve a reasonable visual result. The intensity is ~ (size^2 / distance^2) which can be
@@ -346,8 +347,8 @@ static void RB_TestFlare( flare_t *f ) {
  * intensity = flareCoeff * size^2 / (distance + size*sqrt(flareCoeff))^2
  * As you can see, the intensity will have a max. of 1 when the distance is 0.
  * The coefficient flareCoeff will determine the falloff speed with increasing distance.
-
-void RB_RenderFlare( flare_t *f ) {
+ */
+static void RB_RenderFlare(flare_t *f) {
 	float			size;
 	vec3_t			color;
 	int				iColor[3];
@@ -443,7 +444,9 @@ void RB_RenderFlare( flare_t *f ) {
 
 	RB_EndSurface();
 }
-*/
+#endif
+
+#if 0
 /*
 ==================
 RB_RenderFlares
@@ -459,7 +462,7 @@ The resulting artifact is that flares in mirrors or portals don't dim properly
 when occluded by something in the main view, and portal flares that should
 extend past the portal edge will be overwritten.
 ==================
-
+*/
 void RB_RenderFlares (void)
 {
 	flare_t		*f;
@@ -539,4 +542,4 @@ void RB_RenderFlares (void)
 	qglMatrixMode( GL_MODELVIEW );
 	qglPopMatrix();
 }
-*/
+#endif

@@ -200,6 +200,9 @@ static void vk_read_pixels(unsigned char *pBuf, uint32_t W, uint32_t H) {
 	qvkDestroyBuffer(vk.device, buffer, NULL);
 }
 
+extern size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_width, int image_height,
+						  byte *image_buffer, int padding);
+
 extern void RE_SaveJPG(const char *filename, int quality, int image_width, int image_height, unsigned char *image_buffer,
 					   int padding);
 

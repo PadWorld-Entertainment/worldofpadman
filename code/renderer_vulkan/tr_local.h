@@ -690,9 +690,6 @@ void R_InitImages(void);
 void R_InitSkins(void);
 skin_t *R_GetSkinByHandle(qhandle_t hSkin);
 
-size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_width, int image_height,
-						  byte *image_buffer, int padding);
-
 //
 // tr_shader.c
 //
@@ -711,6 +708,8 @@ void R_UpdateShaderHashTable(shader_t *newShader);
 void R_SetDefaultShader(void);
 shader_t *FinishShader(void);
 void R_CreateDefaultShadingCmds(const char *name, image_t *image);
+
+int R_ComputeLOD(trRefEntity_t *ent);
 
 /*
 ====================================================================

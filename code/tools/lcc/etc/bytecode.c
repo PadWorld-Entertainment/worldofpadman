@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "../../../qcommon/q_platform.h"
+#include "lcc.h"
 
 #ifdef _WIN32
 #define BINEXT ".exe"

@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "cmdlib.h"
 #include "mathlib.h"
 #include "../../qcommon/qfiles.h"
+#include <stdint.h>
 
 /* 19079 total symbols in FI, 2002 Jan 23 */
 #define DEFAULT_HASHTABLE_SIZE 2048
@@ -221,20 +222,17 @@ sourceOps_t sourceOps[] = {
 
 #define NUM_SOURCE_OPS (sizeof(sourceOps) / sizeof(sourceOps[0]))
 
-int opcodesHash[NUM_SOURCE_OPS];
+static int opcodesHash[NUM_SOURCE_OPS];
 
-static int vreport(const char *fmt, va_list vp) {
+static int report(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+static int report(const char *fmt, ...) {
 	if (options.verbose != qtrue)
 		return 0;
-	return vprintf(fmt, vp);
-}
-
-static int report(const char *fmt, ...) {
 	va_list va;
 	int retval;
 
 	va_start(va, fmt);
-	retval = vreport(fmt, va);
+	retval = vprintf(fmt, va);
 	va_end(va);
 	return retval;
 }
@@ -287,7 +285,7 @@ static void hashtable_stats(hashtable_t *H) {
 	float meanlen;
 	hashchain_t *hc;
 
-	report("Stats for hashtable %08X", H);
+	report("Stats for hashtable %08X", (unsigned int)(intptr_t)H);
 	empties = 0;
 	longest = 0;
 	nodes = 0;
@@ -460,6 +458,7 @@ static unsigned int HashString(const char *key) {
 CodeError
 ============
 */
+static void CodeError(char *fmt, ...) __attribute__((format(printf, 1, 2)));
 static void CodeError(char *fmt, ...) {
 	va_list argptr;
 
@@ -792,7 +791,7 @@ static void HackToSegment(segmentName_t seg) {
 
 //#define STAT(L) report("STAT " L "\n");
 #define STAT(L)
-#define ASM(O) static int TryAssemble##O()
+#define ASM(O) static int TryAssemble##O(void)
 
 /*
   These clauses were moved out from AssembleLine() to allow reordering of if's.

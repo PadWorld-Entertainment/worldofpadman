@@ -615,7 +615,7 @@ void R_ScreenShot_f(void) {
 	}
 }
 
-void R_ScreenShotJPEG_f(void) {
+static void R_ScreenShotJPEG_f(void) {
 	char checkname[MAX_OSPATH];
 	static int lastNumber = -1;
 	qboolean silent;
@@ -827,7 +827,7 @@ void GfxInfo_f(void) {
 			ri.Printf(PRINT_ALL, "%s ", qglGetStringi(GL_EXTENSIONS, i));
 		}
 	} else {
-		R_PrintLongString(qglGetString(GL_EXTENSIONS));
+		R_PrintLongString((const char *)qglGetString(GL_EXTENSIONS));
 	}
 	ri.Printf(PRINT_ALL, "\n");
 	ri.Printf(PRINT_ALL, "GL_MAX_TEXTURE_SIZE: %d\n", glConfig.maxTextureSize);
@@ -898,7 +898,7 @@ void GfxInfo_f(void) {
 R_Register
 ===============
 */
-void R_Register(void) {
+static void R_Register(void) {
 #ifdef USE_RENDERER_DLOPEN
 	com_altivec = ri.Cvar_Get("com_altivec", "1", CVAR_ARCHIVE);
 #endif
@@ -1182,7 +1182,7 @@ RE_EndRegistration
 Touch all images to make sure they are resident
 =============
 */
-void RE_EndRegistration(void) {
+static void RE_EndRegistration(void) {
 	R_IssuePendingRenderCommands();
 	if (!ri.Sys_LowPhysicalMemory()) {
 		RB_ShowImages();

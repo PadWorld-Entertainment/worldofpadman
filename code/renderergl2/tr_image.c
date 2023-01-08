@@ -2072,9 +2072,6 @@ void R_UpdateSubImage(image_t *image, byte *pic, int x, int y, int width, int he
 
 //===================================================================
 
-// Prototype for dds loader function which isn't common to both renderers
-void R_LoadDDS(const char *filename, byte **pic, int *width, int *height, GLenum *picFormat, int *numMips);
-
 typedef struct {
 	const char *ext;
 	void (*ImageLoader)(const char *, unsigned char **, int *, int *);
