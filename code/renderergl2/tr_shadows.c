@@ -45,7 +45,7 @@ static int numEdgeDefs[SHADER_MAX_VERTEXES];
 // static	int			facing[SHADER_MAX_INDEXES/3];
 // static	vec3_t		shadowXyz[SHADER_MAX_VERTEXES];
 
-void R_AddEdgeDef(int i1, int i2, int facing) {
+static void R_AddEdgeDef(int i1, int i2, int facing) {
 	int c;
 
 	c = numEdgeDefs[i1];
@@ -58,7 +58,7 @@ void R_AddEdgeDef(int i1, int i2, int facing) {
 	numEdgeDefs[i1]++;
 }
 
-void R_RenderShadowEdges(void) {
+static void R_RenderShadowEdges(void) {
 	// FIXME: implement this
 #if 0
 	int		i;
