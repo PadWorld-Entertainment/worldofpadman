@@ -2385,7 +2385,7 @@ int FS_GetModList(char *listbuf, int bufsize) {
 	const char *const paths[] = {fs_basepath->string, fs_homepath->string, fs_steampath->string, fs_gogpath->string};
 
 	*listbuf = 0;
-	nMods = nTotal = 0;
+	nMods = nTotal = nPakDirs = 0;
 
 	// iterate through paths and get list of potential mods
 	for (i = 0; i < ARRAY_LEN(paths); i++) {

@@ -1398,6 +1398,7 @@ static void Com_InitZoneMemory(void) {
 	Z_ClearZone(mainzone, s_zoneTotal);
 }
 
+#ifdef HUNK_DEBUG
 /*
 =================
 Hunk_Log
@@ -1415,11 +1416,9 @@ static void Hunk_Log(void) {
 	Com_sprintf(buf, sizeof(buf), "\r\n================\r\nHunk log\r\n================\r\n");
 	FS_Write(buf, strlen(buf), logfile);
 	for (block = hunkblocks; block; block = block->next) {
-#ifdef HUNK_DEBUG
 		Com_sprintf(buf, sizeof(buf), "size = %8d: %s, line: %d (%s)\r\n", block->size, block->file, block->line,
 					block->label);
 		FS_Write(buf, strlen(buf), logfile);
-#endif
 		size += block->size;
 		numBlocks++;
 	}
@@ -1464,11 +1463,9 @@ static void Hunk_SmallLog(void) {
 			locsize += block2->size;
 			block2->printed = qtrue;
 		}
-#ifdef HUNK_DEBUG
 		Com_sprintf(buf, sizeof(buf), "size = %8d: %s, line: %d (%s)\r\n", locsize, block->file, block->line,
 					block->label);
 		FS_Write(buf, strlen(buf), logfile);
-#endif
 		size += block->size;
 		numBlocks++;
 	}
@@ -1477,6 +1474,7 @@ static void Hunk_SmallLog(void) {
 	Com_sprintf(buf, sizeof(buf), "%d hunk blocks\r\n", numBlocks);
 	FS_Write(buf, strlen(buf), logfile);
 }
+#endif
 
 /*
 =================
