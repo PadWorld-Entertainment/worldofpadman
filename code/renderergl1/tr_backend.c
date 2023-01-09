@@ -312,7 +312,7 @@ void GL_State(unsigned long stateBits) {
 			qglAlphaFunc(GL_GEQUAL, 0.5f);
 			break;
 		default:
-			assert(0);
+			ri.Error(ERR_DROP, "GL_State: invalid alpha test bits");
 			break;
 		}
 	}

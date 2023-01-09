@@ -822,16 +822,16 @@ image_t *R_CreateImage(const char *name, byte *pic, int width, int height, imgTy
 //===================================================================
 
 typedef struct {
-	char *ext;
+	const char *ext;
 	void (*ImageLoader)(const char *, unsigned char **, int *, int *);
 } imageExtToLoaderMap_t;
 
 // Note that the ordering indicates the order of preference used
 // when there are multiple images of different formats available
-static imageExtToLoaderMap_t imageLoaders[] = {{"png", R_LoadPNG},	{"tga", R_LoadTGA}, {"jpg", R_LoadJPG},
-											   {"jpeg", R_LoadJPG}, {"pcx", R_LoadPCX}, {"bmp", R_LoadBMP}};
+static const imageExtToLoaderMap_t imageLoaders[] = {{"png", R_LoadPNG},  {"tga", R_LoadTGA}, {"jpg", R_LoadJPG},
+													 {"jpeg", R_LoadJPG}, {"pcx", R_LoadPCX}, {"bmp", R_LoadBMP}};
 
-static int numImageLoaders = ARRAY_LEN(imageLoaders);
+static const int numImageLoaders = ARRAY_LEN(imageLoaders);
 
 /*
 =================
@@ -930,7 +930,7 @@ image_t *R_FindImageFile(const char *name, imgType_t type, imgFlags_t flags) {
 	// see if the image is already loaded
 	//
 	for (image = hashTable[hash]; image; image = image->next) {
-		if (!strcmp(name, image->imgName)) {
+		if (!Q_stricmp(name, image->imgName)) {
 			// the white image can be used with any set of parms, but other mismatches are errors
 			if (strcmp(name, "*white")) {
 				if (image->flags != flags) {
@@ -1200,7 +1200,7 @@ void R_SetColorMappings(void) {
 		s_gammatable[i] = inf;
 	}
 
-	for (i = 0; i < 256; i++) {
+	for (i = 0; i < ARRAY_LEN(s_intensitytable); i++) {
 		j = i * r_intensity->value;
 		if (j > 255) {
 			j = 255;
@@ -1269,9 +1269,9 @@ This is unfortunate, but the skin files aren't
 compatible with our normal parsing rules.
 ==================
 */
-static char *CommaParse(char **data_p) {
-	int c = 0, len;
-	char *data;
+static char *CommaParse(const char **data_p) {
+	int c, len;
+	const char *data;
 	static char com_token[MAX_TOKEN_CHARS];
 
 	data = *data_p;
@@ -1368,8 +1368,8 @@ qhandle_t RE_RegisterSkin(const char *name) {
 		char *c;
 		void *v;
 	} text;
-	char *text_p;
-	char *token;
+	const char *text_p;
+	const char *token;
 	char surfName[MAX_QPATH];
 	int totalSurfaces;
 

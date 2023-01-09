@@ -446,7 +446,7 @@ srfGridMesh_t *R_SubdividePatchToGrid(int width, int height, drawVert_t points[M
 		height = t;
 	}
 
-	// put all the aproximating points on the curve
+	// put all the approximating points on the curve
 	PutPointsOnCurve(ctrl, width, height);
 
 	// cull out any rows or columns that are colinear
@@ -534,7 +534,7 @@ srfGridMesh_t *R_GridInsertColumn(srfGridMesh_t *grid, int column, int row, vec3
 	for (j = 0; j < grid->height; j++) {
 		errorTable[1][j] = grid->heightLodError[j];
 	}
-	// put all the aproximating points on the curve
+	// put all the approximating points on the curve
 	// PutPointsOnCurve( ctrl, width, height );
 	// calculate normals
 	MakeMeshNormals(width, height, ctrl);
@@ -588,7 +588,7 @@ srfGridMesh_t *R_GridInsertRow(srfGridMesh_t *grid, int row, int column, vec3_t 
 	for (j = 0; j < grid->width; j++) {
 		errorTable[0][j] = grid->widthLodError[j];
 	}
-	// put all the aproximating points on the curve
+	// put all the approximating points on the curve
 	// PutPointsOnCurve( ctrl, width, height );
 	// calculate normals
 	MakeMeshNormals(width, height, ctrl);
