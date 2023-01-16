@@ -6,6 +6,7 @@
 	- Freeze Tag (ft) game mode and related assets like weapon effects
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
+	- Support for player model sounds depending of the selected skin; a complete sound set or individual sounds for a skin can be stored in a folder of the same name in parallel with the model's folder; the model's sounds serve as a fallback if no sounds are available for the skin
 	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones
 	- Option to switch renderer from OpenGL1 to OpenGL2 or Vulkan to Graphics page of System menu
 	- Option to switch Lighting to Vertex or Lightmap to Graphics page of System menu
@@ -44,7 +45,7 @@
 	- Option to adjust the key mapping for taking a Screenshot `F12` (default) to Misc page of Controls menu
 	- Option to enable/disable Autorecord Demo `O` (default) to Misc page of Controls menu
 	- Option to enable/disable Sync Clients `P` (default) to Misc page of Controls menu
-	- New mapping for f-keys via default.cfg (for developers and level designers): hide/show HUD `F5`; hide/show gun `F6`; hide/show wire frames (cheat protected) `F7`; hide/show lightmap `F8`; hide/show render load information (cheat protected) `F9`; enable/disable noclip (cheat protected) `F10`; enable/disable god mode and give all items (cheat protected) `F11`
+	- New mapping for F-keys via default.cfg (for developers and level designers): hide/show HUD `F5`; hide/show gun `F6`; following are cheat protected: hide/show wire frames `F7`; hide/show lightmap `F8`; hide/show render load information `F9`; enable/disable noclip `F10`; enable/disable god mode and give all items `F11`
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
 	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
@@ -54,6 +55,9 @@
 	- PadKnight bot to the game and shown in the Select Bots menu
 	- Possibility to set Antialiasing (MSAA) to 8x on Graphics page of System menu
 	- Missing default keyboard mapping in Controls menu and synced with default.cfg
+	- White teleporter (portal) and jumppad effect (shaders and textures)
+	- Life limit warnings by announcer in LPS game mode when life count drops below 4
+	- Player event for almost capturing a lolly in CTL, plays "better luck next time, maybe" (known from LPS)
 - CHANGED
 	- Network protocol version number to 72 to avoid issues due to incompatibilities with previous WoP versions
 	- Home path to `worldofpadman` for all operating systems to unify them
@@ -66,7 +70,7 @@
 	- Anisotropy option to be merged with Texture Filter option into a single menu entry on Graphics page of System menu
 	- Name of Fullscreen option on Graphics page of Setup menu to Window Mode, also supporting new borderless window mode and moved to Display page of System menu 
 	- Anaglyph 3D modes on Display page of System menu to list the modes 1 to 4, modes 5 to 8 are enabled by enabling the new Color Swap option
-	- name of Network page of System menu to Net/VoIP and moved all VoIP related options from Sound page of System menu to Net/VoIP
+	- Name of Network page of System menu to Net/VoIP and moved all VoIP related options from Sound page of System menu to Net/VoIP
 	- Net/VoIP and Sound options to hide not necessary options depending on selected VoIP Support or Sound System (instead of showing them greyed)
 	- Controls menu to support options known from pre WoP 1.6 versions, and reallocation and renaming of some options
 	- Options menu to four pages layout to support more options and reallocation of all options to HUD, Game, Chat and Help according their functionality
@@ -89,15 +93,19 @@
 	- Gametype list in Create menu to list FFA gametypes first and FFA being default (was SYC)
 	- Team Orders ingame menu entry to be shown again
 	- Cvar `r_lightmap [1|0]` to be cheat protected now
+	- `animap` shader key to support up to 16 textures instead of 8
+	- World sound files location from folder `sounds` to `sound` and shortening
+	- Teammate icon to be shown through walls in all team game modes, not only Big Balloon
 - FIXED
 	- Path entry of voice chat icon and icon not shown during voice chat
-	- Being unable to use ^ key to enter color tags in Player Seetings menu or console
+	- Being unable to use `^` key to enter color tags in Player Settings menu or console
 	- Anisotropy and Antialiasing options in Graphics menu to be displayed as 4x after video restart, although 2x was selected before
 	- Anisotropy option in Graphics menu not working at all and option always to be displayed as Off after WoP restart, although 2x or more was selected before
 	- Selection of cyan-red in Display menu always enables magenta-green anaglyph mode, magenta-green mode was not respected as new mode in the list
 	- Enabling Greyscale in Display menu always causes the Apply button to be shown even after game restart and without changes made afterwards
 	- Sync Every Frame tooltip in Game options menu to mistake the option for VSync. This option has nothing to do with VSync.
 	- Glowing Player Model option in Game options cannot keep enabled status when Glowing Skin Color black is selected
+	- Not defined value for Start Lives in Start Server (Create) menu, default is 10 now
 	- Wrong spray logo name allocation for Spooky and PadCho
 	- Fail to load OpenAL library on Windows 64bit systems
 	- Setting the spray logo via the Player Settings menu during a match has no effect
@@ -106,16 +114,23 @@
 	- Voice Threshold slider not showing the input value
 	- Menu music loop to be played when calling Team Orders menu via hotkey
 	- View size (screen size) functionality and added missing backtile asset
+	- Missing shader texture in spray room exit portal in MopAn's Jail
+	- Alien monitor animation shader in ENTE's PadShop to support all 9 textures
+	- Player is in his own view when zooming with SPLASHER/INJECTOR in 3rd person mode; 3rd person mode is temporarily disabled when zooming in
+	- Player automatically switches from 3rd person view back to 1st person view when warm-up timer expires
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
 	- `^` key to open/close the console
 	- Not used menu textures
 	- Not used roq video files
+	- Not used shaders entries and textures
+	- Not used world sound files
 	- File suffixes from shader entries to let the engine decide
 	- Not used and outdated BETTY explosion textures
 	- Spray logos of dead sites and partners exp, desura, pqcom, turtle
 	- Exit screen (when clicking the Exit button in the main menu) with confirmation query and related assets
 	- Unused and dead code in general
+	- `cg_LPSwallhackSize` and `cg_LPSwallhackAlpha` to prevent giving an unfair advantage to clients
 - UPDATED
 	- All tooltips in the menus and wording of menu entries where useful
 	- UI menu font texture with HQ version
