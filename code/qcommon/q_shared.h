@@ -237,7 +237,11 @@ typedef int clipHandle_t;
 
 #define ARRAY_LEN(x) (sizeof(x) / sizeof(*(x)))
 #define STRARRAY_LEN(x) (ARRAY_LEN(x) - 1)
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+#define CASSERT(x) _Static_assert(x, #x)
+#else
 #define CASSERT(x) extern int ASSERT_COMPILE[((x) != 0) * 2 - 1]
+#endif
 
 // angle indexes
 #define PITCH 0 // up / down
