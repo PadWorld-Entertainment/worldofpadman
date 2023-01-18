@@ -228,7 +228,7 @@ extern void RE_SaveTGA(const char *filename, int image_width, int image_height, 
 
 static void RB_TakeScreenshotJPEG(int width, int height, const char *fileName) {
 	const uint32_t cnPixels = width * height;
-	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 3);
+	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
 	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
 	RB_ReadPixels(pImg, width, height);
 	RE_SaveJPG(fileName, r_screenshotJpegQuality->integer, width, height, pImg, 0);
@@ -237,7 +237,7 @@ static void RB_TakeScreenshotJPEG(int width, int height, const char *fileName) {
 
 static void RB_TakeScreenshotPNG(int width, int height, const char *fileName) {
 	const uint32_t cnPixels = width * height;
-	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 3);
+	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
 	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
 	RB_ReadPixels(pImg, width, height);
 	RE_SavePNG(fileName, width, height, pImg, 0);
@@ -246,7 +246,7 @@ static void RB_TakeScreenshotPNG(int width, int height, const char *fileName) {
 
 static void RB_TakeScreenshotTGA(int width, int height, const char *fileName) {
 	const uint32_t cnPixels = width * height;
-	unsigned char *const pBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 3);
+	unsigned char *const pBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
 	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
 	RB_ReadPixels(pBuffer, width, height);
 	RE_SaveTGA(fileName, width, height, pBuffer, 0);
