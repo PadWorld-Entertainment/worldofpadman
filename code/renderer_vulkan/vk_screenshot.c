@@ -44,7 +44,7 @@ Implementations may support additional limits and capabilities beyond those list
 
 */
 
-static void imgFlipY(unsigned char *pBuf, const uint32_t w, const uint32_t h) {
+static void RB_FlipFrameBuffer(unsigned char *pBuf, const uint32_t w, const uint32_t h) {
 	const uint32_t a_row = w * 4;
 	const uint32_t nLines = h / 2;
 
@@ -66,8 +66,8 @@ static void imgFlipY(unsigned char *pBuf, const uint32_t w, const uint32_t h) {
 }
 
 // Just reading the pixels for the GPU MEM, don't care about swizzling
-static void vk_read_pixels(unsigned char *pBuf, uint32_t W, uint32_t H) {
-	const uint32_t sizeFB = W * H * 4;
+static void RB_ReadPixels(unsigned char *pBuf, uint32_t width, uint32_t height) {
+	const uint32_t sizeFB = width * height * 4;
 
 	VkBuffer buffer;
 	VkDeviceMemory memory;
@@ -109,8 +109,8 @@ static void vk_read_pixels(unsigned char *pBuf, uint32_t W, uint32_t H) {
 
 	{
 		image_copy.bufferOffset = 0;
-		image_copy.bufferRowLength = W;
-		image_copy.bufferImageHeight = H;
+		image_copy.bufferRowLength = width;
+		image_copy.bufferImageHeight = height;
 
 		image_copy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 		image_copy.imageSubresource.layerCount = 1;
@@ -119,8 +119,8 @@ static void vk_read_pixels(unsigned char *pBuf, uint32_t W, uint32_t H) {
 		image_copy.imageOffset.x = 0;
 		image_copy.imageOffset.y = 0;
 		image_copy.imageOffset.z = 0;
-		image_copy.imageExtent.width = W;
-		image_copy.imageExtent.height = H;
+		image_copy.imageExtent.width = width;
+		image_copy.imageExtent.height = height;
 		image_copy.imageExtent.depth = 1;
 	}
 
@@ -198,32 +198,16 @@ static void vk_read_pixels(unsigned char *pBuf, uint32_t W, uint32_t H) {
 	qvkUnmapMemory(vk.device, memory);
 	qvkFreeMemory(vk.device, memory, NULL);
 	qvkDestroyBuffer(vk.device, buffer, NULL);
-}
 
-extern size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_width, int image_height,
-						  byte *image_buffer, int padding);
-
-extern void RE_SaveJPG(const char *filename, int quality, int image_width, int image_height, unsigned char *image_buffer,
-					   int padding);
-
-static void RB_TakeScreenshotJPEG(int width, int height, const char *fileName) {
-	const uint32_t cnPixels = width * height;
-	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
-
-	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
-
-	vk_read_pixels(pImg, width, height);
-
-	// but why this is need ? why the readed image got fliped about Y ???
-	imgFlipY(pImg, width, height);
+	RB_FlipFrameBuffer(pBuf, width, height);
 
 	// Remove alpha channel and rbg <-> bgr
 	{
-		unsigned char *pSrc = pImg;
-		unsigned char *pDst = pImg;
+		unsigned char *pSrc = pBuf;
+		unsigned char *pDst = pBuf;
 
 		uint32_t i;
-		for (i = 0; i < cnPixels; i++) {
+		for (i = 0; i < width * height; i++) {
 			pSrc[0] = pDst[2];
 			pSrc[1] = pDst[1];
 			pSrc[2] = pDst[0];
@@ -231,57 +215,42 @@ static void RB_TakeScreenshotJPEG(int width, int height, const char *fileName) {
 			pDst += 4;
 		}
 	}
+}
 
-	RE_SaveJPG(fileName, 90, width, height, pImg, 0);
+extern size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_width, int image_height,
+								 byte *image_buffer, int padding);
 
+extern void RE_SaveJPG(const char *filename, int quality, int image_width, int image_height,
+					   unsigned char *image_buffer, int padding);
+extern void RE_SavePNG(const char *filename, int width, int height, byte *data, int padding);
+extern void RE_SaveTGA(const char *filename, int image_width, int image_height, byte *image_buffer, int padding);
+extern cvar_t *r_aviMotionJpegQuality;
+extern cvar_t *r_screenshotJpegQuality;
+
+static void RB_TakeScreenshotJPEG(int width, int height, const char *fileName) {
+	const uint32_t cnPixels = width * height;
+	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 3);
+	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
+	RB_ReadPixels(pImg, width, height);
+	RE_SaveJPG(fileName, r_screenshotJpegQuality->integer, width, height, pImg, 0);
+	ri.Hunk_FreeTempMemory(pImg);
+}
+
+static void RB_TakeScreenshotPNG(int width, int height, const char *fileName) {
+	const uint32_t cnPixels = width * height;
+	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 3);
+	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
+	RB_ReadPixels(pImg, width, height);
+	RE_SavePNG(fileName, width, height, pImg, 0);
 	ri.Hunk_FreeTempMemory(pImg);
 }
 
 static void RB_TakeScreenshotTGA(int width, int height, const char *fileName) {
 	const uint32_t cnPixels = width * height;
+	unsigned char *const pBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 3);
 	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
-
-	// const uint32_t cnPixels = width * height;
-	const uint32_t imgSize = 18 + cnPixels * 3;
-	uint32_t i;
-
-	unsigned char *const pBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(imgSize + cnPixels * 4);
-	unsigned char *const buffer_ptr = pBuffer + 18;
-	unsigned char *const pImg = pBuffer + imgSize;
-
-	vk_read_pixels(pImg, width, height);
-
-	// but why this is need ? why the readed image got fliped about Y ???
-	imgFlipY(pImg, width, height);
-
-	memset(pBuffer, 0, 18);
-	pBuffer[2] = 2; // uncompressed type
-	pBuffer[12] = width & 255;
-	pBuffer[13] = width >> 8;
-	pBuffer[14] = height & 255;
-	pBuffer[15] = height >> 8;
-	pBuffer[16] = 24; // pixel size
-
-	//    VkBool32 need_swizzle = (
-	//            vk.surface_format.format == VK_FORMAT_B8G8R8A8_SRGB ||
-	//            vk.surface_format.format == VK_FORMAT_B8G8R8A8_UNORM ||
-	//           vk.surface_format.format == VK_FORMAT_B8G8R8A8_SNORM );
-
-	if (0) {
-		for (i = 0; i < cnPixels; i++) {
-			buffer_ptr[i * 3] = *(pImg + i * 4 + 2);
-			buffer_ptr[i * 3 + 1] = *(pImg + i * 4 + 1);
-			buffer_ptr[i * 3 + 2] = *(pImg + i * 4);
-		}
-	} else {
-		for (i = 0; i < cnPixels; i++) {
-			buffer_ptr[i * 3] = *(pImg + i * 4);
-			buffer_ptr[i * 3 + 1] = *(pImg + i * 4 + 1);
-			buffer_ptr[i * 3 + 2] = *(pImg + i * 4 + 2);
-		}
-	}
-	ri.FS_WriteFile(fileName, pBuffer, imgSize);
-
+	RB_ReadPixels(pBuffer, width, height);
+	RE_SaveTGA(fileName, width, height, pBuffer, 0);
 	ri.Hunk_FreeTempMemory(pBuffer);
 }
 
@@ -294,11 +263,8 @@ const void *RB_TakeScreenshotCmd(const void *data) {
 		RB_TakeScreenshotTGA(cmd->width, cmd->height, cmd->fileName);
 	else if (cmd->type == ST_JPEG)
 		RB_TakeScreenshotJPEG(cmd->width, cmd->height, cmd->fileName);
-#if 0
-	// TODO
 	else if (cmd->type == ST_PNG)
-		RB_TakeScreenshotPNG(cmd->x, cmd->y, cmd->width, cmd->height, cmd->fileName);
-#endif
+		RB_TakeScreenshotPNG(cmd->width, cmd->height, cmd->fileName);
 
 	return (const void *)(cmd + 1);
 }
@@ -333,72 +299,34 @@ levelshots are specialized 128*128 thumbnails for the
 menu system, sampled down from full screen distorted images
 ====================
 */
-static void R_LevelShot(int W, int H) {
-	char checkname[MAX_OSPATH];
-	unsigned char *buffer;
-	unsigned char *source;
-	unsigned char *src;
-	unsigned char *dst;
-	int x, y;
-	int r, g, b;
-	float xScale, yScale;
-	int xx, yy;
-	int i = 0;
-	Com_sprintf(checkname, sizeof(checkname), "levelshots/%s.tga", tr.world->baseName);
+static void R_LevelShot(screenshotType_e type, const char *ext) {
+	char fileName[MAX_OSPATH];
+	byte *source;
+	int width, height;
+	int arg;
 
-	source = (unsigned char *)ri.Hunk_AllocateTempMemory(W * H * 3);
+	// Allow custom resample width/height
+	arg = atoi(ri.Cmd_Argv(2));
+	if (arg > 0)
+		width = height = arg;
+	else
+		width = height = 128;
 
-	buffer = (unsigned char *)ri.Hunk_AllocateTempMemory(128 * 128 * 3 + 18);
-	memset(buffer, 0, 18);
-	buffer[2] = 2; // uncompressed type
-	buffer[12] = 128;
-	buffer[14] = 128;
-	buffer[16] = 24; // pixel size
+	Com_sprintf(fileName, sizeof(fileName), "levelshots/%s%s", tr.world->baseName, ext);
 
-	{
-		unsigned char *buffer2 = (unsigned char *)ri.Hunk_AllocateTempMemory(W * H * 4);
-		unsigned char *buffer_ptr = source;
-		unsigned char *buffer2_ptr = buffer2;
+	source = (unsigned char *)ri.Hunk_AllocateTempMemory(width * height * 3);
+	RB_ReadPixels(source, width, height);
 
-		vk_read_pixels(buffer2, W, H);
+	if (type == ST_TGA)
+		RE_SaveTGA(fileName, width, height, source, 0);
+	else if (type == ST_JPEG)
+		RE_SaveJPG(fileName, r_screenshotJpegQuality->integer, width, height, source, 0);
+	else if (type == ST_PNG)
+		RE_SavePNG(fileName, width, height, source, 0);
 
-		for (i = 0; i < W * H; i++) {
-			buffer_ptr[0] = buffer2_ptr[0];
-			buffer_ptr[1] = buffer2_ptr[1];
-			buffer_ptr[2] = buffer2_ptr[2];
-			buffer_ptr += 3;
-			buffer2_ptr += 4;
-		}
-		ri.Hunk_FreeTempMemory(buffer2);
-	}
-
-	// resample from source
-	xScale = W / 512.0f;
-	yScale = H / 384.0f;
-	for (y = 0; y < 128; y++) {
-		for (x = 0; x < 128; x++) {
-			r = g = b = 0;
-			for (yy = 0; yy < 3; yy++) {
-				for (xx = 0; xx < 4; xx++) {
-					src = source + 3 * (W * (int)((y * 3 + yy) * yScale) + (int)((x * 4 + xx) * xScale));
-					r += src[0];
-					g += src[1];
-					b += src[2];
-				}
-			}
-			dst = buffer + 18 + 3 * (y * 128 + x);
-			dst[0] = b / 12;
-			dst[1] = g / 12;
-			dst[2] = r / 12;
-		}
-	}
-
-	ri.FS_WriteFile(checkname, buffer, 128 * 128 * 3 + 18);
-
-	ri.Hunk_FreeTempMemory(buffer);
 	ri.Hunk_FreeTempMemory(source);
 
-	ri.Printf(PRINT_ALL, "Wrote %s\n", checkname);
+	ri.Printf(PRINT_ALL, "Wrote %s\n", fileName);
 }
 
 static void R_Screenshot(screenshotType_e type) {
@@ -406,17 +334,13 @@ static void R_Screenshot(screenshotType_e type) {
 	static int lastNumber = -1;
 	qboolean silent;
 
-	int W;
-	int H;
+	int width;
+	int height;
 
-	static const char *exts[] = {
-		".tga", ".jpg", ".png"
-	};
-
-	R_GetWinResolution(&W, &H);
+	static const char *exts[] = {".tga", ".jpg", ".png"};
 
 	if (!strcmp(ri.Cmd_Argv(1), "levelshot")) {
-		R_LevelShot(W, H);
+		R_LevelShot(type, exts[type]);
 		return;
 	}
 
@@ -453,7 +377,8 @@ static void R_Screenshot(screenshotType_e type) {
 		lastNumber++;
 	}
 
-	R_TakeScreenshot(0, 0, W, H, checkname, type);
+	R_GetWinResolution(&width, &height);
+	R_TakeScreenshot(0, 0, width, height, checkname, type);
 
 	if (!silent) {
 		ri.Printf(PRINT_ALL, "Wrote %s\n", checkname);
@@ -484,9 +409,9 @@ void R_ScreenShotPNG_f(void) {
 	R_Screenshot(ST_PNG);
 }
 
-void RB_TakeVideoFrameCmd(const videoFrameCommand_t *const cmd) {
+void RB_TakeVideoFrameCmd(const videoFrameCommand_t *cmd) {
 	size_t memcount, linelen;
-	int padwidth, avipadwidth, padlen;
+	int padwidth, avipadwidth, padlen, avipadlen;
 	unsigned char *pImg;
 
 	linelen = cmd->width * 3;
@@ -496,12 +421,11 @@ void RB_TakeVideoFrameCmd(const videoFrameCommand_t *const cmd) {
 	padlen = padwidth - linelen;
 	// AVI line padding
 	avipadwidth = PAD(linelen, 4);
+	avipadlen = avipadwidth - linelen;
 
 	pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cmd->width * cmd->height * 4);
 
-	vk_read_pixels(pImg, cmd->width, cmd->height);
-
-	imgFlipY(pImg, cmd->width, cmd->height);
+	RB_ReadPixels(pImg, cmd->width, cmd->height);
 
 	memcount = padwidth * cmd->height;
 
@@ -518,26 +442,37 @@ void RB_TakeVideoFrameCmd(const videoFrameCommand_t *const cmd) {
 			pDst += 4;
 		}
 
-		memcount =
-			RE_SaveJPGToBuffer(cmd->encodeBuffer, linelen * cmd->height, 90, cmd->width, cmd->height, pImg, padlen);
+		memcount = RE_SaveJPGToBuffer(cmd->encodeBuffer, linelen * cmd->height, r_aviMotionJpegQuality->integer,
+									  cmd->width, cmd->height, pImg, padlen);
 
 		ri.CL_WriteAVIVideoFrame(cmd->encodeBuffer, memcount);
 	} else {
-		unsigned char *buffer_ptr = cmd->encodeBuffer;
-		const unsigned char *buffer2_ptr = pImg;
-		uint32_t i;
-		for (i = 0; i < cmd->width * cmd->height; i++) {
-			buffer_ptr[0] = buffer2_ptr[0];
-			buffer_ptr[1] = buffer2_ptr[1];
-			buffer_ptr[2] = buffer2_ptr[2];
-			buffer_ptr += 3;
-			buffer2_ptr += 4;
-		}
+		byte *lineend, *memend;
+		byte *srcptr, *destptr;
 
+		srcptr = pImg;
+		destptr = cmd->encodeBuffer;
+		memend = srcptr + memcount;
+
+		// swap R and B and remove line paddings
+		while (srcptr < memend) {
+			lineend = srcptr + linelen;
+			while (srcptr < lineend) {
+				*destptr++ = srcptr[2];
+				*destptr++ = srcptr[1];
+				*destptr++ = srcptr[0];
+				srcptr += 3;
+			}
+
+			Com_Memset(destptr, '\0', avipadlen);
+			destptr += avipadlen;
+
+			srcptr += padlen;
+		}
 		ri.CL_WriteAVIVideoFrame(cmd->encodeBuffer, avipadwidth * cmd->height);
 	}
 
-	free(pImg);
+	ri.Hunk_FreeTempMemory(pImg);
 }
 
 void RE_TakeVideoFrame(int width, int height, unsigned char *captureBuffer, unsigned char *encodeBuffer,

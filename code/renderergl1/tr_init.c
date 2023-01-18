@@ -512,12 +512,8 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 
 	source = RB_ReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, &offset, &spadlen);
 
-	//
-	// Based on RB_ReadPixels
-	qglGetIntegerv(GL_PACK_ALIGNMENT, &packAlign);
-
 	linelen = width * 3;
-	padwidth = PAD(linelen, packAlign);
+	padwidth = spadlen + linelen;
 
 	// Allocate a few more bytes so that we can choose an alignment we like
 	resample = ri.Hunk_AllocateTempMemory(padwidth * height + offset + packAlign - 1);
@@ -552,7 +548,7 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 	memcount = (width * 3 + rpadlen) * height;
 
 	// gamma correct
-	if(glConfig.deviceSupportsGamma)
+	if (glConfig.deviceSupportsGamma)
 		R_GammaCorrect(resample + offset, memcount);
 
 	if (type == ST_TGA)

@@ -34,7 +34,7 @@ typedef struct {
 	VkBool32 motionJpeg;
 } videoFrameCommand_t;
 
-void RB_TakeVideoFrameCmd(const videoFrameCommand_t *const cmd);
+void RB_TakeVideoFrameCmd(const videoFrameCommand_t *cmd);
 const void *RB_TakeScreenshotCmd(const void *data);
 
 #endif

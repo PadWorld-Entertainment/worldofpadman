@@ -72,6 +72,9 @@ cvar_t *r_maxpolyverts;
 cvar_t *r_allowResize; // make window resizable
 cvar_t *r_mode;
 
+cvar_t *r_aviMotionJpegQuality;
+cvar_t *r_screenshotJpegQuality;
+
 void R_Register(void) {
 	//
 	// latched and archived variables
@@ -157,4 +160,8 @@ void R_Register(void) {
 	r_allowResize = ri.Cvar_Get("r_allowResize", "0", CVAR_ARCHIVE | CVAR_LATCH);
 
 	r_mode = ri.Cvar_Get("r_mode", "-2", CVAR_ARCHIVE | CVAR_LATCH);
+
+	r_aviMotionJpegQuality = ri.Cvar_Get("r_aviMotionJpegQuality", "100", CVAR_ARCHIVE);
+	r_screenshotJpegQuality = ri.Cvar_Get("r_screenshotJpegQuality", "100", CVAR_ARCHIVE);
+
 }
