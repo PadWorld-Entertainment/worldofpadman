@@ -2989,9 +2989,9 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 			GAMETYPE_NAME(GT_SPRAYFFA),	 GAMETYPE_NAME(GT_LPS),			 GAMETYPE_NAME(GT_TEAM),
 			GAMETYPE_NAME(GT_FREEZETAG), GAMETYPE_NAME(GT_CTF),			 GAMETYPE_NAME(GT_SPRAY),
 			GAMETYPE_NAME(GT_BALLOON),	 GAMETYPE_NAME(GT_MAX_GAME_TYPE)};
-		CASSERT(ARRAY_LEN(gametype_longstrs) == GT_MAX_GAME_TYPE + 1);
-
 		const int fadeOutTime = 3000;
+
+		CASSERT(ARRAY_LEN(gametype_longstrs) == GT_MAX_GAME_TYPE + 1);
 		if (cg.time - cg.first2dtime < cg_mapInfoTime.integer - fadeOutTime)
 			twhite[3] = 1.0f;
 		else
