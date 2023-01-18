@@ -1460,22 +1460,6 @@ typedef struct {
 	int numDrawSurfs;
 } drawSurfsCommand_t;
 
-typedef enum {
-	ST_TGA,
-	ST_JPEG,
-	ST_PNG
-} screenshotType_e;
-
-typedef struct {
-	int commandId;
-	int x;
-	int y;
-	int width;
-	int height;
-	const char *fileName;
-	screenshotType_e type;
-} screenshotCommand_t;
-
 typedef struct {
 	int commandId;
 	int width;

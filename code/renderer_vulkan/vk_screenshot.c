@@ -362,7 +362,7 @@ static void R_Screenshot(screenshotType_e type) {
 		}
 		// scan for a free number
 		for (; lastNumber <= 9999; lastNumber++) {
-			R_ScreenshotFilename(lastNumber, checkname, exts[type]);
+			R_ScreenshotFilename(lastNumber, checkname, sizeof(checkname), exts[type]);
 			if (!ri.FS_FileExists(checkname)) {
 				break; // file doesn't exist
 			}

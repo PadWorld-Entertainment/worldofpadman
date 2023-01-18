@@ -22,6 +22,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef TR_SHARED_H
 #define TR_SHARED_H
 
-void R_ScreenshotFilename(int lastNumber, char *fileName, const char *ext);
+typedef enum {
+	ST_TGA,
+	ST_JPEG,
+	ST_PNG
+} screenshotType_e;
+
+typedef struct {
+	int commandId;
+	int x;
+	int y;
+	int width;
+	int height;
+	const char *fileName;
+	screenshotType_e type;
+} screenshotCommand_t;
+
+void R_ScreenshotFilename(int lastNumber, char *fileName, int size, const char *ext);
 
 #endif

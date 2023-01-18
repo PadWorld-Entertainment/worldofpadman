@@ -28,11 +28,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 R_ScreenshotFilename
 ==================
 */
-void R_ScreenshotFilename(int lastNumber, char *fileName, const char *ext) {
+void R_ScreenshotFilename(int lastNumber, char *fileName, int size, const char *ext) {
 	int a, b, c, d;
 
 	if (lastNumber < 0 || lastNumber > 9999) {
-		Com_sprintf(fileName, MAX_OSPATH, "screenshots/shot9999.%s", ext);
+		Com_sprintf(fileName, size, "screenshots/shot9999.%s", ext);
 		return;
 	}
 
@@ -44,5 +44,5 @@ void R_ScreenshotFilename(int lastNumber, char *fileName, const char *ext) {
 	lastNumber -= c * 10;
 	d = lastNumber;
 
-	Com_sprintf(fileName, MAX_OSPATH, "screenshots/shot%i%i%i%i.%s", a, b, c, d, ext);
+	Com_sprintf(fileName, size, "screenshots/shot%i%i%i%i.%s", a, b, c, d, ext);
 }
