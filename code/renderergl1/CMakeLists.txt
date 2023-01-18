@@ -45,7 +45,7 @@ endif()
 
 project(renderer_opengl1)
 wop_add_library(TARGET ${PROJECT_NAME} SRCS ${SRCS})
-set(LIBS jpeg SDL2::SDL2)
+set(LIBS jpeg zlib SDL2::SDL2)
 if (MSVC)
 	list(APPEND LIBS ws2_32 winmm psapi gdi32 ole32)
 elseif (APPLE)

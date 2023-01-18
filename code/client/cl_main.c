@@ -2982,9 +2982,6 @@ void CL_InitRef(void) {
 	ri.Sys_GLimpInit = Sys_GLimpInit;
 	ri.Sys_LowPhysicalMemory = Sys_LowPhysicalMemory;
 
-	ri.zlib_compress = compress;
-	ri.zlib_crc32 = crc32;
-
 	ri.CL_GetModDescription = CL_GetModDescription;
 	ri.CL_GetMapTitle = CL_GetMapTitle;
 	ri.CL_GetPlayerLocation = CL_GetPlayerLocation;

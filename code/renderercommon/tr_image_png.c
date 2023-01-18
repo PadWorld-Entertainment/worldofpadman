@@ -24,6 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "../qcommon/puff.h"
 
+#ifdef USE_LOCAL_HEADERS
+#include "../zlib/zlib.h"
+#else
+#include <zlib.h>
+#endif
+
 // we could limit the png size to a lower value here
 #ifndef INT_MAX
 #define INT_MAX 0x1fffffff
@@ -2333,8 +2339,8 @@ static void WriteChunkHeader(void **buffer, void **crcPtr, PNG_ChunkCRC *CRC, in
 	 *  Init CRC
 	 */
 
-	*CRC = ri.zlib_crc32(0, Z_NULL, 0);
-	*CRC = ri.zlib_crc32(*CRC, *(byte **)buffer - 4, 4);
+	*CRC = crc32(0, Z_NULL, 0);
+	*CRC = crc32(*CRC, *(byte **)buffer - 4, 4);
 	*crcPtr = *buffer;
 }
 
@@ -2348,7 +2354,7 @@ static void WriteCRC(void **buffer, void **crcPtr, PNG_ChunkCRC CRC) {
 	 *  Update CRC
 	 */
 	if (size > 0)
-		CRC = ri.zlib_crc32(CRC, *crcPtr, size);
+		CRC = crc32(CRC, *crcPtr, size);
 
 	/*
 	 *  Write CRC
@@ -2396,7 +2402,7 @@ void RE_SavePNG(const char *filename, int width, int height, byte *data, int pad
 	compressedDataLength = imageLength * 1.01f + 12;
 	compressedData = ri.Malloc(compressedDataLength);
 
-	if (ri.zlib_compress(compressedData, &compressedDataLength, imageData, imageLength) != Z_OK) {
+	if (compress(compressedData, &compressedDataLength, imageData, imageLength) != Z_OK) {
 		ri.Free(compressedData);
 		ri.Free(imageData);
 		ri.Printf(PRINT_WARNING, "RE_SavePNG: Failed to compress image data.\n");
@@ -2456,7 +2462,7 @@ void RE_SavePNG(const char *filename, int width, int height, byte *data, int pad
 	 *  Setup CRC.
 	 */
 
-	CRC = ri.zlib_crc32(0, Z_NULL, 0);
+	CRC = crc32(0, Z_NULL, 0);
 	crcPtr = (byte *)buffer + PNG_Signature_Size + 4;
 
 	/*
