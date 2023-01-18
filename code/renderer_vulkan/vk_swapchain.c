@@ -31,7 +31,7 @@ vkAcquireNextImageKHR.
 // 3) Available presentation modes
 
 void vk_recreateSwapChain(void) {
-	ri.Printf(PRINT_DEVELOPER, " Recreate swap chain \n");
+	ri.Printf(PRINT_DEVELOPER, " Recreate swap chain\n");
 
 	if (r_fullscreen->integer) {
 		ri.Cvar_Set("r_fullscreen", "0");
@@ -86,24 +86,24 @@ void vk_createSwapChain(VkDevice device, VkSurfaceKHR surface, VkSurfaceFormatKH
 
 		qvkGetPhysicalDeviceSurfacePresentModesKHR(vk.physical_device, surface, &nPM, pPresentModes);
 
-		ri.Printf(PRINT_DEVELOPER, "Minimaal mumber ImageCount required: %d, Total %d present mode supported: \n",
+		ri.Printf(PRINT_DEVELOPER, "Minimaal mumber ImageCount required: %d, Total %d present mode supported:\n",
 				  vk.surface_caps.minImageCount, nPM);
 
 		for (i = 0; i < nPM; i++) {
 			switch (pPresentModes[i]) {
 			case VK_PRESENT_MODE_IMMEDIATE_KHR:
-				ri.Printf(PRINT_DEVELOPER, " VK_PRESENT_MODE_IMMEDIATE_KHR \n");
+				ri.Printf(PRINT_DEVELOPER, " VK_PRESENT_MODE_IMMEDIATE_KHR\n");
 				immediate_supported = VK_TRUE;
 				break;
 			case VK_PRESENT_MODE_MAILBOX_KHR:
-				ri.Printf(PRINT_DEVELOPER, " VK_PRESENT_MODE_MAILBOX_KHR \n");
+				ri.Printf(PRINT_DEVELOPER, " VK_PRESENT_MODE_MAILBOX_KHR\n");
 				mailbox_supported = VK_TRUE;
 				break;
 			case VK_PRESENT_MODE_FIFO_KHR:
-				ri.Printf(PRINT_DEVELOPER, " VK_PRESENT_MODE_FIFO_KHR \n");
+				ri.Printf(PRINT_DEVELOPER, " VK_PRESENT_MODE_FIFO_KHR\n");
 				break;
 			case VK_PRESENT_MODE_FIFO_RELAXED_KHR:
-				ri.Printf(PRINT_DEVELOPER, " VK_PRESENT_MODE_FIFO_RELAXED_KHR \n");
+				ri.Printf(PRINT_DEVELOPER, " VK_PRESENT_MODE_FIFO_RELAXED_KHR\n");
 				break;
 			default:
 				ri.Printf(PRINT_DEVELOPER, " This device do not support presentation %d\n", pPresentModes[i]);
@@ -117,12 +117,12 @@ void vk_createSwapChain(VkDevice device, VkSurfaceKHR surface, VkSurfaceFormatKH
 			present_mode = VK_PRESENT_MODE_MAILBOX_KHR;
 			image_count = MAX(3u, vk.surface_caps.minImageCount);
 
-			ri.Printf(PRINT_DEVELOPER, "\n VK_PRESENT_MODE_MAILBOX_KHR mode, minImageCount: %d. \n", image_count);
+			ri.Printf(PRINT_DEVELOPER, "\n VK_PRESENT_MODE_MAILBOX_KHR mode, minImageCount: %d.\n", image_count);
 		} else if (immediate_supported) {
 			present_mode = VK_PRESENT_MODE_IMMEDIATE_KHR;
 			image_count = MAX(2u, vk.surface_caps.minImageCount);
 
-			ri.Printf(PRINT_DEVELOPER, "\n VK_PRESENT_MODE_IMMEDIATE_KHR mode, minImageCount: %d. \n", image_count);
+			ri.Printf(PRINT_DEVELOPER, "\n VK_PRESENT_MODE_IMMEDIATE_KHR mode, minImageCount: %d.\n", image_count);
 		} else {
 			// VK_PRESENT_MODE_FIFO_KHR mode is guaranteed to be available.
 			present_mode = VK_PRESENT_MODE_FIFO_KHR;
@@ -147,7 +147,7 @@ void vk_createSwapChain(VkDevice device, VkSurfaceKHR surface, VkSurfaceFormatKH
 			image_count = MIN(image_count + 1, vk.surface_caps.maxImageCount);
 		}
 
-		ri.Printf(PRINT_DEVELOPER, " \n minImageCount: %d, maxImageCount: %d, setted: %d\n", vk.surface_caps.minImageCount,
+		ri.Printf(PRINT_DEVELOPER, "\n minImageCount: %d, maxImageCount: %d, setted: %d\n", vk.surface_caps.minImageCount,
 				  vk.surface_caps.maxImageCount, image_count);
 
 		ri.Printf(PRINT_DEVELOPER, "\n-------- ----------------------- --------\n");

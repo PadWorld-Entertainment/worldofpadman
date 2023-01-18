@@ -97,7 +97,7 @@ void R_LoadImage(const char *name, unsigned char **pic, int *width, int *height)
 			imageLoaders[i].ImageLoader(localName, pic, width, height);
 
 			if (*pic != NULL) {
-				ri.Printf(PRINT_WARNING, "%s without a extension, using %s instead. \n", name, localName);
+				ri.Printf(PRINT_WARNING, "%s without a extension, using %s instead.\n", name, localName);
 				return;
 			}
 		}

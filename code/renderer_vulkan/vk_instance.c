@@ -130,7 +130,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL vk_DebugCallback(VkDebugReportFlagsEXT fla
 
 static void vk_createDebugCallback(PFN_vkDebugReportCallbackEXT qvkDebugCB) {
 	VkDebugReportCallbackCreateInfoEXT desc;
-	ri.Printf(PRINT_DEVELOPER, " vk_createDebugCallback() \n");
+	ri.Printf(PRINT_DEVELOPER, " vk_createDebugCallback()\n");
 	desc.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
 	desc.pNext = NULL;
 	desc.flags =
@@ -213,7 +213,7 @@ static void vk_createInstance(void) {
 
 	assert(nInsExt > 0);
 
-	ri.Printf(PRINT_ALL, "--- Total %d instance extensions. --- \n", nInsExt);
+	ri.Printf(PRINT_ALL, "--- Total %d instance extensions. ---\n", nInsExt);
 
 	pInsExt = (VkExtensionProperties *)ri.Hunk_AllocateTempMemory(sizeof(VkExtensionProperties) * nInsExt);
 
@@ -262,7 +262,7 @@ static void vk_createInstance(void) {
 }
 
 static void vk_loadGlobalFunctions(void) {
-	ri.Printf(PRINT_ALL, " Loading vulkan instance functions \n");
+	ri.Printf(PRINT_ALL, " Loading vulkan instance functions\n");
 
 	vk_getInstanceProcAddrImpl();
 
@@ -305,7 +305,7 @@ static void vk_loadGlobalFunctions(void) {
 
 #undef INIT_INSTANCE_FUNCTION
 
-	ri.Printf(PRINT_ALL, " Init global functions done. \n");
+	ri.Printf(PRINT_ALL, " Init global functions done.\n");
 }
 
 ////////////////////////////////
@@ -374,7 +374,7 @@ static void vk_selectPhysicalDevice(void) {
 
 	ri.Printf(PRINT_ALL, " Total %d graphics card, %i is choosed.\n", gpu_count, device_index);
 
-	ri.Printf(PRINT_ALL, " Get physical device memory properties: vk.devMemProperties \n");
+	ri.Printf(PRINT_ALL, " Get physical device memory properties: vk.devMemProperties\n");
 	qvkGetPhysicalDeviceMemoryProperties(vk.physical_device, &vk.devMemProperties);
 }
 
@@ -383,7 +383,7 @@ static void vk_selectSurfaceFormat(void) {
 	VkSurfaceFormatKHR *pSurfFmts;
 	VkFormatProperties props;
 
-	ri.Printf(PRINT_ALL, "\n -------- vk_selectSurfaceFormat() -------- \n");
+	ri.Printf(PRINT_ALL, "\n -------- vk_selectSurfaceFormat() --------\n");
 
 	// Get the numbers of VkFormat's that are supported
 	// "vk.surface" is the surface that will be associated with the swapchain.
@@ -408,14 +408,14 @@ static void vk_selectSurfaceFormat(void) {
 		ri.Printf(PRINT_ALL, "VK_COLORSPACE_SRGB_NONLINEAR_KHR\n");
 	} else {
 		uint32_t i;
-		ri.Printf(PRINT_ALL, " Total %d surface formats supported, we choose: \n", nSurfmt);
+		ri.Printf(PRINT_ALL, " Total %d surface formats supported, we choose:\n", nSurfmt);
 
 		for (i = 0; i < nSurfmt; i++) {
 			if ((pSurfFmts[i].format == VK_FORMAT_B8G8R8A8_UNORM) &&
 				(pSurfFmts[i].colorSpace == VK_COLORSPACE_SRGB_NONLINEAR_KHR)) {
 
-				ri.Printf(PRINT_ALL, " format = VK_FORMAT_B8G8R8A8_UNORM \n");
-				ri.Printf(PRINT_ALL, " colorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR \n");
+				ri.Printf(PRINT_ALL, " format = VK_FORMAT_B8G8R8A8_UNORM\n");
+				ri.Printf(PRINT_ALL, " colorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR\n");
 
 				vk.surface_format = pSurfFmts[i];
 				break;
@@ -550,7 +550,7 @@ static void vk_createLogicalDevice(void) {
 	uint32_t j;
 
 	// To query the numbers of extensions available to a given physical device
-	ri.Printf(PRINT_ALL, " Check for VK_KHR_swapchain extension. \n");
+	ri.Printf(PRINT_ALL, " Check for VK_KHR_swapchain extension.\n");
 
 	qvkEnumerateDeviceExtensionProperties(vk.physical_device, NULL, &nDevExts, NULL);
 
@@ -604,12 +604,12 @@ static void vk_createLogicalDevice(void) {
 	// specify which queues to create now that we've queried which
 	// queue families are available. You can create multiple logical
 	// devices from the same physical device if you have varying requirements.
-	ri.Printf(PRINT_ALL, " Create logical device: vk.device \n");
+	ri.Printf(PRINT_ALL, " Create logical device: vk.device\n");
 	VK_CHECK(qvkCreateDevice(vk.physical_device, &device_desc, NULL, &vk.device));
 }
 
 static void vk_loadDeviceFunctions(void) {
-	ri.Printf(PRINT_ALL, " Loading device level function. \n");
+	ri.Printf(PRINT_ALL, " Loading device level function.\n");
 
 #define INIT_DEVICE_FUNCTION(func)                                                                                     \
 	q##func = (PFN_##func)qvkGetDeviceProcAddr(vk.device, #func);                                                      \
@@ -726,26 +726,26 @@ void vk_getProcAddress(void) {
 }
 
 void vk_clearProcAddress(void) {
-	ri.Printf(PRINT_ALL, " Destroy logical device: vk.device. \n");
+	ri.Printf(PRINT_ALL, " Destroy logical device: vk.device.\n");
 	// Device queues are implicitly cleaned up when the device is destroyed
 	// so we don't need to do anything in clean up
 	qvkDestroyDevice(vk.device, NULL);
 
-	ri.Printf(PRINT_ALL, " Destroy surface: vk.surface. \n");
+	ri.Printf(PRINT_ALL, " Destroy surface: vk.surface.\n");
 	// make sure that the surface is destroyed before the instance
 	qvkDestroySurfaceKHR(vk.instance, vk.surface, NULL);
 
 #ifndef NDEBUG
-	ri.Printf(PRINT_ALL, " Destroy callback function: vk.h_debugCB. \n");
+	ri.Printf(PRINT_ALL, " Destroy callback function: vk.h_debugCB.\n");
 
 	qvkDestroyDebugReportCallbackEXT(vk.instance, vk.h_debugCB, NULL);
 #endif
 
-	ri.Printf(PRINT_ALL, " Destroy instance: vk.instance. \n");
+	ri.Printf(PRINT_ALL, " Destroy instance: vk.instance.\n");
 	qvkDestroyInstance(vk.instance, NULL);
 
 	// ===========================================================
-	ri.Printf(PRINT_ALL, " clear all proc address \n");
+	ri.Printf(PRINT_ALL, " clear all proc address\n");
 
 	qvkCreateInstance = NULL;
 	qvkEnumerateInstanceExtensionProperties = NULL;

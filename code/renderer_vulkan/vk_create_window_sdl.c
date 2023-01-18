@@ -211,7 +211,7 @@ void vk_createWindow(void) {
 	);
 
 	if (icon == NULL) {
-		ri.Printf(PRINT_ALL, " SDL_CreateRGBSurface Failed. \n");
+		ri.Printf(PRINT_ALL, " SDL_CreateRGBSurface Failed.\n");
 	}
 
 	if (ri.Cvar_VariableIntegerValue("com_abnormalExit")) {

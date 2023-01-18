@@ -1404,7 +1404,7 @@ static void R_LoadSubmodels(lump_t *l) {
 		if (++tr.numModels == MAX_MOD_KNOWN) {
 			ri.Printf(PRINT_WARNING, "R_AllocModel: MAX_MOD_KNOWN.\n");
 		}
-		ri.Printf(PRINT_DEVELOPER, "Allocate Memory for %s model. \n", model->name);
+		ri.Printf(PRINT_DEVELOPER, "Allocate Memory for %s model.\n", model->name);
 
 		for (j = 0; j < 3; j++) {
 			out->bounds[0][j] = LittleFloat(in->mins[j]);

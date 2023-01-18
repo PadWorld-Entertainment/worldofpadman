@@ -33,7 +33,7 @@ qhandle_t RE_RegisterModel(const char *name) {
 	model_t *mod;
 	const char *dot;
 
-	ri.Printf(PRINT_DEVELOPER, "RegisterModel: %s. \n", name);
+	ri.Printf(PRINT_DEVELOPER, "RegisterModel: %s.\n", name);
 
 	if (!name || !name[0]) {
 		ri.Printf(PRINT_WARNING, "RE_RegisterModel: NULL name\n");
@@ -59,7 +59,7 @@ qhandle_t RE_RegisterModel(const char *name) {
 	}
 
 	// allocate a new model_t
-	ri.Printf(PRINT_ALL, "Allocate Memory for %s. \n", name);
+	ri.Printf(PRINT_ALL, "Allocate Memory for %s.\n", name);
 
 	mod = ri.Hunk_Alloc(sizeof(model_t), h_low);
 
@@ -87,7 +87,7 @@ qhandle_t RE_RegisterModel(const char *name) {
 		} else if ((dot[1] == 'i') && (dot[2] == 'q') && (dot[3] == 'm')) {
 			hModel = R_RegisterIQM(name, mod);
 		} else {
-			ri.Printf(PRINT_WARNING, " %s format not support now. \n ", name);
+			ri.Printf(PRINT_WARNING, " %s format not support now.\n", name);
 		}
 	} else {
 		uint32_t i;

@@ -183,7 +183,7 @@ qhandle_t R_RegisterMD3(const char *name, model_t *mod) {
 			return 0;
 		}
 	} else {
-		ri.Printf(PRINT_WARNING, "R_RegisterMD3: failed loading %s from disk. \n", name);
+		ri.Printf(PRINT_WARNING, "R_RegisterMD3: failed loading %s from disk.\n", name);
 	}
 
 	strcpy(filename, name);

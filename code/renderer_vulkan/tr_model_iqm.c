@@ -794,7 +794,7 @@ void R_AddIQMSurfaces(trRefEntity_t *ent) {
 	shader_t *shader;
 	skin_t *skin;
 
-	ri.Printf(PRINT_DEVELOPER, "Add IQM Surfaces. \n");
+	ri.Printf(PRINT_DEVELOPER, "Add IQM Surfaces.\n");
 
 	data = tr.currentModel->modelData;
 	surface = data->surfaces;

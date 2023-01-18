@@ -176,7 +176,7 @@ void vk_createVertexBuffer(void) {
 	uint32_t memory_type_bits;
 	void *data;
 
-	ri.Printf(PRINT_DEVELOPER, " Create vertex buffer: shadingDat.vertex_buffer \n");
+	ri.Printf(PRINT_DEVELOPER, " Create vertex buffer: shadingDat.vertex_buffer\n");
 
 	desc.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	desc.pNext = NULL;
@@ -207,7 +207,7 @@ void vk_createVertexBuffer(void) {
 	alloc_info.memoryTypeIndex =
 		find_memory_type(memory_type_bits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-	ri.Printf(PRINT_ALL, " Allocate device memory for Vertex Buffer: %ld bytes. \n", alloc_info.allocationSize);
+	ri.Printf(PRINT_ALL, " Allocate device memory for Vertex Buffer: %ld bytes.\n", alloc_info.allocationSize);
 
 	VK_CHECK(qvkAllocateMemory(vk.device, &alloc_info, NULL, &shadingDat.vertex_buffer_memory));
 
@@ -224,7 +224,7 @@ void vk_createIndexBuffer(void) {
 	VkMemoryAllocateInfo alloc_info;
 	void *data;
 
-	ri.Printf(PRINT_DEVELOPER, " Create index buffer: shadingDat.index_buffer \n");
+	ri.Printf(PRINT_DEVELOPER, " Create index buffer: shadingDat.index_buffer\n");
 
 	desc.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	desc.pNext = NULL;
@@ -254,7 +254,7 @@ void vk_createIndexBuffer(void) {
 	alloc_info.memoryTypeIndex =
 		find_memory_type(memory_type_bits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-	ri.Printf(PRINT_ALL, " Allocate device memory for Index Buffer: %ld bytes. \n", alloc_info.allocationSize);
+	ri.Printf(PRINT_ALL, " Allocate device memory for Index Buffer: %i bytes.\n", (int)alloc_info.allocationSize);
 
 	VK_CHECK(qvkAllocateMemory(vk.device, &alloc_info, NULL, &shadingDat.index_buffer_memory));
 	qvkBindBufferMemory(vk.device, shadingDat.index_buffer, shadingDat.index_buffer_memory, 0);
@@ -301,7 +301,7 @@ void vk_shade_geometry(VkPipeline pipeline, VkBool32 multitexture, enum Vk_Depth
 
 	// color
 	if ((shadingDat.color_st_elements + tess.numVertexes) * sizeof(color4ub_t) > COLOR_SIZE)
-		ri.Error(ERR_DROP, "vulkan: vertex buffer overflow (color) %ld \n",
+		ri.Error(ERR_DROP, "vulkan: vertex buffer overflow (color) %ld\n",
 				 (shadingDat.color_st_elements + tess.numVertexes) * sizeof(color4ub_t));
 
 	dst_color = shadingDat.vertex_buffer_ptr + offs[0];
@@ -511,8 +511,8 @@ void vk_resetGeometryBuffer(void) {
 }
 
 void vk_destroy_shading_data(void) {
-	ri.Printf(PRINT_ALL, " Destroy vertex/index buffer: shadingDat.vertex_buffer shadingDat.index_buffer. \n");
-	ri.Printf(PRINT_ALL, " Free device memory: vertex_buffer_memory index_buffer_memory. \n");
+	ri.Printf(PRINT_ALL, " Destroy vertex/index buffer: shadingDat.vertex_buffer shadingDat.index_buffer.\n");
+	ri.Printf(PRINT_ALL, " Free device memory: vertex_buffer_memory index_buffer_memory.\n");
 
 	qvkUnmapMemory(vk.device, shadingDat.vertex_buffer_memory);
 	qvkFreeMemory(vk.device, shadingDat.vertex_buffer_memory, NULL);

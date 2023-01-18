@@ -113,13 +113,13 @@ static void vk_createStagingBuffer(uint32_t size) {
 
 		VK_CHECK(qvkBindBufferMemory(vk.device, StagBuf.buff, StagBuf.mappableMem, 0));
 
-		ri.Printf(PRINT_DEVELOPER, " Stagging buffer alignment: %ld, memoryTypeBits: 0x%x, Type Index: %d. \n",
-				  memory_requirements.alignment, memory_requirements.memoryTypeBits, alloc_info.memoryTypeIndex);
+		ri.Printf(PRINT_DEVELOPER, " Stagging buffer alignment: %i, memoryTypeBits: 0x%x, Type Index: %d.\n",
+				  (int)memory_requirements.alignment, memory_requirements.memoryTypeBits, alloc_info.memoryTypeIndex);
 	}
 }
 
 static void vk_destroy_staging_buffer(void) {
-	ri.Printf(PRINT_DEVELOPER, " Destroy staging buffer. \n");
+	ri.Printf(PRINT_DEVELOPER, " Destroy staging buffer.\n");
 
 	if (StagBuf.buff != VK_NULL_HANDLE) {
 		qvkDestroyBuffer(vk.device, StagBuf.buff, NULL);
@@ -307,14 +307,14 @@ static void vk_createImageAndBindWithMemory(image_t *pImg) {
 	devMemImg.Chunks[devMemImg.Index].Used = memory_requirements.size;
 	++devMemImg.Index;
 
-	ri.Printf(PRINT_DEVELOPER, " --- Device memory allocation --- \n");
+	ri.Printf(PRINT_DEVELOPER, " --- Device memory allocation ---\n");
 
-	ri.Printf(PRINT_DEVELOPER, "alignment: %ld, Type Index: %d. \n", memory_requirements.alignment,
+	ri.Printf(PRINT_DEVELOPER, "alignment: %ld, Type Index: %d.\n", memory_requirements.alignment,
 			  alloc_info.memoryTypeIndex);
 
-	ri.Printf(PRINT_DEVELOPER, "Image chuck memory consumed: %d M \n", devMemImg.Index * (IMAGE_CHUNK_SIZE >> 20));
+	ri.Printf(PRINT_DEVELOPER, "Image chuck memory consumed: %d M\n", devMemImg.Index * (IMAGE_CHUNK_SIZE >> 20));
 
-	ri.Printf(PRINT_DEVELOPER, " --- ------------------------ --- \n");
+	ri.Printf(PRINT_DEVELOPER, " --- ------------------------ ---\n");
 }
 
 static void vk_createImageViewAndDescriptorSet(image_t *pImage) {
