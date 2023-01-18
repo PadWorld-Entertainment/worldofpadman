@@ -90,3 +90,15 @@ void CL_InitRef(void) {
 
 void CL_Snd_Shutdown(void) {
 }
+
+void CL_ShutdownCGame(void) {
+}
+
+void CL_ShutdownUI(void) {
+}
+
+void CIN_CloseAllVideos(void) {
+}
+
+void Key_KeynameCompletion(void (*callback)(const char *s)) {
+}

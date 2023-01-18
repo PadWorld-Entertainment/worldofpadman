@@ -58,8 +58,7 @@ void Sys_InitPIDFile(const char *gamedir) {
 void Sys_RemovePIDFile(const char *gamedir) {
 }
 
-void *Sys_LoadGameDll(const char *name, intptr_t(QDECL **entryPoint)(int, ...),
-					  intptr_t (*systemcalls)(intptr_t, ...)) {
+void *Sys_LoadGameDll(const char *name, vmMainProc *entryPoint, intptr_t (*systemcalls)(intptr_t, ...)) {
 	return NULL;
 }
 
