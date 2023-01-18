@@ -284,7 +284,7 @@ void oc_mcenc_search_frame(oc_enc_ctx *_enc,int _accum[2],int _mbi,int _frame){
   /*Start with the median predictor.*/
   candx=mcenc.candidates[0][0];
   candy=mcenc.candidates[0][1];
-  hit_cache[candy+15]|=(ogg_int32_t)1<<candx+15;
+  hit_cache[candy+15]|=(ogg_int32_t)1<<(candx+15);
   frag_buf_offs=_enc->state.frag_buf_offs;
   fragis=_enc->state.mb_maps[_mbi][0];
   src=_enc->state.ref_frame_data[OC_FRAME_IO];

@@ -71,7 +71,7 @@
   _shift:    The non-negative power of two to divide by.
   _rmask:    (1<<_shift)-1*/
 #define OC_DIV_POW2(_dividend,_shift,_rmask)\
-  ((_dividend)+(OC_SIGNMASK(_dividend)&(_rmask))>>(_shift))
+  (((_dividend)+(OC_SIGNMASK(_dividend)&(_rmask)))>>(_shift))
 /*Divides _x by 65536, truncating towards 0.*/
 #define OC_DIV2_16(_x) OC_DIV_POW2(_x,16,0xFFFF)
 /*Divides _x by 2, truncating towards 0.*/
