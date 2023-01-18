@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "q_shared.h"
 #include "qcommon.h"
+#include "../sys/sys_local.h"
 
 void Sys_Print(const char *msg) {
 }
@@ -31,6 +32,7 @@ void Sys_Error(const char *error, ...) {
 }
 
 void Sys_SigHandler(int signal) {
+	exit(signal);
 }
 
 const char *Sys_DefaultInstallPath(void) {
