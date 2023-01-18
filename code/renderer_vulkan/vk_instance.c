@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "tr_cvar.h"
 #include "vkimpl.h"
 #include "tr_globals.h"
 #include "vk_depth_attachment.h"
@@ -151,10 +152,7 @@ static void vk_createInstance(void) {
 	VkExtensionProperties *pInsExt;
 	VkResult e;
 	const char **ppInstanceExt;
-	qboolean enableValidationLayers = qfalse;
-#ifdef DEBUG
-	enableValidationLayers = qtrue;
-#endif
+	qboolean enableValidationLayers = r_enablevalidationlayers->integer;
 
 	// There is no global state in Vulkan and all per-application state
 	// is stored in a VkInstance object. Creating a VkInstance object

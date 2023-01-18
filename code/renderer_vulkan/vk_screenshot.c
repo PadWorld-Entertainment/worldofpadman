@@ -1,6 +1,7 @@
 #include "vk_screenshot.h"
 #include "tr_globals.h"
 #include "vk_cmd.h"
+#include "tr_cvar.h"
 #include "vk_image.h"
 #include "vk_instance.h"
 
@@ -224,8 +225,6 @@ extern void RE_SaveJPG(const char *filename, int quality, int image_width, int i
 					   unsigned char *image_buffer, int padding);
 extern void RE_SavePNG(const char *filename, int width, int height, byte *data, int padding);
 extern void RE_SaveTGA(const char *filename, int image_width, int image_height, byte *image_buffer, int padding);
-extern cvar_t *r_aviMotionJpegQuality;
-extern cvar_t *r_screenshotJpegQuality;
 
 static void RB_TakeScreenshotJPEG(int width, int height, const char *fileName) {
 	const uint32_t cnPixels = width * height;

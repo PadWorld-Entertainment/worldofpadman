@@ -75,6 +75,8 @@ cvar_t *r_mode;
 cvar_t *r_aviMotionJpegQuality;
 cvar_t *r_screenshotJpegQuality;
 
+cvar_t *r_enablevalidationlayers;
+
 void R_Register(void) {
 	//
 	// latched and archived variables
@@ -163,5 +165,5 @@ void R_Register(void) {
 
 	r_aviMotionJpegQuality = ri.Cvar_Get("r_aviMotionJpegQuality", "100", CVAR_ARCHIVE);
 	r_screenshotJpegQuality = ri.Cvar_Get("r_screenshotJpegQuality", "100", CVAR_ARCHIVE);
-
+	r_enablevalidationlayers = ri.Cvar_Get("r_enablevalidationlayers", "0", CVAR_ARCHIVE);
 }

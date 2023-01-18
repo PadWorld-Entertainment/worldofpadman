@@ -82,6 +82,10 @@ extern cvar_t *r_mode;
 extern cvar_t *r_fullscreen;
 extern cvar_t *r_displayRefresh;
 
+extern cvar_t *r_aviMotionJpegQuality;
+extern cvar_t *r_screenshotJpegQuality;
+extern cvar_t *r_enablevalidationlayers;
+
 void R_Register(void);
 
 #endif
