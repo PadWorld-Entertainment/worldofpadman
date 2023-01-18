@@ -214,8 +214,8 @@ static void CG_HelpCmd_f(void) {
 									  GAMETYPE_NAME(GT_SPRAY),
 									  GAMETYPE_NAME(GT_BALLOON),
 									  NULL};
-	CASSERT(ARRAY_LEN(gameNames) == GT_MAX_GAME_TYPE + 1);
 	char buffer[MAX_BUFFERLEN];
+	CASSERT(ARRAY_LEN(gameNames) == GT_MAX_GAME_TYPE + 1);
 
 	if (trap_Argc() <= 0) {
 		Com_Printf("available help:\n");
