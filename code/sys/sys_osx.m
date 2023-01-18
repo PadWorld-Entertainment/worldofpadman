@@ -103,7 +103,7 @@ Discovers if passed dir is suffixed with the directory structure of a Mac OS X
 the result is returned. If not, dir is returned untouched.
 =================
 */
-char *Sys_StripAppBundle(char *dir)
+const char *Sys_StripAppBundle(const char *dir)
 {
 	static char cwd[MAX_OSPATH];
 
