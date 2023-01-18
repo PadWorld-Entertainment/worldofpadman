@@ -48,5 +48,5 @@ jobs:
       - name: "Upload artifacts"
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.os }}
+          name: ${{ matrix.platform.os }}
           path: build/install/*
