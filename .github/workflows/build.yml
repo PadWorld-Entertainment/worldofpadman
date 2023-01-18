@@ -15,7 +15,8 @@ jobs:
         platform:
         - { name: Ubuntu,  os: ubuntu-20.04 }
         - { name: Windows, os: windows-2019 }
-        - { name: MacOS,   os: macos-10.15 }
+        - { name: MacOS10, os: macos-10.15 }
+        - { name: MacOS11, os: macos-11 }
 
     steps:
       - name: "Checkout"
