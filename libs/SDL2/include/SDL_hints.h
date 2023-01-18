@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2022 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -278,10 +278,7 @@ extern "C" {
  *  If this hint isn't specified to a valid setting, or libsamplerate isn't
  *  available, SDL will use the default, internal resampling algorithm.
  *
- *  Note that this is currently only applicable to resampling audio that is
- *  being written to a device for playback or audio being read from a device
- *  for capture. SDL_AudioCVT always uses the default resampler (although this
- *  might change for SDL 2.1).
+ *  As of SDL 2.26, SDL_ConvertAudio() respects this hint when libsamplerate is available.
  *
  *  This hint is currently only checked at audio subsystem initialization.
  *
@@ -543,6 +540,14 @@ extern "C" {
 #define SDL_HINT_GRAB_KEYBOARD              "SDL_GRAB_KEYBOARD"
 
 /**
+ *  \brief  A variable containing a list of devices to ignore in SDL_hid_enumerate()
+ *
+ *  For example, to ignore the Shanwan DS3 controller and any Valve controller, you might
+ *  have the string "0x2563/0x0523,0x28de/0x0000"
+ */
+#define SDL_HINT_HIDAPI_IGNORE_DEVICES "SDL_HIDAPI_IGNORE_DEVICES"
+
+/**
  *  \brief  A variable controlling whether the idle timer is disabled on iOS.
  *
  *  When an iOS app does not receive touches for some time, the screen is
@@ -653,6 +658,37 @@ extern "C" {
 #define SDL_HINT_JOYSTICK_GAMECUBE_RUMBLE_BRAKE "SDL_JOYSTICK_GAMECUBE_RUMBLE_BRAKE"
 
 /**
+  *  \brief  A variable controlling whether the HIDAPI driver for Nintendo Switch Joy-Cons should be used.
+  *
+  *  This variable can be set to the following values:
+  *    "0"       - HIDAPI driver is not used
+  *    "1"       - HIDAPI driver is used
+  *
+  *  The default is the value of SDL_HINT_JOYSTICK_HIDAPI
+  */
+#define SDL_HINT_JOYSTICK_HIDAPI_JOY_CONS "SDL_JOYSTICK_HIDAPI_JOY_CONS"
+
+/**
+  *  \brief  A variable controlling whether Nintendo Switch Joy-Con controllers will be combined into a single Pro-like controller when using the HIDAPI driver
+  *
+  *  This variable can be set to the following values:
+  *    "0"       - Left and right Joy-Con controllers will not be combined and each will be a mini-gamepad
+  *    "1"       - Left and right Joy-Con controllers will be combined into a single controller (the default)
+  */
+#define SDL_HINT_JOYSTICK_HIDAPI_COMBINE_JOY_CONS "SDL_JOYSTICK_HIDAPI_COMBINE_JOY_CONS"
+
+/**
+  *  \brief  A variable controlling whether Nintendo Switch Joy-Con controllers will be in vertical mode when using the HIDAPI driver
+  *
+  *  This variable can be set to the following values:
+  *    "0"       - Left and right Joy-Con controllers will not be in vertical mode (the default)
+  *    "1"       - Left and right Joy-Con controllers will be in vertical mode
+  *
+  *  This hint must be set before calling SDL_Init(SDL_INIT_GAMECONTROLLER)
+  */
+#define SDL_HINT_JOYSTICK_HIDAPI_VERTICAL_JOY_CONS "SDL_JOYSTICK_HIDAPI_VERTICAL_JOY_CONS"
+
+/**
   *  \brief  A variable controlling whether the HIDAPI driver for Amazon Luna controllers connected via Bluetooth should be used.
   *
   *  This variable can be set to the following values:
@@ -664,6 +700,17 @@ extern "C" {
 #define SDL_HINT_JOYSTICK_HIDAPI_LUNA "SDL_JOYSTICK_HIDAPI_LUNA"
 
 /**
+  *  \brief  A variable controlling whether the HIDAPI driver for Nintendo Online classic controllers should be used.
+  *
+  *  This variable can be set to the following values:
+  *    "0"       - HIDAPI driver is not used
+  *    "1"       - HIDAPI driver is used
+  *
+  *  The default is the value of SDL_HINT_JOYSTICK_HIDAPI
+  */
+#define SDL_HINT_JOYSTICK_HIDAPI_NINTENDO_CLASSIC "SDL_JOYSTICK_HIDAPI_NINTENDO_CLASSIC"
+
+/**
   *  \brief  A variable controlling whether the HIDAPI driver for NVIDIA SHIELD controllers should be used.
   *
   *  This variable can be set to the following values:
@@ -673,6 +720,20 @@ extern "C" {
   *  The default is the value of SDL_HINT_JOYSTICK_HIDAPI
   */
 #define SDL_HINT_JOYSTICK_HIDAPI_SHIELD "SDL_JOYSTICK_HIDAPI_SHIELD"
+
+/**
+ *  \brief  A variable controlling whether the HIDAPI driver for PS3 controllers should be used.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - HIDAPI driver is not used
+ *    "1"       - HIDAPI driver is used
+ *
+ *  The default is the value of SDL_HINT_JOYSTICK_HIDAPI on macOS, and "0" on other platforms.
+ *
+ *  It is not possible to use this driver on Windows, due to limitations in the default drivers
+ *  installed. See https://github.com/ViGEm/DsHidMini for an alternative driver on Windows.
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_PS3 "SDL_JOYSTICK_HIDAPI_PS3"
 
 /**
  *  \brief  A variable controlling whether the HIDAPI driver for PS4 controllers should be used.
@@ -756,7 +817,7 @@ extern "C" {
 #define SDL_HINT_JOYSTICK_HIDAPI_STADIA "SDL_JOYSTICK_HIDAPI_STADIA"
 
 /**
- *  \brief  A variable controlling whether the HIDAPI driver for Steam Controllers should be used.
+ *  \brief  A variable controlling whether the HIDAPI driver for Bluetooth Steam Controllers should be used.
  *
  *  This variable can be set to the following values:
  *    "0"       - HIDAPI driver is not used
@@ -779,26 +840,55 @@ extern "C" {
 #define SDL_HINT_JOYSTICK_HIDAPI_SWITCH "SDL_JOYSTICK_HIDAPI_SWITCH"
 
 /**
-  *  \brief  A variable controlling whether Nintendo Switch Joy-Con controllers will be combined into a single Pro-like controller when using the HIDAPI driver
-  *
-  *  This variable can be set to the following values:
-  *    "0"       - Left and right Joy-Con controllers will not be combined and each will be a mini-gamepad
-  *    "1"       - Left and right Joy-Con controllers will be combined into a single controller (the default)
-  *
-  *  The default is "1"
-  */
-#define SDL_HINT_JOYSTICK_HIDAPI_SWITCH_COMBINE_JOY_CONS "SDL_JOYSTICK_HIDAPI_SWITCH_COMBINE_JOY_CONS"
-
-/**
- *  \brief  A variable controlling whether the Home button LED should be turned on when a Nintendo Switch controller is opened
+ *  \brief  A variable controlling whether the Home button LED should be turned on when a Nintendo Switch Pro controller is opened
  *
  *  This variable can be set to the following values:
  *    "0"       - home button LED is turned off
  *    "1"       - home button LED is turned on
  *
- *  By default the Home button LED state is not changed.
+ *  By default the Home button LED state is not changed. This hint can also be set to a floating point value between 0.0 and 1.0 which controls the brightness of the Home button LED.
  */
 #define SDL_HINT_JOYSTICK_HIDAPI_SWITCH_HOME_LED "SDL_JOYSTICK_HIDAPI_SWITCH_HOME_LED"
+
+/**
+ *  \brief  A variable controlling whether the Home button LED should be turned on when a Nintendo Switch Joy-Con controller is opened
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - home button LED is turned off
+ *    "1"       - home button LED is turned on
+ *
+ *  By default the Home button LED state is not changed. This hint can also be set to a floating point value between 0.0 and 1.0 which controls the brightness of the Home button LED.
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_JOYCON_HOME_LED "SDL_JOYSTICK_HIDAPI_JOYCON_HOME_LED"
+
+/**
+ *  \brief  A variable controlling whether the player LEDs should be lit to indicate which player is associated with a Nintendo Switch controller.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - player LEDs are not enabled
+ *    "1"       - player LEDs are enabled (the default)
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_SWITCH_PLAYER_LED "SDL_JOYSTICK_HIDAPI_SWITCH_PLAYER_LED"
+
+/**
+ *  \brief  A variable controlling whether the HIDAPI driver for Nintendo Wii and Wii U controllers should be used.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - HIDAPI driver is not used
+ *    "1"       - HIDAPI driver is used
+ *
+ *  This driver doesn't work with the dolphinbar, so the default is SDL_FALSE for now.
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_WII "SDL_JOYSTICK_HIDAPI_WII"
+
+/**
+ *  \brief  A variable controlling whether the player LEDs should be lit to indicate which player is associated with a Wii controller.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - player LEDs are not enabled
+ *    "1"       - player LEDs are enabled (the default)
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_WII_PLAYER_LED "SDL_JOYSTICK_HIDAPI_WII_PLAYER_LED"
 
 /**
  *  \brief  A variable controlling whether the HIDAPI driver for XBox controllers should be used.
@@ -810,6 +900,59 @@ extern "C" {
  *  The default is "0" on Windows, otherwise the value of SDL_HINT_JOYSTICK_HIDAPI
  */
 #define SDL_HINT_JOYSTICK_HIDAPI_XBOX   "SDL_JOYSTICK_HIDAPI_XBOX"
+
+/**
+ *  \brief  A variable controlling whether the HIDAPI driver for XBox 360 controllers should be used.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - HIDAPI driver is not used
+ *    "1"       - HIDAPI driver is used
+ *
+ *  The default is the value of SDL_HINT_JOYSTICK_HIDAPI_XBOX
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_XBOX_360   "SDL_JOYSTICK_HIDAPI_XBOX_360"
+
+/**
+ *  \brief  A variable controlling whether the player LEDs should be lit to indicate which player is associated with an Xbox 360 controller.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - player LEDs are not enabled
+ *    "1"       - player LEDs are enabled (the default)
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_XBOX_360_PLAYER_LED "SDL_JOYSTICK_HIDAPI_XBOX_360_PLAYER_LED"
+
+/**
+ *  \brief  A variable controlling whether the HIDAPI driver for XBox 360 wireless controllers should be used.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - HIDAPI driver is not used
+ *    "1"       - HIDAPI driver is used
+ *
+ *  The default is the value of SDL_HINT_JOYSTICK_HIDAPI_XBOX_360
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_XBOX_360_WIRELESS   "SDL_JOYSTICK_HIDAPI_XBOX_360_WIRELESS"
+
+/**
+ *  \brief  A variable controlling whether the HIDAPI driver for XBox One controllers should be used.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - HIDAPI driver is not used
+ *    "1"       - HIDAPI driver is used
+ *
+ *  The default is the value of SDL_HINT_JOYSTICK_HIDAPI_XBOX
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_XBOX_ONE   "SDL_JOYSTICK_HIDAPI_XBOX_ONE"
+
+/**
+ *  \brief  A variable controlling whether the Home button LED should be turned on when an Xbox One controller is opened
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - home button LED is turned off
+ *    "1"       - home button LED is turned on
+ *
+ *  By default the Home button LED state is not changed. This hint can also be set to a floating point value between 0.0 and 1.0 which controls the brightness of the Home button LED. The default brightness is 0.4.
+ */
+#define SDL_HINT_JOYSTICK_HIDAPI_XBOX_ONE_HOME_LED "SDL_JOYSTICK_HIDAPI_XBOX_ONE_HOME_LED"
 
 /**
   *  \brief  A variable controlling whether the RAWINPUT joystick drivers should be used for better handling XInput-capable devices.
@@ -938,6 +1081,24 @@ extern "C" {
 #define SDL_HINT_MAC_CTRL_CLICK_EMULATE_RIGHT_CLICK "SDL_MAC_CTRL_CLICK_EMULATE_RIGHT_CLICK"
 
 /**
+ *  \brief   A variable controlling whether dispatching OpenGL context updates should block the dispatching thread until the main thread finishes processing
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - Dispatching OpenGL context updates will block the dispatching thread until the main thread finishes processing (default).
+ *    "1"       - Dispatching OpenGL context updates will allow the dispatching thread to continue execution.
+ *
+ *  Generally you want the default, but if you have OpenGL code in a background thread on a Mac, and the main thread
+ *  hangs because it's waiting for that background thread, but that background thread is also hanging because it's
+ *  waiting for the main thread to do an update, this might fix your issue.
+ *
+ *  This hint only applies to macOS.
+ *
+ *  This hint is available since SDL 2.24.0.
+ *
+ */
+#define SDL_HINT_MAC_OPENGL_ASYNC_DISPATCH "SDL_MAC_OPENGL_ASYNC_DISPATCH"
+
+/**
  *  \brief  A variable setting the double click radius, in pixels.
  */
 #define SDL_HINT_MOUSE_DOUBLE_CLICK_RADIUS    "SDL_MOUSE_DOUBLE_CLICK_RADIUS"
@@ -1005,6 +1166,28 @@ extern "C" {
  *  \brief  A variable setting the scale for mouse motion, in floating point, when the mouse is in relative mode
  */
 #define SDL_HINT_MOUSE_RELATIVE_SPEED_SCALE    "SDL_MOUSE_RELATIVE_SPEED_SCALE"
+
+/**
+ *  \brief  A variable controlling whether the system mouse acceleration curve is used for relative mouse motion.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - Relative mouse motion will be unscaled (the default)
+ *    "1"       - Relative mouse motion will be scaled using the system mouse acceleration curve.
+ *
+ *    If SDL_HINT_MOUSE_RELATIVE_SPEED_SCALE is set, that will override the system speed scale.
+ */
+#define SDL_HINT_MOUSE_RELATIVE_SYSTEM_SCALE    "SDL_MOUSE_RELATIVE_SYSTEM_SCALE"
+
+/**
+ *  \brief  A variable controlling whether a motion event should be generated for mouse warping in relative mode.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - Warping the mouse will not generate a motion event in relative mode
+ *    "1"       - Warping the mouse will generate a motion event in relative mode
+ *
+ *  By default warping the mouse will not generate motion events in relative mode. This avoids the application having to filter out large relative motion due to warping.
+ */
+#define SDL_HINT_MOUSE_RELATIVE_WARP_MOTION  "SDL_MOUSE_RELATIVE_WARP_MOTION"
 
 /**
  *  \brief  A variable controlling whether mouse events should generate synthetic touch events
@@ -1093,7 +1276,7 @@ extern "C" {
  *  When polling for events, SDL_PumpEvents is used to gather new events from devices.
  *  If a device keeps producing new events between calls to SDL_PumpEvents, a poll loop will
  *  become stuck until the new events stop.
- *  This is most noticable when moving a high frequency mouse.
+ *  This is most noticeable when moving a high frequency mouse.
  *
  *  By default, poll sentinels are enabled.
  */
@@ -1268,6 +1451,17 @@ extern "C" {
  *  By default SDL does not sync screen surface updates with vertical refresh.
  */
 #define SDL_HINT_RENDER_VSYNC               "SDL_RENDER_VSYNC"
+
+/**
+ *  \brief  A variable controlling if VSYNC is automatically disable if doesn't reach the enough FPS
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - It will be using VSYNC as defined in the main flag. Default
+ *    "1"       - If VSYNC was previously enabled, then it will disable VSYNC if doesn't reach enough speed
+ *
+ *  By default SDL does not enable the automatic VSYNC
+ */
+#define SDL_HINT_PS2_DYNAMIC_VSYNC    "SDL_PS2_DYNAMIC_VSYNC"
 
 /**
  * \brief A variable to control whether the return key on the soft keyboard
@@ -1535,6 +1729,23 @@ extern "C" {
 #define SDL_HINT_VIDEO_WAYLAND_MODE_EMULATION "SDL_VIDEO_WAYLAND_MODE_EMULATION"
 
 /**
+ *  \brief  Enable or disable mouse pointer warp emulation, needed by some older games.
+ *
+ *  When this hint is set, any SDL will emulate mouse warps using relative mouse mode.
+ *  This is required for some older games (such as Source engine games), which warp the
+ *  mouse to the centre of the screen rather than using relative mouse motion. Note that
+ *  relative mouse mode may have different mouse acceleration behaviour than pointer warps.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - All mouse warps fail, as mouse warping is not available under wayland.
+ *    "1"       - Some mouse warps will be emulated by forcing relative mouse mode.
+ *
+ *  If not set, this is automatically enabled unless an application uses relative mouse
+ *  mode directly.
+ */
+#define SDL_HINT_VIDEO_WAYLAND_EMULATE_MOUSE_WARP "SDL_VIDEO_WAYLAND_EMULATE_MOUSE_WARP"
+
+/**
 *  \brief  A variable that is the address of another SDL_Window* (as a hex string formatted with "%p").
 *  
 *  If this hint is set before SDL_CreateWindowFrom() and the SDL_Window* it is set to has
@@ -1742,6 +1953,28 @@ extern "C" {
  *               This is necessary with .NET languages or debuggers that aren't Visual Studio.
  */
 #define SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING "SDL_WINDOWS_DISABLE_THREAD_NAMING"
+
+/**
+ *  \brief Controls whether menus can be opened with their keyboard shortcut (Alt+mnemonic).
+ *
+ *  If the mnemonics are enabled, then menus can be opened by pressing the Alt
+ *  key and the corresponding mnemonic (for example, Alt+F opens the File menu).
+ *  However, in case an invalid mnemonic is pressed, Windows makes an audible
+ *  beep to convey that nothing happened. This is true even if the window has
+ *  no menu at all!
+ *
+ *  Because most SDL applications don't have menus, and some want to use the Alt
+ *  key for other purposes, SDL disables mnemonics (and the beeping) by default.
+ *
+ *  Note: This also affects keyboard events: with mnemonics enabled, when a
+ *  menu is opened from the keyboard, you will not receive a KEYUP event for
+ *  the mnemonic key, and *might* not receive one for Alt.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - Alt+mnemonic does nothing, no beeping. (default)
+ *    "1"       - Alt+mnemonic opens menus, invalid mnemonics produce a beep.
+ */
+#define SDL_HINT_WINDOWS_ENABLE_MENU_MNEMONICS "SDL_WINDOWS_ENABLE_MENU_MNEMONICS"
 
 /**
  *  \brief  A variable controlling whether the windows message loop is processed by SDL 
@@ -2156,6 +2389,28 @@ extern "C" {
 
 
 /**
+ *  \brief  A variable that treats trackpads as touch devices.
+ *
+ *  On macOS (and possibly other platforms in the future), SDL will report
+ *  touches on a trackpad as mouse input, which is generally what users
+ *  expect from this device; however, these are often actually full
+ *  multitouch-capable touch devices, so it might be preferable to some apps
+ *  to treat them as such.
+ *
+ *  Setting this hint to true will make the trackpad input report as a
+ *  multitouch device instead of a mouse. The default is false.
+ *
+ *  Note that most platforms don't support this hint. As of 2.24.0, it
+ *  only supports MacBooks' trackpads on macOS. Others may follow later.
+ *
+ *  This hint is checked during SDL_Init and can not be changed after.
+ *
+ *  This hint is available since SDL 2.24.0.
+ */
+#define SDL_HINT_TRACKPAD_IS_TOUCH_ONLY "SDL_TRACKPAD_IS_TOUCH_ONLY"
+
+
+/**
  *  \brief  An enumeration of hint priorities
  */
 typedef enum
@@ -2205,6 +2460,38 @@ extern DECLSPEC SDL_bool SDLCALL SDL_SetHintWithPriority(const char *name,
  */
 extern DECLSPEC SDL_bool SDLCALL SDL_SetHint(const char *name,
                                              const char *value);
+
+/**
+ * Reset a hint to the default value.
+ *
+ * This will reset a hint to the value of the environment variable, or NULL if
+ * the environment isn't set. Callbacks will be called normally with this
+ * change.
+ *
+ * \param name the hint to set
+ * \returns SDL_TRUE if the hint was set, SDL_FALSE otherwise.
+ *
+ * \since This function is available since SDL 2.24.0.
+ *
+ * \sa SDL_GetHint
+ * \sa SDL_SetHint
+ */
+extern DECLSPEC SDL_bool SDLCALL SDL_ResetHint(const char *name);
+
+/**
+ * Reset all hints to the default values.
+ *
+ * This will reset all hints to the value of the associated environment
+ * variable, or NULL if the environment isn't set. Callbacks will be called
+ * normally with this change.
+ *
+ * \since This function is available since SDL 2.26.0.
+ *
+ * \sa SDL_GetHint
+ * \sa SDL_SetHint
+ * \sa SDL_ResetHint
+ */
+extern DECLSPEC void SDLCALL SDL_ResetHints(void);
 
 /**
  * Get the value of a hint.
@@ -2279,9 +2566,16 @@ extern DECLSPEC void SDLCALL SDL_DelHintCallback(const char *name,
 /**
  * Clear all hints.
  *
- * This function is automatically called during SDL_Quit().
+ * This function is automatically called during SDL_Quit(), and deletes all
+ * callbacks without calling them and frees all memory associated with hints.
+ * If you're calling this from application code you probably want to call
+ * SDL_ResetHints() instead.
+ *
+ * This function will be removed from the API the next time we rev the ABI.
  *
  * \since This function is available since SDL 2.0.0.
+ *
+ * \sa SDL_ResetHints
  */
 extern DECLSPEC void SDLCALL SDL_ClearHints(void);
 
