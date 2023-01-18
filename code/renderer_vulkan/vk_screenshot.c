@@ -67,9 +67,10 @@ static void RB_FlipFrameBuffer(unsigned char *pBuf, const uint32_t w, const uint
 }
 
 // Just reading the pixels for the GPU MEM, don't care about swizzling
-static void RB_ReadPixels(unsigned char *pBuf, uint32_t width, uint32_t height) {
+static byte *RB_ReadPixels(uint32_t width, uint32_t height) {
 	const uint32_t sizeFB = width * height * 4;
-
+	byte *pBuf = (byte *)ri.Hunk_AllocateTempMemory(sizeFB);
+	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
 	VkBuffer buffer;
 	VkDeviceMemory memory;
 	VkBufferImageCopy image_copy;
@@ -216,6 +217,7 @@ static void RB_ReadPixels(unsigned char *pBuf, uint32_t width, uint32_t height) 
 			pDst += 4;
 		}
 	}
+	return pBuf;
 }
 
 extern size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_width, int image_height,
@@ -227,30 +229,21 @@ extern void RE_SavePNG(const char *filename, int width, int height, byte *data, 
 extern void RE_SaveTGA(const char *filename, int image_width, int image_height, byte *image_buffer, int padding);
 
 static void RB_TakeScreenshotJPEG(int width, int height, const char *fileName) {
-	const uint32_t cnPixels = width * height;
-	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
-	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
-	RB_ReadPixels(pImg, width, height);
+	byte *pImg = RB_ReadPixels(width, height);
 	RE_SaveJPG(fileName, r_screenshotJpegQuality->integer, width, height, pImg, 0);
 	ri.Hunk_FreeTempMemory(pImg);
 }
 
 static void RB_TakeScreenshotPNG(int width, int height, const char *fileName) {
-	const uint32_t cnPixels = width * height;
-	unsigned char *const pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
-	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
-	RB_ReadPixels(pImg, width, height);
+	byte *pImg = RB_ReadPixels(width, height);
 	RE_SavePNG(fileName, width, height, pImg, 0);
 	ri.Hunk_FreeTempMemory(pImg);
 }
 
 static void RB_TakeScreenshotTGA(int width, int height, const char *fileName) {
-	const uint32_t cnPixels = width * height;
-	unsigned char *const pBuffer = (unsigned char *)ri.Hunk_AllocateTempMemory(cnPixels * 4);
-	ri.Printf(PRINT_DEVELOPER, "read %dx%d pixels from GPU\n", width, height);
-	RB_ReadPixels(pBuffer, width, height);
-	RE_SaveTGA(fileName, width, height, pBuffer, 0);
-	ri.Hunk_FreeTempMemory(pBuffer);
+	byte *pImg = RB_ReadPixels(width, height);
+	RE_SaveTGA(fileName, width, height, pImg, 0);
+	ri.Hunk_FreeTempMemory(pImg);
 }
 
 const void *RB_TakeScreenshotCmd(const void *data) {
@@ -313,8 +306,7 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 
 	Com_sprintf(fileName, sizeof(fileName), "levelshots/%s%s", tr.world->baseName, ext);
 
-	source = (unsigned char *)ri.Hunk_AllocateTempMemory(width * height * 3);
-	RB_ReadPixels(source, width, height);
+	source = RB_ReadPixels(width, height);
 
 	if (type == ST_TGA)
 		RE_SaveTGA(fileName, width, height, source, 0);
@@ -422,9 +414,7 @@ void RB_TakeVideoFrameCmd(const videoFrameCommand_t *cmd) {
 	avipadwidth = PAD(linelen, 4);
 	avipadlen = avipadwidth - linelen;
 
-	pImg = (unsigned char *)ri.Hunk_AllocateTempMemory(cmd->width * cmd->height * 4);
-
-	RB_ReadPixels(pImg, cmd->width, cmd->height);
+	pImg = RB_ReadPixels(cmd->width, cmd->height);
 
 	memcount = padwidth * cmd->height;
 
