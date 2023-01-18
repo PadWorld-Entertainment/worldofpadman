@@ -936,6 +936,14 @@ void CL_PacketEvent(netadr_t from, msg_t *msg);
 
 void CL_ConsolePrint(const char *text);
 
+void CL_Shutdown(const char *finalmsg, qboolean disconnect, qboolean quit);
+void CL_MouseEvent(int dx, int dy, int time);
+void CL_KeyEvent(int key, qboolean down, unsigned time);
+void CL_JoystickEvent(int axis, int value, int time);
+void CL_ShutdownCGame(void);
+void CL_ShutdownUI(void);
+void CIN_CloseAllVideos(void);
+
 // do a screen update before starting to load a map
 // when the server is going to load a new map, the entire hunk
 // will be cleared, so the client must shutdown cgame, ui, and
