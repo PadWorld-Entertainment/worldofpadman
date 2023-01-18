@@ -14,18 +14,9 @@ macro(set_and_check _var _file)
     endif()
 endmacro()
 
-# Copied from `configure_package_config_file`
-macro(check_required_components _NAME)
-    foreach(comp ${${_NAME}_FIND_COMPONENTS})
-        if(NOT ${_NAME}_${comp}_FOUND)
-            if(${_NAME}_FIND_REQUIRED_${comp})
-                set(${_NAME}_FOUND FALSE)
-            endif()
-        endif()
-    endforeach()
-endmacro()
-
+get_filename_component(CMAKE_CURRENT_LIST_DIR ${CMAKE_CURRENT_LIST_DIR} REALPATH)
 get_filename_component(prefix "${CMAKE_CURRENT_LIST_DIR}/@cmake_prefix_relpath@" ABSOLUTE)
+
 set(exec_prefix "@exec_prefix@")
 set(bindir "@bindir@")
 set(libdir "@libdir@")
@@ -49,54 +40,62 @@ unset(bindir)
 unset(libdir)
 unset(includedir)
 
-set(_sdl2_libraries "@SDL_LIBS@")
-set(_sdl2_static_private_libs "@SDL_STATIC_LIBS@")
+set(_sdl2_libraries_in "@SDL_LIBS@")
+set(_sdl2_static_private_libs_in "@SDL_STATIC_LIBS@")
 
-# Convert _sdl2_libraries to list and keep only libraries
-string(REGEX MATCHALL "-[lm]([-a-zA-Z0-9._]+)" _sdl2_libraries "${_sdl2_libraries}")
+# Convert _sdl2_libraries to list and keep only libraries + library directories
+string(REGEX MATCHALL "-[lm]([-a-zA-Z0-9._]+)" _sdl2_libraries "${_sdl2_libraries_in}")
 string(REGEX REPLACE "^-l" "" _sdl2_libraries "${_sdl2_libraries}")
 string(REGEX REPLACE ";-l" ";" _sdl2_libraries "${_sdl2_libraries}")
+string(REGEX MATCHALL "-L([-a-zA-Z0-9._/]+)" _sdl2_libdirs "${_sdl2_libraries_in}")
+string(REGEX REPLACE "^-L" "" _sdl2_libdirs "${_sdl2_libdirs}")
+string(REGEX REPLACE ";-L" ";" _sdl2_libdirs "${_sdl2_libdirs}")
+list(APPEND _sdl2_libdirs "${SDL2_LIBDIR}")
 
-# Convert _sdl2_static_private_libs to list and keep only libraries
-string(REGEX MATCHALL "(-[lm]([-a-zA-Z0-9._]+))|(-Wl,[^ ]*framework[^ ]*)" _sdl2_static_private_libs "${_sdl2_static_private_libs}")
+# Convert _sdl2_static_private_libs to list and keep only libraries + library directories
+string(REGEX MATCHALL "(-[lm]([-a-zA-Z0-9._]+))|(-Wl,[^ ]*framework[^ ]*)|(-pthread)" _sdl2_static_private_libs "${_sdl2_static_private_libs_in}")
 string(REGEX REPLACE "^-l" "" _sdl2_static_private_libs "${_sdl2_static_private_libs}")
 string(REGEX REPLACE ";-l" ";" _sdl2_static_private_libs "${_sdl2_static_private_libs}")
+string(REGEX MATCHALL "-L([-a-zA-Z0-9._/]+)" _sdl2_static_private_libdirs "${_sdl2_static_private_libs_in}")
+string(REGEX REPLACE "^-L" "" _sdl2_static_private_libdirs "${_sdl2_static_private_libdirs}")
+string(REGEX REPLACE ";-L" ";" _sdl2_static_private_libdirs "${_sdl2_static_private_libdirs}")
 
 if(_sdl2_libraries MATCHES ".*SDL2main.*")
   list(INSERT SDL2_LIBRARIES 0 SDL2::SDL2main)
   list(INSERT SDL2_STATIC_LIBRARIES 0 SDL2::SDL2main)
-  set(_sdl2main_library ${SDL2_LIBDIR}/${CMAKE_STATIC_LIBRARY_PREFIX}SDL2main${CMAKE_STATIC_LIBRARY_SUFFIX})
-  if(EXISTS "${_sdl2main_library}")
-    set(SDL2MAIN_LIBRARY SDL2::SDL2main)
-    if(NOT TARGET SDL2::SDL2main)
-      add_library(SDL2::SDL2main STATIC IMPORTED)
-      set_target_properties(SDL2::SDL2main
-        PROPERTIES
-          IMPORTED_LOCATION "${_sdl2main_library}"
-      )
-      if(WIN32)
-        # INTERFACE_LINK_OPTIONS needs CMake 3.13
-        cmake_minimum_required(VERSION 3.13)
-        # Mark WinMain/WinMain@16 as undefined, such that it will be withheld by the linker.
-        if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-          set_target_properties(SDL2::SDL2main
-            PROPERTIES
-              INTERFACE_LINK_OPTIONS "-Wl,--undefined=_WinMain@16"
-          )
-        else()
-          set_target_properties(SDL2::SDL2main
-            PROPERTIES
-              INTERFACE_LINK_OPTIONS "-Wl,--undefined=WinMain"
-          )
-        endif()
+endif()
+
+set(_sdl2main_library ${SDL2_LIBDIR}/${CMAKE_STATIC_LIBRARY_PREFIX}SDL2main${CMAKE_STATIC_LIBRARY_SUFFIX})
+if(EXISTS "${_sdl2main_library}")
+  set(SDL2MAIN_LIBRARY SDL2::SDL2main)
+  if(NOT TARGET SDL2::SDL2main)
+    add_library(SDL2::SDL2main STATIC IMPORTED)
+    set_target_properties(SDL2::SDL2main
+      PROPERTIES
+        IMPORTED_LOCATION "${_sdl2main_library}"
+    )
+    if(WIN32)
+      # INTERFACE_LINK_OPTIONS needs CMake 3.13
+      cmake_minimum_required(VERSION 3.13)
+      # Mark WinMain/WinMain@16 as undefined, such that it will be withheld by the linker.
+      if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+        set_target_properties(SDL2::SDL2main
+          PROPERTIES
+            INTERFACE_LINK_OPTIONS "$<$<STREQUAL:$<TARGET_PROPERTY:TYPE>,EXECUTABLE>:-Wl,--undefined=_WinMain@16>"
+        )
+      else()
+        set_target_properties(SDL2::SDL2main
+          PROPERTIES
+            INTERFACE_LINK_OPTIONS "$<$<STREQUAL:$<TARGET_PROPERTY:TYPE>,EXECUTABLE>:-Wl,--undefined=WinMain>"
+        )
       endif()
     endif()
-    set(SDL2_SDL2main_FOUND TRUE)
-  else()
-    set(SDL2_SDL2main_FOUND FALSE)
   endif()
-  unset(_sdl2main_library)
+  set(SDL2_SDL2main_FOUND TRUE)
+else()
+  set(SDL2_SDL2main_FOUND FALSE)
 endif()
+unset(_sdl2main_library)
 
 # Remove SDL2 since this is the "central" library
 # Remove SDL2main since this will be provided by SDL2::SDL2main (if available)
@@ -113,6 +112,7 @@ if(WIN32)
       set_target_properties(SDL2::SDL2 PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIR}"
         INTERFACE_LINK_LIBRARIES "${_sdl2_link_libraries}"
+        INTERFACE_LINK_DIRECTORIES "${_sdl2_libdirs}"
         IMPORTED_LINK_INTERFACE_LANGUAGES "C"
         IMPORTED_IMPLIB "${_sdl2_implib}"
         IMPORTED_LOCATION "${_sdl2_dll}"
@@ -132,6 +132,7 @@ else()
       set_target_properties(SDL2::SDL2 PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIR}"
         INTERFACE_LINK_LIBRARIES "${_sdl2_link_libraries}"
+        INTERFACE_LINK_DIRECTORIES "${_sdl2_libdirs}"
         IMPORTED_LINK_INTERFACE_LANGUAGES "C"
         IMPORTED_LOCATION "${_sdl2_shared}"
       )
@@ -152,6 +153,7 @@ if(EXISTS "${_sdl2_static}")
         IMPORTED_LOCATION "${_sdl2_static}"
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIR}"
         INTERFACE_LINK_LIBRARIES "${_sdl2_link_libraries};${_sdl2_static_private_libs}"
+        INTERFACE_LINK_DIRECTORIES "${_sdl2_libdirs};${_sdl2_static_private_libdirs}"
         IMPORTED_LINK_INTERFACE_LANGUAGES "C"
     )
   endif()
@@ -169,7 +171,7 @@ if(EXISTS "${_sdl2test_library}")
     add_library(SDL2::SDL2test STATIC IMPORTED)
     set_target_properties(SDL2::SDL2test
       PROPERTIES
-        IMPORTED_LOCATION "_sdl2test_library"
+        IMPORTED_LOCATION "${_sdl2test_library}"
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIR}"
         IMPORTED_LINK_INTERFACE_LANGUAGES "C"
     )

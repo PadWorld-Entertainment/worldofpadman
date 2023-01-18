@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2022 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -187,7 +187,8 @@ typedef enum
     SDL_DISPLAYEVENT_NONE,          /**< Never used */
     SDL_DISPLAYEVENT_ORIENTATION,   /**< Display orientation has changed to data1 */
     SDL_DISPLAYEVENT_CONNECTED,     /**< Display has been added to the system */
-    SDL_DISPLAYEVENT_DISCONNECTED   /**< Display has been removed from the system */
+    SDL_DISPLAYEVENT_DISCONNECTED,  /**< Display has been removed from the system */
+    SDL_DISPLAYEVENT_MOVED          /**< Display has changed position */
 } SDL_DisplayEventID;
 
 /**
@@ -596,6 +597,35 @@ extern DECLSPEC int SDLCALL SDL_GetCurrentDisplayMode(int displayIndex, SDL_Disp
  * \sa SDL_GetNumDisplayModes
  */
 extern DECLSPEC SDL_DisplayMode * SDLCALL SDL_GetClosestDisplayMode(int displayIndex, const SDL_DisplayMode * mode, SDL_DisplayMode * closest);
+
+/**
+ * Get the index of the display containing a point
+ *
+ * \param point the point to query
+ * \returns the index of the display containing the point or a negative error
+ *          code on failure; call SDL_GetError() for more information.
+ *
+ * \since This function is available since SDL 2.24.0.
+ *
+ * \sa SDL_GetDisplayBounds
+ * \sa SDL_GetNumVideoDisplays
+ */
+extern DECLSPEC int SDLCALL SDL_GetPointDisplayIndex(const SDL_Point * point);
+
+/**
+ * Get the index of the display primarily containing a rect
+ *
+ * \param rect the rect to query
+ * \returns the index of the display entirely containing the rect or closest
+ *          to the center of the rect on success or a negative error code on
+ *          failure; call SDL_GetError() for more information.
+ *
+ * \since This function is available since SDL 2.24.0.
+ *
+ * \sa SDL_GetDisplayBounds
+ * \sa SDL_GetNumVideoDisplays
+ */
+extern DECLSPEC int SDLCALL SDL_GetRectDisplayIndex(const SDL_Rect * rect);
 
 /**
  * Get the index of the display associated with a window.
@@ -1016,6 +1046,27 @@ extern DECLSPEC void SDLCALL SDL_GetWindowSize(SDL_Window * window, int *w,
 extern DECLSPEC int SDLCALL SDL_GetWindowBordersSize(SDL_Window * window,
                                                      int *top, int *left,
                                                      int *bottom, int *right);
+
+/**
+ * Get the size of a window in pixels.
+ *
+ * This may differ from SDL_GetWindowSize() if we're rendering to a high-DPI
+ * drawable, i.e. the window was created with `SDL_WINDOW_ALLOW_HIGHDPI` on a
+ * platform with high-DPI support (Apple calls this "Retina"), and not
+ * disabled by the `SDL_HINT_VIDEO_HIGHDPI_DISABLED` hint.
+ *
+ * \param window the window from which the drawable size should be queried
+ * \param w a pointer to variable for storing the width in pixels, may be NULL
+ * \param h a pointer to variable for storing the height in pixels, may be
+ *          NULL
+ *
+ * \since This function is available since SDL 2.26.0.
+ *
+ * \sa SDL_CreateWindow
+ * \sa SDL_GetWindowSize
+ */
+extern DECLSPEC void SDLCALL SDL_GetWindowSizeInPixels(SDL_Window * window,
+                                                       int *w, int *h);
 
 /**
  * Set the minimum size of a window's client area.
@@ -1760,6 +1811,9 @@ extern DECLSPEC void SDLCALL SDL_EnableScreenSaver(void);
  *
  * If you disable the screensaver, it is automatically re-enabled when SDL
  * quits.
+ *
+ * The screensaver is disabled by default since SDL 2.0.2. Before SDL 2.0.2
+ * the screensaver was enabled by default.
  *
  * \since This function is available since SDL 2.0.0.
  *
