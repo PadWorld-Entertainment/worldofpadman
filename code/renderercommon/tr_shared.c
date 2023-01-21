@@ -32,7 +32,7 @@ void R_ScreenshotFilename(int lastNumber, char *fileName, int size, const char *
 	int a, b, c, d;
 
 	if (lastNumber < 0 || lastNumber > 9999) {
-		Com_sprintf(fileName, size, "screenshots/shot9999.%s", ext);
+		Com_sprintf(fileName, size, "screenshots/shot9999%s", ext);
 		return;
 	}
 
@@ -44,5 +44,5 @@ void R_ScreenshotFilename(int lastNumber, char *fileName, int size, const char *
 	lastNumber -= c * 10;
 	d = lastNumber;
 
-	Com_sprintf(fileName, size, "screenshots/shot%i%i%i%i.%s", a, b, c, d, ext);
+	Com_sprintf(fileName, size, "screenshots/shot%i%i%i%i%s", a, b, c, d, ext);
 }
