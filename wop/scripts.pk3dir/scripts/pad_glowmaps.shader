@@ -35,7 +35,7 @@ textures/pad_glowsky/utopiaatoll
 	skyparms env/utopiaatoll512 - -
 }
 
-textures/pad_petesky/wolfl
+textures/pad_glowsky/wolfl
 {
 	qer_editorimage env/wolf-pack512_ft
 	surfaceparm noimpact
@@ -57,6 +57,18 @@ textures/pad_glowsky/urban-terror
 	q3map_surfacelight 20
 
 	skyparms env/urban-terror512 - -
+}
+
+textures/pad_backyard/pf-tornado-alley
+{
+	qer_editorimage env/pf-tornado-alley512_ft
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	q3map_lightimage textures/colors/hex_373737ff
+	q3map_sun 0.266383 0.274632 0.358662 100 230 70
+	q3map_surfacelight 175
+
+	skyparms env/pf-tornado-alley512 - -
 }
 
 textures/pad_glowsky/gglass03
@@ -123,19 +135,6 @@ textures/pad_glowsky/gglass02
 	}
 
 }
-
-textures/pad_backyard/pf-tornado-alley
-{
-	qer_editorimage env/pf-tornado-alley512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_373737ff
-	q3map_sun 0.266383 0.274632 0.358662 100 230 70
-	q3map_surfacelight 175
-
-	skyparms env/pf-tornado-alley512 - -
-}
-
 
 textures/pad_glowsky/glass
 {
