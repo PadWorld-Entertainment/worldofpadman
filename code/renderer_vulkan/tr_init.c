@@ -84,9 +84,9 @@ static void R_Init(void) {
 	// make sure all the commands added here are also
 	// removed in R_Shutdown
 	ri.Cmd_AddCommand("modellist", R_Modellist_f);
+	ri.Cmd_AddCommand("screenshot", R_ScreenShotTGA_f);
 	ri.Cmd_AddCommand("screenshotJPEG", R_ScreenShotJPEG_f);
 	ri.Cmd_AddCommand("screenshotPNG", R_ScreenShotPNG_f);
-	ri.Cmd_AddCommand("screenshot", R_ScreenShotTGA_f);
 	ri.Cmd_AddCommand("shaderlist", R_ShaderList_f);
 	ri.Cmd_AddCommand("skinlist", R_SkinList_f);
 
@@ -123,6 +123,7 @@ void RE_Shutdown(qboolean destroyWindow) {
 	ri.Printf(PRINT_ALL, "\nRE_Shutdown( %i )\n", destroyWindow);
 
 	ri.Cmd_RemoveCommand("modellist");
+	ri.Cmd_RemoveCommand("screenshotPNG");
 	ri.Cmd_RemoveCommand("screenshotJPEG");
 	ri.Cmd_RemoveCommand("screenshot");
 	ri.Cmd_RemoveCommand("shaderlist");
