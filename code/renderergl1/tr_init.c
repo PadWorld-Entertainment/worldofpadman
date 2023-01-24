@@ -159,6 +159,7 @@ cvar_t *r_marksOnTriangleMeshes;
 
 cvar_t *r_aviMotionJpegQuality;
 cvar_t *r_screenshotJpegQuality;
+cvar_t *r_screenshotFormat;
 
 cvar_t *r_maxpolys;
 int max_polys;
@@ -620,16 +621,15 @@ static void R_ScreenShot(screenshotType_e type) {
 	}
 }
 
-static void R_ScreenShotTGA_f(void) {
-	R_ScreenShot(ST_TGA);
-}
-
-static void R_ScreenShotJPEG_f(void) {
-	R_ScreenShot(ST_JPEG);
-}
-
-static void R_ScreenShotPNG_f(void) {
-	R_ScreenShot(ST_PNG);
+static void R_ScreenShot_f(void) {
+	int type = r_screenshotFormat->integer;
+	if (type > 1) {
+		R_ScreenShot(ST_PNG);
+	} else if (type == 1) {
+		R_ScreenShot(ST_JPEG);
+	} else {
+		R_ScreenShot(ST_TGA);
+	}
 }
 
 /*
@@ -999,6 +999,7 @@ static void R_Register(void) {
 
 	r_aviMotionJpegQuality = ri.Cvar_Get("r_aviMotionJpegQuality", "100", CVAR_ARCHIVE);
 	r_screenshotJpegQuality = ri.Cvar_Get("r_screenshotJpegQuality", "100", CVAR_ARCHIVE);
+	r_screenshotFormat = ri.Cvar_Get("r_screenshotFormat", "2", CVAR_ARCHIVE);
 
 	r_maxpolys = ri.Cvar_Get("r_maxpolys", va("%d", MAX_POLYS), 0);
 	r_maxpolyverts = ri.Cvar_Get("r_maxpolyverts", va("%d", MAX_POLYVERTS), 0);
@@ -1010,9 +1011,7 @@ static void R_Register(void) {
 	ri.Cmd_AddCommand("skinlist", R_SkinList_f);
 	ri.Cmd_AddCommand("modellist", R_Modellist_f);
 	ri.Cmd_AddCommand("modelist", R_ModeList_f);
-	ri.Cmd_AddCommand("screenshot", R_ScreenShotTGA_f);
-	ri.Cmd_AddCommand("screenshotJPEG", R_ScreenShotJPEG_f);
-	ri.Cmd_AddCommand("screenshotPNG", R_ScreenShotPNG_f);
+	ri.Cmd_AddCommand("screenshot", R_ScreenShot_f);
 	ri.Cmd_AddCommand("gfxinfo", GfxInfo_f);
 	ri.Cmd_AddCommand("minimize", GLimp_Minimize);
 }
@@ -1117,8 +1116,6 @@ void RE_Shutdown(qboolean destroyWindow) {
 	ri.Cmd_RemoveCommand("skinlist");
 	ri.Cmd_RemoveCommand("modellist");
 	ri.Cmd_RemoveCommand("modelist");
-	ri.Cmd_RemoveCommand("screenshotPNG");
-	ri.Cmd_RemoveCommand("screenshotJPEG");
 	ri.Cmd_RemoveCommand("screenshot");
 	ri.Cmd_RemoveCommand("gfxinfo");
 	ri.Cmd_RemoveCommand("minimize");

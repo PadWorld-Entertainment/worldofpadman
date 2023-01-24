@@ -388,16 +388,15 @@ screenshot [filename]
 Doesn't print the pacifier message if there is a second arg
 ==================
 */
-void R_ScreenShotTGA_f(void) {
-	R_Screenshot(ST_TGA);
-}
-
-void R_ScreenShotJPEG_f(void) {
-	R_Screenshot(ST_JPEG);
-}
-
-void R_ScreenShotPNG_f(void) {
-	R_Screenshot(ST_PNG);
+void R_ScreenShot_f(void) {
+	int type = r_screenshotFormat->integer;
+	if (type > 1) {
+		R_Screenshot(ST_PNG);
+	} else if (type == 1) {
+		R_Screenshot(ST_JPEG);
+	} else {
+		R_Screenshot(ST_TGA);
+	}
 }
 
 void RB_TakeVideoFrameCmd(const videoFrameCommand_t *cmd) {

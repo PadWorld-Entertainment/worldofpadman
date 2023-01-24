@@ -84,6 +84,7 @@ extern cvar_t *r_displayRefresh;
 
 extern cvar_t *r_aviMotionJpegQuality;
 extern cvar_t *r_screenshotJpegQuality;
+extern cvar_t *r_screenshotFormat;
 extern cvar_t *r_enablevalidationlayers;
 
 void R_Register(void);

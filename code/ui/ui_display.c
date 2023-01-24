@@ -57,9 +57,11 @@ DISPLAY OPTIONS MENU
 #define ID_WINDOWMODE 18
 #define ID_RESIZE 19
 #define ID_MAXFPS 20
-#define ID_ANAGLYPH 21
-#define ID_SWAPCOLORS 22
-#define ID_GREYSCALE 23
+#define ID_SCREENSHOTFORMAT 21
+#define ID_SSJPEGQUALITY 22
+#define ID_ANAGLYPH 23
+#define ID_SWAPCOLORS 24
+#define ID_GREYSCALE 25
 
 #define XPOSITION 180
 #define YPOSITION 198
@@ -79,6 +81,8 @@ typedef struct {
 	menulist_s windowmode;
 	menuradiobutton_s resize;
 	menuradiobutton_s maxfps;
+	menulist_s screenshotformat;
+	menuslider_s ssjpegquality;
 	menulist_s anaglyph;
 	menuradiobutton_s swapcolors;
 	menuslider_s greyscale;
@@ -96,6 +100,7 @@ typedef struct {
 static displayOptionsInfo_t displayOptionsInfo;
 
 static const char *wm_names[] = {"Off (Fullscreen)", "On (Border)", "On (No Border)", NULL};
+static const char *screenshot_formats[] = {"TGA Image", "JPG Image", "PNG Image", NULL};
 static const char *anaglyph_names[] = {"Off", "Red-Cyan", "Red-Blue", "Red-Green", "Green-Magenta", NULL};
 
 /*
@@ -135,6 +140,9 @@ static void UI_DisplayOptions_SetMenuItems(void) {
 		displayOptionsInfo.maxfps.curvalue = 0;
 	}
 
+	displayOptionsInfo.screenshotformat.curvalue = trap_Cvar_VariableValue("r_screenshotFormat");
+	displayOptionsInfo.ssjpegquality.curvalue = trap_Cvar_VariableValue("r_screenshotJpegQuality");
+
 	anaglyphMode = Com_Clamp(0, 8, trap_Cvar_VariableValue("r_anaglyphMode"));
 	if (anaglyphMode > 4) {
 		anaglyphMode -= 4;
@@ -159,6 +167,12 @@ static void UI_DisplayOptions_UpdateMenuItems(void) {
 		displayOptionsInfo.brightness.generic.flags |= QMF_GRAYED;
 	} else {
 		displayOptionsInfo.brightness.generic.flags &= ~QMF_GRAYED;
+	}
+
+	if (displayOptionsInfo.screenshotformat.curvalue != 1) {
+		displayOptionsInfo.ssjpegquality.generic.flags |= QMF_GRAYED;
+	} else {
+		displayOptionsInfo.ssjpegquality.generic.flags &= ~QMF_GRAYED;
 	}
 
 	if (!displayOptionsInfo.anaglyph.curvalue) {
@@ -236,6 +250,24 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 			trap_Cvar_SetValue("com_maxfpsMinimized", 5);
 			break;
 		}
+		break;
+
+	case ID_SCREENSHOTFORMAT:
+		switch (displayOptionsInfo.screenshotformat.curvalue) {
+		case 0:	//TGA
+			trap_Cvar_SetValue("r_screenshotFormat", 0);
+			break;
+		case 1:	//JPG
+			trap_Cvar_SetValue("r_screenshotFormat", 1);
+			break;
+		case 2:	//PNG
+			trap_Cvar_SetValue("r_screenshotFormat", 2);
+			break;
+		}
+		break;
+
+	case ID_SSJPEGQUALITY:
+		trap_Cvar_SetValue("r_screenshotJpegQuality", (int)displayOptionsInfo.ssjpegquality.curvalue);
 		break;
 
 	case ID_ANAGLYPH:
@@ -449,6 +481,35 @@ static void UI_DisplayOptions_MenuInit(void) {
 		"(5 fps). Default is off. NOTE: This may help to reduce your graphics card load while you "
 		"are not playing the game.";
 
+	y += (BIGCHAR_HEIGHT + 2);
+	displayOptionsInfo.screenshotformat.generic.type = MTYPE_SPINCONTROL;
+	displayOptionsInfo.screenshotformat.generic.name = "Save Screenshots As:";
+	displayOptionsInfo.screenshotformat.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.screenshotformat.generic.callback = UI_DisplayOptions_Event;
+	displayOptionsInfo.screenshotformat.generic.id = ID_SCREENSHOTFORMAT;
+	displayOptionsInfo.screenshotformat.generic.x = XPOSITION;
+	displayOptionsInfo.screenshotformat.generic.y = y;
+	displayOptionsInfo.screenshotformat.itemnames = screenshot_formats;
+	displayOptionsInfo.screenshotformat.generic.toolTip =
+		"Select a desired screenshot image format. Default is PNG as best compromise between image "
+		"quality and file size. TGA as a lossless format offers best quality but results in large "
+		"files. JPG may result in smaller files due to compression if image quality is reduced.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	displayOptionsInfo.ssjpegquality.generic.type = MTYPE_SLIDER;
+	displayOptionsInfo.ssjpegquality.generic.name = "JPEG Image Quality:";
+	displayOptionsInfo.ssjpegquality.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.ssjpegquality.generic.callback = UI_DisplayOptions_Event;
+	displayOptionsInfo.ssjpegquality.generic.id = ID_SSJPEGQUALITY;
+	displayOptionsInfo.ssjpegquality.generic.x = XPOSITION;
+	displayOptionsInfo.ssjpegquality.generic.y = y;
+	displayOptionsInfo.ssjpegquality.minvalue = 60;
+    displayOptionsInfo.ssjpegquality.maxvalue = 100;
+	displayOptionsInfo.ssjpegquality.generic.toolTip =
+		"Use this to adjust the quality of the screenshot saved as a JPG image between 60 to 100 "
+		"percent. Default is 100. NOTE: A lower JPG image quality results in smaller files and "
+		"thus can save disk space.";
+
 	y += 2 * (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
 	displayOptionsInfo.anaglyph.generic.name = "Anaglyph 3D Mode:";
@@ -523,6 +584,8 @@ static void UI_DisplayOptions_MenuInit(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.windowmode);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.resize);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.maxfps);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screenshotformat);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.ssjpegquality);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.swapcolors);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
