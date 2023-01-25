@@ -50,6 +50,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 static int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 	int quantity;
 	int i;
+	qboolean laugh;
 	gclient_t *client;
 
 	if (!other->client->ps.powerups[ent->item->giTag]) {
@@ -66,12 +67,18 @@ static int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 
 	other->client->ps.powerups[ent->item->giTag] += quantity * 1000;
 
-	// give any nearby players a "denied" anti-reward
+	// look for other opponents nearby to laugh at them 
+	laugh = qfalse;
 	for (i = 0; i < level.maxclients; i++) {
 		vec3_t delta;
 		float len;
 		vec3_t forward;
 		trace_t tr;
+
+		// if already laughed at someone, no need to check further
+		if (laugh != qfalse) {
+			break;
+		}
 
 		client = &level.clients[i];
 		if (client == other->client) {
@@ -84,33 +91,37 @@ static int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 			continue;
 		}
 
-		// if same team in team game, no sound
+		// if same team in team game, no laughter
 		// cannot use OnSameTeam as it expects to g_entities, not clients
 		if (g_gametype.integer >= GT_TEAM && other->client->sess.sessionTeam == client->sess.sessionTeam) {
 			continue;
 		}
 
-		// if too far away, no sound
+		// if too far away, no laughter
 		VectorSubtract(ent->s.pos.trBase, client->ps.origin, delta);
 		len = VectorNormalize(delta);
 		if (len > 192) {
 			continue;
 		}
 
-		// if not facing, no sound
+		// if not facing, no laughter
 		AngleVectors(client->ps.viewangles, forward, NULL, NULL);
 		if (DotProduct(delta, forward) < 0.4) {
 			continue;
 		}
 
-		// if not line of sight, no sound
+		// if not line of sight, no laughter
 		trap_Trace(&tr, client->ps.origin, NULL, NULL, ent->s.pos.trBase, ENTITYNUM_NONE, CONTENTS_SOLID);
 		if (tr.fraction != 1.0) {
 			continue;
 		}
+	
+		laugh = qtrue;
+	}
 
-		// anti-reward
-		client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_DENIEDREWARD;
+	// laugh at nearby opponents 
+	if (laugh) {
+		G_AddEvent(other, EV_HEHE2, 0);
 	}
 
 	// FIXME: Where's the best place for this?
@@ -453,7 +464,7 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		break;
 	case IT_POWERUP:
 		respawn = Pickup_Powerup(ent, other);
-		predict = qfalse;
+		//		predict = qfalse;
 		break;
 	case IT_TEAM:
 		respawn = Pickup_Team(ent, other);
