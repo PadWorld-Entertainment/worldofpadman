@@ -325,12 +325,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 	}
 	// if any of the player event bits changed
 	if (ps->persistant[PERS_PLAYEREVENTS] != ops->persistant[PERS_PLAYEREVENTS]) {
-		if ((ps->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_DENIEDREWARD) !=
-			(ops->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_DENIEDREWARD)) {
-			// ToDo: replace with haha1/haha2 sounds of opponent
-			trap_S_StartLocalSound(cgs.media.almostCapture, CHAN_ANNOUNCER);
-		}
-		else if ((ps->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_GAUNTLETREWARD) !=
+		if ((ps->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_GAUNTLETREWARD) !=
 			(ops->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_GAUNTLETREWARD)) {
 			trap_S_StartLocalSound(cgs.media.snackattackSound, CHAN_ANNOUNCER);
 		}
