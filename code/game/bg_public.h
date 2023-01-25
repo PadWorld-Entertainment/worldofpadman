@@ -319,12 +319,11 @@ typedef enum {
 #define EF_VOTED 0x00004000				// already cast a vote
 #define EF_AWARD_PADHERO 0x00008000		// draw a padhero sprite
 #define EF_AWARD_PADACE 0x00010000		// draw a padace sprite
-#define EF_AWARD_DENIED 0x00020000		// denied
-#define EF_TEAMVOTED 0x00040000			// already cast a team vote
-#define EF_FLOATER 0x00080000			// player uses floater
-#define EF_AWARD_SPRAYGOD 0x00100000
-#define EF_AWARD_SPRAYKILLER 0x00200000
-#define EF_NOLIFESLEFT 0x00400000
+#define EF_TEAMVOTED 0x00020000			// already cast a team vote
+#define EF_FLOATER 0x00040000			// player uses floater
+#define EF_AWARD_SPRAYGOD 0x00080000
+#define EF_AWARD_SPRAYKILLER 0x00100000
+#define EF_NOLIFESLEFT 0x00200000
 
 #define REMOVE_AWARDFLAGS                                                                                              \
 	~(EF_AWARD_EXCELLENT | EF_AWARD_SNACKATTACK | EF_AWARD_PADACE | EF_AWARD_PADHERO |               \
@@ -411,9 +410,8 @@ typedef enum {
 } lpsflag_t;
 
 // reward sounds (stored in ps->persistant[PERS_PLAYEREVENTS])
-#define PLAYEREVENT_DENIEDREWARD 0x0001
-#define PLAYEREVENT_GAUNTLETREWARD 0x0002
-#define PLAYEREVENT_ALMOSTCAPTURE 0x0004
+#define PLAYEREVENT_GAUNTLETREWARD 0x0001
+#define PLAYEREVENT_ALMOSTCAPTURE 0x0002
 
 // entityState_t->event values
 // entity events are for effects that take place relative
