@@ -704,9 +704,6 @@ static const char *AwardName(award_t award) {
 	case AWARD_PADACE:
 		name = "padace";
 		break;
-	case AWARD_DENIED:
-		name = "denied";
-		break;
 	case AWARD_SPRAYGOD:
 		name = "spraygod";
 		break;
