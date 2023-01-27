@@ -850,7 +850,6 @@ void UI_NetworkOptionsMenu(void);
 //
 typedef enum {
 	AWARD_ACCURACY,
-	AWARD_IMPRESSIVE,
 	AWARD_EXCELLENT,
 	AWARD_SNACKATTACK,
 	AWARD_FRAGS,

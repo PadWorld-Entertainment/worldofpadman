@@ -1196,8 +1196,7 @@ static void CG_DrawReward(void) {
 			cg.rewardTime = cg.time;
 			cg.rewardStack--;
 			color = CG_FadeColor(cg.rewardTime, REWARD_TIME);
-			if (cg.rewardSound[0] != cgs.media.impressiveSound) // little bit awkward but needs less new code
-				trap_S_StartLocalSound(cg.rewardSound[0], CHAN_ANNOUNCER);
+			trap_S_StartLocalSound(cg.rewardSound[0], CHAN_ANNOUNCER);
 		} else {
 			return;
 		}

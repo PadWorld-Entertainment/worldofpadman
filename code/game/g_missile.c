@@ -144,13 +144,11 @@ static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
 			// complete miss
 			ent->parent->client->accurateCount = 0;
 		} else {
-			// check for "impressive" reward sound
+			// check for two or more splasher hits in a row
 			ent->parent->client->accurateCount++;
 			if (ent->parent->client->accurateCount >= 2) {
-				ent->parent->client->accurateCount--; //-= 2;
-													  //				ent->parent->client->ps.persistant[PERS_IMPRESSIVE_COUNT]++;
-													  //				// add the sprite over the player's head
-													  //				SetAward( ent->parent->client, AWARD_IMPRESSIVE );
+				ent->parent->client->accurateCount--;
+				// Play a laughter sound
 				G_AddEvent(ent->parent, EV_HEHE2, 0);
 			}
 		}

@@ -75,10 +75,11 @@ void UpdateTournamentInfo(void) {
 					  ? 1
 					  : 0;
 
-		Com_sprintf(msg, sizeof(msg), "postgame %i %i %i %i %i %i %i %i %i %i", level.numNonSpectatorClients,
-					playerClientNum, accuracy, player->client->ps.persistant[PERS_IMPRESSIVE_COUNT],
+		Com_sprintf(msg, sizeof(msg), "postgame %i %i %i %i %i %i %i %i %i", level.numNonSpectatorClients,
+					playerClientNum, accuracy,
 					player->client->ps.persistant[PERS_EXCELLENT_COUNT],
-					player->client->ps.persistant[PERS_SNACKATTACK_COUNT], player->client->ps.persistant[PERS_SCORE],
+					player->client->ps.persistant[PERS_SNACKATTACK_COUNT],
+					player->client->ps.persistant[PERS_SCORE],
 					perfect, (player->client->ps.persistant[PERS_SPRAYAWARDS_COUNT] >> 8),
 					player->client->ps.persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF);
 	}

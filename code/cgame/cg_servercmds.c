@@ -39,7 +39,6 @@ static void CG_ParseScores(void) {
 	if (cg.numScores > MAX_CLIENTS) {
 		cg.numScores = MAX_CLIENTS;
 	}
-	//	cg.numFFAplayers = 0;
 
 	memset(cg.scoreTeamCount, 0, sizeof(cg.scoreTeamCount));
 
@@ -49,25 +48,22 @@ static void CG_ParseScores(void) {
 	memset(cg.scores, 0, sizeof(cg.scores));
 	for (i = 0; i < cg.numScores; i++) {
 		//
-		// i*14 zu i*17 um geändert
-
-		cg.scores[i].client = atoi(CG_Argv(i * 17 + 4));
-		cg.scores[i].score = atoi(CG_Argv(i * 17 + 5));
-		cg.scores[i].ping = atoi(CG_Argv(i * 17 + 6));
-		cg.scores[i].time = atoi(CG_Argv(i * 17 + 7));
-		cg.scores[i].scoreFlags = atoi(CG_Argv(i * 17 + 8));
-		powerups = atoi(CG_Argv(i * 17 + 9));
-		cg.scores[i].accuracy = atoi(CG_Argv(i * 17 + 10));
-		cg.scores[i].impressiveCount = atoi(CG_Argv(i * 17 + 11));
-		cg.scores[i].excellentCount = atoi(CG_Argv(i * 17 + 12));
-		cg.scores[i].snackattackCount = atoi(CG_Argv(i * 17 + 13));
-		cg.scores[i].padheroCount = atoi(CG_Argv(i * 17 + 14));
-		cg.scores[i].padaceCount = atoi(CG_Argv(i * 17 + 15));
-		cg.scores[i].perfect = atoi(CG_Argv(i * 17 + 16));
-		cg.scores[i].captures = atoi(CG_Argv(i * 17 + 17));
-		cg.scores[i].spraygodCount = atoi(CG_Argv(i * 17 + 18));
-		cg.scores[i].spraykillerCount = atoi(CG_Argv(i * 17 + 19));
-		cg.scores[i].livesleft = atoi(CG_Argv(i * 17 + 20));
+		cg.scores[i].client = atoi(CG_Argv(i * 16 + 4));
+		cg.scores[i].score = atoi(CG_Argv(i * 16 + 5));
+		cg.scores[i].ping = atoi(CG_Argv(i * 16 + 6));
+		cg.scores[i].time = atoi(CG_Argv(i * 16 + 7));
+		cg.scores[i].scoreFlags = atoi(CG_Argv(i * 16 + 8));
+		powerups = atoi(CG_Argv(i * 16 + 9));
+		cg.scores[i].accuracy = atoi(CG_Argv(i * 16 + 10));
+		cg.scores[i].excellentCount = atoi(CG_Argv(i * 16 + 11));
+		cg.scores[i].snackattackCount = atoi(CG_Argv(i * 16 + 12));
+		cg.scores[i].padheroCount = atoi(CG_Argv(i * 16 + 13));
+		cg.scores[i].padaceCount = atoi(CG_Argv(i * 16 + 14));
+		cg.scores[i].perfect = atoi(CG_Argv(i * 16 + 15));
+		cg.scores[i].captures = atoi(CG_Argv(i * 16 + 16));
+		cg.scores[i].spraygodCount = atoi(CG_Argv(i * 16 + 17));
+		cg.scores[i].spraykillerCount = atoi(CG_Argv(i * 16 + 18));
+		cg.scores[i].livesleft = atoi(CG_Argv(i * 16 + 19));
 
 		if (cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS) {
 			cg.scores[i].client = 0;

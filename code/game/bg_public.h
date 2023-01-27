@@ -291,52 +291,43 @@ typedef enum {
 	PERS_ATTACKEE_ARMOR, // health/armor of last person we attacked
 	PERS_KILLED,		 // count of the number of times you died
 	// player awards tracking
-	PERS_IMPRESSIVE_COUNT,	  // two railgun hits in a row
 	PERS_EXCELLENT_COUNT,	  // two successive kills in a short amount of time
 	PERS_PADHERO_COUNT,		  // padhero awards
 	PERS_PADACE_COUNT,		  // padace awards
 	PERS_SNACKATTACK_COUNT,   // snackattack awards
-	PERS_CAPTURES			  // captures
-
-	,
+	PERS_CAPTURES,			  // captures
 	PERS_SPRAYAWARDS_COUNT // 0xFF00 -> god, 0x00FF -> killer ... because there are max 16 PERS and also only 16 bit(per
 						   // PERS) O_o
 } persEnum_t;
 
 // entityState_t->eFlags
 #define EF_DEAD 0x00000001 // don't draw a foe marker over players with EF_DEAD
-
 #define EF_HURT 0x00000002 // used to determine if somebody is hurt (for stars)
-
-#define EF_TELEPORT_BIT 0x00000004	  // toggled every time the origin abruptly changes
-#define EF_AWARD_EXCELLENT 0x00000008 // draw an excellent sprite
+#define EF_TELEPORT_BIT 0x00000004		// toggled every time the origin abruptly changes
+#define EF_AWARD_EXCELLENT 0x00000008	// draw an excellent sprite
 #define EF_PLAYER_EVENT 0x00000010
-#define EF_BOUNCE 0x00000010		 // for missiles
-#define EF_BOUNCE_HALF 0x00000020	 // for missiles
+#define EF_BOUNCE 0x00000010			// for missiles
+#define EF_BOUNCE_HALF 0x00000020		// for missiles
 #define EF_AWARD_SNACKATTACK 0x00000040 // draw a snackattack sprite
-#define EF_NODRAW 0x00000080		 // may have an event, but no model (unspawned items)
-#define EF_FIRING 0x00000100		 // for lightning gun
-
+#define EF_NODRAW 0x00000080			// may have an event, but no model (unspawned items)
+#define EF_FIRING 0x00000100			// for lightning gun
 #define EF_CHARGED 0x00000200
-
-#define EF_MOVER_STOP 0x00000400	   // will push otherwise
-#define EF_AWARD_CAP 0x00000800		   // draw the capture sprite
-#define EF_TALK 0x00001000			   // draw a talk balloon
-#define EF_CONNECTION 0x00002000	   // draw a connection trouble sprite
-#define EF_VOTED 0x00004000			   // already cast a vote
-#define EF_AWARD_IMPRESSIVE 0x00008000 // draw an impressive sprite
-#define EF_AWARD_PADHERO 0x00010000	   // draw a padhero sprite
-#define EF_AWARD_PADACE 0x00020000	   // draw a padace sprite
-#define EF_AWARD_DENIED 0x00040000	   // denied
-#define EF_TEAMVOTED 0x00080000		   // already cast a team vote
-
-#define EF_FLOATER 0x00100000 // player uses floater
-#define EF_AWARD_SPRAYGOD 0x00200000
-#define EF_AWARD_SPRAYKILLER 0x00400000
-#define EF_NOLIFESLEFT 0x00800000 //
+#define EF_MOVER_STOP 0x00000400		// will push otherwise
+#define EF_AWARD_CAP 0x00000800			// draw the capture sprite
+#define EF_TALK 0x00001000				// draw a talk balloon
+#define EF_CONNECTION 0x00002000		// draw a connection trouble sprite
+#define EF_VOTED 0x00004000				// already cast a vote
+#define EF_AWARD_PADHERO 0x00008000		// draw a padhero sprite
+#define EF_AWARD_PADACE 0x00010000		// draw a padace sprite
+#define EF_AWARD_DENIED 0x00020000		// denied
+#define EF_TEAMVOTED 0x00040000			// already cast a team vote
+#define EF_FLOATER 0x00080000			// player uses floater
+#define EF_AWARD_SPRAYGOD 0x00100000
+#define EF_AWARD_SPRAYKILLER 0x00200000
+#define EF_NOLIFESLEFT 0x00400000
 
 #define REMOVE_AWARDFLAGS                                                                                              \
-	~(EF_AWARD_IMPRESSIVE | EF_AWARD_EXCELLENT | EF_AWARD_SNACKATTACK | EF_AWARD_PADACE | EF_AWARD_PADHERO |               \
+	~(EF_AWARD_EXCELLENT | EF_AWARD_SNACKATTACK | EF_AWARD_PADACE | EF_AWARD_PADHERO |               \
 	  EF_AWARD_CAP | EF_AWARD_SPRAYGOD | EF_AWARD_SPRAYKILLER)
 
 // NOTE: may not have more than 16

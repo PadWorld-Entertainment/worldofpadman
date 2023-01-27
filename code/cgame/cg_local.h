@@ -297,7 +297,6 @@ typedef struct {
 	int padheroCount;
 	int padaceCount;
 	int livesleft;
-	int impressiveCount;
 	int excellentCount;
 	int snackattackCount;
 	int captures;
@@ -1053,7 +1052,6 @@ typedef struct {
 	sfxHandle_t hitSoundHighArmor;
 	sfxHandle_t hitSoundLowArmor;
 	sfxHandle_t hitTeamSound;
-	sfxHandle_t impressiveSound;
 	sfxHandle_t excellentSound;
 	sfxHandle_t snackattackSound;
 	sfxHandle_t spraygodSound;

@@ -351,7 +351,7 @@ struct gclient_s {
 	vec3_t damage_from;		   // origin for vector calculation
 	qboolean damage_fromWorld; // if true, don't use the damage_from vector
 
-	int accurateCount; // for "impressive" reward sound
+	int accurateCount; // for counting splasher hits in a row
 
 	int accuracy_shots; // total number of shots
 	int accuracy_hits;	// total number of hits
@@ -368,7 +368,7 @@ struct gclient_s {
 	int respawnTime;			// can respawn when time > this, force after g_forcerespwan
 	int inactivityTime;			// kick players when time > this
 	qboolean inactivityWarning; // qtrue if the five seoond warning has been given
-	int rewardTime;				// clear the EF_AWARD_IMPRESSIVE, etc when time > this
+	int rewardTime;				// clear the EF_AWARD_* when time > this
 
 	int airOutTime;
 
@@ -594,7 +594,6 @@ typedef enum {
 	AWARD_EXCELLENT = EF_AWARD_EXCELLENT,
 	AWARD_SNACKATTACK = EF_AWARD_SNACKATTACK,
 	AWARD_CAP = EF_AWARD_CAP,
-	AWARD_IMPRESSIVE = EF_AWARD_IMPRESSIVE,
 	AWARD_PADHERO = EF_AWARD_PADHERO,
 	AWARD_PADACE = EF_AWARD_PADACE,
 	AWARD_DENIED = EF_AWARD_DENIED,
