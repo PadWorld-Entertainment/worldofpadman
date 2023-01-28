@@ -369,21 +369,6 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		return;
 	}
 
-	if (targ->client->pers.teamState.lasthurtcarrier &&
-		level.time - targ->client->pers.teamState.lasthurtcarrier < CTF_CARRIER_DANGER_PROTECT_TIMEOUT) {
-		// attacker is on the same team as the skull carrier and
-		AddScore(attacker, targ->r.currentOrigin, CTF_CARRIER_DANGER_PROTECT_BONUS, SCORE_BONUS_CARRIER_PROTECT_S);
-
-		attacker->client->pers.teamState.carrierdefense++;
-		targ->client->pers.teamState.lasthurtcarrier = 0;
-
-		attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
-		// add the sprite over the player's head
-		SetAward(attacker->client, AWARD_PADHERO);
-
-		return;
-	}
-
 	// flag and flag carrier area defense bonuses
 
 	// we have to find the flag and carrier entities
