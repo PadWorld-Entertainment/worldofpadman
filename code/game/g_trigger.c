@@ -267,15 +267,14 @@ static void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t 
 		return;
 	}
 
-	// FIXME: Use defines for spawnflags
-	if ((self->spawnflags & 0x2) && !IsSyc()) {
+	if ((self->spawnflags & TELEPORT_ENTER_SPRAYROOM) && !IsSyc()) {
 		// No need to check for sprayroom teleporter out
 		return;
 	}
 
 	if ((other->client->sess.sessionTeam != TEAM_SPECTATOR) && !LPSDeadSpec(other->client)) {
 		// sprayroom teleporter in
-		if (self->spawnflags & 0x2) {
+		if (self->spawnflags & TELEPORT_ENTER_SPRAYROOM) {
 			if (other->client->ps.ammo[WP_SPRAYPISTOL] <= 0) {
 				return;
 			}
@@ -318,10 +317,6 @@ static void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t 
 
 	TeleportPlayer(other, dest->s.origin, dest->s.angles);
 }
-
-#define TELEPORT_SPECTATORS_ONLY 1
-#define TELEPORT_ENTER_SPRAYROOM 2
-#define TELEPORT_LEAVE_SPRAYROOM 4
 
 /*QUAKED trigger_teleport (.5 .5 .5) ? SPECTATORS_ONLY ENTER_SPRAYROOM LEAVE_SPRAYROOM
 Allows client side prediction of teleportation events.

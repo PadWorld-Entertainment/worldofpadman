@@ -284,7 +284,7 @@ static void move_killerducks(gentity_t *ent) {
 		}
 
 		if (!Q_stricmp(g_entities[touch[i]].classname, "trigger_teleport") &&
-			!(g_entities[touch[i]].spawnflags & 0x2)) {
+			!(g_entities[touch[i]].spawnflags & TELEPORT_ENTER_SPRAYROOM)) {
 			gentity_t *dest;
 
 			dest = G_PickTarget(g_entities[touch[i]].target);
