@@ -512,8 +512,6 @@ trigger_balloonzone
 #define BALLOON_THINKTIME 100
 #define BALLOON_TOUCHDELAY 500
 #define BALLOON_POINTTIME 6000
-#define BT_RED 1
-#define BT_BLUE 2
 
 static void TouchBalloonzone(gentity_t *self, gentity_t *other, trace_t *trace) {
 	int team, timer;
@@ -573,7 +571,7 @@ static int BalloonScore(void) {
 	return 2;
 }
 
-static qboolean IsPlayerAtBalloon(int clientNum, const gentity_t *balloon) {
+qboolean IsPlayerAtBalloon(int clientNum, const gentity_t *balloon) {
 	return (((level.clients[clientNum].balloonTime + BALLOON_TOUCHDELAY) > level.time) &&
 			(level.clients[clientNum].balloonEnt == balloon));
 }
@@ -593,7 +591,6 @@ static int NumPlayersAtBalloon(const gentity_t *balloon, team_t team) {
 static void AddBalloonScores(gentity_t *balloon, team_t team, int score) {
 	int i;
 	gentity_t *ent;
-	;
 
 	for (i = 0; i < level.maxclients; i++) {
 		if ((level.clients[i].sess.sessionTeam == team) && (IsPlayerAtBalloon(i, balloon))) {

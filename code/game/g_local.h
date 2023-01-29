@@ -50,6 +50,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define TELEPORT_ENTER_SPRAYROOM 2
 #define TELEPORT_LEAVE_SPRAYROOM 4
 
+#define BT_RED 1
+#define BT_BLUE 2
+
 // gentity->flags
 #define FL_GODMODE 0x00000010
 #define FL_NOTARGET 0x00000020
@@ -1148,3 +1151,5 @@ int trap_GeneticParentsAndChildSelection(int numranks, float *ranks, int *parent
 
 void trap_SnapVector(float *v);
 int trap_AAS_BestReachableArea(vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalorigin);
+
+qboolean IsPlayerAtBalloon(int clientNum, const gentity_t *balloon);
