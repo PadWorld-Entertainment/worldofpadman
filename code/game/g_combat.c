@@ -268,15 +268,15 @@ CASSERT(ARRAY_LEN(modNames) == MOD_MEANSOFDEATH_MAX);
 
 /*
 ==================
-CheckAlmostCapture
+CheckAlmostLollyCapture
 ==================
 */
-static void CheckAlmostCapture(gentity_t *self, gentity_t *attacker) {
+static void CheckAlmostLollyCapture(gentity_t *self, gentity_t *attacker) {
 	gentity_t *ent;
 	vec3_t dir;
 	char *classname;
 
-	// if this player was carrying a flag
+	// if this player was carrying a lolly (flag)
 	if (self->client->ps.powerups[PW_REDFLAG] || self->client->ps.powerups[PW_BLUEFLAG]) {
 		// get the goal flag this player should have been going for
 		if (self->client->sess.sessionTeam == TEAM_BLUE) {
@@ -288,7 +288,7 @@ static void CheckAlmostCapture(gentity_t *self, gentity_t *attacker) {
 		do {
 			ent = G_Find(ent, FOFS(classname), classname);
 		} while (ent && (ent->flags & FL_DROPPED_ITEM));
-		// if we found the destination flag and it's not picked up
+		// if we found the destination lolly and it's not picked up
 		if (ent && !(ent->r.svFlags & SVF_NOCLIENT)) {
 			// if the player was *very* close
 			VectorSubtract(self->client->ps.origin, ent->s.origin, dir);
@@ -304,12 +304,12 @@ static void CheckAlmostCapture(gentity_t *self, gentity_t *attacker) {
 
 /*
 ==================
-CheckAlmostSprayed
+CheckAlmostSprayAward
 ==================
 */
-static void CheckAlmostSprayed(gentity_t *self, gentity_t *attacker) {
-	// if the player was carrying cartridges
-	if (IsSyc() && self->client->ps.generic1) {
+static void CheckAlmostSprayAward(gentity_t *self, gentity_t *attacker) {
+	// If the player had 5 or more cartridges on him and could have received a spray award (SprayKiller/SprayGod)
+	if (IsSyc() && self->client->ps.generic1 >= 5) {
 		gentity_t *ent = NULL;
 		do {
 			ent = G_Find(ent, FOFS(classname), "trigger_teleport");
@@ -318,12 +318,13 @@ static void CheckAlmostSprayed(gentity_t *self, gentity_t *attacker) {
 		if (ent) {
 			// triggers have no origin \o/
 			vec3_t origin;
-			float distSqr;
+			vec3_t dir;
 
 			VectorAdd(ent->r.mins, ent->r.maxs, origin);
 			VectorScale(origin, 0.5f, origin);
-			distSqr = DistanceSquared(origin, self->client->ps.origin);
-			if (distSqr < Square(128)) {
+			// if the player was *very* close
+			VectorSubtract(self->client->ps.origin, origin, dir);
+			if (VectorLength(dir) < 200) {
 				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
 				if (attacker->client) {
 					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
@@ -335,10 +336,10 @@ static void CheckAlmostSprayed(gentity_t *self, gentity_t *attacker) {
 
 /*
 ===================
-CheckAlmostBalloned
+CheckAlmostBigBalloon
 ===================
 */
-static void CheckAlmostBalloned(gentity_t *self, gentity_t *attacker) {
+static void CheckAlmostBigBalloon(gentity_t *self, gentity_t *attacker) {
 	if (g_gametype.integer == GT_BALLOON) {
 		int check = self->client->sess.sessionTeam == TEAM_RED ? BT_RED : BT_BLUE;
 		int captured = 0;
@@ -351,11 +352,13 @@ static void CheckAlmostBalloned(gentity_t *self, gentity_t *attacker) {
 			}
 		}
 
+		// if only the last balloon is not captured yet
 		if (captured >= level.numBalloons - 1) {
 			ent = NULL;
 			do {
 				ent = G_Find(ent, FOFS(classname), "trigger_balloonzone");
 			} while (ent && (ent->teamMask & check) == 0);
+			// if the player is at the balloon
 			if (ent && (ent->teamMask & check) == 0 && IsPlayerAtBalloon(self->client->ps.clientNum, ent)) {
 				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
 				if (attacker->client) {
@@ -387,11 +390,12 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 		return;
 	}
 
-	// check for an almost capture
-	CheckAlmostCapture(self, attacker);
-	// check for a player that almost brought in color cartridges
-	CheckAlmostSprayed(self, attacker);
-	CheckAlmostBalloned(self, attacker);
+	// check for an almost flag/lolly capture
+	CheckAlmostLollyCapture(self, attacker);
+	// check for almost received a spray award (SprayKiller/SprayGod)
+	CheckAlmostSprayAward(self, attacker);
+	// check for an almost Big Balloon (capturing the last balloon)
+	CheckAlmostBigBalloon(self, attacker);
 
 	if (self->client && self->client->hook) {
 		Weapon_HookFree(self->client->hook);
