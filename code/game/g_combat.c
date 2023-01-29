@@ -304,27 +304,59 @@ static void CheckAlmostCapture(gentity_t *self, gentity_t *attacker) {
 
 /*
 ==================
-CheckAlmostScored
+CheckAlmostSprayed
 ==================
 */
-static void CheckAlmostScored(gentity_t *self, gentity_t *attacker) {
-	gentity_t *ent;
-	vec3_t dir;
-	char *classname;
-
-	// if the player was carrying cubes
-	if (self->client->ps.generic1) {
-		if (self->client->sess.sessionTeam == TEAM_BLUE) {
-			classname = "team_redobelisk";
-		} else {
-			classname = "team_blueobelisk";
-		}
-		ent = G_Find(NULL, FOFS(classname), classname);
-		// if we found the destination obelisk
+static void CheckAlmostSprayed(gentity_t *self, gentity_t *attacker) {
+	// if the player was carrying cartridges
+	if (IsSyc() && self->client->ps.generic1) {
+		gentity_t *ent = NULL;
+		do {
+			ent = G_Find(ent, FOFS(classname), "trigger_teleport");
+		} while (ent && (ent->flags & TELEPORT_ENTER_SPRAYROOM));
+		// if we found the teleporter for the spray room
 		if (ent) {
-			// if the player was *very* close
-			VectorSubtract(self->client->ps.origin, ent->s.origin, dir);
-			if (VectorLength(dir) < 200) {
+			// triggers have no origin \o/
+			vec3_t origin;
+			float distSqr;
+
+			VectorAdd(ent->r.mins, ent->r.maxs, origin);
+			VectorScale(origin, 0.5f, origin);
+			distSqr = DistanceSquared(origin, self->client->ps.origin);
+			if (distSqr < Square(128)) {
+				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
+				if (attacker->client) {
+					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
+				}
+			}
+		}
+	}
+}
+
+/*
+===================
+CheckAlmostBalloned
+===================
+*/
+static void CheckAlmostBalloned(gentity_t *self, gentity_t *attacker) {
+	if (g_gametype.integer == GT_BALLOON) {
+		int check = self->client->sess.sessionTeam == TEAM_RED ? BT_RED : BT_BLUE;
+		int captured = 0;
+		int i;
+		gentity_t *ent = NULL;
+
+		for (i = 0; i < level.numBalloons; ++i) {
+			if (level.balloonState[i] == '0' + check) {
+				++captured;
+			}
+		}
+
+		if (captured >= level.numBalloons - 1) {
+			ent = NULL;
+			do {
+				ent = G_Find(ent, FOFS(classname), "trigger_balloonzone");
+			} while (ent && (ent->teamMask & check) == 0);
+			if (ent && (ent->teamMask & check) == 0 && IsPlayerAtBalloon(self->client->ps.clientNum, ent)) {
 				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
 				if (attacker->client) {
 					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
@@ -357,8 +389,9 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 
 	// check for an almost capture
 	CheckAlmostCapture(self, attacker);
-	// check for a player that almost brought in cubes
-	CheckAlmostScored(self, attacker);
+	// check for a player that almost brought in color cartridges
+	CheckAlmostSprayed(self, attacker);
+	CheckAlmostBalloned(self, attacker);
 
 	if (self->client && self->client->hook) {
 		Weapon_HookFree(self->client->hook);
