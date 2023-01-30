@@ -273,7 +273,6 @@ CheckAlmostLollyCapture
 */
 static void CheckAlmostLollyCapture(gentity_t *self, gentity_t *attacker) {
 	gentity_t *ent;
-	vec3_t dir;
 	char *classname;
 
 	// if this player was carrying a lolly (flag)
@@ -290,9 +289,10 @@ static void CheckAlmostLollyCapture(gentity_t *self, gentity_t *attacker) {
 		} while (ent && (ent->flags & FL_DROPPED_ITEM));
 		// if we found the destination lolly and it's not picked up
 		if (ent && !(ent->r.svFlags & SVF_NOCLIENT)) {
+			float distSqr;
 			// if the player was *very* close
-			VectorSubtract(self->client->ps.origin, ent->s.origin, dir);
-			if (VectorLength(dir) < 200) {
+			distSqr = DistanceSquared(self->client->ps.origin, ent->s.origin);
+			if (distSqr < Square(200)) {
 				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
 				if (attacker->client) {
 					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
@@ -318,13 +318,13 @@ static void CheckAlmostSprayAward(gentity_t *self, gentity_t *attacker) {
 		if (ent) {
 			// triggers have no origin \o/
 			vec3_t origin;
-			vec3_t dir;
+			float distSqr;
 
 			VectorAdd(ent->r.mins, ent->r.maxs, origin);
 			VectorScale(origin, 0.5f, origin);
 			// if the player was *very* close
-			VectorSubtract(self->client->ps.origin, origin, dir);
-			if (VectorLength(dir) < 200) {
+			distSqr = DistanceSquared(self->client->ps.origin, origin);
+			if (distSqr < Square(200)) {
 				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
 				if (attacker->client) {
 					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
