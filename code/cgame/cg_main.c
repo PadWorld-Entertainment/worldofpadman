@@ -651,6 +651,7 @@ static void CG_RegisterSounds(void) {
 		cgs.media.sprayYourColorSound = trap_S_RegisterSound("sound/feedback/spray_color", qtrue);
 		cgs.media.spraygodSound = trap_S_RegisterSound("sound/feedback/awards/spraygod", qtrue);
 		cgs.media.spraykillerSound = trap_S_RegisterSound("sound/feedback/awards/spraykiller", qtrue);
+		cgs.media.almostCapture = trap_S_RegisterSound("sound/feedback/better_luck", qtrue);	// ToDo: find new sound
 	}
 
 	if (cgs.gametype == GT_SPRAY || cg_buildScript.integer) {
@@ -726,7 +727,6 @@ static void CG_RegisterSounds(void) {
 			cgs.media.yourTeamTookEnemyLollySound = trap_S_RegisterSound("sound/feedback/teamplay/team_lolly", qtrue);
 			cgs.media.youHaveLollySound = trap_S_RegisterSound("sound/feedback/teamplay/you_lolly", qtrue);
 			cgs.media.stolenLollySound = trap_S_RegisterSound("sound/feedback/teamplay/stolen_lolly", qfalse);
-			cgs.media.almostCapture = trap_S_RegisterSound("sound/feedback/better_luck", qtrue);	// ToDo: find new sound
 
 			cgs.media.bambamExplosionSound = trap_S_RegisterSound("sound/items/bambam/explosion", qfalse);
 			cgs.media.bambamMissileImpact = trap_S_RegisterSound("sound/items/bambam/impact", qfalse);
@@ -734,6 +734,7 @@ static void CG_RegisterSounds(void) {
 
 		if ((cgs.gametype == GT_CTF) || (cgs.gametype == GT_BALLOON) || cg_buildScript.integer) {
 			cgs.media.boomiesExplosionSound = trap_S_RegisterSound("sound/items/boomies/explosion", qfalse);
+			cgs.media.almostCapture = trap_S_RegisterSound("sound/feedback/better_luck", qtrue);	// ToDo: find new sound
 		}
 	}
 
