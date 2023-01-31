@@ -313,7 +313,7 @@ static void CheckAlmostSprayAward(gentity_t *self, gentity_t *attacker) {
 		gentity_t *ent = NULL;
 		do {
 			ent = G_Find(ent, FOFS(classname), "trigger_teleport");
-		} while (ent && (ent->flags & TELEPORT_ENTER_SPRAYROOM));
+		} while (ent && (ent->spawnflags & TELEPORT_ENTER_SPRAYROOM) == 0);
 		// if we found the teleporter for the spray room
 		if (ent) {
 			// triggers have no origin \o/
