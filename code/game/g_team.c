@@ -281,8 +281,8 @@ static void Team_ForceGesture(int team) {
 ================
 Team_FragBonuses
 
-Calculate the bonuses for flag defense, flag carrier defense, etc.
-Note that bonuses are not cumulative.  You get one, they are in importance
+Calculate the bonuses for flag defense, flag/cartridge carrier defense, etc.
+Note that bonuses are not cumulative. You get one, they are in importance
 order.
 ================
 */
@@ -291,11 +291,16 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 	gentity_t *ent;
 	int flag_pw, enemy_flag_pw;
 	int otherteam;
-	int tokens;
+	int cartridges;
 	gentity_t *flag, *carrier = NULL;
 	char *c;
 	vec3_t v1, v2;
 	int team;
+
+	// no bonus for non team game types
+	if (g_gametype.integer < GT_TEAM) {
+		return;
+	}
 
 	// no bonus for fragging yourself or team mates
 	if (!targ->client || !attacker->client || targ == attacker || OnSameTeam(targ, attacker))
@@ -316,7 +321,6 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 	}
 
 	// did the attacker frag the flag carrier?
-	tokens = 0;
 	if (targ->client->ps.powerups[enemy_flag_pw]) {
 		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
 		AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS, SCORE_BONUS_FRAG_CARRIER_S);
@@ -334,12 +338,13 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		return;
 	}
 
-	// did the attacker frag a head carrier? other->client->ps.generic1
-	if (tokens) {
+	// did the attacker frag a cartridge carrier?
+	cartridges = targ->client->ps.generic1;
+	if (cartridges) {
 		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
-		AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS * tokens * tokens, SCORE_BONUS_FRAG_CARRIER_S);
+		AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS * cartridges, SCORE_BONUS_FRAG_CARRIER_S);
 		attacker->client->pers.teamState.fragcarrier++;
-		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s' skull carrier!\n", attacker->client->pers.netname,
+		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s' cartridge carrier!\n", attacker->client->pers.netname,
 				 TeamName(team));
 
 		// the target had the flag, clear the hurt carrier
@@ -447,8 +452,8 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 ================
 Team_CheckHurtCarrier
 
-Check to see if attacker hurt the flag carrier.  Needed when handing out bonuses for assistance to flag
-carrier defense.
+Check to see if attacker hurt the flag/cartridge carrier.
+Needed when handing out bonuses for assistance to flag/cartridge carrier defense.
 ================
 */
 void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker) {
@@ -466,8 +471,8 @@ void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker) {
 	if (targ->client->ps.powerups[flag_pw] && targ->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
 
-	// skulls
-	if (targ->client->ps.generic1 && targ->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
+	// cartridges (5 or more cartridges only)
+	if (targ->client->ps.generic1 >= 5 && targ->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
 }
 
