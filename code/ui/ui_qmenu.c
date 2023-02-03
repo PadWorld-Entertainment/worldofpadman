@@ -1818,7 +1818,7 @@ sfxHandle_t Menu_DefaultKey(menuframework_s *m, int key) {
 		break;
 
 	case K_F12:
-		trap_Cmd_ExecuteText(EXEC_APPEND, "screenshotJPEG\n");
+		trap_Cmd_ExecuteText(EXEC_APPEND, "screenshot\n");
 		break;
 #endif
 	case K_KP_UPARROW:

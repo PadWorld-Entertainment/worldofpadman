@@ -4,9 +4,7 @@
 #include "../qcommon/q_shared.h"
 #include "vulkan/vulkan_core.h"
 
-void R_ScreenShotJPEG_f(void);
-void R_ScreenShotPNG_f(void);
-void R_ScreenShotTGA_f(void);
+void R_ScreenShot_f(void);
 
 typedef struct {
 	int commandId;

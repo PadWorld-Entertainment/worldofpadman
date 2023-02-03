@@ -722,7 +722,7 @@ void ActiveChooseLogoMenu(void) {
 			cg.wantSelectLogo = qfalse;
 		}
 	} else if (cgs.lastusedkey == K_F12) {
-		trap_SendConsoleCommand("screenshotJPEG\n");
+		trap_SendConsoleCommand("screenshot\n");
 	}
 
 	if (!cg.wantSelectLogo) {

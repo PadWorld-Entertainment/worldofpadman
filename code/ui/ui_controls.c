@@ -326,7 +326,7 @@ static bind_t g_bindings[] = {
 	{"toggle g_synchronousClients", "Sync Clients:", ID_SYNCCLIENTS, ANIM_IDLE, 'p', -1, -1, -1},
 	{"vote yes", "Vote Yes:", ID_VOTEYES, ANIM_IDLE, K_F1, K_KP_PLUS, -1, -1},
 	{"vote no", "Vote No:", ID_VOTENO, ANIM_IDLE, K_F2, K_KP_MINUS, -1, -1},
-	{"screenshotJPEG", "Screenshot:", ID_SCREENSHOT, ANIM_IDLE, K_F12, -1, -1, -1},
+	{"screenshot", "Screenshot:", ID_SCREENSHOT, ANIM_IDLE, K_F12, -1, -1, -1},
 
 	{(char *)NULL, (char *)NULL, 0, 0, -1, -1, -1, -1},
 };
