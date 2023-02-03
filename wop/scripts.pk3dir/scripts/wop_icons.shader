@@ -386,11 +386,20 @@ medal_padhero
 	}
 }
 
-medal_padstar
+medal_padstar_blue
 {
 	nopicmip
 	{
-		map icons/medal_padstar
+		map icons/medal_padstar_blue
+		blendFunc blend
+	}
+}
+
+medal_padstar_red
+{
+	nopicmip
+	{
+		map icons/medal_padstar_red
 		blendFunc blend
 	}
 }

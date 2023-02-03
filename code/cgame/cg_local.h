@@ -974,11 +974,12 @@ typedef struct {
 	// medals shown during gameplay
 	qhandle_t medalExcellent;
 	qhandle_t medalSnackAttack;
-	qhandle_t medalSpraygod;
-	qhandle_t medalSpraykiller;
+	qhandle_t medalSprayGod;
+	qhandle_t medalSprayKiller;
 	qhandle_t medalPadHero;
 	qhandle_t medalPadAce;
 	qhandle_t medalPadStar;
+	qhandle_t medalPadStarRed;
 
 	sfxHandle_t berserkerPunchyLoop;
 

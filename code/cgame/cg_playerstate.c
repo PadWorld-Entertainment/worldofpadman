@@ -291,19 +291,23 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 	}
 	if ((ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF00) != (ops->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF00)) {
 		sfxHandle_t sfx = cgs.media.spraygodSound;
-		CG_PushReward(sfx, cgs.media.medalSpraygod, (ps->persistant[PERS_SPRAYAWARDS_COUNT] >> 8));
+		CG_PushReward(sfx, cgs.media.medalSprayGod, (ps->persistant[PERS_SPRAYAWARDS_COUNT] >> 8));
 		reward = qtrue;
 		// Com_Printf("SprayGod award\n");
 	}
 	if ((ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF) != (ops->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF)) {
 		sfxHandle_t sfx = cgs.media.spraykillerSound;
-		CG_PushReward(sfx, cgs.media.medalSpraykiller, ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF);
+		CG_PushReward(sfx, cgs.media.medalSprayKiller, ps->persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF);
 		reward = qtrue;
 		// Com_Printf("SprayKiller award\n");
 	}
 	if (ps->persistant[PERS_CAPTURES] != ops->persistant[PERS_CAPTURES]) {
 		sfxHandle_t sfx = cgs.media.padstarSound;
-		CG_PushReward(sfx, cgs.media.medalPadStar, ps->persistant[PERS_CAPTURES]);
+		if (cgs.clientinfo[ps->clientNum].team == TEAM_RED) {
+			CG_PushReward(sfx, cgs.media.medalPadStarRed, ps->persistant[PERS_CAPTURES]);			
+		} else {
+			CG_PushReward(sfx, cgs.media.medalPadStar, ps->persistant[PERS_CAPTURES]);
+		}
 		reward = qtrue;
 		// Com_Printf("PadStar award\n");
 	}

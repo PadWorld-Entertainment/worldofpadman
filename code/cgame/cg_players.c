@@ -1929,20 +1929,8 @@ static void CG_PlayerFloatSprite(const centity_t *cent, qhandle_t shader, qboole
 	//       which results in medalPadStar. There is no sound however, since
 	//       AddBalloonScores() does not increase PERS_CAPTURES, which is associated
 	//       with the award in CTL.
-	if (cgs.gametype == GT_BALLOON && shader == cgs.media.medalPadStar) {
-		int team = cgs.clientinfo[cent->currentState.clientNum].team;
-		ent.customShader = cgs.media.hud_balloon;
-
-		ent.shaderRGBA[0] = ent.shaderRGBA[1] = ent.shaderRGBA[2] = 0;
-		ent.shaderRGBA[3] = 255;
-		switch (team) {
-		case TEAM_BLUE:
-			ent.shaderRGBA[2] = 255;
-			break;
-		default:
-			ent.shaderRGBA[0] = 255;
-			break;
-		}
+  	if (shader == cgs.media.medalPadStar && cgs.clientinfo[cent->currentState.clientNum].team == TEAM_RED) {
+		ent.customShader = cgs.media.medalPadStarRed;
 	}
 
 	trap_R_AddRefEntityToScene(&ent);
@@ -1988,12 +1976,12 @@ static void CG_PlayerSprites(const centity_t *cent) {
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_SPRAYGOD) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalSpraygod, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalSprayGod, qfalse);
 		return;
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_SPRAYKILLER) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalSpraykiller, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalSprayKiller, qfalse);
 		return;
 	}
 
