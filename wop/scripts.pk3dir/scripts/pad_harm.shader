@@ -929,7 +929,7 @@ textures/pad_poster/poster002
 //Skybox
 //=======================================================
 
-textures/pad_harmsky/padcity
+textures/pad_harm/padcity
 {
     qer_editorimage env/padcity512_ft
 	surfaceparm noimpact
@@ -941,7 +941,7 @@ textures/pad_harmsky/padcity
 	skyparms env/padcity512 - -
 }
 
-textures/pad_harmsky/harmpc-ground-zero512
+textures/pad_harm/pc-ground-zero512
 {
     qer_editorimage env/pc-ground-zero512_ft
 	surfaceparm noimpact
