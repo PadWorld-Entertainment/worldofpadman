@@ -513,7 +513,7 @@ textures/pad_harm/warpkern
 
 textures/pad_harm/water
 {
-   qer_editorimage textures/pad_harm/water
+   qer_editorimage textures/pad_gfx/water_02
    surfaceparm nodraw
    surfaceparm noimpact
    surfaceparm nolightmap
