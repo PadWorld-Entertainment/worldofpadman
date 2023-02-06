@@ -589,8 +589,8 @@ const gitem_t bg_itemlist[] = {
 	*/
 	{"team_CTL_neutrallolly",
 	 NULL,
-	 {"models/ctl/lollipop_green", 0, 0, 0},
-	 /* icon */ "icons/hud_lolly_green1",
+	 {"models/ctl/lollipop_white", 0, 0, 0},
+	 /* icon */ "icons/hud_lolly_white1",
 	 /* pickup */ "neutral Lolly",
 	 0,
 	 IT_TEAM,

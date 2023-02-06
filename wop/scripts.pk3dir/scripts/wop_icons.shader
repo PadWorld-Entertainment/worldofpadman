@@ -592,29 +592,29 @@ icons/hud_lolly_red3
 	}
 }
 
-icons/hud_lolly_green1
+icons/hud_lolly_white1
 {
 	nopicmip
 	{
-		map icons/hud_lolly_green1
+		map icons/hud_lolly_white1
 		blendFunc blend
 	}
 }
 
-icons/hud_lolly_green2
+icons/hud_lolly_white2
 {
 	nopicmip
 	{
-		map icons/hud_lolly_green2
+		map icons/hud_lolly_white2
 		blendFunc blend
 	}
 }
 
-icons/hud_lolly_green3
+icons/hud_lolly_white3
 {
 	nopicmip
 	{
-		map icons/hud_lolly_green3
+		map icons/hud_lolly_white3
 		blendFunc blend
 	}
 }

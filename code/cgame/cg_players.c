@@ -1751,7 +1751,7 @@ static void CG_PlayerPowerups(centity_t *cent, refEntity_t *torso) {
 	} else if (powerups & (1 << PW_BLUEFLAG)) {
 		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 0.2f, 0.2f, 1.0f);
 	} else if (powerups & (1 << PW_NEUTRALFLAG)) {
-		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 0.2f, 1.0f, 0.2f);
+		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 1.0f, 1.0f, 1.0f);
 	}
 
 	// speedy leaves smoke trails
