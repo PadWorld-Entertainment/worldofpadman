@@ -687,13 +687,13 @@ levelshots/wop_trashmapBBB
 }
 
 // =================
-// Western
+// Westernset
 // =================
 
-levelshots/wop_westernCTLB
+levelshots/wop_westernsetCTLB
 {
 	nomipmaps
 	{
-		animmap 0.5 levelshots/wop_westernCTLB1 levelshots/wop_westernCTLB2 levelshots/wop_westernCTLB3
+		animmap 0.5 levelshots/wop_westernsetCTLB1 levelshots/wop_westernsetCTLB2 levelshots/wop_westernsetCTLB3
 	}
 }

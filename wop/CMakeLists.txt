@@ -44,7 +44,6 @@ set(SHADERS
     pad_shop.shader
     wop_levelshots.shader
     pad_tex02.shader
-    pad_harmwestern.shader
     q3map2_wop_trashmap.shader
     wop_code.shader
     pad_attic.shader
@@ -67,7 +66,7 @@ set(BSPS
     wop_cabin.bsp
     wop_colorstageCTL.bsp
     wop_padshopBB.bsp
-    wop_westernCTL.bsp
+    wop_westernsetCTL.bsp
     wop_padgarden_night.bsp
     wop_cabinBB.bsp
     wop_padlibraryBB.bsp
