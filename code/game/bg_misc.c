@@ -1327,12 +1327,12 @@ int convertGTStringToGTNumber(const char *argStr) {
 		gt = GT_CATCH;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_LPS)) || (strstr(buf, "LAST") && strstr(buf, "STANDING"))) {
 		gt = GT_LPS;
-	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_CTF)) ||
-			   (strstr(buf, "CAPTURE") && (strstr(buf, "LOLLY") || strstr(buf, "LOLLI" /*pop"*/)))) {
-		gt = GT_CTF;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_1FCTF)) ||
 			   (strstr(buf, "ONE") && (strstr(buf, "CTL")))) {
 		gt = GT_1FCTF;
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_CTF)) ||
+			   (strstr(buf, "CAPTURE") && (strstr(buf, "LOLLY") || strstr(buf, "LOLLI" /*pop"*/)))) {
+		gt = GT_CTF;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_TOURNAMENT)) || strstr(buf, "TOURNAMENT") || strstr(buf, "TOURNEY")) {
 		gt = GT_TOURNAMENT;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_TEAM)) || strstr(buf, "TP") || strstr(buf, "TEAM") ||
