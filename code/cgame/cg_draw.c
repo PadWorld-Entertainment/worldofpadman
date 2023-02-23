@@ -2213,8 +2213,7 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 	}
 
 	if (cg.snap->ps.stats[STAT_HEALTH] > (cg.snap->ps.stats[STAT_MAX_HEALTH] * 0.5)) {
-		// Don't draw any healthstation icons if not low on health
-		// FIXME: Handicap. Instagib.
+		// don't draw health station icons unless you are low on health, taking into account the handicap
 		return;
 	}
 
@@ -2226,7 +2225,7 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 		return;
 	}
 
-	// don't draw the icon if the healthstation is visible and close
+	// don't draw the icon if the health station is visible and close
 	CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin, cg.snap->ps.clientNum, MASK_OPAQUE);
 	if (1.0 == trace.fraction) {
 		if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin) < Square(250)) {
