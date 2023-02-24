@@ -1066,10 +1066,10 @@ static void CG_RegisterGraphics(void) {
 		}
 
 		if (cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
-			cgs.media.neutralFlagModel = trap_R_RegisterModel("models/ctl/lollipop_white");
-			cgs.media.neutralflagShader[0] = trap_R_RegisterShaderNoMip("icons/hud_lolly_white1");
-			cgs.media.neutralflagShader[1] = trap_R_RegisterShaderNoMip("icons/hud_lolly_white2");
-			cgs.media.neutralflagShader[2] = trap_R_RegisterShaderNoMip("icons/hud_lolly_white3");
+			cgs.media.neutralFlagModel = trap_R_RegisterModel("models/ctl/lollipop_neutral");
+			cgs.media.neutralflagShader[0] = trap_R_RegisterShaderNoMip("icons/hud_lolly_neutral1");
+			cgs.media.neutralflagShader[1] = trap_R_RegisterShaderNoMip("icons/hud_lolly_neutral2");
+			cgs.media.neutralflagShader[2] = trap_R_RegisterShaderNoMip("icons/hud_lolly_neutral3");
 		}
 
 		if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cgs.gametype == GT_BALLOON || cg_buildScript.integer) {

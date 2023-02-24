@@ -221,11 +221,11 @@ models/ctl/b_sticker_ribbon
 	}
 }
 
-models/ctl/g_lollipop
+models/ctl/n_lollipop
 {
 	cull disable
 	{
-		map models/ctl/g_lollipop
+		map models/ctl/n_lollipop
 		rgbGen identity
 	}
 	{
@@ -235,21 +235,21 @@ models/ctl/g_lollipop
 	}
 }
 
-models/ctl/g_sticker_ribbon
+models/ctl/n_sticker_ribbon
 {
 	cull disable
 	{
-		map models/ctl/g_chromic
+		map models/ctl/n_chromic
 		rgbGen identity
 		alphaFunc GE128
 	}
 	{
-		map models/ctl/g_chromic
+		map models/ctl/n_chromic
 		tcGen environment
 		depthFunc equal
 	}
 	{
-		map models/ctl/g_sticker_ribbon
+		map models/ctl/n_sticker_ribbon
 		depthFunc equal
 		alphaFunc GE128
 	}
