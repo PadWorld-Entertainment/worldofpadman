@@ -150,7 +150,7 @@ name		HellPad
 funname		"^0H^1ell^0P^1ad"
 model		padman/hellpad
 aifile		bots/padman_c.c
-spraylogo	37_devilskull
+spraylogo	35_666
 }
 
 
@@ -163,7 +163,7 @@ name		PadClassic
 funname		"^1Pad^3Classic"
 model		padman/padclassic
 aifile		bots/padman_c.c
-spraylogo	02_cross
+spraylogo	20_quake3
 }
 
 
