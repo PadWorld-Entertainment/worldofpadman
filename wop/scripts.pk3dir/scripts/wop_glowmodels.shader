@@ -297,6 +297,61 @@ models/wop_players/padman/soldier_body_light_s
 }
 
 
+// ================
+// HELLPAD
+// ================
+
+models/wop_players/padman/hellpad_head_light_s
+{
+	nopicmip
+	{		
+		map models/wop_players/padman/hellpad_head_light		
+        blendFunc GL_ONE GL_ZERO		
+        alphaFunc GE128		
+        rgbGen entity	
+    }
+	{
+		map models/wop_players/padman/hellpad_head_light		
+        blendFunc GL_ONE GL_ZERO		
+        alphaFunc LT128		
+        rgbGen identity	
+    }		
+}
+
+models/wop_players/padman/hellpad_body_light_s
+{
+	nopicmip
+	{
+		map models/wop_players/padman/hellpad_body_light
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+	{
+		map models/wop_players/padman/hellpad_body_light
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc LT128
+		rgbGen identity
+	}	
+}
+
+models/wop_players/padman/hellpad_cape_light_s
+{
+	cull disable
+	deformVertexes wave 100 sin 0 0.2 3 1
+	{
+		map models/wop_players/padman/hellpad_body_light
+		blendFunc GL_ONE GL_ZERO
+		rgbGen identity
+		}
+		{
+		map models/wop_players/padman/hellpad_body_light
+		blendFunc GL_ONE GL_ZERO
+		rgbGen entity
+        }
+}
+
+
 // =================
 // PADGiRL
 // =================

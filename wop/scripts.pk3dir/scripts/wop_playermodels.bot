@@ -141,6 +141,19 @@ spraylogo	31_atom
 }
 
 
+// ===========
+// HELLPAD
+// ===========
+
+{
+name		HellPad
+funname		"^0H^1ell^0P^1ad"
+model		padman/hellpad
+aifile		bots/padman_c.c
+spraylogo	37_devilskull
+}
+
+
 // =================
 // PiRATPAD
 // =================
