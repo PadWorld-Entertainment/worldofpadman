@@ -707,6 +707,230 @@ models/wop_players/padman/hellpad_head_blue
 }
 
 
+// ===================
+// PADCLASSiC
+// ===================
+
+models/wop_players/padman/padclassic_goggles
+{
+    cull disable
+    {
+        map models/wop_players/padman/padclassic_head
+		alphaFunc ge128
+	    rgbGen lightingDiffuse
+    }
+	{
+        map models/wop_players/padman/pad_fx
+		blendfunc GL_DST_ALPHA GL_DST_ALPHA
+        tcgen environment
+		rgbGen lightingDiffuse
+		depthfunc equal
+    }
+}
+
+models/wop_players/padman/padclassic_goggles_blue
+{
+    cull disable
+    {
+        map models/wop_players/padman/padclassic_head_blue
+		alphaFunc ge128
+	    rgbGen lightingDiffuse
+    }
+	{
+        map models/wop_players/padman/pad_fx
+		blendfunc GL_DST_ALPHA GL_DST_ALPHA
+        tcgen environment
+		rgbGen lightingDiffuse
+		depthfunc equal
+    }
+}
+
+models/wop_players/padman/padclassic_goggles_red
+{
+    cull disable
+    {
+        map models/wop_players/padman/padclassic_head_red
+		alphaFunc ge128
+	    rgbGen lightingDiffuse
+    }
+	{
+        map models/wop_players/padman/pad_fx
+		blendfunc GL_DST_ALPHA GL_DST_ALPHA
+        tcgen environment
+		rgbGen lightingDiffuse
+		depthfunc equal
+    }
+}
+
+models/wop_players/padman/padclassic_cape
+{
+    cull disable
+	deformVertexes wave 100 sin 0 0.2 3 1
+    {
+		map models/wop_players/padman/padclassic_body
+        rgbGen identity
+    }
+}
+
+models/wop_players/padman/padclassic_head
+{
+	nopicmip
+	nomipmaps
+	cull none
+    {
+		map models/wop_players/padman/padclassic_head
+		rgbGen lightingDiffuse
+    }
+	{
+		map textures/pad_gfx02/tinpad4
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+    }
+    {
+        map models/wop_players/padman/padclassic_head
+		alphaFunc ge128
+		rgbGen lightingDiffuse
+    }
+}
+
+models/wop_players/padman/padclassic_head_blue
+{
+	nopicmip
+	nomipmaps
+	cull none
+    {
+		map models/wop_players/padman/padclassic_head_blue
+		rgbGen lightingDiffuse
+    }
+	{
+		map textures/pad_gfx02/tinpad4
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+    }
+    {
+        map models/wop_players/padman/padclassic_head_blue
+		alphaFunc ge128
+		rgbGen lightingDiffuse
+    }
+}
+
+models/wop_players/padman/padclassic_head_red
+{
+	nopicmip
+	nomipmaps
+	cull none
+    {
+		map models/wop_players/padman/padclassic_head_red
+		rgbGen lightingDiffuse
+    }
+	{
+		map textures/pad_gfx02/tinpad4
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+    }
+    {
+        map models/wop_players/padman/padclassic_head_red
+		alphaFunc ge128
+		rgbGen lightingDiffuse
+    }
+}
+
+models/wop_players/padman/padclassic_body
+{
+	nopicmip
+	nomipmaps
+	cull none
+	{
+		map models/wop_players/padman/padclassic_body
+		rgbGen lightingdiffuse
+	}
+	{
+		map textures/pad_gfx02/tinpad4
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+	}
+	{
+ 		map models/wop_players/padman/padclassic_body
+		alphaFunc ge128
+		rgbGen lightingdiffuse
+	}
+}
+
+models/wop_players/padman/padclassic_body_blue
+{
+	nopicmip
+	nomipmaps
+	cull none
+	{
+		map models/wop_players/padman/padclassic_body_blue
+		rgbGen lightingdiffuse
+	}
+	{
+		map textures/pad_gfx02/tinpad4
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+	}
+	{
+ 		map models/wop_players/padman/padclassic_body_blue
+		alphaFunc ge128
+		rgbGen lightingdiffuse
+	}
+}
+
+models/wop_players/padman/padclassic_cape_blue
+{
+    cull disable
+	deformVertexes wave 100 sin 0 0.2 3 1
+    {
+        map models/wop_players/padman/padclassic_body_blue
+        rgbGen identity
+    }
+}
+
+models/wop_players/padman/padclassic_body_red
+{
+	nopicmip
+	nomipmaps
+	cull none
+	{
+		map models/wop_players/padman/padclassic_body_red
+		rgbGen lightingdiffuse
+	}
+	{
+		map textures/pad_gfx02/tinpad4
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+	}
+	{
+ 		map models/wop_players/padman/padclassic_body_red
+		alphaFunc ge128
+		rgbGen lightingdiffuse
+	}
+}
+
+models/wop_players/padman/padclassic_cape_red
+{
+    cull disable
+	deformVertexes wave 100 sin 0 0.2 3 1
+    {
+        map models/wop_players/padman/padclassic_body_red
+        rgbGen identity
+    }
+}
+
+
 // =================
 // MONSTERHAWK
 // =================

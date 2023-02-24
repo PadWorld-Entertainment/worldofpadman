@@ -154,6 +154,19 @@ spraylogo	37_devilskull
 }
 
 
+// ==================
+// PADCLASSiC
+// ==================
+
+{
+name		PadClassic
+funname		"^1Pad^3Classic"
+model		padman/padclassic
+aifile		bots/padman_c.c
+spraylogo	02_cross
+}
+
+
 // =================
 // PiRATPAD
 // =================
