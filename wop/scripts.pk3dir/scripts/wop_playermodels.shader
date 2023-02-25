@@ -301,6 +301,14 @@ models/wop_players/padman/padrock_goggles_red
 
 }
 
+models/wop_players/padman/null
+{
+	{
+	map textures/colors/hex_000000ff
+	blendFunc GL_ONE GL_ONE
+	}
+}
+
 
 // =================
 // PADSOLDiER
