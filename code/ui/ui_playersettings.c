@@ -251,9 +251,7 @@ static void PlayerSettings_SaveChanges(void) {
 	trap_Cvar_Set("name", s_playersettings.name.field.buffer);
 
 	// handicap
-	// NOTE: We do not use this currently. Some players reported they always get handicap 5 when using the player setup
-	// menu
-	trap_Cvar_SetValue( "handicap", 100 - s_playersettings.handicap.curvalue * 10 );
+	trap_Cvar_SetValue("handicap", 100 - s_playersettings.handicap.curvalue * 10);
 
 	// effects color
 	trap_Cvar_SetValue("color1", uitogamecode[s_playersettings.effects.curvalue]);
@@ -516,8 +514,8 @@ static void PlayerSettings_BuildList(void) {
 
 			COM_StripExtension(fileptr, skinname, sizeof(skinname));
 
-			// look for icon_????
-			if (!Q_stricmpn(skinname, "icon_", 5)) {
+			// look for icon_???? and ignore all containing _blue or _red
+			if (!Q_stricmpn(skinname, "icon_", 5) && !Q_stristr(skinname, "_blue") && !Q_stristr(skinname, "_red")) {
 				ps_playericons.modelskins[tmpskinnum].icon =
 					trap_R_RegisterShaderNoMip(va("models/wop_players/%s/%s", dirptr, skinname));
 				Com_sprintf(ps_playericons.modelskins[tmpskinnum].name, MAX_MODELSKINNAME_STR, "%s/%s", dirptr,
