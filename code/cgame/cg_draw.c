@@ -2218,7 +2218,7 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 		return;
 	}
 
-	// don't draw health the station icon unless you are low on health, taking into account the handicap
+	// don't draw the health station icon unless you are low on health, taking into account the handicap
 	if (cg.snap->ps.stats[STAT_HEALTH] > (cg.snap->ps.stats[STAT_MAX_HEALTH] * 0.5)) {
 		return;
 	}
