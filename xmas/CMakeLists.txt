@@ -32,3 +32,21 @@ set(BSPS
 foreach (BSP ${BSPS})
     bsp_validation(xmas ${BSP})
 endforeach()
+
+set(SKINS
+    special/BlueBalloon_vertex.skin
+    special/RedBalloon_vertex.skin
+    wop_players/fatpad/upper_red.skin
+    wop_players/fatpad/lower_red.skin
+    wop_players/piratpad/upper_red.skin
+    wop_players/piratpad/head_blue.skin
+    wop_players/padman/upper_red.skin
+    wop_players/padman/lower_red.skin
+    wop_players/padgirl/upper_red.skin
+    wop_players/padgirl/lower_red.skin
+    wop_players/padlilly/upper_red.skin
+    wop_players/padlilly/lower_red.skin
+)
+foreach (SKIN ${SKINS})
+    skin_validation(xmas ${SKIN})
+endforeach()
