@@ -2212,8 +2212,14 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 		return;
 	}
 
+	// don't draw the health station icon as long as it is empty
+	// yes, angles[2] is used to store this information: 0 for empty and 1 for full
+	if (cent->currentState.angles2[2] == 0) {
+		return;
+	}
+
+	// don't draw health the station icon unless you are low on health, taking into account the handicap
 	if (cg.snap->ps.stats[STAT_HEALTH] > (cg.snap->ps.stats[STAT_MAX_HEALTH] * 0.5)) {
-		// don't draw health station icons unless you are low on health, taking into account the handicap
 		return;
 	}
 
