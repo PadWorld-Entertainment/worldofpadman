@@ -1,6 +1,6 @@
-u_torso,models/wop_players/padman/biopad_body_red.tga
-u_button,models/wop_players/padman/biopad_head_red.tga
-u_hands,models/wop_players/padman/biopad_head_red.tga
+u_torso,models/wop_players/padman/biopad_body_red
+u_button,models/wop_players/padman/biopad_head_red
+u_hands,models/wop_players/padman/biopad_head_red
 u_cape,
 tag_weapon,
 tag_torso,

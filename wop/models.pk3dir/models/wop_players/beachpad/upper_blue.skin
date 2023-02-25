@@ -1,9 +1,9 @@
-u_torso,models/wop_players/beachpad/default_body.tga
-u_braces,models/wop_players/beachpad/default_barrel_blue.tga
-u_barrel,models/wop_players/beachpad/default_barrel_blue.tga
-u_can,models/wop_players/beachpad/default_body.tga
-u_shell,models/wop_players/beachpad/default_barrel_blue.tga
-u_star,models/wop_players/beachpad/default_barrel_blue.tga
+u_torso,models/wop_players/beachpad/default_body
+u_braces,models/wop_players/beachpad/default_barrel_blue
+u_barrel,models/wop_players/beachpad/default_barrel_blue
+u_can,models/wop_players/beachpad/default_body
+u_shell,models/wop_players/beachpad/default_barrel_blue
+u_star,models/wop_players/beachpad/default_barrel_blue
 tag_weapon,
 tag_torso,
 tag_head,

@@ -1,5 +1,5 @@
-tag_head,
-tag_torso,
+u_torso,models/wop_players/paddybell/paddybee_body_red
+u_wings,models/wop_players/paddybell/paddybee_wings_red
 tag_weapon,
-u_torso,models/wop_players/paddybell/paddybee_body_red.tga
-u_wings,models/wop_players/paddybell/paddybee_wings_red.tga
+tag_torso,
+tag_head,

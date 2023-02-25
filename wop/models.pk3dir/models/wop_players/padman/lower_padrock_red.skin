@@ -1,4 +1,4 @@
-l_legs,models/wop_players/padman/padrock_body_red.tga
-l_buckle,models/wop_players/padman/padrock_head_red.tga
-l_feet,models/wop_players/padman/padrock_head_red.tga
+l_legs,models/wop_players/padman/padrock_body_red
+l_buckle,models/wop_players/padman/padrock_head_red
+l_feet,models/wop_players/padman/padrock_head_red
 tag_torso,

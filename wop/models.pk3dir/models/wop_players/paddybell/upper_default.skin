@@ -1,5 +1,5 @@
-tag_head,
-tag_torso,
+u_torso,models/wop_players/paddybell/default_body
+u_wings,models/wop_players/paddybell/default_wings
 tag_weapon,
-u_torso,models/wop_players/paddybell/default_body.tga
-u_wings,models/wop_players/paddybell/default_wings.tga
+tag_torso,
+tag_head,

@@ -1,6 +1,6 @@
-u_torso,models/wop_players/padman/padsoldier_body.tga
-u_button,models/wop_players/padman/padsoldier_head.tga
-u_hands,models/wop_players/padman/padsoldier_head.tga
+u_torso,models/wop_players/padman/padsoldier_body
+u_button,models/wop_players/padman/padsoldier_head
+u_hands,models/wop_players/padman/padsoldier_head
 u_cape,
 tag_weapon,
 tag_torso,

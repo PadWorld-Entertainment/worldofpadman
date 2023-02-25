@@ -1,5 +1,5 @@
-tag_head,
+u_torso,models/wop_players/piratepad/torso_blue
+u_arm,models/wop_players/piratepad/torso_blue
 tag_weapon,
-u_torso,models/wop_players/piratepad/torso_blue.jpg
-u_arm,models/wop_players/piratepad/torso_blue.jpg
 tag_torso,
+tag_head,

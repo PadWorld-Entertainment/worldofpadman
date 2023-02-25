@@ -1,7 +1,7 @@
-u_torso,models/wop_players/padman/body_red.tga
-u_cape,models/wop_players/padman/cape_red.tga
-u_button,models/wop_players/padman/default_head.tga
-u_hands,models/wop_players/padman/default_head.tga
+u_torso,models/wop_players/padman/body_red
+u_cape,models/wop_players/padman/cape_red
+u_button,models/wop_players/padman/default_head
+u_hands,models/wop_players/padman/default_head
 tag_weapon,
 tag_torso,
 tag_head,

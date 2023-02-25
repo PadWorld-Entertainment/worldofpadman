@@ -1,5 +1,5 @@
-tag_head,
+u_torso,models/wop_players/piratepad/spooky_torso_default
+u_arm,models/wop_players/piratepad/spooky_torso_default
 tag_weapon,
-u_torso,models/wop_players/piratepad/spooky_torso_default.jpg
-u_arm,models/wop_players/piratepad/spooky_torso_default.jpg
 tag_torso,
+tag_head,

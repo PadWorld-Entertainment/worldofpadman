@@ -1,8 +1,5 @@
-tag_head,
+u_torso,models/wop_players/piratepad/default_torso
+u_arm,models/wop_players/piratepad/default_torso
 tag_weapon,
-u_torso,models/wop_players/piratepad/default_torso.tga
 tag_torso,
-
-
-
-
+tag_head,

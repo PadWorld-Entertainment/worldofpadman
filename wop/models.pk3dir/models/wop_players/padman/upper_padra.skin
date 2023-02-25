@@ -1,7 +1,7 @@
-u_torso,models/wop_players/padman/padra_body.tga
-u_button,models/wop_players/padman/padra_head.tga
-u_hands,models/wop_players/padman/padra_head.tga
-u_cape,models/wop_players/padman/padra_cape.tga
+u_torso,models/wop_players/padman/padra_body
+u_button,models/wop_players/padman/padra_head
+u_hands,models/wop_players/padman/padra_head
+u_cape,models/wop_players/padman/padra_cape
 tag_weapon,
 tag_torso,
 tag_head,

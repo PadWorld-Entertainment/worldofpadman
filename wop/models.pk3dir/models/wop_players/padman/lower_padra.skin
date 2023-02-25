@@ -1,4 +1,4 @@
-l_legs,models/wop_players/padman/padra_body.tga
-l_buckle,models/wop_players/padman/padra_head.tga
-l_feet,models/wop_players/padman/padra_head.tga
+l_legs,models/wop_players/padman/padra_body
+l_buckle,models/wop_players/padman/padra_head
+l_feet,models/wop_players/padman/padra_head
 tag_torso,

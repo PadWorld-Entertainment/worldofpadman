@@ -1,5 +1,5 @@
-tag_head,
-tag_torso,
+u_torso,models/wop_players/paddybell/badpaddy_body_blue
+u_wings,models/wop_players/paddybell/badpaddy_wings_blue
 tag_weapon,
-u_torso,models/wop_players/paddybell/badpaddy_body_blue.tga
-u_wings,models/wop_players/paddybell/badpaddy_wings_blue.tga
+tag_torso,
+tag_head,

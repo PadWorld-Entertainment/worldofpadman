@@ -1,7 +1,7 @@
-l_legs,models/wop_players/padking/padknight_lower_red.tga
-l_rightlegpiece,models/wop_players/padking/padknight_upper_red.tga
-l_leftlegpiece,models/wop_players/padking/padknight_upper_red.tga
-l_beltbuckle,models/wop_players/padking/padknight_upper_red.tga
-l_legs,models/wop_players/padking/padknight_lower_red.tga
-l_cape,models/wop_players/padking/padknight_lower_red.tga
+l_legs,models/wop_players/padking/padknight_lower_red
+l_rightlegpiece,models/wop_players/padking/padknight_upper_red
+l_leftlegpiece,models/wop_players/padking/padknight_upper_red
+l_beltbuckle,models/wop_players/padking/padknight_upper_red
+l_legs,models/wop_players/padking/padknight_lower_red
+l_cape,models/wop_players/padking/padknight_lower_red
 tag_torso,

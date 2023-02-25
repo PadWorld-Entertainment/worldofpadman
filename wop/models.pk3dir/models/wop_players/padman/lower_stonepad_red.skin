@@ -1,4 +1,4 @@
-l_legs,models/wop_players/padman/stonepad_body_red.tga
-l_buckle,models/wop_players/padman/stonepad_head.tga
-l_feet,models/wop_players/padman/stonepad_head.tga
+l_legs,models/wop_players/padman/stonepad_body_red
+l_buckle,models/wop_players/padman/stonepad_head
+l_feet,models/wop_players/padman/stonepad_head
 tag_torso,

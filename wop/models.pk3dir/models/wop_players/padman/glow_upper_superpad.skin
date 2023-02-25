@@ -1,7 +1,7 @@
 u_torso,models/wop_players/padman/super_body_light_s
 u_button,models/wop_players/padman/super_light_head_s
 u_hands,models/wop_players/padman/super_head_light_s
-u_cape,models/wop_players/padman/superpad_cape.tga
+u_cape,models/wop_players/padman/superpad_cape
 tag_weapon,
 tag_torso,
 tag_head,

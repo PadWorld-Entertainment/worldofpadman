@@ -1,8 +1,8 @@
-u_torso,models/wop_players/padking/padknight_upper_red.tga
-u_collar,models/wop_players/padking/padknight_upper_red.tga
-u_leftshoulder,models/wop_players/padking/padknight_head_red.tga
-u_rightshoulder,models/wop_players/padking/padknight_head_red.tga
-u_sword,models/wop_players/padking/padknight_upper_red.tga
+u_torso,models/wop_players/padking/padknight_upper_red
+u_collar,models/wop_players/padking/padknight_upper_red
+u_leftshoulder,models/wop_players/padking/padknight_head_red
+u_rightshoulder,models/wop_players/padking/padknight_head_red
+u_sword,models/wop_players/padking/padknight_upper_red
 tag_weapon,
 tag_torso,
 tag_head,
