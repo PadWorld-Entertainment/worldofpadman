@@ -806,8 +806,8 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowleft.generic.y = 20;
 	s_playersettings.arrowleft.generic.id = ID_PREVMODEL;
 	s_playersettings.arrowleft.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.arrowleft.width = 32;
-	s_playersettings.arrowleft.height = 72;
+	s_playersettings.arrowleft.width = 30;
+	s_playersettings.arrowleft.height = 70;
 	s_playersettings.arrowleft.focuspic = BARROWLT1;
 	s_playersettings.arrowleft.focuspicinstead = qtrue;
 
@@ -818,32 +818,32 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowright.generic.y = 20;
 	s_playersettings.arrowright.generic.id = ID_NEXTMODEL;
 	s_playersettings.arrowright.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.arrowright.width = 32;
-	s_playersettings.arrowright.height = 72;
+	s_playersettings.arrowright.width = 30;
+	s_playersettings.arrowright.height = 70;
 	s_playersettings.arrowright.focuspic = BARROWRT1;
 	s_playersettings.arrowright.focuspicinstead = qtrue;
 
 	s_playersettings.arrowup.generic.type = MTYPE_BITMAP;
 	s_playersettings.arrowup.generic.name = BARROWUP0;
 	s_playersettings.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowup.generic.x = 547;
-	s_playersettings.arrowup.generic.y = 119;
+	s_playersettings.arrowup.generic.x = 546;
+	s_playersettings.arrowup.generic.y = 118;
 	s_playersettings.arrowup.generic.id = ID_PREVSKIN;
 	s_playersettings.arrowup.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.arrowup.width = 72;
-	s_playersettings.arrowup.height = 32;
+	s_playersettings.arrowup.width = 70;
+	s_playersettings.arrowup.height = 30;
 	s_playersettings.arrowup.focuspic = BARROWUP1;
 	s_playersettings.arrowup.focuspicinstead = qtrue;
 
 	s_playersettings.arrowdown.generic.type = MTYPE_BITMAP;
 	s_playersettings.arrowdown.generic.name = BARROWDN0;
 	s_playersettings.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowdown.generic.x = 547;
-	s_playersettings.arrowdown.generic.y = 425;
+	s_playersettings.arrowdown.generic.x = 546;
+	s_playersettings.arrowdown.generic.y = 426;
 	s_playersettings.arrowdown.generic.id = ID_NEXTSKIN;
 	s_playersettings.arrowdown.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.arrowdown.width = 72;
-	s_playersettings.arrowdown.height = 32;
+	s_playersettings.arrowdown.width = 70;
+	s_playersettings.arrowdown.height = 30;
 	s_playersettings.arrowdown.focuspic = BARROWDN1;
 	s_playersettings.arrowdown.focuspicinstead = qtrue;
 
