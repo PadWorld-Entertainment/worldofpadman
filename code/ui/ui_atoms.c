@@ -1023,7 +1023,7 @@ void UI_Cache_f(void) {
 	MainMenu_Cache();
 	InGame_Cache();
 	ConfirmMenu_Cache();
-	PlayerSettings_Cache();
+	UI_PlayerSettings_Cache();
 	Controls_Cache();
 	Demos_Cache();
 	UI_Preferences_Cache();

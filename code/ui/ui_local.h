@@ -458,7 +458,7 @@ extern void UI_SpecifyPasswordMenu(const char *string, const char *name);
 // ui_playersettings.c
 //
 extern void UI_PlayerSettingsMenu(void);
-extern void PlayerSettings_Cache(void);
+extern void UI_PlayerSettings_Cache(void);
 
 //
 // ui_preferences.c

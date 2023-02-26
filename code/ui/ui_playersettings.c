@@ -42,20 +42,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_EFFECTS 12
 #define ID_BACK 13
 
-#define ID_MODELSLEFT 15
-#define ID_MODELSRIGHT 16
-#define ID_SKINSUP 17
-#define ID_SKINSDOWN 18
+#define ID_PREVMODEL 15
+#define ID_NEXTMODEL 16
+#define ID_PREVSKIN 17
+#define ID_NEXTSKIN 18
 #define ID_MICON 19 //+4
 #define ID_SICON 24 //+2
 #define ID_PLAYERMODEL 27
 #define ID_SPRAYCOLOR 28
-#define ID_SLOGONEXT 29
-#define ID_SLOGOPREV 30
+#define ID_NEXTLOGO 29
+#define ID_PREVLOGO 30
 
 #define MAX_NAMELENGTH 20
 
 #define DISPLAYED_MODELS 4
+#define SKINGRID_COLS 1
+#define SKINGRID_ROWS 3
+#define SKINSPERPAGE (SKINGRID_ROWS * SKINGRID_COLS)
 
 #define XPOSITION 30
 #define YPOSITION 168
@@ -77,17 +80,16 @@ typedef struct {
 	menubitmap_s back;
 	menubitmap_s model;
 
-	menubitmap1024s_s modelsleft;
-	menubitmap1024s_s modelsright;
-
-	menubitmap1024s_s skinup;
-	menubitmap1024s_s skindown;
+	menubitmap_s arrowleft;
+	menubitmap_s arrowright;
+	menubitmap_s arrowup;
+	menubitmap_s arrowdown;
 
 	menubitmap1024s_s model_icons[DISPLAYED_MODELS];
 	menubitmap1024s_s skin_icons[3];
 
-	menubitmap1024s_s spraylogos_next;
-	menubitmap1024s_s spraylogos_prev;
+	menubitmap_s logoleft;
+	menubitmap_s logoright;
 
 	menubitmap_s spraycolor;
 
@@ -606,6 +608,51 @@ static void PlayerSettings_Draw(void) {
 
 /*
 =================
+UI_PlayerSettings_Update
+=================
+*/
+static void UI_PlayerSettings_Update(void) {
+
+	if (ps_playericons.nummodel > DISPLAYED_MODELS) {
+		s_playersettings.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_playersettings.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_playersettings.arrowleft.generic.flags |= QMF_GRAYED;
+		s_playersettings.arrowright.generic.flags |= QMF_GRAYED;
+
+		if (s_playersettings.firstmodel > 0) {
+			s_playersettings.arrowleft.generic.flags &= ~QMF_GRAYED;
+		}
+
+		if (s_playersettings.firstmodel + DISPLAYED_MODELS < ps_playericons.nummodel) {
+			s_playersettings.arrowright.generic.flags &= ~QMF_GRAYED;
+		}
+	} else {
+		s_playersettings.arrowleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		s_playersettings.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	}
+
+	if (s_playersettings.chosenskins[0] < SKINSPERPAGE) {
+		s_playersettings.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_playersettings.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_playersettings.arrowup.generic.flags |= QMF_GRAYED;
+		s_playersettings.arrowdown.generic.flags |= QMF_GRAYED;
+
+		if (s_playersettings.firstskin > s_playersettings.chosenskins[0]) {
+			s_playersettings.arrowup.generic.flags &= ~QMF_GRAYED;
+		}
+
+		if (s_playersettings.firstskin + 2 < s_playersettings.chosenskins[1]) {
+			s_playersettings.arrowdown.generic.flags &= ~QMF_GRAYED;
+		}
+	} else {
+		s_playersettings.arrowup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		s_playersettings.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	}
+
+}
+
+/*
+=================
 PlayerSettings_MenuEvent
 =================
 */
@@ -628,21 +675,29 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 		UI_PopMenu();
 		break;
 
-	case ID_MODELSLEFT:
-		if (s_playersettings.firstmodel > 0)
+	case ID_PREVMODEL:
+		if (s_playersettings.firstmodel > 0) {
 			s_playersettings.firstmodel--;
+			UI_PlayerSettings_Update();
+		}
 		break;
-	case ID_MODELSRIGHT:
-		if (s_playersettings.firstmodel + DISPLAYED_MODELS < ps_playericons.nummodel)
+	case ID_NEXTMODEL:
+		if (s_playersettings.firstmodel + DISPLAYED_MODELS < ps_playericons.nummodel) {
 			s_playersettings.firstmodel++;
+			UI_PlayerSettings_Update();
+		}
 		break;
-	case ID_SKINSUP:
-		if (s_playersettings.firstskin > s_playersettings.chosenskins[0])
-			s_playersettings.firstskin--;
+	case ID_PREVSKIN:
+		if (s_playersettings.firstskin > s_playersettings.chosenskins[0]) {
+			s_playersettings.firstskin = s_playersettings.firstskin - SKINSPERPAGE;
+			UI_PlayerSettings_Update();
+		}
 		break;
-	case ID_SKINSDOWN:
-		if (s_playersettings.firstskin + 2 < s_playersettings.chosenskins[1])
-			s_playersettings.firstskin++;
+	case ID_NEXTSKIN:
+		if (s_playersettings.firstskin + 2 < s_playersettings.chosenskins[1]) {
+			s_playersettings.firstskin = s_playersettings.firstskin + SKINSPERPAGE;
+			UI_PlayerSettings_Update();
+		}
 		break;
 	case ID_MICON:
 	case ID_MICON + 1:
@@ -673,6 +728,7 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 				break;
 			}
 		}
+		UI_PlayerSettings_Update();
 		break;
 	case ID_SICON:
 	case ID_SICON + 1:
@@ -692,12 +748,12 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 		trap_Cvar_Set("syc_color", va("%i", (uis.cursorx - ((menucommon_s *)ptr)->x) / 14));
 		break;
 
-	case ID_SLOGOPREV:
+	case ID_PREVLOGO:
 		if (--s_playersettings.slogo_num < 0)
 			s_playersettings.slogo_num = uis.spraylogosLoaded - 1; // close the circle
 		break;
 
-	case ID_SLOGONEXT:
+	case ID_NEXTLOGO:
 		if (++s_playersettings.slogo_num >= uis.spraylogosLoaded)
 			s_playersettings.slogo_num = 0; // close the circle
 		break;
@@ -715,7 +771,7 @@ static void PlayerSettings_MenuInit(void) {
 
 	memset(&s_playersettings, 0, sizeof(playersettings_t));
 
-	PlayerSettings_Cache();
+	UI_PlayerSettings_Cache();
 
 	s_playersettings.menu.key = PlayerSettings_MenuKey;
 	s_playersettings.menu.wrapAround = qtrue;
@@ -743,45 +799,53 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.player.generic.id = ID_PLAYERMODEL;
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.player);
 
-	s_playersettings.modelsleft.generic.type = MTYPE_BITMAP1024S;
-	s_playersettings.modelsleft.x = 34;
-	s_playersettings.modelsleft.y = 32;
-	s_playersettings.modelsleft.w = 55;
-	s_playersettings.modelsleft.h = 117;
-	s_playersettings.modelsleft.shader = trap_R_RegisterShaderNoMip(BARROWLT0);
-	s_playersettings.modelsleft.mouseovershader = trap_R_RegisterShaderNoMip(BARROWLT1);
-	s_playersettings.modelsleft.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.modelsleft.generic.id = ID_MODELSLEFT;
+	s_playersettings.arrowleft.generic.type = MTYPE_BITMAP;
+	s_playersettings.arrowleft.generic.name = BARROWLT0;
+	s_playersettings.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.arrowleft.generic.x = 20;
+	s_playersettings.arrowleft.generic.y = 20;
+	s_playersettings.arrowleft.generic.id = ID_PREVMODEL;
+	s_playersettings.arrowleft.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.arrowleft.width = 32;
+	s_playersettings.arrowleft.height = 72;
+	s_playersettings.arrowleft.focuspic = BARROWLT1;
+	s_playersettings.arrowleft.focuspicinstead = qtrue;
 
-	s_playersettings.modelsright.generic.type = MTYPE_BITMAP1024S;
-	s_playersettings.modelsright.x = 937;
-	s_playersettings.modelsright.y = 32;
-	s_playersettings.modelsright.w = 55;
-	s_playersettings.modelsright.h = 117;
-	s_playersettings.modelsright.shader = trap_R_RegisterShaderNoMip(BARROWRT0);
-	s_playersettings.modelsright.mouseovershader = trap_R_RegisterShaderNoMip(BARROWRT1);
-	s_playersettings.modelsright.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.modelsright.generic.id = ID_MODELSRIGHT;
+	s_playersettings.arrowright.generic.type = MTYPE_BITMAP;
+	s_playersettings.arrowright.generic.name = BARROWRT0;
+	s_playersettings.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.arrowright.generic.x = 588;
+	s_playersettings.arrowright.generic.y = 20;
+	s_playersettings.arrowright.generic.id = ID_NEXTMODEL;
+	s_playersettings.arrowright.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.arrowright.width = 32;
+	s_playersettings.arrowright.height = 72;
+	s_playersettings.arrowright.focuspic = BARROWRT1;
+	s_playersettings.arrowright.focuspicinstead = qtrue;
 
-	s_playersettings.skinup.generic.type = MTYPE_BITMAP1024S;
-	s_playersettings.skinup.x = 875;
-	s_playersettings.skinup.y = 190;
-	s_playersettings.skinup.w = 117;
-	s_playersettings.skinup.h = 55;
-	s_playersettings.skinup.shader = trap_R_RegisterShaderNoMip(BARROWUP0);
-	s_playersettings.skinup.mouseovershader = trap_R_RegisterShaderNoMip(BARROWUP1);
-	s_playersettings.skinup.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.skinup.generic.id = ID_SKINSUP;
+	s_playersettings.arrowup.generic.type = MTYPE_BITMAP;
+	s_playersettings.arrowup.generic.name = BARROWUP0;
+	s_playersettings.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.arrowup.generic.x = 547;
+	s_playersettings.arrowup.generic.y = 119;
+	s_playersettings.arrowup.generic.id = ID_PREVSKIN;
+	s_playersettings.arrowup.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.arrowup.width = 72;
+	s_playersettings.arrowup.height = 32;
+	s_playersettings.arrowup.focuspic = BARROWUP1;
+	s_playersettings.arrowup.focuspicinstead = qtrue;
 
-	s_playersettings.skindown.generic.type = MTYPE_BITMAP1024S;
-	s_playersettings.skindown.x = 875;
-	s_playersettings.skindown.y = 680;
-	s_playersettings.skindown.w = 117;
-	s_playersettings.skindown.h = 55;
-	s_playersettings.skindown.shader = trap_R_RegisterShaderNoMip(BARROWDN0);
-	s_playersettings.skindown.mouseovershader = trap_R_RegisterShaderNoMip(BARROWDN1);
-	s_playersettings.skindown.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.skindown.generic.id = ID_SKINSDOWN;
+	s_playersettings.arrowdown.generic.type = MTYPE_BITMAP;
+	s_playersettings.arrowdown.generic.name = BARROWDN0;
+	s_playersettings.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.arrowdown.generic.x = 547;
+	s_playersettings.arrowdown.generic.y = 425;
+	s_playersettings.arrowdown.generic.id = ID_NEXTSKIN;
+	s_playersettings.arrowdown.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.arrowdown.width = 72;
+	s_playersettings.arrowdown.height = 32;
+	s_playersettings.arrowdown.focuspic = BARROWDN1;
+	s_playersettings.arrowdown.focuspicinstead = qtrue;
 
 	for (i = 0; i < DISPLAYED_MODELS; ++i) {
 		s_playersettings.model_icons[i].generic.type = MTYPE_BITMAP1024S;
@@ -848,25 +912,29 @@ static void PlayerSettings_MenuInit(void) {
 		}
 	}
 
-	s_playersettings.spraylogos_prev.generic.type = MTYPE_BITMAP1024S;
-	s_playersettings.spraylogos_prev.x = 76;
-	s_playersettings.spraylogos_prev.y = 570;
-	s_playersettings.spraylogos_prev.w = 40;
-	s_playersettings.spraylogos_prev.h = 20;
-	s_playersettings.spraylogos_prev.shader = trap_R_RegisterShaderNoMip(SARROWLT0);
-	s_playersettings.spraylogos_prev.mouseovershader = trap_R_RegisterShaderNoMip(SARROWLT1);
-	s_playersettings.spraylogos_prev.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.spraylogos_prev.generic.id = ID_SLOGOPREV;
+	s_playersettings.logoleft.generic.type = MTYPE_BITMAP;
+	s_playersettings.logoleft.generic.name = SARROWLT0;
+	s_playersettings.logoleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.logoleft.generic.x = 48;
+	s_playersettings.logoleft.generic.y = 357;
+	s_playersettings.logoleft.generic.id = ID_PREVLOGO;
+	s_playersettings.logoleft.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.logoleft.width = 26;
+	s_playersettings.logoleft.height = 13;
+	s_playersettings.logoleft.focuspic = SARROWLT1;
+	s_playersettings.logoleft.focuspicinstead = qtrue;
 
-	s_playersettings.spraylogos_next.generic.type = MTYPE_BITMAP1024S;
-	s_playersettings.spraylogos_next.x = 130;
-	s_playersettings.spraylogos_next.y = 570;
-	s_playersettings.spraylogos_next.w = 40;
-	s_playersettings.spraylogos_next.h = 20;
-	s_playersettings.spraylogos_next.shader = trap_R_RegisterShaderNoMip(SARROWRT0);
-	s_playersettings.spraylogos_next.mouseovershader = trap_R_RegisterShaderNoMip(SARROWRT1);
-	s_playersettings.spraylogos_next.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.spraylogos_next.generic.id = ID_SLOGONEXT;
+	s_playersettings.logoright.generic.type = MTYPE_BITMAP;
+	s_playersettings.logoright.generic.name = SARROWRT0;
+	s_playersettings.logoright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.logoright.generic.x = 81;
+	s_playersettings.logoright.generic.y = 357;
+	s_playersettings.logoright.generic.id = ID_NEXTLOGO;
+	s_playersettings.logoright.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.logoright.width = 26;
+	s_playersettings.logoright.height = 13;
+	s_playersettings.logoright.focuspic = SARROWRT1;
+	s_playersettings.logoright.focuspicinstead = qtrue;
 
 	s_playersettings.back.generic.type = MTYPE_BITMAP;
 	s_playersettings.back.generic.name = BACK0;
@@ -935,37 +1003,49 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.spraycolor.generic.id = ID_SPRAYCOLOR;
 	s_playersettings.spraycolor.generic.callback = PlayerSettings_MenuEvent;
 
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsleft);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowleft);
 	for (i = 0; i < DISPLAYED_MODELS; ++i) {
 		Menu_AddItem(&s_playersettings.menu, &s_playersettings.model_icons[i]);
 	}
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelsright);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skinup);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowright);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowup);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[0]);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[1]);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[2]);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skindown);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowdown);
 
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicapheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap );
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_prev);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraylogos_next);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoleft);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoright);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraycolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.back);
 
 	PlayerSettings_SetMenuItems();
+	UI_PlayerSettings_Update();
 }
 
 /*
 =================
-PlayerSettings_Cache
+UI_PlayerSettings_Cache
 =================
 */
-void PlayerSettings_Cache(void) {
-
+void UI_PlayerSettings_Cache(void) {
+	trap_R_RegisterShaderNoMip(BARROWLT0);
+	trap_R_RegisterShaderNoMip(BARROWLT1);
+	trap_R_RegisterShaderNoMip(BARROWRT0);
+	trap_R_RegisterShaderNoMip(BARROWRT1);
+	trap_R_RegisterShaderNoMip(BARROWUP0);
+	trap_R_RegisterShaderNoMip(BARROWUP1);
+	trap_R_RegisterShaderNoMip(BARROWDN0);
+	trap_R_RegisterShaderNoMip(BARROWDN1);
+	trap_R_RegisterShaderNoMip(SARROWLT0);
+	trap_R_RegisterShaderNoMip(SARROWLT1);
+	trap_R_RegisterShaderNoMip(SARROWRT0);
+	trap_R_RegisterShaderNoMip(SARROWRT1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 
