@@ -38,20 +38,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SARROWRT1 "menu/arrows/smallyel_rt1"
 
 #define ID_NAME 10
-#define ID_HANDICAP 11
-#define ID_EFFECTS 12
-#define ID_BACK 13
+#define ID_SEX 11
+#define ID_HANDICAP 12
+#define ID_SKINCOLOR 13
+#define ID_EFFECTS 14
+#define ID_BACK 15
 
-#define ID_PREVMODEL 15
-#define ID_NEXTMODEL 16
-#define ID_PREVSKIN 17
-#define ID_NEXTSKIN 18
-#define ID_MICON 19 //+4
-#define ID_SICON 24 //+2
-#define ID_PLAYERMODEL 27
-#define ID_SPRAYCOLOR 28
-#define ID_NEXTLOGO 29
-#define ID_PREVLOGO 30
+#define ID_PREVMODEL 16
+#define ID_NEXTMODEL 17
+#define ID_PREVSKIN 18
+#define ID_NEXTSKIN 19
+#define ID_MICON 20 //+4
+#define ID_SICON 25 //+2
+#define ID_PLAYERMODEL 28
+#define ID_SPRAYCOLOR 29
+#define ID_NEXTLOGO 30
+#define ID_PREVLOGO 31
 
 #define MAX_NAMELENGTH 20
 
@@ -60,7 +62,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SKINGRID_ROWS 3
 #define SKINSPERPAGE (SKINGRID_ROWS * SKINGRID_COLS)
 
-#define XPOSITION 30
+#define XPOSITION 24
 #define YPOSITION 168
 
 typedef struct {
@@ -72,9 +74,10 @@ typedef struct {
 
 	menutext_s nameheader;
 	menufield_s name;
-	menutext_s handicapheader;
+	menulist_s sex;
 	menulist_s handicap;
 	menutext_s logoheader;
+	menulist_s skincolor;
 	menulist_s effects;
 
 	menubitmap_s back;
@@ -113,6 +116,13 @@ static playersettings_t s_playersettings;
 static int gamecodetoui[] = {4, 2, 3, 0, 5, 1, 6};
 static int uitogamecode[] = {4, 6, 2, 3, 1, 5, 7};
 
+static const char *sex_items[] = {
+	"None",
+	"Male",
+	"Female",
+	NULL
+};
+
 static const char *handicap_items[] = {
 	"None",
 	"90",
@@ -127,6 +137,12 @@ static const char *handicap_items[] = {
 	NULL
 };
 
+static const char *skincolor_items[] = {
+	S_COLOR_YELLOW "Default",
+	S_COLOR_BLUE "Blue",
+	S_COLOR_RED "Red",
+	NULL
+};
 
 #define MAX_UIMODELS 96 // 32
 #define MAX_SKINS 640	// padman has 18 skins ...
@@ -173,7 +189,7 @@ static void PlayerSettings_DrawName(void *self) {
 		color = text_color_highlight;
 	}
 
-	basex += 10;
+	basex += 8;
 	y += PROP_HEIGHT;
 	txt = f->field.buffer;
 	color = g_color_table[ColorIndex(COLOR_WHITE)];
@@ -337,6 +353,15 @@ static void PlayerSettings_SetMenuItems(void) {
 		char modelname[32];
 		int mnLen;
 		Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
+
+		// Set skin color menu item
+		if (Q_stristr (modelname, "_blue") || Q_stristr (modelname, "/blue")) {
+			s_playersettings.skincolor.curvalue = 1;
+		} else if (Q_stristr (modelname, "_red") || Q_stristr (modelname, "/red")) {
+			s_playersettings.skincolor.curvalue = 2;
+		} else {
+			s_playersettings.skincolor.curvalue = 0;
+		}
 
 		for (i = 0; i < sizeof(modelname); i++)
 			if (modelname[i] == '/') {
@@ -592,16 +617,23 @@ static void PlayerSettings_Draw(void) {
 
 	Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
 
-	for (i = 0; i < sizeof(modelname); i++)
+ 	for (i = 0; i < sizeof(modelname); i++)
 		if (modelname[i] == '/') {
 			modelname[i] = '\0';
 			break;
 		}
 
-	if (!Q_stricmp(&modelname[i + 1], "default"))
+	if (!Q_stricmp(&modelname[i + 1], "default") || !Q_stricmp(&modelname[i + 1], "blue") || !Q_stricmp(&modelname[i + 1], "red")) {
 		UI_DrawProportionalString(320, 440, modelname, UI_CENTER | UI_SMALLFONT, colorWhite);
-	else
+	} else if (Q_stristr(&modelname[i + 1], "_blue") || Q_stristr(&modelname[i + 1], "_red")) {
+		char *chrptr = strstr(&modelname[i + 1], "_");
+		if (chrptr != NULL) {
+			*chrptr = '\0';
+		}
 		UI_DrawProportionalString(320, 440, &modelname[i + 1], UI_CENTER | UI_SMALLFONT, colorWhite);
+	} else {
+		UI_DrawProportionalString(320, 440, &modelname[i + 1], UI_CENTER | UI_SMALLFONT, colorWhite);
+	}
 
 	Menu_Draw(&s_playersettings.menu);
 }
@@ -653,6 +685,44 @@ static void UI_PlayerSettings_Update(void) {
 
 /*
 =================
+UI_PlayerSettings_SetSkinColor
+=================
+*/
+static void UI_PlayerSettings_SetSkinColor(void) {
+	char modelname[64];
+
+	Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
+	if (Q_stristr(modelname, "/default") || Q_stristr(modelname, "/blue") || Q_stristr(modelname, "/red")) {
+		char *chrptr = strstr(modelname, "/");
+		if (chrptr != NULL) {
+			*chrptr = '\0';
+		}
+		if (s_playersettings.skincolor.curvalue == 2) {
+			Q_strcat(modelname, sizeof(modelname), "/red");
+		} else if (s_playersettings.skincolor.curvalue == 1) {
+			Q_strcat(modelname, sizeof(modelname), "/blue");
+		} else {
+			Q_strcat(modelname, sizeof(modelname), "/default");
+		}
+	} else {
+		char *chrptr = strstr(modelname, "_");
+		if (chrptr != NULL) {
+			*chrptr = '\0';
+		}
+		if (s_playersettings.skincolor.curvalue == 2) {
+			Q_strcat(modelname, sizeof(modelname), "_red");
+		} else if (s_playersettings.skincolor.curvalue == 1) {
+			Q_strcat(modelname, sizeof(modelname), "_blue");
+		}
+	}
+	trap_Cvar_Set("model", modelname);
+	trap_Cvar_Set("headmodel", modelname);
+	trap_Cvar_Set("team_model", modelname);
+	trap_Cvar_Set("team_headmodel", modelname);
+}
+
+/*
+=================
 PlayerSettings_MenuEvent
 =================
 */
@@ -668,6 +738,10 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 
 	case ID_HANDICAP:
 		trap_Cvar_Set( "handicap", va( "%i", 100 - 25 * s_playersettings.handicap.curvalue ) );
+		break;
+
+	case ID_SKINCOLOR:
+		UI_PlayerSettings_SetSkinColor();
 		break;
 
 	case ID_BACK:
@@ -728,6 +802,7 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 				break;
 			}
 		}
+		UI_PlayerSettings_SetSkinColor();
 		UI_PlayerSettings_Update();
 		break;
 	case ID_SICON:
@@ -737,6 +812,7 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 		trap_Cvar_Set("headmodel", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
 		trap_Cvar_Set("team_model", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
 		trap_Cvar_Set("team_headmodel", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
+		UI_PlayerSettings_SetSkinColor();
 		break;
 	case ID_PLAYERMODEL:
 		if (trap_Key_IsDown(K_MOUSE1))
@@ -949,42 +1025,54 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.back.focuspicinstead = qtrue;
 
 	y = YPOSITION;
-	s_playersettings.nameheader.generic.type = MTYPE_TEXT;
+ 	s_playersettings.nameheader.generic.type = MTYPE_TEXT;
 	s_playersettings.nameheader.generic.x = XPOSITION;
 	s_playersettings.nameheader.generic.y = y;
 	s_playersettings.nameheader.string = "Name:";
-	s_playersettings.nameheader.style = (UI_LEFT | UI_SMALLFONT);
+	s_playersettings.nameheader.style = UI_LEFT | UI_SMALLFONT;
 	s_playersettings.nameheader.color = color_yellow;
 
 	s_playersettings.name.generic.type = MTYPE_FIELD;
-	s_playersettings.name.generic.flags = QMF_NODEFAULTINIT;
+	s_playersettings.name.generic.flags = QMF_NODEFAULTINIT | QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	s_playersettings.name.generic.ownerdraw = PlayerSettings_DrawName;
 	s_playersettings.name.field.widthInChars = MAX_NAMELENGTH;
 	s_playersettings.name.field.maxchars = MAX_NAMELENGTH;
-	s_playersettings.name.generic.x = 20;
-	s_playersettings.name.generic.y = 160;
-	s_playersettings.name.generic.left = 20 - 8;
-	s_playersettings.name.generic.top = 160 - 8;
-	s_playersettings.name.generic.right = 20 + 130;
-	s_playersettings.name.generic.bottom = 160 + 2 * PROP_HEIGHT;
+	s_playersettings.name.generic.x = XPOSITION;
+	s_playersettings.name.generic.y = y - 10;
+	s_playersettings.name.generic.left = XPOSITION - 12;
+	s_playersettings.name.generic.top = y;
+	s_playersettings.name.generic.right = XPOSITION + 128;
+	s_playersettings.name.generic.bottom = y + 2*(BIGCHAR_HEIGHT);
 
-	y += 3*(BIGCHAR_HEIGHT + 2);
-	s_playersettings.handicapheader.generic.type = MTYPE_TEXT;
-	s_playersettings.handicapheader.generic.x = XPOSITION;
-	s_playersettings.handicapheader.generic.y = y;
-	s_playersettings.handicapheader.string = "Handicap:";
-	s_playersettings.handicapheader.style = (UI_LEFT | UI_SMALLFONT);
-	s_playersettings.handicapheader.color = color_yellow;
+	y += 2*(BIGCHAR_HEIGHT + 2);
+	s_playersettings.sex.generic.type = MTYPE_SPINCONTROL;
+	s_playersettings.sex.generic.name = "Sex:";
+	s_playersettings.sex.generic.flags	= QMF_SMALLFONT;
+	s_playersettings.sex.generic.id = ID_HANDICAP;
+	s_playersettings.sex.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.sex.generic.x = XPOSITION + 56;
+	s_playersettings.sex.generic.y = y;
+	s_playersettings.sex.itemnames = sex_items;
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.handicap.generic.name = "";
+	s_playersettings.handicap.generic.name = "Cap:";
 	s_playersettings.handicap.generic.flags	= QMF_SMALLFONT;
 	s_playersettings.handicap.generic.id = ID_HANDICAP;
 	s_playersettings.handicap.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.handicap.generic.x	= XPOSITION;
-	s_playersettings.handicap.generic.y	= y;
-	s_playersettings.handicap.itemnames	= handicap_items;
+	s_playersettings.handicap.generic.x = XPOSITION + 56;
+	s_playersettings.handicap.generic.y = y;
+	s_playersettings.handicap.itemnames = handicap_items;
+
+	y += BIGCHAR_HEIGHT + 2;
+	s_playersettings.skincolor.generic.type = MTYPE_SPINCONTROL;
+	s_playersettings.skincolor.generic.name = "Color:";
+	s_playersettings.skincolor.generic.flags = QMF_SMALLFONT;
+	s_playersettings.skincolor.generic.id = ID_SKINCOLOR;
+	s_playersettings.skincolor.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.skincolor.generic.x = XPOSITION + 56;
+	s_playersettings.skincolor.generic.y = y;
+	s_playersettings.skincolor.itemnames = skincolor_items;
 
 	y += 2*(BIGCHAR_HEIGHT + 2);
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
@@ -1016,8 +1104,9 @@ static void PlayerSettings_MenuInit(void) {
 
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicapheader);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.sex);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap );
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skincolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoleft);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoright);
