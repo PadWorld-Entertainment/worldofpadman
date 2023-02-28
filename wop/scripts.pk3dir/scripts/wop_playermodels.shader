@@ -716,6 +716,89 @@ models/wop_players/padman/hellpad_head_blue
 
 
 // ===================
+// PELViS
+// ===================
+
+models/wop_players/padman/pelvis_goggles
+{
+		cull disable
+	{
+		map models/wop_players/padman/pelvis_head
+		rgbGen lightingDiffuse
+	}
+	{
+		map models/wop_players/padman/pad_fx
+		blendfunc GL_DST_ALPHA GL_DST_ALPHA
+		tcgen environment
+		rgbGen lightingDiffuse
+		depthfunc equal
+	}
+}
+
+models/wop_players/padman/pelvis_cape
+{
+		cull disable
+		deformVertexes wave 100 sin 0 0.2 3 1
+	{
+		map models/wop_players/padman/pelvis_body
+		rgbGen lightingDiffuse
+	}
+}
+
+models/wop_players/padman/pelvis_goggles_red
+{
+		cull disable
+	{
+		map models/wop_players/padman/pelvis_head_red
+		rgbGen lightingDiffuse
+	}
+	{
+		map models/wop_players/padman/pad_fx
+		blendfunc GL_DST_ALPHA GL_DST_ALPHA
+		tcgen environment
+		rgbGen lightingDiffuse
+		depthfunc equal
+	}
+}
+
+models/wop_players/padman/pelvis_cape_red
+{
+		cull disable
+		deformVertexes wave 100 sin 0 0.2 3 1
+	{
+		map models/wop_players/padman/pelvis_body_red
+		rgbGen lightingDiffuse
+	}
+}
+
+models/wop_players/padman/pelvis_goggles_blue
+{
+		cull disable
+	{
+		map models/wop_players/padman/pelvis_head_blue
+		rgbGen lightingDiffuse
+	}
+	{
+		map models/wop_players/padman/pad_fx
+		blendfunc GL_DST_ALPHA GL_DST_ALPHA
+		tcgen environment
+		rgbGen lightingDiffuse
+		depthfunc equal
+	}
+}
+
+models/wop_players/padman/pelvis_cape_blue
+{
+		cull disable
+		deformVertexes wave 100 sin 0 0.2 3 1
+	{
+		map models/wop_players/padman/pelvis_body_blue
+		rgbGen lightingDiffuse
+	}
+}
+
+
+// ===================
 // PADCLASSiC
 // ===================
 
