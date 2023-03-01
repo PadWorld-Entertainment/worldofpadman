@@ -478,7 +478,6 @@ NOADDITIONALMODELS:
 			cgs.media.fireBallShader = trap_R_RegisterShader("fireBall_ft");
 			cgs.media.fireTrailShader = trap_R_RegisterShader("fireTrail_ft");
 			cgs.media.fireDropShader = trap_R_RegisterShader("fireDrop_ft");
-			cgs.media.fireExplosionShader = trap_R_RegisterShader("fireExplosion_ft");
 		} else {
 			cgs.media.fireBallShader = trap_R_RegisterShader("fireBall");
 			cgs.media.fireTrailShader = trap_R_RegisterShader("fireTrail");
@@ -1743,8 +1742,8 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 	case WP_BETTY:
 		if (!CG_FreezeTag()) {
 			mod = cgs.media.dishFlashModel;
+			shader = cgs.media.fireExplosionShader;
 		}
-		shader = cgs.media.fireExplosionShader;
 		sfx = cgs.media.BettyExplosion;
 		if (CG_FreezeTag()) {
 			mark = cgs.media.snowMarkShader;
