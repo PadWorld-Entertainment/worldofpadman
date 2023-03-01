@@ -882,6 +882,7 @@ typedef struct {
 	qhandle_t nipperWaveShader;
 	qhandle_t pumperTrailShader;
 	qhandle_t pumperFlashModel;
+	qhandle_t pumperFlashShader;
 	qhandle_t imperiusCoreShader;
 	qhandle_t imperiusRingShader;
 	qhandle_t imperiusBeamModel;

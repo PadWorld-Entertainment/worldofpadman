@@ -450,10 +450,17 @@ NOADDITIONALMODELS:
 		break;
 
 	case WP_PUMPER:
-		MAKERGB(weaponInfo->flashDlightColor, 1, 1, 0);
 		weaponInfo->flashSound[0] = trap_S_RegisterSound("sound/weapons/pumper/flash", qfalse);
 		cgs.media.pumperFlashModel = trap_R_RegisterModel("models/weaponsfx/flash");
-		cgs.media.pumperTrailShader = trap_R_RegisterShader("pumperTrail");
+		if (CG_FreezeTag()) {
+			MAKERGB(weaponInfo->flashDlightColor, 1, 1, 1);
+			cgs.media.pumperTrailShader = trap_R_RegisterShader("pumperTrail_ft");
+			cgs.media.pumperFlashShader = trap_R_RegisterShader("pumperFlash_ft");
+		} else {
+			MAKERGB(weaponInfo->flashDlightColor, 1, 1, 0);
+			cgs.media.pumperTrailShader = trap_R_RegisterShader("pumperTrail");
+			cgs.media.pumperFlashShader = trap_R_RegisterShader("pumperFlash");
+		}
 		break;
 
 	case WP_BETTY:
@@ -1801,7 +1808,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		break;
 	case WP_PUMPER:
 		mod = cgs.media.pumperFlashModel;
-		//		shader = cgs.media.railExplosionShader;
+		shader = cgs.media.pumperFlashShader;
 		sfx = cgs.media.pumperexpSound;
 		if (CG_FreezeTag()) {
 			mark = cgs.media.snowMarkShader;

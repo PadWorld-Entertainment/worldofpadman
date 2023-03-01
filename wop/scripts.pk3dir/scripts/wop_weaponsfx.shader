@@ -157,11 +157,34 @@ pumperTrail
 	}
 }
 
-models/weaponsfx/flash
+pumperFlash
 {
 	cull none
 	{
 		animmap 9 models/weaponsfx/flash0 models/weaponsfx/flash1 models/weaponsfx/flash2
+		blendFunc add
+		tcMod turb 0 0.01 0 11
+		rgbGen wave inversesawtooth 0 1 0 1.2
+	}
+}
+
+pumperTrail_ft
+{
+	cull none
+	nopicmip
+	nomipmaps
+	{
+		map models/weaponsfx/pumpertrail_ft
+		blendFunc add
+		rgbGen vertex
+	}
+}
+
+pumperFlash_ft
+{
+	cull none
+	{
+		animmap 9 models/weaponsfx/flash0_ft models/weaponsfx/flash1_ft models/weaponsfx/flash2_ft
 		blendFunc add
 		tcMod turb 0 0.01 0 11
 		rgbGen wave inversesawtooth 0 1 0 1.2
