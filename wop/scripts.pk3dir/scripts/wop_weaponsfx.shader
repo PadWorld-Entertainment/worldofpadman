@@ -103,11 +103,50 @@ fireExplosion
 	}
 }
 
-models/weaponsfx/firedrop
+fireDrop
 {
 	cull none
 	{
 		map models/weaponsfx/firedrop
+		blendFunc add
+	}
+}
+
+fireBall_ft
+{
+	{
+		map models/weaponsfx/fireball_ft
+		blendFunc add
+	}
+	{
+		map models/weaponsfx/fireball_ft
+		blendFunc add
+	}
+}
+
+fireTrail_ft
+{
+	{
+		map models/weaponsfx/firetrail_ft
+		blendFunc add
+		rgbGen vertex
+		tcMod scroll 1.6 0
+	}
+	{
+		map models/weaponsfx/firetrail_ft
+		blendFunc add
+		rgbGen vertex
+		tcMod scale 2.1 1
+		tcMod scroll -0.63 0
+	}
+
+}
+
+fireDrop_ft
+{
+	cull none
+	{
+		map models/weaponsfx/firedrop_ft
 		blendFunc add
 	}
 }

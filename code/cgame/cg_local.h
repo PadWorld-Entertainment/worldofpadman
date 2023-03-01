@@ -896,6 +896,7 @@ typedef struct {
 	qhandle_t boasterExplosionShader;
 	qhandle_t waterExplosionShader;
 	qhandle_t fireDropModel;
+	qhandle_t fireDropShader;
 	qhandle_t imperiusSphereModel;
 	qhandle_t imperiusRingsModel;
 	// HERBY ^^
@@ -944,7 +945,7 @@ typedef struct {
 	qhandle_t railExplosionShader;
 	qhandle_t plasmaExplosionShader;
 	qhandle_t bulletExplosionShader;
-	qhandle_t rocketExplosionShader;
+	qhandle_t fireExplosionShader;
 	qhandle_t grenadeExplosionShader;
 	qhandle_t bfgExplosionShader;
 	qhandle_t bloodExplosionShader;

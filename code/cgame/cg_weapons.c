@@ -471,10 +471,20 @@ NOADDITIONALMODELS:
 		weaponInfo->trailRadius = 64;
 
 		weaponInfo->flashSound[0] = trap_S_RegisterSound("sound/weapons/betty/flash", qfalse);
-		cgs.media.rocketExplosionShader = trap_R_RegisterShader("fireExplosion");
 		cgs.media.fireBallShader = trap_R_RegisterShader("fireBall");
 		cgs.media.fireTrailShader = trap_R_RegisterShader("fireTrail");
 		cgs.media.fireDropModel = trap_R_RegisterModel("models/weaponsfx/firedrop");
+		if (CG_FreezeTag()) {
+			cgs.media.fireBallShader = trap_R_RegisterShader("fireBall_ft");
+			cgs.media.fireTrailShader = trap_R_RegisterShader("fireTrail_ft");
+			cgs.media.fireDropShader = trap_R_RegisterShader("fireDrop_ft");
+			cgs.media.fireExplosionShader = trap_R_RegisterShader("fireExplosion_ft");
+		} else {
+			cgs.media.fireBallShader = trap_R_RegisterShader("fireBall");
+			cgs.media.fireTrailShader = trap_R_RegisterShader("fireTrail");
+			cgs.media.fireDropShader = trap_R_RegisterShader("fireDrop");
+			cgs.media.fireExplosionShader = trap_R_RegisterShader("fireExplosion");
+		}
 		break;
 
 	case WP_BALLOONY:
@@ -1734,7 +1744,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		if (!CG_FreezeTag()) {
 			mod = cgs.media.dishFlashModel;
 		}
-		shader = cgs.media.rocketExplosionShader;
+		shader = cgs.media.fireExplosionShader;
 		sfx = cgs.media.BettyExplosion;
 		if (CG_FreezeTag()) {
 			mark = cgs.media.snowMarkShader;
@@ -1755,7 +1765,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 			lightColor[2] = 0.0;
 		}
 		VectorSet(sprVel, 0, 0, 400);
-		CG_GenerateParticles(cgs.media.fireDropModel, 0, origin, 16, sprVel, 120, 250, 30, 0, cg.time, 700, 400, 0, 0,
+		CG_GenerateParticles(cgs.media.fireDropModel, cgs.media.fireDropShader, origin, 16, sprVel, 120, 250, 30, 0, cg.time, 700, 400, 0, 0,
 							 0, 0, LEF_GRAVITY | LEF_COLLISIONS, 0);
 		break;
 	case WP_BAMBAM_MISSILE:
