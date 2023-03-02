@@ -750,6 +750,11 @@ typedef struct {
 	// freezetag
 	qhandle_t FreezeScreenShader;
 	qhandle_t iceblockModel;
+	qhandle_t snowMarkShader;
+	qhandle_t freezeIconShader;
+	qhandle_t thawIcon;
+	qhandle_t bettyMuzzleFTShader;
+	qhandle_t bettySkinFTShader;
 
 	qhandle_t tracerShader;
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];
@@ -779,11 +784,6 @@ typedef struct {
 
 	// powerup shaders
 	qhandle_t invisShader;
-
-	// freezetag
-	qhandle_t snowMarkShader;
-	qhandle_t freezeIconShader;
-	qhandle_t thawIcon;
 
 	qhandle_t lpsIcon;
 	qhandle_t lpsIconLead;

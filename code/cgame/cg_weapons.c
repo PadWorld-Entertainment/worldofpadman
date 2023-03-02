@@ -478,6 +478,8 @@ NOADDITIONALMODELS:
 			cgs.media.fireBallShader = trap_R_RegisterShader("fireBall_ft");
 			cgs.media.fireTrailShader = trap_R_RegisterShader("fireTrail_ft");
 			cgs.media.fireDropShader = trap_R_RegisterShader("fireDrop_ft");
+			cgs.media.bettyMuzzleFTShader = trap_R_RegisterShader("bettyMuzzle_ft");
+			cgs.media.bettySkinFTShader = trap_R_RegisterShader("bettySkin_ft");
 		} else {
 			cgs.media.fireBallShader = trap_R_RegisterShader("fireBall");
 			cgs.media.fireTrailShader = trap_R_RegisterShader("fireTrail");
@@ -935,6 +937,13 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 		return;
 	}
 
+	// alternative weapon skin shaders in freezetag
+	if (CG_FreezeTag()) {
+		if (weaponNum == WP_BETTY) {
+			gun.customShader = cgs.media.bettySkinFTShader;
+		}
+	}
+
 	if (!ps) {
 		// add weapon ready sound
 		cent->pe.lightningFiring = qfalse;
@@ -1031,6 +1040,13 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	flash.hModel = weapon->flashModel;
 	if (!flash.hModel) {
 		return;
+	}
+
+	// alternative muzzle flash shader in freezetag
+	if (CG_FreezeTag()) {
+		if (weaponNum == WP_BETTY) {
+			flash.customShader = cgs.media.bettyMuzzleFTShader;
+		}
 	}
 
 	// KMA flash color

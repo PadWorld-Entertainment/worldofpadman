@@ -58,40 +58,51 @@ models/weapons2/betty/betty_flash
 	{
 		clampmap models/weapons2/betty/f_betty
 		blendfunc GL_ONE GL_ONE
-                tcmod rotate 360
-        }
-        {
+		tcmod rotate 360
+	}
+	{
 		clampmap models/weapons2/betty/f_betty
 		blendfunc GL_ONE GL_ONE
-                tcmod rotate -129
-                //tcMod stretch sin .8 0.10 0 .7
-        }
+		tcmod rotate -129
+	}
+}
 
+bettyMuzzle_ft
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/betty/f_betty_ft
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate 360
+	}
+	{
+		clampmap models/weapons2/betty/f_betty_ft
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate -129
+	}
 }
 
 models/weapons2/betty/betty
 {
 	nopicmip
 	nomipmaps
-
 	{
-	        map models/weapons2/betty/fir02
+		map models/weapons2/betty/fir02
 		blendfunc GL_ONE GL_ZERO
-                tcMod turb 0 .2 0 .2
-                tcmod scale .4 .4
-                tcMod scroll .09 -.1.1
-                rgbGen lightingdiffuse
-        }
-        {
-                map models/weapons2/betty/fir01
+		tcMod turb 0 .2 0 .2
+		tcmod scale .4 .4
+		tcMod scroll .09 -.1.1
+		rgbGen lightingdiffuse
+	}
+	{
+		map models/weapons2/betty/fir01
 		blendfunc GL_ONE GL_ONE
-                tcMod turb 0 .1 0 .3
-                tcmod scale .2 .2
-                tcMod scroll .1 .09
-                rgbGen lightingdiffuse
-
-        }
-
+		tcMod turb 0 .1 0 .3
+		tcmod scale .2 .2
+		tcMod scroll .1 .09
+		rgbGen lightingdiffuse
+	}
 	{
 		map models/weapons2/betty/betty
 		alphaFunc ge128
@@ -102,9 +113,42 @@ models/weapons2/betty/betty
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
-                rgbGen lightingdiffuse
+		rgbGen lightingdiffuse
 	}
+}
 
+bettySkin_ft
+{
+	nopicmip
+	nomipmaps
+	{
+		map models/weapons2/betty/fir02_ft
+		blendfunc GL_ONE GL_ZERO
+		tcMod turb 0 .2 0 .2
+		tcmod scale .4 .4
+		tcMod scroll .09 -.1.1
+		rgbGen lightingdiffuse
+	}
+	{
+		map models/weapons2/betty/fir01_ft
+		blendfunc GL_ONE GL_ONE
+		tcMod turb 0 .1 0 .3
+		tcmod scale .2 .2
+		tcMod scroll .1 .09
+		rgbGen lightingdiffuse
+	}
+	{
+		map models/weapons2/betty/betty
+		alphaFunc ge128
+		rgbGen lightingdiffuse
+	}
+	{
+		map textures/pad_gfx02/tinpad3
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+	}
 }
 
 // =================
