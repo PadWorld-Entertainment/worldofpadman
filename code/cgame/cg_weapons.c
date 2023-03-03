@@ -456,6 +456,7 @@ NOADDITIONALMODELS:
 			MAKERGB(weaponInfo->flashDlightColor, 1, 1, 1);
 			cgs.media.pumperTrailShader = trap_R_RegisterShader("pumperTrail_ft");
 			cgs.media.pumperFlashShader = trap_R_RegisterShader("pumperFlash_ft");
+			cgs.media.pumperMuzzleFTShader = trap_R_RegisterShader("pumperMuzzle_ft");
 		} else {
 			MAKERGB(weaponInfo->flashDlightColor, 1, 1, 0);
 			cgs.media.pumperTrailShader = trap_R_RegisterShader("pumperTrail");
@@ -1050,7 +1051,9 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 
 	// alternative muzzle flash shader in freezetag
 	if (CG_FreezeTag()) {
-		if (weaponNum == WP_BETTY) {
+		if (weaponNum == WP_PUMPER) {
+			flash.customShader = cgs.media.pumperMuzzleFTShader;
+		} else if (weaponNum == WP_BETTY) {
 			flash.customShader = cgs.media.bettyMuzzleFTShader;
 		} else if (weaponNum == WP_BUBBLEG) {
 			flash.customShader = cgs.media.bubblegMuzzleFTShader;

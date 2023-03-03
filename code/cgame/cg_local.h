@@ -753,6 +753,7 @@ typedef struct {
 	qhandle_t snowMarkShader;
 	qhandle_t freezeIconShader;
 	qhandle_t thawIcon;
+	qhandle_t pumperMuzzleFTShader;
 	qhandle_t bettyMuzzleFTShader;
 	qhandle_t bettySkinFTShader;
 	qhandle_t bubblegMuzzleFTShader;

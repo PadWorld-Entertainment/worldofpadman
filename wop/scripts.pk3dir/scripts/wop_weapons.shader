@@ -293,7 +293,6 @@ models/weapons2/pumper/tubes
 	}
 }
 
-
 models/weapons2/pumper/f_pumper
 {
 	sort additive
@@ -301,15 +300,29 @@ models/weapons2/pumper/f_pumper
 	{
 		clampmap models/weapons2/pumper/f_pumper
 		blendfunc GL_ONE GL_ONE
-                tcmod rotate 360
-        }
-        {
+		tcmod rotate 360
+	}
+	{
 		clampmap models/weapons2/pumper/f_pumper
 		blendfunc GL_ONE GL_ONE
-                tcmod rotate -129
-                //tcMod stretch sin .8 0.10 0 .7
-        }
+		tcmod rotate -129
+	}
+}
 
+pumperMuzzle_ft
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/pumper/f_pumper_ft
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate 360
+	}
+	{
+		clampmap models/weapons2/pumper/f_pumper_ft
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate -129
+	}
 }
 
 // =================
