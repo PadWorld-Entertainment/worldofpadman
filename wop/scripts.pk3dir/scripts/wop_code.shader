@@ -204,6 +204,15 @@ gfx/damage/gum_mrk
 	}
 }
 
+gfx/damage/ice_mrk
+{
+	polygonoffset
+	{
+		map gfx/damage/ice_mrk
+		blendfunc add
+	}
+}
+
 /*
 #######################
 	kma special zoom effects
