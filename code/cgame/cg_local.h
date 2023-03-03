@@ -876,6 +876,7 @@ typedef struct {
 	qhandle_t star;
 	qhandle_t fireBallShader;
 	qhandle_t fireTrailShader;
+	qhandle_t fireExplosionShader;
 	qhandle_t waterTrailShader;
 	qhandle_t waterBallShader;
 	qhandle_t waterBeamShader;
@@ -939,19 +940,7 @@ typedef struct {
 	qhandle_t kmaMarkShader;
 
 	// weapon effect models
-	qhandle_t bulletFlashModel;
-	qhandle_t ringFlashModel;
 	qhandle_t dishFlashModel;
-	qhandle_t lightningExplosionModel;
-
-	// weapon effect shaders
-	qhandle_t railExplosionShader;
-	qhandle_t plasmaExplosionShader;
-	qhandle_t bulletExplosionShader;
-	qhandle_t fireExplosionShader;
-	qhandle_t grenadeExplosionShader;
-	qhandle_t bfgExplosionShader;
-	qhandle_t bloodExplosionShader;
 
 	// special effects models
 	qhandle_t teleportEffectModel;
