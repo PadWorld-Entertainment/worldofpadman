@@ -1,8 +1,6 @@
 textures/pad_garden/jail_alpha_000 // Primary texture ONLY
 {
-
-qer_editorimage textures/pad_garden/jail_alpha_000
-
+qer_editorimage textures/common/alpha_000
 q3map_alphaMod volume
 q3map_alphaMod set 0.00
 surfaceparm nodraw
@@ -14,7 +12,7 @@ qer_trans 0.75
 
 textures/pad_garden/jail_alpha_025
 {
-qer_editorimage textures/pad_garden/jail_alpha_025
+qer_editorimage textures/common/alpha_025
 q3map_alphaMod volume
 q3map_alphaMod set 0.25
 surfaceparm nodraw
@@ -25,7 +23,7 @@ qer_trans 0.75
 
 textures/pad_garden/jail_alpha_050 // Perfect mix of both Primary + Secondary
 {
-qer_editorimage textures/pad_garden/jail_alpha_050
+qer_editorimage textures/common/alpha_050
 q3map_alphaMod volume
 q3map_alphaMod set 0.50
 surfaceparm nodraw
@@ -33,9 +31,10 @@ surfaceparm nonsolid
 surfaceparm trans
 qer_trans 0.75
 }
+
 textures/pad_garden/jail_alpha_075
 {
-qer_editorimage textures/pad_garden/jail_alpha_075
+qer_editorimage textures/common/alpha_075
 q3map_alphaMod volume
 q3map_alphaMod set 0.75
 surfaceparm nodraw
@@ -46,7 +45,7 @@ qer_trans 0.75
 
 textures/pad_garden/jail_alpha_085
 {
-qer_editorimage textures/pad_garden/jail_alpha_085
+qer_editorimage textures/common/alpha_085
 q3map_alphaMod volume
 q3map_alphaMod set 0.85
 surfaceparm nodraw
@@ -57,37 +56,13 @@ qer_trans 0.75
 
 textures/pad_garden/jail_alpha_100 // Secondary texture ONLY
 {
-qer_editorimage textures/pad_garden/jail_alpha_100
+qer_editorimage textures/common/alpha_100
 q3map_alphaMod volume
 q3map_alphaMod set 1.0
 surfaceparm nodraw
 surfaceparm nonsolid
 surfaceparm trans
 qer_trans 0.75
-}
-
-
-textures/pad_garden/vines
-{
-        qer_editorimage textures/pad_garden/vines
-    	surfaceparm trans
-	surfaceparm alphashadow
-   	surfaceparm nonsolid
-	cull none
-        nopicmip
-	{
-		map textures/pad_garden/vines
-		blendFunc GL_ONE GL_ZERO
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc GL_DST_COLOR GL_ZERO
-		depthFunc equal
-	}
 }
 
 textures/pad_garden/vines2
@@ -113,33 +88,6 @@ textures/pad_garden/vines2
 	}
 }
 
-
-textures/pad_garden/schilf01
-{
-        qer_editorimage textures/pad_garden/schilf01
-      //q3map_lightimage textures/pad_garden/schilf01
-        qer_trans 0.5
-        q3map_globaltexture
-        surfaceparm trans
-        surfaceparm nolightmap
-        surfaceparm nonsolid
-        surfaceparm water
-        cull disable
-
-
-        {
-               map textures/pad_garden/schilf01
-               tcMod turb 0.2 0.1 1 0.05
-               tcMod scale 0.5 0.5
-               tcMod scroll 0.01 0.01
-               blendfunc add
-               rgbGen vertex
-
-        }
-
-}
-
-
 textures/pad_garden/schilf02
 {
         qer_editorimage textures/pad_garden/schilf02
@@ -157,7 +105,7 @@ textures/pad_garden/schilf02
                tcMod turb 0.2 0.1 1 0.05
                tcMod scale 0.5 0.5
                tcMod scroll 0.01 0.01
-	       blendFunc filter
+	       blendFunc add
 	       rgbGen identity
 
         }
@@ -167,7 +115,7 @@ textures/pad_garden/schilf02
                tcMod turb 0.2 0.1 1 0.05
                tcMod scale -0.5 -0.5
                tcMod scroll .025 -.001
-	       blendFunc add
+	       blendFunc filter
 	       rgbGen identity
 
         }
@@ -181,59 +129,6 @@ textures/pad_garden/schilf02
 
 
 
-textures/pad_garden/schilf05
-	{
-		qer_editorimage textures/pad_garden/schilf05
-		qer_trans 0.5
-		q3map_globaltexture
-		surfaceparm trans
-		surfaceparm nonsolid
-		surfaceparm water
-
-		cull disable
-
-                            fogparms ( .211 .231 .094 ) 650
-
-		deformVertexes wave 128 sin .65 .65 0 .5
-		{
-			map textures/pad_garden/schilf05
-			blendFunc GL_one GL_one
-			rgbgen identity
-                                          tcMod turb 0.1 0.1 1 0.05
-                                          tcMod scale 0.4 0.4
-                                          tcMod scroll 0.01 0.01
-		}
-
-		{
-			map textures/pad_garden/schilf05
-			blendFunc GL_one GL_one
-                                          tcMod turb 0.05 0.05 0.5 0.05
-                                          tcMod scale 0.5 0.5
-                                          tcMod scroll 0.01 0.01
-		}
-
-
-		{
-			map $lightmap
-			blendFunc GL_dst_color GL_zero
-			rgbgen identity
-		}
-
-
-
-}
-
-textures/pad_garden/gardine
-{
-	q3map_nolightmap
-	q3map_onlyvertexlighting
-    {
-        map textures/pad_garden/gardine
-        blendFunc GL_ONE GL_ONE
-    }
-}
-
-
 textures/pad_garden/tuereglass
 {
         surfaceparm trans
@@ -242,6 +137,27 @@ textures/pad_garden/tuereglass
 
         {
 		map textures/pad_garden/tuereglass
+                tcgen environment
+		blendFunc GL_ONE GL_ONE
+		rgbGen identity
+	}
+        {
+		map $lightmap
+		rgbGen identity
+		blendFunc filter
+	}
+
+}
+
+
+textures/pad_garden/tuerglasdark
+{
+        surfaceparm trans
+	cull none
+	qer_trans 	0.5
+
+        {
+		map textures/pad_garden/tuerglasdark
                 tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -276,6 +192,27 @@ textures/pad_garden/fensterglass
 }
 
 
+textures/pad_garden/fensterglasdark
+{
+        surfaceparm trans
+	cull none
+	qer_trans 	0.5
+
+        {
+		map textures/pad_garden/fensterglasdark
+                tcgen environment
+		blendFunc GL_ONE GL_ONE
+		rgbGen identity
+	}
+        {
+		map $lightmap
+		rgbGen identity
+		blendFunc filter
+	}
+
+}
+
+
 textures/pad_garden/firedrops01
 {
 qer_editorimage textures/pad_garden/firedrops
@@ -295,28 +232,6 @@ rgbGen wave sawtooth 1.000000 0.000000 0.000000 0.129033
 tcMod stretch sawtooth 1.000000 0.000000 0.000000 0.129033
 blendfunc blend
 }
-}
-
-
-textures/pad_garden/firedrops02
-{
-		qer_editorimage textures/pad_garden/firedrops
-		surfaceparm noimpact
-		surfaceparm nolightmap
-		cull none
-		surfaceparm trans
-		surfaceparm nonsolid
-		surfaceparm nodlight
-		deformvertexes autosprite
-		deformvertexes move 0.000043 0.000000 -1100 sawtooth 0 1 0.800000 3
-	{
-		clampmap textures/pad_garden/firedrops
-		tcMod rotate 0.000000
-		AlphaGen wave sawtooth 0.000000 8.000000 0.800000 0.129033
-		rgbGen wave sawtooth 1.000000 0.000000 0.800000 0.129033
-		tcMod stretch sawtooth 1.000000 0.000000 0.800000 0.129033
-		blendfunc blend
-	}
 }
 
 
@@ -375,22 +290,36 @@ textures/pad_garden/padflagblue
 
 textures/pad_garden/fort-pad
 {
-        qer_editorimage textures/pad_garden/fort-pad
-
-
+	qer_editorimage env/fort-pad512_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
-        q3map_lightimage textures/pad_garden/white
-	q3map_sun	0.266383 0.274632 0.358662 100 50 55
-	q3map_surfacelight 230
+	q3map_lightimage textures/colors/hex_ffffe5ff
+	q3map_sun 1.000000 0.913939 0.701350 390 220 40
+	q3map_surfacelight 250
 
-        skyparms env/fort-pad512 - -
-//       {
-//		map textures/pad_garden/fort-pad
-//		blendfunc GL_ONE GL_ONE
-//		tcMod scroll 0.05 0.06
-//		tcMod scale 3 2
-//	}
+	skyparms env/fort-pad512 - -
+}
+
+textures/pad_garden/polter_geist
+{
+	qer_editorimage env/pf-garden512_ft
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	q3map_lightimage textures/colors/hex_1c1ac7ff
+	q3map_sun 0.404654 0.474220 1.000000 330 220 50
+	q3map_surfacelight 160
+
+	skyparms env/pf-garden512 - -
+}
+
+
+textures/pad_garden/nachtfenster
+{
+    q3map_surfacelight 1000
+    surfaceparm nolightmap
+    {
+        map textures/pad_garden/nachtfenster
+    }
 }
 
 
@@ -478,246 +407,6 @@ textures/pad_garden/kreidemotiv03
 		rgbGen vertex
 	}
 }
-
-textures/pad_garden/neon01
-{
-	qer_editorimage textures/pad_garden/neon01
-	surfaceparm nomarks
-	q3map_surfacelight 300
-        {
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/neon01
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/neon01_blend
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_garden/light01
-{
-	surfaceparm nomarks
-	q3map_surfacelight 300
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light01
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light01_blend
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_garden/light02
-{
-	surfaceparm nomarks
-	q3map_surfacelight 300
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light02
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light02_blend
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_garden/light03
-{
-	surfaceparm nomarks
-	q3map_surfacelight 300
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light03
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light03_blend
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_garden/light04
-{
-	surfaceparm nomarks
-	q3map_surfacelight 300
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light04
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light04_blend
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_garden/light05
-{
-	surfaceparm nomarks
-	q3map_surfacelight 300
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light05
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light05_blend
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_garden/light06
-{
-	surfaceparm nomarks
-	q3map_surfacelight 300
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light06
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light06_blend
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_garden/light07
-{
-	surfaceparm nomarks
-	q3map_surfacelight 300
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light07
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/light07_blend
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_garden/lightlamp01
-{
-	qer_editorimage textures/pad_garden/lightlamp01
-	q3map_lightimage textures/pad_garden/lightlamp01_blend
-	surfaceparm nomarks
-	q3map_surfacelight 400
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/lightlamp01
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/lightlamp01_blend
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_garden/lightlamp02
-{
-	q3map_lightimage textures/pad_garden/lightlamp02_blend
-	surfaceparm nomarks
-	q3map_surfacelight 500
-        {
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/lightlamp02
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/lightlamp02_blend
-		blendfunc GL_ONE GL_ONE
-                rgbGen wave sin .5 0.5 1 .1
-	}
-        {
-		map textures/pad_garden/lightlamp02b
-		blendfunc GL_ONE GL_ONE
-                rgbgen wave triangle 1 5 1 3
-	}
-        {
-		map textures/pad_garden/lightlamp02b
-		blendfunc GL_ONE GL_ONE
-                tcmod scale -1 -1
-                 rgbgen wave triangle 1 2 0 7
-	}
-}
-
-
-textures/pad_garden/lightred
-{
-	q3map_lightimage textures/pad_garden/lightred
-	surfaceparm nomarks
-	q3map_surfacelight 300
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_garden/lightred
-		blendFunc filter
-		rgbGen identity
-	}
-        {
-		map textures/pad_garden/lightred
-		blendFunc add
-	}
-
-}
-
-
-
 
 
 textures/pad_garden/bubbles2_1
@@ -1201,37 +890,6 @@ tcMod scroll 0.008 -0.6
 }
 
 
-textures/pad_garden/gardengrass
-{
-q3map_nonplanar
-q3map_shadeangle 60 l
-surfaceparm sandsteps
-qer_editorimage textures/pad_garden/gardengrass
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/gardengrass
-blendFunc filter
-}
-}
-
-textures/pad_garden/gardensand01
-{
-q3map_nonplanar
-q3map_shadeangle 60 l
-surfaceparm sandsteps
-qer_editorimage textures/pad_garden/gardensand01
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/gardensand01
-blendFunc filter
-}
-}
 
 textures/pad_garden/gardensand02
 {
@@ -1297,25 +955,6 @@ map textures/pad_garden/ashes_256
 blendFunc filter
 }
 }
-
-
-textures/pad_garden/ashes_512
-{
-q3map_nonplanar
-q3map_shadeangle 60 l
-qer_editorimage textures/pad_garden/ashes_512
-surfaceparm sandsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/ashes_512
-blendFunc filter
-}
-}
-
-
 
 
 textures/pad_garden/nail
@@ -1556,19 +1195,6 @@ rgbGen identity
 }
 }
 
-textures/pad_garden/rostdoorbig
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/rostbdoorbig
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
 
 textures/pad_garden/rostdoorsmall
 {
@@ -1671,19 +1297,6 @@ rgbGen identity
 }
 }
 
-textures/pad_garden/birdfloor_small
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/birdfloor_small
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
 
 textures/pad_garden/teichbrett2_512
 {
@@ -1699,33 +1312,6 @@ rgbGen identity
 }
 }
 
-textures/pad_garden/rost003csmall
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/rost003csmall
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_garden/rost003bsmall
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/rost003bsmall
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
 
 textures/pad_garden/rostsoft
 {
@@ -1799,20 +1385,6 @@ rgbGen identity
 }
 
 
-textures/pad_garden/liegestoff
-{
-surfaceparm carpetsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/liegestoff
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
 textures/pad_garden/liegestoff02
 {
 surfaceparm carpetsteps
@@ -1827,33 +1399,7 @@ rgbGen identity
 }
 }
 
-textures/pad_garden/liegestoff03
-{
-surfaceparm carpetsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/liegestoff03
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
 
-textures/pad_garden/liegestoff04
-{
-surfaceparm carpetsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_garden/liegestoff04
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
 
 textures/pad_garden/toyblock01
 {
@@ -1977,45 +1523,11 @@ textures/pad_garden/red_flame256
 }
 
 
-textures/pad_garden/poolfog_green
-{
-		qer_editorimage textures/pad_gfx02b/padfog_green
-		surfaceparm	trans
-		surfaceparm	nonsolid
-		surfaceparm	fog
-		surfaceparm	nolightmap
-
-		fogparms ( .211 .231 .094 ) 650
-}
-
-
 textures/pad_garden/ship00
 {
 	qer_editorimage textures/pad_garden/ship00
 	{
 		map textures/pad_garden/ship00
-		rgbGen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad2c
-		blendfunc add
-		rgbGen identity
-		tcGen environment
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-	}
-}
-
-
-
-textures/pad_garden/ship01
-{
-	qer_editorimage textures/pad_garden/ship01
-	{
-		map textures/pad_garden/ship01
 		rgbGen identity
 	}
 	{
@@ -2260,6 +1772,51 @@ textures/pad_garden/radio005
 	{
 		map $lightmap
 		blendfunc filter
+		rgbGen identity
+	}
+}
+
+textures/pad_garden/rostdoorcurve
+{
+          qer_editorimage textures/pad_garden/rostdoorsmall
+           surfaceparm nonsolid
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_garden/rostdoorsmall
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
+}
+
+textures/pad_metal/testlvlcurve
+{
+          qer_editorimage textures/pad_metal/testlvlbase
+           surfaceparm nonsolid
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_metal/testlvlbase
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
+}
+
+textures/pad_wallout/wall_stonecurve
+{
+          qer_editorimage textures/pad_wallout/wall_stone043
+           surfaceparm nonsolid
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_wallout/wall_stone043
+		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
 }
