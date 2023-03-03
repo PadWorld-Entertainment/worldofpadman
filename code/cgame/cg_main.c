@@ -1093,16 +1093,15 @@ static void CG_RegisterGraphics(void) {
 		}
 	}
 
-	// wall marks
+	// surface damage marks
 	cgs.media.burnMarkShader = trap_R_RegisterShader("gfx/damage/burn_med_mrk");
-	cgs.media.holeMarkShader = trap_R_RegisterShader("gfx/damage/hole_lg_mrk");
 	cgs.media.energyMarkShader = trap_R_RegisterShader("gfx/damage/plasma_mrk");
+	cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/foam_mrk");
+	cgs.media.gumMarkShader = trap_R_RegisterShader("gfx/damage/gum_mrk");
+	cgs.media.kmaMarkShader = trap_R_RegisterShader("kmaMark");
 	cgs.media.shadowMarkShader = trap_R_RegisterShader("markShadow");
 	cgs.media.wakeMarkShader = trap_R_RegisterShader("wake");
 	cgs.media.waterMarkShader = trap_R_RegisterShader("waterMark");
-	cgs.media.kmaMarkShader = trap_R_RegisterShader("kmaMark");
-	cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/foam_mrk");
-	cgs.media.gumMarkShader = trap_R_RegisterShader("gfx/damage/gum_mrk");
 
 	// register the inline models
 	cgs.numInlineModels = trap_CM_NumInlineModels();

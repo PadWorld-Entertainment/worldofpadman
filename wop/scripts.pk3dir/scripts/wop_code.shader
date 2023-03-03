@@ -148,24 +148,14 @@ teleEffectGreenFP
 }
 
 // =================
-// WEAPON MARKS
+// SURFACE DAMAGE MARKS
 // =================
 
-gfx/damage/burn_med_mrk
+gfx/damage/burn_mrk
 {
 	polygonOffset
 	{
-		map gfx/damage/burn_med_mrk
-		blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
-		rgbGen exactVertex
-	}
-}
-
-gfx/damage/hole_lg_mrk
-{
-	polygonOffset
-	{
-		map gfx/damage/hole_lg_mrk
+		map gfx/damage/burn_mrk
 		blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
 		rgbGen exactVertex
 	}

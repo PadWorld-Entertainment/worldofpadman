@@ -750,7 +750,6 @@ typedef struct {
 	// freezetag
 	qhandle_t FreezeScreenShader;
 	qhandle_t iceblockModel;
-	qhandle_t snowMarkShader;
 	qhandle_t freezeIconShader;
 	qhandle_t thawIcon;
 	qhandle_t pumperMuzzleFTShader;
@@ -777,12 +776,14 @@ typedef struct {
 
 	qhandle_t botSkillShaders[5];
 
-	// wall mark shaders
-	qhandle_t wakeMarkShader;
-
+	// surface damage mark shaders
 	qhandle_t burnMarkShader;
-	qhandle_t holeMarkShader;
 	qhandle_t energyMarkShader;
+	qhandle_t foamMarkShader;
+	qhandle_t gumMarkShader;
+	qhandle_t snowMarkShader;
+	qhandle_t wakeMarkShader;
+	qhandle_t waterMarkShader;
 
 	// powerup shaders
 	qhandle_t invisShader;
@@ -844,7 +845,6 @@ typedef struct {
 	qhandle_t zoomKMAaura;
 	qhandle_t zoomKMAbluescreen;
 
-	qhandle_t foamMarkShader;
 	qhandle_t StationRingShader;
 	qhandle_t PadPowerShader;
 	qhandle_t PadPowerPunchySkin;
@@ -892,10 +892,6 @@ typedef struct {
 
 	qhandle_t bigDropModel;
 	qhandle_t smallDropModel;
-
-	qhandle_t waterMarkShader;
-	qhandle_t gumMarkShader;
-
 	qhandle_t boasterExplosionShader;
 	qhandle_t waterExplosionShader;
 	qhandle_t fireDropModel;
