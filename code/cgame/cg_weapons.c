@@ -1757,11 +1757,20 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		mod = cgs.media.dishFlashModel;
 		shader = cgs.media.waterExplosionShader;
 		sfx = cgs.media.BalloonyExplosion;
-		mark = cgs.media.burnMarkShader;
+		if (CG_FreezeTag()) {
+			mark = cgs.media.snowMarkShader;
+		} else {
+			mark = cgs.media.burnMarkShader;
+		}
 		radius = 64;
 		light = 300;
 		duration = 600;
 		isSprite = qtrue;
+		if (CG_FreezeTag()) {
+			lightColor[0] = 0.0f;
+			lightColor[1] = 0.2f;
+			lightColor[2] = 1.0f;
+		}
 		VectorSet(sprVel, 0, 0, 300);
 		CG_GenerateParticles(cgs.media.bigDropModel, 0, origin, 16, sprVel, 120, 200, 30, 0, cg.time, 500, 70, 0, 0, 0,
 							 0, LEF_GRAVITY, 0);
