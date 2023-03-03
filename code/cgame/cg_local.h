@@ -780,7 +780,6 @@ typedef struct {
 	// wall mark shaders
 	qhandle_t wakeMarkShader;
 
-	qhandle_t bulletMarkShader;
 	qhandle_t burnMarkShader;
 	qhandle_t holeMarkShader;
 	qhandle_t energyMarkShader;

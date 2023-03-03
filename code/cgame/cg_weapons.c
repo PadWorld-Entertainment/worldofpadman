@@ -1750,7 +1750,6 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		isSprite = qtrue;
 		duration = 400;
 		sfx = 0;
-		mark = cgs.media.bulletMarkShader;
 		radius = 16;
 		break;
 	case WP_BALLOONY:
