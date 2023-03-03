@@ -445,8 +445,14 @@ NOADDITIONALMODELS:
 	case WP_NIPPER:
 		// HERBY: Nippers defs
 		weaponInfo->flashSound[0] = trap_S_RegisterSound("sound/weapons/nipper/flash", qfalse);
-		cgs.media.nipperBallShader = trap_R_RegisterShader("nipperBall");
-		cgs.media.nipperWaveShader = trap_R_RegisterShader("nipperWave");
+		if (CG_FreezeTag()) {
+			cgs.media.nipperBallShader = trap_R_RegisterShader("nipperBall_ft");
+			cgs.media.nipperWaveShader = trap_R_RegisterShader("nipperWave_ft");
+			cgs.media.nipperMuzzleFTShader = trap_R_RegisterShader("nipperMuzzle_ft");
+		} else {
+			cgs.media.nipperBallShader = trap_R_RegisterShader("nipperBall");
+			cgs.media.nipperWaveShader = trap_R_RegisterShader("nipperWave");
+		}
 		break;
 
 	case WP_PUMPER:
@@ -1051,7 +1057,9 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 
 	// alternative muzzle flash shader in freezetag
 	if (CG_FreezeTag()) {
-		if (weaponNum == WP_PUMPER) {
+		if (weaponNum == WP_NIPPER) {
+			flash.customShader = cgs.media.nipperMuzzleFTShader;
+		} else if (weaponNum == WP_PUMPER) {
 			flash.customShader = cgs.media.pumperMuzzleFTShader;
 		} else if (weaponNum == WP_BETTY) {
 			flash.customShader = cgs.media.bettyMuzzleFTShader;

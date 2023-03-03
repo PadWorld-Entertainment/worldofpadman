@@ -162,15 +162,29 @@ models/weapons2/nipper/f_nipper
 	{
 		clampmap models/weapons2/nipper/f_nipper
 		blendfunc GL_ONE GL_ONE
-                tcmod rotate 360
-        }
-        {
+		tcmod rotate 360
+	}
+	{
 		clampmap models/weapons2/nipper/f_nipper
 		blendfunc GL_ONE GL_ONE
-                tcmod rotate -129
-                //tcMod stretch sin .8 0.10 0 .7
-        }
+		tcmod rotate -129
+	}
+}
 
+nipperMuzzle_ft
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/nipper/f_nipper_ft
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate 360
+	}
+	{
+		clampmap models/weapons2/nipper/f_nipper_ft
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate -129
+	}
 }
 
 models/weapons2/nipper/nipper2_trans

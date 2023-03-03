@@ -281,10 +281,26 @@ nipperWave
 	{
 		map models/weaponsfx/nipperwave
 		blendFunc add
-        rgbGen wave inversesawtooth 0 1 0 1.5
+		rgbGen wave inversesawtooth 0 1 0 1.5
 	}
 }
 
+nipperBall_ft
+{
+	{
+		map models/weaponsfx/nipperball_ft
+		blendFunc add
+	}
+}
+
+nipperWave_ft
+{
+	{
+		map models/weaponsfx/nipperwave_ft
+		blendFunc add
+		rgbGen wave inversesawtooth 0 1 0 1.5
+	}
+}
 
 // =================
 // IMPERIUS
