@@ -1094,7 +1094,7 @@ static void CG_RegisterGraphics(void) {
 	}
 
 	// surface damage marks
-	cgs.media.burnMarkShader = trap_R_RegisterShader("gfx/damage/burn_med_mrk");
+	cgs.media.burnMarkShader = trap_R_RegisterShader("gfx/damage/burn_mrk");
 	cgs.media.energyMarkShader = trap_R_RegisterShader("gfx/damage/plasma_mrk");
 	cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/foam_mrk");
 	cgs.media.gumMarkShader = trap_R_RegisterShader("gfx/damage/gum_mrk");

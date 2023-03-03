@@ -176,7 +176,7 @@ gfx/damage/snow_mrk
 {
 	polygonOffset
 	{
-		map gfx/damage/burn_med_mrk
+		map gfx/damage/burn_mrk
 		blendFunc add
 		rgbGen vertex
 		alphaGen vertex
