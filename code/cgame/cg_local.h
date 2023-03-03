@@ -755,6 +755,8 @@ typedef struct {
 	qhandle_t thawIcon;
 	qhandle_t bettyMuzzleFTShader;
 	qhandle_t bettySkinFTShader;
+	qhandle_t bubblegMuzzleFTShader;
+	qhandle_t bubblegSkinFTShader;
 
 	qhandle_t tracerShader;
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];

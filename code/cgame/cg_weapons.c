@@ -509,6 +509,10 @@ NOADDITIONALMODELS:
 		// HERBY: BUBBLE G
 		weaponInfo->missileModel = trap_R_RegisterModel("models/weaponsfx/gum");
 		weaponInfo->flashSound[0] = trap_S_RegisterSound("sound/weapons/bubbleg/flash", qfalse);
+		if (CG_FreezeTag()) {
+			cgs.media.bubblegMuzzleFTShader = trap_R_RegisterShader("bubblegMuzzle_ft");
+			cgs.media.bubblegSkinFTShader = trap_R_RegisterShader("bubblegSkin_ft");
+		}
 		break;
 
 	case WP_SPLASHER:
@@ -941,6 +945,8 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	if (CG_FreezeTag()) {
 		if (weaponNum == WP_BETTY) {
 			gun.customShader = cgs.media.bettySkinFTShader;
+		} else if (weaponNum == WP_BUBBLEG) {
+			gun.customShader = cgs.media.bubblegSkinFTShader;
 		}
 	}
 
@@ -1046,6 +1052,8 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	if (CG_FreezeTag()) {
 		if (weaponNum == WP_BETTY) {
 			flash.customShader = cgs.media.bettyMuzzleFTShader;
+		} else if (weaponNum == WP_BUBBLEG) {
+			flash.customShader = cgs.media.bubblegMuzzleFTShader;
 		}
 	}
 

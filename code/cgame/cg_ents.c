@@ -271,7 +271,7 @@ static void CG_Item(centity_t *cent) {
 
 	memset(&ent, 0, sizeof(ent));
 
-	// autorotate at one of two speeds
+	// auto rotate at one of two speeds
 	if (item->giType == IT_POWERUP || item->giType == IT_HOLDABLE) {
 		ent.oldframe = ent.frame;
 
@@ -280,7 +280,7 @@ static void CG_Item(centity_t *cent) {
 
 		AxisCopy(cg.autoAxisPadPowerups, ent.axis);
 
-		ent.frame = 0; // so the mainmodel will not be animated
+		ent.frame = 0; // so the main model will not be animated
 	} else if (item->giType == IT_HEALTH) {
 		VectorCopy(cg.autoAnglesFast, cent->lerpAngles);
 		AxisCopy(cg.autoAxisFast, ent.axis);
@@ -290,9 +290,9 @@ static void CG_Item(centity_t *cent) {
 	}
 
 	wi = NULL;
-	// the weapons have their origin where they attatch to player
+	// the weapons have their origin where they attach to player
 	// models, so we need to offset them or they will rotate
-	// eccentricly
+	// eccentrically
 	if (item->giType == IT_WEAPON) {
 		wi = &cg_weapons[item->giTag];
 		cent->lerpOrigin[0] -= wi->weaponMidpoint[0] * ent.axis[0][0] + wi->weaponMidpoint[1] * ent.axis[1][0] +
@@ -340,6 +340,15 @@ static void CG_Item(centity_t *cent) {
 		VectorScale(ent.axis[1], 1.5, ent.axis[1]);
 		VectorScale(ent.axis[2], 1.5, ent.axis[2]);
 		ent.nonNormalizedAxes = qtrue;
+	}
+
+	// alternative weapon skin shaders in freezetag
+	if (CG_FreezeTag() && item->giType == IT_WEAPON) {
+		if (item->giTag == WP_BETTY) {
+			ent.customShader = cgs.media.bettySkinFTShader;
+		} else if (item->giTag == WP_BUBBLEG) {
+			ent.customShader = cgs.media.bubblegSkinFTShader;
+		}
 	}
 
 	// add to refresh list

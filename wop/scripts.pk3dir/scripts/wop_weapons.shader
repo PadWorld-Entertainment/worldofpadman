@@ -411,7 +411,6 @@ models/weapons2/splasher/splasherwater
 }
 
 
-
 // =================
 // BUBBLE G.
 // =================
@@ -423,41 +422,51 @@ models/weapons2/bubbleg/bubbleg_flash
 	{
 		clampmap models/weapons2/bubbleg/f_bubbleg
 		blendfunc GL_ONE GL_ONE
-                tcmod rotate 360
-        }
-        {
+		tcmod rotate 360
+	}
+	{
 		clampmap models/weapons2/bubbleg/f_bubbleg
 		blendfunc GL_ONE GL_ONE
-                tcmod rotate -129
-                //tcMod stretch sin .8 0.10 0 .7
-        }
+		tcmod rotate -129
+	}
 
 }
 
+bubblegMuzzle_ft
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/bubbleg/f_bubbleg_ft
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate 360
+	}
+	{
+		clampmap models/weapons2/bubbleg/f_bubbleg_ft
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate -129
+	}
+
+}
 
 models/weapons2/bubbleg/bubbleg
 {
 	nopicmip
 	nomipmaps
-
 	{
-	        map models/weapons2/bubbleg/watbub02
+		map models/weapons2/bubbleg/bub02
 		blendfunc GL_ONE GL_ZERO
-                tcMod turb 0 .2 0 .2
-
-                tcMod scroll .09 -.1.1
-                rgbGen lightingdiffuse
-        }
-        {
-                map models/weapons2/bubbleg/watbub
+		tcMod turb 0 .2 0 .2
+		tcMod scroll .09 -.1.1
+		rgbGen lightingdiffuse
+	}
+	{
+		map models/weapons2/bubbleg/bub01
 		blendfunc GL_ONE GL_ONE
-                tcMod turb 0 .1 0 .3
-
-                tcMod scroll .1 .09
-                rgbGen lightingdiffuse
-
-        }
-
+		tcMod turb 0 .1 0 .3
+		tcMod scroll .1 .09
+		rgbGen lightingdiffuse
+	}
 	{
 		map models/weapons2/bubbleg/bubbleg
 		alphaFunc ge128
@@ -468,9 +477,40 @@ models/weapons2/bubbleg/bubbleg
 		blendfunc GL_ONE GL_ONE
 		tcmod scale .5 .5
 		tcGen environment
-                rgbGen lightingdiffuse
+		rgbGen lightingdiffuse
 	}
+}
 
+bubblegSkin_ft
+{
+	nopicmip
+	nomipmaps
+	{
+		map models/weapons2/bubbleg/bub02_ft
+		blendfunc GL_ONE GL_ZERO
+		tcMod turb 0 .2 0 .2
+		tcMod scroll .09 -.1.1
+		rgbGen lightingdiffuse
+	}
+	{
+		map models/weapons2/bubbleg/bub01_ft
+		blendfunc GL_ONE GL_ONE
+		tcMod turb 0 .1 0 .3
+		tcMod scroll .1 .09
+		rgbGen lightingdiffuse
+	}
+	{
+		map models/weapons2/bubbleg/bubbleg
+		alphaFunc ge128
+		rgbGen lightingdiffuse
+	}
+	{
+		map textures/pad_gfx02/tinpad3
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+	}
 }
 
 // =================
