@@ -48,7 +48,7 @@ set(SHADERS
     wop_code.shader
     pad_attic.shader
     pad_trash.shader
-    pad_gamemodels.shader
+    wop_gamemodels.shader
 )
 foreach (SHADER ${SHADERS})
     shader_validation(wop ${SHADER})
