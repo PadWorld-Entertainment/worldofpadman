@@ -324,7 +324,7 @@ CG_RegisterWeapon
 The server says this item is used on this level
 =================
 */
-void CG_RegisterWeapon(int weaponNum) {
+static void CG_RegisterWeapon(int weaponNum) {
 	weaponInfo_t *weaponInfo;
 	const gitem_t *item;
 	const gitem_t *ammo;

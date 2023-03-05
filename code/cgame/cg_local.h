@@ -1494,7 +1494,6 @@ void CG_PrevWeapon_f(void);
 void CG_Weapon_f(void);
 void CG_WeaponSRWC(int weapNum);
 
-void CG_RegisterWeapon(int weaponNum);
 void CG_RegisterItemVisuals(int itemNum);
 
 void CG_FireWeapon(centity_t *cent);
