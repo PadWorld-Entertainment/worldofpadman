@@ -27,6 +27,11 @@ qboolean CG_FreezeTag(void) {
 }
 
 qboolean FT_LocalIsFrozen(void) {
+	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+		if (!(cg.snap->ps.pm_flags & PMF_FOLLOW)) {
+			return qfalse;
+		}
+	}
 	return cg.snap->ps.powerups[PW_FREEZE];
 }
 

@@ -2323,25 +2323,27 @@ static void CG_DrawBambamIcon(centity_t *cent) {
 }
 
 static void CG_FreezeTagThawerProgressBar(void) {
-	int x, y, barposy, barposx;
-	int iconsize = 50;
-	int barheight = 10;
-	int barsegments = 6;
-	int segmentwidth = 10;
-	int distance = 5;
-
 	static const vec4_t blue = {0.75f, 0.75f, 0.75f, 1.0f};
 	static const vec4_t orange = {0.75f, 0.0f, 0.0f, 1.0f};
-	int i;
 
-	x = cg_ft_thawerIconX.integer;
-	y = cg_ft_thawerIconY.integer;
+	const int iconsize = 50;
+	const int barheight = 10;
+	const int barsegments = 6;
+	const int segmentwidth = 10;
+	const int distance = 5;
+	const int x = cg_ft_thawerIconX.integer;
+	const int y = cg_ft_thawerIconY.integer;
+	const int barposy = y + iconsize / 2 + distance + barheight / 2;
+	const int barposx = x - barsegments * segmentwidth / 2;
 
-	barposy = y + iconsize / 2 + distance + barheight / 2;
-	barposx = x - barsegments * segmentwidth / 2;
+	int i = barsegments - cg.predictedPlayerState.stats[STAT_CHILL];
 
-	i = cg.predictedPlayerState.stats[STAT_CHILL];
-	i = barsegments - i;
+	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+		if (!(cg.snap->ps.pm_flags & PMF_FOLLOW)) {
+			return;
+		}
+	}
+
 	if (i < 6) {
 		if (i > 6)
 			i = 6;
@@ -2425,6 +2427,7 @@ static void CG_DrawFreezeTag(void) {
 	if (!CG_FreezeTag()) {
 		return;
 	}
+
 	if (FT_LocalIsFrozen()) {
 		CG_FreezeTagFrozen();
 		return;
