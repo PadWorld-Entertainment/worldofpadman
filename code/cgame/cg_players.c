@@ -1520,19 +1520,29 @@ static void CG_BreathPuffs(const centity_t *cent, const refEntity_t *head) {
 
 	ci = &cgs.clientinfo[cent->currentState.number];
 
-	if (!cg_enableBreath.integer) {
+ 	if (!cg_enableBreath.integer && !CG_FreezeTag()) {
 		return;
 	}
+
 	if (cent->currentState.number == cg.snap->ps.clientNum && !cg.renderingThirdPerson) {
 		return;
 	}
+	
+	// don't enable it in freezetag as long as the player is not frozen
+	if (CG_FreezeTag() && !FT_PlayerIsFrozen(cent)) {
+		return;
+	}
+
 	if (cent->currentState.eFlags & EF_DEAD) {
 		return;
 	}
+	
 	contents = CG_PointContents(head->origin, 0);
+	
 	if (contents & (CONTENTS_WATER | CONTENTS_SLIME | CONTENTS_LAVA)) {
 		return;
 	}
+	
 	if (ci->breathPuffTime > cg.time) {
 		return;
 	}
