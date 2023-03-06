@@ -42,6 +42,8 @@
 #define ID_CLEARLIST (ID_SWITCH + 1)
 #define ID_PLAYALL (ID_CLEARLIST + 1)
 
+#define SWITCHDELAY 500
+
 typedef enum {
 	MUSICSWITCH_OUT = -1,
 	MUSICSWITCH_NONE = 0,
@@ -471,12 +473,11 @@ static void MusicMenu_Draw(void) {
 		}
 		// else MUSICSWITCH_IN
 		else if (musicMenu.switchState > 0) {
-			// FIXME: Magical constant 1000
-			switchOffset = (1000 - (uis.realtime - musicMenu.switchTime));
+			switchOffset = (SWITCHDELAY - (uis.realtime - musicMenu.switchTime));
 		}
 
 		switchOffset *= switchOffset;
-		switchOffset *= 0.001f;
+		switchOffset *= 0.01f;
 
 		for (t = 0; t < MAX_TRACKS; ++t) {
 			musicMenu.tracks[t].generic.x = (188 + switchOffset);
@@ -486,7 +487,7 @@ static void MusicMenu_Draw(void) {
 		musicMenu.playAll.x = (925 + switchOffset * FACTOR1024);
 		musicMenu.exit.x = (954 + switchOffset * FACTOR1024);
 
-		if ((uis.realtime - musicMenu.switchTime) > 1000) {
+		if ((uis.realtime - musicMenu.switchTime) > SWITCHDELAY) {
 			if (MUSICSWITCH_OUT == musicMenu.switchState) {
 				trap_S_StartLocalSound(menuSwitchSound, CHAN_LOCAL_SOUND);
 				musicMenu.switchState = MUSICSWITCH_IN;
@@ -668,5 +669,5 @@ void MusicMenu_Open(void) {
 	UI_PushMenu(&musicMenu.menu);
 
 	musicMenu.switchState = MUSICSWITCH_IN;
-	musicMenu.switchTime = (uis.realtime + 1000);
+	musicMenu.switchTime = (uis.realtime + SWITCHDELAY);
 }
