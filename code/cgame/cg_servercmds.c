@@ -657,8 +657,7 @@ static void CG_ServerCommand(void) {
 			break;
 
 		case CLIENT_DO_IT_LPS_LOST:
-			i = (int)(random() * 1.9999f);
-			trap_S_StartLocalSound(cgs.media.youLoseSound[i], CHAN_ANNOUNCER);
+			trap_S_StartLocalSound(cgs.media.loseLPSSound, CHAN_ANNOUNCER);
 			break;
 
 		// TODO: Remove!

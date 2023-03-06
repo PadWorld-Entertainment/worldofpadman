@@ -686,10 +686,9 @@ static void CG_RegisterSounds(void) {
 		cgs.media.oneLifeSound = trap_S_RegisterSound("sound/feedback/count/1_life", qtrue);
 		cgs.media.twoLivesSound = trap_S_RegisterSound("sound/feedback/count/2_lives", qtrue);
 		cgs.media.threeLivesSound = trap_S_RegisterSound("sound/feedback/count/3_lives", qtrue);
-		cgs.media.youWinSound[0] = trap_S_RegisterSound("sound/feedback/you_win", qtrue);
-		cgs.media.youWinSound[1] = trap_S_RegisterSound("sound/feedback/congrats", qtrue);
-		cgs.media.youLoseSound[0] = trap_S_RegisterSound("sound/feedback/you_lose", qtrue);
-		cgs.media.youLoseSound[1] = trap_S_RegisterSound("sound/feedback/better_luck", qtrue);
+		cgs.media.winLPSSound[0] = trap_S_RegisterSound("sound/feedback/you_win", qtrue);
+		cgs.media.winLPSSound[1] = trap_S_RegisterSound("sound/feedback/congrats", qtrue);
+		cgs.media.loseLPSSound = trap_S_RegisterSound("sound/feedback/you_lose", qtrue);
 	}
 
 	if (cgs.gametype == GT_BALLOON || cg_buildScript.integer) {

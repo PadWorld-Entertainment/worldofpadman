@@ -1024,8 +1024,8 @@ typedef struct {
 
 	sfxHandle_t wrongSprayWallSound[4];
 	sfxHandle_t loseFFASound;
-	sfxHandle_t youWinSound[2];
-	sfxHandle_t youLoseSound[2];
+	sfxHandle_t loseLPSSound;
+	sfxHandle_t winLPSSound[2];
 
 	sfxHandle_t suddenDeathSound;
 
