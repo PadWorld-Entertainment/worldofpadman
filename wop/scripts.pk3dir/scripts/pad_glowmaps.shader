@@ -1,6 +1,6 @@
 textures/pad_glowsky/padbox
 {
-	q3map_editorimage env/padboxglow_up
+	qer_editorimage env/padboxglow_up
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky

@@ -248,7 +248,7 @@ textures/pad_tex02/padlolly_blue
 
 textures/pad_tex02/padbox3
 {
-	q3map_editorimage env/padbox3_up
+	qer_editorimage env/padbox3_up
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
@@ -273,7 +273,7 @@ textures/pad_tex02/padbox3
 
 textures/pad_tex02/padbox4
 {
-	q3map_editorimage env/padbox4_up
+	qer_editorimage env/padbox4_up
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
@@ -292,7 +292,7 @@ textures/pad_tex02/padbox4
 
 textures/pad_tex02/padbox5
 {
-	q3map_editorimage env/padbox5_up
+	qer_editorimage env/padbox5_up
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
@@ -317,7 +317,7 @@ textures/pad_tex02/padbox5
 
 textures/pad_tex02/padbox6
 {
-	q3map_editorimage env/padbox6_up
+	qer_editorimage env/padbox6_up
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
