@@ -2204,6 +2204,8 @@ static void CG_DrawBalloonIcon(const centity_t *cent) {
 
 static void CG_DrawHealthstationIcon(const centity_t *cent) {
 	vec3_t iconPos;
+	vec3_t entPos;
+	vec3_t mins, maxs, center;
 	float size, x, y;
 	float squaredDist;
 
@@ -2230,10 +2232,19 @@ static void CG_DrawHealthstationIcon(const centity_t *cent) {
 		return;
 	}
 
+	// get the center of the health station model and add it to the z axis for the trace. We should
+	// not aim for the bottom or top of the health station, but to the center. This way we ensure that
+	// if a health station is a little bit hidden in the ground surface, the trace still hits the
+	// entity, not the surface brush the entity is hidden in.
+	VectorCopy(cent->currentState.origin, entPos);
+	trap_R_ModelBounds(cgs.media.HealthStation_Base, mins, maxs);
+	VectorAdd(mins, maxs, center);
+	entPos[2] += center[2] / 2.0f;
+
 	// don't draw the icon if the health station is visible and close
-	if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin) < Square(250)) {
+	if (DistanceSquared(cg.refdef.vieworg, entPos) < Square(250.0f)) {
 		trace_t trace;
-		CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin, cg.snap->ps.clientNum, MASK_OPAQUE);
+		CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, entPos, cg.snap->ps.clientNum, MASK_OPAQUE);
 		if (1.0 == trace.fraction) {
 			return;
 		}
