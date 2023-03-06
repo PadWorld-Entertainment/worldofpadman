@@ -246,13 +246,38 @@ textures/pad_tex02/padlolly_blue
 
 }
 
+textures/pad_tex02/padbox2
+{
+	qer_editorimage env/padbox2_up
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	surfaceparm sky
+	q3map_lightimage textures/colors/hex_ccccffff
+	q3map_sun	1 1 1 180 -58 90
+	q3map_surfacelight 200
+
+	skyparms env/padbox2 - -
+	{
+		map textures/pad_tex02/skystuff2
+		blendfunc GL_ONE GL_ONE
+		tcMod scroll 0.01 0.03
+		tcMod scale 1 2
+	}
+	{
+		map textures/pad_tex02/skystuff2b
+		blendfunc GL_ONE GL_ONE
+		tcMod scroll -0.01 -0.03
+		tcMod scale 1 2
+	}
+}
+
 textures/pad_tex02/padbox3
 {
 	qer_editorimage env/padbox3_up
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
-	q3map_lightimage textures/pad_tex02/padbox_yel
+	q3map_lightimage textures/colors/hex_ffffccff
 	q3map_sun	1 1 1 180 -58 90
 	q3map_surfacelight 200
 
@@ -277,7 +302,7 @@ textures/pad_tex02/padbox4
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
-	q3map_lightimage textures/pad_tex02/padbox_blu
+	q3map_lightimage textures/colors/hex_dadaffff
 	q3map_sun	1 1 1 180 -58 90
 	q3map_surfacelight 200
 
@@ -296,19 +321,19 @@ textures/pad_tex02/padbox5
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
-	q3map_lightimage textures/pad_tex02/padbox_ora
+	q3map_lightimage textures/colors/hex_ffd8bfff
 	q3map_sun	1 1 1 190 -58 90
 	q3map_surfacelight 200
 
 	skyparms env/padbox5 - -
 	{
-		map textures/pad_tex02/skystuff2
+		map textures/pad_tex02/skystuff5
 		blendfunc GL_ONE GL_ONE
 		tcMod scroll 0.02 0.04
 		tcMod scale 1 2
 	}
 	{
-		map textures/pad_tex02/skystuff2b
+		map textures/pad_tex02/skystuff5b
 		blendfunc GL_ONE GL_ONE
 		tcMod scroll -0.01 -0.03
 		tcMod scale 1 2
@@ -321,7 +346,7 @@ textures/pad_tex02/padbox6
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
-	q3map_lightimage textures/pad_tex02/padbox_yel
+	q3map_lightimage textures/colors/hex_ffffccff
 	q3map_sun	1 1 1 180 -58 90
 	q3map_surfacelight 200
 

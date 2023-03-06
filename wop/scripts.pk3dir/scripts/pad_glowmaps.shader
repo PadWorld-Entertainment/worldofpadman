@@ -1,22 +1,22 @@
 textures/pad_glowsky/padbox
 {
-	qer_editorimage env/padboxglow_up
+	qer_editorimage env/padbox2_up
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
-	q3map_lightimage textures/pad_glowsky/padbox_white
+	q3map_lightimage textures/colors/hex_ccccffff
 	q3map_sun 1 1 1 100 -58 58
 	q3map_surfacelight 90
 
-	skyparms env/padboxglow - -
+	skyparms env/padbox2 - -
 	{
-		map textures/pad_glowsky/sky
+		map textures/pad_tex02/skystuff2b
 		blendfunc GL_ONE GL_ONE
 		tcMod scroll 0.01 0.02
 		tcMod scale 1 2
 	}
 	{
-		map textures/pad_glowsky/sky2
+		map textures/pad_tex02/skystuff2
 		blendfunc GL_ONE GL_ONE
 		tcMod scroll -0.02 -0.01
 		tcMod scale 1 2
