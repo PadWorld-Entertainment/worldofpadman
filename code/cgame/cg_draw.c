@@ -2099,7 +2099,7 @@ static void DrawBigScore(int y, int score) {
 // half captured -> alternate between white and team color
 // uncaptured -> white
 // something is wrong: yellow
-static void CG_GetBalloonStateColor(entityState_t *s, vec4_t col) {
+static void CG_GetBalloonStateColor(const entityState_t *s, vec4_t col) {
 	static const vec4_t red = {1.0f, 0.0f, 0.0f, 1.0f};
 	static const vec4_t blue = {0.0f, 0.0f, 1.0f, 1.0f};
 	static const vec4_t white = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -2167,7 +2167,7 @@ static void CG_GetBalloonColor(int index, vec4_t color) {
 	}
 }
 
-static void CG_DrawBalloonIcon(centity_t *cent) {
+static void CG_DrawBalloonIcon(const centity_t *cent) {
 	vec4_t iconColor;
 	vec3_t iconPos;
 	float squaredDist;
@@ -2282,7 +2282,7 @@ static void CG_DrawSprayroomIcon(centity_t *cent) {
 	CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size), cgs.media.sprayroomIcon);
 }
 
-static void CG_DrawBambamIcon(centity_t *cent) {
+static void CG_DrawBambamIcon(const centity_t *cent) {
 	trace_t trace;
 	vec3_t start, end;
 	float x, y;
