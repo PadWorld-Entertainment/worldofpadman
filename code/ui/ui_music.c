@@ -591,6 +591,9 @@ void MusicMenu_Open(void) {
 
 	MusicMenu_Cache();
 
+	if (musicInfo.playOrder) {
+		musicMenu.currentAlbum = musicInfo.playOrder->album;
+	}
 	musicMenu.menu.wrapAround = qtrue;
 	musicMenu.menu.fullscreen = qfalse;
 	musicMenu.menu.draw = MusicMenu_Draw;
