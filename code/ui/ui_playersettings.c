@@ -644,7 +644,6 @@ UI_PlayerSettings_Update
 =================
 */
 static void UI_PlayerSettings_Update(void) {
-
 	if (ps_playericons.nummodel > DISPLAYED_MODELS) {
 		s_playersettings.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		s_playersettings.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
@@ -673,14 +672,13 @@ static void UI_PlayerSettings_Update(void) {
 			s_playersettings.arrowup.generic.flags &= ~QMF_GRAYED;
 		}
 
-		if (s_playersettings.firstskin + 2 < s_playersettings.chosenskins[1]) {
+		if (s_playersettings.firstskin + (SKINSPERPAGE - 1) < s_playersettings.chosenskins[1]) {
 			s_playersettings.arrowdown.generic.flags &= ~QMF_GRAYED;
 		}
 	} else {
 		s_playersettings.arrowup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 		s_playersettings.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
-
 }
 
 /*
