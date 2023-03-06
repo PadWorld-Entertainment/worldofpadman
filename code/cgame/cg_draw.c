@@ -2170,7 +2170,6 @@ static void CG_GetBalloonColor(int index, vec4_t color) {
 static void CG_DrawBalloonIcon(centity_t *cent) {
 	vec4_t iconColor;
 	vec3_t iconPos;
-	trace_t trace;
 	float squaredDist;
 	float size, x, y;
 
@@ -2188,9 +2187,10 @@ static void CG_DrawBalloonIcon(centity_t *cent) {
 	}
 
 	// don't draw the icon if the box model is visible and close
-	CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin, cg.snap->ps.clientNum, MASK_OPAQUE);
-	if (1.0 == trace.fraction) {
-		if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin) < Square(250)) {
+	if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin) < Square(250)) {
+		trace_t trace;
+		CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin, cg.snap->ps.clientNum, MASK_OPAQUE);
+		if (1.0 == trace.fraction) {
 			return;
 		}
 	}
@@ -2202,11 +2202,10 @@ static void CG_DrawBalloonIcon(centity_t *cent) {
 	trap_R_SetColor(NULL);
 }
 
-static void CG_DrawHealthstationIcon(centity_t *cent) {
+static void CG_DrawHealthstationIcon(const centity_t *cent) {
 	vec3_t iconPos;
 	float size, x, y;
 	float squaredDist;
-	trace_t trace;
 
 	if (!(cg_icons.integer & ICON_HEALTHSTATION)) {
 		return;
@@ -2232,9 +2231,10 @@ static void CG_DrawHealthstationIcon(centity_t *cent) {
 	}
 
 	// don't draw the icon if the health station is visible and close
-	CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin, cg.snap->ps.clientNum, MASK_OPAQUE);
-	if (1.0 == trace.fraction) {
-		if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin) < Square(250)) {
+	if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin) < Square(250)) {
+		trace_t trace;
+		CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin, cg.snap->ps.clientNum, MASK_OPAQUE);
+		if (1.0 == trace.fraction) {
 			return;
 		}
 	}
@@ -2249,7 +2249,6 @@ static void CG_DrawSprayroomIcon(centity_t *cent) {
 	vec3_t iconPos;
 	float size, x, y;
 	float squaredDist;
-	trace_t trace;
 
 	if (!(cg_icons.integer & ICON_SPRAYROOM)) {
 		return;
@@ -2269,9 +2268,10 @@ static void CG_DrawSprayroomIcon(centity_t *cent) {
 	}
 
 	// don't draw the icon if the sprayroom teleporter is visible and close
-	CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin2, cg.snap->ps.clientNum, MASK_OPAQUE);
-	if (1.0 == trace.fraction) {
-		if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin2) < Square(250)) {
+	if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin2) < Square(250)) {
+		trace_t trace;
+		CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin2, cg.snap->ps.clientNum, MASK_OPAQUE);
+		if (1.0 == trace.fraction) {
 			return;
 		}
 	}
