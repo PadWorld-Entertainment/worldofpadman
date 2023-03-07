@@ -1474,14 +1474,26 @@ used for qsort in startserver2- and addbots-menu
 // Ente requested to sort some main characters to the top ...
 static int GetBotListSpecialScore(const char *name) {
 	if (!Q_stricmp(name, "padman"))
-		return 5;
+		return 11;
 	else if (!Q_stricmp(name, "padgirl"))
-		return 4;
+		return 10;
 	else if (!Q_stricmp(name, "monsterpad"))
-		return 3;
+		return 9;
+	else if (!Q_stricmp(name, "piratepad"))
+		return 8;
 	else if (!Q_stricmp(name, "padlilly"))
-		return 2;
+		return 7;
 	else if (!Q_stricmp(name, "fatpad"))
+		return 6;
+	else if (!Q_stricmp(name, "beachpad"))
+		return 5;
+	else if (!Q_stricmp(name, "paddybell"))
+		return 4;
+	else if (!Q_stricmp(name, "padcho"))
+		return 3;
+	else if (!Q_stricmp(name, "padking"))
+		return 2;
+	else if (!Q_stricmp(name, "padpunk"))
 		return 1;
 	else
 		return 0;
