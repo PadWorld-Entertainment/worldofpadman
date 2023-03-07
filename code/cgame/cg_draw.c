@@ -2214,7 +2214,7 @@ static void CG_DrawHealthstationIcon(const centity_t *cent) {
 	}
 
 	// don't draw the health station icon as long as it is empty
-	// yes, angles[2] is used to store this information: 0 for empty and 1 for full
+	// angles2[2] is used to store this information: 0 for empty and 1 for full
 	if (cent->currentState.angles2[2] == 0) {
 		return;
 	}
