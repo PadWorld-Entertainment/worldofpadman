@@ -624,6 +624,7 @@ UI_PlayerSettings_Update
 =================
 */
 static void UI_PlayerSettings_Update(void) {
+	const int skins = s_playersettings.chosenskins[1] - s_playersettings.chosenskins[0];
 	if (ps_playericons.nummodel > DISPLAYED_MODELS) {
 		s_playersettings.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		s_playersettings.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
@@ -642,7 +643,7 @@ static void UI_PlayerSettings_Update(void) {
 		s_playersettings.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 
-	if (s_playersettings.chosenskins[0] < SKINSPERPAGE) {
+	if (skins > SKINSPERPAGE) {
 		s_playersettings.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		s_playersettings.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		s_playersettings.arrowup.generic.flags |= QMF_GRAYED;
@@ -767,7 +768,7 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 			if (strstr(ps_playericons.modelskins[i].name, "default") != NULL) {
 				char tmp[64], *chrptr;
 
-				Q_strncpyz(tmp, ps_playericons.modelskins[i].name, 64);
+				Q_strncpyz(tmp, ps_playericons.modelskins[i].name, sizeof(tmp));
 				if ((chrptr = strchr(tmp, '/')) != NULL)
 					*chrptr = '\0';
 				trap_S_StartLocalSound(trap_S_RegisterSound(va("sound/feedback/players/%s", Q_strlwr(tmp)), qfalse),
