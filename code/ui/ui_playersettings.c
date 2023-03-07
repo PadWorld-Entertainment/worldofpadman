@@ -38,7 +38,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SARROWRT1 "menu/arrows/smallyel_rt1"
 
 #define ID_NAME 10
-#define ID_SEX 11
+#define ID_GENDER 11
 #define ID_HANDICAP 12
 #define ID_SKINCOLOR 13
 #define ID_EFFECTS 14
@@ -74,7 +74,7 @@ typedef struct {
 
 	menutext_s nameheader;
 	menufield_s name;
-	menulist_s sex;
+	menulist_s gender;
 	menulist_s handicap;
 	menutext_s logoheader;
 	menulist_s skincolor;
@@ -116,7 +116,7 @@ static playersettings_t s_playersettings;
 static int gamecodetoui[] = {4, 2, 3, 0, 5, 1, 6};
 static int uitogamecode[] = {4, 6, 2, 3, 1, 5, 7};
 
-static const char *sex_items[] = {"None", "Male", "Female", NULL};
+static const char *gender_items[] = {"None", "Male", "Female", NULL};
 
 static const char *handicap_items[] = {"None", "90", "80", "70", "60", "50", "40", "30", "20", "10", NULL};
 
@@ -243,11 +243,23 @@ PlayerSettings_SaveChanges
 =================
 */
 static void PlayerSettings_SaveChanges(void) {
+	int g;
+
 	// name
 	trap_Cvar_Set("name", s_playersettings.name.field.buffer);
 
 	// handicap
 	trap_Cvar_SetValue("handicap", 100 - s_playersettings.handicap.curvalue * 10);
+
+	// gender
+	g = s_playersettings.gender.curvalue;
+	if (g > 1) {
+		trap_Cvar_Set("sex", "female");
+	} else if (g == 1) {
+		trap_Cvar_Set("sex", "male");
+	} else {
+		trap_Cvar_Set("sex", "none");
+	}
 
 	// effects color
 	trap_Cvar_SetValue("color1", uitogamecode[s_playersettings.effects.curvalue]);
@@ -303,6 +315,7 @@ static void PlayerSettings_SetMenuItems(void) {
 	vec3_t viewangles;
 	int c;
 	int h;
+	char gStr[32];
 
 	// name
 	Q_strncpyz(s_playersettings.name.field.buffer, UI_Cvar_VariableString("name"),
@@ -367,6 +380,16 @@ static void PlayerSettings_SetMenuItems(void) {
 	// handicap
 	h = Com_Clamp(10, 100, trap_Cvar_VariableValue("handicap"));
 	s_playersettings.handicap.curvalue = 10 - h / 10;
+
+	// gender
+	trap_Cvar_VariableStringBuffer("sex", gStr, sizeof(gStr));
+	if (!Q_stricmp(gStr, "female")) {
+		s_playersettings.gender.curvalue = 2;
+	} else if (!Q_stricmp(gStr, "male")) {
+		s_playersettings.gender.curvalue = 1;
+	} else {
+		s_playersettings.gender.curvalue = 0;
+	}
 }
 
 static int GetSpecialSkinScore(const char *iconPath) {
@@ -716,7 +739,7 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 	switch (tmpid) {
 
 	case ID_HANDICAP:
-		trap_Cvar_Set("handicap", va("%i", 100 - 25 * s_playersettings.handicap.curvalue));
+	case ID_GENDER:
 		break;
 
 	case ID_SKINCOLOR:
@@ -1024,32 +1047,32 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.name.generic.bottom = y + 2 * (BIGCHAR_HEIGHT);
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
-	s_playersettings.sex.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.sex.generic.name = "Sex:";
-	s_playersettings.sex.generic.flags = QMF_SMALLFONT;
-	s_playersettings.sex.generic.id = ID_HANDICAP;
-	s_playersettings.sex.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.sex.generic.x = XPOSITION + 56;
-	s_playersettings.sex.generic.y = y;
-	s_playersettings.sex.itemnames = sex_items;
+	s_playersettings.gender.generic.type = MTYPE_SPINCONTROL;
+	s_playersettings.gender.generic.name = "Gender:";
+	s_playersettings.gender.generic.flags = QMF_SMALLFONT;
+	s_playersettings.gender.generic.id = ID_GENDER;
+	s_playersettings.gender.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.gender.generic.x = XPOSITION + 48;
+	s_playersettings.gender.generic.y = y;
+	s_playersettings.gender.itemnames = gender_items;
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.handicap.generic.name = "Cap:";
+	s_playersettings.handicap.generic.name = "Handicap:";
 	s_playersettings.handicap.generic.flags = QMF_SMALLFONT;
 	s_playersettings.handicap.generic.id = ID_HANDICAP;
 	s_playersettings.handicap.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.handicap.generic.x = XPOSITION + 56;
+	s_playersettings.handicap.generic.x = XPOSITION + 48;
 	s_playersettings.handicap.generic.y = y;
 	s_playersettings.handicap.itemnames = handicap_items;
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.skincolor.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.skincolor.generic.name = "Color:";
+	s_playersettings.skincolor.generic.name = "Skin Color:";
 	s_playersettings.skincolor.generic.flags = QMF_SMALLFONT;
 	s_playersettings.skincolor.generic.id = ID_SKINCOLOR;
 	s_playersettings.skincolor.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.skincolor.generic.x = XPOSITION + 56;
+	s_playersettings.skincolor.generic.x = XPOSITION + 48;
 	s_playersettings.skincolor.generic.y = y;
 	s_playersettings.skincolor.itemnames = skincolor_items;
 
@@ -1057,7 +1080,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
 	s_playersettings.logoheader.generic.x = XPOSITION;
 	s_playersettings.logoheader.generic.y = y;
-	s_playersettings.logoheader.string = "Spraylogo:";
+	s_playersettings.logoheader.string = "Spray Logo:";
 	s_playersettings.logoheader.style = (UI_LEFT | UI_SMALLFONT);
 	s_playersettings.logoheader.color = color_yellow;
 
@@ -1083,7 +1106,7 @@ static void PlayerSettings_MenuInit(void) {
 
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.sex);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.gender);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skincolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
