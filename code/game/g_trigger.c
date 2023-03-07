@@ -545,7 +545,7 @@ static void TouchBalloonzone(gentity_t *self, gentity_t *other, trace_t *trace) 
 		self->teamMask |= BT_BLUE;
 	}
 
-	//#@070329: some delay ... i think there isn't always a touch-call (with laging clients)
+	//#@070329: some delay ... i think there isn't always a touch-call (with lagging clients)
 	self->target_ent->teamTime[team] = level.time;
 
 	other->client->balloonEnt = self;
@@ -590,12 +590,10 @@ static int NumPlayersAtBalloon(const gentity_t *balloon, team_t team) {
 
 static void AddBalloonScores(gentity_t *balloon, team_t team, int score) {
 	int i;
-	gentity_t *ent;
 
 	for (i = 0; i < level.maxclients; i++) {
 		if ((level.clients[i].sess.sessionTeam == team) && (IsPlayerAtBalloon(i, balloon))) {
-
-			ent = (g_entities + i);
+			gentity_t *ent = (g_entities + i);
 
 			AddScore(ent, balloon->target_ent->s.origin, score, SCORE_BONUS_CAPTURE_S);
 
@@ -606,6 +604,8 @@ static void AddBalloonScores(gentity_t *balloon, team_t team, int score) {
 		}
 	}
 }
+
+#define BALLOON_FULLY_RAISED_FRAME 11
 
 static void ThinkBalloonzone(gentity_t *self) {
 	//"(team == 0) ? TEAM_RED : TEAM_BLUE" => ! in this code red=0, blue=1 ! (unlike TEAM_RED(1), TEAM_BLUE(2) from
@@ -629,7 +629,7 @@ static void ThinkBalloonzone(gentity_t *self) {
 		tteam = (team + 1);
 
 		// capturing
-		if ((self->target_ent->s.frame < 11) && (self->teamMask & (1 << team)) && !(self->teamMask & (1 << opponent))) {
+		if ((self->target_ent->s.frame < BALLOON_FULLY_RAISED_FRAME) && (self->teamMask & (1 << team)) && !(self->teamMask & (1 << opponent))) {
 
 			numPlayers = NumPlayersAtBalloon(self, tteam);
 			if (numPlayers <= 0) {
@@ -639,7 +639,7 @@ static void ThinkBalloonzone(gentity_t *self) {
 			self->teamTime[team] += (BALLOON_THINKTIME * numPlayers);
 			self->target_ent->s.frame = (1 + self->teamTime[team] / (100 * self->speed));
 
-			if (self->target_ent->s.frame >= 11) {
+			if (self->target_ent->s.frame >= BALLOON_FULLY_RAISED_FRAME) {
 				// captured
 				self->last_move_time = 0;
 				self->teamTime[team] = 0;
@@ -656,13 +656,13 @@ static void ThinkBalloonzone(gentity_t *self) {
 		}
 
 		// balloon is fully raised
-		if (self->target_ent->s.frame >= 11) {
+		if (self->target_ent->s.frame >= BALLOON_FULLY_RAISED_FRAME) {
 			// animate
 			self->last_move_time += BALLOON_THINKTIME;
 			if (self->last_move_time >= (700 * self->speed)) {
 				self->last_move_time -= (700 * self->speed);
 			}
-			self->target_ent->s.frame = (11 + self->last_move_time / (100 * self->speed));
+			self->target_ent->s.frame = (BALLOON_FULLY_RAISED_FRAME + self->last_move_time / (100 * self->speed));
 
 			// give points
 			if (!level.intermissiontime) {
@@ -731,7 +731,7 @@ static void ThinkBalloonzone(gentity_t *self) {
 
 	// prepare next think
 
-	//#@070329: some delay ... i think there isn't always a touch-call (with laging clients)
+	//#@070329: some delay ... i think there isn't always a touch-call (with lagging clients)
 	// "TEAM_RED ? 0 : 1" @ teamTime[...]
 	if ((self->target_ent->teamTime[0] + BALLOON_TOUCHDELAY) < level.time) {
 		self->teamMask &= ~BT_RED;

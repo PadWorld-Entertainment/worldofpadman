@@ -337,34 +337,46 @@ static void CheckAlmostSprayAward(gentity_t *self, gentity_t *attacker) {
 /*
 ===================
 CheckAlmostBigBalloon
+
+If self is dying we are checking whether they were close to the ballon trigger zone
+and if they almost won the match because they were about to capture the last ballon
 ===================
 */
 static void CheckAlmostBigBalloon(gentity_t *self, gentity_t *attacker) {
 	if (g_gametype.integer == GT_BALLOON) {
-		int check = self->client->sess.sessionTeam == TEAM_RED ? BT_RED : BT_BLUE;
+		const int check = self->client->sess.sessionTeam == TEAM_RED ? BT_RED : BT_BLUE;
+		int notCapturedBalloon = -1;
 		int captured = 0;
 		int i;
-		gentity_t *ent = NULL;
 
 		for (i = 0; i < level.numBalloons; ++i) {
 			if (level.balloonState[i] == '0' + check) {
 				++captured;
+			} else {
+				notCapturedBalloon = i;
 			}
 		}
 
 		// if only the last balloon is not captured yet
 		if (captured >= level.numBalloons - 1) {
-			ent = NULL;
-			do {
-				ent = G_Find(ent, FOFS(classname), "trigger_balloonzone");
-			} while (ent && (ent->teamMask & check) == 0);
-			// if the player is at the balloon
-			if (ent && (ent->teamMask & check) == 0 && IsPlayerAtBalloon(self->client->ps.clientNum, ent)) {
-				self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
-				if (attacker->client) {
-					attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
+			gentity_t *balloonZone = NULL;
+			for (;;) {
+				balloonZone = G_Find(balloonZone, FOFS(classname), "trigger_balloonzone");
+				if (balloonZone == NULL) {
+					break;
 				}
-			}
+				if (balloonZone->count != notCapturedBalloon) {
+					continue;
+				}
+				// if the player is at the balloon
+				if (IsPlayerAtBalloon(self->client->ps.clientNum, balloonZone)) {
+					self->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
+					if (attacker->client) {
+						attacker->client->ps.persistant[PERS_PLAYEREVENTS] ^= PLAYEREVENT_ALMOSTCAPTURE;
+					}
+					break;
+				}
+			};
 		}
 	}
 }
