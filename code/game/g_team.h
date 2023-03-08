@@ -54,7 +54,7 @@ const char *TeamColorString(int team);
 void AddTeamScore(vec3_t origin, int team, int score, char *reason);
 
 void Team_DroppedFlagThink(gentity_t *ent);
-void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker);
+void Team_FragBonuses(gentity_t *targ, gentity_t *attacker);
 void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker);
 void Team_InitGame(void);
 void Team_ReturnFlag(int team);

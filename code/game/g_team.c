@@ -365,12 +365,11 @@ Note that bonuses are not cumulative. You get one, they are in importance
 order.
 ================
 */
-void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker) {
+void Team_FragBonuses(gentity_t *targ, gentity_t *attacker) {
 	int i;
 	gentity_t *ent;
 	int flag_pw, enemy_flag_pw;
 	int otherteam;
-	int cartridges;
 	int team;
 
 	// no bonus for non team game types
@@ -396,11 +395,6 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		enemy_flag_pw = PW_REDFLAG;
 	}
 
-	cartridges = 0;
-	if (g_gametype.integer == GT_SPRAY) {
-		cartridges = targ->client->ps.generic1;
-	}
-
 	// did the attacker frag the flag carrier?
 	if (targ->client->ps.powerups[enemy_flag_pw]) {
 		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
@@ -420,21 +414,25 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 	}
 
 	// did the attacker frag a cartridge carrier?
-	if (cartridges) {
-		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
-		AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS * cartridges, SCORE_BONUS_FRAG_CARRIER_S);
-		attacker->client->pers.teamState.fragcarrier++;
-		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s' cartridge carrier!\n", attacker->client->pers.netname,
-				 TeamName(team));
 
-		// the target had the flag, clear the hurt carrier
-		// field on the other team
-		for (i = 0; i < g_maxclients.integer; i++) {
-			ent = g_entities + i;
-			if (ent->inuse && ent->client->sess.sessionTeam == otherteam)
-				ent->client->pers.teamState.lasthurtcarrier = 0;
+	if (g_gametype.integer == GT_SPRAY) {
+		int cartridges = targ->client->ps.generic1;
+		if (cartridges) {
+			attacker->client->pers.teamState.lastfraggedcarrier = level.time;
+			AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS * cartridges, SCORE_BONUS_FRAG_CARRIER_S);
+			attacker->client->pers.teamState.fragcarrier++;
+			PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s' cartridge carrier!\n", attacker->client->pers.netname,
+					 TeamName(team));
+
+			// the target had the flag, clear the hurt carrier
+			// field on the other team
+			for (i = 0; i < g_maxclients.integer; i++) {
+				ent = g_entities + i;
+				if (ent->inuse && ent->client->sess.sessionTeam == otherteam)
+					ent->client->pers.teamState.lasthurtcarrier = 0;
+			}
+			return;
 		}
-		return;
 	}
 
 	if (targ->client->pers.teamState.lasthurtcarrier &&
