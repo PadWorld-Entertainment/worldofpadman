@@ -194,6 +194,26 @@ gentity_t *G_Find(gentity_t *from, int fieldofs, const char *match) {
 	return NULL;
 }
 
+gentity_t *G_FindRadius(gentity_t *from, int fieldofs, const char *match, const vec3_t org, float radius) {
+	gentity_t *ent = from;
+	const float rs = Square(radius);
+
+	while ((ent = G_Find(ent, fieldofs, match))) {
+		vec3_t dist;
+		vec3_t center;
+		VectorMA(ent->r.absmin, 0.5f, ent->r.absmax, center);
+		for (int j = 0; j < 3; j++) {
+			dist[j] = org[j] - center[j];
+		}
+		if (VectorLengthSquared(dist) > rs) {
+			continue;
+		}
+		return ent;
+	}
+
+	return NULL;
+}
+
 /*
 =============
 G_PickTarget

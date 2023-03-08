@@ -567,6 +567,7 @@ int G_SoundIndex(const char *name);
 void G_TeamCommand(team_t team, char *cmd);
 void G_KillBox(gentity_t *ent);
 gentity_t *G_Find(gentity_t *from, int fieldofs, const char *match);
+gentity_t *G_FindRadius(gentity_t *from, int fieldofs, const char *match, const vec3_t org, float radius);
 gentity_t *G_PickTarget(const char *targetname);
 void G_UseTargets(gentity_t *ent, gentity_t *activator);
 void G_SetMovedir(vec3_t angles, vec3_t movedir);
