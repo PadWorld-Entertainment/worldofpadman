@@ -277,6 +277,38 @@ static void Team_ForceGesture(int team) {
 }
 #endif
 
+void G_SetBalloonCaptured(int balloonIndex, team_t team, qboolean fullyCaptured) {
+	if (team != TEAM_RED && team != TEAM_BLUE) {
+		Com_Printf("Invalid team for capturing a balloon: %i\n", team);
+		return;
+	}
+	if (balloonIndex < 0 || balloonIndex >= MAX_BALLOONS) {
+		Com_Printf("Invalid balloon index given: %i\n", balloonIndex);
+		return;
+	}
+	if (fullyCaptured) {
+		level.balloonState[balloonIndex] = (char)('1' + team - 1);
+	} else {
+		level.balloonState[balloonIndex] = (char)('a' + team - 1);
+	}
+	//Com_Printf("balloon state: %s\n", level.balloonState);
+}
+
+qboolean G_BalloonIsCaptured(int balloonIndex, team_t team, qboolean fullyCaptured) {
+	if (team != TEAM_RED && team != TEAM_BLUE) {
+		Com_Printf("Invalid team for querying the balloon state: %i\n", team);
+		return qfalse;
+	}
+	if (balloonIndex < 0 || balloonIndex >= MAX_BALLOONS) {
+		Com_Printf("Invalid balloon index given: %i\n", balloonIndex);
+		return qfalse;
+	}
+	if (fullyCaptured) {
+		return level.balloonState[balloonIndex] == '1' + team - 1;
+	}
+	return level.balloonState[balloonIndex] == 'a' + team - 1;
+}
+
 /**
  * Checks to hand out a pad hero award to the attacker.
  *
@@ -284,22 +316,37 @@ static void Team_ForceGesture(int team) {
  */
 static qboolean Team_BalloonDefendOrProtectBonus(const gentity_t *targ, gentity_t *attacker) {
 	gentity_t *balloon = NULL;
-	const int check = attacker->client->sess.sessionTeam == TEAM_RED ? BT_RED : BT_BLUE;
+	gentity_t *triggers[MAX_BALLOONS];
+	int balloonCount = 0;
 
 	if (attacker->client->sess.sessionTeam == targ->client->sess.sessionTeam) {
 		return qfalse;
 	}
 
-	while ((balloon = G_FindRadius(balloon, FOFS(classname), "target_balloon", targ->r.currentOrigin, BALLOON_TARGET_PROTECT_RADIUS))) {
-		if (!(balloon->teamMask & check)) {
-			continue;
+	while ((balloon = G_Find(balloon, FOFS(classname), "trigger_balloonzone"))) {
+		if (balloonCount >= MAX_BALLOONS) {
+			break;
 		}
-		attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
-		// add the sprite over the player's head
-		SetAward(attacker->client, AWARD_PADHERO);
-		return qtrue;
+		triggers[balloonCount++] = balloon;
 	}
 
+	while ((balloon = G_FindRadius(balloon, FOFS(classname), "target_balloon", targ->r.currentOrigin, BALLOON_TARGET_PROTECT_RADIUS))) {
+		int i;
+		for (i = 0; i < balloonCount; ++i) {
+			// find the related trigger zone for the balloon
+			if (triggers[i]->target_ent != balloon) {
+				continue;
+			}
+			// if the balloon is already fully captured by your team, and you fragged the player from the other team
+			// you get the award.
+			if (G_BalloonIsCaptured(triggers[i]->count, attacker->client->sess.sessionTeam, qtrue)) {
+				attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
+				// add the sprite over the player's head
+				SetAward(attacker->client, AWARD_PADHERO);
+				return qtrue;
+			}
+		}
+	}
 	return qfalse;
 }
 

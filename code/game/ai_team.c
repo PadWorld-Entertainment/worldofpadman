@@ -271,8 +271,6 @@ static void BotInstructMate(bot_state_t *bs, int client, int goal) {
 
 static void BotBalloonOrders(bot_state_t *bs) {
 	int i, j;
-	int index;
-	int state;
 	int capstate[MAX_BALLOONS];
 	int nummates;
 	int mates[MAX_CLIENTS];
@@ -284,13 +282,14 @@ static void BotBalloonOrders(bot_state_t *bs) {
 	numcap = numnmycap = 0;
 
 	for (i = 0; i < level.numBalloons; i++) {
-		index = g_entities[balloongoal[i].entitynum].count;
-		state = level.balloonState[index]; // status of goal i
-		if (BotTeam(bs) == TEAM_RED && state == '1' || BotTeam(bs) == TEAM_BLUE && state == '2') {
+		const int team = BotTeam(bs);
+		const int index = g_entities[balloongoal[i].entitynum].count;
+		if (G_BalloonIsCaptured(index, team, qtrue)) {
 			// own balloon
 			capstate[i] = 0;
 			numcap++;
-		} else if (BotTeam(bs) == TEAM_RED && state == '2' || BotTeam(bs) == TEAM_BLUE && state == '1') {
+		} else if ((team == TEAM_RED && G_BalloonIsCaptured(index, TEAM_BLUE, qtrue)) ||
+				   (team == TEAM_BLUE && G_BalloonIsCaptured(index, TEAM_RED, qtrue))) {
 			// nmy balloon
 			capstate[i] = 1;
 			numnmycap++;

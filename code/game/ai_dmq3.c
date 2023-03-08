@@ -380,15 +380,12 @@ qboolean IsMyBalloon(int team, bot_goal_t *goal) {
 	if (!goal || goal->entitynum < 0 || goal->entitynum > MAX_GENTITIES)
 		return qfalse;
 
-	state = level.balloonState[g_entities[goal->entitynum].count];
-	return ((team == TEAM_RED && state == '1') || (team == TEAM_BLUE && state == '2'));
+	return G_BalloonIsCaptured(g_entities[goal->entitynum].count, team, qtrue);
 }
 
 static qboolean BotPickUnCappedBalloon(bot_state_t *bs) {
 	float rnd, step;
 	int i;
-	int ballindex;
-	int state;
 	int uncaptured[MAX_BALLOONS];
 	int numuncap;
 
@@ -396,10 +393,8 @@ static qboolean BotPickUnCappedBalloon(bot_state_t *bs) {
 	numuncap = 0;
 
 	for (i = 0; i < level.numBalloons; i++) {
-		ballindex = g_entities[balloongoal[i].entitynum].count;
-		state = level.balloonState[ballindex]; // status of goal i
-
-		if ((BotTeam(bs) == TEAM_RED && state != '1') || (BotTeam(bs) == TEAM_BLUE && state != '2')) {
+		const int ballindex = g_entities[balloongoal[i].entitynum].count;
+		if (!G_BalloonIsCaptured(ballindex, BotTeam(bs), qtrue)) {
 			uncaptured[numuncap++] = i;
 		}
 	}
@@ -424,8 +419,6 @@ static qboolean BotPickUnCappedBalloon(bot_state_t *bs) {
 
 static qboolean BotPickBestBalloonGoal(bot_state_t *bs) {
 	int i, j;
-	int index;
-	int state;
 	int capstate[MAX_BALLOONS];
 	int numcap, numnmycap, numuncap;
 	float weight; // 0 - attack, 100 - defend
@@ -438,13 +431,14 @@ static qboolean BotPickBestBalloonGoal(bot_state_t *bs) {
 	numcap = numnmycap = numuncap = 0;
 
 	for (i = 0; i < level.numBalloons; i++) {
-		index = g_entities[balloongoal[i].entitynum].count;
-		state = level.balloonState[index]; // status of goal i
-		if ((BotTeam(bs) == TEAM_RED && state == '1') || (BotTeam(bs) == TEAM_BLUE && state == '2')) {
+		const int team = BotTeam(bs);
+		const int index = g_entities[balloongoal[i].entitynum].count;
+		if (G_BalloonIsCaptured(index, team, qtrue)) {
 			// own balloon
 			capstate[i] = 0;
 			numcap++;
-		} else if ((BotTeam(bs) == TEAM_RED && state == '2') || (BotTeam(bs) == TEAM_BLUE && state == '1')) {
+		} else if ((team == TEAM_RED && G_BalloonIsCaptured(index, TEAM_BLUE, qtrue)) ||
+				   (team == TEAM_BLUE && G_BalloonIsCaptured(index, TEAM_RED, qtrue))) {
 			// nmy balloon
 			capstate[i] = 1;
 			numnmycap++;

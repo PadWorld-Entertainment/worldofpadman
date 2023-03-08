@@ -344,13 +344,12 @@ and if they almost won the match because they were about to capture the last bal
 */
 static void CheckAlmostBigBalloon(gentity_t *self, gentity_t *attacker) {
 	if (g_gametype.integer == GT_BALLOON) {
-		const int check = self->client->sess.sessionTeam == TEAM_RED ? BT_RED : BT_BLUE;
 		int notCapturedBalloon = -1;
 		int captured = 0;
 		int i;
 
 		for (i = 0; i < level.numBalloons; ++i) {
-			if (level.balloonState[i] == '0' + check) {
+			if (G_BalloonIsCaptured(i, self->client->sess.sessionTeam, qtrue)) {
 				++captured;
 			} else {
 				notCapturedBalloon = i;

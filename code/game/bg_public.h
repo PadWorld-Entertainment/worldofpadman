@@ -640,6 +640,7 @@ typedef struct animation_s {
 // changes so a restart of the same anim can be detected
 #define ANIM_TOGGLEBIT 128
 
+// don't change the order or add values in between
 typedef enum {
 	TEAM_FREE,
 	TEAM_RED,

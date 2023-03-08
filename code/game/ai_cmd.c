@@ -350,7 +350,7 @@ static void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 
 		state = level.balloonState[ballindex];
 		// not our balloon?
-		if (BotTeam(bs) == TEAM_RED && state != '1' || BotTeam(bs) == TEAM_BLUE && state != '2') {
+		if (!G_BalloonIsCaptured(ballindex, BotTeam(bs), qtrue) {
 			bs->ltgtype = LTG_ATTACKENEMYBASE;
 			bs->teamgoal_time = FloatTime() + TEAM_BALLOONATTACK_TIME;
 

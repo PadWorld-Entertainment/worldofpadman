@@ -541,10 +541,8 @@ static void TouchBalloonzone(gentity_t *self, gentity_t *other, trace_t *trace) 
 	// remember touch
 	if (other->client->sess.sessionTeam == TEAM_RED) {
 		self->teamMask |= BT_RED;
-		self->target_ent->teamMask |= BT_RED;
 	} else if (other->client->sess.sessionTeam == TEAM_BLUE) {
 		self->teamMask |= BT_BLUE;
-		self->target_ent->teamMask |= BT_BLUE;
 	}
 
 	//#@070329: some delay ... i think there isn't always a touch-call (with lagging clients)
@@ -613,11 +611,7 @@ static void ThinkBalloonzone(gentity_t *self) {
 	//"(team == 0) ? TEAM_RED : TEAM_BLUE" => ! in this code red=0, blue=1 ! (unlike TEAM_RED(1), TEAM_BLUE(2) from
 	//team_t)
 	// FIXME: Remove that offset team uglyness or at least make it readable!!1!
-	int team, opponent;
-	int numPlayers;
-	team_t tteam;
-	char *msg;
-
+	const char *msg;
 	if (!self->message) {
 		msg = "Balloon";
 	} else {
@@ -626,14 +620,13 @@ static void ThinkBalloonzone(gentity_t *self) {
 
 	if (self->target_ent->s.frame) {
 		// get teams
-		team = (self->target_ent->s.generic1 - 1);
-		opponent = (team ^ 1);
-		tteam = (team + 1);
+		int team = (self->target_ent->s.generic1 - 1);
+		int opponent = (team ^ 1);
+		team_t tteam = (team + 1);
 
 		// capturing
 		if ((self->target_ent->s.frame < BALLOON_FULLY_RAISED_FRAME) && (self->teamMask & (1 << team)) && !(self->teamMask & (1 << opponent))) {
-
-			numPlayers = NumPlayersAtBalloon(self, tteam);
+			int numPlayers = NumPlayersAtBalloon(self, tteam);
 			if (numPlayers <= 0) {
 				numPlayers = 1; //... so, we must not check this later
 			}
@@ -645,7 +638,7 @@ static void ThinkBalloonzone(gentity_t *self) {
 				// captured
 				self->last_move_time = 0;
 				self->teamTime[team] = 0;
-				level.balloonState[self->count] = ('1' + team);
+				G_SetBalloonCaptured(self->count, tteam, qtrue);
 				trap_SetConfigstring(CS_BALLOONS, level.balloonState);
 
 				// TODO: Give more points for capturing than for owning?
@@ -679,7 +672,7 @@ static void ThinkBalloonzone(gentity_t *self) {
 
 		// countering capture
 		if (self->teamMask & (1 << opponent)) {
-			numPlayers = NumPlayersAtBalloon(self, tteam);
+			int numPlayers = NumPlayersAtBalloon(self, tteam);
 			if (numPlayers <= 0) {
 				numPlayers = 1; //... so, we must not check this later
 			}
@@ -709,7 +702,9 @@ static void ThinkBalloonzone(gentity_t *self) {
 			self->teamTime[0] = 0;
 			self->teamTime[1] = 0;
 		} else {
+			int team;
 			for (team = 0; team < 2; team++) {
+				const team_t tteam = (team + 1);
 				if (self->teamMask & (1 << team)) {
 					// start capture timer or test for capture
 					if (!self->teamTime[team]) {
@@ -717,9 +712,9 @@ static void ThinkBalloonzone(gentity_t *self) {
 					} else if (level.time > (self->teamTime[team] + 1000)) {
 						self->teamTime[team] = 0;
 						self->teamTime[team ^ 1] = level.time;
-						self->target_ent->s.generic1 = (team + 1);
+						self->target_ent->s.generic1 = tteam;
 						self->target_ent->s.frame = 1;
-						level.balloonState[self->count] = ('a' + team);
+						G_SetBalloonCaptured(self->count, tteam, qfalse);
 						trap_SetConfigstring(CS_BALLOONS, level.balloonState);
 
 						trap_SendServerCommand(-1, va("mp \"%s under attack by %s Team\"", msg, TeamName(team + 1)));
@@ -737,11 +732,9 @@ static void ThinkBalloonzone(gentity_t *self) {
 	// "TEAM_RED ? 0 : 1" @ teamTime[...]
 	if ((self->target_ent->teamTime[0] + BALLOON_TOUCHDELAY) < level.time) {
 		self->teamMask &= ~BT_RED;
-		self->target_ent->teamMask &= ~BT_RED;
 	}
 	if ((self->target_ent->teamTime[1] + BALLOON_TOUCHDELAY) < level.time) {
 		self->teamMask &= ~BT_BLUE;
-		self->target_ent->teamMask &= ~BT_BLUE;
 	}
 
 	self->nextthink = (level.time + BALLOON_THINKTIME);

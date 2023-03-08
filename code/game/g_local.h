@@ -183,7 +183,7 @@ struct gentity_s {
 
 	int timestamp; // body queue sinking, etc
 
-	// balloon team mask - both the trigger and the balloon itself have these values in sync
+	// balloon team mask
 	int teamMask;
 	// balloon team time
 	int teamTime[2];
@@ -753,6 +753,8 @@ void G_RunClient(gentity_t *ent);
 qboolean OnSameTeam(const gentity_t *ent1, const gentity_t *ent2);
 void Team_CheckDroppedItem(const gentity_t *dropped);
 int Team_GetFlagStatus(int team);
+qboolean G_BalloonIsCaptured(int balloonIndex, team_t team, qboolean fullyCaptured);
+void G_SetBalloonCaptured(int balloonIndex, team_t team, qboolean fullyCaptured);
 __attribute__((format(printf, 2, 3))) void QDECL PrintMsg(const gentity_t *ent, const char *fmt, ...);
 
 //

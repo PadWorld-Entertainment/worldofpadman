@@ -2017,12 +2017,7 @@ static qboolean BotDefendsCapturedBalloon(bot_state_t *bs) {
 		return qfalse;
 
 	index = g_entities[bs->teamgoal.entitynum].count;
-	state = level.balloonState[index]; // status of goal i
-	// G_Printf("#%d -> %d ",index, state);
-	if ((BotTeam(bs) == TEAM_RED && state == '1') || (BotTeam(bs) == TEAM_BLUE && state == '2'))
-		return qtrue;
-	else
-		return qfalse;
+	return G_BalloonIsCaptured(index, BotTeam(bs), qtrue);
 }
 
 static void CheckHealth(bot_state_t *bs) {
