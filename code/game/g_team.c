@@ -278,9 +278,9 @@ static void Team_ForceGesture(int team) {
 #endif
 
 static qboolean Team_FlagDefendOrProtectBonus(const gentity_t *targ, gentity_t *attacker, int flag_pw) {
-	gentity_t *flag, *carrier = NULL;
+	gentity_t *flag = NULL;
+	gentity_t *carrier = NULL;
 	const char *c;
-	vec3_t v1, v2;
 	int i;
 
 	// we have to find the flag and carrier entities
@@ -298,14 +298,15 @@ static qboolean Team_FlagDefendOrProtectBonus(const gentity_t *targ, gentity_t *
 	// find attacker's team's flag carrier
 	for (i = 0; i < g_maxclients.integer; i++) {
 		carrier = g_entities + i;
-		if (carrier->inuse && carrier->client->ps.powerups[flag_pw])
+		if (carrier->inuse && carrier->client->ps.powerups[flag_pw]) {
 			break;
+		}
 		carrier = NULL;
 	}
-	flag = NULL;
 	while ((flag = G_Find(flag, FOFS(classname), c)) != NULL) {
-		if (!(flag->flags & FL_DROPPED_ITEM))
+		if (!(flag->flags & FL_DROPPED_ITEM)) {
 			break;
+		}
 	}
 
 	if (!flag) {
@@ -314,27 +315,30 @@ static qboolean Team_FlagDefendOrProtectBonus(const gentity_t *targ, gentity_t *
 
 	// ok we have the attackers flag and a pointer to the carrier
 
-	// check to see if we are defending the base's flag
-	VectorSubtract(targ->r.currentOrigin, flag->r.currentOrigin, v1);
-	VectorSubtract(attacker->r.currentOrigin, flag->r.currentOrigin, v2);
+	if (attacker->client->sess.sessionTeam != targ->client->sess.sessionTeam) {
+		vec3_t v1, v2;
+		// check to see if we are defending the base's flag
+		VectorSubtract(targ->r.currentOrigin, flag->r.currentOrigin, v1);
+		VectorSubtract(attacker->r.currentOrigin, flag->r.currentOrigin, v2);
+		if (((VectorLength(v1) < CTF_TARGET_PROTECT_RADIUS &&
+			  trap_InPVS(flag->r.currentOrigin, targ->r.currentOrigin)) ||
+			 (VectorLength(v2) < CTF_TARGET_PROTECT_RADIUS &&
+			  trap_InPVS(flag->r.currentOrigin, attacker->r.currentOrigin)))) {
 
-	if (((VectorLength(v1) < CTF_TARGET_PROTECT_RADIUS && trap_InPVS(flag->r.currentOrigin, targ->r.currentOrigin)) ||
-		 (VectorLength(v2) < CTF_TARGET_PROTECT_RADIUS &&
-		  trap_InPVS(flag->r.currentOrigin, attacker->r.currentOrigin))) &&
-		attacker->client->sess.sessionTeam != targ->client->sess.sessionTeam) {
+			// we defended the base flag
+			AddScore(attacker, targ->r.currentOrigin, CTF_FLAG_DEFENSE_BONUS, SCORE_BONUS_DEFENSE_S);
+			attacker->client->pers.teamState.basedefense++;
 
-		// we defended the base flag
-		AddScore(attacker, targ->r.currentOrigin, CTF_FLAG_DEFENSE_BONUS, SCORE_BONUS_DEFENSE_S);
-		attacker->client->pers.teamState.basedefense++;
+			attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
+			// add the sprite over the player's head
+			SetAward(attacker->client, AWARD_PADHERO);
 
-		attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
-		// add the sprite over the player's head
-		SetAward(attacker->client, AWARD_PADHERO);
-
-		return qtrue;
+			return qtrue;
+		}
 	}
 
 	if (carrier && carrier != attacker) {
+		vec3_t v1, v2;
 		VectorSubtract(targ->r.currentOrigin, carrier->r.currentOrigin, v1);
 		VectorSubtract(attacker->r.currentOrigin, carrier->r.currentOrigin, v2);
 
