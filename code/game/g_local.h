@@ -183,7 +183,9 @@ struct gentity_s {
 
 	int timestamp; // body queue sinking, etc
 
+	// balloon team mask - both the trigger and the balloon itself have these values in sync
 	int teamMask;
+	// balloon team time
 	int teamTime[2];
 
 	char *target;

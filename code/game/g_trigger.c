@@ -541,8 +541,10 @@ static void TouchBalloonzone(gentity_t *self, gentity_t *other, trace_t *trace) 
 	// remember touch
 	if (other->client->sess.sessionTeam == TEAM_RED) {
 		self->teamMask |= BT_RED;
+		self->target_ent->teamMask |= BT_RED;
 	} else if (other->client->sess.sessionTeam == TEAM_BLUE) {
 		self->teamMask |= BT_BLUE;
+		self->target_ent->teamMask |= BT_BLUE;
 	}
 
 	//#@070329: some delay ... i think there isn't always a touch-call (with lagging clients)
@@ -735,9 +737,11 @@ static void ThinkBalloonzone(gentity_t *self) {
 	// "TEAM_RED ? 0 : 1" @ teamTime[...]
 	if ((self->target_ent->teamTime[0] + BALLOON_TOUCHDELAY) < level.time) {
 		self->teamMask &= ~BT_RED;
+		self->target_ent->teamMask &= ~BT_RED;
 	}
 	if ((self->target_ent->teamTime[1] + BALLOON_TOUCHDELAY) < level.time) {
 		self->teamMask &= ~BT_BLUE;
+		self->target_ent->teamMask &= ~BT_BLUE;
 	}
 
 	self->nextthink = (level.time + BALLOON_THINKTIME);

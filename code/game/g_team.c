@@ -290,7 +290,7 @@ static qboolean Team_BalloonDefendOrProtectBonus(const gentity_t *targ, gentity_
 		return qfalse;
 	}
 
-	while ((balloon = G_FindRadius(balloon, FOFS(classname), "trigger_balloonzone", targ->r.currentOrigin, BALLOON_TARGET_PROTECT_RADIUS))) {
+	while ((balloon = G_FindRadius(balloon, FOFS(classname), "target_balloon", targ->r.currentOrigin, BALLOON_TARGET_PROTECT_RADIUS))) {
 		if (!(balloon->teamMask & check)) {
 			continue;
 		}
