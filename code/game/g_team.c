@@ -637,7 +637,6 @@ Team_DroppedFlagThink
 */
 static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 	int i;
-	gentity_t *player;
 	gclient_t *cl = other->client;
 	int enemy_flag;
 
@@ -689,7 +688,7 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 
 	// Ok, let's do the player loop, hand out the bonuses
 	for (i = 0; i < g_maxclients.integer; i++) {
-		player = &g_entities[i];
+		gentity_t *player = &g_entities[i];
 
 		// also make sure we don't award assist bonuses to the flag carrier himself.
 		if (!player->inuse || player == other)
