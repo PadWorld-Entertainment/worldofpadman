@@ -764,21 +764,18 @@ Team_GetLocation
 Report a location for the player. Uses placed nearby target_location entities
 ============
 */
-static gentity_t *Team_GetLocation(gentity_t *ent) {
+static gentity_t *Team_GetLocation(const gentity_t *ent) {
 	gentity_t *eloc, *best;
-	float bestlen, len;
+	float bestlen;
 	vec3_t origin;
 
 	best = NULL;
-	bestlen = 3 * 8192.0 * 8192.0;
+	bestlen = 3.0f * Square(8192.0f);
 
 	VectorCopy(ent->r.currentOrigin, origin);
 
 	for (eloc = level.locationHead; eloc; eloc = eloc->nextTrain) {
-		len = (origin[0] - eloc->r.currentOrigin[0]) * (origin[0] - eloc->r.currentOrigin[0]) +
-			  (origin[1] - eloc->r.currentOrigin[1]) * (origin[1] - eloc->r.currentOrigin[1]) +
-			  (origin[2] - eloc->r.currentOrigin[2]) * (origin[2] - eloc->r.currentOrigin[2]);
-
+		const float len = DistanceSquared(eloc->r.currentOrigin, origin);
 		if (len > bestlen) {
 			continue;
 		}
@@ -802,10 +799,7 @@ Report a location for the player. Uses placed nearby target_location entities
 ============
 */
 qboolean Team_GetLocationMsg(gentity_t *ent, char *loc, int loclen) {
-	gentity_t *best;
-
-	best = Team_GetLocation(ent);
-
+	gentity_t *best = Team_GetLocation(ent);
 	if (!best)
 		return qfalse;
 
@@ -962,7 +956,7 @@ static void TeamplayInfoMessage(const gentity_t *ent) {
 
 void CheckTeamStatus(void) {
 	int i;
-	gentity_t *loc, *ent;
+	const gentity_t *loc, *ent;
 
 	if (level.time - level.lastTeamLocationTime > TEAM_LOCATION_UPDATE_TIME) {
 
