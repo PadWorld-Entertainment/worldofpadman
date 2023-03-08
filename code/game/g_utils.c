@@ -249,7 +249,7 @@ void G_UseTargets(gentity_t *ent, gentity_t *activator) {
 	}
 
 	if (ent->targetShaderName && ent->targetShaderNewName) {
-		float f = level.time * 0.001;
+		const float f = (float)level.time * 0.001f;
 		AddRemap(ent->targetShaderName, ent->targetShaderNewName, f);
 		trap_SetConfigstring(CS_SHADERSTATE, BuildShaderStateConfig());
 	}
@@ -446,7 +446,7 @@ G_EntitiesFree
 */
 qboolean G_EntitiesFree(void) {
 	int i;
-	gentity_t *e;
+	const gentity_t *e;
 
 	if (level.num_entities < ENTITYNUM_MAX_NORMAL) {
 		// can open a new slot if needed
@@ -605,7 +605,7 @@ void G_AddEvent(gentity_t *ent, int event, int eventParm) {
 G_Sound
 =============
 */
-void G_Sound(gentity_t *ent, int channel, int soundIndex) {
+void G_Sound(const gentity_t *ent, int channel, int soundIndex) {
 	gentity_t *te;
 
 	te = G_TempEntity(ent->r.currentOrigin, EV_GENERAL_SOUND);
@@ -621,7 +621,7 @@ G_SetOrigin
 Sets the pos trajectory for a fixed position
 ================
 */
-void G_SetOrigin(gentity_t *ent, vec3_t origin) {
+void G_SetOrigin(gentity_t *ent, const vec3_t origin) {
 	VectorCopy(origin, ent->s.pos.trBase);
 	ent->s.pos.trType = TR_STATIONARY;
 	ent->s.pos.trTime = 0;

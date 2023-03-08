@@ -574,7 +574,7 @@ void G_SetMovedir(vec3_t angles, vec3_t movedir);
 void G_InitGentity(gentity_t *e);
 gentity_t *G_Spawn(void);
 gentity_t *G_TempEntity(const vec3_t origin, int event);
-void G_Sound(gentity_t *ent, int channel, int soundIndex);
+void G_Sound(const gentity_t *ent, int channel, int soundIndex);
 void G_FreeEntity(gentity_t *e);
 qboolean G_EntitiesFree(void);
 
@@ -587,7 +587,7 @@ float vectoyaw(const vec3_t vec);
 
 void G_AddPredictableEvent(gentity_t *ent, int event, int eventParm);
 void G_AddEvent(gentity_t *ent, int event, int eventParm);
-void G_SetOrigin(gentity_t *ent, vec3_t origin);
+void G_SetOrigin(gentity_t *ent, const vec3_t origin);
 const char *BuildShaderStateConfig(void);
 
 void DebugLineDouble(vec3_t start, vec3_t end, int color);
@@ -747,11 +747,10 @@ void G_RunClient(gentity_t *ent);
 //
 // g_team.c
 //
-qboolean OnSameTeam(gentity_t *ent1, gentity_t *ent2);
-void Team_CheckDroppedItem(gentity_t *dropped);
+qboolean OnSameTeam(const gentity_t *ent1, const gentity_t *ent2);
+void Team_CheckDroppedItem(const gentity_t *dropped);
 int Team_GetFlagStatus(int team);
-qboolean CheckObeliskAttack(gentity_t *obelisk, gentity_t *attacker);
-__attribute__((format(printf, 2, 3))) void QDECL PrintMsg(gentity_t *ent, const char *fmt, ...);
+__attribute__((format(printf, 2, 3))) void QDECL PrintMsg(const gentity_t *ent, const char *fmt, ...);
 
 //
 // g_mem.c

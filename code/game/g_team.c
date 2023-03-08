@@ -41,7 +41,7 @@ teamgame_t teamgame;
 
 gentity_t *neutralObelisk;
 
-void Team_SetFlagStatus(int team, flagStatus_t status);
+static void Team_SetFlagStatus(int team, flagStatus_t status);
 
 void Team_InitGame(void) {
 	memset(&teamgame, 0, sizeof teamgame);
@@ -87,7 +87,7 @@ const char *TeamColorString(int team) {
 }
 
 // NULL for everyone
-void QDECL PrintMsg(gentity_t *ent, const char *fmt, ...) {
+void QDECL PrintMsg(const gentity_t *ent, const char *fmt, ...) {
 	char msg[1024];
 	va_list argptr;
 	char *p;
@@ -114,7 +114,7 @@ AddTeamScore
 ==============
 */
 // TODO: Draw a ScorePlum() as well? Needs cgame fixes to draw plum regardless of "owner"
-void AddTeamScore(vec3_t origin, int team, int score, char *reason) {
+void AddTeamScore(const vec3_t origin, int team, int score, char *reason) {
 	gentity_t *te;
 
 	te = G_TempEntity(origin, EV_GLOBAL_TEAM_SOUND);
@@ -171,7 +171,7 @@ void AddTeamScore(vec3_t origin, int team, int score, char *reason) {
 OnSameTeam
 ==============
 */
-qboolean OnSameTeam(gentity_t *ent1, gentity_t *ent2) {
+qboolean OnSameTeam(const gentity_t *ent1, const gentity_t *ent2) {
 	if (!ent1->client || !ent2->client) {
 		return qfalse;
 	}
@@ -190,7 +190,7 @@ qboolean OnSameTeam(gentity_t *ent1, gentity_t *ent2) {
 static char ctfFlagStatusRemap[] = {'0', '1', '*', '*', '2'};
 static char oneFlagStatusRemap[] = {'0', '1', '2', '3', '4'};
 
-void Team_SetFlagStatus(int team, flagStatus_t status) {
+static void Team_SetFlagStatus(int team, flagStatus_t status) {
 	qboolean modified = qfalse;
 
 	switch (team) {
@@ -245,7 +245,7 @@ int Team_GetFlagStatus(int team) {
 	}
 }
 
-void Team_CheckDroppedItem(gentity_t *dropped) {
+void Team_CheckDroppedItem(const gentity_t *dropped) {
 	if (dropped->item->giTag == PW_REDFLAG) {
 		Team_SetFlagStatus(TEAM_RED, FLAG_DROPPED);
 	} else if (dropped->item->giTag == PW_BLUEFLAG) {
@@ -466,7 +466,7 @@ Check to see if attacker hurt the flag/cartridge carrier.
 Needed when handing out bonuses for assistance to flag/cartridge carrier defense.
 ================
 */
-void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker) {
+void Team_CheckHurtCarrier(const gentity_t *targ, gentity_t *attacker) {
 	int flag_pw;
 
 	if (!targ->client || !attacker->client)
@@ -486,9 +486,10 @@ void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker) {
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
 }
 
-static gentity_t *Team_ResetFlag(int team) {
-	char *c;
-	gentity_t *ent, *rent = NULL;
+static const gentity_t *Team_ResetFlag(int team) {
+	const char *c;
+	gentity_t *ent;
+	const gentity_t *rent = NULL;
 
 	switch (team) {
 	case TEAM_RED:
@@ -526,7 +527,7 @@ static void Team_ResetFlags(void) {
 	}
 }
 
-static void Team_ReturnFlagSound(gentity_t *ent, int team) {
+static void Team_ReturnFlagSound(const gentity_t *ent, int team) {
 	gentity_t *te;
 
 	if (ent == NULL) {
@@ -543,7 +544,7 @@ static void Team_ReturnFlagSound(gentity_t *ent, int team) {
 	te->r.svFlags |= SVF_BROADCAST;
 }
 
-static void Team_TakeFlagSound(gentity_t *ent, int team) {
+static void Team_TakeFlagSound(const gentity_t *ent, int team) {
 	gentity_t *te;
 
 	if (ent == NULL) {
@@ -580,7 +581,7 @@ static void Team_TakeFlagSound(gentity_t *ent, int team) {
 	te->r.svFlags |= SVF_BROADCAST;
 }
 
-static void Team_CaptureFlagSound(gentity_t *ent, int team) {
+static void Team_CaptureFlagSound(const gentity_t *ent, int team) {
 	gentity_t *te;
 
 	if (ent == NULL) {
@@ -606,7 +607,7 @@ void Team_ReturnFlag(int team) {
 	}
 }
 
-void Team_FreeEntity(gentity_t *ent) {
+void Team_FreeEntity(const gentity_t *ent) {
 	if (ent->item->giTag == PW_REDFLAG) {
 		Team_ReturnFlag(TEAM_RED);
 	} else if (ent->item->giTag == PW_BLUEFLAG) {

@@ -67,7 +67,7 @@ static int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 
 	other->client->ps.powerups[ent->item->giTag] += quantity * 1000;
 
-	// look for other opponents nearby to laugh at them 
+	// look for other opponents nearby to laugh at them
 	laugh = qfalse;
 	for (i = 0; i < level.maxclients; i++) {
 		vec3_t delta;
@@ -115,11 +115,11 @@ static int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 		if (tr.fraction != 1.0) {
 			continue;
 		}
-	
+
 		laugh = qtrue;
 	}
 
-	// laugh at nearby opponents 
+	// laugh at nearby opponents
 	if (laugh) {
 		G_AddEvent(other, EV_HEHE2, 0);
 	}
@@ -729,7 +729,6 @@ G_CheckTeamItems
 ==================
 */
 void G_CheckTeamItems(void) {
-
 	// Set up team stuff
 	Team_InitGame();
 
@@ -889,7 +888,6 @@ static void G_BounceItem(gentity_t *ent, trace_t *trace) {
 /*
 ================
 G_RunItem
-
 ================
 */
 void G_RunItem(gentity_t *ent) {

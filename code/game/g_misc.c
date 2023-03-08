@@ -153,7 +153,6 @@ void SP_misc_sprayroomtl_teleporter(gentity_t *ent) {
 #define ANIMATION_THINKTIME 50
 
 static void Think_AnimationExternalmodel(gentity_t *ent) {
-
 	if (ent->animationEnd > ent->animationStart) {
 		ent->s.frame =
 			(int)((float)level.time * 0.001f * ent->animationFPS) % (ent->animationEnd - ent->animationStart);
@@ -185,15 +184,14 @@ void SP_misc_externalmodel(gentity_t *ent) {
 "model"		arbitrary .md3 file to display
 */
 void SP_misc_model(gentity_t *ent) {
-
 #if 0
-	ent->s.modelindex = G_ModelIndex( ent->model );
-	VectorSet (ent->mins, -16, -16, -16);
-	VectorSet (ent->maxs, 16, 16, 16);
-	trap_LinkEntity (ent);
+	ent->s.modelindex = G_ModelIndex(ent->model);
+	VectorSet(ent->mins, -16, -16, -16);
+	VectorSet(ent->maxs, 16, 16, 16);
+	trap_LinkEntity(ent);
 
-	G_SetOrigin( ent, ent->s.origin );
-	VectorCopy( ent->s.angles, ent->s.apos.trBase );
+	G_SetOrigin(ent, ent->s.origin);
+	VectorCopy(ent->s.angles, ent->s.apos.trBase );
 #else
 	G_FreeEntity(ent);
 #endif
@@ -203,7 +201,7 @@ void SP_misc_model(gentity_t *ent) {
 
 static void locateCamera(gentity_t *ent) {
 	vec3_t dir;
-	gentity_t *target;
+	const gentity_t *target;
 	gentity_t *owner;
 
 	owner = G_PickTarget(ent->target);

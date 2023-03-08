@@ -51,14 +51,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 int OtherTeam(int team);
 const char *TeamName(int team);
 const char *TeamColorString(int team);
-void AddTeamScore(vec3_t origin, int team, int score, char *reason);
+void AddTeamScore(const vec3_t origin, int team, int score, char *reason);
 
 void Team_DroppedFlagThink(gentity_t *ent);
 void Team_FragBonuses(gentity_t *targ, gentity_t *attacker);
-void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker);
+void Team_CheckHurtCarrier(const gentity_t *targ, gentity_t *attacker);
 void Team_InitGame(void);
 void Team_ReturnFlag(int team);
-void Team_FreeEntity(gentity_t *ent);
+void Team_FreeEntity(const gentity_t *ent);
 gentity_t *SelectCTFSpawnPoint(team_t team, int teamstate, vec3_t origin, vec3_t angles, qboolean isbot);
 qboolean Team_GetLocationMsg(gentity_t *ent, char *loc, int loclen);
 void CheckTeamStatus(void);
