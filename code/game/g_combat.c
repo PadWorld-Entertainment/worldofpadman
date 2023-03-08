@@ -57,7 +57,7 @@ void BerserkerCheck(gentity_t *ent) {
 ScorePlum
 ============
 */
-static void ScorePlum(gentity_t *ent, vec3_t origin, int score) {
+static void ScorePlum(gentity_t *ent, const vec3_t origin, int score) {
 	gentity_t *plum;
 
 	plum = G_TempEntity(origin, EV_SCOREPLUM);
@@ -76,7 +76,7 @@ AddScore
 Adds score to both the client and his team
 ============
 */
-void AddScore(gentity_t *ent, vec3_t origin, int score, char *reason) {
+void AddScore(gentity_t *ent, const vec3_t origin, int score, char *reason) {
 	if (!ent->client) {
 		return;
 	}

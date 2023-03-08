@@ -573,7 +573,7 @@ void G_SetMovedir(vec3_t angles, vec3_t movedir);
 
 void G_InitGentity(gentity_t *e);
 gentity_t *G_Spawn(void);
-gentity_t *G_TempEntity(vec3_t origin, int event);
+gentity_t *G_TempEntity(const vec3_t origin, int event);
 void G_Sound(gentity_t *ent, int channel, int soundIndex);
 void G_FreeEntity(gentity_t *e);
 qboolean G_EntitiesFree(void);
@@ -687,7 +687,7 @@ void BeginIntermission(void);
 void InitBodyQue(void);
 void ClientSpawn(gentity_t *ent);
 void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod);
-void AddScore(gentity_t *ent, vec3_t origin, int score, char *reason);
+void AddScore(gentity_t *ent, const vec3_t origin, int score, char *reason);
 void CalculateRanks(void);
 qboolean SpotWouldTelefrag(gentity_t *spot);
 
