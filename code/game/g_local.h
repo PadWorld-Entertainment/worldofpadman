@@ -265,10 +265,10 @@ typedef struct {
 	int fragcarrier;
 	int assists;
 
-	float lasthurtcarrier;
-	float lastreturnedflag;
-	float flagsince;
-	float lastfraggedcarrier;
+	int lasthurtcarrier;
+	int lastreturnedflag;
+	int flagsince;
+	int lastfraggedcarrier;
 } playerTeamState_t;
 
 // client data that stays across multiple levels or tournament restarts
