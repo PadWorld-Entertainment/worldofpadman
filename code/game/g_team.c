@@ -321,7 +321,7 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 	}
 
 	cartridges = 0;
-	if(g_gametype.integer == GT_SPRAY) {
+	if (g_gametype.integer == GT_SPRAY) {
 		cartridges = targ->client->ps.generic1;
 	}
 
@@ -699,19 +699,16 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 			player->client->pers.teamState.lasthurtcarrier = -5;
 		} else if (player->client->sess.sessionTeam == cl->sess.sessionTeam) {
 			// award extra points for capture assists
-			if (player->client->pers.teamState.lastreturnedflag +
-					CTF_RETURN_FLAG_ASSIST_TIMEOUT > level.time) {
-				AddScore(player, ent->r.currentOrigin,
-					CTF_RETURN_FLAG_ASSIST_BONUS, SCORE_BONUS_ASSIST_RETURN_S);
+			if (player->client->pers.teamState.lastreturnedflag + CTF_RETURN_FLAG_ASSIST_TIMEOUT > level.time) {
+				AddScore(player, ent->r.currentOrigin, CTF_RETURN_FLAG_ASSIST_BONUS, SCORE_BONUS_ASSIST_RETURN_S);
 				other->client->pers.teamState.assists++;
 				player->client->ps.persistant[PERS_PADACE_COUNT]++;
 				// add the sprite over the player's head
 				SetAward(player->client, AWARD_PADACE);
 			}
-			if (player->client->pers.teamState.lastfraggedcarrier +
-					CTF_FRAG_CARRIER_ASSIST_TIMEOUT > level.time) {
-				AddScore(player, ent->r.currentOrigin,
-					CTF_FRAG_CARRIER_ASSIST_BONUS, SCORE_BONUS_ASSIST_FRAG_CARRIER_S);
+			if (player->client->pers.teamState.lastfraggedcarrier + CTF_FRAG_CARRIER_ASSIST_TIMEOUT > level.time) {
+				AddScore(player, ent->r.currentOrigin, CTF_FRAG_CARRIER_ASSIST_BONUS,
+						 SCORE_BONUS_ASSIST_FRAG_CARRIER_S);
 				other->client->pers.teamState.assists++;
 				player->client->ps.persistant[PERS_PADACE_COUNT]++;
 				// add the sprite over the player's head
