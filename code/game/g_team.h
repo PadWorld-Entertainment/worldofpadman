@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define CTF_TARGET_PROTECT_RADIUS 1000		// the radius around an object being defended where a target will be worth extra frags
 #define CTF_ATTACKER_PROTECT_RADIUS 1000	// the radius around an object being defended where an attacker will get extra frags when making kills
+#define BALLOON_TARGET_PROTECT_RADIUS 1000	// the radius around an object being defended where a target will be worth extra frags
 
 #define CTF_CARRIER_DANGER_PROTECT_TIMEOUT 8000
 #define CTF_FRAG_CARRIER_ASSIST_TIMEOUT 10000

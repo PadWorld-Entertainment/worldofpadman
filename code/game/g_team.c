@@ -277,6 +277,32 @@ static void Team_ForceGesture(int team) {
 }
 #endif
 
+/**
+ * Checks to hand out a pad hero award to the attacker.
+ *
+ * @return @c true if the attacker fragged the victim close to a balloon zone that belongs to the attacker's team
+ */
+static qboolean Team_BalloonDefendOrProtectBonus(const gentity_t *targ, gentity_t *attacker) {
+	gentity_t *balloon = NULL;
+	const int check = attacker->client->sess.sessionTeam == TEAM_RED ? BT_RED : BT_BLUE;
+
+	if (attacker->client->sess.sessionTeam == targ->client->sess.sessionTeam) {
+		return qfalse;
+	}
+
+	while ((balloon = G_FindRadius(balloon, FOFS(classname), "trigger_balloonzone", targ->r.currentOrigin, BALLOON_TARGET_PROTECT_RADIUS))) {
+		if (!(balloon->teamMask & check)) {
+			continue;
+		}
+		attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
+		// add the sprite over the player's head
+		SetAward(attacker->client, AWARD_PADHERO);
+		return qtrue;
+	}
+
+	return qfalse;
+}
+
 static qboolean Team_FlagDefendOrProtectBonus(const gentity_t *targ, gentity_t *attacker, int flag_pw) {
 	gentity_t *flag = NULL;
 	gentity_t *carrier = NULL;
@@ -459,6 +485,8 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *attacker) {
 	// flag and flag carrier area defense bonuses
 	if (g_gametype.integer == GT_CTF) {
 		Team_FlagDefendOrProtectBonus(targ, attacker, flag_pw);
+	} else if (g_gametype.integer == GT_BALLOON) {
+		Team_BalloonDefendOrProtectBonus(targ, attacker);
 	}
 }
 
