@@ -74,12 +74,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 // Fixed reasons and scores for AddScore and AddTeamScore
 // Also see g_team.h for some teamplay (ctf) specific score boni
-#define SCORE_SUICIDE -1
-#define SCORE_TEAMKILL -1
+#define SCORE_SUICIDE (-1)
+#define SCORE_TEAMKILL (-1)
 #define SCORE_KILL 1
 #define SCORE_SURVIVE 1
 #define SCORE_SPRAY 5
-#define SCORE_SPRAY_WRONGWALL -SCORE_SPRAY
+#define SCORE_SPRAY_WRONGWALL (-SCORE_SPRAY)
 #define SCORE_BONUS_SPRAYKILLER 10
 #define SCORE_BONUS_SPRAYGOD 25
 #define SCORE_CAPTURE 1
