@@ -200,12 +200,10 @@ gentity_t *G_FindRadius(gentity_t *from, int fieldofs, const char *match, const 
 
 	while ((ent = G_Find(ent, fieldofs, match))) {
 		vec3_t dist;
-		vec3_t center;
-		int j;
+		int i;
 
-		VectorMA(ent->r.absmin, 0.5f, ent->r.absmax, center);
-		for (j = 0; j < 3; j++) {
-			dist[j] = org[j] - center[j];
+		for (i = 0; i < 3; i++) {
+			dist[i] = (ent->r.absmin[i] + ent->r.absmax[i]) * 0.5f;
 		}
 		if (VectorLengthSquared(dist) > rs) {
 			continue;
