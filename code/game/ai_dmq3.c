@@ -2022,6 +2022,11 @@ int BotSameTeam(const bot_state_t *bs, int entnum) {
 		// BotAI_Print(PRT_ERROR, "BotSameTeam: client out of range\n");
 		return qfalse;
 	}
+	if (gametype == GT_CATCH) {
+		// you are on the same team as all the players that are not carrying the killerduck
+		return !G_IsKillerDuck(&g_entities[entnum]);
+	}
+
 	if (gametype < GT_TEAM)
 		return qfalse;
 

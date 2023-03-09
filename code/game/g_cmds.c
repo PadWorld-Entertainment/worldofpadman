@@ -1165,9 +1165,10 @@ static void Cmd_CallVote_f(gentity_t *ent) {
 	// special case for g_gametype, check for bad values
 	if (!Q_stricmp(arg1, "g_gametype")) {
 		static const char *gametypeNames[GT_MAX_GAME_TYPE] = {
-			GAMETYPE_NAME(GT_FFA),	 GAMETYPE_NAME(GT_TOURNAMENT), GAMETYPE_NAME(GT_SINGLE_PLAYER), GAMETYPE_NAME(GT_SPRAYFFA),
-			GAMETYPE_NAME(GT_LPS),	 GAMETYPE_NAME(GT_TEAM),	   GAMETYPE_NAME(GT_FREEZETAG),		GAMETYPE_NAME(GT_CTF),
-			GAMETYPE_NAME(GT_SPRAY), GAMETYPE_NAME(GT_BALLOON)};
+			GAMETYPE_NAME(GT_FFA),		GAMETYPE_NAME(GT_TOURNAMENT), GAMETYPE_NAME(GT_SINGLE_PLAYER),
+			GAMETYPE_NAME(GT_SPRAYFFA), GAMETYPE_NAME(GT_LPS),		  GAMETYPE_NAME(GT_CATCH),
+			GAMETYPE_NAME(GT_TEAM),		GAMETYPE_NAME(GT_FREEZETAG),  GAMETYPE_NAME(GT_CTF),
+			GAMETYPE_NAME(GT_SPRAY),	GAMETYPE_NAME(GT_BALLOON)};
 		CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
 
 		i = atoi(arg2);
@@ -1732,6 +1733,8 @@ void Cmd_DropCartridge_f(gentity_t *ent) {
 		G_DropCartridges(ent);
 	} else if (g_gametype.integer == GT_CTF) {
 		G_DropFlags(ent);
+	} else if (g_gametype.integer == GT_CATCH) {
+		G_DropKillerDucks(ent);
 	}
 }
 

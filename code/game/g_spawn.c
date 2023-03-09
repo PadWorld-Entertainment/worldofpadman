@@ -391,7 +391,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	const char *gametypeName;
 	const gitem_t *item;
 
-	static const char *gametypeNames[] = {"ffa",  "tournament", "single", "spray", "lps",
+	static const char *gametypeNames[] = {"ffa",  "tournament", "single", "spray", "lps",	 "ctkd",
 										  "team", "freeze",		"ctl",	  "sptp",  "balloon"};
 	CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
 

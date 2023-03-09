@@ -381,8 +381,7 @@ void CG_ScorePlum(int client, vec3_t org, int score) {
 	vec3_t angles;
 	static vec3_t lastPos;
 
-	// only visualize for the client that scored
-	if (client != cg.predictedPlayerState.clientNum || cg_scorePlum.integer == 0) {
+	if (cg_scorePlum.integer == 0) {
 		return;
 	}
 

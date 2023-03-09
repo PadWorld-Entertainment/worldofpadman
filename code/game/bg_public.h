@@ -113,6 +113,7 @@ typedef enum {
 
 	GT_SPRAYFFA, // spray logo ffa GT
 	GT_LPS,
+	GT_CATCH, // catch the killerduck
 
 	//-- team games go after this --
 
@@ -133,6 +134,7 @@ typedef enum {
 #define GTN__GT_SINGLE_PLAYER "Singleplayer"
 #define GTN__GT_SPRAYFFA "Spray Your Color"
 #define GTN__GT_LPS "Last Pad Standing"
+#define GTN__GT_CATCH "Catch The Killerduck"
 #define GTN__GT_TEAM "Free For All Team"
 #define GTN__GT_CTF "Capture The Lolly"
 #define GTN__GT_SPRAY "Spray Your Color Team"
@@ -145,6 +147,7 @@ typedef enum {
 #define GTN_S__GT_SINGLE_PLAYER "SP"
 #define GTN_S__GT_SPRAYFFA "SYC"
 #define GTN_S__GT_LPS "LPS"
+#define GTN_S__GT_CATCH "CTKD"
 #define GTN_S__GT_TEAM "TFFA"
 #define GTN_S__GT_CTF "CTL"
 #define GTN_S__GT_SPRAY "TSYC"
@@ -323,6 +326,7 @@ typedef enum {
 #define EF_AWARD_SPRAYGOD 0x00080000
 #define EF_AWARD_SPRAYKILLER 0x00100000
 #define EF_NOLIFESLEFT 0x00200000
+#define EF_KILLERDUCK 0x00400000
 
 #define REMOVE_AWARDFLAGS                                                                                              \
 	~(EF_AWARD_EXCELLENT | EF_AWARD_SNACKATTACK | EF_AWARD_PADACE | EF_AWARD_PADHERO |               \
@@ -751,6 +755,8 @@ const gitem_t *BG_FindItemForHoldable(holdable_t pw);
 #define ITEM_INDEX(x) ((x)-bg_itemlist)
 
 qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playerState_t *ps);
+
+qboolean BG_IsKillerDuck(const playerState_t *ps);
 
 // g_dmflags->integer flags
 #define DF_NO_FALLING 8

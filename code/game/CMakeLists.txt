@@ -15,6 +15,7 @@ set(SRCS
 	g_active.c
 	g_arenas.c
 	g_bot.c
+	g_catch.c
 	g_client.c
 	g_cmds.c
 	g_combat.c

@@ -196,6 +196,11 @@ static int Pickup_Holdable(gentity_t *ent, gentity_t *other) {
 
 	// FIXME: Check for NULLs?
 	other->client->ps.stats[STAT_HOLDABLE_ITEM] = (ent->item - bg_itemlist);
+	if (g_gametype.integer == GT_CATCH && ent->item->giTag == HI_KILLERDUCKS) {
+		G_BecomeKillerDuck(ent, other);
+		// don't respawn the item
+		return -1;
+	}
 	other->client->ps.stats[STAT_HOLDABLEVAR] = count;
 
 	return RESPAWN_HOLDABLE;
@@ -434,6 +439,12 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	if (other->health < 1)
 		return; // dead people can't pickup
 
+	if (g_gametype.integer == GT_CATCH) {
+		if (ent->s.otherEntityNum == other->s.number) {
+			return;
+		}
+	}
+
 	if (G_FreezeTag() && FT_PlayerIsFrozen(other))
 		return; // frozen people don't pick stuff up
 
@@ -595,13 +606,12 @@ gentity_t *LaunchItem(const gitem_t *item, const vec3_t origin, const vec3_t vel
 
 	dropped->s.eFlags |= EF_BOUNCE_HALF;
 	// Special case for CTF flags
-	if ((g_gametype.integer == GT_CTF) && (item->giType == IT_TEAM)) {
+	if (g_gametype.integer == GT_CTF && item->giType == IT_TEAM) {
 		dropped->think = Team_DroppedFlagThink;
 		dropped->nextthink = (level.time + RESPAWN_DROPPED_FLAG * 1000);
 		Team_CheckDroppedItem(dropped);
-	}
-	// auto-remove after timeout
-	else {
+	} else {
+		// auto-remove after timeout
 		dropped->think = G_FreeEntity;
 		dropped->nextthink = (level.time + RESPAWN_DROPPED_ITEM * 1000);
 	}
@@ -620,22 +630,26 @@ Drop_Item
 Spawns an item and tosses it forward
 ================
 */
-gentity_t *Drop_Item(const gentity_t *ent, const gitem_t *item, float angle) {
-	vec3_t velocity;
-	vec3_t angles;
+gentity_t *Drop_Item(gentity_t *ent, const gitem_t *item, float angle) {
+	if (item->giType == IT_HOLDABLE && item->giTag == HI_KILLERDUCKS && g_gametype.integer == GT_CATCH) {
+		return G_DropKillerDucks(ent);
+	} else {
+		vec3_t velocity;
+		vec3_t angles;
 
-	VectorCopy(ent->s.apos.trBase, angles);
-	angles[YAW] += angle;
-	angles[PITCH] = 0; // always forward
+		VectorCopy(ent->s.apos.trBase, angles);
+		angles[YAW] += angle;
+		angles[PITCH] = 0; // always forward
 
-	AngleVectors(angles, velocity, NULL, NULL);
-	VectorScale(velocity, 150, velocity);
-	velocity[2] += 200 + crandom() * 50;
+		AngleVectors(angles, velocity, NULL, NULL);
+		VectorScale(velocity, 150, velocity);
+		velocity[2] += 200 + crandom() * 50;
 
-	// FIXME: Cartridges call LaunchItem() directly
-	G_LogPrintf("DropItem: %ld %s\n", (ent - g_entities), item->classname);
+		// FIXME: Cartridges call LaunchItem() directly
+		G_LogPrintf("DropItem: %ld %s\n", (ent - g_entities), item->classname);
 
-	return LaunchItem(item, ent->s.pos.trBase, velocity);
+		return LaunchItem(item, ent->s.pos.trBase, velocity);
+	}
 }
 
 /*

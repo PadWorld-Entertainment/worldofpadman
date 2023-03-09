@@ -61,9 +61,15 @@ static void ScorePlum(gentity_t *ent, const vec3_t origin, int score) {
 	gentity_t *plum;
 
 	plum = G_TempEntity(origin, EV_SCOREPLUM);
-	// only send this temp entity to a single client
-	plum->r.svFlags |= SVF_SINGLECLIENT;
-	plum->r.singleClient = ent->s.number;
+	if (G_IsKillerDuck(ent)) {
+		// send scoring point event to every player - the killerduck
+		// should not be able to hide anywhere...
+		plum->r.svFlags |= SVF_BROADCAST;
+	} else {
+		// only send this temp entity to a single client
+		plum->r.svFlags |= SVF_SINGLECLIENT;
+		plum->r.singleClient = ent->s.number;
+	}
 
 	plum->s.otherEntityNum = ent->s.number;
 	plum->s.time = score;
@@ -208,8 +214,9 @@ void TossClientItems(gentity_t *self) {
 	for (i = 1; i < HI_NUM_HOLDABLE; i++) {
 		if (bg_itemlist[self->client->ps.stats[STAT_HOLDABLE_ITEM]].giTag == i) {
 			item = BG_FindItemForHoldable(i);
-			if (!item)
+			if (!item) {
 				continue;
+			}
 			drop = Drop_Item(self, item, angle);
 			drop->count = self->client->ps.stats[STAT_HOLDABLEVAR];
 			angle += 45;
@@ -853,6 +860,10 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		if (targ->flags & FL_GODMODE) {
 			return;
 		}
+	}
+
+	if (g_gametype.integer == GT_CATCH && !G_IsKillerDuck(targ)) {
+		return;
 	}
 
 	// battlesuit protects from all radius damage (but takes knockback)

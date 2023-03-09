@@ -115,11 +115,19 @@ static const char *servertype_items[] = {"All",
 static const char *sortkey_items[] = {"Server Name",   "Map Name", "Open Player Slots", "Game Type", "Ping Time",
 									  "Human Players", NULL};
 
-static char *gamenames[] = {
-	GAMETYPE_NAME_SHORT(GT_FFA),	   GAMETYPE_NAME_SHORT(GT_TOURNAMENT),	  GAMETYPE_NAME_SHORT(GT_SINGLE_PLAYER),
-	GAMETYPE_NAME_SHORT(GT_SPRAYFFA),  GAMETYPE_NAME_SHORT(GT_LPS),			  GAMETYPE_NAME_SHORT(GT_TEAM),
-	GAMETYPE_NAME_SHORT(GT_FREEZETAG), GAMETYPE_NAME_SHORT(GT_CTF),			  GAMETYPE_NAME_SHORT(GT_SPRAY),
-	GAMETYPE_NAME_SHORT(GT_BALLOON),   GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE), NULL};
+static char *gamenames[] = {GAMETYPE_NAME_SHORT(GT_FFA),
+							GAMETYPE_NAME_SHORT(GT_TOURNAMENT),
+							GAMETYPE_NAME_SHORT(GT_SINGLE_PLAYER),
+							GAMETYPE_NAME_SHORT(GT_SPRAYFFA),
+							GAMETYPE_NAME_SHORT(GT_LPS),
+							GAMETYPE_NAME_SHORT(GT_CATCH),
+							GAMETYPE_NAME_SHORT(GT_TEAM),
+							GAMETYPE_NAME_SHORT(GT_FREEZETAG),
+							GAMETYPE_NAME_SHORT(GT_CTF),
+							GAMETYPE_NAME_SHORT(GT_SPRAY),
+							GAMETYPE_NAME_SHORT(GT_BALLOON),
+							GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE),
+							NULL};
 
 static char quake3worldMessage[] = "Visit worldofpadman.net - News, Community, Events, Files";
 

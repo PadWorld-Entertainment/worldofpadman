@@ -365,6 +365,9 @@ static qboolean PM_CheckJump(void) {
 	if (pm->ps->powerups[PW_JUMPER] && pm->ps->weapon != WP_SPRAYPISTOL) {
 		// FIXME: Magical constant 2.5
 		pm->ps->velocity[2] = (JUMP_VELOCITY * 2.5);
+	} else if (BG_IsKillerDuck(pm->ps)) {
+		// FIXME: Magical constant 1.5
+		pm->ps->velocity[2] = (JUMP_VELOCITY * 1.5);
 	} else {
 		pm->ps->velocity[2] = JUMP_VELOCITY;
 	}
@@ -1519,6 +1522,11 @@ static void PM_Weapon(void) {
 				}
 				goto shootafterrspecialHI;
 			} else if (giTag == HI_KILLERDUCKS) {
+				if (pm->gametype == GT_CATCH) {
+					pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
+					PM_AddEvent(EV_USE_ITEM0);
+					return;
+				}
 				if (pm->ps->weaponstate != WEAPON_READY)
 					goto shootafterrspecialHI;
 
@@ -1693,6 +1701,11 @@ shootafterrspecialHI:
 	}
 
 fire:
+
+	if (BG_IsKillerDuck(pm->ps)) {
+		return;
+	}
+
 	// HERBY: Reset flag
 	pm->ps->eFlags &= ~EF_CHARGED;
 

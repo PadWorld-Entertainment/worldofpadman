@@ -1806,6 +1806,11 @@ void trap_GetVoipTimes(int *times);
 int trap_RealTime(qtime_t *qtime);
 
 //
+// cg_catch.c
+//
+qboolean CG_IsKillerDuck(const centity_t *cent);
+
+//
 //	cg_rautelib.c
 qboolean Calculate_2DOf3D(vec3_t point, float *x, float *y);
 
