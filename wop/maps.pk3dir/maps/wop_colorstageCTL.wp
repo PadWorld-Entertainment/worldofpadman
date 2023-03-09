@@ -1,21 +1,21 @@
-waypoint redLolly -1447 -7132 -181
-waypoint redHealthStation 9 -6917 -77
-waypoint redBubbleG 1395 -7030 -181
-waypoint redPadshield -25 -5308 218
-waypoint redPumper -906 -5366 218
-waypoint redShardsPumper -530 -5488 -149
-waypoint redShardsBetty 556 -5488 -149
-waypoint redBetty 873 -5258 218
-waypoint redBalloony -14 -4857 -149
-waypoint blueLolly 1444 -550 -181
-waypoint blueHealthStation 211 -538 -77
-waypoint blueBubbleG -1183 -610 -181
-waypoint bluePadshield 31 -2373 218
-waypoint bluePumper 880 -2381 218
-waypoint blueShardsPumper 509 -2357 -149
-waypoint blueShardsBetty -582 -2260 -149
-waypoint blueBetty -790 -2407 218
-waypoint blueBalloony 4 -2822 -149
+waypoint redLolly -1347 -3351 -201
+waypoint redHealthStation 0 -3736 -100
+waypoint redBubbleG 1212 -3424 -207
+waypoint redPadshield 0 -1472 192
+waypoint redPumper -808 -1464 196
+waypoint redShardsPumper -488 -1472 -160
+waypoint redShardsBetty 472 -1472 -160
+waypoint redBetty 808 -1464 192
+waypoint redBalloony 0 -864 -182
+waypoint blueLolly 1343 3351 -201
+waypoint blueHealthStation 0 3736 -100
+waypoint blueBubbleG -1212 3424 -207
+waypoint bluePadshield 0 1472 192
+waypoint bluePumper 808 1472 196
+waypoint blueShardsPumper 488 1472 -160
+waypoint blueShardsBetty -472 1472 -160
+waypoint blueBetty -808 1472 192
+waypoint blueBalloony 488 1472 -160
 linkblue redLolly redPumper
 linkblue redLolly redHealthStation
 linkblue redHealthStation redBubbleG
