@@ -199,7 +199,7 @@ const gitem_t bg_itemlist[] = {
 	 {"models/weapons2/imperius/imperius", 0, 0, 0},
 	 /* icon */ "icons/weapon_imperius",
 	 /* pickup */ "IMPERiUS",
-	 2,
+	 3,
 	 IT_WEAPON,
 	 WP_IMPERIUS,
 	 /* precache */ "",
