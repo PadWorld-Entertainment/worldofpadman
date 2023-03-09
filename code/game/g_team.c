@@ -581,7 +581,7 @@ void Team_FragBonuses(gentity_t *victim, gentity_t *attacker) {
 	}
 
 	// flag and flag carrier area defense bonuses
-	if (g_gametype.integer == GT_CTF) {
+	if (g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF) {
 		Team_FlagDefendOrProtectBonus(victim, attacker, flag_pw);
 	} else if (g_gametype.integer == GT_BALLOON) {
 		Team_BalloonDefendOrProtectBonus(victim, attacker);
