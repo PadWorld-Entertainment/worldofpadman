@@ -6,7 +6,7 @@ textures/pad_glowsky/padbox
 	surfaceparm sky
 	q3map_lightimage textures/colors/hex_ccccffff
 	q3map_sun 1 1 1 100 -58 58
-	q3map_surfacelight 90
+	q3map_surfacelight 150
 
 	skyparms env/padbox2 - -
 	{
