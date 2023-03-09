@@ -199,13 +199,13 @@ gentity_t *G_FindRadius(gentity_t *from, int fieldofs, const char *match, const 
 	const float rs = Square(radius);
 
 	while ((ent = G_Find(ent, fieldofs, match))) {
-		vec3_t dist;
+		vec3_t center;
 		int i;
 
 		for (i = 0; i < 3; i++) {
-			dist[i] = (ent->r.absmin[i] + ent->r.absmax[i]) * 0.5f;
+			center[i] = (ent->r.absmin[i] + ent->r.absmax[i]) * 0.5f;
 		}
-		if (VectorLengthSquared(dist) > rs) {
+		if (DistanceSquared(org, center) > rs) {
 			continue;
 		}
 		return ent;
