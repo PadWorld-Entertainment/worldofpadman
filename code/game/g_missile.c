@@ -934,6 +934,10 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 	gentity_t *bolt;
 	trace_t tr;
 
+	if (G_IsKillerDuck(self)) {
+		return NULL;
+	}
+
 	VectorNormalize(dir);
 
 	bolt = G_Spawn();

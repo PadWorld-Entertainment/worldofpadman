@@ -311,6 +311,7 @@ typedef struct {
 	qboolean teamInfo;			 // send team overlay updates?
 	qboolean frozen;
 	qboolean ftLateJoin;
+	int lastKillerDuckPoints;	 // catch the killerduck
 } clientPersistant_t;
 
 // this structure is cleared on each ClientSpawn(),
@@ -547,7 +548,7 @@ void RespawnItem(gentity_t *ent);
 
 void UseHoldableItem(gentity_t *ent);
 void PrecacheItem(gitem_t *it);
-gentity_t *Drop_Item(const gentity_t *ent, const gitem_t *item, float angle);
+gentity_t *Drop_Item(gentity_t *ent, const gitem_t *item, float angle);
 gentity_t *LaunchItem(const gitem_t *item, const vec3_t origin, const vec3_t velocity);
 void SetRespawn(gentity_t *ent, float delay);
 void G_SpawnItem(gentity_t *ent, const gitem_t *item);
@@ -816,6 +817,16 @@ qboolean IsItemSameTeam(gentity_t *item, gentity_t *player);
 qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName);
 qboolean boomies_createByPlayer(gentity_t *pEnt, const char *pickupName);
 qboolean CantDamageTeamitem(gentity_t *target, gentity_t *attacker);
+
+//
+// g_catch.c
+//
+gentity_t* G_DropKillerDucks(gentity_t *self);
+void G_DroppedKillerDucksThink(gentity_t *self);
+void G_ThinkDroppedKillerducks(gentity_t *ent);
+void G_KillerDuckThink(gentity_t *ent);
+qboolean G_IsKillerDuck(const gentity_t *ent);
+void G_BecomeKillerDuck(gentity_t *item, gentity_t *ent);
 
 //
 // g_bot.c

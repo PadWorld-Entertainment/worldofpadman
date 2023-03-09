@@ -208,6 +208,7 @@ static void CG_HelpCmd_f(void) {
 									  GAMETYPE_NAME(GT_SINGLE_PLAYER),
 									  GAMETYPE_NAME(GT_SPRAYFFA),
 									  GAMETYPE_NAME(GT_LPS),
+									  GAMETYPE_NAME(GT_CATCH),
 									  GAMETYPE_NAME(GT_TEAM),
 									  GAMETYPE_NAME(GT_FREEZETAG),
 									  GAMETYPE_NAME(GT_CTF),

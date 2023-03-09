@@ -561,16 +561,15 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 
 			break;
 
-		case EV_USE_ITEM4: // HI_KILLERDUCKS
-		{
+		case EV_USE_ITEM4: { // HI_KILLERDUCKS
 			vec3_t forward, right, up, muzzle;
 
 			AngleVectors(client->ps.viewangles, forward, right, up);
 
 			CalcMuzzlePoint(ent, forward, right, up, muzzle);
 			fire_killerducks(ent, muzzle, forward);
-		} break;
-
+			break;
+		}
 		// HI_BAMBAM
 		case EV_USE_ITEM5: {
 			const gitem_t *item = BG_FindItemForHoldable(HI_BAMBAM);
@@ -782,6 +781,10 @@ static void ClientThink_real(gentity_t *ent) {
 			client->ps.speed *= 1.3f;
 	}
 
+	if (G_IsKillerDuck(ent)) {
+		client->ps.speed *= 1.3f;
+	}
+
 	// Let go of the hook if we aren't firing
 	if (client->ps.weapon == WP_GRAPPLING_HOOK && client->hook && !(ucmd->buttons & BUTTON_ATTACK)) {
 		Weapon_HookFree(client->hook);
@@ -885,6 +888,10 @@ static void ClientThink_real(gentity_t *ent) {
 				ent->client->pers.ftLateJoin = qfalse;
 			}
 		}
+	}
+
+	if (G_IsKillerDuck(ent)) {
+		G_KillerDuckThink(ent);
 	}
 
 	// NOTE: now copy the exact origin over otherwise clients can be snapped into solid
