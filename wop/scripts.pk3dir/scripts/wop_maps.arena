@@ -225,7 +225,7 @@
 {
 	map      "wop_colorstageCTL"
 	longname "ColorStage"
-	type     "ctl"
+	type     "ctl 1lctl"
 }
 
 {
