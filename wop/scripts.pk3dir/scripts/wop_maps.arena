@@ -3,13 +3,13 @@
 {
 	map      "wop_padgarden"
 	longname "PadGarden"
-	type     "ffa syc_ffa syc_tp team ft"
+	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_padgarden_night"
 	longname "PadGarden Night"
-	type     "ffa lps"
+	type     "ffa lps ctkd"
 }
 
 {
@@ -21,7 +21,7 @@
 {
 	map      "wop_padkitchen"
 	longname "PadKitchen"
-	type     "ffa syc_ffa syc_tp team ft"
+	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -39,7 +39,7 @@
 {
 	map      "wop_huette"
 	longname "Huette"
-	type     "ffa lps syc_ffa syc_tp team ft"
+	type     "ffa lps syc_ffa syc_tp team ft ctkd"
 } 
 
 {
@@ -51,7 +51,7 @@
 {
 	map      "wop_padlibrary"
 	longname "PadLibrary"
-	type     "ffa syc_ffa syc_tp team ft"
+	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -75,13 +75,13 @@
 {
 	map      "wop_airplane"
 	longname "Airplane"
-	type     "ffa syc_ffa syc_tp team ft lps"
+	type     "ffa syc_ffa syc_tp team ft lps ctkd"
 }
 
 {
 	map      "wop_trashmap"
 	longname "TrashMap"
-	type     "ffa syc_ffa syc_tp team ft"
+	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -93,7 +93,7 @@
 {
 	map      "wop_jail"
 	longname "Jail"
-	type     "ffa syc_ffa syc_tp team ft"
+	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -105,7 +105,7 @@
 {
 	map      "wop_padship"
 	longname "PadShip"
-	type     "ffa syc_ffa syc_tp team ft"
+	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -117,7 +117,7 @@
 {
 	map      "wop_backyard"
 	longname "Backyard"
-	type     "ffa lps syc_ffa syc_tp team ft"
+	type     "ffa lps syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -129,13 +129,13 @@
 {
 	map      "wop_padcrash"
 	longname "PadCrash"
-	type     "ffa lps team ft"
+	type     "ffa lps team ft ctkd"
 }
 
 {
 	map      "wop_bath"
 	longname "CybBath"
-	type     "ffa syc_ffa syc_tp team ft"
+	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -147,7 +147,7 @@
 {
 	map      "wop_padshop"
 	longname "PadShop"
-	type     "ffa syc_ffa syc_tp team ft"
+	type     "ffa syc_ffa syc_tp team ft ctkd"
 } 
 
 {
@@ -159,7 +159,7 @@
 {
 	map      "wop_anteroom"
 	longname "Anteroom"
-	type     "ffa lps syc_ffa syc_tp team ft"
+	type     "ffa lps syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -171,7 +171,7 @@
 {
 	map      "wop_padattic"
 	longname "PadAttic"
-	type     "ffa syc_ffa syc_tp team ft"
+	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -189,7 +189,7 @@
 {
 	map      "wop_cabin"
 	longname "Cabin"
-	type     "ffa lps syc_ffa syc_tp team ft"
+	type     "ffa lps syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -201,7 +201,7 @@
 {
 	map      "wop_diner"
 	longname "Diner"
-	type     "ffa lps syc_ffa syc_tp team ft"
+	type     "ffa lps syc_ffa syc_tp team ft ctkd"
 }
 
 {
@@ -213,7 +213,7 @@
 {
 	map      "wop_padcrash_dm17"
 	longname "PadCrash DM17"
-	type     "ffa lps team ft"
+	type     "ffa lps team ft ctkd"
 }
 
 {

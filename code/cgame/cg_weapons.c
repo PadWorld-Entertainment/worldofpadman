@@ -938,11 +938,15 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	if (cent->currentState.eFlags & (EF_DEAD | EF_NOLIFESLEFT) || cent->currentState.powerups & (1 << PW_FREEZE))
 		cent->currentState.eFlags &= ~EF_FIRING; // maybe this fixes the boaster beam for killed ents
 
-	gun.hModel = weapon->weaponModel;
-	if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE)
-		gun.customSkin = cgs.media.blueSpraypistolskin;
-	else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_FREE)
-		gun.customSkin = cgs.media.neutralSpraypistolskin;
+	if (CG_IsKillerDuck(cent)) {
+		gun.hModel = 0;
+	} else {
+		gun.hModel = weapon->weaponModel;
+		if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE)
+			gun.customSkin = cgs.media.blueSpraypistolskin;
+		else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_FREE)
+			gun.customSkin = cgs.media.neutralSpraypistolskin;
+	}
 
 	if (!gun.hModel) {
 		return;

@@ -311,6 +311,7 @@ typedef struct {
 	qboolean teamInfo;			 // send team overlay updates?
 	qboolean frozen;
 	qboolean ftLateJoin;
+	int lastKillerDuckPoints;	 // catch the killerduck
 } clientPersistant_t;
 
 // this structure is cleared on each ClientSpawn(),
@@ -818,6 +819,14 @@ qboolean IsItemSameTeam(gentity_t *item, gentity_t *player);
 qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName);
 qboolean boomies_createByPlayer(gentity_t *pEnt, const char *pickupName);
 qboolean CantDamageTeamitem(gentity_t *target, gentity_t *attacker);
+
+//
+// g_catch.c
+//
+void G_DropKillerDucks(gentity_t *self);
+void G_KillerDuckPoints(gentity_t *ent);
+qboolean G_IsKillerDuck(const gentity_t *ent);
+void G_GetKillerDuck(gentity_t *ent);
 
 //
 // g_bot.c

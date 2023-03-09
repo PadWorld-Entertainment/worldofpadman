@@ -1,6 +1,7 @@
 project(cgame)
 set(SRCS
 	cg_main.c
+	cg_catch.c
 	cg_consolecmds.c
 	cg_cutscene2d.c
 	cg_draw.c

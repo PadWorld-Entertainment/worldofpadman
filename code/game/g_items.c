@@ -196,6 +196,11 @@ static int Pickup_Holdable(gentity_t *ent, gentity_t *other) {
 
 	// FIXME: Check for NULLs?
 	other->client->ps.stats[STAT_HOLDABLE_ITEM] = (ent->item - bg_itemlist);
+	if (g_gametype.integer == GT_CATCH && ent->item->giTag == HI_KILLERDUCKS) {
+		G_GetKillerDuck(other);
+		// don't respawn the item
+		return -1;
+	}
 	other->client->ps.stats[STAT_HOLDABLEVAR] = count;
 
 	return RESPAWN_HOLDABLE;

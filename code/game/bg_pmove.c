@@ -1693,6 +1693,11 @@ shootafterrspecialHI:
 	}
 
 fire:
+
+	if (pm->ps->eFlags & EF_KILLERDUCK) {
+		return;
+	}
+
 	// HERBY: Reset flag
 	pm->ps->eFlags &= ~EF_CHARGED;
 

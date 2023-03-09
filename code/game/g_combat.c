@@ -61,9 +61,15 @@ static void ScorePlum(gentity_t *ent, const vec3_t origin, int score) {
 	gentity_t *plum;
 
 	plum = G_TempEntity(origin, EV_SCOREPLUM);
-	// only send this temp entity to a single client
-	plum->r.svFlags |= SVF_SINGLECLIENT;
-	plum->r.singleClient = ent->s.number;
+	if (G_IsKillerDuck(ent)) {
+		// send scoring point event to every player - the killerduck
+		// should not be able to hide anywhere...
+		plum->r.svFlags |= SVF_BROADCAST;
+	} else {
+		// only send this temp entity to a single client
+		plum->r.svFlags |= SVF_SINGLECLIENT;
+		plum->r.singleClient = ent->s.number;
+	}
 
 	plum->s.otherEntityNum = ent->s.number;
 	plum->s.time = score;
@@ -625,6 +631,10 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 		deathAnimationIndex = (deathAnimationIndex + 1) % 3;
 	}
 
+	if (G_IsKillerDuck(self)) {
+		G_DropKillerDucks(self);
+	}
+
 	trap_LinkEntity(self);
 }
 
@@ -854,6 +864,10 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		if (targ->flags & FL_GODMODE) {
 			return;
 		}
+	}
+
+	if (g_gametype.integer == GT_CATCH && !G_IsKillerDuck(targ)) {
+		return;
 	}
 
 	// battlesuit protects from all radius damage (but takes knockback)

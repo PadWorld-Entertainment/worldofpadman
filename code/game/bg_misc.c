@@ -1279,6 +1279,8 @@ int convertGTStringToGTNumber(const char *argStr) {
 		}
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_BALLOON)) || strstr(buf, "BALLOON")) {
 		gt = GT_BALLOON;
+	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_CATCH)) || strstr(buf, "CATCH")) {
+		gt = GT_CATCH;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_LPS)) || (strstr(buf, "LAST") && strstr(buf, "STANDING"))) {
 		gt = GT_LPS;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_CTF)) ||
