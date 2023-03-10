@@ -927,6 +927,8 @@ SELECT BOTS MENU
 #define ARROWDN0 "menu/arrows/headyel_dn0"
 #define ARROWDN1 "menu/arrows/headyel_dn1"
 #define ICONSHADOW "menu/art/micon_shadow"
+#define HEADERBOTS "menu/headers/bots"
+#define HEADERCOLOR "menu/headers/color"
 
 #define BOTGRID_COLS 5
 #define BOTGRID_ROWS 4
@@ -942,6 +944,9 @@ typedef struct {
 	menubitmap_s pics[MAX_BOTSPERPAGE];
 	menubitmap_s arrowleft;
 	menubitmap_s arrowright;
+
+	menubitmap_s headerbots;
+	menubitmap_s headercolor;
 
 	menutext_s selectedbotnames[MAX_SELECTLISTBOTS];
 	menutext_s selectedbotteams[MAX_SELECTLISTBOTS];
@@ -1253,6 +1258,8 @@ UI_SelectBots_Cache
 =================
 */
 void UI_SelectBots_Cache(void) {
+	trap_R_RegisterShaderNoMip(HEADERBOTS);
+	trap_R_RegisterShaderNoMip(HEADERCOLOR);
 	trap_R_RegisterShaderNoMip(ARROWLT0);
 	trap_R_RegisterShaderNoMip(ARROWLT1);
 	trap_R_RegisterShaderNoMip(ARROWRT0);
@@ -1450,6 +1457,20 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowright.focuspic = ARROWRT1;
 	botSelectInfo.arrowright.focuspicinstead = qtrue;
 
+	botSelectInfo.headerbots.generic.type = MTYPE_BITMAP;
+	botSelectInfo.headerbots.generic.name = HEADERBOTS;
+	botSelectInfo.headerbots.generic.x = 596;
+	botSelectInfo.headerbots.generic.y = 190;
+	botSelectInfo.headerbots.width = 70;
+	botSelectInfo.headerbots.height = 35;
+
+	botSelectInfo.headercolor.generic.type = MTYPE_BITMAP;
+	botSelectInfo.headercolor.generic.name = HEADERCOLOR;
+	botSelectInfo.headercolor.generic.x = 706;
+	botSelectInfo.headercolor.generic.y = 190;
+	botSelectInfo.headercolor.width = 105;
+	botSelectInfo.headercolor.height = 35;
+
 	y = (414 - MAX_SELECTLISTBOTS * 16);
 
 	for (i = 0; i < MAX_SELECTLISTBOTS; i++) {
@@ -1536,6 +1557,8 @@ static void UI_SelectBots_MenuInit(void) {
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.selectedbotnames[i]);
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.selectedbotteams[i]);
 	}
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerbots);
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headercolor);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.arrowup);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.arrowdown);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.BotSkill);
