@@ -567,7 +567,7 @@ LaunchItem
 Spawns an item and tosses it forward
 ================
 */
-gentity_t *LaunchItem(const gitem_t *item, vec3_t origin, vec3_t velocity) {
+gentity_t *LaunchItem(const gitem_t *item, const vec3_t origin, const vec3_t velocity) {
 	gentity_t *dropped;
 
 	dropped = G_Spawn();
@@ -616,7 +616,7 @@ Drop_Item
 Spawns an item and tosses it forward
 ================
 */
-gentity_t *Drop_Item(gentity_t *ent, const gitem_t *item, float angle) {
+gentity_t *Drop_Item(const gentity_t *ent, const gitem_t *item, float angle) {
 	vec3_t velocity;
 	vec3_t angles;
 
@@ -668,7 +668,7 @@ void FinishSpawningItem(gentity_t *ent) {
 
 	ent->r.contents = CONTENTS_TRIGGER;
 	ent->touch = Touch_Item;
-	// useing an item causes it to respawn
+	// using an item causes it to respawn
 	ent->use = Use_Item;
 
 	if (ent->spawnflags & 1) {

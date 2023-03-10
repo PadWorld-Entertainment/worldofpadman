@@ -76,7 +76,7 @@ AddScore
 Adds score to both the client and his team
 ============
 */
-void AddScore(gentity_t *ent, const vec3_t origin, int score, char *reason) {
+void AddScore(gentity_t *ent, const vec3_t origin, int score, const char *reason) {
 	if (!ent->client) {
 		return;
 	}

@@ -118,7 +118,7 @@ typedef enum {
 
 	GT_TEAM, // team deathmatch
 	GT_FREEZETAG,
-	GT_CTF,	 // capture the flag
+	GT_CTF, // capture the flag
 
 	GT_SPRAY, // spray logo GT
 

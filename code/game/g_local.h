@@ -547,8 +547,8 @@ void RespawnItem(gentity_t *ent);
 
 void UseHoldableItem(gentity_t *ent);
 void PrecacheItem(gitem_t *it);
-gentity_t *Drop_Item(gentity_t *ent, const gitem_t *item, float angle);
-gentity_t *LaunchItem(const gitem_t *item, vec3_t origin, vec3_t velocity);
+gentity_t *Drop_Item(const gentity_t *ent, const gitem_t *item, float angle);
+gentity_t *LaunchItem(const gitem_t *item, const vec3_t origin, const vec3_t velocity);
 void SetRespawn(gentity_t *ent, float delay);
 void G_SpawnItem(gentity_t *ent, const gitem_t *item);
 void FinishSpawningItem(gentity_t *ent);
@@ -690,7 +690,7 @@ void BeginIntermission(void);
 void InitBodyQue(void);
 void ClientSpawn(gentity_t *ent);
 void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod);
-void AddScore(gentity_t *ent, const vec3_t origin, int score, char *reason);
+void AddScore(gentity_t *ent, const vec3_t origin, int score, const char *reason);
 void CalculateRanks(void);
 qboolean SpotWouldTelefrag(gentity_t *spot);
 

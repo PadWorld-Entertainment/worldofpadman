@@ -1672,6 +1672,7 @@ void CG_FireWeapon(centity_t *cent) {
 		CG_Error("CG_FireWeapon: ent->weapon >= WP_NUM_WEAPONS");
 		return;
 	}
+
 	weap = &cg_weapons[ent->weapon];
 
 	// mark the entity as muzzle flashing, so when it is added it will
