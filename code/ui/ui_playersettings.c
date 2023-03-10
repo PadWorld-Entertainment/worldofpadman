@@ -56,12 +56,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define MAX_NAMELENGTH 20
 
-#define DISPLAYED_MODELS 4
+#define DISPLAYED_MODELS 6
 #define SKINGRID_COLS 1
 #define SKINGRID_ROWS 3
 #define SKINSPERPAGE (SKINGRID_ROWS * SKINGRID_COLS)
 
-#define XPOSITION 30
+#define XPOSITION 128
 #define YPOSITION 168
 
 typedef struct {
@@ -88,7 +88,7 @@ typedef struct {
 	menubitmap_s arrowup;
 	menubitmap_s arrowdown;
 
-	menubitmap1024s_s model_icons[DISPLAYED_MODELS];
+	menubitmap_s model_icons[DISPLAYED_MODELS];
 	menubitmap1024s_s skin_icons[3];
 
 	menubitmap_s logoleft;
@@ -235,14 +235,8 @@ static void PlayerSettings_DrawPlayer(void *self) {
 
 	b = (menubitmap_s *)self;
 
-	// YEW=1=right/left
-	//	s_playersettings.playerinfo.viewAngles[YAW] =
-	//	s_playersettings.playerinfo.legs.yawAngle =
-	//	s_playersettings.playerinfo.torso.yawAngle = uis.realtime;
-
 	UI_DrawPlayer(b->generic.x, b->generic.y, b->width, b->height, &s_playersettings.playerinfo, uis.realtime / 2);
 
-	//	UI_DrawRect(b->generic.x, b->generic.y, b->width, b->height, colorGreen);
 }
 
 /*
@@ -583,7 +577,7 @@ static void PlayerSettings_Draw(void) {
 
 	for (i = 0; i < DISPLAYED_MODELS; i++) {
 		s_playersettings.model_icons[i].shader = ps_playericons.modelicons[i + s_playersettings.firstmodel];
-		s_playersettings.model_icons[i].mouseovershader = ps_playericons.modeliconsB[i + s_playersettings.firstmodel];
+//		s_playersettings.model_icons[i].focuspic = ps_playericons.modeliconsB[i + s_playersettings.firstmodel];
 	}
 
 	for (i = 0; i < 3; i++) {
@@ -601,7 +595,7 @@ static void PlayerSettings_Draw(void) {
 	i = Com_Clamp(0, (NUM_SPRAYCOLORS - 1), i);
 
 	UI_SetColor(spraycolors[i]);
-	UI_DrawHandlePic1024(76, 470, 96, 96, uis.spraylogoShaders[s_playersettings.slogo_num]);
+	UI_DrawHandlePic(XPOSITION - 40, 300, 64, 64, uis.spraylogoShaders[s_playersettings.slogo_num]);
 	UI_SetColor(NULL);
 
 	Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
@@ -614,15 +608,15 @@ static void PlayerSettings_Draw(void) {
 
 	if (!Q_stricmp(&modelname[i + 1], "default") || !Q_stricmp(&modelname[i + 1], "blue") ||
 		!Q_stricmp(&modelname[i + 1], "red")) {
-		UI_DrawProportionalString(320, 440, modelname, UI_CENTER | UI_SMALLFONT, colorWhite);
+		UI_DrawProportionalString(432, 446, modelname, UI_CENTER | UI_SMALLFONT, colorWhite);
 	} else if (Q_stristr(&modelname[i + 1], "_blue") || Q_stristr(&modelname[i + 1], "_red")) {
 		char *chrptr = strstr(&modelname[i + 1], "_");
 		if (chrptr != NULL) {
 			*chrptr = '\0';
 		}
-		UI_DrawProportionalString(320, 440, &modelname[i + 1], UI_CENTER | UI_SMALLFONT, colorWhite);
+		UI_DrawProportionalString(432, 446, &modelname[i + 1], UI_CENTER | UI_SMALLFONT, colorWhite);
 	} else {
-		UI_DrawProportionalString(320, 440, &modelname[i + 1], UI_CENTER | UI_SMALLFONT, colorWhite);
+		UI_DrawProportionalString(432, 446, &modelname[i + 1], UI_CENTER | UI_SMALLFONT, colorWhite);
 	}
 
 	Menu_Draw(&s_playersettings.menu);
@@ -809,7 +803,7 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 		break;
 	case ID_SPRAYCOLOR:
 		//		Com_Printf("Spraycolor=%i\n",(uis.cursorx-((menucommon_s*)ptr)->x)/14);
-		trap_Cvar_Set("syc_color", va("%i", (uis.cursorx - ((menucommon_s *)ptr)->x) / 14));
+		trap_Cvar_Set("syc_color", va("%i", (uis.cursorx - ((menucommon_s *)ptr)->x) / 16));
 		break;
 
 	case ID_PREVLOGO:
@@ -821,6 +815,39 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 		if (++s_playersettings.slogo_num >= uis.spraylogosLoaded)
 			s_playersettings.slogo_num = 0; // close the circle
 		break;
+	}
+}
+
+/*
+=================
+UI_SelectModell_DrawModellIcon
+=================
+*/
+static void UI_SelectModell_DrawModellIcon(void *self) {
+	menubitmap_s *b = (menubitmap_s *)self;
+	float x;
+	float y;
+	float w;
+	float h;
+
+	x = b->generic.x;
+	y = b->generic.y;
+	w = b->width;
+	h = b->height;
+
+	// used to refresh shader
+	if (b->generic.name && !b->shader) {
+		b->shader = trap_R_RegisterShaderNoMip(b->generic.name);
+		if (!b->shader && b->errorpic)
+			b->shader = trap_R_RegisterShaderNoMip(b->errorpic);
+	}
+
+	if (b->shader) // if there is no icon there should also be no focuspic
+	{
+		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
+			b->shader = trap_R_RegisterShaderNoMip(b->focuspic);
+		}
+		UI_DrawHandlePic(x, y, w, h, b->shader);
 	}
 }
 
@@ -848,8 +875,8 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.item_null.generic.flags = QMF_LEFT_JUSTIFY | QMF_MOUSEONLY | QMF_SILENT;
 	s_playersettings.item_null.generic.x = 0;
 	s_playersettings.item_null.generic.y = 0;
-	s_playersettings.item_null.width = 640;
-	s_playersettings.item_null.height = 480;
+	s_playersettings.item_null.width = 864;
+	s_playersettings.item_null.height = 486;
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.item_null);
 
 	s_playersettings.player.generic.type = MTYPE_BITMAP;
@@ -878,7 +905,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowright.generic.type = MTYPE_BITMAP;
 	s_playersettings.arrowright.generic.name = BARROWRT0;
 	s_playersettings.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowright.generic.x = 588;
+	s_playersettings.arrowright.generic.x = 814;
 	s_playersettings.arrowright.generic.y = 20;
 	s_playersettings.arrowright.generic.id = ID_NEXTMODEL;
 	s_playersettings.arrowright.generic.callback = PlayerSettings_MenuEvent;
@@ -912,15 +939,17 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowdown.focuspicinstead = qtrue;
 
 	for (i = 0; i < DISPLAYED_MODELS; ++i) {
-		s_playersettings.model_icons[i].generic.type = MTYPE_BITMAP1024S;
-		s_playersettings.model_icons[i].x = 160 + i * (160 + 20);
-		s_playersettings.model_icons[i].y = 16;
-		s_playersettings.model_icons[i].w = s_playersettings.model_icons[i].h = 160;
-		s_playersettings.model_icons[i].shader = 0;
-		s_playersettings.model_icons[i].mouseovershader = 0;
+		s_playersettings.model_icons[i].generic.type = MTYPE_BITMAP;
+		s_playersettings.model_icons[i].generic.flags = QMF_LEFT_JUSTIFY;
+		s_playersettings.model_icons[i].generic.x = 102 + i * (100 + 12);
+		s_playersettings.model_icons[i].generic.y = 12;
+//		s_playersettings.model_icons[i].generic.name = s_playersettings.model_icons[i];
+		s_playersettings.model_icons[i].width = 100;
+		s_playersettings.model_icons[i].height = 100;
 		s_playersettings.model_icons[i].generic.callback = PlayerSettings_MenuEvent;
 		s_playersettings.model_icons[i].generic.id = ID_MICON + i;
-		//		s_playersettings.model_icons[i].generic.flags	= QMF_SILENT;
+		s_playersettings.model_icons[i].focuspicinstead = qtrue;
+//		s_playersettings.model_icons[i].generic.ownerdraw = UI_SelectModell_DrawModellIcon;
 	}
 
 	s_playersettings.skin_icons[0].generic.type = MTYPE_BITMAP1024S;
@@ -979,8 +1008,8 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.logoleft.generic.type = MTYPE_BITMAP;
 	s_playersettings.logoleft.generic.name = SARROWLT0;
 	s_playersettings.logoleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.logoleft.generic.x = 48;
-	s_playersettings.logoleft.generic.y = 357;
+	s_playersettings.logoleft.generic.x = XPOSITION - 38;
+	s_playersettings.logoleft.generic.y = 364;
 	s_playersettings.logoleft.generic.id = ID_PREVLOGO;
 	s_playersettings.logoleft.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.logoleft.width = 26;
@@ -991,8 +1020,8 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.logoright.generic.type = MTYPE_BITMAP;
 	s_playersettings.logoright.generic.name = SARROWRT0;
 	s_playersettings.logoright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.logoright.generic.x = 81;
-	s_playersettings.logoright.generic.y = 357;
+	s_playersettings.logoright.generic.x = XPOSITION - 4;
+	s_playersettings.logoright.generic.y = 364;
 	s_playersettings.logoright.generic.id = ID_NEXTLOGO;
 	s_playersettings.logoright.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.logoright.width = 26;
@@ -1004,7 +1033,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.back.generic.name = BACK0;
 	s_playersettings.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_playersettings.back.generic.x = 8;
-	s_playersettings.back.generic.y = 440;
+	s_playersettings.back.generic.y = 446;
 	s_playersettings.back.generic.id = ID_BACK;
 	s_playersettings.back.generic.callback = PlayerSettings_MenuEvent;
 	s_playersettings.back.width = 80;
@@ -1014,7 +1043,7 @@ static void PlayerSettings_MenuInit(void) {
 
 	y = YPOSITION;
 	s_playersettings.nameheader.generic.type = MTYPE_TEXT;
-	s_playersettings.nameheader.generic.x = XPOSITION;
+	s_playersettings.nameheader.generic.x = XPOSITION - 48;
 	s_playersettings.nameheader.generic.y = y;
 	s_playersettings.nameheader.string = "Name:";
 	s_playersettings.nameheader.style = UI_LEFT | UI_SMALLFONT;
@@ -1027,22 +1056,14 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.name.field.maxchars = MAX_NAMELENGTH;
 	s_playersettings.name.generic.x = XPOSITION;
 	s_playersettings.name.generic.y = y - 10;
-	s_playersettings.name.generic.left = XPOSITION - 12;
+	s_playersettings.name.generic.left = XPOSITION - 96;
 	s_playersettings.name.generic.top = y;
-	s_playersettings.name.generic.right = XPOSITION + 128;
+	s_playersettings.name.generic.right = XPOSITION + 56;
 	s_playersettings.name.generic.bottom = y + 2 * (BIGCHAR_HEIGHT);
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
-	s_playersettings.handicapheader.generic.type = MTYPE_TEXT;
-	s_playersettings.handicapheader.generic.x = XPOSITION;
-	s_playersettings.handicapheader.generic.y = y;
-	s_playersettings.handicapheader.string = "Handicap:";
-	s_playersettings.handicapheader.style = UI_LEFT | UI_SMALLFONT;
-	s_playersettings.handicapheader.color = color_yellow;
-
-	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.handicap.generic.name = "";
+	s_playersettings.handicap.generic.name = "Handicap:";
 	s_playersettings.handicap.generic.flags = QMF_SMALLFONT;
 	s_playersettings.handicap.generic.id = ID_HANDICAP;
 	s_playersettings.handicap.generic.callback = PlayerSettings_MenuEvent;
@@ -1051,16 +1072,8 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.handicap.itemnames = handicap_items;
 
 	y += BIGCHAR_HEIGHT + 2;
-	s_playersettings.skincolorheader.generic.type = MTYPE_TEXT;
-	s_playersettings.skincolorheader.generic.x = XPOSITION;
-	s_playersettings.skincolorheader.generic.y = y;
-	s_playersettings.skincolorheader.string = "Skin Color:";
-	s_playersettings.skincolorheader.style = UI_LEFT | UI_SMALLFONT;
-	s_playersettings.skincolorheader.color = color_yellow;
-
-	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.skincolor.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.skincolor.generic.name = "";
+	s_playersettings.skincolor.generic.name = "Skin Color:";
 	s_playersettings.skincolor.generic.flags = QMF_SMALLFONT;
 	s_playersettings.skincolor.generic.id = ID_SKINCOLOR;
 	s_playersettings.skincolor.generic.callback = PlayerSettings_MenuEvent;
@@ -1068,9 +1081,9 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skincolor.generic.y = y;
 	s_playersettings.skincolor.itemnames = skincolor_items;
 
-	y += BIGCHAR_HEIGHT + 2;
+	y += 2 * (BIGCHAR_HEIGHT + 2);
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
-	s_playersettings.logoheader.generic.x = XPOSITION;
+	s_playersettings.logoheader.generic.x = XPOSITION - 96;
 	s_playersettings.logoheader.generic.y = y;
 	s_playersettings.logoheader.string = "Spray Logo:";
 	s_playersettings.logoheader.style = UI_LEFT | UI_SMALLFONT;
@@ -1078,10 +1091,10 @@ static void PlayerSettings_MenuInit(void) {
 
 	s_playersettings.spraycolor.generic.type = MTYPE_BITMAP;
 	s_playersettings.spraycolor.generic.flags = QMF_LEFT_JUSTIFY;
-	s_playersettings.spraycolor.generic.x = 36;
-	s_playersettings.spraycolor.generic.y = 379;
-	s_playersettings.spraycolor.width = 82;
-	s_playersettings.spraycolor.height = 18;
+	s_playersettings.spraycolor.generic.x = XPOSITION - 52;
+	s_playersettings.spraycolor.generic.y = 386;
+	s_playersettings.spraycolor.width = 96;
+	s_playersettings.spraycolor.height = 16;
 	s_playersettings.spraycolor.generic.id = ID_SPRAYCOLOR;
 	s_playersettings.spraycolor.generic.callback = PlayerSettings_MenuEvent;
 
@@ -1098,9 +1111,7 @@ static void PlayerSettings_MenuInit(void) {
 
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicapheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skincolorheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skincolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoleft);
