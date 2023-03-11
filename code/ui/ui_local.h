@@ -181,7 +181,6 @@ extern vmCvar_t cl_renderer;
 #define BGP_SELECTBOTS 0x004000
 #define BGP_MENUFX 0x008000
 #define BGP_LASTMENU 0x010000
-#define BGP_SPECIFYPASS 0x020000
 
 typedef struct _tag_menuframework {
 	int cursor;
@@ -634,7 +633,6 @@ typedef struct {
 	qhandle_t modsbg;
 	qhandle_t demosbg;
 	qhandle_t specifybg;
-	qhandle_t specifypassbg;
 	qhandle_t preferencesbg;
 	qhandle_t startserverbg;
 	qhandle_t selectbotsbg;

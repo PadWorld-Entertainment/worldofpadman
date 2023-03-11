@@ -1911,7 +1911,6 @@ void Menu_Cache(void) {
 	uis.modsbg = trap_R_RegisterShaderNoMip("menu/bg/mods");
 	uis.demosbg = trap_R_RegisterShaderNoMip("menu/bg/demos");
 	uis.specifybg = trap_R_RegisterShaderNoMip("menu/bg/specify");
-	uis.specifypassbg = trap_R_RegisterShaderNoMip("menu/bg/password");
 	uis.preferencesbg = trap_R_RegisterShaderNoMip("menu/bg/preferences");
 	uis.startserverbg = trap_R_RegisterShaderNoMip("menu/bg/startserver");
 	uis.selectbotsbg = trap_R_RegisterShaderNoMip("menu/bg/selectbots");

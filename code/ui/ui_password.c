@@ -123,7 +123,7 @@ static void SpecifyPassword_MenuInit(void) {
 
 	s_specifypassword.menu.wrapAround = qtrue;
 	s_specifypassword.menu.fullscreen = qtrue;
-	s_specifypassword.menu.bgparts = BGP_SPECIFYPASS | BGP_MENUFX;
+	s_specifypassword.menu.bgparts = BGP_SPECIFY | BGP_MENUFX;
 
 	s_specifypassword.passwordheader.generic.type = MTYPE_TEXT;
 	s_specifypassword.passwordheader.generic.x = 342;

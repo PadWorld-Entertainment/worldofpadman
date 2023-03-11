@@ -1358,8 +1358,6 @@ static void UI_DrawMenu(menuframework_s *menu) {
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.demosbg);
 				if (menu->bgparts & BGP_SPECIFY)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.specifybg);
-				if (menu->bgparts & BGP_SPECIFYPASS)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.specifypassbg);
 				if (menu->bgparts & BGP_PREFERENCES)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.preferencesbg);
 				if (menu->bgparts & BGP_STARTSERVER)
