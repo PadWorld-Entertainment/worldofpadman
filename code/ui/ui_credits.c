@@ -155,8 +155,8 @@ void UI_InitBigCredits(void) {
 	s_bigcredits.bgpic.generic.callback = UI_BigCreditsAction;
 	s_bigcredits.bgpic.generic.x = 0;
 	s_bigcredits.bgpic.generic.y = 0;
-	s_bigcredits.bgpic.width = 640;
-	s_bigcredits.bgpic.height = 480;
+	s_bigcredits.bgpic.width = 864;
+	s_bigcredits.bgpic.height = 486;
 	Menu_AddItem(&s_bigcredits.menu, &s_bigcredits.bgpic);
 
 	UI_PushMenu(&s_bigcredits.menu);
@@ -232,7 +232,7 @@ static void Secret_MenuDraw(void) {
 		UI_DrawStringNS(320 - 320.0f * (float)sin(uis.realtime / 700.0f + 3),
 						240 - 240.0f * (float)sin(uis.realtime / 1400.0f - 4), "f*ck", UI_CENTER, 20, color4);
 
-		UI_DrawStringNS(320, 240 - 20, "Cannot finde Secret-Textures", UI_CENTER, 20, colorWhite);
+		UI_DrawStringNS(320, 240 - 20, "Cannot find secret pictures", UI_CENTER, 20, colorWhite);
 		UI_DrawStringNS(320, 240, s_secretmenu.shadername, UI_CENTER, 15, colorWhite);
 	} else
 		Menu_Draw(&s_secretmenu.menu);
@@ -255,8 +255,8 @@ void UI_SecretMenu(void) {
 	s_secretmenu.bgpic.generic.callback = UI_SecretAction;
 	s_secretmenu.bgpic.generic.x = 0;
 	s_secretmenu.bgpic.generic.y = 0;
-	s_secretmenu.bgpic.width = 640;
-	s_secretmenu.bgpic.height = 480;
+	s_secretmenu.bgpic.width = 864;
+	s_secretmenu.bgpic.height = 486;
 	Menu_AddItem(&s_secretmenu.menu, &s_secretmenu.bgpic);
 
 	UI_PushMenu(&s_secretmenu.menu);
