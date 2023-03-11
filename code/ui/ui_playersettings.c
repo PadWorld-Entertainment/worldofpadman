@@ -923,9 +923,9 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.player.generic.type = MTYPE_BITMAP;
 	s_playersettings.player.generic.flags = QMF_MOUSEONLY | QMF_SILENT;
 	s_playersettings.player.generic.ownerdraw = UI_PlayerSettings_DrawPlayer;
-	s_playersettings.player.generic.x = 272;
+	s_playersettings.player.generic.x = 217;
 	s_playersettings.player.generic.y = 100;
-	s_playersettings.player.width = 320;
+	s_playersettings.player.width = 430;
 	s_playersettings.player.height = 386;
 	s_playersettings.player.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.player.generic.id = ID_PLAYERMODEL;
