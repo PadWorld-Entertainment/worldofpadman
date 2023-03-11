@@ -447,7 +447,7 @@ extern void SetDefaultBinds_onUnusedKeys(void);
 // ui_demos.c
 //
 extern void UI_DemosMenu(void);
-extern void Demos_Cache(void);
+extern void UI_Demos_Cache(void);
 
 //
 // ui_mods.c

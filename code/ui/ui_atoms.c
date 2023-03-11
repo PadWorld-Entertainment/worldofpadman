@@ -1031,7 +1031,7 @@ void UI_Cache_f(void) {
 	ConfirmMenu_Cache();
 	UI_PlayerSettings_Cache();
 	Controls_Cache();
-	Demos_Cache();
+	UI_Demos_Cache();
 	UI_Preferences_Cache();
 	ServerInfo_Cache();
 	SpecifyServer_Cache();
