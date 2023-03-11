@@ -63,10 +63,10 @@ static void UI_SpecifyServer_UpdateMenuItems(void) {
 
 /*
 =================
-SpecifyServer_Event
+UI_SpecifyServer_Event
 =================
 */
-static void SpecifyServer_Event(void *ptr, int event) {
+static void UI_SpecifyServer_Event(void *ptr, int event) {
 	char buff[256];
 
 	switch (((menucommon_s *)ptr)->id) {
@@ -99,14 +99,14 @@ static void SpecifyServer_DrawField(void *self) {
 
 /*
 =================
-SpecifyServer_MenuInit
+UI_SpecifyServer_MenuInit
 =================
 */
-static void SpecifyServer_MenuInit(void) {
+static void UI_SpecifyServer_MenuInit(void) {
 	// zero set all our globals
 	memset(&s_specifyserver, 0, sizeof(s_specifyserver));
 
-	SpecifyServer_Cache();
+	UI_SpecifyServer_Cache();
 
 	s_specifyserver.menu.wrapAround = qtrue;
 	s_specifyserver.menu.fullscreen = qtrue;
@@ -150,7 +150,7 @@ static void SpecifyServer_MenuInit(void) {
 	s_specifyserver.back.generic.x = 8;
 	s_specifyserver.back.generic.y = 446;
 	s_specifyserver.back.generic.id = ID_BACK;
-	s_specifyserver.back.generic.callback = SpecifyServer_Event;
+	s_specifyserver.back.generic.callback = UI_SpecifyServer_Event;
 	s_specifyserver.back.width = 80;
 	s_specifyserver.back.height = 40;
 	s_specifyserver.back.focuspic = BACK1;
@@ -159,7 +159,7 @@ static void SpecifyServer_MenuInit(void) {
 	s_specifyserver.fight.generic.type = MTYPE_BITMAP;
 	s_specifyserver.fight.generic.name = FIGHT0;
 	s_specifyserver.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_specifyserver.fight.generic.callback = SpecifyServer_Event;
+	s_specifyserver.fight.generic.callback = UI_SpecifyServer_Event;
 	s_specifyserver.fight.generic.id = ID_FIGHT;
 	s_specifyserver.fight.focuspic = FIGHT1;
 	s_specifyserver.fight.generic.x = 776;
@@ -180,10 +180,10 @@ static void SpecifyServer_MenuInit(void) {
 
 /*
 =================
-SpecifyServer_Cache
+UI_SpecifyServer_Cache
 =================
 */
-void SpecifyServer_Cache(void) {
+void UI_SpecifyServer_Cache(void) {
 	int i;
 
 	// touch all our pics
@@ -200,6 +200,6 @@ UI_SpecifyServerMenu
 =================
 */
 void UI_SpecifyServerMenu(void) {
-	SpecifyServer_MenuInit();
+	UI_SpecifyServer_MenuInit();
 	UI_PushMenu(&s_specifyserver.menu);
 }

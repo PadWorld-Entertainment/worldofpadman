@@ -1034,7 +1034,7 @@ void UI_Cache_f(void) {
 	UI_Demos_Cache();
 	UI_Preferences_Cache();
 	ServerInfo_Cache();
-	SpecifyServer_Cache();
+	UI_SpecifyServer_Cache();
 	UI_ArenaServers_Cache();
 	UI_StartServer_Cache();
 

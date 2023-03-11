@@ -475,7 +475,7 @@ extern void UI_Preferences_Cache(void);
 // ui_specifyserver.c
 //
 extern void UI_SpecifyServerMenu(void);
-extern void SpecifyServer_Cache(void);
+extern void UI_SpecifyServer_Cache(void);
 
 //
 // ui_servers.c
