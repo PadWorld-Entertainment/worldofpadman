@@ -38,7 +38,9 @@ static char *specifyserver_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NULL};
 
 typedef struct {
 	menuframework_s menu;
+	menutext_s domainheader;
 	menufield_s domain;
+	menutext_s portheader;
 	menufield_s port;
 	menubitmap_s fight;
 	menubitmap_s back;
@@ -110,21 +112,35 @@ static void SpecifyServer_MenuInit(void) {
 	s_specifyserver.menu.fullscreen = qtrue;
 	s_specifyserver.menu.bgparts = BGP_SPECIFY | BGP_MENUFX;
 
+	s_specifyserver.domainheader.generic.type = MTYPE_TEXT;
+	s_specifyserver.domainheader.generic.x = 342;
+	s_specifyserver.domainheader.generic.y = 214;
+	s_specifyserver.domainheader.string = "Address:";
+	s_specifyserver.domainheader.style = UI_SMALLFONT;
+	s_specifyserver.domainheader.color = menu_text_color;
+
 	s_specifyserver.domain.generic.type = MTYPE_FIELD;
 	s_specifyserver.domain.generic.name = "";
 	s_specifyserver.domain.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
-	s_specifyserver.domain.generic.x = 230; // 215;
+	s_specifyserver.domain.generic.x = 342;
 	s_specifyserver.domain.generic.y = 230;
-	s_specifyserver.domain.field.widthInChars = 22; // 28;
+	s_specifyserver.domain.field.widthInChars = 22;
 	s_specifyserver.domain.field.maxchars = 80;
 	s_specifyserver.domain.generic.ownerdraw = SpecifyServer_DrawField;
+
+	s_specifyserver.portheader.generic.type = MTYPE_TEXT;
+	s_specifyserver.portheader.generic.x = 342;
+	s_specifyserver.portheader.generic.y = 259;
+	s_specifyserver.portheader.string = "Port:";
+	s_specifyserver.portheader.style = UI_SMALLFONT;
+	s_specifyserver.portheader.color = menu_text_color;
 
 	s_specifyserver.port.generic.type = MTYPE_FIELD;
 	s_specifyserver.port.generic.name = "";
 	s_specifyserver.port.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_NUMBERSONLY;
-	s_specifyserver.port.generic.x = 230; // 215;
+	s_specifyserver.port.generic.x = 342;
 	s_specifyserver.port.generic.y = 275;
-	s_specifyserver.port.field.widthInChars = 22; // 28;
+	s_specifyserver.port.field.widthInChars = 22;
 	s_specifyserver.port.field.maxchars = 5;
 	s_specifyserver.port.generic.ownerdraw = SpecifyServer_DrawField;
 
@@ -132,7 +148,7 @@ static void SpecifyServer_MenuInit(void) {
 	s_specifyserver.back.generic.name = BACK0;
 	s_specifyserver.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_specifyserver.back.generic.x = 8;
-	s_specifyserver.back.generic.y = 440;
+	s_specifyserver.back.generic.y = 446;
 	s_specifyserver.back.generic.id = ID_BACK;
 	s_specifyserver.back.generic.callback = SpecifyServer_Event;
 	s_specifyserver.back.width = 80;
@@ -146,13 +162,15 @@ static void SpecifyServer_MenuInit(void) {
 	s_specifyserver.fight.generic.callback = SpecifyServer_Event;
 	s_specifyserver.fight.generic.id = ID_FIGHT;
 	s_specifyserver.fight.focuspic = FIGHT1;
-	s_specifyserver.fight.generic.x = 545;
-	s_specifyserver.fight.generic.y = 414;
+	s_specifyserver.fight.generic.x = 776;
+	s_specifyserver.fight.generic.y = 420;
 	s_specifyserver.fight.width = 80;
 	s_specifyserver.fight.height = 60;
 	s_specifyserver.fight.focuspicinstead = qtrue;
 
+	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.domainheader);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.domain);
+	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.portheader);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.port);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.fight);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.back);
