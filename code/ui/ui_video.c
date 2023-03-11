@@ -54,7 +54,7 @@ GRAPHICS OPTIONS MENU
 
 #define ID_LIST 10
 
-#define XPOSITION 180
+#define XPOSITION 220
 #define YPOSITION 198
 
 typedef struct {
@@ -691,7 +691,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	s_graphicsoptions.graphics.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.graphics.generic.id = ID_GRAPHICS;
-	s_graphicsoptions.graphics.generic.x = 16;
+	s_graphicsoptions.graphics.generic.x = XPOSITION - 144;
 	s_graphicsoptions.graphics.generic.y = 37;
 	s_graphicsoptions.graphics.width = 160;
 	s_graphicsoptions.graphics.height = 40;
@@ -703,7 +703,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.display.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.display.generic.id = ID_DISPLAY;
-	s_graphicsoptions.display.generic.x = 169;
+	s_graphicsoptions.display.generic.x = XPOSITION + 9;
 	s_graphicsoptions.display.generic.y = 30;
 	s_graphicsoptions.display.width = 120;
 	s_graphicsoptions.display.height = 40;
@@ -715,7 +715,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.sound.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.sound.generic.id = ID_SOUND;
-	s_graphicsoptions.sound.generic.x = 36;
+	s_graphicsoptions.sound.generic.x = XPOSITION - 124;
 	s_graphicsoptions.sound.generic.y = 79;
 	s_graphicsoptions.sound.width = 120;
 	s_graphicsoptions.sound.height = 40;
@@ -727,7 +727,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.network.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.network.generic.id = ID_NETWORK;
-	s_graphicsoptions.network.generic.x = 142;
+	s_graphicsoptions.network.generic.x = XPOSITION - 18;
 	s_graphicsoptions.network.generic.y = 82;
 	s_graphicsoptions.network.width = 160;
 	s_graphicsoptions.network.height = 40;
@@ -907,7 +907,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.back.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.back.generic.id = ID_BACK;
 	s_graphicsoptions.back.generic.x = 8;
-	s_graphicsoptions.back.generic.y = 440;
+	s_graphicsoptions.back.generic.y = 446;
 	s_graphicsoptions.back.width = 80;
 	s_graphicsoptions.back.height = 40;
 	s_graphicsoptions.back.focuspic = BACK1;
