@@ -153,10 +153,10 @@ static ps_playericons_t ps_playericons;
 
 /*
 =================
-PlayerSettings_DrawName
+UI_PlayerSettings_DrawName
 =================
 */
-static void PlayerSettings_DrawName(void *self) {
+static void UI_PlayerSettings_DrawName(void *self) {
 	menufield_s *f;
 	qboolean focus;
 	int style;
@@ -215,10 +215,10 @@ static void PlayerSettings_DrawName(void *self) {
 
 /*
 =================
-PlayerSettings_DrawPlayer
+UI_PlayerSettings_DrawPlayer
 =================
 */
-static void PlayerSettings_DrawPlayer(void *self) {
+static void UI_PlayerSettings_DrawPlayer(void *self) {
 	menubitmap_s *b;
 	vec3_t viewangles;
 	char buf[MAX_QPATH];
@@ -244,10 +244,11 @@ static void PlayerSettings_DrawPlayer(void *self) {
 
 /*
 =================
-PlayerSettings_SaveChanges
+UI_PlayerSettings_SaveChanges
 =================
 */
-static void PlayerSettings_SaveChanges(void) {
+static void UI_PlayerSettings_SaveChanges(void) {
+	int g;
 
 	// name
 	trap_Cvar_Set("name", s_playersettings.name.field.buffer);
@@ -267,14 +268,14 @@ static void PlayerSettings_SaveChanges(void) {
 
 /*
 =================
-PlayerSettings_MenuKey
+UI_PlayerSettings_MenuKey
 =================
 */
-static sfxHandle_t PlayerSettings_MenuKey(int key) {
+static sfxHandle_t UI_PlayerSettings_MenuKey(int key) {
 	int newweapon;
 
 	if (key == K_MOUSE2 || key == K_ESCAPE) {
-		PlayerSettings_SaveChanges();
+		UI_PlayerSettings_SaveChanges();
 	}
 
 	if (key == K_MWHEELDOWN || key == K_PGDN) {
@@ -302,10 +303,10 @@ static sfxHandle_t PlayerSettings_MenuKey(int key) {
 
 /*
 =================
-PlayerSettings_SetMenuItems
+UI_PlayerSettings_SetMenuItems
 =================
 */
-static void PlayerSettings_SetMenuItems(void) {
+static void UI_PlayerSettings_SetMenuItems(void) {
 	vec3_t viewangles;
 	int c;
 	int h;
@@ -476,11 +477,11 @@ static void TweakModelFolderList(char *list, int *numEntries) {
 }
 
 /*
-#######################
-PlayerSettings_BuildList
-#######################
+=================
+UI_PlayerSettings_BuildList
+=================
 */
-static void PlayerSettings_BuildList(void) {
+static void UI_PlayerSettings_BuildList(void) {
 	int numdirs = 0;
 	int numfiles = 0;
 	char dirlist[MAX_MODEL_DIR_LIST];
@@ -549,11 +550,11 @@ static void PlayerSettings_BuildList(void) {
 }
 
 /*
-#######################
-PlayerSettings_Draw
-#######################
+=================
+UI_PlayerSettings_Draw
+=================
 */
-static void PlayerSettings_Draw(void) {
+static void UI_PlayerSettings_Draw(void) {
 	int i;
 
 	static char modelname[32];
@@ -580,7 +581,7 @@ static void PlayerSettings_Draw(void) {
 
 	for (i = 0; i < MODELSPERPAGE; i++) {
 		s_playersettings.model_icons[i].shader = ps_playericons.modelicons[i + s_playersettings.firstmodel];
-//		s_playersettings.model_icons[i].focuspic = ps_playericons.modeliconsB[i + s_playersettings.firstmodel];
+		s_playersettings.model_icons[i].focusshader = ps_playericons.modeliconsB[i + s_playersettings.firstmodel];
 	}
 
 	for (i = 0; i < SKINSPERPAGE; i++) {
@@ -709,10 +710,77 @@ static void UI_PlayerSettings_SetSkinColor(void) {
 
 /*
 =================
-PlayerSettings_MenuEvent
+UI_PlayerSettings_DrawModelIcon
 =================
 */
-static void PlayerSettings_MenuEvent(void *ptr, int event) {
+static void UI_PlayerSettings_DrawModelIcon(void *self) {
+	menubitmap_s *b;
+	int x;
+	int y;
+	int w;
+	int h;
+
+ 	b = (menubitmap_s *)self;
+
+	// used to refresh shader
+	if (b->generic.name && !b->shader) {
+		b->shader = trap_R_RegisterShaderNoMip(b->generic.name);
+		if (!b->shader && b->errorpic)
+			b->shader = trap_R_RegisterShaderNoMip(b->errorpic);
+	}
+
+	if (b->shader) { // if there is no icon there should also be no focispic
+		x = b->generic.x;
+		y = b->generic.y;
+		w = b->width;
+		h = b->height;
+		if ((Menu_ItemAtCursor(b->generic.parent) == b && b->focusshader)) {
+			UI_DrawHandlePic(x, y, w, h, b->focusshader);
+		} else if (b->shader) {
+			UI_DrawHandlePic(x, y, w, h, b->shader);
+		}
+	}
+}
+
+/*
+=================
+UI_PlayerSettings_DrawSkinIcon
+=================
+*/
+static void UI_SelectSkin_DrawSkinIcon(void *self) {
+	menubitmap_s *b;
+	int x;
+	int y;
+	int w;
+	int h;
+
+ 	b = (menubitmap_s *)self;
+
+	// used to refresh shader
+	if (b->generic.name && !b->shader) {
+		b->shader = trap_R_RegisterShaderNoMip(b->generic.name);
+		if (!b->shader && b->errorpic)
+			b->shader = trap_R_RegisterShaderNoMip(b->errorpic);
+	}
+
+	if (b->shader) { // if there is no icon there should also be no shadow
+		x = b->generic.x;
+		y = b->generic.y;
+		w = b->width;
+		h = b->height;
+		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
+			UI_DrawNamedPic(x, y, w + 6, h + 6, SICONSHADOW);
+		}
+		UI_DrawHandlePic(x, y, w, h, b->shader);
+	}
+}
+
+/*
+=================
+UI_PlayerSettings_MenuEvent
+=================
+*/
+static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 	int tmpid, i;
 
 	if (event != QM_ACTIVATED) {
@@ -730,7 +798,7 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 		break;
 
 	case ID_BACK:
-		PlayerSettings_SaveChanges();
+		UI_PlayerSettings_SaveChanges();
 		UI_PopMenu();
 		break;
 
@@ -809,7 +877,6 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 		s_playersettings.lastCursorX = uis.cursorx;
 		break;
 	case ID_SPRAYCOLOR:
-		//		Com_Printf("Spraycolor=%i\n",(uis.cursorx-((menucommon_s*)ptr)->x)/14);
 		trap_Cvar_Set("syc_color", va("%i", (uis.cursorx - ((menucommon_s *)ptr)->x) / 16));
 		break;
 
@@ -827,43 +894,10 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 
 /*
 =================
-UI_SelectSkin_DrawSkinIcon
+UI_PlayerSettings_MenuInit
 =================
 */
-static void UI_SelectSkin_DrawSkinIcon(void *self) {
-	menubitmap_s *b = (menubitmap_s *)self;
-	float x;
-	float y;
-	float w;
-	float h;
-
-	x = b->generic.x;
-	y = b->generic.y;
-	w = b->width;
-	h = b->height;
-
-	// used to refresh shader
-	if (b->generic.name && !b->shader) {
-		b->shader = trap_R_RegisterShaderNoMip(b->generic.name);
-		if (!b->shader && b->errorpic)
-			b->shader = trap_R_RegisterShaderNoMip(b->errorpic);
-	}
-
-	if (b->shader) // if there is no icon there should also be no shadow
-	{
-		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
-			UI_DrawNamedPic(x, y, w + 6, h + 6, SICONSHADOW);
-		}
-		UI_DrawHandlePic(x, y, w, h, b->shader);
-	}
-}
-
-/*
-=================
-PlayerSettings_MenuInit
-=================
-*/
-static void PlayerSettings_MenuInit(void) {
+static void UI_PlayerSettings_MenuInit(void) {
 	int i, j, k;
 	int x, y;
 
@@ -871,11 +905,11 @@ static void PlayerSettings_MenuInit(void) {
 
 	UI_PlayerSettings_Cache();
 
-	s_playersettings.menu.key = PlayerSettings_MenuKey;
+	s_playersettings.menu.key = UI_PlayerSettings_MenuKey;
 	s_playersettings.menu.wrapAround = qtrue;
 	s_playersettings.menu.fullscreen = qtrue;
 	s_playersettings.chosenskins[1] = ps_playericons.lastskinicon[0];
-	s_playersettings.menu.draw = PlayerSettings_Draw;
+	s_playersettings.menu.draw = UI_PlayerSettings_Draw;
 	s_playersettings.menu.bgparts = BGP_PLAYER;
 
 	s_playersettings.item_null.generic.type = MTYPE_BITMAP;
@@ -888,12 +922,12 @@ static void PlayerSettings_MenuInit(void) {
 
 	s_playersettings.player.generic.type = MTYPE_BITMAP;
 	s_playersettings.player.generic.flags = QMF_MOUSEONLY | QMF_SILENT;
-	s_playersettings.player.generic.ownerdraw = PlayerSettings_DrawPlayer;
-	s_playersettings.player.generic.x = 160;
-	s_playersettings.player.generic.y = 15;
+	s_playersettings.player.generic.ownerdraw = UI_PlayerSettings_DrawPlayer;
+	s_playersettings.player.generic.x = 272;
+	s_playersettings.player.generic.y = 100;
 	s_playersettings.player.width = 320;
-	s_playersettings.player.height = 560;
-	s_playersettings.player.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.player.height = 386;
+	s_playersettings.player.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.player.generic.id = ID_PLAYERMODEL;
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.player);
 
@@ -903,7 +937,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowleft.generic.x = 20;
 	s_playersettings.arrowleft.generic.y = 20;
 	s_playersettings.arrowleft.generic.id = ID_PREVMODEL;
-	s_playersettings.arrowleft.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.arrowleft.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowleft.width = 30;
 	s_playersettings.arrowleft.height = 70;
 	s_playersettings.arrowleft.focuspic = BARROWLT1;
@@ -915,7 +949,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowright.generic.x = 814;
 	s_playersettings.arrowright.generic.y = 20;
 	s_playersettings.arrowright.generic.id = ID_NEXTMODEL;
-	s_playersettings.arrowright.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.arrowright.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowright.width = 30;
 	s_playersettings.arrowright.height = 70;
 	s_playersettings.arrowright.focuspic = BARROWRT1;
@@ -927,7 +961,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowup.generic.x = 721;
 	s_playersettings.arrowup.generic.y = 118;
 	s_playersettings.arrowup.generic.id = ID_PREVSKIN;
-	s_playersettings.arrowup.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.arrowup.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowup.width = 70;
 	s_playersettings.arrowup.height = 30;
 	s_playersettings.arrowup.focuspic = BARROWUP1;
@@ -939,7 +973,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowdown.generic.x = 721;
 	s_playersettings.arrowdown.generic.y = 432;
 	s_playersettings.arrowdown.generic.id = ID_NEXTSKIN;
-	s_playersettings.arrowdown.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.arrowdown.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowdown.width = 70;
 	s_playersettings.arrowdown.height = 30;
 	s_playersettings.arrowdown.focuspic = BARROWDN1;
@@ -950,13 +984,11 @@ static void PlayerSettings_MenuInit(void) {
 		s_playersettings.model_icons[i].generic.flags = QMF_LEFT_JUSTIFY;
 		s_playersettings.model_icons[i].generic.x = 102 + i * (100 + 12);
 		s_playersettings.model_icons[i].generic.y = 12;
-//		s_playersettings.model_icons[i].generic.name = s_playersettings.model_icons[i];
 		s_playersettings.model_icons[i].width = 100;
 		s_playersettings.model_icons[i].height = 100;
-		s_playersettings.model_icons[i].generic.callback = PlayerSettings_MenuEvent;
+		s_playersettings.model_icons[i].generic.callback = UI_PlayerSettings_MenuEvent;
 		s_playersettings.model_icons[i].generic.id = ID_MICON + i;
-		s_playersettings.model_icons[i].focuspicinstead = qtrue;
-//		s_playersettings.model_icons[i].generic.ownerdraw = UI_SelectModell_DrawModellIcon;
+		s_playersettings.model_icons[i].generic.ownerdraw = UI_PlayerSettings_DrawModelIcon;
 	}
 
 	y = GRID_YPOS;
@@ -969,7 +1001,7 @@ static void PlayerSettings_MenuInit(void) {
 			s_playersettings.skin_icons[k].generic.y = y;
 			s_playersettings.skin_icons[k].width = 80;
 			s_playersettings.skin_icons[k].height = 80;
-			s_playersettings.skin_icons[k].generic.callback = PlayerSettings_MenuEvent;
+			s_playersettings.skin_icons[k].generic.callback = UI_PlayerSettings_MenuEvent;
 			s_playersettings.skin_icons[k].generic.id = ID_SICON + k;
 			s_playersettings.skin_icons[k].generic.ownerdraw = UI_SelectSkin_DrawSkinIcon;
 			x += (80 + 12);
@@ -1000,7 +1032,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.logoleft.generic.x = XPOSITION - 38;
 	s_playersettings.logoleft.generic.y = 364;
 	s_playersettings.logoleft.generic.id = ID_PREVLOGO;
-	s_playersettings.logoleft.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.logoleft.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.logoleft.width = 26;
 	s_playersettings.logoleft.height = 13;
 	s_playersettings.logoleft.focuspic = SARROWLT1;
@@ -1012,7 +1044,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.logoright.generic.x = XPOSITION - 4;
 	s_playersettings.logoright.generic.y = 364;
 	s_playersettings.logoright.generic.id = ID_NEXTLOGO;
-	s_playersettings.logoright.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.logoright.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.logoright.width = 26;
 	s_playersettings.logoright.height = 13;
 	s_playersettings.logoright.focuspic = SARROWRT1;
@@ -1024,7 +1056,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.back.generic.x = 8;
 	s_playersettings.back.generic.y = 446;
 	s_playersettings.back.generic.id = ID_BACK;
-	s_playersettings.back.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.back.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.back.width = 80;
 	s_playersettings.back.height = 40;
 	s_playersettings.back.focuspic = BACK1;
@@ -1040,7 +1072,7 @@ static void PlayerSettings_MenuInit(void) {
 
 	s_playersettings.name.generic.type = MTYPE_FIELD;
 	s_playersettings.name.generic.flags = QMF_NODEFAULTINIT | QMF_PULSEIFFOCUS | QMF_SMALLFONT;
-	s_playersettings.name.generic.ownerdraw = PlayerSettings_DrawName;
+	s_playersettings.name.generic.ownerdraw = UI_PlayerSettings_DrawName;
 	s_playersettings.name.field.widthInChars = MAX_NAMELENGTH;
 	s_playersettings.name.field.maxchars = MAX_NAMELENGTH;
 	s_playersettings.name.generic.x = XPOSITION;
@@ -1055,7 +1087,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.handicap.generic.name = "Handicap:";
 	s_playersettings.handicap.generic.flags = QMF_SMALLFONT;
 	s_playersettings.handicap.generic.id = ID_HANDICAP;
-	s_playersettings.handicap.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.handicap.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.handicap.generic.x = XPOSITION;
 	s_playersettings.handicap.generic.y = y;
 	s_playersettings.handicap.itemnames = handicap_items;
@@ -1065,7 +1097,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skincolor.generic.name = "Skin Color:";
 	s_playersettings.skincolor.generic.flags = QMF_SMALLFONT;
 	s_playersettings.skincolor.generic.id = ID_SKINCOLOR;
-	s_playersettings.skincolor.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.skincolor.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.skincolor.generic.x = XPOSITION;
 	s_playersettings.skincolor.generic.y = y;
 	s_playersettings.skincolor.itemnames = skincolor_items;
@@ -1085,7 +1117,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.spraycolor.width = 96;
 	s_playersettings.spraycolor.height = 16;
 	s_playersettings.spraycolor.generic.id = ID_SPRAYCOLOR;
-	s_playersettings.spraycolor.generic.callback = PlayerSettings_MenuEvent;
+	s_playersettings.spraycolor.generic.callback = UI_PlayerSettings_MenuEvent;
 
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowleft);
 	for (i = 0; i < MODELSPERPAGE; ++i) {
@@ -1108,7 +1140,7 @@ static void PlayerSettings_MenuInit(void) {
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraycolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.back);
 
-	PlayerSettings_SetMenuItems();
+	UI_PlayerSettings_SetMenuItems();
 	UI_PlayerSettings_Update();
 }
 
@@ -1134,7 +1166,7 @@ void UI_PlayerSettings_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(SICONSHADOW);
 
-	PlayerSettings_BuildList();
+	UI_PlayerSettings_BuildList();
 }
 
 /*
@@ -1143,6 +1175,6 @@ UI_PlayerSettingsMenu
 =================
 */
 void UI_PlayerSettingsMenu(void) {
-	PlayerSettings_MenuInit();
+	UI_PlayerSettings_MenuInit();
 	UI_PushMenu(&s_playersettings.menu);
 }
