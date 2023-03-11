@@ -147,6 +147,9 @@ typedef struct {
 #define ID_MOUSEACCELSTYLE 68
 #define ID_MOUSEACCELOFFSET 69
 
+#define XPOSITION 630
+#define YPOSITION 180
+
 typedef struct {
 	menuframework_s menu;
 
@@ -480,7 +483,7 @@ Controls_Update
 static void Controls_Update(void) {
 	int i;
 	int j;
-	int y;
+	int x, y;
 	menucommon_s **controls;
 	menucommon_s *control;
 
@@ -502,13 +505,14 @@ static void Controls_Update(void) {
 	}
 
 	// position controls
-	y = 180; // 160;
+	y = YPOSITION;
+	x = XPOSITION;
 	// bk001204 - parentheses
 	for (j = 0; (control = controls[j]); j++, y += SMALLCHAR_HEIGHT) {
-		control->x = 472;
+		control->x = 622;
 		control->y = y;
-		control->left = 472 - 19 * SMALLCHAR_WIDTH;
-		control->right = 472 + 21 * SMALLCHAR_WIDTH;
+		control->left = x - 19 * SMALLCHAR_WIDTH;
+		control->right = x + 21 * SMALLCHAR_WIDTH;
 		control->top = y;
 		control->bottom = y + SMALLCHAR_HEIGHT;
 	}
@@ -633,12 +637,12 @@ static void Controls_DrawKeyBinding(void *self) {
 
 		if (s_controls.waitingforkey) {
 			UI_DrawChar(x, y, '=', UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Waiting for new key ...", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
-			UI_DrawString(450, SCREEN_HEIGHT * 0.89, "Press ESCAPE to cancel", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
+			UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.86, "Waiting for new key ...", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
+			UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.89, "Press ESCAPE to cancel", UI_SMALLFONT | UI_CENTER | UI_PULSE, colorWhite);
 		} else {
 			UI_DrawChar(x, y, FONT_ASCII_TRIANGLE, UI_CENTER | UI_BLINK | UI_SMALLFONT, text_color_highlight);
-			UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Press ENTER or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
-			UI_DrawString(450, SCREEN_HEIGHT * 0.89, "Press BACKSPACE to clear", UI_SMALLFONT | UI_CENTER, colorWhite);
+			UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.86, "Press ENTER or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
+			UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.89, "Press BACKSPACE to clear", UI_SMALLFONT | UI_CENTER, colorWhite);
 		}
 	} else {
 		if (a->generic.flags & QMF_GRAYED) {
@@ -659,7 +663,7 @@ Controls_StatusBar
 =================
 */
 static void Controls_StatusBar(void *self) {
-	UI_DrawString(450, SCREEN_HEIGHT * 0.86, "Use Arrow Keys or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
+	UI_DrawString(XPOSITION - 22, SCREEN_HEIGHT * 0.86, "Use Arrow Keys or CLICK to change", UI_SMALLFONT | UI_CENTER, colorWhite);
 }
 
 /*
@@ -1099,7 +1103,7 @@ static void Controls_MenuInit(void) {
 	s_controls.looking.generic.type = MTYPE_BITMAP;
 	s_controls.looking.generic.name = LOOK0;
 	s_controls.looking.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.looking.generic.x = 422;
+	s_controls.looking.generic.x = XPOSITION - 78;
 	s_controls.looking.generic.y = 28;
 	s_controls.looking.generic.id = ID_LOOKING;
 	s_controls.looking.generic.callback = Controls_MenuEvent;
@@ -1111,7 +1115,7 @@ static void Controls_MenuInit(void) {
 	s_controls.movement.generic.type = MTYPE_BITMAP;
 	s_controls.movement.generic.name = MOVEMENT0;
 	s_controls.movement.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.movement.generic.x = 508;
+	s_controls.movement.generic.x = XPOSITION + 8;
 	s_controls.movement.generic.y = 43;
 	s_controls.movement.generic.id = ID_MOVEMENT;
 	s_controls.movement.generic.callback = Controls_MenuEvent;
@@ -1123,7 +1127,7 @@ static void Controls_MenuInit(void) {
 	s_controls.weapons.generic.type = MTYPE_BITMAP;
 	s_controls.weapons.generic.name = WEAPONS0;
 	s_controls.weapons.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.weapons.generic.x = 376;
+	s_controls.weapons.generic.x = XPOSITION - 124;
 	s_controls.weapons.generic.y = 69;
 	s_controls.weapons.generic.id = ID_WEAPONS;
 	s_controls.weapons.generic.callback = Controls_MenuEvent;
@@ -1135,7 +1139,7 @@ static void Controls_MenuInit(void) {
 	s_controls.chat.generic.type = MTYPE_BITMAP;
 	s_controls.chat.generic.name = CHAT0;
 	s_controls.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.chat.generic.x = 518;
+	s_controls.chat.generic.x = XPOSITION + 18;
 	s_controls.chat.generic.y = 88;
 	s_controls.chat.generic.id = ID_CHAT;
 	s_controls.chat.generic.callback = Controls_MenuEvent;
@@ -1147,7 +1151,7 @@ static void Controls_MenuInit(void) {
 	s_controls.misc.generic.type = MTYPE_BITMAP;
 	s_controls.misc.generic.name = MISC0;
 	s_controls.misc.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_controls.misc.generic.x = 432;
+	s_controls.misc.generic.x = XPOSITION - 78;
 	s_controls.misc.generic.y = 110;
 	s_controls.misc.generic.id = ID_MISC;
 	s_controls.misc.generic.callback = Controls_MenuEvent;
@@ -1159,8 +1163,8 @@ static void Controls_MenuInit(void) {
 	s_controls.back.generic.type = MTYPE_BITMAP;
 	s_controls.back.generic.name = BACK0;
 	s_controls.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	s_controls.back.generic.x = 552;
-	s_controls.back.generic.y = 440;
+	s_controls.back.generic.x = 776;
+	s_controls.back.generic.y = 446;
 	s_controls.back.generic.id = ID_BACK;
 	s_controls.back.generic.callback = Controls_MenuEvent;
 	s_controls.back.width = 80;
@@ -1169,7 +1173,6 @@ static void Controls_MenuInit(void) {
 	s_controls.back.focuspicinstead = qtrue;
 
 	s_controls.sensitivity.generic.type = MTYPE_SLIDER;
-	s_controls.sensitivity.generic.x = SCREEN_WIDTH / 2;
 	s_controls.sensitivity.generic.flags = QMF_SMALLFONT;
 	s_controls.sensitivity.generic.name = "Mouse Sensitivity:";
 	s_controls.sensitivity.generic.id = ID_MOUSESPEED;
@@ -1179,7 +1182,6 @@ static void Controls_MenuInit(void) {
 	s_controls.sensitivity.generic.statusbar = Controls_StatusBar;
 
 	s_controls.maccelfactor.generic.type = MTYPE_SLIDER;
-	s_controls.maccelfactor.generic.x = SCREEN_WIDTH / 2;
 	s_controls.maccelfactor.generic.flags = QMF_SMALLFONT;
 	s_controls.maccelfactor.generic.name = "Mouse Acceleration:";
 	s_controls.maccelfactor.generic.id = ID_MOUSEACCELFACTOR;
@@ -1190,7 +1192,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.maccelstyle.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.maccelstyle.generic.flags = QMF_SMALLFONT;
-	s_controls.maccelstyle.generic.x = SCREEN_WIDTH / 2;
 	s_controls.maccelstyle.generic.name = "Accel. Offset Style:";
 	s_controls.maccelstyle.generic.id = ID_MOUSEACCELSTYLE;
 	s_controls.maccelstyle.generic.callback = Controls_MenuEvent;
@@ -1198,7 +1199,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.macceloffset.generic.type = MTYPE_SLIDER;
 	s_controls.macceloffset.generic.flags = QMF_SMALLFONT;
-	s_controls.macceloffset.generic.x = SCREEN_WIDTH / 2;
 	s_controls.macceloffset.generic.name = "Acceleration Offset:";
 	s_controls.macceloffset.generic.id = ID_MOUSEACCELOFFSET;
 	s_controls.macceloffset.generic.callback = Controls_MenuEvent;
@@ -1208,7 +1208,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.smoothmouse.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.smoothmouse.generic.flags = QMF_SMALLFONT;
-	s_controls.smoothmouse.generic.x = SCREEN_WIDTH / 2;
 	s_controls.smoothmouse.generic.name = "Smooth Mouse:";
 	s_controls.smoothmouse.generic.id = ID_SMOOTHMOUSE;
 	s_controls.smoothmouse.generic.callback = Controls_MenuEvent;
@@ -1217,7 +1216,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.invertmouse.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.invertmouse.generic.flags = QMF_SMALLFONT;
-	s_controls.invertmouse.generic.x = SCREEN_WIDTH / 2;
 	s_controls.invertmouse.generic.name = "Invert Mouse:";
 	s_controls.invertmouse.generic.id = ID_INVERTMOUSE;
 	s_controls.invertmouse.generic.callback = Controls_MenuEvent;
@@ -1244,7 +1242,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.freelook.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.freelook.generic.flags = QMF_SMALLFONT;
-	s_controls.freelook.generic.x = SCREEN_WIDTH / 2;
 	s_controls.freelook.generic.name = "Free Look:";
 	s_controls.freelook.generic.id = ID_FREELOOK;
 	s_controls.freelook.generic.callback = Controls_MenuEvent;
@@ -1266,14 +1263,12 @@ static void Controls_MenuInit(void) {
 
 	s_controls.joyenable.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.joyenable.generic.flags = QMF_SMALLFONT;
-	s_controls.joyenable.generic.x = SCREEN_WIDTH / 2;
 	s_controls.joyenable.generic.name = "Joystick:";
 	s_controls.joyenable.generic.id = ID_JOYENABLE;
 	s_controls.joyenable.generic.callback = Controls_MenuEvent;
 	s_controls.joyenable.generic.statusbar = Controls_StatusBar;
 
 	s_controls.joythreshold.generic.type = MTYPE_SLIDER;
-	s_controls.joythreshold.generic.x = SCREEN_WIDTH / 2;
 	s_controls.joythreshold.generic.flags = QMF_SMALLFONT;
 	s_controls.joythreshold.generic.name = "Joystick Threshold:";
 	s_controls.joythreshold.generic.id = ID_JOYTHRESHOLD;
@@ -1284,7 +1279,6 @@ static void Controls_MenuInit(void) {
 
 	s_controls.alwaysrun.generic.type = MTYPE_RADIOBUTTON;
 	s_controls.alwaysrun.generic.flags = QMF_SMALLFONT;
-	s_controls.alwaysrun.generic.x = SCREEN_WIDTH / 2;
 	s_controls.alwaysrun.generic.name = "Always Run:";
 	s_controls.alwaysrun.generic.id = ID_ALWAYSRUN;
 	s_controls.alwaysrun.generic.callback = Controls_MenuEvent;
