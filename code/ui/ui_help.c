@@ -144,7 +144,7 @@ static sfxHandle_t UI_HelpMenu_Key(int key) {
 
 	// TODO: Close menu with second keypress. How to get original key (from "ui_help x" bind(s))?
 	//       Key_GetKey seems to be in cgame only
-	// FIXME: Hardcoded like in ui_music until there's a better approach
+	// FIXME: Hardcoded like in ui_musicbox until there's a better approach
 	case 'g':
 	case 'h':
 		UI_PopMenu();

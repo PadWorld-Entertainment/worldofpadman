@@ -1079,19 +1079,19 @@ qboolean UI_ConsoleCommand(int realTime) {
 		return qtrue;
 	}
 	if (Q_stricmp(cmd, "wop_music") == 0) {
-		MusicMenu_Open();
+		UI_MusicBox_Open();
 		return qtrue;
 	}
 	if (Q_stricmp(cmd, "wop_checkmusic") == 0) {
-		Music_Check();
+		UI_MusicBox_Check();
 		return qtrue;
 	}
 	if (Q_stricmp(cmd, "wop_nextsong") == 0) {
-		Music_NextTrack();
+		UI_MusicBox_NextTrack();
 		return qtrue;
 	}
 	if (Q_stricmp(cmd, "wop_restartmusic") == 0) {
-		Music_TriggerRestart();
+		UI_MusicBox_TriggerRestart();
 		return qtrue;
 	}
 
@@ -1109,7 +1109,7 @@ UI_Shutdown
 */
 void UI_Shutdown(void) {
 	UI_StopMusic();
-	MusicMenu_Shutdown();
+	UI_MusicBox_Shutdown();
 }
 
 /*
@@ -1132,7 +1132,7 @@ void UI_Init(void) {
 		//return! ... old: EXEC_APPEND 		return;
 	}
 
-	MusicMenu_Init();
+	UI_MusicBox_Init();
 
 	UI_InitGameinfo();
 
@@ -1401,7 +1401,7 @@ void UI_Refresh(int realtime) {
 			UI_StartMusic();
 		}
 	} else {
-		Music_Check();
+		UI_MusicBox_Check();
 	}
 
 	UI_DrawMenu(uis.activemenu);

@@ -401,15 +401,15 @@ extern void UI_InGameMenu(void);
 extern void UI_CallVoteMenu(void);
 
 //
-// ui_music.c
+// ui_musicbox.c
 //
-void MusicMenu_Init(void);
-void MusicMenu_Shutdown(void);
-void MusicMenu_Open(void);
-void MusicMenu_Cache(void);
-void Music_Check(void);
-void Music_TriggerRestart(void);
-void Music_NextTrack(void);
+void UI_MusicBox_Init(void);
+void UI_MusicBox_Shutdown(void);
+void UI_MusicBox_Open(void);
+void UI_MusicBox_Cache(void);
+void UI_MusicBox_Check(void);
+void UI_MusicBox_TriggerRestart(void);
+void UI_MusicBox_NextTrack(void);
 
 //
 // ui_confirm.c
