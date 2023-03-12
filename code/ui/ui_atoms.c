@@ -1026,14 +1026,14 @@ UI_Cache
 =================
 */
 void UI_Cache_f(void) {
-	MainMenu_Cache();
-	InGame_Cache();
-	ConfirmMenu_Cache();
+	UI_MainMenu_Cache();
+	UI_InGame_Cache();
+	UI_ConfirmMenu_Cache();
 	UI_PlayerSettings_Cache();
-	Controls_Cache();
+	UI_Controls_Cache();
 	UI_Demos_Cache();
 	UI_Preferences_Cache();
-	ServerInfo_Cache();
+	UI_ServerInfo_Cache();
 	UI_SpecifyServer_Cache();
 	UI_ArenaServers_Cache();
 	UI_StartServer_Cache();
@@ -1043,12 +1043,12 @@ void UI_Cache_f(void) {
 	UI_EffectsOptions_Cache();
 	UI_SoundOptions_Cache();
 	UI_NetworkOptions_Cache();
-	TeamMain_Cache();
+	UI_TeamMain_Cache();
 	UI_AddBots_Cache();
 	UI_RemoveBots_Cache();
 	UI_SetupMenu_Cache();
 
-	SetupDefaultMenu_Cache();
+	UI_SetupDefaultMenu_Cache();
 	UI_BigCredits_Cache();
 	UI_Credit_Cache();
 
@@ -1123,7 +1123,7 @@ void UI_Init(void) {
 	// not yet
 	// WOP_LoadMenuText(UI_LOCALEFILE, qtrue);
 
-	SetDefaultBinds_onUnusedKeys();
+	UI_SetDefaultBinds_onUnusedKeys();
 
 	if (s_wop_restarted.integer != qtrue) {
 		trap_Cvar_Set("s_wop_restarted", "1");

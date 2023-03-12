@@ -136,7 +136,7 @@ static void TeamMain_MenuInit(void) {
 
 	memset(&s_teammain, 0, sizeof(s_teammain));
 
-	TeamMain_Cache();
+	UI_TeamMain_Cache();
 
 	s_teammain.menu.wrapAround = qtrue;
 	s_teammain.menu.fullscreen = qfalse;
@@ -229,10 +229,10 @@ static void TeamMain_MenuInit(void) {
 
 /*
 ===============
-TeamMain_Cache
+UI_TeamMain_Cache
 ===============
 */
-void TeamMain_Cache(void) {
+void UI_TeamMain_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 }

@@ -137,7 +137,7 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 	// zero set all our globals
 	memset(&s_confirm, 0, sizeof(s_confirm));
 
-	ConfirmMenu_Cache();
+	UI_ConfirmMenu_Cache();
 
 	s_confirm.question = question;
 	s_confirm.draw = draw;
@@ -189,10 +189,10 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 
 /*
 =================
-ConfirmMenu_Cache
+UI_ConfirmMenu_Cache
 =================
 */
-void ConfirmMenu_Cache(void) {
+void UI_ConfirmMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(YES0);
 	trap_R_RegisterShaderNoMip(YES1);
 	trap_R_RegisterShaderNoMip(NO0);

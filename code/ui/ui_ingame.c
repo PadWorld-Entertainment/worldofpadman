@@ -207,7 +207,7 @@ static void InGame_MenuInit(void) {
 
 	memset(&s_ingame, 0, sizeof(s_ingame));
 
-	InGame_Cache();
+	UI_InGame_Cache();
 
 	s_ingame.menu.wrapAround = qtrue;
 	s_ingame.menu.fullscreen = qfalse;
@@ -449,10 +449,10 @@ static void InGame_MenuInit(void) {
 
 /*
 =================
-InGame_Cache
+UI_InGame_Cache
 =================
 */
-void InGame_Cache(void) {
+void UI_InGame_Cache(void) {
 }
 
 /*

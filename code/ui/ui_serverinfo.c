@@ -209,7 +209,7 @@ void UI_ServerInfoMenu(void) {
 	// zero set all our globals
 	memset(&s_serverinfo, 0, sizeof(serverinfo_t));
 
-	ServerInfo_Cache();
+	UI_ServerInfo_Cache();
 
  	s_serverinfo.menu.draw = ServerInfo_MenuDraw;
 	s_serverinfo.menu.key = ServerInfo_MenuKey;
@@ -287,10 +287,10 @@ void UI_ServerInfoMenu(void) {
 
 /*
 =================
-ServerInfo_Cache
+UI_ServerInfo_Cache
 =================
 */
-void ServerInfo_Cache(void) {
+void UI_ServerInfo_Cache(void) {
 	trap_R_RegisterShaderNoMip(ARROWUP0);
 	trap_R_RegisterShaderNoMip(ARROWUP1);
 	trap_R_RegisterShaderNoMip(ARROWDN0);

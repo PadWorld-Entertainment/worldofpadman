@@ -771,7 +771,7 @@ static void Controls_SetConfig(void) {
 	trap_Cmd_ExecuteText(EXEC_APPEND, "in_restart\n");
 }
 
-void SetDefaultBinds_onUnusedKeys(void) {
+void UI_SetDefaultBinds_onUnusedKeys(void) {
 	bind_t *bindptr;
 	int i;
 	char buff[8];
@@ -1092,7 +1092,7 @@ static void Controls_MenuInit(void) {
 		// zero set all our globals
 	memset(&s_controls, 0, sizeof(s_controls));
 
-	Controls_Cache();
+	UI_Controls_Cache();
 
 	s_controls.menu.key = Controls_MenuKey;
 	s_controls.menu.wrapAround = qtrue;
@@ -1661,10 +1661,10 @@ static void Controls_MenuInit(void) {
 
 /*
 =================
-Controls_Cache
+UI_Controls_Cache
 =================
 */
-void Controls_Cache(void) {
+void UI_Controls_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(LOOK0);

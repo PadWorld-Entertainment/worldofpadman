@@ -135,10 +135,10 @@ static void Main_MenuEvent(void *ptr, int event) {
 
 /*
 ===============
-MainMenu_Cache
+UI_MainMenu_Cache
 ===============
 */
-void MainMenu_Cache(void) {
+void UI_MainMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(CREATE0);
 	trap_R_RegisterShaderNoMip(CREATE1);
 	trap_R_RegisterShaderNoMip(JOIN0);
@@ -242,7 +242,7 @@ void UI_MainMenu(void) {
 	memset(&s_errorMessage, 0, sizeof(errorMessage_t));
 
 	// com_errorMessage would need that too
-	MainMenu_Cache();
+	UI_MainMenu_Cache();
 
 	trap_Cvar_VariableStringBuffer("com_errorMessage", s_errorMessage.errorMessage,
 								   sizeof(s_errorMessage.errorMessage));

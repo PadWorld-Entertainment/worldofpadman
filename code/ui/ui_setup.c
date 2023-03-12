@@ -145,7 +145,7 @@ SetupDefaultMenu_Init
 #######################
 */
 static void SetupDefaultMenu_Init(void) {
-	SetupDefaultMenu_Cache();
+	UI_SetupDefaultMenu_Cache();
 
 	memset(&setupDefaultMenu, 0, sizeof(setupDefaultMenu));
 	setupDefaultMenu.menu.key = SetupDefaultMenu_Key;
@@ -199,10 +199,10 @@ static void SetupDefaultMenu_Init(void) {
 
 /*
 #######################
-SetupDefaultMenu_Cache
+UI_SetupDefaultMenu_Cache
 #######################
 */
-void SetupDefaultMenu_Cache(void) {
+void UI_SetupDefaultMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(YES0);
 	trap_R_RegisterShaderNoMip(YES1);
 	trap_R_RegisterShaderNoMip(NO0);

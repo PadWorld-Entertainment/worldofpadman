@@ -377,7 +377,7 @@ extern void UI_UpdateCvars(void);
 //
 // ui_menu.c
 //
-extern void MainMenu_Cache(void);
+extern void UI_MainMenu_Cache(void);
 extern void UI_MainMenu(void);
 
 //
@@ -392,7 +392,7 @@ extern void UI_SecretMenu(void);
 //
 // ui_ingame.c
 //
-extern void InGame_Cache(void);
+extern void UI_InGame_Cache(void);
 extern void UI_InGameMenu(void);
 
 //
@@ -414,7 +414,7 @@ void UI_MusicBox_NextTrack(void);
 //
 // ui_confirm.c
 //
-extern void ConfirmMenu_Cache(void);
+extern void UI_ConfirmMenu_Cache(void);
 extern void UI_ConfirmMenu(const char *question, void (*draw)(void), void (*action)(qboolean result));
 
 //
@@ -422,13 +422,13 @@ extern void UI_ConfirmMenu(const char *question, void (*draw)(void), void (*acti
 //
 extern void UI_SetupMenu_Cache(void);
 extern void UI_SetupMenu(void);
-extern void SetupDefaultMenu_Cache(void);
+extern void UI_SetupDefaultMenu_Cache(void);
 
 //
 // ui_team.c
 //
 extern void UI_TeamMainMenu(void);
-extern void TeamMain_Cache(void);
+extern void UI_TeamMain_Cache(void);
 
 //
 // ui_connect.c
@@ -439,8 +439,8 @@ extern void UI_DrawConnectScreen(qboolean overlay);
 // ui_controls.c
 //
 extern void UI_ControlsMenu(void);
-extern void Controls_Cache(void);
-extern void SetDefaultBinds_onUnusedKeys(void);
+extern void UI_Controls_Cache(void);
+extern void UI_SetDefaultBinds_onUnusedKeys(void);
 
 //
 // ui_demos.c
@@ -497,7 +497,7 @@ extern void UI_SelectBots_Cache(void);
 // ui_serverinfo.c
 //
 extern void UI_ServerInfoMenu(void);
-extern void ServerInfo_Cache(void);
+extern void UI_ServerInfo_Cache(void);
 
 //
 // ui_video.c
