@@ -18,20 +18,16 @@ HELP MENU
 #define ARROWRT0 "menu/arrows/headyel_rt0"
 #define ARROWRT1 "menu/arrows/headyel_rt1"
 
-#define HM_PN_W 50
-#define HM_PN_H 20
-#define HM_PN_X0 260
-#define HM_PN_X1 330
-#define HM_PN_Y 352
+#define XPOSITION (SCREEN_WIDTH / 2)
 
-#define HMI_GAMETYPE_W 373
-#define HMI_GAMETYPE_H 395
-#define HMI_GAMETYPE_X 150
+#define HMI_GAMETYPE_W 400
+#define HMI_GAMETYPE_H 400
+#define HMI_GAMETYPE_X XPOSITION - 200
 #define HMI_GAMETYPE_Y 0
 
-#define HMI_ITEM_W 499
-#define HMI_ITEM_H 433
-#define HMI_ITEM_X 92
+#define HMI_ITEM_W 462
+#define HMI_ITEM_H 400
+#define HMI_ITEM_X XPOSITION - 201 - 19 // offset because picture is asymmetrical
 #define HMI_ITEM_Y 0
 
 typedef struct {
@@ -256,10 +252,10 @@ static void UI_HelpMenu_Init(void) {
 
 	helpMenuInfo.prev.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.prev.generic.id = ID_PREV;
-	helpMenuInfo.prev.generic.x = HM_PN_X0;
-	helpMenuInfo.prev.generic.y = HM_PN_Y;
-	helpMenuInfo.prev.width = HM_PN_W;
-	helpMenuInfo.prev.height = HM_PN_H;
+	helpMenuInfo.prev.generic.x = XPOSITION - 68;
+	helpMenuInfo.prev.generic.y = 322;
+	helpMenuInfo.prev.width = 60;
+	helpMenuInfo.prev.height = 26;
 	helpMenuInfo.prev.generic.name = ARROWLT0;
 	helpMenuInfo.prev.focuspic = ARROWLT1;
 	helpMenuInfo.prev.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
@@ -267,10 +263,10 @@ static void UI_HelpMenu_Init(void) {
 
 	helpMenuInfo.next.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.next.generic.id = ID_NEXT;
-	helpMenuInfo.next.generic.x = HM_PN_X1;
-	helpMenuInfo.next.generic.y = HM_PN_Y;
-	helpMenuInfo.next.width = HM_PN_W;
-	helpMenuInfo.next.height = HM_PN_H;
+	helpMenuInfo.next.generic.x = XPOSITION + 8;
+	helpMenuInfo.next.generic.y = 322;
+	helpMenuInfo.next.width = 60;
+	helpMenuInfo.next.height = 26;
 	helpMenuInfo.next.generic.name = ARROWRT0;
 	helpMenuInfo.next.focuspic = ARROWRT1;
 	helpMenuInfo.next.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
