@@ -592,8 +592,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
 	effectsOptionsInfo.apply.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.apply.generic.id = ID_APPLY;
-	effectsOptionsInfo.apply.generic.x = 512;
-	effectsOptionsInfo.apply.generic.y = 440;
+	effectsOptionsInfo.apply.generic.x = 736;
+	effectsOptionsInfo.apply.generic.y = 446;
 	effectsOptionsInfo.apply.width = 120;
 	effectsOptionsInfo.apply.height = 40;
 	effectsOptionsInfo.apply.focuspic = ACCEPT1;

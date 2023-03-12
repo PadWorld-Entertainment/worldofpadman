@@ -917,8 +917,8 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.apply.generic.name = ACCEPT0;
 	s_graphicsoptions.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
 	s_graphicsoptions.apply.generic.callback = UI_GraphicsOptions_ApplyChanges;
-	s_graphicsoptions.apply.generic.x = 512;
-	s_graphicsoptions.apply.generic.y = 440;
+	s_graphicsoptions.apply.generic.x = 736;
+	s_graphicsoptions.apply.generic.y = 446;
 	s_graphicsoptions.apply.width = 120;
 	s_graphicsoptions.apply.height = 40;
 	s_graphicsoptions.apply.focuspic = ACCEPT1;

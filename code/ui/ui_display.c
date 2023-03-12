@@ -554,8 +554,8 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
 	displayOptionsInfo.apply.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.apply.generic.id = ID_APPLY;
-	displayOptionsInfo.apply.generic.x = 512;
-	displayOptionsInfo.apply.generic.y = 440;
+	displayOptionsInfo.apply.generic.x = 736;
+	displayOptionsInfo.apply.generic.y = 446;
 	displayOptionsInfo.apply.width = 120;
 	displayOptionsInfo.apply.height = 40;
 	displayOptionsInfo.apply.focuspic = ACCEPT1;

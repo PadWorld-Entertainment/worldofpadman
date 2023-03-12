@@ -634,8 +634,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
 	soundOptionsInfo.apply.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.apply.generic.id = ID_APPLY;
-	soundOptionsInfo.apply.generic.x = 512;
-	soundOptionsInfo.apply.generic.y = 440;
+	soundOptionsInfo.apply.generic.x = 736;
+	soundOptionsInfo.apply.generic.y = 446;
 	soundOptionsInfo.apply.width = 120;
 	soundOptionsInfo.apply.height = 40;
 	soundOptionsInfo.apply.focuspic = ACCEPT1;
