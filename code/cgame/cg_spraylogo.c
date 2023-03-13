@@ -645,8 +645,8 @@ void ActiveChooseLogoMenu(void) {
 
 	Com_sprintf(tmpstr, sizeof(tmpstr), "%i/%i", (activepage + 1), numPages);
 	CG_DrawStringExt(320 - CG_DrawStrlen(tmpstr) * 4, ARROWY + 2, tmpstr, colorWhite, qtrue, qtrue, 8, 16, 32);
-	CG_DrawPic(250, ARROWY, 50, 20, cgs.media.slmenu_arrowl);
-	CG_DrawPic(340, ARROWY, 50, 20, cgs.media.slmenu_arrowr);
+	CG_DrawPic(240, ARROWY, 60, 26, cgs.media.slmenu_arrowl);
+	CG_DrawPic(340, ARROWY, 60, 26, cgs.media.slmenu_arrowr);
 
 	if (cgs.gametype == GT_SPRAYFFA) {
 		int numColors = 6; // sizeof(spraycolors)/sizeof(spraycolors[0]);
