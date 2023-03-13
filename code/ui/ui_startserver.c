@@ -926,7 +926,7 @@ SELECT BOTS MENU
 #define ARROWUP1 "menu/arrows/headyel_up1"
 #define ARROWDN0 "menu/arrows/headyel_dn0"
 #define ARROWDN1 "menu/arrows/headyel_dn1"
-#define ICONSHADOW "menu/art/micon_shadow"
+#define ICONSHADOW "menu/art/iconshadow"
 #define HEADERBOTS "menu/headers/bots"
 #define HEADERCOLOR "menu/headers/color"
 
@@ -1394,7 +1394,7 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 	if (b->shader) // if there is no icon there should also be no shadow
 	{
 		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
-			UI_DrawNamedPic(x, y, w + 8, h + 8, ICONSHADOW);
+			UI_DrawNamedPic(x + 5, y + 5, w, h, ICONSHADOW);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 	}

@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SARROWLT1 "menu/arrows/smallyel_lt1"
 #define SARROWRT0 "menu/arrows/smallyel_rt0"
 #define SARROWRT1 "menu/arrows/smallyel_rt1"
-#define SICONSHADOW "menu/art/sicon_shadow"
+#define SICONSHADOW "menu/art/iconshadow"
 
 #define ID_NAME 10
 #define ID_GENDER 11
@@ -770,7 +770,7 @@ static void UI_SelectSkin_DrawSkinIcon(void *self) {
 		h = b->height;
 		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
 //			UI_DrawNamedPic(x, y, w + 6, h + 6, SICONSHADOW);
-			UI_DrawNamedPic(x, y, w + 5, h + 5, SICONSHADOW);
+			UI_DrawNamedPic(x + 5, y + 5, w, h, SICONSHADOW);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 	}
