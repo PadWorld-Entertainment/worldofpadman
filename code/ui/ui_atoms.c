@@ -1266,18 +1266,8 @@ void UI_UpdateScreen(void) {
 	trap_UpdateScreen();
 }
 
-#define WOP_INGAME_X 0
-#define WOP_INGAME_Y 0
-#define WOP_INGAME_B 640
-#define WOP_INGAME_H 480
-
 void UI_DrawIngameBG(void) {
-	float wsCorrection = (uis.glconfig.vidWidth * 480.0f / (float)uis.glconfig.vidHeight) - 640.0f;
-	if (wsCorrection < 0)
-		wsCorrection = 0.0f;
-
-	UI_DrawHandlePic(WOP_INGAME_X - (wsCorrection * 0.5f), WOP_INGAME_Y, WOP_INGAME_B + wsCorrection, WOP_INGAME_H,
-					 uis.ingamebg);
+	UI_DrawHandlePic(((SCREEN_WIDTH - 648) / 2), 0, (SCREEN_WIDTH - 216), SCREEN_HEIGHT, uis.ingamebg);
 }
 
 static void UI_DrawMenu(menuframework_s *menu) {
