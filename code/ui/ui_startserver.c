@@ -929,6 +929,7 @@ SELECT BOTS MENU
 #define ICONSHADOW "menu/art/iconshadow"
 #define HEADERBOTS "menu/headers/bots"
 #define HEADERCOLOR "menu/headers/color"
+#define HEADERTEAM "menu/headers/team"
 
 #define BOTGRID_COLS 5
 #define BOTGRID_ROWS 4
@@ -947,6 +948,7 @@ typedef struct {
 
 	menubitmap_s headerbots;
 	menubitmap_s headercolor;
+	menubitmap_s headerteam;
 
 	menutext_s selectedbotnames[MAX_SELECTLISTBOTS];
 	menutext_s selectedbotteams[MAX_SELECTLISTBOTS];
@@ -1258,8 +1260,10 @@ UI_SelectBots_Cache
 =================
 */
 void UI_SelectBots_Cache(void) {
+	trap_R_RegisterShaderNoMip(ICONSHADOW);
 	trap_R_RegisterShaderNoMip(HEADERBOTS);
 	trap_R_RegisterShaderNoMip(HEADERCOLOR);
+	trap_R_RegisterShaderNoMip(HEADERTEAM);
 	trap_R_RegisterShaderNoMip(ARROWLT0);
 	trap_R_RegisterShaderNoMip(ARROWLT1);
 	trap_R_RegisterShaderNoMip(ARROWRT0);
@@ -1270,7 +1274,6 @@ void UI_SelectBots_Cache(void) {
 	trap_R_RegisterShaderNoMip(ARROWDN1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
-	trap_R_RegisterShaderNoMip(ICONSHADOW);
 }
 
 /*
@@ -1463,13 +1466,25 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.headerbots.generic.y = 190;
 	botSelectInfo.headerbots.width = 70;
 	botSelectInfo.headerbots.height = 35;
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerbots);
 
-	botSelectInfo.headercolor.generic.type = MTYPE_BITMAP;
-	botSelectInfo.headercolor.generic.name = HEADERCOLOR;
-	botSelectInfo.headercolor.generic.x = 706;
-	botSelectInfo.headercolor.generic.y = 190;
-	botSelectInfo.headercolor.width = 105;
-	botSelectInfo.headercolor.height = 35;
+	if (gametype_remap[s_startserver.gametype.curvalue] >= GT_TEAM) {
+		botSelectInfo.headerteam.generic.type = MTYPE_BITMAP;
+		botSelectInfo.headerteam.generic.name = HEADERTEAM;
+		botSelectInfo.headerteam.generic.x = 716;
+		botSelectInfo.headerteam.generic.y = 190;
+		botSelectInfo.headerteam.width = 70;
+		botSelectInfo.headerteam.height = 35;
+		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerteam);
+	} else {
+		botSelectInfo.headercolor.generic.type = MTYPE_BITMAP;
+		botSelectInfo.headercolor.generic.name = HEADERCOLOR;
+		botSelectInfo.headercolor.generic.x = 706;
+		botSelectInfo.headercolor.generic.y = 190;
+		botSelectInfo.headercolor.width = 105;
+		botSelectInfo.headercolor.height = 35;
+		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headercolor);
+	}
 
 	y = (414 - MAX_SELECTLISTBOTS * 16);
 
@@ -1557,8 +1572,6 @@ static void UI_SelectBots_MenuInit(void) {
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.selectedbotnames[i]);
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.selectedbotteams[i]);
 	}
-	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerbots);
-	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headercolor);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.arrowup);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.arrowdown);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.BotSkill);
