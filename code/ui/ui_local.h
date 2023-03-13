@@ -128,7 +128,6 @@ extern vmCvar_t cl_renderer;
 #define MTYPE_TEXT 7
 #define MTYPE_SCROLLLIST 8
 
-#define MTYPE_BITMAP1024S 11 // pic in 1024x768 with shadow(S)
 #define MTYPE_TEXTS 12		 // sizeable(S) text
 
 #define QMF_BLINK ((unsigned int)0x00000001)
@@ -290,15 +289,6 @@ typedef struct {
 
 	qboolean focuspicinstead; // by QuarterPounder
 } menubitmap_s;
-
-typedef struct {
-	menucommon_s generic;
-	qhandle_t shader;
-	qhandle_t shadowshader;
-	qhandle_t mouseovershader;
-	int x, y, w, h;		// 1024!
-	int sx, sy, sw, sh; // shadow x/y/w/h ... 1024!
-} menubitmap1024s_s;
 
 typedef struct {
 	menucommon_s generic;
@@ -652,8 +642,6 @@ typedef struct {
 	float xbias;
 	float ybias;
 
-	float scale1024;
-
 	qboolean demoversion;
 	qboolean firstdraw;
 } uiStatic_t;
@@ -673,8 +661,6 @@ extern void UI_DrawRect(float x, float y, float width, float height, const float
 extern void UI_StartMusic(void);
 extern void UI_StartCreditMusic(void);
 extern void UI_StopMusic(void);
-extern void UI_AdjustFrom1024(float *x, float *y, float *w, float *h);
-extern void UI_DrawHandlePic1024(float x, float y, float w, float h, qhandle_t hShader);
 extern void UI_ModelIcon(const char *modelAndSkin, char *iconName, int SizeOfIconName);
 extern void UI_DrawStringNS(int x, int y, const char *str, int style, float fontsize, const vec4_t color);
 extern void UI_DrawIngameBG(void);

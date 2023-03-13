@@ -1163,7 +1163,6 @@ void UI_Init(void) {
 	} else
 		uis.ybias = 0;
 
-	uis.scale1024 = uis.xscale * (640.0f / 1024.0f); // uis.glconfig.vidHeight * (1.0f/768.0f);
 */
 	// initialize the menu system
 	Menu_Cache();
@@ -1185,14 +1184,6 @@ void UI_AdjustFrom640(float *x, float *y, float *w, float *h) {
 	*y = *y * uis.yscale + uis.ybias;
 	*w *= uis.xscale;
 	*h *= uis.yscale;
-}
-
-void UI_AdjustFrom1024(float *x, float *y, float *w, float *h) {
-	// expect valid pointers
-	*x = *x * uis.xscale + uis.xbias; //uis.scale1024 + uis.xbias;
-	*y = *y * uis.yscale + uis.ybias; //uis.scale1024 + uis.ybias;
-	*w *= uis.xscale; //uis.scale1024;
-	*h *= uis.yscale; //uis.scale1024;
 }
 
 void UI_DrawNamedPic(float x, float y, float width, float height, const char *picname) {
@@ -1228,34 +1219,6 @@ void UI_DrawHandlePic(float x, float y, float w, float h, qhandle_t hShader) {
 	}
 
 	UI_AdjustFrom640(&x, &y, &w, &h);
-	trap_R_DrawStretchPic(x, y, w, h, s0, t0, s1, t1, hShader);
-}
-
-void UI_DrawHandlePic1024(float x, float y, float w, float h, qhandle_t hShader) {
-	float s0;
-	float s1;
-	float t0;
-	float t1;
-
-	if (w < 0) { // flip about vertical
-		w = -w;
-		s0 = 1;
-		s1 = 0;
-	} else {
-		s0 = 0;
-		s1 = 1;
-	}
-
-	if (h < 0) { // flip about horizontal
-		h = -h;
-		t0 = 1;
-		t1 = 0;
-	} else {
-		t0 = 0;
-		t1 = 1;
-	}
-
-	UI_AdjustFrom1024(&x, &y, &w, &h);
 	trap_R_DrawStretchPic(x, y, w, h, s0, t0, s1, t1, hShader);
 }
 
