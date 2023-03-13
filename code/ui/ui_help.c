@@ -22,12 +22,12 @@ HELP MENU
 
 #define HMI_GAMETYPE_W 400
 #define HMI_GAMETYPE_H 400
-#define HMI_GAMETYPE_X XPOSITION - 200
+#define HMI_GAMETYPE_X XPOSITION - 200 + 23// offset because picture is asymmetrical
 #define HMI_GAMETYPE_Y 0
 
 #define HMI_ITEM_W 462
 #define HMI_ITEM_H 400
-#define HMI_ITEM_X XPOSITION - 201 - 19 // offset because picture is asymmetrical
+#define HMI_ITEM_X XPOSITION - 231 + 20 // offset because picture is asymmetrical
 #define HMI_ITEM_Y 0
 
 float nwsOffset;
