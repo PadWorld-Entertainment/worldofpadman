@@ -1271,8 +1271,6 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 	trap_GetGlconfig(&cgs.glconfig);
 	cgs.screenXScale = cgs.glconfig.vidWidth / 640.0;
 	cgs.screenYScale = cgs.glconfig.vidHeight / 480.0;
-	cgs.scale1024X = cgs.glconfig.vidWidth / 1024.0f;
-	cgs.scale1024Y = cgs.glconfig.vidHeight / 768.0f;
 
 	CG_ChangeLoadingProgress(0.1f);
 

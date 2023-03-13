@@ -129,15 +129,19 @@ void CG_DrawInformation(void) {
 	const char *info;
 	qhandle_t levelshot;
 	qhandle_t helppage;
-	float lx, ly, lw, lh;
-	// levelshot ideal coords (assuming 1024*768 resolution)
-	int lsiX = 167;
-	int lsiY = 125;
-	int lsiW = 690;
-	int lsiH = 517;
+	// levelshot ideal coords (assuming 640*480 resolution)
+	int lsiX = 104;
+	int lsiY = 78;
+	int lsiW = 432;
+	int lsiH = 324;
 	float idealAspectRatio = 4.0f / 3.0f;
 	int lsCenterDistX;		// x - distance to center
 	int lsX, lsY, lsW, lsH; // actual levelshot coords
+	// loading bar ideal coords (assuming 640*480 resolution)
+	float lbX = 167;
+	float lbY = 422;
+	float lbW = 306;
+	float lbH = 32;
 
 	info = CG_ConfigString(CS_SERVERINFO);
 
@@ -187,23 +191,17 @@ void CG_DrawInformation(void) {
 	helppage = trap_R_RegisterShaderNoMip(info);
 
 	// now scale x and width to preserve the levelshot aspect ratio
-	lsCenterDistX = (512 - lsiX) * idealAspectRatio / cgs.glconfig.windowAspect;
-	lsX = 512 - lsCenterDistX;
+	lsCenterDistX = (320 - lsiX) * idealAspectRatio / cgs.glconfig.windowAspect;
+	lsX = 320 - lsCenterDistX;
 	lsY = lsiY;
 	lsW = (float)lsiW * (idealAspectRatio / cgs.glconfig.windowAspect);
 	lsH = lsiH;
 
-	CG_DrawPic1024(lsX, lsY, lsW, lsH, levelshot);
-	CG_DrawPic1024(lsX, lsY, lsW, lsH, helppage);
+	CG_DrawPic(lsX, lsY, lsW, lsH, levelshot);
+	CG_DrawPic(lsX, lsY, lsW, lsH, helppage);
 
-	// test values: 300,650,424,40
-	// thumbnail: 282,675,460,48
-	lx = 282;
-	ly = 675;
-	lw = 460 * cg.loadingprogress;
-	lh = 48;
-	CG_AdjustFrom1024(&lx, &ly, &lw, &lh);
-	trap_R_DrawStretchPic(lx, ly, lw, lh, 0, 0, cg.loadingprogress, 1,
+	CG_AdjustFrom640(&lbX, &lbY, &lbW, &lbH);
+	trap_R_DrawStretchPic(lbX, lbY, lbW * cg.loadingprogress, lbH, 0, 0, cg.loadingprogress, 1,
 						  trap_R_RegisterShaderNoMip("menu/art/loadingbar"));
-	CG_DrawPic1024(282, 675, 460, 48, trap_R_RegisterShaderNoMip("menu/art/loadingframe"));
+	CG_DrawPic(167, 422, 306, 32, trap_R_RegisterShaderNoMip("menu/art/loadingframe"));
 }

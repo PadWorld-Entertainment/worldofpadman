@@ -44,13 +44,6 @@ void CG_AdjustFrom640(float *x, float *y, float *w, float *h) {
 	*h *= cgs.screenYScale;
 }
 
-void CG_AdjustFrom1024(float *x, float *y, float *w, float *h) {
-	*x *= cgs.scale1024X;
-	*y *= cgs.scale1024Y;
-	*w *= cgs.scale1024X;
-	*h *= cgs.scale1024Y;
-}
-
 /*
 ================
 CG_FillRect
@@ -113,37 +106,6 @@ Coordinates are 640*480 virtual values
 void CG_DrawPic(float x, float y, float width, float height, qhandle_t hShader) {
 	CG_AdjustFrom640(&x, &y, &width, &height);
 	trap_R_DrawStretchPic(x, y, width, height, 0, 0, 1, 1, hShader);
-}
-
-void CG_FillRect1024(float x, float y, float width, float height, const float *color) {
-	trap_R_SetColor(color);
-
-	CG_AdjustFrom1024(&x, &y, &width, &height);
-	trap_R_DrawStretchPic(x, y, width, height, 0, 0, 0, 0, cgs.media.whiteShader);
-
-	trap_R_SetColor(NULL);
-}
-
-void CG_DrawRect1024(float x, float y, float width, float height, float size, const float *color) {
-	float sizeY;
-
-	CG_AdjustFrom1024(&x, &y, &width, &height);
-	sizeY = size * cgs.scale1024Y;
-	size *= cgs.scale1024X;
-
-	trap_R_SetColor(color);
-
-	trap_R_DrawStretchPic(x, y, width, sizeY, 0, 0, 0, 0, cgs.media.whiteShader);
-	trap_R_DrawStretchPic(x, y + height - sizeY, width, sizeY, 0, 0, 0, 0, cgs.media.whiteShader);
-	trap_R_DrawStretchPic(x, y, size, height, 0, 0, 0, 0, cgs.media.whiteShader);
-	trap_R_DrawStretchPic(x + width - size, y, size, height, 0, 0, 0, 0, cgs.media.whiteShader);
-
-	trap_R_SetColor(NULL);
-}
-
-void CG_DrawPic1024(float x, float y, float width, float height, qhandle_t Shader) {
-	CG_AdjustFrom1024(&x, &y, &width, &height);
-	trap_R_DrawStretchPic(x, y, width, height, 0, 0, 1, 1, Shader);
 }
 
 /*
