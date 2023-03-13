@@ -30,6 +30,8 @@ HELP MENU
 #define HMI_ITEM_X XPOSITION - 201 - 19 // offset because picture is asymmetrical
 #define HMI_ITEM_Y 0
 
+float nwsOffset;
+
 typedef struct {
 	menuframework_s menu;
 
@@ -159,22 +161,17 @@ static sfxHandle_t UI_HelpMenu_Key(int key) {
 
 /*
 ===============
-UI_DrawHelpMenuImg
-===============
-*/
-static void UI_DrawHelpMenuImg(void) {
-	// if ( helpMenuInfo.img ) {
-	UI_DrawHandlePic(helpMenuInfo.x, helpMenuInfo.y, helpMenuInfo.width, helpMenuInfo.height, helpMenuInfo.img);
-	//}
-}
-
-/*
-===============
 UI_HelpMenu_Draw
 ===============
 */
 static void UI_HelpMenu_Draw(void) {
-	UI_DrawHelpMenuImg();
+	// for non-widescreen resolutions we need to calculate and subtract an offset to the height so that the menu always stays at the top of the screen
+	nwsOffset = ((float)uis.glconfig.vidHeight * (float)SCREEN_WIDTH / (float)uis.glconfig.vidWidth) - (float)SCREEN_HEIGHT;
+	if (nwsOffset < 0) {
+		nwsOffset = 0.0f;
+	}
+
+	UI_DrawHandlePic(helpMenuInfo.x, helpMenuInfo.y - (nwsOffset * 0.5f), helpMenuInfo.width, helpMenuInfo.height, helpMenuInfo.img);
 
 	// standard menu drawing
 	Menu_Draw(&helpMenuInfo.menu);
@@ -253,7 +250,7 @@ static void UI_HelpMenu_Init(void) {
 	helpMenuInfo.prev.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.prev.generic.id = ID_PREV;
 	helpMenuInfo.prev.generic.x = XPOSITION - 68;
-	helpMenuInfo.prev.generic.y = 322;
+	helpMenuInfo.prev.generic.y = 322 - (nwsOffset * 0.5f);
 	helpMenuInfo.prev.width = 60;
 	helpMenuInfo.prev.height = 26;
 	helpMenuInfo.prev.generic.name = ARROWLT0;
@@ -264,7 +261,7 @@ static void UI_HelpMenu_Init(void) {
 	helpMenuInfo.next.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.next.generic.id = ID_NEXT;
 	helpMenuInfo.next.generic.x = XPOSITION + 8;
-	helpMenuInfo.next.generic.y = 322;
+	helpMenuInfo.next.generic.y = 322 - (nwsOffset * 0.5f);
 	helpMenuInfo.next.width = 60;
 	helpMenuInfo.next.height = 26;
 	helpMenuInfo.next.generic.name = ARROWRT0;
