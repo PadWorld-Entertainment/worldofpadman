@@ -23,6 +23,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cg_drawtools.c -- helper functions called by cg_draw, cg_scoreboard, cg_info, etc
 #include "cg_local.h"
 
+static screenPlacement_e cg_horizontalPlacement = PLACE_CENTER;
+static screenPlacement_e cg_verticalPlacement = PLACE_CENTER;
+static screenPlacement_e cg_lastHorizontalPlacement = PLACE_CENTER;
+static screenPlacement_e cg_lastVerticalPlacement = PLACE_CENTER;
+
+/*
+================
+CG_SetScreenPlacement
+================
+*/
+void CG_SetScreenPlacement(screenPlacement_e hpos, screenPlacement_e vpos)
+{
+	cg_lastHorizontalPlacement = cg_horizontalPlacement;
+	cg_lastVerticalPlacement = cg_verticalPlacement;
+
+	cg_horizontalPlacement = hpos;
+	cg_verticalPlacement = vpos;
+}
+
+/*
+================
+CG_PopScreenPlacement
+================
+*/
+void CG_PopScreenPlacement(void)
+{
+	cg_horizontalPlacement = cg_lastHorizontalPlacement;
+	cg_verticalPlacement = cg_lastVerticalPlacement;
+}
+
+/*
+================
+CG_GetScreenHorizontalPlacement
+================
+*/
+screenPlacement_e CG_GetScreenHorizontalPlacement(void)
+{
+	return cg_horizontalPlacement;
+}
+
+/*
+================
+CG_GetScreenVerticalPlacement
+================
+*/
+screenPlacement_e CG_GetScreenVerticalPlacement(void)
+{
+	return cg_verticalPlacement;
+}
+
+
 /*
 ================
 CG_AdjustFrom640
@@ -31,17 +82,23 @@ Adjusted for resolution and screen aspect ratio
 ================
 */
 void CG_AdjustFrom640(float *x, float *y, float *w, float *h) {
-#if 0
-	// adjust for wide screens
-	if ( cgs.glconfig.vidWidth * 480 > cgs.glconfig.vidHeight * 640 ) {
-		*x += 0.5 * ( cgs.glconfig.vidWidth - ( cgs.glconfig.vidHeight * 640 / 480 ) );
-	}
-#endif
-	// scale for screen sizes
+
+	// scale for screen sizes (aspect correct)
 	*x *= cgs.screenXScale;
-	*y *= cgs.screenYScale;
 	*w *= cgs.screenXScale;
+	if (cg_horizontalPlacement == PLACE_CENTER) {
+		*x += cgs.screenXBias;
+	} else if (cg_horizontalPlacement == PLACE_RIGHT) {
+		*x += cgs.screenXBias*2;
+	}
+
+	*y *= cgs.screenYScale;
 	*h *= cgs.screenYScale;
+	if (cg_verticalPlacement == PLACE_CENTER) {
+		*y += cgs.screenYBias;
+	} else if (cg_verticalPlacement == PLACE_BOTTOM) {
+		*y += cgs.screenYBias*2;
+	}
 }
 
 /*

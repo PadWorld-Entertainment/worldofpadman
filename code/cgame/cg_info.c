@@ -130,13 +130,10 @@ void CG_DrawInformation(void) {
 	qhandle_t levelshot;
 	qhandle_t helppage;
 	// levelshot ideal coords (assuming 640*480 resolution)
-	int lsiX = 104;
-	int lsiY = 78;
-	int lsiW = 432;
-	int lsiH = 324;
-	float idealAspectRatio = 4.0f / 3.0f;
-	int lsCenterDistX;		// x - distance to center
-	int lsX, lsY, lsW, lsH; // actual levelshot coords
+	int lsX = 104;
+	int lsY = 78;
+	int lsW = 432;
+	int lsH = 324;
 	// loading bar ideal coords (assuming 640*480 resolution)
 	float lbX = 167;
 	float lbY = 422;
@@ -147,7 +144,7 @@ void CG_DrawInformation(void) {
 
 	trap_R_SetColor(NULL);
 
-	CG_DrawPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, trap_R_RegisterShaderNoMip("menu/bg/connecting"));
+//	CG_DrawPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, trap_R_RegisterShaderNoMip("menu/bg/connecting"));
 
 	s = Info_ValueForKey(info, "mapname");
 	levelshot = trap_R_RegisterShaderNoMip(va("levelshots/%s", s));
@@ -190,16 +187,11 @@ void CG_DrawInformation(void) {
 
 	helppage = trap_R_RegisterShaderNoMip(info);
 
-	// now scale x and width to preserve the levelshot aspect ratio
-	lsCenterDistX = (320 - lsiX) * idealAspectRatio / cgs.glconfig.windowAspect;
-	lsX = 320 - lsCenterDistX;
-	lsY = lsiY;
-	lsW = (float)lsiW * (idealAspectRatio / cgs.glconfig.windowAspect);
-	lsH = lsiH;
-
+	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 	CG_DrawPic(lsX, lsY, lsW, lsH, levelshot);
 	CG_DrawPic(lsX, lsY, lsW, lsH, helppage);
 
+	CG_SetScreenPlacement(PLACE_CENTER, PLACE_BOTTOM);
 	CG_AdjustFrom640(&lbX, &lbY, &lbW, &lbH);
 	trap_R_DrawStretchPic(lbX, lbY, lbW * cg.loadingprogress, lbH, 0, 0, cg.loadingprogress, 1,
 						  trap_R_RegisterShaderNoMip("menu/art/loadingbar"));
