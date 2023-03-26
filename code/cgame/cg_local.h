@@ -390,6 +390,7 @@ typedef struct {
 	byte glowColor[4];
 
 	qboolean ftIsFrozen;
+	qboolean ctkdIsKillerduck;
 } clientInfo_t;
 
 // each WP_* weapon enum has an associated weaponInfo_t
@@ -745,6 +746,10 @@ typedef struct {
 	qhandle_t bettySkinFTShader;
 	qhandle_t bubblegMuzzleFTShader;
 	qhandle_t bubblegSkinFTShader;
+
+	// catch the killerduck
+	qhandle_t ctkdHintIconShader;
+	qhandle_t ctkdCarrierIconShader;
 
 	qhandle_t tracerShader;
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];
@@ -1809,6 +1814,7 @@ int trap_RealTime(qtime_t *qtime);
 // cg_catch.c
 //
 qboolean CG_IsKillerDuck(const centity_t *cent);
+void CG_DrawKillerduckIcon(const centity_t *cent);
 
 //
 //	cg_rautelib.c

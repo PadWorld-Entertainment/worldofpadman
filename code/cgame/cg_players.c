@@ -1706,11 +1706,15 @@ static void CG_PlayerPowerups(centity_t *cent, refEntity_t *torso) {
 					 cgs.media.smokePuffShader);
 	}
 
+	// add killerduck glow for any client in catch the killerduck game type
+	if (CG_IsKillerDuck(cent)) {
+		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 1.0f, 1.0f, 0.2f);
+	}
+
 	powerups = cent->currentState.powerups;
 	if (!powerups) {
 		return;
 	}
-
 
 	ci = &cgs.clientinfo[cent->currentState.clientNum];
 
@@ -2396,6 +2400,14 @@ void CG_Player(centity_t *cent) {
 		ci->ftIsFrozen = qtrue;
 	else
 		ci->ftIsFrozen = qfalse;
+
+	// push killerduck state into clientinfo
+	// we need that for the scorebord
+	if (CG_IsKillerDuck(cent)) {
+		ci->ctkdIsKillerduck = qtrue;
+	} else {
+		ci->ctkdIsKillerduck = qfalse;
+	}
 
 	//
 	// add the gun / barrel / flash

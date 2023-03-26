@@ -95,6 +95,7 @@ PREFERENCES MENU
 #define ID_ICONHSTATION 74
 #define ID_ICONSYCTELE 75
 #define ID_ICONBALLOON 76
+#define ID_ICONKILLERDUCK 77
 
 #define NUM_CROSSHAIRS 12
 
@@ -151,6 +152,7 @@ typedef struct {
 	menuradiobutton_s whHStations;
 	menuradiobutton_s whSycTele;
 	menuradiobutton_s whBalloons;
+	menuradiobutton_s whKillerduck;
 
 	menubitmap_s back;
 
@@ -213,6 +215,7 @@ static menucommon_s *g_help_options[] = {
 	(menucommon_s *)&s_preferences.whHStations,
 	(menucommon_s *)&s_preferences.whSycTele,
 	(menucommon_s *)&s_preferences.whBalloons,
+	(menucommon_s *)&s_preferences.whKillerduck,
 	NULL
 };
 
@@ -325,6 +328,7 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.whHStations.curvalue = (ICON_HEALTHSTATION & cg_iconsCvarValue);
 	s_preferences.whSycTele.curvalue = (ICON_SPRAYROOM & cg_iconsCvarValue);
 	s_preferences.whFrozenMates.curvalue = (ICON_FREEZETAG & cg_iconsCvarValue);
+	s_preferences.whKillerduck.curvalue = (ICON_KILLERDUCK & cg_iconsCvarValue);
 }
 
 /*
@@ -599,6 +603,7 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 	case ID_ICONTEAMMATE:
 	case ID_ICONBALLOON:
 	case ID_ICONFROZENMATE:
+	case ID_ICONKILLERDUCK:
 	case ID_ICONHSTATION:
 	case ID_ICONSYCTELE: {
 		// this is only necessary if cg_icons contains flags that we don't cover here
@@ -621,6 +626,9 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 		}
 		if (s_preferences.whFrozenMates.curvalue) {
 			icons |= ICON_FREEZETAG;
+		}
+		if (s_preferences.whKillerduck.curvalue) {
+			icons |= ICON_KILLERDUCK;
 		}
 
 		trap_Cvar_SetValue("cg_icons", icons);
@@ -1225,6 +1233,19 @@ static void UI_Preferences_MenuInit(void) {
 		"through walls, to help you find them in Big Balloon game mode. "
 		"Default is off.";
 
+	y += (BIGCHAR_HEIGHT + 2);
+	s_preferences.whKillerduck.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.whKillerduck.generic.name = "Killerduck:";
+	s_preferences.whKillerduck.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.whKillerduck.generic.callback = UI_Preferences_Event;
+	s_preferences.whKillerduck.generic.id = ID_ICONKILLERDUCK;
+	s_preferences.whKillerduck.generic.x = XPOSITION;
+	s_preferences.whKillerduck.generic.y = y;
+	s_preferences.whKillerduck.generic.toolTip =
+		"Enable to display a Killerduck icon above the Killerduck holdable, "
+		"visible through walls, to help you find it in Catch The Killerduck "
+		"game mode. Default is off.";
+
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
 	s_preferences.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
@@ -1285,6 +1306,7 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whHStations);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whSycTele);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whBalloons);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.whKillerduck);
 
 	UI_Preferences_SetMenuItems();
 	UI_Preferences_UpdateMenuItems();

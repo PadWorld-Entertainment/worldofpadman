@@ -911,6 +911,11 @@ static void CG_RegisterGraphics(void) {
 		cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/foam_mrk");
 	}
 
+	if (cgs.gametype == GT_CATCH) {
+		cgs.media.ctkdHintIconShader = trap_R_RegisterShader("icons/hint_killerduck");
+		cgs.media.ctkdCarrierIconShader = trap_R_RegisterShader("icons/holdable_killerducks");
+	}
+
 	cgs.media.healthstationIcon = trap_R_RegisterShaderNoMip("icons/hint_healthstation");
 
 	if (cgs.gametype == GT_LPS || cg_buildScript.integer) {

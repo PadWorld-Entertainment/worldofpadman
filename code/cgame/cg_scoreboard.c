@@ -100,9 +100,14 @@ static void CG_DrawClientScore(int y, score_t *score, float *color, float fade, 
 	iconx = SB_BOTICON_X + (SB_RATING_WIDTH / 2);
 	headx = SB_HEAD_X + (SB_RATING_WIDTH / 2);
 
-	// freeze icon indicating frozen player
+	// freeze icon indicating frozen player in freezetag
 	if (CG_FreezeTag() && ci->powerups & (1 << PW_FREEZE)) {
 		CG_DrawPic(iconx, icony, lineHeight * 0.8, lineHeight * 0.8, cgs.media.freezeIconShader);
+	// killerduck icon indicating player is killerduck carrier in ctkd
+	} else if (ci->ctkdIsKillerduck) {
+		if (cg_drawIcons.integer) {
+			CG_DrawPic(iconx, icony, lineHeight * 0.8, lineHeight * 0.8, cgs.media.ctkdCarrierIconShader);
+		}
 	} else
 	// draw the handicap or bot skill marker (unless player has lolly)
 	if (ci->powerups & (1 << PW_REDFLAG)) {
