@@ -152,29 +152,32 @@ void CG_DrawInformation(void) {
 	}
 
 	switch (cgs.gametype) {
-	case GT_BALLOON:
-		info = "menu/info/bb";
-		break;
-	case GT_CTF:
-		info = "menu/info/ctl";
-		break;
 	case GT_FFA:
 		info = "menu/info/ffa";
-		break;
-	case GT_LPS:
-		info = "menu/info/lps";
 		break;
 	case GT_SPRAYFFA:
 		info = "menu/info/syc";
 		break;
-	case GT_SPRAY:
-		info = "menu/info/syc_team";
+	case GT_LPS:
+		info = "menu/info/lps";
+		break;
+	case GT_CATCH:
+		info = "menu/info/ctkd";
 		break;
 	case GT_TEAM:
 		info = "menu/info/ffa_team";
 		break;
 	case GT_FREEZETAG:
 		info = "menu/info/ft";
+		break;
+	case GT_CTF:
+		info = "menu/info/ctl";
+		break;
+	case GT_SPRAY:
+		info = "menu/info/syc_team";
+		break;
+	case GT_BALLOON:
+		info = "menu/info/bb";
 		break;
 	default:
 		info = "menu/info/ffa";

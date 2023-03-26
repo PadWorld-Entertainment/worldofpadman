@@ -525,10 +525,10 @@ CG_DrawServerInfos
 ==============
 */
 static const char *gametype_strs[] = {
-	GAMETYPE_NAME_SHORT(GT_FFA),	  GAMETYPE_NAME_SHORT(GT_TOURNAMENT), GAMETYPE_NAME_SHORT(GT_SINGLE_PLAYER),
-	GAMETYPE_NAME_SHORT(GT_SPRAYFFA), GAMETYPE_NAME_SHORT(GT_LPS),		  GAMETYPE_NAME_SHORT(GT_CTF),
-	GAMETYPE_NAME_SHORT(GT_TEAM),	  GAMETYPE_NAME_SHORT(GT_FREEZETAG),  GAMETYPE_NAME_SHORT(GT_SPRAY),
-	GAMETYPE_NAME_SHORT(GT_BALLOON),  GAMETYPE_NAME_SHORT(GT_CATCH),	  GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE)};
+	GAMETYPE_NAME_SHORT(GT_FFA), GAMETYPE_NAME_SHORT(GT_TOURNAMENT), GAMETYPE_NAME_SHORT(GT_SINGLE_PLAYER),
+	GAMETYPE_NAME_SHORT(GT_SPRAYFFA), GAMETYPE_NAME_SHORT(GT_LPS), GAMETYPE_NAME_SHORT(GT_CATCH),
+	GAMETYPE_NAME_SHORT(GT_CTF), GAMETYPE_NAME_SHORT(GT_TEAM), GAMETYPE_NAME_SHORT(GT_FREEZETAG),
+	GAMETYPE_NAME_SHORT(GT_SPRAY), GAMETYPE_NAME_SHORT(GT_BALLOON), GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE)};
 CASSERT(ARRAY_LEN(gametype_strs) == GT_MAX_GAME_TYPE + 1);
 
 static float CG_DrawServerInfos(float y) {
@@ -1050,7 +1050,7 @@ static void CG_DrawHoldableItem(float y) {
 			CG_FillRect(barX, y + ICON_SIZE - barHeight, 10, barHeight, barColor);
 			CG_DrawRect(barX, y, 10, ICON_SIZE, 1.0f, colorWhite);
 		}
-		if (itemId == HI_KILLERDUCKS || itemId == HI_BOOMIES) {
+		if ((itemId == HI_KILLERDUCKS && cgs.gametype != GT_CATCH) || itemId == HI_BOOMIES) {
 			const char *str = va("%i", itemState);
 			const int maxChars = strlen(str);
 			CG_DrawStringExt(640 - 24 - maxChars * 4, y + 8, str, colorWhite, qtrue, qtrue,
@@ -2333,6 +2333,20 @@ static void CG_DrawBambamIcon(const centity_t *cent) {
 	}
 }
 
+static void CG_DrawItemIcon(const centity_t *cent) {
+	const entityState_t *es = &cent->currentState;
+
+	if (es->modelindex >= bg_numItems) {
+		CG_Error("Bad item index %i on entity", es->modelindex);
+	}
+	if (!es->modelindex || (es->eFlags & EF_NODRAW)) {
+		return;
+	}
+	if (bg_itemlist[es->modelindex].giType == IT_HOLDABLE && bg_itemlist[es->modelindex].giTag == HI_KILLERDUCKS) {
+		CG_DrawKillerduckIcon(cent);
+	}
+}
+
 static void CG_FreezeTagThawerProgressBar(void) {
 	static const vec4_t blue = {0.75f, 0.75f, 0.75f, 1.0f};
 	static const vec4_t orange = {0.75f, 0.0f, 0.0f, 1.0f};
@@ -2573,6 +2587,9 @@ static void CG_DrawEntityIcons(void) {
 			break;
 		case ET_STATION:
 			CG_DrawHealthstationIcon(cent);
+			break;
+		case ET_ITEM:
+			CG_DrawItemIcon(cent);
 			break;
 		case ET_TELEPORT_TRIGGER:
 			// constant is set for sprayroom teleporter in SP_trigger_teleport
@@ -2825,7 +2842,6 @@ static void CG_DrawLastPadStanding(void) {
 				strColor[3] = 0.0;
 			}
 
-			// FIXME: Calculate_2DOf3D is more than ugly!
 			squaredDistance = Calculate_2DOf3D(ci->curPos, &x, &y);
 			if (squaredDistance) {
 				float size = (float)(1.0 / (sqrt(squaredDistance) * 0.002));

@@ -51,8 +51,8 @@ static helpMenuInfo_t helpMenuInfo;
 static const char *HELP_GAMETYPE[] = {
 	"ffa",
 	//	"tourney",
-	//	"single", // ""
-	"syc", "lps", "ffa_team", "ft", "ctl", "syc_team", "bb",
+	//	"single",
+	"syc", "lps", "ctkd", "ffa_team", "ft", "ctl", "syc_team", "bb",
 	"unknown" // must be the last entry!
 };
 
@@ -60,16 +60,17 @@ static const char *HELP_GAMETYPE[] = {
 // Maps gametypes to array indices of HELP_GAMETYPE
 static const int GAMETYPE_REMAP[] = {
 	0, // GT_FFA
-	8, // GT_TOURNAMENT, no help
-	8, // GT_SINGLE_PLAYER, no help
+	9, // GT_TOURNAMENT, no help
+	9, // GT_SINGLE_PLAYER, no help
 	1, // GT_SPRAYFFA
 	2, // GT_LPS
-	3, // GT_TEAM
-	4, // GT_FREEZETAG
-	5, // GT_CTF
-	6, // GT_SPRAY
-	7, // GT_BALLOON
-	8, // GT_MAX_GAME_TYPE, invalid thus no help
+	3, // GT_CATCH
+	4, // GT_TEAM
+	5, // GT_FREEZETAG
+	6, // GT_CTF
+	7, // GT_SPRAY
+	8, // GT_BALLOON
+	9, // GT_MAX_GAME_TYPE, invalid thus no help
 };
 
 static const char *HELP_ITEM[] = {"powerups", "weapons"};
