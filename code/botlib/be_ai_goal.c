@@ -992,7 +992,7 @@ void BotUpdateEntityItems(void) {
 
 void BotDumpGoalStack(int goalstate) {
 	int i;
-	bot_goalstate_t *gs;
+	const bot_goalstate_t *gs;
 	char name[32];
 
 	gs = BotGoalStateFromHandle(goalstate);
@@ -1039,7 +1039,7 @@ void BotEmptyGoalStack(int goalstate) {
 }
 
 int BotGetTopGoal(int goalstate, bot_goal_t *goal) {
-	bot_goalstate_t *gs;
+	const bot_goalstate_t *gs;
 
 	gs = BotGoalStateFromHandle(goalstate);
 	if (!gs)
@@ -1051,7 +1051,7 @@ int BotGetTopGoal(int goalstate, bot_goal_t *goal) {
 }
 
 int BotGetSecondGoal(int goalstate, bot_goal_t *goal) {
-	bot_goalstate_t *gs;
+	const bot_goalstate_t *gs;
 
 	gs = BotGoalStateFromHandle(goalstate);
 	if (!gs)
