@@ -1976,7 +1976,7 @@ int AINode_Seek_NBG(bot_state_t *bs) {
 			BotRoamGoal(bs, target);
 			VectorSubtract(target, bs->origin, dir);
 			vectoangles(dir, bs->ideal_viewangles);
-			bs->ideal_viewangles[2] *= 0.5;
+			bs->ideal_viewangles[2] *= 0.5f;
 		}
 	} else if (!(bs->flags & BFL_IDEALVIEWSET)) {
 		if (!trap_BotGetSecondGoal(bs->gs, &goal))
@@ -1988,7 +1988,7 @@ int AINode_Seek_NBG(bot_state_t *bs) {
 		// FIXME: look at cluster portals?
 		else
 			vectoangles(moveresult.movedir, bs->ideal_viewangles);
-		bs->ideal_viewangles[2] *= 0.5;
+		bs->ideal_viewangles[2] *= 0.5f;
 	}
 	// if the weapon is used for the bot movement
 	if (moveresult.flags & MOVERESULT_MOVEMENTWEAPON)
