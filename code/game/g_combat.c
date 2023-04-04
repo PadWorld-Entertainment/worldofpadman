@@ -164,10 +164,9 @@ void TossClientItems(gentity_t *self) {
 		// other->client->ps.generic1=other->client->ps.ammo[WP_SPRAYPISTOL];
 		self->client->ps.generic1 = 0;
 	} else if (g_gametype.integer == GT_SPRAYFFA) {
-		gentity_t *tmpGE;
 		qboolean first = qtrue;
 
-		// droping too many lead to a server crash ... only with using cheats ;)
+		// dropping too many lead to a server crash ... only with using cheats ;)
 		// max cartridges 8 ... so don't drop more than 8
 		if (self->client->ps.ammo[WP_SPRAYPISTOL] > 8)
 			self->client->ps.ammo[WP_SPRAYPISTOL] = 8;
@@ -175,7 +174,7 @@ void TossClientItems(gentity_t *self) {
 		self->client->ps.ammo[WP_SPRAYPISTOL]++; // add the own cartridge ...
 
 		for (; self->client->ps.ammo[WP_SPRAYPISTOL] > 0; self->client->ps.ammo[WP_SPRAYPISTOL]--) {
-			tmpGE = Drop_Item(self, BG_FindItem("neutral Cartridge"), random() * 360); // pickup name ändern !!!
+			gentity_t *tmpGE = Drop_Item(self, BG_FindItem("neutral Cartridge"), random() * 360); // change pickup name !!!
 
 			tmpGE->nextthink = level.time + 120000;
 			if (first) {
