@@ -1641,6 +1641,79 @@ static void CartridgePickUpAbleForOwner(gentity_t *ent) {
 	ent->think = G_FreeEntity;
 }
 
+static void G_DropFlags(gentity_t *ent) {
+	const gitem_t *item;
+	vec3_t origin;
+	int j;
+
+	if (ent->client->ps.powerups[PW_REDFLAG]) {
+		item = BG_FindItemForPowerup(PW_REDFLAG);
+		j = PW_REDFLAG;
+	} else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
+		item = BG_FindItemForPowerup(PW_BLUEFLAG);
+		j = PW_BLUEFLAG;
+	} else {
+		return;
+	}
+
+	if (item) {
+		gentity_t *tmpGE = NULL;
+		vec3_t velocity, angles;
+		if (ent->client->dropTime > level.time) {
+			// TODO: Print some info to player?
+			return;
+		}
+		ent->client->dropTime = (level.time + DROP_DELAY_LOLLY);
+
+		VectorCopy(ent->s.pos.trBase, origin);
+		origin[2] += 50;
+
+		VectorCopy(ent->s.apos.trBase, angles);
+
+		AngleVectors(angles, velocity, NULL, NULL);
+		VectorScale(velocity, 600, velocity);
+		velocity[2] += 200;
+		tmpGE = LaunchItem(item, origin, velocity);
+
+		ent->client->ps.powerups[j] = 0;
+
+		if (tmpGE)
+			G_LogPrintf("DropItem: %ld %s\n", (ent - g_entities), tmpGE->classname);
+	}
+}
+
+static void G_DropCartridges(gentity_t *ent) {
+	gentity_t *tmpGE = NULL;
+	vec3_t velocity, angles;
+
+	if (ent->client->ps.ammo[WP_SPRAYPISTOL] <= 0) {
+		return;
+	}
+
+	G_TempEntity(ent->s.pos.trBase, EV_DROP_CARTRIDGE);
+
+	VectorCopy(ent->s.apos.trBase, angles);
+	AngleVectors(angles, velocity, NULL, NULL);
+	VectorScale(velocity, 600, velocity);
+	velocity[2] += 200;
+
+	if (ent->client->sess.sessionTeam == TEAM_RED) {
+		tmpGE = LaunchItem(BG_FindItem("red Cartridge"), ent->s.pos.trBase, velocity);
+	} else {
+		tmpGE = LaunchItem(BG_FindItem("blue Cartridge"), ent->s.pos.trBase, velocity);
+	}
+
+	tmpGE->s.otherEntityNum = ent->s.number;
+	tmpGE->nextthink = (level.time + 1000);
+	tmpGE->think = CartridgePickUpAbleForOwner;
+
+	ent->client->ps.ammo[WP_SPRAYPISTOL]--;
+	ent->client->ps.generic1--;
+
+	if (tmpGE)
+		G_LogPrintf("DropItem: %ld %s\n", (ent - g_entities), tmpGE->classname);
+}
+
 /*
 #######################
 Cmd_DropCartridge_f
@@ -1651,76 +1724,15 @@ Cmd_DropCartridge_f
 //       higher velocity and no random z
 // TODO: Enforce a cooldown time
 void Cmd_DropCartridge_f(gentity_t *ent) {
-	gentity_t *tmpGE = NULL;
-	vec3_t velocity, angles;
-
 	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
 		return;
 	}
 
-	// Spray your Color Team
 	if (g_gametype.integer == GT_SPRAY) {
-		if (ent->client->ps.ammo[WP_SPRAYPISTOL] <= 0) {
-			return;
-		}
-
-		G_TempEntity(ent->s.pos.trBase, EV_DROP_CARTRIDGE);
-
-		VectorCopy(ent->s.apos.trBase, angles);
-		AngleVectors(angles, velocity, NULL, NULL);
-		VectorScale(velocity, 600, velocity);
-		velocity[2] += 200;
-
-		if (ent->client->sess.sessionTeam == TEAM_RED) {
-			tmpGE = LaunchItem(BG_FindItem("red Cartridge"), ent->s.pos.trBase, velocity);
-		} else {
-			tmpGE = LaunchItem(BG_FindItem("blue Cartridge"), ent->s.pos.trBase, velocity);
-		}
-
-		tmpGE->s.otherEntityNum = ent->s.number;
-		tmpGE->nextthink = (level.time + 1000);
-		tmpGE->think = CartridgePickUpAbleForOwner;
-
-		ent->client->ps.ammo[WP_SPRAYPISTOL]--;
-		ent->client->ps.generic1--;
+		G_DropCartridges(ent);
 	} else if (g_gametype.integer == GT_CTF) {
-		const gitem_t *item;
-		vec3_t origin;
-		int j;
-
-		if (ent->client->ps.powerups[PW_REDFLAG]) {
-			item = BG_FindItemForPowerup(PW_REDFLAG);
-			j = PW_REDFLAG;
-		} else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
-			item = BG_FindItemForPowerup(PW_BLUEFLAG);
-			j = PW_BLUEFLAG;
-		} else {
-			return;
-		}
-
-		if (item) {
-			if (ent->client->dropTime > level.time) {
-				// TODO: Print some info to player?
-				return;
-			}
-			ent->client->dropTime = (level.time + DROP_DELAY_LOLLY);
-
-			VectorCopy(ent->s.pos.trBase, origin);
-			origin[2] += 50;
-
-			VectorCopy(ent->s.apos.trBase, angles);
-
-			AngleVectors(angles, velocity, NULL, NULL);
-			VectorScale(velocity, 600, velocity);
-			velocity[2] += 200;
-			tmpGE = LaunchItem(item, origin, velocity);
-
-			ent->client->ps.powerups[j] = 0;
-		}
+		G_DropFlags(ent);
 	}
-
-	if (tmpGE)
-		G_LogPrintf("DropItem: %ld %s\n", (ent - g_entities), tmpGE->classname);
 }
 
 // cyr{
