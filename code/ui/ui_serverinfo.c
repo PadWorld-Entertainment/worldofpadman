@@ -219,10 +219,10 @@ void UI_ServerInfoMenu(void) {
 	s_serverinfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_serverinfo.arrowup.generic.callback = ServerInfo_Event;
 	s_serverinfo.arrowup.generic.id = ID_SCROLL_UP;
-	s_serverinfo.arrowup.generic.x = XPOSITION + 105;
-	s_serverinfo.arrowup.generic.y = 132;
-	s_serverinfo.arrowup.width = 26;
-	s_serverinfo.arrowup.height = 60;
+	s_serverinfo.arrowup.generic.x = XPOSITION + 80;
+	s_serverinfo.arrowup.generic.y = 142;
+	s_serverinfo.arrowup.width = 22;
+	s_serverinfo.arrowup.height = 50;
 	s_serverinfo.arrowup.focuspic = ARROWUP1;
 	s_serverinfo.arrowup.focuspicinstead = qtrue;
 
@@ -231,10 +231,10 @@ void UI_ServerInfoMenu(void) {
 	s_serverinfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_serverinfo.arrowdown.generic.callback = ServerInfo_Event;
 	s_serverinfo.arrowdown.generic.id = ID_SCROLL_DOWN;
-	s_serverinfo.arrowdown.generic.x = XPOSITION + 105;
+	s_serverinfo.arrowdown.generic.x = XPOSITION + 80;
 	s_serverinfo.arrowdown.generic.y = 208;
-	s_serverinfo.arrowdown.width = 26;
-	s_serverinfo.arrowdown.height = 60;
+	s_serverinfo.arrowdown.width = 22;
+	s_serverinfo.arrowdown.height = 50;
 	s_serverinfo.arrowdown.focuspic = ARROWDN1;
 	s_serverinfo.arrowdown.focuspicinstead = qtrue;
 

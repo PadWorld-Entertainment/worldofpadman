@@ -280,10 +280,10 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	addBotsMenuInfo.arrowup.generic.callback = UI_AddBotsMenu_UpEvent;
 	addBotsMenuInfo.arrowup.generic.id = ID_SCROLL_UP;
-	addBotsMenuInfo.arrowup.generic.x = XPOSITION + 105;
-	addBotsMenuInfo.arrowup.generic.y = 132;
-	addBotsMenuInfo.arrowup.width = 26;
-	addBotsMenuInfo.arrowup.height = 60;
+	addBotsMenuInfo.arrowup.generic.x = XPOSITION + 80;
+	addBotsMenuInfo.arrowup.generic.y = 142;
+	addBotsMenuInfo.arrowup.width = 22;
+	addBotsMenuInfo.arrowup.height = 50;
 	addBotsMenuInfo.arrowup.focuspic = ARROWUP1;
 	addBotsMenuInfo.arrowup.focuspicinstead = qtrue;
 
@@ -292,10 +292,10 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	addBotsMenuInfo.arrowdown.generic.callback = UI_AddBotsMenu_DownEvent;
 	addBotsMenuInfo.arrowdown.generic.id = ID_SCROLL_DOWN;
-	addBotsMenuInfo.arrowdown.generic.x = XPOSITION + 105;
+	addBotsMenuInfo.arrowdown.generic.x = XPOSITION + 80;
 	addBotsMenuInfo.arrowdown.generic.y = 208;
-	addBotsMenuInfo.arrowdown.width = 26;
-	addBotsMenuInfo.arrowdown.height = 60;
+	addBotsMenuInfo.arrowdown.width = 22;
+	addBotsMenuInfo.arrowdown.height = 50;
 	addBotsMenuInfo.arrowdown.focuspic = ARROWDN1;
 	addBotsMenuInfo.arrowdown.focuspicinstead = qtrue;
 

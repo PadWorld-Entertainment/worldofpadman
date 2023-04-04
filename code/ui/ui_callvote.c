@@ -485,10 +485,10 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_callVoteMenu.arrowup.generic.callback = UI_CallVote_UpEvent;
 	s_callVoteMenu.arrowup.generic.id = ID_SCROLL_UP;
-	s_callVoteMenu.arrowup.generic.x = XPOSITION + 105;
-	s_callVoteMenu.arrowup.generic.y = 160;
-	s_callVoteMenu.arrowup.width = 26;
-	s_callVoteMenu.arrowup.height = 60;
+	s_callVoteMenu.arrowup.generic.x = XPOSITION + 80;
+	s_callVoteMenu.arrowup.generic.y = 170;
+	s_callVoteMenu.arrowup.width = 22;
+	s_callVoteMenu.arrowup.height = 50;
 	s_callVoteMenu.arrowup.focuspic = ARROWUP1;
 	s_callVoteMenu.arrowup.focuspicinstead = qtrue;
 
@@ -497,10 +497,10 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_callVoteMenu.arrowdown.generic.callback = UI_CallVote_DownEvent;
 	s_callVoteMenu.arrowdown.generic.id = ID_SCROLL_DOWN;
-	s_callVoteMenu.arrowdown.generic.x = XPOSITION + 105;
+	s_callVoteMenu.arrowdown.generic.x = XPOSITION + 80;
 	s_callVoteMenu.arrowdown.generic.y = 236;
-	s_callVoteMenu.arrowdown.width = 26;
-	s_callVoteMenu.arrowdown.height = 60;
+	s_callVoteMenu.arrowdown.width = 22;
+	s_callVoteMenu.arrowdown.height = 50;
 	s_callVoteMenu.arrowdown.focuspic = ARROWDN1;
 	s_callVoteMenu.arrowdown.focuspicinstead = qtrue;
 
