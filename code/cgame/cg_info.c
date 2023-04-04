@@ -143,8 +143,7 @@ void CG_DrawInformation(void) {
 	info = CG_ConfigString(CS_SERVERINFO);
 
 	trap_R_SetColor(NULL);
-
-//	CG_DrawPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, trap_R_RegisterShaderNoMip("menu/bg/connecting"));
+	trap_R_DrawStretchPic(0, 0, cgs.glconfig.vidWidth, cgs.glconfig.vidHeight, 0, 0, 1, 1, trap_R_RegisterShaderNoMip("menu/bg/connecting"));
 
 	s = Info_ValueForKey(info, "mapname");
 	levelshot = trap_R_RegisterShaderNoMip(va("levelshots/%s", s));
