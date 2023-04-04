@@ -570,6 +570,10 @@ Spawns an item and tosses it forward
 gentity_t *LaunchItem(const gitem_t *item, const vec3_t origin, const vec3_t velocity) {
 	gentity_t *dropped;
 
+	if (item == NULL) {
+		return NULL;
+	}
+
 	dropped = G_Spawn();
 
 	dropped->s.eType = ET_ITEM;
