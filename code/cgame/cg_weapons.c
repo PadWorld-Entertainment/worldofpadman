@@ -981,7 +981,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 
 	gun.oldframe = cent->lastweaponframe;
 
-	switch (cent->currentState.weapon) {
+	switch (weaponNum) {
 	default:
 		gun.frame = 0;
 		break;
