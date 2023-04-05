@@ -1480,6 +1480,10 @@ static qboolean CG_WeaponSelectable(int i) {
 		return qfalse;
 	}
 
+	if (BG_IsKillerDuck(&cg.snap->ps)) {
+		return qfalse;
+	}
+
 	if (cg.snap->ps.powerups[PW_BERSERKER]) {
 		if ((i != WP_PUNCHY) && (i != WP_SPRAYPISTOL)) {
 			return qfalse;
