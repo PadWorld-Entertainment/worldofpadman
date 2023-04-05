@@ -925,7 +925,9 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	centity_t *nonPredictedCent;
 
 	weaponNum = cent->currentState.weapon;
-
+	if (CG_IsKillerDuck(cent) && (ps == NULL || cg.renderingThirdPerson)) {
+		weaponNum = WP_KILLERDUCKS;
+	}
 	CG_RegisterWeapon(weaponNum);
 	weapon = &cg_weapons[weaponNum];
 
@@ -938,7 +940,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	if (cent->currentState.eFlags & (EF_DEAD | EF_NOLIFESLEFT) || cent->currentState.powerups & (1 << PW_FREEZE))
 		cent->currentState.eFlags &= ~EF_FIRING; // maybe this fixes the boaster beam for killed ents
 
-	if (CG_IsKillerDuck(cent)) {
+	if (CG_IsKillerDuck(cent) && ps != NULL) {
 		gun.hModel = 0;
 	} else {
 		gun.hModel = weapon->weaponModel;
