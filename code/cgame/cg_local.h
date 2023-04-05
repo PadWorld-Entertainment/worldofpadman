@@ -1571,8 +1571,7 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops);
 //
 // cg_rautelib.c
 //
-qboolean Calculate_2DOf3D(vec3_t point, refdef_t *refdef, float *x, float *y);
-qboolean Calculate_2DOfDIR(vec3_t vec, refdef_t *refdef, float *x, float *y);
+qboolean Calculate_2DOf3D(vec3_t point, float *x, float *y);
 
 //
 // cg_spraylogo.c
@@ -1808,8 +1807,7 @@ int trap_RealTime(qtime_t *qtime);
 
 //
 //	cg_rautelib.c
-qboolean Calculate_2DOf3D(vec3_t point, refdef_t *refdef, float *x, float *y);
-qboolean Calculate_2DOfDIR(vec3_t vec, refdef_t *refdef, float *x, float *y);
+qboolean Calculate_2DOf3D(vec3_t point, float *x, float *y);
 
 //
 

@@ -2181,7 +2181,7 @@ static void CG_DrawBalloonIcon(const centity_t *cent) {
 
 	VectorCopy(cent->currentState.origin, iconPos);
 	iconPos[2] += 40; // draw icon above visible box model
-	squaredDist = Calculate_2DOf3D(iconPos, &cg.refdef, &x, &y);
+	squaredDist = Calculate_2DOf3D(iconPos, &x, &y);
 	if (!squaredDist) {
 		return;
 	}
@@ -2227,7 +2227,7 @@ static void CG_DrawHealthstationIcon(const centity_t *cent) {
 	VectorCopy(cent->lerpOrigin, iconPos);
 	iconPos[2] += 120; // draw icon above visible model
 
-	squaredDist = Calculate_2DOf3D(iconPos, &cg.refdef, &x, &y);
+	squaredDist = Calculate_2DOf3D(iconPos, &x, &y);
 	if (!squaredDist) {
 		return;
 	}
@@ -2273,7 +2273,7 @@ static void CG_DrawSprayroomIcon(centity_t *cent) {
 	VectorCopy(cent->currentState.origin2, iconPos);
 	iconPos[2] += 100; // draw icon above visible model
 
-	squaredDist = Calculate_2DOf3D(iconPos, &cg.refdef, &x, &y);
+	squaredDist = Calculate_2DOf3D(iconPos, &x, &y);
 	if (!squaredDist) {
 		return;
 	}
@@ -2826,7 +2826,7 @@ static void CG_DrawLastPadStanding(void) {
 			}
 
 			// FIXME: Calculate_2DOf3D is more than ugly!
-			squaredDistance = Calculate_2DOf3D(ci->curPos, &cg.refdef, &x, &y);
+			squaredDistance = Calculate_2DOf3D(ci->curPos, &x, &y);
 			if (squaredDistance) {
 				float size = (float)(1.0 / (sqrt(squaredDistance) * 0.002));
 				if (size > 1.0f) {
