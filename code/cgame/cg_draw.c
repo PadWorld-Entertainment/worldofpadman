@@ -3220,6 +3220,7 @@ static void CG_DrawZoom(void) {
 		vec3_t tmpv3;
 		vec4_t transwhite = {1, 1, 1, 0.1f}, colorOrange = {1, 0.5f, 0, 1};
 		float x, y, w, h;
+		float xGap, yGap;
 
 		if ((cg.snap->ps.weapon != WP_SPLASHER && cg.snap->ps.weapon != WP_KMA97) ||
 			cg.snap->ps.stats[STAT_HEALTH] <= 0) {
@@ -3240,8 +3241,14 @@ static void CG_DrawZoom(void) {
 					cg.zoomSoundStat++;
 				}
 
-				trap_R_DrawStretchPic(cg.refdef.x, cg.refdef.y, cg.refdef.width, cg.refdef.height, 0, 0, 1, 1,
-									  cgs.media.zoomhud);
+				CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
+				xGap = cgs.screenXBias * 0.5f;
+				yGap = cgs.screenYBias * 0.5f;
+				CG_FillRect(-xGap, 0, xGap, SCREEN_HEIGHT, colorBlack); //left gap
+				CG_FillRect(SCREEN_WIDTH, 0, xGap, SCREEN_HEIGHT, colorBlack); // right gap
+				CG_FillRect(0, -yGap, SCREEN_WIDTH, yGap, colorBlack); //upper gap
+				CG_FillRect(0, SCREEN_HEIGHT, SCREEN_WIDTH, yGap, colorBlack); // lower gap
+				CG_DrawPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, cgs.media.zoomhud);
 				tmpv3[0] = -0.125f - cg.snap->ps.viewangles[1] * 0.0027778f; // 1/360= ~0.0027778
 
 				DrawPic2Color(280, 100, 40, 20, tmpv3[0], 0, tmpv3[0] + 0.25f, 1, transwhite, colorWhite,
@@ -3273,8 +3280,14 @@ static void CG_DrawZoom(void) {
 				CG_DrawStringExt(320, 190, va("%-4.0f", tmpv3[0]), colorOrange, qtrue, qfalse, 8, 16, 32);
 			} else if (cg.snap->ps.weapon == WP_KMA97) {
 				// kma Zoom-HUD stuff
-				trap_R_DrawStretchPic(cg.refdef.x, cg.refdef.y, cg.refdef.width, cg.refdef.height, 0, 0, 1, 1,
-									  cgs.media.zoomhud_kma);
+				CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
+				xGap = cgs.screenXBias * 0.5f;
+				yGap = cgs.screenYBias * 0.5f;
+				CG_FillRect(-xGap, 0, xGap, SCREEN_HEIGHT, colorBlack); //left gap
+				CG_FillRect(SCREEN_WIDTH, 0, xGap, SCREEN_HEIGHT, colorBlack); // right gap
+				CG_FillRect(0, -yGap, SCREEN_WIDTH, yGap, colorBlack); //upper gap
+				CG_FillRect(0, SCREEN_HEIGHT, SCREEN_WIDTH, yGap, colorBlack); // lower gap
+				CG_DrawPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, cgs.media.zoomhud_kma);
 			}
 		}
 	}
