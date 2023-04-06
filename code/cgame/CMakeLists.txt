@@ -18,7 +18,6 @@ set(SRCS
 	cg_players.c
 	cg_playerstate.c
 	cg_predict.c
-	cg_rautelib.c
 	cg_scoreboard.c
 	cg_servercmds.c
 	cg_snapshot.c

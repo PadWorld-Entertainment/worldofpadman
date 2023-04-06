@@ -1574,11 +1574,6 @@ void CG_Respawn(void);
 void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops);
 
 //
-// cg_rautelib.c
-//
-qboolean Calculate_2DOf3D(vec3_t point, float *x, float *y);
-
-//
 // cg_spraylogo.c
 //
 void Init_SprayLogoSys(void);
@@ -1817,12 +1812,8 @@ qboolean CG_IsKillerDuck(const centity_t *cent);
 void CG_DrawKillerduckIcon(const centity_t *cent);
 
 //
-//	cg_rautelib.c
-qboolean Calculate_2DOf3D(vec3_t point, float *x, float *y);
-
-//
-
 // cg_misc.c
+//
 void CG_LimitCvars(void);
 char *CG_Timestamp(char *timestamp, unsigned int size);
 void CG_QueryCvar(void);

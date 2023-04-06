@@ -40,7 +40,7 @@ void CG_DrawKillerduckIcon(const centity_t *cent) {
 	}
 
 	VectorCopy(cent->currentState.pos.trBase, iconPos);
-	iconPos[2] += 40; // draw icon above visible killerduck origin
+	iconPos[2] += 50; // draw icon above visible killerduck origin
 	squaredDist = CG_WorldToScreen(iconPos, &x, &y);
 	if (!squaredDist) {
 		return;

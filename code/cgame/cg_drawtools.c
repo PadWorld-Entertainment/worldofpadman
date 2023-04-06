@@ -750,5 +750,5 @@ qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
 	if (y)
 		*y = yc - DotProduct(trans, cg.refdef.viewaxis[2]) * yc / (z * py);
 
-	return qtrue;
+	return VectorLengthSquared(trans); //qtrue;
 }
