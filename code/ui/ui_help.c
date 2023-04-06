@@ -249,10 +249,10 @@ static void UI_HelpMenu_Init(void) {
 
 	helpMenuInfo.prev.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.prev.generic.id = ID_PREV;
-	helpMenuInfo.prev.generic.x = XPOSITION - 68;
-	helpMenuInfo.prev.generic.y = 322 - (nwsOffset * 0.5f);
-	helpMenuInfo.prev.width = 60;
-	helpMenuInfo.prev.height = 26;
+	helpMenuInfo.prev.generic.x = XPOSITION - 58;
+	helpMenuInfo.prev.generic.y = 324 - (nwsOffset * 0.5f);
+	helpMenuInfo.prev.width = 50;
+	helpMenuInfo.prev.height = 22;
 	helpMenuInfo.prev.generic.name = ARROWLT0;
 	helpMenuInfo.prev.focuspic = ARROWLT1;
 	helpMenuInfo.prev.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
@@ -261,9 +261,9 @@ static void UI_HelpMenu_Init(void) {
 	helpMenuInfo.next.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.next.generic.id = ID_NEXT;
 	helpMenuInfo.next.generic.x = XPOSITION + 8;
-	helpMenuInfo.next.generic.y = 322 - (nwsOffset * 0.5f);
-	helpMenuInfo.next.width = 60;
-	helpMenuInfo.next.height = 26;
+	helpMenuInfo.next.generic.y = 324 - (nwsOffset * 0.5f);
+	helpMenuInfo.next.width = 50;
+	helpMenuInfo.next.height = 22;
 	helpMenuInfo.next.generic.name = ARROWRT0;
 	helpMenuInfo.next.focuspic = ARROWRT1;
 	helpMenuInfo.next.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
