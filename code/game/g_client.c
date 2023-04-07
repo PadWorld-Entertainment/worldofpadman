@@ -741,17 +741,15 @@ static void ClientCleanName(const char *in, char *out, int outSize) {
 		Q_strncpyz(out, "UnnamedPlayer", outSize);
 }
 
-/*
-===========
-ClientUserInfoChanged
-
-Called from ClientConnect when the player first connects and
-directly by the server system when the player updates a userinfo variable.
-
-The game can override any of the settings and call trap_SetUserinfo
-if desired.
-============
-*/
+/**
+ * Called from ClientConnect when the player first connects and
+ * directly by the server system when the player updates a userinfo variable.
+ *
+ * The game can override any of the settings and call trap_SetUserinfo
+ * if desired.
+ *
+ * @see CG_NewClientInfo()
+ */
 void ClientUserinfoChanged(int clientNum) {
 	gentity_t *ent;
 	int teamLeader, team, health;
@@ -763,6 +761,7 @@ void ClientUserinfoChanged(int clientNum) {
 	char c1[MAX_INFO_STRING];
 	char c2[MAX_INFO_STRING];
 	char userinfo[MAX_INFO_STRING];
+	gender_t gender;
 
 	ent = g_entities + clientNum;
 	client = ent->client;
@@ -815,6 +814,20 @@ void ClientUserinfoChanged(int clientNum) {
 	}
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
+	// set gender
+	s = Info_ValueForKey(userinfo, "sex");
+	if (!Q_stricmp(s, "neuter")) {
+		gender = GENDER_NEUTER;
+	} else if (!Q_stricmp(s, "female")) {
+		gender = GENDER_FEMALE;
+	} else if (!Q_stricmp(s, "male")) {
+		gender = GENDER_MALE;
+	} else if (!Q_stricmp(s, "none")) {
+		gender = GENDER_NONE;
+	} else {
+		gender = GENDER_MAX;
+	}
+
 	// set model
 	if (g_gametype.integer >= GT_TEAM) {
 		Q_strncpyz(model, Info_ValueForKey(userinfo, "team_model"), sizeof(model));
@@ -849,16 +862,15 @@ void ClientUserinfoChanged(int clientNum) {
 		int rnd;
 		rnd = random() * 5.9;
 		rnd_str = va("%d", rnd);
-		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tl\\%"
-			   "d\\sl\\%s",
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tl\\%d"
+			   "\\sl\\%s",
 			   client->pers.netname, team, model, headModel, c1, rnd_str, client->pers.maxHealth, client->sess.wins,
-			   client->sess.losses, Info_ValueForKey(userinfo, "skill"), teamLeader,
-			   client->sess.selectedlogo);
+			   client->sess.losses, Info_ValueForKey(userinfo, "skill"), teamLeader, client->sess.selectedlogo);
 		// cyr}
 	} else {
-		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\tl\\%d\\sl\\%s",
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\tl\\%d\\sl\\%s\\s\\%i",
 			   client->pers.netname, client->sess.sessionTeam, model, headModel, c1, c2, client->pers.maxHealth,
-			   client->sess.wins, client->sess.losses, teamLeader, client->sess.selectedlogo);
+			   client->sess.wins, client->sess.losses, teamLeader, client->sess.selectedlogo, (int)gender);
 	}
 
 	trap_SetConfigstring(CS_PLAYERS + clientNum, s);

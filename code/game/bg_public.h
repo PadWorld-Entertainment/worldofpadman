@@ -160,7 +160,7 @@ typedef enum {
 
 int convertGTStringToGTNumber(const char *argStr);
 
-typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER, GENDER_MAX } gender_t;
+typedef enum { GENDER_NONE, GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER, GENDER_MAX } gender_t;
 
 /*
 ===================================================================================

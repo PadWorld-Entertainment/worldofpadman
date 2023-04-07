@@ -576,7 +576,7 @@ static void G_AddBot(const char *name, float skill, const char *team, int delay,
 	// have the server allocate a client slot
 	clientNum = trap_BotAllocateClient();
 	if (clientNum == -1) {
-		G_Printf(S_COLOR_RED "Unable to add bot.  All player slots are in use.\n");
+		G_Printf(S_COLOR_RED "Unable to add bot. All player slots are in use.\n");
 		G_Printf(S_COLOR_RED "Start server with more 'open' slots (or check setting of sv_maxclients cvar).\n");
 		return;
 	}
