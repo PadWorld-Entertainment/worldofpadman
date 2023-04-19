@@ -211,16 +211,14 @@ void TossClientItems(gentity_t *self) {
 		}
 	}
 
-	for (i = 1; i < HI_NUM_HOLDABLE; i++) {
-		if (bg_itemlist[self->client->ps.stats[STAT_HOLDABLE_ITEM]].giTag == i) {
-			item = BG_FindItemForHoldable(i);
-			if (!item) {
-				continue;
-			}
-			drop = Drop_Item(self, item, angle);
-			drop->count = self->client->ps.stats[STAT_HOLDABLEVAR];
-			angle += 45;
-		}
+	G_DropHoldable(self, angle);
+}
+
+void G_DropHoldable(gentity_t *self, float angle) {
+	if (bg_itemlist[self->client->ps.stats[STAT_HOLDABLE_ITEM]].giTag != HI_NONE) {
+		const gitem_t *item = BG_FindItemForHoldable(bg_itemlist[self->client->ps.stats[STAT_HOLDABLE_ITEM]].giTag);
+		gentity_t *drop = Drop_Item(self, item, angle);
+		drop->count = self->client->ps.stats[STAT_HOLDABLEVAR];
 	}
 }
 

@@ -625,6 +625,7 @@ int G_InvulnerabilityEffect(gentity_t *targ, vec3_t dir, vec3_t point, vec3_t im
 void body_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath);
 void TossClientItems(gentity_t *self);
 void BerserkerCheck(gentity_t *ent);
+void G_DropHoldable(gentity_t *self, float angle);
 
 // damage flags
 #define DAMAGE_RADIUS 0x00000001		// damage was indirect

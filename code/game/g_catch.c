@@ -28,9 +28,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define RESPAWN_DROPPED_KILLERDUCKS 5
 
-// TODO: cgame add killerduck to hand
-// TODO: make sounds while carrying the duck
-
 /**
  * Executes the respawn of the killerducks after a given timeout at one of the spawn points
  */

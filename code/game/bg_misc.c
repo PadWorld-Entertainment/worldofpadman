@@ -804,6 +804,10 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 			if (ps->stats[STAT_HOLDABLE_ITEM] == item - bg_itemlist)
 				return qtrue;
 
+			// the other item is getting dropped when you collect the killerducks in this game mode
+			if (gametype == GT_CATCH && item->giTag == HI_KILLERDUCKS)
+				return qtrue;
+
 			return qfalse;
 		}
 		return qtrue;

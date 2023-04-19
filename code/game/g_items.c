@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //
 #include "g_local.h"
+#include "inv.h"
 
 /*
 
@@ -192,6 +193,12 @@ static int Pickup_Holdable(gentity_t *ent, gentity_t *other) {
 	default:
 		count = 0; // FIXME: Return here?
 		break;
+	}
+
+	if (g_gametype.integer == GT_CATCH && other->client->ps.stats[STAT_HOLDABLEVAR] > 0 && other->client->ps.stats[STAT_HOLDABLE_ITEM] != 0 &&
+		other->client->ps.stats[STAT_HOLDABLE_ITEM] != MODELINDEX_KILLERDUCKS) {
+		// already has a holdable, drop it in this game mode
+		G_DropHoldable(other, 0.0f);
 	}
 
 	// FIXME: Check for NULLs?
