@@ -117,7 +117,7 @@
 	- Red/blue balloon icon to red/blue PadStar medal in BB
 	- ColorStage: slight weapon, ammo and item adjustments, removed Boaster ammo bottles, adjust teleporter destinations to avoid player confusion, moved red and blue bases further away from map center, extended some walls to prevent weapon jumps or to make it harder
 	- WesternSet: map file name from "wop_westernCTL" to "wop_westernsetCTL"
-	- Huette: switched SPLASHER and BETTY position; adjustemnts to item placement on the desk; location message fixes; added 5 PadShards on the chair
+	- Huette: switched SPLASHER and BETTY position; adjustments to item placement on the desk; location message fixes; added 5 PadShards on the chair
 - FIXED
 	- Fix bad client reliableAcknowledge DOS exploit
 	- Balloon icon over the player's head to be visible though walls after raising a balloon (replaced by PadStar medal)
