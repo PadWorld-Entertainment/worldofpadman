@@ -412,7 +412,7 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	}
 
 	if (s_graphicsoptions.cdetail.curvalue == 3) {
-		trap_Cvar_SetValue("r_subdivisions", 1);
+		trap_Cvar_SetValue("r_subdivisions", 2);
 	} else if (s_graphicsoptions.cdetail.curvalue == 2) {
 		trap_Cvar_SetValue("r_subdivisions", 4);
 	} else if (s_graphicsoptions.cdetail.curvalue == 1) {
