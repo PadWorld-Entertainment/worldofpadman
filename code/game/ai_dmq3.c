@@ -268,6 +268,7 @@ static qboolean EntityCarriesCarts(aas_entityinfo_t *entinfo) {
 		return qfalse;
 	return (g_entities[entinfo->number].client->ps.ammo[WP_SPRAYPISTOL]);
 }
+
 /*
 ==================
 EntityIsInvisible
@@ -1660,6 +1661,16 @@ static float BotFeelingBad(bot_state_t *bs) {
 }
 #endif
 
+static qboolean EntityIsKillerduck(int client) {
+	aas_entityinfo_t entinfo;
+	BotEntityInfo(client, &entinfo);
+	if (!entinfo.valid)
+		return qfalse;
+	if (entinfo.type != ET_PLAYER)
+		return qfalse;
+	return BG_IsKillerDuck(&g_entities[entinfo.number].client->ps);
+}
+
 /*
 ==================
 BotWantsToRetreat
@@ -1683,9 +1694,11 @@ int BotWantsToRetreat(bot_state_t *bs) {
 			trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->teamgoal.areanum, TFL_DEFAULT) > 250) {
 			return qtrue;
 		}
-	}
-
-	else if (gametype == GT_SPRAY || gametype == GT_SPRAYFFA) {
+	} else if (gametype == GT_CATCH) {
+		if (EntityIsKillerduck(bs->client)) {
+			return qtrue;
+		}
+	} else if (gametype == GT_SPRAY || gametype == GT_SPRAYFFA) {
 		if (IsWall(bs->enemy)) // spraywall, avoid the odd movement of battle_fight node
 			return qtrue;
 
@@ -1726,6 +1739,10 @@ int BotWantsToChase(bot_state_t *bs) {
 		}
 	} else if (gametype == GT_FREEZETAG) {
 		if (bs->ltgtype == LTG_UNFREEZE) {
+			return qfalse;
+		}
+	} else if (gametype == GT_CATCH) {
+		if (EntityIsKillerduck(bs->client)) {
 			return qfalse;
 		}
 	} else if (gametype == GT_BALLOON) {

@@ -375,7 +375,7 @@ static qboolean BotChooseSpawnGoal(bot_state_t *bs) {
 BotGetItemLongTermGoal
 ==================
 */
-static int BotGetItemLongTermGoal(bot_state_t *bs, int tfl, bot_goal_t *goal) {
+static int BotGetItemLongTermGoal(bot_state_t *bs, int travelFlags, bot_goal_t *goal) {
 	// if the bot has no goal
 	if (!trap_BotGetTopGoal(bs->gs, goal)) {
 		// BotAI_Print(PRT_MESSAGE, "no ltg on stack\n");
@@ -394,7 +394,7 @@ static int BotGetItemLongTermGoal(bot_state_t *bs, int tfl, bot_goal_t *goal) {
 		// choose a new goal
 		// BotAI_Print(PRT_MESSAGE, "%6.1f client %d: BotChooseLTGItem\n", FloatTime(), bs->client);
 
-		if (trap_BotChooseLTGItem(bs->gs, bs->origin, bs->inventory, tfl) || BotChooseSpawnGoal(bs)) {
+		if (trap_BotChooseLTGItem(bs->gs, bs->origin, bs->inventory, travelFlags) || BotChooseSpawnGoal(bs)) {
 
 			char buf[128];
 			// get the goal at the top of the stack
