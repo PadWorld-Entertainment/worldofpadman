@@ -87,8 +87,8 @@ gentity_t* G_DropKillerDucks(gentity_t *ent) {
 	client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 	client->ps.stats[STAT_HOLDABLEVAR] = 0;
 	client->ps.eFlags &= ~EF_KILLERDUCK;
-	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " is no longer\nthe Killerduck carrier.\n\"", client->pers.netname));
-	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " is no longer the Killerduck carrier.\n\"", client->pers.netname));
+	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " no longer has\nthe Killerduck.\n\"", client->pers.netname));
+	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " no longer has the Killerduck.\n\"", client->pers.netname));
 
 	VectorCopy(ent->s.apos.trBase, angles);
 	AngleVectors(angles, velocity, NULL, NULL);
@@ -106,7 +106,7 @@ gentity_t* G_DropKillerDucks(gentity_t *ent) {
 }
 
 /**
- * This is called for the killerducks carrier in (its client think function) to distribute the points
+ * This is called for the killerduck carrier in (its client think function) to distribute the points
  */
 void G_KillerDuckThink(gentity_t *ent) {
 	const int carrySec = (level.time - ent->client->pers.lastKillerDuckPoints) / 1000;
@@ -133,8 +133,8 @@ void G_BecomeKillerDuck(gentity_t *item, gentity_t *ent) {
 	ent->client->ps.eFlags |= EF_KILLERDUCK;
 	ent->client->ps.stats[STAT_HEALTH] = ent->health = 200;
 	ent->client->ps.stats[STAT_ARMOR] = 200;
-	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " is\nthe Killerduck carrier.\n\"", ent->client->pers.netname));
-	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " is the Killerduck carrier.\n\"", ent->client->pers.netname));
+	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " has\nthe Killerduck.\n\"", ent->client->pers.netname));
+	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " has the Killerduck.\n\"", ent->client->pers.netname));
 }
 
 /**
