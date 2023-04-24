@@ -3,11 +3,20 @@
 ## Version: 1.7.0 (tba.)
 
 - ADDED
-	- Freeze Tag (ft) game mode and related assets like weapon effects
+	- Freeze Tag (FT) game mode and related assets like weapon effects
+	- Catch the Killerduck (CTKD) game mode
+	- PElvis (PadElvis) skin, glow skin and bot for the PADMAN player model
+	- HellPad skin, glow skin and bot for the PADMAN player model
+	- PadClassic skin, glow skin and bot for the PADMAN player model
+	- PadHero award/medal for defending the base and the lolly carrier in CTL, for defending a balloon box in your own team color in BB, and for defending a team mate carrying min 5 cartridges in SYC Team
+	- Red PadStar medal for the red team capturing a lolly
+	- Almost event by the announcer saying "Better luck next time, maybe!" for a player failing to score by getting shot short before: the lolly spawn point in CTL, the sprayroom teleporter and having 5+ cartridges to achieve SprayKiller or SprayGod in SYC+Team, raising the last balloon in the own team color in BB
+	- Denied event for all players who try to pick up the same powerup but are not first; the first player picking it up will laugh on the other players
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- Support for player model sounds depending of the selected skin; a complete sound set or individual sounds for a skin can be stored in a folder of the same name in parallel with the model's folder; the model's sounds serve as a fallback if no sounds are available for the skin
 	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones
+	- Support for screenshots in PNG image format, PNG is the new default
 	- Option to switch renderer from OpenGL1 to OpenGL2 or Vulkan to Graphics page of System menu
 	- Option to switch Lighting to Vertex or Lightmap to Graphics page of System menu
  	- Option to set Models Detail to Graphics page of System menu to set `r_lodbias [2|1|0|-2]` now in 4 steps, -2 will always render high quality models regardless of distance
@@ -15,7 +24,9 @@
 	- Option to switch Window Mode to Off (Fullscreen), On (Border) or On (Borderless) to Display page of System menu
 	- Option to enable/disable Resizable Window to Display page of System menu to allow resizing of the game window
 	- Option to enable/disable Vertical Sync (VSync) to Display page of System menu to limit the frame rate to display refresh rate
-	- Option to enable/disable Limit Frame Rate to Display page of System menu to limit the frame rate when game window is minimized or out of focus 
+	- Option to enable/disable Limit Frame Rate to Display page of System menu to limit the frame rate when game window is minimized or out of focus
+	- Option to select Screenshot Format (TGA, JPG, PNG) to Display page of System menu, PNG is default
+	- Option to select Screenshot Quality, only when JPG format is selected to Display page of System menu
 	- Option to select magenta-green anaglyph 3D mode from the list in Display page of System menu 
 	- Option to enable/disable Swap Colors to Display page of System menu to swap colors of anaglyph 3D modes 
 	- Option to enable/disable Doppler Effect to Sound page of System menu
@@ -50,14 +61,15 @@
 	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
 	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
 	- New surface parameter `splashsteps` for splashy footstep sounds and common shader `splashclip` with texture
-	- Dust trail feature from Q3 Team Arena for textures with surface parameter `dust`. Creates a small dust cloud when a player lands on surface. Enter `enableDust 1` to a map's worldspawn.
-	- Frost breath feature from Q3 Team Arena to simulate cold environments. Creates a small cloud of condensed breath in front of players head. Enter `enableBreath 1` to a map's worldspawn to enable this feature for the whole map.
+	- Dust trail feature from Q3 Team Arena for textures with surface parameter `dust`; creates a small dust cloud when a player lands on surface; unlike in Q3TA it does NOT require `enableDust 1` to a map's worldspawn; new cvar `cg_enableDust [0|1]` to disable the feature on the client side, default is 1.
+	- Frost breath feature from Q3 Team Arena to simulate cold environments; creates a small cloud of condensed breath in front of players head; enter `enableBreath 1` to a map's worldspawn to enable this feature for the whole map; feature is automatically enabled for frozen players in FreezeTag
 	- PadKnight bot to the game and shown in the Select Bots menu
 	- Possibility to set Antialiasing (MSAA) to 8x on Graphics page of System menu
 	- Missing default keyboard mapping in Controls menu and synced with default.cfg
 	- White teleporter (portal) and jumppad effect (shaders and textures)
 	- Life limit warnings by announcer in LPS game mode when life count drops below 4
 	- Player event for almost capturing a lolly in CTL, plays "better luck next time, maybe" (known from LPS)
+	- Jail: splash steps surface parameter to areas with liquid texture decals (dirt/paint/water puddles) and in the shower
 - CHANGED
 	- Network protocol version number to 72 to avoid issues due to incompatibilities with previous WoP versions
 	- Home path to `worldofpadman` for all operating systems to unify them
@@ -66,7 +78,7 @@
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
 	- Map selection/preview to cycle three ingame pictures via shader animation 
 	- Graphics Settings option on Graphics page of System menu to provide a template list with useful and updated settings
-	- Geometric Detail option in Graphics menu to be split into Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|1]` in 4 steps now (new default is 4)
+	- Geometric Detail option in Graphics menu to be split into Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4)
 	- Anisotropy option to be merged with Texture Filter option into a single menu entry on Graphics page of System menu
 	- Name of Fullscreen option on Graphics page of Setup menu to Window Mode, also supporting new borderless window mode and moved to Display page of System menu 
 	- Anaglyph 3D modes on Display page of System menu to list the modes 1 to 4, modes 5 to 8 are enabled by enabling the new Color Swap option
@@ -90,13 +102,25 @@
 	- Dynamic flares to be enabled by default `r_flares [1|0]` 
 	- Team names to Blue Noses and Red Pads everywhere in the game
 	- Scoreboard to show personal scores in team based games again
-	- Gametype list in Create menu to list FFA gametypes first and FFA being default (was SYC)
+	- Game type list in Create menu to list FFA game types first and FFA being default (was SYC)
 	- Team Orders ingame menu entry to be shown again
 	- Cvar `r_lightmap [1|0]` to be cheat protected now
 	- `animap` shader key to support up to 16 textures instead of 8
 	- World sound files location from folder `sounds` to `sound` and shortening
 	- Teammate icon to be shown through walls in all team game modes, not only Big Balloon
+	- Default balloon capture speed from 4 to 5 seconds in Big Balloon
+	- Ammo and max ammo of iMPERiUS from 2 to 3
+	- All main PAD characters to be shown always on top of model and bot lists followed by custom models in Player and Select Bots menus
+	- Health Station wallhack icon to be not shown for currently empty stations and to disappear when the player is close
+	- Music ingame menu to always focus on the currently played album and to open and switch albums much faster
+	- Changed spray logos for HellPad and PadClassic bots (compared to previous single release)
+	- Red/blue balloon icon to red/blue PadStar medal in BB
+	- ColorStage: slight weapon, ammo and item adjustments, removed Boaster ammo bottles, adjust teleporter destinations to avoid player confusion, moved red and blue bases further away from map center, extended some walls to prevent weapon jumps or to make it harder
+	- WesternSet: map file name from "wop_westernCTL" to "wop_westernsetCTL"
+	- Huette: switched SPLASHER and BETTY position; adjustemnts to item placement on the desk; location message fixes; added 5 PadShards on the chair
 - FIXED
+	- Fix bad client reliableAcknowledge DOS exploit
+	- Balloon icon over the player's head to be visible though walls after raising a balloon (replaced by PadStar medal)
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use `^` key to enter color tags in Player Settings menu or console
 	- Anisotropy and Antialiasing options in Graphics menu to be displayed as 4x after video restart, although 2x was selected before
@@ -113,11 +137,17 @@
 	- Incorrect assignment of the drowning sound to the selected player model
 	- Voice Threshold slider not showing the input value
 	- Menu music loop to be played when calling Team Orders menu via hotkey
-	- View size (screen size) functionality and added missing backtile asset
+	- View size (screen size) functionality and added missing back tile asset
 	- Missing shader texture in spray room exit portal in MopAn's Jail
 	- Alien monitor animation shader in ENTE's PadShop to support all 9 textures
 	- Player is in his own view when zooming with SPLASHER/INJECTOR in 3rd person mode; 3rd person mode is temporarily disabled when zooming in
 	- Player automatically switches from 3rd person view back to 1st person view when warm-up timer expires
+	- Console keeps spamming "models/wop_players/padman/..." not found in developer mode by adding a null shader for certain player model skin meshes
+	- HellPads red/blue thumbnail not being grey (compared to previous single release)
+	- Missing clipping on the fuse box in BB version of MopAn's Jail to prevent players jumping in
+	- Missing texture warnings in Kai's TrashMap
+	- Crosshair always hidden/overlayed by BamBam energy bar
+	- Endless restarting of the game in window mode when changing Win 10 scaling
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
 	- `^` key to open/close the console
@@ -131,6 +161,7 @@
 	- Exit screen (when clicking the Exit button in the main menu) with confirmation query and related assets
 	- Unused and dead code in general
 	- `cg_LPSwallhackSize` and `cg_LPSwallhackAlpha` to prevent giving an unfair advantage to clients
+	- WesternSet: remove one lost and unnecessary botclip brush near blue lolly
 - UPDATED
 	- All tooltips in the menus and wording of menu entries where useful
 	- UI menu font texture with HQ version
@@ -148,7 +179,7 @@
 	- OPUS to version 1.3.1
 	- OPUSFILE to version 0.12
 	- OGG to version 1.3.5
-	- SDL to version 2.0.21
+	- SDL to version 2.27.0
 	- JPEG to version 9e
 	- OpenAL soft to version 1.21.1
 
