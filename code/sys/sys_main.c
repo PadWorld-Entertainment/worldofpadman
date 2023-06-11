@@ -47,10 +47,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../qcommon/q_shared.h"
 #include "../qcommon/qcommon.h"
 
-#if defined(PROTOCOL_HANDLER) && defined(__APPLE__)
-char *Sys_InitProtocolHandler(void);
-#endif
-
 static char binaryPath[MAX_OSPATH] = {0};
 static char installPath[MAX_OSPATH] = {0};
 
@@ -596,17 +592,6 @@ static void Sys_ParseArgs(int argc, char **argv) {
 }
 
 #ifdef PROTOCOL_HANDLER
-/*
-=================
-Sys_InitProtocolHandler
-See sys_osx.m for macOS implementation.
-=================
-*/
-#ifndef __APPLE__
-char *Sys_InitProtocolHandler(void) {
-	return NULL;
-}
-#endif
 
 /*
 =================
@@ -657,9 +642,9 @@ char *Sys_ParseProtocolUri(const char *uri) {
 			}
 		}
 
-		bufsize = strlen("+connect ") + i + 1;
+		bufsize = strlen("connect ") + i + 1;
 		out = malloc(bufsize);
-		strcpy(out, "+connect ");
+		strcpy(out, "connect ");
 		strncat(out, uri, i);
 		return out;
 	} else {
@@ -743,10 +728,6 @@ int main(int argc, char **argv) {
 
 	Sys_PlatformInit();
 
-#ifdef PROTOCOL_HANDLER
-	protocolCommand = Sys_InitProtocolHandler();
-#endif
-
 	// Set the initial time base
 	Sys_Milliseconds();
 
@@ -790,6 +771,7 @@ int main(int argc, char **argv) {
 
 #ifdef PROTOCOL_HANDLER
 	if (protocolCommand != NULL) {
+		Q_strcat(commandLine, sizeof(commandLine), "+");
 		Q_strcat(commandLine, sizeof(commandLine), protocolCommand);
 		free(protocolCommand);
 	}
