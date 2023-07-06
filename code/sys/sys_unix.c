@@ -325,6 +325,10 @@ static void Sys_ListFilteredFiles(const char *basedir, const char *subdirs, cons
 		return;
 	}
 
+	if (basedir[0] == '\0') {
+		return;
+	}
+
 	if (strlen(subdirs)) {
 		Com_sprintf(search, sizeof(search), "%s/%s", basedir, subdirs);
 	} else {
@@ -399,6 +403,11 @@ char **Sys_ListFiles(const char *directory, const char *extension, const char *f
 		listCopy[i] = NULL;
 
 		return listCopy;
+	}
+
+	if (directory[0] == '\0') {
+		*numfiles = 0;
+		return NULL;
 	}
 
 	if (!extension)
