@@ -44,3 +44,21 @@ World of PADMAN is powered by a modified id Tech 3 graphics engine based on [ioq
 * [Niklas Link](https://github.com/robo9k)
 * Paul Rabe
 * [Kai Bergmann](https://github.com/kai-li-wop)
+
+## Building from source
+
+Make sure that you've cloned the repository with [git-lfs](https://git-lfs.com/) installed.
+
+The dependencies for World of PADMAN are bundled in this repository. Usually you don't have to install any other dependency - just the compiler and [cmake](https://cmake.org/).
+
+If you are using an IDE with direct cmake support (e.g. [vscode](https://code.visualstudio.com/)), you don't have to run cmake from the command line. For everyone else:
+
+```sh
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install
+cmake --build .
+cmake --install .
+```
+
+There is a more detailed guide available at [worldofpadman.net](https://worldofpadman.net/en/tutorials/compiling-wop-with-cmake-in-vs-code/).
