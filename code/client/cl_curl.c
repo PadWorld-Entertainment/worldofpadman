@@ -180,7 +180,12 @@ void CL_cURL_Cleanup(void) {
 	}
 }
 
-static int CL_cURL_CallbackProgress(void *dummy, double dltotal, double dlnow, double ultotal, double ulnow) {
+#if CURL_AT_LEAST_VERSION(7,32,0)
+static int CL_cURL_CallbackProgress(void *dummy, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
+#else
+static int CL_cURL_CallbackProgress(void *dummy, double dltotal, double dlnow, double ultotal, double ulnow)
+#endif
+{
 	clc.downloadSize = (int)dltotal;
 	Cvar_SetValue("cl_downloadSize", clc.downloadSize);
 	clc.downloadCount = (int)dlnow;
@@ -266,13 +271,21 @@ void CL_cURL_BeginDownload(const char *localName, const char *remoteURL) {
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_WRITEFUNCTION, CL_cURL_CallbackWrite);
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_WRITEDATA, &clc.download);
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_NOPROGRESS, 0);
+#if CURL_AT_LEAST_VERSION(7,32,0)
+	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_XFERINFOFUNCTION, CL_cURL_CallbackProgress);
+#else
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_PROGRESSFUNCTION, CL_cURL_CallbackProgress);
+#endif
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_PROGRESSDATA, NULL);
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_FAILONERROR, 1);
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_FOLLOWLOCATION, 1);
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_MAXREDIRS, 5);
+#if CURL_AT_LEAST_VERSION(7,85,0)
+	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_PROTOCOLS_STR, "http,https,ftp,ftps");
+#else
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_PROTOCOLS,
 						   CURLPROTO_HTTP | CURLPROTO_HTTPS | CURLPROTO_FTP | CURLPROTO_FTPS);
+#endif
 	qcurl_easy_setopt_warn(clc.downloadCURL, CURLOPT_BUFFERSIZE, CURL_MAX_READ_SIZE);
 	clc.downloadCURLM = qcurl_multi_init();
 	if (!clc.downloadCURLM) {
