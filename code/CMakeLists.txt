@@ -297,6 +297,8 @@ function(add_asm TARGET)
 		target_sources(${TARGET} PRIVATE ${ASM_SRCS})
 	else()
 		target_sources(${TARGET} PRIVATE ${CODE_DIR}/asm/snapvector.c ${CODE_DIR}/asm/ftola.c)
+		set_source_files_properties(${CODE_DIR}/asm/snapvector.c PROPERTIES COMPILE_FLAGS -march=k8)
+		set_source_files_properties(${CODE_DIR}/asm/ftola.c PROPERTIES COMPILE_FLAGS -march=k8)
 	endif()
 endfunction()
 
