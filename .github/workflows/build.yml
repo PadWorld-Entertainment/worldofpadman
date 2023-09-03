@@ -13,10 +13,11 @@ jobs:
     strategy:
       matrix:
         platform:
-        - { name: Ubuntu,  os: ubuntu-20.04 }
-        - { name: Windows, os: windows-2019 }
-        - { name: MacOS11, os: macos-11 }
-        - { name: MacOS12, os: macos-12 }
+        - { name: Ubuntu,    os: ubuntu-20.04 }
+        - { name: Windows32, os: windows-2019, param: "-A Win32" }
+        - { name: Windows,   os: windows-2019 }
+        - { name: MacOS11,   os: macos-11 }
+        - { name: MacOS12,   os: macos-12 }
 
     steps:
       - name: "Checkout"
@@ -41,7 +42,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install ${{ matrix.platform.param }}
           cmake --build .
           cmake --install .
 
