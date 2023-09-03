@@ -140,6 +140,7 @@ static void Blit1to2(SDL_BlitInfo *info)
             case 3:
                 *(Uint16 *)dst = map[*src++];
                 dst += 2;
+                SDL_FALLTHROUGH;
             case 2:
                 *(Uint32 *)dst = (map[src[HI]] << 16) | (map[src[LO]]);
                 src += 2;
@@ -169,6 +170,7 @@ static void Blit1to2(SDL_BlitInfo *info)
             case 3:
                 *(Uint16 *)dst = map[*src++];
                 dst += 2;
+                SDL_FALLTHROUGH;
             case 2:
                 *(Uint32 *)dst = (map[src[HI]] << 16) | (map[src[LO]]);
                 src += 2;
@@ -270,8 +272,10 @@ static void Blit1to4(SDL_BlitInfo *info)
         switch (width & 3) {
         case 3:
             *dst++ = map[*src++];
+            SDL_FALLTHROUGH;
         case 2:
             *dst++ = map[*src++];
+            SDL_FALLTHROUGH;
         case 1:
             *dst++ = map[*src++];
         }
@@ -510,8 +514,7 @@ static const SDL_BlitFunc one_blitkey[] = {
     (SDL_BlitFunc)NULL, Blit1to1Key, Blit1to2Key, Blit1to3Key, Blit1to4Key
 };
 
-SDL_BlitFunc
-SDL_CalculateBlit1(SDL_Surface *surface)
+SDL_BlitFunc SDL_CalculateBlit1(SDL_Surface *surface)
 {
     int which;
     SDL_PixelFormat *dstfmt;
@@ -528,6 +531,9 @@ SDL_CalculateBlit1(SDL_Surface *surface)
 
     case SDL_COPY_COLORKEY:
         return one_blitkey[which];
+
+    case SDL_COPY_COLORKEY | SDL_COPY_BLEND:  /* this is not super-robust but handles a specific case we found sdl12-compat. */
+        return (surface->map->info.a == 255) ? one_blitkey[which] : (SDL_BlitFunc)NULL;
 
     case SDL_COPY_MODULATE_ALPHA | SDL_COPY_BLEND:
         /* Supporting 8bpp->8bpp alpha is doable but requires lots of

@@ -58,8 +58,7 @@ int WIN_GLES_LoadLibrary(_THIS, const char *path)
     return 0;
 }
 
-SDL_GLContext
-WIN_GLES_CreateContext(_THIS, SDL_Window *window)
+SDL_GLContext WIN_GLES_CreateContext(_THIS, SDL_Window *window)
 {
     SDL_GLContext context;
     SDL_WindowData *data = (SDL_WindowData *)window->driverdata;
@@ -93,13 +92,14 @@ WIN_GLES_CreateContext(_THIS, SDL_Window *window)
 void WIN_GLES_DeleteContext(_THIS, SDL_GLContext context)
 {
     SDL_EGL_DeleteContext(_this, context);
-    WIN_GLES_UnloadLibrary(_this);
 }
 
+/* *INDENT-OFF* */ /* clang-format off */
 SDL_EGL_SwapWindow_impl(WIN)
-    SDL_EGL_MakeCurrent_impl(WIN)
+SDL_EGL_MakeCurrent_impl(WIN)
+/* *INDENT-ON* */ /* clang-format on */
 
-        int WIN_GLES_SetupWindow(_THIS, SDL_Window *window)
+int WIN_GLES_SetupWindow(_THIS, SDL_Window *window)
 {
     /* The current context is lost in here; save it and reset it. */
     SDL_WindowData *windowdata = (SDL_WindowData *)window->driverdata;

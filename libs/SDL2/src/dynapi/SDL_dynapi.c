@@ -42,9 +42,9 @@
 /* This is the version of the dynamic API. This doesn't match the SDL version
    and should not change until there's been a major revamp in API/ABI.
    So 2.0.5 adds functions over 2.0.4? This number doesn't change;
-   the sizeof (jump_table) changes instead. But 2.1.0 changes how a function
+   the sizeof(jump_table) changes instead. But 2.1.0 changes how a function
    works in an incompatible way or removes a function? This number changes,
-   since sizeof (jump_table) isn't sufficient anymore. It's likely
+   since sizeof(jump_table) isn't sufficient anymore. It's likely
    we'll forget to bump every time we add a function, so this is the
    failsafe switch for major API change decisions. Respect it and use it
    sparingly. */
@@ -161,7 +161,7 @@ static void SDL_InitDynamicAPI(void);
 /* The DEFAULT funcs will init jump table and then call real function. */
 /* The REAL funcs are the actual functions, name-mangled to not clash. */
 #define SDL_DYNAPI_PROC(rc, fn, params, args, ret) \
-    typedef rc(SDLCALL *SDL_DYNAPIFN_##fn) params; \
+    typedef rc (SDLCALL *SDL_DYNAPIFN_##fn) params;\
     static rc SDLCALL fn##_DEFAULT params;         \
     extern rc SDLCALL fn##_REAL params;
 #include "SDL_dynapi_procs.h"
@@ -347,11 +347,10 @@ static Sint32 initialize_jumptable(Uint32 apiver, void *table, Uint32 tablesize)
 
 /* Here's the exported entry point that fills in the jump table. */
 /*  Use specific types when an "int" might suffice to keep this sane. */
-typedef Sint32(SDLCALL *SDL_DYNAPI_ENTRYFN)(Uint32 apiver, void *table, Uint32 tablesize);
+typedef Sint32 (SDLCALL *SDL_DYNAPI_ENTRYFN)(Uint32 apiver, void *table, Uint32 tablesize);
 extern DECLSPEC Sint32 SDLCALL SDL_DYNAPI_entry(Uint32, void *, Uint32);
 
-Sint32
-SDL_DYNAPI_entry(Uint32 apiver, void *table, Uint32 tablesize)
+Sint32 SDL_DYNAPI_entry(Uint32 apiver, void *table, Uint32 tablesize)
 {
     return initialize_jumptable(apiver, table, tablesize);
 }
@@ -372,7 +371,7 @@ static SDL_INLINE void *get_sdlapi_entry(const char *fname, const char *sym)
     HMODULE lib = LoadLibraryA(fname);
     void *retval = NULL;
     if (lib) {
-        retval = GetProcAddress(lib, sym);
+        retval = (void *) GetProcAddress(lib, sym);
         if (retval == NULL) {
             FreeLibrary(lib);
         }
@@ -441,14 +440,28 @@ extern SDL_NORETURN void SDL_ExitProcess(int exitcode);
 
 static void SDL_InitDynamicAPILocked(void)
 {
-    const char *libname = SDL_getenv_REAL(SDL_DYNAMIC_API_ENVVAR);
+    char *libname = SDL_getenv_REAL(SDL_DYNAMIC_API_ENVVAR);
     SDL_DYNAPI_ENTRYFN entry = NULL; /* funcs from here by default. */
     SDL_bool use_internal = SDL_TRUE;
 
     if (libname) {
-        entry = (SDL_DYNAPI_ENTRYFN)get_sdlapi_entry(libname, "SDL_DYNAPI_entry");
+        while (*libname && !entry) {
+            char *ptr = libname;
+            while (SDL_TRUE) {
+                const char ch = *ptr;
+                if ((ch == ',') || (ch == '\0')) {
+                    *ptr = '\0';
+                    entry = (SDL_DYNAPI_ENTRYFN)get_sdlapi_entry(libname, "SDL_DYNAPI_entry");
+                    *ptr = ch;
+                    libname = (ch == '\0') ? ptr : (ptr + 1);
+                    break;
+                } else {
+                    ptr++;
+                }
+            }
+        }
         if (!entry) {
-            dynapi_warn("Couldn't load overriding SDL library. Please fix or remove the " SDL_DYNAMIC_API_ENVVAR " environment variable. Using the default SDL.");
+            dynapi_warn("Couldn't load an overriding SDL library. Please fix or remove the " SDL_DYNAMIC_API_ENVVAR " environment variable. Using the default SDL.");
             /* Just fill in the function pointers from this library, later. */
         }
     }
@@ -489,22 +502,22 @@ static void SDL_InitDynamicAPI(void)
      */
     static SDL_bool already_initialized = SDL_FALSE;
 
-/* SDL_AtomicLock calls SDL mutex functions to emulate if
-   SDL_ATOMIC_DISABLED, which we can't do here, so in such a
-   configuration, you're on your own. */
-#if !SDL_ATOMIC_DISABLED
+    /* SDL_AtomicLock calls SDL mutex functions to emulate if
+       SDL_ATOMIC_DISABLED, which we can't do here, so in such a
+       configuration, you're on your own. */
+    #if !SDL_ATOMIC_DISABLED
     static SDL_SpinLock lock = 0;
     SDL_AtomicLock_REAL(&lock);
-#endif
+    #endif
 
     if (!already_initialized) {
         SDL_InitDynamicAPILocked();
         already_initialized = SDL_TRUE;
     }
 
-#if !SDL_ATOMIC_DISABLED
+    #if !SDL_ATOMIC_DISABLED
     SDL_AtomicUnlock_REAL(&lock);
-#endif
+    #endif
 }
 
 #endif /* SDL_DYNAMIC_API */

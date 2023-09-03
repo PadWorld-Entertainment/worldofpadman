@@ -779,12 +779,12 @@ void WIN_GetWindowSizeInPixels(_THIS, SDL_Window *window, int *w, int *h)
     HWND hwnd = data->hwnd;
     RECT rect;
 
-    if (GetClientRect(hwnd, &rect)) {
+    if (GetClientRect(hwnd, &rect) && !WIN_IsRectEmpty(&rect)) {
         *w = rect.right;
         *h = rect.bottom;
     } else {
-        *w = 0;
-        *h = 0;
+        *w = window->w;
+        *h = window->h;
     }
 }
 
@@ -847,11 +847,16 @@ void WIN_RaiseWindow(_THIS, SDL_Window *window)
 
 void WIN_MaximizeWindow(_THIS, SDL_Window *window)
 {
-    SDL_WindowData *data = (SDL_WindowData *)window->driverdata;
-    HWND hwnd = data->hwnd;
-    data->expected_resize = SDL_TRUE;
-    ShowWindow(hwnd, SW_MAXIMIZE);
-    data->expected_resize = SDL_FALSE;
+    /* Other platforms refuse to maximize a non-resizable window, and with win32,
+       the OS resizes the window weirdly (covering the taskbar) if you don't have
+       the STYLE_RESIZABLE flag set. So just forbid it for now. */
+    if (window->flags & SDL_WINDOW_RESIZABLE) {
+        SDL_WindowData *data = (SDL_WindowData *)window->driverdata;
+        HWND hwnd = data->hwnd;
+        data->expected_resize = SDL_TRUE;
+        ShowWindow(hwnd, SW_MAXIMIZE);
+        data->expected_resize = SDL_FALSE;
+    }
 }
 
 void WIN_MinimizeWindow(_THIS, SDL_Window *window)
@@ -924,7 +929,7 @@ void WIN_SetWindowFullscreen(_THIS, SDL_Window *window, SDL_VideoDisplay *displa
     int x, y;
     int w, h;
 
-    if (!fullscreen && (window->flags & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP)) != 0) {
+    if (!fullscreen && (window->flags & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP))) {
         /* Resizing the window on hide causes problems restoring it in Wine, and it's unnecessary.
          * Also, Windows would preview the minimized window with the wrong size.
          */
@@ -997,8 +1002,7 @@ void WIN_SetWindowFullscreen(_THIS, SDL_Window *window, SDL_VideoDisplay *displa
 }
 
 #if !defined(__XBOXONE__) && !defined(__XBOXSERIES__)
-int
-WIN_SetWindowGammaRamp(_THIS, SDL_Window * window, const Uint16 * ramp)
+int WIN_SetWindowGammaRamp(_THIS, SDL_Window * window, const Uint16 * ramp)
 {
     SDL_VideoDisplay *display = SDL_GetDisplayForWindow(window);
     SDL_DisplayData *data = (SDL_DisplayData *) display->driverdata;
@@ -1016,8 +1020,7 @@ WIN_SetWindowGammaRamp(_THIS, SDL_Window * window, const Uint16 * ramp)
     return succeeded ? 0 : -1;
 }
 
-void
-WIN_UpdateWindowICCProfile(SDL_Window * window, SDL_bool send_event)
+void WIN_UpdateWindowICCProfile(SDL_Window * window, SDL_bool send_event)
 {
     SDL_WindowData *data = (SDL_WindowData *)window->driverdata;
     SDL_VideoDisplay *display = SDL_GetDisplayForWindow(window);
@@ -1046,8 +1049,7 @@ WIN_UpdateWindowICCProfile(SDL_Window * window, SDL_bool send_event)
     }
 }
 
-void *
-WIN_GetWindowICCProfile(_THIS, SDL_Window *window, size_t *size)
+void *WIN_GetWindowICCProfile(_THIS, SDL_Window *window, size_t *size)
 {
     SDL_WindowData *data = (SDL_WindowData *)window->driverdata;
     char *filename_utf8;
@@ -1066,8 +1068,7 @@ WIN_GetWindowICCProfile(_THIS, SDL_Window *window, size_t *size)
     return iccProfileData;
 }
 
-int
-WIN_GetWindowGammaRamp(_THIS, SDL_Window * window, Uint16 * ramp)
+int WIN_GetWindowGammaRamp(_THIS, SDL_Window * window, Uint16 * ramp)
 {
     SDL_VideoDisplay *display = SDL_GetDisplayForWindow(window);
     SDL_DisplayData *data = (SDL_DisplayData *) display->driverdata;
@@ -1166,8 +1167,7 @@ void WIN_DestroyWindow(_THIS, SDL_Window *window)
     CleanupWindowData(_this, window);
 }
 
-SDL_bool
-WIN_GetWindowWMInfo(_THIS, SDL_Window * window, SDL_SysWMinfo * info)
+SDL_bool WIN_GetWindowWMInfo(_THIS, SDL_Window * window, SDL_SysWMinfo * info)
 {
     const SDL_WindowData *data = (const SDL_WindowData *) window->driverdata;
     if (info->version.major <= SDL_MAJOR_VERSION) {
@@ -1273,6 +1273,13 @@ void WIN_OnWindowEnter(_THIS, SDL_Window *window)
     }
 }
 
+static BOOL GetClientScreenRect(HWND hwnd, RECT *rect)
+{
+    return GetClientRect(hwnd, rect) &&             /* RECT( left , top , right , bottom )   */
+           ClientToScreen(hwnd, (LPPOINT)rect) &&   /* POINT( left , top )                    */
+           ClientToScreen(hwnd, (LPPOINT)rect + 1); /*             POINT( right , bottom )   */
+}
+
 void WIN_UpdateClipCursor(SDL_Window *window)
 {
     SDL_WindowData *data = (SDL_WindowData *)window->driverdata;
@@ -1293,15 +1300,17 @@ void WIN_UpdateClipCursor(SDL_Window *window)
          (window->mouse_rect.w > 0 && window->mouse_rect.h > 0)) &&
         (window->flags & SDL_WINDOW_INPUT_FOCUS)) {
         if (mouse->relative_mode && !mouse->relative_mode_warp && data->mouse_relative_mode_center) {
-            if (GetWindowRect(data->hwnd, &rect)) {
+            if (GetClientScreenRect(data->hwnd, &rect)) {
+                /* WIN_WarpCursor() jitters by +1, and remote desktop warp wobble is +/- 1 */
+                LONG remote_desktop_adjustment = GetSystemMetrics(SM_REMOTESESSION) ? 2 : 0;
                 LONG cx, cy;
 
                 cx = (rect.left + rect.right) / 2;
                 cy = (rect.top + rect.bottom) / 2;
 
                 /* Make an absurdly small clip rect */
-                rect.left = cx;
-                rect.right = cx + 1;
+                rect.left = cx - remote_desktop_adjustment;
+                rect.right = cx + 1 + remote_desktop_adjustment;
                 rect.top = cy;
                 rect.bottom = cy + 1;
 
@@ -1312,9 +1321,7 @@ void WIN_UpdateClipCursor(SDL_Window *window)
                 }
             }
         } else {
-            if (GetClientRect(data->hwnd, &rect)) {
-                ClientToScreen(data->hwnd, (LPPOINT)&rect);
-                ClientToScreen(data->hwnd, (LPPOINT)&rect + 1);
+            if (GetClientScreenRect(data->hwnd, &rect)) {
                 if (window->mouse_rect.w > 0 && window->mouse_rect.h > 0) {
                     SDL_Rect mouse_rect_win_client;
                     RECT mouse_rect, intersection;
@@ -1331,14 +1338,14 @@ void WIN_UpdateClipCursor(SDL_Window *window)
                     mouse_rect.bottom = mouse_rect.top + mouse_rect_win_client.h;
                     if (IntersectRect(&intersection, &rect, &mouse_rect)) {
                         SDL_memcpy(&rect, &intersection, sizeof(rect));
-                    } else if ((window->flags & SDL_WINDOW_MOUSE_GRABBED) != 0) {
+                    } else if (window->flags & SDL_WINDOW_MOUSE_GRABBED) {
                         /* Mouse rect was invalid, just do the normal grab */
                     } else {
                         SDL_zero(rect);
                     }
                 }
                 if (SDL_memcmp(&rect, &clipped_rect, sizeof(rect)) != 0) {
-                    if (!IsRectEmpty(&rect)) {
+                    if (!WIN_IsRectEmpty(&rect)) {
                         if (ClipCursor(&rect)) {
                             data->cursor_clipped_rect = rect;
                         }
@@ -1392,7 +1399,7 @@ int WIN_SetWindowOpacity(_THIS, SDL_Window *window, float opacity)
     } else {
         const BYTE alpha = (BYTE)((int)(opacity * 255.0f));
         /* want it transparent, mark it layered if necessary. */
-        if ((style & WS_EX_LAYERED) == 0) {
+        if (!(style & WS_EX_LAYERED)) {
             if (SetWindowLong(hwnd, GWL_EXSTYLE, style | WS_EX_LAYERED) == 0) {
                 return WIN_SetError("SetWindowLong()");
             }

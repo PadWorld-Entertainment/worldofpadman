@@ -39,7 +39,7 @@ typedef struct AAUDIO_Data
 {
     AAudioStreamBuilder *builder;
     void *handle;
-#define SDL_PROC(ret, func, params) ret(*func) params;
+#define SDL_PROC(ret, func, params) ret (*func) params;
 #include "SDL_aaudiofuncs.h"
 #undef SDL_PROC
 } AAUDIO_Data;
@@ -93,7 +93,7 @@ static int aaudio_OpenDevice(_THIS, const char *devname)
         audioDevice = this;
     }
 
-    this->hidden = (struct SDL_PrivateAudioData *)SDL_calloc(1, (sizeof *this->hidden));
+    this->hidden = (struct SDL_PrivateAudioData *)SDL_calloc(1, sizeof(*this->hidden));
     if (this->hidden == NULL) {
         return SDL_OutOfMemory();
     }

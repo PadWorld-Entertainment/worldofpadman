@@ -36,6 +36,7 @@
 #include "../../events/SDL_events_c.h"
 #include "../../events/SDL_mouse_c.h"
 #include "../../events/SDL_touch_c.h"
+#include "../../SDL_utils_c.h"
 
 #include "SDL_hints.h"
 #include "SDL_timer.h"
@@ -414,9 +415,9 @@ void X11_ReconcileKeyboardState(_THIS)
 
     /* Sync up the keyboard modifier state */
     if (X11_XQueryPointer(display, DefaultRootWindow(display), &junk_window, &junk_window, &x, &y, &x, &y, &mask)) {
-        SDL_ToggleModState(KMOD_CAPS, (mask & LockMask) != 0);
-        SDL_ToggleModState(KMOD_NUM, (mask & X11_GetNumLockModifierMask(_this)) != 0);
-        SDL_ToggleModState(KMOD_SCROLL, (mask & X11_GetScrollLockModifierMask(_this)) != 0);
+        SDL_ToggleModState(KMOD_CAPS, (mask & LockMask) ? SDL_TRUE : SDL_FALSE);
+        SDL_ToggleModState(KMOD_NUM, (mask & X11_GetNumLockModifierMask(_this)) ? SDL_TRUE : SDL_FALSE);
+        SDL_ToggleModState(KMOD_SCROLL, (mask & X11_GetScrollLockModifierMask(_this)) ? SDL_TRUE : SDL_FALSE);
     }
 
     keyboardState = SDL_GetKeyboardState(0);
@@ -739,10 +740,22 @@ static Bool isReparentNotify(Display *display, XEvent *ev, XPointer arg)
            ev->xreparent.serial == unmap->serial;
 }
 
+static SDL_bool IsHighLatin1(const char *string, int length)
+{
+	while (length-- > 0) {
+		Uint8 ch = (Uint8)*string;
+		if (ch >= 0x80) {
+			return SDL_TRUE;
+		}
+		++string;
+	}
+	return SDL_FALSE;
+}
+
 static int XLookupStringAsUTF8(XKeyEvent *event_struct, char *buffer_return, int bytes_buffer, KeySym *keysym_return, XComposeStatus *status_in_out)
 {
     int result = X11_XLookupString(event_struct, buffer_return, bytes_buffer, keysym_return, status_in_out);
-    if (result > 0) {
+    if (IsHighLatin1(buffer_return, result)) {
         char *utf8_text = SDL_iconv_string("UTF-8", "ISO-8859-1", buffer_return, result);
         if (utf8_text) {
             SDL_strlcpy(buffer_return, utf8_text, bytes_buffer);
@@ -753,6 +766,31 @@ static int XLookupStringAsUTF8(XKeyEvent *event_struct, char *buffer_return, int
         }
     }
     return result;
+}
+
+void X11_GetBorderValues(void /* SDL_WindowData */ *data_)
+{
+    SDL_WindowData *data = (SDL_WindowData *)data_;
+    SDL_VideoData *videodata = data->videodata;
+    Display *display = videodata->display;
+
+    Atom type;
+    int format;
+    unsigned long nitems, bytes_after;
+    unsigned char *property;
+    if (X11_XGetWindowProperty(display, data->xwindow, videodata->_NET_FRAME_EXTENTS, 0, 16, 0, XA_CARDINAL, &type, &format, &nitems, &bytes_after, &property) == Success) {
+        if (type != None && nitems == 4) {
+            data->border_left = (int)((long *)property)[0];
+            data->border_right = (int)((long *)property)[1];
+            data->border_top = (int)((long *)property)[2];
+            data->border_bottom = (int)((long *)property)[3];
+        }
+        X11_XFree(property);
+
+#ifdef DEBUG_XEVENTS
+        printf("New _NET_FRAME_EXTENTS: left=%d right=%d, top=%d, bottom=%d\n", data->border_left, data->border_right, data->border_top, data->border_bottom);
+#endif
+    }
 }
 
 static void X11_DispatchEvent(_THIS, XEvent *xevent)
@@ -830,6 +868,27 @@ static void X11_DispatchEvent(_THIS, XEvent *xevent)
     printf("type = %d display = %d window = %d\n",
            xevent->type, xevent->xany.display, xevent->xany.window);
 #endif
+
+#ifdef SDL_VIDEO_DRIVER_X11_XFIXES
+    if (SDL_X11_HAVE_XFIXES &&
+            xevent->type == X11_GetXFixesSelectionNotifyEvent()) {
+        XFixesSelectionNotifyEvent *ev = (XFixesSelectionNotifyEvent *) xevent;
+
+        /* !!! FIXME: cache atoms */
+        Atom XA_CLIPBOARD = X11_XInternAtom(display, "CLIPBOARD", 0);
+
+#ifdef DEBUG_XEVENTS
+        printf("window CLIPBOARD: XFixesSelectionNotify (selection = %s)\n",
+                X11_XGetAtomName(display, ev->selection));
+#endif
+
+        if (ev->selection == XA_PRIMARY ||
+                (XA_CLIPBOARD != None && ev->selection == XA_CLIPBOARD)) {
+            SDL_SendClipboardUpdate();
+            return;
+        }
+    }
+#endif /* SDL_VIDEO_DRIVER_X11_XFIXES */
 
     if ((videodata->clipboard_window != None) &&
         (videodata->clipboard_window == xevent->xany.window)) {
@@ -1490,23 +1549,7 @@ static void X11_DispatchEvent(_THIS, XEvent *xevent)
                right approach, but it seems to work. */
             X11_UpdateKeymap(_this, SDL_TRUE);
         } else if (xevent->xproperty.atom == videodata->_NET_FRAME_EXTENTS) {
-            Atom type;
-            int format;
-            unsigned long nitems, bytes_after;
-            unsigned char *property;
-            if (X11_XGetWindowProperty(display, data->xwindow, videodata->_NET_FRAME_EXTENTS, 0, 16, 0, XA_CARDINAL, &type, &format, &nitems, &bytes_after, &property) == Success) {
-                if (type != None && nitems == 4) {
-                    data->border_left = (int)((long *)property)[0];
-                    data->border_right = (int)((long *)property)[1];
-                    data->border_top = (int)((long *)property)[2];
-                    data->border_bottom = (int)((long *)property)[3];
-                }
-                X11_XFree(property);
-
-#ifdef DEBUG_XEVENTS
-                printf("New _NET_FRAME_EXTENTS: left=%d right=%d, top=%d, bottom=%d\n", data->border_left, data->border_right, data->border_top, data->border_bottom);
-#endif
-            }
+            X11_GetBorderValues(data);
         }
     } break;
 

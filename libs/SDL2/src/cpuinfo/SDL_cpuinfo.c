@@ -159,7 +159,7 @@ static int CPU_haveCPUID(void)
     : "%eax", "%ecx"
     );
 #elif (defined(__GNUC__) || defined(__llvm__)) && defined(__x86_64__)
-/* Technically, if this is being compiled under __x86_64__ then it has 
+/* Technically, if this is being compiled under __x86_64__ then it has
    CPUid by definition.  But it's nice to be able to prove it.  :)      */
     __asm__ (
 "        pushfq                      # Get original EFLAGS             \n"
@@ -262,15 +262,16 @@ done:
         __asm mov c, ecx \
         __asm mov d, edx                   \
     }
-#elif defined(_MSC_VER) && defined(_M_X64)
-#define cpuid(func, a, b, c, d) \
-    {                           \
-        int CPUInfo[4];         \
-        __cpuid(CPUInfo, func); \
-        a = CPUInfo[0];         \
-        b = CPUInfo[1];         \
-        c = CPUInfo[2];         \
-        d = CPUInfo[3];         \
+#elif (defined(_MSC_VER) && defined(_M_X64))
+/* Use __cpuidex instead of __cpuid because ICL does not clear ecx register */
+#define cpuid(func, a, b, c, d)      \
+    {                                \
+        int CPUInfo[4];              \
+        __cpuidex(CPUInfo, func, 0); \
+        a = CPUInfo[0];              \
+        b = CPUInfo[1];              \
+        c = CPUInfo[2];              \
+        d = CPUInfo[3];              \
     }
 #else
 #define cpuid(func, a, b, c, d) \
@@ -386,7 +387,7 @@ static int CPU_haveARMSIMD(void)
     fd = open("/proc/self/auxv", O_RDONLY | O_CLOEXEC);
     if (fd >= 0) {
         Elf32_auxv_t aux;
-        while (read(fd, &aux, sizeof aux) == sizeof aux) {
+        while (read(fd, &aux, sizeof(aux)) == sizeof(aux)) {
             if (aux.a_type == AT_PLATFORM) {
                 const char *plat = (const char *)aux.a_un.a_val;
                 if (plat) {
@@ -498,7 +499,7 @@ static int CPU_haveNEON(void)
         AndroidCpuFamily cpu_family = android_getCpuFamily();
         if (cpu_family == ANDROID_CPU_FAMILY_ARM) {
             uint64_t cpu_features = android_getCpuFeatures();
-            if ((cpu_features & ANDROID_CPU_ARM_FEATURE_NEON) != 0) {
+            if (cpu_features & ANDROID_CPU_ARM_FEATURE_NEON) {
                 return 1;
             }
         }
@@ -990,92 +991,77 @@ SDL_bool SDL_HasRDTSC(void)
     return CPU_FEATURE_AVAILABLE(CPU_HAS_RDTSC);
 }
 
-SDL_bool
-SDL_HasAltiVec(void)
+SDL_bool SDL_HasAltiVec(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_ALTIVEC);
 }
 
-SDL_bool
-SDL_HasMMX(void)
+SDL_bool SDL_HasMMX(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_MMX);
 }
 
-SDL_bool
-SDL_Has3DNow(void)
+SDL_bool SDL_Has3DNow(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_3DNOW);
 }
 
-SDL_bool
-SDL_HasSSE(void)
+SDL_bool SDL_HasSSE(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_SSE);
 }
 
-SDL_bool
-SDL_HasSSE2(void)
+SDL_bool SDL_HasSSE2(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_SSE2);
 }
 
-SDL_bool
-SDL_HasSSE3(void)
+SDL_bool SDL_HasSSE3(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_SSE3);
 }
 
-SDL_bool
-SDL_HasSSE41(void)
+SDL_bool SDL_HasSSE41(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_SSE41);
 }
 
-SDL_bool
-SDL_HasSSE42(void)
+SDL_bool SDL_HasSSE42(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_SSE42);
 }
 
-SDL_bool
-SDL_HasAVX(void)
+SDL_bool SDL_HasAVX(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_AVX);
 }
 
-SDL_bool
-SDL_HasAVX2(void)
+SDL_bool SDL_HasAVX2(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_AVX2);
 }
 
-SDL_bool
-SDL_HasAVX512F(void)
+SDL_bool SDL_HasAVX512F(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_AVX512F);
 }
 
-SDL_bool
-SDL_HasARMSIMD(void)
+SDL_bool SDL_HasARMSIMD(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_ARM_SIMD);
 }
 
-SDL_bool
-SDL_HasNEON(void)
+SDL_bool SDL_HasNEON(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_NEON);
 }
 
-SDL_bool
-SDL_HasLSX(void)
+SDL_bool SDL_HasLSX(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_LSX);
 }
 
-SDL_bool
-SDL_HasLASX(void)
+SDL_bool SDL_HasLASX(void)
 {
     return CPU_FEATURE_AVAILABLE(CPU_HAS_LASX);
 }
@@ -1154,8 +1140,7 @@ int SDL_GetSystemRAM(void)
     return SDL_SystemRAM;
 }
 
-size_t
-SDL_SIMDGetAlignment(void)
+size_t SDL_SIMDGetAlignment(void)
 {
     if (SDL_SIMDAlignment == 0xFFFFFFFF) {
         SDL_GetCPUFeatures(); /* make sure this has been calculated */
@@ -1164,8 +1149,7 @@ SDL_SIMDGetAlignment(void)
     return SDL_SIMDAlignment;
 }
 
-void *
-SDL_SIMDAlloc(const size_t len)
+void *SDL_SIMDAlloc(const size_t len)
 {
     const size_t alignment = SDL_SIMDGetAlignment();
     const size_t padding = (alignment - (len % alignment)) % alignment;
@@ -1173,7 +1157,7 @@ SDL_SIMDAlloc(const size_t len)
     Uint8 *ptr;
     size_t to_allocate;
 
-    /* alignment + padding + sizeof (void *) is bounded (a few hundred
+    /* alignment + padding + sizeof(void *) is bounded (a few hundred
      * bytes max), so no need to check for overflow within that argument */
     if (SDL_size_add_overflow(len, alignment + padding + sizeof(void *), &to_allocate)) {
         return NULL;
@@ -1189,8 +1173,7 @@ SDL_SIMDAlloc(const size_t len)
     return retval;
 }
 
-void *
-SDL_SIMDRealloc(void *mem, const size_t len)
+void *SDL_SIMDRealloc(void *mem, const size_t len)
 {
     const size_t alignment = SDL_SIMDGetAlignment();
     const size_t padding = (alignment - (len % alignment)) % alignment;
@@ -1200,7 +1183,7 @@ SDL_SIMDRealloc(void *mem, const size_t len)
     Uint8 *ptr;
     size_t to_allocate;
 
-    /* alignment + padding + sizeof (void *) is bounded (a few hundred
+    /* alignment + padding + sizeof(void *) is bounded (a few hundred
      * bytes max), so no need to check for overflow within that argument */
     if (SDL_size_add_overflow(len, alignment + padding + sizeof(void *), &to_allocate)) {
         return NULL;

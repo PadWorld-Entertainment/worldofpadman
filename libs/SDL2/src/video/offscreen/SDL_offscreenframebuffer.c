@@ -37,7 +37,7 @@ int SDL_OFFSCREEN_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *for
     SDL_OFFSCREEN_DestroyWindowFramebuffer(_this, window);
 
     /* Create a new one */
-    SDL_GetWindowSize(window, &w, &h);
+    SDL_GetWindowSizeInPixels(window, &w, &h);
     surface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 0, surface_format);
     if (surface == NULL) {
         return -1;
@@ -48,6 +48,7 @@ int SDL_OFFSCREEN_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *for
     *format = surface_format;
     *pixels = surface->pixels;
     *pitch = surface->pitch;
+
     return 0;
 }
 
@@ -64,7 +65,7 @@ int SDL_OFFSCREEN_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_R
     /* Send the data to the display */
     if (SDL_getenv("SDL_VIDEO_OFFSCREEN_SAVE_FRAMES")) {
         char file[128];
-        (void)SDL_snprintf(file, sizeof file, "SDL_window%" SDL_PRIu32 "-%8.8d.bmp",
+        (void)SDL_snprintf(file, sizeof(file), "SDL_window%" SDL_PRIu32 "-%8.8d.bmp",
                            SDL_GetWindowID(window), ++frame_number);
         SDL_SaveBMP(surface, file);
     }

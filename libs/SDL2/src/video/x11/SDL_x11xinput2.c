@@ -181,6 +181,7 @@ void X11_InitXinput2(_THIS)
 #endif
 }
 
+#if SDL_VIDEO_DRIVER_X11_XINPUT2
 /* xi2 device went away? take it out of the list. */
 static void xinput2_remove_device_info(SDL_VideoData *videodata, const int device_id)
 {
@@ -202,7 +203,6 @@ static void xinput2_remove_device_info(SDL_VideoData *videodata, const int devic
     }
 }
 
-#if SDL_VIDEO_DRIVER_X11_XINPUT2
 static SDL_XInput2DeviceInfo *xinput2_get_device_info(SDL_VideoData *videodata, const int device_id)
 {
     /* cache device info as we see new devices. */
@@ -294,10 +294,6 @@ int X11_HandleXinput2Event(SDL_VideoData *videodata, XGenericEventCookie *cookie
         parse_valuators(rawev->raw_values, rawev->valuators.mask,
                         rawev->valuators.mask_len, coords, 2);
 
-        if ((rawev->time == devinfo->prev_time) && (coords[0] == devinfo->prev_coords[0]) && (coords[1] == devinfo->prev_coords[1])) {
-            return 0; /* duplicate event, drop it. */
-        }
-
         for (i = 0; i < 2; i++) {
             if (devinfo->relative[i]) {
                 processed_coords[i] = coords[i];
@@ -309,7 +305,6 @@ int X11_HandleXinput2Event(SDL_VideoData *videodata, XGenericEventCookie *cookie
         SDL_SendMouseMotion(mouse->focus, mouse->mouseID, 1, (int)processed_coords[0], (int)processed_coords[1]);
         devinfo->prev_coords[0] = coords[0];
         devinfo->prev_coords[1] = coords[1];
-        devinfo->prev_time = rawev->time;
         return 1;
     } break;
 

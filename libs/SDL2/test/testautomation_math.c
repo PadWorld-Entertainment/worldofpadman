@@ -24,6 +24,8 @@
 #define EULER M_E
 #endif
 
+#define IS_INFINITY(V) fpclassify(V) == FP_INFINITE
+
 /* Square root of 3 (used in atan2) */
 #define SQRT3 1.7320508075688771931766041234368458390235900878906250
 
@@ -62,10 +64,10 @@ typedef double(SDLCALL *dd_to_d_func)(double, double);
  * \brief Runs all the cases on a given function with a signature double -> double.
  * The result is expected to be exact.
  *
- * \param func_name, a printable name for the tested function.
- * \param func, the function to call.
- * \param cases, an array of all the cases.
- * \param cases_size, the size of the cases array.
+ * \param func_name a printable name for the tested function.
+ * \param func the function to call.
+ * \param cases an array of all the cases.
+ * \param cases_size the size of the cases array.
  */
 static int
 helper_dtod(const char *func_name, d_to_d_func func,
@@ -88,10 +90,10 @@ helper_dtod(const char *func_name, d_to_d_func func,
  * \brief Runs all the cases on a given function with a signature double -> double.
  * Checks if the result between expected +/- EPSILON.
  *
- * \param func_name, a printable name for the tested function.
- * \param func, the function to call.
- * \param cases, an array of all the cases.
- * \param cases_size, the size of the cases array.
+ * \param func_name a printable name for the tested function.
+ * \param func the function to call.
+ * \param cases an array of all the cases.
+ * \param cases_size the size of the cases array.
  */
 static int
 helper_dtod_inexact(const char *func_name, d_to_d_func func,
@@ -117,10 +119,10 @@ helper_dtod_inexact(const char *func_name, d_to_d_func func,
  * \brief Runs all the cases on a given function with a signature
  * (double, double) -> double. The result is expected to be exact.
  *
- * \param func_name, a printable name for the tested function.
- * \param func, the function to call.
- * \param cases, an array of all the cases.
- * \param cases_size, the size of the cases array.
+ * \param func_name a printable name for the tested function.
+ * \param func the function to call.
+ * \param cases an array of all the cases.
+ * \param cases_size the size of the cases array.
  */
 static int
 helper_ddtod(const char *func_name, dd_to_d_func func,
@@ -143,10 +145,10 @@ helper_ddtod(const char *func_name, dd_to_d_func func,
  * \brief Runs all the cases on a given function with a signature
  * (double, double) -> double. Checks if the result between expected +/- EPSILON.
  *
- * \param func_name, a printable name for the tested function.
- * \param func, the function to call.
- * \param cases, an array of all the cases.
- * \param cases_size, the size of the cases array.
+ * \param func_name a printable name for the tested function.
+ * \param func the function to call.
+ * \param cases an array of all the cases.
+ * \param cases_size the size of the cases array.
  */
 static int
 helper_ddtod_inexact(const char *func_name, dd_to_d_func func,
@@ -174,8 +176,8 @@ helper_ddtod_inexact(const char *func_name, dd_to_d_func func,
  * This function is only meant to test functions that returns the input value if it is
  * integral: f(x) -> x for x in N.
  *
- * \param func_name, a printable name for the tested function.
- * \param func, the function to call.
+ * \param func_name a printable name for the tested function.
+ * \param func the function to call.
  */
 static int
 helper_range(const char *func_name, d_to_d_func func)
@@ -222,12 +224,12 @@ floor_infCases(void *args)
     double result;
 
     result = SDL_floor(INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Floor(%f), expected %f, got %f",
                         INFINITY, INFINITY, result);
 
     result = SDL_floor(-INFINITY);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Floor(%f), expected %f, got %f",
                         -INFINITY, -INFINITY, result);
 
@@ -326,12 +328,12 @@ ceil_infCases(void *args)
     double result;
 
     result = SDL_ceil(INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Ceil(%f), expected %f, got %f",
                         INFINITY, INFINITY, result);
 
     result = SDL_ceil(-INFINITY);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Ceil(%f), expected %f, got %f",
                         -INFINITY, -INFINITY, result);
 
@@ -430,12 +432,12 @@ trunc_infCases(void *args)
     double result;
 
     result = SDL_trunc(INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Trunc(%f), expected %f, got %f",
                         INFINITY, INFINITY, result);
 
     result = SDL_trunc(-INFINITY);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Trunc(%f), expected %f, got %f",
                         -INFINITY, -INFINITY, result);
 
@@ -534,12 +536,12 @@ round_infCases(void *args)
     double result;
 
     result = SDL_round(INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Round(%f), expected %f, got %f",
                         INFINITY, INFINITY, result);
 
     result = SDL_round(-INFINITY);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Round(%f), expected %f, got %f",
                         -INFINITY, -INFINITY, result);
 
@@ -638,12 +640,12 @@ fabs_infCases(void *args)
     double result;
 
     result = SDL_fabs(INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Fabs(%f), expected %f, got %f",
                         INFINITY, INFINITY, result);
 
     result = SDL_fabs(-INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Fabs(%f), expected %f, got %f",
                         -INFINITY, INFINITY, result);
 
@@ -700,22 +702,22 @@ copysign_infCases(void *args)
     double result;
 
     result = SDL_copysign(INFINITY, -1.0);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Copysign(%f,%.1f), expected %f, got %f",
                         INFINITY, -1.0, -INFINITY, result);
 
     result = SDL_copysign(INFINITY, 1.0);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Copysign(%f,%.1f), expected %f, got %f",
                         INFINITY, 1.0, INFINITY, result);
 
     result = SDL_copysign(-INFINITY, -1.0);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Copysign(%f,%.1f), expected %f, got %f",
                         -INFINITY, -1.0, -INFINITY, result);
 
     result = SDL_copysign(-INFINITY, 1.0);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Copysign(%f,%.1f), expected %f, got %f",
                         -INFINITY, 1.0, INFINITY, result);
 
@@ -1008,7 +1010,7 @@ exp_infCases(void *args)
     double result;
 
     result = SDL_exp(INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Exp(%f), expected %f, got %f",
                         INFINITY, INFINITY, result);
 
@@ -1104,17 +1106,17 @@ log_limitCases(void *args)
     double result;
 
     result = SDL_log(INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Log(%f), expected %f, got %f",
                         INFINITY, INFINITY, result);
 
     result = SDL_log(0.0);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Log(%f), expected %f, got %f",
                         0.0, -INFINITY, result);
 
     result = SDL_log(-0.0);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Log(%f), expected %f, got %f",
                         -0.0, -INFINITY, result);
 
@@ -1194,17 +1196,17 @@ log10_limitCases(void *args)
     double result;
 
     result = SDL_log10(INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Log10(%f), expected %f, got %f",
                         INFINITY, INFINITY, result);
 
     result = SDL_log10(0.0);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Log10(%f), expected %f, got %f",
                         0.0, -INFINITY, result);
 
     result = SDL_log10(-0.0);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Log10(%f), expected %f, got %f",
                         -0.0, -INFINITY, result);
 
@@ -1307,12 +1309,12 @@ pow_baseZeroExpNInfCases(void *args)
     double result;
 
     result = SDL_pow(0.0, -INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         0.0, -INFINITY, INFINITY, result);
 
     result = SDL_pow(-0.0, -INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         -0.0, -INFINITY, INFINITY, result);
 
@@ -1334,12 +1336,12 @@ pow_expInfCases(void *args)
                         0.5, INFINITY, 0.0, result);
 
     result = SDL_pow(1.5, INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         1.5, INFINITY, INFINITY, result);
 
     result = SDL_pow(0.5, -INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         0.5, INFINITY, INFINITY, result);
 
@@ -1368,7 +1370,7 @@ pow_basePInfCases(void *args)
                         INFINITY, -3.0, 0.0, result);
 
     result = SDL_pow(INFINITY, 2.0);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         INFINITY, 2.0, INFINITY, result);
 
@@ -1378,7 +1380,7 @@ pow_basePInfCases(void *args)
                         INFINITY, -2.12345, 0.0, result);
 
     result = SDL_pow(INFINITY, 3.1345);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         INFINITY, 3.12345, INFINITY, result);
 
@@ -1414,17 +1416,17 @@ pow_baseNInfCases(void *args)
                         -INFINITY, -5.5, 0.0, result);
 
     result = SDL_pow(-INFINITY, 3.0);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Pow(%f,%f), expected %f, got %f",
                         -INFINITY, 3.0, -INFINITY, result);
 
     result = SDL_pow(-INFINITY, 2.0);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         -INFINITY, 2.0, INFINITY, result);
 
     result = SDL_pow(-INFINITY, 5.5);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         -INFINITY, 5.5, INFINITY, result);
 
@@ -1526,7 +1528,7 @@ pow_baseNZeroExpOddCases(void *args)
     double result;
 
     result = SDL_pow(-0.0, -3.0);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Pow(%f,%f), expected %f, got %f",
                         -0.0, -3.0, -INFINITY, result);
 
@@ -1550,7 +1552,7 @@ pow_basePZeroExpOddCases(void *args)
     double result;
 
     result = SDL_pow(0.0, -5.0);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         0.0, -5.0, INFINITY, result);
 
@@ -1576,12 +1578,12 @@ pow_baseNZeroCases(void *args)
     double result;
 
     result = SDL_pow(-0.0, -3.5);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         -0.0, -3.5, INFINITY, result);
 
     result = SDL_pow(-0.0, -4.0);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         -0.0, -4.0, INFINITY, result);
 
@@ -1612,12 +1614,12 @@ pow_basePZeroCases(void *args)
     double result;
 
     result = SDL_pow(0.0, -3.5);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         0.0, -3.5, INFINITY, result);
 
     result = SDL_pow(0.0, -4.0);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Pow(%f,%f), expected %f, got %f",
                         0.0, -4.0, INFINITY, result);
 
@@ -1725,7 +1727,7 @@ static int
 sqrt_infCase(void *args)
 {
     const double result = SDL_sqrt(INFINITY);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Sqrt(%f), expected %f, got %f",
                         INFINITY, INFINITY, result);
     return TEST_COMPLETED;
@@ -1818,12 +1820,12 @@ scalbn_infCases(void *args)
     double result;
 
     result = SDL_scalbn(INFINITY, 1);
-    SDLTest_AssertCheck(INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result > 0,
                         "Scalbn(%f,%d), expected %f, got %f",
                         INFINITY, 1, INFINITY, result);
 
     result = SDL_scalbn(-INFINITY, 1);
-    SDLTest_AssertCheck(-INFINITY == result,
+    SDLTest_AssertCheck(IS_INFINITY(result) && result < 0,
                         "Scalbn(%f,%d), expected %f, got %f",
                         -INFINITY, 1, -INFINITY, result);
 

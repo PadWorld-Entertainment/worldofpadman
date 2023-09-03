@@ -32,8 +32,7 @@
 #include "SDL_stdinc.h"
 #include "SDL_filesystem.h"
 
-char *
-SDL_GetBasePath(void)
+char *SDL_GetBasePath(void)
 {
     DWORD buflen = 128;
     WCHAR *path = NULL;
@@ -83,8 +82,7 @@ SDL_GetBasePath(void)
     return retval;
 }
 
-char *
-SDL_GetPrefPath(const char *org, const char *app)
+char *SDL_GetPrefPath(const char *org, const char *app)
 {
     /*
      * Vista and later has a new API for this, but SHGetFolderPath works there,
@@ -171,23 +169,5 @@ SDL_GetPrefPath(const char *org, const char *app)
 }
 
 #endif /* SDL_FILESYSTEM_WINDOWS */
-
-#ifdef SDL_FILESYSTEM_XBOX
-#include "SDL_filesystem.h"
-#include "SDL_error.h"
-char *
-SDL_GetBasePath(void)
-{
-    SDL_Unsupported();
-    return NULL;
-}
-
-char *
-SDL_GetPrefPath(const char *org, const char *app)
-{
-    SDL_Unsupported();
-    return NULL;
-}
-#endif /* SDL_FILESYSTEM_XBOX */
 
 /* vi: set ts=4 sw=4 expandtab: */

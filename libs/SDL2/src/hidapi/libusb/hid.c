@@ -689,6 +689,7 @@ static int is_xbox360(unsigned short vendor_id, const struct libusb_interface_de
 		0x24c6, /* PowerA */
 		0x2c22, /* Qanba */
 		0x2dc8, /* 8BitDo */
+        0x9886, /* ASTRO Gaming */
 	};
 
 	if (intf_desc->bInterfaceClass == LIBUSB_CLASS_VENDOR_SPEC &&
@@ -715,6 +716,7 @@ static int is_xboxone(unsigned short vendor_id, const struct libusb_interface_de
 		0x0738, /* Mad Catz */
 		0x0e6f, /* PDP */
 		0x0f0d, /* Hori */
+        0x10f5, /* Turtle Beach */
 		0x1532, /* Razer Wildcat */
 		0x20d6, /* PowerA */
 		0x24c6, /* PowerA */

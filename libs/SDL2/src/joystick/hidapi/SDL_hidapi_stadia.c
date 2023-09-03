@@ -43,6 +43,7 @@ enum
 
 typedef struct
 {
+    SDL_bool rumble_supported;
     Uint8 last_state[USB_PACKET_LENGTH];
 } SDL_DriverStadia_Context;
 
@@ -77,6 +78,15 @@ static SDL_bool HIDAPI_DriverStadia_InitDevice(SDL_HIDAPI_Device *device)
     }
     device->context = ctx;
 
+    /* Check whether rumble is supported */
+    {
+        Uint8 rumble_packet[] = { 0x05, 0x00, 0x00, 0x00, 0x00 };
+
+        if (SDL_hid_write(device->dev, rumble_packet, sizeof(rumble_packet)) >= 0) {
+            ctx->rumble_supported = SDL_TRUE;
+        }
+    }
+
     device->type = SDL_CONTROLLER_TYPE_GOOGLE_STADIA;
     HIDAPI_SetDeviceName(device, "Google Stadia Controller");
 
@@ -110,17 +120,24 @@ static SDL_bool HIDAPI_DriverStadia_OpenJoystick(SDL_HIDAPI_Device *device, SDL_
 
 static int HIDAPI_DriverStadia_RumbleJoystick(SDL_HIDAPI_Device *device, SDL_Joystick *joystick, Uint16 low_frequency_rumble, Uint16 high_frequency_rumble)
 {
-    Uint8 rumble_packet[] = { 0x05, 0x00, 0x00, 0x00, 0x00 };
+    SDL_DriverStadia_Context *ctx = (SDL_DriverStadia_Context *)device->context;
 
-    rumble_packet[1] = (low_frequency_rumble & 0xFF);
-    rumble_packet[2] = (low_frequency_rumble >> 8);
-    rumble_packet[3] = (high_frequency_rumble & 0xFF);
-    rumble_packet[4] = (high_frequency_rumble >> 8);
+    if (ctx->rumble_supported) {
+        Uint8 rumble_packet[] = { 0x05, 0x00, 0x00, 0x00, 0x00 };
 
-    if (SDL_HIDAPI_SendRumble(device, rumble_packet, sizeof(rumble_packet)) != sizeof(rumble_packet)) {
-        return SDL_SetError("Couldn't send rumble packet");
+
+        rumble_packet[1] = (low_frequency_rumble & 0xFF);
+        rumble_packet[2] = (low_frequency_rumble >> 8);
+        rumble_packet[3] = (high_frequency_rumble & 0xFF);
+        rumble_packet[4] = (high_frequency_rumble >> 8);
+
+        if (SDL_HIDAPI_SendRumble(device, rumble_packet, sizeof(rumble_packet)) != sizeof(rumble_packet)) {
+            return SDL_SetError("Couldn't send rumble packet");
+        }
+        return 0;
+    } else {
+        return SDL_Unsupported();
     }
-    return 0;
 }
 
 static int HIDAPI_DriverStadia_RumbleJoystickTriggers(SDL_HIDAPI_Device *device, SDL_Joystick *joystick, Uint16 left_rumble, Uint16 right_rumble)
@@ -130,7 +147,13 @@ static int HIDAPI_DriverStadia_RumbleJoystickTriggers(SDL_HIDAPI_Device *device,
 
 static Uint32 HIDAPI_DriverStadia_GetJoystickCapabilities(SDL_HIDAPI_Device *device, SDL_Joystick *joystick)
 {
-    return SDL_JOYCAP_RUMBLE;
+    SDL_DriverStadia_Context *ctx = (SDL_DriverStadia_Context *)device->context;
+    Uint32 caps = 0;
+
+    if (ctx->rumble_supported) {
+        caps |= SDL_JOYCAP_RUMBLE;
+    }
+    return caps;
 }
 
 static int HIDAPI_DriverStadia_SetJoystickLED(SDL_HIDAPI_Device *device, SDL_Joystick *joystick, Uint8 red, Uint8 green, Uint8 blue)
