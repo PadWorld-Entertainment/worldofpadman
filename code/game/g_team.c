@@ -442,12 +442,11 @@ Note that bonuses are not cumulative. You get one, they are in importance
 order.
 ================
 */
-void Team_FragBonuses(gentity_t *targ, gentity_t *attacker) {
+void Team_FragBonuses(const gentity_t *victim, gentity_t *attacker) {
 	int i;
-	gentity_t *ent;
 	int flag_pw, enemy_flag_pw;
 	int otherteam;
-	int team;
+	int victimTeam;
 
 	// no bonus for non team game types
 	if (g_gametype.integer < GT_TEAM) {
@@ -455,16 +454,16 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *attacker) {
 	}
 
 	// no bonus for fragging yourself or team mates
-	if (!targ->client || !attacker->client || targ == attacker || OnSameTeam(targ, attacker))
+	if (!victim->client || !attacker->client || victim == attacker || OnSameTeam(victim, attacker))
 		return;
 
-	team = targ->client->sess.sessionTeam;
-	otherteam = OtherTeam(targ->client->sess.sessionTeam);
+	victimTeam = victim->client->sess.sessionTeam;
+	otherteam = OtherTeam(victim->client->sess.sessionTeam);
 	if (otherteam < 0)
 		return; // whoever died isn't on a team
 
 	// same team, if the flag at base, check to he has the enemy flag
-	if (team == TEAM_RED) {
+	if (victimTeam == TEAM_RED) {
 		flag_pw = PW_REDFLAG;
 		enemy_flag_pw = PW_BLUEFLAG;
 	} else {
@@ -473,17 +472,17 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *attacker) {
 	}
 
 	// did the attacker frag the flag carrier?
-	if (targ->client->ps.powerups[enemy_flag_pw]) {
+	if (victim->client->ps.powerups[enemy_flag_pw]) {
 		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
-		AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS, SCORE_BONUS_FRAG_CARRIER_S);
+		AddScore(attacker, victim->r.currentOrigin, CTF_FRAG_CARRIER_BONUS, SCORE_BONUS_FRAG_CARRIER_S);
 		attacker->client->pers.teamState.fragcarrier++;
 		PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s' lolly carrier!\n", attacker->client->pers.netname,
-				 TeamName(team));
+				 TeamName(victimTeam));
 
 		// the target had the flag, clear the hurt carrier
 		// field on the other team
 		for (i = 0; i < g_maxclients.integer; i++) {
-			ent = g_entities + i;
+			gentity_t *ent = g_entities + i;
 			if (ent->inuse && ent->client->sess.sessionTeam == otherteam)
 				ent->client->pers.teamState.lasthurtcarrier = 0;
 		}
@@ -493,18 +492,18 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *attacker) {
 	// did the attacker frag a cartridge carrier?
 
 	if (g_gametype.integer == GT_SPRAY) {
-		int cartridges = targ->client->ps.generic1;
+		int cartridges = victim->client->ps.generic1;
 		if (cartridges) {
 			attacker->client->pers.teamState.lastfraggedcarrier = level.time;
-			AddScore(attacker, targ->r.currentOrigin, CTF_FRAG_CARRIER_BONUS * cartridges, SCORE_BONUS_FRAG_CARRIER_S);
+			AddScore(attacker, victim->r.currentOrigin, CTF_FRAG_CARRIER_BONUS * cartridges, SCORE_BONUS_FRAG_CARRIER_S);
 			attacker->client->pers.teamState.fragcarrier++;
 			PrintMsg(NULL, "%s" S_COLOR_WHITE " fragged %s' cartridge carrier!\n", attacker->client->pers.netname,
-					 TeamName(team));
+					 TeamName(victimTeam));
 
 			// the target had the flag, clear the hurt carrier
 			// field on the other team
 			for (i = 0; i < g_maxclients.integer; i++) {
-				ent = g_entities + i;
+				gentity_t *ent = g_entities + i;
 				if (ent->inuse && ent->client->sess.sessionTeam == otherteam)
 					ent->client->pers.teamState.lasthurtcarrier = 0;
 			}
@@ -512,15 +511,16 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *attacker) {
 		}
 	}
 
-	if (targ->client->pers.teamState.lasthurtcarrier &&
-		level.time - targ->client->pers.teamState.lasthurtcarrier < CTF_CARRIER_DANGER_PROTECT_TIMEOUT &&
-		!attacker->client->ps.powerups[flag_pw]) {
+	// CTF and SyC
+	if (victim->client->pers.teamState.lasthurtcarrier &&
+		level.time - victim->client->pers.teamState.lasthurtcarrier < CTF_CARRIER_DANGER_PROTECT_TIMEOUT &&
+		!attacker->client->ps.powerups[flag_pw] && victim != attacker) {
 		// attacker is on the same team as the flag carrier and
 		// fragged a guy who hurt our flag carrier
-		AddScore(attacker, targ->r.currentOrigin, CTF_CARRIER_DANGER_PROTECT_BONUS, SCORE_BONUS_CARRIER_PROTECT_S);
+		AddScore(attacker, victim->r.currentOrigin, CTF_CARRIER_DANGER_PROTECT_BONUS, SCORE_BONUS_CARRIER_PROTECT_S);
 
 		attacker->client->pers.teamState.carrierdefense++;
-		targ->client->pers.teamState.lasthurtcarrier = 0;
+		victim->client->pers.teamState.lasthurtcarrier = 0;
 
 		attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
 		// add the sprite over the player's head
@@ -531,9 +531,9 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *attacker) {
 
 	// flag and flag carrier area defense bonuses
 	if (g_gametype.integer == GT_CTF) {
-		Team_FlagDefendOrProtectBonus(targ, attacker, flag_pw);
+		Team_FlagDefendOrProtectBonus(victim, attacker, flag_pw);
 	} else if (g_gametype.integer == GT_BALLOON) {
-		Team_BalloonDefendOrProtectBonus(targ, attacker);
+		Team_BalloonDefendOrProtectBonus(victim, attacker);
 	}
 }
 
@@ -545,23 +545,23 @@ Check to see if attacker hurt the flag/cartridge carrier.
 Needed when handing out bonuses for assistance to flag/cartridge carrier defense.
 ================
 */
-void Team_CheckHurtCarrier(const gentity_t *targ, gentity_t *attacker) {
+void Team_CheckHurtCarrier(const gentity_t *victim, gentity_t *attacker) {
 	int flag_pw;
 
-	if (!targ->client || !attacker->client)
+	if (!victim->client || !attacker->client)
 		return;
 
-	if (targ->client->sess.sessionTeam == TEAM_RED)
+	if (victim->client->sess.sessionTeam == TEAM_RED)
 		flag_pw = PW_BLUEFLAG;
 	else
 		flag_pw = PW_REDFLAG;
 
-	// flags
-	if (targ->client->ps.powerups[flag_pw] && targ->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
+	// flags CTF
+	if (victim->client->ps.powerups[flag_pw] && victim->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
 
-	// cartridges (5 or more cartridges only)
-	if (targ->client->ps.generic1 >= 5 && targ->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
+	// cartridges (5 or more cartridges only) SyC
+	if (victim->client->ps.generic1 >= 5 && victim->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
 }
 
