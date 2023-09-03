@@ -114,6 +114,7 @@ static SDL_JoystickDriver *SDL_joystick_drivers[] = {
 static
 #endif
 SDL_mutex *SDL_joystick_lock = NULL; /* This needs to support recursive locks */
+static SDL_atomic_t SDL_joystick_lock_pending;
 static int SDL_joysticks_locked;
 static SDL_bool SDL_joysticks_initialized;
 static SDL_bool SDL_joysticks_quitting = SDL_FALSE;
@@ -122,10 +123,10 @@ static SDL_atomic_t SDL_next_joystick_instance_id SDL_GUARDED_BY(SDL_joystick_lo
 static int SDL_joystick_player_count SDL_GUARDED_BY(SDL_joystick_lock) = 0;
 static SDL_JoystickID *SDL_joystick_players SDL_GUARDED_BY(SDL_joystick_lock) = NULL;
 static SDL_bool SDL_joystick_allows_background_events = SDL_FALSE;
-static char joystick_magic;
+char SDL_joystick_magic;
 
 #define CHECK_JOYSTICK_MAGIC(joystick, retval)             \
-    if (!joystick || joystick->magic != &joystick_magic) { \
+    if (!joystick || joystick->magic != &SDL_joystick_magic) { \
         SDL_InvalidParamError("joystick");                 \
         SDL_UnlockJoysticks();                             \
         return retval;                                     \
@@ -143,23 +144,35 @@ SDL_bool SDL_JoysticksQuitting(void)
 
 void SDL_LockJoysticks(void)
 {
+    (void)SDL_AtomicIncRef(&SDL_joystick_lock_pending);
     SDL_LockMutex(SDL_joystick_lock);
+    (void)SDL_AtomicDecRef(&SDL_joystick_lock_pending);
 
     ++SDL_joysticks_locked;
 }
 
 void SDL_UnlockJoysticks(void)
 {
+    SDL_mutex *joystick_lock = SDL_joystick_lock;
+    SDL_bool last_unlock = SDL_FALSE;
+
     --SDL_joysticks_locked;
 
-    SDL_UnlockMutex(SDL_joystick_lock);
+    if (!SDL_joysticks_initialized) {
+        if (!SDL_joysticks_locked && SDL_AtomicGet(&SDL_joystick_lock_pending) == 0) {
+            /* NOTE: There's a small window here where another thread could lock the mutex */
+            SDL_joystick_lock = NULL;
+            last_unlock = SDL_TRUE;
+        }
+    }
+
+    SDL_UnlockMutex(joystick_lock);
 
     /* The last unlock after joysticks are uninitialized will cleanup the mutex,
      * allowing applications to lock joysticks while reinitializing the system.
      */
-    if (SDL_joystick_lock && !SDL_joysticks_locked && !SDL_joysticks_initialized) {
-        SDL_DestroyMutex(SDL_joystick_lock);
-        SDL_joystick_lock = NULL;
+    if (last_unlock) {
+        SDL_DestroyMutex(joystick_lock);
     }
 }
 
@@ -208,7 +221,7 @@ static int SDL_FindFreePlayerIndex()
 
     for (player_index = 0; player_index < SDL_joystick_player_count; ++player_index) {
         if (SDL_joystick_players[player_index] == -1) {
-            return player_index;
+            break;
         }
     }
     return player_index;
@@ -501,7 +514,7 @@ SDL_Joystick *SDL_JoystickOpen(int device_index)
         SDL_UnlockJoysticks();
         return NULL;
     }
-    joystick->magic = &joystick_magic;
+    joystick->magic = &SDL_joystick_magic;
     joystick->driver = driver;
     joystick->instance_id = instance_id;
     joystick->attached = SDL_TRUE;
@@ -710,7 +723,7 @@ int SDL_JoystickSetVirtualHat(SDL_Joystick *joystick, int hat, Uint8 value)
 SDL_bool SDL_PrivateJoystickValid(SDL_Joystick *joystick)
 {
     SDL_AssertJoysticksLocked();
-    return (joystick && joystick->magic == &joystick_magic);
+    return (joystick && joystick->magic == &SDL_joystick_magic);
 }
 
 SDL_bool SDL_PrivateJoystickGetAutoGamepadMapping(int device_index, SDL_GamepadMapping *out)
@@ -1893,7 +1906,7 @@ void SDL_GetJoystickGUIDInfo(SDL_JoystickGUID guid, Uint16 *vendor, Uint16 *prod
         if (crc16) {
             *crc16 = SDL_SwapLE16(guid16[1]);
         }
-    } else if (bus < ' ') {
+    } else if (bus < ' ' || bus == SDL_HARDWARE_BUS_VIRTUAL) {
         /* This GUID fits the unknown VID/PID form:
          * 16-bit bus
          * 16-bit CRC16 of the joystick name (can be zero)
@@ -2315,8 +2328,20 @@ SDL_bool SDL_IsJoystickXboxSeriesX(Uint16 vendor_id, Uint16 product_id)
             return SDL_TRUE;
         }
     }
+    if (vendor_id == USB_VENDOR_RAZER) {
+        if (product_id == USB_PRODUCT_RAZER_WOLVERINE_V2 ||
+            product_id == USB_PRODUCT_RAZER_WOLVERINE_V2_CHROMA) {
+            return SDL_TRUE;
+        }
+    }
     if (vendor_id == USB_VENDOR_THRUSTMASTER) {
         if (product_id == USB_PRODUCT_THRUSTMASTER_ESWAPX_PRO) {
+            return SDL_TRUE;
+        }
+    }
+    if (vendor_id == USB_VENDOR_TURTLE_BEACH) {
+        if (product_id == USB_PRODUCT_TURTLE_BEACH_SERIES_X_REACT_R ||
+            product_id == USB_PRODUCT_TURTLE_BEACH_SERIES_X_RECON) {
             return SDL_TRUE;
         }
     }
@@ -2441,7 +2466,7 @@ SDL_bool SDL_IsJoystickVirtual(SDL_JoystickGUID guid)
 static SDL_bool SDL_IsJoystickProductWheel(Uint32 vidpid)
 {
     static Uint32 wheel_joysticks[] = {
-        MAKE_VIDPID(0x0079, 0x1864), /* PXN V900 (PS3) */
+        MAKE_VIDPID(0x0079, 0x1864), /* DragonRise Inc. Wired Wheel (active mode) (also known as PXN V900 (PS3), Superdrive SV-750, or a Genesis Seaborg 400) */
         MAKE_VIDPID(0x046d, 0xc294), /* Logitech generic wheel */
         MAKE_VIDPID(0x046d, 0xc295), /* Logitech Momo Force */
         MAKE_VIDPID(0x046d, 0xc298), /* Logitech Driving Force Pro */
@@ -2467,6 +2492,7 @@ static SDL_bool SDL_IsJoystickProductWheel(Uint32 vidpid)
         MAKE_VIDPID(0x044f, 0xb65e), /* Thrustmaster T500RS */
         MAKE_VIDPID(0x044f, 0xb664), /* Thrustmaster TX (initial mode) */
         MAKE_VIDPID(0x044f, 0xb669), /* Thrustmaster TX (active mode) */
+        MAKE_VIDPID(0x11ff, 0x0511), /* DragonRise Inc. Wired Wheel (initial mode) (also known as PXN V900 (PS3), Superdrive SV-750, or a Genesis Seaborg 400) */
     };
     int i;
 

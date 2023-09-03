@@ -34,7 +34,8 @@
 /* Global keyboard information */
 
 #define KEYBOARD_HARDWARE    0x01
-#define KEYBOARD_AUTORELEASE 0x02
+#define KEYBOARD_VIRTUAL     0x02
+#define KEYBOARD_AUTORELEASE 0x04
 
 typedef struct SDL_Keyboard SDL_Keyboard;
 
@@ -47,6 +48,7 @@ struct SDL_Keyboard
     Uint8 keystate[SDL_NUM_SCANCODES];
     SDL_Keycode keymap[SDL_NUM_SCANCODES];
     SDL_bool autorelease_pending;
+    Uint32 hardware_timestamp;
 };
 
 static SDL_Keyboard SDL_keyboard;
@@ -640,8 +642,7 @@ static const char *SDL_scancode_names[SDL_NUM_SCANCODES] = {
 };
 
 /* Taken from SDL_iconv() */
-char *
-SDL_UCS4ToUTF8(Uint32 ch, char *dst)
+char *SDL_UCS4ToUTF8(Uint32 ch, char *dst)
 {
     Uint8 *p = (Uint8 *)dst;
     if (ch <= 0x7F) {
@@ -699,20 +700,41 @@ void SDL_SetKeymap(int start, const SDL_Keycode *keys, int length, SDL_bool send
     SDL_Keyboard *keyboard = &SDL_keyboard;
     SDL_Scancode scancode;
     SDL_Keycode normalized_keymap[SDL_NUM_SCANCODES];
+    SDL_bool is_azerty = SDL_FALSE;
 
     if (start < 0 || start + length > SDL_NUM_SCANCODES) {
         return;
     }
 
+    if (start > 0) {
+        SDL_memcpy(&normalized_keymap[0], &keyboard->keymap[0], sizeof(*keys) * start);
+    }
+
     SDL_memcpy(&normalized_keymap[start], keys, sizeof(*keys) * length);
 
-    /* The number key scancodes always map to the number key keycodes.
-     * On AZERTY layouts these technically are symbols, but users (and games)
-     * always think of them and view them in UI as number keys.
+    if (start + length < SDL_NUM_SCANCODES) {
+        int offset = start + length;
+        SDL_memcpy(&normalized_keymap[offset], &keyboard->keymap[offset], sizeof(*keys) * (SDL_NUM_SCANCODES - offset));
+    }
+
+    /* On AZERTY layouts the number keys are technically symbols, but users (and games)
+     * always think of them and view them in UI as number keys, so remap them here.
      */
-    normalized_keymap[SDL_SCANCODE_0] = SDLK_0;
-    for (scancode = SDL_SCANCODE_1; scancode <= SDL_SCANCODE_9; ++scancode) {
-        normalized_keymap[scancode] = SDLK_1 + (scancode - SDL_SCANCODE_1);
+    if (normalized_keymap[SDL_SCANCODE_0] < SDLK_0 || normalized_keymap[SDL_SCANCODE_0] > SDLK_9) {
+        is_azerty = SDL_TRUE;
+        for (scancode = SDL_SCANCODE_1; scancode <= SDL_SCANCODE_9; ++scancode) {
+            if (normalized_keymap[scancode] >= SDLK_0 && normalized_keymap[scancode] <= SDLK_9) {
+                /* There's a number on this row, it's not AZERTY */
+                is_azerty = SDL_FALSE;
+                break;
+            }
+        }
+    }
+    if (is_azerty) {
+        normalized_keymap[SDL_SCANCODE_0] = SDLK_0;
+        for (scancode = SDL_SCANCODE_1; scancode <= SDL_SCANCODE_9; ++scancode) {
+            normalized_keymap[scancode] = SDLK_1 + (scancode - SDL_SCANCODE_1);
+        }
     }
 
     /* If the mapping didn't really change, we're done here */
@@ -735,8 +757,7 @@ void SDL_SetScancodeName(SDL_Scancode scancode, const char *name)
     SDL_scancode_names[scancode] = name;
 }
 
-SDL_Window *
-SDL_GetKeyboardFocus(void)
+SDL_Window *SDL_GetKeyboardFocus(void)
 {
     SDL_Keyboard *keyboard = &SDL_keyboard;
 
@@ -846,7 +867,9 @@ static int SDL_SendKeyboardKeyInternal(Uint8 source, Uint8 state, SDL_Scancode s
         keycode = keyboard->keymap[scancode];
     }
 
-    if (source == KEYBOARD_AUTORELEASE) {
+    if (source == KEYBOARD_HARDWARE) {
+        keyboard->hardware_timestamp = SDL_GetTicks();
+    } else if (source == KEYBOARD_AUTORELEASE) {
         keyboard->autorelease_pending = SDL_TRUE;
     }
 
@@ -946,18 +969,23 @@ int SDL_SendKeyboardUnicodeKey(Uint32 ch)
 
     if (mod & KMOD_SHIFT) {
         /* If the character uses shift, press shift down */
-        SDL_SendKeyboardKey(SDL_PRESSED, SDL_SCANCODE_LSHIFT);
+        SDL_SendKeyboardKeyInternal(KEYBOARD_VIRTUAL, SDL_PRESSED, SDL_SCANCODE_LSHIFT, SDLK_UNKNOWN);
     }
 
     /* Send a keydown and keyup for the character */
-    SDL_SendKeyboardKey(SDL_PRESSED, code);
-    SDL_SendKeyboardKey(SDL_RELEASED, code);
+    SDL_SendKeyboardKeyInternal(KEYBOARD_VIRTUAL, SDL_PRESSED, code, SDLK_UNKNOWN);
+    SDL_SendKeyboardKeyInternal(KEYBOARD_VIRTUAL, SDL_RELEASED, code, SDLK_UNKNOWN);
 
     if (mod & KMOD_SHIFT) {
         /* If the character uses shift, release shift */
-        SDL_SendKeyboardKey(SDL_RELEASED, SDL_SCANCODE_LSHIFT);
+        SDL_SendKeyboardKeyInternal(KEYBOARD_VIRTUAL, SDL_RELEASED, SDL_SCANCODE_LSHIFT, SDLK_UNKNOWN);
     }
     return 0;
+}
+
+int SDL_SendVirtualKeyboardKey(Uint8 state, SDL_Scancode scancode)
+{
+    return SDL_SendKeyboardKeyInternal(KEYBOARD_VIRTUAL, state, scancode, SDLK_UNKNOWN);
 }
 
 int SDL_SendKeyboardKey(Uint8 state, SDL_Scancode scancode)
@@ -988,20 +1016,27 @@ void SDL_ReleaseAutoReleaseKeys(void)
         }
         keyboard->autorelease_pending = SDL_FALSE;
     }
+
+    if (keyboard->hardware_timestamp) {
+        /* Keep hardware keyboard "active" for 250 ms */
+        if (SDL_TICKS_PASSED(SDL_GetTicks(), keyboard->hardware_timestamp + 250)) {
+            keyboard->hardware_timestamp = 0;
+        }
+    }
 }
 
-SDL_bool
-SDL_HardwareKeyboardKeyPressed(void)
+SDL_bool SDL_HardwareKeyboardKeyPressed(void)
 {
     SDL_Keyboard *keyboard = &SDL_keyboard;
     SDL_Scancode scancode;
 
     for (scancode = SDL_SCANCODE_UNKNOWN; scancode < SDL_NUM_SCANCODES; ++scancode) {
-        if ((keyboard->keysource[scancode] & KEYBOARD_HARDWARE) != 0) {
+        if (keyboard->keysource[scancode] & KEYBOARD_HARDWARE) {
             return SDL_TRUE;
         }
     }
-    return SDL_FALSE;
+
+    return keyboard->hardware_timestamp ? SDL_TRUE : SDL_FALSE;
 }
 
 int SDL_SendKeyboardText(const char *text)
@@ -1068,8 +1103,7 @@ void SDL_KeyboardQuit(void)
 {
 }
 
-const Uint8 *
-SDL_GetKeyboardState(int *numkeys)
+const Uint8 *SDL_GetKeyboardState(int *numkeys)
 {
     SDL_Keyboard *keyboard = &SDL_keyboard;
 
@@ -1079,8 +1113,7 @@ SDL_GetKeyboardState(int *numkeys)
     return keyboard->keystate;
 }
 
-SDL_Keymod
-SDL_GetModState(void)
+SDL_Keymod SDL_GetModState(void)
 {
     SDL_Keyboard *keyboard = &SDL_keyboard;
 
@@ -1105,8 +1138,7 @@ void SDL_ToggleModState(const SDL_Keymod modstate, const SDL_bool toggle)
     }
 }
 
-SDL_Keycode
-SDL_GetKeyFromScancode(SDL_Scancode scancode)
+SDL_Keycode SDL_GetKeyFromScancode(SDL_Scancode scancode)
 {
     SDL_Keyboard *keyboard = &SDL_keyboard;
 
@@ -1118,8 +1150,7 @@ SDL_GetKeyFromScancode(SDL_Scancode scancode)
     return keyboard->keymap[scancode];
 }
 
-SDL_Keycode
-SDL_GetDefaultKeyFromScancode(SDL_Scancode scancode)
+SDL_Keycode SDL_GetDefaultKeyFromScancode(SDL_Scancode scancode)
 {
     if (((int)scancode) < SDL_SCANCODE_UNKNOWN || scancode >= SDL_NUM_SCANCODES) {
         SDL_InvalidParamError("scancode");
@@ -1129,8 +1160,7 @@ SDL_GetDefaultKeyFromScancode(SDL_Scancode scancode)
     return SDL_default_keymap[scancode];
 }
 
-SDL_Scancode
-SDL_GetScancodeFromKey(SDL_Keycode key)
+SDL_Scancode SDL_GetScancodeFromKey(SDL_Keycode key)
 {
     SDL_Keyboard *keyboard = &SDL_keyboard;
     SDL_Scancode scancode;
@@ -1144,8 +1174,7 @@ SDL_GetScancodeFromKey(SDL_Keycode key)
     return SDL_SCANCODE_UNKNOWN;
 }
 
-const char *
-SDL_GetScancodeName(SDL_Scancode scancode)
+const char *SDL_GetScancodeName(SDL_Scancode scancode)
 {
     const char *name;
     if (((int)scancode) < SDL_SCANCODE_UNKNOWN || scancode >= SDL_NUM_SCANCODES) {
@@ -1183,8 +1212,7 @@ SDL_Scancode SDL_GetScancodeFromName(const char *name)
     return SDL_SCANCODE_UNKNOWN;
 }
 
-const char *
-SDL_GetKeyName(SDL_Keycode key)
+const char *SDL_GetKeyName(SDL_Keycode key)
 {
     static char name[8];
     char *end;
@@ -1221,8 +1249,7 @@ SDL_GetKeyName(SDL_Keycode key)
     }
 }
 
-SDL_Keycode
-SDL_GetKeyFromName(const char *name)
+SDL_Keycode SDL_GetKeyFromName(const char *name)
 {
     SDL_Keycode key;
 

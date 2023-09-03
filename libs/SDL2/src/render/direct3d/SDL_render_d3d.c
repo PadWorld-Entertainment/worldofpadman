@@ -1108,7 +1108,7 @@ static int D3D_RunCommandQueue(SDL_Renderer *renderer, SDL_RenderCommand *cmd, v
         return -1;
     }
 
-    if (vertices) {
+    if (vertsize > 0) {
         /* upload the new VBO data for this set of commands. */
         vbo = data->vertexBuffers[vboidx];
         if (data->vertexBufferSize[vboidx] < vertsize) {
@@ -1546,8 +1546,7 @@ static int D3D_SetVSync(SDL_Renderer *renderer, const int vsync)
     return 0;
 }
 
-SDL_Renderer *
-D3D_CreateRenderer(SDL_Window *window, Uint32 flags)
+SDL_Renderer *D3D_CreateRenderer(SDL_Window *window, Uint32 flags)
 {
     SDL_Renderer *renderer;
     D3D_RenderData *data;
@@ -1736,8 +1735,7 @@ SDL_RenderDriver D3D_RenderDriver = {
 
 #if defined(__WIN32__) || defined(__WINGDK__)
 /* This function needs to always exist on Windows, for the Dynamic API. */
-IDirect3DDevice9 *
-SDL_RenderGetD3D9Device(SDL_Renderer *renderer)
+IDirect3DDevice9 *SDL_RenderGetD3D9Device(SDL_Renderer *renderer)
 {
     IDirect3DDevice9 *device = NULL;
 

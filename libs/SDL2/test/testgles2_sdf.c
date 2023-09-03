@@ -10,15 +10,13 @@
   freely.
 */
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
 #endif
 
 #include "SDL_test_common.h"
+#include "testutils.h"
 
 #if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__EMSCRIPTEN__) || defined(__NACL__) \
     || defined(__WINDOWS__) || defined(__LINUX__)
@@ -31,7 +29,7 @@
 
 typedef struct GLES2_Context
 {
-#define SDL_PROC(ret, func, params) ret(APIENTRY *func) params;
+#define SDL_PROC(ret, func, params) ret (APIENTRY *func) params;
 #include "../src/render/opengles2/SDL_gles2funcs.h"
 #undef SDL_PROC
 } GLES2_Context;
@@ -56,7 +54,7 @@ typedef enum
 } GLES2_Uniform;
 
 
-GLuint g_uniform_locations[16];
+GLint g_uniform_locations[16];
 
 static SDLTest_CommonState *state;
 static SDL_GLContext *context = NULL;
@@ -127,8 +125,8 @@ quit(int rc)
  * source: Passed-in shader source code.
  * shader_type: Passed to GL, e.g. GL_VERTEX_SHADER.
  */
-void 
-process_shader(GLuint *shader, const char * source, GLint shader_type)
+void
+process_shader(GLenum *shader, const char *source, GLenum shader_type)
 {
     GLint status = GL_FALSE;
     const char *shaders[1] = { NULL };
@@ -151,9 +149,9 @@ process_shader(GLuint *shader, const char * source, GLint shader_type)
 
     /* Dump debug info (source and log) if compilation failed. */
     if (status != GL_TRUE) {
-        ctx.glGetProgramInfoLog(*shader, sizeof(buffer), &length, &buffer[0]);
+        ctx.glGetShaderInfoLog(*shader, sizeof(buffer), &length, &buffer[0]);
         buffer[length] = '\0';
-        SDL_Log("Shader compilation failed: %s", buffer);fflush(stderr);
+        SDL_Log("Shader compilation failed: %s", buffer);
         quit(-1);
     }
 }
@@ -163,7 +161,7 @@ process_shader(GLuint *shader, const char * source, GLint shader_type)
  * To get correct rotation for most cases when a_angle is disabled cosine
  * value is decremented by 1.0 to get proper output with 0.0 which is default value
  */
-static const Uint8 GLES2_VertexSrc_Default_[] = " \
+static const char GLES2_VertexSrc_Default_[] = " \
     uniform mat4 u_projection; \
     attribute vec2 a_position; \
     attribute vec2 a_texCoord; \
@@ -183,7 +181,7 @@ static const Uint8 GLES2_VertexSrc_Default_[] = " \
     } \
 ";
 
-static const Uint8 GLES2_FragmentSrc_TextureABGRSrc_[] = " \
+static const char GLES2_FragmentSrc_TextureABGRSrc_[] = " \
     precision mediump float; \
     uniform sampler2D u_texture; \
     uniform vec4 u_color; \
@@ -197,7 +195,7 @@ static const Uint8 GLES2_FragmentSrc_TextureABGRSrc_[] = " \
 ";
 
 /* RGB to ABGR conversion */
-static const Uint8 GLES2_FragmentSrc_TextureABGRSrc_SDF[] = " \
+static const char GLES2_FragmentSrc_TextureABGRSrc_SDF[] = " \
     #extension GL_OES_standard_derivatives : enable\n\
     \
     precision mediump float; \
@@ -246,7 +244,8 @@ static float matrix_mvp[4][4];
 
 typedef struct shader_data
 {
-    GLuint shader_program, shader_frag, shader_vert;
+    GLint shader_program;
+    GLenum shader_frag, shader_vert;
 
     GLint attr_position;
     GLint attr_color, attr_mvp;
@@ -254,7 +253,7 @@ typedef struct shader_data
 } shader_data;
 
 static void
-Render(unsigned int width, unsigned int height, shader_data* data)
+Render(int width, int height, shader_data* data)
 {
     float *verts = g_verts;
     ctx.glViewport(0, 0, 640, 480);
@@ -273,7 +272,7 @@ Render(unsigned int width, unsigned int height, shader_data* data)
 
 void renderCopy_angle(float degree_angle)
 {
-    const float radian_angle = (float)(3.141592 * degree_angle) / 180.0;
+    const float radian_angle = (float)(3.141592 * degree_angle) / 180.0f;
     const GLfloat s = (GLfloat) SDL_sin(radian_angle);
     const GLfloat c = (GLfloat) SDL_cos(radian_angle) - 1.0f;
     GLfloat *verts = g_verts + 16;
@@ -293,15 +292,15 @@ void renderCopy_position(SDL_Rect *srcrect, SDL_Rect *dstrect)
     GLfloat minu, maxu, minv, maxv;
     GLfloat *verts = g_verts;
 
-    minx = dstrect->x;
-    miny = dstrect->y;
-    maxx = dstrect->x + dstrect->w;
-    maxy = dstrect->y + dstrect->h;
+    minx = (GLfloat)dstrect->x;
+    miny = (GLfloat)dstrect->y;
+    maxx = (GLfloat)(dstrect->x + dstrect->w);
+    maxy = (GLfloat)(dstrect->y + dstrect->h);
 
-    minu = (GLfloat) srcrect->x / g_surf_sdf->w;
-    maxu = (GLfloat) (srcrect->x + srcrect->w) / g_surf_sdf->w;
-    minv = (GLfloat) srcrect->y / g_surf_sdf->h;
-    maxv = (GLfloat) (srcrect->y + srcrect->h) / g_surf_sdf->h;
+    minu = (GLfloat) srcrect->x / (GLfloat)g_surf_sdf->w;
+    maxu = (GLfloat) (srcrect->x + srcrect->w) / (GLfloat)g_surf_sdf->w;
+    minv = (GLfloat) srcrect->y / (GLfloat)g_surf_sdf->h;
+    maxv = (GLfloat) (srcrect->y + srcrect->h) / (GLfloat)g_surf_sdf->h;
 
     *(verts++) = minx;
     *(verts++) = miny;
@@ -340,28 +339,8 @@ void loop()
         {
             const int sym = event.key.keysym.sym;
 
-                if (sym == SDLK_TAB) {
-                    SDL_Log("Tab");
-
-
-                }
-
-
-                if (sym == SDLK_LEFT) {
-                    g_val -= 0.05;
-                }
-                if (sym == SDLK_RIGHT) {
-                    g_val += 0.05;
-                }
-                if (sym == SDLK_UP) {
-                    g_angle -= 1;
-                }
-                if (sym == SDLK_DOWN) {
-                        g_angle += 1;
-                }
- 
-
-                break;
+            if (sym == SDLK_TAB) {
+                SDL_Log("Tab");
             }
 
             if (sym == SDLK_LEFT) {
@@ -411,19 +390,9 @@ void loop()
     matrix_mvp[3][0] = -1.0f;
     matrix_mvp[3][3] = 1.0f;
 
-    matrix_mvp[0][0] = 2.0f / 640.0;
-    matrix_mvp[1][1] = -2.0f / 480.0;
+    matrix_mvp[0][0] = 2.0f / 640.0f;
+    matrix_mvp[1][1] = -2.0f / 480.0f;
     matrix_mvp[3][1] = 1.0f;
-    
-    if (0) {
-        float *f = (float *) matrix_mvp;
-        SDL_Log("-----------------------------------");
-        SDL_Log("[ %f, %f, %f, %f ]", *f++, *f++, *f++, *f++);
-        SDL_Log("[ %f, %f, %f, %f ]", *f++, *f++, *f++, *f++);
-        SDL_Log("[ %f, %f, %f, %f ]", *f++, *f++, *f++, *f++);
-        SDL_Log("[ %f, %f, %f, %f ]", *f++, *f++, *f++, *f++);
-        SDL_Log("-----------------------------------");
-    }
 
     renderCopy_angle(g_angle);
 
@@ -434,7 +403,7 @@ void loop()
         SDL_GL_GetDrawableSize(state->windows[0], &w, &h);
 
         rs.x = 0; rs.y = 0; rs.w = g_surf_sdf->w; rs.h = g_surf_sdf->h;
-        rd.w = g_surf_sdf->w * g_val; rd.h = g_surf_sdf->h * g_val;
+        rd.w = (int)((float)g_surf_sdf->w * g_val); rd.h = (int)((float)g_surf_sdf->h * g_val);
         rd.x = (w - rd.w) / 2; rd.y = (h - rd.h) / 2;
         renderCopy_position(&rs, &rd);
     }
@@ -803,9 +772,9 @@ int main(int argc, char *argv[])
         SDL_Log("%2.2f frames per second\n",
                 ((double)frames * 1000) / (now - then));
     }
-#if !defined(__ANDROID__) && !defined(__NACL__)  
+#if !defined(__ANDROID__) && !defined(__NACL__)
     quit(0);
-#endif    
+#endif
     return 0;
 }
 

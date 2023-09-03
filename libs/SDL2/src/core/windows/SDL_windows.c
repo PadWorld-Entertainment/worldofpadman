@@ -122,8 +122,7 @@ void WIN_CoUninitialize(void)
 }
 
 #ifndef __WINRT__
-void *
-WIN_LoadComBaseFunction(const char *name)
+void *WIN_LoadComBaseFunction(const char *name)
 {
     static SDL_bool s_bLoaded;
     static HMODULE s_hComBase;
@@ -248,8 +247,7 @@ has the same problem.)
 
 WASAPI doesn't need this. This is just for DirectSound/WinMM.
 */
-char *
-WIN_LookupAudioDeviceName(const WCHAR *name, const GUID *guid)
+char *WIN_LookupAudioDeviceName(const WCHAR *name, const GUID *guid)
 {
 #if defined(__WINRT__) || defined(__XBOXONE__) || defined(__XBOXSERIES__)
     return WIN_StringToUTF8(name); /* No registry access on WinRT/UWP and Xbox, go with what we've got. */
@@ -268,7 +266,7 @@ WIN_LookupAudioDeviceName(const WCHAR *name, const GUID *guid)
     }
 
     ptr = (const unsigned char *)guid;
-    (void)SDL_snprintf(keystr, sizeof keystr,
+    (void)SDL_snprintf(keystr, sizeof(keystr),
                        "System\\CurrentControlSet\\Control\\MediaCategories\\{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
                        ptr[3], ptr[2], ptr[1], ptr[0], ptr[5], ptr[4], ptr[7], ptr[6],
                        ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
@@ -333,6 +331,11 @@ void WIN_RectToRECT(const SDL_Rect *sdlrect, RECT *winrect)
     winrect->bottom = sdlrect->y + sdlrect->h - 1;
 }
 
+BOOL WIN_IsRectEmpty(const RECT *rect)
+{
+    /* Calculating this manually because UWP and Xbox do not support Win32 IsRectEmpty. */
+    return (rect->right <= rect->left) || (rect->bottom <= rect->top);
+}
 #endif /* defined(__WIN32__) || defined(__WINRT__) || defined(__GDK__) */
 
 /*
@@ -365,8 +368,7 @@ int SDL_Direct3D9GetAdapterIndex(int displayIndex)
     return 0; /* D3DADAPTER_DEFAULT */
 }
 
-SDL_bool
-SDL_DXGIGetOutputInfo(int displayIndex, int *adapterIndex, int *outputIndex)
+SDL_bool SDL_DXGIGetOutputInfo(int displayIndex, int *adapterIndex, int *outputIndex)
 {
     (void)displayIndex;
     if (adapterIndex) {

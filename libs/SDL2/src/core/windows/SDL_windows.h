@@ -76,6 +76,19 @@
 #define WINVER       _WIN32_WINNT
 #endif
 
+/* See https://github.com/libsdl-org/SDL/pull/7607  */
+/* force_align_arg_pointer attribute requires gcc >= 4.2.x.  */
+#if defined(__clang__)
+#define HAVE_FORCE_ALIGN_ARG_POINTER
+#elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#define HAVE_FORCE_ALIGN_ARG_POINTER
+#endif
+#if defined(__GNUC__) && defined(__i386__) && defined(HAVE_FORCE_ALIGN_ARG_POINTER)
+#define MINGW32_FORCEALIGN __attribute__((force_align_arg_pointer))
+#else
+#define MINGW32_FORCEALIGN
+#endif
+
 #include <windows.h>
 #include <basetyps.h> /* for REFIID with broken mingw.org headers */
 
@@ -152,6 +165,9 @@ extern BOOL WIN_IsEqualIID(REFIID a, REFIID b);
 /* Convert between SDL_rect and RECT */
 extern void WIN_RECTToRect(const RECT *winrect, SDL_Rect *sdlrect);
 extern void WIN_RectToRECT(const SDL_Rect *sdlrect, RECT *winrect);
+
+/* Returns SDL_TRUE if the rect is empty */
+extern BOOL WIN_IsRectEmpty(const RECT *rect);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

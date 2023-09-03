@@ -1711,7 +1711,7 @@ static int WaveCheckFormat(WaveFile *file, size_t datalength)
 
         /* All supported formats must have a proper block size. */
         if (format->blockalign == 0) {
-            return SDL_SetError("Invalid block alignment");
+            format->blockalign = 1;  /* force it to 1 if it was unset. */
         }
 
         /* If the fact chunk is valid and the appropriate hint is set, the
@@ -2077,8 +2077,7 @@ static int WaveLoad(SDL_RWops *src, WaveFile *file, SDL_AudioSpec *spec, Uint8 *
     return 0;
 }
 
-SDL_AudioSpec *
-SDL_LoadWAV_RW(SDL_RWops *src, int freesrc, SDL_AudioSpec *spec, Uint8 **audio_buf, Uint32 *audio_len)
+SDL_AudioSpec *SDL_LoadWAV_RW(SDL_RWops *src, int freesrc, SDL_AudioSpec *spec, Uint8 **audio_buf, Uint32 *audio_len)
 {
     int result;
     WaveFile file;

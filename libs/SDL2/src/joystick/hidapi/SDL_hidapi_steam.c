@@ -35,11 +35,9 @@
 
 #include <stdint.h>
 
-typedef enum
-{
-    false,
-    true
-} bool;
+#define bool SDL_bool
+#define true SDL_TRUE
+#define false SDL_FALSE
 
 typedef uint32_t uint32;
 typedef uint64_t uint64;
@@ -252,7 +250,7 @@ static int WriteSegmentToSteamControllerPacketAssembler(SteamControllerPacketAss
 
         DPRINTF("GOT PACKET HEADER = 0x%x\n", uSegmentHeader);
 
-        if ((uSegmentHeader & REPORT_SEGMENT_DATA_FLAG) == 0) {
+        if (!(uSegmentHeader & REPORT_SEGMENT_DATA_FLAG)) {
             // We get empty segments, just ignore them
             return 0;
         }

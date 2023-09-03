@@ -91,7 +91,7 @@ static int SW_GetOutputSize(SDL_Renderer *renderer, int *w, int *h)
     }
 
     if (renderer->window) {
-        SDL_GetWindowSize(renderer->window, w, h);
+        SDL_GetWindowSizeInPixels(renderer->window, w, h);
         return 0;
     }
 
@@ -986,8 +986,7 @@ static void SW_DestroyRenderer(SDL_Renderer *renderer)
     SDL_free(renderer);
 }
 
-SDL_Renderer *
-SW_CreateRendererForSurface(SDL_Surface *surface)
+SDL_Renderer *SW_CreateRendererForSurface(SDL_Surface *surface)
 {
     SDL_Renderer *renderer;
     SW_RenderData *data;

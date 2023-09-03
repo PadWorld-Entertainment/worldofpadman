@@ -43,8 +43,7 @@
 
 /* work around compiler warning on older GCCs. */
 #if (defined(__GNUC__) && (__GNUC__ <= 2))
-static size_t
-strftime_gcc2_workaround(char *s, size_t max, const char *fmt, const struct tm *tm)
+static size_t strftime_gcc2_workaround(char *s, size_t max, const char *fmt, const struct tm *tm)
 {
     return strftime(s, max, fmt, tm);
 }
@@ -76,7 +75,7 @@ SDLTest_TimestampToString(const time_t timestamp)
     SDL_memset(buffer, 0, sizeof(buffer));
     copy = timestamp;
     local = localtime(&copy);
-    result = strftime(buffer, sizeof buffer, "%x %X", local);
+    result = strftime(buffer, sizeof(buffer), "%x %X", local);
     if (result == 0) {
         return "";
     }

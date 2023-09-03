@@ -68,13 +68,6 @@ int SDL_XINPUT_JoystickInit(void)
 {
     s_bXInputEnabled = SDL_GetHintBoolean(SDL_HINT_XINPUT_ENABLED, SDL_TRUE);
 
-#ifdef SDL_JOYSTICK_RAWINPUT
-    if (RAWINPUT_IsEnabled()) {
-        /* The raw input driver handles more than 4 controllers, so prefer that when available */
-        s_bXInputEnabled = SDL_FALSE;
-    }
-#endif
-
     if (s_bXInputEnabled && WIN_LoadXInputDLL() < 0) {
         s_bXInputEnabled = SDL_FALSE; /* oh well. */
     }
@@ -86,37 +79,37 @@ static const char *GetXInputName(const Uint8 userid, BYTE SubType)
     static char name[32];
 
     if (SDL_XInputUseOldJoystickMapping()) {
-        (void)SDL_snprintf(name, sizeof name, "X360 Controller #%u", 1 + userid);
+        (void)SDL_snprintf(name, sizeof(name), "X360 Controller #%u", 1 + userid);
     } else {
         switch (SubType) {
         case XINPUT_DEVSUBTYPE_GAMEPAD:
-            (void)SDL_snprintf(name, sizeof name, "XInput Controller #%u", 1 + userid);
+            (void)SDL_snprintf(name, sizeof(name), "XInput Controller #%u", 1 + userid);
             break;
         case XINPUT_DEVSUBTYPE_WHEEL:
-            (void)SDL_snprintf(name, sizeof name, "XInput Wheel #%u", 1 + userid);
+            (void)SDL_snprintf(name, sizeof(name), "XInput Wheel #%u", 1 + userid);
             break;
         case XINPUT_DEVSUBTYPE_ARCADE_STICK:
-            (void)SDL_snprintf(name, sizeof name, "XInput ArcadeStick #%u", 1 + userid);
+            (void)SDL_snprintf(name, sizeof(name), "XInput ArcadeStick #%u", 1 + userid);
             break;
         case XINPUT_DEVSUBTYPE_FLIGHT_STICK:
-            (void)SDL_snprintf(name, sizeof name, "XInput FlightStick #%u", 1 + userid);
+            (void)SDL_snprintf(name, sizeof(name), "XInput FlightStick #%u", 1 + userid);
             break;
         case XINPUT_DEVSUBTYPE_DANCE_PAD:
-            (void)SDL_snprintf(name, sizeof name, "XInput DancePad #%u", 1 + userid);
+            (void)SDL_snprintf(name, sizeof(name), "XInput DancePad #%u", 1 + userid);
             break;
         case XINPUT_DEVSUBTYPE_GUITAR:
         case XINPUT_DEVSUBTYPE_GUITAR_ALTERNATE:
         case XINPUT_DEVSUBTYPE_GUITAR_BASS:
-            (void)SDL_snprintf(name, sizeof name, "XInput Guitar #%u", 1 + userid);
+            (void)SDL_snprintf(name, sizeof(name), "XInput Guitar #%u", 1 + userid);
             break;
         case XINPUT_DEVSUBTYPE_DRUM_KIT:
-            (void)SDL_snprintf(name, sizeof name, "XInput DrumKit #%u", 1 + userid);
+            (void)SDL_snprintf(name, sizeof(name), "XInput DrumKit #%u", 1 + userid);
             break;
         case XINPUT_DEVSUBTYPE_ARCADE_PAD:
-            (void)SDL_snprintf(name, sizeof name, "XInput ArcadePad #%u", 1 + userid);
+            (void)SDL_snprintf(name, sizeof(name), "XInput ArcadePad #%u", 1 + userid);
             break;
         default:
-            (void)SDL_snprintf(name, sizeof name, "XInput Device #%u", 1 + userid);
+            (void)SDL_snprintf(name, sizeof(name), "XInput Device #%u", 1 + userid);
             break;
         }
     }
@@ -242,6 +235,20 @@ static void AddXInputDevice(Uint8 userid, BYTE SubType, JoyStick_DeviceData **pC
     JoyStick_DeviceData *pPrevJoystick = NULL;
     JoyStick_DeviceData *pNewJoystick = *pContext;
 
+#ifdef SDL_JOYSTICK_RAWINPUT
+    if (RAWINPUT_IsEnabled()) {
+        /* The raw input driver handles more than 4 controllers, so prefer that when available */
+        /* We do this check here rather than at the top of SDL_XINPUT_JoystickDetect() because
+           we need to check XInput state before RAWINPUT gets a hold of the device, otherwise
+           when a controller is connected via the wireless adapter, it will shut down at the
+           first subsequent XInput call. This seems like a driver stack bug?
+
+           Reference: https://github.com/libsdl-org/SDL/issues/3468
+         */
+        return;
+    }
+#endif
+
     if (SDL_XInputUseOldJoystickMapping() && SubType != XINPUT_DEVSUBTYPE_GAMEPAD) {
         return;
     }
@@ -279,7 +286,7 @@ static void AddXInputDevice(Uint8 userid, BYTE SubType, JoyStick_DeviceData **pC
         SDL_free(pNewJoystick);
         return; /* better luck next time? */
     }
-    (void)SDL_snprintf(pNewJoystick->path, sizeof pNewJoystick->path, "XInput#%d", userid);
+    (void)SDL_snprintf(pNewJoystick->path, sizeof(pNewJoystick->path), "XInput#%d", userid);
     if (!SDL_XInputUseOldJoystickMapping()) {
         GuessXInputDevice(userid, &vendor, &product, &version);
 
@@ -497,8 +504,7 @@ int SDL_XINPUT_JoystickRumble(SDL_Joystick *joystick, Uint16 low_frequency_rumbl
     return 0;
 }
 
-Uint32
-SDL_XINPUT_JoystickGetCapabilities(SDL_Joystick *joystick)
+Uint32 SDL_XINPUT_JoystickGetCapabilities(SDL_Joystick *joystick)
 {
     return SDL_JOYCAP_RUMBLE;
 }
@@ -583,8 +589,7 @@ int SDL_XINPUT_JoystickRumble(SDL_Joystick *joystick, Uint16 low_frequency_rumbl
     return SDL_Unsupported();
 }
 
-Uint32
-SDL_XINPUT_JoystickGetCapabilities(SDL_Joystick *joystick)
+Uint32 SDL_XINPUT_JoystickGetCapabilities(SDL_Joystick *joystick)
 {
     return 0;
 }

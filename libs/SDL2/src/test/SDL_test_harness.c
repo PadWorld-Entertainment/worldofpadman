@@ -50,8 +50,7 @@ static Uint32 SDLTest_TestCaseTimeout = 3600;
  *
  * \returns The generated seed string
  */
-char *
-SDLTest_GenerateRunSeed(const int length)
+char *SDLTest_GenerateRunSeed(const int length)
 {
     char *seed = NULL;
     SDLTest_RandomContext randomContext;
@@ -130,8 +129,8 @@ static Uint64 SDLTest_GenerateExecKey(const char *runSeed, const char *suiteName
     }
 
     /* Convert iteration number into a string */
-    SDL_memset(iterationString, 0, sizeof iterationString);
-    (void)SDL_snprintf(iterationString, sizeof iterationString - 1, "%d", iteration);
+    SDL_memset(iterationString, 0, sizeof(iterationString));
+    (void)SDL_snprintf(iterationString, sizeof(iterationString) - 1, "%d", iteration);
 
     /* Combine the parameters into single string */
     runSeedLength = SDL_strlen(runSeed);

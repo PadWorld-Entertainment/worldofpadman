@@ -242,8 +242,7 @@ SDL_bool SDL_EGL_HasExtension(_THIS, SDL_EGL_ExtensionType type, const char *ext
     return SDL_FALSE;
 }
 
-void *
-SDL_EGL_GetProcAddress(_THIS, const char *proc)
+void *SDL_EGL_GetProcAddress(_THIS, const char *proc)
 {
     void *retval = NULL;
     if (_this->egl_data != NULL) {
@@ -934,8 +933,7 @@ int SDL_EGL_ChooseConfig(_THIS)
     return SDL_EGL_SetError("Couldn't find matching EGL config", "eglChooseConfig");
 }
 
-SDL_GLContext
-SDL_EGL_CreateContext(_THIS, EGLSurface egl_surface)
+SDL_GLContext SDL_EGL_CreateContext(_THIS, EGLSurface egl_surface)
 {
     /* max 14 values plus terminator. */
     EGLint attribs[15];
@@ -957,7 +955,7 @@ SDL_EGL_CreateContext(_THIS, EGLSurface egl_surface)
     }
 
 #if SDL_VIDEO_DRIVER_ANDROID
-    if ((_this->gl_config.flags & SDL_GL_CONTEXT_DEBUG_FLAG) != 0) {
+    if (_this->gl_config.flags & SDL_GL_CONTEXT_DEBUG_FLAG) {
         /* If SDL_GL_CONTEXT_DEBUG_FLAG is set but EGL_KHR_debug unsupported, unset.
          * This is required because some Android devices like to complain about it
          * by "silently" failing, logging a hint which could be easily overlooked:
@@ -1179,8 +1177,7 @@ void SDL_EGL_DeleteContext(_THIS, SDL_GLContext context)
     }
 }
 
-EGLSurface *
-SDL_EGL_CreateSurface(_THIS, NativeWindowType nw)
+EGLSurface *SDL_EGL_CreateSurface(_THIS, NativeWindowType nw)
 {
 #if SDL_VIDEO_DRIVER_ANDROID
     EGLint format_wanted;

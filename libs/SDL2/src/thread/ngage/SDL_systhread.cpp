@@ -65,7 +65,7 @@ int SDL_SYS_CreateThread(SDL_Thread *thread)
 
     TInt status = CreateUnique(NewThread, &rthread, thread);
     if (status != KErrNone) {
-        delete (((RThread *)(thread->handle)));
+        delete (RThread *)thread->handle;
         thread->handle = NULL;
         return SDL_SetError("Not enough resources to create thread");
     }
@@ -80,8 +80,7 @@ void SDL_SYS_SetupThread(const char *name)
     return;
 }
 
-SDL_threadID
-SDL_ThreadID(void)
+SDL_threadID SDL_ThreadID(void)
 {
     RThread current;
     TThreadId id = current.Id();

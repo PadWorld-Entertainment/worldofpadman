@@ -200,8 +200,7 @@ static const GUID SDL_IID_ID3D11DeviceContext1 = { 0xbb2c6faa, 0xb5fb, 0x4082, {
 #pragma GCC diagnostic pop
 #endif
 
-Uint32
-D3D11_DXGIFormatToSDLPixelFormat(DXGI_FORMAT dxgiFormat)
+Uint32 D3D11_DXGIFormatToSDLPixelFormat(DXGI_FORMAT dxgiFormat)
 {
     switch (dxgiFormat) {
     case DXGI_FORMAT_B8G8R8A8_UNORM:
@@ -2144,7 +2143,7 @@ static int D3D11_RenderReadPixels(SDL_Renderer *renderer, const SDL_Rect *rect,
     D3D11_BOX srcBox;
     D3D11_MAPPED_SUBRESOURCE textureMemory;
 
-    ID3D11DeviceContext_OMGetRenderTargets(data->d3dContext, 1, &renderTargetView, NULL);
+    renderTargetView = D3D11_GetCurrentRenderTargetView(renderer);
     if (renderTargetView == NULL) {
         SDL_SetError("%s, ID3D11DeviceContext::OMGetRenderTargets failed", __FUNCTION__);
         goto done;
@@ -2300,8 +2299,7 @@ static int D3D11_SetVSync(SDL_Renderer *renderer, const int vsync)
 }
 #endif
 
-SDL_Renderer *
-D3D11_CreateRenderer(SDL_Window *window, Uint32 flags)
+SDL_Renderer *D3D11_CreateRenderer(SDL_Window *window, Uint32 flags)
 {
     SDL_Renderer *renderer;
     D3D11_RenderData *data;
@@ -2364,7 +2362,7 @@ D3D11_CreateRenderer(SDL_Window *window, Uint32 flags)
      */
     renderer->info.flags |= SDL_RENDERER_PRESENTVSYNC;
 #else
-    if ((flags & SDL_RENDERER_PRESENTVSYNC)) {
+    if (flags & SDL_RENDERER_PRESENTVSYNC) {
         renderer->info.flags |= SDL_RENDERER_PRESENTVSYNC;
     }
     renderer->SetVSync = D3D11_SetVSync;
@@ -2413,8 +2411,7 @@ SDL_RenderDriver D3D11_RenderDriver = {
 
 #if defined(__WIN32__) || defined(__WINGDK__)
 /* This function needs to always exist on Windows, for the Dynamic API. */
-ID3D11Device *
-SDL_RenderGetD3D11Device(SDL_Renderer *renderer)
+ID3D11Device *SDL_RenderGetD3D11Device(SDL_Renderer *renderer)
 {
     ID3D11Device *device = NULL;
 
