@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "qasm-inline.h"
 #include "../qcommon/q_shared.h"
 
-#if idx64
+#if defined (__i386__) || defined(__x86_64__)
 
 /*
  * GNU inline asm version of qsnapvector
@@ -47,7 +47,6 @@ void qsnapvectorsse(vec3_t vec) {
 					 : "r"(ssemask), "r"(vec)
 					 : "memory", "%xmm0", "%xmm1", "%xmm2");
 }
-#elif id386
 #define QROUNDX87(src)                                                                                                 \
 	"flds " src "\n"                                                                                                   \
 	"fistpl " src "\n"                                                                                                 \
