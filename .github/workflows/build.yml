@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         platform:
+        - { name: Ubuntu32,  os: ubuntu-20.04, env: "CFLAGS=-m32" }
         - { name: Ubuntu,    os: ubuntu-20.04 }
         - { name: Windows32, os: windows-2019, param: "-A Win32" }
         - { name: Windows,   os: windows-2019 }
@@ -27,7 +28,7 @@ jobs:
         if: ${{ runner.os == 'Linux' }}
         run: |
           sudo apt-get update
-          sudo apt-get install libsdl2-dev
+          sudo apt-get install libsdl2-dev libsdl2-dev:i386
 
       - name: "Install Dependencies (OSX)"
         if: ${{ runner.os == 'macOS' }}
@@ -42,7 +43,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install ${{ matrix.platform.param }}
+          ${{ matrix.platform.env }} cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install ${{ matrix.platform.param }}
           cmake --build .
           cmake --install .
 
