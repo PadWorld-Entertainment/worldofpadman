@@ -61,7 +61,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SKINGRID_ROWS 3
 #define SKINSPERPAGE (SKINGRID_ROWS * SKINGRID_COLS)
 
-#define XPOSITION 24
+#define XPOSITION 30
 #define YPOSITION 168
 
 typedef struct {
@@ -73,9 +73,11 @@ typedef struct {
 
 	menutext_s nameheader;
 	menufield_s name;
+	menutext_s handicapheader;
 	menulist_s handicap;
-	menutext_s logoheader;
+	menutext_s skincolorheader;
 	menulist_s skincolor;
+	menutext_s logoheader;
 	menulist_s effects;
 
 	menubitmap_s back;
@@ -1022,31 +1024,47 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.name.generic.bottom = y + 2 * (BIGCHAR_HEIGHT);
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
+	s_playersettings.handicapheader.generic.type = MTYPE_TEXT;
+	s_playersettings.handicapheader.generic.x = XPOSITION;
+	s_playersettings.handicapheader.generic.y = y;
+	s_playersettings.handicapheader.string = "Handicap:";
+	s_playersettings.handicapheader.style = UI_LEFT | UI_SMALLFONT;
+	s_playersettings.handicapheader.color = color_yellow;
+
+	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.handicap.generic.name = "Handicap:";
+	s_playersettings.handicap.generic.name = "";
 	s_playersettings.handicap.generic.flags = QMF_SMALLFONT;
 	s_playersettings.handicap.generic.id = ID_HANDICAP;
 	s_playersettings.handicap.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.handicap.generic.x = XPOSITION + 48;
+	s_playersettings.handicap.generic.x = XPOSITION;
 	s_playersettings.handicap.generic.y = y;
 	s_playersettings.handicap.itemnames = handicap_items;
 
 	y += BIGCHAR_HEIGHT + 2;
+	s_playersettings.skincolorheader.generic.type = MTYPE_TEXT;
+	s_playersettings.skincolorheader.generic.x = XPOSITION;
+	s_playersettings.skincolorheader.generic.y = y;
+	s_playersettings.skincolorheader.string = "Skin Color:";
+	s_playersettings.skincolorheader.style = UI_LEFT | UI_SMALLFONT;
+	s_playersettings.skincolorheader.color = color_yellow;
+
+	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.skincolor.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.skincolor.generic.name = "Skin Color:";
+	s_playersettings.skincolor.generic.name = "";
 	s_playersettings.skincolor.generic.flags = QMF_SMALLFONT;
 	s_playersettings.skincolor.generic.id = ID_SKINCOLOR;
 	s_playersettings.skincolor.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.skincolor.generic.x = XPOSITION + 48;
+	s_playersettings.skincolor.generic.x = XPOSITION;
 	s_playersettings.skincolor.generic.y = y;
 	s_playersettings.skincolor.itemnames = skincolor_items;
 
-	y += 3 * (BIGCHAR_HEIGHT + 2);
+	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
 	s_playersettings.logoheader.generic.x = XPOSITION;
 	s_playersettings.logoheader.generic.y = y;
 	s_playersettings.logoheader.string = "Spray Logo:";
-	s_playersettings.logoheader.style = (UI_LEFT | UI_SMALLFONT);
+	s_playersettings.logoheader.style = UI_LEFT | UI_SMALLFONT;
 	s_playersettings.logoheader.color = color_yellow;
 
 	s_playersettings.spraycolor.generic.type = MTYPE_BITMAP;
@@ -1071,7 +1089,9 @@ static void PlayerSettings_MenuInit(void) {
 
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicapheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skincolorheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skincolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoleft);
