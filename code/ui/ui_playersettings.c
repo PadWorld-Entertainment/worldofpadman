@@ -116,9 +116,19 @@ static playersettings_t s_playersettings;
 static int gamecodetoui[] = {4, 2, 3, 0, 5, 1, 6};
 static int uitogamecode[] = {4, 6, 2, 3, 1, 5, 7};
 
-static const char *handicap_items[] = {"None", "90", "80", "70", "60", "50", "40", "30", "20", "10", NULL};
+static const char *handicap_items[] = {S_COLOR_WHITE "None",
+									   S_COLOR_WHITE "90",
+									   S_COLOR_WHITE "80",
+									   S_COLOR_WHITE "70",
+									   S_COLOR_WHITE "60",
+									   S_COLOR_WHITE "50",
+									   S_COLOR_WHITE "40",
+									   S_COLOR_WHITE "30",
+									   S_COLOR_WHITE "20",
+									   S_COLOR_WHITE "10",
+									   NULL};
 
-static const char *skincolor_items[] = {S_COLOR_YELLOW "Default", S_COLOR_BLUE "Blue", S_COLOR_RED "Red", NULL};
+static const char *skincolor_items[] = {S_COLOR_WHITE "Default", S_COLOR_BLUE "Blue", S_COLOR_RED "Red", NULL};
 
 #define MAX_UIMODELS 96 // 32
 #define MAX_SKINS 640	// padman has 18 skins ...
