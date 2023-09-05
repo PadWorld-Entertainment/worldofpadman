@@ -737,18 +737,18 @@ qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
 
 	VectorSubtract(point, cg.refdef.vieworg, trans);
 
-	xc = 640.0f / 2.0f;
-	yc = 480.0f / 2.0f;
+	xc = (float)(SCREEN_WIDTH * cg_viewsize.integer) / 200.0f;
+	yc = (float)(SCREEN_HEIGHT * cg_viewsize.integer) / 200.0f;
 
 	z = DotProduct(trans, cg.refdef.viewaxis[0]);
 	if (z <= 0.001f)
 		return qfalse;
 
 	if (x)
-		*x = xc - DotProduct(trans, cg.refdef.viewaxis[1]) * xc / (z * px);
+		*x = (float)SCREEN_WIDTH * 0.5f - DotProduct(trans, cg.refdef.viewaxis[1]) * xc / (z * px);
 
 	if (y)
-		*y = yc - DotProduct(trans, cg.refdef.viewaxis[2]) * yc / (z * py);
+		*y = (float)SCREEN_HEIGHT * 0.5f - DotProduct(trans, cg.refdef.viewaxis[2]) * yc / (z * py);
 
 	return VectorLengthSquared(trans); //qtrue;
 }
