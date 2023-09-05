@@ -38,22 +38,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SARROWRT1 "menu/arrows/smallyel_rt1"
 
 #define ID_NAME 10
-#define ID_GENDER 11
-#define ID_HANDICAP 12
-#define ID_SKINCOLOR 13
-#define ID_EFFECTS 14
-#define ID_BACK 15
+#define ID_HANDICAP 11
+#define ID_SKINCOLOR 12
+#define ID_EFFECTS 13
+#define ID_BACK 14
 
-#define ID_PREVMODEL 16
-#define ID_NEXTMODEL 17
-#define ID_PREVSKIN 18
-#define ID_NEXTSKIN 19
-#define ID_MICON 20 //+4
-#define ID_SICON 25 //+2
-#define ID_PLAYERMODEL 28
-#define ID_SPRAYCOLOR 29
-#define ID_NEXTLOGO 30
-#define ID_PREVLOGO 31
+#define ID_PREVMODEL 15
+#define ID_NEXTMODEL 16
+#define ID_PREVSKIN 17
+#define ID_NEXTSKIN 18
+#define ID_MICON 19 //+4
+#define ID_SICON 24//+2
+#define ID_PLAYERMODEL 27
+#define ID_SPRAYCOLOR 28
+#define ID_NEXTLOGO 29
+#define ID_PREVLOGO 30
 
 #define MAX_NAMELENGTH 20
 
@@ -74,7 +73,6 @@ typedef struct {
 
 	menutext_s nameheader;
 	menufield_s name;
-	menulist_s gender;
 	menulist_s handicap;
 	menutext_s logoheader;
 	menulist_s skincolor;
@@ -115,8 +113,6 @@ static playersettings_t s_playersettings;
 
 static int gamecodetoui[] = {4, 2, 3, 0, 5, 1, 6};
 static int uitogamecode[] = {4, 6, 2, 3, 1, 5, 7};
-
-static const char *gender_items[] = {"None", "Male", "Female", NULL};
 
 static const char *handicap_items[] = {"None", "90", "80", "70", "60", "50", "40", "30", "20", "10", NULL};
 
@@ -243,23 +239,12 @@ PlayerSettings_SaveChanges
 =================
 */
 static void PlayerSettings_SaveChanges(void) {
-	int g;
 
 	// name
 	trap_Cvar_Set("name", s_playersettings.name.field.buffer);
 
 	// handicap
 	trap_Cvar_SetValue("handicap", 100 - s_playersettings.handicap.curvalue * 10);
-
-	// gender
-	g = s_playersettings.gender.curvalue;
-	if (g > 1) {
-		trap_Cvar_Set("sex", "female");
-	} else if (g == 1) {
-		trap_Cvar_Set("sex", "male");
-	} else {
-		trap_Cvar_Set("sex", "none");
-	}
 
 	// effects color
 	trap_Cvar_SetValue("color1", uitogamecode[s_playersettings.effects.curvalue]);
@@ -381,15 +366,6 @@ static void PlayerSettings_SetMenuItems(void) {
 	h = Com_Clamp(10, 100, trap_Cvar_VariableValue("handicap"));
 	s_playersettings.handicap.curvalue = 10 - h / 10;
 
-	// gender
-	trap_Cvar_VariableStringBuffer("sex", gStr, sizeof(gStr));
-	if (!Q_stricmp(gStr, "female")) {
-		s_playersettings.gender.curvalue = 2;
-	} else if (!Q_stricmp(gStr, "male")) {
-		s_playersettings.gender.curvalue = 1;
-	} else {
-		s_playersettings.gender.curvalue = 0;
-	}
 }
 
 static int GetSpecialSkinScore(const char *iconPath) {
@@ -739,7 +715,6 @@ static void PlayerSettings_MenuEvent(void *ptr, int event) {
 	switch (tmpid) {
 
 	case ID_HANDICAP:
-	case ID_GENDER:
 		break;
 
 	case ID_SKINCOLOR:
@@ -1047,16 +1022,6 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.name.generic.bottom = y + 2 * (BIGCHAR_HEIGHT);
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
-	s_playersettings.gender.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.gender.generic.name = "Gender:";
-	s_playersettings.gender.generic.flags = QMF_SMALLFONT;
-	s_playersettings.gender.generic.id = ID_GENDER;
-	s_playersettings.gender.generic.callback = PlayerSettings_MenuEvent;
-	s_playersettings.gender.generic.x = XPOSITION + 48;
-	s_playersettings.gender.generic.y = y;
-	s_playersettings.gender.itemnames = gender_items;
-
-	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
 	s_playersettings.handicap.generic.name = "Handicap:";
 	s_playersettings.handicap.generic.flags = QMF_SMALLFONT;
@@ -1076,7 +1041,7 @@ static void PlayerSettings_MenuInit(void) {
 	s_playersettings.skincolor.generic.y = y;
 	s_playersettings.skincolor.itemnames = skincolor_items;
 
-	y += 2 * (BIGCHAR_HEIGHT + 2);
+	y += 3 * (BIGCHAR_HEIGHT + 2);
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
 	s_playersettings.logoheader.generic.x = XPOSITION;
 	s_playersettings.logoheader.generic.y = y;
@@ -1106,7 +1071,6 @@ static void PlayerSettings_MenuInit(void) {
 
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.gender);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skincolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
