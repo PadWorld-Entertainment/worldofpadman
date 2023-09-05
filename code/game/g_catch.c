@@ -75,6 +75,7 @@ static void G_DroppedKillerDucksThinkPickable(gentity_t *ent) {
  * The respawn of the killerduck happens on death in @c TossClientItems
  */
 gentity_t* G_DropKillerDucks(gentity_t *ent) {
+	const int clientNum = ent - g_entities;
 	vec3_t velocity, angles;
 	gclient_t *client = ent->client;
 	gentity_t *killerDucks;
@@ -87,8 +88,11 @@ gentity_t* G_DropKillerDucks(gentity_t *ent) {
 	client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 	client->ps.stats[STAT_HOLDABLEVAR] = 0;
 	client->ps.eFlags &= ~EF_KILLERDUCK;
-	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " no longer has\nthe Killerduck.\n\"", client->pers.netname));
-	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " no longer has the Killerduck.\n\"", client->pers.netname));
+	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " lost the Killerduck.\n\"", client->pers.netname));
+	if (ent->client->ps.clientNum == clientNum) {
+		trap_SendServerCommand(clientNum, va("cp \"%s" S_COLOR_WHITE, "You lost the Killerduck.\n\""));
+	}
+	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " lost the Killerduck.\n\"", client->pers.netname));
 
 	VectorCopy(ent->s.apos.trBase, angles);
 	AngleVectors(angles, velocity, NULL, NULL);
@@ -123,6 +127,7 @@ void G_KillerDuckThink(gentity_t *ent) {
  * This is called if a player collects the killerduck
  */
 void G_BecomeKillerDuck(gentity_t *item, gentity_t *ent) {
+	const int clientNum = ent - g_entities;
 	item->wait = -1;
 	item->nextthink = 0;
 	item->think = NULL;
@@ -133,8 +138,11 @@ void G_BecomeKillerDuck(gentity_t *item, gentity_t *ent) {
 	ent->client->ps.eFlags |= EF_KILLERDUCK;
 	ent->client->ps.stats[STAT_HEALTH] = ent->health = 200;
 	ent->client->ps.stats[STAT_ARMOR] = 200;
-	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " has\nthe Killerduck.\n\"", ent->client->pers.netname));
-	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " has the Killerduck.\n\"", ent->client->pers.netname));
+	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " catched the Killerduck.\n\"", ent->client->pers.netname));
+	if (ent->client->ps.clientNum == clientNum) {
+		trap_SendServerCommand(clientNum, va("cp \"%s" S_COLOR_WHITE, "You catched the Killerduck.\n\""));
+	}
+	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " catched the Killerduck.\n\"", ent->client->pers.netname));
 }
 
 /**
