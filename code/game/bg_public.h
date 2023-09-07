@@ -409,7 +409,6 @@ typedef enum {
 	LPSF_PPOINTLIMIT = 1, // Multiple map_restarts until one player won pointlimit times
 						  // Why has this two P's in its name?
 	LPSF_MULTIPOINTS = 2, // With LPSF_PPOINTLIMIT, everyone get's points depending on his rank
-	LPSF_NOARROWS = 4	  // Don't draw Icons clientside
 } lpsflag_t;
 
 // reward sounds (stored in ps->persistant[PERS_PLAYEREVENTS])

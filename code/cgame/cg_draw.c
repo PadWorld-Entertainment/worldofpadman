@@ -2801,9 +2801,6 @@ static void CG_DrawLastPadStanding(void) {
 	if ((cg_icons.integer & ICON_ARROW) == 0) {
 		return;
 	}
-	if ((cgs.lpsflags & LPSF_NOARROWS)) {
-		return;
-	}
 
 	if (cgs.gametype != GT_LPS) {
 		return;

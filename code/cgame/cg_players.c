@@ -2373,7 +2373,7 @@ void CG_Player(centity_t *cent) {
 	}
 
 	// save player position for LPS
-	if ((cgs.gametype == GT_LPS) && !(cgs.lpsflags & LPSF_NOARROWS) &&
+	if ((cgs.gametype == GT_LPS) &&
 		(cent->currentState.number != cg.snap->ps.clientNum) &&
 		!(cent->currentState.eFlags & (EF_DEAD | EF_NOLIFESLEFT))) {
 		VectorCopy(cent->lerpOrigin, ci->curPos);
