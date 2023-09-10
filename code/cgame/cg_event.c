@@ -392,21 +392,20 @@ CG_WeaponHigher
 ================
 */
 static qboolean CG_WeaponHigher(int currentWeapon, int newWeapon) {
-    char *currentScore = NULL;
-    char *newScore = NULL;
-    char weapon[5];
-    Com_sprintf(weapon,5,"/%i/",currentWeapon);
-    currentScore = strstr(cg_weaponOrder.string,weapon);
-    Com_sprintf(weapon,5,"/%i/",newWeapon);
-    newScore = strstr(cg_weaponOrder.string,weapon);
-    if(!newScore || !currentScore)
-        return qfalse;
-    if(newScore>currentScore)
-        return qtrue;
-    else
-        return qfalse;
+	const char *currentScore = NULL;
+	const char *newScore = NULL;
+	char weapon[5];
+	Com_sprintf(weapon, sizeof(weapon), "/%i/", currentWeapon);
+	currentScore = strstr(cg_weaponOrder.string, weapon);
+	Com_sprintf(weapon, sizeof(weapon), "/%i/", newWeapon);
+	newScore = strstr(cg_weaponOrder.string, weapon);
+	if (!newScore || !currentScore)
+		return qfalse;
+	if (newScore > currentScore)
+		return qtrue;
+	else
+		return qfalse;
 }
-
 
 /*
 ================
@@ -433,7 +432,7 @@ static void CG_ItemPickup(int itemNum) {
 			if (cg.weaponSelect == WP_SPRAYPISTOL)
 				return;
 		}
-		
+
 		// if always
 		if (cg_autoswitch.integer == 1 && bg_itemlist[itemNum].giTag != WP_NIPPER) {
 			cg.weaponSelectTime = cg.time;
@@ -441,24 +440,23 @@ static void CG_ItemPickup(int itemNum) {
 		}
 
 		// if new
-		if (cg_autoswitch.integer == 2 && 0 == (cg.snap->ps.stats[ STAT_WEAPONS ] & (1 << bg_itemlist[itemNum].giTag))) {
-            cg.weaponSelectTime = cg.time;
+		if (cg_autoswitch.integer == 2 && 0 == (cg.snap->ps.stats[STAT_WEAPONS] & (1 << bg_itemlist[itemNum].giTag))) {
+			cg.weaponSelectTime = cg.time;
 			cg.weaponSelect = bg_itemlist[itemNum].giTag;
-        }
+		}
 
 		// if better
-        if (cg_autoswitch.integer == 3 && CG_WeaponHigher(cg.weaponSelect,bg_itemlist[itemNum].giTag)) {
-        	cg.weaponSelectTime = cg.time;
+		if (cg_autoswitch.integer == 3 && CG_WeaponHigher(cg.weaponSelect, bg_itemlist[itemNum].giTag)) {
+			cg.weaponSelectTime = cg.time;
 			cg.weaponSelect = bg_itemlist[itemNum].giTag;
-        }
+		}
 
-        // if new and better
-        if (cg_autoswitch.integer == 4 && 0 == (cg.snap->ps.stats[ STAT_WEAPONS ] & (1 << bg_itemlist[itemNum].giTag)) 
-				&& CG_WeaponHigher(cg.weaponSelect,bg_itemlist[itemNum].giTag)) {
-            cg.weaponSelectTime = cg.time;
+		// if new and better
+		if (cg_autoswitch.integer == 4 && 0 == (cg.snap->ps.stats[STAT_WEAPONS] & (1 << bg_itemlist[itemNum].giTag)) &&
+			CG_WeaponHigher(cg.weaponSelect, bg_itemlist[itemNum].giTag)) {
+			cg.weaponSelectTime = cg.time;
 			cg.weaponSelect = bg_itemlist[itemNum].giTag;
-    	}
-
+		}
 	}
 
 	if (bg_itemlist[itemNum].giType == IT_POWERUP && bg_itemlist[itemNum].giTag == PW_BERSERKER) {
