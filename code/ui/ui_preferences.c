@@ -67,16 +67,17 @@ PREFERENCES MENU
 #define ID_FPS 20
 #define ID_UPS 21
 
-#define ID_SIMPLEITEMS 30
-#define ID_WALLMARKS 31
-#define ID_DYNAMICLIGHTS 32
-#define ID_FLARES 33
-#define ID_HIGHQUALITYSKY 34
-#define ID_LENSFLARE 35
-#define ID_INGAMEVIDEO 36
-#define ID_SYNCEVERYFRAME 37
-#define ID_FORCEMODEL 38
-#define ID_GLOWMODEL 39
+#define ID_AUTOSWITCH 30
+#define ID_SIMPLEITEMS 31
+#define ID_WALLMARKS 32
+#define ID_DYNAMICLIGHTS 33
+#define ID_FLARES 34
+#define ID_HIGHQUALITYSKY 35
+#define ID_LENSFLARE 36
+#define ID_INGAMEVIDEO 37
+#define ID_SYNCEVERYFRAME 38
+#define ID_FORCEMODEL 39
+#define ID_GLOWMODEL 40
 
 #define ID_CONNOTIFY 50
 #define ID_CHATHEIGHT 51
@@ -123,6 +124,7 @@ typedef struct {
 	menuradiobutton_s fps;
 	menuradiobutton_s ups;
 
+	menulist_s autoswitch;
 	menuradiobutton_s simpleitems;
 	menuradiobutton_s wallmarks;
 	menuradiobutton_s dynamiclights;
@@ -180,6 +182,7 @@ static menucommon_s *g_hud_options[] = {
 };
 
 static menucommon_s *g_game_options[] = {
+	(menucommon_s *)&s_preferences.autoswitch,
 	(menucommon_s *)&s_preferences.simpleitems,
 	(menucommon_s *)&s_preferences.wallmarks,
 	(menucommon_s *)&s_preferences.dynamiclights,
@@ -229,6 +232,8 @@ static menucommon_s **g_options[] = {
 static const char *ffahudtheme_items[] = {"Black", "Red", "Blue", "Green", "Chrome", "Whitemetal",
 									 "Rust", "Flower", "Wood", "Airforce", NULL};
 
+static const char *autoswitch_items[] = {"Never", "Always", "New", "Better", "New+Better", NULL};
+
 static const char *connotify_items[] = {"Short", "Default", "Long", "Maximum", NULL};
 
 static const char *glowmodel_items[] = {S_COLOR_YELLOW "None", S_COLOR_BLACK "Black", S_COLOR_RED "Red",
@@ -263,6 +268,7 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.fps.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawFPS"));
 	s_preferences.ups.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("cg_drawups"));
 
+	s_preferences.autoswitch.curvalue = Com_Clamp(0, 4, trap_Cvar_VariableValue("cg_autoswitch"));
 	s_preferences.simpleitems.curvalue = trap_Cvar_VariableValue("cg_simpleItems") != 0;
 	s_preferences.wallmarks.curvalue = trap_Cvar_VariableValue("cg_marks") != 0;
 	s_preferences.dynamiclights.curvalue = trap_Cvar_VariableValue("r_dynamiclight") != 0;
@@ -476,6 +482,10 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 
 	case ID_UPS:
 		trap_Cvar_SetValue("cg_drawUPS", s_preferences.ups.curvalue);
+		break;
+
+	case ID_AUTOSWITCH:
+		trap_Cvar_SetValue("cg_autoswitch", s_preferences.autoswitch.curvalue);
 		break;
 
 	case ID_SIMPLEITEMS:
@@ -904,6 +914,21 @@ static void UI_Preferences_MenuInit(void) {
 
 	// game options
 	y = YPOSITION;
+	s_preferences.autoswitch.generic.type = MTYPE_SPINCONTROL;
+	s_preferences.autoswitch.generic.name = "Autoswitch Weapon:";
+	s_preferences.autoswitch.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.autoswitch.generic.callback = UI_Preferences_Event;
+	s_preferences.autoswitch.generic.id = ID_AUTOSWITCH;
+	s_preferences.autoswitch.generic.x = XPOSITION;
+	s_preferences.autoswitch.generic.y = y;
+	s_preferences.autoswitch.itemnames = autoswitch_items;
+	s_preferences.autoswitch.generic.toolTip =
+		"If you run into a weapon to pick it up, your character will 'never' auto-switch to that weapon, "
+		"'always' auto-switch to that weapon, only auto-switch to that weapon when 'new', only auto-switch "
+		"to that weapon when 'better', only auto-switch to that weapon when 'new and better'. Default is "
+		"'new and better'.";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.simpleitems.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.simpleitems.generic.name = "Simple Items:";
 	s_preferences.simpleitems.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -1277,6 +1302,7 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.fps);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.ups);
 
+	Menu_AddItem(&s_preferences.menu, &s_preferences.autoswitch);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.simpleitems);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.wallmarks);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.dynamiclights);
