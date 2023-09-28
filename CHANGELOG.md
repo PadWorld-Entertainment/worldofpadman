@@ -3,19 +3,22 @@
 ## Version: 1.7.0 (tba.)
 
 - ADDED
-	- Freeze Tag (FT) game mode and related assets like weapon effects
+	- 32bit binaries to support Windows and Linux systems 
+	- Freeze Tag (FT) game mode and related assets like ice cold weapon effects
 	- Catch the Killerduck (CTKD) game mode
 	- PElvis (PadElvis) skin, glow skin and bot for the PADMAN player model
 	- HellPad skin, glow skin and bot for the PADMAN player model
 	- PadClassic skin, glow skin and bot for the PADMAN player model
 	- PadHero award/medal for defending the base and the lolly carrier in CTL, for defending a balloon box in your own team color in BB, and for defending a team mate carrying min 5 cartridges in SYC Team
+	- PadKnight bot and shown in the Select Bots menu
 	- Red PadStar medal for the red team capturing a lolly
-	- Almost event by the announcer saying "Better luck next time, maybe!" for a player failing to score by getting shot short before: the lolly spawn point in CTL, the sprayroom teleporter and having 5+ cartridges to achieve SprayKiller or SprayGod in SYC+Team, raising the last balloon in the own team color in BB
+	- Almost event by the announcer saying "Better luck next time, maybe!" for a player failing to score by getting shot close to the lolly spawn point in CTL, the sprayroom teleporter and having 5+ cartridges to achieve SprayKiller or SprayGod in SYC+Team, raising the last balloon in the own team color in BB
 	- Denied event for all players who try to pick up the same powerup but are not first; the first player picking it up will laugh on the other players
+	- Presentation of received medals and count during a match at the lower left of the scoreboard depending of the currently played game mode
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- Support for player model sounds depending of the selected skin; a complete sound set or individual sounds for a skin can be stored in a folder of the same name in parallel with the model's folder; the model's sounds serve as a fallback if no sounds are available for the skin
-	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones
+	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones, and additionally logos for fire, earth, air; also added the old and replaced balloon hud icon as spray logo
 	- Support for screenshots in PNG image format, PNG is the new default
 	- Option to switch renderer from OpenGL1 to OpenGL2 or Vulkan to Graphics page of System menu
 	- Option to switch Lighting to Vertex or Lightmap to Graphics page of System menu
@@ -58,12 +61,12 @@
 	- Option to enable/disable Sync Clients `P` (default) to Misc page of Controls menu
 	- New mapping for F-keys via default.cfg (for developers and level designers): hide/show HUD `F5`; hide/show gun `F6`; following are cheat protected: hide/show wire frames `F7`; hide/show lightmap `F8`; hide/show render load information `F9`; enable/disable noclip `F10`; enable/disable god mode and give all items `F11`
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
+	- New cvar `cg_weaponOrder` to customize the weapon order from worse to best for extended Autoswitch Weapon option, default is '/1/2/4/6/3/7/8/9/5/'
 	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
 	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
 	- New surface parameter `splashsteps` for splashy footstep sounds and common shader `splashclip` with texture
 	- Dust trail feature from Q3 Team Arena for textures with surface parameter `dust`; creates a small dust cloud when a player lands on surface; unlike in Q3TA it does NOT require `enableDust 1` to a map's worldspawn; new cvar `cg_enableDust [0|1]` to disable the feature on the client side, default is 1.
 	- Frost breath feature from Q3 Team Arena to simulate cold environments; creates a small cloud of condensed breath in front of players head; enter `enableBreath 1` to a map's worldspawn to enable this feature for the whole map; feature is automatically enabled for frozen players in FreezeTag
-	- PadKnight bot to the game and shown in the Select Bots menu
 	- Possibility to set Antialiasing (MSAA) to 8x on Graphics page of System menu
 	- Missing default keyboard mapping in Controls menu and synced with default.cfg
 	- White teleporter (portal) and jumppad effect (shaders and textures)
@@ -105,6 +108,7 @@
 	- Game type list in Create menu to list FFA game types first and FFA being default (was SYC)
 	- Team Orders ingame menu entry to be shown again
 	- Cvar `r_lightmap [1|0]` to be cheat protected now
+	- Cvar `cg_autoswitch [4|3|2|1|0]` to support more weapon auto switch options; 0 = Never: as before, simply switched off; 1 = Always: switches the weapon every time one is picked up; 2 = New: switches to a picked up weapon if it is new and was not in the inventory before; 3 = Better: changes to a picked up weapon if it is better than the currently selected weapon; 4 = New+Better: switches to a picked up weapon if it is new and was not in the inventory before and if it is better than the currently selected weapon; use cvar `cg_weaponOrder` to customize the weapon order (thanks to Open Arena for idea and code base); menu option is located at Game page of Options menu now
 	- `animap` shader key to support up to 16 textures instead of 8
 	- World sound files location from folder `sounds` to `sound` and shortening
 	- Teammate icon to be shown through walls in all team game modes, not only Big Balloon
@@ -137,7 +141,8 @@
 	- Incorrect assignment of the drowning sound to the selected player model
 	- Voice Threshold slider not showing the input value
 	- Menu music loop to be played when calling Team Orders menu via hotkey
-	- View size (screen size) functionality and added missing back tile asset
+	- Screen Size menu option functionality (cvar `cg_viewsize`) and added missing back tile asset
+	- CG_WorldToScreen function to work properly with restored Screen Size feature (cvar `cg_viewsize`)
 	- Missing shader texture in spray room exit portal in MopAn's Jail
 	- Alien monitor animation shader in ENTE's PadShop to support all 9 textures
 	- Player is in his own view when zooming with SPLASHER/INJECTOR in 3rd person mode; 3rd person mode is temporarily disabled when zooming in
@@ -151,6 +156,8 @@
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
 	- `^` key to open/close the console
+	- `g_LPS_flags [4]` (4 = LPSF_NOARROWS) due to redundancy to the help menu option to enable/disable the arrow icons in LPS client side; also prevents the same menu option from working
+	- `cg_LPSwallhackSize` and `cg_LPSwallhackAlpha` to prevent giving an unfair advantage to clients
 	- Not used menu textures
 	- Not used roq video files
 	- Not used shaders entries and textures
@@ -160,7 +167,6 @@
 	- Spray logos of dead sites and partners exp, desura, pqcom, turtle
 	- Exit screen (when clicking the Exit button in the main menu) with confirmation query and related assets
 	- Unused and dead code in general
-	- `cg_LPSwallhackSize` and `cg_LPSwallhackAlpha` to prevent giving an unfair advantage to clients
 	- WesternSet: remove one lost and unnecessary botclip brush near blue lolly
 - UPDATED
 	- All tooltips in the menus and wording of menu entries where useful
