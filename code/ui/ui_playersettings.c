@@ -41,9 +41,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_NAME 10
 #define ID_GENDER 11
 #define ID_HANDICAP 12
-// #define ID_SKINCOLOR 13
-#define ID_EFFECTS 14
-#define ID_BACK 15
+#define ID_EFFECTS 13
+#define ID_BACK 14
 
 #define ID_PREVMODEL 16
 #define ID_NEXTMODEL 17
@@ -80,7 +79,6 @@ typedef struct {
 	menutext_s handicapheader;
 	menulist_s handicap;
 	menutext_s logoheader;
-//	menulist_s skincolor;
 	menulist_s effects;
 
 	menubitmap_s back;
@@ -130,8 +128,6 @@ static const char *handicap_items[] = {S_COLOR_WHITE "None",
 									   S_COLOR_WHITE "20",
 									   S_COLOR_WHITE "10",
 									   NULL};
-
-static const char *skincolor_items[] = {S_COLOR_WHITE "Default", S_COLOR_BLUE "Blue", S_COLOR_RED "Red", NULL};
 
 #define MAX_UIMODELS 96 // 32
 #define MAX_SKINS 640	// padman has 18 skins ...
@@ -339,15 +335,6 @@ static void UI_PlayerSettings_SetMenuItems(void) {
 		int mnLen;
 		Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
 
-		// Set skin color menu item
-/* 		if (Q_stristr(modelname, "_blue") || Q_stristr(modelname, "/blue")) {
-			s_playersettings.skincolor.curvalue = 1;
-		} else if (Q_stristr(modelname, "_red") || Q_stristr(modelname, "/red")) {
-			s_playersettings.skincolor.curvalue = 2;
-		} else {
-			s_playersettings.skincolor.curvalue = 0;
-		}
- */
 		for (i = 0; i < sizeof(modelname); i++)
 			if (modelname[i] == '/') {
 				modelname[i] = '\0';
@@ -528,8 +515,8 @@ static void UI_PlayerSettings_BuildList(void) {
 
 			COM_StripExtension(fileptr, skinname, sizeof(skinname));
 
-			// look for icon_???? and ignore all containing _blue or _red
-			if (!Q_stricmpn(skinname, "icon_", 5)) { // && !Q_stristr(skinname, "_blue") && !Q_stristr(skinname, "_red")) {
+			// look for icon_????
+			if (!Q_stricmpn(skinname, "icon_", 5)) { 
 				ps_playericons.modelskins[tmpskinnum].icon =
 					trap_R_RegisterShaderNoMip(va("models/wop_players/%s/%s", dirptr, skinname));
 				Com_sprintf(ps_playericons.modelskins[tmpskinnum].name, MAX_MODELSKINNAME_STR, "%s/%s", dirptr,
@@ -610,16 +597,9 @@ static void UI_PlayerSettings_Draw(void) {
 			break;
 		}
 
-	if (!Q_stricmp(&modelname[i + 1], "default") ) { // || !Q_stricmp(&modelname[i + 1], "blue") ||
-//		!Q_stricmp(&modelname[i + 1], "red")) {
+	if (!Q_stricmp(&modelname[i + 1], "default") ) {
 		UI_DrawProportionalString(432, 446, modelname, UI_CENTER | UI_SMALLFONT, colorWhite);
-/* 	} else if (Q_stristr(&modelname[i + 1], "_blue") || Q_stristr(&modelname[i + 1], "_red")) {
-		char *chrptr = strstr(&modelname[i + 1], "_");
-		if (chrptr != NULL) {
-			*chrptr = '\0';
-		}
-		UI_DrawProportionalString(432, 446, &modelname[i + 1], UI_CENTER | UI_SMALLFONT, colorWhite);
- */	} else {
+	} else {
 		UI_DrawProportionalString(432, 446, &modelname[i + 1], UI_CENTER | UI_SMALLFONT, colorWhite);
 	}
 
@@ -669,44 +649,6 @@ static void UI_PlayerSettings_Update(void) {
 		s_playersettings.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 }
-
-/*
-=================
-UI_PlayerSettings_SetSkinColor
-=================
-*/
-/*static void UI_PlayerSettings_SetSkinColor(void) {
-	char modelname[64];
-
- 	Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
-	if (Q_stristr(modelname, "/default") || Q_stristr(modelname, "/blue") || Q_stristr(modelname, "/red")) {
-		char *chrptr = strstr(modelname, "/");
-		if (chrptr != NULL) {
-			*chrptr = '\0';
-		}
-		if (s_playersettings.skincolor.curvalue == 2) {
-			Q_strcat(modelname, sizeof(modelname), "/red");
-		} else if (s_playersettings.skincolor.curvalue == 1) {
-			Q_strcat(modelname, sizeof(modelname), "/blue");
-		} else {
-			Q_strcat(modelname, sizeof(modelname), "/default");
-		}
-	} else {
-		char *chrptr = strstr(modelname, "_");
-		if (chrptr != NULL) {
-			*chrptr = '\0';
-		}
-		if (s_playersettings.skincolor.curvalue == 2) {
-			Q_strcat(modelname, sizeof(modelname), "_red");
-		} else if (s_playersettings.skincolor.curvalue == 1) {
-			Q_strcat(modelname, sizeof(modelname), "_blue");
-		}
-	}
-	trap_Cvar_Set("model", modelname);
-	trap_Cvar_Set("headmodel", modelname);
-	trap_Cvar_Set("team_model", modelname);
-	trap_Cvar_Set("team_headmodel", modelname);
-}*/
 
 /*
 =================
@@ -769,7 +711,6 @@ static void UI_SelectSkin_DrawSkinIcon(void *self) {
 		w = b->width;
 		h = b->height;
 		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
-//			UI_DrawNamedPic(x, y, w + 6, h + 6, SICONSHADOW);
 			UI_DrawNamedPic(x + 5, y + 5, w, h, SICONSHADOW);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
@@ -794,10 +735,6 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 	case ID_HANDICAP:
 		break;
 
-/* 	case ID_SKINCOLOR:
-		UI_PlayerSettings_SetSkinColor();
-		break;
- */
 	case ID_BACK:
 		UI_PlayerSettings_SaveChanges();
 		UI_PopMenu();
@@ -857,7 +794,6 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 				break;
 			}
 		}
-//		UI_PlayerSettings_SetSkinColor();
 		UI_PlayerSettings_Update();
 		break;
 	case ID_SICON:
@@ -876,7 +812,6 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 		trap_Cvar_Set("headmodel", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
 		trap_Cvar_Set("team_model", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
 		trap_Cvar_Set("team_headmodel", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
-//		UI_PlayerSettings_SetSkinColor();
 		break;
 	case ID_PLAYERMODEL:
 		if (trap_Key_IsDown(K_MOUSE1))
@@ -1006,15 +941,13 @@ static void UI_PlayerSettings_MenuInit(void) {
 			s_playersettings.skin_icons[k].generic.flags = QMF_LEFT_JUSTIFY;
 			s_playersettings.skin_icons[k].generic.x = x;
 			s_playersettings.skin_icons[k].generic.y = y;
-			s_playersettings.skin_icons[k].width = 64; //80;
-			s_playersettings.skin_icons[k].height = 64; //80;
+			s_playersettings.skin_icons[k].width = 64;
+			s_playersettings.skin_icons[k].height = 64;
 			s_playersettings.skin_icons[k].generic.callback = UI_PlayerSettings_MenuEvent;
 			s_playersettings.skin_icons[k].generic.id = ID_SICON + k;
 			s_playersettings.skin_icons[k].generic.ownerdraw = UI_SelectSkin_DrawSkinIcon;
-//			x += (80 + 12);
 			x += (64 + 8);
 		}
-//		y += (80 + 12);
 		y += (64 + 8);
 	}
 
@@ -1101,16 +1034,6 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.handicap.generic.y = y;
 	s_playersettings.handicap.itemnames = handicap_items;
 
- 	y += BIGCHAR_HEIGHT + 2;
-/*	s_playersettings.skincolor.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.skincolor.generic.name = "Skin Color:";
-	s_playersettings.skincolor.generic.flags = QMF_SMALLFONT;
-	s_playersettings.skincolor.generic.id = ID_SKINCOLOR;
-	s_playersettings.skincolor.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.skincolor.generic.x = XPOSITION;
-	s_playersettings.skincolor.generic.y = y;
-	s_playersettings.skincolor.itemnames = skincolor_items;
- */
 	y += 2 * (BIGCHAR_HEIGHT + 2);
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
 	s_playersettings.logoheader.generic.x = XPOSITION - 96;
@@ -1142,7 +1065,6 @@ static void UI_PlayerSettings_MenuInit(void) {
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
-//	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skincolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoleft);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoright);
