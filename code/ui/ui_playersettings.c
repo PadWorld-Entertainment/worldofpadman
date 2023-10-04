@@ -32,10 +32,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define BARROWUP1 "menu/arrows/bigyel_up1"
 #define BARROWDN0 "menu/arrows/bigyel_dn0"
 #define BARROWDN1 "menu/arrows/bigyel_dn1"
-#define SARROWLT0 "menu/arrows/smallyel_lt0"
-#define SARROWLT1 "menu/arrows/smallyel_lt1"
-#define SARROWRT0 "menu/arrows/smallyel_rt0"
-#define SARROWRT1 "menu/arrows/smallyel_rt1"
 #define SICONSHADOW "menu/art/iconshadow"
 
 #define ID_NAME 10
@@ -64,8 +60,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define GRID_YPOS 158
 #define GRID_XPOS 644 //670
 
-#define XPOSITION 128
-#define YPOSITION 168
+#define XPOSITION 124
+#define YPOSITION 172
 
 typedef struct {
 	menuframework_s menu;
@@ -542,7 +538,9 @@ UI_PlayerSettings_Draw
 =================
 */
 static void UI_PlayerSettings_Draw(void) {
-	int i;
+	int i, x, y;
+	int prevlogo, nextlogo;
+	int mouseOverColor = -1;
 
 	static char modelname[32];
 	if (s_playersettings.nextGestureTime == 0)
@@ -585,17 +583,61 @@ static void UI_PlayerSettings_Draw(void) {
 	i = trap_Cvar_VariableValue("syc_color");
 	i = Com_Clamp(0, (NUM_SPRAYCOLORS - 1), i);
 
+	x = XPOSITION - 32;
+	y = 308;
 	UI_SetColor(spraycolors[i]);
-	UI_DrawHandlePic(XPOSITION - 40, 300, 64, 64, uis.spraylogoShaders[s_playersettings.slogo_num]);
+	UI_DrawHandlePic(x, y, 64, 64, uis.spraylogoShaders[s_playersettings.slogo_num]);
+
+	if (s_playersettings.slogo_num - 1 < 0) {
+		prevlogo = uis.spraylogosLoaded - 1;
+	} else {
+		prevlogo = s_playersettings.slogo_num - 1;
+	}
+
+	x = XPOSITION - 64 - 8;
+	y = 332;
+	UI_SetColor(spraycolors[i]);
+	UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[prevlogo]);
+	if (uis.cursorx >= x && uis.cursorx <= (x + 32) && uis.cursory >= y && uis.cursory <= (y + 32)) {
+		UI_SetColor(colorTBlack33);
+		UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[prevlogo]);
+	}
+
+	if (s_playersettings.slogo_num + 1 >= uis.spraylogosLoaded) {
+		nextlogo = 0;
+	} else {
+		nextlogo = s_playersettings.slogo_num + 1;
+	}
+
+	x = XPOSITION + 32 + 8;
+	UI_SetColor(spraycolors[i]);
+	UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[nextlogo]);
+	if (uis.cursorx >= x && uis.cursorx <= (x + 32) && uis.cursory >= y && uis.cursory <= (y + 32)) {
+		UI_SetColor(colorTBlack33);
+		UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[nextlogo]);
+	}
+
 	UI_SetColor(NULL);
+
+	// spray color selection boxes
+	x = XPOSITION - 58;
+	y = 382 + 4;
+	for (i = 0; i < 6; ++i) {
+		UI_FillRect(x + (16 + 4) * i, y, 16, 16, spraycolors[i]);
+		if (uis.cursorx >= (x + (16 + 4) * i) && uis.cursorx <= (x + (16 + 4) * i + 16) && uis.cursory >= y && uis.cursory <= (y + 16)) {
+			UI_FillRect(x + (16 + 4) * i, y, 16, 16, colorTBlack33);
+			mouseOverColor = i;
+		}
+	}
 
 	Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
 
-	for (i = 0; i < sizeof(modelname); i++)
+	for (i = 0; i < sizeof(modelname); i++) {
 		if (modelname[i] == '/') {
 			modelname[i] = '\0';
 			break;
 		}
+	}
 
 	if (!Q_stricmp(&modelname[i + 1], "default") ) {
 		UI_DrawProportionalString(432, 446, modelname, UI_CENTER | UI_SMALLFONT, colorWhite);
@@ -819,7 +861,7 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 		s_playersettings.lastCursorX = uis.cursorx;
 		break;
 	case ID_SPRAYCOLOR:
-		trap_Cvar_Set("syc_color", va("%i", (uis.cursorx - ((menucommon_s *)ptr)->x) / 16));
+		trap_Cvar_Set("syc_color", va("%i", (uis.cursorx - ((menucommon_s *)ptr)->x) / 20));
 		break;
 
 	case ID_PREVLOGO:
@@ -900,8 +942,8 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowup.generic.type = MTYPE_BITMAP;
 	s_playersettings.arrowup.generic.name = BARROWUP0;
 	s_playersettings.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowup.generic.x = 715; //721;
-	s_playersettings.arrowup.generic.y = 120; //118;
+	s_playersettings.arrowup.generic.x = 715;
+	s_playersettings.arrowup.generic.y = 120;
 	s_playersettings.arrowup.generic.id = ID_PREVSKIN;
 	s_playersettings.arrowup.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowup.width = 70;
@@ -912,8 +954,8 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowdown.generic.type = MTYPE_BITMAP;
 	s_playersettings.arrowdown.generic.name = BARROWDN0;
 	s_playersettings.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowdown.generic.x = 715; //721;
-	s_playersettings.arrowdown.generic.y = 446; //432;
+	s_playersettings.arrowdown.generic.x = 715;
+	s_playersettings.arrowdown.generic.y = 446;
 	s_playersettings.arrowdown.generic.id = ID_NEXTSKIN;
 	s_playersettings.arrowdown.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowdown.width = 70;
@@ -969,28 +1011,22 @@ static void UI_PlayerSettings_MenuInit(void) {
 	}
 
 	s_playersettings.logoleft.generic.type = MTYPE_BITMAP;
-	s_playersettings.logoleft.generic.name = SARROWLT0;
-	s_playersettings.logoleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.logoleft.generic.x = XPOSITION - 38;
-	s_playersettings.logoleft.generic.y = 364;
+	s_playersettings.logoleft.generic.flags = QMF_LEFT_JUSTIFY;
+	s_playersettings.logoleft.generic.x = XPOSITION - 64 - 8;
+	s_playersettings.logoleft.generic.y = 332;
 	s_playersettings.logoleft.generic.id = ID_PREVLOGO;
 	s_playersettings.logoleft.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.logoleft.width = 26;
-	s_playersettings.logoleft.height = 13;
-	s_playersettings.logoleft.focuspic = SARROWLT1;
-	s_playersettings.logoleft.focuspicinstead = qtrue;
+	s_playersettings.logoleft.width = 32;
+	s_playersettings.logoleft.height = 32;
 
 	s_playersettings.logoright.generic.type = MTYPE_BITMAP;
-	s_playersettings.logoright.generic.name = SARROWRT0;
-	s_playersettings.logoright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.logoright.generic.x = XPOSITION - 4;
-	s_playersettings.logoright.generic.y = 364;
+	s_playersettings.logoright.generic.flags = QMF_LEFT_JUSTIFY;
+	s_playersettings.logoright.generic.x = XPOSITION + 32 + 8;
+	s_playersettings.logoright.generic.y = 332;
 	s_playersettings.logoright.generic.id = ID_NEXTLOGO;
 	s_playersettings.logoright.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.logoright.width = 26;
-	s_playersettings.logoright.height = 13;
-	s_playersettings.logoright.focuspic = SARROWRT1;
-	s_playersettings.logoright.focuspicinstead = qtrue;
+	s_playersettings.logoright.width = 32;
+	s_playersettings.logoright.height = 32;
 
 	s_playersettings.back.generic.type = MTYPE_BITMAP;
 	s_playersettings.back.generic.name = BACK0;
@@ -1024,7 +1060,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.name.generic.right = XPOSITION + 56;
 	s_playersettings.name.generic.bottom = y + 2 * (BIGCHAR_HEIGHT);
 
-	y += 2 * (BIGCHAR_HEIGHT + 2);
+	y += 3 * (BIGCHAR_HEIGHT + 2);
 	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
 	s_playersettings.handicap.generic.name = "Handicap:";
 	s_playersettings.handicap.generic.flags = QMF_SMALLFONT;
@@ -1034,7 +1070,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.handicap.generic.y = y;
 	s_playersettings.handicap.itemnames = handicap_items;
 
-	y += 2 * (BIGCHAR_HEIGHT + 2);
+	y += 3 * (BIGCHAR_HEIGHT + 2);
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
 	s_playersettings.logoheader.generic.x = XPOSITION - 96;
 	s_playersettings.logoheader.generic.y = y;
@@ -1044,10 +1080,10 @@ static void UI_PlayerSettings_MenuInit(void) {
 
 	s_playersettings.spraycolor.generic.type = MTYPE_BITMAP;
 	s_playersettings.spraycolor.generic.flags = QMF_LEFT_JUSTIFY;
-	s_playersettings.spraycolor.generic.x = XPOSITION - 52;
-	s_playersettings.spraycolor.generic.y = 386;
-	s_playersettings.spraycolor.width = 96;
-	s_playersettings.spraycolor.height = 16;
+	s_playersettings.spraycolor.generic.x = XPOSITION - 60;
+	s_playersettings.spraycolor.generic.y = 384;
+	s_playersettings.spraycolor.width = 120;
+	s_playersettings.spraycolor.height = 20;
 	s_playersettings.spraycolor.generic.id = ID_SPRAYCOLOR;
 	s_playersettings.spraycolor.generic.callback = UI_PlayerSettings_MenuEvent;
 
@@ -1089,10 +1125,6 @@ void UI_PlayerSettings_Cache(void) {
 	trap_R_RegisterShaderNoMip(BARROWUP1);
 	trap_R_RegisterShaderNoMip(BARROWDN0);
 	trap_R_RegisterShaderNoMip(BARROWDN1);
-	trap_R_RegisterShaderNoMip(SARROWLT0);
-	trap_R_RegisterShaderNoMip(SARROWLT1);
-	trap_R_RegisterShaderNoMip(SARROWRT0);
-	trap_R_RegisterShaderNoMip(SARROWRT1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(SICONSHADOW);
