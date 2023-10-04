@@ -34,22 +34,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define BARROWDN1 "menu/arrows/bigyel_dn1"
 #define SICONSHADOW "menu/art/iconshadow"
 
-#define ID_NAME 10
-#define ID_GENDER 11
-#define ID_HANDICAP 12
-#define ID_EFFECTS 13
-#define ID_BACK 14
+#define ID_BACK 10
 
-#define ID_PREVMODEL 16
-#define ID_NEXTMODEL 17
-#define ID_PREVSKIN 18
-#define ID_NEXTSKIN 19
-#define ID_MICON 20 //+5
-#define ID_SICON 26 //+11
-#define ID_PLAYERMODEL 38 //32
-#define ID_SPRAYCOLOR 39 //33
-#define ID_NEXTLOGO 40 //34
-#define ID_PREVLOGO 41 //35
+#define ID_NAME 20
+#define ID_HANDICAP 21
+#define ID_EFFECTS 22
+#define ID_PREVMODEL 23
+#define ID_NEXTMODEL 24
+#define ID_PREVSKIN 25
+#define ID_NEXTSKIN 26
+#define ID_MICON 27 //+5
+#define ID_SICON 33 //+11
+#define ID_PLAYERMODEL 45
+#define ID_SPRAYCOLOR 46
+#define ID_NEXTLOGO 47
+#define ID_PREVLOGO 48
 
 #define MAX_NAMELENGTH 20
 
@@ -58,7 +57,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SKINGRID_ROWS 4
 #define SKINSPERPAGE (SKINGRID_ROWS * SKINGRID_COLS)
 #define GRID_YPOS 158
-#define GRID_XPOS 644 //670
+#define GRID_XPOS 644
 
 #define XPOSITION 124
 #define YPOSITION 172
@@ -1042,7 +1041,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 
 	y = YPOSITION;
 	s_playersettings.nameheader.generic.type = MTYPE_TEXT;
-	s_playersettings.nameheader.generic.x = XPOSITION - 48;
+	s_playersettings.nameheader.generic.x = XPOSITION - 80;
 	s_playersettings.nameheader.generic.y = y;
 	s_playersettings.nameheader.string = "Name:";
 	s_playersettings.nameheader.style = UI_LEFT | UI_SMALLFONT;
@@ -1053,26 +1052,34 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.name.generic.ownerdraw = UI_PlayerSettings_DrawName;
 	s_playersettings.name.field.widthInChars = MAX_NAMELENGTH;
 	s_playersettings.name.field.maxchars = MAX_NAMELENGTH;
-	s_playersettings.name.generic.x = XPOSITION;
+	s_playersettings.name.generic.x = XPOSITION - 72;
 	s_playersettings.name.generic.y = y - 10;
-	s_playersettings.name.generic.left = XPOSITION - 96;
+	s_playersettings.name.generic.left = XPOSITION - 80;
 	s_playersettings.name.generic.top = y;
-	s_playersettings.name.generic.right = XPOSITION + 56;
+	s_playersettings.name.generic.right = XPOSITION + 80;
 	s_playersettings.name.generic.bottom = y + 2 * (BIGCHAR_HEIGHT);
 
 	y += 3 * (BIGCHAR_HEIGHT + 2);
+	s_playersettings.handicapheader.generic.type = MTYPE_TEXT;
+	s_playersettings.handicapheader.generic.x = XPOSITION - 80;
+	s_playersettings.handicapheader.generic.y = y;
+	s_playersettings.handicapheader.string = "Handicap:";
+	s_playersettings.handicapheader.style = UI_LEFT | UI_SMALLFONT;
+	s_playersettings.handicapheader.color = color_yellow;
+	
+	y += (BIGCHAR_HEIGHT + 2);
 	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.handicap.generic.name = "Handicap:";
+	s_playersettings.handicap.generic.name = "";
 	s_playersettings.handicap.generic.flags = QMF_SMALLFONT;
 	s_playersettings.handicap.generic.id = ID_HANDICAP;
 	s_playersettings.handicap.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.handicap.generic.x = XPOSITION;
+	s_playersettings.handicap.generic.x = XPOSITION - 72;
 	s_playersettings.handicap.generic.y = y;
 	s_playersettings.handicap.itemnames = handicap_items;
 
-	y += 3 * (BIGCHAR_HEIGHT + 2);
+	y += 2 * (BIGCHAR_HEIGHT + 2);
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
-	s_playersettings.logoheader.generic.x = XPOSITION - 96;
+	s_playersettings.logoheader.generic.x = XPOSITION - 80;
 	s_playersettings.logoheader.generic.y = y;
 	s_playersettings.logoheader.string = "Spray Logo:";
 	s_playersettings.logoheader.style = UI_LEFT | UI_SMALLFONT;
@@ -1100,6 +1107,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowdown);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicapheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoleft);
