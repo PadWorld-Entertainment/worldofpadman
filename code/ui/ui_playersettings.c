@@ -782,16 +782,20 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 		break;
 
 	case ID_PREVMODEL:
-		if (s_playersettings.firstmodel > 0) {
-			s_playersettings.firstmodel--;
-			UI_PlayerSettings_Update();
+		if (s_playersettings.firstmodel - MODELSPERPAGE > MODELSPERPAGE) {
+			s_playersettings.firstmodel -= MODELSPERPAGE;
+		} else {
+			s_playersettings.firstmodel = 0;
 		}
+		UI_PlayerSettings_Update();
 		break;
 	case ID_NEXTMODEL:
-		if (s_playersettings.firstmodel + MODELSPERPAGE < ps_playericons.nummodel) {
-			s_playersettings.firstmodel++;
-			UI_PlayerSettings_Update();
-		}
+		if (s_playersettings.firstmodel + 2 * MODELSPERPAGE < ps_playericons.nummodel) {
+			s_playersettings.firstmodel += MODELSPERPAGE;
+		} else {
+			s_playersettings.firstmodel = ps_playericons.nummodel - MODELSPERPAGE;
+		} 
+		UI_PlayerSettings_Update();
 		break;
 	case ID_PREVSKIN:
 		if (s_playersettings.firstskin > s_playersettings.chosenskins[0]) {
