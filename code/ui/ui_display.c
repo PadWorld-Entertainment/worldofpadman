@@ -346,7 +346,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.graphics.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.graphics.generic.id = ID_GRAPHICS;
 	displayOptionsInfo.graphics.generic.x = XPOSITION - 144;
-	displayOptionsInfo.graphics.generic.y = 37;
+	displayOptionsInfo.graphics.generic.y = 43;
 	displayOptionsInfo.graphics.width = 160;
 	displayOptionsInfo.graphics.height = 40;
 	displayOptionsInfo.graphics.focuspic = GRAPHICS1;
@@ -358,7 +358,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.display.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.display.generic.id = ID_DISPLAY;
 	displayOptionsInfo.display.generic.x = XPOSITION + 9;
-	displayOptionsInfo.display.generic.y = 30;
+	displayOptionsInfo.display.generic.y = 36;
 	displayOptionsInfo.display.width = 120;
 	displayOptionsInfo.display.height = 40;
 	displayOptionsInfo.display.focuspic = DISPLAY1;
@@ -370,7 +370,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.sound.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.sound.generic.id = ID_SOUND;
 	displayOptionsInfo.sound.generic.x = XPOSITION - 124;
-	displayOptionsInfo.sound.generic.y = 79;
+	displayOptionsInfo.sound.generic.y = 85;
 	displayOptionsInfo.sound.width = 120;
 	displayOptionsInfo.sound.height = 40;
 	displayOptionsInfo.sound.focuspic = SOUND1;
@@ -382,7 +382,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.network.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.network.generic.id = ID_NETWORK;
 	displayOptionsInfo.network.generic.x = XPOSITION - 18;
-	displayOptionsInfo.network.generic.y = 82;
+	displayOptionsInfo.network.generic.y = 88;
 	displayOptionsInfo.network.width = 160;
 	displayOptionsInfo.network.height = 40;
 	displayOptionsInfo.network.focuspic = NETWORK1;
