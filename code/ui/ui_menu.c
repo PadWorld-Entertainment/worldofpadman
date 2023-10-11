@@ -109,6 +109,7 @@ static void Main_MenuEvent(void *ptr, int event) {
 		break;
 
 	case ID_MUSIC:
+		UI_MusicMenu();
 		break;
 
 	case ID_DEMOS:
@@ -304,7 +305,7 @@ void UI_MainMenu(void) {
 
 	s_main.Music.generic.type = MTYPE_BITMAP;
 	s_main.Music.generic.name = MUSIC0;
-	s_main.Music.generic.flags = QMF_LEFT_JUSTIFY | QMF_INACTIVE; //QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.Music.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_main.Music.generic.x = 710;
 	s_main.Music.generic.y = 248;
 	s_main.Music.generic.id = ID_MUSIC;

@@ -1305,6 +1305,8 @@ static void UI_DrawMenu(menuframework_s *menu) {
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.playerbg);
 				if (menu->bgparts & BGP_SERVERS)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.serversbg);
+				if (menu->bgparts & BGP_MUSIC)
+					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.musicbg);
 				if (menu->bgparts & BGP_MODS)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.modsbg);
 				if (menu->bgparts & BGP_DEMOS)

@@ -172,14 +172,15 @@ extern vmCvar_t cl_renderer;
 #define BGP_CONTROLS 0x000040
 #define BGP_PLAYER 0x000080
 #define BGP_SERVERS 0x000100
-#define BGP_MODS 0x000200
-#define BGP_DEMOS 0x000400
-#define BGP_SPECIFY 0x000800
-#define BGP_PREFERENCES 0x001000
-#define BGP_STARTSERVER 0x002000
-#define BGP_SELECTBOTS 0x004000
-#define BGP_MENUFX 0x008000
-#define BGP_LASTMENU 0x010000
+#define BGP_MUSIC 0x000200
+#define BGP_MODS 0x000400
+#define BGP_DEMOS 0x000800
+#define BGP_SPECIFY 0x001000
+#define BGP_PREFERENCES 0x002000
+#define BGP_STARTSERVER 0x004000
+#define BGP_SELECTBOTS 0x008000
+#define BGP_MENUFX 0x010000
+#define BGP_LASTMENU 0x020000
 
 typedef struct _tag_menuframework {
 	int cursor;
@@ -432,6 +433,12 @@ extern void UI_Controls_Cache(void);
 extern void UI_SetDefaultBinds_onUnusedKeys(void);
 
 //
+// ui_music.c
+//
+extern void UI_MusicMenu(void);
+extern void UI_Music_Cache(void);
+
+//
 // ui_demos.c
 //
 extern void UI_DemosMenu(void);
@@ -625,6 +632,7 @@ typedef struct {
 	qhandle_t controlsbg;
 	qhandle_t playerbg;
 	qhandle_t serversbg;
+	qhandle_t musicbg;
 	qhandle_t modsbg;
 	qhandle_t demosbg;
 	qhandle_t specifybg;
