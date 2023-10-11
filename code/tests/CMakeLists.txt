@@ -90,6 +90,7 @@ set(SRCS_UI
 	${CODE_DIR}/ui/ui_menu.c
 	${CODE_DIR}/ui/ui_mfield.c
 	${CODE_DIR}/ui/ui_mods.c
+	${CODE_DIR}/ui/ui_music.c
 	${CODE_DIR}/ui/ui_musicbox.c
 	${CODE_DIR}/ui/ui_network.c
 	${CODE_DIR}/ui/ui_password.c

@@ -434,6 +434,12 @@ extern void UI_Controls_Cache(void);
 extern void UI_SetDefaultBinds_onUnusedKeys(void);
 
 //
+// ui_music.c
+//
+extern void UI_MusicMenu(void);
+extern void UI_Music_Cache(void);
+
+//
 // ui_demos.c
 //
 extern void UI_DemosMenu(void);

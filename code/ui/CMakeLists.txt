@@ -20,6 +20,7 @@ set(SRCS
 	ui_menu.c
 	ui_mfield.c
 	ui_mods.c
+	ui_music.c
 	ui_musicbox.c
 	ui_network.c
 	ui_password.c
