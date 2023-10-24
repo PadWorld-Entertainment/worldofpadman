@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "server.h"
 
 #include "../botlib/botlib.h"
+#include "sv_discord.h"
 
 botlib_export_t *botlib_export;
 
@@ -278,6 +279,9 @@ The module is making a system call
 */
 static intptr_t SV_GameSystemCalls(intptr_t *args) {
 	switch (args[0]) {
+	case G_GLOBALMESSAGE:
+		DISCORD_EnqueueMessage((const char *)VMA(1), (const char *)VMA(2));
+		return 0;
 	case G_PRINT:
 		Com_Printf("%s", (const char *)VMA(1));
 		return 0;

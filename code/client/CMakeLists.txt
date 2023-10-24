@@ -51,6 +51,8 @@ set(SRCS
 	../server/sv_bot.c
 	../server/sv_ccmds.c
 	../server/sv_client.c
+	../server/sv_discord.c
+	../server/sv_http.c
 	../server/sv_game.c
 	../server/sv_init.c
 	../server/sv_main.c
@@ -90,9 +92,9 @@ endif()
 add_botlib(${PROJECT_NAME})
 add_dependencies(${PROJECT_NAME} cgame qagame ui ${RENDERER_LIST})
 set(CLIENT_DEFINES)
-set(LIBS opusfile opus vorbis theora zlib openal SDL2::SDL2 SDL2::SDL2main ${CMAKE_DL_LIBS})
+set(LIBS curl opusfile opus vorbis theora zlib openal SDL2::SDL2 SDL2::SDL2main ${CMAKE_DL_LIBS})
 if (MSVC)
-	list(APPEND LIBS ws2_32 winmm psapi gdi32 ole32)
+	list(APPEND LIBS ws2_32 winmm psapi gdi32 ole32 winhttp)
 elseif (APPLE)
 	set(FRAMEWORKS Cocoa Security IOKit)
 	foreach (_framework ${FRAMEWORKS})

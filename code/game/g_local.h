@@ -735,7 +735,7 @@ void QDECL G_Error(const char *fmt, ...) __attribute__((noreturn, format(printf,
 //
 // g_client.c
 //
-char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot);
+const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot);
 void ClientUserinfoChanged(int clientNum);
 void ClientDisconnect(int clientNum);
 void ClientBegin(int clientNum);
@@ -952,6 +952,8 @@ extern vmCvar_t g_modInstagib_WeaponJump;
 
 extern vmCvar_t g_logDamage;
 
+// allows you to send messages to discord
+void trap_GlobalMessage(const char *user, const char *msg);
 void trap_Print(const char *fmt);
 void trap_Error(const char *fmt) Q_NORETURN;
 int trap_Milliseconds(void);

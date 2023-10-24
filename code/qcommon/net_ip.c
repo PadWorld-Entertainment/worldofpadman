@@ -46,9 +46,13 @@ typedef int socklen_t;
 typedef unsigned short sa_family_t;
 #endif
 
+#undef EAGAIN
 #define EAGAIN WSAEWOULDBLOCK
+#undef EADDRNOTAVAIL
 #define EADDRNOTAVAIL WSAEADDRNOTAVAIL
+#undef EAFNOSUPPORT
 #define EAFNOSUPPORT WSAEAFNOSUPPORT
+#undef ECONNRESET
 #define ECONNRESET WSAECONNRESET
 typedef u_long ioctlarg_t;
 #define socketError WSAGetLastError()

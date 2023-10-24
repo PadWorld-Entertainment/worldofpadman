@@ -3,7 +3,8 @@
 ## Version: 1.7.0 (tba.)
 
 - ADDED
-	- 32bit binaries to support Windows and Linux systems 
+	- Discord webhook support for dedicated servers. discord_webhook_url cvar should get set to a webhook url like https://discord.com/api/webhooks/xxx/yyy (can be done by exporting an env var called WOP_DISCORD_WEBHOOK_URL due to the // in the url)
+	- 32bit binaries to support Windows and Linux systems
 	- Freeze Tag (FT) game mode and related assets like ice cold weapon effects
 	- Catch the Killerduck (CTKD) game mode
 	- PElvis (PadElvis) skin, glow skin and bot for the PADMAN player model
@@ -30,8 +31,8 @@
 	- Option to enable/disable Limit Frame Rate to Display page of System menu to limit the frame rate when game window is minimized or out of focus
 	- Option to select Screenshot Format (TGA, JPG, PNG) to Display page of System menu, PNG is default
 	- Option to select Screenshot Quality, only when JPG format is selected to Display page of System menu
-	- Option to select magenta-green anaglyph 3D mode from the list in Display page of System menu 
-	- Option to enable/disable Swap Colors to Display page of System menu to swap colors of anaglyph 3D modes 
+	- Option to select magenta-green anaglyph 3D mode from the list in Display page of System menu
+	- Option to enable/disable Swap Colors to Display page of System menu to swap colors of anaglyph 3D modes
 	- Option to enable/disable Doppler Effect to Sound page of System menu
 	- Option to enable/disable Auto Mute to Sound page of System menu to mute the sound when game window is minimized or out of focus
 	- Options to select sound Output and Input Devices to Sound page of System menu
@@ -79,11 +80,11 @@
 	- Title of the game uniformly to `World of PADMAN` everywhere
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
-	- Map selection/preview to cycle three ingame pictures via shader animation 
+	- Map selection/preview to cycle three ingame pictures via shader animation
 	- Graphics Settings option on Graphics page of System menu to provide a template list with useful and updated settings
 	- Geometric Detail option in Graphics menu to be split into Curves Detail and Models Detail to be able to set `r_subdivisions [20|12|4|2]` in 4 steps now (new default is 4)
 	- Anisotropy option to be merged with Texture Filter option into a single menu entry on Graphics page of System menu
-	- Name of Fullscreen option on Graphics page of Setup menu to Window Mode, also supporting new borderless window mode and moved to Display page of System menu 
+	- Name of Fullscreen option on Graphics page of Setup menu to Window Mode, also supporting new borderless window mode and moved to Display page of System menu
 	- Anaglyph 3D modes on Display page of System menu to list the modes 1 to 4, modes 5 to 8 are enabled by enabling the new Color Swap option
 	- Name of Network page of System menu to Net/VoIP and moved all VoIP related options from Sound page of System menu to Net/VoIP
 	- Net/VoIP and Sound options to hide not necessary options depending on selected VoIP Support or Sound System (instead of showing them greyed)
@@ -102,7 +103,7 @@
 	- Headline of Team ingame menu changed to Start like listed in ingame main menu
 	- Headline of Voice ingame menu changed to Voice Chat like listed in ingame main menu
 	- Default keyboard mapping in a few spots: `Q`/`MOUSE3` for gesture (was undefined); `E`/`ENTER` for use item; `F`/`BACKSPACE` for drop item (cartridge/lolly); `HOME`/`KP5` for 3rd person view (was `U`); `X`/`MOUSE2` for scope/zoom (was `MOUSE3`); `Y`/`Z` for chat team (was undefined); `U` chat target (was undefined); `I` for chat attacker (was undefined); `F12` for taking a screenshot (was `F11`).
-	- Dynamic flares to be enabled by default `r_flares [1|0]` 
+	- Dynamic flares to be enabled by default `r_flares [1|0]`
 	- Team names to Blue Noses and Red Pads everywhere in the game
 	- Scoreboard to show personal scores in team based games again
 	- Game type list in Create menu to list FFA game types first and FFA being default (was SYC)
@@ -475,7 +476,7 @@
 	- Maps: All old maps overhauled
 	- Menu: Start menu Sigle and Multi replaced by Create and Join
 	- Menu: All levelshots overhauled and resized
-	- Menu: Menu background pictures overhauled 
+	- Menu: Menu background pictures overhauled
 	- Menu: Bot menu, only default bots selectable, additional selection of default/red/blue in list
 	- Menu: Game options menu expanded
 	- Menu: New game play hints while the loading screen is shown

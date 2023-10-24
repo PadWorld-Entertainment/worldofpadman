@@ -3,6 +3,8 @@ set(SRCS
 	sv_bot.c
 	sv_ccmds.c
 	sv_client.c
+	sv_discord.c
+	sv_http.c
 	sv_game.c
 	sv_init.c
 	sv_main.c
@@ -50,9 +52,9 @@ add_asm(${PROJECT_NAME})
 add_botlib(${PROJECT_NAME})
 add_dependencies(${PROJECT_NAME} qagame)
 set(SERVER_DEFINES DEDICATED)
-set(LIBS zlib ${CMAKE_DL_LIBS})
+set(LIBS curl zlib SDL2::SDL2 SDL2::SDL2main ${CMAKE_DL_LIBS})
 if (MSVC)
-	list(APPEND LIBS ws2_32 winmm psapi)
+	list(APPEND LIBS ws2_32 winmm psapi winhttp)
 elseif (APPLE)
 	set(FRAMEWORKS Cocoa)
 	foreach (_framework ${FRAMEWORKS})
