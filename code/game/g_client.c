@@ -887,7 +887,7 @@ to the server machine, but qfalse on map changes and tournement
 restarts.
 ============
 */
-char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
+const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 	const char *value;
 	//	const char *areabits;
 	gclient_t *client;
@@ -954,6 +954,8 @@ char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 		if (!G_BotConnect(clientNum, !firstTime)) {
 			return "BotConnectfailed";
 		}
+	} else if (firstTime) {
+		trap_GlobalMessage(Info_ValueForKey(userinfo, "name"), "Joined the server");
 	}
 
 	// get and distribute relevant parameters

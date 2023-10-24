@@ -52,5 +52,6 @@ profile
 *.dylib
 
 /wop.*
+/woptest*
 /wopded.*
 /libSDL2*

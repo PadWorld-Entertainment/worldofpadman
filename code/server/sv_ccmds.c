@@ -628,7 +628,6 @@ SV_DelBanEntryFromList
 Remove a ban or an exception from the list.
 ==================
 */
-
 static qboolean SV_DelBanEntryFromList(int index) {
 	if (index == serverBansCount - 1)
 		serverBansCount--;
@@ -648,7 +647,6 @@ SV_ParseCIDRNotation
 Parse a CIDR notation type string and return a netadr_t and suffix by reference
 ==================
 */
-
 static qboolean SV_ParseCIDRNotation(netadr_t *dest, int *mask, const char *adrstr) {
 	char *suffix;
 
@@ -686,7 +684,6 @@ SV_AddBanToList
 Ban a user from being able to play on this server based on his ip address.
 ==================
 */
-
 static void SV_AddBanToList(qboolean isexception) {
 	const char *banstring;
 	char addy2[NET_ADDRSTRMAXLEN];
@@ -808,7 +805,6 @@ SV_DelBanFromList
 Remove a ban or an exception from the list.
 ==================
 */
-
 static void SV_DelBanFromList(qboolean isexception) {
 	int index, count = 0, todel, mask;
 	netadr_t ip;
@@ -883,7 +879,6 @@ SV_ListBans_f
 List all bans and exceptions on console
 ==================
 */
-
 static void SV_ListBans_f(void) {
 	int index, count;
 	serverBan_t *ban;
@@ -921,7 +916,6 @@ SV_FlushBans_f
 Delete all bans and exceptions.
 ==================
 */
-
 static void SV_FlushBans_f(void) {
 	// make sure server is running
 	if (!com_sv_running->integer) {

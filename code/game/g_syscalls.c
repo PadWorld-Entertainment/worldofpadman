@@ -40,6 +40,10 @@ static int PASSFLOAT(float x) {
 	return *(int *)&floatTemp;
 }
 
+void trap_GlobalMessage(const char *user, const char *msg) {
+	syscall(G_GLOBALMESSAGE, user, msg);
+}
+
 void trap_Print(const char *text) {
 	syscall(G_PRINT, text);
 }

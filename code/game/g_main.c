@@ -1309,6 +1309,7 @@ void LogExit(const char *string) {
 		}
 
 		G_LogPrintf("Score: %i %i\n", level.sortedClients[i], cl->ps.persistant[PERS_SCORE]);
+		trap_GlobalMessage(cl->pers.netname, va("Score: %i", cl->ps.persistant[PERS_SCORE]));
 	}
 }
 
@@ -1682,7 +1683,6 @@ static void CheckTournament(void) {
 	}
 
 	if (g_gametype.integer == GT_TOURNAMENT) {
-
 		// pull in a spectator if needed
 		if (level.numPlayingClients < 2) {
 			AddTournamentPlayer();

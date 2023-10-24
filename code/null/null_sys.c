@@ -35,6 +35,10 @@ void Sys_SigHandler(int signal) {
 	exit(signal);
 }
 
+const char *Sys_DefaultAppPath(void) {
+	return "";
+}
+
 const char *Sys_DefaultInstallPath(void) {
 	return ".";
 }

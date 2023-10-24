@@ -20,7 +20,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
+#include "SDL_thread.h"
 #include "server.h"
+#include "sv_discord.h"
+#include "sv_http.h"
+
+#ifdef USE_LOCAL_HEADERS
+#include "SDL.h"
+#else
+#include <SDL.h>
+#endif
 
 /*
 ===============
@@ -378,7 +387,7 @@ clients along with it.
 This is NOT called for map_restart
 ================
 */
-void SV_SpawnServer(char *server, qboolean killBots) {
+void SV_SpawnServer(const char *server, qboolean killBots) {
 	int i;
 	int checksum;
 	qboolean isBot;
@@ -451,6 +460,8 @@ void SV_SpawnServer(char *server, qboolean killBots) {
 	FS_Restart(sv.checksumFeed);
 
 	CM_LoadMap(va("maps/%s.bsp", server), qfalse, &checksum);
+
+	DISCORD_EnqueueMessage(sv_hostname->string, va("starting map %s", server));
 
 	// set serverinfo visible name
 	Cvar_Set("mapname", server);
@@ -605,6 +616,8 @@ Only called at main exe startup, not for each game
 void SV_Init(void) {
 	int index;
 
+	SDL_Init(0);
+
 	SV_AddOperatorCommands();
 
 	// serverinfo vars
@@ -670,6 +683,11 @@ void SV_Init(void) {
 
 	// Load saved bans
 	Cbuf_AddText("rehashbans\n");
+
+	HTTP_Init();
+	DISCORD_Init();
+	HTTP_SetTimeouts(Cvar_Get("http_connecttimeout", "5", CVAR_ARCHIVE)->integer,
+					 Cvar_Get("http_timeout", "5", CVAR_ARCHIVE)->integer);
 }
 
 /*
@@ -728,6 +746,9 @@ void SV_Shutdown(const char *finalmsg) {
 	SV_MasterShutdown();
 	SV_ShutdownGameProgs();
 
+	DISCORD_Close();
+	HTTP_Close();
+
 	// free current level
 	SV_ClearServer();
 
@@ -750,4 +771,6 @@ void SV_Shutdown(const char *finalmsg) {
 	// disconnect any local clients
 	if (sv_killserver->integer != 2)
 		CL_Disconnect(qfalse);
+
+	SDL_Quit();
 }

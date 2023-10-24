@@ -20,32 +20,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-#if defined(DEDICATED) || defined(TESTS)
-#ifdef _WIN32
-#include <windows.h>
-#define Sys_LoadLibrary(f) (void *)LoadLibrary(f)
-#define Sys_UnloadLibrary(h) FreeLibrary((HMODULE)h)
-#define Sys_LoadFunction(h, fn) (void *)GetProcAddress((HMODULE)h, fn)
-#define Sys_LibraryError() "unknown"
-#else
-#include <dlfcn.h>
-#define Sys_LoadLibrary(f) dlopen(f, RTLD_NOW)
-#define Sys_UnloadLibrary(h) dlclose(h)
-#define Sys_LoadFunction(h, fn) dlsym(h, fn)
-#define Sys_LibraryError() dlerror()
-#endif
-#else // DEDICATED
-#ifdef USE_LOCAL_HEADERS
-#include "SDL.h"
-#include "SDL_loadso.h"
-#else
-#include <SDL.h>
-#include <SDL_loadso.h>
-#endif
-#define Sys_LoadLibrary(f) SDL_LoadObject(f)
-#define Sys_UnloadLibrary(h) SDL_UnloadObject(h)
-#define Sys_LoadFunction(h, fn) SDL_LoadFunction(h, fn)
-#define Sys_LibraryError() SDL_GetError()
-#endif
+#ifndef DISCORD_H
+#define DISCORD_H
 
-void *QDECL Sys_LoadDll(const char *name, qboolean useSystemLib);
+int DISCORD_Init(void);
+void DISCORD_Close(void);
+
+// send a message of a user via configured discord webhook - blocking
+// return a negative number on error and otherwise the http status code
+int DISCORD_SendMessage(const char *user, const char *msg);
+// send a message of a user via configured discord webhook - non-blocking
+// return 0 on success
+// return -1 if the queue is full and the message wasn't send
+int DISCORD_EnqueueMessage(const char *user, const char *msg);
+
+#endif

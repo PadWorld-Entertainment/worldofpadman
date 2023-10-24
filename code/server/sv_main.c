@@ -1176,8 +1176,7 @@ int SV_RateMsec(client_t *client) {
 
 	if (rate > rateMsec)
 		return 0;
-	else
-		return rateMsec - rate;
+	return rateMsec - rate;
 }
 
 /*
@@ -1189,7 +1188,6 @@ not computing a server frame or sending client snapshots.
 Return the time in msec until we expect to be called next
 ====================
 */
-
 int SV_SendQueuedPackets(void) {
 	int numBlocks;
 	int dlStart, deltaT, delayT;
