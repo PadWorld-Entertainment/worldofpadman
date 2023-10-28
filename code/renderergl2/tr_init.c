@@ -612,7 +612,6 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 
 	offset = resamplestart - resample;
 	rpadlen = padwidth - linelen;
-	//
 
 	// resample from source
 	xScale = glConfig.vidWidth / (float)(width * 4.0f);
@@ -635,6 +634,8 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 			dst[2] = b / 12;
 		}
 	}
+
+	memcount = (width * 3 + rpadlen) * height;
 
 	// gamma correction
 	if (glConfig.deviceSupportsGamma) {
