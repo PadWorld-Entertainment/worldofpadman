@@ -814,7 +814,6 @@ extern cvar_t *com_journal;
 extern cvar_t *com_ansiColor;
 extern cvar_t *com_unfocused;
 extern cvar_t *com_minimized;
-extern cvar_t *com_altivec;
 extern cvar_t *com_basegame;
 extern cvar_t *com_homepath;
 

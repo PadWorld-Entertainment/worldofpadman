@@ -27,48 +27,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define idx64 0
 
 #ifdef Q3_VM
-
 #define id386 0
-#define idppc 0
-#define idppc_altivec 0
-#define idsparc 0
-
-#else
-
+#else /* Q3_VM */
 #if (defined _M_IX86 || defined __i386__) && !defined(C_ONLY)
 #define id386 1
 #else
 #define id386 0
 #endif
-
-#if (defined(powerc) || defined(powerpc) || defined(ppc) || defined(__ppc) || defined(__ppc__)) && !defined(C_ONLY)
-#define idppc 1
-#if defined(__VEC__)
-#define idppc_altivec 1
-#ifdef __APPLE__ // Apple's GCC does this differently than the FSF.
-#define VECCONST_UINT8(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)                                                 \
-	(vector unsigned char)(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
-#else
-#define VECCONST_UINT8(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)                                                 \
-	(vector unsigned char) {                                                                                           \
-		a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p                                                                 \
-	}
-#endif
-#else
-#define idppc_altivec 0
-#endif
-#else
-#define idppc 0
-#define idppc_altivec 0
-#endif
-
-#if defined(__sparc__) && !defined(C_ONLY)
-#define idsparc 1
-#else
-#define idsparc 0
-#endif
-
-#endif
+#endif /* Q3_VM */
 
 #ifndef __ASM_I386__ // don't include the C bits if included from qasm.h
 

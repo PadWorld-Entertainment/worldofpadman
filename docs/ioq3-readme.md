@@ -221,7 +221,6 @@ The defaults for these variables differ depending on the target platform.
                                       via UDP, in kbyte/s
 
   com_ansiColor                     - enable use of ANSI escape codes in the tty
-  com_altivec                       - enable use of altivec on PowerPC systems
   com_basegame                      - Use a different base than baseq3. If no
                                       original Quake3 or TeamArena pak files
                                       are found, this will enable running in
@@ -565,5 +564,3 @@ Significant contributions from
   * Vincent S. Cojot <vincent at cojot dot name>
   * optical <alex@rigbo.se>
   * Aaron Gyes <floam@aaron.gy>
-
-

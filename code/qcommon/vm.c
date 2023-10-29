@@ -797,7 +797,7 @@ intptr_t QDECL VM_Call(vm_t *vm, int callnum, ...) {
 		r = vm->entryPoint(callnum, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8],
 						   args[9], args[10], args[11]);
 	} else {
-#if (id386 || idsparc) && !defined __clang__ // calling convention doesn't need conversion in some cases
+#if id386 && !defined __clang__ // calling convention doesn't need conversion in some cases
 #ifndef NO_VM_COMPILED
 		if (vm->compiled)
 			r = VM_CallCompiled(vm, (int *)&callnum);

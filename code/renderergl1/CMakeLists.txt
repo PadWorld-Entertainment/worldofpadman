@@ -1,5 +1,4 @@
 set(SRCS
-	tr_altivec.c
 	tr_animation.c
 	tr_backend.c
 	tr_bsp.c
