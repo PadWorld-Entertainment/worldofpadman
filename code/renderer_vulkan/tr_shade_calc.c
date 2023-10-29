@@ -1065,78 +1065,21 @@ void RB_CalcDiffuseColor(unsigned char (*colors)[4]) {
 	vec3_t lightDir;
 	vec3_t directedLight;
 	int numVertexes;
-#if idppc_altivec
-	vector unsigned char vSel = (vector unsigned char)(0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
-													   0xff, 0x00, 0x00, 0x00, 0xff);
-	vector float ambientLightVec;
-	vector float directedLightVec;
-	vector float lightDirVec;
-	vector float normalVec0, normalVec1;
-	vector float incomingVec0, incomingVec1, incomingVec2;
-	vector float zero, jVec;
-	vector signed int jVecInt;
-	vector signed short jVecShort;
-	vector unsigned char jVecChar, normalPerm;
-#endif
 	ent = backEnd.currentEntity;
 	//	ambientLightRGBA[0] = ent->ambientLightRGBA[0];
 	//  ambientLightRGBA[1] = ent->ambientLightRGBA[1];
 	//	ambientLightRGBA[2] = ent->ambientLightRGBA[2];
 	//	ambientLightRGBA[3] = ent->ambientLightRGBA[3];
 
-#if idppc_altivec
-	// A lot of this could be simplified if we made sure
-	// entities light info was 16-byte aligned.
-	jVecChar = vec_lvsl(0, ent->ambientLight);
-	ambientLightVec = vec_ld(0, (vector float *)ent->ambientLight);
-	jVec = vec_ld(11, (vector float *)ent->ambientLight);
-	ambientLightVec = vec_perm(ambientLightVec, jVec, jVecChar);
-
-	jVecChar = vec_lvsl(0, ent->directedLight);
-	directedLightVec = vec_ld(0, (vector float *)ent->directedLight);
-	jVec = vec_ld(11, (vector float *)ent->directedLight);
-	directedLightVec = vec_perm(directedLightVec, jVec, jVecChar);
-
-	jVecChar = vec_lvsl(0, ent->lightDir);
-	lightDirVec = vec_ld(0, (vector float *)ent->lightDir);
-	jVec = vec_ld(11, (vector float *)ent->lightDir);
-	lightDirVec = vec_perm(lightDirVec, jVec, jVecChar);
-
-	zero = (vector float)vec_splat_s8(0);
-	VectorCopy(ent->lightDir, lightDir);
-#else
 	VectorCopy(ent->ambientLight, ambientLight);
 	VectorCopy(ent->directedLight, directedLight);
 	VectorCopy(ent->lightDir, lightDir);
-#endif
 
 	v = tess.xyz[0];
 	normal = tess.normal[0];
 
-#if idppc_altivec
-	normalPerm = vec_lvsl(0, normal);
-#endif
 	numVertexes = tess.numVertexes;
 	for (i = 0; i < numVertexes; i++, v += 4, normal += 4) {
-#if idppc_altivec
-		normalVec0 = vec_ld(0, (vector float *)normal);
-		normalVec1 = vec_ld(11, (vector float *)normal);
-		normalVec0 = vec_perm(normalVec0, normalVec1, normalPerm);
-		incomingVec0 = vec_madd(normalVec0, lightDirVec, zero);
-		incomingVec1 = vec_sld(incomingVec0, incomingVec0, 4);
-		incomingVec2 = vec_add(incomingVec0, incomingVec1);
-		incomingVec1 = vec_sld(incomingVec1, incomingVec1, 4);
-		incomingVec2 = vec_add(incomingVec2, incomingVec1);
-		incomingVec0 = vec_splat(incomingVec2, 0);
-		incomingVec0 = vec_max(incomingVec0, zero);
-		normalPerm = vec_lvsl(12, normal);
-		jVec = vec_madd(incomingVec0, directedLightVec, ambientLightVec);
-		jVecInt = vec_cts(jVec, 0);					 // RGBx
-		jVecShort = vec_pack(jVecInt, jVecInt);		 // RGBxRGBx
-		jVecChar = vec_packsu(jVecShort, jVecShort); // RGBxRGBxRGBxRGBx
-		jVecChar = vec_sel(jVecChar, vSel, vSel);	 // RGBARGBARGBARGBA replace alpha with 255
-		vec_ste((vector unsigned int)jVecChar, 0, (unsigned int *)&colors[i * 4]); // store color
-#else
 		int R, G, B;
 		incoming = DotProduct(normal, lightDir);
 		if (incoming <= 0) {
@@ -1167,6 +1110,5 @@ void RB_CalcDiffuseColor(unsigned char (*colors)[4]) {
 		colors[i][2] = B;
 
 		colors[i][3] = 255;
-#endif
 	}
 }

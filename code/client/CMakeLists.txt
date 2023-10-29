@@ -11,7 +11,6 @@ set(SRCS
 	cl_scrn.c
 	cl_ui.c
 	cl_avi.c
-	snd_altivec.c
 	snd_adpcm.c
 	snd_dma.c
 	snd_mem.c
@@ -81,7 +80,6 @@ endif()
 
 project(wop)
 wop_add_executable(TARGET ${PROJECT_NAME} WINDOWED SRCS ${SRCS})
-add_asm(${PROJECT_NAME})
 if (NOT MSVC AND NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
 	target_sources(${PROJECT_NAME} PRIVATE ${CODE_DIR}/asm/snd_mixa.s ${CODE_DIR}/asm/matha.s)
 	set_source_files_properties(${CODE_DIR}/asm/snd_mixa.s PROPERTIES COMPILE_FLAGS "-m32 -march=i586 -x assembler-with-cpp")

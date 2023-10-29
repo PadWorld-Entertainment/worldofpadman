@@ -529,13 +529,6 @@ static void ProjectDlightTexture_scalar(void) {
 }
 
 static void ProjectDlightTexture(void) {
-#if idppc_altivec
-	if (com_altivec->integer) {
-		// must be in a separate translation unit or G3 systems will crash.
-		ProjectDlightTexture_altivec();
-		return;
-	}
-#endif
 	ProjectDlightTexture_scalar();
 }
 

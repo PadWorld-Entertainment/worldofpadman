@@ -319,13 +319,6 @@ static void S_PaintChannelFrom16_scalar(channel_t *ch, const sfx_t *sc, int coun
 }
 
 static void S_PaintChannelFrom16(channel_t *ch, const sfx_t *sc, int count, int sampleOffset, int bufferOffset) {
-#if idppc_altivec
-	if (com_altivec->integer) {
-		// must be in a separate translation unit or G3 systems will crash.
-		S_PaintChannelFrom16_altivec(paintbuffer, snd_vol, ch, sc, count, sampleOffset, bufferOffset);
-		return;
-	}
-#endif
 	S_PaintChannelFrom16_scalar(ch, sc, count, sampleOffset, bufferOffset);
 }
 

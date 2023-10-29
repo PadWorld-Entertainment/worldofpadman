@@ -62,7 +62,6 @@ cvar_t *com_timescale;
 cvar_t *com_fixedtime;
 cvar_t *com_journal;
 cvar_t *com_maxfps;
-cvar_t *com_altivec;
 cvar_t *com_timedemo;
 cvar_t *com_sv_running;
 cvar_t *com_cl_running;
@@ -92,14 +91,6 @@ cvar_t *com_homepath;
 cvar_t *com_busyWait;
 #ifndef DEDICATED
 cvar_t *con_autochat;
-#endif
-
-#if idx64
-int (*Q_VMftol)(void);
-#elif id386
-long(QDECL *Q_ftol)(float f);
-int(QDECL *Q_VMftol)(void);
-void(QDECL *Q_SnapVector)(vec3_t vec);
 #endif
 
 // com_speeds times
@@ -2351,65 +2342,6 @@ static void Com_GameRestart_f(void) {
 	Com_GameRestart(0, qtrue);
 }
 
-static void Com_DetectAltivec(void) {
-	// Only detect if user hasn't forcibly disabled it.
-	if (com_altivec->integer) {
-		static qboolean altivec = qfalse;
-		static qboolean detected = qfalse;
-		if (!detected) {
-			altivec = (Sys_GetProcessorFeatures() & CF_ALTIVEC);
-			detected = qtrue;
-		}
-
-		if (!altivec) {
-			Cvar_Set("com_altivec", "0"); // we don't have it! Disable support!
-		}
-	}
-}
-
-/*
-=================
-Com_DetectSSE
-Find out whether we have SSE support for Q_ftol function
-=================
-*/
-
-#if id386 || idx64
-
-static void Com_DetectSSE(void) {
-#if !idx64
-	cpuFeatures_t feat;
-
-	feat = Sys_GetProcessorFeatures();
-
-	if (feat & CF_SSE) {
-		if (feat & CF_SSE2)
-			Q_SnapVector = qsnapvectorsse;
-		else
-			Q_SnapVector = qsnapvectorx87;
-
-		Q_ftol = qftolsse;
-#endif
-		Q_VMftol = qvmftolsse;
-
-		Com_Printf("SSE instruction set enabled\n");
-#if !idx64
-	} else {
-		Q_ftol = qftolx87;
-		Q_VMftol = qvmftolx87;
-		Q_SnapVector = qsnapvectorx87;
-
-		Com_Printf("SSE instruction set not available\n");
-	}
-#endif
-}
-
-#else
-
-#define Com_DetectSSE()
-
-#endif
-
 /*
 =================
 Com_InitRand
@@ -2458,8 +2390,6 @@ void Com_Init(char *commandLine) {
 
 	//	Swap_Init ();
 	Cbuf_Init();
-
-	Com_DetectSSE();
 
 	// override anything from the config files with command line args
 	Com_StartupVariable(NULL);
@@ -2516,7 +2446,6 @@ void Com_Init(char *commandLine) {
 	//
 	// init commands and vars
 	//
-	com_altivec = Cvar_Get("com_altivec", "1", CVAR_ARCHIVE);
 	com_maxfps = Cvar_Get("com_maxfps", "125", CVAR_ARCHIVE);
 
 	com_logfile = Cvar_Get("logfile", "0", CVAR_TEMP);
@@ -2605,12 +2534,6 @@ void Com_Init(char *commandLine) {
 	Cvar_Set("ui_singlePlayerActive", "0");
 
 	com_fullyInitialized = qtrue;
-
-	// always set the cvar, but only print the info if it makes sense.
-	Com_DetectAltivec();
-#if idppc
-	Com_Printf("Altivec support is %s\n", com_altivec->integer ? "enabled" : "disabled");
-#endif
 
 	com_pipefile = Cvar_Get("com_pipefile", "", CVAR_ARCHIVE | CVAR_LATCH);
 	if (com_pipefile->string[0]) {
@@ -2887,11 +2810,6 @@ void Com_Frame(void) {
 	msec = com_frameTime - lastTime;
 
 	Cbuf_Execute();
-
-	if (com_altivec->modified) {
-		Com_DetectAltivec();
-		com_altivec->modified = qfalse;
-	}
 
 	// mess with msec if needed
 	msec = Com_ModifyMsec(msec);

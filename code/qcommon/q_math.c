@@ -468,9 +468,6 @@ void VectorRotateTMatrix(vec3_t in, vec3_t matrix[3], vec3_t out) {
 	out[2] = matrix[0][2] * in[0] + matrix[1][2] * in[1] + matrix[2][2] * in[2];
 }
 
-//============================================================================
-
-#if !idppc
 /*
 ** float q_rsqrt( float number )
 */
@@ -495,14 +492,10 @@ float Q_fabs(float f) {
 	fi.i &= 0x7FFFFFFF;
 	return fi.f;
 }
-#endif
-
-//============================================================
 
 /*
 ===============
 LerpAngle
-
 ===============
 */
 float LerpAngle(float from, float to, float frac) {
