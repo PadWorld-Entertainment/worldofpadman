@@ -347,12 +347,15 @@ static const replacePair_t q3ToWopItems[] = {{"weapon_gauntlet", "weapon_punchy"
 											 {"ammo_bfg", "ammo_imperius"},
 
 											 {"item_quad", "item_padpower"},
-											 {"item_enviro", "item_climber"},
-											 {"item_hast", "item_speedy"},
-											 {"item_flight", "item_jump"},
+											 {"item_haste", "item_speedy"},
+											 {"item_flight", "item_jumper"},
 											 {"item_invis", "item_visionless"},
 											 {"item_regen", "item_revival"},
+											 {"item_armor_combat", "item_armor_padshield"},
 											 {"item_armor_body", "item_armor_padshield"},
+
+											 {"holdable_teleporter", "holdable_floater"},
+											 {"holdable_medkit", "holdable_killerducks"},
 
 											 {"team_CTF_redflag", "team_CTL_redlolly"},
 											 {"team_CTF_blueflag", "team_CTL_bluelolly"},
@@ -377,6 +380,50 @@ static const replacePair_t spawnpointReplacements[] = {{"team_redplayer", "info_
 
 /*
 ===================
+G_ValueIncludesGametype
+
+Returns whether value includes gametype.
+If g_q3Items is enabled, will also check against Q3 gametype names.
+===================
+*/
+static qboolean G_ValueIncludesGametype(const char *value, gametype_t gametype) {
+	const char *gametypeName;
+	char *s;
+
+	// Order needs to match gametype_t of WoP
+	static const char *gametypeNames[] = {"ffa", "tournament", "single", "spray", "lps", "ctkd",
+											"team", "freeze", "ctl", "sptp", "balloon"};
+	static const char *gametypeNamesQ3[] = {"ffa", "tournament", "single", NULL, NULL, NULL,
+											"team", NULL, "ctf", NULL, NULL};
+
+	if ((gametype < GT_FFA) || (gametype >= GT_MAX_GAME_TYPE)) {
+		return qfalse;
+	}
+	gametypeName = gametypeNames[gametype];
+
+	s = strstr(value, gametypeName);
+	if (!s) {
+		if (g_q3Items.integer) {
+			gametypeName = gametypeNamesQ3[gametype];
+			if (NULL == gametypeName) {
+				return qfalse;
+			}
+
+			s = strstr(value, gametypeName);
+			if (s) {
+				return qtrue;
+			}
+		}
+
+		return qfalse;
+	}
+
+	return qtrue;
+}
+
+
+/*
+===================
 G_SpawnGEntityFromSpawnVars
 
 Spawn an entity and fill in all of the level fields from
@@ -391,8 +438,8 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	const char *gametypeName;
 	const gitem_t *item;
 
-	static const char *gametypeNames[] = {"ffa",  "tournament", "single", "spray", "lps",	 "ctkd",
-										  "team", "freeze",		"ctl",	  "sptp",  "balloon"};
+	static const char *gametypeNames[] = {"ffa", "tournament", "single", "spray", "lps", "ctkd",
+										  "team", "freeze", "ctl", "sptp", "balloon"};
 	CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
 
 	// get the next free entity
@@ -406,6 +453,9 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	if (g_q3Items.integer) {
 		for (i = 0; q3ToWopItems[i].s; i++) {
 			if (Q_stricmp(ent->classname, q3ToWopItems[i].s) == 0) {
+				G_Printf("Spawning (Q3 items): replacing entity " S_COLOR_YELLOW "%s" S_COLOR_WHITE
+						  " with " S_COLOR_YELLOW "%s" S_COLOR_WHITE ".\n",
+						  ent->classname, q3ToWopItems[i].r);
 				ent->classname = (const char *)q3ToWopItems[i].r;
 				break;
 			}
@@ -506,7 +556,25 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		}
 	}
 
-	for (item = (bg_itemlist + 1); item->classname; item++) {
+	if (G_SpawnString("gametype", NULL, &value)) {
+		if (!G_ValueIncludesGametype(value, g_gametype.integer)) {
+			G_Printf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to gametype key.\n",
+					  ent->classname);
+			G_FreeEntity(ent);
+			return;
+		}
+	}
+
+	if (G_SpawnString("notGametype", NULL, &value)) {
+		if (G_ValueIncludesGametype(value, g_gametype.integer)) {
+			G_Printf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to notGametype key.\n",
+					  ent->classname);
+			G_FreeEntity(ent);
+			return;
+		}
+	}
+	
+		for (item = (bg_itemlist + 1); item->classname; item++) {
 		if (strcmp(item->classname, ent->classname) == 0) {
 			RegisterItem(item);
 			break;
