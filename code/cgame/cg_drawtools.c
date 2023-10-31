@@ -608,35 +608,25 @@ static int UI_ProportionalStringWidth(const char *str) {
 
 static void UI_DrawProportionalString2(int x, int y, const char *str, const vec4_t color, float sizeScale,
 									   qhandle_t charset) {
-	const char *s;
-	unsigned char ch; // bk001204 - unsigned
-	float ax;
-	float ay;
-	float aw;
-	float ah;
-	float frow;
-	float fcol;
-	float fwidth;
-	float fheight;
+	float ax = x * cgs.screenXScale + cgs.screenXBias;
+	const float ay = y * cgs.screenYScale;
+	const char *s =  str;
 
 	// draw the colored text
 	trap_R_SetColor(color);
 
-	ax = x * cgs.screenXScale + cgs.screenXBias;
-	ay = y * cgs.screenYScale;
-
-	s = str;
 	while (*s) {
-		ch = *s & 127;
+		unsigned char ch = *s & 127;
+		float aw;
 		if (ch == ' ') {
 			aw = (float)PROP_SPACE_WIDTH * cgs.screenXScale * sizeScale;
 		} else if (propMap[ch].width != -1) {
-			fcol = (float)propMap[ch].x / 256.0f;
-			frow = (float)propMap[ch].y / 256.0f;
-			fwidth = (float)propMap[ch].width / 256.0f;
-			fheight = (float)PROP_HEIGHT / 256.0f;
+			const float fcol = (float)propMap[ch].x / 256.0f;
+			const float frow = (float)propMap[ch].y / 256.0f;
+			const float fwidth = (float)propMap[ch].width / 256.0f;
+			const float fheight = (float)PROP_HEIGHT / 256.0f;
+			const float ah = (float)PROP_HEIGHT * cgs.screenYScale * sizeScale;
 			aw = (float)propMap[ch].width * cgs.screenXScale * sizeScale;
-			ah = (float)PROP_HEIGHT * cgs.screenYScale * sizeScale;
 			trap_R_DrawStretchPic(ax, ay, aw, ah, fcol, frow, fcol + fwidth, frow + fheight, charset);
 		} else {
 			aw = 0;
@@ -697,9 +687,9 @@ void UI_DrawProportionalString(int x, int y, const char *str, int style, const v
 	}
 
 	if (style & UI_INVERSE) {
-		drawcolor[0] = color[0] * 0.8;
-		drawcolor[1] = color[1] * 0.8;
-		drawcolor[2] = color[2] * 0.8;
+		drawcolor[0] = color[0] * 0.8f;
+		drawcolor[1] = color[1] * 0.8f;
+		drawcolor[2] = color[2] * 0.8f;
 		drawcolor[3] = color[3];
 		UI_DrawProportionalString2(x, y, str, drawcolor, sizeScale, cgs.media.charsetProp);
 		return;
