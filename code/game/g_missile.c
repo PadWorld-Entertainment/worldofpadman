@@ -611,7 +611,7 @@ void G_RunMissile(gentity_t *ent) {
 		passent = ent->r.ownerNum;
 	}
 	// trace a line from the previous position to the current position
-	if (level.time - ent->s.pos.trTime > 50)
+	if (level.time - ent->s.pos.trTime > MISSILE_PRESTEP_TIME)
 		trap_Trace(&tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, passent, ent->clipmask);
 	else
 		trap_Trace(&tr, ent->r.currentOrigin, vec3_origin, vec3_origin, origin, passent, ent->clipmask);
