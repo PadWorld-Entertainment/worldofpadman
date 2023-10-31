@@ -727,28 +727,28 @@ CG_WorldToScreen
 ================
 */
 qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
+	const float px = tan(cg.refdef.fov_x * M_PI / 360.0f);
+	const float py = tan(cg.refdef.fov_y * M_PI / 360.0f);
+	const float xc = (float)(SCREEN_WIDTH * cg_viewsize.integer) / 200.0f;
+	const float yc = (float)(SCREEN_HEIGHT * cg_viewsize.integer) / 200.0f;
+	qboolean front = qtrue;
 	vec3_t trans;
-	float xc, yc;
-	float px, py;
 	float z;
-
-	px = tan(cg.refdef.fov_x * M_PI / 360.0);
-	py = tan(cg.refdef.fov_y * M_PI / 360.0);
 
 	VectorSubtract(point, cg.refdef.vieworg, trans);
 
-	xc = (float)(SCREEN_WIDTH * cg_viewsize.integer) / 200.0f;
-	yc = (float)(SCREEN_HEIGHT * cg_viewsize.integer) / 200.0f;
-
 	z = DotProduct(trans, cg.refdef.viewaxis[0]);
-	if (z <= 0.001f)
-		return qfalse;
+	if (z <= 0.001f) {
+		front = qfalse;
+	}
 
-	if (x)
+	if (x) {
 		*x = (float)SCREEN_WIDTH * 0.5f - DotProduct(trans, cg.refdef.viewaxis[1]) * xc / (z * px);
+	}
 
-	if (y)
+	if (y) {
 		*y = (float)SCREEN_HEIGHT * 0.5f - DotProduct(trans, cg.refdef.viewaxis[2]) * yc / (z * py);
+	}
 
-	return VectorLengthSquared(trans); //qtrue;
+	return front;
 }

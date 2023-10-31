@@ -29,6 +29,8 @@ qboolean CG_IsKillerDuck(const centity_t *cent) {
 void CG_DrawKillerduckIcon(const centity_t *cent) {
 	vec3_t iconPos;
 	float size, x, y;
+	qboolean front;
+	vec3_t trans;
 	float squaredDist;
 
 	if (!(cg_icons.integer & ICON_KILLERDUCK)) {
@@ -41,13 +43,14 @@ void CG_DrawKillerduckIcon(const centity_t *cent) {
 
 	VectorCopy(cent->currentState.pos.trBase, iconPos);
 	iconPos[2] += 50; // draw icon above visible killerduck origin
-	squaredDist = CG_WorldToScreen(iconPos, &x, &y);
-	if (!squaredDist) {
+	front = CG_WorldToScreen(iconPos, &x, &y);
+	if (!front) {
 		return;
 	}
 
 	// don't draw the icon if the killerduck holdable is visible and close
-	if (DistanceSquared(cg.refdef.vieworg, cent->currentState.pos.trBase) < Square(250.0f)) {
+	squaredDist = DistanceSquared(cg.refdef.vieworg, cent->currentState.pos.trBase);
+	if (squaredDist < Square(250.0f)) {
 		trace_t trace;
 		CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.pos.trBase, cg.snap->ps.clientNum, MASK_OPAQUE);
 		if (1.0 == trace.fraction) {

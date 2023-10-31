@@ -527,7 +527,7 @@ CG_DrawServerInfos
 static const char *gametype_strs[] = {
 	GAMETYPE_NAME_SHORT(GT_FFA), GAMETYPE_NAME_SHORT(GT_TOURNAMENT), GAMETYPE_NAME_SHORT(GT_SINGLE_PLAYER),
 	GAMETYPE_NAME_SHORT(GT_SPRAYFFA), GAMETYPE_NAME_SHORT(GT_LPS), GAMETYPE_NAME_SHORT(GT_CATCH),
-	GAMETYPE_NAME_SHORT(GT_TEAM), GAMETYPE_NAME_SHORT(GT_FREEZETAG), GAMETYPE_NAME_SHORT(GT_CTF), 
+	GAMETYPE_NAME_SHORT(GT_TEAM), GAMETYPE_NAME_SHORT(GT_FREEZETAG), GAMETYPE_NAME_SHORT(GT_CTF),
 	GAMETYPE_NAME_SHORT(GT_SPRAY), GAMETYPE_NAME_SHORT(GT_BALLOON), GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE)};
 CASSERT(ARRAY_LEN(gametype_strs) == GT_MAX_GAME_TYPE + 1);
 
@@ -2172,6 +2172,7 @@ static void CG_DrawBalloonIcon(const centity_t *cent) {
 	vec3_t iconPos;
 	float squaredDist;
 	float size, x, y;
+	qboolean front;
 
 	if (!(cg_icons.integer & ICON_BALLOON)) {
 		return;
@@ -2181,13 +2182,14 @@ static void CG_DrawBalloonIcon(const centity_t *cent) {
 
 	VectorCopy(cent->currentState.origin, iconPos);
 	iconPos[2] += 40; // draw icon above visible box model
-	squaredDist = CG_WorldToScreen(iconPos, &x, &y);
-	if (!squaredDist) {
+	front = CG_WorldToScreen(iconPos, &x, &y);
+	if (!front) {
 		return;
 	}
 
 	// don't draw the icon if the box model is visible and close
-	if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin) < Square(250)) {
+	squaredDist = DistanceSquared(cg.refdef.vieworg, cent->currentState.origin);
+	if (squaredDist < Square(250)) {
 		trace_t trace;
 		CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin, cg.snap->ps.clientNum, MASK_OPAQUE);
 		if (1.0 == trace.fraction) {
@@ -2208,6 +2210,7 @@ static void CG_DrawHealthstationIcon(const centity_t *cent) {
 	vec3_t mins, maxs, center;
 	float size, x, y;
 	float squaredDist;
+	qboolean front;
 
 	if (!(cg_icons.integer & ICON_HEALTHSTATION)) {
 		return;
@@ -2227,8 +2230,8 @@ static void CG_DrawHealthstationIcon(const centity_t *cent) {
 	VectorCopy(cent->lerpOrigin, iconPos);
 	iconPos[2] += 120; // draw icon above visible model
 
-	squaredDist = CG_WorldToScreen(iconPos, &x, &y);
-	if (!squaredDist) {
+	front = CG_WorldToScreen(iconPos, &x, &y);
+	if (!front) {
 		return;
 	}
 
@@ -2242,7 +2245,8 @@ static void CG_DrawHealthstationIcon(const centity_t *cent) {
 	entPos[2] += center[2] / 2.0f;
 
 	// don't draw the icon if the health station is visible and close
-	if (DistanceSquared(cg.refdef.vieworg, entPos) < Square(250.0f)) {
+	squaredDist = DistanceSquared(cg.refdef.vieworg, entPos);
+	if (squaredDist < Square(250.0f)) {
 		trace_t trace;
 		CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, entPos, cg.snap->ps.clientNum, MASK_OPAQUE);
 		if (1.0 == trace.fraction) {
@@ -2260,6 +2264,7 @@ static void CG_DrawSprayroomIcon(centity_t *cent) {
 	vec3_t iconPos;
 	float size, x, y;
 	float squaredDist;
+	qboolean front;
 
 	if (!(cg_icons.integer & ICON_SPRAYROOM)) {
 		return;
@@ -2273,13 +2278,14 @@ static void CG_DrawSprayroomIcon(centity_t *cent) {
 	VectorCopy(cent->currentState.origin2, iconPos);
 	iconPos[2] += 100; // draw icon above visible model
 
-	squaredDist = CG_WorldToScreen(iconPos, &x, &y);
-	if (!squaredDist) {
+	front = CG_WorldToScreen(iconPos, &x, &y);
+	if (!front) {
 		return;
 	}
 
 	// don't draw the icon if the sprayroom teleporter is visible and close
-	if (DistanceSquared(cg.refdef.vieworg, cent->currentState.origin2) < Square(250)) {
+	squaredDist = DistanceSquared(cg.refdef.vieworg, cent->currentState.origin2);
+	if (squaredDist < Square(250)) {
 		trace_t trace;
 		CG_Trace(&trace, cg.refdef.vieworg, NULL, NULL, cent->currentState.origin2, cg.snap->ps.clientNum, MASK_OPAQUE);
 		if (1.0 == trace.fraction) {
@@ -2824,27 +2830,28 @@ static void CG_DrawLastPadStanding(void) {
 	for (i = 0; i < cg.numScores; i++) {
 		score_t *score = &cg.scores[i];
 		clientInfo_t *ci = &cgs.clientinfo[score->client];
-		vec4_t strColor = {1.0, 1.0, 1.0, 1.0};
+		vec4_t strColor = {1.0f, 1.0f, 1.0f, 1.0f};
 
 		// FIXME: Magical constants!
 		if ((ci->lastPosSaveTime > 0) && ((cg.time - ci->lastPosSaveTime) < 1500)) {
 			float x, y;
-			float squaredDistance;
+			qboolean front;
 
 			// fading out, if the player disappeared
 			strColor[3] = ((1500 - (cg.time - ci->lastPosSaveTime)) / 1000);
 			if (strColor[3] > 1.0) {
-				strColor[3] = 1.0;
+				strColor[3] = 1.0f;
 			} else if (strColor[3] < 0.0) {
-				strColor[3] = 0.0;
+				strColor[3] = 0.0f;
 			}
 
-			squaredDistance = CG_WorldToScreen(ci->curPos, &x, &y);
-			if (squaredDistance) {
+			front = CG_WorldToScreen(ci->curPos, &x, &y);
+			if (front) {
+				float squaredDistance = DistanceSquared(cg.refdef.vieworg, ci->curPos);
 				float size = (float)(1.0 / (sqrt(squaredDistance) * 0.002));
 				if (size > 1.0f) {
 					size = 1.0f;
-				} else if (size < 0.5) {
+				} else if (size < 0.5f) {
 					size = 0.5f;
 				}
 
@@ -2856,10 +2863,10 @@ static void CG_DrawLastPadStanding(void) {
 				trap_R_SetColor(strColor);
 
 				if (score->livesleft < mostLives) {
-					CG_DrawPic((x - 16.0 * size), (y - 16.0 * size), (32.0 * size), (32.0 * size),
+					CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size),
 								cgs.media.lpsIcon);
 				} else {
-					CG_DrawPic((x - 16.0 * size), (y - 16.0 * size), (32.0 * size), (32.0 * size),
+					CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size),
 								cgs.media.lpsIconLead);
 				}
 

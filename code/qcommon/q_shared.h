@@ -654,7 +654,7 @@ static ID_INLINE vec_t DistanceSquared(const vec3_t p1, const vec3_t p2) {
 	vec3_t v;
 
 	VectorSubtract(p2, p1, v);
-	return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
+	return VectorLengthSquared(v);
 }
 
 // fast vector normalize routine that does not check to make sure
