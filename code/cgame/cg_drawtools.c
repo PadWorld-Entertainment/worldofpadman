@@ -744,11 +744,6 @@ qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
 	vec3_t trans;
 	float z;
 
-	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
-
-	px = tan(cg.refdef.fov_x * M_PI / 360.0);
-	py = tan(cg.refdef.fov_y * M_PI / 360.0);
-
 	VectorSubtract(point, cg.refdef.vieworg, trans);
 
 	z = DotProduct(trans, cg.refdef.viewaxis[0]);
