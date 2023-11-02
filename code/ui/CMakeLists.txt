@@ -28,6 +28,7 @@ set(SRCS
 	ui_preferences.c
 	ui_qmenu.c
 	ui_removebots.c
+	ui_secret.c
 	ui_serverinfo.c
 	ui_servers.c
 	ui_setup.c

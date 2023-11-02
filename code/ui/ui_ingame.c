@@ -142,7 +142,7 @@ static void InGame_Event(void *ptr, int notification) {
 		UI_RemoveBotsMenu();
 		break;
 
-case ID_TEAMORDERS:
+	case ID_TEAMORDERS:
 		UI_TeamOrdersMenu();
 		break;
 

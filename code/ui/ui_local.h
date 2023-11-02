@@ -377,7 +377,6 @@ extern void UI_CreditMenu(void);
 extern void UI_Credit_Cache(void);
 extern void UI_BigCredits_Cache(void);
 extern void UI_InitBigCredits(void);
-extern void UI_SecretMenu(void);
 
 //
 // ui_ingame.c
@@ -460,6 +459,12 @@ extern void UI_PlayerSettings_Cache(void);
 //
 extern void UI_PreferencesMenu(void);
 extern void UI_Preferences_Cache(void);
+
+//
+// ui_secret.c
+//
+extern void UI_SecretMenu(void);
+extern void UI_Secret_Cache(void);
 
 //
 // ui_specifyserver.c
