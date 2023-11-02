@@ -23,19 +23,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 =======================================================================
 
-CREDITS
-... the Q3-like credits menu (shown before leaving the programm)
+CREDITS (Short credits when leaving World of PADMAN)
 
 =======================================================================
 */
 
 #include "ui_local.h"
 
+#define CREDITSPIC "menu/bg/credits"
+
 typedef struct {
 	menuframework_s menu;
-} creditsmenu_t;
 
-static creditsmenu_t s_credits;
+} credits_t;
+
+static credits_t s_credits;
 
 /*
 =================
@@ -58,7 +60,7 @@ UI_CreditMenu_Draw
 */
 static void UI_CreditMenu_Draw(void) {
 
-	UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, trap_R_RegisterShaderNoMip("menu/bg/credits"));
+	UI_DrawNamedPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, CREDITSPIC);
 }
 
 /*
@@ -67,12 +69,6 @@ UI_CreditMenu
 ===============
 */
 void UI_CreditMenu(void) {
-	/* This UI_FillRect() hack will blank the borders if you're in widescreen,
-	   so you get a completely black background instead of stripes from the
-	   previous frame on each side of the credits.. */
-	const float black[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-	UI_FillRect(0 - uis.xbias, 0, (640.0f / uis.xscale) * 2.0f, 480.0f / uis.yscale, black);
-
 	memset(&s_credits, 0, sizeof(s_credits));
 
 	UI_Credit_Cache();
@@ -84,14 +80,7 @@ void UI_CreditMenu(void) {
 }
 
 void UI_Credit_Cache(void) {
-	trap_R_RegisterShaderNoMip("menu/bg/credits");
-}
-
-static sfxHandle_t UI_CheckMenuExitKeys(int key) {
-	if (key == K_MOUSE2 || key == K_ESCAPE) {
-		UI_StopMusic(); // -> durch refresh sollte automatisch wieder der normale starten
-	}
-	return Menu_DefaultKey(uis.activemenu, key);
+	trap_R_RegisterShaderNoMip(CREDITSPIC);
 }
 
 /*
@@ -138,6 +127,13 @@ static void UI_BigCreditsAction(void *ptr, int event) {
 	s_bigcredits.bgpic.shader = 0;
 
 	trap_S_StartLocalSound(menuSwitchSound, CHAN_LOCAL_SOUND);
+}
+
+static sfxHandle_t UI_CheckMenuExitKeys(int key) {
+	if (key == K_MOUSE2 || key == K_ESCAPE) {
+		UI_StopMusic(); // -> durch refresh sollte automatisch wieder der normale starten
+	}
+	return Menu_DefaultKey(uis.activemenu, key);
 }
 
 void UI_InitBigCredits(void) {
