@@ -1049,7 +1049,7 @@ void UI_Cache_f(void) {
 	UI_SetupMenu_Cache();
 
 	UI_SetupDefaultMenu_Cache();
-	UI_BigCredits_Cache();
+	UI_WopCredits_Cache();
 	UI_Credit_Cache();
 
 	UI_SelectBots_Cache();

@@ -120,7 +120,7 @@ static void Main_MenuEvent(void *ptr, int event) {
 		break;
 
 	case ID_CREDITS:
-		UI_InitBigCredits();
+		UI_WopCreditsMenu();
 		break;
 
 	case ID_SECRET:
