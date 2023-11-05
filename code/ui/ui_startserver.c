@@ -25,7 +25,8 @@ CREATE MENU (START SERVER)
 #define MAX_MAPCOLS 3
 #define MAX_MAPSPERPAGE 9
 #define OPTIONS_XPOS 700
-#define GRID_XPOS 66
+#define OPTIONS_YPOS 168
+#define GRID_XPOS 60
 #define GRID_YPOS 40
 
 #define MAX_SERVERSTEXT 8192
@@ -653,8 +654,8 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.gametype.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
 	s_startserver.gametype.generic.callback = UI_StartServer_GametypeEvent;
 	s_startserver.gametype.generic.id = ID_GAMETYPE;
-	s_startserver.gametype.generic.x = 500;
-	s_startserver.gametype.generic.y = 430;
+	s_startserver.gametype.generic.x = 508;
+	s_startserver.gametype.generic.y = 436;
 	s_startserver.gametype.itemnames = gametype_items;
 	s_startserver.gametype.generic.ownerdraw = UI_StartServer_GameTypeDraw;
 	s_startserver.gametype.curvalue = gametype_remap2[(int)Com_Clamp(
@@ -679,7 +680,7 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.arrowleft.generic.type = MTYPE_BITMAP;
 	s_startserver.arrowleft.generic.name = ARROWLT0;
 	s_startserver.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_startserver.arrowleft.generic.x = 214;
+	s_startserver.arrowleft.generic.x = 208;
 	s_startserver.arrowleft.generic.y = 396;
 	s_startserver.arrowleft.generic.id = ID_PREVPAGE;
 	s_startserver.arrowleft.generic.callback = UI_StartServer_MenuEvent;
@@ -691,7 +692,7 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.arrowright.generic.type = MTYPE_BITMAP;
 	s_startserver.arrowright.generic.name = ARROWRT0;
 	s_startserver.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_startserver.arrowright.generic.x = 290;
+	s_startserver.arrowright.generic.x = 284;
 	s_startserver.arrowright.generic.y = 396;
 	s_startserver.arrowright.generic.id = ID_NEXTPAGE;
 	s_startserver.arrowright.generic.callback = UI_StartServer_MenuEvent;
@@ -712,7 +713,7 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.back.height = 40;
 	s_startserver.back.focuspicinstead = qtrue;
 
-	y = 176;
+	y = OPTIONS_YPOS;
 	s_startserver.hostname.generic.type = MTYPE_FIELD;
 	s_startserver.hostname.generic.name = "Host Name:";
 	s_startserver.hostname.generic.flags = QMF_SMALLFONT;
@@ -789,17 +790,16 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.startlives.field.widthInChars = 3;
 	s_startserver.startlives.field.maxchars = 3;
 
-	y += BIGCHAR_HEIGHT + 4;
 	s_startserver.selectbots.generic.type = MTYPE_BITMAP;
 	s_startserver.selectbots.generic.name = SELECTBOTS0;
 	s_startserver.selectbots.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_startserver.selectbots.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.selectbots.generic.id = ID_SELECTBOTS;
 	s_startserver.selectbots.focuspic = SELECTBOTS1;
-	s_startserver.selectbots.generic.x = OPTIONS_XPOS - 70;
-	s_startserver.selectbots.generic.y = y;
-	s_startserver.selectbots.width = 140;
-	s_startserver.selectbots.height = 24;
+	s_startserver.selectbots.generic.x = 613;
+	s_startserver.selectbots.generic.y = 334;
+	s_startserver.selectbots.width = 160;
+	s_startserver.selectbots.height = 28;
 	s_startserver.selectbots.focuspicinstead = qtrue;
 
 	s_startserver.fight.generic.type = MTYPE_BITMAP;
@@ -1441,7 +1441,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowleft.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowleft.generic.name = ARROWLT0;
 	botSelectInfo.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	botSelectInfo.arrowleft.generic.x = 214;
+	botSelectInfo.arrowleft.generic.x = 208;
 	botSelectInfo.arrowleft.generic.y = 396;
 	botSelectInfo.arrowleft.generic.callback = UI_SelectBots_LeftEvent;
 	botSelectInfo.arrowleft.width = 60;
@@ -1452,7 +1452,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowright.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowright.generic.name = ARROWRT0;
 	botSelectInfo.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	botSelectInfo.arrowright.generic.x = 290;
+	botSelectInfo.arrowright.generic.x = 284;
 	botSelectInfo.arrowright.generic.y = 396;
 	botSelectInfo.arrowright.generic.callback = UI_SelectBots_RightEvent;
 	botSelectInfo.arrowright.width = 60;
