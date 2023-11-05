@@ -118,7 +118,7 @@ const vec4_t color_intro = {1.0f, 0.4f, 1.0f, 1.0f};
 const vec4_t color_skyboxes = {0.6f, 0.8f, 1.0f, 1.0f};
 const vec4_t color_soundtrack = {1.0f, 0.8f, 0.0f, 1.0f};
 const vec4_t color_prnews = {0.8f, 1.0f, 0.0f, 1.0f};
-const vec4_t color_thx = {1.0f, 0.2f, 0.0f, 1.0f};
+const vec4_t color_bthx = {1.0f, 0.2f, 0.0f, 1.0f};
 const vec4_t color_mthx = {1.0f, 0.8f, 0.99f, 1.0f};
 const vec4_t color_sthx = {0.6f, 0.6f, 1.0f, 1.0f};
 const vec4_t color_vsthx = {0.6f, 0.8f, 0.2f, 1.0f};
@@ -275,7 +275,7 @@ static cr_line credits[] = {
 	{"", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
 	{"", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
 
-	{"Thanks To", UI_CENTER|UI_BIGFONT|UI_DROPSHADOW, &color_thx},
+	{"Big Thanks To", UI_CENTER|UI_BIGFONT|UI_DROPSHADOW, &color_bthx},
 	{"", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
 	{"GrimReaper", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
 	{"GreenThumB", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
