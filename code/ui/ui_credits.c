@@ -376,6 +376,7 @@ UI_WopCredits_Draw
 static void UI_WopCredits_Draw(void) {
 int x = 270, y, n, ysize = 0, fadetime = 2.0f;
 vec4_t fadecolour = {0.0f, 0.0f, 0.0f, 0.0f};
+float yGap;
 
 	if (!ysize) {
 		for(n = 0; n <= sizeof(credits) - 1; n++) {
@@ -422,6 +423,12 @@ vec4_t fadecolour = {0.0f, 0.0f, 0.0f, 0.0f};
 		if (y > SCREEN_HEIGHT) {
 			break;
 		}
+	}
+
+	if (uis.ybias) {
+		yGap = uis.ybias * 0.5f;
+		UI_FillRect(0, -yGap, SCREEN_WIDTH, yGap, colorBlack); //upper gap
+		UI_FillRect(0, SCREEN_HEIGHT, SCREEN_WIDTH, yGap, colorBlack); // lower gap
 	}
 }
 
