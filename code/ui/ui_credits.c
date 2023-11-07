@@ -291,7 +291,7 @@ static cr_line credits[] = {
 	{"DemonPrincess", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
 	{"GomJabbar", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
 	{"Wakey", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
-	{"Paster", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
+	{"Padster", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
 	{"Smiley", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
 	{"meimeiriver", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
 	{"Fiesling", UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, &color_white},
