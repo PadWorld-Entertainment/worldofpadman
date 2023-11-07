@@ -53,6 +53,11 @@ MUSIC PLAYER MENU
 #define ID_PREVALBUM 15
 #define ID_EXIT 16
 
+#define MAX_TRACKS 15
+#define MAX_ALBUMS 10
+#define MAX_TRACKNAME 64
+#define MAX_ALBUMNAME 32
+
 typedef struct {
 	menuframework_s menu;
 
@@ -144,9 +149,48 @@ static void UI_Music_MenuEvent(void *ptr, int event) {
 		break;
 
 	case ID_EXIT:
+		UI_StartMusic();
 		UI_PopMenu();
 		break;
 	}
+}
+
+/*
+================
+UI_Music_Key
+================
+*/
+static sfxHandle_t UI_Music_Key(int key) {
+	switch (key) {
+	case K_ESCAPE:
+		UI_Music_MenuEvent(&s_music.exit, QM_ACTIVATED);
+		break;
+	}
+
+	return Menu_DefaultKey(&s_music.menu, key);
+}
+
+/*
+================
+UI_Music_InitAlbums
+================
+*/
+void UI_Music_InitAlbums(void) {
+
+
+
+}
+
+/*
+================
+UI_Music_DrawAlbums
+================
+*/
+static void UI_Music_DrawAlbums(void) {
+
+	// if (musicInfo.albums[musicMenu.currentAlbum].background) {
+	// 	UI_DrawHandlePic((202), 60, 374, 340, musicInfo.albums[musicMenu.currentAlbum].background);
+	//}
 }
 
 /*
@@ -159,9 +203,14 @@ void UI_Music_MenuInit(void) {
 
 	// zero set all our globals
 	UI_Music_Cache();
+	UI_Music_InitAlbums();
 
 	s_music.menu.wrapAround = qtrue;
 	s_music.menu.fullscreen = qtrue;
+	s_music.menu.key = UI_Music_Key;
+	
+	UI_Music_DrawAlbums();
+
 	s_music.menu.bgparts = BGP_MUSIC;
 
 	s_music.play.generic.type = MTYPE_BITMAP;
@@ -285,6 +334,7 @@ UI_MusicMenu
 =================
 */
 void UI_MusicMenu(void) {
+	trap_S_StopBackgroundTrack();
 	UI_Music_MenuInit();
 	UI_PushMenu(&s_music.menu);
 }
