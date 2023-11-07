@@ -18,7 +18,7 @@ CREATE MENU (START SERVER)
 #define SELECTBOTS1 "menu/buttons/selectbots1"
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-
+#define HEADERGAMETYPE "menu/headers/gametype"
 #define UNKNOWNMAP "menu/art/unknownmap"
 
 #define MAX_MAPROWS 2
@@ -56,9 +56,9 @@ typedef struct {
 typedef struct {
 	menuframework_s menu;
 
+	menubitmap_s headergametype;
 	menulist_s gametype;
 	menubitmap_s mappics[MAX_MAPSPERPAGE];
-	//	menubitmap_s	mapbuttons[MAX_MAPSPERPAGE];
 	menubitmap_s arrowleft;
 	menubitmap_s arrowright;
 
@@ -650,11 +650,19 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.menu.bgparts = BGP_STARTSERVER | BGP_MENUFX;
 	s_startserver.menu.draw = UI_StartServer_MenuDraw;
 
+	s_startserver.headergametype.generic.type = MTYPE_BITMAP;
+	s_startserver.headergametype.generic.name = HEADERGAMETYPE;
+	s_startserver.headergametype.generic.x = 450;
+	s_startserver.headergametype.generic.y = 402;
+	s_startserver.headergametype.width = 140;
+	s_startserver.headergametype.height = 35;
+	Menu_AddItem(&s_startserver.menu, &s_startserver.headergametype);
+
 	s_startserver.gametype.generic.type = MTYPE_SPINCONTROL;
 	s_startserver.gametype.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
 	s_startserver.gametype.generic.callback = UI_StartServer_GametypeEvent;
 	s_startserver.gametype.generic.id = ID_GAMETYPE;
-	s_startserver.gametype.generic.x = 508;
+	s_startserver.gametype.generic.x = 446;
 	s_startserver.gametype.generic.y = 436;
 	s_startserver.gametype.itemnames = gametype_items;
 	s_startserver.gametype.generic.ownerdraw = UI_StartServer_GameTypeDraw;
@@ -880,6 +888,7 @@ void UI_StartServer_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(UNKNOWNMAP);
+	trap_R_RegisterShaderNoMip(HEADERGAMETYPE);
 
 	for (i = 0; i < 10; i++)
 		s_startserver.mapNumbers[i] = trap_R_RegisterShaderNoMip(va("menu/numbers/%i", i));
@@ -927,6 +936,7 @@ SELECT BOTS MENU
 #define ARROWDN0 "menu/arrows/headyel_dn0"
 #define ARROWDN1 "menu/arrows/headyel_dn1"
 #define ICONSHADOW "menu/art/iconshadow"
+#define HEADERBOTSKILL "menu/headers/botskill"
 #define HEADERBOTS "menu/headers/bots"
 #define HEADERCOLOR "menu/headers/color"
 #define HEADERTEAM "menu/headers/team"
@@ -946,6 +956,7 @@ typedef struct {
 	menubitmap_s arrowleft;
 	menubitmap_s arrowright;
 
+	menubitmap_s headerbotskill;
 	menubitmap_s headerbots;
 	menubitmap_s headercolor;
 	menubitmap_s headerteam;
@@ -956,7 +967,7 @@ typedef struct {
 	menubitmap_s arrowup;
 	menubitmap_s arrowdown;
 
-	menulist_s BotSkill;
+	menulist_s botskill;
 	menutext_s slotsleft;
 
 	menubitmap_s back;
@@ -1122,17 +1133,17 @@ static int UI_SelectBots_GetNumSelectedBots(void) {
 
 /*
 =================
-UI_SelectBots_GetSlotsLeft
+UI_SelectBots_GetNumMaxSlots
 =================
 */
-static int UI_SelectBots_GetSlotsLeft(void) {
+static int UI_SelectBots_GetNumMaxSlots(void) {
 	int maxclients = atoi(s_startserver.maxclients.field.buffer);
 
 	if (s_startserver.dedicated.curvalue == 0) {
 		// running locally
-		return (maxclients - UI_SelectBots_GetNumSelectedBots() - 1);
+		return (maxclients - 1);
 	} else {
-		return (maxclients - UI_SelectBots_GetNumSelectedBots());
+		return (maxclients);
 	}
 }
 
@@ -1143,6 +1154,7 @@ UI_SelectBots_UpdateList
 */
 static void UI_SelectBots_UpdateList(void) {
 	int i, j;
+	int numSlectedBots, numMaxSlots;
 	char *tmpptr;
 
 	j = 0;
@@ -1154,7 +1166,7 @@ static void UI_SelectBots_UpdateList(void) {
 
 			if (s_startserver.selectbotinfos[j].name[0] != '\0') {
 				tmpptr = s_startserver.selectbotinfos[j].name;
-				j++; // damit es +1 ist wenn die äußere schleife looped
+				j++; // so that it is +1 when the outer loop loops
 				break;
 			}
 		}
@@ -1202,7 +1214,28 @@ static void UI_SelectBots_UpdateList(void) {
 			botSelectInfo.selectedbotteams[i].generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 		}
 	}
-	botSelectInfo.slotsleft.string = va("Open Slots: %2d", UI_SelectBots_GetSlotsLeft());
+	numSlectedBots = UI_SelectBots_GetNumSelectedBots();
+	numMaxSlots = UI_SelectBots_GetNumMaxSlots();
+	botSelectInfo.slotsleft.string = va("%2d/%2d", numSlectedBots, numMaxSlots);
+
+	if (numMaxSlots > MAX_SELECTLISTBOTS) {
+		botSelectInfo.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		botSelectInfo.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		botSelectInfo.arrowup.generic.flags |= QMF_GRAYED;
+		botSelectInfo.arrowdown.generic.flags |= QMF_GRAYED;
+
+		if (botSelectInfo.topbot > 0) {
+			botSelectInfo.arrowup.generic.flags &= ~QMF_GRAYED;
+		}
+
+		if (botSelectInfo.topbot < numMaxSlots - MAX_SELECTLISTBOTS) {
+			botSelectInfo.arrowdown.generic.flags &= ~QMF_GRAYED;
+		}
+	} else {
+		botSelectInfo.arrowup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		botSelectInfo.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	}
+
 }
 
 /*
@@ -1221,7 +1254,7 @@ static void UI_SelectBots_BotEvent(void *ptr, int event) {
 	i = ((menucommon_s *)ptr)->id;
 	botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_BOTSPERPAGE + i;
 
-	if (UI_SelectBots_GetSlotsLeft() <= 0) {
+	if (UI_SelectBots_GetNumSelectedBots() >= UI_SelectBots_GetNumMaxSlots()) {
 		return;
 	}
 
@@ -1261,6 +1294,7 @@ UI_SelectBots_Cache
 */
 void UI_SelectBots_Cache(void) {
 	trap_R_RegisterShaderNoMip(ICONSHADOW);
+	trap_R_RegisterShaderNoMip(HEADERBOTSKILL);
 	trap_R_RegisterShaderNoMip(HEADERBOTS);
 	trap_R_RegisterShaderNoMip(HEADERCOLOR);
 	trap_R_RegisterShaderNoMip(HEADERTEAM);
@@ -1419,6 +1453,24 @@ static void UI_SelectBots_MenuInit(void) {
 
 	UI_SelectBots_Cache();
 
+	botSelectInfo.headerbotskill.generic.type = MTYPE_BITMAP;
+	botSelectInfo.headerbotskill.generic.name = HEADERBOTSKILL;
+	botSelectInfo.headerbotskill.generic.x = 386;
+	botSelectInfo.headerbotskill.generic.y = 402;
+	botSelectInfo.headerbotskill.width = 140;
+	botSelectInfo.headerbotskill.height = 35;
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerbotskill);
+
+	botSelectInfo.botskill.generic.type = MTYPE_SPINCONTROL;
+	botSelectInfo.botskill.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
+	botSelectInfo.botskill.generic.x = 398;
+	botSelectInfo.botskill.generic.y = 436;
+	botSelectInfo.botskill.itemnames = botSkill_list;
+	botSelectInfo.botskill.generic.ownerdraw = UI_StartServer_GameTypeDraw;
+	botSelectInfo.botskill.curvalue = 1;
+	botSelectInfo.botskill.generic.callback = UI_SelectBots_BotSkillChanged;
+	s_startserver.botskill = 2;
+
 	y = GRID_YPOS;
 	for (i = 0, k = 0; i < BOTGRID_ROWS; i++) {
 		x = GRID_XPOS;
@@ -1462,7 +1514,7 @@ static void UI_SelectBots_MenuInit(void) {
 
 	botSelectInfo.headerbots.generic.type = MTYPE_BITMAP;
 	botSelectInfo.headerbots.generic.name = HEADERBOTS;
-	botSelectInfo.headerbots.generic.x = 596;
+	botSelectInfo.headerbots.generic.x = 590;
 	botSelectInfo.headerbots.generic.y = 190;
 	botSelectInfo.headerbots.width = 70;
 	botSelectInfo.headerbots.height = 35;
@@ -1471,7 +1523,7 @@ static void UI_SelectBots_MenuInit(void) {
 	if (gametype_remap[s_startserver.gametype.curvalue] >= GT_TEAM) {
 		botSelectInfo.headerteam.generic.type = MTYPE_BITMAP;
 		botSelectInfo.headerteam.generic.name = HEADERTEAM;
-		botSelectInfo.headerteam.generic.x = 716;
+		botSelectInfo.headerteam.generic.x = 710;
 		botSelectInfo.headerteam.generic.y = 190;
 		botSelectInfo.headerteam.width = 70;
 		botSelectInfo.headerteam.height = 35;
@@ -1479,7 +1531,7 @@ static void UI_SelectBots_MenuInit(void) {
 	} else {
 		botSelectInfo.headercolor.generic.type = MTYPE_BITMAP;
 		botSelectInfo.headercolor.generic.name = HEADERCOLOR;
-		botSelectInfo.headercolor.generic.x = 706;
+		botSelectInfo.headercolor.generic.x = 700;
 		botSelectInfo.headercolor.generic.y = 190;
 		botSelectInfo.headercolor.width = 105;
 		botSelectInfo.headercolor.height = 35;
@@ -1492,7 +1544,7 @@ static void UI_SelectBots_MenuInit(void) {
 		botSelectInfo.selectedbotnames[i].generic.type = MTYPE_TEXTS;
 		botSelectInfo.selectedbotnames[i].fontHeight = 16.0f;
 		botSelectInfo.selectedbotnames[i].generic.flags = QMF_SMALLFONT;
-		botSelectInfo.selectedbotnames[i].generic.x = 600;
+		botSelectInfo.selectedbotnames[i].generic.x = 594;
 		botSelectInfo.selectedbotnames[i].generic.y = y + i * 16;
 		botSelectInfo.selectedbotnames[i].string = "              "; // 14
 		botSelectInfo.selectedbotnames[i].color = color_white;
@@ -1503,7 +1555,7 @@ static void UI_SelectBots_MenuInit(void) {
 		botSelectInfo.selectedbotteams[i].generic.type = MTYPE_TEXTS;
 		botSelectInfo.selectedbotteams[i].fontHeight = 16.0f;
 		botSelectInfo.selectedbotteams[i].generic.flags = QMF_SMALLFONT;
-		botSelectInfo.selectedbotteams[i].generic.x = 720;
+		botSelectInfo.selectedbotteams[i].generic.x = 714;
 		botSelectInfo.selectedbotteams[i].generic.y = y + i * 16;
 		botSelectInfo.selectedbotteams[i].string = "        "; // 8
 		botSelectInfo.selectedbotteams[i].color = color_blue;
@@ -1515,7 +1567,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowup.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowup.generic.name = ARROWUP0;
 	botSelectInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	botSelectInfo.arrowup.generic.x = 794;
+	botSelectInfo.arrowup.generic.x = 788;
 	botSelectInfo.arrowup.generic.y = 250;
 	botSelectInfo.arrowup.generic.callback = UI_SelectBots_ListUp;
 	botSelectInfo.arrowup.width = 25;
@@ -1526,7 +1578,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowdown.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowdown.generic.name = ARROWDN0;
 	botSelectInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	botSelectInfo.arrowdown.generic.x = 794;
+	botSelectInfo.arrowdown.generic.x = 788;
 	botSelectInfo.arrowdown.generic.y = 326;
 	botSelectInfo.arrowdown.generic.callback = UI_SelectBots_ListDown;
 	botSelectInfo.arrowdown.width = 25;
@@ -1534,33 +1586,24 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowdown.focuspic = ARROWDN1;
 	botSelectInfo.arrowdown.focuspicinstead = qtrue;
 
-	botSelectInfo.BotSkill.generic.type = MTYPE_SPINCONTROL;
-	botSelectInfo.BotSkill.generic.flags = QMF_SMALLFONT;
-	botSelectInfo.BotSkill.generic.name = "Skill:";
-	botSelectInfo.BotSkill.generic.x = 655;
-	botSelectInfo.BotSkill.generic.y = 420;
-	botSelectInfo.BotSkill.itemnames = botSkill_list;
-	botSelectInfo.BotSkill.curvalue = 1;
-	botSelectInfo.BotSkill.generic.callback = UI_SelectBots_BotSkillChanged;
-	s_startserver.botskill = 2;
-
 	botSelectInfo.slotsleft.generic.type = MTYPE_TEXTS;
 	botSelectInfo.slotsleft.generic.flags = QMF_SMALLFONT;
-	botSelectInfo.slotsleft.string = va("Open Slots: %2d", UI_SelectBots_GetSlotsLeft());
-	botSelectInfo.slotsleft.generic.x = 600;
-	botSelectInfo.slotsleft.generic.y = 440;
+	botSelectInfo.slotsleft.string = "     "; // 5
+	botSelectInfo.slotsleft.generic.x = 780;
+	botSelectInfo.slotsleft.generic.y = 398;
 	botSelectInfo.slotsleft.color = color_yellow;
 
 	botSelectInfo.back.generic.type = MTYPE_BITMAP;
 	botSelectInfo.back.generic.name = BACK0;
 	botSelectInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	botSelectInfo.back.generic.callback = UI_SelectBots_BackEvent;
-	botSelectInfo.back.generic.x = 8;
+	botSelectInfo.back.generic.x = 776;
 	botSelectInfo.back.generic.y = 446;
 	botSelectInfo.back.width = 80;
 	botSelectInfo.back.height = 40;
 	botSelectInfo.back.focuspic = BACK1;
 
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.botskill);
 	for (i = 0; i < MAX_BOTSPERPAGE; i++) {
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.pics[i]);
 	}
@@ -1574,7 +1617,6 @@ static void UI_SelectBots_MenuInit(void) {
 	}
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.arrowup);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.arrowdown);
-	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.BotSkill);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.slotsleft);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.back);
 
