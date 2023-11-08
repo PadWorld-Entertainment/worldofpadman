@@ -78,6 +78,7 @@ PREFERENCES MENU
 #define ID_SYNCEVERYFRAME 38
 #define ID_FORCEMODEL 39
 #define ID_GLOWMODEL 40
+#define ID_HITSOUND 41
 
 #define ID_CONNOTIFY 50
 #define ID_CHATHEIGHT 51
@@ -135,6 +136,7 @@ typedef struct {
 	menuradiobutton_s synceveryframe;
 	menuradiobutton_s forcemodel;
 	menulist_s glowmodel;
+	menuradiobutton_s hitsound;
 
 	menulist_s connotify;
 	menulist_s chatheight;
@@ -193,6 +195,7 @@ static menucommon_s *g_game_options[] = {
 	(menucommon_s *)&s_preferences.synceveryframe,
 	(menucommon_s *)&s_preferences.forcemodel,
 	(menucommon_s *)&s_preferences.glowmodel,
+	(menucommon_s *)&s_preferences.hitsound,
 	NULL
 };
 
@@ -278,12 +281,12 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.ingamevideo.curvalue = trap_Cvar_VariableValue("r_inGameVideo") != 0;
 	s_preferences.synceveryframe.curvalue = trap_Cvar_VariableValue("r_finish") != 0;
 	s_preferences.forcemodel.curvalue = (trap_Cvar_VariableValue("cg_forcemodel") != 0);
-
 	if (!Q_stricmp(UI_Cvar_VariableString("cg_glowModel"), "")) {
 		s_preferences.glowmodel.curvalue = 0;
 	} else {
 		s_preferences.glowmodel.curvalue = (trap_Cvar_VariableValue("cg_glowModel") + 1);
 	}
+	s_preferences.hitsound.curvalue = (trap_Cvar_VariableValue("cg_advHitSound") != 0);
 
 	notify = UI_GetCvarInt("con_notifytime");
 	if (notify < 0) {
@@ -531,6 +534,10 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 			trap_Cvar_SetValue("cg_glowModel", s_preferences.glowmodel.curvalue - 1);
 		}
 		UI_Preferences_UpdateMenuItems();
+		break;
+
+	case ID_HITSOUND:
+		trap_Cvar_SetValue("cg_advHitSound", s_preferences.hitsound.curvalue);
 		break;
 
 	case ID_CONNOTIFY:
@@ -929,6 +936,18 @@ static void UI_Preferences_MenuInit(void) {
 		"'new and better'.";
 
 	y += (BIGCHAR_HEIGHT + 2);
+	s_preferences.hitsound.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.hitsound.generic.name = "Advanced Hit Sound:";
+	s_preferences.hitsound.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.hitsound.generic.callback = UI_Preferences_Event;
+	s_preferences.hitsound.generic.id = ID_HITSOUND;
+	s_preferences.hitsound.generic.x = XPOSITION;
+	s_preferences.hitsound.generic.y = y;
+	s_preferences.hitsound.generic.toolTip =
+		"Enable to play an alternate set of hit sounds indicating your opponent's shield status. "
+		"Default is off.";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.simpleitems.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.simpleitems.generic.name = "Simple Items:";
 	s_preferences.simpleitems.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -1303,6 +1322,7 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.ups);
 
 	Menu_AddItem(&s_preferences.menu, &s_preferences.autoswitch);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.hitsound);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.simpleitems);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.wallmarks);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.dynamiclights);

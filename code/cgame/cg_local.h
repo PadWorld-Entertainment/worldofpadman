@@ -1032,8 +1032,8 @@ typedef struct {
 	sfxHandle_t oneLifeSound;
 
 	sfxHandle_t hitSound;
-	sfxHandle_t hitSoundHighArmor;
-	sfxHandle_t hitSoundLowArmor;
+	sfxHandle_t hitShieldSound;
+	sfxHandle_t hitNoShieldSound;
 	sfxHandle_t hitTeamSound;
 	sfxHandle_t excellentSound;
 	sfxHandle_t snackattackSound;
@@ -1318,6 +1318,7 @@ extern vmCvar_t cg_cineDrawLetterBox;
 
 extern vmCvar_t cg_glowModel;
 extern vmCvar_t cg_glowModelTeam;
+extern vmCvar_t cg_advHitSound;
 
 extern vmCvar_t cg_warmupReady;
 extern vmCvar_t cg_curWarmupReady;

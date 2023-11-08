@@ -291,6 +291,7 @@ typedef enum {
 	PERS_SPAWN_COUNT,	 // incremented every respawn
 	PERS_PLAYEREVENTS,	 // 16 bits that can be flipped for events
 	PERS_ATTACKER,		 // clientnum of last damage inflicter
+	PERS_ATTACKEE_ARMOR, // health/armor of last person we attacked
 	PERS_KILLED,		 // count of the number of times you died
 	// player awards tracking
 	PERS_EXCELLENT_COUNT,	  // two successive kills in a short amount of time
