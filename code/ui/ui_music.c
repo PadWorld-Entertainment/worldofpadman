@@ -30,6 +30,7 @@ MUSIC PLAYER MENU
 =======================================================================
 */
 
+#define MUSICBG "menu/bg/music"
 #define PLAY0 "menu/buttons/mp_play0"
 #define PLAY1 "menu/buttons/mp_play1"
 #define STOP0 "menu/buttons/mp_stop0"
@@ -61,6 +62,7 @@ MUSIC PLAYER MENU
 typedef struct {
 	menuframework_s menu;
 
+	menubitmap_s musicbg;
 	menubitmap_s play;
 	menubitmap_s stop;
 	menubitmap_s nextsong;
@@ -211,7 +213,12 @@ void UI_Music_MenuInit(void) {
 	
 	UI_Music_DrawAlbums();
 
-	s_music.menu.bgparts = BGP_MUSIC;
+	s_music.musicbg.generic.type = MTYPE_BITMAP;
+	s_music.musicbg.generic.name = MUSICBG;
+	s_music.musicbg.generic.x = 0;
+	s_music.musicbg.generic.y = 0;
+	s_music.musicbg.width = SCREEN_WIDTH;
+	s_music.musicbg.height = SCREEN_HEIGHT;
 
 	s_music.play.generic.type = MTYPE_BITMAP;
 	s_music.play.generic.name = PLAY0;
@@ -297,6 +304,7 @@ void UI_Music_MenuInit(void) {
 	s_music.exit.focuspic = EXIT1;
 	s_music.exit.focuspicinstead = qtrue;
 
+	Menu_AddItem(&s_music.menu, &s_music.musicbg);
 	Menu_AddItem(&s_music.menu, &s_music.play);
 	Menu_AddItem(&s_music.menu, &s_music.stop);
 	Menu_AddItem(&s_music.menu, &s_music.nextsong);
@@ -312,6 +320,7 @@ UI_Music_Cache
 =================
 */
 void UI_Music_Cache(void) {
+	trap_R_RegisterShaderNoMip(MUSICBG);
 	trap_R_RegisterShaderNoMip(PLAY0);
 	trap_R_RegisterShaderNoMip(PLAY1);
 	trap_R_RegisterShaderNoMip(STOP0);

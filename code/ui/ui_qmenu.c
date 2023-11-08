@@ -1851,7 +1851,6 @@ void Menu_Cache(void) {
 	uis.controlsbg = trap_R_RegisterShaderNoMip("menu/bg/controls");
 	uis.playerbg = trap_R_RegisterShaderNoMip("menu/bg/player");
 	uis.serversbg = trap_R_RegisterShaderNoMip("menu/bg/servers");
-	uis.musicbg = trap_R_RegisterShaderNoMip("menu/bg/music");
 	uis.modsbg = trap_R_RegisterShaderNoMip("menu/bg/mods");
 	uis.demosbg = trap_R_RegisterShaderNoMip("menu/bg/demos");
 	uis.specifybg = trap_R_RegisterShaderNoMip("menu/bg/specify");
