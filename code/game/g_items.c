@@ -841,6 +841,11 @@ G_ItemDisabled
 static int G_ItemDisabled(const gitem_t *item) {
 	char name[128];
 
+	// never disable the killerduck in catch the killerduck mode
+	if (item->giTag == HI_KILLERDUCKS && g_gametype.integer == GT_CATCH) {
+		return 0;
+	}
+
 	Com_sprintf(name, sizeof(name), "disable_%s", item->classname);
 	return trap_Cvar_VariableIntegerValue(name);
 }

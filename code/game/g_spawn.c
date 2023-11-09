@@ -573,8 +573,8 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 			return;
 		}
 	}
-	
-		for (item = (bg_itemlist + 1); item->classname; item++) {
+
+	for (item = (bg_itemlist + 1); item->classname; item++) {
 		if (strcmp(item->classname, ent->classname) == 0) {
 			RegisterItem(item);
 			break;
