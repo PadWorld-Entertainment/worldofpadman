@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  * Executes the respawn of the killerducks after a given timeout at one of the spawn points
  */
 static void G_RespawnKillerDucks(gentity_t *self) {
-	gentity_t *ent;
+	gentity_t *ent, *spawnPoint = NULL;
 	const gitem_t *item;
 
 	trap_SendServerCommand(-1, va("cp \"The Killerduck respawned.\n\""));
@@ -47,7 +47,13 @@ static void G_RespawnKillerDucks(gentity_t *self) {
 	ent->classname = item->classname;
 	ent->think = FinishSpawningItem;
 
-	if (SelectSpawnPoint(self->r.currentOrigin, ent->s.origin, ent->s.angles, qfalse) == NULL) {
+	// randomly also pick the original spawn point (if available)
+	if (rand() % 5 == 1) {
+		spawnPoint = G_Find(NULL, FOFS(classname), "holdable_killerducks");
+	}
+	if (spawnPoint) {
+		VectorCopy(spawnPoint->r.currentOrigin, ent->s.origin);
+	} else if (SelectSpawnPoint(self->r.currentOrigin, ent->s.origin, ent->s.angles, qfalse) == NULL) {
 		VectorCopy(self->r.currentOrigin, ent->s.origin);
 	}
 	VectorCopy(ent->s.origin, ent->s.pos.trBase);
