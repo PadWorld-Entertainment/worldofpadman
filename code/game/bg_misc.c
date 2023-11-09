@@ -747,9 +747,15 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 
 	switch (item->giType) {
 	case IT_WEAPON:
+		if (BG_IsKillerDuck(ps)) {
+			return qfalse;
+		}
 		return qtrue; // weapons are always picked up
 
 	case IT_AMMO:
+		if (BG_IsKillerDuck(ps)) {
+			return qfalse;
+		}
 		if (ps->ammo[item->giTag] >= MAXAMMO_WEAPON) {
 			return qfalse; // can't hold any more
 		}
