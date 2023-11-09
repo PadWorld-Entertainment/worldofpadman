@@ -3394,7 +3394,7 @@ void CL_Init(void) {
 	Cvar_Get("team_model", "padman", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("team_headmodel", "padman", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("handicap", "100", CVAR_USERINFO | CVAR_ARCHIVE);
-	Cvar_Get("sex", "male", CVAR_USERINFO | CVAR_ARCHIVE);
+	Cvar_Get("sex", "model", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("cl_anonymous", "0", CVAR_USERINFO | CVAR_ARCHIVE);
 
 	Cvar_Get("password", "", CVAR_USERINFO);
