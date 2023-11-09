@@ -783,7 +783,7 @@ void GfxInfo_f(void) {
 	ri.Printf(PRINT_ALL, "GL_EXTENSIONS: ");
 	// glConfig.extensions_string is a limited length so get the full list directly
 	if (qglGetStringi) {
-		GLint numExtensions;
+		GLint numExtensions = 0;
 		int i;
 
 		qglGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
