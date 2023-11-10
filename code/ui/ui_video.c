@@ -437,8 +437,10 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 
 	if (s_graphicsoptions.aa.curvalue > 0) {
 		trap_Cvar_SetValue("r_ext_multisample", power(2, s_graphicsoptions.aa.curvalue));
+		trap_Cvar_SetValue("r_ext_framebuffer_multisample", power(2, s_graphicsoptions.aa.curvalue));
 	} else {
 		trap_Cvar_Set("r_ext_multisample", "0");
+		trap_Cvar_Set("r_ext_framebuffer_multisample", "0");
 	}
 
 	if (resolutionsDetected) {
@@ -647,10 +649,18 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 
 	s_graphicsoptions.ct.curvalue = UI_GetCvarInt("r_ext_compressed_textures");
 
-	if (trap_Cvar_VariableValue("r_ext_multisample") > 2) {
-		s_graphicsoptions.aa.curvalue = ceil(sqrt(trap_Cvar_VariableValue("r_ext_multisample")));
+	if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2")) {
+		if (trap_Cvar_VariableValue("r_ext_framebuffer_multisample") > 2) {
+			s_graphicsoptions.aa.curvalue = ceil(sqrt(trap_Cvar_VariableValue("r_ext_framebuffer_multisample")));
+		} else {
+			s_graphicsoptions.aa.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_framebuffer_multisample")));
+		}
 	} else {
-		s_graphicsoptions.aa.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_multisample")));
+		if (trap_Cvar_VariableValue("r_ext_multisample") > 2) {
+			s_graphicsoptions.aa.curvalue = ceil(sqrt(trap_Cvar_VariableValue("r_ext_multisample")));
+		} else {
+			s_graphicsoptions.aa.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_multisample")));
+		}
 	}
 }
 
@@ -876,7 +886,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 		"Default is off. This can reduce graphics card memory usage on weak systems.";
 
 	y += (BIGCHAR_HEIGHT + 2);
-	// references/modifies "r_ext_max_multisampling"
+	// references/modifies "r_ext_max_multisampling" or "r_ext_framebuffer_multisample"
 	s_graphicsoptions.aa.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.aa.generic.name = "Antialiasing:";
 	s_graphicsoptions.aa.generic.flags = QMF_SMALLFONT;
