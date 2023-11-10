@@ -84,11 +84,12 @@ PREFERENCES MENU
 #define ID_CHATHEIGHT 51
 #define ID_CHATICON 52
 #define ID_CHATBEEP 53
-#define ID_GESTURE 54
-#define ID_BOTCHAT 55
-#define ID_TEAMCHATSONLY 56
-#define ID_CONAUTOCHAT 57
-#define ID_CONAUTOCLEAR 58
+#define ID_TEAMCHATBEEP 54
+#define ID_GESTURE 55
+#define ID_BOTCHAT 56
+#define ID_TEAMCHATSONLY 57
+#define ID_CONAUTOCHAT 58
+#define ID_CONAUTOCLEAR 59
 
 #define ID_DRAWTOOLTIP 70
 #define ID_ICONTEAMMATE 71
@@ -142,6 +143,7 @@ typedef struct {
 	menulist_s chatheight;
 	menuradiobutton_s chaticon;
 	menuradiobutton_s chatbeep;
+	menuradiobutton_s teamchatbeep;
 	menuradiobutton_s gesture;
 	menulist_s botchat;
 	menuradiobutton_s teamchatsonly;
@@ -204,6 +206,7 @@ static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.chatheight,
 	(menucommon_s *)&s_preferences.chaticon,
 	(menucommon_s *)&s_preferences.chatbeep,
+	(menucommon_s *)&s_preferences.teamchatbeep,
 	(menucommon_s *)&s_preferences.gesture,
 	(menucommon_s *)&s_preferences.botchat,
 	(menucommon_s *)&s_preferences.teamchatsonly,
@@ -256,6 +259,7 @@ UI_Preferences_SetMenuItems
 static void UI_Preferences_SetMenuItems(void) {
 	int notify;
 	int chatheight;
+	int chatbeep;
 	int cg_iconsCvarValue;
 
 	s_preferences.crosshair.curvalue = (int)trap_Cvar_VariableValue("cg_drawCrosshair") % NUM_CROSSHAIRS;
@@ -312,7 +316,22 @@ static void UI_Preferences_SetMenuItems(void) {
 	}
 
 	s_preferences.chaticon.curvalue = trap_Cvar_VariableValue("cg_drawChatIcon") != 0;
-	s_preferences.chatbeep.curvalue = trap_Cvar_VariableValue("cg_chatBeep") != 0;
+
+	chatbeep = trap_Cvar_VariableValue("cg_chatBeep");
+	if (chatbeep == 0) {
+		s_preferences.chatbeep.curvalue = 0;
+		s_preferences.teamchatbeep.curvalue = 0;
+	} else if (chatbeep == 2) {
+		s_preferences.chatbeep.curvalue = 0;
+		s_preferences.teamchatbeep.curvalue = 1;
+	} else if (chatbeep == 5) {
+		s_preferences.chatbeep.curvalue = 1;
+		s_preferences.teamchatbeep.curvalue = 0;
+	} else {
+		s_preferences.chatbeep.curvalue = 1;
+		s_preferences.teamchatbeep.curvalue = 1;
+	}
+
 	s_preferences.gesture.curvalue = trap_Cvar_VariableValue("cg_noTaunt") == 0;
 	s_preferences.teamchatsonly.curvalue = trap_Cvar_VariableValue("cg_teamChatsOnly") != 0;
 	s_preferences.conautochat.curvalue = trap_Cvar_VariableValue("con_autochat") != 0;
@@ -576,8 +595,13 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 		break;
 
 	case ID_CHATBEEP:
-		if (s_preferences.chatbeep.curvalue == 0) {
-			trap_Cvar_SetValue("cg_chatBeep", s_preferences.chatbeep.curvalue);
+	case ID_TEAMCHATBEEP:
+		if (s_preferences.chatbeep.curvalue == 0 && s_preferences.teamchatbeep.curvalue == 0) {
+			trap_Cvar_SetValue("cg_chatBeep", 0);
+		} else if (s_preferences.chatbeep.curvalue == 0 && s_preferences.teamchatbeep.curvalue == 1) {
+			trap_Cvar_SetValue("cg_chatBeep", 2);
+		} else if (s_preferences.chatbeep.curvalue == 1 && s_preferences.teamchatbeep.curvalue == 0) {
+			trap_Cvar_SetValue("cg_chatBeep", 5);
 		} else {
 			trap_Cvar_SetValue("cg_chatBeep", 7);
 		}
@@ -1119,7 +1143,19 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.chatbeep.generic.x = XPOSITION;
 	s_preferences.chatbeep.generic.y = y;
 	s_preferences.chatbeep.generic.toolTip =
-		"Disable to switch off the beep of all chat notifications. Default is on.";
+		"Disable to switch off the beep for all chat notifications except for team chat "
+		"notifications. Default is on.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	s_preferences.teamchatbeep.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.teamchatbeep.generic.name = "Team Chat Beep:";
+	s_preferences.teamchatbeep.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.teamchatbeep.generic.callback = UI_Preferences_Event;
+	s_preferences.teamchatbeep.generic.id = ID_TEAMCHATBEEP;
+	s_preferences.teamchatbeep.generic.x = XPOSITION;
+	s_preferences.teamchatbeep.generic.y = y;
+	s_preferences.teamchatbeep.generic.toolTip =
+		"Disable to switch off the beep for team chat notifications. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.gesture.generic.type = MTYPE_RADIOBUTTON;
@@ -1338,6 +1374,7 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatheight);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chaticon);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.chatbeep);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatbeep);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.gesture);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.botchat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
