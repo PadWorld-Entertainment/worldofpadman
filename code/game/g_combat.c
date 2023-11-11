@@ -691,7 +691,7 @@ dflags		these flags are used to control how G_Damage works
 	DAMAGE_NO_PROTECTION	kills godmode, armor, everything
 ============
 */
-void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage,
+void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage,
 			  int dflags, int mod) {
 	gclient_t *client;
 	int take;
@@ -699,7 +699,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	int knockback;
 	int max;
 
-	if (!targ->takedamage) {
+	if (!victim->takedamage) {
 		return;
 	}
 
@@ -709,7 +709,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		return;
 	}
 
-	client = targ->client;
+	client = victim->client;
 
 	if ((!attacker || (attacker->s.eType != ET_PLAYER)) && (client && (client->lastSentFlying > -1)) &&
 		((mod == MOD_FALLING /* just in case */) || (mod == MOD_LAVA) || (mod == MOD_SLIME) ||
@@ -730,20 +730,20 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		attacker = &g_entities[ENTITYNUM_WORLD];
 	}
 
-	if (!targ->client && CantDamageTeamitem(targ, attacker)) {
+	if (!victim->client && CantDamageTeamitem(victim, attacker)) {
 		return;
 	}
 
 	// shootable doors / buttons don't actually have any health
-	if (targ->s.eType == ET_MOVER) {
-		if (targ->use && (targ->moverState == MOVER_POS1 || targ->moverState == ROTATOR_POS1)) {
-			targ->use(targ, inflictor, attacker);
+	if (victim->s.eType == ET_MOVER) {
+		if (victim->use && (victim->moverState == MOVER_POS1 || victim->moverState == ROTATOR_POS1)) {
+			victim->use(victim, inflictor, attacker);
 		}
 		return;
 	}
 	// reduce damage by the attacker's handicap value
 	// unless they are rocket jumping
-	if (attacker->client && attacker != targ) {
+	if (attacker->client && attacker != victim) {
 		max = attacker->client->ps.stats[STAT_MAX_HEALTH];
 		damage = damage * max / 100;
 	}
@@ -756,10 +756,10 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 
 	// freezetag
 	if (G_FreezeTag()) {
-		if (FT_PlayerIsFrozen(targ)) {
+		if (FT_PlayerIsFrozen(victim)) {
 			if (mod == MOD_TRIGGER_HURT) {
-				FT_RelocateToNearestSpawnPoint(targ);
-				FT_FreezePlayer(targ, attacker);
+				FT_RelocateToNearestSpawnPoint(victim);
+				FT_FreezePlayer(victim, attacker);
 			}
 			return;
 		} else if (FT_PlayerIsFrozen(attacker)) {
@@ -767,8 +767,8 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 				return;
 			}
 		} else if (mod == MOD_TELEFRAG) {
-			FT_FreezePlayer(targ, attacker);
-			FT_RelocateToNearestSpawnPoint(targ);
+			FT_FreezePlayer(victim, attacker);
+			FT_RelocateToNearestSpawnPoint(victim);
 			return;
 		}
 	}
@@ -782,7 +782,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	// Modifiers / Instagib
 	// Apply special instagib damage rules to target
 	if (g_modInstagib.integer) {
-		damage = Instagib_calculateDamage(targ, inflictor, attacker, damage, dflags, mod);
+		damage = Instagib_calculateDamage(victim, inflictor, attacker, damage, dflags, mod);
 		dflags |= DAMAGE_NO_ARMOR;
 	}
 
@@ -791,7 +791,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	if ((mod == MOD_IMPERIUS_SPLASH) && (knockback > KNOCKBACK_MAX_IMPERIUS))
 		knockback = KNOCKBACK_MAX_IMPERIUS;
 
-	if ((mod == MOD_PUMPER) && (targ == attacker)) // PUMPER
+	if ((mod == MOD_PUMPER) && (victim == attacker)) // PUMPER
 		knockback *= KNOCKBACK_MOD_PUMPER;
 
 	if (mod == MOD_BALLOONY_SPLASH) // BALLOONY
@@ -800,7 +800,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	if (knockback > 200) {
 		knockback = 200;
 	}
-	if (targ->flags & FL_NO_KNOCKBACK) {
+	if (victim->flags & FL_NO_KNOCKBACK) {
 		knockback = 0;
 	}
 	if (dflags & DAMAGE_NO_KNOCKBACK) {
@@ -808,18 +808,18 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	}
 
 	// figure momentum add, even if the damage won't be taken
-	if (knockback && targ->client) {
+	if (knockback && victim->client) {
 		vec3_t kvel;
 		float mass;
 
 		mass = 200;
 
 		VectorScale(dir, g_knockback.value * (float)knockback / mass, kvel);
-		VectorAdd(targ->client->ps.velocity, kvel, targ->client->ps.velocity);
+		VectorAdd(victim->client->ps.velocity, kvel, victim->client->ps.velocity);
 
 		// set the timer so that the other client can't cancel
 		// out the movement immediately
-		if (!targ->client->ps.pm_time) {
+		if (!victim->client->ps.pm_time) {
 			int t;
 
 			t = knockback * 2;
@@ -829,16 +829,16 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 			if (t > 200) {
 				t = 200;
 			}
-			targ->client->ps.pm_time = t;
-			targ->client->ps.pm_flags |= PMF_TIME_KNOCKBACK;
+			victim->client->ps.pm_time = t;
+			victim->client->ps.pm_flags |= PMF_TIME_KNOCKBACK;
 		}
 
 		// Remeber the last person to hurt the player
-		if ((targ == attacker) || OnSameTeam(targ, attacker)) {
-			targ->client->lastSentFlying = -1;
+		if ((victim == attacker) || OnSameTeam(victim, attacker)) {
+			victim->client->lastSentFlying = -1;
 		} else {
-			targ->client->lastSentFlying = attacker->s.number;
-			targ->client->lastSentFlyingTime = level.time;
+			victim->client->lastSentFlying = attacker->s.number;
+			victim->client->lastSentFlyingTime = level.time;
 		}
 	}
 
@@ -848,27 +848,27 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		// if TF_NO_FRIENDLY_FIRE is set, don't do damage to the target
 		// if the attacker was on the same team
 		// NOTE: With Boomies we can have targ==attacker, should be considered friendlyfire instead of selfdamage
-		if ((targ != attacker && (OnSameTeam(targ, attacker) || IsItemSameTeam(attacker, targ))) ||
-			(targ == attacker && mod == MOD_BOOMIES)) {
+		if ((victim != attacker && (OnSameTeam(victim, attacker) || IsItemSameTeam(attacker, victim))) ||
+			(victim == attacker && mod == MOD_BOOMIES)) {
 			if (!g_friendlyFire.integer) {
 				return;
 			}
 		}
 
 		// check for godmode
-		if (targ->flags & FL_GODMODE) {
+		if (victim->flags & FL_GODMODE) {
 			return;
 		}
 	}
 
-	if (g_gametype.integer == GT_CATCH && !G_IsKillerDuck(targ)) {
+	if (g_gametype.integer == GT_CATCH && !G_IsKillerDuck(victim)) {
 		return;
 	}
 
 	// battlesuit protects from all radius damage (but takes knockback)
 	// and protects 50% against all damage
 	if (client && client->ps.powerups[PW_PADPOWER]) {
-		G_AddEvent(targ, EV_POWERUP_PADPOWER, 0);
+		G_AddEvent(victim, EV_POWERUP_PADPOWER, 0);
 		if ((dflags & DAMAGE_RADIUS) || (mod == MOD_FALLING)) {
 			return;
 		}
@@ -876,19 +876,19 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	}
 
 	// add to the attacker's hit counter (if the target isn't a general entity like a prox mine)
-	if (attacker->client && targ != attacker && targ->health > 0 && client && targ->s.eType != ET_MISSILE &&
-		targ->s.eType != ET_GENERAL) {
-		if (OnSameTeam(targ, attacker)) {
+	if (attacker->client && victim != attacker && victim->health > 0 && client && victim->s.eType != ET_MISSILE &&
+		victim->s.eType != ET_GENERAL) {
+		if (OnSameTeam(victim, attacker)) {
 			attacker->client->ps.persistant[PERS_HITS]--;
 		} else {
 			attacker->client->ps.persistant[PERS_HITS]++;
 		}
-		attacker->client->ps.persistant[PERS_ATTACKEE_ARMOR] = (targ->health << 8) | (client->ps.stats[STAT_ARMOR]);
+		attacker->client->ps.persistant[PERS_ATTACKEE_ARMOR] = (victim->health << 8) | (client->ps.stats[STAT_ARMOR]);
 	}
 
 	// always give half damage if hurting self
 	// calculated after knockback, so rocket jumping works
-	if (targ == attacker) {
+	if (victim == attacker) {
 		damage *= 0.5f;
 	}
 
@@ -898,16 +898,16 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	take = damage;
 
 	// save some from armor
-	asave = CheckArmor(targ, take, dflags);
+	asave = CheckArmor(victim, take, dflags);
 	take -= asave;
 
 	if (g_debugDamage.integer) {
-		G_Printf("%i: client:%i health:%i damage:%i armor:%i\n", level.time, targ->s.number, targ->health, take, asave);
+		G_Printf("%i: client:%i health:%i damage:%i armor:%i\n", level.time, victim->s.number, victim->health, take, asave);
 	}
 
 	if (g_logDamage.integer) {
 		// "Damage: target-cid inflictor-cid attacker-cid damage meansofdeath"
-		G_LogPrintf("Damage: %ld %ld %ld %d %d\n", (targ - g_entities), (inflictor - g_entities),
+		G_LogPrintf("Damage: %ld %ld %ld %d %d\n", (victim - g_entities), (inflictor - g_entities),
 					(attacker - g_entities), take, mod);
 	}
 
@@ -929,50 +929,50 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 			VectorCopy(dir, client->damage_from);
 			client->damage_fromWorld = qfalse;
 		} else {
-			VectorCopy(targ->r.currentOrigin, client->damage_from);
+			VectorCopy(victim->r.currentOrigin, client->damage_from);
 			client->damage_fromWorld = qtrue;
 		}
 	}
 
 	// See if it's the player hurting the enemy flag/cartridge carrier
 	if (g_gametype.integer == GT_CTF || g_gametype.integer == GT_SPRAY) {
-		Team_CheckHurtCarrier(targ, attacker);
+		Team_CheckHurtCarrier(victim, attacker);
 	}
 
-	if (targ->client) {
+	if (victim->client) {
 		// set the last client who damaged the target
-		targ->client->lasthurt_client = attacker->s.number;
-		targ->client->lasthurt_mod = mod;
+		victim->client->lasthurt_client = attacker->s.number;
+		victim->client->lasthurt_mod = mod;
 	}
 
 	// do the damage
 	if (take) {
-		targ->health = targ->health - take;
-		if (targ->client) {
-			targ->client->ps.stats[STAT_HEALTH] = targ->health;
+		victim->health = victim->health - take;
+		if (victim->client) {
+			victim->client->ps.stats[STAT_HEALTH] = victim->health;
 		}
 
-		if (targ->health <= 0) {
+		if (victim->health <= 0) {
 			if (client)
-				targ->flags |= FL_NO_KNOCKBACK;
+				victim->flags |= FL_NO_KNOCKBACK;
 
-			if (targ->health < -999)
-				targ->health = -999;
+			if (victim->health < -999)
+				victim->health = -999;
 
-			targ->enemy = attacker;
+			victim->enemy = attacker;
 
 			// don't kill players in freezetag
-			if (G_FreezeTag() && !FT_PlayerIsFrozen(targ)) {
+			if (G_FreezeTag() && !FT_PlayerIsFrozen(victim)) {
 				if (mod == MOD_TRIGGER_HURT) {
-					ClientSpawn(targ); // relocate players to a spawnpoint
+					ClientSpawn(victim); // relocate players to a spawnpoint
 				}
-				FT_FreezePlayer(targ, attacker);
+				FT_FreezePlayer(victim, attacker);
 			} else {
-				targ->die(targ, inflictor, attacker, take, mod);
+				victim->die(victim, inflictor, attacker, take, mod);
 			}
 			return;
-		} else if (targ->pain) {
-			targ->pain(targ, attacker, take);
+		} else if (victim->pain) {
+			victim->pain(victim, attacker, take);
 		}
 	}
 }
