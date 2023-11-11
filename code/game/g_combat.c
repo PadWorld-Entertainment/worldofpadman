@@ -312,8 +312,9 @@ CheckAlmostSprayAward
 ==================
 */
 static void CheckAlmostSprayAward(gentity_t *self, gentity_t *attacker) {
-	// If the player had 5 or more cartridges on him and could have received a spray award (SprayKiller/SprayGod)
-	if (IsSyc() && self->client->ps.generic1 >= 5) {
+	// If the player had 5 (CNT_CARTRIDGES) or more cartridges on him and could have received a spray award
+	// (SprayKiller/SprayGod)
+	if (IsSyc() && self->client->ps.generic1 >= CNT_CARTRIDGES) {
 		gentity_t *ent = NULL;
 		do {
 			ent = G_Find(ent, FOFS(classname), "trigger_teleport");

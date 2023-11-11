@@ -561,7 +561,7 @@ void Team_CheckHurtCarrier(const gentity_t *victim, gentity_t *attacker) {
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
 
 	// cartridges (5 or more cartridges only) SyC
-	if (victim->client->ps.generic1 >= 5 && victim->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
+	if (victim->client->ps.generic1 >= CNT_CARTRIDGES && victim->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
 }
 

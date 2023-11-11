@@ -98,6 +98,7 @@
 #define RANGE_BAMBAM_VISIONLESS 320.0f // rather magical constant
 #define FIREDELAY_BAMBAM 1000
 #define FIRESTART_BAMBAM 1000
+#define CNT_CARTRIDGES 5
 #define MAX_TEAM_BAMBAMS 5
 
 // Not a real weapon ..

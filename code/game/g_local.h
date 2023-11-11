@@ -267,7 +267,7 @@ typedef struct {
 	int fragcarrier;
 	int assists;
 
-	// carrier of the flag or carrier of 5 cartridges in syc
+	// carrier of the flag or carrier of 5 (CNT_CARTRIDGES) cartridges in syc
 	int lasthurtcarrier;
 	int lastreturnedflag;
 	int flagsince;
