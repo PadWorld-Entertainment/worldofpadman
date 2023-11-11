@@ -934,7 +934,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		}
 	}
 
-	// See if it's the player hurting the emeny flag/cartridge carrier
+	// See if it's the player hurting the enemy flag/cartridge carrier
 	if (g_gametype.integer == GT_CTF || g_gametype.integer == GT_SPRAY) {
 		Team_CheckHurtCarrier(targ, attacker);
 	}

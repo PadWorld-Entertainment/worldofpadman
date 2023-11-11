@@ -287,6 +287,52 @@ static int CG_TeamScoreboard(int y, team_t team, float fade, int maxLines, int l
 	return count;
 }
 
+// draw medals
+static void CG_DrawMedals(float x, float y, const score_t *score) {
+	char buf[32];
+
+	CG_DrawPic(x, y, 60, 24, cgs.media.scoreboardMedals);
+	x += 64;
+	CG_DrawPic(x, y, 24, 24, cgs.media.medalExcellent);
+	Com_sprintf(buf, sizeof(buf), "%d", score->excellentCount);
+	CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+	x += 30;
+	CG_DrawPic(x, y, 24, 24, cgs.media.medalSnackAttack);
+	Com_sprintf(buf, sizeof(buf), "%d", score->snackattackCount);
+	CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+	if (cgs.gametype == GT_SPRAYFFA || cgs.gametype == GT_SPRAY) {
+		x += 30;
+		CG_DrawPic(x, y, 24, 24, cgs.media.medalSprayKiller);
+		Com_sprintf(buf, sizeof(buf), "%d", score->spraykillerCount);
+		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+		x += 32;
+		CG_DrawPic(x, y, 24, 24, cgs.media.medalSprayGod);
+		Com_sprintf(buf, sizeof(buf), "%d", score->spraygodCount);
+		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+	}
+	if (cgs.gametype == GT_CTF || cgs.gametype == GT_BALLOON) {
+		const clientInfo_t *ci = &cgs.clientinfo[score->client];
+		x += 30;
+		if (ci->team == TEAM_RED) {
+			CG_DrawPic(x, y, 24, 24, cgs.media.medalPadStarRed);
+		} else {
+			CG_DrawPic(x, y, 24, 24, cgs.media.medalPadStar);
+		}
+		Com_sprintf(buf, sizeof(buf), "%d", score->captures);
+		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+	}
+	if (cgs.gametype == GT_CTF || cgs.gametype == GT_BALLOON || cgs.gametype == GT_SPRAY) {
+		x += 30;
+		CG_DrawPic(x, y, 24, 24, cgs.media.medalPadHero);
+		Com_sprintf(buf, sizeof(buf), "%d", score->padheroCount);
+		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+		x += 30;
+		CG_DrawPic(x, y, 24, 24, cgs.media.medalPadAce);
+		Com_sprintf(buf, sizeof(buf), "%d", score->padaceCount);
+		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+	}
+}
+
 /*
 =================
 CG_DrawOldScoreboard
@@ -558,57 +604,7 @@ qboolean CG_DrawOldScoreboard(void) {
 		y += (n2 * lineHeight);
 	}
 
-	// draw medals
-	y = 312;
-	x = 64;
-	// draw medal header
-	CG_DrawPic(x, y, 60, 24, cgs.media.scoreboardMedals);
-	// draw Excellent medal
-	x += 64;
-	CG_DrawPic(x, y, 24, 24, cgs.media.medalExcellent);
-	Com_sprintf(buf, sizeof(buf), "%d", score->excellentCount);
-	CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
-	// draw SnackAttack medal
-	x += 30;
-	CG_DrawPic(x, y, 24, 24, cgs.media.medalSnackAttack);
-	Com_sprintf(buf, sizeof(buf), "%d", score->snackattackCount);
-	CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
-	if (cgs.gametype == GT_SPRAYFFA || cgs.gametype == GT_SPRAY) {
-		// draw SprayKiller medal
-		x += 30;
-		CG_DrawPic(x, y, 24, 24, cgs.media.medalSprayKiller);
-		Com_sprintf(buf, sizeof(buf), "%d", score->spraykillerCount);
-		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
-		// draw SprayGod medal
-		x += 32;
-		CG_DrawPic(x, y, 24, 24, cgs.media.medalSprayGod);
-		Com_sprintf(buf, sizeof(buf), "%d", score->spraygodCount);
-		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
-	}
-	if (cgs.gametype == GT_CTF || cgs.gametype == GT_BALLOON) {
-		// draw PadStar medal
-		ci = &cgs.clientinfo[score->client];
-		x += 30;
-		if (ci->team == TEAM_RED) {
-			CG_DrawPic(x, y, 24, 24, cgs.media.medalPadStarRed);
-		} else {
-			CG_DrawPic(x, y, 24, 24, cgs.media.medalPadStar);
-		}
-		Com_sprintf(buf, sizeof(buf), "%d", score->captures);
-		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
-	}
-	if (cgs.gametype == GT_CTF || cgs.gametype == GT_BALLOON || cgs.gametype == GT_SPRAY) {
-		// draw PadHero medal
-		x += 30;
-		CG_DrawPic(x, y, 24, 24, cgs.media.medalPadHero);
-		Com_sprintf(buf, sizeof(buf), "%d", score->padheroCount);
-		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
-		// draw PadAce medal
-		x += 30;
-		CG_DrawPic(x, y, 24, 24, cgs.media.medalPadAce);
-		Com_sprintf(buf, sizeof(buf), "%d", score->padaceCount);
-		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
-	}
+	CG_DrawMedals(64.0f, 312.0f, score);
 
 	// load any models that have been deferred
 	if (++cg.deferredPlayerLoading > 10) {
