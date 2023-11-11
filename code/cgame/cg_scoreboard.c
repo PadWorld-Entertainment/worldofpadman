@@ -341,10 +341,9 @@ Draw the normal in-game scoreboard
 =================
 */
 qboolean CG_DrawOldScoreboard(void) {
-	int x, y, w, i, n1, n2;
+	int x, y, i;
 	float fade;
 	float *fadeColor;
-	char *s;
 	int maxClients;
 	int lineHeight;
 	int topBorderSize, bottomBorderSize;
@@ -389,8 +388,8 @@ qboolean CG_DrawOldScoreboard(void) {
 
 	// fragged by ... line
 	if (cg.killerName[0]) {
-		s = va(S_COLOR_BLACK "Fragged by %s", cg.killerName);
-		w = (CG_DrawStrlen(s) * BIGCHAR_WIDTH);
+		char *s = va(S_COLOR_BLACK "Fragged by %s", cg.killerName);
+		int w = (CG_DrawStrlen(s) * BIGCHAR_WIDTH);
 		x = ((SCREEN_WIDTH - w) / 2);
 		y = (SB_TOP - 60);
 
@@ -400,6 +399,8 @@ qboolean CG_DrawOldScoreboard(void) {
 	// current rank
 	if (cgs.gametype < GT_TEAM) {
 		if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR) {
+			char *s;
+			int w;
 			if (cgs.gametype == GT_LPS) {
 				int ownLives = cg.snap->ps.stats[STAT_LIVESLEFT];
 				if (ownLives < 0) {
@@ -425,6 +426,8 @@ qboolean CG_DrawOldScoreboard(void) {
 			CG_DrawStringExt(x, y, s, fadeColor, qfalse, qfalse, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0);
 		}
 	} else {
+		char *s;
+		int w;
 		// FIXME: Use some sort of team_t define/enum
 		if (cg.teamScores[0] == cg.teamScores[1]) {
 			if (CG_FreezeTag())
@@ -556,6 +559,7 @@ qboolean CG_DrawOldScoreboard(void) {
 	localClient = qfalse;
 
 	if (cgs.gametype >= GT_TEAM) {
+		int n1;
 		//
 		// teamplay scoreboard
 		//
@@ -563,6 +567,7 @@ qboolean CG_DrawOldScoreboard(void) {
 		y += topBorderSize;
 
 		if (cg.teamScores[0] >= cg.teamScores[1]) {
+			int n2;
 			CG_DrawTeamBackground(70, y - topBorderSize, 506,
 								  maxScoreLinesPerTeam[TEAM_RED] * lineHeight + topBorderSize + bottomBorderSize, 0.66f,
 								  TEAM_RED);
@@ -576,6 +581,7 @@ qboolean CG_DrawOldScoreboard(void) {
 			y += (n2 * lineHeight) + bottomBorderSize;
 			maxClients -= n2;
 		} else {
+			int n2;
 			CG_DrawTeamBackground(70, y - topBorderSize, 506,
 								  maxScoreLinesPerTeam[TEAM_BLUE] * lineHeight + topBorderSize + bottomBorderSize,
 								  0.66f, TEAM_BLUE);
@@ -593,12 +599,12 @@ qboolean CG_DrawOldScoreboard(void) {
 		y += 8;
 		n1 = CG_TeamScoreboard(y, TEAM_SPECTATOR, fade, maxScoreLinesPerTeam[TEAM_SPECTATOR], lineHeight);
 		y += (n1 * lineHeight);
-
 	} else {
 		//
 		// free for all scoreboard
 		//
-		n1 = CG_TeamScoreboard(y, TEAM_FREE, fade, maxScoreLinesPerTeam[TEAM_FREE], lineHeight);
+		int n1 = CG_TeamScoreboard(y, TEAM_FREE, fade, maxScoreLinesPerTeam[TEAM_FREE], lineHeight);
+		int n2;
 		y += (n1 * lineHeight) + 8;
 		n2 = CG_TeamScoreboard(y, TEAM_SPECTATOR, fade, maxScoreLinesPerTeam[TEAM_SPECTATOR], lineHeight);
 		y += (n2 * lineHeight);
