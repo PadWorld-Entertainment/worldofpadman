@@ -536,7 +536,7 @@ void StopFollowing(gentity_t *ent);
 void BroadcastTeamChange(gclient_t *client, int oldTeam);
 void SetTeam(gentity_t *ent, const char *s);
 void Cmd_FollowCycle_f(gentity_t *ent, int dir);
-void Cmd_DropCartridge_f(gentity_t *ent);
+void Cmd_DropTeamItem_f(gentity_t *ent);
 const char *ConcatArgs(int start);
 void G_Say(gentity_t *ent, gentity_t *target, int mode, const char *chatText);
 

@@ -720,7 +720,7 @@ static void ClientThink_real(gentity_t *ent) {
 	}
 
 	if ((client->buttons & BUTTON_DROPCART) && !(client->oldbuttons & BUTTON_DROPCART)) {
-		Cmd_DropCartridge_f(ent);
+		Cmd_DropTeamItem_f(ent);
 	}
 
 	// spectators don't do much

@@ -1717,14 +1717,13 @@ static void G_DropCartridges(gentity_t *ent) {
 
 /*
 #######################
-Cmd_DropCartridge_f
+Cmd_DropTeamItem_f
 #######################
 */
-// FIXME: Rename, since it also works for flags!
 // TODO: This entire code is almost the same as Drop_Item(), except for
 //       higher velocity and no random z
 // TODO: Enforce a cooldown time
-void Cmd_DropCartridge_f(gentity_t *ent) {
+void Cmd_DropTeamItem_f(gentity_t *ent) {
 	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
 		return;
 	}
@@ -1957,7 +1956,7 @@ void ClientCommand(int clientNum) {
 		Cmd_TeamReady_f(ent);
 	else if (Q_stricmp(cmd, "dropCartridge") == 0 || Q_stricmp(cmd, "sv_dropCartridge") == 0 ||
 			 Q_stricmp(cmd, "dropTeamItem") == 0)
-		Cmd_DropCartridge_f(ent);
+		Cmd_DropTeamItem_f(ent);
 	else if (Q_stricmp(cmd, "editbotinv") == 0)
 		Cmd_EditBotInv_f(ent);
 	else if (Q_stricmp(cmd, "thaw") == 0)
