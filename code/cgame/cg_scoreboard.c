@@ -69,8 +69,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 //  wins/losses are drawn on bot icon now
 
-static qboolean localClient; // true if local client has been displayed
-
 /*
 =================
 CG_DrawClientScore
@@ -168,8 +166,6 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	if (score->client == cg.snap->ps.clientNum) {
 		float hcolor[4];
 		int rank;
-
-		localClient = qtrue;
 
 		if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || cgs.gametype >= GT_TEAM) {
 			rank = -1;
@@ -555,8 +551,6 @@ qboolean CG_DrawOldScoreboard(void) {
 		lineHeight = 10;
 		maxClients = (scoreLineSpace / lineHeight);
 	}
-
-	localClient = qfalse;
 
 	if (cgs.gametype >= GT_TEAM) {
 		int n1;
