@@ -291,7 +291,7 @@ void G_SetBalloonCaptured(int balloonIndex, team_t team, qboolean fullyCaptured)
 	} else {
 		level.balloonState[balloonIndex] = (char)('a' + team - 1);
 	}
-	//Com_Printf("balloon state: %s\n", level.balloonState);
+	// Com_Printf("balloon state: %s\n", level.balloonState);
 }
 
 qboolean G_BalloonIsCaptured(int balloonIndex, team_t team, qboolean fullyCaptured) {
@@ -433,6 +433,37 @@ static qboolean Team_FlagDefendOrProtectBonus(const gentity_t *targ, gentity_t *
 	return qfalse;
 }
 
+/**
+ * @brief Checks if the attacker is eligible for getting a defense bonus for killing the victim
+ */
+static qboolean G_IsEligibleForCarrierDefense(const gentity_t *victim, const gentity_t *attacker) {
+	const playerTeamState_t *teamState = &victim->client->pers.teamState;
+
+	// the victim doesn't hurt the carrier
+	if (teamState->lasthurtcarrier == 0) {
+		return qfalse;
+	}
+	// the victim hurts the carrier, but the attacker is not eligible because this didn't happened recent enough
+	if (level.time - teamState->lasthurtcarrier >= CTF_CARRIER_DANGER_PROTECT_TIMEOUT) {
+		return qfalse;
+	}
+
+	if (g_gametype.integer == GT_CTF) {
+		int flag_pw;
+		// same team, if the flag at base, check to he has the enemy flag
+		if (victim->client->sess.sessionTeam == TEAM_RED) {
+			flag_pw = PW_REDFLAG;
+		} else {
+			flag_pw = PW_BLUEFLAG;
+		}
+		// if you are the carrier yourself, don't give bonus
+		if (attacker->client->ps.powerups[flag_pw]) {
+			return qfalse;
+		}
+	}
+	return qtrue;
+}
+
 /*
 ================
 Team_FragBonuses
@@ -512,9 +543,7 @@ void Team_FragBonuses(const gentity_t *victim, gentity_t *attacker) {
 	}
 
 	// CTF and SyC
-	if (victim->client->pers.teamState.lasthurtcarrier &&
-		level.time - victim->client->pers.teamState.lasthurtcarrier < CTF_CARRIER_DANGER_PROTECT_TIMEOUT &&
-		!attacker->client->ps.powerups[flag_pw]) {
+	if (G_IsEligibleForCarrierDefense(victim, attacker)) {
 		// attacker is on the same team as the flag carrier and
 		// fragged a guy who hurt our flag carrier
 		AddScore(attacker, victim->r.currentOrigin, CTF_CARRIER_DANGER_PROTECT_BONUS, SCORE_BONUS_CARRIER_PROTECT_S);
@@ -547,8 +576,12 @@ Needed when handing out bonuses for assistance to flag/cartridge carrier defense
 */
 void Team_CheckHurtCarrier(const gentity_t *victim, gentity_t *attacker) {
 	int flag_pw;
+	playerTeamState_t *attackerTeamState;
 
 	if (!victim->client || !attacker->client)
+		return;
+
+	if (victim->client->sess.sessionTeam == attacker->client->sess.sessionTeam)
 		return;
 
 	if (victim->client->sess.sessionTeam == TEAM_RED)
@@ -556,13 +589,19 @@ void Team_CheckHurtCarrier(const gentity_t *victim, gentity_t *attacker) {
 	else
 		flag_pw = PW_REDFLAG;
 
+	attackerTeamState = &attacker->client->pers.teamState;
+
 	// flags CTF
-	if (victim->client->ps.powerups[flag_pw] && victim->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
-		attacker->client->pers.teamState.lasthurtcarrier = level.time;
+	if (victim->client->ps.powerups[flag_pw]) {
+		attackerTeamState->lasthurtcarrier = level.time;
+		attackerTeamState->lasthurtcarrierId = victim->s.number;
+	}
 
 	// cartridges (5 or more cartridges only) SyC
-	if (victim->client->ps.generic1 >= CNT_CARTRIDGES && victim->client->sess.sessionTeam != attacker->client->sess.sessionTeam)
-		attacker->client->pers.teamState.lasthurtcarrier = level.time;
+	if (victim->client->ps.generic1 >= CNT_CARTRIDGES) {
+		attackerTeamState->lasthurtcarrier = level.time;
+		attackerTeamState->lasthurtcarrierId = victim->s.number;
+	}
 }
 
 static const gentity_t *Team_ResetFlag(int team) {

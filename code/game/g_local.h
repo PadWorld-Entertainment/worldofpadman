@@ -268,7 +268,11 @@ typedef struct {
 	int assists;
 
 	// carrier of the flag or carrier of 5 (CNT_CARTRIDGES) cartridges in syc
+	// level time that you've last hurt a carrier in ctf of syc on a foreign team
 	int lasthurtcarrier;
+	// the id of the carrier on a foreign team that you've hurt last.
+	// check in combination with lasthurtcarrier
+	int lasthurtcarrierId;
 	int lastreturnedflag;
 	int flagsince;
 	int lastfraggedcarrier;
