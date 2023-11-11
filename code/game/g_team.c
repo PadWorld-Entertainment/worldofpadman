@@ -461,6 +461,10 @@ static qboolean G_IsEligibleForCarrierDefense(const gentity_t *victim, const gen
 			return qfalse;
 		}
 	}
+	// if the last attacked carrier was the attacker itself, don't give a bonus
+	if (attacker->s.number == teamState->lasthurtcarrierId) {
+		return qfalse;
+	}
 	return qtrue;
 }
 
