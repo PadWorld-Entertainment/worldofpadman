@@ -76,7 +76,7 @@ static qboolean localClient; // true if local client has been displayed
 CG_DrawClientScore
 =================
 */
-static void CG_DrawClientScore(int y, score_t *score, float *color, float fade, int lineHeight) {
+static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, float fade, int lineHeight) {
 	int icony, fontHeight;
 	char string[1024];
 	vec3_t headAngles;
@@ -229,10 +229,8 @@ CG_TeamScoreboard
 // maxLines = max Lines for THIS team
 static int CG_TeamScoreboard(int y, team_t team, float fade, int maxLines, int lineHeight) {
 	int i;
-	score_t *score;
-	float color[4];
+	vec4_t color;
 	int count;
-	clientInfo_t *ci;
 	qboolean localSpecialDraw;
 	int localScoreID = 0;
 
@@ -244,7 +242,7 @@ static int CG_TeamScoreboard(int y, team_t team, float fade, int maxLines, int l
 	if ((cg.snap->ps.persistant[PERS_TEAM] == team) && (maxLines < cg.scoreTeamCount[team])) {
 		count = 0;
 		for (i = 0; i < cg.numScores; i++) {
-			score = &cg.scores[i];
+			const score_t *score = &cg.scores[i];
 
 			if (team == cgs.clientinfo[score->client].team) {
 				count++;
@@ -260,8 +258,8 @@ static int CG_TeamScoreboard(int y, team_t team, float fade, int maxLines, int l
 
 	count = 0;
 	for (i = 0; i < cg.numScores && count < maxLines; i++) {
-		score = &cg.scores[i];
-		ci = &cgs.clientinfo[score->client];
+		const score_t *score = &cg.scores[i];
+		const clientInfo_t *ci = &cgs.clientinfo[score->client];
 
 		if (team != ci->team) {
 			continue;
