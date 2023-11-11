@@ -164,7 +164,7 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 
 	// highlight your position
 	if (score->client == cg.snap->ps.clientNum) {
-		float hcolor[4];
+		vec4_t hcolor;
 		int rank;
 
 		if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || cgs.gametype >= GT_TEAM) {
@@ -190,7 +190,7 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 			hcolor[2] = 0.7f;
 		}
 
-		hcolor[3] = fade * 0.7;
+		hcolor[3] = fade * 0.7f;
 
 		CG_FillRect(SB_SCORELINE_X + BIGCHAR_WIDTH + (SB_RATING_WIDTH / 2), y, 400, fontHeight, hcolor);
 
@@ -622,17 +622,8 @@ CG_CenterGiantLine
 ================
 */
 static void CG_CenterGiantLine(float y, const char *string) {
-	float x;
-	vec4_t color;
-
-	color[0] = 1;
-	color[1] = 1;
-	color[2] = 1;
-	color[3] = 1;
-
-	x = 0.5f * (SCREEN_WIDTH - GIANT_WIDTH * CG_DrawStrlen(string));
-
-	CG_DrawStringExt(x, y, string, color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
+	const float x = 0.5f * (SCREEN_WIDTH - GIANT_WIDTH * CG_DrawStrlen(string));
+	CG_DrawStringExt(x, y, string, colorWhite, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 }
 
 /*
@@ -644,7 +635,6 @@ Draw the oversize scoreboard for tournements
 */
 void CG_DrawOldTourneyScoreboard(void) {
 	const char *s;
-	vec4_t color;
 	int min, tens, ones;
 	clientInfo_t *ci;
 	int y;
@@ -657,14 +647,7 @@ void CG_DrawOldTourneyScoreboard(void) {
 	}
 
 	// draw the dialog background
-	color[0] = color[1] = color[2] = 0;
-	color[3] = 1;
-	CG_FillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, color);
-
-	color[0] = 1;
-	color[1] = 1;
-	color[2] = 1;
-	color[3] = 1;
+	CG_FillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, colorBlack);
 
 	// print the message of the day
 	s = CG_ConfigString(CS_MOTD);
@@ -692,15 +675,15 @@ void CG_DrawOldTourneyScoreboard(void) {
 		//
 		// teamplay scoreboard
 		//
-		CG_DrawStringExt(8, y, "Red Pads", color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
+		CG_DrawStringExt(8, y, "Red Pads", colorWhite, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 		s = va("%i", cg.teamScores[0]);
-		CG_DrawStringExt(632 - GIANT_WIDTH * strlen(s), y, s, color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
+		CG_DrawStringExt(SCREEN_WIDTH - 8 - GIANT_WIDTH * strlen(s), y, s, colorWhite, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 
 		y += 64;
 
-		CG_DrawStringExt(8, y, "Blue Noses", color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
+		CG_DrawStringExt(8, y, "Blue Noses", colorWhite, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 		s = va("%i", cg.teamScores[1]);
-		CG_DrawStringExt(632 - GIANT_WIDTH * strlen(s), y, s, color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
+		CG_DrawStringExt(SCREEN_WIDTH - 8 - GIANT_WIDTH * strlen(s), y, s, colorWhite, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 	} else {
 		//
 		// free for all scoreboard
@@ -714,9 +697,9 @@ void CG_DrawOldTourneyScoreboard(void) {
 				continue;
 			}
 
-			CG_DrawStringExt(8, y, ci->name, color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
+			CG_DrawStringExt(8, y, ci->name, colorWhite, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 			s = va("%i", ci->score);
-			CG_DrawStringExt(632 - GIANT_WIDTH * strlen(s), y, s, color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
+			CG_DrawStringExt(SCREEN_WIDTH - 8 - GIANT_WIDTH * strlen(s), y, s, colorWhite, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 			y += 64;
 		}
 	}
