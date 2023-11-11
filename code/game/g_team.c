@@ -514,7 +514,7 @@ void Team_FragBonuses(const gentity_t *victim, gentity_t *attacker) {
 	// CTF and SyC
 	if (victim->client->pers.teamState.lasthurtcarrier &&
 		level.time - victim->client->pers.teamState.lasthurtcarrier < CTF_CARRIER_DANGER_PROTECT_TIMEOUT &&
-		!attacker->client->ps.powerups[flag_pw] && victim != attacker) {
+		!attacker->client->ps.powerups[flag_pw]) {
 		// attacker is on the same team as the flag carrier and
 		// fragged a guy who hurt our flag carrier
 		AddScore(attacker, victim->r.currentOrigin, CTF_CARRIER_DANGER_PROTECT_BONUS, SCORE_BONUS_CARRIER_PROTECT_S);
