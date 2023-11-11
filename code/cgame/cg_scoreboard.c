@@ -636,7 +636,7 @@ static void CG_CenterGiantLine(float y, const char *string) {
 	color[2] = 1;
 	color[3] = 1;
 
-	x = 0.5f * (640 - GIANT_WIDTH * CG_DrawStrlen(string));
+	x = 0.5f * (SCREEN_WIDTH - GIANT_WIDTH * CG_DrawStrlen(string));
 
 	CG_DrawStringExt(x, y, string, color, qtrue, qtrue, GIANT_WIDTH, GIANT_HEIGHT, 0);
 }
