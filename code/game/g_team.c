@@ -433,6 +433,12 @@ static qboolean Team_FlagDefendOrProtectBonus(const gentity_t *targ, gentity_t *
 	return qfalse;
 }
 
+static void G_ResetLastHurtCarrier(gentity_t *ent) {
+	playerTeamState_t *teamState = &ent->client->pers.teamState;
+	teamState->lasthurtcarrier = 0;
+	teamState->lasthurtcarrierId = -1;
+}
+
 /**
  * @brief Checks if the attacker is eligible for getting a defense bonus for killing the victim
  */
@@ -477,7 +483,7 @@ Note that bonuses are not cumulative. You get one, they are in importance
 order.
 ================
 */
-void Team_FragBonuses(const gentity_t *victim, gentity_t *attacker) {
+void Team_FragBonuses(gentity_t *victim, gentity_t *attacker) {
 	int i;
 	int flag_pw, enemy_flag_pw;
 	int otherteam;
@@ -519,7 +525,7 @@ void Team_FragBonuses(const gentity_t *victim, gentity_t *attacker) {
 		for (i = 0; i < g_maxclients.integer; i++) {
 			gentity_t *ent = g_entities + i;
 			if (ent->inuse && ent->client->sess.sessionTeam == otherteam)
-				ent->client->pers.teamState.lasthurtcarrier = 0;
+				G_ResetLastHurtCarrier(ent);
 		}
 		return;
 	}
@@ -540,7 +546,7 @@ void Team_FragBonuses(const gentity_t *victim, gentity_t *attacker) {
 			for (i = 0; i < g_maxclients.integer; i++) {
 				gentity_t *ent = g_entities + i;
 				if (ent->inuse && ent->client->sess.sessionTeam == otherteam)
-					ent->client->pers.teamState.lasthurtcarrier = 0;
+					G_ResetLastHurtCarrier(ent);
 			}
 			return;
 		}
@@ -553,7 +559,7 @@ void Team_FragBonuses(const gentity_t *victim, gentity_t *attacker) {
 		AddScore(attacker, victim->r.currentOrigin, CTF_CARRIER_DANGER_PROTECT_BONUS, SCORE_BONUS_CARRIER_PROTECT_S);
 
 		attacker->client->pers.teamState.carrierdefense++;
-		victim->client->pers.teamState.lasthurtcarrier = 0;
+		G_ResetLastHurtCarrier(victim);
 
 		attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
 		// add the sprite over the player's head
