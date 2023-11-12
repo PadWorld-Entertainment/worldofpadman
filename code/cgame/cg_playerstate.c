@@ -256,10 +256,7 @@ CG_CheckLocalSounds
 ==================
 */
 static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
-	int health, armor;
-	int advHitSound;
 	qboolean reward = qfalse;
-	sfxHandle_t sfx;
 
 	// don't play the sounds if the player just changed teams
 	if (ps->persistant[PERS_TEAM] != ops->persistant[PERS_TEAM]) {
@@ -268,9 +265,9 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 
 	// hit changes
 	if (ps->persistant[PERS_HITS] > ops->persistant[PERS_HITS]) {
-		armor  = ps->persistant[PERS_ATTACKEE_ARMOR] & 0xff;
-		health = ps->persistant[PERS_ATTACKEE_ARMOR] >> 8;
-		advHitSound = cg_advHitSound.integer;
+		int armor  = ps->persistant[PERS_ATTACKEE_ARMOR] & 0xff;
+		int health = ps->persistant[PERS_ATTACKEE_ARMOR] >> 8;
+		int advHitSound = cg_advHitSound.integer;
 		if (armor > 50 && advHitSound) {
 			trap_S_StartLocalSound(cgs.media.hitShieldSound, CHAN_LOCAL_SOUND);
 		} else if (!armor && advHitSound) {
@@ -311,6 +308,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 		// Com_Printf("SprayKiller award\n");
 	}
 	if (ps->persistant[PERS_CAPTURES] != ops->persistant[PERS_CAPTURES]) {
+		sfxHandle_t sfx;
 		// Do not play the PadStar sound when we are in Big Balloon so as not to disturb the balloon capture sound.
 		if (cgs.gametype == GT_BALLOON) {
 			sfx = -1;
@@ -318,7 +316,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 			sfx = cgs.media.padstarSound;
 		}
 		if (cgs.clientinfo[ps->clientNum].team == TEAM_RED) {
-			CG_PushReward(sfx, cgs.media.medalPadStarRed, ps->persistant[PERS_CAPTURES]);			
+			CG_PushReward(sfx, cgs.media.medalPadStarRed, ps->persistant[PERS_CAPTURES]);
 		} else {
 			CG_PushReward(sfx, cgs.media.medalPadStar, ps->persistant[PERS_CAPTURES]);
 		}
