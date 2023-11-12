@@ -1196,7 +1196,9 @@ static void CG_DrawReward(void) {
 			cg.rewardTime = cg.time;
 			cg.rewardStack--;
 			color = CG_FadeColor(cg.rewardTime, REWARD_TIME);
-			trap_S_StartLocalSound(cg.rewardSound[0], CHAN_ANNOUNCER);
+			if (cg.rewardSound[0] != -1) {
+				trap_S_StartLocalSound(cg.rewardSound[0], CHAN_ANNOUNCER);
+			}
 		} else {
 			return;
 		}
