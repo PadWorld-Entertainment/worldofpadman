@@ -3,19 +3,20 @@
 ## Version: 1.7.0 (tba.)
 
 - ADDED
-	- Discord webhook support for dedicated servers. discord_webhook_url cvar should get set to a webhook url like https://discord.com/api/webhooks/xxx/yyy (can be done by exporting an env var called WOP_DISCORD_WEBHOOK_URL due to the // in the url)
 	- 32bit binaries to support Windows and Linux systems
 	- Freeze Tag (FT) game mode and related assets like ice cold weapon effects
 	- Catch the Killerduck (CTKD) game mode
 	- PElvis (PadElvis) skin, glow skin and bot for the PADMAN player model
 	- HellPad skin, glow skin and bot for the PADMAN player model
 	- PadClassic skin, glow skin and bot for the PADMAN player model
-	- PadHero award/medal for defending the base and the lolly carrier in CTL, for defending a balloon box in your own team color in BB, and for defending a team mate carrying min 5 cartridges in SYC Team
+	- PadHero award/medal for defending the base and the lolly carrier in CTL, for defending a balloon box in your own team color in BB, and for defending a teammate carrying min 5 cartridges in SYC Team when attacked
 	- PadKnight bot and shown in the Select Bots menu
-	- Red PadStar medal for the red team capturing a lolly
+	- Red PadStar medal for the red team capturing a lolly in CTL or raising a balloon in BB
 	- Almost event by the announcer saying "Better luck next time, maybe!" for a player failing to score by getting shot close to the lolly spawn point in CTL, the sprayroom teleporter and having 5+ cartridges to achieve SprayKiller or SprayGod in SYC+Team, raising the last balloon in the own team color in BB
 	- Denied event for all players who try to pick up the same powerup but are not first; the first player picking it up will laugh on the other players
 	- Presentation of received medals and count during a match at the lower left of the scoreboard depending of the currently played game mode
+	- Advanced hit sound feedback to be enabled/disabled via Game page of Options menu or via new cvar `cg_advHitSounds [0|1]`; when opponent has >50 shield points a more light hit sound indicating less impact is played; when opponent has no shield points left a more fleshy hit sound indicating highest impact is played
+	- Discord webhook support for dedicated servers; discord_webhook_url cvar should get set to a webhook url like https://discord.com/api/webhooks/xxx/yyy (can be done by exporting an env var called WOP_DISCORD_WEBHOOK_URL due to the // in the url)
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- Support for player model sounds depending of the selected skin; a complete sound set or individual sounds for a skin can be stored in a folder of the same name in parallel with the model's folder; the model's sounds serve as a fallback if no sounds are available for the skin
@@ -48,7 +49,8 @@
 	- Option to enable/disable Indicate Health to HUD page of Options menu crosshair indicates the health status of the player by changing the color
 	- Option to enable/disable Ingame Videos (video shaders in maps) to Game page of Options menu
 	- Option to enable/disable Team Chats Only to Chat page of Options menu to hide chats of non-team players, works only in team game modes
-	- Option to enable/disable playing the Chat Beep to Chat page of Options menu to switch on/off the squeeze toy sound of chat notifications
+	- Option to enable/disable playing the Chat Beep to Chat page of Options menu to switch on/off the squeeze toy sound of all chat notifications except team chat notifications
+	- Option to enable/disable playing the Team Chat Beep to Chat page of Options menu to switch on/off the squeeze toy sound of team chat notifications
 	- Option to enable/disable the Display Gesture of other players and the sound that comes with it to Chat page of Options menu
 	- Option to enable/disable Bots chatting or to make them chatting more often to Chat page of Options menu
 	- Option to adjust the Notification Space to 4, 6 or 8 lines to Chat page of Options menu via new cvar `cg_chatheight`, default is 4
@@ -60,6 +62,7 @@
 	- Option to adjust the key mapping for taking a Screenshot `F12` (default) to Misc page of Controls menu
 	- Option to enable/disable Autorecord Demo `O` (default) to Misc page of Controls menu
 	- Option to enable/disable Sync Clients `P` (default) to Misc page of Controls menu
+	- Option to select the player's gender independent from the model's gender to Player page of Setup menu; also added 'none' as a new gender that forces the game to use they/them instead of he/his, she/her, or it/its if selected 
 	- New mapping for F-keys via default.cfg (for developers and level designers): hide/show HUD `F5`; hide/show gun `F6`; following are cheat protected: hide/show wire frames `F7`; hide/show lightmap `F8`; hide/show render load information `F9`; enable/disable noclip `F10`; enable/disable god mode and give all items `F11`
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- New cvar `cg_weaponOrder` to customize the weapon order from worse to best for extended Autoswitch Weapon option, default is '/1/2/4/6/3/7/8/9/5/'
@@ -72,7 +75,6 @@
 	- Missing default keyboard mapping in Controls menu and synced with default.cfg
 	- White teleporter (portal) and jumppad effect (shaders and textures)
 	- Life limit warnings by announcer in LPS game mode when life count drops below 4
-	- Player event for almost capturing a lolly in CTL, plays "better luck next time, maybe" (known from LPS)
 	- Jail: splash steps surface parameter to areas with liquid texture decals (dirt/paint/water puddles) and in the shower
 - CHANGED
 	- Network protocol version number to 72 to avoid issues due to incompatibilities with previous WoP versions
@@ -119,7 +121,9 @@
 	- Health Station wallhack icon to be not shown for currently empty stations and to disappear when the player is close
 	- Music ingame menu to always focus on the currently played album and to open and switch albums much faster
 	- Changed spray logos for HellPad and PadClassic bots (compared to previous single release)
-	- Red/blue balloon icon to red/blue PadStar medal in BB
+	- Red/blue balloon icon to red/blue PadStar medal which is counted as a full capture award in Big Balloon now
+	- Team hit sound to a beep sound to indicate friendly fire at teammates when the server has friendly fire enabled
+	- Support for Q3A items by adding replacements for Q3A items teleporter (floater), medkit (killerducks), add comabt armor (padshield); also `g_q3Items` checks against Q3A game types now (taken from Byrillium mod)
 	- ColorStage: slight weapon, ammo and item adjustments, removed Boaster ammo bottles, adjust teleporter destinations to avoid player confusion, moved red and blue bases further away from map center, extended some walls to prevent weapon jumps or to make it harder
 	- WesternSet: map file name from "wop_westernCTL" to "wop_westernsetCTL"
 	- Huette: switched SPLASHER and BETTY position; adjustments to item placement on the desk; location message fixes; added 5 PadShards on the chair
@@ -150,6 +154,7 @@
 	- Player automatically switches from 3rd person view back to 1st person view when warm-up timer expires
 	- Console keeps spamming "models/wop_players/padman/..." not found in developer mode by adding a null shader for certain player model skin meshes
 	- HellPads red/blue thumbnail not being grey (compared to previous single release)
+	- SuperPads anaglyph 3D glasses from red-cyan to cyan-red 
 	- Missing clipping on the fuse box in BB version of MopAn's Jail to prevent players jumping in
 	- Missing texture warnings in Kai's TrashMap
 	- Crosshair always hidden/overlayed by BamBam energy bar
