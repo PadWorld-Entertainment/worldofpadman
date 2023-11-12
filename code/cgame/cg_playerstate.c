@@ -259,6 +259,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 	int health, armor;
 	int advHitSound;
 	qboolean reward = qfalse;
+	sfxHandle_t sfx;
 
 	// don't play the sounds if the player just changed teams
 	if (ps->persistant[PERS_TEAM] != ops->persistant[PERS_TEAM]) {
@@ -310,10 +311,16 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 		// Com_Printf("SprayKiller award\n");
 	}
 	if (ps->persistant[PERS_CAPTURES] != ops->persistant[PERS_CAPTURES]) {
-		if (cgs.clientinfo[ps->clientNum].team == TEAM_RED) {
-			CG_PushReward(cgs.media.padstarSound, cgs.media.medalPadStarRed, ps->persistant[PERS_CAPTURES]);			
+		// Do not play the PadStar sound when we are in Big Balloon so as not to disturb the balloon capture sound.
+		if (cgs.gametype == GT_BALLOON) {
+			sfx = -1;
 		} else {
-			CG_PushReward(cgs.media.padstarSound, cgs.media.medalPadStar, ps->persistant[PERS_CAPTURES]);
+			sfx = cgs.media.padstarSound;
+		}
+		if (cgs.clientinfo[ps->clientNum].team == TEAM_RED) {
+			CG_PushReward(sfx, cgs.media.medalPadStarRed, ps->persistant[PERS_CAPTURES]);			
+		} else {
+			CG_PushReward(sfx, cgs.media.medalPadStar, ps->persistant[PERS_CAPTURES]);
 		}
 		reward = qtrue;
 		// Com_Printf("PadStar award\n");

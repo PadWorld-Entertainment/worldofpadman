@@ -600,7 +600,7 @@ static void AddBalloonScores(gentity_t *balloon, team_t team, int score) {
 			// add the sprite over the player's head
 			SetAward(ent->client, AWARD_CAP);
 
-			// TODO: PERS_CAPTURES++ ? This'll toggle the padstar sound clientside
+			ent->client->ps.persistant[PERS_CAPTURES]++;
 		}
 	}
 }
