@@ -603,7 +603,7 @@ static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
 	return clientNum;
 }
 
-static void AddBalloonScores(gentity_t *balloon, team_t team, int score) {
+static void AddPersPlayerScores(gentity_t *balloon, team_t team) {
 	int i, firstAtBalloon = FirstPlayerAtBalloon(balloon, team);
 
 	for (i = 0; i < level.maxclients; i++) {
@@ -612,12 +612,13 @@ static void AddBalloonScores(gentity_t *balloon, team_t team, int score) {
 
 			if (i == firstAtBalloon) {
 				// the first player at balloon receives capture award
-				AddScore(ent, balloon->target_ent->s.origin, score, SCORE_BONUS_CAPTURE_S);
+				AddScore(ent, ent->r.currentOrigin, BB_CAPTURE_BONUS, SCORE_BONUS_CAPTURE_S);
 				ent->client->ps.persistant[PERS_CAPTURES]++;
 				// add the sprite over the player's head
 				SetAward(ent->client, AWARD_CAP);
 			} else {
 				// all other players at balloon receive assist award (PadAce)
+				AddScore(ent, ent->r.currentOrigin, BB_ASSIST_BONUS, SCORE_BONUS_ASSIST_CAPTURE_S);
 				ent->client->ps.persistant[PERS_PADACE_COUNT]++;
 				// add the sprite over the player's head
 				SetAward(ent->client, AWARD_PADACE);
@@ -665,7 +666,7 @@ static void ThinkBalloonzone(gentity_t *self) {
 				// TODO: Give more points for capturing than for owning?
 				//       Need to test balance!
 				AddTeamScore(self->s.pos.trBase, tteam, (BalloonScore() * 2), SCORE_BONUS_CAPTURE_S);
-				AddBalloonScores(self, tteam, 1);
+				AddPersPlayerScores(self, tteam);
 
 				trap_SendServerCommand(-1, va("mp \"%s captured by %s Team\"", msg, TeamName(tteam)));
 			}

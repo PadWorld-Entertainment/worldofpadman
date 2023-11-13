@@ -100,6 +100,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SCORE_BONUS_RECOVERY_S "recovery"
 #define SCORE_BONUS_CAPTURE_S "capture"
 #define SCORE_BONUS_CAPTURE_TEAM_S "capture_team"
+#define SCORE_BONUS_ASSIST_CAPTURE_S "assist_capture"
 #define SCORE_BONUS_ASSIST_RETURN_S "assist_return"
 #define SCORE_BONUS_ASSIST_FRAG_CARRIER_S "assist_frag_carrier"
 #define SCORE_BONUS_FLAG_S "flag"

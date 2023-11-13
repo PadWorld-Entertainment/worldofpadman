@@ -34,6 +34,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CTF_RETURN_FLAG_ASSIST_BONUS 1		// awarded for returning a flag that causes a capture to happen almost immediately
 #define CTF_FRAG_CARRIER_ASSIST_BONUS 2		// award for fragging a flag carrier if a capture happens almost immediately
 
+#define BB_CAPTURE_BONUS 5      // what you get for capturing a balloon
+#define BB_DESTROY_BONUS 2      // what you get for destroying a balloon
+#define BB_DEFENSE_BONUS 1      // what you get for defending a balloon
+#define BB_ASSIST_BONUS 1       // what you get for assisting in capturing a balloon (PadAce)
+
 #define CTF_TARGET_PROTECT_RADIUS 1000		// the radius around an object being defended where a target will be worth extra frags
 #define CTF_ATTACKER_PROTECT_RADIUS 1000	// the radius around an object being defended where an attacker will get extra frags when making kills
 #define BALLOON_TARGET_PROTECT_RADIUS 1000	// the radius around an object being defended where a target will be worth extra frags

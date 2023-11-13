@@ -340,6 +340,7 @@ static qboolean Team_BalloonDefendOrProtectBonus(const gentity_t *targ, gentity_
 			// if the balloon is already fully captured by your team, and you fragged the player from the other team
 			// you get the award.
 			if (G_BalloonIsCaptured(triggers[i]->count, attacker->client->sess.sessionTeam, qtrue)) {
+				AddScore(attacker, attacker->r.currentOrigin, BB_DEFENSE_BONUS, SCORE_BONUS_DEFENSE_S);
 				attacker->client->ps.persistant[PERS_PADHERO_COUNT]++;
 				// add the sprite over the player's head
 				SetAward(attacker->client, AWARD_PADHERO);

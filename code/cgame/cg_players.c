@@ -1818,9 +1818,7 @@ static void CG_PlayerFloatSprite(const centity_t *cent, qhandle_t shader, qboole
 	}
 
 	// NOTE: Currently the gamecode uses EF_AWARD_CAP for both CTL and BB,
-	//       which results in medalPadStar. There is no sound however, since
-	//       AddBalloonScores() does not increase PERS_CAPTURES, which is associated
-	//       with the award in CTL.
+	// which results in blue or red medal PadStar.
   	if (shader == cgs.media.medalPadStar && cgs.clientinfo[cent->currentState.clientNum].team == TEAM_RED) {
 		ent.customShader = cgs.media.medalPadStarRed;
 	}
