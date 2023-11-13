@@ -800,10 +800,10 @@ void SP_trigger_balloonzone(gentity_t *ent) {
 
 	// set defaults
 	if (ent->wait < 0.1f) {
-		ent->wait = 3.0f;
+		ent->wait = 5.0f;
 	}
 	if (ent->speed < 0.1f) {
-		ent->speed = 5.0f;
+		ent->speed = 10.0f;
 	}
 	ent->target_ent->s.time = (ent->speed * 1000);
 }
