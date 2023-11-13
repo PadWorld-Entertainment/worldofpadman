@@ -588,19 +588,40 @@ static int NumPlayersAtBalloon(const gentity_t *balloon, team_t team) {
 	return count;
 }
 
+static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
+	int i, clientNum, clientBalloonTime = level.time;
+
+	for (i = 0; i < level.maxclients; i++) {
+		if (level.clients[i].sess.sessionTeam == team  && (IsPlayerAtBalloon(i, balloon))) {
+			if ((level.clients[i].balloonTime + BALLOON_TOUCHDELAY) > clientBalloonTime) {
+				clientBalloonTime = level.clients[i].balloonTime + BALLOON_TOUCHDELAY;
+				clientNum = i;
+			}
+		}
+	}
+
+	return clientNum;
+}
+
 static void AddBalloonScores(gentity_t *balloon, team_t team, int score) {
-	int i;
+	int i, firstAtBalloon = FirstPlayerAtBalloon(balloon, team);
 
 	for (i = 0; i < level.maxclients; i++) {
 		if ((level.clients[i].sess.sessionTeam == team) && (IsPlayerAtBalloon(i, balloon))) {
 			gentity_t *ent = (g_entities + i);
 
-			AddScore(ent, balloon->target_ent->s.origin, score, SCORE_BONUS_CAPTURE_S);
-
-			// add the sprite over the player's head
-			SetAward(ent->client, AWARD_CAP);
-
-			ent->client->ps.persistant[PERS_CAPTURES]++;
+			if (i == firstAtBalloon) {
+				// the first player at balloon receives capture award
+				AddScore(ent, balloon->target_ent->s.origin, score, SCORE_BONUS_CAPTURE_S);
+				ent->client->ps.persistant[PERS_CAPTURES]++;
+				// add the sprite over the player's head
+				SetAward(ent->client, AWARD_CAP);
+			} else {
+				// all other players at balloon receive assist award (PadAce)
+				ent->client->ps.persistant[PERS_PADACE_COUNT]++;
+				// add the sprite over the player's head
+				SetAward(ent->client, AWARD_PADACE);
+			}
 		}
 	}
 }
