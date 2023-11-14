@@ -92,13 +92,14 @@ PREFERENCES MENU
 #define ID_CONAUTOCLEAR 59
 
 #define ID_DRAWTOOLTIP 70
-#define ID_ICONTEAMMATE 71
-#define ID_ICONFROZENMATE 72
-#define ID_ICONLPSFOE 73
-#define ID_ICONHSTATION 74
-#define ID_ICONSYCTELE 75
-#define ID_ICONBALLOON 76
-#define ID_ICONKILLERDUCK 77
+#define ID_DRAWFRIEND 71
+#define ID_ICONTEAMMATE 72
+#define ID_ICONFROZENMATE 73
+#define ID_ICONLPSFOE 74
+#define ID_ICONHSTATION 75
+#define ID_ICONSYCTELE 76
+#define ID_ICONBALLOON 77
+#define ID_ICONKILLERDUCK 78
 
 #define NUM_CROSSHAIRS 12
 
@@ -151,6 +152,7 @@ typedef struct {
 	menuradiobutton_s conautoclear;
 
 	menuradiobutton_s drawtooltip;
+	menuradiobutton_s drawfriend;
 	menutext_s whIcons;
 	menuradiobutton_s whTeamMates;
 	menuradiobutton_s whFrozenMates;
@@ -217,6 +219,7 @@ static menucommon_s *g_chat_options[] = {
 
 static menucommon_s *g_help_options[] = {
 	(menucommon_s *)&s_preferences.drawtooltip,
+	(menucommon_s *)&s_preferences.drawfriend,
 	(menucommon_s *)&s_preferences.whIcons,
 	(menucommon_s *)&s_preferences.whTeamMates,
 	(menucommon_s *)&s_preferences.whFrozenMates,
@@ -348,6 +351,7 @@ static void UI_Preferences_SetMenuItems(void) {
 	}
 
 	s_preferences.drawtooltip.curvalue = trap_Cvar_VariableValue("ui_drawToolTip") != 0;
+	s_preferences.drawfriend.curvalue = trap_Cvar_VariableValue("cg_drawFriend") != 0;
 
 	cg_iconsCvarValue = (int)trap_Cvar_VariableValue("cg_icons");
 	s_preferences.whLPSfoe.curvalue = (ICON_ARROW & cg_iconsCvarValue);
@@ -419,6 +423,9 @@ static void UI_Preferences_UpdateMenuItems(void) {
 	// special cases
 	if (UI_GetCvarInt("cl_voip") == 0) {
 		s_preferences.voipmeter.generic.flags |= QMF_GRAYED;
+	}
+	if (s_preferences.drawfriend.curvalue == 0) {
+		s_preferences.whTeamMates.generic.flags |= QMF_GRAYED;
 	}
 }
 
@@ -638,6 +645,11 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 
 	case ID_DRAWTOOLTIP:
 		trap_Cvar_SetValue("ui_drawToolTip", s_preferences.drawtooltip.curvalue);
+		break;
+
+	case ID_DRAWFRIEND:
+		trap_Cvar_SetValue("cg_drawFriend", s_preferences.drawfriend.curvalue);
+		UI_Preferences_UpdateMenuItems();
 		break;
 
 	case ID_ICONLPSFOE:
@@ -1227,6 +1239,18 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.drawtooltip.generic.toolTip =
 		"Disable to not show those wonderful tooltips in the menu. Default is on.";
 
+	y += (BIGCHAR_HEIGHT + 2);
+	s_preferences.drawfriend.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.drawfriend.generic.name = "Teammate Icon:";
+	s_preferences.drawfriend.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.drawfriend.generic.callback = UI_Preferences_Event;
+	s_preferences.drawfriend.generic.id = ID_DRAWFRIEND;
+	s_preferences.drawfriend.generic.x = XPOSITION;
+	s_preferences.drawfriend.generic.y = y;
+	s_preferences.drawfriend.generic.toolTip =
+		"Disable this to not display a green PAD logo above your teammates, "
+		"to help you find them in team based game modes. Default is on.";
+
 	y += 2 * (BIGCHAR_HEIGHT + 2);
 	s_preferences.whIcons.generic.type = MTYPE_TEXT;
 	s_preferences.whIcons.generic.flags = QMF_HIDDEN;
@@ -1245,9 +1269,9 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whTeamMates.generic.x = XPOSITION;
 	s_preferences.whTeamMates.generic.y = y;
 	s_preferences.whTeamMates.generic.toolTip =
-		"Enable this to display a PAD logo above your teammates, visible "
-		"through walls, to help you find them in team based game modes. "
-		"Default is off.";
+		"Enable this to make the teammate icon visible through walls, "
+		"to help you find them even better in team based game modes. "
+		"Default is off. NOTE: The teammate icon must be enabled for this.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whFrozenMates.generic.type = MTYPE_RADIOBUTTON;
@@ -1382,6 +1406,7 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.conautoclear);
 
 	Menu_AddItem(&s_preferences.menu, &s_preferences.drawtooltip);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.drawfriend);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whIcons);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whTeamMates);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.whFrozenMates);
