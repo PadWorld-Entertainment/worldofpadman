@@ -603,7 +603,7 @@ static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
 	return clientNum;
 }
 
-static void AddPersPlayerScores(gentity_t *balloon, team_t team) {
+static void AddCaptureBalloonScores(gentity_t *balloon, team_t team) {
 	int i, firstAtBalloon = FirstPlayerAtBalloon(balloon, team);
 
 	for (i = 0; i < level.maxclients; i++) {
@@ -623,6 +623,19 @@ static void AddPersPlayerScores(gentity_t *balloon, team_t team) {
 				// add the sprite over the player's head
 				SetAward(ent->client, AWARD_PADACE);
 			}
+		}
+	}
+}
+
+static void AddCounterBalloonScores(gentity_t *balloon, team_t team) {
+	int i;
+
+	for (i = 0; i < level.maxclients; i++) {
+		if ((level.clients[i].sess.sessionTeam == team) && (IsPlayerAtBalloon(i, balloon))) {
+			gentity_t *ent = (g_entities + i);
+
+			// all players at balloon receive counter points
+			AddScore(ent, ent->r.currentOrigin, BB_COUNTER_BONUS, SCORE_BONUS_COUNTER_S);
 		}
 	}
 }
@@ -666,7 +679,7 @@ static void ThinkBalloonzone(gentity_t *self) {
 				// TODO: Give more points for capturing than for owning?
 				//       Need to test balance!
 				AddTeamScore(self->s.pos.trBase, tteam, (BalloonScore() * 2), SCORE_BONUS_CAPTURE_S);
-				AddPersPlayerScores(self, tteam);
+				AddCaptureBalloonScores(self, tteam);
 
 				trap_SendServerCommand(-1, va("mp \"%s captured by %s Team\"", msg, TeamName(tteam)));
 			}
@@ -710,8 +723,7 @@ static void ThinkBalloonzone(gentity_t *self) {
 				self->target_ent->s.frame = 0;
 				level.balloonState[self->count] = '0';
 				trap_SetConfigstring(CS_BALLOONS, level.balloonState);
-
-				// TODO: Also give players//&team points for destroying a balloon?
+				AddCounterBalloonScores(self, OtherTeam(tteam));
 
 				trap_SendServerCommand(-1, va("mp \"%s destroyed by %s Team\"", msg, TeamName(OtherTeam(tteam))));
 			}
