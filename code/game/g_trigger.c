@@ -612,13 +612,13 @@ static void AddCaptureBalloonScores(gentity_t *balloon, team_t team) {
 
 			if (i == firstAtBalloon) {
 				// the first player at balloon receives capture award
-				AddScore(ent, ent->r.currentOrigin, BB_CAPTURE_BONUS, SCORE_BONUS_CAPTURE_S);
+				AddScore(ent, balloon->target_ent->s.origin, BB_CAPTURE_BONUS, SCORE_BONUS_CAPTURE_S);
 				ent->client->ps.persistant[PERS_CAPTURES]++;
 				// add the sprite over the player's head
 				SetAward(ent->client, AWARD_CAP);
 			} else {
 				// all other players at balloon receive assist award (PadAce)
-				AddScore(ent, ent->r.currentOrigin, BB_ASSIST_BONUS, SCORE_BONUS_ASSIST_CAPTURE_S);
+				AddScore(ent, balloon->target_ent->s.origin, BB_ASSIST_BONUS, SCORE_BONUS_ASSIST_CAPTURE_S);
 				ent->client->ps.persistant[PERS_PADACE_COUNT]++;
 				// add the sprite over the player's head
 				SetAward(ent->client, AWARD_PADACE);
@@ -635,7 +635,7 @@ static void AddCounterBalloonScores(gentity_t *balloon, team_t team) {
 			gentity_t *ent = (g_entities + i);
 
 			// all players at balloon receive counter points
-			AddScore(ent, ent->r.currentOrigin, BB_COUNTER_BONUS, SCORE_BONUS_COUNTER_S);
+			AddScore(ent, balloon->target_ent->s.origin, BB_COUNTER_BONUS, SCORE_BONUS_COUNTER_S);
 		}
 	}
 }
