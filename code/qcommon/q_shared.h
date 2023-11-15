@@ -314,7 +314,7 @@ typedef enum {
 #define FONT_ASCII_TRIANGLE 31
 #define FONT_ASCII_UNDERLINE 95
 
-#define PROP_GAP_WIDTH 3
+#define PROP_GAP_WIDTH 2
 #define PROP_SPACE_WIDTH 8
 #define PROP_HEIGHT 27
 #define PROP_SMALL_SIZE_SCALE 0.75
