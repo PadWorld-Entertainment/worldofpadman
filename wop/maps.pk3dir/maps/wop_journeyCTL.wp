@@ -1,16 +1,16 @@
-waypoint redlolly -6129 -381 1350
-waypoint redfunnel -4382 -912 1600
-waypoint redsoap -4498 -136 722
-waypoint redcabindoor -5080 343 82
-waypoint center -2726 -112 74
-waypoint bluesoap -901 -181 723 
-waypoint bluefunnel -1030 -1022 1600 
-waypoint bluelolly 710 -365 1350 
-waypoint bluecabindoor -356 292 82
-waypoint redgangway -4670 590 82
-waypoint redtoilet -4131 -47 84
-waypoint bluetoilet -1573 -173 82
-waypoint bluegangway -836 586 86
+waypoint redlolly -3426 -498 1352
+waypoint redfunnel -1719 -1022 1602
+waypoint redsoap -1781 -93 688
+waypoint redcabindoor -2651 350 79
+waypoint redgangway -1895 679 79
+waypoint redtoilet -1334 -52 88
+waypoint center -14 -108 80
+waypoint bluelolly 3426 -498 1352
+waypoint bluefunnel 1719 -1022 1602 
+waypoint bluesoap 1781 -93 688
+waypoint bluecabindoor 2651 350 79
+waypoint bluegangway 1895 679 79
+waypoint bluetoilet 1334 -52 88
 
 linkblue redlolly redfunnel
 linkblue redfunnel redsoap
