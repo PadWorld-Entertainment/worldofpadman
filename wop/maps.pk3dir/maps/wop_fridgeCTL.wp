@@ -1,18 +1,18 @@
-waypoint redlolly 120 -978 1104
-waypoint redbubbleg -63 -796 420
+waypoint redlolly -283 -975 649
+waypoint redbubbleg -115 -780 408
 waypoint redorange 180 -1364 285
-waypoint redduck 297 -941 -261
+waypoint redvisionless 62 -1047 -209
 waypoint redsewer 155 -1491 -269
 waypoint redboomie -357 -947 -879
 waypoint redunderground 312 -1018 -879
 
-waypoint bluelolly -96 975 1104
-waypoint bluebubbleg 202 761 420
-waypoint blueorange -154 1392 285
-waypoint blueduck -230 993 -261
-waypoint bluesewer -170 1419 -255
-waypoint blueboomie 355 1006 -879
-waypoint blueunderground -281 993 -879
+waypoint bluelolly 283 975 649
+waypoint bluebubbleg 115 780 408
+waypoint blueorange -180 1364 285
+waypoint bluevisionless -62 1047 -209
+waypoint bluesewer -155 1491 -269
+waypoint blueboomie 357 947 -879
+waypoint blueunderground -312 1018 -879
 
 linkblue redlolly redbubbleg
 linkred redbubbleg redlolly
@@ -26,17 +26,17 @@ linkred redorange redlolly
 linkred bluelolly blueorange
 linkblue blueorange bluelolly
 
-linkblue redorange redduck
-linkred redduck redorange
+linkblue redorange redvisionless
+linkred redvisionless redorange
 
-linkred blueorange blueduck
-linkblue blueduck blueorange
+linkred blueorange bluevisionless
+linkblue bluevisionless blueorange
 
-linkblue redduck redboomie
-linkred redboomie redduck
+linkblue redvisionless redboomie
+linkred redboomie redvisionless
 
-linkred blueduck blueboomie
-linkblue blueboomie blueduck
+linkred bluevisionless blueboomie
+linkblue blueboomie bluevisionless
 
 linkred blueboomie redboomie
 linkblue redboomie blueboomie
