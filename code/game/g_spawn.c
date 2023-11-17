@@ -382,7 +382,7 @@ static const replacePair_t spawnpointReplacements[] = {{"team_redplayer", "info_
 													   {NULL, NULL}};
 
 static const char *gametypeNames[] = {"ffa", "tournament", "single", "spray", "lps", "ctkd",
-										"team", "freeze", "ctl", "sptp", "balloon"};
+										"team", "freeze", "ctl", "onelolly", "sptp", "balloon"};
 CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
 
 /*
@@ -399,7 +399,7 @@ static qboolean G_ValueIncludesGametype(const char *value, gametype_t gametype) 
 
 	// Order needs to match gametype_t of WoP
 	static const char *gametypeNamesQ3[] = {"ffa", "tournament", "single", NULL, NULL, NULL,
-											"team", NULL, "ctf", NULL, NULL};
+											"team", NULL, "ctf", "oneflag", NULL, NULL};
 	CASSERT(ARRAY_LEN(gametypeNamesQ3) == GT_MAX_GAME_TYPE);
 
 	if (gametype < GT_FFA || gametype >= GT_MAX_GAME_TYPE) {
