@@ -890,6 +890,9 @@ extern gentity_t g_entities[MAX_GENTITIES];
 
 #define FOFS(x) ((size_t) & (((gentity_t *)0)->x))
 
+// the amount of items that were initially spawned in the map
+extern int g_itemCount[MAX_ITEMS];
+
 extern vmCvar_t g_gametype;
 extern vmCvar_t g_dedicated;
 extern vmCvar_t g_cheats;

@@ -747,6 +747,7 @@ void FinishSpawningItem(gentity_t *ent) {
 }
 
 static qboolean itemRegistered[MAX_ITEMS];
+int g_itemCount[MAX_ITEMS];
 
 /*
 ==================
@@ -779,6 +780,7 @@ ClearRegisteredItems
 */
 void ClearRegisteredItems(void) {
 	memset(itemRegistered, 0, sizeof(itemRegistered));
+	memset(g_itemCount, 0, sizeof(g_itemCount));
 
 	// players always start with the base weapon
 	RegisterItem(BG_FindItemForWeapon(WP_NIPPER));
