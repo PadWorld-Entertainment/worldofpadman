@@ -436,9 +436,7 @@ level.spawnVars[], then call the class specific spawn function
 static void G_SpawnGEntityFromSpawnVars(void) {
 	int i;
 	gentity_t *ent;
-	const char *s;
 	const char *value;
-	const char *gametypeName;
 	const gitem_t *item;
 
 	// get the next free entity
@@ -533,7 +531,8 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 
 	if (G_SpawnString("gametype", NULL, &value)) {
 		if (g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE) {
-			gametypeName = gametypeNames[g_gametype.integer];
+			const char *s;
+			const char *gametypeName = gametypeNames[g_gametype.integer];
 
 			s = strstr(value, gametypeName);
 			if (!s) {
@@ -545,7 +544,8 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 
 	if (G_SpawnString("notGametype", NULL, &value)) {
 		if (g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE) {
-			gametypeName = gametypeNames[g_gametype.integer];
+			const char *s;
+			const char *gametypeName = gametypeNames[g_gametype.integer];
 
 			s = strstr(value, gametypeName);
 			if (s) {
