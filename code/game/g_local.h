@@ -558,7 +558,7 @@ void PrecacheItem(gitem_t *it);
 gentity_t *Drop_Item(gentity_t *ent, const gitem_t *item, float angle);
 gentity_t *LaunchItem(const gitem_t *item, const vec3_t origin, const vec3_t velocity);
 void SetRespawn(gentity_t *ent, float delay);
-void G_SpawnItem(gentity_t *ent, const gitem_t *item);
+qboolean G_SpawnItem(gentity_t *ent, const gitem_t *item);
 void FinishSpawningItem(gentity_t *ent);
 void Think_Weapon(gentity_t *ent);
 int ArmorIndex(gentity_t *ent);
