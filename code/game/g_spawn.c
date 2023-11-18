@@ -378,6 +378,10 @@ static const replacePair_t spawnpointReplacements[] = {{"team_redplayer", "info_
 													   {"team_bluespawn", "info_player_deathmatch"},
 													   {NULL, NULL}};
 
+static const char *gametypeNames[] = {"ffa", "tournament", "single", "spray", "lps", "ctkd",
+										"team", "freeze", "ctl", "sptp", "balloon"};
+CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
+
 /*
 ===================
 G_ValueIncludesGametype
@@ -388,20 +392,19 @@ If g_q3Items is enabled, will also check against Q3 gametype names.
 */
 static qboolean G_ValueIncludesGametype(const char *value, gametype_t gametype) {
 	const char *gametypeName;
-	char *s;
+	const char *s;
 
 	// Order needs to match gametype_t of WoP
-	static const char *gametypeNames[] = {"ffa", "tournament", "single", "spray", "lps", "ctkd",
-											"team", "freeze", "ctl", "sptp", "balloon"};
 	static const char *gametypeNamesQ3[] = {"ffa", "tournament", "single", NULL, NULL, NULL,
 											"team", NULL, "ctf", NULL, NULL};
+	CASSERT(ARRAY_LEN(gametypeNamesQ3) == GT_MAX_GAME_TYPE);
 
-	if ((gametype < GT_FFA) || (gametype >= GT_MAX_GAME_TYPE)) {
+	if (gametype < GT_FFA || gametype >= GT_MAX_GAME_TYPE) {
 		return qfalse;
 	}
 	gametypeName = gametypeNames[gametype];
 
-	s = strstr(value, gametypeName);
+	s = Q_stristr(value, gametypeName);
 	if (!s) {
 		if (g_q3Items.integer) {
 			gametypeName = gametypeNamesQ3[gametype];
@@ -409,7 +412,7 @@ static qboolean G_ValueIncludesGametype(const char *value, gametype_t gametype) 
 				return qfalse;
 			}
 
-			s = strstr(value, gametypeName);
+			s = Q_stristr(value, gametypeName);
 			if (s) {
 				return qtrue;
 			}
@@ -437,10 +440,6 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	const char *value;
 	const char *gametypeName;
 	const gitem_t *item;
-
-	static const char *gametypeNames[] = {"ffa", "tournament", "single", "spray", "lps", "ctkd",
-										  "team", "freeze", "ctl", "sptp", "balloon"};
-	CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
 
 	// get the next free entity
 	ent = G_Spawn();
