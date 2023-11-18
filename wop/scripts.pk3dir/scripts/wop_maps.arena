@@ -40,7 +40,7 @@
 	map      "wop_huette"
 	longname "Huette"
 	type     "ffa lps syc_ffa syc_tp team ft"
-} 
+}
 
 {
 	map      "wop_huetteBB"
@@ -148,7 +148,7 @@
 	map      "wop_padshop"
 	longname "PadShop"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
-} 
+}
 
 {
 	map      "wop_padshopBB"
