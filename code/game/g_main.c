@@ -580,6 +580,21 @@ void QDECL Com_Printf(const char *msg, ...) {
 	trap_Print(text);
 }
 
+void QDECL Com_DPrintf(const char *msg, ...) {
+	va_list argptr;
+	char text[1024];
+
+	if (!trap_Cvar_VariableIntegerValue("developer")) {
+		return; // don't confuse non-developers with techie stuff...
+	}
+
+	va_start(argptr, msg);
+	Q_vsnprintf(text, sizeof(text), msg, argptr);
+	va_end(argptr);
+
+	trap_Print(text);
+}
+
 #endif
 
 /*
