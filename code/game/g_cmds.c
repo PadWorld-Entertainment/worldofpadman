@@ -231,11 +231,7 @@ Give items to a client
 */
 static void Cmd_Give_f(gentity_t *ent) {
 	const char *name;
-	const gitem_t *it;
-	int i;
 	qboolean give_all;
-	gentity_t *it_ent;
-	trace_t trace;
 
 	if (!CheatsOk(ent)) {
 		return;
@@ -262,6 +258,7 @@ static void Cmd_Give_f(gentity_t *ent) {
 	}
 
 	if (give_all || Q_stricmp(name, "ammo") == 0) {
+		int i;
 		for (i = 0; i < MAX_WEAPONS; i++) {
 			if (i == WP_SPRAYPISTOL)
 				continue;
@@ -324,7 +321,10 @@ static void Cmd_Give_f(gentity_t *ent) {
 
 	// spawn a specific item right on the player
 	if (!give_all) {
-		it = BG_FindItem(name);
+		const gitem_t *it = BG_FindItem(name);
+		gentity_t *it_ent;
+		trace_t trace;
+
 		if (!it) {
 			return;
 		}
