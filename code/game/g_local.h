@@ -816,7 +816,7 @@ int Instagib_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t 
 							 int mod);
 qboolean Instagib_isRelevantDamageEvent(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage,
 										int dflags, int mod);
-qboolean Instagib_canSpawnEntity(gentity_t *ent);
+qboolean Instagib_canSpawnEntity(const gentity_t *ent);
 
 //
 // g_ctlitems.c

@@ -67,18 +67,15 @@ Returns qfalse if entity is not to be spawned for instagib play.
 
 ent:	entity that wants to be spawned
 */
-qboolean Instagib_canSpawnEntity(gentity_t *ent) {
-	const char *classname, *listEntry;
-	int i;
-	static char *list[] = {// list of stuff we don't want
-						   "holdable_", "weapon_", "ammo_", "station_health", NULL};
-
-	classname = ent->classname;
-
+qboolean Instagib_canSpawnEntity(const gentity_t *ent) {
+	static const char *list[] = {// list of stuff we don't want
+								 "holdable_", "weapon_", "ammo_", "station_health", NULL};
+	const char *classname = ent->classname;
 	// see if entity is in the list of stuff that we don't want
-	i = 0;
+	int i = 0;
+
 	while (NULL != list[i]) {
-		listEntry = list[i];
+		const char *listEntry = list[i];
 		if (NULL != strstr(classname, listEntry))
 			return qfalse;
 
