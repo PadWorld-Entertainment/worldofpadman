@@ -2802,7 +2802,147 @@ static void CG_DrawCaptureTheLolly(int team) {
 	}
 }
 
-static void CG_DrawLastPadStanding(void) {
+#define FADEOUTTIME 1500
+
+static void CG_DrawTeammateIcon(void) {
+	int i;
+
+	if (!cg_drawFriend.integer) {
+		return;
+	}
+
+	if ((cg_icons.integer & ICON_TEAMMATE) == 0) {
+		return;
+	}
+
+	if (cgs.gametype < GT_TEAM) {
+		return;
+	}
+
+	for (i = 0; i < cgs.maxclients; i++) {
+		int myteam = cg.snap->ps.persistant[PERS_TEAM];
+
+		if (!cgs.clientinfo[i].infoValid)
+			continue;
+
+		if (cgs.clientinfo[i].team != myteam)
+			continue;
+
+		if (i == cg.clientNum)
+			continue;
+
+		// Don't draw it, if we are in freezetag, the teammate is frozen,
+		// and the frozen teammate icon is enabled. It would interfere
+		// with the frozen teammate icon.
+		if (cgs.gametype == GT_FREEZETAG && (cg_icons.integer & ICON_FREEZETAG) &&
+			cgs.clientinfo[i].ftIsFrozen) 
+			continue;
+
+		if ((cgs.clientinfo[i].lastPosSaveTime > 0) && ((cg.time - cgs.clientinfo[i].lastPosSaveTime) < FADEOUTTIME)) {
+			float x, y;
+			qboolean front;
+			vec4_t strColor = {1.0f, 1.0f, 1.0f, 1.0f};
+
+			// fading out, if the player disappeared
+			strColor[3] = ((FADEOUTTIME - (cg.time - cgs.clientinfo[i].lastPosSaveTime)) / 1000);
+			if (strColor[3] > 1.0) {
+				strColor[3] = 1.0f;
+			} else if (strColor[3] < 0.0) {
+				strColor[3] = 0.0f;
+			}
+
+			front = CG_WorldToScreen(cgs.clientinfo[i].curPos, &x, &y);
+			if (front) {
+				float squaredDistance = DistanceSquared(cg.refdef.vieworg, cgs.clientinfo[i].curPos);
+				float size = (float)(1.0 / (sqrt(squaredDistance) * 0.002));
+				if (size > 1.0f) {
+					size = 1.0f;
+				} else if (size < 0.5f) {
+					size = 0.5f;
+				}
+
+				strColor[3] *= (float)(0.3 + 0.7 * (1 / (1 + squaredDistance * 0.000004)));
+				if (strColor[3] > 1.0f) {
+					strColor[3] = 1.0f;
+				}
+
+				trap_R_SetColor(strColor);
+
+				CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size),
+								cgs.media.friendShader);
+
+				trap_R_SetColor(NULL);
+			}
+		}
+	}
+}
+
+static void CG_DrawFrozenTeammateIcon(void) {
+	int i;
+
+	if ((cg_icons.integer & ICON_FREEZETAG) == 0) {
+		return;
+	}
+
+	if (cgs.gametype != GT_FREEZETAG) {
+		return;
+	}
+
+	for (i = 0; i < cgs.maxclients; i++) {
+		int myteam = cg.snap->ps.persistant[PERS_TEAM];
+
+		if (!cgs.clientinfo[i].infoValid)
+			continue;
+
+		if (cgs.clientinfo[i].team != myteam)
+			continue;
+
+		if (!cgs.clientinfo[i].ftIsFrozen)
+			continue;
+
+		if (i == cg.clientNum)
+			continue;
+
+		if ((cgs.clientinfo[i].lastPosSaveTime > 0) && ((cg.time - cgs.clientinfo[i].lastPosSaveTime) < FADEOUTTIME)) {
+			float x, y;
+			qboolean front;
+			vec4_t strColor = {1.0f, 1.0f, 1.0f, 1.0f};
+
+			// fading out, if the player disappeared
+			strColor[3] = ((FADEOUTTIME - (cg.time - cgs.clientinfo[i].lastPosSaveTime)) / 1000);
+			if (strColor[3] > 1.0) {
+				strColor[3] = 1.0f;
+			} else if (strColor[3] < 0.0) {
+				strColor[3] = 0.0f;
+			}
+
+			front = CG_WorldToScreen(cgs.clientinfo[i].curPos, &x, &y);
+			if (front) {
+				float squaredDistance = DistanceSquared(cg.refdef.vieworg, cgs.clientinfo[i].curPos);
+				float size = (float)(1.0 / (sqrt(squaredDistance) * 0.002));
+				if (size > 1.0f) {
+					size = 1.0f;
+				} else if (size < 0.5f) {
+					size = 0.5f;
+				}
+
+				strColor[3] *= (float)(0.3 + 0.7 * (1 / (1 + squaredDistance * 0.000004)));
+				if (strColor[3] > 1.0f) {
+					strColor[3] = 1.0f;
+				}
+
+				trap_R_SetColor(strColor);
+
+				CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size),
+								cgs.media.freezeIconShader);
+
+				trap_R_SetColor(NULL);
+			}
+		}
+	}
+}
+
+static void CG_DrawLPSArrowIcon(void) {
 	int i;
 	int mostLives;
 
@@ -2835,12 +2975,12 @@ static void CG_DrawLastPadStanding(void) {
 		vec4_t strColor = {1.0f, 1.0f, 1.0f, 1.0f};
 
 		// FIXME: Magical constants!
-		if ((ci->lastPosSaveTime > 0) && ((cg.time - ci->lastPosSaveTime) < 1500)) {
+		if ((ci->lastPosSaveTime > 0) && ((cg.time - ci->lastPosSaveTime) < FADEOUTTIME)) {
 			float x, y;
 			qboolean front;
 
 			// fading out, if the player disappeared
-			strColor[3] = ((1500 - (cg.time - ci->lastPosSaveTime)) / 1000);
+			strColor[3] = ((FADEOUTTIME - (cg.time - ci->lastPosSaveTime)) / 1000);
 			if (strColor[3] > 1.0) {
 				strColor[3] = 1.0f;
 			} else if (strColor[3] < 0.0) {
@@ -2986,7 +3126,9 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	CG_DrawSprayYourColorCartridges(team, hudnum);
 	CG_DrawBigBallon(team);
 	CG_DrawCaptureTheLolly(team);
-	CG_DrawLastPadStanding();
+	CG_DrawLPSArrowIcon();
+	CG_DrawTeammateIcon();
+	CG_DrawFrozenTeammateIcon();
 
 	cg.scoreBoardShowing = CG_DrawScoreboard();
 	if (!cg.scoreBoardShowing) {

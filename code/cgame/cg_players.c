@@ -1791,7 +1791,7 @@ CG_PlayerFloatSprite
 Float a sprite over the player's head
 ===============
 */
-static void CG_PlayerFloatSprite(const centity_t *cent, qhandle_t shader, qboolean wallhack) {
+static void CG_PlayerFloatSprite(const centity_t *cent, qhandle_t shader) {
 	int rf;
 	refEntity_t ent;
 
@@ -1813,10 +1813,6 @@ static void CG_PlayerFloatSprite(const centity_t *cent, qhandle_t shader, qboole
 	ent.shaderRGBA[2] = 255;
 	ent.shaderRGBA[3] = 255;
 
-	if (wallhack) {
-		ent.renderfx |= RF_DEPTHHACK;
-	}
-
 	// NOTE: Currently the gamecode uses EF_AWARD_CAP for both CTL and BB,
 	// which results in blue or red medal PadStar.
   	if (shader == cgs.media.medalPadStar && cgs.clientinfo[cent->currentState.clientNum].team == TEAM_RED) {
@@ -1837,12 +1833,12 @@ static void CG_PlayerSprites(const centity_t *cent) {
 	int team;
 
 	if (cent->currentState.eFlags & EF_CONNECTION) {
-		CG_PlayerFloatSprite(cent, cgs.media.connectionShader, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.connectionShader);
 		return;
 	}
 
 	if (cent->currentState.eFlags & EF_TALK) {
-		CG_PlayerFloatSprite(cent, cgs.media.balloonShader, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.balloonShader);
 		return;
 	}
 
@@ -1850,61 +1846,53 @@ static void CG_PlayerSprites(const centity_t *cent) {
 	if (cg.lastVoiceTime[cent->currentState.clientNum] > cg.time - 1000) {
 		// TODO: find out how bots get through this, do they have sane lastVoiceTime values?
 		if (0 == cgs.clientinfo[cent->currentState.clientNum].botSkill) {
-			CG_PlayerFloatSprite(cent, cgs.media.voiceIcon, qfalse);
+			CG_PlayerFloatSprite(cent, cgs.media.voiceIcon);
 			return;
 		}
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_EXCELLENT) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalExcellent, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalExcellent);
 		return;
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_SNACKATTACK) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalSnackAttack, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalSnackAttack);
 		return;
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_SPRAYGOD) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalSprayGod, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalSprayGod);
 		return;
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_SPRAYKILLER) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalSprayKiller, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalSprayKiller);
 		return;
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_PADHERO) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalPadHero, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalPadHero);
 		return;
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_PADACE) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalPadAce, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalPadAce);
 		return;
 	}
 
 	if (cent->currentState.eFlags & EF_AWARD_CAP) {
-		CG_PlayerFloatSprite(cent, cgs.media.medalPadStar, qfalse);
+		CG_PlayerFloatSprite(cent, cgs.media.medalPadStar);
 		return;
 	}
 
 	team = cgs.clientinfo[cent->currentState.clientNum].team;
 
-	if (CG_FreezeTag() && FT_PlayerIsFrozen(cent)) {
-		if (cg.snap->ps.persistant[PERS_TEAM] == team) {
-			const qboolean wallhack = cg_icons.integer & ICON_FREEZETAG;
-			CG_PlayerFloatSprite(cent, cgs.media.freezeIconShader, wallhack);
-		}
-		return;
-	}
-
 	if (!(cent->currentState.eFlags & EF_DEAD) && cg.snap->ps.persistant[PERS_TEAM] == team &&
 		cgs.gametype >= GT_TEAM) {
-		if (cg_drawFriend.integer) {
-			qboolean wallhack = (cg_icons.integer & ICON_TEAMMATE);
-			CG_PlayerFloatSprite(cent, cgs.media.friendShader, wallhack);
+		// don't draw it when cvar diabled or wallhack version is drawn
+		if (cg_drawFriend.integer && !(cg_icons.integer & ICON_TEAMMATE)) {
+			CG_PlayerFloatSprite(cent, cgs.media.friendShader);
 		}
 		return;
 	}
@@ -2382,7 +2370,7 @@ void CG_Player(centity_t *cent) {
 		CG_AddStars(cent->currentState.number, head.origin, stars, alpha);
 	}
 
-	// save player position for LPS
+	// save player position for LPS wallhack icon
 	if ((cgs.gametype == GT_LPS) &&
 		(cent->currentState.number != cg.snap->ps.clientNum) &&
 		!(cent->currentState.eFlags & (EF_DEAD | EF_NOLIFESLEFT))) {
@@ -2393,15 +2381,16 @@ void CG_Player(centity_t *cent) {
 		ci->lastPosSaveTime = 0; // "reset"
 	}
 
-	// save position for freezetag xray icons
-	if (CG_FreezeTag() && cent->currentState.number != cg.snap->ps.clientNum &&
-		cent->currentState.powerups & (1 << PW_FREEZE) && cg.snap->ps.persistant[PERS_TEAM] == ci->team) {
-		ci->curPos[0] = cent->lerpOrigin[0];
-		ci->curPos[1] = cent->lerpOrigin[1];
-		ci->curPos[2] = cent->lerpOrigin[2] + 64;
+	// save position for teammate & freezetag wallhack icons
+	if ((cgs.gametype >= GT_TEAM) &&
+		(cent->currentState.number != cg.snap->ps.clientNum) &&
+		(cg.snap->ps.persistant[PERS_TEAM] == ci->team) &&
+		!(cent->currentState.eFlags & EF_DEAD)) {
+		VectorCopy(cent->lerpOrigin, ci->curPos);
+		ci->curPos[2] += 64; // position above head
 		ci->lastPosSaveTime = cg.time;
 	} else if (ci->lastPosSaveTime != cg.time) {
-		ci->lastPosSaveTime = 0;
+		ci->lastPosSaveTime = 0; // "reset"
 	}
 
 	// push frozen state into clientinfo
