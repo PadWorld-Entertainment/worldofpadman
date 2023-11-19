@@ -1364,7 +1364,7 @@ typedef struct {
 typedef struct {
 	trRefdef_t refdef;
 	viewParms_t viewParms;
-	orientationr_t or ;
+	orientationr_t or;
 	backEndCounters_t pc;
 	qboolean isHyperspace;
 	const trRefEntity_t *currentEntity;
@@ -1377,7 +1377,6 @@ typedef struct {
 
 	FBO_t *last2DFBO;
 	qboolean colorMask[4];
-	qboolean framePostProcessed;
 	qboolean depthFill;
 } backEndState_t;
 

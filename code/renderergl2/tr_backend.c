@@ -294,9 +294,7 @@ static void RB_BeginDrawingView(void) {
 	if (glRefConfig.framebufferObject) {
 		FBO_t *fbo = backEnd.viewParms.targetFbo;
 
-		// FIXME: HUGE HACK: render to the screen fbo if we've already postprocessed the frame and aren't drawing more
-		// world drawing more world check is in case of double renders, such as skyportals
-		if (fbo == NULL && !(backEnd.framePostProcessed && (backEnd.refdef.rdflags & RDF_NOWORLDMODEL)))
+		if (fbo == NULL && (!r_postProcess->integer || !(backEnd.refdef.rdflags & RDF_NOWORLDMODEL)))
 			fbo = tr.renderFbo;
 
 		if (tr.renderCubeFbo && fbo == tr.renderCubeFbo) {
@@ -636,9 +634,8 @@ void RE_StretchRaw(int x, int y, int w, int h, int cols, int rows, const byte *d
 		ri.Printf(PRINT_ALL, "qglTexSubImage2D %i, %i: %i msec\n", cols, rows, end - start);
 	}
 
-	// FIXME: HUGE hack
 	if (glRefConfig.framebufferObject) {
-		FBO_Bind(backEnd.framePostProcessed ? NULL : tr.renderFbo);
+		FBO_Bind(r_postProcess->integer ? NULL : tr.renderFbo);
 	}
 
 	RB_SetGL2D();
@@ -720,9 +717,8 @@ static const void *RB_StretchPic(const void *data) {
 
 	cmd = (const stretchPicCommand_t *)data;
 
-	// FIXME: HUGE hack
 	if (glRefConfig.framebufferObject)
-		FBO_Bind(backEnd.framePostProcessed ? NULL : tr.renderFbo);
+		FBO_Bind(r_postProcess->integer ? NULL : tr.renderFbo);
 
 	RB_SetGL2D();
 
@@ -1220,11 +1216,7 @@ static const void *RB_ClearDepth(const void *data) {
 		RB_ShowImages();
 
 	if (glRefConfig.framebufferObject) {
-		if (!tr.renderFbo || backEnd.framePostProcessed) {
-			FBO_Bind(NULL);
-		} else {
-			FBO_Bind(tr.renderFbo);
-		}
+		FBO_Bind(tr.renderFbo);
 	}
 
 	qglClear(GL_DEPTH_BUFFER_BIT);
@@ -1278,7 +1270,7 @@ static const void *RB_SwapBuffers(const void *data) {
 	}
 
 	if (glRefConfig.framebufferObject) {
-		if (!backEnd.framePostProcessed) {
+		if (!r_postProcess->integer) {
 			if (tr.msaaResolveFbo && r_hdr->integer) {
 				// Resolving an RGB16F MSAA FBO to the screen messes with the brightness, so resolve to an RGB16F FBO
 				// first
@@ -1298,7 +1290,6 @@ static const void *RB_SwapBuffers(const void *data) {
 
 	GLimp_EndFrame();
 
-	backEnd.framePostProcessed = qfalse;
 	backEnd.projection2D = qfalse;
 
 	return (const void *)(cmd + 1);
@@ -1531,8 +1522,6 @@ static const void *RB_PostProcess(const void *data) {
 		}
 	}
 #endif
-
-	backEnd.framePostProcessed = qtrue;
 
 	return (const void *)(cmd + 1);
 }
