@@ -252,7 +252,7 @@ static void BotInstructMate(bot_state_t *bs, int client, int goal) {
 	char name[MAX_NETNAME];
 
 	ClientName(client, name, sizeof(name));
-	// G_Printf("ordering %s",name);	// cyr 20055
+	// Com_Printf("ordering %s",name);	// cyr 20055
 	if (g_entities[client].r.svFlags & SVF_BOT)
 		BotAI_BotInitialChat(bs, "cmd_accompany", name, va("%d", goal), NULL);
 	else {
@@ -277,7 +277,7 @@ static void BotBalloonOrders(bot_state_t *bs) {
 	int numcap, numnmycap;
 	float weight; // 0 - attack, 100 - defend
 
-	// G_Printf(S_COLOR_RED " orders for %d",BotTeam(bs));	// 20055
+	// Com_Printf(S_COLOR_RED " orders for %d",BotTeam(bs));	// 20055
 	// get status of balloons
 	numcap = numnmycap = 0;
 
@@ -312,14 +312,14 @@ static void BotBalloonOrders(bot_state_t *bs) {
 	// istruct all, or only respawner
 	if (!bs->orderclient) {
 		nummates = BotGetTeammates(bs, mates, sizeof(mates));
-		// G_Printf("teamorder\n");	// cyr 20055
+		// Com_Printf("teamorder\n");	// cyr 20055
 	} else {
 		char netname[MAX_NETNAME];
 		mates[0] = bs->orderclient - 1;
 		nummates = 1;
 
 		EasyClientName(bs->orderclient - 1, netname, sizeof(netname));
-		// G_Printf("individual order for %s \n", netname);	// cyr 20055
+		// Com_Printf("individual order for %s \n", netname);	// cyr 20055
 
 		bs->orderclient = 0;
 	}
@@ -343,7 +343,7 @@ static void BotBalloonOrders(bot_state_t *bs) {
 			}
 			wtt = tt * multiplier * multiplier;
 
-			G_Printf("%f .. %d -> %f -> %f , %d (%f)\n", weight, i, tt, wtt, capstate[j], multiplier);
+			Com_Printf("%f .. %d -> %f -> %f , %d (%f)\n", weight, i, tt, wtt, capstate[j], multiplier);
 			if (wtt < bestdist) {
 				bestdist = wtt;
 				bestgoal = j;

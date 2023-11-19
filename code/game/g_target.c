@@ -306,7 +306,7 @@ static void target_laser_start(gentity_t *self) {
 	if (self->target) {
 		ent = G_Find(NULL, FOFS(targetname), self->target);
 		if (!ent) {
-			G_Printf("%s at %s: %s is a bad target\n", self->classname, vtos(self->s.origin), self->target);
+			Com_Printf("%s at %s: %s is a bad target\n", self->classname, vtos(self->s.origin), self->target);
 		}
 		self->enemy = ent;
 	} else {
@@ -341,7 +341,7 @@ static void target_teleporter_use(gentity_t *self, gentity_t *other, gentity_t *
 		return;
 	dest = G_PickTarget(self->target);
 	if (!dest) {
-		G_Printf("Couldn't find teleporter destination\n");
+		Com_Printf("Couldn't find teleporter destination\n");
 		return;
 	}
 
@@ -353,7 +353,7 @@ The activator will be teleported away.
 */
 void SP_target_teleporter(gentity_t *self) {
 	if (!self->targetname)
-		G_Printf("untargeted %s at %s\n", self->classname, vtos(self->s.origin));
+		Com_Printf("untargeted %s at %s\n", self->classname, vtos(self->s.origin));
 
 	self->use = target_teleporter_use;
 }

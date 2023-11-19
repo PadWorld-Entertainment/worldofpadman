@@ -902,7 +902,7 @@ void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3
 	take -= asave;
 
 	if (g_debugDamage.integer) {
-		G_Printf("%i: client:%i health:%i damage:%i armor:%i\n", level.time, victim->s.number, victim->health, take, asave);
+		Com_Printf("%i: client:%i health:%i damage:%i armor:%i\n", level.time, victim->s.number, victim->health, take, asave);
 	}
 
 	if (g_logDamage.integer) {

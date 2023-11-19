@@ -1260,7 +1260,7 @@ void SP_func_door_rotating(gentity_t *ent) {
 	// default to distance of 90 degrees. This is something the mapper should not
 	// leave out, so we'll tell him if he does.
 	if (!ent->distance) {
-		G_Printf("%s at %s with no distance set.\n", ent->classname, vtos(ent->s.origin));
+		Com_Printf("%s at %s with no distance set.\n", ent->classname, vtos(ent->s.origin));
 		ent->distance = 90.0;
 	}
 
@@ -1648,7 +1648,7 @@ static void Think_SetupTrainTargets(gentity_t *ent) {
 
 	ent->nextTrain = G_Find(NULL, FOFS(targetname), ent->target);
 	if (!ent->nextTrain) {
-		G_Printf("func_train at %s with an unfound target\n", vtos(ent->r.absmin));
+		Com_Printf("func_train at %s with an unfound target\n", vtos(ent->r.absmin));
 		return;
 	}
 
@@ -1659,7 +1659,7 @@ static void Think_SetupTrainTargets(gentity_t *ent) {
 		}
 
 		if (!path->target) {
-			G_Printf("Train corner at %s without a target\n", vtos(path->s.origin));
+			Com_Printf("Train corner at %s without a target\n", vtos(path->s.origin));
 			return;
 		}
 
@@ -1670,7 +1670,7 @@ static void Think_SetupTrainTargets(gentity_t *ent) {
 		do {
 			next = G_Find(next, FOFS(targetname), path->target);
 			if (!next) {
-				G_Printf("Train corner at %s without a target path_corner\n", vtos(path->s.origin));
+				Com_Printf("Train corner at %s without a target path_corner\n", vtos(path->s.origin));
 				return;
 			}
 		} while (strcmp(next->classname, "path_corner"));
@@ -1690,7 +1690,7 @@ Target: next path corner and other targets to fire
 */
 void SP_path_corner(gentity_t *self) {
 	if (!self->targetname) {
-		G_Printf("path_corner with no targetname at %s\n", vtos(self->s.origin));
+		Com_Printf("path_corner with no targetname at %s\n", vtos(self->s.origin));
 		G_FreeEntity(self);
 		return;
 	}
@@ -1725,7 +1725,7 @@ void SP_func_train(gentity_t *self) {
 	}
 
 	if (!self->target) {
-		G_Printf("func_train without a target at %s\n", vtos(self->r.absmin));
+		Com_Printf("func_train without a target at %s\n", vtos(self->r.absmin));
 		G_FreeEntity(self);
 		return;
 	}

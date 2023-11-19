@@ -704,7 +704,7 @@ void FinishSpawningItem(gentity_t *ent) {
 		VectorSet(dest, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2] - 4096);
 		trap_Trace(&tr, ent->s.origin, ent->r.mins, ent->r.maxs, dest, ent->s.number, MASK_SOLID);
 		if (tr.startsolid) {
-			G_Printf("FinishSpawningItem: %s startsolid at %s\n", ent->classname, vtos(ent->s.origin));
+			Com_Printf("FinishSpawningItem: %s startsolid at %s\n", ent->classname, vtos(ent->s.origin));
 			G_FreeEntity(ent);
 			return;
 		}
@@ -764,11 +764,11 @@ void G_CheckTeamItems(void) {
 		// check for the two flags
 		item = BG_FindItem("red Lolly");
 		if (!item || !itemRegistered[item - bg_itemlist]) {
-			G_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_redlolly in map");
+			Com_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_redlolly in map");
 		}
 		item = BG_FindItem("blue Lolly");
 		if (!item || !itemRegistered[item - bg_itemlist]) {
-			G_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_bluelolly in map");
+			Com_Printf(S_COLOR_YELLOW "WARNING: No team_CTL_bluelolly in map");
 		}
 	}
 }
@@ -831,7 +831,7 @@ void SaveRegisteredItems(void) {
 	}
 	string[bg_numItems] = 0;
 
-	G_Printf("%i items registered\n", count);
+	Com_Printf("%i items registered\n", count);
 	trap_SetConfigstring(CS_ITEMS, string);
 }
 

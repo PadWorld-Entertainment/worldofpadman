@@ -680,11 +680,11 @@ static void ClientThink_real(gentity_t *ent) {
 	// sanity check the command time to prevent speedup cheating
 	if (ucmd->serverTime > level.time + 200) {
 		ucmd->serverTime = level.time + 200;
-		//		G_Printf("serverTime <<<<<\n" );
+		//		Com_Printf("serverTime <<<<<\n" );
 	}
 	if (ucmd->serverTime < level.time - 1000) {
 		ucmd->serverTime = level.time - 1000;
-		//		G_Printf("serverTime >>>>>\n" );
+		//		Com_Printf("serverTime >>>>>\n" );
 	}
 
 	msec = ucmd->serverTime - client->ps.commandTime;

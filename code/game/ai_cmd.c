@@ -357,7 +357,7 @@ static void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 			if (bot_developer.integer & AIDBG_CHAT) {
 				char botname[128];
 				ClientName(bs->client, botname, sizeof(botname));
-				G_Printf("%s attacking %s \n", botname, g_entities[balloongoal[ballindex].entitynum].message);
+				Com_Printf("%s attacking %s \n", botname, g_entities[balloongoal[ballindex].entitynum].message);
 			}
 		} else {
 			// DEFEND !!11
@@ -373,7 +373,7 @@ static void BotMatch_GoForBalloon(bot_state_t *bs, bot_match_t *match) {
 			if (bot_developer.integer & AIDBG_CHAT) {
 				char botname[128];
 				ClientName(bs->client, botname, sizeof(botname));
-				G_Printf("%s defending %s \n", botname, g_entities[balloongoal[ballindex].entitynum].message);
+				Com_Printf("%s defending %s \n", botname, g_entities[balloongoal[ballindex].entitynum].message);
 			}
 		}
 		memcpy(&bs->teamgoal, &balloongoal[ballindex], sizeof(bs->teamgoal));
@@ -563,7 +563,7 @@ static void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
 	bs->teammessage_time = FloatTime() + 1 * random();
 	// set the ltg type
 	bs->ltgtype = LTG_GIVECART;
-	// G_Printf(S_COLOR_BLUE "giving cart! \n");	// cyr 20055
+	// Com_Printf(S_COLOR_BLUE "giving cart! \n");	// cyr 20055
 	bs->teamgoal_time = FloatTime() + SYC_CART_EXCHANGE_TIME;
 }
 // cyr_drop}
@@ -580,13 +580,13 @@ int BotMatchMessage(bot_state_t *bs, const char *message) {
 	// if it is an unknown message
 	if (!trap_BotFindMatch(message, &match, MTCONTEXT_MISC | MTCONTEXT_INITIALTEAMCHAT)) {
 		if (bot_developer.integer & AIDBG_CHAT) {
-			G_Printf(S_COLOR_GREEN "no match for ^1%s\n", message);
+			Com_Printf(S_COLOR_GREEN "no match for ^1%s\n", message);
 		}
 		return qfalse;
 	}
 
 	if (bot_developer.integer & AIDBG_CHAT) {
-		G_Printf(S_COLOR_MAGENTA "match %d for " S_COLOR_RED "%s\n", match.type, message);
+		Com_Printf(S_COLOR_MAGENTA "match %d for " S_COLOR_RED "%s\n", match.type, message);
 	}
 
 	// react to the found message

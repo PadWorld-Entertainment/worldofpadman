@@ -81,7 +81,7 @@ int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
 	int i, numteammates;
 	char buf[MAX_INFO_STRING];
 
-	// G_Printf("mates: ");
+	// Com_Printf("mates: ");
 
 	numteammates = 0;
 	for (i = 0; i < level.maxclients; i++) {
@@ -97,10 +97,10 @@ int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
 			teammates[numteammates++] = i;
 			if (numteammates >= maxteammates)
 				break;
-			// G_Printf("/%s ", Info_ValueForKey(buf, "n"));
+			// Com_Printf("/%s ", Info_ValueForKey(buf, "n"));
 		}
 	}
-	// G_Printf("\n %d mates \n", numteammates);
+	// Com_Printf("\n %d mates \n", numteammates);
 	return numteammates;
 }
 
@@ -253,7 +253,7 @@ static int BotGotIllegalCartGoal(bot_state_t *bs) {
 				trap_BotPopGoal(bs->gs);
 
 				// if(bot_developer.integer)
-				//	G_Printf("bot spotted own cart, now avoiding \n");
+				//	Com_Printf("bot spotted own cart, now avoiding \n");
 				return 1;
 			}
 		}
@@ -669,7 +669,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 
 		if (FT_InThawingRange(&g_entities[bs->client], mate)) {
 			// camp
-			// G_Printf("camping \n");
+			// Com_Printf("camping \n");
 			VectorCopy(bs->origin, goal->origin);
 			goal->areanum = BotPointAreaNum(bs->origin);
 			VectorSet(goal->mins, -8, -8, -8);
@@ -677,7 +677,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 			return qtrue;
 		} else {
 			memcpy(goal, &mategoal, sizeof(bot_goal_t));
-			// G_Printf("moving, tt is %d \n", trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, goal->areanum,
+			// Com_Printf("moving, tt is %d \n", trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, goal->areanum,
 			// TFL_DEFAULT) );
 		}
 		return qtrue;
@@ -1205,7 +1205,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 			if (!bs->which_wall) { // should not happen
 				bs->which_wall = BotChooseCorrectWall(bs);
 				if (bot_developer.integer)
-					G_Printf("wall wasnt set in rushbase ltg\n");
+					Com_Printf("wall wasnt set in rushbase ltg\n");
 			}
 
 			memcpy(goal, bs->which_wall, sizeof(*goal));
@@ -1236,7 +1236,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 					// even spraytele not reachable?
 					// if (bot_developer.integer) {
 					//	if (!BotClientTravelTimeToGoal(bs->client, goal)) {
-					//		G_Printf(S_COLOR_RED " no way to wall, tele area is %d \n", spraytele.areanum);
+					//		Com_Printf(S_COLOR_RED " no way to wall, tele area is %d \n", spraytele.areanum);
 					//	}
 					// }
 				}
@@ -1312,7 +1312,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 	}
 
 	if (bs->ltgtype == LTG_GO_FOR_HEALTH) {
-		// G_Printf("execing health");
+		// Com_Printf("execing health");
 		// reached max health ? // cyr 20055
 		if (bs->inventory[INVENTORY_HEALTH] >= g_entities[bs->client].client->pers.maxHealth) {
 			bs->ltgtype = 0;
@@ -2354,7 +2354,7 @@ int AINode_Seek_LTG(bot_state_t *bs) {
 			trap_BotGetTopGoal(bs->gs, &nbg);
 			tt_nbg = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, nbg.areanum, bs->tfl);
 			if (bot_developer.integer & AIDBG_GOAL)
-				G_Printf(S_COLOR_GREEN "going for NBG with tt: %d, LTG has %d, range %d \n", tt_nbg, tt_ltg, range);
+				Com_Printf(S_COLOR_GREEN "going for NBG with tt: %d, LTG has %d, range %d \n", tt_nbg, tt_ltg, range);
 			trap_BotResetLastAvoidReach(bs->ms);
 			// get the goal at the top of the stack
 			// trap_BotGetTopGoal(bs->gs, &tmpgoal);

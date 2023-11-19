@@ -269,28 +269,6 @@ int G_GetCvarInt(const char *cvar) {
 	return atoi(buffer);
 }
 
-void QDECL G_Printf(const char *fmt, ...) {
-	va_list argptr;
-	char text[1024];
-
-	va_start(argptr, fmt);
-	Q_vsnprintf(text, sizeof(text), fmt, argptr);
-	va_end(argptr);
-
-	trap_Print(text);
-}
-
-void QDECL G_Error(const char *fmt, ...) {
-	va_list argptr;
-	char text[1024];
-
-	va_start(argptr, fmt);
-	Q_vsnprintf(text, sizeof(text), fmt, argptr);
-	va_end(argptr);
-
-	trap_Error(text);
-}
-
 /*
 ================
 G_FindTeams
@@ -342,7 +320,7 @@ static void G_FindTeams(void) {
 		}
 	}
 
-	G_Printf("%i teams with %i entities\n", c, c2);
+	Com_Printf("%i teams with %i entities\n", c, c2);
 }
 
 /*
@@ -362,7 +340,7 @@ static void G_RegisterCvars(void) {
 
 	// check some things
 	if (g_gametype.integer < 0 || g_gametype.integer >= GT_MAX_GAME_TYPE) {
-		G_Printf("g_gametype %i is out of range, defaulting to 0\n", g_gametype.integer);
+		Com_Printf("g_gametype %i is out of range, defaulting to 0\n", g_gametype.integer);
 		trap_Cvar_Set("g_gametype", "0");
 	}
 
@@ -405,8 +383,8 @@ G_InitGame
 static void G_InitGame(int levelTime, int randomSeed, int restart) {
 	int i;
 
-	G_Printf("------- Game Initialization -------\n");
-	G_Printf("gamename: %s\n", GAMEVERSION);
+	Com_Printf("------- Game Initialization -------\n");
+	Com_Printf("gamename: %s\n", GAMEVERSION);
 
 	srand(randomSeed);
 
@@ -435,7 +413,7 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 			trap_FS_FOpenFile(g_log.string, &level.logFile, FS_APPEND);
 		}
 		if (!level.logFile) {
-			G_Printf("WARNING: Couldn't open logfile: %s\n", g_log.string);
+			Com_Printf("WARNING: Couldn't open logfile: %s\n", g_log.string);
 		} else {
 			char serverinfo[MAX_INFO_STRING];
 			qtime_t qt;
@@ -450,7 +428,7 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 						(qt.tm_mon + 1), (qt.tm_year + 1900));
 		}
 	} else {
-		G_Printf("Not logging to disk.\n");
+		Com_Printf("Not logging to disk.\n");
 	}
 
 	G_InitWorldSession();
@@ -505,7 +483,7 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 
 	SaveRegisteredItems();
 
-	G_Printf("-----------------------------------\n");
+	Com_Printf("-----------------------------------\n");
 
 	if (trap_Cvar_VariableIntegerValue("bot_enable")) {
 		BotAISetup(restart);
@@ -536,7 +514,7 @@ static void G_ShutdownGame(int restart) {
 	else
 		trap_Cvar_Set("nextmapBackUp", "");
 
-	G_Printf("==== ShutdownGame ====\n");
+	Com_Printf("==== ShutdownGame ====\n");
 
 	if (level.logFile) {
 		G_LogPrintf("ShutdownGame:\n");
@@ -554,6 +532,17 @@ static void G_ShutdownGame(int restart) {
 }
 
 //===================================================================
+
+void QDECL G_Error(const char *fmt, ...) {
+	va_list argptr;
+	char text[1024];
+
+	va_start(argptr, fmt);
+	Q_vsnprintf(text, sizeof(text), fmt, argptr);
+	va_end(argptr);
+
+	trap_Error(text);
+}
 
 #ifndef GAME_HARD_LINKED
 // this is only here so the functions in q_shared.c and bg_*.c can link
@@ -1274,7 +1263,7 @@ void QDECL G_LogPrintf(const char *fmt, ...) {
 	va_end(argptr);
 
 	if (g_dedicated.integer) {
-		G_Printf("%s", string + 7);
+		Com_Printf("%s", string + 7);
 	}
 
 	if (!level.logFile) {
@@ -1488,7 +1477,7 @@ static void CheckExitRules(void) {
 	}
 
 	if (g_timelimit.integer < 0 || g_timelimit.integer > INT_MAX / 60000) {
-		G_Printf("timelimit %i is out of range, defaulting to 0\n", g_timelimit.integer);
+		Com_Printf("timelimit %i is out of range, defaulting to 0\n", g_timelimit.integer);
 		trap_Cvar_Set("timelimit", "0");
 		trap_Cvar_Update(&g_timelimit);
 	}
@@ -1509,7 +1498,7 @@ static void CheckExitRules(void) {
 	*/
 
 	if (g_fraglimit.integer < 0) {
-		G_Printf("fraglimit %i is out of range, defaulting to 0\n", g_fraglimit.integer);
+		Com_Printf("fraglimit %i is out of range, defaulting to 0\n", g_fraglimit.integer);
 		trap_Cvar_Set("fraglimit", "0");
 		trap_Cvar_Update(&g_fraglimit);
 	}
@@ -1654,7 +1643,7 @@ static void CheckExitRules(void) {
 	}
 
 	if (g_capturelimit.integer < 0) {
-		G_Printf("capturelimit %i is out of range, defaulting to 0\n", g_capturelimit.integer);
+		Com_Printf("capturelimit %i is out of range, defaulting to 0\n", g_capturelimit.integer);
 		trap_Cvar_Set("capturelimit", "0");
 		trap_Cvar_Update(&g_capturelimit);
 	}
@@ -2387,7 +2376,7 @@ static void G_RunFrame(int levelTime) {
 
 	if (g_listEntity.integer) {
 		for (i = 0; i < MAX_GENTITIES; i++) {
-			G_Printf("%4i: %s\n", i, g_entities[i].classname);
+			Com_Printf("%4i: %s\n", i, g_entities[i].classname);
 		}
 		trap_Cvar_Set("g_listEntity", "0");
 	}

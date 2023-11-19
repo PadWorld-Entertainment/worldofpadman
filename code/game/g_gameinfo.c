@@ -31,10 +31,10 @@ static int G_ParseInfos(const char *buf, int max, char *infos[]) {
 		if (!token[0]) {
 			break;
 		} else if (strcmp(token, "{") != 0) {
-			G_Printf("Missing { in info file\n");
+			Com_Printf("Missing { in info file\n");
 			break;
 		} else if (count >= max) {
-			G_Printf("Max infos exceeded\n");
+			Com_Printf("Max infos exceeded\n");
 			break;
 		}
 
@@ -42,7 +42,7 @@ static int G_ParseInfos(const char *buf, int max, char *infos[]) {
 		while (qtrue) {
 			token = COM_ParseExt(&buf, qtrue);
 			if (!token[0]) {
-				G_Printf("Unexpected end of info file\n");
+				Com_Printf("Unexpected end of info file\n");
 				break;
 			} else if (!strcmp(token, "}")) {
 				break;
@@ -81,10 +81,10 @@ static void G_LoadArenaFromFile(const char *filename) {
 
 	len = trap_FS_FOpenFile(filename, &f, FS_READ);
 	if (!f) {
-		G_Printf(S_COLOR_RED "file not found: %s\n", filename);
+		Com_Printf(S_COLOR_RED "file not found: %s\n", filename);
 		return;
 	} else if (len >= sizeof(buf)) {
-		G_Printf(S_COLOR_RED "file too large: %s is %d, max allowed is %ld", filename, len, (sizeof(buf) - 1));
+		Com_Printf(S_COLOR_RED "file too large: %s is %d, max allowed is %ld", filename, len, (sizeof(buf) - 1));
 		trap_FS_FCloseFile(f);
 		return;
 	}
@@ -120,7 +120,7 @@ static void G_LoadArenas(void) {
 		Q_strcat(filename, sizeof(filename), dirptr);
 		G_LoadArenaFromFile(filename);
 	}
-	G_Printf("%d arenas parsed.\n", g_numArenas);
+	Com_Printf("%d arenas parsed.\n", g_numArenas);
 
 	// set initial numbers
 	for (i = 0; i < g_numArenas; i++) {
@@ -156,7 +156,7 @@ static const char *G_GetArenaInfoByNumber(int num) {
 	const char *value;
 
 	if ((num < 0) || (num >= g_numArenas)) {
-		G_Printf(S_COLOR_RED "Invalid arena number: %d\n", num);
+		Com_Printf(S_COLOR_RED "Invalid arena number: %d\n", num);
 		return NULL;
 	}
 

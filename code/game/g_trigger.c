@@ -93,7 +93,7 @@ void SP_trigger_multiple(gentity_t *ent) {
 
 	if (ent->random >= ent->wait && ent->wait >= 0) {
 		ent->random = ent->wait - FRAMETIME;
-		G_Printf("trigger_multiple has random >= wait\n");
+		Com_Printf("trigger_multiple has random >= wait\n");
 	}
 
 	ent->touch = Touch_Multi;
@@ -311,7 +311,7 @@ static void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t 
 
 	dest = G_PickTarget(self->target);
 	if (!dest) {
-		G_Printf("Couldn't find teleporter destination\n");
+		Com_Printf("Couldn't find teleporter destination\n");
 		return;
 	}
 
@@ -486,7 +486,7 @@ void SP_func_timer(gentity_t *self) {
 
 	if (self->random >= self->wait) {
 		self->random = self->wait - FRAMETIME;
-		G_Printf("func_timer at %s has random >= wait\n", vtos(self->s.origin));
+		Com_Printf("func_timer at %s has random >= wait\n", vtos(self->s.origin));
 	}
 
 	if (self->spawnflags & 1) {

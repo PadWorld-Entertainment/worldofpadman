@@ -289,7 +289,7 @@ static void move_killerducks(gentity_t *ent) {
 
 			dest = G_PickTarget(g_entities[touch[i]].target);
 			if (!dest) {
-				G_Printf("Couldn't find teleporter destination\n");
+				Com_Printf("Couldn't find teleporter destination\n");
 				return;
 			}
 

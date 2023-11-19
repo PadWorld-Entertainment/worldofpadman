@@ -968,7 +968,7 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, const char *chatText) {
 
 	// echo the text to the console
 	if (g_dedicated.integer) {
-		G_Printf("%s%s\n", name, text);
+		Com_Printf("%s%s\n", name, text);
 	}
 
 	// send it to all the appropriate clients
@@ -1774,7 +1774,7 @@ void EditPlayerInventory(gentity_t *ent, int arg_offset) {
 	} else if (Q_stricmp(itstr, "pu_jumper") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
 		ent->client->ps.powerups[PW_JUMPER] = level.time + 1000 * atoi(arg);
-		// G_Printf("jumper %d\n", ent->client->ps.powerups[PW_JUMPER] );
+		// Com_Printf("jumper %d\n", ent->client->ps.powerups[PW_JUMPER] );
 	} else if (Q_stricmp(itstr, "pu_padpower") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
 		ent->client->ps.powerups[PW_PADPOWER] = level.time + 1000 * atoi(arg);

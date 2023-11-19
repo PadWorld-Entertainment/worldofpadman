@@ -215,7 +215,7 @@ static qboolean G_CallSpawn(gentity_t *ent) {
 	const gitem_t *item;
 
 	if (!ent->classname) {
-		G_Printf("G_CallSpawn: NULL classname\n");
+		Com_Printf("G_CallSpawn: NULL classname\n");
 		return qfalse;
 	}
 
@@ -237,7 +237,7 @@ static qboolean G_CallSpawn(gentity_t *ent) {
 			return qtrue;
 		}
 	}
-	G_Printf("%s doesn't have a spawn function\n", ent->classname);
+	Com_Printf("%s doesn't have a spawn function\n", ent->classname);
 	return qfalse;
 }
 
@@ -452,7 +452,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	if (g_q3Items.integer) {
 		for (i = 0; q3ToWopItems[i].s; i++) {
 			if (Q_stricmp(ent->classname, q3ToWopItems[i].s) == 0) {
-				G_Printf("Spawning (Q3 items): replacing entity " S_COLOR_YELLOW "%s" S_COLOR_WHITE
+				Com_Printf("Spawning (Q3 items): replacing entity " S_COLOR_YELLOW "%s" S_COLOR_WHITE
 						  " with " S_COLOR_YELLOW "%s" S_COLOR_WHITE ".\n",
 						  ent->classname, q3ToWopItems[i].r);
 				ent->classname = (const char *)q3ToWopItems[i].r;
@@ -559,7 +559,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 
 	if (G_SpawnString("gametype", NULL, &value)) {
 		if (!G_ValueIncludesGametype(value, g_gametype.integer)) {
-			G_Printf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to gametype key.\n",
+			Com_Printf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to gametype key.\n",
 					  ent->classname);
 			G_FreeEntity(ent);
 			return;
@@ -568,7 +568,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 
 	if (G_SpawnString("notGametype", NULL, &value)) {
 		if (G_ValueIncludesGametype(value, g_gametype.integer)) {
-			G_Printf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to notGametype key.\n",
+			Com_Printf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to notGametype key.\n",
 					  ent->classname);
 			G_FreeEntity(ent);
 			return;

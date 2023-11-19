@@ -238,7 +238,7 @@ void InitWpTravelTimes(void) {
 	wp = &waypoints[0];
 	for (i = 0; i < numwaypoints; i++, wp++) {
 		if (!trap_AAS_AreaReachability(wp->goal.areanum)) {
-			G_Printf("waypoint %s unreachable\n", wp->name);
+			Com_Printf("waypoint %s unreachable\n", wp->name);
 			wp->travelTime[TEAM_RED] = wp->travelTime[TEAM_RED] = 99999;
 			continue;
 		}
@@ -246,13 +246,13 @@ void InitWpTravelTimes(void) {
 			trap_AAS_AreaTravelTimeToGoalArea(wp->goal.areanum, wp->goal.origin, ctf_redflag.areanum, TFL_DEFAULT);
 
 		if (!wp->travelTime[TEAM_RED])
-			G_Printf(S_COLOR_RED " waypoint %s has no route to the red flag \n", wp->name);
+			Com_Printf(S_COLOR_RED " waypoint %s has no route to the red flag \n", wp->name);
 
 		wp->travelTime[TEAM_BLUE] =
 			trap_AAS_AreaTravelTimeToGoalArea(wp->goal.areanum, wp->goal.origin, ctf_blueflag.areanum, TFL_DEFAULT);
 
 		if (!wp->travelTime[TEAM_BLUE])
-			G_Printf(S_COLOR_RED " waypoint %s has no route to the blue flag \n", wp->name);
+			Com_Printf(S_COLOR_RED " waypoint %s has no route to the blue flag \n", wp->name);
 	}
 }
 #endif
@@ -267,14 +267,14 @@ static const char *ParseLink(const char *buf, int type) {
 
 	token = COM_Parse(&buf);
 	if (!*token) {
-		G_Printf("missing link origin name \n");
+		Com_Printf("missing link origin name \n");
 		return NULL;
 	}
 	Q_strncpyz(wpfrom, token, sizeof(wpfrom));
 
 	token = COM_Parse(&buf);
 	if (!*token) {
-		G_Printf("missing link target name \n");
+		Com_Printf("missing link target name \n");
 		return NULL;
 	}
 	Q_strncpyz(wpto, token, sizeof(wpto));
@@ -302,13 +302,13 @@ static const char *ParseLink(const char *buf, int type) {
 	}
 
 	if (from == -1 || to == -1) {
-		G_Printf("no match found for %s or %s \n", wpfrom, wpto);
+		Com_Printf("no match found for %s or %s \n", wpfrom, wpto);
 		return NULL;
 	}
 
 	links = &waypoints[from].links[type];
 	if (links->num >= MAX_LINKSPERTYPE) {
-		G_Printf("waypoint %s can't have more links of type %d \n", wpfrom, type);
+		Com_Printf("waypoint %s can't have more links of type %d \n", wpfrom, type);
 		return NULL;
 	}
 
@@ -328,7 +328,7 @@ static const char *ParseBambam(const char *buf) {
 	// red|blue
 	token = COM_Parse(&buf);
 	if (!*token) {
-		G_Printf("parsing bambam %d: missing team \n", numbambamspots);
+		Com_Printf("parsing bambam %d: missing team \n", numbambamspots);
 		return NULL;
 	}
 
@@ -337,14 +337,14 @@ static const char *ParseBambam(const char *buf) {
 	else if (token[0] == 'b')
 		team = TEAM_BLUE;
 	else {
-		G_Printf("parsing bambam %d: unknown team \n", numbambamspots);
+		Com_Printf("parsing bambam %d: unknown team \n", numbambamspots);
 		return NULL;
 	}
 
 	for (i = 0; i < 3; i++) {
 		token = COM_Parse(&buf);
 		if (!*token) {
-			G_Printf("parsing bambam %d: missing coordinate %d \n", numbambamspots, i);
+			Com_Printf("parsing bambam %d: missing coordinate %d \n", numbambamspots, i);
 			return NULL;
 		}
 		pos[i] = atoi(token);
@@ -352,7 +352,7 @@ static const char *ParseBambam(const char *buf) {
 
 	// register
 	if (numbambamspots >= MAX_BAMBAMSPOTS) {
-		G_Printf("parsing bambam %d: too many bambamspots \n", numbambamspots);
+		Com_Printf("parsing bambam %d: too many bambamspots \n", numbambamspots);
 		return NULL;
 	}
 
@@ -364,7 +364,7 @@ static const char *ParseBambam(const char *buf) {
 	spot->goal.areanum =
 		trap_AAS_BestReachableArea(spot->goal.origin, spot->goal.mins, spot->goal.maxs, spot->goal.origin);
 	if (!spot->goal.areanum || !trap_AAS_AreaReachability(spot->goal.areanum)) {
-		G_Printf("bambam %d is not in a valid area \n", numbambamspots);
+		Com_Printf("bambam %d is not in a valid area \n", numbambamspots);
 		numbambamspots--; // remove it
 	}
 
@@ -384,7 +384,7 @@ static const char *ParseBoomie(const char *buf) {
 	// red|blue
 	token = COM_Parse(&buf);
 	if (!*token) {
-		G_Printf("parsing boomie %d: missing team \n", numboomiespots);
+		Com_Printf("parsing boomie %d: missing team \n", numboomiespots);
 		return NULL;
 	}
 
@@ -393,7 +393,7 @@ static const char *ParseBoomie(const char *buf) {
 	else if (token[0] == 'b')
 		team = TEAM_BLUE;
 	else {
-		G_Printf("parsing boomie %d: unknown team \n", numboomiespots);
+		Com_Printf("parsing boomie %d: unknown team \n", numboomiespots);
 		return NULL;
 	}
 
@@ -401,7 +401,7 @@ static const char *ParseBoomie(const char *buf) {
 	for (i = 0; i < 3; i++) {
 		token = COM_Parse(&buf);
 		if (!*token) {
-			G_Printf("parsing boomie %d: missing coordinate %d \n", numboomiespots, i);
+			Com_Printf("parsing boomie %d: missing coordinate %d \n", numboomiespots, i);
 			return NULL;
 		}
 		pos[i] = atoi(token);
@@ -411,7 +411,7 @@ static const char *ParseBoomie(const char *buf) {
 	for (i = 0; i < 2; i++) {
 		token = COM_Parse(&buf);
 		if (!*token) {
-			G_Printf("parsing boomie %d: missing angle \n", numboomiespots);
+			Com_Printf("parsing boomie %d: missing angle \n", numboomiespots);
 			return NULL;
 		}
 		angles[i] = atoi(token);
@@ -421,7 +421,7 @@ static const char *ParseBoomie(const char *buf) {
 
 	// register boomie
 	if (numboomiespots >= MAX_BOOMIESPOTS) {
-		G_Printf("parsing boomie %d: too many boomiespots \n", numboomiespots);
+		Com_Printf("parsing boomie %d: too many boomiespots \n", numboomiespots);
 		return NULL;
 	}
 
@@ -434,7 +434,7 @@ static const char *ParseBoomie(const char *buf) {
 	spot->goal.areanum =
 		trap_AAS_BestReachableArea(spot->goal.origin, spot->goal.mins, spot->goal.maxs, spot->goal.origin);
 	if (!spot->goal.areanum || !trap_AAS_AreaReachability(spot->goal.areanum)) {
-		G_Printf("boomie %d is not in a valid area \n", numboomiespots);
+		Com_Printf("boomie %d is not in a valid area \n", numboomiespots);
 		numboomiespots--; // remove it
 	}
 
@@ -459,7 +459,7 @@ static void ParseWaypointFile(const char *buf) {
 		if (!Q_stricmp(token, "waypoint")) {
 
 			if (numwaypoints >= MAX_WAYPOINTS) {
-				G_Printf("waypoint limit exceeded \n");
+				Com_Printf("waypoint limit exceeded \n");
 				break;
 			}
 
@@ -467,7 +467,7 @@ static void ParseWaypointFile(const char *buf) {
 			// waypoint name
 			token = COM_Parse(&buf);
 			if (!*token) {
-				G_Printf("missing waypoint name\n");
+				Com_Printf("missing waypoint name\n");
 				break;
 			}
 			Q_strncpyz(wp->name, token, sizeof(wp->name));
@@ -480,7 +480,7 @@ static void ParseWaypointFile(const char *buf) {
 			}
 			// exit if less then 3 tokens were read
 			if (i < 3) {
-				G_Printf("3 coordinates for waypoint %s needed, only %d present\n", wp->name, i);
+				Com_Printf("3 coordinates for waypoint %s needed, only %d present\n", wp->name, i);
 				break;
 			}
 			// finish setting up the goal
@@ -489,7 +489,7 @@ static void ParseWaypointFile(const char *buf) {
 			wp->goal.areanum =
 				trap_AAS_BestReachableArea(wp->goal.origin, wp->goal.mins, wp->goal.maxs, wp->goal.origin);
 			if (!wp->goal.areanum || !trap_AAS_AreaReachability(wp->goal.areanum))
-				G_Printf("warning: waypoint %s is not in a valid area \n", wp->name);
+				Com_Printf("warning: waypoint %s is not in a valid area \n", wp->name);
 
 		} else if (!Q_stricmp(token, "bambam")) {
 			buf = ParseBambam(buf);
@@ -512,15 +512,15 @@ static void ParseWaypointFile(const char *buf) {
 			if (!buf)
 				break;
 		} else {
-			G_Printf("unknown token %s \n", token);
+			Com_Printf("unknown token %s \n", token);
 		}
 	}
 
 	if (!eof) {
 		numwaypoints = 0;
-		G_Printf("malformatted waypoint file\n");
+		Com_Printf("malformatted waypoint file\n");
 	} else {
-		G_Printf("parsed %d waypoints %d bambams %d boomies \n", numwaypoints, numbambamspots, numboomiespots);
+		Com_Printf("parsed %d waypoints %d bambams %d boomies \n", numwaypoints, numbambamspots, numboomiespots);
 	}
 }
 
@@ -638,19 +638,19 @@ void QDECL BotAI_Print(int type, const char *fmt, ...) {
 
 	switch (type) {
 	case PRT_MESSAGE: {
-		G_Printf("%s", str);
+		Com_Printf("%s", str);
 		break;
 	}
 	case PRT_WARNING: {
-		G_Printf(S_COLOR_YELLOW "Warning: %s", str);
+		Com_Printf(S_COLOR_YELLOW "Warning: %s", str);
 		break;
 	}
 	case PRT_ERROR: {
-		G_Printf(S_COLOR_RED "Error: %s", str);
+		Com_Printf(S_COLOR_RED "Error: %s", str);
 		break;
 	}
 	case PRT_FATAL: {
-		G_Printf(S_COLOR_RED "Fatal: %s", str);
+		Com_Printf(S_COLOR_RED "Fatal: %s", str);
 		break;
 	}
 	case PRT_EXIT: {
@@ -658,7 +658,7 @@ void QDECL BotAI_Print(int type, const char *fmt, ...) {
 		break;
 	}
 	default: {
-		G_Printf("unknown print type\n");
+		Com_Printf("unknown print type\n");
 		break;
 	}
 	}
@@ -830,7 +830,7 @@ void BotTestAAS(vec3_t origin) {
 }
 
 static void BotAddInfoLtg(bot_state_t *bs) {
-	// G_Printf("ltg: %i\n",i);
+	// Com_Printf("ltg: %i\n",i);
 	switch (bs->ltgtype) {
 	case 0: {
 		char buf[128];
@@ -2005,7 +2005,7 @@ int BotAIStartFrame(int time) {
 	if (bot_memorydump.integer) {
 		trap_BotLibVarSet("memorydump", "1");
 		trap_Cvar_Set("bot_memorydump", "0");
-		G_Printf("bstates %lu one state %lu ratio %f\n", sizeof(botstates), sizeof(bot_state_t),
+		Com_Printf("bstates %lu one state %lu ratio %f\n", sizeof(botstates), sizeof(bot_state_t),
 				 (double)sizeof(botstates) / sizeof(bot_state_t));
 	}
 	if (bot_saveroutingcache.integer) {

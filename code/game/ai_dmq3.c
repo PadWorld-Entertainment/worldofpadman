@@ -171,7 +171,7 @@ static int BotGetVisTeamPlayers(bot_state_t *bs, int *players, int maxplayers, q
 				break;
 		}
 	}
-	// G_Printf("\n %d mates \n", numteammates);
+	// Com_Printf("\n %d mates \n", numteammates);
 	return numplayers;
 }
 
@@ -481,7 +481,7 @@ static qboolean BotPickBestBalloonGoal(bot_state_t *bs) {
 		}
 		wtt = tt * multiplier * multiplier;
 
-		// G_Printf("%f .. %d -> %f -> %f , %d (%f)\n", weight, i, tt, wtt, capstate[j], multiplier);
+		// Com_Printf("%f .. %d -> %f -> %f , %d (%f)\n", weight, i, tt, wtt, capstate[j], multiplier);
 		// BotAddInfo(bs, va("ball%d %d -> %.1f", j, capstate[j], wtt), AIDBG_GAMETYPE);
 
 		if (wtt < bestdist) {
@@ -1233,7 +1233,7 @@ void BotChooseWeapon(bot_state_t *bs) {
 		if (bs->inventory[(bs->weaponnum + offset)]) {
 			trap_EA_SelectWeapon(bs->client, bs->weaponnum);
 		} else {
-			// G_Printf(S_COLOR_BLUE " lost weapon during change \n");
+			// Com_Printf(S_COLOR_BLUE " lost weapon during change \n");
 			bs->cur_ps.weaponstate = WEAPON_READY; // hm
 			BotChooseWeapon(bs);
 			return;
@@ -1266,7 +1266,7 @@ void BotChooseWeapon(bot_state_t *bs) {
 			bs->weaponchange_time = FloatTime();
 		}
 		bs->weaponnum = newweaponnum;
-		// G_Printf( "bs->weaponnum = %d\n", bs->weaponnum );
+		// Com_Printf( "bs->weaponnum = %d\n", bs->weaponnum );
 
 		trap_EA_SelectWeapon(bs->client, bs->weaponnum);
 	}
@@ -1476,7 +1476,7 @@ void BotBattleUseItems(bot_state_t *bs) {
 	VectorSubtract(entinfo.origin, entinfo.lastvisorigin, botvelocity);
 	falling = (DotProduct(up, botvelocity) < 0);
 	// if(falling && bot_developer.integer)
-	//	G_Printf("falling! %f \n", DotProduct(up, botvelocity) );
+	//	Com_Printf("falling! %f \n", DotProduct(up, botvelocity) );
 
 	// trap_EA_MoveForward(bs->client);
 	BotEntityInfo(bs->enemy, &enemyinfo);
@@ -2226,7 +2226,7 @@ static qboolean EnemyFitsWell(bot_state_t *bs, aas_entityinfo_t *entinfo, int cu
 		VectorSubtract(curenemyinfo.origin, bs->origin, dir2);
 		l2 = VectorLength(dir2);
 		if (l2 < 900 && l1 > l2) { // curenemy is near, candidate is further away
-			// G_Printf(S_COLOR_RED " imped \n");	// cyr_ptr
+			// Com_Printf(S_COLOR_RED " imped \n");	// cyr_ptr
 			return qtrue;
 		}
 	}
@@ -2912,7 +2912,7 @@ void BotAimAtEnemy(bot_state_t *bs) {
 	else
 		bs->ideal_viewangles[YAW] -= wi_spread_y;
 	bs->ideal_viewangles[YAW] = AngleMod(bs->ideal_viewangles[YAW]);
-	// G_Printf( "skill %f spread %.2f %.2f \n", aim_skill, wi_spread_x, wi_spread_y );
+	// Com_Printf( "skill %f spread %.2f %.2f \n", aim_skill, wi_spread_x, wi_spread_y );
 
 	// if the bots should be really challenging
 	if (bot_challenge.integer) {
@@ -3035,7 +3035,7 @@ void BotCheckAttack(bot_state_t *bs) {
 			// release fire button...shoot
 		} else { // charge
 			trap_EA_Attack(bs->client);
-			// G_Printf(S_COLOR_RED " loading %d\n",bs->cur_ps.weaponTime);
+			// Com_Printf(S_COLOR_RED " loading %d\n",bs->cur_ps.weaponTime);
 		}
 	} else // shoot
 		trap_EA_Attack(bs->client);
@@ -4117,13 +4117,13 @@ static void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 			bot_goal_t goal;
 			float dist;
 
-			G_Printf(S_COLOR_GREEN " launched ..."); // cyr_ptr
+			Com_Printf(S_COLOR_GREEN " launched ..."); // cyr_ptr
 			VectorSubtract(state->origin, bs->origin, dir);
 			if (VectorLength(dir) >= PUSHCART_DIST) {
-				G_Printf("too far %d\n", VectorLength(dir)); // cyr_ptr
+				Com_Printf("too far %d\n", VectorLength(dir)); // cyr_ptr
 																 // break;	// cyr_ptr
 			} else
-				G_Printf("in range ..."); // cyr_ptr
+				Com_Printf("in range ..."); // cyr_ptr
 
 			// push droped cart in item db
 			trap_BotUpdateEntityItems();
@@ -4132,9 +4132,9 @@ static void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 			if (dist < 200) {
 				bs->takecart = qtrue;
 				memcpy(&goal, &bs->teamgoal, sizeof(goal));
-				G_Printf("taking it\n"); // cyr_ptr
+				Com_Printf("taking it\n"); // cyr_ptr
 			} else
-				G_Printf("not found\n"); // cyr_ptr
+				Com_Printf("not found\n"); // cyr_ptr
 #endif
 		}
 		break;

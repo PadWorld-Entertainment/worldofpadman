@@ -141,7 +141,7 @@ qboolean G_FreezeTag() {
 // deprecated
 static void G_checkPlayerThawerDistance(const gentity_t *player, gentity_t *thawer) {
 	if (FT_PlayersTooClose(player, thawer)) {
-		// G_Printf( "thawer too close to player!\n" );
+		// Com_Printf( "thawer too close to player!\n" );
 		FT_PushThawerAway(player, thawer, 32);
 	}
 }
@@ -155,7 +155,7 @@ qboolean FT_ClientIsFrozen(const gclient_t *client) {
 
 	if (client->pers.teamState.state == TEAM_ACTIVE) {
 		if (g_ft_debug.integer >= 2) {
-			G_Printf("FT_clientIsFrozen: client->pers.frozen: %i\n", client->pers.frozen);
+			Com_Printf("FT_clientIsFrozen: client->pers.frozen: %i\n", client->pers.frozen);
 		}
 		return client->pers.frozen;
 	}
@@ -163,7 +163,7 @@ qboolean FT_ClientIsFrozen(const gclient_t *client) {
 		return qtrue;
 	}
 	if (g_ft_debug.integer >= 2) {
-		G_Printf("FT_clientIsFrozen: qfalse\n");
+		Com_Printf("FT_clientIsFrozen: qfalse\n");
 	}
 	return qfalse;
 }
@@ -384,7 +384,7 @@ qboolean FT_WholeTeamIsFrozen(int team) {
 	int i;
 
 	if (g_ft_debug.integer >= 2)
-		G_Printf("FT_wholeTeamIsFrozen!\n");
+		Com_Printf("FT_wholeTeamIsFrozen!\n");
 
 	for (i = 0; i < level.maxclients; i++) {
 		client = &level.clients[i];
@@ -393,7 +393,7 @@ qboolean FT_WholeTeamIsFrozen(int team) {
 	}
 
 	if (g_ft_debug.integer == 1)
-		G_Printf("level.teamScores[ %i ]:%i\n", team, level.teamScores[team]);
+		Com_Printf("level.teamScores[ %i ]:%i\n", team, level.teamScores[team]);
 
 	return qtrue;
 }
@@ -517,8 +517,8 @@ void FT_InitFreezeTag(void) {
 		Q_strncpyz(mapname, Info_ValueForKey(info, "mapname"), sizeof(mapname));
 		v = FT_ValueForKey(s, "map");
 
-		// G_Printf("^2This Map: %s\n", mapname);
-		// G_Printf("^2Last Map: %s\n", v);
+		// Com_Printf("^2This Map: %s\n", mapname);
+		// Com_Printf("^2Last Map: %s\n", v);
 
 		if (Q_stricmp(mapname, v) != 0) {
 			// clear
@@ -528,9 +528,9 @@ void FT_InitFreezeTag(void) {
 		}
 
 		// dbg
-		// G_Printf("^2played: %i\n", level.ftNumRoundsPlayed);
-		// G_Printf("^2Red Wins: %i\n", level.ftNumRoundsWon[TEAM_RED]);
-		// G_Printf("^2Blue Wins: %i\n", level.ftNumRoundsWon[TEAM_BLUE]);
+		// Com_Printf("^2played: %i\n", level.ftNumRoundsPlayed);
+		// Com_Printf("^2Red Wins: %i\n", level.ftNumRoundsWon[TEAM_RED]);
+		// Com_Printf("^2Blue Wins: %i\n", level.ftNumRoundsWon[TEAM_BLUE]);
 	}
 }
 
@@ -601,9 +601,9 @@ qboolean FT_MatchInProgress(void) {
 
 qboolean FT_CanSwitchTeam(gentity_t *player, int team) {
 #if 0
-	G_Printf("frozen: %i\nteam: %i\n", G_playerIsFrozen(player), team);
+	Com_Printf("frozen: %i\nteam: %i\n", G_playerIsFrozen(player), team);
 	if (player->client)
-		G_Printf("^2has client\n");
+		Com_Printf("^2has client\n");
 
 	if (G_playerIsFrozen(player) && team != TEAM_SPECTATOR)
 		return qfalse;

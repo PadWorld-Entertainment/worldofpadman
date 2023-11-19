@@ -98,7 +98,7 @@ static qboolean StringToFilter(char *s, ipFilter_t *f) {
 				s++;
 				continue;
 			}
-			G_Printf("Bad filter address: %s\n", s);
+			Com_Printf("Bad filter address: %s\n", s);
 			return qfalse;
 		}
 
@@ -205,7 +205,7 @@ static void AddIP(char *str) {
 			break; // free spot
 	if (i == numIPFilters) {
 		if (numIPFilters == MAX_IPFILTERS) {
-			G_Printf("IP filter list is full\n");
+			Com_Printf("IP filter list is full\n");
 			return;
 		}
 		numIPFilters++;
@@ -249,7 +249,7 @@ static void Svcmd_AddIP_f(void) {
 	char str[MAX_TOKEN_CHARS];
 
 	if (trap_Argc() < 2) {
-		G_Printf("Usage: addip <ip-mask>\n");
+		Com_Printf("Usage: addip <ip-mask>\n");
 		return;
 	}
 
@@ -269,7 +269,7 @@ static void Svcmd_RemoveIP_f(void) {
 	char str[MAX_TOKEN_CHARS];
 
 	if (trap_Argc() < 2) {
-		G_Printf("Usage: removeip <ip-mask>\n");
+		Com_Printf("Usage: removeip <ip-mask>\n");
 		return;
 	}
 
@@ -281,14 +281,14 @@ static void Svcmd_RemoveIP_f(void) {
 	for (i = 0; i < numIPFilters; i++) {
 		if (ipFilters[i].mask == f.mask && ipFilters[i].compare == f.compare) {
 			ipFilters[i].compare = 0xffffffffu;
-			G_Printf("Removed.\n");
+			Com_Printf("Removed.\n");
 
 			UpdateIPBans();
 			return;
 		}
 	}
 
-	G_Printf("Didn't find %s.\n", str);
+	Com_Printf("Didn't find %s.\n", str);
 }
 
 /*
@@ -305,53 +305,53 @@ static void Svcmd_EntityList_f(void) {
 		if (!check->inuse) {
 			continue;
 		}
-		G_Printf("%3i:", e);
+		Com_Printf("%3i:", e);
 		switch (check->s.eType) {
 		case ET_GENERAL:
-			G_Printf("ET_GENERAL          ");
+			Com_Printf("ET_GENERAL          ");
 			break;
 		case ET_PLAYER:
-			G_Printf("ET_PLAYER           ");
+			Com_Printf("ET_PLAYER           ");
 			break;
 		case ET_ITEM:
-			G_Printf("ET_ITEM             ");
+			Com_Printf("ET_ITEM             ");
 			break;
 		case ET_MISSILE:
-			G_Printf("ET_MISSILE          ");
+			Com_Printf("ET_MISSILE          ");
 			break;
 		case ET_MOVER:
-			G_Printf("ET_MOVER            ");
+			Com_Printf("ET_MOVER            ");
 			break;
 		case ET_BEAM:
-			G_Printf("ET_BEAM             ");
+			Com_Printf("ET_BEAM             ");
 			break;
 		case ET_PORTAL:
-			G_Printf("ET_PORTAL           ");
+			Com_Printf("ET_PORTAL           ");
 			break;
 		case ET_SPEAKER:
-			G_Printf("ET_SPEAKER          ");
+			Com_Printf("ET_SPEAKER          ");
 			break;
 		case ET_PUSH_TRIGGER:
-			G_Printf("ET_PUSH_TRIGGER     ");
+			Com_Printf("ET_PUSH_TRIGGER     ");
 			break;
 		case ET_TELEPORT_TRIGGER:
-			G_Printf("ET_TELEPORT_TRIGGER ");
+			Com_Printf("ET_TELEPORT_TRIGGER ");
 			break;
 		case ET_INVISIBLE:
-			G_Printf("ET_INVISIBLE        ");
+			Com_Printf("ET_INVISIBLE        ");
 			break;
 		case ET_GRAPPLE:
-			G_Printf("ET_GRAPPLE          ");
+			Com_Printf("ET_GRAPPLE          ");
 			break;
 		default:
-			G_Printf("%3i                 ", check->s.eType);
+			Com_Printf("%3i                 ", check->s.eType);
 			break;
 		}
 
 		if (check->classname) {
-			G_Printf("%s", check->classname);
+			Com_Printf("%s", check->classname);
 		}
-		G_Printf("\n");
+		Com_Printf("\n");
 	}
 }
 
@@ -371,7 +371,7 @@ static gclient_t *ClientForString(const char *s) {
 
 		cl = &level.clients[idnum];
 		if (cl->pers.connected == CON_DISCONNECTED) {
-			G_Printf("Client %i is not connected\n", idnum);
+			Com_Printf("Client %i is not connected\n", idnum);
 			return NULL;
 		}
 		return cl;
@@ -388,10 +388,10 @@ static gclient_t *ClientForString(const char *s) {
 		if (!Q_stricmp(netname, s)) {
 			return cl;
 		} else
-			G_Printf("missmatch %s <-> %s \n", netname, s);
+			Com_Printf("missmatch %s <-> %s \n", netname, s);
 	}
 
-	G_Printf("User %s is not on the server\n", s);
+	Com_Printf("User %s is not on the server\n", s);
 
 	return NULL;
 }
@@ -405,7 +405,7 @@ ssay <text>
 */
 static void Svcmd_Say_f(void) {
 	if (trap_Argc() < 2) {
-		G_Printf("usage: ssay <text>\n");
+		Com_Printf("usage: ssay <text>\n");
 		return;
 	}
 
@@ -425,7 +425,7 @@ static void Svcmd_Tell_f(void) {
 	gentity_t *target;
 
 	if (trap_Argc() < 3) {
-		G_Printf("usage: stell <cid> <text>\n");
+		Com_Printf("usage: stell <cid> <text>\n");
 		return;
 	}
 
@@ -433,14 +433,14 @@ static void Svcmd_Tell_f(void) {
 	cid = atoi(str);
 
 	if ((cid < 0) || (cid >= MAX_CLIENTS)) {
-		G_Printf("Not a valid client number.\n");
+		Com_Printf("Not a valid client number.\n");
 		return;
 	}
 
 	target = (g_entities + cid);
 
 	if (target->client->pers.connected != CON_CONNECTED) {
-		G_Printf("Client not connected.\n");
+		Com_Printf("Client not connected.\n");
 		return;
 	}
 
@@ -461,7 +461,7 @@ static void Svcmd_ClientCommand_f(clientCommand_t cmd) {
 
 	if (trap_Argc() < 3) {
 		// FIXME: Use real command in error message
-		G_Printf("usage: $cmd <cid> <text>\n");
+		Com_Printf("usage: $cmd <cid> <text>\n");
 		return;
 	}
 
@@ -485,12 +485,12 @@ static void Svcmd_ClientCommand_f(clientCommand_t cmd) {
 	cid = atoi(str);
 
 	if (((cid < 0) || (cid >= MAX_CLIENTS)) && (cid != -1)) {
-		G_Printf("Not a valid client number.\n");
+		Com_Printf("Not a valid client number.\n");
 		return;
 	}
 
 	if ((cid != -1) && (level.clients[cid].pers.connected != CON_CONNECTED)) {
-		G_Printf("Client not connected.\n");
+		Com_Printf("Client not connected.\n");
 		return;
 	}
 
@@ -509,7 +509,7 @@ static void Svcmd_ForceTeam_f(void) {
 	char str[MAX_TOKEN_CHARS];
 
 	if (trap_Argc() < 3) {
-		G_Printf("Usage: forceteam <player> <team>\n");
+		Com_Printf("Usage: forceteam <player> <team>\n");
 		return;
 	}
 
@@ -561,7 +561,7 @@ static void Svcmd_StartCam(void) {
 	Q_strncpyz(map, Info_ValueForKey(serverinfo, "mapname"), sizeof(map));
 	Com_sprintf(path, sizeof(path), "cutscenes\\%s\\scene.cfg", map);
 	if (!FileExists(path)) {
-		G_Printf("%s does not exist\n", path);
+		Com_Printf("%s does not exist\n", path);
 		return;
 	}
 	trap_SendConsoleCommand(EXEC_APPEND, va("exec \"%s\"\n", path));
@@ -864,7 +864,7 @@ qboolean ConsoleCommand(void) {
 		trap_Argv(1, key, sizeof(key));
 		trap_Argv(2, value, sizeof(value));
 		if (!strlen(key)) {
-			G_Printf("missing key\n");
+			Com_Printf("missing key\n");
 			return qtrue;
 		}
 
