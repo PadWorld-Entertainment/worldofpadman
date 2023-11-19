@@ -329,6 +329,16 @@ static void CG_DrawMedals(float x, float y, const score_t *score) {
 	}
 }
 
+static const score_t *CG_GetScoreForClient(int clientNum) {
+	int i;
+	for (i = 0; i < cg.numScores; ++i) {
+		if (cg.scores[i].client == clientNum) {
+			return &cg.scores[i];
+		}
+	}
+	return NULL;
+}
+
 /*
 =================
 CG_DrawOldScoreboard
@@ -344,7 +354,7 @@ qboolean CG_DrawOldScoreboard(void) {
 	int lineHeight;
 	int topBorderSize, bottomBorderSize;
 	int scoreLineSpace, maxScoreLinesPerTeam[TEAM_NUM_TEAMS];
-	const score_t *score = &cg.scores[cg.clientNum];
+	const score_t *score;
 	clientInfo_t *ci;
 	char buf[32];
 
@@ -363,6 +373,8 @@ qboolean CG_DrawOldScoreboard(void) {
 	if (cg.warmup && !cg.showScores) {
 		return qfalse;
 	}
+
+	score = CG_GetScoreForClient(cg.clientNum);
 
 	if (cg.showScores || cg.predictedPlayerState.pm_type == PM_DEAD ||
 		cg.predictedPlayerState.pm_type == PM_INTERMISSION) {
