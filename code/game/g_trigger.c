@@ -589,10 +589,12 @@ static int NumPlayersAtBalloon(const gentity_t *balloon, team_t team) {
 }
 
 static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
-	int i, clientNum, clientBalloonTime = level.time;
+	int i;
+	int clientNum = -1;
+	int clientBalloonTime = level.time;
 
 	for (i = 0; i < level.maxclients; i++) {
-		if (level.clients[i].sess.sessionTeam == team  && (IsPlayerAtBalloon(i, balloon))) {
+		if (level.clients[i].sess.sessionTeam == team && (IsPlayerAtBalloon(i, balloon))) {
 			if ((level.clients[i].balloonTime + BALLOON_TOUCHDELAY) > clientBalloonTime) {
 				clientBalloonTime = level.clients[i].balloonTime + BALLOON_TOUCHDELAY;
 				clientNum = i;
@@ -603,7 +605,7 @@ static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
 	return clientNum;
 }
 
-static void AddCaptureBalloonScores(gentity_t *balloon, team_t team) {
+static void AddCaptureBalloonScores(const gentity_t *balloon, team_t team) {
 	int i, firstAtBalloon = FirstPlayerAtBalloon(balloon, team);
 
 	for (i = 0; i < level.maxclients; i++) {
