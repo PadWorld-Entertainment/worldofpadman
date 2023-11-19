@@ -591,7 +591,7 @@ static int NumPlayersAtBalloon(const gentity_t *balloon, team_t team) {
 static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
 	int i;
 	int clientNum = -1;
-	int clientBalloonTime = level.time;
+	int clientBalloonTime = -1;
 
 	for (i = 0; i < level.maxclients; i++) {
 		if (level.clients[i].sess.sessionTeam != team) {
@@ -600,8 +600,8 @@ static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
 		if (!IsPlayerAtBalloon(i, balloon)) {
 			continue;
 		}
-		if (level.clients[i].balloonTime + BALLOON_TOUCHDELAY > clientBalloonTime) {
-			clientBalloonTime = level.clients[i].balloonTime + BALLOON_TOUCHDELAY;
+		if (clientBalloonTime < level.clients[i].balloonTime) {
+			clientBalloonTime = level.clients[i].balloonTime;
 			clientNum = i;
 		}
 	}
