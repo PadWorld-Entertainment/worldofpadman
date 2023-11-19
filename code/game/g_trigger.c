@@ -594,11 +594,15 @@ static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
 	int clientBalloonTime = level.time;
 
 	for (i = 0; i < level.maxclients; i++) {
-		if (level.clients[i].sess.sessionTeam == team && (IsPlayerAtBalloon(i, balloon))) {
-			if ((level.clients[i].balloonTime + BALLOON_TOUCHDELAY) > clientBalloonTime) {
-				clientBalloonTime = level.clients[i].balloonTime + BALLOON_TOUCHDELAY;
-				clientNum = i;
-			}
+		if (level.clients[i].sess.sessionTeam != team) {
+			continue;
+		}
+		if (!IsPlayerAtBalloon(i, balloon)) {
+			continue;
+		}
+		if (level.clients[i].balloonTime + BALLOON_TOUCHDELAY > clientBalloonTime) {
+			clientBalloonTime = level.clients[i].balloonTime + BALLOON_TOUCHDELAY;
+			clientNum = i;
 		}
 	}
 
@@ -609,7 +613,7 @@ static void AddCaptureBalloonScores(const gentity_t *balloon, team_t team) {
 	int i, firstAtBalloon = FirstPlayerAtBalloon(balloon, team);
 
 	for (i = 0; i < level.maxclients; i++) {
-		if ((level.clients[i].sess.sessionTeam == team) && (IsPlayerAtBalloon(i, balloon))) {
+		if (level.clients[i].sess.sessionTeam == team && IsPlayerAtBalloon(i, balloon)) {
 			gentity_t *ent = (g_entities + i);
 
 			if (i == firstAtBalloon) {
