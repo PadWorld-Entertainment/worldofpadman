@@ -548,6 +548,10 @@ static void TouchBalloonzone(gentity_t *self, gentity_t *other, trace_t *trace) 
 	//#@070329: some delay ... i think there isn't always a touch-call (with lagging clients)
 	self->target_ent->teamTime[team] = level.time;
 
+	if (other->client->balloonTime + BALLOON_TOUCHDELAY < level.time) {
+		other->client->balloonFirstTouchTime = level.time;
+	}
+
 	other->client->balloonEnt = self;
 	other->client->balloonTime = level.time;
 }
@@ -600,8 +604,8 @@ static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
 		if (!IsPlayerAtBalloon(i, balloon)) {
 			continue;
 		}
-		if (clientBalloonTime < level.clients[i].balloonTime) {
-			clientBalloonTime = level.clients[i].balloonTime;
+		if (clientBalloonTime < level.clients[i].balloonFirstTouchTime) {
+			clientBalloonTime = level.clients[i].balloonFirstTouchTime;
 			clientNum = i;
 		}
 	}
@@ -610,7 +614,12 @@ static int FirstPlayerAtBalloon(const gentity_t *balloon, team_t team) {
 }
 
 static void AddCaptureBalloonScores(const gentity_t *balloon, team_t team) {
-	int i, firstAtBalloon = FirstPlayerAtBalloon(balloon, team);
+	const int firstAtBalloon = FirstPlayerAtBalloon(balloon, team);
+	int i;
+
+	if (firstAtBalloon != -1) {
+		Com_DPrintf("First player at balloon: %s\n", level.clients[firstAtBalloon].pers.netname);
+	}
 
 	for (i = 0; i < level.maxclients; i++) {
 		if (level.clients[i].sess.sessionTeam == team && IsPlayerAtBalloon(i, balloon)) {

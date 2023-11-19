@@ -349,6 +349,7 @@ struct gclient_s {
 	int nextBoasterDoTTick;
 
 	int balloonTime;
+	int balloonFirstTouchTime;
 	gentity_t *balloonEnt;
 
 	int lastCmdTime; // level.time of last usercmd_t, for EF_CONNECTION
