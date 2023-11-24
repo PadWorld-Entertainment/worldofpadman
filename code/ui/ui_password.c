@@ -39,6 +39,7 @@ static const char *specifypassword_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NU
 
 typedef struct {
 	menuframework_s menu;
+	menutext_s passwordheader;
 	menufield_s password;
 	menubitmap_s fight;
 	menubitmap_s back;
@@ -48,6 +49,17 @@ typedef struct {
 } specifypassword_t;
 
 static specifypassword_t s_specifypassword;
+
+/*
+=================
+UI_SpecifyPassword_Draw
+=================
+*/
+static void UI_SpecifyPassword_Draw(void) {
+	static const vec4_t color_specifypw = {0.8f, 0.85f, 1.0f, 1.0f};
+	UI_DrawProportionalString(SCREEN_WIDTH * 0.5f, 188, "SPECIFY SERVER", UI_CENTER | UI_SMALLFONT, color_specifypw);
+	Menu_Draw(&s_specifypassword.menu);
+}
 
 /*
 =================
@@ -64,10 +76,10 @@ static void UI_SpecifyPassword_UpdateMenuItems(void) {
 
 /*
 =================
-SpecifyPassword_Event
+UI_SpecifyPassword_Event
 =================
 */
-static void SpecifyPassword_Event(void *ptr, int event) {
+static void UI_SpecifyPassword_Event(void *ptr, int event) {
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_FIGHT:
 		if (event != QM_ACTIVATED)
@@ -90,10 +102,10 @@ static void SpecifyPassword_Event(void *ptr, int event) {
 
 /*
 =================
-SpecifyPassword_Cache
+UI_SpecifyPassword_Cache
 =================
 */
-static void SpecifyPassword_Cache(void) {
+static void UI_SpecifyPassword_Cache(void) {
 	int i;
 
 	// touch all our pics
@@ -111,23 +123,31 @@ static void SpecifyPassword_DrawField(void *self) {
 
 /*
 =================
-SpecifyPassword_MenuInit
+UI_SpecifyPassword_MenuInit
 =================
 */
-static void SpecifyPassword_MenuInit(void) {
+static void UI_SpecifyPassword_MenuInit(void) {
 	// zero set all our globals
 	memset(&s_specifypassword, 0, sizeof(specifypassword_t));
 
-	SpecifyPassword_Cache();
+	UI_SpecifyPassword_Cache();
 
+	s_specifypassword.menu.draw = UI_SpecifyPassword_Draw;
 	s_specifypassword.menu.wrapAround = qtrue;
 	s_specifypassword.menu.fullscreen = qtrue;
-	s_specifypassword.menu.bgparts = BGP_SPECIFYPASS | BGP_MENUFX;
+	s_specifypassword.menu.bgparts = BGP_SPECIFY | BGP_MENUFX;
+
+	s_specifypassword.passwordheader.generic.type = MTYPE_TEXT;
+	s_specifypassword.passwordheader.generic.x = 342;
+	s_specifypassword.passwordheader.generic.y = 218;
+	s_specifypassword.passwordheader.string = "Password:";
+	s_specifypassword.passwordheader.style = UI_SMALLFONT;
+	s_specifypassword.passwordheader.color = menu_text_color;
 
 	s_specifypassword.password.generic.type = MTYPE_FIELD;
 	s_specifypassword.password.generic.name = "";
 	s_specifypassword.password.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
-	s_specifypassword.password.generic.x = 230;
+	s_specifypassword.password.generic.x = 342;
 	s_specifypassword.password.generic.y = 234;
 	s_specifypassword.password.field.widthInChars = 22;
 	s_specifypassword.password.field.maxchars = 80;
@@ -138,9 +158,9 @@ static void SpecifyPassword_MenuInit(void) {
 	s_specifypassword.back.generic.name = BACK0;
 	s_specifypassword.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_specifypassword.back.generic.x = 8;
-	s_specifypassword.back.generic.y = 440;
+	s_specifypassword.back.generic.y = 446;
 	s_specifypassword.back.generic.id = ID_BACK;
-	s_specifypassword.back.generic.callback = SpecifyPassword_Event;
+	s_specifypassword.back.generic.callback = UI_SpecifyPassword_Event;
 	s_specifypassword.back.width = 80;
 	s_specifypassword.back.height = 40;
 	s_specifypassword.back.focuspic = BACK1;
@@ -149,15 +169,16 @@ static void SpecifyPassword_MenuInit(void) {
 	s_specifypassword.fight.generic.type = MTYPE_BITMAP;
 	s_specifypassword.fight.generic.name = FIGHT0;
 	s_specifypassword.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_specifypassword.fight.generic.callback = SpecifyPassword_Event;
+	s_specifypassword.fight.generic.callback = UI_SpecifyPassword_Event;
 	s_specifypassword.fight.generic.id = ID_FIGHT;
 	s_specifypassword.fight.focuspic = FIGHT1;
-	s_specifypassword.fight.generic.x = 545;
-	s_specifypassword.fight.generic.y = 414;
+	s_specifypassword.fight.generic.x = 776;
+	s_specifypassword.fight.generic.y = 420;
 	s_specifypassword.fight.width = 80;
 	s_specifypassword.fight.height = 60;
 	s_specifypassword.fight.focuspicinstead = qtrue;
 
+	Menu_AddItem(&s_specifypassword.menu, &s_specifypassword.passwordheader);
 	Menu_AddItem(&s_specifypassword.menu, &s_specifypassword.password);
 	Menu_AddItem(&s_specifypassword.menu, &s_specifypassword.fight);
 	Menu_AddItem(&s_specifypassword.menu, &s_specifypassword.back);
@@ -169,7 +190,7 @@ UI_SpecifyPasswordMenu
 =================
 */
 void UI_SpecifyPasswordMenu(const char *string, const char *name) {
-	SpecifyPassword_MenuInit();
+	UI_SpecifyPassword_MenuInit();
 	s_specifypassword.connectstring = string;
 	Q_strncpyz(s_specifypassword.servername, name, sizeof(s_specifypassword.servername));
 	UI_PushMenu(&s_specifypassword.menu);

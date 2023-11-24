@@ -66,7 +66,7 @@ SOUND OPTIONS MENU
 #define UISND_SDL 0
 #define UISND_OPENAL 1
 
-#define XPOSITION 180
+#define XPOSITION 220
 #define YPOSITION 198
 #define MAX_DEVICES 128
 
@@ -420,8 +420,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	soundOptionsInfo.graphics.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.graphics.generic.id = ID_GRAPHICS;
-	soundOptionsInfo.graphics.generic.x = 16;
-	soundOptionsInfo.graphics.generic.y = 37;
+	soundOptionsInfo.graphics.generic.x = XPOSITION - 144;
+	soundOptionsInfo.graphics.generic.y = 43;
 	soundOptionsInfo.graphics.width = 160;
 	soundOptionsInfo.graphics.height = 40;
 	soundOptionsInfo.graphics.focuspic = GRAPHICS1;
@@ -432,8 +432,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	soundOptionsInfo.display.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.display.generic.id = ID_DISPLAY;
-	soundOptionsInfo.display.generic.x = 169;
-	soundOptionsInfo.display.generic.y = 30;
+	soundOptionsInfo.display.generic.x = XPOSITION + 9;
+	soundOptionsInfo.display.generic.y = 36;
 	soundOptionsInfo.display.width = 120;
 	soundOptionsInfo.display.height = 40;
 	soundOptionsInfo.display.focuspic = DISPLAY1;
@@ -444,8 +444,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	soundOptionsInfo.sound.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.sound.generic.id = ID_SOUND;
-	soundOptionsInfo.sound.generic.x = 36;
-	soundOptionsInfo.sound.generic.y = 79;
+	soundOptionsInfo.sound.generic.x = XPOSITION - 124;
+	soundOptionsInfo.sound.generic.y = 85;
 	soundOptionsInfo.sound.width = 120;
 	soundOptionsInfo.sound.height = 40;
 	soundOptionsInfo.sound.focuspic = SOUND1;
@@ -456,8 +456,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	soundOptionsInfo.network.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.network.generic.id = ID_NETWORK;
-	soundOptionsInfo.network.generic.x = 142;
-	soundOptionsInfo.network.generic.y = 82;
+	soundOptionsInfo.network.generic.x = XPOSITION - 18;
+	soundOptionsInfo.network.generic.y = 88;
 	soundOptionsInfo.network.width = 160;
 	soundOptionsInfo.network.height = 40;
 	soundOptionsInfo.network.focuspic = NETWORK1;
@@ -623,7 +623,7 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.back.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.back.generic.id = ID_BACK;
 	soundOptionsInfo.back.generic.x = 8;
-	soundOptionsInfo.back.generic.y = 440;
+	soundOptionsInfo.back.generic.y = 446;
 	soundOptionsInfo.back.width = 80;
 	soundOptionsInfo.back.height = 40;
 	soundOptionsInfo.back.focuspic = BACK1;
@@ -634,8 +634,8 @@ static void UI_SoundOptions_MenuInit(void) {
 	soundOptionsInfo.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
 	soundOptionsInfo.apply.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.apply.generic.id = ID_APPLY;
-	soundOptionsInfo.apply.generic.x = 512;
-	soundOptionsInfo.apply.generic.y = 440;
+	soundOptionsInfo.apply.generic.x = 736;
+	soundOptionsInfo.apply.generic.y = 446;
 	soundOptionsInfo.apply.width = 120;
 	soundOptionsInfo.apply.height = 40;
 	soundOptionsInfo.apply.focuspic = ACCEPT1;

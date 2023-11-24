@@ -919,24 +919,30 @@ UI_MouseEvent
 */
 void UI_MouseEvent(int dx, int dy) {
 	int i;
+	int xbias;
+	int ybias;
+
 	menucommon_s *m;
 
 	if (!uis.activemenu)
 		return;
 
+	// convert X Y bias to 640 coords
+	xbias = uis.xbias / uis.xscale;
+	ybias = uis.ybias / uis.yscale;
+
 	// update mouse screen position
 	uis.cursorx += dx;
-	if (uis.cursorx < -uis.xbias)
-		uis.cursorx = -uis.xbias;
-	else if (uis.cursorx > SCREEN_WIDTH + uis.xbias)
-		uis.cursorx = SCREEN_WIDTH + uis.xbias;
+	if (uis.cursorx < -xbias)
+		uis.cursorx = -xbias;
+	else if (uis.cursorx > SCREEN_WIDTH + xbias)
+		uis.cursorx = SCREEN_WIDTH + xbias;
 
-	// todo: use ybias here for odd screens (and symmetry)
 	uis.cursory += dy;
-	if (uis.cursory < 0)
-		uis.cursory = 0;
-	else if (uis.cursory > SCREEN_HEIGHT)
-		uis.cursory = SCREEN_HEIGHT;
+	if (uis.cursory < -ybias)
+		uis.cursory = -ybias;
+	else if (uis.cursory > SCREEN_HEIGHT + ybias)
+		uis.cursory = SCREEN_HEIGHT + ybias;
 
 	if (uis.dropdownlist)
 		return;
@@ -1016,15 +1022,15 @@ UI_Cache
 =================
 */
 void UI_Cache_f(void) {
-	MainMenu_Cache();
-	InGame_Cache();
-	ConfirmMenu_Cache();
+	UI_MainMenu_Cache();
+	UI_InGame_Cache();
+	UI_ConfirmMenu_Cache();
 	UI_PlayerSettings_Cache();
-	Controls_Cache();
-	Demos_Cache();
+	UI_Controls_Cache();
+	UI_Demos_Cache();
 	UI_Preferences_Cache();
-	ServerInfo_Cache();
-	SpecifyServer_Cache();
+	UI_ServerInfo_Cache();
+	UI_SpecifyServer_Cache();
 	UI_ArenaServers_Cache();
 	UI_StartServer_Cache();
 
@@ -1033,13 +1039,13 @@ void UI_Cache_f(void) {
 	UI_EffectsOptions_Cache();
 	UI_SoundOptions_Cache();
 	UI_NetworkOptions_Cache();
-	TeamMain_Cache();
+	UI_TeamMain_Cache();
 	UI_AddBots_Cache();
 	UI_RemoveBots_Cache();
 	UI_SetupMenu_Cache();
 
-	SetupDefaultMenu_Cache();
-	UI_BigCredits_Cache();
+	UI_SetupDefaultMenu_Cache();
+	UI_WopCredits_Cache();
 	UI_Credit_Cache();
 
 	UI_SelectBots_Cache();
@@ -1069,19 +1075,19 @@ qboolean UI_ConsoleCommand(int realTime) {
 		return qtrue;
 	}
 	if (Q_stricmp(cmd, "wop_music") == 0) {
-		MusicMenu_Open();
+		UI_MusicBox_Open();
 		return qtrue;
 	}
 	if (Q_stricmp(cmd, "wop_checkmusic") == 0) {
-		Music_Check();
+		UI_MusicBox_Check();
 		return qtrue;
 	}
 	if (Q_stricmp(cmd, "wop_nextsong") == 0) {
-		Music_NextTrack();
+		UI_MusicBox_NextTrack();
 		return qtrue;
 	}
 	if (Q_stricmp(cmd, "wop_restartmusic") == 0) {
-		Music_TriggerRestart();
+		UI_MusicBox_TriggerRestart();
 		return qtrue;
 	}
 
@@ -1099,7 +1105,7 @@ UI_Shutdown
 */
 void UI_Shutdown(void) {
 	UI_StopMusic();
-	MusicMenu_Shutdown();
+	UI_MusicBox_Shutdown();
 }
 
 /*
@@ -1111,9 +1117,9 @@ void UI_Init(void) {
 	UI_RegisterCvars();
 
 	// not yet
-	//	WOP_LoadMenuText(UI_LOCALEFILE, qtrue);
+	// WOP_LoadMenuText(UI_LOCALEFILE, qtrue);
 
-	SetDefaultBinds_onUnusedKeys();
+	UI_SetDefaultBinds_onUnusedKeys();
 
 	if (s_wop_restarted.integer != qtrue) {
 		trap_Cvar_Set("s_wop_restarted", "1");
@@ -1122,7 +1128,7 @@ void UI_Init(void) {
 		//return! ... old: EXEC_APPEND 		return;
 	}
 
-	MusicMenu_Init();
+	UI_MusicBox_Init();
 
 	UI_InitGameinfo();
 
@@ -1130,27 +1136,30 @@ void UI_Init(void) {
 	trap_GetGlconfig(&uis.glconfig);
 
 	// for 640x480 virtualized screen
-	uis.xscale = uis.glconfig.vidWidth * (1.0f / 640.0f);
-	uis.yscale = uis.glconfig.vidHeight * (1.0f / 480.0f);
+	uis.xscale = uis.glconfig.vidWidth * (1.0f / (float)SCREEN_WIDTH);
+	uis.yscale = uis.glconfig.vidHeight * (1.0f / (float)SCREEN_HEIGHT);
 
-	if (uis.glconfig.vidWidth * 480 > uis.glconfig.vidHeight * 640) {
+	if (uis.glconfig.vidWidth * (float)SCREEN_HEIGHT > uis.glconfig.vidHeight * (float)SCREEN_WIDTH) {
 		// wide screen
-		uis.xbias = 0.5f * (uis.glconfig.vidWidth - (uis.glconfig.vidHeight * (640.0f / 480.0f)));
+		uis.xbias = 0.5f * (uis.glconfig.vidWidth - (uis.glconfig.vidHeight * ((float)SCREEN_WIDTH/(float)SCREEN_HEIGHT)));
 		uis.xscale = uis.yscale;
 		uis.ybias = 0;
 	} else {
 		// no wide screen
 		uis.xbias = 0;
-	}
 
+		// narrow screen
+		uis.ybias = 0.5 * (uis.glconfig.vidHeight - (uis.glconfig.vidWidth * ((float)SCREEN_HEIGHT/(float)SCREEN_WIDTH)));
+		uis.yscale = uis.xscale;
+	}
+/*
 	if (uis.glconfig.vidWidth * 480 < uis.glconfig.vidHeight * 640) {
 		uis.ybias = 0.5f * (uis.glconfig.vidHeight - (uis.glconfig.vidWidth * (480.0f / 640.0f)));
 		uis.yscale = uis.xscale;
 	} else
 		uis.ybias = 0;
 
-	uis.scale1024 = uis.xscale * (640.0f / 1024.0f); // uis.glconfig.vidHeight * (1.0f/768.0f);
-
+*/
 	// initialize the menu system
 	Menu_Cache();
 
@@ -1171,14 +1180,6 @@ void UI_AdjustFrom640(float *x, float *y, float *w, float *h) {
 	*y = *y * uis.yscale + uis.ybias;
 	*w *= uis.xscale;
 	*h *= uis.yscale;
-}
-
-void UI_AdjustFrom1024(float *x, float *y, float *w, float *h) {
-	// expect valid pointers
-	*x = *x * uis.scale1024 + uis.xbias;
-	*y = *y * uis.scale1024 + uis.ybias;
-	*w *= uis.scale1024;
-	*h *= uis.scale1024;
 }
 
 void UI_DrawNamedPic(float x, float y, float width, float height, const char *picname) {
@@ -1214,34 +1215,6 @@ void UI_DrawHandlePic(float x, float y, float w, float h, qhandle_t hShader) {
 	}
 
 	UI_AdjustFrom640(&x, &y, &w, &h);
-	trap_R_DrawStretchPic(x, y, w, h, s0, t0, s1, t1, hShader);
-}
-
-void UI_DrawHandlePic1024(float x, float y, float w, float h, qhandle_t hShader) {
-	float s0;
-	float s1;
-	float t0;
-	float t1;
-
-	if (w < 0) { // flip about vertical
-		w = -w;
-		s0 = 1;
-		s1 = 0;
-	} else {
-		s0 = 0;
-		s1 = 1;
-	}
-
-	if (h < 0) { // flip about horizontal
-		h = -h;
-		t0 = 1;
-		t1 = 0;
-	} else {
-		t0 = 0;
-		t1 = 1;
-	}
-
-	UI_AdjustFrom1024(&x, &y, &w, &h);
 	trap_R_DrawStretchPic(x, y, w, h, s0, t0, s1, t1, hShader);
 }
 
@@ -1289,18 +1262,8 @@ void UI_UpdateScreen(void) {
 	trap_UpdateScreen();
 }
 
-#define WOP_INGAME_X 0
-#define WOP_INGAME_Y 0
-#define WOP_INGAME_B 640
-#define WOP_INGAME_H 480
-
 void UI_DrawIngameBG(void) {
-	float wsCorrection = (uis.glconfig.vidWidth * 480.0f / (float)uis.glconfig.vidHeight) - 640.0f;
-	if (wsCorrection < 0)
-		wsCorrection = 0.0f;
-
-	UI_DrawHandlePic(WOP_INGAME_X - (wsCorrection * 0.5f), WOP_INGAME_Y, WOP_INGAME_B + wsCorrection, WOP_INGAME_H,
-					 uis.ingamebg);
+	UI_DrawHandlePic(((SCREEN_WIDTH - 648) / 2), 0, (SCREEN_WIDTH - 216), SCREEN_HEIGHT, uis.ingamebg);
 }
 
 static void UI_DrawMenu(menuframework_s *menu) {
@@ -1310,11 +1273,15 @@ static void UI_DrawMenu(menuframework_s *menu) {
 				UI_DrawMenu(uis.stack[uis.menusp - 2]);
 			}
 		} else if (menu->fullscreen) {
-			// draw the black background for non 4:3 resolutions
-			trap_R_SetColor(colorBlack);
-			trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 0, 0, uis.whiteShader);
-			trap_R_SetColor(NULL);
+			// clear edge if window is different aspect than UI
+			// Clearing for 4:3 xbias is handled in SCR_DrawScreenField().
+			if (uis.xbias || uis.ybias) {
+				trap_R_SetColor(g_color_table[0]);
+				trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 0, 0, uis.whiteShader);
+				trap_R_SetColor(NULL);
+			}
 
+			// draw the background
 			if (menu->bgparts) {
 				if (menu->bgparts & BGP_MAINFX)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.mainbgfx);
@@ -1340,8 +1307,6 @@ static void UI_DrawMenu(menuframework_s *menu) {
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.demosbg);
 				if (menu->bgparts & BGP_SPECIFY)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.specifybg);
-				if (menu->bgparts & BGP_SPECIFYPASS)
-					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.specifypassbg);
 				if (menu->bgparts & BGP_PREFERENCES)
 					UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.preferencesbg);
 				if (menu->bgparts & BGP_STARTSERVER)
@@ -1385,7 +1350,7 @@ void UI_Refresh(int realtime) {
 			UI_StartMusic();
 		}
 	} else {
-		Music_Check();
+		UI_MusicBox_Check();
 	}
 
 	UI_DrawMenu(uis.activemenu);

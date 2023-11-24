@@ -103,7 +103,7 @@ PREFERENCES MENU
 
 #define NUM_CROSSHAIRS 12
 
-#define XPOSITION 534
+#define XPOSITION 670
 #define YPOSITION 216
 
 typedef struct {
@@ -760,7 +760,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.hud.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_preferences.hud.generic.callback = UI_Preferences_Event;
 	s_preferences.hud.generic.id = ID_HUD;
-	s_preferences.hud.generic.x = 428;
+	s_preferences.hud.generic.x = XPOSITION - 106;
 	s_preferences.hud.generic.y = 30;
 	s_preferences.hud.width = 80;
 	s_preferences.hud.height = 40;
@@ -772,7 +772,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.game.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_preferences.game.generic.callback = UI_Preferences_Event;
 	s_preferences.game.generic.id = ID_GAME;
-	s_preferences.game.generic.x = 514;
+	s_preferences.game.generic.x = XPOSITION - 20;
 	s_preferences.game.generic.y = 40;
 	s_preferences.game.width = 80;
 	s_preferences.game.height = 40;
@@ -784,7 +784,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_preferences.chat.generic.callback = UI_Preferences_Event;
 	s_preferences.chat.generic.id = ID_CHAT;
-	s_preferences.chat.generic.x = 402;
+	s_preferences.chat.generic.x = XPOSITION - 132;
 	s_preferences.chat.generic.y = 72;
 	s_preferences.chat.width = 80;
 	s_preferences.chat.height = 40;
@@ -796,14 +796,14 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.help.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_preferences.help.generic.callback = UI_Preferences_Event;
 	s_preferences.help.generic.id = ID_HELP;
-	s_preferences.help.generic.x = 490;
+	s_preferences.help.generic.x = XPOSITION - 44;
 	s_preferences.help.generic.y = 80;
 	s_preferences.help.width = 80;
 	s_preferences.help.height = 40;
 	s_preferences.help.focuspic = HELP1;
 	s_preferences.help.focuspicinstead = qtrue;
 
-	y = YPOSITION;
+	y = YPOSITION - 2 * (BIGCHAR_HEIGHT + 2);
 	// hud options
 	s_preferences.crosshair.generic.type = MTYPE_TEXT;
 	s_preferences.crosshair.generic.flags = QMF_SMALLFONT | QMF_NODEFAULTINIT | QMF_OWNERDRAW;
@@ -821,7 +821,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.crosshair.generic.toolTip =
 		"Select your favorite crosshair design by clicking on the image.";
 
-	y += (BIGCHAR_HEIGHT + 2);
+	y = YPOSITION;
 	s_preferences.indicatehealth.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.indicatehealth.generic.name = "Indicate Health:";
 	s_preferences.indicatehealth.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -1353,8 +1353,8 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
 	s_preferences.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	s_preferences.back.generic.x = 552;
-	s_preferences.back.generic.y = 440;
+	s_preferences.back.generic.x = 776;
+	s_preferences.back.generic.y = 446;
 	s_preferences.back.generic.id = ID_BACK;
 	s_preferences.back.generic.callback = UI_Preferences_Event;
 	s_preferences.back.width = 80;

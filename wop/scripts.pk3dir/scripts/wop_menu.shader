@@ -28,6 +28,19 @@ menu/bg/menubgfx
 }
 
 // =================
+// WoP CREDITS MENU BG
+// =================
+
+menu/wopcredits
+{
+	nomipmaps
+	{
+		animmap 0.05 menu/credits/001 menu/credits/002 menu/credits/003 menu/credits/004 menu/credits/005 menu/credits/006 menu/credits/007 menu/credits/008 
+		blendfunc blend
+	}
+}
+
+// =================
 // CONSOLE BG FX
 // =================
 

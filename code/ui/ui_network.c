@@ -57,7 +57,7 @@ NETWORK OPTIONS MENU
 #define ID_VOIPSENDTARGET 17
 #define ID_MUMBLESCALE 18
 
-#define XPOSITION 180
+#define XPOSITION 220
 #define YPOSITION 198
 
 static const char *rate_items[] = {"Modem", "ISDN", "LAN/Cable/xDSL", NULL};
@@ -347,8 +347,8 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.graphics.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.graphics.generic.id = ID_GRAPHICS;
-	networkOptionsInfo.graphics.generic.x = 16;
-	networkOptionsInfo.graphics.generic.y = 37;
+	networkOptionsInfo.graphics.generic.x = XPOSITION - 144;
+	networkOptionsInfo.graphics.generic.y = 43;
 	networkOptionsInfo.graphics.width = 160;
 	networkOptionsInfo.graphics.height = 40;
 	networkOptionsInfo.graphics.focuspic = GRAPHICS1;
@@ -359,8 +359,8 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.display.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.display.generic.id = ID_DISPLAY;
-	networkOptionsInfo.display.generic.x = 169;
-	networkOptionsInfo.display.generic.y = 30;
+	networkOptionsInfo.display.generic.x = XPOSITION + 9;
+	networkOptionsInfo.display.generic.y = 36;
 	networkOptionsInfo.display.width = 120;
 	networkOptionsInfo.display.height = 40;
 	networkOptionsInfo.display.focuspic = DISPLAY1;
@@ -371,8 +371,8 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.sound.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.sound.generic.id = ID_SOUND;
-	networkOptionsInfo.sound.generic.x = 36;
-	networkOptionsInfo.sound.generic.y = 79;
+	networkOptionsInfo.sound.generic.x = XPOSITION - 124;
+	networkOptionsInfo.sound.generic.y = 85;
 	networkOptionsInfo.sound.width = 120;
 	networkOptionsInfo.sound.height = 40;
 	networkOptionsInfo.sound.focuspic = SOUND1;
@@ -383,8 +383,8 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	networkOptionsInfo.network.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.network.generic.id = ID_NETWORK;
-	networkOptionsInfo.network.generic.x = 142;
-	networkOptionsInfo.network.generic.y = 82;
+	networkOptionsInfo.network.generic.x = XPOSITION - 18;
+	networkOptionsInfo.network.generic.y = 88;
 	networkOptionsInfo.network.width = 160;
 	networkOptionsInfo.network.height = 40;
 	networkOptionsInfo.network.focuspic = NETWORK1;
@@ -528,7 +528,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.back.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.back.generic.id = ID_BACK;
 	networkOptionsInfo.back.generic.x = 8;
-	networkOptionsInfo.back.generic.y = 440;
+	networkOptionsInfo.back.generic.y = 446;
 	networkOptionsInfo.back.width = 80;
 	networkOptionsInfo.back.height = 40;
 	networkOptionsInfo.back.focuspic = BACK1;

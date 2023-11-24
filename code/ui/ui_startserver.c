@@ -18,12 +18,16 @@ CREATE MENU (START SERVER)
 #define SELECTBOTS1 "menu/buttons/selectbots1"
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-
+#define HEADERGAMETYPE "menu/headers/gametype"
 #define UNKNOWNMAP "menu/art/unknownmap"
 
-#define MAX_MAPROWS 3
-#define MAX_MAPCOLS 2
-#define MAX_MAPSPERPAGE 6
+#define MAX_MAPROWS 2
+#define MAX_MAPCOLS 3
+#define MAX_MAPSPERPAGE 9
+#define OPTIONS_XPOS 700
+#define OPTIONS_YPOS 168
+#define GRID_XPOS 60
+#define GRID_YPOS 40
 
 #define MAX_SERVERSTEXT 8192
 
@@ -52,9 +56,9 @@ typedef struct {
 typedef struct {
 	menuframework_s menu;
 
+	menubitmap_s headergametype;
 	menulist_s gametype;
 	menubitmap_s mappics[MAX_MAPSPERPAGE];
-	//	menubitmap_s	mapbuttons[MAX_MAPSPERPAGE];
 	menubitmap_s arrowleft;
 	menubitmap_s arrowright;
 
@@ -646,20 +650,28 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.menu.bgparts = BGP_STARTSERVER | BGP_MENUFX;
 	s_startserver.menu.draw = UI_StartServer_MenuDraw;
 
+	s_startserver.headergametype.generic.type = MTYPE_BITMAP;
+	s_startserver.headergametype.generic.name = HEADERGAMETYPE;
+	s_startserver.headergametype.generic.x = 450;
+	s_startserver.headergametype.generic.y = 402;
+	s_startserver.headergametype.width = 140;
+	s_startserver.headergametype.height = 35;
+	Menu_AddItem(&s_startserver.menu, &s_startserver.headergametype);
+
 	s_startserver.gametype.generic.type = MTYPE_SPINCONTROL;
 	s_startserver.gametype.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
 	s_startserver.gametype.generic.callback = UI_StartServer_GametypeEvent;
 	s_startserver.gametype.generic.id = ID_GAMETYPE;
-	s_startserver.gametype.generic.x = 300;
-	s_startserver.gametype.generic.y = 430;
+	s_startserver.gametype.generic.x = 446;
+	s_startserver.gametype.generic.y = 436;
 	s_startserver.gametype.itemnames = gametype_items;
 	s_startserver.gametype.generic.ownerdraw = UI_StartServer_GameTypeDraw;
 	s_startserver.gametype.curvalue = gametype_remap2[(int)Com_Clamp(
 		0, (sizeof(gametype_remap2) / sizeof(gametype_remap[0]) - 1), trap_Cvar_VariableValue("ui_createGametype"))];
 
 	for (i = 0; i < MAX_MAPSPERPAGE; i++) {
-		x = (i % MAX_MAPCOLS) * (128 + 10) + 60;
-		y = (i / MAX_MAPCOLS /* % MAX_MAPROWS*/) * (110 + 8) + 40; // was 128+8
+		x = (i % MAX_MAPCOLS) * (128 + 24) + GRID_XPOS;
+		y = (i / MAX_MAPCOLS) * (96 + 23) + GRID_YPOS;
 
 		s_startserver.mappics[i].generic.type = MTYPE_BITMAP;
 		s_startserver.mappics[i].generic.flags = QMF_LEFT_JUSTIFY;
@@ -676,8 +688,8 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.arrowleft.generic.type = MTYPE_BITMAP;
 	s_startserver.arrowleft.generic.name = ARROWLT0;
 	s_startserver.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_startserver.arrowleft.generic.x = 128;
-	s_startserver.arrowleft.generic.y = 399;
+	s_startserver.arrowleft.generic.x = 208;
+	s_startserver.arrowleft.generic.y = 396;
 	s_startserver.arrowleft.generic.id = ID_PREVPAGE;
 	s_startserver.arrowleft.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.arrowleft.width = 60;
@@ -688,8 +700,8 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.arrowright.generic.type = MTYPE_BITMAP;
 	s_startserver.arrowright.generic.name = ARROWRT0;
 	s_startserver.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_startserver.arrowright.generic.x = 198;
-	s_startserver.arrowright.generic.y = 399;
+	s_startserver.arrowright.generic.x = 284;
+	s_startserver.arrowright.generic.y = 396;
 	s_startserver.arrowright.generic.id = ID_NEXTPAGE;
 	s_startserver.arrowright.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.arrowright.width = 60;
@@ -704,16 +716,12 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.back.generic.id = ID_STARTSERVERBACK;
 	s_startserver.back.focuspic = BACK1;
 	s_startserver.back.generic.x = 8;
-	s_startserver.back.generic.y = 440;
+	s_startserver.back.generic.y = 446;
 	s_startserver.back.width = 80;
 	s_startserver.back.height = 40;
 	s_startserver.back.focuspicinstead = qtrue;
 
-	// 502,212 -> name of the marked map
-
-#define OPTIONS_XPOS 502
-
-	y = 176;
+	y = OPTIONS_YPOS;
 	s_startserver.hostname.generic.type = MTYPE_FIELD;
 	s_startserver.hostname.generic.name = "Host Name:";
 	s_startserver.hostname.generic.flags = QMF_SMALLFONT;
@@ -722,15 +730,13 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.hostname.field.widthInChars = 12;
 	s_startserver.hostname.field.maxchars = 64;
 
-	//	if(0)//TODO: change me // s_serveroptions.gametype >= GT_TEAM )
-	//	{
 	y += BIGCHAR_HEIGHT + 2;
 	s_startserver.friendlyfire.generic.type = MTYPE_RADIOBUTTON;
 	s_startserver.friendlyfire.generic.flags = QMF_SMALLFONT | QMF_GRAYED;
 	s_startserver.friendlyfire.generic.x = OPTIONS_XPOS;
 	s_startserver.friendlyfire.generic.y = y;
 	s_startserver.friendlyfire.generic.name = "Friendly Fire:";
-	//	}
+
 	y += BIGCHAR_HEIGHT + 2;
 	s_startserver.instagib.generic.type = MTYPE_RADIOBUTTON;
 	s_startserver.instagib.generic.flags = QMF_SMALLFONT;
@@ -792,17 +798,16 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.startlives.field.widthInChars = 3;
 	s_startserver.startlives.field.maxchars = 3;
 
-	y += BIGCHAR_HEIGHT + 4;
 	s_startserver.selectbots.generic.type = MTYPE_BITMAP;
 	s_startserver.selectbots.generic.name = SELECTBOTS0;
 	s_startserver.selectbots.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_startserver.selectbots.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.selectbots.generic.id = ID_SELECTBOTS;
 	s_startserver.selectbots.focuspic = SELECTBOTS1;
-	s_startserver.selectbots.generic.x = OPTIONS_XPOS - 70;
-	s_startserver.selectbots.generic.y = y;
-	s_startserver.selectbots.width = 140;
-	s_startserver.selectbots.height = 24;
+	s_startserver.selectbots.generic.x = 613;
+	s_startserver.selectbots.generic.y = 334;
+	s_startserver.selectbots.width = 160;
+	s_startserver.selectbots.height = 28;
 	s_startserver.selectbots.focuspicinstead = qtrue;
 
 	s_startserver.fight.generic.type = MTYPE_BITMAP;
@@ -811,8 +816,8 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.fight.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.fight.generic.id = ID_STARTSERVER;
 	s_startserver.fight.focuspic = FIGHT1;
-	s_startserver.fight.generic.x = 545;
-	s_startserver.fight.generic.y = 414;
+	s_startserver.fight.generic.x = 776;
+	s_startserver.fight.generic.y = 420;
 	s_startserver.fight.width = 80;
 	s_startserver.fight.height = 60;
 	s_startserver.fight.focuspicinstead = qtrue;
@@ -821,8 +826,8 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.item_null.generic.flags = QMF_LEFT_JUSTIFY | QMF_MOUSEONLY | QMF_SILENT;
 	s_startserver.item_null.generic.x = 0;
 	s_startserver.item_null.generic.y = 0;
-	s_startserver.item_null.width = 640;
-	s_startserver.item_null.height = 480;
+	s_startserver.item_null.width = 864;
+	s_startserver.item_null.height = 486;
 
 	Menu_AddItem(&s_startserver.menu, &s_startserver.item_null);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.gametype);
@@ -883,6 +888,7 @@ void UI_StartServer_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(UNKNOWNMAP);
+	trap_R_RegisterShaderNoMip(HEADERGAMETYPE);
 
 	for (i = 0; i < 10; i++)
 		s_startserver.mapNumbers[i] = trap_R_RegisterShaderNoMip(va("menu/numbers/%i", i));
@@ -929,22 +935,31 @@ SELECT BOTS MENU
 #define ARROWUP1 "menu/arrows/headyel_up1"
 #define ARROWDN0 "menu/arrows/headyel_dn0"
 #define ARROWDN1 "menu/arrows/headyel_dn1"
-#define ICONSHADOW "menu/art/micon_shadow"
+#define ICONSHADOW "menu/art/iconshadow"
+#define HEADERBOTSKILL "menu/headers/botskill"
+#define HEADERBOTS "menu/headers/bots"
+#define HEADERCOLOR "menu/headers/color"
+#define HEADERTEAM "menu/headers/team"
 
-#define PLAYERGRID_COLS 4 // 3
-#define PLAYERGRID_ROWS 4
-#define MAX_MODELSPERPAGE (PLAYERGRID_ROWS * PLAYERGRID_COLS)
+#define BOTGRID_COLS 5
+#define BOTGRID_ROWS 4
+#define MAX_BOTSPERPAGE (BOTGRID_ROWS * BOTGRID_COLS)
 
-#define MAX_SELECTLISTBOTS 12 // 10
+#define MAX_SELECTLISTBOTS 12
 
 typedef struct {
 	menuframework_s menu;
 
 	menutext_s banner;
 
-	menubitmap_s pics[MAX_MODELSPERPAGE];
+	menubitmap_s pics[MAX_BOTSPERPAGE];
 	menubitmap_s arrowleft;
 	menubitmap_s arrowright;
+
+	menubitmap_s headerbotskill;
+	menubitmap_s headerbots;
+	menubitmap_s headercolor;
+	menubitmap_s headerteam;
 
 	menutext_s selectedbotnames[MAX_SELECTLISTBOTS];
 	menutext_s selectedbotteams[MAX_SELECTLISTBOTS];
@@ -952,7 +967,7 @@ typedef struct {
 	menubitmap_s arrowup;
 	menubitmap_s arrowdown;
 
-	menulist_s BotSkill;
+	menulist_s botskill;
 	menutext_s slotsleft;
 
 	menubitmap_s back;
@@ -963,8 +978,8 @@ typedef struct {
 	int numpages;
 	int selectedmodel;
 	int sortedBotNums[MAX_BOTS];
-	char boticons[MAX_MODELSPERPAGE][MAX_QPATH];
-	char botnames[MAX_MODELSPERPAGE][16];
+	char boticons[MAX_BOTSPERPAGE][MAX_QPATH];
+	char botnames[MAX_BOTSPERPAGE][16];
 } botSelectInfo_t;
 
 static botSelectInfo_t botSelectInfo;
@@ -982,8 +997,8 @@ static void UI_SelectBots_BuildList(void) {
 
 	botSelectInfo.modelpage = 0;
 	botSelectInfo.numBots = UI_GetNumBots();
-	botSelectInfo.numpages = botSelectInfo.numBots / MAX_MODELSPERPAGE;
-	if (botSelectInfo.numBots % MAX_MODELSPERPAGE) {
+	botSelectInfo.numpages = botSelectInfo.numBots / MAX_BOTSPERPAGE;
+	if (botSelectInfo.numBots % MAX_BOTSPERPAGE) {
 		botSelectInfo.numpages++;
 	}
 
@@ -1030,8 +1045,8 @@ static void UI_SelectBots_UpdateGrid(void) {
 	int i;
 	int j;
 
-	j = botSelectInfo.modelpage * MAX_MODELSPERPAGE;
-	for (i = 0; i < (PLAYERGRID_ROWS * PLAYERGRID_COLS); i++, j++) {
+	j = botSelectInfo.modelpage * MAX_BOTSPERPAGE;
+	for (i = 0; i < (BOTGRID_ROWS * BOTGRID_COLS); i++, j++) {
 		if (j < botSelectInfo.numBots) {
 			info = UI_GetBotInfoByNumber(botSelectInfo.sortedBotNums[j]);
 			UI_SelectBots_ServerPlayerIcon(Info_ValueForKey(info, "model"), botSelectInfo.boticons[i], MAX_QPATH);
@@ -1047,7 +1062,7 @@ static void UI_SelectBots_UpdateGrid(void) {
 	}
 
 	// set selected model
-	i = botSelectInfo.selectedmodel % MAX_MODELSPERPAGE;
+	i = botSelectInfo.selectedmodel % MAX_BOTSPERPAGE;
 
 	if (botSelectInfo.numpages > 1) {
 		botSelectInfo.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
@@ -1079,7 +1094,7 @@ static void UI_SelectBots_LeftEvent(void *ptr, int event) {
 	}
 	if (botSelectInfo.modelpage > 0) {
 		botSelectInfo.modelpage--;
-		botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_MODELSPERPAGE;
+		botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_BOTSPERPAGE;
 		UI_SelectBots_UpdateGrid();
 	}
 }
@@ -1095,7 +1110,7 @@ static void UI_SelectBots_RightEvent(void *ptr, int event) {
 	}
 	if (botSelectInfo.modelpage < botSelectInfo.numpages - 1) {
 		botSelectInfo.modelpage++;
-		botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_MODELSPERPAGE;
+		botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_BOTSPERPAGE;
 		UI_SelectBots_UpdateGrid();
 	}
 }
@@ -1118,17 +1133,17 @@ static int UI_SelectBots_GetNumSelectedBots(void) {
 
 /*
 =================
-UI_SelectBots_GetSlotsLeft
+UI_SelectBots_GetNumMaxSlots
 =================
 */
-static int UI_SelectBots_GetSlotsLeft(void) {
+static int UI_SelectBots_GetNumMaxSlots(void) {
 	int maxclients = atoi(s_startserver.maxclients.field.buffer);
 
 	if (s_startserver.dedicated.curvalue == 0) {
 		// running locally
-		return (maxclients - UI_SelectBots_GetNumSelectedBots() - 1);
+		return (maxclients - 1);
 	} else {
-		return (maxclients - UI_SelectBots_GetNumSelectedBots());
+		return (maxclients);
 	}
 }
 
@@ -1139,6 +1154,7 @@ UI_SelectBots_UpdateList
 */
 static void UI_SelectBots_UpdateList(void) {
 	int i, j;
+	int numSlectedBots, numMaxSlots;
 	char *tmpptr;
 
 	j = 0;
@@ -1150,7 +1166,7 @@ static void UI_SelectBots_UpdateList(void) {
 
 			if (s_startserver.selectbotinfos[j].name[0] != '\0') {
 				tmpptr = s_startserver.selectbotinfos[j].name;
-				j++; // damit es +1 ist wenn die äußere schleife looped
+				j++; // so that it is +1 when the outer loop loops
 				break;
 			}
 		}
@@ -1198,7 +1214,28 @@ static void UI_SelectBots_UpdateList(void) {
 			botSelectInfo.selectedbotteams[i].generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 		}
 	}
-	botSelectInfo.slotsleft.string = va("Open Slots: %2d", UI_SelectBots_GetSlotsLeft());
+	numSlectedBots = UI_SelectBots_GetNumSelectedBots();
+	numMaxSlots = UI_SelectBots_GetNumMaxSlots();
+	botSelectInfo.slotsleft.string = va("%2d/%2d", numSlectedBots, numMaxSlots);
+
+	if (numMaxSlots > MAX_SELECTLISTBOTS) {
+		botSelectInfo.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		botSelectInfo.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		botSelectInfo.arrowup.generic.flags |= QMF_GRAYED;
+		botSelectInfo.arrowdown.generic.flags |= QMF_GRAYED;
+
+		if (botSelectInfo.topbot > 0) {
+			botSelectInfo.arrowup.generic.flags &= ~QMF_GRAYED;
+		}
+
+		if (botSelectInfo.topbot < numMaxSlots - MAX_SELECTLISTBOTS) {
+			botSelectInfo.arrowdown.generic.flags &= ~QMF_GRAYED;
+		}
+	} else {
+		botSelectInfo.arrowup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		botSelectInfo.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	}
+
 }
 
 /*
@@ -1215,9 +1252,9 @@ static void UI_SelectBots_BotEvent(void *ptr, int event) {
 
 	// set selected
 	i = ((menucommon_s *)ptr)->id;
-	botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_MODELSPERPAGE + i;
+	botSelectInfo.selectedmodel = botSelectInfo.modelpage * MAX_BOTSPERPAGE + i;
 
-	if (UI_SelectBots_GetSlotsLeft() <= 0) {
+	if (UI_SelectBots_GetNumSelectedBots() >= UI_SelectBots_GetNumMaxSlots()) {
 		return;
 	}
 
@@ -1256,6 +1293,11 @@ UI_SelectBots_Cache
 =================
 */
 void UI_SelectBots_Cache(void) {
+	trap_R_RegisterShaderNoMip(ICONSHADOW);
+	trap_R_RegisterShaderNoMip(HEADERBOTSKILL);
+	trap_R_RegisterShaderNoMip(HEADERBOTS);
+	trap_R_RegisterShaderNoMip(HEADERCOLOR);
+	trap_R_RegisterShaderNoMip(HEADERTEAM);
 	trap_R_RegisterShaderNoMip(ARROWLT0);
 	trap_R_RegisterShaderNoMip(ARROWLT1);
 	trap_R_RegisterShaderNoMip(ARROWRT0);
@@ -1266,7 +1308,6 @@ void UI_SelectBots_Cache(void) {
 	trap_R_RegisterShaderNoMip(ARROWDN1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
-	trap_R_RegisterShaderNoMip(ICONSHADOW);
 }
 
 /*
@@ -1390,7 +1431,7 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 	if (b->shader) // if there is no icon there should also be no shadow
 	{
 		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
-			UI_DrawNamedPic(x, y, w + 8, h + 8, ICONSHADOW);
+			UI_DrawNamedPic(x + 5, y + 5, w, h, ICONSHADOW);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 	}
@@ -1412,10 +1453,28 @@ static void UI_SelectBots_MenuInit(void) {
 
 	UI_SelectBots_Cache();
 
-	y = 54;
-	for (i = 0, k = 0; i < PLAYERGRID_ROWS; i++) {
-		x = 51;
-		for (j = 0; j < PLAYERGRID_COLS; j++, k++) {
+	botSelectInfo.headerbotskill.generic.type = MTYPE_BITMAP;
+	botSelectInfo.headerbotskill.generic.name = HEADERBOTSKILL;
+	botSelectInfo.headerbotskill.generic.x = 386;
+	botSelectInfo.headerbotskill.generic.y = 402;
+	botSelectInfo.headerbotskill.width = 140;
+	botSelectInfo.headerbotskill.height = 35;
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerbotskill);
+
+	botSelectInfo.botskill.generic.type = MTYPE_SPINCONTROL;
+	botSelectInfo.botskill.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
+	botSelectInfo.botskill.generic.x = 398;
+	botSelectInfo.botskill.generic.y = 436;
+	botSelectInfo.botskill.itemnames = botSkill_list;
+	botSelectInfo.botskill.generic.ownerdraw = UI_StartServer_GameTypeDraw;
+	botSelectInfo.botskill.curvalue = 1;
+	botSelectInfo.botskill.generic.callback = UI_SelectBots_BotSkillChanged;
+	s_startserver.botskill = 2;
+
+	y = GRID_YPOS;
+	for (i = 0, k = 0; i < BOTGRID_ROWS; i++) {
+		x = GRID_XPOS;
+		for (j = 0; j < BOTGRID_COLS; j++, k++) {
 			botSelectInfo.pics[k].generic.type = MTYPE_BITMAP;
 			botSelectInfo.pics[k].generic.flags = QMF_LEFT_JUSTIFY;
 			botSelectInfo.pics[k].generic.x = x;
@@ -1426,16 +1485,16 @@ static void UI_SelectBots_MenuInit(void) {
 			botSelectInfo.pics[k].generic.callback = UI_SelectBots_BotEvent;
 			botSelectInfo.pics[k].generic.id = k;
 			botSelectInfo.pics[k].generic.ownerdraw = UI_SelectBots_DrawBotIcon;
-			x += (64 + 27);
+			x += (64 + 28);
 		}
-		y += (64 + 21);
+		y += (64 + 26);
 	}
 
 	botSelectInfo.arrowleft.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowleft.generic.name = ARROWLT0;
 	botSelectInfo.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	botSelectInfo.arrowleft.generic.x = 148;
-	botSelectInfo.arrowleft.generic.y = 400;
+	botSelectInfo.arrowleft.generic.x = 208;
+	botSelectInfo.arrowleft.generic.y = 396;
 	botSelectInfo.arrowleft.generic.callback = UI_SelectBots_LeftEvent;
 	botSelectInfo.arrowleft.width = 60;
 	botSelectInfo.arrowleft.height = 25;
@@ -1445,23 +1504,49 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowright.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowright.generic.name = ARROWRT0;
 	botSelectInfo.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	botSelectInfo.arrowright.generic.x = 232;
-	botSelectInfo.arrowright.generic.y = 400;
+	botSelectInfo.arrowright.generic.x = 284;
+	botSelectInfo.arrowright.generic.y = 396;
 	botSelectInfo.arrowright.generic.callback = UI_SelectBots_RightEvent;
 	botSelectInfo.arrowright.width = 60;
 	botSelectInfo.arrowright.height = 25;
 	botSelectInfo.arrowright.focuspic = ARROWRT1;
 	botSelectInfo.arrowright.focuspicinstead = qtrue;
 
-	y = (350 - MAX_SELECTLISTBOTS * 16 + 64);
+	botSelectInfo.headerbots.generic.type = MTYPE_BITMAP;
+	botSelectInfo.headerbots.generic.name = HEADERBOTS;
+	botSelectInfo.headerbots.generic.x = 590;
+	botSelectInfo.headerbots.generic.y = 190;
+	botSelectInfo.headerbots.width = 70;
+	botSelectInfo.headerbots.height = 35;
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerbots);
+
+	if (gametype_remap[s_startserver.gametype.curvalue] >= GT_TEAM) {
+		botSelectInfo.headerteam.generic.type = MTYPE_BITMAP;
+		botSelectInfo.headerteam.generic.name = HEADERTEAM;
+		botSelectInfo.headerteam.generic.x = 710;
+		botSelectInfo.headerteam.generic.y = 190;
+		botSelectInfo.headerteam.width = 70;
+		botSelectInfo.headerteam.height = 35;
+		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerteam);
+	} else {
+		botSelectInfo.headercolor.generic.type = MTYPE_BITMAP;
+		botSelectInfo.headercolor.generic.name = HEADERCOLOR;
+		botSelectInfo.headercolor.generic.x = 700;
+		botSelectInfo.headercolor.generic.y = 190;
+		botSelectInfo.headercolor.width = 105;
+		botSelectInfo.headercolor.height = 35;
+		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headercolor);
+	}
+
+	y = (414 - MAX_SELECTLISTBOTS * 16);
 
 	for (i = 0; i < MAX_SELECTLISTBOTS; i++) {
 		botSelectInfo.selectedbotnames[i].generic.type = MTYPE_TEXTS;
 		botSelectInfo.selectedbotnames[i].fontHeight = 16.0f;
 		botSelectInfo.selectedbotnames[i].generic.flags = QMF_SMALLFONT;
-		botSelectInfo.selectedbotnames[i].generic.x = 430;
+		botSelectInfo.selectedbotnames[i].generic.x = 594;
 		botSelectInfo.selectedbotnames[i].generic.y = y + i * 16;
-		botSelectInfo.selectedbotnames[i].string = "               "; // MonsterPad_blue
+		botSelectInfo.selectedbotnames[i].string = "              "; // 14
 		botSelectInfo.selectedbotnames[i].color = color_white;
 		botSelectInfo.selectedbotnames[i].focuscolor = color_orange;
 		botSelectInfo.selectedbotnames[i].generic.id = i;
@@ -1470,9 +1555,9 @@ static void UI_SelectBots_MenuInit(void) {
 		botSelectInfo.selectedbotteams[i].generic.type = MTYPE_TEXTS;
 		botSelectInfo.selectedbotteams[i].fontHeight = 16.0f;
 		botSelectInfo.selectedbotteams[i].generic.flags = QMF_SMALLFONT;
-		botSelectInfo.selectedbotteams[i].generic.x = 550;
+		botSelectInfo.selectedbotteams[i].generic.x = 714;
 		botSelectInfo.selectedbotteams[i].generic.y = y + i * 16;
-		botSelectInfo.selectedbotteams[i].string = "    "; // blue
+		botSelectInfo.selectedbotteams[i].string = "        "; // 8
 		botSelectInfo.selectedbotteams[i].color = color_blue;
 		botSelectInfo.selectedbotteams[i].focuscolor = color_white;
 		botSelectInfo.selectedbotteams[i].generic.id = i;
@@ -1482,8 +1567,8 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowup.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowup.generic.name = ARROWUP0;
 	botSelectInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	botSelectInfo.arrowup.generic.x = 608;
-	botSelectInfo.arrowup.generic.y = 228;
+	botSelectInfo.arrowup.generic.x = 788;
+	botSelectInfo.arrowup.generic.y = 250;
 	botSelectInfo.arrowup.generic.callback = UI_SelectBots_ListUp;
 	botSelectInfo.arrowup.width = 25;
 	botSelectInfo.arrowup.height = 60;
@@ -1493,42 +1578,33 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowdown.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowdown.generic.name = ARROWDN0;
 	botSelectInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	botSelectInfo.arrowdown.generic.x = 608;
-	botSelectInfo.arrowdown.generic.y = 310;
+	botSelectInfo.arrowdown.generic.x = 788;
+	botSelectInfo.arrowdown.generic.y = 326;
 	botSelectInfo.arrowdown.generic.callback = UI_SelectBots_ListDown;
 	botSelectInfo.arrowdown.width = 25;
 	botSelectInfo.arrowdown.height = 60;
 	botSelectInfo.arrowdown.focuspic = ARROWDN1;
 	botSelectInfo.arrowdown.focuspicinstead = qtrue;
 
-	botSelectInfo.BotSkill.generic.type = MTYPE_SPINCONTROL;
-	botSelectInfo.BotSkill.generic.flags = QMF_SMALLFONT;
-	botSelectInfo.BotSkill.generic.name = "Skill:";
-	botSelectInfo.BotSkill.generic.x = 485;
-	botSelectInfo.BotSkill.generic.y = 420;
-	botSelectInfo.BotSkill.itemnames = botSkill_list;
-	botSelectInfo.BotSkill.curvalue = 1;
-	botSelectInfo.BotSkill.generic.callback = UI_SelectBots_BotSkillChanged;
-	s_startserver.botskill = 2;
-
 	botSelectInfo.slotsleft.generic.type = MTYPE_TEXTS;
 	botSelectInfo.slotsleft.generic.flags = QMF_SMALLFONT;
-	botSelectInfo.slotsleft.string = va("Open Slots: %2d", UI_SelectBots_GetSlotsLeft());
-	botSelectInfo.slotsleft.generic.x = 430;
-	botSelectInfo.slotsleft.generic.y = 440;
+	botSelectInfo.slotsleft.string = "     "; // 5
+	botSelectInfo.slotsleft.generic.x = 780;
+	botSelectInfo.slotsleft.generic.y = 398;
 	botSelectInfo.slotsleft.color = color_yellow;
 
 	botSelectInfo.back.generic.type = MTYPE_BITMAP;
 	botSelectInfo.back.generic.name = BACK0;
 	botSelectInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	botSelectInfo.back.generic.callback = UI_SelectBots_BackEvent;
-	botSelectInfo.back.generic.x = 552;
-	botSelectInfo.back.generic.y = 440;
+	botSelectInfo.back.generic.x = 776;
+	botSelectInfo.back.generic.y = 446;
 	botSelectInfo.back.width = 80;
 	botSelectInfo.back.height = 40;
 	botSelectInfo.back.focuspic = BACK1;
 
-	for (i = 0; i < MAX_MODELSPERPAGE; i++) {
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.botskill);
+	for (i = 0; i < MAX_BOTSPERPAGE; i++) {
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.pics[i]);
 	}
 
@@ -1541,13 +1617,12 @@ static void UI_SelectBots_MenuInit(void) {
 	}
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.arrowup);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.arrowdown);
-	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.BotSkill);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.slotsleft);
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.back);
 
 	UI_SelectBots_BuildList();
 	UI_SelectBots_UpdateList(); // selectbot-list
-	botSelectInfo.modelpage = botSelectInfo.selectedmodel / MAX_MODELSPERPAGE;
+	botSelectInfo.modelpage = botSelectInfo.selectedmodel / MAX_BOTSPERPAGE;
 	UI_SelectBots_UpdateGrid();
 }
 

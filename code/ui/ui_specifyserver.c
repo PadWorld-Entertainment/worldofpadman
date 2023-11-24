@@ -38,13 +38,26 @@ static char *specifyserver_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NULL};
 
 typedef struct {
 	menuframework_s menu;
+	menutext_s domainheader;
 	menufield_s domain;
+	menutext_s portheader;
 	menufield_s port;
 	menubitmap_s fight;
 	menubitmap_s back;
 } specifyserver_t;
 
 static specifyserver_t s_specifyserver;
+
+/*
+=================
+UI_SpecifyServer_Draw
+=================
+*/
+static void UI_SpecifyServer_Draw(void) {
+	static const vec4_t color_specifyserver = {0.8f, 0.85f, 1.0f, 1.0f};
+	UI_DrawProportionalString(SCREEN_WIDTH * 0.5f, 188, "SPECIFY SERVER", UI_CENTER | UI_SMALLFONT, color_specifyserver);
+	Menu_Draw(&s_specifyserver.menu);
+}
 
 /*
 =================
@@ -61,10 +74,10 @@ static void UI_SpecifyServer_UpdateMenuItems(void) {
 
 /*
 =================
-SpecifyServer_Event
+UI_SpecifyServer_Event
 =================
 */
-static void SpecifyServer_Event(void *ptr, int event) {
+static void UI_SpecifyServer_Event(void *ptr, int event) {
 	char buff[256];
 
 	switch (((menucommon_s *)ptr)->id) {
@@ -97,34 +110,49 @@ static void SpecifyServer_DrawField(void *self) {
 
 /*
 =================
-SpecifyServer_MenuInit
+UI_SpecifyServer_MenuInit
 =================
 */
-static void SpecifyServer_MenuInit(void) {
+static void UI_SpecifyServer_MenuInit(void) {
 	// zero set all our globals
 	memset(&s_specifyserver, 0, sizeof(s_specifyserver));
 
-	SpecifyServer_Cache();
+	UI_SpecifyServer_Cache();
 
+	s_specifyserver.menu.draw = UI_SpecifyServer_Draw;
 	s_specifyserver.menu.wrapAround = qtrue;
 	s_specifyserver.menu.fullscreen = qtrue;
 	s_specifyserver.menu.bgparts = BGP_SPECIFY | BGP_MENUFX;
 
+	s_specifyserver.domainheader.generic.type = MTYPE_TEXT;
+	s_specifyserver.domainheader.generic.x = 342;
+	s_specifyserver.domainheader.generic.y = 214;
+	s_specifyserver.domainheader.string = "Address:";
+	s_specifyserver.domainheader.style = UI_SMALLFONT;
+	s_specifyserver.domainheader.color = menu_text_color;
+
 	s_specifyserver.domain.generic.type = MTYPE_FIELD;
 	s_specifyserver.domain.generic.name = "";
 	s_specifyserver.domain.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
-	s_specifyserver.domain.generic.x = 230; // 215;
+	s_specifyserver.domain.generic.x = 342;
 	s_specifyserver.domain.generic.y = 230;
-	s_specifyserver.domain.field.widthInChars = 22; // 28;
+	s_specifyserver.domain.field.widthInChars = 22;
 	s_specifyserver.domain.field.maxchars = 80;
 	s_specifyserver.domain.generic.ownerdraw = SpecifyServer_DrawField;
+
+	s_specifyserver.portheader.generic.type = MTYPE_TEXT;
+	s_specifyserver.portheader.generic.x = 342;
+	s_specifyserver.portheader.generic.y = 259;
+	s_specifyserver.portheader.string = "Port:";
+	s_specifyserver.portheader.style = UI_SMALLFONT;
+	s_specifyserver.portheader.color = menu_text_color;
 
 	s_specifyserver.port.generic.type = MTYPE_FIELD;
 	s_specifyserver.port.generic.name = "";
 	s_specifyserver.port.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_NUMBERSONLY;
-	s_specifyserver.port.generic.x = 230; // 215;
+	s_specifyserver.port.generic.x = 342;
 	s_specifyserver.port.generic.y = 275;
-	s_specifyserver.port.field.widthInChars = 22; // 28;
+	s_specifyserver.port.field.widthInChars = 22;
 	s_specifyserver.port.field.maxchars = 5;
 	s_specifyserver.port.generic.ownerdraw = SpecifyServer_DrawField;
 
@@ -132,9 +160,9 @@ static void SpecifyServer_MenuInit(void) {
 	s_specifyserver.back.generic.name = BACK0;
 	s_specifyserver.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_specifyserver.back.generic.x = 8;
-	s_specifyserver.back.generic.y = 440;
+	s_specifyserver.back.generic.y = 446;
 	s_specifyserver.back.generic.id = ID_BACK;
-	s_specifyserver.back.generic.callback = SpecifyServer_Event;
+	s_specifyserver.back.generic.callback = UI_SpecifyServer_Event;
 	s_specifyserver.back.width = 80;
 	s_specifyserver.back.height = 40;
 	s_specifyserver.back.focuspic = BACK1;
@@ -143,16 +171,18 @@ static void SpecifyServer_MenuInit(void) {
 	s_specifyserver.fight.generic.type = MTYPE_BITMAP;
 	s_specifyserver.fight.generic.name = FIGHT0;
 	s_specifyserver.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_specifyserver.fight.generic.callback = SpecifyServer_Event;
+	s_specifyserver.fight.generic.callback = UI_SpecifyServer_Event;
 	s_specifyserver.fight.generic.id = ID_FIGHT;
 	s_specifyserver.fight.focuspic = FIGHT1;
-	s_specifyserver.fight.generic.x = 545;
-	s_specifyserver.fight.generic.y = 414;
+	s_specifyserver.fight.generic.x = 776;
+	s_specifyserver.fight.generic.y = 420;
 	s_specifyserver.fight.width = 80;
 	s_specifyserver.fight.height = 60;
 	s_specifyserver.fight.focuspicinstead = qtrue;
 
+	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.domainheader);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.domain);
+	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.portheader);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.port);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.fight);
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.back);
@@ -162,10 +192,10 @@ static void SpecifyServer_MenuInit(void) {
 
 /*
 =================
-SpecifyServer_Cache
+UI_SpecifyServer_Cache
 =================
 */
-void SpecifyServer_Cache(void) {
+void UI_SpecifyServer_Cache(void) {
 	int i;
 
 	// touch all our pics
@@ -182,6 +212,6 @@ UI_SpecifyServerMenu
 =================
 */
 void UI_SpecifyServerMenu(void) {
-	SpecifyServer_MenuInit();
+	UI_SpecifyServer_MenuInit();
 	UI_PushMenu(&s_specifyserver.menu);
 }

@@ -22,35 +22,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #include "ui_local.h"
 
-#define BACK0 "menu/buttons/back0"
-#define BACK1 "menu/buttons/back1"
-#define FIGHT0 "menu/buttons/play_blu0"
-#define FIGHT1 "menu/buttons/play_blu1"
 #define ARROWUP0 "menu/arrows/headyel_up0"
 #define ARROWUP1 "menu/arrows/headyel_up1"
 #define ARROWDN0 "menu/arrows/headyel_dn0"
 #define ARROWDN1 "menu/arrows/headyel_dn1"
+#define BACK0 "menu/buttons/back0"
+#define BACK1 "menu/buttons/back1"
+#define GO0 "menu/buttons/play_blu0"
+#define GO1 "menu/buttons/play_blu1"
 
 #define MAX_MODS 64
 #define NAMEBUFSIZE (MAX_MODS * 48)
 #define GAMEBUFSIZE (MAX_MODS * 16)
 
-#define ID_BACK 10
-#define ID_GO 11
-#define ID_LIST 12
-#define ID_SCROLL_UP 13
-#define ID_SCROLL_DOWN 14
+#define ID_LIST 10
+#define ID_SCROLL_UP 11
+#define ID_SCROLL_DOWN 12
+#define ID_BACK 13
+#define ID_GO 14
 
 typedef struct {
 	menuframework_s menu;
 
 	menulist_s list;
 
+	menubitmap_s arrowup;
+	menubitmap_s arrowdown;
+	menubitmap_s go;
 	menubitmap_s back;
-
-	menubitmap1024s_s go;
-	menubitmap1024s_s arrowup;
-	menubitmap1024s_s arrowdown;
 
 	char description[NAMEBUFSIZE];
 	char fs_game[GAMEBUFSIZE];
@@ -138,41 +137,6 @@ static void UI_Mods_ParseInfos(char *modDir, char *modDesc) {
 	s_mods.list.numitems++;
 }
 
-#if 0 // bk001204 - unused
-/*
-===============
-UI_Mods_LoadModsFromFile
-===============
-*/
-static void UI_Mods_LoadModsFromFile( char *filename ) {
-	int				len;
-	fileHandle_t	f;
-	char			buf[1024];
-
-	len = trap_FS_FOpenFile( filename, &f, FS_READ );
-	if ( !f ) {
-		trap_Print( va( S_COLOR_RED "file not found: %s\n", filename ) );
-		return;
-	}
-	if ( len >= sizeof(buf) ) {
-		trap_Print( va( S_COLOR_RED "file too large: %s is %i, max allowed is %i", filename, len, sizeof(buf) ) );
-		trap_FS_FCloseFile( f );
-		return;
-	}
-
-	trap_FS_Read( buf, len, f );
-	buf[len] = 0;
-	trap_FS_FCloseFile( f );
-
-	len = strlen( filename );
-	if( !Q_stricmp(filename +  len - 4,".mod") ) {
-		filename[len-4] = '\0';
-	}
-
-	UI_Mods_ParseInfos( filename, buf );
-}
-#endif
-
 /*
 ===============
 UI_Mods_LoadMods
@@ -190,7 +154,7 @@ static void UI_Mods_LoadMods(void) {
 	s_mods.descriptionPtr = s_mods.description;
 	s_mods.fs_gamePtr = s_mods.fs_game;
 
-	// always start off with wop
+	// always start off with WoP
 	s_mods.list.numitems = 1;
 	s_mods.list.itemnames[0] = s_mods.descriptionList[0] = "World of PADMAN";
 	s_mods.fs_gameList[0] = "";
@@ -224,11 +188,47 @@ static void UI_Mods_MenuInit(void) {
 	s_mods.menu.fullscreen = qtrue;
 	s_mods.menu.bgparts = BGP_MODS | BGP_MENUFX;
 
+	s_mods.arrowup.generic.type = MTYPE_BITMAP;
+	s_mods.arrowup.generic.name = ARROWUP0;
+	s_mods.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_mods.arrowup.generic.callback = UI_Mods_MenuEvent;
+	s_mods.arrowup.generic.id = ID_SCROLL_UP;
+	s_mods.arrowup.generic.x = 62;
+	s_mods.arrowup.generic.y = 140;
+	s_mods.arrowup.width = 26;
+	s_mods.arrowup.height = 60;
+	s_mods.arrowup.focuspic = ARROWUP1;
+	s_mods.arrowup.focuspicinstead = qtrue;
+
+	s_mods.arrowdown.generic.type = MTYPE_BITMAP;
+	s_mods.arrowdown.generic.name = ARROWDN0;
+	s_mods.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_mods.arrowdown.generic.callback = UI_Mods_MenuEvent;
+	s_mods.arrowdown.generic.id = ID_SCROLL_DOWN;
+	s_mods.arrowdown.generic.x = 62;
+	s_mods.arrowdown.generic.y = 256;
+	s_mods.arrowdown.width = 26;
+	s_mods.arrowdown.height = 60;
+	s_mods.arrowdown.focuspic = ARROWDN1;
+	s_mods.arrowdown.focuspicinstead = qtrue;
+
+	s_mods.go.generic.type = MTYPE_BITMAP;
+	s_mods.go.generic.name = GO0;
+	s_mods.go.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_mods.go.generic.callback = UI_Mods_MenuEvent;
+	s_mods.go.generic.id = ID_GO;
+	s_mods.go.generic.x = 55;
+	s_mods.go.generic.y = 208;
+	s_mods.go.width = 40;
+	s_mods.go.height = 40;
+	s_mods.go.focuspic = GO1;
+	s_mods.go.focuspicinstead = qtrue;
+
 	s_mods.back.generic.type = MTYPE_BITMAP;
 	s_mods.back.generic.name = BACK0;
 	s_mods.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	s_mods.back.generic.x = 8;
-	s_mods.back.generic.y = 440;
+	s_mods.back.generic.y = 446;
 	s_mods.back.generic.id = ID_BACK;
 	s_mods.back.generic.callback = UI_Mods_MenuEvent;
 	s_mods.back.width = 80;
@@ -236,45 +236,14 @@ static void UI_Mods_MenuInit(void) {
 	s_mods.back.focuspic = BACK1;
 	s_mods.back.focuspicinstead = qtrue;
 
-	s_mods.go.generic.type = MTYPE_BITMAP1024S;
-	s_mods.go.x = 84;  // 814;
-	s_mods.go.y = 350; // 633;
-	s_mods.go.w = 63;  // 184;
-	s_mods.go.h = 63;  // 113;
-	s_mods.go.shader = trap_R_RegisterShaderNoMip(FIGHT0);
-	s_mods.go.mouseovershader = trap_R_RegisterShaderNoMip(FIGHT1);
-	s_mods.go.generic.callback = UI_Mods_MenuEvent;
-	s_mods.go.generic.id = ID_GO;
-
-	s_mods.arrowup.generic.type = MTYPE_BITMAP1024S;
-	s_mods.arrowup.x = 96; // 785;
-	s_mods.arrowup.y = 240;
-	s_mods.arrowup.w = 38;
-	s_mods.arrowup.h = 98;
-	s_mods.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
-	s_mods.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
-	s_mods.arrowup.generic.callback = UI_Mods_MenuEvent;
-	s_mods.arrowup.generic.id = ID_SCROLL_UP;
-
-	s_mods.arrowdown.generic.type = MTYPE_BITMAP1024S;
-	s_mods.arrowdown.x = 96; // 785;
-	s_mods.arrowdown.y = 432;
-	s_mods.arrowdown.w = 38;
-	s_mods.arrowdown.h = 98;
-	s_mods.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
-	s_mods.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
-	s_mods.arrowdown.generic.callback = UI_Mods_MenuEvent;
-	s_mods.arrowdown.generic.id = ID_SCROLL_DOWN;
-
-	// scan for mods
 	s_mods.list.generic.type = MTYPE_SCROLLLIST;
 	s_mods.list.generic.flags = QMF_PULSEIFFOCUS | QMF_CENTER_JUSTIFY;
 	s_mods.list.generic.callback = UI_Mods_MenuEvent;
 	s_mods.list.generic.id = ID_LIST;
-	s_mods.list.generic.x = 210;
+	s_mods.list.generic.x = 252;
 	s_mods.list.generic.y = 60;
-	s_mods.list.width = 28;
-	s_mods.list.height = 20;
+	s_mods.list.width = 37;
+	s_mods.list.height = 21;
 
 	UI_Mods_LoadMods();
 
@@ -291,10 +260,14 @@ UI_Mods_Cache
 =================
 */
 void UI_ModsMenu_Cache(void) {
+	trap_R_RegisterShaderNoMip(ARROWUP0);
+	trap_R_RegisterShaderNoMip(ARROWUP1);
+	trap_R_RegisterShaderNoMip(ARROWDN0);
+	trap_R_RegisterShaderNoMip(ARROWDN1);
+	trap_R_RegisterShaderNoMip(GO0);
+	trap_R_RegisterShaderNoMip(GO1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
-	trap_R_RegisterShaderNoMip(FIGHT0);
-	trap_R_RegisterShaderNoMip(FIGHT1);
 }
 
 /*

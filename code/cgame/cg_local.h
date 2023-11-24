@@ -1117,9 +1117,7 @@ typedef struct {
 	float screenXScale;	   // derived from glconfig
 	float screenYScale;
 	float screenXBias;
-
-	float scale1024X;
-	float scale1024Y;
+	float screenYBias;
 
 	int serverCommandSequence; // reliable command stream counter
 	int processedSnapshotNum;  // the number of snapshots cgame has requested
@@ -1391,11 +1389,27 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 //
 // cg_drawtools.c
 //
+// ugly workaround for having it in cg_local.h and ui_shared.h
+#ifndef HAVE_SCREEN_PLACEMENT
+#define HAVE_SCREEN_PLACEMENT
+typedef enum {
+	PLACE_CENTER,
+
+	// horizontal only
+	PLACE_LEFT,
+	PLACE_RIGHT,
+
+	// vertical only
+	PLACE_TOP,
+	PLACE_BOTTOM
+} screenPlacement_e;
+#endif
+
+void CG_SetScreenPlacement(screenPlacement_e hpos, screenPlacement_e vpos);
+void CG_PopScreenPlacement(void);
+screenPlacement_e CG_GetScreenHorizontalPlacement(void);
+screenPlacement_e CG_GetScreenVerticalPlacement(void);
 void CG_AdjustFrom640(float *x, float *y, float *w, float *h);
-void CG_AdjustFrom1024(float *x, float *y, float *w, float *h);
-void CG_FillRect1024(float x, float y, float width, float height, const float *color);
-void CG_DrawRect1024(float x, float y, float width, float height, float size, const float *color);
-void CG_DrawPic1024(float x, float y, float width, float height, qhandle_t Shader);
 void CG_FillRect(float x, float y, float width, float height, const float *color);
 void CG_DrawPic(float x, float y, float width, float height, qhandle_t hShader);
 void CG_DrawString(float x, float y, const char *string, float charWidth, float charHeight, const float *modulate);

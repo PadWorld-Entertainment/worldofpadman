@@ -63,7 +63,7 @@ DISPLAY OPTIONS MENU
 #define ID_SWAPCOLORS 24
 #define ID_GREYSCALE 25
 
-#define XPOSITION 180
+#define XPOSITION 220
 #define YPOSITION 198
 
 typedef struct {
@@ -345,8 +345,8 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.graphics.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.graphics.generic.id = ID_GRAPHICS;
-	displayOptionsInfo.graphics.generic.x = 16;
-	displayOptionsInfo.graphics.generic.y = 37;
+	displayOptionsInfo.graphics.generic.x = XPOSITION - 144;
+	displayOptionsInfo.graphics.generic.y = 43;
 	displayOptionsInfo.graphics.width = 160;
 	displayOptionsInfo.graphics.height = 40;
 	displayOptionsInfo.graphics.focuspic = GRAPHICS1;
@@ -357,8 +357,8 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	displayOptionsInfo.display.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.display.generic.id = ID_DISPLAY;
-	displayOptionsInfo.display.generic.x = 169;
-	displayOptionsInfo.display.generic.y = 30;
+	displayOptionsInfo.display.generic.x = XPOSITION + 9;
+	displayOptionsInfo.display.generic.y = 36;
 	displayOptionsInfo.display.width = 120;
 	displayOptionsInfo.display.height = 40;
 	displayOptionsInfo.display.focuspic = DISPLAY1;
@@ -369,8 +369,8 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.sound.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.sound.generic.id = ID_SOUND;
-	displayOptionsInfo.sound.generic.x = 36;
-	displayOptionsInfo.sound.generic.y = 79;
+	displayOptionsInfo.sound.generic.x = XPOSITION - 124;
+	displayOptionsInfo.sound.generic.y = 85;
 	displayOptionsInfo.sound.width = 120;
 	displayOptionsInfo.sound.height = 40;
 	displayOptionsInfo.sound.focuspic = SOUND1;
@@ -381,8 +381,8 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.network.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.network.generic.id = ID_NETWORK;
-	displayOptionsInfo.network.generic.x = 142;
-	displayOptionsInfo.network.generic.y = 82;
+	displayOptionsInfo.network.generic.x = XPOSITION - 18;
+	displayOptionsInfo.network.generic.y = 88;
 	displayOptionsInfo.network.width = 160;
 	displayOptionsInfo.network.height = 40;
 	displayOptionsInfo.network.focuspic = NETWORK1;
@@ -554,8 +554,8 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
 	displayOptionsInfo.apply.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.apply.generic.id = ID_APPLY;
-	displayOptionsInfo.apply.generic.x = 512;
-	displayOptionsInfo.apply.generic.y = 440;
+	displayOptionsInfo.apply.generic.x = 736;
+	displayOptionsInfo.apply.generic.y = 446;
 	displayOptionsInfo.apply.width = 120;
 	displayOptionsInfo.apply.height = 40;
 	displayOptionsInfo.apply.focuspic = ACCEPT1;
@@ -566,7 +566,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.back.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.back.generic.id = ID_BACK;
 	displayOptionsInfo.back.generic.x = 8;
-	displayOptionsInfo.back.generic.y = 440;
+	displayOptionsInfo.back.generic.y = 446;
 	displayOptionsInfo.back.width = 80;
 	displayOptionsInfo.back.height = 40;
 	displayOptionsInfo.back.focuspic = BACK1;

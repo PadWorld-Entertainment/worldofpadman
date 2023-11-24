@@ -14,11 +14,13 @@
 #define ID_SCROLL_UP 12
 #define ID_SCROLL_DOWN 13
 
+#define XPOSITION (SCREEN_WIDTH / 2)
+
 typedef struct {
 	menuframework_s menu;
 
-	menubitmap1024s_s arrowup;
-	menubitmap1024s_s arrowdown;
+	menubitmap_s arrowup;
+	menubitmap_s arrowdown;
 	menubitmap_s back;
 
 	menutext_s add;
@@ -124,9 +126,9 @@ static void ServerInfo_MenuDraw(void) {
 	int keylen, vallen, infonum = -1;
 
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(320, 110, "SERVER INFO", UI_CENTER | UI_SMALLFONT, color_black);
+	UI_DrawProportionalString(XPOSITION, 110, "SERVER INFO", UI_CENTER | UI_SMALLFONT, color_black);
 
-	y = 140; // 95;
+	y = 140;
 	s = s_serverinfo.info;
 	s_serverinfo.numdrawn = 0;
 	while (s && i < s_serverinfo.numlines) {
@@ -147,22 +149,22 @@ static void ServerInfo_MenuDraw(void) {
 		keylen = Q_PrintStrlen(key);
 		vallen = Q_PrintStrlen(value);
 		if (keylen + vallen < 20) {
-			UI_DrawString(230, y, key, UI_LEFT | UI_SMALLFONT, color_black);
-			UI_DrawString(230 + keylen * 8, y, value, UI_LEFT | UI_SMALLFONT, color_blue);
+			UI_DrawString(XPOSITION - 90, y, key, UI_LEFT | UI_SMALLFONT, color_black);
+			UI_DrawString(XPOSITION - 90 + keylen * 8, y, value, UI_LEFT | UI_SMALLFONT, color_blue);
 
 			s_serverinfo.numdrawn++;
 		} else {
 			int j;
 
 			// TODO: Also add linebreaks for long keys?
-			UI_DrawString(230, y, key, UI_LEFT | UI_SMALLFONT, color_black);
+			UI_DrawString(XPOSITION - 90, y, key, UI_LEFT | UI_SMALLFONT, color_black);
 
 			for (j = 0; j < vallen; j += 20) {
 				y += SMALLCHAR_HEIGHT;
 				if (y > 260)
 					break;
 
-				UI_DrawString(230, y, va("%20.20s", &value[j]), UI_LEFT | UI_SMALLFONT, color_blue);
+				UI_DrawString(XPOSITION - 90, y, va("%20.20s", &value[j]), UI_LEFT | UI_SMALLFONT, color_blue);
 
 				s_serverinfo.numdrawn++;
 			}
@@ -207,38 +209,41 @@ void UI_ServerInfoMenu(void) {
 	// zero set all our globals
 	memset(&s_serverinfo, 0, sizeof(serverinfo_t));
 
-	ServerInfo_Cache();
+	UI_ServerInfo_Cache();
 
-	s_serverinfo.menu.draw = ServerInfo_MenuDraw;
+ 	s_serverinfo.menu.draw = ServerInfo_MenuDraw;
 	s_serverinfo.menu.key = ServerInfo_MenuKey;
-	s_serverinfo.arrowup.generic.type = MTYPE_BITMAP1024S;
-	s_serverinfo.arrowup.x = 638;
-	s_serverinfo.arrowup.y = 236;
-	s_serverinfo.arrowup.w = 29;
-	s_serverinfo.arrowup.h = 74;
-	s_serverinfo.arrowup.shader = trap_R_RegisterShaderNoMip(ARROWUP0);
-	s_serverinfo.arrowup.mouseovershader = trap_R_RegisterShaderNoMip(ARROWUP1);
+
+	s_serverinfo.arrowup.generic.type = MTYPE_BITMAP;
+	s_serverinfo.arrowup.generic.name = ARROWUP0;
+	s_serverinfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_serverinfo.arrowup.generic.callback = ServerInfo_Event;
 	s_serverinfo.arrowup.generic.id = ID_SCROLL_UP;
-	Menu_AddItem(&s_serverinfo.menu, (void *)&s_serverinfo.arrowup);
+	s_serverinfo.arrowup.generic.x = XPOSITION + 80;
+	s_serverinfo.arrowup.generic.y = 142;
+	s_serverinfo.arrowup.width = 22;
+	s_serverinfo.arrowup.height = 50;
+	s_serverinfo.arrowup.focuspic = ARROWUP1;
+	s_serverinfo.arrowup.focuspicinstead = qtrue;
 
-	s_serverinfo.arrowdown.generic.type = MTYPE_BITMAP1024S;
-	s_serverinfo.arrowdown.x = 638;
-	s_serverinfo.arrowdown.y = 406 - 74;
-	s_serverinfo.arrowdown.w = 29; // 38
-	s_serverinfo.arrowdown.h = 74; // 98
-	s_serverinfo.arrowdown.shader = trap_R_RegisterShaderNoMip(ARROWDN0);
-	s_serverinfo.arrowdown.mouseovershader = trap_R_RegisterShaderNoMip(ARROWDN1);
+	s_serverinfo.arrowdown.generic.type = MTYPE_BITMAP;
+	s_serverinfo.arrowdown.generic.name = ARROWDN0;
+	s_serverinfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_serverinfo.arrowdown.generic.callback = ServerInfo_Event;
 	s_serverinfo.arrowdown.generic.id = ID_SCROLL_DOWN;
-	Menu_AddItem(&s_serverinfo.menu, (void *)&s_serverinfo.arrowdown);
+	s_serverinfo.arrowdown.generic.x = XPOSITION + 80;
+	s_serverinfo.arrowdown.generic.y = 208;
+	s_serverinfo.arrowdown.width = 22;
+	s_serverinfo.arrowdown.height = 50;
+	s_serverinfo.arrowdown.focuspic = ARROWDN1;
+	s_serverinfo.arrowdown.focuspicinstead = qtrue;
 
 	s_serverinfo.add.generic.type = MTYPE_TEXTS;
 	s_serverinfo.add.fontHeight = 18.0f;
-	s_serverinfo.add.generic.flags = QMF_CENTER_JUSTIFY; //|QMF_PULSEIFFOCUS;
+	s_serverinfo.add.generic.flags = QMF_CENTER_JUSTIFY;
 	s_serverinfo.add.generic.callback = ServerInfo_Event;
 	s_serverinfo.add.generic.id = ID_ADD;
-	s_serverinfo.add.generic.x = 320;
+	s_serverinfo.add.generic.x = XPOSITION;
 	s_serverinfo.add.generic.y = 290;
 	s_serverinfo.add.string = "ADD TO FAVORiTES";
 	s_serverinfo.add.style = UI_CENTER | UI_SMALLFONT;
@@ -251,7 +256,7 @@ void UI_ServerInfoMenu(void) {
 	s_serverinfo.back.generic.type = MTYPE_BITMAP;
 	s_serverinfo.back.generic.name = BACK0;
 	s_serverinfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	s_serverinfo.back.generic.x = 225;
+	s_serverinfo.back.generic.x = XPOSITION - 95;
 	s_serverinfo.back.generic.y = 340;
 	s_serverinfo.back.generic.id = ID_BACK;
 	s_serverinfo.back.generic.callback = ServerInfo_Event;
@@ -272,6 +277,8 @@ void UI_ServerInfoMenu(void) {
 		s_serverinfo.numlines++;
 	}
 
+	Menu_AddItem(&s_serverinfo.menu, (void *)&s_serverinfo.arrowup);
+	Menu_AddItem(&s_serverinfo.menu, (void *)&s_serverinfo.arrowdown);
 	Menu_AddItem(&s_serverinfo.menu, (void *)&s_serverinfo.add);
 	Menu_AddItem(&s_serverinfo.menu, (void *)&s_serverinfo.back);
 
@@ -280,10 +287,14 @@ void UI_ServerInfoMenu(void) {
 
 /*
 =================
-ServerInfo_Cache
+UI_ServerInfo_Cache
 =================
 */
-void ServerInfo_Cache(void) {
+void UI_ServerInfo_Cache(void) {
+	trap_R_RegisterShaderNoMip(ARROWUP0);
+	trap_R_RegisterShaderNoMip(ARROWUP1);
+	trap_R_RegisterShaderNoMip(ARROWDN0);
+	trap_R_RegisterShaderNoMip(ARROWDN1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 }

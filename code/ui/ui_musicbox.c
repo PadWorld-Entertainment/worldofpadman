@@ -29,7 +29,15 @@
 
 #include "ui_local.h"
 
-#define MUSIC_BG_ARM "wopmusic/bg_arm"
+#define MUSICBOX "menu/bg/musicbox"
+#define ALL0 "menu/buttons/mb_all0"
+#define ALL1 "menu/buttons/mb_all1"
+#define CLEAR0 "menu/buttons/mb_clear0"
+#define CLEAR1 "menu/buttons/mb_clear1"
+#define EXIT0 "menu/buttons/mb_exit0"
+#define EXIT1 "menu/buttons/mb_exit1"
+#define SWITCH0 "menu/buttons/mb_switch0"
+#define SWITCH1 "menu/buttons/mb_switch1"
 
 #define MAX_TRACKS 15
 #define MAX_ALBUMS 10
@@ -43,6 +51,7 @@
 #define ID_PLAYALL (ID_CLEARLIST + 1)
 
 #define SWITCHDELAY 500
+#define XPOSITION (SCREEN_WIDTH / 2)
 
 typedef enum {
 	MUSICSWITCH_OUT = -1,
@@ -55,10 +64,10 @@ typedef struct {
 	menuframework_s menu;
 
 	menutext_s tracks[MAX_TRACKS];
-	menubitmap1024s_s exit;
-	menubitmap1024s_s switchAlbum;
-	menubitmap1024s_s clearList;
-	menubitmap1024s_s playAll;
+	menubitmap_s switchAlbum;
+	menubitmap_s clearList;
+	menubitmap_s playAll;
+	menubitmap_s exit;
 
 	qhandle_t background;
 	musicMenuSwitch_t switchState;
@@ -166,7 +175,7 @@ static void Playlist_AddTrack(int album, int track, qboolean init) {
 
 	// if we're not initializing, check whether to play that song
 	if (!init) {
-		Music_Check();
+		UI_MusicBox_Check();
 	}
 }
 
@@ -213,7 +222,7 @@ static int QDECL SortTracks(const void *a, const void *b) {
 // snd_restart causes shutdown without initialization
 static qboolean musicInitialized = qfalse;
 
-void MusicMenu_Init(void) {
+void UI_MusicBox_Init(void) {
 	char albumDirList[1024];
 	char trackDirList[1024];
 	char *albumStr, *trackStr;
@@ -347,7 +356,7 @@ void MusicMenu_Init(void) {
 	}
 }
 
-void MusicMenu_Shutdown(void) {
+void UI_MusicBox_Shutdown(void) {
 	playOrder_t *playOrder;
 	int i;
 	fileHandle_t f;
@@ -381,7 +390,7 @@ static void Music_PlayNextTrack(const trackInfo_t *ti) {
 	trap_S_StartBackgroundTrack(ti->file, "<nextsongCMD>");
 }
 
-void Music_NextTrack(void) {
+void UI_MusicBox_NextTrack(void) {
 	playOrder_t *playOrder;
 
 	if (NULL == musicInfo.playOrder) {
@@ -400,11 +409,11 @@ void Music_NextTrack(void) {
 	Music_PlayNextTrack(&(musicInfo.albums[musicInfo.playOrder->album].tracks[musicInfo.playOrder->track]));
 }
 
-void Music_TriggerRestart(void) {
+void UI_MusicBox_TriggerRestart(void) {
 	musicInfo.songStarted = qfalse;
 }
 
-void Music_Check(void) {
+void UI_MusicBox_Check(void) {
 	if (uis.musicstate == MUSICSTATE_RUNNING) {
 		return;
 	}
@@ -415,7 +424,7 @@ void Music_Check(void) {
 
 	if (!musicInfo.songStarted) {
 		if (wop_AutoswitchSongByNextMap.integer) {
-			Music_NextTrack();
+			UI_MusicBox_NextTrack();
 		} else {
 			Music_PlayNextTrack(&(musicInfo.albums[musicInfo.playOrder->album].tracks[musicInfo.playOrder->track]));
 		}
@@ -461,7 +470,6 @@ static void MusicMenu_Event(void *ptr, int notification) {
 	}
 }
 
-#define FACTOR1024 (1024.0f / 640.0f)
 static void MusicMenu_Draw(void) {
 	int t;
 	float switchOffset = 0.0f;
@@ -480,12 +488,12 @@ static void MusicMenu_Draw(void) {
 		switchOffset *= 0.01f;
 
 		for (t = 0; t < MAX_TRACKS; ++t) {
-			musicMenu.tracks[t].generic.x = (188 + switchOffset);
+			musicMenu.tracks[t].generic.x = (XPOSITION - 132 + switchOffset);
 		}
-		musicMenu.switchAlbum.x = (925 + switchOffset * FACTOR1024);
-		musicMenu.clearList.x = (958 + switchOffset * FACTOR1024);
-		musicMenu.playAll.x = (925 + switchOffset * FACTOR1024);
-		musicMenu.exit.x = (954 + switchOffset * FACTOR1024);
+		musicMenu.switchAlbum.generic.x = (XPOSITION + 253 + switchOffset);
+		musicMenu.clearList.generic.x = (XPOSITION + 275 + switchOffset);
+		musicMenu.playAll.generic.x = (XPOSITION + 253 + switchOffset);
+		musicMenu.exit.generic.x = (XPOSITION + 270 + switchOffset);
 
 		if ((uis.realtime - musicMenu.switchTime) > SWITCHDELAY) {
 			if (MUSICSWITCH_OUT == musicMenu.switchState) {
@@ -518,22 +526,22 @@ static void MusicMenu_Draw(void) {
 		}
 	} else {
 		for (t = 0; t < MAX_TRACKS; ++t) {
-			musicMenu.tracks[t].generic.x = 188;
+			musicMenu.tracks[t].generic.x = XPOSITION - 132;
 		}
-		musicMenu.switchAlbum.x = 925;
-		musicMenu.clearList.x = 958;
-		musicMenu.playAll.x = 925;
-		musicMenu.exit.x = 954;
+		musicMenu.switchAlbum.generic.x = XPOSITION + 253;
+		musicMenu.clearList.generic.x = XPOSITION + 275;
+		musicMenu.playAll.generic.x = XPOSITION + 253;
+		musicMenu.exit.generic.x = XPOSITION + 270;
 	}
 
 	if (musicInfo.albums[musicMenu.currentAlbum].background) {
-		UI_DrawHandlePic((130 + switchOffset), 61, 366, 338, musicInfo.albums[musicMenu.currentAlbum].background);
+		UI_DrawHandlePic((XPOSITION - 202 + switchOffset), 60, 374, 340, musicInfo.albums[musicMenu.currentAlbum].background);
 	} else {
-		UI_FillRect((160 + switchOffset), 60, 335, 340, colorBlack);
-		UI_DrawStringNS((170 + switchOffset), 62, musicInfo.albums[musicMenu.currentAlbum].name, 0, 16.0f, colorWhite);
+		UI_FillRect((XPOSITION - 170 + switchOffset), 60, 340, 340, colorBlack);
+		UI_DrawStringNS((XPOSITION - 150 + switchOffset), 62, musicInfo.albums[musicMenu.currentAlbum].name, 0, 16.0f, colorWhite);
 	}
 
-	UI_DrawHandlePic((433 + switchOffset), 68, 500, 315, musicMenu.background);
+	UI_DrawNamedPic((XPOSITION + 108 + switchOffset), 68, 500, 315, MUSICBOX);
 
 	if (musicInfo.playOrder != NULL) {
 		playOrder_t *playOrder;
@@ -542,7 +550,7 @@ static void MusicMenu_Draw(void) {
 		for (playOrder = musicInfo.playOrder, i = 1; playOrder != NULL; playOrder = playOrder->next, i++) {
 			if (playOrder->album == musicMenu.currentAlbum) {
 				// FIXME: Magical constant 18
-				UI_DrawString((188 + switchOffset), (82 + playOrder->track * 18), va("%2i.", i),
+				UI_DrawString((XPOSITION - 132 + switchOffset), (82 + playOrder->track * 18), va("%2i.", i),
 							  (UI_RIGHT | UI_SMALLFONT), colorWhite);
 			}
 		}
@@ -575,11 +583,7 @@ static sfxHandle_t MusicMenu_Key(int key) {
 	return (Menu_DefaultKey(&musicMenu.menu, key));
 }
 
-void MusicMenu_Cache(void) {
-	musicMenu.background = trap_R_RegisterShaderNoMip(MUSIC_BG_ARM);
-}
-
-void MusicMenu_Open(void) {
+void UI_MusicBox_Open(void) {
 	int y, t;
 
 	memset(&musicMenu, 0, sizeof(musicMenu));
@@ -589,7 +593,7 @@ void MusicMenu_Open(void) {
 	// this should not matter if MUSICSTATE_RUNNING_MUSIC_MENU is set
 	trap_Cvar_Set("cl_paused", "1");
 
-	MusicMenu_Cache();
+	UI_MusicBox_Cache();
 
 	if (musicInfo.playOrder) {
 		musicMenu.currentAlbum = musicInfo.playOrder->album;
@@ -608,7 +612,7 @@ void MusicMenu_Open(void) {
 		} else {
 			musicMenu.tracks[t].generic.flags = 0;
 		}
-		musicMenu.tracks[t].generic.x = 188;
+		musicMenu.tracks[t].generic.x = XPOSITION - 132;
 		musicMenu.tracks[t].generic.y = y;
 		musicMenu.tracks[t].generic.id = (ID_TRACK1 + t);
 		musicMenu.tracks[t].generic.callback = MusicMenu_Event;
@@ -622,55 +626,83 @@ void MusicMenu_Open(void) {
 		y += 18;
 	}
 
-	musicMenu.switchAlbum.x = 925;
-	musicMenu.clearList.x = 958;
-	musicMenu.playAll.x = 925;
-	musicMenu.exit.x = 954;
-
-	musicMenu.switchAlbum.generic.type = MTYPE_BITMAP1024S;
+	musicMenu.switchAlbum.generic.type = MTYPE_BITMAP;
 	if (musicInfo.numAlbums < 2) {
 		musicMenu.switchAlbum.generic.flags = (QMF_HIDDEN | QMF_INACTIVE);
 	}
-	musicMenu.switchAlbum.y = 348;
+
+	musicMenu.switchAlbum.generic.type = MTYPE_BITMAP;
+	musicMenu.switchAlbum.generic.name = SWITCH0;
+	musicMenu.switchAlbum.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	musicMenu.switchAlbum.generic.x = XPOSITION + 253;
+	musicMenu.switchAlbum.generic.y = 216;
 	musicMenu.switchAlbum.generic.id = ID_SWITCH;
 	musicMenu.switchAlbum.generic.callback = MusicMenu_Event;
-	musicMenu.switchAlbum.w = 76;
-	musicMenu.switchAlbum.h = 19;
-	musicMenu.switchAlbum.shader = trap_R_RegisterShaderNoMip("wopmusic/switch_button_off");
-	musicMenu.switchAlbum.mouseovershader = trap_R_RegisterShaderNoMip("wopmusic/switch_button_on");
-	Menu_AddItem(&musicMenu.menu, &musicMenu.switchAlbum);
+	musicMenu.switchAlbum.width = 48;
+	musicMenu.switchAlbum.height = 13;
+	musicMenu.switchAlbum.focuspic = SWITCH1;
+	musicMenu.switchAlbum.focuspicinstead = qtrue;
 
-	musicMenu.clearList.generic.type = MTYPE_BITMAP1024S;
-	musicMenu.clearList.y = 369;
+	musicMenu.clearList.generic.type = MTYPE_BITMAP;
+	musicMenu.clearList.generic.name = CLEAR0;
+	musicMenu.clearList.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	musicMenu.clearList.generic.x = XPOSITION + 275;
+	musicMenu.clearList.generic.y = 231;
 	musicMenu.clearList.generic.id = ID_CLEARLIST;
 	musicMenu.clearList.generic.callback = MusicMenu_Event;
-	musicMenu.clearList.w = 43;
-	musicMenu.clearList.h = 19;
-	musicMenu.clearList.shader = trap_R_RegisterShaderNoMip("wopmusic/clear_button_off");
-	musicMenu.clearList.mouseovershader = trap_R_RegisterShaderNoMip("wopmusic/clear_button_on");
-	Menu_AddItem(&musicMenu.menu, &musicMenu.clearList);
+	musicMenu.clearList.width = 26;
+	musicMenu.clearList.height = 13;
+	musicMenu.clearList.focuspic = CLEAR1;
+	musicMenu.clearList.focuspicinstead = qtrue;
 
-	musicMenu.playAll.generic.type = MTYPE_BITMAP1024S;
-	musicMenu.playAll.y = 369;
+	musicMenu.playAll.generic.type = MTYPE_BITMAP;
+	musicMenu.playAll.generic.name = ALL0;
+	musicMenu.playAll.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	musicMenu.playAll.generic.x = XPOSITION + 253;
+	musicMenu.playAll.generic.y = 231;
 	musicMenu.playAll.generic.id = ID_PLAYALL;
 	musicMenu.playAll.generic.callback = MusicMenu_Event;
-	musicMenu.playAll.w = 31;
-	musicMenu.playAll.h = 19;
-	musicMenu.playAll.shader = trap_R_RegisterShaderNoMip("wopmusic/all_button_off");
-	musicMenu.playAll.mouseovershader = trap_R_RegisterShaderNoMip("wopmusic/all_button_on");
-	Menu_AddItem(&musicMenu.menu, &musicMenu.playAll);
+	musicMenu.playAll.width = 20;
+	musicMenu.playAll.height = 13;
+	musicMenu.playAll.focuspic = ALL1;
+	musicMenu.playAll.focuspicinstead = qtrue;
 
-	musicMenu.exit.generic.type = MTYPE_BITMAP1024S;
-	musicMenu.exit.y = 413;
+	musicMenu.exit.generic.type = MTYPE_BITMAP;
+	musicMenu.exit.generic.name = EXIT0;
+	musicMenu.exit.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	musicMenu.exit.generic.x = XPOSITION + 270;
+	musicMenu.exit.generic.y = 257;
 	musicMenu.exit.generic.id = ID_EXIT;
 	musicMenu.exit.generic.callback = MusicMenu_Event;
-	musicMenu.exit.w = musicMenu.exit.h = 55;
-	musicMenu.exit.shader = trap_R_RegisterShaderNoMip("wopmusic/exit_button_off");
-	musicMenu.exit.mouseovershader = trap_R_RegisterShaderNoMip("wopmusic/exit_button_on");
+	musicMenu.exit.width = 36;
+	musicMenu.exit.height = 36;
+	musicMenu.exit.focuspic = EXIT1;
+	musicMenu.exit.focuspicinstead = qtrue;
+
+	Menu_AddItem(&musicMenu.menu, &musicMenu.switchAlbum);
+	Menu_AddItem(&musicMenu.menu, &musicMenu.playAll);
+	Menu_AddItem(&musicMenu.menu, &musicMenu.clearList);
 	Menu_AddItem(&musicMenu.menu, &musicMenu.exit);
 
 	UI_PushMenu(&musicMenu.menu);
 
 	musicMenu.switchState = MUSICSWITCH_IN;
 	musicMenu.switchTime = (uis.realtime + SWITCHDELAY);
+}
+
+/*
+===============
+UI_MusicBox_Cache
+===============
+*/
+void UI_MusicBox_Cache(void) {
+	trap_R_RegisterShaderNoMip(MUSICBOX);
+	trap_R_RegisterShaderNoMip(ALL0);
+	trap_R_RegisterShaderNoMip(ALL1);
+	trap_R_RegisterShaderNoMip(CLEAR0);
+	trap_R_RegisterShaderNoMip(CLEAR1);
+	trap_R_RegisterShaderNoMip(EXIT0);
+	trap_R_RegisterShaderNoMip(EXIT1);
+	trap_R_RegisterShaderNoMip(SWITCH0);
+	trap_R_RegisterShaderNoMip(SWITCH1);
 }

@@ -599,6 +599,8 @@ void ActiveChooseLogoMenu(void) {
 
 	numPages = (int)ceil((float)loadedlogos * 0.125f); // 1/8->0.125
 
+	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
+
 	if (cgs.media.chooselogo_bg == 0) {
 		CG_FillRect(XLL - GAP, 60, 640 - 2 * (XLL - GAP), 320, tblack33);
 		CG_DrawRect(XLL - GAP, 60, 640 - 2 * (XLL - GAP), 320, 1, colorBlack);
@@ -645,8 +647,8 @@ void ActiveChooseLogoMenu(void) {
 
 	Com_sprintf(tmpstr, sizeof(tmpstr), "%i/%i", (activepage + 1), numPages);
 	CG_DrawStringExt(320 - CG_DrawStrlen(tmpstr) * 4, ARROWY + 2, tmpstr, colorWhite, qtrue, qtrue, 8, 16, 32);
-	CG_DrawPic(250, ARROWY, 50, 20, cgs.media.slmenu_arrowl);
-	CG_DrawPic(340, ARROWY, 50, 20, cgs.media.slmenu_arrowr);
+	CG_DrawPic(250, ARROWY, 50, 22, cgs.media.slmenu_arrowl);
+	CG_DrawPic(340, ARROWY, 50, 22, cgs.media.slmenu_arrowr);
 
 	if (cgs.gametype == GT_SPRAYFFA) {
 		int numColors = 6; // sizeof(spraycolors)/sizeof(spraycolors[0]);
@@ -680,16 +682,16 @@ void ActiveChooseLogoMenu(void) {
 
 			trap_Cvar_Set("syc_color", va("%d", mouseOverColor));
 		} else {
-			// right arrow
-			if (cgs.cursorX > 270 && cgs.cursorX < 300 && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 20)) {
+			// left arrow
+			if (cgs.cursorX > 250 && cgs.cursorX < 300 && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
 				if (activepage > 0) {
 					trap_S_StartLocalSound(menuClickSound, CHAN_LOCAL_SOUND);
 
 					--activepage;
 				}
 			}
-			// left arrow
-			else if (cgs.cursorX > 340 && cgs.cursorX < 370 && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 20)) {
+			// right arrow
+			else if (cgs.cursorX > 340 && cgs.cursorX < 390 && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
 				if (activepage < (numPages - 1)) {
 					trap_S_StartLocalSound(menuClickSound, CHAN_LOCAL_SOUND);
 

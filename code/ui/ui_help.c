@@ -18,21 +18,19 @@ HELP MENU
 #define ARROWRT0 "menu/arrows/headyel_rt0"
 #define ARROWRT1 "menu/arrows/headyel_rt1"
 
-#define HM_PN_W 50
-#define HM_PN_H 20
-#define HM_PN_X0 260
-#define HM_PN_X1 330
-#define HM_PN_Y 352
+#define XPOSITION (SCREEN_WIDTH / 2)
 
-#define HMI_GAMETYPE_W 373
-#define HMI_GAMETYPE_H 395
-#define HMI_GAMETYPE_X 150
+#define HMI_GAMETYPE_W 400
+#define HMI_GAMETYPE_H 400
+#define HMI_GAMETYPE_X XPOSITION - 200 + 23// offset because picture is asymmetrical
 #define HMI_GAMETYPE_Y 0
 
-#define HMI_ITEM_W 499
-#define HMI_ITEM_H 433
-#define HMI_ITEM_X 92
+#define HMI_ITEM_W 462
+#define HMI_ITEM_H 400
+#define HMI_ITEM_X XPOSITION - 231 + 20 // offset because picture is asymmetrical
 #define HMI_ITEM_Y 0
+
+float nwsOffset;
 
 typedef struct {
 	menuframework_s menu;
@@ -148,7 +146,7 @@ static sfxHandle_t UI_HelpMenu_Key(int key) {
 
 	// TODO: Close menu with second keypress. How to get original key (from "ui_help x" bind(s))?
 	//       Key_GetKey seems to be in cgame only
-	// FIXME: Hardcoded like in ui_music until there's a better approach
+	// FIXME: Hardcoded like in ui_musicbox until there's a better approach
 	case 'g':
 	case 'h':
 		UI_PopMenu();
@@ -163,22 +161,17 @@ static sfxHandle_t UI_HelpMenu_Key(int key) {
 
 /*
 ===============
-UI_DrawHelpMenuImg
-===============
-*/
-static void UI_DrawHelpMenuImg(void) {
-	// if ( helpMenuInfo.img ) {
-	UI_DrawHandlePic(helpMenuInfo.x, helpMenuInfo.y, helpMenuInfo.width, helpMenuInfo.height, helpMenuInfo.img);
-	//}
-}
-
-/*
-===============
 UI_HelpMenu_Draw
 ===============
 */
 static void UI_HelpMenu_Draw(void) {
-	UI_DrawHelpMenuImg();
+	// for non-widescreen resolutions we need to calculate and subtract an offset to the height so that the menu always stays at the top of the screen
+	nwsOffset = ((float)uis.glconfig.vidHeight * (float)SCREEN_WIDTH / (float)uis.glconfig.vidWidth) - (float)SCREEN_HEIGHT;
+	if (nwsOffset < 0) {
+		nwsOffset = 0.0f;
+	}
+
+	UI_DrawHandlePic(helpMenuInfo.x, helpMenuInfo.y - (nwsOffset * 0.5f), helpMenuInfo.width, helpMenuInfo.height, helpMenuInfo.img);
 
 	// standard menu drawing
 	Menu_Draw(&helpMenuInfo.menu);
@@ -256,10 +249,10 @@ static void UI_HelpMenu_Init(void) {
 
 	helpMenuInfo.prev.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.prev.generic.id = ID_PREV;
-	helpMenuInfo.prev.generic.x = HM_PN_X0;
-	helpMenuInfo.prev.generic.y = HM_PN_Y;
-	helpMenuInfo.prev.width = HM_PN_W;
-	helpMenuInfo.prev.height = HM_PN_H;
+	helpMenuInfo.prev.generic.x = XPOSITION - 58;
+	helpMenuInfo.prev.generic.y = 324 - (nwsOffset * 0.5f);
+	helpMenuInfo.prev.width = 50;
+	helpMenuInfo.prev.height = 22;
 	helpMenuInfo.prev.generic.name = ARROWLT0;
 	helpMenuInfo.prev.focuspic = ARROWLT1;
 	helpMenuInfo.prev.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
@@ -267,10 +260,10 @@ static void UI_HelpMenu_Init(void) {
 
 	helpMenuInfo.next.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.next.generic.id = ID_NEXT;
-	helpMenuInfo.next.generic.x = HM_PN_X1;
-	helpMenuInfo.next.generic.y = HM_PN_Y;
-	helpMenuInfo.next.width = HM_PN_W;
-	helpMenuInfo.next.height = HM_PN_H;
+	helpMenuInfo.next.generic.x = XPOSITION + 8;
+	helpMenuInfo.next.generic.y = 324 - (nwsOffset * 0.5f);
+	helpMenuInfo.next.width = 50;
+	helpMenuInfo.next.height = 22;
 	helpMenuInfo.next.generic.name = ARROWRT0;
 	helpMenuInfo.next.focuspic = ARROWRT1;
 	helpMenuInfo.next.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
