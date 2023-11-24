@@ -861,6 +861,8 @@ static float CG_DrawPowerups(float y) {
 	return y;
 }
 
+#define DIST_FORBIDDEN 128
+
 /*
 ===================
 CG_DrawHoldableItem
@@ -884,6 +886,59 @@ static void CG_DrawHoldableItem(float y) {
 		CG_DrawPic(SCREEN_WIDTH - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cg_items[value].icon);
 		if (cg.snap->ps.stats[STAT_FORBIDDENITEMS] & (1 << itemId)) {
 			CG_DrawPic(SCREEN_WIDTH - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
+		}
+
+		if (itemId == (HI_BAMBAM || HI_BOOMIES)) {
+			int i;
+			centity_t *cent = NULL;
+			vec3_t entPos;
+			vec3_t mins, maxs, center;
+			float squaredDist;
+			qboolean showCross = qfalse;
+
+			for (i = 0; i < MAX_GENTITIES; i++) {
+				if (!cent->currentValid) {
+					continue;
+				}
+
+				switch (cent->currentState.eType) {
+				case ET_BOOMIES:
+					VectorCopy(cent->currentState.origin, entPos);
+					squaredDist = DistanceSquared(cg.refdef.vieworg, entPos);
+					if (squaredDist < Square(DIST_FORBIDDEN / 2)) {
+						showCross = qtrue;
+					}
+					break;
+				case ET_ITEM:
+					switch (cent->currentState.giType) {
+						case IT_WEAPON:
+						case IT_POWERUP:
+						case IT_HOLDABLE:
+							VectorCopy(cent->currentState.origin, entPos);
+							squaredDist = DistanceSquared(cg.refdef.vieworg, entPos);
+							if (squaredDist < Square(DIST_FORBIDDEN / 2)) {
+								showCross = qtrue;
+							}
+							break;
+					}
+					break;
+				case ET_STATION:
+					VectorCopy(cent->currentState.origin, entPos);
+					trap_R_ModelBounds(cgs.media.HealthStation_Base, mins, maxs);
+					VectorAdd(mins, maxs, center);
+					entPos[2] += center[2] / 2.0f;
+					squaredDist = DistanceSquared(cg.refdef.vieworg, entPos);
+					if (squaredDist < Square(DIST_FORBIDDEN)) {
+						showCross = qtrue;
+					}
+					break;
+				}
+				break;
+			}
+
+			if (showCross = qtrue) {
+				CG_DrawPic(640 - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
+			}
 		}
 
 		if (itemId == HI_FLOATER) {
