@@ -738,11 +738,22 @@ CG_WorldToScreen
 qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
 	const float px = tan(cg.refdef.fov_x * M_PI / 360.0f);
 	const float py = tan(cg.refdef.fov_y * M_PI / 360.0f);
-	const float xc = (float)(SCREEN_WIDTH * cg_viewsize.integer) / 200.0f;
-	const float yc = (float)(SCREEN_HEIGHT * cg_viewsize.integer) / 200.0f;
+	float xc;
+	float yc;
 	qboolean front = qtrue;
 	vec3_t trans;
 	float z;
+	int screenWidth = SCREEN_WIDTH;
+	int screenHeight = SCREEN_HEIGHT;
+
+	// check for widescreen
+	if (cg.refdef.width * (float)SCREEN_HEIGHT > cg.refdef.height * (float)SCREEN_WIDTH) {
+		// see ui_local.h for SCREEN_WIDTH and SCREEN_HEIGHT re-definition
+		screenWidth = 864;
+		screenHeight = 486;
+	}
+	xc = (float)(screenWidth * cg_viewsize.integer) / 200.0f;
+	yc = (float)(screenHeight * cg_viewsize.integer) / 200.0f;
 
 	VectorSubtract(point, cg.refdef.vieworg, trans);
 
@@ -752,11 +763,11 @@ qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
 	}
 
 	if (x) {
-		*x = (float)SCREEN_WIDTH * 0.5f - DotProduct(trans, cg.refdef.viewaxis[1]) * xc / (z * px);
+		*x = (float)screenWidth * 0.5f - DotProduct(trans, cg.refdef.viewaxis[1]) * xc / (z * px);
 	}
 
 	if (y) {
-		*y = (float)SCREEN_HEIGHT * 0.5f - DotProduct(trans, cg.refdef.viewaxis[2]) * yc / (z * py);
+		*y = (float)screenHeight * 0.5f - DotProduct(trans, cg.refdef.viewaxis[2]) * yc / (z * py);
 	}
 
 	return front;
