@@ -53,6 +53,10 @@ void Team_InitGame(void) {
 		teamgame.blueStatus = -1;
 		Team_SetFlagStatus(TEAM_BLUE, FLAG_ATBASE);
 		break;
+	case GT_1FCTF:
+		teamgame.flagStatus = -1; // Invalid to force update
+		Team_SetFlagStatus(TEAM_FREE, FLAG_ATBASE);
+		break;
 	default:
 		break;
 	}
@@ -250,6 +254,8 @@ void Team_CheckDroppedItem(const gentity_t *dropped) {
 		Team_SetFlagStatus(TEAM_RED, FLAG_DROPPED);
 	} else if (dropped->item->giTag == PW_BLUEFLAG) {
 		Team_SetFlagStatus(TEAM_BLUE, FLAG_DROPPED);
+	} else if (dropped->item->giTag == PW_NEUTRALFLAG) {
+		Team_SetFlagStatus(TEAM_FREE, FLAG_DROPPED);
 	}
 }
 
@@ -513,6 +519,11 @@ void Team_FragBonuses(gentity_t *victim, gentity_t *attacker) {
 		enemy_flag_pw = PW_REDFLAG;
 	}
 
+	if (g_gametype.integer == GT_1FCTF) {
+		flag_pw = PW_NEUTRALFLAG;
+		enemy_flag_pw = PW_NEUTRALFLAG;
+	} 
+
 	// did the attacker frag the flag carrier?
 	if (victim->client->ps.powerups[enemy_flag_pw]) {
 		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
@@ -570,7 +581,7 @@ void Team_FragBonuses(gentity_t *victim, gentity_t *attacker) {
 	}
 
 	// flag and flag carrier area defense bonuses
-	if (g_gametype.integer == GT_CTF) {
+	if (g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF) {
 		Team_FlagDefendOrProtectBonus(victim, attacker, flag_pw);
 	} else if (g_gametype.integer == GT_BALLOON) {
 		Team_BalloonDefendOrProtectBonus(victim, attacker);
@@ -600,6 +611,10 @@ void Team_CheckHurtCarrier(const gentity_t *victim, gentity_t *attacker) {
 	else
 		flag_pw = PW_REDFLAG;
 
+	if (g_gametype.integer == GT_1FCTF) {
+		flag_pw = PW_NEUTRALFLAG;
+	}
+
 	attackerTeamState = &attacker->client->pers.teamState;
 
 	// flags CTF
@@ -628,7 +643,7 @@ static const gentity_t *Team_ResetFlag(int team) {
 		c = "team_CTL_bluelolly";
 		break;
 	case TEAM_FREE:
-		c = "team_CTF_neutralflag";
+		c = "team_CTL_neutrallolly";
 		break;
 	default:
 		return NULL;
@@ -653,6 +668,8 @@ static void Team_ResetFlags(void) {
 	if (g_gametype.integer == GT_CTF) {
 		Team_ResetFlag(TEAM_RED);
 		Team_ResetFlag(TEAM_BLUE);
+	} else if (g_gametype.integer == GT_1FCTF) {
+		Team_ResetFlag(TEAM_FREE);
 	}
 }
 
@@ -741,6 +758,8 @@ void Team_FreeEntity(const gentity_t *ent) {
 		Team_ReturnFlag(TEAM_RED);
 	} else if (ent->item->giTag == PW_BLUEFLAG) {
 		Team_ReturnFlag(TEAM_BLUE);
+	} else if (ent->item->giTag == PW_NEUTRALFLAG) {
+		Team_ReturnFlag(TEAM_FREE);
 	}
 }
 
@@ -760,6 +779,8 @@ void Team_DroppedFlagThink(gentity_t *ent) {
 		team = TEAM_RED;
 	} else if (ent->item->giTag == PW_BLUEFLAG) {
 		team = TEAM_BLUE;
+	} else if (ent->item->giTag == PW_NEUTRALFLAG) {
+		team = TEAM_FREE;
 	}
 
 	Team_ReturnFlagSound(Team_ResetFlag(team), team);
@@ -776,32 +797,35 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 	gclient_t *cl = other->client;
 	int enemy_flag;
 
-	if (cl->sess.sessionTeam == TEAM_RED) {
-		enemy_flag = PW_BLUEFLAG;
+	if (g_gametype.integer == GT_1FCTF) {
+		enemy_flag = PW_NEUTRALFLAG;
 	} else {
-		enemy_flag = PW_REDFLAG;
+		if (cl->sess.sessionTeam == TEAM_RED) {
+			enemy_flag = PW_BLUEFLAG;
+		} else {
+			enemy_flag = PW_REDFLAG;
+		}
+
+		if (ent->flags & FL_DROPPED_ITEM) {
+			// hey, it's not home.  return it by teleporting it back
+			PrintMsg(NULL, "%s" S_COLOR_WHITE " returned the %s' lolly!\n", cl->pers.netname, TeamName(team));
+			AddScore(other, ent->r.currentOrigin, CTF_RECOVERY_BONUS, SCORE_BONUS_RECOVERY_S);
+			other->client->pers.teamState.flagrecovery++;
+			other->client->pers.teamState.lastreturnedflag = level.time;
+			// ResetFlag will remove this entity!  We must return zero
+			Team_ReturnFlagSound(Team_ResetFlag(team), team);
+			return 0;
+		}
 	}
-
-	if (ent->flags & FL_DROPPED_ITEM) {
-		// hey, it's not home.  return it by teleporting it back
-		PrintMsg(NULL, "%s" S_COLOR_WHITE " returned the %s' lolly!\n", cl->pers.netname, TeamName(team));
-
-		AddScore(other, ent->r.currentOrigin, CTF_RECOVERY_BONUS, SCORE_BONUS_RECOVERY_S);
-
-		other->client->pers.teamState.flagrecovery++;
-		other->client->pers.teamState.lastreturnedflag = level.time;
-
-		// ResetFlag will remove this entity!  We must return zero
-		Team_ReturnFlagSound(Team_ResetFlag(team), team);
-		return 0;
-	}
-
 	// the flag is at home base.  if the player has the enemy
 	// flag, he's just won!
 	if (!cl->ps.powerups[enemy_flag])
 		return 0; // We don't have the flag
-	PrintMsg(NULL, "%s" S_COLOR_WHITE " captured the %s' lolly!\n", cl->pers.netname, TeamName(OtherTeam(team)));
-
+	if (g_gametype.integer == GT_1FCTF) {
+		PrintMsg( NULL, "%s" S_COLOR_WHITE " captured the lolly!\n", cl->pers.netname);
+	} else {
+		PrintMsg(NULL, "%s" S_COLOR_WHITE " captured the %s' lolly!\n", cl->pers.netname, TeamName(OtherTeam(team)));
+	}
 	cl->ps.powerups[enemy_flag] = 0;
 
 	teamgame.last_flag_capture = level.time;
@@ -859,14 +883,27 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 static int Team_TouchEnemyFlag(gentity_t *ent, gentity_t *other, int team) {
 	gclient_t *cl = other->client;
 
-	PrintMsg(NULL, "%s" S_COLOR_WHITE " got the %s' lolly!\n", other->client->pers.netname, TeamName(team));
+	if (g_gametype.integer == GT_1FCTF) {
+		PrintMsg (NULL, "%s" S_COLOR_WHITE " got the lolly!\n", other->client->pers.netname);
 
-	if (team == TEAM_RED)
-		cl->ps.powerups[PW_REDFLAG] = INT_MAX; // flags never expire
-	else
-		cl->ps.powerups[PW_BLUEFLAG] = INT_MAX; // flags never expire
+		cl->ps.powerups[PW_NEUTRALFLAG] = INT_MAX; // flags never expire
 
-	Team_SetFlagStatus(team, FLAG_TAKEN);
+		if (team == TEAM_RED) {
+			Team_SetFlagStatus(TEAM_FREE, FLAG_TAKEN_RED);
+		} else {
+			Team_SetFlagStatus(TEAM_FREE, FLAG_TAKEN_BLUE);
+		}
+	} else {
+		PrintMsg(NULL, "%s" S_COLOR_WHITE " got the %s' lolly!\n", other->client->pers.netname, TeamName(team));
+
+		if (team == TEAM_RED)
+			cl->ps.powerups[PW_REDFLAG] = INT_MAX; // flags never expire
+		else
+			cl->ps.powerups[PW_BLUEFLAG] = INT_MAX; // flags never expire
+
+		Team_SetFlagStatus(team, FLAG_TAKEN);
+	}
+
 	cl->pers.teamState.flagsince = level.time;
 	Team_TakeFlagSound(ent, team);
 
@@ -882,10 +919,23 @@ int Pickup_Team(gentity_t *ent, gentity_t *other) {
 		team = TEAM_RED;
 	} else if (strcmp(ent->classname, "team_CTL_bluelolly") == 0) {
 		team = TEAM_BLUE;
+	} else if (strcmp(ent->classname, "team_CTL_neutrallolly") == 0) {
+		team = TEAM_FREE;
 	} else {
 		PrintMsg(other, "Don't know what team the lolly is on.\n");
 		return 0;
 	}
+
+	if (g_gametype.integer == GT_1FCTF) {
+		if (team == TEAM_FREE) {
+			return Team_TouchEnemyFlag(ent, other, cl->sess.sessionTeam);
+		}
+		if (team != cl->sess.sessionTeam) {
+			return Team_TouchOurFlag(ent, other, cl->sess.sessionTeam);
+		}
+		return 0;
+	}
+
 	// GT_CTF
 	if (team == cl->sess.sessionTeam) {
 		return Team_TouchOurFlag(ent, other, team);

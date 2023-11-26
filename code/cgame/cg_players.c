@@ -1740,12 +1740,18 @@ static void CG_PlayerPowerups(centity_t *cent, refEntity_t *torso) {
 		if (powerups & (1 << PW_BLUEFLAG)) {
 			CG_TrailItem(cent, cgs.media.blueFlagModel);
 		}
+		// neutral lolly
+		if (powerups & (1 << PW_NEUTRALFLAG) ) {
+			CG_TrailItem(cent, cgs.media.neutralFlagModel);
+		}
 	}
 	// add lolly glow for any client
 	if (powerups & (1 << PW_REDFLAG)) {
 		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 1.0f, 0.2f, 0.2f);
 	} else if (powerups & (1 << PW_BLUEFLAG)) {
 		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 0.2f, 0.2f, 1.0f);
+	} else if (powerups & (1 << PW_NEUTRALFLAG)) {
+		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 1.0f, 1.0f, 1.0f);
 	}
 
 	// speedy leaves smoke trails

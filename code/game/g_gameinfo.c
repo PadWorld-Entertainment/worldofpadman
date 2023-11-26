@@ -191,7 +191,7 @@ typedef struct {
 
 static const g_gametypeBitmap_s gametypeMap[GT_MAX_GAME_TYPE] = {
 	{"ffa", GT_FFA}, {"tourney", GT_TOURNAMENT}, {"single", GT_SINGLE_PLAYER}, {"team", GT_TEAM}, {"ft", GT_FREEZETAG},
-	{"ctl", GT_CTF}, {"syc_ffa", GT_SPRAYFFA},	 {"syc_tp", GT_SPRAY},		   {"lps", GT_LPS},	  {"bb", GT_BALLOON}};
+	{"ctl", GT_CTF}, {"1lctl", GT_1FCTF}, {"syc_ffa", GT_SPRAYFFA}, {"syc_tp", GT_SPRAY}, {"lps", GT_LPS}, {"bb", GT_BALLOON}};
 
 /*
 =================

@@ -714,6 +714,7 @@ typedef struct {
 	qhandle_t neutralFlagModel;
 	qhandle_t redFlagShader[3];
 	qhandle_t blueFlagShader[3];
+	qhandle_t neutralflagShader[3];
 
 	qhandle_t armorModel;
 	qhandle_t armorIcon;
@@ -1080,9 +1081,13 @@ typedef struct {
 	// voc_ sounds:
 	sfxHandle_t redLollyReturnedSound;
 	sfxHandle_t blueLollyReturnedSound;
-	sfxHandle_t yourTeamTookEnemyLollySound;
+	sfxHandle_t neutralLollyReturnedSound;
 	sfxHandle_t enemyTookYourLollySound;
+	sfxHandle_t yourTeamTookEnemyLollySound;
 	sfxHandle_t youHaveLollySound;
+	sfxHandle_t enemyTookTheLollySound;
+	sfxHandle_t yourTeamTookTheLollySound;
+
 	sfxHandle_t stolenLollySound;
 	sfxHandle_t almostCapture;
 

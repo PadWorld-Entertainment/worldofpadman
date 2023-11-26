@@ -1165,10 +1165,10 @@ static void Cmd_CallVote_f(gentity_t *ent) {
 	// special case for g_gametype, check for bad values
 	if (!Q_stricmp(arg1, "g_gametype")) {
 		static const char *gametypeNames[GT_MAX_GAME_TYPE] = {
-			GAMETYPE_NAME(GT_FFA),		GAMETYPE_NAME(GT_TOURNAMENT), GAMETYPE_NAME(GT_SINGLE_PLAYER),
-			GAMETYPE_NAME(GT_SPRAYFFA), GAMETYPE_NAME(GT_LPS),		  GAMETYPE_NAME(GT_CATCH),
-			GAMETYPE_NAME(GT_TEAM),		GAMETYPE_NAME(GT_FREEZETAG),  GAMETYPE_NAME(GT_CTF),
-			GAMETYPE_NAME(GT_SPRAY),	GAMETYPE_NAME(GT_BALLOON)};
+			GAMETYPE_NAME(GT_FFA), GAMETYPE_NAME(GT_TOURNAMENT), GAMETYPE_NAME(GT_SINGLE_PLAYER),
+			GAMETYPE_NAME(GT_SPRAYFFA), GAMETYPE_NAME(GT_LPS), GAMETYPE_NAME(GT_CATCH),
+			GAMETYPE_NAME(GT_TEAM), GAMETYPE_NAME(GT_FREEZETAG), GAMETYPE_NAME(GT_CTF),
+			GAMETYPE_NAME(GT_1FCTF), GAMETYPE_NAME(GT_SPRAY), GAMETYPE_NAME(GT_BALLOON)};
 		CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
 
 		i = atoi(arg2);
@@ -1653,6 +1653,9 @@ static void G_DropFlags(gentity_t *ent) {
 	} else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
 		item = BG_FindItemForPowerup(PW_BLUEFLAG);
 		j = PW_BLUEFLAG;
+	} else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
+		item = BG_FindItemForPowerup(PW_NEUTRALFLAG);
+		j = PW_NEUTRALFLAG;
 	} else {
 		return;
 	}
@@ -1730,7 +1733,7 @@ void Cmd_DropTeamItem_f(gentity_t *ent) {
 
 	if (g_gametype.integer == GT_SPRAY) {
 		G_DropCartridges(ent);
-	} else if (g_gametype.integer == GT_CTF) {
+	} else if (g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF) {
 		G_DropFlags(ent);
 	} else if (g_gametype.integer == GT_CATCH) {
 		G_DropKillerDucks(ent);

@@ -280,7 +280,8 @@ static void CheckAlmostLollyCapture(gentity_t *self, gentity_t *attacker) {
 	char *classname;
 
 	// if this player was carrying a lolly (flag)
-	if (self->client->ps.powerups[PW_REDFLAG] || self->client->ps.powerups[PW_BLUEFLAG]) {
+	if (self->client->ps.powerups[PW_REDFLAG] || self->client->ps.powerups[PW_BLUEFLAG] || 
+		self->client->ps.powerups[PW_NEUTRALFLAG]) {
 		// get the goal flag this player should have been going for
 		if (self->client->sess.sessionTeam == TEAM_BLUE) {
 			classname = "team_CTL_bluelolly";
@@ -533,7 +534,10 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 
 	// if I committed suicide, the flag does not fall, it returns.
 	if (meansOfDeath == MOD_SUICIDE) {
-		if (self->client->ps.powerups[PW_REDFLAG]) { // only happens in standard CTF
+		if (self->client->ps.powerups[PW_NEUTRALFLAG]) { // only happens in One Flag CTF
+			Team_ReturnFlag(TEAM_FREE);
+			self->client->ps.powerups[PW_NEUTRALFLAG] = 0;
+		} else if (self->client->ps.powerups[PW_REDFLAG]) { // only happens in standard CTF
 			Team_ReturnFlag(TEAM_RED);
 			self->client->ps.powerups[PW_REDFLAG] = 0;
 		} else if (self->client->ps.powerups[PW_BLUEFLAG]) { // only happens in standard CTF
@@ -935,7 +939,7 @@ void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3
 	}
 
 	// See if it's the player hurting the enemy flag/cartridge carrier
-	if (g_gametype.integer == GT_CTF || g_gametype.integer == GT_SPRAY) {
+	if (g_gametype.integer == GT_CTF || g_gametype.integer == GT_SPRAY || g_gametype.integer == GT_SPRAY) {
 		Team_CheckHurtCarrier(victim, attacker);
 	}
 

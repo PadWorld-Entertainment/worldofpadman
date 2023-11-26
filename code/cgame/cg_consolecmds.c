@@ -212,6 +212,7 @@ static void CG_HelpCmd_f(void) {
 									  GAMETYPE_NAME(GT_TEAM),
 									  GAMETYPE_NAME(GT_FREEZETAG),
 									  GAMETYPE_NAME(GT_CTF),
+									  GAMETYPE_NAME(GT_1FCTF),
 									  GAMETYPE_NAME(GT_SPRAY),
 									  GAMETYPE_NAME(GT_BALLOON),
 									  NULL};

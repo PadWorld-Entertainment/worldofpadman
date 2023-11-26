@@ -177,6 +177,8 @@ void CG_DrawFlagModel(float x, float y, float w, float h, int team, qboolean for
 			item = BG_FindItemForPowerup(PW_REDFLAG);
 		} else if (team == TEAM_BLUE) {
 			item = BG_FindItemForPowerup(PW_BLUEFLAG);
+		} else if (team == TEAM_FREE) {
+			item = BG_FindItemForPowerup(PW_NEUTRALFLAG);
 		} else {
 			return;
 		}
@@ -517,8 +519,9 @@ CG_DrawServerInfos
 static const char *gametype_strs[] = {
 	GAMETYPE_NAME_SHORT(GT_FFA), GAMETYPE_NAME_SHORT(GT_TOURNAMENT), GAMETYPE_NAME_SHORT(GT_SINGLE_PLAYER),
 	GAMETYPE_NAME_SHORT(GT_SPRAYFFA), GAMETYPE_NAME_SHORT(GT_LPS), GAMETYPE_NAME_SHORT(GT_CATCH),
-	GAMETYPE_NAME_SHORT(GT_TEAM), GAMETYPE_NAME_SHORT(GT_FREEZETAG), GAMETYPE_NAME_SHORT(GT_CTF),
-	GAMETYPE_NAME_SHORT(GT_SPRAY), GAMETYPE_NAME_SHORT(GT_BALLOON), GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE)};
+	GAMETYPE_NAME_SHORT(GT_TEAM), GAMETYPE_NAME_SHORT(GT_FREEZETAG), GAMETYPE_NAME_SHORT(GT_CTF), 
+	GAMETYPE_NAME_SHORT(GT_1FCTF), GAMETYPE_NAME_SHORT(GT_SPRAY), GAMETYPE_NAME_SHORT(GT_BALLOON),
+	GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE)};
 CASSERT(ARRAY_LEN(gametype_strs) == GT_MAX_GAME_TYPE + 1);
 
 static float CG_DrawServerInfos(float y) {
@@ -999,9 +1002,10 @@ static void CG_WoPTeamOverlay(void) {
 			DrawStringWithCutFrame(x + 46 + 11, y + 14, va("%i", ci->numCartridges), colorWhite, 8, 10, x, y, x + w,
 								   y + h);
 			break;
+		case GT_1FCTF:
 		case GT_CTF:
 			for (j = 0; j <= PW_NUM_POWERUPS; j++) {
-				if (j != PW_REDFLAG && j != PW_BLUEFLAG)
+				if (j != PW_REDFLAG && j != PW_BLUEFLAG && j != PW_NEUTRALFLAG)
 					continue;
 
 				if (ci->powerups & (1 << j)) {
@@ -1328,7 +1332,7 @@ static void CG_DrawDisconnect(void) {
 		x = (640 - 48 - 94);
 	} else if (cgs.gametype == GT_BALLOON) {
 		x = (640 - 48 - 64);
-	} else if (cgs.gametype == GT_CTF) {
+	} else if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF) {
 		x = (640 - 48 - 78);
 	} else {
 		x = (640 - 48);
@@ -1368,7 +1372,7 @@ static void CG_DrawLagometer(void) {
 		x = (640 - 48 - 94);
 	} else if (cgs.gametype == GT_BALLOON) {
 		x = (640 - 48 - 64);
-	} else if (cgs.gametype == GT_CTF) {
+	} else if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF) {
 		x = (640 - 48 - 78);
 	} else {
 		x = (640 - 48);
@@ -2012,6 +2016,8 @@ static void CG_DrawWarmup(void) {
 			s = GAMETYPE_NAME(GT_FREEZETAG);
 		} else if (cgs.gametype == GT_CTF) {
 			s = GAMETYPE_NAME(GT_CTF);
+		} else if (cgs.gametype == GT_1FCTF) {
+			s = GAMETYPE_NAME(GT_1FCTF);
 		} else {
 			s = "";
 		}
@@ -2848,6 +2854,53 @@ static void CG_DrawCaptureTheLolly(int team) {
 	}
 }
 
+static void CG_DrawOneLollyCTL(int team) {
+	const float CTL_BG_WIDTH = 78;
+	const float CTL_BG_HEIGHT = 115;
+	const float CTL_LOLLYMDLX = 573;
+	const float CTL_LOLLYMDLY = 427;
+	const float CTL_LOLLYMDLW = 50;
+	const float CTL_LOLLYMDLH = 50;
+	const float CTL_STATX = 610;
+	const float CTL_STATY1 = 370;
+	const float CTL_STATY2 = 402;
+	const float CTL_STATWH = 26;
+
+	if (team == TEAM_SPECTATOR) {
+		return;
+	}
+	if (cgs.gametype != GT_1FCTF) {
+		return;
+	} else {
+		// draw the neutral lolly model if taken by the player
+		if (cg.predictedPlayerState.powerups[PW_NEUTRALFLAG]) {
+			CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_FREE, qfalse);
+		}
+		// draw the blue/red lolly icon in upper slot depending on neutral flag taken status to indicate
+		// which team has currently taken the neutral lolly; draw the neutral lolly icon in lower icon
+		// slot depending on neutral flag status
+		if( cgs.flagStatus >= 0 && cgs.flagStatus <= 4 ) {
+			int flagIndex = 0;
+			if (cgs.flagStatus == FLAG_TAKEN_RED) {
+				flagIndex = 1;
+				CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[0]);
+			} else if (cgs.flagStatus == FLAG_TAKEN_BLUE) {
+				flagIndex = 1;
+				CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[0]);
+			} else if (cgs.flagStatus == FLAG_DROPPED) {
+				flagIndex = 2;
+			}
+			CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.neutralflagShader[flagIndex]);
+		}
+		// draw the background depending on tam status
+		if (team == TEAM_RED) {
+			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_red);
+		} else {
+			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_blue);
+		}
+	}
+}
+
 #define FADEOUTTIME 1500
 
 static void CG_DrawTeammateIcon(void) {
@@ -3174,6 +3227,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	CG_DrawSprayYourColorCartridges(team, hudnum);
 	CG_DrawBigBallon(team);
 	CG_DrawCaptureTheLolly(team);
+	CG_DrawOneLollyCTL(team);
 	CG_DrawLPSArrowIcon();
 	CG_DrawTeammateIcon();
 	CG_DrawFrozenTeammateIcon();
@@ -3215,10 +3269,11 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 		vec4_t twhite = {1.0f, 1.0f, 1.0f, 1.0f};
 		const char *s;
 		const char *gametype_longstrs[] = {
-			GAMETYPE_NAME(GT_FFA),		GAMETYPE_NAME(GT_TOURNAMENT), GAMETYPE_NAME(GT_SINGLE_PLAYER),
-			GAMETYPE_NAME(GT_SPRAYFFA), GAMETYPE_NAME(GT_LPS),		  GAMETYPE_NAME(GT_CATCH),
-			GAMETYPE_NAME(GT_TEAM),		GAMETYPE_NAME(GT_FREEZETAG),  GAMETYPE_NAME(GT_CTF),
-			GAMETYPE_NAME(GT_SPRAY),	GAMETYPE_NAME(GT_BALLOON),	  GAMETYPE_NAME(GT_MAX_GAME_TYPE)};
+			GAMETYPE_NAME(GT_FFA), GAMETYPE_NAME(GT_TOURNAMENT), GAMETYPE_NAME(GT_SINGLE_PLAYER),
+			GAMETYPE_NAME(GT_SPRAYFFA), GAMETYPE_NAME(GT_LPS), GAMETYPE_NAME(GT_CATCH),
+			GAMETYPE_NAME(GT_TEAM), GAMETYPE_NAME(GT_FREEZETAG), GAMETYPE_NAME(GT_CTF),
+			GAMETYPE_NAME(GT_1FCTF), GAMETYPE_NAME(GT_SPRAY), GAMETYPE_NAME(GT_BALLOON),
+			GAMETYPE_NAME(GT_MAX_GAME_TYPE)};
 		const int fadeOutTime = 3000;
 
 		CASSERT(ARRAY_LEN(gametype_longstrs) == GT_MAX_GAME_TYPE + 1);

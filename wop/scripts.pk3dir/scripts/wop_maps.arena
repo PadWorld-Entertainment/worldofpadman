@@ -225,7 +225,7 @@
 {
 	map      "wop_colorstageCTL"
 	longname "ColorStage"
-	type     "ctl"
+	type     "ctl 1lctl"
 }
 
 {
@@ -237,7 +237,7 @@
 {
 	map      "wop_westernsetCTL"
 	longname "Westernset"
-	type     "ctl"
+	type     "ctl 1lctl"
 }
 
 //{
@@ -255,7 +255,7 @@
 {
 	map      "wop_journeyCTL"
 	longname "CybJourney"
-	type      "ctl"
+	type      "ctl 1lctl"
 }
 
 {
@@ -273,5 +273,5 @@
 {
 	map      "wop_fridgeCTL"
 	longname "FridgeWars"
-	type     "ctl"
+	type     "ctl 1lctl"
 }

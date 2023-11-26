@@ -361,6 +361,7 @@ static const replacePair_t q3ToWopItems[] = {{"weapon_gauntlet", "weapon_punchy"
 
 											 {"team_CTF_redflag", "team_CTL_redlolly"},
 											 {"team_CTF_blueflag", "team_CTL_bluelolly"},
+											 {"team_CTF_neutralflag", "team_CTL_neutrallolly"},
 											 {"team_CTF_redplayer", "team_redplayer"},
 											 {"team_CTF_blueplayer", "team_blueplayer"},
 											 {"team_CTF_redspawn", "team_redspawn"},
@@ -381,7 +382,7 @@ static const replacePair_t spawnpointReplacements[] = {{"team_redplayer", "info_
 													   {NULL, NULL}};
 
 static const char *gametypeNames[] = {"ffa", "tournament", "single", "spray", "lps", "ctkd",
-										"team", "freeze", "ctl", "sptp", "balloon"};
+										"team", "freeze", "ctl", "onelolly", "sptp", "balloon"};
 CASSERT(ARRAY_LEN(gametypeNames) == GT_MAX_GAME_TYPE);
 
 /*
@@ -398,7 +399,7 @@ static qboolean G_ValueIncludesGametype(const char *value, gametype_t gametype) 
 
 	// Order needs to match gametype_t of WoP
 	static const char *gametypeNamesQ3[] = {"ffa", "tournament", "single", NULL, NULL, NULL,
-											"team", NULL, "ctf", NULL, NULL};
+											"team", NULL, "ctf", "oneflag", NULL, NULL};
 	CASSERT(ARRAY_LEN(gametypeNamesQ3) == GT_MAX_GAME_TYPE);
 
 	if (gametype < GT_FFA || gametype >= GT_MAX_GAME_TYPE) {
@@ -471,14 +472,19 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		}
 	}
 
-	// remove lollies if we aren't in CTL
-	// FIXME: Should mappers do this via gametype spawnvar (also for balloons, lps items etc) ?
-	if (g_gametype.integer != GT_CTF &&
+	// remove red and blue lollies if we aren't in CTL and 1LCTL
+	if (g_gametype.integer != GT_CTF && g_gametype.integer != GT_1FCTF &&
 		(!Q_stricmp(ent->classname, "team_CTL_redlolly") || !Q_stricmp(ent->classname, "team_CTL_bluelolly"))) {
 		G_FreeEntity(ent);
 		return;
 	}
 
+	// remove neutral lolly if we aren't in 1LCTL
+	if (g_gametype.integer != GT_1FCTF && !Q_stricmp(ent->classname, "team_CTL_neutrallolly")) {
+		G_FreeEntity(ent);
+		return;
+	}
+	
 	if (!IsSyc()) {
 		G_SpawnInt("onlyspraygt", "0", &i);
 		if (i) {
