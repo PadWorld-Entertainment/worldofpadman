@@ -310,7 +310,7 @@ static void CG_DrawMedals(float x, float y, const score_t *score) {
 		Com_sprintf(buf, sizeof(buf), "%d", score->spraygodCount);
 		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 	}
-	if (cgs.gametype == GT_CTF || cgs.gametype == GT_BALLOON) {
+	if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cgs.gametype == GT_BALLOON) {
 		const clientInfo_t *ci = &cgs.clientinfo[score->client];
 		x += 30;
 		if (ci->team == TEAM_RED) {
@@ -321,7 +321,7 @@ static void CG_DrawMedals(float x, float y, const score_t *score) {
 		Com_sprintf(buf, sizeof(buf), "%d", score->captures);
 		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 	}
-	if (cgs.gametype == GT_CTF || cgs.gametype == GT_BALLOON || cgs.gametype == GT_SPRAY) {
+	if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cgs.gametype == GT_BALLOON || cgs.gametype == GT_SPRAY) {
 		x += 30;
 		CG_DrawPic(x, y, 24, 24, cgs.media.medalPadHero);
 		Com_sprintf(buf, sizeof(buf), "%d", score->padheroCount);
