@@ -62,7 +62,6 @@ MUSIC PLAYER MENU
 typedef struct {
 	menuframework_s menu;
 
-	menubitmap_s musicbg;
 	menubitmap_s play;
 	menubitmap_s stop;
 	menubitmap_s nextsong;
@@ -71,9 +70,33 @@ typedef struct {
 	menubitmap_s prevalbum;
 	menubitmap_s exit;
 
+	int currentAlbum;
 } music_t;
 
 static music_t s_music;
+
+typedef struct {
+	char title[MAX_TRACKNAME];
+	char file[MAX_QPATH];
+} trackInfo_t;
+
+typedef struct {
+	trackInfo_t tracks[MAX_TRACKS];
+	qhandle_t albumCover;
+	char name[MAX_ALBUMNAME];
+	int numTracks;
+} albumInfo_t;
+
+typedef struct {
+	albumInfo_t albums[MAX_ALBUMS];
+
+//	playOrder_t *playOrder;
+//	playOrder_t *lastplayOrderItem;
+	int numAlbums;
+//	int songStarted;
+} musicInfo_t;
+
+static musicInfo_t s_musicInfo;
 
 /*
 =================
@@ -190,9 +213,26 @@ UI_Music_DrawAlbums
 */
 static void UI_Music_DrawAlbums(void) {
 
-	// if (musicInfo.albums[musicMenu.currentAlbum].background) {
-	// 	UI_DrawHandlePic((202), 60, 374, 340, musicInfo.albums[musicMenu.currentAlbum].background);
-	//}
+	if (s_musicInfo.albums[s_music.currentAlbum - 1].albumCover) {
+		UI_DrawHandlePic(110, 32, 130, 120, s_musicInfo.albums[s_music.currentAlbum - 1].albumCover);
+	} else {
+		UI_FillRect(110, 32, 130, 120, colorDkGrey);
+	}
+
+	if (s_musicInfo.albums[s_music.currentAlbum].albumCover) {
+		UI_DrawHandlePic(298, 32, 248, 230, s_musicInfo.albums[s_music.currentAlbum].albumCover);
+	} else {
+		UI_FillRect(298, 32, 248, 230, colorDkGrey);
+	}
+
+	if (s_musicInfo.albums[s_music.currentAlbum + 1].albumCover) {
+		UI_DrawHandlePic(614, 32, 130, 120, s_musicInfo.albums[s_music.currentAlbum + 1].albumCover);
+	} else {
+		UI_FillRect(614, 32, 130, 120, colorDkGrey);
+	}
+
+	UI_DrawNamedPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, MUSICBG);
+	Menu_Draw(&s_music.menu);
 }
 
 /*
@@ -210,15 +250,7 @@ void UI_Music_MenuInit(void) {
 	s_music.menu.wrapAround = qtrue;
 	s_music.menu.fullscreen = qtrue;
 	s_music.menu.key = UI_Music_Key;
-	
-	UI_Music_DrawAlbums();
-
-	s_music.musicbg.generic.type = MTYPE_BITMAP;
-	s_music.musicbg.generic.name = MUSICBG;
-	s_music.musicbg.generic.x = 0;
-	s_music.musicbg.generic.y = 0;
-	s_music.musicbg.width = SCREEN_WIDTH;
-	s_music.musicbg.height = SCREEN_HEIGHT;
+	s_music.menu.draw = UI_Music_DrawAlbums;
 
 	s_music.play.generic.type = MTYPE_BITMAP;
 	s_music.play.generic.name = PLAY0;
@@ -304,7 +336,6 @@ void UI_Music_MenuInit(void) {
 	s_music.exit.focuspic = EXIT1;
 	s_music.exit.focuspicinstead = qtrue;
 
-	Menu_AddItem(&s_music.menu, &s_music.musicbg);
 	Menu_AddItem(&s_music.menu, &s_music.play);
 	Menu_AddItem(&s_music.menu, &s_music.stop);
 	Menu_AddItem(&s_music.menu, &s_music.nextsong);
