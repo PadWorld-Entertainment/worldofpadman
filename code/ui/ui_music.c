@@ -52,7 +52,8 @@ MUSIC PLAYER MENU
 #define ID_PREVSONG 13
 #define ID_NEXTALBUM 14
 #define ID_PREVALBUM 15
-#define ID_EXIT 16
+#define ID_MUSICVOLUME 16
+#define ID_EXIT 17
 
 #define MAX_TRACKS 15
 #define MAX_ALBUMS 10
@@ -68,6 +69,7 @@ typedef struct {
 	menubitmap_s prevsong;
 	menubitmap_s nextalbum;
 	menubitmap_s prevalbum;
+	menuslider_s musicvolume;
 	menubitmap_s exit;
 
 	int currentAlbum;
@@ -97,6 +99,18 @@ typedef struct {
 } musicInfo_t;
 
 static musicInfo_t s_musicInfo;
+float originalmusicvolume;
+
+/*
+=================
+UI_Music_SetMenuItems
+=================
+*/
+static void UI_Music_SetMenuItems(void) {
+
+	s_music.musicvolume.curvalue = originalmusicvolume * 100;
+
+}
 
 /*
 =================
@@ -155,6 +169,10 @@ static void UI_Music_MenuEvent(void *ptr, int event) {
 	}
 
 	switch (((menucommon_s *)ptr)->id) {
+	case ID_MUSICVOLUME:
+		trap_Cvar_SetValue("s_musicvolume", (float)((int)s_music.musicvolume.curvalue) / 100);
+		break;
+
 	case ID_PLAY:
 		break;
 
@@ -174,6 +192,7 @@ static void UI_Music_MenuEvent(void *ptr, int event) {
 		break;
 
 	case ID_EXIT:
+		trap_Cmd_ExecuteText(EXEC_APPEND, va("s_musicvolume %f\n", originalmusicvolume));
 		UI_StartMusic();
 		UI_PopMenu();
 		break;
@@ -252,6 +271,8 @@ void UI_Music_MenuInit(void) {
 	s_music.menu.key = UI_Music_Key;
 	s_music.menu.draw = UI_Music_DrawAlbums;
 
+	originalmusicvolume = trap_Cvar_VariableValue("s_musicvolume");
+
 	s_music.play.generic.type = MTYPE_BITMAP;
 	s_music.play.generic.name = PLAY0;
 	s_music.play.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
@@ -324,6 +345,20 @@ void UI_Music_MenuInit(void) {
 	s_music.prevalbum.focuspic = PREVALBUM1;
 	s_music.prevalbum.focuspicinstead = qtrue;
 
+	s_music.musicvolume.generic.type = MTYPE_SLIDER;
+	s_music.musicvolume.generic.name = "Volume:";
+	s_music.musicvolume.generic.flags = QMF_SMALLFONT;
+	s_music.musicvolume.generic.callback = UI_Music_MenuEvent;
+	s_music.musicvolume.generic.id = ID_MUSICVOLUME;
+	s_music.musicvolume.generic.x = 464;
+	s_music.musicvolume.generic.y = 282;
+	s_music.musicvolume.minvalue = 0;
+	s_music.musicvolume.maxvalue = 100;
+	s_music.musicvolume.generic.toolTip =
+		"Use this to adjust the music volume to your needs. NOTE: All changes "
+		"here will be reset to the music volume set in sound options when "
+		"leaving this menu.";
+
 	s_music.exit.generic.type = MTYPE_BITMAP;
 	s_music.exit.generic.name = EXIT0;
 	s_music.exit.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
@@ -342,7 +377,10 @@ void UI_Music_MenuInit(void) {
 	Menu_AddItem(&s_music.menu, &s_music.prevsong);
 	Menu_AddItem(&s_music.menu, &s_music.nextalbum);
 	Menu_AddItem(&s_music.menu, &s_music.prevalbum);
+	Menu_AddItem(&s_music.menu, &s_music.musicvolume);
 	Menu_AddItem(&s_music.menu, &s_music.exit);
+
+	UI_Music_SetMenuItems();
 }
 
 /*
