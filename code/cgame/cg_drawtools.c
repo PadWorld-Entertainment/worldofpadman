@@ -103,6 +103,39 @@ void CG_AdjustFrom640(float *x, float *y, float *w, float *h) {
 
 /*
 ================
+CG_NativeResTo640
+
+Adjust native window position to current widescreen placement
+================
+*/
+void CG_NativeResTo640(float *x, float *y, float *w, float *h) {
+	if (x) {
+		if (cg_horizontalPlacement == PLACE_CENTER) {
+			*x -= cgs.screenXBias;
+		} else if (cg_horizontalPlacement == PLACE_RIGHT) {
+			*x -= cgs.screenXBias*2;
+		}
+		*x /= cgs.screenXScale;
+	}
+	if (w) {
+		*w /= cgs.screenXScale;
+	}
+
+	if (y) {
+		if (cg_verticalPlacement == PLACE_CENTER) {
+			*y -= cgs.screenYBias;
+		} else if (cg_verticalPlacement == PLACE_BOTTOM) {
+			*y -= cgs.screenYBias*2;
+		}
+		*y /= cgs.screenYScale;
+	}
+	if (h) {
+		*h /= cgs.screenYScale;
+	}
+}
+
+/*
+================
 CG_FillRect
 
 Coordinates are 640*480 virtual values
@@ -738,22 +771,11 @@ CG_WorldToScreen
 qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
 	const float px = tan(cg.refdef.fov_x * M_PI / 360.0f);
 	const float py = tan(cg.refdef.fov_y * M_PI / 360.0f);
-	float xc;
-	float yc;
+	float xc = cg.refdef.width * 0.5f;
+	float yc = cg.refdef.height * 0.5f;
 	qboolean front = qtrue;
 	vec3_t trans;
 	float z;
-	int screenWidth = SCREEN_WIDTH;
-	int screenHeight = SCREEN_HEIGHT;
-
-	// check for widescreen
-	if (cg.refdef.width * (float)SCREEN_HEIGHT > cg.refdef.height * (float)SCREEN_WIDTH) {
-		// see ui_local.h for SCREEN_WIDTH and SCREEN_HEIGHT re-definition
-		screenWidth = 864;
-		screenHeight = 486;
-	}
-	xc = (float)(screenWidth * cg_viewsize.integer) / 200.0f;
-	yc = (float)(screenHeight * cg_viewsize.integer) / 200.0f;
 
 	VectorSubtract(point, cg.refdef.vieworg, trans);
 
@@ -763,12 +785,14 @@ qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
 	}
 
 	if (x) {
-		*x = (float)screenWidth * 0.5f - DotProduct(trans, cg.refdef.viewaxis[1]) * xc / (z * px);
+		*x = cg.refdef.x + xc - DotProduct(trans, cg.refdef.viewaxis[1]) * xc / (z * px);
 	}
 
 	if (y) {
-		*y = (float)screenHeight * 0.5f - DotProduct(trans, cg.refdef.viewaxis[2]) * yc / (z * py);
+		*y = cg.refdef.y + yc - DotProduct(trans, cg.refdef.viewaxis[2]) * yc / (z * py);
 	}
+
+	CG_NativeResTo640( x, y, NULL, NULL );
 
 	return front;
 }
