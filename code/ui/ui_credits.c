@@ -305,6 +305,7 @@ static const cr_line credits[] = {
 	{"Gerrit Neuendorf", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
 	{"Scott Reismanis", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
 	{"Jeremy Williams", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
+	{"Zack Middleton", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
 	{"Victor Karp", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
 	{"Ragman", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
 	{"Magnacus", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
