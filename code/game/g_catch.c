@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // code for the catch the killerduck game mode
 
 #include "g_local.h"
-#include "g_spawn.h"
 #include "inv.h"
 
 #define RESPAWN_DROPPED_KILLERDUCKS 5
