@@ -476,6 +476,10 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 		G_CheckTeamItems();
 	}
 
+	if (g_gametype.integer == GT_CATCH) {
+		G_CatchHandleHoldableKillerducks();
+	}
+
 	// freezetag
 	if (G_FreezeTag()) {
 		FT_InitFreezeTag();

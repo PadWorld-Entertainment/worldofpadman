@@ -28,6 +28,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define RESPAWN_DROPPED_KILLERDUCKS 5
 
+// TODO: don't free them - but allow to re-use those entities to re-spawn the killerduck here
+static void G_EnsureExactlyOne(const char *name) {
+	gentity_t *item = G_Find(NULL, FOFS(classname), name);
+	if (item == NULL) {
+		Com_Printf("WARNING: No %s found\n", name);
+		return;
+	}
+
+	do {
+		item = G_Find(item, FOFS(classname), name);
+		if (item == NULL) {
+			break;
+		}
+		G_FreeEntity(item);
+	} while (item);
+}
+
+/**
+ * @brief Checks that enough holdable_killerducks are spawned
+ *
+ * Removes all holdable_killerducks if there are too many
+ */
+void G_CatchHandleHoldableKillerducks(void) {
+	G_EnsureExactlyOne("holdable_killerducks");
+}
+
 /**
  * Executes the respawn of the killerducks after a given timeout at one of the spawn points
  */
@@ -80,7 +106,7 @@ static void G_DroppedKillerDucksThinkPickable(gentity_t *ent) {
 /**
  * The respawn of the killerduck happens on death in @c TossClientItems
  */
-gentity_t* G_DropKillerDucks(gentity_t *ent) {
+gentity_t *G_DropKillerDucks(gentity_t *ent) {
 	const int clientNum = ent - g_entities;
 	vec3_t velocity, angles;
 	gclient_t *client = ent->client;
