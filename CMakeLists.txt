@@ -95,6 +95,18 @@ function(shader_validation GAME SHADER)
   )
 endfunction()
 
+function(skin_validation GAME PATH)
+  set(SKINPATH "${CMAKE_CURRENT_SOURCE_DIR}/models.pk3dir/models/${PATH}")
+  set(targetname "skin-${GAME}-${PATH}")
+  string(REPLACE "/" "-" targetname ${targetname})
+  get_filename_component(targetname ${targetname} NAME_WLE)
+  get_filename_component(filename ${SKINPATH} NAME)
+  add_test(NAME ${targetname}
+    COMMAND $<TARGET_FILE:skintool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SKINPATH}"
+    WORKING_DIRECTORY "$<TARGET_FILE_DIR:skintool>"
+  )
+endfunction()
+
 function(bsp_validation GAME BSP)
   set(BSPPATH "${CMAKE_CURRENT_SOURCE_DIR}/maps.pk3dir/maps/${BSP}")
   set(targetname "bsp-${GAME}-${BSP}")

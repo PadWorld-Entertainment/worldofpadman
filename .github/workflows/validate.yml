@@ -26,4 +26,5 @@ jobs:
           cmake .. -DBUILD_CLIENT=OFF -DBUILD_SERVER=OFF -DBUILD_RENDERER_OPENGL2=OFF -DBUILD_RENDERER_VULKAN=OFF
           cmake --build . --target bsptool
           cmake --build . --target shadertool
+          cmake --build . --target skintool
           ctest --output-on-failure
