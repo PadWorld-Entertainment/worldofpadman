@@ -65,10 +65,8 @@ static void Initrefdef2D(void) {
 	refdef2D.y = y;
 	refdef2D.width = w;
 	refdef2D.height = h;
-	//	refdef2D.fov_x = 171.77787f;//2*atan(320/23)
-	//	refdef2D.fov_y = 169.05174f;//2*atan(240/23)
-	refdef2D.fov_x = 35.48934f; // 2*atan(320/1000)
-	refdef2D.fov_y = 26.99147f; // 2*atan(240/1000)
+	refdef2D.fov_x = RAD2DEG(2.0f * atan2(refdef2D.vieworg[0], 1000.0f));
+	refdef2D.fov_y = RAD2DEG(2.0f * atan2(refdef2D.vieworg[1], 1000.0f));
 	refdef2D.time = INT_MSECTIME;
 
 	initrefdef = qtrue;
