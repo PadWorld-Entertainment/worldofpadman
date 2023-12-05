@@ -3604,19 +3604,27 @@ static void CG_DrawChat(void) {
 			// this is adding some extra time to those chat entries that were not visible before...
 			cg.chatmsgtime[i] = cg.time;
 		} else if (cg.chatmsgtime[i] && cg.time - cg.chatmsgtime[i] < notifytime * 1000) {
-			const int iconSize = 14;
+			int iconSize = 16;
 			const int padding = 1;
-			const int charHeight = iconSize - (2 * padding);
-			const int charWidth = charHeight / 2;
-			const int iconY = j * iconSize;
-			const int textY = iconY + ((iconSize - charHeight) / 2);
+			int charHeight, charWidth;
+			int iconY, textY;
 			int x = padding;
+			int iconPreference = CG_GetCvarInt("cg_drawChatIcon");
 
-			if (cg.chaticons[i] && CG_GetCvarInt("cg_drawChatIcon") != 0) {
-				CG_DrawPic((float)x, (float)(j * iconSize), (float)iconSize, (float)iconSize, cg.chaticons[i]);
-				x += iconSize + padding;
+			if (iconPreference == 1) {
+				iconSize = 12;
+			} else if (iconPreference == 3) {
+				iconSize = 20;
 			}
-			// TODO: Create a cvar for fontsize (also adjust icon-size)?
+
+			charHeight = iconSize - (2 * padding);
+			charWidth = charHeight / 2;
+			iconY = j * iconSize;
+			textY = iconY + ((iconSize - charHeight) / 2);
+
+			if (cg.chaticons[i] && iconPreference != 0) {
+				CG_DrawPic((float)x, (float)(j * iconSize), (float)iconSize, (float)iconSize, cg.chaticons[i]);					x += iconSize + padding;
+			}
 			// TODO: This does not support newlines (see "hotfix" in CG_DrawChar() )
 			//       or linewrapping. On the other hand, long text crashes the game anyways..
 			CG_DrawStringExt(x, textY, cg.chattext[i], colorWhite, qfalse, qtrue, charWidth, charHeight,

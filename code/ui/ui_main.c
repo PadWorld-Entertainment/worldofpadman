@@ -227,7 +227,7 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&syc_logo, "syc_logo", "", CVAR_ARCHIVE},
 								  {&s_wop_restarted, "s_wop_restarted", "0", CVAR_ROM | CVAR_TEMP}, // CVAR_NORESTART
 								  {&con_notifytime, "con_notifytime", "-4", CVAR_ARCHIVE},
-								  {&cg_drawChatIcon, "cg_drawChatIcon", "1", CVAR_ARCHIVE},
+								  {&cg_drawChatIcon, "cg_drawChatIcon", "2", CVAR_ARCHIVE},
 								  {&cg_chatBeep, "cg_chatBeep", "7", CVAR_ARCHIVE},
 								  {&cg_glowModel, "cg_glowModel", "", CVAR_ARCHIVE},
 								  {&wop_AutoswitchSongByNextMap, "wop_AutoswitchSongByNextMap", "0", CVAR_ARCHIVE},

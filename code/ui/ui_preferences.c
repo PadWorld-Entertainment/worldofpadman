@@ -142,7 +142,7 @@ typedef struct {
 
 	menulist_s connotify;
 	menulist_s chatheight;
-	menuradiobutton_s chaticon;
+	menulist_s chaticon;
 	menuradiobutton_s chatbeep;
 	menuradiobutton_s teamchatbeep;
 	menuradiobutton_s gesture;
@@ -254,6 +254,8 @@ static const char *botchat_items[] = {"Off", "Default", "Often", NULL};
 
 static const char *chatheight_items[] = {"Default", "Expanded", "Maximum", NULL};
 
+static const char *chaticon_items[] = {"Off", "Small", "Default", "Big", NULL};
+
 /*
 =================
 UI_Preferences_SetMenuItems
@@ -318,7 +320,7 @@ static void UI_Preferences_SetMenuItems(void) {
 		s_preferences.chatheight.curvalue = 0;
 	}
 
-	s_preferences.chaticon.curvalue = trap_Cvar_VariableValue("cg_drawChatIcon") != 0;
+	s_preferences.chaticon.curvalue = Com_Clamp(0, 3, trap_Cvar_VariableValue("cg_drawChatIcon"));
 
 	chatbeep = trap_Cvar_VariableValue("cg_chatBeep");
 	if (chatbeep == 0) {
@@ -1136,15 +1138,18 @@ static void UI_Preferences_MenuInit(void) {
 		"(up to 6 lines), or maximum (up to 8 lines) at the top of the screen.";
 
 	y += (BIGCHAR_HEIGHT + 2);
-	s_preferences.chaticon.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.chaticon.generic.type = MTYPE_SPINCONTROL;
 	s_preferences.chaticon.generic.name = "Player Icon:";
 	s_preferences.chaticon.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.chaticon.generic.callback = UI_Preferences_Event;
 	s_preferences.chaticon.generic.id = ID_CHATICON;
 	s_preferences.chaticon.generic.x = XPOSITION;
 	s_preferences.chaticon.generic.y = y;
+	s_preferences.chaticon.itemnames = chaticon_items;
 	s_preferences.chaticon.generic.toolTip =
-		"Disable to hide the player icon at the beginning of a chat notification. Default is on.";
+		"Select whether you prefer the player icon at the beginning of a chat notification to "
+		"appear small or big at the top of the screen. This also influences the text size. "
+		"Disable to hide it.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.chatbeep.generic.type = MTYPE_RADIOBUTTON;

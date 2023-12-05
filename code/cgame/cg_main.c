@@ -342,7 +342,7 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_ambient, "cg_ambient", "1", CVAR_ARCHIVE},
 
 	{&cg_chatHeight, "cg_chatHeight", "4", CVAR_ARCHIVE},
-	{&cg_drawChatIcon, "cg_drawChatIcon", "1", CVAR_ARCHIVE},
+	{&cg_drawChatIcon, "cg_drawChatIcon", "2", CVAR_ARCHIVE},
 
 	// freezetag
 	{&cg_ft_thawerIconX, "cg_FT_thawerIconX", "320", CVAR_ARCHIVE},
