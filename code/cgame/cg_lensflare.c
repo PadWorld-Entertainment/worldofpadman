@@ -12,7 +12,7 @@ typedef enum {
 	SF_NO = 0, // SF=SpecialFlare
 	SF_BEAM,
 	SF_LINE,
-	SF_OB, // ob=overbrighten
+	SF_OVERBRIGHTEN,
 	SF_SUBLF
 } specials_t;
 
@@ -453,12 +453,14 @@ void Init_LensFlareSys(void) {
 	}
 	g_freeflares = &g_flares[MAX_FLARES - 1];
 
+	// normalized "skylensflare_dir" values followed by the "skylensflare" values from worldspawn
 	Q_strncpyz(tmpstr, cg_skyLensflare.string, sizeof(tmpstr));
 	if (tmpstr[0] != '\0') {
 		sscanf(tmpstr, "%f %f %f", &cg.skylensflare_dir[0], &cg.skylensflare_dir[1], &cg.skylensflare_dir[2]);
 		Q_strncpyz(cg.skylensflare, (char *)(strchr(tmpstr, '>') + 1), sizeof(cg.skylensflare));
-	} else
+	} else {
 		cg.skylensflare[0] = '\0';
+	}
 
 	// default lf vv
 	strcpy(g_lensflares[0].lfname, "default");
@@ -680,11 +682,11 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 				tmpflare->shader = cgs.media.whiteShader;
 		}
 
-		if (tmpflare->special == SF_OB && sublf)
+		if (tmpflare->special == SF_OVERBRIGHTEN && sublf)
 			continue;
 
 		if (!sublf) {
-			if (tmpflare->special == SF_OB) {
+			if (tmpflare->special == SF_OVERBRIGHTEN) {
 				if ((tmpflare->specialVar * tmpflare->specialVar) < prozDirLenSquared)
 					continue;
 				else
@@ -816,13 +818,14 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 						  (xywh[0] + dir[0] * tmpflare->pos + qdir[0] + ndir[0]),
 						  (xywh[1] - (dir[1] * tmpflare->pos + qdir[1] + ndir[1])), tmpflare->shader, tmpflare->color);
 		} break;
-		case SF_OB:
-			// da fehlt das um skallieren -.-
-			//			trap_R_SetColor(tmpflare->color);
-			//			trap_R_DrawStretchPic(xywh[0]-(xywh[2]*0.5f*tmpflare->radius),xywh[1]-(xywh[3]*0.5f*tmpflare->radius),xywh[2]*tmpflare->radius,xywh[3]*tmpflare->radius,0,0,1,1,tmpflare->shader);
-			//			trap_R_SetColor(NULL);
+		case SF_OVERBRIGHTEN:
+			// the scaling is missing here -.-
+			// trap_R_SetColor(tmpflare->color);
+			// trap_R_DrawStretchPic(xywh[0]-(xywh[2]*0.5f*tmpflare->radius),xywh[1]-(xywh[3]*0.5f*tmpflare->radius),xywh[2]*tmpflare->radius,xywh[3]*tmpflare->radius,0,0,1,1,tmpflare->shader);
+			// trap_R_SetColor(NULL);
 
-			AdvancedDrawPicA(xywh[0], xywh[1], SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1, 1, tmpflare->shader, tmpflare->color, 0,
+			AdvancedDrawPicA(xywh[0], xywh[1], SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1, 1, tmpflare->shader,
+							 tmpflare->color, 0,
 							 3); // TURNORIGIN_MIDDLECENTER=3
 			break;
 		case SF_SUBLF: {

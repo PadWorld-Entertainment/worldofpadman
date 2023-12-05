@@ -43,8 +43,8 @@ static void Initrefdef2D(void) {
 	memset(&refdef2D, 0, sizeof(refdef2D));
 	refdef2D.rdflags = RDF_NOWORLDMODEL;
 	// orig (0/0/0)
-	refdef2D.vieworg[0] = 320.0f;
-	refdef2D.vieworg[1] = 240.0f;
+	refdef2D.vieworg[0] = SCREEN_WIDTH / 2.0f;
+	refdef2D.vieworg[1] = SCREEN_HEIGHT / 2.0f;
 	//	refdef2D.vieworg[2]=23.0f;// ;) ... fov!
 	refdef2D.vieworg[2] = 1000.0f;
 	refdef2D.viewaxis[0][0] = 0;
@@ -58,8 +58,8 @@ static void Initrefdef2D(void) {
 	refdef2D.viewaxis[2][2] = 0;
 	x = 0;
 	y = 0;
-	w = 640;
-	h = 480;
+	w = SCREEN_WIDTH;
+	h = SCREEN_HEIGHT;
 	ADJUSTFROM640(&x, &y, &w, &h);
 	refdef2D.x = x;
 	refdef2D.y = y;
@@ -79,7 +79,7 @@ static void Initrefdef2D(void) {
 DrawPoly
 #######################
 */
-static void DrawPoly(poly_t *poly) {
+static void DrawPoly(const poly_t *poly) {
 	if (!initrefdef)
 		Initrefdef2D();
 
