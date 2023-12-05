@@ -542,12 +542,11 @@ Calculate_2DdirOf3D
 
 A function for calculating the 2D-dir(center of the screen is 0/0) of a 3D-Dot/Dir ... base on my first lensflare
 src(for padmod) returns alpha-float, if the lensflare can't be seen it is 0.0f point is the 3d origin of the dot dir is
-the direktion of the lf-source refdef is the refdef for the drawn scene v2 is the 2D-vector from the screen-center to
+the direction of the lf-source refdef is the refdef for the drawn scene v2 is the 2D-vector from the screen-center to
 the lf point
 #######################
 */
-static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *distanceSquared,
-								 vec4_t xywh) {
+static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *distanceSquared, vec4_t xywh) {
 	vec3_t vec;
 	vec3_t axis[3];
 	trace_t tr;
@@ -709,38 +708,36 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 			curSpecialVar = tmpflare->specialVar * prozSize;
 
 		switch (tmpflare->special) {
-		default:
-			{
-				float tmpf = 0;
-				vec2_t tmpdir;
+		default: {
+			float tmpf = 0;
+			vec2_t tmpdir;
 
-				if (tmpflare->turnstyle[1] != 0.0f) {
-					tmpf = sqrt(dir[0] * dir[0] + dir[1] * dir[1]);
+			if (tmpflare->turnstyle[1] != 0.0f) {
+				tmpf = sqrt(dir[0] * dir[0] + dir[1] * dir[1]);
 
-					if (tmpf) {
-						tmpf = 1 / tmpf;
-						tmpdir[0] = dir[0] * tmpf;
-						tmpdir[1] = dir[1] * tmpf;
+				if (tmpf) {
+					tmpf = 1 / tmpf;
+					tmpdir[0] = dir[0] * tmpf;
+					tmpdir[1] = dir[1] * tmpf;
 
-						//				tmpf=asin(tmpdir[0])*180.0f/M_PI;//q3 has no asin-table =(
-						tmpf = 90.0f - RAD2DEG(acos(tmpdir[0]));
+					//				tmpf=asin(tmpdir[0])*180.0f/M_PI;//q3 has no asin-table =(
+					tmpf = 90.0f - RAD2DEG(acos(tmpdir[0]));
 
-						if (tmpdir[1] > 0)
-							tmpf = 180.0f - tmpf;
-					} else
-						tmpf = 0.0f;
+					if (tmpdir[1] > 0)
+						tmpf = 180.0f - tmpf;
+				} else
+					tmpf = 0.0f;
 
-					tmpf *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinnmacht
-				}
-
-				tmpf += tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
-						(tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos);
-
-				AdvancedDrawPicA((xywh[0] + dir[0] * tmpflare->pos), (xywh[1] - dir[1] * tmpflare->pos),
-								 curRadius * 2.0f, curRadius * 2.0f, 0, 0, 1, 1, tmpflare->shader, tmpflare->color,
-								 tmpf, 3); // TURNORIGIN_MIDDLECENTER=3
+				tmpf *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinnmacht
 			}
-			break;
+
+			tmpf += tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
+					(tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos);
+
+			AdvancedDrawPicA((xywh[0] + dir[0] * tmpflare->pos), (xywh[1] - dir[1] * tmpflare->pos), curRadius * 2.0f,
+							 curRadius * 2.0f, 0, 0, 1, 1, tmpflare->shader, tmpflare->color, tmpf,
+							 3); // TURNORIGIN_MIDDLECENTER=3
+		} break;
 		case SF_BEAM: {
 			vec2_t qdir;
 			vec2_t ldir;
@@ -886,10 +883,6 @@ TODO: write some info ;)
 */
 void AddLFsToScreen(void) {
 	int i;
-	vec2_t v2;
-	float lfalpha;
-
-	//	strcpy(cg.skylensflare,"testskylf");
 
 	if (!cg_drawLensflare.integer) {
 		return;
@@ -902,33 +895,6 @@ void AddLFsToScreen(void) {
 		VectorNormalize(cg.skylensflare_dir);
 
 		if (cg.wopSky[0] != '\0') {
-			/*
-						//0->hoch/runter, 1->rechts/links, 2->v^/^v(kamera um linsen-axe drehen)
-						if(cg.skylensflare_dir[0]==1.0f)
-						{ tmpv32[0]=tmpv32[1]=tmpv32[2]=0.0f; }
-						else if(cg.skylensflare_dir[1]==1.0f)
-						{ tmpv32[0]=tmpv32[2]=0.0f;tmpv32[1]=-90.0f; }
-						else if(cg.skylensflare_dir[2]==1.0f)
-						{ tmpv32[1]=tmpv32[2]=0.0f;tmpv32[0]=-90.0f; }
-						else if(cg.skylensflare_dir[0]==-1.0f)
-						{ tmpv32[0]=tmpv32[2]=0.0f;tmpv32[1]=180.0f; }
-						else if(cg.skylensflare_dir[1]==-1.0f)
-						{ tmpv32[0]=tmpv32[2]=0.0f;tmpv32[1]=90.0f; }
-						else if(cg.skylensflare_dir[2]==-1.0f)
-						{ tmpv32[1]=tmpv32[2]=0.0f;tmpv32[0]=90.0f; }
-						else
-						{
-							tmpv32[2]=0.0f;
-							tmpv32[0]=-90.0f+180.0f/M_PI*acos(cg.skylensflare_dir[2]/sqrt(cg.skylensflare_dir[0]*cg.skylensflare_dir[0]+cg.skylensflare_dir[2]*cg.skylensflare_dir[2]));
-							tmpv32[1]=90.0f-180.0f/M_PI*acos(cg.skylensflare_dir[0]/sqrt(cg.skylensflare_dir[0]*cg.skylensflare_dir[0]+cg.skylensflare_dir[1]*cg.skylensflare_dir[1]));
-						}
-
-						tmpv32[0]+=cg.wopSky_Angles[0]*sin(cg.time*0.0001f*cg.wopSky_TimeFactors[0]);
-						tmpv32[1]+=cg.wopSky_Angles[1]*sin(cg.time*0.0001f*cg.wopSky_TimeFactors[1]);
-						tmpv32[2]+=cg.wopSky_Angles[2]*sin(cg.time*0.0001f*cg.wopSky_TimeFactors[2]);
-
-						AngleVectors(tmpv32,tmpv32,NULL,NULL);
-			*/
 			vec3_t wopSkyAxis[3];
 
 			tmpv32[0] = -cg.wopSky_Angles[0] * sin(cg.time * 0.0001f * cg.wopSky_TimeFactors[0]);
@@ -950,13 +916,13 @@ void AddLFsToScreen(void) {
 	for (i = 0; i < IFDA_firstempty; i++) {
 		float distanceSquared;
 		vec4_t xywh;
+		vec2_t v2;
 
-		lfalpha = Calculate_2DdirOf3D(IFD_Array[i].origin, IFD_Array[i].dir, v2, &distanceSquared, xywh);
+		const float lfalpha = Calculate_2DdirOf3D(IFD_Array[i].origin, IFD_Array[i].dir, v2, &distanceSquared, xywh);
 		if (lfalpha == 0.0f)
 			continue;
-		CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
-		DrawLensflare(IFD_Array[i].lensflare, v2, lfalpha, distanceSquared, xywh,
-					  qfalse); // normal 480 ... ausser wenn das bild verkleinert wird
+		// usually 480 ... except the screen was made smaller
+		DrawLensflare(IFD_Array[i].lensflare, v2, lfalpha, distanceSquared, xywh, qfalse);
 	}
 
 	// del list
