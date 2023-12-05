@@ -79,10 +79,11 @@ screenPlacement_e CG_GetScreenVerticalPlacement(void)
 CG_AdjustFrom640
 
 Adjusted for resolution and screen aspect ratio
+
+See CG_NativeResTo640()
 ================
 */
 void CG_AdjustFrom640(float *x, float *y, float *w, float *h) {
-
 	// scale for screen sizes (aspect correct)
 	*x *= cgs.screenXScale;
 	*w *= cgs.screenXScale;
@@ -106,6 +107,8 @@ void CG_AdjustFrom640(float *x, float *y, float *w, float *h) {
 CG_NativeResTo640
 
 Adjust native window position to current widescreen placement
+
+See CG_AdjustFrom640()
 ================
 */
 void CG_NativeResTo640(float *x, float *y, float *w, float *h) {
