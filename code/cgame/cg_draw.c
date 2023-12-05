@@ -3623,7 +3623,8 @@ static void CG_DrawChat(void) {
 			textY = iconY + ((iconSize - charHeight) / 2);
 
 			if (cg.chaticons[i] && iconPreference != 0) {
-				CG_DrawPic((float)x, (float)(j * iconSize), (float)iconSize, (float)iconSize, cg.chaticons[i]);					x += iconSize + padding;
+				CG_DrawPic((float)x, (float)(j * iconSize), (float)iconSize, (float)iconSize, cg.chaticons[i]);
+				x += iconSize + padding;
 			}
 			// TODO: This does not support newlines (see "hotfix" in CG_DrawChar() )
 			//       or linewrapping. On the other hand, long text crashes the game anyways..
