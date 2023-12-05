@@ -656,9 +656,9 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 	flare_t *tmpflare;
 	vec2_t prozDir;
 	float prozDirLenSquared;
-	float invHalfWidth = 1 / (xywh[2] * 0.5f); // inv=inversed
-	float invHalfHeight = 1 / (xywh[3] * 0.5f);
-	float prozSize = xywh[3] / 480.0f;
+	float invHalfWidth = 1.0f / (xywh[2] * 0.5f); // inv=inversed
+	float invHalfHeight = 1.0f / (xywh[3] * 0.5f);
+	float prozSize = xywh[3] / (float)SCREEN_HEIGHT;
 	//	float	invprozSize=480.0f/xywh[3];
 
 	float curRadius, curSpecialVar = 0;
@@ -725,7 +725,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 						tmpdir[1] = dir[1] * tmpf;
 
 						//				tmpf=asin(tmpdir[0])*180.0f/M_PI;//q3 has no asin-table =(
-						tmpf = 90.0f - (acos(tmpdir[0]) * 180.0f / M_PI);
+						tmpf = 90.0f - RAD2DEG(acos(tmpdir[0]));
 
 						if (tmpdir[1] > 0)
 							tmpf = 180.0f - tmpf;
@@ -796,9 +796,8 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 				tmpf *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinn macht
 			}
 
-			tmpf += (tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
-					 (tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos)) /
-					180.0f * M_PI;
+			tmpf += DEG2RAD(tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
+					 (tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos));
 
 			ndir[0] = sin(tmpf);
 			ndir[1] = -cos(tmpf);
@@ -824,7 +823,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 			//			trap_R_DrawStretchPic(xywh[0]-(xywh[2]*0.5f*tmpflare->radius),xywh[1]-(xywh[3]*0.5f*tmpflare->radius),xywh[2]*tmpflare->radius,xywh[3]*tmpflare->radius,0,0,1,1,tmpflare->shader);
 			//			trap_R_SetColor(NULL);
 
-			AdvancedDrawPicA(xywh[0], xywh[1], 640.0f, 480.0f, 0, 0, 1, 1, tmpflare->shader, tmpflare->color, 0,
+			AdvancedDrawPicA(xywh[0], xywh[1], SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1, 1, tmpflare->shader, tmpflare->color, 0,
 							 3); // TURNORIGIN_MIDDLECENTER=3
 			break;
 		case SF_SUBLF: {
@@ -858,9 +857,8 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 				angle *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinn macht
 			}
 
-			angle += (tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
-					  (tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos)) /
-					 180.0f * M_PI;
+			angle += DEG2RAD(tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
+					  (tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos));
 
 			subdir[0] = sin(angle) * curRadius * dirlen * tmpflare->pos;
 			subdir[1] = -cos(angle) * curRadius * dirlen * tmpflare->pos;

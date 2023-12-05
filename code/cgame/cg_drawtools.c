@@ -792,7 +792,7 @@ qboolean CG_WorldToScreen(const vec3_t point, float *x, float *y) {
 		*y = cg.refdef.y + yc - DotProduct(trans, cg.refdef.viewaxis[2]) * yc / (z * py);
 	}
 
-	CG_NativeResTo640( x, y, NULL, NULL );
+	CG_NativeResTo640(x, y, NULL, NULL);
 
 	return front;
 }
