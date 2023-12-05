@@ -553,11 +553,10 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *dis
 	trace_t tr;
 
 	// x,y of the center ... Width, Height ... all convertet to the 640x480-screen
-	xywh[2] = cg.refdef.width;
-	xywh[3] = cg.refdef.height;
-
 	xywh[0] = cg.refdef.x + cg.refdef.width * 0.5f;
 	xywh[1] = cg.refdef.y + cg.refdef.height * 0.5f;
+	xywh[2] = cg.refdef.width;
+	xywh[3] = cg.refdef.height;
 
 	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 	CG_NativeResTo640(&xywh[0], &xywh[1], &xywh[2], &xywh[3]);
@@ -612,7 +611,7 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *dis
 	}
 
 	// make a dotproduct to get a rough anglecheck ...
-	if (((vec[0] * cg.refdef.viewaxis[0][0] + vec[1] * cg.refdef.viewaxis[0][1] + vec[2] * cg.refdef.viewaxis[0][2]) <= 0))
+	if (DotProduct(vec, cg.refdef.viewaxis[0]) <= 0.0f)
 		return 0.0f;
 
 	// copy axis to get a short name ;)
