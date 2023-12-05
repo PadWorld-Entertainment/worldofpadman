@@ -553,11 +553,15 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, refdef_t *refdef, vec
 	trace_t tr;
 
 	// x,y of the center ... Width, Height ... all convertet to the 640x480-screen
-	xywh[2] = 640.0f * (float)refdef->width / (float)cgs.glconfig.vidWidth;
-	xywh[3] = 480.0f * (float)refdef->height / (float)cgs.glconfig.vidHeight;
+	xywh[2] = cg.refdef.width;
+	xywh[3] = cg.refdef.height;
 
-	xywh[0] = 640.0f * (float)(refdef->x + refdef->width * 0.5f) / (float)cgs.glconfig.vidWidth;
-	xywh[1] = 480.0f * (float)(refdef->y + refdef->height * 0.5f) / (float)cgs.glconfig.vidHeight;
+	xywh[0] = cg.refdef.x + cg.refdef.width * 0.5f;
+	xywh[1] = cg.refdef.y + cg.refdef.height * 0.5f;
+
+	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
+	CG_NativeResTo640(&xywh[0], &xywh[1], &xywh[2], &xywh[3]);
+	CG_PopScreenPlacement();
 
 	if (point[0] != 2300000.0f) // a small hack to mark only dirs (origins have to be between 65535 and -65535)
 	{
@@ -954,6 +958,7 @@ void AddLFsToScreen(void) {
 		lfalpha = Calculate_2DdirOf3D(IFD_Array[i].origin, IFD_Array[i].dir, &cg.refdef, v2, &distanceSquared, xywh);
 		if (lfalpha == 0.0f)
 			continue;
+		CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 		DrawLensflare(IFD_Array[i].lensflare, v2, lfalpha, distanceSquared, xywh,
 					  qfalse); // normal 480 ... ausser wenn das bild verkleinert wird
 	}
