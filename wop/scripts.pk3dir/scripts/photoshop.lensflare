@@ -1,4 +1,4 @@
-// Diese LFs sollen so aussehen wie die aus PS ;)
+// These LFs should look like the ones from PS ;)
 
 "Photoshop/50-300mmZoom"
 {
@@ -13,59 +13,59 @@
   {
     radius 73
     pos -0.99
-    color 1.0 0.95 0.16 0.2 //GR‹N-BRAUN
+    color 1.0 0.95 0.16 0.2 //GREEN-BROWN
     shader lfsprites/disc3
   }
   {
     radius 51
     pos -0.44
-    color 0.46 0.25 0.12 0.2 //BRAUN
+    color 0.46 0.25 0.12 0.2 //BROWN
     shader lfsprites/disc1
   }
   {
     radius 30
     pos -0.40
-    color 0.46 0.25 0.12 0.2 //BRAUN
+    color 0.46 0.25 0.12 0.2 //BROWN
     shader lfsprites/disc1
   }
   {
     radius 12
     pos -0.46
-    color 0.46 0.25 0.12 0.2 //BRAUN
+    color 0.46 0.25 0.12 0.2 //BROWN
     shader lfsprites/disc1
   }
   {
     radius 22
     pos -0.64
-    color 0.0 1.0 1.0 0.3 //GR‹N-BLAU
+    color 0.0 1.0 1.0 0.3 //GREEN-BLUE
     shader lfsprites/disc1
   }
   {
     radius 10
     pos -0.26
-    color 0.43 0.91 0.71 2.0 //WEIS-T‹RKIS - 109 233 181 100%
+    color 0.43 0.91 0.71 2.0 //WHITE-TURQUOISE - 109 233 181 100%
     shader lfsprites/ball
   }
 // pos>0 vv
-  { // ganz groﬂer Flare ... mit AutoCAD vermessen ;)
+  { // very big flare ... measured with AutoCAD ;)
     radius 200
     pos 1.14
-    color 0.30 0.12 0.06 0.12 //BRAUN - 74 31 15 12%
+    color 0.30 0.12 0.06 0.12 //BROWN - 74 31 15 12%
     shader lfsprites/BigDisc
   }
   {
     radius 3
     pos 0.015
-    color 0.43 0.91 0.71 2.0 //WEIS-T‹RKIS - 109 233 181 100%
+    color 0.43 0.91 0.71 2.0 //WHITE-TURQUOISE - 109 233 181 100%
     shader lfsprites/ball
   }
   {
     radius 105
     pos 1.5
-    color 0.30 0.12 0.06 0.04 //BRAUN - 74 31 15 2% (?)
+    color 0.30 0.12 0.06 0.04 //BROWN - 74 31 15 2% (?)
     shader lfsprites/BigDisc
   }
-  { // weiﬂer "stern", roter ring und rotes leuchten
+  { // white "star", red circle and red glow
     radius 116 // 65 - 116
     pos 1.0
     color 1.0 1.0 1.0 1.0 //
@@ -74,32 +74,31 @@
   {
     radius 30
     pos 1.3
-    color 0.8 1.0 0.2 0.1 //GELB? - 201 255 48 ~8%
+    color 0.8 1.0 0.2 0.1 //YELLOW? - 201 255 48 ~8%
     shader lfsprites/disc2
   }
   {
     radius 44
     pos 0.45
-    color 0.0 0.0 1.0 0.1 //BLAU - 255 0 0 ~1% (?)
+    color 0.0 0.0 1.0 0.1 //BLUE - 255 0 0 ~1% (?)
     shader lfsprites/disc1
   }
   {
     radius 15
     pos 0.5
-    color 0.0 0.0 1.0 0.1 //BLAU
+    color 0.0 0.0 1.0 0.1 //BLUE
     shader lfsprites/disc1
   }
   {
     radius 15
     pos 0.2
-    color 0.46 0.25 0.12 0.1 //BRAUN - 118 63 30
+    color 0.46 0.25 0.12 0.1 //BROWN - 118 63 30
     shader lfsprites/disc1
   }
   {
     radius 18
     pos 0.4
-    color 0.0 0.0 1.0 0.1 //BLAU
+    color 0.0 0.0 1.0 0.1 //BLUE
     shader lfsprites/disc1
   }
-
 }
