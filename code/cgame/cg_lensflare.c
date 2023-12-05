@@ -513,7 +513,7 @@ AddLFToDrawList
 TODO: write some info ;)
 #######################
 */
-static void AddLFToDrawList(const char *lfname, vec3_t origin, vec3_t dir) {
+static void AddLFToDrawList(const char *lfname, const vec3_t origin, const vec3_t dir) {
 	int i;
 
 	if (IFDA_firstempty == MAX_SCREENLFS)
