@@ -27,47 +27,10 @@
 
 #endif
 
-//#include "wop_advanced2d.h" // will be loaded with .._local.h
-
 #define DEG2RAD_FLOAT 0.017453292f // PI/180
 
-/*
-note:
-typedef struct {
-	vec3_t		xyz;
-	float		st[2];
-	byte		modulate[4];
-} polyVert_t;
-
-typedef struct poly_s {
-	qhandle_t			hShader;
-	int					numVerts;
-	polyVert_t			*verts;
-} poly_t;
-
-RDF_NOWORLDMODEL
-
-typedef struct {
-	int			x, y, width, height;
-	float		fov_x, fov_y;
-	vec3_t		vieworg;
-	vec3_t		viewaxis[3];		// transformation matrix
-
-	// time in milliseconds for shader effects and other time dependent rendering issues
-	int			time;
-
-	int			rdflags;			// RDF_NOWORLDMODEL, etc
-
-	// 1 bits will prevent the associated area from rendering at all
-	byte		areamask[MAX_MAP_AREA_BYTES];
-
-	// text messages for deform text shaders
-	char		text[MAX_RENDER_STRINGS][MAX_RENDER_STRING_LENGTH];
-} refdef_t;
-*/
-
-refdef_t refdef2D;
-int initrefdef = 0;
+static refdef_t refdef2D;
+static qboolean initrefdef = qfalse;
 
 /*
 #######################
@@ -108,7 +71,7 @@ static void Initrefdef2D(void) {
 	refdef2D.fov_y = 26.99147f; // 2*atan(240/1000)
 	refdef2D.time = INT_MSECTIME;
 
-	initrefdef = 1;
+	initrefdef = qtrue;
 }
 
 /*
@@ -638,11 +601,11 @@ static int colorAndPosinc(const char *str, int *spos, float *tmpColor, qboolean 
 DrawTurnableString
 #######################
 */
-static void DrawTurnableStringFC(float x, float y, const char *s, vec4_t color, float charHeight, float angle, int turnorigin,
-						  qboolean forceColor) {
+void DrawTurnableString(float x, float y, const char *s, vec4_t color, float charHeight, float angle, int turnorigin) {
 	vec2_t vec_w, vec_h;
 	int i, j, sLen;
 	vec4_t tmpColor;
+	qboolean forceColor = qfalse;
 
 	memcpy(tmpColor, color, sizeof(vec4_t));
 
@@ -695,10 +658,6 @@ static void DrawTurnableStringFC(float x, float y, const char *s, vec4_t color, 
 	trap_R_RenderScene(&refdef2D);
 }
 
-void DrawTurnableString(float x, float y, const char *s, vec4_t color, float charHeight, float angle, int turnorigin) {
-	DrawTurnableStringFC(x, y, s, color, charHeight, angle, turnorigin, qfalse);
-}
-
 /*
 ####################### ####################### #######################
 
@@ -746,20 +705,19 @@ static void DrawCharWithCutFrame(float x, float y, char ch, float w, float h, fl
 						  t2, FONTSHADER);
 }
 /**
- *
- * Args:
- * x leftedge on 640x480
- * y topedge on 640x480
- * str String that should be drawn
- * cW width of one letter
- * cH height of one letter
- * fl frame leftedge
- * ft frame topedge
- * fr frame rightedge
- * fb frame bottomedge
+ * @param x leftedge on 640x480
+ * @param y topedge on 640x480
+ * @param str String that should be drawn
+ * @param cW width of one letter
+ * @param cH height of one letter
+ * @param fl frame leftedge
+ * @param ft frame topedge
+ * @param fr frame rightedge
+ * @param fb frame bottomedge
  */
-static void DrawStringWithCutFrameFC(float x, float y, const char *str, vec4_t color, float cW, float cH, float fl, float ft,
-							  float fr, float fb, qboolean forceColor) {
+void DrawStringWithCutFrame(float x, float y, const char *str, vec4_t color, float cW, float cH, float fl, float ft,
+							float fr, float fb) {
+	qboolean forceColor = qfalse;
 	int i, sLen;
 	float j = 0.0f;
 	vec4_t tmpColor;
@@ -786,9 +744,4 @@ static void DrawStringWithCutFrameFC(float x, float y, const char *str, vec4_t c
 		j += cW;
 	}
 	trap_R_SetColor(NULL);
-}
-
-void DrawStringWithCutFrame(float x, float y, const char *str, vec4_t color, float cW, float cH, float fl, float ft,
-							float fr, float fb) {
-	DrawStringWithCutFrameFC(x, y, str, color, cW, cH, fl, ft, fr, fb, qfalse);
 }
