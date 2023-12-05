@@ -546,7 +546,7 @@ the direktion of the lf-source refdef is the refdef for the drawn scene v2 is th
 the lf point
 #######################
 */
-static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, refdef_t *refdef, vec2_t v2, float *distanceSquared,
+static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *distanceSquared,
 								 vec4_t xywh) {
 	vec3_t vec;
 	vec3_t axis[3];
@@ -565,25 +565,25 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, refdef_t *refdef, vec
 
 	if (point[0] != 2300000.0f) // a small hack to mark only dirs (origins have to be between 65535 and -65535)
 	{
-		CG_Trace(&tr, refdef->vieworg, NULL, NULL, point, cg.snap->ps.clientNum, CONTENTS_SOLID);
+		CG_Trace(&tr, cg.refdef.vieworg, NULL, NULL, point, cg.snap->ps.clientNum, CONTENTS_SOLID);
 		if (tr.fraction != 1.0f)
 			return 0.0f;
 
 		// make a vector from camera to dot
-		vec[0] = point[0] - refdef->vieworg[0];
-		vec[1] = point[1] - refdef->vieworg[1];
-		vec[2] = point[2] - refdef->vieworg[2];
+		vec[0] = point[0] - cg.refdef.vieworg[0];
+		vec[1] = point[1] - cg.refdef.vieworg[1];
+		vec[2] = point[2] - cg.refdef.vieworg[2];
 
 		*distanceSquared = VectorLengthSquared(vec);
 	} else {
 		vec3_t start;
-		start[0] = refdef->vieworg[0];
-		start[1] = refdef->vieworg[1];
-		start[2] = refdef->vieworg[2];
+		start[0] = cg.refdef.vieworg[0];
+		start[1] = cg.refdef.vieworg[1];
+		start[2] = cg.refdef.vieworg[2];
 
-		vec[0] = refdef->vieworg[0] + dir[0] * 200000.0f;
-		vec[1] = refdef->vieworg[1] + dir[1] * 200000.0f;
-		vec[2] = refdef->vieworg[2] + dir[2] * 200000.0f;
+		vec[0] = cg.refdef.vieworg[0] + dir[0] * 200000.0f;
+		vec[1] = cg.refdef.vieworg[1] + dir[1] * 200000.0f;
+		vec[2] = cg.refdef.vieworg[2] + dir[2] * 200000.0f;
 
 		do {
 			CG_Trace(&tr, start, NULL, NULL, vec, cg.snap->ps.clientNum, CONTENTS_SOLID);
@@ -612,11 +612,11 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, refdef_t *refdef, vec
 	}
 
 	// make a dotproduct to get a rough anglecheck ...
-	if (((vec[0] * refdef->viewaxis[0][0] + vec[1] * refdef->viewaxis[0][1] + vec[2] * refdef->viewaxis[0][2]) <= 0))
+	if (((vec[0] * cg.refdef.viewaxis[0][0] + vec[1] * cg.refdef.viewaxis[0][1] + vec[2] * cg.refdef.viewaxis[0][2]) <= 0))
 		return 0.0f;
 
 	// copy axis to get a short name ;)
-	AxisCopy(refdef->viewaxis, axis);
+	AxisCopy(cg.refdef.viewaxis, axis);
 	if (vec[0] != 0.0f) // the normal formula doesn't work with vec[0]==0 ...
 		v2[0] = (((vec[0] * axis[0][2] - vec[2] * axis[0][0]) * (vec[1] * axis[2][0] - vec[0] * axis[2][1])) -
 				 ((vec[0] * axis[0][1] - vec[1] * axis[0][0]) * (vec[2] * axis[2][0] - vec[0] * axis[2][2]))) /
@@ -639,8 +639,8 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, refdef_t *refdef, vec
 	// wow the calc is very simple (and I don't need any fixed mult value =) ... but I must use Rad instead of Deg ;)
 	// scale to render-size
 #define DEG2RAD_FLOAT 0.017453292f // PI/180
-	v2[0] *= ((float)(xywh[2]) * 0.5f) / tan(refdef->fov_x * 0.5f * DEG2RAD_FLOAT);
-	v2[1] *= ((float)(xywh[3]) * 0.5f) / tan(refdef->fov_y * 0.5f * DEG2RAD_FLOAT);
+	v2[0] *= ((float)(xywh[2]) * 0.5f) / tan(cg.refdef.fov_x * 0.5f * DEG2RAD_FLOAT);
+	v2[1] *= ((float)(xywh[3]) * 0.5f) / tan(cg.refdef.fov_y * 0.5f * DEG2RAD_FLOAT);
 
 	return 1.0f; // noch neuen code fuer den alpha-wert schreiben
 }
@@ -953,7 +953,7 @@ void AddLFsToScreen(void) {
 		float distanceSquared;
 		vec4_t xywh;
 
-		lfalpha = Calculate_2DdirOf3D(IFD_Array[i].origin, IFD_Array[i].dir, &cg.refdef, v2, &distanceSquared, xywh);
+		lfalpha = Calculate_2DdirOf3D(IFD_Array[i].origin, IFD_Array[i].dir, v2, &distanceSquared, xywh);
 		if (lfalpha == 0.0f)
 			continue;
 		CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
