@@ -42,13 +42,13 @@ typedef struct lensflare_s {
 #define MAX_FLARES 128
 #define MAX_LENSFLARES 32
 
-static flare_t flaremem[MAX_FLARES]; // wieviel brauch ich da??????????
-static flare_t *freeflares;
-static lensflare_t lfmem[MAX_LENSFLARES]; // wieviel brauch ich da??????????
-static int numlfs;
+static flare_t g_flares[MAX_FLARES];
+static flare_t *g_freeflares;
+static lensflare_t g_lensflares[MAX_LENSFLARES];
+static int g_num_lensflares;
 
 typedef struct InfosForDrawing_s {
-	int lensflare; // index in lfmem
+	int lensflare; // index in g_lensflares
 	vec3_t origin; // origin ... the screen pos will be called @ drawing
 	vec3_t dir;	   // dir ... the screen pos will be
 	float alpha;
@@ -116,7 +116,7 @@ static void StrEndWork(void) {
 			}
 			break;
 		case NT_VIEWSIZE:
-			lfmem[numlfs - 1].viewsize = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].viewsize = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
@@ -142,58 +142,59 @@ static void StrEndWork(void) {
 			}
 			break;
 		case NT_RADIUS:
-			lfmem[numlfs - 1].firstflare->radius = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->radius = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_POS:
-			lfmem[numlfs - 1].firstflare->pos = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->pos = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_SHADER:
-			Q_strncpyz(lfmem[numlfs - 1].firstflare->shadername, tmpString, sizeof(lfmem[numlfs - 1].firstflare->shadername));
+			Q_strncpyz(g_lensflares[g_num_lensflares - 1].firstflare->shadername, tmpString,
+					   sizeof(g_lensflares[g_num_lensflares - 1].firstflare->shadername));
 
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_COLOR_R:
-			lfmem[numlfs - 1].firstflare->color[0] = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->color[0] = atof(tmpString);
 
 			next_tmpstr = NT_COLOR_G;
 			break;
 		case NT_COLOR_G:
-			lfmem[numlfs - 1].firstflare->color[1] = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->color[1] = atof(tmpString);
 
 			next_tmpstr = NT_COLOR_B;
 			break;
 		case NT_COLOR_B:
-			lfmem[numlfs - 1].firstflare->color[2] = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->color[2] = atof(tmpString);
 
 			next_tmpstr = NT_COLOR_A;
 			break;
 		case NT_COLOR_A:
-			lfmem[numlfs - 1].firstflare->color[3] = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->color[3] = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_SPECIAL:
 			if (!Q_stricmp(tmpString, "beam")) {
-				lfmem[numlfs - 1].firstflare->special = SF_BEAM;
+				g_lensflares[g_num_lensflares - 1].firstflare->special = SF_BEAM;
 
 				next_tmpstr = NT_SPECIALVAR;
 				break;
 			} else if (!Q_stricmp(tmpString, "line")) {
-				lfmem[numlfs - 1].firstflare->special = SF_LINE;
+				g_lensflares[g_num_lensflares - 1].firstflare->special = SF_LINE;
 
 				next_tmpstr = NT_SPECIALVAR;
 				break;
 			} else if (!Q_stricmp(tmpString, "overbrighten")) {
-				lfmem[numlfs - 1].firstflare->special = SF_OB;
+				g_lensflares[g_num_lensflares - 1].firstflare->special = SF_OVERBRIGHTEN;
 
 				next_tmpstr = NT_SPECIALVAR;
 				break;
 			} else if (!Q_stricmp(tmpString, "sublf")) {
-				lfmem[numlfs - 1].firstflare->special = SF_SUBLF;
+				g_lensflares[g_num_lensflares - 1].firstflare->special = SF_SUBLF;
 
 				next_tmpstr = NT_SETSUBLFPTR;
 				break;
@@ -203,43 +204,43 @@ static void StrEndWork(void) {
 			break;
 
 		case NT_SPECIALVAR:
-			lfmem[numlfs - 1].firstflare->specialVar = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->specialVar = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
 
 		case NT_TURNSTYLE:
 			if (!Q_stricmp(tmpString, "center")) {
-				lfmem[numlfs - 1].firstflare->turnstyle[1] = 1.0f;
+				g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[1] = 1.0f;
 				next_tmpstr = NT_NORMAL;
 			} else {
-				lfmem[numlfs - 1].firstflare->turnstyle[0] = atof(tmpString);
+				g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[0] = atof(tmpString);
 				next_tmpstr = NT_TURNVAR1;
 			}
 			break;
 		case NT_TURNVAR1:
-			lfmem[numlfs - 1].firstflare->turnstyle[1] = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[1] = atof(tmpString);
 			next_tmpstr = NT_TURNVAR2;
 			break;
 		case NT_TURNVAR2:
-			lfmem[numlfs - 1].firstflare->turnstyle[2] = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[2] = atof(tmpString);
 			next_tmpstr = NT_TURNVAR3;
 			break;
 		case NT_TURNVAR3:
-			lfmem[numlfs - 1].firstflare->turnstyle[3] = atof(tmpString);
+			g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[3] = atof(tmpString);
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_SETSUBLFPTR: {
 			int i;
 
 			for (i = 0; i < MAX_LENSFLARES; i++) {
-				if (!Q_stricmp(lfmem[i].lfname, tmpString)) {
-					*((int *)(&lfmem[numlfs - 1].firstflare->specialVar)) = i;
+				if (!Q_stricmp(g_lensflares[i].lfname, tmpString)) {
+					*((int *)(&g_lensflares[g_num_lensflares - 1].firstflare->specialVar)) = i;
 					break;
 				}
 			}
-			if (*((int *)(&lfmem[numlfs - 1].firstflare->specialVar)) == 0 && Q_stricmp(tmpString, "default"))
-				Com_Printf("Can't find sublf(\"%s\") for %s\n", tmpString, lfmem[numlfs - 1].lfname);
+			if (*((int *)(&g_lensflares[g_num_lensflares - 1].firstflare->specialVar)) == 0 && Q_stricmp(tmpString, "default"))
+				Com_Printf("Can't find sublf(\"%s\") for %s\n", tmpString, g_lensflares[g_num_lensflares - 1].lfname);
 			next_tmpstr = NT_NORMAL;
 		} break;
 		default:
@@ -325,28 +326,29 @@ static void LF_Parser(const char *scriptname) {
 			switch (parserlvl) {
 			case PL_LF:
 				// alloc a new lf-struct and set a pointer ...
-				if (numlfs + 1 >= MAX_LENSFLARES) {
+				if (g_num_lensflares + 1 >= MAX_LENSFLARES) {
 					Com_Printf(S_COLOR_RED "can't load lensflare-script: no struct free (MAX=%i)\n", MAX_LENSFLARES);
 					return;
 				}
 
-				Q_strncpyz(lfmem[numlfs].lfname, nextscript, sizeof(lfmem[numlfs].lfname));
-				lfmem[numlfs].viewsize = 1.0f;
-				numlfs++;
+				Q_strncpyz(g_lensflares[g_num_lensflares].lfname, nextscript, sizeof(g_lensflares[g_num_lensflares].lfname));
+				g_lensflares[g_num_lensflares].viewsize = 1.0f;
+				g_num_lensflares++;
 				break;
 			case PL_FLARE:
 				// alloc a new flare-struct and set the firstflare-pointer ...
-				if (!freeflares) {
-					Com_Printf(S_COLOR_RED "can't finish load lensflare-script(\"%s\"): no flare-struct free (MAX=%i)\n",
-							   lfmem[numlfs - 1].lfname, MAX_FLARES);
+				if (!g_freeflares) {
+					Com_Printf(S_COLOR_RED
+							   "can't finish load lensflare-script(\"%s\"): no flare-struct free (MAX=%i)\n",
+							   g_lensflares[g_num_lensflares - 1].lfname, MAX_FLARES);
 					return;
 				}
 
-				tmpflare = freeflares;
-				freeflares = tmpflare->next;
+				tmpflare = g_freeflares;
+				g_freeflares = tmpflare->next;
 
-				tmpflare->next = lfmem[numlfs - 1].firstflare;
-				lfmem[numlfs - 1].firstflare = tmpflare;
+				tmpflare->next = g_lensflares[g_num_lensflares - 1].firstflare;
+				g_lensflares[g_num_lensflares - 1].firstflare = tmpflare;
 				break;
 			default:
 				break;
@@ -369,7 +371,8 @@ static void LF_Parser(const char *scriptname) {
 						tmpString[tmpstrl] = buffer[i];
 						tmpString[++tmpstrl] = '\0';
 					} else
-						Com_Printf(S_COLOR_GREEN "tmpString is full (this may happen if you use very long names, >%i chars) ... if "
+						Com_Printf(S_COLOR_GREEN
+								   "tmpString is full (this may happen if you use very long names, >%i chars) ... if "
 								   "this leads to errors, short the names or/and send me a mail at raute_at@gmx.de\n",
 								   (MAX_TMPSTRING - 2));
 				}
@@ -382,7 +385,8 @@ static void LF_Parser(const char *scriptname) {
 					tmpString[tmpstrl] = buffer[i];
 					tmpString[++tmpstrl] = '\0';
 				} else
-					Com_Printf(S_COLOR_GREEN "tmpString is full (this may happen if you use very long names, >%i chars) ... if "
+					Com_Printf(S_COLOR_GREEN
+							   "tmpString is full (this may happen if you use very long names, >%i chars) ... if "
 							   "this leads to errors, short the names or/and send me a mail at raute_at@gmx.de\n",
 							   (MAX_TMPSTRING - 2));
 			}
@@ -441,13 +445,13 @@ void Init_LensFlareSys(void) {
 	int i;
 	char tmpstr[256];
 
-	memset(&flaremem, 0, sizeof(flaremem));
-	memset(&lfmem, 0, sizeof(lfmem));
+	memset(&g_flares, 0, sizeof(g_flares));
+	memset(&g_lensflares, 0, sizeof(g_lensflares));
 
 	for (i = 1; i < MAX_FLARES; i++) {
-		flaremem[i].next = &flaremem[i - 1];
+		g_flares[i].next = &g_flares[i - 1];
 	}
-	freeflares = &flaremem[MAX_FLARES - 1];
+	g_freeflares = &g_flares[MAX_FLARES - 1];
 
 	Q_strncpyz(tmpstr, cg_skyLensflare.string, sizeof(tmpstr));
 	if (tmpstr[0] != '\0') {
@@ -457,41 +461,41 @@ void Init_LensFlareSys(void) {
 		cg.skylensflare[0] = '\0';
 
 	// default lf vv
-	strcpy(lfmem[0].lfname, "default");
-	lfmem[0].firstflare = freeflares;
-	freeflares = lfmem[0].firstflare->next->next->next->next;
-	lfmem[0].firstflare->next->next->next->next = NULL;
-	lfmem[0].firstflare->radius = 5;
-	lfmem[0].firstflare->color[0] = 1.0f;
-	lfmem[0].firstflare->color[1] = 1.0f;
-	lfmem[0].firstflare->color[2] = 0.0f;
-	lfmem[0].firstflare->color[3] = 0.8f;
-	lfmem[0].firstflare->shader = cgs.media.whiteShader;
-	lfmem[0].firstflare->pos = 0.2f;
-	lfmem[0].firstflare->next->radius = 10;
-	lfmem[0].firstflare->next->color[0] = 0.0f;
-	lfmem[0].firstflare->next->color[1] = 0.33f;
-	lfmem[0].firstflare->next->color[2] = 1.0f;
-	lfmem[0].firstflare->next->color[3] = 0.33f;
-	lfmem[0].firstflare->next->shader = cgs.media.whiteShader;
-	lfmem[0].firstflare->next->pos = -0.3f;
-	lfmem[0].firstflare->next->next->radius = 4;
-	lfmem[0].firstflare->next->next->color[0] = 1.0f;
-	lfmem[0].firstflare->next->next->color[1] = 0.33f;
-	lfmem[0].firstflare->next->next->color[2] = 0.0f;
-	lfmem[0].firstflare->next->next->color[3] = 0.66f;
-	lfmem[0].firstflare->next->next->shader = cgs.media.whiteShader;
-	lfmem[0].firstflare->next->next->pos = 1.0f;
-	lfmem[0].firstflare->next->next->next->radius = 15;
-	lfmem[0].firstflare->next->next->next->color[0] = 0.75f;
-	lfmem[0].firstflare->next->next->next->color[1] = 0.0f;
-	lfmem[0].firstflare->next->next->next->color[2] = 0.0f;
-	lfmem[0].firstflare->next->next->next->color[3] = 0.33f;
-	lfmem[0].firstflare->next->next->next->shader = cgs.media.whiteShader;
-	lfmem[0].firstflare->next->next->next->pos = 2.0f;
-	lfmem[0].shadersloaded = qtrue;
+	strcpy(g_lensflares[0].lfname, "default");
+	g_lensflares[0].firstflare = g_freeflares;
+	g_freeflares = g_lensflares[0].firstflare->next->next->next->next;
+	g_lensflares[0].firstflare->next->next->next->next = NULL;
+	g_lensflares[0].firstflare->radius = 5;
+	g_lensflares[0].firstflare->color[0] = 1.0f;
+	g_lensflares[0].firstflare->color[1] = 1.0f;
+	g_lensflares[0].firstflare->color[2] = 0.0f;
+	g_lensflares[0].firstflare->color[3] = 0.8f;
+	g_lensflares[0].firstflare->shader = cgs.media.whiteShader;
+	g_lensflares[0].firstflare->pos = 0.2f;
+	g_lensflares[0].firstflare->next->radius = 10;
+	g_lensflares[0].firstflare->next->color[0] = 0.0f;
+	g_lensflares[0].firstflare->next->color[1] = 0.33f;
+	g_lensflares[0].firstflare->next->color[2] = 1.0f;
+	g_lensflares[0].firstflare->next->color[3] = 0.33f;
+	g_lensflares[0].firstflare->next->shader = cgs.media.whiteShader;
+	g_lensflares[0].firstflare->next->pos = -0.3f;
+	g_lensflares[0].firstflare->next->next->radius = 4;
+	g_lensflares[0].firstflare->next->next->color[0] = 1.0f;
+	g_lensflares[0].firstflare->next->next->color[1] = 0.33f;
+	g_lensflares[0].firstflare->next->next->color[2] = 0.0f;
+	g_lensflares[0].firstflare->next->next->color[3] = 0.66f;
+	g_lensflares[0].firstflare->next->next->shader = cgs.media.whiteShader;
+	g_lensflares[0].firstflare->next->next->pos = 1.0f;
+	g_lensflares[0].firstflare->next->next->next->radius = 15;
+	g_lensflares[0].firstflare->next->next->next->color[0] = 0.75f;
+	g_lensflares[0].firstflare->next->next->next->color[1] = 0.0f;
+	g_lensflares[0].firstflare->next->next->next->color[2] = 0.0f;
+	g_lensflares[0].firstflare->next->next->next->color[3] = 0.33f;
+	g_lensflares[0].firstflare->next->next->next->shader = cgs.media.whiteShader;
+	g_lensflares[0].firstflare->next->next->next->pos = 2.0f;
+	g_lensflares[0].shadersloaded = qtrue;
 	// default lf ^^
-	numlfs = 1;
+	g_num_lensflares = 1;
 
 	Load_LFfiles();
 }
@@ -527,7 +531,7 @@ static void AddLFToDrawList(const char *lfname, const vec3_t origin, const vec3_
 	IFD_Array[IFDA_firstempty].origin[2] = origin[2];
 
 	for (i = 0; i < MAX_LENSFLARES; i++) {
-		if (!Q_stricmp(lfmem[i].lfname, lfname)) {
+		if (!Q_stricmp(g_lensflares[i].lfname, lfname)) {
 			IFD_Array[IFDA_firstempty].lensflare = i;
 			break;
 		}
@@ -666,10 +670,10 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 	prozDirLenSquared = prozDir[0] * prozDir[0] + prozDir[1] * prozDir[1];
 
 	// draw all flares of the lf
-	for (tmpflare = lfmem[lfid].firstflare; tmpflare != NULL; tmpflare = tmpflare->next) {
+	for (tmpflare = g_lensflares[lfid].firstflare; tmpflare != NULL; tmpflare = tmpflare->next) {
 		float tmpalpha, tmpalpha2;
 
-		if (!lfmem[lfid].shadersloaded) {
+		if (!g_lensflares[lfid].shadersloaded) {
 			tmpflare->shader = trap_R_RegisterShaderNoMip(tmpflare->shadername);
 
 			if (tmpflare->shader == 0)
@@ -687,10 +691,10 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 					//				transparency=sqrt(tmpf)/tmpflare->specialVar;
 					tmpalpha2 = lfalpha * (1.0f - prozDirLenSquared / (tmpflare->specialVar * tmpflare->specialVar));
 			} else {
-				if (1.0f < prozDirLenSquared / lfmem[lfid].viewsize)
+				if (1.0f < prozDirLenSquared / g_lensflares[lfid].viewsize)
 					continue;
 				else
-					tmpalpha2 = lfalpha * (1.0f - prozDirLenSquared / lfmem[lfid].viewsize);
+					tmpalpha2 = lfalpha * (1.0f - prozDirLenSquared / g_lensflares[lfid].viewsize);
 			}
 		} else if (lfalpha < 0.0f) {
 			continue;
@@ -792,7 +796,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 			}
 
 			tmpf += DEG2RAD(tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
-					 (tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos));
+							(tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos));
 
 			ndir[0] = sin(tmpf);
 			ndir[1] = -cos(tmpf);
@@ -853,13 +857,13 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 			}
 
 			angle += DEG2RAD(tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
-					  (tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos));
+							 (tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos));
 
 			subdir[0] = sin(angle) * curRadius * dirlen * tmpflare->pos;
 			subdir[1] = -cos(angle) * curRadius * dirlen * tmpflare->pos;
 
 			if (*((int *)(&tmpflare->specialVar)) == lfid) {
-				Com_Printf("ERROR: lensflare(%s) with the same lensflare as sublf!!!\n", lfmem[lfid].lfname);
+				Com_Printf("ERROR: lensflare(%s) with the same lensflare as sublf!!!\n", g_lensflares[lfid].lfname);
 				return;
 			}
 
@@ -871,7 +875,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 		tmpflare->color[3] = tmpalpha;
 	}
 
-	lfmem[lfid].shadersloaded = qtrue;
+	g_lensflares[lfid].shadersloaded = qtrue;
 }
 
 /*
