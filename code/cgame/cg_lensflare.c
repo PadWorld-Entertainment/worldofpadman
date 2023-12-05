@@ -637,9 +637,8 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *dis
 
 	// wow the calc is very simple (and I don't need any fixed mult value =) ... but I must use Rad instead of Deg ;)
 	// scale to render-size
-#define DEG2RAD_FLOAT 0.017453292f // PI/180
-	v2[0] *= ((float)(xywh[2]) * 0.5f) / tan(cg.refdef.fov_x * 0.5f * DEG2RAD_FLOAT);
-	v2[1] *= ((float)(xywh[3]) * 0.5f) / tan(cg.refdef.fov_y * 0.5f * DEG2RAD_FLOAT);
+	v2[0] *= ((float)(xywh[2]) * 0.5f) / tan(cg.refdef.fov_x * M_PI / 360.0f);
+	v2[1] *= ((float)(xywh[3]) * 0.5f) / tan(cg.refdef.fov_y * M_PI / 360.0f);
 
 	return 1.0f; // noch neuen code fuer den alpha-wert schreiben
 }
