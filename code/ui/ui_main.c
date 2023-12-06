@@ -149,12 +149,12 @@ vmCvar_t ui_server14;
 vmCvar_t ui_server15;
 vmCvar_t ui_server16;
 
-// spray anfang
+// spray begin
 // vmCvar_t	logolist;
-// spray ende
-// lens anfang
+// spray end
+// lens begin
 // vmCvar_t	lensflarelist;
-// lens ende
+// lens end
 vmCvar_t spraycolor;
 vmCvar_t syc_logo;
 vmCvar_t s_wop_restarted;
@@ -219,12 +219,12 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&ui_server14, "server14", "", CVAR_ARCHIVE},
 								  {&ui_server15, "server15", "", CVAR_ARCHIVE},
 								  {&ui_server16, "server16", "", CVAR_ARCHIVE},
-
-								  // spray anfang
-								  //	,{ NULL, "logolist", "", CVAR_INIT|CVAR_ROM } // ohne verwaltungs-cvar -> kein
-								  //value limit spray ende lens anfang
-								  //	,{ NULL, "lensflarelist", "", CVAR_INIT|CVAR_ROM }
-								  // lens ende
+								  // spray begin
+								  //	,{NULL, "logolist", "", CVAR_INIT|CVAR_ROM} // no value limit
+								  // spray end
+								  // lens begin
+								  //	,{NULL, "lensflarelist", "", CVAR_INIT|CVAR_ROM}
+								  // lens end
 								  {&spraycolor, "syc_color", "0", CVAR_ARCHIVE | CVAR_USERINFO},
 								  {&syc_logo, "syc_logo", "", CVAR_ARCHIVE},
 								  {&s_wop_restarted, "s_wop_restarted", "0", CVAR_ROM | CVAR_TEMP}, // CVAR_NORESTART
@@ -255,13 +255,13 @@ void UI_RegisterCvars(void) {
 		trap_Cvar_Register(cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags);
 	}
 
-	// cvars die mehr als 256 Zeich aufnehmen sollen (256-limit ist nur im gamecode)
-	// spray anfang
+	// cvars that should take more than 256 chars (the 256-limit is only in the gamecode)
+	// spray begin
 	trap_Cvar_Register(NULL, "logolist", "", CVAR_INIT | CVAR_ROM);
-	// spray ende
-	// lens anfang
+	// spray end
+	// lens begin
 	trap_Cvar_Register(NULL, "lensflarelist", "", CVAR_INIT | CVAR_ROM);
-	// lens ende
+	// lens end
 }
 
 /*
