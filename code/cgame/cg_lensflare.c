@@ -924,8 +924,8 @@ void CG_AddLFsToScreen(void) {
 	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 	for (i = 0; i < IFDA_firstempty; i++) {
 		float distanceSquared = 0.0f;
-		vec4_t xywh;
-		vec2_t v2;
+		vec4_t xywh = {0.0f, 0.0f, 0.0f, 0.0f};
+		vec2_t v2 = {0.0f, 0.0f};
 
 		const float lfalpha = CG_2DdirOf3D(IFD_Array[i].origin, IFD_Array[i].dir, v2, &distanceSquared, xywh);
 		if (lfalpha == 0.0f)
