@@ -860,11 +860,6 @@ int UI_GetNumBots(void);
 void UI_InitGameinfo(void);
 
 //
-// wop_advanced2d.c
-//
-#include "../cgame/wopc_advanced2d.h"
-
-//
 // ui_help.c
 //
 extern void UI_HelpMenu(void);

@@ -1,10 +1,27 @@
 /*
-####################### ####################### ####################### ####################### #######################
-	lens flare system coded by #@(aka Raute)
+===========================================================================
+Copyright (C) 1999-2005 Id Software, Inc.
 
-	this file contains the lensflare system
-####################### ####################### ####################### ####################### #######################
+This file is part of WorldOfPadman source code.
+
+WorldOfPadman source code is free software; you can redistribute it
+and/or modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation; either version 2 of the License,
+or (at your option) any later version.
+
+WorldOfPadman source code is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with WorldOfPadman source code; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+===========================================================================
 */
+
+// lens flare system coded by #@(aka Raute)
+// this file contains the lensflare system
 
 #include "cg_local.h"
 
@@ -62,11 +79,11 @@ static int IFDA_firstempty;
 // cvar:"lensflarelist"
 // vv INIT-stuff vv
 /*
-#######################
+====================
 LF_Parser
 
 ... reads a lf-script and puts the infos in the lf/flare-structs
-#######################
+====================
 */
 typedef enum { PL_BASE, PL_LF, PL_FLARE } parserlvl_t;
 
@@ -98,7 +115,7 @@ static int tmpstrl;
 static char tmpString[MAX_TMPSTRING];
 static char nextscript[128];
 
-static void StrEndWork(void) {
+static void CG_StrEndWork(void) {
 	if (tmpstrl == 0) {
 		next_tmpstr = NT_NORMAL;
 		return;
@@ -257,7 +274,7 @@ static void StrEndWork(void) {
 }
 
 #define MAX_LFSCRIPTSIZE 8192 //-> like arenas-file loader
-static void LF_Parser(const char *scriptname) {
+static void CG_LensflareParser(const char *scriptname) {
 	fileHandle_t f;
 	int i;
 	qboolean inString;
@@ -285,7 +302,7 @@ static void LF_Parser(const char *scriptname) {
 		if (buffer[i] == '/') {
 			if (buffer[i + 1] == '/') {
 				if (inString) {
-					StrEndWork();
+					CG_StrEndWork();
 					inString = qfalse;
 				}
 				for (; buffer[i] != '\n'; i++)
@@ -293,7 +310,7 @@ static void LF_Parser(const char *scriptname) {
 				continue;
 			} else if (buffer[i + 1] == '*') {
 				if (inString) {
-					StrEndWork();
+					CG_StrEndWork();
 					inString = qfalse;
 				}
 				for (; buffer[i] != '*' && buffer[i + 1] != '/'; i++)
@@ -304,7 +321,7 @@ static void LF_Parser(const char *scriptname) {
 
 		if (buffer[i] <= 0x20) {
 			if (inString) {
-				StrEndWork();
+				CG_StrEndWork();
 				inString = qfalse;
 			}
 			if (buffer[i] == '\0')
@@ -317,7 +334,7 @@ static void LF_Parser(const char *scriptname) {
 			flare_t *tmpflare;
 
 			if (inString) {
-				StrEndWork();
+				CG_StrEndWork();
 				inString = qfalse;
 			}
 
@@ -355,7 +372,7 @@ static void LF_Parser(const char *scriptname) {
 			}
 		} else if (buffer[i] == '}') {
 			if (inString) {
-				StrEndWork();
+				CG_StrEndWork();
 				inString = qfalse;
 			}
 
@@ -377,7 +394,7 @@ static void LF_Parser(const char *scriptname) {
 								   (MAX_TMPSTRING - 2));
 				}
 
-				StrEndWork();
+				CG_StrEndWork();
 			} else {
 				inString = qtrue;
 
@@ -396,14 +413,14 @@ static void LF_Parser(const char *scriptname) {
 }
 
 /*
-#######################
+====================
 Load_LFfiles
 
 this function will search lensflare-scripts in "lensflarelist" and call the parser
-#######################
+====================
 */
 #define MAX_LFFILES 40 // I hope this is enough
-static void Load_LFfiles(void) {
+static void CG_LoadLensflareFiles(void) {
 	int i, scriptsfound;
 	char *scriptnamelist[MAX_LFFILES];
 	char scriptnamestr[1024];
@@ -430,18 +447,18 @@ static void Load_LFfiles(void) {
 		scriptsfound = 0;
 
 	for (i = 0; i < scriptsfound; i++) {
-		LF_Parser(scriptnamelist[i]);
+		CG_LensflareParser(scriptnamelist[i]);
 	}
 }
 
 /*
-#######################
+====================
 Init_LensFlareSys
 
 The main-init for the lensflaresys ... should be called at every vid_restart
-#######################
+====================
 */
-void Init_LensFlareSys(void) {
+void CG_InitLensflareSystem(void) {
 	int i;
 	char tmpstr[256];
 
@@ -499,7 +516,7 @@ void Init_LensFlareSys(void) {
 	// default lf ^^
 	g_num_lensflares = 1;
 
-	Load_LFfiles();
+	CG_LoadLensflareFiles();
 }
 
 // loading all lensflare-scripts (filelist by ui)
@@ -513,13 +530,13 @@ void Init_LensFlareSys(void) {
 // ^^ INIT-stuff ^^
 // vv ACTIVE-stuff vv
 /*
-#######################
+====================
 AddLFToDrawList
 
 TODO: write some info ;)
-#######################
+====================
 */
-static void AddLFToDrawList(const char *lfname, const vec3_t origin, const vec3_t dir) {
+static void CG_AddLFToDrawList(const char *lfname, const vec3_t origin, const vec3_t dir) {
 	int i;
 
 	if (IFDA_firstempty == MAX_SCREENLFS)
@@ -543,16 +560,16 @@ static void AddLFToDrawList(const char *lfname, const vec3_t origin, const vec3_
 }
 
 /*
-#######################
+====================
 Calculate_2DdirOf3D
 
 A function for calculating the 2D-dir(center of the screen is 0/0) of a 3D-Dot/Dir ... base on my first lensflare
 src(for padmod) returns alpha-float, if the lensflare can't be seen it is 0.0f point is the 3d origin of the dot dir is
 the direction of the lf-source refdef is the refdef for the drawn scene v2 is the 2D-vector from the screen-center to
 the lf point
-#######################
+====================
 */
-static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *distanceSquared, vec4_t xywh) {
+static float CG_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *distanceSquared, vec4_t xywh) {
 	vec3_t vec;
 	vec3_t axis[3];
 	trace_t tr;
@@ -649,13 +666,13 @@ static float Calculate_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *dis
 }
 
 /*
-#######################
+====================
 DrawLensflare
 
 TODO: write some info ;)
-#######################
+====================
 */
-static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSquared, vec4_t xywh, qboolean sublf) {
+static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSquared, vec4_t xywh, qboolean sublf) {
 	flare_t *tmpflare;
 	vec2_t prozDir;
 	float prozDirLenSquared;
@@ -740,9 +757,9 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 			tmpf += tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
 					(tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos);
 
-			AdvancedDrawPicA((xywh[0] + dir[0] * tmpflare->pos), (xywh[1] - dir[1] * tmpflare->pos), curRadius * 2.0f,
+			CG_AdvancedDrawPicA((xywh[0] + dir[0] * tmpflare->pos), (xywh[1] - dir[1] * tmpflare->pos), curRadius * 2.0f,
 							 curRadius * 2.0f, 0, 0, 1, 1, tmpflare->shader, tmpflare->color, tmpf,
-							 3); // TURNORIGIN_MIDDLECENTER=3
+							 TURNORIGIN_MIDDLECENTER);
 		} break;
 		case SF_BEAM: {
 			vec2_t qdir;
@@ -766,7 +783,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 			qdir[0] *= tmpflare->pos;
 			qdir[1] *= tmpflare->pos;
 
-			Draw4VertsPic((xywh[0] + dir[0] * tmpflare->pos - qdir[0] + ldir[0]),
+			CG_Draw4VertsPic((xywh[0] + dir[0] * tmpflare->pos - qdir[0] + ldir[0]),
 						  (xywh[1] - (dir[1] * tmpflare->pos - qdir[1] + ldir[1])),
 						  (xywh[0] + dir[0] * tmpflare->pos - qdir[0] - ldir[0]),
 						  (xywh[1] - (dir[1] * tmpflare->pos - qdir[1] - ldir[1])),
@@ -809,7 +826,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 			ndir[0] *= curRadius;
 			ndir[1] *= curRadius;
 
-			Draw4VertsPic((xywh[0] + dir[0] * tmpflare->pos - qdir[0] + ndir[0]),
+			CG_Draw4VertsPic((xywh[0] + dir[0] * tmpflare->pos - qdir[0] + ndir[0]),
 						  (xywh[1] - (dir[1] * tmpflare->pos - qdir[1] + ndir[1])),
 						  (xywh[0] + dir[0] * tmpflare->pos - qdir[0] - ndir[0]),
 						  (xywh[1] - (dir[1] * tmpflare->pos - qdir[1] - ndir[1])),
@@ -824,9 +841,9 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 			// trap_R_DrawStretchPic(xywh[0]-(xywh[2]*0.5f*tmpflare->radius),xywh[1]-(xywh[3]*0.5f*tmpflare->radius),xywh[2]*tmpflare->radius,xywh[3]*tmpflare->radius,0,0,1,1,tmpflare->shader);
 			// trap_R_SetColor(NULL);
 
-			AdvancedDrawPicA(xywh[0], xywh[1], SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1, 1, tmpflare->shader,
+			CG_AdvancedDrawPicA(xywh[0], xywh[1], SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1, 1, tmpflare->shader,
 							 tmpflare->color, 0,
-							 3); // TURNORIGIN_MIDDLECENTER=3
+							 TURNORIGIN_MIDDLECENTER);
 			break;
 		case SF_SUBLF: {
 			vec2_t subdir;
@@ -870,7 +887,7 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 				return;
 			}
 
-			DrawLensflare(*((int *)(&tmpflare->specialVar)), subdir, tmpflare->color[3], distanceSquared, subxywh,
+			CG_DrawLensflare(*((int *)(&tmpflare->specialVar)), subdir, tmpflare->color[3], distanceSquared, subxywh,
 						  qtrue);
 		} break;
 		}
@@ -882,13 +899,13 @@ static void DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSqu
 }
 
 /*
-#######################
+====================
 AddLFsToScreen
 
 TODO: write some info ;)
-#######################
+====================
 */
-void AddLFsToScreen(void) {
+void CG_AddLFsToScreen(void) {
 	int i;
 
 	if (!cg_drawLensflare.integer) {
@@ -916,7 +933,7 @@ void AddLFsToScreen(void) {
 			tmpv32[2] = cg.skylensflare_dir[2];
 		}
 
-		AddLFToDrawList(cg.skylensflare, tmpv3, tmpv32);
+		CG_AddLFToDrawList(cg.skylensflare, tmpv3, tmpv32);
 	}
 
 	// Draw (with 3DTo2D-calc)
@@ -925,11 +942,11 @@ void AddLFsToScreen(void) {
 		vec4_t xywh;
 		vec2_t v2;
 
-		const float lfalpha = Calculate_2DdirOf3D(IFD_Array[i].origin, IFD_Array[i].dir, v2, &distanceSquared, xywh);
+		const float lfalpha = CG_2DdirOf3D(IFD_Array[i].origin, IFD_Array[i].dir, v2, &distanceSquared, xywh);
 		if (lfalpha == 0.0f)
 			continue;
 		// usually 480 ... except the screen was made smaller
-		DrawLensflare(IFD_Array[i].lensflare, v2, lfalpha, distanceSquared, xywh, qfalse);
+		CG_DrawLensflare(IFD_Array[i].lensflare, v2, lfalpha, distanceSquared, xywh, qfalse);
 	}
 
 	// del list

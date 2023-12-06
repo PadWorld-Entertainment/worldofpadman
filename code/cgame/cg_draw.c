@@ -378,12 +378,12 @@ static float CG_DrawRealTime(float y) {
 
 		trap_RealTime(&time);
 
-		DrawTurnableString(320, 240, "    ## hours ##>", colorBlue, 16,
+		CG_DrawTurnableString(320, 240, "    ## hours ##>", colorBlue, 16,
 						   90.0f - ((float)(time.tm_hour % 12) * 60.0f + time.tm_min) / 720.0f * 360.0f,
 						   TURNORIGIN_MIDDLELEFT);
-		DrawTurnableString(320, 240, "    === minutes ===>", colorGreen, 16,
+		CG_DrawTurnableString(320, 240, "    === minutes ===>", colorGreen, 16,
 						   90.0f - (time.tm_min * 60.0f + time.tm_sec) / 10.0f, TURNORIGIN_MIDDLELEFT);
-		DrawTurnableString(320, 240, "    ----- seconds -----", colorRed, 16, 90.0f - time.tm_sec / 60.0f * 360.0f,
+		CG_DrawTurnableString(320, 240, "    ----- seconds -----", colorRed, 16, 90.0f - time.tm_sec / 60.0f * 360.0f,
 						   TURNORIGIN_MIDDLELEFT);
 
 		return y;
@@ -519,7 +519,7 @@ CG_DrawServerInfos
 static const char *gametype_strs[] = {
 	GAMETYPE_NAME_SHORT(GT_FFA), GAMETYPE_NAME_SHORT(GT_TOURNAMENT), GAMETYPE_NAME_SHORT(GT_SINGLE_PLAYER),
 	GAMETYPE_NAME_SHORT(GT_SPRAYFFA), GAMETYPE_NAME_SHORT(GT_LPS), GAMETYPE_NAME_SHORT(GT_CATCH),
-	GAMETYPE_NAME_SHORT(GT_TEAM), GAMETYPE_NAME_SHORT(GT_FREEZETAG), GAMETYPE_NAME_SHORT(GT_CTF), 
+	GAMETYPE_NAME_SHORT(GT_TEAM), GAMETYPE_NAME_SHORT(GT_FREEZETAG), GAMETYPE_NAME_SHORT(GT_CTF),
 	GAMETYPE_NAME_SHORT(GT_1FCTF), GAMETYPE_NAME_SHORT(GT_SPRAY), GAMETYPE_NAME_SHORT(GT_BALLOON),
 	GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE)};
 CASSERT(ARRAY_LEN(gametype_strs) == GT_MAX_GAME_TYPE + 1);
@@ -569,7 +569,7 @@ static float CG_DrawServerInfos(float y) {
 		if (tmpi <= 18)
 			CG_DrawStringExt(640 - xpos + 2, y, s, colorWhite, qfalse, qfalse, 8, 16, 18);
 		else {
-			DrawStringWithCutFrame(640 - ((cg.time % ((200 + 8 * tmpi) * 20)) / 20.0f), y, s, colorWhite, 8, 16,
+			CG_DrawStringWithCutFrame(640 - ((cg.time % ((200 + 8 * tmpi) * 20)) / 20.0f), y, s, colorWhite, 8, 16,
 								   640 - xpos + 2, 0, 640 - 1, 480);
 		}
 	}
@@ -586,7 +586,7 @@ static float CG_DrawServerInfos(float y) {
 	scrollLen = tmpi = strlen(cgs.shortmapname) - 13;
 	CG_DrawStringExt(640 - xpos + 2, y, "map: ", colorWhite, qfalse, qfalse, 8, 16, 18);
 	if (scrollLen > 0)
-		DrawStringWithCutFrame(640 - xpos + 45 - (8 * scrollLen * (0.5f + 0.5f * sin(0.01f / scrollLen * cg.time))), y,
+		CG_DrawStringWithCutFrame(640 - xpos + 45 - (8 * scrollLen * (0.5f + 0.5f * sin(0.01f / scrollLen * cg.time))), y,
 							   cgs.shortmapname, colorCyan, 8, 16, 640 - xpos + 8 * 5, 0, 640 - 1, 480);
 	else
 		CG_DrawStringExt(640 - xpos + 42, y, cgs.shortmapname, colorCyan, qfalse, qfalse, 8, 16, 18);
@@ -860,7 +860,7 @@ static void CG_DrawHoldableItem(float y) {
 			CG_FillRect(barX, y + ICON_SIZE - barHeight, 10, barHeight, barColor);
 			CG_DrawRect(barX, y, 10, ICON_SIZE, 1.0f, colorWhite);
 		}
-		
+
 		if ((itemId == HI_KILLERDUCKS && cgs.gametype != GT_CATCH) || itemId == HI_BOOMIES) {
 			const char *str = va("%i", itemState);
 			const int maxChars = strlen(str);
@@ -877,7 +877,7 @@ CG_DrawLowerRight
 */
 static void CG_DrawLowerRight(void) {
 	float y;
-	
+
 	y = 360.0f;
 
 	CG_SetScreenPlacement(PLACE_RIGHT, PLACE_BOTTOM);
@@ -999,7 +999,7 @@ static void CG_WoPTeamOverlay(void) {
 			CG_DrawPic(
 				x + 46, y + 14, 10, 10,
 				cg_items[(team == TEAM_RED ? cgs.media.redCartridgeEntNum : cgs.media.blueCartridgeEntNum)].icon);
-			DrawStringWithCutFrame(x + 46 + 11, y + 14, va("%i", ci->numCartridges), colorWhite, 8, 10, x, y, x + w,
+			CG_DrawStringWithCutFrame(x + 46 + 11, y + 14, va("%i", ci->numCartridges), colorWhite, 8, 10, x, y, x + w,
 								   y + h);
 			break;
 		case GT_1FCTF:
@@ -1031,10 +1031,10 @@ static void CG_WoPTeamOverlay(void) {
 		strLen = CG_DrawStrlen(ci->name);
 		scrollLen = (strLen * 6) - (w - 4) + 2;
 		if (scrollLen > 0.0f)
-			DrawStringWithCutFrame(x + 2 - scrollLen * (0.5f + 0.5f * sin(0.01f / (scrollLen + 1) * cg.time)), y + 27,
+			CG_DrawStringWithCutFrame(x + 2 - scrollLen * (0.5f + 0.5f * sin(0.01f / (scrollLen + 1) * cg.time)), y + 27,
 								   ci->name, colorWhite, 6, 12, x + 2, y, x + w - 2, y + h);
 		else
-			DrawStringWithCutFrame(x + 2, y + 27, ci->name, colorWhite, 6, 12, x + 2, y, x + w - 2, y + h);
+			CG_DrawStringWithCutFrame(x + 2, y + 27, ci->name, colorWhite, 6, 12, x + 2, y, x + w - 2, y + h);
 
 		if (withLocLine) {
 			loc = CG_ConfigString(CS_LOCATIONS + ci->location);
@@ -1043,10 +1043,10 @@ static void CG_WoPTeamOverlay(void) {
 			strLen = CG_DrawStrlen(loc);
 			if (strLen * 6 > (w - 4)) {
 				scrollLen = (strLen * 6) + w;
-				DrawStringWithCutFrame(x + (w - 4) - ((cg.time % (int)(scrollLen * 40)) / 40.0f), y + 27 + 13, loc,
+				CG_DrawStringWithCutFrame(x + (w - 4) - ((cg.time % (int)(scrollLen * 40)) / 40.0f), y + 27 + 13, loc,
 									   colorWhite, 6, 12, x + 2, y, x + w, y + h);
 			} else
-				DrawStringWithCutFrame(x + 2, y + 27 + 13, loc, colorWhite, 6, 12, x + 2, y, x + w, y + h);
+				CG_DrawStringWithCutFrame(x + 2, y + 27 + 13, loc, colorWhite, 6, 12, x + 2, y, x + w, y + h);
 		}
 
 		// all slots are filled?
@@ -2120,7 +2120,7 @@ static void DrawBigScore(int y, int score) {
 	case 2: // scrolling with cutframe
 	{
 		// 95 ~> chars*8 + 2*framewidth
-		DrawStringWithCutFrame(54 - ((cg.time % 2500) * (95.0f / 2500.0f)), y, va("%i", score), colorWhite, 8, 16, 26,
+		CG_DrawStringWithCutFrame(54 - ((cg.time % 2500) * (95.0f / 2500.0f)), y, va("%i", score), colorWhite, 8, 16, 26,
 							   0, 52, 480);
 	} break;
 	}
@@ -2570,7 +2570,7 @@ static void CG_HudDrawHealthAndArmor(int hudnum) {
 	float y = 406 + 39;
 	float w = 69;
 	float h = 20;
-	
+
 	CG_SetScreenPlacement(PLACE_CENTER, PLACE_BOTTOM);
 
 	CG_AdjustFrom640(&x, &y, &w, &h);
@@ -2934,7 +2934,7 @@ static void CG_DrawTeammateIcon(void) {
 		// and the frozen teammate icon is enabled. It would interfere
 		// with the frozen teammate icon.
 		if (cgs.gametype == GT_FREEZETAG && (cg_icons.integer & ICON_FREEZETAG) &&
-			cgs.clientinfo[i].ftIsFrozen) 
+			cgs.clientinfo[i].ftIsFrozen)
 			continue;
 
 		if ((cgs.clientinfo[i].lastPosSaveTime > 0) && ((cg.time - cgs.clientinfo[i].lastPosSaveTime) < FADEOUTTIME)) {
@@ -3451,13 +3451,13 @@ static void CG_DrawZoom(void) {
 				CG_DrawPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, cgs.media.zoomhud);
 				tmpv3[0] = -0.125f - cg.snap->ps.viewangles[1] * 0.0027778f; // 1/360= ~0.0027778
 
-				DrawPic2Color(280, 100, 40, 20, tmpv3[0], 0, tmpv3[0] + 0.25f, 1, transwhite, colorWhite,
+				CG_DrawPic2Color(280, 100, 40, 20, tmpv3[0], 0, tmpv3[0] + 0.25f, 1, transwhite, colorWhite,
 							  cgs.media.zoomcompass);
-				DrawPic2Color(280, 100, 40, 20, tmpv3[0] + 1.0f, 0, tmpv3[0] + 1.25f, 1, transwhite, colorWhite,
+				CG_DrawPic2Color(280, 100, 40, 20, tmpv3[0] + 1.0f, 0, tmpv3[0] + 1.25f, 1, transwhite, colorWhite,
 							  cgs.media.zoomcompass);
-				DrawPic2Color(320, 100, 40, 20, tmpv3[0] + 0.25f, 0, tmpv3[0] + 0.5f, 1, colorWhite, transwhite,
+				CG_DrawPic2Color(320, 100, 40, 20, tmpv3[0] + 0.25f, 0, tmpv3[0] + 0.5f, 1, colorWhite, transwhite,
 							  cgs.media.zoomcompass);
-				DrawPic2Color(320, 100, 40, 20, tmpv3[0] + 1.25f, 0, tmpv3[0] + 1.5f, 1, colorWhite, transwhite,
+				CG_DrawPic2Color(320, 100, 40, 20, tmpv3[0] + 1.25f, 0, tmpv3[0] + 1.5f, 1, colorWhite, transwhite,
 							  cgs.media.zoomcompass);
 
 				x = 248.0f;
@@ -3674,7 +3674,7 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 				  cg.refdef.viewaxis[0][2]);
 	}
 
-	AddLFsToScreen();
+	CG_AddLFsToScreen();
 
 	CG_DrawZoom();
 

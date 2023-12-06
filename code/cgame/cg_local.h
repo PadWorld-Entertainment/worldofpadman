@@ -1609,8 +1609,8 @@ void CG_DumpPolyInfo(void);
 //
 // cg_lensflare.c
 //
-void Init_LensFlareSys(void);
-void AddLFsToScreen(void);
+void CG_InitLensflareSystem(void);
+void CG_AddLFsToScreen(void);
 
 //
 // cg_spriteparticles.c
@@ -1621,9 +1621,27 @@ void LaunchRevivalParticle(vec3_t origin, const int lifetime);
 void Main_SpriteParticles(void);
 
 //
-// wop_advanced2d.c
+// cg_advanced2d.c
 //
-#include "wopc_advanced2d.h"
+#define TURNORIGIN_UPPERLEFT 1
+#define TURNORIGIN_MIDDLELEFT 2
+#define TURNORIGIN_MIDDLECENTER 3
+
+void CG_AdvancedDrawPicA(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader,
+					  vec4_t color, float angle, int turnorigin);
+
+void CG_DrawLine(float x1, float y1, float x2, float y2, float size, vec4_t color);
+
+void CG_DrawPic2Color(float x, float y, float w, float h, float s1, float t1, float s2, float t2, vec4_t color1,
+				   vec4_t color2, qhandle_t shader);
+
+void CG_Draw4VertsPic(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, qhandle_t shader,
+				   vec4_t color);
+
+void CG_DrawTurnableString(float x, float y, const char *s, vec4_t color, float charHeight, float angle, int turnorigin);
+
+void CG_DrawStringWithCutFrame(float x, float y, const char *str, vec4_t color, float cW, float cH, float fl, float ft,
+							float fr, float fb);
 
 //
 // cg_freezetag.c

@@ -1032,8 +1032,8 @@ static void CG_RegisterGraphics(void) {
 			cgs.media.hud_balloon_bar = trap_R_RegisterShaderNoMip("hud/balloonbar");
 			cgs.media.boomiesSphereModel = trap_R_RegisterModel("models/weaponsfx/boomiessphere");
 			cgs.media.boomiesCoreShader = trap_R_RegisterShader("boomiesCore");
-		} 
-		
+		}
+
 		if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
 			cgs.media.hud_CTL_bg_red = trap_R_RegisterShaderNoMip("hud/CTL_red");
 			cgs.media.hud_CTL_bg_blue = trap_R_RegisterShaderNoMip("hud/CTL_blue");
@@ -1355,7 +1355,7 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 		Init_SprayLogoSys();
 	}
 
-	Init_LensFlareSys();
+	CG_InitLensflareSystem();
 
 	{
 		char *tmpcptr;

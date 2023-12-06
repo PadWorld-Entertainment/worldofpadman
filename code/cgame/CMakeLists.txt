@@ -1,6 +1,7 @@
 project(cgame)
 set(SRCS
 	cg_main.c
+	cg_advanced2d.c
 	cg_catch.c
 	cg_consolecmds.c
 	cg_cutscene2d.c
@@ -25,7 +26,6 @@ set(SRCS
 	cg_spriteparticles.c
 	cg_view.c
 	cg_weapons.c
-	wopc_advanced2d.c
 
 	../game/bg_misc.c
 	../game/bg_pmove.c
