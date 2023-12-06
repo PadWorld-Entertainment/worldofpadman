@@ -110,6 +110,7 @@ static char tmpString[MAX_TMPSTRING];
 static char nextscript[128];
 
 static void CG_StrEndWork(void) {
+	lensflare_t *target = &g_lensflares[g_num_lensflares - 1];
 	if (tmpstrl == 0) {
 		next_tmpstr = NT_NORMAL;
 		return;
@@ -127,7 +128,7 @@ static void CG_StrEndWork(void) {
 			}
 			break;
 		case NT_VIEWSIZE:
-			g_lensflares[g_num_lensflares - 1].viewsize = atof(tmpString);
+			target->viewsize = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
@@ -153,59 +154,58 @@ static void CG_StrEndWork(void) {
 			}
 			break;
 		case NT_RADIUS:
-			g_lensflares[g_num_lensflares - 1].firstflare->radius = atof(tmpString);
+			target->firstflare->radius = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_POS:
-			g_lensflares[g_num_lensflares - 1].firstflare->pos = atof(tmpString);
+			target->firstflare->pos = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_SHADER:
-			Q_strncpyz(g_lensflares[g_num_lensflares - 1].firstflare->shadername, tmpString,
-					   sizeof(g_lensflares[g_num_lensflares - 1].firstflare->shadername));
+			Q_strncpyz(target->firstflare->shadername, tmpString, sizeof(target->firstflare->shadername));
 
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_COLOR_R:
-			g_lensflares[g_num_lensflares - 1].firstflare->color[0] = atof(tmpString);
+			target->firstflare->color[0] = atof(tmpString);
 
 			next_tmpstr = NT_COLOR_G;
 			break;
 		case NT_COLOR_G:
-			g_lensflares[g_num_lensflares - 1].firstflare->color[1] = atof(tmpString);
+			target->firstflare->color[1] = atof(tmpString);
 
 			next_tmpstr = NT_COLOR_B;
 			break;
 		case NT_COLOR_B:
-			g_lensflares[g_num_lensflares - 1].firstflare->color[2] = atof(tmpString);
+			target->firstflare->color[2] = atof(tmpString);
 
 			next_tmpstr = NT_COLOR_A;
 			break;
 		case NT_COLOR_A:
-			g_lensflares[g_num_lensflares - 1].firstflare->color[3] = atof(tmpString);
+			target->firstflare->color[3] = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_SPECIAL:
 			if (!Q_stricmp(tmpString, "beam")) {
-				g_lensflares[g_num_lensflares - 1].firstflare->special = SF_BEAM;
+				target->firstflare->special = SF_BEAM;
 
 				next_tmpstr = NT_SPECIALVAR;
 				break;
 			} else if (!Q_stricmp(tmpString, "line")) {
-				g_lensflares[g_num_lensflares - 1].firstflare->special = SF_LINE;
+				target->firstflare->special = SF_LINE;
 
 				next_tmpstr = NT_SPECIALVAR;
 				break;
 			} else if (!Q_stricmp(tmpString, "overbrighten")) {
-				g_lensflares[g_num_lensflares - 1].firstflare->special = SF_OVERBRIGHTEN;
+				target->firstflare->special = SF_OVERBRIGHTEN;
 
 				next_tmpstr = NT_SPECIALVAR;
 				break;
 			} else if (!Q_stricmp(tmpString, "sublf")) {
-				g_lensflares[g_num_lensflares - 1].firstflare->special = SF_SUBLF;
+				target->firstflare->special = SF_SUBLF;
 
 				next_tmpstr = NT_SETSUBLFPTR;
 				break;
@@ -215,30 +215,30 @@ static void CG_StrEndWork(void) {
 			break;
 
 		case NT_SPECIALVAR:
-			g_lensflares[g_num_lensflares - 1].firstflare->specialVar = atof(tmpString);
+			target->firstflare->specialVar = atof(tmpString);
 
 			next_tmpstr = NT_NORMAL;
 			break;
 
 		case NT_TURNSTYLE:
 			if (!Q_stricmp(tmpString, "center")) {
-				g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[1] = 1.0f;
+				target->firstflare->turnstyle[1] = 1.0f;
 				next_tmpstr = NT_NORMAL;
 			} else {
-				g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[0] = atof(tmpString);
+				target->firstflare->turnstyle[0] = atof(tmpString);
 				next_tmpstr = NT_TURNVAR1;
 			}
 			break;
 		case NT_TURNVAR1:
-			g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[1] = atof(tmpString);
+			target->firstflare->turnstyle[1] = atof(tmpString);
 			next_tmpstr = NT_TURNVAR2;
 			break;
 		case NT_TURNVAR2:
-			g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[2] = atof(tmpString);
+			target->firstflare->turnstyle[2] = atof(tmpString);
 			next_tmpstr = NT_TURNVAR3;
 			break;
 		case NT_TURNVAR3:
-			g_lensflares[g_num_lensflares - 1].firstflare->turnstyle[3] = atof(tmpString);
+			target->firstflare->turnstyle[3] = atof(tmpString);
 			next_tmpstr = NT_NORMAL;
 			break;
 		case NT_SETSUBLFPTR: {
@@ -246,12 +246,12 @@ static void CG_StrEndWork(void) {
 
 			for (i = 0; i < MAX_LENSFLARES; i++) {
 				if (!Q_stricmp(g_lensflares[i].lfname, tmpString)) {
-					*((int *)(&g_lensflares[g_num_lensflares - 1].firstflare->specialVar)) = i;
+					*((int *)(&target->firstflare->specialVar)) = i;
 					break;
 				}
 			}
-			if (*((int *)(&g_lensflares[g_num_lensflares - 1].firstflare->specialVar)) == 0 && Q_stricmp(tmpString, "default"))
-				Com_Printf("Can't find sublf(\"%s\") for %s\n", tmpString, g_lensflares[g_num_lensflares - 1].lfname);
+			if (*((int *)(&target->firstflare->specialVar)) == 0 && Q_stricmp(tmpString, "default"))
+				Com_Printf("Can't find sublf(\"%s\") for %s\n", tmpString, target->lfname);
 			next_tmpstr = NT_NORMAL;
 		} break;
 		default:
@@ -922,7 +922,7 @@ void CG_AddLFsToScreen(void) {
 
 	// Draw (with 3DTo2D-calc)
 	for (i = 0; i < IFDA_firstempty; i++) {
-		float distanceSquared;
+		float distanceSquared = 0.0f;
 		vec4_t xywh;
 		vec2_t v2;
 
