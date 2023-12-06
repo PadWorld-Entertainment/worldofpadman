@@ -41,7 +41,6 @@ set(SRCS
 	ui_voicechat.c
 	../game/bg_misc.c
 	../game/bg_lib.c
-	../cgame/wopc_advanced2d.c
 	../qcommon/q_math.c
 	../qcommon/q_shared.c
 )

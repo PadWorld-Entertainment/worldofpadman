@@ -113,7 +113,6 @@ set(SRCS_UI
 
 	${CODE_DIR}/game/bg_misc.c
 	${CODE_DIR}/game/bg_lib.c
-	${CODE_DIR}/cgame/wopc_advanced2d.c
 
 	${SRCS_BASE}
 )

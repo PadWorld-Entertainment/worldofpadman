@@ -7,25 +7,8 @@
 ####################### ####################### #######################
 */
 
-#ifdef UI
-
-#include "../ui/ui_local.h"
-
-#define FONTSHADER uis.charsetShader
-#define WHITESHADER uis.whiteShader
-#define ADJUSTFROM640 UI_AdjustFrom640
-#define INT_MSECTIME uis.realtime
-
-#else
 
 #include "cg_local.h"
-
-#define FONTSHADER cgs.media.charsetShader
-#define WHITESHADER cgs.media.whiteShader
-#define ADJUSTFROM640 CG_AdjustFrom640
-#define INT_MSECTIME cg.time
-
-#endif
 
 #define DEG2RAD_FLOAT 0.017453292f // PI/180
 
@@ -45,7 +28,6 @@ static void Initrefdef2D(void) {
 	// orig (0/0/0)
 	refdef2D.vieworg[0] = SCREEN_WIDTH / 2.0f;
 	refdef2D.vieworg[1] = SCREEN_HEIGHT / 2.0f;
-	//	refdef2D.vieworg[2]=23.0f;// ;) ... fov!
 	refdef2D.vieworg[2] = 1000.0f;
 	refdef2D.viewaxis[0][0] = 0;
 	refdef2D.viewaxis[0][1] = 0;
@@ -60,14 +42,14 @@ static void Initrefdef2D(void) {
 	y = 0;
 	w = SCREEN_WIDTH;
 	h = SCREEN_HEIGHT;
-	ADJUSTFROM640(&x, &y, &w, &h);
+	CG_AdjustFrom640(&x, &y, &w, &h);
 	refdef2D.x = x;
 	refdef2D.y = y;
 	refdef2D.width = w;
 	refdef2D.height = h;
-	refdef2D.fov_x = RAD2DEG(2.0f * atan2(refdef2D.vieworg[0], 1000.0f));
-	refdef2D.fov_y = RAD2DEG(2.0f * atan2(refdef2D.vieworg[1], 1000.0f));
-	refdef2D.time = INT_MSECTIME;
+	refdef2D.fov_x = RAD2DEG(2.0f * atan2(refdef2D.vieworg[0], refdef2D.vieworg[2]));
+	refdef2D.fov_y = RAD2DEG(2.0f * atan2(refdef2D.vieworg[1], refdef2D.vieworg[2]));
+	refdef2D.time = cg.time;
 
 	initrefdef = qtrue;
 }
@@ -197,7 +179,7 @@ void DrawLine(float x1, float y1, float x2, float y2, float size, vec4_t color) 
 	memset(&verts, 0, sizeof(verts));
 	poly.verts = verts;
 	poly.numVerts = 4;
-	poly.hShader = WHITESHADER;
+	poly.hShader = cgs.media.whiteShader;
 
 	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = 255 * color[0];
 
@@ -297,132 +279,6 @@ void DrawPic2Color(float x, float y, float w, float h, float s1, float t1, float
 	DrawPoly(&poly);
 }
 
-#if 0
-/*
-#######################
-FillRect2Color
-#######################
-*/
-void FillRect2Color(float x, float y, float w, float h, vec4_t color1, vec4_t color2) {
-	poly_t poly;
-	polyVert_t verts[4];
-
-	memset(&poly, 0, sizeof(poly));
-	memset(&verts, 0, sizeof(verts));
-	poly.verts = verts;
-	poly.numVerts = 4;
-	poly.hShader = WHITESHADER;
-
-	verts[0].modulate[0] = verts[3].modulate[0] = 255 * color1[0];
-	verts[1].modulate[0] = verts[2].modulate[0] = 255 * color2[0];
-
-	verts[0].modulate[1] = verts[3].modulate[1] = 255 * color1[1];
-	verts[1].modulate[1] = verts[2].modulate[1] = 255 * color2[1];
-
-	verts[0].modulate[2] = verts[3].modulate[2] = 255 * color1[2];
-	verts[1].modulate[2] = verts[2].modulate[2] = 255 * color2[2];
-
-	verts[0].modulate[3] = verts[3].modulate[3] = 255 * color1[3];
-	verts[1].modulate[3] = verts[2].modulate[3] = 255 * color2[3];
-
-	verts[0].xyz[0] = x;
-	verts[0].xyz[1] = y;
-
-	verts[1].xyz[0] = x + w;
-	verts[1].xyz[1] = y;
-
-	verts[2].xyz[0] = x + w;
-	verts[2].xyz[1] = y + h;
-
-	verts[3].xyz[0] = x;
-	verts[3].xyz[1] = y + h;
-
-	verts[0].st[0] = 0;
-	verts[0].st[1] = 0;
-
-	verts[1].st[0] = 1;
-	verts[1].st[1] = 0;
-
-	verts[2].st[0] = 1;
-	verts[2].st[1] = 1;
-
-	verts[3].st[0] = 0;
-	verts[3].st[1] = 1;
-
-	DrawPoly(&poly);
-}
-
-/*
-#######################
-FillTriangle
-#######################
-*/
-void FillTriangle(float x1, float y1, float x2, float y2, float x3, float y3, vec4_t color) {
-	poly_t poly;
-	polyVert_t verts[3];
-	int itmp;
-
-	memset(&poly, 0, sizeof(poly));
-	memset(&verts, 0, sizeof(verts));
-	poly.verts = verts;
-	poly.numVerts = 3;
-	poly.hShader = WHITESHADER;
-
-	//	(x2-x1)   (x3-x1)
-	//	(y2-y1) x (y3-y1)   = (x2-x1)*(y3-y1)-(y2-y1)*(x3-x1)
-	//		  0   0
-
-	if (((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) < 0) {
-		itmp = x2;
-		x2 = x3;
-		x3 = itmp;
-
-		itmp = y2;
-		y2 = y3;
-		y3 = itmp;
-	}
-
-	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = 255 * color[0];
-
-	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = 255 * color[1];
-
-	verts[0].modulate[2] = verts[1].modulate[2] = verts[2].modulate[2] = 255 * color[2];
-
-	verts[0].modulate[3] = verts[1].modulate[3] = verts[2].modulate[3] = 255 * color[3];
-
-	verts[0].xyz[0] = x1;
-	verts[0].xyz[1] = y1;
-
-	verts[1].xyz[0] = x2;
-	verts[1].xyz[1] = y2;
-
-	verts[2].xyz[0] = x3;
-	verts[2].xyz[1] = y3;
-
-	verts[0].st[0] = 0;
-	verts[0].st[1] = 0;
-
-	verts[1].st[0] = 1;
-	verts[1].st[1] = 0;
-
-	verts[2].st[0] = 1;
-	verts[2].st[1] = 1;
-
-	DrawPoly(&poly);
-}
-
-/*
-#######################
-DrawTriangle
-#######################
-*/
-void DrawTriangle(float x1, float y1, float x2, float y2, float x3, float y3, vec4_t color) {
-	DrawLine(x1, y1, x2, y2, 1, color);
-	DrawLine(x2, y2, x3, y3, 1, color);
-	DrawLine(x3, y3, x1, y1, 1, color);
-}
-#endif
-
 /*
 #######################
 Draw4VertsPic
@@ -503,7 +359,7 @@ static void AddCharToScene(float x, float y, int ch, vec4_t color, vec2_t vec_w,
 	memset(&verts, 0, sizeof(verts));
 	poly.verts = verts;
 	poly.numVerts = 4;
-	poly.hShader = FONTSHADER;
+	poly.hShader = cgs.media.charsetShader;
 
 	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = 255 * color[0];
 
@@ -698,10 +554,11 @@ static void DrawCharWithCutFrame(float x, float y, char ch, float w, float h, fl
 	s2 -= (rcut * CSIZE);
 	t2 -= (bcut * CSIZE);
 
-	ADJUSTFROM640(&x, &y, &w, &h);
+	CG_AdjustFrom640(&x, &y, &w, &h);
 	trap_R_DrawStretchPic(x + lcut * w, y + tcut * h, w * (1.0f - lcut - rcut), h * (1.0f - tcut - bcut), s1, t1, s2,
-						  t2, FONTSHADER);
+						  t2, cgs.media.charsetShader);
 }
+
 /**
  * @param x leftedge on 640x480
  * @param y topedge on 640x480
