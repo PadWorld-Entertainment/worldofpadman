@@ -100,7 +100,9 @@ extern vmCvar_t wop_AutoBindUnusedKeys;
 extern vmCvar_t cg_drawChatIcon;
 extern vmCvar_t cg_chatBeep;
 extern vmCvar_t cg_glowModel;
+#ifdef USE_RENDERER_DLOPEN
 extern vmCvar_t cl_renderer;
+#endif
 
 //
 // locals

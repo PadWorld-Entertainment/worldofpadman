@@ -67,7 +67,9 @@ typedef struct {
 
 	menulist_s list;
 	menulist_s mode;
+#ifdef USE_RENDERER_DLOPEN
 	menulist_s renderer;
+#endif
 	menulist_s colordepth;
 	menulist_s lighting;
 	menulist_s mdetail;
@@ -250,7 +252,9 @@ UI_GraphicsOptions_GetInitialVideo
 */
 static void UI_GraphicsOptions_GetInitialVideo(void) {
 	s_ivo.mode = s_graphicsoptions.mode.curvalue;
+#ifdef USE_RENDERER_DLOPEN
 	s_ivo.renderer = s_graphicsoptions.renderer.curvalue;
+#endif
 	s_ivo.colordepth = s_graphicsoptions.colordepth.curvalue;
 	s_ivo.lighting = s_graphicsoptions.lighting.curvalue;
 	s_ivo.mdetail = s_graphicsoptions.mdetail.curvalue;
@@ -273,8 +277,10 @@ static void UI_GraphicsOptions_CheckConfig(void) {
 	for (i = 0; i < (NUM_IVO_TEMPLATES - 1); i++) {
 		if (s_ivo_templates[i].mode != s_graphicsoptions.mode.curvalue)
 			continue;
+#ifdef USE_RENDERER_DLOPEN
 		if (s_ivo_templates[i].renderer != s_graphicsoptions.renderer.curvalue)
 			continue;
+#endif
 		if (s_ivo_templates[i].colordepth != s_graphicsoptions.colordepth.curvalue)
 			continue;
 		if (s_ivo_templates[i].lighting != s_graphicsoptions.lighting.curvalue)
@@ -313,18 +319,22 @@ static void UI_GraphicsOptions_UpdateMenuItems(void) {
 		s_graphicsoptions.colordepth.generic.flags &= ~QMF_GRAYED;
 	}
 
+#ifdef USE_RENDERER_DLOPEN
 	if (Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2") ||
 		(s_graphicsoptions.renderer.curvalue != 1)) {
 		s_graphicsoptions.effects.generic.flags |= QMF_GRAYED;
 	} else {
 		s_graphicsoptions.effects.generic.flags &= ~QMF_GRAYED;
 	}
+#endif
 
 	s_graphicsoptions.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 	if (s_ivo.mode != s_graphicsoptions.mode.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+#ifdef USE_RENDERER_DLOPEN
 	} else if (s_ivo.renderer != s_graphicsoptions.renderer.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+#endif
 	} else if (s_ivo.colordepth != s_graphicsoptions.colordepth.curvalue) {
 		s_graphicsoptions.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (s_ivo.lighting != s_graphicsoptions.lighting.curvalue) {
@@ -357,6 +367,7 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	if (notification != QM_ACTIVATED)
 		return;
 
+#ifdef USE_RENDERER_DLOPEN
 	switch (s_graphicsoptions.renderer.curvalue) {
 	case 0:
 		trap_Cvar_Set("cl_renderer", "opengl1");
@@ -368,6 +379,7 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		trap_Cvar_Set("cl_renderer", "vulkan");
 		break;
 	}
+#endif
 
 	switch (s_graphicsoptions.tquality.curvalue) {
 	case 0:
@@ -483,7 +495,9 @@ static void UI_GraphicsOptions_Event(void *ptr, int event) {
 	case ID_LIST:
 		ivo = &s_ivo_templates[s_graphicsoptions.list.curvalue];
 		s_graphicsoptions.mode.curvalue = ivo->mode;
+#ifdef USE_RENDERER_DLOPEN
 		s_graphicsoptions.renderer.curvalue = ivo->renderer;
+#endif
 		s_graphicsoptions.colordepth.curvalue = ivo->colordepth;
 		s_graphicsoptions.lighting.curvalue = ivo->lighting;
 		s_graphicsoptions.mdetail.curvalue = ivo->mdetail;
@@ -566,6 +580,7 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 		}
 	}
 
+#ifdef USE_RENDERER_DLOPEN
 	if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "vulkan")) {
 		s_graphicsoptions.renderer.curvalue = 2;
 	} else if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2")) {
@@ -573,6 +588,7 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 	} else {
 		s_graphicsoptions.renderer.curvalue = 0;
 	}
+#endif
 
 	s_graphicsoptions.tdetail.curvalue = 3 - UI_GetCvarInt("r_picmip");
 	if (s_graphicsoptions.tdetail.curvalue < 0) {
@@ -649,6 +665,7 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 
 	s_graphicsoptions.ct.curvalue = UI_GetCvarInt("r_ext_compressed_textures");
 
+#ifdef USE_RENDERER_DLOPEN
 	if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2")) {
 		if (trap_Cvar_VariableValue("r_ext_framebuffer_multisample") > 2) {
 			s_graphicsoptions.aa.curvalue = ceil(sqrt(trap_Cvar_VariableValue("r_ext_framebuffer_multisample")));
@@ -662,6 +679,13 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 			s_graphicsoptions.aa.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_multisample")));
 		}
 	}
+#else
+	if (trap_Cvar_VariableValue("r_ext_framebuffer_multisample") > 2) {
+		s_graphicsoptions.aa.curvalue = ceil(sqrt(trap_Cvar_VariableValue("r_ext_framebuffer_multisample")));
+	} else {
+		s_graphicsoptions.aa.curvalue = floor(sqrt(trap_Cvar_VariableValue("r_ext_framebuffer_multisample")));
+	}
+#endif
 }
 
 /*
@@ -771,6 +795,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 		"start. However, you can also manually select a suitable resolution from the list "
 		"of possible resolutions.";
 
+#ifdef USE_RENDERER_DLOPEN
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "cl_renderer"
 	s_graphicsoptions.renderer.generic.type = MTYPE_SPINCONTROL;
@@ -782,6 +807,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.renderer.generic.toolTip =
 		"Select a desired renderer. Default is OpenGL1. OpenGL2 offers more features and "
 		"effects but can lead to a higher graphics card load. Vulkan is still experimental.";
+#endif
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references "r_colorbits"
@@ -940,7 +966,9 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.list);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.mode);
+#ifdef USE_RENDERER_DLOPEN
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.renderer);
+#endif
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.colordepth);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.lighting);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.mdetail);

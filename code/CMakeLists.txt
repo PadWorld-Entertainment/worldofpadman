@@ -73,7 +73,7 @@ endfunction()
 
 function(wop_add_library)
 	set(_OPTIONS_ARGS GAME)
-	set(_ONE_VALUE_ARGS TARGET)
+	set(_ONE_VALUE_ARGS TARGET STATIC)
 	set(_MULTI_VALUE_ARGS SRCS)
 
 	cmake_parse_arguments(_LIB "${_OPTIONS_ARGS}" "${_ONE_VALUE_ARGS}" "${_MULTI_VALUE_ARGS}" ${ARGN} )
@@ -92,7 +92,13 @@ function(wop_add_library)
 		set(LIB_BINARY_DIR "${GAME_BINARY_DIR}")
 	endif()
 
-	add_library(${_LIB_TARGET} SHARED ${_LIB_SRCS})
+	if (_LIB_STATIC)
+		set(LINK_TYPE STATIC)
+	else()
+		set(LINK_TYPE SHARED)
+	endif()
+
+	add_library(${_LIB_TARGET} ${LINK_TYPE} ${_LIB_SRCS})
 	set_target_properties(${_LIB_TARGET} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/${GAME_NAME})
 	set_target_properties(${_LIB_TARGET} PROPERTIES PREFIX "")
 	set_target_properties(${_LIB_TARGET} PROPERTIES OUTPUT_NAME "${OUTPUTNAME}")
