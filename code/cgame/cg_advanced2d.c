@@ -91,10 +91,11 @@ CG_AdvancedDrawPicA
 ====================
 */
 void CG_AdvancedDrawPicA(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader,
-						 vec4_t color, float angle, int turnorigin) {
+						 vec4_t color, float angleDegree, int turnorigin) {
 	poly_t poly;
 	polyVert_t verts[4];
 	vec2_t vec_w, vec_h;
+	float angle = DEG2RAD(angleDegree);
 
 	memset(&poly, 0, sizeof(poly));
 	memset(&verts, 0, sizeof(verts));
@@ -102,15 +103,10 @@ void CG_AdvancedDrawPicA(float x, float y, float w, float h, float s1, float t1,
 	poly.numVerts = 4;
 	poly.hShader = hShader;
 
-	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = 255 * color[0];
-
-	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = 255 * color[1];
-
-	verts[0].modulate[2] = verts[1].modulate[2] = verts[2].modulate[2] = verts[3].modulate[2] = 255 * color[2];
-
-	verts[0].modulate[3] = verts[1].modulate[3] = verts[2].modulate[3] = verts[3].modulate[3] = 255 * color[3];
-
-	angle *= DEG2RAD_FLOAT;
+	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = (byte)(255.0f * color[0]);
+	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = (byte)(255.0f * color[1]);
+	verts[0].modulate[2] = verts[1].modulate[2] = verts[2].modulate[2] = verts[3].modulate[2] = (byte)(255.0f * color[2]);
+	verts[0].modulate[3] = verts[1].modulate[3] = verts[2].modulate[3] = verts[3].modulate[3] = (byte)(255.0f * color[3]);
 
 	vec_w[0] = cos(angle);
 	vec_w[1] = -sin(angle);
@@ -309,13 +305,10 @@ void CG_Draw4VertsPic(float x1, float y1, float x2, float y2, float x3, float y3
 	//	Com_Printf("x1=%3.2f, y1=%3.2f, x2=%3.2f, y2=%3.2f\nx3=%3.2f, y3=%3.2f, x4=%3.2f, y4=%3.2f\n", x1, y1, x2, y2,
 	// x3, y3, x4, y4);
 
-	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = 255 * color[0];
-
-	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = 255 * color[1];
-
-	verts[0].modulate[2] = verts[1].modulate[2] = verts[2].modulate[2] = verts[3].modulate[2] = 255 * color[2];
-
-	verts[0].modulate[3] = verts[1].modulate[3] = verts[2].modulate[3] = verts[3].modulate[3] = 255 * color[3];
+	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = (byte)(255.0f * color[0]);
+	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = (byte)(255.0f * color[1]);
+	verts[0].modulate[2] = verts[1].modulate[2] = verts[2].modulate[2] = verts[3].modulate[2] = (byte)(255.0f * color[2]);
+	verts[0].modulate[3] = verts[1].modulate[3] = verts[2].modulate[3] = verts[3].modulate[3] = (byte)(255.0f * color[3]);
 
 	verts[0].xyz[0] = x1;
 	verts[0].xyz[1] = y1;
@@ -364,13 +357,10 @@ static void CG_AddCharToScene(float x, float y, int ch, vec4_t color, vec2_t vec
 	poly.numVerts = 4;
 	poly.hShader = cgs.media.charsetShader;
 
-	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = 255 * color[0];
-
-	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = 255 * color[1];
-
-	verts[0].modulate[2] = verts[1].modulate[2] = verts[2].modulate[2] = verts[3].modulate[2] = 255 * color[2];
-
-	verts[0].modulate[3] = verts[1].modulate[3] = verts[2].modulate[3] = verts[3].modulate[3] = 255 * color[3];
+	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = (byte)(255.0f * color[0]);
+	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = (byte)(255.0f * color[1]);
+	verts[0].modulate[2] = verts[1].modulate[2] = verts[2].modulate[2] = verts[3].modulate[2] = (byte)(255.0f * color[2]);
+	verts[0].modulate[3] = verts[1].modulate[3] = verts[2].modulate[3] = verts[3].modulate[3] = (byte)(255.0f * color[3]);
 
 	verts[0].xyz[0] = x;
 	verts[0].xyz[1] = y;
@@ -388,17 +378,17 @@ static void CG_AddCharToScene(float x, float y, int ch, vec4_t color, vec2_t vec
 	row = ch >> 4;
 	col = ch & 15;
 
-	verts[0].st[0] = col * 0.0625f;
-	verts[0].st[1] = row * 0.0625f;
+	verts[0].st[0] = (float)col * 0.0625f;
+	verts[0].st[1] = (float)row * 0.0625f;
 
-	verts[1].st[0] = (col + 1) * 0.0625f;
-	verts[1].st[1] = row * 0.0625f;
+	verts[1].st[0] = (float)(col + 1) * 0.0625f;
+	verts[1].st[1] = (float)row * 0.0625f;
 
-	verts[2].st[0] = (col + 1) * 0.0625f;
-	verts[2].st[1] = (row + 1) * 0.0625f;
+	verts[2].st[0] = (float)(col + 1) * 0.0625f;
+	verts[2].st[1] = (float)(row + 1) * 0.0625f;
 
-	verts[3].st[0] = col * 0.0625f;
-	verts[3].st[1] = (row + 1) * 0.0625f;
+	verts[3].st[0] = (float)col * 0.0625f;
+	verts[3].st[1] = (float)(row + 1) * 0.0625f;
 
 	trap_R_AddPolyToScene(poly.hShader, poly.numVerts, poly.verts);
 }
@@ -499,10 +489,10 @@ static void CG_DrawCharWithCutFrame(float x, float y, char ch, float w, float h,
 	// see CG_DrawChar
 	row = ch >> 4;
 	col = ch & 15;
-	s1 = (col * CSIZE);
-	t1 = (row * CSIZE);
-	s2 = ((col + 1) * CSIZE);
-	t2 = ((row + 1) * CSIZE);
+	s1 = (float)col * CSIZE;
+	t1 = (float)row * CSIZE;
+	s2 = (float)(col + 1) * CSIZE;
+	t2 = (float)(row + 1) * CSIZE;
 
 	s1 += (lcut * CSIZE);
 	t1 += (tcut * CSIZE);

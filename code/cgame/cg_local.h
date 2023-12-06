@@ -1628,7 +1628,7 @@ void Main_SpriteParticles(void);
 #define TURNORIGIN_MIDDLECENTER 3
 
 void CG_AdvancedDrawPicA(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader,
-					  vec4_t color, float angle, int turnorigin);
+					  vec4_t color, float angleDegree, int turnorigin);
 
 void CG_DrawLine(float x1, float y1, float x2, float y2, float size, vec4_t color);
 
