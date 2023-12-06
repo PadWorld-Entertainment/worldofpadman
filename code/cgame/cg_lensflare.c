@@ -921,6 +921,7 @@ void CG_AddLFsToScreen(void) {
 	}
 
 	// Draw (with 3DTo2D-calc)
+	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 	for (i = 0; i < IFDA_firstempty; i++) {
 		float distanceSquared = 0.0f;
 		vec4_t xywh;
@@ -932,6 +933,7 @@ void CG_AddLFsToScreen(void) {
 		// usually 480 ... except the screen was made smaller
 		CG_DrawLensflare(IFD_Array[i].lensflare, v2, lfalpha, distanceSquared, xywh, qfalse);
 	}
+	CG_PopScreenPlacement();
 
 	// del list
 	memset(IFD_Array, 0, sizeof(IFD_Array));
