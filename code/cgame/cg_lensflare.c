@@ -743,7 +743,6 @@ static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distance
 					tmpdir[0] = dir[0] * tmpf;
 					tmpdir[1] = dir[1] * tmpf;
 
-					//				tmpf=asin(tmpdir[0])*180.0f/M_PI;//q3 has no asin-table =(
 					tmpf = 90.0f - RAD2DEG(acos(tmpdir[0]));
 
 					if (tmpdir[1] > 0)
@@ -751,7 +750,7 @@ static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distance
 				} else
 					tmpf = 0.0f;
 
-				tmpf *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinnmacht
+				tmpf *= tmpflare->turnstyle[1]; // TODO: check if this makes sense
 			}
 
 			tmpf += tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
@@ -811,7 +810,7 @@ static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distance
 				} else
 					tmpf = 0.0f;
 
-				tmpf *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinn macht
+				tmpf *= tmpflare->turnstyle[1]; // TODO: check if this makes sense
 			}
 
 			tmpf += DEG2RAD(tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
@@ -873,7 +872,7 @@ static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distance
 				} else
 					angle = 0.0f;
 
-				angle *= tmpflare->turnstyle[1]; // noch mal ueberlegen ob das sinn macht
+				angle *= tmpflare->turnstyle[1]; // TODO: check if this makes sense
 			}
 
 			angle += DEG2RAD(tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
