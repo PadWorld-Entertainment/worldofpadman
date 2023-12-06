@@ -58,6 +58,7 @@ typedef struct lensflare_s {
 
 #define MAX_FLARES 128
 #define MAX_LENSFLARES 32
+#define CG_LENS_DIR_MARKER 2300000.0f
 
 static flare_t g_flares[MAX_FLARES];
 static flare_t *g_freeflares;
@@ -77,14 +78,7 @@ static InfosForDrawing_t IFD_Array[MAX_SCREENLFS];
 static int IFDA_firstempty;
 
 // cvar:"lensflarelist"
-// vv INIT-stuff vv
-/*
-====================
-LF_Parser
 
-... reads a lf-script and puts the infos in the lf/flare-structs
-====================
-*/
 typedef enum { PL_BASE, PL_LF, PL_FLARE } parserlvl_t;
 
 typedef enum {
@@ -274,6 +268,13 @@ static void CG_StrEndWork(void) {
 }
 
 #define MAX_LFSCRIPTSIZE 8192 //-> like arenas-file loader
+/*
+====================
+CG_LensflareParser
+
+... reads a lf-script and puts the infos in the lf/flare-structs
+====================
+*/
 static void CG_LensflareParser(const char *scriptname) {
 	fileHandle_t f;
 	int i;
@@ -414,7 +415,7 @@ static void CG_LensflareParser(const char *scriptname) {
 
 /*
 ====================
-Load_LFfiles
+CG_LoadLensflareFiles
 
 this function will search lensflare-scripts in "lensflarelist" and call the parser
 ====================
@@ -453,7 +454,7 @@ static void CG_LoadLensflareFiles(void) {
 
 /*
 ====================
-Init_LensFlareSys
+CG_InitLensflareSystem
 
 The main-init for the lensflaresys ... should be called at every vid_restart
 ====================
@@ -519,21 +520,9 @@ void CG_InitLensflareSystem(void) {
 	CG_LoadLensflareFiles();
 }
 
-// loading all lensflare-scripts (filelist by ui)
-// VV ... VV //get a info from the server which flares will be used(I don't know how I will make this exactly ...
-// especially if I use ent-flares) ... I think I will inform me of the fixed lens and load the ent-lens depending on the
-// registlist VV ... VV //loading all shaders needed for the lensflares I think I will load the shaders at the first use
-// (sprites should not take that much loading time) ...
-//*oh* and don't forget to save the scripts in vars (maybe only the needed ones) ??? öh? what ;)
-// make a list of all lensflares in this map (name, origin/dir, dirbool) ... this list is only for fixed lensflares ...
-// maybe we only need to do this vor skylfs
-// ^^ INIT-stuff ^^
-// vv ACTIVE-stuff vv
 /*
 ====================
-AddLFToDrawList
-
-TODO: write some info ;)
+CG_AddLFToDrawList
 ====================
 */
 static void CG_AddLFToDrawList(const char *lfname, const vec3_t origin, const vec3_t dir) {
@@ -561,7 +550,7 @@ static void CG_AddLFToDrawList(const char *lfname, const vec3_t origin, const ve
 
 /*
 ====================
-Calculate_2DdirOf3D
+CG_2DdirOf3D
 
 A function for calculating the 2D-dir(center of the screen is 0/0) of a 3D-Dot/Dir ... base on my first lensflare
 src(for padmod) returns alpha-float, if the lensflare can't be seen it is 0.0f point is the 3d origin of the dot dir is
@@ -584,8 +573,8 @@ static float CG_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *distanceSq
 	CG_NativeResTo640(&xywh[0], &xywh[1], &xywh[2], &xywh[3]);
 	CG_PopScreenPlacement();
 
-	if (point[0] != 2300000.0f) // a small hack to mark only dirs (origins have to be between 65535 and -65535)
-	{
+	// a small hack to mark only dirs (origins have to be between 65535 and -65535)
+	if (point[0] != CG_LENS_DIR_MARKER) {
 		CG_Trace(&tr, cg.refdef.vieworg, NULL, NULL, point, cg.snap->ps.clientNum, CONTENTS_SOLID);
 		if (tr.fraction != 1.0f)
 			return 0.0f;
@@ -667,9 +656,7 @@ static float CG_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *distanceSq
 
 /*
 ====================
-DrawLensflare
-
-TODO: write some info ;)
+CG_DrawLensflare
 ====================
 */
 static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distanceSquared, vec4_t xywh, qboolean sublf) {
@@ -899,9 +886,7 @@ static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distance
 
 /*
 ====================
-AddLFsToScreen
-
-TODO: write some info ;)
+CG_AddLFsToScreen
 ====================
 */
 void CG_AddLFsToScreen(void) {
@@ -912,7 +897,7 @@ void CG_AddLFsToScreen(void) {
 	}
 
 	if (cg.skylensflare[0] != '\0') {
-		vec3_t tmpv3 = {2300000.0f, 0, 0};
+		vec3_t tmpv3 = {CG_LENS_DIR_MARKER, 0, 0};
 		vec3_t tmpv32;
 
 		VectorNormalize(cg.skylensflare_dir);
@@ -952,10 +937,3 @@ void CG_AddLFsToScreen(void) {
 	memset(IFD_Array, 0, sizeof(IFD_Array));
 	IFDA_firstempty = 0;
 }
-// if I want to use dynamic lensflares (for ents), I will have to create a lensflare list
-// check if we see a lens ...
-// draw the seen lensflares
-// ^^ ACTIVE-stuff ^^
-// vv SHUTDOWN-stuff vv
-// don't know if I need to shutdown something
-// ^^ SHUTDOWN-stuff ^^
