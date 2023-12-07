@@ -45,7 +45,7 @@ endif()
 
 project(renderer_opengl1)
 set(STATIC FALSE)
-if (USE_RENDERER_DLOPEN)
+if (NOT USE_RENDERER_DLOPEN)
 	set(STATIC TRUE)
 endif()
 wop_add_library(TARGET ${PROJECT_NAME} SRCS ${SRCS} STATIC ${STATIC})

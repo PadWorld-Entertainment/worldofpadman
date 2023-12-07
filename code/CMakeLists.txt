@@ -208,12 +208,20 @@ function(wop_add_executable)
 	wop_add_debuggger(${_EXE_TARGET})
 endfunction()
 
-function(add_qvm TARGET)
-	set(srcfiles ${ARGV})
-	string(TOUPPER ${TARGET} UPPERTARGET)
+function(add_qvm)
+	set(_OPTIONS_ARGS)
+	set(_ONE_VALUE_ARGS TARGET)
+	set(_MULTI_VALUE_ARGS SRCS DEFINES)
+
+	cmake_parse_arguments(_QVM "${_OPTIONS_ARGS}" "${_ONE_VALUE_ARGS}" "${_MULTI_VALUE_ARGS}" ${ARGN} )
+
+	string(TOUPPER ${_QVM_TARGET} UPPERTARGET)
 	set(compileflags "-D${UPPERTARGET}" "-DVMS")
+	foreach (_d ${_QVM_DEFINES})
+		list(APPEND compileflags "-D${_d}")
+	endforeach()
 	set(QVM_SRCS)
-	foreach(srcfile ${srcfiles})
+	foreach(srcfile ${_QVM_SRCS})
 		get_filename_component(ext ${srcfile} EXT)
 		if ("${ext}" STREQUAL ".asm")
 			list(APPEND QVM_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/${srcfile})
@@ -230,17 +238,17 @@ function(add_qvm TARGET)
 			list(APPEND QVM_SRCS ${q3asm_outfile})
 		endif()
 	endforeach()
-	add_dependencies(qvm qvm_${TARGET})
+	add_dependencies(qvm qvm_${_QVM_TARGET})
 
-	set(QVM_PATH ${GAME_NAME}/vm/${TARGET}.qvm)
+	set(QVM_PATH ${GAME_NAME}/vm/${_QVM_TARGET}.qvm)
 	add_custom_command(
 		OUTPUT "${ROOT_DIR}/${ENGINE_BINARY_DIR}/${QVM_PATH}"
 		COMMAND q3asm
 		ARGS -o "${ROOT_DIR}/${ENGINE_BINARY_DIR}/${QVM_PATH}" ${QVM_SRCS}
 		DEPENDS q3asm ${QVM_SRCS}
 	)
-	add_custom_target(qvm_${TARGET} DEPENDS "${ROOT_DIR}/${ENGINE_BINARY_DIR}/${QVM_PATH}")
-	add_dependencies(${TARGET} qvm_${TARGET})
+	add_custom_target(qvm_${_QVM_TARGET} DEPENDS "${ROOT_DIR}/${ENGINE_BINARY_DIR}/${QVM_PATH}")
+	add_dependencies(${_QVM_TARGET} qvm_${_QVM_TARGET})
 	set_source_files_properties(${QVM_PATH} PROPERTIES GENERATED TRUE)
 	set_source_files_properties(${QVM_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/${QVM_PATH})
 	install(FILES "${ROOT_DIR}/${ENGINE_BINARY_DIR}/${QVM_PATH}" DESTINATION "${GAME_NAME}" COMPONENT wop)
