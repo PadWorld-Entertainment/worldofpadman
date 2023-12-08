@@ -36,8 +36,6 @@ CG_Initrefdef2D
 ====================
 */
 static void CG_Initrefdef2D(void) {
-	float x, y, w, h;
-
 	memset(&refdef2D, 0, sizeof(refdef2D));
 	refdef2D.rdflags = RDF_NOWORLDMODEL;
 	// orig (0/0/0)
@@ -53,15 +51,10 @@ static void CG_Initrefdef2D(void) {
 	refdef2D.viewaxis[2][0] = 0;
 	refdef2D.viewaxis[2][1] = -1;
 	refdef2D.viewaxis[2][2] = 0;
-	x = 0;
-	y = 0;
-	w = SCREEN_WIDTH;
-	h = SCREEN_HEIGHT;
-	CG_AdjustFrom640(&x, &y, &w, &h);
-	refdef2D.x = x;
-	refdef2D.y = y;
-	refdef2D.width = w;
-	refdef2D.height = h;
+	refdef2D.x = 0;
+	refdef2D.y = 0;
+	refdef2D.width = cgs.glconfig.vidWidth;
+	refdef2D.height = cgs.glconfig.vidHeight;
 	refdef2D.fov_x = RAD2DEG(2.0f * atan2(refdef2D.vieworg[0], refdef2D.vieworg[2]));
 	refdef2D.fov_y = RAD2DEG(2.0f * atan2(refdef2D.vieworg[1], refdef2D.vieworg[2]));
 	refdef2D.time = cg.time;
@@ -87,21 +80,26 @@ static void CG_DrawPoly(const poly_t *poly) {
 
 /*
 ====================
-CG_AdvancedDrawPicA
+CG_DrawPicAngle
 ====================
 */
-void CG_AdvancedDrawPicA(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader,
-						 vec4_t color, float angleDegree, int turnorigin) {
+void CG_DrawPicAngle(float x, float y, float w, float h, qhandle_t hShader, vec4_t color, float angleDegree) {
 	poly_t poly;
 	polyVert_t verts[4];
 	vec2_t vec_w, vec_h;
-	float angle = DEG2RAD(angleDegree);
+	const float angle = DEG2RAD(angleDegree);
+	const float s1 = 0.0f;
+	const float t1 = 0.0f;
+	const float s2 = 1.0f;
+	const float t2 = 1.0f;
 
 	memset(&poly, 0, sizeof(poly));
 	memset(&verts, 0, sizeof(verts));
 	poly.verts = verts;
 	poly.numVerts = 4;
 	poly.hShader = hShader;
+
+	CG_AdjustFrom640(&x, &y, &w, &h);
 
 	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = (byte)(255.0f * color[0]);
 	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = (byte)(255.0f * color[1]);
@@ -113,48 +111,17 @@ void CG_AdvancedDrawPicA(float x, float y, float w, float h, float s1, float t1,
 	vec_h[0] = sin(angle);
 	vec_h[1] = cos(angle);
 
-	switch (turnorigin) {
-	default:
-	case TURNORIGIN_UPPERLEFT:
-		verts[0].xyz[0] = x;
-		verts[0].xyz[1] = y;
+	verts[0].xyz[0] = x - vec_w[0] * w * 0.5f - vec_h[0] * h * 0.5f;
+	verts[0].xyz[1] = y - vec_w[1] * w * 0.5f - vec_h[1] * h * 0.5f;
 
-		verts[1].xyz[0] = x + vec_w[0] * w;
-		verts[1].xyz[1] = y + vec_w[1] * w;
+	verts[1].xyz[0] = x + vec_w[0] * w * 0.5f - vec_h[0] * h * 0.5f;
+	verts[1].xyz[1] = y + vec_w[1] * w * 0.5f - vec_h[1] * h * 0.5f;
 
-		verts[2].xyz[0] = x + vec_w[0] * w + vec_h[0] * h;
-		verts[2].xyz[1] = y + vec_w[1] * w + vec_h[1] * h;
+	verts[2].xyz[0] = x + vec_w[0] * w * 0.5f + vec_h[0] * h * 0.5f;
+	verts[2].xyz[1] = y + vec_w[1] * w * 0.5f + vec_h[1] * h * 0.5f;
 
-		verts[3].xyz[0] = x + vec_h[0] * h;
-		verts[3].xyz[1] = y + vec_h[1] * h;
-		break;
-	case TURNORIGIN_MIDDLELEFT:
-		verts[0].xyz[0] = x - vec_h[0] * h * 0.5f;
-		verts[0].xyz[1] = y - vec_h[1] * h * 0.5f;
-
-		verts[1].xyz[0] = x + vec_w[0] * w - vec_h[0] * h * 0.5f;
-		verts[1].xyz[1] = y + vec_w[1] * w - vec_h[1] * h * 0.5f;
-
-		verts[2].xyz[0] = x + vec_w[0] * w + vec_h[0] * h * 0.5f;
-		verts[2].xyz[1] = y + vec_w[1] * w + vec_h[1] * h * 0.5f;
-
-		verts[3].xyz[0] = x + vec_h[0] * h * 0.5f;
-		verts[3].xyz[1] = y + vec_h[1] * h * 0.5f;
-		break;
-	case TURNORIGIN_MIDDLECENTER:
-		verts[0].xyz[0] = x - vec_w[0] * w * 0.5f - vec_h[0] * h * 0.5f;
-		verts[0].xyz[1] = y - vec_w[1] * w * 0.5f - vec_h[1] * h * 0.5f;
-
-		verts[1].xyz[0] = x + vec_w[0] * w * 0.5f - vec_h[0] * h * 0.5f;
-		verts[1].xyz[1] = y + vec_w[1] * w * 0.5f - vec_h[1] * h * 0.5f;
-
-		verts[2].xyz[0] = x + vec_w[0] * w * 0.5f + vec_h[0] * h * 0.5f;
-		verts[2].xyz[1] = y + vec_w[1] * w * 0.5f + vec_h[1] * h * 0.5f;
-
-		verts[3].xyz[0] = x - vec_w[0] * w * 0.5f + vec_h[0] * h * 0.5f;
-		verts[3].xyz[1] = y - vec_w[1] * w * 0.5f + vec_h[1] * h * 0.5f;
-		break;
-	}
+	verts[3].xyz[0] = x - vec_w[0] * w * 0.5f + vec_h[0] * h * 0.5f;
+	verts[3].xyz[1] = y - vec_w[1] * w * 0.5f + vec_h[1] * h * 0.5f;
 
 	verts[0].st[0] = s1;
 	verts[0].st[1] = t1;

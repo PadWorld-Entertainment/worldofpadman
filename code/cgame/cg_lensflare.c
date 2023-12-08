@@ -564,10 +564,10 @@ static float CG_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *distanceSq
 	trace_t tr;
 
 	// x,y of the center ... Width, Height ... all convertet to the 640x480-screen
-	xywh[0] = cg.refdef.x + cg.refdef.width * 0.5f;
-	xywh[1] = cg.refdef.y + cg.refdef.height * 0.5f;
-	xywh[2] = cg.refdef.width;
-	xywh[3] = cg.refdef.height;
+	xywh[0] = (float)SCREEN_WIDTH * (float)(cg.refdef.x + cg.refdef.width * 0.5f) / (float)cgs.glconfig.vidWidth;
+	xywh[1] = (float)SCREEN_HEIGHT * (float)(cg.refdef.y + cg.refdef.height * 0.5f) / (float)cgs.glconfig.vidHeight;
+	xywh[2] = (float)SCREEN_WIDTH * (float)cg.refdef.width / (float)cgs.glconfig.vidWidth;
+	xywh[3] = (float)SCREEN_HEIGHT * (float)cg.refdef.height / (float)cgs.glconfig.vidHeight;
 
 	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 	CG_NativeResTo640(&xywh[0], &xywh[1], &xywh[2], &xywh[3]);
@@ -743,9 +743,8 @@ static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distance
 			tmpf += tmpflare->turnstyle[0] + (tmpflare->turnstyle[2] * prozDir[0] * tmpflare->pos) +
 					(tmpflare->turnstyle[3] * prozDir[1] * tmpflare->pos);
 
-			CG_AdvancedDrawPicA((xywh[0] + dir[0] * tmpflare->pos), (xywh[1] - dir[1] * tmpflare->pos), curRadius * 2.0f,
-							 curRadius * 2.0f, 0, 0, 1, 1, tmpflare->shader, tmpflare->color, tmpf,
-							 TURNORIGIN_MIDDLECENTER);
+			CG_DrawPicAngle((xywh[0] + dir[0] * tmpflare->pos), (xywh[1] - dir[1] * tmpflare->pos), curRadius * 2.0f,
+							 curRadius * 2.0f, tmpflare->shader, tmpflare->color, tmpf);
 		} break;
 		case SF_BEAM: {
 			vec2_t qdir;
@@ -827,9 +826,8 @@ static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distance
 			// trap_R_DrawStretchPic(xywh[0]-(xywh[2]*0.5f*tmpflare->radius),xywh[1]-(xywh[3]*0.5f*tmpflare->radius),xywh[2]*tmpflare->radius,xywh[3]*tmpflare->radius,0,0,1,1,tmpflare->shader);
 			// trap_R_SetColor(NULL);
 
-			CG_AdvancedDrawPicA(xywh[0], xywh[1], SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1, 1, tmpflare->shader,
-							 tmpflare->color, 0,
-							 TURNORIGIN_MIDDLECENTER);
+			CG_DrawPicAngle(xywh[0], xywh[1], SCREEN_WIDTH, SCREEN_HEIGHT, tmpflare->shader,
+							 tmpflare->color, 0);
 			break;
 		case SF_SUBLF: {
 			vec2_t subdir;

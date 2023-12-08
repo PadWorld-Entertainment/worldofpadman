@@ -44,6 +44,7 @@
 	static int prevFailed = 0;                                                                                         \
 	static char errorBuf[4096] = "";                                                                                   \
 	static int lastExpectedInt = 0;                                                                                    \
+	static float lastExpectedFloat = 0.0f;                                                                             \
 	static const char *lastExpectedString = NULL;                                                                      \
 	static int runDisabled = 0;
 
@@ -67,6 +68,21 @@
 	Sys_Milliseconds();                                                                                                \
 	Com_Init("")
 
+#define ASSERT_EQ_FLOAT(exp, actual)                                                                                   \
+	if (lastExpectedFloat = (actual), abs((exp)-lastExpectedFloat) > (epsilon)) {                                      \
+		snprintf(errorBuf + strlen(errorBuf), sizeof(errorBuf) - strlen(errorBuf),                                     \
+				 " - " TEST_STRINGIFY(actual) ": expected %f, but got %f\n", exp, lastExpectedFloat);                  \
+		++failed;                                                                                                      \
+		return;                                                                                                        \
+	}
+
+#define EXPECT_EQ_FLOAT(exp, actual, epsilon)                                                                          \
+	if (lastExpectedFloat = (actual), abs((exp)-lastExpectedFloat) > (epsilon)) {                                      \
+		snprintf(errorBuf + strlen(errorBuf), sizeof(errorBuf) - strlen(errorBuf),                                     \
+				 " - " TEST_STRINGIFY(actual) ": expected %f, but got %f\n", exp, lastExpectedFloat);                  \
+		++failed;                                                                                                      \
+	}
+
 #define ASSERT_EQ_INT(exp, actual)                                                                                     \
 	if (lastExpectedInt = (actual), (exp) != lastExpectedInt) {                                                        \
 		snprintf(errorBuf + strlen(errorBuf), sizeof(errorBuf) - strlen(errorBuf),                                     \
@@ -83,7 +99,7 @@
 	}
 
 #define EXPECT_BETWEEN_INT(minv, maxv, actual)                                                                         \
-	if (lastExpectedInt = (actual), lastExpectedInt < minv || lastExpectedInt > maxv) {                                \
+	if (lastExpectedInt = (actual), lastExpectedInt < (minv) || lastExpectedInt > (maxv)) {                            \
 		snprintf(errorBuf + strlen(errorBuf), sizeof(errorBuf) - strlen(errorBuf),                                     \
 				 " - " TEST_STRINGIFY(actual) ": expected %i to in range of [%i:%i]\n", lastExpectedInt, minv, maxv);  \
 		++failed;                                                                                                      \
