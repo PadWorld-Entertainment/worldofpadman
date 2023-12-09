@@ -2872,6 +2872,7 @@ static void CG_DrawOneLollyCTL(int team) {
 	if (cgs.gametype != GT_1FCTF) {
 		return;
 	} else {
+		CG_SetScreenPlacement(PLACE_RIGHT, PLACE_BOTTOM);
 		// draw the neutral lolly model if taken by the player
 		if (cg.predictedPlayerState.powerups[PW_NEUTRALFLAG]) {
 			CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_FREE, qfalse);
