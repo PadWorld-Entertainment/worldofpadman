@@ -39,8 +39,8 @@ static void CG_Initrefdef2D(void) {
 	memset(&refdef2D, 0, sizeof(refdef2D));
 	refdef2D.rdflags = RDF_NOWORLDMODEL;
 	// orig (0/0/0)
-	refdef2D.vieworg[0] = SCREEN_WIDTH / 2.0f;
-	refdef2D.vieworg[1] = SCREEN_HEIGHT / 2.0f;
+	refdef2D.vieworg[0] = cgs.glconfig.vidWidth / 2.0f;
+	refdef2D.vieworg[1] = cgs.glconfig.vidHeight / 2.0f;
 	refdef2D.vieworg[2] = 1000.0f;
 	refdef2D.viewaxis[0][0] = 0;
 	refdef2D.viewaxis[0][1] = 0;
@@ -155,6 +155,9 @@ void CG_DrawLine(float x1, float y1, float x2, float y2, float size, vec4_t colo
 	poly.numVerts = 4;
 	poly.hShader = cgs.media.whiteShader;
 
+	CG_AdjustFrom640(&x1, &y1, NULL, NULL);
+	CG_AdjustFrom640(&x2, &y2, NULL, NULL);
+
 	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = 255 * color[0];
 
 	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = 255 * color[1];
@@ -214,6 +217,8 @@ void CG_DrawPic2Color(float x, float y, float w, float h, float s1, float t1, fl
 	poly.numVerts = 4;
 	poly.hShader = shader;
 
+	CG_AdjustFrom640(&x, &y, &w, &h);
+
 	verts[0].modulate[0] = verts[3].modulate[0] = 255 * color1[0];
 	verts[1].modulate[0] = verts[2].modulate[0] = 255 * color2[0];
 
@@ -269,6 +274,11 @@ void CG_Draw4VertsPic(float x1, float y1, float x2, float y2, float x3, float y3
 	poly.numVerts = 4;
 	poly.hShader = shader;
 
+	CG_AdjustFrom640(&x1, &y1, NULL, NULL);
+	CG_AdjustFrom640(&x2, &y2, NULL, NULL);
+	CG_AdjustFrom640(&x3, &y3, NULL, NULL);
+	CG_AdjustFrom640(&x4, &y4, NULL, NULL);
+
 	//	Com_Printf("x1=%3.2f, y1=%3.2f, x2=%3.2f, y2=%3.2f\nx3=%3.2f, y3=%3.2f, x4=%3.2f, y4=%3.2f\n", x1, y1, x2, y2,
 	// x3, y3, x4, y4);
 
@@ -323,6 +333,9 @@ static void CG_AddCharToScene(float x, float y, int ch, vec4_t color, vec2_t vec
 	poly.verts = verts;
 	poly.numVerts = 4;
 	poly.hShader = cgs.media.charsetShader;
+
+	CG_AdjustFrom640(&x, &y, &vec_w[0], &vec_h[0]);
+	CG_AdjustFrom640(NULL, NULL, &vec_w[1], &vec_h[1]);
 
 	verts[0].modulate[0] = verts[1].modulate[0] = verts[2].modulate[0] = verts[3].modulate[0] = (byte)(255.0f * color[0]);
 	verts[0].modulate[1] = verts[1].modulate[1] = verts[2].modulate[1] = verts[3].modulate[1] = (byte)(255.0f * color[1]);
