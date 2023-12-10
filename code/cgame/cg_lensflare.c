@@ -564,14 +564,12 @@ static float CG_2DdirOf3D(vec3_t point, vec3_t dir, vec2_t v2, float *distanceSq
 	trace_t tr;
 
 	// x,y of the center ... Width, Height ... all convertet to the 640x480-screen
-	xywh[0] = (float)SCREEN_WIDTH * (float)(cg.refdef.x + cg.refdef.width * 0.5f) / (float)cgs.glconfig.vidWidth;
-	xywh[1] = (float)SCREEN_HEIGHT * (float)(cg.refdef.y + cg.refdef.height * 0.5f) / (float)cgs.glconfig.vidHeight;
-	xywh[2] = (float)SCREEN_WIDTH * (float)cg.refdef.width / (float)cgs.glconfig.vidWidth;
-	xywh[3] = (float)SCREEN_HEIGHT * (float)cg.refdef.height / (float)cgs.glconfig.vidHeight;
+	xywh[0] = cg.refdef.x + cg.refdef.width * 0.5f;
+	xywh[1] = cg.refdef.y + cg.refdef.height * 0.5f;
+	xywh[2] = cg.refdef.width;
+	xywh[3] = cg.refdef.height;
 
-	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 	CG_NativeResTo640(&xywh[0], &xywh[1], &xywh[2], &xywh[3]);
-	CG_PopScreenPlacement();
 
 	// a small hack to mark only dirs (origins have to be between 65535 and -65535)
 	if (point[0] != CG_LENS_DIR_MARKER) {
@@ -894,6 +892,8 @@ void CG_AddLFsToScreen(void) {
 		return;
 	}
 
+	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
+
 	if (cg.skylensflare[0] != '\0') {
 		vec3_t tmpv3 = {CG_LENS_DIR_MARKER, 0, 0};
 		vec3_t tmpv32;
@@ -919,7 +919,6 @@ void CG_AddLFsToScreen(void) {
 	}
 
 	// Draw (with 3DTo2D-calc)
-	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 	for (i = 0; i < IFDA_firstempty; i++) {
 		float distanceSquared = 0.0f;
 		vec4_t xywh = {0.0f, 0.0f, 0.0f, 0.0f};
@@ -931,7 +930,6 @@ void CG_AddLFsToScreen(void) {
 		// usually 480 ... except the screen was made smaller
 		CG_DrawLensflare(IFD_Array[i].lensflare, v2, lfalpha, distanceSquared, xywh, qfalse);
 	}
-	CG_PopScreenPlacement();
 
 	// del list
 	memset(IFD_Array, 0, sizeof(IFD_Array));
