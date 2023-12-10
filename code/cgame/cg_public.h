@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // multiple commands may be combined into a single packet, so this
 // needs to be larger than PACKET_BACKUP
 
-#define MAX_ENTITIES_IN_SNAPSHOT 256
+#define MAX_ENTITIES_IN_SNAPSHOT 512
 
 // snapshots are a view of the server at a given time
 
