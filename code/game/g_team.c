@@ -522,7 +522,7 @@ void Team_FragBonuses(gentity_t *victim, gentity_t *attacker) {
 	if (g_gametype.integer == GT_1FCTF) {
 		flag_pw = PW_NEUTRALFLAG;
 		enemy_flag_pw = PW_NEUTRALFLAG;
-	} 
+	}
 
 	// did the attacker frag the flag carrier?
 	if (victim->client->ps.powerups[enemy_flag_pw]) {
@@ -1086,16 +1086,15 @@ TeamplayLocationsMessage
 Format:
 	clientNum location health armor weapon powerups cartridges
 
+See CG_ParseTeamInfo()
 ==================
 */
 static void TeamplayInfoMessage(const gentity_t *ent) {
 	char entry[1024];
 	char string[8192];
-	int stringlength, entrylength;
+	int stringlength;
 	int i;
-	gentity_t *player;
 	int count;
-	int h, a;
 
 	if (!ent->client->pers.teamInfo) {
 		return;
@@ -1110,9 +1109,16 @@ static void TeamplayInfoMessage(const gentity_t *ent) {
 	stringlength = 0;
 
 	for (i = 0, count = 0; ((i < level.maxclients) && (count < TEAM_MAXOVERLAY)); i++) {
-		player = (g_entities + i);
-		if (player->inuse && (player != ent) &&
-			(player->client->sess.sessionTeam == ent->client->ps.persistant[PERS_TEAM])) {
+		const gentity_t *player = (g_entities + i);
+		if (!player->inuse) {
+			continue;
+		}
+		if (player == ent) {
+			continue;
+		}
+		if (player->client->sess.sessionTeam == ent->client->ps.persistant[PERS_TEAM]) {
+			int h, a;
+			int entrylength;
 
 			h = player->client->ps.stats[STAT_HEALTH];
 			if (h < 0) {

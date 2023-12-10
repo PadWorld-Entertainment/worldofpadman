@@ -82,6 +82,7 @@ static void CG_ParseScores(void) {
 =================
 CG_ParseTeamInfo
 
+See TeamplayInfoMessage()
 =================
 */
 #define TI_VALUES_PER_PLAYER 7
