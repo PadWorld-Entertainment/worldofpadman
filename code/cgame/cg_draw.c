@@ -888,14 +888,16 @@ static void CG_DrawHoldableItem(float y) {
 			CG_DrawPic(SCREEN_WIDTH - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
 		}
 
-		if (itemId == (HI_BAMBAM || HI_BOOMIES)) {
+		if (itemId == HI_BAMBAM || itemId == HI_BOOMIES) {
 			int i;
 			centity_t *cent = NULL;
+			entityState_t *es = &cent->currentState;
 			vec3_t entPos;
 			vec3_t mins, maxs, center;
 			float squaredDist;
 			qboolean showCross = qfalse;
 
+			// ToDo: loop only GENTITIES in direct sourrounding of the player
 			for (i = 0; i < MAX_GENTITIES; i++) {
 				if (!cent->currentValid) {
 					continue;
@@ -910,7 +912,7 @@ static void CG_DrawHoldableItem(float y) {
 					}
 					break;
 				case ET_ITEM:
-					switch (cent->currentState.giType) {
+					switch (bg_itemlist[es->modelindex].giType) {
 						case IT_WEAPON:
 						case IT_POWERUP:
 						case IT_HOLDABLE:
@@ -936,8 +938,8 @@ static void CG_DrawHoldableItem(float y) {
 				break;
 			}
 
-			if (showCross = qtrue) {
-				CG_DrawPic(640 - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
+			if (showCross) {
+				CG_DrawPic(SCREEN_WIDTH - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
 			}
 		}
 
