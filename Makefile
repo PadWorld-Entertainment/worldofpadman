@@ -29,6 +29,9 @@ distclean:
 cmake:
 	$(Q)$(CMAKE) -H$(CURDIR) -B$(BUILDDIR) $(CMAKE_OPTIONS)
 
+package:
+	$(Q)cd $(BUILDDIR); cpack
+
 .PHONY: ccmake
 ccmake:
 	$(Q)ccmake -B$(BUILDDIR) -S.

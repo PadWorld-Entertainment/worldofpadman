@@ -49,6 +49,17 @@ endif()
 
 enable_testing()
 set(CTEST_TEST_TIMEOUT 1800)
+string(TIMESTAMP COPYRIGHT_YEAR "%Y")
+
+if (APPLE)
+    set(CPACK_GENERATOR "Bundle")
+    set(CPACK_BUNDLE_PLIST ${ROOT_DIR}/misc/osx/application.plist.in)
+    set(CPACK_BUNDLE_NAME ${PROJECT_NAME})
+    set(CPACK_BUNDLE_ICON ${ROOT_DIR}/misc/wop.icns)
+    SET(CPACK_BUNDLE_APPLE_CERT_APP "-")
+endif()
+
+include(CPack)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
 	add_compile_definitions(NDEBUG)
