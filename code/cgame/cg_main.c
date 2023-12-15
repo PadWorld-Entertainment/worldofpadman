@@ -707,15 +707,13 @@ static void CG_RegisterSounds(void) {
 
 	if (cgs.gametype >= GT_TEAM || cg_buildScript.integer) {
 		cgs.media.redLeadsSound[0] = trap_S_RegisterSound("sound/feedback/teamplay/red_leads", qtrue);
-		cgs.media.redLeadsSound[1] = trap_S_RegisterSound("sound/feedback/teamplay/red_rules", qtrue);
-		cgs.media.redLeadsSound[2] = trap_S_RegisterSound("sound/feedback/teamplay/red_best", qtrue);
+		cgs.media.redLeadsSound[1] = trap_S_RegisterSound("sound/feedback/teamplay/red_best", qtrue);
 		cgs.media.blueLeadsSound[0] = trap_S_RegisterSound("sound/feedback/teamplay/blue_leads", qtrue);
-		cgs.media.blueLeadsSound[1] = trap_S_RegisterSound("sound/feedback/teamplay/blue_rules", qtrue);
-		cgs.media.blueLeadsSound[2] = trap_S_RegisterSound("sound/feedback/teamplay/blue_best", qtrue);
+		cgs.media.blueLeadsSound[1] = trap_S_RegisterSound("sound/feedback/teamplay/blue_best", qtrue);
 		cgs.media.teamsTiedSound = trap_S_RegisterSound("sound/feedback/teamplay/teams_tied", qtrue);
 		cgs.media.hitTeamSound = trap_S_RegisterSound("sound/feedback/hit_team", qtrue);
-		cgs.media.redScoredSound = trap_S_RegisterSound("sound/feedback/teamplay/red_scores", qtrue);
-		cgs.media.blueScoredSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_scores", qtrue);
+		cgs.media.redScoredSound = trap_S_RegisterSound("sound/feedback/teamplay/red_rules", qtrue);
+		cgs.media.blueScoredSound = trap_S_RegisterSound("sound/feedback/teamplay/blue_rules", qtrue);
 
 		if (cgs.gametype == GT_CTF || cg_buildScript.integer) {
 			cgs.media.captureYourTeamSound = trap_S_RegisterSound("sound/feedback/teamplay/lollycapture_team", qtrue);
