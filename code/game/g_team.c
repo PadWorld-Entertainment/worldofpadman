@@ -136,10 +136,10 @@ void AddTeamScore(const vec3_t origin, int team, int score, char *reason) {
 			// red scored sound
 			te->s.eventParm = GTS_REDTEAM_SCORED;
 
-			// Hackity! In BB teams score continously, which makes for annoying
+			// Hackity! In BB teams score continuously, which leads to annoying
 			// sound spam. Thus disable sound.
 			// Better solution would be to either only do this sound on captures/destroys
-			// or continously at fixed time offsets.
+			// or continuously at fixed time offsets.
 			// Also note that there already is a "blue/red balloon" sound in cgame CG_UpdateBalloonStates
 			if (g_gametype.integer == GT_BALLOON) {
 				G_FreeEntity(te);
