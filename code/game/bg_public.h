@@ -317,17 +317,17 @@ typedef enum {
 #define EF_CHARGED 0x00000200
 #define EF_MOVER_STOP 0x00000400		// will push otherwise
 #define EF_AWARD_CAP 0x00000800			// draw the capture sprite
-#define EF_TALK 0x00001000				// draw a talk balloon
+#define EF_KILLERDUCK 0x00001000		// player carries the Killerduck in CATCH
 #define EF_CONNECTION 0x00002000		// draw a connection trouble sprite
 #define EF_VOTED 0x00004000				// already cast a vote
 #define EF_AWARD_PADHERO 0x00008000		// draw a padhero sprite
 #define EF_AWARD_PADACE 0x00010000		// draw a padace sprite
 #define EF_TEAMVOTED 0x00020000			// already cast a team vote
 #define EF_FLOATER 0x00040000			// player uses floater
-#define EF_AWARD_SPRAYGOD 0x00080000
-#define EF_AWARD_SPRAYKILLER 0x00100000
+#define EF_AWARD_SPRAYGOD 0x00080000	// draw a spraygod sprite
+#define EF_AWARD_SPRAYKILLER 0x00100000 // draw a spraykiller sprite
 #define EF_NOLIFESLEFT 0x00200000
-#define EF_KILLERDUCK 0x00400000
+#define EF_TALK 0x00400000				// draw a talk balloon sprite
 
 #define REMOVE_AWARDFLAGS                                                                                              \
 	~(EF_AWARD_EXCELLENT | EF_AWARD_SNACKATTACK | EF_AWARD_PADACE | EF_AWARD_PADHERO |               \
