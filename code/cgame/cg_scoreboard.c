@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define SCOREBOARD_X (0)
 
-#define SB_HEADER 74
+#define SB_HEADER 73
 #define SB_TOP (100)
 
 // Where the status bar starts, so we don't overwrite it
@@ -618,7 +618,7 @@ qboolean CG_DrawOldScoreboard(void) {
 		y += (n2 * lineHeight);
 	}
 
-	CG_DrawMedals(64.0f, 312.0f, score);
+	CG_DrawMedals(64.0f, 313.0f, score);
 
 	// load any models that have been deferred
 	if (++cg.deferredPlayerLoading > 10) {
