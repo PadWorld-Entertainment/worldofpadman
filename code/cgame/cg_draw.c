@@ -2748,7 +2748,7 @@ static void CG_DrawSprayYourColorCartridges(int team, int hudnum) {
 	CG_DrawPic(x + 78, y + 94, 9, 9, cartCount > 7 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
 }
 
-static void CG_DrawBigBallon(int team) {
+static void CG_DrawBigBalloon(int team) {
 	static const vec4_t yellow = {1.0f, 0.9f, 0.1f, 1.0f};
 	static const vec4_t orange = {1.0f, 0.4f, 0.1f, 1.0f};
 	vec4_t iconColor;
@@ -3216,7 +3216,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	CG_HudDrawHead();
 	CG_HudDrawHealthAndArmor(hudnum);
 	CG_DrawSprayYourColorCartridges(team, hudnum);
-	CG_DrawBigBallon(team);
+	CG_DrawBigBalloon(team);
 	CG_DrawCaptureTheLolly(team);
 	CG_DrawOneLollyCTL(team);
 	CG_DrawLPSArrowIcon();
