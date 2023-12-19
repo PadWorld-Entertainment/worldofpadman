@@ -133,14 +133,14 @@ CG_DrawFlagModel
 Used for both the status bar and the scoreboard
 ================
 */
-void CG_DrawFlagModel(float x, float y, float w, float h, int team, qboolean force2D) {
+void CG_DrawFlagModel(float x, float y, float w, float h, int team) {
 	qhandle_t cm;
 	float len;
 	vec3_t origin, angles;
 	vec3_t mins, maxs;
 	qhandle_t handle;
 
-	if (!force2D && cg_draw3dIcons.integer) {
+	if (cg_draw3dIcons.integer) {
 		VectorClear(angles);
 
 		cm = cgs.media.redFlagModel;
@@ -2819,7 +2819,7 @@ static void CG_DrawCaptureTheLolly(int team) {
 			CG_DrawPic(605, 445, 25, 25, cgs.media.blueFlagShader[cgs.blueflag]);
 
 			if (cg.predictedPlayerState.powerups[PW_BLUEFLAG])
-				CG_DrawFlagModel(602, 407, 35, 35, TEAM_BLUE, qfalse);
+				CG_DrawFlagModel(602, 407, 35, 35, TEAM_BLUE);
 
 			CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_red);
 		} else {
@@ -2827,7 +2827,7 @@ static void CG_DrawCaptureTheLolly(int team) {
 			CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[cgs.blueflag]);
 
 			if (cg.predictedPlayerState.powerups[PW_BLUEFLAG])
-				CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_BLUE, qfalse);
+				CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_BLUE);
 
 			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT,
 						cgs.media.hud_CTL_bg_red);
@@ -2838,7 +2838,7 @@ static void CG_DrawCaptureTheLolly(int team) {
 			CG_DrawPic(605, 445, 25, 25, cgs.media.redFlagShader[cgs.redflag]);
 
 			if (cg.predictedPlayerState.powerups[PW_REDFLAG])
-				CG_DrawFlagModel(602, 407, 35, 35, TEAM_RED, qfalse);
+				CG_DrawFlagModel(602, 407, 35, 35, TEAM_RED);
 
 			CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_blue);
 		} else {
@@ -2846,7 +2846,7 @@ static void CG_DrawCaptureTheLolly(int team) {
 			CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[cgs.redflag]);
 
 			if (cg.predictedPlayerState.powerups[PW_REDFLAG])
-				CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_RED, qfalse);
+				CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_RED);
 
 			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT,
 						cgs.media.hud_CTL_bg_blue);
@@ -2875,7 +2875,7 @@ static void CG_DrawOneLollyCTL(int team) {
 		CG_SetScreenPlacement(PLACE_RIGHT, PLACE_BOTTOM);
 		// draw the neutral lolly model if taken by the player
 		if (cg.predictedPlayerState.powerups[PW_NEUTRALFLAG]) {
-			CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_FREE, qfalse);
+			CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_FREE);
 		}
 		// draw the blue/red lolly icon in upper slot depending on neutral flag taken status to indicate
 		// which team has currently taken the neutral lolly; draw the neutral lolly icon in lower icon

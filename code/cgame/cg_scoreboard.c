@@ -110,15 +110,15 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	// draw the handicap or bot skill marker (unless player has lolly)
 	if (ci->powerups & (1 << PW_REDFLAG)) {
 		if (cg_drawIcons.integer) {
-			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_RED, qfalse);
+			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_RED);
 		}
 	} else if (ci->powerups & (1 << PW_BLUEFLAG)) {
 		if (cg_drawIcons.integer) {
-			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_BLUE, qfalse);
+			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_BLUE);
 		}
 	} else if (ci->powerups & (1 << PW_NEUTRALFLAG)) {
 		if (cg_drawIcons.integer) {
-			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_FREE, qfalse);
+			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_FREE);
 		}
 	} else {
 		if (ci->botSkill > 0 && ci->botSkill <= 5) {
