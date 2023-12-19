@@ -2802,55 +2802,35 @@ static void CG_DrawCaptureTheLolly(int team) {
 	if (team == TEAM_SPECTATOR) {
 		return;
 	}
+
 	if (cgs.gametype != GT_CTF) {
 		return;
 	}
 
 	CG_SetScreenPlacement(PLACE_RIGHT, PLACE_BOTTOM);
 
-	// TODO: clarify whether position(red/blue) is fixed or per team?
-	//			CG_DrawFlagModel(605,375,30,30,TEAM_RED,qfalse);
-	//			CG_DrawFlagModel(605,445,30,30,TEAM_BLUE,qfalse);
-
-	// draw the background
 	if (team == TEAM_RED) {
-		if (!cgs.media.hud_CTL_bg_red) { // keep old stuff, as fallback
-			CG_DrawPic(605, 375, 25, 25, cgs.media.redFlagShader[cgs.redflag]);
-			CG_DrawPic(605, 445, 25, 25, cgs.media.blueFlagShader[cgs.blueflag]);
+		// draw flag status
+		CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[cgs.redflag]);
+		CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[cgs.blueflag]);
 
-			if (cg.predictedPlayerState.powerups[PW_BLUEFLAG])
-				CG_DrawFlagModel(602, 407, 35, 35, TEAM_BLUE);
-
-			CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_red);
-		} else {
-			CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[cgs.redflag]);
-			CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[cgs.blueflag]);
-
-			if (cg.predictedPlayerState.powerups[PW_BLUEFLAG])
-				CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_BLUE);
-
-			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT,
-						cgs.media.hud_CTL_bg_red);
+		// draw the blue lolly model if taken by the player
+		if (cg.predictedPlayerState.powerups[PW_BLUEFLAG]) {
+			CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_BLUE);
 		}
+		// draw the background
+		CG_DrawPic(SCREEN_WIDTH - CTL_BG_WIDTH, SCREEN_HEIGHT - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_red);
 	} else {
-		if (!cgs.media.hud_CTL_bg_blue) { // keep old stuff, as fallback
-			CG_DrawPic(605, 375, 25, 25, cgs.media.blueFlagShader[cgs.blueflag]);
-			CG_DrawPic(605, 445, 25, 25, cgs.media.redFlagShader[cgs.redflag]);
+		// draw flag status
+		CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[cgs.blueflag]);
+		CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[cgs.redflag]);
 
-			if (cg.predictedPlayerState.powerups[PW_REDFLAG])
-				CG_DrawFlagModel(602, 407, 35, 35, TEAM_RED);
-
-			CG_DrawPic(640 - 64, 480 - 128, 64, 128, cgs.media.hud_bk_balloon_blue);
-		} else {
-			CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[cgs.blueflag]);
-			CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[cgs.redflag]);
-
-			if (cg.predictedPlayerState.powerups[PW_REDFLAG])
-				CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_RED);
-
-			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT,
-						cgs.media.hud_CTL_bg_blue);
+		// draw the red lolly model if taken by the player
+		if (cg.predictedPlayerState.powerups[PW_REDFLAG]) {
+			CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_RED);
 		}
+		// draw the background
+		CG_DrawPic(SCREEN_WIDTH - CTL_BG_WIDTH, SCREEN_HEIGHT - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_blue);
 	}
 }
 
@@ -2869,37 +2849,41 @@ static void CG_DrawOneLollyCTL(int team) {
 	if (team == TEAM_SPECTATOR) {
 		return;
 	}
+
 	if (cgs.gametype != GT_1FCTF) {
 		return;
-	} else {
-		CG_SetScreenPlacement(PLACE_RIGHT, PLACE_BOTTOM);
-		// draw the neutral lolly model if taken by the player
-		if (cg.predictedPlayerState.powerups[PW_NEUTRALFLAG]) {
-			CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_FREE);
-		}
-		// draw the blue/red lolly icon in upper slot depending on neutral flag taken status to indicate
-		// which team has currently taken the neutral lolly; draw the neutral lolly icon in lower icon
-		// slot depending on neutral flag status
-		if( cgs.flagStatus >= 0 && cgs.flagStatus <= 4 ) {
-			int flagIndex = 0;
-			if (cgs.flagStatus == FLAG_TAKEN_RED) {
-				flagIndex = 1;
-				CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[0]);
-			} else if (cgs.flagStatus == FLAG_TAKEN_BLUE) {
-				flagIndex = 1;
-				CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[0]);
-			} else if (cgs.flagStatus == FLAG_DROPPED) {
-				flagIndex = 2;
-			}
-			CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.neutralflagShader[flagIndex]);
-		}
-		// draw the background depending on tam status
-		if (team == TEAM_RED) {
-			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_red);
-		} else {
-			CG_DrawPic(640 - CTL_BG_WIDTH, 480 - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_blue);
-		}
 	}
+
+	CG_SetScreenPlacement(PLACE_RIGHT, PLACE_BOTTOM);
+
+	// draw the neutral lolly model if taken by the player
+	if (cg.predictedPlayerState.powerups[PW_NEUTRALFLAG]) {
+		CG_DrawFlagModel(CTL_LOLLYMDLX, CTL_LOLLYMDLY, CTL_LOLLYMDLW, CTL_LOLLYMDLH, TEAM_FREE);
+	}
+
+	// draw the blue/red lolly icon in upper slot depending on neutral flag taken status to indicate
+	// which team has currently taken the neutral lolly; draw the neutral lolly icon in lower icon
+	// slot depending on neutral flag status
+	if(cgs.flagStatus >= 0 && cgs.flagStatus <= 4) {
+		int flagIndex = 0;
+		if (cgs.flagStatus == FLAG_TAKEN_RED) {
+			flagIndex = 1;
+			CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.redFlagShader[0]);
+		} else if (cgs.flagStatus == FLAG_TAKEN_BLUE) {
+			flagIndex = 1;
+			CG_DrawPic(CTL_STATX, CTL_STATY1, CTL_STATWH, CTL_STATWH, cgs.media.blueFlagShader[0]);
+		} else if (cgs.flagStatus == FLAG_DROPPED) {
+			flagIndex = 2;
+		}
+		CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.neutralflagShader[flagIndex]);
+	}
+	
+	// draw the background depending on tam status
+	if (team == TEAM_RED) {
+		CG_DrawPic(SCREEN_WIDTH - CTL_BG_WIDTH, SCREEN_HEIGHT - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_red);
+	} else {
+		CG_DrawPic(SCREEN_WIDTH - CTL_BG_WIDTH, SCREEN_HEIGHT - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_blue);
+	}	
 }
 
 #define FADEOUTTIME 1500
