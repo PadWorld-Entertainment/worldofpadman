@@ -250,6 +250,7 @@ static void CG_Item(centity_t *cent) {
 		memset(&ent, 0, sizeof(ent));
 		ent.reType = RT_SPRITE;
 		VectorCopy(cent->lerpOrigin, ent.origin);
+		ent.origin[2] += 16; // position above ground
 		ent.radius = 14;
 
 		if (es->modelindex == cgs.media.neutralCartridgeEntNum &&
