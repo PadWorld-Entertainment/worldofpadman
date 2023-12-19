@@ -75,11 +75,12 @@ CG_DrawClientScore
 =================
 */
 static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, float fade, int lineHeight) {
-	int icony, fontHeight;
+	int icony, heady, fontHeight;
 	char string[1024];
 	vec3_t headAngles;
 	clientInfo_t *ci;
 	int iconx, headx;
+	int iconsize;
 
 	if (score->client < 0 || score->client >= cgs.maxclients) {
 		Com_Printf("Bad score->client: %i\n", score->client);
@@ -87,11 +88,16 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	}
 
 	icony = y;
+	heady = y;
 	if (lineHeight > 16) {
 		y += (lineHeight - 16) / 2;
 		fontHeight = 16;
-	} else
+		iconsize = (int)((float)lineHeight * 0.9f);
+		icony += (lineHeight - iconsize) / 2;
+	} else {
 		fontHeight = lineHeight;
+		iconsize = lineHeight;
+	}
 
 	ci = &cgs.clientinfo[score->client];
 
@@ -100,30 +106,32 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 
 	// freeze icon indicating frozen player in freezetag
 	if (CG_FreezeTag() && ci->powerups & (1 << PW_FREEZE)) {
-		CG_DrawPic(iconx, icony, lineHeight * 0.8, lineHeight * 0.8, cgs.media.freezeIconShader);
+		CG_DrawPic(iconx, icony, lineHeight, lineHeight, cgs.media.freezeIconShader);
 	// killerduck icon indicating player is killerduck carrier in ctkd
 	} else if (ci->ctkdIsKillerduck) {
 		if (cg_drawIcons.integer) {
-			CG_DrawPic(iconx, icony, lineHeight * 0.8, lineHeight * 0.8, cgs.media.ctkdCarrierIconShader);
+			CG_DrawPic(iconx, icony, iconsize, iconsize, cgs.media.ctkdCarrierIconShader);
 		}
-	} else
-	// draw the handicap or bot skill marker (unless player has lolly)
-	if (ci->powerups & (1 << PW_REDFLAG)) {
+	// red lolly icon indicating player has the red lolly in ctl
+	} else if (ci->powerups & (1 << PW_REDFLAG)) {
 		if (cg_drawIcons.integer) {
-			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_RED);
+			CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_RED);
 		}
+	// red lolly icon indicating player has the blue lolly in ctl
 	} else if (ci->powerups & (1 << PW_BLUEFLAG)) {
 		if (cg_drawIcons.integer) {
-			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_BLUE);
+			CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_BLUE);
 		}
+	// red lolly icon indicating player has the neutral lolly in 1lctl
 	} else if (ci->powerups & (1 << PW_NEUTRALFLAG)) {
 		if (cg_drawIcons.integer) {
-			CG_DrawFlagModel(iconx, icony, lineHeight, lineHeight, TEAM_FREE);
+			CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_FREE);
 		}
+	// draw the handicap or bot skill marker unless player has lolly, killerduck, or is frozen)
 	} else {
 		if (ci->botSkill > 0 && ci->botSkill <= 5) {
 			if (cg_drawIcons.integer) {
-				CG_DrawPic(iconx, icony, lineHeight, lineHeight, cgs.media.botSkillShaders[ci->botSkill - 1]);
+				CG_DrawPic(iconx, icony, iconsize, iconsize, cgs.media.botSkillShaders[ci->botSkill - 1]);
 			}
 		} else if (ci->handicap < 100) {
 			Com_sprintf(string, sizeof(string), "%i", ci->handicap);
@@ -147,7 +155,7 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	// draw the face
 	VectorClear(headAngles);
 	headAngles[YAW] = 180;
-	CG_DrawHead(headx, icony, lineHeight, lineHeight, score->client, headAngles);
+	CG_DrawHead(headx, heady, lineHeight, lineHeight, score->client, headAngles);
 
 	// draw the score line
 	if (score->ping == -1) {
