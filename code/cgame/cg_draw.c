@@ -2691,10 +2691,10 @@ static void CG_DrawSprayYourColor(void) {
 }
 
 static void CG_DrawSprayYourColorCartridges(int team, int hudnum) {
-	float x = 564;
+	float x = 566;
 	float y = 425;
-	float w = 54;
-	float h = 54;
+	float w = ICON_SIZE;
+	float h = ICON_SIZE;
 	int cartCount = 0;
 
 	if (team == TEAM_SPECTATOR) {
@@ -2716,21 +2716,21 @@ static void CG_DrawSprayYourColorCartridges(int team, int hudnum) {
 		qhandle_t cartIcon = cg_items[cgs.media.neutralCartridgeEntNum].icon;
 		if (cg_draw3dIcons.integer) {
 			tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
-			tmporigin[0] = 70;
+			tmporigin[0] = 60;
 			tmpangles[1] = (float)(cg.time) * 0.09f;
 			if (team == TEAM_BLUE) {
 				cartModel = cg_items[cgs.media.blueCartridgeEntNum].models[0];
 			} else if (team == TEAM_RED) {
 				cartModel = cg_items[cgs.media.redCartridgeEntNum].models[0];
 			}
-			CG_Draw3DModel(x, y, w, h, cartModel, 0, tmporigin, tmpangles, 1.0f, NULL);
+			CG_Draw3DModel(x, y + 4, w, h, cartModel, 0, tmporigin, tmpangles, 1.0f, NULL);
 		} else {
 			if (team == TEAM_BLUE) {
 				cartIcon = cg_items[cgs.media.blueCartridgeEntNum].icon;
 			} else if (team == TEAM_RED) {
 				cartIcon = cg_items[cgs.media.redCartridgeEntNum].icon;
 			}
-			CG_DrawPic(x + 3, y, w - 6, h - 6, cartIcon);
+			CG_DrawPic(x, y, w, h, cartIcon);
 		}
 	}
 
@@ -2802,10 +2802,10 @@ static void CG_DrawBigBalloon(int team) {
 static void CG_DrawCaptureTheLolly(int team) {
 	const float CTL_BG_WIDTH = 78;
 	const float CTL_BG_HEIGHT = 115;
-	const float CTL_LOLLYMDLX = 573;
-	const float CTL_LOLLYMDLY = 427;
-	const float CTL_LOLLYMDLW = 50;
-	const float CTL_LOLLYMDLH = 50;
+	const float CTL_LOLLYMDLX = 574;
+	const float CTL_LOLLYMDLY = 428;
+	const float CTL_LOLLYMDLW = ICON_SIZE;
+	const float CTL_LOLLYMDLH = ICON_SIZE;
 	const float CTL_STATX = 610;
 	const float CTL_STATY1 = 370;
 	const float CTL_STATY2 = 402;
@@ -2849,10 +2849,10 @@ static void CG_DrawCaptureTheLolly(int team) {
 static void CG_DrawOneLollyCTL(int team) {
 	const float CTL_BG_WIDTH = 78;
 	const float CTL_BG_HEIGHT = 115;
-	const float CTL_LOLLYMDLX = 573;
-	const float CTL_LOLLYMDLY = 427;
-	const float CTL_LOLLYMDLW = 50;
-	const float CTL_LOLLYMDLH = 50;
+	const float CTL_LOLLYMDLX = 574;
+	const float CTL_LOLLYMDLY = 428;
+	const float CTL_LOLLYMDLW = ICON_SIZE;
+	const float CTL_LOLLYMDLH = ICON_SIZE;
 	const float CTL_STATX = 610;
 	const float CTL_STATY1 = 370;
 	const float CTL_STATY2 = 402;
