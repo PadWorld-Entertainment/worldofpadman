@@ -2691,13 +2691,11 @@ static void CG_DrawSprayYourColor(void) {
 }
 
 static void CG_DrawSprayYourColorCartridges(int team, int hudnum) {
-	float x = 548 + 16;
-	float y = 367 + 58;
+	float x = 564;
+	float y = 425;
 	float w = 54;
 	float h = 54;
-	vec3_t tmporigin, tmpangles;
 	int cartCount = 0;
-	qhandle_t cartModel;
 
 	if (team == TEAM_SPECTATOR) {
 		return;
@@ -2713,19 +2711,27 @@ static void CG_DrawSprayYourColorCartridges(int team, int hudnum) {
 
 	// draw the cartridge model only if we carry at least one
 	if (cartCount > 0) {
-		tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
-
-		tmporigin[0] = 70;
-		tmpangles[1] = (float)(cg.time) * 0.09f;
-
-		if (team == TEAM_BLUE) {
-			cartModel = cg_items[cgs.media.blueCartridgeEntNum].models[0];
-		} else if (team == TEAM_RED) {
-			cartModel = cg_items[cgs.media.redCartridgeEntNum].models[0];
+		vec3_t tmporigin, tmpangles;
+		qhandle_t cartModel = cg_items[cgs.media.neutralCartridgeEntNum].models[0];
+		qhandle_t cartIcon = cg_items[cgs.media.neutralCartridgeEntNum].icon;
+		if (cg_draw3dIcons.integer) {
+			tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
+			tmporigin[0] = 70;
+			tmpangles[1] = (float)(cg.time) * 0.09f;
+			if (team == TEAM_BLUE) {
+				cartModel = cg_items[cgs.media.blueCartridgeEntNum].models[0];
+			} else if (team == TEAM_RED) {
+				cartModel = cg_items[cgs.media.redCartridgeEntNum].models[0];
+			}
+			CG_Draw3DModel(x, y, w, h, cartModel, 0, tmporigin, tmpangles, 1.0f, NULL);
 		} else {
-			cartModel = cg_items[cgs.media.neutralCartridgeEntNum].models[0];
+			if (team == TEAM_BLUE) {
+				cartIcon = cg_items[cgs.media.blueCartridgeEntNum].icon;
+			} else if (team == TEAM_RED) {
+				cartIcon = cg_items[cgs.media.redCartridgeEntNum].icon;
+			}
+			CG_DrawPic(x + 3, y, w - 6, h - 6, cartIcon);
 		}
-		CG_Draw3DModel(x, y, w, h, cartModel, 0, tmporigin, tmpangles, 1.0f, NULL);
 	}
 
 	x = 548;
