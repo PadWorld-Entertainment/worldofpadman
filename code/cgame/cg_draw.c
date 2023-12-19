@@ -2696,50 +2696,56 @@ static void CG_DrawSprayYourColorCartridges(int team, int hudnum) {
 	float w = 54;
 	float h = 54;
 	vec3_t tmporigin, tmpangles;
-	int carts;
+	int cartCount = 0;
+	qhandle_t cartModel;
 
 	if (team == TEAM_SPECTATOR) {
 		return;
 	}
+
 	if (cgs.gametype != GT_SPRAY && cgs.gametype != GT_SPRAYFFA) {
 		return;
 	}
 
 	CG_SetScreenPlacement(PLACE_RIGHT, PLACE_BOTTOM);
 
-	tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
+	cartCount = cg.snap->ps.ammo[WP_SPRAYPISTOL];
 
-	tmporigin[0] = 70;
-	tmpangles[1] = (float)(cg.time) * 0.09f;
+	// draw the cartridge model only if we carry at least one
+	if (cartCount > 0) {
+		tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
 
-	if (team == TEAM_BLUE)
-		CG_Draw3DModel(x, y, w, h, cg_items[cgs.media.blueCartridgeEntNum].models[0], 0, tmporigin, tmpangles,
-						1.0f, NULL);
-	else if (team == TEAM_RED)
-		CG_Draw3DModel(x, y, w, h, cg_items[cgs.media.redCartridgeEntNum].models[0], 0, tmporigin, tmpangles,
-						1.0f, NULL);
-	else
-		CG_Draw3DModel(x, y, w, h, cg_items[cgs.media.neutralCartridgeEntNum].models[0], 0, tmporigin,
-						tmpangles, 1.0f, NULL);
+		tmporigin[0] = 70;
+		tmpangles[1] = (float)(cg.time) * 0.09f;
+
+		if (team == TEAM_BLUE) {
+			cartModel = cg_items[cgs.media.blueCartridgeEntNum].models[0];
+		} else if (team == TEAM_RED) {
+			cartModel = cg_items[cgs.media.redCartridgeEntNum].models[0];
+		} else {
+			cartModel = cg_items[cgs.media.neutralCartridgeEntNum].models[0];
+		}
+		CG_Draw3DModel(x, y, w, h, cartModel, 0, tmporigin, tmpangles, 1.0f, NULL);
+	}
 
 	x = 548;
 	y = 367;
 	w = 92;
 	h = 113;
 
+	// draw the background
 	CG_DrawPic(x, y, w, h, cgs.media.hud_br[hudnum]);
 
-	carts = cg.snap->ps.ammo[WP_SPRAYPISTOL];
+	// draw the cartridge dots
+	CG_DrawPic(x + 78, y + 15, 9, 9, cartCount > 0 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(x + 78, y + 26, 9, 9, cartCount > 1 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(x + 78, y + 38, 9, 9, cartCount > 2 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(x + 78, y + 49, 9, 9, cartCount > 3 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
 
-	CG_DrawPic(x + 78, y + 15, 9, 9, carts > 0 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-	CG_DrawPic(x + 78, y + 26, 9, 9, carts > 1 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-	CG_DrawPic(x + 78, y + 38, 9, 9, carts > 2 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-	CG_DrawPic(x + 78, y + 49, 9, 9, carts > 3 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-
-	CG_DrawPic(x + 78, y + 60, 9, 9, carts > 4 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-	CG_DrawPic(x + 78, y + 72, 9, 9, carts > 5 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-	CG_DrawPic(x + 78, y + 83, 9, 9, carts > 6 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
-	CG_DrawPic(x + 78, y + 94, 9, 9, carts > 7 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(x + 78, y + 60, 9, 9, cartCount > 4 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(x + 78, y + 72, 9, 9, cartCount > 5 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(x + 78, y + 83, 9, 9, cartCount > 6 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
+	CG_DrawPic(x + 78, y + 94, 9, 9, cartCount > 7 ? cgs.media.hud_dotfull : cgs.media.hud_dotempty);
 }
 
 static void CG_DrawBigBallon(int team) {
