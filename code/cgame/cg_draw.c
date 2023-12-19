@@ -3149,7 +3149,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 		if (hudnum > 9 || hudnum < 0)
 			hudnum = 0;
 	}
-	// vv bl
+
 	weaponNum = cg.snap->ps.weapon;
 	team = cg.snap->ps.persistant[PERS_TEAM];
 	{
@@ -3158,12 +3158,22 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 		CG_SetScreenPlacement(PLACE_LEFT, PLACE_BOTTOM);
 
 		if (weaponNum > WP_NONE) {
-			if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE)
-				CG_DrawPic(10, 375, 42, 42, cgs.media.blueSpraypistolicon);
-			else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_FREE)
-				CG_DrawPic(10, 375, 42, 42, cgs.media.neutralSpraypistolicon);
-			else
-				CG_DrawPic(10, 375, 42, 42, cg_weapons[weaponNum].weaponIcon);
+			vec3_t tmporigin, tmpangles;
+			qhandle_t ammoModel = cg_weapons[weaponNum].ammoModel;
+			qhandle_t ammoIcon = cg_weapons[weaponNum].weaponIcon;
+			if (cg_draw3dIcons.integer && !(weaponNum == WP_PUNCHY || weaponNum == WP_SPRAYPISTOL)) {
+				tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
+				tmporigin[0] = 60;
+				tmpangles[1] = (float)(cg.time) * 0.09f;
+				CG_Draw3DModel(7, 376, ICON_SIZE, ICON_SIZE, ammoModel, 0, tmporigin, tmpangles, 1.0f, NULL);
+			} else {
+				if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE) {
+					ammoIcon = cgs.media.blueSpraypistolicon;
+				} else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_FREE) {
+					ammoIcon = cgs.media.neutralSpraypistolicon;
+				}
+				CG_DrawPic(7, 372, ICON_SIZE, ICON_SIZE, ammoIcon);
+			}
 		}
 
 		x = 0;
