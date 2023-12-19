@@ -109,30 +109,20 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 		CG_DrawPic(iconx, icony, lineHeight, lineHeight, cgs.media.freezeIconShader);
 	// killerduck icon indicating player is killerduck carrier in ctkd
 	} else if (ci->ctkdIsKillerduck) {
-		if (cg_drawIcons.integer) {
-			CG_DrawPic(iconx, icony, iconsize, iconsize, cgs.media.ctkdCarrierIconShader);
-		}
+		CG_DrawPic(iconx, icony, iconsize, iconsize, cgs.media.ctkdCarrierIconShader);
 	// red lolly icon indicating player has the red lolly in ctl
 	} else if (ci->powerups & (1 << PW_REDFLAG)) {
-		if (cg_drawIcons.integer) {
-			CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_RED);
-		}
+		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_RED);
 	// red lolly icon indicating player has the blue lolly in ctl
 	} else if (ci->powerups & (1 << PW_BLUEFLAG)) {
-		if (cg_drawIcons.integer) {
-			CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_BLUE);
-		}
+		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_BLUE);
 	// red lolly icon indicating player has the neutral lolly in 1lctl
 	} else if (ci->powerups & (1 << PW_NEUTRALFLAG)) {
-		if (cg_drawIcons.integer) {
-			CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_FREE);
-		}
+		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_FREE);
 	// draw the handicap or bot skill marker unless player has lolly, killerduck, or is frozen)
 	} else {
 		if (ci->botSkill > 0 && ci->botSkill <= 5) {
-			if (cg_drawIcons.integer) {
-				CG_DrawPic(iconx, icony, iconsize, iconsize, cgs.media.botSkillShaders[ci->botSkill - 1]);
-			}
+			CG_DrawPic(iconx, icony, iconsize, iconsize, cgs.media.botSkillShaders[ci->botSkill - 1]);
 		} else if (ci->handicap < 100) {
 			Com_sprintf(string, sizeof(string), "%i", ci->handicap);
 			if (cgs.gametype == GT_TOURNAMENT)

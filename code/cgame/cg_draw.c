@@ -170,7 +170,7 @@ void CG_DrawFlagModel(float x, float y, float w, float h, int team) {
 			return;
 		}
 		CG_Draw3DModel(x, y, w, h, handle, 0, origin, angles, 1.15f, NULL); // old: 1.0f
-	} else if (cg_drawIcons.integer) {
+	} else {
 		const gitem_t *item;
 
 		if (team == TEAM_RED) {
