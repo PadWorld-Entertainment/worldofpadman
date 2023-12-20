@@ -925,7 +925,7 @@ static void CG_RegisterGraphics(void) {
 
 	if (cgs.gametype == GT_CATCH) {
 		cgs.media.ctkdHintIconShader = trap_R_RegisterShader("icons/hint_killerduck");
-		cgs.media.ctkdCarrierIconShader = trap_R_RegisterShader("icons/holdable_killerducks");
+		cgs.media.ctkdCarrierIconShader = trap_R_RegisterShader("icons/hint_kdcarrier");
 	}
 
 	cgs.media.healthstationIcon = trap_R_RegisterShaderNoMip("icons/hint_healthstation");

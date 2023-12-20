@@ -525,6 +525,24 @@ icons/hint_voicechat
 	}
 }
 
+icons/hint_killerduck
+{
+	nopicmip
+	{
+		map icons/hint_killerduck
+		blendFunc blend
+	}
+}
+
+icons/hint_kdcarrier
+{
+	nopicmip
+	{
+		map icons/hint_kdcarrier
+		blendFunc blend
+	}
+}
+
 //
 // HUD ICONS
 //

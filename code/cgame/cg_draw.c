@@ -846,6 +846,11 @@ static void CG_DrawHoldableItem(float y) {
 		const int itemId = bg_itemlist[value].giTag;
 		CG_RegisterItemVisuals(value);
 
+		// don't draw the killerduck holdable information if in ctkd
+		if (itemId == HI_KILLERDUCKS && cgs.gametype == GT_CATCH) {
+			return;
+		}
+
 		y -= ICON_SIZE;
 		CG_DrawPic(SCREEN_WIDTH - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cg_items[value].icon);
 		if (cg.snap->ps.stats[STAT_FORBIDDENITEMS] & (1 << itemId)) {
@@ -861,7 +866,7 @@ static void CG_DrawHoldableItem(float y) {
 			CG_DrawRect(barX, y, 10, ICON_SIZE, 1.0f, colorWhite);
 		}
 
-		if ((itemId == HI_KILLERDUCKS && cgs.gametype != GT_CATCH) || itemId == HI_BOOMIES) {
+		if (itemId == HI_KILLERDUCKS  || itemId == HI_BOOMIES) {
 			const char *str = va("%i", itemState);
 			const int maxChars = strlen(str);
 			CG_DrawStringExt(SCREEN_WIDTH - 24 - maxChars * 4, y + 8, str, colorWhite, qtrue, qtrue,
@@ -3159,15 +3164,25 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 
 		if (weaponNum > WP_NONE) {
 			vec3_t tmporigin, tmpangles;
-			qhandle_t ammoModel = cg_weapons[weaponNum].ammoModel;
-			qhandle_t ammoIcon = cg_weapons[weaponNum].weaponIcon;
+			float duckOffset = 0.0f;
+			// always draw the killerduck model if we catched it in ctkd
+			if (BG_IsKillerDuck(&cg.snap->ps)) {
+				weaponNum = WP_KILLERDUCKS;
+				duckOffset = -8.0f;
+			}
 			if (cg_draw3dIcons.integer && !(weaponNum == WP_PUNCHY || weaponNum == WP_SPRAYPISTOL)) {
-				tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
-				tmporigin[0] = 60;
+				qhandle_t ammoModel = cg_weapons[weaponNum].ammoModel;
+				tmpangles[0] = tmpangles[2] = tmporigin[1] = 0.0f;
+				tmporigin[0] = 60.0f;
+				tmporigin[2] = 0.0f + duckOffset;
 				tmpangles[1] = (float)(cg.time) * 0.09f;
 				CG_Draw3DModel(7, 376, ICON_SIZE, ICON_SIZE, ammoModel, 0, tmporigin, tmpangles, 1.0f, NULL);
 			} else {
-				if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE) {
+				qhandle_t ammoIcon = cg_weapons[weaponNum].weaponIcon;
+				// always draw the killerduck icon if we catched it in ctkd
+				if (BG_IsKillerDuck(&cg.snap->ps)) {
+					ammoIcon = cgs.media.ctkdCarrierIconShader;
+				} else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE) {
 					ammoIcon = cgs.media.blueSpraypistolicon;
 				} else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_FREE) {
 					ammoIcon = cgs.media.neutralSpraypistolicon;
@@ -3183,8 +3198,10 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 
 		CG_DrawPic(x, y, w, h, cgs.media.hud_bl[hudnum]);
 
-		if (cg.snap->ps.ammo[weaponNum] >= 0)
+		// don't draw ammo information if in ctkd
+		if (cg.snap->ps.ammo[weaponNum] >= 0 && !BG_IsKillerDuck(&cg.snap->ps)) {
 			CG_DrawStringExt(20, 425, va("%3i", cg.snap->ps.ammo[weaponNum]), colorBlack, qtrue, qfalse, 8, 16, 3);
+		}
 
 		if (cgs.gametype < GT_TEAM) {
 			// LPS has livesleft as primary score only when LPSF_PPOINTLIMIT is not enabled
