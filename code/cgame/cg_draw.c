@@ -935,11 +935,11 @@ static void CG_DrawHoldableItem(float y) {
 					}
 					break;
 				}
-				break;
-			}
 
-			if (showCross) {
-				CG_DrawPic(SCREEN_WIDTH - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
+				if (showCross) {
+					CG_DrawPic(SCREEN_WIDTH - ICON_SIZE, y, ICON_SIZE, ICON_SIZE, cgs.media.noammoShader);
+					break;
+				}
 			}
 		}
 
