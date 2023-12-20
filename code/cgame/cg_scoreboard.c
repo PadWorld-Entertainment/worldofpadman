@@ -109,7 +109,7 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 		CG_DrawPic(iconx, icony, lineHeight, lineHeight, cgs.media.freezeIconShader);
 	// killerduck icon indicating player is killerduck carrier in ctkd
 	} else if (ci->ctkdIsKillerduck) {
-		CG_DrawPic(iconx, icony, iconsize, iconsize, cgs.media.ctkdCarrierIconShader);
+		CG_DrawDuckModel(iconx, icony, iconsize, iconsize);
 	// red lolly icon indicating player has the red lolly in ctl
 	} else if (ci->powerups & (1 << PW_REDFLAG)) {
 		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_RED);

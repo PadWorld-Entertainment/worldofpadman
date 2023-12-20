@@ -190,6 +190,37 @@ void CG_DrawFlagModel(float x, float y, float w, float h, int team) {
 
 /*
 ================
+CG_DrawDuckModel
+Used for both the status bar and the scoreboard
+================
+*/
+void CG_DrawDuckModel(float x, float y, float w, float h) {
+	qhandle_t handle = cg_weapons[WP_KILLERDUCKS].ammoModel;
+	float len;
+	vec3_t origin, angles;
+	vec3_t mins, maxs;
+
+	if (cg_draw3dIcons.integer) {
+		VectorClear(angles);
+
+		// offset the origin y and z to center the model
+		trap_R_ModelBounds(handle, mins, maxs);
+		origin[2] = -0.4f * (mins[2] + maxs[2]);
+		origin[1] = 0.5f * (mins[1] + maxs[1]);
+
+		// calculate distance so the model nearly fills the box
+		// assume model is taller than wide
+		len = 0.5f * (maxs[2] - mins[2]);
+		origin[0] = len / 0.268f; // len / tan( fov/2 )
+		angles[YAW] = 100.0f * (float)cg.time / 2000.0f;
+		CG_Draw3DModel(x, y, w, h, handle, 0, origin, angles, 0.8f, NULL);
+	} else {
+		CG_DrawPic(x, y, w, h, cgs.media.ctkdCarrierIconShader);
+	}
+}
+
+/*
+================
 CG_DrawTeamBackground
 ================
 */
@@ -3162,33 +3193,29 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 
 		CG_SetScreenPlacement(PLACE_LEFT, PLACE_BOTTOM);
 
-		if (weaponNum > WP_NONE) {
-			vec3_t tmporigin, tmpangles;
-			float duckOffset = 0.0f;
-			// always draw the killerduck model if we catched it in ctkd
-			if (BG_IsKillerDuck(&cg.snap->ps)) {
-				weaponNum = WP_KILLERDUCKS;
-				duckOffset = -8.0f;
-			}
+		// don't draw the ammo model / weapon icon if we catched the killerduck in ctkd
+		if (weaponNum > WP_NONE && !BG_IsKillerDuck(&cg.snap->ps)) {
 			if (cg_draw3dIcons.integer && !(weaponNum == WP_PUNCHY || weaponNum == WP_SPRAYPISTOL)) {
+				vec3_t tmporigin, tmpangles;
 				qhandle_t ammoModel = cg_weapons[weaponNum].ammoModel;
-				tmpangles[0] = tmpangles[2] = tmporigin[1] = 0.0f;
+				tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
 				tmporigin[0] = 60.0f;
-				tmporigin[2] = 0.0f + duckOffset;
 				tmpangles[1] = (float)(cg.time) * 0.09f;
 				CG_Draw3DModel(7, 376, ICON_SIZE, ICON_SIZE, ammoModel, 0, tmporigin, tmpangles, 1.0f, NULL);
 			} else {
 				qhandle_t ammoIcon = cg_weapons[weaponNum].weaponIcon;
-				// always draw the killerduck icon if we catched it in ctkd
-				if (BG_IsKillerDuck(&cg.snap->ps)) {
-					ammoIcon = cgs.media.ctkdCarrierIconShader;
-				} else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE) {
+				if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE) {
 					ammoIcon = cgs.media.blueSpraypistolicon;
 				} else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_FREE) {
 					ammoIcon = cgs.media.neutralSpraypistolicon;
 				}
 				CG_DrawPic(7, 372, ICON_SIZE, ICON_SIZE, ammoIcon);
 			}
+		}
+
+		// only draw the killerduck model if we catched it in ctkd
+		if (BG_IsKillerDuck(&cg.snap->ps)) {
+			CG_DrawDuckModel(7, 372, ICON_SIZE, ICON_SIZE);
 		}
 
 		x = 0;
