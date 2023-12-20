@@ -58,14 +58,15 @@ PREFERENCES MENU
 #define ID_INDICATEHEALTH 11
 #define ID_IDENTIFYTARGET 12
 #define ID_FFAHUDTHEME 13
-#define ID_TEAMOVERLAY 14
-#define ID_LAGOMETER 15
-#define ID_VOIPMETER 16
-#define ID_TIMER 17
-#define ID_TIMELEFT 18
-#define ID_REALTIME 19
-#define ID_FPS 20
-#define ID_UPS 21
+#define ID_DRAW3DICONS 14
+#define ID_TEAMOVERLAY 15
+#define ID_LAGOMETER 16
+#define ID_VOIPMETER 17
+#define ID_TIMER 18
+#define ID_TIMELEFT 19
+#define ID_REALTIME 20
+#define ID_FPS 21
+#define ID_UPS 22
 
 #define ID_AUTOSWITCH 30
 #define ID_SIMPLEITEMS 31
@@ -118,6 +119,7 @@ typedef struct {
 	menuradiobutton_s indicatehealth;
 	menuradiobutton_s identifytarget;
 	menulist_s ffahudtheme;
+	menuradiobutton_s draw3dicons;
 	menuradiobutton_s teamoverlay;
 	menuradiobutton_s lagometer;
 	menuradiobutton_s voipmeter;
@@ -176,6 +178,7 @@ static menucommon_s *g_hud_options[] = {
 	(menucommon_s *)&s_preferences.indicatehealth,
 	(menucommon_s *)&s_preferences.identifytarget,
 	(menucommon_s *)&s_preferences.ffahudtheme,
+	(menucommon_s *)&s_preferences.draw3dicons,
 	(menucommon_s *)&s_preferences.teamoverlay,
 	(menucommon_s *)&s_preferences.lagometer,
 	(menucommon_s *)&s_preferences.voipmeter,
@@ -271,6 +274,7 @@ static void UI_Preferences_SetMenuItems(void) {
 	s_preferences.indicatehealth.curvalue = trap_Cvar_VariableValue("cg_crosshairHealth") != 0;
 	s_preferences.identifytarget.curvalue = trap_Cvar_VariableValue("cg_drawCrosshairNames") != 0;
 	s_preferences.ffahudtheme.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopffahud"));
+	s_preferences.draw3dicons.curvalue = trap_Cvar_VariableValue("cg_draw3dIcons") != 0;
 	s_preferences.teamoverlay.curvalue = trap_Cvar_VariableValue("cg_drawTeamOverlay") != 0;
 	s_preferences.lagometer.curvalue = trap_Cvar_VariableValue("cg_lagometer") != 0;
 	s_preferences.voipmeter.curvalue = trap_Cvar_VariableValue("cl_voipShowMeter") != 0;
@@ -481,6 +485,10 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 
 	case ID_FFAHUDTHEME:
 		trap_Cvar_SetValue("cg_wopffahud", s_preferences.ffahudtheme.curvalue);
+		break;
+
+	case ID_DRAW3DICONS:
+		trap_Cvar_SetValue("cg_draw3dIcons", s_preferences.draw3dicons.curvalue);
 		break;
 
 	case ID_TEAMOVERLAY:
@@ -849,7 +857,7 @@ static void UI_Preferences_MenuInit(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.ffahudtheme.generic.type = MTYPE_SPINCONTROL;
-	s_preferences.ffahudtheme.generic.name = "HUD Color/Theme:";
+	s_preferences.ffahudtheme.generic.name = "Color/Theme:";
 	s_preferences.ffahudtheme.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.ffahudtheme.generic.callback = UI_Preferences_Event;
 	s_preferences.ffahudtheme.generic.id = ID_FFAHUDTHEME;
@@ -858,8 +866,19 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.ffahudtheme.itemnames = ffahudtheme_items;
 	s_preferences.ffahudtheme.generic.toolTip =
 		"Choose your favorite HUD color or theme for non-team-based gametypes. Default is black. "
-		"NOTE: In team gametypes, the color or theme is always set to red or blue depending on which "
-		"team you join. ";
+		"NOTE: In team gametypes, the color or theme is always set to red or blue.";
+
+	y += (BIGCHAR_HEIGHT + 2);
+	s_preferences.draw3dicons.generic.type = MTYPE_RADIOBUTTON;
+	s_preferences.draw3dicons.generic.name = "Draw 3D Icons:";
+	s_preferences.draw3dicons.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.draw3dicons.generic.callback = UI_Preferences_Event;
+	s_preferences.draw3dicons.generic.id = ID_DRAW3DICONS;
+	s_preferences.draw3dicons.generic.x = XPOSITION;
+	s_preferences.draw3dicons.generic.y = y;
+	s_preferences.draw3dicons.generic.toolTip =
+		"Disable to replace all animated 3D icons with 2D versions in the HUD and scoreboard, "
+		"except for the player's head. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.teamoverlay.generic.type = MTYPE_RADIOBUTTON;
@@ -1377,6 +1396,7 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.indicatehealth);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.identifytarget);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.ffahudtheme);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.draw3dicons);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamoverlay);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.lagometer);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.voipmeter);
