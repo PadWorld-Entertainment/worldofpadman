@@ -148,17 +148,15 @@ void CG_DrawFlagModel(float x, float y, float w, float h, int team) {
 		// offset the origin y and z to center the flag
 		trap_R_ModelBounds(cm, mins, maxs);
 
-		// old:		origin[2] = -0.5 * ( mins[2] + maxs[2] );
 		origin[2] = -1.1f * (mins[2] + maxs[2]);
 		origin[1] = 0.5f * (mins[1] + maxs[1]);
 
 		// calculate distance so the flag nearly fills the box
-		// assume heads are taller than wide
+		// assume flags are taller than wide
 		len = 0.5f * (maxs[2] - mins[2]);
 		origin[0] = len / 0.268f; // len / tan( fov/2 )
 
-		// old:		angles[YAW] = 60 * sin( cg.time / 2000.0 );;
-		angles[YAW] = 100.0f * (cg.time / 2000.0f);
+		angles[YAW] = 100.0f * (float)cg.time / 2000.0f;
 
 		if (team == TEAM_RED) {
 			handle = cgs.media.redFlagModel;
@@ -169,7 +167,7 @@ void CG_DrawFlagModel(float x, float y, float w, float h, int team) {
 		} else {
 			return;
 		}
-		CG_Draw3DModel(x, y, w, h, handle, 0, origin, angles, 1.15f, NULL); // old: 1.0f
+		CG_Draw3DModel(x, y, w, h, handle, 0, origin, angles, 1.15f, NULL);
 	} else {
 		const gitem_t *item;
 
@@ -2753,7 +2751,7 @@ static void CG_DrawSprayYourColorCartridges(int team, int hudnum) {
 		if (cg_draw3dIcons.integer) {
 			tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
 			tmporigin[0] = 60;
-			tmpangles[1] = (float)(cg.time) * 0.09f;
+			tmpangles[1] = 100.0f * (float)cg.time / 2000.0f;
 			if (team == TEAM_BLUE) {
 				cartModel = cg_items[cgs.media.blueCartridgeEntNum].models[0];
 			} else if (team == TEAM_RED) {
@@ -3200,7 +3198,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 				qhandle_t ammoModel = cg_weapons[weaponNum].ammoModel;
 				tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
 				tmporigin[0] = 60.0f;
-				tmpangles[1] = (float)(cg.time) * 0.09f;
+				tmpangles[1] = 100.0f * (float)cg.time / 2000.0f;
 				CG_Draw3DModel(7, 376, ICON_SIZE, ICON_SIZE, ammoModel, 0, tmporigin, tmpangles, 1.0f, NULL);
 			} else {
 				qhandle_t ammoIcon = cg_weapons[weaponNum].weaponIcon;
