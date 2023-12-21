@@ -1,106 +1,125 @@
 set(PK3DIRS
-    scripts
-    models
-    sound
+    botfiles
     gfx
+    maps
     menu
+    models
+    music
+    padpack
+    scripts
+    sound
     textures
     video
-    maps
-    botfiles
-    music
 )
 compress_pk3(wop ${PK3DIRS})
 
 set(SHADERS
-    pad_airplane.shader
-    q3map2_wop_dinerBB.shader
-    pad_cyb.shader
-    pad_asia.shader
-    q3map2_wop_diner.shader
-    pad_harm.shader
-    wop_weapons.shader
-    wop_icons.shader
-    pad_bookroom.shader
-    pad_steps.shader
-    pad_cloister.shader
-    wop_menu.shader
-    pad_effects.shader
-    wop_powerups.shader
-    wop_weaponsfx.shader
     common.shader
-    pad_gfx.shader
-    pad_pirate.shader
-    pad_journey.shader
-    wop_spaylogos.shader
-    pad_garden.shader
-    pad_kitchen.shader
-    pad_glowmaps.shader
-    pad_mapobjects.shader
-    pad_jail.shader
+    pad_airplane.shader
+    pad_asia.shader
+    pad_attic.shader
+    pad_bookroom.shader
+    pad_cloister.shader
+    pad_cyb.shader
+    pad_effects.shader
     pad_fridge.shader
-    wop_playermodels.shader
-    wop_glowmodels.shader
+    pad_garden.shader
+    pad_gfx.shader
+    pad_glowmaps.shader
+    pad_harm.shader
+    pad_jail.shader
+    pad_journey.shader
+    pad_kitchen.shader
+    pad_mapobjects.shader
+    pad_pirate.shader
     pad_shop.shader
-    wop_levelshots.shader
+    pad_steps.shader
     pad_tex02.shader
+    pad_trash.shader
+    q3map2_wop_diner.shader
+    q3map2_wop_dinerBB.shader
     q3map2_wop_trashmap.shader
     wop_code.shader
-    pad_attic.shader
-    pad_trash.shader
     wop_gamemodels.shader
+    wop_glowmodels.shader
+    wop_icons.shader
+    wop_levelshots.shader
+    wop_menu.shader
+    wop_playermodels.shader
+    wop_powerups.shader
+    wop_spaylogos.shader
+    wop_weapons.shader
+    wop_weaponsfx.shader
 )
+
+set(PADPACK_SHADERS
+    pad_xeffect.shader
+    pad_xmaps.shader
+    padpack_levelshots.shader
+    particle_smoke.shader
+)
+list(APPEND SHADERS ${PADPACK_SHADERS})
+
 foreach (SHADER ${SHADERS})
     shader_validation(wop ${SHADER})
 endforeach()
 
 set(BSPS
-    wop_padlibrary.bsp
-    wop_padattic.bsp
-    wop_padkitchenLPS.bsp
-    wop_padkitchen.bsp
-    wop_journeyCTL.bsp
-    wop_dinerBB.bsp
-    wop_padgardenBB.bsp
-    wop_padcrashBB.bsp
-    wop_cabin.bsp
-    wop_colorstageCTL.bsp
-    wop_padshopBB.bsp
-    wop_westernsetCTL.bsp
-    wop_padgarden_night.bsp
-    wop_cabinBB.bsp
-    wop_padlibraryBB.bsp
-    wop_padgarden.bsp
-    wop_padatticLPS.bsp
-    wop_bath.bsp
-    wop_backyardBB.bsp
-    wop_jailBB.bsp
-    wop_padasiaCTL.bsp
-    wop_anteroom.bsp
-    wop_padboxCTL.bsp
-    wop_backyard.bsp
-    wop_huette.bsp
-    wop_jail.bsp
-    wop_padkitchenBB.bsp
-    wop_padcrashCTL.bsp
-    wop_anteroomBB.bsp
-    wop_padatticBB.bsp
-    wop_padlibraryLPS.bsp
-    wop_padshipBB.bsp
-    wop_padbaseCTL.bsp
-    wop_fridgeCTL.bsp
-    wop_padshop.bsp
-    wop_padcloisterCTL.bsp
-    wop_trashmapBB.bsp
-    wop_padcrash.bsp
-    wop_padship.bsp
-    wop_huetteBB.bsp
-    wop_bathBB.bsp
-    wop_diner.bsp
-    wop_trashmap.bsp
-    wop_padcrash_dm17.bsp
     wop_airplane.bsp
+    wop_anteroom.bsp
+    wop_anteroomBB.bsp
+    wop_backyard.bsp
+    wop_backyardBB.bsp
+    wop_bath.bsp
+    wop_bathBB.bsp
+    wop_cabin.bsp
+    wop_cabinBB.bsp
+    wop_colorstageCTL.bsp
+    wop_diner.bsp
+    wop_dinerBB.bsp
+    wop_fridgeCTL.bsp
+    wop_huette.bsp
+    wop_huetteBB.bsp
+    wop_jail.bsp
+    wop_jailBB.bsp
+    wop_journeyCTL.bsp
+    wop_padasiaCTL.bsp
+    wop_padattic.bsp
+    wop_padatticBB.bsp
+    wop_padatticLPS.bsp
+    wop_padbaseCTL.bsp
+    wop_padboxCTL.bsp
+    wop_padcloisterCTL.bsp
+    wop_padcrash.bsp
+    wop_padcrash_dm17.bsp
+    wop_padcrashBB.bsp
+    wop_padcrashCTL.bsp
+    wop_padgarden.bsp
+    wop_padgarden_night.bsp
+    wop_padgardenBB.bsp
+    wop_padkitchen.bsp
+    wop_padkitchenBB.bsp
+    wop_padkitchenLPS.bsp
+    wop_padlibrary.bsp
+    wop_padlibraryBB.bsp
+    wop_padlibraryLPS.bsp
+    wop_padship.bsp
+    wop_padshipBB.bsp
+    wop_padshop.bsp
+    wop_padshopBB.bsp
+    wop_trashmap.bsp
+    wop_trashmapBB.bsp
+    wop_westernsetCTL.bsp
 )
+
+set(PADPACK_BSPS
+    wop_padcastle.bsp
+    wop_padcastleBB.bsp
+    wop_padgallery.bsp
+    wop_padgalleryBB.bsp
+)
+list(APPEND BSPS ${PADPACK_BSPS})
+
 foreach (BSP ${BSPS})
     bsp_validation(wop ${BSP})
 endforeach()
