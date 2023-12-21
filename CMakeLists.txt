@@ -52,11 +52,11 @@ set(CTEST_TEST_TIMEOUT 1800)
 string(TIMESTAMP COPYRIGHT_YEAR "%Y")
 
 if (APPLE)
-    set(CPACK_GENERATOR "Bundle")
-    set(CPACK_BUNDLE_PLIST ${ROOT_DIR}/misc/osx/application.plist.in)
-    set(CPACK_BUNDLE_NAME ${PROJECT_NAME})
-    set(CPACK_BUNDLE_ICON ${ROOT_DIR}/misc/wop.icns)
-    SET(CPACK_BUNDLE_APPLE_CERT_APP "-")
+	set(CPACK_GENERATOR "Bundle")
+	set(CPACK_BUNDLE_PLIST ${ROOT_DIR}/misc/osx/application.plist.in)
+	set(CPACK_BUNDLE_NAME ${PROJECT_NAME})
+	set(CPACK_BUNDLE_ICON ${ROOT_DIR}/misc/wop.icns)
+	set(CPACK_BUNDLE_APPLE_CERT_APP "-")
 endif()
 
 include(CPack)
@@ -77,12 +77,12 @@ endif()
 add_compile_definitions(PRODUCT_VERSION="${CMAKE_PROJECT_VERSION}")
 
 function(check_compiler_flag flag)
-  string(REGEX REPLACE "[-=+]" "_" _flag ${flag})
-  string(TOUPPER ${_flag} _flagfinal)
-  check_c_compiler_flag("${flag}" COMPILER_SUPPORTS_${_flagfinal})
-  if (COMPILER_SUPPORTS_${_flagfinal})
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flag}" PARENT_SCOPE)
-  endif()
+	string(REGEX REPLACE "[-=+]" "_" _flag ${flag})
+	string(TOUPPER ${_flag} _flagfinal)
+	check_c_compiler_flag("${flag}" COMPILER_SUPPORTS_${_flagfinal})
+	if (COMPILER_SUPPORTS_${_flagfinal})
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flag}" PARENT_SCOPE)
+	endif()
 endfunction()
 
 add_custom_target(pk3)
@@ -91,51 +91,61 @@ set(ZIP_7z "a")
 set(ZIP_zip "-r9q")
 find_program(ZIP NAMES zip 7z HINTS "$ENV{ProgramFiles}/7-Zip")
 if (ZIP)
-  get_filename_component(zip_binary ${ZIP} NAME_WE)
-  set(ZIP_ARGS ${ZIP_${zip_binary}})
+	get_filename_component(zip_binary ${ZIP} NAME_WE)
+	set(ZIP_ARGS ${ZIP_${zip_binary}})
 endif()
 
 function(shader_validation GAME SHADER)
-  set(SHADERPATH "${CMAKE_CURRENT_SOURCE_DIR}/scripts.pk3dir/scripts/${SHADER}")
-  set(targetname "shader-${GAME}-${SHADER}")
-  get_filename_component(targetname ${targetname} NAME_WLE)
-  get_filename_component(filename ${SHADERPATH} NAME)
-  add_test(NAME ${targetname}
-    COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}"
-    WORKING_DIRECTORY "$<TARGET_FILE_DIR:shadertool>"
-  )
+	set(PK3DIRS scripts.pk3dir padpack.pk3dir)
+	foreach(PK3DIR ${PK3DIRS})
+		set(SHADERPATH "${CMAKE_CURRENT_SOURCE_DIR}/${PK3DIR}/scripts/${SHADER}")
+		if (EXISTS ${SHADERPATH})
+			set(targetname "shader-${GAME}-${SHADER}")
+			get_filename_component(targetname ${targetname} NAME_WLE)
+			get_filename_component(filename ${SHADERPATH} NAME)
+			add_test(NAME ${targetname}
+				COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}"
+				WORKING_DIRECTORY "$<TARGET_FILE_DIR:shadertool>"
+			)
+		endif()
+	endforeach()
 endfunction()
 
 function(bsp_validation GAME BSP)
-  set(BSPPATH "${CMAKE_CURRENT_SOURCE_DIR}/maps.pk3dir/maps/${BSP}")
-  set(targetname "bsp-${GAME}-${BSP}")
-  get_filename_component(targetname ${targetname} NAME_WLE)
-  get_filename_component(filename ${BSPPATH} NAME)
-  add_test(NAME ${targetname}
-    COMMAND $<TARGET_FILE:bsptool> "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}"
-    WORKING_DIRECTORY "$<TARGET_FILE_DIR:bsptool>"
-  )
+	set(PK3DIRS maps.pk3dir padpack.pk3dir)
+	foreach(PK3DIR ${PK3DIRS})
+		set(BSPPATH "${CMAKE_CURRENT_SOURCE_DIR}/${PK3DIR}/maps/${BSP}")
+		if (EXISTS ${BSPPATH})
+			set(targetname "bsp-${GAME}-${BSP}")
+			get_filename_component(targetname ${targetname} NAME_WLE)
+			get_filename_component(filename ${BSPPATH} NAME)
+			add_test(NAME ${targetname}
+				COMMAND $<TARGET_FILE:bsptool> "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}"
+				WORKING_DIRECTORY "$<TARGET_FILE_DIR:bsptool>"
+			)
+		endif()
+	endforeach()
 endfunction()
 
 function(compress_pk3 TARGET)
-  add_custom_target(pk3-${TARGET})
-  foreach (PK3DIR ${ARGN})
-    set(_dir ${PK3DIR}.pk3dir)
-    set(_file ${PK3DIR}-${CMAKE_PROJECT_VERSION}.pk3)
-    add_custom_command(
-      OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${_file}"
-      COMMAND "${ZIP}" ${ZIP_ARGS} "${CMAKE_CURRENT_BINARY_DIR}/${_file}" .
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${_dir}"
-      COMMENT "Create pk3 for ${PK3DIR}"
-      VERBATIM
-    )
-    add_custom_target(pk3-${TARGET}-${PK3DIR}
-      DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${_file}"
-      COMMENT "Generate pk3 for ${PK3DIR}"
-    )
-    add_dependencies(pk3-${TARGET} pk3-${TARGET}-${PK3DIR})
-  endforeach()
-  add_dependencies(pk3 pk3-${TARGET})
+	add_custom_target(pk3-${TARGET})
+	foreach (PK3DIR ${ARGN})
+		set(_dir ${PK3DIR}.pk3dir)
+		set(_file ${PK3DIR}-${CMAKE_PROJECT_VERSION}.pk3)
+		add_custom_command(
+			OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${_file}"
+			COMMAND "${ZIP}" ${ZIP_ARGS} "${CMAKE_CURRENT_BINARY_DIR}/${_file}" .
+			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${_dir}"
+			COMMENT "Create pk3 for ${PK3DIR}"
+			VERBATIM
+		)
+		add_custom_target(pk3-${TARGET}-${PK3DIR}
+			DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${_file}"
+			COMMENT "Generate pk3 for ${PK3DIR}"
+		)
+		add_dependencies(pk3-${TARGET} pk3-${TARGET}-${PK3DIR})
+	endforeach()
+	add_dependencies(pk3 pk3-${TARGET})
 endfunction()
 
 check_compiler_flag(-Wformat=2)
