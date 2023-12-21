@@ -15,11 +15,11 @@ E-Mail:			ente@padman.de / ente@worldofpadman.com
 Website:		http://www.worldofpadman.com or http://www.enteswelt.de
 
 --------------------
-         
+
 Description:
 
 This is the re-release of ENTE's PadPack for World of Padman 1.5 and newer. Unlike
-earlier versions of the PadPack, this package contains only ENTE's PadCastle and 
+earlier versions of the PadPack, this package contains only ENTE's PadCastle and
 PadGallery, since PadCrash and PadCrash DM17 are already part of the World of
 Padman 1.5 default installation. The maps support the game types Free For All,
 FFA Team, Last Pad Standing and Big Balloon. All these maps have full bot support!
@@ -37,7 +37,7 @@ them seamless. All skyboxes in the PadPack were upscaled to 1024x1024px by the
 use of AI to present more detail and a better quality. All content of the original
 PadPack, which is already part of the WoP 1.5 default installation was removed
 to avoid conflicts with WoP 1.5 game content. The original levelshots needed to
-be adjusted and extended in certain areas to fit the portrait format of WoP 1.5. 
+be adjusted and extended in certain areas to fit the portrait format of WoP 1.5.
 All those edits were executed by Kai-Li. ENTE agrees with these changes and the
 publication of the new version of his PadPack. Enjoy it!
 
@@ -55,7 +55,7 @@ Ok, have fun with the new maps, I hope you like it..!!?"
 
 Skyboxes in PadGallery and PadCastle by:
 
-Mighty Pete  
+Mighty Pete
 E-Mail: petes-oasis@bigfoot.com
 Website: http://www.petes-oasis.com/
 
@@ -72,19 +72,19 @@ Website:	http://home.fotocommunity.de/christim/
 --------------------
 
 Textures:
-I used many different textures which I collected everywhere, some by me, 
-some from graphics programs, some from other maps or even from pictures 
-that I found in the www. Some from: http://www.cgtextures.com/ 
+I used many different textures which I collected everywhere, some by me,
+some from graphics programs, some from other maps or even from pictures
+that I found in the www. Some from: http://www.cgtextures.com/
 (a damn cool site with cool pictures for making textures)
-I don't know where I got some of the textures and I can't give credits to them 
-unless I don´t know the authors, sorry. If someone recognizes his work,
-please drop me a line if you want your textures to be removed 
+I don't know where I got some of the textures and I can't give credits to them
+unless I don't know the authors, sorry. If someone recognizes his work,
+please drop me a line if you want your textures to be removed
 (or get a credit for it ;). A big thank you to all the authors.
 
 --------------------
 
-Mapobjects: 
-I´ve used some different mapobjects by different authors.
+Mapobjects:
+I've used some different mapobjects by different authors.
 Doomdragon (www.doomdragon.de) built new mapobjects for PadCastle
 Take a look at the "scripts/mapobject_readmes/" directory,
 there you will find all the readmes by the other mapobject artist.
@@ -105,8 +105,8 @@ YSM
 
 Instructions:
 1 ) Extract wop_padpack15.zip and move wop_padpack15.pk3 into your user data folder
-		Windows: c:\Users\YourUserName\AppData\Roaming\Padman\wop\
-		Linux: ~/.padman/wop/
+		Windows: c:\Users\YourUserName\AppData\Roaming\worldofpadman\wop\
+		Linux: ~/.local/share/worldofpadman/wop/
 2 ) Start WoP
 3 ) All maps will be accessible from the 'create' menu
 
@@ -117,11 +117,11 @@ Instructions:
 
 These maps are (c) 2020 ENTE (Andreas Endres).
 
-All rights of textures, soundfiles, 
+All rights of textures, soundfiles,
 models or images are are by their respective owners.
 
-"World of Padman" the Pad characters and the PadLogo are (c) ENTE 
+"World of Padman" the Pad characters and the PadLogo are (c) ENTE
 
 ================================================================================
-The "World of Padman"-Standalone - get your copy on www.worldofpadman.com ;)
+The "World of Padman"-Standalone - get your copy on www.worldofpadman.net ;)
 ================================================================================
