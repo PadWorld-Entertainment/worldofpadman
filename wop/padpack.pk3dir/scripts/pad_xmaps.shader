@@ -1,53 +1,3 @@
-textures/pad_maps/blobpad
-{
-	surfaceparm nolightmap
-	surfaceparm nonsolid
-	cull twosided
-
-	deformVertexes wave 30 sin 0 5 0 0.2
-	deformVertexes wave 100 sin 0 4 0 0.1
-	tessSize 48
-	qer_trans 0.5
-	{
-		map textures/pad_maps/blobpad
-		tcGen environment
-		tcMod turb 0 0.35 0 0.25
-		tcmod scroll -0.6 -0.8
-	}
-	{
-		map textures/pad_maps/blobpad
-		tcGen environment
-		tcMod turb 0 0.25 0 0.5
-		tcmod scroll 1 1
-		blendfunc GL_ONE GL_ONE
-	}
-}
-
-
-textures/pad_maps/knightsh
-{
-	cull disable
-	surfaceparm alphashadow
-	surfaceparm trans
-	surfaceparm nomarks
-	tessSize 64
-
-
-	{
-		map textures/pad_maps/knightsh
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc filter
-		depthFunc equal
-	}
-}
-
-
 textures/pad_maps/pad_vine
 {
 	cull disable
@@ -156,29 +106,6 @@ textures/pad_maps/tilewall002
 	}
 }
 
-
-textures/pad_maps/tilewall003
-{
-	qer_editorimage textures/pad_maps/tilewall003
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_maps/tilewall003
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad5
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
-
-
 textures/pad_maps/tilewall004
 {
 	qer_editorimage textures/pad_maps/tilewall004
@@ -197,25 +124,6 @@ textures/pad_maps/tilewall004
 		tcgen environment
 		blendfunc add
 		rgbgen identity
-	}
-}
-
-
-textures/pad_maps/lamp01
-{
-	q3map_surfacelight 2000
-	surfaceparm nolightmap
-	{
-		map textures/pad_maps/lamp01
-	}
-}
-
-textures/pad_maps/lamp02
-{
-	q3map_surfacelight 1225
-	surfaceparm nolightmap
-	{
-		map textures/pad_maps/lamp02
 	}
 }
 
@@ -255,16 +163,6 @@ textures/pad_maps/lamp06
 		map textures/pad_maps/lamp06
 	}
 }
-
-textures/pad_maps/lamp07
-{
-	q3map_surfacelight 175
-	surfaceparm nolightmap
-	{
-		map textures/pad_maps/lamp07
-	}
-}
-
 
 textures/pad_maps/lamp08
 {
@@ -333,17 +231,6 @@ textures/pad_maps/padgallery01
 		map textures/pad_maps/padgallery01
 	}
 }
-
-textures/pad_maps/padgallery02
-{
-	q3map_surfacelight 100
-	surfaceparm nolightmap
-	{
-		map textures/pad_maps/padgallery02
-	}
-}
-
-
 
 textures/pad_maps/jumpvator
 {
@@ -629,7 +516,7 @@ textures/pad_maps/fackel
 		surfaceparm trans
 		surfaceparm nomarks
 		surfaceparm nonsolid
-		qer_editorimage textures/pad_maps/fackel
+		qer_editorimage textures/pad_garden/sflame1
 		q3map_surfacelight 900
 		surfaceparm nolightmap
 		cull none
@@ -688,28 +575,6 @@ textures/pad_maps/tafel01
 	}
 	{
 		map textures/pad_maps/tafel01
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad4
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
-
-
-textures/pad_maps/tafel02
-{
-	qer_editorimage textures/pad_maps/tafel02
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_maps/tafel02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
@@ -790,28 +655,6 @@ textures/pad_maps/lackgrey2
 }
 
 
-textures/pad_maps/noentry2
-{
-	qer_editorimage textures/pad_maps/noentry2
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_maps/noentry2
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad5
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
-
-
 textures/pad_maps/feuerl
 {
 	surfaceparm noimpact
@@ -865,23 +708,6 @@ textures/pad_maps/not04
 	}
 }
 
-
-textures/pad_maps/not01
-{
-	surfaceparm noimpact
-	surfaceparm nonsolid
-	surfaceparm trans
-	polygonOffset
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_maps/not01
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
-	}
-}
 
 textures/pad_maps/not05
 {
@@ -1254,27 +1080,6 @@ textures/pad_gallery/lara_baumann_008
 }
 
 
-textures/pad_gallery/lara_baumann_009
-{
-	qer_editorimage textures/pad_gallery/lara_baumann_009
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_gallery/lara_baumann_009
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad4
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
-
 textures/pad_gallery/lara_baumann_009_256
 {
 	qer_editorimage textures/pad_gallery/lara_baumann_009_256
@@ -1285,29 +1090,6 @@ textures/pad_gallery/lara_baumann_009_256
 	}
 	{
 		map textures/pad_gallery/lara_baumann_009_256
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad4
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
-
-
-
-textures/pad_gallery/lara_baumann_010
-{
-	qer_editorimage textures/pad_gallery/lara_baumann_010
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_gallery/lara_baumann_010
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
@@ -1385,68 +1167,6 @@ textures/pad_gallery/lara_baumann_012
 	}
 }
 
-textures/pad_gallery/lara_baumann_015
-{
-	qer_editorimage textures/pad_gallery/lara_baumann_015
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_gallery/lara_baumann_015
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad4
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
-
-textures/pad_gallery/lara_baumann_016
-{
-	qer_editorimage textures/pad_gallery/lara_baumann_016
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_gallery/lara_baumann_016
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad4
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
-
-textures/pad_gallery/lara_baumann_017
-{
-	qer_editorimage textures/pad_gallery/lara_baumann_017
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_gallery/lara_baumann_017
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad4
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
 
 textures/pad_gallery/lara_baumann_017_256
 {
@@ -1469,26 +1189,6 @@ textures/pad_gallery/lara_baumann_017_256
 	}
 }
 
-textures/pad_gallery/lara_baumann_018
-{
-	qer_editorimage textures/pad_gallery/lara_baumann_018
-
-	{
-		map $lightmap
-		rgbGen identity
-	}
-	{
-		map textures/pad_gallery/lara_baumann_018
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbgen identity
-	}
-	{
-		map textures/pad_gfx02/tinpad4
-		tcgen environment
-		blendfunc add
-		rgbgen identity
-	}
-}
 
 textures/pad_gallery/lara_baumann_018_256
 {
@@ -1604,21 +1304,6 @@ textures/pad_maps/kredit
 }
 
 
-
-textures/pad_maps/brueckenwood
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/brueckenwood
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
 textures/pad_maps/burgfloor001
 {
 surfaceparm woodsteps
@@ -1676,118 +1361,6 @@ rgbGen identity
 }
 }
 
-
-textures/pad_maps/gras_ground
-{
-surfaceparm sandsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/gras_ground
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_maps/gras_ground2
-{
-surfaceparm sandsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/gras_ground2
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_maps/gras_ground3_1024
-{
-surfaceparm sandsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/gras_ground3_1024
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_maps/gras_ground3_512
-{
-surfaceparm sandsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/gras_ground3_512
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_maps/nature14
-{
-surfaceparm sandsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/nature14
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_maps/rostline_1024
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/rostline_1024
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_maps/rostline_512
-{
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/rostline_512
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
-
-textures/pad_maps/schrank01b
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/schrank01b
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
 
 textures/pad_maps/schrank01d
 {
@@ -1860,19 +1433,6 @@ rgbGen identity
 }
 }
 
-textures/pad_maps/woolwall001_1024
-{
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_maps/woolwall001_1024
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
-}
 
 textures/pad_maps/woolwall001_512
 {
@@ -2426,7 +1986,7 @@ textures/pad_gallery/ente005_256
 
 textures/pad_shop/nottingham
 {
-	qer_editorimage textures/pad_shop/nottingham
+	qer_editorimage env/nottingham1024_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/pad_shop/brown
@@ -2444,7 +2004,7 @@ textures/pad_shop/nottingham
 
 textures/pad_petesky/night-life
 {
-	qer_editorimage textures/pad_petesky/night-life
+	qer_editorimage env/pc-night-life1024_ft
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/pad_petesky/white02

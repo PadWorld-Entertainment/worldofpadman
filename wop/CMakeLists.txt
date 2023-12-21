@@ -59,6 +59,7 @@ set(PADPACK_SHADERS
     pad_xeffect.shader
     pad_xmaps.shader
     wop_padpack.shader
+    particle_smoke.shader
 )
 foreach (SHADER ${PADPACK_SHADERS})
     shader_validation(wop ${SHADER} 1)
