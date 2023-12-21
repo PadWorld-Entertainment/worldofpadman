@@ -5,113 +5,113 @@
 // If this file was created with work-around code switched on,
 // you will have to remove all occurences of the string
 // "//-UNCMT4RELEASE-//" after you compile the map.
-// 
-// If you forget to do this,  your particles will look flat and 
+//
+// If you forget to do this,  your particles will look flat and
 // will have misaligned textures.
 
 textures/particles/smoke_1
 {
-qer_editorimage textures/particle_studio/editor.tga
-surfaceparm noimpact
-surfaceparm nolightmap
-cull none
-surfaceparm trans
-surfaceparm nonsolid
-surfaceparm nodlight
-deformvertexes autosprite
-deformvertexes move -6.939269 -6.384233 85.880608 sawtooth 0 1 0.289346 0.500282
-{
-clampmap textures/particles/rauch.tga
-tcMod rotate 5.856960
-AlphaGen wave sawtooth 0.910858 -0.835838 0.289346 0.500282
-rgbGen wave sawtooth 0.836573 -0.747200 0.289346 0.500282
-tcMod stretch sawtooth 1.000000 0.000000 0.289346 0.500282
-blendfunc blend
-}
+	qer_editorimage textures/particle_studio/editor.tga
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	cull none
+	surfaceparm trans
+	surfaceparm nonsolid
+	surfaceparm nodlight
+	deformvertexes autosprite
+	deformvertexes move -6.939269 -6.384233 85.880608 sawtooth 0 1 0.289346 0.500282
+	{
+		clampmap textures/particles/rauch.tga
+		tcMod rotate 5.856960
+		AlphaGen wave sawtooth 0.910858 -0.835838 0.289346 0.500282
+		rgbGen wave sawtooth 0.836573 -0.747200 0.289346 0.500282
+		tcMod stretch sawtooth 1.000000 0.000000 0.289346 0.500282
+		blendfunc blend
+	}
 }
 
 textures/particles/smoke_2
 {
-qer_editorimage textures/particle_studio/editor.tga
-surfaceparm noimpact
-surfaceparm nolightmap
-cull none
-surfaceparm trans
-surfaceparm nonsolid
-surfaceparm nodlight
-deformvertexes autosprite
-deformvertexes move 0.945118 -7.180432 129.940796 sawtooth 0 1 0.412030 0.376360
-{
-clampmap textures/particles/rauch.tga
-tcMod rotate 12.846309
-AlphaGen wave sawtooth 1.095105 -0.964296 0.412030 0.376360
-rgbGen wave sawtooth 0.832240 -0.750917 0.412030 0.376360
-tcMod stretch sawtooth 1.000000 0.000000 0.412030 0.376360
-blendfunc blend
-}
+	qer_editorimage textures/particle_studio/editor.tga
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	cull none
+	surfaceparm trans
+	surfaceparm nonsolid
+	surfaceparm nodlight
+	deformvertexes autosprite
+	deformvertexes move 0.945118 -7.180432 129.940796 sawtooth 0 1 0.412030 0.376360
+	{
+		clampmap textures/particles/rauch.tga
+		tcMod rotate 12.846309
+		AlphaGen wave sawtooth 1.095105 -0.964296 0.412030 0.376360
+		rgbGen wave sawtooth 0.832240 -0.750917 0.412030 0.376360
+		tcMod stretch sawtooth 1.000000 0.000000 0.412030 0.376360
+		blendfunc blend
+	}
 }
 
 textures/particles/smoke_3
 {
-qer_editorimage textures/particle_studio/editor.tga
-surfaceparm noimpact
-surfaceparm nolightmap
-cull none
-surfaceparm trans
-surfaceparm nonsolid
-surfaceparm nodlight
-deformvertexes autosprite
-deformvertexes move 3.028154 4.169074 117.624290 sawtooth 0 1 0.992584 0.342096
-{
-clampmap textures/particles/rauch.tga
-tcMod rotate 9.964446
-AlphaGen wave sawtooth 0.969442 -0.865819 0.992584 0.342096
-rgbGen wave sawtooth 0.957768 -0.981552 0.992584 0.342096
-tcMod stretch sawtooth 1.000000 0.000000 0.992584 0.342096
-blendfunc blend
-}
+	qer_editorimage textures/particle_studio/editor.tga
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	cull none
+	surfaceparm trans
+	surfaceparm nonsolid
+	surfaceparm nodlight
+	deformvertexes autosprite
+	deformvertexes move 3.028154 4.169074 117.624290 sawtooth 0 1 0.992584 0.342096
+	{
+		clampmap textures/particles/rauch.tga
+		tcMod rotate 9.964446
+		AlphaGen wave sawtooth 0.969442 -0.865819 0.992584 0.342096
+		rgbGen wave sawtooth 0.957768 -0.981552 0.992584 0.342096
+		tcMod stretch sawtooth 1.000000 0.000000 0.992584 0.342096
+		blendfunc blend
+	}
 }
 
 textures/particles/smoke_4
 {
-qer_editorimage textures/particle_studio/editor.tga
-surfaceparm noimpact
-surfaceparm nolightmap
-cull none
-surfaceparm trans
-surfaceparm nonsolid
-surfaceparm nodlight
-deformvertexes autosprite
-deformvertexes move -3.269272 -8.604949 85.946678 sawtooth 0 1 0.927458 0.481238
-{
-clampmap textures/particles/rauch.tga
-tcMod rotate 9.892118
-AlphaGen wave sawtooth 0.971249 -1.046257 0.927458 0.481238
-rgbGen wave sawtooth 0.923368 -0.929664 0.927458 0.481238
-tcMod stretch sawtooth 1.000000 0.000000 0.927458 0.481238
-blendfunc blend
-}
+	qer_editorimage textures/particle_studio/editor.tga
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	cull none
+	surfaceparm trans
+	surfaceparm nonsolid
+	surfaceparm nodlight
+	deformvertexes autosprite
+	deformvertexes move -3.269272 -8.604949 85.946678 sawtooth 0 1 0.927458 0.481238
+	{
+		clampmap textures/particles/rauch.tga
+		tcMod rotate 9.892118
+		AlphaGen wave sawtooth 0.971249 -1.046257 0.927458 0.481238
+		rgbGen wave sawtooth 0.923368 -0.929664 0.927458 0.481238
+		tcMod stretch sawtooth 1.000000 0.000000 0.927458 0.481238
+		blendfunc blend
+	}
 }
 
 textures/particles/smoke_5
 {
-qer_editorimage textures/particle_studio/editor.tga
-surfaceparm noimpact
-surfaceparm nolightmap
-cull none
-surfaceparm trans
-surfaceparm nonsolid
-surfaceparm nodlight
-deformvertexes autosprite
-deformvertexes move 6.379093 6.909052 113.207039 sawtooth 0 1 0.709464 0.422816
-{
-clampmap textures/particles/rauch.tga
-tcMod rotate 7.320322
-AlphaGen wave sawtooth 0.906073 -0.713605 0.709464 0.422816
-rgbGen wave sawtooth 0.978253 -0.982626 0.709464 0.422816
-tcMod stretch sawtooth 1.000000 0.000000 0.709464 0.422816
-blendfunc blend
-}
+	qer_editorimage textures/particle_studio/editor.tga
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	cull none
+	surfaceparm trans
+	surfaceparm nonsolid
+	surfaceparm nodlight
+	deformvertexes autosprite
+	deformvertexes move 6.379093 6.909052 113.207039 sawtooth 0 1 0.709464 0.422816
+	{
+		clampmap textures/particles/rauch.tga
+		tcMod rotate 7.320322
+		AlphaGen wave sawtooth 0.906073 -0.713605 0.709464 0.422816
+		rgbGen wave sawtooth 0.978253 -0.982626 0.709464 0.422816
+		tcMod stretch sawtooth 1.000000 0.000000 0.709464 0.422816
+		blendfunc blend
+	}
 }
 
 textures/particles/smoke_6
@@ -2108,4 +2108,3 @@ tcMod stretch sawtooth 1.000000 0.000000 0.159948 0.349854
 blendfunc blend
 }
 }
-

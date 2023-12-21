@@ -1,8 +1,8 @@
 models/mapobjects/multiplant/fern
-{	
-    surfaceparm alphashadow
-    cull none
-    nopicmip
+{
+	surfaceparm alphashadow
+	cull none
+	nopicmip
 	{
 		map models/mapobjects/multiplant/fern.tga
 		blendFunc GL_ONE GL_ZERO
@@ -19,10 +19,10 @@ models/mapobjects/multiplant/fern
 }
 
 models/mapobjects/multiplant/bannanaleaf
-{	
-    surfaceparm alphashadow
-    cull none
-    nopicmip
+{
+	surfaceparm alphashadow
+	cull none
+	nopicmip
 	{
 		map models/mapobjects/multiplant/bannanaleaf.tga
 		blendFunc GL_ONE GL_ZERO
@@ -39,10 +39,10 @@ models/mapobjects/multiplant/bannanaleaf
 }
 
 models/mapobjects/multiplant/batleaf
-{	
-    surfaceparm alphashadow
-    cull none
-    	
+{
+	surfaceparm alphashadow
+	cull none
+
 	{
 		map models/mapobjects/multiplant/batleaf.tga
 		blendFunc GL_ONE GL_ZERO
@@ -61,14 +61,12 @@ models/mapobjects/multiplant/batleaf
 }
 
 models/mapobjects/multiplant/batleaf2
-{	
-    surfaceparm alphashadow
-    cull none
-//    nopicmip
-//	tesssize 32
+{
+	surfaceparm alphashadow
+	cull none
+	// nopicmip
+	// tesssize 32
 	deformVertexes wave 100 sin 3 5 .1 0.1
-
-
 
 	{
 		map models/mapobjects/multiplant/batleaf2.tga
@@ -77,13 +75,13 @@ models/mapobjects/multiplant/batleaf2
 		depthWrite
 		rgbGen vertex
 	}
-       {
-               map models/mapobjects/multiplant/batleaf2veins.tga
-//               blendFunc GL_ONE GL_ONE
-               blendFunc blend
-               rgbGen wave sin 0 1 0 .33
-//		rgbGen identity             
-       }
+	{
+		map models/mapobjects/multiplant/batleaf2veins.tga
+//		blendFunc GL_ONE GL_ONE
+		blendFunc blend
+		rgbGen wave sin 0 1 0 .33
+//		rgbGen identity
+	}
 
 
 	{
@@ -95,9 +93,9 @@ models/mapobjects/multiplant/batleaf2
 }
 
 models/mapobjects/multiplant/leaf1
-{	
-    surfaceparm alphashadow
-    cull none
+{
+	surfaceparm alphashadow
+	cull none
 
 	{
 		map models/mapobjects/multiplant/leaf1.tga
@@ -106,7 +104,6 @@ models/mapobjects/multiplant/leaf1
 		depthWrite
 		rgbGen vertex
 	}
-
 
 	{
 		map $lightmap
@@ -117,9 +114,9 @@ models/mapobjects/multiplant/leaf1
 }
 
 models/mapobjects/multiplant/leaf2
-{	
-    surfaceparm alphashadow
-    cull none
+{
+	surfaceparm alphashadow
+	cull none
 
 	{
 		map models/mapobjects/multiplant/leaf2.tga
@@ -128,7 +125,6 @@ models/mapobjects/multiplant/leaf2
 		depthWrite
 		rgbGen vertex
 	}
-
 
 	{
 		map $lightmap
@@ -139,9 +135,9 @@ models/mapobjects/multiplant/leaf2
 }
 
 models/mapobjects/multiplant/leaf3
-{	
-    surfaceparm alphashadow
-    cull none
+{
+	surfaceparm alphashadow
+	cull none
 
 	{
 		map models/mapobjects/multiplant/leaf3.tga
@@ -150,7 +146,6 @@ models/mapobjects/multiplant/leaf3
 		depthWrite
 		rgbGen vertex
 	}
-
 
 	{
 		map $lightmap
@@ -161,9 +156,9 @@ models/mapobjects/multiplant/leaf3
 }
 
 models/mapobjects/multiplant/pleaf1
-{	
-    surfaceparm alphashadow
-    cull none
+{
+	surfaceparm alphashadow
+	cull none
 
 	{
 		map models/mapobjects/multiplant/pleaf1.tga
@@ -172,7 +167,6 @@ models/mapobjects/multiplant/pleaf1
 		depthWrite
 		rgbGen vertex
 	}
-
 
 	{
 		map $lightmap
@@ -183,9 +177,9 @@ models/mapobjects/multiplant/pleaf1
 }
 
 models/mapobjects/multiplant/pleaf2
-{	
-    surfaceparm alphashadow
-    cull none
+{
+	surfaceparm alphashadow
+	cull none
 
 	{
 		map models/mapobjects/multiplant/pleaf2.tga
@@ -194,7 +188,6 @@ models/mapobjects/multiplant/pleaf2
 		depthWrite
 		rgbGen vertex
 	}
-
 
 	{
 		map $lightmap
@@ -205,9 +198,9 @@ models/mapobjects/multiplant/pleaf2
 }
 
 models/mapobjects/multiplant/pleaf3
-{	
-    surfaceparm alphashadow
-    cull none
+{
+	surfaceparm alphashadow
+	cull none
 
 	{
 		map models/mapobjects/multiplant/pleaf3.tga
@@ -216,7 +209,6 @@ models/mapobjects/multiplant/pleaf3
 		depthWrite
 		rgbGen vertex
 	}
-
 
 	{
 		map $lightmap
@@ -227,10 +219,10 @@ models/mapobjects/multiplant/pleaf3
 }
 
 models/mapobjects/multiplant/palmfrond
-{	
-    surfaceparm alphashadow
-    cull none
-    nopicmip
+{
+	surfaceparm alphashadow
+	cull none
+	nopicmip
 	{
 		map models/mapobjects/multiplant/palmfrond.tga
 		blendFunc GL_ONE GL_ZERO
@@ -247,12 +239,12 @@ models/mapobjects/multiplant/palmfrond
 }
 models/mapobjects/multiplant/invisible
 {
-    surfaceparm alphashadow
-	surfaceparm nolightmap			
-        {
-                map models/mapobjects/multiplant/invisible.tga
-                alphaFunc GE128
+	surfaceparm alphashadow
+	surfaceparm nolightmap
+	{
+		map models/mapobjects/multiplant/invisible.tga
+		alphaFunc GE128
 		depthWrite
 		rgbGen vertex
-        }
+	}
 }
