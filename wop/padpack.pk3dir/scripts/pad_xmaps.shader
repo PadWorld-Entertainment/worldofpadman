@@ -373,16 +373,16 @@ textures/pad_gallery/padentertainment2
 }
 
 
-textures/pad_gallery/waytothemuseum
+textures/pad_maps/waytothemuseum
 {
-	qer_editorimage textures/pad_gallery/waytothemuseum
+	qer_editorimage textures/pad_maps/waytothemuseum
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/waytothemuseum
+		map textures/pad_maps/waytothemuseum
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
