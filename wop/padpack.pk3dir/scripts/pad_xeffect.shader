@@ -1,6 +1,6 @@
 textures/pad_garden/neon01
 {
-	qer_editorimage textures/pad_enteflare/neon01.tga
+	qer_editorimage textures/pad_enteflare/neon01
 	surfaceparm nomarks
 	q3map_flareShader flareShader
 	q3map_surfacelight 300
@@ -9,12 +9,12 @@ textures/pad_garden/neon01
 		rgbGen identity
 	}
 	{
-		map textures/pad_enteflare/neon01.tga
+		map textures/pad_enteflare/neon01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
 	{
-		map textures/pad_enteflare/neon01_blend.tga
+		map textures/pad_enteflare/neon01_blend
 		blendfunc GL_ONE GL_ONE
 	}
 }
@@ -27,7 +27,7 @@ textures/pad_crytek/yb2
 		rgbGen identity
 	}
 	{
-		map textures/pad_metal/yb2.tga
+		map textures/pad_metal/yb2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -35,7 +35,7 @@ textures/pad_crytek/yb2
 
 textures/pad_effect/waterfall
 {
-	qer_editorimage textures/pad_effect/pooltest.tga
+	qer_editorimage textures/pad_effect/pooltest
 	q3map_globaltexture
 	surfaceparm trans
 	//surfaceparm nonsolid
@@ -47,7 +47,7 @@ textures/pad_effect/waterfall
 	deformVertexes wave 64 triangle 1 3 .1 .8
 
 	{
-		map textures/pad_effect/pool3d_3e.tga
+		map textures/pad_effect/pool3d_3e
 		blendfunc GL_DST_COLOR GL_SRC_COLOR
 		tcMod scale 1.0 2.0
 		tcMod turb .1 .05 .25 .08
@@ -55,7 +55,7 @@ textures/pad_effect/waterfall
 	}
 
 	{
-		map textures/pad_effect/pool3d_6b.tga
+		map textures/pad_effect/pool3d_6b
 		blendfunc GL_DST_COLOR GL_ONE
 		tcMod scale .5 .5
 		tcMod turb .1 .075 .5 .05
@@ -65,7 +65,7 @@ textures/pad_effect/waterfall
 
 textures/pad_effect/vines
 {
-	qer_editorimage textures/pad_effect/vines.tga
+	qer_editorimage textures/pad_effect/vines
 	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -73,7 +73,7 @@ textures/pad_effect/vines
 	cull none
 	nopicmip
 	{
-		map textures/pad_effect/vines.tga
+		map textures/pad_effect/vines
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -89,7 +89,7 @@ textures/pad_effect/vines
 
 textures/pad_effect/vines2
 {
-	qer_editorimage textures/pad_effect/vines2.tga
+	qer_editorimage textures/pad_effect/vines2
 	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -97,7 +97,7 @@ textures/pad_effect/vines2
 	cull none
 	nopicmip
 	{
-		map textures/pad_effect/vines2.tga
+		map textures/pad_effect/vines2
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -116,7 +116,7 @@ textures/pad_effect/walkwaylightf
 	q3map_surfacelight 1225
 	surfaceparm nolightmap
 	{
-		map textures/pad_effect/walkwaylightf.tga
+		map textures/pad_effect/walkwaylightf
 	}
 }
 
@@ -129,20 +129,20 @@ textures/pad_effect/galleryinfo
 		map $lightmap
 	}
 	{
-		map textures/pad_effect/galleryinfo.tga
+		map textures/pad_effect/galleryinfo
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
 
 	{
-		map textures/pad_effect/galleryinfo.tga
+		map textures/pad_effect/galleryinfo
 		//blendFunc GL_ONE GL_ONE
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
@@ -158,20 +158,20 @@ textures/pad_effect/schild
 		map $lightmap
 	}
 	{
-		map textures/pad_effect/schild.tga
+		map textures/pad_effect/schild
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
 
 	{
-		map textures/pad_effect/schild.tga
+		map textures/pad_effect/schild
 		//blendFunc GL_ONE GL_ONE
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
@@ -187,20 +187,20 @@ textures/pad_effect/skinwin
 		map $lightmap
 	}
 	{
-		map textures/pad_effect/skinwin.tga
+		map textures/pad_effect/skinwin
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
 
 	{
-		map textures/pad_effect/skinwin.tga
+		map textures/pad_effect/skinwin
 		//blendFunc GL_ONE GL_ONE
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
@@ -210,7 +210,7 @@ textures/pad_effect/skinwin
 
 textures/pad_effect/busch
 {
-	qer_editorimage textures/pad_effect/busch.tga
+	qer_editorimage textures/pad_effect/busch
 	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
@@ -218,7 +218,7 @@ textures/pad_effect/busch
 	cull none
 	nopicmip
 	{
-		map textures/pad_effect/busch.tga
+		map textures/pad_effect/busch
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -238,7 +238,7 @@ textures/pad_effect/elight1
 	q3map_surfacelight 2000
 	surfaceparm nolightmap
 	{
-		map textures/pad_effect/elight1.tga
+		map textures/pad_effect/elight1
 	}
 }
 
@@ -248,7 +248,7 @@ textures/pad_effect/light_basic
 	q3map_surfacelight 175
 	surfaceparm nolightmap
 	{
-		map textures/pad_effect/light_basic.tga
+		map textures/pad_effect/light_basic
 	}
 }
 
@@ -260,7 +260,7 @@ textures/pad_effect/light_floor
 	light 1
 	surfaceparm nolightmap
 	{
-		map textures/pad_effect/light_floor.tga
+		map textures/pad_effect/light_floor
 	}
 }
 
@@ -272,20 +272,20 @@ textures/pad_effect/blacky
 		map $lightmap
 	}
 	{
-		map textures/pad_effect/blacky.tga
+		map textures/pad_effect/blacky
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
 
 	{
-		map textures/pad_effect/blacky.tga
+		map textures/pad_effect/blacky
 		//blendFunc GL_ONE GL_ONE
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
@@ -300,7 +300,7 @@ textures/pad_effect/blatt
 //	deformVertexes autoSprite
 	surfaceparm trans
 	{
-		map textures/pad_effect/blatt.tga
+		map textures/pad_effect/blatt
 		alphaFunc GE128
 		depthWrite
 		rgbGen vertex
@@ -322,20 +322,20 @@ textures/pad_effect/colabox
 		map $lightmap
 	}
 	{
-		map textures/pad_effect/colabox.tga
+		map textures/pad_effect/colabox
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
 
 	{
-		map textures/pad_effect/colabox.tga
+		map textures/pad_effect/colabox
 		//blendFunc GL_ONE GL_ONE
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
@@ -352,20 +352,20 @@ textures/pad_effect/blacky01
 		map $lightmap
 	}
 	{
-		map textures/pad_effect/blacky01.tga
+		map textures/pad_effect/blacky01
 		blendFunc GL_DST_COLOR GL_SRC_ALPHA
 		rgbGen identity
 		alphaGen lightingSpecular
 	}
 	{
-		map textures/pad_gfx02/tinpad.tga
+		map textures/pad_gfx02/tinpad
 		tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
 
 	{
-		map textures/pad_effect/blacky01.tga
+		map textures/pad_effect/blacky01
 		//blendFunc GL_ONE GL_ONE
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity

@@ -9,13 +9,13 @@ textures/pad_maps/blobpad
 	tessSize 48
 	qer_trans 0.5
 	{
-		map textures/pad_maps/blobpad.tga
+		map textures/pad_maps/blobpad
 		tcGen environment
 		tcMod turb 0 0.35 0 0.25
 		tcmod scroll -0.6 -0.8
 	}
 	{
-		map textures/pad_maps/blobpad.tga
+		map textures/pad_maps/blobpad
 		tcGen environment
 		tcMod turb 0 0.25 0 0.5
 		tcmod scroll 1 1
@@ -34,7 +34,7 @@ textures/pad_maps/knightsh
 
 
 	{
-		map textures/pad_maps/knightsh.tga
+		map textures/pad_maps/knightsh
 		alphaFunc GE128
 		depthWrite
 		rgbGen identity
@@ -57,7 +57,7 @@ textures/pad_maps/pad_vine
 	tessSize 64
 
 	{
-		map textures/pad_maps/pad_vine.tga
+		map textures/pad_maps/pad_vine
 		alphaFunc GE128
 		depthWrite
 		rgbGen identity
@@ -72,8 +72,8 @@ textures/pad_maps/pad_vine
 
 textures/pad_maps/crosslight
 {
-	qer_editorimage textures/pad_maps/crosslight.tga
-	q3map_lightimage textures/pad_maps/crosslight02.tga
+	qer_editorimage textures/pad_maps/crosslight
+	q3map_lightimage textures/pad_maps/crosslight02
 	q3map_surfacelight 4000
 	surfaceparm nomarks
 	{
@@ -81,12 +81,12 @@ textures/pad_maps/crosslight
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/crosslight.tga
+		map textures/pad_maps/crosslight
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/crosslight02.tga
+		map textures/pad_maps/crosslight02
 		blendfunc GL_ONE GL_ONE
 	}
 }
@@ -94,8 +94,8 @@ textures/pad_maps/crosslight
 
 textures/pad_maps/upperlight
 {
-	qer_editorimage textures/pad_maps/upperlight.tga
-	q3map_lightimage textures/pad_maps/upperlight02.tga
+	qer_editorimage textures/pad_maps/upperlight
+	q3map_lightimage textures/pad_maps/upperlight02
 	q3map_surfacelight 4000
 	surfaceparm nomarks
 	{
@@ -103,31 +103,31 @@ textures/pad_maps/upperlight
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/upperlight.tga
+		map textures/pad_maps/upperlight
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/upperlight02.tga
+		map textures/pad_maps/upperlight02
 		blendfunc GL_ONE GL_ONE
 	}
 }
 
 textures/pad_maps/tilewall001
 {
-	qer_editorimage textures/pad_maps/tilewall001.tga
+	qer_editorimage textures/pad_maps/tilewall001
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/tilewall001.tga
+		map textures/pad_maps/tilewall001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad5.tga
+		map textures/pad_gfx02/tinpad5
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -137,19 +137,19 @@ textures/pad_maps/tilewall001
 
 textures/pad_maps/tilewall002
 {
-	qer_editorimage textures/pad_maps/tilewall002.tga
+	qer_editorimage textures/pad_maps/tilewall002
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/tilewall002.tga
+		map textures/pad_maps/tilewall002
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad5.tga
+		map textures/pad_gfx02/tinpad5
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -159,19 +159,19 @@ textures/pad_maps/tilewall002
 
 textures/pad_maps/tilewall003
 {
-	qer_editorimage textures/pad_maps/tilewall003.tga
+	qer_editorimage textures/pad_maps/tilewall003
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/tilewall003.tga
+		map textures/pad_maps/tilewall003
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad5.tga
+		map textures/pad_gfx02/tinpad5
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -181,19 +181,19 @@ textures/pad_maps/tilewall003
 
 textures/pad_maps/tilewall004
 {
-	qer_editorimage textures/pad_maps/tilewall004.tga
+	qer_editorimage textures/pad_maps/tilewall004
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/tilewall004.tga
+		map textures/pad_maps/tilewall004
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad5.tga
+		map textures/pad_gfx02/tinpad5
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -206,7 +206,7 @@ textures/pad_maps/lamp01
 	q3map_surfacelight 2000
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/lamp01.tga
+		map textures/pad_maps/lamp01
 	}
 }
 
@@ -215,7 +215,7 @@ textures/pad_maps/lamp02
 	q3map_surfacelight 1225
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/lamp02.tga
+		map textures/pad_maps/lamp02
 	}
 }
 
@@ -225,7 +225,7 @@ textures/pad_maps/lamp03
 	q3map_surfacelight 1225
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/lamp03.tga
+		map textures/pad_maps/lamp03
 	}
 }
 
@@ -234,7 +234,7 @@ textures/pad_maps/lamp04
 	q3map_surfacelight 1225
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/lamp04.tga
+		map textures/pad_maps/lamp04
 	}
 }
 
@@ -243,7 +243,7 @@ textures/pad_maps/lamp05
 	q3map_surfacelight 1225
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/lamp05.tga
+		map textures/pad_maps/lamp05
 	}
 }
 
@@ -252,7 +252,7 @@ textures/pad_maps/lamp06
 	q3map_surfacelight 175
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/lamp06.tga
+		map textures/pad_maps/lamp06
 	}
 }
 
@@ -261,7 +261,7 @@ textures/pad_maps/lamp07
 	q3map_surfacelight 175
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/lamp07.tga
+		map textures/pad_maps/lamp07
 	}
 }
 
@@ -271,7 +271,7 @@ textures/pad_maps/lamp08
 	q3map_surfacelight 240
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/lamp08.tga
+		map textures/pad_maps/lamp08
 	}
 }
 
@@ -281,7 +281,7 @@ textures/pad_maps/notausgang02
 	q3map_surfacelight 300
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/notausgang02.tga
+		map textures/pad_maps/notausgang02
 	}
 }
 
@@ -290,7 +290,7 @@ textures/pad_maps/notausgang
 	q3map_surfacelight 300
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/notausgang.tga
+		map textures/pad_maps/notausgang
 	}
 }
 
@@ -300,7 +300,7 @@ textures/pad_maps/notausganglight
 	q3map_surfacelight 300
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/notausganglight.tga
+		map textures/pad_maps/notausganglight
 	}
 }
 
@@ -310,7 +310,7 @@ textures/pad_maps/exit
 	q3map_surfacelight 300
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/exit.tga
+		map textures/pad_maps/exit
 	}
 }
 
@@ -320,7 +320,7 @@ textures/pad_maps/win002
 	q3map_surfacelight 100
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/win002.tga
+		map textures/pad_maps/win002
 	}
 }
 
@@ -330,7 +330,7 @@ textures/pad_maps/padgallery01
 	q3map_surfacelight 100
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/padgallery01.tga
+		map textures/pad_maps/padgallery01
 	}
 }
 
@@ -339,7 +339,7 @@ textures/pad_maps/padgallery02
 	q3map_surfacelight 100
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/padgallery02.tga
+		map textures/pad_maps/padgallery02
 	}
 }
 
@@ -350,21 +350,21 @@ textures/pad_maps/jumpvator
 	q3map_surfacelight 300
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/jumpvator.tga
+		map textures/pad_maps/jumpvator
 	}
 }
 
 
 textures/pad_maps/glassblue
 {
-	qer_editorimage textures/pad_maps/glassblue.tga
+	qer_editorimage textures/pad_maps/glassblue
 	surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
 
 	{
-		map textures/pad_maps/glassblue.tga
+		map textures/pad_maps/glassblue
 		tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -380,14 +380,14 @@ textures/pad_maps/glassblue
 
 textures/pad_maps/glassgreen
 {
-	qer_editorimage textures/pad_maps/glassgreen.tga
+	qer_editorimage textures/pad_maps/glassgreen
 	surfaceparm trans
 	cull none
 	surfaceparm nolightmap
 	qer_trans 	0.5
 
 	{
-		map textures/pad_maps/glassgreen.tga
+		map textures/pad_maps/glassgreen
 		tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
@@ -402,19 +402,19 @@ textures/pad_maps/glassgreen
 
 textures/pad_gallery/tomoyo003
 {
-	qer_editorimage textures/pad_gallery/tomoyo003.tga
+	qer_editorimage textures/pad_gallery/tomoyo003
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/tomoyo003.tga
+		map textures/pad_gallery/tomoyo003
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -424,19 +424,19 @@ textures/pad_gallery/tomoyo003
 
 textures/pad_gallery/lara_baumann012
 {
-	qer_editorimage textures/pad_gallery/lara_baumann012.tga
+	qer_editorimage textures/pad_gallery/lara_baumann012
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann012.tga
+		map textures/pad_gallery/lara_baumann012
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -445,19 +445,19 @@ textures/pad_gallery/lara_baumann012
 
 textures/pad_gallery/padman002
 {
-	qer_editorimage textures/pad_gallery/padman002.tga
+	qer_editorimage textures/pad_gallery/padman002
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman002.tga
+		map textures/pad_gallery/padman002
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -466,19 +466,19 @@ textures/pad_gallery/padman002
 
 textures/pad_gallery/padentertainment2
 {
-	qer_editorimage textures/pad_gallery/padentertainment2.tga
+	qer_editorimage textures/pad_gallery/padentertainment2
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padentertainment2.tga
+		map textures/pad_gallery/padentertainment2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -488,19 +488,19 @@ textures/pad_gallery/padentertainment2
 
 textures/pad_gallery/waytothemuseum
 {
-	qer_editorimage textures/pad_gallery/waytothemuseum.tga
+	qer_editorimage textures/pad_gallery/waytothemuseum
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/waytothemuseum.tga
+		map textures/pad_gallery/waytothemuseum
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -510,7 +510,7 @@ textures/pad_gallery/waytothemuseum
 
 textures/pad_maps/fish01
 {
-	qer_editorimage textures/pad_maps/fish01.tga
+	qer_editorimage textures/pad_maps/fish01
 	deformVertexes wave 194 sin 0 2 0 .2
 	deformVertexes wave 30 sin 0 1 0 .3
 	deformVertexes wave 194 sin 0 1 0 .1
@@ -519,7 +519,7 @@ textures/pad_maps/fish01
 	cull none
 
 	{
-		map textures/pad_maps/fish01.tga
+		map textures/pad_maps/fish01
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -535,7 +535,7 @@ textures/pad_maps/fish01
 
 textures/pad_maps/fish02
 {
-	qer_editorimage textures/pad_maps/fish02.tga
+	qer_editorimage textures/pad_maps/fish02
 	deformVertexes wave 194 sin 0 2 0 .2
 	deformVertexes wave 30 sin 0 1 0 .3
 	deformVertexes wave 194 sin 0 1 0 .1
@@ -544,7 +544,7 @@ textures/pad_maps/fish02
 	cull none
 
 	{
-		map textures/pad_maps/fish02.tga
+		map textures/pad_maps/fish02
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -561,7 +561,7 @@ textures/pad_maps/fish02
 
 textures/pad_maps/fish03
 {
-	qer_editorimage textures/pad_maps/fish03.tga
+	qer_editorimage textures/pad_maps/fish03
 	deformVertexes wave 194 sin 0 2 0 .2
 	deformVertexes wave 30 sin 0 1 0 .3
 	deformVertexes wave 194 sin 0 1 0 .1
@@ -570,7 +570,7 @@ textures/pad_maps/fish03
 	cull none
 
 	{
-		map textures/pad_maps/fish03.tga
+		map textures/pad_maps/fish03
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -587,7 +587,7 @@ textures/pad_maps/fish03
 
 textures/pad_maps/fish04
 {
-	qer_editorimage textures/pad_maps/fish04.tga
+	qer_editorimage textures/pad_maps/fish04
 	deformVertexes wave 194 sin 0 2 0 .2
 	deformVertexes wave 30 sin 0 1 0 .3
 	deformVertexes wave 194 sin 0 1 0 .1
@@ -596,7 +596,7 @@ textures/pad_maps/fish04
 	cull none
 
 	{
-		map textures/pad_maps/fish04.tga
+		map textures/pad_maps/fish04
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -617,7 +617,7 @@ textures/pad_maps/galllight
 	q3map_flareShader flareShader
 	surfaceparm nolightmap
 	{
-		map textures/pad_maps/galllight.tga
+		map textures/pad_maps/galllight
 	}
 }
 
@@ -629,26 +629,26 @@ textures/pad_maps/fackel
 		surfaceparm trans
 		surfaceparm nomarks
 		surfaceparm nonsolid
-		qer_editorimage textures/pad_maps/fackel.tga
+		qer_editorimage textures/pad_maps/fackel
 		q3map_surfacelight 900
 		surfaceparm nolightmap
 		cull none
 
 	{
-		animMap 10 textures/pad_garden/sflame1.tga textures/pad_garden/sflame2.tga textures/pad_garden/sflame3.tga textures/pad_garden/sflame4.tga textures/pad_garden/sflame5.tga textures/pad_garden/sflame6.tga textures/pad_garden/sflame7.tga textures/pad_garden/sflame8.tga
+		animMap 10 textures/pad_garden/sflame1 textures/pad_garden/sflame2 textures/pad_garden/sflame3 textures/pad_garden/sflame4 textures/pad_garden/sflame5 textures/pad_garden/sflame6 textures/pad_garden/sflame7 textures/pad_garden/sflame8
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave inverseSawtooth 0 1 0 10
 
 	}
 	{
-		animMap 10 textures/pad_garden/sflame2.tga textures/pad_garden/sflame3.tga textures/pad_garden/sflame4.tga textures/pad_garden/sflame5.tga textures/pad_garden/sflame6.tga textures/pad_garden/sflame7.tga textures/pad_garden/sflame8.tga textures/pad_garden/sflame1.tga
+		animMap 10 textures/pad_garden/sflame2 textures/pad_garden/sflame3 textures/pad_garden/sflame4 textures/pad_garden/sflame5 textures/pad_garden/sflame6 textures/pad_garden/sflame7 textures/pad_garden/sflame8 textures/pad_garden/sflame1
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave sawtooth 0 1 0 10
 	}
 
 
 	{
-		map textures/pad_garden/sflameball.tga
+		map textures/pad_garden/sflameball
 		blendFunc GL_ONE GL_ONE
 		rgbGen wave sin .6 .2 0 .6
 	}
@@ -658,19 +658,19 @@ textures/pad_maps/fackel
 
 textures/pad_maps/notdoor002
 {
-	qer_editorimage textures/pad_maps/notdoor002.tga
+	qer_editorimage textures/pad_maps/notdoor002
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/notdoor002.tga
+		map textures/pad_maps/notdoor002
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad5.tga
+		map textures/pad_gfx02/tinpad5
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -680,19 +680,19 @@ textures/pad_maps/notdoor002
 
 textures/pad_maps/tafel01
 {
-	qer_editorimage textures/pad_maps/tafel01.tga
+	qer_editorimage textures/pad_maps/tafel01
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/tafel01.tga
+		map textures/pad_maps/tafel01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -702,19 +702,19 @@ textures/pad_maps/tafel01
 
 textures/pad_maps/tafel02
 {
-	qer_editorimage textures/pad_maps/tafel02.tga
+	qer_editorimage textures/pad_maps/tafel02
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/tafel02.tga
+		map textures/pad_maps/tafel02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -724,19 +724,19 @@ textures/pad_maps/tafel02
 
 textures/pad_maps/tafel03
 {
-	qer_editorimage textures/pad_maps/tafel03.tga
+	qer_editorimage textures/pad_maps/tafel03
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/tafel03.tga
+		map textures/pad_maps/tafel03
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -748,19 +748,19 @@ textures/pad_maps/tafel03
 
 textures/pad_maps/lackgrey
 {
-	qer_editorimage textures/pad_maps/lackgrey.tga
+	qer_editorimage textures/pad_maps/lackgrey
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/lackgrey.tga
+		map textures/pad_maps/lackgrey
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad5.tga
+		map textures/pad_gfx02/tinpad5
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -770,19 +770,19 @@ textures/pad_maps/lackgrey
 
 textures/pad_maps/lackgrey2
 {
-	qer_editorimage textures/pad_maps/lackgrey2.tga
+	qer_editorimage textures/pad_maps/lackgrey2
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/lackgrey2.tga
+		map textures/pad_maps/lackgrey2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad5.tga
+		map textures/pad_gfx02/tinpad5
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -792,19 +792,19 @@ textures/pad_maps/lackgrey2
 
 textures/pad_maps/noentry2
 {
-	qer_editorimage textures/pad_maps/noentry2.tga
+	qer_editorimage textures/pad_maps/noentry2
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/noentry2.tga
+		map textures/pad_maps/noentry2
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad5.tga
+		map textures/pad_gfx02/tinpad5
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -823,7 +823,7 @@ textures/pad_maps/feuerl
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/feuerl.tga
+		map textures/pad_maps/feuerl
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -841,7 +841,7 @@ textures/pad_gallery/padman023
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman023.tga
+		map textures/pad_gallery/padman023
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -859,7 +859,7 @@ textures/pad_maps/not04
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/not04.tga
+		map textures/pad_maps/not04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -877,7 +877,7 @@ textures/pad_maps/not01
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/not01.tga
+		map textures/pad_maps/not01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -894,7 +894,7 @@ textures/pad_maps/not05
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/not05.tga
+		map textures/pad_maps/not05
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -912,7 +912,7 @@ textures/pad_maps/nosmoking
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/nosmoking.tga
+		map textures/pad_maps/nosmoking
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -930,7 +930,7 @@ textures/pad_maps/impmaster
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/impmaster.tga
+		map textures/pad_maps/impmaster
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -948,7 +948,7 @@ textures/pad_maps/notenter
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/notenter.tga
+		map textures/pad_maps/notenter
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
@@ -957,12 +957,12 @@ textures/pad_maps/notenter
 
 textures/pad_maps/jail2maschendrahtzaun
 {
-	qer_editorimage textures/pad_maps/jail2maschendrahtzaun.tga
+	qer_editorimage textures/pad_maps/jail2maschendrahtzaun
 	cull disable
 		surfaceparm alphashadow
 			surfaceparm latticesteps
 	{
-		map textures/pad_maps/jail2maschendrahtzaun.tga
+		map textures/pad_maps/jail2maschendrahtzaun
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
@@ -980,7 +980,7 @@ textures/pad_maps/jail2maschendrahtzaun
 
 textures/pad_maps/water_aqua
 {
-	qer_editorimage textures/pad_maps/aqua01.tga
+	qer_editorimage textures/pad_maps/aqua01
 	qer_trans .4
 	q3map_globaltexture
 	surfaceparm trans
@@ -988,14 +988,14 @@ textures/pad_maps/water_aqua
 	surfaceparm nomarks
 
 	{
-		map textures/pad_maps/aqua01.tga
+		map textures/pad_maps/aqua01
 		blendFunc GL_dst_color GL_one
 		rgbgen identity
 		tcmod scale .5 .5
 		tcmod scroll .025 .01
 	}
 	{
-		map textures/pad_maps/aqua01.tga
+		map textures/pad_maps/aqua01
 		blendFunc GL_dst_color gl_one
 		rgbgen identity
 		tcmod scale -1 -1
@@ -1011,16 +1011,16 @@ textures/pad_maps/water_aqua
 
 textures/pad_maps/moni001
 {
-	q3map_lightimage textures/pad_maps/moni001.tga
+	q3map_lightimage textures/pad_maps/moni001
 	q3map_surfacelight 2
 
 		{
-		map textures/pad_maps/moni001.tga
+		map textures/pad_maps/moni001
 		rgbGen identity
 	}
 
 		{
-		map textures/pad_maps/moni002.tga
+		map textures/pad_maps/moni002
 		blendfunc add
 		rgbGen identity
 		tcmod scroll 0 1
@@ -1039,19 +1039,19 @@ textures/pad_maps/moni001
 
 textures/pad_maps/shinyblack
 {
-	qer_editorimage textures/pad_maps/shinyblack.tga
+	qer_editorimage textures/pad_maps/shinyblack
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/shinyblack.tga
+		map textures/pad_maps/shinyblack
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1061,19 +1061,19 @@ textures/pad_maps/shinyblack
 
 textures/pad_maps/shinywhite
 {
-	qer_editorimage textures/pad_maps/shinywhite.tga
+	qer_editorimage textures/pad_maps/shinywhite
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/shinywhite.tga
+		map textures/pad_maps/shinywhite
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1083,19 +1083,19 @@ textures/pad_maps/shinywhite
 
 textures/pad_gallery/lara_baumann_001
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_001.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_001
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_001.tga
+		map textures/pad_gallery/lara_baumann_001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1104,19 +1104,19 @@ textures/pad_gallery/lara_baumann_001
 
 textures/pad_gallery/lara_baumann_002
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_002.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_002
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_002.tga
+		map textures/pad_gallery/lara_baumann_002
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1126,19 +1126,19 @@ textures/pad_gallery/lara_baumann_002
 
 textures/pad_gallery/lara_baumann_003
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_003.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_003
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_003.tga
+		map textures/pad_gallery/lara_baumann_003
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1147,19 +1147,19 @@ textures/pad_gallery/lara_baumann_003
 
 textures/pad_gallery/lara_baumann_004
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_004.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_004
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_004.tga
+		map textures/pad_gallery/lara_baumann_004
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1169,19 +1169,19 @@ textures/pad_gallery/lara_baumann_004
 
 textures/pad_gallery/lara_baumann_005
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_005.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_005
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_005.tga
+		map textures/pad_gallery/lara_baumann_005
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1191,19 +1191,19 @@ textures/pad_gallery/lara_baumann_005
 
 textures/pad_gallery/lara_baumann_006
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_006.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_006
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_006.tga
+		map textures/pad_gallery/lara_baumann_006
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1212,19 +1212,19 @@ textures/pad_gallery/lara_baumann_006
 
 textures/pad_gallery/lara_baumann_007
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_007.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_007
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_007.tga
+		map textures/pad_gallery/lara_baumann_007
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1234,19 +1234,19 @@ textures/pad_gallery/lara_baumann_007
 
 textures/pad_gallery/lara_baumann_008
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_008.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_008
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_008.tga
+		map textures/pad_gallery/lara_baumann_008
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1256,19 +1256,19 @@ textures/pad_gallery/lara_baumann_008
 
 textures/pad_gallery/lara_baumann_009
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_009.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_009
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_009.tga
+		map textures/pad_gallery/lara_baumann_009
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1277,19 +1277,19 @@ textures/pad_gallery/lara_baumann_009
 
 textures/pad_gallery/lara_baumann_009_256
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_009_256.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_009_256
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_009_256.tga
+		map textures/pad_gallery/lara_baumann_009_256
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1300,19 +1300,19 @@ textures/pad_gallery/lara_baumann_009_256
 
 textures/pad_gallery/lara_baumann_010
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_010.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_010
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_010.tga
+		map textures/pad_gallery/lara_baumann_010
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1322,19 +1322,19 @@ textures/pad_gallery/lara_baumann_010
 
 textures/pad_gallery/lara_baumann_010_256
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_010_256.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_010_256
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_010_256.tga
+		map textures/pad_gallery/lara_baumann_010_256
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1344,19 +1344,19 @@ textures/pad_gallery/lara_baumann_010_256
 
 textures/pad_gallery/lara_baumann_011
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_011.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_011
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_011.tga
+		map textures/pad_gallery/lara_baumann_011
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1366,19 +1366,19 @@ textures/pad_gallery/lara_baumann_011
 
 textures/pad_gallery/lara_baumann_012
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_012.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_012
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_012.tga
+		map textures/pad_gallery/lara_baumann_012
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1387,19 +1387,19 @@ textures/pad_gallery/lara_baumann_012
 
 textures/pad_gallery/lara_baumann_015
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_015.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_015
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_015.tga
+		map textures/pad_gallery/lara_baumann_015
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1408,19 +1408,19 @@ textures/pad_gallery/lara_baumann_015
 
 textures/pad_gallery/lara_baumann_016
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_016.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_016
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_016.tga
+		map textures/pad_gallery/lara_baumann_016
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1429,19 +1429,19 @@ textures/pad_gallery/lara_baumann_016
 
 textures/pad_gallery/lara_baumann_017
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_017.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_017
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_017.tga
+		map textures/pad_gallery/lara_baumann_017
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1450,19 +1450,19 @@ textures/pad_gallery/lara_baumann_017
 
 textures/pad_gallery/lara_baumann_017_256
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_017_256.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_017_256
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_017_256.tga
+		map textures/pad_gallery/lara_baumann_017_256
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1471,19 +1471,19 @@ textures/pad_gallery/lara_baumann_017_256
 
 textures/pad_gallery/lara_baumann_018
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_018.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_018
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_018.tga
+		map textures/pad_gallery/lara_baumann_018
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1492,19 +1492,19 @@ textures/pad_gallery/lara_baumann_018
 
 textures/pad_gallery/lara_baumann_018_256
 {
-	qer_editorimage textures/pad_gallery/lara_baumann_018_256.tga
+	qer_editorimage textures/pad_gallery/lara_baumann_018_256
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/lara_baumann_018_256.tga
+		map textures/pad_gallery/lara_baumann_018_256
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1514,19 +1514,19 @@ textures/pad_gallery/lara_baumann_018_256
 
 textures/pad_gallery/ente004
 {
-	qer_editorimage textures/pad_gallery/ente004.tga
+	qer_editorimage textures/pad_gallery/ente004
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/ente004.tga
+		map textures/pad_gallery/ente004
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1536,19 +1536,19 @@ textures/pad_gallery/ente004
 
 textures/pad_gallery/tomoyo001
 {
-	qer_editorimage textures/pad_gallery/tomoyo001.tga
+	qer_editorimage textures/pad_gallery/tomoyo001
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/tomoyo001.tga
+		map textures/pad_gallery/tomoyo001
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1558,19 +1558,19 @@ textures/pad_gallery/tomoyo001
 
 textures/pad_gallery/tomoyo002
 {
-	qer_editorimage textures/pad_gallery/tomoyo002.tga
+	qer_editorimage textures/pad_gallery/tomoyo002
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/tomoyo002.tga
+		map textures/pad_gallery/tomoyo002
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1588,7 +1588,7 @@ textures/pad_maps/kredit
 
 
 		{
-				map textures/pad_maps/kredit.tga
+				map textures/pad_maps/kredit
 				alphaFunc GE128
 		depthWrite
 		rgbGen identity
@@ -1613,7 +1613,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/brueckenwood.tga
+map textures/pad_maps/brueckenwood
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1627,7 +1627,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/burgfloor001.tga
+map textures/pad_maps/burgfloor001
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1641,7 +1641,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/burgfloor002.tga
+map textures/pad_maps/burgfloor002
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1655,7 +1655,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/burgfloor003.tga
+map textures/pad_maps/burgfloor003
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1670,7 +1670,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/burgfloor004.tga
+map textures/pad_maps/burgfloor004
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1685,7 +1685,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/gras_ground.tga
+map textures/pad_maps/gras_ground
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1699,7 +1699,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/gras_ground2.tga
+map textures/pad_maps/gras_ground2
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1713,7 +1713,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/gras_ground3_1024.tga
+map textures/pad_maps/gras_ground3_1024
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1727,7 +1727,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/gras_ground3_512.tga
+map textures/pad_maps/gras_ground3_512
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1741,7 +1741,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/nature14.tga
+map textures/pad_maps/nature14
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1755,7 +1755,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/rostline_1024.tga
+map textures/pad_maps/rostline_1024
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1769,7 +1769,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/rostline_512.tga
+map textures/pad_maps/rostline_512
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1783,7 +1783,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/schrank01b.tga
+map textures/pad_maps/schrank01b
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1797,7 +1797,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/schrank01d.tga
+map textures/pad_maps/schrank01d
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1811,7 +1811,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/spint01.tga
+map textures/pad_maps/spint01
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1825,7 +1825,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/spint02.tga
+map textures/pad_maps/spint02
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1840,7 +1840,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/stroh.tga
+map textures/pad_maps/stroh
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1854,7 +1854,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/woodsteg.tga
+map textures/pad_maps/woodsteg
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1868,7 +1868,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/woolwall001_1024.tga
+map textures/pad_maps/woolwall001_1024
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1882,7 +1882,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/woolwall001_512.tga
+map textures/pad_maps/woolwall001_512
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1896,7 +1896,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/buche003.tga
+map textures/pad_maps/buche003
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1911,7 +1911,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/buche004.tga
+map textures/pad_maps/buche004
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1925,7 +1925,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_maps/redcarp.tga
+map textures/pad_maps/redcarp
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1939,7 +1939,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_bookroom/redfloor_256.tga
+map textures/pad_bookroom/redfloor_256
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1953,7 +1953,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/padman/welcome.tga
+map textures/padman/welcome
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1968,7 +1968,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_garden/grasground3.tga
+map textures/pad_garden/grasground3
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
@@ -1977,19 +1977,19 @@ rgbGen identity
 
 textures/pad_gallery/doomdragon01
 {
-	qer_editorimage textures/pad_gallery/doomdragon01.tga
+	qer_editorimage textures/pad_gallery/doomdragon01
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/doomdragon01.tga
+		map textures/pad_gallery/doomdragon01
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -1998,19 +1998,19 @@ textures/pad_gallery/doomdragon01
 
 textures/pad_gallery/doomdragon02
 {
-	qer_editorimage textures/pad_gallery/doomdragon02.tga
+	qer_editorimage textures/pad_gallery/doomdragon02
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/doomdragon02.tga
+		map textures/pad_gallery/doomdragon02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2020,19 +2020,19 @@ textures/pad_gallery/doomdragon02
 
 textures/pad_gallery/entecartoon006
 {
-	qer_editorimage textures/pad_gallery/entecartoon006.tga
+	qer_editorimage textures/pad_gallery/entecartoon006
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/entecartoon006.tga
+		map textures/pad_gallery/entecartoon006
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2042,19 +2042,19 @@ textures/pad_gallery/entecartoon006
 
 textures/pad_gallery/entecartoon009
 {
-	qer_editorimage textures/pad_gallery/entecartoon009.tga
+	qer_editorimage textures/pad_gallery/entecartoon009
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/entecartoon009.tga
+		map textures/pad_gallery/entecartoon009
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2064,19 +2064,19 @@ textures/pad_gallery/entecartoon009
 
 textures/pad_gallery/gallery2000
 {
-	qer_editorimage textures/pad_gallery/gallery2000.tga
+	qer_editorimage textures/pad_gallery/gallery2000
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/gallery2000.tga
+		map textures/pad_gallery/gallery2000
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2086,19 +2086,19 @@ textures/pad_gallery/gallery2000
 
 textures/pad_gallery/padman005
 {
-	qer_editorimage textures/pad_gallery/padman005.tga
+	qer_editorimage textures/pad_gallery/padman005
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman005.tga
+		map textures/pad_gallery/padman005
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2107,19 +2107,19 @@ textures/pad_gallery/padman005
 
 textures/pad_gallery/padman007b
 {
-	qer_editorimage textures/pad_gallery/padman007b.tga
+	qer_editorimage textures/pad_gallery/padman007b
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman007b.tga
+		map textures/pad_gallery/padman007b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2129,19 +2129,19 @@ textures/pad_gallery/padman007b
 
 textures/pad_gallery/padman010_256
 {
-	qer_editorimage textures/pad_gallery/padman010_256.tga
+	qer_editorimage textures/pad_gallery/padman010_256
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman010_256.tga
+		map textures/pad_gallery/padman010_256
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2151,19 +2151,19 @@ textures/pad_gallery/padman010_256
 
 textures/pad_gallery/padman011_256
 {
-	qer_editorimage textures/pad_gallery/padman011_256.tga
+	qer_editorimage textures/pad_gallery/padman011_256
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman011_256.tga
+		map textures/pad_gallery/padman011_256
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2173,19 +2173,19 @@ textures/pad_gallery/padman011_256
 
 textures/pad_gallery/padman014_512
 {
-	qer_editorimage textures/pad_gallery/padman014_512.tga
+	qer_editorimage textures/pad_gallery/padman014_512
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman014_512.tga
+		map textures/pad_gallery/padman014_512
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2195,19 +2195,19 @@ textures/pad_gallery/padman014_512
 
 textures/pad_gallery/padman016_256
 {
-	qer_editorimage textures/pad_gallery/padman016_256.tga
+	qer_editorimage textures/pad_gallery/padman016_256
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman016_256.tga
+		map textures/pad_gallery/padman016_256
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2216,19 +2216,19 @@ textures/pad_gallery/padman016_256
 
 textures/pad_gallery/padman018
 {
-	qer_editorimage textures/pad_gallery/padman018.tga
+	qer_editorimage textures/pad_gallery/padman018
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman018.tga
+		map textures/pad_gallery/padman018
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2237,19 +2237,19 @@ textures/pad_gallery/padman018
 
 textures/pad_gallery/padman025
 {
-	qer_editorimage textures/pad_gallery/padman025.tga
+	qer_editorimage textures/pad_gallery/padman025
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman025.tga
+		map textures/pad_gallery/padman025
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2258,19 +2258,19 @@ textures/pad_gallery/padman025
 
 textures/pad_gallery/padman026
 {
-	qer_editorimage textures/pad_gallery/padman026.tga
+	qer_editorimage textures/pad_gallery/padman026
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_gallery/padman026.tga
+		map textures/pad_gallery/padman026
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2279,19 +2279,19 @@ textures/pad_gallery/padman026
 
 textures/pad_maps/wop02
 {
-	qer_editorimage textures/pad_maps/wop02.tga
+	qer_editorimage textures/pad_maps/wop02
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/wop02.tga
+		map textures/pad_maps/wop02
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2301,19 +2301,19 @@ textures/pad_maps/wop02
 
 textures/pad_maps/wop03
 {
-	qer_editorimage textures/pad_maps/wop03.tga
+	qer_editorimage textures/pad_maps/wop03
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/wop03.tga
+		map textures/pad_maps/wop03
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2322,19 +2322,19 @@ textures/pad_maps/wop03
 
 textures/pad_maps/wop04
 {
-	qer_editorimage textures/pad_maps/wop04.tga
+	qer_editorimage textures/pad_maps/wop04
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/wop04.tga
+		map textures/pad_maps/wop04
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2343,19 +2343,19 @@ textures/pad_maps/wop04
 
 textures/pad_maps/wop32
 {
-	qer_editorimage textures/pad_maps/wop32.tga
+	qer_editorimage textures/pad_maps/wop32
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/wop32.tga
+		map textures/pad_maps/wop32
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2365,19 +2365,19 @@ textures/pad_maps/wop32
 
 textures/pad_maps/xwop34
 {
-	qer_editorimage textures/pad_maps/xwop34.tga
+	qer_editorimage textures/pad_maps/xwop34
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/xwop34.tga
+		map textures/pad_maps/xwop34
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2386,19 +2386,19 @@ textures/pad_maps/xwop34
 
 textures/pad_maps/blackdoor
 {
-	qer_editorimage textures/pad_maps/blackdoor.tga
+	qer_editorimage textures/pad_maps/blackdoor
 
 	{
 		map $lightmap
 		rgbGen identity
 	}
 	{
-		map textures/pad_maps/blackdoor.tga
+		map textures/pad_maps/blackdoor
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbgen identity
 	}
 	{
-		map textures/pad_gfx02/tinpad4.tga
+		map textures/pad_gfx02/tinpad4
 		tcgen environment
 		blendfunc add
 		rgbgen identity
@@ -2407,9 +2407,9 @@ textures/pad_maps/blackdoor
 
 textures/pad_gallery/ente005_256
 {
-	qer_editorimage textures/pad_gallery/ente005_256.tga
+	qer_editorimage textures/pad_gallery/ente005_256
 	{
-		map textures/pad_gallery/ente005_256.tga
+		map textures/pad_gallery/ente005_256
 		rgbGen identity
 	}
 	{
@@ -2418,7 +2418,7 @@ textures/pad_gallery/ente005_256
 		blendfunc gl_dst_color gl_zero
 	}
 	{
-		map textures/pad_gallery/ente005_light.tga
+		map textures/pad_gallery/ente005_light
 		blendfunc gl_one gl_one
 		rgbgen wave inversesawtooth 0 1 0 1
 	}
@@ -2426,16 +2426,16 @@ textures/pad_gallery/ente005_256
 
 textures/pad_shop/nottingham
 {
-	qer_editorimage textures/pad_shop/nottingham.tga
+	qer_editorimage textures/pad_shop/nottingham
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_shop/brown.tga
+	q3map_lightimage textures/pad_shop/brown
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 250
 
 		skyparms env/nottingham1024 - -
 //	   {
-//		map textures/pad_shop/nottingham512.tga
+//		map textures/pad_shop/nottingham512
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
@@ -2444,16 +2444,16 @@ textures/pad_shop/nottingham
 
 textures/pad_petesky/night-life
 {
-	qer_editorimage textures/pad_petesky/night-life.tga
+	qer_editorimage textures/pad_petesky/night-life
 	surfaceparm noimpact
 	surfaceparm nolightmap
-	q3map_lightimage textures/pad_petesky/white02.tga
+	q3map_lightimage textures/pad_petesky/white02
 	q3map_sun	0.266383 0.274632 0.358662 100 50 55
 	q3map_surfacelight 200
 
 		skyparms env/pc-night-life1024 - -
 //	   {
-//		map textures/pad_petesky/night-life.tga
+//		map textures/pad_petesky/night-life
 //		blendfunc GL_ONE GL_ONE
 //		tcMod scroll 0.05 0.06
 //		tcMod scale 3 2
