@@ -169,7 +169,7 @@ static int validateSound(const char* filename, const char *pk3dir, const char *s
 	char basename[1024];
 	int len;
 	static const char *ext[] = {"wav", "ogg", "opus", NULL};
-	static const char *searchpaths[] = {"sound.pk3dir", NULL};
+	static const char *searchpaths[] = {"sound.pk3dir", "padpack.pk3dir", NULL};
 	static const char *subdirs[] = {".", "../wop"};
 
 	if (sound[0] == '*') {
@@ -233,7 +233,7 @@ static int validateShader(const char *shaderName, const char *bspfilename, const
 	char basename[1024];
 	int len;
 	static const char *ext[] = {"jpg", "png", "tga", NULL};
-	static const char *searchpaths[] = {"models.pk3dir", "textures.pk3dir", NULL};
+	static const char *searchpaths[] = {"models.pk3dir", "textures.pk3dir", "padpack.pk3dir", NULL};
 	static const char *subdirs[] = {".", "../wop", "../xmas"};
 
 	Q_strncpyz(basename, shaderName, sizeof(basename));

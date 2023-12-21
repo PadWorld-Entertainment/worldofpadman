@@ -122,7 +122,7 @@ static int validateTexture(const char *shaderName, const char *shaderfilename, c
 	char basename[1024];
 	int len;
 	static const char *ext[] = {"jpg", "png", "tga", NULL};
-	static const char *searchpaths[] = {"gfx.pk3dir", "maps.pk3dir", "menu.pk3dir", "models.pk3dir", "textures.pk3dir", NULL};
+	static const char *searchpaths[] = {"gfx.pk3dir", "maps.pk3dir", "menu.pk3dir", "models.pk3dir", "padpack.pk3dir", "textures.pk3dir", NULL};
 	static const char *skyparms[] = {"", "_ft", "_bk", "_rt", "_lf", "_up", "_dn"};
 	static const char *subdirs[] = {".", "../wop"};
 
