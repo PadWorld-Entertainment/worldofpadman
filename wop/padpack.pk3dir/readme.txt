@@ -123,5 +123,5 @@ models or images are are by their respective owners.
 "World of Padman" the Pad characters and the PadLogo are (c) ENTE
 
 ================================================================================
-The "World of Padman"-Standalone - get your copy on www.worldofpadman.net ;)
+The "World of Padman"-Standalone - get your copy on www.worldofpadman.com ;)
 ================================================================================
