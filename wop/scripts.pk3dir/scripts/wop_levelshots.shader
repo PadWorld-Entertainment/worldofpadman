@@ -38,7 +38,7 @@ levelshots/wop_anteroomBBA
 {
 	nomipmaps
 	{
-	map levelshots/wop_anteroomA
+		map levelshots/wop_anteroomA
 	}
 }
 
