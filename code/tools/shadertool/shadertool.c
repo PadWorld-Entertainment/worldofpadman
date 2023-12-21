@@ -116,13 +116,16 @@ static void Q_strncpyz(char *dest, const char *src, int destsize) {
 	dest[destsize - 1] = 0;
 }
 
-static int validateTexture(const char *shaderName, const char *shaderfilename, const char *pk3dir, const char *filename) {
+static int validateTexture(const char *shaderName, const char *shaderfilename, const char *pk3dir, const char *filename, int ispadpack) {
 	FILE *fp;
 	char buf[1024];
 	char basename[1024];
 	int len;
 	static const char *ext[] = {"jpg", "png", "tga", NULL};
-	static const char *searchpaths[] = {"gfx.pk3dir", "maps.pk3dir", "menu.pk3dir", "models.pk3dir", "padpack.pk3dir", "textures.pk3dir", NULL};
+	const char *searchpaths[] = {"gfx.pk3dir", "maps.pk3dir", "menu.pk3dir", "models.pk3dir", "textures.pk3dir", NULL, NULL};
+	if (ispadpack) {
+		searchpaths[5] = "padpack.pk3dir";
+	}
 	static const char *skyparms[] = {"", "_ft", "_bk", "_rt", "_lf", "_up", "_dn"};
 	static const char *subdirs[] = {".", "../wop"};
 
@@ -159,7 +162,7 @@ static int validateTexture(const char *shaderName, const char *shaderfilename, c
 	return 1;
 }
 
-static int validateShader(const char *filename, const char *pk3dir, const char *buf) {
+static int validateShader(const char *filename, const char *pk3dir, const char *buf, int ispadpack) {
 	int error = 0;
 	printf("Validate shader %s\n", filename);
 	int depth = 0;
@@ -196,7 +199,7 @@ static int validateShader(const char *filename, const char *pk3dir, const char *
 					printf("%s:%i: error unexpected end of shader found\n", filename, com_tokenline);
 					return 1;
 				}
-				if (validateTexture(shaderName, filename, pk3dir, token) != 0) {
+				if (validateTexture(shaderName, filename, pk3dir, token, ispadpack) != 0) {
 					error = 1;
 				}
 			}
@@ -219,15 +222,17 @@ int main(int argc, char *argv[]) {
 	const char *pk3dir;
 	long bufsize;
 	char *source;
+	int ispadpack;
 	FILE *fp;
 
-	if (argc != 3) {
-		printf("Usage: shadertool <path-to-textures-pk3dir> <path-to.shader>\n");
+	if (argc != 4) {
+		printf("Usage: shadertool <path-to-textures-pk3dir> <path-to.shader> <ispadpack>\n");
 		return 1;
 	}
 
 	pk3dir = argv[1];
 	filename = argv[2];
+	ispadpack = atoi(argv[3]);
 	fp = fopen(filename, "rb");
 	if (fp == NULL) {
 		printf("Could not open file %s", filename);
@@ -259,7 +264,7 @@ int main(int argc, char *argv[]) {
 
 	source[newLen++] = '\0';
 
-	if (validateShader(filename, pk3dir, source) == 0) {
+	if (validateShader(filename, pk3dir, source, ispadpack) == 0) {
 		free(source);
 		return 0;
 	}

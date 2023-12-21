@@ -16,12 +16,12 @@ set(SHADERS
     wop_xmas.shader
 )
 foreach (SHADER ${SHADERS})
-    shader_validation(xmas ${SHADER})
+    shader_validation(xmas ${SHADER} 0)
 endforeach()
 
 set(BSPS
     weinacht.bsp
 )
 foreach (BSP ${BSPS})
-    bsp_validation(xmas ${BSP})
+    bsp_validation(xmas ${BSP} 0)
 endforeach()

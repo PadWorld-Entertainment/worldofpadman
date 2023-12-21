@@ -51,6 +51,9 @@ set(SHADERS
     wop_weapons.shader
     wop_weaponsfx.shader
 )
+foreach (SHADER ${SHADERS})
+    shader_validation(wop ${SHADER} 0)
+endforeach()
 
 set(PADPACK_SHADERS
     pad_xeffect.shader
@@ -58,10 +61,8 @@ set(PADPACK_SHADERS
     padpack_levelshots.shader
     particle_smoke.shader
 )
-list(APPEND SHADERS ${PADPACK_SHADERS})
-
-foreach (SHADER ${SHADERS})
-    shader_validation(wop ${SHADER})
+foreach (SHADER ${PADPACK_SHADERS})
+    shader_validation(wop ${SHADER} 1)
 endforeach()
 
 set(BSPS
@@ -111,6 +112,9 @@ set(BSPS
     wop_trashmapBB.bsp
     wop_westernsetCTL.bsp
 )
+foreach (BSP ${BSPS})
+    bsp_validation(wop ${BSP} 0)
+endforeach()
 
 set(PADPACK_BSPS
     wop_padcastle.bsp
@@ -118,8 +122,6 @@ set(PADPACK_BSPS
     wop_padgallery.bsp
     wop_padgalleryBB.bsp
 )
-list(APPEND BSPS ${PADPACK_BSPS})
-
-foreach (BSP ${BSPS})
-    bsp_validation(wop ${BSP})
+foreach (BSP ${PADPACK_BSPS})
+    bsp_validation(wop ${BSP} 1)
 endforeach()
