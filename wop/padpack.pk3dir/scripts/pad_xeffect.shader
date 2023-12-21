@@ -168,3 +168,42 @@ textures/pad_effect/blacky01
 		rgbGen identity
 	}
 }
+
+textures/pad_liquidfx/water_calm1
+{
+	qer_editorimage textures/pad_liquidfx/wat01.tga
+	qer_trans .5
+	q3map_globaltexture
+	surfaceparm trans
+	surfaceparm nonsolid
+	surfaceparm water
+	cull disable
+	{
+		map textures/pad_liquidfx/wat01.tga
+		blendFunc GL_dst_color GL_one
+		rgbgen identity
+		tcmod scale .5 .5
+		tcmod transform 1.5 0 1.5 1 1 2
+		tcmod scroll -.05 .001
+	}
+	{
+		map textures/pad_liquidfx/wat03.tga
+		blendFunc GL_dst_color GL_one
+		rgbgen identity
+		tcmod scale .5 .5
+		tcmod transform 0 1.5 1 1.5 2 1
+		tcmod scroll .025 -.001
+	}
+	{
+		map textures/pad_liquidfx/wat01.tga
+		blendFunc GL_dst_color GL_one
+		rgbgen identity
+		tcmod scale .25 .5
+		tcmod scroll .001 .025
+	}
+	{
+		map $lightmap
+		blendFunc GL_dst_color GL_zero
+		rgbgen identity		
+	}
+}
