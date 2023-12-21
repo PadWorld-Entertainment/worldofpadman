@@ -1,0 +1,86 @@
+Date: 15th Juni 2001.
+Quake3Arena map object models
+
+====================================================
+Title:            GrimReaper's Tree-mapmodels 
+File:             gr_trees.pk3
+Author:           Krischan Makowka (aka GrimReaper) 
+E-mail address:   GrimReaper@planetquake.com
+
+Description:      Different tree mapmodels with muliple skins
+
+		  
+====================================================
+Model information
+
+Nadelbaum.md3	Big evergreen
+Nadelbaum2.md3	Small evergreen
+Nbsnow.md3	Big evergreen covered with snow
+Nbsnow2.md3	Small evergreen covered with snow
+xmasgold.md3	Default xmas tree
+xmasred.md3	CTF Red xmas tree
+xmasblue.md3	CTF Blue xmas tree
+tree1.md3	Big "normal" tree with yellow leaves
+tree2.md3	Big "normal" tree with light green leaves	
+tree3.md3	Big "normal" tree with yellow/red leaves
+tree4.md3	Big "normal" tree with yellow/red/green leaves
+tree5.md3	Big "normal" tree with pink leaves (for all your Alien worlds ;) )
+tree6.md3	Big "normal" tree with dark green leaves
+small1.md3	Small "normal" tree with yellow leaves
+small2.md3	Small "normal" tree with light green leaves	
+small3.md3	Small "normal" tree with yellow/red leaves
+small4.md3	Small "normal" tree with yellow/red/green leaves
+small5.md3	Small "normal" tree with pink leaves (for all your Alien worlds ;) )
+small6.md3	Small "normal" tree with dark green leaves
+
+
+====================================================
+Construction
+
+Base:           none
+Editor:         MilkShape 3d 
+Other progs:    PaintShopPro 7.2
+                
+Know bugs:      The bug with the dissapering leaves that occoured in the earlier release
+		IS FINALLY FIXED :)
+
+Build time:     Sorry no idea
+
+====================================================
+Thanks to ...
+
+Fatmanfat for shader advice,
+Icarus, and many kind folks from Quake3world level editing forum
+for artistic feedback
+
+AND anyone I might have forgotten :)
+
+====================================================
+Distribution / Copyright / Permissions 
+
+You may use these models, textures, and shaders in your maps.
+You may extract and use just the files you need.
+Please include the following information in your 
+readme file:
+
+GR_trees.pk3 - .md3, texture, and shader files by 
+Krischan Makowka Copyright (c) 2001
+Grimreaper@planetquake.com
+____________________________________________________
+
+All original artwork Copyright (c) 2001
+All rights reserved.
+
+Quake III Arena is a registered trademark of
+id Software, Inc.
+All rights reserved.
+
+This file may be electronically distributed only at 
+NO CHARGE to the recipient in its current state, MUST 
+include this .txt file, and may NOT be modified IN 
+ANY WAY. UNDER NO CIRCUMSTANCES ARE THE FILE OR THE 
+CONTENTS OF THIS FILE TO BE DISTRIBUTED ON CD-ROM 
+WITHOUT PRIOR WRITTEN PERMISSION.
+
+====================================================
+

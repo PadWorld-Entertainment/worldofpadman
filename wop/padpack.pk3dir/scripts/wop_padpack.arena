@@ -1,0 +1,25 @@
+// padpack maps for wop
+
+{
+	map			"wop_padcastle"
+	longname	"ENTE's PadCastle"
+	type		"ffa team lps"
+}
+
+{
+	map			"wop_padcastleBB"
+	longname	"ENTE's PadCastle"
+	type		"bb"
+}
+
+{
+	map			"wop_padgallery"
+	longname	"ENTE's PadGallery"
+	type		"ffa team lps"
+}
+
+{
+	map			"wop_padgalleryBB"
+	longname	"ENTE's PadGallery"
+	type		"bb"
+}

@@ -1,0 +1,81 @@
+date: 22nd July 2000.
+Quake3Arena map object model
+
+====================================================
+title:            Buddha Model Pack
+file:             buddha.pk3
+author:           todd gantzler 
+email address:    toddg@slip.net
+URL:              http://i.am/professorQ3
+description:      a 518 poly Buddha model
+			with 5 different skins/shaders
+			(in 5 different .md3 files)
+
+====================================================
+model information
+
+buddha.md3		a stone buddha, default shader (simple texture)
+buddha_g.md3	a gold buddha, shader with environment map
+buddha_j.md3	a jade buddha, shader with environment map
+buddha_m.md3	a magic buddha, two-pass shader with special effects
+buddha_f.md3	a false buddha, two-passes plus lightmap
+
+how to use        place buddha.pk3 in your /baseq3/ folder
+                  choose one of the buddha models from the model menu
+			in Q3Radient
+                  
+====================================================
+construction
+
+base:           none
+editor:         3DStudioMAX r3.1
+other progs:    Pop'n'Fresh .md3 exporter
+                
+know bugs:      may bring peace and calm to your arena
+
+build time:     5-8 hours of model building, about a week of
+			shader/texture tuning
+
+====================================================
+thanks to ...
+
+Fatmanfat for shader advice and assistance
+Brok3n and Froggyquim for artistic feedback
+
+the folks at the quake3world level editing and 
+editing and modifications forums for shader info
+and general technical assistance.
+thanks to Rungy in particular for technical info.
+
+====================================================
+Distribution / Copyright / Permissions 
+
+you may use these models, textures, and shaders in your maps.
+you may extract and use just the files you need.
+please include the following information in your 
+readme file:
+
+Buddha .md3, texture, and shader files by 
+Todd Gantzler Copyright (c) 2000
+http://i.am/professorQ3
+____________________________________________________
+
+all original artwork Copyright (c) 2000
+All rights reserved.
+
+based on shader files from Quake III Arena
+Copyright (c) 1999 id Software, Inc.
+All rights reserved.
+
+Quake III Arena is a registered trademark of 
+id Software, Inc.
+
+This file may be electronically distributed only at 
+NO CHARGE to the recipient in its current state, MUST 
+include this .txt file, and may NOT be modified IN 
+ANY WAY. UNDER NO CIRCUMSTANCES ARE THE FILE OR THE 
+CONTENTS OF THIS FILE TO BE DISTRIBUTED ON CD-ROM 
+WITHOUT PRIOR WRITTEN PERMISSION.
+
+====================================================
+
