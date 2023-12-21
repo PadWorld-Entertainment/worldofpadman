@@ -38,6 +38,8 @@ GRAPHICS OPTIONS MENU
 #define GRAPHICS1 "menu/buttons/graphics1"
 #define DISPLAY0 "menu/buttons/display0"
 #define DISPLAY1 "menu/buttons/display1"
+#define EFFECTS0 "menu/buttons/effects0"
+#define EFFECTS1 "menu/buttons/effects1"
 #define SOUND0 "menu/buttons/sound0"
 #define SOUND1 "menu/buttons/sound1"
 #define NETWORK0 "menu/buttons/netvoip0"
@@ -47,10 +49,10 @@ GRAPHICS OPTIONS MENU
 
 #define ID_GRAPHICS 100
 #define ID_DISPLAY 101
-#define ID_SOUND 102
-#define ID_NETWORK 103
-#define ID_BACK 104
-#define ID_EFFECTS 105
+#define ID_EFFECTS 102
+#define ID_SOUND 103
+#define ID_NETWORK 104
+#define ID_BACK 105
 
 #define ID_LIST 10
 
@@ -62,6 +64,7 @@ typedef struct {
 
 	menubitmap_s graphics;
 	menubitmap_s display;
+	menubitmap_s effects;
 	menubitmap_s sound;
 	menubitmap_s network;
 
@@ -79,7 +82,6 @@ typedef struct {
 	menulist_s tfilter;
 	menuradiobutton_s ct;
 	menulist_s aa;
-	menutext_s effects;
 
 	menubitmap_s apply;
 	menubitmap_s back;
@@ -313,11 +315,6 @@ UI_GraphicsOptions_UpdateMenuItems
 =================
 */
 static void UI_GraphicsOptions_UpdateMenuItems(void) {
-	if (UI_GetCvarInt("r_fullscreen") == 0) {
-		s_graphicsoptions.colordepth.generic.flags |= QMF_GRAYED;
-	} else {
-		s_graphicsoptions.colordepth.generic.flags &= ~QMF_GRAYED;
-	}
 
 #ifdef USE_RENDERER_DLOPEN
 	if (Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2") ||
@@ -327,6 +324,12 @@ static void UI_GraphicsOptions_UpdateMenuItems(void) {
 		s_graphicsoptions.effects.generic.flags &= ~QMF_GRAYED;
 	}
 #endif
+
+	if (UI_GetCvarInt("r_fullscreen") == 0) {
+		s_graphicsoptions.colordepth.generic.flags |= QMF_GRAYED;
+	} else {
+		s_graphicsoptions.colordepth.generic.flags &= ~QMF_GRAYED;
+	}
 
 	s_graphicsoptions.apply.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 	if (s_ivo.mode != s_graphicsoptions.mode.curvalue) {
@@ -517,6 +520,11 @@ static void UI_GraphicsOptions_Event(void *ptr, int event) {
 		UI_DisplayOptionsMenu();
 		break;
 
+	case ID_EFFECTS:
+		UI_PopMenu();
+		UI_EffectsOptionsMenu();
+		break;
+
 	case ID_SOUND:
 		UI_PopMenu();
 		UI_SoundOptionsMenu();
@@ -525,11 +533,6 @@ static void UI_GraphicsOptions_Event(void *ptr, int event) {
 	case ID_NETWORK:
 		UI_PopMenu();
 		UI_NetworkOptionsMenu();
-		break;
-
-	case ID_EFFECTS:
-		UI_PopMenu();
-		UI_EffectsOptionsMenu();
 		break;
 
 	case ID_BACK:
@@ -726,8 +729,8 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	s_graphicsoptions.graphics.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.graphics.generic.id = ID_GRAPHICS;
-	s_graphicsoptions.graphics.generic.x = XPOSITION - 144;
-	s_graphicsoptions.graphics.generic.y = 43;
+	s_graphicsoptions.graphics.generic.x = 120;
+	s_graphicsoptions.graphics.generic.y = 22;
 	s_graphicsoptions.graphics.width = 160;
 	s_graphicsoptions.graphics.height = 40;
 	s_graphicsoptions.graphics.focuspic = GRAPHICS1;
@@ -738,20 +741,32 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.display.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.display.generic.id = ID_DISPLAY;
-	s_graphicsoptions.display.generic.x = XPOSITION + 9;
-	s_graphicsoptions.display.generic.y = 36;
+	s_graphicsoptions.display.generic.x = 85;
+	s_graphicsoptions.display.generic.y = 66;
 	s_graphicsoptions.display.width = 120;
 	s_graphicsoptions.display.height = 40;
 	s_graphicsoptions.display.focuspic = DISPLAY1;
 	s_graphicsoptions.display.focuspicinstead = qtrue;
+
+	s_graphicsoptions.effects.generic.type = MTYPE_BITMAP;
+	s_graphicsoptions.effects.generic.name = EFFECTS0;
+	s_graphicsoptions.effects.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_graphicsoptions.effects.generic.callback = UI_GraphicsOptions_Event;
+	s_graphicsoptions.effects.generic.id = ID_EFFECTS;
+	s_graphicsoptions.effects.generic.x = 212;
+	s_graphicsoptions.effects.generic.y = 58;
+	s_graphicsoptions.effects.width = 120;
+	s_graphicsoptions.effects.height = 40;
+	s_graphicsoptions.effects.focuspic = EFFECTS1;
+	s_graphicsoptions.effects.focuspicinstead = qtrue;
 
 	s_graphicsoptions.sound.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.sound.generic.name = SOUND0;
 	s_graphicsoptions.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.sound.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.sound.generic.id = ID_SOUND;
-	s_graphicsoptions.sound.generic.x = XPOSITION - 124;
-	s_graphicsoptions.sound.generic.y = 85;
+	s_graphicsoptions.sound.generic.x = 106;
+	s_graphicsoptions.sound.generic.y = 108;
 	s_graphicsoptions.sound.width = 120;
 	s_graphicsoptions.sound.height = 40;
 	s_graphicsoptions.sound.focuspic = SOUND1;
@@ -762,8 +777,8 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.network.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.network.generic.id = ID_NETWORK;
-	s_graphicsoptions.network.generic.x = XPOSITION - 18;
-	s_graphicsoptions.network.generic.y = 88;
+	s_graphicsoptions.network.generic.x = 212;
+	s_graphicsoptions.network.generic.y = 100;
 	s_graphicsoptions.network.width = 160;
 	s_graphicsoptions.network.height = 40;
 	s_graphicsoptions.network.focuspic = NETWORK1;
@@ -783,7 +798,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 		"maximum except Texture Filter and Antialiasing. Minimum will set everything to low or "
 		"off. Quality and Performance offer a good compromise in one direction or the other.";
 
-	y += (BIGCHAR_HEIGHT + 2);
+	y += 2 * (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_mode"
 	s_graphicsoptions.mode.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.mode.generic.name = "Video Mode:";
@@ -925,19 +940,6 @@ void UI_GraphicsOptions_MenuInit(void) {
 		"off. Selecting higher levels results in better render quality but can lead to a high "
 		"graphics card load.";
 
-	y += (BIGCHAR_HEIGHT + 2);
-	s_graphicsoptions.effects.generic.type = MTYPE_TEXTS;
-	s_graphicsoptions.effects.string = "Advanced Effects";
-	s_graphicsoptions.effects.fontHeight = 20.0f;
-	s_graphicsoptions.effects.generic.flags = QMF_CENTER_JUSTIFY;
-	s_graphicsoptions.effects.generic.x = XPOSITION;
-	s_graphicsoptions.effects.generic.y = y;
-	s_graphicsoptions.effects.generic.id = ID_EFFECTS;
-	s_graphicsoptions.effects.generic.callback = UI_GraphicsOptions_Event;
-	s_graphicsoptions.effects.color = color_lightOrange;
-	s_graphicsoptions.effects.focuscolor = color_orange;
-	s_graphicsoptions.effects.style = UI_CENTER | UI_SMALLFONT;
-
 	s_graphicsoptions.back.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.back.generic.name = BACK0;
 	s_graphicsoptions.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
@@ -962,6 +964,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.graphics);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.display);
+	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.effects);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.sound);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.network);
 
@@ -979,7 +982,6 @@ void UI_GraphicsOptions_MenuInit(void) {
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.tfilter);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.ct);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.aa);
-	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.effects);
 
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.back);
 	Menu_AddItem(&s_graphicsoptions.menu, (void *)&s_graphicsoptions.apply);
@@ -1000,6 +1002,8 @@ void UI_GraphicsOptions_Cache(void) {
 	trap_R_RegisterShaderNoMip(GRAPHICS1);
 	trap_R_RegisterShaderNoMip(DISPLAY0);
 	trap_R_RegisterShaderNoMip(DISPLAY1);
+	trap_R_RegisterShaderNoMip(EFFECTS0);
+	trap_R_RegisterShaderNoMip(EFFECTS1);
 	trap_R_RegisterShaderNoMip(SOUND0);
 	trap_R_RegisterShaderNoMip(SOUND1);
 	trap_R_RegisterShaderNoMip(NETWORK0);

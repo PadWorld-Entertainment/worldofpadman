@@ -36,6 +36,8 @@ DISPLAY OPTIONS MENU
 #define GRAPHICS1 "menu/buttons/graphics1"
 #define DISPLAY0 "menu/buttons/display0"
 #define DISPLAY1 "menu/buttons/display1"
+#define EFFECTS0 "menu/buttons/effects0"
+#define EFFECTS1 "menu/buttons/effects1"
 #define SOUND0 "menu/buttons/sound0"
 #define SOUND1 "menu/buttons/sound1"
 #define NETWORK0 "menu/buttons/netvoip0"
@@ -45,10 +47,11 @@ DISPLAY OPTIONS MENU
 
 #define ID_GRAPHICS 100
 #define ID_DISPLAY 101
-#define ID_SOUND 102
-#define ID_NETWORK 103
-#define ID_BACK 104
-#define ID_APPLY 105
+#define ID_EFFECTS 102
+#define ID_SOUND 103
+#define ID_NETWORK 104
+#define ID_BACK 105
+#define ID_APPLY 106
 
 #define ID_IGNOREHWG 14
 #define ID_BRIGHTNESS 15
@@ -71,6 +74,7 @@ typedef struct {
 
 	menubitmap_s graphics;
 	menubitmap_s display;
+	menubitmap_s effects;
 	menubitmap_s sound;
 	menubitmap_s network;
 
@@ -163,6 +167,12 @@ UI_DisplayOptions_UpdateMenuItems
 */
 static void UI_DisplayOptions_UpdateMenuItems(void) {
 
+	if (Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2")) {
+		displayOptionsInfo.effects.generic.flags |= QMF_GRAYED;
+	} else {
+		displayOptionsInfo.effects.generic.flags &= ~QMF_GRAYED;
+	}
+
 	if (!uis.glconfig.deviceSupportsGamma) {
 		displayOptionsInfo.brightness.generic.flags |= QMF_GRAYED;
 	} else {
@@ -208,7 +218,6 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 	}
 
 	switch (((menucommon_s *)ptr)->id) {
-	case ID_DISPLAY:
 	case ID_IGNOREHWG:
 	case ID_VSYNC:
 	case ID_WINDOWMODE:
@@ -219,6 +228,14 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 	case ID_GRAPHICS:
 		UI_PopMenu();
 		UI_GraphicsOptionsMenu();
+		break;
+
+	case ID_DISPLAY:
+		break;
+
+	case ID_EFFECTS:
+		UI_PopMenu();
+		UI_EffectsOptionsMenu();
 		break;
 
 	case ID_SOUND:
@@ -345,8 +362,8 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.graphics.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.graphics.generic.id = ID_GRAPHICS;
-	displayOptionsInfo.graphics.generic.x = XPOSITION - 144;
-	displayOptionsInfo.graphics.generic.y = 43;
+	displayOptionsInfo.graphics.generic.x = 120;
+	displayOptionsInfo.graphics.generic.y = 22;
 	displayOptionsInfo.graphics.width = 160;
 	displayOptionsInfo.graphics.height = 40;
 	displayOptionsInfo.graphics.focuspic = GRAPHICS1;
@@ -357,20 +374,32 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	displayOptionsInfo.display.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.display.generic.id = ID_DISPLAY;
-	displayOptionsInfo.display.generic.x = XPOSITION + 9;
-	displayOptionsInfo.display.generic.y = 36;
+	displayOptionsInfo.display.generic.x = 85;
+	displayOptionsInfo.display.generic.y = 66;
 	displayOptionsInfo.display.width = 120;
 	displayOptionsInfo.display.height = 40;
 	displayOptionsInfo.display.focuspic = DISPLAY1;
 	displayOptionsInfo.display.focuspicinstead = qtrue;
+
+	displayOptionsInfo.effects.generic.type = MTYPE_BITMAP;
+	displayOptionsInfo.effects.generic.name = EFFECTS0;
+	displayOptionsInfo.effects.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	displayOptionsInfo.effects.generic.callback = UI_DisplayOptions_Event;
+	displayOptionsInfo.effects.generic.id = ID_EFFECTS;
+	displayOptionsInfo.effects.generic.x = 212;
+	displayOptionsInfo.effects.generic.y = 58;
+	displayOptionsInfo.effects.width = 120;
+	displayOptionsInfo.effects.height = 40;
+	displayOptionsInfo.effects.focuspic = EFFECTS1;
+	displayOptionsInfo.effects.focuspicinstead = qtrue;
 
 	displayOptionsInfo.sound.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.sound.generic.name = SOUND0;
 	displayOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.sound.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.sound.generic.id = ID_SOUND;
-	displayOptionsInfo.sound.generic.x = XPOSITION - 124;
-	displayOptionsInfo.sound.generic.y = 85;
+	displayOptionsInfo.sound.generic.x = 106;
+	displayOptionsInfo.sound.generic.y = 108;
 	displayOptionsInfo.sound.width = 120;
 	displayOptionsInfo.sound.height = 40;
 	displayOptionsInfo.sound.focuspic = SOUND1;
@@ -381,8 +410,8 @@ static void UI_DisplayOptions_MenuInit(void) {
 	displayOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.network.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.network.generic.id = ID_NETWORK;
-	displayOptionsInfo.network.generic.x = XPOSITION - 18;
-	displayOptionsInfo.network.generic.y = 88;
+	displayOptionsInfo.network.generic.x = 212;
+	displayOptionsInfo.network.generic.y = 100;
 	displayOptionsInfo.network.width = 160;
 	displayOptionsInfo.network.height = 40;
 	displayOptionsInfo.network.focuspic = NETWORK1;
@@ -574,6 +603,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.graphics);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.display);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.effects);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.sound);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.network);
 
@@ -608,6 +638,8 @@ void UI_DisplayOptions_Cache(void) {
 	trap_R_RegisterShaderNoMip(GRAPHICS1);
 	trap_R_RegisterShaderNoMip(DISPLAY0);
 	trap_R_RegisterShaderNoMip(DISPLAY1);
+	trap_R_RegisterShaderNoMip(EFFECTS0);
+	trap_R_RegisterShaderNoMip(EFFECTS1);
 	trap_R_RegisterShaderNoMip(SOUND0);
 	trap_R_RegisterShaderNoMip(SOUND1);
 	trap_R_RegisterShaderNoMip(NETWORK0);

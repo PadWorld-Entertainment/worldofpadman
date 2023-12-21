@@ -36,6 +36,8 @@ NETWORK OPTIONS MENU
 #define GRAPHICS1 "menu/buttons/graphics1"
 #define DISPLAY0 "menu/buttons/display0"
 #define DISPLAY1 "menu/buttons/display1"
+#define EFFECTS0 "menu/buttons/effects0"
+#define EFFECTS1 "menu/buttons/effects1"
 #define SOUND0 "menu/buttons/sound0"
 #define SOUND1 "menu/buttons/sound1"
 #define NETWORK0 "menu/buttons/netvoip0"
@@ -43,9 +45,10 @@ NETWORK OPTIONS MENU
 
 #define ID_GRAPHICS 100
 #define ID_DISPLAY 101
-#define ID_SOUND 102
-#define ID_NETWORK 103
-#define ID_BACK 104
+#define ID_EFFECTS 102
+#define ID_SOUND 103
+#define ID_NETWORK 104
+#define ID_BACK 105
 
 #define ID_RATE 10
 #define ID_ALLOWDOWNLOAD 11
@@ -72,6 +75,7 @@ typedef struct {
 
 	menubitmap_s graphics;
 	menubitmap_s display;
+	menubitmap_s effects;
 	menubitmap_s sound;
 	menubitmap_s network;
 
@@ -136,6 +140,12 @@ UI_NetworkOptions_SetMenuItems
 */
 static void UI_NetworkOptions_SetMenuItems(void) {
 	int rate;
+
+	if (Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2")) {
+		networkOptionsInfo.effects.generic.flags |= QMF_GRAYED;
+	} else {
+		networkOptionsInfo.effects.generic.flags &= ~QMF_GRAYED;
+	}
 
 	rate = trap_Cvar_VariableValue("rate");
 	if (rate <= 4000) {
@@ -245,6 +255,11 @@ static void UI_NetworkOptions_Event(void *ptr, int event) {
 		UI_DisplayOptionsMenu();
 		break;
 
+	case ID_EFFECTS:
+		UI_PopMenu();
+		UI_EffectsOptionsMenu();
+		break;
+
 	case ID_SOUND:
 		UI_PopMenu();
 		UI_SoundOptionsMenu();
@@ -347,8 +362,8 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.graphics.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.graphics.generic.id = ID_GRAPHICS;
-	networkOptionsInfo.graphics.generic.x = XPOSITION - 144;
-	networkOptionsInfo.graphics.generic.y = 43;
+	networkOptionsInfo.graphics.generic.x = 120;
+	networkOptionsInfo.graphics.generic.y = 22;
 	networkOptionsInfo.graphics.width = 160;
 	networkOptionsInfo.graphics.height = 40;
 	networkOptionsInfo.graphics.focuspic = GRAPHICS1;
@@ -359,20 +374,32 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.display.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.display.generic.id = ID_DISPLAY;
-	networkOptionsInfo.display.generic.x = XPOSITION + 9;
-	networkOptionsInfo.display.generic.y = 36;
+	networkOptionsInfo.display.generic.x = 85;
+	networkOptionsInfo.display.generic.y = 66;
 	networkOptionsInfo.display.width = 120;
 	networkOptionsInfo.display.height = 40;
 	networkOptionsInfo.display.focuspic = DISPLAY1;
 	networkOptionsInfo.display.focuspicinstead = qtrue;
+
+	networkOptionsInfo.effects.generic.type = MTYPE_BITMAP;
+	networkOptionsInfo.effects.generic.name = EFFECTS0;
+	networkOptionsInfo.effects.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	networkOptionsInfo.effects.generic.callback = UI_NetworkOptions_Event;
+	networkOptionsInfo.effects.generic.id = ID_EFFECTS;
+	networkOptionsInfo.effects.generic.x = 212;
+	networkOptionsInfo.effects.generic.y = 58;
+	networkOptionsInfo.effects.width = 120;
+	networkOptionsInfo.effects.height = 40;
+	networkOptionsInfo.effects.focuspic = EFFECTS1;
+	networkOptionsInfo.effects.focuspicinstead = qtrue;
 
 	networkOptionsInfo.sound.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.sound.generic.name = SOUND0;
 	networkOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.sound.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.sound.generic.id = ID_SOUND;
-	networkOptionsInfo.sound.generic.x = XPOSITION - 124;
-	networkOptionsInfo.sound.generic.y = 85;
+	networkOptionsInfo.sound.generic.x = 106;
+	networkOptionsInfo.sound.generic.y = 108;
 	networkOptionsInfo.sound.width = 120;
 	networkOptionsInfo.sound.height = 40;
 	networkOptionsInfo.sound.focuspic = SOUND1;
@@ -383,8 +410,8 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
 	networkOptionsInfo.network.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.network.generic.id = ID_NETWORK;
-	networkOptionsInfo.network.generic.x = XPOSITION - 18;
-	networkOptionsInfo.network.generic.y = 88;
+	networkOptionsInfo.network.generic.x = 212;
+	networkOptionsInfo.network.generic.y = 100;
 	networkOptionsInfo.network.width = 160;
 	networkOptionsInfo.network.height = 40;
 	networkOptionsInfo.network.focuspic = NETWORK1;
@@ -536,6 +563,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.graphics);
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.display);
+	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.effects);
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.sound);
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.network);
 
@@ -567,6 +595,8 @@ void UI_NetworkOptions_Cache(void) {
 	trap_R_RegisterShaderNoMip(GRAPHICS1);
 	trap_R_RegisterShaderNoMip(DISPLAY0);
 	trap_R_RegisterShaderNoMip(DISPLAY1);
+	trap_R_RegisterShaderNoMip(EFFECTS0);
+	trap_R_RegisterShaderNoMip(EFFECTS1);
 	trap_R_RegisterShaderNoMip(SOUND0);
 	trap_R_RegisterShaderNoMip(SOUND1);
 	trap_R_RegisterShaderNoMip(NETWORK0);
