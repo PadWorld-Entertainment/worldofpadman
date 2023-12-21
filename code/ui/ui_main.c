@@ -235,7 +235,7 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&wop_AutoswitchSongByNextMap, "wop_AutoswitchSongByNextMap", "0", CVAR_ARCHIVE},
 								  {&wop_AutoBindUnusedKeys, "wop_AutoBindUnusedKeys", "1", CVAR_ARCHIVE},
 #ifdef USE_RENDERER_DLOPEN
-								  {&cl_renderer, "cl_renderer", "opengl1", CVAR_ARCHIVE}
+								  {&cl_renderer, "cl_renderer", "opengl2", CVAR_ARCHIVE}
 #endif
 								};
 

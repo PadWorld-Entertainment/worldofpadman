@@ -375,9 +375,9 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 	case 1:
 		trap_Cvar_Set("cl_renderer", "opengl2");
 		break;
-	case 2:
-		trap_Cvar_Set("cl_renderer", "vulkan");
-		break;
+//	case 2:
+//		trap_Cvar_Set("cl_renderer", "vulkan");
+//		break;
 	}
 #endif
 
@@ -581,9 +581,10 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 	}
 
 #ifdef USE_RENDERER_DLOPEN
-	if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "vulkan")) {
-		s_graphicsoptions.renderer.curvalue = 2;
-	} else if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2")) {
+//	if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "vulkan")) {
+//		s_graphicsoptions.renderer.curvalue = 2;
+//	} else 
+	if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2")) {
 		s_graphicsoptions.renderer.curvalue = 1;
 	} else {
 		s_graphicsoptions.renderer.curvalue = 0;
@@ -695,7 +696,7 @@ UI_GraphicsOptions_MenuInit
 */
 void UI_GraphicsOptions_MenuInit(void) {
 	static const char *templates_names[] = {"Can it run WoP?", "Maximum", "Quality", "Performance", "Minimum", "Custom", NULL};
-	static const char *renderer_names[] = {"OpenGL1", "OpenGL2", "Vulkan", NULL};
+	static const char *renderer_names[] = {"OpenGL1", "OpenGL2", NULL}; // "Vulkan", NULL};
 	static const char *colordepth_names[] = {"Desktop", "16 bit", "32 bit", NULL};
 	static const char *lighting_names[] = {"Low (Vertex)", "High (Lightmap)", NULL};
 	static const char *mdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
@@ -805,8 +806,8 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.renderer.generic.x = XPOSITION;
 	s_graphicsoptions.renderer.generic.y = y;
 	s_graphicsoptions.renderer.generic.toolTip =
-		"Select a desired renderer. Default is OpenGL1. OpenGL2 offers more features and "
-		"effects but can lead to a higher graphics card load. Vulkan is still experimental.";
+		"Select the desired renderer. Default is OpenGL2. NOTE: OpenGL1 offers fewer features "
+		"and effects, but can save system resources, which may be helpful on lower-end systems";
 #endif
 
 	y += (BIGCHAR_HEIGHT + 2);

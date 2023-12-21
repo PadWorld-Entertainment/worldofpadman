@@ -27,7 +27,7 @@
 	- Support for player model sounds depending of the selected skin; a complete sound set or individual sounds for a skin can be stored in a folder of the same name in parallel with the model's folder; the model's sounds serve as a fallback if no sounds are available for the skin
 	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones, and additionally logos for fire, earth, air; also added the old and replaced balloon hud icon as spray logo
 	- Support for screenshots in PNG image format, PNG is the new default
-	- Option to switch renderer from OpenGL1 to OpenGL2 or Vulkan to Graphics page of System menu
+	- Option to switch renderer from OpenGL1 to OpenGL2 to Graphics page of System menu
 	- Option to switch Lighting to Vertex or Lightmap to Graphics page of System menu
  	- Option to set Models Detail to Graphics page of System menu to set `r_lodbias [2|1|0|-2]` now in 4 steps, -2 will always render high quality models regardless of distance
 	- Option to set the Screen Size within the game window to Display page of System menu
@@ -87,6 +87,7 @@
 	- Network protocol version number to 72 to avoid issues due to incompatibilities with previous WoP versions
 	- Home path to `worldofpadman` for all operating systems to unify them
 	- Title of the game uniformly to `World of PADMAN` everywhere
+	- Set OpenGL2 renderer as default
 	- Menu aspect ratio from 4:3 to 16:9 (WoP widescreen support)
 	- Server configs to support new game types (FT, CTKD, 1LCTL)
 	- Location of assets where useful (folder and filing cleanup)
