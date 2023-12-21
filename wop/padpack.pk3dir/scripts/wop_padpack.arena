@@ -3,7 +3,7 @@
 {
 	map			"wop_padcastle"
 	longname	"ENTE's PadCastle"
-	type		"ffa team lps"
+	type		"ffa team lps ft ctkd"
 }
 
 {
@@ -15,7 +15,7 @@
 {
 	map			"wop_padgallery"
 	longname	"ENTE's PadGallery"
-	type		"ffa team lps"
+	type		"ffa team lps ft ctkd"
 }
 
 {
