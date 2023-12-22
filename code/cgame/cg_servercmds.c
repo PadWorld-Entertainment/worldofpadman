@@ -35,6 +35,7 @@ See also DeathmatchScoreboardMessage() and CG_DrawClientScore()
 */
 static void CG_ParseScores(void) {
 	int i, powerups;
+	const int numArgs = 16;
 
 	cg.numScores = atoi(CG_Argv(1));
 	if (cg.numScores > MAX_CLIENTS) {
@@ -48,34 +49,35 @@ static void CG_ParseScores(void) {
 
 	memset(cg.scores, 0, sizeof(cg.scores));
 	for (i = 0; i < cg.numScores; i++) {
-		//
-		cg.scores[i].client = atoi(CG_Argv(i * 16 + 4));
-		cg.scores[i].score = atoi(CG_Argv(i * 16 + 5));
-		cg.scores[i].ping = atoi(CG_Argv(i * 16 + 6));
-		cg.scores[i].time = atoi(CG_Argv(i * 16 + 7));
-		cg.scores[i].scoreFlags = atoi(CG_Argv(i * 16 + 8));
-		powerups = atoi(CG_Argv(i * 16 + 9));
-		cg.scores[i].accuracy = atoi(CG_Argv(i * 16 + 10));
-		cg.scores[i].excellentCount = atoi(CG_Argv(i * 16 + 11));
-		cg.scores[i].snackattackCount = atoi(CG_Argv(i * 16 + 12));
-		cg.scores[i].padheroCount = atoi(CG_Argv(i * 16 + 13));
-		cg.scores[i].padaceCount = atoi(CG_Argv(i * 16 + 14));
-		cg.scores[i].perfect = atoi(CG_Argv(i * 16 + 15));
-		cg.scores[i].captures = atoi(CG_Argv(i * 16 + 16));
-		cg.scores[i].spraygodCount = atoi(CG_Argv(i * 16 + 17));
-		cg.scores[i].spraykillerCount = atoi(CG_Argv(i * 16 + 18));
-		cg.scores[i].livesleft = atoi(CG_Argv(i * 16 + 19));
+		score_t *score = &cg.scores[i];
+		const int argIdx = i * numArgs + 4;
+		score->client = atoi(CG_Argv(argIdx + 0));
+		score->score = atoi(CG_Argv(argIdx + 1));
+		score->ping = atoi(CG_Argv(argIdx + 2));
+		score->time = atoi(CG_Argv(argIdx + 3));
+		score->scoreFlags = atoi(CG_Argv(argIdx + 4));
+		powerups = atoi(CG_Argv(argIdx + 5));
+		score->accuracy = atoi(CG_Argv(argIdx + 6));
+		score->excellentCount = atoi(CG_Argv(argIdx + 7));
+		score->snackattackCount = atoi(CG_Argv(argIdx + 8));
+		score->padheroCount = atoi(CG_Argv(argIdx + 9));
+		score->padaceCount = atoi(CG_Argv(argIdx + 10));
+		score->perfect = atoi(CG_Argv(argIdx + 11));
+		score->captures = atoi(CG_Argv(argIdx + 12));
+		score->spraygodCount = atoi(CG_Argv(argIdx + 13));
+		score->spraykillerCount = atoi(CG_Argv(argIdx + 14));
+		score->livesleft = atoi(CG_Argv(argIdx + 15));
 
-		if (cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS) {
-			cg.scores[i].client = 0;
+		if (score->client < 0 || score->client >= MAX_CLIENTS) {
+			score->client = 0;
 		}
-		cgs.clientinfo[cg.scores[i].client].score = cg.scores[i].score;
-		cgs.clientinfo[cg.scores[i].client].powerups = powerups;
+		cgs.clientinfo[score->client].score = score->score;
+		cgs.clientinfo[score->client].powerups = powerups;
 
-		cg.scores[i].team = cgs.clientinfo[cg.scores[i].client].team;
-		//		if(cgs.gametype<GT_TEAM && cg.scores[i].team==TEAM_FREE) cg.numFFAplayers++;
-		if (cg.scores[i].team >= TEAM_FREE && cg.scores[i].team <= TEAM_SPECTATOR)
-			cg.scoreTeamCount[cg.scores[i].team]++;
+		score->team = cgs.clientinfo[score->client].team;
+		//		if(cgs.gametype<GT_TEAM && score->team==TEAM_FREE) cg.numFFAplayers++;
+		if (score->team >= TEAM_FREE && score->team <= TEAM_SPECTATOR)
+			cg.scoreTeamCount[score->team]++;
 	}
 }
 
