@@ -57,6 +57,8 @@ endforeach()
 
 set(PADPACK_SHADERS
     wop_padpack.shader
+    wop_padpack-levelshots.shader
+    wop_padpack-skyboxes.shader
 )
 foreach (SHADER ${PADPACK_SHADERS})
     shader_validation(wop ${SHADER} 1)
