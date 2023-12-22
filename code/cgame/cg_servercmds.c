@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 =================
 CG_ParseScores
 
+See also DeathmatchScoreboardMessage() and CG_DrawClientScore()
 =================
 */
 static void CG_ParseScores(void) {

@@ -2945,13 +2945,13 @@ static void CG_DrawOneLollyCTL(int team) {
 		}
 		CG_DrawPic(CTL_STATX, CTL_STATY2, CTL_STATWH, CTL_STATWH, cgs.media.neutralflagShader[flagIndex]);
 	}
-	
+
 	// draw the background depending on tam status
 	if (team == TEAM_RED) {
 		CG_DrawPic(SCREEN_WIDTH - CTL_BG_WIDTH, SCREEN_HEIGHT - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_red);
 	} else {
 		CG_DrawPic(SCREEN_WIDTH - CTL_BG_WIDTH, SCREEN_HEIGHT - CTL_BG_HEIGHT, CTL_BG_WIDTH, CTL_BG_HEIGHT, cgs.media.hud_CTL_bg_blue);
-	}	
+	}
 }
 
 #define FADEOUTTIME 1500

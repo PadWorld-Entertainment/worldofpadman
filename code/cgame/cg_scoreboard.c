@@ -72,6 +72,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 =================
 CG_DrawClientScore
+
+See also CG_ParseScores()
 =================
 */
 static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, float fade, int lineHeight) {
@@ -111,7 +113,7 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	} else if (ci->ctkdIsKillerduck) {
 		CG_DrawDuckModel(iconx, icony, iconsize, iconsize);
 	// cartridge icon indicating player carries cartridges in syc
-	} else if (ci->numCartridges > 0 || (score->client == cg.snap->ps.clientNum && 
+	} else if (ci->numCartridges > 0 || (score->client == cg.snap->ps.clientNum &&
 			cg.snap->ps.ammo[WP_SPRAYPISTOL]))  {
 		CG_DrawCartModel(iconx, icony, iconsize, iconsize, ci->team);
 	// red lolly icon indicating player has the red lolly in ctl

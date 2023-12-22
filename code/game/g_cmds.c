@@ -30,6 +30,7 @@ extern vmCvar_t bot_developer;
 ==================
 DeathmatchScoreboardMessage
 
+See also CG_ParseScores()
 ==================
 */
 void DeathmatchScoreboardMessage(const gentity_t *ent) {
