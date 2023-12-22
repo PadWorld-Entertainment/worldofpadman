@@ -785,12 +785,12 @@ textures/pad_maps/notenter
 
 textures/pad_maps/jail2maschendrahtzaun
 {
-	qer_editorimage textures/pad_maps/jail2maschendrahtzaun
+	qer_editorimage textures/pad_jail/jail2_maschendrahtzaun
 	cull disable
-		surfaceparm alphashadow
-			surfaceparm latticesteps
+	surfaceparm alphashadow
+	surfaceparm latticesteps
 	{
-		map textures/pad_maps/jail2maschendrahtzaun
+		map textures/pad_jail/jail2_maschendrahtzaun
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
