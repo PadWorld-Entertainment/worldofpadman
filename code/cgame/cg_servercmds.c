@@ -34,8 +34,8 @@ See also DeathmatchScoreboardMessage() and CG_DrawClientScore()
 =================
 */
 static void CG_ParseScores(void) {
-	int i, powerups;
-	const int numArgs = 16;
+	int i, powerups, numCartridges;
+	const int numArgs = 17;
 
 	cg.numScores = atoi(CG_Argv(1));
 	if (cg.numScores > MAX_CLIENTS) {
@@ -67,12 +67,14 @@ static void CG_ParseScores(void) {
 		score->spraygodCount = atoi(CG_Argv(argIdx + 13));
 		score->spraykillerCount = atoi(CG_Argv(argIdx + 14));
 		score->livesleft = atoi(CG_Argv(argIdx + 15));
+		numCartridges = atoi(CG_Argv(argIdx + 16));
 
 		if (score->client < 0 || score->client >= MAX_CLIENTS) {
 			score->client = 0;
 		}
 		cgs.clientinfo[score->client].score = score->score;
 		cgs.clientinfo[score->client].powerups = powerups;
+		cgs.clientinfo[score->client].numCartridges = numCartridges;
 
 		score->team = cgs.clientinfo[score->client].team;
 		//		if(cgs.gametype<GT_TEAM && score->team==TEAM_FREE) cg.numFFAplayers++;

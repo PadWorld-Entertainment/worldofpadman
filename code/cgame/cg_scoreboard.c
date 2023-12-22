@@ -113,8 +113,7 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	} else if (ci->ctkdIsKillerduck) {
 		CG_DrawDuckModel(iconx, icony, iconsize, iconsize);
 	// cartridge icon indicating player carries cartridges in syc
-	} else if (ci->numCartridges > 0 || (score->client == cg.snap->ps.clientNum &&
-			cg.snap->ps.ammo[WP_SPRAYPISTOL]))  {
+	} else if (ci->numCartridges > 0) {
 		CG_DrawCartModel(iconx, icony, iconsize, iconsize, ci->team);
 	// red lolly icon indicating player has the red lolly in ctl
 	} else if (ci->powerups & (1 << PW_REDFLAG)) {
