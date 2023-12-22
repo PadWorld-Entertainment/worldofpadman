@@ -110,13 +110,17 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	// killerduck icon indicating player is killerduck carrier in ctkd
 	} else if (ci->ctkdIsKillerduck) {
 		CG_DrawDuckModel(iconx, icony, iconsize, iconsize);
+	// cartridge icon indicating player carries cartridges in syc
+	} else if (ci->numCartridges > 0 || (score->client == cg.snap->ps.clientNum && 
+			cg.snap->ps.ammo[WP_SPRAYPISTOL]))  {
+		CG_DrawCartModel(iconx, icony, iconsize, iconsize, ci->team);
 	// red lolly icon indicating player has the red lolly in ctl
 	} else if (ci->powerups & (1 << PW_REDFLAG)) {
 		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_RED);
-	// red lolly icon indicating player has the blue lolly in ctl
+	// blue lolly icon indicating player has the blue lolly in ctl
 	} else if (ci->powerups & (1 << PW_BLUEFLAG)) {
 		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_BLUE);
-	// red lolly icon indicating player has the neutral lolly in 1lctl
+	// neutral lolly icon indicating player has the neutral lolly in 1lctl
 	} else if (ci->powerups & (1 << PW_NEUTRALFLAG)) {
 		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_FREE);
 	// draw the handicap or bot skill marker unless player has lolly, killerduck, or is frozen)

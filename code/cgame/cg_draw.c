@@ -188,6 +188,48 @@ void CG_DrawFlagModel(float x, float y, float w, float h, int team) {
 
 /*
 ================
+CG_DrawCartModel
+Used for both the status bar and the scoreboard
+================
+*/
+void CG_DrawCartModel(float x, float y, float w, float h, int team) {
+	qhandle_t handle = cg_items[cgs.media.neutralCartridgeEntNum].models[0];
+	qhandle_t icon = cg_items[cgs.media.neutralCartridgeEntNum].icon;
+	float len;
+	vec3_t origin, angles;
+	vec3_t mins, maxs;
+
+	if (cg_draw3dIcons.integer) {
+		VectorClear(angles);
+
+		// offset the origin y and z to center the model
+		trap_R_ModelBounds(handle, mins, maxs);
+		origin[2] = -0.4f * (mins[2] + maxs[2]);
+		origin[1] = 0.5f * (mins[1] + maxs[1]);
+
+		// calculate distance so the model nearly fills the box
+		// assume model is taller than wide
+		len = 0.5f * (maxs[2] - mins[2]);
+		origin[0] = len / 0.268f; // len / tan( fov/2 )
+		angles[YAW] = 100.0f * (float)cg.time / 2000.0f;
+		if (team == TEAM_BLUE) {
+			handle = cg_items[cgs.media.blueCartridgeEntNum].models[0];
+		} else if (team == TEAM_RED) {
+			handle = cg_items[cgs.media.redCartridgeEntNum].models[0];
+		}
+		CG_Draw3DModel(x, y, w, h, handle, 0, origin, angles, 0.8f, NULL);
+	} else {
+		if (team == TEAM_BLUE) {
+			icon = cg_items[cgs.media.blueCartridgeEntNum].icon;
+		} else if (team == TEAM_RED) {
+			icon = cg_items[cgs.media.redCartridgeEntNum].icon;
+		}
+		CG_DrawPic(x, y, w, h, icon);
+	}
+}
+
+/*
+================
 CG_DrawDuckModel
 Used for both the status bar and the scoreboard
 ================
@@ -2745,27 +2787,7 @@ static void CG_DrawSprayYourColorCartridges(int team, int hudnum) {
 
 	// draw the cartridge model only if we carry at least one
 	if (cartCount > 0) {
-		vec3_t tmporigin, tmpangles;
-		qhandle_t cartModel = cg_items[cgs.media.neutralCartridgeEntNum].models[0];
-		qhandle_t cartIcon = cg_items[cgs.media.neutralCartridgeEntNum].icon;
-		if (cg_draw3dIcons.integer) {
-			tmpangles[0] = tmpangles[2] = tmporigin[1] = tmporigin[2] = 0.0f;
-			tmporigin[0] = 60;
-			tmpangles[1] = 100.0f * (float)cg.time / 2000.0f;
-			if (team == TEAM_BLUE) {
-				cartModel = cg_items[cgs.media.blueCartridgeEntNum].models[0];
-			} else if (team == TEAM_RED) {
-				cartModel = cg_items[cgs.media.redCartridgeEntNum].models[0];
-			}
-			CG_Draw3DModel(x, y + 4, w, h, cartModel, 0, tmporigin, tmpangles, 1.0f, NULL);
-		} else {
-			if (team == TEAM_BLUE) {
-				cartIcon = cg_items[cgs.media.blueCartridgeEntNum].icon;
-			} else if (team == TEAM_RED) {
-				cartIcon = cg_items[cgs.media.redCartridgeEntNum].icon;
-			}
-			CG_DrawPic(x, y, w, h, cartIcon);
-		}
+		CG_DrawCartModel(x, y, w, h, team);
 	}
 
 	x = 548;
