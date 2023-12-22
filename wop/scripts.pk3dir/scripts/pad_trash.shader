@@ -385,7 +385,7 @@ textures/pad_trash/kb_maschendrahtzaun
 	nopicmip
 	{
 		map textures/pad_jail/jail2_maschendrahtzaun
-		tcmod scale 2 2
+		tcmod scale 3 3
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128

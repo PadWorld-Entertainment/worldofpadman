@@ -791,11 +791,11 @@ textures/pad_maps/jail2maschendrahtzaun
 	surfaceparm latticesteps
 	{
 		map textures/pad_jail/jail2_maschendrahtzaun
+		tcmod scale 1.5 1.5
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
 		rgbGen identity
-
 	}
 	{
 		map $lightmap

@@ -3179,17 +3179,17 @@ textures/pad_jail/pad_jail_maschendrahtzaun
 {
 	qer_editorimage textures/pad_jail/jail2_maschendrahtzaun
 	cull disable
-    	surfaceparm alphashadow
-        surfaceparm latticesteps
-        surfaceparm nomarks
+    surfaceparm alphashadow
+    surfaceparm latticesteps
+    surfaceparm nomarks
 	surfaceparm trans
 	{
 		map textures/pad_jail/jail2_maschendrahtzaun
+		tcmod scale 2 2
 		blendFunc GL_ONE GL_ZERO
 		alphaFunc GE128
 		depthWrite
 		rgbGen identity
-
 	}
 	{
 		map $lightmap
