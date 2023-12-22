@@ -1158,7 +1158,7 @@ static void R_Register(void) {
 	r_forceSunLightScale = ri.Cvar_Get("r_forceSunLightScale", "1.0", CVAR_CHEAT);
 	r_forceSunAmbientScale = ri.Cvar_Get("r_forceSunAmbientScale", "0.5", CVAR_CHEAT);
 	r_drawSunRays = ri.Cvar_Get("r_drawSunRays", "0", CVAR_ARCHIVE | CVAR_LATCH);
-	r_sunlightMode = ri.Cvar_Get("r_sunlightMode", "1", CVAR_ARCHIVE | CVAR_LATCH);
+	r_sunlightMode = ri.Cvar_Get("r_sunlightMode", "2", CVAR_ARCHIVE | CVAR_LATCH);
 
 	r_sunShadows = ri.Cvar_Get("r_sunShadows", "1", CVAR_ARCHIVE | CVAR_LATCH);
 	r_shadowFilter = ri.Cvar_Get("r_shadowFilter", "1", CVAR_ARCHIVE | CVAR_LATCH);

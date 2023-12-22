@@ -551,8 +551,8 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.sunlightMode.generic.y = y;
 	effectsOptionsInfo.sunlightMode.generic.toolTip =
 		"Select the method used to add sunlight to the scene. Off for none, "
-		"dynamic (default) to multiply lit areas by light scale, and shadowed "
-		"areas by ambient scale, or hybrid to add light respecting the baked "
+		"dynamic to multiply lit areas by light scale, and shadowed areas by "
+		"ambient scale, or hybrid (default) to add light respecting the baked "
 		"lightmap.";
 
 	y += (BIGCHAR_HEIGHT + 2);
