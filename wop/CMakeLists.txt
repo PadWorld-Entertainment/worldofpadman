@@ -56,8 +56,6 @@ foreach (SHADER ${SHADERS})
 endforeach()
 
 set(PADPACK_SHADERS
-    pad_xeffect.shader
-    pad_xmaps.shader
     wop_padpack.shader
 )
 foreach (SHADER ${PADPACK_SHADERS})
