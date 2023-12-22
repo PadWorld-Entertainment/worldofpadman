@@ -217,7 +217,7 @@ void CG_DrawCartModel(float x, float y, float w, float h, int team) {
 		} else if (team == TEAM_RED) {
 			handle = cg_items[cgs.media.redCartridgeEntNum].models[0];
 		}
-		CG_Draw3DModel(x, y, w, h, handle, 0, origin, angles, 0.8f, NULL);
+		CG_Draw3DModel(x, y, w, h, handle, 0, origin, angles, 0.75f, NULL);
 	} else {
 		if (team == TEAM_BLUE) {
 			icon = cg_items[cgs.media.blueCartridgeEntNum].icon;
