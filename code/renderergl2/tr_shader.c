@@ -1584,12 +1584,17 @@ static qboolean ParseShader(const char **text) {
 				tr.sunShadowScale = atof(token);
 
 				// parse twice, since older shaders may include mapLightScale before sunShadowScale
-				token = COM_ParseExt(text, qfalse);
-				if (token[0])
-					tr.sunShadowScale = atof(token);
+				if (token[0]) {
+					token = COM_ParseExt(text, qfalse);
+					if (token[0]) {
+						tr.sunShadowScale = atof(token);
+					}
+				}
 			}
 
-			SkipRestOfLine(text);
+			if (token[0]) {
+				SkipRestOfLine(text);
+			}
 			continue;
 		}
 		// tonemap parms
@@ -2228,7 +2233,8 @@ static int CollapseStagesToGLSL(void) {
 		numStages++;
 	}
 
-	// convert any remaining lightmap stages with blendfunc filter to a lighting pass with a white texture
+	// convert any remaining lightmap stages with no blending or blendfunc filter
+	// to a lighting pass with a white texture
 	// only do this with r_sunlightMode non-zero, as it's only for correct shadows.
 	if (r_sunlightMode->integer && shader.numDeforms == 0) {
 		for (i = 0; i < MAX_SHADER_STAGES; i++) {
@@ -2246,7 +2252,8 @@ static int CollapseStagesToGLSL(void) {
 
 			blendBits = pStage->stateBits & (GLS_DSTBLEND_BITS | GLS_SRCBLEND_BITS);
 
-			if (blendBits != (GLS_DSTBLEND_SRC_COLOR | GLS_SRCBLEND_ZERO) &&
+			if (blendBits != 0 &&
+				blendBits != (GLS_DSTBLEND_SRC_COLOR | GLS_SRCBLEND_ZERO) &&
 				blendBits != (GLS_DSTBLEND_ZERO | GLS_SRCBLEND_DST_COLOR)) {
 				continue;
 			}
