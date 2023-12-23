@@ -10,7 +10,7 @@ textures/pad_shop/nottingham
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/pad_shop/brown
-	q3gl2_sun 0.266383 0.274632 0.358662 100 225 50
+	q3gl2_sun 0.266383 0.274632 0.358662 100 225 50 0.5
 	q3map_surfacelight 250
 
 		skyparms env/nottingham1024 - -
@@ -26,7 +26,7 @@ textures/pad_petesky/night-life
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	q3map_lightimage textures/pad_petesky/white02
-	q3gl2_sun 0.47451 0.576471 1.000000 60 350 45
+	q3gl2_sun 0.47451 0.576471 1.000000 60 350 45 0.5
 	q3map_surfacelight 200
 
 		skyparms env/pc-night-life1024 - -

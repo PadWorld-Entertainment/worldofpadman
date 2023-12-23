@@ -11,7 +11,6 @@ textures/pad_trash/trash_skybox_night
     surfaceparm nolightmap
     surfaceparm sky
     q3map_sun 0.47451 0.576471 1 55 210 60
-    q3map_surfacelight 0
     skyParms env/pc-friday-13th-512 128 -
 }
 
