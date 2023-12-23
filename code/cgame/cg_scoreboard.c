@@ -124,7 +124,8 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	// neutral lolly icon indicating player has the neutral lolly in 1lctl
 	} else if (ci->powerups & (1 << PW_NEUTRALFLAG)) {
 		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_FREE);
-	// draw the handicap or bot skill marker unless player has lolly, killerduck, or is frozen)
+	// draw the handicap or bot skill marker unless player has
+	// lolly, cartridge, killer duck, or is frozen)
 	} else {
 		if (ci->botSkill > 0 && ci->botSkill <= 5) {
 			CG_DrawPic(iconx, icony, iconsize, iconsize, cgs.media.botSkillShaders[ci->botSkill - 1]);
@@ -624,6 +625,11 @@ qboolean CG_DrawOldScoreboard(void) {
 	}
 
 	CG_DrawMedals(64.0f, 313.0f, score);
+
+	// draw accuracy rate
+	CG_DrawPic(342.0f, 313.0f, 96.0f, 24.0f, cgs.media.scoreboardAccuracy);
+	Com_sprintf(buf, sizeof(buf), "%i%%", score->accuracy);
+	CG_DrawStringExt(440, 316, buf, colorWhite, qfalse, qtrue, BIGCHAR_WIDTH / 2 , BIGCHAR_HEIGHT, 0);
 
 	// load any models that have been deferred
 	if (++cg.deferredPlayerLoading > 10) {

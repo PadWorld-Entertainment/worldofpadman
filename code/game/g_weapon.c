@@ -500,8 +500,10 @@ void G_FireWeapon(gentity_t *ent) {
 		s_quadFactor = 1;
 	}
 
-	// track shots taken for accuracy tracking.  Grapple is not a weapon and gauntet is just not tracked
-	if (ent->s.weapon != WP_GRAPPLING_HOOK && ent->s.weapon != WP_PUNCHY) {
+	// track shots taken for accuracy tracking.
+	// Grapple is not a weapon. Punchy and Spraypistol is just not tracked
+	if (ent->s.weapon != WP_GRAPPLING_HOOK && ent->s.weapon != WP_PUNCHY
+		&& ent->s.weapon != WP_SPRAYPISTOL) {
 		ent->client->accuracy_shots++;
 	}
 
