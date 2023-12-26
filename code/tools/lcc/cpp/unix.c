@@ -63,6 +63,9 @@ void setup(int argc, char **argv) {
 		fp = (char *)newstring((uchar *)argv[optind], strlen(argv[optind]), 0);
 		if ((fd = open(fp, 0)) <= 0)
 			error(FATAL, "Can't open input file %s", fp);
+#ifdef WIN32
+		_setmode(fd, _O_BINARY);
+#endif
 	}
 	if (optind + 1 < argc) {
 		int fdo;
@@ -73,6 +76,9 @@ void setup(int argc, char **argv) {
 #endif
 		if (fdo < 0)
 			error(FATAL, "Can't open output file %s", argv[optind + 1]);
+#ifdef WIN32
+		_setmode(fdo, _O_BINARY);
+#endif
 		dup2(fdo, 1);
 	}
 	if (Mflag)
