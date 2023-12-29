@@ -125,7 +125,6 @@ static void Weapon_PumperFire(gentity_t *ent) {
 	gentity_t *tent;
 	gentity_t *traceEnt;
 	int damage;
-	int hits;
 	int passent;
 	vec3_t minPumper = {-4.0f, -4.0f, -4.0f};
 	vec3_t maxPumper = {4.0f, 4.0f, 4.0f};
@@ -135,7 +134,6 @@ static void Weapon_PumperFire(gentity_t *ent) {
 	VectorMA(muzzle, RANGE_PUMPER, forward, end);
 
 	// trace only against the solids, so the railgun will go through people
-	hits = 0;
 	traceEnt = NULL;
 	passent = ent->s.number;
 	trap_Trace(&trace, muzzle, minPumper, maxPumper, end, passent, MASK_SHOT);
@@ -145,7 +143,7 @@ static void Weapon_PumperFire(gentity_t *ent) {
 		traceEnt = &g_entities[trace.entityNum];
 		if (traceEnt->takedamage) {
 			if (LogAccuracyHit(traceEnt, ent)) {
-				hits++;
+				ent->client->accuracy_hits++;
 			}
 			damage *= 1.0f - (trace.fraction * 0.5f);
 			G_Damage(traceEnt, ent, ent, forward, trace.endpos, damage, 0, MOD_PUMPER);
