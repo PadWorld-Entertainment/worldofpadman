@@ -1,6 +1,34 @@
 // World of PADMAN skyboxes shader
 
 // =================
+// PadGarden skybox
+// =================
+
+textures/pad_garden/fort-pad
+{
+    qer_editorimage env/fort-pad512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_ffffe5ff
+    q3map_sun 1.000000 0.913939 0.701350 390 220 40
+    q3map_surfacelight 250
+    skyparms env/fort-pad512 - -
+}
+
+textures/pad_garden/polter_geist
+{
+    qer_editorimage env/pf-garden512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_1c1ac7ff
+    q3map_sun 0.404654 0.474220 1.000000 330 220 50
+    q3map_surfacelight 160
+    skyparms env/pf-garden512 - -
+}
+
+// =================
 // TrashMap skybox
 // =================
 
