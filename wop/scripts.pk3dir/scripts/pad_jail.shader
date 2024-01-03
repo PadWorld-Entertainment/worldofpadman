@@ -1873,49 +1873,6 @@ textures/pad_jail/pad_jail_sprayroom2_telefield
 
 }
 
-// ********************************************************
-// *
-// *   sky -> 1. by ydnar, 2. by MopAn
-// *
-// ********************************************************
-
-textures/pad_jail/pad_jail_sky4
-{
-	qer_editorimage env/jail_sprayroom3_ft
-	q3map_globaltexture
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	surfaceparm sky
-	q3map_sunExt 0.68 0.82 0.86 40 -300 27.4 2 1
-	q3map_lightRGB 0.7 0.8 1.0
-	q3map_lightmapFilterRadius 0 64
-	q3map_skyLight 38 3
-
-	skyparms env/jail_sprayroom3 - -
-}
-
-// ***********************************************************
-// *
-// *  MopAn's Jail: environment, skybox -> by Mighty Pete
-// *
-// ***********************************************************
-textures/pad_jail/pad_jail_envcolor
-{
-	qer_editorimage env/padcity-hilton512_ft
-	q3map_lightimage textures/colors/hex_d1a76bff
-	q3map_globaltexture
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	surfaceparm sky
-	q3map_sunExt 0.68 0.82 0.86 40 -300 27.4 2 1
-	q3map_lightRGB 0.7 0.8 1.0
-	q3map_lightmapFilterRadius 0 64
-	q3map_skyLight 38 3
-
-	skyparms env/padcity-hilton512 - -
-}
-
-
 // ======================================================================
 // collected from terrain-tutorial by sock at simland
 // DotProduct2 Terrain blending
