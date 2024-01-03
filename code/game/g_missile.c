@@ -708,8 +708,12 @@ void G_RunExplosion(gentity_t *ent) {
 	if (level.time >= ent->pain_debounce_time) {
 		// do damage
 		ent->pain_debounce_time += 100;
-		G_RadiusDamage(ent->r.currentOrigin, ent->parent, 400, frac * ent->splashRadius, NULL,
-					   ent->splashMethodOfDeath);
+		if (G_RadiusDamage(ent->r.currentOrigin, ent->parent, 400, frac * ent->splashRadius, NULL,
+					   ent->splashMethodOfDeath)) {
+			if (ent->parent->client) {
+				G_LogHit(ent->parent);
+			}
+		}
 	}
 }
 
