@@ -624,6 +624,9 @@ void G_RunMissile(gentity_t *ent) {
 			if (other->takedamage && ent->damage) {
 				vec3_t delta;
 				BG_EvaluateTrajectoryDelta(&ent->s.pos, level.time, delta);
+				if (LogAccuracyHit(other, attacker)) {
+					G_LogHit(attacker);
+				}
 				G_Damage(other, ent, attacker, delta, tr.endpos, ent->damage, 0, ent->methodOfDeath);
 
 				if (other->client) {
