@@ -57,6 +57,34 @@ textures/pad_petesky/urban-terror
 }
 
 // =================
+// PadLibrary skybox
+// =================
+
+textures/pad_petesky/sep
+{
+    qer_editorimage env/sep512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_ff6600ff
+    q3map_sun 0.266383 0.274632 0.358662 94 48 75
+    q3map_surfacelight 280
+    skyparms env/sep512 - -
+}
+
+textures/pad_bookroom/frost-bite
+{
+    qer_editorimage env/frost-bite512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_5b88c8ff
+    q3map_sun 0.754360 0.959199 1.000000 300 50 55
+    q3map_surfacelight 300
+    skyparms env/frost-bite512 - -
+}
+
+// =================
 // TrashMap skybox
 // =================
 

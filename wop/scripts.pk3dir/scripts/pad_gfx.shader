@@ -2537,18 +2537,6 @@ textures/pad_petesky/morning_alley
 	skyparms env/morning_alley512 - -
 }
 
-textures/pad_petesky/sep
-{
-	qer_editorimage env/sep512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_ff6600ff
-	q3map_sun 0.266383 0.274632 0.358662 94 48 75
-	q3map_surfacelight 280
-
-	skyparms env/sep512 - -
-}
-
 textures/pad_petesky/morning-madness
 {
 	qer_editorimage env/pc-morning-madness512_ft

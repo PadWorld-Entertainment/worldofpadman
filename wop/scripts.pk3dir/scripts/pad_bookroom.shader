@@ -1440,14 +1440,3 @@ textures/pad_bookroom/gelan001b
 		rgbGen identity
 	}
 }
-
-textures/pad_bookroom/frost-bite
-{
-	qer_editorimage env/frost-bite512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_5b88c8ff
-	q3map_sun 0.754360 0.959199 1.000000 300 50 55
-	q3map_surfacelight 300
-	skyparms env/frost-bite512 - -
-}
