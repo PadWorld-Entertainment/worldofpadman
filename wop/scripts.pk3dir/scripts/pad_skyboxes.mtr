@@ -1,6 +1,22 @@
 // World of PADMAN OpenGL2 skyboxes shader
 
 // =================
+// Huette skybox
+// =================
+
+textures/pad_harm/padcity
+{
+    qer_editorimage env/padcity512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_ffffffff
+    q3gl2_sun 0.266383 0.274632 0.358662 160 290 25 0.5
+    q3map_surfacelight 100
+    skyparms env/padcity512 - -
+}
+
+// =================
 // Jail skybox
 // =================
 
