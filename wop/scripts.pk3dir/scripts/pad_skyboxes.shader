@@ -1,6 +1,22 @@
 // World of PADMAN skyboxes shader
 
 // =================
+// PadCloister skybox
+// =================
+
+textures/pad_fountain/utopiaatoll
+{
+    qer_editorimage env/utopiaatoll512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_dbac7fff
+    q3map_sun 1.000000 0.828885 0.672267 220 100 90
+    q3map_surfacelight 300
+    skyparms env/utopiaatoll512 - -
+}
+
+// =================
 // PadGarden skybox
 // =================
 
