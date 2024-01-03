@@ -143,7 +143,7 @@ static void Weapon_PumperFire(gentity_t *ent) {
 		traceEnt = &g_entities[trace.entityNum];
 		if (traceEnt->takedamage) {
 			if (LogAccuracyHit(traceEnt, ent)) {
-				ent->client->accuracy_hits++;
+				G_LogHit(ent);
 			}
 			damage *= 1.0f - (trace.fraction * 0.5f);
 			G_Damage(traceEnt, ent, ent, forward, trace.endpos, damage, 0, MOD_PUMPER);
