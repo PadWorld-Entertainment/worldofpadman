@@ -109,9 +109,8 @@ G_MissileImpact
 ================
 */
 static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
-	gentity_t *other;
 	qboolean hitClient = qfalse;
-	other = &g_entities[trace->entityNum];
+	gentity_t *other = &g_entities[trace->entityNum];
 
 	// check for bounce
 	if (!other->takedamage && (ent->s.eFlags & (EF_BOUNCE | EF_BOUNCE_HALF))) {
@@ -947,6 +946,7 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
 	bolt->s.weapon = WP_KILLERDUCKS;
+	// TODO: this looks wrong - it should be self->s.number, as bolt - g_entities is the index of the killerduck missile.
 	bolt->r.ownerNum = bolt - g_entities; // self->s.number;
 	bolt->parent = self;
 	bolt->r.mins[0] = -10.0f;
@@ -964,7 +964,7 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 		bolt->takedamage = qfalse;
 	}
 	bolt->die = duck_die;
-	// dmg-vars vielleicht noch missbrauchen ;)
+	// dmg-vars maybe misuse them ;)
 	bolt->damage = DAMAGE_KILLERDUCKS_IMPACT;
 	bolt->splashDamage = SPLASHDMG_KILLERDUCKS;
 	bolt->splashRadius = SPLASHRAD_KILLERDUCKS;
@@ -977,7 +977,7 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.pos.trTime = level.time; // - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
 									 //	VectorCopy( start, bolt->s.pos.trBase );
 
-	// missbrauch ;)
+	// misuse ;)
 	tr.endpos[0] = start[0] + dir[0] * 32.0f;
 	tr.endpos[1] = start[1] + dir[1] * 32.0f;
 	tr.endpos[2] = start[2] + dir[2] * 32.0f;
