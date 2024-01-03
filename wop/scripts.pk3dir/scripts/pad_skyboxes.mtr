@@ -101,6 +101,40 @@ textures/pad_bookroom/frost-bite
 }
 
 // =================
+// PadShop skybox
+// =================
+
+textures/pad_shop/padnight
+{
+    qer_editorimage env/mercury512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_cc0000ff
+    q3gl2_sun 0.854902 0.490196 0.152941 200 0 90 0.5
+    q3map_surfacelight 100
+    skyparms env/mercury512 - -
+    {
+        map textures/pad_shop/skystuff
+        blendfunc GL_ONE GL_ONE
+        tcMod scroll 0.07 0.09
+        tcMod scale 3 2
+    }
+}
+
+textures/pad_shop/pc-ground-zero512
+{
+    qer_editorimage env/pc-ground-zero512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_2f8fcfff
+//    q3map_sun 0.266383 0.274632 0.358662 20 50 55
+    q3map_surfacelight 300
+    skyparms env/pc-ground-zero512 - -
+}
+
+// =================
 // TrashMap skybox
 // =================
 
