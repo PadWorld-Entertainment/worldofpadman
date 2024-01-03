@@ -95,9 +95,8 @@ static void G_ExplodeMissile(gentity_t *ent) {
 	// splash damage
 	if (ent->splashDamage) {
 		if (G_RadiusDamage(ent->r.currentOrigin, ent->parent, ent->splashDamage, ent->splashRadius, ent,
-						   ent->splashMethodOfDeath) &&
-			ent->parent && ent->parent->client) {
-			ent->parent->client->accuracy_hits++;
+						   ent->splashMethodOfDeath) && ent->parent && ent->parent->client) {
+			G_LogHit(ent->parent);
 		}
 	}
 
@@ -110,9 +109,8 @@ G_MissileImpact
 ================
 */
 static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
-	gentity_t *other;
 	qboolean hitClient = qfalse;
-	other = &g_entities[trace->entityNum];
+	gentity_t *other = &g_entities[trace->entityNum];
 
 	// check for bounce
 	if (!other->takedamage && (ent->s.eFlags & (EF_BOUNCE | EF_BOUNCE_HALF))) {
@@ -127,7 +125,7 @@ static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
 			vec3_t velocity;
 
 			if (LogAccuracyHit(other, &g_entities[ent->r.ownerNum])) {
-				g_entities[ent->r.ownerNum].client->accuracy_hits++;
+				G_LogHit(&g_entities[ent->r.ownerNum]);
 				hitClient = qtrue;
 			}
 			BG_EvaluateTrajectoryDelta(&ent->s.pos, level.time, velocity);
@@ -229,7 +227,7 @@ static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
 		if (G_RadiusDamage(trace->endpos, ent->parent, ent->splashDamage, ent->splashRadius, other,
 						   ent->splashMethodOfDeath)) {
 			if (!hitClient) {
-				g_entities[ent->r.ownerNum].client->accuracy_hits++;
+				G_LogHit(&g_entities[ent->r.ownerNum]);
 			}
 		}
 	}
@@ -626,6 +624,9 @@ void G_RunMissile(gentity_t *ent) {
 			if (other->takedamage && ent->damage) {
 				vec3_t delta;
 				BG_EvaluateTrajectoryDelta(&ent->s.pos, level.time, delta);
+				if (LogAccuracyHit(other, attacker)) {
+					G_LogHit(attacker);
+				}
 				G_Damage(other, ent, attacker, delta, tr.endpos, ent->damage, 0, ent->methodOfDeath);
 
 				if (other->client) {
@@ -707,8 +708,12 @@ void G_RunExplosion(gentity_t *ent) {
 	if (level.time >= ent->pain_debounce_time) {
 		// do damage
 		ent->pain_debounce_time += 100;
-		G_RadiusDamage(ent->r.currentOrigin, ent->parent, 400, frac * ent->splashRadius, NULL,
-					   ent->splashMethodOfDeath);
+		if (G_RadiusDamage(ent->r.currentOrigin, ent->parent, 400, frac * ent->splashRadius, NULL,
+					   ent->splashMethodOfDeath)) {
+			if (ent->parent->client) {
+				G_LogHit(ent->parent);
+			}
+		}
 	}
 }
 
@@ -948,6 +953,7 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
 	bolt->s.weapon = WP_KILLERDUCKS;
+	// TODO: this looks wrong - it should be self->s.number, as bolt - g_entities is the index of the killerduck missile.
 	bolt->r.ownerNum = bolt - g_entities; // self->s.number;
 	bolt->parent = self;
 	bolt->r.mins[0] = -10.0f;
@@ -965,7 +971,7 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 		bolt->takedamage = qfalse;
 	}
 	bolt->die = duck_die;
-	// dmg-vars vielleicht noch missbrauchen ;)
+	// dmg-vars maybe misuse them ;)
 	bolt->damage = DAMAGE_KILLERDUCKS_IMPACT;
 	bolt->splashDamage = SPLASHDMG_KILLERDUCKS;
 	bolt->splashRadius = SPLASHRAD_KILLERDUCKS;
@@ -978,7 +984,7 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.pos.trTime = level.time; // - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
 									 //	VectorCopy( start, bolt->s.pos.trBase );
 
-	// missbrauch ;)
+	// misuse ;)
 	tr.endpos[0] = start[0] + dir[0] * 32.0f;
 	tr.endpos[1] = start[1] + dir[1] * 32.0f;
 	tr.endpos[2] = start[2] + dir[2] * 32.0f;

@@ -697,6 +697,7 @@ void G_Respawn(gentity_t *ent);
 void BeginIntermission(void);
 void InitBodyQue(void);
 void ClientSpawn(gentity_t *ent);
+void G_LogHit(gentity_t *attacker);
 void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod);
 void AddScore(gentity_t *ent, const vec3_t origin, int score, const char *reason);
 void CalculateRanks(void);

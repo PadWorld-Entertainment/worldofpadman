@@ -910,6 +910,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.scoreboardScore = trap_R_RegisterShaderNoMip("menu/headers/score");
 	cgs.media.scoreboardTime = trap_R_RegisterShaderNoMip("menu/headers/time");
 	cgs.media.scoreboardMedals = trap_R_RegisterShaderNoMip("menu/headers/medals");
+	cgs.media.scoreboardAccuracy = trap_R_RegisterShaderNoMip("menu/headers/accuracy");
 	cgs.media.voiceIcon = trap_R_RegisterShaderNoMip("icons/hint_voicechat");
 
 	if (cgs.gametype == GT_FREEZETAG) {

@@ -1076,6 +1076,13 @@ void ClientBegin(int clientNum) {
 	CalculateRanks();
 }
 
+void G_LogHit(gentity_t *attacker) {
+	gclient_t *client = attacker->client;
+
+	Com_DPrintf("hit for %s\n", client->pers.netname);
+	client->accuracy_hits++;
+}
+
 /*
 ===========
 ClientSpawn

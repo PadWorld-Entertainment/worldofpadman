@@ -952,6 +952,7 @@ typedef struct {
 	qhandle_t scoreboardScore;
 	qhandle_t scoreboardTime;
 	qhandle_t scoreboardMedals;
+	qhandle_t scoreboardAccuracy;
 
 	qhandle_t voiceIcon;
 
