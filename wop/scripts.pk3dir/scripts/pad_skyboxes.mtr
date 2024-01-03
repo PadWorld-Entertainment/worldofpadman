@@ -44,6 +44,18 @@ textures/pad_kitchen/urban-chaos
     skyparms env/urban-chaos512 - -
 }
 
+textures/pad_petesky/urban-terror
+{
+    qer_editorimage env/urban-terror512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_ff9860ff
+    q3gl2_sun 1.000000 0.718471 0.616587 160 266 19 0.5
+    q3map_surfacelight 200
+    skyparms env/urban-terror512 - -
+}
+
 // =================
 // TrashMap skybox
 // =================

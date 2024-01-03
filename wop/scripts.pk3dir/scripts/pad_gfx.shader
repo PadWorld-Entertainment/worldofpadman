@@ -2501,18 +2501,6 @@ textures/pad_petesky/utopiaatoll
 	skyparms env/utopiaatoll512 - -
 }
 
-textures/pad_petesky/urban-terror
-{
-	qer_editorimage env/urban-terror512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_ff9860ff
-	q3map_sun 1.000000 0.718471 0.616587 200 60 225
-	q3map_surfacelight 200
-
-	skyparms env/urban-terror512 - -
-}
-
 textures/pad_petesky/poltergeist
 {
 	qer_editorimage env/pf-poltergeist512_ft
