@@ -2,276 +2,276 @@
 
 {
 	map      "wop_padgarden"
-	longname "PadGarden"
+	longname "ENTE's PadGarden"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_padgarden_night"
-	longname "PadGarden Night"
+	longname "ENTE's PadGarden Night"
 	type     "ffa lps ctkd"
 }
 
 {
 	map      "wop_padgardenBB"
-	longname "PadGarden"
+	longname "ENTE's PadGarden"
 	type     "bb"
 }
 
 {
 	map      "wop_padkitchen"
-	longname "PadKitchen"
+	longname "ENTE's PadKitchen"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_padkitchenLPS"
-	longname "PadKitchen"
+	longname "ENTE's PadKitchen"
 	type     "lps"
 }
 
 {
 	map      "wop_padkitchenBB"
-	longname "PadKitchen"
+	longname "ENTE's PadKitchen"
 	type     "bb"
 }
 
 {
 	map      "wop_huette"
-	longname "Huette"
+	longname "Harm's Huette"
 	type     "ffa lps syc_ffa syc_tp team ft"
 }
 
 {
 	map      "wop_huetteBB"
-	longname "Huette"
+	longname "Harm's Huette"
 	type     "bb"
 }
 
 {
 	map      "wop_padlibrary"
-	longname "PadLibrary"
+	longname "ENTE's PadLibrary"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_padlibraryLPS"
-	longname "PadLibrary"
+	longname "ENTE's PadLibrary"
 	type     "lps"
 }
 
 {
 	map      "wop_padlibraryBB"
-	longname "PadLibrary"
+	longname "ENTE's PadLibrary"
 	type     "bb"
 }
 
 {
 	map     "wop_padcrashBB"
-	longname "PadCrash"
+	longname "ENTE's PadCrash"
 	type     "bb"
 }
 
 {
 	map      "wop_airplane"
-	longname "Airplane"
+	longname "Oregano4's Plane"
 	type     "ffa syc_ffa syc_tp team ft lps ctkd"
 }
 
 {
 	map      "wop_trashmap"
-	longname "TrashMap"
+	longname "Kai's TrashMap"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_trashmapBB"
-	longname "TrashMap"
+	longname "Kai's TrashMap"
 	type     "bb ctkd"
 }
 
 {
 	map      "wop_jail"
-	longname "Jail"
+	longname "MopAn's Jail"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_jailBB"
-	longname "Jail"
+	longname "MopAn's Jail"
 	type     "bb"
 }
 
 {
 	map      "wop_padship"
-	longname "PadShip"
+	longname "ENTE's PadShip"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_padshipBB"
-	longname "PadShip"
+	longname "ENTE's PadShip"
 	type     "bb"
 }
 
 {
 	map      "wop_backyard"
-	longname "Backyard"
+	longname "GlowStar's Backyard"
 	type     "ffa lps syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_backyardBB"
-	longname "Backyard"
+	longname "GlowStar's Backyard"
 	type     "bb"
 }
 
 {
 	map      "wop_padcrash"
-	longname "PadCrash"
+	longname "ENTE's PadCrash"
 	type     "ffa lps team ft"
 }
 
 {
 	map      "wop_bath"
-	longname "CybBath"
+	longname "Cyben's CybBath"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_bathBB"
-	longname "CybBath"
+	longname "Cyben's CybBath"
 	type     "bb"
 }
 
 {
 	map      "wop_padshop"
-	longname "PadShop"
+	longname "ENTE's PadShop"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_padshopBB"
-	longname "PadShop"
+	longname "ENTE's PadShop"
 	type     "bb"
 }
 
 {
 	map      "wop_anteroom"
-	longname "Anteroom"
+	longname "GlowStar's Anteroom"
 	type     "ffa lps syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_anteroomBB"
-	longname "Anteroom"
+	longname "GlowStar's Anteroom"
 	type     "bb"
 }
 
 {
 	map      "wop_padattic"
-	longname "PadAttic"
+	longname "ENTE's PadAttic"
 	type     "ffa syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_padatticLPS"
-	longname "PadAttic Night"
+	longname "ENTE's PadAttic Night"
 	type     "lps"
 }
 
 {
 	map      "wop_padatticBB"
-	longname "PadAttic"
+	longname "ENTE's PadAttic"
 	type     "bb"
 }
 
 {
 	map      "wop_cabin"
-	longname "Cabin"
+	longname "GlowStar's Cabin"
 	type     "ffa lps syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_cabinBB"
-	longname "Cabin"
+	longname "GlowStar's Cabin"
 	type     "bb"
 }
 
 {
 	map      "wop_diner"
-	longname "Diner"
+	longname "Harm's Diner"
 	type     "ffa lps syc_ffa syc_tp team ft ctkd"
 }
 
 {
 	map      "wop_dinerBB"
-	longname "Diner"
+	longname "Harm's Diner"
 	type     "bb"
 }
 
 {
 	map      "wop_padcrash_dm17"
-	longname "PadCrash DM17"
+	longname "ENTE's PadCrash DM17"
 	type     "ffa lps team ft"
 }
 
 {
 	map      "wop_padcloisterCTL"
-	longname "PadCloister"
+	longname "ENTE's PadCloister"
 	type     "ctl"
 }
 
 {
 	map      "wop_colorstageCTL"
-	longname "ColorStage"
+	longname "GlowStar's ColorStage"
 	type     "ctl 1lctl"
 }
 
 {
 	map      "wop_padasiaCTL"
-	longname "PadAsia"
+	longname "ENTE's PadAsia"
 	type     "ctl"
 }
 
 {
 	map      "wop_westernsetCTL"
-	longname "Westernset"
+	longname "Harm's WesternSet"
 	type     "ctl 1lctl"
 }
 
 //{
 //	map      "wop_trashmapCTL"
-//	longname "TrashMap"
+//	longname "Kai's TrashMap"
 //	type     "ctl"
 //}
 
 {
 	map      "wop_padboxCTL"
-	longname "PadBox"
+	longname "ENTE's PadBox"
 	type     "ctl"
 }
 
 {
 	map      "wop_journeyCTL"
-	longname "CybJourney"
+	longname "Cyben's CybJourney"
 	type      "ctl 1lctl"
 }
 
 {
 	map      "wop_padbaseCTL"
-	longname "PadBase"
+	longname "ENTE's PadBase"
 	type     "ctl"
 }
 
 {
 	map      "wop_padcrashCTL"
-	longname "PadCrash"
+	longname "ENTE's PadCrash"
 	type     "ctl"
 }
 
 {
 	map      "wop_fridgeCTL"
-	longname "FridgeWars"
+	longname "Kai's FridgeWars"
 	type     "ctl 1lctl"
 }
