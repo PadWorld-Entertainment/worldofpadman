@@ -34,7 +34,6 @@ set(SHADERS
     pad_pirate.shader
     pad_shop.shader
     pad_skyboxes.shader
-    pad_skyboxes.mtr
     pad_steps.shader
     pad_tex02.shader
     pad_trash.shader
