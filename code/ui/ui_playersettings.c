@@ -77,6 +77,7 @@ typedef struct {
 	menutext_s genderheader;
 	menulist_s gender;
 	menutext_s logoheader;
+	menutext_s logoname;
 	menulist_s effects;
 
 	menubitmap_s back;
@@ -138,6 +139,17 @@ typedef struct {
 } ps_playericons_t;
 
 static ps_playericons_t ps_playericons;
+
+static const char *SkipLogoNumber(const char *logoName) {
+	const char *p = logoName;
+	while (*p != '\0') {
+		const char c = *p;
+		if (c == '_')
+			return p + 1;
+		++p;
+	}
+	return logoName;
+}
 
 /*
 =================
@@ -566,6 +578,7 @@ static void UI_PlayerSettings_Draw(void) {
 	int i, x, y;
 	int prevlogo, nextlogo;
 	int mouseOverColor = -1;
+	char logoName[MAX_SPRAYLOGO_NAME];
 
 	static char modelname[32];
 	if (s_playersettings.nextGestureTime == 0)
@@ -609,9 +622,11 @@ static void UI_PlayerSettings_Draw(void) {
 	i = Com_Clamp(0, (NUM_SPRAYCOLORS - 1), i);
 
 	x = XPOSITION - 32;
-	y = 308;
+	y = 314;
 	UI_SetColor(spraycolors[i]);
 	UI_DrawHandlePic(x, y, 64, 64, uis.spraylogoShaders[s_playersettings.slogo_num]);
+	Q_strncpyz(logoName, SkipLogoNumber(uis.spraylogoNames[s_playersettings.slogo_num]), sizeof(logoName));
+	s_playersettings.logoname.string = logoName;
 
 	if (s_playersettings.slogo_num - 1 < 0) {
 		prevlogo = uis.spraylogosLoaded - 1;
@@ -1138,6 +1153,14 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.logoheader.style = UI_LEFT | UI_SMALLFONT;
 	s_playersettings.logoheader.color = color_yellow;
 
+	y += BIGCHAR_HEIGHT + 2;
+	s_playersettings.logoname.generic.type = MTYPE_TEXT;
+	s_playersettings.logoname.generic.x = XPOSITION - 64;
+	s_playersettings.logoname.generic.y = y;
+	s_playersettings.logoname.string = "        ";
+	s_playersettings.logoname.style = UI_LEFT | UI_SMALLFONT;
+	s_playersettings.logoname.color = color_white;
+
 	s_playersettings.spraycolor.generic.type = MTYPE_BITMAP;
 	s_playersettings.spraycolor.generic.flags = QMF_LEFT_JUSTIFY;
 	s_playersettings.spraycolor.generic.x = XPOSITION - 60;
@@ -1165,6 +1188,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.genderheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.gender);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoname);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoleft);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoright);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraycolor);
