@@ -612,14 +612,15 @@ void ActiveChooseLogoMenu(void) {
 
 	CursorAtLogo = -1;
 	for (i = 0, j = activepage * 8; i < 4; i++, j++) {
-		const char *logoName;
+		char logoName[MAX_SPRAYLOGO_NAME];
 		// first line
 		if (j >= loadedlogos)
 			break;
 		trap_R_SetColor(spraycolor);
 		CG_DrawPic(XLL + i * (LOGOSIZE + GAP), POSY_FIRSTLINE, LOGOSIZE, LOGOSIZE, loadedlogos_array[j].logohandle);
 		trap_R_SetColor(NULL);
-		logoName = SkipLogoNumber(loadedlogos_array[j].name);
+		Q_strncpyz(logoName, SkipLogoNumber(loadedlogos_array[j].name), sizeof(logoName));
+		logoName[0] = toupper(logoName[0]);
 		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
 						 POSY_FIRSTLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8, 16,
 						 32);
@@ -633,7 +634,8 @@ void ActiveChooseLogoMenu(void) {
 		CG_DrawPic(XLL + i * (LOGOSIZE + GAP), POSY_SECONDLINE, LOGOSIZE, LOGOSIZE,
 				   loadedlogos_array[(j + 4)].logohandle);
 		trap_R_SetColor(NULL);
-		logoName = SkipLogoNumber(loadedlogos_array[(j + 4)].name);
+		Q_strncpyz(logoName, SkipLogoNumber(loadedlogos_array[(j + 4)].name), sizeof(logoName));
+		logoName[0] = toupper(logoName[0]);
 		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
 						 POSY_SECONDLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8,
 						 16, 32);

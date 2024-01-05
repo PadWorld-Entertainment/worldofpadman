@@ -626,6 +626,7 @@ static void UI_PlayerSettings_Draw(void) {
 	UI_SetColor(spraycolors[i]);
 	UI_DrawHandlePic(x, y, 64, 64, uis.spraylogoShaders[s_playersettings.slogo_num]);
 	Q_strncpyz(logoName, SkipLogoNumber(uis.spraylogoNames[s_playersettings.slogo_num]), sizeof(logoName));
+	logoName[0] = toupper(logoName[0]);
 	s_playersettings.logoname.string = logoName;
 
 	if (s_playersettings.slogo_num - 1 < 0) {
