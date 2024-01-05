@@ -1432,12 +1432,25 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 			b->shader = trap_R_RegisterShaderNoMip(b->errorpic);
 	}
 
-	if (b->shader) // if there is no icon there should also be no shadow
-	{
+	// if there is no icon there should also be no shadow and no name
+	if (b->shader) {
+		int i = botSelectInfo.topbot * MAX_BOTSPERPAGE + b->generic.id;
+		char botUpper[MAX_BOTNAME];
+
 		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
 			UI_DrawNamedPic(x + 5, y + 5, w, h, ICONSHADOW);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
+
+		x += b->width / 2;
+		y += b->height + 4;
+		if (Menu_ItemAtCursor(b->generic.parent) == b) {
+			Q_strncpyz(botUpper, botSelectInfo.botnames[i], sizeof(botUpper));
+			Q_strupr(botUpper);
+			UI_DrawStringNS(x, y, botUpper, UI_CENTER, 14.0f, color_white);
+		} else {
+			UI_DrawStringNS(x, y, botSelectInfo.botnames[i], UI_CENTER, 14.0f, color_white);
+		}
 	}
 }
 
