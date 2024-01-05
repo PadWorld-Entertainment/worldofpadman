@@ -550,12 +550,12 @@ static qboolean CursorInBox(int x, int y, int w, int h) {
 
 static int activepage = 0;
 
-static const char *SkipNumber(const char *logoName) {
+static const char *SkipLogoNumber(const char *logoName) {
 	const char *p = logoName;
 	while (*p != '\0') {
-		const char c = tolower(*p);
-		if (c >= 'a' && c <= 'z')
-			return p;
+		const char c = *p;
+		if (c == '_')
+			return p + 1;
 		++p;
 	}
 	return logoName;
@@ -619,7 +619,7 @@ void ActiveChooseLogoMenu(void) {
 		trap_R_SetColor(spraycolor);
 		CG_DrawPic(XLL + i * (LOGOSIZE + GAP), POSY_FIRSTLINE, LOGOSIZE, LOGOSIZE, loadedlogos_array[j].logohandle);
 		trap_R_SetColor(NULL);
-		logoName = SkipNumber(loadedlogos_array[j].name);
+		logoName = SkipLogoNumber(loadedlogos_array[j].name);
 		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
 						 POSY_FIRSTLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8, 16,
 						 32);
@@ -633,7 +633,7 @@ void ActiveChooseLogoMenu(void) {
 		CG_DrawPic(XLL + i * (LOGOSIZE + GAP), POSY_SECONDLINE, LOGOSIZE, LOGOSIZE,
 				   loadedlogos_array[(j + 4)].logohandle);
 		trap_R_SetColor(NULL);
-		logoName = SkipNumber(loadedlogos_array[(j + 4)].name);
+		logoName = SkipLogoNumber(loadedlogos_array[(j + 4)].name);
 		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
 						 POSY_SECONDLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8,
 						 16, 32);
