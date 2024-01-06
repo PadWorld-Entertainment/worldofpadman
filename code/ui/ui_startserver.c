@@ -983,7 +983,7 @@ typedef struct {
 	int selectedmodel;
 	int sortedBotNums[MAX_BOTS];
 	char boticons[MAX_BOTSPERPAGE][MAX_QPATH];
-	char botnames[MAX_BOTSPERPAGE][16];
+	char botnames[MAX_BOTSPERPAGE][MAX_BOTNAME];
 } botSelectInfo_t;
 
 static botSelectInfo_t botSelectInfo;
