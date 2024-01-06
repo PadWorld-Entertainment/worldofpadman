@@ -1436,8 +1436,9 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 	if (b->shader) {
 		int i = botSelectInfo.topbot * MAX_BOTSPERPAGE + b->generic.id;
 		char botUpper[MAX_BOTNAME];
+		const char *name = botSelectInfo.botnames[i];
 
-		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
+		if (Menu_ItemAtCursor(b->generic.parent) != b) {
 			UI_DrawNamedPic(x + 5, y + 5, w, h, ICONSHADOW);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
@@ -1447,10 +1448,9 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 		if (Menu_ItemAtCursor(b->generic.parent) == b) {
 			Q_strncpyz(botUpper, botSelectInfo.botnames[i], sizeof(botUpper));
 			Q_strupr(botUpper);
-			UI_DrawStringNS(x, y, botUpper, UI_CENTER, 14.0f, color_white);
-		} else {
-			UI_DrawStringNS(x, y, botSelectInfo.botnames[i], UI_CENTER, 14.0f, color_white);
+			name = botUpper;
 		}
+		UI_DrawStringNS(x, y, name, UI_CENTER, 14.0f, color_white);
 	}
 }
 
