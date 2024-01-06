@@ -72,7 +72,7 @@ static const int GAMETYPE_REMAP[] = {
 	10, // GT_MAX_GAME_TYPE, invalid thus no help
 };
 
-static const char *HELP_ITEM[] = {"powerups", "weapons"};
+static const char *HELP_ITEM[] = {"weapons", "powerups", "medals"};
 static const unsigned int NUM_HELP_ITEM = (sizeof(HELP_ITEM) / sizeof(HELP_ITEM[0]));
 
 static int helpMax, helpMin = 0;
