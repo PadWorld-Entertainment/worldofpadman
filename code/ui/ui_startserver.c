@@ -1438,9 +1438,8 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 
 	// if there is no icon there should also be no shadow and no name
 	if (b->shader) {
-		int i = botSelectInfo.topbot * MAX_BOTSPERPAGE + b->generic.id;
 		char botUpper[MAX_BOTNAME];
-		const char *name = botSelectInfo.botnames[i];
+		const char *name = botSelectInfo.botnames[b->generic.id];
 		const menubitmap_s *itemCursor = Menu_ItemAtCursor(b->generic.parent);
 
 		if (itemCursor != b) {
@@ -1451,7 +1450,7 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 		x += b->width / 2;
 		y += b->height + 4;
 		if (itemCursor == b) {
-			Q_strncpyz(botUpper, botSelectInfo.botnames[i], sizeof(botUpper));
+			Q_strncpyz(botUpper, name, sizeof(botUpper));
 			Q_strupr(botUpper);
 			name = botUpper;
 		}
