@@ -20,9 +20,9 @@ HELP MENU
 
 #define XPOSITION (SCREEN_WIDTH / 2)
 
-#define HMI_GAMETYPE_W 400
-#define HMI_GAMETYPE_H 400
-#define HMI_GAMETYPE_X XPOSITION - 200 + 23// offset because picture is asymmetrical
+#define HMI_GAMETYPE_W 350
+#define HMI_GAMETYPE_H 350
+#define HMI_GAMETYPE_X XPOSITION - 175 + 20// offset because picture is asymmetrical
 #define HMI_GAMETYPE_Y 0
 
 #define HMI_ITEM_W 462
