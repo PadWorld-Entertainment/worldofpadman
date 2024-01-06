@@ -1158,7 +1158,7 @@ UI_SelectBots_UpdateList
 */
 static void UI_SelectBots_UpdateList(void) {
 	int i, j;
-	int numSlectedBots, numMaxSlots;
+	int numSelectedBots, numMaxSlots;
 	char *tmpptr;
 
 	j = 0;
@@ -1218,11 +1218,11 @@ static void UI_SelectBots_UpdateList(void) {
 			botSelectInfo.selectedbotteams[i].generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 		}
 	}
-	numSlectedBots = UI_SelectBots_GetNumSelectedBots();
+	numSelectedBots = UI_SelectBots_GetNumSelectedBots();
 	numMaxSlots = UI_SelectBots_GetNumMaxSlots();
-	botSelectInfo.slotsleft.string = va("%2d/%2d", numSlectedBots, numMaxSlots);
+	botSelectInfo.slotsleft.string = va("%2d/%2d", numSelectedBots, numMaxSlots);
 
-	if (numMaxSlots > MAX_SELECTLISTBOTS) {
+	if (numSelectedBots > MAX_SELECTLISTBOTS) {
 		botSelectInfo.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		botSelectInfo.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		botSelectInfo.arrowup.generic.flags |= QMF_GRAYED;
@@ -1232,14 +1232,13 @@ static void UI_SelectBots_UpdateList(void) {
 			botSelectInfo.arrowup.generic.flags &= ~QMF_GRAYED;
 		}
 
-		if (botSelectInfo.topbot < numMaxSlots - MAX_SELECTLISTBOTS) {
+		if (botSelectInfo.topbot < numSelectedBots - MAX_SELECTLISTBOTS) {
 			botSelectInfo.arrowdown.generic.flags &= ~QMF_GRAYED;
 		}
 	} else {
 		botSelectInfo.arrowup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 		botSelectInfo.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
-
 }
 
 /*
@@ -1336,6 +1335,11 @@ static void UI_SelectBots_SelectBotName(void *ptr, int event) {
 		memcpy(&s_startserver.selectbotinfos[i], &s_startserver.selectbotinfos[i + 1], sizeof(selectbotinfo_t));
 		memcpy(&s_startserver.selectbotinfos[i + 1], &tmpcpy, sizeof(selectbotinfo_t));
 	}
+
+	if (UI_SelectBots_GetNumSelectedBots() <= MAX_SELECTLISTBOTS) {
+		botSelectInfo.topbot = 0;
+	}
+
 	UI_SelectBots_UpdateList();
 }
 
@@ -1437,15 +1441,16 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 		int i = botSelectInfo.topbot * MAX_BOTSPERPAGE + b->generic.id;
 		char botUpper[MAX_BOTNAME];
 		const char *name = botSelectInfo.botnames[i];
+		const menubitmap_s *itemCursor = Menu_ItemAtCursor(b->generic.parent);
 
-		if (Menu_ItemAtCursor(b->generic.parent) != b) {
+		if (itemCursor != b) {
 			UI_DrawNamedPic(x + 5, y + 5, w, h, ICONSHADOW);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 
 		x += b->width / 2;
 		y += b->height + 4;
-		if (Menu_ItemAtCursor(b->generic.parent) == b) {
+		if (itemCursor == b) {
 			Q_strncpyz(botUpper, botSelectInfo.botnames[i], sizeof(botUpper));
 			Q_strupr(botUpper);
 			name = botUpper;
