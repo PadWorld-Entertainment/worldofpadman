@@ -293,7 +293,7 @@ static void CG_Obituary(entityState_t *ent) {
 			break;
 		case MOD_KILLERDUCKS:
 			message = "was hunted & bitten to death by";
-			message2 = "'s Killerduck";
+			message2 = "'s KillerDuck";
 			break;
 		case MOD_TELEFRAG:
 			message = "tried to invade";

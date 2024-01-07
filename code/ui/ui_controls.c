@@ -1349,8 +1349,8 @@ static void Controls_MenuInit(void) {
 	s_controls.useitem.generic.callback = Controls_ActionEvent;
 	s_controls.useitem.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.useitem.generic.id = ID_USEITEM;
-	s_controls.useitem.generic.toolTip = "Press this key in game to throw killerducks / use floater / deploy bambam "
-										 "and place boomies (you must look at the ground to place a boomie).";
+	s_controls.useitem.generic.toolTip = "Press this key in game to throw KillerDucks / use Floater / deploy BamBam "
+										 "and place Boomies (you must look at the ground to place a Boomie).";
 
 	s_controls.dropCart.generic.type = MTYPE_ACTION;
 	s_controls.dropCart.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;

@@ -1363,15 +1363,15 @@ static void UI_Preferences_MenuInit(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whKillerduck.generic.type = MTYPE_RADIOBUTTON;
-	s_preferences.whKillerduck.generic.name = "Killerduck:";
+	s_preferences.whKillerduck.generic.name = "KillerDuck:";
 	s_preferences.whKillerduck.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
 	s_preferences.whKillerduck.generic.callback = UI_Preferences_Event;
 	s_preferences.whKillerduck.generic.id = ID_ICONKILLERDUCK;
 	s_preferences.whKillerduck.generic.x = XPOSITION;
 	s_preferences.whKillerduck.generic.y = y;
 	s_preferences.whKillerduck.generic.toolTip =
-		"Enable to display a Killerduck icon above the Killerduck holdable, "
-		"visible through walls, to help you find it in Catch The Killerduck "
+		"Enable to display a KillerDuck icon above the KillerDuck holdable, "
+		"visible through walls, to help you find it in Catch The KillerDuck "
 		"game mode. Default is off.";
 
 	s_preferences.back.generic.type = MTYPE_BITMAP;

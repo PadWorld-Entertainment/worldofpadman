@@ -5,7 +5,7 @@
 - ADDED
 	- 32bit binaries to support Windows and Linux systems
 	- Freeze Tag (FT) game type and related assets like ice cold weapon effects
-	- Catch the Killerduck (CTKD) game type
+	- Catch the KillerDuck (CTKD) game type
 	- One Lolly CTL (1LCTL) game type
 	- PElvis (PadElvis) skin, glow skin and bot for the PADMAN player model
 	- HellPad skin, glow skin and bot for the PADMAN player model

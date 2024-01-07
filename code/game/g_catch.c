@@ -60,12 +60,12 @@ static void G_RespawnKillerDucks(gentity_t *self) {
 	gentity_t *ent, *spawnPoint = NULL;
 	const gitem_t *item;
 
-	trap_SendServerCommand(-1, va("cp \"The Killerduck respawned.\n\""));
-	trap_SendServerCommand(-1, va("print \"The Killerduck respawned.\n\""));
+	trap_SendServerCommand(-1, va("cp \"The KillerDuck respawned.\n\""));
+	trap_SendServerCommand(-1, va("print \"The KillerDuck respawned.\n\""));
 
 	item = BG_FindItemForHoldable(HI_KILLERDUCKS);
 	if (item == NULL) {
-		Com_Error(ERR_DROP, "Failed to respawn the Killerduck");
+		Com_Error(ERR_DROP, "Failed to respawn the KillerDuck");
 	}
 
 	ent = G_Spawn();
@@ -119,11 +119,11 @@ gentity_t *G_DropKillerDucks(gentity_t *ent) {
 	client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 	client->ps.stats[STAT_HOLDABLEVAR] = 0;
 	client->ps.eFlags &= ~EF_KILLERDUCK;
-	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " lost the Killerduck.\n\"", client->pers.netname));
+	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " lost the KillerDuck.\n\"", client->pers.netname));
 	if (ent->client->ps.clientNum == clientNum) {
-		trap_SendServerCommand(clientNum, va("cp \"%s" S_COLOR_WHITE, "You lost the Killerduck.\n\""));
+		trap_SendServerCommand(clientNum, va("cp \"%s" S_COLOR_WHITE, "You lost the KillerDuck.\n\""));
 	}
-	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " lost the Killerduck.\n\"", client->pers.netname));
+	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " lost the KillerDuck.\n\"", client->pers.netname));
 
 	VectorCopy(ent->s.apos.trBase, angles);
 	AngleVectors(angles, velocity, NULL, NULL);
@@ -132,7 +132,7 @@ gentity_t *G_DropKillerDucks(gentity_t *ent) {
 
 	killerDucks = LaunchItem(BG_FindItemForHoldable(HI_KILLERDUCKS), ent->s.pos.trBase, velocity);
 	if (killerDucks == NULL) {
-		Com_Error(ERR_DROP, "Failed to drop the Killerduck");
+		Com_Error(ERR_DROP, "Failed to drop the KillerDuck");
 	}
 	killerDucks->s.otherEntityNum = ent->s.number;
 	killerDucks->nextthink = (level.time + 1000);
@@ -169,11 +169,11 @@ void G_BecomeKillerDuck(gentity_t *item, gentity_t *ent) {
 	ent->client->ps.eFlags |= EF_KILLERDUCK;
 	ent->client->ps.stats[STAT_HEALTH] = ent->health = 200;
 	ent->client->ps.stats[STAT_ARMOR] = 200;
-	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " catched the Killerduck.\n\"", ent->client->pers.netname));
+	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " catched the KillerDuck.\n\"", ent->client->pers.netname));
 	if (ent->client->ps.clientNum == clientNum) {
-		trap_SendServerCommand(clientNum, va("cp \"%s" S_COLOR_WHITE, "You catched the Killerduck.\n\""));
+		trap_SendServerCommand(clientNum, va("cp \"%s" S_COLOR_WHITE, "You catched the KillerDuck.\n\""));
 	}
-	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " catched the Killerduck.\n\"", ent->client->pers.netname));
+	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " catched the KillerDuck.\n\"", ent->client->pers.netname));
 }
 
 /**

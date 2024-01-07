@@ -132,7 +132,7 @@ typedef enum {
 #define GTN__GT_SINGLE_PLAYER "Singleplayer"
 #define GTN__GT_SPRAYFFA "Spray Your Color"
 #define GTN__GT_LPS "Last Pad Standing"
-#define GTN__GT_CATCH "Catch The Killerduck"
+#define GTN__GT_CATCH "Catch The KillerDuck"
 #define GTN__GT_TEAM "Free For All Team"
 #define GTN__GT_FREEZETAG "Freeze Tag"
 #define GTN__GT_CTF "Capture The Lolly"
@@ -266,7 +266,7 @@ typedef enum {
 	STAT_CLIENTS_READY, // bit mask of clients wishing to exit the intermission (FIXME: configstring?)
 	STAT_MAX_HEALTH,	// health / armor limit, changeable by handicap
 
-	STAT_HOLDABLEVAR,	// for Floater/Killerduck "ammo"
+	STAT_HOLDABLEVAR,	// for Floater/KillerDuck "ammo"
 	STAT_SPRAYROOMSECS, // time for sprayroom->killroom stuff (this is level.maxsprayroomtime+1)
 						// According to latin notation, "cs" can be replaced with "x" :)
 	STAT_BALLOONTIME,
@@ -317,7 +317,7 @@ typedef enum {
 #define EF_CHARGED 0x00000200
 #define EF_MOVER_STOP 0x00000400		// will push otherwise
 #define EF_AWARD_CAP 0x00000800			// draw the capture sprite
-#define EF_KILLERDUCK 0x00001000		// player carries the Killerduck in CATCH
+#define EF_KILLERDUCK 0x00001000		// player carries the KillerDuck in CATCH
 #define EF_CONNECTION 0x00002000		// draw a connection trouble sprite
 #define EF_VOTED 0x00004000				// already cast a vote
 #define EF_AWARD_PADHERO 0x00008000		// draw a padhero sprite
