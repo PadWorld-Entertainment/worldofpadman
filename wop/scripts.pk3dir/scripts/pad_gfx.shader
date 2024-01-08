@@ -2489,42 +2489,6 @@ textures/pad_flowerfx/sprite_leaf2
 //SKY BOXES by MightyPete
 //=======================================================
 
-textures/pad_petesky/utopiaatoll
-{
-	qer_editorimage env/utopiaatoll512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_ffcfafff
-	q3map_sun 0.266383 0.274632 0.358662 100 50 55
-	q3map_surfacelight 200
-
-	skyparms env/utopiaatoll512 - -
-}
-
-textures/pad_petesky/pf-tornado-alley
-{
-	qer_editorimage env/pf-tornado-alley512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_5d5d5dff
-	q3map_sun 0.266383 0.274632 0.358662 100 50 55
-	q3map_surfacelight 200
-
-	skyparms env/pf-tornado-alley512 - -
-}
-
-textures/pad_petesky/morning-madness
-{
-	qer_editorimage env/pc-morning-madness512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_ff9860ff
-	q3map_sun 0.266383 0.274632 0.358662 100 50 55
-	q3map_surfacelight 200
-
-	skyparms env/pc-morning-madness512 - -
-}
-
 textures/pad_petesky/sist
 {
 	qer_editorimage env/sist512_ft
@@ -2535,28 +2499,4 @@ textures/pad_petesky/sist
 	q3map_surfacelight 200
 
 	skyparms env/sist512 - -
-}
-
-textures/pad_petesky/doornthree
-{
-	qer_editorimage env/doornthree512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_f67536ff
-	q3map_sun 0.266383 0.274632 0.358662 100 50 55
-	q3map_surfacelight 200
-
-	skyparms env/doornthree512 - -
-}
-
-textures/pad_petesky/wolfl
-{
-	qer_editorimage env/wolf-pack512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_5d5d5dff
-	q3map_sun 0.266383 0.274632 0.358662 150 60 85
-	q3map_surfacelight 20
-
-	skyparms env/wolf-pack512 - -
 }

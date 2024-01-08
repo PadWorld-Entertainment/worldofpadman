@@ -17,6 +17,38 @@ textures/pad_o4texs/ueberdenwolken
 }
 
 // =================
+// CybBath skybox
+// =================
+
+textures/pad_petesky/morning-madness
+{
+    qer_editorimage env/pc-morning-madness512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_ff9860ff
+    q3map_sun 0.266383 0.274632 0.358662 100 50 55
+    q3map_surfacelight 200
+    skyparms env/pc-morning-madness512 - -
+}
+
+// =================
+// Diner skybox
+// =================
+
+textures/pad_harm/pc-ground-zero512
+{
+    qer_editorimage env/pc-ground-zero512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_ffffffff
+    q3map_sun 0.266383 0.274632 0.358662 20 50 55
+    q3map_surfacelight 10
+    skyparms env/pc-ground-zero512 - -
+}
+
+// =================
 // Huette skybox
 // =================
 
