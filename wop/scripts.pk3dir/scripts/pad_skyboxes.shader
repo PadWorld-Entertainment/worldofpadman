@@ -33,6 +33,22 @@ textures/pad_petesky/morning-madness
 }
 
 // =================
+// CybJourney skybox
+// =================
+
+textures/pad_journey/sist
+{
+    qer_editorimage env/sist512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_ffcfafff
+    q3map_sun 0.266383 0.274632 0.358662 180 270 31
+    q3map_surfacelight 200
+    skyparms env/sist512 - -
+}
+
+// =================
 // Diner skybox
 // =================
 

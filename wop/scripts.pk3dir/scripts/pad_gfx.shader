@@ -2483,20 +2483,3 @@ textures/pad_flowerfx/sprite_leaf2
 	rgbGen identity
 	}
 }
-
-
-//=======================================================
-//SKY BOXES by MightyPete
-//=======================================================
-
-textures/pad_petesky/sist
-{
-	qer_editorimage env/sist512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_ffcfafff
-	q3map_sun 0.266383 0.274632 0.358662 100 50 55
-	q3map_surfacelight 200
-
-	skyparms env/sist512 - -
-}
