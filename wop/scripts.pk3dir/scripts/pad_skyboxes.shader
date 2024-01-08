@@ -66,6 +66,35 @@ textures/pad_jail/pad_jail_sky4
 }
 
 // =================
+// PadAttic skybox
+// =================
+
+textures/pad_petesky/morning_alley
+{
+    qer_editorimage env/morning_alley512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_ff9860ff
+    q3map_sun 1.000000 0.862213 0.247457 330 340 50
+    q3map_surfacelight 400
+    skyparms env/morning_alley512 - -
+}
+
+textures/pad_petesky/poltergeist
+{
+    qer_editorimage env/pf-poltergeist512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_5b7c97ff
+    q3map_sun 0.434981 0.749839 1.000000 260 35 35
+    q3map_surfacelight 400
+    skyparms env/pf-poltergeist512 - -
+}
+
+
+// =================
 // PadCloister skybox
 // =================
 

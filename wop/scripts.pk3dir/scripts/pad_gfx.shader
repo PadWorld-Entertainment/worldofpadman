@@ -2501,18 +2501,6 @@ textures/pad_petesky/utopiaatoll
 	skyparms env/utopiaatoll512 - -
 }
 
-textures/pad_petesky/poltergeist
-{
-	qer_editorimage env/pf-poltergeist512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_5b7c97ff
-	q3map_sun 0.434981 0.749839 1.000000 260 340 50
-	q3map_surfacelight 400
-
-	skyparms env/pf-poltergeist512 - -
-}
-
 textures/pad_petesky/pf-tornado-alley
 {
 	qer_editorimage env/pf-tornado-alley512_ft
@@ -2523,18 +2511,6 @@ textures/pad_petesky/pf-tornado-alley
 	q3map_surfacelight 200
 
 	skyparms env/pf-tornado-alley512 - -
-}
-
-textures/pad_petesky/morning_alley
-{
-	qer_editorimage env/morning_alley512_ft
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	q3map_lightimage textures/colors/hex_ff9860ff
-	q3map_sun 1.000000 0.862213 0.247457 330 340 50
-	q3map_surfacelight 400
-
-	skyparms env/morning_alley512 - -
 }
 
 textures/pad_petesky/morning-madness
