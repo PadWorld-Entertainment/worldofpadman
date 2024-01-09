@@ -449,7 +449,7 @@ iteminfo "item_botroam"
 
 iteminfo "team_CTL_redlolly"
 {
-	name					"red Lolly"
+	name					"Red Lolly"
 	model					"models/ctl/lollipop_red.md3"
 	modelindex				MODELINDEX_REDFLAG
 	type					ITEM_FLAG
@@ -461,7 +461,7 @@ iteminfo "team_CTL_redlolly"
 
 iteminfo "team_CTL_bluelolly"
 {
-	name					"blue Lolly"
+	name					"Blue Lolly"
 	model					"models/ctl/lollipop_blue.md3"
 	modelindex				MODELINDEX_BLUEFLAG
 	type					ITEM_FLAG

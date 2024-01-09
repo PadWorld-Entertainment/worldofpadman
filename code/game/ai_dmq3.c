@@ -815,7 +815,7 @@ static int GetTeamFlagCarrier(int team) {
 }
 
 static qboolean GetDroppedLollyGoal(int team, bot_goal_t *goal) {
-	const char *itemname = (team == TEAM_RED) ? "red Lolly" : "blue Lolly";
+	const char *itemname = (team == TEAM_RED) ? "Red Lolly" : "Blue Lolly";
 
 	if (trap_BotGetLevelItemGoal(-1, itemname, goal) < 0)
 		return qfalse;
@@ -4540,9 +4540,9 @@ void BotSetupDeathmatchAI(void) {
 		qboolean blueInit = qfalse;
 
 		// todo: get rid of the trapcalls and to everything in the loop below
-		if (trap_BotGetLevelItemGoal(-1, "red Lolly", &ctf_redflag) < 0)
+		if (trap_BotGetLevelItemGoal(-1, "Red Lolly", &ctf_redflag) < 0)
 			BotAI_Print(PRT_WARNING, "CTL without Red Lolly\n");
-		if (trap_BotGetLevelItemGoal(-1, "blue Lolly", &ctf_blueflag) < 0)
+		if (trap_BotGetLevelItemGoal(-1, "Blue Lolly", &ctf_blueflag) < 0)
 			BotAI_Print(PRT_WARNING, "CTL without Blue Lolly\n");
 
 		// find the entity numbers
