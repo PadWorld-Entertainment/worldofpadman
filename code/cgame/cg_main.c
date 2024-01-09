@@ -346,8 +346,8 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_ft_thawerIconX, "cg_FT_thawerIconX", "320", CVAR_ARCHIVE},
 	{&cg_ft_thawerIconY, "cg_FT_thawerIconY", "290", CVAR_ARCHIVE},
 
-	// Should match ICON_ALL
-	{&cg_icons, "cg_icons", XSTRING(ICON_ALL & ~ICON_TEAMMATE), CVAR_ARCHIVE}};
+	// Should match enum of (ICON_ALL & ~ICON_TEAMMATE)
+	{&cg_icons, "cg_icons", "123", CVAR_ARCHIVE}};
 
 static const int cvarTableSize = ARRAY_LEN(cvarTable);
 

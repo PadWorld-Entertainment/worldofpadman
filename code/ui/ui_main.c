@@ -242,7 +242,7 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&cg_drawTeamOverlay, "cg_drawTeamOverlay", "1", CVAR_ARCHIVE},
 								  {&cg_drawFriend, "cg_drawFriend", "1", CVAR_ARCHIVE},
 								  {&cg_drawLensflare, "cg_drawLensflare", "1", CVAR_ARCHIVE},
-								  {&cg_icons, "cg_icons", XSTRING(ICON_ALL & ~ICON_TEAMMATE), CVAR_ARCHIVE},
+								  {&cg_icons, "cg_icons", "123", CVAR_ARCHIVE}, // Should match enum of (ICON_ALL & ~ICON_TEAMMATE)
 								  {&wop_AutoswitchSongByNextMap, "wop_AutoswitchSongByNextMap", "0", CVAR_ARCHIVE},
 								  {&wop_AutoBindUnusedKeys, "wop_AutoBindUnusedKeys", "1", CVAR_ARCHIVE},
 #ifdef USE_RENDERER_DLOPEN
