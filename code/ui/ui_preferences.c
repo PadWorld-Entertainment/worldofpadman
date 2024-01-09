@@ -1308,7 +1308,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whFrozenMates.generic.toolTip =
 		"Enable this to display a freeze icon above your frozen teammates, "
 		"visible through walls, to help you find them in Freeze Tag game mode. "
-		"Default is off.";
+		"Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whLPSfoe.generic.type = MTYPE_RADIOBUTTON;
@@ -1321,7 +1321,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whLPSfoe.generic.toolTip =
 		"Enable this to display an arrow icon above all opposing players, "
 		"visible through walls, to help you find them in Last Pad Standing "
-		"game mode. Default is off.";
+		"game mode. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whHStations.generic.type = MTYPE_RADIOBUTTON;
@@ -1333,7 +1333,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whHStations.generic.y = y;
 	s_preferences.whHStations.generic.toolTip =
 		"Enable to display a heart icon above every health station, visible "
-		"through walls, to help you find them. Default is off.";
+		"through walls, to help you find them. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whSycTele.generic.type = MTYPE_RADIOBUTTON;
@@ -1346,7 +1346,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whSycTele.generic.toolTip =
 		"Enable to display an arrow icon above the sprayroom teleporter, visible "
 		"through walls, to help you find it in Spray Your Color game modes. "
-		"Default is off.";
+		"Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whBalloons.generic.type = MTYPE_RADIOBUTTON;
@@ -1359,7 +1359,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whBalloons.generic.toolTip =
 		"Enable to display a balloon icon above balloon boxes, visible "
 		"through walls, to help you find them in Big Balloon game mode. "
-		"Default is off.";
+		"Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.whKillerduck.generic.type = MTYPE_RADIOBUTTON;
@@ -1372,7 +1372,7 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whKillerduck.generic.toolTip =
 		"Enable to display a KillerDuck icon above the KillerDuck holdable, "
 		"visible through walls, to help you find it in Catch The KillerDuck "
-		"game mode. Default is off.";
+		"game mode. Default is on.";
 
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
