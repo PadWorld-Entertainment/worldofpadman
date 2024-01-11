@@ -475,19 +475,22 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	// remove red and blue lollies if we aren't in CTL and 1LCTL
 	if (g_gametype.integer != GT_CTF && g_gametype.integer != GT_1FCTF &&
 		(!Q_stricmp(ent->classname, "team_CTL_redlolly") || !Q_stricmp(ent->classname, "team_CTL_bluelolly"))) {
+		Com_DPrintf("Spawning: Free lollies, this is not a ctf game type\n");
 		G_FreeEntity(ent);
 		return;
 	}
 
 	// remove neutral lolly if we aren't in 1LCTL
 	if (g_gametype.integer != GT_1FCTF && !Q_stricmp(ent->classname, "team_CTL_neutrallolly")) {
+		Com_DPrintf("Spawning: Remove neutral lolly, this is no 1flag game type\n");
 		G_FreeEntity(ent);
 		return;
 	}
-	
+
 	if (!IsSyc()) {
 		G_SpawnInt("onlyspraygt", "0", &i);
 		if (i) {
+			Com_DPrintf("Spawning: onlyspraygt is set to %i - free it\n", i);
 			G_FreeEntity(ent);
 			return;
 		}
@@ -497,12 +500,14 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		if (!Q_stricmp(ent->classname, "station_health") || NULL != strstr(ent->classname, "_imperius") ||
 			!Q_stricmpn(ent->classname, "holdable_", 9) ||
 			(!Q_stricmpn(ent->classname, "item_", 5) && Q_stricmp(ent->classname, "item_botroam"))) {
+			Com_DPrintf("Spawning: Item %s is not allowed in LPS\n", ent->classname);
 			G_FreeEntity(ent);
 			return;
 		}
 
 		G_SpawnInt("notLPS", "0", &i);
 		if (i) {
+			Com_DPrintf("Spawning: Item %s disabled in LPS\n", ent->classname);
 			G_FreeEntity(ent);
 			return;
 		}
@@ -512,6 +517,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	if (g_gametype.integer == GT_SINGLE_PLAYER) {
 		G_SpawnInt("notsingle", "0", &i);
 		if (i) {
+			Com_DPrintf("Spawning: Item %s disabled in single player\n", ent->classname);
 			G_FreeEntity(ent);
 			return;
 		}
@@ -520,12 +526,14 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	if (g_gametype.integer >= GT_TEAM) {
 		G_SpawnInt("notteam", "0", &i);
 		if (i) {
+			Com_DPrintf("Spawning: Item %s disabled in team modes\n", ent->classname);
 			G_FreeEntity(ent);
 			return;
 		}
 	} else {
 		G_SpawnInt("notfree", "0", &i);
 		if (i) {
+			Com_DPrintf("Spawning: Item %s disabled in FFA mode\n", ent->classname);
 			G_FreeEntity(ent);
 			return;
 		}
@@ -533,39 +541,14 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 
 	G_SpawnInt("notwop", "0", &i);
 	if (i) {
+		Com_DPrintf("Spawning: Item %s disabled - notwop is set\n", ent->classname);
 		G_FreeEntity(ent);
 		return;
 	}
 
 	if (G_SpawnString("gametype", NULL, &value)) {
-		if (g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE) {
-			const char *s;
-			const char *gametypeName = gametypeNames[g_gametype.integer];
-
-			s = strstr(value, gametypeName);
-			if (!s) {
-				G_FreeEntity(ent);
-				return;
-			}
-		}
-	}
-
-	if (G_SpawnString("notGametype", NULL, &value)) {
-		if (g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE) {
-			const char *s;
-			const char *gametypeName = gametypeNames[g_gametype.integer];
-
-			s = strstr(value, gametypeName);
-			if (s) {
-				G_FreeEntity(ent);
-				return;
-			}
-		}
-	}
-
-	if (G_SpawnString("gametype", NULL, &value)) {
 		if (!G_ValueIncludesGametype(value, g_gametype.integer)) {
-			Com_Printf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to gametype key.\n",
+			Com_DPrintf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to gametype key.\n",
 					  ent->classname);
 			G_FreeEntity(ent);
 			return;
@@ -574,7 +557,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 
 	if (G_SpawnString("notGametype", NULL, &value)) {
 		if (G_ValueIncludesGametype(value, g_gametype.integer)) {
-			Com_Printf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to notGametype key.\n",
+			Com_DPrintf("Spawning: not spawning " S_COLOR_YELLOW "%s" S_COLOR_WHITE " due to notGametype key.\n",
 					  ent->classname);
 			G_FreeEntity(ent);
 			return;
@@ -595,6 +578,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	we turn off the modifier, which doesn't trigger a full client reload)
 	*/
 	if (g_modInstagib.integer && !Instagib_canSpawnEntity(ent)) {
+		Com_DPrintf("Spawning: not allowed is instagib (%s).\n", ent->classname);
 		G_FreeEntity(ent);
 		return;
 	}
@@ -607,6 +591,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		vec3_t trEnd;
 
 		if (g_modInstagib.integer) { // no markers for instagib
+			Com_DPrintf("Spawning: no markers is instagib (%s).\n", ent->classname);
 			G_FreeEntity(ent);
 			return;
 		}
@@ -644,6 +629,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 
 	// if we didn't get a classname, don't bother spawning anything
 	if (!G_CallSpawn(ent)) {
+		Com_DPrintf("Spawning: Failed to call spawn function for %s.\n", ent->classname);
 		G_FreeEntity(ent);
 	}
 }
