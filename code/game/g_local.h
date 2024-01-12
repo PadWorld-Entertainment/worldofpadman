@@ -157,9 +157,9 @@ struct gentity_s {
 	char *model2;
 	int freetime; // level.time when the object was freed
 
-	int eventTime; // events will be cleared EVENT_VALID_MSEC after set
-	qboolean freeAfterEvent;
-	qboolean unlinkAfterEvent;
+	int eventTime;			   // events will be cleared EVENT_VALID_MSEC after set
+	qboolean freeAfterEvent;   // tempEntities or dropped items completely go away after their event
+	qboolean unlinkAfterEvent; // items that will respawn will hide themselves after their pickup event
 
 	qboolean physicsObject; // if true, it can be pushed by movers and fall off edges
 							// all game items are physicsObjects,
