@@ -1043,8 +1043,7 @@ G_RadiusDamage
 ============
 */
 qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float radius, gentity_t *ignore, int mod) {
-	float points, dist;
-	gentity_t *ent;
+	float dist;
 	int entityList[MAX_GENTITIES];
 	int numListedEntities;
 	vec3_t mins, maxs;
@@ -1065,12 +1064,13 @@ qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float 
 	numListedEntities = trap_EntitiesInBox(mins, maxs, entityList, MAX_GENTITIES);
 
 	for (e = 0; e < numListedEntities; e++) {
-		ent = &g_entities[entityList[e]];
-
-		if (ent == ignore)
+		gentity_t *ent = &g_entities[entityList[e]];
+		if (ent == ignore) {
 			continue;
-		if (!ent->takedamage)
+		}
+		if (!ent->takedamage) {
 			continue;
+		}
 
 		// find the distance from the edge of the bounding box
 		for (i = 0; i < 3; i++) {
@@ -1088,9 +1088,8 @@ qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float 
 			continue;
 		}
 
-		points = damage * (1.0f - dist / radius);
-
 		if (CanDamage(ent, origin)) {
+			const float points = damage * (1.0f - dist / radius);
 			if (LogAccuracyHit(ent, attacker)) {
 				hitClient = qtrue;
 			}
