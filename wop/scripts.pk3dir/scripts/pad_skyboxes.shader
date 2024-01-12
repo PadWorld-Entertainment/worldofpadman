@@ -11,7 +11,7 @@ textures/pad_o4texs/ueberdenwolken
 	surfaceparm nolightmap
     surfaceparm sky
 	q3map_lightimage textures/pad_o4texs/125
-	q3map_sun 0.925 0.949 1 120 60 20
+	q3map_sun 0.925 0.949 1 120 30 20
 	q3map_surfacelight 200
 	skyparms env/ueberdenwolken - -
 }
