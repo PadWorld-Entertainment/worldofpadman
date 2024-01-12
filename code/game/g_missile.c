@@ -96,7 +96,10 @@ static void G_ExplodeMissile(gentity_t *ent) {
 	if (ent->splashDamage) {
 		if (G_RadiusDamage(ent->r.currentOrigin, ent->parent, ent->splashDamage, ent->splashRadius, ent,
 						   ent->splashMethodOfDeath) && ent->parent && ent->parent->client) {
-			G_LogHit(ent->parent);
+			if (!ent->accuracyHitLogged) {
+				G_LogHit(ent->parent);
+				ent->accuracyHitLogged = qtrue;
+			}
 		}
 	}
 
@@ -109,7 +112,6 @@ G_MissileImpact
 ================
 */
 static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
-	qboolean hitClient = qfalse;
 	gentity_t *other = &g_entities[trace->entityNum];
 
 	// check for bounce
@@ -125,8 +127,10 @@ static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
 			vec3_t velocity;
 
 			if (LogAccuracyHit(other, &g_entities[ent->r.ownerNum])) {
-				G_LogHit(&g_entities[ent->r.ownerNum]);
-				hitClient = qtrue;
+				if (!ent->accuracyHitLogged) {
+					G_LogHit(&g_entities[ent->r.ownerNum]);
+					ent->accuracyHitLogged = qtrue;
+				}
 			}
 			BG_EvaluateTrajectoryDelta(&ent->s.pos, level.time, velocity);
 			if (VectorLength(velocity) == 0) {
@@ -226,8 +230,9 @@ static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
 	if (ent->splashDamage) {
 		if (G_RadiusDamage(trace->endpos, ent->parent, ent->splashDamage, ent->splashRadius, other,
 						   ent->splashMethodOfDeath)) {
-			if (!hitClient) {
+			if (!ent->accuracyHitLogged) {
 				G_LogHit(&g_entities[ent->r.ownerNum]);
+				ent->accuracyHitLogged = qtrue;
 			}
 		}
 	}
@@ -625,7 +630,10 @@ void G_RunMissile(gentity_t *ent) {
 				vec3_t delta;
 				BG_EvaluateTrajectoryDelta(&ent->s.pos, level.time, delta);
 				if (LogAccuracyHit(other, attacker)) {
-					G_LogHit(attacker);
+					if (!ent->accuracyHitLogged) {
+						G_LogHit(attacker);
+						ent->accuracyHitLogged = qtrue;
+					}
 				}
 				G_Damage(other, ent, attacker, delta, tr.endpos, ent->damage, 0, ent->methodOfDeath);
 
@@ -710,8 +718,9 @@ void G_RunExplosion(gentity_t *ent) {
 		ent->pain_debounce_time += 100;
 		if (G_RadiusDamage(ent->r.currentOrigin, ent->parent, 400, frac * ent->splashRadius, NULL,
 					   ent->splashMethodOfDeath)) {
-			if (ent->parent->client) {
+			if (ent->parent->client && !ent->accuracyHitLogged) {
 				G_LogHit(ent->parent);
+				ent->accuracyHitLogged = qtrue;
 			}
 		}
 	}

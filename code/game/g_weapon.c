@@ -118,7 +118,7 @@ static void Weapon_ImperiusFire(gentity_t *ent) {
 	//	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
 }
 
-// new: g_combat.c(line ~830) 2x knockback with pumper
+// 2x knockback with pumper
 static void Weapon_PumperFire(gentity_t *ent) {
 	vec3_t end;
 	trace_t trace;

@@ -217,6 +217,9 @@ struct gentity_s {
 
 	qboolean takedamage;
 
+	// track whether a missile already gave the owner some accuracy bonus
+	qboolean accuracyHitLogged;
+
 	int damage;
 	int splashDamage; // quad will increase this without increasing radius
 	int splashRadius;
