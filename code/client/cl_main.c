@@ -3388,6 +3388,7 @@ void CL_Init(void) {
 	// userinfo
 	Cvar_Get("name", "PadPlayer", CVAR_USERINFO | CVAR_ARCHIVE);
 	cl_rate = Cvar_Get("rate", "25000", CVAR_USERINFO | CVAR_ARCHIVE);
+	// between 1 and sv_fps
 	Cvar_Get("snaps", "20", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("model", "padman", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("headmodel", "padman", CVAR_USERINFO | CVAR_ARCHIVE);
@@ -3395,7 +3396,6 @@ void CL_Init(void) {
 	Cvar_Get("team_headmodel", "padman", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("handicap", "100", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("sex", "model", CVAR_USERINFO | CVAR_ARCHIVE);
-	Cvar_Get("cl_anonymous", "0", CVAR_USERINFO | CVAR_ARCHIVE);
 
 	Cvar_Get("password", "", CVAR_USERINFO);
 	Cvar_Get("cg_predictItems", "1", CVAR_USERINFO | CVAR_ARCHIVE);
