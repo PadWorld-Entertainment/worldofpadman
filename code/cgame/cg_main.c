@@ -1357,7 +1357,6 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 	{
 		char *tmpcptr;
 
-		s = CG_ConfigString(CS_SERVERINFO);
 		Q_strncpyz(cg.wopSky, cg_sky.string, sizeof(cg.wopSky));
 
 		tmpcptr = strchr(cg.wopSky, '<');
