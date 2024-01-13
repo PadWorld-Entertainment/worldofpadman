@@ -1,10 +1,10 @@
 textures/pad_shop/light_blue
 {
-    q3map_surfacelight 1000
-    surfaceparm nolightmap
-    {
-        map textures/pad_shop/light_blue
-    }
+	q3map_surfacelight 1000
+	surfaceparm nolightmap
+	{
+		map textures/pad_shop/light_blue
+	}
 }
 
 textures/pad_shop/marslava
@@ -32,52 +32,52 @@ textures/pad_shop/marslava
 
 textures/pad_shop/planetstone
 {
-q3map_nonplanar
-q3map_shadeangle 60 l
-q3map_surfacelight 4
-qer_editorimage textures/pad_shop/planetstone
-surfaceparm nomarks
-surfaceparm sandsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_shop/planetstone
-blendFunc filter
-}
-{
-map textures/pad_shop/planetstone02
-blendfunc GL_ONE GL_ONE
-}
+	q3map_nonplanar
+	q3map_shadeangle 60 l
+	q3map_surfacelight 4
+	qer_editorimage textures/pad_shop/planetstone
+	surfaceparm nomarks
+	surfaceparm sandsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_shop/planetstone
+		blendFunc filter
+	}
+	{
+		map textures/pad_shop/planetstone02
+		blendfunc GL_ONE GL_ONE
+	}
 }
 
 textures/pad_shop/punk
 {
-q3map_nonplanar
-q3map_shadeangle 60 l
-qer_editorimage textures/pad_shop/punk
-surfaceparm sandsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_shop/punk
-blendFunc filter
-}
+	q3map_nonplanar
+	q3map_shadeangle 60 l
+	qer_editorimage textures/pad_shop/punk
+	surfaceparm sandsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_shop/punk
+		blendFunc filter
+	}
 }
 
 
 textures/pad_shop/closed
 {
-        qer_editorimage textures/pad_shop/closed
-    	surfaceparm trans
+	qer_editorimage textures/pad_shop/closed
+	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
    	surfaceparm nonsolid
 	cull none
-        nopicmip
+	nopicmip
 	{
 		map textures/pad_shop/closed
 		blendFunc GL_ONE GL_ZERO
@@ -96,13 +96,13 @@ textures/pad_shop/closed
 
 textures/pad_shop/d_midbars3
 {
-        qer_editorimage textures/pad_shop/d_midbars3
-    	surfaceparm trans
+	qer_editorimage textures/pad_shop/d_midbars3
+	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
    	surfaceparm nonsolid
 	cull none
-        nopicmip
+	nopicmip
 	{
 		map textures/pad_shop/d_midbars3
 		blendFunc GL_ONE GL_ZERO
@@ -121,13 +121,13 @@ textures/pad_shop/d_midbars3
 
 textures/pad_shop/d_brnsmal1
 {
-        qer_editorimage textures/pad_shop/d_brnsmal1
-    	surfaceparm trans
+	qer_editorimage textures/pad_shop/d_brnsmal1
+	surfaceparm trans
 	surfaceparm alphashadow
 	surfaceparm playerclip
-   	surfaceparm nonsolid
+	surfaceparm nonsolid
 	cull none
-        nopicmip
+	nopicmip
 	{
 		map textures/pad_shop/d_brnsmal1
 		blendFunc GL_ONE GL_ZERO
@@ -240,16 +240,16 @@ textures/pad_shop/d_tekgren3
 textures/pad_shop/d_trooper
 {
 	qer_editorimage textures/pad_shop/d_trooper
-              surfaceparm nonsolid
+	surfaceparm nonsolid
 	cull disable
 	deformvertexes autosprite
 
-{
-	map textures/pad_shop/d_trooper
-	blendFunc blend
-      alphaFunc GE128
-	depthWrite
-	rgbGen vertex
+	{
+		map textures/pad_shop/d_trooper
+		blendFunc blend
+		alphaFunc GE128
+		depthWrite
+		rgbGen vertex
 	}
 }
 
@@ -257,16 +257,16 @@ textures/pad_shop/d_trooper
 textures/pad_shop/d_imp
 {
 	qer_editorimage textures/pad_shop/d_imp
-              surfaceparm nonsolid
+	surfaceparm nonsolid
 	cull disable
 	deformvertexes autosprite
 
-{
-	map textures/pad_shop/d_imp
-	blendFunc blend
-      alphaFunc GE128
-	depthWrite
-	rgbGen vertex
+	{
+		map textures/pad_shop/d_imp
+		blendFunc blend
+		alphaFunc GE128
+		depthWrite
+		rgbGen vertex
 	}
 }
 
@@ -274,16 +274,16 @@ textures/pad_shop/d_imp
 textures/pad_shop/d_chainsaw_small
 {
 	qer_editorimage textures/pad_shop/d_chainsaw_small
-              surfaceparm nonsolid
+	surfaceparm nonsolid
 	cull disable
 	deformvertexes autosprite
 
-{
-	map textures/pad_shop/d_chainsaw_small
-	blendFunc blend
-      alphaFunc GE128
-	depthWrite
-	rgbGen vertex
+	{
+		map textures/pad_shop/d_chainsaw_small
+		blendFunc blend
+		alphaFunc GE128
+		depthWrite
+		rgbGen vertex
 	}
 }
 
@@ -340,7 +340,7 @@ textures/pad_shop/terrain_vertex
 textures/pad_shop/sparks
 {
 	qer_editorimage textures/pad_shop/sparks
-        deformVertexes move 2 3 1.5  sin 0 5 0 0.3
+	deformVertexes move 2 3 1.5  sin 0 5 0 0.3
 	surfaceparm nolightmap
 	surfaceparm nomarks
 	surfaceparm nonsolid
@@ -365,7 +365,7 @@ textures/pad_shop/lavafall
 	surfaceparm water
 	cull disable
 	qer_trans 0.6
-                q3map_surfacelight 140
+	q3map_surfacelight 140
 	q3map_globaltexture
 	{
 		map textures/pad_shop/marslava
@@ -390,48 +390,47 @@ textures/pad_shop/tuerchen
 	cull none
 	qer_trans 	0.5
 
-        {
+	{
 		map textures/pad_shop/tuerchen
-                tcgen environment
+		tcgen environment
 		blendFunc GL_ONE GL_ONE
 		rgbGen identity
 	}
-        {
+	{
 		map $lightmap
 		rgbGen identity
 		blendFunc filter
 	}
-
 }
 
 
 textures/pad_shop/blueborder
 {
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_shop/blueborder
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
+	surfaceparm woodsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_shop/blueborder
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
 }
 
 
 textures/pad_shop/blueborder2
 {
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_shop/blueborder2
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
+	surfaceparm woodsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_shop/blueborder2
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
 }
 
 
