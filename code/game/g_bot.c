@@ -54,7 +54,7 @@ float trap_Cvar_VariableValue(const char *var_name) {
 G_ParseBotInfos
 ===============
 */
-static int G_ParseBotInfos(char *buf, int max, char *infos[]) {
+static int G_ParseBotInfos(const char *buf, int max, char *infos[]) {
 	const char *token;
 	int count;
 	char key[MAX_TOKEN_CHARS];
@@ -63,7 +63,7 @@ static int G_ParseBotInfos(char *buf, int max, char *infos[]) {
 	count = 0;
 
 	while (1) {
-		token = COM_Parse((const char **)&buf);
+		token = COM_Parse(&buf);
 		if (!token[0]) {
 			break;
 		}
@@ -79,7 +79,7 @@ static int G_ParseBotInfos(char *buf, int max, char *infos[]) {
 
 		info[0] = '\0';
 		while (1) {
-			token = COM_ParseExt((const char **)&buf, qtrue);
+			token = COM_ParseExt(&buf, qtrue);
 			if (!token[0]) {
 				Com_Printf("Unexpected end of info file\n");
 				break;
@@ -89,11 +89,12 @@ static int G_ParseBotInfos(char *buf, int max, char *infos[]) {
 			}
 			Q_strncpyz(key, token, sizeof(key));
 
-			token = COM_ParseExt((const char **)&buf, qfalse);
+			token = COM_ParseExt(&buf, qfalse);
 			if (!token[0]) {
-				strcpy((char*)token, "<NULL>");
+				Info_SetValueForKey(info, key, "<NULL>");
+			} else {
+				Info_SetValueForKey(info, key, token);
 			}
-			Info_SetValueForKey(info, key, token);
 		}
 		// NOTE: extra space for arena number
 		infos[count] = G_Alloc(strlen(info) + strlen(va("\\num\\%d", MAX_ARENAS)) + 1);
