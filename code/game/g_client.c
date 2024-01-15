@@ -752,14 +752,13 @@ static void ClientCleanName(const char *in, char *out, int outSize) {
  */
 void ClientUserinfoChanged(int clientNum) {
 	gentity_t *ent;
-	int teamLeader, team, health;
+	int teamLeader, team, health, randomColor;
 	const char *s;
 	char model[MAX_QPATH];
 	char headModel[MAX_QPATH];
 	char oldname[MAX_STRING_CHARS];
 	gclient_t *client;
-	char c1[MAX_INFO_STRING];
-	char c2[MAX_INFO_STRING];
+	char sprayColor[MAX_INFO_STRING];
 	char userinfo[MAX_INFO_STRING];
 	gender_t gender;
 
@@ -850,26 +849,27 @@ void ClientUserinfoChanged(int clientNum) {
 	// team Leader (1 = leader, 0 is normal player)
 	teamLeader = client->sess.teamLeader;
 
-	// colors
-	Q_strncpyz(c1, Info_ValueForKey(userinfo, "color1"), sizeof(c1));
-	Q_strncpyz(c2, Info_ValueForKey(userinfo, "syc_color"), sizeof(c2));
+	// spray color
+	Q_strncpyz(sprayColor, Info_ValueForKey(userinfo, "spraycolor"), sizeof(sprayColor));
+
+	// random spray / iNjECTOR trail color (1 = enabled, 0 = disabled)
+	randomColor = atoi(Info_ValueForKey(userinfo, "randomcolor"));
 
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
 	if (ent->r.svFlags & SVF_BOT) {
 		// cyr{
-		char *rnd_str;
-		int rnd;
-		rnd = random() * 5.9;
-		rnd_str = va("%d", rnd);
-		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tl\\%d"
+		const char *rndSprayColor;
+		int rnd = randomindex(NUM_COLORS);
+		rndSprayColor = va("%d", rnd);
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\sc\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tl\\%d"
 			   "\\sl\\%s",
-			   client->pers.netname, team, model, headModel, c1, rnd_str, client->pers.maxHealth, client->sess.wins,
+			   client->pers.netname, team, model, headModel, rndSprayColor, client->pers.maxHealth, client->sess.wins,
 			   client->sess.losses, Info_ValueForKey(userinfo, "skill"), teamLeader, client->sess.selectedlogo);
 		// cyr}
 	} else {
-		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\tl\\%d\\sl\\%s\\s\\%i",
-			   client->pers.netname, client->sess.sessionTeam, model, headModel, c1, c2, client->pers.maxHealth,
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\sc\\%s\\rc\\%i\\hc\\%i\\w\\%i\\l\\%i\\tl\\%d\\sl\\%s\\s\\%i",
+			   client->pers.netname, client->sess.sessionTeam, model, headModel, sprayColor, randomColor, client->pers.maxHealth,
 			   client->sess.wins, client->sess.losses, teamLeader, client->sess.selectedlogo, (int)gender);
 	}
 

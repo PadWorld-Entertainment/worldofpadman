@@ -223,7 +223,7 @@ typedef struct localEntity_s {
 
 	float bounceFactor; // 0.0 = no bounce, 1.0 = perfect
 
-	float color[4];
+	vec4_t color;
 
 	float radius;
 
@@ -319,8 +319,9 @@ typedef struct {
 
 	int botSkill; // 0 = not bot, 1-5 = bot
 
-	vec3_t color1;
-	vec3_t color2;
+	vec4_t spraycolor;
+	vec4_t rndspraycolor;
+	int randomcolor;	// random color option
 
 	char spraylogo[MAX_SPRAYLOGO_NAME];
 

@@ -3394,6 +3394,8 @@ void CL_Init(void) {
 	Cvar_Get("headmodel", "padman", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("team_model", "padman", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("team_headmodel", "padman", CVAR_USERINFO | CVAR_ARCHIVE);
+	Cvar_Get("spraycolor", "2", CVAR_USERINFO | CVAR_ARCHIVE);
+	Cvar_Get("randomcolor", "0", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("handicap", "100", CVAR_USERINFO | CVAR_ARCHIVE);
 	Cvar_Get("sex", "model", CVAR_USERINFO | CVAR_ARCHIVE);
 

@@ -444,10 +444,8 @@ qboolean Q_IsColorString(const char *p); // ^[0-9a-zA-Z]
 #define S_COLOR_MAGENTA "^6"
 #define S_COLOR_WHITE "^7"
 
-extern vec4_t g_color_table[8];
-extern vec4_t spraycolors[];
-//#define NUM_SPRAYCOLORS ( sizeof( spraycolors[] ) / sizeof( spraycolors[0] ) )
-#define NUM_SPRAYCOLORS 6
+#define NUM_COLORS 8
+extern vec4_t g_color_table[NUM_COLORS];
 
 #define MAKERGB(v, r, g, b)                                                                                            \
 	v[0] = r;                                                                                                          \
