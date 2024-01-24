@@ -462,3 +462,47 @@ spraylogos/42_water
 		alphaGen vertex
 	}
 }
+
+spraylogos/43_fire
+{
+	nopicmip
+	{
+		map spraylogos/43_fire
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+spraylogos/44_earth
+{
+	nopicmip
+	{
+		map spraylogos/44_earth
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+spraylogos/45_air
+{
+	nopicmip
+	{
+		map spraylogos/45_air
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+spraylogos/46_balloon
+{
+	nopicmip
+	{
+		map spraylogos/46_balloon
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
