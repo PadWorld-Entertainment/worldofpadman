@@ -1740,7 +1740,6 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 	float radius;
 	float light;
 	vec3_t lightColor;
-	localEntity_t *le;
 	qboolean alphaFade;
 	qboolean isSprite;
 	int duration;
@@ -1853,7 +1852,8 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		sfx = 0;
 		break;
 	case WP_IMPERIUS:
-		le = CG_AllocLocalEntity();
+	{
+		localEntity_t *le = CG_AllocLocalEntity();
 		le->leType = LE_IMPERIUSBOOM;
 		le->startTime = cg.time;
 		le->endTime = cg.time + 1000;
@@ -1869,6 +1869,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		radius = 32;
 		sfx = cgs.media.sfx_imperiusexp;
 		break;
+	}
 	case WP_PUMPER:
 		mod = cgs.media.pumperFlashModel;
 		shader = cgs.media.pumperFlashShader;
@@ -1925,7 +1926,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 	// create the explosion
 	//
 	if (mod) {
-		le = CG_MakeExplosion(origin, dir, mod, shader, duration, isSprite);
+		localEntity_t *le = CG_MakeExplosion(origin, dir, mod, shader, duration, isSprite);
 		le->light = light;
 		VectorCopy(lightColor, le->lightColor);
 	}
