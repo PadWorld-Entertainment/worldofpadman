@@ -1577,15 +1577,21 @@ static void Cmd_SetViewpos_f(gentity_t *ent) {
 		angles[YAW] = atof(buffer);
 
 		TeleportPlayer(ent, origin, angles);
-	} else if (argc == 2) {
+	} else if (argc >= 2) {
 		gentity_t *target;
 		trap_Argv(1, buffer, sizeof(buffer));
 
-		target = G_Find(NULL, FOFS(targetname), buffer);
+		target = G_Find(NULL, FOFS(target), buffer);
+		if (!target) {
+			target = G_Find(NULL, FOFS(targetname), buffer);
+		}
+		if (!target) {
+			target = G_Find(NULL, FOFS(classname), buffer);
+		}
 		if (target) {
 			TeleportPlayer(ent, target->s.origin, target->s.angles);
 		} else {
-			trap_SendServerCommand(ent - g_entities, "print \"Couldn't find targetname.\n\"");
+			trap_SendServerCommand(ent - g_entities, "print \"Couldn't find target, targetname or classname.\n\"");
 		}
 	} else {
 		trap_SendServerCommand(ent - g_entities, "print \"usage: setviewpos x y z yaw\nusage: setviewpos targetname\n\"");
