@@ -138,8 +138,7 @@ passed to the renderer.
 #define MAX_MARK_FRAGMENTS 128
 #define MAX_MARK_POINTS 384
 
-void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, float orientation, float red,
-				   float green, float blue, float alpha, qboolean alphaFade, float radius, qboolean temporary) {
+void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, float orientation, const vec4_t color, qboolean alphaFade, float radius, qboolean temporary) {
 	vec3_t axis[3];
 	float texCoordScale;
 	vec3_t originalPoints[4];
@@ -150,6 +149,10 @@ void CG_ImpactMark(qhandle_t markShader, const vec3_t origin, const vec3_t dir, 
 	vec3_t markPoints[MAX_MARK_POINTS];
 	vec3_t projection;
 	markPoly_t *mp, *next;
+	float red = color[0];
+	float green = color[1];
+	float blue = color[2];
+	float alpha = color[3];
 
 	if (!cg_addMarks.integer) {
 		return;

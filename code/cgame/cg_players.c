@@ -1913,6 +1913,7 @@ Returns the Z component of the surface being shadowed
 #define SHADOW_DISTANCE 128
 static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 	vec3_t end, mins = {-15, -15, 0}, maxs = {15, 15, 2};
+	vec4_t color;
 	trace_t trace;
 	float alpha;
 
@@ -1952,8 +1953,10 @@ static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 
 	// add the mark as a temporary, so it goes directly to the renderer
 	// without taking a spot in the cg_marks array
-	CG_ImpactMark(cgs.media.shadowMarkShader, trace.endpos, trace.plane.normal, cent->pe.legs.yawAngle, alpha, alpha,
-				  alpha, 1, qfalse, 24, qtrue);
+	color[0] = color[1] = color[2] = alpha;
+	color[3] = 1.0f;
+	CG_ImpactMark(cgs.media.shadowMarkShader, trace.endpos, trace.plane.normal, cent->pe.legs.yawAngle, color, qfalse,
+				  24, qtrue);
 
 	return qtrue;
 }

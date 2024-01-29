@@ -1764,7 +1764,6 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 	case WP_BOASTER:
 		mod = cgs.media.dishFlashModel;
 		shader = cgs.media.boasterExplosionShader;
-		radius = 32;
 		isSprite = qtrue;
 		duration = 400;
 		sfx = 0;
@@ -1939,10 +1938,11 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 
 	if (weapon == WP_BOASTER && clientNum) // clientNum wird hier missbraucht ;P
 		return;
+
 	// HERBY: Bubble G
 	alphaFade = (mark == cgs.media.gumMarkShader);
 	if (weapon == WP_BUBBLEG) {
-		float *color;
+		const float *color;
 
 		// colorize with client color
 		if (CG_FreezeTag()) {
@@ -1951,9 +1951,10 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 			color = g_color_table[colorCode]; // HERBY
 		}
 
-		CG_ImpactMark(mark, origin, dir, random() * 360, color[0], color[1], color[2], 1, alphaFade, radius, qfalse);
+		CG_ImpactMark(mark, origin, dir, random() * 360, color, alphaFade, radius, qfalse);
 	} else {
-		CG_ImpactMark(mark, origin, dir, random() * 360, 1, 1, 1, 1, alphaFade, radius, qfalse);
+		const float *color = g_color_table[ColorIndex(COLOR_WHITE)];
+		CG_ImpactMark(mark, origin, dir, random() * 360, color, alphaFade, radius, qfalse);
 	}
 }
 

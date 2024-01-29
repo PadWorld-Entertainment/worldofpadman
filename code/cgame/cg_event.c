@@ -1020,8 +1020,8 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 				logohandle = FindLogoForSpraying(ci);
 				Add_LogoToDrawList(es->pos.trBase, dir, logohandle, radius, ci);
 			} else {
-				CG_ImpactMark(cgs.media.spraymark, es->pos.trBase, dir, (random() * 360), color[0], color[1], color[2],
-							  color[3], qfalse, radius, qfalse);
+				// hit other surface
+				CG_ImpactMark(cgs.media.spraymark, es->pos.trBase, dir, (random() * 360), color, qfalse, radius, qfalse);
 			}
 		}
 

@@ -159,9 +159,11 @@ static void CG_General(centity_t *cent) {
 
 	// Boaster-Slik-ents ... don't know why I coded this stuff in such a ugly way (without a new ent-type)
 	if (s1->weapon == WP_BOASTER_SPECIAL_VAR) {
-		if (cent->miscTime != 1) // misbraucht ;)
-			CG_ImpactMark(/*cgs.media.energyMarkShader*/ cgs.media.foamMarkShader, s1->origin, s1->angles, s1->time2,
-						  0.5f, 0.5f, 1, 1, qfalse, s1->generic1, qfalse);
+		if (cent->miscTime != 1) { // misbraucht ;)
+			const vec4_t color = {0.5f, 0.5f, 1, 1};
+			CG_ImpactMark(cgs.media.foamMarkShader, s1->origin, s1->angles, s1->time2, color, qfalse, s1->generic1,
+						  qfalse);
+		}
 		cent->miscTime = 1;
 	}
 
@@ -600,13 +602,16 @@ static void CG_Missile(centity_t *cent) {
 
 			// no shadow if too high
 			if (trace.fraction != 1.0f || !trace.startsolid || !trace.allsolid) {
+				vec4_t color;
 				// fade the shadow out with height
 				alpha = 1.0f - trace.fraction;
+				color[0] = color[1] = color[2] = alpha;
+				color[3] = 1.0f;
 
 				// add the mark as a temporary, so it goes directly to the renderer
 				// without taking a spot in the cg_marks array
 				CG_ImpactMark(cgs.media.shadowMarkShader, trace.endpos, trace.plane.normal, cent->pe.legs.yawAngle,
-							  alpha, alpha, alpha, 1, qfalse, 10, qtrue);
+							  color, qfalse, 10, qtrue);
 			}
 		}
 	}
