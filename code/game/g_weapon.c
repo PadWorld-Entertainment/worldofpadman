@@ -308,7 +308,7 @@ static void G_CheckSprayAwards(gentity_t *ent) {
 	ent->client->logocounter++;
 
 	// FIXME: Less magical constants
-	if (ent->client->logocounter == 5) {
+	if (ent->client->logocounter == CNT_CARTRIDGES) {
 		ent->client->ps.persistant[PERS_SPRAYAWARDS_COUNT] =
 			((ent->client->ps.persistant[PERS_SPRAYAWARDS_COUNT] & 0xFF00) |
 			 ((ent->client->ps.persistant[PERS_SPRAYAWARDS_COUNT] + 1) & 0xFF));
@@ -322,7 +322,7 @@ static void G_CheckSprayAwards(gentity_t *ent) {
 			AddTeamScore(ent->client->ps.origin, ent->client->sess.sessionTeam, SCORE_BONUS_SPRAYKILLER,
 						 SCORE_BONUS_SPRAYKILLER_S);
 		}
-	} else if (ent->client->logocounter == 8) {
+	} else if (ent->client->logocounter == MAX_CARTRIDGES) {
 		ent->client->ps.persistant[PERS_SPRAYAWARDS_COUNT] += 0x100;
 
 		// add the sprite over the player's head
