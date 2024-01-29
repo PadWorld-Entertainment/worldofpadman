@@ -278,7 +278,7 @@ static void CG_TouchItem(centity_t *cent) {
 		if (((!strcmp(item->classname, "ammo_spray_b") && cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_BLUE) ||
 			 (!strcmp(item->classname, "ammo_spray_r") && cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_RED) ||
 			 !strcmp(item->classname, "ammo_spray_n")) &&
-			cg.predictedPlayerState.ammo[WP_SPRAYPISTOL] >= 8) {
+			cg.predictedPlayerState.ammo[WP_SPRAYPISTOL] >= MAX_CARTRIDGES) {
 			return; // can't hold more than 8 usable cartridges
 		}
 	}

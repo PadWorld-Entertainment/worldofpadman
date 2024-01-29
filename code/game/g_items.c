@@ -251,7 +251,7 @@ static int Pickup_Ammo(gentity_t *ent, gentity_t *other) {
 		if (((!strcmp(ent->item->classname, "ammo_spray_b") && other->client->sess.sessionTeam == TEAM_BLUE) ||
 			 (!strcmp(ent->item->classname, "ammo_spray_r") && other->client->sess.sessionTeam == TEAM_RED) ||
 			 !strcmp(ent->item->classname, "ammo_spray_n")) &&
-			other->client->ps.ammo[WP_SPRAYPISTOL] >= 8) {
+			other->client->ps.ammo[WP_SPRAYPISTOL] >= MAX_CARTRIDGES) {
 			if ((level.time - other->client->lastOwnCartMSGtime) >
 				5000) // I know the variablename doesn't fit for this :P (#@)
 			{

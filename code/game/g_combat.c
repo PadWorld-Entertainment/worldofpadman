@@ -151,8 +151,8 @@ void TossClientItems(gentity_t *self) {
 	if (g_gametype.integer == GT_SPRAY) {
 		// droping too many lead to a server crash ... only with using cheats ;)
 		// max cartridges 8 ... so don't drop more than 8
-		if (self->client->ps.ammo[WP_SPRAYPISTOL] > 8)
-			self->client->ps.ammo[WP_SPRAYPISTOL] = 8;
+		if (self->client->ps.ammo[WP_SPRAYPISTOL] > MAX_CARTRIDGES)
+			self->client->ps.ammo[WP_SPRAYPISTOL] = MAX_CARTRIDGES;
 
 		if (self->client->sess.sessionTeam == TEAM_RED) {
 			for (; self->client->ps.ammo[WP_SPRAYPISTOL] > 0; self->client->ps.ammo[WP_SPRAYPISTOL]--)
@@ -174,8 +174,8 @@ void TossClientItems(gentity_t *self) {
 
 		// dropping too many lead to a server crash ... only with using cheats ;)
 		// max cartridges 8 ... so don't drop more than 8
-		if (self->client->ps.ammo[WP_SPRAYPISTOL] > 8)
-			self->client->ps.ammo[WP_SPRAYPISTOL] = 8;
+		if (self->client->ps.ammo[WP_SPRAYPISTOL] > MAX_CARTRIDGES)
+			self->client->ps.ammo[WP_SPRAYPISTOL] = MAX_CARTRIDGES;
 
 		self->client->ps.ammo[WP_SPRAYPISTOL]++; // add the own cartridge ...
 

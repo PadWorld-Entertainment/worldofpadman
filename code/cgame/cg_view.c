@@ -1111,7 +1111,7 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	// add buffered sounds
 	CG_PlayBufferedSounds();
 
-	if (cg.snap->ps.ammo[WP_SPRAYPISTOL] >= 8 && cg.sprayyourcolortime < cg.time) {
+	if (cg.snap->ps.ammo[WP_SPRAYPISTOL] >= MAX_CARTRIDGES && cg.sprayyourcolortime < cg.time) {
 		trap_S_StartLocalSound(cgs.media.sprayYourColorSound, cg.snap->ps.clientNum);
 		cg.sprayyourcolortime = cg.time + 20000;
 	}
