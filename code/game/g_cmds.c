@@ -1555,29 +1555,41 @@ Cmd_SetViewpos_f
 =================
 */
 static void Cmd_SetViewpos_f(gentity_t *ent) {
-	vec3_t origin, angles;
 	char buffer[MAX_TOKEN_CHARS];
-	int i;
+	const int argc = trap_Argc();
 
 	if (!g_cheats.integer) {
 		trap_SendServerCommand(ent - g_entities, "print \"Cheats are not enabled on this server.\n\"");
 		return;
 	}
-	if (trap_Argc() != 5) {
-		trap_SendServerCommand(ent - g_entities, "print \"usage: setviewpos x y z yaw\n\"");
-		return;
+
+	if (argc == 5) {
+		vec3_t origin, angles;
+		int i;
+
+		VectorClear(angles);
+		for (i = 0; i < 3; i++) {
+			trap_Argv(i + 1, buffer, sizeof(buffer));
+			origin[i] = atof(buffer);
+		}
+
+		trap_Argv(4, buffer, sizeof(buffer));
+		angles[YAW] = atof(buffer);
+
+		TeleportPlayer(ent, origin, angles);
+	} else if (argc == 2) {
+		gentity_t *target;
+		trap_Argv(1, buffer, sizeof(buffer));
+
+		target = G_Find(NULL, FOFS(targetname), buffer);
+		if (target) {
+			TeleportPlayer(ent, target->s.origin, target->s.angles);
+		} else {
+			trap_SendServerCommand(ent - g_entities, "print \"Couldn't find targetname.\n\"");
+		}
+	} else {
+		trap_SendServerCommand(ent - g_entities, "print \"usage: setviewpos x y z yaw\nusage: setviewpos targetname\n\"");
 	}
-
-	VectorClear(angles);
-	for (i = 0; i < 3; i++) {
-		trap_Argv(i + 1, buffer, sizeof(buffer));
-		origin[i] = atof(buffer);
-	}
-
-	trap_Argv(4, buffer, sizeof(buffer));
-	angles[YAW] = atof(buffer);
-
-	TeleportPlayer(ent, origin, angles);
 }
 
 /*
