@@ -749,8 +749,6 @@ static void CG_SetDeferredClientInfo(int clientNum, clientInfo_t *ci) {
 			continue;
 		}
 		if (Q_stricmp(ci->skinName, match->skinName) || Q_stricmp(ci->modelName, match->modelName) ||
-			//			 Q_stricmp( ci->headModelName, match->headModelName ) ||
-			//			 Q_stricmp( ci->headSkinName, match->headSkinName ) ||
 			(cgs.gametype >= GT_TEAM && ci->team != match->team)) {
 			continue;
 		}
@@ -1628,21 +1626,20 @@ static void CG_TrailItem(const centity_t *cent, qhandle_t hModel) {
 CG_PlayerCartridges
 ===============
 */
-// FIXME: Use seperate defines, structs, consts
 static void CG_PlayerCartridges(centity_t *cent, int renderfx) {
 	int i, j, tokens = cent->currentState.generic1;
 	float angle;
 	refEntity_t ent;
 	vec3_t dir, origin;
-	skulltrail_t *trail = &cg.skulltrails[cent->currentState.number];
+	cartridgetrail_t *trail = &cg.cartridgeTrail[cent->currentState.number];
 
 	if (!tokens) {
 		trail->numpositions = 0;
 		return;
 	}
 
-	if (tokens > MAX_SKULLTRAIL) {
-		tokens = MAX_SKULLTRAIL;
+	if (tokens > MAX_CARTRIDGETRAIL) {
+		tokens = MAX_CARTRIDGETRAIL;
 	}
 
 	// add cartridges if there are more than last time
@@ -1690,7 +1687,7 @@ static void CG_PlayerCartridges(centity_t *cent, int renderfx) {
 		VectorInverse(ent.axis[1]);
 
 		VectorCopy(trail->positions[i], ent.origin);
-		angle = ((((cg.time + (500 * MAX_SKULLTRAIL) - (500 * i)) / 16) & 255) * (M_PI * 2) / 255);
+		angle = ((((cg.time + (500 * MAX_CARTRIDGETRAIL) - (500 * i)) / 16) & 255) * (M_PI * 2) / 255);
 		ent.origin[2] += (sin(angle) * 10);
 		ent.customShader = 0; // to remove the powerup-shader from the last cartridge
 		CG_AddRefEntityWithPowerups(&ent, &cent->currentState, cgs.clientinfo[cent->currentState.number].team);

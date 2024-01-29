@@ -446,12 +446,12 @@ typedef struct {
 	int itemNum;
 } powerupInfo_t;
 
-#define MAX_SKULLTRAIL 10
+#define MAX_CARTRIDGETRAIL 10
 
 typedef struct {
-	vec3_t positions[MAX_SKULLTRAIL];
+	vec3_t positions[MAX_CARTRIDGETRAIL];
 	int numpositions;
-} skulltrail_t;
+} cartridgetrail_t;
 
 #define MAX_REWARDSTACK 10
 #define MAX_SOUNDBUFFER 20
@@ -608,7 +608,7 @@ typedef struct {
 	int spectatorPaintLen;				  // current offset from start
 
 	// skull trails
-	skulltrail_t skulltrails[MAX_CLIENTS];
+	cartridgetrail_t cartridgeTrail[MAX_CLIENTS];
 
 	// centerprinting
 	int centerPrintTime;
