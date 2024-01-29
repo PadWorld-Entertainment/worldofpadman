@@ -501,7 +501,7 @@ static void BotMatch_EnterGame(bot_state_t *bs, bot_match_t *match) {
 
 // cyr_drop{
 static void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
-	int client, areanum;
+	int client;
 	char netname[MAX_MESSAGE_SIZE];
 	aas_entityinfo_t entinfo;
 
@@ -531,7 +531,7 @@ static void BotMatch_DropCart(bot_state_t *bs, bot_match_t *match) {
 	BotEntityInfo(client, &entinfo);
 	// if info is valid (in PVS)
 	if (entinfo.valid) {
-		areanum = BotPointAreaNum(entinfo.origin);
+		const int areanum = BotPointAreaNum(entinfo.origin);
 		if (areanum) { // && trap_AAS_AreaReachability(areanum)) {
 			bs->teamgoal.entitynum = client;
 			bs->teamgoal.areanum = areanum;
