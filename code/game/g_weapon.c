@@ -304,7 +304,7 @@ SPRAY PISTOL
 ======================================================================
 */
 
-static void check_sprayawards(gentity_t *ent) {
+static void G_CheckSprayAwards(gentity_t *ent) {
 	ent->client->logocounter++;
 
 	// FIXME: Less magical constants
@@ -356,7 +356,7 @@ static void Weapon_SpraypistolFire(gentity_t *ent) {
 			if (ent->client->sess.sessionTeam == TEAM_RED) {
 				AddTeamScore(tr.endpos, TEAM_RED, SCORE_SPRAY, SCORE_SPRAY_S);
 				AddScore(ent, tr.endpos, SCORE_SPRAY, SCORE_SPRAY_S);
-				check_sprayawards(ent);
+				G_CheckSprayAwards(ent);
 			} else {
 				AddScore(ent, tr.endpos, SCORE_SPRAY_WRONGWALL, SCORE_SPRAY_WRONGWALL_S);
 				// FIXME: Use an event rather than that crap
@@ -369,7 +369,7 @@ static void Weapon_SpraypistolFire(gentity_t *ent) {
 			if (ent->client->sess.sessionTeam == TEAM_BLUE) {
 				AddTeamScore(tr.endpos, TEAM_BLUE, SCORE_SPRAY, SCORE_SPRAY_S);
 				AddScore(ent, tr.endpos, SCORE_SPRAY, SCORE_SPRAY_S);
-				check_sprayawards(ent);
+				G_CheckSprayAwards(ent);
 			} else {
 				AddScore(ent, tr.endpos, SCORE_SPRAY_WRONGWALL, SCORE_SPRAY_WRONGWALL_S);
 				trap_SendServerCommand(-1, va("cdi " XSTRING(CLIENT_DO_IT_SPRAYED_ON_WRONG_WALL) " %i", (int)(random() * 3.9999)));
@@ -385,7 +385,7 @@ static void Weapon_SpraypistolFire(gentity_t *ent) {
 		if ((&g_entities[tr.entityNum] == level.rspraywall) || (&g_entities[tr.entityNum] == level.bspraywall) ||
 			(&g_entities[tr.entityNum] == level.nspraywall)) {
 			AddScore(ent, tr.endpos, SCORE_SPRAY, SCORE_SPRAY_S);
-			check_sprayawards(ent);
+			G_CheckSprayAwards(ent);
 		}
 	}
 
