@@ -323,7 +323,7 @@ color -> the color of the logo
 FIXME: Radius is not fixed at all!
 #######################
 */
-void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float radius, const vec4_t color) {
+void Add_LogoToDrawList(const vec3_t origin, const vec3_t dir, qhandle_t shader, float radius, const vec4_t color) {
 	vec3_t logoPoints[4]; // the 4 points of the unsplited logo
 	vec3_t projection;	  // a vec for projecting the logo at the wall
 	int numFragments;
@@ -415,12 +415,8 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 										 MAX_LOGO_FRAGMENTS, logoFragments);
 
 	for (i = 0; i < numFragments; i++) {
-		polyVert_t *v;
-		logoPoly_t *lp;
-
 		markFragment_t *lf = &logoFragments[i];
-
-		lp = Alloc_LogoPoly();
+		logoPoly_t *lp = Alloc_LogoPoly();
 		if (!lp)
 			return; // alloc had a big error ...
 
@@ -436,7 +432,7 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 		for (j = 0; j < lf->numPoints; j++) {
 			vec3_t delta;
 
-			v = &lp->verts[j];
+			polyVert_t *v = &lp->verts[j];
 
 			// calculate the texturecoordinates (took this code from mark func)
 			// copy origin and move a bit away from the wall (because we can't use polygonoffset in the shader)
