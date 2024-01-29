@@ -304,6 +304,14 @@ static void Cmd_Give_f(gentity_t *ent) {
 		ent->client->ps.persistant[PERS_PADHERO_COUNT]++;
 		return;
 	}
+
+	if (Q_stricmp(name, "ammo_spray") == 0) {
+		ent->client->ps.ammo[WP_SPRAYPISTOL]++;
+		if (ent->client->ps.ammo[WP_SPRAYPISTOL] >= MAX_CARTRIDGES)
+			ent->client->ps.ammo[WP_SPRAYPISTOL] = MAX_CARTRIDGES;
+		ent->client->ps.generic1 = ent->client->ps.ammo[WP_SPRAYPISTOL];
+	}
+
 	if (Q_stricmp(name, "padace") == 0) {
 		ent->client->ps.persistant[PERS_PADACE_COUNT]++;
 		return;
