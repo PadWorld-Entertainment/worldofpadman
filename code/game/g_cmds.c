@@ -1765,6 +1765,9 @@ void EditPlayerInventory(gentity_t *ent, int arg_offset) {
 	} else if (Q_stricmp(itstr, "ammo_spray") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
 		ent->client->ps.ammo[WP_SPRAYPISTOL] += atoi(arg);
+		if (ent->client->ps.ammo[WP_SPRAYPISTOL] > MAX_CARTRIDGES) {
+			ent->client->ps.ammo[WP_SPRAYPISTOL] = MAX_CARTRIDGES;
+		}
 	} else if (Q_stricmp(itstr, "health") == 0) {
 		trap_Argv(arg_offset + 1, arg, sizeof(arg));
 		G_Damage(ent, NULL, NULL, NULL, NULL, atoi(arg), 0, MOD_UNKNOWN);
