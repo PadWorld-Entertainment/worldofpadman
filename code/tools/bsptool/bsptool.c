@@ -1,6 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef WIN32
+#include "win/dirent.h"
+#else
+#include <dirent.h>
+#endif
 
 typedef struct {
 	int fileofs, filelen;
@@ -148,6 +153,50 @@ static const char *COM_ParseExt(const char **data_p) {
 	return com_token;
 }
 
+static int SkipBracedSection(const char **program, int depth) {
+	const char *token;
+
+	do {
+		token = COM_ParseExt(program);
+		if (token[1] == 0) {
+			if (token[0] == '{') {
+				depth++;
+			} else if (token[0] == '}') {
+				depth--;
+			}
+		}
+	} while (depth && *program);
+
+	return depth;
+}
+
+static const char *FindShaderInShaderText(const char *shadername, const char *allShaders) {
+	const char *token, *p = allShaders;
+	if (!p) {
+		return NULL;
+	}
+
+	while (1) {
+		token = COM_ParseExt(&p);
+		if (token[0] == 0) {
+			break;
+		}
+
+
+		if (!strcmp(token, shadername)) {
+			return p;
+		} else {
+			const int depth = SkipBracedSection(&p, 0);
+			if (depth != 0) {
+				printf("Error: missing brace in shader file: %i\n", depth);
+				exit(1);
+			}
+		}
+	}
+
+	return NULL;
+}
+
 static void Q_strncpyz(char *dest, const char *src, int destsize) {
 	strncpy(dest, src, destsize - 1);
 	dest[destsize - 1] = 0;
@@ -163,7 +212,7 @@ static void sanitizeFilename(char *in) {
 	}
 }
 
-static int validateSound(const char* filename, const char *pk3dir, const char *sound, int ispadpack) {
+static int validateSound(const char *filename, const char *pk3dir, const char *sound, int ispadpack) {
 	FILE *fp;
 	char buf[1024];
 	char basename[1024];
@@ -208,7 +257,7 @@ static int validateSound(const char* filename, const char *pk3dir, const char *s
 	return 1;
 }
 
-static int validateEntityString(const char* filename, const char *pk3dir, const char *entitystring, int ispadpack) {
+static int validateEntityString(const char *filename, const char *pk3dir, const char *entitystring, int ispadpack) {
 	int error = 0;
 	for (;;) {
 		const char *token = COM_ParseExt(&entitystring);
@@ -230,7 +279,17 @@ static int validateEntityString(const char* filename, const char *pk3dir, const 
 	return error;
 }
 
-static int validateShader(const char *shaderName, const char *bspfilename, const char *pk3dir, int ispadpack) {
+static int checkForShader(const char *allShaders, const char *shaderName, const char *bspfilename) {
+	const char *shader = FindShaderInShaderText(shaderName, allShaders);
+	if (shader == NULL) {
+		printf("%s: error in bsp: texture or shader '%s' not found\n", bspfilename, shaderName);
+		return 1;
+	}
+	return 0;
+}
+
+static int validateShader(const char *allShaders, const char *shaderName, const char *bspfilename, const char *pk3dir,
+						  int ispadpack) {
 	FILE *fp;
 	char buf[1024];
 	char basename[1024];
@@ -253,7 +312,7 @@ static int validateShader(const char *shaderName, const char *bspfilename, const
 		basename[len - 4] = '\0';
 	}
 
-	// no extension in filename - append supported extensions and check for for those
+	// no extension in filename - append supported extensions and check for those
 	for (const char **e = ext; *e; ++e) {
 		for (const char **searchpath = searchpaths; *searchpath; ++searchpath) {
 			for (const char **sd = subdirs; *sd; ++sd) {
@@ -266,8 +325,87 @@ static int validateShader(const char *shaderName, const char *bspfilename, const
 		}
 	}
 
-	printf("%s: error in bsp: shader '%s' not found\n", bspfilename, shaderName);
-	return 1;
+	return checkForShader(allShaders, shaderName, bspfilename);
+}
+
+static int filter(const struct dirent *entry) {
+	return strstr(entry->d_name, ".shader") != NULL;
+}
+
+static char *loadAllShaders(const char *pk3dir, int ispadpack) {
+	const int maxShaderSize = 5 * 1024 * 1024;
+	char *shaders = (char *)malloc(maxShaderSize);
+	char buf[1024];
+	int complete_filesize = 0;
+	static const char *subdirs[] = {".", "../xmas"};
+	const char *searchpaths[] = {"scripts.pk3dir", NULL, NULL};
+	int shaderCount = 0;
+
+	if (ispadpack) {
+		searchpaths[1] = "padpack.pk3dir";
+	}
+
+	shaders[0] = '\0';
+
+	for (const char **searchpath = searchpaths; *searchpath; ++searchpath) {
+		for (const char **sd = subdirs; *sd; ++sd) {
+			snprintf(buf, sizeof(buf), "%s/%s/%s/scripts", pk3dir, *sd, *searchpath);
+			struct dirent **files;
+			int n = scandir(buf, &files, filter, alphasort);
+			if (n <= 0) {
+				printf("Failed to scan directory %s\n", buf);
+				continue;
+			}
+
+			for (int i = 0; i < n; ++i) {
+				FILE *fp;
+				int file_size;
+				char *buffer;
+
+				if (files[i]->d_type != DT_REG) {
+					continue;
+				}
+				snprintf(buf, sizeof(buf), "%s/%s/%s/scripts/%s", pk3dir, *sd, *searchpath, files[i]->d_name);
+				fp = fopen(buf, "r");
+				if (fp == NULL) {
+					printf("Failed to open %s\n", buf);
+					continue;
+				}
+				// printf("Load shader %s\n", buf);
+				fseek(fp, 0, SEEK_END);
+				file_size = ftell(fp);
+				fseek(fp, 0, SEEK_SET);
+
+				buffer = (char *)malloc(file_size + 2);
+				fread(buffer, 1, file_size, fp);
+				buffer[file_size] = '\n';
+				buffer[file_size + 1] = '\0';
+				fclose(fp);
+				strncat(shaders, buffer, maxShaderSize - strlen(shaders) - 1);
+				free(buffer);
+				complete_filesize += file_size + 1;
+				++shaderCount;
+			}
+			for (int i = 0; i < n; ++i) {
+				free(files[i]);
+			}
+		}
+	}
+	if (complete_filesize > maxShaderSize) {
+		printf("Fatal error: shader file size is %i bytes\n", complete_filesize);
+		exit(1);
+	}
+	if (complete_filesize == 0) {
+		printf("Fatal error: shader file size is 0 bytes\n");
+		exit(1);
+	}
+	printf("Loaded %i bytes of %i shader data\n", complete_filesize, shaderCount);
+	if (complete_filesize != strlen(shaders)) {
+		printf("Fatal error: shader file size is %i bytes, but strlen(shaders) is %i\n", complete_filesize,
+			   (int)strlen(shaders));
+		exit(1);
+	}
+	return shaders;
 }
 
 static int validateBsp(const char *filename, const char *pk3dir, const void *buf, int ispadpack) {
@@ -278,20 +416,22 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 		return 1;
 	}
 
+	char *allShaders = loadAllShaders(pk3dir, ispadpack);
+
 	int errors = 0;
 	{
 		const lump_t *l = &header.lumps[LUMP_ENTITIES];
-		char *entityString = (char*)malloc(l->filelen);
-		Q_strncpyz(entityString, (const char*)((const unsigned char*)buf + l->fileofs), l->filelen);
+		char *entityString = (char *)malloc(l->filelen);
+		Q_strncpyz(entityString, (const char *)((const unsigned char *)buf + l->fileofs), l->filelen);
 
 		if (validateEntityString(filename, pk3dir, entityString, ispadpack) != 0) {
 			++errors;
 		}
 		free(entityString);
 	}
-	if (0) { // TODO: load all shaders and parse the ids
+	{
 		const lump_t *l = &header.lumps[LUMP_SHADERS];
-		const dshader_t *shaders = (const dshader_t *)(const void *)((const unsigned char*)buf + l->fileofs);
+		const dshader_t *shaders = (const dshader_t *)(const void *)((const unsigned char *)buf + l->fileofs);
 		const int count = l->filelen / sizeof(*shaders);
 		int i;
 
@@ -301,12 +441,13 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 		} else {
 			for (i = 0; i < count; ++i) {
 				const char *shader = shaders[i].shader;
-				if (validateShader(shader, filename, pk3dir, ispadpack) == 0) {
+				if (validateShader(allShaders, shader, filename, pk3dir, ispadpack) == 0) {
 					++errors;
 				}
 			}
 		}
 	}
+	free(allShaders);
 	return errors;
 }
 
