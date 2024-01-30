@@ -318,20 +318,19 @@ origin -> center of the logo
 dir -> a normal of the logo (pointing away from the wall)
 shader -> the shader-handle so we know what to draw ;)
 radius -> this will be a fixed value (but I don't want to fix it here)
-ci -> the clientInfo of the sprayer, so we know the team(for tp spray) and the color(for ffa spray)
+color -> the color of the logo
 
-FIXME: Radius is not fixed at all! RGBA should be passed explicitly, not via clientinfo
+FIXME: Radius is not fixed at all!
 #######################
 */
-void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float radius, clientInfo_t *ci) {
-	vec3_t LogoPoints[4]; // the 4 points of the unsplited logo
+void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float radius, const vec4_t color) {
+	vec3_t logoPoints[4]; // the 4 points of the unsplited logo
 	vec3_t projection;	  // a vec for projecting the logo at the wall
 	int numFragments;
-	markFragment_t LogoFragments[MAX_LOGO_FRAGMENTS], *lf;
-	vec3_t LogoFragmentPoints[MAX_LOGO_POINTS];
+	markFragment_t logoFragments[MAX_LOGO_FRAGMENTS];
+	vec3_t logoFragmentPoints[MAX_LOGO_POINTS];
 	vec3_t axis[3];
 	int i, j;
-	byte color[4];
 	float texCoordScale;
 	logoPoly_t *tmplp;
 	int level;
@@ -376,44 +375,26 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 	}
 
 	// unwind the loop
-	LogoPoints[0][0] = origin[0] - radius * axis[1][0] - radius * axis[2][0];
-	LogoPoints[0][1] = origin[1] - radius * axis[1][1] - radius * axis[2][1];
-	LogoPoints[0][2] = origin[2] - radius * axis[1][2] - radius * axis[2][2];
+	logoPoints[0][0] = origin[0] - radius * axis[1][0] - radius * axis[2][0];
+	logoPoints[0][1] = origin[1] - radius * axis[1][1] - radius * axis[2][1];
+	logoPoints[0][2] = origin[2] - radius * axis[1][2] - radius * axis[2][2];
 
-	LogoPoints[1][0] = origin[0] + radius * axis[1][0] - radius * axis[2][0];
-	LogoPoints[1][1] = origin[1] + radius * axis[1][1] - radius * axis[2][1];
-	LogoPoints[1][2] = origin[2] + radius * axis[1][2] - radius * axis[2][2];
+	logoPoints[1][0] = origin[0] + radius * axis[1][0] - radius * axis[2][0];
+	logoPoints[1][1] = origin[1] + radius * axis[1][1] - radius * axis[2][1];
+	logoPoints[1][2] = origin[2] + radius * axis[1][2] - radius * axis[2][2];
 
-	LogoPoints[2][0] = origin[0] + radius * axis[1][0] + radius * axis[2][0];
-	LogoPoints[2][1] = origin[1] + radius * axis[1][1] + radius * axis[2][1];
-	LogoPoints[2][2] = origin[2] + radius * axis[1][2] + radius * axis[2][2];
+	logoPoints[2][0] = origin[0] + radius * axis[1][0] + radius * axis[2][0];
+	logoPoints[2][1] = origin[1] + radius * axis[1][1] + radius * axis[2][1];
+	logoPoints[2][2] = origin[2] + radius * axis[1][2] + radius * axis[2][2];
 
-	LogoPoints[3][0] = origin[0] - radius * axis[1][0] + radius * axis[2][0];
-	LogoPoints[3][1] = origin[1] - radius * axis[1][1] + radius * axis[2][1];
-	LogoPoints[3][2] = origin[2] - radius * axis[1][2] + radius * axis[2][2];
+	logoPoints[3][0] = origin[0] - radius * axis[1][0] + radius * axis[2][0];
+	logoPoints[3][1] = origin[1] - radius * axis[1][1] + radius * axis[2][1];
+	logoPoints[3][2] = origin[2] - radius * axis[1][2] + radius * axis[2][2];
 
 	// in mark code the projection is only 20 units
 	projection[0] = dir[0] * (-16);
 	projection[1] = dir[1] * (-16);
 	projection[2] = dir[2] * (-16);
-
-	if (ci->team == TEAM_RED) {
-		color[0] = 255;
-		color[1] = 0;
-		color[2] = 0;
-		color[3] = 255;
-	} else if (ci->team == TEAM_BLUE) {
-		color[0] = 0;
-		color[1] = 0;
-		color[2] = 255;
-		color[3] = 255;
-	} else // free in sprayffa
-	{
-		color[0] = ci->color2[0] * 255;
-		color[1] = ci->color2[1] * 255;
-		color[2] = ci->color2[2] * 255;
-		color[3] = 255;
-	}
 
 	texCoordScale = 0.5f * 1.0f / radius;
 
@@ -430,14 +411,14 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 		tmplp = tmplp->nextPoly;
 	}
 
-	numFragments = trap_CM_MarkFragments(4, (void *)LogoPoints, projection, MAX_LOGO_POINTS, LogoFragmentPoints[0],
-										 MAX_LOGO_FRAGMENTS, LogoFragments);
+	numFragments = trap_CM_MarkFragments(4, (void *)logoPoints, projection, MAX_LOGO_POINTS, logoFragmentPoints[0],
+										 MAX_LOGO_FRAGMENTS, logoFragments);
 
 	for (i = 0; i < numFragments; i++) {
 		polyVert_t *v;
 		logoPoly_t *lp;
 
-		lf = &LogoFragments[i];
+		markFragment_t *lf = &logoFragments[i];
 
 		lp = Alloc_LogoPoly();
 		if (!lp)
@@ -459,25 +440,25 @@ void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float
 
 			// calculate the texturecoordinates (took this code from mark func)
 			// copy origin and move a bit away from the wall (because we can't use polygonoffset in the shader)
-			v->xyz[0] = LogoFragmentPoints[lf->firstPoint + j][0] + dir[0] * (0.1f + 0.01f * (float)(level));
-			v->xyz[1] = LogoFragmentPoints[lf->firstPoint + j][1] + dir[1] * (0.1f + 0.01f * (float)(level));
-			v->xyz[2] = LogoFragmentPoints[lf->firstPoint + j][2] + dir[2] * (0.1f + 0.01f * (float)(level));
+			v->xyz[0] = logoFragmentPoints[lf->firstPoint + j][0] + dir[0] * (0.1f + 0.01f * (float)(level));
+			v->xyz[1] = logoFragmentPoints[lf->firstPoint + j][1] + dir[1] * (0.1f + 0.01f * (float)(level));
+			v->xyz[2] = logoFragmentPoints[lf->firstPoint + j][2] + dir[2] * (0.1f + 0.01f * (float)(level));
 
 			VectorSubtract(v->xyz, origin, delta);
 			v->st[0] = 0.5f + DotProduct(delta, axis[1]) * texCoordScale;
 			v->st[1] = 0.5f + DotProduct(delta, axis[2]) * texCoordScale;
 			v->st[0] += level * 10.0f; // TODO ... level-info into the engine ^^
 
-			memcpy(&v->modulate, &color, sizeof(color));
+			v->modulate[0] = (byte)(color[0] * 255.0f);
+			v->modulate[1] = (byte)(color[1] * 255.0f);
+			v->modulate[2] = (byte)(color[2] * 255.0f);
+			v->modulate[3] = (byte)(color[3] * 255.0f);
 		}
 
 		lp->spraytime = cg.time;
 		lp->logoShader = shader;
 		lp->numVerts = lf->numPoints;
-		lp->color[0] = (float)color[0] / 255.0f;
-		lp->color[1] = (float)color[1] / 255.0f;
-		lp->color[2] = (float)color[2] / 255.0f;
-		lp->color[3] = (float)color[3] / 255.0f;
+		Vector4Copy(color, lp->color);
 	}
 }
 

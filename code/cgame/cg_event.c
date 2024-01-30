@@ -1018,7 +1018,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			// Hit a spraywall
 			if (es->generic1 == SPRAYROOM_CONSTANT) {
 				logohandle = FindLogoForSpraying(ci);
-				Add_LogoToDrawList(es->pos.trBase, dir, logohandle, radius, ci);
+				Add_LogoToDrawList(es->pos.trBase, dir, logohandle, radius, color);
 			} else {
 				// hit other surface
 				CG_ImpactMark(cgs.media.spraymark, es->pos.trBase, dir, (random() * 360), color, qfalse, radius, qfalse);

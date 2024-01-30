@@ -1602,7 +1602,7 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops);
 //
 void Init_SprayLogoSys(void);
 void AddLogosToScene(void);
-void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float radius, clientInfo_t *ci);
+void Add_LogoToDrawList(const vec3_t origin, vec3_t dir, qhandle_t shader, float radius, const vec4_t color);
 qhandle_t FindLogoForSpraying(const clientInfo_t *ci);
 void ActiveChooseLogoMenu(void);
 void CG_DumpPolyInfo(void);
