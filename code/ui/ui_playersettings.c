@@ -39,17 +39,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_NAME 20
 #define ID_HANDICAP 21
 #define ID_GENDER 22
-#define ID_EFFECTS 23
-#define ID_PREVMODEL 24
-#define ID_NEXTMODEL 25
-#define ID_PREVSKIN 26
-#define ID_NEXTSKIN 27
-#define ID_MICON 28 //+5
-#define ID_SICON 34 //+11
-#define ID_PLAYERMODEL 46
-#define ID_SPRAYCOLOR 47
-#define ID_NEXTLOGO 48
-#define ID_PREVLOGO 49
+#define ID_PREVMODEL 23
+#define ID_NEXTMODEL 24
+#define ID_PREVSKIN 25
+#define ID_NEXTSKIN 26
+#define ID_MICON 27 //+5
+#define ID_SICON 33 //+11
+#define ID_PLAYERMODEL 45
+#define ID_PREVLOGO 46
+#define ID_NEXTLOGO 47
+#define ID_RANDOMCOLOR 48
+#define ID_SPRAYCOLOR 49
 
 #define MAX_NAMELENGTH 20
 
@@ -60,7 +60,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define GRID_YPOS 158
 #define GRID_XPOS 644
 
-#define XPOSITION 124
+#define XPOSITION 128
 #define YPOSITION 172
 
 typedef struct {
@@ -72,15 +72,11 @@ typedef struct {
 
 	menutext_s nameheader;
 	menufield_s name;
-	menutext_s handicapheader;
 	menulist_s handicap;
-	menutext_s genderheader;
 	menulist_s gender;
 	menutext_s logoheader;
 	menutext_s logoname;
-	menulist_s effects;
 
-	menubitmap_s back;
 	menubitmap_s model;
 
 	menubitmap_s arrowleft;
@@ -93,8 +89,10 @@ typedef struct {
 
 	menubitmap_s logoleft;
 	menubitmap_s logoright;
-
+	menuradiobutton_s randomcolor;
 	menubitmap_s spraycolor;
+
+	menubitmap_s back;
 
 	int firstmodel;
 	int firstskin;
@@ -112,9 +110,6 @@ typedef struct {
 } playersettings_t;
 
 static playersettings_t s_playersettings;
-
-static int gamecodetoui[] = {4, 2, 3, 0, 5, 1, 6};
-static int uitogamecode[] = {4, 6, 2, 3, 1, 5, 7};
 
 static const char *gender_items[] = {S_COLOR_WHITE "Model", S_COLOR_WHITE "Male", S_COLOR_WHITE "Female", S_COLOR_WHITE "Neuter", S_COLOR_WHITE "None", NULL};
 
@@ -256,9 +251,6 @@ static void UI_PlayerSettings_SaveChanges(void) {
 	// handicap
 	trap_Cvar_SetValue("handicap", 100 - s_playersettings.handicap.curvalue * 10);
 
-	// effects color
-	trap_Cvar_SetValue("color1", uitogamecode[s_playersettings.effects.curvalue]);
-
 	// gender
 	g = s_playersettings.gender.curvalue;
 	if (g > 3) {
@@ -331,13 +323,6 @@ static void UI_PlayerSettings_SetMenuItems(void) {
 	Q_strncpyz(s_playersettings.name.field.buffer, UI_Cvar_VariableString("name"),
 			   sizeof(s_playersettings.name.field.buffer));
 
-	// effects color
-	c = UI_GetCvarInt("color1") - 1;
-	if (c < 0 || c > 6) {
-		c = 6;
-	}
-	s_playersettings.effects.curvalue = gamecodetoui[c];
-
 	// model/skin
 	memset(&s_playersettings.playerinfo, 0, sizeof(playerInfo_t));
 
@@ -395,6 +380,9 @@ static void UI_PlayerSettings_SetMenuItems(void) {
 	} else {
 		s_playersettings.gender.curvalue = 0;
 	}
+
+	// random spray color
+	s_playersettings.randomcolor.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("randomcolor"));
 }
 
 static int GetSpecialSkinScore(const char *iconPath) {
@@ -618,12 +606,12 @@ static void UI_PlayerSettings_Draw(void) {
 		}
 	}
 
-	i = trap_Cvar_VariableValue("syc_color");
-	i = Com_Clamp(0, (NUM_SPRAYCOLORS - 1), i);
+	i = (int)trap_Cvar_VariableValue("spraycolor");
+	i = Com_Clamp(0, (NUM_COLORS - 1), i);
 
-	x = XPOSITION - 32;
-	y = 314;
-	UI_SetColor(spraycolors[i]);
+	x = 92;
+	y = 284;
+	UI_SetColor(g_color_table[i]);
 	UI_DrawHandlePic(x, y, 64, 64, uis.spraylogoShaders[s_playersettings.slogo_num]);
 	Q_strncpyz(logoName, SkipLogoNumber(uis.spraylogoNames[s_playersettings.slogo_num]), sizeof(logoName));
 	logoName[0] = toupper(logoName[0]);
@@ -635,9 +623,9 @@ static void UI_PlayerSettings_Draw(void) {
 		prevlogo = s_playersettings.slogo_num - 1;
 	}
 
-	x = XPOSITION - 64 - 8;
-	y = 332;
-	UI_SetColor(spraycolors[i]);
+	x = 52;
+	y = 302;
+	UI_SetColor(g_color_table[i]);
 	UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[prevlogo]);
 	if (uis.cursorx >= x && uis.cursorx <= (x + 32) && uis.cursory >= y && uis.cursory <= (y + 32)) {
 		UI_SetColor(colorTBlack33);
@@ -650,8 +638,8 @@ static void UI_PlayerSettings_Draw(void) {
 		nextlogo = s_playersettings.slogo_num + 1;
 	}
 
-	x = XPOSITION + 32 + 8;
-	UI_SetColor(spraycolors[i]);
+	x = 164;
+	UI_SetColor(g_color_table[i]);
 	UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[nextlogo]);
 	if (uis.cursorx >= x && uis.cursorx <= (x + 32) && uis.cursory >= y && uis.cursory <= (y + 32)) {
 		UI_SetColor(colorTBlack33);
@@ -661,10 +649,10 @@ static void UI_PlayerSettings_Draw(void) {
 	UI_SetColor(NULL);
 
 	// spray color selection boxes
-	x = XPOSITION - 58;
+	x = 46;
 	y = 382 + 4;
-	for (i = 0; i < 6; ++i) {
-		UI_FillRect(x + (16 + 4) * i, y, 16, 16, spraycolors[i]);
+	for (i = 0; i < NUM_COLORS; ++i) {
+		UI_FillRect(x + (16 + 4) * i, y, 16, 16, g_color_table[i]);
 		if (uis.cursorx >= (x + (16 + 4) * i) && uis.cursorx <= (x + (16 + 4) * i + 16) && uis.cursory >= y && uis.cursory <= (y + 16)) {
 			UI_FillRect(x + (16 + 4) * i, y, 16, 16, colorTBlack33);
 			mouseOverColor = i;
@@ -906,8 +894,13 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 			s_playersettings.modelhold = qtrue;
 		s_playersettings.lastCursorX = uis.cursorx;
 		break;
+
+	case ID_RANDOMCOLOR:
+		trap_Cvar_SetValue("randomcolor", s_playersettings.randomcolor.curvalue);
+		break;
+
 	case ID_SPRAYCOLOR:
-		trap_Cvar_Set("syc_color", va("%i", (uis.cursorx - ((menucommon_s *)ptr)->x) / 20));
+		trap_Cvar_Set("spraycolor", va("%i", (uis.cursorx - ((menucommon_s *)ptr)->x) / 20));
 		break;
 
 	case ID_PREVLOGO:
@@ -1058,8 +1051,8 @@ static void UI_PlayerSettings_MenuInit(void) {
 
 	s_playersettings.logoleft.generic.type = MTYPE_BITMAP;
 	s_playersettings.logoleft.generic.flags = QMF_LEFT_JUSTIFY;
-	s_playersettings.logoleft.generic.x = XPOSITION - 64 - 8;
-	s_playersettings.logoleft.generic.y = 332;
+	s_playersettings.logoleft.generic.x = 52;
+	s_playersettings.logoleft.generic.y = 302;
 	s_playersettings.logoleft.generic.id = ID_PREVLOGO;
 	s_playersettings.logoleft.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.logoleft.width = 32;
@@ -1067,8 +1060,8 @@ static void UI_PlayerSettings_MenuInit(void) {
 
 	s_playersettings.logoright.generic.type = MTYPE_BITMAP;
 	s_playersettings.logoright.generic.flags = QMF_LEFT_JUSTIFY;
-	s_playersettings.logoright.generic.x = XPOSITION + 32 + 8;
-	s_playersettings.logoright.generic.y = 332;
+	s_playersettings.logoright.generic.x = 164;
+	s_playersettings.logoright.generic.y = 302;
 	s_playersettings.logoright.generic.id = ID_NEXTLOGO;
 	s_playersettings.logoright.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.logoright.width = 32;
@@ -1106,67 +1099,62 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.name.generic.right = XPOSITION + 80;
 	s_playersettings.name.generic.bottom = y + 2 * (BIGCHAR_HEIGHT);
 
-	y += 2 * (BIGCHAR_HEIGHT + 2);
-	s_playersettings.handicapheader.generic.type = MTYPE_TEXT;
-	s_playersettings.handicapheader.generic.x = XPOSITION - 80;
-	s_playersettings.handicapheader.generic.y = y;
-	s_playersettings.handicapheader.string = "Handicap:";
-	s_playersettings.handicapheader.style = UI_LEFT | UI_SMALLFONT;
-	s_playersettings.handicapheader.color = color_yellow;
-
-	y += BIGCHAR_HEIGHT + 2;
+	y += 3 * (BIGCHAR_HEIGHT + 2);
 	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.handicap.generic.name = "";
+	s_playersettings.handicap.generic.name = "Handicap:";
 	s_playersettings.handicap.generic.flags = QMF_SMALLFONT;
 	s_playersettings.handicap.generic.id = ID_HANDICAP;
 	s_playersettings.handicap.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.handicap.generic.x = XPOSITION - 72;
+	s_playersettings.handicap.generic.x = XPOSITION;
 	s_playersettings.handicap.generic.y = y;
 	s_playersettings.handicap.itemnames = handicap_items;
 
 	y += BIGCHAR_HEIGHT + 2;
-	s_playersettings.genderheader.generic.type = MTYPE_TEXT;
-	s_playersettings.genderheader.generic.x = XPOSITION - 80;
-	s_playersettings.genderheader.generic.y = y;
-	s_playersettings.genderheader.string = "Gender:";
-	s_playersettings.genderheader.style = UI_LEFT | UI_SMALLFONT;
-	s_playersettings.genderheader.color = color_yellow;
-
-	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.gender.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.gender.generic.name = "";
+	s_playersettings.gender.generic.name = "Gender:";
 	s_playersettings.gender.generic.flags = QMF_SMALLFONT;
 	s_playersettings.gender.generic.id = ID_GENDER;
 	s_playersettings.gender.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.gender.generic.x = XPOSITION - 72;
+	s_playersettings.gender.generic.x = XPOSITION;
 	s_playersettings.gender.generic.y = y;
 	s_playersettings.gender.itemnames = gender_items;
 	s_playersettings.gender.generic.toolTip =
 		"Choose a desired gender, which is normally determined by the chosen player model, or choose "
-		"none to deactivate the gender. Default is model. Note: none forces the game to use they/them "
+		"none to deactivate the gender. Default is model. NOTE: None forces the game to use they/them "
 		"instead of he/his, she/her, or it/its for your character.";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
-	s_playersettings.logoheader.generic.x = XPOSITION - 80;
+	s_playersettings.logoheader.generic.x = XPOSITION - 96;
 	s_playersettings.logoheader.generic.y = y;
 	s_playersettings.logoheader.string = "Spray Logo:";
 	s_playersettings.logoheader.style = UI_LEFT | UI_SMALLFONT;
 	s_playersettings.logoheader.color = color_yellow;
 
-	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.logoname.generic.type = MTYPE_TEXT;
-	s_playersettings.logoname.generic.x = XPOSITION - 64;
+	s_playersettings.logoname.generic.x = XPOSITION + 8;
 	s_playersettings.logoname.generic.y = y;
-	s_playersettings.logoname.string = "        ";
+	s_playersettings.logoname.string = "          ";
 	s_playersettings.logoname.style = UI_LEFT | UI_SMALLFONT;
 	s_playersettings.logoname.color = color_white;
 
+	y += 5 * (BIGCHAR_HEIGHT + 2);
+	s_playersettings.randomcolor.generic.type = MTYPE_RADIOBUTTON;
+	s_playersettings.randomcolor.generic.name = "Random Color:";
+	s_playersettings.randomcolor.generic.flags = QMF_SMALLFONT;
+	s_playersettings.randomcolor.generic.callback = UI_PlayerSettings_MenuEvent;
+	s_playersettings.randomcolor.generic.id = ID_RANDOMCOLOR;
+	s_playersettings.randomcolor.generic.x = XPOSITION + 24;
+	s_playersettings.randomcolor.generic.y = y;
+	s_playersettings.randomcolor.generic.toolTip =
+		"Enable to randomize the color of the spray logo color and the Injector trail with each "
+		"shot. Default is off. NOTE: In team game types the color is always set to red or blue.";
+
 	s_playersettings.spraycolor.generic.type = MTYPE_BITMAP;
 	s_playersettings.spraycolor.generic.flags = QMF_LEFT_JUSTIFY;
-	s_playersettings.spraycolor.generic.x = XPOSITION - 60;
+	s_playersettings.spraycolor.generic.x = 44;
 	s_playersettings.spraycolor.generic.y = 384;
-	s_playersettings.spraycolor.width = 120;
+	s_playersettings.spraycolor.width = 160;
 	s_playersettings.spraycolor.height = 20;
 	s_playersettings.spraycolor.generic.id = ID_SPRAYCOLOR;
 	s_playersettings.spraycolor.generic.callback = UI_PlayerSettings_MenuEvent;
@@ -1184,14 +1172,13 @@ static void UI_PlayerSettings_MenuInit(void) {
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowdown);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicapheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.genderheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.gender);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoname);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoleft);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoright);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.randomcolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.spraycolor);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.back);
 

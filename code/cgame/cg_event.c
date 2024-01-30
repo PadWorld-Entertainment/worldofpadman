@@ -1001,29 +1001,35 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 
 			ByteToDir(es->eventParm, dir);
 
-			switch (ci->team) {
-			case TEAM_RED:
-				VectorSet(color, 1.0, 0.0, 0.0);
-				break;
-			case TEAM_BLUE:
-				VectorSet(color, 0.0, 0.0, 1.0);
-				break;
-			default:
-				VectorCopy(ci->color2, color);
-				break;
+			if (cgs.gametype >= GT_TEAM) {
+				// force team colors
+				if (ci->team == TEAM_BLUE) {
+					Vector4Copy(g_color_table[ColorIndex(COLOR_BLUE)], color);
+				} else {
+					Vector4Copy(g_color_table[ColorIndex(COLOR_RED)], color);
+				}
+			} else {
+				// use custom color
+				if (ci->randomcolor == 1) {
+					int rnd = randomindex(NUM_COLORS);
+					// use random spray color
+					Vector4Copy(ci->rndspraycolor, color);
+					Vector4Copy(g_color_table[rnd], ci->rndspraycolor);
+				} else {
+					// use spray color
+					Vector4Copy(ci->spraycolor, color);
+				}
 			}
-			color[3] = 1.0f;
 
 			if (es->generic1 == SPRAYROOM_CONSTANT) {
-				// hit a spraywall
+				// hit a spray wall
 				qhandle_t logohandle = FindLogoForSpraying(ci);
 				Add_LogoToDrawList(es->pos.trBase, dir, logohandle, radius, color);
 			} else {
 				// hit other surface
-				CG_ImpactMark(cgs.media.spraymark, es->pos.trBase, dir, (random() * 360), color, qfalse, radius, qfalse);
+				CG_ImpactMark(cgs.media.spraymark, es->pos.trBase, dir, (random() * 360), color, qtrue, radius, qfalse);
 			}
 		}
-
 		break;
 
 	case EV_GLOBAL_SOUND: // play from the player's head so it never diminishes

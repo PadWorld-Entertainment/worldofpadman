@@ -156,6 +156,7 @@ vmCvar_t ui_server16;
 // vmCvar_t	lensflarelist;
 // lens end
 vmCvar_t spraycolor;
+vmCvar_t randomcolor;
 vmCvar_t syc_logo;
 vmCvar_t s_wop_restarted;
 vmCvar_t con_notifytime;
@@ -231,7 +232,8 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  // lens begin
 								  //	,{NULL, "lensflarelist", "", CVAR_INIT|CVAR_ROM}
 								  // lens end
-								  {&spraycolor, "syc_color", "0", CVAR_ARCHIVE | CVAR_USERINFO},
+								  {&spraycolor, "spraycolor", "2", CVAR_ARCHIVE | CVAR_USERINFO},
+								  {&randomcolor, "randomcolor", "0", CVAR_ARCHIVE | CVAR_USERINFO},
 								  {&syc_logo, "syc_logo", "", CVAR_ARCHIVE},
 								  {&s_wop_restarted, "s_wop_restarted", "0", CVAR_ROM | CVAR_TEMP}, // CVAR_NORESTART
 								  {&con_notifytime, "con_notifytime", "-4", CVAR_ARCHIVE},

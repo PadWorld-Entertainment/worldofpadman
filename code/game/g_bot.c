@@ -554,17 +554,10 @@ static void G_AddBot(const char *name, float skill, const char *team, int delay,
 	}
 	Info_SetValueForKey(userinfo, "sex", s);
 
-	key = "color1";
+	key = "spraycolor";
 	s = Info_ValueForKey(botinfo, key);
 	if (!*s) {
-		s = "4";
-	}
-	Info_SetValueForKey(userinfo, key, s);
-
-	key = "color2";
-	s = Info_ValueForKey(botinfo, key);
-	if (!*s) {
-		s = "5";
+		s = "2"; // COLOR_GREEN
 	}
 	Info_SetValueForKey(userinfo, key, s);
 

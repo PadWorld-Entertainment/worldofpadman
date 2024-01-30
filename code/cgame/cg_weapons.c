@@ -27,13 +27,14 @@ static qboolean CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle);
 
 #define MAXRADIUS 48 // 32
 #define PUFFSPEED 1000.0f
+
 /*
 ==========================
 CG_SprayTrail
 ==========================
 */
 static void CG_SprayTrail(centity_t *cent, vec3_t start) {
-	vec4_t tmpcolor = {1.0f, 1.0f, 1.0f, 1.0f};
+	vec4_t color = {1.0f, 1.0f, 1.0f, 1.0f};
 	//	vec3_t	smokepos,scalevec;
 	vec3_t smokevel; // = { -5.0f, 0.0f, 0.0f };
 					 //	int		i;
@@ -54,16 +55,22 @@ static void CG_SprayTrail(centity_t *cent, vec3_t start) {
 		end[2] = tr.endpos[2];
 	}
 
-	if (cgs.clientinfo[cent->currentState.clientNum].team == TEAM_RED) {
-		tmpcolor[0] = 1.0f;
-		tmpcolor[1] = tmpcolor[2] = 0.0f;
-	} else if (cgs.clientinfo[cent->currentState.clientNum].team == TEAM_BLUE) {
-		tmpcolor[0] = tmpcolor[1] = 0.0f;
-		tmpcolor[2] = 1.0f;
+	if (cgs.gametype >= GT_TEAM) {
+		// force team colors
+		if (cgs.clientinfo[cent->currentState.clientNum].team == TEAM_BLUE) {
+			Vector4Copy(g_color_table[ColorIndex(COLOR_BLUE)], color);
+		} else {
+			Vector4Copy(g_color_table[ColorIndex(COLOR_RED)], color);
+		}
 	} else {
-		tmpcolor[0] = cgs.clientinfo[cent->currentState.clientNum].color2[0];
-		tmpcolor[1] = cgs.clientinfo[cent->currentState.clientNum].color2[1];
-		tmpcolor[2] = cgs.clientinfo[cent->currentState.clientNum].color2[2];
+		// use custom color
+		if (cgs.clientinfo[cent->currentState.clientNum].randomcolor == 1) {
+			// use random spray color
+			Vector4Copy(cgs.clientinfo[cent->currentState.clientNum].rndspraycolor, color);
+		} else {
+			// use spray color
+			Vector4Copy(cgs.clientinfo[cent->currentState.clientNum].spraycolor, color);
+		}
 	}
 
 	smokevel[0] = end[0] - start[0];
@@ -76,7 +83,7 @@ static void CG_SprayTrail(centity_t *cent, vec3_t start) {
 	smokevel[1] *= PUFFSPEED;
 	smokevel[2] *= PUFFSPEED;
 
-	smoke = CG_SmokePuff(start, smokevel, MAXRADIUS, tmpcolor[0], tmpcolor[1], tmpcolor[2], 0.33f,
+	smoke = CG_SmokePuff(start, smokevel, MAXRADIUS, color[0], color[1], color[2], 0.33f,
 						 1000.0f * traillength / PUFFSPEED, // disappear at wall
 						 cg.time, 0, 0, cgs.media.spraypuff);
 	// use the optimized local entity add
@@ -192,33 +199,31 @@ static void CG_KMATrail(centity_t *ent, const weaponInfo_t *wi) {
 		ent->trailLE->pos = es->pos;
 		ent->trailLE->refEntity.customShader = cgs.media.kmaTrailShader;
 
-		if (cgs.gametype >= GT_TEAM) // team mode
-		{
+		if (cgs.gametype >= GT_TEAM) {
 			// force team colors
 			if (cinfo->team == TEAM_BLUE) {
-				ent->trailLE->color[0] = 0.0f;
-				ent->trailLE->color[1] = 0.0f;
-				ent->trailLE->color[2] = 1.0f;
+				Vector4Copy(g_color_table[ColorIndex(COLOR_BLUE)], ent->trailLE->color);
 			} else {
-				ent->trailLE->color[0] = 1.0f;
-				ent->trailLE->color[1] = 0.0f;
-				ent->trailLE->color[2] = 0.0f;
+				Vector4Copy(g_color_table[ColorIndex(COLOR_RED)], ent->trailLE->color);
 			}
-		} else // free mode
-		{
-			// use custom colors
-			ent->trailLE->color[0] = cinfo->color2[0];
-			ent->trailLE->color[1] = cinfo->color2[1];
-			ent->trailLE->color[2] = cinfo->color2[2];
+		} else {
+			// use custom color
+			if (cinfo->randomcolor == 1) {
+				// use random spray color
+				Vector4Copy(cinfo->rndspraycolor, ent->trailLE->color);
+			} else {
+				// use spray color
+				Vector4Copy(cinfo->spraycolor, ent->trailLE->color);
+			}
 
 			// force a different color for "black" since black doesn't show up
 			if (ent->trailLE->color[0] == 0.0f && ent->trailLE->color[1] == 0.0f && ent->trailLE->color[2] == 0.0f) {
 				ent->trailLE->color[0] = 0.8f;
 				ent->trailLE->color[1] = 0.0f;
 				ent->trailLE->color[2] = 1.0f;
+				ent->trailLE->color[3] = 1.0f;
 			}
 		}
-		ent->trailLE->color[3] = 1.0f;
 		ent->trailLE->refEntity.radius = wi->trailRadius;
 		VectorCopy(es->origin2, ent->trailLE->refEntity.origin);
 	}
@@ -1082,8 +1087,8 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 		es = &cent->currentState;
 		cinfo = &cgs.clientinfo[es->clientNum];
 
-		// forced team color
 		if (cgs.gametype >= GT_TEAM) {
+			// force team colors
 			if (cinfo->team == TEAM_BLUE) {
 				flash.shaderRGBA[0] = 0;
 				flash.shaderRGBA[1] = 0;
@@ -1095,16 +1100,25 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 				flash.shaderRGBA[2] = 0;
 				flash.shaderRGBA[3] = 255;
 			}
-		} else // ffa-type color
-		{
-			flash.shaderRGBA[0] = cinfo->color2[0] * 255;
-			flash.shaderRGBA[1] = cinfo->color2[1] * 255;
-			flash.shaderRGBA[2] = cinfo->color2[2] * 255;
-			flash.shaderRGBA[3] = 255;
+		// use custom color
+		} else {
+			if (cinfo->randomcolor == 1) {
+				// use random spray color
+				flash.shaderRGBA[0] = cinfo->rndspraycolor[0] * 255;
+				flash.shaderRGBA[1] = cinfo->rndspraycolor[1] * 255;
+				flash.shaderRGBA[2] = cinfo->rndspraycolor[2] * 255;
+				flash.shaderRGBA[3] = 255;
+			} else {
+				// use spray color
+				flash.shaderRGBA[0] = cinfo->spraycolor[0] * 255;
+				flash.shaderRGBA[1] = cinfo->spraycolor[1] * 255;
+				flash.shaderRGBA[2] = cinfo->spraycolor[2] * 255;
+				flash.shaderRGBA[3] = 255;
+			}
 
 			// force a different color for "black" since black doesn't show up
 			if (flash.shaderRGBA[0] == 0 && flash.shaderRGBA[1] == 0 && flash.shaderRGBA[2] == 0) {
-				flash.shaderRGBA[0] = (unsigned int)0.8 * 255;
+				flash.shaderRGBA[0] = (byte)(0.8f * 255);
 				flash.shaderRGBA[1] = 0;
 				flash.shaderRGBA[2] = 255;
 			}
@@ -1138,7 +1152,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 				ImpLoadingSoundsPlayed = 0;
 			}
 
-			if (ImpLoadingSoundsPlayed <= 11 && (cg.time - cg.imp_startloading) >= 200 * (1 + ImpLoadingSoundsPlayed)) {
+			if (ImpLoadingSoundsPlayed < ((int)sizeof(cgs.media.imperiusloading) - 1) && (cg.time - cg.imp_startloading) >= 200 * (1 + ImpLoadingSoundsPlayed)) {
 				trap_S_StartLocalSound(cgs.media.imperiusloading[ImpLoadingSoundsPlayed + 1], CHAN_LOCAL_SOUND);
 				ImpLoadingSoundsPlayed++;
 			}
@@ -1694,6 +1708,12 @@ void CG_FireWeapon(centity_t *cent) {
 		if (cent->pe.lightningFiring) {
 			return;
 		}
+	}
+
+	// random color if injector is used and random color menu option is enabled
+	if (cgs.clientinfo[cent->currentState.clientNum].randomcolor == 1 && ent->weapon == WP_KMA97) {
+		const int rnd = randomindex(NUM_COLORS);
+		Vector4Copy(g_color_table[rnd], cgs.clientinfo[cent->currentState.clientNum].rndspraycolor);
 	}
 
 	// play quad sound if needed

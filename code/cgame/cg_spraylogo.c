@@ -219,7 +219,7 @@ The main-init for the spraylogosys ... should be called at every vid_restart
 */
 void Init_SprayLogoSys(void) {
 	cgs.media.spraypuff = trap_R_RegisterShader("models/weaponsfx/spraypuff");
-	cgs.media.spraymark = trap_R_RegisterShader("models/weaponsfx/spraymark");
+	cgs.media.spraymark = trap_R_RegisterShader("gfx/damage/spray_mrk");
 	cgs.media.slmenu_arrowr = trap_R_RegisterShaderNoMip("menu/arrows/headblu_rt0");
 	cgs.media.slmenu_arrowl = trap_R_RegisterShaderNoMip("menu/arrows/headblu_lt0");
 	cgs.media.cgwopmenu_cursor = trap_R_RegisterShaderNoMip("menu/art/3_cursor2");
@@ -395,7 +395,6 @@ void Add_LogoToDrawList(const vec3_t origin, const vec3_t dir, qhandle_t shader,
 	projection[0] = dir[0] * (-16);
 	projection[1] = dir[1] * (-16);
 	projection[2] = dir[2] * (-16);
-
 	texCoordScale = 0.5f * 1.0f / radius;
 
 	tmplp = drawLogoPolys;
@@ -491,10 +490,10 @@ void AddLogosToScene(void) {
 
 		// maybe I will fade color as well
 		for (i = 0; i < lp->numVerts; i++) {
-			lp->verts[i].modulate[0] = (int)(lp->color[0] * fadeout * 255.0f);
-			lp->verts[i].modulate[1] = (int)(lp->color[1] * fadeout * 255.0f);
-			lp->verts[i].modulate[2] = (int)(lp->color[2] * fadeout * 255.0f);
-			lp->verts[i].modulate[3] = (int)(lp->color[3] * fadeout * 255.0f);
+			lp->verts[i].modulate[0] = (byte)(lp->color[0] * fadeout * 255.0f);
+			lp->verts[i].modulate[1] = (byte)(lp->color[1] * fadeout * 255.0f);
+			lp->verts[i].modulate[2] = (byte)(lp->color[2] * fadeout * 255.0f);
+			lp->verts[i].modulate[3] = (byte)(lp->color[3] * fadeout * 255.0f);
 		}
 
 		// add to scene ;)
@@ -562,12 +561,12 @@ void ActiveChooseLogoMenu(void) {
 		else
 			spraycolor = colorBlue;
 	} else {
-		trap_Cvar_VariableStringBuffer("syc_color", colorchar, sizeof(colorchar));
+		trap_Cvar_VariableStringBuffer("spraycolor", colorchar, sizeof(colorchar));
 
-		if (colorchar[0] > '5' || colorchar[0] < '0')
-			colorchar[0] = '0';
+		if (colorchar[0] > COLOR_WHITE || colorchar[0] < COLOR_BLACK)
+			colorchar[0] = COLOR_BLACK;
 
-		spraycolor = spraycolors[(int)(colorchar[0] - '0')];
+		spraycolor = g_color_table[ColorIndex(colorchar[0])];
 	}
 
 	catcher = trap_Key_GetCatcher();
@@ -630,15 +629,14 @@ void ActiveChooseLogoMenu(void) {
 	CG_DrawPic(340, ARROWY, 50, 22, cgs.media.slmenu_arrowr);
 
 	if (cgs.gametype == GT_SPRAYFFA) {
-		int numColors = 6; // sizeof(spraycolors)/sizeof(spraycolors[0]);
 		int x = XLL;
 		int y = ARROWY + 40;
 
-		CG_DrawStringExt(x, y + COLORSIZE / 2 - 8, "...or change the spray color:", colorWhite, qtrue, qtrue, 8, 16,
-						 -1);
-		x += 240;
-		for (i = 0; i < numColors; ++i) {
-			CG_FillRect(x + (COLORSIZE + CGAP) * i, y, COLORSIZE, COLORSIZE, spraycolors[i]);
+		CG_DrawStringExt(x, y + COLORSIZE / 2 - 8, "...or change the color:", colorWhite, qtrue, qtrue, 8, 16, -1);
+
+		x += 200;
+		for (i = 0; i < NUM_COLORS; ++i) {
+			CG_FillRect(x + (COLORSIZE + CGAP) * i, y, COLORSIZE, COLORSIZE, g_color_table[i]);
 			if (CursorInBox(x + (COLORSIZE + CGAP) * i, y, COLORSIZE, COLORSIZE)) {
 				CG_FillRect(x + (COLORSIZE + CGAP) * i, y, COLORSIZE, COLORSIZE, colorTBlack33);
 				mouseOverColor = i;
@@ -659,7 +657,7 @@ void ActiveChooseLogoMenu(void) {
 		} else if (mouseOverColor != -1) {
 			trap_S_StartLocalSound(menuClickSound, CHAN_LOCAL_SOUND);
 
-			trap_Cvar_Set("syc_color", va("%d", mouseOverColor));
+			trap_Cvar_Set("spraycolor", va("%d", mouseOverColor));
 		} else {
 			// left arrow
 			if (cgs.cursorX > 250 && cgs.cursorX < 300 && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {

@@ -833,21 +833,27 @@ void CG_NewClientInfo(int clientNum) {
 	v = Info_ValueForKey(configstring, "n");
 	Q_strncpyz(newInfo.name, v, sizeof(newInfo.name));
 
-	// colors
-	v = Info_ValueForKey(configstring, "c1");
-	CG_ColorFromString(v, newInfo.color1);
-
-	v = Info_ValueForKey(configstring, "c2");
+	// spray color
+	v = Info_ValueForKey(configstring, "sc");
 	{
 		int colorid = atoi(v);
 
 		if (colorid < 0) {
 			colorid = 0;
-		} else if (colorid >= NUM_SPRAYCOLORS) {
-			colorid = (NUM_SPRAYCOLORS - 1);
+		} else if (colorid >= NUM_COLORS) {
+			colorid = (NUM_COLORS - 1);
 		}
 
-		VectorCopy(spraycolors[colorid], newInfo.color2);
+		Vector4Copy(g_color_table[colorid], newInfo.spraycolor);
+	}
+
+	// random color
+	v = Info_ValueForKey(configstring, "rc");
+	newInfo.randomcolor = atoi(v);
+
+	if (newInfo.randomcolor) {
+		const int rnd = randomindex(NUM_COLORS);
+		Vector4Copy(g_color_table[rnd], newInfo.rndspraycolor);
 	}
 
 	// bot skill

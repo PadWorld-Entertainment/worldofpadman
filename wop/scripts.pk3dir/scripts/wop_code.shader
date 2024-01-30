@@ -9,9 +9,6 @@ models/weaponsfx/spraypuff { {  map models/weaponsfx/spraypuff  blendFunc blend 
 powerupeffect/puff { {  map powerupeffect/puff  blendFunc blend  rgbGen vertex  alphaGen vertex } }
 powerupeffect/revival { {  map powerupeffect/heart_noalpha  blendFunc add  rgbGen vertex  alphaGen vertex } }
 
-//spraymark ... I will use the spraypuff =)
-models/weaponsfx/spraymark { polygonoffset {  map models/weaponsfx/spraypuff  blendFunc blend  rgbGen vertex  alphaGen vertex } }
-
 // =================
 // WoP ASCII FONT
 // =================
@@ -210,6 +207,18 @@ gfx/damage/ice_mrk
 	{
 		map gfx/damage/ice_mrk
 		blendfunc add
+	}
+}
+
+gfx/damage/spray_mrk
+{
+	cull none
+	polygonoffset
+	{
+		map gfx/damage/spray_mrk
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
 	}
 }
 
