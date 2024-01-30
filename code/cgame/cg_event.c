@@ -994,11 +994,10 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		break;
 
 	case EV_SPRAYLOGO:
-		// Hit a surface
+		// hit a surface
 		if (es->eventParm != 255) {
 			vec4_t color;
-			int radius = (int)(32.0f * es->angles[0]); // Scale by distance
-			qhandle_t logohandle;
+			int radius = (int)(32.0f * es->angles[0]); // scale by distance
 
 			ByteToDir(es->eventParm, dir);
 
@@ -1015,9 +1014,9 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			}
 			color[3] = 1.0f;
 
-			// Hit a spraywall
 			if (es->generic1 == SPRAYROOM_CONSTANT) {
-				logohandle = FindLogoForSpraying(ci);
+				// hit a spraywall
+				qhandle_t logohandle = FindLogoForSpraying(ci);
 				Add_LogoToDrawList(es->pos.trBase, dir, logohandle, radius, color);
 			} else {
 				// hit other surface
