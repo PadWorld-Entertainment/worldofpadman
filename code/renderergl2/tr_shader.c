@@ -30,6 +30,7 @@ static char *s_shaderText;
 static shaderStage_t stages[MAX_SHADER_STAGES];
 static shader_t shader;
 static texModInfo_t texMods[MAX_SHADER_STAGES][TR_MAX_TEXMODS];
+static int shader_realLightmapIndex;
 
 #define FILE_HASH_SIZE 1024
 static shader_t *hashTable[FILE_HASH_SIZE];
@@ -2568,7 +2569,7 @@ static void FixFatLightmapTexCoords(void)
 		return;
 	}
 
-	lightmapnum = shader.lightmapIndex;
+	lightmapnum = shader_realLightmapIndex;
 
 	if (tr.worldDeluxeMapping)
 		lightmapnum >>= 1;
@@ -2626,7 +2627,7 @@ static void FixFatLightmapTexCoords(void)
 InitShader
 ===============
 */
-static void InitShader(const char *name, int lightmapIndex) {
+static void InitShaderEx(const char *name, int lightmapIndex, int realLightmapIndex) {
 	int i;
 
 	// clear the global shader
@@ -2635,6 +2636,7 @@ static void InitShader(const char *name, int lightmapIndex) {
 
 	Q_strncpyz(shader.name, name, sizeof(shader.name));
 	shader.lightmapIndex = lightmapIndex;
+	shader_realLightmapIndex = realLightmapIndex;
 
 	for (i = 0; i < MAX_SHADER_STAGES; i++) {
 		stages[i].bundle[0].texMods = texMods[i];
@@ -2649,6 +2651,10 @@ static void InitShader(const char *name, int lightmapIndex) {
 			stages[i].specularScale[3] = r_baseGloss->value;
 		}
 	}
+}
+
+static void InitShader( const char *name, int lightmapIndex ) {
+	InitShaderEx( name, lightmapIndex, lightmapIndex );
 }
 
 /*
@@ -2957,9 +2963,13 @@ most world construction surfaces.
 ===============
 */
 shader_t *R_FindShader(const char *name, int lightmapIndex, qboolean mipRawImage) {
+	return R_FindShaderEx(name, lightmapIndex, mipRawImage, lightmapIndex);
+}
+
+shader_t *R_FindShaderEx(const char *name, int lightmapIndex, qboolean mipRawImage, int realLightmapIndex) {
 	char strippedName[MAX_QPATH];
 	int hash;
-	const char *shaderText;
+	char *shaderText;
 	image_t *image;
 	shader_t *sh;
 
@@ -2995,7 +3005,7 @@ shader_t *R_FindShader(const char *name, int lightmapIndex, qboolean mipRawImage
 		}
 	}
 
-	InitShader(strippedName, lightmapIndex);
+	InitShaderEx(strippedName, lightmapIndex, realLightmapIndex);
 
 	//
 	// attempt to define shader from an explicit parameter file
