@@ -132,7 +132,7 @@ static char *gamenames[] = {GAMETYPE_NAME_SHORT(GT_FFA),
 							GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE),
 							NULL};
 
-static char quake3worldMessage[] = "Visit www.worldofpadman.net - News, Community, Events, Files";
+static char quake3worldMessage[] = "Visit www.worldofpadman.net - News, Events, Files";
 
 typedef struct {
 	char adrstr[MAX_ADDRESSLENGTH];
@@ -1439,7 +1439,7 @@ static void UI_ArenaServers_MenuInit(void) {
 
 	numMasters = UI_ArenaServers_ConstructMasterList();
 
-	y = (80 - SMALLCHAR_HEIGHT);
+	y = 30;
 	g_arenaservers.master.generic.type = MTYPE_SPINCONTROL;
 	g_arenaservers.master.generic.name = "Servers:";
 	g_arenaservers.master.generic.flags = (QMF_PULSEIFFOCUS | QMF_SMALLFONT);
@@ -1449,7 +1449,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.master.generic.y = y;
 	g_arenaservers.master.itemnames = master_items;
 
-	y += SMALLCHAR_HEIGHT;
+	y += (BIGCHAR_HEIGHT + 2);
 	g_arenaservers.gametype.generic.type = MTYPE_SPINCONTROL;
 	g_arenaservers.gametype.generic.name = "Game Type:";
 	g_arenaservers.gametype.generic.flags = (QMF_PULSEIFFOCUS | QMF_SMALLFONT);
@@ -1459,7 +1459,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.gametype.generic.y = y;
 	g_arenaservers.gametype.itemnames = servertype_items;
 
-	y += SMALLCHAR_HEIGHT;
+	y += (BIGCHAR_HEIGHT + 2);
 	g_arenaservers.sortkey.generic.type = MTYPE_SPINCONTROL;
 	g_arenaservers.sortkey.generic.name = "Sort By:";
 	g_arenaservers.sortkey.generic.flags = (QMF_PULSEIFFOCUS | QMF_SMALLFONT);
@@ -1469,7 +1469,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.sortkey.generic.y = y;
 	g_arenaservers.sortkey.itemnames = sortkey_items;
 
-	y += SMALLCHAR_HEIGHT;
+	y += (BIGCHAR_HEIGHT + 2);
 	g_arenaservers.showfull.generic.type = MTYPE_RADIOBUTTON;
 	g_arenaservers.showfull.generic.name = "Show Full:";
 	g_arenaservers.showfull.generic.flags = (QMF_PULSEIFFOCUS | QMF_SMALLFONT);
@@ -1478,7 +1478,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.showfull.generic.x = 432;
 	g_arenaservers.showfull.generic.y = y;
 
-	y += SMALLCHAR_HEIGHT;
+	y += (BIGCHAR_HEIGHT + 2);
 	g_arenaservers.showempty.generic.type = MTYPE_RADIOBUTTON;
 	g_arenaservers.showempty.generic.name = "Show Empty:";
 	g_arenaservers.showempty.generic.flags = (QMF_PULSEIFFOCUS | QMF_SMALLFONT);
@@ -1487,7 +1487,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.showempty.generic.x = 432;
 	g_arenaservers.showempty.generic.y = y;
 
-	y += SMALLCHAR_HEIGHT;
+	y += (BIGCHAR_HEIGHT + 2);
 	g_arenaservers.onlyhumans.generic.type = MTYPE_RADIOBUTTON;
 	g_arenaservers.onlyhumans.generic.name = "Humans Only:";
 	g_arenaservers.onlyhumans.generic.flags = (QMF_PULSEIFFOCUS | QMF_SMALLFONT);
@@ -1496,7 +1496,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.onlyhumans.generic.x = 432;
 	g_arenaservers.onlyhumans.generic.y = y;
 
-	y += SMALLCHAR_HEIGHT;
+	y += (BIGCHAR_HEIGHT + 2);
 	g_arenaservers.hideprivate.generic.type = MTYPE_RADIOBUTTON;
 	g_arenaservers.hideprivate.generic.name = "Hide Private:";
 	g_arenaservers.hideprivate.generic.flags = (QMF_PULSEIFFOCUS | QMF_SMALLFONT);
@@ -1520,8 +1520,8 @@ static void UI_ArenaServers_MenuInit(void) {
 
 	g_arenaservers.mappic.generic.type = MTYPE_BITMAP;
 	g_arenaservers.mappic.generic.flags = (QMF_LEFT_JUSTIFY | QMF_INACTIVE);
-	g_arenaservers.mappic.generic.x = 100;
-	g_arenaservers.mappic.generic.y = 66;
+	g_arenaservers.mappic.generic.x = 83;
+	g_arenaservers.mappic.generic.y = 45;
 	g_arenaservers.mappic.width = 128;
 	g_arenaservers.mappic.height = 96;
 	g_arenaservers.mappic.errorpic = UNKNOWNMAP;
@@ -1550,15 +1550,15 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.arrowdown.focuspic = ARROWDN1;
 	g_arenaservers.arrowdown.focuspicinstead = qtrue;
 
-	y = 390;
+	y = 391;
 	g_arenaservers.status.generic.type = MTYPE_TEXT;
 	g_arenaservers.status.generic.x = 432;
 	g_arenaservers.status.generic.y = y;
 	g_arenaservers.status.string = statusbuffer;
-	g_arenaservers.status.style = (UI_CENTER | UI_SMALLFONT);
+	g_arenaservers.status.style = UI_CENTER | UI_SMALLFONT;
 	g_arenaservers.status.color = menu_text_color;
 
-	y += SMALLCHAR_HEIGHT;
+	y += (BIGCHAR_HEIGHT + 2);
 	g_arenaservers.statusbar.generic.type = MTYPE_TEXT;
 	g_arenaservers.statusbar.generic.x = 432;
 	g_arenaservers.statusbar.generic.y = y;
@@ -1571,8 +1571,8 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.addFav.generic.flags = QMF_PULSEIFFOCUS;
 	g_arenaservers.addFav.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.addFav.generic.id = ID_ADDTOFAV;
-	g_arenaservers.addFav.generic.x = 630;
-	g_arenaservers.addFav.generic.y = 48;
+	g_arenaservers.addFav.generic.x = 636;
+	g_arenaservers.addFav.generic.y = 30;
 	g_arenaservers.addFav.string = "Add to Favorites";
 	g_arenaservers.addFav.style = UI_SMALLFONT;
 	g_arenaservers.addFav.color = color_orange;
@@ -1583,23 +1583,12 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.addAllFav.generic.flags = QMF_PULSEIFFOCUS;
 	g_arenaservers.addAllFav.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.addAllFav.generic.id = ID_ADDALLTOFAV;
-	g_arenaservers.addAllFav.generic.x = 630;
-	g_arenaservers.addAllFav.generic.y = 64;
+	g_arenaservers.addAllFav.generic.x = 636;
+	g_arenaservers.addAllFav.generic.y = 48;
 	g_arenaservers.addAllFav.string = "Add All to Favorites";
 	g_arenaservers.addAllFav.style = UI_SMALLFONT;
 	g_arenaservers.addAllFav.color = color_orange;
 	g_arenaservers.addAllFav.focuscolor = color_red;
-
-	g_arenaservers.back.generic.type = MTYPE_BITMAP;
-	g_arenaservers.back.generic.name = BACK0;
-	g_arenaservers.back.generic.flags = (QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS);
-	g_arenaservers.back.generic.callback = UI_ArenaServers_Event;
-	g_arenaservers.back.generic.id = ID_BACK;
-	g_arenaservers.back.generic.x = 8;
-	g_arenaservers.back.generic.y = 446;
-	g_arenaservers.back.width = 80;
-	g_arenaservers.back.height = 40;
-	g_arenaservers.back.focuspic = BACK1;
 
 	g_arenaservers.specify.generic.type = MTYPE_BITMAP;
 	g_arenaservers.specify.generic.name = SPECIFY0;
@@ -1607,7 +1596,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.specify.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.specify.generic.id = ID_SPECIFY;
 	g_arenaservers.specify.generic.x = 222;
-	g_arenaservers.specify.generic.y = 426;
+	g_arenaservers.specify.generic.y = 432;
 	g_arenaservers.specify.width = 120;
 	g_arenaservers.specify.height = 40;
 	g_arenaservers.specify.focuspic = SPECIFY1;
@@ -1619,7 +1608,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.refresh.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.refresh.generic.id = ID_REFRESH;
 	g_arenaservers.refresh.generic.x = 372;
-	g_arenaservers.refresh.generic.y = 426;
+	g_arenaservers.refresh.generic.y = 432;
 	g_arenaservers.refresh.width = 120;
 	g_arenaservers.refresh.height = 40;
 	g_arenaservers.refresh.focuspic = REFRESH1;
@@ -1631,7 +1620,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.remove.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.remove.generic.id = ID_REMOVE;
 	g_arenaservers.remove.generic.x = 522;
-	g_arenaservers.remove.generic.y = 426;
+	g_arenaservers.remove.generic.y = 432;
 	g_arenaservers.remove.width = 120;
 	g_arenaservers.remove.height = 40;
 	g_arenaservers.remove.focuspic = DELETE1;
@@ -1648,6 +1637,17 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.fight.width = 80;
 	g_arenaservers.fight.height = 60;
 	g_arenaservers.fight.focuspicinstead = qtrue;
+
+	g_arenaservers.back.generic.type = MTYPE_BITMAP;
+	g_arenaservers.back.generic.name = BACK0;
+	g_arenaservers.back.generic.flags = (QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS);
+	g_arenaservers.back.generic.callback = UI_ArenaServers_Event;
+	g_arenaservers.back.generic.id = ID_BACK;
+	g_arenaservers.back.generic.x = 8;
+	g_arenaservers.back.generic.y = 446;
+	g_arenaservers.back.width = 80;
+	g_arenaservers.back.height = 40;
+	g_arenaservers.back.focuspic = BACK1;
 
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.master);
 	Menu_AddItem(&g_arenaservers.menu, (void *)&g_arenaservers.gametype);
