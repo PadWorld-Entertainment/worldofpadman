@@ -112,9 +112,9 @@ static void SetupDefaultMenu_Event(void *ptr, int event) {
 
 static void SetupDefaultMenu_Draw(void) {
 	static const vec4_t color_setdefaults = {0.8f, 0.85f, 1.0f, 1.0f};	
-	UI_DrawProportionalString(2 * (SCREEN_WIDTH / 3) + 5, 256, "SET TO DEFAULTS?", (UI_CENTER | UI_SMALLFONT), color_setdefaults);
-	UI_DrawStringNS(2 * (SCREEN_WIDTH / 3) + 20, 380, "This will reset *^1ALL^3* options", UI_CENTER, 20, color_yellow);
-	UI_DrawStringNS(2 * (SCREEN_WIDTH / 3), 380 + 22, "to their default values.", UI_CENTER, 20, color_yellow);
+	UI_DrawProportionalString(670 + 5, 170, "SET TO DEFAULTS?", (UI_CENTER | UI_SMALLFONT), color_setdefaults);
+	UI_DrawStringNS(670 + 20, 294, "This will reset *^1ALL^3* options", UI_CENTER, 20, color_yellow);
+	UI_DrawStringNS(670, 294 + 22, "to their default values!", UI_CENTER, 20, color_yellow);
 	Menu_Draw(&setupDefaultMenu.menu);
 }
 
@@ -158,8 +158,8 @@ static void SetupDefaultMenu_Init(void) {
 	setupDefaultMenu.yes.generic.type = MTYPE_BITMAP;
 	setupDefaultMenu.yes.generic.name = YES0;
 	setupDefaultMenu.yes.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupDefaultMenu.yes.generic.x = 496;
-	setupDefaultMenu.yes.generic.y = 288;
+	setupDefaultMenu.yes.generic.x = 590;
+	setupDefaultMenu.yes.generic.y = 202;
 	setupDefaultMenu.yes.generic.id = ID_DEFAULT_YES;
 	setupDefaultMenu.yes.generic.callback = SetupDefaultMenu_Event;
 	setupDefaultMenu.yes.width = 80;
@@ -170,8 +170,8 @@ static void SetupDefaultMenu_Init(void) {
 	setupDefaultMenu.no.generic.type = MTYPE_BITMAP;
 	setupDefaultMenu.no.generic.name = NO0;
 	setupDefaultMenu.no.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupDefaultMenu.no.generic.x = 616;
-	setupDefaultMenu.no.generic.y = 288;
+	setupDefaultMenu.no.generic.x = 710;
+	setupDefaultMenu.no.generic.y = 202;
 	setupDefaultMenu.no.generic.id = ID_DEFAULT_NO;
 	setupDefaultMenu.no.generic.callback = SetupDefaultMenu_Event;
 	setupDefaultMenu.no.width = 40;
