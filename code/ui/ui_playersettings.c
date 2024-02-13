@@ -54,11 +54,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define MAX_NAMELENGTH 20
 
 #define MODELSPERPAGE 6
-#define SKINGRID_COLS 3
-#define SKINGRID_ROWS 4
+#define SKINGRID_COLS 1
+#define SKINGRID_ROWS 3
 #define SKINSPERPAGE (SKINGRID_ROWS * SKINGRID_COLS)
-#define GRID_YPOS 158
-#define GRID_XPOS 644
+#define SKINGRID_YPOS 168
+#define SKINGRID_XPOS 744
+#define MODELICON_SIZE 100
+#define MODELICON_GAP 20
+#define SKINICON_SIZE 80
+#define SKINICON_GAP 10
 
 #define XPOSITION 128
 #define YPOSITION 172
@@ -958,7 +962,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowleft.generic.name = BARROWLT0;
 	s_playersettings.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_playersettings.arrowleft.generic.x = 20;
-	s_playersettings.arrowleft.generic.y = 20;
+	s_playersettings.arrowleft.generic.y = 25;
 	s_playersettings.arrowleft.generic.id = ID_PREVMODEL;
 	s_playersettings.arrowleft.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowleft.width = 30;
@@ -970,7 +974,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowright.generic.name = BARROWRT0;
 	s_playersettings.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	s_playersettings.arrowright.generic.x = 814;
-	s_playersettings.arrowright.generic.y = 20;
+	s_playersettings.arrowright.generic.y = 25;
 	s_playersettings.arrowright.generic.id = ID_NEXTMODEL;
 	s_playersettings.arrowright.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowright.width = 30;
@@ -981,8 +985,8 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowup.generic.type = MTYPE_BITMAP;
 	s_playersettings.arrowup.generic.name = BARROWUP0;
 	s_playersettings.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowup.generic.x = 715;
-	s_playersettings.arrowup.generic.y = 120;
+	s_playersettings.arrowup.generic.x = SKINGRID_XPOS + 5;
+	s_playersettings.arrowup.generic.y = SKINGRID_YPOS - SKINICON_GAP - 30;
 	s_playersettings.arrowup.generic.id = ID_PREVSKIN;
 	s_playersettings.arrowup.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowup.width = 70;
@@ -993,8 +997,8 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.arrowdown.generic.type = MTYPE_BITMAP;
 	s_playersettings.arrowdown.generic.name = BARROWDN0;
 	s_playersettings.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowdown.generic.x = 715;
-	s_playersettings.arrowdown.generic.y = 446;
+	s_playersettings.arrowdown.generic.x = SKINGRID_XPOS + 5;
+	s_playersettings.arrowdown.generic.y = SKINGRID_YPOS + SKINGRID_ROWS * (SKINICON_SIZE + SKINICON_GAP);
 	s_playersettings.arrowdown.generic.id = ID_NEXTSKIN;
 	s_playersettings.arrowdown.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.arrowdown.width = 70;
@@ -1005,31 +1009,31 @@ static void UI_PlayerSettings_MenuInit(void) {
 	for (i = 0; i < MODELSPERPAGE; ++i) {
 		s_playersettings.model_icons[i].generic.type = MTYPE_BITMAP;
 		s_playersettings.model_icons[i].generic.flags = QMF_LEFT_JUSTIFY;
-		s_playersettings.model_icons[i].generic.x = 102 + i * (100 + 12);
+		s_playersettings.model_icons[i].generic.x = 84 + i * (MODELICON_SIZE + MODELICON_GAP);
 		s_playersettings.model_icons[i].generic.y = 12;
-		s_playersettings.model_icons[i].width = 100;
-		s_playersettings.model_icons[i].height = 100;
+		s_playersettings.model_icons[i].width = MODELICON_SIZE;
+		s_playersettings.model_icons[i].height = MODELICON_SIZE;
 		s_playersettings.model_icons[i].generic.callback = UI_PlayerSettings_MenuEvent;
 		s_playersettings.model_icons[i].generic.id = ID_MICON + i;
 		s_playersettings.model_icons[i].generic.ownerdraw = UI_PlayerSettings_DrawModelIcon;
 	}
 
-	y = GRID_YPOS;
+	y = SKINGRID_YPOS;
 	for (i = 0, k = 0; i < SKINGRID_ROWS; i++) {
-		x = GRID_XPOS;
+		x = SKINGRID_XPOS;
 		for (j = 0; j < SKINGRID_COLS; j++, k++) {
 			s_playersettings.skin_icons[k].generic.type = MTYPE_BITMAP;
 			s_playersettings.skin_icons[k].generic.flags = QMF_LEFT_JUSTIFY;
 			s_playersettings.skin_icons[k].generic.x = x;
 			s_playersettings.skin_icons[k].generic.y = y;
-			s_playersettings.skin_icons[k].width = 64;
-			s_playersettings.skin_icons[k].height = 64;
+			s_playersettings.skin_icons[k].width = SKINICON_SIZE;
+			s_playersettings.skin_icons[k].height = SKINICON_SIZE;
 			s_playersettings.skin_icons[k].generic.callback = UI_PlayerSettings_MenuEvent;
 			s_playersettings.skin_icons[k].generic.id = ID_SICON + k;
 			s_playersettings.skin_icons[k].generic.ownerdraw = UI_SelectSkin_DrawSkinIcon;
-			x += (64 + 8);
+			x += (SKINICON_SIZE + SKINICON_GAP);
 		}
-		y += (64 + 8);
+		y += (SKINICON_SIZE + SKINICON_GAP);
 	}
 
 	{
