@@ -2992,7 +2992,7 @@ shader_t *R_FindShader(const char *name, int lightmapIndex, qboolean mipRawImage
 shader_t *R_FindShaderEx(const char *name, int lightmapIndex, qboolean mipRawImage, int realLightmapIndex) {
 	char strippedName[MAX_QPATH];
 	int hash;
-	char *shaderText;
+	const char *shaderText;
 	image_t *image;
 	shader_t *sh;
 
