@@ -25,7 +25,7 @@ CREATE MENU (START SERVER)
 #define MAX_MAPCOLS 3
 #define MAX_MAPSPERPAGE 9
 #define OPTIONS_XPOS 700
-#define OPTIONS_YPOS 168
+#define OPTIONS_YPOS 172
 #define GRID_XPOS 60
 #define GRID_YPOS 40
 
@@ -656,8 +656,8 @@ static void UI_StartServer_MenuInit(void) {
 
 	s_startserver.headergametype.generic.type = MTYPE_BITMAP;
 	s_startserver.headergametype.generic.name = HEADERGAMETYPE;
-	s_startserver.headergametype.generic.x = 450;
-	s_startserver.headergametype.generic.y = 402;
+	s_startserver.headergametype.generic.x = 460;
+	s_startserver.headergametype.generic.y = 400;
 	s_startserver.headergametype.width = 140;
 	s_startserver.headergametype.height = 35;
 	Menu_AddItem(&s_startserver.menu, &s_startserver.headergametype);
@@ -666,7 +666,7 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.gametype.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
 	s_startserver.gametype.generic.callback = UI_StartServer_GametypeEvent;
 	s_startserver.gametype.generic.id = ID_GAMETYPE;
-	s_startserver.gametype.generic.x = 446;
+	s_startserver.gametype.generic.x = 452;
 	s_startserver.gametype.generic.y = 436;
 	s_startserver.gametype.itemnames = gametype_items;
 	s_startserver.gametype.generic.ownerdraw = UI_StartServer_GameTypeDraw;
@@ -1477,7 +1477,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.headerbotskill.generic.type = MTYPE_BITMAP;
 	botSelectInfo.headerbotskill.generic.name = HEADERBOTSKILL;
 	botSelectInfo.headerbotskill.generic.x = 386;
-	botSelectInfo.headerbotskill.generic.y = 402;
+	botSelectInfo.headerbotskill.generic.y = 400;
 	botSelectInfo.headerbotskill.width = 140;
 	botSelectInfo.headerbotskill.height = 35;
 	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerbotskill);
