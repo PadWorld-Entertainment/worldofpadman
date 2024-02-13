@@ -654,7 +654,7 @@ static void UI_PlayerSettings_Draw(void) {
 
 	// spray color selection boxes
 	x = 46;
-	y = 382 + 4;
+	y = 378 + 2;
 	for (i = 0; i < NUM_COLORS; ++i) {
 		UI_FillRect(x + (16 + 4) * i, y, 16, 16, g_color_table[i]);
 		if (uis.cursorx >= (x + (16 + 4) * i) && uis.cursorx <= (x + (16 + 4) * i + 16) && uis.cursory >= y && uis.cursory <= (y + 16)) {
@@ -1151,13 +1151,13 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.randomcolor.generic.x = XPOSITION + 24;
 	s_playersettings.randomcolor.generic.y = y;
 	s_playersettings.randomcolor.generic.toolTip =
-		"Enable to randomize the color of the spray logo color and the Injector trail with each "
+		"Enable to randomize the color of the spray logo and the Injector trail with each "
 		"shot. Default is off. NOTE: In team game types the color is always set to red or blue.";
 
 	s_playersettings.spraycolor.generic.type = MTYPE_BITMAP;
 	s_playersettings.spraycolor.generic.flags = QMF_LEFT_JUSTIFY;
 	s_playersettings.spraycolor.generic.x = 44;
-	s_playersettings.spraycolor.generic.y = 384;
+	s_playersettings.spraycolor.generic.y = 378;
 	s_playersettings.spraycolor.width = 160;
 	s_playersettings.spraycolor.height = 20;
 	s_playersettings.spraycolor.generic.id = ID_SPRAYCOLOR;
