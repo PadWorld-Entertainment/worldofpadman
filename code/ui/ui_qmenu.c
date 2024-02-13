@@ -249,7 +249,7 @@ static void Bitmap_Draw(menubitmap_s *b) {
 
 	if (b->generic.flags & QMF_GRAYED) {
 		if (b->shader) {
-			trap_R_SetColor(colorMdGrey);
+			trap_R_SetColor(colorLtGrey);
 			UI_DrawHandlePic(x, y, w, h, b->shader);
 			trap_R_SetColor(NULL);
 		}
