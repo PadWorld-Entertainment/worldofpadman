@@ -182,7 +182,7 @@ static void SetupDefaultMenu_Init(void) {
 	setupDefaultMenu.back.generic.type = MTYPE_BITMAP;
 	setupDefaultMenu.back.generic.name = BACK0;
 	setupDefaultMenu.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	setupDefaultMenu.back.generic.x = 8;
+	setupDefaultMenu.back.generic.x = 776;
 	setupDefaultMenu.back.generic.y = 446;
 	setupDefaultMenu.back.generic.id = ID_DEFAULT_BACK;
 	setupDefaultMenu.back.generic.callback = SetupDefaultMenu_Event;
