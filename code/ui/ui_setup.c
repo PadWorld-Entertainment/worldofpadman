@@ -265,8 +265,8 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.player.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.player.generic.name = PLAYER0;
 	setupMenuInfo.player.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.player.generic.x = 92;
-	setupMenuInfo.player.generic.y = 46;
+	setupMenuInfo.player.generic.x = 98;
+	setupMenuInfo.player.generic.y = 76;
 	setupMenuInfo.player.generic.id = ID_CUSTOMIZEPLAYER;
 	setupMenuInfo.player.generic.callback = UI_SetupMenu_Event;
 	setupMenuInfo.player.width = 120;
@@ -278,8 +278,8 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.controls.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.controls.generic.name = CONTROLS0;
 	setupMenuInfo.controls.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.controls.generic.x = 80;
-	setupMenuInfo.controls.generic.y = 87;
+	setupMenuInfo.controls.generic.x = 86;
+	setupMenuInfo.controls.generic.y = 117;
 	setupMenuInfo.controls.generic.id = ID_CUSTOMIZECONTROLS;
 	setupMenuInfo.controls.generic.callback = UI_SetupMenu_Event;
 	setupMenuInfo.controls.width = 160;
@@ -291,8 +291,8 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.system.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.system.generic.name = SYSTEM0;
 	setupMenuInfo.system.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.system.generic.x = 109;
-	setupMenuInfo.system.generic.y = 127;
+	setupMenuInfo.system.generic.x = 115;
+	setupMenuInfo.system.generic.y = 157;
 	setupMenuInfo.system.generic.id = ID_SYSTEMCONFIG;
 	setupMenuInfo.system.generic.callback = UI_SetupMenu_Event;
 	setupMenuInfo.system.width = 120;
@@ -304,8 +304,8 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.options.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.options.generic.name = OPTIONS0;
 	setupMenuInfo.options.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	setupMenuInfo.options.generic.x = 91;
-	setupMenuInfo.options.generic.y = 167;
+	setupMenuInfo.options.generic.x = 97;
+	setupMenuInfo.options.generic.y = 197;
 	setupMenuInfo.options.generic.id = ID_GAME;
 	setupMenuInfo.options.generic.callback = UI_SetupMenu_Event;
 	setupMenuInfo.options.width = 120;
@@ -318,8 +318,8 @@ static void UI_SetupMenu_Init(void) {
 		setupMenuInfo.defaults.generic.type = MTYPE_BITMAP;
 		setupMenuInfo.defaults.generic.name = DEFAULTS0;
 		setupMenuInfo.defaults.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-		setupMenuInfo.defaults.generic.x = 91;
-		setupMenuInfo.defaults.generic.y = 207;
+		setupMenuInfo.defaults.generic.x = 97;
+		setupMenuInfo.defaults.generic.y = 237;
 		setupMenuInfo.defaults.generic.id = ID_DEFAULTS;
 		setupMenuInfo.defaults.generic.callback = UI_SetupMenu_Event;
 		setupMenuInfo.defaults.width = 160;
