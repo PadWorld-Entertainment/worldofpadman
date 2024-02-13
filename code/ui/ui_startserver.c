@@ -821,9 +821,9 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.fight.generic.id = ID_STARTSERVER;
 	s_startserver.fight.focuspic = FIGHT1;
 	s_startserver.fight.generic.x = 776;
-	s_startserver.fight.generic.y = 420;
+	s_startserver.fight.generic.y = 432;
 	s_startserver.fight.width = 80;
-	s_startserver.fight.height = 60;
+	s_startserver.fight.height = 40;
 	s_startserver.fight.focuspicinstead = qtrue;
 
 	s_startserver.item_null.generic.type = MTYPE_BITMAP;

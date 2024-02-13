@@ -175,9 +175,9 @@ static void UI_SpecifyServer_MenuInit(void) {
 	s_specifyserver.fight.generic.id = ID_FIGHT;
 	s_specifyserver.fight.focuspic = FIGHT1;
 	s_specifyserver.fight.generic.x = 776;
-	s_specifyserver.fight.generic.y = 420;
+	s_specifyserver.fight.generic.y = 432;
 	s_specifyserver.fight.width = 80;
-	s_specifyserver.fight.height = 60;
+	s_specifyserver.fight.height = 40;
 	s_specifyserver.fight.focuspicinstead = qtrue;
 
 	Menu_AddItem(&s_specifyserver.menu, &s_specifyserver.domainheader);

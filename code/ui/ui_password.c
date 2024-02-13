@@ -173,9 +173,9 @@ static void UI_SpecifyPassword_MenuInit(void) {
 	s_specifypassword.fight.generic.id = ID_FIGHT;
 	s_specifypassword.fight.focuspic = FIGHT1;
 	s_specifypassword.fight.generic.x = 776;
-	s_specifypassword.fight.generic.y = 420;
+	s_specifypassword.fight.generic.y = 432;
 	s_specifypassword.fight.width = 80;
-	s_specifypassword.fight.height = 60;
+	s_specifypassword.fight.height = 40;
 	s_specifypassword.fight.focuspicinstead = qtrue;
 
 	Menu_AddItem(&s_specifypassword.menu, &s_specifypassword.passwordheader);

@@ -1633,9 +1633,9 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.fight.generic.id = ID_CONNECT;
 	g_arenaservers.fight.focuspic = FIGHT1;
 	g_arenaservers.fight.generic.x = 776;
-	g_arenaservers.fight.generic.y = 420;
+	g_arenaservers.fight.generic.y = 432;
 	g_arenaservers.fight.width = 80;
-	g_arenaservers.fight.height = 60;
+	g_arenaservers.fight.height = 40;
 	g_arenaservers.fight.focuspicinstead = qtrue;
 
 	g_arenaservers.back.generic.type = MTYPE_BITMAP;
