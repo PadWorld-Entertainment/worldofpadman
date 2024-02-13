@@ -1558,7 +1558,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.status.style = UI_CENTER | UI_SMALLFONT;
 	g_arenaservers.status.color = menu_text_color;
 
-	y += (BIGCHAR_HEIGHT + 2);
+	y += (BIGCHAR_HEIGHT + 6);
 	g_arenaservers.statusbar.generic.type = MTYPE_TEXT;
 	g_arenaservers.statusbar.generic.x = 432;
 	g_arenaservers.statusbar.generic.y = y;
@@ -1571,7 +1571,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.addFav.generic.flags = QMF_PULSEIFFOCUS;
 	g_arenaservers.addFav.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.addFav.generic.id = ID_ADDTOFAV;
-	g_arenaservers.addFav.generic.x = 636;
+	g_arenaservers.addFav.generic.x = 632;
 	g_arenaservers.addFav.generic.y = 30;
 	g_arenaservers.addFav.string = "Add to Favorites";
 	g_arenaservers.addFav.style = UI_SMALLFONT;
@@ -1583,7 +1583,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.addAllFav.generic.flags = QMF_PULSEIFFOCUS;
 	g_arenaservers.addAllFav.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.addAllFav.generic.id = ID_ADDALLTOFAV;
-	g_arenaservers.addAllFav.generic.x = 636;
+	g_arenaservers.addAllFav.generic.x = 632;
 	g_arenaservers.addAllFav.generic.y = 48;
 	g_arenaservers.addAllFav.string = "Add All to Favorites";
 	g_arenaservers.addAllFav.style = UI_SMALLFONT;
