@@ -111,8 +111,7 @@ static void SetupDefaultMenu_Event(void *ptr, int event) {
 }
 
 static void SetupDefaultMenu_Draw(void) {
-	static const vec4_t color_setdefaults = {0.8f, 0.85f, 1.0f, 1.0f};	
-	UI_DrawProportionalString(670 + 5, 170, "SET TO DEFAULTS?", (UI_CENTER | UI_SMALLFONT), color_setdefaults);
+	UI_DrawProportionalString(670 + 5, 170, "SET TO DEFAULTS?", (UI_CENTER | UI_SMALLFONT), color_white);
 	UI_DrawStringNS(670 + 20, 294, "This will reset *^1ALL^3* options", UI_CENTER, 20, color_yellow);
 	UI_DrawStringNS(670, 294 + 22, "to their default values!", UI_CENTER, 20, color_yellow);
 	Menu_Draw(&setupDefaultMenu.menu);
