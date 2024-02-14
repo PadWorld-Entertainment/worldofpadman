@@ -313,10 +313,13 @@ static void UI_SetupMenu_Init(void) {
 	setupMenuInfo.options.focuspicinstead = qtrue;
 	Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.options);
 
-	if (!trap_Cvar_VariableValue("cl_paused")) {
 		setupMenuInfo.defaults.generic.type = MTYPE_BITMAP;
 		setupMenuInfo.defaults.generic.name = DEFAULTS0;
-		setupMenuInfo.defaults.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+		if (!trap_Cvar_VariableValue("cl_paused")) {
+			setupMenuInfo.defaults.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+		} else {
+			setupMenuInfo.defaults.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED;
+		}
 		setupMenuInfo.defaults.generic.x = 97;
 		setupMenuInfo.defaults.generic.y = 237;
 		setupMenuInfo.defaults.generic.id = ID_DEFAULTS;
@@ -326,7 +329,6 @@ static void UI_SetupMenu_Init(void) {
 		setupMenuInfo.defaults.focuspic = DEFAULTS1;
 		setupMenuInfo.defaults.focuspicinstead = qtrue;
 		Menu_AddItem(&setupMenuInfo.menu, &setupMenuInfo.defaults);
-	}
 
 	setupMenuInfo.back.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.back.generic.name = BACK0;
