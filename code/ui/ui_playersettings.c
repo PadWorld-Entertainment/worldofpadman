@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define BARROWUP1 "menu/arrows/bigyel_up1"
 #define BARROWDN0 "menu/arrows/bigyel_dn0"
 #define BARROWDN1 "menu/arrows/bigyel_dn1"
-#define SICONSHADOW "menu/art/iconshadow"
 
 #define ID_BACK 10
 
@@ -786,7 +785,7 @@ static void UI_SelectSkin_DrawSkinIcon(void *self) {
 		w = b->width;
 		h = b->height;
 		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
-			UI_DrawNamedPic(x + 5, y + 5, w, h, SICONSHADOW);
+			UI_FillRect(x + 4, y + 4, w, h, colorTBlack33);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 	}
@@ -1206,7 +1205,6 @@ void UI_PlayerSettings_Cache(void) {
 	trap_R_RegisterShaderNoMip(BARROWDN1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
-	trap_R_RegisterShaderNoMip(SICONSHADOW);
 
 	UI_PlayerSettings_BuildList();
 }

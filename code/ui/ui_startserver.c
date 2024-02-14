@@ -939,7 +939,6 @@ SELECT BOTS MENU
 #define ARROWUP1 "menu/arrows/headyel_up1"
 #define ARROWDN0 "menu/arrows/headyel_dn0"
 #define ARROWDN1 "menu/arrows/headyel_dn1"
-#define ICONSHADOW "menu/art/iconshadow"
 #define HEADERBOTSKILL "menu/headers/botskill"
 #define HEADERBOTS "menu/headers/bots"
 #define HEADERCOLOR "menu/headers/color"
@@ -1296,7 +1295,6 @@ UI_SelectBots_Cache
 =================
 */
 void UI_SelectBots_Cache(void) {
-	trap_R_RegisterShaderNoMip(ICONSHADOW);
 	trap_R_RegisterShaderNoMip(HEADERBOTSKILL);
 	trap_R_RegisterShaderNoMip(HEADERBOTS);
 	trap_R_RegisterShaderNoMip(HEADERCOLOR);
@@ -1443,7 +1441,7 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 		const menubitmap_s *itemCursor = Menu_ItemAtCursor(b->generic.parent);
 
 		if (itemCursor != b) {
-			UI_DrawNamedPic(x + 5, y + 5, w, h, ICONSHADOW);
+			UI_FillRect(x + 4, y + 4, w, h, colorTBlack33);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 
