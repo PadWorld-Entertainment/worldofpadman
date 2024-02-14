@@ -24,14 +24,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-#define BARROWLT0 "menu/arrows/bigblu_lt0"
-#define BARROWLT1 "menu/arrows/bigblu_lt1"
-#define BARROWRT0 "menu/arrows/bigblu_rt0"
-#define BARROWRT1 "menu/arrows/bigblu_rt1"
-#define BARROWUP0 "menu/arrows/bigyel_up0"
-#define BARROWUP1 "menu/arrows/bigyel_up1"
-#define BARROWDN0 "menu/arrows/bigyel_dn0"
-#define BARROWDN1 "menu/arrows/bigyel_dn1"
+#define MARROWLT0 "menu/arrows/model_lt0"
+#define MARROWLT1 "menu/arrows/model_lt1"
+#define MARROWRT0 "menu/arrows/model_rt0"
+#define MARROWRT1 "menu/arrows/model_rt1"
+#define SARROWUP0 "menu/arrows/skin_up0"
+#define SARROWUP1 "menu/arrows/skin_up1"
+#define SARROWDN0 "menu/arrows/skin_dn0"
+#define SARROWDN1 "menu/arrows/skin_dn1"
 
 #define ID_BACK 10
 
@@ -82,10 +82,10 @@ typedef struct {
 
 	menubitmap_s model;
 
-	menubitmap_s arrowleft;
-	menubitmap_s arrowright;
-	menubitmap_s arrowup;
-	menubitmap_s arrowdown;
+	menubitmap_s modelleft;
+	menubitmap_s modelright;
+	menubitmap_s skinup;
+	menubitmap_s skindown;
 
 	menubitmap_s model_icons[MODELSPERPAGE];
 	menubitmap_s skin_icons[SKINSPERPAGE];
@@ -688,39 +688,39 @@ UI_PlayerSettings_Update
 static void UI_PlayerSettings_Update(void) {
 	const int skins = s_playersettings.chosenskins[1] - s_playersettings.chosenskins[0];
 	if (ps_playericons.nummodel > MODELSPERPAGE) {
-		s_playersettings.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_playersettings.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_playersettings.arrowleft.generic.flags |= QMF_GRAYED;
-		s_playersettings.arrowright.generic.flags |= QMF_GRAYED;
+		s_playersettings.modelleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_playersettings.modelright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_playersettings.modelleft.generic.flags |= QMF_GRAYED;
+		s_playersettings.modelright.generic.flags |= QMF_GRAYED;
 
 		if (s_playersettings.firstmodel > 0) {
-			s_playersettings.arrowleft.generic.flags &= ~QMF_GRAYED;
+			s_playersettings.modelleft.generic.flags &= ~QMF_GRAYED;
 		}
 
 		if (s_playersettings.firstmodel + MODELSPERPAGE < ps_playericons.nummodel) {
-			s_playersettings.arrowright.generic.flags &= ~QMF_GRAYED;
+			s_playersettings.modelright.generic.flags &= ~QMF_GRAYED;
 		}
 	} else {
-		s_playersettings.arrowleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
-		s_playersettings.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		s_playersettings.modelleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		s_playersettings.modelright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 
 	if (skins > SKINSPERPAGE) {
-		s_playersettings.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_playersettings.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_playersettings.arrowup.generic.flags |= QMF_GRAYED;
-		s_playersettings.arrowdown.generic.flags |= QMF_GRAYED;
+		s_playersettings.skinup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_playersettings.skindown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		s_playersettings.skinup.generic.flags |= QMF_GRAYED;
+		s_playersettings.skindown.generic.flags |= QMF_GRAYED;
 
 		if (s_playersettings.firstskin > s_playersettings.chosenskins[0]) {
-			s_playersettings.arrowup.generic.flags &= ~QMF_GRAYED;
+			s_playersettings.skinup.generic.flags &= ~QMF_GRAYED;
 		}
 
 		if (s_playersettings.firstskin + (SKINSPERPAGE - 1) < s_playersettings.chosenskins[1]) {
-			s_playersettings.arrowdown.generic.flags &= ~QMF_GRAYED;
+			s_playersettings.skindown.generic.flags &= ~QMF_GRAYED;
 		}
 	} else {
-		s_playersettings.arrowup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
-		s_playersettings.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		s_playersettings.skinup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+		s_playersettings.skindown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 }
 
@@ -957,53 +957,53 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.player.generic.id = ID_PLAYERMODEL;
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.player);
 
-	s_playersettings.arrowleft.generic.type = MTYPE_BITMAP;
-	s_playersettings.arrowleft.generic.name = BARROWLT0;
-	s_playersettings.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowleft.generic.x = 20;
-	s_playersettings.arrowleft.generic.y = 25;
-	s_playersettings.arrowleft.generic.id = ID_PREVMODEL;
-	s_playersettings.arrowleft.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.arrowleft.width = 30;
-	s_playersettings.arrowleft.height = 70;
-	s_playersettings.arrowleft.focuspic = BARROWLT1;
-	s_playersettings.arrowleft.focuspicinstead = qtrue;
+	s_playersettings.modelleft.generic.type = MTYPE_BITMAP;
+	s_playersettings.modelleft.generic.name = MARROWLT0;
+	s_playersettings.modelleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.modelleft.generic.x = 16;
+	s_playersettings.modelleft.generic.y = 32;
+	s_playersettings.modelleft.generic.id = ID_PREVMODEL;
+	s_playersettings.modelleft.generic.callback = UI_PlayerSettings_MenuEvent;
+	s_playersettings.modelleft.width = 58;
+	s_playersettings.modelleft.height = 58;
+	s_playersettings.modelleft.focuspic = MARROWLT1;
+	s_playersettings.modelleft.focuspicinstead = qtrue;
 
-	s_playersettings.arrowright.generic.type = MTYPE_BITMAP;
-	s_playersettings.arrowright.generic.name = BARROWRT0;
-	s_playersettings.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowright.generic.x = 814;
-	s_playersettings.arrowright.generic.y = 25;
-	s_playersettings.arrowright.generic.id = ID_NEXTMODEL;
-	s_playersettings.arrowright.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.arrowright.width = 30;
-	s_playersettings.arrowright.height = 70;
-	s_playersettings.arrowright.focuspic = BARROWRT1;
-	s_playersettings.arrowright.focuspicinstead = qtrue;
+	s_playersettings.modelright.generic.type = MTYPE_BITMAP;
+	s_playersettings.modelright.generic.name = MARROWRT0;
+	s_playersettings.modelright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.modelright.generic.x = 790;
+	s_playersettings.modelright.generic.y = 32;
+	s_playersettings.modelright.generic.id = ID_NEXTMODEL;
+	s_playersettings.modelright.generic.callback = UI_PlayerSettings_MenuEvent;
+	s_playersettings.modelright.width = 58;
+	s_playersettings.modelright.height = 58;
+	s_playersettings.modelright.focuspic = MARROWRT1;
+	s_playersettings.modelright.focuspicinstead = qtrue;
 
-	s_playersettings.arrowup.generic.type = MTYPE_BITMAP;
-	s_playersettings.arrowup.generic.name = BARROWUP0;
-	s_playersettings.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowup.generic.x = SKINGRID_XPOS + 5;
-	s_playersettings.arrowup.generic.y = SKINGRID_YPOS - SKINICON_GAP - 30;
-	s_playersettings.arrowup.generic.id = ID_PREVSKIN;
-	s_playersettings.arrowup.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.arrowup.width = 70;
-	s_playersettings.arrowup.height = 30;
-	s_playersettings.arrowup.focuspic = BARROWUP1;
-	s_playersettings.arrowup.focuspicinstead = qtrue;
+	s_playersettings.skinup.generic.type = MTYPE_BITMAP;
+	s_playersettings.skinup.generic.name = SARROWUP0;
+	s_playersettings.skinup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.skinup.generic.x = SKINGRID_XPOS;
+	s_playersettings.skinup.generic.y = SKINGRID_YPOS - SKINICON_GAP - 35;
+	s_playersettings.skinup.generic.id = ID_PREVSKIN;
+	s_playersettings.skinup.generic.callback = UI_PlayerSettings_MenuEvent;
+	s_playersettings.skinup.width = 80;
+	s_playersettings.skinup.height = 40;
+	s_playersettings.skinup.focuspic = SARROWUP1;
+	s_playersettings.skinup.focuspicinstead = qtrue;
 
-	s_playersettings.arrowdown.generic.type = MTYPE_BITMAP;
-	s_playersettings.arrowdown.generic.name = BARROWDN0;
-	s_playersettings.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_playersettings.arrowdown.generic.x = SKINGRID_XPOS + 5;
-	s_playersettings.arrowdown.generic.y = SKINGRID_YPOS + SKINGRID_ROWS * (SKINICON_SIZE + SKINICON_GAP);
-	s_playersettings.arrowdown.generic.id = ID_NEXTSKIN;
-	s_playersettings.arrowdown.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.arrowdown.width = 70;
-	s_playersettings.arrowdown.height = 30;
-	s_playersettings.arrowdown.focuspic = BARROWDN1;
-	s_playersettings.arrowdown.focuspicinstead = qtrue;
+	s_playersettings.skindown.generic.type = MTYPE_BITMAP;
+	s_playersettings.skindown.generic.name = SARROWDN0;
+	s_playersettings.skindown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.skindown.generic.x = SKINGRID_XPOS;
+	s_playersettings.skindown.generic.y = SKINGRID_YPOS + SKINGRID_ROWS * (SKINICON_SIZE + SKINICON_GAP) - 5;
+	s_playersettings.skindown.generic.id = ID_NEXTSKIN;
+	s_playersettings.skindown.generic.callback = UI_PlayerSettings_MenuEvent;
+	s_playersettings.skindown.width = 80;
+	s_playersettings.skindown.height = 40;
+	s_playersettings.skindown.focuspic = SARROWDN1;
+	s_playersettings.skindown.focuspicinstead = qtrue;
 
 	for (i = 0; i < MODELSPERPAGE; ++i) {
 		s_playersettings.model_icons[i].generic.type = MTYPE_BITMAP;
@@ -1162,17 +1162,17 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.spraycolor.generic.id = ID_SPRAYCOLOR;
 	s_playersettings.spraycolor.generic.callback = UI_PlayerSettings_MenuEvent;
 
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowleft);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelleft);
 	for (i = 0; i < MODELSPERPAGE; ++i) {
 		Menu_AddItem(&s_playersettings.menu, &s_playersettings.model_icons[i]);
 	}
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowright);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowup);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowleft);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelright);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skinup);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.modelleft);
 	for (i = 0; i < SKINSPERPAGE; ++i) {
 		Menu_AddItem(&s_playersettings.menu, &s_playersettings.skin_icons[i]);
 	}
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.arrowdown);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skindown);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
@@ -1195,14 +1195,14 @@ UI_PlayerSettings_Cache
 =================
 */
 void UI_PlayerSettings_Cache(void) {
-	trap_R_RegisterShaderNoMip(BARROWLT0);
-	trap_R_RegisterShaderNoMip(BARROWLT1);
-	trap_R_RegisterShaderNoMip(BARROWRT0);
-	trap_R_RegisterShaderNoMip(BARROWRT1);
-	trap_R_RegisterShaderNoMip(BARROWUP0);
-	trap_R_RegisterShaderNoMip(BARROWUP1);
-	trap_R_RegisterShaderNoMip(BARROWDN0);
-	trap_R_RegisterShaderNoMip(BARROWDN1);
+	trap_R_RegisterShaderNoMip(MARROWLT0);
+	trap_R_RegisterShaderNoMip(MARROWLT1);
+	trap_R_RegisterShaderNoMip(MARROWRT0);
+	trap_R_RegisterShaderNoMip(MARROWRT1);
+	trap_R_RegisterShaderNoMip(SARROWUP0);
+	trap_R_RegisterShaderNoMip(SARROWUP1);
+	trap_R_RegisterShaderNoMip(SARROWDN0);
+	trap_R_RegisterShaderNoMip(SARROWDN1);
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 
