@@ -1666,7 +1666,7 @@ void *Menu_ItemAtCursor(menuframework_s *m) {
 Menu_ActivateItem
 =================
 */
-sfxHandle_t Menu_ActivateItem(menuframework_s *s, menucommon_s *item) {
+static sfxHandle_t Menu_ActivateItem(menuframework_s *s, menucommon_s *item) {
 	if (item->callback) {
 		item->callback(item, QM_ACTIVATED);
 		if (!(item->flags & QMF_SILENT)) {
