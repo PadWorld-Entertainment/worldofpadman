@@ -25,11 +25,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define SCOREBOARD_X (0)
 
-#define SB_HEADER 73
-#define SB_TOP (100)
+#define SB_TOP 90
+#define SB_HEADER (SB_TOP - 28)
 
-// Where the status bar starts, so we don't overwrite it
-#define SB_STATUSBAR 310
+// Where the status bar (medals/accuracy) starts, so we don't overwrite it
+#define SB_STATUSBAR 306
 
 #define SB_NORMAL_HEIGHT 32
 
@@ -295,8 +295,8 @@ static int CG_TeamScoreboard(int y, team_t team, float fade, int maxLines, int l
 static void CG_DrawMedals(float x, float y, const score_t *score) {
 	char buf[32];
 
-	CG_DrawPic(x, y, 60, 24, cgs.media.scoreboardMedals);
-	x += 64;
+	CG_DrawPic(x, y, 72, 24, cgs.media.scoreboardMedals);
+	x += 72;
 	CG_DrawPic(x, y, 24, 24, cgs.media.medalExcellent);
 	Com_sprintf(buf, sizeof(buf), "%d", score->excellentCount);
 	CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
@@ -400,14 +400,14 @@ qboolean CG_DrawOldScoreboard(void) {
 		fade = *fadeColor;
 	}
 
-	CG_DrawPic(40, 10, 560, 470, cgs.media.scoreboardBG);
+	CG_DrawPic(0, 0, 640, 496, cgs.media.scoreboardBG);
 
 	// fragged by ... line
 	if (cg.killerName[0]) {
 		char *s = va(S_COLOR_BLACK "Fragged by %s", cg.killerName);
 		int w = (CG_DrawStrlen(s) * BIGCHAR_WIDTH);
 		x = ((SCREEN_WIDTH - w) / 2);
-		y = (SB_TOP - 60);
+		y = (SB_TOP - 56);
 
 		CG_DrawStringExt(x, y, s, fadeColor, qfalse, qfalse, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0);
 	}
@@ -452,20 +452,20 @@ qboolean CG_DrawOldScoreboard(void) {
 				s = va(S_COLOR_BLACK "Teams are tied at %i", cg.teamScores[0]);
 		} else if (cg.teamScores[0] >= cg.teamScores[1]) {
 			if (CG_FreezeTag())
-				s = va(S_COLOR_RED "Red" S_COLOR_BLACK " leads " S_COLOR_RED "%i" S_COLOR_BLACK " to " S_COLOR_BLUE
+				s = va(S_COLOR_RED "Red Pads" S_COLOR_BLACK " lead " S_COLOR_RED "%i" S_COLOR_BLACK " to " S_COLOR_BLUE
 								   "%i" S_COLOR_BLACK " rounds",
 					   cg.teamScores[0], cg.teamScores[1]);
 			else
-				s = va(S_COLOR_RED "Red" S_COLOR_BLACK " leads " S_COLOR_RED "%i" S_COLOR_BLACK " to " S_COLOR_BLUE
+				s = va(S_COLOR_RED "Red Pads" S_COLOR_BLACK " lead " S_COLOR_RED "%i" S_COLOR_BLACK " to " S_COLOR_BLUE
 								   "%i",
 					   cg.teamScores[0], cg.teamScores[1]);
 		} else {
 			if (CG_FreezeTag())
-				s = va(S_COLOR_BLUE "Blue" S_COLOR_BLACK " leads " S_COLOR_BLUE "%i" S_COLOR_BLACK " to " S_COLOR_RED
+				s = va(S_COLOR_BLUE "Blue Noses" S_COLOR_BLACK " lead " S_COLOR_BLUE "%i" S_COLOR_BLACK " to " S_COLOR_RED
 									"%i" S_COLOR_BLACK " rounds",
 					   cg.teamScores[1], cg.teamScores[0]);
 			else
-				s = va(S_COLOR_BLUE "Blue" S_COLOR_BLACK " leads " S_COLOR_BLUE "%i" S_COLOR_BLACK " to " S_COLOR_RED
+				s = va(S_COLOR_BLUE "Blue Noses" S_COLOR_BLACK " lead " S_COLOR_BLUE "%i" S_COLOR_BLACK " to " S_COLOR_RED
 									"%i",
 					   cg.teamScores[1], cg.teamScores[0]);
 		}
@@ -610,7 +610,7 @@ qboolean CG_DrawOldScoreboard(void) {
 			maxClients -= n2;
 		}
 
-		y += 8;
+		y += 4;
 		n1 = CG_TeamScoreboard(y, TEAM_SPECTATOR, fade, maxScoreLinesPerTeam[TEAM_SPECTATOR], lineHeight);
 		y += (n1 * lineHeight);
 	} else {
@@ -619,17 +619,17 @@ qboolean CG_DrawOldScoreboard(void) {
 		//
 		int n1 = CG_TeamScoreboard(y, TEAM_FREE, fade, maxScoreLinesPerTeam[TEAM_FREE], lineHeight);
 		int n2;
-		y += (n1 * lineHeight) + 8;
+		y += (n1 * lineHeight) + 4;
 		n2 = CG_TeamScoreboard(y, TEAM_SPECTATOR, fade, maxScoreLinesPerTeam[TEAM_SPECTATOR], lineHeight);
 		y += (n2 * lineHeight);
 	}
 
-	CG_DrawMedals(64.0f, 313.0f, score);
+	CG_DrawMedals(62.0f, (float)SB_TOP + 216.0f, score);
 
 	// draw accuracy rate
-	CG_DrawPic(342.0f, 313.0f, 96.0f, 24.0f, cgs.media.scoreboardAccuracy);
+	CG_DrawPic(342.0f, (float)SB_TOP + 216.0f, 96.0f, 24.0f, cgs.media.scoreboardAccuracy);
 	Com_sprintf(buf, sizeof(buf), "%i%%", score->accuracy);
-	CG_DrawStringExt(440, 316, buf, colorWhite, qfalse, qtrue, BIGCHAR_WIDTH / 2 , BIGCHAR_HEIGHT, 0);
+	CG_DrawStringExt(438, SB_TOP + 220, buf, colorWhite, qfalse, qtrue, BIGCHAR_WIDTH / 2 , BIGCHAR_HEIGHT, 0);
 
 	// load any models that have been deferred
 	if (++cg.deferredPlayerLoading > 10) {
