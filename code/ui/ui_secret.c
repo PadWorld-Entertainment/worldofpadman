@@ -29,7 +29,6 @@ SECRET MENU (ENTE'S ARTWORKS)
 */
 #include "ui_local.h"
 
-#define BGPIC "menu/bg/connecting"
 #define BARROWLT0 "menu/arrows/bigblu_lt0"
 #define BARROWLT1 "menu/arrows/bigblu_lt1"
 #define BARROWRT0 "menu/arrows/bigblu_rt0"
@@ -124,7 +123,7 @@ UI_Secret_MenuDraw
 */
 static void UI_Secret_MenuDraw(void) {
 
-	UI_DrawNamedPic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, BGPIC);
+	UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.connectbg);
 	UI_FillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, colorTBlack33);
 	UI_DrawStringNS(SCREEN_WIDTH - 14 * SMALLCHAR_WIDTH, SCREEN_HEIGHT - SMALLCHAR_HEIGHT, 
 					"(c) ENTE 2024", UI_LEFT, SMALLCHAR_HEIGHT, color_white);
@@ -228,7 +227,6 @@ UI_Secret_Cache
 void UI_Secret_Cache(void) {
 	int i;
 
-	trap_R_RegisterShaderNoMip(BGPIC);
 	for (i = 0; i < MAX_SECRETPAGES; i++) {
 		trap_R_RegisterShaderNoMip(secretpics[i]);
 	}
