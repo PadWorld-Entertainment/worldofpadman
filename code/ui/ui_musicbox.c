@@ -29,7 +29,7 @@
 
 #include "ui_local.h"
 
-#define MUSICBOX "menu/bg/musicbox"
+#define MUSICARM "menu/bg/musicarm"
 #define ALL0 "menu/buttons/mb_all0"
 #define ALL1 "menu/buttons/mb_all1"
 #define CLEAR0 "menu/buttons/mb_clear0"
@@ -490,10 +490,10 @@ static void MusicMenu_Draw(void) {
 		for (t = 0; t < MAX_TRACKS; ++t) {
 			musicMenu.tracks[t].generic.x = (XPOSITION - 132 + switchOffset);
 		}
-		musicMenu.switchAlbum.generic.x = (XPOSITION + 256 + switchOffset);
-		musicMenu.playAll.generic.x = (XPOSITION + 256 + switchOffset);
-		musicMenu.clearList.generic.x = (XPOSITION + 278 + switchOffset);
-		musicMenu.exit.generic.x = (XPOSITION + 273 + switchOffset);
+		musicMenu.switchAlbum.generic.x = (XPOSITION + 251 + switchOffset);
+		musicMenu.playAll.generic.x = (XPOSITION + 251 + switchOffset);
+		musicMenu.clearList.generic.x = (XPOSITION + 273 + switchOffset);
+		musicMenu.exit.generic.x = (XPOSITION + 268 + switchOffset);
 
 		if ((uis.realtime - musicMenu.switchTime) > SWITCHDELAY) {
 			if (MUSICSWITCH_OUT == musicMenu.switchState) {
@@ -528,10 +528,10 @@ static void MusicMenu_Draw(void) {
 		for (t = 0; t < MAX_TRACKS; ++t) {
 			musicMenu.tracks[t].generic.x = XPOSITION - 132;
 		}
-		musicMenu.switchAlbum.generic.x = XPOSITION + 256;
-		musicMenu.playAll.generic.x = XPOSITION + 256;
-		musicMenu.clearList.generic.x = XPOSITION + 278;
-		musicMenu.exit.generic.x = XPOSITION + 273;
+		musicMenu.switchAlbum.generic.x = XPOSITION + 251;
+		musicMenu.playAll.generic.x = XPOSITION + 251;
+		musicMenu.clearList.generic.x = XPOSITION + 273;
+		musicMenu.exit.generic.x = XPOSITION + 268;
 	}
 
 	if (musicInfo.albums[musicMenu.currentAlbum].background) {
@@ -541,7 +541,7 @@ static void MusicMenu_Draw(void) {
 		UI_DrawStringNS((XPOSITION - 150 + switchOffset), 62, musicInfo.albums[musicMenu.currentAlbum].name, 0, 16.0f, colorWhite);
 	}
 
-	UI_DrawNamedPic((XPOSITION + 107 + switchOffset), 46, 469, 350, MUSICBOX);
+	UI_DrawNamedPic((XPOSITION + 106 + switchOffset), 92, 490, 315, MUSICARM);
 
 	if (musicInfo.playOrder != NULL) {
 		playOrder_t *playOrder;
@@ -634,8 +634,8 @@ void UI_MusicBox_Open(void) {
 	musicMenu.switchAlbum.generic.type = MTYPE_BITMAP;
 	musicMenu.switchAlbum.generic.name = SWITCH0;
 	musicMenu.switchAlbum.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	musicMenu.switchAlbum.generic.x = XPOSITION + 256;
-	musicMenu.switchAlbum.generic.y = 216;
+	musicMenu.switchAlbum.generic.x = XPOSITION + 251;
+	musicMenu.switchAlbum.generic.y = 217;
 	musicMenu.switchAlbum.generic.id = ID_SWITCH;
 	musicMenu.switchAlbum.generic.callback = MusicMenu_Event;
 	musicMenu.switchAlbum.width = 48;
@@ -646,8 +646,8 @@ void UI_MusicBox_Open(void) {
 	musicMenu.playAll.generic.type = MTYPE_BITMAP;
 	musicMenu.playAll.generic.name = ALL0;
 	musicMenu.playAll.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	musicMenu.playAll.generic.x = XPOSITION + 256;
-	musicMenu.playAll.generic.y = 231;
+	musicMenu.playAll.generic.x = XPOSITION + 251;
+	musicMenu.playAll.generic.y = 232;
 	musicMenu.playAll.generic.id = ID_PLAYALL;
 	musicMenu.playAll.generic.callback = MusicMenu_Event;
 	musicMenu.playAll.width = 20;
@@ -658,8 +658,8 @@ void UI_MusicBox_Open(void) {
 	musicMenu.clearList.generic.type = MTYPE_BITMAP;
 	musicMenu.clearList.generic.name = CLEAR0;
 	musicMenu.clearList.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	musicMenu.clearList.generic.x = XPOSITION + 278;
-	musicMenu.clearList.generic.y = 231;
+	musicMenu.clearList.generic.x = XPOSITION + 273;
+	musicMenu.clearList.generic.y = 232;
 	musicMenu.clearList.generic.id = ID_CLEARLIST;
 	musicMenu.clearList.generic.callback = MusicMenu_Event;
 	musicMenu.clearList.width = 26;
@@ -670,8 +670,8 @@ void UI_MusicBox_Open(void) {
 	musicMenu.exit.generic.type = MTYPE_BITMAP;
 	musicMenu.exit.generic.name = EXIT0;
 	musicMenu.exit.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	musicMenu.exit.generic.x = XPOSITION + 273;
-	musicMenu.exit.generic.y = 259;
+	musicMenu.exit.generic.x = XPOSITION + 268;
+	musicMenu.exit.generic.y = 258;
 	musicMenu.exit.generic.id = ID_EXIT;
 	musicMenu.exit.generic.callback = MusicMenu_Event;
 	musicMenu.exit.width = 35;
@@ -696,7 +696,7 @@ UI_MusicBox_Cache
 ===============
 */
 void UI_MusicBox_Cache(void) {
-	trap_R_RegisterShaderNoMip(MUSICBOX);
+	trap_R_RegisterShaderNoMip(MUSICARM);
 	trap_R_RegisterShaderNoMip(ALL0);
 	trap_R_RegisterShaderNoMip(ALL1);
 	trap_R_RegisterShaderNoMip(CLEAR0);
