@@ -178,6 +178,7 @@ void UI_DrawConnectScreen(qboolean overlay) {
 	uiClientState_t cstate;
 	char info[MAX_INFO_VALUE];
 	char downloadName[MAX_INFO_VALUE];
+	float offset = 0.5f * (uis.glconfig.vidWidth - uis.glconfig.vidHeight);
 
 	trap_Cvar_VariableStringBuffer("cl_downloadName", downloadName, sizeof(downloadName));
 
@@ -187,12 +188,17 @@ void UI_DrawConnectScreen(qboolean overlay) {
 		// draw the dialog background
 		UI_SetColor(color_white);
 
-		// UI_DrawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.connectbg );
-		// stretch it like in cgame ...
-		if (*downloadName)
+		if (*downloadName) {
 			trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 1, 1, uis.menubgfx);
-		else
-			trap_R_DrawStretchPic(0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 1, 1, uis.connectbg);
+		} else {
+			// The connect bg texture is square so calculate the offset to current video
+			// resolution to draw the bg texture in correct aspect ratio and not to stretch it
+			if (offset > 0) {
+				trap_R_DrawStretchPic(0, -offset, uis.glconfig.vidWidth, uis.glconfig.vidWidth, 0, 0, 1, 1, uis.connectbg);
+			} else {
+				trap_R_DrawStretchPic(-offset, 0, uis.glconfig.vidHeight, uis.glconfig.vidHeight, 0, 0, 1, 1, uis.connectbg);
+			}
+		}
 	} else {
 		return; // doppelt over lay O_o
 	}

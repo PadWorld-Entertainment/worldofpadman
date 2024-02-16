@@ -127,6 +127,7 @@ Draw all the status / pacifier stuff during level loading
 void CG_DrawInformation(void) {
 	const char *s;
 	const char *info;
+	qhandle_t connect = trap_R_RegisterShaderNoMip("menu/bg/connecting");
 	qhandle_t levelshot;
 	qhandle_t helppage;
 	// levelshot ideal coords (assuming 640*480 resolution)
@@ -139,11 +140,19 @@ void CG_DrawInformation(void) {
 	float lbY = 422;
 	float lbW = 306;
 	float lbH = 32;
+	float offset = 0.5f * (cgs.glconfig.vidWidth - cgs.glconfig.vidHeight); 
 
 	info = CG_ConfigString(CS_SERVERINFO);
 
 	trap_R_SetColor(NULL);
-	trap_R_DrawStretchPic(0, 0, cgs.glconfig.vidWidth, cgs.glconfig.vidHeight, 0, 0, 1, 1, trap_R_RegisterShaderNoMip("menu/bg/connecting"));
+
+	// The connect bg texture is square so calculate the offset to current video
+	// resolution to draw the bg texture in correct aspect ratio and not to stretch it
+	if (offset > 0) {
+		trap_R_DrawStretchPic(0, -offset, cgs.glconfig.vidWidth, cgs.glconfig.vidWidth, 0, 0, 1, 1, connect);
+	} else {
+		trap_R_DrawStretchPic(-offset, 0, cgs.glconfig.vidHeight, cgs.glconfig.vidHeight, 0, 0, 1, 1, connect);
+	}
 
 	s = Info_ValueForKey(info, "mapname");
 	levelshot = trap_R_RegisterShaderNoMip(va("levelshots/%s", s));
