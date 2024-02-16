@@ -1840,7 +1840,7 @@ void Menu_Cache(void) {
 	uis.rb_off = trap_R_RegisterShaderNoMip("menu/art/switch_off");
 
 	uis.whiteShader = trap_R_RegisterShaderNoMip("white");
-	uis.connectbg = trap_R_RegisterShaderNoMip("menu/bg/connecting");
+	uis.connectbg = trap_R_RegisterShaderNoMip("menu/bg/connect");
 
 	uis.menubgfx = trap_R_RegisterShaderNoMip("menu/bg/menubgfx");
 	uis.mainbgfx = trap_R_RegisterShaderNoMip("menu/bg/mainbgfx");

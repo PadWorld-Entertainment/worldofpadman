@@ -127,7 +127,7 @@ Draw all the status / pacifier stuff during level loading
 void CG_DrawInformation(void) {
 	const char *s;
 	const char *info;
-	qhandle_t connect = trap_R_RegisterShaderNoMip("menu/bg/connecting");
+	qhandle_t connect = trap_R_RegisterShaderNoMip("menu/bg/connect");
 	qhandle_t levelshot;
 	qhandle_t helppage;
 	// levelshot ideal coords (assuming 640*480 resolution)
