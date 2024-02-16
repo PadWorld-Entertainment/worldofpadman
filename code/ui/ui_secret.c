@@ -122,11 +122,21 @@ UI_Secret_MenuDraw
 =================
 */
 static void UI_Secret_MenuDraw(void) {
-
-	UI_DrawHandlePic(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, uis.connectbg);
+	// The bg texture is square so we need to calculate the y offset to draw the bg
+	// texture in correct aspect ratio and we need to cover top and bottom area with
+	// black rectangles if the video resolution is narrow screen
+	float yOffset = 0.5f * (float)(SCREEN_WIDTH - SCREEN_HEIGHT);
+	// draw the bg texture with y offset
+	UI_DrawHandlePic(0, -yOffset, SCREEN_WIDTH, SCREEN_WIDTH, uis.connectbg);
+	// tone the visible bg texture down
 	UI_FillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, colorTBlack33);
+	// add black rectangles to cover top and bottom area outside ws menu
+	UI_FillRect(0, -yOffset, SCREEN_WIDTH, yOffset, color_black);
+	UI_FillRect(0, SCREEN_HEIGHT, SCREEN_WIDTH, yOffset, color_black);
+	// draw the copypright string
 	UI_DrawStringNS(SCREEN_WIDTH - 14 * SMALLCHAR_WIDTH, SCREEN_HEIGHT - SMALLCHAR_HEIGHT, 
 					"(c) ENTE 2024", UI_LEFT, SMALLCHAR_HEIGHT, color_white);
+
 	Menu_Draw(&s_secret.menu);
 }
 
