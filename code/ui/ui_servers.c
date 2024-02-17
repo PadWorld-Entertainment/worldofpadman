@@ -132,7 +132,7 @@ static char *gamenames[] = {GAMETYPE_NAME_SHORT(GT_FFA),
 							GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE),
 							NULL};
 
-static char quake3worldMessage[] = "Visit www.worldofpadman.net - News, Events, Files";
+static char quake3worldMessage[] = "Visit www.worldofpadman.com - News, Events, Files";
 
 typedef struct {
 	char adrstr[MAX_ADDRESSLENGTH];
