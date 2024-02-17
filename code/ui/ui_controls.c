@@ -214,8 +214,8 @@ typedef struct {
 	menuaction_s togglemenu;
 	menuaction_s minimizegame;
 	menuaction_s music;
-	menuaction_s helpGametype;
-	menuaction_s helpItems;
+	menuaction_s gameplay;
+	menuaction_s help;
 	menuaction_s ServerInfo;
 	menuaction_s nextSong;
 	menuaction_s recorddemo;
@@ -291,8 +291,8 @@ static bind_t g_bindings[] = {
 	{"togglemenu", "Ingame Menu:", ID_TOGGLEMENU, K_ESCAPE, -1, -1, -1},
 	{"minimize", "Minimize Game:", ID_MINIMIZEGAME, K_PGUP, -1, -1, -1},
 	{"wop_music", "Music Player:", ID_MUSIC, 'm', -1, -1, -1},
-	{"ui_help gametype", "Help Gametype:", ID_HELP_GAMETYPE, 'g', -1, -1, -1},
-	{"ui_help item", "Help Weapons/Items:", ID_HELP_ITEMS, 'h', -1, -1, -1},
+	{"ui_help gametype", "Gameplay Info:", ID_HELP_GAMETYPE, 'g', -1, -1, -1},
+	{"ui_help item", "Help & Info Pages:", ID_HELP_ITEMS, 'h', -1, -1, -1},
 	{"toggle cg_drawServerInfos", "Server Info:", ID_SERVERINFO, 'k', -1, -1, -1},
 	{"wop_nextsong", "Skip to Next Song:", ID_NEXTSONG, 'n', -1, -1, -1},
 	{"toggle cl_autoRecordDemo 1, 0;stoprecord", "Autorecord Demo:", ID_RECORDDEMO, 'o', -1, -1, -1},
@@ -387,8 +387,8 @@ static menucommon_s *g_misc_controls[] = {
 	(menucommon_s *)&s_controls.togglemenu,
 	(menucommon_s *)&s_controls.minimizegame,
 	(menucommon_s *)&s_controls.music,
-	(menucommon_s *)&s_controls.helpGametype,
-	(menucommon_s *)&s_controls.helpItems,
+	(menucommon_s *)&s_controls.gameplay,
+	(menucommon_s *)&s_controls.help,
 	(menucommon_s *)&s_controls.ServerInfo,
 	(menucommon_s *)&s_controls.nextSong,
 	(menucommon_s *)&s_controls.recorddemo,
@@ -1508,22 +1508,26 @@ static void Controls_MenuInit(void) {
 	s_controls.music.generic.callback = Controls_ActionEvent;
 	s_controls.music.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.music.generic.id = ID_MUSIC;
+	s_controls.music.generic.toolTip =
+		"Press this key in game to open the music player menu to play your favorite tracks.";
 
-	s_controls.helpGametype.generic.type = MTYPE_ACTION;
-	s_controls.helpGametype.generic.flags = (QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN);
-	s_controls.helpGametype.generic.callback = Controls_ActionEvent;
-	s_controls.helpGametype.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.helpGametype.generic.id = ID_HELP_GAMETYPE;
-	s_controls.helpGametype.generic.toolTip =
-		"Press this key in game to see a basic description of the rules of the gametype set.";
+	s_controls.gameplay.generic.type = MTYPE_ACTION;
+	s_controls.gameplay.generic.flags = (QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN);
+	s_controls.gameplay.generic.callback = Controls_ActionEvent;
+	s_controls.gameplay.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.gameplay.generic.id = ID_HELP_GAMETYPE;
+	s_controls.gameplay.generic.toolTip =
+		"Press this key in game to see a basic description of the rules of the currently played "
+		"gametype and additional info.";
 
-	s_controls.helpItems.generic.type = MTYPE_ACTION;
-	s_controls.helpItems.generic.flags = (QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN);
-	s_controls.helpItems.generic.callback = Controls_ActionEvent;
-	s_controls.helpItems.generic.ownerdraw = Controls_DrawKeyBinding;
-	s_controls.helpItems.generic.id = ID_HELP_ITEMS;
-	s_controls.helpItems.generic.toolTip =
-		"Press this key in game to see information on what the weapons / powerups / items and icons are.";
+	s_controls.help.generic.type = MTYPE_ACTION;
+	s_controls.help.generic.flags = (QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN);
+	s_controls.help.generic.callback = Controls_ActionEvent;
+	s_controls.help.generic.ownerdraw = Controls_DrawKeyBinding;
+	s_controls.help.generic.id = ID_HELP_ITEMS;
+	s_controls.help.generic.toolTip =
+		"Press this key in game to see detailed information about weapons, powerups, medals and "
+		"other displayed icons in the game.";
 
 	s_controls.ServerInfo.generic.type = MTYPE_ACTION;
 	s_controls.ServerInfo.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED | QMF_HIDDEN;
@@ -1634,8 +1638,8 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.togglemenu);
 	Menu_AddItem(&s_controls.menu, &s_controls.minimizegame);
 	Menu_AddItem(&s_controls.menu, &s_controls.music);
-	Menu_AddItem(&s_controls.menu, &s_controls.helpGametype);
-	Menu_AddItem(&s_controls.menu, &s_controls.helpItems);
+	Menu_AddItem(&s_controls.menu, &s_controls.gameplay);
+	Menu_AddItem(&s_controls.menu, &s_controls.help);
 	Menu_AddItem(&s_controls.menu, &s_controls.ServerInfo);
 	Menu_AddItem(&s_controls.menu, &s_controls.nextSong);
 	Menu_AddItem(&s_controls.menu, &s_controls.recorddemo);
