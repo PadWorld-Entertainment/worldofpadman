@@ -7,11 +7,12 @@ UPDATEDIR      := /tmp
 BUILDTYPE      ?= Debug
 BUILDDIR       ?= ./build/$(BUILDTYPE)
 INSTALL_DIR    ?= $(BUILDDIR)
-GENERATOR      := Ninja
+GENERATOR      ?= Ninja
+ALLTARGET      ?= all
 CMAKE          ?= cmake
 CMAKE_OPTIONS  ?= -DCMAKE_BUILD_TYPE=$(BUILDTYPE) -G$(GENERATOR) --graphviz=$(BUILDDIR)/deps.dot
 
-all:
+$(ALLTARGET):
 	$(Q)if [ ! -f $(BUILDDIR)/CMakeCache.txt ]; then $(CMAKE) -H$(CURDIR) -B$(BUILDDIR) $(CMAKE_OPTIONS); fi
 	$(Q)$(CMAKE) --build $(BUILDDIR) --target $@
 	$(Q)$(CMAKE) -E create_symlink $(BUILDDIR)/compile_commands.json compile_commands.json

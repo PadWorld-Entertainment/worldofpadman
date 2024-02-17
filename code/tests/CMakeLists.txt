@@ -62,7 +62,7 @@ if (USE_VOIP)
 endif()
 
 set(SRCS_MAIN test_main.c ${SRCS_BASE})
-wop_add_executable(TARGET ${PROJECT_NAME}-main SRCS ${SRCS_MAIN})
+wop_add_executable(TARGET ${PROJECT_NAME}-main SRCS ${SRCS_MAIN} NOINSTALL)
 add_asm(${PROJECT_NAME}-main)
 add_botlib(${PROJECT_NAME}-main)
 target_link_libraries(${PROJECT_NAME}-main ${LIBS})
@@ -116,7 +116,7 @@ set(SRCS_UI
 
 	${SRCS_BASE}
 )
-wop_add_executable(TARGET ${PROJECT_NAME}-ui SRCS ${SRCS_UI})
+wop_add_executable(TARGET ${PROJECT_NAME}-ui SRCS ${SRCS_UI} NOINSTALL)
 add_asm(${PROJECT_NAME}-ui)
 target_link_libraries(${PROJECT_NAME}-ui ${LIBS})
 target_include_directories(${PROJECT_NAME}-ui PRIVATE ${CODE_DIR}/qcommon)

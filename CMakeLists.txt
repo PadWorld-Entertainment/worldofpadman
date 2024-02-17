@@ -56,7 +56,37 @@ if (APPLE)
 	set(CPACK_BUNDLE_PLIST ${ROOT_DIR}/misc/osx/application.plist.in)
 	set(CPACK_BUNDLE_NAME ${PROJECT_NAME})
 	set(CPACK_BUNDLE_ICON ${ROOT_DIR}/misc/wop.icns)
-	set(CPACK_BUNDLE_APPLE_CERT_APP "-")
+	set(CMAKE_XCODE_GENERATE_SCHEME "YES")
+
+	find_program(XCRUN_EXECUTABLE NAMES xcrun)
+	if (XCRUN_EXECUTABLE)
+		# execute xrun to find the development team id
+		execute_process(COMMAND ${XCRUN_EXECUTABLE} security find-identity -v -p codesigning OUTPUT_VARIABLE DEVELOPMENT_TEAMS)
+		# extract the team id from the output that starts with "Developer ID Application: "
+		string(REGEX MATCH "Developer ID Application: [^)]+\\(([^)]+)\\)" DEVELOPMENT_TEAM_ID ${DEVELOPMENT_TEAMS})
+		set(DEVELOPMENT_TEAM_ID ${CMAKE_MATCH_1})
+		if (DEVELOPMENT_TEAM_ID)
+			message(STATUS "Development Team ID: ${DEVELOPMENT_TEAM_ID}")
+		else()
+			message(WARNING "No Development Team ID found")
+		endif()
+	endif()
+
+	# With xcode versions >= 14 it is no longer possible to build unsigned binaries
+	# - is for signing locally
+	if (DEVELOPMENT_TEAM_ID STREQUAL "")
+		if(XCODE_VERSION VERSION_LESS 14)
+			set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "" CACHE INTERNAL "")
+		else()
+			set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "-" CACHE INTERNAL "")
+		endif()
+	else()
+		set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "Mac Developer" CACHE INTERNAL "")
+		set(CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${DEVELOPMENT_TEAM_ID})
+	endif()
+	# --deep is for signing 3d party libraries
+	set(CMAKE_XCODE_ATTRIBUTE_OTHER_CODE_SIGN_FLAGS "--deep -o linker-signed --timestamp" CACHE INTERNAL "")
+	set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
 endif()
 
 include(CPack)

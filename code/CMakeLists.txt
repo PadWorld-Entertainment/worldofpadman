@@ -119,7 +119,7 @@ function(wop_add_library)
 endfunction()
 
 function(wop_add_executable)
-	set(_OPTIONS_ARGS WINDOWED)
+	set(_OPTIONS_ARGS WINDOWED NOINSTALL)
 	set(_ONE_VALUE_ARGS TARGET)
 	set(_MULTI_VALUE_ARGS SRCS)
 
@@ -176,31 +176,67 @@ function(wop_add_executable)
 		configure_file(${ROOT_DIR}/misc/linux/${_EXE_TARGET}.service.in ${_EXE_TARGET}.service @ONLY)
 	endif()
 
-	if (APPLE)
-		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${ROOT_DIR}/misc/osx/application.plist.in)
-		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE ON)
-		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "${CMAKE_PROJECT_NAME}")
-		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
-		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
-		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}")
-		set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_COPYRIGHT "Copyright 2004 - ${COPYRIGHT_YEAR} PadWorld Entertainment")
-		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "YES")
-		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")
-		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${CODESIGNIDENTITY})
-		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${DEVELOPMENT_TEAM_ID})
-		#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER ${PROVISIONING_PROFILE_NAME})
-		if (${CMAKE_GENERATOR} STREQUAL "Xcode")
-			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_EXECUTABLE_NAME \${EXECUTABLE_NAME})
-			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_PRODUCT_NAME \${PRODUCT_NAME})
-			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME \${PRODUCT_NAME})
-		else()
-			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_PRODUCT_NAME "${CMAKE_PROJECT_NAME}")
-			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${CMAKE_PROJECT_NAME}")
-		endif()
-		install(CODE "include(BundleUtilities)
-			fixup_bundle(\"$<TARGET_BUNDLE_DIR:${_EXE_TARGET}>\" \"\" \"\")" COMPONENT wop)
+	if (_EXE_NOINSTALL)
+		set(INSTALL_DATA False)
+		set(CPACK_${_EXE_TARGET}_COMPONENT_INSTALL OFF)
+	else()
+		set(INSTALL_DATA True)
+		set(CPACK_${_EXE_TARGET}_COMPONENT_INSTALL ON)
 	endif()
-	install(TARGETS ${_EXE_TARGET} DESTINATION "${ENGINE_BINARY_DIR}" COMPONENT wop)
+
+	set(CFGS
+		default.cfg
+		rotation.cfg
+		server-allgametypes.cfg
+		server-bigballoon.cfg
+		server-capturethelolly.cfg
+		server-catchthekillerduck.cfg
+		server-freezetag.cfg
+		server-lastpadstanding.cfg
+		server-onelollyctl.cfg
+		server-settings.cfg
+		server-sprayyourcolor.cfg
+	)
+	if (APPLE)
+		if (INSTALL_DATA)
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${ROOT_DIR}/misc/osx/application.plist.in)
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE ON)
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "${CMAKE_PROJECT_NAME}")
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}")
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_COPYRIGHT "Copyright 2004 - ${COPYRIGHT_YEAR} PadWorld Entertainment")
+			#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "YES")
+			#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")
+			#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${CODESIGNIDENTITY})
+			#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${DEVELOPMENT_TEAM_ID})
+			#set_target_properties(${_EXE_TARGET} PROPERTIES XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER ${PROVISIONING_PROFILE_NAME})
+			add_custom_command(TARGET ${_EXE_TARGET} POST_BUILD COMMAND ${CMAKE_COMMAND} -DTARGET_BUNDLE_DIR=$<TARGET_BUNDLE_DIR:${_EXE_TARGET}> -P "${ROOT_DIR}/cmake/applebundle.cmake" VERBATIM)
+			if (${CMAKE_GENERATOR} STREQUAL "Xcode")
+				set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_EXECUTABLE_NAME \${EXECUTABLE_NAME})
+				set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_PRODUCT_NAME \${PRODUCT_NAME})
+				set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME \${PRODUCT_NAME})
+			else()
+				set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_PRODUCT_NAME "${CMAKE_PROJECT_NAME}")
+				set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${CMAKE_PROJECT_NAME}")
+			endif()
+			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_ICON_FILE wop.icns)
+			set_source_files_properties(${ROOT_DIR}/misc/wop.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+			foreach (_c ${CFGS})
+				set_source_files_properties(${ROOT_DIR}/wop/${_c} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources/wop")
+				target_sources(${_EXE_TARGET} PRIVATE ${ROOT_DIR}/wop/${_c})
+			endforeach()
+			target_sources(${_EXE_TARGET} PRIVATE ${ROOT_DIR}/misc/wop.icns)
+
+			install(CODE "include(BundleUtilities)
+				fixup_bundle(\"$<TARGET_BUNDLE_DIR:${_EXE_TARGET}>\" \"\" \"\")" COMPONENT wop)
+			install(TARGETS ${_EXE_TARGET} DESTINATION "${ENGINE_BINARY_DIR}" COMPONENT wop)
+		endif()
+	endif()
+
+	if (INSTALL_DATA)
+		cpack_add_component(${_EXE_TARGET} DISPLAY_NAME "${_EXE_TARGET}")
+	endif()
 
 	add_custom_target(${_EXE_TARGET}-run
 		COMMAND $<TARGET_FILE:${_EXE_TARGET}> +set sv_pure 0
