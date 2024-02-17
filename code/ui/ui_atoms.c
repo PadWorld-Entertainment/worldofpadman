@@ -1263,7 +1263,7 @@ void UI_UpdateScreen(void) {
 }
 
 void UI_DrawIngameBG(void) {
-	UI_DrawHandlePic(((SCREEN_WIDTH - 648) / 2), 0, (SCREEN_WIDTH - 216), SCREEN_HEIGHT, uis.ingamebg);
+	UI_DrawHandlePic(0, 0, SCREEN_WIDTH, 589, uis.ingamebg);
 }
 
 static void UI_DrawMenu(menuframework_s *menu) {
