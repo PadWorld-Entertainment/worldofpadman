@@ -174,6 +174,9 @@ void G_BecomeKillerDuck(gentity_t *item, gentity_t *ent) {
 		trap_SendServerCommand(clientNum, va("cp \"%s" S_COLOR_WHITE, "You catched the KillerDuck.\n\""));
 	}
 	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " catched the KillerDuck.\n\"", ent->client->pers.netname));
+
+	// cache sound
+	G_SoundIndex("sound/items/killerducks/bite");
 }
 
 /**
