@@ -607,7 +607,6 @@ UI_StartServer_GameTypeDraw
 =================
 */
 static void UI_StartServer_GameTypeDraw(void *voidptr) {
-	const float *color;
 	int x, y;
 	int style;
 	qboolean focus;
@@ -619,13 +618,11 @@ static void UI_StartServer_GameTypeDraw(void *voidptr) {
 	style = UI_SMALLFONT;
 	focus = (s->generic.parent->cursor == s->generic.menuPosition);
 
-	color = color_black;
-
 	if (focus)
 		UI_FillRect(s->generic.left, s->generic.top, ((s->generic.right - s->generic.left + 1) * 15) / 16,
 					s->generic.bottom - s->generic.top + 1, listbar_color);
 
-	UI_DrawStringNS(x, y, s->itemnames[s->curvalue], style, 15.0f, color);
+	UI_DrawStringNS(x, y, s->itemnames[s->curvalue], style, 15.0f, color_yellow);
 }
 
 /*
