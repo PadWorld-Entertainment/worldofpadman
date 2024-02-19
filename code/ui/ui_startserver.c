@@ -652,6 +652,7 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.menu.draw = UI_StartServer_MenuDraw;
 
 	s_startserver.headergametype.generic.type = MTYPE_BITMAP;
+	s_startserver.headergametype.generic.flags = QMF_INACTIVE;
 	s_startserver.headergametype.generic.name = HEADERGAMETYPE;
 	s_startserver.headergametype.generic.x = 460;
 	s_startserver.headergametype.generic.y = 400;
@@ -1470,6 +1471,7 @@ static void UI_SelectBots_MenuInit(void) {
 	UI_SelectBots_Cache();
 
 	botSelectInfo.headerbotskill.generic.type = MTYPE_BITMAP;
+	botSelectInfo.headerbotskill.generic.flags = QMF_INACTIVE;
 	botSelectInfo.headerbotskill.generic.name = HEADERBOTSKILL;
 	botSelectInfo.headerbotskill.generic.x = 386;
 	botSelectInfo.headerbotskill.generic.y = 400;
@@ -1529,6 +1531,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowright.focuspicinstead = qtrue;
 
 	botSelectInfo.headerbots.generic.type = MTYPE_BITMAP;
+	botSelectInfo.headerbots.generic.flags = QMF_INACTIVE;
 	botSelectInfo.headerbots.generic.name = HEADERBOTS;
 	botSelectInfo.headerbots.generic.x = 590;
 	botSelectInfo.headerbots.generic.y = 190;
@@ -1538,6 +1541,7 @@ static void UI_SelectBots_MenuInit(void) {
 
 	if (gametype_remap[s_startserver.gametype.curvalue] >= GT_TEAM) {
 		botSelectInfo.headerteam.generic.type = MTYPE_BITMAP;
+		botSelectInfo.headerteam.generic.flags = QMF_INACTIVE;
 		botSelectInfo.headerteam.generic.name = HEADERTEAM;
 		botSelectInfo.headerteam.generic.x = 710;
 		botSelectInfo.headerteam.generic.y = 190;
@@ -1546,6 +1550,7 @@ static void UI_SelectBots_MenuInit(void) {
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerteam);
 	} else {
 		botSelectInfo.headercolor.generic.type = MTYPE_BITMAP;
+		botSelectInfo.headercolor.generic.flags = QMF_INACTIVE;
 		botSelectInfo.headercolor.generic.name = HEADERCOLOR;
 		botSelectInfo.headercolor.generic.x = 700;
 		botSelectInfo.headercolor.generic.y = 190;
@@ -1603,7 +1608,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowdown.focuspicinstead = qtrue;
 
 	botSelectInfo.slotsleft.generic.type = MTYPE_TEXTS;
-	botSelectInfo.slotsleft.generic.flags = QMF_SMALLFONT;
+	botSelectInfo.slotsleft.generic.flags = QMF_INACTIVE | QMF_SMALLFONT;
 	botSelectInfo.slotsleft.string = "     "; // 5
 	botSelectInfo.slotsleft.generic.x = 780;
 	botSelectInfo.slotsleft.generic.y = 398;
