@@ -293,7 +293,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.gain.generic.name = "Volume";
 	voiceChatMenuInfo.gain.generic.flags = QMF_BLUESTYLE | QMF_GRAYED;
 	voiceChatMenuInfo.gain.generic.callback = UI_VoiceChatMenu_GainSliderEvent;
-	voiceChatMenuInfo.gain.generic.x = XPOSITION - 5;
+	voiceChatMenuInfo.gain.generic.x = XPOSITION - 24;
 	voiceChatMenuInfo.gain.generic.y = y;
 	voiceChatMenuInfo.gain.minvalue = 0;
 	voiceChatMenuInfo.gain.maxvalue = 10;
@@ -304,7 +304,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.mute.generic.name = "Mute";
 	voiceChatMenuInfo.mute.generic.flags = QMF_BLUESTYLE | QMF_SMALLFONT | QMF_GRAYED;
 	voiceChatMenuInfo.mute.generic.callback = UI_VoiceChatMenu_MuteEvent;
-	voiceChatMenuInfo.mute.generic.x = XPOSITION - 5;
+	voiceChatMenuInfo.mute.generic.x = XPOSITION - 24;
 	voiceChatMenuInfo.mute.generic.y = y;
 	voiceChatMenuInfo.mute.curvalue = 0;
 
@@ -313,7 +313,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.muteAll.generic.name = "Mute All";
 	voiceChatMenuInfo.muteAll.generic.flags = QMF_BLUESTYLE | QMF_SMALLFONT;
 	voiceChatMenuInfo.muteAll.generic.callback = UI_VoiceChatMenu_MuteAllEvent;
-	voiceChatMenuInfo.muteAll.generic.x = XPOSITION - 5;
+	voiceChatMenuInfo.muteAll.generic.x = XPOSITION - 24;
 	voiceChatMenuInfo.muteAll.generic.y = y;
 	voiceChatMenuInfo.muteAll.curvalue = (trap_GetVoiceMuteAll() != 0);
 
@@ -322,7 +322,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.sendTarget.generic.name = "Talk To:";
 	voiceChatMenuInfo.sendTarget.generic.flags = QMF_SMALLFONT;
 	voiceChatMenuInfo.sendTarget.generic.callback = UI_VoiceChatMenu_sendTargetEvent;
-	voiceChatMenuInfo.sendTarget.generic.x = XPOSITION - 5;
+	voiceChatMenuInfo.sendTarget.generic.x = XPOSITION - 24;
 	voiceChatMenuInfo.sendTarget.generic.y = y;
 	voiceChatMenuInfo.sendTarget.itemnames = sendTarget_names;
 
