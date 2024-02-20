@@ -62,9 +62,10 @@ DISPLAY OPTIONS MENU
 #define ID_MAXFPS 20
 #define ID_SCREENSHOTFORMAT 21
 #define ID_SSJPEGQUALITY 22
-#define ID_ANAGLYPH 23
-#define ID_SWAPCOLORS 24
-#define ID_GREYSCALE 25
+#define ID_PLAYINTRO 23
+#define ID_ANAGLYPH 24
+#define ID_SWAPCOLORS 25
+#define ID_GREYSCALE 26
 
 #define XPOSITION 220
 #define YPOSITION 198
@@ -87,6 +88,7 @@ typedef struct {
 	menuradiobutton_s maxfps;
 	menulist_s screenshotformat;
 	menuslider_s ssjpegquality;
+	menuradiobutton_s playintro;
 	menulist_s anaglyph;
 	menuradiobutton_s swapcolors;
 	menuslider_s greyscale;
@@ -146,6 +148,8 @@ static void UI_DisplayOptions_SetMenuItems(void) {
 
 	displayOptionsInfo.screenshotformat.curvalue = trap_Cvar_VariableValue("r_screenshotFormat");
 	displayOptionsInfo.ssjpegquality.curvalue = trap_Cvar_VariableValue("r_screenshotJpegQuality");
+
+	displayOptionsInfo.playintro.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("com_playIntro"));
 
 	anaglyphMode = Com_Clamp(0, 8, trap_Cvar_VariableValue("r_anaglyphMode"));
 	if (anaglyphMode > 4) {
@@ -286,6 +290,9 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 	case ID_SSJPEGQUALITY:
 		trap_Cvar_SetValue("r_screenshotJpegQuality", (int)displayOptionsInfo.ssjpegquality.curvalue);
 		break;
+
+	case ID_PLAYINTRO:
+		trap_Cvar_SetValue("com_playIntro", displayOptionsInfo.playintro.curvalue);
 
 	case ID_ANAGLYPH:
 	case ID_SWAPCOLORS:
@@ -539,7 +546,18 @@ static void UI_DisplayOptions_MenuInit(void) {
 		"percent. Default is 100. NOTE: A lower JPG image quality results in smaller files and "
 		"thus can save disk space.";
 
-	y += 2 * (BIGCHAR_HEIGHT + 2);
+	y += (BIGCHAR_HEIGHT + 2);
+	displayOptionsInfo.playintro.generic.type = MTYPE_RADIOBUTTON;
+	displayOptionsInfo.playintro.generic.name = "Play Intro Video:";
+	displayOptionsInfo.playintro.generic.flags = QMF_SMALLFONT;
+	displayOptionsInfo.playintro.generic.callback = UI_DisplayOptions_Event;
+	displayOptionsInfo.playintro.generic.id = ID_PLAYINTRO;
+	displayOptionsInfo.playintro.generic.x = XPOSITION;
+	displayOptionsInfo.playintro.generic.y = y;
+	displayOptionsInfo.playintro.generic.toolTip =
+		"Disable to not play the intro video when starting the game. Default is on.";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.anaglyph.generic.type = MTYPE_SPINCONTROL;
 	displayOptionsInfo.anaglyph.generic.name = "Anaglyph 3D Mode:";
 	displayOptionsInfo.anaglyph.generic.flags = QMF_SMALLFONT;
@@ -616,6 +634,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.maxfps);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.screenshotformat);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.ssjpegquality);
+	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.playintro);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.anaglyph);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.swapcolors);
 	Menu_AddItem(&displayOptionsInfo.menu, (void *)&displayOptionsInfo.greyscale);
