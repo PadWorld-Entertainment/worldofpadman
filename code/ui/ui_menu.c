@@ -217,18 +217,6 @@ void UI_MainMenu(void) {
 	trap_Cvar_Set("mapname", ""); // note: I just recognized that this isn't reset on server shutdown ... but for some
 								  // optimations in wopSP-code it is better to have this on a correct value
 
-	if (UI_GetCvarInt("ui_mainmenuCinTest")) {
-		char buffer[32];
-		trap_Cvar_VariableStringBuffer("ui_mainmenuCinTestFile", buffer, sizeof(buffer));
-		if (!buffer[0])
-			strcpy(buffer, "idlogo.roq");
-		if (CINhandle >= 0)
-			trap_CIN_StopCinematic(CINhandle);
-		//		CINhandle = trap_CIN_PlayCinematic("idlogo.roq", 10, 10, 160, 120, /*int bits*/ CIN_loop);
-		CINhandle = trap_CIN_PlayCinematic(buffer, 10, 10, 160, 120, /*int bits*/ CIN_loop);
-		trap_S_StopBackgroundTrack();
-	}
-
 	memset(&s_main, 0, sizeof(mainmenu_t));
 	memset(&s_errorMessage, 0, sizeof(errorMessage_t));
 

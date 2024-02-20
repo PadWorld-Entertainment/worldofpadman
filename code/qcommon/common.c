@@ -72,7 +72,7 @@ cvar_t *com_showtrace;
 cvar_t *com_version;
 static cvar_t *com_buildScript; // for automated data building scripts
 #ifdef CINEMATICS_INTRO
-static cvar_t *com_introPlayed;
+static cvar_t *com_playIntro;
 #endif
 cvar_t *cl_paused;
 cvar_t *sv_paused;
@@ -2546,7 +2546,7 @@ void Com_Init(char *commandLine) {
 	Cvar_Get("com_errorMessage", "", CVAR_ROM | CVAR_NORESTART);
 
 #ifdef CINEMATICS_INTRO
-	com_introPlayed = Cvar_Get("com_introplayed", "0", CVAR_ARCHIVE);
+	com_playIntro = Cvar_Get("com_playIntro", "1", CVAR_ARCHIVE);
 #endif
 
 	s = va("%s %s", Q3_VERSION, PLATFORM_STRING);
@@ -2584,13 +2584,9 @@ void Com_Init(char *commandLine) {
 	if (!Com_AddStartupCommands()) {
 		// if the user didn't give any commands, run default action
 		if (!com_dedicated->integer) {
-#ifdef CINEMATICS_LOGO
-			Cbuf_AddText("cinematic " CINEMATICS_LOGO "\n");
-#endif
 #ifdef CINEMATICS_INTRO
-			if (!com_introPlayed->integer) {
-				Cvar_Set(com_introPlayed->name, "1");
-				Cvar_Set("nextmap", "cinematic " CINEMATICS_INTRO);
+			if (com_playIntro->integer) {
+				Cbuf_AddText("cinematic " CINEMATICS_INTRO "\n");
 			}
 #endif
 		}
