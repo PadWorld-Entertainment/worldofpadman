@@ -240,11 +240,11 @@
 	type     "ctl 1lctl"
 }
 
-//{
-//	map      "wop_trashmapCTL"
-//	longname "Kai's TrashMap"
-//	type     "ctl"
-//}
+{
+	map      "wop_trashmapCTL"
+	longname "Kai's TrashMap"
+	type     "ctl 1lctl"
+}
 
 {
 	map      "wop_padboxCTL"

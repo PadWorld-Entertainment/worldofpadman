@@ -463,6 +463,27 @@ textures/pad_trash/kb_verzierung
 	}
 }
 
+textures/pad_trash/kb_verzierung2
+{
+	surfaceparm alphashadow
+	surfaceparm trans
+	surfaceparm nomarks
+	cull disable
+	nopicmip
+	{
+		map textures/pad_trash/kb_verzierung2
+		rgbGen identity
+		depthWrite
+		alphaFunc GE128
+	}
+	{
+		map $lightmap
+		rgbGen identity
+		blendfunc filter
+		depthFunc equal
+	}
+}
+
 textures/pad_trash/kb_verzierung3
 {
 	surfaceparm alphashadow

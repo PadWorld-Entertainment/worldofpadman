@@ -686,6 +686,14 @@ levelshots/wop_trashmapBBB
 	}
 }
 
+levelshots/wop_trashmapCTLB
+{
+	nomipmaps
+	{
+		animmap 0.5 levelshots/wop_trashmapCTLB1 levelshots/wop_trashmapCTLB2 levelshots/wop_trashmapCTLB3
+	}
+}
+
 // =================
 // Westernset
 // =================
