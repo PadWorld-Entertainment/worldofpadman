@@ -20,17 +20,15 @@ HELP MENU
 
 #define XPOSITION (SCREEN_WIDTH / 2)
 
-#define HMI_GAMETYPE_W 350
-#define HMI_GAMETYPE_H 350
-#define HMI_GAMETYPE_X XPOSITION - 175 + 20// offset because picture is asymmetrical
-#define HMI_GAMETYPE_Y 0
+#define HMI_GAMETYPE_W 400
+#define HMI_GAMETYPE_H 352
+#define HMI_GAMETYPE_X 232
+#define HMI_GAMETYPE_Y 28
 
-#define HMI_ITEM_W 462
-#define HMI_ITEM_H 400
-#define HMI_ITEM_X XPOSITION - 231 + 20 // offset because picture is asymmetrical
-#define HMI_ITEM_Y 0
-
-float nwsOffset;
+#define HMI_ITEM_W 440
+#define HMI_ITEM_H 366
+#define HMI_ITEM_X 212
+#define HMI_ITEM_Y 32
 
 typedef struct {
 	menuframework_s menu;
@@ -166,13 +164,8 @@ UI_HelpMenu_Draw
 ===============
 */
 static void UI_HelpMenu_Draw(void) {
-	// for non-widescreen resolutions we need to calculate and subtract an offset to the height so that the menu always stays at the top of the screen
-	nwsOffset = ((float)uis.glconfig.vidHeight * (float)SCREEN_WIDTH / (float)uis.glconfig.vidWidth) - (float)SCREEN_HEIGHT;
-	if (nwsOffset < 0) {
-		nwsOffset = 0.0f;
-	}
 
-	UI_DrawHandlePic(helpMenuInfo.x, helpMenuInfo.y - (nwsOffset * 0.5f), helpMenuInfo.width, helpMenuInfo.height, helpMenuInfo.img);
+	UI_DrawHandlePic(helpMenuInfo.x, helpMenuInfo.y, helpMenuInfo.width, helpMenuInfo.height, helpMenuInfo.img);
 
 	// standard menu drawing
 	Menu_Draw(&helpMenuInfo.menu);
@@ -251,7 +244,7 @@ static void UI_HelpMenu_Init(void) {
 	helpMenuInfo.prev.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.prev.generic.id = ID_PREV;
 	helpMenuInfo.prev.generic.x = XPOSITION - 58;
-	helpMenuInfo.prev.generic.y = 324 - (nwsOffset * 0.5f);
+	helpMenuInfo.prev.generic.y = 306;
 	helpMenuInfo.prev.width = 50;
 	helpMenuInfo.prev.height = 22;
 	helpMenuInfo.prev.generic.name = ARROWLT0;
@@ -262,7 +255,7 @@ static void UI_HelpMenu_Init(void) {
 	helpMenuInfo.next.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.next.generic.id = ID_NEXT;
 	helpMenuInfo.next.generic.x = XPOSITION + 8;
-	helpMenuInfo.next.generic.y = 324 - (nwsOffset * 0.5f);
+	helpMenuInfo.next.generic.y = 306;
 	helpMenuInfo.next.width = 50;
 	helpMenuInfo.next.height = 22;
 	helpMenuInfo.next.generic.name = ARROWRT0;
