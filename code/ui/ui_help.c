@@ -28,7 +28,7 @@ HELP MENU
 #define HMI_ITEM_W 440
 #define HMI_ITEM_H 366
 #define HMI_ITEM_X 212
-#define HMI_ITEM_Y 32
+#define HMI_ITEM_Y 28
 
 typedef struct {
 	menuframework_s menu;
@@ -244,7 +244,7 @@ static void UI_HelpMenu_Init(void) {
 	helpMenuInfo.prev.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.prev.generic.id = ID_PREV;
 	helpMenuInfo.prev.generic.x = XPOSITION - 58;
-	helpMenuInfo.prev.generic.y = 306;
+	helpMenuInfo.prev.generic.y = 304;
 	helpMenuInfo.prev.width = 50;
 	helpMenuInfo.prev.height = 22;
 	helpMenuInfo.prev.generic.name = ARROWLT0;
@@ -255,7 +255,7 @@ static void UI_HelpMenu_Init(void) {
 	helpMenuInfo.next.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.next.generic.id = ID_NEXT;
 	helpMenuInfo.next.generic.x = XPOSITION + 8;
-	helpMenuInfo.next.generic.y = 306;
+	helpMenuInfo.next.generic.y = 304;
 	helpMenuInfo.next.width = 50;
 	helpMenuInfo.next.height = 22;
 	helpMenuInfo.next.generic.name = ARROWRT0;
