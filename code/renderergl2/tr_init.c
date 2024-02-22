@@ -430,7 +430,7 @@ Return value must be freed with ri.Hunk_FreeTempMemory()
 static byte *RB_ReadPixels(int x, int y, int width, int height, size_t *offset, int *padlen) {
 	byte *buffer, *bufstart;
 	int padwidth, linelen;
-	GLint packAlign;
+	GLint packAlign = 0;
 
 	qglGetIntegerv(GL_PACK_ALIGNMENT, &packAlign);
 
@@ -577,7 +577,7 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 	size_t offset = 0, memcount;
 	int spadlen, rpadlen;
 	int padwidth, linelen;
-	GLint packAlign;
+	GLint packAlign = 0;
 	byte *src, *dst;
 	int x, y;
 	int r, g, b;
@@ -760,7 +760,7 @@ const void *RB_TakeVideoFrameCmd(const void *data) {
 	byte *cBuf;
 	size_t memcount, linelen;
 	int padwidth, avipadwidth, padlen, avipadlen;
-	GLint packAlign;
+	GLint packAlign = 0;
 
 	// finish any 2D drawing if needed
 	if (tess.numIndexes)
