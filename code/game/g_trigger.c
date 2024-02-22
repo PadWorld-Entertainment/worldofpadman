@@ -632,11 +632,11 @@ static void AddCaptureBalloonScores(const gentity_t *balloon, team_t team) {
 				// add the sprite over the player's head
 				SetAward(ent->client, AWARD_CAP);
 			} else {
-				// all other players at balloon receive assist award (PadAce)
+				// all other players at balloon receive assist award (WatchPad)
 				AddScore(ent, balloon->target_ent->s.origin, BB_ASSIST_BONUS, SCORE_BONUS_ASSIST_CAPTURE_S);
-				ent->client->ps.persistant[PERS_PADACE_COUNT]++;
+				ent->client->ps.persistant[PERS_WATCHPAD_COUNT]++;
 				// add the sprite over the player's head
-				SetAward(ent->client, AWARD_PADACE);
+				SetAward(ent->client, AWARD_WATCHPAD);
 			}
 		}
 	}

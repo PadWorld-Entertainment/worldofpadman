@@ -721,8 +721,8 @@ static const char *AwardName(award_t award) {
 	case AWARD_PADHERO:
 		name = "padhero";
 		break;
-	case AWARD_PADACE:
-		name = "padace";
+	case AWARD_WATCHPAD:
+		name = "watchpad";
 		break;
 	case AWARD_SPRAYGOD:
 		name = "spraygod";

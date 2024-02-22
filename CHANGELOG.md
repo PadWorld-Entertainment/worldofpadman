@@ -15,7 +15,7 @@
 	- Milton Boulevard music pack by neurological featuring 7 new tracks
 	- ENTE's PadPack with PadCastle and PadGallery maps as optional installation option
 	- PadHero (defend) award/medal for defending the base and the lolly carrier in CTL, for defending a balloon box in your own team color in BB, and for defending a teammate carrying min 5 cartridges in SYC Team when attacked
-	- PadAce (assist) award/medal for 1st returning the own lolly, and 2nd for killing the opposing lolly carrier if a teammate scores shortly after in CTL, and for helping a teammate to raise a balloon in BB
+	- WatchPad (assist) award/medal for 1st returning the own lolly, and 2nd for killing the opposing lolly carrier if a teammate scores shortly after in CTL, and for helping a teammate to raise a balloon in BB
 	- Red PadStar medal for the red team capturing a lolly in CTL or raising a balloon in BB
 	- Personal bonus scores in BB for capturing a balloon (5 points), for countering a balloon (1 points), for defending a balloon (1 points) and for helping to raise a balloon (2 points)
 	- Almost event by the announcer saying "Better luck next time, maybe!" for a player failing to score by getting shot close to the lolly spawn point in CTL, the sprayroom teleporter and having 5+ cartridges to achieve SprayKiller or SprayGod in SYC+Team, raising the last balloon in the own team color in BB
@@ -146,7 +146,7 @@
 	- Music ingame menu to always focus on the currently played album and to open and switch albums much faster
 	- Changed spray logos for HellPad and PadClassic bots (compared to previous single release)
 	- Red/blue balloon icon to red/blue PadStar medal which is counted as a full capture award in Big Balloon now
-	- Capturing a balloon in BB together with teammates to give the first player who started the capture the PadStar award and all the other players who helped the PadAce award
+	- Capturing a balloon in BB together with teammates to give the first player who started the capture the PadStar award and all the other players who helped the WatchPad award
 	- Team hit sound to a beep sound to indicate friendly fire at teammates when the server has friendly fire enabled
 	- Default player icon size in chat notifications from 14 to 16 pixels
 	- Support for Q3A items by adding replacements for Q3A items teleporter (floater), medkit (killerducks), add comabt armor (padshield); also `g_q3Items` checks against Q3A game types now (taken from Byrillium mod)

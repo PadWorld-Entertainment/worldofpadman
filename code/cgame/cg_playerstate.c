@@ -333,10 +333,10 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 		reward = qtrue;
 		//Com_Printf("PadHero award\n");
 	}
-	if (ps->persistant[PERS_PADACE_COUNT] != ops->persistant[PERS_PADACE_COUNT]) {
-		CG_PushReward(cgs.media.padaceSound, cgs.media.medalPadAce, ps->persistant[PERS_PADACE_COUNT]);
+	if (ps->persistant[PERS_WATCHPAD_COUNT] != ops->persistant[PERS_WATCHPAD_COUNT]) {
+		CG_PushReward(cgs.media.watchpadSound, cgs.media.medalWatchPad, ps->persistant[PERS_WATCHPAD_COUNT]);
 		reward = qtrue;
-		//Com_Printf("PadAce award\n");
+		//Com_Printf("WatchPad award\n");
 	}
 	// if any of the player event bits changed
 	if (ps->persistant[PERS_PLAYEREVENTS] != ops->persistant[PERS_PLAYEREVENTS]) {

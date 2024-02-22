@@ -61,7 +61,7 @@ static void CG_ParseScores(void) {
 		score->excellentCount = atoi(CG_Argv(argIdx + 7));
 		score->snackattackCount = atoi(CG_Argv(argIdx + 8));
 		score->padheroCount = atoi(CG_Argv(argIdx + 9));
-		score->padaceCount = atoi(CG_Argv(argIdx + 10));
+		score->watchpadCount = atoi(CG_Argv(argIdx + 10));
 		score->perfect = atoi(CG_Argv(argIdx + 11));
 		score->captures = atoi(CG_Argv(argIdx + 12));
 		score->spraygodCount = atoi(CG_Argv(argIdx + 13));

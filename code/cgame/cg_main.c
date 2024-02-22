@@ -767,7 +767,7 @@ static void CG_RegisterSounds(void) {
 	cgs.media.excellentSound = trap_S_RegisterSound("sound/feedback/awards/excellent", qtrue);
 	cgs.media.snackattackSound = trap_S_RegisterSound("sound/feedback/awards/snackattack", qtrue);
 	cgs.media.padheroSound = trap_S_RegisterSound("sound/feedback/awards/padhero", qtrue);
-	cgs.media.padaceSound = trap_S_RegisterSound("sound/feedback/awards/padace", qtrue);
+	cgs.media.watchpadSound = trap_S_RegisterSound("sound/feedback/awards/watchpad", qtrue);
 	cgs.media.padstarSound = trap_S_RegisterSound("sound/feedback/awards/padstar", qtrue);
 
 	cgs.media.watrInSound = trap_S_RegisterSound("sound/padplayer/water_in", qfalse);
@@ -1109,7 +1109,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.medalSprayGod = trap_R_RegisterShaderNoMip("medal_spraygod");
 	cgs.media.medalSprayKiller = trap_R_RegisterShaderNoMip("medal_spraykiller");
 	cgs.media.medalPadHero = trap_R_RegisterShaderNoMip("medal_padhero");
-	cgs.media.medalPadAce = trap_R_RegisterShaderNoMip("medal_padace");
+	cgs.media.medalWatchPad = trap_R_RegisterShaderNoMip("medal_watchpad");
 	cgs.media.medalPadStar = trap_R_RegisterShaderNoMip("medal_padstar_blue");
 	cgs.media.medalPadStarRed = trap_R_RegisterShaderNoMip("medal_padstar_red");
 

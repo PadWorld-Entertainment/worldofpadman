@@ -861,17 +861,17 @@ static int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 			if (player->client->pers.teamState.lastreturnedflag + CTF_RETURN_FLAG_ASSIST_TIMEOUT > level.time) {
 				AddScore(player, ent->r.currentOrigin, CTF_RETURN_FLAG_ASSIST_BONUS, SCORE_BONUS_ASSIST_RETURN_S);
 				other->client->pers.teamState.assists++;
-				player->client->ps.persistant[PERS_PADACE_COUNT]++;
+				player->client->ps.persistant[PERS_WATCHPAD_COUNT]++;
 				// add the sprite over the player's head
-				SetAward(player->client, AWARD_PADACE);
+				SetAward(player->client, AWARD_WATCHPAD);
 			}
 			if (player->client->pers.teamState.lastfraggedcarrier + CTF_FRAG_CARRIER_ASSIST_TIMEOUT > level.time) {
 				AddScore(player, ent->r.currentOrigin, CTF_FRAG_CARRIER_ASSIST_BONUS,
 						 SCORE_BONUS_ASSIST_FRAG_CARRIER_S);
 				other->client->pers.teamState.assists++;
-				player->client->ps.persistant[PERS_PADACE_COUNT]++;
+				player->client->ps.persistant[PERS_WATCHPAD_COUNT]++;
 				// add the sprite over the player's head
-				SetAward(player->client, AWARD_PADACE);
+				SetAward(player->client, AWARD_WATCHPAD);
 			}
 		}
 	}

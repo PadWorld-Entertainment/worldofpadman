@@ -77,7 +77,7 @@ void DeathmatchScoreboardMessage(const gentity_t *ent) {
 			cl->ps.persistant[PERS_EXCELLENT_COUNT],
 			cl->ps.persistant[PERS_SNACKATTACK_COUNT],
 			cl->ps.persistant[PERS_PADHERO_COUNT],
-			cl->ps.persistant[PERS_PADACE_COUNT],
+			cl->ps.persistant[PERS_WATCHPAD_COUNT],
 			perfect,
 			cl->ps.persistant[PERS_CAPTURES],
 			(cl->ps.persistant[PERS_SPRAYAWARDS_COUNT] >> 8),
@@ -312,8 +312,8 @@ static void Cmd_Give_f(gentity_t *ent) {
 		ent->client->ps.generic1 = ent->client->ps.ammo[WP_SPRAYPISTOL];
 	}
 
-	if (Q_stricmp(name, "padace") == 0) {
-		ent->client->ps.persistant[PERS_PADACE_COUNT]++;
+	if (Q_stricmp(name, "watchpad") == 0) {
+		ent->client->ps.persistant[PERS_WATCHPAD_COUNT]++;
 		return;
 	}
 

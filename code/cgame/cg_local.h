@@ -295,7 +295,7 @@ typedef struct {
 	int spraygodCount;
 	int spraykillerCount;
 	int padheroCount;
-	int padaceCount;
+	int watchpadCount;
 	int livesleft;
 	int excellentCount;
 	int snackattackCount;
@@ -963,7 +963,7 @@ typedef struct {
 	qhandle_t medalSprayGod;
 	qhandle_t medalSprayKiller;
 	qhandle_t medalPadHero;
-	qhandle_t medalPadAce;
+	qhandle_t medalWatchPad;
 	qhandle_t medalPadStar;
 	qhandle_t medalPadStarRed;
 
@@ -1044,7 +1044,7 @@ typedef struct {
 	sfxHandle_t spraygodSound;
 	sfxHandle_t spraykillerSound;
 	sfxHandle_t padheroSound;
-	sfxHandle_t padaceSound;
+	sfxHandle_t watchpadSound;
 	sfxHandle_t padstarSound;
 
 	sfxHandle_t takenLeadSound;

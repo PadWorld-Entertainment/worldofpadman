@@ -368,11 +368,11 @@ medal_excellent
 	}
 }
 
-medal_padace
+medal_watchpad
 {
 	nopicmip
 	{
-		map icons/medal_padace
+		map icons/medal_watchpad
 		blendFunc blend
 	}
 }

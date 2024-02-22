@@ -331,8 +331,8 @@ static void CG_DrawMedals(float x, float y, const score_t *score) {
 		Com_sprintf(buf, sizeof(buf), "%d", score->padheroCount);
 		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 		x += 30;
-		CG_DrawPic(x, y, 24, 24, cgs.media.medalPadAce);
-		Com_sprintf(buf, sizeof(buf), "%d", score->padaceCount);
+		CG_DrawPic(x, y, 24, 24, cgs.media.medalWatchPad);
+		Com_sprintf(buf, sizeof(buf), "%d", score->watchpadCount);
 		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 	}
 }

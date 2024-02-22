@@ -296,7 +296,7 @@ typedef enum {
 	// player awards tracking
 	PERS_EXCELLENT_COUNT,	  // two successive kills in a short amount of time
 	PERS_PADHERO_COUNT,		  // padhero awards
-	PERS_PADACE_COUNT,		  // padace awards
+	PERS_WATCHPAD_COUNT,		  // watchpad awards
 	PERS_SNACKATTACK_COUNT,   // snackattack awards
 	PERS_CAPTURES,			  // captures
 	PERS_SPRAYAWARDS_COUNT // 0xFF00 -> god, 0x00FF -> killer ... because there are max 16 PERS and also only 16 bit(per
@@ -321,7 +321,7 @@ typedef enum {
 #define EF_CONNECTION 0x00002000		// draw a connection trouble sprite
 #define EF_VOTED 0x00004000				// already cast a vote
 #define EF_AWARD_PADHERO 0x00008000		// draw a padhero sprite
-#define EF_AWARD_PADACE 0x00010000		// draw a padace sprite
+#define EF_AWARD_WATCHPAD 0x00010000		// draw a watchpad sprite
 #define EF_TEAMVOTED 0x00020000			// already cast a team vote
 #define EF_FLOATER 0x00040000			// player uses floater
 #define EF_AWARD_SPRAYGOD 0x00080000	// draw a spraygod sprite
@@ -330,7 +330,7 @@ typedef enum {
 #define EF_TALK 0x00400000				// draw a talk balloon sprite
 
 #define REMOVE_AWARDFLAGS                                                                                              \
-	~(EF_AWARD_EXCELLENT | EF_AWARD_SNACKATTACK | EF_AWARD_PADACE | EF_AWARD_PADHERO |               \
+	~(EF_AWARD_EXCELLENT | EF_AWARD_SNACKATTACK | EF_AWARD_WATCHPAD | EF_AWARD_PADHERO |               \
 	  EF_AWARD_CAP | EF_AWARD_SPRAYGOD | EF_AWARD_SPRAYKILLER)
 
 // NOTE: may not have more than 16
