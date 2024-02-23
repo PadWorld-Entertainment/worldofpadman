@@ -22,10 +22,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #include "ui_local.h"
 
-#define ARROWUP0 "menu/arrows/arryel_up0r"
-#define ARROWUP1 "menu/arrows/arryel_up1"
-#define ARROWDN0 "menu/arrows/arryel_dn0r"
-#define ARROWDN1 "menu/arrows/arryel_dn1"
+#define ARROWUP0 "menu/arrows/arrblu_up0r"
+#define ARROWUP1 "menu/arrows/arrblu_up1"
+#define ARROWDN0 "menu/arrows/arrblu_dn0r"
+#define ARROWDN1 "menu/arrows/arrblu_dn1"
 #define GO0 "menu/arrows/headyel_rt0r"
 #define GO1 "menu/arrows/headyel_rt1"
 #define BACK0 "menu/buttons/back0"
