@@ -32,10 +32,10 @@ ADD BOTS MENU
 
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-#define ARROWUP0 "menu/arrows/headyel_up0"
-#define ARROWUP1 "menu/arrows/headyel_up1"
-#define ARROWDN0 "menu/arrows/headyel_dn0"
-#define ARROWDN1 "menu/arrows/headyel_dn1"
+#define ARROWUP0 "menu/arrows/arryel_up0b"
+#define ARROWUP1 "menu/arrows/arryel_up1"
+#define ARROWDN0 "menu/arrows/arryel_dn0b"
+#define ARROWDN1 "menu/arrows/arryel_dn1"
 
 #define NUM_BOTS 6
 

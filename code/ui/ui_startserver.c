@@ -10,10 +10,10 @@ CREATE MENU (START SERVER)
 
 #define FIGHT0 "menu/buttons/fight0"
 #define FIGHT1 "menu/buttons/fight1"
-#define ARROWLT0 "menu/arrows/headblu_lt0"
-#define ARROWLT1 "menu/arrows/headblu_lt1"
-#define ARROWRT0 "menu/arrows/headblu_rt0"
-#define ARROWRT1 "menu/arrows/headblu_rt1"
+#define ARROWLT0 "menu/arrows/arrblu_lt0r"
+#define ARROWLT1 "menu/arrows/arrblu_lt1"
+#define ARROWRT0 "menu/arrows/arrblu_rt0r"
+#define ARROWRT1 "menu/arrows/arrblu_rt1"
 #define SELECTBOTS0 "menu/buttons/selectbots0"
 #define SELECTBOTS1 "menu/buttons/selectbots1"
 #define BACK0 "menu/buttons/back0"
@@ -933,10 +933,10 @@ SELECT BOTS MENU
 =======================================================================
 */
 
-#define ARROWUP0 "menu/arrows/headyel_up0"
-#define ARROWUP1 "menu/arrows/headyel_up1"
-#define ARROWDN0 "menu/arrows/headyel_dn0"
-#define ARROWDN1 "menu/arrows/headyel_dn1"
+#define ARROWUP0 "menu/arrows/arryel_up0b"
+#define ARROWUP1 "menu/arrows/arryel_up1"
+#define ARROWDN0 "menu/arrows/arryel_dn0b"
+#define ARROWDN1 "menu/arrows/arryel_dn1"
 #define HEADERBOTSKILL "menu/headers/botskill"
 #define HEADERBOTS "menu/headers/bots"
 #define HEADERCOLOR "menu/headers/color"
@@ -1439,7 +1439,7 @@ static void UI_SelectBots_DrawBotIcon(void *self) {
 		const menubitmap_s *itemCursor = Menu_ItemAtCursor(b->generic.parent);
 
 		if (itemCursor != b) {
-			UI_FillRect(x + 4, y + 4, w, h, colorTBlack33);
+			UI_FillRect(x - 4, y + 4, w, h, menuShadowBot);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 

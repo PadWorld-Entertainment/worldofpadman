@@ -785,7 +785,7 @@ static void UI_SelectSkin_DrawSkinIcon(void *self) {
 		w = b->width;
 		h = b->height;
 		if (!(Menu_ItemAtCursor(b->generic.parent) == b)) {
-			UI_FillRect(x + 4, y + 4, w, h, colorTBlack33);
+			UI_FillRect(x - 4, y + 4, w, h, menuShadowSkin);
 		}
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 	}

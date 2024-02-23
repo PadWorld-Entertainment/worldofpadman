@@ -13,10 +13,10 @@ HELP MENU
 
 #define HELPMENU_PATH "menu/help/"
 
-#define ARROWLT0 "menu/arrows/headyel_lt0"
-#define ARROWLT1 "menu/arrows/headyel_lt1"
-#define ARROWRT0 "menu/arrows/headyel_rt0"
-#define ARROWRT1 "menu/arrows/headyel_rt1"
+#define ARROWLT0 "menu/arrows/arryel_lt0b"
+#define ARROWLT1 "menu/arrows/arryel_lt1"
+#define ARROWRT0 "menu/arrows/arryel_rt0b"
+#define ARROWRT1 "menu/arrows/arryel_rt1"
 
 #define XPOSITION (SCREEN_WIDTH / 2)
 

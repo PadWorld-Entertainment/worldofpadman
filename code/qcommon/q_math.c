@@ -52,6 +52,8 @@ vec4_t colorDkBlue = {0, 0, 0.5f, 1};
 vec4_t colorDkRed = {0.5f, 0, 0, 1};
 vec4_t colorDkLilac = {0.4f, 0, 0.4f, 1};
 vec4_t colorDkOrange = {0.75f, 0.3f, 0, 1};
+vec4_t menuShadowBot = {0.23f, 0.02f, 0, 0.22f};
+vec4_t menuShadowSkin = {0.20f, 0.02f, 0, 0.28f};
 
 vec4_t g_color_table[8] = {
 	{0.0, 0.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0}, {0.0, 1.0, 0.0, 1.0}, {1.0, 1.0, 0.0, 1.0},

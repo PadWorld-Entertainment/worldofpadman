@@ -419,6 +419,8 @@ extern vec4_t colorDkBlue;
 extern vec4_t colorDkRed;
 extern vec4_t colorDkLilac;
 extern vec4_t colorDkOrange;
+extern vec4_t menuShadowBot;
+extern vec4_t menuShadowSkin;
 
 #define Q_COLOR_ESCAPE '^'
 qboolean Q_IsColorString(const char *p); // ^[0-9a-zA-Z]

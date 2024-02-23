@@ -30,14 +30,14 @@ DEMOS MENU
 
 #include "ui_local.h"
 
-#define ARROWUP0 "menu/arrows/headblu_up0"
-#define ARROWUP1 "menu/arrows/headblu_up1"
-#define ARROWDN0 "menu/arrows/headblu_dn0"
-#define ARROWDN1 "menu/arrows/headblu_dn1"
+#define ARROWUP0 "menu/arrows/arryel_up0r"
+#define ARROWUP1 "menu/arrows/arryel_up1"
+#define ARROWDN0 "menu/arrows/arryel_dn0r"
+#define ARROWDN1 "menu/arrows/arryel_dn1"
+#define GO0 "menu/arrows/headyel_rt0r"
+#define GO1 "menu/arrows/headyel_rt1"
 #define BACK0 "menu/buttons/back0"
 #define BACK1 "menu/buttons/back1"
-#define GO0 "menu/buttons/play_yel0"
-#define GO1 "menu/buttons/play_yel1"
 
 #define MAX_DEMOS 1024
 #define NAMEBUFSIZE (MAX_DEMOS * 32)

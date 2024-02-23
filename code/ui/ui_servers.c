@@ -51,10 +51,10 @@ JOIN MENU (SERVER BROWSER)
 #define DELETE1 "menu/buttons/delete1"
 #define FIGHT0 "menu/buttons/fight0"
 #define FIGHT1 "menu/buttons/fight1"
-#define ARROWUP0 "menu/arrows/headyel_up0"
-#define ARROWUP1 "menu/arrows/headyel_up1"
-#define ARROWDN0 "menu/arrows/headyel_dn0"
-#define ARROWDN1 "menu/arrows/headyel_dn1"
+#define ARROWUP0 "menu/arrows/arryel_up0b"
+#define ARROWUP1 "menu/arrows/arryel_up1"
+#define ARROWDN0 "menu/arrows/arryel_dn0b"
+#define ARROWDN1 "menu/arrows/arryel_dn1"
 #define UNKNOWNMAP "menu/art/unknownmap"
 
 #define ID_MASTER 10
