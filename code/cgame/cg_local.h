@@ -803,8 +803,10 @@ typedef struct {
 
 	qhandle_t spraypuff;
 	qhandle_t spraymark;
-	qhandle_t slmenu_arrowr;
-	qhandle_t slmenu_arrowl;
+	qhandle_t arrowlt0;
+	qhandle_t arrowlt1;
+	qhandle_t arrowrt0;
+	qhandle_t arrowrt1;
 	qhandle_t cgwopmenu_cursor;
 	qhandle_t chooselogo_bg;
 

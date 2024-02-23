@@ -220,8 +220,10 @@ The main-init for the spraylogosys ... should be called at every vid_restart
 void Init_SprayLogoSys(void) {
 	cgs.media.spraypuff = trap_R_RegisterShader("models/weaponsfx/spraypuff");
 	cgs.media.spraymark = trap_R_RegisterShader("gfx/damage/spray_mrk");
-	cgs.media.slmenu_arrowr = trap_R_RegisterShaderNoMip("menu/arrows/arrblu_rt0b");
-	cgs.media.slmenu_arrowl = trap_R_RegisterShaderNoMip("menu/arrows/arrblu_lt0b");
+	cgs.media.arrowlt0 = trap_R_RegisterShaderNoMip("menu/arrows/arrblu_lt0b");
+	cgs.media.arrowlt1 = trap_R_RegisterShaderNoMip("menu/arrows/arrblu_lt1");
+	cgs.media.arrowrt0 = trap_R_RegisterShaderNoMip("menu/arrows/arrblu_rt0b");
+	cgs.media.arrowrt1 = trap_R_RegisterShaderNoMip("menu/arrows/arrblu_rt1");
 	cgs.media.cgwopmenu_cursor = trap_R_RegisterShaderNoMip("menu/art/cursor");
 	if (cgs.gametype == GT_SPRAY) {
 		cgs.media.chooselogo_bg = trap_R_RegisterShaderNoMip("menu/bg/selectlogo_team");
@@ -524,6 +526,8 @@ static qboolean CursorInBox(int x, int y, int w, int h) {
 #define GAP 32								   // old:16
 #define XLL (320 - GAP * 3 / 2 - 2 * LOGOSIZE) // x left logo XD
 
+#define ARROWLTX (SCREEN_WIDTH / 2 - 58)
+#define ARROWRTX (SCREEN_WIDTH / 2 + 8)
 #define ARROWY (POSY_SECONDLINE + LOGOSIZE + 40)
 
 #define COLORSIZE 16
@@ -634,10 +638,31 @@ void ActiveChooseLogoMenu(void) {
 		CG_DrawRect(XLL + (CursorAtLogo % 4) * (LOGOSIZE + GAP),
 					((CursorAtLogo % 8) / 4) ? POSY_SECONDLINE : POSY_FIRSTLINE, LOGOSIZE, LOGOSIZE, 1, colorLtGrey);
 
-	Com_sprintf(tmpstr, sizeof(tmpstr), "%i/%i", (activepage + 1), numPages);
-	CG_DrawStringExt(320 - CG_DrawStrlen(tmpstr) * 4, ARROWY + 2, tmpstr, colorWhite, qtrue, qtrue, 8, 16, 32);
-	CG_DrawPic(250, ARROWY, 50, 22, cgs.media.slmenu_arrowl);
-	CG_DrawPic(340, ARROWY, 50, 22, cgs.media.slmenu_arrowr);
+	// draw left arrow
+	if (activepage <= 0) {
+		trap_R_SetColor(colorLtGrey);
+		CG_DrawPic(ARROWLTX, ARROWY, 50, 22, cgs.media.arrowlt0);
+		trap_R_SetColor(NULL);
+	} else {
+		if (cgs.cursorX > ARROWLTX && cgs.cursorX < (ARROWLTX + 50) && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
+			CG_DrawPic(ARROWLTX, ARROWY, 50, 22, cgs.media.arrowlt1);
+		} else {
+			CG_DrawPic(ARROWLTX, ARROWY, 50, 22, cgs.media.arrowlt0);
+		}
+	}
+
+	// draw right arrow
+	if (activepage >= (numPages - 1)) {
+		trap_R_SetColor(colorLtGrey);
+		CG_DrawPic(ARROWRTX, ARROWY, 50, 22, cgs.media.arrowrt0);
+		trap_R_SetColor(NULL);
+	} else {
+		if (cgs.cursorX > ARROWRTX && cgs.cursorX < (ARROWRTX + 50) && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
+			CG_DrawPic(ARROWRTX, ARROWY, 50, 22, cgs.media.arrowrt1);
+		} else {
+			CG_DrawPic(ARROWRTX, ARROWY, 50, 22, cgs.media.arrowrt0);
+		}
+	}
 
 	if (cgs.gametype == GT_SPRAYFFA) {
 		int x = XLL;
@@ -671,7 +696,7 @@ void ActiveChooseLogoMenu(void) {
 			trap_Cvar_Set("spraycolor", va("%d", mouseOverColor));
 		} else {
 			// left arrow
-			if (cgs.cursorX > 250 && cgs.cursorX < 300 && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
+			if (cgs.cursorX > ARROWLTX && cgs.cursorX < (ARROWLTX + 50) && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
 				if (activepage > 0) {
 					trap_S_StartLocalSound(menuClickSound, CHAN_LOCAL_SOUND);
 
@@ -679,7 +704,7 @@ void ActiveChooseLogoMenu(void) {
 				}
 			}
 			// right arrow
-			else if (cgs.cursorX > 340 && cgs.cursorX < 390 && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
+			else if (cgs.cursorX > ARROWRTX && cgs.cursorX < (ARROWRTX + 50) && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
 				if (activepage < (numPages - 1)) {
 					trap_S_StartLocalSound(menuClickSound, CHAN_LOCAL_SOUND);
 
