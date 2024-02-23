@@ -1835,7 +1835,7 @@ Menu_Cache
 void Menu_Cache(void) {
 	uis.charsetShader = trap_R_RegisterShaderNoMip("fontascii");
 	uis.charsetProp = trap_R_RegisterShaderNoMip("gfx/2d/fontmenu");
-	uis.cursor = trap_R_RegisterShaderNoMip("menu/art/3_cursor2");
+	uis.cursor = trap_R_RegisterShaderNoMip("menu/art/cursor");
 	uis.rb_on = trap_R_RegisterShaderNoMip("menu/art/switch_on");
 	uis.rb_off = trap_R_RegisterShaderNoMip("menu/art/switch_off");
 
