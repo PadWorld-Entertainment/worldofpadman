@@ -223,7 +223,12 @@ void Init_SprayLogoSys(void) {
 	cgs.media.slmenu_arrowr = trap_R_RegisterShaderNoMip("menu/arrows/arrblu_rt0b");
 	cgs.media.slmenu_arrowl = trap_R_RegisterShaderNoMip("menu/arrows/arrblu_lt0b");
 	cgs.media.cgwopmenu_cursor = trap_R_RegisterShaderNoMip("menu/art/cursor");
-	cgs.media.chooselogo_bg = trap_R_RegisterShaderNoMip("menu/bg/selectlogo");
+	if (cgs.gametype == GT_SPRAY) {
+		cgs.media.chooselogo_bg = trap_R_RegisterShaderNoMip("menu/bg/selectlogo_team");
+	} else {
+		cgs.media.chooselogo_bg = trap_R_RegisterShaderNoMip("menu/bg/selectlogo_ffa");
+	}
+	
 	Load_Logos();
 	Init_LogoPolyList();
 
@@ -540,6 +545,8 @@ static const char *SkipLogoNumber(const char *logoName) {
 /*
 #######################
 ActiveChooseLogoMenu
+
+Why here and not in UI ??? ;(
 #######################
 */
 void ActiveChooseLogoMenu(void) {
@@ -581,7 +588,11 @@ void ActiveChooseLogoMenu(void) {
 		CG_FillRect(XLL - GAP, 60, 640 - 2 * (XLL - GAP), 320, tblack33);
 		CG_DrawRect(XLL - GAP, 60, 640 - 2 * (XLL - GAP), 320, 1, colorBlack);
 	} else {
-		CG_DrawPic(XLL - GAP - 10, 60 - 10, 640 - 2 * (XLL - GAP) + 20, 320 + 20, cgs.media.chooselogo_bg);
+		if (cgs.gametype == GT_SPRAY) {
+			CG_DrawPic(XLL - GAP - 10, 60 - 10, 640 - 2 * (XLL - GAP) + 20, 320 - 15, cgs.media.chooselogo_bg);
+		} else {
+			CG_DrawPic(XLL - GAP - 10, 60 - 10, 640 - 2 * (XLL - GAP) + 20, 320 + 20, cgs.media.chooselogo_bg);
+		}
 	}
 
 	CG_DrawStringExt(XLL, POSY_FIRSTLINE - 26, "Please select a spray logo...", colorWhite, qtrue, qtrue, 8, 16, 64);
@@ -630,7 +641,7 @@ void ActiveChooseLogoMenu(void) {
 
 	if (cgs.gametype == GT_SPRAYFFA) {
 		int x = XLL;
-		int y = ARROWY + 40;
+		int y = ARROWY + 56;
 
 		CG_DrawStringExt(x, y + COLORSIZE / 2 - 8, "...or change the color:", colorWhite, qtrue, qtrue, 8, 16, -1);
 
