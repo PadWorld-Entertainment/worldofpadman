@@ -437,6 +437,8 @@ static void UI_ArenaServers_UpdateMenu(void) {
 			g_arenaservers.hideprivate.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.showfull.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.list.generic.flags &= ~QMF_GRAYED;
+			g_arenaservers.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+			g_arenaservers.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 			g_arenaservers.refresh.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.fight.generic.flags &= ~QMF_GRAYED;
 
@@ -463,6 +465,8 @@ static void UI_ArenaServers_UpdateMenu(void) {
 			g_arenaservers.hideprivate.generic.flags |= QMF_GRAYED;
 			g_arenaservers.showfull.generic.flags |= QMF_GRAYED;
 			g_arenaservers.list.generic.flags |= QMF_GRAYED;
+			g_arenaservers.arrowup.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
+			g_arenaservers.arrowdown.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 			g_arenaservers.refresh.generic.flags |= QMF_GRAYED;
 			g_arenaservers.fight.generic.flags |= QMF_GRAYED;
 		} else {
@@ -487,6 +491,8 @@ static void UI_ArenaServers_UpdateMenu(void) {
 			g_arenaservers.hideprivate.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.showfull.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.list.generic.flags |= QMF_GRAYED;
+			g_arenaservers.arrowup.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
+			g_arenaservers.arrowdown.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 			g_arenaservers.refresh.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.fight.generic.flags |= QMF_GRAYED;
 		}
