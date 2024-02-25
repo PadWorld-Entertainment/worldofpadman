@@ -1055,8 +1055,11 @@ static void UI_SelectBots_UpdateGrid(void) {
 			Q_strncpyz(botSelectInfo.botnames[i], Info_ValueForKey(info, "name"), 16);
 			Q_CleanStr(botSelectInfo.botnames[i]);
 			botSelectInfo.pics[i].generic.name = botSelectInfo.boticons[i];
+			botSelectInfo.pics[i].generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+
 		} else {
 			// dead slot
+			botSelectInfo.pics[i].generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 			botSelectInfo.pics[i].generic.name = NULL;
 			botSelectInfo.botnames[i][0] = 0;
 		}
