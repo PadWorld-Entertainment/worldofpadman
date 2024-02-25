@@ -1666,6 +1666,10 @@ static void CG_DrawCrosshair(void) {
 		return;
 	}
 
+	if (cg.wantSelectLogo) {
+		return;
+	}
+
 	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 
 	// set color based on health
@@ -1832,6 +1836,10 @@ static void CG_DrawCrosshairNames(void) {
 		return;
 	}
 	if (cg.renderingThirdPerson) {
+		return;
+	}
+
+	if (cg.wantSelectLogo) {
 		return;
 	}
 
