@@ -558,6 +558,7 @@ static void UI_StartServer_LevelshotDraw(void *self) {
 	if (Menu_ItemAtCursor(b->generic.parent) == b && b->focusshader) {
 		UI_DrawHandlePic(x, y, w, h, b->focusshader);
 	} else if (b->shader) {
+		UI_FillRect(x - 4, y + 4, w, h, menuShadowBot);
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 	}
 
