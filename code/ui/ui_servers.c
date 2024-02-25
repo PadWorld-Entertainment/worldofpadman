@@ -114,7 +114,7 @@ static const char *servertype_items[] = {"All",
 										 GAMETYPE_NAME(GT_BALLOON),
 										 NULL};
 
-static const char *sortkey_items[] = {"Server Name",   "Map Name", "Open Player Slots", "Game Type", "Ping Time",
+static const char *sortkey_items[] = {"Server Name", "Map Name", "Open Player Slots", "Game Type", "Ping Time",
 									  "Human Players", NULL};
 
 static char *gamenames[] = {GAMETYPE_NAME_SHORT(GT_FFA),
@@ -131,6 +131,8 @@ static char *gamenames[] = {GAMETYPE_NAME_SHORT(GT_FFA),
 							GAMETYPE_NAME_SHORT(GT_BALLOON),
 							GAMETYPE_NAME_SHORT(GT_MAX_GAME_TYPE),
 							NULL};
+
+static char* netnames[] = {"??? ", "UDP ", "UDP6", NULL};
 
 static char quake3worldMessage[] = "Visit www.worldofpadman.com - News, Events, Files";
 
@@ -150,6 +152,7 @@ typedef struct servernode_s {
 	int pingtime;
 	int gametype;
 	char gamename[16];
+	int nettype;
 	qboolean mod;
 	int minPing;
 	int maxPing;
@@ -625,14 +628,13 @@ static void UI_ArenaServers_UpdateMenu(void) {
 
 		// TODO: Color if password'ed? Different colors depending on free slots?
 
-		// NOTE: netname has been removed, since it's not really useful to the average player
-		//       Also note that highlighting is partially broken due to static colors
+		// NOTE: Highlighting is partially broken due to static colors
 
 		Com_sprintf(tableptr->buff, ARRAY_LEN(tableptr->buff),
-					"%-22.22s%s %-18.18s" DEFAULT_COLOR_S " %s%2d+%2d/%2d" DEFAULT_COLOR_S " %s%-8.8s %s%-3d",
+					"%-22.22s%s %-18.18s" DEFAULT_COLOR_S " %s%2d+%2d/%2d" DEFAULT_COLOR_S " %s%-8.8s %4s%s%3d",
 					servernodeptr->hostname, mapColor, servernodeptr->mapname, slotsColor, servernodeptr->humanclients,
 					(servernodeptr->numclients - servernodeptr->humanclients), servernodeptr->maxclients, modColor,
-					servernodeptr->gamename, pingColor, servernodeptr->pingtime);
+					servernodeptr->gamename, netnames[servernodeptr->nettype], pingColor, servernodeptr->pingtime);
 
 		j++;
 	}
@@ -739,6 +741,11 @@ static void UI_ArenaServers_Insert(char *adrstr, char *info, int pingtime) {
 	servernodeptr->pingtime = pingtime;
 	servernodeptr->minPing = atoi(Info_ValueForKey(info, "minPing"));
 	servernodeptr->maxPing = atoi(Info_ValueForKey(info, "maxPing"));
+
+	servernodeptr->nettype = atoi(Info_ValueForKey(info, "nettype"));
+	if (servernodeptr->nettype < 0 || servernodeptr->nettype >= ARRAY_LEN(netnames) - 1) {
+		servernodeptr->nettype = 0;
+	}
 
 	s = Info_ValueForKey(info, "game");
 	i = atoi(Info_ValueForKey(info, "gametype"));
