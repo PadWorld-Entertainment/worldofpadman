@@ -22,6 +22,7 @@
 	- Denied event for all players who try to pick up the same powerup but are not first; the first player picking it up will laugh on the other players
 	- Presentation of received medals and count during a match at the lower left of the scoreboard depending of the currently played game type
 	- Presentation of weapon accuracy as percentage value during a match at the lower right of the scoreboard
+	- Support for magenta and cyan as spray colors in Spray Your Color game types
 	- Cartridge icon/model to the scoreboard next to the player's head if cartridges are carried in SYC game types
 	- Advanced hit sound feedback to be enabled/disabled via Game page of Options menu or via new cvar `cg_advHitSounds [0|1]`; when opponent has >50 shield points a more light hit sound indicating less impact is played; when opponent has no shield points left a more fleshy hit sound indicating highest impact is played
 	- Discord webhook support for dedicated servers; discord_webhook_url cvar should get set to a webhook url like https://discord.com/api/webhooks/xxx/yyy (can be done by exporting an env var called WOP_DISCORD_WEBHOOK_URL due to the // in the url)
@@ -41,6 +42,7 @@
 	- Option to enable/disable Limit Frame Rate to Display page of System menu to limit the frame rate when game window is minimized or out of focus
 	- Option to select Screenshot Format (TGA, JPG, PNG) to Display page of System menu, PNG is default
 	- Option to select Screenshot Quality, only when JPG format is selected to Display page of System menu
+	- Option to enable/disable WoP intro movie on game startup to Display page of System menu (cvar `com_playIntro [0|1]`)
 	- Option to select magenta-green anaglyph 3D mode from the list in Display page of System menu
 	- Option to enable/disable Swap Colors to Display page of System menu to swap colors of anaglyph 3D modes
 	- Option to enable/disable Doppler Effect to Sound page of System menu
@@ -74,12 +76,14 @@
 	- Option to enable/disable Autorecord Demo `O` (default) to Misc page of Controls menu
 	- Option to enable/disable Sync Clients `P` (default) to Misc page of Controls menu
 	- Option to select the player's gender independent from the model's gender to Player page of Setup menu; also added 'none' as a new gender that forces the game to use they/them instead of he/his, she/her, or it/its if selected
+	- Option to enable/disable a random color for the spray logo in SYC or the Injector trail when fired
 	- Spray logo name above the spray logo to Player settings menu
+	- Shadows to level shots in Create menu
 	- New mapping for F-keys via default.cfg (for developers and level designers): hide/show HUD `F5`; hide/show gun `F6`; following are cheat protected: hide/show wire frames `F7`; hide/show lightmap `F8`; hide/show render load information `F9`; enable/disable noclip `F10`; enable/disable god mode and give all items `F11`
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- New cvar `cg_weaponOrder` to customize the weapon order from worse to best for extended Autoswitch Weapon option, default is '/1/2/4/6/3/7/8/9/5/'
 	- New cvar `cg_drawChatIcon [3|2|1|0]` to enable/disable the chat icon and to chose the size, 3 is big (20 pixels)default is 2 (16 pixels), 1 is small (12 pixels), 0 is off; this also influences the chat notification text size
-	- Protocol handler support for web browser based match making. Join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
+	- Protocol handler support for web browser based match making, join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
 	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
 	- New surface parameter `splashsteps` for splashy footstep sounds and common shader `splashclip` with texture
 	- Dust trail feature from Q3 Team Arena for textures with surface parameter `dust`; creates a small dust cloud when a player lands on surface; unlike in Q3TA it does NOT require `enableDust 1` to a map's worldspawn; new cvar `cg_enableDust [0|1]` to disable the feature on the client side, default is 1.
@@ -91,6 +95,7 @@
 	- Mapper names next to map names below the level shots in Create menu like in old WoP versions (some needed shortening due to given space)
 	- Bot names below bot icons in Select Bots menu to unify maps and bots grid experience
 	- OpenGL2 dynamic cascaded shadows support for the sky boxes of maps and areas in maps where it was useful to implement
+	- Cheat protected command `give ammo_spray` to receive a cartridge in SYC
 	- Jail: splash steps surface parameter to areas with liquid texture decals (dirt/paint/water puddles) and in the shower
 	- Airplane: sky lens flare feature
 	- CybJourney: sky lens flare feature
@@ -100,7 +105,7 @@
 	- Title of the game uniformly to `World of PADMAN` everywhere
 	- Set OpenGL2 renderer as default
 	- Menu aspect ratio from 4:3 to 16:9 (WoP widescreen support)
-	- Ingame Help screens to explain all weapons, powerups, medals, icons and game types in higher resolution
+	- Ingame Help screens to explain all weapons, powerups, medals and icons
 	- Server configs to support new game types (FT, CTKD, 1LCTL)
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
@@ -124,6 +129,8 @@
 	- Fight button in the menus only works if a map is selected, a server is selected or specified with address, port, or password in the related menus
 	- Arrow buttons in the menus indicate now if first/last page/list entry is reached in the related menus by being disabled or hidden
 	- Ingame Voice Chat menu to support new send target options: `attacker`, `crosshair` and `spatial` (default)
+	- Server browser list in Join menu to show net type (UDP/UDP6) again since some servers are shown several time and users don't know why
+	- Select Logo menu to show normal menu arrows and removed page numbers
 	- JPEG quality set to 100% for creating screenshots and avi videos
 	- Headline of Team ingame menu changed to Start like listed in ingame main menu
 	- Headline of Voice ingame menu changed to Voice Chat like listed in ingame main menu
@@ -133,6 +140,7 @@
 	- Scoreboard to show personal scores in team based game types again
 	- Game type list in Create menu to list FFA game types first and FFA being default (was SYC)
 	- Team Orders ingame menu entry to be shown again
+	- Cvar `com_introPlayed [1|0]` to `com_playIntro [1|0]` to be used to enable/disable the WoP into movie on every game startup, default is 1.
 	- Cvar `r_lightmap [1|0]` to be cheat protected now
 	- Cvar `cg_autoswitch [4|3|2|1|0]` to support more weapon auto switch options; 0 = Never: as before, simply switched off; 1 = Always: switches the weapon every time one is picked up; 2 = New: switches to a picked up weapon if it is new and was not in the inventory before; 3 = Better: changes to a picked up weapon if it is better than the currently selected weapon; 4 = New+Better: switches to a picked up weapon if it is new and was not in the inventory before and if it is better than the currently selected weapon; use cvar `cg_weaponOrder` to customize the weapon order (thanks to Open Arena for idea and code base); menu option is located at Game page of Options menu now
 	- `animap` shader key to support up to 16 textures instead of 8
@@ -157,6 +165,7 @@
 	- Ammo info on lower left HUD to show ammo bottle model instead of 2D icon if `cg_draw3dIcons` is enabled except for Spraypistol and Punchy
 	- All icons/models to appear the same size and model rotation speed in the HUD (and scoreboard)
 	- Resolution of sky box textures via AI upscale where useful
+	- Setviewpos command to accept a target name
 	- ColorStage: slight weapon, ammo and item adjustments; removed Boaster ammo bottles; adjust teleporter destinations to avoid player confusion; moved red and blue bases much further away from map center, extended some walls to prevent weapon jumps or to make it harder 
 	- WesternSet: map file name from wop_westernCTL to wop_westernsetCTL; added a neutral lolly to the REVIVAL position; adds a trigger_forbiddenitems to neutral lolly position; adds 2 new REViVALs in the vent shafts in 1LCTL only; REViVAL position in CTL stays untouched
 	- Huette: switched SPLASHER and BETTY position; adjustments to item placement on the desk; location message fixes; added 5 PadShards on the chair
@@ -176,6 +185,8 @@
 	- Sync Every Frame tooltip in Game options menu to mistake the option for VSync; this option has nothing to do with VSync
 	- Glowing Player Model option in Game options cannot keep enabled status when Glowing Skin Color black is selected
 	- Not defined value for Start Lives in Start Server (Create) menu, default is 10 now
+	- Not used and invisible slots in bot grid of Select Bots menu to cause sound when mouse over
+	- Crosshair and crosshair names being visible in front of Select Logo ingame menu
 	- Wrong spray logo name allocation for Spooky and PadCho
 	- Fail to load OpenAL library on Windows 64bit systems
 	- Not correctly set default values for several options in the menu after reset to defaults
@@ -205,8 +216,9 @@
 - REMOVED
 	- Green Sun music pack, will stay available as extra download
 	- `^` key to open/close the console
-	- `g_LPS_flags [4]` (4 = LPSF_NOARROWS) due to redundancy to the help menu option to enable/disable the arrow icons in LPS client side; also prevents the same menu option from working
-	- `cg_LPSwallhackSize` and `cg_LPSwallhackAlpha` to prevent giving an unfair advantage to clients
+	- Cvar `g_LPS_flags [4]` (4 = LPSF_NOARROWS) due to redundancy to the help menu option to enable/disable the arrow icons in LPS client side; also prevents the same menu option from working
+	- Cvar `cg_LPSwallhackSize` and `cg_LPSwallhackAlpha` to prevent giving an unfair advantage to clients
+	- Not used cvar `cl_anonymous`
 	- Not used menu textures
 	- Not used roq video files
 	- Not used shaders entries and textures
@@ -220,7 +232,8 @@
 	- WesternSet: remove one lost and unnecessary botclip brush near blue lolly
 - UPDATED
 	- All tooltips in the menus and wording of menu entries where useful
-	- UI menu font texture with HQ version
+	- Menu background textures with HQ versions
+	- Menu font texture with HQ version
 	- Spray logos with HQ versions
 	- Scoreboard headers with HQ versions
 	- Menu buttons with HQ versions
