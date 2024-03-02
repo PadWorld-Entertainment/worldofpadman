@@ -148,7 +148,9 @@ static void UI_SoundOptions_SetMenuItems(void) {
 		trap_Cvar_VariableStringBuffer("s_sdlInputDevice", currentInputDevice, sizeof(currentInputDevice));
 	}
 	soundOptionsInfo.device.itemnames = (const char **)soundOptionsInfo.deviceslist;
+	soundOptionsInfo.device.curvalue_maxlen = 25;
 	soundOptionsInfo.inputdevice.itemnames = (const char **)soundOptionsInfo.inputdeviceslist;
+	soundOptionsInfo.inputdevice.curvalue_maxlen = 25;
 
 	ParseMenuListItems(soundOptionsInfo.inputdevicenames, &soundOptionsInfo.inputdevice, MAX_DEVICES, '\n', currentInputDevice,
 					   "No input device found.");

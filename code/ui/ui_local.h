@@ -256,6 +256,8 @@ typedef struct {
 	int numitems;
 	int top;
 
+	int curvalue_maxlen; // the max length to show the current selected value - show the full string from itemnames if
+						 // this is 0
 	const char **itemnames;
 
 	int width;

@@ -733,6 +733,8 @@ static void SpinControl_Draw(const menulist_s *s) {
 	int x, y;
 	int style;
 	qboolean focus;
+	char buf[128];
+	int len;
 
 	x = s->generic.x;
 	y = s->generic.y;
@@ -776,7 +778,14 @@ static void SpinControl_Draw(const menulist_s *s) {
 	}
 
 	UI_DrawString(x - SMALLCHAR_WIDTH, y, s->generic.name, UI_RIGHT | (style & ~UI_PULSE), color);
-	UI_DrawString(x + SMALLCHAR_WIDTH, y, s->itemnames[s->curvalue], style | UI_LEFT, color);
+	len = strlen(s->itemnames[s->curvalue]);
+	if (s->curvalue_maxlen > 0 && s->curvalue_maxlen < sizeof(buf) - 3 && len >= s->curvalue_maxlen) {
+		Q_strncpyz(buf, s->itemnames[s->curvalue], s->curvalue_maxlen + 1);
+		Q_strcat(buf, sizeof(buf), "...");
+		UI_DrawString(x + SMALLCHAR_WIDTH, y, buf, style | UI_LEFT, color);
+	} else {
+		UI_DrawString(x + SMALLCHAR_WIDTH, y, s->itemnames[s->curvalue], style | UI_LEFT, color);
+	}
 }
 
 /*
