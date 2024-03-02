@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SARROWUP1 "menu/arrows/skin_up1"
 #define SARROWDN0 "menu/arrows/skin_dn0"
 #define SARROWDN1 "menu/arrows/skin_dn1"
+#define MICONSHADOW "menu/art/miconshadow"
 
 #define ID_BACK 10
 
@@ -58,8 +59,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SKINSPERPAGE (SKINGRID_ROWS * SKINGRID_COLS)
 #define SKINGRID_YPOS 168
 #define SKINGRID_XPOS 744
-#define MODELICON_SIZE 100
-#define MODELICON_GAP 20
+#define MODELICON_SIZE 97
+#define MODELICON_GAP 23
 #define SKINICON_SIZE 80
 #define SKINICON_GAP 10
 
@@ -524,10 +525,10 @@ static void UI_PlayerSettings_BuildList(void) {
 			continue;
 
 		if (!(ps_playericons.modelicons[ps_playericons.nummodel] =
-				  trap_R_RegisterShaderNoMip(va("models/wop_players/%s/wop_menu", dirptr))))
+				  trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_icon", dirptr))))
 			continue;
 		ps_playericons.modeliconsB[ps_playericons.nummodel] =
-			trap_R_RegisterShaderNoMip(va("models/wop_players/%s/wop_menuB", dirptr));
+			trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_iconb", dirptr));
 
 		// iterate all skin files in directory
 		numfiles =
@@ -745,14 +746,15 @@ static void UI_PlayerSettings_DrawModelIcon(void *self) {
 			b->shader = trap_R_RegisterShaderNoMip(b->errorpic);
 	}
 
-	if (b->shader) { // if there is no icon there should also be no focispic
+	if (b->shader) { // if there is no icon there should also be no focuspic
 		x = b->generic.x;
 		y = b->generic.y;
 		w = b->width;
 		h = b->height;
 		if ((Menu_ItemAtCursor(b->generic.parent) == b && b->focusshader)) {
 			UI_DrawHandlePic(x, y, w, h, b->focusshader);
-		} else if (b->shader) {
+		} else {
+			UI_DrawNamedPic(x - 3, y + 3, w, h, MICONSHADOW);
 			UI_DrawHandlePic(x, y, w, h, b->shader);
 		}
 	}
@@ -1195,6 +1197,7 @@ UI_PlayerSettings_Cache
 =================
 */
 void UI_PlayerSettings_Cache(void) {
+	trap_R_RegisterShaderNoMip(MICONSHADOW);
 	trap_R_RegisterShaderNoMip(MARROWLT0);
 	trap_R_RegisterShaderNoMip(MARROWLT1);
 	trap_R_RegisterShaderNoMip(MARROWRT0);
