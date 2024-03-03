@@ -734,10 +734,24 @@ static void SpinControl_Draw(const menulist_s *s) {
 	int style;
 	qboolean focus;
 	char buf[128];
-	int len;
+	int len, width, height;
+	const char *str;
 
 	x = s->generic.x;
 	y = s->generic.y;
+
+	height = s->generic.bottom - s->generic.top + 1;
+
+	len = strlen(s->itemnames[s->curvalue]);
+	if (s->curvalue_maxlen > 0 && s->curvalue_maxlen < sizeof(buf) - 3 && len >= s->curvalue_maxlen) {
+		Q_strncpyz(buf, s->itemnames[s->curvalue], s->curvalue_maxlen + 1);
+		Q_strcat(buf, sizeof(buf), "...");
+		str = buf;
+		width = x - s->generic.left + 1 + (s->curvalue_maxlen + 4) * SMALLCHAR_WIDTH;
+	} else {
+		str = s->itemnames[s->curvalue];
+		width = x - s->generic.left + 1 + (len + 1) * SMALLCHAR_WIDTH;
+	}
 
 	style = UI_SMALLFONT;
 	focus = (s->generic.parent->cursor == s->generic.menuPosition);
@@ -766,26 +780,16 @@ static void SpinControl_Draw(const menulist_s *s) {
 	if (focus) {
 		// draw cursor
 		if (s->generic.flags & QMF_BLUESTYLE)
-			UI_FillRect(s->generic.left, s->generic.top, s->generic.right - s->generic.left + 1,
-						s->generic.bottom - s->generic.top + 1, listbar_bluecolor);
+			UI_FillRect(s->generic.left, s->generic.top, width, height, listbar_bluecolor);
 		else if (s->generic.flags & QMF_INGAMESTYLE)
-			UI_FillRect(s->generic.left, s->generic.top, s->generic.right - s->generic.left + 1,
-						s->generic.bottom - s->generic.top + 1, listbar_igcolor);
+			UI_FillRect(s->generic.left, s->generic.top, width, height, listbar_igcolor);
 		else
-			UI_FillRect(s->generic.left, s->generic.top, s->generic.right - s->generic.left + 1,
-						s->generic.bottom - s->generic.top + 1, listbar_color);
+			UI_FillRect(s->generic.left, s->generic.top, width, height, listbar_color);
 		UI_DrawChar(x, y, FONT_ASCII_TRIANGLE, UI_CENTER | UI_BLINK | UI_SMALLFONT, color);
 	}
 
 	UI_DrawString(x - SMALLCHAR_WIDTH, y, s->generic.name, UI_RIGHT | (style & ~UI_PULSE), color);
-	len = strlen(s->itemnames[s->curvalue]);
-	if (s->curvalue_maxlen > 0 && s->curvalue_maxlen < sizeof(buf) - 3 && len >= s->curvalue_maxlen) {
-		Q_strncpyz(buf, s->itemnames[s->curvalue], s->curvalue_maxlen + 1);
-		Q_strcat(buf, sizeof(buf), "...");
-		UI_DrawString(x + SMALLCHAR_WIDTH, y, buf, style | UI_LEFT, color);
-	} else {
-		UI_DrawString(x + SMALLCHAR_WIDTH, y, s->itemnames[s->curvalue], style | UI_LEFT, color);
-	}
+	UI_DrawString(x + SMALLCHAR_WIDTH, y, str, style | UI_LEFT, color);
 }
 
 /*
