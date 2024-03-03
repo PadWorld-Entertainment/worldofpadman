@@ -10,7 +10,7 @@ set(PK3DIRS
 compress_pk3(xmas ${PK3DIRS})
 
 set(SHADERS
-    monster.shader
+    monsterpad.shader
     pad_garden.shader
     padmodel.shader
     wop_xmas.shader

@@ -620,34 +620,34 @@ models/wop_players/padlilly/dilla_body_light_s
 // MONSTERPAD
 // =================
 
-models/wop_players/monster/monster_head_light_s
+models/wop_players/monsterpad/monster_head_light_s
               {
 	nopicmip
 	{
-              map models/wop_players/monster/monster_head_light
+              map models/wop_players/monsterpad/monster_head_light
               blendFunc GL_ONE GL_ZERO
               alphaFunc GE128
               rgbGen entity
               }
 	{
-              map models/wop_players/monster/monster_head_light
+              map models/wop_players/monsterpad/monster_head_light
               blendFunc GL_ONE GL_ZERO
               alphaFunc LT128
               rgbGen identity
               }
 }
 
-models/wop_players/monster/monster_body_light_s
+models/wop_players/monsterpad/monster_body_light_s
               {
 	nopicmip
               {
-              map models/wop_players/monster/monster_body_light
+              map models/wop_players/monsterpad/monster_body_light
               blendFunc GL_ONE GL_ZERO
               alphaFunc GE128
               rgbGen entity
               }
               {
-              map models/wop_players/monster/monster_body_light
+              map models/wop_players/monsterpad/monster_body_light
               blendFunc GL_ONE GL_ZERO
               alphaFunc LT128
               rgbGen identity
@@ -659,34 +659,34 @@ models/wop_players/monster/monster_body_light_s
 // MONSTERHAWK
 // =================
 
-models/wop_players/monster/hawk_head_light_s
+models/wop_players/monsterpad/hawk_head_light_s
               {
 	nopicmip
 	{
-              map models/wop_players/monster/hawk_head_light
+              map models/wop_players/monsterpad/hawk_head_light
               blendFunc GL_ONE GL_ZERO
               alphaFunc GE128
               rgbGen entity
               }
 	{
-              map models/wop_players/monster/hawk_head_light
+              map models/wop_players/monsterpad/hawk_head_light
               blendFunc GL_ONE GL_ZERO
               alphaFunc LT128
               rgbGen identity
               }
 }
 
-models/wop_players/monster/hawk_body_light_s
+models/wop_players/monsterpad/hawk_body_light_s
               {
 	nopicmip
               {
-              map models/wop_players/monster/hawk_body_light
+              map models/wop_players/monsterpad/hawk_body_light
               blendFunc GL_ONE GL_ZERO
               alphaFunc GE128
               rgbGen entity
               }
               {
-              map models/wop_players/monster/hawk_body_light
+              map models/wop_players/monsterpad/hawk_body_light
               blendFunc GL_ONE GL_ZERO
               alphaFunc LT128
               rgbGen identity

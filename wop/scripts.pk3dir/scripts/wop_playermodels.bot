@@ -226,7 +226,7 @@ spraylogo	30_dieselkopf
 {
 name		MonsterPad
 funname     "^0M^2o^0n^2s^0t^2e^0r^2P^0a^2d"
-model		monster
+model		monsterpad
 aifile		bots/padman_c.c
 spraylogo	27_ugly
 }
@@ -238,7 +238,7 @@ spraylogo	27_ugly
 
 {
 name		MonsterHawk
-model		monster/monsterhawk
+model		monsterpad/monsterhawk
 funname   	"^2Monster^3Hawk"
 aifile		bots/padman_c.c
 spraylogo	40_dog

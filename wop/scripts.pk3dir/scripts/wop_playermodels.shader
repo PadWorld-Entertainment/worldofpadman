@@ -1026,66 +1026,66 @@ models/wop_players/padman/padclassic_cape_red
 // MONSTERHAWK
 // =================
 
-models/wop_players/monster/monsterhawk_body
+models/wop_players/monsterpad/monsterhawk_body
 {
      cull disable
         {
-                map models/wop_players/monster/monsterhawk_body
+                map models/wop_players/monsterpad/monsterhawk_body
 		alphaFunc ge128
 		rgbGen lightingDiffuse
         }
 
 }
 
-models/wop_players/monster/monsterhawk_body_blue
+models/wop_players/monsterpad/monsterhawk_body_blue
 {
      	cull disable
         {
-                map models/wop_players/monster/monsterhawk_body_blue
+                map models/wop_players/monsterpad/monsterhawk_body_blue
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
 
 }
 
-models/wop_players/monster/monsterhawk_body_red
+models/wop_players/monsterpad/monsterhawk_body_red
 {
      cull disable
         {
-                map models/wop_players/monster/monsterhawk_body_red
+                map models/wop_players/monsterpad/monsterhawk_body_red
 		alphaFunc ge128
      	        rgbGen lightingDiffuse
         }
 
 }
 
-models/wop_players/monster/monsterhawk_head
+models/wop_players/monsterpad/monsterhawk_head
 {
      	cull disable
         {
-                map models/wop_players/monster/monsterhawk_head
+                map models/wop_players/monsterpad/monsterhawk_head
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
 
 }
 
-models/wop_players/monster/monsterhawk_head_blue
+models/wop_players/monsterpad/monsterhawk_head_blue
 {
      cull disable
         {
-                map models/wop_players/monster/monsterhawk_head_blue
+                map models/wop_players/monsterpad/monsterhawk_head_blue
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
 
 }
 
-models/wop_players/monster/monsterhawk_head_red
+models/wop_players/monsterpad/monsterhawk_head_red
 {
      	cull disable
         {
-                map models/wop_players/monster/monsterhawk_head_red
+                map models/wop_players/monsterpad/monsterhawk_head_red
 		alphaFunc ge128
                 rgbGen lightingDiffuse
         }
