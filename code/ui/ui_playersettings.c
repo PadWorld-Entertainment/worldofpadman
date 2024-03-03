@@ -524,11 +524,18 @@ static void UI_PlayerSettings_BuildList(void) {
 		if (!strcmp(dirptr, ".") || !strcmp(dirptr, "..") || *dirptr == '\0')
 			continue;
 
-		if (!(ps_playericons.modelicons[ps_playericons.nummodel] =
-				  trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_icon", dirptr))))
-			continue;
-		ps_playericons.modeliconsB[ps_playericons.nummodel] =
-			trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_iconb", dirptr));
+		// Find the model icon for the menu. If there is none, take the default model icon instead.
+		// This will help supporting custom player models with missing or incorrect model icons.
+		if (ps_playericons.modelicons[ps_playericons.nummodel] =
+				trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_icon", dirptr))) {
+			ps_playericons.modeliconsB[ps_playericons.nummodel] = 
+				trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_iconb", dirptr));
+		} else {
+			ps_playericons.modelicons[ps_playericons.nummodel] =
+				trap_R_RegisterShaderNoMip(va("menu/art/micon", dirptr));
+			ps_playericons.modeliconsB[ps_playericons.nummodel] =
+				trap_R_RegisterShaderNoMip(va("menu/art/miconb", dirptr));
+		}
 
 		// iterate all skin files in directory
 		numfiles =
