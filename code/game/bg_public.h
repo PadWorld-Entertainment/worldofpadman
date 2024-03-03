@@ -371,7 +371,7 @@ typedef enum {
 } holdable_t;
 
 typedef enum {
-	BBS_INACTIVE = 0,  // throwen to the ground, not yet building
+	BBS_INACTIVE = 0,  // thrown to the ground, not yet building
 	BBS_BUILDING,	   // can't should, playing anim 1-50
 	BBS_IDLE,		   // waiting for enemy, playing anim 51-85 (! set nextthink 20sek, for zzz)
 	BBS_IDLE2SHOOTING, // switch to this by first enemy trigger ... switch to shooting at a delayed think

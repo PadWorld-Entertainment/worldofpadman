@@ -1004,9 +1004,9 @@ static void CG_Balloon(centity_t *cent) {
 	}
 
 	// colorize
-	if (s1->generic1 == 1)
+	if (s1->generic1 == TEAM_RED)
 		VectorSet(ent.shaderRGBA, 128, 0, 0);
-	else if (s1->generic1 == 2)
+	else if (s1->generic1 == TEAM_BLUE)
 		VectorSet(ent.shaderRGBA, 0, 0, 128);
 	else
 		VectorSet(ent.shaderRGBA, 128, 128, 128);

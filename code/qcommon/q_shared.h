@@ -1358,7 +1358,7 @@ typedef struct entityState_s {
 	int legsAnim;  // mask off ANIM_TOGGLEBIT
 	int torsoAnim; // mask off ANIM_TOGGLEBIT
 
-	int generic1;
+	int generic1; // lps - remaining lives, ballon - team, syc - SPRAYROOM_CONSTANT, bambam state
 } entityState_t;
 
 typedef enum {
@@ -1380,7 +1380,7 @@ typedef enum {
 #define GLYPH_END 255
 #define GLYPH_CHARSTART 32
 #define GLYPH_CHAREND 127
-#define GLYPHS_PER_FONT GLYPH_END - GLYPH_START + 1
+#define GLYPHS_PER_FONT (GLYPH_END - GLYPH_START + 1)
 typedef struct {
 	int height;		 // number of scan lines
 	int top;		 // top of glyph in buffer
