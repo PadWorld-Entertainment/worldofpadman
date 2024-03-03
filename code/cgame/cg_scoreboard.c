@@ -626,12 +626,14 @@ qboolean CG_DrawOldScoreboard(void) {
 		y += (n2 * lineHeight);
 	}
 
-	CG_DrawMedals(62.0f, (float)SB_TOP + 216.0f, score);
+	if (score != NULL) {
+		CG_DrawMedals(62.0f, (float)SB_TOP + 216.0f, score);
 
-	// draw accuracy rate
-	CG_DrawPic(342.0f, (float)SB_TOP + 216.0f, 96.0f, 24.0f, cgs.media.scoreboardAccuracy);
-	Com_sprintf(buf, sizeof(buf), "%i%%", score->accuracy);
-	CG_DrawStringExt(438, SB_TOP + 220, buf, colorWhite, qfalse, qtrue, BIGCHAR_WIDTH / 2 , BIGCHAR_HEIGHT, 0);
+		// draw accuracy rate
+		CG_DrawPic(342.0f, (float)SB_TOP + 216.0f, 96.0f, 24.0f, cgs.media.scoreboardAccuracy);
+		Com_sprintf(buf, sizeof(buf), "%i%%", score->accuracy);
+		CG_DrawStringExt(438, SB_TOP + 220, buf, colorWhite, qfalse, qtrue, BIGCHAR_WIDTH / 2 , BIGCHAR_HEIGHT, 0);
+	}
 
 	// load any models that have been deferred
 	if (++cg.deferredPlayerLoading > 10) {
