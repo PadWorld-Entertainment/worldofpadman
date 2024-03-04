@@ -255,7 +255,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	voiceChatMenuInfo.arrowup.generic.callback = UI_VoiceChatMenu_UpEvent;
 	voiceChatMenuInfo.arrowup.generic.id = ID_SCROLL_UP;
-	voiceChatMenuInfo.arrowup.generic.x = XPOSITION + 80;
+	voiceChatMenuInfo.arrowup.generic.x = XPOSITION + 74;
 	voiceChatMenuInfo.arrowup.generic.y = 142;
 	voiceChatMenuInfo.arrowup.width = 22;
 	voiceChatMenuInfo.arrowup.height = 50;
@@ -267,7 +267,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
 	voiceChatMenuInfo.arrowdown.generic.callback = UI_VoiceChatMenu_DownEvent;
 	voiceChatMenuInfo.arrowdown.generic.id = ID_SCROLL_DOWN;
-	voiceChatMenuInfo.arrowdown.generic.x = XPOSITION + 80;
+	voiceChatMenuInfo.arrowdown.generic.x = XPOSITION + 74;
 	voiceChatMenuInfo.arrowdown.generic.y = 208;
 	voiceChatMenuInfo.arrowdown.width = 22;
 	voiceChatMenuInfo.arrowdown.height = 50;
