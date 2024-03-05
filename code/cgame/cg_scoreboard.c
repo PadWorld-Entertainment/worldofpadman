@@ -295,17 +295,22 @@ static int CG_TeamScoreboard(int y, team_t team, float fade, int maxLines, int l
 static void CG_DrawMedals(float x, float y, const score_t *score) {
 	char buf[32];
 
+	// there no medals in freezetag
+	if (cgs.gametype == GT_FREEZETAG) {
+		return;
+	}
+
 	CG_DrawPic(x, y, 72, 24, cgs.media.scoreboardMedals);
 	x += 72;
 	CG_DrawPic(x, y, 24, 24, cgs.media.medalExcellent);
 	Com_sprintf(buf, sizeof(buf), "%d", score->excellentCount);
 	CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
-	x += 30;
+	x += 32;
 	CG_DrawPic(x, y, 24, 24, cgs.media.medalSnackAttack);
 	Com_sprintf(buf, sizeof(buf), "%d", score->snackattackCount);
 	CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 	if (cgs.gametype == GT_SPRAYFFA || cgs.gametype == GT_SPRAY) {
-		x += 30;
+		x += 32;
 		CG_DrawPic(x, y, 24, 24, cgs.media.medalSprayKiller);
 		Com_sprintf(buf, sizeof(buf), "%d", score->spraykillerCount);
 		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
@@ -316,7 +321,7 @@ static void CG_DrawMedals(float x, float y, const score_t *score) {
 	}
 	if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cgs.gametype == GT_BALLOON) {
 		const clientInfo_t *ci = &cgs.clientinfo[score->client];
-		x += 30;
+		x += 32;
 		if (ci->team == TEAM_RED) {
 			CG_DrawPic(x, y, 24, 24, cgs.media.medalPadStarRed);
 		} else {
@@ -326,13 +331,13 @@ static void CG_DrawMedals(float x, float y, const score_t *score) {
 		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 	}
 	if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cgs.gametype == GT_BALLOON || cgs.gametype == GT_SPRAY) {
-		x += 30;
+		x += 32;
 		CG_DrawPic(x, y, 24, 24, cgs.media.medalPadHero);
 		Com_sprintf(buf, sizeof(buf), "%d", score->padheroCount);
 		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 	}
 	if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cgs.gametype == GT_BALLOON) {
-		x += 30;
+		x += 32;
 		CG_DrawPic(x, y, 24, 24, cgs.media.medalWatchPad);
 		Com_sprintf(buf, sizeof(buf), "%d", score->watchpadCount);
 		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
