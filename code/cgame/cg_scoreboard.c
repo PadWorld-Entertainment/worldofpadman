@@ -330,6 +330,8 @@ static void CG_DrawMedals(float x, float y, const score_t *score) {
 		CG_DrawPic(x, y, 24, 24, cgs.media.medalPadHero);
 		Com_sprintf(buf, sizeof(buf), "%d", score->padheroCount);
 		CG_DrawStringExt(x + 12 - SMALLCHAR_WIDTH * CG_DrawStrlen(buf) / 2, y + 12 - SMALLCHAR_HEIGHT / 2, buf, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+	}
+	if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cgs.gametype == GT_BALLOON) {
 		x += 30;
 		CG_DrawPic(x, y, 24, 24, cgs.media.medalWatchPad);
 		Com_sprintf(buf, sizeof(buf), "%d", score->watchpadCount);
