@@ -201,7 +201,7 @@ static void CG_Obituary(entityState_t *ent) {
 
 	// check for kill messages from the current clientNum
 	if (attacker == cg.snap->ps.clientNum) {
-		char *s;
+		const char *s;
 
 		if (cgs.gametype < GT_TEAM) {
 			if (cgs.gametype == GT_LPS) {

@@ -528,13 +528,13 @@ static void UI_PlayerSettings_BuildList(void) {
 		// This will help supporting custom player models with missing or incorrect model icons.
 		if (ps_playericons.modelicons[ps_playericons.nummodel] =
 				trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_icon", dirptr))) {
-			ps_playericons.modeliconsB[ps_playericons.nummodel] = 
+			ps_playericons.modeliconsB[ps_playericons.nummodel] =
 				trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_iconb", dirptr));
 		} else {
 			ps_playericons.modelicons[ps_playericons.nummodel] =
-				trap_R_RegisterShaderNoMip(va("menu/art/micon", dirptr));
+				trap_R_RegisterShaderNoMip("menu/art/micon");
 			ps_playericons.modeliconsB[ps_playericons.nummodel] =
-				trap_R_RegisterShaderNoMip(va("menu/art/miconb", dirptr));
+				trap_R_RegisterShaderNoMip("menu/art/miconb");
 		}
 
 		// iterate all skin files in directory
@@ -548,7 +548,7 @@ static void UI_PlayerSettings_BuildList(void) {
 			COM_StripExtension(fileptr, skinname, sizeof(skinname));
 
 			// look for icon_????
-			if (!Q_stricmpn(skinname, "icon_", 5)) { 
+			if (!Q_stricmpn(skinname, "icon_", 5)) {
 				ps_playericons.modelskins[tmpskinnum].icon =
 					trap_R_RegisterShaderNoMip(va("models/wop_players/%s/%s", dirptr, skinname));
 				Com_sprintf(ps_playericons.modelskins[tmpskinnum].name, MAX_MODELSKINNAME_STR, "%s/%s", dirptr,
@@ -837,7 +837,7 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 			s_playersettings.firstmodel += MODELSPERPAGE;
 		} else {
 			s_playersettings.firstmodel = ps_playericons.nummodel - MODELSPERPAGE;
-		} 
+		}
 		UI_PlayerSettings_Update();
 		break;
 	case ID_PREVSKIN:
@@ -866,19 +866,20 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 		s_playersettings.chosenskins[1] = ps_playericons.lastskinicon[tmpid];
 
 		for (i = s_playersettings.chosenskins[0]; i <= s_playersettings.chosenskins[1]; i++) {
-			if (strstr(ps_playericons.modelskins[i].name, "default") != NULL) {
+			SkinData_t *skinData = &ps_playericons.modelskins[i];
+			if (strstr(skinData->name, "default") != NULL) {
 				char tmp[64], *chrptr;
 
-				Q_strncpyz(tmp, ps_playericons.modelskins[i].name, sizeof(tmp));
+				Q_strncpyz(tmp, skinData->name, sizeof(tmp));
 				if ((chrptr = strchr(tmp, '/')) != NULL)
 					*chrptr = '\0';
-				trap_S_StartLocalSound(trap_S_RegisterSound(va("sound/feedback/players/%s", Q_strlwr(tmp)), qfalse),
+				Q_strlwr(tmp);
+				trap_S_StartLocalSound(trap_S_RegisterSound(va("sound/feedback/players/%s", tmp), qfalse),
 									   CHAN_LOCAL_SOUND);
-
-				trap_Cvar_Set("model", ps_playericons.modelskins[i].name);
-				trap_Cvar_Set("headmodel", ps_playericons.modelskins[i].name);
-				trap_Cvar_Set("team_model", ps_playericons.modelskins[i].name);
-				trap_Cvar_Set("team_headmodel", ps_playericons.modelskins[i].name);
+				trap_Cvar_Set("model", skinData->name);
+				trap_Cvar_Set("headmodel", skinData->name);
+				trap_Cvar_Set("team_model", skinData->name);
+				trap_Cvar_Set("team_headmodel", skinData->name);
 				break;
 			}
 		}
@@ -895,12 +896,14 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 	case ID_SICON + 8:
 	case ID_SICON + 9:
 	case ID_SICON + 10:
-	case ID_SICON + 11:
-		trap_Cvar_Set("model", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
-		trap_Cvar_Set("headmodel", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
-		trap_Cvar_Set("team_model", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
-		trap_Cvar_Set("team_headmodel", ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin].name);
+	case ID_SICON + 11: {
+		const SkinData_t *skinData = &ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin];
+		trap_Cvar_Set("model", skinData->name);
+		trap_Cvar_Set("headmodel", skinData->name);
+		trap_Cvar_Set("team_model", skinData->name);
+		trap_Cvar_Set("team_headmodel", skinData->name);
 		break;
+	}
 	case ID_PLAYERMODEL:
 		if (trap_Key_IsDown(K_MOUSE1))
 			s_playersettings.modelhold = qtrue;
