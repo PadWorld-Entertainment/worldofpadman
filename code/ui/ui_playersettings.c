@@ -214,31 +214,38 @@ static void UI_PlayerSettings_DrawName(void *self) {
 
 /*
 =================
+UI_PlayerSettings_SwitchModel
+=================
+*/
+static void UI_PlayerSettings_SwitchModel(const char *model) {
+	vec3_t viewangles;
+	UI_PlayerInfo_SetModel(&s_playersettings.playerinfo, model);
+	Q_strncpyz(s_playersettings.playerModel, model, sizeof(s_playersettings.playerModel));
+	viewangles[YAW] = 180 + 10;
+	viewangles[PITCH] = 0;
+	viewangles[ROLL] = 0;
+	UI_PlayerInfo_SetInfo(&s_playersettings.playerinfo, LEGS_IDLE, TORSO_STAND, viewangles, vec3_origin, WP_NIPPER,
+							qfalse);
+	s_playersettings.nextGestureTime = uis.realtime + 2000;
+}
+
+/*
+=================
 UI_PlayerSettings_DrawPlayer
 =================
 */
 static void UI_PlayerSettings_DrawPlayer(void *self) {
 	menubitmap_s *b;
-	vec3_t viewangles;
 	char buf[MAX_QPATH];
 
 	trap_Cvar_VariableStringBuffer("model", buf, sizeof(buf));
 	if (strcmp(buf, s_playersettings.playerModel) != 0) {
-		UI_PlayerInfo_SetModel(&s_playersettings.playerinfo, buf);
-		Q_strncpyz(s_playersettings.playerModel, buf, sizeof(s_playersettings.playerModel));
-
-		viewangles[YAW] = 180 + 10;
-		viewangles[PITCH] = 0;
-		viewangles[ROLL] = 0;
-		UI_PlayerInfo_SetInfo(&s_playersettings.playerinfo, LEGS_IDLE, TORSO_STAND, viewangles, vec3_origin, WP_NIPPER,
-							  qfalse);
-		s_playersettings.nextGestureTime = uis.realtime + 2000;
+		UI_PlayerSettings_SwitchModel(buf);
 	}
 
 	b = (menubitmap_s *)self;
 
 	UI_DrawPlayer(b->generic.x, b->generic.y, b->width, b->height, &s_playersettings.playerinfo, uis.realtime / 2);
-
 }
 
 /*
@@ -318,10 +325,10 @@ UI_PlayerSettings_SetMenuItems
 =================
 */
 static void UI_PlayerSettings_SetMenuItems(void) {
-	vec3_t viewangles;
 	int c;
 	int h;
 	char gStr[32];
+	char modelname[32];
 
 	// name
 	Q_strncpyz(s_playersettings.name.field.buffer, UI_Cvar_VariableString("name"),
@@ -330,19 +337,12 @@ static void UI_PlayerSettings_SetMenuItems(void) {
 	// model/skin
 	memset(&s_playersettings.playerinfo, 0, sizeof(playerInfo_t));
 
-	viewangles[YAW] = 180 - 30;
-	viewangles[PITCH] = 0;
-	viewangles[ROLL] = 0;
-
-	UI_PlayerInfo_SetModel(&s_playersettings.playerinfo, UI_Cvar_VariableString("model"));
-	UI_PlayerInfo_SetInfo(&s_playersettings.playerinfo, LEGS_IDLE, TORSO_STAND, viewangles, vec3_origin, WP_NIPPER,
-						  qfalse);
+	Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
+	UI_PlayerSettings_SwitchModel(modelname);
 
 	{
 		int i;
-		char modelname[32];
 		int mnLen;
-		Q_strncpyz(modelname, UI_Cvar_VariableString("model"), sizeof(modelname));
 
 		for (i = 0; i < sizeof(modelname); i++)
 			if (modelname[i] == '/') {
