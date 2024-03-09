@@ -583,6 +583,7 @@ typedef struct {
 
 	qboolean glowModel;
 	byte glowColor[4];
+	gender_t gender;
 } playerInfo_t;
 
 void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int time);

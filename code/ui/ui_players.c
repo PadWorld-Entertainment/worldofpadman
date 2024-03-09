@@ -1053,8 +1053,16 @@ static qboolean UI_ParseAnimationFile(const char *filename, playerInfo_t *pi) {
 			continue;
 		} else if (!Q_stricmp(token, "sex")) {
 			token = COM_Parse(&text_p);
-			if (!token) {
+			if (!token[0]) {
+				pi->gender = GENDER_NONE;
 				break;
+			}
+			if (token[0] == 'm' || token[0] == 'M') {
+				pi->gender = GENDER_MALE;
+			} else if (token[0] == 'f' || token[0] == 'F') {
+				pi->gender = GENDER_FEMALE;
+			} else if (token[0] == 'n' || token[0] == 'N') {
+				pi->gender = GENDER_NEUTER;
 			}
 			continue;
 		} else if (!Q_stricmp(token, "fixedlegs")) {
