@@ -3,7 +3,7 @@
 {
 	map      "wop_padgarden"
 	longname "ENTE's PadGarden"
-	type     "ffa syc_ffa syc_tp team ft ctkd"
+	type     "ffa syc_ffa syc_tp team ft"
 }
 
 {
@@ -135,7 +135,7 @@
 {
 	map      "wop_bath"
 	longname "Cyben's CybBath"
-	type     "ffa syc_ffa syc_tp team ft ctkd"
+	type     "ffa syc_ffa syc_tp team ft"
 }
 
 {
@@ -201,7 +201,7 @@
 {
 	map      "wop_diner"
 	longname "Harm's Diner"
-	type     "ffa lps syc_ffa syc_tp team ft ctkd"
+	type     "ffa lps syc_ffa syc_tp team ft"
 }
 
 {
