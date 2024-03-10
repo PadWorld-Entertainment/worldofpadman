@@ -183,7 +183,7 @@ void CG_DrawInformation(void) {
 		info = "menu/info/ctl";
 		break;
 	case GT_1FCTF:
-		info = "menu/info/1lctl";
+		info = "menu/info/1lc";
 		break;
 	case GT_SPRAY:
 		info = "menu/info/syc_team";

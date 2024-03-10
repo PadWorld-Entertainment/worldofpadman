@@ -2910,7 +2910,7 @@ static void CG_DrawCaptureTheLolly(int team) {
 	}
 }
 
-static void CG_DrawOneLollyCTL(int team) {
+static void CG_DrawOneLollyCapture(int team) {
 	const float CTL_BG_WIDTH = 78;
 	const float CTL_BG_HEIGHT = 115;
 	const float CTL_LOLLYMDLX = 574;
@@ -3306,7 +3306,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	CG_DrawSprayYourColorCartridges(team, hudnum);
 	CG_DrawBigBalloon(team);
 	CG_DrawCaptureTheLolly(team);
-	CG_DrawOneLollyCTL(team);
+	CG_DrawOneLollyCapture(team);
 	CG_DrawLPSArrowIcon();
 	CG_DrawTeammateIcon();
 	CG_DrawFrozenTeammateIcon();

@@ -48,7 +48,7 @@ static const char *HELP_GAMETYPE[] = {
 	"ffa",
 	//	"tourney",
 	//	"single", // ""
-	"syc", "lps", "ctkd", "ffa_team", "ft", "ctl", "1lctl", "syc_team", "bb",
+	"syc", "lps", "ctkd", "ffa_team", "ft", "ctl", "1lc", "syc_team", "bb",
 	"unknown" // must be the last entry!
 };
 

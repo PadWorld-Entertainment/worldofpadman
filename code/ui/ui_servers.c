@@ -91,7 +91,7 @@ JOIN MENU (SERVER BROWSER)
 #define GAMES_LPS 3
 #define GAMES_TDM 4
 #define GAMES_CTL 5
-#define GAMES_1LCTL 6
+#define GAMES_1LC 6
 #define GAMES_TSYC 7
 #define GAMES_BB 8
 #define GAMES_FT 9
@@ -571,7 +571,7 @@ static void UI_ArenaServers_UpdateMenu(void) {
 			}
 			break;
 
-		case GAMES_1LCTL:
+		case GAMES_1LC:
 			if (servernodeptr->gametype != GT_1FCTF) {
 				continue;
 			}
@@ -1148,8 +1148,8 @@ static void UI_ArenaServers_StartRefresh(void) {
 			Q_strncpyz(myargs, " ctl", sizeof(myargs));
 			break;
 
-		case GAMES_1LCTL:
-			Q_strncpyz(myargs, " 1lctl", sizeof(myargs));
+		case GAMES_1LC:
+			Q_strncpyz(myargs, " 1lc", sizeof(myargs));
 			break;
 
 		case GAMES_TSYC:

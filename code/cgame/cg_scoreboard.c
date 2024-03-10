@@ -121,7 +121,7 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 	// blue lolly icon indicating player has the blue lolly in ctl
 	} else if (ci->powerups & (1 << PW_BLUEFLAG)) {
 		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_BLUE);
-	// neutral lolly icon indicating player has the neutral lolly in 1lctl
+	// neutral lolly icon indicating player has the neutral lolly in 1lc
 	} else if (ci->powerups & (1 << PW_NEUTRALFLAG)) {
 		CG_DrawFlagModel(iconx, icony, iconsize, iconsize, TEAM_FREE);
 	// draw the handicap or bot skill marker unless player has

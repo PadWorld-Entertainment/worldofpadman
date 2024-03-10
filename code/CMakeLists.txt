@@ -193,7 +193,7 @@ function(wop_add_executable)
 		server-catchthekillerduck.cfg
 		server-freezetag.cfg
 		server-lastpadstanding.cfg
-		server-onelollyctl.cfg
+		server-onelollycapture.cfg
 		server-settings.cfg
 		server-sprayyourcolor.cfg
 	)

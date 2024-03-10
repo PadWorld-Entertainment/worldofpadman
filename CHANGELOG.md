@@ -6,7 +6,7 @@
 	- 32bit binaries to support Windows and Linux systems
 	- Freeze Tag (FT) game type and related assets like ice cold weapon effects
 	- Catch the KillerDuck (CTKD) game type
-	- One Lolly CTL (1LCTL) game type
+	- One Lolly Capture (1LC) game type
 	- PElvis (PadElvis) skin, glow skin and bot for the PADMAN player model
 	- HellPad skin, glow skin and bot for the PADMAN player model
 	- PadClassic skin, glow skin and bot for the PADMAN player model
@@ -106,7 +106,7 @@
 	- Set OpenGL2 renderer as default
 	- Menu aspect ratio from 4:3 to 16:9 (WoP widescreen support)
 	- Ingame Help screens to explain all weapons, powerups, medals and icons
-	- Server configs to support new game types (FT, CTKD, 1LCTL)
+	- Server configs to support new game types (FT, CTKD, 1LC)
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
 	- Map selection/preview to cycle three ingame pictures via shader animation
@@ -167,10 +167,10 @@
 	- Resolution of sky box textures via AI upscale where useful
 	- Setviewpos command to accept a target name
 	- ColorStage: slight weapon, ammo and item adjustments; removed Boaster ammo bottles; adjust teleporter destinations to avoid player confusion; moved red and blue bases much further away from map center, extended some walls to prevent weapon jumps or to make it harder 
-	- WesternSet: map file name from wop_westernCTL to wop_westernsetCTL; added a neutral lolly to the REVIVAL position; adds a trigger_forbiddenitems to neutral lolly position; adds 2 new REViVALs in the vent shafts in 1LCTL only; REViVAL position in CTL stays untouched
+	- WesternSet: map file name from wop_westernCTL to wop_westernsetCTL; added a neutral lolly to the REVIVAL position; adds a trigger_forbiddenitems to neutral lolly position; adds 2 new REViVALs in the vent shafts in 1LC only; REViVAL position in CTL stays untouched
 	- Huette: switched SPLASHER and BETTY position; adjustments to item placement on the desk; location message fixes; added 5 PadShards on the chair
-	- CybJourney: added more PadShards to lolly bases and hallways; added suitcase to hallways and moved the health station from lolly base floor behind; removed BALLOONY from funnel and moved to base hallway; moved PUMPER closer to map center next to toilet door; moved ammo bottles from seats to the other side to make use of the space; added KiLLERDUCKS to map and lolly bases; moved BOOMiES from lolly bases on top of toilets; centered the lolly positions on the shelf; moved SPLASHER into funnel where BALLOONY was before; moved PADSHiELD from toilets to trash bin in the hallways to use this space reachable via jumppad; opened car doors in map center a little bit and animated them (mover) and added more light to the area; added two new paths (teleporter) left and right side of map center close to the doors down the steps; added some and distributed all spawn points all over the map; replaced sign textures above fire extinguisher because red and jpg compression leads to ugly artifacts; clipped the toilet paper rolls; added neutral lolly at the REViVAL position but REViVAL is removed 1LCTL
-	- FridgeWars: enabled breath buff feature via enableBreath; clipped banana under chocolate; moved lolly out of freezer to top of the cake at former PadShield position; moved PUMPER to former lolly position; moved PadShield to former REViVAL position; introduce ViSIONLESS and placed at former KiLLERDUCKS position; Moved KiLLERDUCKS to lowest sidewalk entries to attract players there; Removed BAMBAM and replaced with REViVAL; added a neutral lolly at the REViVAL position but REViVAL is removed in in 1LCTL
+	- CybJourney: added more PadShards to lolly bases and hallways; added suitcase to hallways and moved the health station from lolly base floor behind; removed BALLOONY from funnel and moved to base hallway; moved PUMPER closer to map center next to toilet door; moved ammo bottles from seats to the other side to make use of the space; added KiLLERDUCKS to map and lolly bases; moved BOOMiES from lolly bases on top of toilets; centered the lolly positions on the shelf; moved SPLASHER into funnel where BALLOONY was before; moved PADSHiELD from toilets to trash bin in the hallways to use this space reachable via jumppad; opened car doors in map center a little bit and animated them (mover) and added more light to the area; added two new paths (teleporter) left and right side of map center close to the doors down the steps; added some and distributed all spawn points all over the map; replaced sign textures above fire extinguisher because red and jpg compression leads to ugly artifacts; clipped the toilet paper rolls; added neutral lolly at the REViVAL position but REViVAL is removed 1LC
+	- FridgeWars: enabled breath buff feature via enableBreath; clipped banana under chocolate; moved lolly out of freezer to top of the cake at former PadShield position; moved PUMPER to former lolly position; moved PadShield to former REViVAL position; introduce ViSIONLESS and placed at former KiLLERDUCKS position; Moved KiLLERDUCKS to lowest sidewalk entries to attract players there; Removed BAMBAM and replaced with REViVAL; added a neutral lolly at the REViVAL position but REViVAL is removed in in 1LC
 	- PadCastle and PadGallery to support Freeze Tag and Catch The KillerDuck game types
 - FIXED
 	- Bad client reliableAcknowledge DOS exploit

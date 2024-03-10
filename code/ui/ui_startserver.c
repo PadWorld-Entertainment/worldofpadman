@@ -162,7 +162,7 @@ static int UI_StartServer_GametypeBits(const char *string) {
 			continue;
 		}
 
-		if (Q_stricmp(token, "1lctl") == 0 || Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_1FCTF)) == 0) {
+		if (Q_stricmp(token, "1lc") == 0 || Q_stricmp(token, GAMETYPE_NAME_SHORT(GT_1FCTF)) == 0) {
 			bits |= 1 << GT_1FCTF;
 			continue;
 		}

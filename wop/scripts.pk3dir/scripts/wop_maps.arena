@@ -225,7 +225,7 @@
 {
 	map      "wop_colorstageCTL"
 	longname "GlowStar's ColorStage"
-	type     "ctl 1lctl"
+	type     "ctl 1lc"
 }
 
 {
@@ -237,13 +237,13 @@
 {
 	map      "wop_westernsetCTL"
 	longname "Harm's WesternSet"
-	type     "ctl 1lctl"
+	type     "ctl 1lc"
 }
 
 {
 	map      "wop_trashmapCTL"
 	longname "Kai's TrashMap"
-	type     "ctl 1lctl"
+	type     "ctl 1lc"
 }
 
 {
@@ -255,7 +255,7 @@
 {
 	map      "wop_journeyCTL"
 	longname "Cyben's CybJourney"
-	type      "ctl 1lctl"
+	type      "ctl 1lc"
 }
 
 {
@@ -273,5 +273,5 @@
 {
 	map      "wop_fridgeCTL"
 	longname "Kai's FridgeWars"
-	type     "ctl 1lctl"
+	type     "ctl 1lc"
 }

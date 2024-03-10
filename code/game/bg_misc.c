@@ -585,7 +585,7 @@ const gitem_t bg_itemlist[] = {
 	 /* sounds */ ""},
 
 	/*QUAKED team_CTL_neutrallolly (1 0 1) (-16 -16 -16) (16 16 16)
-	Only in One Lolly CTL games
+	Only in One Lolly Capture games
 	*/
 	{"team_CTL_neutrallolly",
 	 NULL,
@@ -1328,10 +1328,10 @@ int convertGTStringToGTNumber(const char *argStr) {
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_LPS)) || (strstr(buf, "LAST") && strstr(buf, "STANDING"))) {
 		gt = GT_LPS;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_1FCTF)) ||
-			   (strstr(buf, "ONE") && (strstr(buf, "CTL")))) {
+			   (strstr(buf, "ONE") && (strstr(buf, "LOLLY") || strstr(buf, "LOLLI" /*pop"*/)))) {
 		gt = GT_1FCTF;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_CTF)) ||
-			   (strstr(buf, "CAPTURE") && (strstr(buf, "LOLLY") || strstr(buf, "LOLLI" /*pop"*/)))) {
+			   (strstr(buf, "THE") && (strstr(buf, "LOLLY") || strstr(buf, "LOLLI" /*pop"*/)))) {
 		gt = GT_CTF;
 	} else if (strstr(buf, GAMETYPE_NAME_SHORT(GT_TOURNAMENT)) || strstr(buf, "TOURNAMENT") || strstr(buf, "TOURNEY")) {
 		gt = GT_TOURNAMENT;
