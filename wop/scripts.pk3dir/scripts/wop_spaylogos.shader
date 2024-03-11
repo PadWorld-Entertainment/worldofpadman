@@ -100,11 +100,11 @@ spraylogos/09_sketch
 	}
 }
 
-spraylogos/10_yinyan
+spraylogos/10_balloon
 {
 	nopicmip
 	{
-		map spraylogos/10_yinyan
+		map spraylogos/10_balloon
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
@@ -518,11 +518,11 @@ spraylogos/47_earth
 	}
 }
 
-spraylogos/48_balloon
+spraylogos/48_yinyan
 {
 	nopicmip
 	{
-		map spraylogos/48_balloon
+		map spraylogos/48_yinyan
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
