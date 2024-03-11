@@ -452,55 +452,77 @@ spraylogos/41_peace
 	}
 }
 
-spraylogos/42_water
+spraylogos/42_peacedove
 {
 	nopicmip
 	{
-		map spraylogos/42_water
+		map spraylogos/42_peacedove
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
 	}
 }
 
-spraylogos/43_fire
+spraylogos/43_duckwire
 {
 	nopicmip
 	{
-		map spraylogos/43_fire
+		map spraylogos/43_duckwire
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
 	}
 }
 
-spraylogos/44_earth
+spraylogos/44_toilet
 {
 	nopicmip
 	{
-		map spraylogos/44_earth
+		map spraylogos/44_toilet
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
 	}
 }
 
-spraylogos/45_air
+spraylogos/45_water
 {
 	nopicmip
 	{
-		map spraylogos/45_air
+		map spraylogos/45_water
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
 	}
 }
 
-spraylogos/46_balloon
+spraylogos/46_fire
 {
 	nopicmip
 	{
-		map spraylogos/46_balloon
+		map spraylogos/46_fire
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+spraylogos/47_earth
+{
+	nopicmip
+	{
+		map spraylogos/47_earth
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+spraylogos/48_balloon
+{
+	nopicmip
+	{
+		map spraylogos/48_balloon
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex
