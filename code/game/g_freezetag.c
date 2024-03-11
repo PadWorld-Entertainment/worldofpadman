@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define FT_THAWED_HEATRECHARGE 100
 #define FT_DEFAULTWEAPONSET "punchy:-1:pumper:15:bubbleg:40"
 #define FT_AMMO_PICKUPRATIO 0.33f
+#define FT_THAW_BONUS 1
 
 static vec_t FT_SquaredDistanceBetweenEntities(const gentity_t *ent, const gentity_t *other) {
 	return DistanceSquared(ent->client->ps.origin, other->client->ps.origin);
@@ -241,9 +242,13 @@ void FT_ThawPlayer(gentity_t *player, gentity_t *other) {
 	player->client->ps.pm_type = PM_NORMAL;
 
 	if (other) {
-		if (other->client)
-			AddScore(other, player->client->ps.origin, 1, SCORE_THAWED_S);
-
+		if (other->client) {
+			// thawer receives assist award (WatchPad)
+			AddScore(other, player->client->ps.origin, FT_THAW_BONUS, SCORE_THAWED_S);
+			other->client->ps.persistant[PERS_WATCHPAD_COUNT]++;
+			// add the sprite over the thawer's head
+			SetAward(other->client, AWARD_WATCHPAD);
+		}
 		G_checkPlayerThawerDistance(player, other);
 		FT_AnnounceThaw(player->client, other->client);
 	} else {
