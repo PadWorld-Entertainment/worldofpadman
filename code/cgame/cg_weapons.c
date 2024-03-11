@@ -1374,6 +1374,11 @@ void CG_DrawWeaponSelect(void) {
 		return;
 	}
 
+	// don't display if in select logo menu
+	if (cg.wantSelectLogo) {
+		return;
+	}
+
 	color = CG_FadeColor(cg.weaponSelectTime, WEAPON_SELECT_TIME);
 	if (!color) {
 		return;
