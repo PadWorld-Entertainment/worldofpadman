@@ -87,6 +87,7 @@ set(SRCS_UI
 	${CODE_DIR}/ui/ui_gameinfo.c
 	${CODE_DIR}/ui/ui_help.c
 	${CODE_DIR}/ui/ui_ingame.c
+	${CODE_DIR}/ui/ui_mania.c
 	${CODE_DIR}/ui/ui_menu.c
 	${CODE_DIR}/ui/ui_mfield.c
 	${CODE_DIR}/ui/ui_mods.c

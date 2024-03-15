@@ -37,7 +37,8 @@ MAIN MENU
 #define ID_MODS 14
 #define ID_CREDITS 15
 #define ID_EXIT 16
-#define ID_SECRET 17
+#define ID_MANIA 17
+#define ID_SECRET 18
 
 #define CREATE0 "menu/buttons/create0"
 #define CREATE1 "menu/buttons/create1"
@@ -66,6 +67,7 @@ typedef struct {
 	menubitmap_s mods;
 	menubitmap_s credits;
 	menubitmap_s exit;
+	menubitmap_s mania;
 	menubitmap_s secret;
 
 	char msg[MAX_MSGLENGHT];
@@ -114,6 +116,10 @@ static void Main_MenuEvent(void *ptr, int event) {
 
 	case ID_CREDITS:
 		UI_WopCreditsMenu();
+		break;
+
+	case ID_MANIA:
+		UI_ManiaMenu();
 		break;
 
 	case ID_SECRET:
@@ -247,7 +253,7 @@ void UI_MainMenu(void) {
 
 	s_main.create.generic.type = MTYPE_BITMAP;
 	s_main.create.generic.name = CREATE0;
-	s_main.create.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.create.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_main.create.generic.x = 714;
 	s_main.create.generic.y = 130;
 	s_main.create.generic.id = ID_CREATE;
@@ -259,7 +265,7 @@ void UI_MainMenu(void) {
 
 	s_main.join.generic.type = MTYPE_BITMAP;
 	s_main.join.generic.name = JOIN0;
-	s_main.join.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.join.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_main.join.generic.x = 734;
 	s_main.join.generic.y = 166;
 	s_main.join.generic.id = ID_JOIN;
@@ -271,7 +277,7 @@ void UI_MainMenu(void) {
 
 	s_main.setup.generic.type = MTYPE_BITMAP;
 	s_main.setup.generic.name = SETUP0;
-	s_main.setup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.setup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_main.setup.generic.x = 708;
 	s_main.setup.generic.y = 202;
 	s_main.setup.generic.id = ID_SETUP;
@@ -283,7 +289,7 @@ void UI_MainMenu(void) {
 
 	s_main.demos.generic.type = MTYPE_BITMAP;
 	s_main.demos.generic.name = DEMOS0;
-	s_main.demos.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.demos.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_main.demos.generic.x = 720;
 	s_main.demos.generic.y = 238;
 	s_main.demos.generic.id = ID_DEMOS;
@@ -295,7 +301,7 @@ void UI_MainMenu(void) {
 
 	s_main.mods.generic.type = MTYPE_BITMAP;
 	s_main.mods.generic.name = MODS0;
-	s_main.mods.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.mods.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_main.mods.generic.x = 736;
 	s_main.mods.generic.y = 274;
 	s_main.mods.generic.id = ID_MODS;
@@ -307,7 +313,7 @@ void UI_MainMenu(void) {
 
 	s_main.credits.generic.type = MTYPE_BITMAP;
 	s_main.credits.generic.name = CREDITS0;
-	s_main.credits.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.credits.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_main.credits.generic.x = 712;
 	s_main.credits.generic.y = 310;
 	s_main.credits.generic.id = ID_CREDITS;
@@ -319,7 +325,7 @@ void UI_MainMenu(void) {
 
 	s_main.exit.generic.type = MTYPE_BITMAP;
 	s_main.exit.generic.name = EXIT0;
-	s_main.exit.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_main.exit.generic.flags = QMF_PULSEIFFOCUS;
 	s_main.exit.generic.x = 738;
 	s_main.exit.generic.y = 346;
 	s_main.exit.generic.id = ID_EXIT;
@@ -328,6 +334,15 @@ void UI_MainMenu(void) {
 	s_main.exit.height = 40;
 	s_main.exit.focuspic = EXIT1;
 	s_main.exit.focuspicinstead = qtrue;
+
+	s_main.mania.generic.type = MTYPE_BITMAP;
+	s_main.mania.generic.x = 64;
+	s_main.mania.generic.y = 312;
+	s_main.mania.generic.id = ID_MANIA;
+	s_main.mania.generic.callback = Main_MenuEvent;
+	s_main.mania.width = 40;
+	s_main.mania.height = 40;
+	s_main.mania.focuspicinstead = qfalse;
 
 	s_main.secret.generic.type = MTYPE_BITMAP;
 	s_main.secret.generic.flags = QMF_MOUSEONLY | QMF_SILENT | QMF_HIDDEN;
@@ -345,6 +360,7 @@ void UI_MainMenu(void) {
 	Menu_AddItem(&s_main.menu, &s_main.mods);
 	Menu_AddItem(&s_main.menu, &s_main.credits);
 	Menu_AddItem(&s_main.menu, &s_main.exit);
+	Menu_AddItem(&s_main.menu, &s_main.mania);
 	Menu_AddItem(&s_main.menu, &s_main.secret);
 
 	trap_Key_SetCatcher(KEYCATCH_UI);

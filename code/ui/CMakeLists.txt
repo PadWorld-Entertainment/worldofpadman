@@ -17,6 +17,7 @@ set(SRCS
 	ui_gameinfo.c
 	ui_help.c
 	ui_ingame.c
+	ui_mania.c
 	ui_menu.c
 	ui_mfield.c
 	ui_mods.c

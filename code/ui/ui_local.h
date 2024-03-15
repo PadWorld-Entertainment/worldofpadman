@@ -470,6 +470,12 @@ extern void UI_SecretMenu(void);
 extern void UI_Secret_Cache(void);
 
 //
+// ui_mania.c
+//
+extern void UI_ManiaMenu(void);
+extern void UI_Mania_Cache(void);
+
+//
 // ui_specifyserver.c
 //
 extern void UI_SpecifyServerMenu(void);
