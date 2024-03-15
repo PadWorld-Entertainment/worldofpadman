@@ -279,7 +279,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 
 	removeBotsMenuInfo.arrowup.generic.type = MTYPE_BITMAP;
 	removeBotsMenuInfo.arrowup.generic.name = ARROWUP0;
-	removeBotsMenuInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	removeBotsMenuInfo.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	removeBotsMenuInfo.arrowup.generic.callback = UI_RemoveBotsMenu_UpEvent;
 	removeBotsMenuInfo.arrowup.generic.id = ID_SCROLL_UP;
 	removeBotsMenuInfo.arrowup.generic.x = XPOSITION + 74;
@@ -291,7 +291,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 
 	removeBotsMenuInfo.arrowdown.generic.type = MTYPE_BITMAP;
 	removeBotsMenuInfo.arrowdown.generic.name = ARROWDN0;
-	removeBotsMenuInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	removeBotsMenuInfo.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	removeBotsMenuInfo.arrowdown.generic.callback = UI_RemoveBotsMenu_DownEvent;
 	removeBotsMenuInfo.arrowdown.generic.id = ID_SCROLL_DOWN;
 	removeBotsMenuInfo.arrowdown.generic.x = XPOSITION + 74;
@@ -349,7 +349,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 
 	removeBotsMenuInfo.back.generic.type = MTYPE_BITMAP;
 	removeBotsMenuInfo.back.generic.name = BACK0;
-	removeBotsMenuInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	removeBotsMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	removeBotsMenuInfo.back.generic.x = XPOSITION - 95;
 	removeBotsMenuInfo.back.generic.y = 340;
 	removeBotsMenuInfo.back.generic.id = ID_BACK;

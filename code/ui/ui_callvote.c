@@ -482,7 +482,7 @@ static void UI_CallVoteMenu_Init(void) {
 
 	s_callVoteMenu.arrowup.generic.type = MTYPE_BITMAP;
 	s_callVoteMenu.arrowup.generic.name = ARROWUP0;
-	s_callVoteMenu.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_callVoteMenu.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_callVoteMenu.arrowup.generic.callback = UI_CallVote_UpEvent;
 	s_callVoteMenu.arrowup.generic.id = ID_SCROLL_UP;
 	s_callVoteMenu.arrowup.generic.x = XPOSITION + 74;
@@ -494,7 +494,7 @@ static void UI_CallVoteMenu_Init(void) {
 
 	s_callVoteMenu.arrowdown.generic.type = MTYPE_BITMAP;
 	s_callVoteMenu.arrowdown.generic.name = ARROWDN0;
-	s_callVoteMenu.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_callVoteMenu.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_callVoteMenu.arrowdown.generic.callback = UI_CallVote_DownEvent;
 	s_callVoteMenu.arrowdown.generic.id = ID_SCROLL_DOWN;
 	s_callVoteMenu.arrowdown.generic.x = XPOSITION + 74;
@@ -557,7 +557,7 @@ static void UI_CallVoteMenu_Init(void) {
 
 	s_callVoteMenu.back.generic.type = MTYPE_BITMAP;
 	s_callVoteMenu.back.generic.name = BACK0;
-	s_callVoteMenu.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_callVoteMenu.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_callVoteMenu.back.generic.x = XPOSITION - 95;
 	s_callVoteMenu.back.generic.y = 340;
 	s_callVoteMenu.back.generic.id = ID_BACK;

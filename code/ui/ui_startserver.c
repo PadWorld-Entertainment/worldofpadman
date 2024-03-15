@@ -692,7 +692,7 @@ static void UI_StartServer_MenuInit(void) {
 
 	s_startserver.arrowleft.generic.type = MTYPE_BITMAP;
 	s_startserver.arrowleft.generic.name = ARROWLT0;
-	s_startserver.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_startserver.arrowleft.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_startserver.arrowleft.generic.x = 208;
 	s_startserver.arrowleft.generic.y = 396;
 	s_startserver.arrowleft.generic.id = ID_PREVPAGE;
@@ -704,7 +704,7 @@ static void UI_StartServer_MenuInit(void) {
 
 	s_startserver.arrowright.generic.type = MTYPE_BITMAP;
 	s_startserver.arrowright.generic.name = ARROWRT0;
-	s_startserver.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_startserver.arrowright.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_startserver.arrowright.generic.x = 284;
 	s_startserver.arrowright.generic.y = 396;
 	s_startserver.arrowright.generic.id = ID_NEXTPAGE;
@@ -716,7 +716,7 @@ static void UI_StartServer_MenuInit(void) {
 
 	s_startserver.back.generic.type = MTYPE_BITMAP;
 	s_startserver.back.generic.name = BACK0;
-	s_startserver.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_startserver.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_startserver.back.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.back.generic.id = ID_STARTSERVERBACK;
 	s_startserver.back.focuspic = BACK1;
@@ -805,7 +805,7 @@ static void UI_StartServer_MenuInit(void) {
 
 	s_startserver.selectbots.generic.type = MTYPE_BITMAP;
 	s_startserver.selectbots.generic.name = SELECTBOTS0;
-	s_startserver.selectbots.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_startserver.selectbots.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_startserver.selectbots.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.selectbots.generic.id = ID_SELECTBOTS;
 	s_startserver.selectbots.focuspic = SELECTBOTS1;
@@ -817,7 +817,7 @@ static void UI_StartServer_MenuInit(void) {
 
 	s_startserver.fight.generic.type = MTYPE_BITMAP;
 	s_startserver.fight.generic.name = FIGHT0;
-	s_startserver.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_startserver.fight.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_startserver.fight.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.fight.generic.id = ID_STARTSERVER;
 	s_startserver.fight.focuspic = FIGHT1;
@@ -828,7 +828,7 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.fight.focuspicinstead = qtrue;
 
 	s_startserver.item_null.generic.type = MTYPE_BITMAP;
-	s_startserver.item_null.generic.flags = QMF_LEFT_JUSTIFY | QMF_MOUSEONLY | QMF_SILENT;
+	s_startserver.item_null.generic.flags = QMF_MOUSEONLY | QMF_SILENT;
 	s_startserver.item_null.generic.x = 0;
 	s_startserver.item_null.generic.y = 0;
 	s_startserver.item_null.width = 864;
@@ -1517,7 +1517,7 @@ static void UI_SelectBots_MenuInit(void) {
 
 	botSelectInfo.arrowleft.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowleft.generic.name = ARROWLT0;
-	botSelectInfo.arrowleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	botSelectInfo.arrowleft.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	botSelectInfo.arrowleft.generic.x = 208;
 	botSelectInfo.arrowleft.generic.y = 396;
 	botSelectInfo.arrowleft.generic.callback = UI_SelectBots_LeftEvent;
@@ -1528,7 +1528,7 @@ static void UI_SelectBots_MenuInit(void) {
 
 	botSelectInfo.arrowright.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowright.generic.name = ARROWRT0;
-	botSelectInfo.arrowright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	botSelectInfo.arrowright.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	botSelectInfo.arrowright.generic.x = 284;
 	botSelectInfo.arrowright.generic.y = 396;
 	botSelectInfo.arrowright.generic.callback = UI_SelectBots_RightEvent;
@@ -1594,7 +1594,7 @@ static void UI_SelectBots_MenuInit(void) {
 
 	botSelectInfo.arrowup.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowup.generic.name = ARROWUP0;
-	botSelectInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	botSelectInfo.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	botSelectInfo.arrowup.generic.x = 788;
 	botSelectInfo.arrowup.generic.y = 250;
 	botSelectInfo.arrowup.generic.callback = UI_SelectBots_ListUp;
@@ -1605,7 +1605,7 @@ static void UI_SelectBots_MenuInit(void) {
 
 	botSelectInfo.arrowdown.generic.type = MTYPE_BITMAP;
 	botSelectInfo.arrowdown.generic.name = ARROWDN0;
-	botSelectInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	botSelectInfo.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	botSelectInfo.arrowdown.generic.x = 788;
 	botSelectInfo.arrowdown.generic.y = 326;
 	botSelectInfo.arrowdown.generic.callback = UI_SelectBots_ListDown;
@@ -1623,7 +1623,7 @@ static void UI_SelectBots_MenuInit(void) {
 
 	botSelectInfo.back.generic.type = MTYPE_BITMAP;
 	botSelectInfo.back.generic.name = BACK0;
-	botSelectInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	botSelectInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	botSelectInfo.back.generic.callback = UI_SelectBots_BackEvent;
 	botSelectInfo.back.generic.x = 776;
 	botSelectInfo.back.generic.y = 446;

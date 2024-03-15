@@ -349,7 +349,7 @@ static void UI_TeamOrdersMenu_Init(void) {
 
 	teamOrdersMenuInfo.back.generic.type = MTYPE_BITMAP;
 	teamOrdersMenuInfo.back.generic.name = BACK0;
-	teamOrdersMenuInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	teamOrdersMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	teamOrdersMenuInfo.back.generic.x = XPOSITION - 95;
 	teamOrdersMenuInfo.back.generic.y = 340;
 	teamOrdersMenuInfo.back.generic.callback = UI_TeamOrdersMenu_BackEvent;

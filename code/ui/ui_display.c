@@ -366,7 +366,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 
 	displayOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.graphics.generic.name = GRAPHICS0;
-	displayOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	displayOptionsInfo.graphics.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.graphics.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.graphics.generic.id = ID_GRAPHICS;
 	displayOptionsInfo.graphics.generic.x = 120;
@@ -378,7 +378,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 
 	displayOptionsInfo.display.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.display.generic.name = DISPLAY0;
-	displayOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
+	displayOptionsInfo.display.generic.flags = QMF_HIGHLIGHT;
 	displayOptionsInfo.display.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.display.generic.id = ID_DISPLAY;
 	displayOptionsInfo.display.generic.x = 85;
@@ -390,7 +390,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 
 	displayOptionsInfo.effects.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.effects.generic.name = EFFECTS0;
-	displayOptionsInfo.effects.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	displayOptionsInfo.effects.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.effects.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.effects.generic.id = ID_EFFECTS;
 	displayOptionsInfo.effects.generic.x = 212;
@@ -402,7 +402,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 
 	displayOptionsInfo.sound.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.sound.generic.name = SOUND0;
-	displayOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	displayOptionsInfo.sound.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.sound.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.sound.generic.id = ID_SOUND;
 	displayOptionsInfo.sound.generic.x = 106;
@@ -414,7 +414,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 
 	displayOptionsInfo.network.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.network.generic.name = NETWORK0;
-	displayOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	displayOptionsInfo.network.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	displayOptionsInfo.network.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.network.generic.id = ID_NETWORK;
 	displayOptionsInfo.network.generic.x = 212;
@@ -609,7 +609,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 
 	displayOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	displayOptionsInfo.back.generic.name = BACK0;
-	displayOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	displayOptionsInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	displayOptionsInfo.back.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.back.generic.id = ID_BACK;
 	displayOptionsInfo.back.generic.x = 8;

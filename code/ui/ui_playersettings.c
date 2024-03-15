@@ -951,7 +951,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.menu.bgparts = BGP_PLAYER;
 
 	s_playersettings.item_null.generic.type = MTYPE_BITMAP;
-	s_playersettings.item_null.generic.flags = QMF_LEFT_JUSTIFY | QMF_MOUSEONLY | QMF_SILENT;
+	s_playersettings.item_null.generic.flags = QMF_MOUSEONLY | QMF_SILENT;
 	s_playersettings.item_null.generic.x = 0;
 	s_playersettings.item_null.generic.y = 0;
 	s_playersettings.item_null.width = 864;
@@ -971,7 +971,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 
 	s_playersettings.modelleft.generic.type = MTYPE_BITMAP;
 	s_playersettings.modelleft.generic.name = MARROWLT0;
-	s_playersettings.modelleft.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.modelleft.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_playersettings.modelleft.generic.x = 18;
 	s_playersettings.modelleft.generic.y = 32;
 	s_playersettings.modelleft.generic.id = ID_PREVMODEL;
@@ -983,7 +983,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 
 	s_playersettings.modelright.generic.type = MTYPE_BITMAP;
 	s_playersettings.modelright.generic.name = MARROWRT0;
-	s_playersettings.modelright.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.modelright.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_playersettings.modelright.generic.x = 792;
 	s_playersettings.modelright.generic.y = 32;
 	s_playersettings.modelright.generic.id = ID_NEXTMODEL;
@@ -995,7 +995,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 
 	s_playersettings.skinup.generic.type = MTYPE_BITMAP;
 	s_playersettings.skinup.generic.name = SARROWUP0;
-	s_playersettings.skinup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.skinup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_playersettings.skinup.generic.x = SKINGRID_XPOS - 6;
 	s_playersettings.skinup.generic.y = SKINGRID_YPOS - SKINICON_GAP - 26;
 	s_playersettings.skinup.generic.id = ID_PREVSKIN;
@@ -1007,7 +1007,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 
 	s_playersettings.skindown.generic.type = MTYPE_BITMAP;
 	s_playersettings.skindown.generic.name = SARROWDN0;
-	s_playersettings.skindown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_playersettings.skindown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_playersettings.skindown.generic.x = SKINGRID_XPOS - 6;
 	s_playersettings.skindown.generic.y = SKINGRID_YPOS + SKINGRID_ROWS * (SKINICON_SIZE + SKINICON_GAP);
 	s_playersettings.skindown.generic.id = ID_NEXTSKIN;
@@ -1084,7 +1084,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 
 	s_playersettings.back.generic.type = MTYPE_BITMAP;
 	s_playersettings.back.generic.name = BACK0;
-	s_playersettings.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_playersettings.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_playersettings.back.generic.x = 8;
 	s_playersettings.back.generic.y = 446;
 	s_playersettings.back.generic.id = ID_BACK;

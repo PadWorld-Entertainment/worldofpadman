@@ -1538,7 +1538,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	}
 
 	g_arenaservers.mappic.generic.type = MTYPE_BITMAP;
-	g_arenaservers.mappic.generic.flags = (QMF_LEFT_JUSTIFY | QMF_INACTIVE);
+	g_arenaservers.mappic.generic.flags = QMF_INACTIVE;
 	g_arenaservers.mappic.generic.x = 83;
 	g_arenaservers.mappic.generic.y = 45;
 	g_arenaservers.mappic.width = 128;
@@ -1547,7 +1547,7 @@ static void UI_ArenaServers_MenuInit(void) {
 
 	g_arenaservers.arrowup.generic.type = MTYPE_BITMAP;
 	g_arenaservers.arrowup.generic.name = ARROWUP0;
-	g_arenaservers.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	g_arenaservers.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	g_arenaservers.arrowup.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.arrowup.generic.id = ID_SCROLL_UP;
 	g_arenaservers.arrowup.generic.x = 744;
@@ -1559,7 +1559,7 @@ static void UI_ArenaServers_MenuInit(void) {
 
 	g_arenaservers.arrowdown.generic.type = MTYPE_BITMAP;
 	g_arenaservers.arrowdown.generic.name = ARROWDN0;
-	g_arenaservers.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	g_arenaservers.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	g_arenaservers.arrowdown.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.arrowdown.generic.id = ID_SCROLL_DOWN;
 	g_arenaservers.arrowdown.generic.x = 744;
@@ -1611,7 +1611,7 @@ static void UI_ArenaServers_MenuInit(void) {
 
 	g_arenaservers.specify.generic.type = MTYPE_BITMAP;
 	g_arenaservers.specify.generic.name = SPECIFY0;
-	g_arenaservers.specify.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	g_arenaservers.specify.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	g_arenaservers.specify.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.specify.generic.id = ID_SPECIFY;
 	g_arenaservers.specify.generic.x = 222;
@@ -1623,7 +1623,7 @@ static void UI_ArenaServers_MenuInit(void) {
 
 	g_arenaservers.refresh.generic.type = MTYPE_BITMAP;
 	g_arenaservers.refresh.generic.name = REFRESH0;
-	g_arenaservers.refresh.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	g_arenaservers.refresh.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	g_arenaservers.refresh.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.refresh.generic.id = ID_REFRESH;
 	g_arenaservers.refresh.generic.x = 372;
@@ -1635,7 +1635,7 @@ static void UI_ArenaServers_MenuInit(void) {
 
 	g_arenaservers.remove.generic.type = MTYPE_BITMAP;
 	g_arenaservers.remove.generic.name = DELETE0;
-	g_arenaservers.remove.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	g_arenaservers.remove.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	g_arenaservers.remove.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.remove.generic.id = ID_REMOVE;
 	g_arenaservers.remove.generic.x = 522;
@@ -1647,7 +1647,7 @@ static void UI_ArenaServers_MenuInit(void) {
 
 	g_arenaservers.fight.generic.type = MTYPE_BITMAP;
 	g_arenaservers.fight.generic.name = FIGHT0;
-	g_arenaservers.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	g_arenaservers.fight.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	g_arenaservers.fight.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.fight.generic.id = ID_CONNECT;
 	g_arenaservers.fight.focuspic = FIGHT1;
@@ -1659,7 +1659,7 @@ static void UI_ArenaServers_MenuInit(void) {
 
 	g_arenaservers.back.generic.type = MTYPE_BITMAP;
 	g_arenaservers.back.generic.name = BACK0;
-	g_arenaservers.back.generic.flags = (QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS);
+	g_arenaservers.back.generic.flags = QMF_PULSEIFFOCUS;
 	g_arenaservers.back.generic.callback = UI_ArenaServers_Event;
 	g_arenaservers.back.generic.id = ID_BACK;
 	g_arenaservers.back.generic.x = 8;

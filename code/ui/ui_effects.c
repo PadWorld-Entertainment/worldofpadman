@@ -381,7 +381,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	effectsOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.graphics.generic.name = GRAPHICS0;
-	effectsOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	effectsOptionsInfo.graphics.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	effectsOptionsInfo.graphics.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.graphics.generic.id = ID_GRAPHICS;
 	effectsOptionsInfo.graphics.generic.x = 120;
@@ -393,7 +393,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	effectsOptionsInfo.display.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.display.generic.name = DISPLAY0;
-	effectsOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	effectsOptionsInfo.display.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	effectsOptionsInfo.display.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.display.generic.id = ID_DISPLAY;
 	effectsOptionsInfo.display.generic.x = 85;
@@ -405,7 +405,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	effectsOptionsInfo.effects.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.effects.generic.name = EFFECTS0;
-	effectsOptionsInfo.effects.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
+	effectsOptionsInfo.effects.generic.flags = QMF_HIGHLIGHT;
 	effectsOptionsInfo.effects.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.effects.generic.id = ID_EFFECTS;
 	effectsOptionsInfo.effects.generic.x = 212;
@@ -417,7 +417,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	effectsOptionsInfo.sound.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.sound.generic.name = SOUND0;
-	effectsOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	effectsOptionsInfo.sound.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	effectsOptionsInfo.sound.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.sound.generic.id = ID_SOUND;
 	effectsOptionsInfo.sound.generic.x = 106;
@@ -429,7 +429,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	effectsOptionsInfo.network.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.network.generic.name = NETWORK0;
-	effectsOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	effectsOptionsInfo.network.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	effectsOptionsInfo.network.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.network.generic.id = ID_NETWORK;
 	effectsOptionsInfo.network.generic.x = 212;
@@ -612,7 +612,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	effectsOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.back.generic.name = BACK0;
-	effectsOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	effectsOptionsInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	effectsOptionsInfo.back.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.back.generic.id = ID_BACK;
 	effectsOptionsInfo.back.generic.x = 8;

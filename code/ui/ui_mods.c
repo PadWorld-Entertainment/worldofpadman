@@ -190,7 +190,7 @@ static void UI_Mods_MenuInit(void) {
 
 	s_mods.arrowup.generic.type = MTYPE_BITMAP;
 	s_mods.arrowup.generic.name = ARROWUP0;
-	s_mods.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_mods.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_mods.arrowup.generic.callback = UI_Mods_MenuEvent;
 	s_mods.arrowup.generic.id = ID_SCROLL_UP;
 	s_mods.arrowup.generic.x = 62;
@@ -202,7 +202,7 @@ static void UI_Mods_MenuInit(void) {
 
 	s_mods.arrowdown.generic.type = MTYPE_BITMAP;
 	s_mods.arrowdown.generic.name = ARROWDN0;
-	s_mods.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_mods.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_mods.arrowdown.generic.callback = UI_Mods_MenuEvent;
 	s_mods.arrowdown.generic.id = ID_SCROLL_DOWN;
 	s_mods.arrowdown.generic.x = 62;
@@ -214,7 +214,7 @@ static void UI_Mods_MenuInit(void) {
 
 	s_mods.go.generic.type = MTYPE_BITMAP;
 	s_mods.go.generic.name = GO0;
-	s_mods.go.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_mods.go.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_mods.go.generic.callback = UI_Mods_MenuEvent;
 	s_mods.go.generic.id = ID_GO;
 	s_mods.go.generic.x = 55;
@@ -226,7 +226,7 @@ static void UI_Mods_MenuInit(void) {
 
 	s_mods.back.generic.type = MTYPE_BITMAP;
 	s_mods.back.generic.name = BACK0;
-	s_mods.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_mods.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_mods.back.generic.x = 8;
 	s_mods.back.generic.y = 446;
 	s_mods.back.generic.id = ID_BACK;

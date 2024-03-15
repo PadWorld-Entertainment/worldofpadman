@@ -767,7 +767,7 @@ static void UI_Preferences_MenuInit(void) {
 	//menu
 	s_preferences.hud.generic.type = MTYPE_BITMAP;
 	s_preferences.hud.generic.name = HUD0;
-	s_preferences.hud.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_preferences.hud.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_preferences.hud.generic.callback = UI_Preferences_Event;
 	s_preferences.hud.generic.id = ID_HUD;
 	s_preferences.hud.generic.x = 598;
@@ -779,7 +779,7 @@ static void UI_Preferences_MenuInit(void) {
 
 	s_preferences.game.generic.type = MTYPE_BITMAP;
 	s_preferences.game.generic.name = GAME0;
-	s_preferences.game.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_preferences.game.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_preferences.game.generic.callback = UI_Preferences_Event;
 	s_preferences.game.generic.id = ID_GAME;
 	s_preferences.game.generic.x = 684;
@@ -791,7 +791,7 @@ static void UI_Preferences_MenuInit(void) {
 
 	s_preferences.chat.generic.type = MTYPE_BITMAP;
 	s_preferences.chat.generic.name = CHAT0;
-	s_preferences.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_preferences.chat.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_preferences.chat.generic.callback = UI_Preferences_Event;
 	s_preferences.chat.generic.id = ID_CHAT;
 	s_preferences.chat.generic.x = 574;
@@ -803,7 +803,7 @@ static void UI_Preferences_MenuInit(void) {
 
 	s_preferences.help.generic.type = MTYPE_BITMAP;
 	s_preferences.help.generic.name = HELP0;
-	s_preferences.help.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_preferences.help.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_preferences.help.generic.callback = UI_Preferences_Event;
 	s_preferences.help.generic.id = ID_HELP;
 	s_preferences.help.generic.x = 660;
@@ -1376,7 +1376,7 @@ static void UI_Preferences_MenuInit(void) {
 
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
-	s_preferences.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_preferences.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_preferences.back.generic.x = 776;
 	s_preferences.back.generic.y = 446;
 	s_preferences.back.generic.id = ID_BACK;

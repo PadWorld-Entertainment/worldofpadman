@@ -197,7 +197,7 @@ static void TeamMain_MenuInit(void) {
 
 	s_teammain.back.generic.type = MTYPE_BITMAP;
 	s_teammain.back.generic.name = BACK0;
-	s_teammain.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_teammain.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_teammain.back.generic.x = XPOSITION - 95;
 	s_teammain.back.generic.y = 340;
 	s_teammain.back.generic.id = ID_BACK;

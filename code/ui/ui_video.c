@@ -726,7 +726,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	s_graphicsoptions.graphics.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.graphics.generic.name = GRAPHICS0;
-	s_graphicsoptions.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
+	s_graphicsoptions.graphics.generic.flags = QMF_HIGHLIGHT;
 	s_graphicsoptions.graphics.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.graphics.generic.id = ID_GRAPHICS;
 	s_graphicsoptions.graphics.generic.x = 120;
@@ -738,7 +738,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	s_graphicsoptions.display.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.display.generic.name = DISPLAY0;
-	s_graphicsoptions.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_graphicsoptions.display.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.display.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.display.generic.id = ID_DISPLAY;
 	s_graphicsoptions.display.generic.x = 85;
@@ -750,7 +750,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	s_graphicsoptions.effects.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.effects.generic.name = EFFECTS0;
-	s_graphicsoptions.effects.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_graphicsoptions.effects.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.effects.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.effects.generic.id = ID_EFFECTS;
 	s_graphicsoptions.effects.generic.x = 212;
@@ -762,7 +762,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	s_graphicsoptions.sound.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.sound.generic.name = SOUND0;
-	s_graphicsoptions.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_graphicsoptions.sound.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.sound.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.sound.generic.id = ID_SOUND;
 	s_graphicsoptions.sound.generic.x = 106;
@@ -774,7 +774,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	s_graphicsoptions.network.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.network.generic.name = NETWORK0;
-	s_graphicsoptions.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_graphicsoptions.network.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_graphicsoptions.network.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.network.generic.id = ID_NETWORK;
 	s_graphicsoptions.network.generic.x = 212;
@@ -942,7 +942,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	s_graphicsoptions.back.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.back.generic.name = BACK0;
-	s_graphicsoptions.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_graphicsoptions.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_graphicsoptions.back.generic.callback = UI_GraphicsOptions_Event;
 	s_graphicsoptions.back.generic.id = ID_BACK;
 	s_graphicsoptions.back.generic.x = 8;

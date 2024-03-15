@@ -633,7 +633,7 @@ void UI_MusicBox_Open(void) {
 
 	musicMenu.switchAlbum.generic.type = MTYPE_BITMAP;
 	musicMenu.switchAlbum.generic.name = SWITCH0;
-	musicMenu.switchAlbum.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	musicMenu.switchAlbum.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	musicMenu.switchAlbum.generic.x = XPOSITION + 251;
 	musicMenu.switchAlbum.generic.y = 217;
 	musicMenu.switchAlbum.generic.id = ID_SWITCH;
@@ -645,7 +645,7 @@ void UI_MusicBox_Open(void) {
 
 	musicMenu.playAll.generic.type = MTYPE_BITMAP;
 	musicMenu.playAll.generic.name = ALL0;
-	musicMenu.playAll.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	musicMenu.playAll.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	musicMenu.playAll.generic.x = XPOSITION + 251;
 	musicMenu.playAll.generic.y = 232;
 	musicMenu.playAll.generic.id = ID_PLAYALL;
@@ -657,7 +657,7 @@ void UI_MusicBox_Open(void) {
 
 	musicMenu.clearList.generic.type = MTYPE_BITMAP;
 	musicMenu.clearList.generic.name = CLEAR0;
-	musicMenu.clearList.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	musicMenu.clearList.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	musicMenu.clearList.generic.x = XPOSITION + 273;
 	musicMenu.clearList.generic.y = 232;
 	musicMenu.clearList.generic.id = ID_CLEARLIST;
@@ -669,7 +669,7 @@ void UI_MusicBox_Open(void) {
 
 	musicMenu.exit.generic.type = MTYPE_BITMAP;
 	musicMenu.exit.generic.name = EXIT0;
-	musicMenu.exit.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	musicMenu.exit.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	musicMenu.exit.generic.x = XPOSITION + 268;
 	musicMenu.exit.generic.y = 258;
 	musicMenu.exit.generic.id = ID_EXIT;

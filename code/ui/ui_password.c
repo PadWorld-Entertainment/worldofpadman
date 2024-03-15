@@ -156,7 +156,7 @@ static void UI_SpecifyPassword_MenuInit(void) {
 
 	s_specifypassword.back.generic.type = MTYPE_BITMAP;
 	s_specifypassword.back.generic.name = BACK0;
-	s_specifypassword.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_specifypassword.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_specifypassword.back.generic.x = 8;
 	s_specifypassword.back.generic.y = 446;
 	s_specifypassword.back.generic.id = ID_BACK;
@@ -168,7 +168,7 @@ static void UI_SpecifyPassword_MenuInit(void) {
 
 	s_specifypassword.fight.generic.type = MTYPE_BITMAP;
 	s_specifypassword.fight.generic.name = FIGHT0;
-	s_specifypassword.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_specifypassword.fight.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_specifypassword.fight.generic.callback = UI_SpecifyPassword_Event;
 	s_specifypassword.fight.generic.id = ID_FIGHT;
 	s_specifypassword.fight.focuspic = FIGHT1;

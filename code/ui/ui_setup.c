@@ -156,7 +156,7 @@ static void SetupDefaultMenu_Init(void) {
 
 	setupDefaultMenu.yes.generic.type = MTYPE_BITMAP;
 	setupDefaultMenu.yes.generic.name = YES0;
-	setupDefaultMenu.yes.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupDefaultMenu.yes.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	setupDefaultMenu.yes.generic.x = 590;
 	setupDefaultMenu.yes.generic.y = 202;
 	setupDefaultMenu.yes.generic.id = ID_DEFAULT_YES;
@@ -168,7 +168,7 @@ static void SetupDefaultMenu_Init(void) {
 
 	setupDefaultMenu.no.generic.type = MTYPE_BITMAP;
 	setupDefaultMenu.no.generic.name = NO0;
-	setupDefaultMenu.no.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupDefaultMenu.no.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	setupDefaultMenu.no.generic.x = 710;
 	setupDefaultMenu.no.generic.y = 202;
 	setupDefaultMenu.no.generic.id = ID_DEFAULT_NO;
@@ -180,7 +180,7 @@ static void SetupDefaultMenu_Init(void) {
 
 	setupDefaultMenu.back.generic.type = MTYPE_BITMAP;
 	setupDefaultMenu.back.generic.name = BACK0;
-	setupDefaultMenu.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	setupDefaultMenu.back.generic.flags = QMF_PULSEIFFOCUS;
 	setupDefaultMenu.back.generic.x = 776;
 	setupDefaultMenu.back.generic.y = 446;
 	setupDefaultMenu.back.generic.id = ID_DEFAULT_BACK;
@@ -263,7 +263,7 @@ static void UI_SetupMenu_Init(void) {
 
 	setupMenuInfo.player.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.player.generic.name = PLAYER0;
-	setupMenuInfo.player.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupMenuInfo.player.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	setupMenuInfo.player.generic.x = 98;
 	setupMenuInfo.player.generic.y = 76;
 	setupMenuInfo.player.generic.id = ID_CUSTOMIZEPLAYER;
@@ -276,7 +276,7 @@ static void UI_SetupMenu_Init(void) {
 
 	setupMenuInfo.controls.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.controls.generic.name = CONTROLS0;
-	setupMenuInfo.controls.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupMenuInfo.controls.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	setupMenuInfo.controls.generic.x = 86;
 	setupMenuInfo.controls.generic.y = 117;
 	setupMenuInfo.controls.generic.id = ID_CUSTOMIZECONTROLS;
@@ -289,7 +289,7 @@ static void UI_SetupMenu_Init(void) {
 
 	setupMenuInfo.system.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.system.generic.name = SYSTEM0;
-	setupMenuInfo.system.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupMenuInfo.system.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	setupMenuInfo.system.generic.x = 115;
 	setupMenuInfo.system.generic.y = 157;
 	setupMenuInfo.system.generic.id = ID_SYSTEMCONFIG;
@@ -302,7 +302,7 @@ static void UI_SetupMenu_Init(void) {
 
 	setupMenuInfo.options.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.options.generic.name = OPTIONS0;
-	setupMenuInfo.options.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	setupMenuInfo.options.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	setupMenuInfo.options.generic.x = 97;
 	setupMenuInfo.options.generic.y = 197;
 	setupMenuInfo.options.generic.id = ID_GAME;
@@ -316,9 +316,9 @@ static void UI_SetupMenu_Init(void) {
 		setupMenuInfo.defaults.generic.type = MTYPE_BITMAP;
 		setupMenuInfo.defaults.generic.name = DEFAULTS0;
 		if (!trap_Cvar_VariableValue("cl_paused")) {
-			setupMenuInfo.defaults.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+			setupMenuInfo.defaults.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 		} else {
-			setupMenuInfo.defaults.generic.flags = QMF_LEFT_JUSTIFY | QMF_GRAYED;
+			setupMenuInfo.defaults.generic.flags = QMF_GRAYED;
 		}
 		setupMenuInfo.defaults.generic.x = 97;
 		setupMenuInfo.defaults.generic.y = 237;
@@ -332,7 +332,7 @@ static void UI_SetupMenu_Init(void) {
 
 	setupMenuInfo.back.generic.type = MTYPE_BITMAP;
 	setupMenuInfo.back.generic.name = BACK0;
-	setupMenuInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	setupMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	setupMenuInfo.back.generic.x = 8;
 	setupMenuInfo.back.generic.y = 446;
 	setupMenuInfo.back.generic.id = ID_BACK;

@@ -252,7 +252,7 @@ static void UI_VoiceChatMenu_Init(void) {
 
 	voiceChatMenuInfo.arrowup.generic.type = MTYPE_BITMAP;
 	voiceChatMenuInfo.arrowup.generic.name = ARROWUP0;
-	voiceChatMenuInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	voiceChatMenuInfo.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	voiceChatMenuInfo.arrowup.generic.callback = UI_VoiceChatMenu_UpEvent;
 	voiceChatMenuInfo.arrowup.generic.id = ID_SCROLL_UP;
 	voiceChatMenuInfo.arrowup.generic.x = XPOSITION + 74;
@@ -264,7 +264,7 @@ static void UI_VoiceChatMenu_Init(void) {
 
 	voiceChatMenuInfo.arrowdown.generic.type = MTYPE_BITMAP;
 	voiceChatMenuInfo.arrowdown.generic.name = ARROWDN0;
-	voiceChatMenuInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	voiceChatMenuInfo.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	voiceChatMenuInfo.arrowdown.generic.callback = UI_VoiceChatMenu_DownEvent;
 	voiceChatMenuInfo.arrowdown.generic.id = ID_SCROLL_DOWN;
 	voiceChatMenuInfo.arrowdown.generic.x = XPOSITION + 74;
@@ -341,7 +341,7 @@ static void UI_VoiceChatMenu_Init(void) {
 
 	voiceChatMenuInfo.back.generic.type = MTYPE_BITMAP;
 	voiceChatMenuInfo.back.generic.name = BACK0;
-	voiceChatMenuInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	voiceChatMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	voiceChatMenuInfo.back.generic.x = XPOSITION - 95;
 	voiceChatMenuInfo.back.generic.y = 340;
 	voiceChatMenuInfo.back.generic.id = ID_BACK;

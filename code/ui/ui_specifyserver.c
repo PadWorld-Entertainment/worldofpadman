@@ -158,7 +158,7 @@ static void UI_SpecifyServer_MenuInit(void) {
 
 	s_specifyserver.back.generic.type = MTYPE_BITMAP;
 	s_specifyserver.back.generic.name = BACK0;
-	s_specifyserver.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_specifyserver.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_specifyserver.back.generic.x = 8;
 	s_specifyserver.back.generic.y = 446;
 	s_specifyserver.back.generic.id = ID_BACK;
@@ -170,7 +170,7 @@ static void UI_SpecifyServer_MenuInit(void) {
 
 	s_specifyserver.fight.generic.type = MTYPE_BITMAP;
 	s_specifyserver.fight.generic.name = FIGHT0;
-	s_specifyserver.fight.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_specifyserver.fight.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_specifyserver.fight.generic.callback = UI_SpecifyServer_Event;
 	s_specifyserver.fight.generic.id = ID_FIGHT;
 	s_specifyserver.fight.focuspic = FIGHT1;

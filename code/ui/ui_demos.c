@@ -146,7 +146,7 @@ static void UI_Demos_MenuInit(void) {
 
 	s_demos.arrowup.generic.type = MTYPE_BITMAP;
 	s_demos.arrowup.generic.name = ARROWUP0;
-	s_demos.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_demos.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_demos.arrowup.generic.callback = UI_Demos_MenuEvent;
 	s_demos.arrowup.generic.id = ID_SCROLL_UP;
 	s_demos.arrowup.generic.x = 62;
@@ -158,7 +158,7 @@ static void UI_Demos_MenuInit(void) {
 
 	s_demos.arrowdown.generic.type = MTYPE_BITMAP;
 	s_demos.arrowdown.generic.name = ARROWDN0;
-	s_demos.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_demos.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_demos.arrowdown.generic.callback = UI_Demos_MenuEvent;
 	s_demos.arrowdown.generic.id = ID_SCROLL_DOWN;
 	s_demos.arrowdown.generic.x = 62;
@@ -170,7 +170,7 @@ static void UI_Demos_MenuInit(void) {
 
 	s_demos.go.generic.type = MTYPE_BITMAP;
 	s_demos.go.generic.name = GO0;
-	s_demos.go.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_demos.go.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_demos.go.generic.callback = UI_Demos_MenuEvent;
 	s_demos.go.generic.id = ID_GO;
 	s_demos.go.generic.x = 55;
@@ -182,7 +182,7 @@ static void UI_Demos_MenuInit(void) {
 
 	s_demos.back.generic.type = MTYPE_BITMAP;
 	s_demos.back.generic.name = BACK0;
-	s_demos.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_demos.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_demos.back.generic.x = 8;
 	s_demos.back.generic.y = 446;
 	s_demos.back.generic.id = ID_BACK;

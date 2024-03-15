@@ -359,7 +359,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 
 	networkOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.graphics.generic.name = GRAPHICS0;
-	networkOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	networkOptionsInfo.graphics.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.graphics.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.graphics.generic.id = ID_GRAPHICS;
 	networkOptionsInfo.graphics.generic.x = 120;
@@ -371,7 +371,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 
 	networkOptionsInfo.display.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.display.generic.name = DISPLAY0;
-	networkOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	networkOptionsInfo.display.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.display.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.display.generic.id = ID_DISPLAY;
 	networkOptionsInfo.display.generic.x = 85;
@@ -383,7 +383,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 
 	networkOptionsInfo.effects.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.effects.generic.name = EFFECTS0;
-	networkOptionsInfo.effects.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	networkOptionsInfo.effects.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.effects.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.effects.generic.id = ID_EFFECTS;
 	networkOptionsInfo.effects.generic.x = 212;
@@ -395,7 +395,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 
 	networkOptionsInfo.sound.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.sound.generic.name = SOUND0;
-	networkOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	networkOptionsInfo.sound.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	networkOptionsInfo.sound.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.sound.generic.id = ID_SOUND;
 	networkOptionsInfo.sound.generic.x = 106;
@@ -407,7 +407,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 
 	networkOptionsInfo.network.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.network.generic.name = NETWORK0;
-	networkOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
+	networkOptionsInfo.network.generic.flags = QMF_HIGHLIGHT;
 	networkOptionsInfo.network.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.network.generic.id = ID_NETWORK;
 	networkOptionsInfo.network.generic.x = 212;
@@ -551,7 +551,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 
 	networkOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.back.generic.name = BACK0;
-	networkOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	networkOptionsInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	networkOptionsInfo.back.generic.callback = UI_NetworkOptions_Event;
 	networkOptionsInfo.back.generic.id = ID_BACK;
 	networkOptionsInfo.back.generic.x = 8;

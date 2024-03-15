@@ -434,7 +434,7 @@ static void UI_SoundOptions_MenuInit(void) {
 
 	soundOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.graphics.generic.name = GRAPHICS0;
-	soundOptionsInfo.graphics.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	soundOptionsInfo.graphics.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	soundOptionsInfo.graphics.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.graphics.generic.id = ID_GRAPHICS;
 	soundOptionsInfo.graphics.generic.x = 120;
@@ -446,7 +446,7 @@ static void UI_SoundOptions_MenuInit(void) {
 
 	soundOptionsInfo.display.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.display.generic.name = DISPLAY0;
-	soundOptionsInfo.display.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	soundOptionsInfo.display.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	soundOptionsInfo.display.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.display.generic.id = ID_DISPLAY;
 	soundOptionsInfo.display.generic.x = 85;
@@ -458,7 +458,7 @@ static void UI_SoundOptions_MenuInit(void) {
 
 	soundOptionsInfo.effects.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.effects.generic.name = EFFECTS0;
-	soundOptionsInfo.effects.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	soundOptionsInfo.effects.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	soundOptionsInfo.effects.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.effects.generic.id = ID_EFFECTS;
 	soundOptionsInfo.effects.generic.x = 212;
@@ -470,7 +470,7 @@ static void UI_SoundOptions_MenuInit(void) {
 
 	soundOptionsInfo.sound.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.sound.generic.name = SOUND0;
-	soundOptionsInfo.sound.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT;
+	soundOptionsInfo.sound.generic.flags = QMF_HIGHLIGHT;
 	soundOptionsInfo.sound.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.sound.generic.id = ID_SOUND;
 	soundOptionsInfo.sound.generic.x = 106;
@@ -482,7 +482,7 @@ static void UI_SoundOptions_MenuInit(void) {
 
 	soundOptionsInfo.network.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.network.generic.name = NETWORK0;
-	soundOptionsInfo.network.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	soundOptionsInfo.network.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	soundOptionsInfo.network.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.network.generic.id = ID_NETWORK;
 	soundOptionsInfo.network.generic.x = 212;
@@ -648,7 +648,7 @@ static void UI_SoundOptions_MenuInit(void) {
 
 	soundOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	soundOptionsInfo.back.generic.name = BACK0;
-	soundOptionsInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	soundOptionsInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	soundOptionsInfo.back.generic.callback = UI_SoundOptions_Event;
 	soundOptionsInfo.back.generic.id = ID_BACK;
 	soundOptionsInfo.back.generic.x = 8;

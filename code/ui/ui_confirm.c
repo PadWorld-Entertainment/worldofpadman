@@ -157,7 +157,7 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 
 	s_confirm.yes.generic.type = MTYPE_BITMAP;
 	s_confirm.yes.generic.name = YES0;
-	s_confirm.yes.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_confirm.yes.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_confirm.yes.generic.callback = ConfirmMenu_Event;
 	s_confirm.yes.generic.id = ID_YES;
 	s_confirm.yes.generic.x = XPOSITION - 60;
@@ -169,7 +169,7 @@ static void UI_ConfirmMenu_Style(const char *question, int style, void (*draw)(v
 
 	s_confirm.no.generic.type = MTYPE_BITMAP;
 	s_confirm.no.generic.name = NO0;
-	s_confirm.no.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_confirm.no.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_confirm.no.generic.callback = ConfirmMenu_Event;
 	s_confirm.no.generic.id = ID_NO;
 	s_confirm.no.generic.x = XPOSITION + 15;

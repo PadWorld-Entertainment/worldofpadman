@@ -1102,7 +1102,7 @@ static void Controls_MenuInit(void) {
 
 	s_controls.looking.generic.type = MTYPE_BITMAP;
 	s_controls.looking.generic.name = LOOK0;
-	s_controls.looking.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.looking.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_controls.looking.generic.x = XPOSITION - 78;
 	s_controls.looking.generic.y = 28;
 	s_controls.looking.generic.id = ID_LOOKING;
@@ -1114,7 +1114,7 @@ static void Controls_MenuInit(void) {
 
 	s_controls.movement.generic.type = MTYPE_BITMAP;
 	s_controls.movement.generic.name = MOVEMENT0;
-	s_controls.movement.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.movement.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_controls.movement.generic.x = XPOSITION + 8;
 	s_controls.movement.generic.y = 43;
 	s_controls.movement.generic.id = ID_MOVEMENT;
@@ -1126,7 +1126,7 @@ static void Controls_MenuInit(void) {
 
 	s_controls.weapons.generic.type = MTYPE_BITMAP;
 	s_controls.weapons.generic.name = WEAPONS0;
-	s_controls.weapons.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.weapons.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_controls.weapons.generic.x = XPOSITION - 124;
 	s_controls.weapons.generic.y = 69;
 	s_controls.weapons.generic.id = ID_WEAPONS;
@@ -1138,7 +1138,7 @@ static void Controls_MenuInit(void) {
 
 	s_controls.chat.generic.type = MTYPE_BITMAP;
 	s_controls.chat.generic.name = CHAT0;
-	s_controls.chat.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.chat.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_controls.chat.generic.x = XPOSITION + 18;
 	s_controls.chat.generic.y = 88;
 	s_controls.chat.generic.id = ID_CHAT;
@@ -1150,7 +1150,7 @@ static void Controls_MenuInit(void) {
 
 	s_controls.misc.generic.type = MTYPE_BITMAP;
 	s_controls.misc.generic.name = MISC0;
-	s_controls.misc.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_controls.misc.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_controls.misc.generic.x = XPOSITION - 78;
 	s_controls.misc.generic.y = 110;
 	s_controls.misc.generic.id = ID_MISC;
@@ -1162,7 +1162,7 @@ static void Controls_MenuInit(void) {
 
 	s_controls.back.generic.type = MTYPE_BITMAP;
 	s_controls.back.generic.name = BACK0;
-	s_controls.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_controls.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_controls.back.generic.x = 776;
 	s_controls.back.generic.y = 446;
 	s_controls.back.generic.id = ID_BACK;

@@ -216,7 +216,7 @@ void UI_ServerInfoMenu(void) {
 
 	s_serverinfo.arrowup.generic.type = MTYPE_BITMAP;
 	s_serverinfo.arrowup.generic.name = ARROWUP0;
-	s_serverinfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_serverinfo.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_serverinfo.arrowup.generic.callback = ServerInfo_Event;
 	s_serverinfo.arrowup.generic.id = ID_SCROLL_UP;
 	s_serverinfo.arrowup.generic.x = XPOSITION + 74;
@@ -228,7 +228,7 @@ void UI_ServerInfoMenu(void) {
 
 	s_serverinfo.arrowdown.generic.type = MTYPE_BITMAP;
 	s_serverinfo.arrowdown.generic.name = ARROWDN0;
-	s_serverinfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	s_serverinfo.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_serverinfo.arrowdown.generic.callback = ServerInfo_Event;
 	s_serverinfo.arrowdown.generic.id = ID_SCROLL_DOWN;
 	s_serverinfo.arrowdown.generic.x = XPOSITION + 74;
@@ -255,7 +255,7 @@ void UI_ServerInfoMenu(void) {
 
 	s_serverinfo.back.generic.type = MTYPE_BITMAP;
 	s_serverinfo.back.generic.name = BACK0;
-	s_serverinfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	s_serverinfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	s_serverinfo.back.generic.x = XPOSITION - 95;
 	s_serverinfo.back.generic.y = 340;
 	s_serverinfo.back.generic.id = ID_BACK;

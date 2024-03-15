@@ -277,7 +277,7 @@ static void UI_AddBotsMenu_Init(void) {
 
 	addBotsMenuInfo.arrowup.generic.type = MTYPE_BITMAP;
 	addBotsMenuInfo.arrowup.generic.name = ARROWUP0;
-	addBotsMenuInfo.arrowup.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	addBotsMenuInfo.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	addBotsMenuInfo.arrowup.generic.callback = UI_AddBotsMenu_UpEvent;
 	addBotsMenuInfo.arrowup.generic.id = ID_SCROLL_UP;
 	addBotsMenuInfo.arrowup.generic.x = XPOSITION + 74;
@@ -289,7 +289,7 @@ static void UI_AddBotsMenu_Init(void) {
 
 	addBotsMenuInfo.arrowdown.generic.type = MTYPE_BITMAP;
 	addBotsMenuInfo.arrowdown.generic.name = ARROWDN0;
-	addBotsMenuInfo.arrowdown.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
+	addBotsMenuInfo.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	addBotsMenuInfo.arrowdown.generic.callback = UI_AddBotsMenu_DownEvent;
 	addBotsMenuInfo.arrowdown.generic.id = ID_SCROLL_DOWN;
 	addBotsMenuInfo.arrowdown.generic.x = XPOSITION + 74;
@@ -360,7 +360,7 @@ static void UI_AddBotsMenu_Init(void) {
 
 	addBotsMenuInfo.back.generic.type = MTYPE_BITMAP;
 	addBotsMenuInfo.back.generic.name = BACK0;
-	addBotsMenuInfo.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	addBotsMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
 	addBotsMenuInfo.back.generic.x = XPOSITION - 95;
 	addBotsMenuInfo.back.generic.y = 340;
 	addBotsMenuInfo.back.generic.id = ID_BACK;
