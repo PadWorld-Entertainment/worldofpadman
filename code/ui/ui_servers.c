@@ -1552,7 +1552,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.arrowup.generic.id = ID_SCROLL_UP;
 	g_arenaservers.arrowup.generic.x = 744;
 	g_arenaservers.arrowup.generic.y = 224;
-	g_arenaservers.arrowup.width = 25;
+	g_arenaservers.arrowup.width = 26;
 	g_arenaservers.arrowup.height = 60;
 	g_arenaservers.arrowup.focuspic = ARROWUP1;
 	g_arenaservers.arrowup.focuspicinstead = qtrue;
@@ -1564,7 +1564,7 @@ static void UI_ArenaServers_MenuInit(void) {
 	g_arenaservers.arrowdown.generic.id = ID_SCROLL_DOWN;
 	g_arenaservers.arrowdown.generic.x = 744;
 	g_arenaservers.arrowdown.generic.y = 300;
-	g_arenaservers.arrowdown.width = 25;
+	g_arenaservers.arrowdown.width = 26;
 	g_arenaservers.arrowdown.height = 60;
 	g_arenaservers.arrowdown.focuspic = ARROWDN1;
 	g_arenaservers.arrowdown.focuspicinstead = qtrue;

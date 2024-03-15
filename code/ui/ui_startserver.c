@@ -698,7 +698,7 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.arrowleft.generic.id = ID_PREVPAGE;
 	s_startserver.arrowleft.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.arrowleft.width = 60;
-	s_startserver.arrowleft.height = 25;
+	s_startserver.arrowleft.height = 26;
 	s_startserver.arrowleft.focuspic = ARROWLT1;
 	s_startserver.arrowleft.focuspicinstead = qtrue;
 
@@ -710,7 +710,7 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.arrowright.generic.id = ID_NEXTPAGE;
 	s_startserver.arrowright.generic.callback = UI_StartServer_MenuEvent;
 	s_startserver.arrowright.width = 60;
-	s_startserver.arrowright.height = 25;
+	s_startserver.arrowright.height = 26;
 	s_startserver.arrowright.focuspic = ARROWRT1;
 	s_startserver.arrowright.focuspicinstead = qtrue;
 
@@ -1522,7 +1522,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowleft.generic.y = 396;
 	botSelectInfo.arrowleft.generic.callback = UI_SelectBots_LeftEvent;
 	botSelectInfo.arrowleft.width = 60;
-	botSelectInfo.arrowleft.height = 25;
+	botSelectInfo.arrowleft.height = 26;
 	botSelectInfo.arrowleft.focuspic = ARROWLT1;
 	botSelectInfo.arrowleft.focuspicinstead = qtrue;
 
@@ -1533,7 +1533,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowright.generic.y = 396;
 	botSelectInfo.arrowright.generic.callback = UI_SelectBots_RightEvent;
 	botSelectInfo.arrowright.width = 60;
-	botSelectInfo.arrowright.height = 25;
+	botSelectInfo.arrowright.height = 26;
 	botSelectInfo.arrowright.focuspic = ARROWRT1;
 	botSelectInfo.arrowright.focuspicinstead = qtrue;
 
@@ -1598,7 +1598,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowup.generic.x = 788;
 	botSelectInfo.arrowup.generic.y = 250;
 	botSelectInfo.arrowup.generic.callback = UI_SelectBots_ListUp;
-	botSelectInfo.arrowup.width = 25;
+	botSelectInfo.arrowup.width = 26;
 	botSelectInfo.arrowup.height = 60;
 	botSelectInfo.arrowup.focuspic = ARROWUP1;
 	botSelectInfo.arrowup.focuspicinstead = qtrue;
@@ -1609,7 +1609,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.arrowdown.generic.x = 788;
 	botSelectInfo.arrowdown.generic.y = 326;
 	botSelectInfo.arrowdown.generic.callback = UI_SelectBots_ListDown;
-	botSelectInfo.arrowdown.width = 25;
+	botSelectInfo.arrowdown.width = 26;
 	botSelectInfo.arrowdown.height = 60;
 	botSelectInfo.arrowdown.focuspic = ARROWDN1;
 	botSelectInfo.arrowdown.focuspicinstead = qtrue;
