@@ -54,6 +54,8 @@ MAIN MENU
 #define CREDITS1 "menu/buttons/credits1"
 #define EXIT0 "menu/buttons/exit0"
 #define EXIT1 "menu/buttons/exit1"
+#define MANIA0 "menu/buttons/mania0"
+#define MANIA1 "menu/buttons/mania1"
 
 #define MAX_MSGLENGHT 256
 
@@ -152,6 +154,8 @@ void UI_MainMenu_Cache(void) {
 	trap_R_RegisterShaderNoMip(CREDITS1);
 	trap_R_RegisterShaderNoMip(EXIT0);
 	trap_R_RegisterShaderNoMip(EXIT1);
+	trap_R_RegisterShaderNoMip(MANIA0);
+	trap_R_RegisterShaderNoMip(MANIA1);
 }
 
 static sfxHandle_t ErrorMessage_Key(int key) {
@@ -336,13 +340,16 @@ void UI_MainMenu(void) {
 	s_main.exit.focuspicinstead = qtrue;
 
 	s_main.mania.generic.type = MTYPE_BITMAP;
-	s_main.mania.generic.x = 64;
-	s_main.mania.generic.y = 312;
+	s_main.mania.generic.name = MANIA0;
+	s_main.mania.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.mania.generic.x = 0;
+	s_main.mania.generic.y = 300;
 	s_main.mania.generic.id = ID_MANIA;
 	s_main.mania.generic.callback = Main_MenuEvent;
-	s_main.mania.width = 40;
-	s_main.mania.height = 40;
-	s_main.mania.focuspicinstead = qfalse;
+	s_main.mania.width = 200;
+	s_main.mania.height = 186;
+	s_main.mania.focuspic = MANIA1;
+	s_main.mania.focuspicinstead = qtrue;
 
 	s_main.secret.generic.type = MTYPE_BITMAP;
 	s_main.secret.generic.flags = QMF_MOUSEONLY | QMF_SILENT | QMF_HIDDEN;
