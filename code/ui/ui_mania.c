@@ -40,12 +40,12 @@ PADMANIA MENU (FAN ARTWORKS etc.)
 #define ID_NEXT 11
 #define ID_PREV 12
 
-#define MAX_MANIAPAGES 9
+#define MAX_MANIAPAGES 10
 
 const char *maniapics[] = {"menu/mania/001", "menu/mania/002", "menu/mania/003",
 							"menu/mania/004", "menu/mania/005", "menu/mania/006",
 							"menu/mania/007", "menu/mania/008", "menu/mania/009",
-							NULL};
+							"menu/mania/010", NULL};
 
 typedef struct {
 	menuframework_s menu;
