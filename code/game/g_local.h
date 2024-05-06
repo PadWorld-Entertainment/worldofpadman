@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CARNAGE_REWARD_TIME 3000
 #define REWARD_SPRITE_TIME 4000
 #define SPRAYREWARD_SPRITE_TIME 6000
+#define INSTAGIB_PROTECT_TIME 6000
 
 #define INTERMISSION_DELAY_TIME 1000
 #define SP_INTERMISSION_DELAY_TIME 5000
@@ -410,6 +411,7 @@ struct gclient_s {
 	int lastSentFlyingTime;
 
 	int dropTime;
+	int	startGod; // instagib spawn protection
 
 	int powerupsBackpack[MAX_POWERUPS];
 	qboolean frozen;

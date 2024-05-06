@@ -1240,8 +1240,15 @@ void ClientSpawn(gentity_t *ent) {
 		client->ps.stats[STAT_WEAPONS] |= (1 << WP_SPRAYPISTOL);
 	}
 
-	// health will count down towards max_health
-	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
+	if (g_modInstagib.integer) {
+		// set health to max_health
+		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH];
+	} else {
+		// health will count down towards max_health
+		// add some bonus health as spawn protection if instagib is not active
+		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
+	}
+	
 	if (g_gametype.integer == GT_LPS) {
 		client->ps.stats[STAT_ARMOR] = 100;
 	}
@@ -1324,6 +1331,13 @@ void ClientSpawn(gentity_t *ent) {
 
 	// clear entity state values
 	BG_PlayerStateToEntityState(&client->ps, &ent->s, qtrue);
+
+	// start instagib spawn protection
+	if (g_modInstagib.integer) { 
+		ent->flags ^= FL_GODMODE;
+		client->startGod = level.time;
+	}
+
 }
 
 /*

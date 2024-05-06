@@ -742,6 +742,13 @@ static void ClientThink_real(gentity_t *ent) {
 		return;
 	}
 
+	// stop instagib spawn protection
+	if (g_modInstagib.integer) { 	
+		if ((ent->flags & FL_GODMODE) && ((level.time - ent->client->startGod) > INSTAGIB_PROTECT_TIME)) {
+			ent->flags &= ~FL_GODMODE;
+		}
+	}
+
 	// clear the rewards if time
 	if (level.time > client->rewardTime) {
 		client->ps.eFlags &= REMOVE_AWARDFLAGS;
