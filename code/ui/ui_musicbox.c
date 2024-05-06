@@ -39,8 +39,8 @@
 #define SWITCH0 "menu/buttons/mb_switch0"
 #define SWITCH1 "menu/buttons/mb_switch1"
 
-#define MAX_TRACKS 15
-#define MAX_ALBUMS 10
+#define MAX_TRACKS 12
+#define MAX_ALBUMS 12
 #define MAX_TRACKNAME 64
 #define MAX_ALBUMNAME 32
 
