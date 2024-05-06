@@ -29,22 +29,23 @@ SECRET MENU (ENTE'S ARTWORKS)
 */
 #include "ui_local.h"
 
-#define BARROWLT0 "menu/arrows/bigblu_lt0"
-#define BARROWLT1 "menu/arrows/bigblu_lt1"
-#define BARROWRT0 "menu/arrows/bigblu_rt0"
-#define BARROWRT1 "menu/arrows/bigblu_rt1"
-#define BACK0 "menu/buttons/back0"
-#define BACK1 "menu/buttons/back1"
+#define ARROWLT0 "menu/arrows/arryel_lt0b"
+#define ARROWLT1 "menu/arrows/arryel_lt1"
+#define ARROWRT0 "menu/arrows/arryel_rt0b"
+#define ARROWRT1 "menu/arrows/arryel_rt1"
+#define EXIT0 "menu/buttons/exit0"
+#define EXIT1 "menu/buttons/exit1"
 
-#define ID_BACK 10
+#define ID_EXIT 10
 #define ID_NEXT 11
 #define ID_PREV 12
 
 #define MAX_SECRETPAGES 12
 
-const char *secretpics[] = {"menu/secret/001", "menu/secret/002", "menu/secret/003", "menu/secret/004",
-							"menu/secret/005", "menu/secret/006", "menu/secret/007", "menu/secret/008",
-							"menu/secret/009", "menu/secret/010", "menu/secret/011", "menu/secret/012",
+const char *secretpics[] = {"menu/secret/001", "menu/secret/002", "menu/secret/003",
+							"menu/secret/004", "menu/secret/005", "menu/secret/006",
+							"menu/secret/007", "menu/secret/008", "menu/secret/009",
+							"menu/secret/010", "menu/secret/011", "menu/secret/012",
 							NULL};
 
 typedef struct {
@@ -53,7 +54,7 @@ typedef struct {
 	menubitmap_s secpic;
 	menubitmap_s next;
 	menubitmap_s prev;
-	menubitmap_s back;
+	menubitmap_s exit;
 
 	int currentpage;
 
@@ -95,7 +96,7 @@ static void UI_Secret_MenuEvent(void *ptr, int event) {
 	}
 
 	switch (((menucommon_s *)ptr)->id) {
-	case ID_BACK:
+	case ID_EXIT:
 		UI_StopMusic(); // -> durch refresh sollte automatisch wieder der normale starten
 		UI_PopMenu();
 		break;
@@ -122,18 +123,7 @@ UI_Secret_MenuDraw
 =================
 */
 static void UI_Secret_MenuDraw(void) {
-	// The bg texture is square so we need to calculate the y offset to draw the bg
-	// texture in correct aspect ratio and we need to cover top and bottom area with
-	// black rectangles if the video resolution is narrow screen
-	float yOffset = 0.5f * (float)(SCREEN_WIDTH - SCREEN_HEIGHT);
-	// draw the bg texture with y offset
-	UI_DrawHandlePic(0, -yOffset, SCREEN_WIDTH, SCREEN_WIDTH, uis.connectbg);
-	// tone the visible bg texture down
-	UI_FillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, colorTBlack33);
-	// add black rectangles to cover top and bottom area outside ws menu
-	UI_FillRect(0, -yOffset, SCREEN_WIDTH, yOffset, color_black);
-	UI_FillRect(0, SCREEN_HEIGHT, SCREEN_WIDTH, yOffset, color_black);
-	// draw the copypright string
+	// draw the copyright string
 	UI_DrawStringNS(SCREEN_WIDTH - 14 * SMALLCHAR_WIDTH, SCREEN_HEIGHT - SMALLCHAR_HEIGHT, 
 					"(c) ENTE 2024", UI_LEFT, SMALLCHAR_HEIGHT, color_white);
 
@@ -179,51 +169,51 @@ static void UI_Secret_MenuInit(void) {
 
 	s_secret.secpic.generic.type = MTYPE_BITMAP;
 	s_secret.secpic.generic.name = secretpics[0];
-	s_secret.secpic.generic.x = 108;
+	s_secret.secpic.generic.x = 0;
 	s_secret.secpic.generic.y = 0;
-	s_secret.secpic.width = 648;
+	s_secret.secpic.width = SCREEN_WIDTH;
 	s_secret.secpic.height = SCREEN_HEIGHT;
 
 	s_secret.prev.generic.type = MTYPE_BITMAP;
-	s_secret.prev.generic.name = BARROWLT0;
-	s_secret.prev.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_secret.prev.generic.x = 24;
-	s_secret.prev.generic.y = 173;
+	s_secret.prev.generic.name = ARROWLT0;
+	s_secret.prev.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
+	s_secret.prev.generic.x = 364;
+	s_secret.prev.generic.y = 446;
 	s_secret.prev.generic.id = ID_PREV;
 	s_secret.prev.generic.callback = UI_Secret_MenuEvent;
 	s_secret.prev.width = 60;
-	s_secret.prev.height = 140;
-	s_secret.prev.focuspic = BARROWLT1;
+	s_secret.prev.height = 26;
+	s_secret.prev.focuspic = ARROWLT1;
 	s_secret.prev.focuspicinstead = qtrue;
 
 	s_secret.next.generic.type = MTYPE_BITMAP;
-	s_secret.next.generic.name = BARROWRT0;
-	s_secret.next.generic.flags = QMF_LEFT_JUSTIFY | QMF_HIGHLIGHT_IF_FOCUS;
-	s_secret.next.generic.x = 780;
-	s_secret.next.generic.y = 173;
+	s_secret.next.generic.name = ARROWRT0;
+	s_secret.next.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
+	s_secret.next.generic.x = 440;
+	s_secret.next.generic.y = 446;
 	s_secret.next.generic.id = ID_NEXT;
 	s_secret.next.generic.callback = UI_Secret_MenuEvent;
 	s_secret.next.width = 60;
-	s_secret.next.height = 140;
-	s_secret.next.focuspic = BARROWRT1;
+	s_secret.next.height = 26;
+	s_secret.next.focuspic = ARROWRT1;
 	s_secret.next.focuspicinstead = qtrue;
 
-	s_secret.back.generic.type = MTYPE_BITMAP;
-	s_secret.back.generic.name = BACK0;
-	s_secret.back.generic.flags = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
-	s_secret.back.generic.x = 8;
-	s_secret.back.generic.y = 446;
-	s_secret.back.generic.id = ID_BACK;
-	s_secret.back.generic.callback = UI_Secret_MenuEvent;
-	s_secret.back.width = 80;
-	s_secret.back.height = 40;
-	s_secret.back.focuspic = BACK1;
-	s_secret.back.focuspicinstead = qtrue;
+	s_secret.exit.generic.type = MTYPE_BITMAP;
+	s_secret.exit.generic.name = EXIT0;
+	s_secret.exit.generic.flags = QMF_PULSEIFFOCUS;
+	s_secret.exit.generic.x = 8;
+	s_secret.exit.generic.y = 446;
+	s_secret.exit.generic.id = ID_EXIT;
+	s_secret.exit.generic.callback = UI_Secret_MenuEvent;
+	s_secret.exit.width = 80;
+	s_secret.exit.height = 40;
+	s_secret.exit.focuspic = EXIT1;
+	s_secret.exit.focuspicinstead = qtrue;
 
 	Menu_AddItem(&s_secret.menu, &s_secret.secpic);
 	Menu_AddItem(&s_secret.menu, &s_secret.next);
 	Menu_AddItem(&s_secret.menu, &s_secret.prev);
-	Menu_AddItem(&s_secret.menu, &s_secret.back);
+	Menu_AddItem(&s_secret.menu, &s_secret.exit);
 
 	UI_Secret_MenuUpdate();
 
@@ -240,12 +230,12 @@ void UI_Secret_Cache(void) {
 	for (i = 0; i < MAX_SECRETPAGES; i++) {
 		trap_R_RegisterShaderNoMip(secretpics[i]);
 	}
-	trap_R_RegisterShaderNoMip(BARROWLT0);
-	trap_R_RegisterShaderNoMip(BARROWLT1);
-	trap_R_RegisterShaderNoMip(BARROWRT0);
-	trap_R_RegisterShaderNoMip(BARROWRT1);
-	trap_R_RegisterShaderNoMip(BACK0);
-	trap_R_RegisterShaderNoMip(BACK1);
+	trap_R_RegisterShaderNoMip(ARROWLT0);
+	trap_R_RegisterShaderNoMip(ARROWLT1);
+	trap_R_RegisterShaderNoMip(ARROWRT0);
+	trap_R_RegisterShaderNoMip(ARROWRT1);
+	trap_R_RegisterShaderNoMip(EXIT0);
+	trap_R_RegisterShaderNoMip(EXIT1);
 }
 
 /*
