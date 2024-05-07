@@ -503,4 +503,5 @@ CG_ToggleSpawnProtection
 void CG_ToggleSpawnProtection(int entNum, qboolean state) {
 	centity_t *cent = &cg_entities[entNum];
 	cent->spawnProtection = state;
+	Com_DPrintf("toggle spawn protection for %d to %i\n", entNum, state);
 }
