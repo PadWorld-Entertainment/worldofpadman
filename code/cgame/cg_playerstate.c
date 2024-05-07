@@ -494,3 +494,13 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops) {
 		cg.duckTime = cg.time;
 	}
 }
+
+/*
+===============
+CG_ToggleSpawnProtection
+===============
+*/
+void CG_ToggleSpawnProtection(int entNum, qboolean state) {
+	centity_t *cent = &cg_entities[entNum];
+	cent->spawnProtection = state;
+}

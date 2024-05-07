@@ -1335,7 +1335,8 @@ void ClientSpawn(gentity_t *ent) {
 	// start instagib spawn protection
 	if (g_modInstagib.integer) { 
 		ent->flags ^= FL_GODMODE;
-		client->startGod = level.time;
+		client->spawnProtect = level.time;
+		G_AddEvent(ent, EV_SPAWNPROTECT, qtrue);
 	}
 
 }

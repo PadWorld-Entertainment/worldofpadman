@@ -523,6 +523,7 @@ typedef enum {
 
 	EV_GIB_PLAYER, // gib a previously living player
 	EV_SCOREPLUM,  // score plum
+	EV_SPAWNPROTECT, // instagib spawn protection
 
 	EV_DEBUG_LINE,
 	EV_STOPLOOPINGSOUND,

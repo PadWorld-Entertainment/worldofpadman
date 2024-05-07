@@ -238,13 +238,14 @@ typedef struct localEntity_s {
 
 //=================================================
 
-// centity_t have a direct corespondence with gentity_t in the game, but
+// centity_t have a direct correspondence with gentity_t in the game, but
 // only the entityState_t is directly communicated to the cgame
 typedef struct centity_s {
 	entityState_t currentState; // from cg.frame
 	entityState_t nextState;	// from cg.nextFrame, if available
 	qboolean interpolate;		// true if next is valid to interpolate to
 	qboolean currentValid;		// true if cg.frame holds this entity
+	qboolean spawnProtection;	// set by EV_SPAWNPROTECT
 
 	int muzzleFlashTime; // move to playerEntity?
 	int previousEvent;
@@ -1599,6 +1600,7 @@ void CG_ShaderStateChanged(void);
 //
 void CG_Respawn(void);
 void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops);
+void CG_ToggleSpawnProtection(int entNum, qboolean state);
 
 //
 // cg_spraylogo.c

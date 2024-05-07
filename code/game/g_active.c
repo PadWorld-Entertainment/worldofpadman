@@ -743,9 +743,10 @@ static void ClientThink_real(gentity_t *ent) {
 	}
 
 	// stop instagib spawn protection
-	if (g_modInstagib.integer) { 	
-		if ((ent->flags & FL_GODMODE) && ((level.time - ent->client->startGod) > INSTAGIB_PROTECT_TIME)) {
+	if (g_modInstagib.integer) {
+		if ((ent->flags & FL_GODMODE) && ((level.time - ent->client->spawnProtect) > INSTAGIB_PROTECT_TIME)) {
 			ent->flags &= ~FL_GODMODE;
+			G_AddEvent(ent, EV_SPAWNPROTECT, qfalse);
 		}
 	}
 

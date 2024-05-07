@@ -2658,6 +2658,13 @@ static void CG_HudDrawHealthAndArmor(int hudnum) {
 	CG_SetScreenPlacement(PLACE_CENTER, PLACE_BOTTOM);
 
 	CG_AdjustFrom640(&x, &y, &w, &h);
+
+	// override tmpf when instagib spawn protection is active
+	// to flash the energy and shield bars
+	if (cg_entities[cg.snap->ps.clientNum].spawnProtection) {
+		tmpf = round(cos(cg.time * 0.01f) * 0.5f + 0.5f);
+	}
+
 	if (tmpf > 1.0f) {
 		tmpf2 = tmpf - 1.0f;
 		tmpf = 1.0f;
@@ -2675,7 +2682,10 @@ static void CG_HudDrawHealthAndArmor(int hudnum) {
 	}
 
 	tmpf2 = 0.0f;
-	tmpf = (float)cg.snap->ps.stats[STAT_ARMOR] * 0.01f;
+	if (!cg_entities[cg.snap->ps.clientNum].spawnProtection) {
+		tmpf = (float)cg.snap->ps.stats[STAT_ARMOR] * 0.01f;
+	}
+
 	x = 214 + 132;
 	y = 406 + 39;
 	w = 69;

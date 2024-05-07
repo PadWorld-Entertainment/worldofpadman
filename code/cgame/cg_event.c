@@ -924,6 +924,10 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		CG_ScorePlum(cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time);
 		break;
 
+	case EV_SPAWNPROTECT:
+		CG_ToggleSpawnProtection(es->number, es->eventParm);
+		break;
+
 	//
 	// missile impacts
 	//

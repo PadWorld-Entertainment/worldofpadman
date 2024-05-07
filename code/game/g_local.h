@@ -411,7 +411,7 @@ struct gclient_s {
 	int lastSentFlyingTime;
 
 	int dropTime;
-	int	startGod; // instagib spawn protection
+	int spawnProtect; // instagib spawn protection
 
 	int powerupsBackpack[MAX_POWERUPS];
 	qboolean frozen;
