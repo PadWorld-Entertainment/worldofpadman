@@ -747,6 +747,7 @@ static void ClientThink_real(gentity_t *ent) {
 		if ((ent->flags & FL_GODMODE) && ((level.time - ent->client->spawnProtect) > INSTAGIB_PROTECT_TIME)) {
 			ent->flags &= ~FL_GODMODE;
 			G_AddEvent(ent, EV_SPAWNPROTECT, qfalse);
+			Com_DPrintf("Stop spawn protection for %s\n", client->pers.netname);
 		}
 	}
 

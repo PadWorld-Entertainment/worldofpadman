@@ -1337,6 +1337,7 @@ void ClientSpawn(gentity_t *ent) {
 		ent->flags ^= FL_GODMODE;
 		client->spawnProtect = level.time;
 		G_AddEvent(ent, EV_SPAWNPROTECT, qtrue);
+		Com_DPrintf("Start spawn protection for %s\n", client->pers.netname);
 	}
 
 }
