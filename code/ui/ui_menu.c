@@ -352,13 +352,14 @@ void UI_MainMenu(void) {
 	s_main.mania.focuspicinstead = qtrue;
 
 	s_main.secret.generic.type = MTYPE_BITMAP;
-	s_main.secret.generic.flags = QMF_MOUSEONLY | QMF_SILENT | QMF_HIDDEN;
-	s_main.secret.generic.x = 302;
+	s_main.secret.generic.flags = QMF_MOUSEONLY | QMF_HIDDEN;
+	s_main.secret.generic.x = 305;
 	s_main.secret.generic.y = 316;
 	s_main.secret.generic.id = ID_SECRET;
 	s_main.secret.generic.callback = Main_MenuEvent;
 	s_main.secret.width = 40;
 	s_main.secret.height = 40;
+	s_main.secret.generic.focussfx = menuHeySound;
 
 	Menu_AddItem(&s_main.menu, &s_main.create);
 	Menu_AddItem(&s_main.menu, &s_main.join);

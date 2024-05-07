@@ -215,6 +215,7 @@ typedef struct {
 	menuframework_s *parent;
 	int menuPosition;
 	unsigned int flags;
+	sfxHandle_t focussfx;
 
 	/**
 	 * @param[in] event QM_GOTFOCUS, QM_LOSTFOCUS or QM_ACTIVATED
@@ -320,6 +321,7 @@ extern sfxHandle_t menuMoveSound;
 extern sfxHandle_t menuSwitchSound;
 extern sfxHandle_t menuClickSound;
 extern sfxHandle_t menuBuzzSound;
+extern sfxHandle_t menuHeySound;
 extern sfxHandle_t menuNullSound;
 extern sfxHandle_t weaponChangeSound;
 extern const vec4_t menu_text_color;

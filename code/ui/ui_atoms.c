@@ -964,7 +964,7 @@ void UI_MouseEvent(int dx, int dy) {
 	}
 
 	// region test the active menu items
-	//	for (i=0; i<uis.activemenu->nitems; i++)
+	// for (i=0; i<uis.activemenu->nitems; i++)
 	// draw order == selection order ...
 	for (i = uis.activemenu->nitems - 1; i >= 0; --i) {
 		m = (menucommon_s *)uis.activemenu->items[i];
@@ -985,7 +985,13 @@ void UI_MouseEvent(int dx, int dy) {
 				((menucommon_s *)(uis.activemenu->items[uis.activemenu->cursor_prev]))->flags &= ~QMF_HASMOUSEFOCUS;
 
 			if (!(((menucommon_s *)(uis.activemenu->items[uis.activemenu->cursor]))->flags & QMF_SILENT)) {
-				trap_S_StartLocalSound(menuMoveSound, CHAN_LOCAL_SOUND);
+				sfxHandle_t sfx = ((menucommon_s *)(uis.activemenu->items[uis.activemenu->cursor]))->focussfx;
+				// check for existing focus sound to be played instead of default sound
+				if (sfx != 0) {
+					trap_S_StartLocalSound(sfx, CHAN_LOCAL_SOUND);
+				} else {
+					trap_S_StartLocalSound(menuMoveSound, CHAN_LOCAL_SOUND);
+				}				
 			}
 		}
 

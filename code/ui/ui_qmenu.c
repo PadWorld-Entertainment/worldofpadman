@@ -31,6 +31,7 @@ sfxHandle_t menuMoveSound;
 sfxHandle_t menuSwitchSound;
 sfxHandle_t menuClickSound;
 sfxHandle_t menuBuzzSound;
+sfxHandle_t menuHeySound;
 sfxHandle_t menuNullSound;
 sfxHandle_t weaponChangeSound;
 
@@ -1876,6 +1877,7 @@ void Menu_Cache(void) {
 	menuClickSound = trap_S_RegisterSound("sound/feedback/menu/click", qfalse);
 	menuMoveSound = trap_S_RegisterSound("sound/feedback/menu/move", qfalse);
 	menuBuzzSound = trap_S_RegisterSound("sound/feedback/menu/buzz", qfalse);
+	menuHeySound = trap_S_RegisterSound("sound/feedback/menu/hey", qfalse);
 	weaponChangeSound = trap_S_RegisterSound("sound/weapons/change", qfalse);
 
 	// need a nonzero sound, make an empty sound for this
