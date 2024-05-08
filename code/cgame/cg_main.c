@@ -175,7 +175,6 @@ vmCvar_t cg_drawups;
 vmCvar_t cg_drawMessages;
 vmCvar_t cg_drawServerInfos;
 vmCvar_t cg_drawTimeLeft;
-vmCvar_t cg_thirdPersonAutoSwitch;
 vmCvar_t cg_bigScoreType;
 
 vmCvar_t cg_cineHideHud; // FIXME: would be better to rename it to "cutscene"-mode
@@ -313,7 +312,6 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_drawMessages, "cg_drawMessages", "1", CVAR_ARCHIVE},
 	{&cg_drawServerInfos, "cg_drawServerInfos", "0", CVAR_ARCHIVE},
 	{&cg_drawTimeLeft, "cg_drawTimeLeft", "0", CVAR_ARCHIVE},
-	{&cg_thirdPersonAutoSwitch, "cg_thirdPersonAutoSwitch", "0", CVAR_ARCHIVE},
 	{&cg_bigScoreType, "cg_bigScoreType", "0", 0},
 
 	{&cg_cineHideHud, "cg_CINE_hideHUD", "0", CVAR_TEMP},

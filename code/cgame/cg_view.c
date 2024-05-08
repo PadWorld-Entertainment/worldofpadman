@@ -868,13 +868,6 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	cg.millis = trap_Milliseconds();
 	cg.demoPlayback = demoPlayback;
 
-	if (cg_thirdPersonAutoSwitch.integer == 1) {
-		if (cg.weaponSelect == WP_PUNCHY && cg_thirdPerson.integer == 0)
-			trap_Cvar_Set("cg_thirdPerson", "1");
-		else if (cg.weaponSelect != WP_PUNCHY && cg_thirdPerson.integer != 0)
-			trap_Cvar_Set("cg_thirdPerson", "0");
-	}
-
 	// update cvars
 	CG_UpdateCvars();
 

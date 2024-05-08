@@ -1318,7 +1318,6 @@ extern vmCvar_t cg_drawups;
 extern vmCvar_t cg_drawMessages;
 extern vmCvar_t cg_drawServerInfos;
 extern vmCvar_t cg_drawTimeLeft;
-extern vmCvar_t cg_thirdPersonAutoSwitch;
 extern vmCvar_t cg_bigScoreType;
 
 extern vmCvar_t cg_cineHideHud;
