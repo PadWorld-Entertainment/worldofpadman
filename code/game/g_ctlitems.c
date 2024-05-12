@@ -115,9 +115,8 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 				trap_SendServerCommand(clientNum, "cp \"Too close to health station\"");
 				return qfalse;
 			}
-		} else if (otherEnt->s.eType == ET_ITEM &&
-				   (otherEnt->item->giTag == PW_REDFLAG || otherEnt->item->giTag == PW_BLUEFLAG	||
-				   	otherEnt->item->giTag == PW_NEUTRALFLAG)) {
+		} else if (otherEnt->s.eType == ET_ITEM && (otherEnt->item->giTag == PW_REDFLAG || otherEnt->item->giTag == PW_BLUEFLAG	||
+				   	otherEnt->item->giTag == PW_NEUTRALFLAG) && (g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF)) {
 			float distSqr = DistanceSquared(otherEnt->s.pos.trBase, spot);
 			if (distSqr < Square(256)) {
 				trap_SendServerCommand(clientNum, "cp \"Too close to lolly base\"");
@@ -127,7 +126,6 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 			// triggers have no origin \o/
 			vec3_t origin;
 			float distSqr;
-
 			VectorAdd(otherEnt->r.mins, otherEnt->r.maxs, origin);
 			VectorScale(origin, 0.5, origin);
 			distSqr = DistanceSquared(origin, spot);
@@ -155,11 +153,10 @@ static qboolean IsBambamBoomieSpotClean(vec3_t spot, gentity_t *pEnt, const char
 				trap_SendServerCommand(clientNum, "cp \"Too close to spawn point\"");
 				return qfalse;
 			}
-		} else if (!Q_stricmp(otherEnt->classname, "trigger_balloonzone")) {
+		} else if (!Q_stricmp(otherEnt->classname, "trigger_balloonzone") && (g_gametype.integer == GT_BALLOON)) {
 			// triggers have no origin \o/
 			vec3_t origin;
 			float distSqr;
-
 			VectorAdd(otherEnt->r.mins, otherEnt->r.maxs, origin);
 			VectorScale(origin, 0.5, origin);
 			distSqr = DistanceSquared(origin, spot);
