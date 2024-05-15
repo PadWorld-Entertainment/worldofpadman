@@ -98,7 +98,7 @@ void SCR_DrawPic(float x, float y, float width, float height, qhandle_t hShader)
 ** SCR_DrawChar
 ** chars are drawn at 640*480 virtual screen size
 */
-static void SCR_DrawChar(int x, int y, float size, int ch) {
+static void SCR_DrawCharExt(int x, int y, float size, int ch) {
 	int row, col;
 	float frow, fcol;
 	float ax, ay, aw, ah;
@@ -130,35 +130,6 @@ static void SCR_DrawChar(int x, int y, float size, int ch) {
 }
 
 /*
-** SCR_DrawSmallChar
-** small chars are drawn at native screen resolution
-*/
-void SCR_DrawSmallChar(int x, int y, int ch) {
-	int row, col;
-	float frow, fcol;
-	float size;
-
-	ch &= 255;
-
-	if (ch == ' ') {
-		return;
-	}
-
-	if (y < -SMALLCHAR_HEIGHT) {
-		return;
-	}
-
-	row = ch >> 4;
-	col = ch & 15;
-
-	frow = row * 0.0625f;
-	fcol = col * 0.0625f;
-	size = 0.0625f;
-
-	re.DrawStretchPic(x, y, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, fcol, frow, fcol + size, frow + size, cls.charsetShader);
-}
-
-/*
 ==================
 SCR_DrawBigString[Color]
 
@@ -185,7 +156,7 @@ static void SCR_DrawStringExt(int x, int y, float size, const char *string, floa
 			s += 2;
 			continue;
 		}
-		SCR_DrawChar(xx + 1, y + 1, size, *s);
+		SCR_DrawCharExt(xx + 1, y + 1, size, *s);
 		xx += size;
 		s++;
 	}
@@ -206,19 +177,40 @@ static void SCR_DrawStringExt(int x, int y, float size, const char *string, floa
 				continue;
 			}
 		}
-		SCR_DrawChar(xx, y, size, *s);
+		SCR_DrawCharExt(xx, y, size, *s);
 		xx += size;
 		s++;
 	}
 	re.SetColor(NULL);
 }
 
-void SCR_DrawBigString(int x, int y, const char *s, float alpha, qboolean noColorEscape) {
-	float color[4];
+/*
+** SCR_DrawSmallChar
+** small chars are drawn at native screen resolution
+*/
+void SCR_DrawChar(int x, int y, int ch, fontSize_t fsize) {
+	int row, col;
+	float frow, fcol;
+	float size;
 
-	color[0] = color[1] = color[2] = 1.0f;
-	color[3] = alpha;
-	SCR_DrawStringExt(x, y, BIGCHAR_WIDTH, s, color, qfalse, noColorEscape);
+	ch &= 255;
+
+	if (ch == ' ') {
+		return;
+	}
+
+	if (y < -fsize.h) {
+		return;
+	}
+
+	row = ch >> 4;
+	col = ch & 15;
+
+	frow = row * 0.0625f;
+	fcol = col * 0.0625f;
+	size = 0.0625f;
+
+	re.DrawStretchPic(x, y, fsize.h, fsize.h, fcol, frow, fcol + size, frow + size, cls.charsetShader);
 }
 
 /*
@@ -229,11 +221,13 @@ Draws a multi-colored string with a drop shadow, optionally forcing
 to a fixed color.
 ==================
 */
-void SCR_DrawSmallStringExt(int x, int y, const char *string, float *setColor, qboolean forceColor,
-							qboolean noColorEscape) {
+void SCR_DrawString(int x, int y, const char *string, qboolean noColorEscape, fontSize_t fontsize) {
 	vec4_t color;
 	const char *s;
 	int xx;
+	vec4_t setColor;
+
+	setColor[0] = setColor[1] = setColor[2] = setColor[3] = 1.0f;
 
 	// draw the colored text
 	s = string;
@@ -241,18 +235,16 @@ void SCR_DrawSmallStringExt(int x, int y, const char *string, float *setColor, q
 	re.SetColor(setColor);
 	while (*s) {
 		if (Q_IsColorString(s)) {
-			if (!forceColor) {
-				Com_Memcpy(color, g_color_table[ColorIndex(*(s + 1))], sizeof(color));
-				color[3] = setColor[3];
-				re.SetColor(color);
-			}
+			Com_Memcpy(color, g_color_table[ColorIndex(*(s + 1))], sizeof(color));
+			color[3] = setColor[3];
+			re.SetColor(color);
 			if (!noColorEscape) {
 				s += 2;
 				continue;
 			}
 		}
-		SCR_DrawSmallChar(xx, y, *s);
-		xx += SMALLCHAR_WIDTH;
+		SCR_DrawChar(xx, y, *s, fontsize);
+		xx += fontsize.w;
 		s++;
 	}
 	re.SetColor(NULL);
@@ -275,13 +267,6 @@ static int SCR_Strlen(const char *str) {
 	}
 
 	return count;
-}
-
-/*
-** SCR_GetBigStringWidth
-*/
-int SCR_GetBigStringWidth(const char *str) {
-	return SCR_Strlen(str) * BIGCHAR_WIDTH;
 }
 
 //===============================================================================

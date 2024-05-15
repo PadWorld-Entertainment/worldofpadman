@@ -24,7 +24,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "client.h"
 
 int g_console_field_width = 78;
+static fontSize_t fontSize;
 
+#define MAX_CONSOLE_WIDTH 120
 #define NUM_CON_TIMES 4
 
 #define CON_TEXTSIZE 32768
@@ -38,6 +40,7 @@ typedef struct {
 
 	int linewidth;	// characters across screen
 	int totallines; // total lines in console scrollback
+	int viswidth;
 
 	float xadjust; // for wide aspect screens
 
@@ -51,11 +54,12 @@ typedef struct {
 	vec4_t color;
 } console_t;
 
-console_t con;
+static console_t con;
 
-cvar_t *con_conspeed;
-cvar_t *con_autoclear;
-cvar_t *con_notifytime;
+static cvar_t *con_conspeed;
+static cvar_t *con_autoclear;
+static cvar_t *con_notifytime;
+static cvar_t *con_scale;
 
 #define DEFAULT_CONSOLE_WIDTH 78
 
@@ -156,7 +160,7 @@ static void Con_MessageMode4_f(void) {
 Con_Clear_f
 ================
 */
-void Con_Clear_f(void) {
+static void Con_Clear_f(void) {
 	int i;
 
 	for (i = 0; i < CON_TEXTSIZE; i++) {
@@ -265,54 +269,79 @@ If the line width has changed, reformat the buffer.
 ================
 */
 void Con_CheckResize(void) {
-	int i, j, width, oldwidth, oldtotallines, numlines, numchars;
-	short tbuf[CON_TEXTSIZE];
+	float scale;
 
-	width = (SCREEN_WIDTH / SMALLCHAR_WIDTH) - 2;
-
-	if (width == con.linewidth)
+	if (con.viswidth == cls.glconfig.vidWidth && !con_scale->modified) {
 		return;
+	}
 
-	if (width < 1) // video hasn't been initialized yet
+	scale = con_scale->value;
+
+	con.viswidth = cls.glconfig.vidWidth;
+
+	fontSize.w = SMALLCHAR_WIDTH * scale;
+	fontSize.h = SMALLCHAR_HEIGHT * scale;
+
+	if (cls.glconfig.vidWidth == 0) // video hasn't been initialized yet
 	{
-		width = DEFAULT_CONSOLE_WIDTH;
+		int width;
+		g_console_field_width = DEFAULT_CONSOLE_WIDTH;
+		width = DEFAULT_CONSOLE_WIDTH * scale;
 		con.linewidth = width;
 		con.totallines = CON_TEXTSIZE / con.linewidth;
-		for (i = 0; i < CON_TEXTSIZE; i++)
 
-			con.text[i] = (ColorIndex(COLOR_WHITE) << 8) | ' ';
+		Con_Clear_f();
 	} else {
-		oldwidth = con.linewidth;
-		con.linewidth = width;
-		oldtotallines = con.totallines;
-		con.totallines = CON_TEXTSIZE / con.linewidth;
-		numlines = oldtotallines;
+		int oldcurrent, oldwidth, oldtotallines;
+		short tbuf[CON_TEXTSIZE];
+		int i, j, width, numlines, numchars;
 
-		if (con.totallines < numlines)
-			numlines = con.totallines;
+		width = ((cls.glconfig.vidWidth / fontSize.w) - 2);
+
+		g_console_field_width = width;
+		g_consoleField.widthInChars = g_console_field_width;
+
+		if (width > MAX_CONSOLE_WIDTH)
+			width = MAX_CONSOLE_WIDTH;
+
+		oldwidth = con.linewidth;
+		oldtotallines = con.totallines;
+		oldcurrent = con.current;
+
+		con.linewidth = width;
+		con.totallines = CON_TEXTSIZE / con.linewidth;
 
 		numchars = oldwidth;
-
-		if (con.linewidth < numchars)
+		if (numchars > con.linewidth)
 			numchars = con.linewidth;
 
-		Com_Memcpy(tbuf, con.text, CON_TEXTSIZE * sizeof(short));
-		for (i = 0; i < CON_TEXTSIZE; i++)
+		if (oldcurrent > oldtotallines)
+			numlines = oldtotallines;
+		else
+			numlines = oldcurrent + 1;
 
+		if (numlines > con.totallines)
+			numlines = con.totallines;
+
+		Com_Memcpy(tbuf, con.text, CON_TEXTSIZE * sizeof(short));
+
+		for (i = 0; i < CON_TEXTSIZE; i++)
 			con.text[i] = (ColorIndex(COLOR_WHITE) << 8) | ' ';
 
 		for (i = 0; i < numlines; i++) {
-			for (j = 0; j < numchars; j++) {
-				con.text[(con.totallines - 1 - i) * con.linewidth + j] =
-					tbuf[((con.current - i + oldtotallines) % oldtotallines) * oldwidth + j];
-			}
+			const short *src = &tbuf[((oldcurrent - i + oldtotallines) % oldtotallines) * oldwidth];
+			short *dst = &con.text[(numlines - 1 - i) * con.linewidth];
+			for (j = 0; j < numchars; j++)
+				*dst++ = *src++;
 		}
 
 		Con_ClearNotify();
+
+		con.current = numlines - 1;
 	}
 
-	con.current = con.totallines - 1;
 	con.display = con.current;
+	con_scale->modified = qfalse;
 }
 
 /*
@@ -337,6 +366,11 @@ void Con_Init(void) {
 	con_notifytime = Cvar_Get("con_notifytime", "-4", 0);
 	con_conspeed = Cvar_Get("scr_conspeed", "3", 0);
 	con_autoclear = Cvar_Get("con_autoclear", "1", CVAR_ARCHIVE);
+	con_scale = Cvar_Get("con_scale", "1", CVAR_ARCHIVE);
+	Cvar_CheckRange(con_scale, 1, 4, qtrue);
+
+	fontSize.w = SMALLCHAR_WIDTH * con_scale->value;
+	fontSize.h = SMALLCHAR_HEIGHT * con_scale->value;
 
 	Field_Clear(&g_consoleField);
 	g_consoleField.widthInChars = g_console_field_width;
@@ -426,8 +460,15 @@ void CL_ConsolePrint(const char *txt) {
 	}
 
 	if (!con.initialized) {
+		static cvar_t null_cvar = { 0 };
+		fontSize.w = SMALLCHAR_WIDTH;
+		fontSize.h = SMALLCHAR_HEIGHT;
 		con.color[0] = con.color[1] = con.color[2] = con.color[3] = 1.0f;
+		con.viswidth = -9999;
 		con.linewidth = -1;
+		con_scale = &null_cvar;
+		con_scale->value = 1.0f;
+		con_scale->modified = qtrue;
 		Con_CheckResize();
 		con.initialized = qtrue;
 	}
@@ -508,13 +549,13 @@ static void Con_DrawInput(void) {
 		return;
 	}
 
-	y = con.vislines - (SMALLCHAR_HEIGHT * 2);
+	y = con.vislines - (fontSize.h * 2);
 
 	re.SetColor(con.color);
 
-	SCR_DrawSmallChar(con.xadjust + 1 * SMALLCHAR_WIDTH, y, ']');
+	SCR_DrawChar(con.xadjust + 1 * fontSize.w, y, ']', fontSize);
 
-	Field_Draw(&g_consoleField, con.xadjust + 2 * SMALLCHAR_WIDTH, y, SCREEN_WIDTH - 3 * SMALLCHAR_WIDTH, qtrue, qtrue);
+	Field_Draw(&g_consoleField, con.xadjust + 2 * fontSize.w, y, SCREEN_WIDTH - 3 * fontSize.w, qtrue, qtrue, fontSize);
 }
 
 /*
@@ -559,10 +600,10 @@ void Con_DrawNotify(void) {
 				currentColor = ColorIndexForNumber(text[x] >> 8);
 				re.SetColor(g_color_table[currentColor]);
 			}
-			SCR_DrawSmallChar(cl_conXOffset->integer + con.xadjust + (x + 1) * SMALLCHAR_WIDTH, v, text[x] & 0xff);
+			SCR_DrawChar(cl_conXOffset->integer + con.xadjust + (x + 1) * fontSize.w, v, text[x] & 0xff, fontSize);
 		}
 
-		v += SMALLCHAR_HEIGHT;
+		v += fontSize.h;
 	}
 
 	re.SetColor(NULL);
@@ -574,14 +615,14 @@ void Con_DrawNotify(void) {
 	// draw the chat line
 	if (Key_GetCatcher() & KEYCATCH_MESSAGE) {
 		if (chat_team) {
-			SCR_DrawBigString(8, v, "say_team:", 1.0f, qfalse);
+			SCR_DrawString(8, v, "say_team:", qfalse, FONT_BIG);
 			skip = 10;
 		} else {
-			SCR_DrawBigString(8, v, "say:", 1.0f, qfalse);
+			SCR_DrawString(8, v, "say:", qfalse, FONT_BIG);
 			skip = 5;
 		}
 
-		Field_BigDraw(&chatField, skip * BIGCHAR_WIDTH, v, SCREEN_WIDTH - (skip + 1) * BIGCHAR_WIDTH, qtrue, qtrue);
+		Field_Draw(&chatField, skip * FONT_BIG.w, v, SCREEN_WIDTH - (skip + 1) * FONT_BIG.w, qtrue, qtrue, FONT_BIG);
 	}
 }
 
@@ -635,23 +676,23 @@ static void Con_DrawSolidConsole(float frac) {
 	i = strlen(Q3_VERSION);
 
 	for (x = 0; x < i; x++) {
-		SCR_DrawSmallChar(cls.glconfig.vidWidth - (i - x + 1) * SMALLCHAR_WIDTH, lines - SMALLCHAR_HEIGHT,
-						  Q3_VERSION[x]);
+		SCR_DrawChar(cls.glconfig.vidWidth - (i - x + 1) * fontSize.w, lines - fontSize.h,
+						  Q3_VERSION[x], fontSize);
 	}
 
 	// draw the text
 	con.vislines = lines;
-	rows = (lines - SMALLCHAR_HEIGHT) / SMALLCHAR_HEIGHT; // rows of text to draw
+	rows = (lines - fontSize.h) / fontSize.h; // rows of text to draw
 
-	y = lines - (SMALLCHAR_HEIGHT * 3);
+	y = lines - (fontSize.h * 3);
 
 	// draw from the bottom up
 	if (con.display != con.current) {
 		// draw arrows to show the buffer is backscrolled
 		re.SetColor(g_color_table[ColorIndex(COLOR_RED)]);
 		for (x = 0; x < con.linewidth; x += 4)
-			SCR_DrawSmallChar(con.xadjust + (x + 1) * SMALLCHAR_WIDTH, y, '^');
-		y -= SMALLCHAR_HEIGHT;
+			SCR_DrawChar(con.xadjust + (x + 1) * fontSize.w, y, '^', fontSize);
+		y -= fontSize.h;
 		rows--;
 	}
 
@@ -664,7 +705,7 @@ static void Con_DrawSolidConsole(float frac) {
 	currentColor = 7;
 	re.SetColor(g_color_table[currentColor]);
 
-	for (i = 0; i < rows; i++, y -= SMALLCHAR_HEIGHT, row--) {
+	for (i = 0; i < rows; i++, y -= fontSize.h, row--) {
 		if (row < 0)
 			break;
 		if (con.current - row >= con.totallines) {
@@ -683,7 +724,7 @@ static void Con_DrawSolidConsole(float frac) {
 				currentColor = ColorIndexForNumber(text[x] >> 8);
 				re.SetColor(g_color_table[currentColor]);
 			}
-			SCR_DrawSmallChar(con.xadjust + (x + 1) * SMALLCHAR_WIDTH, y, text[x] & 0xff);
+			SCR_DrawChar(con.xadjust + (x + 1) * fontSize.w, y, text[x] & 0xff, fontSize);
 		}
 	}
 

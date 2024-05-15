@@ -328,8 +328,11 @@ Handles horizontal scrolling and cursor blinking
 x, y, and width are in pixels
 ===================
 */
-static void Field_VariableSizeDraw(field_t *edit, int x, int y, int width, int size, qboolean showCursor,
+static void Field_VariableSizeDraw(field_t *edit, int x, int y, int width, int fontsize, qboolean showCursor,
 								   qboolean noColorEscape) {
+}
+
+void Field_Draw(field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape, fontSize_t fontsize) {
 	int len;
 	int drawLen;
 	int prestep;
@@ -366,15 +369,7 @@ static void Field_VariableSizeDraw(field_t *edit, int x, int y, int width, int s
 	str[drawLen] = 0;
 
 	// draw it
-	if (size == SMALLCHAR_WIDTH) {
-		float color[4];
-
-		color[0] = color[1] = color[2] = color[3] = 1.0f;
-		SCR_DrawSmallStringExt(x, y, str, color, qfalse, noColorEscape);
-	} else {
-		// draw big string with drop shadow
-		SCR_DrawBigString(x, y, str, 1.0f, noColorEscape);
-	}
+	SCR_DrawString(x, y, str, noColorEscape, fontsize);
 
 	// draw the cursor
 	if (showCursor) {
@@ -390,22 +385,10 @@ static void Field_VariableSizeDraw(field_t *edit, int x, int y, int width, int s
 
 		i = drawLen - strlen(str);
 
-		if (size == SMALLCHAR_WIDTH) {
-			SCR_DrawSmallChar(x + (edit->cursor - prestep - i) * size, y, cursorChar);
-		} else {
-			str[0] = cursorChar;
-			str[1] = 0;
-			SCR_DrawBigString(x + (edit->cursor - prestep - i) * size, y, str, 1.0f, qfalse);
-		}
+		str[0] = cursorChar;
+		str[1] = 0;
+		SCR_DrawString(x + (edit->cursor - prestep - i) * fontsize.w, y, str, qfalse, fontsize);
 	}
-}
-
-void Field_Draw(field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape) {
-	Field_VariableSizeDraw(edit, x, y, width, SMALLCHAR_WIDTH, showCursor, noColorEscape);
-}
-
-void Field_BigDraw(field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape) {
-	Field_VariableSizeDraw(edit, x, y, width, BIGCHAR_WIDTH, showCursor, noColorEscape);
 }
 
 static void Field_CharEvent(field_t *edit, int ch);

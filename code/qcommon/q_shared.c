@@ -28,6 +28,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 const int demo_protocols[] = {66, 67, PROTOCOL_LEGACY_VERSION, 69, 70, 71, PROTOCOL_VERSION, 0};
 
+fontSize_t FONT_SMALL = {SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT};
+fontSize_t FONT_BIG = {BIGCHAR_WIDTH, BIGCHAR_HEIGHT};
+
 // ^[0-9a-zA-Z]
 qboolean Q_IsColorString(const char *p) {
 	if (!p)

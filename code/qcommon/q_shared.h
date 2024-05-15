@@ -401,6 +401,14 @@ extern vec3_t bytedirs[NUMVERTEXNORMALS];
 #define GIANTCHAR_WIDTH 32
 #define GIANTCHAR_HEIGHT 48
 
+typedef struct {
+	int w;
+	int h;
+} fontSize_t;
+
+extern fontSize_t FONT_SMALL;
+extern fontSize_t FONT_BIG;
+
 extern vec4_t colorBlack;
 extern vec4_t colorRed;
 extern vec4_t colorGreen;

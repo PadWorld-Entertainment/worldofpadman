@@ -31,8 +31,7 @@ typedef struct {
 
 extern qkey_t keys[MAX_KEYS];
 
-void Field_Draw(field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape);
-void Field_BigDraw(field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape);
+void Field_Draw(field_t *edit, int x, int y, int width, qboolean showCursor, qboolean noColorEscape, fontSize_t fontsize);
 
 #define COMMAND_HISTORY 32
 extern field_t historyEditLines[COMMAND_HISTORY];
