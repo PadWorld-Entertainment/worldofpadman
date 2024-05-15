@@ -88,7 +88,7 @@ static void CG_SprayTrail(centity_t *cent, vec3_t start) {
 						 cg.time, 0, 0, cgs.media.spraypuff);
 	// use the optimized local entity add
 	smoke->leType = LE_SPRAYTRAIL;							 // LE_MOVE_SCALE_FADE
-	smoke->angles.trDuration = 1000.0f * 256.0f / PUFFSPEED; // missbrauch !! :P
+	smoke->angles.trDuration = 1000.0f * 256.0f / PUFFSPEED; // FIXME abuse
 }
 
 /*
@@ -1944,7 +1944,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 	if (!mark)
 		return;
 
-	if (weapon == WP_BOASTER && clientNum) // clientNum wird hier missbraucht ;P
+	if (weapon == WP_BOASTER && clientNum) // FIXME abuse: clientNum
 		return;
 
 	// HERBY: Bubble G

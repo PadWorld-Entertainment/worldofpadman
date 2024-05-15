@@ -1622,7 +1622,7 @@ void BotUpdateBattleInventory(bot_state_t *bs, int enemy) {
 static void BotUseKillerducks(bot_state_t *bs) {
 	int enemies, teammates;
 
-	// abuse: inv_time wird bei jedem check und USE gesetzt
+	// FIXME abuse: inv_time wird bei jedem check und USE gesetzt
 	if (bs->duckuse_time > FloatTime())
 		return;
 	bs->duckuse_time = FloatTime() + 1;

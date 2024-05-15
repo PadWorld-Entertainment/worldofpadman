@@ -865,7 +865,7 @@ static void CG_AddWaterBeam(localEntity_t *le) {
 
 			if (!(tr.surfaceFlags & SURF_NOIMPACT))
 				CG_MissileHitWall(WP_BOASTER, (tr.entityNum == ENTITYNUM_WORLD && tr.plane.normal[2] > 0.8), tr.endpos,
-								  tr.plane.normal, 0, IMPACTSOUND_DEFAULT); // clientNum wird hier missbraucht ;P
+								  tr.plane.normal, 0, IMPACTSOUND_DEFAULT); // FIXME abuse: clientNum
 
 			CG_FreeLocalEntity(le);
 			return;

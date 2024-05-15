@@ -400,6 +400,7 @@ qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 	entBam->parent = pEnt;
 
 	// Needed for clientside bambam health bar, abuse some vars
+	// FIXME abuse
 	entBam->s.angles2[2] = (float)((float)entBam->health / HEALTH_BAMBAM);
 	entBam->pain = bambam_pain;
 

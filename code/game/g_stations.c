@@ -29,6 +29,7 @@ s.angles2[2] => health in the station (0: leer, 1:voll ... wird in der cgame gen
 // TODO: #defines for FULLENERGYMESSAGE_DELAY, TOUCH_DELAY, (.3/500)
 
 /*
+FIXME abuse:
 	Other abused entity fields:
 		health:			current amount of health left in station. Also see angles2[2]
 		damage:			maximum amount of health in station (for reloading)
