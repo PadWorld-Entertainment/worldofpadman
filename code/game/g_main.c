@@ -2037,10 +2037,6 @@ static void WoP_RunFrame(void) {
 			continue;
 		}
 
-		ent->client->ps.stats[STAT_HB_EFLAGS] = ent->s.time2 =
-			(ent->s.eFlags >> 16); // missbrauch !!! ... it's a hack to bring the higher bytes from server to client (it
-								   // seems the engine just sends 16bit)
-
 		// broadcast boasteruser (why?)
 		if (level.clients[i].ps.weapon == WP_BOASTER)
 			ent->r.svFlags |= SVF_BROADCAST;

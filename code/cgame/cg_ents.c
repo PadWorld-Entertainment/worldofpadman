@@ -1270,7 +1270,6 @@ static void CG_AddCEntity(centity_t *cent) {
 		CG_General(cent);
 		break;
 	case ET_PLAYER:
-		cent->currentState.eFlags |= (cent->currentState.time2 << 16);
 		CG_Player(cent);
 		break;
 	case ET_ITEM:

@@ -272,9 +272,7 @@ typedef enum {
 	STAT_BALLOONTIME,
 	STAT_FORBIDDENITEMS,
 
-	STAT_CHILL,
-
-	STAT_HB_EFLAGS // copy of the higher bytes of eFlags
+	STAT_CHILL
 } statIndex_t;
 
 #define STAT_LIVESLEFT STAT_SPRAYROOMSECS // in LPS we don't need the sprayroom seconds

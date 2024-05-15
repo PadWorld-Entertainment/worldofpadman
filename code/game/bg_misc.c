@@ -1201,7 +1201,6 @@ void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean s
 	s->torsoAnim = ps->torsoAnim;
 	s->clientNum = ps->clientNum; // ET_PLAYER looks here instead of at number
 								  // so corpses can also reference the proper config
-	ps->eFlags = (ps->eFlags & 0xFFFF) | (ps->stats[STAT_HB_EFLAGS] << 16);
 	s->eFlags = ps->eFlags;
 	if (ps->stats[STAT_HEALTH] <= 0) {
 		s->eFlags |= EF_DEAD;
