@@ -257,8 +257,8 @@ static void move_killerducks(gentity_t *ent) {
 	int tmptime;
 	trace_t tr;
 	vec3_t tmpv3, tmpv3_2;
-	int i, opfer;	   // rofl
-	float opferlenght; //""
+	int i, victim;
+	float victimLen;
 
 	// checkjumppads
 	int touch[MAX_GENTITIES];
@@ -280,7 +280,7 @@ static void move_killerducks(gentity_t *ent) {
 			continue;
 
 		if (!Q_stricmp(g_entities[touch[i]].classname, "trigger_push")) {
-			//			Com_Printf("kd im jumppad\n");
+			// Com_Printf("kd in jumppad\n");
 			ent->s.pos.trDelta[0] = g_entities[touch[i]].s.origin2[0];
 			ent->s.pos.trDelta[1] = g_entities[touch[i]].s.origin2[1];
 			ent->s.pos.trDelta[2] = g_entities[touch[i]].s.origin2[2];
@@ -303,8 +303,8 @@ static void move_killerducks(gentity_t *ent) {
 	}
 	// CJP end
 
-	opferlenght = (1024.0f * 1024.0f); // 262144.0f;//(512.0f)
-	opfer = -1;
+	victimLen = (1024.0f * 1024.0f); // 262144.0f;//(512.0f)
+	victim = -1;
 	for (i = 0; i < g_maxclients.integer; i++) {
 		if (level.clients[i].pers.connected != CON_CONNECTED)
 			continue;
@@ -323,14 +323,14 @@ static void move_killerducks(gentity_t *ent) {
 
 		tmpv3[0] = tmpv3[0] * tmpv3[0] + tmpv3[1] * tmpv3[1] + tmpv3[2] * tmpv3[2];
 
-		if (tmpv3[0] < opferlenght) {
-			opfer = i;
-			opferlenght = tmpv3[0];
+		if (tmpv3[0] < victimLen) {
+			victim = i;
+			victimLen = tmpv3[0];
 		}
 	}
 
 	// check distance of the owner
-	if (opfer == -1) {
+	if (victim == -1) {
 		tmpv3[0] = level.clients[ownerNum].ps.origin[0] - ent->r.currentOrigin[0];
 		tmpv3[1] = level.clients[ownerNum].ps.origin[1] - ent->r.currentOrigin[1];
 		tmpv3[2] = (level.clients[ownerNum].ps.origin[2] - ent->r.currentOrigin[2]) *
@@ -338,20 +338,20 @@ static void move_killerducks(gentity_t *ent) {
 
 		tmpv3[0] = tmpv3[0] * tmpv3[0] + tmpv3[1] * tmpv3[1] + tmpv3[2] * tmpv3[2];
 
-		if (tmpv3[0] < opferlenght) {
-			opfer = ownerNum; // r.ownerNum;
-			opferlenght = tmpv3[0];
+		if (tmpv3[0] < victimLen) {
+			victim = ownerNum; // r.ownerNum;
+			victimLen = tmpv3[0];
 		}
 	}
 
-	if (opfer != -1 &&
-		(level.time - (ent->nextthink - 10000)) > 500) // in die ersten 1/2 sek. sollen die opfer egal sein
+	if (victim != -1 &&
+		(level.time - (ent->nextthink - 10000)) > 500) // the first half second the victim should be irrelevant
 	{
 		float tmpf;
 
-		tmpv3[0] = level.clients[opfer].ps.origin[0] - ent->r.currentOrigin[0];
-		tmpv3[1] = level.clients[opfer].ps.origin[1] - ent->r.currentOrigin[1];
-		//			tmpv3[2]=level.clients[opfer].ps.origin[2]-ent->r.currentOrigin[2];
+		tmpv3[0] = level.clients[victim].ps.origin[0] - ent->r.currentOrigin[0];
+		tmpv3[1] = level.clients[victim].ps.origin[1] - ent->r.currentOrigin[1];
+		//			tmpv3[2]=level.clients[victim].ps.origin[2]-ent->r.currentOrigin[2];
 		tmpv3[2] = 0.0f;
 
 		//:HERBY:ea
@@ -449,7 +449,7 @@ static void move_killerducks(gentity_t *ent) {
 		//				ent->s.pos.trDelta[2]=0;
 		//			}
 		//			else
-		if (tr.contents & CONTENTS_SOLID) // tr.entityNum==ENTITYNUM_WORLD)//!=opfer)
+		if (tr.contents & CONTENTS_SOLID) // tr.entityNum==ENTITYNUM_WORLD)//!=victim)
 		{
 			vec3_t oldvel;
 
@@ -463,8 +463,8 @@ static void move_killerducks(gentity_t *ent) {
 			tmpv3_2[2] = tmpv3[2] + 64;
 			trap_Trace(&trj, tmpv3_2, ent->r.mins, ent->r.maxs, tmpv3, ent->s.number, ent->clipmask);
 
-			if (trj.entityNum == opfer)
-				trj.startsolid = qtrue; // don't jump on top of the "opfer" ^^
+			if (trj.entityNum == victim)
+				trj.startsolid = qtrue; // don't jump on top of the "victim" ^^
 			//				}
 			//				else
 			//					trj.plane.normal[2]=0.0f;//uah O_o
@@ -525,10 +525,10 @@ static void move_killerducks(gentity_t *ent) {
 	}
 	//	}
 
-	if ((tr.entityNum == opfer) && (ent->s.time2 <= level.time)) {
+	if ((tr.entityNum == victim) && (ent->s.time2 <= level.time)) {
 		G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sound/items/killerducks/bite"));
 		// TODO: Add dir
-		G_Damage(&g_entities[opfer], NULL, ent->parent, NULL, NULL, DAMAGE_KILLERDUCKS_BITE, 0, ent->methodOfDeath);
+		G_Damage(&g_entities[victim], NULL, ent->parent, NULL, NULL, DAMAGE_KILLERDUCKS_BITE, 0, ent->methodOfDeath);
 		ent->s.time2 = (level.time + 1000);
 	}
 

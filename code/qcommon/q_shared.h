@@ -1334,7 +1334,7 @@ typedef struct entityState_s {
 	trajectory_t apos; // for calculating angles
 
 	int time;
-	int time2;
+	int time2;	// bambam team, orientation for the boaster, killerducks timer for the bite sound event
 
 	vec3_t origin;
 	vec3_t origin2;

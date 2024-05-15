@@ -159,7 +159,7 @@ static void CG_General(centity_t *cent) {
 
 	// Boaster-Slik-ents ... don't know why I coded this stuff in such a ugly way (without a new ent-type)
 	if (s1->weapon == WP_BOASTER_SPECIAL_VAR) {
-		if (cent->miscTime != 1) { // misbraucht ;)
+		if (cent->miscTime != 1) { // abused this variable
 			const vec4_t color = {0.5f, 0.5f, 1, 1};
 			CG_ImpactMark(cgs.media.foamMarkShader, s1->origin, s1->angles, s1->time2, color, qfalse, s1->generic1,
 						  qfalse);
