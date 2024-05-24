@@ -572,7 +572,7 @@ the menu system, sampled down from full screen distorted images
 */
 static void R_LevelShot(screenshotType_e type, const char *ext) {
 	char fileName[MAX_OSPATH];
-	byte *source;
+	byte *source, *allsource;
 	byte *resample, *resamplestart;
 	size_t offset = 0, memcount;
 	int spadlen, rpadlen;
@@ -600,7 +600,8 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 
 	Com_sprintf(fileName, sizeof(fileName), "levelshots/%s%s", tr.world->baseName, ext);
 
-	source = RB_ReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, &offset, &spadlen);
+	allsource = RB_ReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, &offset, &spadlen);
+	source = allsource + offset;
 
 	linelen = width * 3;
 	padwidth = spadlen + linelen;
@@ -650,7 +651,7 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 		RE_SavePNG(fileName, width, height, resample + offset, rpadlen);
 
 	ri.Hunk_FreeTempMemory(resample);
-	ri.Hunk_FreeTempMemory(source);
+	ri.Hunk_FreeTempMemory(allsource);
 
 	ri.Printf(PRINT_ALL, "Wrote %s\n", fileName);
 }
