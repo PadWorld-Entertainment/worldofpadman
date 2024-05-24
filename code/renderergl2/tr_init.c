@@ -577,7 +577,7 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 	size_t offset = 0, memcount;
 	int spadlen, rpadlen;
 	int padwidth, linelen;
-	GLint packAlign = 0;
+	GLint packAlign = 1;
 	byte *src, *dst;
 	int x, y;
 	int r, g, b;
