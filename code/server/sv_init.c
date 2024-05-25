@@ -616,8 +616,6 @@ Only called at main exe startup, not for each game
 void SV_Init(void) {
 	int index;
 
-	SDL_Init(0);
-
 	SV_AddOperatorCommands();
 
 	// serverinfo vars
@@ -771,6 +769,4 @@ void SV_Shutdown(const char *finalmsg) {
 	// disconnect any local clients
 	if (sv_killserver->integer != 2)
 		CL_Disconnect(qfalse);
-
-	SDL_Quit();
 }
