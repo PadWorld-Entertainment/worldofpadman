@@ -280,6 +280,9 @@ static int validateEntityString(const char *filename, const char *pk3dir, const 
 }
 
 static int checkForShader(const char *allShaders, const char *shaderName, const char *bspfilename) {
+	if (!strcmp(shaderName, "noshader")) {
+		return 0;
+	}
 	const char *shader = FindShaderInShaderText(shaderName, allShaders);
 	if (shader == NULL) {
 		printf("%s: error in bsp: texture or shader '%s' not found\n", bspfilename, shaderName);
