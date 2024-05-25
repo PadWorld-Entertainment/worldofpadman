@@ -25,9 +25,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../sys/sys_local.h"
 
 void Sys_Print(const char *msg) {
+#ifdef TESTS
+	// printf("%s", msg);
+#endif
 }
 
 void Sys_Error(const char *error, ...) {
+#ifdef TESTS
+	va_list argptr;
+	char string[1024];
+
+	va_start(argptr, error);
+	Q_vsnprintf(string, sizeof(string), error, argptr);
+	va_end(argptr);
+
+	fprintf(stderr, "%s\n", string);
+#endif
 	exit(1);
 }
 
