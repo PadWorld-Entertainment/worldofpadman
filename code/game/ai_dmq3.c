@@ -2093,7 +2093,7 @@ BotEntityVisible
 returns visibility in the range [0, 1] taking fog and water surfaces into account
 ==================
 */
-float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int ent) {
+float BotEntityVisible(int viewer, const vec3_t eye, const vec3_t viewangles, float fov, int ent) {
 	int i, contents_mask, passent, hitent, infog, inwater, otherinfog, pc;
 	float squaredfogdist, waterfactor, vis, bestvis;
 	bsp_trace_t trace;
