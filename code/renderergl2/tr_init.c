@@ -572,12 +572,11 @@ the menu system, sampled down from full screen distorted images
 */
 static void R_LevelShot(screenshotType_e type, const char *ext) {
 	char fileName[MAX_OSPATH];
-	byte *source;
-	byte *resample, *resamplestart;
+	byte *source, *allsource;
+	byte *resample;
 	size_t offset = 0, memcount;
-	int spadlen, rpadlen;
-	int padwidth, linelen;
-	GLint packAlign = 0;
+	int spadlen;
+	int linelen;
 	byte *src, *dst;
 	int x, y;
 	int r, g, b;
@@ -600,18 +599,13 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 
 	Com_sprintf(fileName, sizeof(fileName), "levelshots/%s%s", tr.world->baseName, ext);
 
-	source = RB_ReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, &offset, &spadlen);
+	allsource = RB_ReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, &offset, &spadlen);
+	source = allsource + offset;
 
 	linelen = width * 3;
-	padwidth = spadlen + linelen;
+	memcount = linelen * height;
 
-	// Allocate a few more bytes so that we can choose an alignment we like
-	resample = ri.Hunk_AllocateTempMemory(padwidth * height + offset + packAlign - 1);
-
-	resamplestart = PADP((intptr_t) resample + offset, packAlign);
-
-	offset = resamplestart - resample;
-	rpadlen = padwidth - linelen;
+	resample = ri.Hunk_AllocateTempMemory(memcount);
 
 	// resample from source
 	xScale = glConfig.vidWidth / (float)(width * 4.0f);
@@ -635,22 +629,20 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 		}
 	}
 
-	memcount = (width * 3 + rpadlen) * height;
-
 	// gamma correction
 	if (glConfig.deviceSupportsGamma) {
-		R_GammaCorrect(resample + offset, memcount);
+		R_GammaCorrect(resample, memcount);
 	}
 
 	if (type == ST_TGA)
-		RE_SaveTGA(fileName, width, height, resample + offset, rpadlen);
+		RE_SaveTGA(fileName, width, height, resample, 0);
 	else if (type == ST_JPEG)
-		RE_SaveJPG(fileName, r_screenshotJpegQuality->integer, width, height, resample + offset, rpadlen);
+		RE_SaveJPG(fileName, r_screenshotJpegQuality->integer, width, height, resample, 0);
 	else if (type == ST_PNG)
-		RE_SavePNG(fileName, width, height, resample + offset, rpadlen);
+		RE_SavePNG(fileName, width, height, resample, 0);
 
 	ri.Hunk_FreeTempMemory(resample);
-	ri.Hunk_FreeTempMemory(source);
+	ri.Hunk_FreeTempMemory(allsource);
 
 	ri.Printf(PRINT_ALL, "Wrote %s\n", fileName);
 }
