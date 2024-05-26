@@ -97,7 +97,7 @@ int BotFindEnemy(bot_state_t *bs, int curenemy);
 // returns a roam goal
 void BotRoamGoal(bot_state_t *bs, vec3_t goal);
 // returns entity visibility in the range [0, 1]
-float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int ent);
+float BotEntityVisible(int viewer, const vec3_t eye, const vec3_t viewangles, float fov, int ent);
 // the bot will aim at the current enemy
 void BotAimAtEnemy(bot_state_t *bs);
 // check if the bot should attack
