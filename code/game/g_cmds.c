@@ -1563,7 +1563,7 @@ static void Cmd_SetViewpos_f(gentity_t *ent) {
 		return;
 	}
 
-	if (argc == 5) {
+	if (argc == 6) {
 		vec3_t origin, angles;
 		int i;
 
@@ -1574,6 +1574,9 @@ static void Cmd_SetViewpos_f(gentity_t *ent) {
 		}
 
 		trap_Argv(4, buffer, sizeof(buffer));
+		angles[PITCH] = atof(buffer);
+
+		trap_Argv(5, buffer, sizeof(buffer));
 		angles[YAW] = atof(buffer);
 
 		TeleportPlayer(ent, origin, angles);
@@ -1594,7 +1597,7 @@ static void Cmd_SetViewpos_f(gentity_t *ent) {
 			trap_SendServerCommand(ent - g_entities, "print \"Couldn't find target, targetname or classname.\n\"");
 		}
 	} else {
-		trap_SendServerCommand(ent - g_entities, "print \"usage: setviewpos x y z yaw\nusage: setviewpos targetname\n\"");
+		trap_SendServerCommand(ent - g_entities, "print \"usage: setviewpos x y z pitch yaw\nusage: setviewpos targetname\n\"");
 	}
 }
 
