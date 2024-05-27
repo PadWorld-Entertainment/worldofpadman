@@ -566,8 +566,8 @@ static void R_TakeScreenshot(int x, int y, int width, int height, char *name, sc
 ====================
 R_LevelShot
 
-levelshots are specialized 128*128 thumbnails for
-the menu system, sampled down from full screen distorted images
+levelshots are specialized thumbnails for the menu system,
+sampled down from full screen distorted images
 ====================
 */
 static void R_LevelShot(screenshotType_e type, const char *ext) {
@@ -590,7 +590,7 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 	if (arg > 0)
 		width = height = arg;
 	else
-		width = height = 128;
+		width = height = 256;
 
 	if (width > glConfig.vidWidth)
 		width = glConfig.vidWidth;
@@ -657,7 +657,7 @@ static void R_ScreenShot(screenshotType_e type) {
 	};
 
 	if (!strcmp(ri.Cmd_Argv(1), "levelshot")) {
-		R_LevelShot(ST_TGA, exts[type]);
+		R_LevelShot(ST_PNG, exts[ST_PNG]);
 		return;
 	}
 
