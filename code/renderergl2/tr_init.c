@@ -670,7 +670,7 @@ static void R_ScreenShot(screenshotType_e type) {
 	};
 
 	if (!strcmp(ri.Cmd_Argv(1), "levelshot")) {
-		R_LevelShot(ST_PNG, exts[ST_PNG]);
+		R_LevelShot(ST_JPEG, exts[ST_JPEG]);
 		return;
 	}
 
