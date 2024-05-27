@@ -495,7 +495,8 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 	int xx, yy;
 	int	width, height;
 	int	arg;
-
+	int lscount;
+	
 	// Allow custom resample width/height
 	arg = atoi(ri.Cmd_Argv(2));
 	if (arg > 0)
@@ -508,7 +509,19 @@ static void R_LevelShot(screenshotType_e type, const char *ext) {
 	if (height > glConfig.vidHeight)
 		height = glConfig.vidHeight;
 
-	Com_sprintf(fileName, sizeof(fileName), "levelshots/%s%s", tr.world->baseName, ext);
+	// scan for a free number
+	for (lscount = 1; lscount <= MAX_LEVELSHOTS; lscount++) {
+		Com_sprintf(fileName, sizeof(fileName), "levelshots/%sB%i%s", tr.world->baseName, lscount, ext);
+
+		if (!ri.FS_FileExists(fileName)) {
+			break; // file doesn't exist
+		}
+	}
+	
+	if (lscount > MAX_LEVELSHOTS) {
+		ri.Printf(PRINT_ALL, "LevelShot: Couldn't create a file\n");
+		return;
+	}
 
 	allsource = RB_ReadPixels(0, 0, glConfig.vidWidth, glConfig.vidHeight, &offset, &spadlen);
 	source = allsource + offset;

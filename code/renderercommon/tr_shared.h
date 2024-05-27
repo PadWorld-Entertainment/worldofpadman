@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef TR_SHARED_H
 #define TR_SHARED_H
 
+#define MAX_LEVELSHOTS 3
+
 typedef enum {
 	ST_TGA,
 	ST_JPEG,
