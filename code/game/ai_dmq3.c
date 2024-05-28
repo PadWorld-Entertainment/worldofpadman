@@ -104,7 +104,7 @@ qboolean ClientInSprayroom(int clId) {
 	return qtrue;
 }
 
-qboolean BotCTFCarryingFlag(bot_state_t *bs) {
+qboolean BotCTFCarryingFlag(const bot_state_t *bs) {
 	if (gametype != GT_CTF)
 		return CTF_FLAG_NONE;
 
@@ -115,12 +115,11 @@ qboolean BotCTFCarryingFlag(bot_state_t *bs) {
 	return CTF_FLAG_NONE;
 }
 
-int BotGetNumClientCarts(bot_state_t *bs, int clientnum) {
+int BotGetNumClientCarts(const bot_state_t *bs, int clientnum) {
 	// evt noch visibility pruefen
 	if (gametype == GT_SPRAY || gametype == GT_SPRAYFFA)
 		return g_entities[clientnum].client->ps.ammo[WP_SPRAYPISTOL];
-	else
-		return 0;
+	return 0;
 }
 
 static int BotGetVisTeamPlayers(bot_state_t *bs, int *players, int maxplayers, qboolean sameteam) {
@@ -353,16 +352,20 @@ void BotRefuseOrder(bot_state_t *bs) {
 }
 */
 
-qboolean GetCTLFlagGoal(int team, bot_goal_t *goal) {
+static qboolean GetCTLFlagGoal(int team, bot_goal_t *goal) {
 	int i;
-	gentity_t *ent;
-	int itemtag = (team == TEAM_RED) ? PW_REDFLAG : PW_BLUEFLAG;
 	vec3_t goalorigin;
+	int itemtag;
+
+	if (team == TEAM_RED)
+		itemtag = PW_REDFLAG;
+	else
+		itemtag = PW_BLUEFLAG;
 
 	for (i = MAX_CLIENTS; i < level.num_entities; i++) {
-		ent = &g_entities[i];
+		const gentity_t *ent = &g_entities[i];
 		if (ent->inuse && ent->item && ent->item->giTag == itemtag && ent->flags & FL_DROPPED_ITEM) {
-			memset(goal, 0, sizeof(bot_goal_t));
+			memset(goal, 0, sizeof(*goal));
 			goal->areanum = trap_AAS_BestReachableArea(ent->r.currentOrigin, tv(-5, -5, -5), tv(5, 5, 5), goalorigin);
 			VectorCopy(goalorigin, goal->origin);
 			goal->entitynum = i;
@@ -800,7 +803,14 @@ static int BotNumberInTeam(bot_state_t *bs) {
 
 static int GetTeamFlagCarrier(int team) {
 	int i;
-	int pu = (team == TEAM_RED) ? PW_REDFLAG : PW_BLUEFLAG;
+	int powerupId;
+
+	if (team == TEAM_RED)
+		powerupId = PW_REDFLAG;
+	else if (team == TEAM_BLUE)
+		powerupId = PW_BLUEFLAG;
+	else
+		return -1;
 
 	for (i = 0; i < level.maxclients; i++) {
 		// valid client?
@@ -808,14 +818,18 @@ static int GetTeamFlagCarrier(int team) {
 			continue;
 
 		// carrying the flag?
-		if (g_entities[i].client->ps.powerups[pu])
+		if (g_entities[i].client->ps.powerups[powerupId])
 			return i;
 	}
 	return -1;
 }
 
 static qboolean GetDroppedLollyGoal(int team, bot_goal_t *goal) {
-	const char *itemname = (team == TEAM_RED) ? "Red Lolly" : "Blue Lolly";
+	const char *itemname;
+	if (team == TEAM_RED)
+		itemname = "Red Lolly";
+	else 
+		itemname = "Blue Lolly";
 
 	if (trap_BotGetLevelItemGoal(-1, itemname, goal) < 0)
 		return qfalse;
@@ -881,7 +895,7 @@ static qboolean PickBambamGoal(bot_state_t *bs) {
 #endif
 
 static void BotCtfSeekGoals(bot_state_t *bs) {
-	int flagstatus, nmyflagstatus;
+	flagStatus_t flagstatus, nmyflagstatus;
 	int action = 0;
 	int carrier;
 
@@ -893,6 +907,7 @@ static void BotCtfSeekGoals(bot_state_t *bs) {
 
 	// carrying the flag? rush home!
 	if (BotCTFCarryingFlag(bs)) {
+		BotAddInfo(bs, "I carry the flag", AIDBG_ALL);
 		// try to get a health-goal if we are really low
 		if (bs->inventory[INVENTORY_HEALTH] < 30) {
 			bs->ltgtype = 0;
@@ -1053,7 +1068,6 @@ BotTeamGoals
 ==================
 */
 void BotTeamGoals(bot_state_t *bs, int retreat) {
-
 	if (gametype == GT_CTF) {
 		BotCtfSeekGoals(bs);
 	} else if (gametype == GT_BALLOON) {
@@ -1774,15 +1788,6 @@ int BotWantsToChase(bot_state_t *bs) {
 
 /*
 ==================
-BotWantsToHelp
-==================
-*/
-int BotWantsToHelp(bot_state_t *bs) {
-	return qtrue;
-}
-
-/*
-==================
 BotDontAvoid
 ==================
 */
@@ -2060,7 +2065,7 @@ int BotSameTeam(const bot_state_t *bs, int entnum) {
 InFieldOfVision
 ==================
 */
-qboolean InFieldOfVision(vec3_t viewangles, float fov, vec3_t angles) {
+qboolean InFieldOfVision(const vec3_t viewangles, float fov, vec3_t angles) {
 	int i;
 	float diff, angle;
 
@@ -2484,7 +2489,7 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 }
 
 // cyr_ret{
-int BotSprayWallCheckAttack(bot_state_t *bs) {
+int BotSprayWallCheckAttack(const bot_state_t *bs) {
 	//    float points, reactiontime, fov, firethrottle;
 	float fov;
 	int attackentity;
@@ -4183,40 +4188,6 @@ static void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 		break;
 	}
 	case EV_GLOBAL_TEAM_SOUND: {
-		/*if (gametype == GT_CTF) {
-			switch(state->eventParm) {
-				case GTS_RED_CAPTURE:
-					bs->blueflagstatus = 0;
-					bs->redflagstatus = 0;
-					//bs->flagstatuschanged = qtrue;
-					break; //see BotMatch_CTF
-				case GTS_BLUE_CAPTURE:
-					bs->blueflagstatus = 0;
-					bs->redflagstatus = 0;
-					//bs->flagstatuschanged = qtrue;
-					break; //see BotMatch_CTF
-				case GTS_RED_RETURN:
-					//blue flag is returned
-					bs->blueflagstatus = 0;
-					//bs->flagstatuschanged = qtrue;
-					break;
-				case GTS_BLUE_RETURN:
-					//red flag is returned
-					bs->redflagstatus = 0;
-					//bs->flagstatuschanged = qtrue;
-					break;
-				case GTS_RED_TAKEN:
-					//blue flag is taken
-					bs->blueflagstatus = 1;
-					//bs->flagstatuschanged = qtrue;
-					break; //see BotMatch_CTF
-				case GTS_BLUE_TAKEN:
-					//red flag is taken
-					bs->redflagstatus = 1;
-					//bs->flagstatuschanged = qtrue;
-					break; //see BotMatch_CTF
-			}
-		}*/
 		break;
 	}
 	case EV_PLAYER_TELEPORT_IN: {

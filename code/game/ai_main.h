@@ -47,8 +47,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LTG_TEAMHELP 1		// help a team mate
 #define LTG_TEAMACCOMPANY 2 // accompany a team mate
 #define LTG_DEFENDKEYAREA 3 // defend a key area
-#define LTG_GETFLAG 4		// get the enemy flag
-#define LTG_RUSHBASE 5		// rush to the base
+#define LTG_GETFLAG 4		// get the enemy or neutral flag
+#define LTG_RUSHBASE 5		// going for spraywall
 //#define LTG_RETURNFLAG				6	//return the flag
 #define LTG_BALLCAMP 7 // camp somewhere
 //#define LTG_CAMPORDER				8	//ordered to camp somewhere
@@ -62,7 +62,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LTG_GIVECART 16
 #define LTG_FETCHCART 17
 #define LTG_JOINMATE 18
-#define LTG_CAPTUREFLAG 19
+#define LTG_CAPTUREFLAG 19 // return the flag to base or to eneny base in 1FCTF
 #define LTG_PICKUPFLAG 20
 #define LTG_PLANTBOOMIE 21
 #define LTG_PLANTBAMBAM 22
@@ -82,6 +82,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define RUSHBASE_TIME 120		// 2 minutes
 #define CTF_RUSHBASE_TIME 120	// 2 minutes ctf rush base time
 #define CTF_RETURNFLAG_TIME 180 // 3 minutes to return the flag
+#define TEAM_ATTACKENEMYBASE_TIME	600	//10 minutes
 #define TEAM_UNFREEZETIME 120
 
 #define PUSHCART_DIST 160
