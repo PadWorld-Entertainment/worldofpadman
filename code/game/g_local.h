@@ -1045,7 +1045,7 @@ int trap_AAS_PointAreaNum(vec3_t point);
 int trap_AAS_PointReachabilityAreaIndex(vec3_t point);
 int trap_AAS_TraceAreas(vec3_t start, vec3_t end, int *areas, vec3_t *points, int maxareas);
 
-int trap_AAS_PointContents(vec3_t point);
+int trap_AAS_PointContents(const vec3_t point);
 int trap_AAS_NextBSPEntity(int ent);
 int trap_AAS_ValueForBSPEpairKey(int ent, char *key, char *value, int size);
 int trap_AAS_VectorForBSPEpairKey(int ent, char *key, vec3_t v);
