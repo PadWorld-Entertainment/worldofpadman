@@ -614,4 +614,16 @@ weight "team_CTL_bluelolly"{
 	return 4000;
 }
 
-
+weight "team_CTL_neutrallolly"{
+/*
+	switch( INVENTORY_NEUTRALFLAG){
+		case 1:{
+			return 1000;
+		}
+		default:{
+			return 200;
+		}
+	}
+*/
+	return 4000;
+}

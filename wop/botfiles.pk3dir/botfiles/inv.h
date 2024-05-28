@@ -47,18 +47,19 @@
 
 #define INVENTORY_REDFLAG			45
 #define INVENTORY_BLUEFLAG			46
-//eigena cyr{
-#define INVENTORY_SPRAYPISTOLAMMO   47
-#define INVENTORY_BAMBAM			48
-#define INVENTORY_BOOMIE			49
+#define INVENTORY_NEUTRALFLAG		47
+//own cyr{
+#define INVENTORY_SPRAYPISTOLAMMO	48
+#define INVENTORY_BAMBAM			49
+#define INVENTORY_BOOMIE			50
 
-//eigene cyr}
-//enemy stuff
-#define ENEMY_DIST					48
-#define ENEMY_HEIGHT				49
-#define NUM_VISIBLE_ENEMIES			50
-#define NUM_VISIBLE_TEAMMATES		51
-//eigene
+//own cyr}
+//enemy stuff that is also stored in the inventory
+#define ENEMY_DIST					51
+#define ENEMY_HEIGHT				52
+#define NUM_VISIBLE_ENEMIES			53
+#define NUM_VISIBLE_TEAMMATES		54
+//own
 
 
 //item numbers (make sure they are in sync with bg_itemlist in bg_misc.c)
@@ -99,10 +100,13 @@
 #define MODELINDEX_JUMPER			33
 #define MODELINDEX_VISIONLESS		34
 #define MODELINDEX_REVIVAL			35
-#define MODELINDEX_REDFLAG			36
-#define MODELINDEX_BLUEFLAG			37
-#define MODELINDEX_KMA				38	// "Kiss My Ass 1997"
-#define MODELINDEX_KMAAMMO			39	// ~
+#define MODELINDEX_BERSERKER		36
+#define MODELINDEX_REDFLAG			37
+#define MODELINDEX_BLUEFLAG			38
+#define MODELINDEX_NEUTRALFLAG		39
+#define MODELINDEX_KMA				40	// "Kiss My Ass 1997"
+#define MODELINDEX_KMAAMMO			41	// ~
+#define MODELINDEX_FREEZE			42
 
 #define WEAPONINDEX_PUNCHY			1
 #define WEAPONINDEX_NIPPER			2
