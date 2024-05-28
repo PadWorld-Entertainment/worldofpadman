@@ -4,6 +4,14 @@
 // PadCastle levelshots
 // =================
 
+levelshots/wop_padcastleB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_padcastleB1 levelshots/wop_padcastleB2 levelshots/wop_padcastleB3
+    }
+}
+
 levelshots/wop_padcastleBB
 {
     nomipmaps
@@ -24,13 +32,21 @@ levelshots/wop_padcastleBBB
 {
     nomipmaps
     {
-        map levelshots/wop_padcastleB
+        animmap 0.5 levelshots/wop_padcastleB1 levelshots/wop_padcastleB2 levelshots/wop_padcastleB3
     }
 }
 
 // =================
 // PadGallery levelshots
 // =================
+
+levelshots/wop_padgalleryB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_padgalleryB1 levelshots/wop_padgalleryB2 levelshots/wop_padgalleryB3
+    }
+}
 
 levelshots/wop_padgalleryBB
 {
@@ -52,6 +68,6 @@ levelshots/wop_padgalleryBBB
 {
     nomipmaps
     {
-        map levelshots/wop_padgalleryB
+        animmap 0.5 levelshots/wop_padgalleryB1 levelshots/wop_padgalleryB2 levelshots/wop_padgalleryB3
     }
 }
