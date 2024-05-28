@@ -244,6 +244,9 @@ flagStatus_t Team_GetFlagStatus(int team) {
 	case TEAM_BLUE:
 		return teamgame.blueStatus;
 
+	case TEAM_FREE:
+		return teamgame.flagStatus;
+
 	default:
 		return 0;
 	}
@@ -471,6 +474,13 @@ static qboolean G_IsEligibleForCarrierDefense(const gentity_t *victim, const gen
 		}
 		// if you are the carrier yourself, don't give bonus
 		if (attacker->client->ps.powerups[flag_pw]) {
+			return qfalse;
+		}
+	}
+
+	if (g_gametype.integer == GT_1FCTF) {
+		// if you are the carrier yourself, don't give bonus
+		if (attacker->client->ps.powerups[PW_NEUTRALFLAG]) {
 			return qfalse;
 		}
 	}

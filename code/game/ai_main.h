@@ -315,8 +315,8 @@ typedef struct bot_state_s {
 	int ctfstrategy;			 // ctf strategy
 	int forceorders;			 // true if forced to give orders
 	int numteammates;			 // number of team mates
-	int blueflagstatus;
-	int redflagstatus;
+	int blueflagstatus;			 // 0 = at base, 1 = not at base
+	int redflagstatus;			 // 0 = at base, 1 = not at base
 #endif
 	int freezecheck_time;
 	int hstationgoal; // 0 = no hstation, > 0 = station index +1

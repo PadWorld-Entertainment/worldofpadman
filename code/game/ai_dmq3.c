@@ -78,9 +78,10 @@ static vec3_t lastteleport_origin; // last teleport event origin
 static float lastteleport_time;	// last teleport event time
 static int max_bspmodelindex;		// maximum BSP model index
 
-// cyr {
 bot_goal_t ctf_redflag;
 bot_goal_t ctf_blueflag;
+bot_goal_t ctf_neutralflag;
+// cyr {
 bot_goal_t balloongoal[MAX_BALLOONS];
 bot_goal_t rwall, bwall, spraytele, outtele;
 bot_goal_t hstations[MAX_HSTATIONS];
@@ -105,14 +106,16 @@ qboolean ClientInSprayroom(int clId) {
 }
 
 qboolean BotCTFCarryingFlag(const bot_state_t *bs) {
-	if (gametype != GT_CTF)
-		return CTF_FLAG_NONE;
-
-	if (bs->inventory[INVENTORY_REDFLAG] > 0)
-		return CTF_FLAG_RED;
-	else if (bs->inventory[INVENTORY_BLUEFLAG] > 0)
-		return CTF_FLAG_BLUE;
-	return CTF_FLAG_NONE;
+	if (gametype == GT_CTF) {
+		if (bs->inventory[INVENTORY_REDFLAG] > 0)
+			return qtrue;
+		if (bs->inventory[INVENTORY_BLUEFLAG] > 0)
+			return qtrue;
+	} else if (gametype == GT_1FCTF) {
+		if (bs->inventory[INVENTORY_NEUTRALFLAG] > 0)
+			return qtrue;
+	}
+	return qfalse;
 }
 
 int BotGetNumClientCarts(const bot_state_t *bs, int clientnum) {
@@ -359,8 +362,10 @@ static qboolean GetCTLFlagGoal(int team, bot_goal_t *goal) {
 
 	if (team == TEAM_RED)
 		itemtag = PW_REDFLAG;
-	else
+	else if (team == TEAM_BLUE)
 		itemtag = PW_BLUEFLAG;
+	else
+		itemtag = PW_NEUTRALFLAG;
 
 	for (i = MAX_CLIENTS; i < level.num_entities; i++) {
 		const gentity_t *ent = &g_entities[i];
@@ -801,6 +806,9 @@ static int BotNumberInTeam(bot_state_t *bs) {
 	return r;
 }
 
+/**
+ * @sa BotTeamFlagCarrierVisible()
+ */
 static int GetTeamFlagCarrier(int team) {
 	int i;
 	int powerupId;
@@ -809,6 +817,8 @@ static int GetTeamFlagCarrier(int team) {
 		powerupId = PW_REDFLAG;
 	else if (team == TEAM_BLUE)
 		powerupId = PW_BLUEFLAG;
+	else if (team == TEAM_FREE)
+		powerupId = PW_NEUTRALFLAG;
 	else
 		return -1;
 
@@ -828,8 +838,10 @@ static qboolean GetDroppedLollyGoal(int team, bot_goal_t *goal) {
 	const char *itemname;
 	if (team == TEAM_RED)
 		itemname = "Red Lolly";
-	else 
+	else if (team == TEAM_BLUE)
 		itemname = "Blue Lolly";
+	else
+		itemname = "Neutral Lolly";
 
 	if (trap_BotGetLevelItemGoal(-1, itemname, goal) < 0)
 		return qfalse;
@@ -1019,9 +1031,9 @@ static void BotCtfSeekGoals(bot_state_t *bs) {
 	if (action == LTG_DEFENDKEYAREA && bs->ltgtype != LTG_DEFENDKEYAREA) {
 		// defend
 		if (BotTeam(bs) == TEAM_RED)
-			memcpy(&bs->teamgoal, &ctf_redflag, sizeof(bot_goal_t));
+			memcpy(&bs->teamgoal, &ctf_redflag, sizeof(bs->teamgoal));
 		else
-			memcpy(&bs->teamgoal, &ctf_blueflag, sizeof(bot_goal_t));
+			memcpy(&bs->teamgoal, &ctf_blueflag, sizeof(bs->teamgoal));
 
 		bs->ltgtype = LTG_DEFENDKEYAREA;
 		bs->decisionmaker = bs->client;
@@ -1064,12 +1076,190 @@ static void BotCtfSeekGoals(bot_state_t *bs) {
 
 /*
 ==================
+EntityCarriesFlag
+==================
+*/
+static qboolean EntityCarriesFlag(const aas_entityinfo_t *entinfo) {
+	if (entinfo->powerups & (1 << PW_REDFLAG))
+		return qtrue;
+	if (entinfo->powerups & (1 << PW_BLUEFLAG))
+		return qtrue;
+	if (entinfo->powerups & (1 << PW_NEUTRALFLAG))
+		return qtrue;
+	return qfalse;
+}
+
+/**
+ * @sa GetTeamFlagCarrier()
+ */
+static int BotTeamFlagCarrierVisible(const bot_state_t *bs) {
+	int i;
+	float vis;
+	aas_entityinfo_t entinfo;
+
+	for (i = 0; i < level.maxclients; i++) {
+		if (i == bs->client)
+			continue;
+		//
+		BotEntityInfo(i, &entinfo);
+		//if this player is active
+		if (!entinfo.valid)
+			continue;
+		//if this player is carrying a flag
+		if (!EntityCarriesFlag(&entinfo))
+			continue;
+		//if the flag carrier is not on the same team
+		if (!BotSameTeam(bs, i))
+			continue;
+		//if the flag carrier is not visible
+		vis = BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, i);
+		if (vis <= 0)
+			continue;
+		//
+		return i;
+	}
+	return -1;
+}
+
+/*
+==================
+Bot1FCTFSeekGoals
+==================
+*/
+static void Bot1FCTFSeekGoals(bot_state_t *bs) {
+	flagStatus_t flagstatus;
+
+	if (bs->ltgtype == LTG_JOINMATE)
+		return;
+
+	// when carrying a flag in ctf the bot should rush to the base
+	if (BotCTFCarryingFlag(bs)) {
+		BotAddInfo(bs, "I carry the flag", AIDBG_ALL);
+		// try to get a health-goal if we are really low
+		if (bs->inventory[INVENTORY_HEALTH] < 30) {
+			bs->ltgtype = 0;
+			return;
+		}
+
+		if (bs->ltgtype != LTG_CAPTUREFLAG) {
+			bs->ltgtype = LTG_CAPTUREFLAG;
+			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
+			bs->rushbaseaway_time = 0;
+			bs->decisionmaker = bs->client;
+		}
+		return;
+	}
+
+	// if the bot decided to follow someone
+	if (bs->ltgtype == LTG_TEAMACCOMPANY) {
+		aas_entityinfo_t entinfo;
+		// if the team mate being accompanied no longer carries the flag
+		BotEntityInfo(bs->teammate, &entinfo);
+		if (!EntityCarriesFlag(&entinfo)) {
+			bs->ltgtype = 0;
+		}
+	}
+
+	flagstatus = Team_GetFlagStatus(TEAM_FREE);
+
+	// noone has the flag
+	if (flagstatus == FLAG_ATBASE || flagstatus == FLAG_DROPPED) {
+		int action = 0;
+		if (BotNumberInTeam(bs) & 1) { // the bots 1,3,5,... will be defensive
+			if (flagstatus == FLAG_DROPPED) {
+				action = LTG_PICKUPFLAG;
+			} else {
+				action = LTG_GETFLAG;
+			}
+		} else {
+			action = LTG_DEFENDKEYAREA;
+		}
+
+		// assign LTG, unless the bot is already going for it
+		if (action == LTG_DEFENDKEYAREA && bs->ltgtype != LTG_DEFENDKEYAREA) {
+			// defend
+			if (BotTeam(bs) == TEAM_RED)
+				memcpy(&bs->teamgoal, &ctf_redflag, sizeof(bs->teamgoal));
+			else
+				memcpy(&bs->teamgoal, &ctf_blueflag, sizeof(bs->teamgoal));
+
+			bs->ltgtype = LTG_DEFENDKEYAREA;
+			bs->decisionmaker = bs->client;
+			bs->teamgoal_time = FloatTime() + TEAM_DEFENDKEYAREA_TIME;
+			bs->defendaway_time = 0;
+		} else if (action == LTG_GETFLAG && bs->ltgtype != LTG_GETFLAG) {
+			// attack enemy flag/base
+			bs->decisionmaker = bs->client;
+			bs->ltgtype = LTG_GETFLAG;
+			// set the time the bot will stop getting the flag
+			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
+		} else if (action == LTG_PICKUPFLAG && bs->ltgtype != LTG_PICKUPFLAG) {
+			// attack enemy flag/base
+			bs->decisionmaker = bs->client;
+			bs->ltgtype = LTG_PICKUPFLAG;
+			// set the time the bot will stop getting the flag
+			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
+		}
+		return;
+	}
+
+	// our team has the flag
+	if ((BotTeam(bs) == TEAM_RED && flagstatus == FLAG_TAKEN_RED) ||
+		(BotTeam(bs) == TEAM_BLUE && flagstatus == FLAG_TAKEN_BLUE)) {
+		BotAddInfo(bs, "our team has the flag", AIDBG_GAMETYPE);
+		// if not already following someone
+		if (bs->ltgtype != LTG_TEAMACCOMPANY) {
+			// if there is a visible team mate flag carrier
+			const int teammate = BotTeamFlagCarrierVisible(bs);
+			if (teammate >= 0) {
+				// follow the flag carrier
+				bs->decisionmaker = bs->client;
+				// the team mate
+				bs->teammate = teammate;
+				// last time the team mate was visible
+				bs->teammatevisible_time = FloatTime();
+				// no message
+				bs->teammessage_time = 0;
+				// no arrive message
+				bs->arrive_time = 1;
+
+				// get the team goal time
+				bs->teamgoal_time = FloatTime() + TEAM_ACCOMPANY_TIME;
+				bs->ltgtype = LTG_TEAMACCOMPANY;
+				bs->formation_dist = 3.5 * 32; // 3.5 meter
+			}
+		}
+	} else {
+		// if already a CTF or team goal
+		if (bs->ltgtype == LTG_TEAMHELP || bs->ltgtype == LTG_TEAMACCOMPANY || bs->ltgtype == LTG_GETITEM) {
+			return;
+		}
+		// if not already defending the base
+		if (bs->ltgtype != LTG_DEFENDKEYAREA) {
+			bs->decisionmaker = bs->client;
+			if (BotTeam(bs) == TEAM_RED)
+				memcpy(&bs->teamgoal, &ctf_redflag, sizeof(bs->teamgoal));
+			else
+				memcpy(&bs->teamgoal, &ctf_blueflag, sizeof(bs->teamgoal));
+			// set the ltg type
+			bs->ltgtype = LTG_DEFENDKEYAREA;
+			// set the time the bot stops defending the base
+			bs->teamgoal_time = FloatTime() + TEAM_DEFENDKEYAREA_TIME;
+			bs->defendaway_time = 0;
+		}
+	}
+}
+
+/*
+==================
 BotTeamGoals
 ==================
 */
 void BotTeamGoals(bot_state_t *bs, int retreat) {
 	if (gametype == GT_CTF) {
 		BotCtfSeekGoals(bs);
+	} else if (gametype == GT_1FCTF) {
+		Bot1FCTFSeekGoals(bs);
 	} else if (gametype == GT_BALLOON) {
 		BotBalloonSeekGoals(bs);
 	} else if (gametype == GT_FREEZETAG) {
@@ -1694,7 +1884,7 @@ BotWantsToRetreat
 int BotWantsToRetreat(bot_state_t *bs) {
 	aas_entityinfo_t entinfo;
 
-	if (gametype == GT_CTF) {
+	if (gametype == GT_CTF || gametype == GT_1FCTF) {
 		if (bs->ltgtype == LTG_CAPTUREFLAG || bs->ltgtype == LTG_GETFLAG || bs->ltgtype == LTG_PICKUPFLAG) {
 			return qtrue;
 		}
@@ -1748,7 +1938,7 @@ int BotWantsToChase(bot_state_t *bs) {
 	aas_entityinfo_t entinfo;
 	aas_entityinfo_t enemyinfo;
 
-	if (gametype == GT_CTF) {
+	if (gametype == GT_CTF || gametype == GT_1FCTF) {
 		if (bs->ltgtype == LTG_CAPTUREFLAG || bs->ltgtype == LTG_GETFLAG || bs->ltgtype == LTG_PICKUPFLAG) {
 			return qfalse;
 		}
@@ -2210,10 +2400,6 @@ float BotEntityVisible(int viewer, const vec3_t eye, const vec3_t viewangles, fl
 
 // cyr{
 static qboolean EnemyFitsWell(bot_state_t *bs, aas_entityinfo_t *entinfo, int curenemy) {
-	aas_entityinfo_t curenemyinfo;
-	vec3_t dir1, dir2;
-	float l1, l2;
-
 	if (curenemy < 0)
 		return qtrue;
 	if (entinfo->type != ET_PLAYER)
@@ -2224,6 +2410,9 @@ static qboolean EnemyFitsWell(bot_state_t *bs, aas_entityinfo_t *entinfo, int cu
 		return qtrue;
 
 	if (bs->weaponnum == WP_IMPERIUS) {
+		aas_entityinfo_t curenemyinfo;
+		vec3_t dir1, dir2;
+		float l1, l2;
 		BotEntityInfo(curenemy, &curenemyinfo);
 		if (!curenemyinfo.valid)
 			return qfalse;
@@ -4507,15 +4696,18 @@ void BotSetupDeathmatchAI(void) {
 	trap_Cvar_Register(&bot_predictobstacles, "bot_predictobstacles", "1", 0);
 	trap_Cvar_Register(&g_spSkill, "g_spSkill", "2", 0);
 
-	if (gametype == GT_CTF) {
+	if (gametype == GT_CTF || gametype == GT_1FCTF) {
 		qboolean redInit = qfalse;
 		qboolean blueInit = qfalse;
+		qboolean neutralInit = gametype == GT_CTF;
 
 		// todo: get rid of the trapcalls and to everything in the loop below
 		if (trap_BotGetLevelItemGoal(-1, "Red Lolly", &ctf_redflag) < 0)
 			BotAI_Print(PRT_WARNING, "CTL without Red Lolly\n");
 		if (trap_BotGetLevelItemGoal(-1, "Blue Lolly", &ctf_blueflag) < 0)
 			BotAI_Print(PRT_WARNING, "CTL without Blue Lolly\n");
+		if (gametype == GT_1FCTF && trap_BotGetLevelItemGoal(-1, "Neutral Lolly", &ctf_neutralflag) < 0)
+			BotAI_Print(PRT_WARNING, "1FCTL without Neutral Lolly\n");
 
 		// find the entity numbers
 		pent = &g_entities[MAX_CLIENTS];
@@ -4528,9 +4720,12 @@ void BotSetupDeathmatchAI(void) {
 			} else if (!Q_stricmp(pent->classname, "team_CTL_redlolly")) {
 				ctf_redflag.entitynum = i;
 				redInit = qtrue;
+			} else if (!Q_stricmp(pent->classname, "team_CTL_neutrallolly")) {
+				ctf_neutralflag.entitynum = i;
+				neutralInit = qtrue;
 			}
 
-			if (redInit && blueInit)
+			if (redInit && blueInit && neutralInit)
 				break;
 		}
 

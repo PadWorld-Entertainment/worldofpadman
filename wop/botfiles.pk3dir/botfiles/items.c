@@ -470,3 +470,14 @@ iteminfo "team_CTL_bluelolly"
 	maxs					{15,15,15}
 } //end iteminfo
 
+
+iteminfo "team_CTL_neutrallolly"
+{
+	name					"Neutral Lolly"
+	model					"models/ctl/lollipop_neutral.md3"
+	modelindex				MODELINDEX_NEUTRALFLAG
+	type					ITEM_FLAG
+	index					INVENTORY_NEUTRALFLAG
+	mins					{-15,-15,-15}
+	maxs					{15,15,15}
+} //end iteminfo

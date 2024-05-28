@@ -1165,6 +1165,199 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 			memcpy(goal, &bs->teamgoal, sizeof(*goal));
 			return qtrue;
 		}
+	} else if (gametype == GT_1FCTF) {
+		if (bs->ltgtype == LTG_CAPTUREFLAG) {
+			bot_goal_t *base_flag = NULL;
+
+			// if not carrying the flag anymore, or timer hits
+			if (!BotCTFCarryingFlag(bs) || bs->teamgoal_time < FloatTime()) {
+				bs->ltgtype = 0;
+				return qfalse;
+			}
+
+			if (bs->rushbaseaway_time < FloatTime()) {
+				if (BotTeam(bs) == TEAM_RED)
+					base_flag = &ctf_blueflag;
+				else
+					base_flag = &ctf_redflag;
+
+				// do we have a waypoint system?
+				if (!numwaypoints) {
+					memcpy(goal, base_flag, sizeof(*goal));
+					return qtrue;
+				} // oldschool system
+				else {
+					float wpDist_sqr; // squared distance to the next waypoint
+					int tt;
+
+					// do we have a valid waypoint?
+					if (!BotWpValid(bs)) {
+						FindWp(bs, qfalse);
+					}
+
+					// if you are going for the final waypoint, go for the flag instead
+					if (!BotWpHasSuccessor(bs, qfalse)) {
+						BotAddInfo(bs, "final wp", AIDBG_GAMETYPE);
+						memcpy(goal, base_flag, sizeof(*goal));
+						bs->wptime = level.time;
+						return qtrue;
+					}
+
+					// are we close enough to proceed to the next wp?
+					tt = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->wp->goal.areanum, bs->tfl);
+					if (tt) {
+						if (tt < 10)
+							GetNextWp(bs, qfalse);
+					} else { // tt is invalid, fall back to 3d distance
+						wpDist_sqr = DistanceSquared(bs->wp->goal.origin, bs->origin);
+						if (wpDist_sqr < 40000) // Square(200)
+							GetNextWp(bs, qfalse);
+					}
+
+					BotAddInfo(bs, va("wp %s", bs->wp->name), AIDBG_GAMETYPE);
+
+					bs->wptime = level.time;
+
+					memcpy(goal, &bs->wp->goal, sizeof(*goal));
+					return qtrue;
+				}
+			}
+		}
+		// collect the neutral flag from its spawn position
+		if (bs->ltgtype == LTG_GETFLAG) {
+			flagStatus_t status;
+
+			// stop after timer hit
+			if (bs->teamgoal_time < FloatTime()) {
+				bs->ltgtype = 0;
+			}
+
+			status = Team_GetFlagStatus(TEAM_FREE);
+			BotAddInfo(bs, va("neutral flag %d", status), AIDBG_GAMETYPE);
+			if (status == FLAG_TAKEN) {
+				bs->ltgtype = 0;
+				return qfalse;
+			} else if (status == FLAG_DROPPED) {
+				vec3_t dir;
+				memcpy(goal, &bs->teamgoal, sizeof(*goal));
+				// reset ltg if bot touches the goal.. to cover the case where the flag
+				// got picked up and dropped again between two AI frames
+				VectorSubtract(goal->origin, bs->origin, dir);
+				if (VectorLengthSquared(dir) < Square(7)) {
+					bs->ltgtype = 0;
+					return qfalse;
+				}
+				return qtrue;
+			} else {
+				if (!numwaypoints) {
+					memcpy(goal, &ctf_neutralflag, sizeof(*goal));
+				} else {
+					float wpDist_sqr; // squared distance to the next waypoint
+					int tt;
+
+					// do we have a valid waypoint?
+					if (!BotWpValid(bs)) {
+						FindWp(bs, qfalse);
+					}
+
+					// if you are going for the final waypoint, go for the flag instead
+					if (!BotWpHasSuccessor(bs, qfalse)) {
+						BotAddInfo(bs, "final wp", AIDBG_GAMETYPE);
+						memcpy(goal, &ctf_neutralflag, sizeof(*goal));
+						bs->wptime = level.time;
+						return qtrue;
+					}
+
+					// are we close enough to proceed to the next wp?
+					tt = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->wp->goal.areanum, bs->tfl);
+					if (tt) {
+						if (tt < 10)
+							GetNextWp(bs, qfalse);
+					} else { // tt is invalid, fall back to 3d distance
+						wpDist_sqr = DistanceSquared(bs->wp->goal.origin, bs->origin);
+						if (wpDist_sqr < 40000) // Square(200)
+							GetNextWp(bs, qfalse);
+					}
+
+					BotAddInfo(bs, va("wp %s", bs->wp->name), AIDBG_GAMETYPE); // va("%d", GetWpID(bs->wp) ) );
+
+					bs->wptime = level.time;
+
+					memcpy(goal, &bs->wp->goal, sizeof(*goal));
+				}
+				return qtrue;
+			}
+		}
+		if (bs->ltgtype == LTG_PICKUPFLAG) {
+			flagStatus_t status;
+
+			// time's up?
+			if (bs->teamgoal_time < FloatTime()) {
+				bs->ltgtype = 0;
+				return qfalse;
+			}
+
+			// flag is no longer there?
+			status = Team_GetFlagStatus(BotTeam(bs));
+			if (status != FLAG_DROPPED) {
+				bs->ltgtype = 0;
+				return qfalse;
+			}
+
+			memcpy(goal, &bs->teamgoal, sizeof(*goal));
+			return qtrue;
+		}
+		if (bs->ltgtype == LTG_PLANTBOOMIE) {
+			if (bs->teamgoal_time < FloatTime()) {
+				bs->ltgtype = 0;
+				return qfalse;
+			}
+
+			// reached?
+			// VectorSubtract(bs->teamgoal.origin, bs->origin, dir);
+			// if(VectorLengthSquared(dir) < Square(10) )
+			if (trap_BotTouchingGoal(bs->origin, &bs->teamgoal)) {
+				vec3_t bAngles;
+				float diffPitch, diffYaw;
+
+				VectorCopy(boomiespots[bs->teammate].angles, bAngles);
+				VectorCopy(bAngles, bs->ideal_viewangles);
+				bs->flags |= BFL_IDEALVIEWSET;
+				diffPitch = AngleDifference(bs->viewangles[0], bs->ideal_viewangles[0]);
+				diffYaw = AngleDifference(bs->viewangles[1], bs->ideal_viewangles[1]);
+
+				// BotAddInfo(bs, va("looking at goal %d %d %d", (int)bAngles[0], (int)bAngles[1], (int)bAngles[2]),
+				// AIDBG_GAMETYPE );
+				// do eeett
+				if (diffPitch < 5.f && diffYaw < 5.f) {
+					BotAddInfo(bs, "planting", AIDBG_GAMETYPE);
+					trap_EA_Use(bs->client);
+				}
+			} else
+				BotAddInfo(bs, "moving to goal", AIDBG_GAMETYPE);
+
+			memcpy(goal, &bs->teamgoal, sizeof(*goal));
+			return qtrue;
+		}
+		if (bs->ltgtype == LTG_PLANTBAMBAM) {
+			if (bs->teamgoal_time < FloatTime()) {
+				bs->ltgtype = 0;
+				return qfalse;
+			}
+
+			// reached?
+			// VectorSubtract(goal->origin, bs->origin, dir);
+			// if(VectorLengthSquared(dir) < Square(10) )
+			if (trap_BotTouchingGoal(bs->origin, &bs->teamgoal)) {
+				BotAddInfo(bs, "planting", AIDBG_GAMETYPE);
+				// do eeett
+				trap_EA_Use(bs->client);
+			} else
+				BotAddInfo(bs, "moving to goal", AIDBG_GAMETYPE);
+
+			memcpy(goal, &bs->teamgoal, sizeof(*goal));
+			return qtrue;
+		}
 	}
 
 	// camp at the balloon until captured

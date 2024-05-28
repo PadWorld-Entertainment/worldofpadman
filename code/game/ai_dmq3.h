@@ -130,7 +130,6 @@ qboolean IsBoomie(int ent);
 qboolean IsBambam(int ent);
 qboolean IsMyBalloon(int team, bot_goal_t *goal);
 qboolean BotCTFCarryingFlag(const bot_state_t *bs);
-qboolean GetCTLFlagGoal(int team, bot_goal_t *goal);
 
 #define MAX_HSTATIONS 8
 
@@ -143,6 +142,7 @@ extern vmCvar_t bot_challenge;
 
 extern bot_goal_t ctf_redflag;
 extern bot_goal_t ctf_blueflag;
+extern bot_goal_t ctf_neutralflag;
 extern bot_goal_t balloongoal[MAX_BALLOONS];
 extern bot_goal_t rwall;
 extern bot_goal_t bwall;

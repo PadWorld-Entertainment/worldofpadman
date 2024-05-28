@@ -839,7 +839,7 @@ static void BotAddInfoLtg(bot_state_t *bs) {
 		// get the goal at the top of the stack
 		if (trap_BotGetTopGoal(bs->gs, goal)) {
 			trap_BotGoalName(goal->number, buf, sizeof(buf));
-			BotAddInfo(bs, va(" ltg: item %s", buf), AIDBG_ALL);
+			BotAddInfo(bs, va("ltg: item %s", buf), AIDBG_ALL);
 		}
 		break;
 	}
@@ -853,7 +853,10 @@ static void BotAddInfoLtg(bot_state_t *bs) {
 		BotAddInfo(bs, "ltg: bring flag to base", AIDBG_ALL);
 		break;
 	case LTG_GETFLAG:
-		BotAddInfo(bs, "ltg: get the enemy flag", AIDBG_ALL);
+		if (gametype == GT_1FCTF)
+			BotAddInfo(bs, "ltg: get the neutral flag", AIDBG_ALL);
+		else
+			BotAddInfo(bs, "ltg: get the enemy flag", AIDBG_ALL);
 		break;
 
 	case LTG_ATTACKENEMYBASE:
@@ -866,7 +869,7 @@ static void BotAddInfoLtg(bot_state_t *bs) {
 	case LTG_DEFENDKEYAREA:
 		if (gametype == GT_BALLOON)
 			BotAddInfo(bs, va("ltg: defend ball %s", g_entities[bs->teamgoal.entitynum].message), AIDBG_ALL);
-		else if (gametype == GT_CTF)
+		else if (gametype == GT_CTF || gametype == GT_1FCTF)
 			BotAddInfo(bs, "ltg: defending flag", AIDBG_ALL);
 		break;
 	case LTG_BALLCAMP:
