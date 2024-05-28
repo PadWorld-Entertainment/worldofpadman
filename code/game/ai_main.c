@@ -669,7 +669,7 @@ void QDECL BotAI_Print(int type, const char *fmt, ...) {
 BotAI_Trace
 ==================
 */
-void BotAI_Trace(bsp_trace_t *bsptrace, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, int passent,
+void BotAI_Trace(bsp_trace_t *bsptrace, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passent,
 				 int contentmask) {
 	trace_t trace;
 

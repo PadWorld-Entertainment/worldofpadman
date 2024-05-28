@@ -374,7 +374,7 @@ extern float floattime;
 void BotAddInfo(bot_state_t *bs, const char *value, int dbgFlags);
 void QDECL BotAI_Print(int type, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 void QDECL QDECL BotAI_BotInitialChat(const bot_state_t *bs, const char *type, ...);
-void BotAI_Trace(bsp_trace_t *bsptrace, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, int passent,
+void BotAI_Trace(bsp_trace_t *bsptrace, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passent,
 				 int contentmask);
 int BotAI_GetClientState(int clientNum, playerState_t *state);
 int BotAI_GetEntityState(int entityNum, entityState_t *state);
