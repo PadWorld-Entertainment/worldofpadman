@@ -765,7 +765,7 @@ void G_RunClient(gentity_t *ent);
 //
 qboolean OnSameTeam(const gentity_t *ent1, const gentity_t *ent2);
 void Team_CheckDroppedItem(const gentity_t *dropped);
-int Team_GetFlagStatus(int team);
+flagStatus_t Team_GetFlagStatus(int team);
 qboolean G_BalloonIsCaptured(int balloonIndex, team_t team, qboolean fullyCaptured);
 void G_SetBalloonCaptured(int balloonIndex, team_t team, qboolean fullyCaptured);
 __attribute__((format(printf, 2, 3))) void QDECL PrintMsg(const gentity_t *ent, const char *fmt, ...);
@@ -1181,6 +1181,6 @@ void trap_BotResetWeaponState(int weaponstate);
 int trap_GeneticParentsAndChildSelection(int numranks, float *ranks, int *parent1, int *parent2, int *child);
 
 void trap_SnapVector(float *v);
-int trap_AAS_BestReachableArea(vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalorigin);
+int trap_AAS_BestReachableArea(const vec3_t origin, const vec3_t mins, const vec3_t maxs, vec3_t goalorigin);
 
 qboolean IsPlayerAtBalloon(int clientNum, const gentity_t *balloon);

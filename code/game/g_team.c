@@ -236,7 +236,7 @@ static void Team_SetFlagStatus(int team, flagStatus_t status) {
 	}
 }
 
-int Team_GetFlagStatus(int team) {
+flagStatus_t Team_GetFlagStatus(int team) {
 	switch (team) {
 	case TEAM_RED: // CTF
 		return teamgame.redStatus;

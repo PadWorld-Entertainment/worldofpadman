@@ -804,6 +804,6 @@ int trap_PC_SourceFileAndLine(int handle, const char *filename, int *line) {
 	return syscall(BOTLIB_PC_SOURCE_FILE_AND_LINE, handle, filename, line);
 }
 
-int trap_AAS_BestReachableArea(vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalorigin) {
+int trap_AAS_BestReachableArea(const vec3_t origin, const vec3_t mins, const vec3_t maxs, vec3_t goalorigin) {
 	return syscall(BOTLIB_AAS_BESTREACHABLEAREA, origin, mins, maxs, goalorigin);
 }

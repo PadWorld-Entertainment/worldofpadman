@@ -508,15 +508,9 @@ however this saves us a lot of code
 ==================
 */
 static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t *goal) {
-	vec3_t target, dir, dir2;
-	char netname[MAX_NETNAME];
-	char buf[MAX_MESSAGE_SIZE];
-	int areanum;
-	float croucher;
-	aas_entityinfo_t entinfo, botinfo;
-
 	// cyr_drop{
 	if (bs->ltgtype == LTG_FETCHCART) {
+		aas_entityinfo_t entinfo;
 		// carts already dropped ?
 		if (bs->takecart) {
 			SelfTeamGoal(bs);
@@ -533,7 +527,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		BotEntityInfo(bs->teammate, &entinfo);
 		// if the entity information is valid (entity in PVS)
 		if (entinfo.valid) {
-			areanum = BotPointAreaNum(entinfo.origin);
+			int areanum = BotPointAreaNum(entinfo.origin);
 			if (areanum && trap_AAS_AreaReachability(areanum)) {
 				// update team goal
 				bs->teamgoal.entitynum = bs->teammate;
@@ -548,12 +542,14 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		return qtrue;
 	}
 	if (bs->ltgtype == LTG_GIVECART) {
+		aas_entityinfo_t entinfo;
 		// stop if sprayammo is empty
 		if (!bs->cur_ps.ammo[WP_SPRAYPISTOL]) {
 			bs->ltgtype = 0;
 			return BotGetItemLongTermGoal(bs, tfl, goal);
 		}
 		if (bs->teammessage_time && bs->teammessage_time < FloatTime()) {
+			char netname[MAX_NETNAME];
 			BotAI_BotInitialChat(bs, "givecart_start", EasyClientName(bs->teammate, netname, sizeof(netname)), NULL);
 			trap_BotEnterChat(bs->cs, bs->teammate, CHAT_TELL);
 			trap_EA_Action(bs->client, ACTION_AFFIRMATIVE);
@@ -566,6 +562,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 
 		// if the companion is visible
 		if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, bs->teammate)) {
+			vec3_t dir;
 			// update visible time
 			bs->teammatevisible_time = FloatTime();
 			VectorSubtract(entinfo.origin, bs->origin, dir);
@@ -579,8 +576,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 				VectorNormalize(forward);
 				VectorNormalize(dir);
 				if (DotProduct(dir, forward) > 0.85) {
-					Com_sprintf(buf, sizeof(buf), "dropCartridge");
-					trap_EA_Command(bs->client, buf);
+					trap_EA_Command(bs->client, "dropCartridge");
 				}
 				//				bs->cartthrown = qtrue;
 			}
@@ -588,7 +584,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 
 		// if the entity information is valid (entity in PVS)
 		if (entinfo.valid) {
-			areanum = BotPointAreaNum(entinfo.origin);
+			int areanum = BotPointAreaNum(entinfo.origin);
 			if (areanum && trap_AAS_AreaReachability(areanum)) {
 				// update team goal
 				bs->teamgoal.entitynum = bs->teammate;
@@ -604,8 +600,10 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 	}
 	// cyr_drop}
 	if (bs->ltgtype == LTG_JOINMATE && !retreat) {
+		aas_entityinfo_t entinfo;
 		// check for bot typing status message
 		if (bs->teammessage_time && bs->teammessage_time < FloatTime()) {
+			char netname[MAX_NETNAME];
 			BotAI_BotInitialChat(bs, "catch_start", EasyClientName(bs->teammate, netname, sizeof(netname)), NULL);
 			trap_BotEnterChat(bs->cs, bs->decisionmaker, CHAT_TELL);
 			// BotVoiceChatOnly(bs, bs->decisionmaker, VOICECHAT_YES);
@@ -626,6 +624,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 			return qfalse;
 		// if the team mate is visible
 		if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, bs->teammate)) {
+			vec3_t dir;
 			// if close just stand still there
 			VectorSubtract(entinfo.origin, bs->origin, dir);
 			if (VectorLengthSquared(dir) < Square(30)) {
@@ -638,7 +637,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		}
 		// if the entity information is valid (entity in PVS)
 		if (entinfo.valid) {
-			areanum = BotPointAreaNum(entinfo.origin);
+			int areanum = BotPointAreaNum(entinfo.origin);
 			if (areanum && trap_AAS_AreaReachability(areanum)) {
 				// update team goal
 				bs->teamgoal.entitynum = bs->teammate;
@@ -693,8 +692,10 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 	}
 	// if the bot accompanies someone
 	if (bs->ltgtype == LTG_TEAMACCOMPANY && !retreat) {
+		aas_entityinfo_t entinfo;
 		// check for bot typing status message
 		if (bs->teammessage_time && bs->teammessage_time < FloatTime()) {
+			char netname[MAX_NETNAME];
 			BotAI_BotInitialChat(bs, "accompany_start", EasyClientName(bs->teammate, netname, sizeof(netname)), NULL);
 			trap_BotEnterChat(bs->cs, bs->decisionmaker, CHAT_TELL);
 			// BotVoiceChatOnly(bs, bs->decisionmaker, VOICECHAT_YES);
@@ -703,6 +704,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		}
 		// if accompanying the companion for 3 minutes
 		if (bs->teamgoal_time < FloatTime()) {
+			char netname[MAX_NETNAME];
 			BotAI_BotInitialChat(bs, "accompany_stop", EasyClientName(bs->teammate, netname, sizeof(netname)), NULL);
 			trap_BotEnterChat(bs->cs, bs->teammate, CHAT_TELL);
 			bs->ltgtype = 0;
@@ -715,10 +717,12 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		}
 		// if the companion is visible
 		if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, bs->teammate)) {
+			vec3_t dir;
 			// update visible time
 			bs->teammatevisible_time = FloatTime();
 			VectorSubtract(entinfo.origin, bs->origin, dir);
 			if (VectorLengthSquared(dir) < Square(bs->formation_dist)) {
+				aas_entityinfo_t botinfo;
 				//
 				// if the client being followed bumps into this bot then
 				// the bot should back up
@@ -734,6 +738,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 							botinfo.origin[1] + botinfo.mins[1] < entinfo.origin[1] + entinfo.maxs[1] + 4) {
 							if (botinfo.origin[2] + botinfo.maxs[2] > entinfo.origin[2] + entinfo.mins[2] - 4 &&
 								botinfo.origin[2] + botinfo.mins[2] < entinfo.origin[2] + entinfo.maxs[2] + 4) {
+								vec3_t dir2;
 								// if the followed client looks in the direction of this bot
 								AngleVectors(entinfo.angles, dir, NULL, NULL);
 								dir[2] = 0;
@@ -753,7 +758,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 				// check if the bot wants to crouch
 				// don't crouch if crouched less than 5 seconds ago
 				if (bs->attackcrouch_time < FloatTime() - 5) {
-					croucher = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CROUCHER, 0, 1);
+					float croucher = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CROUCHER, 0, 1);
 					if (random() < bs->thinktime * croucher) {
 						bs->attackcrouch_time = FloatTime() + 5 + croucher * 15;
 					}
@@ -788,6 +793,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 				}
 				// else look strategically around for enemies
 				else if (random() < bs->thinktime * 0.8f) {
+					vec3_t target;
 					BotRoamGoal(bs, target);
 					VectorSubtract(target, bs->origin, dir);
 					vectoangles(dir, bs->ideal_viewangles);
@@ -812,7 +818,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		}
 		// if the entity information is valid (entity in PVS)
 		if (entinfo.valid) {
-			areanum = BotPointAreaNum(entinfo.origin);
+			int areanum = BotPointAreaNum(entinfo.origin);
 			if (areanum && trap_AAS_AreaReachability(areanum)) {
 				// update team goal
 				bs->teamgoal.entitynum = bs->teammate;
@@ -826,6 +832,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		memcpy(goal, &bs->teamgoal, sizeof(*goal));
 		// if the companion is NOT visible for too long
 		if (bs->teammatevisible_time < FloatTime() - 60) {
+			char netname[MAX_NETNAME];
 			BotAI_BotInitialChat(bs, "accompany_cannotfind", EasyClientName(bs->teammate, netname, sizeof(netname)),
 								 NULL);
 			trap_BotEnterChat(bs->cs, bs->teammate, CHAT_TELL);
@@ -894,6 +901,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 	if (bs->ltgtype == LTG_GETITEM && !retreat) {
 		// check for bot typing status message
 		if (bs->teammessage_time && bs->teammessage_time < FloatTime()) {
+			char buf[MAX_MESSAGE_SIZE];
 			trap_BotGoalName(bs->teamgoal.number, buf, sizeof(buf));
 			BotAI_BotInitialChat(bs, "getitem_start", buf, NULL);
 			trap_BotEnterChat(bs->cs, bs->decisionmaker, CHAT_TELL);
@@ -909,11 +917,13 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		}
 		//
 		if (trap_BotItemGoalInVisButNotVisible(bs->entitynum, bs->eye, bs->viewangles, goal)) {
+			char buf[MAX_MESSAGE_SIZE];
 			trap_BotGoalName(bs->teamgoal.number, buf, sizeof(buf));
 			BotAI_BotInitialChat(bs, "getitem_notthere", buf, NULL);
 			trap_BotEnterChat(bs->cs, bs->decisionmaker, CHAT_TELL);
 			bs->ltgtype = 0;
 		} else if (BotReachedGoal(bs, goal)) {
+			char buf[MAX_MESSAGE_SIZE];
 			trap_BotGoalName(bs->teamgoal.number, buf, sizeof(buf));
 			BotAI_BotInitialChat(bs, "getitem_gotit", buf, NULL);
 			trap_BotEnterChat(bs->cs, bs->decisionmaker, CHAT_TELL);
@@ -924,7 +934,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 	if (gametype == GT_CTF) {
 		if (bs->ltgtype == LTG_CAPTUREFLAG) {
 			bot_goal_t *base_flag = NULL;
-			int flagstatus;
+			flagStatus_t flagstatus;
 
 			// if not carrying the flag anymore, or timer hits
 			if (!BotCTFCarryingFlag(bs) || bs->teamgoal_time < FloatTime()) {
@@ -1009,7 +1019,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 			}
 		}
 		if (bs->ltgtype == LTG_GETFLAG) {
-			int status;
+			flagStatus_t status;
 
 			// stop after timer hit
 			if (bs->teamgoal_time < FloatTime()) {
@@ -1022,6 +1032,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 				bs->ltgtype = 0;
 				return qfalse;
 			} else if (status == FLAG_DROPPED) {
+				vec3_t dir;
 				memcpy(goal, &bs->teamgoal, sizeof(*goal));
 				// reset ltg if bot touches the goal.. to cover the case where the flag
 				// got picked up and dropped again between two AI frames
@@ -1158,6 +1169,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 
 	// camp at the balloon until captured
 	if (bs->ltgtype == LTG_BALLCAMP) {
+		vec3_t dir;
 		if (bs->teamgoal_time < FloatTime()) {
 			bs->ltgtype = 0;
 		}
@@ -1174,6 +1186,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		if (VectorLengthSquared(dir) < Square(60)) {
 			// look strategically around for enemies
 			if (random() < bs->thinktime * 0.8f) {
+				vec3_t target;
 				BotRoamGoal(bs, target);
 				VectorSubtract(target, bs->origin, dir);
 				vectoangles(dir, bs->ideal_viewangles);
@@ -1182,7 +1195,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 			// check if the bot wants to crouch
 			// don't crouch if crouched less than 5 seconds ago
 			if (bs->attackcrouch_time < FloatTime() - 5) {
-				croucher = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CROUCHER, 0, 1);
+				float croucher = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_CROUCHER, 0, 1);
 				if (random() < bs->thinktime * croucher) {
 					bs->attackcrouch_time = FloatTime() + 5 + croucher * 15;
 				}

@@ -30,11 +30,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *****************************************************************************/
 
-// ctf flags
-#define CTF_FLAG_NONE 0
-#define CTF_FLAG_RED 1
-#define CTF_FLAG_BLUE 2
-
 // setup the deathmatch AI
 void BotSetupDeathmatchAI(void);
 // let the bot live within its deathmatch AI net
@@ -80,8 +75,6 @@ float BotAggression(bot_state_t *bs);
 int BotWantsToRetreat(bot_state_t *bs);
 // returns true if the bot wants to chase
 int BotWantsToChase(bot_state_t *bs);
-// returns true if the bot wants to help
-int BotWantsToHelp(bot_state_t *bs);
 // the bot will perform attack movements
 bot_moveresult_t BotAttackMove(bot_state_t *bs, int tfl);
 // returns true if the bot and the entity are in the same team
@@ -91,7 +84,7 @@ int TeamPlayIsOn(void);
 // get the number of visible teammates and enemies
 void BotVisibleTeamMatesAndEnemies(bot_state_t *bs, int *teammates, int *enemies, float range);
 // returns true if within the field of vision for the given angles
-qboolean InFieldOfVision(vec3_t viewangles, float fov, vec3_t angles);
+qboolean InFieldOfVision(const vec3_t viewangles, float fov, vec3_t angles);
 // returns true and sets the .enemy field when an enemy is found
 int BotFindEnemy(bot_state_t *bs, int curenemy);
 // returns a roam goal
@@ -128,15 +121,15 @@ void BotMapScripts(bot_state_t *bs);
 qboolean ClientInSprayroom(int clId);
 qboolean BotCheckChargedImp(bot_state_t *bs);
 qboolean BotNmyTurnedInvalid(bot_state_t *bs);
-int BotGetNumClientCarts(bot_state_t *bs, int clientnum);
-int BotSprayWallCheckAttack(bot_state_t *bs);
+int BotGetNumClientCarts(const bot_state_t *bs, int clientnum);
+int BotSprayWallCheckAttack(const bot_state_t *bs);
 void BotSelectLogo(bot_state_t *bs);
 qboolean IsDuck(int ent);
 qboolean IsWall(int ent);
 qboolean IsBoomie(int ent);
 qboolean IsBambam(int ent);
 qboolean IsMyBalloon(int team, bot_goal_t *goal);
-qboolean BotCTFCarryingFlag(bot_state_t *bs);
+qboolean BotCTFCarryingFlag(const bot_state_t *bs);
 qboolean GetCTLFlagGoal(int team, bot_goal_t *goal);
 
 #define MAX_HSTATIONS 8

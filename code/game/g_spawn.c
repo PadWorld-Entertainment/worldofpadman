@@ -472,7 +472,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		}
 	}
 
-	// remove red and blue lollies if we aren't in CTL and 1LC
+	// remove red and blue lollies if we aren't in CTL and 1LCTL
 	if (g_gametype.integer != GT_CTF && g_gametype.integer != GT_1FCTF &&
 		(!Q_stricmp(ent->classname, "team_CTL_redlolly") || !Q_stricmp(ent->classname, "team_CTL_bluelolly"))) {
 		Com_DPrintf("Spawning: Free lollies, this is not a ctf game type\n");
@@ -480,7 +480,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		return;
 	}
 
-	// remove neutral lolly if we aren't in 1LC
+	// remove neutral lolly if we aren't in 1LCTL
 	if (g_gametype.integer != GT_1FCTF && !Q_stricmp(ent->classname, "team_CTL_neutrallolly")) {
 		Com_DPrintf("Spawning: Remove neutral lolly, this is no 1flag game type\n");
 		G_FreeEntity(ent);
