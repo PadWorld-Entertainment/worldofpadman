@@ -1393,6 +1393,7 @@ void BotUpdateInventory(bot_state_t *bs) {
 
 	bs->inventory[INVENTORY_REDFLAG] = bs->cur_ps.powerups[PW_REDFLAG] != 0;
 	bs->inventory[INVENTORY_BLUEFLAG] = bs->cur_ps.powerups[PW_BLUEFLAG] != 0;
+	bs->inventory[INVENTORY_NEUTRALFLAG] = bs->cur_ps.powerups[PW_NEUTRALFLAG] != 0;
 
 	// cyr
 	bs->inventory[INVENTORY_CLIENTNUM] = bs->client; // cyr
