@@ -1002,7 +1002,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		if (bs->ltgtype == LTG_GETFLAG) {
 			int status;
 
-			// stop after 3 minutes
+			// stop after timer hit
 			if (bs->teamgoal_time < FloatTime()) {
 				bs->ltgtype = 0;
 			}
@@ -1147,7 +1147,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		}
 	}
 
-	// camp at the balloon untill captured
+	// camp at the balloon until captured
 	if (bs->ltgtype == LTG_BALLCAMP) {
 		if (bs->teamgoal_time < FloatTime()) {
 			bs->ltgtype = 0;
