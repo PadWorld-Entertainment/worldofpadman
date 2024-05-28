@@ -243,6 +243,37 @@ textures/pad_bookroom/frost-bite
 }
 
 // =================
+// PadShip skybox
+// =================
+
+textures/pad_pirate/doornthree
+{
+    qer_editorimage env/doornthree512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_f67536ff
+    q3map_sun 1.000000 0.635081 0.272618 280 68 26 0.5
+    q3map_surfacelight 230
+    {
+        alphafunc LT128
+        map *white
+    }
+}
+
+textures/pad_pirate/deep-six
+{
+    qer_editorimage env/deep-six512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    q3map_lightimage textures/colors/hex_abbfdbff
+    q3map_sun 0.266383 0.274632 0.358662 130 65 55
+    q3map_surfacelight 170
+    skyparms env/deep-six512 - -
+}
+
+// =================
 // PadShop skybox
 // =================
 
