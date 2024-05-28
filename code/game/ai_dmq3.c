@@ -1328,7 +1328,7 @@ static int BotCalcWeapEquip(bot_state_t *bs, int weapid, int ammoid, int snapamm
 		else
 			ammo = bs->inventory[ammoid];
 		// [0..100]
-		return (100 * (float)(ammo / snapammo));
+		return 100 * ((float)ammo / (float)snapammo);
 	}
 	// no weap, no equip
 	return 0;
