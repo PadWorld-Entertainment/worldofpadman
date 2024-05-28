@@ -273,6 +273,15 @@ static int BotNearbyGoal(bot_state_t *bs, int tfl, bot_goal_t *ltg, float range)
 	if (BotGoForAir(bs, tfl, ltg, range))
 		return qtrue;
 
+	// if the bot is carrying a flag or cubes
+	if (BotCTFCarryingFlag(bs)) {
+		// if the bot is just a few secs away from the base
+		if (trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->teamgoal.areanum, TFL_DEFAULT) < 300) {
+			// make the range really small
+			range = 50;
+		}
+	}
+
 	ret = trap_BotChooseNBGItem(bs->gs, bs->origin, bs->inventory, tfl, ltg, range);
 
 	if (BotGotIllegalCartGoal(bs)) // goal was dropped, so dont set ltg_time
