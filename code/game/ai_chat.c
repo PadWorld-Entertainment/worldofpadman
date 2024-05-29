@@ -197,7 +197,7 @@ static char *BotLastClientInRankings(void) {
 BotRandomOpponentName
 ==================
 */
-static char *BotRandomOpponentName(const bot_state_t *bs) {
+static const char *BotRandomOpponentName(const bot_state_t *bs) {
 	int i, count;
 	char buf[MAX_INFO_STRING];
 	int opponents[MAX_CLIENTS], numopponents;
