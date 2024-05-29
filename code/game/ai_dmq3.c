@@ -790,16 +790,17 @@ static void BotSyCRetreatGoals(bot_state_t *bs) {
 }
 
 // returns which "number" in the team is this bot (will be used for some fake teamplay ;P)
-static int BotNumberInTeam(bot_state_t *bs) {
-	int i;
+static int BotNumberInTeam(const bot_state_t *bs) {
+	int id;
 	int r = 0;
 
-	for (i = 0; i < level.maxclients; ++i) {
-		if (i == bs->client)
+	for (id = 0; id < MAX_CLIENTS; ++id) {
+		bot_state_t *otherbs = botstates[id];
+		if (!otherbs || !otherbs->inuse)
+			continue;
+		if (otherbs->client == bs->client)
 			break;
-
-		// FIXME: that call maybe a bit to heavy ... and probably also return true for none-bot teammates
-		if (BotSameTeam(bs, i))
+		if (BotSameTeam(bs, otherbs->entitynum))
 			++r;
 	}
 
