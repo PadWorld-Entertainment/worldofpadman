@@ -334,9 +334,9 @@ typedef struct bot_state_s {
 	int stuckcounter;  // bathscript, increased every frame the bot is stuck (his traveltime is the same as last frame)
 	int curtt;		   // bathscript, current traveltime
 	qboolean takecart; // stop going for mate, go for NBG
+	qboolean cartthrown;
 	float checkcarttime; // search for weak cart carrying mates - time interval
 	float checkhealth_time;
-	qboolean cartthrown;
 	int orderclient;	// teamleader AI, if this is == -1 order only this client
 	int frametime;		// clock frame duration
 	float duckuse_time; // dont use ducks till that time

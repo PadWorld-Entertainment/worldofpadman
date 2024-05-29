@@ -1016,6 +1016,7 @@ static void BotCtfSeekGoals(bot_state_t *bs) {
 			break;
 		default: // FLAG_ATBASE
 			action = LTG_DEFENDKEYAREA;
+			break;
 		}
 	} else {
 		// the enemyflag was taken ... and we have our flag ... defend it!
