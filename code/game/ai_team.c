@@ -997,6 +997,7 @@ void BotTeamAI(bot_state_t *bs) {
 		}
 		break;
 	}
+	case GT_1FCTF:
 	case GT_CTF: {
 		// if the number of team mates changed or the flag status changed
 		// or someone wants to know what to do

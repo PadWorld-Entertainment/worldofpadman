@@ -4365,6 +4365,18 @@ static void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 		} else if (attacker == bs->enemy && target == attacker) {
 			bs->enemysuicide = qtrue;
 		}
+#if USE_TEAMAI
+		if (gametype == GT_1FCTF) {
+			aas_entityinfo_t entinfo;
+			BotEntityInfo(target, &entinfo);
+			if (entinfo.powerups & (1 << PW_NEUTRALFLAG)) {
+				if (!BotSameTeam(bs, target)) {
+					bs->neutralflagstatus = 3; // enemy dropped the flag
+					bs->flagstatuschanged = qtrue;
+				}
+			}
+		}
+#endif
 		break;
 	}
 	case EV_GLOBAL_SOUND: {
@@ -4380,6 +4392,42 @@ static void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 		break;
 	}
 	case EV_GLOBAL_TEAM_SOUND: {
+#if USE_TEAMAI
+		if (gametype == GT_CTF || gametype == GT_1FCTF) {
+			switch (state->eventParm) {
+			case GTS_RED_CAPTURE:
+				bs->blueflagstatus = 0;
+				bs->redflagstatus = 0;
+				bs->flagstatuschanged = qtrue;
+				break; // see BotMatch_CTF
+			case GTS_BLUE_CAPTURE:
+				bs->blueflagstatus = 0;
+				bs->redflagstatus = 0;
+				bs->flagstatuschanged = qtrue;
+				break; // see BotMatch_CTF
+			case GTS_RED_RETURN:
+				// blue flag is returned
+				bs->blueflagstatus = 0;
+				bs->flagstatuschanged = qtrue;
+				break;
+			case GTS_BLUE_RETURN:
+				// red flag is returned
+				bs->redflagstatus = 0;
+				bs->flagstatuschanged = qtrue;
+				break;
+			case GTS_RED_TAKEN:
+				// blue flag is taken
+				bs->blueflagstatus = 1;
+				bs->flagstatuschanged = qtrue;
+				break; // see BotMatch_CTF
+			case GTS_BLUE_TAKEN:
+				// red flag is taken
+				bs->redflagstatus = 1;
+				bs->flagstatuschanged = qtrue;
+				break; // see BotMatch_CTF
+			}
+		}
+#endif
 		break;
 	}
 	case EV_PLAYER_TELEPORT_IN: {
