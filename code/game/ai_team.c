@@ -54,7 +54,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "match.h"
 
-int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates);
+int BotGetTeammates(const bot_state_t *bs, int *teammates, int maxteammates);
 
 #if USE_TEAMAI
 

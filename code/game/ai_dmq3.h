@@ -106,9 +106,9 @@ int BotPopFromActivateGoalStack(bot_state_t *bs);
 // clear the activate goal stack
 void BotClearActivateGoalStack(bot_state_t *bs);
 // returns the team the bot is in
-int BotTeam(bot_state_t *bs);
+int BotTeam(const bot_state_t *bs);
 // retuns the opposite team of the bot
-int BotOppositeTeam(bot_state_t *bs);
+int BotOppositeTeam(const bot_state_t *bs);
 // remember the last ordered task
 void BotRememberLastOrderedTask(bot_state_t *bs);
 // returns the number of the client with the given name

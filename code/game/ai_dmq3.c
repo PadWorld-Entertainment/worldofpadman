@@ -207,7 +207,7 @@ qboolean IsBoomie(int ent) {
 BotTeam
 ==================
 */
-int BotTeam(bot_state_t *bs) {
+int BotTeam(const bot_state_t *bs) {
 	gclient_t *client;
 
 	if (bs->client < 0 || bs->client >= MAX_CLIENTS) {
@@ -225,7 +225,7 @@ int BotTeam(bot_state_t *bs) {
 BotOppositeTeam
 ==================
 */
-int BotOppositeTeam(bot_state_t *bs) {
+int BotOppositeTeam(const bot_state_t *bs) {
 	switch (BotTeam(bs)) {
 	case TEAM_RED:
 		return TEAM_BLUE;

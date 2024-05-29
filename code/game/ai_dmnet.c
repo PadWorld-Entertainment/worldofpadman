@@ -77,7 +77,7 @@ int BotClientTravelTimeToGoal(int client, bot_goal_t *goal) {
 	return trap_AAS_AreaTravelTimeToGoalArea(areanum, ps.origin, goal->areanum, TFL_DEFAULT);
 }
 
-int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates) {
+int BotGetTeammates(const bot_state_t *bs, int *teammates, int maxteammates) {
 	int i, numteammates;
 	char buf[MAX_INFO_STRING];
 
@@ -118,7 +118,7 @@ void BotResetNodeSwitches(void) {
 BotDumpNodeSwitches
 ==================
 */
-void BotDumpNodeSwitches(bot_state_t *bs) {
+void BotDumpNodeSwitches(const bot_state_t *bs) {
 	int i;
 	char netname[MAX_NETNAME];
 
@@ -473,7 +473,7 @@ static void BotBathScript(bot_state_t *bs, bot_goal_t *goal) {
 }
 #endif
 
-bot_goal_t *BotChooseWall(bot_state_t *bs) {
+bot_goal_t *BotChooseWall(const bot_state_t *bs) {
 	if (gametype == GT_SPRAYFFA) // fifty fifty
 		return (random() < 0.5) ? &bwall : &rwall;
 
@@ -484,7 +484,7 @@ bot_goal_t *BotChooseWall(bot_state_t *bs) {
 		return (random() < 0.99) ? &bwall : &rwall;
 }
 
-bot_goal_t *BotChooseCorrectWall(bot_state_t *bs) {
+bot_goal_t *BotChooseCorrectWall(const bot_state_t *bs) {
 	// shall not be called for sycffa
 	if (BotTeam(bs) == TEAM_RED)
 		return &rwall;
@@ -1765,7 +1765,7 @@ static int AINode_Frozen(bot_state_t *bs) {
 	return qtrue;
 }
 
-static void AIEnterFrozen(bot_state_t *bs, char *s) {
+static void AIEnterFrozen(bot_state_t *bs, const char *s) {
 	BotRecordNodeSwitch(bs, "frozen", "", s);
 	bs->ainode = AINode_Frozen;
 	bs->teammessage_time = 0;
@@ -1776,7 +1776,7 @@ static void AIEnterFrozen(bot_state_t *bs, char *s) {
 AIEnter_Stand
 ==================
 */
-void AIEnter_Stand(bot_state_t *bs, char *s) {
+void AIEnter_Stand(bot_state_t *bs, const char *s) {
 	BotRecordNodeSwitch(bs, "stand", "", s);
 	bs->standfindenemy_time = FloatTime() + 1;
 	bs->ainode = AINode_Stand;
@@ -1787,7 +1787,7 @@ void AIEnter_Stand(bot_state_t *bs, char *s) {
 AIEnter_Respawn
 ==================
 */
-void AIEnter_Respawn(bot_state_t *bs, char *s) {
+void AIEnter_Respawn(bot_state_t *bs, const char *s) {
 	BotRecordNodeSwitch(bs, "respawn", "", s);
 	// reset some states
 	trap_BotResetMoveState(bs->ms);
@@ -1871,7 +1871,7 @@ static int BotSelectActivateWeapon(bot_state_t *bs) {
 AIEnter_Seek_ActivateEntity
 ==================
 */
-void AIEnter_Seek_ActivateEntity(bot_state_t *bs, char *s) {
+void AIEnter_Seek_ActivateEntity(bot_state_t *bs, const char *s) {
 	BotRecordNodeSwitch(bs, "activate entity", "", s);
 	bs->ainode = AINode_Seek_ActivateEntity;
 }
@@ -2089,7 +2089,7 @@ int AINode_Seek_ActivateEntity(bot_state_t *bs) {
 AIEnter_Seek_NBG
 ==================
 */
-void AIEnter_Seek_NBG(bot_state_t *bs, char *s) {
+void AIEnter_Seek_NBG(bot_state_t *bs, const char *s) {
 	bot_goal_t goal;
 	char buf[144];
 
@@ -2426,7 +2426,7 @@ int AINode_Cam(bot_state_t *bs) {
 AIEnter_Seek_LTG
 ==================
 */
-void AIEnter_Seek_LTG(bot_state_t *bs, char *s) {
+void AIEnter_Seek_LTG(bot_state_t *bs, const char *s) {
 	bot_goal_t goal;
 	char buf[144];
 
@@ -2643,7 +2643,7 @@ int AINode_Seek_LTG(bot_state_t *bs) {
 AIEnter_Battle_Fight
 ==================
 */
-void AIEnter_Battle_Fight(bot_state_t *bs, char *s) {
+void AIEnter_Battle_Fight(bot_state_t *bs, const char *s) {
 	BotRecordNodeSwitch(bs, "battle fight", "", s);
 	trap_BotResetLastAvoidReach(bs->ms);
 	bs->ainode = AINode_Battle_Fight;
@@ -2654,7 +2654,7 @@ void AIEnter_Battle_Fight(bot_state_t *bs, char *s) {
 AIEnter_Battle_Fight
 ==================
 */
-static void AIEnter_Battle_SuicidalFight(bot_state_t *bs, char *s) {
+static void AIEnter_Battle_SuicidalFight(bot_state_t *bs, const char *s) {
 	BotRecordNodeSwitch(bs, "battle fight", "", s);
 	trap_BotResetLastAvoidReach(bs->ms);
 	bs->ainode = AINode_Battle_Fight;
@@ -2835,7 +2835,7 @@ int AINode_Battle_Fight(bot_state_t *bs) {
 AIEnter_Battle_Chase
 ==================
 */
-void AIEnter_Battle_Chase(bot_state_t *bs, char *s) {
+void AIEnter_Battle_Chase(bot_state_t *bs, const char *s) {
 	BotRecordNodeSwitch(bs, "battle chase", "", s);
 	bs->chase_time = FloatTime();
 	bs->ainode = AINode_Battle_Chase;
@@ -2997,7 +2997,7 @@ int AINode_Battle_Chase(bot_state_t *bs) {
 AIEnter_Battle_Retreat
 ==================
 */
-void AIEnter_Battle_Retreat(bot_state_t *bs, char *s) {
+void AIEnter_Battle_Retreat(bot_state_t *bs, const char *s) {
 	BotRecordNodeSwitch(bs, "battle retreat", "", s);
 	bs->ainode = AINode_Battle_Retreat;
 }
@@ -3231,7 +3231,7 @@ int AINode_Battle_Retreat(bot_state_t *bs) {
 AIEnter_Battle_NBG
 ==================
 */
-void AIEnter_Battle_NBG(bot_state_t *bs, char *s) {
+void AIEnter_Battle_NBG(bot_state_t *bs, const char *s) {
 	BotRecordNodeSwitch(bs, "battle NBG", "", s);
 	bs->ainode = AINode_Battle_NBG;
 }

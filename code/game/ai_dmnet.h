@@ -32,16 +32,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define MAX_NODESWITCHES 50
 
-void AIEnter_Stand(bot_state_t *bs, char *s);
-void AIEnter_Seek_ActivateEntity(bot_state_t *bs, char *s);
-void AIEnter_Seek_NBG(bot_state_t *bs, char *s);
-void AIEnter_Seek_LTG(bot_state_t *bs, char *s);
-void AIEnter_Seek_Camp(bot_state_t *bs, char *s);
-void AIEnter_Battle_Fight(bot_state_t *bs, char *s);
-void AIEnter_Battle_Chase(bot_state_t *bs, char *s);
-void AIEnter_Battle_Retreat(bot_state_t *bs, char *s);
-void AIEnter_Battle_NBG(bot_state_t *bs, char *s);
-void AIEnter_Respawn(bot_state_t *bs, char *s);
+void AIEnter_Stand(bot_state_t *bs, const char *s);
+void AIEnter_Seek_ActivateEntity(bot_state_t *bs, const char *s);
+void AIEnter_Seek_NBG(bot_state_t *bs, const char *s);
+void AIEnter_Seek_LTG(bot_state_t *bs, const char *s);
+void AIEnter_Seek_Camp(bot_state_t *bs, const char *s);
+void AIEnter_Battle_Fight(bot_state_t *bs, const char *s);
+void AIEnter_Battle_Chase(bot_state_t *bs, const char *s);
+void AIEnter_Battle_Retreat(bot_state_t *bs, const char *s);
+void AIEnter_Battle_NBG(bot_state_t *bs, const char *s);
+void AIEnter_Respawn(bot_state_t *bs, const char *s);
 int AINode_Respawn(bot_state_t *bs);
 int AINode_Seek_ActivateEntity(bot_state_t *bs);
 int AINode_Seek_NBG(bot_state_t *bs);
@@ -50,13 +50,12 @@ int AINode_Battle_Fight(bot_state_t *bs);
 int AINode_Battle_Chase(bot_state_t *bs);
 int AINode_Battle_Retreat(bot_state_t *bs);
 int AINode_Battle_NBG(bot_state_t *bs);
-void AIEnter_Reachtest(bot_state_t *bs, char *s);
 int AINode_Reachtest(bot_state_t *bs);
 int AINode_Cam(bot_state_t *bs);
-int BotGetTeammates(bot_state_t *bs, int *teammates, int maxteammates);
+int BotGetTeammates(const bot_state_t *bs, int *teammates, int maxteammates);
 
 void BotResetNodeSwitches(void);
-void BotDumpNodeSwitches(bot_state_t *bs);
+void BotDumpNodeSwitches(const bot_state_t *bs);
 
-bot_goal_t *BotChooseWall(bot_state_t *bs);
-bot_goal_t *BotChooseCorrectWall(bot_state_t *bs);
+bot_goal_t *BotChooseWall(const bot_state_t *bs);
+bot_goal_t *BotChooseCorrectWall(const bot_state_t *bs);
