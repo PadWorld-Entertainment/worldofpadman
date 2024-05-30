@@ -1212,8 +1212,7 @@ void ClientSpawn(gentity_t *ent) {
 
 	// weapon inventory / Modifiers
 	if (g_modInstagib.integer) {
-		int weapon;
-		weapon = Instagib_getSpawnWeapon();
+		int weapon = Instagib_getSpawnWeapon();
 
 		// add instagib weapon to client's inventory
 		client->ps.stats[STAT_WEAPONS] = (1 << weapon);
@@ -1248,7 +1247,7 @@ void ClientSpawn(gentity_t *ent) {
 		// add some bonus health as spawn protection if instagib is not active
 		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
 	}
-	
+
 	if (g_gametype.integer == GT_LPS) {
 		client->ps.stats[STAT_ARMOR] = 100;
 	}
@@ -1333,7 +1332,7 @@ void ClientSpawn(gentity_t *ent) {
 	BG_PlayerStateToEntityState(&client->ps, &ent->s, qtrue);
 
 	// start instagib spawn protection
-	if (g_modInstagib.integer) { 
+	if (g_modInstagib.integer) {
 		ent->flags ^= FL_GODMODE;
 		client->spawnProtect = level.time;
 		G_AddEvent(ent, EV_SPAWNPROTECT, qtrue);

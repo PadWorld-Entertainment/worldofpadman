@@ -1010,7 +1010,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 
 	CG_PositionEntityOnTag(&gun, parent, parent->hModel, "tag_weapon");
 
-	CG_AddWeaponWithPowerups(&gun, cent->currentState.powerups, cent->currentState.weapon);
+	CG_AddWeaponWithPowerups(&gun, cent->currentState.powerups, weaponNum);
 
 	// add the spinning barrel
 	if (weapon->barrelModel) {
@@ -1027,7 +1027,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 
 		CG_PositionRotatedEntityOnTag(&barrel, &gun, weapon->weaponModel, "tag_barrel");
 
-		CG_AddWeaponWithPowerups(&barrel, cent->currentState.powerups, cent->currentState.weapon);
+		CG_AddWeaponWithPowerups(&barrel, cent->currentState.powerups, weaponNum);
 	}
 
 	// make sure we aren't looking at cg.predictedPlayerEntity for LG
@@ -1274,7 +1274,6 @@ void CG_AddViewWeapon(const playerState_t *ps) {
 		case WP_PUMPER:
 			xOffset += -2;
 			yOffset += -2;
-			//			zOffset+=0;
 			break;
 		case WP_BALLOONY:
 			xOffset += 2;
@@ -1316,7 +1315,6 @@ void CG_AddViewWeapon(const playerState_t *ps) {
 		case WP_SPRAYPISTOL:
 			xOffset += 10;
 			yOffset += -3;
-			//		zOffset+=0;
 			break;
 		}
 	}
