@@ -1375,7 +1375,7 @@ void CG_DrawWeaponSelect(void) {
 	}
 
 	// don't display if in select logo menu
-	if (cg.wantSelectLogo) {
+	if (cg.wantSelectLogo || BG_IsKillerDuck(&cg.snap->ps)) {
 		return;
 	}
 
