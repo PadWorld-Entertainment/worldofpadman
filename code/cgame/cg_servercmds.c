@@ -544,7 +544,7 @@ Cmd_Argc() / Cmd_Argv()
 static void CG_ServerCommand(void) {
 	const char *cmd;
 	char text[MAX_SAY_TEXT];
-	int i, id;
+	int i;
 
 	cmd = CG_Argv(0);
 
@@ -578,6 +578,7 @@ static void CG_ServerCommand(void) {
 #define CHATBEEP_TELL 4
 	// say $mode $cid $text
 	if (!strcmp(cmd, "say")) {
+		int id;
 		int mode = atoi(CG_Argv(1));
 		if (cgs.gametype >= GT_TEAM && cg_teamChatsOnly.integer && (mode == SAY_ALL)) {
 			return;
@@ -657,14 +658,14 @@ static void CG_ServerCommand(void) {
 
 	// "sprayroom weapon change"
 	if (!strcmp(cmd, "srwc")) {
-		id = atoi(CG_Argv(1));
+		int id = atoi(CG_Argv(1));
 		CG_WeaponSRWC(id);
 		return;
 	}
 
 	// "client do it"
 	if (!strcmp(cmd, "cdi")) {
-		id = atoi(CG_Argv(1));
+		int id = atoi(CG_Argv(1));
 
 		// FIXME: Magical constants!
 		switch (id) {

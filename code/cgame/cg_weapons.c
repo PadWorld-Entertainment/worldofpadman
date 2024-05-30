@@ -1536,7 +1536,7 @@ void CG_NextWeapon_f(void) {
 
 	for (i = 0; i < WP_NUM_WEAPONS; i++) {
 		cg.weaponSelect++;
-		if (cg.weaponSelect == WP_NUM_WEAPONS) {
+		if (cg.weaponSelect >= WP_NUM_WEAPONS) {
 			cg.weaponSelect = WP_NONE;
 		}
 

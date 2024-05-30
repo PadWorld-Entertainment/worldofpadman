@@ -469,7 +469,7 @@ CG_WaterLevel
 Returns waterlevel for entity origin
 ================
 */
-static int CG_WaterLevel(centity_t *cent) {
+static int CG_WaterLevel(const centity_t *cent) {
 	vec3_t point;
 	int contents, sample1, sample2, anim, waterlevel;
 	int viewheight;
@@ -521,7 +521,7 @@ Also called by playerstate transition
 ================
 */
 void CG_PainEvent(centity_t *cent, int health) {
-	char *snd;
+	const char *snd;
 
 	// don't do more than two pain sounds a second
 	if (cg.time - cent->pe.painTime < 500) {

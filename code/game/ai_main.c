@@ -1466,9 +1466,7 @@ static int BotAI(int client, float thinktime) {
 			trap_BotQueueConsoleMessage(bs->cs, CMS_CHAT, args);
 		} else if (!Q_stricmp(buf, "scores")) {			 /*FIXME: parse scores?*/
 		} else if (!Q_stricmp(buf, "clientLevelShot")) { /*ignore*/
-		}
-
-		else if (!Q_stricmp(buf, "srwc")) // srwc->sprayroomweaponchange ;)
+		} else if (!Q_stricmp(buf, "srwc")) // srwc->sprayroomweaponchange ;)
 		{
 			//			trap_SendConsoleCommand(va("weapon %s",CG_Argv(1)));
 			bs->weaponnum = atoi(args);
