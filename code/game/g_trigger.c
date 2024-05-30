@@ -285,25 +285,17 @@ static void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t 
 			other->client->sprayroomsoundflags = 0;
 			other->client->ps.stats[STAT_SPRAYROOMSECS] = (level.maxsprayroomtime + 1);
 
-			if (other->client->ps.weapon != WP_SPRAYPISTOL) {
-				other->client->last_nonspray_weapon = other->client->ps.weapon;
-			}
 			if (other->client->ps.weaponstate == WEAPON_CHARGING) {
 				other->client->ps.weaponstate = WEAPON_READY;
 				other->client->ps.weaponTime = 0;
 			}
-			trap_SendServerCommand(other->client->ps.clientNum, va("srwc %i", WP_SPRAYPISTOL));
-			other->client->pers.cmd.weapon = WP_SPRAYPISTOL;
-			other->client->ps.weapon = WP_SPRAYPISTOL;
-
+			G_ForceClientWeapon(other->client, WP_SPRAYPISTOL, qfalse);
 			G_BackupPowerups(other->client);
 		}
 		// sprayroom teleporter out
 		else if (self->spawnflags & 0x4) {
 			other->client->ps.stats[STAT_SPRAYROOMSECS] = 0;
-			trap_SendServerCommand(other->client->ps.clientNum, va("srwc %i", other->client->last_nonspray_weapon));
-			other->client->pers.cmd.weapon = other->client->last_nonspray_weapon;
-			other->client->ps.weapon = other->client->last_nonspray_weapon;
+			G_RestoreClientLastWeapon(other->client, qfalse);
 
 			G_RestorePowerups(other->client);
 		}

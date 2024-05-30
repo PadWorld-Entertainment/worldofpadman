@@ -2154,8 +2154,7 @@ static void WoP_RunFrame(void) {
 						ent->client->ps.origin[2] += 9;
 
 						SetClientViewAngle(ent, level.sr_tl_tele->s.angles);
-
-						trap_SendServerCommand(i, va("srwc %i", ent->client->last_nonspray_weapon));
+						G_RestoreClientLastWeapon(ent->client, qfalse);
 					}
 					// No killroom in map. Kill player right in place
 					else {

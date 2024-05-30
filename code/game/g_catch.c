@@ -118,6 +118,7 @@ gentity_t *G_DropKillerDucks(gentity_t *ent) {
 	client->pers.lastKillerDuckPoints = 0;
 	client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 	client->ps.stats[STAT_HOLDABLEVAR] = 0;
+	G_RestoreClientLastWeapon(client, qtrue);
 	client->ps.eFlags &= ~EF_KILLERDUCK;
 	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " lost the KillerDuck.\n\"", client->pers.netname));
 	if (ent->client->ps.clientNum == clientNum) {
@@ -166,6 +167,7 @@ void G_BecomeKillerDuck(gentity_t *item, gentity_t *ent) {
 	// we only carry one killer duck in this game mode
 	ent->client->ps.stats[STAT_HOLDABLEVAR] = 1;
 	ent->client->pers.lastKillerDuckPoints = level.time;
+	G_ForceClientWeapon(ent->client, WP_KILLERDUCKS, qtrue);
 	ent->client->ps.eFlags |= EF_KILLERDUCK;
 	ent->client->ps.stats[STAT_HEALTH] = ent->health = 200;
 	ent->client->ps.stats[STAT_ARMOR] = 200;

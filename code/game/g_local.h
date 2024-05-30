@@ -345,7 +345,7 @@ struct gclient_s {
 
 	int sprayroomleavetime;	 // when the player have to leave the room
 	int sprayroomsoundflags; // 1 -> TenSecondsTo..., 2 -> CountDown
-	int last_nonspray_weapon;
+	int last_nonforced_weapon;	// last weapon before forced weapon change for e.g. sprayrooms or ctkd
 	int logoasktime;
 
 	int lastBoasterHitTime;
@@ -574,6 +574,9 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace);
 void ClearRegisteredItems(void);
 void RegisterItem(const gitem_t *item);
 void SaveRegisteredItems(void);
+
+void G_ForceClientWeapon(gclient_t *client, int weapon, qboolean addToInventory);
+void G_RestoreClientLastWeapon(gclient_t *client, qboolean removeFromInventory);
 
 //
 // g_utils.c

@@ -649,8 +649,9 @@ void SetTeam(gentity_t *ent, const char *s) {
 	}
 
 	// noch mal aendern falls MG nicht standard waffe is
-	if (client->ps.weapon == WP_SPRAYPISTOL)
-		trap_SendServerCommand(client->ps.clientNum, va("srwc %i", WP_NIPPER));
+	if (client->ps.weapon == WP_SPRAYPISTOL) {
+		G_ForceClientWeapon(client, WP_NIPPER, qfalse);
+	}
 
 	client->sess.teamLeader = qfalse;
 	if (team == TEAM_RED || team == TEAM_BLUE) {

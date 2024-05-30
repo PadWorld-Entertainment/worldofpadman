@@ -127,9 +127,7 @@ static int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 
 	// FIXME: Where's the best place for this?
 	if (ent->item->giTag == PW_BERSERKER) {
-		trap_SendServerCommand((ent - g_entities), va("srwc %i", WP_PUNCHY));
-		other->client->pers.cmd.weapon = WP_PUNCHY;
-		other->client->ps.weapon = WP_PUNCHY;
+		G_ForceClientWeapon(ent->client, WP_PUNCHY, qfalse);
 	}
 
 	return RESPAWN_POWERUP;
@@ -999,4 +997,29 @@ void G_RunItem(gentity_t *ent) {
 	}
 
 	G_BounceItem(ent, &tr);
+}
+
+void G_ForceClientWeapon(gclient_t *client, int weapon, qboolean addToInventory) {
+	const int clientNum = client - level.clients;
+	if (client->ps.weapon != weapon) {
+		client->last_nonforced_weapon = client->ps.weapon;
+	}
+	trap_SendServerCommand(clientNum, va("srwc %i", weapon));
+	if (addToInventory) {
+		client->ps.stats[STAT_WEAPONS] |= (1 << weapon);
+	}
+	client->pers.cmd.weapon = weapon;
+	client->ps.weapon = weapon;
+}
+
+void G_RestoreClientLastWeapon(gclient_t *client, qboolean removeFromInventory) {
+	const int clientNum = client - level.clients;
+	const int weapon = client->last_nonforced_weapon;
+	trap_SendServerCommand(clientNum, va("srwc %i", weapon));
+	if (removeFromInventory) {
+		client->ps.stats[STAT_WEAPONS] &= ~(1 << client->ps.weapon);
+	}
+	client->pers.cmd.weapon = weapon;
+	client->ps.weapon = weapon;
+	client->last_nonforced_weapon = 0;
 }
