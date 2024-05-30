@@ -930,9 +930,6 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	centity_t *nonPredictedCent;
 
 	weaponNum = cent->currentState.weapon;
-	if (CG_IsKillerDuck(cent) && (ps == NULL || cg.renderingThirdPerson)) {
-		weaponNum = WP_KILLERDUCKS;
-	}
 	CG_RegisterWeapon(weaponNum);
 	weapon = &cg_weapons[weaponNum];
 
@@ -945,15 +942,11 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 	if (cent->currentState.eFlags & (EF_DEAD | EF_NOLIFESLEFT) || cent->currentState.powerups & (1 << PW_FREEZE))
 		cent->currentState.eFlags &= ~EF_FIRING; // maybe this fixes the boaster beam for killed ents
 
-	if (CG_IsKillerDuck(cent) && ps != NULL) {
-		gun.hModel = 0;
-	} else {
-		gun.hModel = weapon->weaponModel;
-		if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE)
-			gun.customSkin = cgs.media.blueSpraypistolskin;
-		else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_FREE)
-			gun.customSkin = cgs.media.neutralSpraypistolskin;
-	}
+	gun.hModel = weapon->weaponModel;
+	if (weaponNum == WP_SPRAYPISTOL && team == TEAM_BLUE)
+		gun.customSkin = cgs.media.blueSpraypistolskin;
+	else if (weaponNum == WP_SPRAYPISTOL && team == TEAM_FREE)
+		gun.customSkin = cgs.media.neutralSpraypistolskin;
 
 	if (!gun.hModel) {
 		return;
@@ -1310,8 +1303,12 @@ void CG_AddViewWeapon(const playerState_t *ps) {
 			yOffset += -7;
 			zOffset += -1;
 			break;
-			//	case WP_GRAPPLING_HOOK:
-			//	case WP_KILLERDUCKS://keine echte waffe mehr
+		case WP_KILLERDUCKS:
+			// just a weapon in ctkd
+			xOffset += 20;
+			yOffset += -12;
+			zOffset += -20;
+			break;
 		case WP_SPRAYPISTOL:
 			xOffset += 10;
 			yOffset += -3;
@@ -1620,17 +1617,17 @@ void CG_Weapon_f(void) {
 	CG_ChangeWeapon(num);
 }
 
-void CG_WeaponSRWC(int weaponNum) {
+void CG_WeaponForceSwitch(int weaponNum, qboolean checkInventory) {
 	if (cg.zoomed) {
 		CG_ZoomDown_f();
 	}
 
 	// Using CG_WeaponSelectable() here does not work ( calls flawed CG_WeaponSelectableSprayroom() ), thus copy code.
 	// I guess the "srwc" command arrives before STAT_SPRAYROOMSECS is updated.
-	if ((weaponNum <= WP_NONE) || (weaponNum > /*= *WP_NUM_WEAPONS*/ WP_SPRAYPISTOL)) {
+	if ((weaponNum <= WP_NONE) || (weaponNum >= WP_NUM_WEAPONS)) {
 		return;
 	}
-	if (!(cg.snap->ps.stats[STAT_WEAPONS] & (1 << weaponNum))) {
+	if (checkInventory && !(cg.snap->ps.stats[STAT_WEAPONS] & (1 << weaponNum))) {
 		return;
 	}
 

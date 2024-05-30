@@ -1512,7 +1512,7 @@ void CG_ChangeWeapon(int weapon);
 void CG_NextWeapon_f(void);
 void CG_PrevWeapon_f(void);
 void CG_Weapon_f(void);
-void CG_WeaponSRWC(int weapNum);
+void CG_WeaponForceSwitch(int weapNum, qboolean checkInventory);
 
 void CG_RegisterItemVisuals(int itemNum);
 
