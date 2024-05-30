@@ -197,8 +197,8 @@ function(wop_add_executable)
 		server-settings.cfg
 		server-sprayyourcolor.cfg
 	)
-	if (APPLE)
-		if (INSTALL_DATA)
+	if (INSTALL_DATA)
+		if (APPLE)
 			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${ROOT_DIR}/misc/osx/application.plist.in)
 			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE ON)
 			set_target_properties(${_EXE_TARGET} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "${CMAKE_PROJECT_NAME}")
@@ -230,8 +230,8 @@ function(wop_add_executable)
 
 			install(CODE "include(BundleUtilities)
 				fixup_bundle(\"$<TARGET_BUNDLE_DIR:${_EXE_TARGET}>\" \"\" \"\")" COMPONENT wop)
-			install(TARGETS ${_EXE_TARGET} DESTINATION "${ENGINE_BINARY_DIR}" COMPONENT wop)
 		endif()
+		install(TARGETS ${_EXE_TARGET} DESTINATION "${ENGINE_BINARY_DIR}" COMPONENT wop)
 	endif()
 
 	if (INSTALL_DATA)
