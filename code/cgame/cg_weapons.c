@@ -1406,8 +1406,8 @@ void CG_DrawWeaponSelect(void) {
 		}
 	}
 
-	x = 320 - count * 20;
-	y = 360;
+	x = SCREEN_WIDTH / 2 - count * 20;
+	y = SCREEN_WIDTH / 4 * 3;
 
 	for (i = 1; i < 16; i++) {
 		if (!(bits & (1 << i))) {
@@ -1421,7 +1421,6 @@ void CG_DrawWeaponSelect(void) {
 		else if (i == WP_SPRAYPISTOL && cg.snap->ps.persistant[PERS_TEAM] == TEAM_FREE)
 			CG_DrawPic(x, y, 32, 32, cgs.media.neutralSpraypistolicon);
 		else
-
 			// draw weapon icon
 			CG_DrawPic(x, y, 32, 32, cg_weapons[i].weaponIcon);
 
@@ -1482,20 +1481,20 @@ static qboolean CG_WeaponSelectableSprayroom(int weapon) {
 CG_WeaponSelectable
 ===============
 */
-static qboolean CG_WeaponSelectable(int i) {
-	if ((i <= WP_NONE) || (i > /*= *WP_NUM_WEAPONS*/ WP_SPRAYPISTOL)) {
+static qboolean CG_WeaponSelectable(int weapon, qboolean checkAmmo) {
+	if ((weapon <= WP_NONE) || (weapon > /*= *WP_NUM_WEAPONS*/ WP_SPRAYPISTOL)) {
 		return qfalse;
 	}
 
-	if (!(cg.snap->ps.stats[STAT_WEAPONS] & (1 << i))) {
+	if (!(cg.snap->ps.stats[STAT_WEAPONS] & (1 << weapon))) {
 		return qfalse;
 	}
 
-	if (!cg.snap->ps.ammo[i]) {
+	if (checkAmmo && !cg.snap->ps.ammo[weapon]) {
 		return qfalse;
 	}
 
-	if (!CG_WeaponSelectableSprayroom(i)) {
+	if (!CG_WeaponSelectableSprayroom(weapon)) {
 		return qfalse;
 	}
 
@@ -1504,7 +1503,7 @@ static qboolean CG_WeaponSelectable(int i) {
 	}
 
 	if (cg.snap->ps.powerups[PW_BERSERKER]) {
-		if ((i != WP_PUNCHY) && (i != WP_SPRAYPISTOL)) {
+		if ((weapon != WP_PUNCHY) && (weapon != WP_SPRAYPISTOL)) {
 			return qfalse;
 		}
 	}
@@ -1541,7 +1540,7 @@ void CG_NextWeapon_f(void) {
 			cg.weaponSelect = WP_NONE;
 		}
 
-		if (CG_WeaponSelectable(cg.weaponSelect)) {
+		if (CG_WeaponSelectable(cg.weaponSelect, qtrue)) {
 			break;
 		}
 	}
@@ -1578,7 +1577,7 @@ void CG_PrevWeapon_f(void) {
 			cg.weaponSelect = WP_NUM_WEAPONS - 1;
 		}
 
-		if (CG_WeaponSelectable(cg.weaponSelect)) {
+		if (CG_WeaponSelectable(cg.weaponSelect, qtrue)) {
 			break;
 		}
 	}
@@ -1604,31 +1603,15 @@ void CG_Weapon_f(void) {
 
 	num = atoi(CG_Argv(1));
 
+	// you should also be able to directly select a weapon without ammo
+	if (!CG_WeaponSelectable(num, qfalse)) {
+		return;
+	}
+
 	if (cg.zoomed)
 		CG_ZoomDown_f();
-	// direkte wahl einer waffe mit 0 amma soll möglich sein -> deshalb CG_WeaponSelectable nicht sinnvoll
-	//	if(CG_WeaponSelectable(num))	return;
-
-	if (!CG_WeaponSelectableSprayroom(num)) {
-		return;
-	}
-
-	if (cg.snap->ps.powerups[PW_BERSERKER]) {
-		if ((num != WP_PUNCHY) && (num != WP_SPRAYPISTOL)) {
-			return;
-		}
-	}
-
-	if ((num < WP_PUNCHY) || (num > WP_SPRAYPISTOL)) {
-		return;
-	}
 
 	cg.weaponSelectTime = cg.time;
-
-	if (!(cg.snap->ps.stats[STAT_WEAPONS] & (1 << num))) {
-		return; // don't have the weapon
-	}
-
 	cg.weaponSelect = num;
 }
 
@@ -1663,10 +1646,10 @@ void CG_OutOfAmmoChange(void) {
 	if (cg.zoomed)
 		CG_ZoomDown_f();
 
-	cg.weaponSelectTime = cg.time;
 
 	for (i = WP_NUM_WEAPONS - 1; i > WP_NONE; i--) {
-		if (CG_WeaponSelectable(i)) {
+		if (CG_WeaponSelectable(i, qtrue)) {
+			cg.weaponSelectTime = cg.time;
 			cg.weaponSelect = i;
 			break;
 		}
