@@ -367,7 +367,6 @@ qboolean CG_DrawOldScoreboard(void) {
 	int topBorderSize, bottomBorderSize;
 	int scoreLineSpace, maxScoreLinesPerTeam[TEAM_NUM_TEAMS];
 	const score_t *score;
-	clientInfo_t *ci;
 	char buf[32];
 
 	// don't draw anything if the menu or console is up
@@ -628,14 +627,16 @@ qboolean CG_DrawOldScoreboard(void) {
 		y += (n2 * lineHeight);
 	}
 
-	ci = &cgs.clientinfo[score->client];
-	if (score != NULL && ci->team != TEAM_SPECTATOR) {
-		CG_DrawMedals(62.0f, (float)SB_TOP + 216.0f, score);
+	if (score != NULL) {
+		const clientInfo_t *ci = &cgs.clientinfo[score->client];
+		if (ci->team != TEAM_SPECTATOR) {
+			CG_DrawMedals(62.0f, (float)SB_TOP + 216.0f, score);
 
-		// draw accuracy rate
-		CG_DrawPic(342.0f, (float)SB_TOP + 216.0f, 96.0f, 24.0f, cgs.media.scoreboardAccuracy);
-		Com_sprintf(buf, sizeof(buf), "%i%%", score->accuracy);
-		CG_DrawStringExt(438, SB_TOP + 220, buf, colorWhite, qfalse, qtrue, BIGCHAR_WIDTH / 2 , BIGCHAR_HEIGHT, 0);
+			// draw accuracy rate
+			CG_DrawPic(342.0f, (float)SB_TOP + 216.0f, 96.0f, 24.0f, cgs.media.scoreboardAccuracy);
+			Com_sprintf(buf, sizeof(buf), "%i%%", score->accuracy);
+			CG_DrawStringExt(438, SB_TOP + 220, buf, colorWhite, qfalse, qtrue, BIGCHAR_WIDTH / 2 , BIGCHAR_HEIGHT, 0);
+		}
 	}
 
 	// load any models that have been deferred
@@ -668,7 +669,6 @@ Draw the oversize scoreboard for tournements
 void CG_DrawOldTourneyScoreboard(void) {
 	const char *s;
 	int min, tens, ones;
-	clientInfo_t *ci;
 	int y;
 	int i;
 
@@ -721,7 +721,7 @@ void CG_DrawOldTourneyScoreboard(void) {
 		// free for all scoreboard
 		//
 		for (i = 0; i < MAX_CLIENTS; i++) {
-			ci = &cgs.clientinfo[i];
+			const clientInfo_t *ci = &cgs.clientinfo[i];
 			if (!ci->infoValid) {
 				continue;
 			}
