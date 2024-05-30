@@ -628,7 +628,8 @@ qboolean CG_DrawOldScoreboard(void) {
 		y += (n2 * lineHeight);
 	}
 
-	if (score != NULL) {
+	ci = &cgs.clientinfo[score->client];
+	if (score != NULL && ci->team != TEAM_SPECTATOR) {
 		CG_DrawMedals(62.0f, (float)SB_TOP + 216.0f, score);
 
 		// draw accuracy rate
