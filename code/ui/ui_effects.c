@@ -594,7 +594,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 	effectsOptionsInfo.sunRays.generic.x = XPOSITION;
 	effectsOptionsInfo.sunRays.generic.y = y;
 	effectsOptionsInfo.sunRays.generic.toolTip =
-		"Enable to draw a dynamic sun rays effect. Default is off.";
+		"Disable to not draw the dynamic sun rays effect. Default is on.";
 
 	y += (BIGCHAR_HEIGHT + 2);
 	// references/modifies "r_dlightMode"
