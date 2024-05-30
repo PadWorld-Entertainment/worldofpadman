@@ -1586,6 +1586,14 @@ void CG_PrevWeapon_f(void) {
 	}
 }
 
+void CG_ChangeWeapon(int weaponNum) {
+	// display weapons available
+	cg.weaponSelectTime = cg.time;
+
+	// switch weapon
+	cg.weaponSelect = weaponNum;
+}
+
 /*
 ===============
 CG_Weapon_f
@@ -1611,8 +1619,7 @@ void CG_Weapon_f(void) {
 	if (cg.zoomed)
 		CG_ZoomDown_f();
 
-	cg.weaponSelectTime = cg.time;
-	cg.weaponSelect = num;
+	CG_ChangeWeapon(num);
 }
 
 void CG_WeaponSRWC(int weaponNum) {
@@ -1629,8 +1636,7 @@ void CG_WeaponSRWC(int weaponNum) {
 		return;
 	}
 
-	cg.weaponSelectTime = cg.time;
-	cg.weaponSelect = weaponNum;
+	CG_ChangeWeapon(weaponNum);
 }
 
 /*
@@ -1649,8 +1655,7 @@ void CG_OutOfAmmoChange(void) {
 
 	for (i = WP_NUM_WEAPONS - 1; i > WP_NONE; i--) {
 		if (CG_WeaponSelectable(i, qtrue)) {
-			cg.weaponSelectTime = cg.time;
-			cg.weaponSelect = i;
+			CG_ChangeWeapon(i);
 			break;
 		}
 	}

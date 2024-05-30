@@ -190,11 +190,8 @@ void CG_Respawn(void) {
 	// no error decay on player movement
 	cg.thisFrameTeleport = qtrue;
 
-	// display weapons available
-	cg.weaponSelectTime = cg.time;
-
 	// select the weapon the server says we are using
-	cg.weaponSelect = cg.snap->ps.weapon;
+	CG_ChangeWeapon(cg.snap->ps.weapon);
 }
 
 /*

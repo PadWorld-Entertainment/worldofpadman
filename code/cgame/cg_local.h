@@ -1508,6 +1508,7 @@ void CG_Boomies_Explosion(vec3_t origin);
 //
 // cg_weapons.c
 //
+void CG_ChangeWeapon(int weapon);
 void CG_NextWeapon_f(void);
 void CG_PrevWeapon_f(void);
 void CG_Weapon_f(void);

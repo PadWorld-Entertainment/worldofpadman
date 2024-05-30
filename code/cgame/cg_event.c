@@ -431,34 +431,29 @@ static void CG_ItemPickup(int itemNum) {
 
 		// if always
 		if (cg_autoswitch.integer == 1 && bg_itemlist[itemNum].giTag != WP_NIPPER) {
-			cg.weaponSelectTime = cg.time;
-			cg.weaponSelect = bg_itemlist[itemNum].giTag;
+			CG_ChangeWeapon(bg_itemlist[itemNum].giTag);
 		}
 
 		// if new
 		if (cg_autoswitch.integer == 2 && 0 == (cg.snap->ps.stats[STAT_WEAPONS] & (1 << bg_itemlist[itemNum].giTag))) {
-			cg.weaponSelectTime = cg.time;
-			cg.weaponSelect = bg_itemlist[itemNum].giTag;
+			CG_ChangeWeapon(bg_itemlist[itemNum].giTag);
 		}
 
 		// if better
 		if (cg_autoswitch.integer == 3 && CG_WeaponHigher(cg.weaponSelect, bg_itemlist[itemNum].giTag)) {
-			cg.weaponSelectTime = cg.time;
-			cg.weaponSelect = bg_itemlist[itemNum].giTag;
+			CG_ChangeWeapon(bg_itemlist[itemNum].giTag);
 		}
 
 		// if new and better
 		if (cg_autoswitch.integer == 4 && 0 == (cg.snap->ps.stats[STAT_WEAPONS] & (1 << bg_itemlist[itemNum].giTag)) &&
 			CG_WeaponHigher(cg.weaponSelect, bg_itemlist[itemNum].giTag)) {
-			cg.weaponSelectTime = cg.time;
-			cg.weaponSelect = bg_itemlist[itemNum].giTag;
+			CG_ChangeWeapon(bg_itemlist[itemNum].giTag);
 		}
 	}
 
 	if (bg_itemlist[itemNum].giType == IT_POWERUP && bg_itemlist[itemNum].giTag == PW_BERSERKER) {
 		if (cg.weaponSelect != WP_SPRAYPISTOL && cg.weaponSelect != WP_PUNCHY) {
-			cg.weaponSelectTime = cg.time;
-			cg.weaponSelect = WP_PUNCHY;
+			CG_ChangeWeapon(WP_PUNCHY);
 		}
 	}
 }
