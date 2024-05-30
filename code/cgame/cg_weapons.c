@@ -1623,7 +1623,7 @@ void CG_WeaponForceSwitch(int weaponNum, qboolean checkInventory) {
 	}
 
 	// Using CG_WeaponSelectable() here does not work ( calls flawed CG_WeaponSelectableSprayroom() ), thus copy code.
-	// I guess the "srwc" command arrives before STAT_SPRAYROOMSECS is updated.
+	// I guess the "fwc" command arrives before STAT_SPRAYROOMSECS is updated.
 	if ((weaponNum <= WP_NONE) || (weaponNum >= WP_NUM_WEAPONS)) {
 		return;
 	}

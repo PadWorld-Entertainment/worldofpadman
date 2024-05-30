@@ -656,8 +656,8 @@ static void CG_ServerCommand(void) {
 		return;
 	}
 
-	// "sprayroom weapon change"
-	if (!strcmp(cmd, "srwc")) {
+	// "force weapon change"
+	if (!strcmp(cmd, "fwc")) {
 		int id = atoi(CG_Argv(1));
 		qboolean checkInventory = atoi(CG_Argv(2));
 		CG_WeaponForceSwitch(id, checkInventory);

@@ -1005,7 +1005,7 @@ void G_ForceClientWeapon(gclient_t *client, int weapon, qboolean addToInventory)
 		client->last_nonforced_weapon = client->ps.weapon;
 	}
 	// we don't want to check the client side of the inventory because the snapshot is sent to late
-	trap_SendServerCommand(clientNum, va("srwc %i %i", weapon, addToInventory ? 0 : 1));
+	trap_SendServerCommand(clientNum, va("fwc %i %i", weapon, addToInventory ? 0 : 1));
 	if (addToInventory) {
 		client->ps.stats[STAT_WEAPONS] |= (1 << weapon);
 	}
@@ -1016,7 +1016,7 @@ void G_ForceClientWeapon(gclient_t *client, int weapon, qboolean addToInventory)
 void G_RestoreClientLastWeapon(gclient_t *client, qboolean removeFromInventory) {
 	const int clientNum = client - level.clients;
 	const int weapon = client->last_nonforced_weapon;
-	trap_SendServerCommand(clientNum, va("srwc %i 1", weapon));
+	trap_SendServerCommand(clientNum, va("fwc %i 1", weapon));
 	if (removeFromInventory) {
 		client->ps.stats[STAT_WEAPONS] &= ~(1 << client->ps.weapon);
 	}
