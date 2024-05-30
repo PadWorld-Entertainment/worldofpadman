@@ -305,6 +305,7 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_bigFont, "ui_bigFont", "0.4", CVAR_ARCHIVE},
 
 	{&cg_correctedWeaponPos, "cg_correctedWeaponPos", "1", CVAR_ARCHIVE},
+	{&cg_gun_frame, "cg_gun_frame", "0", CVAR_CHEAT},
 	{&cg_drawRealTime, "cg_drawRealTime", "0", CVAR_ARCHIVE},
 	{&cg_printDir, "cg_printDir", "0", CVAR_ARCHIVE},
 	{&cg_wopFFAhud, "cg_wopFFAhud", "0", CVAR_ARCHIVE},
