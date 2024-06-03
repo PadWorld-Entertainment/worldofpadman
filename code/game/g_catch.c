@@ -97,7 +97,6 @@ static void G_DroppedKillerDucksThinkRespawn(gentity_t *self) {
 }
 
 static void G_DroppedKillerDucksThinkPickable(gentity_t *ent) {
-	ent->s.otherEntityNum = -1;
 	ent->nextthink = (level.time + RESPAWN_DROPPED_KILLERDUCKS * 1000);
 	ent->think = G_DroppedKillerDucksThinkRespawn;
 }
@@ -135,7 +134,11 @@ gentity_t *G_DropKillerDucks(gentity_t *ent) {
 	if (killerDucks == NULL) {
 		Com_Error(ERR_DROP, "Failed to drop the KillerDuck");
 	}
+
+	// don't allow to re-collect for 5 seconds
+	// see BG_CanItemBeGrabbed()
 	killerDucks->s.otherEntityNum = ent->s.number;
+	killerDucks->s.time = level.time + 5000;
 	killerDucks->nextthink = (level.time + 1000);
 	killerDucks->think = G_DroppedKillerDucksThinkPickable;
 	return killerDucks;

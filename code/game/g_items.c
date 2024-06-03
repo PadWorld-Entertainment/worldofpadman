@@ -444,17 +444,11 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	if (other->health < 1)
 		return; // dead people can't pickup
 
-	if (g_gametype.integer == GT_CATCH) {
-		if (ent->s.otherEntityNum == other->s.number) {
-			return;
-		}
-	}
-
 	if (G_FreezeTag() && FT_PlayerIsFrozen(other))
 		return; // frozen people don't pick stuff up
 
 	// the same pickup rules are used for client side and server side
-	if (!BG_CanItemBeGrabbed(g_gametype.integer, &ent->s, &other->client->ps)) {
+	if (!BG_CanItemBeGrabbed(g_gametype.integer, &ent->s, &other->client->ps, level.time)) {
 		return;
 	}
 

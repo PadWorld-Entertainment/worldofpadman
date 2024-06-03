@@ -750,7 +750,7 @@ Returns false if the item should not be picked up.
 This needs to be the same for client side prediction and server use.
 ================
 */
-qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playerState_t *ps) {
+qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playerState_t *ps, int time) {
 	const gitem_t *item;
 
 	if (ent->modelindex < 1 || ent->modelindex >= bg_numItems) {
@@ -834,6 +834,14 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 		return qfalse;
 
 	case IT_HOLDABLE:
+		// the other item is getting dropped when you collect the killerducks in this game mode
+		if (gametype == GT_CATCH && item->giTag == HI_KILLERDUCKS) {
+			// don't allow to re-collect after dropping it (for some time)
+			// see G_DropKillerDucks()
+			if (ent->otherEntityNum == ps->clientNum && time < ent->time) {
+				return qfalse;
+			}
+		}
 		// can only hold one item at a time
 		if (ps->stats[STAT_HOLDABLE_ITEM]) {
 			// pick it up, if you already have one of this type
