@@ -43,7 +43,7 @@ if (MSVC)
 	# 4100 unreferenced formal parameter
 	# 4255 invalid function prototype - missing void
 	# 4389 comparison signed/unsigned
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4267 /wd4244 /wd4305 /wd4820 /wd5045 /wd4668 /wd4061 /wd4242 /wd4464 /wd4619 /wd4245 /wd4100 /wd4255 /wd4389")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MT /wd4267 /wd4244 /wd4305 /wd4820 /wd5045 /wd4668 /wd4061 /wd4242 /wd4464 /wd4619 /wd4245 /wd4100 /wd4255 /wd4389")
 	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()
 
