@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -24,7 +24,6 @@
  *
  *  Main include header for the SDL library
  */
-
 
 #ifndef SDL_h_
 #define SDL_h_
@@ -69,6 +68,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* WIKI CATEGORY: Init */
 
 /* As of version 0.5, SDL is loaded dynamically into the application */
 

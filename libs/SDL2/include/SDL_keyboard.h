@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,9 +20,9 @@
 */
 
 /**
- *  \file SDL_keyboard.h
+ * # CategoryKeyboard
  *
- *  Include file for SDL keyboard event handling
+ * Include file for SDL keyboard event handling
  */
 
 #ifndef SDL_keyboard_h_
@@ -40,14 +40,15 @@ extern "C" {
 #endif
 
 /**
- *  \brief The SDL keysym structure, used in key events.
+ * The SDL keysym structure, used in key events.
  *
- *  \note  If you are looking for translated character input, see the ::SDL_TEXTINPUT event.
+ * If you are looking for translated character input, see the SDL_TEXTINPUT
+ * event.
  */
 typedef struct SDL_Keysym
 {
-    SDL_Scancode scancode;      /**< SDL physical key code - see ::SDL_Scancode for details */
-    SDL_Keycode sym;            /**< SDL virtual key code - see ::SDL_Keycode for details */
+    SDL_Scancode scancode;      /**< SDL physical key code - see SDL_Scancode for details */
+    SDL_Keycode sym;            /**< SDL virtual key code - see SDL_Keycode for details */
     Uint16 mod;                 /**< current key modifiers */
     Uint32 unused;
 } SDL_Keysym;
@@ -253,6 +254,10 @@ extern DECLSPEC SDL_Keycode SDLCALL SDL_GetKeyFromName(const char *name);
  *
  * On some platforms using this function activates the screen keyboard.
  *
+ * On desktop platforms, SDL_StartTextInput() is implicitly called on SDL
+ * window creation which will cause events SDL_TextInputEvent and
+ * SDL_TextEditingEvent to begin emitting.
+ *
  * \since This function is available since SDL 2.0.0.
  *
  * \sa SDL_SetTextInputRect
@@ -299,6 +304,9 @@ extern DECLSPEC SDL_bool SDLCALL SDL_IsTextInputShown(void);
 
 /**
  * Set the rectangle used to type Unicode text inputs.
+ *
+ * Native input methods will place a window with word suggestions near it,
+ * without covering the text being inputted.
  *
  * To start text input in a given location, this function is intended to be
  * called before SDL_StartTextInput, although some platforms support moving

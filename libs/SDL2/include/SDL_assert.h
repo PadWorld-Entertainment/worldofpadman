@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -61,6 +61,8 @@ assert can have unique static variables associated with it.
     #define SDL_TriggerBreakpoint() __asm__ __volatile__ ( "brk #22\n\t" )
 #elif defined(__APPLE__) && defined(__arm__)
     #define SDL_TriggerBreakpoint() __asm__ __volatile__ ( "bkpt #22\n\t" )
+#elif defined(_WIN32) && ((defined(__GNUC__) || defined(__clang__)) && (defined(__arm64__) || defined(__aarch64__)) )
+    #define SDL_TriggerBreakpoint() __asm__ __volatile__ ( "brk #0xF000\n\t" )
 #elif defined(__386__) && defined(__WATCOMC__)
     #define SDL_TriggerBreakpoint() { _asm { int 0x03 } }
 #elif defined(HAVE_SIGNAL_H) && !defined(__WATCOMC__)

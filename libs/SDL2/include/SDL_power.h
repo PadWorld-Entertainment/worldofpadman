@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -23,9 +23,9 @@
 #define SDL_power_h_
 
 /**
- *  \file SDL_power.h
+ * # CategoryPower
  *
- *  Header for the SDL power management routines.
+ * Header for the SDL power management routines.
  */
 
 #include "SDL_stdinc.h"
@@ -37,9 +37,9 @@ extern "C" {
 #endif
 
 /**
- *  The basic state for the system's power supply.
+ * The basic state for the system's power supply.
  */
-typedef enum
+typedef enum SDL_PowerState
 {
     SDL_POWERSTATE_UNKNOWN,      /**< cannot determine power status */
     SDL_POWERSTATE_ON_BATTERY,   /**< Not plugged in, running on the battery */

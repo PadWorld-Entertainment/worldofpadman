@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -19,12 +19,12 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
+/* WIKI CATEGORY: BeginCode */
+
 /**
- *  \file begin_code.h
- *
- *  This file sets things up for C dynamic library function definitions,
- *  static inlined functions, and structures aligned at 4-byte alignment.
- *  If you don't like ugly C preprocessor code, don't look at this file. :)
+ * begin_code.h sets things up for C dynamic library function definitions,
+ * static inlined functions, and structures aligned at 4-byte alignment.
+ * If you don't like ugly C preprocessor code, don't look at this file. :)
  */
 
 /* This shouldn't be nested -- included it around code only. */

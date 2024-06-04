@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,9 +20,9 @@
 */
 
 /**
- *  \file SDL_rect.h
+ * # CategoryRect
  *
- *  Header file for SDL_rect definition and management functions.
+ * Header file for SDL_rect definition and management functions.
  */
 
 #ifndef SDL_rect_h_

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,9 +20,9 @@
 */
 
 /**
- *  \file SDL_mouse.h
+ * # CategoryMouse
  *
- *  Include file for SDL mouse event handling.
+ * Include file for SDL mouse event handling.
  */
 
 #ifndef SDL_mouse_h_
@@ -41,9 +41,9 @@ extern "C" {
 typedef struct SDL_Cursor SDL_Cursor;   /**< Implementation dependent */
 
 /**
- * \brief Cursor types for SDL_CreateSystemCursor().
+ * Cursor types for SDL_CreateSystemCursor().
  */
-typedef enum
+typedef enum SDL_SystemCursor
 {
     SDL_SYSTEM_CURSOR_ARROW,     /**< Arrow */
     SDL_SYSTEM_CURSOR_IBEAM,     /**< I-beam */
@@ -61,9 +61,9 @@ typedef enum
 } SDL_SystemCursor;
 
 /**
- * \brief Scroll direction types for the Scroll event
+ * Scroll direction types for the Scroll event
  */
-typedef enum
+typedef enum SDL_MouseWheelDirection
 {
     SDL_MOUSEWHEEL_NORMAL,    /**< The scroll direction is normal */
     SDL_MOUSEWHEEL_FLIPPED    /**< The scroll direction is flipped / natural */
@@ -437,9 +437,9 @@ extern DECLSPEC int SDLCALL SDL_ShowCursor(int toggle);
 /**
  * Used as a mask when testing buttons in buttonstate.
  *
- * - Button 1:  Left mouse button
- * - Button 2:  Middle mouse button
- * - Button 3:  Right mouse button
+ * - Button 1: Left mouse button
+ * - Button 2: Middle mouse button
+ * - Button 3: Right mouse button
  */
 #define SDL_BUTTON(X)       (1 << ((X)-1))
 #define SDL_BUTTON_LEFT     1

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,9 +20,9 @@
 */
 
 /**
- *  \file SDL_video.h
+ * # CategoryVideo
  *
- *  Header file for SDL video functions.
+ * Header file for SDL video functions.
  */
 
 #ifndef SDL_video_h_
@@ -40,17 +40,17 @@ extern "C" {
 #endif
 
 /**
- *  \brief  The structure that defines a display mode
+ * The structure that defines a display mode
  *
- *  \sa SDL_GetNumDisplayModes()
- *  \sa SDL_GetDisplayMode()
- *  \sa SDL_GetDesktopDisplayMode()
- *  \sa SDL_GetCurrentDisplayMode()
- *  \sa SDL_GetClosestDisplayMode()
- *  \sa SDL_SetWindowDisplayMode()
- *  \sa SDL_GetWindowDisplayMode()
+ * \sa SDL_GetNumDisplayModes
+ * \sa SDL_GetDisplayMode
+ * \sa SDL_GetDesktopDisplayMode
+ * \sa SDL_GetCurrentDisplayMode
+ * \sa SDL_GetClosestDisplayMode
+ * \sa SDL_SetWindowDisplayMode
+ * \sa SDL_GetWindowDisplayMode
  */
-typedef struct
+typedef struct SDL_DisplayMode
 {
     Uint32 format;              /**< pixel format */
     int w;                      /**< width, in screen coordinates */
@@ -60,46 +60,46 @@ typedef struct
 } SDL_DisplayMode;
 
 /**
- *  \brief The type used to identify a window
+ * The opaque type used to identify a window.
  *
- *  \sa SDL_CreateWindow()
- *  \sa SDL_CreateWindowFrom()
- *  \sa SDL_DestroyWindow()
- *  \sa SDL_FlashWindow()
- *  \sa SDL_GetWindowData()
- *  \sa SDL_GetWindowFlags()
- *  \sa SDL_GetWindowGrab()
- *  \sa SDL_GetWindowKeyboardGrab()
- *  \sa SDL_GetWindowMouseGrab()
- *  \sa SDL_GetWindowPosition()
- *  \sa SDL_GetWindowSize()
- *  \sa SDL_GetWindowTitle()
- *  \sa SDL_HideWindow()
- *  \sa SDL_MaximizeWindow()
- *  \sa SDL_MinimizeWindow()
- *  \sa SDL_RaiseWindow()
- *  \sa SDL_RestoreWindow()
- *  \sa SDL_SetWindowData()
- *  \sa SDL_SetWindowFullscreen()
- *  \sa SDL_SetWindowGrab()
- *  \sa SDL_SetWindowKeyboardGrab()
- *  \sa SDL_SetWindowMouseGrab()
- *  \sa SDL_SetWindowIcon()
- *  \sa SDL_SetWindowPosition()
- *  \sa SDL_SetWindowSize()
- *  \sa SDL_SetWindowBordered()
- *  \sa SDL_SetWindowResizable()
- *  \sa SDL_SetWindowTitle()
- *  \sa SDL_ShowWindow()
+ * \sa SDL_CreateWindow
+ * \sa SDL_CreateWindowFrom
+ * \sa SDL_DestroyWindow
+ * \sa SDL_FlashWindow
+ * \sa SDL_GetWindowData
+ * \sa SDL_GetWindowFlags
+ * \sa SDL_GetWindowGrab
+ * \sa SDL_GetWindowKeyboardGrab
+ * \sa SDL_GetWindowMouseGrab
+ * \sa SDL_GetWindowPosition
+ * \sa SDL_GetWindowSize
+ * \sa SDL_GetWindowTitle
+ * \sa SDL_HideWindow
+ * \sa SDL_MaximizeWindow
+ * \sa SDL_MinimizeWindow
+ * \sa SDL_RaiseWindow
+ * \sa SDL_RestoreWindow
+ * \sa SDL_SetWindowData
+ * \sa SDL_SetWindowFullscreen
+ * \sa SDL_SetWindowGrab
+ * \sa SDL_SetWindowKeyboardGrab
+ * \sa SDL_SetWindowMouseGrab
+ * \sa SDL_SetWindowIcon
+ * \sa SDL_SetWindowPosition
+ * \sa SDL_SetWindowSize
+ * \sa SDL_SetWindowBordered
+ * \sa SDL_SetWindowResizable
+ * \sa SDL_SetWindowTitle
+ * \sa SDL_ShowWindow
  */
 typedef struct SDL_Window SDL_Window;
 
 /**
- *  \brief The flags on a window
+ * The flags on a window
  *
- *  \sa SDL_GetWindowFlags()
+ * \sa SDL_GetWindowFlags
  */
-typedef enum
+typedef enum SDL_WindowFlags
 {
     SDL_WINDOW_FULLSCREEN = 0x00000001,         /**< fullscreen window */
     SDL_WINDOW_OPENGL = 0x00000002,             /**< window usable with OpenGL context */
@@ -131,7 +131,7 @@ typedef enum
 } SDL_WindowFlags;
 
 /**
- *  \brief Used to indicate that you don't care what the window position is.
+ * Used to indicate that you don't care what the window position is.
  */
 #define SDL_WINDOWPOS_UNDEFINED_MASK    0x1FFF0000u
 #define SDL_WINDOWPOS_UNDEFINED_DISPLAY(X)  (SDL_WINDOWPOS_UNDEFINED_MASK|(X))
@@ -140,7 +140,7 @@ typedef enum
             (((X)&0xFFFF0000) == SDL_WINDOWPOS_UNDEFINED_MASK)
 
 /**
- *  \brief Used to indicate that the window position should be centered.
+ * Used to indicate that the window position should be centered.
  */
 #define SDL_WINDOWPOS_CENTERED_MASK    0x2FFF0000u
 #define SDL_WINDOWPOS_CENTERED_DISPLAY(X)  (SDL_WINDOWPOS_CENTERED_MASK|(X))
@@ -149,9 +149,9 @@ typedef enum
             (((X)&0xFFFF0000) == SDL_WINDOWPOS_CENTERED_MASK)
 
 /**
- *  \brief Event subtype for window events
+ * Event subtype for window events
  */
-typedef enum
+typedef enum SDL_WindowEventID
 {
     SDL_WINDOWEVENT_NONE,           /**< Never used */
     SDL_WINDOWEVENT_SHOWN,          /**< Window has been shown */
@@ -180,9 +180,9 @@ typedef enum
 } SDL_WindowEventID;
 
 /**
- *  \brief Event subtype for display events
+ * Event subtype for display events
  */
-typedef enum
+typedef enum SDL_DisplayEventID
 {
     SDL_DISPLAYEVENT_NONE,          /**< Never used */
     SDL_DISPLAYEVENT_ORIENTATION,   /**< Display orientation has changed to data1 */
@@ -192,9 +192,9 @@ typedef enum
 } SDL_DisplayEventID;
 
 /**
- *  \brief Display orientation
+ * Display orientation
  */
-typedef enum
+typedef enum SDL_DisplayOrientation
 {
     SDL_ORIENTATION_UNKNOWN,            /**< The display orientation can't be determined */
     SDL_ORIENTATION_LANDSCAPE,          /**< The display is in landscape mode, with the right side up, relative to portrait mode */
@@ -204,9 +204,9 @@ typedef enum
 } SDL_DisplayOrientation;
 
 /**
- *  \brief Window flash operation
+ * Window flash operation
  */
-typedef enum
+typedef enum SDL_FlashOperation
 {
     SDL_FLASH_CANCEL,                   /**< Cancel any window flash state */
     SDL_FLASH_BRIEFLY,                  /**< Flash the window briefly to get attention */
@@ -214,14 +214,16 @@ typedef enum
 } SDL_FlashOperation;
 
 /**
- *  \brief An opaque handle to an OpenGL context.
+ * An opaque handle to an OpenGL context.
+ *
+ * \sa SDL_GL_CreateContext
  */
 typedef void *SDL_GLContext;
 
 /**
- *  \brief OpenGL configuration attributes
+ * OpenGL configuration attributes
  */
-typedef enum
+typedef enum SDL_GLattr
 {
     SDL_GL_RED_SIZE,
     SDL_GL_GREEN_SIZE,
@@ -253,14 +255,14 @@ typedef enum
     SDL_GL_FLOATBUFFERS
 } SDL_GLattr;
 
-typedef enum
+typedef enum SDL_GLprofile
 {
     SDL_GL_CONTEXT_PROFILE_CORE           = 0x0001,
     SDL_GL_CONTEXT_PROFILE_COMPATIBILITY  = 0x0002,
     SDL_GL_CONTEXT_PROFILE_ES             = 0x0004 /**< GLX_CONTEXT_ES2_PROFILE_BIT_EXT */
 } SDL_GLprofile;
 
-typedef enum
+typedef enum SDL_GLcontextFlag
 {
     SDL_GL_CONTEXT_DEBUG_FLAG              = 0x0001,
     SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG = 0x0002,
@@ -268,13 +270,13 @@ typedef enum
     SDL_GL_CONTEXT_RESET_ISOLATION_FLAG    = 0x0008
 } SDL_GLcontextFlag;
 
-typedef enum
+typedef enum SDL_GLcontextReleaseFlag
 {
     SDL_GL_CONTEXT_RELEASE_BEHAVIOR_NONE   = 0x0000,
     SDL_GL_CONTEXT_RELEASE_BEHAVIOR_FLUSH  = 0x0001
 } SDL_GLcontextReleaseFlag;
 
-typedef enum
+typedef enum SDL_GLContextResetNotification
 {
     SDL_GL_CONTEXT_RESET_NO_NOTIFICATION = 0x0000,
     SDL_GL_CONTEXT_RESET_LOSE_CONTEXT    = 0x0001
@@ -770,7 +772,7 @@ extern DECLSPEC Uint32 SDLCALL SDL_GetWindowPixelFormat(SDL_Window * window);
  * \param w the width of the window, in screen coordinates
  * \param h the height of the window, in screen coordinates
  * \param flags 0, or one or more SDL_WindowFlags OR'd together
- * \returns the window that was created or NULL on failure; call
+ * \returns the `SDL_Window` that was created or NULL on failure; call
  *          SDL_GetError() for more information.
  *
  * \since This function is available since SDL 2.0.0.
@@ -1262,6 +1264,10 @@ extern DECLSPEC void SDLCALL SDL_RestoreWindow(SDL_Window * window);
  * videomode change; `SDL_WINDOW_FULLSCREEN_DESKTOP` for "fake" fullscreen
  * that takes the size of the desktop; and 0 for windowed mode.
  *
+ * Note that for some renderers, this function may trigger an
+ * SDL_RENDER_TARGETS_RESET event. Your application should be prepared to
+ * handle this event by reuploading textures!
+ *
  * \param window the window to change
  * \param flags `SDL_WINDOW_FULLSCREEN`, `SDL_WINDOW_FULLSCREEN_DESKTOP` or 0
  * \returns 0 on success or a negative error code on failure; call
@@ -1278,7 +1284,8 @@ extern DECLSPEC int SDLCALL SDL_SetWindowFullscreen(SDL_Window * window,
 /**
  * Return whether the window has a surface associated with it.
  *
- * \returns SDL_TRUE if there is a surface associated with the window, or SDL_FALSE otherwise.
+ * \returns SDL_TRUE if there is a surface associated with the window, or
+ *          SDL_FALSE otherwise.
  *
  * \since This function is available since SDL 2.28.0.
  *
@@ -1295,6 +1302,10 @@ extern DECLSPEC SDL_bool SDLCALL SDL_HasWindowSurface(SDL_Window *window);
  *
  * This surface will be invalidated if the window is resized. After resizing a
  * window this function must be called again to return a valid surface.
+ *
+ * Note that on some platforms the pixels pointer of the surface may be
+ * modified after each call to SDL_UpdateWindowSurface(), so that the platform
+ * code can implement efficient double or triple buffering.
  *
  * You may not combine this with 3D or the rendering API on this window.
  *
@@ -1339,6 +1350,11 @@ extern DECLSPEC int SDLCALL SDL_UpdateWindowSurface(SDL_Window * window);
  * on the screen.
  *
  * This function is equivalent to the SDL 1.2 API SDL_UpdateRects().
+ *
+ * Note that this function will update _at least_ the rectangles specified,
+ * but this is only intended as an optimization; in practice, this might
+ * update more of the screen (or all of the screen!), depending on what method
+ * SDL uses to send pixels to the system.
  *
  * \param window the window to update
  * \param rects an array of SDL_Rect structures representing areas of the
@@ -1705,7 +1721,7 @@ extern DECLSPEC int SDLCALL SDL_GetWindowGammaRamp(SDL_Window * window,
  *
  * \sa SDL_HitTest
  */
-typedef enum
+typedef enum SDL_HitTestResult
 {
     SDL_HITTEST_NORMAL,  /**< Region is normal. No special properties. */
     SDL_HITTEST_DRAGGABLE,  /**< Region can drag entire window. */

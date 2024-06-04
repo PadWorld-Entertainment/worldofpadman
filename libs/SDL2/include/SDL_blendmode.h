@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,9 +20,9 @@
 */
 
 /**
- *  \file SDL_blendmode.h
+ * # CategoryBlendmode
  *
- *  Header file declaring the SDL_BlendMode enumeration
+ * Header file declaring the SDL_BlendMode enumeration
  */
 
 #ifndef SDL_blendmode_h_
@@ -35,9 +35,9 @@ extern "C" {
 #endif
 
 /**
- *  \brief The blend mode used in SDL_RenderCopy() and drawing operations.
+ * The blend mode used in SDL_RenderCopy() and drawing operations.
  */
-typedef enum
+typedef enum SDL_BlendMode
 {
     SDL_BLENDMODE_NONE = 0x00000000,     /**< no blending
                                               dstRGBA = srcRGBA */
@@ -60,21 +60,22 @@ typedef enum
 } SDL_BlendMode;
 
 /**
- *  \brief The blend operation used when combining source and destination pixel components
+ * The blend operation used when combining source and destination pixel
+ * components
  */
-typedef enum
+typedef enum SDL_BlendOperation
 {
     SDL_BLENDOPERATION_ADD              = 0x1,  /**< dst + src: supported by all renderers */
-    SDL_BLENDOPERATION_SUBTRACT         = 0x2,  /**< dst - src : supported by D3D9, D3D11, OpenGL, OpenGLES */
-    SDL_BLENDOPERATION_REV_SUBTRACT     = 0x3,  /**< src - dst : supported by D3D9, D3D11, OpenGL, OpenGLES */
+    SDL_BLENDOPERATION_SUBTRACT         = 0x2,  /**< src - dst : supported by D3D9, D3D11, OpenGL, OpenGLES */
+    SDL_BLENDOPERATION_REV_SUBTRACT     = 0x3,  /**< dst - src : supported by D3D9, D3D11, OpenGL, OpenGLES */
     SDL_BLENDOPERATION_MINIMUM          = 0x4,  /**< min(dst, src) : supported by D3D9, D3D11 */
     SDL_BLENDOPERATION_MAXIMUM          = 0x5   /**< max(dst, src) : supported by D3D9, D3D11 */
 } SDL_BlendOperation;
 
 /**
- *  \brief The normalized factor used to multiply pixel components
+ * The normalized factor used to multiply pixel components
  */
-typedef enum
+typedef enum SDL_BlendFactor
 {
     SDL_BLENDFACTOR_ZERO                = 0x1,  /**< 0, 0, 0, 0 */
     SDL_BLENDFACTOR_ONE                 = 0x2,  /**< 1, 1, 1, 1 */

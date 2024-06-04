@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -19,10 +19,12 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
+/* WIKI CATEGORY: GameController */
+
 /**
- *  \file SDL_gamecontroller.h
+ * # CategoryGameController
  *
- *  Include file for SDL game controller event handling
+ * Include file for SDL game controller event handling
  */
 
 #ifndef SDL_gamecontroller_h_
@@ -44,7 +46,7 @@ extern "C" {
  *  \file SDL_gamecontroller.h
  *
  *  In order to use these functions, SDL_Init() must have been called
- *  with the ::SDL_INIT_GAMECONTROLLER flag.  This causes SDL to scan the system
+ *  with the SDL_INIT_GAMECONTROLLER flag.  This causes SDL to scan the system
  *  for game controllers, and load appropriate drivers.
  *
  *  If you would like to receive controller updates while the application
@@ -58,7 +60,7 @@ extern "C" {
 struct _SDL_GameController;
 typedef struct _SDL_GameController SDL_GameController;
 
-typedef enum
+typedef enum SDL_GameControllerType
 {
     SDL_CONTROLLER_TYPE_UNKNOWN = 0,
     SDL_CONTROLLER_TYPE_XBOX360,
@@ -73,10 +75,11 @@ typedef enum
     SDL_CONTROLLER_TYPE_NVIDIA_SHIELD,
     SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_LEFT,
     SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_RIGHT,
-    SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_PAIR
+    SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_PAIR,
+    SDL_CONTROLLER_TYPE_MAX
 } SDL_GameControllerType;
 
-typedef enum
+typedef enum SDL_GameControllerBindType
 {
     SDL_CONTROLLER_BINDTYPE_NONE = 0,
     SDL_CONTROLLER_BINDTYPE_BUTTON,
@@ -85,7 +88,7 @@ typedef enum
 } SDL_GameControllerBindType;
 
 /**
- *  Get the SDL joystick layer binding for this controller button/axis mapping
+ * Get the SDL joystick layer binding for this controller button/axis mapping
  */
 typedef struct SDL_GameControllerButtonBind
 {
@@ -165,9 +168,10 @@ typedef struct SDL_GameControllerButtonBind
 extern DECLSPEC int SDLCALL SDL_GameControllerAddMappingsFromRW(SDL_RWops * rw, int freerw);
 
 /**
- *  Load a set of mappings from a file, filtered by the current SDL_GetPlatform()
+ * Load a set of mappings from a file, filtered by the current
+ * SDL_GetPlatform()
  *
- *  Convenience macro.
+ * Convenience macro.
  */
 #define SDL_GameControllerAddMappingsFromFile(file)   SDL_GameControllerAddMappingsFromRW(SDL_RWFromFile(file, "rb"), 1)
 
@@ -524,6 +528,20 @@ extern DECLSPEC Uint16 SDLCALL SDL_GameControllerGetFirmwareVersion(SDL_GameCont
 extern DECLSPEC const char * SDLCALL SDL_GameControllerGetSerial(SDL_GameController *gamecontroller);
 
 /**
+ * Get the Steam Input handle of an opened controller, if available.
+ *
+ * Returns an InputHandle_t for the controller that can be used with Steam
+ * Input API: https://partner.steamgames.com/doc/api/ISteamInput
+ *
+ * \param gamecontroller the game controller object to query.
+ * \returns the gamepad handle, or 0 if unavailable.
+ *
+ * \since This function is available since SDL 2.30.0.
+ */
+extern DECLSPEC Uint64 SDLCALL SDL_GameControllerGetSteamHandle(SDL_GameController *gamecontroller);
+
+
+/**
  * Check if a controller has been opened and is currently connected.
  *
  * \param gamecontroller a game controller identifier previously returned by
@@ -592,15 +610,19 @@ extern DECLSPEC void SDLCALL SDL_GameControllerUpdate(void);
 
 
 /**
- *  The list of axes available from a controller
+ * The list of axes available from a controller
  *
- *  Thumbstick axis values range from SDL_JOYSTICK_AXIS_MIN to SDL_JOYSTICK_AXIS_MAX,
- *  and are centered within ~8000 of zero, though advanced UI will allow users to set
- *  or autodetect the dead zone, which varies between controllers.
+ * Thumbstick axis values range from SDL_JOYSTICK_AXIS_MIN to
+ * SDL_JOYSTICK_AXIS_MAX, and are centered within ~8000 of zero, though
+ * advanced UI will allow users to set or autodetect the dead zone, which
+ * varies between controllers.
  *
- *  Trigger axis values range from 0 to SDL_JOYSTICK_AXIS_MAX.
+ * Trigger axis values range from 0 (released) to SDL_JOYSTICK_AXIS_MAX (fully
+ * pressed) when reported by SDL_GameControllerGetAxis(). Note that this is
+ * not the same range that will be reported by the lower-level
+ * SDL_GetJoystickAxis().
  */
-typedef enum
+typedef enum SDL_GameControllerAxis
 {
     SDL_CONTROLLER_AXIS_INVALID = -1,
     SDL_CONTROLLER_AXIS_LEFTX,
@@ -687,8 +709,12 @@ SDL_GameControllerHasAxis(SDL_GameController *gamecontroller, SDL_GameController
  *
  * The axis indices start at index 0.
  *
- * The state is a value ranging from -32768 to 32767. Triggers, however, range
- * from 0 to 32767 (they never return a negative value).
+ * For thumbsticks, the state is a value ranging from -32768 (up/left) to
+ * 32767 (down/right).
+ *
+ * Triggers range from 0 when released to 32767 when fully pressed, and never
+ * return a negative value. Note that this differs from the value reported by
+ * the lower-level SDL_GetJoystickAxis(), which normally uses the full range.
  *
  * \param gamecontroller a game controller
  * \param axis an axis index (one of the SDL_GameControllerAxis values)
@@ -703,9 +729,9 @@ extern DECLSPEC Sint16 SDLCALL
 SDL_GameControllerGetAxis(SDL_GameController *gamecontroller, SDL_GameControllerAxis axis);
 
 /**
- *  The list of buttons available from a controller
+ * The list of buttons available from a controller
  */
-typedef enum
+typedef enum SDL_GameControllerButton
 {
     SDL_CONTROLLER_BUTTON_INVALID = -1,
     SDL_CONTROLLER_BUTTON_A,

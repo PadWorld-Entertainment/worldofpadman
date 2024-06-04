@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,9 +20,9 @@
 */
 
 /**
- *  \file SDL_pixels.h
+ * # CategoryPixels
  *
- *  Header for the enumerated pixel format definitions.
+ * Header for the enumerated pixel format definitions.
  */
 
 #ifndef SDL_pixels_h_
@@ -61,7 +61,10 @@ typedef enum
     SDL_PIXELTYPE_ARRAYU16,
     SDL_PIXELTYPE_ARRAYU32,
     SDL_PIXELTYPE_ARRAYF16,
-    SDL_PIXELTYPE_ARRAYF32
+    SDL_PIXELTYPE_ARRAYF32,
+
+    /* This must be at the end of the list to avoid breaking the existing ABI */
+    SDL_PIXELTYPE_INDEX2
 } SDL_PixelType;
 
 /** Bitmap pixel order, high bit -> low bit. */
@@ -134,6 +137,7 @@ typedef enum
 #define SDL_ISPIXELFORMAT_INDEXED(format)   \
     (!SDL_ISPIXELFORMAT_FOURCC(format) && \
      ((SDL_PIXELTYPE(format) == SDL_PIXELTYPE_INDEX1) || \
+      (SDL_PIXELTYPE(format) == SDL_PIXELTYPE_INDEX2) || \
       (SDL_PIXELTYPE(format) == SDL_PIXELTYPE_INDEX4) || \
       (SDL_PIXELTYPE(format) == SDL_PIXELTYPE_INDEX8)))
 
@@ -177,6 +181,12 @@ typedef enum
     SDL_PIXELFORMAT_INDEX1MSB =
         SDL_DEFINE_PIXELFORMAT(SDL_PIXELTYPE_INDEX1, SDL_BITMAPORDER_1234, 0,
                                1, 0),
+    SDL_PIXELFORMAT_INDEX2LSB =
+        SDL_DEFINE_PIXELFORMAT(SDL_PIXELTYPE_INDEX2, SDL_BITMAPORDER_4321, 0,
+                               2, 0),
+    SDL_PIXELFORMAT_INDEX2MSB =
+        SDL_DEFINE_PIXELFORMAT(SDL_PIXELTYPE_INDEX2, SDL_BITMAPORDER_1234, 0,
+                               2, 0),
     SDL_PIXELFORMAT_INDEX4LSB =
         SDL_DEFINE_PIXELFORMAT(SDL_PIXELTYPE_INDEX4, SDL_BITMAPORDER_4321, 0,
                                4, 0),
@@ -276,11 +286,19 @@ typedef enum
     SDL_PIXELFORMAT_ARGB32 = SDL_PIXELFORMAT_ARGB8888,
     SDL_PIXELFORMAT_BGRA32 = SDL_PIXELFORMAT_BGRA8888,
     SDL_PIXELFORMAT_ABGR32 = SDL_PIXELFORMAT_ABGR8888,
+    SDL_PIXELFORMAT_RGBX32 = SDL_PIXELFORMAT_RGBX8888,
+    SDL_PIXELFORMAT_XRGB32 = SDL_PIXELFORMAT_XRGB8888,
+    SDL_PIXELFORMAT_BGRX32 = SDL_PIXELFORMAT_BGRX8888,
+    SDL_PIXELFORMAT_XBGR32 = SDL_PIXELFORMAT_XBGR8888,
 #else
     SDL_PIXELFORMAT_RGBA32 = SDL_PIXELFORMAT_ABGR8888,
     SDL_PIXELFORMAT_ARGB32 = SDL_PIXELFORMAT_BGRA8888,
     SDL_PIXELFORMAT_BGRA32 = SDL_PIXELFORMAT_ARGB8888,
     SDL_PIXELFORMAT_ABGR32 = SDL_PIXELFORMAT_RGBA8888,
+    SDL_PIXELFORMAT_RGBX32 = SDL_PIXELFORMAT_XBGR8888,
+    SDL_PIXELFORMAT_XRGB32 = SDL_PIXELFORMAT_BGRX8888,
+    SDL_PIXELFORMAT_BGRX32 = SDL_PIXELFORMAT_XRGB8888,
+    SDL_PIXELFORMAT_XBGR32 = SDL_PIXELFORMAT_RGBX8888,
 #endif
 
     SDL_PIXELFORMAT_YV12 =      /**< Planar mode: Y + V + U  (3 planes) */
@@ -302,9 +320,10 @@ typedef enum
 } SDL_PixelFormatEnum;
 
 /**
- * The bits of this structure can be directly reinterpreted as an integer-packed
- * color which uses the SDL_PIXELFORMAT_RGBA32 format (SDL_PIXELFORMAT_ABGR8888
- * on little-endian systems and SDL_PIXELFORMAT_RGBA8888 on big-endian systems).
+ * The bits of this structure can be directly reinterpreted as an
+ * integer-packed color which uses the SDL_PIXELFORMAT_RGBA32 format
+ * (SDL_PIXELFORMAT_ABGR8888 on little-endian systems and
+ * SDL_PIXELFORMAT_RGBA8888 on big-endian systems).
  */
 typedef struct SDL_Color
 {
@@ -324,7 +343,30 @@ typedef struct SDL_Palette
 } SDL_Palette;
 
 /**
- *  \note Everything in the pixel format structure is read-only.
+ * A structure that contains pixel format information.
+ *
+ * Everything in the pixel format structure is read-only.
+ *
+ * A pixel format has either a palette or masks. If a palette is used `Rmask`,
+ * `Gmask`, `Bmask`, and `Amask` will be 0.
+ *
+ * An SDL_PixelFormat describes the format of the pixel data stored at the
+ * `pixels` field of an SDL_Surface. Every surface stores an SDL_PixelFormat
+ * in the `format` field.
+ *
+ * If you wish to do pixel level modifications on a surface, then
+ * understanding how SDL stores its color information is essential.
+ *
+ * For information on modern pixel color spaces, see the following Wikipedia
+ * article: http://en.wikipedia.org/wiki/RGBA_color_space
+ *
+ * \sa SDL_ConvertSurface
+ * \sa SDL_GetRGB
+ * \sa SDL_GetRGBA
+ * \sa SDL_MapRGB
+ * \sa SDL_MapRGBA
+ * \sa SDL_AllocFormat
+ * \sa SDL_FreeFormat
  */
 typedef struct SDL_PixelFormat
 {

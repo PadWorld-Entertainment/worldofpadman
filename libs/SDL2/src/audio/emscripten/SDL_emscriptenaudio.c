@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,7 +20,7 @@
 */
 #include "../../SDL_internal.h"
 
-#if SDL_AUDIO_DRIVER_EMSCRIPTEN
+#ifdef SDL_AUDIO_DRIVER_EMSCRIPTEN
 
 #include "SDL_audio.h"
 #include "../SDL_audio_c.h"
@@ -70,7 +70,7 @@ static void HandleAudioProcess(_THIS)
         return;
     }
 
-    if (this->stream == NULL) { /* no conversion necessary. */
+    if (!this->stream) { /* no conversion necessary. */
         SDL_assert(this->spec.size == stream_len);
         callback(this->callbackspec.userdata, this->work_buffer, stream_len);
     } else { /* streaming/converting */
@@ -130,7 +130,7 @@ static void HandleCaptureProcess(_THIS)
 
     /* okay, we've got an interleaved float32 array in C now. */
 
-    if (this->stream == NULL) { /* no conversion necessary. */
+    if (!this->stream) { /* no conversion necessary. */
         SDL_assert(this->spec.size == stream_len);
         callback(this->callbackspec.userdata, this->work_buffer, stream_len);
     } else { /* streaming/converting */

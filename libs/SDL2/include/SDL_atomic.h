@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,38 +20,29 @@
 */
 
 /**
- * \file SDL_atomic.h
+ * # CategoryAtomic
  *
  * Atomic operations.
  *
- * IMPORTANT:
- * If you are not an expert in concurrent lockless programming, you should
- * only be using the atomic lock and reference counting functions in this
- * file.  In all other cases you should be protecting your data structures
- * with full mutexes.
+ * IMPORTANT: If you are not an expert in concurrent lockless programming, you
+ * should not be using any functions in this file. You should be protecting
+ * your data structures with full mutexes instead.
  *
- * The list of "safe" functions to use are:
- *  SDL_AtomicLock()
- *  SDL_AtomicUnlock()
- *  SDL_AtomicIncRef()
- *  SDL_AtomicDecRef()
+ * ***Seriously, here be dragons!***
  *
- * Seriously, here be dragons!
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *
- * You can find out a little more about lockless programming and the
- * subtle issues that can arise here:
- * http://msdn.microsoft.com/en-us/library/ee418650%28v=vs.85%29.aspx
+ * You can find out a little more about lockless programming and the subtle
+ * issues that can arise here:
+ * https://learn.microsoft.com/en-us/windows/win32/dxtecharts/lockless-programming
  *
  * There's also lots of good information here:
- * http://www.1024cores.net/home/lock-free-algorithms
- * http://preshing.com/
  *
- * These operations may or may not actually be implemented using
- * processor specific atomic operations. When possible they are
- * implemented as true processor specific atomic operations. When that
- * is not possible the are implemented using locks that *do* use the
- * available atomic operations.
+ * - https://www.1024cores.net/home/lock-free-algorithms
+ * - https://preshing.com/
+ *
+ * These operations may or may not actually be implemented using processor
+ * specific atomic operations. When possible they are implemented as true
+ * processor specific atomic operations. When that is not possible the are
+ * implemented using locks that *do* use the available atomic operations.
  *
  * All of the atomic operations that modify memory are full memory barriers.
  */
@@ -209,7 +200,7 @@ typedef void (*SDL_KernelMemoryBarrierFunc)();
 #if defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7S__) || defined(__ARM_ARCH_8A__)
 #define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("dmb ish" : : : "memory")
 #define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("dmb ish" : : : "memory")
-#elif defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) || defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6T2__) || defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__) || defined(__ARM_ARCH_5TE__)
+#elif defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) || defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6T2__) || defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
 #ifdef __thumb__
 /* The mcr instruction isn't available in thumb mode, use real functions */
 #define SDL_MEMORY_BARRIER_USES_FUNCTION
@@ -257,10 +248,13 @@ typedef void (*SDL_KernelMemoryBarrierFunc)();
 
 
 /**
- * \brief A type representing an atomic integer value.  It is a struct
- *        so people don't accidentally use numeric operations on it.
+ * A type representing an atomic integer value.
+ *
+ * It is a struct so people don't accidentally use numeric operations on it.
  */
-typedef struct { int value; } SDL_atomic_t;
+typedef struct SDL_atomic_t {
+    int value;
+} SDL_atomic_t;
 
 /**
  * Set an atomic variable to a new value if it is currently an old value.

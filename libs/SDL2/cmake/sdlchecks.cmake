@@ -471,7 +471,9 @@ macro(CheckX11)
       list(APPEND SOURCE_FILES ${X11_SOURCES})
       set(SDL_VIDEO_DRIVER_X11 1)
 
-      # !!! FIXME: why is this disabled for Apple?
+      # Note: Disabled on Apple because the dynamic mode backend for X11 doesn't
+      # work properly on Apple during several issues like inconsistent paths
+      # among platforms. See #6778 (https://github.com/libsdl-org/SDL/issues/6778)
       if(APPLE)
         set(SDL_X11_SHARED OFF)
       endif()
@@ -912,6 +914,22 @@ macro(CheckOpenGLES)
 endmacro()
 
 # Requires:
+# - EGL
+macro(CheckQNXScreen)
+  if(QNX AND HAVE_OPENGL_EGL)
+    check_c_source_compiles("
+        #include <screen/screen.h>
+        int main (int argc, char** argv) { return 0; }" HAVE_QNX_SCREEN)
+    if(HAVE_QNX_SCREEN)
+      set(SDL_VIDEO_DRIVER_QNX 1)
+      file(GLOB QNX_VIDEO_SOURCES ${SDL2_SOURCE_DIR}/src/video/qnx/*.c)
+      list(APPEND SOURCE_FILES ${QNX_VIDEO_SOURCES})
+      list(APPEND EXTRA_LIBS screen EGL)
+    endif()
+  endif()
+endmacro()
+
+# Requires:
 # - nada
 # Optional:
 # - THREADS opt
@@ -961,6 +979,8 @@ macro(CheckPTHREAD)
     elseif(EMSCRIPTEN)
       set(PTHREAD_CFLAGS "-D_REENTRANT -pthread")
       set(PTHREAD_LDFLAGS "-pthread")
+    elseif(QNX)
+      # pthread support is baked in
     else()
       set(PTHREAD_CFLAGS "-D_REENTRANT")
       set(PTHREAD_LDFLAGS "-lpthread")
@@ -1229,6 +1249,7 @@ macro(CheckHIDAPI)
 
     if(HAVE_HIDAPI)
       if(ANDROID)
+        enable_language(CXX)
         list(APPEND SOURCE_FILES ${SDL2_SOURCE_DIR}/src/hidapi/android/hid.cpp)
       endif()
       if(IOS OR TVOS)
@@ -1256,13 +1277,18 @@ endmacro()
 # - n/a
 macro(CheckRPI)
   if(SDL_RPI)
-    pkg_check_modules(VIDEO_RPI bcm_host brcmegl)
+    pkg_check_modules(VIDEO_RPI bcm_host)
     if (NOT VIDEO_RPI_FOUND)
       set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include" "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/" )
       set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
       set(VIDEO_RPI_LIBRARIES bcm_host )
-      set(VIDEO_RPI_LDFLAGS "-Wl,-rpath,/opt/vc/lib")
     endif()
+
+    pkg_check_modules(VIDEO_RPI_EGL brcmegl)
+    if (NOT VIDEO_RPI_EGL_FOUND)
+      set(VIDEO_RPI_EGL_LDFLAGS "-Wl,-rpath,/opt/vc/lib")
+    endif()
+
     listtostr(VIDEO_RPI_INCLUDE_DIRS VIDEO_RPI_INCLUDE_FLAGS "-I")
     listtostr(VIDEO_RPI_LIBRARY_DIRS VIDEO_RPI_LIBRARY_FLAGS "-L")
 
@@ -1271,9 +1297,7 @@ macro(CheckRPI)
     set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBRARIES}")
     check_c_source_compiles("
         #include <bcm_host.h>
-        #include <EGL/eglplatform.h>
         int main(int argc, char **argv) {
-          EGL_DISPMANX_WINDOW_T window;
           bcm_host_init();
         }" HAVE_RPI)
     set(CMAKE_REQUIRED_FLAGS "${ORIG_CMAKE_REQUIRED_FLAGS}")
@@ -1287,7 +1311,7 @@ macro(CheckRPI)
       list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBRARIES})
       # !!! FIXME: shouldn't be using CMAKE_C_FLAGS, right?
       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
-      list(APPEND EXTRA_LDFLAGS ${VIDEO_RPI_LDFLAGS})
+      list(APPEND EXTRA_LDFLAGS ${VIDEO_RPI_LDFLAGS} ${VIDEO_RPI_EGL_LDFLAGS})
     endif()
   endif()
 endmacro()

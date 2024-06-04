@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -21,7 +21,7 @@
 
 #include "../../SDL_internal.h"
 
-#if SDL_VIDEO_DRIVER_PSP
+#ifdef SDL_VIDEO_DRIVER_PSP
 
 /* SDL internals */
 #include "../SDL_sysvideo.h"
@@ -29,14 +29,128 @@
 #include "SDL_syswm.h"
 #include "SDL_loadso.h"
 #include "SDL_events.h"
+#include "SDL_render.h"
 #include "../../events/SDL_mouse_c.h"
 #include "../../events/SDL_keyboard_c.h"
+#include "../../render/SDL_sysrender.h"
 
 
 /* PSP declarations */
 #include "SDL_pspvideo.h"
 #include "SDL_pspevents_c.h"
 #include "SDL_pspgl_c.h"
+#include "../../render/psp/SDL_render_psp.h"
+
+#define SDL_WINDOWTEXTUREDATA "_SDL_WindowTextureData"
+
+typedef struct
+{
+    SDL_Renderer *renderer;
+    SDL_Texture *texture;
+    void *pixels;
+    int pitch;
+    int bytes_per_pixel;
+} SDL_WindowTextureData;
+
+int PSP_CreateWindowFramebuffer(SDL_VideoDevice *_this, SDL_Window *window, Uint32 *format, void **pixels, int *pitch)
+{
+    SDL_RendererInfo info;
+    SDL_WindowTextureData *data = SDL_GetWindowData(window, SDL_WINDOWTEXTUREDATA);
+    int i, w, h;
+
+    SDL_GetWindowSizeInPixels(window, &w, &h);
+
+    if (w != 480) {
+        return SDL_SetError("Unexpected window size");
+    }
+
+    if (!data) {
+        SDL_Renderer *renderer = NULL;
+        for (i = 0; i < SDL_GetNumRenderDrivers(); ++i) {
+            SDL_GetRenderDriverInfo(i, &info);
+            if (SDL_strcmp(info.name, "software") != 0) {
+                renderer = SDL_CreateRenderer(window, i, 0);
+                if (renderer && (SDL_GetRendererInfo(renderer, &info) == 0) && (info.flags & SDL_RENDERER_ACCELERATED)) {
+                    break; /* this will work. */
+                }
+                if (renderer) { /* wasn't accelerated, etc, skip it. */
+                    SDL_DestroyRenderer(renderer);
+                    renderer = NULL;
+                }
+            }
+        }
+        if (!renderer) {
+            return SDL_SetError("No hardware accelerated renderers available");
+        }
+
+        SDL_assert(renderer != NULL); /* should have explicitly checked this above. */
+
+        /* Create the data after we successfully create the renderer (bug #1116) */
+        data = (SDL_WindowTextureData *)SDL_calloc(1, sizeof(*data));
+
+        if (!data) {
+            SDL_DestroyRenderer(renderer);
+            return SDL_OutOfMemory();
+        }
+
+        SDL_SetWindowData(window, SDL_WINDOWTEXTUREDATA, data);
+        data->renderer = renderer;
+    } else {
+        if (SDL_GetRendererInfo(data->renderer, &info) == -1) {
+            return -1;
+        }
+    }
+
+    /* Find the first format without an alpha channel */
+    *format = info.texture_formats[0];
+
+    for (i = 0; i < (int)info.num_texture_formats; ++i) {
+        if (!SDL_ISPIXELFORMAT_FOURCC(info.texture_formats[i]) &&
+            !SDL_ISPIXELFORMAT_ALPHA(info.texture_formats[i])) {
+            *format = info.texture_formats[i];
+            break;
+        }
+    }
+
+    /* get the PSP renderer's "private" data */
+    SDL_PSP_RenderGetProp(data->renderer, SDL_PSP_RENDERPROPS_FRONTBUFFER, &data->pixels);
+
+    /* Create framebuffer data */
+    data->bytes_per_pixel = SDL_BYTESPERPIXEL(*format);
+    /* since we point directly to VRAM's frontbuffer, we have to use
+       the upscaled pitch of 512 width - since PSP requires all textures to be
+       powers of 2. */
+    data->pitch = 512 * data->bytes_per_pixel;
+    *pixels = data->pixels;
+    *pitch = data->pitch;
+
+    /* Make sure we're not double-scaling the viewport */
+    SDL_RenderSetViewport(data->renderer, NULL);
+
+    return 0;
+}
+
+int PSP_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect *rects, int numrects)
+{
+    SDL_WindowTextureData *data;
+    data = SDL_GetWindowData(window, SDL_WINDOWTEXTUREDATA);
+    if (!data || !data->renderer || !window->surface) {
+        return -1;
+    }
+    data->renderer->RenderPresent(data->renderer);
+    SDL_PSP_RenderGetProp(data->renderer, SDL_PSP_RENDERPROPS_BACKBUFFER, &window->surface->pixels);
+    return 0;
+}
+
+void PSP_DestroyWindowFramebuffer(_THIS, SDL_Window *window)
+{
+    SDL_WindowTextureData *data = SDL_GetWindowData(window, SDL_WINDOWTEXTUREDATA);
+    if (!data || !data->renderer) {
+        return;
+    }
+    SDL_DestroyRenderer(data->renderer);
+    data->renderer = NULL;
+}
 
 /* unused
 static SDL_bool PSP_initialized = SDL_FALSE;
@@ -46,7 +160,7 @@ static void PSP_Destroy(SDL_VideoDevice *device)
 {
     /*    SDL_VideoData *phdata = (SDL_VideoData *) device->driverdata; */
 
-    if (device->driverdata != NULL) {
+    if (device->driverdata) {
         device->driverdata = NULL;
     }
 }
@@ -59,21 +173,21 @@ static SDL_VideoDevice *PSP_Create()
 
     /* Initialize SDL_VideoDevice structure */
     device = (SDL_VideoDevice *)SDL_calloc(1, sizeof(SDL_VideoDevice));
-    if (device == NULL) {
+    if (!device) {
         SDL_OutOfMemory();
         return NULL;
     }
 
     /* Initialize internal PSP specific data */
     phdata = (SDL_VideoData *)SDL_calloc(1, sizeof(SDL_VideoData));
-    if (phdata == NULL) {
+    if (!phdata) {
         SDL_OutOfMemory();
         SDL_free(device);
         return NULL;
     }
 
     gldata = (SDL_GLDriverData *)SDL_calloc(1, sizeof(SDL_GLDriverData));
-    if (gldata == NULL) {
+    if (!gldata) {
         SDL_OutOfMemory();
         SDL_free(device);
         SDL_free(phdata);
@@ -128,13 +242,21 @@ static SDL_VideoDevice *PSP_Create()
 
     device->PumpEvents = PSP_PumpEvents;
 
+    /* backend to use VRAM directly as a framebuffer using
+       SDL_GetWindowSurface() API. */
+    device->checked_texture_framebuffer = 1;
+    device->CreateWindowFramebuffer = PSP_CreateWindowFramebuffer;
+    device->UpdateWindowFramebuffer = PSP_UpdateWindowFramebuffer;
+    device->DestroyWindowFramebuffer = PSP_DestroyWindowFramebuffer;
+
     return device;
 }
 
 VideoBootStrap PSP_bootstrap = {
     "PSP",
     "PSP Video Driver",
-    PSP_Create
+    PSP_Create,
+    NULL /* no ShowMessageBox implementation */
 };
 
 /*****************************************************************************/
@@ -144,6 +266,10 @@ int PSP_VideoInit(_THIS)
 {
     SDL_VideoDisplay display;
     SDL_DisplayMode current_mode;
+
+    if (PSP_EventInit(_this) == -1) {
+        return -1;  /* error string would already be set */
+    }
 
     SDL_zero(current_mode);
 
@@ -169,11 +295,13 @@ int PSP_VideoInit(_THIS)
     SDL_AddDisplayMode(&display, &current_mode);
 
     SDL_AddVideoDisplay(&display, SDL_FALSE);
-    return 1;
+
+    return 0;
 }
 
 void PSP_VideoQuit(_THIS)
 {
+    PSP_EventQuit(_this);
 }
 
 void PSP_GetDisplayModes(_THIS, SDL_VideoDisplay *display)
@@ -202,7 +330,7 @@ int PSP_CreateWindow(_THIS, SDL_Window *window)
 
     /* Allocate window internal data */
     wdata = (SDL_WindowData *)SDL_calloc(1, sizeof(SDL_WindowData));
-    if (wdata == NULL) {
+    if (!wdata) {
         return SDL_OutOfMemory();
     }
 
