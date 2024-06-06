@@ -38,7 +38,11 @@ R_DrawElements
 */
 
 void R_DrawElements(int numIndexes, int firstIndex) {
-	qglDrawElements(GL_TRIANGLES, numIndexes, GL_INDEX_TYPE, BUFFER_OFFSET(firstIndex * sizeof(glIndex_t)));
+	if (tess.useCacheVao) {
+		VaoCache_DrawElements(numIndexes, firstIndex);
+	} else {
+		qglDrawElements(GL_TRIANGLES, numIndexes, GL_INDEX_TYPE, BUFFER_OFFSET(firstIndex * sizeof(glIndex_t)));
+	}
 }
 
 /*
@@ -1554,6 +1558,8 @@ void RB_EndSurface(void) {
 	tess.numIndexes = 0;
 	tess.numVertexes = 0;
 	tess.firstIndex = 0;
+	tess.useCacheVao = qfalse;
+	tess.useInternalVao = qfalse;
 
 	GLimp_LogComment("----------\n");
 }
