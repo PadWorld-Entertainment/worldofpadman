@@ -42,14 +42,12 @@ QGL_1_3_PROCS
 QGL_1_5_PROCS
 QGL_2_0_PROCS
 QGL_3_0_PROCS
-QGL_ARB_occlusion_query_PROCS
-QGL_ARB_framebuffer_object_PROCS
-QGL_ARB_vertex_array_object_PROCS
-QGL_EXT_direct_state_access_PROCS
+QGL_ARB_occlusion_query_PROCS QGL_ARB_framebuffer_object_PROCS QGL_ARB_vertex_array_object_PROCS
+	QGL_EXT_direct_state_access_PROCS
 #undef GLE
 
 #define GL_INDEX_TYPE GL_UNSIGNED_INT
-typedef unsigned int glIndex_t;
+	typedef unsigned int glIndex_t;
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -1312,6 +1310,7 @@ typedef struct {
 	qboolean intelGraphics;
 
 	qboolean occlusionQuery;
+	GLenum occlusionQueryTarget;
 
 	int glslMajorVersion;
 	int glslMinorVersion;
@@ -1335,6 +1334,12 @@ typedef struct {
 
 	qboolean vertexArrayObject;
 	qboolean directStateAccess;
+
+	// OpenGL ES extensions
+	qboolean readDepth;
+	qboolean readStencil;
+	qboolean shadowSamplers;
+	qboolean standardDerivatives;
 } glRefConfig_t;
 
 typedef struct {
@@ -1370,7 +1375,7 @@ typedef struct {
 typedef struct {
 	trRefdef_t refdef;
 	viewParms_t viewParms;
-	orientationr_t or;
+	orientationr_t or ;
 	backEndCounters_t pc;
 	qboolean isHyperspace;
 	const trRefEntity_t *currentEntity;
@@ -1404,7 +1409,7 @@ typedef struct {
 	int frameCount; // incremented every frame
 	int sceneCount; // incremented every scene
 	int viewCount;	// incremented every view (twice a scene if portaled)
-					// and every R_MarkFragments call
+				   // and every R_MarkFragments call
 
 	int frameSceneNum; // zeroed at RE_BeginFrame
 
@@ -2382,5 +2387,7 @@ size_t RE_SaveJPGToBuffer(byte *buffer, size_t bufSize, int quality, int image_w
 						  byte *image_buffer, int padding);
 void RE_SaveTGA(const char *filename, int image_width, int image_height, byte *image_buffer, int padding);
 void RE_TakeVideoFrame(int width, int height, byte *captureBuffer, byte *encodeBuffer, qboolean motionJpeg);
+
+void R_ConvertTextureFormat(const byte *in, int width, int height, GLenum format, GLenum type, byte *out);
 
 #endif // TR_LOCAL_H

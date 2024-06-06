@@ -270,7 +270,7 @@ static void R_LoadLightmaps(const lump_t *l, const lump_t *surfs) {
 		tr.deluxemaps = ri.Hunk_Alloc(tr.numLightmaps * sizeof(image_t *), h_low);
 
 	textureInternalFormat = GL_RGBA8;
-	if (r_hdr->integer) {
+	if (r_hdr->integer && !qglesMajorVersion) {
 		// Check for the first hdr lightmap, if it exists, use GL_RGBA16 for textures.
 		char filename[MAX_QPATH];
 
