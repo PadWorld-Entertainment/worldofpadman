@@ -51,7 +51,7 @@ cvar_t *r_allowSoftwareGL; // Don't abort out if a hardware visual can't be obta
 cvar_t *r_allowResize;	   // make window resizable
 cvar_t *r_centerWindow;
 cvar_t *r_sdlDriver;
-cvar_t *r_useOpenGLES;
+cvar_t *r_preferOpenGLES;
 
 int qglMajorVersion, qglMinorVersion;
 int qglesMajorVersion, qglesMinorVersion;
@@ -376,6 +376,12 @@ GLimp_SetMode
 ===============
 */
 static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qboolean fixedFunction) {
+	struct GLimp_ContextType {
+		int profileMask;
+		int majorVersion;
+		int minorVersion;
+	} contexts[3];
+	int numContexts, type;
 	const char *glstring;
 	int perChannelColorBits;
 	int colorBits, depthBits, stencilBits;
@@ -483,6 +489,47 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 
 	stencilBits = r_stencilbits->value;
 	samples = r_ext_multisample->value;
+	numContexts = 0;
+
+	if (!fixedFunction) {
+		int profileMask;
+		qboolean preferOpenGLES;
+
+		SDL_GL_ResetAttributes();
+		SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &profileMask);
+
+		preferOpenGLES = (r_preferOpenGLES->integer == 1 ||
+						  (r_preferOpenGLES->integer == -1 && profileMask == SDL_GL_CONTEXT_PROFILE_ES));
+
+		if (preferOpenGLES) {
+			contexts[numContexts].profileMask = SDL_GL_CONTEXT_PROFILE_ES;
+			contexts[numContexts].majorVersion = 2;
+			contexts[numContexts].minorVersion = 0;
+			numContexts++;
+		}
+
+		contexts[numContexts].profileMask = SDL_GL_CONTEXT_PROFILE_CORE;
+		contexts[numContexts].majorVersion = 3;
+		contexts[numContexts].minorVersion = 2;
+		numContexts++;
+
+		contexts[numContexts].profileMask = 0;
+		contexts[numContexts].majorVersion = 2;
+		contexts[numContexts].minorVersion = 0;
+		numContexts++;
+
+		if (!preferOpenGLES) {
+			contexts[numContexts].profileMask = SDL_GL_CONTEXT_PROFILE_ES;
+			contexts[numContexts].majorVersion = 2;
+			contexts[numContexts].minorVersion = 0;
+			numContexts++;
+		}
+	} else {
+		contexts[numContexts].profileMask = 0;
+		contexts[numContexts].majorVersion = 1;
+		contexts[numContexts].minorVersion = 1;
+		numContexts++;
+	}
 
 	for (i = 0; i < 16; i++) {
 		int testColorBits, testDepthBits, testStencilBits;
@@ -609,97 +656,63 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 
 		SDL_SetWindowIcon(SDL_window, icon);
 
-		if (!fixedFunction) {
-			int profileMask;
-
-			SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &profileMask);
-
-			if (r_useOpenGLES->integer == 1 ||
-				(r_useOpenGLES->integer == -1 && profileMask == SDL_GL_CONTEXT_PROFILE_ES)) {
-				ri.Printf(PRINT_ALL, "Trying to get an OpenGL ES 2.0 context\n");
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-
-				SDL_glContext = SDL_GL_CreateContext(SDL_window);
-				if (!SDL_glContext) {
-					ri.Printf(PRINT_ALL, "SDL_GL_CreateContext failed: %s\n", SDL_GetError());
-				} else {
-					ri.Printf(PRINT_ALL, "SDL_GL_CreateContext succeeded.\n");
-
-					if (!GLimp_GetProcAddresses(fixedFunction)) {
-						ri.Printf(PRINT_ALL, "GLimp_GetProcAddresses() failed for OpenGL ES 2.0 context\n");
-						GLimp_ClearProcAddresses();
-						SDL_GL_DeleteContext(SDL_glContext);
-						SDL_glContext = NULL;
-					}
-				}
+		for (type = 0; type < numContexts; type++) {
+			char contextName[32];
+			switch (contexts[type].profileMask) {
+			default:
+			case 0:
+				Com_sprintf(contextName, sizeof(contextName), "OpenGL %d.%d", contexts[type].majorVersion,
+							contexts[type].minorVersion);
+				break;
+			case SDL_GL_CONTEXT_PROFILE_CORE:
+				Com_sprintf(contextName, sizeof(contextName), "OpenGL %d.%d Core", contexts[type].majorVersion,
+							contexts[type].minorVersion);
+				break;
+			case SDL_GL_CONTEXT_PROFILE_ES:
+				Com_sprintf(contextName, sizeof(contextName), "OpenGL ES %d.%d", contexts[type].majorVersion,
+							contexts[type].minorVersion);
+				break;
 			}
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, contexts[type].profileMask);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, contexts[type].majorVersion);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, contexts[type].minorVersion);
 
+			SDL_glContext = SDL_GL_CreateContext(SDL_window);
 			if (!SDL_glContext) {
-				ri.Printf(PRINT_ALL, "Trying to get an OpenGL 3.2 core context\n");
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-
-				SDL_glContext = SDL_GL_CreateContext(SDL_window);
-				if (!SDL_glContext) {
-					ri.Printf(PRINT_ALL, "SDL_GL_CreateContext failed: %s\n", SDL_GetError());
-				} else {
-					const char *renderer;
-
-					ri.Printf(PRINT_ALL, "SDL_GL_CreateContext succeeded.\n");
-
-					if (GLimp_GetProcAddresses(fixedFunction)) {
-						renderer = (const char *)qglGetString(GL_RENDERER);
-					} else {
-						ri.Printf(PRINT_ALL, "GLimp_GetProcAddresses() failed for OpenGL 3.2 core context\n");
-						renderer = NULL;
-					}
-
-					if (!renderer || strstr(renderer, "Software Renderer") || strstr(renderer, "Software Rasterizer")) {
-						if (renderer)
-							ri.Printf(PRINT_ALL, "GL_RENDERER is %s, rejecting context\n", renderer);
-
-						GLimp_ClearProcAddresses();
-						SDL_GL_DeleteContext(SDL_glContext);
-						SDL_glContext = NULL;
-					}
-				}
-			}
-
-			if (!SDL_glContext) {
-				ri.Printf(PRINT_ALL, "Trying to get an OpenGL 2.0 context\n");
-
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, 0);
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-			}
-		} else {
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, 0);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
-			SDL_glContext = NULL;
-		}
-
-		if (!SDL_glContext) {
-			if ((SDL_glContext = SDL_GL_CreateContext(SDL_window)) == NULL) {
-				ri.Printf(PRINT_DEVELOPER, "SDL_GL_CreateContext failed: %s\n", SDL_GetError());
-				SDL_DestroyWindow(SDL_window);
-				SDL_window = NULL;
+				ri.Printf(PRINT_ALL, "SDL_GL_CreateContext() for %s context failed: %s\n", contextName, SDL_GetError());
 				continue;
 			}
 
 			if (!GLimp_GetProcAddresses(fixedFunction)) {
-				ri.Printf(PRINT_ALL, "GLimp_GetProcAddresses() failed\n");
+				ri.Printf(PRINT_ALL, "GLimp_GetProcAddresses() for %s context failed\n", contextName);
 				GLimp_ClearProcAddresses();
 				SDL_GL_DeleteContext(SDL_glContext);
 				SDL_glContext = NULL;
-				SDL_DestroyWindow(SDL_window);
-				SDL_window = NULL;
 				continue;
 			}
+
+			if (contexts[type].profileMask == SDL_GL_CONTEXT_PROFILE_CORE) {
+				const char *renderer;
+
+				renderer = (const char *)qglGetString(GL_RENDERER);
+
+				if (!renderer || strstr(renderer, "Software Renderer") || strstr(renderer, "Software Rasterizer")) {
+					ri.Printf(PRINT_ALL, "GL_RENDERER is %s, rejecting %s context\n", renderer, contextName);
+
+					GLimp_ClearProcAddresses();
+					SDL_GL_DeleteContext(SDL_glContext);
+					SDL_glContext = NULL;
+					continue;
+				}
+			}
+
+			break;
+		}
+
+		if (!SDL_glContext) {
+			SDL_DestroyWindow(SDL_window);
+			SDL_window = NULL;
+			continue;
 		}
 
 		qglClearColor(0, 0, 0, 1);
@@ -932,7 +945,7 @@ void GLimp_Init(qboolean fixedFunction) {
 	r_sdlDriver = ri.Cvar_Get("r_sdlDriver", "", CVAR_ROM);
 	r_allowResize = ri.Cvar_Get("r_allowResize", "0", CVAR_ARCHIVE | CVAR_LATCH);
 	r_centerWindow = ri.Cvar_Get("r_centerWindow", "0", CVAR_ARCHIVE | CVAR_LATCH);
-	r_useOpenGLES = ri.Cvar_Get("r_useOpenGLES", "-1", CVAR_ARCHIVE | CVAR_LATCH);
+	r_preferOpenGLES = ri.Cvar_Get("r_preferOpenGLES", "-1", CVAR_ARCHIVE | CVAR_LATCH);
 
 	if (ri.Cvar_VariableIntegerValue("com_abnormalExit")) {
 		ri.Cvar_Set("r_mode", va("%d", R_MODE_FALLBACK));
