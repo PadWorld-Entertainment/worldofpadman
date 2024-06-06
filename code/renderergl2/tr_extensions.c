@@ -68,11 +68,22 @@ void GLimp_InitExtraExtensions(void) {
 			goto done;
 
 		extension = "GL_EXT_occlusion_query_boolean";
-		if (SDL_GL_ExtensionSupported(extension)) {
+		if (qglesMajorVersion >= 3 || SDL_GL_ExtensionSupported(extension)) {
 			glRefConfig.occlusionQuery = qtrue;
 			glRefConfig.occlusionQueryTarget = GL_ANY_SAMPLES_PASSED;
 
-			QGL_ARB_occlusion_query_PROCS;
+			if (qglesMajorVersion >= 3) {
+				QGL_ARB_occlusion_query_PROCS;
+			} else {
+				// GL_EXT_occlusion_query_boolean uses EXT suffix
+#undef GLE
+#define GLE(ret, name, ...) qgl##name = (name##proc *) SDL_GL_GetProcAddress("gl" #name "EXT");
+
+				QGL_ARB_occlusion_query_PROCS;
+
+#undef GLE
+#define GLE(ret, name, ...) qgl##name = (name##proc *) SDL_GL_GetProcAddress("gl" #name);
+			}
 
 			ri.Printf(PRINT_ALL, result[glRefConfig.occlusionQuery], extension);
 		} else {
@@ -117,7 +128,7 @@ void GLimp_InitExtraExtensions(void) {
 
 		// GL_OES_element_index_uint
 		extension = "GL_OES_element_index_uint";
-		if (SDL_GL_ExtensionSupported(extension)) {
+		if (qglesMajorVersion >= 3 || SDL_GL_ExtensionSupported(extension)) {
 			glRefConfig.vaoCacheGlIndexType = GL_UNSIGNED_INT;
 			glRefConfig.vaoCacheGlIndexSize = sizeof(unsigned int);
 			ri.Printf(PRINT_ALL, result[1], extension);

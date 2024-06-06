@@ -276,7 +276,12 @@ static void InitOpenGL(void) {
 		glRefConfig.maxVertexAttribs = temp;
 
 		// reserve 160 components for other uniforms
-		qglGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &temp);
+		if (qglesMajorVersion) {
+			qglGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &temp);
+			temp *= 4;
+		} else {
+			qglGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &temp);
+		}
 		glRefConfig.glslMaxAnimatedBones = Com_Clamp(0, IQM_MAX_JOINTS, (temp - 160) / 16);
 		if (glRefConfig.glslMaxAnimatedBones < 12) {
 			glRefConfig.glslMaxAnimatedBones = 0;
