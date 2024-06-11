@@ -1402,7 +1402,7 @@ void CG_DrawWeaponSelect(void) {
 	}
 
 	x = SCREEN_WIDTH / 2 - count * 20;
-	y = SCREEN_WIDTH / 4 * 3;
+	y = SCREEN_HEIGHT / 4 * 3;
 
 	for (i = 1; i < 16; i++) {
 		if (!(bits & (1 << i))) {
