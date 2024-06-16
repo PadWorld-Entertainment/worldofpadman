@@ -364,13 +364,12 @@ Draw the normal in-game scoreboard
 qboolean CG_DrawOldScoreboard(void) {
 	int x, y, i;
 	float fade;
-	float *fadeColor;
+	const float *fadeColor;
 	int maxClients;
 	int lineHeight;
 	int topBorderSize, bottomBorderSize;
 	int scoreLineSpace, maxScoreLinesPerTeam[TEAM_NUM_TEAMS];
 	const score_t *score;
-	char buf[32];
 
 	// don't draw anything if the menu or console is up
 	if (cg_paused.integer) {
@@ -406,11 +405,11 @@ qboolean CG_DrawOldScoreboard(void) {
 		fade = *fadeColor;
 	}
 
-	CG_DrawPic(0, 0, 640, 496, cgs.media.scoreboardBG);
+	CG_DrawPic(0, 0, SCREEN_WIDTH, 496, cgs.media.scoreboardBG);
 
 	// fragged by ... line
 	if (cg.killerName[0]) {
-		char *s = va(S_COLOR_BLACK "Fragged by %s", cg.killerName);
+		const char *s = va(S_COLOR_BLACK "Fragged by %s", cg.killerName);
 		int w = (CG_DrawStrlen(s) * BIGCHAR_WIDTH);
 		x = ((SCREEN_WIDTH - w) / 2);
 		y = (SB_TOP - 56);
@@ -421,7 +420,7 @@ qboolean CG_DrawOldScoreboard(void) {
 	// current rank
 	if (cgs.gametype < GT_TEAM) {
 		if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR) {
-			char *s;
+			const char *s;
 			int w;
 			if (cgs.gametype == GT_LPS) {
 				int ownLives = cg.snap->ps.stats[STAT_LIVESLEFT];
@@ -448,7 +447,7 @@ qboolean CG_DrawOldScoreboard(void) {
 			CG_DrawStringExt(x, y, s, fadeColor, qfalse, qfalse, FONT_BIG, 0);
 		}
 	} else {
-		char *s;
+		const char *s;
 		int w;
 		// FIXME: Use some sort of team_t define/enum
 		if (cg.teamScores[0] == cg.teamScores[1]) {
@@ -552,7 +551,6 @@ qboolean CG_DrawOldScoreboard(void) {
 				averageTeamLines = (linesLeft / numTeams);
 
 				if ((!teamDone[i]) && (cg.scoreTeamCount[i] <= averageTeamLines)) {
-
 					maxScoreLinesPerTeam[i] = cg.scoreTeamCount[i];
 					teamDone[i] = qtrue;
 					linesLeft -= cg.scoreTeamCount[i];
@@ -633,6 +631,7 @@ qboolean CG_DrawOldScoreboard(void) {
 	if (score != NULL) {
 		const clientInfo_t *ci = &cgs.clientinfo[score->client];
 		if (ci->team != TEAM_SPECTATOR) {
+			char buf[32];
 			CG_DrawMedals(62.0f, (float)SB_TOP + 216.0f, score);
 
 			// draw accuracy rate

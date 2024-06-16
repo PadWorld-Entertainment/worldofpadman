@@ -1597,7 +1597,7 @@ void CG_ShaderStateChanged(void);
 // cg_playerstate.c
 //
 void CG_Respawn(void);
-void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops);
+void CG_TransitionPlayerState(const playerState_t *ps, playerState_t *ops);
 void CG_ToggleSpawnProtection(int entNum, qboolean state);
 
 //
