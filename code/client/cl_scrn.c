@@ -210,7 +210,7 @@ void SCR_DrawChar(int x, int y, int ch, fontSize_t fsize) {
 	fcol = col * 0.0625f;
 	size = 0.0625f;
 
-	re.DrawStretchPic(x, y, fsize.h, fsize.h, fcol, frow, fcol + size, frow + size, cls.charsetShader);
+	re.DrawStretchPic(x, y, fsize.w, fsize.h, fcol, frow, fcol + size, frow + size, cls.charsetShader);
 }
 
 /*
