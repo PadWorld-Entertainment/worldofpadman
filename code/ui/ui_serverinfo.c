@@ -143,7 +143,7 @@ static void ServerInfo_MenuDraw(void) {
 		if (y > 260)
 			break;
 
-		Com_sprintf(key, MAX_INFO_KEY, "%s: ", key);
+		Q_strcat(key, MAX_INFO_KEY, ": ");
 		keylen = Q_PrintStrlen(key);
 		vallen = Q_PrintStrlen(value);
 		if (keylen + vallen < 20) {
