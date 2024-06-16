@@ -387,6 +387,7 @@ extern vec3_t bytedirs[NUMVERTEXNORMALS];
 // all drawing is done to a 640*480 virtual screen size
 // and will be automatically scaled to the real resolution
 #define SCREEN_WIDTH 640
+#define SCREEN_CENTER (SCREEN_WIDTH / 2)
 #define SCREEN_HEIGHT 480
 
 #define TINYCHAR_WIDTH (SMALLCHAR_WIDTH)
@@ -406,8 +407,10 @@ typedef struct {
 	int h;
 } fontSize_t;
 
+extern fontSize_t FONT_TINY;
 extern fontSize_t FONT_SMALL;
 extern fontSize_t FONT_BIG;
+extern fontSize_t FONT_GIANT;
 
 extern vec4_t colorBlack;
 extern vec4_t colorRed;

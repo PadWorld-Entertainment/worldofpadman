@@ -29,7 +29,6 @@ CALL VOTE MENU
 #define NUM_LISTITEMS 8
 
 #define LISTITEM_WIDTH 160
-#define XPOSITION (SCREEN_WIDTH / 2)
 
 #define MAX_LISTSTRARRAY (8 * 1024)
 static char ArrayForListStrs[MAX_LISTSTRARRAY];
@@ -238,7 +237,7 @@ static void UI_CallVote_Draw(void) {
 	char info[MAX_INFO_STRING];
 
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(XPOSITION, 110, "CALL VOTE", (UI_CENTER | UI_SMALLFONT), color_black);
+	UI_DrawProportionalString(SCREEN_CENTER, 110, "CALL VOTE", (UI_CENTER | UI_SMALLFONT), color_black);
 
 	trap_GetConfigString(CS_VOTE_TIME, info, sizeof(info));
 
@@ -254,24 +253,24 @@ static void UI_CallVote_Draw(void) {
 
 		sec = ((atoi(info) + VOTE_TIME) / 1000);
 
-		UI_DrawStringNS(XPOSITION - 80, 130, "Vote in progress", UI_LEFT, 16.0f, colorBlack);
-		UI_DrawStringNS(XPOSITION - 80, (130 + 16), va("Lasts: %d:%2.2d", (sec / 60), (sec % 60)), UI_LEFT, 16.0f, colorBlack);
+		UI_DrawStringNS(SCREEN_CENTER - 80, 130, "Vote in progress", UI_LEFT, 16.0f, colorBlack);
+		UI_DrawStringNS(SCREEN_CENTER - 80, (130 + 16), va("Lasts: %d:%2.2d", (sec / 60), (sec % 60)), UI_LEFT, 16.0f, colorBlack);
 
 		trap_GetConfigString(CS_VOTE_STRING, info, sizeof(info));
-		UI_DrawStringNS(XPOSITION - 80, (130 + 40), "Vote is about:", UI_LEFT, 16.0f, colorBlack);
+		UI_DrawStringNS(SCREEN_CENTER - 80, (130 + 40), "Vote is about:", UI_LEFT, 16.0f, colorBlack);
 		i = 0;
 #define MAXLINELEN 20
 		do {
 			Q_strncpyz(buff, (info + (i * MAXLINELEN)), (MAXLINELEN + 1));
 			i++;
-			UI_DrawStringNS(XPOSITION - 80, (130 + 40 + (17 * i)), buff, UI_LEFT, 16.0f, colorBlack);
+			UI_DrawStringNS(SCREEN_CENTER - 80, (130 + 40 + (17 * i)), buff, UI_LEFT, 16.0f, colorBlack);
 		} while (strlen(buff) == MAXLINELEN);
 
 		trap_GetConfigString(CS_VOTE_YES, info, sizeof(info));
-		UI_DrawStringNS(XPOSITION - 90, 285, info, UI_LEFT, 23.0f, colorBlack);
+		UI_DrawStringNS(SCREEN_CENTER - 90, 285, info, UI_LEFT, 23.0f, colorBlack);
 
 		trap_GetConfigString(CS_VOTE_NO, info, sizeof(info));
-		UI_DrawStringNS(XPOSITION + 40, 285, info, UI_RIGHT, 23.0f, colorBlack);
+		UI_DrawStringNS(SCREEN_CENTER + 40, 285, info, UI_RIGHT, 23.0f, colorBlack);
 	} else {
 		if (s_callVoteMenu.voteRunning) {
 			s_callVoteMenu.voteRunning = qfalse;
@@ -282,12 +281,12 @@ static void UI_CallVote_Draw(void) {
 			s_callVoteMenu.go.generic.flags &= ~QMF_GRAYED;
 		}
 
-		UI_DrawStringNS(XPOSITION - 80, 130, "Vote Type:", UI_LEFT, 18.0f, colorBlack);
+		UI_DrawStringNS(SCREEN_CENTER - 80, 130, "Vote Type:", UI_LEFT, 18.0f, colorBlack);
 
 		if (s_callVoteMenu.numListitems) {
 			int i = (s_callVoteMenu.selectedItem - s_callVoteMenu.baseItem);
 			if ((i >= 0) && (i < NUM_LISTITEMS)) {
-				UI_FillRect((XPOSITION - 90 - 2), (170 + (i * 18)), (LISTITEM_WIDTH + 4), 18, colorTOrange);
+				UI_FillRect((SCREEN_CENTER - 90 - 2), (170 + (i * 18)), (LISTITEM_WIDTH + 4), 18, colorTOrange);
 			}
 		}
 	}
@@ -462,7 +461,7 @@ static void UI_CallVoteMenu_Init(void) {
 	y = (130 + 18);
 	s_callVoteMenu.votetype.generic.type = MTYPE_SPINCONTROL;
 	s_callVoteMenu.votetype.generic.flags = (QMF_SMALLFONT | QMF_INGAMESTYLE);
-	s_callVoteMenu.votetype.generic.x = XPOSITION - 70;
+	s_callVoteMenu.votetype.generic.x = SCREEN_CENTER - 70;
 	s_callVoteMenu.votetype.generic.y = (130 + 18);
 	s_callVoteMenu.votetype.generic.name = "";
 	s_callVoteMenu.votetype.generic.id = ID_CALLVOTETYPE;
@@ -474,7 +473,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.value.generic.type = MTYPE_FIELD;
 	s_callVoteMenu.value.generic.name = "Value:";
 	s_callVoteMenu.value.generic.flags = (QMF_NUMBERSONLY | QMF_SMALLFONT | QMF_INGAMESTYLE);
-	s_callVoteMenu.value.generic.x = XPOSITION - 20;
+	s_callVoteMenu.value.generic.x = SCREEN_CENTER - 20;
 	s_callVoteMenu.value.generic.y = y;
 	s_callVoteMenu.value.field.widthInChars = 5;
 	s_callVoteMenu.value.field.maxchars = 5;
@@ -485,7 +484,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_callVoteMenu.arrowup.generic.callback = UI_CallVote_UpEvent;
 	s_callVoteMenu.arrowup.generic.id = ID_SCROLL_UP;
-	s_callVoteMenu.arrowup.generic.x = XPOSITION + 74;
+	s_callVoteMenu.arrowup.generic.x = SCREEN_CENTER + 74;
 	s_callVoteMenu.arrowup.generic.y = 170;
 	s_callVoteMenu.arrowup.width = 22;
 	s_callVoteMenu.arrowup.height = 50;
@@ -497,7 +496,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_callVoteMenu.arrowdown.generic.callback = UI_CallVote_DownEvent;
 	s_callVoteMenu.arrowdown.generic.id = ID_SCROLL_DOWN;
-	s_callVoteMenu.arrowdown.generic.x = XPOSITION + 74;
+	s_callVoteMenu.arrowdown.generic.x = SCREEN_CENTER + 74;
 	s_callVoteMenu.arrowdown.generic.y = 236;
 	s_callVoteMenu.arrowdown.width = 22;
 	s_callVoteMenu.arrowdown.height = 50;
@@ -510,7 +509,7 @@ static void UI_CallVoteMenu_Init(void) {
 		s_callVoteMenu.listitems[n].fontHeight = 16.0f;
 		s_callVoteMenu.listitems[n].generic.flags = QMF_LEFT_JUSTIFY;
 		s_callVoteMenu.listitems[n].generic.id = (ID_LISTITEM0 + n);
-		s_callVoteMenu.listitems[n].generic.x = XPOSITION - 90;
+		s_callVoteMenu.listitems[n].generic.x = SCREEN_CENTER - 90;
 		s_callVoteMenu.listitems[n].generic.y = y;
 		s_callVoteMenu.listitems[n].generic.callback = UI_CallVote_ClickListItem;
 		s_callVoteMenu.listitems[n].string = "foobar";
@@ -524,7 +523,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.voteyes.generic.flags = QMF_LEFT_JUSTIFY;
 	s_callVoteMenu.voteyes.generic.callback = UI_CallVote_Vote;
 	s_callVoteMenu.voteyes.generic.id = ID_VOTEYES;
-	s_callVoteMenu.voteyes.generic.x = XPOSITION - 90;
+	s_callVoteMenu.voteyes.generic.x = SCREEN_CENTER - 90;
 	s_callVoteMenu.voteyes.generic.y = 250;
 	s_callVoteMenu.voteyes.string = "YES";
 	s_callVoteMenu.voteyes.style = (UI_SMALLFONT | UI_LEFT);
@@ -536,7 +535,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.voteno.generic.flags = QMF_RIGHT_JUSTIFY;
 	s_callVoteMenu.voteno.generic.callback = UI_CallVote_Vote;
 	s_callVoteMenu.voteno.generic.id = ID_VOTENO;
-	s_callVoteMenu.voteno.generic.x = XPOSITION - 40;
+	s_callVoteMenu.voteno.generic.x = SCREEN_CENTER - 40;
 	s_callVoteMenu.voteno.generic.y = 250;
 	s_callVoteMenu.voteno.string = "NO";
 	s_callVoteMenu.voteno.style = (UI_SMALLFONT | UI_RIGHT);
@@ -548,7 +547,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.go.generic.flags = QMF_CENTER_JUSTIFY;
 	s_callVoteMenu.go.generic.callback = UI_CallVote_GoEvent;
 	s_callVoteMenu.go.generic.id = ID_GO;
-	s_callVoteMenu.go.generic.x = XPOSITION;
+	s_callVoteMenu.go.generic.x = SCREEN_CENTER;
 	s_callVoteMenu.go.generic.y = 315;
 	s_callVoteMenu.go.string = "GO!";
 	s_callVoteMenu.go.style = (UI_CENTER | UI_SMALLFONT);
@@ -558,7 +557,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.back.generic.type = MTYPE_BITMAP;
 	s_callVoteMenu.back.generic.name = BACK0;
 	s_callVoteMenu.back.generic.flags = QMF_PULSEIFFOCUS;
-	s_callVoteMenu.back.generic.x = XPOSITION - 95;
+	s_callVoteMenu.back.generic.x = SCREEN_CENTER - 95;
 	s_callVoteMenu.back.generic.y = 340;
 	s_callVoteMenu.back.generic.id = ID_BACK;
 	s_callVoteMenu.back.generic.callback = UI_CallVote_BackEvent;
