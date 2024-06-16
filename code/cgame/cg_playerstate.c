@@ -199,7 +199,7 @@ void CG_Respawn(void) {
 CG_CheckPlayerstateEvents
 ==============
 */
-static void CG_CheckPlayerstateEvents(playerState_t *ps, playerState_t *ops) {
+static void CG_CheckPlayerstateEvents(const playerState_t *ps, playerState_t *ops) {
 	int i;
 	int event;
 	centity_t *cent;
@@ -252,7 +252,7 @@ static void CG_PushReward(sfxHandle_t sfx, qhandle_t shader, int rewardCount) {
 CG_CheckLocalSounds
 ==================
 */
-static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
+static void CG_CheckLocalSounds(const playerState_t *ps, playerState_t *ops) {
 	qboolean reward = qfalse;
 
 	// don't play the sounds if the player just changed teams
@@ -452,7 +452,7 @@ static void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 CG_TransitionPlayerState
 ===============
 */
-void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops) {
+void CG_TransitionPlayerState(const playerState_t *ps, playerState_t *ops) {
 	// check for changing follow mode
 	if (ps->clientNum != ops->clientNum) {
 		cg.thisFrameTeleport = qtrue;

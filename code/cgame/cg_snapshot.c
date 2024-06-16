@@ -81,8 +81,6 @@ All other times will use CG_TransitionSnapshot instead.
 */
 static void CG_SetInitialSnapshot(snapshot_t *snap) {
 	int i;
-	centity_t *cent;
-	entityState_t *state;
 
 	cg.snap = snap;
 
@@ -98,8 +96,8 @@ static void CG_SetInitialSnapshot(snapshot_t *snap) {
 	CG_Respawn();
 
 	for (i = 0; i < cg.snap->numEntities; i++) {
-		state = &cg.snap->entities[i];
-		cent = &cg_entities[state->number];
+		const entityState_t *state = &cg.snap->entities[i];
+		centity_t *cent = &cg_entities[state->number];
 
 		memcpy(&cent->currentState, state, sizeof(entityState_t));
 		// cent->currentState = *state;
@@ -121,7 +119,6 @@ The transition point from snap to nextSnap has passed
 ===================
 */
 static void CG_TransitionSnapshot(void) {
-	centity_t *cent;
 	snapshot_t *oldFrame;
 	int i;
 
@@ -141,7 +138,7 @@ static void CG_TransitionSnapshot(void) {
 
 	// clear the currentValid flag for all entities in the existing snapshot
 	for (i = 0; i < cg.snap->numEntities; i++) {
-		cent = &cg_entities[cg.snap->entities[i].number];
+		centity_t *cent = &cg_entities[cg.snap->entities[i].number];
 		cent->currentValid = qfalse;
 	}
 
@@ -153,7 +150,7 @@ static void CG_TransitionSnapshot(void) {
 	cg_entities[cg.snap->ps.clientNum].interpolate = qfalse;
 
 	for (i = 0; i < cg.snap->numEntities; i++) {
-		cent = &cg_entities[cg.snap->entities[i].number];
+		centity_t *cent = &cg_entities[cg.snap->entities[i].number];
 		CG_TransitionEntity(cent);
 
 		// remember time of snapshot this entity was last updated in
