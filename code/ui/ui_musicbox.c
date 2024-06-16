@@ -51,7 +51,6 @@
 #define ID_PLAYALL (ID_CLEARLIST + 1)
 
 #define SWITCHDELAY 500
-#define XPOSITION (SCREEN_WIDTH / 2)
 
 typedef enum {
 	MUSICSWITCH_OUT = -1,
@@ -488,12 +487,12 @@ static void MusicMenu_Draw(void) {
 		switchOffset *= 0.01f;
 
 		for (t = 0; t < MAX_TRACKS; ++t) {
-			musicMenu.tracks[t].generic.x = (XPOSITION - 132 + switchOffset);
+			musicMenu.tracks[t].generic.x = (SCREEN_CENTER - 132 + switchOffset);
 		}
-		musicMenu.switchAlbum.generic.x = (XPOSITION + 251 + switchOffset);
-		musicMenu.playAll.generic.x = (XPOSITION + 251 + switchOffset);
-		musicMenu.clearList.generic.x = (XPOSITION + 273 + switchOffset);
-		musicMenu.exit.generic.x = (XPOSITION + 268 + switchOffset);
+		musicMenu.switchAlbum.generic.x = (SCREEN_CENTER + 251 + switchOffset);
+		musicMenu.playAll.generic.x = (SCREEN_CENTER + 251 + switchOffset);
+		musicMenu.clearList.generic.x = (SCREEN_CENTER + 273 + switchOffset);
+		musicMenu.exit.generic.x = (SCREEN_CENTER + 268 + switchOffset);
 
 		if ((uis.realtime - musicMenu.switchTime) > SWITCHDELAY) {
 			if (MUSICSWITCH_OUT == musicMenu.switchState) {
@@ -526,22 +525,22 @@ static void MusicMenu_Draw(void) {
 		}
 	} else {
 		for (t = 0; t < MAX_TRACKS; ++t) {
-			musicMenu.tracks[t].generic.x = XPOSITION - 132;
+			musicMenu.tracks[t].generic.x = SCREEN_CENTER - 132;
 		}
-		musicMenu.switchAlbum.generic.x = XPOSITION + 251;
-		musicMenu.playAll.generic.x = XPOSITION + 251;
-		musicMenu.clearList.generic.x = XPOSITION + 273;
-		musicMenu.exit.generic.x = XPOSITION + 268;
+		musicMenu.switchAlbum.generic.x = SCREEN_CENTER + 251;
+		musicMenu.playAll.generic.x = SCREEN_CENTER + 251;
+		musicMenu.clearList.generic.x = SCREEN_CENTER + 273;
+		musicMenu.exit.generic.x = SCREEN_CENTER + 268;
 	}
 
 	if (musicInfo.albums[musicMenu.currentAlbum].background) {
-		UI_DrawHandlePic((XPOSITION - 202 + switchOffset), 60, 374, 340, musicInfo.albums[musicMenu.currentAlbum].background);
+		UI_DrawHandlePic((SCREEN_CENTER - 202 + switchOffset), 60, 374, 340, musicInfo.albums[musicMenu.currentAlbum].background);
 	} else {
-		UI_FillRect((XPOSITION - 170 + switchOffset), 60, 340, 340, colorBlack);
-		UI_DrawStringNS((XPOSITION - 150 + switchOffset), 62, musicInfo.albums[musicMenu.currentAlbum].name, 0, 16.0f, colorWhite);
+		UI_FillRect((SCREEN_CENTER - 170 + switchOffset), 60, 340, 340, colorBlack);
+		UI_DrawStringNS((SCREEN_CENTER - 150 + switchOffset), 62, musicInfo.albums[musicMenu.currentAlbum].name, 0, 16.0f, colorWhite);
 	}
 
-	UI_DrawNamedPic((XPOSITION + 106 + switchOffset), 92, 490, 315, MUSICARM);
+	UI_DrawNamedPic((SCREEN_CENTER + 106 + switchOffset), 92, 490, 315, MUSICARM);
 
 	if (musicInfo.playOrder != NULL) {
 		playOrder_t *playOrder;
@@ -550,7 +549,7 @@ static void MusicMenu_Draw(void) {
 		for (playOrder = musicInfo.playOrder, i = 1; playOrder != NULL; playOrder = playOrder->next, i++) {
 			if (playOrder->album == musicMenu.currentAlbum) {
 				// FIXME: Magical constant 18
-				UI_DrawString((XPOSITION - 132 + switchOffset), (82 + playOrder->track * 18), va("%2i.", i),
+				UI_DrawString((SCREEN_CENTER - 132 + switchOffset), (82 + playOrder->track * 18), va("%2i.", i),
 							  (UI_RIGHT | UI_SMALLFONT), colorWhite);
 			}
 		}
@@ -612,7 +611,7 @@ void UI_MusicBox_Open(void) {
 		} else {
 			musicMenu.tracks[t].generic.flags = 0;
 		}
-		musicMenu.tracks[t].generic.x = XPOSITION - 132;
+		musicMenu.tracks[t].generic.x = SCREEN_CENTER - 132;
 		musicMenu.tracks[t].generic.y = y;
 		musicMenu.tracks[t].generic.id = (ID_TRACK1 + t);
 		musicMenu.tracks[t].generic.callback = MusicMenu_Event;
@@ -634,7 +633,7 @@ void UI_MusicBox_Open(void) {
 	musicMenu.switchAlbum.generic.type = MTYPE_BITMAP;
 	musicMenu.switchAlbum.generic.name = SWITCH0;
 	musicMenu.switchAlbum.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
-	musicMenu.switchAlbum.generic.x = XPOSITION + 251;
+	musicMenu.switchAlbum.generic.x = SCREEN_CENTER + 251;
 	musicMenu.switchAlbum.generic.y = 217;
 	musicMenu.switchAlbum.generic.id = ID_SWITCH;
 	musicMenu.switchAlbum.generic.callback = MusicMenu_Event;
@@ -646,7 +645,7 @@ void UI_MusicBox_Open(void) {
 	musicMenu.playAll.generic.type = MTYPE_BITMAP;
 	musicMenu.playAll.generic.name = ALL0;
 	musicMenu.playAll.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
-	musicMenu.playAll.generic.x = XPOSITION + 251;
+	musicMenu.playAll.generic.x = SCREEN_CENTER + 251;
 	musicMenu.playAll.generic.y = 232;
 	musicMenu.playAll.generic.id = ID_PLAYALL;
 	musicMenu.playAll.generic.callback = MusicMenu_Event;
@@ -658,7 +657,7 @@ void UI_MusicBox_Open(void) {
 	musicMenu.clearList.generic.type = MTYPE_BITMAP;
 	musicMenu.clearList.generic.name = CLEAR0;
 	musicMenu.clearList.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
-	musicMenu.clearList.generic.x = XPOSITION + 273;
+	musicMenu.clearList.generic.x = SCREEN_CENTER + 273;
 	musicMenu.clearList.generic.y = 232;
 	musicMenu.clearList.generic.id = ID_CLEARLIST;
 	musicMenu.clearList.generic.callback = MusicMenu_Event;
@@ -670,7 +669,7 @@ void UI_MusicBox_Open(void) {
 	musicMenu.exit.generic.type = MTYPE_BITMAP;
 	musicMenu.exit.generic.name = EXIT0;
 	musicMenu.exit.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
-	musicMenu.exit.generic.x = XPOSITION + 268;
+	musicMenu.exit.generic.x = SCREEN_CENTER + 268;
 	musicMenu.exit.generic.y = 258;
 	musicMenu.exit.generic.id = ID_EXIT;
 	musicMenu.exit.generic.callback = MusicMenu_Event;

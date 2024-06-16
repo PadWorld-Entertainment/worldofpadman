@@ -960,9 +960,9 @@ Controls_ResetDefaults_Draw
 =================
 */
 static void Controls_ResetDefaults_Draw(void) {
-	UI_DrawProportionalString(SCREEN_WIDTH / 2, 356 + PROP_HEIGHT * 0, "WARNING: This will reset all",
+	UI_DrawProportionalString(SCREEN_CENTER, 356 + PROP_HEIGHT * 0, "WARNING: This will reset all",
 							  UI_CENTER | UI_SMALLFONT, color_yellow);
-	UI_DrawProportionalString(SCREEN_WIDTH / 2, 356 + PROP_HEIGHT * 1, "controls to their default values.",
+	UI_DrawProportionalString(SCREEN_CENTER, 356 + PROP_HEIGHT * 1, "controls to their default values.",
 							  UI_CENTER | UI_SMALLFONT, color_yellow);
 }
 

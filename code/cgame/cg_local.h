@@ -614,7 +614,6 @@ typedef struct {
 
 	// centerprinting
 	int centerPrintTime;
-	int centerPrintCharWidth;
 	int centerPrintY;
 	char centerPrint[1024];
 	int centerPrintLines;
@@ -1421,10 +1420,9 @@ void CG_AdjustFrom640(float *x, float *y, float *w, float *h);
 void CG_NativeResTo640(float *x, float *y, float *w, float *h);
 void CG_FillRect(float x, float y, float width, float height, const float *color);
 void CG_DrawPic(float x, float y, float width, float height, qhandle_t hShader);
-void CG_DrawString(float x, float y, const char *string, float charWidth, float charHeight, const float *modulate);
 
 void CG_DrawStringExt(int x, int y, const char *string, const float *setColor, qboolean forceColor, qboolean shadow,
-					  int charWidth, int charHeight, int maxChars);
+					  fontSize_t fontsize, int maxChars);
 void CG_DrawBigString(int x, int y, const char *s, float alpha);
 void CG_DrawBigStringColor(int x, int y, const char *s, const vec4_t color);
 void CG_DrawSmallString(int x, int y, const char *s, float alpha);
@@ -1453,7 +1451,7 @@ extern int numSortedTeamPlayers;
 void CG_MessagePrint(const char *str);
 void CG_AddLagometerFrameInfo(void);
 void CG_AddLagometerSnapshotInfo(snapshot_t *snap);
-void CG_CenterPrint(const char *str, int y, int charWidth);
+void CG_CenterPrint(const char *str, int y);
 void CG_DrawHead(float x, float y, float w, float h, int clientNum, vec3_t headAngles);
 void CG_DrawActive(stereoFrame_t stereoView);
 void CG_DrawFlagModel(float x, float y, float w, float h, int team);
@@ -1645,7 +1643,7 @@ void CG_Draw4VertsPic(float x1, float y1, float x2, float y2, float x3, float y3
 
 void CG_DrawTurnableString(float x, float y, const char *s, vec4_t color, float charHeight, float angle, int turnorigin);
 
-void CG_DrawStringWithCutFrame(float x, float y, const char *str, vec4_t color, float cW, float cH, float fl, float ft,
+void CG_DrawStringWithCutFrame(float x, float y, const char *str, vec4_t color, fontSize_t fontsize, float fl, float ft,
 							float fr, float fb);
 
 //

@@ -14,8 +14,6 @@
 #define ID_SCROLL_UP 12
 #define ID_SCROLL_DOWN 13
 
-#define XPOSITION (SCREEN_WIDTH / 2)
-
 typedef struct {
 	menuframework_s menu;
 
@@ -126,7 +124,7 @@ static void ServerInfo_MenuDraw(void) {
 	int keylen, vallen, infonum = -1;
 
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(XPOSITION, 110, "SERVER INFO", UI_CENTER | UI_SMALLFONT, color_black);
+	UI_DrawProportionalString(SCREEN_CENTER, 110, "SERVER INFO", UI_CENTER | UI_SMALLFONT, color_black);
 
 	y = 140;
 	s = s_serverinfo.info;
@@ -149,22 +147,22 @@ static void ServerInfo_MenuDraw(void) {
 		keylen = Q_PrintStrlen(key);
 		vallen = Q_PrintStrlen(value);
 		if (keylen + vallen < 20) {
-			UI_DrawString(XPOSITION - 90, y, key, UI_LEFT | UI_SMALLFONT, color_black);
-			UI_DrawString(XPOSITION - 90 + keylen * 8, y, value, UI_LEFT | UI_SMALLFONT, color_blue);
+			UI_DrawString(SCREEN_CENTER - 90, y, key, UI_LEFT | UI_SMALLFONT, color_black);
+			UI_DrawString(SCREEN_CENTER - 90 + keylen * SMALLCHAR_WIDTH, y, value, UI_LEFT | UI_SMALLFONT, color_blue);
 
 			s_serverinfo.numdrawn++;
 		} else {
 			int j;
 
 			// TODO: Also add linebreaks for long keys?
-			UI_DrawString(XPOSITION - 90, y, key, UI_LEFT | UI_SMALLFONT, color_black);
+			UI_DrawString(SCREEN_CENTER - 90, y, key, UI_LEFT | UI_SMALLFONT, color_black);
 
 			for (j = 0; j < vallen; j += 20) {
 				y += SMALLCHAR_HEIGHT;
 				if (y > 260)
 					break;
 
-				UI_DrawString(XPOSITION - 90, y, va("%20.20s", &value[j]), UI_LEFT | UI_SMALLFONT, color_blue);
+				UI_DrawString(SCREEN_CENTER - 90, y, va("%20.20s", &value[j]), UI_LEFT | UI_SMALLFONT, color_blue);
 
 				s_serverinfo.numdrawn++;
 			}
@@ -219,7 +217,7 @@ void UI_ServerInfoMenu(void) {
 	s_serverinfo.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_serverinfo.arrowup.generic.callback = ServerInfo_Event;
 	s_serverinfo.arrowup.generic.id = ID_SCROLL_UP;
-	s_serverinfo.arrowup.generic.x = XPOSITION + 74;
+	s_serverinfo.arrowup.generic.x = SCREEN_CENTER + 74;
 	s_serverinfo.arrowup.generic.y = 142;
 	s_serverinfo.arrowup.width = 22;
 	s_serverinfo.arrowup.height = 50;
@@ -231,7 +229,7 @@ void UI_ServerInfoMenu(void) {
 	s_serverinfo.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_serverinfo.arrowdown.generic.callback = ServerInfo_Event;
 	s_serverinfo.arrowdown.generic.id = ID_SCROLL_DOWN;
-	s_serverinfo.arrowdown.generic.x = XPOSITION + 74;
+	s_serverinfo.arrowdown.generic.x = SCREEN_CENTER + 74;
 	s_serverinfo.arrowdown.generic.y = 208;
 	s_serverinfo.arrowdown.width = 22;
 	s_serverinfo.arrowdown.height = 50;
@@ -243,7 +241,7 @@ void UI_ServerInfoMenu(void) {
 	s_serverinfo.add.generic.flags = QMF_CENTER_JUSTIFY;
 	s_serverinfo.add.generic.callback = ServerInfo_Event;
 	s_serverinfo.add.generic.id = ID_ADD;
-	s_serverinfo.add.generic.x = XPOSITION;
+	s_serverinfo.add.generic.x = SCREEN_CENTER;
 	s_serverinfo.add.generic.y = 290;
 	s_serverinfo.add.string = "ADD TO FAVORiTES";
 	s_serverinfo.add.style = UI_CENTER | UI_SMALLFONT;
@@ -256,7 +254,7 @@ void UI_ServerInfoMenu(void) {
 	s_serverinfo.back.generic.type = MTYPE_BITMAP;
 	s_serverinfo.back.generic.name = BACK0;
 	s_serverinfo.back.generic.flags = QMF_PULSEIFFOCUS;
-	s_serverinfo.back.generic.x = XPOSITION - 95;
+	s_serverinfo.back.generic.x = SCREEN_CENTER - 95;
 	s_serverinfo.back.generic.y = 340;
 	s_serverinfo.back.generic.id = ID_BACK;
 	s_serverinfo.back.generic.callback = ServerInfo_Event;
