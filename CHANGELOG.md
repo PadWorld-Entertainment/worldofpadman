@@ -11,17 +11,20 @@
 	- HellPad skin, glow skin and bot for the PADMAN player model
 	- PadClassic skin, glow skin and bot for the PADMAN player model
 	- PadKnight bot and shown in the Select Bots menu
+	- 3 new tracks to Dieselkopf music packs
 	- Summer music pack by neurological featuring 7 new tracks
 	- Milton Boulevard music pack by neurological featuring 7 new tracks
+	- Carnage music pack by MightyPete
 	- ENTE's PadPack with PadCastle and PadGallery maps as optional installation option
 	- PadHero (defend) award/medal for defending the base and the lolly carrier in CTL, for defending a balloon box in your own team color in BB, and for defending a teammate carrying min 5 cartridges in SYC Team when attacked
-	- WatchPad (assist) award/medal for 1st returning the own lolly, and 2nd for killing the opposing lolly carrier if a teammate scores shortly after in CTL, and for helping a teammate to raise a balloon in BB
+	- WatchPad (assist) award/medal for 1st returning the own lolly, and 2nd for killing the opposing lolly carrier if a teammate scores shortly after in CTL, for helping a teammate to raise a balloon in BB, and the nearest thawer should receive it for thawing a team mate
 	- Red PadStar medal for the red team capturing a lolly in CTL or raising a balloon in BB
 	- Personal bonus scores in BB for capturing a balloon (5 points), for countering a balloon (1 points), for defending a balloon (1 points) and for helping to raise a balloon (2 points)
 	- Almost event by the announcer saying "Better luck next time, maybe!" for a player failing to score by getting shot close to the lolly spawn point in CTL, the sprayroom teleporter and having 5+ cartridges to achieve SprayKiller or SprayGod in SYC+Team, raising the last balloon in the own team color in BB
 	- Denied event for all players who try to pick up the same powerup but are not first; the first player picking it up will laugh on the other players
-	- Presentation of received medals and count during a match at the lower left of the scoreboard depending of the currently played game type
-	- Presentation of weapon accuracy as percentage value during a match at the lower right of the scoreboard
+	- InstaPad spawn protection, a player cannot take damage for 6 seconds, the health and ammo bar will flash to indicate this
+	- Presentation of received medals and count during a match at the lower left of the scoreboard depending of the currently played game type if not spectator
+	- Presentation of weapon accuracy as percentage value during a match at the lower right of the scoreboard if not spectator
 	- Support for magenta and cyan as spray colors in Spray Your Color game types
 	- Cartridge icon/model to the scoreboard next to the player's head if cartridges are carried in SYC game types
 	- Advanced hit sound feedback to be enabled/disabled via Game page of Options menu or via new cvar `cg_advHitSounds [0|1]`; when opponent has >50 shield points a more light hit sound indicating less impact is played; when opponent has no shield points left a more fleshy hit sound indicating highest impact is played
@@ -29,7 +32,7 @@
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- Support for player model sounds depending of the selected skin; a complete sound set or individual sounds for a skin can be stored in a folder of the same name in parallel with the model's folder; the model's sounds serve as a fallback if no sounds are available for the skin
-	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones, and additionally logos for fire, earth, air; also added the old and replaced balloon hud icon as spray logo
+	- New spray logos modio, quake3 (reintroduced), drpad to replace removed ones, and additionally fire, earth, duckwire, peacedove, toilet; also added the old and replaced balloon hud icon as spray logo
 	- Support for screenshots in PNG image format, PNG is the new default
 	- Effects page with OpenGl2 renderer related options to System menu, available if OpenGL2 renderer is enabled, otherwise disabled
 	- Option to switch renderer from OpenGL1 to OpenGL2 to Graphics page of System menu
@@ -67,6 +70,7 @@
 	- Option to enable/disable Bots chatting or to make them chatting more often to Chat page of Options menu
 	- Option to adjust the Notification Space to 4, 6 or 8 lines to Chat page of Options menu via new cvar `cg_chatheight`, default is 4
 	- Option to enable/disable and to chose the size of the player chat icon separately from notification time Chat page of Options menu; this also influences the chat notification text size
+	- Option to adjust the scale of the console text to Chat page of Options menu
 	- Option to enable/disable Console Auto Chat to Chat page of Options menu to prevent console input text to be interpreted as chat
 	- Option to enable/disable Console Auto Clear to Chat page of Options menu to prevent console to get cleared after being closed
 	- Option to enable/disable Menu Tooltips to Help page of Options menu
@@ -80,6 +84,7 @@
 	- Spray logo name above the spray logo to Player settings menu
 	- Shadows to level shots in Create menu
 	- New mapping for F-keys via default.cfg (for developers and level designers): hide/show HUD `F5`; hide/show gun `F6`; following are cheat protected: hide/show wire frames `F7`; hide/show lightmap `F8`; hide/show render load information `F9`; enable/disable noclip `F10`; enable/disable god mode and give all items `F11`
+	- New cvar `con_scale [1 to 4]` to scale the console text when difficult to read at higher resolutions, takes decimal comma values, default 1
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- New cvar `cg_weaponOrder` to customize the weapon order from worse to best for extended Autoswitch Weapon option, default is '/1/2/4/6/3/7/8/9/5/'
 	- New cvar `cg_drawChatIcon [3|2|1|0]` to enable/disable the chat icon and to chose the size, 3 is big (20 pixels)default is 2 (16 pixels), 1 is small (12 pixels), 0 is off; this also influences the chat notification text size
@@ -94,6 +99,7 @@
 	- Life limit warnings by announcer in LPS game type when life count drops below 4
 	- Mapper names next to map names below the level shots in Create menu like in old WoP versions (some needed shortening due to given space)
 	- Bot names below bot icons in Select Bots menu to unify maps and bots grid experience
+	- Separate white frame to levelshots presented in map selection menu so there is no need to edit it into the B-levelshots created with ´levelshot´command afterwards
 	- OpenGL2 dynamic cascaded shadows support for the sky boxes of maps and areas in maps where it was useful to implement
 	- Cheat protected command `give ammo_spray` to receive a cartridge in SYC
 	- Jail: splash steps surface parameter to areas with liquid texture decals (dirt/paint/water puddles) and in the shower
@@ -101,14 +107,18 @@
 	- CybJourney: sky lens flare feature
 - CHANGED
 	- Network protocol version number to 72 to avoid issues due to incompatibilities with previous WoP versions
+	- Network protocol to 32 bits and removed hack (abuse of the the time2 player and entity state variable) to send the higher 16 bits for the eFlags
 	- Home path to `worldofpadman` for all operating systems to unify them
 	- Title of the game uniformly to `World of PADMAN` everywhere
 	- Set OpenGL2 renderer as default
 	- Menu aspect ratio from 4:3 to 16:9 (WoP widescreen support)
 	- Ingame Help screens to explain all weapons, powerups, medals and icons
+	- Ingame vote menu being disabled when being spectator, spectators cannot vote anyways
+	- Music player to support up to 12 music packs with up to 12 tracks each
 	- Server configs to support new game types (FT, CTKD, 1LC)
 	- Location of assets where useful (folder and filing cleanup)
 	- Pad-Anthem credits song moved to music folder (credits.ogg)
+	- Replaced Pad-Anthem credits version with long version in Green Sun music pack
 	- Map selection/preview to cycle three ingame pictures via shader animation
 	- All wallhack hint icons to be enabled by default (except teammate icon)
 	- Graphics Settings option on Graphics page of System menu to provide a template list with useful and updated settings
@@ -165,8 +175,12 @@
 	- Ammo info on lower left HUD to show ammo bottle model instead of 2D icon if `cg_draw3dIcons` is enabled except for Spraypistol and Punchy
 	- All icons/models to appear the same size and model rotation speed in the HUD (and scoreboard)
 	- Resolution of sky box textures via AI upscale where useful
-	- Setviewpos command to accept a target name
-	- ColorStage: slight weapon, ammo and item adjustments; removed Boaster ammo bottles; adjust teleporter destinations to avoid player confusion; moved red and blue bases much further away from map center, extended some walls to prevent weapon jumps or to make it harder 
+	- `setviewpos` command to additionally accept the pitch angle or a target name
+	- `viewpos` command to additionally print the pitch angle
+	- `levelshot` command to always create up to 3 levelshots in JPG format in 256x256 resolution (instead of 128x128), better use `screenshot levelshot` command bound to a key to create individual levelshots for your map
+	- ColorStage: slight weapon, ammo and item adjustments; removed Boaster ammo bottles; adjust teleporter destinations to avoid player confusion; moved red and blue bases much further away from map center, extended some walls to prevent weapon jumps or to make it harder
+	- PadKitchen: Minor texture update
+	- PadAttic: Minor texture update
 	- WesternSet: map file name from wop_westernCTL to wop_westernsetCTL; added a neutral lolly to the REVIVAL position; adds a trigger_forbiddenitems to neutral lolly position; adds 2 new REViVALs in the vent shafts in 1LC only; REViVAL position in CTL stays untouched
 	- Huette: switched SPLASHER and BETTY position; adjustments to item placement on the desk; location message fixes; added 5 PadShards on the chair
 	- CybJourney: added more PadShards to lolly bases and hallways; added suitcase to hallways and moved the health station from lolly base floor behind; removed BALLOONY from funnel and moved to base hallway; moved PUMPER closer to map center next to toilet door; moved ammo bottles from seats to the other side to make use of the space; added KiLLERDUCKS to map and lolly bases; moved BOOMiES from lolly bases on top of toilets; centered the lolly positions on the shelf; moved SPLASHER into funnel where BALLOONY was before; moved PADSHiELD from toilets to trash bin in the hallways to use this space reachable via jumppad; opened car doors in map center a little bit and animated them (mover) and added more light to the area; added two new paths (teleporter) left and right side of map center close to the doors down the steps; added some and distributed all spawn points all over the map; replaced sign textures above fire extinguisher because red and jpg compression leads to ugly artifacts; clipped the toilet paper rolls; added neutral lolly at the REViVAL position but REViVAL is removed 1LC
@@ -202,22 +216,27 @@
 	- Player automatically switches from 3rd person view back to 1st person view when warm-up timer expires
 	- Console keeps spamming "models/wop_players/padman/..." not found in developer mode by adding a null shader for certain player model skin meshes
 	- Menu font appearance issues like wrong pixel assignment, truncated letters, pixel artifacts at edges, incoherent spacing between letters
+	- Ingame spray logo menu being overlayed by display of weapon selection, crosshair and crosshair names
 	- HellPads red/blue thumbnail not being grey (compared to previous single release)
-	- SuperPads anaglyph 3D glasses from red-cyan to cyan-red 
+	- BadPaddy's red/blue skin menu icons not correctly representing the model skin colors
+	- SuperPads anaglyph 3D glasses from red-cyan to cyan-red
 	- Missing clipping on the fuse box in BB version of MopAn's Jail to prevent players jumping in
 	- Crosshair always hidden/overlayed by BamBam energy bar
-	- Endless restarting of the game in window mode when changing Win 10 scaling
+	- Endless restarting of the game in window mode when changing Windows 10 scaling
 	- Cvar `cg_draw3dIcons` to work with cartridge in SYC HUD lower right, shows cartridge model when enabled and cartridge icon when disabled
 	- Quake3 items support to spawn the lollys in CTF and 1FCTF Quake3 maps
+	- Few spelling mistakes and misinterpreted title names in Dieselkopf music packs
+	- Print warning "Too close to lolly base" when planting BOOMIES in Big Balloon
+	- Backyard: players being able to enter and hide in the pipe near the crate; jumppad on the ground to the roof area near PadPower/Boomies to no longer be possible to reach this area directly with a normal jump (due to com_maxfps set to 125) 
 	- Jail: missing shader texture in spray room exit portal
 	- PadShop: alien monitor animation shader to support all 9 textures
 	- TrashMap: missing texture warnings
 	- PadGallery: wrong shader path for way to the museum sign
 - REMOVED
-	- Green Sun music pack, will stay available as extra download
 	- `^` key to open/close the console
 	- Cvar `g_LPS_flags [4]` (4 = LPSF_NOARROWS) due to redundancy to the help menu option to enable/disable the arrow icons in LPS client side; also prevents the same menu option from working
 	- Cvar `cg_LPSwallhackSize` and `cg_LPSwallhackAlpha` to prevent giving an unfair advantage to clients
+	- Cvar `cg_thirdPersonAutoSwitch` which interfered with `cg_thirdPerson` toggle in undesirable ways
 	- Not used cvar `cl_anonymous`
 	- Not used menu textures
 	- Not used roq video files
@@ -248,7 +267,7 @@
 	- OPUS to version 1.3.1
 	- OPUSFILE to version 0.12
 	- OGG to version 1.3.5
-	- SDL to version 2.27.0
+	- SDL to version 2.31.0
 	- JPEG to version 9e
 	- OpenAL soft to version 1.21.1
 
