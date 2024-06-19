@@ -89,8 +89,9 @@ PREFERENCES MENU
 #define ID_GESTURE 55
 #define ID_BOTCHAT 56
 #define ID_TEAMCHATSONLY 57
-#define ID_CONAUTOCHAT 58
-#define ID_CONAUTOCLEAR 59
+#define ID_CONSCALE 58
+#define ID_CONAUTOCHAT 59
+#define ID_CONAUTOCLEAR 60
 
 #define ID_DRAWTOOLTIP 70
 #define ID_DRAWFRIEND 71
@@ -150,6 +151,7 @@ typedef struct {
 	menuradiobutton_s gesture;
 	menulist_s botchat;
 	menuradiobutton_s teamchatsonly;
+	menuslider_s conscale;
 	menuradiobutton_s conautochat;
 	menuradiobutton_s conautoclear;
 
@@ -215,6 +217,7 @@ static menucommon_s *g_chat_options[] = {
 	(menucommon_s *)&s_preferences.gesture,
 	(menucommon_s *)&s_preferences.botchat,
 	(menucommon_s *)&s_preferences.teamchatsonly,
+	(menucommon_s *)&s_preferences.conscale,
 	(menucommon_s *)&s_preferences.conautochat,
 	(menucommon_s *)&s_preferences.conautoclear,
 	NULL
@@ -343,6 +346,7 @@ static void UI_Preferences_SetMenuItems(void) {
 
 	s_preferences.gesture.curvalue = trap_Cvar_VariableValue("cg_noTaunt") == 0;
 	s_preferences.teamchatsonly.curvalue = trap_Cvar_VariableValue("cg_teamChatsOnly") != 0;
+	s_preferences.conscale.curvalue = Com_Clamp(1, 4, trap_Cvar_VariableValue("con_scale"));
 	s_preferences.conautochat.curvalue = trap_Cvar_VariableValue("con_autochat") != 0;
 	s_preferences.conautoclear.curvalue = trap_Cvar_VariableValue("con_autoclear") != 0;
 
@@ -630,6 +634,10 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 
 	case ID_TEAMCHATSONLY:
 		trap_Cvar_SetValue("cg_teamChatsOnly", s_preferences.teamchatsonly.curvalue);
+		break;
+
+	case ID_CONSCALE:
+		trap_Cvar_SetValue("con_scale", s_preferences.conscale.curvalue);
 		break;
 
 	case ID_CONAUTOCHAT:
@@ -1229,6 +1237,20 @@ static void UI_Preferences_MenuInit(void) {
 		"Enable to force only chat messages from your teammates to be displayed. Default is off.";
 
 	y += 2 * (BIGCHAR_HEIGHT + 2);
+	s_preferences.conscale.generic.type = MTYPE_SLIDER;
+	s_preferences.conscale.generic.name = "Console Text Scale:";
+	s_preferences.conscale.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.conscale.generic.callback = UI_Preferences_Event;
+	s_preferences.conscale.generic.id = ID_CONSCALE;
+	s_preferences.conscale.generic.x = XPOSITION;
+	s_preferences.conscale.generic.y = y;
+	s_preferences.conscale.minvalue = 1;
+	s_preferences.conscale.maxvalue = 4;
+	s_preferences.conscale.generic.toolTip =
+		"Use this to adjust the scale of the console text if it is difficult to read at higher "
+		"screen resolutions. Default is 1.";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.conautochat.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.conautochat.generic.name = "Console Auto Chat:";
 	s_preferences.conautochat.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -1427,6 +1449,7 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.gesture);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.botchat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.teamchatsonly);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.conscale);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.conautochat);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.conautoclear);
 
