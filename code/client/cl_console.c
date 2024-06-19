@@ -367,7 +367,7 @@ void Con_Init(void) {
 	con_conspeed = Cvar_Get("scr_conspeed", "3", 0);
 	con_autoclear = Cvar_Get("con_autoclear", "1", CVAR_ARCHIVE);
 	con_scale = Cvar_Get("con_scale", "1", CVAR_ARCHIVE);
-	Cvar_CheckRange(con_scale, 1, 4, qtrue);
+	Cvar_CheckRange(con_scale, 1, 4, qfalse);
 
 	fontSize.w = SMALLCHAR_WIDTH * con_scale->value;
 	fontSize.h = SMALLCHAR_HEIGHT * con_scale->value;
