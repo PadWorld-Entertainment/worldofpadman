@@ -691,5 +691,5 @@
 	- ioq3 code base
 
 
-## Version 1.1.0 (Apr 01, 2010)
+## Version 1.1.0 (Apr 01, 2007)
 - Initial standalone relase
