@@ -341,8 +341,8 @@ textures/pad_trash/trash_skybox_evening
     surfaceparm nolightmap
     surfaceparm sky
     skyParms env/pc-morning-madness512 128 -
-	q3map_lightmapFilterRadius 0 16
-	q3map_skyLight 150 6
+    q3map_lightmapFilterRadius 0 16
+    q3map_skyLight 150 6
 }
 
 // =================
