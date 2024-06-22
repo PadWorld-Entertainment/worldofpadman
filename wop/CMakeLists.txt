@@ -110,6 +110,7 @@ set(BSPS
     wop_padshopBB.bsp
     wop_trashmap.bsp
     wop_trashmapBB.bsp
+    wop_trashmapCTL.bsp
     wop_westernsetCTL.bsp
 )
 foreach (BSP ${BSPS})
