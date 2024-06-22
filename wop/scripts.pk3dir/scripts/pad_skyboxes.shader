@@ -253,7 +253,7 @@ textures/pad_pirate/doornthree
     surfaceparm nolightmap
     surfaceparm sky
     q3map_lightimage textures/colors/hex_f67536ff
-    q3map_sun 1.000000 0.635081 0.272618 280 68 26 0.5
+    q3map_sun 1.000000 0.635081 0.272618 280 68 26
     q3map_surfacelight 230
     {
         alphafunc LT128
