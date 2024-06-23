@@ -402,7 +402,7 @@ static char *loadAllShaders(const char *pk3dir, int ispadpack) {
 		printf("Fatal error: shader file size is 0 bytes\n");
 		exit(1);
 	}
-	printf("Loaded %i bytes of %i shader data\n", complete_filesize, shaderCount);
+	printf("Loaded %i shaders with %i bytes\n", shaderCount, complete_filesize);
 	if (complete_filesize != strlen(shaders)) {
 		printf("Fatal error: shader file size is %i bytes, but strlen(shaders) is %i\n", complete_filesize,
 			   (int)strlen(shaders));
@@ -461,6 +461,8 @@ int main(int argc, char *argv[]) {
 	char *source;
 	int ispadpack;
 	FILE *fp;
+	size_t newLen;
+	int errorCount;
 
 	if (argc != 4) {
 		printf("Usage: bsptool <path-to-game-dir> <path-to.bsp> <ispadpack>\n");
@@ -493,7 +495,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	source = (char *)malloc(bufsize + 1);
-	size_t newLen = fread(source, 1, bufsize, fp);
+	newLen = fread(source, 1, bufsize, fp);
 	if (ferror(fp) != 0) {
 		perror("Error: failed to read bsp file. ");
 		return 1;
@@ -502,7 +504,8 @@ int main(int argc, char *argv[]) {
 		printf("Error: failed to read the complete bsp file.\n");
 	}
 
-	if (validateBsp(filename, pk3dir, source, ispadpack) == 0) {
+	errorCount = validateBsp(filename, pk3dir, source, ispadpack);
+	if (errorCount == 0) {
 		free(source);
 		return 0;
 	}
