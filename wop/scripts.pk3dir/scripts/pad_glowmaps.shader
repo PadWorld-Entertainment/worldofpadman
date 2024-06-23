@@ -348,13 +348,13 @@ textures/pad_glow/marble27
 }
 
 
-textures/pad_cabin/Moni
+textures/pad_cabin/moni
 {
-	q3map_lightimage textures/pad_cabin/Moni
+	q3map_lightimage textures/pad_cabin/moni
 	q3map_surfacelight 20
 
         {
-		map textures/pad_cabin/Moni
+		map textures/pad_cabin/moni
 		rgbGen identity
 	}
 

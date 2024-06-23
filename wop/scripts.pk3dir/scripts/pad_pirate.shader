@@ -1553,7 +1553,7 @@ rgbGen identity
 }
 }
 
-textures/pad_pirate/wood017Sblueb
+textures/pad_pirate/wood017sblueb
 {
 surfaceparm woodsteps
 {
@@ -1561,14 +1561,14 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_pirate/wood017Sblueb
+map textures/pad_pirate/wood017sblueb
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
 
 
-textures/pad_pirate/wood017Sgreenb
+textures/pad_pirate/wood017sgreenb
 {
 surfaceparm woodsteps
 {
@@ -1576,13 +1576,13 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_pirate/wood017Sgreenb
+map textures/pad_pirate/wood017sgreenb
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
 
-textures/pad_pirate/wood017Sredb
+textures/pad_pirate/wood017sredb
 {
 surfaceparm woodsteps
 {
@@ -1590,7 +1590,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_pirate/wood017Sredb
+map textures/pad_pirate/wood017sredb
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }

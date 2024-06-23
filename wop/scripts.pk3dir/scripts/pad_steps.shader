@@ -1614,7 +1614,7 @@ rgbGen identity
 }
 }
 
-textures/pad_wood/wood017S
+textures/pad_wood/wood017s
 {
 surfaceparm woodsteps
 {
@@ -1622,13 +1622,13 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017S
+map textures/pad_wood/wood017s
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
 
-textures/pad_wood/wood017Sbrown
+textures/pad_wood/wood017sbrown
 {
 surfaceparm woodsteps
 {
@@ -1636,13 +1636,13 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017Sbrown
+map textures/pad_wood/wood017sbrown
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
 
-textures/pad_wood/wood017Sgreen
+textures/pad_wood/wood017sgreen
 {
 surfaceparm woodsteps
 {
@@ -1650,13 +1650,13 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017Sgreen
+map textures/pad_wood/wood017sgreen
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
 
-textures/pad_wood/wood017Sred
+textures/pad_wood/wood017sred
 {
 surfaceparm woodsteps
 {
@@ -1664,13 +1664,13 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017Sred
+map textures/pad_wood/wood017sred
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
 }
 
-textures/pad_wood/wood017Sbrown
+textures/pad_wood/wood017sbrown
 {
 surfaceparm woodsteps
 {
@@ -1678,7 +1678,7 @@ map $lightmap
 rgbGen identity
 }
 {
-map textures/pad_wood/wood017Sbrown
+map textures/pad_wood/wood017sbrown
 blendFunc GL_DST_COLOR GL_ZERO
 rgbGen identity
 }
