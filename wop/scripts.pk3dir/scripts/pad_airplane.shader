@@ -65,7 +65,7 @@ textures/pad_o4texs/danke_maxmustermann
 	}
 }
 
-textures/pad_o4texs/gurtschlossA
+textures/pad_o4texs/gurtschlossa
 {
 	surfaceparm trans
 	surfaceparm alphashadow
@@ -85,7 +85,7 @@ textures/pad_o4texs/gurtschlossA
 	}
 }
 
-textures/pad_o4texs/gurtschlossC
+textures/pad_o4texs/gurtschlossc
 {
 	surfaceparm trans
 	surfaceparm alphashadow
@@ -417,7 +417,7 @@ textures/pad_o4texs/p032nonsolid
 //Bildschirmchen im Cockpit
 //-----------------------------------------------------------------
 
-textures/pad_o4texs/Cabin-dispA
+textures/pad_o4texs/cabin-dispa
 {
 	qer_editorimage textures/pad_o4texs/cabin-dispa
 	q3map_surfacelight 10
@@ -660,7 +660,7 @@ textures/pad_o4texs/glass-nonglare-002
 //zB Grafitti
 //-----------------------------------------------------------------
 
-textures/pad_o4texs/AcmeTires
+textures/pad_o4texs/acmetires
 {
 	qer_editorimage textures/pad_o4texs/acmetires
 	surfaceparm trans
@@ -722,7 +722,7 @@ textures/pad_o4texs/teppich
 	}
 }
 
-textures/pad_o4texs/p008Leder
+textures/pad_o4texs/p008leder
 {
 	surfaceparm carpetsteps
 	{
@@ -736,7 +736,7 @@ textures/pad_o4texs/p008Leder
 	}
 }
 
-textures/pad_o4texs/p002Leder
+textures/pad_o4texs/p002leder
 {
 	surfaceparm carpetsteps
 	{
@@ -753,7 +753,7 @@ textures/pad_o4texs/p002Leder
 
 //metalclip Metall
 
-textures/pad_o4texs/p888AluGeb
+textures/pad_o4texs/p888alugeb
 {
 	surfaceparm metalsteps
 	{
@@ -767,7 +767,7 @@ textures/pad_o4texs/p888AluGeb
 	}
 }
 
-textures/pad_o4texs/p001AluGeb
+textures/pad_o4texs/p001alugeb
 {
 	surfaceparm metalsteps
 	{
@@ -813,7 +813,7 @@ textures/pad_o4texs/metalstep063
 
 //woodclip Holz
 
-textures/pad_o4texs/p002Holz
+textures/pad_o4texs/p002holz
 {
 	surfaceparm woodsteps
 	{
@@ -827,7 +827,7 @@ textures/pad_o4texs/p002Holz
 	}
 }
 
-textures/pad_o4texs/p008Holz
+textures/pad_o4texs/p008holz
 {
 	surfaceparm woodsteps
 	{
@@ -841,7 +841,7 @@ textures/pad_o4texs/p008Holz
 	}
 }
 
-textures/pad_o4texs/p009Holz
+textures/pad_o4texs/p009holz
 {
 	surfaceparm woodsteps
 	{
@@ -855,7 +855,7 @@ textures/pad_o4texs/p009Holz
 	}
 }
 
-textures/pad_o4texs/p039Holz
+textures/pad_o4texs/p039holz
 {
 	surfaceparm woodsteps
 	{
