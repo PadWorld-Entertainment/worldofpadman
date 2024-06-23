@@ -444,7 +444,7 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 		} else {
 			for (i = 0; i < count; ++i) {
 				const char *shader = shaders[i].shader;
-				if (validateShader(allShaders, shader, filename, pk3dir, ispadpack) == 0) {
+				if (validateShader(allShaders, shader, filename, pk3dir, ispadpack) != 0) {
 					++errors;
 				}
 			}
