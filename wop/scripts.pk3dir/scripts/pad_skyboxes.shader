@@ -328,9 +328,10 @@ textures/pad_trash/trash_skybox_day
     surfaceparm noimpact
     surfaceparm nolightmap
     surfaceparm sky
-    q3map_sun 1 1 0.9 150 210 68
-    q3map_surfacelight 300
+    q3map_sunExt 255 255 230 250 210 68 1 32
     skyParms env/padcity512 128 -
+    q3map_lightmapFilterRadius 0 16
+    q3map_skyLight 200 6
 }
 
 textures/pad_trash/trash_skybox_evening

@@ -328,6 +328,57 @@ textures/pad_trash/kb_fenster_10nite
 	}
 }
 
+textures/pad_trash/kb_door_day
+{
+	qer_editorimage textures/pad_trash/kb_door_f
+	{
+		map textures/pad_trash/kb_door_b
+	}
+	{
+		map textures/pad_gfx02/tinpad3
+		blendfunc add
+		rgbGen identity
+		tcGen environment 
+	}
+	{
+		map textures/pad_trash/kb_door_f
+		depthWrite
+		alphaFunc GE128
+	}
+	{
+		map $lightmap 
+		blendfunc filter
+		rgbGen identity
+		tcGen lightmap 
+	}
+}
+
+textures/pad_trash/kb_door_nite
+{
+	qer_editorimage textures/pad_trash/kb_door_f
+	q3map_lightimage textures/pad_trash/kb_door_g
+	q3map_surfacelight 100
+	q3map_backsplash 0 0
+	{
+		map textures/pad_trash/kb_door_b
+	}
+	{
+		map textures/pad_trash/kb_door_f
+		depthWrite
+		alphaFunc GE128
+	}
+	{
+		map $lightmap 
+		blendfunc filter
+		rgbGen identity
+		tcGen lightmap 
+	}
+	{
+		map textures/pad_trash/kb_door_b
+		blendfunc add
+	}
+}
+
 textures/pad_trash/kb_flame
 {
 	qer_editorimage textures/pad_pirate/flame1
