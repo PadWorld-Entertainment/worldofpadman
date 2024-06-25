@@ -356,7 +356,7 @@ textures/pad_trash/kb_door_day
 textures/pad_trash/kb_door_nite
 {
 	qer_editorimage textures/pad_trash/kb_door_f
-	q3map_lightimage textures/pad_trash/kb_door_g
+	q3map_lightimage textures/pad_trash/kb_fenster_b01
 	q3map_surfacelight 100
 	q3map_backsplash 0 0
 	{
