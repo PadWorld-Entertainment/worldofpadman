@@ -415,10 +415,11 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 		display = SDL_GetWindowDisplayIndex(SDL_window);
 		if (display < 0) {
 			ri.Printf(PRINT_DEVELOPER, "SDL_GetWindowDisplayIndex() failed: %s\n", SDL_GetError());
+			display = 0;
 		}
 	}
 
-	if (display >= 0 && SDL_GetDesktopDisplayMode(display, &desktopMode) == 0) {
+	if (SDL_GetDesktopDisplayMode(display, &desktopMode) == 0) {
 		glConfig.displayAspect = (float)desktopMode.w / (float)desktopMode.h;
 
 		ri.Printf(PRINT_ALL, "Display aspect: %.3f\n", glConfig.displayAspect);
