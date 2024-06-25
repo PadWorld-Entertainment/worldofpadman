@@ -360,7 +360,7 @@ textures/pad_trash/kb_door_nite
 	q3map_surfacelight 100
 	q3map_backsplash 0 0
 	{
-		map textures/pad_trash/kb_door_b
+		map textures/pad_trash/kb_fenster_b01
 	}
 	{
 		map textures/pad_trash/kb_door_f
@@ -368,14 +368,14 @@ textures/pad_trash/kb_door_nite
 		alphaFunc GE128
 	}
 	{
+		map textures/pad_trash/kb_door_b
+		blendfunc add
+	}
+	{
 		map $lightmap 
 		blendfunc filter
 		rgbGen identity
 		tcGen lightmap 
-	}
-	{
-		map textures/pad_trash/kb_door_b
-		blendfunc add
 	}
 }
 

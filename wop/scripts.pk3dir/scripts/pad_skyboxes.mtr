@@ -316,7 +316,18 @@ textures/pad_trash/trash_skybox_night
     surfaceparm noimpact
     surfaceparm nolightmap
     surfaceparm sky
-    q3gl2_sun 0.47451 0.576471 1 55 210 60 0.5
+    q3gl2_sun 0.47451 0.576471 1 50 210 60 0.5
+    skyParms env/pc-friday-13th-512 128 -
+    q3map_lightmapFilterRadius 0 16
+    q3map_skyLight 32 6
+}
+
+textures/pad_trash/trash_skybox_night
+{
+    qer_editorimage env/pc-friday-13th-512_ft
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
     skyParms env/pc-friday-13th-512 128 -
 }
 
@@ -327,7 +338,7 @@ textures/pad_trash/trash_skybox_day
     surfaceparm noimpact
     surfaceparm nolightmap
     surfaceparm sky
-    q3gl2_sun 1 1 0.9 100 210 68 0.5
+    q3gl2_sun 1 1 0.9 80 210 68 0.5
     skyParms env/padcity512 128 -
     q3map_lightmapFilterRadius 0 16
     q3map_skyLight 200 6
