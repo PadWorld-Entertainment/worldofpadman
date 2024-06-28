@@ -353,7 +353,7 @@ textures/pad_cabin/moni
 	q3map_lightimage textures/pad_cabin/moni
 	q3map_surfacelight 20
 
-        {
+	{
 		map textures/pad_cabin/moni
 		rgbGen identity
 	}
@@ -371,100 +371,100 @@ textures/pad_cabin/moni
 
 textures/pad_backyard/glow_rost01
 {
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/glow_rost01
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
+	surfaceparm metalsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_backyard/glow_rost01
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
 }
 
 textures/pad_backyard/metall1
 {
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/metall1
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
+	surfaceparm metalsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_backyard/metall1
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
 }
 
 textures/pad_backyard/metall2
 {
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_backyard/metall2
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
+	surfaceparm metalsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_backyard/metall2
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
 }
 
 textures/pad_cabin/darkrost
 {
-surfaceparm metalsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/darkrost
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
+	surfaceparm metalsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_cabin/darkrost
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
 }
 
 textures/pad_cabin/fensterbank
 {
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_cabin/fensterbank
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
+	surfaceparm woodsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_cabin/fensterbank
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
 }
 
 textures/pad_glow/wallcol016
 {
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_glow/wallcol016
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
+	surfaceparm woodsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_glow/wallcol016
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
 }
 
 textures/pad_glow/wallcol017
 {
-surfaceparm woodsteps
-{
-map $lightmap
-rgbGen identity
-}
-{
-map textures/pad_glow/wallcol017
-blendFunc GL_DST_COLOR GL_ZERO
-rgbGen identity
-}
+	surfaceparm woodsteps
+	{
+		map $lightmap
+		rgbGen identity
+	}
+	{
+		map textures/pad_glow/wallcol017
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
 }
 
 textures/pad_glowsky/glowscreen
@@ -472,11 +472,10 @@ textures/pad_glowsky/glowscreen
 	q3map_lightimage textures/pad_glowsky/glowscreen
 	q3map_surfacelight 20
 
-        {
+	{
 		map textures/pad_glowsky/glowscreen
 		rgbGen identity
 	}
-
 
 	{
 		map $lightmap
