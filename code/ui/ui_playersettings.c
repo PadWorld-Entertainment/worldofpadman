@@ -38,18 +38,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define ID_NAME 20
 #define ID_HANDICAP 21
-#define ID_GENDER 22
-#define ID_PREVMODEL 23
-#define ID_NEXTMODEL 24
-#define ID_PREVSKIN 25
-#define ID_NEXTSKIN 26
-#define ID_MICON 27 //+5
-#define ID_SICON 33 //+11
-#define ID_PLAYERMODEL 45
-#define ID_PREVLOGO 46
-#define ID_NEXTLOGO 47
-#define ID_RANDOMCOLOR 48
-#define ID_SPRAYCOLOR 49
+#define ID_PREVMODEL 22
+#define ID_NEXTMODEL 23
+#define ID_PREVSKIN 24
+#define ID_NEXTSKIN 25
+#define ID_MICON 26 //+5
+#define ID_SICON 32 //+11
+#define ID_PLAYERMODEL 44
+#define ID_PREVLOGO 45
+#define ID_NEXTLOGO 46
+#define ID_RANDOMCOLOR 47
+#define ID_SPRAYCOLOR 48
 
 #define MAX_NAMELENGTH 20
 
@@ -77,7 +76,6 @@ typedef struct {
 	menutext_s nameheader;
 	menufield_s name;
 	menulist_s handicap;
-	menulist_s gender;
 	menutext_s logoheader;
 	menutext_s logoname;
 
@@ -114,8 +112,6 @@ typedef struct {
 } playersettings_t;
 
 static playersettings_t s_playersettings;
-
-static const char *gender_items[] = {S_COLOR_WHITE "Model", S_COLOR_WHITE "Male", S_COLOR_WHITE "Female", S_COLOR_WHITE "Neuter", S_COLOR_WHITE "None", NULL};
 
 static const char *handicap_items[] = {S_COLOR_WHITE "None", S_COLOR_WHITE "90", S_COLOR_WHITE "80", S_COLOR_WHITE "70", S_COLOR_WHITE "60",
 									   S_COLOR_WHITE "50", S_COLOR_WHITE "40", S_COLOR_WHITE "30", S_COLOR_WHITE "20", S_COLOR_WHITE "10",
@@ -254,27 +250,12 @@ UI_PlayerSettings_SaveChanges
 =================
 */
 static void UI_PlayerSettings_SaveChanges(void) {
-	int g;
 
 	// name
 	trap_Cvar_Set("name", s_playersettings.name.field.buffer);
 
 	// handicap
 	trap_Cvar_SetValue("handicap", 100 - s_playersettings.handicap.curvalue * 10);
-
-	// gender
-	g = s_playersettings.gender.curvalue;
-	if (g > 3) {
-		trap_Cvar_Set("sex", "none");
-	} else if (g == 1) {
-		trap_Cvar_Set("sex", "male");
-	} else if (g == 2) {
-		trap_Cvar_Set("sex", "female");
-	} else if (g == 3) {
-		trap_Cvar_Set("sex", "neuter");
-	} else {
-		trap_Cvar_Set("sex", "model");
-	}
 
 	// spray logo
 	trap_Cvar_Set("syc_logo", uis.spraylogoNames[s_playersettings.slogo_num]);
@@ -327,7 +308,6 @@ UI_PlayerSettings_SetMenuItems
 static void UI_PlayerSettings_SetMenuItems(void) {
 	int c;
 	int h;
-	char gStr[32];
 	char modelname[32];
 
 	// name
@@ -370,20 +350,6 @@ static void UI_PlayerSettings_SetMenuItems(void) {
 	// handicap
 	h = Com_Clamp(10, 100, trap_Cvar_VariableValue("handicap"));
 	s_playersettings.handicap.curvalue = 10 - h / 10;
-
-	// gender
-	trap_Cvar_VariableStringBuffer("sex", gStr, sizeof(gStr));
-	if (!Q_stricmp(gStr, "none")) {
-		s_playersettings.gender.curvalue = 4;
-	} else if (!Q_stricmp(gStr, "neuter")) {
-		s_playersettings.gender.curvalue = 3;
-	} else if (!Q_stricmp(gStr, "female")) {
-		s_playersettings.gender.curvalue = 2;
-	} else if (!Q_stricmp(gStr, "male")) {
-		s_playersettings.gender.curvalue = 1;
-	} else {
-		s_playersettings.gender.curvalue = 0;
-	}
 
 	// random spray color
 	s_playersettings.randomcolor.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("randomcolor"));
@@ -621,7 +587,7 @@ static void UI_PlayerSettings_Draw(void) {
 	i = Com_Clamp(0, (NUM_COLORS - 1), i);
 
 	x = 92;
-	y = 284;
+	y = 284 - 9;
 	UI_SetColor(g_color_table[i]);
 	UI_DrawHandlePic(x, y, 64, 64, uis.spraylogoShaders[s_playersettings.slogo_num]);
 	Q_strncpyz(logoName, SkipLogoNumber(uis.spraylogoNames[s_playersettings.slogo_num]), sizeof(logoName));
@@ -635,7 +601,7 @@ static void UI_PlayerSettings_Draw(void) {
 	}
 
 	x = 52;
-	y = 302;
+	y = 302 - 9;
 	UI_SetColor(g_color_table[i]);
 	UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[prevlogo]);
 	if (uis.cursorx >= x && uis.cursorx <= (x + 32) && uis.cursory >= y && uis.cursory <= (y + 32)) {
@@ -816,7 +782,6 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 	switch (tmpid) {
 
 	case ID_HANDICAP:
-	case ID_GENDER:
 		break;
 
 	case ID_BACK:
@@ -1125,20 +1090,6 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.handicap.itemnames = handicap_items;
 
 	y += BIGCHAR_HEIGHT + 2;
-	s_playersettings.gender.generic.type = MTYPE_SPINCONTROL;
-	s_playersettings.gender.generic.name = "Gender:";
-	s_playersettings.gender.generic.flags = QMF_SMALLFONT;
-	s_playersettings.gender.generic.id = ID_GENDER;
-	s_playersettings.gender.generic.callback = UI_PlayerSettings_MenuEvent;
-	s_playersettings.gender.generic.x = XPOSITION;
-	s_playersettings.gender.generic.y = y;
-	s_playersettings.gender.itemnames = gender_items;
-	s_playersettings.gender.generic.toolTip =
-		"Choose a desired gender, which is normally determined by the chosen player model, or choose "
-		"none to deactivate the gender. Default is model. NOTE: None forces the game to use they/them "
-		"instead of he/his, she/her, or it/its for your character.";
-
-	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.logoheader.generic.type = MTYPE_TEXT;
 	s_playersettings.logoheader.generic.x = XPOSITION - 96;
 	s_playersettings.logoheader.generic.y = y;
@@ -1153,7 +1104,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.logoname.style = UI_LEFT | UI_SMALLFONT;
 	s_playersettings.logoname.color = color_white;
 
-	y += 5 * (BIGCHAR_HEIGHT + 2);
+	y += 6 * (BIGCHAR_HEIGHT + 2);
 	s_playersettings.randomcolor.generic.type = MTYPE_RADIOBUTTON;
 	s_playersettings.randomcolor.generic.name = "Random Color:";
 	s_playersettings.randomcolor.generic.flags = QMF_SMALLFONT;
@@ -1188,7 +1139,6 @@ static void UI_PlayerSettings_MenuInit(void) {
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
-	Menu_AddItem(&s_playersettings.menu, &s_playersettings.gender);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoname);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoleft);

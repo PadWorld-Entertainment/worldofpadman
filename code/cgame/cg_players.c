@@ -108,6 +108,7 @@ static qboolean CG_ParseAnimationFile(const char *filename, clientInfo_t *ci) {
 	ci->footsteps = FOOTSTEP_NORMAL;
 	VectorClear(ci->headOffset);
 	ci->headScale = 1.0f;
+	ci->gender = GENDER_MALE;
 	ci->fixedlegs = qfalse;
 	ci->fixedtorso = qfalse;
 
@@ -166,15 +167,14 @@ static qboolean CG_ParseAnimationFile(const char *filename, clientInfo_t *ci) {
 		} else if (!Q_stricmp(token, "sex")) {
 			token = COM_Parse(&text_p);
 			if (!token[0]) {
-				ci->genderModel = GENDER_NONE;
 				break;
 			}
-			if (token[0] == 'm' || token[0] == 'M') {
-				ci->genderModel = GENDER_MALE;
-			} else if (token[0] == 'f' || token[0] == 'F') {
-				ci->genderModel = GENDER_FEMALE;
+			if (token[0] == 'f' || token[0] == 'F') {
+				ci->gender = GENDER_FEMALE;
 			} else if (token[0] == 'n' || token[0] == 'N') {
-				ci->genderModel = GENDER_NEUTER;
+				ci->gender = GENDER_NEUTER;
+			} else {
+				ci->gender = GENDER_MALE;
 			}
 			continue;
 		} else if (!Q_stricmp(token, "fixedlegs")) {
@@ -195,6 +195,7 @@ static qboolean CG_ParseAnimationFile(const char *filename, clientInfo_t *ci) {
 
 	// read information for each frame
 	for (i = 0; i < MAX_ANIMATIONS; i++) {
+
 		token = COM_Parse(&text_p);
 		if (!token[0]) {
 			if (i >= TORSO_GETFLAG && i <= TORSO_NEGATIVE) {
@@ -667,21 +668,18 @@ static void CG_LoadClientInfo(int clientNum, clientInfo_t *ci) {
 			CG_ResetPlayerEntity(&cg_entities[i]);
 		}
 	}
-
-	if (ci->gender == GENDER_MAX) {
-		ci->gender = ci->genderModel;
-	}
 }
 
-/**
- * @brief Copies the attributes of a model from its @c animation.cfg properties to the new @c clientInfo_t
- * @sa CG_ParseAnimationFile()
- */
+/*
+======================
+CG_CopyClientInfoModel
+======================
+*/
 static void CG_CopyClientInfoModel(const clientInfo_t *from, clientInfo_t *to) {
 	VectorCopy(from->headOffset, to->headOffset);
 	to->headScale = from->headScale;
 	to->footsteps = from->footsteps;
-	to->genderModel = from->genderModel;
+	to->gender = from->gender;
 
 	to->legsModel = from->legsModel;
 	to->legsSkin = from->legsSkin;
@@ -801,9 +799,11 @@ static void CG_SetDeferredClientInfo(int clientNum, clientInfo_t *ci) {
 	CG_LoadClientInfo(clientNum, ci);
 }
 
-/**
- * @sa ClientUserinfoChanged()
- */
+/*
+======================
+CG_NewClientInfo
+======================
+*/
 void CG_NewClientInfo(int clientNum) {
 	clientInfo_t *ci;
 	clientInfo_t newInfo;
@@ -883,17 +883,6 @@ void CG_NewClientInfo(int clientNum) {
 	// team leader
 	v = Info_ValueForKey(configstring, "tl");
 	newInfo.teamLeader = atoi(v);
-
-	// sex
-	// if a sex option is set in the userinfo string we take this,
-	// otherwise we check for GENDER_MAX in CG_ParseAnimationFile() to use the
-	// setting from animation.cfg
-	newInfo.gender = GENDER_MAX;
-	v = Info_ValueForKey(configstring, "s");
-	if (v[0] != '\0') {
-		newInfo.gender = atoi(v);
-	}
-
 	oldTeam = ci->team;
 
 	// this may be run before the first snapshot arrives
@@ -1002,7 +991,6 @@ void CG_NewClientInfo(int clientNum) {
 
 	// replace whatever was there with the new one
 	newInfo.infoValid = qtrue;
-
 	*ci = newInfo;
 
 	// if the local client changed teams in a team gametype, adjust team- and enemymodels

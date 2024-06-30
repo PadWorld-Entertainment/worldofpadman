@@ -156,34 +156,28 @@ static void CG_Obituary(entityState_t *ent) {
 		gender = ci->gender;
 		switch (mod) {
 		case MOD_BALLOONY_SPLASH:
-			if (gender == GENDER_MALE)
-				message = "tripped on his own water bomb";
-			else if (gender == GENDER_FEMALE)
+			if (gender == GENDER_FEMALE)
 				message = "tripped on her own water bomb";
 			else if (gender == GENDER_NEUTER)
 				message = "tripped on its own water bomb";
 			else
-				message = "tripped on their own water bomb";
+				message = "tripped on his own water bomb";
 			break;
 		case MOD_BETTY_SPLASH:
-			if (gender == GENDER_MALE)
-				message = "blew himself up";
-			else if (gender == GENDER_FEMALE)
+			if (gender == GENDER_FEMALE)
 				message = "blew herself up";
 			else if (gender == GENDER_NEUTER)
 				message = "blew itself up";
 			else
-				message = "blew themselves up";
+				message = "blew himself up";
 			break;
 		case MOD_BUBBLEG_SPLASH:
-			if (gender == GENDER_MALE)
-				message = "melted himself";
-			else if (gender == GENDER_FEMALE)
+			if (gender == GENDER_FEMALE)
 				message = "melted herself";
 			else if (gender == GENDER_NEUTER)
 				message = "melted itself";
 			else
-				message = "melted themselves";
+				message = "melted himself";
 			break;
 		case MOD_IMPERIUS_SPLASH:
 			message = "should have used a smaller gun";
@@ -205,19 +199,19 @@ static void CG_Obituary(entityState_t *ent) {
 
 		if (cgs.gametype < GT_TEAM) {
 			if (cgs.gametype == GT_LPS) {
-				const char *gender_strings[] = {"they have", "he has", "she has", "it has", NULL};
+				const char *gender_strings[] = {"he", "she", "it", NULL};
 				CASSERT(ARRAY_LEN(gender_strings) == GENDER_MAX + 1);
 
 				gender = ci->gender;
-				if (gender >= GENDER_MAX || gender < GENDER_NONE)
-					gender = GENDER_NONE;
+				if (gender >= GENDER_MAX || gender < GENDER_MALE)
+					gender = GENDER_NEUTER;
 
 				if (ent->generic1 == 0)
-					s = va("You fragged %s,\n%s no lives left.", targetName, gender_strings[gender]);
+					s = va("You fragged %s\n%s has no lives left.", targetName, gender_strings[gender]);
 				else if (ent->generic1 == 1)
-					s = va("You fragged %s,\n%s 1 life left.", targetName, gender_strings[gender]);
+					s = va("You fragged %s\n%s has 1 life left.", targetName, gender_strings[gender]);
 				else
-					s = va("You fragged %s,\n%s %i lives left.", targetName, gender_strings[gender], ent->generic1);
+					s = va("You fragged %s\n%s has %i lives left.", targetName, gender_strings[gender], ent->generic1);
 			} else
 				s = va("You fragged %s\n%s place with %i", targetName,
 					   CG_PlaceString(cg.snap->ps.persistant[PERS_RANK] + 1), cg.snap->ps.persistant[PERS_SCORE]);

@@ -371,8 +371,7 @@ typedef struct {
 	float headScale;
 
 	footstep_t footsteps;
-	gender_t gender;	  // user settings (can also be from model)
-	gender_t genderModel; // cached value from model (animation.cfg)
+	gender_t gender; // from model
 
 	qhandle_t legsModel;
 	qhandle_t legsSkin;
