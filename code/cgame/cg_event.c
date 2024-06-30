@@ -153,7 +153,7 @@ static void CG_Obituary(entityState_t *ent) {
 	}
 
 	if (attacker == target) {
-		gender = (ci->gender >= GENDER_MAX || ci->gender < GENDER_NONE) ? ci->genderModel : ci->gender;
+		gender = ci->gender;
 		switch (mod) {
 		case MOD_BALLOONY_SPLASH:
 			if (gender == GENDER_MALE)
@@ -208,7 +208,10 @@ static void CG_Obituary(entityState_t *ent) {
 				const char *gender_strings[] = {"they have", "he has", "she has", "it has", NULL};
 				CASSERT(ARRAY_LEN(gender_strings) == GENDER_MAX + 1);
 
-				gender = (ci->gender >= GENDER_MAX || ci->gender < GENDER_NONE) ? ci->genderModel : ci->gender;
+				gender = ci->gender;
+				if (gender >= GENDER_MAX || gender < GENDER_NONE)
+					gender = GENDER_NONE;
+
 				if (ent->generic1 == 0)
 					s = va("You fragged %s,\n%s no lives left.", targetName, gender_strings[gender]);
 				else if (ent->generic1 == 1)
