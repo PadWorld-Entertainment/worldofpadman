@@ -28,8 +28,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 const int demo_protocols[] = {66, 67, PROTOCOL_LEGACY_VERSION, 69, 70, 71, PROTOCOL_VERSION, 0};
 
+fontSize_t FONT_TINY = {TINYCHAR_WIDTH, TINYCHAR_HEIGHT};
 fontSize_t FONT_SMALL = {SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT};
 fontSize_t FONT_BIG = {BIGCHAR_WIDTH, BIGCHAR_HEIGHT};
+fontSize_t FONT_GIANT = {GIANTCHAR_WIDTH, GIANTCHAR_HEIGHT};
 
 // ^[0-9a-zA-Z]
 qboolean Q_IsColorString(const char *p) {
@@ -89,8 +91,7 @@ const char *COM_GetExtension(const char *name) {
 	const char *dot = strrchr(name, '.'), *slash;
 	if (dot && (!(slash = strrchr(name, '/')) || slash < dot))
 		return dot + 1;
-	else
-		return "";
+	return "";
 }
 
 /*
@@ -138,15 +139,14 @@ qboolean COM_CompareExtension(const char *in, const char *ext) {
 COM_DefaultExtension
 
 if path doesn't have an extension, then append
- the specified one (which should include the .)
+the specified one (which should include the .)
 ==================
 */
 void COM_DefaultExtension(char *path, int maxSize, const char *extension) {
 	const char *dot = strrchr(path, '.'), *slash;
 	if (dot && (!(slash = strrchr(path, '/')) || slash < dot))
 		return;
-	else
-		Q_strcat(path, maxSize, extension);
+	Q_strcat(path, maxSize, extension);
 }
 
 /*
@@ -294,7 +294,7 @@ a newline.
 ==============
 */
 static const char *SkipWhitespace(const char *data, qboolean *hasNewLines) {
-	int c;
+	char c;
 
 	while ((c = *data) <= ' ') {
 		if (!c) {
@@ -1009,7 +1009,7 @@ const char *Info_ValueForKey(const char *s, const char *key) {
 ===================
 Info_NextPair
 
-Used to itterate through all the key/value pairs in an info string
+Used to iterate through all the key/value pairs in an info string
 ===================
 */
 void Info_NextPair(const char **head, char *key, char *value) {

@@ -48,8 +48,6 @@ INGAME MENU
 #define ID_CALLVOTE 23
 #define ID_TEAMORDERS 24
 
-#define XPOSITION (SCREEN_WIDTH / 2)
-
 typedef struct {
 	menuframework_s menu;
 	menutext_s team;
@@ -219,7 +217,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.team.generic.type = MTYPE_TEXTS;
 	s_ingame.team.fontHeight = 20.0f;
 	s_ingame.team.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.team.generic.x = XPOSITION;
+	s_ingame.team.generic.x = SCREEN_CENTER;
 	s_ingame.team.generic.y = y;
 	s_ingame.team.generic.id = ID_TEAM;
 	s_ingame.team.generic.callback = InGame_Event;
@@ -232,7 +230,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.addbots.generic.type = MTYPE_TEXTS;
 	s_ingame.addbots.fontHeight = 20.0f;
 	s_ingame.addbots.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.addbots.generic.x = XPOSITION;
+	s_ingame.addbots.generic.x = SCREEN_CENTER;
 	s_ingame.addbots.generic.y = y;
 	s_ingame.addbots.generic.id = ID_ADDBOTS;
 	s_ingame.addbots.generic.callback = InGame_Event;
@@ -248,7 +246,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.removebots.generic.type = MTYPE_TEXTS;
 	s_ingame.removebots.fontHeight = 20.0f;
 	s_ingame.removebots.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.removebots.generic.x = XPOSITION;
+	s_ingame.removebots.generic.x = SCREEN_CENTER;
 	s_ingame.removebots.generic.y = y;
 	s_ingame.removebots.generic.id = ID_REMOVEBOTS;
 	s_ingame.removebots.generic.callback = InGame_Event;
@@ -264,7 +262,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.teamorders.generic.type = MTYPE_TEXTS;
 	s_ingame.teamorders.fontHeight = 20.0f;
 	s_ingame.teamorders.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.teamorders.generic.x = XPOSITION;
+	s_ingame.teamorders.generic.x = SCREEN_CENTER;
 	s_ingame.teamorders.generic.y = y;
 	s_ingame.teamorders.generic.id = ID_TEAMORDERS;
 	s_ingame.teamorders.generic.callback = InGame_Event;
@@ -287,7 +285,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.voiceingame.generic.type = MTYPE_TEXTS;
 	s_ingame.voiceingame.fontHeight = 20.0f;
 	s_ingame.voiceingame.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.voiceingame.generic.x = XPOSITION;
+	s_ingame.voiceingame.generic.x = SCREEN_CENTER;
 	s_ingame.voiceingame.generic.y = y;
 	s_ingame.voiceingame.generic.id = ID_VOICEINGAME;
 	s_ingame.voiceingame.generic.callback = InGame_Event;
@@ -304,7 +302,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.callvote.generic.type = MTYPE_TEXTS;
 	s_ingame.callvote.fontHeight = 20.0f;
 	s_ingame.callvote.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.callvote.generic.x = XPOSITION;
+	s_ingame.callvote.generic.x = SCREEN_CENTER;
 	s_ingame.callvote.generic.y = y;
 	s_ingame.callvote.generic.id = ID_CALLVOTE;
 	s_ingame.callvote.generic.callback = InGame_Event;
@@ -327,7 +325,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.setup.generic.type = MTYPE_TEXTS;
 	s_ingame.setup.fontHeight = 20.0f;
 	s_ingame.setup.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.setup.generic.x = XPOSITION;
+	s_ingame.setup.generic.x = SCREEN_CENTER;
 	s_ingame.setup.generic.y = y;
 	s_ingame.setup.generic.id = ID_SETUP;
 	s_ingame.setup.generic.callback = InGame_Event;
@@ -340,7 +338,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.nextmap.generic.type = MTYPE_TEXTS;
 	s_ingame.nextmap.fontHeight = 20.0f;
 	s_ingame.nextmap.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.nextmap.generic.x = XPOSITION;
+	s_ingame.nextmap.generic.x = SCREEN_CENTER;
 	s_ingame.nextmap.generic.y = y;
 	s_ingame.nextmap.generic.id = ID_NEXTMAP;
 	s_ingame.nextmap.generic.callback = InGame_Event;
@@ -356,7 +354,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.server.generic.type = MTYPE_TEXTS;
 	s_ingame.server.fontHeight = 20.0f;
 	s_ingame.server.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.server.generic.x = XPOSITION;
+	s_ingame.server.generic.x = SCREEN_CENTER;
 	s_ingame.server.generic.y = y;
 	s_ingame.server.generic.id = ID_SERVERINFO;
 	s_ingame.server.generic.callback = InGame_Event;
@@ -369,7 +367,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.restart.generic.type = MTYPE_TEXTS;
 	s_ingame.restart.fontHeight = 20.0f;
 	s_ingame.restart.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.restart.generic.x = XPOSITION;
+	s_ingame.restart.generic.x = SCREEN_CENTER;
 	s_ingame.restart.generic.y = y;
 	s_ingame.restart.generic.id = ID_RESTART;
 	s_ingame.restart.generic.callback = InGame_Event;
@@ -386,7 +384,7 @@ static void InGame_MenuInit(void) {
 		s_ingame.rechooselogo.generic.type = MTYPE_TEXTS;
 		s_ingame.rechooselogo.fontHeight = 20.0f;
 		s_ingame.rechooselogo.generic.flags = QMF_CENTER_JUSTIFY;
-		s_ingame.rechooselogo.generic.x = XPOSITION;
+		s_ingame.rechooselogo.generic.x = SCREEN_CENTER;
 		s_ingame.rechooselogo.generic.y = y;
 		s_ingame.rechooselogo.generic.id = ID_RECHOOSELOGO;
 		s_ingame.rechooselogo.generic.callback = InGame_Event;
@@ -400,7 +398,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.resume.generic.type = MTYPE_TEXTS;
 	s_ingame.resume.fontHeight = 20.0f;
 	s_ingame.resume.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.resume.generic.x = XPOSITION;
+	s_ingame.resume.generic.x = SCREEN_CENTER;
 	s_ingame.resume.generic.y = y;
 	s_ingame.resume.generic.id = ID_RESUME;
 	s_ingame.resume.generic.callback = InGame_Event;
@@ -413,7 +411,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.leave.generic.type = MTYPE_TEXTS;
 	s_ingame.leave.fontHeight = 20.0f;
 	s_ingame.leave.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.leave.generic.x = XPOSITION;
+	s_ingame.leave.generic.x = SCREEN_CENTER;
 	s_ingame.leave.generic.y = y;
 	s_ingame.leave.generic.id = ID_LEAVEARENA;
 	s_ingame.leave.generic.callback = InGame_Event;
@@ -426,7 +424,7 @@ static void InGame_MenuInit(void) {
 	s_ingame.quit.generic.type = MTYPE_TEXTS;
 	s_ingame.quit.fontHeight = 20.0f;
 	s_ingame.quit.generic.flags = QMF_CENTER_JUSTIFY;
-	s_ingame.quit.generic.x = XPOSITION;
+	s_ingame.quit.generic.x = SCREEN_CENTER;
 	s_ingame.quit.generic.y = y;
 	s_ingame.quit.generic.id = ID_QUIT;
 	s_ingame.quit.generic.callback = InGame_Event;

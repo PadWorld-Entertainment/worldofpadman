@@ -112,7 +112,7 @@ void CG_Cutscene2d_Draw(void) {
 		cutscene2dPicture_t *pic = &cg_cutscene2d.pics[i];
 
 		if (pic->isShown) {
-
+			fontSize_t fontsize;
 			trap_R_SetColor(pic->color);
 			CG_DrawPic(pic->x, pic->y, pic->w, pic->h, pic->shader);
 			trap_R_SetColor(NULL);
@@ -120,6 +120,8 @@ void CG_Cutscene2d_Draw(void) {
 			if (pic->text[0]) {
 				char *start, *end;
 				int line = 0;
+				fontsize.w = pic->text_cw;
+				fontsize.h = pic->text_ch;
 
 				start = pic->text;
 				do {
@@ -128,7 +130,7 @@ void CG_Cutscene2d_Draw(void) {
 						end[0] = '\0';
 
 					CG_DrawStringExt(pic->x + pic->text_x, pic->y + pic->text_y + line * pic->text_ch, start,
-									 pic->textcolor, qfalse, qfalse, pic->text_cw, pic->text_ch, 0);
+									 pic->textcolor, qfalse, qfalse, fontsize, 0);
 
 					if (end) {
 						end[0] = '\\';

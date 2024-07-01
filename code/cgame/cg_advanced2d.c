@@ -452,11 +452,13 @@ void CG_DrawTurnableString(float x, float y, const char *s, vec4_t color, float 
 }
 
 #define CSIZE 0.0625f
-static void CG_DrawCharWithCutFrame(float x, float y, char ch, float w, float h, float fl, float ft, float fr,
+static void CG_DrawCharWithCutFrame(float x, float y, char ch, fontSize_t fontsize, float fl, float ft, float fr,
 									float fb) {
 	float lcut, tcut, rcut, bcut;
 	int row, col;
 	float s1, t1, s2, t2;
+	float w = fontsize.w;
+	float h = fontsize.h;
 
 	if (x > fr || y > fb || x + w < fl || y + h < ft)
 		return; // not in the frame
@@ -488,14 +490,13 @@ static void CG_DrawCharWithCutFrame(float x, float y, char ch, float w, float h,
  * @param x leftedge on 640x480
  * @param y topedge on 640x480
  * @param str String that should be drawn
- * @param cW width of one letter
- * @param cH height of one letter
+ * @param fontsize width and height of one letter
  * @param fl frame leftedge
  * @param ft frame topedge
  * @param fr frame rightedge
  * @param fb frame bottomedge
  */
-void CG_DrawStringWithCutFrame(float x, float y, const char *str, vec4_t color, float cW, float cH, float fl, float ft,
+void CG_DrawStringWithCutFrame(float x, float y, const char *str, vec4_t color, fontSize_t fontsize, float fl, float ft,
 							   float fr, float fb) {
 	qboolean forceColor = qfalse;
 	int i, sLen;
@@ -520,8 +521,8 @@ void CG_DrawStringWithCutFrame(float x, float y, const char *str, vec4_t color, 
 			continue;
 		}
 
-		CG_DrawCharWithCutFrame(x + j, y, str[i], cW, cH, fl, ft, fr, fb);
-		j += cW;
+		CG_DrawCharWithCutFrame(x + j, y, str[i], fontsize, fl, ft, fr, fb);
+		j += fontsize.w;
 	}
 	trap_R_SetColor(NULL);
 }

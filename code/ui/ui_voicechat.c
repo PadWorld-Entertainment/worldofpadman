@@ -20,8 +20,6 @@
 #define ID_CLIENT4 17
 #define ID_CLIENT5 18
 
-#define XPOSITION (SCREEN_WIDTH / 2)
-
 typedef struct {
 	menuframework_s menu;
 
@@ -145,7 +143,7 @@ static sfxHandle_t UI_VoiceChatMenu_Key(int key) {
 
 static void UI_VoiceChatMenu_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(XPOSITION, 110, "VOICE CHAT", UI_CENTER | UI_SMALLFONT, color_black);
+	UI_DrawProportionalString(SCREEN_CENTER, 110, "VOICE CHAT", UI_CENTER | UI_SMALLFONT, color_black);
 
 	// standard menu drawing
 	Menu_Draw(&voiceChatMenuInfo.menu);
@@ -255,7 +253,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	voiceChatMenuInfo.arrowup.generic.callback = UI_VoiceChatMenu_UpEvent;
 	voiceChatMenuInfo.arrowup.generic.id = ID_SCROLL_UP;
-	voiceChatMenuInfo.arrowup.generic.x = XPOSITION + 74;
+	voiceChatMenuInfo.arrowup.generic.x = SCREEN_CENTER + 74;
 	voiceChatMenuInfo.arrowup.generic.y = 142;
 	voiceChatMenuInfo.arrowup.width = 22;
 	voiceChatMenuInfo.arrowup.height = 50;
@@ -267,7 +265,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	voiceChatMenuInfo.arrowdown.generic.callback = UI_VoiceChatMenu_DownEvent;
 	voiceChatMenuInfo.arrowdown.generic.id = ID_SCROLL_DOWN;
-	voiceChatMenuInfo.arrowdown.generic.x = XPOSITION + 74;
+	voiceChatMenuInfo.arrowdown.generic.x = SCREEN_CENTER + 74;
 	voiceChatMenuInfo.arrowdown.generic.y = 208;
 	voiceChatMenuInfo.arrowdown.width = 22;
 	voiceChatMenuInfo.arrowdown.height = 50;
@@ -279,7 +277,7 @@ static void UI_VoiceChatMenu_Init(void) {
 		voiceChatMenuInfo.displayClients[n].fontHeight = 20.0f;
 		voiceChatMenuInfo.displayClients[n].generic.flags = QMF_LEFT_JUSTIFY;
 		voiceChatMenuInfo.displayClients[n].generic.id = ID_CLIENT0 + n;
-		voiceChatMenuInfo.displayClients[n].generic.x = XPOSITION - 70;
+		voiceChatMenuInfo.displayClients[n].generic.x = SCREEN_CENTER - 70;
 		voiceChatMenuInfo.displayClients[n].generic.y = y;
 		voiceChatMenuInfo.displayClients[n].generic.callback = UI_VoiceChatMenu_SelectEvent;
 		voiceChatMenuInfo.displayClients[n].string = voiceChatMenuInfo.displayClientNames[n];
@@ -293,7 +291,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.gain.generic.name = "Volume";
 	voiceChatMenuInfo.gain.generic.flags = QMF_BLUESTYLE | QMF_GRAYED;
 	voiceChatMenuInfo.gain.generic.callback = UI_VoiceChatMenu_GainSliderEvent;
-	voiceChatMenuInfo.gain.generic.x = XPOSITION - 24;
+	voiceChatMenuInfo.gain.generic.x = SCREEN_CENTER - 24;
 	voiceChatMenuInfo.gain.generic.y = y;
 	voiceChatMenuInfo.gain.minvalue = 0;
 	voiceChatMenuInfo.gain.maxvalue = 10;
@@ -304,7 +302,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.mute.generic.name = "Mute";
 	voiceChatMenuInfo.mute.generic.flags = QMF_BLUESTYLE | QMF_SMALLFONT | QMF_GRAYED;
 	voiceChatMenuInfo.mute.generic.callback = UI_VoiceChatMenu_MuteEvent;
-	voiceChatMenuInfo.mute.generic.x = XPOSITION - 24;
+	voiceChatMenuInfo.mute.generic.x = SCREEN_CENTER - 24;
 	voiceChatMenuInfo.mute.generic.y = y;
 	voiceChatMenuInfo.mute.curvalue = 0;
 
@@ -313,7 +311,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.muteAll.generic.name = "Mute All";
 	voiceChatMenuInfo.muteAll.generic.flags = QMF_BLUESTYLE | QMF_SMALLFONT;
 	voiceChatMenuInfo.muteAll.generic.callback = UI_VoiceChatMenu_MuteAllEvent;
-	voiceChatMenuInfo.muteAll.generic.x = XPOSITION - 24;
+	voiceChatMenuInfo.muteAll.generic.x = SCREEN_CENTER - 24;
 	voiceChatMenuInfo.muteAll.generic.y = y;
 	voiceChatMenuInfo.muteAll.curvalue = (trap_GetVoiceMuteAll() != 0);
 
@@ -322,7 +320,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.sendTarget.generic.name = "Talk To:";
 	voiceChatMenuInfo.sendTarget.generic.flags = QMF_SMALLFONT;
 	voiceChatMenuInfo.sendTarget.generic.callback = UI_VoiceChatMenu_sendTargetEvent;
-	voiceChatMenuInfo.sendTarget.generic.x = XPOSITION - 24;
+	voiceChatMenuInfo.sendTarget.generic.x = SCREEN_CENTER - 24;
 	voiceChatMenuInfo.sendTarget.generic.y = y;
 	voiceChatMenuInfo.sendTarget.itemnames = sendTarget_names;
 
@@ -342,7 +340,7 @@ static void UI_VoiceChatMenu_Init(void) {
 	voiceChatMenuInfo.back.generic.type = MTYPE_BITMAP;
 	voiceChatMenuInfo.back.generic.name = BACK0;
 	voiceChatMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
-	voiceChatMenuInfo.back.generic.x = XPOSITION - 95;
+	voiceChatMenuInfo.back.generic.x = SCREEN_CENTER - 95;
 	voiceChatMenuInfo.back.generic.y = 340;
 	voiceChatMenuInfo.back.generic.id = ID_BACK;
 	voiceChatMenuInfo.back.generic.callback = UI_VoiceChatMenu_BackEvent;

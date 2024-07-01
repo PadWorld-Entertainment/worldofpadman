@@ -35,8 +35,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_JOINGAME 13
 #define ID_SPECTATE 14
 
-#define XPOSITION (SCREEN_WIDTH / 2)
-
 typedef struct {
 	menuframework_s menu;
 	menutext_s joinred;
@@ -119,7 +117,7 @@ static sfxHandle_t TeamMain_Key(int key) {
 
 static void TeamMain_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(XPOSITION, 110, "START", (UI_CENTER | UI_SMALLFONT), color_black);
+	UI_DrawProportionalString(SCREEN_CENTER, 110, "START", (UI_CENTER | UI_SMALLFONT), color_black);
 
 	Menu_Draw(&s_teammain.menu);
 }
@@ -149,7 +147,7 @@ static void TeamMain_MenuInit(void) {
 	s_teammain.joinred.generic.flags = QMF_CENTER_JUSTIFY;
 	s_teammain.joinred.generic.id = ID_JOINRED;
 	s_teammain.joinred.generic.callback = TeamMain_MenuEvent;
-	s_teammain.joinred.generic.x = XPOSITION;
+	s_teammain.joinred.generic.x = SCREEN_CENTER;
 	s_teammain.joinred.generic.y = y;
 	s_teammain.joinred.string = "RED PADS";
 	s_teammain.joinred.style = (UI_CENTER | UI_SMALLFONT);
@@ -162,7 +160,7 @@ static void TeamMain_MenuInit(void) {
 	s_teammain.joinblue.generic.flags = QMF_CENTER_JUSTIFY;
 	s_teammain.joinblue.generic.id = ID_JOINBLUE;
 	s_teammain.joinblue.generic.callback = TeamMain_MenuEvent;
-	s_teammain.joinblue.generic.x = XPOSITION;
+	s_teammain.joinblue.generic.x = SCREEN_CENTER;
 	s_teammain.joinblue.generic.y = y;
 	s_teammain.joinblue.string = "BLUE NOSES";
 	s_teammain.joinblue.style = (UI_CENTER | UI_SMALLFONT);
@@ -175,7 +173,7 @@ static void TeamMain_MenuInit(void) {
 	s_teammain.joingame.generic.flags = QMF_CENTER_JUSTIFY;
 	s_teammain.joingame.generic.id = ID_JOINGAME;
 	s_teammain.joingame.generic.callback = TeamMain_MenuEvent;
-	s_teammain.joingame.generic.x = XPOSITION;
+	s_teammain.joingame.generic.x = SCREEN_CENTER;
 	s_teammain.joingame.generic.y = y;
 	s_teammain.joingame.string = "JOIN GAME";
 	s_teammain.joingame.style = (UI_CENTER | UI_SMALLFONT);
@@ -188,7 +186,7 @@ static void TeamMain_MenuInit(void) {
 	s_teammain.spectate.generic.flags = QMF_CENTER_JUSTIFY;
 	s_teammain.spectate.generic.id = ID_SPECTATE;
 	s_teammain.spectate.generic.callback = TeamMain_MenuEvent;
-	s_teammain.spectate.generic.x = XPOSITION;
+	s_teammain.spectate.generic.x = SCREEN_CENTER;
 	s_teammain.spectate.generic.y = y;
 	s_teammain.spectate.string = "SPECTATE";
 	s_teammain.spectate.style = (UI_CENTER | UI_SMALLFONT);
@@ -198,7 +196,7 @@ static void TeamMain_MenuInit(void) {
 	s_teammain.back.generic.type = MTYPE_BITMAP;
 	s_teammain.back.generic.name = BACK0;
 	s_teammain.back.generic.flags = QMF_PULSEIFFOCUS;
-	s_teammain.back.generic.x = XPOSITION - 95;
+	s_teammain.back.generic.x = SCREEN_CENTER - 95;
 	s_teammain.back.generic.y = 340;
 	s_teammain.back.generic.id = ID_BACK;
 	s_teammain.back.generic.callback = TeamMain_MenuEvent;

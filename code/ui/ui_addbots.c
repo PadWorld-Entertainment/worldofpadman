@@ -54,8 +54,6 @@ ADD BOTS MENU
 #define ID_BOTNAME5 25
 #define ID_BOTNAME6 26
 
-#define XPOSITION (SCREEN_WIDTH / 2)
-
 typedef struct {
 	menuframework_s menu;
 
@@ -208,7 +206,7 @@ UI_AddBotsMenu_Draw
 */
 static void UI_AddBotsMenu_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(XPOSITION, 110, "ADD BOTS", UI_CENTER | UI_SMALLFONT, color_black);
+	UI_DrawProportionalString(SCREEN_CENTER, 110, "ADD BOTS", UI_CENTER | UI_SMALLFONT, color_black);
 
 	// standard menu drawing
 	Menu_Draw(&addBotsMenuInfo.menu);
@@ -280,7 +278,7 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	addBotsMenuInfo.arrowup.generic.callback = UI_AddBotsMenu_UpEvent;
 	addBotsMenuInfo.arrowup.generic.id = ID_SCROLL_UP;
-	addBotsMenuInfo.arrowup.generic.x = XPOSITION + 74;
+	addBotsMenuInfo.arrowup.generic.x = SCREEN_CENTER + 74;
 	addBotsMenuInfo.arrowup.generic.y = 142;
 	addBotsMenuInfo.arrowup.width = 22;
 	addBotsMenuInfo.arrowup.height = 50;
@@ -292,7 +290,7 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	addBotsMenuInfo.arrowdown.generic.callback = UI_AddBotsMenu_DownEvent;
 	addBotsMenuInfo.arrowdown.generic.id = ID_SCROLL_DOWN;
-	addBotsMenuInfo.arrowdown.generic.x = XPOSITION + 74;
+	addBotsMenuInfo.arrowdown.generic.x = SCREEN_CENTER + 74;
 	addBotsMenuInfo.arrowdown.generic.y = 208;
 	addBotsMenuInfo.arrowdown.width = 22;
 	addBotsMenuInfo.arrowdown.height = 50;
@@ -303,7 +301,7 @@ static void UI_AddBotsMenu_Init(void) {
 		addBotsMenuInfo.bot_pics[n].generic.type = MTYPE_BITMAP;
 		addBotsMenuInfo.bot_pics[n].generic.name = addBotsMenuInfo.boticonnames[n];
 		addBotsMenuInfo.bot_pics[n].generic.flags = QMF_INACTIVE;
-		addBotsMenuInfo.bot_pics[n].generic.x = XPOSITION - 90;
+		addBotsMenuInfo.bot_pics[n].generic.x = SCREEN_CENTER - 90;
 		addBotsMenuInfo.bot_pics[n].generic.y = y;
 		addBotsMenuInfo.bot_pics[n].width = 20;
 		addBotsMenuInfo.bot_pics[n].height = 20;
@@ -312,7 +310,7 @@ static void UI_AddBotsMenu_Init(void) {
 		addBotsMenuInfo.bots[n].fontHeight = 20.0f;
 		addBotsMenuInfo.bots[n].generic.flags = QMF_LEFT_JUSTIFY;
 		addBotsMenuInfo.bots[n].generic.id = ID_BOTNAME0 + n;
-		addBotsMenuInfo.bots[n].generic.x = XPOSITION - 70;
+		addBotsMenuInfo.bots[n].generic.x = SCREEN_CENTER - 70;
 		addBotsMenuInfo.bots[n].generic.y = y;
 		addBotsMenuInfo.bots[n].generic.callback = UI_AddBotsMenu_BotEvent;
 		addBotsMenuInfo.bots[n].string = addBotsMenuInfo.botnames[n];
@@ -324,7 +322,7 @@ static void UI_AddBotsMenu_Init(void) {
 	y = 270;
 	addBotsMenuInfo.skill.generic.type = MTYPE_SPINCONTROL;
 	addBotsMenuInfo.skill.generic.flags = QMF_SMALLFONT | QMF_INGAMESTYLE;
-	addBotsMenuInfo.skill.generic.x = XPOSITION - 40;
+	addBotsMenuInfo.skill.generic.x = SCREEN_CENTER - 40;
 	addBotsMenuInfo.skill.generic.y = y;
 	addBotsMenuInfo.skill.generic.name = "Skill:";
 	addBotsMenuInfo.skill.generic.id = ID_SKILL;
@@ -334,7 +332,7 @@ static void UI_AddBotsMenu_Init(void) {
 	y += SMALLCHAR_HEIGHT;
 	addBotsMenuInfo.team.generic.type = MTYPE_SPINCONTROL;
 	addBotsMenuInfo.team.generic.flags = QMF_SMALLFONT | QMF_INGAMESTYLE;
-	addBotsMenuInfo.team.generic.x = XPOSITION - 40;
+	addBotsMenuInfo.team.generic.x = SCREEN_CENTER - 40;
 	addBotsMenuInfo.team.generic.y = y;
 	addBotsMenuInfo.team.generic.id = ID_TEAM;
 
@@ -351,7 +349,7 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.go.generic.flags = QMF_CENTER_JUSTIFY;
 	addBotsMenuInfo.go.generic.callback = UI_AddBotsMenu_FightEvent;
 	addBotsMenuInfo.go.generic.id = ID_GO;
-	addBotsMenuInfo.go.generic.x = XPOSITION;
+	addBotsMenuInfo.go.generic.x = SCREEN_CENTER;
 	addBotsMenuInfo.go.generic.y = 315;
 	addBotsMenuInfo.go.string = "ADD";
 	addBotsMenuInfo.go.style = (UI_CENTER | UI_SMALLFONT);
@@ -361,7 +359,7 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.back.generic.type = MTYPE_BITMAP;
 	addBotsMenuInfo.back.generic.name = BACK0;
 	addBotsMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
-	addBotsMenuInfo.back.generic.x = XPOSITION - 95;
+	addBotsMenuInfo.back.generic.x = SCREEN_CENTER - 95;
 	addBotsMenuInfo.back.generic.y = 340;
 	addBotsMenuInfo.back.generic.id = ID_BACK;
 	addBotsMenuInfo.back.generic.callback = UI_AddBotsMenu_BackEvent;

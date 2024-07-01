@@ -52,8 +52,6 @@ REMOVE BOTS MENU
 #define ID_BOTNAME5 25
 #define ID_BOTNAME6 26
 
-#define XPOSITION (SCREEN_WIDTH / 2)
-
 typedef struct {
 	menuframework_s menu;
 
@@ -224,7 +222,7 @@ static void UI_RemoveBotsMenu_GetBots(void) {
 */
 static void UI_RemoveBotsMenu_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(XPOSITION, 110, "REMOVE BOTS", UI_CENTER | UI_SMALLFONT, color_black);
+	UI_DrawProportionalString(SCREEN_CENTER, 110, "REMOVE BOTS", UI_CENTER | UI_SMALLFONT, color_black);
 
 	Menu_Draw(&removeBotsMenuInfo.menu);
 }
@@ -282,7 +280,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.arrowup.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	removeBotsMenuInfo.arrowup.generic.callback = UI_RemoveBotsMenu_UpEvent;
 	removeBotsMenuInfo.arrowup.generic.id = ID_SCROLL_UP;
-	removeBotsMenuInfo.arrowup.generic.x = XPOSITION + 74;
+	removeBotsMenuInfo.arrowup.generic.x = SCREEN_CENTER + 74;
 	removeBotsMenuInfo.arrowup.generic.y = 142;
 	removeBotsMenuInfo.arrowup.width = 22;
 	removeBotsMenuInfo.arrowup.height = 50;
@@ -294,7 +292,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.arrowdown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	removeBotsMenuInfo.arrowdown.generic.callback = UI_RemoveBotsMenu_DownEvent;
 	removeBotsMenuInfo.arrowdown.generic.id = ID_SCROLL_DOWN;
-	removeBotsMenuInfo.arrowdown.generic.x = XPOSITION + 74;
+	removeBotsMenuInfo.arrowdown.generic.x = SCREEN_CENTER + 74;
 	removeBotsMenuInfo.arrowdown.generic.y = 208;
 	removeBotsMenuInfo.arrowdown.width = 22;
 	removeBotsMenuInfo.arrowdown.height = 50;
@@ -305,7 +303,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 		removeBotsMenuInfo.bot_pics[n].generic.type = MTYPE_BITMAP;
 		removeBotsMenuInfo.bot_pics[n].generic.name = removeBotsMenuInfo.boticonnames[n];
 		removeBotsMenuInfo.bot_pics[n].generic.flags = QMF_INACTIVE;
-		removeBotsMenuInfo.bot_pics[n].generic.x = XPOSITION - 90;
+		removeBotsMenuInfo.bot_pics[n].generic.x = SCREEN_CENTER - 90;
 		removeBotsMenuInfo.bot_pics[n].generic.y = y;
 		removeBotsMenuInfo.bot_pics[n].width = 20;
 		removeBotsMenuInfo.bot_pics[n].height = 20;
@@ -314,7 +312,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 		removeBotsMenuInfo.bots[n].fontHeight = 20.0f;
 		removeBotsMenuInfo.bots[n].generic.flags = QMF_LEFT_JUSTIFY;
 		removeBotsMenuInfo.bots[n].generic.id = ID_BOTNAME0 + n;
-		removeBotsMenuInfo.bots[n].generic.x = XPOSITION - 70;
+		removeBotsMenuInfo.bots[n].generic.x = SCREEN_CENTER - 70;
 		removeBotsMenuInfo.bots[n].generic.y = y;
 		removeBotsMenuInfo.bots[n].generic.callback = UI_RemoveBotsMenu_BotEvent;
 		removeBotsMenuInfo.bots[n].string = removeBotsMenuInfo.botnames[n];
@@ -328,7 +326,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.delete.generic.flags = QMF_CENTER_JUSTIFY; //|QMF_PULSEIFFOCUS;
 	removeBotsMenuInfo.delete.generic.callback = UI_RemoveBotsMenu_DeleteEvent;
 	removeBotsMenuInfo.delete.generic.id = ID_DELETE;
-	removeBotsMenuInfo.delete.generic.x = XPOSITION;
+	removeBotsMenuInfo.delete.generic.x = SCREEN_CENTER;
 	removeBotsMenuInfo.delete.generic.y = 290;
 	removeBotsMenuInfo.delete.string = "REMOVE";
 	removeBotsMenuInfo.delete.style = (UI_CENTER | UI_SMALLFONT);
@@ -340,7 +338,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.removeAll.generic.flags = QMF_CENTER_JUSTIFY; //|QMF_PULSEIFFOCUS;
 	removeBotsMenuInfo.removeAll.generic.callback = UI_RemoveBotsMenu_DeleteEvent;
 	removeBotsMenuInfo.removeAll.generic.id = ID_REMOVEALL;
-	removeBotsMenuInfo.removeAll.generic.x = XPOSITION;
+	removeBotsMenuInfo.removeAll.generic.x = SCREEN_CENTER;
 	removeBotsMenuInfo.removeAll.generic.y = 290 + 26;
 	removeBotsMenuInfo.removeAll.string = "REMOVE ALL";
 	removeBotsMenuInfo.removeAll.style = (UI_CENTER | UI_SMALLFONT);
@@ -350,7 +348,7 @@ static void UI_RemoveBotsMenu_Init(void) {
 	removeBotsMenuInfo.back.generic.type = MTYPE_BITMAP;
 	removeBotsMenuInfo.back.generic.name = BACK0;
 	removeBotsMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
-	removeBotsMenuInfo.back.generic.x = XPOSITION - 95;
+	removeBotsMenuInfo.back.generic.x = SCREEN_CENTER - 95;
 	removeBotsMenuInfo.back.generic.y = 340;
 	removeBotsMenuInfo.back.generic.id = ID_BACK;
 	removeBotsMenuInfo.back.generic.callback = UI_RemoveBotsMenu_BackEvent;

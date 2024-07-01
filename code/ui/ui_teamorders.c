@@ -38,7 +38,6 @@ TEAM ORDERS MENU
 #define ID_LIST_TEAM_ORDERS 12
 
 #define ORDER_HEIGHT 24
-#define XPOSITION (SCREEN_WIDTH / 2)
 
 typedef struct {
 	menuframework_s menu;
@@ -318,7 +317,7 @@ static void UI_TeamOrdersMenu_BuildBotList(void) {
 */
 static void TeamOrderMenu_Draw(void) {
 	UI_DrawIngameBG();
-	UI_DrawProportionalString(XPOSITION, 110, "TEAM ORDERS", UI_CENTER | UI_SMALLFONT, color_black);
+	UI_DrawProportionalString(SCREEN_CENTER, 110, "TEAM ORDERS", UI_CENTER | UI_SMALLFONT, color_black);
 
 	// standard menu drawing
 	Menu_Draw(&teamOrdersMenuInfo.menu);
@@ -344,13 +343,13 @@ static void UI_TeamOrdersMenu_Init(void) {
 	teamOrdersMenuInfo.list.generic.flags = QMF_PULSEIFFOCUS;
 	teamOrdersMenuInfo.list.generic.ownerdraw = UI_TeamOrdersMenu_ListDraw;
 	teamOrdersMenuInfo.list.generic.callback = UI_TeamOrdersMenu_ListEvent;
-	teamOrdersMenuInfo.list.generic.x = XPOSITION;
+	teamOrdersMenuInfo.list.generic.x = SCREEN_CENTER;
 	teamOrdersMenuInfo.list.generic.y = 140;
 
 	teamOrdersMenuInfo.back.generic.type = MTYPE_BITMAP;
 	teamOrdersMenuInfo.back.generic.name = BACK0;
 	teamOrdersMenuInfo.back.generic.flags = QMF_PULSEIFFOCUS;
-	teamOrdersMenuInfo.back.generic.x = XPOSITION - 95;
+	teamOrdersMenuInfo.back.generic.x = SCREEN_CENTER - 95;
 	teamOrdersMenuInfo.back.generic.y = 340;
 	teamOrdersMenuInfo.back.generic.callback = UI_TeamOrdersMenu_BackEvent;
 	teamOrdersMenuInfo.back.width = 50;
@@ -361,9 +360,9 @@ static void UI_TeamOrdersMenu_Init(void) {
 	Menu_AddItem(&teamOrdersMenuInfo.menu, &teamOrdersMenuInfo.list);
 	Menu_AddItem(&teamOrdersMenuInfo.menu, &teamOrdersMenuInfo.back);
 
-	teamOrdersMenuInfo.list.generic.left = XPOSITION - 100;
+	teamOrdersMenuInfo.list.generic.left = SCREEN_CENTER - 100;
 	teamOrdersMenuInfo.list.generic.top = teamOrdersMenuInfo.list.generic.y;
-	teamOrdersMenuInfo.list.generic.right = XPOSITION + 100;
+	teamOrdersMenuInfo.list.generic.right = SCREEN_CENTER + 100;
 	UI_TeamOrdersMenu_SetList(ID_LIST_BOTS);
 }
 

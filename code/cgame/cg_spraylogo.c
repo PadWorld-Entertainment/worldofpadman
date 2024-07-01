@@ -230,7 +230,7 @@ void Init_SprayLogoSys(void) {
 	} else {
 		cgs.media.chooselogo_bg = trap_R_RegisterShaderNoMip("menu/bg/selectlogo_ffa");
 	}
-	
+
 	Load_Logos();
 	Init_LogoPolyList();
 
@@ -515,8 +515,7 @@ void AddLogosToScene(void) {
 static qboolean CursorInBox(int x, int y, int w, int h) {
 	if (cgs.cursorX >= x && cgs.cursorX <= x + w && cgs.cursorY >= y && cgs.cursorY <= y + h)
 		return qtrue;
-	else
-		return qfalse;
+	return qfalse;
 }
 
 #define POSY_FIRSTLINE 100
@@ -524,10 +523,10 @@ static qboolean CursorInBox(int x, int y, int w, int h) {
 
 #define LOGOSIZE 64							   // old: 128
 #define GAP 32								   // old:16
-#define XLL (320 - GAP * 3 / 2 - 2 * LOGOSIZE) // x left logo XD
+#define XLL (SCREEN_CENTER - GAP * 3 / 2 - 2 * LOGOSIZE) // x left logo XD
 
-#define ARROWLTX (SCREEN_WIDTH / 2 - 58)
-#define ARROWRTX (SCREEN_WIDTH / 2 + 8)
+#define ARROWLTX (SCREEN_CENTER - 58)
+#define ARROWRTX (SCREEN_CENTER + 8)
 #define ARROWY (POSY_SECONDLINE + LOGOSIZE + 40)
 
 #define COLORSIZE 16
@@ -599,7 +598,7 @@ void ActiveChooseLogoMenu(void) {
 		}
 	}
 
-	CG_DrawStringExt(XLL, POSY_FIRSTLINE - 26, "Please select a spray logo...", colorWhite, qtrue, qtrue, 8, 16, 64);
+	CG_DrawStringExt(XLL, POSY_FIRSTLINE - 26, "Please select a spray logo...", colorWhite, qtrue, qtrue, FONT_SMALL, 64);
 
 	CursorAtLogo = -1;
 	for (i = 0, j = activepage * 8; i < 4; i++, j++) {
@@ -613,7 +612,7 @@ void ActiveChooseLogoMenu(void) {
 		Q_strncpyz(logoName, SkipLogoNumber(loadedlogos_array[j].name), sizeof(logoName));
 		logoName[0] = toupper(logoName[0]);
 		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
-						 POSY_FIRSTLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8, 16,
+						 POSY_FIRSTLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, FONT_SMALL,
 						 32);
 		if (CursorInBox(XLL + i * (LOGOSIZE + GAP), POSY_FIRSTLINE, LOGOSIZE, LOGOSIZE + 26))
 			CursorAtLogo = j;
@@ -628,8 +627,7 @@ void ActiveChooseLogoMenu(void) {
 		Q_strncpyz(logoName, SkipLogoNumber(loadedlogos_array[(j + 4)].name), sizeof(logoName));
 		logoName[0] = toupper(logoName[0]);
 		CG_DrawStringExt(XLL + i * (LOGOSIZE + GAP) + 32 - CG_DrawStrlen(logoName) * 4,
-						 POSY_SECONDLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, 8,
-						 16, 32);
+						 POSY_SECONDLINE + LOGOSIZE + 10, logoName, colorWhite, qtrue, qtrue, FONT_SMALL, 32);
 		if (CursorInBox(XLL + i * (LOGOSIZE + GAP), POSY_SECONDLINE, LOGOSIZE, LOGOSIZE + 26))
 			CursorAtLogo = (j + 4);
 	}
@@ -668,7 +666,7 @@ void ActiveChooseLogoMenu(void) {
 		int x = XLL;
 		int y = ARROWY + 56;
 
-		CG_DrawStringExt(x, y + COLORSIZE / 2 - 8, "...or change the color:", colorWhite, qtrue, qtrue, 8, 16, -1);
+		CG_DrawStringExt(x, y + COLORSIZE / 2 - 8, "...or change the color:", colorWhite, qtrue, qtrue, FONT_SMALL, -1);
 
 		x += 200;
 		for (i = 0; i < NUM_COLORS; ++i) {

@@ -18,8 +18,6 @@ HELP MENU
 #define ARROWRT0 "menu/arrows/arryel_rt0b"
 #define ARROWRT1 "menu/arrows/arryel_rt1"
 
-#define XPOSITION (SCREEN_WIDTH / 2)
-
 #define HMI_GAMETYPE_W 400
 #define HMI_GAMETYPE_H 352
 #define HMI_GAMETYPE_X 232
@@ -243,7 +241,7 @@ static void UI_HelpMenu_Init(void) {
 
 	helpMenuInfo.prev.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.prev.generic.id = ID_PREV;
-	helpMenuInfo.prev.generic.x = XPOSITION - 58;
+	helpMenuInfo.prev.generic.x = SCREEN_CENTER - 58;
 	helpMenuInfo.prev.generic.y = 304;
 	helpMenuInfo.prev.width = 50;
 	helpMenuInfo.prev.height = 22;
@@ -254,7 +252,7 @@ static void UI_HelpMenu_Init(void) {
 
 	helpMenuInfo.next.generic.type = MTYPE_BITMAP;
 	helpMenuInfo.next.generic.id = ID_NEXT;
-	helpMenuInfo.next.generic.x = XPOSITION + 8;
+	helpMenuInfo.next.generic.x = SCREEN_CENTER + 8;
 	helpMenuInfo.next.generic.y = 304;
 	helpMenuInfo.next.width = 50;
 	helpMenuInfo.next.height = 22;

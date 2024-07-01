@@ -216,7 +216,7 @@ CG_DrawChar
 Coordinates and size in 640*480 virtual screen size
 ===============
 */
-static void CG_DrawChar(int x, int y, int width, int height, int ch) {
+static void CG_DrawChar(int x, int y, fontSize_t fontsize, int ch) {
 	int row, col;
 	float frow, fcol;
 	float size;
@@ -235,8 +235,8 @@ static void CG_DrawChar(int x, int y, int width, int height, int ch) {
 
 	ax = x;
 	ay = y;
-	aw = width;
-	ah = height;
+	aw = fontsize.w;
+	ah = fontsize.h;
 	CG_AdjustFrom640(&ax, &ay, &aw, &ah);
 
 	row = ch >> 4;
@@ -260,7 +260,7 @@ Coordinates are at 640 by 480 virtual resolution
 ==================
 */
 void CG_DrawStringExt(int x, int y, const char *string, const float *setColor, qboolean forceColor, qboolean shadow,
-					  int charWidth, int charHeight, int maxChars) {
+					  fontSize_t fontsize, int maxChars) {
 	vec4_t color;
 	const char *s;
 	int xx;
@@ -282,9 +282,9 @@ void CG_DrawStringExt(int x, int y, const char *string, const float *setColor, q
 				s += 2;
 				continue;
 			}
-			CG_DrawChar(xx + 1, y + 1, charWidth, charHeight, *s);
+			CG_DrawChar(xx + 1, y + 1, fontsize, *s);
 			cnt++;
-			xx += charWidth;
+			xx += fontsize.w;
 			s++;
 		}
 	}
@@ -304,8 +304,8 @@ void CG_DrawStringExt(int x, int y, const char *string, const float *setColor, q
 			s += 2;
 			continue;
 		}
-		CG_DrawChar(xx, y, charWidth, charHeight, *s);
-		xx += charWidth;
+		CG_DrawChar(xx, y, fontsize, *s);
+		xx += fontsize.w;
 		cnt++;
 		s++;
 	}
@@ -317,11 +317,11 @@ void CG_DrawBigString(int x, int y, const char *s, float alpha) {
 
 	color[0] = color[1] = color[2] = 1.0f;
 	color[3] = alpha;
-	CG_DrawStringExt(x, y, s, color, qfalse, qtrue, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0);
+	CG_DrawStringExt(x, y, s, color, qfalse, qtrue, FONT_BIG, 0);
 }
 
 void CG_DrawBigStringColor(int x, int y, const char *s, const vec4_t color) {
-	CG_DrawStringExt(x, y, s, color, qtrue, qtrue, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0);
+	CG_DrawStringExt(x, y, s, color, qtrue, qtrue, FONT_BIG, 0);
 }
 
 void CG_DrawSmallString(int x, int y, const char *s, float alpha) {
@@ -329,11 +329,11 @@ void CG_DrawSmallString(int x, int y, const char *s, float alpha) {
 
 	color[0] = color[1] = color[2] = 1.0f;
 	color[3] = alpha;
-	CG_DrawStringExt(x, y, s, color, qfalse, qfalse, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+	CG_DrawStringExt(x, y, s, color, qfalse, qfalse, FONT_SMALL, 0);
 }
 
 void CG_DrawSmallStringColor(int x, int y, const char *s, const vec4_t color) {
-	CG_DrawStringExt(x, y, s, color, qtrue, qfalse, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+	CG_DrawStringExt(x, y, s, color, qtrue, qfalse, FONT_SMALL, 0);
 }
 
 /*
