@@ -65,6 +65,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define XPOSITION 128
 #define YPOSITION 172
+#define YLOGOPOS (YPOSITION + 103)
 
 typedef struct {
 	menuframework_s menu;
@@ -587,7 +588,7 @@ static void UI_PlayerSettings_Draw(void) {
 	i = Com_Clamp(0, (NUM_COLORS - 1), i);
 
 	x = 92;
-	y = 284 - 9;
+	y = YLOGOPOS;
 	UI_SetColor(g_color_table[i]);
 	UI_DrawHandlePic(x, y, 64, 64, uis.spraylogoShaders[s_playersettings.slogo_num]);
 	Q_strncpyz(logoName, SkipLogoNumber(uis.spraylogoNames[s_playersettings.slogo_num]), sizeof(logoName));
@@ -601,7 +602,7 @@ static void UI_PlayerSettings_Draw(void) {
 	}
 
 	x = 52;
-	y = 302 - 9;
+	y = YLOGOPOS + 18;
 	UI_SetColor(g_color_table[i]);
 	UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[prevlogo]);
 	if (uis.cursorx >= x && uis.cursorx <= (x + 32) && uis.cursory >= y && uis.cursory <= (y + 32)) {
@@ -1032,7 +1033,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.logoleft.generic.type = MTYPE_BITMAP;
 	s_playersettings.logoleft.generic.flags = QMF_LEFT_JUSTIFY;
 	s_playersettings.logoleft.generic.x = 52;
-	s_playersettings.logoleft.generic.y = 302;
+	s_playersettings.logoleft.generic.y = YLOGOPOS + 18;
 	s_playersettings.logoleft.generic.id = ID_PREVLOGO;
 	s_playersettings.logoleft.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.logoleft.width = 32;
@@ -1041,7 +1042,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.logoright.generic.type = MTYPE_BITMAP;
 	s_playersettings.logoright.generic.flags = QMF_LEFT_JUSTIFY;
 	s_playersettings.logoright.generic.x = 164;
-	s_playersettings.logoright.generic.y = 302;
+	s_playersettings.logoright.generic.y = YLOGOPOS + 18;
 	s_playersettings.logoright.generic.id = ID_NEXTLOGO;
 	s_playersettings.logoright.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.logoright.width = 32;
