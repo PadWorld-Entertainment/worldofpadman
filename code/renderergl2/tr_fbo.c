@@ -33,7 +33,7 @@ R_CheckFBO
 static qboolean R_CheckFBO(const FBO_t *fbo) {
 	GLenum code = qglCheckNamedFramebufferStatusEXT(fbo->frameBuffer, GL_FRAMEBUFFER);
 
-	if (code == GL_FRAMEBUFFER_COMPLETE)
+	if (code == GL_FRAMEBUFFER_COMPLETE || code == GL_NO_ERROR)
 		return qtrue;
 
 	// an error occurred
