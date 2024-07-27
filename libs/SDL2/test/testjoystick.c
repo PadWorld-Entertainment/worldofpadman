@@ -250,7 +250,7 @@ void loop(void *arg)
         for (i = 0; i < SDL_JoystickNumHats(joystick); ++i) {
             /* Derive the new position */
             const Uint8 hat_pos = SDL_JoystickGetHat(joystick, i);
-            x = SCREEN_CENTER;
+            x = SCREEN_WIDTH / 2;
             y = SCREEN_HEIGHT / 2;
 
             if (hat_pos & SDL_HAT_UP) {
