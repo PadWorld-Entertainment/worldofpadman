@@ -74,7 +74,7 @@ update-libogg:
 	cp $(UPDATEDIR)/libogg-$(LIBOGG_VERSION)/src/*.c libs/libogg-$(LIBOGG_VERSION)/src
 	cp $(UPDATEDIR)/libogg-$(LIBOGG_VERSION)/include/ogg/*.h libs/libogg-$(LIBOGG_VERSION)/include/ogg
 
-JPEG_VERSION=9e
+JPEG_VERSION=9f
 update-jpeg:
 	curl -L https://ijg.org/files/jpegsr$(JPEG_VERSION).zip -o $(UPDATEDIR)/jpeg.zip
 	unzip -o $(UPDATEDIR)/jpeg.zip -d $(UPDATEDIR)
