@@ -28,7 +28,7 @@ static cvar_t *cvar_vars = NULL;
 static cvar_t *cvar_cheats;
 int cvar_modifiedFlags;
 
-#define MAX_CVARS 1024
+#define MAX_CVARS 2048
 static cvar_t cvar_indexes[MAX_CVARS];
 static int cvar_numIndexes;
 
