@@ -34,21 +34,11 @@
 #include "../video/SDL_sysvideo.h"
 #include "SDL_syswm.h"
 
-#undef SDL_PRIs64
-#if (defined(__WIN32__) || defined(__GDK__)) && !defined(__CYGWIN__)
-#define SDL_PRIs64 "I64d"
-#else
-#define SDL_PRIs64 "lld"
-#endif
-
 /* An arbitrary limit so we don't have unbounded growth */
 #define SDL_MAX_QUEUED_EVENTS 65535
 
-/* Determines how often we pump events if joystick or sensor subsystems are active */
-#define ENUMERATION_POLL_INTERVAL_MS 3000
-
-/* Determines how often to pump events if joysticks or sensors are actively being read */
-#define EVENT_POLL_INTERVAL_MS 1
+/* Determines how often we wake to call SDL_PumpEvents() in SDL_WaitEventTimeout_Device() */
+#define PERIODIC_POLL_INTERVAL_MS 3000
 
 typedef struct SDL_EventWatcher
 {
@@ -457,8 +447,8 @@ static void SDL_LogEvent(const SDL_Event *event)
 
 #define PRINT_FINGER_EVENT(event)                                                                                                                      \
     (void)SDL_snprintf(details, sizeof(details), " (timestamp=%u touchid=%" SDL_PRIs64 " fingerid=%" SDL_PRIs64 " x=%f y=%f dx=%f dy=%f pressure=%f)", \
-                       (uint)event->tfinger.timestamp, (long long)event->tfinger.touchId,                                                              \
-                       (long long)event->tfinger.fingerId, event->tfinger.x, event->tfinger.y,                                                         \
+                       (uint)event->tfinger.timestamp, event->tfinger.touchId,                                                                         \
+                       event->tfinger.fingerId, event->tfinger.x, event->tfinger.y,                                                                    \
                        event->tfinger.dx, event->tfinger.dy, event->tfinger.pressure)
         SDL_EVENT_CASE(SDL_FINGERDOWN)
         PRINT_FINGER_EVENT(event);
@@ -473,8 +463,8 @@ static void SDL_LogEvent(const SDL_Event *event)
 
 #define PRINT_DOLLAR_EVENT(event)                                                                                                                      \
     (void)SDL_snprintf(details, sizeof(details), " (timestamp=%u touchid=%" SDL_PRIs64 " gestureid=%" SDL_PRIs64 " numfingers=%u error=%f x=%f y=%f)", \
-                       (uint)event->dgesture.timestamp, (long long)event->dgesture.touchId,                                                            \
-                       (long long)event->dgesture.gestureId, (uint)event->dgesture.numFingers,                                                         \
+                       (uint)event->dgesture.timestamp, event->dgesture.touchId,                                                                       \
+                       event->dgesture.gestureId, (uint)event->dgesture.numFingers,                                                                    \
                        event->dgesture.error, event->dgesture.x, event->dgesture.y)
         SDL_EVENT_CASE(SDL_DOLLARGESTURE)
         PRINT_DOLLAR_EVENT(event);
@@ -486,7 +476,7 @@ static void SDL_LogEvent(const SDL_Event *event)
 
         SDL_EVENT_CASE(SDL_MULTIGESTURE)
         (void)SDL_snprintf(details, sizeof(details), " (timestamp=%u touchid=%" SDL_PRIs64 " dtheta=%f ddist=%f x=%f y=%f numfingers=%u)",
-                           (uint)event->mgesture.timestamp, (long long)event->mgesture.touchId,
+                           (uint)event->mgesture.timestamp, event->mgesture.touchId,
                            event->mgesture.dTheta, event->mgesture.dDist,
                            event->mgesture.x, event->mgesture.y, (uint)event->mgesture.numFingers);
         break;
@@ -970,41 +960,27 @@ int SDL_PollEvent(SDL_Event *event)
     return SDL_WaitEventTimeout(event, 0);
 }
 
-static Sint16 SDL_events_get_polling_interval(void)
+static SDL_bool SDL_events_need_periodic_poll(void)
 {
-    Sint16 poll_interval = SDL_MAX_SINT16;
+    SDL_bool need_periodic_poll = SDL_FALSE;
 
 #ifndef SDL_JOYSTICK_DISABLED
-    if (SDL_WasInit(SDL_INIT_JOYSTICK) && SDL_update_joysticks) {
-        if (SDL_NumJoysticks() > 0) {
-            /* If we have joysticks open, we need to poll rapidly for events */
-            poll_interval = SDL_min(poll_interval, EVENT_POLL_INTERVAL_MS);
-        } else {
-            /* If not, just poll every few seconds to enumerate new joysticks */
-            poll_interval = SDL_min(poll_interval, ENUMERATION_POLL_INTERVAL_MS);
-        }
-    }
+    need_periodic_poll =
+        SDL_WasInit(SDL_INIT_JOYSTICK) && SDL_update_joysticks;
 #endif
 
 #ifndef SDL_SENSOR_DISABLED
-    if (SDL_WasInit(SDL_INIT_SENSOR) && SDL_update_sensors) {
-        if (SDL_NumSensors() > 0) {
-            /* If we have sensors open, we need to poll rapidly for events */
-            poll_interval = SDL_min(poll_interval, EVENT_POLL_INTERVAL_MS);
-        } else {
-            /* If not, just poll every few seconds to enumerate new sensors */
-            poll_interval = SDL_min(poll_interval, ENUMERATION_POLL_INTERVAL_MS);
-        }
-    }
+    need_periodic_poll = need_periodic_poll ||
+                         (SDL_WasInit(SDL_INIT_SENSOR) && SDL_update_sensors);
 #endif
 
-    return poll_interval;
+    return need_periodic_poll;
 }
 
 static int SDL_WaitEventTimeout_Device(_THIS, SDL_Window *wakeup_window, SDL_Event *event, Uint32 start, int timeout)
 {
     int loop_timeout = timeout;
-    Sint16 poll_interval = SDL_events_get_polling_interval();
+    SDL_bool need_periodic_poll = SDL_events_need_periodic_poll();
 
     for (;;) {
         /* Pump events on entry and each time we wake to ensure:
@@ -1046,20 +1022,17 @@ static int SDL_WaitEventTimeout_Device(_THIS, SDL_Window *wakeup_window, SDL_Eve
             }
             loop_timeout = (int)((Uint32)timeout - elapsed);
         }
-
-        /* Adjust the timeout for any polling requirements we currently have. */
-        if (poll_interval != SDL_MAX_SINT16) {
+        if (need_periodic_poll) {
             if (loop_timeout >= 0) {
-                loop_timeout = SDL_min(loop_timeout, poll_interval);
+                loop_timeout = SDL_min(loop_timeout, PERIODIC_POLL_INTERVAL_MS);
             } else {
-                loop_timeout = poll_interval;
+                loop_timeout = PERIODIC_POLL_INTERVAL_MS;
             }
         }
-
         status = _this->WaitEventTimeout(_this, loop_timeout);
         /* Set wakeup_window to NULL without holding the lock. */
         _this->wakeup_window = NULL;
-        if (status == 0 && poll_interval != SDL_MAX_SINT16 && loop_timeout == poll_interval) {
+        if (status == 0 && need_periodic_poll && loop_timeout == PERIODIC_POLL_INTERVAL_MS) {
             /* We may have woken up to poll. Try again */
             continue;
         } else if (status <= 0) {
@@ -1070,6 +1043,25 @@ static int SDL_WaitEventTimeout_Device(_THIS, SDL_Window *wakeup_window, SDL_Eve
           to let SDL_PeepEvents pick it up .*/
     }
     return 0;
+}
+
+static SDL_bool SDL_events_need_polling(void)
+{
+    SDL_bool need_polling = SDL_FALSE;
+
+#ifndef SDL_JOYSTICK_DISABLED
+    need_polling =
+        SDL_WasInit(SDL_INIT_JOYSTICK) &&
+        SDL_update_joysticks &&
+        (SDL_NumJoysticks() > 0);
+#endif
+
+#ifndef SDL_SENSOR_DISABLED
+    need_polling = need_polling ||
+                   (SDL_WasInit(SDL_INIT_SENSOR) && SDL_update_sensors && (SDL_NumSensors() > 0));
+#endif
+
+    return need_polling;
 }
 
 static SDL_Window *SDL_find_active_window(SDL_VideoDevice *_this)
@@ -1144,7 +1136,7 @@ int SDL_WaitEventTimeout(SDL_Event *event, int timeout)
         expiration = 0;
     }
 
-    if (_this && _this->WaitEventTimeout && _this->SendWakeupEvent) {
+    if (_this && _this->WaitEventTimeout && _this->SendWakeupEvent && !SDL_events_need_polling()) {
         /* Look if a shown window is available to send the wakeup event. */
         wakeup_window = SDL_find_active_window(_this);
         if (wakeup_window) {
@@ -1168,7 +1160,7 @@ int SDL_WaitEventTimeout(SDL_Event *event, int timeout)
                 /* Timeout expired and no events */
                 return 0;
             }
-            SDL_Delay(EVENT_POLL_INTERVAL_MS);
+            SDL_Delay(1);
             break;
         default:
             /* Has events */

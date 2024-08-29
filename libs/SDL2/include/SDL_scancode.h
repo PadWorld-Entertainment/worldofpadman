@@ -20,9 +20,9 @@
 */
 
 /**
- * # CategoryScancode
+ *  \file SDL_scancode.h
  *
- * Defines keyboard scancodes.
+ *  Defines keyboard scancodes.
  */
 
 #ifndef SDL_scancode_h_
@@ -31,16 +31,16 @@
 #include "SDL_stdinc.h"
 
 /**
- * The SDL keyboard scancode representation.
+ *  \brief The SDL keyboard scancode representation.
  *
- * Values of this type are used to represent keyboard keys, among other places
- * in the SDL_Keysym::scancode key.keysym.scancode field of the SDL_Event
- * structure.
+ *  Values of this type are used to represent keyboard keys, among other places
+ *  in the \link SDL_Keysym::scancode key.keysym.scancode \endlink field of the
+ *  SDL_Event structure.
  *
- * The values in this enumeration are based on the USB usage page standard:
- * https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf
+ *  The values in this enumeration are based on the USB usage page standard:
+ *  https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf
  */
-typedef enum SDL_Scancode
+typedef enum
 {
     SDL_SCANCODE_UNKNOWN = 0,
 

@@ -20,9 +20,9 @@
 */
 
 /**
- * # CategoryFilesystem
+ *  \file SDL_filesystem.h
  *
- * Include file for filesystem SDL API functions
+ *  \brief Include file for filesystem SDL API functions
  */
 
 #ifndef SDL_filesystem_h_

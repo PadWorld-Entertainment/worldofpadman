@@ -19,16 +19,10 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-/* WIKI CATEGORY: CPUInfo */
-
 /**
- * # CategoryCPUInfo
+ *  \file SDL_cpuinfo.h
  *
- * CPU feature detection for SDL.
- *
- * These functions are largely concerned with reporting if the system has
- * access to various SIMD instruction sets, but also has other important info
- * to share, such as number of logical CPU cores.
+ *  CPU feature detection for SDL.
  */
 
 #ifndef SDL_cpuinfo_h_

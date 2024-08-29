@@ -25,6 +25,7 @@
  *  Main include header for the SDL library
  */
 
+
 #ifndef SDL_h_
 #define SDL_h_
 
@@ -68,8 +69,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/* WIKI CATEGORY: Init */
 
 /* As of version 0.5, SDL is loaded dynamically into the application */
 

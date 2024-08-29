@@ -24,7 +24,7 @@
 
 void N3DS_InitTouch(void);
 void N3DS_QuitTouch(void);
-void N3DS_PollTouch(_THIS);
+void N3DS_PollTouch(void);
 
 #endif /* SDL_n3dstouch_h_ */
 

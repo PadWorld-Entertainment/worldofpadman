@@ -20,9 +20,9 @@
 */
 
 /**
- * # CategoryBlendmode
+ *  \file SDL_blendmode.h
  *
- * Header file declaring the SDL_BlendMode enumeration
+ *  Header file declaring the SDL_BlendMode enumeration
  */
 
 #ifndef SDL_blendmode_h_
@@ -35,9 +35,9 @@ extern "C" {
 #endif
 
 /**
- * The blend mode used in SDL_RenderCopy() and drawing operations.
+ *  \brief The blend mode used in SDL_RenderCopy() and drawing operations.
  */
-typedef enum SDL_BlendMode
+typedef enum
 {
     SDL_BLENDMODE_NONE = 0x00000000,     /**< no blending
                                               dstRGBA = srcRGBA */
@@ -60,10 +60,9 @@ typedef enum SDL_BlendMode
 } SDL_BlendMode;
 
 /**
- * The blend operation used when combining source and destination pixel
- * components
+ *  \brief The blend operation used when combining source and destination pixel components
  */
-typedef enum SDL_BlendOperation
+typedef enum
 {
     SDL_BLENDOPERATION_ADD              = 0x1,  /**< dst + src: supported by all renderers */
     SDL_BLENDOPERATION_SUBTRACT         = 0x2,  /**< src - dst : supported by D3D9, D3D11, OpenGL, OpenGLES */
@@ -73,9 +72,9 @@ typedef enum SDL_BlendOperation
 } SDL_BlendOperation;
 
 /**
- * The normalized factor used to multiply pixel components
+ *  \brief The normalized factor used to multiply pixel components
  */
-typedef enum SDL_BlendFactor
+typedef enum
 {
     SDL_BLENDFACTOR_ZERO                = 0x1,  /**< 0, 0, 0, 0 */
     SDL_BLENDFACTOR_ONE                 = 0x2,  /**< 1, 1, 1, 1 */

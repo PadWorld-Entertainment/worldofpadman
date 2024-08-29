@@ -20,19 +20,18 @@
 */
 
 /**
- * # CategoryLog
+ *  \file SDL_log.h
  *
- * Simple log messages with categories and priorities.
+ *  Simple log messages with categories and priorities.
  *
- * By default logs are quiet, but if you're debugging SDL you might want:
+ *  By default logs are quiet, but if you're debugging SDL you might want:
  *
- * SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
+ *      SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
  *
- * Here's where the messages go on different platforms:
- *
- * - Windows: debug output stream
- * - Android: log output
- * - Others: standard error output (stderr)
+ *  Here's where the messages go on different platforms:
+ *      Windows: debug output stream
+ *      Android: log output
+ *      Others: standard error output (stderr)
  */
 
 #ifndef SDL_log_h_
@@ -48,20 +47,21 @@ extern "C" {
 
 
 /**
- * The maximum size of a log message prior to SDL 2.0.24
+ *  \brief The maximum size of a log message prior to SDL 2.0.24
  *
- * As of 2.0.24 there is no limit to the length of SDL log messages.
+ *  As of 2.0.24 there is no limit to the length of SDL log messages.
  */
 #define SDL_MAX_LOG_MESSAGE 4096
 
 /**
- * The predefined log categories
+ *  \brief The predefined log categories
  *
- * By default the application category is enabled at the INFO level, the
- * assert category is enabled at the WARN level, test is enabled at the
- * VERBOSE level and all other categories are enabled at the ERROR level.
+ *  By default the application category is enabled at the INFO level,
+ *  the assert category is enabled at the WARN level, test is enabled
+ *  at the VERBOSE level and all other categories are enabled at the
+ *  ERROR level.
  */
-typedef enum SDL_LogCategory
+typedef enum
 {
     SDL_LOG_CATEGORY_APPLICATION,
     SDL_LOG_CATEGORY_ERROR,
@@ -97,9 +97,9 @@ typedef enum SDL_LogCategory
 } SDL_LogCategory;
 
 /**
- * The predefined log priorities
+ *  \brief The predefined log priorities
  */
-typedef enum SDL_LogPriority
+typedef enum
 {
     SDL_LOG_PRIORITY_VERBOSE = 1,
     SDL_LOG_PRIORITY_DEBUG,

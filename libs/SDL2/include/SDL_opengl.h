@@ -19,11 +19,17 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-/*
- * This is a simple file to encapsulate the OpenGL API headers.
+/**
+ *  \file SDL_opengl.h
  *
- * Define NO_SDL_GLEXT if you have your own version of glext.h and want
- * to disable the version included in SDL_opengl.h.
+ *  This is a simple file to encapsulate the OpenGL API headers.
+ */
+
+/**
+ *  \def NO_SDL_GLEXT
+ *
+ *  Define this if you have your own version of glext.h and want to disable the
+ *  version included in SDL_opengl.h.
  */
 
 #ifndef SDL_opengl_h_

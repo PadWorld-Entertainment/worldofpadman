@@ -64,7 +64,6 @@
 #include <xkbcommon/xkbcommon-compose.h>
 #include "../../events/imKStoUCS.h"
 #include "../../events/SDL_keysym_to_scancode_c.h"
-#include "cursor-shape-v1-client-protocol.h"
 
 /* Clamp the wl_seat version on older versions of libwayland. */
 #if SDL_WAYLAND_CHECK_VERSION(1, 21, 0)
@@ -179,17 +178,6 @@ static SDL_bool Wayland_SurfaceHasActiveTouches(struct wl_surface *surface)
     return SDL_FALSE;
 }
 
-void Wayland_CreateCursorShapeDevice(struct SDL_WaylandInput *input)
-{
-    SDL_VideoData *viddata = input->display;
-
-    if (viddata->cursor_shape_manager) {
-        if (input->pointer && !input->cursor_shape) {
-            input->cursor_shape = wp_cursor_shape_manager_v1_get_pointer(viddata->cursor_shape_manager, input->pointer);
-        }
-    }
-}
-
 /* Returns SDL_TRUE if a key repeat event was due */
 static SDL_bool keyboard_repeat_handle(SDL_WaylandKeyboardRepeat *repeat_info, uint32_t elapsed)
 {
@@ -260,12 +248,25 @@ static SDL_bool keyboard_repeat_key_is_set(SDL_WaylandKeyboardRepeat *repeat_inf
     return repeat_info->is_initialized && repeat_info->is_key_down && key == repeat_info->key;
 }
 
+static void sync_done_handler(void *data, struct wl_callback *callback, uint32_t callback_data)
+{
+    /* Nothing to do, just destroy the callback */
+    wl_callback_destroy(callback);
+}
+
+static struct wl_callback_listener sync_listener = {
+    sync_done_handler
+};
+
 void Wayland_SendWakeupEvent(_THIS, SDL_Window *window)
 {
     SDL_VideoData *d = _this->driverdata;
 
-    /* TODO: Maybe use a pipe to avoid the compositor roundtrip? */
-    wl_display_sync(d->display);
+    /* Queue a sync event to unblock the event queue fd if it's empty and being waited on.
+     * TODO: Maybe use a pipe to avoid the compositor roundtrip?
+     */
+    struct wl_callback *cb = wl_display_sync(d->display);
+    wl_callback_add_listener(cb, &sync_listener, NULL);
     WAYLAND_wl_display_flush(d->display);
 }
 
@@ -1407,15 +1408,10 @@ static void seat_handle_capabilities(void *data, struct wl_seat *seat,
         input->pointer = wl_seat_get_pointer(seat);
         SDL_memset(&input->pointer_curr_axis_info, 0, sizeof(input->pointer_curr_axis_info));
         input->display->pointer = input->pointer;
-        Wayland_CreateCursorShapeDevice(input);
         wl_pointer_set_user_data(input->pointer, input);
         wl_pointer_add_listener(input->pointer, &pointer_listener,
                                 input);
     } else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && input->pointer) {
-        if (input->cursor_shape) {
-            wp_cursor_shape_device_v1_destroy(input->cursor_shape);
-            input->cursor_shape = NULL;
-        }
         wl_pointer_destroy(input->pointer);
         input->pointer = NULL;
         input->display->pointer = NULL;
@@ -2539,6 +2535,9 @@ void Wayland_display_destroy_input(SDL_VideoData *d)
         if (input->primary_selection_device->selection_offer) {
             Wayland_primary_selection_offer_destroy(input->primary_selection_device->selection_offer);
         }
+        if (input->primary_selection_device->primary_selection_device) {
+            zwp_primary_selection_device_v1_destroy(input->primary_selection_device->primary_selection_device);
+        }
         SDL_free(input->primary_selection_device);
     }
 
@@ -2549,10 +2548,6 @@ void Wayland_display_destroy_input(SDL_VideoData *d)
 
     if (input->keyboard) {
         wl_keyboard_destroy(input->keyboard);
-    }
-
-    if (input->cursor_shape) {
-        wp_cursor_shape_device_v1_destroy(input->cursor_shape);
     }
 
     if (input->pointer) {

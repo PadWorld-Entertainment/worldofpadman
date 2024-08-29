@@ -20,30 +20,29 @@
 */
 
 /**
- * # CategoryRender
+ *  \file SDL_render.h
  *
- * Header file for SDL 2D rendering functions.
+ *  Header file for SDL 2D rendering functions.
  *
- * This API supports the following features:
+ *  This API supports the following features:
+ *      * single pixel points
+ *      * single pixel lines
+ *      * filled rectangles
+ *      * texture images
  *
- * - single pixel points
- * - single pixel lines
- * - filled rectangles
- * - texture images
+ *  The primitives may be drawn in opaque, blended, or additive modes.
  *
- * The primitives may be drawn in opaque, blended, or additive modes.
+ *  The texture images may be drawn in opaque, blended, or additive modes.
+ *  They can have an additional color tint or alpha modulation applied to
+ *  them, and may also be stretched with linear interpolation.
  *
- * The texture images may be drawn in opaque, blended, or additive modes. They
- * can have an additional color tint or alpha modulation applied to them, and
- * may also be stretched with linear interpolation.
+ *  This API is designed to accelerate simple 2D operations. You may
+ *  want more functionality such as polygons and particle effects and
+ *  in that case you should use SDL's OpenGL/Direct3D support or one
+ *  of the many good 3D engines.
  *
- * This API is designed to accelerate simple 2D operations. You may want more
- * functionality such as polygons and particle effects and in that case you
- * should use SDL's OpenGL/Direct3D support or one of the many good 3D
- * engines.
- *
- * These functions must be called from the main thread. See this bug for
- * details: https://github.com/libsdl-org/SDL/issues/986
+ *  These functions must be called from the main thread.
+ *  See this bug for details: https://github.com/libsdl-org/SDL/issues/986
  */
 
 #ifndef SDL_render_h_
@@ -62,7 +61,7 @@ extern "C" {
 /**
  * Flags used when creating a rendering context
  */
-typedef enum SDL_RendererFlags
+typedef enum
 {
     SDL_RENDERER_SOFTWARE = 0x00000001,         /**< The renderer is a software fallback */
     SDL_RENDERER_ACCELERATED = 0x00000002,      /**< The renderer uses hardware
@@ -79,7 +78,7 @@ typedef enum SDL_RendererFlags
 typedef struct SDL_RendererInfo
 {
     const char *name;           /**< The name of the renderer */
-    Uint32 flags;               /**< Supported SDL_RendererFlags */
+    Uint32 flags;               /**< Supported ::SDL_RendererFlags */
     Uint32 num_texture_formats; /**< The number of available texture formats */
     Uint32 texture_formats[16]; /**< The available texture formats */
     int max_texture_width;      /**< The maximum texture width */
@@ -87,7 +86,7 @@ typedef struct SDL_RendererInfo
 } SDL_RendererInfo;
 
 /**
- * Vertex structure
+ *  Vertex structure
  */
 typedef struct SDL_Vertex
 {
@@ -99,7 +98,7 @@ typedef struct SDL_Vertex
 /**
  * The scaling mode for a texture.
  */
-typedef enum SDL_ScaleMode
+typedef enum
 {
     SDL_ScaleModeNearest, /**< nearest pixel sampling */
     SDL_ScaleModeLinear,  /**< linear filtering */
@@ -109,7 +108,7 @@ typedef enum SDL_ScaleMode
 /**
  * The access pattern allowed for a texture.
  */
-typedef enum SDL_TextureAccess
+typedef enum
 {
     SDL_TEXTUREACCESS_STATIC,    /**< Changes rarely, not lockable */
     SDL_TEXTUREACCESS_STREAMING, /**< Changes frequently, lockable */
@@ -119,7 +118,7 @@ typedef enum SDL_TextureAccess
 /**
  * The texture channel modulation used in SDL_RenderCopy().
  */
-typedef enum SDL_TextureModulate
+typedef enum
 {
     SDL_TEXTUREMODULATE_NONE = 0x00000000,     /**< No modulation */
     SDL_TEXTUREMODULATE_COLOR = 0x00000001,    /**< srcC = srcC * color */
@@ -129,7 +128,7 @@ typedef enum SDL_TextureModulate
 /**
  * Flip constants for SDL_RenderCopyEx
  */
-typedef enum SDL_RendererFlip
+typedef enum
 {
     SDL_FLIP_NONE = 0x00000000,     /**< Do not flip */
     SDL_FLIP_HORIZONTAL = 0x00000001,    /**< flip horizontally */

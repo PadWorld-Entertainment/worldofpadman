@@ -20,25 +20,24 @@
 */
 
 /**
- * # CategoryHaptic
+ *  \file SDL_haptic.h
  *
- * SDL haptic subsystem allows you to control haptic (force feedback) devices.
+ *  \brief The SDL haptic subsystem allows you to control haptic (force feedback)
+ *         devices.
  *
- * The basic usage is as follows:
+ *  The basic usage is as follows:
+ *   - Initialize the subsystem (::SDL_INIT_HAPTIC).
+ *   - Open a haptic device.
+ *    - SDL_HapticOpen() to open from index.
+ *    - SDL_HapticOpenFromJoystick() to open from an existing joystick.
+ *   - Create an effect (::SDL_HapticEffect).
+ *   - Upload the effect with SDL_HapticNewEffect().
+ *   - Run the effect with SDL_HapticRunEffect().
+ *   - (optional) Free the effect with SDL_HapticDestroyEffect().
+ *   - Close the haptic device with SDL_HapticClose().
  *
- * - Initialize the subsystem (SDL_INIT_HAPTIC).
- * - Open a haptic device.
- * - SDL_HapticOpen() to open from index.
- * - SDL_HapticOpenFromJoystick() to open from an existing joystick.
- * - Create an effect (SDL_HapticEffect).
- * - Upload the effect with SDL_HapticNewEffect().
- * - Run the effect with SDL_HapticRunEffect().
- * - (optional) Free the effect with SDL_HapticDestroyEffect().
- * - Close the haptic device with SDL_HapticClose().
- *
- * Simple rumble example:
- *
- * ```c
+ * \par Simple rumble example:
+ * \code
  *    SDL_Haptic *haptic;
  *
  *    // Open the device
@@ -57,11 +56,10 @@
  *
  *    // Clean up
  *    SDL_HapticClose( haptic );
- * ```
+ * \endcode
  *
- * Complete example:
- *
- * ```c
+ * \par Complete example:
+ * \code
  * int test_haptic( SDL_Joystick * joystick ) {
  *    SDL_Haptic *haptic;
  *    SDL_HapticEffect effect;
@@ -103,7 +101,7 @@
  *
  *    return 0; // Success
  * }
- * ```
+ * \endcode
  */
 
 #ifndef SDL_haptic_h_
@@ -156,29 +154,31 @@ typedef struct _SDL_Haptic SDL_Haptic;
 /* @{ */
 
 /**
- * Constant effect supported.
+ *  \brief Constant effect supported.
  *
- * Constant haptic effect.
+ *  Constant haptic effect.
  *
- * \sa SDL_HapticCondition
+ *  \sa SDL_HapticCondition
  */
 #define SDL_HAPTIC_CONSTANT   (1u<<0)
 
 /**
- * Sine wave effect supported.
+ *  \brief Sine wave effect supported.
  *
- * Periodic haptic effect that simulates sine waves.
+ *  Periodic haptic effect that simulates sine waves.
  *
- * \sa SDL_HapticPeriodic
+ *  \sa SDL_HapticPeriodic
  */
 #define SDL_HAPTIC_SINE       (1u<<1)
 
 /**
- * Left/Right effect supported.
+ *  \brief Left/Right effect supported.
  *
- * Haptic effect for direct control over high/low frequency motors.
+ *  Haptic effect for direct control over high/low frequency motors.
  *
- * \sa SDL_HapticLeftRight
+ *  \sa SDL_HapticLeftRight
+ * \warning this value was SDL_HAPTIC_SQUARE right before 2.0.0 shipped. Sorry,
+ *          we ran out of bits, and this is important for XInput devices.
  */
 #define SDL_HAPTIC_LEFTRIGHT     (1u<<2)
 
@@ -186,85 +186,85 @@ typedef struct _SDL_Haptic SDL_Haptic;
 /* #define SDL_HAPTIC_SQUARE     (1<<2) */
 
 /**
- * Triangle wave effect supported.
+ *  \brief Triangle wave effect supported.
  *
- * Periodic haptic effect that simulates triangular waves.
+ *  Periodic haptic effect that simulates triangular waves.
  *
- * \sa SDL_HapticPeriodic
+ *  \sa SDL_HapticPeriodic
  */
 #define SDL_HAPTIC_TRIANGLE   (1u<<3)
 
 /**
- * Sawtoothup wave effect supported.
+ *  \brief Sawtoothup wave effect supported.
  *
- * Periodic haptic effect that simulates saw tooth up waves.
+ *  Periodic haptic effect that simulates saw tooth up waves.
  *
- * \sa SDL_HapticPeriodic
+ *  \sa SDL_HapticPeriodic
  */
 #define SDL_HAPTIC_SAWTOOTHUP (1u<<4)
 
 /**
- * Sawtoothdown wave effect supported.
+ *  \brief Sawtoothdown wave effect supported.
  *
- * Periodic haptic effect that simulates saw tooth down waves.
+ *  Periodic haptic effect that simulates saw tooth down waves.
  *
- * \sa SDL_HapticPeriodic
+ *  \sa SDL_HapticPeriodic
  */
 #define SDL_HAPTIC_SAWTOOTHDOWN (1u<<5)
 
 /**
- * Ramp effect supported.
+ *  \brief Ramp effect supported.
  *
- * Ramp haptic effect.
+ *  Ramp haptic effect.
  *
- * \sa SDL_HapticRamp
+ *  \sa SDL_HapticRamp
  */
 #define SDL_HAPTIC_RAMP       (1u<<6)
 
 /**
- * Spring effect supported - uses axes position.
+ *  \brief Spring effect supported - uses axes position.
  *
- * Condition haptic effect that simulates a spring. Effect is based on the
- * axes position.
+ *  Condition haptic effect that simulates a spring.  Effect is based on the
+ *  axes position.
  *
- * \sa SDL_HapticCondition
+ *  \sa SDL_HapticCondition
  */
 #define SDL_HAPTIC_SPRING     (1u<<7)
 
 /**
- * Damper effect supported - uses axes velocity.
+ *  \brief Damper effect supported - uses axes velocity.
  *
- * Condition haptic effect that simulates dampening. Effect is based on the
- * axes velocity.
+ *  Condition haptic effect that simulates dampening.  Effect is based on the
+ *  axes velocity.
  *
- * \sa SDL_HapticCondition
+ *  \sa SDL_HapticCondition
  */
 #define SDL_HAPTIC_DAMPER     (1u<<8)
 
 /**
- * Inertia effect supported - uses axes acceleration.
+ *  \brief Inertia effect supported - uses axes acceleration.
  *
- * Condition haptic effect that simulates inertia. Effect is based on the axes
- * acceleration.
+ *  Condition haptic effect that simulates inertia.  Effect is based on the axes
+ *  acceleration.
  *
- * \sa SDL_HapticCondition
+ *  \sa SDL_HapticCondition
  */
 #define SDL_HAPTIC_INERTIA    (1u<<9)
 
 /**
- * Friction effect supported - uses axes movement.
+ *  \brief Friction effect supported - uses axes movement.
  *
- * Condition haptic effect that simulates friction. Effect is based on the
- * axes movement.
+ *  Condition haptic effect that simulates friction.  Effect is based on the
+ *  axes movement.
  *
- * \sa SDL_HapticCondition
+ *  \sa SDL_HapticCondition
  */
 #define SDL_HAPTIC_FRICTION   (1u<<10)
 
 /**
- * Custom effect is supported.
+ *  \brief Custom effect is supported.
  *
- * User defined custom haptic effect.
+ *  User defined custom haptic effect.
  */
 #define SDL_HAPTIC_CUSTOM     (1u<<11)
 
@@ -273,39 +273,39 @@ typedef struct _SDL_Haptic SDL_Haptic;
 /* These last few are features the device has, not effects */
 
 /**
- * Device can set global gain.
+ *  \brief Device can set global gain.
  *
- * Device supports setting the global gain.
+ *  Device supports setting the global gain.
  *
- * \sa SDL_HapticSetGain
+ *  \sa SDL_HapticSetGain
  */
 #define SDL_HAPTIC_GAIN       (1u<<12)
 
 /**
- * Device can set autocenter.
+ *  \brief Device can set autocenter.
  *
- * Device supports setting autocenter.
+ *  Device supports setting autocenter.
  *
- * \sa SDL_HapticSetAutocenter
+ *  \sa SDL_HapticSetAutocenter
  */
 #define SDL_HAPTIC_AUTOCENTER (1u<<13)
 
 /**
- * Device can be queried for effect status.
+ *  \brief Device can be queried for effect status.
  *
- * Device supports querying effect status.
+ *  Device supports querying effect status.
  *
- * \sa SDL_HapticGetEffectStatus
+ *  \sa SDL_HapticGetEffectStatus
  */
 #define SDL_HAPTIC_STATUS     (1u<<14)
 
 /**
- * Device can be paused.
+ *  \brief Device can be paused.
  *
- * Devices supports being paused.
+ *  Devices supports being paused.
  *
- * \sa SDL_HapticPause
- * \sa SDL_HapticUnpause
+ *  \sa SDL_HapticPause
+ *  \sa SDL_HapticUnpause
  */
 #define SDL_HAPTIC_PAUSE      (1u<<15)
 
@@ -316,33 +316,31 @@ typedef struct _SDL_Haptic SDL_Haptic;
 /* @{ */
 
 /**
- * Uses polar coordinates for the direction.
+ *  \brief Uses polar coordinates for the direction.
  *
- * \sa SDL_HapticDirection
+ *  \sa SDL_HapticDirection
  */
 #define SDL_HAPTIC_POLAR      0
 
 /**
- * Uses cartesian coordinates for the direction.
+ *  \brief Uses cartesian coordinates for the direction.
  *
- * \sa SDL_HapticDirection
+ *  \sa SDL_HapticDirection
  */
 #define SDL_HAPTIC_CARTESIAN  1
 
 /**
- * Uses spherical coordinates for the direction.
+ *  \brief Uses spherical coordinates for the direction.
  *
- * \sa SDL_HapticDirection
+ *  \sa SDL_HapticDirection
  */
 #define SDL_HAPTIC_SPHERICAL  2
 
 /**
- * Use this value to play an effect on the steering wheel axis.
- *
- * This provides better compatibility across platforms and devices as SDL will
- * guess the correct axis.
- *
- * \sa SDL_HapticDirection
+ *  \brief Use this value to play an effect on the steering wheel axis. This 
+ *  provides better compatibility across platforms and devices as SDL will guess 
+ *  the correct axis.
+ *  \sa SDL_HapticDirection
  */
 #define SDL_HAPTIC_STEERING_AXIS 3
 
@@ -355,7 +353,7 @@ typedef struct _SDL_Haptic SDL_Haptic;
  */
 
 /**
- * Used to play a device an infinite number of times.
+ * \brief Used to play a device an infinite number of times.
  *
  * \sa SDL_HapticRunEffect
  */
@@ -363,82 +361,77 @@ typedef struct _SDL_Haptic SDL_Haptic;
 
 
 /**
- * Structure that represents a haptic direction.
+ *  \brief Structure that represents a haptic direction.
  *
- * This is the direction where the force comes from, instead of the direction
- * in which the force is exerted.
+ *  This is the direction where the force comes from,
+ *  instead of the direction in which the force is exerted.
  *
- * Directions can be specified by:
+ *  Directions can be specified by:
+ *   - ::SDL_HAPTIC_POLAR : Specified by polar coordinates.
+ *   - ::SDL_HAPTIC_CARTESIAN : Specified by cartesian coordinates.
+ *   - ::SDL_HAPTIC_SPHERICAL : Specified by spherical coordinates.
  *
- * - SDL_HAPTIC_POLAR : Specified by polar coordinates.
- * - SDL_HAPTIC_CARTESIAN : Specified by cartesian coordinates.
- * - SDL_HAPTIC_SPHERICAL : Specified by spherical coordinates.
+ *  Cardinal directions of the haptic device are relative to the positioning
+ *  of the device.  North is considered to be away from the user.
  *
- * Cardinal directions of the haptic device are relative to the positioning of
- * the device. North is considered to be away from the user.
+ *  The following diagram represents the cardinal directions:
+ *  \verbatim
+                 .--.
+                 |__| .-------.
+                 |=.| |.-----.|
+                 |--| ||     ||
+                 |  | |'-----'|
+                 |__|~')_____('
+                   [ COMPUTER ]
+
+
+                     North (0,-1)
+                         ^
+                         |
+                         |
+   (-1,0)  West <----[ HAPTIC ]----> East (1,0)
+                         |
+                         |
+                         v
+                      South (0,1)
+
+
+                      [ USER ]
+                        \|||/
+                        (o o)
+                  ---ooO-(_)-Ooo---
+    \endverbatim
  *
- * The following diagram represents the cardinal directions:
+ *  If type is ::SDL_HAPTIC_POLAR, direction is encoded by hundredths of a
+ *  degree starting north and turning clockwise.  ::SDL_HAPTIC_POLAR only uses
+ *  the first \c dir parameter.  The cardinal directions would be:
+ *   - North: 0 (0 degrees)
+ *   - East: 9000 (90 degrees)
+ *   - South: 18000 (180 degrees)
+ *   - West: 27000 (270 degrees)
  *
- * ```
- *                .--.
- *                |__| .-------.
- *                |=.| |.-----.|
- *                |--| ||     ||
- *                |  | |'-----'|
- *                |__|~')_____('
- *                  [ COMPUTER ]
+ *  If type is ::SDL_HAPTIC_CARTESIAN, direction is encoded by three positions
+ *  (X axis, Y axis and Z axis (with 3 axes)).  ::SDL_HAPTIC_CARTESIAN uses
+ *  the first three \c dir parameters.  The cardinal directions would be:
+ *   - North:  0,-1, 0
+ *   - East:   1, 0, 0
+ *   - South:  0, 1, 0
+ *   - West:  -1, 0, 0
+ *
+ *  The Z axis represents the height of the effect if supported, otherwise
+ *  it's unused.  In cartesian encoding (1, 2) would be the same as (2, 4), you
+ *  can use any multiple you want, only the direction matters.
+ *
+ *  If type is ::SDL_HAPTIC_SPHERICAL, direction is encoded by two rotations.
+ *  The first two \c dir parameters are used.  The \c dir parameters are as
+ *  follows (all values are in hundredths of degrees):
+ *   - Degrees from (1, 0) rotated towards (0, 1).
+ *   - Degrees towards (0, 0, 1) (device needs at least 3 axes).
  *
  *
- *                    North (0,-1)
- *                        ^
- *                        |
- *                        |
- *  (-1,0)  West <----[ HAPTIC ]----> East (1,0)
- *                        |
- *                        |
- *                        v
- *                     South (0,1)
- *
- *
- *                     [ USER ]
- *                       \|||/
- *                       (o o)
- *                 ---ooO-(_)-Ooo---
- * ```
- *
- * If type is SDL_HAPTIC_POLAR, direction is encoded by hundredths of a degree
- * starting north and turning clockwise. SDL_HAPTIC_POLAR only uses the first
- * `dir` parameter. The cardinal directions would be:
- *
- * - North: 0 (0 degrees)
- * - East: 9000 (90 degrees)
- * - South: 18000 (180 degrees)
- * - West: 27000 (270 degrees)
- *
- * If type is SDL_HAPTIC_CARTESIAN, direction is encoded by three positions (X
- * axis, Y axis and Z axis (with 3 axes)). SDL_HAPTIC_CARTESIAN uses the first
- * three `dir` parameters. The cardinal directions would be:
- *
- * - North: 0,-1, 0
- * - East: 1, 0, 0
- * - South: 0, 1, 0
- * - West: -1, 0, 0
- *
- * The Z axis represents the height of the effect if supported, otherwise it's
- * unused. In cartesian encoding (1, 2) would be the same as (2, 4), you can
- * use any multiple you want, only the direction matters.
- *
- * If type is SDL_HAPTIC_SPHERICAL, direction is encoded by two rotations. The
- * first two `dir` parameters are used. The `dir` parameters are as follows
- * (all values are in hundredths of degrees):
- *
- * - Degrees from (1, 0) rotated towards (0, 1).
- * - Degrees towards (0, 0, 1) (device needs at least 3 axes).
- *
- * Example of force coming from the south with all encodings (force coming
- * from the south means the user will have to pull the stick to counteract):
- *
- * ```c
+ *  Example of force coming from the south with all encodings (force coming
+ *  from the south means the user will have to pull the stick to counteract):
+ *  \code
  *  SDL_HapticDirection direction;
  *
  *  // Cartesian directions
@@ -454,14 +447,14 @@ typedef struct _SDL_Haptic SDL_Haptic;
  *  // Spherical coordinates
  *  direction.type = SDL_HAPTIC_SPHERICAL; // Spherical encoding
  *  direction.dir[0] = 9000; // Since we only have two axes we don't need more parameters.
- * ```
+ *  \endcode
  *
- * \sa SDL_HAPTIC_POLAR
- * \sa SDL_HAPTIC_CARTESIAN
- * \sa SDL_HAPTIC_SPHERICAL
- * \sa SDL_HAPTIC_STEERING_AXIS
- * \sa SDL_HapticEffect
- * \sa SDL_HapticNumAxes
+ *  \sa SDL_HAPTIC_POLAR
+ *  \sa SDL_HAPTIC_CARTESIAN
+ *  \sa SDL_HAPTIC_SPHERICAL
+ *  \sa SDL_HAPTIC_STEERING_AXIS
+ *  \sa SDL_HapticEffect
+ *  \sa SDL_HapticNumAxes
  */
 typedef struct SDL_HapticDirection
 {
@@ -471,20 +464,20 @@ typedef struct SDL_HapticDirection
 
 
 /**
- * A structure containing a template for a Constant effect.
+ *  \brief A structure containing a template for a Constant effect.
  *
- * This struct is exclusively for the SDL_HAPTIC_CONSTANT effect.
+ *  This struct is exclusively for the ::SDL_HAPTIC_CONSTANT effect.
  *
- * A constant effect applies a constant force in the specified direction to
- * the joystick.
+ *  A constant effect applies a constant force in the specified direction
+ *  to the joystick.
  *
- * \sa SDL_HAPTIC_CONSTANT
- * \sa SDL_HapticEffect
+ *  \sa SDL_HAPTIC_CONSTANT
+ *  \sa SDL_HapticEffect
  */
 typedef struct SDL_HapticConstant
 {
     /* Header */
-    Uint16 type;            /**< SDL_HAPTIC_CONSTANT */
+    Uint16 type;            /**< ::SDL_HAPTIC_CONSTANT */
     SDL_HapticDirection direction;  /**< Direction of the effect. */
 
     /* Replay */
@@ -506,71 +499,68 @@ typedef struct SDL_HapticConstant
 } SDL_HapticConstant;
 
 /**
- * A structure containing a template for a Periodic effect.
+ *  \brief A structure containing a template for a Periodic effect.
  *
- * The struct handles the following effects:
+ *  The struct handles the following effects:
+ *   - ::SDL_HAPTIC_SINE
+ *   - ::SDL_HAPTIC_LEFTRIGHT
+ *   - ::SDL_HAPTIC_TRIANGLE
+ *   - ::SDL_HAPTIC_SAWTOOTHUP
+ *   - ::SDL_HAPTIC_SAWTOOTHDOWN
  *
- * - SDL_HAPTIC_SINE
- * - SDL_HAPTIC_SQUARE
- * - SDL_HAPTIC_TRIANGLE
- * - SDL_HAPTIC_SAWTOOTHUP
- * - SDL_HAPTIC_SAWTOOTHDOWN
+ *  A periodic effect consists in a wave-shaped effect that repeats itself
+ *  over time.  The type determines the shape of the wave and the parameters
+ *  determine the dimensions of the wave.
  *
- * A periodic effect consists in a wave-shaped effect that repeats itself over
- * time. The type determines the shape of the wave and the parameters
- * determine the dimensions of the wave.
+ *  Phase is given by hundredth of a degree meaning that giving the phase a value
+ *  of 9000 will displace it 25% of its period.  Here are sample values:
+ *   -     0: No phase displacement.
+ *   -  9000: Displaced 25% of its period.
+ *   - 18000: Displaced 50% of its period.
+ *   - 27000: Displaced 75% of its period.
+ *   - 36000: Displaced 100% of its period, same as 0, but 0 is preferred.
  *
- * Phase is given by hundredth of a degree meaning that giving the phase a
- * value of 9000 will displace it 25% of its period. Here are sample values:
+ *  Examples:
+ *  \verbatim
+    SDL_HAPTIC_SINE
+      __      __      __      __
+     /  \    /  \    /  \    /
+    /    \__/    \__/    \__/
+
+    SDL_HAPTIC_SQUARE
+     __    __    __    __    __
+    |  |  |  |  |  |  |  |  |  |
+    |  |__|  |__|  |__|  |__|  |
+
+    SDL_HAPTIC_TRIANGLE
+      /\    /\    /\    /\    /\
+     /  \  /  \  /  \  /  \  /
+    /    \/    \/    \/    \/
+
+    SDL_HAPTIC_SAWTOOTHUP
+      /|  /|  /|  /|  /|  /|  /|
+     / | / | / | / | / | / | / |
+    /  |/  |/  |/  |/  |/  |/  |
+
+    SDL_HAPTIC_SAWTOOTHDOWN
+    \  |\  |\  |\  |\  |\  |\  |
+     \ | \ | \ | \ | \ | \ | \ |
+      \|  \|  \|  \|  \|  \|  \|
+    \endverbatim
  *
- * - 0: No phase displacement.
- * - 9000: Displaced 25% of its period.
- * - 18000: Displaced 50% of its period.
- * - 27000: Displaced 75% of its period.
- * - 36000: Displaced 100% of its period, same as 0, but 0 is preferred.
- *
- * Examples:
- *
- * ```
- *   SDL_HAPTIC_SINE
- *     __      __      __      __
- *    /  \    /  \    /  \    /
- *   /    \__/    \__/    \__/
- *
- *   SDL_HAPTIC_SQUARE
- *    __    __    __    __    __
- *   |  |  |  |  |  |  |  |  |  |
- *   |  |__|  |__|  |__|  |__|  |
- *
- *   SDL_HAPTIC_TRIANGLE
- *     /\    /\    /\    /\    /\
- *    /  \  /  \  /  \  /  \  /
- *   /    \/    \/    \/    \/
- *
- *   SDL_HAPTIC_SAWTOOTHUP
- *     /|  /|  /|  /|  /|  /|  /|
- *    / | / | / | / | / | / | / |
- *   /  |/  |/  |/  |/  |/  |/  |
- *
- *   SDL_HAPTIC_SAWTOOTHDOWN
- *   \  |\  |\  |\  |\  |\  |\  |
- *    \ | \ | \ | \ | \ | \ | \ |
- *     \|  \|  \|  \|  \|  \|  \|
- * ```
- *
- * \sa SDL_HAPTIC_SINE
- * \sa SDL_HAPTIC_LEFTRIGHT
- * \sa SDL_HAPTIC_TRIANGLE
- * \sa SDL_HAPTIC_SAWTOOTHUP
- * \sa SDL_HAPTIC_SAWTOOTHDOWN
- * \sa SDL_HapticEffect
+ *  \sa SDL_HAPTIC_SINE
+ *  \sa SDL_HAPTIC_LEFTRIGHT
+ *  \sa SDL_HAPTIC_TRIANGLE
+ *  \sa SDL_HAPTIC_SAWTOOTHUP
+ *  \sa SDL_HAPTIC_SAWTOOTHDOWN
+ *  \sa SDL_HapticEffect
  */
 typedef struct SDL_HapticPeriodic
 {
     /* Header */
-    Uint16 type;        /**< SDL_HAPTIC_SINE, SDL_HAPTIC_LEFTRIGHT,
-                             SDL_HAPTIC_TRIANGLE, SDL_HAPTIC_SAWTOOTHUP or
-                             SDL_HAPTIC_SAWTOOTHDOWN */
+    Uint16 type;        /**< ::SDL_HAPTIC_SINE, ::SDL_HAPTIC_LEFTRIGHT,
+                             ::SDL_HAPTIC_TRIANGLE, ::SDL_HAPTIC_SAWTOOTHUP or
+                             ::SDL_HAPTIC_SAWTOOTHDOWN */
     SDL_HapticDirection direction;  /**< Direction of the effect. */
 
     /* Replay */
@@ -595,35 +585,34 @@ typedef struct SDL_HapticPeriodic
 } SDL_HapticPeriodic;
 
 /**
- * A structure containing a template for a Condition effect.
+ *  \brief A structure containing a template for a Condition effect.
  *
- * The struct handles the following effects:
+ *  The struct handles the following effects:
+ *   - ::SDL_HAPTIC_SPRING: Effect based on axes position.
+ *   - ::SDL_HAPTIC_DAMPER: Effect based on axes velocity.
+ *   - ::SDL_HAPTIC_INERTIA: Effect based on axes acceleration.
+ *   - ::SDL_HAPTIC_FRICTION: Effect based on axes movement.
  *
- * - SDL_HAPTIC_SPRING: Effect based on axes position.
- * - SDL_HAPTIC_DAMPER: Effect based on axes velocity.
- * - SDL_HAPTIC_INERTIA: Effect based on axes acceleration.
- * - SDL_HAPTIC_FRICTION: Effect based on axes movement.
+ *  Direction is handled by condition internals instead of a direction member.
+ *  The condition effect specific members have three parameters.  The first
+ *  refers to the X axis, the second refers to the Y axis and the third
+ *  refers to the Z axis.  The right terms refer to the positive side of the
+ *  axis and the left terms refer to the negative side of the axis.  Please
+ *  refer to the ::SDL_HapticDirection diagram for which side is positive and
+ *  which is negative.
  *
- * Direction is handled by condition internals instead of a direction member.
- * The condition effect specific members have three parameters. The first
- * refers to the X axis, the second refers to the Y axis and the third refers
- * to the Z axis. The right terms refer to the positive side of the axis and
- * the left terms refer to the negative side of the axis. Please refer to the
- * SDL_HapticDirection diagram for which side is positive and which is
- * negative.
- *
- * \sa SDL_HapticDirection
- * \sa SDL_HAPTIC_SPRING
- * \sa SDL_HAPTIC_DAMPER
- * \sa SDL_HAPTIC_INERTIA
- * \sa SDL_HAPTIC_FRICTION
- * \sa SDL_HapticEffect
+ *  \sa SDL_HapticDirection
+ *  \sa SDL_HAPTIC_SPRING
+ *  \sa SDL_HAPTIC_DAMPER
+ *  \sa SDL_HAPTIC_INERTIA
+ *  \sa SDL_HAPTIC_FRICTION
+ *  \sa SDL_HapticEffect
  */
 typedef struct SDL_HapticCondition
 {
     /* Header */
-    Uint16 type;            /**< SDL_HAPTIC_SPRING, SDL_HAPTIC_DAMPER,
-                                 SDL_HAPTIC_INERTIA or SDL_HAPTIC_FRICTION */
+    Uint16 type;            /**< ::SDL_HAPTIC_SPRING, ::SDL_HAPTIC_DAMPER,
+                                 ::SDL_HAPTIC_INERTIA or ::SDL_HAPTIC_FRICTION */
     SDL_HapticDirection direction;  /**< Direction of the effect - Not used ATM. */
 
     /* Replay */
@@ -644,22 +633,22 @@ typedef struct SDL_HapticCondition
 } SDL_HapticCondition;
 
 /**
- * A structure containing a template for a Ramp effect.
+ *  \brief A structure containing a template for a Ramp effect.
  *
- * This struct is exclusively for the SDL_HAPTIC_RAMP effect.
+ *  This struct is exclusively for the ::SDL_HAPTIC_RAMP effect.
  *
- * The ramp effect starts at start strength and ends at end strength. It
- * augments in linear fashion. If you use attack and fade with a ramp the
- * effects get added to the ramp effect making the effect become quadratic
- * instead of linear.
+ *  The ramp effect starts at start strength and ends at end strength.
+ *  It augments in linear fashion.  If you use attack and fade with a ramp
+ *  the effects get added to the ramp effect making the effect become
+ *  quadratic instead of linear.
  *
- * \sa SDL_HAPTIC_RAMP
- * \sa SDL_HapticEffect
+ *  \sa SDL_HAPTIC_RAMP
+ *  \sa SDL_HapticEffect
  */
 typedef struct SDL_HapticRamp
 {
     /* Header */
-    Uint16 type;            /**< SDL_HAPTIC_RAMP */
+    Uint16 type;            /**< ::SDL_HAPTIC_RAMP */
     SDL_HapticDirection direction;  /**< Direction of the effect. */
 
     /* Replay */
@@ -682,9 +671,9 @@ typedef struct SDL_HapticRamp
 } SDL_HapticRamp;
 
 /**
- * A structure containing a template for a Left/Right effect.
+ * \brief A structure containing a template for a Left/Right effect.
  *
- * This struct is exclusively for the SDL_HAPTIC_LEFTRIGHT effect.
+ * This struct is exclusively for the ::SDL_HAPTIC_LEFTRIGHT effect.
  *
  * The Left/Right effect is used to explicitly control the large and small
  * motors, commonly found in modern game controllers. The small (right) motor
@@ -696,7 +685,7 @@ typedef struct SDL_HapticRamp
 typedef struct SDL_HapticLeftRight
 {
     /* Header */
-    Uint16 type;            /**< SDL_HAPTIC_LEFTRIGHT */
+    Uint16 type;            /**< ::SDL_HAPTIC_LEFTRIGHT */
 
     /* Replay */
     Uint32 length;          /**< Duration of the effect in milliseconds. */
@@ -707,24 +696,24 @@ typedef struct SDL_HapticLeftRight
 } SDL_HapticLeftRight;
 
 /**
- * A structure containing a template for the SDL_HAPTIC_CUSTOM effect.
+ *  \brief A structure containing a template for the ::SDL_HAPTIC_CUSTOM effect.
  *
- * This struct is exclusively for the SDL_HAPTIC_CUSTOM effect.
+ *  This struct is exclusively for the ::SDL_HAPTIC_CUSTOM effect.
  *
- * A custom force feedback effect is much like a periodic effect, where the
- * application can define its exact shape. You will have to allocate the data
- * yourself. Data should consist of channels * samples Uint16 samples.
+ *  A custom force feedback effect is much like a periodic effect, where the
+ *  application can define its exact shape.  You will have to allocate the
+ *  data yourself.  Data should consist of channels * samples Uint16 samples.
  *
- * If channels is one, the effect is rotated using the defined direction.
- * Otherwise it uses the samples in data for the different axes.
+ *  If channels is one, the effect is rotated using the defined direction.
+ *  Otherwise it uses the samples in data for the different axes.
  *
- * \sa SDL_HAPTIC_CUSTOM
- * \sa SDL_HapticEffect
+ *  \sa SDL_HAPTIC_CUSTOM
+ *  \sa SDL_HapticEffect
  */
 typedef struct SDL_HapticCustom
 {
     /* Header */
-    Uint16 type;            /**< SDL_HAPTIC_CUSTOM */
+    Uint16 type;            /**< ::SDL_HAPTIC_CUSTOM */
     SDL_HapticDirection direction;  /**< Direction of the effect. */
 
     /* Replay */
@@ -749,28 +738,27 @@ typedef struct SDL_HapticCustom
 } SDL_HapticCustom;
 
 /**
- * The generic template for any haptic effect.
+ *  \brief The generic template for any haptic effect.
  *
- * All values max at 32767 (0x7FFF). Signed values also can be negative. Time
- * values unless specified otherwise are in milliseconds.
+ *  All values max at 32767 (0x7FFF).  Signed values also can be negative.
+ *  Time values unless specified otherwise are in milliseconds.
  *
- * You can also pass SDL_HAPTIC_INFINITY to length instead of a 0-32767 value.
- * Neither delay, interval, attack_length nor fade_length support
- * SDL_HAPTIC_INFINITY. Fade will also not be used since effect never ends.
+ *  You can also pass ::SDL_HAPTIC_INFINITY to length instead of a 0-32767
+ *  value.  Neither delay, interval, attack_length nor fade_length support
+ *  ::SDL_HAPTIC_INFINITY.  Fade will also not be used since effect never ends.
  *
- * Additionally, the SDL_HAPTIC_RAMP effect does not support a duration of
- * SDL_HAPTIC_INFINITY.
+ *  Additionally, the ::SDL_HAPTIC_RAMP effect does not support a duration of
+ *  ::SDL_HAPTIC_INFINITY.
  *
- * Button triggers may not be supported on all devices, it is advised to not
- * use them if possible. Buttons start at index 1 instead of index 0 like the
- * joystick.
+ *  Button triggers may not be supported on all devices, it is advised to not
+ *  use them if possible.  Buttons start at index 1 instead of index 0 like
+ *  the joystick.
  *
- * If both attack_length and fade_level are 0, the envelope is not used,
- * otherwise both values are used.
+ *  If both attack_length and fade_level are 0, the envelope is not used,
+ *  otherwise both values are used.
  *
- * Common parts:
- *
- * ```c
+ *  Common parts:
+ *  \code
  *  // Replay - All effects have this
  *  Uint32 length;        // Duration of effect (ms).
  *  Uint16 delay;         // Delay before starting effect.
@@ -784,39 +772,39 @@ typedef struct SDL_HapticCustom
  *  Uint16 attack_level;  // Level at the start of the attack.
  *  Uint16 fade_length;   // Duration of the fade out (ms).
  *  Uint16 fade_level;    // Level at the end of the fade.
- * ```
+ *  \endcode
  *
- * Here we have an example of a constant effect evolution in time:
  *
- * ```
- *  Strength
- *  ^
- *  |
- *  |    effect level -->  _________________
- *  |                     /                 \
- *  |                    /                   \
- *  |                   /                     \
- *  |                  /                       \
- *  | attack_level --> |                        \
- *  |                  |                        |  <---  fade_level
- *  |
- *  +--------------------------------------------------> Time
- *                     [--]                 [---]
- *                     attack_length        fade_length
+ *  Here we have an example of a constant effect evolution in time:
+ *  \verbatim
+    Strength
+    ^
+    |
+    |    effect level -->  _________________
+    |                     /                 \
+    |                    /                   \
+    |                   /                     \
+    |                  /                       \
+    | attack_level --> |                        \
+    |                  |                        |  <---  fade_level
+    |
+    +--------------------------------------------------> Time
+                       [--]                 [---]
+                       attack_length        fade_length
+
+    [------------------][-----------------------]
+    delay               length
+    \endverbatim
  *
- *  [------------------][-----------------------]
- *  delay               length
- * ```
+ *  Note either the attack_level or the fade_level may be above the actual
+ *  effect level.
  *
- * Note either the attack_level or the fade_level may be above the actual
- * effect level.
- *
- * \sa SDL_HapticConstant
- * \sa SDL_HapticPeriodic
- * \sa SDL_HapticCondition
- * \sa SDL_HapticRamp
- * \sa SDL_HapticLeftRight
- * \sa SDL_HapticCustom
+ *  \sa SDL_HapticConstant
+ *  \sa SDL_HapticPeriodic
+ *  \sa SDL_HapticCondition
+ *  \sa SDL_HapticRamp
+ *  \sa SDL_HapticLeftRight
+ *  \sa SDL_HapticCustom
  */
 typedef union SDL_HapticEffect
 {

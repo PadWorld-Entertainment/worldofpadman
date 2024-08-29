@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0...3.5)
-project(SDL2_test C)
+project(SDL2_test)
 
 include(CheckCCompilerFlag)
 include(CMakeParseArguments)

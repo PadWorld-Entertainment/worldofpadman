@@ -30,42 +30,45 @@
 #include <time.h>
 #include <sys/time.h>
 #include <pspthreadman.h>
-#include <psprtc.h>
 
-static Uint64 start_tick;
-
-static Uint64 PSP_Ticks(void)
-{
-    Uint64 ticks;
-    sceRtcGetCurrentTick(&ticks);
-    return ticks;
-}
+static struct timeval start;
+static SDL_bool ticks_started = SDL_FALSE;
 
 void SDL_TicksInit(void)
 {
-    if (start_tick == 0) {
-        start_tick = PSP_Ticks();
+    if (ticks_started) {
+        return;
     }
+    ticks_started = SDL_TRUE;
+
+    gettimeofday(&start, NULL);
 }
 
 void SDL_TicksQuit(void)
 {
+    ticks_started = SDL_FALSE;
 }
 
-/* return ticks as milliseconds */
 Uint64 SDL_GetTicks64(void)
 {
-    return (PSP_Ticks() - start_tick) / 1000ULL;
+    struct timeval now;
+
+    if (!ticks_started) {
+        SDL_TicksInit();
+    }
+
+    gettimeofday(&now, NULL);
+    return (Uint64)(((Sint64)(now.tv_sec - start.tv_sec) * 1000) + ((now.tv_usec - start.tv_usec) / 1000));
 }
 
 Uint64 SDL_GetPerformanceCounter(void)
 {
-    return PSP_Ticks();
+    return SDL_GetTicks64();
 }
 
 Uint64 SDL_GetPerformanceFrequency(void)
 {
-    return sceRtcGetTickResolution();
+    return 1000;
 }
 
 void SDL_Delay(Uint32 ms)

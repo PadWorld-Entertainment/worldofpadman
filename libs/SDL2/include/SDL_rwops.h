@@ -19,13 +19,11 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-/* WIKI CATEGORY: RWOPS */
-
 /**
- * # CategoryRWOPS
+ *  \file SDL_rwops.h
  *
- * This file provides a general interface for SDL to read and write data
- * streams. It can easily be extended to files, memory, etc.
+ *  This file provides a general interface for SDL to read and write
+ *  data streams.  It can easily be extended to files, memory, etc.
  */
 
 #ifndef SDL_rwops_h_
@@ -59,7 +57,7 @@ typedef struct SDL_RWops
     Sint64 (SDLCALL * size) (struct SDL_RWops * context);
 
     /**
-     *  Seek to `offset` relative to `whence`, one of stdio's whence values:
+     *  Seek to \c offset relative to \c whence, one of stdio's whence values:
      *  RW_SEEK_SET, RW_SEEK_CUR, RW_SEEK_END
      *
      *  \return the final offset in the data stream, or -1 on error.
@@ -68,8 +66,8 @@ typedef struct SDL_RWops
                              int whence);
 
     /**
-     *  Read up to `maxnum` objects each of size `size` from the data
-     *  stream to the area pointed at by `ptr`.
+     *  Read up to \c maxnum objects each of size \c size from the data
+     *  stream to the area pointed at by \c ptr.
      *
      *  \return the number of objects read, or 0 at error or end of file.
      */
@@ -77,8 +75,8 @@ typedef struct SDL_RWops
                              size_t size, size_t maxnum);
 
     /**
-     *  Write exactly `num` objects each of size `size` from the area
-     *  pointed at by `ptr` to data stream.
+     *  Write exactly \c num objects each of size \c size from the area
+     *  pointed at by \c ptr to data stream.
      *
      *  \return the number of objects written, or 0 at error or end of file.
      */
@@ -368,7 +366,6 @@ extern DECLSPEC SDL_RWops *SDLCALL SDL_AllocRW(void);
  */
 extern DECLSPEC void SDLCALL SDL_FreeRW(SDL_RWops * area);
 
-/* Possible `whence` values for SDL_RWops seeking... */
 #define RW_SEEK_SET 0       /**< Seek from the beginning of data */
 #define RW_SEEK_CUR 1       /**< Seek relative to current read point */
 #define RW_SEEK_END 2       /**< Seek relative to the end of data */

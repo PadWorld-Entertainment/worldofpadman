@@ -20,9 +20,9 @@
 */
 
 /**
- * # CategoryEndian
+ *  \file SDL_endian.h
  *
- * Functions for reading and writing endian-specific values
+ *  Functions for reading and writing endian-specific values
  */
 
 #ifndef SDL_endian_h_
@@ -180,16 +180,6 @@ extern __inline Uint16 SDL_Swap16(Uint16);
   parm   [ax]   \
   modify [ax];
 #else
-
-/**
- * Use this function to swap the byte order of a 16-bit value.
- *
- * \param x the value to be swapped
- * \returns the swapped value.
- *
- * \sa SDL_SwapBE16
- * \sa SDL_SwapLE16
- */
 SDL_FORCE_INLINE Uint16
 SDL_Swap16(Uint16 x)
 {
@@ -241,16 +231,6 @@ extern __inline Uint32 SDL_Swap32(Uint32);
   parm   [eax] \
   modify [eax];
 #else
-
-/**
- * Use this function to swap the byte order of a 32-bit value.
- *
- * \param x the value to be swapped
- * \returns the swapped value.
- *
- * \sa SDL_SwapBE32
- * \sa SDL_SwapLE32
- */
 SDL_FORCE_INLINE Uint32
 SDL_Swap32(Uint32 x)
 {
@@ -296,16 +276,6 @@ extern __inline Uint64 SDL_Swap64(Uint64);
   parm [eax edx]  \
   modify [eax edx];
 #else
-
-/**
- * Use this function to swap the byte order of a 64-bit value.
- *
- * \param x the value to be swapped
- * \returns the swapped value.
- *
- * \sa SDL_SwapBE64
- * \sa SDL_SwapLE64
- */
 SDL_FORCE_INLINE Uint64
 SDL_Swap64(Uint64 x)
 {
@@ -323,15 +293,6 @@ SDL_Swap64(Uint64 x)
 #endif
 
 
-/**
- * Use this function to swap the byte order of a floating point value.
- *
- * \param x the value to be swapped
- * \returns the swapped value.
- *
- * \sa SDL_SwapFloatBE
- * \sa SDL_SwapFloatLE
- */
 SDL_FORCE_INLINE float
 SDL_SwapFloat(float x)
 {

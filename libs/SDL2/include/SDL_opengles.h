@@ -19,10 +19,11 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-/*
- * This is a simple file to encapsulate the OpenGL ES 1.X API headers.
+/**
+ *  \file SDL_opengles.h
+ *
+ *  This is a simple file to encapsulate the OpenGL ES 1.X API headers.
  */
-
 #include "SDL_config.h"
 
 #ifdef __IPHONEOS__
