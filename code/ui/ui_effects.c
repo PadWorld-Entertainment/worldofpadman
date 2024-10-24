@@ -42,8 +42,8 @@ EFFECTS OPTIONS MENU
 #define SOUND1 "menu/buttons/sound1"
 #define NETWORK0 "menu/buttons/netvoip0"
 #define NETWORK1 "menu/buttons/netvoip1"
-#define ACCEPT0 "menu/buttons/accept"
-#define ACCEPT1 "menu/buttons/accept"
+#define ACCEPT0 "menu/buttons/accept0"
+#define ACCEPT1 "menu/buttons/accept1"
 
 #define ID_GRAPHICS 100
 #define ID_DISPLAY 101
@@ -624,7 +624,7 @@ static void UI_EffectsOptions_MenuInit(void) {
 
 	effectsOptionsInfo.apply.generic.type = MTYPE_BITMAP;
 	effectsOptionsInfo.apply.generic.name = ACCEPT0;
-	effectsOptionsInfo.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
+	effectsOptionsInfo.apply.generic.flags = QMF_PULSE | QMF_HIDDEN | QMF_INACTIVE;
 	effectsOptionsInfo.apply.generic.callback = UI_EffectsOptions_Event;
 	effectsOptionsInfo.apply.generic.id = ID_APPLY;
 	effectsOptionsInfo.apply.generic.x = 736;

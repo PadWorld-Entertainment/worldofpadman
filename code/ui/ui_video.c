@@ -44,8 +44,8 @@ GRAPHICS OPTIONS MENU
 #define SOUND1 "menu/buttons/sound1"
 #define NETWORK0 "menu/buttons/netvoip0"
 #define NETWORK1 "menu/buttons/netvoip1"
-#define ACCEPT0 "menu/buttons/accept"
-#define ACCEPT1 "menu/buttons/accept"
+#define ACCEPT0 "menu/buttons/accept0"
+#define ACCEPT1 "menu/buttons/accept1"
 
 #define ID_GRAPHICS 100
 #define ID_DISPLAY 101
@@ -954,7 +954,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 
 	s_graphicsoptions.apply.generic.type = MTYPE_BITMAP;
 	s_graphicsoptions.apply.generic.name = ACCEPT0;
-	s_graphicsoptions.apply.generic.flags = QMF_PULSEIFFOCUS | QMF_HIDDEN | QMF_INACTIVE;
+	s_graphicsoptions.apply.generic.flags = QMF_PULSE | QMF_HIDDEN | QMF_INACTIVE;
 	s_graphicsoptions.apply.generic.callback = UI_GraphicsOptions_ApplyChanges;
 	s_graphicsoptions.apply.generic.x = 736;
 	s_graphicsoptions.apply.generic.y = 446;

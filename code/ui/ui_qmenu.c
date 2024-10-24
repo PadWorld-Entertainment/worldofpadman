@@ -264,7 +264,7 @@ static void Bitmap_Draw(menubitmap_s *b) {
 		}
 
 		// bk001204 - parentheses
-		if (((b->generic.flags & QMF_PULSE) || (b->generic.flags & QMF_PULSEIFFOCUS)) &&
+		if ((b->generic.flags & QMF_PULSE) || ((b->generic.flags & QMF_PULSEIFFOCUS)) &&
 			(Menu_ItemAtCursor(b->generic.parent) == b)) {
 			if (b->focuscolor) {
 				tempcolor[0] = b->focuscolor[0];
