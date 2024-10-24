@@ -230,22 +230,16 @@ static void UI_StartServer_Update(void) {
 		s_startserver.mappics[i].shader = 0;
 	}
 
+	s_startserver.arrowleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	s_startserver.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	if (s_startserver.maxpages > 1) {
-		s_startserver.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_startserver.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_startserver.arrowleft.generic.flags |= QMF_GRAYED;
-		s_startserver.arrowright.generic.flags |= QMF_GRAYED;
-
 		if (s_startserver.page > 0) {
-			s_startserver.arrowleft.generic.flags &= ~QMF_GRAYED;
+			s_startserver.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
 
 		if (s_startserver.page < (s_startserver.maxpages - 1)) {
-			s_startserver.arrowright.generic.flags &= ~QMF_GRAYED;
+			s_startserver.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
-	} else {
-		s_startserver.arrowleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
-		s_startserver.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 
 	if (s_startserver.maploop[0] != -1) {
@@ -1072,22 +1066,17 @@ static void UI_SelectBots_UpdateGrid(void) {
 	// set selected model
 	i = botSelectInfo.selectedmodel % MAX_BOTSPERPAGE;
 
+	botSelectInfo.arrowleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	botSelectInfo.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	if (botSelectInfo.numpages > 1) {
-		botSelectInfo.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		botSelectInfo.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		botSelectInfo.arrowleft.generic.flags |= QMF_GRAYED;
-		botSelectInfo.arrowright.generic.flags |= QMF_GRAYED;
 
 		if (botSelectInfo.modelpage > 0) {
-			botSelectInfo.arrowleft.generic.flags &= ~QMF_GRAYED;
+			botSelectInfo.arrowleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
 
 		if (botSelectInfo.modelpage < (botSelectInfo.numpages - 1)) {
-			botSelectInfo.arrowright.generic.flags &= ~QMF_GRAYED;
+			botSelectInfo.arrowright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
-	} else {
-		botSelectInfo.arrowleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
-		botSelectInfo.arrowright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 }
 
@@ -1226,22 +1215,16 @@ static void UI_SelectBots_UpdateList(void) {
 	numMaxSlots = UI_SelectBots_GetNumMaxSlots();
 	botSelectInfo.slotsleft.string = va("%2d/%2d", numSelectedBots, numMaxSlots);
 
+	botSelectInfo.arrowup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	botSelectInfo.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	if (numSelectedBots > MAX_SELECTLISTBOTS) {
-		botSelectInfo.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		botSelectInfo.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		botSelectInfo.arrowup.generic.flags |= QMF_GRAYED;
-		botSelectInfo.arrowdown.generic.flags |= QMF_GRAYED;
-
 		if (botSelectInfo.topbot > 0) {
-			botSelectInfo.arrowup.generic.flags &= ~QMF_GRAYED;
+			botSelectInfo.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
 
 		if (botSelectInfo.topbot < numSelectedBots - MAX_SELECTLISTBOTS) {
-			botSelectInfo.arrowdown.generic.flags &= ~QMF_GRAYED;
+			botSelectInfo.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
-	} else {
-		botSelectInfo.arrowup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
-		botSelectInfo.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 }
 

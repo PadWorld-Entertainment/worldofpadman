@@ -662,40 +662,29 @@ UI_PlayerSettings_Update
 */
 static void UI_PlayerSettings_Update(void) {
 	const int skins = s_playersettings.chosenskins[1] - s_playersettings.chosenskins[0];
-	if (ps_playericons.nummodel > MODELSPERPAGE) {
-		s_playersettings.modelleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_playersettings.modelright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_playersettings.modelleft.generic.flags |= QMF_GRAYED;
-		s_playersettings.modelright.generic.flags |= QMF_GRAYED;
+	s_playersettings.modelleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	s_playersettings.modelright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 
+	if (ps_playericons.nummodel > MODELSPERPAGE) {
 		if (s_playersettings.firstmodel > 0) {
-			s_playersettings.modelleft.generic.flags &= ~QMF_GRAYED;
+			s_playersettings.modelleft.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
 
 		if (s_playersettings.firstmodel + MODELSPERPAGE < ps_playericons.nummodel) {
-			s_playersettings.modelright.generic.flags &= ~QMF_GRAYED;
+			s_playersettings.modelright.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
-	} else {
-		s_playersettings.modelleft.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
-		s_playersettings.modelright.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 
+	s_playersettings.skinup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	s_playersettings.skindown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	if (skins > SKINSPERPAGE) {
-		s_playersettings.skinup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_playersettings.skindown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-		s_playersettings.skinup.generic.flags |= QMF_GRAYED;
-		s_playersettings.skindown.generic.flags |= QMF_GRAYED;
-
 		if (s_playersettings.firstskin > s_playersettings.chosenskins[0]) {
-			s_playersettings.skinup.generic.flags &= ~QMF_GRAYED;
+			s_playersettings.skinup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
 
 		if (s_playersettings.firstskin + (SKINSPERPAGE - 1) < s_playersettings.chosenskins[1]) {
-			s_playersettings.skindown.generic.flags &= ~QMF_GRAYED;
+			s_playersettings.skindown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 		}
-	} else {
-		s_playersettings.skinup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
-		s_playersettings.skindown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 }
 

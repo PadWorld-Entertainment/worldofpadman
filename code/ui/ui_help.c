@@ -81,14 +81,14 @@ UI_HelpMenu_AdjustButtons
 ===============
 */
 static void UI_HelpMenu_AdjustButtons(void) {
-	helpMenuInfo.prev.generic.flags &= ~QMF_GRAYED;
-	helpMenuInfo.next.generic.flags &= ~QMF_GRAYED;
+	helpMenuInfo.prev.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+	helpMenuInfo.next.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 
 	if (helpIndex <= 0) {
-		helpMenuInfo.prev.generic.flags |= QMF_GRAYED;
+		helpMenuInfo.prev.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 	if (helpIndex >= helpMax) {
-		helpMenuInfo.next.generic.flags |= QMF_GRAYED;
+		helpMenuInfo.next.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
 
 	helpMenuInfo.img = trap_R_RegisterShaderNoMip(va(HELPMENU_PATH "%s", helpList[helpIndex]));

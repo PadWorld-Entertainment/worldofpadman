@@ -637,11 +637,7 @@ void ActiveChooseLogoMenu(void) {
 					((CursorAtLogo % 8) / 4) ? POSY_SECONDLINE : POSY_FIRSTLINE, LOGOSIZE, LOGOSIZE, 1, colorLtGrey);
 
 	// draw left arrow
-	if (activepage <= 0) {
-		trap_R_SetColor(colorLtGrey);
-		CG_DrawPic(ARROWLTX, ARROWY, 50, 22, cgs.media.arrowlt0);
-		trap_R_SetColor(NULL);
-	} else {
+	if (activepage > 0) {
 		if (cgs.cursorX > ARROWLTX && cgs.cursorX < (ARROWLTX + 50) && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
 			CG_DrawPic(ARROWLTX, ARROWY, 50, 22, cgs.media.arrowlt1);
 		} else {
@@ -650,11 +646,7 @@ void ActiveChooseLogoMenu(void) {
 	}
 
 	// draw right arrow
-	if (activepage >= (numPages - 1)) {
-		trap_R_SetColor(colorLtGrey);
-		CG_DrawPic(ARROWRTX, ARROWY, 50, 22, cgs.media.arrowrt0);
-		trap_R_SetColor(NULL);
-	} else {
+	if (activepage < (numPages - 1)) {
 		if (cgs.cursorX > ARROWRTX && cgs.cursorX < (ARROWRTX + 50) && cgs.cursorY > ARROWY && cgs.cursorY < (ARROWY + 22)) {
 			CG_DrawPic(ARROWRTX, ARROWY, 50, 22, cgs.media.arrowrt1);
 		} else {

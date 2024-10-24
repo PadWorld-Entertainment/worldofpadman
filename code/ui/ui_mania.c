@@ -71,15 +71,15 @@ static void UI_Mania_MenuUpdate(void) {
 	s_mania.maniapic.generic.name = maniapics[s_mania.currentpage];
 	s_mania.maniapic.shader = 0;
 
-	s_mania.next.generic.flags |= QMF_GRAYED;
-	s_mania.prev.generic.flags |= QMF_GRAYED;
+	s_mania.next.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	s_mania.prev.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 
 	if (s_mania.currentpage < (MAX_MANIAPAGES - 1)) {
-		s_mania.next.generic.flags &= ~QMF_GRAYED;
+		s_mania.next.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 	}
 		
 	if (s_mania.currentpage > 0) {
-		s_mania.prev.generic.flags &= ~QMF_GRAYED;
+		s_mania.prev.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 	}
 
 }

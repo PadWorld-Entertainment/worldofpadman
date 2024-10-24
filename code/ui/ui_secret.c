@@ -72,15 +72,15 @@ static void UI_Secret_MenuUpdate(void) {
 	s_secret.secpic.generic.name = secretpics[s_secret.currentpage];
 	s_secret.secpic.shader = 0;
 
-	s_secret.next.generic.flags |= QMF_GRAYED;
-	s_secret.prev.generic.flags |= QMF_GRAYED;
+	s_secret.next.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	s_secret.prev.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 
 	if (s_secret.currentpage < (MAX_SECRETPAGES - 1)) {
-		s_secret.next.generic.flags &= ~QMF_GRAYED;
+		s_secret.next.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 	}
 		
 	if (s_secret.currentpage > 0) {
-		s_secret.prev.generic.flags &= ~QMF_GRAYED;
+		s_secret.prev.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 	}
 
 }
