@@ -601,27 +601,10 @@ static void UI_PlayerSettings_Draw(void) {
 		prevlogo = s_playersettings.slogo_num - 1;
 	}
 
-	x = 52;
-	y = YLOGOPOS + 18;
-	UI_SetColor(g_color_table[i]);
-	UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[prevlogo]);
-	if (uis.cursorx >= x && uis.cursorx <= (x + 32) && uis.cursory >= y && uis.cursory <= (y + 32)) {
-		UI_SetColor(colorTBlack33);
-		UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[prevlogo]);
-	}
-
 	if (s_playersettings.slogo_num + 1 >= uis.spraylogosLoaded) {
 		nextlogo = 0;
 	} else {
 		nextlogo = s_playersettings.slogo_num + 1;
-	}
-
-	x = 164;
-	UI_SetColor(g_color_table[i]);
-	UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[nextlogo]);
-	if (uis.cursorx >= x && uis.cursorx <= (x + 32) && uis.cursory >= y && uis.cursory <= (y + 32)) {
-		UI_SetColor(colorTBlack33);
-		UI_DrawHandlePic(x, y, 32, 32, uis.spraylogoShaders[nextlogo]);
 	}
 
 	UI_SetColor(NULL);
@@ -1020,22 +1003,28 @@ static void UI_PlayerSettings_MenuInit(void) {
 	}
 
 	s_playersettings.logoleft.generic.type = MTYPE_BITMAP;
-	s_playersettings.logoleft.generic.flags = QMF_LEFT_JUSTIFY;
+	s_playersettings.logoleft.generic.name = MARROWLT0;
+	s_playersettings.logoleft.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_playersettings.logoleft.generic.x = 52;
 	s_playersettings.logoleft.generic.y = YLOGOPOS + 18;
 	s_playersettings.logoleft.generic.id = ID_PREVLOGO;
 	s_playersettings.logoleft.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.logoleft.width = 32;
 	s_playersettings.logoleft.height = 32;
+	s_playersettings.logoleft.focuspic = MARROWLT1;
+	s_playersettings.logoleft.focuspicinstead = qtrue;
 
 	s_playersettings.logoright.generic.type = MTYPE_BITMAP;
-	s_playersettings.logoright.generic.flags = QMF_LEFT_JUSTIFY;
+	s_playersettings.logoright.generic.name = MARROWRT0;
+	s_playersettings.logoright.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_playersettings.logoright.generic.x = 164;
 	s_playersettings.logoright.generic.y = YLOGOPOS + 18;
 	s_playersettings.logoright.generic.id = ID_NEXTLOGO;
 	s_playersettings.logoright.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.logoright.width = 32;
 	s_playersettings.logoright.height = 32;
+	s_playersettings.logoright.focuspic = MARROWRT1;
+	s_playersettings.logoright.focuspicinstead = qtrue;
 
 	s_playersettings.back.generic.type = MTYPE_BITMAP;
 	s_playersettings.back.generic.name = BACK0;
