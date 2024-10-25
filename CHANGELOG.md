@@ -6,7 +6,7 @@
 	- 32bit binaries to support Windows and Linux systems
 	- Freeze Tag (FT) game type and related assets like ice cold weapon effects
 	- Catch the KillerDuck (CTKD) game type
-	- One Lolly Capture (1LC) game type
+	- One Lolly Capture (1LC) game type supported by a selection of the original CTL maps
 	- PElvis (PadElvis) skin, glow skin and bot for the PADMAN player model
 	- HellPad skin, glow skin and bot for the PADMAN player model
 	- PadClassic skin, glow skin and bot for the PADMAN player model
@@ -15,6 +15,7 @@
 	- Summer music pack by neurological featuring 7 new tracks
 	- Milton Boulevard music pack by neurological featuring 7 new tracks
 	- Carnage music pack by MightyPete
+	- Kai's TrashMap version for CTL and 1LC
 	- ENTE's PadPack with PadCastle and PadGallery maps as optional installation option
 	- PadHero (defend) award/medal for defending the base and the lolly carrier in CTL, for defending a balloon box in your own team color in BB, and for defending a teammate carrying min 5 cartridges in SYC Team when attacked
 	- WatchPad (assist) award/medal for 1st returning the own lolly, and 2nd for killing the opposing lolly carrier if a teammate scores shortly after in CTL, for helping a teammate to raise a balloon in BB, and the nearest thawer should receive it for thawing a team mate
@@ -79,15 +80,14 @@
 	- Option to adjust the key mapping for taking a Screenshot `F12` (default) to Misc page of Controls menu
 	- Option to enable/disable Autorecord Demo `O` (default) to Misc page of Controls menu
 	- Option to enable/disable Sync Clients `P` (default) to Misc page of Controls menu
-	- Option to select the player's gender independent from the model's gender to Player page of Setup menu; also added 'none' as a new gender that forces the game to use they/them instead of he/his, she/her, or it/its if selected
-	- Option to enable/disable a random color for the spray logo in SYC or the Injector trail when fired
+	- Option to enable/disable a random color for the spray logo in SYC or the Injector trail when fired in InstaPad
 	- Spray logo name above the spray logo to Player settings menu
 	- Shadows to level shots in Create menu
 	- New mapping for F-keys via default.cfg (for developers and level designers): hide/show HUD `F5`; hide/show gun `F6`; following are cheat protected: hide/show wire frames `F7`; hide/show lightmap `F8`; hide/show render load information `F9`; enable/disable noclip `F10`; enable/disable god mode and give all items `F11`
 	- New cvar `con_scale [1 to 4]` to scale the console text when difficult to read at higher resolutions, takes decimal comma values, default 1
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- New cvar `cg_weaponOrder` to customize the weapon order from worse to best for extended Autoswitch Weapon option, default is '/1/2/4/6/3/7/8/9/5/'
-	- New cvar `cg_drawChatIcon [3|2|1|0]` to enable/disable the chat icon and to chose the size, 3 is big (20 pixels)default is 2 (16 pixels), 1 is small (12 pixels), 0 is off; this also influences the chat notification text size
+	- New cvar `cg_drawChatIcon [3|2|1|0]` to enable/disable the chat icon and to chose the size, 3 is big (20 pixels), default is 2 (16 pixels), 1 is small (12 pixels), 0 is off; this also influences the chat notification text size
 	- Protocol handler support for web browser based match making, join a match by clicking e.g. `worldofpadman://connect/example.com:27950`. For safety reasons, hostname:port can only contain characters from `[a-z|A-Z|0-9|.|:|-]`
 	- Defaults menu supports keys `[N|Y]` to chose menu options Yes or No
 	- New surface parameter `splashsteps` for splashy footstep sounds and common shader `splashclip` with texture
@@ -114,6 +114,7 @@
 	- Menu aspect ratio from 4:3 to 16:9 (WoP widescreen support)
 	- Ingame Help screens to explain all weapons, powerups, medals and icons
 	- Ingame vote menu being disabled when being spectator, spectators cannot vote anyways
+	- Select Bots and ingame Add Bots menus to be bound to and synced with cvar `g_spSkill`, default is 2 (Flower Power)
 	- Music player to support up to 12 music packs with up to 12 tracks each
 	- Server configs to support new game types (FT, CTKD, 1LC)
 	- Location of assets where useful (folder and filing cleanup)
@@ -138,6 +139,7 @@
 	- Player Settings menu to list first all PadCharacters followed by custom player models
 	- Fight button in the menus only works if a map is selected, a server is selected or specified with address, port, or password in the related menus
 	- Arrow buttons in the menus indicate now if first/last page/list entry is reached in the related menus by being disabled or hidden
+	- Accept button to a constant blink/pulse to alert users to apply recently made changes, requiring a restart of the game otherwise those changes will be lost
 	- Ingame Voice Chat menu to support new send target options: `attacker`, `crosshair` and `spatial` (default)
 	- Server browser list in Join menu to show net type (UDP/UDP6) again since some servers are shown several time and users don't know why
 	- Select Logo menu to show normal menu arrows and removed page numbers
@@ -153,7 +155,7 @@
 	- Cvar `com_introPlayed [1|0]` to `com_playIntro [1|0]` to be used to enable/disable the WoP into movie on every game startup, default is 1.
 	- Cvar `r_lightmap [1|0]` to be cheat protected now
 	- Cvar `cg_autoswitch [4|3|2|1|0]` to support more weapon auto switch options; 0 = Never: as before, simply switched off; 1 = Always: switches the weapon every time one is picked up; 2 = New: switches to a picked up weapon if it is new and was not in the inventory before; 3 = Better: changes to a picked up weapon if it is better than the currently selected weapon; 4 = New+Better: switches to a picked up weapon if it is new and was not in the inventory before and if it is better than the currently selected weapon; use cvar `cg_weaponOrder` to customize the weapon order (thanks to Open Arena for idea and code base); menu option is located at Game page of Options menu now
-	- `animap` shader key to support up to 16 textures instead of 8
+	- `animap` shader key to support up to 16 textures, was limited to 8 before
 	- World sound files location from folder `sounds` to `sound` and shortening
 	- Teammate wallhack icon to be shown through walls in all team game types, not only Big Balloon and to scale in size depending on distance like the LPS icon, if enabled
 	- Default balloon capture speed from 4 to 10 seconds in Big Balloon
@@ -195,12 +197,13 @@
 	- Anisotropy and Antialiasing options in Graphics menu to be displayed as 4x after video restart, although 2x was selected before
 	- Anisotropy option in Graphics menu not working at all and option always to be displayed as Off after WoP restart, although 2x or more was selected before
 	- Selection of cyan-red in Display menu always enables magenta-green anaglyph mode, magenta-green mode was not respected as new mode in the list
-	- Enabling Greyscale in Display menu always causes the Apply button to be shown even after game restart and without changes made afterwards
+	- Enabling Greyscale in Display menu always causes the Accept button to be shown even after game restart and without changes made afterwards
 	- Sync Every Frame tooltip in Game options menu to mistake the option for VSync; this option has nothing to do with VSync
 	- Glowing Player Model option in Game options cannot keep enabled status when Glowing Skin Color black is selected
 	- Not defined value for Start Lives in Start Server (Create) menu, default is 10 now
 	- Not used and invisible slots in bot grid of Select Bots menu to cause sound when mouse over
 	- Crosshair and crosshair names being visible in front of Select Logo ingame menu
+	- Select Bots and ingame Add Bots menus to remember the user selected bot skill 
 	- Wrong spray logo name allocation for Spooky and PadCho
 	- Fail to load OpenAL library on Windows 64bit systems
 	- Not correctly set default values for several options in the menu after reset to defaults
@@ -267,7 +270,7 @@
 	- OPUS to version 1.3.1
 	- OPUSFILE to version 0.12
 	- OGG to version 1.3.5
-	- SDL to version 2.31.0
+	- SDL to version 2.30.8
 	- JPEG to version 9e
 	- OpenAL soft to version 1.21.1
 
