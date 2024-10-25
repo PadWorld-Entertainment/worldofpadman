@@ -165,6 +165,7 @@ vmCvar_t wop_AutoBindUnusedKeys;
 vmCvar_t cg_drawChatIcon;
 vmCvar_t cg_chatBeep;
 vmCvar_t cg_glowModel;
+vmCvar_t g_spSkill;
 vmCvar_t cg_draw3dIcons;
 vmCvar_t cg_drawTeamOverlay;
 vmCvar_t cg_drawFriend;
@@ -241,6 +242,7 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&cg_drawChatIcon, "cg_drawChatIcon", "2", CVAR_ARCHIVE},
 								  {&cg_chatBeep, "cg_chatBeep", "7", CVAR_ARCHIVE},
 								  {&cg_glowModel, "cg_glowModel", "", CVAR_ARCHIVE},
+								  {&g_spSkill, "g_spSkill", "2", 0},
 								  {&cg_draw3dIcons, "cg_draw3dIcons", "1", CVAR_ARCHIVE},
 								  {&cg_drawTeamOverlay, "cg_drawTeamOverlay", "1", CVAR_ARCHIVE},
 								  {&cg_drawFriend, "cg_drawFriend", "1", CVAR_ARCHIVE},

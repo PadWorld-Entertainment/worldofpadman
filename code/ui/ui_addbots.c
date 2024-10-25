@@ -95,7 +95,7 @@ static void UI_AddBotsMenu_FightEvent(void *ptr, int event) {
 
 	team = addBotsMenuInfo.team.itemnames[addBotsMenuInfo.team.curvalue];
 	skill = addBotsMenuInfo.skill.curvalue + 1;
-
+	
 	trap_Cmd_ExecuteText(EXEC_APPEND,
 						 va("addbot %s %i %s %i\n", addBotsMenuInfo.botnames[addBotsMenuInfo.selectedBotNum], skill,
 							team, addBotsMenuInfo.delay));
@@ -118,6 +118,21 @@ static void UI_AddBotsMenu_BotEvent(void *ptr, int event) {
 	addBotsMenuInfo.selectedBotNum = ((menucommon_s *)ptr)->id - ID_BOTNAME0;
 	addBotsMenuInfo.bots[addBotsMenuInfo.selectedBotNum].color = colorDkOrange;
 	addBotsMenuInfo.bots[addBotsMenuInfo.selectedBotNum].focuscolor = color_orange;
+}
+
+/*
+=================
+UI_AddBotsMenu_SkillEvent
+=================
+*/
+static void UI_AddBotsMenu_SkillEvent(void *ptr, int event) {
+	int skill;
+
+	if (event != QM_ACTIVATED)
+		return;
+
+	skill = ((menulist_s *)ptr)->curvalue + 1;
+	trap_Cvar_SetValue("g_spSkill", skill);
 }
 
 /*
@@ -254,7 +269,7 @@ static const char *teamNames2[] = {"Red", "Blue", NULL};
 static void UI_AddBotsMenu_Init(void) {
 	int n;
 	int y;
-	int gametype;
+	int gametype, skill;
 	int count;
 	char info[MAX_INFO_STRING];
 
@@ -267,6 +282,11 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.menu.wrapAround = qtrue;
 	addBotsMenuInfo.delay = 1000;
 	addBotsMenuInfo.menu.key = AddBotsMenu_Key;
+
+	skill = (int)trap_Cvar_VariableValue("g_spSkill");
+	if (skill < 1 || skill > 5) {
+		skill = 2;
+	}
 
 	UI_AddBots_Cache();
 
@@ -327,7 +347,8 @@ static void UI_AddBotsMenu_Init(void) {
 	addBotsMenuInfo.skill.generic.name = "Skill:";
 	addBotsMenuInfo.skill.generic.id = ID_SKILL;
 	addBotsMenuInfo.skill.itemnames = skillNames;
-	addBotsMenuInfo.skill.curvalue = Com_Clamp(0, 4, (int)trap_Cvar_VariableValue("g_spSkill") - 1);
+	addBotsMenuInfo.skill.curvalue = skill - 1;
+	addBotsMenuInfo.skill.generic.callback = UI_AddBotsMenu_SkillEvent;
 
 	y += SMALLCHAR_HEIGHT;
 	addBotsMenuInfo.team.generic.type = MTYPE_SPINCONTROL;

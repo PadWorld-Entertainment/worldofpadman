@@ -89,7 +89,6 @@ typedef struct {
 	char longnamemaplist[MAX_SERVERMAPS][MAX_LONGNAMELENGTH];
 	int mapGamebits[MAX_SERVERMAPS];
 	selectbotinfo_t selectbotinfos[MAX_SELECTBOTS];
-	int botskill;
 	int maploop[MAX_MAPSINLOOP];
 	qhandle_t mapNumbers[10];
 } startserver_t;
@@ -426,6 +425,7 @@ static void UI_StartServer_MenuEvent(void *ptr, int event) {
 			int friendlyfire;
 			int instagib;
 			int pure;
+			int skill;
 			int n;
 			char buf[64];
 
@@ -442,6 +442,10 @@ static void UI_StartServer_MenuEvent(void *ptr, int event) {
 			friendlyfire = s_startserver.friendlyfire.curvalue;
 			instagib = s_startserver.instagib.curvalue;
 			pure = s_startserver.pure.curvalue;
+			skill = (int)trap_Cvar_VariableValue("g_spSkill");
+			if (skill < 1 || skill > 5) {
+				skill = 2;
+			}
 			gametype = gametype_remap[s_startserver.gametype.curvalue];
 
 			switch (gametype) {
@@ -503,7 +507,7 @@ static void UI_StartServer_MenuEvent(void *ptr, int event) {
 			trap_Cmd_ExecuteText(EXEC_APPEND, "wait 3\n");
 			for (n = 0; n < MAX_SELECTBOTS && s_startserver.selectbotinfos[n].name[0] != '\0'; n++) {
 				Com_sprintf(buf, sizeof(buf), "addbot %s %i %s\n", s_startserver.selectbotinfos[n].name,
-							s_startserver.botskill, teamstrs[s_startserver.selectbotinfos[n].team]);
+							skill, teamstrs[s_startserver.selectbotinfos[n].team]);
 				trap_Cmd_ExecuteText(EXEC_APPEND, buf);
 			}
 		}
@@ -935,7 +939,7 @@ SELECT BOTS MENU
 #define ARROWUP1 "menu/arrows/arryel_up1"
 #define ARROWDN0 "menu/arrows/arryel_dn0b"
 #define ARROWDN1 "menu/arrows/arryel_dn1"
-#define HEADERBOTSKILL "menu/headers/botskill"
+#define HEADERSKILL "menu/headers/botskill"
 #define HEADERBOTS "menu/headers/bots"
 #define HEADERCOLOR "menu/headers/color"
 #define HEADERTEAM "menu/headers/team"
@@ -955,7 +959,7 @@ typedef struct {
 	menubitmap_s arrowleft;
 	menubitmap_s arrowright;
 
-	menubitmap_s headerbotskill;
+	menubitmap_s headerskill;
 	menubitmap_s headerbots;
 	menubitmap_s headercolor;
 	menubitmap_s headerteam;
@@ -966,7 +970,7 @@ typedef struct {
 	menubitmap_s arrowup;
 	menubitmap_s arrowdown;
 
-	menulist_s botskill;
+	menulist_s skill;
 	menutext_s slotsleft;
 
 	menubitmap_s back;
@@ -983,8 +987,8 @@ typedef struct {
 
 static botSelectInfo_t botSelectInfo;
 
-static const char *botSkill_list[] = {"Kindergarten", "Flower Power", "Mosquito Bite",
-									  "Peacemaker", "Brutal Blue Noses", 0};
+static const char *skill_items[] = {"Kindergarten", "Flower Power", "Mosquito Bite",
+									  "Peacemaker", "Brutal Blue Noses", NULL};
 
 /*
 =================
@@ -1283,7 +1287,7 @@ UI_SelectBots_Cache
 =================
 */
 void UI_SelectBots_Cache(void) {
-	trap_R_RegisterShaderNoMip(HEADERBOTSKILL);
+	trap_R_RegisterShaderNoMip(HEADERSKILL);
 	trap_R_RegisterShaderNoMip(HEADERBOTS);
 	trap_R_RegisterShaderNoMip(HEADERCOLOR);
 	trap_R_RegisterShaderNoMip(HEADERTEAM);
@@ -1388,14 +1392,17 @@ static void UI_SelectBots_ListDown(void *ptr, int event) {
 
 /*
 =================
-UI_SelectBots_BotSkillChanged
+UI_SelectBots_SkillEvent
 =================
 */
-static void UI_SelectBots_BotSkillChanged(void *ptr, int event) {
+static void UI_SelectBots_SkillEvent(void *ptr, int event) {
+	int skill;
+
 	if (event != QM_ACTIVATED)
 		return;
 
-	s_startserver.botskill = ((menulist_s *)ptr)->curvalue + 1;
+	skill = ((menulist_s *)ptr)->curvalue + 1;
+	trap_Cvar_SetValue("g_spSkill", skill);
 }
 
 /*
@@ -1452,32 +1459,37 @@ UI_SelectBots_MenuInit
 static void UI_SelectBots_MenuInit(void) {
 	int i, j, k;
 	int x, y;
+	int skill;
 
 	memset(&botSelectInfo, 0, sizeof(botSelectInfo));
 	botSelectInfo.menu.wrapAround = qtrue;
 	botSelectInfo.menu.fullscreen = qtrue;
 	botSelectInfo.menu.bgparts = BGP_SELECTBOTS | BGP_MENUFX;
 
+	skill = (int)trap_Cvar_VariableValue("g_spSkill");
+	if (skill < 1 || skill > 5) {
+		skill = 2;
+	}
+
 	UI_SelectBots_Cache();
 
-	botSelectInfo.headerbotskill.generic.type = MTYPE_BITMAP;
-	botSelectInfo.headerbotskill.generic.flags = QMF_INACTIVE;
-	botSelectInfo.headerbotskill.generic.name = HEADERBOTSKILL;
-	botSelectInfo.headerbotskill.generic.x = 386;
-	botSelectInfo.headerbotskill.generic.y = 400;
-	botSelectInfo.headerbotskill.width = 140;
-	botSelectInfo.headerbotskill.height = 35;
-	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerbotskill);
+	botSelectInfo.headerskill.generic.type = MTYPE_BITMAP;
+	botSelectInfo.headerskill.generic.flags = QMF_INACTIVE;
+	botSelectInfo.headerskill.generic.name = HEADERSKILL;
+	botSelectInfo.headerskill.generic.x = 386;
+	botSelectInfo.headerskill.generic.y = 400;
+	botSelectInfo.headerskill.width = 140;
+	botSelectInfo.headerskill.height = 35;
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.headerskill);
 
-	botSelectInfo.botskill.generic.type = MTYPE_SPINCONTROL;
-	botSelectInfo.botskill.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
-	botSelectInfo.botskill.generic.x = 398;
-	botSelectInfo.botskill.generic.y = 436;
-	botSelectInfo.botskill.itemnames = botSkill_list;
-	botSelectInfo.botskill.generic.ownerdraw = UI_StartServer_GameTypeDraw;
-	botSelectInfo.botskill.curvalue = 1;
-	botSelectInfo.botskill.generic.callback = UI_SelectBots_BotSkillChanged;
-	s_startserver.botskill = 2;
+	botSelectInfo.skill.generic.type = MTYPE_SPINCONTROL;
+	botSelectInfo.skill.generic.flags = QMF_PULSEIFFOCUS | QMF_SMALLFONT | QMF_FORCEDROPDOWN;
+	botSelectInfo.skill.generic.x = 398;
+	botSelectInfo.skill.generic.y = 436;
+	botSelectInfo.skill.itemnames = skill_items;
+	botSelectInfo.skill.generic.ownerdraw = UI_StartServer_GameTypeDraw;
+	botSelectInfo.skill.curvalue = skill - 1;
+	botSelectInfo.skill.generic.callback = UI_SelectBots_SkillEvent;
 
 	y = GRID_YPOS;
 	for (i = 0, k = 0; i < BOTGRID_ROWS; i++) {
@@ -1614,7 +1626,7 @@ static void UI_SelectBots_MenuInit(void) {
 	botSelectInfo.back.height = 40;
 	botSelectInfo.back.focuspic = BACK1;
 
-	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.botskill);
+	Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.skill);
 	for (i = 0; i < MAX_BOTSPERPAGE; i++) {
 		Menu_AddItem(&botSelectInfo.menu, &botSelectInfo.pics[i]);
 	}
