@@ -221,14 +221,72 @@ static int QDECL SortTracks(const void *a, const void *b) {
 // snd_restart causes shutdown without initialization
 static qboolean musicInitialized = qfalse;
 
+static qboolean UI_MusicBox_AddAlbum(const char *albumStr) {
+	char albumName[32];
+	int trackDirLen, numTrackDirs, t;
+	int numTracks;
+	char trackDirList[1024];
+	const char *trackStr;
+	const int albumDirLen = strlen(albumStr);
+
+	// '/' is missing if the directory isn't in a pk3
+	if ('/' == albumStr[(albumDirLen - 1)]) {
+		Q_strncpyz(albumName, albumStr, sizeof(albumName));
+	} else {
+		Com_sprintf(albumName, sizeof(albumName), "%s/", albumStr);
+	}
+	Q_strncpyz(musicInfo.albums[musicInfo.numAlbums].name, albumStr,
+			   sizeof(musicInfo.albums[musicInfo.numAlbums].name));
+
+	musicInfo.albums[musicInfo.numAlbums].background = trap_R_RegisterShaderNoMip(va("wopmusic/%sbg", albumName));
+
+	// Load tracks for each supported format, currently .ogg only
+
+	// it'd be best if songs were in a subdirectory (without any non-track-files like bg)
+	// so we could omit the .foo extension and just load all files from that dir
+
+	numTracks = 0;
+	numTrackDirs = trap_FS_GetFileList(va("wopmusic/%s", albumName), ".ogg", trackDirList, sizeof(trackDirList));
+	trackStr = trackDirList;
+	// numTracks is the number of .wav that were found previously
+	if (numTrackDirs > (MAX_TRACKS - numTracks)) {
+		numTrackDirs = (MAX_TRACKS - numTracks);
+	}
+
+	for (t = 0; t < numTrackDirs; ++t, trackStr += (trackDirLen + 1)) {
+		if ('\0' == *trackStr) {
+			trackDirLen = 0;
+			continue;
+		}
+
+		trackDirLen = strlen(trackStr);
+
+		Com_sprintf(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].file,
+					sizeof(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].file), "wopmusic/%s%s", albumName,
+					trackStr);
+
+		// "09_pad-anthem (credits).ogg"
+		Q_strncpyz(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].title, (char *)(trackStr + 3),
+				   sizeof(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].title));
+		*strstr(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].title, ".ogg") = '\0';
+		numTracks++;
+	}
+
+	// sort album by track names
+	qsort(musicInfo.albums[musicInfo.numAlbums].tracks, numTracks, sizeof(trackInfo_t), SortTracks);
+
+	if (numTracks > 0) {
+		musicInfo.albums[musicInfo.numAlbums].numTracks = numTracks;
+		musicInfo.numAlbums++;
+	}
+	return qtrue;
+}
+
 void UI_MusicBox_Init(void) {
 	char albumDirList[1024];
-	char trackDirList[1024];
-	char *albumStr, *trackStr;
+	const char *albumStr;
 	int albumDirLen, numAlbumDirs, a;
-	int trackDirLen, numTrackDirs, t;
-	char albumName[32];
-	int numTracks;
+	int trackDirLen;
 
 	musicInitialized = qtrue;
 	memset(&musicInfo, 0, sizeof(musicInfo));
@@ -240,79 +298,37 @@ void UI_MusicBox_Init(void) {
 	}
 
 	numAlbumDirs = trap_FS_GetFileList("wopmusic", "/", albumDirList, sizeof(albumDirList));
-	albumStr = albumDirList;
 	if (numAlbumDirs > MAX_ALBUMS) {
 		numAlbumDirs = MAX_ALBUMS;
 	}
-	for (a = 0; a < numAlbumDirs; ++a, albumStr += (albumDirLen + 1)) {
+
+	// we want the dieselkopf albums to be the first ones
+	albumStr = albumDirList;
+	for (a = 0; a < numAlbumDirs; ++a) {
+		if (!Q_stricmpn(albumStr, "dieselkopf", 10)) {
+			UI_MusicBox_AddAlbum(albumStr);
+		}
+		albumStr += strlen(albumStr) + 1;
+	}
+
+	albumStr = albumDirList;
+	for (a = 0; a < numAlbumDirs; ++a) {
 		if ('\0' == *albumStr) {
-			albumDirLen = 0;
+			albumStr++;
 			continue;
 		}
-
-		albumDirLen = strlen(albumStr);
-
 		if (!Q_stricmp(albumStr, ".") || !Q_stricmp(albumStr, "..")) {
 			continue;
 		}
-
-		// '/' is missing if the directory isn't in a pk3
-		if ('/' == albumStr[(albumDirLen - 1)]) {
-			Q_strncpyz(albumName, albumStr, sizeof(albumName));
-		} else {
-			Com_sprintf(albumName, sizeof(albumName), "%s/", albumStr);
+		if (Q_stricmpn(albumStr, "dieselkopf", 10)) {
+			UI_MusicBox_AddAlbum(albumStr);
 		}
-		Q_strncpyz(musicInfo.albums[musicInfo.numAlbums].name, albumStr,
-				   sizeof(musicInfo.albums[musicInfo.numAlbums].name));
-
-		musicInfo.albums[musicInfo.numAlbums].background = trap_R_RegisterShaderNoMip(va("wopmusic/%sbg", albumName));
-
-		// Load tracks for each supported format, currently .ogg only
-
-		// it'd be best if songs were in a subdirectory (without any non-track-files like bg)
-		// so we could omit the .foo extension and just load all files from that dir
-
-		numTracks = 0;
-		numTrackDirs = trap_FS_GetFileList(va("wopmusic/%s", albumName), ".ogg", trackDirList, sizeof(trackDirList));
-		trackStr = trackDirList;
-		// numTracks is the number of .wav that were found previously
-		if (numTrackDirs > (MAX_TRACKS - numTracks)) {
-			numTrackDirs = (MAX_TRACKS - numTracks);
-		}
-
-		for (t = 0; t < numTrackDirs; ++t, trackStr += (trackDirLen + 1)) {
-			if ('\0' == *trackStr) {
-				trackDirLen = 0;
-				continue;
-			}
-
-			trackDirLen = strlen(trackStr);
-
-			Com_sprintf(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].file,
-						sizeof(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].file), "wopmusic/%s%s",
-						albumName, trackStr);
-
-			// "09_pad-anthem (credits).ogg"
-			Q_strncpyz(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].title, (char *)(trackStr + 3),
-					   sizeof(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].title));
-			*strstr(musicInfo.albums[musicInfo.numAlbums].tracks[numTracks].title, ".ogg") = '\0';
-			numTracks++;
-		}
-
-		// sort album by track names
-		qsort(musicInfo.albums[musicInfo.numAlbums].tracks, numTracks, sizeof(trackInfo_t), SortTracks);
-
-		if (numTracks > 0) {
-			musicInfo.albums[musicInfo.numAlbums].numTracks = numTracks;
-			musicInfo.numAlbums++;
-		}
+		albumStr += strlen(albumStr) + 1;
 	}
-
 	// no playlist in memory?
 	if (NULL == musicInfo.playOrder) {
 		fileHandle_t f;
 		char playlist[4096];
-		const char *trackName;
 		const char *playlistPtr;
 		int i;
 
@@ -336,7 +352,7 @@ void UI_MusicBox_Init(void) {
 
 		playlistPtr = playlist;
 		for (;;) {
-			trackName = Com_ParseLine(&playlistPtr);
+			const char *trackName = Com_ParseLine(&playlistPtr);
 			if (*playlistPtr == '\0' && *trackName == '\0') {
 				break;
 			}
@@ -344,6 +360,7 @@ void UI_MusicBox_Init(void) {
 				continue;
 			}
 			for (a = 0; a < musicInfo.numAlbums; ++a) {
+				int t;
 				for (t = 0; t < musicInfo.albums[a].numTracks; ++t) {
 					if (Q_stricmp(musicInfo.albums[a].tracks[t].file, trackName) == 0) {
 						Playlist_AddTrack(a, t, qtrue);
