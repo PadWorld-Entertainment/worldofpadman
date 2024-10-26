@@ -438,6 +438,7 @@ Touch_Item
 void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	int respawn;
 	qboolean predict;
+	pickupresult_t result;
 
 	if (!other->client)
 		return;
@@ -448,7 +449,8 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		return; // frozen people don't pick stuff up
 
 	// the same pickup rules are used for client side and server side
-	if (BG_CanItemBeGrabbed(g_gametype.integer, &ent->s, &other->client->ps, level.time) != PICKUP_OK) {
+	result = BG_CanItemBeGrabbed(g_gametype.integer, &ent->s, &other->client->ps, level.time);
+	if (result != PICKUP_OK) {
 		return;
 	}
 

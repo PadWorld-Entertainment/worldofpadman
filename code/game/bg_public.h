@@ -756,7 +756,8 @@ const gitem_t *BG_FindItemForHoldable(holdable_t pw);
 
 typedef enum {
 	PICKUP_OK = 0,
-	PICKUP_NOT_ALLOWED = 1
+	PICKUP_NOT_ALLOWED = 1,
+	PICKUP_KILLERDUCKS_NOT_YET_AGAIN = 2
 } pickupresult_t;
 
 pickupresult_t BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playerState_t *ps, int time);

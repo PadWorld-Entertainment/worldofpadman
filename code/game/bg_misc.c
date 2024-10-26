@@ -839,7 +839,7 @@ pickupresult_t BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const
 			// don't allow to re-collect after dropping it (for some time)
 			// see G_DropKillerDucks()
 			if (ent->otherEntityNum == ps->clientNum && time < ent->time) {
-				return PICKUP_NOT_ALLOWED;
+				return PICKUP_KILLERDUCKS_NOT_YET_AGAIN;
 			}
 		}
 		// can only hold one item at a time
