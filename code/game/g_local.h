@@ -341,7 +341,7 @@ struct gclient_s {
 
 	qboolean readyToFight;
 	int last_slickent_touch; // note last touch time ... to control deactivation
-	int lastOwnCartMSGtime;
+	int lastWarningMessageTime;
 
 	int sprayroomleavetime;	 // when the player have to leave the room
 	int sprayroomsoundflags; // 1 -> TenSecondsTo..., 2 -> CountDown

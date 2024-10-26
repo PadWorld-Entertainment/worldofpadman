@@ -239,9 +239,9 @@ static int Pickup_Ammo(gentity_t *ent, gentity_t *other) {
 		}
 
 		if (!strcmp(ent->item->classname, "ammo_spray_n") && ent->s.otherEntityNum == other->s.number) {
-			if ((level.time - other->client->lastOwnCartMSGtime) > 5000) {
+			if ((level.time - other->client->lastWarningMessageTime) > 5000) {
 				trap_SendServerCommand(other->s.clientNum, "cp \"You can't grab your own cartridge!\n\"");
-				other->client->lastOwnCartMSGtime = level.time;
+				other->client->lastWarningMessageTime = level.time;
 			}
 			return 0; // leave the item in the world ...
 		}
@@ -250,11 +250,9 @@ static int Pickup_Ammo(gentity_t *ent, gentity_t *other) {
 			 (!strcmp(ent->item->classname, "ammo_spray_r") && other->client->sess.sessionTeam == TEAM_RED) ||
 			 !strcmp(ent->item->classname, "ammo_spray_n")) &&
 			other->client->ps.ammo[WP_SPRAYPISTOL] >= MAX_CARTRIDGES) {
-			if ((level.time - other->client->lastOwnCartMSGtime) >
-				5000) // I know the variablename doesn't fit for this :P (#@)
-			{
+			if ((level.time - other->client->lastWarningMessageTime) > 5000) {
 				trap_SendServerCommand(other->s.clientNum, "cp \"You can't grab more than 8 cartridges!\n\"");
-				other->client->lastOwnCartMSGtime = level.time;
+				other->client->lastWarningMessageTime = level.time;
 			}
 			return 0; // leave the item in the world ...
 		}
