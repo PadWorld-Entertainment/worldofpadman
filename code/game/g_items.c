@@ -449,6 +449,12 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// the same pickup rules are used for client side and server side
 	result = BG_CanItemBeGrabbed(g_gametype.integer, &ent->s, &other->client->ps, level.time);
 	if (result != PICKUP_OK) {
+		if (result == PICKUP_KILLERDUCKS_NOT_YET_AGAIN) {
+			if ((level.time - other->client->lastWarningMessageTime) > 5000) {
+				trap_SendServerCommand(other->s.clientNum, "cp \"You can't pick up the KillerDuck for a while!\n\"");
+				other->client->lastWarningMessageTime = level.time;
+			}
+		}
 		return;
 	}
 
