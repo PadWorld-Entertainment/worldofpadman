@@ -750,7 +750,7 @@ Returns false if the item should not be picked up.
 This needs to be the same for client side prediction and server use.
 ================
 */
-qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playerState_t *ps, int time) {
+pickupresult_t BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playerState_t *ps, int time) {
 	const gitem_t *item;
 
 	if (ent->modelindex < 1 || ent->modelindex >= bg_numItems) {
@@ -762,56 +762,56 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 	switch (item->giType) {
 	case IT_WEAPON:
 		if (BG_IsKillerDuck(ps)) {
-			return qfalse;
+			return PICKUP_NOT_ALLOWED;
 		}
-		return qtrue; // weapons are always picked up
+		return PICKUP_OK; // weapons are always picked up
 
 	case IT_AMMO:
 		if (BG_IsKillerDuck(ps)) {
-			return qfalse;
+			return PICKUP_NOT_ALLOWED;
 		}
 		if (ps->ammo[item->giTag] >= MAXAMMO_WEAPON) {
-			return qfalse; // can't hold any more
+			return PICKUP_NOT_ALLOWED; // can't hold any more
 		}
-		return qtrue;
+		return PICKUP_OK;
 
 	case IT_ARMOR:
 		if (ps->stats[STAT_ARMOR] >= ps->stats[STAT_MAX_HEALTH] * 2) {
-			return qfalse;
+			return PICKUP_NOT_ALLOWED;
 		}
-		return qtrue;
+		return PICKUP_OK;
 
 	case IT_HEALTH:
 		// small and mega healths will go over the max, otherwise
 		// don't pick up if already at max
 		if (item->quantity == 5 || item->quantity == 100) {
 			if (ps->stats[STAT_HEALTH] >= ps->stats[STAT_MAX_HEALTH] * 2) {
-				return qfalse;
+				return PICKUP_NOT_ALLOWED;
 			}
-			return qtrue;
+			return PICKUP_OK;
 		}
 
 		if (ps->stats[STAT_HEALTH] >= ps->stats[STAT_MAX_HEALTH]) {
-			return qfalse;
+			return PICKUP_NOT_ALLOWED;
 		}
-		return qtrue;
+		return PICKUP_OK;
 
 	case IT_POWERUP:
-		return qtrue; // powerups are always picked up
+		return PICKUP_OK; // powerups are always picked up
 
 	case IT_TEAM: // team items, such as flags
 		if (gametype == GT_1FCTF) {
 			// neutral flag can always be picked up
 			if (item->giTag == PW_NEUTRALFLAG) {
-				return qtrue;
+				return PICKUP_OK;
 			}
 			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
 				if (item->giTag == PW_BLUEFLAG && ps->powerups[PW_NEUTRALFLAG]) {
-					return qtrue;
+					return PICKUP_OK;
 				}
 			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
 				if (item->giTag == PW_REDFLAG && ps->powerups[PW_NEUTRALFLAG]) {
-					return qtrue;
+					return PICKUP_OK;
 				}
 			}
 		}
@@ -823,15 +823,15 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
 				if (item->giTag == PW_BLUEFLAG || (item->giTag == PW_REDFLAG && ent->modelindex2) ||
 					(item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG]))
-					return qtrue;
+					return PICKUP_OK;
 			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
 				if (item->giTag == PW_REDFLAG || (item->giTag == PW_BLUEFLAG && ent->modelindex2) ||
 					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]))
-					return qtrue;
+					return PICKUP_OK;
 			}
 		}
 
-		return qfalse;
+		return PICKUP_NOT_ALLOWED;
 
 	case IT_HOLDABLE:
 		// the other item is getting dropped when you collect the killerducks in this game mode
@@ -839,22 +839,22 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 			// don't allow to re-collect after dropping it (for some time)
 			// see G_DropKillerDucks()
 			if (ent->otherEntityNum == ps->clientNum && time < ent->time) {
-				return qfalse;
+				return PICKUP_NOT_ALLOWED;
 			}
 		}
 		// can only hold one item at a time
 		if (ps->stats[STAT_HOLDABLE_ITEM]) {
 			// pick it up, if you already have one of this type
 			if (ps->stats[STAT_HOLDABLE_ITEM] == item - bg_itemlist)
-				return qtrue;
+				return PICKUP_OK;
 
 			// the other item is getting dropped when you collect the killerducks in this game mode
 			if (gametype == GT_CATCH && item->giTag == HI_KILLERDUCKS)
-				return qtrue;
+				return PICKUP_OK;
 
-			return qfalse;
+			return PICKUP_NOT_ALLOWED;
 		}
-		return qtrue;
+		return PICKUP_OK;
 
 	case IT_BAD:
 		Com_Error(ERR_DROP, "BG_CanItemBeGrabbed: IT_BAD");
@@ -867,7 +867,7 @@ qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playe
 		break;
 	}
 
-	return qfalse;
+	return PICKUP_NOT_ALLOWED;
 }
 
 /*

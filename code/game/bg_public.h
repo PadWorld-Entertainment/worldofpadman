@@ -754,7 +754,12 @@ const gitem_t *BG_FindItemForPowerup(powerup_t pw);
 const gitem_t *BG_FindItemForHoldable(holdable_t pw);
 #define ITEM_INDEX(x) ((x)-bg_itemlist)
 
-qboolean BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playerState_t *ps, int time);
+typedef enum {
+	PICKUP_OK = 0,
+	PICKUP_NOT_ALLOWED = 1
+} pickupresult_t;
+
+pickupresult_t BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const playerState_t *ps, int time);
 
 qboolean BG_IsKillerDuck(const playerState_t *ps);
 

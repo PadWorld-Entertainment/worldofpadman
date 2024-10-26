@@ -283,7 +283,7 @@ static void CG_TouchItem(centity_t *cent) {
 		}
 	}
 
-	if (!BG_CanItemBeGrabbed(cgs.gametype, &cent->currentState, &cg.predictedPlayerState, cg.time)) {
+	if (BG_CanItemBeGrabbed(cgs.gametype, &cent->currentState, &cg.predictedPlayerState, cg.time) != PICKUP_OK) {
 		return; // can't hold it
 	}
 
