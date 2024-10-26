@@ -135,6 +135,10 @@ gentity_t *G_DropKillerDucks(gentity_t *ent) {
 		Com_Error(ERR_DROP, "Failed to drop the KillerDuck");
 	}
 
+	// wait a bit before we send a warning for not being able to pick up
+	// the killerducks that fast again - see PICKUP_KILLERDUCKS_NOT_YET_AGAIN
+	// and the handling in Touch_Item()
+	client->lastWarningMessageTime = level.time;
 	// don't allow to re-collect for 5 seconds
 	// see BG_CanItemBeGrabbed()
 	killerDucks->s.otherEntityNum = ent->s.number;
