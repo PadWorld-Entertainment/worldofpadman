@@ -493,13 +493,15 @@ static void UI_PlayerSettings_BuildList(void) {
 
 		// Find the model icon for the menu. If there is none, take the default model icon instead.
 		// This will help supporting custom player models with missing or incorrect model icons.
-		if (ps_playericons.modelicons[ps_playericons.nummodel] =
-				trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_icon", dirptr))) {
-			ps_playericons.modeliconsB[ps_playericons.nummodel] =
+		ps_playericons.modelicons[ps_playericons.nummodel] =
+				trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_icon", dirptr));
+		ps_playericons.modeliconsB[ps_playericons.nummodel] =
 				trap_R_RegisterShaderNoMip(va("models/wop_players/%s/menu_iconb", dirptr));
-		} else {
+		if (!ps_playericons.modelicons[ps_playericons.nummodel]) {
 			ps_playericons.modelicons[ps_playericons.nummodel] =
 				trap_R_RegisterShaderNoMip("menu/art/micon");
+		}
+		if (!ps_playericons.modeliconsB[ps_playericons.nummodel]) {
 			ps_playericons.modeliconsB[ps_playericons.nummodel] =
 				trap_R_RegisterShaderNoMip("menu/art/miconb");
 		}
