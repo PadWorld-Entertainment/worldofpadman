@@ -135,7 +135,7 @@ static void FT_PushThawerAway(const gentity_t *player, gentity_t *thawer, int di
 /**
  * @returns qtrue if we are in FreezeTag
  */
-qboolean G_FreezeTag() {
+qboolean G_FreezeTag(void) {
 	return g_gametype.integer == GT_FREEZETAG;
 }
 
