@@ -198,10 +198,6 @@ static void UI_HelpMenu_SetTopic(void) {
 			helpIndex = GAMETYPE_REMAP[gametype];
 			helpMin = helpIndex;
 			helpMax = helpIndex;
-
-			helpMenuInfo.prev.generic.flags = QMF_HIDDEN;
-			helpMenuInfo.next.generic.flags = QMF_HIDDEN;
-
 			helpMenuInfo.width = HMI_GAMETYPE_W;
 			helpMenuInfo.height = HMI_GAMETYPE_H;
 			helpMenuInfo.x = HMI_GAMETYPE_X;
@@ -228,7 +224,6 @@ static void UI_HelpMenu_SetTopic(void) {
 		helpMenuInfo.y = HMI_ITEM_Y;
 		UI_HelpMenu_AdjustButtons();
 	}
-
 	helpMenuInfo.img = trap_R_RegisterShaderNoMip(va(HELPMENU_PATH "%s", helpList[helpIndex]));
 }
 
