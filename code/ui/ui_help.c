@@ -81,17 +81,18 @@ UI_HelpMenu_AdjustButtons
 ===============
 */
 static void UI_HelpMenu_AdjustButtons(void) {
-	helpMenuInfo.prev.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-	helpMenuInfo.next.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 
-	if (helpIndex <= 0) {
+	if (helpIndex > 0) {
+		helpMenuInfo.prev.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+	} else {
 		helpMenuInfo.prev.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
-	if (helpIndex >= helpMax) {
+
+	if (helpIndex < helpMax) {
+		helpMenuInfo.next.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+	} else {
 		helpMenuInfo.next.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
-
-	helpMenuInfo.img = trap_R_RegisterShaderNoMip(va(HELPMENU_PATH "%s", helpList[helpIndex]));
 }
 
 /*
@@ -179,6 +180,9 @@ static void UI_HelpMenu_SetTopic(void) {
 	char info[MAX_INFO_STRING];
 	int gametype;
 
+	helpMenuInfo.prev.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	helpMenuInfo.next.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+
 	if (trap_Argc() > 1) {
 		arg = UI_Argv(1);
 
@@ -211,6 +215,7 @@ static void UI_HelpMenu_SetTopic(void) {
 			helpMenuInfo.height = HMI_ITEM_H;
 			helpMenuInfo.x = HMI_ITEM_X;
 			helpMenuInfo.y = HMI_ITEM_Y;
+			UI_HelpMenu_AdjustButtons();
 		}
 	} else {
 		helpMin = 0;
@@ -221,9 +226,10 @@ static void UI_HelpMenu_SetTopic(void) {
 		helpMenuInfo.height = HMI_ITEM_H;
 		helpMenuInfo.x = HMI_ITEM_X;
 		helpMenuInfo.y = HMI_ITEM_Y;
+		UI_HelpMenu_AdjustButtons();
 	}
 
-	UI_HelpMenu_AdjustButtons();
+	helpMenuInfo.img = trap_R_RegisterShaderNoMip(va(HELPMENU_PATH "%s", helpList[helpIndex]));
 }
 
 /*
