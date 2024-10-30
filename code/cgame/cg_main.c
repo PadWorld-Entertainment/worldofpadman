@@ -1037,6 +1037,18 @@ static void CG_RegisterGraphics(void) {
 			cgs.media.blueFlagModel = trap_R_RegisterModel("models/ctl/lollipop_blue");
 			cgs.media.redFlagShader[0] = trap_R_RegisterShaderNoMip("icons/hud_lolly_red1");
 			cgs.media.blueFlagShader[0] = trap_R_RegisterShaderNoMip("icons/hud_lolly_blue1");
+			// BamBam assets
+			cgs.media.bambamMissileRedShader = trap_R_RegisterShader("bambamMissileRed");
+			cgs.media.bambamMissileBlueShader = trap_R_RegisterShader("bambamMissileBlue");
+			trap_R_RegisterModel("models/weapons2/bambam/bambam_red");
+			trap_R_RegisterModel("models/weapons2/bambam/bambam_blue");
+			cgs.media.bambamExplosionLeg = trap_R_RegisterModel("models/weapons2/bambam/bambamExplosionLeg");
+			cgs.media.bambamExplosionTorso = trap_R_RegisterModel("models/weapons2/bambam/bambamExplosionTorso");
+			cgs.media.bambamImpactDrops = trap_R_RegisterModel("models/weaponsfx/bambamdrop");
+			cgs.media.bambamImpactDropsRedShader = trap_R_RegisterShader("models/weaponsfx/bambamdrop_red");
+			cgs.media.bambamImpactDropsBlueShader = trap_R_RegisterShader("models/weaponsfx/bambamdrop_blue");
+			cgs.media.bambamHealthIconBG = trap_R_RegisterShaderNoMip("models/weapons2/bambam/bamhealth01");
+			cgs.media.bambamHealthIcon = trap_R_RegisterShaderNoMip("models/weapons2/bambam/bamhealth02");
 		}
 
 		if (cgs.gametype == GT_CTF || cg_buildScript.integer) {
@@ -1044,21 +1056,6 @@ static void CG_RegisterGraphics(void) {
 			cgs.media.redFlagShader[2] = trap_R_RegisterShaderNoMip("icons/hud_lolly_red3");
 			cgs.media.blueFlagShader[1] = trap_R_RegisterShaderNoMip("icons/hud_lolly_blue2");
 			cgs.media.blueFlagShader[2] = trap_R_RegisterShaderNoMip("icons/hud_lolly_blue3");
-
-			cgs.media.bambamMissileRedShader = trap_R_RegisterShader("bambamMissileRed");
-			cgs.media.bambamMissileBlueShader = trap_R_RegisterShader("bambamMissileBlue");
-			trap_R_RegisterModel("models/weapons2/bambam/bambam_red");
-			trap_R_RegisterModel("models/weapons2/bambam/bambam_blue");
-
-			cgs.media.bambamExplosionLeg = trap_R_RegisterModel("models/weapons2/bambam/bambamExplosionLeg");
-			cgs.media.bambamExplosionTorso = trap_R_RegisterModel("models/weapons2/bambam/bambamExplosionTorso");
-			cgs.media.bambamImpactDrops = trap_R_RegisterModel("models/weaponsfx/bambamdrop");
-
-			cgs.media.bambamImpactDropsRedShader = trap_R_RegisterShader("models/weaponsfx/bambamdrop_red");
-			cgs.media.bambamImpactDropsBlueShader = trap_R_RegisterShader("models/weaponsfx/bambamdrop_blue");
-
-			cgs.media.bambamHealthIconBG = trap_R_RegisterShaderNoMip("models/weapons2/bambam/bamhealth01");
-			cgs.media.bambamHealthIcon = trap_R_RegisterShaderNoMip("models/weapons2/bambam/bamhealth02");
 		}
 
 		if (cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
