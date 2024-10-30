@@ -1454,6 +1454,10 @@ void BotChooseWeapon(bot_state_t *bs) {
 			}
 		}
 
+		if (BG_IsKillerDuck(&bs->cur_ps)) {
+			newweaponnum = WP_KILLERDUCKS;
+		}
+
 		if (g_modInstagib.integer && (newweaponnum != WP_SPRAYPISTOL)) {
 			newweaponnum = Instagib_getSpawnWeapon();
 			bs->weaponnum = newweaponnum;
