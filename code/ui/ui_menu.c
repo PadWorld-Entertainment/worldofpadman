@@ -341,7 +341,7 @@ void UI_MainMenu(void) {
 
 	s_main.mania.generic.type = MTYPE_BITMAP;
 	s_main.mania.generic.name = MANIA0;
-	s_main.mania.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
+	s_main.mania.generic.flags = QMF_INACTIVE; // QMF_HIGHLIGHT_IF_FOCUS;
 	s_main.mania.generic.x = 0;
 	s_main.mania.generic.y = 300;
 	s_main.mania.generic.id = ID_MANIA;
