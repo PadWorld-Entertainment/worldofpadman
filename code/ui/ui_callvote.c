@@ -535,7 +535,7 @@ static void UI_CallVoteMenu_Init(void) {
 	s_callVoteMenu.voteno.generic.flags = QMF_RIGHT_JUSTIFY;
 	s_callVoteMenu.voteno.generic.callback = UI_CallVote_Vote;
 	s_callVoteMenu.voteno.generic.id = ID_VOTENO;
-	s_callVoteMenu.voteno.generic.x = SCREEN_CENTER - 40;
+	s_callVoteMenu.voteno.generic.x = SCREEN_CENTER + 40;
 	s_callVoteMenu.voteno.generic.y = 250;
 	s_callVoteMenu.voteno.string = "NO";
 	s_callVoteMenu.voteno.style = (UI_SMALLFONT | UI_RIGHT);
