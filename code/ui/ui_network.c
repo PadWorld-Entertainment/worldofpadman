@@ -187,32 +187,32 @@ static void UI_NetworkOptions_UpdateMenuItems(void) {
 		networkOptionsInfo.voipMode.curvalue = 0;
 		networkOptionsInfo.voipHint.generic.flags &= ~QMF_HIDDEN;
 		networkOptionsInfo.voipMode.generic.flags |= QMF_GRAYED;
-		networkOptionsInfo.voipVADmode.generic.flags |= QMF_HIDDEN;
-		networkOptionsInfo.voipVADthreshold.generic.flags |= QMF_HIDDEN;
-		networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN;
-		networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN;
-		networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN;
-		networkOptionsInfo.mumbleScale.generic.flags |= QMF_HIDDEN;
+		networkOptionsInfo.voipVADmode.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipVADthreshold.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.mumbleScale.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 	} else {
 		networkOptionsInfo.voipHint.generic.flags |= QMF_HIDDEN;
 		networkOptionsInfo.voipMode.generic.flags &= ~QMF_GRAYED;
 
 		// voipMode is set to Mumble
 		if (!trap_Cvar_VariableValue("cl_voip") && trap_Cvar_VariableValue("cl_useMumble")) {
-			networkOptionsInfo.voipVADmode.generic.flags |= QMF_HIDDEN;
-			networkOptionsInfo.voipVADthreshold.generic.flags |= QMF_HIDDEN;
-			networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN;
-			networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN;
-			networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN;
+			networkOptionsInfo.voipVADmode.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipVADthreshold.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 			networkOptionsInfo.mumbleScale.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 
 			// voipMode is set to Built-in
 		} else if (trap_Cvar_VariableValue("cl_voip") && !trap_Cvar_VariableValue("cl_useMumble")) {
-			networkOptionsInfo.voipVADmode.generic.flags &= ~QMF_HIDDEN;
-			networkOptionsInfo.voipVADthreshold.generic.flags &= ~QMF_HIDDEN;
-			networkOptionsInfo.voipGainDuringCapture.generic.flags &= ~QMF_HIDDEN;
-			networkOptionsInfo.voipCaptureMult.generic.flags &= ~QMF_HIDDEN;
-			networkOptionsInfo.voipSendTarget.generic.flags &= ~QMF_HIDDEN;
+			networkOptionsInfo.voipVADmode.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+			networkOptionsInfo.voipVADthreshold.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+			networkOptionsInfo.voipGainDuringCapture.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+			networkOptionsInfo.voipCaptureMult.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+			networkOptionsInfo.voipSendTarget.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 			networkOptionsInfo.mumbleScale.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 
 			// automatic recording enabled is a condition for voip vad threshold
@@ -224,11 +224,11 @@ static void UI_NetworkOptions_UpdateMenuItems(void) {
 			UI_NetworkOptions_SendTargetUpdate();
 		} else {
 			// voipMode is set to off
-			networkOptionsInfo.voipVADmode.generic.flags |= QMF_HIDDEN;
-			networkOptionsInfo.voipVADthreshold.generic.flags |= QMF_HIDDEN;
-			networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN;
-			networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN;
-			networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN;
+			networkOptionsInfo.voipVADmode.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipVADthreshold.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 			networkOptionsInfo.mumbleScale.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 		}
 	}
