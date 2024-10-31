@@ -41,7 +41,7 @@ extern const int demo_protocols[];
 #define CLIENT_WINDOW_TITLE "World of PADMAN"
 #define CLIENT_WINDOW_MIN_TITLE PRODUCT_TITLE
 #define PRODUCT_BASE "ioq3 05180e3"
-#define PRODUCT_RELEASE "beta1" // "beta x" "final"/""
+#define PRODUCT_RELEASE "beta2" // "beta x" "final"/""
 
 #define VERSION_INFO PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
 #define HOMEPATH_NAME_UNIX "worldofpadman"
