@@ -1287,7 +1287,6 @@ Append information about this game to the log file
 void LogExit(const char *string);
 void LogExit(const char *string) {
 	int i, numSorted;
-	gclient_t *cl;
 	G_LogPrintf("Exit: %s\n", string);
 
 	level.intermissionQueued = level.time;
@@ -1307,7 +1306,7 @@ void LogExit(const char *string) {
 	}
 
 	for (i = 0; i < numSorted; i++) {
-		cl = &level.clients[level.sortedClients[i]];
+		const gclient_t *cl = &level.clients[level.sortedClients[i]];
 
 		if (cl->sess.sessionTeam == TEAM_SPECTATOR) {
 			continue;
