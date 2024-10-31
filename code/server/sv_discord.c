@@ -147,10 +147,11 @@ int DISCORD_SendMessage(const char *user, const char *msg) {
 		return -1;
 	}
 
+
 	len = Com_sprintf(body, sizeof(body), "{\"username\": \"%s\", \"content\": \"%s\"}", user, msg);
 	if (len >= (int)sizeof(body)) {
 		return -2;
 	}
-	statusCode = DISCORD_SendWebHook(headers, body);
+	statusCode = DISCORD_SendWebHook(headers, Q_CleanStr(body));
 	return statusCode;
 }
