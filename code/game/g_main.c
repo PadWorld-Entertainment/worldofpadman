@@ -1287,6 +1287,9 @@ Append information about this game to the log file
 void LogExit(const char *string);
 void LogExit(const char *string) {
 	int i, numSorted;
+	char scoreBuf[2048] = "";
+	qboolean headline = qfalse;
+
 	G_LogPrintf("Exit: %s\n", string);
 
 	level.intermissionQueued = level.time;
@@ -1302,11 +1305,14 @@ void LogExit(const char *string) {
 	}
 
 	if (g_gametype.integer >= GT_TEAM) {
+		Q_strcat(scoreBuf, sizeof(scoreBuf),
+				 va("**Teamscores**\n* " S_COLOR_RED " Red Pads %i\n* " S_COLOR_BLUE " Blue Noses %i\n\n", level.teamScores[TEAM_RED], level.teamScores[TEAM_BLUE]));
 		G_LogPrintf("Teamscores: red %i  blue %i\n", level.teamScores[TEAM_RED], level.teamScores[TEAM_BLUE]);
 	}
 
 	for (i = 0; i < numSorted; i++) {
 		const gclient_t *cl = &level.clients[level.sortedClients[i]];
+		const char *color;
 
 		if (cl->sess.sessionTeam == TEAM_SPECTATOR) {
 			continue;
@@ -1315,8 +1321,23 @@ void LogExit(const char *string) {
 			continue;
 		}
 
+		if (!headline) {
+			Q_strcat(scoreBuf, sizeof(scoreBuf), "**Scores**\n");
+			headline = qtrue;
+		}
+
+		if (cl->sess.sessionTeam == TEAM_RED) {
+			color = S_COLOR_RED;
+		} else if (cl->sess.sessionTeam == TEAM_BLUE) {
+			color = S_COLOR_BLUE;
+		} else {
+			color = "";
+		}
+		Q_strcat(scoreBuf, sizeof(scoreBuf), va("* %s: %s%i\n", cl->pers.netname, color, cl->ps.persistant[PERS_SCORE]));
 		G_LogPrintf("Score: %i %i\n", level.sortedClients[i], cl->ps.persistant[PERS_SCORE]);
-		trap_GlobalMessage(cl->pers.netname, va("Score: %i", cl->ps.persistant[PERS_SCORE]));
+	}
+	if (scoreBuf[0]) {
+		trap_GlobalMessage(NULL, scoreBuf);
 	}
 }
 

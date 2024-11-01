@@ -137,21 +137,84 @@ void DISCORD_Close(void) {
 	HTTP_Close();
 }
 
+#define USE_DISCORD_COLORS 0
+
 int DISCORD_SendMessage(const char *user, const char *msg) {
-	const char *headers = "Content-Type: application/json";
-	char body[2048];
+	const char *headers = "Content-Type: application/json; charset=UTF-8";
+	char payload[2048];
+	char jsonBodyContent[2048] = "";
+	char userContent[128] = "";
 	int statusCode;
 	int len;
-
+	int length = 0;
+#if USE_DISCORD_COLORS
+	static int q3ToAnsi[] = {
+		30, // COLOR_BLACK
+		31, // COLOR_RED
+		32, // COLOR_GREEN
+		33, // COLOR_YELLOW
+		34, // COLOR_BLUE
+		36, // COLOR_CYAN
+		35, // COLOR_MAGENTA
+		0	// COLOR_WHITE
+	};
+#endif
 	if (discord_webhook_url->string[0] == '\0') {
 		return -1;
 	}
 
+	while (*msg) {
+		if (length > sizeof(jsonBodyContent) - 2) {
+			return -2;
+		}
+		if (*msg == '\n') {
+#if USE_DISCORD_COLORS
+			const char *convert = "\x1B[0m\\n";
+			Q_strcat(jsonBodyContent, sizeof(jsonBodyContent), convert);
+			length += strlen(convert);
+#else
+			jsonBodyContent[length++] = '\\';
+			jsonBodyContent[length++] = 'n';
+#endif
+			msg++;
+		} else if (Q_IsColorString(msg)) {
+#if USE_DISCORD_COLORS
+			const char *color = va("\x1B[%dm", q3ToAnsi[ColorIndex(*(msg + 1))]);
+			Q_strcat(jsonBodyContent, sizeof(jsonBodyContent), color);
+			length += strlen(color);
+#endif
+			msg += 2;
+		} else {
+			jsonBodyContent[length++] = *msg++;
+		}
+	}
+	jsonBodyContent[length] = '\0';
 
-	len = Com_sprintf(body, sizeof(body), "{\"username\": \"%s\", \"content\": \"%s\"}", user, msg);
-	if (len >= (int)sizeof(body)) {
+	length = 0;
+	while (*user) {
+		if (length > sizeof(userContent) - 2) {
+			return -2;
+		}
+		if (Q_IsColorString(user)) {
+#if USE_DISCORD_COLORS
+			const char *color = va("\x1B[%dm", q3ToAnsi[ColorIndex(*(msg + 1))]);
+			Q_strcat(userContent, sizeof(userContent), color);
+			length += strlen(color);
+#endif
+			user += 2;
+		} else {
+			userContent[length++] = *user++;
+		}
+	}
+	userContent[length] = '\0';
+
+	len = Com_sprintf(payload, sizeof(payload),
+					  "{\"username\": \"%s\", \"allowed_mentions\": {\"parse\": []}, \"content\": \"%s\"}", userContent,
+					  jsonBodyContent);
+	if (len >= (int)sizeof(payload)) {
 		return -2;
 	}
-	statusCode = DISCORD_SendWebHook(headers, Q_CleanStr(body));
+
+	statusCode = DISCORD_SendWebHook(headers, payload);
 	return statusCode;
 }
