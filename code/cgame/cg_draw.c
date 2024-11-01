@@ -1671,10 +1671,6 @@ static void CG_DrawCrosshair(void) {
 		return;
 	}
 
-	if (cg.renderingThirdPerson) {
-		return;
-	}
-
 	if (cg.wantSelectLogo) {
 		return;
 	}
