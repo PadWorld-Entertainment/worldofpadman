@@ -691,15 +691,15 @@ static sfxHandle_t SpinControl_Key(menulist_s *s, int key) {
 			sound = menuClickSound;
 		} else {
 			uis.dropdownlist = s;
-			if (s->generic.right > 640)
-				uis.dropdownxywh[0] = 640 - s->dropdown_len;
+			if (s->generic.right > SCREEN_WIDTH)
+				uis.dropdownxywh[0] = SCREEN_WIDTH - s->dropdown_len;
 			else
 				uis.dropdownxywh[0] = s->generic.right - s->dropdown_len;
 			uis.dropdownxywh[3] = s->numitems * SMALLCHAR_HEIGHT;
 			uis.dropdownxywh[1] = s->generic.y + SMALLCHAR_HEIGHT * 0.5f - uis.dropdownxywh[3] * 0.5f;
 
-			if (uis.dropdownxywh[1] + uis.dropdownxywh[3] > 480.0f)
-				uis.dropdownxywh[1] = 480.0f - uis.dropdownxywh[3];
+			if (uis.dropdownxywh[1] + uis.dropdownxywh[3] > SCREEN_HEIGHT)
+				uis.dropdownxywh[1] = SCREEN_HEIGHT - uis.dropdownxywh[3];
 			else if (uis.dropdownxywh[1] < 0.0f)
 				uis.dropdownxywh[1] = 0.0f;
 
@@ -1460,14 +1460,14 @@ static void UI_DrawToolTip(const menucommon_s *focusItem) {
 	boxHeight = numLines * lineHeight + 2 * boxMargin;
 
 	boxX = focusItem->x;
-	if (boxX > 640 - boxWidth) {
+	if (boxX > SCREEN_WIDTH - boxWidth) {
 		boxX -= boxWidth;
 		if (boxX < 0)
 			boxX = 0;
 	}
 
 	boxY = focusItem->y - boxHeight - outerMargin;
-	if (boxY < 0 && focusItem->y < 240) // box doesnt fit and item is in the top half
+	if (boxY < 0 && focusItem->y < SCREEN_HEIGHT / 2) // box doesnt fit and item is in the top half
 	{
 		boxY = focusItem->y + 15 + outerMargin;
 	}
