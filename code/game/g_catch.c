@@ -178,11 +178,11 @@ void G_BecomeKillerDuck(gentity_t *item, gentity_t *ent) {
 	ent->client->ps.eFlags |= EF_KILLERDUCK;
 	ent->client->ps.stats[STAT_HEALTH] = ent->health = 200;
 	ent->client->ps.stats[STAT_ARMOR] = 200;
-	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " catched the KillerDuck.\n\"", ent->client->pers.netname));
+	trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_WHITE " has caught the KillerDuck.\n\"", ent->client->pers.netname));
 	if (ent->client->ps.clientNum == clientNum) {
-		trap_SendServerCommand(clientNum, va("cp \"%s" S_COLOR_WHITE, "You catched the KillerDuck.\n\""));
+		trap_SendServerCommand(clientNum, va("cp \"%s" S_COLOR_WHITE, "You've caught the KillerDuck.\n\""));
 	}
-	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " catched the KillerDuck.\n\"", ent->client->pers.netname));
+	trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " has caught the KillerDuck.\n\"", ent->client->pers.netname));
 
 	// cache sound
 	G_SoundIndex("sound/items/killerducks/bite");

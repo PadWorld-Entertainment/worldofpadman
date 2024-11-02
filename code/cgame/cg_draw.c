@@ -3255,7 +3255,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 
 		CG_SetScreenPlacement(PLACE_LEFT, PLACE_BOTTOM);
 
-		// don't draw the ammo model / weapon icon if we catched the killerduck in ctkd
+		// don't draw the ammo model / weapon icon if we caught the killerduck in ctkd
 		if (weaponNum > WP_NONE && !BG_IsKillerDuck(&cg.snap->ps)) {
 			if (cg_draw3dIcons.integer && !(weaponNum == WP_PUNCHY || weaponNum == WP_SPRAYPISTOL)) {
 				vec3_t tmporigin, tmpangles;
@@ -3275,7 +3275,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 			}
 		}
 
-		// only draw the killerduck model if we catched it in ctkd
+		// only draw the killerduck model if we caught it in ctkd
 		if (BG_IsKillerDuck(&cg.snap->ps)) {
 			CG_DrawDuckModel(7, 372, ICON_SIZE, ICON_SIZE);
 		}
