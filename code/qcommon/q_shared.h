@@ -308,8 +308,8 @@ typedef enum {
 } errorParm_t;
 
 typedef enum {
-	DISCORD_MSG_STARTING_MAP = 1,
-	DISCORD_MSG_PLAYER_CONNECT = 2,
+	DISCORD_MSG_PLAYER_CONNECT = 1,
+	DISCORD_MSG_STARTING_MAP = 2,
 	DISCORD_MSG_SCORE = 4
 } discordMsg_t;
 

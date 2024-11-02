@@ -115,7 +115,7 @@ int DISCORD_Init(void) {
 	}
 	// e.g. https://discord.com/api/webhooks/xxx/yyy
 	discord_webhook_url = Cvar_Get("discord_webhook_url", "", CVAR_ARCHIVE);
-	discord_webhook_content = Cvar_Get("discord_webhook_content", "255", CVAR_ARCHIVE);
+	discord_webhook_content = Cvar_Get("discord_webhook_content", "1", CVAR_ARCHIVE);
 	Cvar_SetDescription(discord_webhook_content, "A bitmask of the content to send to the discord webhook");
 
 	commandQueueMutex = SDL_CreateMutex();
