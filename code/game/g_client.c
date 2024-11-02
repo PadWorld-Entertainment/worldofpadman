@@ -950,8 +950,6 @@ const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 		if (!G_BotConnect(clientNum, !firstTime)) {
 			return "BotConnectfailed";
 		}
-	} else if (firstTime && G_DISCORD_WantMessages(DISCORD_MSG_PLAYER_CONNECT)) {
-		trap_GlobalMessage(Info_ValueForKey(userinfo, "name"), "Joined the server");
 	}
 
 	// get and distribute relevant parameters
@@ -978,6 +976,53 @@ const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 	//	client->areabits = areabits;
 	//	if ( !client->areabits )
 	//		client->areabits = G_Alloc( (trap_AAS_PointReachabilityAreaIndex( NULL ) + 7) / 8 );
+
+	if (firstTime && G_DISCORD_WantMessages(DISCORD_MSG_PLAYER_CONNECT)) {
+		const qboolean isTeam = g_gametype.integer >= GT_TEAM;
+		const char *map = level.shortmapname;
+		const char *arenaInfo = G_GetArenaInfoByMap(map);
+		const char *longName = Info_ValueForKey(arenaInfo, "longname");
+		int humanCount[TEAM_NUM_TEAMS] = {0, 0, 0, 0};
+		int botCount[TEAM_NUM_TEAMS] = {0, 0, 0, 0};
+		const char *padPlayerStr;
+		const char *buf;
+		int humanAll = 0;
+		int i;
+
+		if (longName[0]) {
+			map = longName;
+		}
+
+		// count spectators
+		for (i = 0; i < g_maxclients.integer; ++i) {
+			gclient_t *cl = level.clients + i;
+			if (cl->pers.connected == CON_DISCONNECTED) {
+				continue;
+			}
+			if (g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT) {
+				++botCount[cl->sess.sessionTeam];
+				continue;
+			}
+			++humanCount[cl->sess.sessionTeam];
+			++humanAll;
+		}
+
+		if (humanAll == 1) {
+			padPlayerStr = "PadPlayer";
+		} else {
+			padPlayerStr = "PadPlayers";
+		}
+
+		if (isTeam) {
+			buf = va("%i %s playing **%s**\n* Blue noses: %i (and %i bots)\n* Red Pads: %i (and %i bots)\n* "
+					 "Spectators: %i)",
+					 humanAll, padPlayerStr, map, humanCount[TEAM_BLUE], botCount[TEAM_BLUE], humanCount[TEAM_RED],
+					 botCount[TEAM_RED], humanCount[TEAM_SPECTATOR]);
+		} else {
+			buf = va("%i %s playing **%s**\n* Spectators: %i", humanAll, padPlayerStr, map, humanCount[TEAM_SPECTATOR]);
+		}
+		trap_GlobalMessage(NULL, buf);
+	}
 
 	return NULL;
 }
