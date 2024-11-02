@@ -503,6 +503,16 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 	}
 
 	G_InitGameinfo();
+
+	if (G_DISCORD_WantMessages(DISCORD_MSG_STARTING_MAP)) {
+		const char *map = level.shortmapname;
+		const char *arenaInfo = G_GetArenaInfoByMap(map);
+		const char *longName = Info_ValueForKey(arenaInfo, "longname");
+		if (longName[0]) {
+			map = longName;
+		}
+		trap_GlobalMessage(NULL, va("starting map **%s**", longName));
+	}
 }
 
 /*
