@@ -416,7 +416,7 @@ float UI_ProportionalSizeScale(int style) {
 		return PROP_SMALL_SIZE_SCALE;
 	}
 	if (style & UI_TINYFONT) {
-		return PROP_SMALL_SIZE_SCALE;
+		return PROP_TINY_SIZE_SCALE;
 	}
 
 	return 1.0f;
