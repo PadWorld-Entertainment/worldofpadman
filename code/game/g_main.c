@@ -382,6 +382,7 @@ G_InitGame
 */
 static void G_InitGame(int levelTime, int randomSeed, int restart) {
 	int i;
+	char serverinfo[MAX_INFO_STRING];
 
 	Com_Printf("------- Game Initialization -------\n");
 	Com_Printf("gamename: %s\n", GAMEVERSION);
@@ -406,6 +407,10 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 
 	level.snd_fry = G_SoundIndex("sound/padplayer/fry"); // FIXME standing in lava / slime
 
+	trap_GetServerinfo(serverinfo, sizeof(serverinfo));
+	Q_strncpyz(level.servername, Info_ValueForKey(serverinfo, "sv_hostname"), sizeof(level.servername));
+	Q_strncpyz(level.shortmapname, Info_ValueForKey(serverinfo, "mapname"), sizeof(level.shortmapname));
+
 	if (g_gametype.integer != GT_SINGLE_PLAYER && g_log.string[0]) {
 		if (g_logSync.integer) {
 			trap_FS_FOpenFile(g_log.string, &level.logFile, FS_APPEND_SYNC);
@@ -415,12 +420,9 @@ static void G_InitGame(int levelTime, int randomSeed, int restart) {
 		if (!level.logFile) {
 			Com_Printf("WARNING: Couldn't open logfile: %s\n", g_log.string);
 		} else {
-			char serverinfo[MAX_INFO_STRING];
 			qtime_t qt;
 
 			trap_RealTime(&qt);
-
-			trap_GetServerinfo(serverinfo, sizeof(serverinfo));
 
 			G_LogPrintf("------------------------------------------------------------\n");
 			G_LogPrintf("InitGame: %s\n", serverinfo);

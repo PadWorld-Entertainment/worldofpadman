@@ -529,6 +529,9 @@ typedef struct {
 	int ftNumRoundsWon[TEAM_NUM_TEAMS];
 
 	qboolean allRoundsPlayed;
+
+	char shortmapname[MAX_QPATH];
+	char servername[32];
 } level_locals_t;
 
 //
