@@ -2305,7 +2305,7 @@ static void R_LoadImage(const char *name, byte **pic, int *width, int *height, G
 		}
 	}
 	if (*pic == NULL) {
-		ri.Printf(PRINT_WARNING, "WARNING: image '%s' not present\n", name);
+		ri.Printf(PRINT_DEVELOPER, "WARNING: image '%s' not present\n", name);
 	}
 }
 
