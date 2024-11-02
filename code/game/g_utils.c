@@ -776,6 +776,11 @@ void RemoveOwnedItems(gentity_t *client) {
 	}
 }
 
+qboolean G_DISCORD_WantMessages(discordMsg_t type) {
+	const unsigned int mask = trap_Cvar_VariableIntegerValue("discord_webhook_content");
+	return mask & type;
+}
+
 /*
 	Blindy saves the times of all powerups and removes them afterwards.
 	Does not care for PW_REDFLAG, PW_NONE, PW_NUM_POWERUPS.

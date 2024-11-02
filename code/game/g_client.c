@@ -950,7 +950,7 @@ const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 		if (!G_BotConnect(clientNum, !firstTime)) {
 			return "BotConnectfailed";
 		}
-	} else if (firstTime) {
+	} else if (firstTime && G_DISCORD_WantMessages(DISCORD_MSG_PLAYER_CONNECT)) {
 		trap_GlobalMessage(Info_ValueForKey(userinfo, "name"), "Joined the server");
 	}
 

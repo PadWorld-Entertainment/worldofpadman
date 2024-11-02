@@ -1289,6 +1289,7 @@ void LogExit(const char *string) {
 	int i, numSorted;
 	char scoreBuf[2048] = "";
 	qboolean headline = qfalse;
+	const qboolean wantMessage = G_DISCORD_WantMessages(DISCORD_MSG_SCORE);
 
 	G_LogPrintf("Exit: %s\n", string);
 
@@ -1305,8 +1306,10 @@ void LogExit(const char *string) {
 	}
 
 	if (g_gametype.integer >= GT_TEAM) {
-		Q_strcat(scoreBuf, sizeof(scoreBuf),
-				 va("**Teamscores**\n* " S_COLOR_RED " Red Pads %i\n* " S_COLOR_BLUE " Blue Noses %i\n\n", level.teamScores[TEAM_RED], level.teamScores[TEAM_BLUE]));
+		if (wantMessage) {
+			Q_strcat(scoreBuf, sizeof(scoreBuf),
+					va("**Teamscores**\n* " S_COLOR_RED " Red Pads %i\n* " S_COLOR_BLUE " Blue Noses %i\n\n", level.teamScores[TEAM_RED], level.teamScores[TEAM_BLUE]));
+		}
 		G_LogPrintf("Teamscores: red %i  blue %i\n", level.teamScores[TEAM_RED], level.teamScores[TEAM_BLUE]);
 	}
 
@@ -1321,7 +1324,7 @@ void LogExit(const char *string) {
 			continue;
 		}
 
-		if (!headline) {
+		if (wantMessage && !headline) {
 			Q_strcat(scoreBuf, sizeof(scoreBuf), "**Scores**\n");
 			headline = qtrue;
 		}
@@ -1333,7 +1336,9 @@ void LogExit(const char *string) {
 		} else {
 			color = "";
 		}
-		Q_strcat(scoreBuf, sizeof(scoreBuf), va("* %s: %s%i\n", cl->pers.netname, color, cl->ps.persistant[PERS_SCORE]));
+		if (wantMessage) {
+			Q_strcat(scoreBuf, sizeof(scoreBuf), va("* %s: %s%i\n", cl->pers.netname, color, cl->ps.persistant[PERS_SCORE]));
+		}
 		G_LogPrintf("Score: %i %i\n", level.sortedClients[i], cl->ps.persistant[PERS_SCORE]);
 	}
 	if (scoreBuf[0]) {

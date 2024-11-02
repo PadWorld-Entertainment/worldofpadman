@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef DISCORD_H
 #define DISCORD_H
 
+#include "../qcommon/q_shared.h"
+
 int DISCORD_Init(void);
 void DISCORD_Close(void);
 
@@ -33,5 +35,6 @@ int DISCORD_SendMessage(const char *user, const char *msg);
 // return 0 on success
 // return -1 if the queue is full and the message wasn't send
 int DISCORD_EnqueueMessage(const char *user, const char *msg);
+qboolean DISCORD_WantMessages(discordMsg_t type);
 
 #endif

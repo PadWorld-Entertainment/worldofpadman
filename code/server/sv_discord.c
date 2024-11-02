@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 static SDL_atomic_t shouldQuit;
 static cvar_t *discord_webhook_url;
+static cvar_t *discord_webhook_content;
 
 #define MAX_COMMANDS 32
 
@@ -51,6 +52,11 @@ static command_t commandQueue[MAX_COMMANDS];
 static int commandCount = 0;
 static int producerIndex = 0;
 static int consumerIndex = 0;
+
+qboolean DISCORD_WantMessages(discordMsg_t type) {
+	const unsigned int mask = Cvar_VariableIntegerValue("discord_webhook_content");
+	return mask & type;
+}
 
 int DISCORD_EnqueueMessage(const char *user, const char *message) {
 	SDL_LockMutex(commandQueueMutex);
@@ -109,6 +115,8 @@ int DISCORD_Init(void) {
 	}
 	// e.g. https://discord.com/api/webhooks/xxx/yyy
 	discord_webhook_url = Cvar_Get("discord_webhook_url", "", CVAR_ARCHIVE);
+	discord_webhook_content = Cvar_Get("discord_webhook_content", "255", CVAR_ARCHIVE);
+	Cvar_SetDescription(discord_webhook_content, "A bitmask of the content to send to the discord webhook");
 
 	commandQueueMutex = SDL_CreateMutex();
 	queueNotEmpty = SDL_CreateCond();

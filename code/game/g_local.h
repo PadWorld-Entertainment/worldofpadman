@@ -590,6 +590,7 @@ gentity_t *G_FindRadius(gentity_t *from, int fieldofs, const char *match, const 
 gentity_t *G_PickTarget(const char *targetname);
 void G_UseTargets(gentity_t *ent, gentity_t *activator);
 void G_SetMovedir(vec3_t angles, vec3_t movedir);
+qboolean G_DISCORD_WantMessages(discordMsg_t type);
 
 void G_InitGentity(gentity_t *e);
 gentity_t *G_Spawn(void);

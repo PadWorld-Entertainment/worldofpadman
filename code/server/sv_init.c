@@ -461,7 +461,9 @@ void SV_SpawnServer(const char *server, qboolean killBots) {
 
 	CM_LoadMap(va("maps/%s.bsp", server), qfalse, &checksum);
 
-	DISCORD_EnqueueMessage(sv_hostname->string, va("starting map **%s**", server));
+	if (DISCORD_WantMessages(DISCORD_MSG_STARTING_MAP)) {
+		DISCORD_EnqueueMessage(sv_hostname->string, va("starting map **%s**", server));
+	}
 
 	// set serverinfo visible name
 	Cvar_Set("mapname", server);
