@@ -209,6 +209,9 @@ void FT_FreezePlayer(gentity_t *player, gentity_t *other) {
 	player->client->ps.powerups[PW_FREEZE] = level.time + 10000000;
 	player->client->ps.stats[STAT_CHILL] = player->client->freezeCount;
 
+	// disable the floater when you are frozen
+	player->client->ps.eFlags &= ~EF_FLOATER;
+
 	if (other_client) {
 		AddScore(other, player->client->ps.origin, 1, SCORE_FROZEN_S);
 	}
