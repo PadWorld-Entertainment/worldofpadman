@@ -766,14 +766,19 @@ pickupresult_t BG_CanItemBeGrabbed(int gametype, const entityState_t *ent, const
 		}
 		return PICKUP_OK; // weapons are always picked up
 
-	case IT_AMMO:
+	case IT_AMMO: {
+		int maxAmmoCount = MAXAMMO_WEAPON;
+		if (item->giTag == WP_IMPERIUS) {
+			maxAmmoCount = MAXAMMO_IMPERIUS;
+		}
 		if (BG_IsKillerDuck(ps)) {
 			return PICKUP_NOT_ALLOWED;
 		}
-		if (ps->ammo[item->giTag] >= MAXAMMO_WEAPON) {
+		if (ps->ammo[item->giTag] >= maxAmmoCount) {
 			return PICKUP_NOT_ALLOWED; // can't hold any more
 		}
 		return PICKUP_OK;
+	}
 
 	case IT_ARMOR:
 		if (ps->stats[STAT_ARMOR] >= ps->stats[STAT_MAX_HEALTH] * 2) {
