@@ -415,6 +415,9 @@ float UI_ProportionalSizeScale(int style) {
 	if (style & UI_SMALLFONT) {
 		return PROP_SMALL_SIZE_SCALE;
 	}
+	if (style & UI_TINYFONT) {
+		return PROP_SMALL_SIZE_SCALE;
+	}
 
 	return 1.0f;
 }
@@ -484,6 +487,9 @@ static int CharWidthForStringStyle(int style) {
 	else if (style & UI_GIANTFONT)
 		return GIANTCHAR_WIDTH;
 
+	else if (style & UI_TINYFONT)
+		return TINYCHAR_WIDTH;
+
 	return BIGCHAR_WIDTH;
 }
 
@@ -493,6 +499,9 @@ static int CharHeightForStringStyle(int style) {
 
 	else if (style & UI_GIANTFONT)
 		return GIANTCHAR_HEIGHT;
+
+	else if (style & UI_TINYFONT)
+		return TINYCHAR_HEIGHT;
 
 	return BIGCHAR_HEIGHT;
 }
@@ -991,7 +1000,7 @@ void UI_MouseEvent(int dx, int dy) {
 					trap_S_StartLocalSound(sfx, CHAN_LOCAL_SOUND);
 				} else {
 					trap_S_StartLocalSound(menuMoveSound, CHAN_LOCAL_SOUND);
-				}				
+				}
 			}
 		}
 

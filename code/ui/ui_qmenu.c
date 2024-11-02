@@ -1431,10 +1431,10 @@ wrap:
 }
 
 static void UI_DrawToolTip(const menucommon_s *focusItem) {
-	static const int textStyleFlags = UI_SMALLFONT;
+	static const int textStyleFlags = UI_TINYFONT;
 	static const int maxTextWidth = 250;
 	static const int boxMargin = 5;
-	static const int lineHeight = 20;
+	static const int lineHeight = TINYCHAR_HEIGHT;
 	static const int outerMargin = 10;
 	int numLines;
 	int boxWidth, boxHeight;
@@ -1476,7 +1476,7 @@ static void UI_DrawToolTip(const menucommon_s *focusItem) {
 	textY = boxY + boxMargin;
 
 	UI_FillRect(boxX, boxY, boxWidth, boxHeight, color_orange);
-	UI_DrawString_AutoWrapped(textX, textY, maxTextWidth, 20, focusItem->toolTip, textStyleFlags, menu_text_color,
+	UI_DrawString_AutoWrapped(textX, textY, maxTextWidth, lineHeight, focusItem->toolTip, textStyleFlags, menu_text_color,
 							  qfalse);
 	UI_DrawRect(boxX, boxY, boxWidth, boxHeight, colorYellow, 2);
 

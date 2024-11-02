@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../client/keycodes.h"
 #include "../game/bg_public.h"
 
-// For only widescreen menu SCREEN_* must be seprate values for UI, CGame, and Client.
+// For only widescreen menu SCREEN_* must be separate values for UI, CGame, and Client.
 #undef SCREEN_WIDTH
 #undef SCREEN_HEIGHT
 #define SCREEN_WIDTH 864
