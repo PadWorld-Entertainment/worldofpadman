@@ -140,7 +140,7 @@ void CG_ParseServerinfo(void) {
 	cgs.teamflags = atoi(Info_ValueForKey(info, "teamflags"));
 	cgs.fraglimit = cgs.capturelimit = atoi(Info_ValueForKey(info, "pointlimit"));
 	strcpy(cgs.shortmapname, Info_ValueForKey(info, "mapname"));
-	Q_strncpyz(cgs.servername, Info_ValueForKey(info, "sv_hostname"), 32);
+	Q_strncpyz(cgs.servername, Info_ValueForKey(info, "sv_hostname"), sizeof(cgs.servername));
 	cgs.lpsflags = atoi(Info_ValueForKey(info, "g_LPS_flags"));
 	cgs.lpsStartLives = atoi(Info_ValueForKey(info, "g_LPS_startlives"));
 	cgs.timelimit = atoi(Info_ValueForKey(info, "timelimit"));
