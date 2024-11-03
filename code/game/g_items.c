@@ -194,7 +194,7 @@ static int Pickup_Holdable(gentity_t *ent, gentity_t *other) {
 	}
 
 	if (g_gametype.integer == GT_CATCH && other->client->ps.stats[STAT_HOLDABLEVAR] > 0 && other->client->ps.stats[STAT_HOLDABLE_ITEM] != 0 &&
-		other->client->ps.stats[STAT_HOLDABLE_ITEM] != MODELINDEX_KILLERDUCKS) {
+		other->client->ps.stats[STAT_HOLDABLE_ITEM] != MODELINDEX_KILLERDUCKS && ent->item->giTag == HI_KILLERDUCKS) {
 		// already has a holdable, drop it in this game mode
 		G_DropHoldable(other, 0.0f);
 	}
