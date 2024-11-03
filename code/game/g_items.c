@@ -137,6 +137,7 @@ static int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 
 static int Pickup_Holdable(gentity_t *ent, gentity_t *other) {
 	int count = 0;
+	qboolean becomeKillerDuck;
 
 	if (ent->count > 0) {
 		count = ent->count;
@@ -193,15 +194,16 @@ static int Pickup_Holdable(gentity_t *ent, gentity_t *other) {
 		break;
 	}
 
-	if (g_gametype.integer == GT_CATCH && other->client->ps.stats[STAT_HOLDABLEVAR] > 0 && other->client->ps.stats[STAT_HOLDABLE_ITEM] != 0 &&
-		other->client->ps.stats[STAT_HOLDABLE_ITEM] != MODELINDEX_KILLERDUCKS && ent->item->giTag == HI_KILLERDUCKS) {
-		// already has a holdable, drop it in this game mode
+	becomeKillerDuck = g_gametype.integer == GT_CATCH && ent->item->giTag == HI_KILLERDUCKS;
+	// is you are about the become the killerduck, and you already have a holdable, drop it in this game mode
+	if (becomeKillerDuck && other->client->ps.stats[STAT_HOLDABLEVAR] > 0 && other->client->ps.stats[STAT_HOLDABLE_ITEM] != 0 &&
+		other->client->ps.stats[STAT_HOLDABLE_ITEM] != MODELINDEX_KILLERDUCKS) {
 		G_DropHoldable(other, 0.0f);
 	}
 
 	// FIXME: Check for NULLs?
 	other->client->ps.stats[STAT_HOLDABLE_ITEM] = (ent->item - bg_itemlist);
-	if (g_gametype.integer == GT_CATCH && ent->item->giTag == HI_KILLERDUCKS) {
+	if (becomeKillerDuck) {
 		G_BecomeKillerDuck(ent, other);
 		// don't respawn the item
 		return -1;
