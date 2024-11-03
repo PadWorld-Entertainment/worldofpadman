@@ -560,7 +560,7 @@ static void ClientEvents(gentity_t *ent, int oldEventSequence) {
 
 		case EV_USE_ITEM3:																		  // HI_FLOATER
 			if (client->ps.velocity[2] < 512.0f)											  //<256
-				client->ps.velocity[2] += 900.0f * (1.0f / (float)(G_GetCvarInt("sv_fps"))); // noch zu testen
+				client->ps.velocity[2] += 45.0f; // noch zu testen
 
 			break;
 
