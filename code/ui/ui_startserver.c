@@ -20,7 +20,6 @@ CREATE MENU (START SERVER)
 #define BACK1 "menu/buttons/back1"
 #define HEADERGAMETYPE "menu/headers/gametype"
 #define UNKNOWNMAP "menu/art/unknownmap"
-#define MAPFRAME "menu/art/mapframe"
 
 #define MAX_MAPROWS 2
 #define MAX_MAPCOLS 3
@@ -560,7 +559,7 @@ static void UI_StartServer_LevelshotDraw(void *self) {
 		UI_FillRect(x - 4, y + 4, w, h, menuShadowBot);
 		UI_DrawHandlePic(x, y, w, h, b->shader);
 	}
-	UI_DrawNamedPic(x, y, w, h, MAPFRAME);
+	UI_DrawRect(x, y, w, h, colorWhite, 4);
 
 	n = s_startserver.page * MAX_MAPSPERPAGE + b->generic.id - ID_PICTURES;
 
@@ -891,7 +890,6 @@ void UI_StartServer_Cache(void) {
 	trap_R_RegisterShaderNoMip(BACK0);
 	trap_R_RegisterShaderNoMip(BACK1);
 	trap_R_RegisterShaderNoMip(UNKNOWNMAP);
-	trap_R_RegisterShaderNoMip(MAPFRAME);
 	trap_R_RegisterShaderNoMip(HEADERGAMETYPE);
 
 	for (i = 0; i < 10; i++)
