@@ -1556,3 +1556,13 @@ textures/pad_shop/game_padwarb
 		rgbgen identity
 	}
 }
+
+// temp fix missing MonsterPad head texture
+// remove before recompile
+models/wop_players/monster/mhead
+{
+	{
+		map models/wop_players/monsterpad/mhead
+		rgbGen identity
+	}
+}
