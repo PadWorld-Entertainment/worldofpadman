@@ -1475,13 +1475,15 @@ static void UI_DrawToolTip(const menucommon_s *focusItem) {
 	textX = boxX + boxMargin;
 	textY = boxY + boxMargin;
 
+	// draw the shadow
+	UI_FillRect(boxX + 8, boxY + 8, boxWidth, boxHeight, color_dim);
+	// draw the box
 	UI_FillRect(boxX, boxY, boxWidth, boxHeight, color_orange);
+	// draw the text
 	UI_DrawString_AutoWrapped(textX, textY, maxTextWidth, lineHeight, focusItem->toolTip, textStyleFlags, menu_text_color,
 							  qfalse);
-	UI_DrawRect(boxX, boxY, boxWidth, boxHeight, colorYellow, 2);
-
-	// draw frame and tip
-	// UI_DrawString(500, SCREEN_HEIGHT * 0.85, focusItem->toolTip, UI_SMALLFONT|UI_CENTER, colorWhite );
+	// draw the frame
+	UI_DrawRect(boxX, boxY, boxWidth, boxHeight, colorWhite, 4);
 }
 
 void Menu_DrawField(menufield_s *f) {
