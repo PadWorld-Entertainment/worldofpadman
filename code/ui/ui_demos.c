@@ -65,6 +65,28 @@ static demos_t s_demos;
 
 /*
 ===============
+UI_Demos_MenuUpdate
+===============
+*/
+static void UI_Demos_MenuUpdate(void) {
+
+	s_demos.arrowup.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
+	s_demos.arrowdown.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
+
+	if (s_demos.list.numitems > 0) {
+
+		if (s_demos.list.curvalue > 0) {
+			s_demos.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		}
+
+		if (s_demos.list.curvalue < (s_demos.list.numitems - 1)) {
+			s_demos.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		}
+	}
+}
+
+/*
+===============
 UI_Demos_MenuEvent
 ===============
 */
@@ -103,6 +125,7 @@ static sfxHandle_t UI_DemosMenu_Key(int key) {
 	if (key == K_MWHEELUP) {
 		ScrollList_Key(&s_demos.list, K_UPARROW);
 	}
+
 	if (key == K_MWHEELDOWN) {
 		ScrollList_Key(&s_demos.list, K_DOWNARROW);
 	}
@@ -127,6 +150,16 @@ static int QDECL UI_SortDemos(const void *a, const void *b) {
 
 /*
 ===============
+UI_Demos_MenuDraw
+===============
+*/
+static void UI_Demos_MenuDraw(void) {
+	UI_Demos_MenuUpdate();
+	Menu_Draw(&s_demos.menu);
+}
+
+/*
+===============
 UI_Demos_MenuInit
 ===============
 */
@@ -142,6 +175,7 @@ static void UI_Demos_MenuInit(void) {
 
 	s_demos.menu.fullscreen = qtrue;
 	s_demos.menu.wrapAround = qtrue;
+	s_demos.menu.draw = UI_Demos_MenuDraw;
 	s_demos.menu.bgparts = BGP_DEMOS | BGP_MENUFX;
 
 	s_demos.arrowup.generic.type = MTYPE_BITMAP;
@@ -232,8 +266,6 @@ static void UI_Demos_MenuInit(void) {
 
 		// degenerate case, not selectable
 		s_demos.go.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
-		s_demos.arrowup.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
-		s_demos.arrowdown.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 	}
 
 	qsort(s_demos.list.itemnames, s_demos.list.numitems, sizeof(s_demos.list.itemnames[0]), UI_SortDemos);

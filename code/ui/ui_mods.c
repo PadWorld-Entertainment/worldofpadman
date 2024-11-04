@@ -65,6 +65,28 @@ static mods_t s_mods;
 
 /*
 ===============
+UI_Mods_MenuUpdate
+===============
+*/
+static void UI_Mods_MenuUpdate(void) {
+
+	s_mods.arrowdown.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	s_mods.arrowup.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+
+	if (s_mods.list.numitems > 0) {
+
+		if (s_mods.list.curvalue > 0) {
+			s_mods.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		}
+
+		if (s_mods.list.curvalue < (s_mods.list.numitems - 1)) {
+			s_mods.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		}
+	}
+}
+
+/*
+===============
 UI_Mods_MenuEvent
 ===============
 */
@@ -105,6 +127,7 @@ static sfxHandle_t UI_Mods_MenuKey(int key) {
 	if (key == K_MWHEELUP) {
 		ScrollList_Key(&s_mods.list, K_UPARROW);
 	}
+
 	if (key == K_MWHEELDOWN) {
 		ScrollList_Key(&s_mods.list, K_DOWNARROW);
 	}
@@ -176,16 +199,29 @@ static void UI_Mods_LoadMods(void) {
 
 /*
 ===============
+UI_Mods_MenuDraw
+===============
+*/
+static void UI_Mods_MenuDraw(void) {
+	UI_Mods_MenuUpdate();
+	Menu_Draw(&s_mods.menu);
+}
+
+/*
+===============
 UI_Mods_MenuInit
 ===============
 */
 static void UI_Mods_MenuInit(void) {
-	UI_ModsMenu_Cache();
 
 	memset(&s_mods, 0, sizeof(mods_t));
 	s_mods.menu.key = UI_Mods_MenuKey;
+
+	UI_ModsMenu_Cache();
+
 	s_mods.menu.wrapAround = qtrue;
 	s_mods.menu.fullscreen = qtrue;
+	s_mods.menu.draw = UI_Mods_MenuDraw;
 	s_mods.menu.bgparts = BGP_MODS | BGP_MENUFX;
 
 	s_mods.arrowup.generic.type = MTYPE_BITMAP;

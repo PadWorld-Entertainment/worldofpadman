@@ -410,6 +410,28 @@ static void UI_ArenaServers_UpdatePicture(void) {
 }
 
 /*
+===============
+UI_ArenaServers_ListUpdate
+===============
+*/
+static void UI_ArenaServers_ListUpdate(void) {
+
+	g_arenaservers.arrowup.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
+	g_arenaservers.arrowdown.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
+
+	if (g_arenaservers.list.numitems > 0) {
+
+		if (g_arenaservers.list.curvalue > 0) {
+			g_arenaservers.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		}
+
+		if (g_arenaservers.list.curvalue < (g_arenaservers.list.numitems - 1)) {
+			g_arenaservers.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+		}
+	}
+}
+
+/*
 =================
 UI_ArenaServers_UpdateMenu
 =================
@@ -442,8 +464,6 @@ static void UI_ArenaServers_UpdateMenu(void) {
 			g_arenaservers.addFav.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.addAllFav.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.list.generic.flags &= ~QMF_GRAYED;
-			g_arenaservers.arrowup.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
-			g_arenaservers.arrowdown.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
 			g_arenaservers.refresh.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.fight.generic.flags &= ~QMF_GRAYED;
 
@@ -472,8 +492,6 @@ static void UI_ArenaServers_UpdateMenu(void) {
 			g_arenaservers.addFav.generic.flags |= QMF_GRAYED;
 			g_arenaservers.addAllFav.generic.flags |= QMF_GRAYED;
 			g_arenaservers.list.generic.flags |= QMF_GRAYED;
-			g_arenaservers.arrowup.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
-			g_arenaservers.arrowdown.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 			g_arenaservers.refresh.generic.flags |= QMF_GRAYED;
 			g_arenaservers.fight.generic.flags |= QMF_GRAYED;
 		} else {
@@ -500,8 +518,6 @@ static void UI_ArenaServers_UpdateMenu(void) {
 			g_arenaservers.addFav.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.addAllFav.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.list.generic.flags |= QMF_GRAYED;
-			g_arenaservers.arrowup.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
-			g_arenaservers.arrowdown.generic.flags |= (QMF_INACTIVE | QMF_HIDDEN);
 			g_arenaservers.refresh.generic.flags &= ~QMF_GRAYED;
 			g_arenaservers.fight.generic.flags |= QMF_GRAYED;
 		}
@@ -1364,18 +1380,6 @@ static void UI_ArenaServers_Event(void *ptr, int event) {
 
 /*
 =================
-UI_ArenaServers_MenuDraw
-=================
-*/
-static void UI_ArenaServers_MenuDraw(void) {
-	if (g_arenaservers.refreshservers)
-		UI_ArenaServers_DoRefresh();
-
-	Menu_Draw(&g_arenaservers.menu);
-}
-
-/*
-=================
 UI_ArenaServers_MenuKey
 =================
 */
@@ -1432,6 +1436,19 @@ static int UI_ArenaServers_ConstructMasterList(void) {
 
 	master_items[listind] = NULL;
 	return listind;
+}
+
+/*
+=================
+UI_ArenaServers_MenuDraw
+=================
+*/
+static void UI_ArenaServers_MenuDraw(void) {
+	if (g_arenaservers.refreshservers)
+		UI_ArenaServers_DoRefresh();
+
+	UI_ArenaServers_ListUpdate();
+	Menu_Draw(&g_arenaservers.menu);
 }
 
 /*
