@@ -505,7 +505,6 @@ static int CG_CalcFov(void) {
 	float fov_x, fov_y;
 	float zoomFov;
 	float f;
-	float fovFactor = 1.0f;
 	int inwater;
 
 	if (cg.predictedPlayerState.pm_type == PM_INTERMISSION) {
@@ -570,8 +569,6 @@ static int CG_CalcFov(void) {
 		const float desiredFov = fov_x;
 
 		fov_x = atan2(tan(desiredFov * M_PI / 360.0f) * baseAspect * aspect, 1) * 360.0f / M_PI;
-
-		fovFactor = desiredFov / fov_x;
 	}
 
 	x = cg.refdef.width / tan(fov_x / 360 * M_PI);
@@ -592,7 +589,7 @@ static int CG_CalcFov(void) {
 
 	if (cg.snap->ps.powerups[PW_SPEEDY]) {
 		if (cg.xyspeed > 500.0f) {
-			if (cg.speedyeffect < 1.5f * fovFactor)
+			if (cg.speedyeffect < 1.5f)
 				cg.speedyeffect += (float)cg.frametime * 0.001f;
 		} else {
 			if (cg.speedyeffect > 1.0f)
