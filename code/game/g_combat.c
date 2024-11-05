@@ -863,10 +863,10 @@ void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3
 		if (victim->flags & FL_GODMODE) {
 			return;
 		}
-	}
 
-	if (g_gametype.integer == GT_CATCH && !G_IsKillerDuck(victim)) {
-		return;
+		if (g_gametype.integer == GT_CATCH && !G_IsKillerDuck(victim)) {
+			return;
+		}
 	}
 
 	// battlesuit protects from all radius damage (but takes knockback)
