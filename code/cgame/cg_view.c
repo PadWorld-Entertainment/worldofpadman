@@ -506,6 +506,7 @@ static int CG_CalcFov(void) {
 	float zoomFov;
 	float f;
 	int inwater;
+	float speedy_dyn = 0.4;	// default when cg_fovAspectAdjust disabled
 
 	if (cg.predictedPlayerState.pm_type == PM_INTERMISSION) {
 		// if in intermission, use a fixed value
@@ -569,6 +570,7 @@ static int CG_CalcFov(void) {
 		const float desiredFov = fov_x;
 
 		fov_x = atan2(tan(desiredFov * M_PI / 360.0f) * baseAspect * aspect, 1) * 360.0f / M_PI;
+		speedy_dyn = 0.5 / aspect; // dynamic when cg_fovAspectAdjust enabled
 	}
 
 	x = cg.refdef.width / tan(fov_x / 360 * M_PI);
@@ -589,7 +591,7 @@ static int CG_CalcFov(void) {
 
 	if (cg.snap->ps.powerups[PW_SPEEDY]) {
 		if (cg.xyspeed > 500.0f) {
-			if (cg.speedyeffect < (1.0f + 0.5f * (float)cg.refdef.height / (float)cg.refdef.width))
+			if (cg.speedyeffect < (1.0f + speedy_dyn))
 				cg.speedyeffect += (float)cg.frametime * 0.001f;
 		} else {
 			if (cg.speedyeffect > 1.0f)
@@ -597,40 +599,11 @@ static int CG_CalcFov(void) {
 			else if (cg.speedyeffect < 1.0f)
 				cg.speedyeffect = 1.0f;
 		}
-
 		fov_x *= cg.speedyeffect;
 		fov_y *= cg.speedyeffect;
-
-		/* erster versuch:
-				float tmpf;
-
-				tmpf = cg.snap->ps.velocity[0]*cg.refdef.viewaxis[0][0]+
-					cg.snap->ps.velocity[1]*cg.refdef.viewaxis[0][1]+
-					cg.snap->ps.velocity[2]*cg.refdef.viewaxis[0][2];
-
-				if(tmpf>640.0f)
-				{
-					fov_x*=1.5f;
-					fov_y*=1.5f;
-				}
-				else if(tmpf>320.0f)
-				{
-					fov_x*=(tmpf+320.0f)/640.0f;
-					fov_y*=(tmpf+320.0f)/640.0f;
-				}
-				else if(tmpf<-640.0f)
-				{
-					fov_x*=0.5f;
-					fov_y*=0.5f;
-				}
-				else if(tmpf<-320.0f)
-				{
-					fov_x*=(960.0f+tmpf)/640.0f;
-					fov_y*=(960.0f+tmpf)/640.0f;
-				}
-		*/
-	} else
-		cg.speedyeffect = 1.0f; // damit die waffenposition stimmt ;)
+	} else {
+		cg.speedyeffect = 1.0f; // so that the weapon position is correct ;)
+	}
 
 	// set it
 	cg.refdef.fov_x = fov_x;
