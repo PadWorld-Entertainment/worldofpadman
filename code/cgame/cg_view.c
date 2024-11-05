@@ -589,7 +589,7 @@ static int CG_CalcFov(void) {
 
 	if (cg.snap->ps.powerups[PW_SPEEDY]) {
 		if (cg.xyspeed > 500.0f) {
-			if (cg.speedyeffect < 1.5f)
+			if (cg.speedyeffect < (1.0f + 0.5f * (float)cg.refdef.height / (float)cg.refdef.width))
 				cg.speedyeffect += (float)cg.frametime * 0.001f;
 		} else {
 			if (cg.speedyeffect > 1.0f)
