@@ -1,9 +1,9 @@
 # World of PADMAN Changelog
 
-## Version: 1.7.0 (tba.)
+## Version: 1.7.0 (Dec 06, 2024)
 
 - ADDED
-	- 32bit binaries to support Windows and Linux systems
+	- 32bit binaries to support older Windows systems
 	- Freeze Tag (FT) game type and related assets like ice cold weapon effects
 	- Catch the KillerDuck (CTKD) game type
 	- One Lolly Capture (1LC) game type supported by a selection of the original CTL maps
@@ -16,7 +16,7 @@
 	- Milton Boulevard music pack by neurological featuring 7 new tracks
 	- Carnage music pack by MightyPete
 	- Kai's TrashMap version for CTL and 1LC
-	- ENTE's PadPack with PadCastle and PadGallery maps as optional installation option
+	- ENTE's PadPack with PadCastle and PadGallery maps
 	- PadHero (defend) award/medal for defending the base and the lolly carrier in CTL, for defending a balloon box in your own team color in BB, and for defending a teammate carrying min 5 cartridges in SYC Team when attacked
 	- WatchPad (assist) award/medal for 1st returning the own lolly, and 2nd for killing the opposing lolly carrier if a teammate scores shortly after in CTL, for helping a teammate to raise a balloon in BB, and the nearest thawer should receive it for thawing a team mate
 	- Red PadStar medal for the red team capturing a lolly in CTL or raising a balloon in BB
@@ -29,7 +29,7 @@
 	- Support for magenta and cyan as spray colors in Spray Your Color game types
 	- Cartridge icon/model to the scoreboard next to the player's head if cartridges are carried in SYC game types
 	- Advanced hit sound feedback to be enabled/disabled via Game page of Options menu or via new cvar `cg_advHitSounds [0|1]`; when opponent has >50 shield points a more light hit sound indicating less impact is played; when opponent has no shield points left a more fleshy hit sound indicating highest impact is played
-	- Discord webhook support for dedicated servers; discord_webhook_url cvar should get set to a webhook url like https://discord.com/api/webhooks/xxx/yyy (can be done by exporting an env var called WOP_DISCORD_WEBHOOK_URL due to the // in the url)
+	- Discord webhook support for dedicated servers; `discord_webhook_url` cvar should be set to a webhook url like https://discord.com/api/webhooks/xxx/yyy; change cvar `discord_webhook_content` for different content, 1 (default) for human player connect message, sending data about human player count, team status and map, 2 for next map start, sending name of next map, 4 for scores message, sending scores of all players by match end; set to 255 to send all messages and maybe future ones to be implemented
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- Support for player model sounds depending of the selected skin; a complete sound set or individual sounds for a skin can be stored in a folder of the same name in parallel with the model's folder; the model's sounds serve as a fallback if no sounds are available for the skin
@@ -84,7 +84,7 @@
 	- Spray logo name above the spray logo to Player settings menu
 	- Shadows to level shots in Create menu
 	- New mapping for F-keys via default.cfg (for developers and level designers): hide/show HUD `F5`; hide/show gun `F6`; following are cheat protected: hide/show wire frames `F7`; hide/show lightmap `F8`; hide/show render load information `F9`; enable/disable noclip `F10`; enable/disable god mode and give all items `F11`
-	- New cvar `con_scale [1 to 4]` to scale the console text when difficult to read at higher resolutions, takes decimal comma values, default 1
+	- New cvar `con_scale [1 to 4]` to scale the console text when difficult to read at higher resolutions, takes decimal comma values, default 2
 	- New cvar `cg_fovAspectAdjust [0|1]` to automatically adjust the fov depending on given screen resolution / aspect ratio, default 1
 	- New cvar `cg_weaponOrder` to customize the weapon order from worse to best for extended Autoswitch Weapon option, default is '/1/2/4/6/3/7/8/9/5/'
 	- New cvar `cg_drawChatIcon [3|2|1|0]` to enable/disable the chat icon and to chose the size, 3 is big (20 pixels), default is 2 (16 pixels), 1 is small (12 pixels), 0 is off; this also influences the chat notification text size
@@ -136,6 +136,7 @@
 	- Notification Time option on Chat page of Options menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
 	- Menu slider controls to scale to 100s values instead of 10s values where useful
 	- Menu slider controls to show the user input value next to it
+	- Menu tooltips to appear smaller
 	- Player Settings menu to list first all PadCharacters followed by custom player models
 	- Fight button in the menus only works if a map is selected, a server is selected or specified with address, port, or password in the related menus
 	- Arrow buttons in the menus indicate now if first/last page/list entry is reached in the related menus by being disabled or hidden
@@ -151,7 +152,6 @@
 	- Team names to Blue Noses and Red Pads everywhere in the game
 	- Scoreboard to show personal scores in team based game types again
 	- Game type list in Create menu to list FFA game types first and FFA being default (was SYC)
-	- Team Orders ingame menu entry to be shown again
 	- Cvar `com_introPlayed [1|0]` to `com_playIntro [1|0]` to be used to enable/disable the WoP into movie on every game startup, default is 1.
 	- Cvar `r_lightmap [1|0]` to be cheat protected now
 	- Cvar `cg_autoswitch [4|3|2|1|0]` to support more weapon auto switch options; 0 = Never: as before, simply switched off; 1 = Always: switches the weapon every time one is picked up; 2 = New: switches to a picked up weapon if it is new and was not in the inventory before; 3 = Better: changes to a picked up weapon if it is better than the currently selected weapon; 4 = New+Better: switches to a picked up weapon if it is new and was not in the inventory before and if it is better than the currently selected weapon; use cvar `cg_weaponOrder` to customize the weapon order (thanks to Open Arena for idea and code base); menu option is located at Game page of Options menu now
@@ -190,8 +190,10 @@
 	- PadCastle and PadGallery to support Freeze Tag and Catch The KillerDuck game types
 - FIXED
 	- Bad client reliableAcknowledge DOS exploit
+	- Bots keep camping on opposing team's lolly position; this has bothered us since WoP 1.5
 	- All HUD elements to be shown in correct aspect ratio in wide and narrow screen (WoP widescreen support)
 	- Balloon icon over the player's head to be visible though walls after raising a balloon (replaced by PadStar medal)
+	- iMPERiUS ammo can be collected even when you have the maximum quantity
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use `^` key to enter color tags in Player Settings menu or console
 	- Anisotropy and Antialiasing options in Graphics menu to be displayed as 4x after video restart, although 2x was selected before
@@ -212,7 +214,6 @@
 	- Team Overlay always shown as disabled in Options menu when set to defaults due to wrong defined cvar default value
 	- Incorrect assignment of the drowning sound to the selected player model
 	- Voice Threshold slider not showing the input value
-	- Menu music loop to be played when calling Team Orders menu via hotkey
 	- Screen Size menu option functionality (cvar `cg_viewsize`) and added missing back tile asset
 	- CG_WorldToScreen function to work properly with restored Screen Size feature (cvar `cg_viewsize`)
 	- Player is in his own view when zooming with SPLASHER/INJECTOR in 3rd person mode; 3rd person mode is temporarily disabled when zooming in
@@ -273,9 +274,10 @@
 	- SDL to version 2.30.8
 	- JPEG to version 9e
 	- OpenAL soft to version 1.21.1
+	- Code base to [ioq3 1.36 Git cc18246](https://github.com/ioquake/ioq3/commit/cc18246f22ab033e1b17af4616a68e9ea2e873db) with associated features and bug fixes
 
 
-## Version 1.6.2 (Nov 28 2021)
+## Version 1.6.2 (Nov 28, 2021)
 
 - ADDED
 	- Icon vector graphic (wop.svg) for Linux (removed icon.svg)
@@ -295,7 +297,7 @@
 	- Code base to [ioq3 1.36 Git d1d5a89](https://github.com/ioquake/ioq3/commit/d1d5a89aad5673fa465a6ea6973195d7e981dd94) with associated features and bug fixes
 
 
-## Version 1.6.1 (Nov 01 2021)
+## Version 1.6.1 (Nov 01, 2021)
 
 - ADDED
 	- Password user interface when connecting to private servers
