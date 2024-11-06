@@ -36,14 +36,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 extern const int demo_protocols[];
 
 #define PRODUCT_NAME "wop"
-#define PRODUCT_TITLE "WoP"
 #define BASEGAME "wop" // TODO: Use this in Makefile
 #define CLIENT_WINDOW_TITLE "World of PADMAN"
-#define CLIENT_WINDOW_MIN_TITLE PRODUCT_TITLE
-#define PRODUCT_BASE "ioq3 05180e3"
-#define PRODUCT_RELEASE "beta2" // "beta x" "final"/""
-
-#define VERSION_INFO PRODUCT_TITLE " " PRODUCT_VERSION " " PRODUCT_RELEASE " (" PRODUCT_BASE ")"
+#define CLIENT_WINDOW_MIN_TITLE "WoP"
 #define HOMEPATH_NAME_UNIX "worldofpadman"
 #define HOMEPATH_NAME_WIN "worldofpadman"
 #define HOMEPATH_NAME_MACOSX "worldofpadman"
@@ -67,6 +62,7 @@ extern const int demo_protocols[];
 #define PRODUCT_VERSION "1.7.0"
 #endif
 
+#define PRODUCT_RELEASE "beta2" // "dev" "final"
 #define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION " " PRODUCT_RELEASE
 
 #define MAX_TEAMNAME 32
