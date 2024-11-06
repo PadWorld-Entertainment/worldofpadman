@@ -382,6 +382,8 @@ UI_TeamOrdersMenu
 ===============
 */
 void UI_TeamOrdersMenu(void) {
+	return; // disabled for now until issues with bo chat are fixed
+	
 	trap_Cvar_Set("cl_paused", "1"); // pause game and indirectly pause/stop background music
 
 	UI_TeamOrdersMenu_Init();

@@ -1632,7 +1632,7 @@ static void Controls_MenuInit(void) {
 	Menu_AddItem(&s_controls.menu, &s_controls.chat4);
 	Menu_AddItem(&s_controls.menu, &s_controls.pushToTalk);
 	Menu_AddItem(&s_controls.menu, &s_controls.gesture);
-	Menu_AddItem(&s_controls.menu, &s_controls.teamorders);
+//	Menu_AddItem(&s_controls.menu, &s_controls.teamorders);
 
 	Menu_AddItem(&s_controls.menu, &s_controls.showscores);
 	Menu_AddItem(&s_controls.menu, &s_controls.togglemenu);

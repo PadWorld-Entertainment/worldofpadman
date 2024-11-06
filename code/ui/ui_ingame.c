@@ -258,7 +258,7 @@ static void InGame_MenuInit(void) {
 		s_ingame.removebots.generic.flags |= QMF_GRAYED;
 	}
 
-	y += INGAME_MENU_VERTICAL_SPACING;
+/* 	y += INGAME_MENU_VERTICAL_SPACING;
 	s_ingame.teamorders.generic.type = MTYPE_TEXTS;
 	s_ingame.teamorders.fontHeight = 20.0f;
 	s_ingame.teamorders.generic.flags = QMF_CENTER_JUSTIFY;
@@ -280,7 +280,7 @@ static void InGame_MenuInit(void) {
 			s_ingame.teamorders.generic.flags |= QMF_GRAYED;
 		}
 	}
-
+ */
 	y += INGAME_MENU_VERTICAL_SPACING;
 	s_ingame.voiceingame.generic.type = MTYPE_TEXTS;
 	s_ingame.voiceingame.fontHeight = 20.0f;
@@ -436,7 +436,7 @@ static void InGame_MenuInit(void) {
 	Menu_AddItem(&s_ingame.menu, &s_ingame.team);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.addbots);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.removebots);
-	Menu_AddItem(&s_ingame.menu, &s_ingame.teamorders);
+//	Menu_AddItem(&s_ingame.menu, &s_ingame.teamorders);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.voiceingame);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.callvote);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.setup);
