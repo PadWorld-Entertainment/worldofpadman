@@ -1,6 +1,6 @@
 body {
 	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-size:10pt;
+	font-size:11pt;
 	margin:0px;
 	background:#005FFF url(pictures/readme_back.png) repeat fixed;
 	color:#FFE100;
@@ -82,7 +82,7 @@ ul#navigation {
 	list-style:none;
 	margin:3px 0px 3px 0px;
 	padding:0px;
-	font-size:8pt;
+	font-size:11pt;
 	font-weight:normal;
 	text-decoration:none;
 }
@@ -133,7 +133,7 @@ ul#navigation li a:hover {
 	background-color:inherit;
 	color:#ffffff;
 	background-image:url(./pictures/readme_header.gif);
-	font-size:14pt;
+	font-size:15pt;
 	font-weight:bold;	
 	text-align:center;
 }
@@ -143,7 +143,7 @@ ul#navigation li a:hover {
 	text-align:left;
 	padding:6px;
 	border:1px solid #000000;
-	font-size:10pt;
+	font-size:11pt;
 	min-height:65px;
 	color:inherit;
 	background-color:#003399;
