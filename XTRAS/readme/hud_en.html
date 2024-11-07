@@ -1,69 +1,167 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="stylesheet" type="text/css" href="readme.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="readme.css" />
 </head>
 
 <body>
+	<center>
+		<div class="readme_entry">
+			<div class="readme_body">
+				<div class="readme_subject">The HUD</div>
+				<div class="readme_inner">
+					<p>
+						<b><u>HUD designs</u></b>
+						<br /><br />
+						We have created a total of 10 HUD designs for you to
+						choose from in the Setup -> Options -> HUD menu.
+						Since we already explained on the menu page how the
+						selection works, here is a nice copy'n'paste:
+						<br />
+						The HUD design is selected from a list. Clicking on
+						Color/Theme will display all available designs for
+						you to choose from. These changes will be applied
+						and displayed in-game immediately, unless a team
+						game mode is active. The HUD theme will then
+						automatically be set to the team colors of blue or
+						red.
+					</p>
 
-<center>
+					<p>
+						<b><u>Notifications (top left)</u></b>
+						<br /><br />
+						The notification area is located in the upper left
+						corner of the HUD. This is where chat messages from
+						other players are displayed. In the Setup -> Options
+						-> Chat menu, you can set the display height (number
+						of lines), the display time, and the size of the
+						player image in front of the text. The larger the
+						image, the larger the text. The image can also be
+						turned off completely.
+						<br />
+						There is also an option to scale the text in the
+						console if it is too small to read at high
+						resolution.
+					</p>
 
-<div class='readme_entry'>
-	<div class='readme_body'>
-		<div class='readme_subject'>
-			The HUD
+					<p style="min-height: 150px">
+						<b><u>Server info (top right)</u></b>
+						<br /><br />
+						<img style="float: left" class="readme_image" alt="" src="pictures/server_hud_kl.jpg" />
+						The server info is a small window in the top right
+						corner of the HUD that displays things like the set
+						point limit, match time, etc. A key to show or hide
+						the info window can be assigned in the Setup ->
+						Controls -> Misc menu. The default is 'K'.
+					</p>
+
+					<p style="min-height: 220px">
+						<b><u>Weapon status and points (bottom left)</u></b>
+						<br /><br />
+						<img class="readme_image" style="float: left" src="pictures/lefthud.jpg" alt="" />
+						In the lower left corner of the HUD, you can see
+						which weapon you have selected and how much ammo you
+						have left for that weapon. This is also where the
+						score is displayed, so you can see at a glance what
+						your personal score is, or which team is ahead in
+						the team game modes.<br />
+						The yellow dot with the X in it always shows you
+						which one is yours.
+						<br /><br />
+						<b>Catch The KillerDuck:</b> In this game mode,
+						weapons and ammo are no longer usable and cannot be
+						collected once the KillerDuck has been captured. The
+						3D model or 2D icon will be replaced by the
+						KillerDuck and the ammo meter will be removed.
+					</p>
+
+					<p style="min-height: 160px">
+						<b><u>Health and shield energy (bottom center)</u></b>
+						<br /><br />
+						<img class="readme_image" style="float: left" src="pictures/centerhud.jpg" alt="" />
+						This is probably the most important part of the HUD.
+						In the middle section at the bottom you can see your
+						health to the left of your head and your shield
+						energy to the right in the form of bars.<br />
+						If the left part, the red area, is completely
+						filled, you have 100% health. If you happen to have
+						more than 100% health, e.g. due to the Revival
+						power-up or respawning, you will see a corresponding
+						part of the bar in dark red. The whole thing goes up
+						to a maximum of 200%.
+						<br />
+						The same applies to the right part of the bar, the
+						blue shield energy status. If you have more than
+						100% shield energy, e.g. due to PadShield or
+						PadShards, you will see a corresponding dark blue
+						section. Again, the display goes up to a maximum of
+						200%.<br />
+						Again, the display goes up to a maximum of 200%. You
+						can also display your health directly with the
+						crosshair by activating the Indicate Health option
+						in the Setup -> Options -> HUD menu. The crosshair
+						will turn yellow and then red as your health
+						decreases.
+						<br /><br />
+						<b>InstaPad:</b> If this area of the HUD flashes
+						wildly for a few seconds at the start of the game,
+						it is not a bug, but is intended to show you in
+						InstaPad how long enemy hits cannot harm you after a
+						respawn. During this time, you are protected and can
+						find your way around the game.
+					</p>
+
+					<p style="min-height: 240px">
+						<b><u>Game mode info (bottom right)</u></b>
+						<br /><br />
+						<img class="readme_image" style="float: left" src="pictures/righthudsyc.jpg" alt="" /><img
+							class="readme_image" style="float: right" src="pictures/righthudbb.jpg" alt="" />
+						This area varies depending on the game mode. Nothing
+						is displayed for Free For All (Team), Last Pad
+						Standing, Freeze Tag, and Catch The KillerDuck.
+						However, useful information is displayed for Spray
+						Your Color (Team), Big Balloon, Capture The Lolly,
+						and One Lolly Capture.
+						<br /><br />
+						<b>Spray Your Color</b>: The number of collected
+						color cartridges is displayed here. Since the number
+						of color cartridges is limited to eight, up to eight
+						dots are displayed here. Each red dot represents a
+						collected color cartridge. When you have collected
+						at least one color cartridge, a 3D model or 2D icon
+						appears, depending on your settings. <br /><br />
+						<b>Big Balloon:</b> This shows which balloons are
+						captured by which team. With a little practice, you
+						can quickly figure out which balloon is where on the
+						map. In addition, a small yellow bar shows how long
+						you have to stay near a balloon before it fully
+						rises or bursts.
+
+						<br /><br />
+						<b>Capture The Lolly:</b> This game mode shows the
+						status of your lollipop, whether it is safe in your
+						base (@), captured by your opponent (X), or lying
+						somewhere on the map (?). If you have captured the
+						lollipop yourself, a 3D model or 2D icon of the
+						lollipop will appear, depending on your settings.
+						<br /><br />
+						<b>One Lolly Capture:</b> One Lolly Capture: In this
+						game mode, the status of the neutral lollipop is
+						indicated by white symbols at the lower position,
+						i.e. whether it is in the middle of the map (@), has
+						been captured (X), or is lying somewhere on the map
+						(?). The red or blue @ symbol above the lollipop
+						only appears if one of the teams currently has
+						possession of the lollipop. If you picked up the
+						lollipop yourself, you will see a 3D model or a 2D
+						icon, depending on your settings.
+					</p>
+				</div>
+			</div>
 		</div>
-		<div class='readme_inner'>
-
-			<p>
-			<b><u>Changeable HUDs</u></b>
-			<br><br>
-			We created 10 different HUD designs for you to choose from. Just select the one you want and the change will be applied immediately.
-			</p>
-
-			<p style='min-height:220px;'>
-			<b><u>'Left'</u></b>
-			<br><br>
-			<img class='readme_image' style='float:left;' src='pictures/hud/lefthud.jpg' alt=''>
-			The left part of the HUD shows your selected weapon and the ammo for it. The scores of the teams are also shown here
-			so you can see see which team is currently winning. The yellow circle containing the X shows which team is yours.
-			</p>
-
-			<p style='min-height:160px;'>
-			<b><u>'Center'</u></b>
-			<br><br>
-			<img class='readme_image' style='float:left;' src='pictures/hud/centerhud.jpg' alt=''>
-			This is the most important part of the HUD. Here you can see your health and shield status.
-			The left part (red) is for health, and when it's completely filled, you have 100% health.
-			You can have more than 100% health with revival or after respawn. Having part of the bar a darker red shows this.
-			The blue side (shield) on the right works in the same way. If you have more than 100% shield, the part over 100% is shown on the bar as dark blue.
-			</p>
-
-			<p style='min-height:240px;'>
-			<b><u>'Right'</u></b>
-			<br><br>
-			<img class='readme_image' style='float:left;' src='pictures/hud/righthudsyc.jpg' alt=''><img class='readme_image' style='float:right;' src='pictures/hud/righthudbb.jpg' alt=''>
-			The design of this part depends on the game mode you are playing. In normal FFA, TDM and "Last Pad Standing", the right part is empty.
-			Playing 'Spray your Color', 'Big Balloon' or 'Capture the Lolly', you'll find some helpful information here.
-
-			<br><br>
-			'Spray your Color': The amount of collected cartridges is displayed here. Having a limit of eight collected cartridges,
-			you'll notice that eight small dots are here. Every red dot means one collected cartridge.
-			<br><br>
-			'Big Balloon': Shows which team dominates which balloons. After a few rounds, you'll know where to find the each balloon.
-			A small bar shows how much longer you have to be near a balloon to activate it.
-			<br><br>
-			'Capture the Lolly': In this gametype you'll see the status of the Lollies here. There are three different states: the lolly is safe in your base, it is taken by an enemy, or
-			the status is unknown, meaning that the Lolly is dropped somewhere in the map.
-			</p>
-
-		</div>
-	</div>
-</div>
-
-</center>
-
+	</center>
 </body>
+
 </html>
