@@ -1,133 +1,129 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-	<head>
-		<meta
-			http-equiv="Content-Type"
-			content="text/html; charset=ISO-8859-1"
-		/>
-		<link rel="stylesheet" type="text/css" href="readme.css" />
-	</head>
 
-	<body>
-		<center>
-			<div class="readme_entry">
-				<div class="readme_body">
-					<div class="readme_subject">General Information</div>
-					<div class="readme_inner">
-						<p>
-							<b><u>Bot support</u></b>
-							<br /><br />
-							World of PADMAN offers full bot support for all game
-							modes! Offline players will be happy to play Spray
-							Your Color, Big Balloon, Last Pad Standing, Capture
-							the Lolly and many more with bots. The bot support
-							works quite well and the maps have been optimized
-							for bots.
-						</p>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="readme.css" />
+</head>
 
-						<p>
-							<b><u>Dropping items</u></b>
-							<br /><br />
-							Have you collected a bunch of color cartridges and
-							don't think you'll make it to the teleporter? Want
-							to give your teammate a color cartridge so they can
-							earn extra points for the team with SprayGod or
-							SprayKiller? For such cases, you can define a drop
-							button in the menu under Setup -> Controls -> Move.
-							The defaults are 'F' and 'Backspace'. This feature
-							works not only in the team version of Spray Your
-							Color, but also in Capture The Lolly and One Lolly
-							Capture. Here you can pass the lolly to other
-							players. In Catch The KillerDuck you can quickly get
-							rid of the duck if it gets too much for you.
-						</p>
+<body>
+	<center>
+		<div class="readme_entry">
+			<div class="readme_body">
+				<div class="readme_subject">General Information</div>
+				<div class="readme_inner">
+					<p>
+						<b><u>Bot support</u></b>
+						<br /><br />
+						World of PADMAN offers full bot support for all game
+						modes! Offline players will be happy to play Spray
+						Your Color, Big Balloon, Last Pad Standing, Capture
+						the Lolly and many more with bots. The bot support
+						works quite well and the maps have been optimized
+						for bots.
+					</p>
 
-						<p>
-							<b><u>Glow Skins</u></b>
-							<br /><br />
-							In serious tournaments it is important to recognize
-							your opponent quickly. For this reason, WoP offers
-							the option to activate glow skins in the Setup ->
-							Options -> Game menu. If you do this, the models of
-							your opponents will get a glowing skin in a color of
-							your choice, so that they stand out clearly from the
-							game world. This option is certainly a plus for
-							clans and action-packed 1v1 battles, but not for the
-							overall graphical concept ;) In the team game modes,
-							the colors are always set to red and blue.
-						</p>
+					<p>
+						<b><u>Dropping items</u></b>
+						<br /><br />
+						Have you collected a bunch of color cartridges and
+						don't think you'll make it to the teleporter? Want
+						to give your teammate a color cartridge so they can
+						earn extra points for the team with SprayGod or
+						SprayKiller? For such cases, you can define a drop
+						button in the menu under Setup -> Controls -> Move.
+						The defaults are 'F' and 'Backspace'. This feature
+						works not only in the team version of Spray Your
+						Color, but also in Capture The Lolly and One Lolly
+						Capture. Here you can pass the lolly to other
+						players. In Catch The KillerDuck you can quickly get
+						rid of the duck if it gets too much for you.
+					</p>
 
-						<p>
-							<b><u>Voice-Chat</u></b>
-							<br /><br />
-							Gone are the days when you had to torture your
-							keyboard, because World of PADMAN has a voice chat
-							system. This must be activated in the menu under
-							Setup -> System -> Net/VoIP. Then you can choose if
-							your voice will be recognized and transmitted
-							automatically or if you want to press a button to
-							talk (push to talk), like with a walkie-talkie. If
-							you choose push to talk, you can define a button for
-							it in the menu under Setup -> Controls -> Chat. The
-							default is 'R'.
-							<br />
-							In the game itself, you can also adjust the volume
-							of individual players or mute them using the
-							'Escape' key to enter the in-game menu. If you want
-							to use Mumble as an external voice chat program, you
-							can also select Mumble support in the menu.
-						</p>
+					<p>
+						<b><u>Glow Skins</u></b>
+						<br /><br />
+						In serious tournaments it is important to recognize
+						your opponent quickly. For this reason, WoP offers
+						the option to activate glow skins in the Setup ->
+						Options -> Game menu. If you do this, the models of
+						your opponents will get a glowing skin in a color of
+						your choice, so that they stand out clearly from the
+						game world. This option is certainly a plus for
+						clans and action-packed 1v1 battles, but not for the
+						overall graphical concept ;) In the team game modes,
+						the colors are always set to red and blue.
+					</p>
 
-						<p>
-							<b><u>Warmup</u></b>
-							<br /><br />
-							The <i>g_WarmupReady</i> command can be used so that
-							a game does not start immediately after loading, but
-							only when a certain number of players have
-							registered as ready to play with the
-							<i>/ready</i> command. The server administrator can
-							set the variable <i>g_WarmupReady</i> to a value
-							between 0 and 1 in the server configuration, where
-							<i>g_doWarmup</i> must also be set to 1. If
-							<i>g_WarmupReady</i> is set to 0, this means that
-							the game will start immediately. If it is 1, 100% of
-							the players present must type <i>/ready</i> in the
-							console. In addition, any other decimal number
-							between 0 and 1 can be entered to force a certain
-							percentage of players to be ready.<br /><br />
-							<u>Examples:</u>
-							<br /><br />
-							set g_doWarmup 1<br />
-							set g_WarmupReady 0.5 -> 50% must be ready to play
-							<br /><br />
-							or<br /><br />
-							set g_doWarmup 1<br />
-							set g_WarmupReady 0.8 -> 80% must be ready to
-							play<br /><br />
-							This command is especially recommended for Last Pad
-							Standing and team-oriented game modes in general.
-						</p>
+					<p>
+						<b><u>Voice-Chat</u></b>
+						<br /><br />
+						Gone are the days when you had to torture your
+						keyboard, because World of PADMAN has a voice chat
+						system. This must be activated in the menu under
+						Setup -> System -> Net/VoIP. Then you can choose if
+						your voice will be recognized and transmitted
+						automatically or if you want to press a button to
+						talk (push to talk), like with a walkie-talkie. If
+						you choose push to talk, you can define a button for
+						it in the menu under Setup -> Controls -> Chat. The
+						default is 'R'.
+						<br />
+						In the game itself, you can also adjust the volume
+						of individual players or mute them using the
+						'Escape' key to enter the in-game menu. If you want
+						to use Mumble as an external voice chat program, you
+						can also select Mumble support in the menu.
+					</p>
 
-						<p>
-							<b><u>Bugs</u></b>
-							<br /><br />
-							World of PADMAN has been in development for over 20
-							years, but that doesn't mean it's bug-free. Like any
-							self-respecting developer, we've intentionally
-							included a few bugs to give you something to look
-							for and get excited about. If you find bugs, send us
-							an email so we can brag about a patch. ;) Better
-							yet, report the bug directly on
-							<a
-								href="https://github.com/PadWorld-Entertainment/worldofpadman/issues"
-								target="_blank"
-								>Github</a
-							>
-							by creating a ticket there.
-						</p>
-					</div>
+					<p>
+						<b><u>Warmup</u></b>
+						<br /><br />
+						The <i>g_WarmupReady</i> command can be used so that
+						a game does not start immediately after loading, but
+						only when a certain number of players have
+						registered as ready to play with the
+						<i>/ready</i> command. The server administrator can
+						set the variable <i>g_WarmupReady</i> to a value
+						between 0 and 1 in the server configuration, where
+						<i>g_doWarmup</i> must also be set to 1. If
+						<i>g_WarmupReady</i> is set to 0, this means that
+						the game will start immediately. If it is 1, 100% of
+						the players present must type <i>/ready</i> in the
+						console. In addition, any other decimal number
+						between 0 and 1 can be entered to force a certain
+						percentage of players to be ready.<br /><br />
+						<u>Examples:</u>
+						<br /><br />
+						set g_doWarmup 1<br />
+						set g_WarmupReady 0.5 -> 50% must be ready to play
+						<br /><br />
+						or<br /><br />
+						set g_doWarmup 1<br />
+						set g_WarmupReady 0.8 -> 80% must be ready to
+						play<br /><br />
+						This command is especially recommended for Last Pad
+						Standing and team-oriented game modes in general.
+					</p>
+
+					<p>
+						<b><u>Bugs</u></b>
+						<br /><br />
+						World of PADMAN has been in development for over 20
+						years, but that doesn't mean it's bug-free. Like any
+						self-respecting developer, we've intentionally
+						included a few bugs to give you something to look
+						for and get excited about. If you find bugs, send us
+						an email so we can brag about a patch. ;) Better
+						yet, report the bug directly on
+						<a href="https://github.com/PadWorld-Entertainment/worldofpadman/issues"
+							target="_blank">Github</a>
+						by creating a ticket there.
+					</p>
 				</div>
 			</div>
-		</center>
-	</body>
+		</div>
+	</center>
+</body>
+
 </html>
