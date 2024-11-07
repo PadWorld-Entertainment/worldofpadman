@@ -2,14 +2,20 @@
 Urheberrecht
 ----------------
 
-World of PADMAN bzw. dessen Einzelwerke (z.B. Maps, Texturen, Modelle, Sounds) sind urheberrechtlich geschÃ¼tzt. Die Schutzrechte liegen auf Seiten der jeweiligen Autoren der Einzelwerke, zusammenfassend im folgenden als WoP-Team (PadWorld Entertainment) bezeichnet.
+Nutzungsbedingungen
 
-Das WoP-Team kommt Ã¼berein, dass jegliche kommerzielle Nutzung des Spiels und somit deren Einzelwerke ohne explizite Zustimmung und Erlaubnis verboten ist. Dieses beinhaltet, ist jedoch nicht begrenzt auf, Massen-Archivierungen auf CD-ROM, DVD oder Ã¤hnlichen DatentrÃ¤gern im Zusammenhang von kommerziellen VerÃ¶ffentlichungen wie z.B. Zusammenstellungen fÃ¼r Magazine, BÃ¼cher, Online-Vertrieb von Zusammenstellungen, Zusammenstellungen jeglicher Art im Sinne der kommerziellen Nutzung.
+Das WoP-Team (PadWorld Entertainment) kommt überein, dass jegliche kommerzielle Nutzung von World of PADMAN und der einzelnen von PadWorld Entertainment erstellten Werke ohne ausdrückliche schriftliche Zustimmung und Genehmigung untersagt ist.
+Dies beinhaltet, ist aber nicht beschränkt auf, die Massenarchivierung auf Disketten oder ähnlichen Medien in Verbindung mit kommerziellen Veröffentlichungen wie Kompilationen für Zeitschriften, Bücher, Online-Vertrieb von Kompilationen und Kompilationen jeglicher Art zum Zwecke der kommerziellen Nutzung.
+Dazu gehört auch das Verbot der Vervielfältigung, Bearbeitung, Verbreitung und öffentlichen Wiedergabe zu gewerblichen Zwecken, sei es auf elektronischem oder anderem Wege. Erlaubt und erwünscht ist die private oder nicht kommerzielle Vervielfältigung, Verbreitung und öffentliche Wiedergabe.
 
-Weiterhin beinhaltet dies das Verbot der VervielfÃ¤ltigung, der Bearbeitung, der Verbreitung und der Ã¶ffentlichen Wiedergabe im Sinne einer kommerziellen Nutzung. Jegliche Bearbeitung des Spiels (ausgenommen der Programmcode) und somit dessen Einzelwerke, ob kommerziell oder nicht, ist ebenfalls widerrechtlich im Sinne des Urheberrechts der einzelnen Autoren und ohne explizite Erlaubnis verboten. Die private, nicht kommerzielle VervielfÃ¤ltigung, Verbreitung oder sogar das Ã¶ffentliche Vorspielen von World of PADMAN ist hingegen erwÃ¼nscht.
+Quellcode und Assets
 
-Zur Erstellung dieses Spiels wurde mitunter Material (z.B. Texturen und Sounds) verwendet, welches das WoP-Team aus unterschiedlichen Quellen erhielt und dessen Lizenz die Verwendung und Modifikation gestattet. Sollte dies in einem Fall nicht zutreffen und Rechte Dritter verletzt werden, bitten wir um eine unverzÃ¼gliche VerstÃ¤ndigung, damit das WoP-Team umgehend reagieren kann. Detaillierte Informationen und Credits zu den verwendeten Sounds befinden sich in der sounds_readme.txt.
+Der Quellcode von World of PADMAN wird unter der GNU General Public License (Version 2, Juni 1991) veröffentlicht und es gelten die entsprechenden Regeln. Dies gilt nicht für die einzelnen Assets von World of PADMAN, wie z.B. Maps, Texturen, Modelle, Sounds, etc. Diese Assets sind Eigentum der jeweiligen Autoren und urheberrechtlich geschützt.
+PadWorld Entertainment erlaubt die Verwendung und Bearbeitung der eigenen Assets für Custom Maps und Mods, sofern diese ausschließlich für World of PADMAN und nicht zu kommerziellen Zwecken erstellt und veröffentlicht werden. Credits müssen in jedem Fall angegeben werden. Als grundsätzliche Verhaltensregel möchten wir nicht, dass die Assets von World of PADMAN auseinandergenommen, verstreut und anderweitig, z.B. in anderen Spielen, verwendet werden.
 
-Der Programmcode steht unter der GNU GENERAL PUBLIC LICENSE (Version 2, June 1991). Detaillierte Inforamtionen zur GPL befinden sich in der gpl.txt. 
+Inhalte Dritter
 
-Bei Fragen und Hinweisen kontaktieren Sie das WoP-Team bitte per E-Mail: team@worldofpadman.com
+Einige Teile von World of PADMAN wurden mit Inhalten erstellt, die von PadWorld Entertainment aus verschiedenen Quellen erworben wurden, mit Lizenzen, die deren Nutzung und Veränderung erlauben. Sollte dennoch eine Verletzung von Rechten Dritter festgestellt werden, bitten wir um sofortige Benachrichtigung. Weitere Informationen über die in World of PADMAN verwendeten Inhalte Dritter und die entsprechenden Lizenzen sind in der Datei LICENSES.md dokumentiert.
+
+Sollte eine der oben genannten Regeln unklar sein oder bei Fragen kontaktieren Sie das WoP-Team bitte per E-Mail:
+team@worldofpadman.net 
