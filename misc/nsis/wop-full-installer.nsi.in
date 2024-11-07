@@ -184,12 +184,18 @@ Section $(NAME_Section1) Section1
         CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\Big Balloon Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-bigballoon.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\Last Pad Standing Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-lastpadstanding.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\Capture The Lolly Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-capturethelolly.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\One Lolly Capture Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-onelollycapture.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\Freeze Tag Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-freezetag.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\Catch The KillerDuck Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-catchthekillerduck.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\Dedicated Server\All Gametypes Server (dedicated).lnk" "$INSTDIR\wopded.x86_64.exe" "+set dedicated 1 +exec server-allgametypes.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateDirectory "$SMPROGRAMS\$SMGroup\Listen Server"
         CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Spray Your Color Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-sprayyourcolour.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Big Balloon Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-bigballoon.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Last Pad Standing Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-lastpadstanding.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Capture The Lolly Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-capturethelolly.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\One Lolly Capture Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-onelollycapture.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Freeze Tag Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-freezetag.cfg" "$INSTDIR\XTRAS\wop.ico" 0
+        CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\Catch The KillerDuck Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-catchthekillerduck.cfg" "$INSTDIR\XTRAS\wop.ico" 0
         CreateShortCut "$SMPROGRAMS\$SMGroup\Listen Server\All Gametypes Server (listen).lnk" "$INSTDIR\wop.x86_64.exe" "+exec server-allgametypes.cfg" "$INSTDIR\XTRAS\wop.ico" 0
     !insertmacro MUI_STARTMENU_WRITE_END
 
