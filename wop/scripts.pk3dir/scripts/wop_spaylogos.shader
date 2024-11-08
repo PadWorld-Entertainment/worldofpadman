@@ -518,11 +518,11 @@ spraylogos/47_earth
 	}
 }
 
-spraylogos/48_yinyan
+spraylogos/48_yinyang
 {
 	nopicmip
 	{
-		map spraylogos/48_yinyan
+		map spraylogos/48_yinyang
 		blendFunc blend
 		rgbGen vertex
 		alphaGen vertex

@@ -163,7 +163,7 @@ name		Pelvis
 model		padman/pelvis
 funname     "^6Pelv^7i^6s"
 aifile      bots/pelvis_c.c
-spraylogo	48_yinyan
+spraylogo	48_yinyang
 }
 
 
