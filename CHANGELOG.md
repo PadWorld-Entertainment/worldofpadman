@@ -697,4 +697,4 @@
 
 
 ## Version 1.1.0 (Apr 01, 2007)
-- Initial standalone relase
+- Initial standalone release
