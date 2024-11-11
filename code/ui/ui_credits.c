@@ -91,381 +91,94 @@ void UI_Credit_Cache(void) {
 /*
 =======================================================================
 
-WOP CREDITS (Scrolling credits for World of PADMAN)
+WOP CREDITS (Slideshow credits for World of PADMAN)
 
 =======================================================================
 */
 
-#define WOPCREDITSBG "menu/wopcredits"
-#define TRACKLENGTH 343 // length of the credits track in seconds
+#define ARROWLT0 "menu/arrows/arryel_lt0b"
+#define ARROWLT1 "menu/arrows/arryel_lt1"
+#define ARROWRT0 "menu/arrows/arryel_rt0b"
+#define ARROWRT1 "menu/arrows/arryel_rt1"
+#define EXIT0 "menu/buttons/exit0"
+#define EXIT1 "menu/buttons/exit1"
+
+#define ID_EXIT 10
+#define ID_NEXT 11
+#define ID_PREV 12
+
+const char *creditspics[] = {"menu/credits/001", "menu/credits/002", "menu/credits/003",
+							"menu/credits/004", "menu/credits/005", "menu/credits/006",
+							"menu/credits/007", "menu/credits/008", NULL};
+
+#define MAX_CREDITSPAGES STRARRAY_LEN(creditspics)
 
 typedef struct {
 	menuframework_s menu;
+
+	menubitmap_s creditspic;
+	menubitmap_s next;
+	menubitmap_s prev;
+	menubitmap_s exit;
+
+	int currentpage;
+
 } wopcredits_t;
 
 static wopcredits_t s_wopcredits;
 
-static int creditSeqStarttime;
+/*
+===============
+UI_WopCredits_MenuUpdate
+===============
+*/
+static void UI_WopCredits_MenuUpdate(void) {
 
-static const vec4_t color_programming = {1.0f, 0.6f, 1.0f, 1.0f};
-static const vec4_t color_models = {1.0f, 0.6f, 0.0f, 1.0f};
-static const vec4_t color_skins = {0.8f, 1.0f, 0.0f, 1.0f};
-static const vec4_t color_artwork = {1.0f, 0.4f, 0.0f, 1.0f};
-static const vec4_t color_voiceart = {0.0f, 1.0f, 0.0f, 1.0f};
-static const vec4_t color_intro = {1.0f, 0.4f, 1.0f, 1.0f};
-static const vec4_t color_skyboxes = {0.6f, 0.8f, 1.0f, 1.0f};
-static const vec4_t color_soundtrack = {1.0f, 0.8f, 0.0f, 1.0f};
-static const vec4_t color_prnews = {0.8f, 1.0f, 0.0f, 1.0f};
-static const vec4_t color_bthx = {1.0f, 0.2f, 0.0f, 1.0f};
-static const vec4_t color_mthx = {1.0f, 0.8f, 0.99f, 1.0f};
-static const vec4_t color_sthx = {0.6f, 0.6f, 1.0f, 1.0f};
-static const vec4_t color_vsthx = {0.6f, 0.8f, 0.2f, 1.0f};
-static const vec4_t color_memory = {0.0f, 0.64f, 0.99f, 1.0f};
+	s_wopcredits.creditspic.generic.name = creditspics[s_wopcredits.currentpage];
+	s_wopcredits.creditspic.shader = 0;
 
-typedef struct {
-	const char *string;
-	int style;
-	const vec4_t *color;
-} cr_line;
+	s_wopcredits.next.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
+	s_wopcredits.prev.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 
-static const cr_line credits[] = {
-	{"World of PADMAN", UI_CENTER | UI_GIANTFONT | UI_DROPSHADOW, &color_white},
-	{"20th Anniversary", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW | UI_PULSE, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
+	if (s_wopcredits.currentpage < (MAX_CREDITSPAGES - 1)) {
+		s_wopcredits.next.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+	}
+		
+	if (s_wopcredits.currentpage > 0) {
+		s_wopcredits.prev.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
+	}
 
-	{"Lead & Game Design", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_yellow},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Andreas (ENTE) Endres", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Programming", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_programming},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Stefan (#@) Langer", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Uwe (Cyrri) Koch", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Martin (mgerhardy) Gerhardy", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Niklas (brain) Link", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Thilo (Thilo) Schulz", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Paul (paulR) Rabe", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Kai (Kai-Li) Bergmann", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Herby", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Level Design", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_red},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Andreas Endres", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Joerg (Glowstar) Holsten", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Simon (Harmonieman) Furkert", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Kai Bergmann", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Martin (Cyben) Lange", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Andreas (MopAn) Spitzer", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Michael (oregano4) Grzesik", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Models & Animation", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_models},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Sebastian (doomdragon) Henke", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Kevin (SLoB) Jaques", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Manuel (Gogitason) Reyes", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Paul (paulR) Rabe", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"James (PencilWhipped) Johnson", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Tim (tpe) Evison", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Tony (Tone) Bellott", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Felix (FEzzz) Stellmacher", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Player Skins", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_skins},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Andreas Endres", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Sebastian Henke", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Manuel Reyes", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Kevin Jaques", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Tim Evison", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"James Johnson", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Camilla (milla) Koutsos", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Mario (Shocker) Perez Leal", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"2D Artwork", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_artwork},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Andreas Endres", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Andreas Spitzer", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"MightyPete", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Voice Art", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_voiceart},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Angie Lee Stahl", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Eileen Heath", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Andreas Endres", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Simon Furkert", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Sebastian Henke", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Intro & Trailers", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_intro},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Sebastian Henke", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Heiko (Mel O'Dee) Klueh", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Raptaker", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Sound Assortment", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &text_color_highlight},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Andreas Endres", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Kai Bergmann", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Skyboxes", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_skyboxes},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"MightyPete", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Soundtrack", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_soundtrack},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"dieselkopf", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"neurological", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Green Sun", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"PR & News", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_prnews},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Andreas Endres", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Kai Bergmann", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Simon Furkert", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Beta Tester", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_yellow},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"3aTmE!", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Adri{HUN}", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Hectic", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Blu123", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Ben", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Iltis", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Imagine", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Sauerbraten", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"YSM", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"kARMU", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Psychic_Pad", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"GLL", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Pudding", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"ladykiller", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Dopehead.NL", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Pixelmaennchen", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Chaosblubbel", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Sims", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Phobos", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Glyxbaer", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Padster", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"PaDbUrY", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Tryhard", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Racor", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Dr.Metzler", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"nestel34", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Schnaubi", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Fokili", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"hafer", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Nasbit", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Pinhead", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Frankenraecher", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Raptaker", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"IG", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Wh1sper", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"somtin", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"smiley", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Wakey", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"aquarius", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"stuffStohl", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"umbatz", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"acid", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Bio][WsG", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"CIX", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Fiesling", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"frank[ger]", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Kalis", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Magnacus", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"prophet", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Shady", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Shooeyy", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Big Thanks To", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_bthx},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"GrimReaper", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Redlemons", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"MrFloppi", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"GreenThumB", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"QuarterPounder", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"chaOs", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Landi", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"jube", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Maverick", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Sunrabbit", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Gekitsu", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"DemonPrincess", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"GomJabbar", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Wakey", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Padster", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"smiley", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"meimeiriver", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Fiesling", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Psychic_Pad", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Leo2701", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Shooeyy", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"IG", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"More Thanks To", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_mthx},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Gerrit Neuendorf", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Scott Reismanis", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Jeremy Williams", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Zack Middleton", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Victor Karp", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Michael Kupfer", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Ragman", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Magnacus", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Levelord", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Budi", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Pappy-R", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"CaliGirl", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Badb0y", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Special Thanks To", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_sthx},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"id Software", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"ioQuake3", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"ModDB & IndieDB", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Mod.io", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Spawnpoint", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"GitHub", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Giga TV", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"MTV", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"In Memory Of", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_memory},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Pierre (Peyo) Culliford", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Creator Of The Smurfs", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{"Very Special Thanks To", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW, &color_vsthx},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"The fantastic", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"[PAD]Community", UI_CENTER | UI_BIGFONT | UI_DROPSHADOW | UI_PULSE, &color_white},
-	{"You Rock!", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"And Our Families And", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Friends, With Whom We", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Often Spent Little Time", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Your WoP Team", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"PadWorld Entertainment", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"(2024)", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"And Now,", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Has Anybody Seen", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"Our Real Life?", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-	{"", UI_CENTER | UI_SMALLFONT | UI_DROPSHADOW, &color_white},
-
-	{NULL}};
+}
 
 /*
-=================
-UI_WopCredits_Draw
-=================
+===============
+UI_WopCredits_MenuEvent
+===============
 */
-static void UI_WopCredits_Draw(void) {
-	int y, n, ysize = 0;
-
-	for (n = 0; n < ARRAY_LEN(credits); n++) {
-		if (credits[n].style & UI_SMALLFONT) {
-			ysize += PROP_HEIGHT * PROP_SMALL_SIZE_SCALE;
-		} else if (credits[n].style & UI_BIGFONT) {
-			ysize += PROP_HEIGHT;
-		} else if (credits[n].style & UI_GIANTFONT) {
-			ysize += PROP_HEIGHT * (1 / PROP_SMALL_SIZE_SCALE);
-		}
+static void UI_WopCredits_MenuEvent(void *ptr, int event) {
+	if (event != QM_ACTIVATED) {
+		return;
 	}
 
-	UI_DrawNamedPic(216, 0, 648, SCREEN_HEIGHT, WOPCREDITSBG); // pictures have 4:3 resolution referenced
+	switch (((menucommon_s *)ptr)->id) {
+	case ID_EXIT:
+		UI_StopMusic(); // -> durch refresh sollte automatisch wieder der normale starten
+		UI_PopMenu();
+		break;
 
-	y = SCREEN_HEIGHT - (float)((ysize + 2 * SCREEN_HEIGHT) / TRACKLENGTH) * (float)(uis.realtime - creditSeqStarttime) / 1000;
-	for (n = 0; n < ARRAY_LEN(credits); n++) {
-		if (credits[n].string == NULL) {
-			if (y < -16) {
-				UI_StopMusic();
-				UI_PopMenu();
-				break;
-			}
-			break;
+	case ID_NEXT:
+		if (s_wopcredits.currentpage < (MAX_CREDITSPAGES - 1)) {
+			s_wopcredits.currentpage++;
+			UI_WopCredits_MenuUpdate();
 		}
+		break;
 
-		if (strlen(credits[n].string) == 1) {
-			continue;
+	case ID_PREV:
+		if (s_wopcredits.currentpage > 0) {
+			s_wopcredits.currentpage--;
+			UI_WopCredits_MenuUpdate();
 		}
-
-		if (y > -(PROP_HEIGHT * (1 / PROP_SMALL_SIZE_SCALE))) {
-			UI_DrawProportionalString(270, y, credits[n].string, credits[n].style, *credits[n].color);
-		}
-
-		if (credits[n].style & UI_SMALLFONT) {
-			y += PROP_HEIGHT * PROP_SMALL_SIZE_SCALE;
-		} else if (credits[n].style & UI_BIGFONT) {
-			y += PROP_HEIGHT;
-		} else if (credits[n].style & UI_GIANTFONT) {
-			y += PROP_HEIGHT * (1 / PROP_SMALL_SIZE_SCALE);
-		}
-
-		if (y > SCREEN_HEIGHT) {
-			break;
-		}
-	}
-
-	if (uis.ybias) {
-		const float yGap = uis.ybias * 0.5f;
-		UI_FillRect(0, -yGap, SCREEN_WIDTH, yGap, colorBlack);		   // upper gap
-		UI_FillRect(0, SCREEN_HEIGHT, SCREEN_WIDTH, yGap, colorBlack); // lower gap
+		break;
 	}
 }
 
@@ -475,10 +188,18 @@ UI_WopCredits_MenuKey
 ===============
 */
 static sfxHandle_t UI_WopCredits_MenuKey(int key) {
+
+	if (key == K_PGDN || key == K_RIGHTARROW) {
+		UI_WopCredits_MenuEvent(&s_wopcredits.next, QM_ACTIVATED);
+	}
+	if (key == K_PGUP || key == K_LEFTARROW) {
+		UI_WopCredits_MenuEvent(&s_wopcredits.prev, QM_ACTIVATED);
+	}
 	if (key == K_MOUSE2 || key == K_ESCAPE) {
 		UI_StopMusic(); // -> durch refresh sollte automatisch wieder der normale starten
 	}
-	return Menu_DefaultKey(uis.activemenu, key);
+
+	return Menu_DefaultKey(&s_wopcredits.menu, key);
 }
 
 /*
@@ -490,15 +211,62 @@ static void UI_WopCredits_MenuInit(void) {
 	memset(&s_wopcredits, 0, sizeof(s_wopcredits));
 
 	UI_WopCredits_Cache();
-
-	creditSeqStarttime = uis.realtime;
-
 	UI_StartCreditMusic();
 
-	s_wopcredits.menu.fullscreen = qtrue;
 	s_wopcredits.menu.key = UI_WopCredits_MenuKey;
-	s_wopcredits.menu.draw = UI_WopCredits_Draw;
-	s_wopcredits.menu.bgparts = BGP_MENUFX;
+	s_wopcredits.menu.wrapAround = qtrue;
+	s_wopcredits.menu.fullscreen = qtrue;
+
+	s_wopcredits.creditspic.generic.type = MTYPE_BITMAP;
+	s_wopcredits.creditspic.generic.name = creditspics[0];
+	s_wopcredits.creditspic.generic.x = 0;
+	s_wopcredits.creditspic.generic.y = 0;
+	s_wopcredits.creditspic.width = SCREEN_WIDTH;
+	s_wopcredits.creditspic.height = SCREEN_HEIGHT;
+
+	s_wopcredits.prev.generic.type = MTYPE_BITMAP;
+	s_wopcredits.prev.generic.name = ARROWLT0;
+	s_wopcredits.prev.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
+	s_wopcredits.prev.generic.x = 364;
+	s_wopcredits.prev.generic.y = 446;
+	s_wopcredits.prev.generic.id = ID_PREV;
+	s_wopcredits.prev.generic.callback = UI_WopCredits_MenuEvent;
+	s_wopcredits.prev.width = 60;
+	s_wopcredits.prev.height = 26;
+	s_wopcredits.prev.focuspic = ARROWLT1;
+	s_wopcredits.prev.focuspicinstead = qtrue;
+
+	s_wopcredits.next.generic.type = MTYPE_BITMAP;
+	s_wopcredits.next.generic.name = ARROWRT0;
+	s_wopcredits.next.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
+	s_wopcredits.next.generic.x = 440;
+	s_wopcredits.next.generic.y = 446;
+	s_wopcredits.next.generic.id = ID_NEXT;
+	s_wopcredits.next.generic.callback = UI_WopCredits_MenuEvent;
+	s_wopcredits.next.width = 60;
+	s_wopcredits.next.height = 26;
+	s_wopcredits.next.focuspic = ARROWRT1;
+	s_wopcredits.next.focuspicinstead = qtrue;
+
+	s_wopcredits.exit.generic.type = MTYPE_BITMAP;
+	s_wopcredits.exit.generic.name = EXIT0;
+	s_wopcredits.exit.generic.flags = QMF_PULSEIFFOCUS;
+	s_wopcredits.exit.generic.x = 8;
+	s_wopcredits.exit.generic.y = 446;
+	s_wopcredits.exit.generic.id = ID_EXIT;
+	s_wopcredits.exit.generic.callback = UI_WopCredits_MenuEvent;
+	s_wopcredits.exit.width = 80;
+	s_wopcredits.exit.height = 40;
+	s_wopcredits.exit.focuspic = EXIT1;
+	s_wopcredits.exit.focuspicinstead = qtrue;
+
+	Menu_AddItem(&s_wopcredits.menu, &s_wopcredits.creditspic);
+	Menu_AddItem(&s_wopcredits.menu, &s_wopcredits.next);
+	Menu_AddItem(&s_wopcredits.menu, &s_wopcredits.prev);
+	Menu_AddItem(&s_wopcredits.menu, &s_wopcredits.exit);
+
+	UI_WopCredits_MenuUpdate();
+
 }
 
 /*
@@ -507,7 +275,17 @@ UI_WopCredits_Cache
 ===============
 */
 void UI_WopCredits_Cache(void) {
-	trap_R_RegisterShaderNoMip(WOPCREDITSBG);
+	int i;
+
+	for (i = 0; i < MAX_CREDITSPAGES; i++) {
+		trap_R_RegisterShaderNoMip(creditspics[i]);
+	}
+	trap_R_RegisterShaderNoMip(ARROWLT0);
+	trap_R_RegisterShaderNoMip(ARROWLT1);
+	trap_R_RegisterShaderNoMip(ARROWRT0);
+	trap_R_RegisterShaderNoMip(ARROWRT1);
+	trap_R_RegisterShaderNoMip(EXIT0);
+	trap_R_RegisterShaderNoMip(EXIT1);
 }
 
 /*
