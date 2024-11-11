@@ -3,9 +3,9 @@
 ## Version: 1.7.0 (Dec 06, 2024)
 
 - ADDED
-	- 32bit binaries to support older Windows systems
+	- 32bit binaries for Windows to support older systems
 	- Freeze Tag (FT) game type and related assets like ice cold weapon effects
-	- Catch the KillerDuck (CTKD) game type
+	- Catch The KillerDuck (CTKD) game type
 	- One Lolly Capture (1LC) game type supported by a selection of the original CTL maps
 	- PElvis (PadElvis) skin, glow skin and bot for the PADMAN player model
 	- HellPad skin, glow skin and bot for the PADMAN player model
@@ -136,7 +136,7 @@
 	- Notification Time option on Chat page of Options menu to be adjusted in 4 steps now (2s, 4s, 6s, and 8s)
 	- Menu slider controls to scale to 100s values instead of 10s values where useful
 	- Menu slider controls to show the user input value next to it
-	- Menu tooltips to appear smaller
+	- Menu tooltips to appear smaller and to support wide screen aspect ratio
 	- Player Settings menu to list first all PadCharacters followed by custom player models
 	- Fight button in the menus only works if a map is selected, a server is selected or specified with address, port, or password in the related menus
 	- Arrow buttons in the menus indicate now if first/last page/list entry is reached in the related menus by being disabled or hidden
@@ -176,7 +176,6 @@
 	- Cartridge model/icon in lower right HUD to be drawn only if cartridges are carried in SYC
 	- Ammo info on lower left HUD to show ammo bottle model instead of 2D icon if `cg_draw3dIcons` is enabled except for Spraypistol and Punchy
 	- All icons/models to appear the same size and model rotation speed in the HUD (and scoreboard)
-	- Resolution of sky box textures via AI upscale where useful
 	- `setviewpos` command to additionally accept the pitch angle or a target name
 	- `viewpos` command to additionally print the pitch angle
 	- `levelshot` command to always create up to 3 levelshots in JPG format in 256x256 resolution (instead of 128x128), better use `screenshot levelshot` command bound to a key to create individual levelshots for your map
@@ -261,17 +260,18 @@
 	- Scoreboard headers with HQ versions
 	- Menu buttons with HQ versions
 	- Score numbers with HQ versions
-	- Footstep sounds with HQ versions
+	- Footstep sounds partly with HQ versions
 	- Common player sounds like frying, landing, jumping in, out and under water
 	- Roq version of WoP intro in 4:3 ratio with a HQ version for display in maps via video shader
 	- Map selection/preview screenshots with better quality
 	- Menu music loop with 44kHz version and slightly longer
 	- Icons for weapons, ammo, powerups, medals etc. updated with HQ versions
 	- Common textures with HQ versions and q3map2 shader entries to support watercaulk, lavacaulk, slimecaulk etc.
+	- World of PADMAN readme (manual in XTRAS folder) to support new game modes
 	- OPUS to version 1.3.1
 	- OPUSFILE to version 0.12
 	- OGG to version 1.3.5
-	- SDL to version 2.30.8
+	- SDL to version 2.30.9
 	- JPEG to version 9e
 	- OpenAL soft to version 1.21.1
 	- Code base to [ioq3 1.36 Git cc18246](https://github.com/ioquake/ioq3/commit/cc18246f22ab033e1b17af4616a68e9ea2e873db) with associated features and bug fixes
