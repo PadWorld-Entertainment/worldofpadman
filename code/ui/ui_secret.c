@@ -40,13 +40,13 @@ SECRET MENU (ENTE'S ARTWORKS)
 #define ID_NEXT 11
 #define ID_PREV 12
 
-#define MAX_SECRETPAGES 12
-
 const char *secretpics[] = {"menu/secret/001", "menu/secret/002", "menu/secret/003",
 							"menu/secret/004", "menu/secret/005", "menu/secret/006",
 							"menu/secret/007", "menu/secret/008", "menu/secret/009",
 							"menu/secret/010", "menu/secret/011", "menu/secret/012",
 							NULL};
+
+#define MAX_SECRETPAGES STRARRAY_LEN(secretpics)
 
 typedef struct {
 	menuframework_s menu;
