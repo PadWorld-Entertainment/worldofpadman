@@ -3448,11 +3448,6 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 		CG_DrawUpperRight(stereoFrame);
 		CG_DrawSpectator();
 
-		if (stereoFrame == STEREO_CENTER)
-			CG_DrawCrosshair();
-
-		CG_DrawCrosshairNames();
-
 		cg.scoreBoardShowing = CG_DrawScoreboard();
 		if (!cg.scoreBoardShowing)
 			CG_DrawCenterString();
