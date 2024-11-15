@@ -166,8 +166,9 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 			} else {
 				Com_sprintf(string, sizeof(string), "%5i %4i %4i", score->livesleft, score->ping, score->time);
 			}
+		} else {
+			Com_sprintf(string, sizeof(string), "%5i %4i %4i", score->score, score->ping, score->time);
 		}
-		Com_sprintf(string, sizeof(string), "%5i %4i %4i", score->score, score->ping, score->time);
 	}
 
 	// highlight your position
