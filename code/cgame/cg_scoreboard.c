@@ -160,7 +160,9 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 		Com_sprintf(string, sizeof(string), " SPECT %3i %4i", score->ping, score->time);
 	} else {
 		if (cgs.gametype == GT_LPS) {
-			if (cgs.lpsflags & LPSF_PPOINTLIMIT) {
+			if (score->livesleft <= 0) {
+				Com_sprintf(string, sizeof(string), " WAIT  %3i %4i", score->ping, score->time);
+			} else if (cgs.lpsflags & LPSF_PPOINTLIMIT) {
 				Com_sprintf(string, sizeof(string), "%3i/%-2i %3i %4i", score->score, score->livesleft, score->ping,
 							score->time);
 			} else {
