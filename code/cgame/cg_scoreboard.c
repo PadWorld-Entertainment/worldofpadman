@@ -634,13 +634,15 @@ qboolean CG_DrawOldScoreboard(void) {
 	if (score != NULL) {
 		const clientInfo_t *ci = &cgs.clientinfo[score->client];
 		if (ci->team != TEAM_SPECTATOR) {
-			char buf[32];
-			CG_DrawMedals(62.0f, (float)SB_TOP + 216.0f, score);
+			if (!(cgs.gametype == GT_LPS && cg.snap->ps.stats[STAT_LIVESLEFT] <= 0)) {
+				char buf[32];
+				CG_DrawMedals(62.0f, (float)SB_TOP + 216.0f, score);
 
-			// draw accuracy rate
-			CG_DrawPic(342.0f, (float)SB_TOP + 216.0f, 96.0f, 24.0f, cgs.media.scoreboardAccuracy);
-			Com_sprintf(buf, sizeof(buf), "%i%%", score->accuracy);
-			CG_DrawStringExt(438, SB_TOP + 220, buf, colorWhite, qfalse, qtrue, FONT_SMALL, 0);
+				// draw accuracy rate
+				CG_DrawPic(342.0f, (float)SB_TOP + 216.0f, 96.0f, 24.0f, cgs.media.scoreboardAccuracy);
+				Com_sprintf(buf, sizeof(buf), "%i%%", score->accuracy);
+				CG_DrawStringExt(438, SB_TOP + 220, buf, colorWhite, qfalse, qtrue, FONT_SMALL, 0);
+			}
 		}
 	}
 
