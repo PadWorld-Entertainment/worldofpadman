@@ -429,11 +429,11 @@ qboolean CG_DrawOldScoreboard(void) {
 				}
 
 				if (cgs.lpsflags & LPSF_PPOINTLIMIT) {
-					s = va("%s" S_COLOR_BLACK " place with %i Points & %i Lives",
+					s = va("%s" S_COLOR_BLACK " place with %iP/%iL",
 						   CG_PlaceString(cg.snap->ps.persistant[PERS_RANK] + 1), cg.snap->ps.persistant[PERS_SCORE],
 						   ownLives);
 				} else {
-					s = va("%s" S_COLOR_BLACK " place with %i Lives",
+					s = va("%s" S_COLOR_BLACK " place with %i lives",
 						   CG_PlaceString(cg.snap->ps.persistant[PERS_RANK] + 1), ownLives);
 				}
 			} else {
