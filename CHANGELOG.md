@@ -151,6 +151,7 @@
 	- Dynamic flares to be enabled by default `r_flares [1|0]`
 	- Team names to Blue Noses and Red Pads everywhere in the game
 	- Scoreboard to show personal scores in team based game types again
+	- Scoreboard shows WAIT instead of -1 lives or score/lives when players are waiting for next round
 	- Game type list in Create menu to list FFA game types first and FFA being default (was SYC)
 	- Cvar `com_introPlayed [1|0]` to `com_playIntro [1|0]` to be used to enable/disable the WoP into movie on every game startup, default is 1.
 	- Cvar `r_lightmap [1|0]` to be cheat protected now
@@ -192,7 +193,8 @@
 	- Bots keep camping on opposing team's lolly position; this has bothered us since WoP 1.5
 	- All HUD elements to be shown in correct aspect ratio in wide and narrow screen (WoP widescreen support)
 	- Balloon icon over the player's head to be visible though walls after raising a balloon (replaced by PadStar medal)
-	- iMPERiUS ammo can be collected even when you have the maximum quantity
+	- iMPERiUS ammo to be collected even when you have the maximum quantity
+	- Floater z velocity being depending on cvar `sv_fps` value
 	- Path entry of voice chat icon and icon not shown during voice chat
 	- Being unable to use `^` key to enter color tags in Player Settings menu or console
 	- Anisotropy and Antialiasing options in Graphics menu to be displayed as 4x after video restart, although 2x was selected before
@@ -203,38 +205,40 @@
 	- Glowing Player Model option in Game options cannot keep enabled status when Glowing Skin Color black is selected
 	- Not defined value for Start Lives in Start Server (Create) menu, default is 10 now
 	- Not used and invisible slots in bot grid of Select Bots menu to cause sound when mouse over
-	- Crosshair and crosshair names being visible in front of Select Logo ingame menu
 	- Select Bots and ingame Add Bots menus to remember the user selected bot skill 
 	- Wrong spray logo name allocation for Spooky and PadCho
 	- Fail to load OpenAL library on Windows 64bit systems
 	- Not correctly set default values for several options in the menu after reset to defaults
 	- Number in front of the spray logo names not to be skipped in Select Logo menu when file name consists only of numbers like "35_666".
+	- Spraylogo name "yinyan" to "yinyang"
 	- Setting the spray logo via the Player Settings menu during a match has no effect
 	- Team Overlay always shown as disabled in Options menu when set to defaults due to wrong defined cvar default value
 	- Incorrect assignment of the drowning sound to the selected player model
 	- Voice Threshold slider not showing the input value
 	- Screen Size menu option functionality (cvar `cg_viewsize`) and added missing back tile asset
 	- CG_WorldToScreen function to work properly with restored Screen Size feature (cvar `cg_viewsize`)
-	- Player is in his own view when zooming with SPLASHER/INJECTOR in 3rd person mode; 3rd person mode is temporarily disabled when zooming in
+	- Player is in his own view when zooming with SPLASHER/iNiECTOR in 3rd person mode; 3rd person mode is temporarily disabled when zooming in
 	- Player automatically switches from 3rd person view back to 1st person view when warm-up timer expires
 	- Console keeps spamming "models/wop_players/padman/..." not found in developer mode by adding a null shader for certain player model skin meshes
 	- Menu font appearance issues like wrong pixel assignment, truncated letters, pixel artifacts at edges, incoherent spacing between letters
 	- Ingame spray logo menu being overlayed by display of weapon selection, crosshair and crosshair names
+	- Crosshair and crosshair names shown when waiting for next round in LPS
+	- Rank status line on top of the scoreboard no longer overlapping the width of the scoreboard texture when round based LPS is enabled (cvar `g_lps_flag`set to 1), points and lives are now shortened to P/L (e.g. 1P/3L)
 	- HellPads red/blue thumbnail not being grey (compared to previous single release)
 	- BadPaddy's red/blue skin menu icons not correctly representing the model skin colors
 	- SuperPads anaglyph 3D glasses from red-cyan to cyan-red
-	- Missing clipping on the fuse box in BB version of MopAn's Jail to prevent players jumping in
 	- Crosshair always hidden/overlayed by BamBam energy bar
 	- Endless restarting of the game in window mode when changing Windows 10 scaling
 	- Cvar `cg_draw3dIcons` to work with cartridge in SYC HUD lower right, shows cartridge model when enabled and cartridge icon when disabled
 	- Quake3 items support to spawn the lollys in CTF and 1FCTF Quake3 maps
 	- Few spelling mistakes and misinterpreted title names in Dieselkopf music packs
 	- Print warning "Too close to lolly base" when planting BOOMIES in Big Balloon
-	- Backyard: players being able to enter and hide in the pipe near the crate; jumppad on the ground to the roof area near PadPower/Boomies to no longer be possible to reach this area directly with a normal jump (due to com_maxfps set to 125) 
-	- Jail: missing shader texture in spray room exit portal
+	- Backyard: players being able to enter and hide in the pipe near the crate; jumppad on the ground to the roof area near PadPower/Boomies to no longer be possible to reach this area directly with a normal jump (due to com_maxfps set to 125)
+	- FridgeWars: faulty location message string, "shelfs" changed to "shelves"
+	- Jail: missing shader texture in spray room exit portal; missing clipping on the fuse box in BB version to prevent players jumping in
 	- PadShop: alien monitor animation shader to support all 9 textures
-	- TrashMap: missing texture warnings
 	- PadGallery: wrong shader path for way to the museum sign
+	- TrashMap: missing texture warnings
 - REMOVED
 	- `^` key to open/close the console
 	- Cvar `g_LPS_flags [4]` (4 = LPSF_NOARROWS) due to redundancy to the help menu option to enable/disable the arrow icons in LPS client side; also prevents the same menu option from working
