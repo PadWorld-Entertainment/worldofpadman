@@ -217,7 +217,7 @@
 	- Voice Threshold slider not showing the input value
 	- Screen Size menu option functionality (cvar `cg_viewsize`) and added missing back tile asset
 	- CG_WorldToScreen function to work properly with restored Screen Size feature (cvar `cg_viewsize`)
-	- Player is in his own view when zooming with SPLASHER/iNiECTOR in 3rd person mode; 3rd person mode is temporarily disabled when zooming in
+	- Player is in his own view when zooming with SPLASHER/iNjECTOR in 3rd person mode; 3rd person mode is temporarily disabled when zooming in
 	- Player automatically switches from 3rd person view back to 1st person view when warm-up timer expires
 	- Console keeps spamming "models/wop_players/padman/..." not found in developer mode by adding a null shader for certain player model skin meshes
 	- Menu font appearance issues like wrong pixel assignment, truncated letters, pixel artifacts at edges, incoherent spacing between letters
