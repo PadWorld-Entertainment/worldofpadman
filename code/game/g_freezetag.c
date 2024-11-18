@@ -22,13 +22,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "g_local.h"
 
-#define FREEZE_MESSAGE_ATTACKER "you froze"
-#define FREEZE_MESSAGE_VICTIM "you are frozen\n(wait for a teammate to thaw you)"
+#define FREEZE_MESSAGE_ATTACKER "You froze"
+#define FREEZE_MESSAGE_SELF	"You froze yourself"
+#define FREEZE_MESSAGE_VICTIM "You are frozen\n(wait for a teammate to thaw you)"
 #define FREEZE_MESSAGE_GLOBAL "was frozen by"
+#define FREEZE_MESSAGE_GLOBAL_SELF "Self-freeze performed by"
 #define FREEZE_MESSAGE_WORLD "was frozen"
 
-#define THAW_MESSAGE_PLAYER "you have been thawed"
-#define THAW_MESSAGE_THAWER "you have thawn"
+#define THAW_MESSAGE_PLAYER "You have been thawed"
+#define THAW_MESSAGE_THAWER "You have thawn"
 #define THAW_MESSAGE_GLOBAL "was thawn by"
 #define THAW_MESSAGE_WORLD "thawed"
 
@@ -60,12 +62,18 @@ static void FT_AnnounceFreeze(const gclient_t *client, const gclient_t *attacker
 	trap_SendServerCommand(client->ps.clientNum, va("cp \"^7%s\n\"", FREEZE_MESSAGE_VICTIM));
 
 	// tell attacker
-	if (attacker) {
+	if (attacker->ps.clientNum == client->ps.clientNum) {
 		trap_SendServerCommand(attacker->ps.clientNum,
-							   va("cp \"^7%s ^7%s^7.\n\"", FREEZE_MESSAGE_ATTACKER, client->pers.netname));
+								va("cp \"^7%s^7.\n\"", FREEZE_MESSAGE_SELF));
+	} else if (attacker) {
+		trap_SendServerCommand(attacker->ps.clientNum,
+								va("cp \"^7%s ^7%s^7.\n\"", FREEZE_MESSAGE_ATTACKER, client->pers.netname));
 	}
 
-	if (attacker)
+	if (attacker->ps.clientNum == client->ps.clientNum) {
+		trap_SendServerCommand(
+			-1, va("print \"^7%s ^7%s\n\"", FREEZE_MESSAGE_GLOBAL_SELF, attacker->pers.netname));
+	} else if (attacker)
 		trap_SendServerCommand(
 			-1, va("print \"^7%s ^7%s ^7%s\n\"", client->pers.netname, FREEZE_MESSAGE_GLOBAL, attacker->pers.netname));
 	else
