@@ -62,22 +62,26 @@ static void FT_AnnounceFreeze(const gclient_t *client, const gclient_t *attacker
 	trap_SendServerCommand(client->ps.clientNum, va("cp \"^7%s\n\"", FREEZE_MESSAGE_VICTIM));
 
 	// tell attacker
-	if (attacker->ps.clientNum == client->ps.clientNum) {
-		trap_SendServerCommand(attacker->ps.clientNum,
-								va("cp \"^7%s^7.\n\"", FREEZE_MESSAGE_SELF));
-	} else if (attacker) {
-		trap_SendServerCommand(attacker->ps.clientNum,
-								va("cp \"^7%s ^7%s^7.\n\"", FREEZE_MESSAGE_ATTACKER, client->pers.netname));
+	if (attacker) {
+		if (attacker->ps.clientNum == client->ps.clientNum) {
+			trap_SendServerCommand(attacker->ps.clientNum, "cp \"^7"FREEZE_MESSAGE_SELF"^7.\n\"");
+		} else {
+			trap_SendServerCommand(attacker->ps.clientNum,
+				va("cp \"^7%s ^7%s^7.\n\"", FREEZE_MESSAGE_ATTACKER, client->pers.netname));
+		}
 	}
 
-	if (attacker->ps.clientNum == client->ps.clientNum) {
-		trap_SendServerCommand(
-			-1, va("print \"^7%s ^7%s\n\"", FREEZE_MESSAGE_GLOBAL_SELF, attacker->pers.netname));
-	} else if (attacker)
-		trap_SendServerCommand(
-			-1, va("print \"^7%s ^7%s ^7%s\n\"", client->pers.netname, FREEZE_MESSAGE_GLOBAL, attacker->pers.netname));
-	else
+	if (attacker) {
+		if (attacker->ps.clientNum == client->ps.clientNum) {
+			trap_SendServerCommand(
+				-1, va("print \"^7%s ^7%s\n\"", FREEZE_MESSAGE_GLOBAL_SELF, attacker->pers.netname));
+		} else {
+			trap_SendServerCommand(
+				-1, va("print \"^7%s ^7%s ^7%s\n\"", client->pers.netname, FREEZE_MESSAGE_GLOBAL, attacker->pers.netname));
+		}
+	} else {
 		trap_SendServerCommand(-1, va("print \"^7%s ^7%s\n\"", client->pers.netname, FREEZE_MESSAGE_WORLD));
+	}
 }
 
 static void FT_AnnounceThaw(gclient_t *client, gclient_t *other) {
