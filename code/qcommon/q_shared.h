@@ -62,7 +62,7 @@ extern const int demo_protocols[];
 #define PRODUCT_VERSION "1.7.0"
 #endif
 
-#define PRODUCT_RELEASE "beta2" // "dev" "final"
+#define PRODUCT_RELEASE "final" // "beta" "dev"
 #define Q3_VERSION PRODUCT_NAME " " PRODUCT_VERSION " " PRODUCT_RELEASE
 
 #define MAX_TEAMNAME 32
