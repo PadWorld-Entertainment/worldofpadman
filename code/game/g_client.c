@@ -977,7 +977,7 @@ const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 	//	if ( !client->areabits )
 	//		client->areabits = G_Alloc( (trap_AAS_PointReachabilityAreaIndex( NULL ) + 7) / 8 );
 
-	if (firstTime && G_DISCORD_WantMessages(DISCORD_MSG_PLAYER_CONNECT)) {
+	if (!isBot && firstTime && G_DISCORD_WantMessages(DISCORD_MSG_PLAYER_CONNECT)) {
 		const qboolean isTeam = g_gametype.integer >= GT_TEAM;
 		const char *map = level.shortmapname;
 		const char *arenaInfo = G_GetArenaInfoByMap(map);
@@ -1015,7 +1015,7 @@ const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 
 		if (isTeam) {
 			buf = va("%i %s playing **%s**\n* Blue Noses: %i (and %i bots)\n* Red Pads: %i (and %i bots)\n* "
-					 "Spectators: %i)",
+					 "Spectators: %i",
 					 humanAll, padPlayerStr, map, humanCount[TEAM_BLUE], botCount[TEAM_BLUE], humanCount[TEAM_RED],
 					 botCount[TEAM_RED], humanCount[TEAM_SPECTATOR]);
 		} else {
