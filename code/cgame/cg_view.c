@@ -237,9 +237,6 @@ static void CG_OffsetThirdPersonView(void) {
 		cg.refdefViewAngles[YAW] = cg.predictedPlayerState.stats[STAT_DEAD_YAW];
 	}
 
-	if (focusAngles[PITCH] > 45) {
-		focusAngles[PITCH] = 45; // don't go too far overhead
-	}
 	AngleVectors(focusAngles, forward, NULL, NULL);
 
 	VectorMA(cg.refdef.vieworg, FOCUS_DISTANCE, forward, focusPoint);
@@ -247,8 +244,6 @@ static void CG_OffsetThirdPersonView(void) {
 	VectorCopy(cg.refdef.vieworg, view);
 
 	view[2] += 8;
-
-	cg.refdefViewAngles[PITCH] *= 0.5;
 
 	AngleVectors(cg.refdefViewAngles, forward, right, up);
 
