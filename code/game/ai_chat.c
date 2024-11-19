@@ -367,7 +367,7 @@ static int BotVisibleEnemies(bot_state_t *bs) {
 BotValidChatPosition
 ==================
 */
-static int BotValidChatPosition(bot_state_t *bs) {
+int BotValidChatPosition(bot_state_t *bs) {
 	vec3_t point, start, end, mins, maxs;
 	bsp_trace_t trace;
 
