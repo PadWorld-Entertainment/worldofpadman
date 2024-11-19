@@ -158,6 +158,9 @@ typedef enum {
 #define GAMETYPE_NAME(gametype) GTN__##gametype
 #define GAMETYPE_NAME_SHORT(gametype) GTN_S__##gametype
 
+extern const char *gameNames_Long[GT_MAX_GAME_TYPE];
+extern const char *gameNames_Short[GT_MAX_GAME_TYPE];
+
 int convertGTStringToGTNumber(const char *argStr);
 
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER, GENDER_MAX } gender_t;

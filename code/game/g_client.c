@@ -889,6 +889,10 @@ const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 	gclient_t *client;
 	char userinfo[MAX_INFO_STRING];
 	gentity_t *ent;
+	int gametype = g_gametype.integer;
+	if (gametype < 0 || gametype >= GT_MAX_GAME_TYPE) {
+		gametype = GT_MAX_GAME_TYPE - 1;
+	}
 
 	ent = &g_entities[clientNum];
 
@@ -1014,12 +1018,13 @@ const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 		}
 
 		if (isTeam) {
-			buf = va("%i %s playing **%s**\n* Blue Noses: %i (and %i bots)\n* Red Pads: %i (and %i bots)\n* "
+			buf = va("%i %s playing **%s** on **%s**\n* Blue Noses: %i (and %i bots)\n* Red Pads: %i (and %i bots)\n* "
 					 "Spectators: %i",
-					 humanAll, padPlayerStr, map, humanCount[TEAM_BLUE], botCount[TEAM_BLUE], humanCount[TEAM_RED],
-					 botCount[TEAM_RED], humanCount[TEAM_SPECTATOR]);
+					 humanAll, padPlayerStr, gameNames_Short[gametype], map, humanCount[TEAM_BLUE], botCount[TEAM_BLUE],
+					 humanCount[TEAM_RED], botCount[TEAM_RED], humanCount[TEAM_SPECTATOR]);
 		} else {
-			buf = va("%i %s playing **%s**\n* Spectators: %i", humanAll, padPlayerStr, map, humanCount[TEAM_SPECTATOR]);
+			buf = va("%i %s playing **%s** on **%s**\n* Spectators: %i", humanAll, padPlayerStr,
+					 gameNames_Short[gametype], map, humanCount[TEAM_SPECTATOR]);
 		}
 		trap_GlobalMessage(NULL, buf);
 	}
