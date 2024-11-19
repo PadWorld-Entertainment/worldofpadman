@@ -1014,7 +1014,7 @@ const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 		}
 
 		if (isTeam) {
-			buf = va("%i %s playing **%s**\n* Blue noses: %i (and %i bots)\n* Red Pads: %i (and %i bots)\n* "
+			buf = va("%i %s playing **%s**\n* Blue Noses: %i (and %i bots)\n* Red Pads: %i (and %i bots)\n* "
 					 "Spectators: %i)",
 					 humanAll, padPlayerStr, map, humanCount[TEAM_BLUE], botCount[TEAM_BLUE], humanCount[TEAM_RED],
 					 botCount[TEAM_RED], humanCount[TEAM_SPECTATOR]);
