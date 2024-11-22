@@ -1738,11 +1738,14 @@ static void CG_PlayerPowerups(centity_t *cent, refEntity_t *torso) {
 	}
 	// add lolly glow for any client
 	if (powerups & (1 << PW_REDFLAG)) {
+		// red lolly
 		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 1.0f, 0.2f, 0.2f);
 	} else if (powerups & (1 << PW_BLUEFLAG)) {
+		// blue lolly
 		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 0.2f, 0.2f, 1.0f);
 	} else if (powerups & (1 << PW_NEUTRALFLAG)) {
-		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 1.0f, 1.0f, 1.0f);
+		// neutral lolly
+		trap_R_AddLightToScene(cent->lerpOrigin, 200.0f + (float)(rand() & 31), 1.0f, 1.0f, 0.2f);
 	}
 
 	// speedy leaves smoke trails
