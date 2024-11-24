@@ -1179,7 +1179,7 @@ void StringDump_Push(char *s, const char *value) {
 	Com_sprintf(newi, sizeof(newi), "\\%s", value);
 
 	if (strlen(newi) + strlen(s) >= MAX_INFO_STRING) {
-		Com_Printf("Info string length exceeded\n");
+		Com_Printf("StringDump_Push: Info string length exceeded for '%s'\n", newi);
 		return;
 	}
 	strcat(newi, s);
@@ -1239,7 +1239,7 @@ void Info_SetValueForKey(char *s, const char *key, const char *value) {
 	Com_sprintf(newi, sizeof(newi), "\\%s\\%s", key, value);
 
 	if (strlen(newi) + strlen(s) >= MAX_INFO_STRING) {
-		Com_Printf("Info string length exceeded\n");
+		Com_Printf("Info_SetValueForKey: Info string length exceeded for '%s'\n", newi);
 		return;
 	}
 
