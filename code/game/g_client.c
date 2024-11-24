@@ -999,7 +999,7 @@ const char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot) {
 
 		// count spectators
 		for (i = 0; i < g_maxclients.integer; ++i) {
-			gclient_t *cl = level.clients + i;
+			const gclient_t *cl = level.clients + i;
 			if (cl->pers.connected == CON_DISCONNECTED) {
 				continue;
 			}
