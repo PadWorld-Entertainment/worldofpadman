@@ -10,7 +10,7 @@
 static void process_message(char *data, int len, struct sockaddr_in *client_addr, int sock, const char *motdBuffer) {
 	// Check if the message has the correct header
 	if (len < 4 || memcmp(data, "\xFF\xFF\xFF\xFF", 4) != 0) {
-		printf("Invalid header\n");
+		// printf("Invalid header\n");
 		return;
 	}
 
@@ -20,7 +20,7 @@ static void process_message(char *data, int len, struct sockaddr_in *client_addr
 
 	// Check if the payload starts with "getmotd"
 	if (payload_len < 7 || strncmp(payload, "getmotd", 7) != 0) {
-		printf("Invalid cmd\n");
+		// printf("Invalid cmd\n");
 		return;
 	}
 
@@ -28,7 +28,7 @@ static void process_message(char *data, int len, struct sockaddr_in *client_addr
 	char *infostring = payload + 10;
 	int infostring_len = payload_len - 10 - 2; // Exclude trailing bytes
 	if (infostring_len <= 0) {
-		printf("Invalid infostring\n");
+		// printf("Invalid infostring\n");
 		return;
 	}
 
@@ -50,7 +50,7 @@ static void process_message(char *data, int len, struct sockaddr_in *client_addr
 	}
 
 	if (strlen(challenge) == 0) {
-		printf("Challenge not found\n");
+		// printf("Challenge not found\n");
 		return;
 	}
 
@@ -60,7 +60,7 @@ static void process_message(char *data, int len, struct sockaddr_in *client_addr
 
 	// Send the response
 	sendto(sock, motd, strlen(motd), 0, (struct sockaddr *)client_addr, sizeof(*client_addr));
-	printf("MOTD sent: %s\n", motd);
+	// printf("MOTD sent: %s\n", motd);
 }
 
 int main(int argc, char *argv[]) {
