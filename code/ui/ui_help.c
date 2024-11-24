@@ -77,10 +77,10 @@ static const char **helpList = NULL;
 
 /*
 ===============
-UI_HelpMenu_AdjustButtons
+UI_HelpMenu_Update
 ===============
 */
-static void UI_HelpMenu_AdjustButtons(void) {
+static void UI_HelpMenu_Update(void) {
 
 	if (helpIndex > 0) {
 		helpMenuInfo.prev.generic.flags &= ~(QMF_INACTIVE | QMF_HIDDEN);
@@ -93,6 +93,7 @@ static void UI_HelpMenu_AdjustButtons(void) {
 	} else {
 		helpMenuInfo.next.generic.flags |= QMF_INACTIVE | QMF_HIDDEN;
 	}
+	helpMenuInfo.img = trap_R_RegisterShaderNoMip(va(HELPMENU_PATH "%s", helpList[helpIndex]));
 }
 
 /*
@@ -122,7 +123,7 @@ static void UI_HelpMenu_Event(void *ptr, int event) {
 		helpIndex = helpMax;
 	}
 
-	UI_HelpMenu_AdjustButtons();
+	UI_HelpMenu_Update();
 }
 
 /*
@@ -202,6 +203,7 @@ static void UI_HelpMenu_SetTopic(void) {
 			helpMenuInfo.height = HMI_GAMETYPE_H;
 			helpMenuInfo.x = HMI_GAMETYPE_X;
 			helpMenuInfo.y = HMI_GAMETYPE_Y;
+			helpMenuInfo.img = trap_R_RegisterShaderNoMip(va(HELPMENU_PATH "%s", helpList[helpIndex]));
 		} else {
 			helpMin = 0;
 			helpMax = (NUM_HELP_ITEM - 1);
@@ -211,7 +213,7 @@ static void UI_HelpMenu_SetTopic(void) {
 			helpMenuInfo.height = HMI_ITEM_H;
 			helpMenuInfo.x = HMI_ITEM_X;
 			helpMenuInfo.y = HMI_ITEM_Y;
-			UI_HelpMenu_AdjustButtons();
+			UI_HelpMenu_Update();
 		}
 	} else {
 		helpMin = 0;
@@ -222,9 +224,8 @@ static void UI_HelpMenu_SetTopic(void) {
 		helpMenuInfo.height = HMI_ITEM_H;
 		helpMenuInfo.x = HMI_ITEM_X;
 		helpMenuInfo.y = HMI_ITEM_Y;
-		UI_HelpMenu_AdjustButtons();
+		UI_HelpMenu_Update();
 	}
-	helpMenuInfo.img = trap_R_RegisterShaderNoMip(va(HELPMENU_PATH "%s", helpList[helpIndex]));
 }
 
 /*
