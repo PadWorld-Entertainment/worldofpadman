@@ -244,6 +244,8 @@ PROTOCOL
 ==============================================================
 */
 
+// #define UPDATE_SERVER_NAME "update.worldofpadman.com"
+
 // override on command line, config files etc.
 #ifndef MASTER_SERVER_NAME
 #define MASTER_SERVER_NAME "master.worldofpadman.com"
