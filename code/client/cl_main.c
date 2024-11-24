@@ -2154,11 +2154,12 @@ CL_MotdPacket
 */
 static void CL_MotdPacket(netadr_t from) {
 #ifdef UPDATE_SERVER_NAME
-	char *challenge;
+	const char *challenge;
 	const char *info;
 
 	// if not from our server, ignore it
 	if (!NET_CompareAdr(from, cls.updateServer)) {
+		Com_Printf("CL_MotdPacket: not from our server: %s\n", NET_AdrToStringwPort(from));
 		return;
 	}
 
@@ -2166,7 +2167,8 @@ static void CL_MotdPacket(netadr_t from) {
 
 	// check challenge
 	challenge = Info_ValueForKey(info, "challenge");
-	if (strcmp(challenge, cls.updateChallenge)) {
+	if (strcmp(challenge, cls.updateChallenge) != 0) {
+		Com_Printf("CL_MotdPacket: challenge mismatch: %s vs %s\n", challenge, cls.updateChallenge);
 		return;
 	}
 
@@ -2442,7 +2444,7 @@ static void CL_ConnectionlessPacket(netadr_t from, msg_t *msg) {
 		return;
 	}
 
-	// global MOTD from id
+	// global MOTD from update server
 	if (!Q_stricmp(c, "motd")) {
 		CL_MotdPacket(from);
 		return;
