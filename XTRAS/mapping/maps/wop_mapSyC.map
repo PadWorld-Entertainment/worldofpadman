@@ -1,7 +1,7 @@
 // entity 0
 {
 "classname" "worldspawn"
-"message" "wop_syc_map"
+"message" "WoP sample map for SYC"
 // brush 0
 {
 ( -1128 1072 -952 ) ( -1144 1072 -952 ) ( -1144 504 -952 ) common/nodraw 0 -32 0 0.500000 0.500000 0 0 0
@@ -1857,7 +1857,7 @@ pad_tex/col08
 "classname" "target_speaker"
 "spawnflags" "8"
 "targetname" "t61"
-"noise" "sound/pad_sound/pad_action/sturz03.wav"
+"noise" "sound/world/tunnel/wp3"
 "origin" "-2072 2200 -328"
 }
 // entity 46
@@ -1878,7 +1878,7 @@ pad_tex/col08
 {
 "classname" "target_speaker"
 "origin" "1720 2192 -296"
-"noise" "sound/pad_sound/pad_action/sturz03.wav"
+"noise" "sound/world/tunnel/wp3"
 "targetname" "t65"
 "spawnflags" "8"
 }

@@ -2,7 +2,7 @@
 // entity 0
 {
 "classname" "worldspawn"
-"message" "wop_balloonmap"
+"message" "WoP sample map for BB"
 // brush 0
 {
 ( 648 -320 -184 ) ( 192 -320 -184 ) ( 192 -760 -184 ) common/caulk 0 0 0 0.5 0.5 0 0 0
@@ -95,7 +95,7 @@
 // entity 2
 {
 "classname" "trigger_balloonzone"
-"message" "Balloon behind the red wall"
+"message" "Balloon behind the yellow wall"
 "target" "balloon1"
 // brush 0
 {

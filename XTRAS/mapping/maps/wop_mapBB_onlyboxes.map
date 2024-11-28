@@ -2,7 +2,6 @@
 // entity 0
 {
 "classname" "worldspawn"
-"message" "wop_balloonmap"
 }
 // entity 1
 {

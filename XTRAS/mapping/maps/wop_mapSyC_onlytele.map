@@ -1,7 +1,6 @@
 // entity 0
 {
 "classname" "worldspawn"
-"message" "wop_syc_map"
 // brush 0
 {
 ( 2024 2280 -224 ) ( 2024 2104 -224 ) ( 2320 2280 -224 ) pad_tex/col13 0 0 0 0.500000 0.500000 0 0 0
@@ -332,7 +331,7 @@
 "classname" "target_speaker"
 "spawnflags" "8"
 "targetname" "t61"
-"noise" "sound/pad_sound/pad_action/sturz03.wav"
+"noise" "sound/world/tunnel/wp3"
 "origin" "-2072 2200 -328"
 }
 // entity 17
@@ -352,7 +351,7 @@
 // entity 18
 {
 "origin" "1720 2192 -296"
-"noise" "sound/pad_sound/pad_action/sturz03.wav"
+"noise" "sound/world/tunnel/wp3"
 "targetname" "t65"
 "spawnflags" "8"
 "classname" "target_speaker"
