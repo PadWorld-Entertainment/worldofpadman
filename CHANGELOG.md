@@ -29,7 +29,7 @@
 	- Support for magenta and cyan as spray colors in Spray Your Color game types
 	- Cartridge icon/model to the scoreboard next to the player's head if cartridges are carried in SYC game types
 	- Advanced hit sound feedback to be enabled/disabled via Game page of Options menu or via new cvar `cg_advHitSounds [0|1]`; when opponent has >50 shield points a more light hit sound indicating less impact is played; when opponent has no shield points left a more fleshy hit sound indicating highest impact is played
-	- Discord webhook support for dedicated servers; `discord_webhook_url` cvar should be set to a webhook url like https://discord.com/api/webhooks/xxx/yyy; change cvar `discord_webhook_content` for different content, 1 (default) for human player connect message, sending data about human player count, team status and map, 2 for next map start, sending name of next map, 4 for scores message, sending scores of all players by match end; set to 255 to send all messages and maybe future ones to be implemented
+	- Discord webhook support for dedicated servers; `discord_webhook_url` cvar should be set to a webhook url like https://discord.com/api/webhooks/xxx/yyy; change cvar `discord_webhook_content` for different content, 1 (default) for human player connect message, sending data about human player count, team status, game type and map, 2 for next map start, sending name of next map, 4 for scores message, sending scores of all players by match end; set to 255 to send all messages and maybe future ones to be implemented
 	- Support for new water level 'wading' in knee deep water and suitable footstep sounds
 	- Support for individual player model footsteps `flesh` (PaddyBell and BeachPad) and `spurs` (PadCho)
 	- Support for player model sounds depending of the selected skin; a complete sound set or individual sounds for a skin can be stored in a folder of the same name in parallel with the model's folder; the model's sounds serve as a fallback if no sounds are available for the skin
@@ -234,7 +234,7 @@
 	- Few spelling mistakes and misinterpreted title names in Dieselkopf music packs
 	- Print warning "Too close to lolly base" when planting BOOMIES in Big Balloon
 	- Backyard: players being able to enter and hide in the pipe near the crate; jumppad on the ground to the roof area near PadPower/Boomies to no longer be possible to reach this area directly with a normal jump (due to com_maxfps set to 125)
-	- FridgeWars: faulty location message string, "shelfs" changed to "shelves"
+	- FridgeWars: faulty location message string "shelfs" changed to "shelves"
 	- Jail: missing shader texture in spray room exit portal; missing clipping on the fuse box in BB version to prevent players jumping in
 	- PadShop: alien monitor animation shader to support all 9 textures
 	- PadGallery: wrong shader path for way to the museum sign
@@ -271,6 +271,7 @@
 	- Menu music loop with 44kHz version and slightly longer
 	- Icons for weapons, ammo, powerups, medals etc. updated with HQ versions
 	- Common textures with HQ versions and q3map2 shader entries to support watercaulk, lavacaulk, slimecaulk etc.
+	- Sample maps to support 1LC (see folder XTRAS/mapping/maps)
 	- World of PADMAN readme (manual in XTRAS folder) to support new game modes
 	- OPUS to version 1.3.1
 	- OPUSFILE to version 0.12
