@@ -1033,8 +1033,6 @@ static void CG_RegisterGraphics(void) {
 		if (cgs.gametype == GT_CTF || cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
 			cgs.media.hud_CTL_bg_red = trap_R_RegisterShaderNoMip("hud/CTL_red");
 			cgs.media.hud_CTL_bg_blue = trap_R_RegisterShaderNoMip("hud/CTL_blue");
-			cgs.media.redFlagModel = trap_R_RegisterModel("models/ctl/lollipop_red");
-			cgs.media.blueFlagModel = trap_R_RegisterModel("models/ctl/lollipop_blue");
 			cgs.media.redFlagShader[0] = trap_R_RegisterShaderNoMip("icons/hud_lolly_red1");
 			cgs.media.blueFlagShader[0] = trap_R_RegisterShaderNoMip("icons/hud_lolly_blue1");
 			// BamBam assets
@@ -1052,6 +1050,8 @@ static void CG_RegisterGraphics(void) {
 		}
 
 		if (cgs.gametype == GT_CTF || cg_buildScript.integer) {
+			cgs.media.redFlagModel = trap_R_RegisterModel("models/ctl/lollipop_red");
+			cgs.media.blueFlagModel = trap_R_RegisterModel("models/ctl/lollipop_blue");
 			cgs.media.redFlagShader[1] = trap_R_RegisterShaderNoMip("icons/hud_lolly_red2");
 			cgs.media.redFlagShader[2] = trap_R_RegisterShaderNoMip("icons/hud_lolly_red3");
 			cgs.media.blueFlagShader[1] = trap_R_RegisterShaderNoMip("icons/hud_lolly_blue2");
@@ -1059,6 +1059,8 @@ static void CG_RegisterGraphics(void) {
 		}
 
 		if (cgs.gametype == GT_1FCTF || cg_buildScript.integer) {
+			cgs.media.redFlagModel = trap_R_RegisterModel("models/ctl/lollipop_red_holo");
+			cgs.media.blueFlagModel = trap_R_RegisterModel("models/ctl/lollipop_blue_holo");
 			cgs.media.neutralFlagModel = trap_R_RegisterModel("models/ctl/lollipop_neutral");
 			cgs.media.neutralflagShader[0] = trap_R_RegisterShaderNoMip("icons/hud_lolly_neutral1");
 			cgs.media.neutralflagShader[1] = trap_R_RegisterShaderNoMip("icons/hud_lolly_neutral2");
