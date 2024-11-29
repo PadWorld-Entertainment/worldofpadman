@@ -689,18 +689,6 @@ void FinishSpawningItem(gentity_t *ent) {
 
 	ent->s.eType = ET_ITEM;
 	ent->s.modelindex = ent->item - bg_itemlist; // store item number in modelindex
-
-	// we use modified lolly assets in 1LC
-	if (g_gametype.integer == GT_1FCTF) {
-		if (ent->item->giType == IT_TEAM) {
-			if (ent->item->giTag == PW_REDFLAG) {
-				ent->s.modelindex = G_ModelIndex("models/ctl/lollipop_red_holo");
-			} else if (ent->item->giTag == PW_BLUEFLAG) {
-				ent->s.modelindex = G_ModelIndex("models/ctl/lollipop_blue_holo");
-			}
-		}
-	}
-
 	ent->s.modelindex2 = 0;						 // zero indicates this isn't a dropped item
 	ent->r.contents = CONTENTS_TRIGGER;
 	ent->touch = Touch_Item;

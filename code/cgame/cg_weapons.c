@@ -625,6 +625,7 @@ The server says this item is used on this level
 void CG_RegisterItemVisuals(int itemNum) {
 	itemInfo_t *itemInfo;
 	const gitem_t *item;
+	const char *model;
 
 	if (itemNum < 0 || itemNum >= bg_numItems) {
 		CG_Error("CG_RegisterItemVisuals: itemNum %d out of range [0-%d]", itemNum, bg_numItems - 1);
@@ -640,7 +641,15 @@ void CG_RegisterItemVisuals(int itemNum) {
 	memset(itemInfo, 0, sizeof(*itemInfo));
 	itemInfo->registered = qtrue;
 
-	itemInfo->models[0] = trap_R_RegisterModel(item->world_model[0]);
+	model = item->world_model[0];
+	if (cgs.gametype == GT_1FCTF && item->giType == IT_TEAM) {
+		if (item->giTag == PW_REDFLAG) {
+			model = "models/ctl/lollipop_red_holo";
+		} else if (item->giTag == PW_BLUEFLAG) {
+			model = "models/ctl/lollipop_blue_holo";
+		}
+	}
+	itemInfo->models[0] = trap_R_RegisterModel(model);
 
 	itemInfo->icon = trap_R_RegisterShader(item->icon);
 
