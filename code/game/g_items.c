@@ -690,7 +690,6 @@ void FinishSpawningItem(gentity_t *ent) {
 	ent->s.eType = ET_ITEM;
 	ent->s.modelindex = ent->item - bg_itemlist; // store item number in modelindex
 	ent->s.modelindex2 = 0;						 // zero indicates this isn't a dropped item
-
 	ent->r.contents = CONTENTS_TRIGGER;
 	ent->touch = Touch_Item;
 	// using an item causes it to respawn

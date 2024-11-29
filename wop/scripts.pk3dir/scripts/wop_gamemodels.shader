@@ -134,10 +134,9 @@ station/ring
 
 
 // =================
-// LOLLYPOP
+// LOLLIPOP
 // =================
 
-//shaders by doomdragon for WoP capture the lollipop gamemode
 models/ctl/foil
 {
 	cull disable
@@ -256,7 +255,147 @@ models/ctl/n_sticker_ribbon
 }
 
 // =================
-// BiGBALLOON
+// LOLLIPOP HOLO
+// =================
+
+models/ctl/r_lollipop_holo
+{
+	{
+		map models/ctl/holo_interlace.png
+		blendFunc GL_ZERO GL_ONE
+		alphaFunc GE128
+		tcgen vector ( 0 0.04 0 ) ( 0 0 -.04 0)
+		tcMod scroll 0 -0.2
+		depthWrite
+	}
+	{
+		map models/ctl/r_holo_lollipop.png
+		blendfunc add
+		rgbGen identity
+		depthFunc equal
+	}
+	{
+		map models/ctl/r_holo_glow.png
+		blendFunc add
+		tcgen vector ( 0 0.01 0 ) ( 0 0 -.01 0)
+		tcMod scroll 0 -0.4
+		depthFunc equal
+	}
+}
+
+models/ctl/r_ribbon_holo
+{
+	cull none
+	{
+		map models/ctl/holo_interlace.png
+		blendFunc GL_ZERO GL_ONE
+		alphaFunc GE128
+		tcgen vector ( 0 0.04 0 ) ( 0 0 -.04 0)
+		tcMod scroll 0 -0.2
+		depthWrite
+	}
+	{
+		map models/ctl/r_holo_lollipop.png
+		blendfunc add
+		rgbGen identity
+		depthFunc equal
+	}
+	{
+		map models/ctl/r_holo_glow.png
+		blendFunc add
+		tcgen vector ( 0 0.01 0 ) ( 0 0 -.01 0)
+		tcMod scroll 0 -0.4
+		depthFunc equal
+	}
+}
+
+models/ctl/r_label_holo
+{
+	{
+		map models/ctl/holo_interlace.png
+		blendFunc GL_ZERO GL_ONE
+		alphaFunc GE128
+		tcgen vector ( 0 0.04 0 ) ( 0 0 -.04 0)
+		tcMod scroll 0 -0.2
+		depthWrite
+	}
+	{
+		map models/ctl/r_holo_lollipop.png
+		blendfunc add
+		depthFunc equal
+	}
+}
+
+models/ctl/b_lollipop_holo
+{
+	{
+		map models/ctl/holo_interlace.png
+		blendFunc GL_ZERO GL_ONE
+		alphaFunc GE128
+		tcgen vector ( 0 0.04 0 ) ( 0 0 -.04 0)
+		tcMod scroll 0 -0.2
+		depthWrite
+	}
+	{
+		map models/ctl/b_holo_lollipop.png
+		blendfunc add
+		rgbGen identity
+		depthFunc equal
+	}
+	{
+		map models/ctl/b_holo_glow.png
+		blendFunc add
+		tcgen vector ( 0 0.01 0 ) ( 0 0 -.01 0)
+		tcMod scroll 0 -0.4
+		depthFunc equal
+	}
+}
+
+models/ctl/b_ribbon_holo
+{
+	cull none
+	{
+		map models/ctl/holo_interlace.png
+		blendFunc GL_ZERO GL_ONE
+		alphaFunc GE128
+		tcgen vector ( 0 0.04 0 ) ( 0 0 -.04 0)
+		tcMod scroll 0 -0.2
+		depthWrite
+	}
+	{
+		map models/ctl/b_holo_lollipop.png
+		blendfunc add
+		rgbGen identity
+		depthFunc equal
+	}
+	{
+		map models/ctl/b_holo_glow.png
+		blendFunc add
+		tcgen vector ( 0 0.01 0 ) ( 0 0 -.01 0)
+		tcMod scroll 0 -0.4
+		depthFunc equal
+	}
+}
+
+models/ctl/b_label_holo
+{
+	{
+		map models/ctl/holo_interlace.png
+		blendFunc GL_ZERO GL_ONE
+		alphaFunc GE128
+		tcgen vector ( 0 0.04 0 ) ( 0 0 -.04 0)
+		tcMod scroll 0 -0.2
+		depthWrite
+	}
+	{
+		map models/ctl/b_holo_lollipop.png
+		blendfunc add
+		depthFunc equal
+	}
+}
+
+// =================
+// BiG BALLOON
 // =================
 
 models/special/ballon
