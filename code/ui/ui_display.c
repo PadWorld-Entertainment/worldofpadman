@@ -253,7 +253,7 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 		break;
 
 	case ID_BRIGHTNESS:
-		trap_Cvar_SetValue("r_gamma", (float)((int)displayOptionsInfo.brightness.curvalue / 100));
+		trap_Cvar_SetValue("r_gamma", (float)((int)displayOptionsInfo.brightness.curvalue) / 100.f);
 		break;
 
 	case ID_SCREENSIZE:
@@ -329,7 +329,7 @@ static void UI_DisplayOptions_Event(void *ptr, int event) {
 			}
 
 			trap_Cvar_SetValue("r_allowResize", displayOptionsInfo.resize.curvalue);
-			trap_Cvar_SetValue("r_greyscale", (float)((int)displayOptionsInfo.greyscale.curvalue / 100));
+			trap_Cvar_SetValue("r_greyscale", (float)((int)displayOptionsInfo.greyscale.curvalue) / 100.f);
 
 			UI_ForceMenuOff();
 			trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart\n");
