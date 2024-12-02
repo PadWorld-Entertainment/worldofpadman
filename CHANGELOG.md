@@ -1,5 +1,19 @@
 # World of PADMAN Changelog
 
+## Version: 1.7.1 (tba)
+
+- ADDED
+	- 
+- CHANGED
+	- 
+- FIXED
+	- 
+- REMOVED
+	- 
+- UPDATED
+	- Code base to [ioq3 1.36 Git cc18246](https://github.com/ioquake/ioq3/commit/cc18246f22ab033e1b17af4616a68e9ea2e873db) with associated features and bug fixes
+
+	
 ## Version: 1.7.0 (Dec 06, 2024)
 
 - ADDED
