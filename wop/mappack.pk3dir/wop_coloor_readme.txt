@@ -4,7 +4,7 @@ About the Map:
 
 	Originally created in the summer of 2008 in 2 days over a weekend for WoP 1.2, I had already forgotten about this map until 
 	I recently found it on Ben's server. Since it was barely playable due to missing textures, I decided to port it to WoP 1.6.
-	The map file in this pk3 stands under the GPL v3.
+	Now it is available for WoP 1.7 and stands under the CC-BY-NC.
 
 Gametypes: 
 
