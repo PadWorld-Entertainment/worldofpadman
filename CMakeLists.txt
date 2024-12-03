@@ -159,7 +159,7 @@ function(shader_validation GAME SHADER MAPPACK)
 endfunction()
 
 function(bsp_validation GAME BSP PADPACK)
-	set(PK3DIRS maps.pk3dir padpack.pk3dir)
+	set(PK3DIRS maps.pk3dir padpack.pk3dir mappack.pk3dir)
 	foreach(PK3DIR ${PK3DIRS})
 		set(BSPPATH "${CMAKE_CURRENT_SOURCE_DIR}/${PK3DIR}/maps/${BSP}")
 		if (EXISTS ${BSPPATH})
@@ -168,22 +168,6 @@ function(bsp_validation GAME BSP PADPACK)
 			get_filename_component(filename ${BSPPATH} NAME)
 			add_test(NAME ${targetname}
 				COMMAND $<TARGET_FILE:bsptool> "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}" "${PADPACK}"
-				WORKING_DIRECTORY "$<TARGET_FILE_DIR:bsptool>"
-			)
-		endif()
-	endforeach()
-endfunction()
-
-function(bsp_validation GAME BSP MAPPACK)
-	set(PK3DIRS maps.pk3dir mappack.pk3dir)
-	foreach(PK3DIR ${PK3DIRS})
-		set(BSPPATH "${CMAKE_CURRENT_SOURCE_DIR}/${PK3DIR}/maps/${BSP}")
-		if (EXISTS ${BSPPATH})
-			set(targetname "bsp-${GAME}-${BSP}")
-			get_filename_component(targetname ${targetname} NAME_WLE)
-			get_filename_component(filename ${BSPPATH} NAME)
-			add_test(NAME ${targetname}
-				COMMAND $<TARGET_FILE:bsptool> "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}" "${MAPPACK}"
 				WORKING_DIRECTORY "$<TARGET_FILE_DIR:bsptool>"
 			)
 		endif()

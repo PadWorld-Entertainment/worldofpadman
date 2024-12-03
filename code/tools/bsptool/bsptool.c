@@ -31,6 +31,10 @@ typedef struct {
 #define HEADER_LUMPS 17
 #define BSP_VERSION 46
 
+#define WOP_MAPS 0
+#define WOP_PADPAK 1
+#define WOP_COMMUNITY 2
+
 typedef struct {
 	int ident;
 	int version;
@@ -212,15 +216,17 @@ static void sanitizeFilename(char *in) {
 	}
 }
 
-static int validateSound(const char *filename, const char *pk3dir, const char *sound, int ispadpack) {
+static int validateSound(const char *filename, const char *pk3dir, const char *sound, int mappacktype) {
 	FILE *fp;
 	char buf[1024];
 	char basename[1024];
 	int len;
 	static const char *ext[] = {"wav", "ogg", "opus", NULL};
 	const char *searchpaths[] = {"sound.pk3dir", NULL, NULL};
-	if (ispadpack) {
+	if (mappacktype == WOP_PADPAK) {
 		searchpaths[1] = "padpack.pk3dir";
+	} else if (mappacktype == WOP_COMMUNITY) {
+		searchpaths[1] = "mappack.pk3dir";
 	}
 	static const char *subdirs[] = {".", "../wop"};
 
@@ -257,7 +263,7 @@ static int validateSound(const char *filename, const char *pk3dir, const char *s
 	return 1;
 }
 
-static int validateEntityString(const char *filename, const char *pk3dir, const char *entitystring, int ispadpack) {
+static int validateEntityString(const char *filename, const char *pk3dir, const char *entitystring, int mappacktype) {
 	int error = 0;
 	for (;;) {
 		const char *token = COM_ParseExt(&entitystring);
@@ -270,7 +276,7 @@ static int validateEntityString(const char *filename, const char *pk3dir, const 
 				printf("%s: error unexpected end of entity string found\n", filename);
 				return 1;
 			}
-			if (validateSound(filename, pk3dir, token, ispadpack) != 0) {
+			if (validateSound(filename, pk3dir, token, mappacktype) != 0) {
 				error = 1;
 			}
 		}
@@ -292,15 +298,17 @@ static int checkForShader(const char *allShaders, const char *shaderName, const 
 }
 
 static int validateShader(const char *allShaders, const char *shaderName, const char *bspfilename, const char *pk3dir,
-						  int ispadpack) {
+						  int mappacktype) {
 	FILE *fp;
 	char buf[1024];
 	char basename[1024];
 	int len;
 	static const char *ext[] = {"jpg", "png", "tga", NULL};
 	const char *searchpaths[] = {"models.pk3dir", "textures.pk3dir", NULL, NULL};
-	if (ispadpack) {
+	if (mappacktype == WOP_PADPAK) {
 		searchpaths[2] = "padpack.pk3dir";
+	} else if (mappacktype == WOP_COMMUNITY) {
+		searchpaths[2] = "mappack.pk3dir";
 	}
 
 	static const char *subdirs[] = {".", "../wop", "../xmas"};
@@ -335,7 +343,7 @@ static int filter(const struct dirent *entry) {
 	return strstr(entry->d_name, ".shader") != NULL;
 }
 
-static char *loadAllShaders(const char *pk3dir, int ispadpack) {
+static char *loadAllShaders(const char *pk3dir, int mappacktype) {
 	const int maxShaderSize = 5 * 1024 * 1024;
 	char *shaders = (char *)malloc(maxShaderSize);
 	char buf[1024];
@@ -344,8 +352,10 @@ static char *loadAllShaders(const char *pk3dir, int ispadpack) {
 	const char *searchpaths[] = {"scripts.pk3dir", NULL, NULL};
 	int shaderCount = 0;
 
-	if (ispadpack) {
+	if (mappacktype == WOP_PADPAK) {
 		searchpaths[1] = "padpack.pk3dir";
+	} else if (mappacktype == WOP_COMMUNITY) {
+		searchpaths[1] = "mappack.pk3dir";
 	}
 
 	shaders[0] = '\0';
@@ -411,7 +421,7 @@ static char *loadAllShaders(const char *pk3dir, int ispadpack) {
 	return shaders;
 }
 
-static int validateBsp(const char *filename, const char *pk3dir, const void *buf, int ispadpack) {
+static int validateBsp(const char *filename, const char *pk3dir, const void *buf, int mappacktype) {
 	const dheader_t header = *(const dheader_t *)buf;
 	printf("Validate bsp %s\n", filename);
 	if (header.version != BSP_VERSION) {
@@ -419,7 +429,7 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 		return 1;
 	}
 
-	char *allShaders = loadAllShaders(pk3dir, ispadpack);
+	char *allShaders = loadAllShaders(pk3dir, mappacktype);
 
 	int errors = 0;
 	{
@@ -427,7 +437,7 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 		char *entityString = (char *)malloc(l->filelen);
 		Q_strncpyz(entityString, (const char *)((const unsigned char *)buf + l->fileofs), l->filelen);
 
-		if (validateEntityString(filename, pk3dir, entityString, ispadpack) != 0) {
+		if (validateEntityString(filename, pk3dir, entityString, mappacktype) != 0) {
 			++errors;
 		}
 		free(entityString);
@@ -444,7 +454,7 @@ static int validateBsp(const char *filename, const char *pk3dir, const void *buf
 		} else {
 			for (i = 0; i < count; ++i) {
 				const char *shader = shaders[i].shader;
-				if (validateShader(allShaders, shader, filename, pk3dir, ispadpack) != 0) {
+				if (validateShader(allShaders, shader, filename, pk3dir, mappacktype) != 0) {
 					++errors;
 				}
 			}
@@ -459,19 +469,20 @@ int main(int argc, char *argv[]) {
 	const char *pk3dir;
 	long bufsize;
 	char *source;
-	int ispadpack;
+	int mappacktype;
 	FILE *fp;
 	size_t newLen;
 	int errorCount;
 
 	if (argc != 4) {
-		printf("Usage: bsptool <path-to-game-dir> <path-to.bsp> <ispadpack>\n");
+		printf("Usage: bsptool <path-to-game-dir> <path-to.bsp> <mappacktype>\n");
+		printf("mappacktype: 0 = wop, 1 = padpack, 2 = community\n");
 		return 1;
 	}
 
 	pk3dir = argv[1];
 	filename = argv[2];
-	ispadpack = atoi(argv[3]);
+	mappacktype = atoi(argv[3]);
 	fp = fopen(filename, "rb");
 	if (fp == NULL) {
 		printf("Could not open file %s", filename);
@@ -504,7 +515,7 @@ int main(int argc, char *argv[]) {
 		printf("Error: failed to read the complete bsp file.\n");
 	}
 
-	errorCount = validateBsp(filename, pk3dir, source, ispadpack);
+	errorCount = validateBsp(filename, pk3dir, source, mappacktype);
 	if (errorCount == 0) {
 		free(source);
 		return 0;
