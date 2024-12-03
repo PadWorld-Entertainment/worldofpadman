@@ -126,39 +126,23 @@ if (ZIP)
 	set(ZIP_ARGS ${ZIP_${zip_binary}})
 endif()
 
-function(shader_validation GAME SHADER PADPACK)
-	set(PK3DIRS scripts.pk3dir padpack.pk3dir)
-	foreach(PK3DIR ${PK3DIRS})
-		set(SHADERPATH "${CMAKE_CURRENT_SOURCE_DIR}/${PK3DIR}/scripts/${SHADER}")
-		if (EXISTS ${SHADERPATH})
-			set(targetname "shader-${GAME}-${SHADER}")
-			get_filename_component(targetname ${targetname} NAME_WLE)
-			get_filename_component(filename ${SHADERPATH} NAME)
-			add_test(NAME ${targetname}
-				COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}" "${PADPACK}"
-				WORKING_DIRECTORY "$<TARGET_FILE_DIR:shadertool>"
-			)
-		endif()
-	endforeach()
+function(shader_validation GAME SHADER MAPPACKTYPE)
+    set(PK3DIRS scripts.pk3dir padpack.pk3dir mappack.pk3dir)
+    foreach(PK3DIR ${PK3DIRS})
+        set(SHADERPATH "${CMAKE_CURRENT_SOURCE_DIR}/${PK3DIR}/scripts/${SHADER}")
+        if (EXISTS ${SHADERPATH})
+            set(targetname "shader-${GAME}-${SHADER}")
+            get_filename_component(targetname ${targetname} NAME_WLE)
+            get_filename_component(filename ${SHADERPATH} NAME)
+            add_test(NAME ${targetname}
+                COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}" "${MAPPACKTYPE}"
+                WORKING_DIRECTORY "$<TARGET_FILE_DIR:shadertool>"
+            )
+        endif()
+    endforeach()
 endfunction()
 
-function(shader_validation GAME SHADER MAPPACK)
-	set(PK3DIRS scripts.pk3dir mappack.pk3dir)
-	foreach(PK3DIR ${PK3DIRS})
-		set(SHADERPATH "${CMAKE_CURRENT_SOURCE_DIR}/${PK3DIR}/scripts/${SHADER}")
-		if (EXISTS ${SHADERPATH})
-			set(targetname "shader-${GAME}-${SHADER}")
-			get_filename_component(targetname ${targetname} NAME_WLE)
-			get_filename_component(filename ${SHADERPATH} NAME)
-			add_test(NAME ${targetname}
-				COMMAND $<TARGET_FILE:shadertool> "${CMAKE_CURRENT_SOURCE_DIR}" "${SHADERPATH}" "${MAPPACK}"
-				WORKING_DIRECTORY "$<TARGET_FILE_DIR:shadertool>"
-			)
-		endif()
-	endforeach()
-endfunction()
-
-function(bsp_validation GAME BSP PADPACK)
+function(bsp_validation GAME BSP MAPPACKTYPE)
 	set(PK3DIRS maps.pk3dir padpack.pk3dir mappack.pk3dir)
 	foreach(PK3DIR ${PK3DIRS})
 		set(BSPPATH "${CMAKE_CURRENT_SOURCE_DIR}/${PK3DIR}/maps/${BSP}")
@@ -167,7 +151,7 @@ function(bsp_validation GAME BSP PADPACK)
 			get_filename_component(targetname ${targetname} NAME_WLE)
 			get_filename_component(filename ${BSPPATH} NAME)
 			add_test(NAME ${targetname}
-				COMMAND $<TARGET_FILE:bsptool> "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}" "${PADPACK}"
+				COMMAND $<TARGET_FILE:bsptool> "${CMAKE_CURRENT_SOURCE_DIR}" "${BSPPATH}" "${MAPPACKTYPE}"
 				WORKING_DIRECTORY "$<TARGET_FILE_DIR:bsptool>"
 			)
 		endif()
