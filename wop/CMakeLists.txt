@@ -1,6 +1,7 @@
 set(PK3DIRS
     botfiles
     gfx
+    mappack
     maps
     menu
     models
@@ -65,6 +66,13 @@ foreach (SHADER ${PADPACK_SHADERS})
     shader_validation(wop ${SHADER} 1)
 endforeach()
 
+set(MAPPACK_SHADERS
+    wop_mappack-levelshots.shader
+)
+foreach (SHADER ${MAPPACK_SHADERS})
+    shader_validation(wop ${SHADER} 2)
+endforeach()
+
 set(BSPS
     wop_airplane.bsp
     wop_anteroom.bsp
@@ -125,4 +133,11 @@ set(PADPACK_BSPS
 )
 foreach (BSP ${PADPACK_BSPS})
     bsp_validation(wop ${BSP} 1)
+endforeach()
+
+set(MAPPACK_BSPS
+    wop_coloor.bsp
+)
+foreach (BSP ${MAPPACK_BSPS})
+    bsp_validation(wop ${BSP} 2)
 endforeach()
