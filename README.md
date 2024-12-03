@@ -23,6 +23,10 @@ The source code of World of PADMAN is published under the [GNU General Public Li
 
 Some parts of World of PADMAN were created with contents acquired by PadWorld Entertainment from various sources, with licenses that allow its use and modification. For more information about third-party content used in World of PADMAN and related licenses, please refer to [LICENSES.md](LICENSES.md).
 
+## MapPack
+
+[MAPPACK.md](MAPPACK.md) lists all the maps provided with the Community Map Pack and the associated licenses or terms of use chosen by the original author, which allows PadWorld Entertainment to bundle and release these maps with the World of PADMAN game and to make changes if necessary. If you would like to include your map, please contact us. A license that allows us to make necessary adjustments to the current WoP development status, such as [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/), is a basic requirement.
+
 ## Security
 
 **Please do not report security vulnerabilities through public GitHub issues.** If you believe you have found a security vulnerability in any of our repositories please follow instructions provided in [SECURITY.md](SECURITY.md).
