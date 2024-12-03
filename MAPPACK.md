@@ -1,4 +1,4 @@
-# Community MapPack Licenses
+# Community Map Pack Licenses
 
 This file lists all the maps provided with the Community Map Pack and the associated licenses or terms of use chosen by the original author, which allows PadWorld Entertainment to bundle and release these maps with the World of PADMAN game and make changes if necessary.
 
