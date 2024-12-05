@@ -137,6 +137,7 @@ endforeach()
 
 set(MAPPACK_BSPS
     wop_coloor.bsp
+    wop_fragbox.bsp
 )
 foreach (BSP ${MAPPACK_BSPS})
     bsp_validation(wop ${BSP} 2)
