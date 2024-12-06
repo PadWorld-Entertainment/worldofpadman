@@ -35,3 +35,15 @@ levelshots/wop_fragboxB
         animmap 0.5 levelshots/wop_fragboxB1 levelshots/wop_fragboxB2 levelshots/wop_fragboxB3
     }
 }
+
+// ==============
+// Pac-Man
+// ==============
+
+levelshots/wop_pacmanB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_pacmanB1 levelshots/wop_pacmanB2 levelshots/wop_pacmanB3
+    }
+}

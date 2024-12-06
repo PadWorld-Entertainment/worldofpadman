@@ -17,3 +17,9 @@
     longname "3aTmE!'s FragBox"
     type "ffa team lps"
 }
+
+{
+	map "wop_pacman"
+	longname "Hectic's Pac-Man"
+	type "ffa"
+}
