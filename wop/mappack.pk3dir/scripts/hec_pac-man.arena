@@ -1,0 +1,5 @@
+{
+	map			"hec_pac-man"
+	longname	"Pac-Man"
+	type		"ffa tourney"
+}
