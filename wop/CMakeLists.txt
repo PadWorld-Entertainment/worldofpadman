@@ -136,6 +136,7 @@ foreach (BSP ${PADPACK_BSPS})
 endforeach()
 
 set(MAPPACK_BSPS
+    wop_alongwayCTL.bsp
     wop_coloor.bsp
     wop_fragbox.bsp
 )
