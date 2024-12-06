@@ -1,0 +1,7 @@
+{
+map "hec_alw_v2rc3"
+longname "A Long Way"
+bots "padman"
+pointlimit 8
+type "ctl"
+}
