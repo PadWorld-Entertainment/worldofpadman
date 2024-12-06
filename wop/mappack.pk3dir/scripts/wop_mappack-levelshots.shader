@@ -1,8 +1,20 @@
 // Community map pack levelshots shader
 
-// =================
-// Coloor levelshots
-// =================
+// ==============
+// A Long Way
+// ==============
+
+levelshots/wop_alongwayCTLB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_alongwayCTLB1 levelshots/wop_alongwayCTLB2 levelshots/wop_alongwayCTLB3
+    }
+}
+
+// ==============
+// Coloor
+// ==============
 
 levelshots/wop_coloorB
 {
@@ -12,9 +24,9 @@ levelshots/wop_coloorB
     }
 }
 
-// =================
-// FragBox levelshots
-// =================
+// ==============
+// FragBox
+// ==============
 
 levelshots/wop_fragboxB
 {
