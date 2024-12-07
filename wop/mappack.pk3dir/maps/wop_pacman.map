@@ -1,4 +1,3 @@
-
 // entity 0
 {
 "classname" "worldspawn"
@@ -2866,1257 +2865,1221 @@
 "classname" "weapon_balloony"
 "origin" "-288.000000 352.000000 16.000000"
 "count" "100"
+"marker" "orange"
 }
 // entity 33
 {
 "classname" "weapon_boaster"
 "origin" "288.000000 352.000000 16.000000"
 "count" "200"
+"marker" "orange"
 }
 // entity 34
 {
 "classname" "weapon_bubbleg"
 "origin" "-352.000000 -416.000000 16.000000"
 "count" "200"
+"marker" "orange"
 }
 // entity 35
 {
 "classname" "weapon_splasher"
 "origin" "352.000000 -416.000000 16.000000"
 "count" "100"
+"marker" "orange"
 }
 // entity 36
 {
 "classname" "weapon_betty"
 "origin" "-544.000000 -992.000000 16.000000"
 "count" "100"
+"marker" "orange"
 }
 // entity 37
 {
 "classname" "weapon_pumper"
 "origin" "544.000000 -992.000000 16.000000"
 "count" "100"
+"marker" "orange"
 }
 // entity 38
-{
-"classname" "misc_model"
-"origin" "-288.000061 352.000000 0.000000"
-"model" "models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg.md3"
-"angle" "-90.000000"
-}
-// entity 39
-{
-"classname" "misc_model"
-"origin" "543.999939 -992.000000 0.000000"
-"model" "models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg.md3"
-"angle" "-90.000000"
-}
-// entity 40
-{
-"classname" "misc_model"
-"origin" "-544.000061 -992.000000 0.000000"
-"model" "models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg.md3"
-"angle" "-90.000000"
-}
-// entity 41
-{
-"classname" "misc_model"
-"origin" "-352.000061 -416.000000 0.000000"
-"model" "models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg.md3"
-"angle" "-90.000000"
-}
-// entity 42
-{
-"classname" "misc_model"
-"origin" "351.999939 -416.000000 0.000000"
-"model" "models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg.md3"
-"angle" "-90.000000"
-}
-// entity 43
-{
-"classname" "misc_model"
-"origin" "287.999939 352.000000 0.000000"
-"model" "models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg.md3"
-"angle" "-90.000000"
-}
-// entity 44
 {
 "classname" "item_armor_shard"
 "origin" "-608.000000 -992.000000 16.000000"
 }
-// entity 45
+// entity 39
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 -416.000000 16.000000"
 }
-// entity 46
+// entity 40
 {
 "classname" "item_armor_shard"
 "origin" "-736.000000 -992.000000 16.000000"
 }
-// entity 47
+// entity 41
 {
 "classname" "item_armor_shard"
 "origin" "-672.000000 -992.000000 16.000000"
 }
-// entity 48
+// entity 42
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 -992.000000 16.000000"
 }
-// entity 49
+// entity 43
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -992.000000 16.000000"
 }
-// entity 50
+// entity 44
 {
 "classname" "item_armor_shard"
 "origin" "-416.000000 -992.000000 16.000000"
 }
-// entity 51
+// entity 45
 {
 "classname" "item_armor_shard"
 "origin" "-352.000000 -992.000000 16.000000"
 }
-// entity 52
+// entity 46
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 -992.000000 16.000000"
 }
-// entity 53
+// entity 47
 {
 "classname" "item_armor_shard"
 "origin" "-224.000000 -992.000000 16.000000"
 }
-// entity 54
+// entity 48
 {
 "classname" "item_armor_shard"
 "origin" "-160.000000 -992.000000 16.000000"
 }
-// entity 55
+// entity 49
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 -992.000000 16.000000"
 }
-// entity 56
+// entity 50
 {
 "classname" "item_armor_shard"
 "origin" "-32.000000 -992.000000 16.000000"
 }
-// entity 57
+// entity 51
 {
 "classname" "item_armor_shard"
 "origin" "32.000000 -992.000000 16.000000"
 }
-// entity 58
+// entity 52
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 -992.000000 16.000000"
 }
-// entity 59
+// entity 53
 {
 "classname" "item_armor_shard"
 "origin" "160.000000 -992.000000 16.000000"
 }
-// entity 60
+// entity 54
 {
 "classname" "item_armor_shard"
 "origin" "224.000000 -992.000000 16.000000"
 }
-// entity 61
+// entity 55
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 -992.000000 16.000000"
 }
-// entity 62
+// entity 56
 {
 "classname" "item_armor_shard"
 "origin" "352.000000 -992.000000 16.000000"
 }
-// entity 63
+// entity 57
 {
 "classname" "item_armor_shard"
 "origin" "416.000000 -992.000000 16.000000"
 }
-// entity 64
+// entity 58
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -992.000000 16.000000"
 }
-// entity 65
+// entity 59
 {
 "classname" "item_armor_shard"
 "origin" "608.000000 -992.000000 16.000000"
 }
-// entity 66
+// entity 60
 {
 "classname" "item_armor_shard"
 "origin" "672.000000 -992.000000 16.000000"
 }
-// entity 67
+// entity 61
 {
 "classname" "item_armor_shard"
 "origin" "736.000000 -992.000000 16.000000"
 }
-// entity 68
+// entity 62
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 -992.000000 16.000000"
 }
-// entity 69
+// entity 63
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 -928.000000 16.000000"
 }
-// entity 70
+// entity 64
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 -864.000000 16.000000"
 }
-// entity 71
+// entity 65
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 -800.000000 16.000000"
 }
-// entity 72
+// entity 66
 {
 "classname" "item_armor_shard"
 "origin" "736.000000 -800.000000 16.000000"
 }
-// entity 73
+// entity 67
 {
 "classname" "item_armor_shard"
 "origin" "672.000000 -800.000000 16.000000"
 }
-// entity 74
+// entity 68
 {
 "classname" "item_armor_shard"
 "origin" "608.000000 -800.000000 16.000000"
 }
-// entity 75
+// entity 69
 {
 "classname" "item_armor_shard"
 "origin" "544.000000 -800.000000 16.000000"
 }
-// entity 76
+// entity 70
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -800.000000 16.000000"
 }
-// entity 77
+// entity 71
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -736.000000 16.000000"
 }
-// entity 78
+// entity 72
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -672.000000 16.000000"
 }
-// entity 79
+// entity 73
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -608.000000 16.000000"
 }
-// entity 80
+// entity 74
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -544.000000 16.000000"
 }
-// entity 81
+// entity 75
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -480.000000 16.000000"
 }
-// entity 82
+// entity 76
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -416.000000 16.000000"
 }
-// entity 83
+// entity 77
 {
 "classname" "item_armor_shard"
 "origin" "544.000000 -416.000000 16.000000"
 }
-// entity 84
+// entity 78
 {
 "classname" "item_armor_shard"
 "origin" "608.000000 -416.000000 16.000000"
 }
-// entity 85
+// entity 79
 {
 "classname" "item_armor_shard"
 "origin" "672.000000 -416.000000 16.000000"
 }
-// entity 86
+// entity 80
 {
 "classname" "item_armor_shard"
 "origin" "736.000000 -416.000000 16.000000"
 }
-// entity 87
+// entity 81
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 -416.000000 16.000000"
 }
-// entity 88
+// entity 82
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 -480.000000 16.000000"
 }
-// entity 89
+// entity 83
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 -544.000000 16.000000"
 }
-// entity 90
+// entity 84
 {
 "classname" "item_armor_shard"
 "origin" "736.000000 -608.000000 16.000000"
 }
-// entity 91
+// entity 85
 {
 "classname" "item_armor_shard"
 "origin" "672.000000 -608.000000 16.000000"
 }
-// entity 92
+// entity 86
 {
 "classname" "item_armor_shard"
 "origin" "672.000000 -672.000000 16.000000"
 }
-// entity 93
+// entity 87
 {
 "classname" "item_armor_shard"
 "origin" "672.000000 -736.000000 16.000000"
 }
-// entity 94
+// entity 88
 {
 "classname" "item_armor_shard"
 "origin" "416.000000 -608.000000 16.000000"
 }
-// entity 95
+// entity 89
 {
 "classname" "item_armor_shard"
 "origin" "352.000000 -608.000000 16.000000"
 }
-// entity 96
+// entity 90
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 -608.000000 16.000000"
 }
-// entity 97
+// entity 91
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 -672.000000 16.000000"
 }
-// entity 98
+// entity 92
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 -736.000000 16.000000"
 }
-// entity 99
+// entity 93
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 -800.000000 16.000000"
 }
-// entity 100
+// entity 94
 {
 "classname" "item_armor_shard"
 "origin" "224.000000 -800.000000 16.000000"
 }
-// entity 101
+// entity 95
 {
 "classname" "item_armor_shard"
 "origin" "160.000000 -800.000000 16.000000"
 }
-// entity 102
+// entity 96
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 -800.000000 16.000000"
 }
-// entity 103
+// entity 97
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 -864.000000 16.000000"
 }
-// entity 104
+// entity 98
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 -928.000000 16.000000"
 }
-// entity 105
+// entity 99
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 -928.000000 16.000000"
 }
-// entity 106
+// entity 100
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 -864.000000 16.000000"
 }
-// entity 107
+// entity 101
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 -800.000000 16.000000"
 }
-// entity 108
+// entity 102
 {
 "classname" "item_armor_shard"
 "origin" "-160.000000 -800.000000 16.000000"
 }
-// entity 109
+// entity 103
 {
 "classname" "item_armor_shard"
 "origin" "-224.000000 -800.000000 16.000000"
 }
-// entity 110
+// entity 104
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 -800.000000 16.000000"
 }
-// entity 111
+// entity 105
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 -736.000000 16.000000"
 }
-// entity 112
+// entity 106
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 -672.000000 16.000000"
 }
-// entity 113
+// entity 107
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 -608.000000 16.000000"
 }
-// entity 114
+// entity 108
 {
 "classname" "item_armor_shard"
 "origin" "-224.000000 -608.000000 16.000000"
 }
-// entity 115
+// entity 109
 {
 "classname" "item_armor_shard"
 "origin" "-160.000000 -608.000000 16.000000"
 }
-// entity 116
+// entity 110
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 -608.000000 16.000000"
 }
-// entity 117
+// entity 111
 {
 "classname" "item_armor_shard"
 "origin" "-32.000000 -608.000000 16.000000"
 }
-// entity 118
+// entity 112
 {
 "classname" "item_armor_shard"
 "origin" "32.000000 -608.000000 16.000000"
 }
-// entity 119
+// entity 113
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 -608.000000 16.000000"
 }
-// entity 120
+// entity 114
 {
 "classname" "item_armor_shard"
 "origin" "160.000000 -608.000000 16.000000"
 }
-// entity 121
+// entity 115
 {
 "classname" "item_armor_shard"
 "origin" "224.000000 -608.000000 16.000000"
 }
-// entity 122
+// entity 116
 {
 "classname" "item_armor_shard"
 "origin" "-352.000000 -608.000000 16.000000"
 }
-// entity 123
+// entity 117
 {
 "classname" "item_armor_shard"
 "origin" "-416.000000 -608.000000 16.000000"
 }
-// entity 124
+// entity 118
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -608.000000 16.000000"
 }
-// entity 125
+// entity 119
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -672.000000 16.000000"
 }
-// entity 126
+// entity 120
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -736.000000 16.000000"
 }
-// entity 127
+// entity 121
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -800.000000 16.000000"
 }
-// entity 128
+// entity 122
 {
 "classname" "item_armor_shard"
 "origin" "-544.000000 -800.000000 16.000000"
 }
-// entity 129
+// entity 123
 {
 "classname" "item_armor_shard"
 "origin" "-608.000000 -800.000000 16.000000"
 }
-// entity 130
+// entity 124
 {
 "classname" "item_armor_shard"
 "origin" "-672.000000 -800.000000 16.000000"
 }
-// entity 131
+// entity 125
 {
 "classname" "item_armor_shard"
 "origin" "-736.000000 -800.000000 16.000000"
 }
-// entity 132
+// entity 126
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 -800.000000 16.000000"
 }
-// entity 133
+// entity 127
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 -864.000000 16.000000"
 }
-// entity 134
+// entity 128
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 -928.000000 16.000000"
 }
-// entity 135
+// entity 129
 {
 "classname" "item_armor_shard"
 "origin" "-672.000000 -736.000000 16.000000"
 }
-// entity 136
+// entity 130
 {
 "classname" "item_armor_shard"
 "origin" "-672.000000 -672.000000 16.000000"
 }
-// entity 137
+// entity 131
 {
 "classname" "item_armor_shard"
 "origin" "-672.000000 -608.000000 16.000000"
 }
-// entity 138
+// entity 132
 {
 "classname" "item_armor_shard"
 "origin" "-736.000000 -608.000000 16.000000"
 }
-// entity 139
+// entity 133
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 -544.000000 16.000000"
 }
-// entity 140
+// entity 134
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 -480.000000 16.000000"
 }
-// entity 141
+// entity 135
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 -416.000000 16.000000"
 }
-// entity 142
+// entity 136
 {
 "classname" "item_armor_shard"
 "origin" "-736.000000 -416.000000 16.000000"
 }
-// entity 143
+// entity 137
 {
 "classname" "item_armor_shard"
 "origin" "-672.000000 -416.000000 16.000000"
 }
-// entity 144
+// entity 138
 {
 "classname" "item_armor_shard"
 "origin" "-608.000000 -416.000000 16.000000"
 }
-// entity 145
+// entity 139
 {
 "classname" "item_armor_shard"
 "origin" "-544.000000 -416.000000 16.000000"
 }
-// entity 146
+// entity 140
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 288.000000 16.000000"
 }
-// entity 147
+// entity 141
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -480.000000 16.000000"
 }
-// entity 148
+// entity 142
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -544.000000 16.000000"
 }
-// entity 149
+// entity 143
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -416.000000 16.000000"
 }
-// entity 150
+// entity 144
 {
 "classname" "item_armor_shard"
 "origin" "-416.000000 -416.000000 16.000000"
 }
-// entity 151
+// entity 145
 {
 "classname" "item_armor_shard"
 "origin" "-224.000000 -416.000000 16.000000"
 }
-// entity 152
+// entity 146
 {
 "classname" "item_armor_shard"
 "origin" "-160.000000 -416.000000 16.000000"
 }
-// entity 153
+// entity 147
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 -416.000000 16.000000"
 }
-// entity 154
+// entity 148
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 -480.000000 16.000000"
 }
-// entity 155
+// entity 149
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 -544.000000 16.000000"
 }
-// entity 156
+// entity 150
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 -544.000000 16.000000"
 }
-// entity 157
+// entity 151
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 -480.000000 16.000000"
 }
-// entity 158
+// entity 152
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 -416.000000 16.000000"
 }
-// entity 159
+// entity 153
 {
 "classname" "item_armor_shard"
 "origin" "160.000000 -416.000000 16.000000"
 }
-// entity 160
+// entity 154
 {
 "classname" "item_armor_shard"
 "origin" "224.000000 -416.000000 16.000000"
 }
-// entity 161
+// entity 155
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 -416.000000 16.000000"
 }
-// entity 162
+// entity 156
 {
 "classname" "item_armor_shard"
 "origin" "416.000000 -416.000000 16.000000"
 }
-// entity 163
+// entity 157
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -352.000000 16.000000"
 }
-// entity 164
+// entity 158
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -288.000000 16.000000"
 }
-// entity 165
+// entity 159
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -224.000000 16.000000"
 }
-// entity 166
+// entity 160
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -160.000000 16.000000"
 }
-// entity 167
+// entity 161
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 -96.000000 16.000000"
 }
-// entity 168
+// entity 162
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -96.000000 16.000000"
 }
-// entity 169
+// entity 163
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -160.000000 16.000000"
 }
-// entity 170
+// entity 164
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -224.000000 16.000000"
 }
-// entity 171
+// entity 165
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -288.000000 16.000000"
 }
-// entity 172
+// entity 166
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 -352.000000 16.000000"
 }
-// entity 173
+// entity 167
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 32.000000 16.000000"
 }
-// entity 174
+// entity 168
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 96.000000 16.000000"
 }
-// entity 175
+// entity 169
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 160.000000 16.000000"
 }
-// entity 176
+// entity 170
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 224.000000 16.000000"
 }
-// entity 177
+// entity 171
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 288.000000 16.000000"
 }
-// entity 178
+// entity 172
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 352.000000 16.000000"
 }
-// entity 179
+// entity 173
 {
 "classname" "item_armor_shard"
 "origin" "-544.000000 352.000000 16.000000"
 }
-// entity 180
+// entity 174
 {
 "classname" "item_armor_shard"
 "origin" "-608.000000 352.000000 16.000000"
 }
-// entity 181
+// entity 175
 {
 "classname" "item_armor_shard"
 "origin" "-672.000000 352.000000 16.000000"
 }
-// entity 182
+// entity 176
 {
 "classname" "item_armor_shard"
 "origin" "-736.000000 352.000000 16.000000"
 }
-// entity 183
+// entity 177
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 352.000000 16.000000"
 }
-// entity 184
+// entity 178
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 416.000000 16.000000"
 }
-// entity 185
+// entity 179
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 480.000000 16.000000"
 }
-// entity 186
+// entity 180
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 544.000000 16.000000"
 }
-// entity 187
+// entity 181
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 608.000000 16.000000"
 }
-// entity 188
+// entity 182
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 736.000000 16.000000"
 }
-// entity 189
+// entity 183
 {
 "classname" "item_armor_shard"
 "origin" "-800.000000 800.000000 16.000000"
 }
-// entity 190
+// entity 184
 {
 "classname" "item_armor_shard"
 "origin" "-736.000000 800.000000 16.000000"
 }
-// entity 191
+// entity 185
 {
 "classname" "item_armor_shard"
 "origin" "-672.000000 800.000000 16.000000"
 }
-// entity 192
+// entity 186
 {
 "classname" "item_armor_shard"
 "origin" "-608.000000 800.000000 16.000000"
 }
-// entity 193
+// entity 187
 {
 "classname" "item_armor_shard"
 "origin" "-544.000000 800.000000 16.000000"
 }
-// entity 194
+// entity 188
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 800.000000 16.000000"
 }
-// entity 195
+// entity 189
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 736.000000 16.000000"
 }
-// entity 196
+// entity 190
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 672.000000 16.000000"
 }
-// entity 197
+// entity 191
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 608.000000 16.000000"
 }
-// entity 198
+// entity 192
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 544.000000 16.000000"
 }
-// entity 199
+// entity 193
 {
 "classname" "item_armor_shard"
 "origin" "-544.000000 544.000000 16.000000"
 }
-// entity 200
+// entity 194
 {
 "classname" "item_armor_shard"
 "origin" "-608.000000 544.000000 16.000000"
 }
-// entity 201
+// entity 195
 {
 "classname" "item_armor_shard"
 "origin" "-672.000000 544.000000 16.000000"
 }
-// entity 202
+// entity 196
 {
 "classname" "item_armor_shard"
 "origin" "-736.000000 544.000000 16.000000"
 }
-// entity 203
+// entity 197
 {
 "classname" "item_armor_shard"
 "origin" "-416.000000 544.000000 16.000000"
 }
-// entity 204
+// entity 198
 {
 "classname" "item_armor_shard"
 "origin" "-352.000000 544.000000 16.000000"
 }
-// entity 205
+// entity 199
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 544.000000 16.000000"
 }
-// entity 206
+// entity 200
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 480.000000 16.000000"
 }
-// entity 207
+// entity 201
 {
 "classname" "item_armor_shard"
 "origin" "-480.000000 416.000000 16.000000"
 }
-// entity 208
+// entity 202
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 416.000000 16.000000"
 }
-// entity 209
+// entity 203
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 480.000000 16.000000"
 }
-// entity 210
+// entity 204
 {
 "classname" "item_armor_shard"
 "origin" "-224.000000 544.000000 16.000000"
 }
-// entity 211
+// entity 205
 {
 "classname" "item_armor_shard"
 "origin" "-160.000000 544.000000 16.000000"
 }
-// entity 212
+// entity 206
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 544.000000 16.000000"
 }
-// entity 213
+// entity 207
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 608.000000 16.000000"
 }
-// entity 214
+// entity 208
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 672.000000 16.000000"
 }
-// entity 215
+// entity 209
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 736.000000 16.000000"
 }
-// entity 216
+// entity 210
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 800.000000 16.000000"
 }
-// entity 217
+// entity 211
 {
 "classname" "item_armor_shard"
 "origin" "-160.000000 800.000000 16.000000"
 }
-// entity 218
+// entity 212
 {
 "classname" "item_armor_shard"
 "origin" "-224.000000 800.000000 16.000000"
 }
-// entity 219
+// entity 213
 {
 "classname" "item_armor_shard"
 "origin" "-288.000000 800.000000 16.000000"
 }
-// entity 220
+// entity 214
 {
 "classname" "item_armor_shard"
 "origin" "-352.000000 800.000000 16.000000"
 }
-// entity 221
+// entity 215
 {
 "classname" "item_armor_shard"
 "origin" "-416.000000 800.000000 16.000000"
 }
-// entity 222
+// entity 216
 {
 "classname" "item_armor_shard"
 "origin" "-32.000000 544.000000 16.000000"
 }
-// entity 223
+// entity 217
 {
 "classname" "item_armor_shard"
 "origin" "32.000000 544.000000 16.000000"
 }
-// entity 224
+// entity 218
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 544.000000 16.000000"
 }
-// entity 225
+// entity 219
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 608.000000 16.000000"
 }
-// entity 226
+// entity 220
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 672.000000 16.000000"
 }
-// entity 227
+// entity 221
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 736.000000 16.000000"
 }
-// entity 228
+// entity 222
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 800.000000 16.000000"
 }
-// entity 229
+// entity 223
 {
 "classname" "item_armor_shard"
 "origin" "160.000000 800.000000 16.000000"
 }
-// entity 230
+// entity 224
 {
 "classname" "item_armor_shard"
 "origin" "224.000000 800.000000 16.000000"
 }
-// entity 231
+// entity 225
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 800.000000 16.000000"
 }
-// entity 232
+// entity 226
 {
 "classname" "item_armor_shard"
 "origin" "352.000000 800.000000 16.000000"
 }
-// entity 233
+// entity 227
 {
 "classname" "item_armor_shard"
 "origin" "416.000000 800.000000 16.000000"
 }
-// entity 234
+// entity 228
 {
 "classname" "item_armor_shard"
 "origin" "160.000000 544.000000 16.000000"
 }
-// entity 235
+// entity 229
 {
 "classname" "item_armor_shard"
 "origin" "224.000000 544.000000 16.000000"
 }
-// entity 236
+// entity 230
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 544.000000 16.000000"
 }
-// entity 237
+// entity 231
 {
 "classname" "item_armor_shard"
 "origin" "352.000000 544.000000 16.000000"
 }
-// entity 238
+// entity 232
 {
 "classname" "item_armor_shard"
 "origin" "416.000000 544.000000 16.000000"
 }
-// entity 239
+// entity 233
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 544.000000 16.000000"
 }
-// entity 240
+// entity 234
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 608.000000 16.000000"
 }
-// entity 241
+// entity 235
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 672.000000 16.000000"
 }
-// entity 242
+// entity 236
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 736.000000 16.000000"
 }
-// entity 243
+// entity 237
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 800.000000 16.000000"
 }
-// entity 244
+// entity 238
 {
 "classname" "item_armor_shard"
 "origin" "544.000000 800.000000 16.000000"
 }
-// entity 245
+// entity 239
 {
 "classname" "item_armor_shard"
 "origin" "608.000000 800.000000 16.000000"
 }
-// entity 246
+// entity 240
 {
 "classname" "item_armor_shard"
 "origin" "672.000000 800.000000 16.000000"
 }
-// entity 247
+// entity 241
 {
 "classname" "item_armor_shard"
 "origin" "736.000000 800.000000 16.000000"
 }
-// entity 248
+// entity 242
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 800.000000 16.000000"
 }
-// entity 249
+// entity 243
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 736.000000 16.000000"
 }
-// entity 250
+// entity 244
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 608.000000 16.000000"
 }
-// entity 251
+// entity 245
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 544.000000 16.000000"
 }
-// entity 252
+// entity 246
 {
 "classname" "item_armor_shard"
 "origin" "736.000000 544.000000 16.000000"
 }
-// entity 253
+// entity 247
 {
 "classname" "item_armor_shard"
 "origin" "672.000000 544.000000 16.000000"
 }
-// entity 254
+// entity 248
 {
 "classname" "item_armor_shard"
 "origin" "608.000000 544.000000 16.000000"
 }
-// entity 255
+// entity 249
 {
 "classname" "item_armor_shard"
 "origin" "544.000000 544.000000 16.000000"
 }
-// entity 256
+// entity 250
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 480.000000 16.000000"
 }
-// entity 257
+// entity 251
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 416.000000 16.000000"
 }
-// entity 258
+// entity 252
 {
 "classname" "item_armor_shard"
 "origin" "800.000000 352.000000 16.000000"
 }
-// entity 259
+// entity 253
 {
 "classname" "item_armor_shard"
 "origin" "736.000000 352.000000 16.000000"
 }
-// entity 260
+// entity 254
 {
 "classname" "item_armor_shard"
 "origin" "672.000000 352.000000 16.000000"
 }
-// entity 261
+// entity 255
 {
 "classname" "item_armor_shard"
 "origin" "608.000000 352.000000 16.000000"
 }
-// entity 262
+// entity 256
 {
 "classname" "item_armor_shard"
 "origin" "544.000000 352.000000 16.000000"
 }
-// entity 263
+// entity 257
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 352.000000 16.000000"
 }
-// entity 264
+// entity 258
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 416.000000 16.000000"
 }
-// entity 265
+// entity 259
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 480.000000 16.000000"
 }
-// entity 266
+// entity 260
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 480.000000 16.000000"
 }
-// entity 267
+// entity 261
 {
 "classname" "item_armor_shard"
 "origin" "288.000000 416.000000 16.000000"
 }
-// entity 268
+// entity 262
 {
 "classname" "item_armor_shard"
 "origin" "224.000000 352.000000 16.000000"
 }
-// entity 269
+// entity 263
 {
 "classname" "item_armor_shard"
 "origin" "160.000000 352.000000 16.000000"
 }
-// entity 270
+// entity 264
 {
 "classname" "item_armor_shard"
 "origin" "96.000000 352.000000 16.000000"
 }
-// entity 271
+// entity 265
 {
 "classname" "item_armor_shard"
 "origin" "-96.000000 352.000000 16.000000"
 }
-// entity 272
+// entity 266
 {
 "classname" "item_armor_shard"
 "origin" "-160.000000 352.000000 16.000000"
 }
-// entity 273
+// entity 267
 {
 "classname" "item_armor_shard"
 "origin" "-224.000000 352.000000 16.000000"
 }
-// entity 274
+// entity 268
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 32.000000 16.000000"
 }
-// entity 275
+// entity 269
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 96.000000 16.000000"
 }
-// entity 276
+// entity 270
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 160.000000 16.000000"
 }
-// entity 277
+// entity 271
 {
 "classname" "item_armor_shard"
 "origin" "480.000000 224.000000 16.000000"
 }
-// entity 278
+// entity 272
 {
 "classname" "misc_teleporter_dest"
 "origin" "800.000000 -32.000000 24.000000"
 "angle" "180.000000"
 "targetname" "misc_teleporter_dest1"
 }
-// entity 279
+// entity 273
 {
 "classname" "trigger_teleport"
 "target" "misc_teleporter_dest2"
@@ -4130,7 +4093,7 @@
 ( 888 -64 80 ) ( 888 0 80 ) ( 888 -64 88 ) common/clip 0 0 0 0.5 0.5 0 0 0
 }
 }
-// entity 280
+// entity 274
 {
 "classname" "trigger_teleport"
 "target" "misc_teleporter_dest1"
@@ -4144,102 +4107,102 @@
 ( -896 -64 64 ) ( -896 0 64 ) ( -896 -64 128 ) common/clip 0 0 0 0.5 0.5 0 0 0
 }
 }
-// entity 281
+// entity 275
 {
 "classname" "misc_teleporter_dest"
 "origin" "-800.000000 -32.000000 24.000000"
 "targetname" "misc_teleporter_dest2"
 }
-// entity 282
+// entity 276
 {
 "classname" "info_player_deathmatch"
 "origin" "800.000000 -992.000000 24.000000"
 "angle" "180.000000"
 }
-// entity 283
+// entity 277
 {
 "classname" "info_player_deathmatch"
 "origin" "-160.000000 -992.000000 24.000000"
 "angle" "180.000000"
 }
-// entity 284
+// entity 278
 {
 "classname" "info_player_deathmatch"
 "origin" "160.000000 -992.000000 24.000000"
 }
-// entity 285
+// entity 279
 {
 "classname" "info_player_deathmatch"
 "origin" "96.000000 -416.000000 24.000000"
 }
-// entity 286
+// entity 280
 {
 "classname" "info_player_deathmatch"
 "origin" "-96.000000 -416.000000 24.000000"
 "angle" "180.000000"
 }
-// entity 287
+// entity 281
 {
 "classname" "info_player_deathmatch"
 "origin" "736.000000 -416.000000 24.000000"
 "angle" "180.000000"
 }
-// entity 288
+// entity 282
 {
 "classname" "info_player_deathmatch"
 "origin" "-736.000000 -416.000000 24.000000"
 }
-// entity 289
+// entity 283
 {
 "classname" "info_player_deathmatch"
 "origin" "-96.000000 352.000000 24.000000"
 "angle" "180.000000"
 }
-// entity 290
+// entity 284
 {
 "classname" "info_player_deathmatch"
 "origin" "96.000000 352.000000 24.000000"
 }
-// entity 291
+// entity 285
 {
 "classname" "info_player_deathmatch"
 "origin" "288.000000 544.000000 24.000000"
 "angle" "-90.000000"
 }
-// entity 292
+// entity 286
 {
 "classname" "info_player_deathmatch"
 "origin" "-288.000000 544.000000 24.000000"
 "angle" "-90.000000"
 }
-// entity 293
+// entity 287
 {
 "classname" "info_player_deathmatch"
 "origin" "-800.000000 -992.000000 24.000000"
 }
-// entity 294
+// entity 288
 {
 "classname" "station_health"
 "origin" "-128.000000 -32.000000 0.000000"
 }
-// entity 295
+// entity 289
 {
 "classname" "station_health"
 "origin" "128.000000 -32.000000 0.000000"
 }
-// entity 296
+// entity 290
 {
 "classname" "ammo_nipper"
 "origin" "-480.000000 -32.000000 32.000000"
 "wait" "25"
 }
-// entity 297
+// entity 291
 {
 "classname" "ammo_nipper"
 "origin" "480.000000 -32.000000 32.000000"
 "wait" "25"
 }
-// entity 298
+// entity 292
 {
 "classname" "trigger_teleport"
 "target" "misc_teleporter_dest2"
@@ -4253,7 +4216,7 @@
 ( 888 -64 16 ) ( 888 0 16 ) ( 888 -64 24 ) common/trigger 0 0 0 0.5 0.5 0 0 0
 }
 }
-// entity 299
+// entity 293
 {
 "classname" "trigger_teleport"
 "target" "misc_teleporter_dest1"
