@@ -6540,6 +6540,7 @@ textures/pad_wop/padjump_white
 
 textures/pad_wop/padtele
 {
+	qer_editorimage textures/pad_wop/padtele_yellow
 	surfaceparm nomarks
 	surfaceparm nolightmap
 	cull none
