@@ -1,3 +1,23 @@
+// Hectic's maps shader
+
+// ==============
+// 7 Colors
+// ==============
+
+textures/hectic/randlicht
+{
+	qer_editorimage textures/pad_gfx02/light_white
+   	q3map_surfacelight 750
+	surfaceparm nolightmap
+	{
+		map textures/pad_gfx02/light_white
+	}
+}
+
+// ==============
+// Workshop
+// ==============
+
 textures/hectic/plane
 {
     qer_editorimage textures/pad_jail/jail2_bed_decke1_blau

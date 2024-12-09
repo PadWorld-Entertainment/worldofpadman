@@ -1,6 +1,18 @@
 // Community map pack levelshots shader
 
 // ==============
+// 7 Colors
+// ==============
+
+levelshots/wop_7colorsB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_7colorsB1 levelshots/wop_7colorsB2 levelshots/wop_7colorsB3
+    }
+}
+
+// ==============
 // A Long Way
 // ==============
 

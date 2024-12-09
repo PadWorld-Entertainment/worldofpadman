@@ -1,6 +1,12 @@
 // Community map pack for WoP
 
 {
+    map "wop_7colors"
+    longname "Hectic's 7 Colors"
+    type "ffa"
+}
+
+{
     map "wop_alongwayCTL"
     longname "Hectic's A Long Way"
     type "ctl"

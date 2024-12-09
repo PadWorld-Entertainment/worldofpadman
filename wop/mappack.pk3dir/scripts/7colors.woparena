@@ -1,7 +1,0 @@
-{
-map "hec_7colors"
-longname "7 Colors"
-bots "padman"
-pointlimit 0
-type "tourney ffa"
-}
