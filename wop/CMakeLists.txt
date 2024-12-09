@@ -67,8 +67,8 @@ foreach (SHADER ${PADPACK_SHADERS})
 endforeach()
 
 set(MAPPACK_SHADERS
-wop_hectic.shader
-wop_mappack-levelshots.shader
+    wop_hectic.shader
+    wop_mappack-levelshots.shader
 )
 foreach (SHADER ${MAPPACK_SHADERS})
     shader_validation(wop ${SHADER} 2)
