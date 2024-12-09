@@ -47,3 +47,39 @@ levelshots/wop_pacmanB
         animmap 0.5 levelshots/wop_pacmanB1 levelshots/wop_pacmanB2 levelshots/wop_pacmanB3
     }
 }
+
+// ==============
+// Workshop
+// ==============
+
+levelshots/wop_workshopB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_workshopB1 levelshots/wop_workshopB2 levelshots/wop_workshopB3
+    }
+}
+
+levelshots/wop_workshopBB
+{
+	nomipmaps
+	{
+		map levelshots/wop_workshop
+	}
+}
+
+levelshots/wop_workshopBBA
+{
+	nomipmaps
+	{
+		map levelshots/wop_workshopA
+	}
+}
+
+levelshots/wop_workshopBBB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_workshopB1 levelshots/wop_workshopB2 levelshots/wop_workshopB3
+    }
+}
