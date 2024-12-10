@@ -142,6 +142,7 @@ set(MAPPACK_BSPS
     wop_coloor.bsp
     wop_fragbox.bsp
     wop_pacman.bsp
+    wop_tinyCTL.bsp
     wop_workshop.bsp
     wop_workshopBB.bsp
 )

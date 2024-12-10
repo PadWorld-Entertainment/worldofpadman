@@ -31,6 +31,12 @@
 }
 
 {
+    map "wop_tinyCTL"
+    longname "Blu's TinyCTL"
+    type "ctl"
+}
+
+{
     map "wop_workshop"
     longname "Hectic's Workshop"
     type "ffa team syc_ffa syc_tp lps"

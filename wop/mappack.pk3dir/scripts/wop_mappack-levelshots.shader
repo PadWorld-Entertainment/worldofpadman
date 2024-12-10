@@ -49,6 +49,18 @@ levelshots/wop_fragboxB
 }
 
 // ==============
+// TinyCTL
+// ==============
+
+levelshots/wop_tinyCTLB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_tinyCTLB1 levelshots/wop_tinyCTLB2 levelshots/wop_tinyCTLB3
+    }
+}
+
+// ==============
 // Pac-Man
 // ==============
 
