@@ -1,0 +1,49 @@
+Date: 11/23/02
+What: Q3A source .map file>
+
+========================================================================
+title:          The Vast and Furious
+file:           bubctf1-src.map
+author:         ButterB 
+email address:  butterb@planetquake.com
+URL:            www.planetquake.com/butterb
+description:    Released .map file because I think its fun to do, and I 
+		had a ton of requests.
+
+========================================================================
+ Conditions of use of bubctf1-src.map
+
+bubctf1-src.map is released to the public by me, ButterB, under 
+the ..::LvL Open Game Source License. You are free to use 
+bubctf1-src.map as a base for any thing you wish or can imagine. 
+The following is all I ask for in return:
+
+1, You must state in a text file, included with in any distribution 
+medium of your new creation that bubctf1-src.map by ButterB
+was used in the creation of [insert the name of your creation here], 
+released under the ..::LvL Open Game Source License'.
+
+2, You can NOT call your new creation bubctf1.map/.bsp or 
+"The Vast and Furious" as this is the title of the original.
+
+3, You can only use bubctf1-src.map at your own risk. Any damage, 
+good or bad caused by bubctf1-src.map is your problem.
+
+4, bubctf1-src.map may be distributed by any means so long as this 
+text file is included.
+
+
+========================================================================
+ About the ..::LvL Open Game Source License 
+
+The ..::LvL Open Game Source License (OGSL) has been set-up to encourage
+creators of game add-ons and content to release their source files 
+publicly for use and modification. OGSL requires the creators of new 
+content to recognise the original Author(s) work while giving the 
+creator full freedom.
+
+For more information about OGSL, including a blank template visit:
+http://lvl.sourceforge.net/lvl-ogsl.php
+
+
+
