@@ -6,12 +6,59 @@
 
 textures/hectic/randlicht
 {
-	qer_editorimage textures/pad_gfx02/light_white
-   	q3map_surfacelight 750
-	surfaceparm nolightmap
-	{
-		map textures/pad_gfx02/light_white
-	}
+    qer_editorimage textures/pad_gfx02/light_white
+    q3map_surfacelight 750
+    surfaceparm nolightmap
+    {
+        map textures/pad_gfx02/light_white
+    }
+}
+
+// ==============
+// Hurry up!
+// ==============
+
+textures/hectic/darksky
+{
+    qer_editorimage textures/colors/hex_000000ff
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm sky
+    {
+        map textures/colors/hex_000000ff
+    }
+}
+
+textures/hectic/portal
+{
+    qer_editorimage textures/pad_gfx02/padmapyel
+    q3map_lightimage textures/pad_gfx02/padmapyel
+    surfaceparm noimpact
+    surfaceparm nolightmap
+    surfaceparm nonsolid
+    portal
+    {
+        map textures/pad_gfx02/padmapyel
+        blendfunc blend
+        rgbGen identityLighting
+        depthWrite
+        alphaGen portal 700
+    }
+    {
+        map textures/pad_gfx02/padmapyel
+        blendfunc add
+        tcgen environment
+    }
+}
+
+textures/hectic/randlicht2000
+{
+    qer_editorimage textures/colors/hex_ffffffff
+    q3map_surfacelight 2000
+    surfaceparm nolightmap
+    {
+        map textures/colors/hex_ffffffff
+    }
 }
 
 // ==============

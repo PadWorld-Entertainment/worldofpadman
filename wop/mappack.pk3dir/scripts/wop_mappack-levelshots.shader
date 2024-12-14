@@ -49,6 +49,66 @@ levelshots/wop_fragboxB
 }
 
 // ==============
+// Hurry up!
+// ==============
+
+levelshots/wop_hurryupB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_hurryupB1 levelshots/wop_hurryupB2 levelshots/wop_hurryupB3
+    }
+}
+
+levelshots/wop_hurryupBB
+{
+	nomipmaps
+	{
+		map levelshots/wop_hurryup
+	}
+}
+
+levelshots/wop_hurryupBBA
+{
+	nomipmaps
+	{
+		map levelshots/wop_hurryupA
+	}
+}
+
+levelshots/wop_hurryupBBB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_hurryupCTLB1 levelshots/wop_hurryupCTLB2 levelshots/wop_hurryupCTLB3
+    }
+}
+
+levelshots/wop_hurryupCTL
+{
+	nomipmaps
+	{
+		map levelshots/wop_hurryup
+	}
+}
+
+levelshots/wop_hurryupCTLA
+{
+	nomipmaps
+	{
+		map levelshots/wop_hurryupA
+	}
+}
+
+levelshots/wop_hurryupCTLB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_hurryupCTLB1 levelshots/wop_hurryupCTLB2 levelshots/wop_hurryupCTLB3
+    }
+}
+
+// ==============
 // TinyCTL
 // ==============
 

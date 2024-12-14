@@ -25,6 +25,18 @@
 }
 
 {
+    map "wop_hurryup"
+    longname "Hectic's Hurry up!"
+    type "ffa lps"
+}
+
+{
+    map "wop_hurryupCTL"
+    longname "Hectic's Hurry up!"
+    type "ctl 1lc bb"
+}
+
+{
 	map "wop_pacman"
 	longname "Hectic's Pac-Man"
 	type "ffa"
