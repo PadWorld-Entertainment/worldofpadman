@@ -304,11 +304,12 @@ static int validateShader(const char *allShaders, const char *shaderName, const 
 	char basename[1024];
 	int len;
 	static const char *ext[] = {"jpg", "png", "tga", NULL};
-	const char *searchpaths[] = {"models.pk3dir", "textures.pk3dir", NULL, NULL};
+	const char *searchpaths[] = {"models.pk3dir", "textures.pk3dir", NULL, NULL, NULL};
 	if (mappacktype == WOP_PADPAK) {
 		searchpaths[2] = "padpack.pk3dir";
 	} else if (mappacktype == WOP_COMMUNITY) {
-		searchpaths[2] = "mappack.pk3dir";
+		searchpaths[2] = "padpack.pk3dir";
+		searchpaths[3] = "mappack.pk3dir";
 	}
 
 	static const char *subdirs[] = {".", "../wop", "../xmas"};
