@@ -23,6 +23,9 @@ release:
 clean:
 	$(Q)rm -rf $(BUILDDIR)
 
+test:
+	$(Q)$(CMAKE) --build $(BUILDDIR) --target test
+
 distclean:
 	$(Q)git clean -fdx
 
