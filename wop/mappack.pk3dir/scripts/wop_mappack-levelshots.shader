@@ -143,27 +143,3 @@ levelshots/wop_workshopB
         animmap 0.5 levelshots/wop_workshopB1 levelshots/wop_workshopB2 levelshots/wop_workshopB3
     }
 }
-
-levelshots/wop_workshopBB
-{
-	nomipmaps
-	{
-		map levelshots/wop_workshop
-	}
-}
-
-levelshots/wop_workshopBBA
-{
-	nomipmaps
-	{
-		map levelshots/wop_workshopA
-	}
-}
-
-levelshots/wop_workshopBBB
-{
-    nomipmaps
-    {
-        animmap 0.5 levelshots/wop_workshopB1 levelshots/wop_workshopB2 levelshots/wop_workshopB3
-    }
-}

@@ -51,11 +51,5 @@
 {
     map "wop_workshop"
     longname "Hectic's Workshop"
-    type "ffa team syc_ffa syc_tp lps"
-}
-
-{
-    map "wop_workshopBB"
-    longname "Hectic's Workshop"
-    type "bb"
+    type "ffa team syc_ffa syc_tp lps bb ft ctkd"
 }

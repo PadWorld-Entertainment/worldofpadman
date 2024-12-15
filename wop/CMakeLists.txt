@@ -146,7 +146,6 @@ set(MAPPACK_BSPS
     wop_pacman.bsp
     wop_tinyCTL.bsp
     wop_workshop.bsp
-    wop_workshopBB.bsp
 )
 foreach (BSP ${MAPPACK_BSPS})
     bsp_validation(wop ${BSP} 2)

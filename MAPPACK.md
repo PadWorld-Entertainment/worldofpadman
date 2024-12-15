@@ -11,4 +11,4 @@ wop_fragbox | FragBox | 3aTmE! | [![CC-BY-NC](https://mirrors.creativecommons.or
 wop_hurryup / wop_hurryupCTL | Hurry up! | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_pacman | Pac-Man | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_tinyCTL | TinyCTL | Blu | [![WTFPL](https://upload.wikimedia.org/wikipedia/commons/f/fa/WTFPL_badge.png "WTFPL")](http://www.wtfpl.net/)
-wop_workshop / wop_workshopBB | Workshop | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
+wop_workshop | Workshop | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
