@@ -4621,31 +4621,35 @@ pad_tex/col16
 {
 "classname" "weapon_splasher"
 "origin" "-928.000000 -128.000000 24.000000"
-"marker" "orange"
+"marker" "black"
+"angle" "90"
 }
 // entity 5
 {
 "classname" "weapon_bubbleg"
 "origin" "-160.000000 1184.000000 224.000000"
-"marker" "orange"
+"marker" "black"
 }
 // entity 6
 {
 "classname" "weapon_betty"
 "origin" "928.000000 448.000000 32.000000"
-"marker" "orange"
+"marker" "black"
+"angle" "270"
 }
 // entity 7
 {
 "classname" "weapon_boaster"
 "origin" "-928.000000 704.000000 232.000000"
-"marker" "orange"
+"marker" "black"
+"angle" "270"
 }
 // entity 8
 {
 "classname" "weapon_pumper"
 "origin" "160.000000 1184.000000 40.000000"
-"marker" "orange"
+"marker" "black"
+"angle" "180"
 }
 // entity 9
 {
@@ -5056,7 +5060,8 @@ pad_tex/col16
 {
 "classname" "weapon_nipper"
 "origin" "288.000000 -928.000000 232.000000"
-"marker" "orange"
+"marker" "black"
+"angle" "180"
 }
 // entity 53
 {
@@ -5123,6 +5128,8 @@ pad_tex/col16
 {
 "classname" "weapon_balloony"
 "origin" "928 128 232"
+"marker" "black"
+"angle" "90"
 }
 // entity 63
 {
