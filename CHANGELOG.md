@@ -3,11 +3,14 @@
 ## Version: 1.7.1 (tba)
 
 - ADDED
-	- 
+	- Mappack with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
+	- Missing PADMAN winner statue model (md3 file)
+	- Jail: missing pressure scale textures
 - CHANGED
 	- 
 - FIXED
-	- 
+	- Missing qer_editorimage path in textures/pad_wop/padtele shader
+	- Jail: replaced temperature scale with pressure scale on the gas bottles and replaced weight scale with temperature scale on the ventilation 
 - REMOVED
 	- 
 - UPDATED
