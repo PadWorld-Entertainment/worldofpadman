@@ -860,121 +860,110 @@ models/mapobjects/pad_teleporter/pad_base
 
 
 // =================
-// WEAPONMARKER
+// WEAPON MARKER
 // =================
 
 //Weapon marker model used for marking the weapon positions in the padmod maps :)
 //model design by SLoB -shader by SLoB - Skins by Ente 2003
-//5 weapon marker shaders
+// 5 weapon marker shaders
 
-//4 blue versions with blue glow
-models/mapobjects/pad_weaponmarker/pad_wepm_blue_bg
+// black/red design with blue glow and blue cone 
+models/markers/black_bg
 {
 	nopicmip
-	qer_editorimage models/mapobjects/pad_weaponmarker/pad_wepm_blue_bg
+	qer_editorimage models/markers/black_bg
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_blue_bg
-
-
+		map models/markers/black_bg
 	}
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_blueglow
+		map models/markers/blueglow
 		rgbGen wave sin .05 .9 0 .4
 		blendFunc add
 	}
 }
 
-models/mapobjects/pad_weaponmarker/pad_wepm_black_bg
+// blue/red design with blue glow and blue cone 
+models/markers/blue_bg
 {
 	nopicmip
-	qer_editorimage models/mapobjects/pad_weaponmarker/pad_wepm_black_bg
+	qer_editorimage models/markers/blue_bg
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_black_bg
-
-
+		map models/markers/blue_bg
 	}
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_blueglow
+		map models/markers/blueglow
 		rgbGen wave sin .05 .9 0 .4
 		blendFunc add
 	}
 }
 
-models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg
+// orange/green design with green glow and green cone 
+models/markers/green_gg
 {
 	nopicmip
-	qer_editorimage models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg
+	qer_editorimage models/markers/green_gg
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg
-
-
+		map models/markers/green_gg
 	}
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_blueglow
+		map models/markers/greenglow
 		rgbGen wave sin .05 .9 0 .4
 		blendFunc add
 	}
 }
 
-models/mapobjects/pad_weaponmarker/pad_wepm_green_bg
+// orange/blue design with blue glow and blue cone 
+models/markers/orange_bg
 {
 	nopicmip
-	qer_editorimage models/mapobjects/pad_weaponmarker/pad_wepm_green_bg
+	qer_editorimage models/markers/orange_bg
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_green_bg
-
-
+		map models/markers/orange_bg
 	}
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_pinkglow
+		map models/markers/blueglow
 		rgbGen wave sin .05 .9 0 .4
 		blendFunc add
 	}
 }
 
-//1 green version with green glow
-models/mapobjects/pad_weaponmarker/pad_wepm_green_gg
+// purple/pink design with pink glow and blue cone 
+models/markers/purple_pg
 {
 	nopicmip
-	qer_editorimage models/mapobjects/pad_weaponmarker/pad_wepm_green_gg
+	qer_editorimage models/markers/purple_pg
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_green_gg
-
-
+		map models/markers/purple_pg
 	}
 	{
-		map models/mapobjects/pad_weaponmarker/pad_wepm_greenglow
+		map models/markers/pinkglow
 		rgbGen wave sin .05 .9 0 .4
 		blendFunc add
 	}
 }
 
+// Conefade - Blue & Green
 
-//Conefade - Blue & Green
-
-models/mapobjects/pad_weaponmarker/pad_wepm_bluecone
+models/markers/bluecone
 {
 	nopicmip
 	cull none
-	qer_editorimage models/mapobjects/pad_weaponmarker/beam_blue
+	qer_editorimage models/markers/beam_blue
 	{
-		map models/mapobjects/pad_weaponmarker/beam_blue
-                tcMod Scroll .3 0
-                blendFunc add
-        }
-
+		map models/markers/beam_blue
+		tcMod Scroll .3 0
+		blendFunc add
+	}
 }
 
-models/mapobjects/pad_weaponmarker/pad_wepm_greencone
+models/markers/greencone
 {
 	nopicmip
 	cull none
-	qer_editorimage models/mapobjects/pad_weaponmarker/beam_green
+	qer_editorimage models/markers/beam_green
 	{
-		map models/mapobjects/pad_weaponmarker/beam_green
-                tcMod Scroll .3 0
-                blendFunc add
-        }
-
+		map models/markers/beam_green
+		tcMod Scroll .3 0
+		blendFunc add
+	}
 }
-

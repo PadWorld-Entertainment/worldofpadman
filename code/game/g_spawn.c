@@ -368,11 +368,11 @@ static const replacePair_t q3ToWopItems[] = {{"weapon_gauntlet", "weapon_punchy"
 											 {"team_CTF_bluespawn", "team_bluespawn"},
 											 {NULL, NULL}};
 
-static const replacePair_t shortMarkernames[] = {{"black", "models/mapobjects/pad_weaponmarker/pad_wepm_black_bg"},
-												 {"blue", "models/mapobjects/pad_weaponmarker/pad_wepm_blue_bg"},
-												 {"green", "models/mapobjects/pad_weaponmarker/pad_wepm_green_gg"},
-												 {"purple", "models/mapobjects/pad_weaponmarker/pad_wepm_green_bg"},
-												 {"orange", "models/mapobjects/pad_weaponmarker/pad_wepm_orange_bg"},
+static const replacePair_t shortMarkernames[] = {{"black", "models/markers/black_bg"},
+												 {"blue", "models/markers/blue_bg"},
+												 {"green", "models/markers/green_gg"},
+												 {"orange", "models/markers/orange_bg"},
+												 {"purple", "models/markers/purple_pg"},
 												 {NULL, NULL}};
 
 static const replacePair_t spawnpointReplacements[] = {{"team_redplayer", "info_player_deathmatch"},
