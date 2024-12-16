@@ -10,6 +10,7 @@
 	- 
 - FIXED
 	- Missing qer_editorimage path in textures/pad_wop/padtele shader
+	- Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights
 	- Jail: replaced temperature scale with pressure scale on the gas bottles and replaced weight scale with temperature scale on the ventilation 
 - REMOVED
 	- 
