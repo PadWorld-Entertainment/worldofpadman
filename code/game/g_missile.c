@@ -306,19 +306,27 @@ static void move_killerducks(gentity_t *ent) {
 	victimLen = (1024.0f * 1024.0f); // 262144.0f;//(512.0f)
 	victim = -1;
 	for (i = 0; i < g_maxclients.integer; i++) {
-		if (level.clients[i].pers.connected != CON_CONNECTED)
+		const gclient_t *client = &level.clients[i];
+		if (client->pers.connected != CON_CONNECTED) {
 			continue;
-		if (i == ownerNum)
+		}
+		if (i == ownerNum) {
 			continue;
-		if (level.clients[i].ps.stats[STAT_HEALTH] <= 0)
+		}
+		if (client->ps.stats[STAT_HEALTH] <= 0) {
 			continue;
-		if ((level.clients[i].sess.sessionTeam == TEAM_SPECTATOR) || LPSDeadSpec(&level.clients[i])) {
+		}
+		if (client->sess.sessionTeam == TEAM_SPECTATOR || LPSDeadSpec(&level.clients[i])) {
+			continue;
+		}
+		// killerducks should not attack frozen players - they would stack up
+		if (FT_ClientIsFrozen(client)) {
 			continue;
 		}
 
-		tmpv3[0] = level.clients[i].ps.origin[0] - ent->r.currentOrigin[0];
-		tmpv3[1] = level.clients[i].ps.origin[1] - ent->r.currentOrigin[1];
-		tmpv3[2] = (level.clients[i].ps.origin[2] - ent->r.currentOrigin[2]) *
+		tmpv3[0] = client->ps.origin[0] - ent->r.currentOrigin[0];
+		tmpv3[1] = client->ps.origin[1] - ent->r.currentOrigin[1];
+		tmpv3[2] = (client->ps.origin[2] - ent->r.currentOrigin[2]) *
 				   2.0f; // the height should have a higher influence ..
 
 		tmpv3[0] = tmpv3[0] * tmpv3[0] + tmpv3[1] * tmpv3[1] + tmpv3[2] * tmpv3[2];
@@ -372,9 +380,9 @@ static void move_killerducks(gentity_t *ent) {
 
 		VectorNormalize(tmpv3);
 
-		if ((tmpf = ent->s.pos.trDelta[0] * ent->s.pos.trDelta[0] + ent->s.pos.trDelta[1] * ent->s.pos.trDelta[1]) >
-			160000.0f) {
-			tmpf = 1 / sqrt(tmpf); // also wenn die wurzel aus >400 0 wird ist eh der weltuntergang nicht mehr weit O_o
+		tmpf = ent->s.pos.trDelta[0] * ent->s.pos.trDelta[0] + ent->s.pos.trDelta[1] * ent->s.pos.trDelta[1];
+		if (tmpf > 160000.0f) {
+			tmpf = 1 / sqrt(tmpf); // if the square root of >400 becomes 0, the end of the world is near O_o
 
 			if (ent->s.pos.trDelta[0] * tmpv3[0] + ent->s.pos.trDelta[1] * tmpv3[1] <
 				0.98) // cos<0.98 -> more than ~10degree deviation
