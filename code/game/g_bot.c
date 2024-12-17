@@ -334,7 +334,7 @@ static void G_CheckMinimumPlayers(void) {
 		}
 	}
 	// cyr_zMinplayer {
-	else if (g_gametype.integer == GT_SPRAYFFA || g_gametype.integer == GT_LPS || g_gametype.integer == GT_FFA) {
+	else if (g_gametype.integer != GT_SINGLE_PLAYER) {
 		if (minplayers >= g_maxclients.integer) {
 			// cyr_zMinplayer }
 			minplayers = g_maxclients.integer - 1;
