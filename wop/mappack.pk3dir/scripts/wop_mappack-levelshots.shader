@@ -37,6 +37,18 @@ levelshots/wop_coloorB
 }
 
 // ==============
+// Cube Fight
+// ==============
+
+levelshots/wop_cubefightB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_cubefightB1 levelshots/wop_cubefightB2 levelshots/wop_cubefightB3
+    }
+}
+
+// ==============
 // FragBox
 // ==============
 

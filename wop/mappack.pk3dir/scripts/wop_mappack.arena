@@ -19,6 +19,12 @@
 }
 
 {
+    map "wop_cubefight"
+    longname "Hectic's Cube Fight"
+    type "ffa lps"
+}
+
+{
     map "wop_fragbox"
     longname "3aTmE!'s FragBox"
     type "ffa team lps"

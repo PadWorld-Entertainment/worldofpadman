@@ -9,6 +9,7 @@ textures/hectic/randlicht
     qer_editorimage textures/pad_gfx02/light_white
     q3map_surfacelight 750
     surfaceparm nolightmap
+    tessSize 16
     {
         map textures/pad_gfx02/light_white
     }
@@ -56,6 +57,7 @@ textures/hectic/randlicht2000
     qer_editorimage textures/colors/hex_ffffffff
     q3map_surfacelight 2000
     surfaceparm nolightmap
+    tessSize 16
     {
         map textures/colors/hex_ffffffff
     }
