@@ -24,22 +24,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 ==================
 CM_PointLeafnum_r
-
 ==================
 */
 static int CM_PointLeafnum_r(const vec3_t p, int num) {
-	float d;
-	cNode_t *node;
-	cplane_t *plane;
-
 	while (num >= 0) {
-		node = cm.nodes + num;
-		plane = node->plane;
+		const cNode_t *node = cm.nodes + num;
+		const cplane_t *plane = node->plane;
+		float d;
 
 		if (plane->type < 3)
 			d = p[plane->type] - plane->dist;
 		else
 			d = DotProduct(plane->normal, p) - plane->dist;
+
 		if (d < 0)
 			num = node->children[1];
 		else
@@ -217,31 +214,27 @@ CM_PointContents
 ==================
 */
 int CM_PointContents(const vec3_t p, clipHandle_t model) {
-	int leafnum;
-	int i, k;
-	int brushnum;
-	cLeaf_t *leaf;
-	cbrush_t *b;
+	int k;
+	const cLeaf_t *leaf;
 	int contents;
-	float d;
-	cmodel_t *clipm;
 
 	if (!cm.numNodes) { // map not loaded
 		return 0;
 	}
 
 	if (model) {
-		clipm = CM_ClipHandleToModel(model);
+		const cmodel_t *clipm = CM_ClipHandleToModel(model);
 		leaf = &clipm->leaf;
 	} else {
-		leafnum = CM_PointLeafnum_r(p, 0);
+		const int leafnum = CM_PointLeafnum_r(p, 0);
 		leaf = &cm.leafs[leafnum];
 	}
 
 	contents = 0;
 	for (k = 0; k < leaf->numLeafBrushes; k++) {
-		brushnum = cm.leafbrushes[leaf->firstLeafBrush + k];
-		b = &cm.brushes[brushnum];
+		const int brushnum = cm.leafbrushes[leaf->firstLeafBrush + k];
+		const cbrush_t *b = &cm.brushes[brushnum];
+		int i;
 
 		if (!CM_BoundsIntersectPoint(b->bounds[0], b->bounds[1], p)) {
 			continue;
@@ -249,7 +242,7 @@ int CM_PointContents(const vec3_t p, clipHandle_t model) {
 
 		// see if the point is in the brush
 		for (i = 0; i < b->numsides; i++) {
-			d = DotProduct(p, b->sides[i].plane->normal);
+			const float d = DotProduct(p, b->sides[i].plane->normal);
 			// FIXME test for Cash
 			//			if ( d >= b->sides[i].plane->dist ) {
 			if (d > b->sides[i].plane->dist) {
