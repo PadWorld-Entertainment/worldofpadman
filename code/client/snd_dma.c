@@ -309,7 +309,7 @@ static void S_Base_DisableSounds(void) {
 
 /*
 ==================
-S_RegisterSound
+S_Base_RegisterSound
 
 Creates a default buzz sound if the file can't be loaded
 ==================
