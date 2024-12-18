@@ -3,17 +3,19 @@
 ## Version: 1.7.1 (tba)
 
 - ADDED
-	- Mappack with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
+	- Map pack with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
 	- Missing PADMAN winner statue model (md3 file)
 	- Jail: missing pressure scale textures
 - CHANGED
 	- 
 - FIXED
+	- KillerDucks attacking frozen players and stacking up in Freeze Tag
+	- Cvar bot_minplayers not working as intended in some game types
 	- Missing qer_editorimage path in textures/pad_wop/padtele shader
 	- Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights
 	- Jail: replaced temperature scale with pressure scale on the gas bottles and replaced weight scale with temperature scale on the ventilation 
 - REMOVED
-	- 
+	- Weapon makers from mapobjects folder; don't set weapon markers as misc_model entities, use the `marker` key in weapon entities instead
 - UPDATED
 	- Code base to [ioq3 1.36 Git cc18246](https://github.com/ioquake/ioq3/commit/cc18246f22ab033e1b17af4616a68e9ea2e873db) with associated features and bug fixes
 
