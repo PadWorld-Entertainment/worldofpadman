@@ -349,7 +349,7 @@ static void G_MoveKillerDuck(gentity_t *ent) {
 
 		//:HERBY:ea
 		// change direction to the victim slightly to avoid overlapping ducks
-		// not a beatiful solution, but it looks better
+		// not a beautiful solution, but it looks better
 		tmpv3_2[0] = tmpv3[1];
 		tmpv3_2[1] = -tmpv3[0];
 		tmpv3_2[2] = 0;
