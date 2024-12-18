@@ -363,7 +363,7 @@ static void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 	client->buttons = ucmd->buttons;
 
 	if (level.time - client->lastDeathTime < 10000)
-		return; // verhindern das man bei lps zu schnell in einen follow landet
+		return; // prevent landing in follow mode too quickly in LPS
 
 	// attack button cycles through spectators
 	if ((client->buttons & BUTTON_ATTACK) && !(client->oldbuttons & BUTTON_ATTACK)) {

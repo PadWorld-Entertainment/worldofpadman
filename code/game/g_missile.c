@@ -316,11 +316,9 @@ static void G_MoveKillerDuck(gentity_t *ent) {
 
 		tmpv3[0] = client->ps.origin[0] - ent->r.currentOrigin[0];
 		tmpv3[1] = client->ps.origin[1] - ent->r.currentOrigin[1];
-		tmpv3[2] = (client->ps.origin[2] - ent->r.currentOrigin[2]) *
-				   2.0f; // the height should have a higher influence ..
-
+		// the height should have a higher influence ..
+		tmpv3[2] = (client->ps.origin[2] - ent->r.currentOrigin[2]) * 2.0f;
 		tmpv3[0] = DotProduct(tmpv3, tmpv3);
-
 		if (tmpv3[0] < victimLen) {
 			victim = i;
 			victimLen = tmpv3[0];
@@ -331,11 +329,9 @@ static void G_MoveKillerDuck(gentity_t *ent) {
 	if (victim == -1) {
 		tmpv3[0] = level.clients[ownerNum].ps.origin[0] - ent->r.currentOrigin[0];
 		tmpv3[1] = level.clients[ownerNum].ps.origin[1] - ent->r.currentOrigin[1];
-		tmpv3[2] = (level.clients[ownerNum].ps.origin[2] - ent->r.currentOrigin[2]) *
-				   2.0f; // the height should have a higher influence ..
-
+		// the height should have a higher influence ..
+		tmpv3[2] = (level.clients[ownerNum].ps.origin[2] - ent->r.currentOrigin[2]) * 2.0f;
 		tmpv3[0] = DotProduct(tmpv3, tmpv3);
-
 		if (tmpv3[0] < victimLen) {
 			victim = ownerNum;
 			victimLen = tmpv3[0];
@@ -343,7 +339,7 @@ static void G_MoveKillerDuck(gentity_t *ent) {
 	}
 
 	// the first half second the victim should be irrelevant
-	if (victim != -1 && (level.time - (ent->nextthink - 10000)) > 500) {
+	if (victim != -1 && (level.time - (ent->nextthink - DURATION_KILLERDUCKS)) > 500) {
 		float tmpf;
 
 		tmpv3[0] = level.clients[victim].ps.origin[0] - ent->r.currentOrigin[0];
@@ -380,7 +376,6 @@ static void G_MoveKillerDuck(gentity_t *ent) {
 				ent->s.pos.trDelta[0] = tmpv3[0] * 400.0f;
 				ent->s.pos.trDelta[1] = tmpv3[1] * 400.0f;
 			}
-
 		} else {
 			ent->s.pos.trDelta[0] = tmpv3[0] * 400.0f;
 			ent->s.pos.trDelta[1] = tmpv3[1] * 400.0f;
@@ -416,9 +411,7 @@ static void G_MoveKillerDuck(gentity_t *ent) {
 		}
 
 		VectorNormalize(ent->s.pos.trDelta);
-		ent->s.pos.trDelta[0] *= 400.0f;
-		ent->s.pos.trDelta[1] *= 400.0f;
-		ent->s.pos.trDelta[2] *= 400.0f;
+		VectorScale(ent->s.pos.trDelta, 400.0f, ent->s.pos.trDelta);
 	}
 
 	VectorMA(ent->s.pos.trBase, (float)tmptime * 0.001f, ent->s.pos.trDelta, tmpv3);
@@ -455,9 +448,7 @@ static void G_MoveKillerDuck(gentity_t *ent) {
 				VectorNormalize(ent->s.pos.trDelta);
 
 				if (tr.plane.normal[2] > 0.6f) {
-					ent->s.pos.trDelta[0] *= -400.0f;
-					ent->s.pos.trDelta[1] *= -400.0f;
-					ent->s.pos.trDelta[2] *= -400.0f;
+					VectorScale(ent->s.pos.trDelta, -400.0f, ent->s.pos.trDelta);
 				} else {
 					float cosalpha;
 
@@ -484,7 +475,7 @@ static void G_MoveKillerDuck(gentity_t *ent) {
 		}
 	}
 
-	if ((tr.entityNum == victim) && (ent->s.time2 <= level.time)) {
+	if (tr.entityNum == victim && ent->s.time2 <= level.time) {
 		G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sound/items/killerducks/bite"));
 		// TODO: Add dir
 		G_Damage(&g_entities[victim], NULL, ent->parent, NULL, NULL, DAMAGE_KILLERDUCKS_BITE, 0, ent->methodOfDeath);
