@@ -937,14 +937,11 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->clipmask = MASK_SHOT & ~(bolt->r.contents);
 	bolt->target_ent = NULL;
 
-	bolt->s.pos.trType = TR_GRAVITY; // TR_LINEAR;
-	bolt->s.pos.trTime = level.time; // - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
-									 //	VectorCopy( start, bolt->s.pos.trBase );
+	bolt->s.pos.trType = TR_GRAVITY;
+	bolt->s.pos.trTime = level.time;
 
 	// misuse ;)
-	tr.endpos[0] = start[0] + dir[0] * 32.0f;
-	tr.endpos[1] = start[1] + dir[1] * 32.0f;
-	tr.endpos[2] = start[2] + dir[2] * 32.0f;
+	VectorMA(start, 32.0f, dir, tr.endpos);
 
 	trap_Trace(&tr, start, bolt->r.mins, bolt->r.maxs, tr.endpos, self->s.number, MASK_SHOT);
 
@@ -954,8 +951,6 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 
 	VectorScale(dir, 400, bolt->s.pos.trDelta);
 	SnapVector(bolt->s.pos.trDelta); // save net bandwidth
-
-	//	VectorCopy (start, bolt->r.currentOrigin);
 
 	return bolt;
 }
