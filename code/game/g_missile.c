@@ -882,7 +882,7 @@ gentity_t *fire_boaster(gentity_t *self, vec3_t start, vec3_t dir) {
 duck_die
 #######################
 */
-static void duck_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
+static void killerduck_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	ent->think = G_ExplodeMissile;
 	ent->nextthink = level.time + 1;
 }
@@ -919,15 +919,15 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->r.maxs[0] = 10.0f;
 	bolt->r.maxs[1] = 10.0f;
 	bolt->r.maxs[2] = 10.0f;
-	bolt->r.contents = CONTENTS_CORPSE; // CONTENTS_BODY;
-	bolt->clipmask = MASK_PLAYERSOLID;	// MASK_SHOT
+	bolt->r.contents = CONTENTS_CORPSE;
+	bolt->clipmask = MASK_PLAYERSOLID;
 	if (g_KillerduckHealth.integer > 0) {
 		bolt->takedamage = qtrue;
 		bolt->health = g_KillerduckHealth.integer;
 	} else {
 		bolt->takedamage = qfalse;
 	}
-	bolt->die = duck_die;
+	bolt->die = killerduck_die;
 	// dmg-vars maybe misuse them ;)
 	bolt->damage = DAMAGE_KILLERDUCKS_IMPACT;
 	bolt->splashDamage = SPLASHDMG_KILLERDUCKS;
