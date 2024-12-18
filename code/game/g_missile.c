@@ -253,7 +253,8 @@ static const float duckAttackPos[5] = {0.0f, 20.0f, -20.0f, 10.0f, -10.0f};
 static int duckFrame;
 static int duckNum;
 
-static void move_killerducks(gentity_t *ent) {
+static void G_MoveKillerDuck(gentity_t *ent) {
+	const int ownerNum = ent->parent->s.number;
 	int tmptime;
 	trace_t tr;
 	vec3_t tmpv3, tmpv3_2;
@@ -264,46 +265,35 @@ static void move_killerducks(gentity_t *ent) {
 	int touch[MAX_GENTITIES];
 	int num;
 
-	int ownerNum = ent->parent->s.number; // ent->r.ownerNum;
-
-	tmpv3[0] = ent->r.currentOrigin[0] + ent->r.mins[0];
-	tmpv3[1] = ent->r.currentOrigin[1] + ent->r.mins[1];
-	tmpv3[2] = ent->r.currentOrigin[2] + ent->r.mins[2];
-	tmpv3_2[0] = ent->r.currentOrigin[0] + ent->r.maxs[0];
-	tmpv3_2[1] = ent->r.currentOrigin[1] + ent->r.maxs[1];
-	tmpv3_2[2] = ent->r.currentOrigin[2] + ent->r.maxs[2];
+	VectorAdd(ent->r.currentOrigin, ent->r.mins, tmpv3);
+	VectorAdd(ent->r.currentOrigin, ent->r.maxs, tmpv3_2);
 
 	num = trap_EntitiesInBox(tmpv3, tmpv3_2, touch, MAX_GENTITIES);
 
 	for (i = 0; i < num; i++) {
-		if (!(g_entities[touch[i]].r.contents & CONTENTS_TRIGGER))
+		gentity_t *tent = &g_entities[touch[i]];
+		if (!(tent->r.contents & CONTENTS_TRIGGER))
 			continue;
 
-		if (!Q_stricmp(g_entities[touch[i]].classname, "trigger_push")) {
-			// Com_Printf("kd in jumppad\n");
-			ent->s.pos.trDelta[0] = g_entities[touch[i]].s.origin2[0];
-			ent->s.pos.trDelta[1] = g_entities[touch[i]].s.origin2[1];
-			ent->s.pos.trDelta[2] = g_entities[touch[i]].s.origin2[2];
+		if (!Q_stricmp(tent->classname, "trigger_push")) {
+			VectorCopy(tent->s.origin2, ent->s.pos.trDelta);
 		}
 
-		if (!Q_stricmp(g_entities[touch[i]].classname, "trigger_teleport") &&
-			!(g_entities[touch[i]].spawnflags & TELEPORT_ENTER_SPRAYROOM)) {
-			gentity_t *dest;
-
-			dest = G_PickTarget(g_entities[touch[i]].target);
+		if (!Q_stricmp(tent->classname, "trigger_teleport") &&
+			!(tent->spawnflags & TELEPORT_ENTER_SPRAYROOM)) {
+			gentity_t *dest = G_PickTarget(tent->target);
 			if (!dest) {
 				Com_Printf("Couldn't find teleporter destination\n");
 				return;
 			}
 
-			ent->r.currentOrigin[0] = dest->s.origin[0];
-			ent->r.currentOrigin[1] = dest->s.origin[1];
-			ent->r.currentOrigin[2] = dest->s.origin[2] + 20;
+			VectorCopy(dest->s.origin, ent->r.currentOrigin);
+			ent->r.currentOrigin[2] += 20;
 		}
 	}
-	// CJP end
+	// checkjumppads end
 
-	victimLen = (1024.0f * 1024.0f); // 262144.0f;//(512.0f)
+	victimLen = (1024.0f * 1024.0f);
 	victim = -1;
 	for (i = 0; i < g_maxclients.integer; i++) {
 		const gclient_t *client = &level.clients[i];
@@ -329,7 +319,7 @@ static void move_killerducks(gentity_t *ent) {
 		tmpv3[2] = (client->ps.origin[2] - ent->r.currentOrigin[2]) *
 				   2.0f; // the height should have a higher influence ..
 
-		tmpv3[0] = tmpv3[0] * tmpv3[0] + tmpv3[1] * tmpv3[1] + tmpv3[2] * tmpv3[2];
+		tmpv3[0] = DotProduct(tmpv3, tmpv3);
 
 		if (tmpv3[0] < victimLen) {
 			victim = i;
@@ -344,22 +334,21 @@ static void move_killerducks(gentity_t *ent) {
 		tmpv3[2] = (level.clients[ownerNum].ps.origin[2] - ent->r.currentOrigin[2]) *
 				   2.0f; // the height should have a higher influence ..
 
-		tmpv3[0] = tmpv3[0] * tmpv3[0] + tmpv3[1] * tmpv3[1] + tmpv3[2] * tmpv3[2];
+		tmpv3[0] = DotProduct(tmpv3, tmpv3);
 
 		if (tmpv3[0] < victimLen) {
-			victim = ownerNum; // r.ownerNum;
+			victim = ownerNum;
 			victimLen = tmpv3[0];
 		}
 	}
 
-	if (victim != -1 &&
-		(level.time - (ent->nextthink - 10000)) > 500) // the first half second the victim should be irrelevant
-	{
+	// the first half second the victim should be irrelevant
+	if (victim != -1 && (level.time - (ent->nextthink - 10000)) > 500) {
 		float tmpf;
 
 		tmpv3[0] = level.clients[victim].ps.origin[0] - ent->r.currentOrigin[0];
 		tmpv3[1] = level.clients[victim].ps.origin[1] - ent->r.currentOrigin[1];
-		//			tmpv3[2]=level.clients[victim].ps.origin[2]-ent->r.currentOrigin[2];
+		// tmpv3[2] = level.clients[victim].ps.origin[2] - ent->r.currentOrigin[2];
 		tmpv3[2] = 0.0f;
 
 		//:HERBY:ea
@@ -373,8 +362,9 @@ static void move_killerducks(gentity_t *ent) {
 		if (duckFrame != level.framenum) {
 			duckNum = 0;
 			duckFrame = level.framenum;
-		} else
+		} else {
 			duckNum++;
+		}
 		VectorMA(tmpv3, duckAttackPos[duckNum % 5], tmpv3_2, tmpv3);
 		//:HERBY:ee
 
@@ -382,11 +372,11 @@ static void move_killerducks(gentity_t *ent) {
 
 		tmpf = ent->s.pos.trDelta[0] * ent->s.pos.trDelta[0] + ent->s.pos.trDelta[1] * ent->s.pos.trDelta[1];
 		if (tmpf > 160000.0f) {
-			tmpf = 1 / sqrt(tmpf); // if the square root of >400 becomes 0, the end of the world is near O_o
+			// if the square root of >400 becomes 0, the end of the world is near O_o
+			tmpf = 1 / sqrt(tmpf);
 
-			if (ent->s.pos.trDelta[0] * tmpv3[0] + ent->s.pos.trDelta[1] * tmpv3[1] <
-				0.98) // cos<0.98 -> more than ~10degree deviation
-			{
+			// cos<0.98 -> more than ~10degree deviation
+			if (ent->s.pos.trDelta[0] * tmpv3[0] + ent->s.pos.trDelta[1] * tmpv3[1] < 0.98f) {
 				ent->s.pos.trDelta[0] = tmpv3[0] * 400.0f;
 				ent->s.pos.trDelta[1] = tmpv3[1] * 400.0f;
 			}
@@ -401,9 +391,7 @@ static void move_killerducks(gentity_t *ent) {
 
 	tmptime = level.time - ent->timestamp;
 
-	ent->s.pos.trBase[0] = ent->r.currentOrigin[0];
-	ent->s.pos.trBase[1] = ent->r.currentOrigin[1];
-	ent->s.pos.trBase[2] = ent->r.currentOrigin[2];
+	VectorCopy(ent->r.currentOrigin, ent->s.pos.trBase);
 	ent->s.pos.trTime = level.time;
 
 	tmpv3[0] = ent->r.currentOrigin[0];
@@ -414,15 +402,8 @@ static void move_killerducks(gentity_t *ent) {
 
 	if (tr.fraction == 1.0f)
 		ent->s.pos.trDelta[2] -= 0.8f * (float)tmptime;
-	else if (ent->s.pos.trDelta[2] < 0.0f)
-	//		ent->s.pos.trDelta[2]=0.0f;
-	{
-		//		PM_ClipVelocity (ent->s.pos.trDelta, tr.plane.normal, ent->s.pos.trDelta, OVERCLIP );
-		float backoff;
-		float change;
-
-		backoff = DotProduct(ent->s.pos.trDelta, tr.plane.normal);
-
+	else if (ent->s.pos.trDelta[2] < 0.0f) {
+		float backoff = DotProduct(ent->s.pos.trDelta, tr.plane.normal);
 		if (backoff < 0) {
 			backoff *= 1.001f;
 		} else {
@@ -430,7 +411,7 @@ static void move_killerducks(gentity_t *ent) {
 		}
 
 		for (i = 0; i < 3; i++) {
-			change = tr.plane.normal[i] * backoff;
+			const float change = tr.plane.normal[i] * backoff;
 			ent->s.pos.trDelta[i] = ent->s.pos.trDelta[i] - change;
 		}
 
@@ -440,60 +421,33 @@ static void move_killerducks(gentity_t *ent) {
 		ent->s.pos.trDelta[2] *= 400.0f;
 	}
 
-	tmpv3[0] = ent->s.pos.trBase[0] + ent->s.pos.trDelta[0] * (float)tmptime * 0.001f;
-	tmpv3[1] = ent->s.pos.trBase[1] + ent->s.pos.trDelta[1] * (float)tmptime * 0.001f;
-	tmpv3[2] = ent->s.pos.trBase[2] + ent->s.pos.trDelta[2] * (float)tmptime * 0.001f -
-			   ent->s.pos.trDelta[2] *
-				   ((float)tmptime * (float)tmptime * 0.000001f); // 0.001² ... hmm was sollte das //noch mal O_o
+	VectorMA(ent->s.pos.trBase, (float)tmptime * 0.001f, ent->s.pos.trDelta, tmpv3);
+	// 0.001² ... hmm what was that again O_o
+	tmpv3[2] -= ent->s.pos.trDelta[2] * ((float)tmptime * (float)tmptime * 0.000001f);
 
 	trap_Trace(&tr, ent->s.pos.trBase, ent->r.mins, ent->r.maxs, tmpv3, ent->s.number, ent->clipmask);
 
-	//	if(ent->s.pos.trDelta[2]<1)// don't change the direction whenever we move upwards (JUMP/JUMP_PAD)
-	//	{
 	if (tr.fraction != 1.0f) {
-		//			if(((ent->s.pos.trDelta[0]*ent->s.pos.trDelta[0]+ent->s.pos.trDelta[1]*ent->s.pos.trDelta[1])<ent->s.pos.trDelta[2]*ent->s.pos.trDelta[2])
-		//&& 					tr.plane.normal[2]>0.8f)
-		//			{
-		//				ent->s.pos.trDelta[2]=0;
-		//			}
-		//			else
-		if (tr.contents & CONTENTS_SOLID) // tr.entityNum==ENTITYNUM_WORLD)//!=victim)
-		{
-			vec3_t oldvel;
-
+		if (tr.contents & CONTENTS_SOLID) {
 			// check jump
 			trace_t trj;
 
-			//				if(tr.plane.normal[2]<1.0f)
-			//				{
 			tmpv3_2[0] = tmpv3[0];
 			tmpv3_2[1] = tmpv3[1];
 			tmpv3_2[2] = tmpv3[2] + 64;
 			trap_Trace(&trj, tmpv3_2, ent->r.mins, ent->r.maxs, tmpv3, ent->s.number, ent->clipmask);
 
-			if (trj.entityNum == victim)
+			if (trj.entityNum == victim) {
 				trj.startsolid = qtrue; // don't jump on top of the "victim" ^^
-			//				}
-			//				else
-			//					trj.plane.normal[2]=0.0f;//uah O_o
+			}
 
-			if (trj.startsolid == qfalse && trj.plane.normal[2] > 0.8f) {
-				//					if(trj.fraction>0.5f)
-				//					{//uah not nice ;)
-				tr.endpos[0] = trj.endpos[0];
-				tr.endpos[1] = trj.endpos[1];
-				tr.endpos[2] = trj.endpos[2];
-				//					}
-				//					else
-				//					{
-				//						ent->s.pos.trDelta[2]+=400;
-				//					}
+			if (!trj.startsolid && trj.plane.normal[2] > 0.8f) {
+				VectorCopy(trj.endpos, tr.endpos);
 			} else {
-				// CJ end
+				// check jump end
+				vec3_t oldvel;
 
-				oldvel[0] = ent->s.pos.trDelta[0];
-				oldvel[1] = ent->s.pos.trDelta[1];
-				oldvel[2] = ent->s.pos.trDelta[2];
+				VectorCopy(ent->s.pos.trDelta, oldvel);
 
 				// TODO: change me
 				CrossProduct(oldvel, tr.plane.normal, tmpv3);
@@ -505,15 +459,13 @@ static void move_killerducks(gentity_t *ent) {
 					ent->s.pos.trDelta[1] *= -400.0f;
 					ent->s.pos.trDelta[2] *= -400.0f;
 				} else {
-					float oldspeed;
 					float cosalpha;
 
-					oldspeed = VectorNormalize(oldvel);
+					const float oldspeed = VectorNormalize(oldvel);
 					VectorNormalize(
 						tr.plane.normal); // TODO: maybe this can get removed because it already is normalized?
 
-					cosalpha = oldvel[0] * tr.plane.normal[0] + oldvel[1] * tr.plane.normal[1] +
-							   oldvel[2] * tr.plane.normal[2];
+					cosalpha = DotProduct(oldvel, tr.plane.normal);
 
 					ent->s.pos.trDelta[0] = (tr.plane.normal[0] * -2 * cosalpha + oldvel[0]) * oldspeed;
 					ent->s.pos.trDelta[1] = (tr.plane.normal[1] * -2 * cosalpha + oldvel[1]) * oldspeed;
@@ -531,7 +483,6 @@ static void move_killerducks(gentity_t *ent) {
 			//:HERBY:ee
 		}
 	}
-	//	}
 
 	if ((tr.entityNum == victim) && (ent->s.time2 <= level.time)) {
 		G_AddEvent(ent, EV_GENERAL_SOUND, G_SoundIndex("sound/items/killerducks/bite"));
@@ -540,9 +491,7 @@ static void move_killerducks(gentity_t *ent) {
 		ent->s.time2 = (level.time + 1000);
 	}
 
-	ent->r.currentOrigin[0] = tr.endpos[0];
-	ent->r.currentOrigin[1] = tr.endpos[1];
-	ent->r.currentOrigin[2] = tr.endpos[2];
+	VectorCopy(tr.endpos, ent->r.currentOrigin);
 
 	ent->timestamp = level.time;
 
@@ -607,7 +556,7 @@ void G_RunMissile(gentity_t *ent) {
 	int passent;
 
 	if (ent->s.weapon == WP_KILLERDUCKS) {
-		move_killerducks(ent);
+		G_MoveKillerDuck(ent);
 		return;
 	}
 
