@@ -934,7 +934,7 @@ gentity_t *fire_killerducks(gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->splashRadius = SPLASHRAD_KILLERDUCKS;
 	bolt->methodOfDeath = MOD_KILLERDUCKS;
 	bolt->splashMethodOfDeath = MOD_KILLERDUCKS;
-	bolt->clipmask = MASK_SHOT;
+	bolt->clipmask = MASK_SHOT & ~(bolt->r.contents);
 	bolt->target_ent = NULL;
 
 	bolt->s.pos.trType = TR_GRAVITY; // TR_LINEAR;
