@@ -49,6 +49,42 @@ levelshots/wop_cubefightB
 }
 
 // ==============
+// Dark Place
+// ==============
+
+levelshots/wop_darkplaceB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_darkplaceB1 levelshots/wop_darkplaceB2 levelshots/wop_darkplaceB3
+    }
+}
+
+levelshots/wop_darkplaceCTL
+{
+	nomipmaps
+	{
+		map levelshots/wop_darkplace
+	}
+}
+
+levelshots/wop_darkplaceCTLA
+{
+	nomipmaps
+	{
+		map levelshots/wop_darkplaceA
+	}
+}
+
+levelshots/wop_darkplaceCTLB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_darkplaceCTLB1 levelshots/wop_darkplaceCTLB2 levelshots/wop_darkplaceCTLB3
+    }
+}
+
+// ==============
 // FragBox
 // ==============
 

@@ -68,6 +68,7 @@ endforeach()
 
 set(MAPPACK_SHADERS
     wop_hectic.shader
+    wop_iltis.shader
     wop_mappack-levelshots.shader
 )
 foreach (SHADER ${MAPPACK_SHADERS})
@@ -141,6 +142,8 @@ set(MAPPACK_BSPS
     wop_alongwayCTL.bsp
     wop_coloor.bsp
     wop_cubefight.bsp
+    wop_darkplace.bsp
+    wop_darkplaceCTL.bsp
     wop_fragbox.bsp
     wop_hurryup.bsp
     wop_hurryupCTL.bsp

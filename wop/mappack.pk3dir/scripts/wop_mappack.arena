@@ -25,6 +25,18 @@
 }
 
 {
+    map	"wop_darkplace"
+    longname "Iltis' Dark Place"
+    type "ffa team lps ft"
+}
+
+{
+    map	"wop_darkplaceCTL"
+    longname "Iltis' Dark Place"
+    type "ctl"
+}
+
+{
     map "wop_fragbox"
     longname "3aTmE!'s FragBox"
     type "ffa team lps"
