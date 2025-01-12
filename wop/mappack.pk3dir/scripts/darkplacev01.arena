@@ -1,0 +1,11 @@
+{
+map		"darkplacev02"
+longname	"Dark Place"
+type		"ffa team LPS"
+}
+
+{
+map		"darkplacev02CTL"
+longname	"Dark Place"
+type		"CTL"
+}
