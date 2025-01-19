@@ -13,6 +13,12 @@
 }
 
 {
+    map "wop_cheesedome"
+    longname "Iltis' Cheese Dome"
+    type "ffa lps"
+}
+
+{
     map "wop_coloor"
     longname "3aTmE!'s Coloor"
     type "ffa team lps"

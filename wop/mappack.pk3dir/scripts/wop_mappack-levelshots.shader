@@ -25,6 +25,18 @@ levelshots/wop_alongwayCTLB
 }
 
 // ==============
+// Cheese Dome
+// ==============
+
+levelshots/wop_cheesedomeB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_cheesedomeB1 levelshots/wop_cheesedomeB2 levelshots/wop_cheesedomeB3
+    }
+}
+
+// ==============
 // Coloor
 // ==============
 

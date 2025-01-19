@@ -140,6 +140,7 @@ endforeach()
 set(MAPPACK_BSPS
     wop_7colors.bsp
     wop_alongwayCTL.bsp
+    wop_cheesedome.bsp
     wop_coloor.bsp
     wop_cubefight.bsp
     wop_darkplace.bsp
