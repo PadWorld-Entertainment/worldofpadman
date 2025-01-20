@@ -1,0 +1,5 @@
+//modified for World of Padman
+
+
+// this file lists all the separate shader files
+bfg_fly_or_die

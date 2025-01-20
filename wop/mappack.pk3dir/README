@@ -1,0 +1,107 @@
+=============================================================
+readme.txt for Map "BFG Fly or Die"
+=============================================================
+
+Mapname:               BFG Fly or Die
+Version:               0.2
+Author:                BuddyFriendGuy
+Supported gametypes:   FFA, LPS
+Bot support:           Limited -- bots can't fly well anyway.
+Known to work with:    WoP 1.5, 1.6
+Size of the map:       x/y/z: 2048 x 2048 x 2464 Units
+Discussion thread:     http://worldofpadman.com/forum/viewtopic.php?f=10&t=6075
+Download URL:          https://sites.google.com/site/buddyfriendguyfiles/home/wop-1-6-maps
+
+Characteristics of the map
+--------------------------
+Hectic's Jump'n'Run inspired me to make maps that help players improve specific 
+skills. This map features floaters. Players will spend most of the time in the 
+air fighting with each other. In short, there are:
+
+    Big empty space for pure Kung Fu fighting,
+    Easy rechargeable floaters for continous air fight, and
+    Easy rechargeable weapons.
+
+(Do a crouch if you get stuck in the initial position.)
+
+Legal information
+-----------------
+This pk3 contains material of my own and of others.
+
+Textures:               
+    World of Padman by Ente©:
+        textures/pad_teehouse/korb*
+        textures/pad_floorout/Floor008*
+        textures/pad_gfx02b/hotlava2.tga
+        textures/common/caulk.tga
+        textures/common/nodraw.tga
+
+    Caligraphy by 趙孟頫 (Zhao Mengfu)
+        http://zh.wikipedia.org/wiki/%E8%B6%99%E5%AD%9F%E9%A0%AB
+        archived and digitized by Taiwanese Government, freely available via 
+        http://www.cns11643.gov.tw/
+
+        textures/bfg_fly_or_die/east.tga
+        textures/bfg_fly_or_die/north.tga
+        textures/bfg_fly_or_die/sky.tga
+        textures/bfg_fly_or_die/west.tga
+        textures/bfg_fly_or_die/ground.tga
+        textures/bfg_fly_or_die/south.tga
+
+License:
+    The map bfg_fly_or_die.map (and its compiled form) is licensed under the
+    GPL 3.0. In particular I demand that any derived maps to include the .map 
+    files as well.
+
+
+Motivation
+----------
+I suck at graphics. It took me forever to draw something and to put elements 
+in place. However, I believe in community power. I do a little bit onto some
+other people's work, and then somebody else adds a little bit more, and 
+together we can create something nice and fun.
+
+You are encouraged to improve my map: a better balance, a better trap 
+design, a better positioning of elements, etc. I am not a very fast mapper,
+but you can leave your suggestions for me in the WoP forum (my ID is 
+BuddyFriendGuy there), or make your maps and share them.
+
+You can also extned the concepts of focusing on specific skills in the game.
+These are some ideas:
+
+    A map in which only Punchy (or any other single weapon) is allowed,
+    to force players to really work on that skill.
+
+    A map with lots of PadPower and iMPERiUS, so users can throw each other 
+    off their course.
+
+    A map full of unavoidable Speedy and lots of lava, so users can work on 
+    better controls.
+
+    A map with long-lasting revival so it's not about killing each other,
+    but who can find something or get to somewhere first, and when that
+    happens, the world either collapses, or the winner triggers tons of 
+    shooters to end the game.
+
+    Etc.
+
+Thanks
+------
+Thanks a lot to ENTE and the WoP-Team for this brilliant game!
+
+Special thanks to Hectic for patiently answering TONS of my questions during game plays,
+and for not going after me for using his README file structure.
+
+Thanks to The Brain for helping me with various questions with mapping in Linux.
+
+I haven't seen saha around lately, but I want to thank him for convincing me that mapping 
+is even possible for somebody like me. 
+
+And also thanks to all the fun players in the game for all the great time.
+
+Change Log
+----------
+v0.2 Jul 20, 2012
+    Reduce the sizes of levelshots
+v0.1 Jan 7, 2012
+    First draft
