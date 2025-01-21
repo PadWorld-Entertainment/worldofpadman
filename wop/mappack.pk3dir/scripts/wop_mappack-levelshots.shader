@@ -49,6 +49,18 @@ levelshots/wop_coloorB
 }
 
 // ==============
+// Copy and Paste
+// ==============
+
+levelshots/wop_copyandpasteB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_copyandpasteB1 levelshots/wop_copyandpasteB2 levelshots/wop_copyandpasteB3
+    }
+}
+
+// ==============
 // Cube Fight
 // ==============
 

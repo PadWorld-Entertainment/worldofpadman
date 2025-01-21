@@ -25,6 +25,12 @@
 }
 
 {
+    map "wop_copyandpaste"
+    longname "3aTmE!'s Copy'n'Paste"
+    type "ffa team syc_ffa syc_tp lps ft"
+}
+
+{
     map "wop_cubefight"
     longname "Hectic's Cube Fight"
     type "ffa lps"

@@ -8,6 +8,7 @@ wop_7colors | 7 Colors | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3
 wop_alongwayCTL | A Long Way | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_cheesedome | Cheese Dome | Iltis | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_coloor | Coloor | 3aTmE! | [![CC-BY-NC](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc.svg "CC-BY-NC")](https://creativecommons.org/licenses/by-nc/4.0/)
+wop_copyandpaste | Copy and Paste | 3aTmE! | [![CC-0](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/cc-zero.svg "CC-0")](https://creativecommons.org/publicdomain/zero/1.0/)
 wop_cubefight | Cube Fight | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_darkplace / wop_darkplaceCTL | Dark Place | Iltis | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_flyordie | Fly or Die | BuddyFriendGuy | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)

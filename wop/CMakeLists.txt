@@ -143,6 +143,7 @@ set(MAPPACK_BSPS
     wop_alongwayCTL.bsp
     wop_cheesedome.bsp
     wop_coloor.bsp
+    wop_copyandpaste.bsp
     wop_cubefight.bsp
     wop_darkplace.bsp
     wop_darkplaceCTL.bsp
