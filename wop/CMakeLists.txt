@@ -145,6 +145,7 @@ set(MAPPACK_BSPS
     wop_cubefight.bsp
     wop_darkplace.bsp
     wop_darkplaceCTL.bsp
+    wop_flyordie.bsp
     wop_fragbox.bsp
     wop_hurryup.bsp
     wop_hurryupCTL.bsp

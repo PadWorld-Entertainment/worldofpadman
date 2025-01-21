@@ -97,6 +97,18 @@ levelshots/wop_darkplaceCTLB
 }
 
 // ==============
+// Fly or Die
+// ==============
+
+levelshots/wop_flyordieB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_flyordieB1 levelshots/wop_flyordieB2 levelshots/wop_flyordieB3
+    }
+}
+
+// ==============
 // FragBox
 // ==============
 
