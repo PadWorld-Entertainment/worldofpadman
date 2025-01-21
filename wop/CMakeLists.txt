@@ -67,6 +67,7 @@ foreach (SHADER ${PADPACK_SHADERS})
 endforeach()
 
 set(MAPPACK_SHADERS
+    wop_buddyfriendguy.shader
     wop_hectic.shader
     wop_iltis.shader
     wop_mappack-levelshots.shader
