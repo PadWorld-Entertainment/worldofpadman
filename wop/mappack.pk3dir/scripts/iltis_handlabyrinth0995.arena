@@ -1,0 +1,11 @@
+{
+map "iltis_handlabyrinth0995" 
+longname	"HandLabyrinth 0.9.9.5/Beta"
+type	"SyC_ffa SyC_tp ffa team LPS BB"
+}
+ 
+{
+map		"iltis_handlabyrinth0995CTL" 
+longname	"HandLabyrinthCTL 0.9.9.5/Beta"
+type	"CTL"
+}
