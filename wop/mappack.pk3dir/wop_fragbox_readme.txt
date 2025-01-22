@@ -2,7 +2,7 @@
 
 Mapname : FragBox
 Created by : 3aTmE!
-Gametypes Supported : FFA, TFFA, LPS
+Gametypes Supported : FFA, TFFA, LPS, FT
 Items : Pumper, BubbleG, Boaster, Betty, Ballony, Splasher, lots of Ammo and PadShards, 2x Health Stations at the bottom and lasty a PadPower (120 sec wait time)
 Players : The more, the merrier!
 Bot Support : Yes

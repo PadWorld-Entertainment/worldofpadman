@@ -8,7 +8,7 @@ About the Map:
 
 Gametypes: 
 
-	Free For All, Team Free For All and Last Pad Standing.
+	Free For All, Free For All Team, Last Pad Standing and Freeze Tag.
 
 Weapons:
 
