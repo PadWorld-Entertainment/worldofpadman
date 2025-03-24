@@ -26,6 +26,10 @@ option(USE_CURL_DLOPEN "" ON)
 option(USE_VOIP "" ON)
 option(USE_MUMBLE "" ON)
 
+if (UNIX)
+	add_compile_definitions(ARCH_STRING="${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
 if (MSVC)
 	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /MANIFEST:NO")
