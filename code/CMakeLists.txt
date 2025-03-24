@@ -34,8 +34,12 @@ set(QCOMMON_VM_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm.c
 	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_interpreted.c
 	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_local.h
-	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_x86.c
 )
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^x86")
+	list(APPEND QCOMMON_VM_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_x86.c)
+else()
+	list(APPEND QCOMMON_VM_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_none.c)
+endif()
 
 find_program(GDB_EXECUTABLE gdb)
 find_program(LLDB_EXECUTABLE lldb)
@@ -84,6 +88,9 @@ function(wop_add_library)
 	endif()
 	if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$")
 		set(ARCH "arm64")
+	endif()
+	if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ppc64le")
+		set(ARCH "ppc64le")
 	endif()
 
 	set(OUTPUTNAME "${_LIB_TARGET}_${ARCH}")
@@ -151,6 +158,9 @@ function(wop_add_executable)
 	endif()
 	if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$")
 		set(ARCH "arm64")
+	endif()
+	if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ppc64le")
+		set(ARCH "ppc64le")
 	endif()
 
 	set(OUTPUTNAME "${_EXE_TARGET}.${ARCH}")
@@ -349,6 +359,7 @@ function(add_asm TARGET)
 		endforeach()
 		target_sources(${TARGET} PRIVATE ${ASM_SRCS})
 	elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+	elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ppc64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ppc64le")
 	else()
 		target_sources(${TARGET} PRIVATE ${CODE_DIR}/asm/snapvector.c ${CODE_DIR}/asm/ftola.c)
 		set_source_files_properties(${CODE_DIR}/asm/snapvector.c PROPERTIES COMPILE_FLAGS -march=k8)

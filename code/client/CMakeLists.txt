@@ -47,7 +47,6 @@ set(SRCS
 	../qcommon/puff.c
 	../qcommon/vm.c
 	../qcommon/vm_interpreted.c
-	../qcommon/vm_x86.c
 	../server/sv_bot.c
 	../server/sv_ccmds.c
 	../server/sv_client.c
@@ -64,6 +63,12 @@ set(SRCS
 	../sys/con_log.c
 	../sys/sys_main.c
 )
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^x86")
+	list(APPEND SRCS ../qcommon/vm_x86.c)
+else()
+	list(APPEND SRCS ../qcommon/vm_none.c)
+endif()
 
 if (WIN32)
 	list(APPEND SRCS ../sys/sys_win32.c)
