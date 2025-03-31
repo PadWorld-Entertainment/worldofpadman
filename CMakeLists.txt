@@ -25,6 +25,7 @@ option(USE_OPENAL_DLOPEN "" ON)
 option(USE_CURL_DLOPEN "" ON)
 option(USE_VOIP "" ON)
 option(USE_MUMBLE "" ON)
+option(USE_LOCAL_SDL2 "Use a locally installed sdl2 - or if disabled the bundled sdl2 version" ON)
 
 if (UNIX)
 	add_compile_definitions(ARCH_STRING="${CMAKE_SYSTEM_PROCESSOR}")
