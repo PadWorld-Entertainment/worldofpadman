@@ -148,6 +148,16 @@ function(wop_add_executable)
 		endif()
 	endif()
 
+	# On ELF/Unix platforms, export dynamic symbols from the main executable so
+	# runtime resolvers (dladdr/backward) can find function names from the
+	# executable symbol table. This is required to get human-readable names in
+	# stacktraces when capturing from signal handlers.
+	if (UNIX AND NOT APPLE)
+		# Append the export-dynamic flag to the link flags for this target.
+		# Use APPEND_STRING to avoid overwriting other LINK_FLAGS.
+		set_property(TARGET ${_EXE_TARGET} APPEND_STRING PROPERTY LINK_FLAGS " -Wl,--export-dynamic")
+	endif()
+
 	set(ARCH "x86")
 	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 		set(ARCH "x86_64")

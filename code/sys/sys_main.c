@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
+#include "backward_c.h"
 #include <signal.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -687,6 +688,8 @@ void Sys_SigHandler(int signal) {
 		SV_Shutdown(va("Received signal %d", signal));
 		VM_Forced_Unload_Done();
 	}
+
+	backward_print_stacktrace(stderr);
 
 	if (signal == SIGTERM || signal == SIGINT)
 		Sys_Exit(1);
