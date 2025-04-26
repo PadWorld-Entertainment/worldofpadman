@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         platform:
-        - { name: Ubuntu,    os: ubuntu-20.04 }
+        - { name: Ubuntu,    os: ubuntu-22.04 }
         - { name: Windows32, os: windows-2019, param: "-A Win32" }
         - { name: Windows,   os: windows-2019 }
         - { name: MacOS13,   os: macos-13 }
