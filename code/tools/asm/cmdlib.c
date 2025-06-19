@@ -63,7 +63,7 @@ void ExpandWildcards(int *argc, char ***argv) {
 	struct _finddata_t fileinfo;
 	intptr_t handle;
 	int i;
-	char filename[1024];
+	char filename[2048];
 	char filebase[1024];
 	char *path;
 
