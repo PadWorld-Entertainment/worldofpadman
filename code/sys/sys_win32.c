@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <io.h>
 #include <conio.h>
 #include <wincrypt.h>
+#include <shfolder.h>
 #include <shlobj.h>
 #include <psapi.h>
 #include <float.h>
@@ -95,7 +96,7 @@ Sys_DefaultHomePath
 */
 char *Sys_DefaultHomePath(void) {
 	TCHAR szPath[MAX_PATH];
-	FARPROC qSHGetFolderPath;
+	PFNSHGETFOLDERPATHA qSHGetFolderPath;
 	HMODULE shfolder = LoadLibrary("shfolder.dll");
 
 	if (shfolder == NULL) {
@@ -104,7 +105,7 @@ char *Sys_DefaultHomePath(void) {
 	}
 
 	if (!*homePath && com_homepath) {
-		qSHGetFolderPath = GetProcAddress(shfolder, "SHGetFolderPathA");
+		qSHGetFolderPath = (PFNSHGETFOLDERPATHA)GetProcAddress(shfolder, "SHGetFolderPathA");
 		if (qSHGetFolderPath == NULL) {
 			Com_Printf("Unable to find SHGetFolderPath in SHFolder.dll\n");
 			FreeLibrary(shfolder);
