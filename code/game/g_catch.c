@@ -139,10 +139,10 @@ gentity_t *G_DropKillerDucks(gentity_t *ent) {
 	// the killerducks that fast again - see PICKUP_KILLERDUCKS_NOT_YET_AGAIN
 	// and the handling in Touch_Item()
 	client->lastWarningMessageTime = level.time;
-	// don't allow to re-collect for 5 seconds
+	// don't allow to re-collect for 5+1 seconds
 	// see BG_CanItemBeGrabbed()
 	killerDucks->s.otherEntityNum = ent->s.number;
-	killerDucks->s.time = level.time + 5000;
+	killerDucks->s.time = level.time + (RESPAWN_DROPPED_KILLERDUCKS + 1) * 1000;
 	killerDucks->nextthink = (level.time + 1000);
 	killerDucks->think = G_DroppedKillerDucksThinkPickable;
 	return killerDucks;
