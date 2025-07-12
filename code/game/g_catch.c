@@ -56,7 +56,7 @@ void G_CatchHandleHoldableKillerducks(void) {
 /**
  * Executes the respawn of the killerducks after a given timeout at one of the spawn points
  */
-static void G_RespawnKillerDucks(gentity_t *self) {
+void G_RespawnKillerDucks(gentity_t *self) {
 	gentity_t *ent, *spawnPoint = NULL;
 	const gitem_t *item;
 

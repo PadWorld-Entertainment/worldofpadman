@@ -989,6 +989,9 @@ void G_RunItem(gentity_t *ent) {
 	// if it is in a nodrop volume, remove it
 	contents = trap_PointContents(ent->r.currentOrigin, -1);
 	if (contents & CONTENTS_NODROP) {
+		if (g_gametype.integer == GT_CATCH && ent->item->giTag == HI_KILLERDUCKS) {
+			G_RespawnKillerDucks(ent);
+		}
 		if (ent->item && ent->item->giType == IT_TEAM) {
 			Team_FreeEntity(ent);
 		} else {

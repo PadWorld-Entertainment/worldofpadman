@@ -843,6 +843,7 @@ qboolean CantDamageTeamitem(gentity_t *target, gentity_t *attacker);
 // g_catch.c
 //
 void G_CatchHandleHoldableKillerducks(void);
+void G_RespawnKillerDucks(gentity_t *self);
 gentity_t* G_DropKillerDucks(gentity_t *self);
 void G_DroppedKillerDucksThink(gentity_t *self);
 void G_ThinkDroppedKillerducks(gentity_t *ent);
