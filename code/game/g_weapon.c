@@ -304,11 +304,13 @@ SPRAY PISTOL
 ======================================================================
 */
 
-static void G_CheckSprayAwards(gentity_t *ent, vec3_t scorepos) {
+static void G_CheckSprayAwards(gentity_t *ent, const vec3_t endpos) {
+	vec3_t scorepos;
+
 	ent->client->logocounter++;
-	
+
 	// Move the bonus score bubble down slightly to avoid overlapping with the spray score bubble.
-	VectorMA(scorepos, -8, up, scorepos);
+	VectorMA(endpos, -8, up, scorepos);
 
 	// FIXME: Less magical constants
 	if (ent->client->logocounter == CNT_CARTRIDGES) {
