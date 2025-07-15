@@ -40,7 +40,7 @@ chat "padman"
 	type "level_end_lose"{
 		"That wasn't luck, I just went easy on you.";
 		"Have fun storming the PadWorld.";
-		"Good luck, ", 2, ", but I think PADMAN is going to toast you.";
+		"Good luck, ", 2, ". Next time, I'm going to toast you.";
 		"Noes!!";
 		"Best of three?";
 	}
