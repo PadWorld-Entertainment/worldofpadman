@@ -1662,16 +1662,18 @@ static void CG_DrawCrosshair(void) {
 	float f;
 	float x, y;
 	int ca;
+	trace_t trace;
+	playerState_t *ps;
+	vec3_t muzzle, forward, up, start, end;
+	qboolean front;
+
+	ps = &cg.predictedPlayerState;
 
 	if (!cg_drawCrosshair.integer) {
 		return;
 	}
 
 	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
-		return;
-	}
-
-	if (cg.renderingThirdPerson) {
 		return;
 	}
 
@@ -1710,8 +1712,22 @@ static void CG_DrawCrosshair(void) {
 	}
 	hShader = cgs.media.crosshairShader[ca % NUM_CROSSHAIRS];
 
-	CG_DrawPic(((SCREEN_WIDTH-w)*0.5f)+x, ((SCREEN_HEIGHT-h)*0.5f)+y, w, h, hShader);
-
+	if (cg.renderingThirdPerson) {
+		AngleVectors(ps->viewangles, forward, NULL, up);
+		VectorCopy(ps->origin, muzzle);
+		VectorMA(muzzle, ps->viewheight, up, muzzle);
+		VectorMA(muzzle, 14, forward, muzzle);
+		VectorCopy(muzzle, start);
+		VectorMA(start, 131072, forward, end);
+		CG_Trace(&trace, start, NULL, NULL, end, cg.snap->ps.clientNum, CONTENTS_SOLID | CONTENTS_BODY);
+		front = CG_WorldToScreen(trace.endpos, &x, &y);
+		if (!front) {
+			return;
+		}
+		CG_DrawPic(x - 0.5f * w, y - 0.5f * h, w, h, hShader);
+	} else {
+		CG_DrawPic(((SCREEN_WIDTH - w) * 0.5f) + x, ((SCREEN_HEIGHT - h) * 0.5f) + y, w, h, hShader);
+	}
 	trap_R_SetColor(NULL);
 }
 
