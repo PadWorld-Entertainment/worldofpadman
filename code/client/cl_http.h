@@ -20,35 +20,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-#ifndef __QCURL_H__
-#define __QCURL_H__
+#ifndef __CL_HTTP_H__
+#define __CL_HTTP_H__
 
 #include "../qcommon/q_shared.h"
-#include "../qcommon/qcommon.h"
 
-#ifdef USE_LOCAL_HEADERS
-#include "../curl-7.54.0/include/curl/curl.h"
-#else
-#include <curl/curl.h>
-#endif
+qboolean CL_HTTP_Init(void);
+qboolean CL_HTTP_Available(void);
+void CL_HTTP_Shutdown(void);
+void CL_HTTP_BeginDownload(const char *remoteURL);
+qboolean CL_HTTP_PerformDownload(void);
 
-#ifdef USE_CURL_DLOPEN
-#ifdef WIN32
-#define DEFAULT_CURL_LIB "libcurl-4.dll"
-#define ALTERNATE_CURL_LIB "libcurl-3.dll"
-#elif defined(__APPLE__)
-#define DEFAULT_CURL_LIB "libcurl.dylib"
-#else
-#define DEFAULT_CURL_LIB "libcurl.so.4"
-#define ALTERNATE_CURL_LIB "libcurl.so.3"
-#endif
-
-extern cvar_t *cl_cURLLib;
-#endif
-
-qboolean CL_cURL_Init(void);
-void CL_cURL_Shutdown(void);
-void CL_cURL_BeginDownload(const char *localName, const char *remoteURL);
-void CL_cURL_PerformDownload(void);
-void CL_cURL_Cleanup(void);
-#endif // __QCURL_H__
+#endif // __CL_HTTP_H__

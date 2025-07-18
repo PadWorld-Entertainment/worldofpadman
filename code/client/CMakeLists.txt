@@ -24,7 +24,6 @@ set(SRCS
 	snd_codec_opus.c
 	qal.c
 	snd_openal.c
-	cl_curl.c
 	../qcommon/cm_load.c
 	../qcommon/cm_patch.c
 	../qcommon/cm_polylib.c
@@ -69,12 +68,14 @@ if (WIN32)
 	list(APPEND SRCS ../sys/sys_win32.c)
 	list(APPEND SRCS ../sys/con_passive.c)
 	list(APPEND SRCS ../sys/win_resource.rc)
+	list(APPEND SRCS cl_http_windows.c)
 else()
 	if(APPLE)
 		list(APPEND SRCS ../sys/sys_osx.m)
 	endif()
 	list(APPEND SRCS ../sys/sys_unix.c)
 	list(APPEND SRCS ../sys/con_tty.c)
+	list(APPEND SRCS cl_http_curl.c)
 endif()
 
 if (USE_MUMBLE)
@@ -114,6 +115,14 @@ if (USE_VOIP)
 endif()
 if (USE_MUMBLE)
 	list(APPEND CLIENT_DEFINES USE_MUMBLE)
+endif()
+if (USE_HTTP)
+	list(APPEND CLIENT_DEFINES USE_HTTP)
+	if (MSVC)
+		list(APPEND LIBS wininet)
+	else()
+		list(APPEND LIBS curl)
+	endif()
 endif()
 if (USE_RENDERER_DLOPEN)
 	list(APPEND CLIENT_DEFINES USE_RENDERER_DLOPEN)

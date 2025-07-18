@@ -1,5 +1,7 @@
 add_subdirectory(AL)
-add_subdirectory(curl-7.54.0)
+if (UNIX)
+	add_subdirectory(curl-7.54.0)
+endif()
 add_subdirectory(jpeg-9e)
 add_subdirectory(libogg-1.3.5)
 add_subdirectory(libtheora-1.1.1)
