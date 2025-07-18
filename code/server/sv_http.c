@@ -45,15 +45,8 @@ static int timeoutSecond = 5;
 cvar_t *sv_cURLLib;
 static void *cURLLib = NULL;
 
-#ifdef WIN32
-#define DEFAULT_CURL_LIB "libcurl-4.dll"
-#define ALTERNATE_CURL_LIB "libcurl-3.dll"
-#elif defined(__APPLE__)
-#define DEFAULT_CURL_LIB "libcurl.dylib"
-#else
 #define DEFAULT_CURL_LIB "libcurl.so.4"
 #define ALTERNATE_CURL_LIB "libcurl.so.3"
-#endif
 
 static CURL *(*qcurl_easy_init)(void);
 static CURLcode (*qcurl_easy_setopt)(CURL *curl, CURLoption option, ...);
