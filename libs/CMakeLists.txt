@@ -1,5 +1,5 @@
 add_subdirectory(AL)
-if (UNIX)
+if (UNIX AND USE_HTTP)
 	add_subdirectory(curl-7.54.0)
 endif()
 add_subdirectory(jpeg-9e)

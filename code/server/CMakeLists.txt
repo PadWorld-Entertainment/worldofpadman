@@ -4,8 +4,8 @@ set(SRCS
 	sv_ccmds.c
 	sv_client.c
 	sv_discord.c
-	sv_http.c
 	sv_game.c
+	sv_http.c
 	sv_init.c
 	sv_main.c
 	sv_net_chan.c
@@ -38,12 +38,18 @@ if (WIN32)
 	list(APPEND SRCS ../sys/sys_win32.c)
 	list(APPEND SRCS ../sys/con_win32.c)
 	list(APPEND SRCS ../sys/win_resource.rc)
+	if (USE_HTTP)
+		list(APPEND SRCS sv_http_windows.c)
+	endif()
 else()
 	if(APPLE)
 		list(APPEND SRCS ../sys/sys_osx.m)
 	endif()
 	list(APPEND SRCS ../sys/sys_unix.c)
 	list(APPEND SRCS ../sys/con_tty.c)
+	if (USE_HTTP)
+		list(APPEND SRCS sv_http_curl.c)
+	endif()
 endif()
 
 project(wopded)
@@ -67,8 +73,6 @@ else()
 	set(CMAKE_REQUIRED_LIBRARIES)
 	list(APPEND LIBS m)
 endif()
-target_link_libraries(${PROJECT_NAME} ${LIBS})
-target_include_directories(${PROJECT_NAME} PRIVATE ../qcommon)
 if (USE_VOIP)
 	list(APPEND SERVER_DEFINES USE_VOIP)
 endif()
@@ -80,4 +84,6 @@ if (USE_HTTP)
 		list(APPEND LIBS curl)
 	endif()
 endif()
+target_link_libraries(${PROJECT_NAME} ${LIBS})
+target_include_directories(${PROJECT_NAME} PRIVATE ../qcommon)
 target_compile_definitions(${PROJECT_NAME} PRIVATE ${SERVER_DEFINES})
