@@ -85,14 +85,12 @@ tryagain:
 	}
 
 	if (weaponNum == WP_NIPPER || weaponNum == WP_PUNCHY || weaponNum == WP_IMPERIUS) {
-		strcpy(path, item->world_model[0]);
-		COM_StripExtension(path, path, sizeof(path));
+		COM_StripExtension(item->world_model[0], path, sizeof(path));
 		strcat(path, "_barrel");
 		pi->barrelModel = trap_R_RegisterModel(path);
 	}
 
-	strcpy(path, item->world_model[0]);
-	COM_StripExtension(path, path, sizeof(path));
+	COM_StripExtension(item->world_model[0], path, sizeof(path));
 	strcat(path, "_flash");
 	pi->flashModel = trap_R_RegisterModel(path);
 
