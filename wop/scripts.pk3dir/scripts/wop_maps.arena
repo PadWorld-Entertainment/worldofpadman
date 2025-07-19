@@ -189,7 +189,7 @@
 {
 	map      "wop_cabin"
 	longname "GlowStar's Cabin"
-	type     "ffa lps syc_ffa syc_tp team ft ctkd"
+	type     "ffa lps syc_ffa syc_tp team ft"
 }
 
 {
