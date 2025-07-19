@@ -391,23 +391,20 @@ static void CG_RegisterWeapon(int weaponNum) {
 	}
 
 	if (weaponNum != WP_PUNCHY) {
-		Q_strncpyz(path, item->world_model[0], sizeof(path));
-		COM_StripExtension(path, path, sizeof(path));
+		COM_StripExtension(item->world_model[0], path, sizeof(path));
 		Q_strcat(path, sizeof(path), "_flash");
 		weaponInfo->flashModel = trap_R_RegisterModel(path);
 	}
 
 	if (weaponNum == WP_NIPPER || weaponNum == WP_IMPERIUS) // || weaponNum == WP_PUNCHY
 	{
-		Q_strncpyz(path, item->world_model[0], sizeof(path));
-		COM_StripExtension(path, path, sizeof(path));
+		COM_StripExtension(item->world_model[0], path, sizeof(path));
 		Q_strcat(path, sizeof(path), "_barrel");
 		weaponInfo->barrelModel = trap_R_RegisterModel(path);
 	} else
 		weaponInfo->barrelModel = 0;
 
-	Q_strncpyz(path, item->world_model[0], sizeof(path));
-	COM_StripExtension(path, path, sizeof(path));
+	COM_StripExtension(item->world_model[0], path, sizeof(path));
 	Q_strcat(path, sizeof(path), "_hand");
 	weaponInfo->handsModel = trap_R_RegisterModel(path);
 
