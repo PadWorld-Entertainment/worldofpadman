@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -48,9 +48,6 @@ static void Cocoa_VideoQuit(_THIS);
 static void Cocoa_DeleteDevice(SDL_VideoDevice * device)
 { @autoreleasepool
 {
-    if (device->wakeup_lock) {
-        SDL_DestroyMutex(device->wakeup_lock);
-    }
     CFBridgingRelease(device->driverdata);
     SDL_free(device);
 }}
@@ -76,7 +73,6 @@ static SDL_VideoDevice *Cocoa_CreateDevice(void)
         return NULL;
     }
     device->driverdata = (void *)CFBridgingRetain(data);
-    device->wakeup_lock = SDL_CreateMutex();
 
     /* Set the function pointers */
     device->VideoInit = Cocoa_VideoInit;

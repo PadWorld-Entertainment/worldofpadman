@@ -55,7 +55,7 @@ define UPDATE_GIT
 endef
 
 update-sdl2:
-	$(call UPDATE_GIT,sdl2,https://github.com/libsdl-org/SDL.git -b release-2.30.9)
+	$(call UPDATE_GIT,sdl2,https://github.com/libsdl-org/SDL.git -b release-2.32.8)
 	rm -rf libs/SDL2/src/* libs/SDL2/include/* libs/SDL2/cmake/*
 	cp -r $(UPDATEDIR)/sdl2.sync/* libs/SDL2
 

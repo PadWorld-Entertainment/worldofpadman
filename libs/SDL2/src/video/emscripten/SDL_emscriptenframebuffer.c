@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -79,7 +79,7 @@ int Emscripten_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect
         if (!Module['SDL2']) Module['SDL2'] = {};
         var SDL2 = Module['SDL2'];
         if (SDL2.ctxCanvas !== Module['canvas']) {
-            SDL2.ctx = Module['createContext'](Module['canvas'], false, true);
+            SDL2.ctx = Browser.createContext(Module['canvas'], false, true);
             SDL2.ctxCanvas = Module['canvas'];
         }
         if (SDL2.w !== w || SDL2.h !== h || SDL2.imageCtx !== SDL2.ctx) {

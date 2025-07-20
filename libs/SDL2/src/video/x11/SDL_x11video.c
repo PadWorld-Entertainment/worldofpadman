@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -108,9 +108,6 @@ static void X11_DeleteDevice(SDL_VideoDevice *device)
         X11_XCloseDisplay(data->request_display);
     }
     SDL_free(data->windowlist);
-    if (device->wakeup_lock) {
-        SDL_DestroyMutex(device->wakeup_lock);
-    }
     SDL_free(device->driverdata);
     SDL_free(device);
 
@@ -203,8 +200,6 @@ static SDL_VideoDevice *X11_CreateDevice(void)
         SDL_X11_UnloadSymbols();
         return NULL;
     }
-
-    device->wakeup_lock = SDL_CreateMutex();
 
 #ifdef X11_DEBUG
     X11_XSynchronize(data->display, True);
