@@ -71,27 +71,6 @@ example: `15`
 Specifies the number of seconds a player has time to join a team without penalty. After this time
 is expired joining a team will automatically freeze the player.
 
-* `g_ft_useWeaponSet`
-
-values: pairs of string and integer, all tokens seperated by a `:`
-
-example: `punchy:-1:betty:15:pumper:8`
-
-This option will enable alternate freezetag gameplay when it is not set to either "" nor `0`.
-When enabled it will remove all weapon spawns from the map, it will convert all ammo spawns into
-one kind of ammo which will universally charge any weapon and it will spawn every player with the
-weapon and ammo specified as its value.
-
-* `g_ft_weaponSetAmmoRatio`
-
-values: positive floating point numbers
-
-example: `0.5`
-
-This option specifies how much ammo is recharged from the universal ammo enabled with `g_ft_useWeaponSet`.
-The amount is based on the initual fill chosen. `g_ft_useWeaponSet "pumper:30"` and `g_ft_weaponSetAmmoRatio 0.5` will result in a recharge
-of `15` for every universal ammo picked up.
-
 # Freezetag Client Cvars:
 
 * `cg_ft_thawerIconX`
