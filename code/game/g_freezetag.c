@@ -474,43 +474,6 @@ static const char *FT_ValueForKey(const char *s, const char *key) {
 }
 
 void FT_InitFreezeTag(void) {
-	if (Q_stricmp(g_ft_useWeaponSet.string, "") == 0 || Q_stricmp(g_ft_useWeaponSet.string, "0") == 0) {
-		// wop-normal weapon equip
-		level.ftWeaponSet = (1 << WP_NIPPER);
-		if (g_gametype.integer == GT_TEAM || g_gametype.integer == GT_FREEZETAG) {
-			level.ftWeaponSetAmmo[WP_NIPPER] = 50;
-		} else {
-			level.ftWeaponSetAmmo[WP_NIPPER] = 100;
-		}
-		level.ftWeaponSet |= (1 << WP_PUNCHY);
-		level.ftWeaponSetAmmo[WP_PUNCHY] = -1;
-		level.ftWeaponSetAmmo[WP_GRAPPLING_HOOK] = -1;
-	} else {
-		// set up weapon set
-		const char *weaponstring;
-		const char *v;
-		int ammo;
-		int i;
-
-		static char *weapons[] = {"none",	 "punchy",	 "nipper",	"pumper",	"balloony", "betty",
-								  "boaster", "splasher", "bubbleg", "imperius", NULL};
-
-		weaponstring = g_ft_useWeaponSet.string;
-
-		level.ftWeaponSet = 0;
-
-		for (i = 1; weapons[i] != NULL; i++) {
-			v = FT_ValueForKey(weaponstring, weapons[i]);
-			ammo = atoi(v);
-
-			if (ammo) {
-				level.ftWeaponSet |= (1 << i);
-				level.ftWeaponSetAmmo[i] = ammo;
-			}
-		}
-
-		level.ftWeaponSetAmmoRatio = g_ft_weaponSetAmmoRatio.value;
-	}
 
 	// load rounds status
 	{
@@ -551,23 +514,6 @@ void FT_InitFreezeTag(void) {
 		// Com_Printf("^2played: %i\n", level.ftNumRoundsPlayed);
 		// Com_Printf("^2Red Wins: %i\n", level.ftNumRoundsWon[TEAM_RED]);
 		// Com_Printf("^2Blue Wins: %i\n", level.ftNumRoundsWon[TEAM_BLUE]);
-	}
-}
-
-void FT_AddStartWeapons(gclient_t *client) {
-	int i;
-
-	client->ps.stats[STAT_WEAPONS] = level.ftWeaponSet;
-	for (i = WP_NONE + 1; i < WP_NUM_WEAPONS; i++)
-		client->ps.ammo[i] = level.ftWeaponSetAmmo[i];
-}
-
-void FT_AddAmmo(gentity_t *player) {
-	int i;
-	for (i = 1; i < WP_NUM_WEAPONS; i++) {
-		if (player->client->ps.stats[STAT_WEAPONS] & (1 << i)) {
-			Add_Ammo(player, i, ((float)(level.ftWeaponSetAmmo[i]) * level.ftWeaponSetAmmoRatio) + 0.5f);
-		}
 	}
 }
 

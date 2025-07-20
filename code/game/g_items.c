@@ -265,11 +265,7 @@ static int Pickup_Ammo(gentity_t *ent, gentity_t *other) {
 		}
 	}
 
-	if (G_FreezeTag() && Q_stricmp(g_ft_useWeaponSet.string, "") != 0 && Q_stricmp(g_ft_useWeaponSet.string, "0") != 0) {
-		FT_AddAmmo(other);
-	} else {
-		Add_Ammo(other, ent->item->giTag, quantity);
-	}
+	Add_Ammo(other, ent->item->giTag, quantity);
 
 	other->client->ps.generic1 = other->client->ps.ammo[WP_SPRAYPISTOL];
 

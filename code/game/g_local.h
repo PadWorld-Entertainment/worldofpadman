@@ -521,13 +521,8 @@ typedef struct {
 	int numBoomies[TEAM_NUM_TEAMS];
 
 	// freezetag
-	int ftWeaponSet; // weapon set handed out at client spawn
-	int ftWeaponSetAmmo[WP_NUM_WEAPONS];
-	float ftWeaponSetAmmoRatio; // ratio of ammo pickup to initial fill
-
 	int ftNumRoundsPlayed;
 	int ftNumRoundsWon[TEAM_NUM_TEAMS];
-
 	qboolean allRoundsPlayed;
 
 	char shortmapname[MAX_QPATH];
@@ -806,12 +801,10 @@ gentity_t *FT_NearestFrozenPlayer(gentity_t *player);
 qboolean FT_InThawingRange(const gentity_t *player, const gentity_t *other);
 void FT_ProgressThawing(gentity_t *player, gentity_t *thawer);
 qboolean FT_WholeTeamIsFrozen(int team);
-void FT_AddStartWeapons(gclient_t *client);
 qboolean FT_MatchInProgress(void);
 qboolean FT_CanSwitchTeam(gentity_t *player, int team);
 qboolean FT_ClientIsFrozen(const gclient_t *client);
 void FT_RelocateToNearestSpawnPoint(gentity_t *player);
-void FT_AddAmmo(gentity_t *player);
 
 //
 // g_arenas.c
@@ -966,8 +959,6 @@ extern vmCvar_t g_transmitSVboastermissiles;
 extern vmCvar_t g_ft_numRounds;
 extern vmCvar_t g_ft_playAllRounds;
 extern vmCvar_t g_ft_lateJoinTime;
-extern vmCvar_t g_ft_useWeaponSet;
-extern vmCvar_t g_ft_weaponSetAmmoRatio;
 extern vmCvar_t g_ft_debug;
 
 // Modifiers

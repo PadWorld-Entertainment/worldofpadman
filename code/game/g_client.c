@@ -1251,8 +1251,6 @@ void ClientSpawn(gentity_t *ent) {
 		// add instagib weapon to client's inventory
 		client->ps.stats[STAT_WEAPONS] = (1 << weapon);
 		client->ps.ammo[weapon] = INFINITE;
-	} else if (G_FreezeTag()) {
-		FT_AddStartWeapons(client);
 	} else {
 		// add normal wop weapons to client's inventory
 		client->ps.stats[STAT_WEAPONS] = (1 << WP_NIPPER);

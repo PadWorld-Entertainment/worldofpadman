@@ -96,8 +96,6 @@ vmCvar_t g_suddenDeath;
 vmCvar_t g_ft_numRounds;
 vmCvar_t g_ft_playAllRounds;
 vmCvar_t g_ft_lateJoinTime;
-vmCvar_t g_ft_useWeaponSet;
-vmCvar_t g_ft_weaponSetAmmoRatio;
 vmCvar_t g_ft_debug;
 
 // Modifiers
@@ -199,8 +197,6 @@ static cvarTable_t gameCvarTable[] = {
 	{&g_ft_numRounds, "g_ft_numRounds", "3", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},
 	{&g_ft_playAllRounds, "g_ft_playAllRounds", "0", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},
 	{&g_ft_lateJoinTime, "g_FT_lateJoinTime", "30", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},
-	{&g_ft_useWeaponSet, "g_FT_useWeaponSet", "0", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse}, // freezetag
-	{&g_ft_weaponSetAmmoRatio, "g_FT_weaponSetAmmoRatio", "0.5", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},
 	{&g_ft_debug, "g_FT_debug", "0", 0, 0, qfalse},
 
 	{NULL, PLAYERINFO_TEAM, PLAYERINFO_NONE, (CVAR_SERVERINFO | CVAR_ROM), 0, qfalse},
