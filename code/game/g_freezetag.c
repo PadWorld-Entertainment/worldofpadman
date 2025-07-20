@@ -476,45 +476,41 @@ static const char *FT_ValueForKey(const char *s, const char *key) {
 void FT_InitFreezeTag(void) {
 
 	// load rounds status
-	{
-		char s[MAX_STRING_CHARS];
-		const char *v;
-		char mapname[256];
-		char info[1024];
+	char s[MAX_STRING_CHARS];
+	const char *v;
+	char mapname[256];
+	char info[1024];
 
-		trap_Cvar_VariableStringBuffer("ftrounds", s, sizeof(s));
+	trap_Cvar_VariableStringBuffer("ftrounds", s, sizeof(s));
 
-		v = FT_ValueForKey(s, "played");
-		level.ftNumRoundsPlayed = atoi(v);
+	v = FT_ValueForKey(s, "played");
+	level.ftNumRoundsPlayed = atoi(v);
 
-		v = FT_ValueForKey(s, "redwins");
-		level.ftNumRoundsWon[TEAM_RED] = atoi(v);
+	v = FT_ValueForKey(s, "redwins");
+	level.ftNumRoundsWon[TEAM_RED] = atoi(v);
 
-		v = FT_ValueForKey(s, "bluewins");
-		level.ftNumRoundsWon[TEAM_BLUE] = atoi(v);
+	v = FT_ValueForKey(s, "bluewins");
+	level.ftNumRoundsWon[TEAM_BLUE] = atoi(v);
 
-		/*
-			check if we changed the map, clear all round info if we did
-		*/
-		trap_GetServerinfo(info, sizeof(info));
-		Q_strncpyz(mapname, Info_ValueForKey(info, "mapname"), sizeof(mapname));
-		v = FT_ValueForKey(s, "map");
+	// check if we changed the map, clear all round info if we did
+	trap_GetServerinfo(info, sizeof(info));
+	Q_strncpyz(mapname, Info_ValueForKey(info, "mapname"), sizeof(mapname));
+	v = FT_ValueForKey(s, "map");
 
-		// Com_Printf("^2This Map: %s\n", mapname);
-		// Com_Printf("^2Last Map: %s\n", v);
+	// Com_Printf("^2This Map: %s\n", mapname);
+	// Com_Printf("^2Last Map: %s\n", v);
 
-		if (Q_stricmp(mapname, v) != 0) {
-			// clear
-			level.ftNumRoundsPlayed = 0;
-			level.ftNumRoundsWon[TEAM_RED] = 0;
-			level.ftNumRoundsWon[TEAM_BLUE] = 0;
-		}
-
-		// dbg
-		// Com_Printf("^2played: %i\n", level.ftNumRoundsPlayed);
-		// Com_Printf("^2Red Wins: %i\n", level.ftNumRoundsWon[TEAM_RED]);
-		// Com_Printf("^2Blue Wins: %i\n", level.ftNumRoundsWon[TEAM_BLUE]);
+	if (Q_stricmp(mapname, v) != 0) {
+		// clear
+		level.ftNumRoundsPlayed = 0;
+		level.ftNumRoundsWon[TEAM_RED] = 0;
+		level.ftNumRoundsWon[TEAM_BLUE] = 0;
 	}
+
+	// dbg
+	// Com_Printf("^2played: %i\n", level.ftNumRoundsPlayed);
+	// Com_Printf("^2Red Wins: %i\n", level.ftNumRoundsWon[TEAM_RED]);
+	// Com_Printf("^2Blue Wins: %i\n", level.ftNumRoundsWon[TEAM_BLUE]);
 }
 
 void FT_CalculateRoundScores(void) {
