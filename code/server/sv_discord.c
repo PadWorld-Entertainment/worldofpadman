@@ -134,13 +134,20 @@ int DISCORD_Init(void) {
 }
 
 void DISCORD_Close(void) {
+	if (consumerThread == NULL) {
+		return;
+	}
 	SDL_AtomicSet(&shouldQuit, 1);
 	SDL_CondSignal(queueNotEmpty);
 	SDL_WaitThread(consumerThread, NULL);
+	consumerThread = NULL;
 
 	SDL_DestroyMutex(commandQueueMutex);
+	commandQueueMutex = NULL;
 	SDL_DestroyCond(queueNotEmpty);
+	queueNotEmpty = NULL;
 	SDL_DestroyCond(queueNotFull);
+	queueNotFull = NULL;
 }
 
 #define USE_DISCORD_COLORS 0
