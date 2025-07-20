@@ -59,6 +59,10 @@ qboolean DISCORD_WantMessages(discordMsg_t type) {
 }
 
 int DISCORD_EnqueueMessage(const char *user, const char *message) {
+	if (consumerThread == NULL) {
+		Com_DPrintf("Discord: Not initialized\n");
+		return -1;
+	}
 	SDL_LockMutex(commandQueueMutex);
 	if (commandCount >= MAX_COMMANDS) {
 		SDL_UnlockMutex(commandQueueMutex);
