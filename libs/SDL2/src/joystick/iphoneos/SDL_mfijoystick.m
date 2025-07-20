@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -1283,6 +1283,8 @@ static void IOS_MFIJoystickUpdate(SDL_Joystick *joystick)
         }
 #if TARGET_OS_TV
         else if (controller.microGamepad) {
+            Uint8 buttons[joystick->nbuttons];
+            int button_count = 0;
             GCMicroGamepad *gamepad = controller.microGamepad;
 
             Sint16 axes[] = {
@@ -1294,8 +1296,6 @@ static void IOS_MFIJoystickUpdate(SDL_Joystick *joystick)
                 SDL_PrivateJoystickAxis(joystick, i, axes[i]);
             }
 
-            Uint8 buttons[joystick->nbuttons];
-            int button_count = 0;
             buttons[button_count++] = gamepad.buttonA.isPressed;
             buttons[button_count++] = gamepad.buttonX.isPressed;
             buttons[button_count++] = (device->pause_button_pressed > 0);
