@@ -37,9 +37,11 @@ static void testDiscord(void) {
 	Cvar_Get("discord_webhook_url",
 			 "https://discord.com/api/webhooks/xx/yy",
 			 0);
+	ASSERT_EQ_INT(0, HTTP_Init());
 	ASSERT_EQ_INT(0, DISCORD_Init());
 	EXPECT_BETWEEN_INT(200, 299, DISCORD_SendMessage("testuser", "Test message"));
 	DISCORD_Close();
+	HTTP_Close();
 }
 
 static void testCommon(void) {

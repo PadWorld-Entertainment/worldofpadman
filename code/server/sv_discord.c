@@ -113,10 +113,6 @@ static int DISCORD_SendWebHook(const char *headers, const char *body) {
 }
 
 int DISCORD_Init(void) {
-	if (HTTP_Init() != 0) {
-		Com_Printf("Discord: Failed to initialize http subsystem\n");
-		return 1;
-	}
 	// e.g. https://discord.com/api/webhooks/xxx/yyy
 	discord_webhook_url = Cvar_Get("discord_webhook_url", "", CVAR_ARCHIVE);
 	discord_webhook_content = Cvar_Get("discord_webhook_content", "1", CVAR_ARCHIVE);
@@ -145,8 +141,6 @@ void DISCORD_Close(void) {
 	SDL_DestroyMutex(commandQueueMutex);
 	SDL_DestroyCond(queueNotEmpty);
 	SDL_DestroyCond(queueNotFull);
-
-	HTTP_Close();
 }
 
 #define USE_DISCORD_COLORS 0
