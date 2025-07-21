@@ -3,23 +3,30 @@
 ## Version: 1.7.1 (tba)
 
 - ADDED
-	- Map pack with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
+	- [PAD]Community MapPack v1.1.0 with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
 	- Missing PADMAN winner statue model (md3 file)
 	- Jail: missing pressure scale textures
 - CHANGED
 	- PadGirl and PadBabe taunts, PadGirl now says "Don't call me babe!" and PadBabe now says "Eat this!" which makes more sense
-	- landing sound to play on all falls, no matter the height, the Pads always fall on their feeds without taking damage
+	- Landing sound to play on all falls, no matter the height, the Pads always fall on their feeds without taking damage
+	- KillerDuck pickup lock time beyond respawn time to prevent players from gaining too much of an advantage from health and armor refills by re-collecting the item too fast
 - FIXED
 	- KillerDucks attacking frozen players and stacking up in Freeze Tag
-	- Cvar bot_minplayers not working as intended in some game types
-	- Missing qer_editorimage path in textures/pad_wop/padtele shader
-	- Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights; slightly lowered gamma factor of the light map and added _minlight to brighten dark spots
+	- KillerDucks movement to prevent them to stack and get stuck
+	- KillerDuck disappears from the match if thrown into a nodrop area in CTKD
+	- SprayKiller and SprayGod bonus scores not visible in first-person view, they are now drawn next to the spray scores and not above the payers head
+	- Cvar `bot_minplayers` not working as intended in some game types
+	- Missing `qer_editorimage` path in `textures/pad_wop/padtele` shader
+	- Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights; slightly lowered gamma factor of the light map and added `_minlight` to brighten dark spots
 	- Jail: replaced temperature scale with pressure scale on the gas bottles and replaced weight scale with temperature scale on the ventilation 
 - REMOVED
 	- Weapon makers from mapobjects folder; don't set weapon markers as misc_model entities, use the `marker` key in weapon entities instead
-	- fall and damage sounds when falling from higher heights, since WoP does not have fall damage
-	- fall1 sounds from player models and partially reused them as death variant sounds for alternate skins of a player model
+	- Fall and damage sounds when falling from higher heights, since WoP does not have fall damage
+	- `fall1` sounds from player models and partially reused them as death variant sounds for alternate skins of a player model
+	- `g_FT_useWeaponSet` and `g_FT_weaponSetAmmoRatio` modifiers because this feature was broken in Freeze Tag and rather unused.
+	- Cabin from the server map rotation and selection menu for CTKD game mode because bots cannot reach the KillerDuck item on the shelf
 - UPDATED
+	- SDL to version 2.32.8
 	- Code base to [ioq3 1.36 Git cc18246](https://github.com/ioquake/ioq3/commit/cc18246f22ab033e1b17af4616a68e9ea2e873db) with associated features and bug fixes
 
 	
