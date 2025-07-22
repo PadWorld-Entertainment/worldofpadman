@@ -195,6 +195,8 @@ void TossClientItems(gentity_t *self) {
 	for (i = 1; i < PW_NUM_POWERUPS; i++) {
 		if (i == PW_BERSERKER)
 			continue; // berserker doesn't get dropped
+		if (i == PW_FREEZE)
+			continue; // freeze doesn't get dropped
 
 		if (self->client->ps.powerups[i] > level.time) {
 			item = BG_FindItemForPowerup(i);
