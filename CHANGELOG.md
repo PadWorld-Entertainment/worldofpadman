@@ -3,22 +3,24 @@
 ## Version: 1.7.1 (tba)
 
 - ADDED
-	- [PAD]Community MapPack v1.1.0 with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
+	- Community MapPack v1.1.0 with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
 	- Missing PADMAN winner statue model (md3 file)
 	- Jail: missing pressure scale textures
 - CHANGED
 	- PadGirl and PadBabe taunts, PadGirl now says "Don't call me babe!" and PadBabe now says "Eat this!" which makes more sense
 	- Landing sound to play on all falls, no matter the height, the Pads always fall on their feeds without taking damage
 	- KillerDuck pickup lock time beyond respawn time to prevent players from gaining too much of an advantage from health and armor refills by re-collecting the item too fast
+	- Diner: slightly lowered gamma factor of the light map and added `_minlight` to brighten dark spots
+	- Jail: replaced temperature scale textures with pressure scale textures on the gas bottles and replaced weight scale textures with temperature scale textures on the ventilation 
 - FIXED
+	- Fatal crash when starting a new match from the main menu after exiting an arena and returning directly to the main menu.
 	- KillerDucks attacking frozen players and stacking up in Freeze Tag
 	- KillerDucks movement to prevent them to stack and get stuck
 	- KillerDuck disappears from the match if thrown into a nodrop area in CTKD
 	- SprayKiller and SprayGod bonus scores not visible in first-person view, they are now drawn next to the spray scores and not above the payers head
 	- Cvar `bot_minplayers` not working as intended in some game types
 	- Missing `qer_editorimage` path in `textures/pad_wop/padtele` shader
-	- Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights; slightly lowered gamma factor of the light map and added `_minlight` to brighten dark spots
-	- Jail: replaced temperature scale with pressure scale on the gas bottles and replaced weight scale with temperature scale on the ventilation 
+	- Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights
 - REMOVED
 	- Weapon makers from mapobjects folder; don't set weapon markers as misc_model entities, use the `marker` key in weapon entities instead
 	- Fall and damage sounds when falling from higher heights, since WoP does not have fall damage
