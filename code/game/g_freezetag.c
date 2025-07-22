@@ -474,7 +474,6 @@ static const char *FT_ValueForKey(const char *s, const char *key) {
 }
 
 void FT_InitFreezeTag(void) {
-
 	// load rounds status
 	char s[MAX_STRING_CHARS];
 	const char *v;

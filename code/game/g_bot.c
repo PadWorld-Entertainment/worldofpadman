@@ -114,13 +114,13 @@ G_AddRandomBot
 static void G_AddRandomBot(int team) {
 	int i, n, num;
 	float skill;
-	const char *value, *teamstr;
-	char netname[36];
+	const char *teamstr;
+	char netname[MAX_NETNAME];
 	gclient_t *cl;
 
 	num = 0;
 	for (n = 0; n < g_numBots; n++) {
-		value = Info_ValueForKey(g_botInfos[n], "name");
+		const char *value = Info_ValueForKey(g_botInfos[n], "name");
 		//
 		for (i = 0; i < g_maxclients.integer; i++) {
 			cl = level.clients + i;
@@ -143,7 +143,7 @@ static void G_AddRandomBot(int team) {
 	}
 	num = random() * num;
 	for (n = 0; n < g_numBots; n++) {
-		value = Info_ValueForKey(g_botInfos[n], "name");
+		const char *value = Info_ValueForKey(g_botInfos[n], "name");
 		//
 		for (i = 0; i < g_maxclients.integer; i++) {
 			cl = level.clients + i;
@@ -187,11 +187,10 @@ G_RemoveRandomBot
 */
 static int G_RemoveRandomBot(int team) {
 	int i;
-	char netname[36];
-	gclient_t *cl;
+	char netname[MAX_NETNAME];
 
 	for (i = 0; i < g_maxclients.integer; i++) {
-		cl = level.clients + i;
+		const gclient_t *cl = level.clients + i;
 		if (cl->pers.connected != CON_CONNECTED) {
 			continue;
 		}
@@ -216,11 +215,10 @@ G_CountHumanPlayers
 */
 static int G_CountHumanPlayers(int team) {
 	int i, num;
-	gclient_t *cl;
 
 	num = 0;
 	for (i = 0; i < g_maxclients.integer; i++) {
-		cl = level.clients + i;
+		const gclient_t *cl = level.clients + i;
 		if (cl->pers.connected != CON_CONNECTED) {
 			continue;
 		}
