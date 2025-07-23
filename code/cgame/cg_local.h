@@ -1343,9 +1343,6 @@ extern vmCvar_t cg_drawChatIcon;
 
 extern vmCvar_t cg_icons;
 
-extern vmCvar_t cg_ft_thawerIconX;
-extern vmCvar_t cg_ft_thawerIconY;
-
 //
 // cg_main.c
 //

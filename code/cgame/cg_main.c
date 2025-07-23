@@ -204,10 +204,6 @@ vmCvar_t cg_drawChatIcon;
 
 vmCvar_t cg_icons;
 
-// freezetag
-vmCvar_t cg_ft_thawerIconX;
-vmCvar_t cg_ft_thawerIconY;
-
 typedef struct {
 	vmCvar_t *vmCvar;
 	const char *cvarName;
@@ -340,10 +336,6 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 
 	{&cg_chatHeight, "cg_chatHeight", "4", CVAR_ARCHIVE},
 	{&cg_drawChatIcon, "cg_drawChatIcon", "2", CVAR_ARCHIVE},
-
-	// freezetag
-	{&cg_ft_thawerIconX, "cg_FT_thawerIconX", "320", CVAR_ARCHIVE},
-	{&cg_ft_thawerIconY, "cg_FT_thawerIconY", "290", CVAR_ARCHIVE},
 
 	// Should match enum of (ICON_ALL & ~ICON_TEAMMATE)
 	{&cg_icons, "cg_icons", "123", CVAR_ARCHIVE}};

@@ -2495,8 +2495,8 @@ static void CG_FreezeTagThawerProgressBar(void) {
 	const int barsegments = 6;
 	const int segmentwidth = 10;
 	const int distance = 5;
-	const int x = cg_ft_thawerIconX.integer;
-	const int y = cg_ft_thawerIconY.integer;
+	const int x = SCREEN_WIDTH / 2;
+	const int y = 290;
 	const int barposy = y + iconsize / 2 + distance + barheight / 2;
 	const int barposx = x - barsegments * segmentwidth / 2;
 

@@ -25,7 +25,8 @@
 	- Weapon makers from mapobjects folder; don't set weapon markers as misc_model entities, use the `marker` key in weapon entities instead
 	- Fall and damage sounds when falling from higher heights, since WoP does not have fall damage
 	- `fall1` sounds from player models and partially reused them as death variant sounds for alternate skins of a player model
-	- `g_FT_useWeaponSet` and `g_FT_weaponSetAmmoRatio` modifiers because this feature was broken in Freeze Tag and rather unused.
+	- `g_ft_useWeaponSet` and `g_ft_weaponSetAmmoRatio` modifiers because this feature was broken in Freeze Tag and rather unused.
+	- `cg_ft_thawerIconX` and `cg_ft_thawerIconY` Freeze Tag thawer icon position cvars 
 	- Cabin from the server map rotation and selection menu for CTKD game mode because bots cannot reach the KillerDuck item on the shelf
 - UPDATED
 	- SDL to version 2.32.8
