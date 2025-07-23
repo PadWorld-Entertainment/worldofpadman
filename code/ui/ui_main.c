@@ -129,6 +129,7 @@ vmCvar_t ui_createGametype;
 vmCvar_t ui_drawToolTip;
 
 vmCvar_t ui_drawCrosshair;
+vmCvar_t ui_drawTraceCrosshair;
 vmCvar_t ui_drawCrosshairNames;
 vmCvar_t ui_marks;
 
@@ -209,6 +210,7 @@ static cvarTable_t cvarTable[] = {{&ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", 
 								  {&ui_drawToolTip, "ui_drawToolTip", "1", CVAR_ARCHIVE},
 
 								  {&ui_drawCrosshair, "cg_drawCrosshair", "1", CVAR_ARCHIVE},
+								  {&ui_drawTraceCrosshair, "cg_drawTraceCrosshair", "1", CVAR_ARCHIVE},
 								  {&ui_drawCrosshairNames, "cg_drawCrosshairNames", "1", CVAR_ARCHIVE},
 								  {&ui_marks, "cg_marks", "1", CVAR_ARCHIVE},
 

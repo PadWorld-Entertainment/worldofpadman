@@ -1236,6 +1236,7 @@ extern vmCvar_t cg_mapInfoTime;
 extern vmCvar_t cg_showMapInfo;
 extern vmCvar_t cg_drawAmmoWarning;
 extern vmCvar_t cg_drawCrosshair;
+extern vmCvar_t cg_drawTraceCrosshair;
 extern vmCvar_t cg_drawCrosshairNames;
 extern vmCvar_t cg_drawRewards;
 extern vmCvar_t cg_drawTeamOverlay;

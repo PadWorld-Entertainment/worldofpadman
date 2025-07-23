@@ -95,6 +95,7 @@ vmCvar_t cg_mapInfoTime;
 vmCvar_t cg_showMapInfo;
 vmCvar_t cg_drawAmmoWarning;
 vmCvar_t cg_drawCrosshair;
+vmCvar_t cg_drawTraceCrosshair;
 vmCvar_t cg_drawCrosshairNames;
 vmCvar_t cg_drawRewards;
 vmCvar_t cg_fovAspectAdjust;
@@ -231,6 +232,7 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_drawAmmoWarning, "cg_drawAmmoWarning", "1", CVAR_ARCHIVE},
 	{&cg_drawAttacker, "cg_drawAttacker", "1", CVAR_ARCHIVE},
 	{&cg_drawCrosshair, "cg_drawCrosshair", "1", CVAR_ARCHIVE},
+	{&cg_drawTraceCrosshair, "cg_drawTraceCrosshair", "1", CVAR_ARCHIVE},
 	{&cg_drawCrosshairNames, "cg_drawCrosshairNames", "1", CVAR_ARCHIVE},
 	{&cg_drawRewards, "cg_drawRewards", "1", CVAR_ARCHIVE},
 	{&cg_fovAspectAdjust, "cg_fovAspectAdjust", "1", CVAR_ARCHIVE},
