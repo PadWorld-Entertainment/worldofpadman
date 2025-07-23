@@ -32,21 +32,6 @@ The licenses used are:
   * Attribution-Noncommercial 3.0 Unported
   * http://creativecommons.org/licenses/by-nc/3.0/
 
-# General Server Cvars:
-
-* `g_noSecrets`
-
-values: `1` or `0`
-
-This option controls if secrets such as trap doors and buttons, present in the wop1.x and padpack
-maps, can be use or not.
-
-* `g_noPowerups`
-
-values: `1` or `0`
-
-This option controls if powerups and holdables are spawned on the map.
-
 # Freezetag Server Cvars:
 
 * `g_ft_numRounds`
@@ -70,13 +55,3 @@ example: `15`
 
 Specifies the number of seconds a player has time to join a team without penalty. After this time
 is expired joining a team will automatically freeze the player.
-
-# Freezetag Client Cvars:
-
-* `cg_ft_thawerIconX`
-* `cg_ft_thawerIconY`
-
-values: positive integers in the range `[0, 640]` for `~X` and `[0, 480]` for `~Y`
-
-Specifies the location of the "thawing" icon displayed to the thawer, ie the player doing the
-thawing for a teammate.
