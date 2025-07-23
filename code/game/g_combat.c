@@ -551,7 +551,9 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	if (!(contents & CONTENTS_NODROP) && !level.cammode) {
 		TossClientItems(self);
 	} else {
-		if (self->client->ps.powerups[PW_REDFLAG]) { // only happens in standard CTF
+		if (self->client->ps.powerups[PW_NEUTRALFLAG]) { // only happens in One Flag CTF
+			Team_ReturnFlag(TEAM_FREE);
+		} else if (self->client->ps.powerups[PW_REDFLAG]) { // only happens in standard CTF
 			Team_ReturnFlag(TEAM_RED);
 		} else if (self->client->ps.powerups[PW_BLUEFLAG]) { // only happens in standard CTF
 			Team_ReturnFlag(TEAM_BLUE);
