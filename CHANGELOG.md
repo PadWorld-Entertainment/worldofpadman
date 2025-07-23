@@ -13,10 +13,12 @@
 	- Diner: slightly lowered gamma factor of the light map and added `_minlight` to brighten dark spots
 	- Jail: replaced temperature scale textures with pressure scale textures on the gas bottles and replaced weight scale textures with temperature scale textures on the ventilation 
 - FIXED
-	- Fatal crash when starting a new match from the main menu after exiting an arena and returning directly to the main menu.
-	- KillerDucks attacking frozen players and stacking up in Freeze Tag
+	- Fatal crash when starting a new match from the main menu after exiting an arena and returning directly to the main menu
+	- KillerDucks attacking frozen players and stacking up in FT
+	- Disconnected clients dropping the freeze power-up in FT, which allowed others to collect the item, run around, and shoot while appearing frozen
 	- KillerDucks movement to prevent them to stack and get stuck
 	- KillerDuck disappears from the match if thrown into a nodrop area in CTKD
+	- The neutral lolly would not respawn when the carrier died inside a nodrop volume brush
 	- SprayKiller and SprayGod bonus scores not visible in first-person view, they are now drawn next to the spray scores and not above the payers head
 	- Cvar `bot_minplayers` not working as intended in some game types
 	- Missing `qer_editorimage` path in `textures/pad_wop/padtele` shader
@@ -25,8 +27,8 @@
 	- Weapon makers from mapobjects folder; don't set weapon markers as misc_model entities, use the `marker` key in weapon entities instead
 	- Fall and damage sounds when falling from higher heights, since WoP does not have fall damage
 	- `fall1` sounds from player models and partially reused them as death variant sounds for alternate skins of a player model
-	- `g_ft_useWeaponSet` and `g_ft_weaponSetAmmoRatio` modifiers because this feature was broken in Freeze Tag and rather unused.
-	- `cg_ft_thawerIconX` and `cg_ft_thawerIconY` Freeze Tag thawer icon position cvars 
+	- `g_ft_useWeaponSet` and `g_ft_weaponSetAmmoRatio` modifiers because this feature was broken in FT and rather unused.
+	- `cg_ft_thawerIconX` and `cg_ft_thawerIconY` FT thawer icon position cvars 
 	- Cabin from the server map rotation and selection menu for CTKD game mode because bots cannot reach the KillerDuck item on the shelf
 - UPDATED
 	- SDL to version 2.32.8
