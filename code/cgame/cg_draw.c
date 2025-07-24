@@ -1662,6 +1662,15 @@ static void CG_DrawCrosshair(void) {
 	float f;
 	float x, y;
 	int ca;
+	trace_t trace;
+	playerState_t *ps;
+	vec3_t muzzle, forward, up, start, end;
+	qboolean front;
+
+	static float lastPositionX = SCREEN_WIDTH * 0.5f;
+	static float lastPositionY = SCREEN_HEIGHT * 0.5f;
+
+	ps = &cg.predictedPlayerState;
 
 	if (!cg_drawCrosshair.integer) {
 		return;
@@ -1671,15 +1680,9 @@ static void CG_DrawCrosshair(void) {
 		return;
 	}
 
-	if (cg.renderingThirdPerson) {
-		return;
-	}
-
 	if (cg.wantSelectLogo) {
 		return;
 	}
-
-	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 
 	// set color based on health
 	if (cg_crosshairHealth.integer) {
@@ -1710,8 +1713,37 @@ static void CG_DrawCrosshair(void) {
 	}
 	hShader = cgs.media.crosshairShader[ca % NUM_CROSSHAIRS];
 
-	CG_DrawPic(((SCREEN_WIDTH-w)*0.5f)+x, ((SCREEN_HEIGHT-h)*0.5f)+y, w, h, hShader);
+	if (cg.renderingThirdPerson) {
+		if (cg_drawTraceCrosshair.integer <= 0) {
+			return;
+		} else if (cg_drawTraceCrosshair.integer >= 2) {
+			AngleVectors(cg.snap->ps.viewangles, forward, NULL, up);
+			VectorCopy(cg.snap->ps.origin, muzzle);
+			VectorMA(muzzle, cg.snap->ps.viewheight, up, muzzle);
+		} else {
+			AngleVectors(ps->viewangles, forward, NULL, up);
+			VectorCopy(ps->origin, muzzle);
+			VectorMA(muzzle, ps->viewheight, up, muzzle);
+		}
+		VectorMA(muzzle, 14, forward, muzzle);
+		VectorCopy(muzzle, start);
+		VectorMA(start, 131072, forward, end);
+		CG_Trace(&trace, start, NULL, NULL, end, cg.snap->ps.clientNum, CONTENTS_SOLID | CONTENTS_BODY);
+		front = CG_WorldToScreen(trace.endpos, &x, &y);
+		if (!front) {
+			return;
+		}
 
+		x = LERP(lastPositionX, x, (float)(cg.frametime / 1000.00f) * 18.0f);
+		y = LERP(lastPositionY, y, (float)(cg.frametime / 1000.00f) * 18.0f);
+
+		CG_DrawPic(x - 0.5f * w, y - 0.5f * h, w, h, hShader);
+
+		lastPositionX = x;
+		lastPositionY = y;
+	} else {
+		CG_DrawPic(((SCREEN_WIDTH - w) * 0.5f) + x, ((SCREEN_HEIGHT - h) * 0.5f) + y, w, h, hShader);
+	}
 	trap_R_SetColor(NULL);
 }
 

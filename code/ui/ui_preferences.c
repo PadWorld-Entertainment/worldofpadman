@@ -55,18 +55,19 @@ PREFERENCES MENU
 #define ID_HELP 104
 
 #define ID_CROSSHAIR 10
-#define ID_INDICATEHEALTH 11
-#define ID_IDENTIFYTARGET 12
-#define ID_FFAHUDTHEME 13
-#define ID_DRAW3DICONS 14
-#define ID_TEAMOVERLAY 15
-#define ID_LAGOMETER 16
-#define ID_VOIPMETER 17
-#define ID_TIMER 18
-#define ID_TIMELEFT 19
-#define ID_REALTIME 20
-#define ID_FPS 21
-#define ID_UPS 22
+#define ID_TRACECROSSHAIR 11
+#define ID_INDICATEHEALTH 12
+#define ID_IDENTIFYTARGET 13
+#define ID_FFAHUDTHEME 14
+#define ID_DRAW3DICONS 15
+#define ID_TEAMOVERLAY 16
+#define ID_LAGOMETER 17
+#define ID_VOIPMETER 18
+#define ID_TIMER 19
+#define ID_TIMELEFT 20
+#define ID_REALTIME 21
+#define ID_FPS 22
+#define ID_UPS 23
 
 #define ID_AUTOSWITCH 30
 #define ID_SIMPLEITEMS 31
@@ -117,6 +118,7 @@ typedef struct {
 	menubitmap_s help;
 
 	menulist_s crosshair;
+	menulist_s tracecrosshair;
 	menuradiobutton_s indicatehealth;
 	menuradiobutton_s identifytarget;
 	menulist_s ffahudtheme;
@@ -177,6 +179,7 @@ static preferences_t s_preferences;
 
 static menucommon_s *g_hud_options[] = {
 	(menucommon_s *)&s_preferences.crosshair,
+	(menucommon_s *)&s_preferences.tracecrosshair,
 	(menucommon_s *)&s_preferences.indicatehealth,
 	(menucommon_s *)&s_preferences.identifytarget,
 	(menucommon_s *)&s_preferences.ffahudtheme,
@@ -244,6 +247,8 @@ static menucommon_s **g_options[] = {
 	g_help_options,
 };
 
+static const char *tracecrosshair_items[] = {"Off", "Default", "Traced", NULL};
+
 static const char *ffahudtheme_items[] = {"Black", "Red", "Blue", "Green", "Chrome", "Whitemetal",
 									 "Rust", "Flower", "Wood", "Airforce", NULL};
 
@@ -274,6 +279,7 @@ static void UI_Preferences_SetMenuItems(void) {
 	int cg_iconsCvarValue;
 
 	s_preferences.crosshair.curvalue = (int)trap_Cvar_VariableValue("cg_drawCrosshair") % NUM_CROSSHAIRS;
+	s_preferences.tracecrosshair.curvalue = Com_Clamp(0, 2, trap_Cvar_VariableValue("cg_drawTraceCrosshair"));
 	s_preferences.indicatehealth.curvalue = trap_Cvar_VariableValue("cg_crosshairHealth") != 0;
 	s_preferences.identifytarget.curvalue = trap_Cvar_VariableValue("cg_drawCrosshairNames") != 0;
 	s_preferences.ffahudtheme.curvalue = Com_Clamp(0, 9, trap_Cvar_VariableValue("cg_wopffahud"));
@@ -479,7 +485,11 @@ static void UI_Preferences_Event(void *ptr, int notification) {
 		trap_Cvar_SetValue("cg_drawCrosshair", s_preferences.crosshair.curvalue);
 		break;
 
-	case ID_INDICATEHEALTH:
+	case ID_TRACECROSSHAIR:
+		trap_Cvar_SetValue("cg_drawTraceCrosshair", s_preferences.tracecrosshair.curvalue);
+		break;
+
+		case ID_INDICATEHEALTH:
 		trap_Cvar_SetValue("cg_crosshairHealth", s_preferences.indicatehealth.curvalue);
 		break;
 
@@ -840,6 +850,19 @@ static void UI_Preferences_MenuInit(void) {
 		"Select your favorite crosshair design by clicking on the image.";
 
 	y = YPOSITION;
+	s_preferences.tracecrosshair.generic.type = MTYPE_SPINCONTROL;
+	s_preferences.tracecrosshair.generic.name = "3rd Person View:";
+	s_preferences.tracecrosshair.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
+	s_preferences.tracecrosshair.generic.callback = UI_Preferences_Event;
+	s_preferences.tracecrosshair.generic.id = ID_TRACECROSSHAIR;
+	s_preferences.tracecrosshair.generic.x = XPOSITION;
+	s_preferences.tracecrosshair.generic.y = y;
+	s_preferences.tracecrosshair.itemnames = tracecrosshair_items;
+	s_preferences.tracecrosshair.generic.toolTip =
+		"Disable to not display the crosshair in third person view. "
+		"Select 'traced' to achieve an appearance similar to that in the simulations.";
+
+	y += (BIGCHAR_HEIGHT + 2);
 	s_preferences.indicatehealth.generic.type = MTYPE_RADIOBUTTON;
 	s_preferences.indicatehealth.generic.name = "Indicate Health:";
 	s_preferences.indicatehealth.generic.flags = QMF_SMALLFONT | QMF_HIDDEN;
@@ -1415,6 +1438,7 @@ static void UI_Preferences_MenuInit(void) {
 	Menu_AddItem(&s_preferences.menu, &s_preferences.back);
 
 	Menu_AddItem(&s_preferences.menu, &s_preferences.crosshair);
+	Menu_AddItem(&s_preferences.menu, &s_preferences.tracecrosshair);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.indicatehealth);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.identifytarget);
 	Menu_AddItem(&s_preferences.menu, &s_preferences.ffahudtheme);
