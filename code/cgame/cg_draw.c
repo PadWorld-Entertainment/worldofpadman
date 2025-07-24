@@ -1672,15 +1672,23 @@ static void CG_DrawCrosshair(void) {
 
 	ps = &cg.predictedPlayerState;
 
+	// don't draw crosshair when disabled
 	if (!cg_drawCrosshair.integer) {
 		return;
 	}
 
+	// don't draw crosshair when spectator
 	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 		return;
 	}
 
+	// don't draw crosshair when in select logo ingame menu
 	if (cg.wantSelectLogo) {
+		return;
+	}
+
+	// don't draw crosshair when killerduck in ctkd
+	if (BG_IsKillerDuck(&cg.snap->ps)) {
 		return;
 	}
 
@@ -1764,14 +1772,27 @@ static void CG_DrawCrosshair3D(void) {
 	char rendererinfos[128];
 	refEntity_t ent;
 
+	// don't draw crosshair when disabled
 	if (!cg_drawCrosshair.integer) {
 		return;
 	}
 
+	// don't draw crosshair when spectator
 	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 		return;
 	}
 
+	// don't draw crosshair when in select logo ingame menu
+	if (cg.wantSelectLogo) {
+		return;
+	}
+
+	// don't draw crosshair when killerduck in ctkd
+	if (BG_IsKillerDuck(&cg.snap->ps)) {
+		return;
+	}
+
+	// don't draw crosshair when in 3rd person view
 	if (cg.renderingThirdPerson) {
 		return;
 	}
