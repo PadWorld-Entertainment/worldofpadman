@@ -3,11 +3,13 @@
 ## Version: 1.7.1 (tba)
 
 - ADDED
-	- Community MapPack v1.1.0 with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
+	- Community MapPack v1.2.0 with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
+	- Traceable crosshair in 3rd person view; disable or set to "traced" mode in game options menu
 	- Missing PADMAN winner statue model (md3 file)
 	- Jail: missing pressure scale textures
 - CHANGED
 	- PadGirl and PadBabe taunts, PadGirl now says "Don't call me babe!" and PadBabe now says "Eat this!" which makes more sense
+	- Crosshair not drawn when playing as the KillerDuck in CTKD to better indicate that there is no weapon to shoot with
 	- Landing sound to play on all falls, no matter the height, the Pads always fall on their feeds without taking damage
 	- KillerDuck pickup lock time beyond respawn time to prevent players from gaining too much of an advantage from health and armor refills by re-collecting the item too fast
 	- Diner: slightly lowered gamma factor of the light map and added `_minlight` to brighten dark spots
@@ -20,6 +22,7 @@
 	- KillerDuck disappears from the match if thrown into a nodrop area in CTKD
 	- The neutral lolly would not respawn when the carrier died inside a nodrop volume brush
 	- SprayKiller and SprayGod bonus scores not visible in first-person view, they are now drawn next to the spray scores and not above the payers head
+	- 3D crosshair drawn and visible in front of select logo ingame menu in SYC when anaglyph mode is enabled.
 	- Cvar `bot_minplayers` not working as intended in some game types
 	- Missing `qer_editorimage` path in `textures/pad_wop/padtele` shader
 	- Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights
