@@ -266,7 +266,11 @@ void CL_HTTP_BeginDownload(const char *remoteURL) {
 	qcurl_easy_setopt_warn(downloadCURL, CURLOPT_FAILONERROR, 1);
 	qcurl_easy_setopt_warn(downloadCURL, CURLOPT_FOLLOWLOCATION, 1);
 	qcurl_easy_setopt_warn(downloadCURL, CURLOPT_MAXREDIRS, 5);
-	qcurl_easy_setopt_warn(downloadCURL, CURLOPT_PROTOCOLS_STR, "http,https");
+#if CURL_AT_LEAST_VERSION(7,85,0)
+	qcurl_easy_setopt_warn(downloadCURL, CURLOPT_PROTOCOLS_STR, "http,https,ftp,ftps");
+#else
+	qcurl_easy_setopt_warn(downloadCURL, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS | CURLPROTO_FTP | CURLPROTO_FTPS);
+#endif
 	qcurl_easy_setopt_warn(downloadCURL, CURLOPT_BUFFERSIZE, CURL_MAX_READ_SIZE);
 	downloadCURLM = qcurl_multi_init();
 	if (!downloadCURLM) {
