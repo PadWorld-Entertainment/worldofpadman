@@ -23,11 +23,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef SV_HTTP_H
 #define SV_HTTP_H
 
+extern int httpConnectTimeoutSecond;
+extern int httpTimeoutSecond;
+
 int HTTP_Init(void);
 void HTTP_Close(void);
 void HTTP_SetTimeouts(int connectTimeoutSeconds, int readWriteTimeoutSeconds);
 int HTTP_ExecutePOST(const char *url, const char *headers, const char *body,
 					 void (*writeCallback)(unsigned char *, int));
 int HTTP_ExecuteGET(const char *url, const char *headers, void (*writeCallback)(unsigned char *, int));
+int HTTP_Execute(const char *mode, const char *url, const char *headers, const char *body,
+				 void (*writeCallback)(unsigned char *, int));
 
 #endif
