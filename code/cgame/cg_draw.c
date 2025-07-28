@@ -1651,6 +1651,31 @@ CROSSHAIR
 ================================================================================
 */
 
+static qboolean CG_ShouldDrawCrosshair(void) {
+
+	// don't draw crosshair when disabled
+	if (!cg_drawCrosshair.integer) {
+		return qfalse;
+	}
+
+	// don't draw crosshair when spectator
+	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+		return qfalse;
+	}
+
+	// don't draw crosshair when in select logo ingame menu
+	if (cg.wantSelectLogo) {
+		return qfalse;
+	}
+
+	// don't draw crosshair when killerduck in ctkd
+	if (BG_IsKillerDuck(&cg.snap->ps)) {
+		return qfalse;
+	}
+
+	return qtrue;
+}
+
 /*
 =================
 CG_DrawCrosshair
@@ -1673,22 +1698,7 @@ static void CG_DrawCrosshair(void) {
 	ps = &cg.predictedPlayerState;
 
 	// don't draw crosshair when disabled
-	if (!cg_drawCrosshair.integer) {
-		return;
-	}
-
-	// don't draw crosshair when spectator
-	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
-		return;
-	}
-
-	// don't draw crosshair when in select logo ingame menu
-	if (cg.wantSelectLogo) {
-		return;
-	}
-
-	// don't draw crosshair when killerduck in ctkd
-	if (BG_IsKillerDuck(&cg.snap->ps)) {
+	if (!CG_ShouldDrawCrosshair()) {
 		return;
 	}
 
@@ -1773,26 +1783,12 @@ static void CG_DrawCrosshair3D(void) {
 	refEntity_t ent;
 
 	// don't draw crosshair when disabled
-	if (!cg_drawCrosshair.integer) {
-		return;
-	}
-
-	// don't draw crosshair when spectator
-	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
-		return;
-	}
-
-	// don't draw crosshair when in select logo ingame menu
-	if (cg.wantSelectLogo) {
-		return;
-	}
-
-	// don't draw crosshair when killerduck in ctkd
-	if (BG_IsKillerDuck(&cg.snap->ps)) {
+	if (!CG_ShouldDrawCrosshair()) {
 		return;
 	}
 
 	// don't draw crosshair when in 3rd person view
+	// ToDo: Add a 3rd person view crosshair for anaglyph stereo mode
 	if (cg.renderingThirdPerson) {
 		return;
 	}
