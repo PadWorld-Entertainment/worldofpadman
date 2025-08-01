@@ -116,8 +116,8 @@ endforeach()
 if (USE_RENDERER_DLOPEN)
 	list(APPEND SRCS
 		../qcommon/q_shared.c
-		../qcommon/puff.c
 		../qcommon/q_math.c
+		../renderercommon/puff.c
 	)
 endif()
 
