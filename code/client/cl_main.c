@@ -2358,6 +2358,8 @@ static void CL_ServersResponsePacket(const netadr_t *from, msg_t *msg, qboolean 
 	Com_Printf("%d servers parsed (total %d)\n", numservers, total);
 }
 
+static void CL_ServerInfoPacket(netadr_t from, msg_t *msg);
+
 /*
 =================
 CL_ConnectionlessPacket
@@ -3317,6 +3319,8 @@ static void CL_Sayto_f(void) {
 	CL_AddReliableCommand(va("tell %i \"%s\"", clientNum, p), qfalse);
 }
 
+static void CL_Ping_f(void);
+
 /*
 ====================
 CL_Init
@@ -3650,7 +3654,7 @@ static void CL_SetServerInfoByAddress(netadr_t from, const char *info, int ping)
 CL_ServerInfoPacket
 ===================
 */
-void CL_ServerInfoPacket(netadr_t from, msg_t *msg) {
+static void CL_ServerInfoPacket(netadr_t from, msg_t *msg) {
 	int i, type;
 	char info[MAX_INFO_STRING];
 	const char *infoString;
@@ -3904,7 +3908,7 @@ CL_LocalServers_f
 ==================
 */
 void CL_LocalServers_f(void) {
-	char *message;
+	const char *message;
 	int i, j;
 	netadr_t to;
 
@@ -4173,7 +4177,7 @@ static ping_t *CL_GetFreePing(void) {
 CL_Ping_f
 ==================
 */
-void CL_Ping_f(void) {
+static void CL_Ping_f(void) {
 	netadr_t to;
 	ping_t *pingptr;
 	const char *server;

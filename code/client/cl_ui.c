@@ -47,7 +47,7 @@ static void GetClientState(uiClientState_t *state) {
 LAN_LoadCachedServers
 ====================
 */
-void LAN_LoadCachedServers(void) {
+static void LAN_LoadCachedServers(void) {
 	int size;
 	fileHandle_t fileIn;
 	cls.numglobalservers = cls.numfavoriteservers = 0;
@@ -72,7 +72,7 @@ void LAN_LoadCachedServers(void) {
 LAN_SaveServersToCache
 ====================
 */
-void LAN_SaveServersToCache(void) {
+static void LAN_SaveServersToCache(void) {
 	int size;
 	fileHandle_t fileOut = FS_SV_FOpenFileWrite("servercache.dat");
 	FS_Write(&cls.numglobalservers, sizeof(int), fileOut);

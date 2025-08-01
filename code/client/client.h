@@ -515,11 +515,8 @@ void CL_ParseServerMessage(msg_t *msg);
 
 //====================================================================
 
-void CL_ServerInfoPacket(netadr_t from, msg_t *msg);
 void CL_LocalServers_f(void);
 void CL_GlobalServers_f(void);
-void CL_FavoriteServers_f(void);
-void CL_Ping_f(void);
 qboolean CL_UpdateVisiblePings_f(int source);
 
 //
@@ -616,8 +613,6 @@ void CL_ShutdownCGame(void);
 qboolean CL_GameCommand(void);
 void CL_CGameRendering(stereoFrame_t stereo);
 void CL_SetCGameTime(void);
-void CL_FirstSnapshot(void);
-void CL_ShaderStateChanged(void);
 
 //
 // cl_ui.c
@@ -626,8 +621,6 @@ void CL_InitUI(void);
 void CL_ShutdownUI(void);
 int Key_GetCatcher(void);
 void Key_SetCatcher(int catcher);
-void LAN_LoadCachedServers(void);
-void LAN_SaveServersToCache(void);
 
 //
 // cl_net_chan.c
