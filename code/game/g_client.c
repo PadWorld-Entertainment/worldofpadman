@@ -1364,7 +1364,7 @@ void ClientSpawn(gentity_t *ent) {
 	BG_PlayerStateToEntityState(&client->ps, &ent->s, qtrue);
 
 	// start instapad spawn protection
-	if (g_instaPad.integer) {
+	if (g_instaPad.integer && g_instaPadSpawnProtect.integer) {
 		ent->flags ^= FL_GODMODE;
 		client->spawnProtect = level.time;
 		G_AddEvent(ent, EV_SPAWNPROTECT, qtrue);

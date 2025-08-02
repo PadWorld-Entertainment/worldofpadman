@@ -101,6 +101,7 @@ vmCvar_t g_ft_debug;
 // instapad
 vmCvar_t g_instaPad;
 vmCvar_t g_instaPadWeaponJump;
+vmCvar_t g_instaPadSpawnProtect;
 
 vmCvar_t g_logDamage;
 
@@ -192,6 +193,7 @@ static cvarTable_t gameCvarTable[] = {
 	// instapad
 	{&g_instaPad, "g_instaPad", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qtrue},
 	{&g_instaPadWeaponJump, "g_weaponJump", "1", CVAR_ARCHIVE, 0, qtrue},
+	{&g_instaPadSpawnProtect, "g_spawnProtect", "3", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue},
 
 	{&g_ft_numRounds, "g_ft_numRounds", "3", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},
 	{&g_ft_playAllRounds, "g_ft_playAllRounds", "0", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},

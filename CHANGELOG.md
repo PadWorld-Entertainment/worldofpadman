@@ -6,12 +6,14 @@
 	- Community MapPack v1.2.0 with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
 	- Traceable crosshair in 3rd person view; disable or set to "traced" mode in game options menu
 	- Missing PADMAN winner statue model (md3 file)
+	- Cvar `g_spawnProtect` to set the spawn protect time in InstaPad in seconds, default value is 3, 0 turns it off
 	- Jail: missing pressure scale textures
 - CHANGED
 	- PadGirl and PadBabe taunts, PadGirl now says "Don't call me babe!" and PadBabe now says "Eat this!" which makes more sense
 	- Crosshair not drawn when playing as the KillerDuck in CTKD to better indicate that there is no weapon to shoot with
 	- Landing sound to play on all falls, no matter the height, the Pads always fall on their feeds without taking damage
 	- KillerDuck pickup lock time beyond respawn time to prevent players from gaining too much of an advantage from health and armor refills by re-collecting the item too fast
+	- Spawn protect default time from 6 to 3 seconds in InstaPad
 	- Diner: slightly lowered gamma factor of the light map and added `_minlight` to brighten dark spots
 	- Jail: replaced temperature scale textures with pressure scale textures on the gas bottles and replaced weight scale textures with temperature scale textures on the ventilation 
 - FIXED
