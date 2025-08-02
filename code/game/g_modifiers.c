@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
 	All(/most of) the Modifier specific stuff should go here
-	So far it's all just instagib though, no idea if there will be more :X
+	So far it's all just instapad though, no idea if there will be more :X
 */
 
 #include "g_local.h"
@@ -29,17 +29,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /*
 *****************************************
 
-	Instagib
+	InstaPad
 
 *****************************************
 */
 
-#define INSTAGIB_DAMAGE 5000
-#define INSTAGIB_WJUMP_MAXRADIUS 50
-#define INSTAGIB_WJUMP_KNOCKBACK 110
+#define INSTAPAD_DAMAGE 5000
+#define INSTAPAD_WJUMP_MAXRADIUS 50
+#define INSTAPAD_WJUMP_KNOCKBACK 110
 
 /**
-Returns the damage value to be used in instagib play
+Returns the damage value to be used in instapad play
 
 target:		the target of the attack
 inflictor:	the inflictor used for the attack (missile)
@@ -48,7 +48,7 @@ damage:		damage to be normally dealt by attack
 dflags:		special DAMAGE_* flag
 mod:		method of death used in the attack
 */
-int Instagib_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage, int dflags,
+int InstaPad_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage, int dflags,
 							 int mod) {
 	if (attacker == target)
 		return damage;
@@ -59,15 +59,15 @@ int Instagib_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t 
 	if (dflags == DAMAGE_RADIUS && attacker->client)
 		return 0; // no splash damage from players -- might change later ;)
 
-	return INSTAGIB_DAMAGE;
+	return INSTAPAD_DAMAGE;
 }
 
 /**
-Returns qfalse if entity is not to be spawned for instagib play.
+Returns qfalse if entity is not to be spawned for instapad play.
 
 ent:	entity that wants to be spawned
 */
-qboolean Instagib_canSpawnEntity(const gentity_t *ent) {
+qboolean InstaPad_canSpawnEntity(const gentity_t *ent) {
 	static const char *list[] = {// list of stuff we don't want
 								 "holdable_", "weapon_", "ammo_", "station_health", NULL};
 	const char *classname = ent->classname;
@@ -100,7 +100,7 @@ mod:		method of death
 
 (feels kinda weird, very un-rocket-jumpy.. >_<)
 */
-void Instagib_applyWeaponJumpKnockback(vec3_t origin, gentity_t *playerEnt, int mod) {
+void InstaPad_applyWeaponJumpKnockback(vec3_t origin, gentity_t *playerEnt, int mod) {
 	int distance;
 	vec3_t distanceVector;
 
@@ -113,7 +113,7 @@ void Instagib_applyWeaponJumpKnockback(vec3_t origin, gentity_t *playerEnt, int 
 	VectorSubtract(origin, playerEnt->r.currentOrigin, distanceVector);
 	distance = VectorLength(distanceVector);
 
-	if (distance <= INSTAGIB_WJUMP_MAXRADIUS) {
+	if (distance <= INSTAPAD_WJUMP_MAXRADIUS) {
 		vec3_t direction, kvel;
 		float mass, knockback;
 
@@ -122,7 +122,7 @@ void Instagib_applyWeaponJumpKnockback(vec3_t origin, gentity_t *playerEnt, int 
 		VectorNormalize(direction);
 
 		mass = 200;
-		knockback = INSTAGIB_WJUMP_KNOCKBACK;
+		knockback = INSTAPAD_WJUMP_KNOCKBACK;
 
 		VectorScale(direction, g_knockback.value * knockback / mass, kvel);
 		VectorAdd(playerEnt->client->ps.velocity, kvel, playerEnt->client->ps.velocity);
@@ -131,8 +131,8 @@ void Instagib_applyWeaponJumpKnockback(vec3_t origin, gentity_t *playerEnt, int 
 
 /**
 Returns WP_* index of the weapon that players are to be spawned
-with during instagib play
+with during instapad play
 */
-int Instagib_getSpawnWeapon(void) {
+int InstaPad_getSpawnWeapon(void) {
 	return WP_KMA97; // for now, it's always KMA :)
 }

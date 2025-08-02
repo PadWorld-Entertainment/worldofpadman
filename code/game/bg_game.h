@@ -74,7 +74,7 @@
 #define ADDTIME_IMPERIUS 800
 
 // NOTE: More KMA97 should be here aswell, but it is supposed to be used
-//       in instagib only. Should also be instant hit like splasher.
+//       in instapad only. Should also be instant hit like splasher.
 #define ADDTIME_KMA97 1500 // FIXME: Should this equal splasher?
 
 // Spraypistol?

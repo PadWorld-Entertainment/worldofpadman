@@ -2729,7 +2729,7 @@ static void CG_HudDrawHealthAndArmor(int hudnum) {
 
 	CG_AdjustFrom640(&x, &y, &w, &h);
 
-	// override tmpf when instagib spawn protection is active
+	// override tmpf when instapad spawn protection is active
 	// to flash the energy and shield bars
 	if (cg_entities[cg.snap->ps.clientNum].spawnProtection) {
 		tmpf = round(cos(cg.time * 0.01f) * 0.5f + 0.5f);

@@ -572,13 +572,12 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	}
 
 	/*
-	Modifiers / Instagib
-	Exclude unwanted Items from spawning in Instagib, but have them register with
+	Exclude unwanted items from spawning in instapad, but have them register with
 	the client anyway. (So we have working visuals and sound for the entities when
 	we turn off the modifier, which doesn't trigger a full client reload)
 	*/
-	if (g_modInstagib.integer && !Instagib_canSpawnEntity(ent)) {
-		Com_DPrintf("Spawning: not allowed is instagib (%s).\n", ent->classname);
+	if (g_instaPad.integer && !InstaPad_canSpawnEntity(ent)) {
+		Com_DPrintf("Spawning: not allowed in InstaPad (%s).\n", ent->classname);
 		G_FreeEntity(ent);
 		return;
 	}
@@ -590,8 +589,9 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 		vec3_t max = {16.0f, 16.0f, 1.0f};
 		vec3_t trEnd;
 
-		if (g_modInstagib.integer) { // no markers for instagib
-			Com_DPrintf("Spawning: no markers is instagib (%s).\n", ent->classname);
+		// no weapon markers in instapad
+		if (g_instaPad.integer) { 
+			Com_DPrintf("Spawning: no markers is InstaPad (%s).\n", ent->classname);
 			G_FreeEntity(ent);
 			return;
 		}

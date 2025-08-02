@@ -1458,8 +1458,8 @@ void BotChooseWeapon(bot_state_t *bs) {
 			newweaponnum = WP_KILLERDUCKS;
 		}
 
-		if (g_modInstagib.integer && (newweaponnum != WP_SPRAYPISTOL)) {
-			newweaponnum = Instagib_getSpawnWeapon();
+		if (g_instaPad.integer && (newweaponnum != WP_SPRAYPISTOL)) {
+			newweaponnum = InstaPad_getSpawnWeapon();
 			bs->weaponnum = newweaponnum;
 			trap_EA_SelectWeapon(bs->client, bs->weaponnum);
 			return;
@@ -1819,7 +1819,7 @@ float BotAggression(bot_state_t *bs) {
 	}
 
 	if (bs->inventory[INVENTORY_KMA]) // FIXME/CHECKME: I'm not really sure if it is good to make them agressive in
-									  // instaGib
+									  // instapad
 		return 100;
 	// if the bot can use the IMPERiUS
 	if (bs->inventory[INVENTORY_IMPERIUS] > 0 && bs->inventory[INVENTORY_IMPERIUSAMMO] > 0)

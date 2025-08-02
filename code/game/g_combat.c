@@ -132,9 +132,8 @@ void TossClientItems(gentity_t *self) {
 		}
 	}
 
-	// Modifiers
-	// prevent weapon drop in instagib
-	if (g_modInstagib.integer) {
+	// prevent weapon drop in instapad
+	if (g_instaPad.integer) {
 		weapon = WP_NONE;
 	}
 
@@ -787,10 +786,9 @@ void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3
 		VectorNormalize(dir);
 	}
 
-	// Modifiers / Instagib
-	// Apply special instagib damage rules to target
-	if (g_modInstagib.integer) {
-		damage = Instagib_calculateDamage(victim, inflictor, attacker, damage, dflags, mod);
+	// apply special instapad damage rules to target
+	if (g_instaPad.integer) {
+		damage = InstaPad_calculateDamage(victim, inflictor, attacker, damage, dflags, mod);
 		dflags |= DAMAGE_NO_ARMOR;
 	}
 

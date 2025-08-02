@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CARNAGE_REWARD_TIME 3000
 #define REWARD_SPRITE_TIME 4000
 #define SPRAYREWARD_SPRITE_TIME 6000
-#define INSTAGIB_PROTECT_TIME 6000
+#define INSTAPAD_PROTECT_TIME 6000
 
 #define INTERMISSION_DELAY_TIME 1000
 #define SP_INTERMISSION_DELAY_TIME 5000
@@ -411,7 +411,7 @@ struct gclient_s {
 	int lastSentFlyingTime;
 
 	int dropTime;
-	int spawnProtect; // instagib spawn protection
+	int spawnProtect; // instapad spawn protection
 
 	int powerupsBackpack[MAX_POWERUPS];
 	qboolean frozen;
@@ -816,13 +816,13 @@ void Svcmd_AbortPodium_f(void);
 //
 // g_modifiers.c
 //
-void Instagib_applyWeaponJumpKnockback(vec3_t origin, gentity_t *ent, int mod);
-int Instagib_getSpawnWeapon(void);
-int Instagib_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage, int dflags,
+void InstaPad_applyWeaponJumpKnockback(vec3_t origin, gentity_t *ent, int mod);
+int InstaPad_getSpawnWeapon(void);
+int InstaPad_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage, int dflags,
 							 int mod);
-qboolean Instagib_isRelevantDamageEvent(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage,
+qboolean InstaPad_isRelevantDamageEvent(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage,
 										int dflags, int mod);
-qboolean Instagib_canSpawnEntity(const gentity_t *ent);
+qboolean InstaPad_canSpawnEntity(const gentity_t *ent);
 
 //
 // g_ctlitems.c
@@ -961,9 +961,9 @@ extern vmCvar_t g_ft_playAllRounds;
 extern vmCvar_t g_ft_lateJoinTime;
 extern vmCvar_t g_ft_debug;
 
-// Modifiers
-extern vmCvar_t g_modInstagib;
-extern vmCvar_t g_modInstagib_WeaponJump;
+// instapad
+extern vmCvar_t g_instaPad;
+extern vmCvar_t g_instaPadWeaponJump;
 
 extern vmCvar_t g_logDamage;
 

@@ -237,9 +237,9 @@ static void G_MissileImpact(gentity_t *ent, trace_t *trace) {
 		}
 	}
 
-	// Instagib Weaponjump
-	if (g_modInstagib.integer && g_modInstagib_WeaponJump.integer)
-		Instagib_applyWeaponJumpKnockback(trace->endpos, ent->parent, ent->methodOfDeath);
+	// instapad weapon jump
+	if (g_instaPad.integer && g_instaPadWeaponJump.integer)
+		InstaPad_applyWeaponJumpKnockback(trace->endpos, ent->parent, ent->methodOfDeath);
 
 	trap_LinkEntity(ent);
 }

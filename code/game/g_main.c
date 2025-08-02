@@ -98,9 +98,9 @@ vmCvar_t g_ft_playAllRounds;
 vmCvar_t g_ft_lateJoinTime;
 vmCvar_t g_ft_debug;
 
-// Modifiers
-vmCvar_t g_modInstagib;
-vmCvar_t g_modInstagib_WeaponJump;
+// instapad
+vmCvar_t g_instaPad;
+vmCvar_t g_instaPadWeaponJump;
 
 vmCvar_t g_logDamage;
 
@@ -189,10 +189,9 @@ static cvarTable_t gameCvarTable[] = {
 	{&g_transmitSVboastermissiles, "g_transmitSVboastermissiles", "0", 0, 0, qtrue},
 	{&g_suddenDeath, "g_suddenDeath", "1", CVAR_ARCHIVE, 0, qfalse},
 
-	// Modifiers
-	{&g_modInstagib, "g_instaPad", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qtrue},
-	// TODO: Either rename again or allow instapad-weaponjump in non-instapad gameplay :)
-	{&g_modInstagib_WeaponJump, "g_weaponJump", "1", CVAR_ARCHIVE, 0, qtrue},
+	// instapad
+	{&g_instaPad, "g_instaPad", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qtrue},
+	{&g_instaPadWeaponJump, "g_weaponJump", "1", CVAR_ARCHIVE, 0, qtrue},
 
 	{&g_ft_numRounds, "g_ft_numRounds", "3", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},
 	{&g_ft_playAllRounds, "g_ft_playAllRounds", "0", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse},

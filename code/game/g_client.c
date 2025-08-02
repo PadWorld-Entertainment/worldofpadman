@@ -130,7 +130,7 @@ static gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from) {
 }
 #endif
 
-// this should be used by the instaGib-Bots to have any idea where they could run to
+// this should be used by the bots in instapad to have any idea where they could run to
 // previously they used the normal spawn-code, but this is a real heavy-weight-call
 qboolean GetASpawnPosition(vec3_t currentPos, vec3_t output) {
 	gentity_t *spot;
@@ -1244,11 +1244,11 @@ void ClientSpawn(gentity_t *ent) {
 
 	client->ps.clientNum = index;
 
-	// weapon inventory / Modifiers
-	if (g_modInstagib.integer) {
-		int weapon = Instagib_getSpawnWeapon();
+	// instapad weapon inventory
+	if (g_instaPad.integer) {
+		int weapon = InstaPad_getSpawnWeapon();
 
-		// add instagib weapon to client's inventory
+		// add instapad weapon to client's inventory
 		client->ps.stats[STAT_WEAPONS] = (1 << weapon);
 		client->ps.ammo[weapon] = INFINITE;
 	} else {
@@ -1271,12 +1271,12 @@ void ClientSpawn(gentity_t *ent) {
 		client->ps.stats[STAT_WEAPONS] |= (1 << WP_SPRAYPISTOL);
 	}
 
-	if (g_modInstagib.integer) {
+	if (g_instaPad.integer) {
 		// set health to max_health
 		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH];
 	} else {
 		// health will count down towards max_health
-		// add some bonus health as spawn protection if instagib is not active
+		// add some bonus health as spawn protection if instapad is not active
 		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
 	}
 
@@ -1363,8 +1363,8 @@ void ClientSpawn(gentity_t *ent) {
 	// clear entity state values
 	BG_PlayerStateToEntityState(&client->ps, &ent->s, qtrue);
 
-	// start instagib spawn protection
-	if (g_modInstagib.integer) {
+	// start instapad spawn protection
+	if (g_instaPad.integer) {
 		ent->flags ^= FL_GODMODE;
 		client->spawnProtect = level.time;
 		G_AddEvent(ent, EV_SPAWNPROTECT, qtrue);

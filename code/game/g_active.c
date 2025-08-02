@@ -742,9 +742,9 @@ static void ClientThink_real(gentity_t *ent) {
 		return;
 	}
 
-	// stop instagib spawn protection
-	if (g_modInstagib.integer) {
-		if ((ent->flags & FL_GODMODE) && ((level.time - ent->client->spawnProtect) > INSTAGIB_PROTECT_TIME)) {
+	// stop instapad spawn protection
+	if (g_instaPad.integer) {
+		if ((ent->flags & FL_GODMODE) && ((level.time - ent->client->spawnProtect) > INSTAPAD_PROTECT_TIME)) {
 			ent->flags &= ~FL_GODMODE;
 			G_AddEvent(ent, EV_SPAWNPROTECT, qfalse);
 			Com_DPrintf("Stop spawn protection for %s\n", client->pers.netname);

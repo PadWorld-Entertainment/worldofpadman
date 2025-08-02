@@ -67,7 +67,7 @@ typedef struct {
 	menufield_s fraglimit;
 	menufield_s maxclients;
 	menuradiobutton_s friendlyfire;
-	menuradiobutton_s instagib;
+	menuradiobutton_s instapad;
 	menufield_s hostname;
 	menuradiobutton_s pure;
 	menufield_s startlives;
@@ -422,7 +422,7 @@ static void UI_StartServer_MenuEvent(void *ptr, int event) {
 			int dedicated;
 			int gametype;
 			int friendlyfire;
-			int instagib;
+			int instapad;
 			int pure;
 			int skill;
 			int n;
@@ -439,7 +439,7 @@ static void UI_StartServer_MenuEvent(void *ptr, int event) {
 			maxclients = atoi(s_startserver.maxclients.field.buffer);
 			dedicated = s_startserver.dedicated.curvalue;
 			friendlyfire = s_startserver.friendlyfire.curvalue;
-			instagib = s_startserver.instagib.curvalue;
+			instapad = s_startserver.instapad.curvalue;
 			pure = s_startserver.pure.curvalue;
 			skill = (int)trap_Cvar_VariableValue("g_spSkill");
 			if (skill < 1 || skill > 5) {
@@ -482,7 +482,7 @@ static void UI_StartServer_MenuEvent(void *ptr, int event) {
 			trap_Cvar_SetValue("pointlimit", Com_Clamp(0, fraglimit, fraglimit));
 			trap_Cvar_SetValue("g_LPS_startlives", Com_Clamp(1, lifelimit, lifelimit));
 			trap_Cvar_SetValue("g_friendlyfire", friendlyfire);
-			trap_Cvar_SetValue("g_instaPad", instagib);
+			trap_Cvar_SetValue("g_instaPad", instapad);
 			trap_Cvar_SetValue("sv_pure", pure);
 			trap_Cvar_Set("sv_hostname", s_startserver.hostname.field.buffer);
 
@@ -740,11 +740,11 @@ static void UI_StartServer_MenuInit(void) {
 	s_startserver.friendlyfire.generic.name = "Friendly Fire:";
 
 	y += BIGCHAR_HEIGHT + 2;
-	s_startserver.instagib.generic.type = MTYPE_RADIOBUTTON;
-	s_startserver.instagib.generic.flags = QMF_SMALLFONT;
-	s_startserver.instagib.generic.x = OPTIONS_XPOS;
-	s_startserver.instagib.generic.y = y;
-	s_startserver.instagib.generic.name = "InstaPad:";
+	s_startserver.instapad.generic.type = MTYPE_RADIOBUTTON;
+	s_startserver.instapad.generic.flags = QMF_SMALLFONT;
+	s_startserver.instapad.generic.x = OPTIONS_XPOS;
+	s_startserver.instapad.generic.y = y;
+	s_startserver.instapad.generic.name = "InstaPad:";
 
 	y += BIGCHAR_HEIGHT + 2;
 	s_startserver.pure.generic.type = MTYPE_RADIOBUTTON;
@@ -843,7 +843,7 @@ static void UI_StartServer_MenuInit(void) {
 
 	Menu_AddItem(&s_startserver.menu, &s_startserver.hostname);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.friendlyfire);
-	Menu_AddItem(&s_startserver.menu, &s_startserver.instagib);
+	Menu_AddItem(&s_startserver.menu, &s_startserver.instapad);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.pure);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.dedicated);
 	Menu_AddItem(&s_startserver.menu, &s_startserver.fraglimit);
