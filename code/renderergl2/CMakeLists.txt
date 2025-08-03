@@ -90,7 +90,7 @@ if (USE_RENDERER_DLOPEN)
 		../qcommon/q_shared.c
 		../qcommon/puff.c
 		../qcommon/q_math.c
-		tr_subs.c
+		../renderercommon/tr_subs.c
 	)
 endif()
 
