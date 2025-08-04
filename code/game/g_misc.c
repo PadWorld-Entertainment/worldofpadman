@@ -70,7 +70,7 @@ TELEPORTERS
 =================================================================================
 */
 
-void TeleportPlayer(gentity_t *player, vec3_t origin, vec3_t angles) {
+void TeleportPlayer(gentity_t *player, const vec3_t origin, const vec3_t angles) {
 	gentity_t *tent;
 
 	// use temp events at source and destination to prevent the effect

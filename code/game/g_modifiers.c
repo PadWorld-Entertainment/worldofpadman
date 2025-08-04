@@ -48,8 +48,8 @@ damage:		damage to be normally dealt by attack
 dflags:		special DAMAGE_* flag
 mod:		method of death used in the attack
 */
-int InstaPad_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage, int dflags,
-							 int mod) {
+int InstaPad_calculateDamage(const gentity_t *target, const gentity_t *inflictor, const gentity_t *attacker, int damage,
+							 int dflags, int mod) {
 	if (attacker == target)
 		return damage;
 

@@ -30,7 +30,7 @@ G_BounceMissile
 
 ================
 */
-static void G_BounceMissile(gentity_t *ent, trace_t *trace) {
+static void G_BounceMissile(gentity_t *ent, const trace_t *trace) {
 	vec3_t velocity;
 	float dot;
 	int hitTime;

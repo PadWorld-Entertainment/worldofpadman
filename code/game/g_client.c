@@ -582,7 +582,7 @@ SetClientViewAngle
 
 ==================
 */
-void SetClientViewAngle(gentity_t *ent, vec3_t angle) {
+void SetClientViewAngle(gentity_t *ent, const vec3_t angle) {
 	int i;
 
 	// set the delta angle

@@ -1000,7 +1000,7 @@ static void Blocked_Door(gentity_t *ent, gentity_t *other) {
 Touch_DoorTriggerSpectator
 ================
 */
-static void Touch_DoorTriggerSpectator(gentity_t *ent, gentity_t *other, trace_t *trace) {
+static void Touch_DoorTriggerSpectator(gentity_t *ent, gentity_t *other) {
 	int i, axis;
 	vec3_t origin, dir, angles;
 
@@ -1032,7 +1032,7 @@ void Touch_DoorTrigger(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		// if the door is not open and not opening
 		if (ent->parent->moverState != MOVER_1TO2 && ent->parent->moverState != MOVER_POS2 &&
 			ent->parent->moverState != ROTATOR_1TO2 && ent->parent->moverState != ROTATOR_POS2) {
-			Touch_DoorTriggerSpectator(ent, other, trace);
+			Touch_DoorTriggerSpectator(ent, other);
 		}
 	} else if (ent->parent->moverState != MOVER_1TO2 && ent->parent->moverState != ROTATOR_1TO2) {
 		Use_BinaryMover(ent->parent, ent, other);

@@ -678,13 +678,13 @@ void Touch_DoorTrigger(gentity_t *ent, gentity_t *other, trace_t *trace);
 //
 // g_misc.c
 //
-void TeleportPlayer(gentity_t *player, vec3_t origin, vec3_t angles);
+void TeleportPlayer(gentity_t *player, const vec3_t origin, const vec3_t angles);
 
 //
 // g_weapon.c
 //
-qboolean LogAccuracyHit(gentity_t *target, gentity_t *attacker);
-void CalcMuzzlePoint(gentity_t *ent, vec3_t forward, vec3_t right, vec3_t up, vec3_t muzzlePoint);
+qboolean LogAccuracyHit(const gentity_t *target, const gentity_t *attacker);
+void CalcMuzzlePoint(const gentity_t *ent, const vec3_t forward, const vec3_t right, const vec3_t up, vec3_t muzzlePoint);
 void SnapVectorTowards(vec3_t v, const vec3_t to);
 qboolean CheckGauntletAttack(gentity_t *ent);
 void Weapon_HookFree(gentity_t *ent);
@@ -696,7 +696,7 @@ void Weapon_HookThink(gentity_t *ent);
 int TeamCount(int ignoreClientNum, int team);
 int TeamLeader(int team);
 team_t PickTeam(int ignoreClientNum);
-void SetClientViewAngle(gentity_t *ent, vec3_t angle);
+void SetClientViewAngle(gentity_t *ent, const vec3_t angle);
 gentity_t *SelectSpawnPoint(const vec3_t avoidPoint, vec3_t origin, vec3_t angles, qboolean isbot);
 void CopyToBodyQue(gentity_t *ent);
 void G_Respawn(gentity_t *ent);
@@ -719,7 +719,6 @@ qboolean GetASpawnPosition(vec3_t currentPos, vec3_t output);
 qboolean ConsoleCommand(void);
 void G_ProcessIPBans(void);
 qboolean G_FilterPacket(const char *from);
-int convertGTStringToGTNumber(const char *argStr);
 
 //
 // g_weapon.c
@@ -817,10 +816,8 @@ void Svcmd_AbortPodium_f(void);
 //
 void InstaPad_applyWeaponJumpKnockback(vec3_t origin, gentity_t *ent, int mod);
 int InstaPad_getSpawnWeapon(void);
-int InstaPad_calculateDamage(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage, int dflags,
+int InstaPad_calculateDamage(const gentity_t *target, const gentity_t *inflictor, const gentity_t *attacker, int damage, int dflags,
 							 int mod);
-qboolean InstaPad_isRelevantDamageEvent(gentity_t *target, gentity_t *inflictor, gentity_t *attacker, int damage,
-										int dflags, int mod);
 qboolean InstaPad_canSpawnEntity(const gentity_t *ent);
 
 //

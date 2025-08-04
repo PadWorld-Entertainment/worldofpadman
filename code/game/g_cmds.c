@@ -387,7 +387,7 @@ argv(0) notarget
 ==================
 */
 static void Cmd_Notarget_f(gentity_t *ent) {
-	char *msg;
+	const char *msg;
 
 	if (!CheatsOk(ent)) {
 		return;
@@ -410,7 +410,7 @@ argv(0) noclip
 ==================
 */
 static void Cmd_Noclip_f(gentity_t *ent) {
-	char *msg;
+	const char *msg;
 
 	if (!CheatsOk(ent)) {
 		return;

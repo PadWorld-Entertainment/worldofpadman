@@ -154,7 +154,7 @@ signed short ClampShort(int i) {
 }
 
 // this isn't a real cheap function to call!
-int DirToByte(vec3_t dir) {
+int DirToByte(const vec3_t dir) {
 	int i, best;
 	float d, bestd;
 

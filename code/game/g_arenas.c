@@ -37,7 +37,7 @@ UpdateTournamentInfo
 */
 void UpdateTournamentInfo(void) {
 	int i;
-	gentity_t *player;
+	const gentity_t *player;
 	int playerClientNum;
 	int n, accuracy, perfect, msglen;
 	char buf[32];
