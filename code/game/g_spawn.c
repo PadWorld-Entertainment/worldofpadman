@@ -591,7 +591,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 
 		// no weapon markers in instapad
 		if (g_instaPad.integer) { 
-			Com_DPrintf("Spawning: no markers is InstaPad (%s).\n", ent->classname);
+			Com_DPrintf("Spawning: no weapon markers in InstaPad (%s).\n", ent->classname);
 			G_FreeEntity(ent);
 			return;
 		}
