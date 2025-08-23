@@ -68,7 +68,7 @@ static void Sys_SetBinaryPath(const char *path) {
 Sys_BinaryPath
 =================
 */
-static const char *Sys_BinaryPath(void) {
+const char *Sys_BinaryPath(void) {
 	return binaryPath;
 }
 
@@ -659,7 +659,10 @@ char *Sys_ParseProtocolUri(const char *uri) {
 #endif
 
 #ifndef DEFAULT_BASEDIR
-#ifdef __APPLE__
+#if defined(DEFAULT_RELATIVE_BASEDIR)
+#define DEFAULT_BASEDIR Sys_BinaryPathRelative(DEFAULT_RELATIVE_BASEDIR)
+#elif defined(__APPLE__)
+#elif defined __APPLE__
 #define DEFAULT_BASEDIR Sys_StripAppBundle(Sys_BinaryPath())
 #else
 #define DEFAULT_BASEDIR Sys_BinaryPath()

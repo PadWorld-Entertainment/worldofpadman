@@ -389,6 +389,24 @@ const char *Sys_Cwd(void) {
 
 	return cwd;
 }
+/*
+==============
+Sys_BinaryPathRelative
+==============
+*/
+const char *Sys_BinaryPathRelative(const char *relative)
+{
+	static char resolved[MAX_OSPATH];
+	char combined[MAX_OSPATH];
+
+	snprintf(combined, sizeof(combined), "%s\\%s", Sys_BinaryPath(), relative);
+
+	DWORD len = GetFullPathNameA(combined, MAX_OSPATH, resolved, NULL);
+	if (len == 0 || len >= MAX_OSPATH)
+		return NULL;
+
+	return resolved;
+}
 
 /*
 ==============================================================

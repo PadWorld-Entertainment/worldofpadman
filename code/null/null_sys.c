@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "qcommon.h"
 #include "../sys/sys_local.h"
 
+static char binaryPath[MAX_OSPATH] = {0};
+
 void Sys_Print(const char *msg) {
 #ifdef TESTS
 	// printf("%s", msg);
@@ -69,6 +71,15 @@ char *Sys_ConsoleInput(void) {
 
 cpuFeatures_t Sys_GetProcessorFeatures(void) {
 	return 0;
+}
+
+void Sys_SetBinaryPath(const char *path);
+void Sys_SetBinaryPath(const char *path) {
+	Q_strncpyz(binaryPath, path, sizeof(binaryPath));
+}
+
+const char *Sys_BinaryPath(void) {
+	return binaryPath;
 }
 
 void Sys_InitPIDFile(const char *gamedir) {

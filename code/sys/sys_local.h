@@ -53,6 +53,9 @@ unsigned int CON_LogSize(void);
 unsigned int CON_LogWrite(const char *in);
 unsigned int CON_LogRead(char *out, unsigned int outSize);
 
+const char *Sys_BinaryPath(void);
+const char *Sys_BinaryPathRelative(const char *relative);
+
 #ifdef __APPLE__
 const char *Sys_StripAppBundle(const char *pwd);
 #endif

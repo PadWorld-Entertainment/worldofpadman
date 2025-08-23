@@ -4,6 +4,7 @@
 #include "q_shared.h"
 #include "qcommon.h"
 #include "../sys/sys_local.h"
+void Sys_SetBinaryPath(const char *path);
 
 #define TEST_STRINGIFY(arg) #arg
 
@@ -64,6 +65,7 @@
 			return 0;                                                                                                  \
 		}                                                                                                              \
 	}                                                                                                                  \
+	Sys_SetBinaryPath(argv[0]);                                                                                        \
 	Sys_PlatformInit();                                                                                                \
 	Sys_Milliseconds();                                                                                                \
 	Com_Init("")
