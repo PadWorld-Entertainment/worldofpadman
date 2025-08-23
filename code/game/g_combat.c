@@ -710,6 +710,7 @@ mod         means of death		what is the cause of the damage
 */
 void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage,
 			  int dflags, meansOfDeath_t mod) {
+	const qboolean noProtection = dflags & DAMAGE_NO_PROTECTION;
 	gclient_t *client;
 	int take;
 	int asave;
@@ -826,9 +827,7 @@ void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3
 	// figure momentum add, even if the damage won't be taken
 	if (knockback && victim->client) {
 		vec3_t kvel;
-		float mass;
-
-		mass = 200;
+		float mass = 200.0f;
 
 		VectorScale(dir, g_knockback.value * (float)knockback / mass, kvel);
 		VectorAdd(victim->client->ps.velocity, kvel, victim->client->ps.velocity);
@@ -836,9 +835,7 @@ void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3
 		// set the timer so that the other client can't cancel
 		// out the movement immediately
 		if (!victim->client->ps.pm_time) {
-			int t;
-
-			t = knockback * 2;
+			int t = knockback * 2;
 			if (t < 50) {
 				t = 50;
 			}
@@ -849,8 +846,8 @@ void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3
 			victim->client->ps.pm_flags |= PMF_TIME_KNOCKBACK;
 		}
 
-		// Remeber the last person to hurt the player
-		if ((victim == attacker) || OnSameTeam(victim, attacker)) {
+		// Remember the last person to hurt the player
+		if (victim == attacker || OnSameTeam(victim, attacker)) {
 			victim->client->lastSentFlying = -1;
 		} else {
 			victim->client->lastSentFlying = attacker->s.number;
@@ -859,10 +856,8 @@ void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3
 	}
 
 	// check for completely getting out of the damage
-	if (!(dflags & DAMAGE_NO_PROTECTION)) {
-
-		// if TF_NO_FRIENDLY_FIRE is set, don't do damage to the target
-		// if the attacker was on the same team
+	if (!noProtection) {
+		// don't do damage to the target if the attacker was on the same team
 		// NOTE: With Boomies we can have targ==attacker, should be considered friendlyfire instead of selfdamage
 		if ((victim != attacker && (OnSameTeam(victim, attacker) || IsItemSameTeam(attacker, victim))) ||
 			(victim == attacker && mod == MOD_BOOMIES)) {
@@ -1059,12 +1054,9 @@ G_RadiusDamage
 ============
 */
 qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float radius, gentity_t *ignore, meansOfDeath_t mod) {
-	float dist;
 	int entityList[MAX_GENTITIES];
 	int numListedEntities;
 	vec3_t mins, maxs;
-	vec3_t v;
-	vec3_t dir;
 	int i, e;
 	qboolean hitClient = qfalse;
 
@@ -1081,6 +1073,9 @@ qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float 
 
 	for (e = 0; e < numListedEntities; e++) {
 		gentity_t *ent = &g_entities[entityList[e]];
+		float dist;
+		vec3_t v;
+
 		if (ent == ignore) {
 			continue;
 		}
@@ -1106,6 +1101,7 @@ qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float 
 
 		if (CanDamage(ent, origin)) {
 			const float points = damage * (1.0f - dist / radius);
+			vec3_t dir;
 			if (LogAccuracyHit(ent, attacker)) {
 				hitClient = qtrue;
 			}
