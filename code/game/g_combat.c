@@ -675,6 +675,14 @@ static int CheckArmor(gentity_t *ent, int damage, int dflags) {
 	return save;
 }
 
+/**
+ * @brief Ensure that we always apply damage values for particular means of death values
+ * @note This is also applied in situations where damage normally not applied, like being the duck hunter
+ */
+static qboolean G_IsEnvironmentalDamage(meansOfDeath_t mod) {
+	return mod == MOD_WATER || mod == MOD_SLIME || mod == MOD_LAVA || mod == MOD_CRUSH || mod == MOD_TELEFRAG;
+}
+
 /*
 ============
 G_Damage
@@ -868,8 +876,12 @@ void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3
 			return;
 		}
 
-		if (g_gametype.integer == GT_CATCH && !G_IsKillerDuck(victim)) {
-			return;
+		if (!G_IsEnvironmentalDamage(mod)) {
+			// some game types ignore damage under certain conditions
+			// but environmental damage is always taken
+			if (g_gametype.integer == GT_CATCH && !G_IsKillerDuck(victim)) {
+				return;
+			}
 		}
 	}
 
