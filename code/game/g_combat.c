@@ -248,7 +248,7 @@ static void LookAtKiller(gentity_t *self, gentity_t *inflictor, gentity_t *attac
 body_die
 ==================
 */
-void body_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath) {
+void body_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, meansOfDeath_t meansOfDeath) {
 	if (self->health > GIB_HEALTH) {
 		return;
 	}
@@ -392,7 +392,7 @@ static void CheckAlmostBigBalloon(gentity_t *self, gentity_t *attacker) {
 player_die
 ==================
 */
-void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath) {
+void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, meansOfDeath_t meansOfDeath) {
 	gentity_t *ent;
 	int anim;
 	int contents;
@@ -679,7 +679,7 @@ static int CheckArmor(gentity_t *ent, int damage, int dflags) {
 ============
 G_Damage
 
-targ		entity that is being damaged
+victim		entity that is being damaged
 inflictor	entity that is causing the damage
 attacker	entity that caused the inflictor to damage targ
 	example: targ=monster, inflictor=rocket, attacker=player
@@ -696,10 +696,12 @@ dflags		these flags are used to control how G_Damage works
 	DAMAGE_NO_ARMOR			armor does not protect from this damage
 	DAMAGE_NO_KNOCKBACK		do not affect velocity, just view angles
 	DAMAGE_NO_PROTECTION	kills godmode, armor, everything
+
+mod         means of death		what is the cause of the damage
 ============
 */
 void G_Damage(gentity_t *victim, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage,
-			  int dflags, int mod) {
+			  int dflags, meansOfDeath_t mod) {
 	gclient_t *client;
 	int take;
 	int asave;
@@ -1044,7 +1046,7 @@ static qboolean CanDamage(const gentity_t *targ, const vec3_t origin) {
 G_RadiusDamage
 ============
 */
-qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float radius, gentity_t *ignore, int mod) {
+qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float radius, gentity_t *ignore, meansOfDeath_t mod) {
 	float dist;
 	int entityList[MAX_GENTITIES];
 	int numListedEntities;

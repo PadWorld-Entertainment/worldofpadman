@@ -882,7 +882,7 @@ gentity_t *fire_boaster(gentity_t *self, vec3_t start, vec3_t dir) {
 duck_die
 #######################
 */
-static void killerduck_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
+static void killerduck_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, meansOfDeath_t mod) {
 	ent->think = G_ExplodeMissile;
 	ent->nextthink = level.time + 1;
 }

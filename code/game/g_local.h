@@ -207,7 +207,7 @@ struct gentity_s {
 	void (*touch)(gentity_t *self, gentity_t *other, trace_t *trace);
 	void (*use)(gentity_t *self, gentity_t *other, gentity_t *activator);
 	void (*pain)(gentity_t *self, gentity_t *attacker, int damage);
-	void (*die)(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod);
+	void (*die)(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, meansOfDeath_t mod);
 
 	int pain_debounce_time;
 	int fly_sound_debounce_time; // wind tunnel
@@ -633,10 +633,10 @@ void RemoveOwnedItems(gentity_t *client);
 // g_combat.c
 //
 void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage,
-			  int dflags, int mod);
-qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float radius, gentity_t *ignore, int mod);
+			  int dflags, meansOfDeath_t mod);
+qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float radius, gentity_t *ignore, meansOfDeath_t mod);
 int G_InvulnerabilityEffect(gentity_t *targ, vec3_t dir, vec3_t point, vec3_t impactpoint, vec3_t bouncedir);
-void body_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath);
+void body_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, meansOfDeath_t meansOfDeath);
 void TossClientItems(gentity_t *self);
 void BerserkerCheck(gentity_t *ent);
 void G_DropHoldable(gentity_t *self, float angle);
@@ -704,7 +704,7 @@ void BeginIntermission(void);
 void InitBodyQue(void);
 void ClientSpawn(gentity_t *ent);
 void G_LogHit(gentity_t *attacker);
-void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod);
+void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, meansOfDeath_t mod);
 void AddScore(gentity_t *ent, const vec3_t origin, int score, const char *reason);
 void CalculateRanks(void);
 qboolean SpotWouldTelefrag(gentity_t *spot);

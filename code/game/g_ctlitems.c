@@ -246,7 +246,7 @@ static void bambam_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	}
 }
 
-static void bambam_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
+static void bambam_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, meansOfDeath_t mod) {
 	vec3_t dir;
 
 	G_FreeEntity(ent->nextTrain); // NOTE: nextTain == triggerChildEnt
@@ -430,7 +430,7 @@ qboolean bambam_createByPlayer(gentity_t *pEnt, const char *pickupName) {
 
 ####################### ####################### #######################
 */
-static void boomies_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
+static void boomies_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, meansOfDeath_t mod) {
 	vec3_t dir;
 
 	G_FreeEntity(ent->nextTrain); // NOTE: nextTain == triggerChildEnt
