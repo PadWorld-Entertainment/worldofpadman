@@ -498,6 +498,10 @@ qboolean FS_CreatePath(char *ospath) {
 	char *ofs;
 	char path[MAX_OSPATH];
 
+	if (!ospath || !*ospath) {
+		return qfalse;
+	}
+
 	// make absolutely sure that it can't back up the path
 	// FIXME: is c: allowed???
 	if (strstr(ospath, "..") || strstr(ospath, "::")) {
