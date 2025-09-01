@@ -670,7 +670,7 @@ BotAI_Trace
 ==================
 */
 void BotAI_Trace(bsp_trace_t *bsptrace, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passent,
-				 int contentmask) {
+								int contentmask) {
 	trace_t trace;
 
 	trap_Trace(&trace, start, mins, maxs, end, passent, contentmask);
@@ -2227,10 +2227,6 @@ static int BotInitLibrary(void) {
 	trap_Cvar_VariableStringBuffer("fs_game", buf, sizeof(buf));
 	if (strlen(buf))
 		trap_BotLibVarSet("gamedir", buf);
-	// home directory
-	trap_Cvar_VariableStringBuffer("fs_homepath", buf, sizeof(buf));
-	if (strlen(buf))
-		trap_BotLibVarSet("homedir", buf);
 	// setup the bot library
 	return trap_BotLibSetup();
 }
