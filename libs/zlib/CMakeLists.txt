@@ -12,3 +12,6 @@ set(SRCS
 add_library(zlib STATIC ${SRCS})
 target_include_directories(zlib PUBLIC .)
 target_compile_definitions(zlib PRIVATE NO_GZIP)
+list(APPEND SERVER_LIBRARIES zlib)
+list(APPEND CLIENT_LIBRARIES zlib)
+list(APPEND RENDERER_LIBRARIES zlib)
