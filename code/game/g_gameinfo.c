@@ -104,7 +104,7 @@ G_LoadArenas
 static void G_LoadArenas(void) {
 	int numdirs;
 	char filename[128];
-	char dirlist[2048];
+	char dirlist[4096];
 	char *dirptr;
 	int i;
 	int dirlen;
