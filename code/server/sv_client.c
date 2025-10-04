@@ -352,7 +352,7 @@ void SV_DirectConnect(netadr_t from) {
 				return;
 			}
 		} else {
-			NET_OutOfBandPrint(NS_SERVER, from, "print\nServer is full.\n");
+			NET_OutOfBandPrint(NS_SERVER, from, "print\nServer is full\n");
 			Com_DPrintf("Rejected a connection.\n");
 			return;
 		}
@@ -1682,7 +1682,8 @@ void SV_ExecuteClientMessage(client_t *cl, msg_t *msg) {
 	// NOTE: when the client message is fux0red the acknowledgement numbers
 	// can be out of range, this could cause the server to send thousands of server
 	// commands which the server thinks are not yet acknowledged in SV_UpdateServerCommandsToClient
-	if ((cl->reliableSequence - cl->reliableAcknowledge >= MAX_RELIABLE_COMMANDS) || (cl->reliableSequence - cl->reliableAcknowledge < 0)) {
+	if ((cl->reliableSequence - cl->reliableAcknowledge >= MAX_RELIABLE_COMMANDS) ||
+		(cl->reliableSequence - cl->reliableAcknowledge < 0)) {
 		// usually only hackers create messages like this
 		// it is more annoying for them to let them hanging
 #ifndef NDEBUG
