@@ -264,7 +264,8 @@ typedef int clipHandle_t;
 #define MAX_OSPATH 256 // max length of a filesystem pathname
 #endif
 
-#define MAX_NAME_LENGTH 32 // max length of a client name
+#define MAX_NAME_LENGTH 32	   // max length of a client name
+#define MAX_HOSTNAME_LENGTH 80 // max length of a host name
 
 #define MAX_SAY_TEXT 150
 
