@@ -346,7 +346,7 @@ void Sys_AnsiColorPrint(const char *msg) {
 	static char buffer[MAXPRINTMSG];
 	int length = 0;
 	static int q3ToAnsi[8] = {
-		30, // COLOR_BLACK
+		7,	// COLOR_BLACK
 		31, // COLOR_RED
 		32, // COLOR_GREEN
 		33, // COLOR_YELLOW
@@ -370,8 +370,8 @@ void Sys_AnsiColorPrint(const char *msg) {
 				fputs("\033[0m\n", stderr);
 				msg++;
 			} else {
-				// Print the color code
-				Com_sprintf(buffer, sizeof(buffer), "\033[%dm", q3ToAnsi[ColorIndex(*(msg + 1))]);
+				// Print the color code (reset first to clear potential inverse (black))
+				Com_sprintf(buffer, sizeof(buffer), "\033[0m\033[%dm", q3ToAnsi[ColorIndex(*(msg + 1))]);
 				fputs(buffer, stderr);
 				msg += 2;
 			}
@@ -724,11 +724,11 @@ int main(int argc, char **argv) {
 #define MINSDL_VERSION XSTRING(MINSDL_MAJOR) "." XSTRING(MINSDL_MINOR) "." XSTRING(MINSDL_PATCH)
 		if (SDL_VERSIONNUM(ver.major, ver.minor, ver.patch) < SDL_VERSIONNUM(MINSDL_MAJOR, MINSDL_MINOR, MINSDL_PATCH)) {
 			Sys_Dialog(DT_ERROR,
-					va("SDL version " MINSDL_VERSION " or greater is required, "
-						"but only version %d.%d.%d was found. You may be able to obtain a more recent copy "
-						"from http://www.libsdl.org/.",
-						ver.major, ver.minor, ver.patch),
-					"SDL Library Too Old");
+					   va("SDL version " MINSDL_VERSION " or greater is required, "
+						  "but only version %d.%d.%d was found. You may be able to obtain a more recent copy "
+						  "from http://www.libsdl.org/.",
+						  ver.major, ver.minor, ver.patch),
+					   "SDL Library Too Old");
 
 			Sys_Exit(1);
 		}
