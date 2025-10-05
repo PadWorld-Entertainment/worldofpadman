@@ -13,7 +13,7 @@
 [![image](https://worldofpadman.net/wp-content/uploads/wop_header01.png)](https://worldofpadman.net)
 
 
-World of PADMAN is an incredibly carefully designed and colorful freeware fun shooter for young and young-at-heart people, created by cartoonist and illustrator ENTE and the WoP team, aka. [PadWorld Entertainment](https://worldofpadman.net/about/team/). For more information about the game please visit the official [World of PADMAN website](https://worldofpadman.net).
+World of PADMAN is an incredibly carefully designed and colorful freeware fun shooter for young and young-at-heart people, created by cartoonist and illustrator ENTE and the WoP team, aka. [PadWorld Entertainment](https://worldofpadman.net/about/team/). For more information about the game please visit the official [World of PADMAN website](https://worldofpadman.net). All notable changes to this game are documented in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
