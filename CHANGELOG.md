@@ -5,7 +5,7 @@
 ### Added
 
 - Community MapPack v1.2.0 with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
-- Traceable crosshair in 3rd person view; disable or set to "traced" mode in game options menu
+- Crosshair in 3rd person view and enabled by default; disable or set to "traced" mode in game options menu
 - Missing PADMAN winner statue model (md3 file)
 - Cvar `g_spawnProtect` to set the spawn protect time in InstaPad in seconds, default value is 3, 0 turns it off
 - Jail: missing pressure scale textures
@@ -17,7 +17,8 @@
 - Disconnected clients dropping the freeze power-up in FT, which allowed others to collect the item, run around, and shoot while appearing frozen
 - KillerDucks movement to prevent them to stack and get stuck
 - KillerDuck disappears from the match if thrown into a nodrop area in CTKD
-- The neutral lolly would not respawn when the carrier died inside a nodrop volume brush
+- Duck hunters not being vulnerable to environmental hazards such as lava in CTKD
+- The neutral lolly would not respawn when the carrier died inside a nodrop volume brush in 1LC
 - SprayKiller and SprayGod bonus scores not visible in first-person view, they are now drawn next to the spray scores and not above the payers head
 - 3D crosshair drawn and visible in front of select logo ingame menu in SYC when anaglyph mode is enabled
 - Cvar `bot_minplayers` not working as intended in some game types
