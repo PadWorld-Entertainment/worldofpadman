@@ -270,7 +270,12 @@ static void RB_TestFlare(flare_t *f) {
 	float depth;
 	qboolean visible;
 	float fade;
-	float screenZ;
+	float flareDepth;
+
+	// Treat near-equal depths as visible, tiny margin to avoid false occlusion from rounding.
+	// ~256 / 2^24
+	const float depthBias = 1e-5f;
+
 	FBO_t *oldFbo;
 
 	backEnd.pc.c_flareTests++;
@@ -293,10 +298,18 @@ static void RB_TestFlare(flare_t *f) {
 		FBO_Bind(oldFbo);
 	}
 
-	screenZ = backEnd.viewParms.projectionMatrix[14] /
-			  ((2 * depth - 1) * backEnd.viewParms.projectionMatrix[11] - backEnd.viewParms.projectionMatrix[10]);
-
-	visible = (-f->eyeZ - -screenZ) < 24;
+	// Project flare origin with the CURRENT view (handles oblique near plane)
+	{
+		vec4_t eyePos, clipPos;
+		R_TransformModelToClip(f->origin, backEnd.or.modelMatrix, backEnd.viewParms.projectionMatrix, eyePos, clipPos);
+		if (clipPos[3] <= 0.0f) {
+			visible = qfalse; // behind eye
+		} else {
+			float clipDepth = clipPos[2] / clipPos[3];	 // [-1,1]
+			flareDepth = clipDepth * 0.5f + 0.5f;		 // 0..1
+			visible = (flareDepth - depthBias) <= depth; // in front (with margin)
+		}
+	}
 
 	if (visible) {
 		if (!f->visible) {
