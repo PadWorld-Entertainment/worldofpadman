@@ -254,7 +254,6 @@ const char *Com_ParseLine(const char **data_p) {
 	return string;
 }
 
-
 const char *COM_Parse(const char **data_p) {
 	return COM_ParseExt(data_p, qtrue);
 }
@@ -1155,12 +1154,21 @@ can mess up the server's parsing
 ==================
 */
 qboolean Info_Validate(const char *s) {
-	if (strchr(s, '\"')) {
-		return qfalse;
+	const char *ch = s;
+
+	while (*ch != '\0') {
+		if (!Q_isprint(*ch))
+			return qfalse;
+
+		if (*ch == '\"')
+			return qfalse;
+
+		if (*ch == ';')
+			return qfalse;
+
+		++ch;
 	}
-	if (strchr(s, ';')) {
-		return qfalse;
-	}
+
 	return qtrue;
 }
 
