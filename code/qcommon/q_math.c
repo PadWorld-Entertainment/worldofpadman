@@ -45,15 +45,15 @@ vec4_t colorWhite = {1.0f, 1.0f, 1.0f, 1.0f};
 vec4_t colorLtGrey = {0.75f, 0.75f, 0.75f, 1.0f};
 vec4_t colorMdGrey = {0.5f, 0.5f, 0.5f, 1.0f};
 vec4_t colorDkGrey = {0.25f, 0.25f, 0.25f, 1.0f};
-vec4_t colorTBlack33 = {0, 0, 0, 0.33f};
-vec4_t colorTBlack66 = {0, 0, 0, 0.66f};
-vec4_t colorDkGreen = {0, 0.5f, 0, 1};
-vec4_t colorDkBlue = {0, 0, 0.5f, 1};
-vec4_t colorDkRed = {0.5f, 0, 0, 1};
-vec4_t colorDkLilac = {0.4f, 0, 0.4f, 1};
-vec4_t colorDkOrange = {0.75f, 0.3f, 0, 1};
-vec4_t menuShadowBot = {0.23f, 0.02f, 0, 0.22f};
-vec4_t menuShadowSkin = {0.20f, 0.02f, 0, 0.28f};
+vec4_t colorTBlack33 = {0.0f, 0.0f, 0.0f, 0.33f};
+vec4_t colorTBlack66 = {0.0f, 0.0f, 0.0f, 0.66f};
+vec4_t colorDkGreen = {0.0f, 0.5f, 0.0f, 1.0f};
+vec4_t colorDkBlue = {0.0f, 0.0f, 0.5f, 1.0f};
+vec4_t colorDkRed = {0.5f, 0.0f, 0.0f, 1.0f};
+vec4_t colorDkLilac = {0.4f, 0.0f, 0.4f, 1.0f};
+vec4_t colorDkOrange = {0.75f, 0.3f, 0.0f, 1.0f};
+vec4_t menuShadowBot = {0.23f, 0.02f, 0.0f, 0.22f};
+vec4_t menuShadowSkin = {0.20f, 0.02f, 0.0f, 0.28f};
 
 vec4_t g_color_table[8] = {
 	{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 0.0f, 1.0f},
