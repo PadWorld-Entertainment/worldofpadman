@@ -944,6 +944,7 @@ extern vmCvar_t pmove_msec;
 extern vmCvar_t g_enableBreath;
 
 extern vmCvar_t g_q3Items;
+extern vmCvar_t g_externalEntities;
 extern vmCvar_t g_sky;
 extern vmCvar_t g_skyLensflare;
 extern vmCvar_t g_LPS_startlives;
@@ -1180,3 +1181,7 @@ void trap_SnapVector(float *v);
 int trap_AAS_BestReachableArea(const vec3_t origin, const vec3_t mins, const vec3_t maxs, vec3_t goalorigin);
 
 qboolean IsPlayerAtBalloon(int clientNum, const gentity_t *balloon);
+
+qboolean BE_GetEntityToken(char *buffer, int bufferSize);
+void BE_PreSpawnEntities(void);
+void BE_PostSpawnEntities(void);
