@@ -342,6 +342,19 @@ void CL_SystemInfoChanged(void) {
 
 	// don't set any vars when playing a demo
 	if (clc.demoplaying) {
+		// WOP: allow sky keys through so the overlay sky initializes on cold-start demos (no prior map load)
+		const char *sky, *skyLF;
+
+		sky = Info_ValueForKey(systemInfo, "g_sky");
+		if (sky && sky[0]) {
+			Cvar_SetSafe("g_sky", sky);
+		}
+
+		skyLF = Info_ValueForKey(systemInfo, "g_skyLensflare");
+		if (skyLF && skyLF[0]) {
+			Cvar_SetSafe("g_skyLensflare", skyLF);
+		}
+
 		return;
 	}
 
