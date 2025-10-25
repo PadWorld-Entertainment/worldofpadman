@@ -94,7 +94,6 @@ extern vmCvar_t ui_server16;
 extern vmCvar_t spraycolor;
 extern vmCvar_t syc_logo;
 extern vmCvar_t s_wop_restarted;
-extern vmCvar_t con_notifytime;
 extern vmCvar_t wop_AutoswitchSongByNextMap;
 extern vmCvar_t wop_AutoBindUnusedKeys;
 extern vmCvar_t cg_drawChatIcon;

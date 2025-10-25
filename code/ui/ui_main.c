@@ -160,7 +160,7 @@ vmCvar_t spraycolor;
 vmCvar_t randomcolor;
 vmCvar_t syc_logo;
 vmCvar_t s_wop_restarted;
-vmCvar_t con_notifytime;
+static vmCvar_t con_notifytime;
 vmCvar_t wop_AutoswitchSongByNextMap;
 vmCvar_t wop_AutoBindUnusedKeys;
 vmCvar_t cg_drawChatIcon;
@@ -172,7 +172,7 @@ vmCvar_t cg_drawTeamOverlay;
 vmCvar_t cg_drawFriend;
 vmCvar_t cg_drawLensflare;
 vmCvar_t cg_icons;
-vmCvar_t com_playIntro;
+static vmCvar_t com_playIntro;
 
 #ifdef USE_RENDERER_DLOPEN
 static vmCvar_t cl_renderer;
