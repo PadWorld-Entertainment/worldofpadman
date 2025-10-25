@@ -175,7 +175,7 @@ vmCvar_t cg_icons;
 vmCvar_t com_playIntro;
 
 #ifdef USE_RENDERER_DLOPEN
-vmCvar_t cl_renderer;
+static vmCvar_t cl_renderer;
 #endif
 
 // bk001129 - made static to avoid aliasing.

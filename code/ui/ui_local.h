@@ -101,9 +101,6 @@ extern vmCvar_t cg_drawChatIcon;
 extern vmCvar_t cg_chatBeep;
 extern vmCvar_t cg_glowModel;
 extern vmCvar_t g_spSkill;
-#ifdef USE_RENDERER_DLOPEN
-extern vmCvar_t cl_renderer;
-#endif
 
 //
 // locals
