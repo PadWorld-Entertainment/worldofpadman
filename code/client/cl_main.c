@@ -922,8 +922,10 @@ static int CL_WalkDemoExt(char *arg, char *name, int *demofile) {
 	Com_Printf("Not found: %s\n", name);
 
 	while (demo_protocols[i]) {
-		if (demo_protocols[i] == com_protocol->integer)
+		if (demo_protocols[i] == com_protocol->integer) {
+			i++;
 			continue;
+		}
 
 		Com_sprintf(name, MAX_OSPATH, "demos/%s.%s%d", arg, DEMOEXT, demo_protocols[i]);
 		FS_FOpenFileRead(name, demofile, qtrue);
