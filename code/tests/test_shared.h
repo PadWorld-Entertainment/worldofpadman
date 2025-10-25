@@ -61,7 +61,7 @@ void Sys_SetBinaryPath(const char *path);
 		if (!strcmp(argv[1], "--also_run_disabled_tests")) {                                                           \
 			runDisabled = 1;                                                                                           \
 		} else if (!strcmp(argv[1], "--help")) {                                                                       \
-			printf("--also_run_disabled_tests : also run disabled tests");                                             \
+			printf("--also_run_disabled_tests : also run disabled tests\n");                                           \
 			return 0;                                                                                                  \
 		}                                                                                                              \
 	}                                                                                                                  \
