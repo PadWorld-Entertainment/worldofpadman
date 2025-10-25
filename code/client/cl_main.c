@@ -921,6 +921,10 @@ static int CL_WalkDemoExt(char *arg, char *name, int *demofile) {
 
 	Com_Printf("Not found: %s\n", name);
 
+	if (com_protocol->integer == 0) {
+		Com_Error(ERR_FATAL, "No demo protocol specified");
+	}
+
 	while (demo_protocols[i]) {
 		if (demo_protocols[i] == com_protocol->integer) {
 			i++;
