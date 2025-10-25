@@ -53,8 +53,13 @@ int main(int argc, char *argv[]) {
 	TESTS_INIT();
 
 	ADD_TEST(testCommon);
+#ifdef USE_HTTP
 	ADD_TEST(testHTTPPOST);
 	ADD_TEST(testHTTPGET);
+#else
+	ADD_DISABLED_TEST(testHTTPPOST);
+	ADD_DISABLED_TEST(testHTTPGET);
+#endif
 	ADD_DISABLED_TEST(testDiscord);
 
 	Com_Shutdown();
