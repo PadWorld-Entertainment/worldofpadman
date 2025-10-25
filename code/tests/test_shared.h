@@ -155,7 +155,7 @@ void Sys_SetBinaryPath(const char *path);
 #define EXPECT_NE_STRING(exp, actual)                                                                                  \
 	if (lastExpectedString = (actual), strcmp(exp, lastExpectedString) == 0) {                                         \
 		snprintf(errorBuf + strlen(errorBuf), sizeof(errorBuf) - strlen(errorBuf),                                     \
-				 " - " TEST_STRINGIFY(actual) ": expected '%s', but got '%s'\n", exp, lastExpectedString);             \
+				 " - " TEST_STRINGIFY(actual) ": not expecting '%s', but got '%s'\n", exp, lastExpectedString);        \
 		++failed;                                                                                                      \
 	}
 
