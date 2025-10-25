@@ -45,4 +45,13 @@ set(QVM_SRCS ${SRCS} g_syscalls.asm)
 list(APPEND SRCS ${LIB_SRCS})
 wop_add_library(TARGET ${PROJECT_NAME} GAME SRCS ${SRCS})
 target_compile_definitions(${PROJECT_NAME} PRIVATE QAGAME)
+
+# Hide symbols by default on non-MSVC; Q_EXPORT exposes vmMain/dllEntry only.
+if (NOT MSVC)
+	set_target_properties(${PROJECT_NAME} PROPERTIES
+		C_VISIBILITY_PRESET hidden
+		VISIBILITY_INLINES_HIDDEN YES
+	)
+	target_compile_options(${PROJECT_NAME} PRIVATE -fvisibility=hidden)
+endif()
 add_qvm(TARGET ${PROJECT_NAME} SRCS ${QVM_SRCS})

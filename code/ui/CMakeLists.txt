@@ -54,4 +54,16 @@ if (USE_RENDERER_DLOPEN)
 	list(APPEND UI_DEFINES USE_RENDERER_DLOPEN)
 endif()
 target_compile_definitions(${PROJECT_NAME} PRIVATE ${UI_DEFINES})
+
+# Hide all symbols by default on GCC/Clang; Q_EXPORT marks the few we need
+# (vmMain, dllEntry). On MSVC, symbol export is controlled by __declspec(dllexport)
+# and the default is already hidden, so we only apply these flags on compilers
+# that support ELF visibility.
+if (NOT MSVC)
+	set_target_properties(${PROJECT_NAME} PROPERTIES
+		C_VISIBILITY_PRESET hidden
+		VISIBILITY_INLINES_HIDDEN YES
+	)
+	target_compile_options(${PROJECT_NAME} PRIVATE -fvisibility=hidden)
+endif()
 add_qvm(TARGET ${PROJECT_NAME} SRCS ${QVM_SRCS} DEFINES ${UI_DEFINES})
