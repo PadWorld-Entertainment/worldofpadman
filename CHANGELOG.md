@@ -13,6 +13,7 @@
 ### Fixed
 
 - Fatal crash when starting a new match from the main menu after exiting an arena and returning directly to the main menu
+- WoP freezing or crashing when the `/demo` command is entered with an invalid demo file name
 - KillerDucks attacking frozen players and stacking up in FT
 - Disconnected clients dropping the freeze power-up in FT, which allowed others to collect the item, run around, and shoot while appearing frozen
 - KillerDucks movement to prevent them to stack and get stuck
@@ -21,6 +22,7 @@
 - The neutral lolly would not respawn when the carrier died inside a nodrop volume brush in 1LC
 - SprayKiller and SprayGod bonus scores not visible in first-person view, they are now drawn next to the spray scores and not above the payers head
 - 3D crosshair drawn and visible in front of select logo ingame menu in SYC when anaglyph mode is enabled
+- Hall of mirrors effect visible on the skybox in PadShip during demo playback when OpenGL2 renderer is enabled
 - Cvar `bot_minplayers` not working as intended in some game types
 - Missing `qer_editorimage` path in `textures/pad_wop/padtele` shader
 - Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights
@@ -39,7 +41,7 @@
 
 - Weapon makers from mapobjects folder; don't set weapon markers as misc_model entities, use the `marker` key in weapon entities instead
 - Fall and damage sounds when falling from higher heights, since WoP does not have fall damage
-- `fall1` sounds from player models and partially reused them as death variant sounds for alternate skins of a player model
+- `fall1` sound samples from player models and partially reused them as death variant sounds for alternate skins of a player model
 - `g_ft_useWeaponSet` and `g_ft_weaponSetAmmoRatio` modifiers because this feature was broken in FT and rather unused
 - `cg_ft_thawerIconX` and `cg_ft_thawerIconY` FT thawer icon position cvars 
 - Cabin from the server map rotation and selection menu for CTKD game mode because bots cannot reach the KillerDuck item on the shelf
@@ -47,7 +49,7 @@
 ### Updated
 
 - SDL to version 2.32.8
-- Code base to [ioq3 1.36 Git cc18246](https://github.com/ioquake/ioq3/commit/cc18246f22ab033e1b17af4616a68e9ea2e873db) with associated features and bug fixes
+- Code base to [ioq3 1.36 Git cc18246](https://github.com/ioquake/ioq3/commit/8cc9eb5eff62816f2849b1ca03695c0882e1a1d8) with associated features and bug fixes
 
 ## [1.7.0] - 2024-12-06
 
