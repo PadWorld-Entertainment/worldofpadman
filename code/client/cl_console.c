@@ -363,8 +363,8 @@ Con_Init
 void Con_Init(void) {
 	int i;
 
-	con_notifytime = Cvar_Get("con_notifytime", "-4", 0);
-	con_conspeed = Cvar_Get("scr_conspeed", "3", 0);
+	con_notifytime = Cvar_Get("con_notifytime", "-4", CVAR_ARCHIVE);
+	con_conspeed = Cvar_Get("scr_conspeed", "3", CVAR_ARCHIVE);
 	con_autoclear = Cvar_Get("con_autoclear", "1", CVAR_ARCHIVE);
 	con_scale = Cvar_Get("con_scale", "2", CVAR_ARCHIVE);
 	Cvar_CheckRange(con_scale, 1, 4, qfalse);
