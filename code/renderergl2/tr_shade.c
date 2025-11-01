@@ -691,19 +691,6 @@ static void ComputeShaderColors(const shaderStage_t *pStage, vec4_t baseColor, v
 		vertColor[3] = 0.0f;
 		break;
 	}
-
-	// FIXME: find some way to implement this.
-#if 0
-	// if in greyscale rendering mode turn all color values into greyscale.
-	if (r_greyscale->integer) {
-		int scale, i;
-
-		for (i = 0; i < tess.numVertexes; i++) {
-			scale = (tess.svars.colors[i][0] + tess.svars.colors[i][1] + tess.svars.colors[i][2]) / 3;
-			tess.svars.colors[i][0] = tess.svars.colors[i][1] = tess.svars.colors[i][2] = scale;
-		}
-	}
-#endif
 }
 
 static void ComputeFogValues(vec4_t fogDistanceVector, vec4_t fogDepthVector, float *eyeT) {

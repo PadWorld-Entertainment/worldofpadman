@@ -52,6 +52,8 @@ extern const char *fallbackShader_texturecolor_vp;
 extern const char *fallbackShader_texturecolor_fp;
 extern const char *fallbackShader_tonemap_vp;
 extern const char *fallbackShader_tonemap_fp;
+extern const char *fallbackShader_greyscale_vp;
+extern const char *fallbackShader_greyscale_fp;
 
 typedef struct uniformInfo_s {
 	char *name;
@@ -153,6 +155,7 @@ static uniformInfo_t uniformsInfo[] = {
 	{"u_AlphaTest", GLSL_INT},
 
 	{"u_BoneMatrix", GLSL_MAT16_BONEMATRIX},
+	{"u_Greyscale", GLSL_FLOAT}
 };
 
 typedef enum { GLSL_PRINTLOG_PROGRAM_INFO, GLSL_PRINTLOG_SHADER_INFO, GLSL_PRINTLOG_SHADER_SOURCE } glslPrintLog_t;
@@ -1309,6 +1312,17 @@ void GLSL_InitGPUShaders(void) {
 
 		numEtcShaders++;
 	}
+
+	if (!GLSL_InitGPUShader(&tr.greyscaleShader, "greyscale", attribs, qtrue, extradefines, qtrue,
+							fallbackShader_greyscale_vp, fallbackShader_greyscale_fp)) {
+		ri.Error(ERR_FATAL, "Unable to load greyscale shader");
+	}
+
+	GLSL_InitUniforms(&tr.greyscaleShader);
+	GLSL_SetUniformInt(&tr.greyscaleShader, UNIFORM_TEXTUREMAP, TB_DIFFUSEMAP);
+	GLSL_FinishGPUShader(&tr.greyscaleShader);
+
+	numEtcShaders++;
 
 	// GLSL 1.10+ or GL_OES_standard_derivatives extension are required for dFdx() and dFdy() GLSL functions
 	if (glRefConfig.glslMajorVersion > 1 || (glRefConfig.glslMajorVersion == 1 && glRefConfig.glslMinorVersion >= 10) ||
