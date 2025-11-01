@@ -72,6 +72,8 @@ set(SHADER_SRCS
 	glsl/texturecolor_vp.glsl
 	glsl/tonemap_fp.glsl
 	glsl/tonemap_vp.glsl
+	glsl/greyscale_fp.glsl
+	glsl/greyscale_vp.glsl
 )
 
 foreach (shader ${SHADER_SRCS})
