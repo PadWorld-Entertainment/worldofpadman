@@ -1217,7 +1217,7 @@ static void PM_CheckDuck(void) {
 	trace_t trace;
 
 	if (pm->ps->powerups[PW_CLIMBER]) {
-		pm->ps->viewheight = 26; // default
+		pm->ps->viewheight = DEFAULT_VIEWHEIGHT;
 
 		VectorSet(pm->mins, -30, -30, -30);
 		VectorSet(pm->maxs, 30, 30, 30);
@@ -1225,16 +1225,16 @@ static void PM_CheckDuck(void) {
 		return;
 	}
 
-	pm->mins[0] = -15;
-	pm->mins[1] = -15;
+	pm->mins[0] = -PLAYER_WIDTH;
+	pm->mins[1] = -PLAYER_WIDTH;
 
-	pm->maxs[0] = 15;
-	pm->maxs[1] = 15;
+	pm->maxs[0] = PLAYER_WIDTH;
+	pm->maxs[1] = PLAYER_WIDTH;
 
 	pm->mins[2] = MINS_Z;
 
 	if (pm->ps->pm_type == PM_DEAD) {
-		pm->maxs[2] = -8;
+		pm->maxs[2] = DEAD_HEIGHT;
 		pm->ps->viewheight = DEAD_VIEWHEIGHT;
 		return;
 	}
@@ -1244,7 +1244,7 @@ static void PM_CheckDuck(void) {
 	} else { // stand up if possible
 		if (pm->ps->pm_flags & PMF_DUCKED) {
 			// try to stand up
-			pm->maxs[2] = 32;
+			pm->maxs[2] = DEFAULT_HEIGHT;
 			pm->trace(&trace, pm->ps->origin, pm->mins, pm->maxs, pm->ps->origin, pm->ps->clientNum, pm->tracemask);
 			if (!trace.allsolid)
 				pm->ps->pm_flags &= ~PMF_DUCKED;
@@ -1252,10 +1252,10 @@ static void PM_CheckDuck(void) {
 	}
 
 	if (pm->ps->pm_flags & PMF_DUCKED) {
-		pm->maxs[2] = 16;
+		pm->maxs[2] = CROUCH_HEIGHT;
 		pm->ps->viewheight = CROUCH_VIEWHEIGHT;
 	} else {
-		pm->maxs[2] = 32;
+		pm->maxs[2] = DEFAULT_HEIGHT;
 		pm->ps->viewheight = DEFAULT_VIEWHEIGHT;
 	}
 }
