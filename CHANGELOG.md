@@ -23,6 +23,7 @@
 - SprayKiller and SprayGod bonus scores not visible in first-person view, they are now drawn next to the spray scores and not above the payers head
 - 3D crosshair drawn and visible in front of select logo ingame menu in SYC when anaglyph mode is enabled
 - Hall of mirrors effect visible on the skybox in PadShip during demo playback when OpenGL2 renderer is enabled
+- Disabling anaglyph 3D mode in the menu prevents adjusting the grayscale afterward, both options are decoupled now
 - Cvar `bot_minplayers` not working as intended in some game types
 - Missing `qer_editorimage` path in `textures/pad_wop/padtele` shader
 - Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights
@@ -34,6 +35,7 @@
 - Landing sound to play on all falls, no matter the height, the Pads always fall on their feeds without taking damage
 - KillerDuck pickup lock time beyond respawn time to prevent players from gaining too much of an advantage from health and armor refills by re-collecting the item too fast
 - Spawn protect default time from 6 to 3 seconds in InstaPad
+- Renamed "Greyscale" to "Grayscale" in the menu as we stick to American English, cvar `r_greyscale` stays untouched
 - Diner: slightly lowered gamma factor of the light map and added `_minlight` to brighten dark spots
 - Jail: replaced temperature scale textures with pressure scale textures on the gas bottles and replaced weight scale textures with temperature scale textures on the ventilation 
 

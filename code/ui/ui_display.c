@@ -190,10 +190,8 @@ static void UI_DisplayOptions_UpdateMenuItems(void) {
 	}
 
 	if (!displayOptionsInfo.anaglyph.curvalue) {
-		displayOptionsInfo.greyscale.generic.flags |= QMF_GRAYED;
 		displayOptionsInfo.swapcolors.generic.flags |= QMF_GRAYED;
 	} else {
-		displayOptionsInfo.greyscale.generic.flags &= ~QMF_GRAYED;
 		displayOptionsInfo.swapcolors.generic.flags &= ~QMF_GRAYED;
 	}
 
@@ -583,7 +581,7 @@ static void UI_DisplayOptions_MenuInit(void) {
 
 	y += (BIGCHAR_HEIGHT + 2);
 	displayOptionsInfo.greyscale.generic.type = MTYPE_SLIDER;
-	displayOptionsInfo.greyscale.generic.name = "Greyscale:";
+	displayOptionsInfo.greyscale.generic.name = "Grayscale:";
 	displayOptionsInfo.greyscale.generic.flags = QMF_SMALLFONT;
 	displayOptionsInfo.greyscale.generic.callback = UI_DisplayOptions_Event;
 	displayOptionsInfo.greyscale.generic.id = ID_GREYSCALE;
