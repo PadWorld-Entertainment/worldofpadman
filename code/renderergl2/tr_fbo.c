@@ -538,7 +538,7 @@ void FBO_BlitFromTexture(struct image_s *src, vec4_t inSrcTexCorners, vec2_t inS
 	FBO_Bind(oldFbo);
 }
 
-void FBO_Blit(FBO_t *src, ivec4_t inSrcBox, vec2_t srcTexScale, FBO_t *dst, ivec4_t dstBox,
+void FBO_Blit(const FBO_t *src, ivec4_t inSrcBox, vec2_t srcTexScale, FBO_t *dst, ivec4_t dstBox,
 			  struct shaderProgram_s *shaderProgram, const vec4_t color, int blend) {
 	vec4_t srcTexCorners;
 
@@ -560,7 +560,7 @@ void FBO_Blit(FBO_t *src, ivec4_t inSrcBox, vec2_t srcTexScale, FBO_t *dst, ivec
 						blend | GLS_DEPTHTEST_DISABLE);
 }
 
-void FBO_FastBlit(FBO_t *src, ivec4_t srcBox, FBO_t *dst, ivec4_t dstBox, int buffers, int filter) {
+void FBO_FastBlit(const FBO_t *src, ivec4_t srcBox, FBO_t *dst, ivec4_t dstBox, int buffers, int filter) {
 	ivec4_t srcBoxFinal, dstBoxFinal;
 	GLuint srcFb, dstFb;
 
