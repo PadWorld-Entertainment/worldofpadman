@@ -368,8 +368,6 @@ function(add_asm TARGET)
 	elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ppc64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ppc64le")
 	else()
 		target_sources(${TARGET} PRIVATE ${CODE_DIR}/asm/snapvector.c ${CODE_DIR}/asm/ftola.c)
-		set_source_files_properties(${CODE_DIR}/asm/snapvector.c PROPERTIES COMPILE_FLAGS -march=k8)
-		set_source_files_properties(${CODE_DIR}/asm/ftola.c PROPERTIES COMPILE_FLAGS -march=k8)
 	endif()
 endfunction()
 
