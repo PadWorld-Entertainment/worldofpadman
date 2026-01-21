@@ -34,12 +34,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define MAX_NUM_ARGVS 50
 
 #define MIN_DEDICATED_COMHUNKMEGS 1
-#define MIN_COMHUNKMEGS 96
 #if defined(_WIN32)
 #define DEF_COMHUNKMEGS 256
 #else
 #define DEF_COMHUNKMEGS 512
 #endif
+#define MIN_COMHUNKMEGS DEF_COMHUNKMEGS
 #define DEF_COMZONEMEGS 96
 #define DEF_COMHUNKMEGS_S XSTRING(DEF_COMHUNKMEGS)
 #define DEF_COMZONEMEGS_S XSTRING(DEF_COMZONEMEGS)
@@ -1424,6 +1424,7 @@ static void Hunk_Log(void) {
 	FS_Write(buf, strlen(buf), logfile);
 	Com_sprintf(buf, sizeof(buf), "%d hunk blocks\r\n", numBlocks);
 	FS_Write(buf, strlen(buf), logfile);
+	FS_Flush(logfile);
 }
 
 /*
@@ -1471,6 +1472,7 @@ static void Hunk_SmallLog(void) {
 	FS_Write(buf, strlen(buf), logfile);
 	Com_sprintf(buf, sizeof(buf), "%d hunk blocks\r\n", numBlocks);
 	FS_Write(buf, strlen(buf), logfile);
+	FS_Flush(logfile);
 }
 #endif
 

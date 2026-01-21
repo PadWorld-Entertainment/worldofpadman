@@ -649,6 +649,8 @@ typedef enum {
 
 	UNIFORM_BONEMATRIX,
 
+	UNIFORM_GREYSCALE,
+
 	UNIFORM_COUNT
 } uniform_t;
 
@@ -1397,6 +1399,7 @@ typedef struct {
 	FBO_t *last2DFBO;
 	qboolean colorMask[4];
 	qboolean depthFill;
+	float greyscale;
 } backEndState_t;
 
 /*
@@ -1417,7 +1420,7 @@ typedef struct {
 	int frameCount; // incremented every frame
 	int sceneCount; // incremented every scene
 	int viewCount;	// incremented every view (twice a scene if portaled)
-				   // and every R_MarkFragments call
+					// and every R_MarkFragments call
 
 	int frameSceneNum; // zeroed at RE_BeginFrame
 
@@ -1516,6 +1519,7 @@ typedef struct {
 	shaderProgram_t ssaoShader;
 	shaderProgram_t depthBlurShader[4];
 	shaderProgram_t testcubeShader;
+	shaderProgram_t greyscaleShader;
 
 	// -----------------------------------------
 
