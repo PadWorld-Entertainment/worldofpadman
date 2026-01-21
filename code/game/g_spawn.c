@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "g_local.h"
 #include "g_spawn.h"
 
+static char *pWorldspawn, *pWorldspawnParsePoint;
+
 qboolean G_SpawnString(const char *key, const char *defaultString, const char **out) {
 	int i;
 
@@ -672,7 +674,8 @@ static qboolean G_ParseSpawnVars(void) {
 	level.numSpawnVarChars = 0;
 
 	// parse the opening brace
-	if (!trap_GetEntityToken(com_token, sizeof(com_token))) {
+	// if (!trap_GetEntityToken(com_token, sizeof(com_token))) {
+	if (!BE_GetEntityToken(com_token, sizeof(com_token))) {
 		// end of spawn string
 		return qfalse;
 	}
@@ -683,7 +686,8 @@ static qboolean G_ParseSpawnVars(void) {
 	// go through all the key / value pairs
 	while (1) {
 		// parse key
-		if (!trap_GetEntityToken(keyname, sizeof(keyname))) {
+		// if (!trap_GetEntityToken(keyname, sizeof(keyname))) {
+		if (!BE_GetEntityToken(keyname, sizeof(keyname))) {
 			G_Error("G_ParseSpawnVars: EOF without closing brace");
 		}
 
@@ -692,7 +696,8 @@ static qboolean G_ParseSpawnVars(void) {
 		}
 
 		// parse value
-		if (!trap_GetEntityToken(com_token, sizeof(com_token))) {
+		// if (!trap_GetEntityToken(com_token, sizeof(com_token))) {
+		if (!BE_GetEntityToken(com_token, sizeof(com_token))) {
 			G_Error("G_ParseSpawnVars: EOF without closing brace");
 		}
 
@@ -805,6 +810,8 @@ void G_SpawnEntitiesFromString(void) {
 	level.numSpawnVars = 0;
 	level.sr_tl_tele = NULL;
 
+	BE_PreSpawnEntities();
+
 	// the worldspawn is not an actual entity, but it still
 	// has a "spawn" function to perform any global setup
 	// needed by a level (setting configstrings or cvars, etc)
@@ -818,5 +825,124 @@ void G_SpawnEntitiesFromString(void) {
 		G_SpawnGEntityFromSpawnVars();
 	}
 
+	BE_PostSpawnEntities();
+
 	level.spawning = qfalse; // any future calls to G_Spawn*() will be errors
+}
+
+/*
+==============
+BE_LoadEntities
+
+Loads entities from disk (maps/mapname.ent), but does not parse them.
+Taken from Beryllium mod by the-brain
+==============
+*/
+
+static void BE_LoadEntities(const char *mapname) {
+	int len;
+	fileHandle_t f;
+	char filename[MAX_QPATH];
+
+	G_assert(mapname != NULL);
+
+	pWorldspawn = NULL;
+	if (!g_externalEntities.integer) {
+		/*
+		 * Make sure we've NULLed pWorldspawn, since it's checked against
+		 * in all other checks
+		 */
+		return;
+	}
+
+	Com_sprintf(filename, sizeof(filename), "maps/%s.ent", mapname);
+
+	len = trap_FS_FOpenFile(filename, &f, FS_READ);
+	if (!f) {
+		Com_Printf("Could not load entities from " S_COLOR_YELLOW "%s" S_COLOR_WHITE ".\n", filename);
+		return;
+	}
+
+	/*
+	 * We need a second pointer because COM_Parse() will overwrite and thus
+	 *  leak our buffer pointer otherwise.
+	 */
+	pWorldspawn = pWorldspawnParsePoint = BE_Alloc(len);
+	G_assert(pWorldspawn != NULL);
+
+	trap_FS_Read(pWorldspawn, len, f);
+	pWorldspawn[len] = '\0';
+	trap_FS_FCloseFile(f);
+
+	Com_Printf("Loaded entities from " S_COLOR_YELLOW "%s" S_COLOR_WHITE ".\n", filename);
+}
+
+/*
+==============
+BE_PreSpawnEntities
+
+Called once we're ready to parse entities.
+Taken from Beryllium mod by the-brain
+==============
+*/
+void BE_PreSpawnEntities(void) {
+	char serverinfo[MAX_INFO_STRING];
+	char mapname[MAX_INFO_VALUE];
+
+	trap_GetServerinfo(serverinfo, sizeof(serverinfo));
+	Q_strncpyz(mapname, Info_ValueForKey(serverinfo, "mapname"), sizeof(mapname));
+	/* FIXME: Copy pasta. BE_InitBeryllium() is called to late. */
+
+	BE_LoadEntities(mapname);
+}
+
+/*
+==============
+BE_FreeEntities
+
+Frees memory used to hold entities from disk.
+Taken from Beryllium mod by the-brain
+==============
+*/
+static void BE_FreeEntities(void) {
+	if (pWorldspawn != NULL) {
+		BE_Free(pWorldspawn);
+		pWorldspawn = NULL;
+	}
+}
+
+/*
+==============
+BE_PostSpawnEntities
+
+Called after entities have been parsed.
+Taken from Beryllium mod by the-brain
+==============
+*/
+void BE_PostSpawnEntities(void) {
+	BE_FreeEntities();
+}
+
+/*
+==============
+BE_GetEntityToken
+
+See GET_ENTITY_TOKEN in SV_GameSystemCalls().
+Taken from Beryllium mod by the-brain
+==============
+*/
+qboolean BE_GetEntityToken(char *buffer, int bufferSize) {
+	const char *s;
+
+	if (NULL == pWorldspawn) {
+		return trap_GetEntityToken(buffer, bufferSize);
+	} else {
+		s = COM_Parse(&pWorldspawnParsePoint);
+		Q_strncpyz(buffer, s, bufferSize);
+		if (!pWorldspawnParsePoint && !s[0]) {
+			return qfalse;
+		} else {
+			return qtrue;
+		}
+	}
 }
