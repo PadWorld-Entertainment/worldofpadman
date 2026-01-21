@@ -271,8 +271,17 @@ static int BotAddressedToBot(bot_state_t *bs, bot_match_t *match) {
 		}
 
 		return qfalse;
+	} else {
+		bot_match_t tellmatch;
+
+		tellmatch.type = 0;
+		// if this message wasn't directed solely to this bot
+		if (!trap_BotFindMatch(match->string, &tellmatch, MTCONTEXT_REPLYCHAT) || tellmatch.type != MSG_CHATTELL) {
+			// make sure not everyone reacts to this message
+			if (random() > (float)1.0 / (NumPlayersOnSameTeam(bs) - 1))
+				return qfalse;
+		}
 	}
-	// not addressed, take it
 	return qtrue;
 }
 
@@ -595,7 +604,7 @@ int BotMatchMessage(bot_state_t *bs, const char *message) {
 		BotMatch_WrongWall(bs, &match);
 		break;
 	}
-	case MSG_GOFORBALLOON:{				//someone calling for company
+	case MSG_GOFORBALLOON: {				//someone calling for company
 		BotMatch_GoForBalloon(bs, &match);
 		break;
 	}
