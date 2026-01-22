@@ -763,6 +763,10 @@ static void CG_RegisterSounds(void) {
 	cgs.media.watchpadSound = trap_S_RegisterSound("sound/feedback/awards/watchpad", qtrue);
 	cgs.media.padstarSound = trap_S_RegisterSound("sound/feedback/awards/padstar", qtrue);
 
+	cgs.media.voteNow = trap_S_RegisterSound("sound/feedback/vote_now", qtrue);
+	cgs.media.votePassed = trap_S_RegisterSound("sound/feedback/vote_passed", qtrue);
+	cgs.media.voteFailed = trap_S_RegisterSound("sound/feedback/vote_failed", qtrue);
+
 	cgs.media.watrInSound = trap_S_RegisterSound("sound/padplayer/water_in", qfalse);
 	cgs.media.watrOutSound = trap_S_RegisterSound("sound/padplayer/water_out", qfalse);
 	cgs.media.watrUnSound = trap_S_RegisterSound("sound/padplayer/water_under", qfalse);
