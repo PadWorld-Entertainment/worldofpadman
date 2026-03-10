@@ -111,3 +111,10 @@ update-opus:
 	$(Q)curl -L https://archive.mozilla.org/pub/opus/opus-$(OPUS_VERSION).tar.gz -o $(UPDATEDIR)/opus.tar.gz
 	$(Q)tar -xzf $(UPDATEDIR)/opus.tar.gz -C $(UPDATEDIR)
 	$(Q)echo Todo
+
+ZLIB_VERSION=1.3.2
+update-zlib:
+	$(Q)curl -L https://github.com/madler/zlib/releases/download/v$(ZLIB_VERSION)/zlib-$(ZLIB_VERSION).tar.gz -o $(UPDATEDIR)/zlib.tar.gz
+	$(Q)tar -xzf $(UPDATEDIR)/zlib.tar.gz -C $(UPDATEDIR)
+	$(Q)rm -f libs/zlib/*.[ch]
+	$(Q)cp $(UPDATEDIR)/zlib-$(ZLIB_VERSION)/*.[ch] libs/zlib
