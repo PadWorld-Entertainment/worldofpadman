@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "g_local.h"
 #include "inv.h"
 
-#define RESPAWN_DROPPED_KILLERDUCKS 5
+#define RESPAWN_DROPPED_KILLERDUCKS 10
 
 // TODO: don't free them - but allow to re-use those entities to re-spawn the killerduck here
 static void G_EnsureExactlyOne(const char *name) {
