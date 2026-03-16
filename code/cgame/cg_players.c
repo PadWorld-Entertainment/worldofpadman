@@ -2396,6 +2396,18 @@ void CG_Player(centity_t *cent) {
 		ci->lastPosSaveTime = 0; // "reset"
 	}
 
+	// save position for killerduck wallhack icon
+	if ((cgs.gametype == GT_CATCH) &&
+		(cent->currentState.number != cg.snap->ps.clientNum) &&
+		(CG_IsKillerDuck(cent)) &&
+		!(cent->currentState.eFlags & EF_DEAD)) {
+		VectorCopy(cent->lerpOrigin, ci->curPos);
+		ci->curPos[2] += 64; // position above head
+		ci->lastPosSaveTime = cg.time;
+	} else if (ci->lastPosSaveTime != cg.time) {
+		ci->lastPosSaveTime = 0; // "reset"
+	}
+
 	// push frozen state into clientinfo
 	// we need that in CG_RunLerpFrame :X
 	if (CG_FreezeTag() && cent->currentState.powerups & (1 << PW_FREEZE))

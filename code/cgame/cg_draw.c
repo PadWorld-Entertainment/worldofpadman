@@ -3261,6 +3261,67 @@ static void CG_DrawLPSArrowIcon(void) {
 	}
 }
 
+static void CG_DrawKillerduckCarrierIcon(void) {
+	int i;
+
+	if (!(cg_icons.integer & ICON_KILLERDUCK)) {
+		return;
+	}
+
+	if (cgs.gametype != GT_CATCH) {
+		return;
+	}
+
+	for (i = 0; i < cgs.maxclients; i++) {
+
+		if (!cgs.clientinfo[i].infoValid)
+			continue;
+
+		if (i == cg.clientNum)
+			continue;
+
+		if (!cgs.clientinfo[i].ctkdIsKillerduck)
+			continue;
+
+		if ((cgs.clientinfo[i].lastPosSaveTime > 0) && ((cg.time - cgs.clientinfo[i].lastPosSaveTime) < FADEOUTTIME)) {
+			float x, y;
+			qboolean front;
+			vec4_t strColor = {1.0f, 1.0f, 1.0f, 1.0f};
+
+			// fading out, if the player disappeared
+			strColor[3] = ((FADEOUTTIME - (cg.time - cgs.clientinfo[i].lastPosSaveTime)) / 1000);
+			if (strColor[3] > 1.0) {
+				strColor[3] = 1.0f;
+			} else if (strColor[3] < 0.0) {
+				strColor[3] = 0.0f;
+			}
+
+			front = CG_WorldToScreen(cgs.clientinfo[i].curPos, &x, &y);
+			if (front) {
+				float squaredDistance = DistanceSquared(cg.refdef.vieworg, cgs.clientinfo[i].curPos);
+				float size = (float)(1.0 / (sqrt(squaredDistance) * 0.002));
+				if (size > 1.0f) {
+					size = 1.0f;
+				} else if (size < 0.5f) {
+					size = 0.5f;
+				}
+
+				strColor[3] *= (float)(0.3 + 0.7 * (1 / (1 + squaredDistance * 0.000004)));
+				if (strColor[3] > 1.0f) {
+					strColor[3] = 1.0f;
+				}
+
+				trap_R_SetColor(strColor);
+
+				CG_DrawPic((x - 16.0f * size), (y - 16.0f * size), (32.0f * size), (32.0f * size),
+								cgs.media.ctkdCarrierIconShader);
+
+				trap_R_SetColor(NULL);
+			}
+		}
+	}
+}
+
 static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	float x, y, w, h;
 	int weaponNum, team;
@@ -3393,6 +3454,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	CG_DrawLPSArrowIcon();
 	CG_DrawTeammateIcon();
 	CG_DrawFrozenTeammateIcon();
+	CG_DrawKillerduckCarrierIcon();
 
 	cg.scoreBoardShowing = CG_DrawScoreboard();
 	if (!cg.scoreBoardShowing) {
