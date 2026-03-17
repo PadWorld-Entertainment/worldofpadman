@@ -54,7 +54,8 @@
 ### Updated
 
 - SDL to version 2.32.8
-- Code base to [ioq3 1.36 Git cc18246](https://github.com/ioquake/ioq3/commit/8cc9eb5eff62816f2849b1ca03695c0882e1a1d8) with associated features and bug fixes
+- ZLIB to version 1.3.2
+- Code base to [ioq3 1.36 Git 3041ec3](https://github.com/ioquake/ioq3/commit/3041ec3695c66ec9c8bb0094dafe0acba7cd9d6b) with associated features and bug fixes
 
 ## [1.7.0] - 2024-12-06
 
