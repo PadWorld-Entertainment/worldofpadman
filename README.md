@@ -25,7 +25,7 @@ Some parts of World of PADMAN were created with contents acquired by PadWorld En
 
 ## MapPack
 
-[MAPPACK.md](MAPPACK.md) lists all the maps provided with the Community Map Pack and the associated licenses or terms of use chosen by the original author, which allows PadWorld Entertainment to bundle and release these maps with the World of PADMAN game and to make changes if necessary. If you would like to include your map, please contact us. A license that allows us to make necessary adjustments to the current WoP development status, such as [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/), is a basic requirement.
+[MAPPACK.md](MAPPACK.md) lists all the maps included in the Community Map Pack, as well as the licenses and terms of use chosen by the original authors. This allows PadWorld Entertainment to bundle and release these maps with the World of PADMAN game, and to make changes if necessary. If you would like to include your map, please contact us. A license that allows us to make necessary adjustments to the current WoP development status, such as [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/), is a basic requirement. Additionally, the changelog section documents all notable changes to this map pack.
 
 ## Security
 

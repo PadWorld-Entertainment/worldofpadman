@@ -1,6 +1,8 @@
-# Community Map Pack Licenses
+# Community Map Pack Readme
 
-This file lists all the maps provided with the Community Map Pack and the associated licenses or terms of use chosen by the original author, which allows PadWorld Entertainment to bundle and release these maps with the World of PADMAN game and make changes if necessary.
+This file lists all the maps included in the Community Map Pack, as well as the licenses and terms of use chosen by the original authors. This allows PadWorld Entertainment to bundle and release these maps with the World of PADMAN game, and to make changes if necessary. Additionally, the changelog section documents all notable changes to this map pack.
+
+## License
 
 File | Name | Author | License
 ---- | ---- | ------ | -------
@@ -17,3 +19,30 @@ wop_hurryup / wop_hurryupCTL | Hurry up! | Hectic | [![GPL-3.0](https://www.gnu.
 wop_pacman | Pac-Man | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_tinyCTL | TinyCTL | Blu | [![WTFPL](https://upload.wikimedia.org/wikipedia/commons/f/fa/WTFPL_badge.png "WTFPL")](http://www.wtfpl.net/)
 wop_workshop | Workshop | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
+
+## Changelog
+
+### [1.2.0] - tba
+
+- Fixed a missplaced brush in Hectic's Hurry Up (CTL version)
+- Fixed not drawn brushes in 3aTmE!'s Copy'n'Paste
+- Fixed z-fights on white heating pipes in Hectic's Workshop
+
+### [1.1.0] - 2025-07-14
+
+- Added Cheese Dome by Iltis
+- Added Copy'n'Paste by 3aTmE!
+- Added Dark Place by Iltis
+- Added Fly or Die by BuddyFriendGuy
+
+### [1.0.0] - 2024-12-23
+
+- Added 7 Colors by Hectic
+- Added A Long Way by Hectic
+- Added Coloor by 3aTmE!
+- Added Cube Fight Hectic
+- Added FragBox by 3aTmE!
+- Added Hurry up! by Hectic
+- Added Pac-Man by Hectic
+- Added TinyCTL by Blu
+- Added Workshop by Hectic
