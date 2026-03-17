@@ -6,6 +6,7 @@
 
 - Community MapPack v1.2.0 with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
 - Crosshair in 3rd person view and enabled by default; disable or set to "traced" mode in game options menu
+- KillerDuck wallhack icon over the carriers head in CATCH to reveal his position, provided the option is enabled in the menu
 - Missing PADMAN winner statue model (md3 file)
 - Cvar `g_spawnProtect` to set the spawn protect time in InstaPad in seconds, default value is 3, 0 turns it off
 - Jail: missing pressure scale textures
@@ -18,7 +19,7 @@
 - Disconnected clients dropping the freeze power-up in FT, which allowed others to collect the item, run around, and shoot while appearing frozen
 - KillerDucks movement to prevent them to stack and get stuck
 - KillerDuck disappears from the match if thrown into a nodrop area in CTKD
-- Duck hunters not being vulnerable to environmental hazards such as lava in CTKD
+- KillerDuck hunters not being vulnerable to environmental hazards such as lava in CTKD
 - The neutral lolly would not respawn when the carrier died inside a nodrop volume brush in 1LC
 - SprayKiller and SprayGod bonus scores not visible in first-person view, they are now drawn next to the spray scores and not above the payers head
 - 3D crosshair drawn and visible in front of select logo ingame menu in SYC when anaglyph mode is enabled
@@ -31,9 +32,11 @@
 ### Changed
 
 - PadGirl and PadBabe taunts, PadGirl now says "Don't call me babe!" and PadBabe now says "Eat this!" which makes more sense
-- Crosshair not drawn when playing as the KillerDuck in CTKD to better indicate that there is no weapon to shoot with
 - Landing sound to play on all falls, no matter the height, the Pads always fall on their feeds without taking damage
-- KillerDuck pickup lock time beyond respawn time to prevent players from gaining too much of an advantage from health and armor refills by re-collecting the item too fast
+- Crosshair not drawn when playing as the KillerDuck in CTKD to better indicate that there is no weapon to shoot with
+- KillerDuck pickup lock time beyond respawn time to prevent players from gaining too much of an advantage from health and armor refills by re-collecting the item too fast in CTKD
+- KillerDuck respawn time from 5 to 10 seconds to give the hunters a better chance to pick it up before it respawns in CTKD
+- Player glow effect to be more visible when holding a lolly in CTF/1LC or the KillerDuck in CTKD
 - Spawn protect default time from 6 to 3 seconds in InstaPad
 - Renamed "Greyscale" to "Grayscale" in the menu as we stick to American English, cvar `r_greyscale` stays untouched
 - Diner: slightly lowered gamma factor of the light map and added `_minlight` to brighten dark spots
