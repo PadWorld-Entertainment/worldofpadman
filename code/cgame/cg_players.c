@@ -1890,7 +1890,7 @@ static void CG_PlayerSprites(const centity_t *cent) {
 
 	if (!(cent->currentState.eFlags & EF_DEAD) && cg.snap->ps.persistant[PERS_TEAM] == team &&
 		cgs.gametype >= GT_TEAM) {
-		// don't draw it when cvar diabled or wallhack version is drawn
+		// don't draw it when cvar disabled or wallhack version is drawn
 		if (cg_drawFriend.integer && !(cg_icons.integer & ICON_TEAMMATE)) {
 			CG_PlayerFloatSprite(cent, cgs.media.friendShader);
 		}
