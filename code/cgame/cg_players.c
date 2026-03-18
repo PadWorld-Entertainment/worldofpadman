@@ -2205,6 +2205,37 @@ static void CG_PlayerGlowmodel(int clientNum, const clientInfo_t *ci, refEntity_
 
 /*
 ===============
+CG_SavePlayerPosition
+
+Save player position in client info
+Used to show several wallhack icons over the players head
+===============
+*/
+
+void CG_SavePlayerPosition(centity_t *cent, clientInfo_t *ci) {
+	
+	if (cent->currentState.eFlags & (EF_DEAD)) {
+		return;
+	}
+
+	if (cent->currentState.number == cg.snap->ps.clientNum) {
+		return;
+	}
+
+	if ((cgs.gametype == GT_LPS) && !(cent->currentState.eFlags & (EF_NOLIFESLEFT)) ||		// LPS arrow icon
+		(cgs.gametype >= GT_TEAM) && (cg.snap->ps.persistant[PERS_TEAM] == ci->team) ||		// teammate & freezetag icons
+		(cgs.gametype == GT_CATCH) && (CG_IsKillerDuck(cent))) {							// killerduck carrier icon
+		VectorCopy(cent->lerpOrigin, ci->curPos);
+		ci->curPos[2] += 64; // position above head
+		ci->lastPosSaveTime = cg.time;
+	} else if (ci->lastPosSaveTime != cg.time) {
+		ci->lastPosSaveTime = 0; // "reset"
+	}
+
+}
+
+/*
+===============
 CG_Player
 ===============
 */
@@ -2373,40 +2404,8 @@ void CG_Player(centity_t *cent) {
 		CG_AddStars(cent->currentState.number, head.origin, stars, alpha);
 	}
 
-	// save player position for LPS wallhack icon
-	if ((cgs.gametype == GT_LPS) &&
-		(cent->currentState.number != cg.snap->ps.clientNum) &&
-		!(cent->currentState.eFlags & (EF_DEAD | EF_NOLIFESLEFT))) {
-		VectorCopy(cent->lerpOrigin, ci->curPos);
-		ci->curPos[2] += 64; // position above head
-		ci->lastPosSaveTime = cg.time;
-	} else if (ci->lastPosSaveTime != cg.time) {
-		ci->lastPosSaveTime = 0; // "reset"
-	}
-
-	// save position for teammate & freezetag wallhack icons
-	if ((cgs.gametype >= GT_TEAM) &&
-		(cent->currentState.number != cg.snap->ps.clientNum) &&
-		(cg.snap->ps.persistant[PERS_TEAM] == ci->team) &&
-		!(cent->currentState.eFlags & EF_DEAD)) {
-		VectorCopy(cent->lerpOrigin, ci->curPos);
-		ci->curPos[2] += 64; // position above head
-		ci->lastPosSaveTime = cg.time;
-	} else if (ci->lastPosSaveTime != cg.time) {
-		ci->lastPosSaveTime = 0; // "reset"
-	}
-
-	// save position for killerduck wallhack icon
-	if ((cgs.gametype == GT_CATCH) &&
-		(cent->currentState.number != cg.snap->ps.clientNum) &&
-		(CG_IsKillerDuck(cent)) &&
-		!(cent->currentState.eFlags & EF_DEAD)) {
-		VectorCopy(cent->lerpOrigin, ci->curPos);
-		ci->curPos[2] += 64; // position above head
-		ci->lastPosSaveTime = cg.time;
-	} else if (ci->lastPosSaveTime != cg.time) {
-		ci->lastPosSaveTime = 0; // "reset"
-	}
+	// save player position for wallhack icons
+	CG_SavePlayerPosition(cent, ci);
 
 	// push frozen state into clientinfo
 	// we need that in CG_RunLerpFrame :X
