@@ -708,6 +708,24 @@ void VM_Forced_Unload_Start(void) {
 	forced_unload = 1;
 }
 
+void VM_CheckBounds(const vm_t *vm, unsigned int address, unsigned int length) {
+	if ((unsigned int)vm->dataAlloc < address || (unsigned int)vm->dataAlloc - address < length) {
+		Com_Error(ERR_DROP, "program tried to bypass data segment bounds");
+	}
+}
+
+void VM_CheckBounds2(const vm_t *vm, unsigned int addr1, unsigned int addr2, unsigned int length) {
+	VM_CheckBounds(vm, addr1, length);
+	VM_CheckBounds(vm, addr2, length);
+}
+
+void VM_CheckBounds3(const vm_t *vm, unsigned int address, unsigned int count, unsigned int size) {
+	if (count > (unsigned int)vm->dataAlloc / size ||
+		(unsigned int)vm->dataAlloc - count * size < address) {
+		Com_Error(ERR_DROP, "program tried to bypass data segment bounds");
+	}
+}
+
 void VM_Forced_Unload_Done(void) {
 	forced_unload = 0;
 }
