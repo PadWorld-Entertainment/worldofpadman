@@ -876,7 +876,7 @@ static int SV_WriteDownloadToClient(client_t *cl, msg_t *msg) {
 
 		cl->downloadBlockSize[curindex] = FS_Read(cl->downloadBlocks[curindex], MAX_DOWNLOAD_BLKSIZE, cl->download);
 
-		if (cl->downloadBlockSize[curindex] < 0) {
+		if (cl->downloadBlockSize[curindex] <= 0) {
 			// EOF right now
 			cl->downloadCount = cl->downloadSize;
 			break;
