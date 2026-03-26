@@ -41,6 +41,9 @@ int SV_NumForGentity(sharedEntity_t *ent) {
 sharedEntity_t *SV_GentityNum(int num) {
 	sharedEntity_t *ent;
 
+	if (num < 0 || num >= MAX_GENTITIES) {
+		Com_Error(ERR_DROP, "%s: bad num %d", __func__, num);
+	}
 	ent = (sharedEntity_t *)((byte *)sv.gentities + sv.gentitySize * (num));
 
 	return ent;
@@ -147,11 +150,15 @@ qboolean SV_inPVS(const vec3_t p1, const vec3_t p2) {
 
 	leafnum = CM_PointLeafnum(p1);
 	cluster = CM_LeafCluster(leafnum);
+	if (cluster < 0)
+		return qfalse;
 	area1 = CM_LeafArea(leafnum);
 	mask = CM_ClusterPVS(cluster);
 
 	leafnum = CM_PointLeafnum(p2);
 	cluster = CM_LeafCluster(leafnum);
+	if (cluster < 0)
+		return qfalse;
 	area2 = CM_LeafArea(leafnum);
 	if (mask && (!(mask[cluster >> 3] & (1 << (cluster & 7)))))
 		return qfalse;
@@ -174,10 +181,14 @@ static qboolean SV_inPVSIgnorePortals(const vec3_t p1, const vec3_t p2) {
 
 	leafnum = CM_PointLeafnum(p1);
 	cluster = CM_LeafCluster(leafnum);
+	if (cluster < 0)
+		return qfalse;
 	mask = CM_ClusterPVS(cluster);
 
 	leafnum = CM_PointLeafnum(p2);
 	cluster = CM_LeafCluster(leafnum);
+	if (cluster < 0)
+		return qfalse;
 
 	if (mask && (!(mask[cluster >> 3] & (1 << (cluster & 7)))))
 		return qfalse;
