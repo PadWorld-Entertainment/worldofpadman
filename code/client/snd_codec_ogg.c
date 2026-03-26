@@ -76,6 +76,10 @@ static size_t S_OGG_Callback_read(void *ptr, size_t size, size_t nmemb, void *da
 
 	// read it with the Q3 function FS_Read()
 	bytesRead = FS_Read(ptr, byteSize, stream->file);
+	if (bytesRead < 0) {
+		errno = EIO;
+		return 0;
+	}
 
 	// update the file position
 	stream->pos += bytesRead;
