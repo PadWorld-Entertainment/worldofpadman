@@ -151,6 +151,7 @@ set(MAPPACK_BSPS
     wop_fragbox.bsp
     wop_hurryup.bsp
     wop_hurryupCTL.bsp
+    wop_marblemaze.bsp
     wop_pacman.bsp
     wop_tinyCTL.bsp
     wop_workshop.bsp
