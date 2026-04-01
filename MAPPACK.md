@@ -16,6 +16,7 @@ wop_darkplace / wop_darkplaceCTL | Dark Place | Iltis | [![GPL-3.0](https://www.
 wop_flyordie | Fly or Die | BuddyFriendGuy | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_fragbox | FragBox | 3aTmE! | [![CC-BY-NC](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc.svg "CC-BY-NC")](https://creativecommons.org/licenses/by-nc/4.0/)
 wop_hurryup / wop_hurryupCTL | Hurry up! | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
+wop_marblemaze | Marble Maze | Iltis | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_pacman | Pac-Man | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
 wop_tinyCTL | TinyCTL | Blu | [![WTFPL](https://upload.wikimedia.org/wikipedia/commons/f/fa/WTFPL_badge.png "WTFPL")](http://www.wtfpl.net/)
 wop_workshop | Workshop | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv3-127x51.png "GPL-3.0")](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -24,6 +25,7 @@ wop_workshop | Workshop | Hectic | [![GPL-3.0](https://www.gnu.org/graphics/gplv
 
 ### [1.2.0] - tba
 
+- Added Marble Maze by Iltis
 - Fixed a missplaced brush in Hectic's Hurry Up (CTL version)
 - Fixed not drawn brushes in 3aTmE!'s Copy'n'Paste
 - Fixed z-fights on white heating pipes in Hectic's Workshop
