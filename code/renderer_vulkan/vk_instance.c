@@ -355,16 +355,22 @@ static void vk_selectPhysicalDevice(void) {
 
 	// TODO: multi graphic cards selection support
 	VK_CHECK(qvkEnumeratePhysicalDevices(vk.instance, &gpu_count, pPhyDev));
-	for (i = 0; i < gpu_count; i++) {
+	int integrated_index = -1;
+	for (i = 0; i < (int)gpu_count; i++) {
 		VkPhysicalDeviceProperties props;
 		qvkGetPhysicalDeviceProperties(pPhyDev[i], &props);
 		ri.Printf(PRINT_ALL, " %i: %s\n", i, renderer_name(&props));
 		if (device_index == -1 && props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
 			device_index = i;
-		} else if (device_index == -2 && props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
-			device_index = i;
+		} else if (integrated_index == -1 && props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
+			integrated_index = i;
 		}
 	}
+
+	if (device_index == -1)
+		device_index = integrated_index;
+	if (device_index == -1)
+		device_index = 0; // fallback to first available device
 
 	vk.physical_device = pPhyDev[device_index];
 
