@@ -426,8 +426,18 @@ void vk_begin_frame(void) {
 
 	// An application must wait until either the semaphore or fence is signaled
 	// before accessing the image's data.
-	VK_CHECK(qvkAcquireNextImageKHR(vk.device, vk.swapchain, UINT64_MAX, sema_imageAvailable, VK_NULL_HANDLE,
-									&vk.idx_swapchain_image));
+	{
+		VkResult acquireResult = qvkAcquireNextImageKHR(vk.device, vk.swapchain, UINT64_MAX, sema_imageAvailable,
+													   VK_NULL_HANDLE, &vk.idx_swapchain_image);
+		if (acquireResult == VK_ERROR_OUT_OF_DATE_KHR || acquireResult == VK_ERROR_SURFACE_LOST_KHR) {
+			qvkDeviceWaitIdle(vk.device);
+			vk_recreateSwapChain();
+			return;
+		}
+		if (acquireResult != VK_SUCCESS && acquireResult != VK_SUBOPTIMAL_KHR) {
+			ri.Printf(PRINT_ALL, "Vulkan: error %s returned by vkAcquireNextImageKHR\n", cvtResToStr(acquireResult));
+		}
+	}
 
 	//  User could call method vkWaitForFences to wait for completion. A fence is a
 	//  very heavyweight synchronization primitive as it requires the GPU to flush
@@ -614,12 +624,8 @@ void vk_end_frame(void) {
 		return;
 	}
 
-	if ((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_ERROR_SURFACE_LOST_KHR)) {
-		// we first call vkDeviceWaitIdle because we
-		// shouldn't touch resources that still be in use
+	if (result == VK_SUBOPTIMAL_KHR || result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_ERROR_SURFACE_LOST_KHR) {
 		qvkDeviceWaitIdle(vk.device);
-		// recreate the objects that depend on the swap chain and the window size
-
 		vk_recreateSwapChain();
 	}
 }
