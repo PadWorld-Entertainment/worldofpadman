@@ -112,7 +112,7 @@ void vk_clearProcAddress(void);
 
 const char *cvtResToStr(VkResult result);
 
-#ifndef NDEDBG
+#ifndef NDEBUG
 #define VK_CHECK(function_call)                                                                                        \
 	{                                                                                                                  \
 		VkResult result = function_call;                                                                               \
