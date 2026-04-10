@@ -136,40 +136,40 @@ static void vk_destroy_staging_buffer(void) {
 	memset(&StagBuf, 0, sizeof(StagBuf));
 }
 
-static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pRegion, uint32_t num_region) {
-	// An application can copy buffer and image data using several methods
-	// depending on the type of data transfer. Data can be copied between
-	// buffer objects with vkCmdCopyBuffer and a portion of an image can
-	// be copied to another image with vkCmdCopyImage.
-	//
-	// Image data can also be copied to and from buffer memory using
-	// vkCmdCopyImageToBuffer and vkCmdCopyBufferToImage.
-	//
-	// Image data can be blitted (with or without scaling and filtering)
-	// with vkCmdBlitImage. Multisampled images can be resolved to a
-	// non-multisampled image with vkCmdResolveImage.
-	//
-	VkCommandBuffer cmd_buf;
-	VkBufferMemoryBarrier barrier;
-	VkSubmitInfo submit_info;
+static VkCommandBuffer uploadCmdBuf = VK_NULL_HANDLE;
+static VkFence uploadFence = VK_NULL_HANDLE;
 
-	{
+static void vk_ensureUploadResources(void) {
+	if (uploadCmdBuf == VK_NULL_HANDLE) {
 		VkCommandBufferAllocateInfo alloc_info;
-		VkCommandBufferBeginInfo begin_info;
-
 		alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		alloc_info.pNext = NULL;
 		alloc_info.commandPool = vk.command_pool;
 		alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		alloc_info.commandBufferCount = 1;
-		VK_CHECK(qvkAllocateCommandBuffers(vk.device, &alloc_info, &cmd_buf));
-
-		begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		begin_info.pNext = NULL;
-		begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-		begin_info.pInheritanceInfo = NULL;
-		VK_CHECK(qvkBeginCommandBuffer(cmd_buf, &begin_info));
+		VK_CHECK(qvkAllocateCommandBuffers(vk.device, &alloc_info, &uploadCmdBuf));
 	}
+	if (uploadFence == VK_NULL_HANDLE) {
+		VkFenceCreateInfo fence_info;
+		fence_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		fence_info.pNext = NULL;
+		fence_info.flags = 0;
+		VK_CHECK(qvkCreateFence(vk.device, &fence_info, NULL, &uploadFence));
+	}
+}
+
+static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pRegion, uint32_t num_region) {
+	VkBufferMemoryBarrier barrier;
+	VkSubmitInfo submit_info;
+	VkCommandBufferBeginInfo begin_info;
+
+	vk_ensureUploadResources();
+
+	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	begin_info.pNext = NULL;
+	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+	begin_info.pInheritanceInfo = NULL;
+	VK_CHECK(qvkBeginCommandBuffer(uploadCmdBuf, &begin_info));
 
 	barrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
 	barrier.pNext = NULL;
@@ -181,28 +181,20 @@ static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pReg
 	barrier.offset = 0;
 	barrier.size = VK_WHOLE_SIZE;
 
-	qvkCmdPipelineBarrier(cmd_buf, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, NULL, 1, &barrier,
-						  0, NULL);
+	qvkCmdPipelineBarrier(uploadCmdBuf, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, NULL, 1,
+						  &barrier, 0, NULL);
 
-	record_image_layout_transition(cmd_buf, image, VK_IMAGE_ASPECT_COLOR_BIT, 0, VK_IMAGE_LAYOUT_UNDEFINED,
+	record_image_layout_transition(uploadCmdBuf, image, VK_IMAGE_ASPECT_COLOR_BIT, 0, VK_IMAGE_LAYOUT_UNDEFINED,
 								   VK_ACCESS_TRANSFER_WRITE_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
-	// To copy data from a buffer object to an image object
+	qvkCmdCopyBufferToImage(uploadCmdBuf, StagBuf.buff, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, num_region,
+							pRegion);
 
-	// cmd_buf is the command buffer into which the command will be recorded.
-	// StagBuf.buff is the source buffer.
-	// image is the destination image.
-	// dstImageLayout is the layout of the destination image subresources.
-	// curLevel is the number of regions to copy.
-	// pRegions is a pointer to an array of VkBufferImageCopy structures
-	// specifying the regions to copy.
-	qvkCmdCopyBufferToImage(cmd_buf, StagBuf.buff, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, num_region, pRegion);
-
-	record_image_layout_transition(cmd_buf, image, VK_IMAGE_ASPECT_COLOR_BIT, VK_ACCESS_TRANSFER_WRITE_BIT,
+	record_image_layout_transition(uploadCmdBuf, image, VK_IMAGE_ASPECT_COLOR_BIT, VK_ACCESS_TRANSFER_WRITE_BIT,
 								   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_ACCESS_SHADER_READ_BIT,
 								   VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-	VK_CHECK(qvkEndCommandBuffer(cmd_buf));
+	VK_CHECK(qvkEndCommandBuffer(uploadCmdBuf));
 
 	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submit_info.pNext = NULL;
@@ -210,14 +202,13 @@ static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pReg
 	submit_info.pWaitSemaphores = NULL;
 	submit_info.pWaitDstStageMask = NULL;
 	submit_info.commandBufferCount = 1;
-	submit_info.pCommandBuffers = &cmd_buf;
+	submit_info.pCommandBuffers = &uploadCmdBuf;
 	submit_info.signalSemaphoreCount = 0;
 	submit_info.pSignalSemaphores = NULL;
 
-	VK_CHECK(qvkQueueSubmit(vk.queue, 1, &submit_info, VK_NULL_HANDLE));
-	VK_CHECK(qvkQueueWaitIdle(vk.queue));
-
-	qvkFreeCommandBuffers(vk.device, vk.command_pool, 1, &cmd_buf);
+	VK_CHECK(qvkResetFences(vk.device, 1, &uploadFence));
+	VK_CHECK(qvkQueueSubmit(vk.queue, 1, &submit_info, uploadFence));
+	VK_CHECK(qvkWaitForFences(vk.device, 1, &uploadFence, VK_TRUE, UINT64_MAX));
 }
 
 #define FILE_HASH_SIZE 1024
@@ -917,6 +908,16 @@ void vk_destroyImageRes(void) {
 	devMemImg.Index = 0;
 
 	vk_destroy_staging_buffer();
+
+	if (uploadFence != VK_NULL_HANDLE) {
+		qvkDestroyFence(vk.device, uploadFence, NULL);
+		uploadFence = VK_NULL_HANDLE;
+	}
+	if (uploadCmdBuf != VK_NULL_HANDLE) {
+		qvkFreeCommandBuffers(vk.device, vk.command_pool, 1, &uploadCmdBuf);
+		uploadCmdBuf = VK_NULL_HANDLE;
+	}
+
 	// Destroying a pool object implicitly frees all objects allocated from that pool.
 	// Specifically, destroying VkCommandPool frees all VkCommandBuffer objects that
 	// were allocated from it, and destroying VkDescriptorPool frees all
