@@ -1129,7 +1129,16 @@ UI_Init
 =================
 */
 void UI_Init(void) {
+	char fsGame[MAX_QPATH];
+
 	UI_RegisterCvars();
+
+	// XMAS: detect xmas mod (hat support is gated on this)
+	trap_Cvar_VariableStringBuffer("fs_game", fsGame, sizeof(fsGame));
+	uis.isXmas = (qboolean)(!Q_stricmp(fsGame, "xmas"));
+
+	// XMAS: per-client hat selection (e.g. "santa"). Only used when running with the xmas gamedir.
+	trap_Cvar_Register(NULL, "hat", "", CVAR_USERINFO | CVAR_ARCHIVE);
 
 	// not yet
 	// WOP_LoadMenuText(UI_LOCALEFILE, qtrue);
