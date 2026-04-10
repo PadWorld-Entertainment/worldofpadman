@@ -29,19 +29,20 @@ asked for again.
 qhandle_t RE_RegisterModel(const char *name) {
 	qboolean orgNameFailed = qfalse;
 	int orgLoader = -1;
-	qhandle_t hModel;
+	qhandle_t hModel = 0;
 	model_t *mod;
-	const char *dot;
-
-	ri.Printf(PRINT_DEVELOPER, "RegisterModel: %s.\n", name);
+	int i;
+	char localName[MAX_QPATH];
+	const char *ext;
+	char altName[MAX_QPATH];
 
 	if (!name || !name[0]) {
-		ri.Printf(PRINT_WARNING, "RE_RegisterModel: NULL name\n");
+		ri.Printf(PRINT_ALL, "RE_RegisterModel: NULL name\n");
 		return 0;
 	}
 
 	if (strlen(name) >= MAX_QPATH) {
-		ri.Printf(PRINT_WARNING, "Model name exceeds MAX_QPATH\n");
+		ri.Printf(PRINT_ALL, "Model name exceeds MAX_QPATH\n");
 		return 0;
 	}
 
@@ -51,7 +52,6 @@ qhandle_t RE_RegisterModel(const char *name) {
 	for (hModel = 1; hModel < tr.numModels; hModel++) {
 		if (0 == strcmp(tr.models[hModel]->name, name)) {
 			if (tr.models[hModel]->type == MOD_BAD) {
-				ri.Printf(PRINT_WARNING, "tr.models[%d]->type = MOD_BAD \n", hModel);
 				return 0;
 			}
 			return hModel;
@@ -59,8 +59,6 @@ qhandle_t RE_RegisterModel(const char *name) {
 	}
 
 	// allocate a new model_t
-	ri.Printf(PRINT_ALL, "Allocate Memory for %s.\n", name);
-
 	mod = ri.Hunk_Alloc(sizeof(model_t), h_low);
 
 	// only set the name after the model has been successfully loaded
@@ -75,45 +73,50 @@ qhandle_t RE_RegisterModel(const char *name) {
 		ri.Printf(PRINT_WARNING, "RE_RegisterModel: MAX_MOD_KNOWN.\n");
 	}
 
+	//
 	// load the files
+	//
+	Q_strncpyz(localName, name, sizeof(localName));
+	ext = COM_GetExtension(localName);
 
-	dot = strrchr(name, '.');
-
-	if (dot != NULL) {
-		if ((dot[1] == 'm') && (dot[2] == 'd') && (dot[3] == '3')) {
-			hModel = R_RegisterMD3(name, mod);
-		} else if ((dot[1] == 'm') && (dot[2] == 'd') && (dot[3] == 'r')) {
-			hModel = R_RegisterMDR(name, mod);
-		} else if ((dot[1] == 'i') && (dot[2] == 'q') && (dot[3] == 'm')) {
-			hModel = R_RegisterIQM(name, mod);
-		} else {
-			ri.Printf(PRINT_WARNING, " %s format not support now.\n", name);
-		}
-	} else {
-		uint32_t i;
-		ri.Printf(PRINT_WARNING,
-				  "RegisterModel: %s without extention. "
-				  " Try and find a suitable match using all the model formats supported\n",
-				  name);
-
-		for (i = 0; i < numModelLoaders; i++) {
-			char altName[MAX_QPATH * 2] = {0};
-			if (i == orgLoader)
-				continue;
-
-			snprintf(altName, sizeof(altName), "%s.%s", name, modelLoaders[i].ext);
-
-			// Load
-			hModel = modelLoaders[i].ModelLoader(altName, mod);
-
-			if (hModel) {
-				if (orgNameFailed) {
-					ri.Printf(PRINT_ALL, "WARNING: %s not present, using %s instead\n", name, altName);
-				}
-
+	if (*ext) {
+		// Look for the correct loader and use it
+		for (i = 0; i < (int)numModelLoaders; i++) {
+			if (!Q_stricmp(ext, modelLoaders[i].ext)) {
+				hModel = modelLoaders[i].ModelLoader(localName, mod);
 				break;
 			}
 		}
+
+		// A loader was found
+		if (i < (int)numModelLoaders) {
+			if (!hModel) {
+				// Loader failed, try again without the extension
+				orgNameFailed = qtrue;
+				orgLoader = i;
+				COM_StripExtension(name, localName, sizeof(localName));
+			} else {
+				return hModel;
+			}
+		}
 	}
+
+	// Try and find a suitable match using all the model formats supported
+	for (i = 0; i < (int)numModelLoaders; i++) {
+		if (i == orgLoader)
+			continue;
+
+		Com_sprintf(altName, sizeof(altName), "%s.%s", localName, modelLoaders[i].ext);
+
+		hModel = modelLoaders[i].ModelLoader(altName, mod);
+
+		if (hModel) {
+			if (orgNameFailed) {
+				ri.Printf(PRINT_DEVELOPER, "WARNING: %s not present, using %s instead\n", name, altName);
+			}
+			break;
+		}
+	}
+
 	return hModel;
 }
