@@ -296,6 +296,10 @@ static void vk_createImageAndBindWithMemory(image_t *pImg) {
 	// Couldn't find suitable in existing chunk.
 	// Allocate a new chunk
 
+	if (devMemImg.Index >= ARRAY_LEN(devMemImg.Chunks)) {
+		ri.Error(ERR_DROP, "vk_createImageAndBindWithMemory: image chunk array full (max 512MB device memory)");
+	}
+
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	alloc_info.pNext = NULL;
 	alloc_info.allocationSize = IMAGE_CHUNK_SIZE;
