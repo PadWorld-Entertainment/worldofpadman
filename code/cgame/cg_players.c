@@ -111,6 +111,12 @@ static qboolean CG_ParseAnimationFile(const char *filename, clientInfo_t *ci) {
 	ci->gender = GENDER_MALE;
 	ci->fixedlegs = qfalse;
 	ci->fixedtorso = qfalse;
+	// XMAS: hat defaults
+	ci->hatScale = 1.0f;
+	VectorClear(ci->hatOffset);
+	VectorClear(ci->hatRotate);
+	ci->hasHatOffset = qfalse;
+	ci->hasHatRotate = qfalse;
 
 	// read optional parameters
 	while (1) {
@@ -182,6 +188,36 @@ static qboolean CG_ParseAnimationFile(const char *filename, clientInfo_t *ci) {
 			continue;
 		} else if (!Q_stricmp(token, "fixedtorso")) {
 			ci->fixedtorso = qtrue;
+			continue;
+		} else if (!Q_stricmp(token, "hatscale")) {
+			// XMAS: per-model hat scale (e.g. christmas hats)
+			token = COM_Parse(&text_p);
+			if (!token[0]) {
+				break;
+			}
+			ci->hatScale = atof(token);
+			continue;
+		} else if (!Q_stricmp(token, "hatoffset")) {
+			// XMAS: hat offset fallback when the head model has no tag_hat
+			for (i = 0; i < 3; i++) {
+				token = COM_Parse(&text_p);
+				if (!token[0]) {
+					break;
+				}
+				ci->hatOffset[i] = atof(token);
+			}
+			ci->hasHatOffset = qtrue;
+			continue;
+		} else if (!Q_stricmp(token, "hatrotate")) {
+			// XMAS: hat rotation (pitch/yaw/roll) fallback when there is no tag_hat
+			for (i = 0; i < 3; i++) {
+				token = COM_Parse(&text_p);
+				if (!token[0]) {
+					break;
+				}
+				ci->hatRotate[i] = atof(token);
+			}
+			ci->hasHatRotate = qtrue;
 			continue;
 		}
 
@@ -543,6 +579,19 @@ static qboolean CG_RegisterClientModelname(clientInfo_t *ci, const char *modelNa
 		return qfalse;
 	}
 
+	// XMAS: load optional hat model from models/hats/<hatName>/. The hat is shared across all
+	// player models. The hat name is selected per-client via the "hat" userinfo cvar.
+	ci->hatModel = 0;
+	ci->hatSkin = 0;
+	if (cgs.isXmas && ci->hatName[0]) {
+		Com_sprintf(filename, sizeof(filename), "models/hats/%s/hat.md3", ci->hatName);
+		ci->hatModel = trap_R_RegisterModel(filename);
+		if (ci->hatModel) {
+			Com_sprintf(filename, sizeof(filename), "models/hats/%s/hat_default.skin", ci->hatName);
+			ci->hatSkin = trap_R_RegisterSkin(filename);
+		}
+	}
+
 	if (CG_FindClientHeadFile(filename, sizeof(filename), ci, NULL, headModelName, headSkinName, "icon", "png")) {
 		ci->modelIcon = trap_R_RegisterShaderNoMip(filename);
 	} else if (CG_FindClientHeadFile(filename, sizeof(filename), ci, NULL, headModelName, headSkinName, "icon",
@@ -689,6 +738,15 @@ static void CG_CopyClientInfoModel(const clientInfo_t *from, clientInfo_t *to) {
 	to->headSkin = from->headSkin;
 	to->modelIcon = from->modelIcon;
 
+	// XMAS: hat
+	to->hatModel = from->hatModel;
+	to->hatSkin = from->hatSkin;
+	to->hatScale = from->hatScale;
+	VectorCopy(from->hatOffset, to->hatOffset);
+	VectorCopy(from->hatRotate, to->hatRotate);
+	to->hasHatOffset = from->hasHatOffset;
+	to->hasHatRotate = from->hasHatRotate;
+
 	memcpy(to->animations, from->animations, sizeof(to->animations));
 	memcpy(to->sounds, from->sounds, sizeof(to->sounds));
 }
@@ -712,6 +770,7 @@ static qboolean CG_ScanForExistingClientInfo(clientInfo_t *ci) {
 		}
 		if (!Q_stricmp(ci->modelName, match->modelName) && !Q_stricmp(ci->skinName, match->skinName) &&
 			!Q_stricmp(ci->headModelName, match->headModelName) && !Q_stricmp(ci->headSkinName, match->headSkinName) &&
+			!Q_stricmp(ci->hatName, match->hatName) &&
 			(cgs.gametype < GT_TEAM || ci->team == match->team) && (ci->glowModel == match->glowModel)) {
 			// this clientinfo is identical, so use its handles
 
@@ -945,6 +1004,10 @@ void CG_NewClientInfo(int clientNum) {
 
 	Q_strncpyz(newInfo.headSkinName, skin, sizeof(newInfo.headSkinName));
 	Q_strncpyz(newInfo.headModelName, modelStr, sizeof(newInfo.headModelName));
+
+	// XMAS: hat selection (shared across all player models)
+	v = Info_ValueForKey(configstring, "hat");
+	Q_strncpyz(newInfo.hatName, v, sizeof(newInfo.hatName));
 
 	newInfo.glowModel = qfalse;
 	color = ColorIndex(COLOR_BLACK);
@@ -2377,6 +2440,59 @@ void CG_Player(centity_t *cent) {
 	head.renderfx = renderfx;
 
 	CG_AddRefEntityWithPowerups(&head, &cent->currentState, ci->team);
+
+	// XMAS: optional hat (e.g. christmas hat). Only drawn when the xmas mod is active and a hat
+	// model is registered. The hat is positioned via the head's tag_hat. If the head model has no
+	// tag_hat, the optional hatoffset/hatrotate fallback from animation.cfg is used. If neither is
+	// available, the hat is skipped (per issue #393).
+	if (cgs.isXmas && ci->hatModel) {
+		refEntity_t hat;
+		orientation_t tag;
+
+		memset(&hat, 0, sizeof(hat));
+		hat.hModel = ci->hatModel;
+		hat.customSkin = ci->hatSkin;
+		VectorCopy(cent->lerpOrigin, hat.lightingOrigin);
+		hat.shadowPlane = shadowPlane;
+		hat.renderfx = renderfx;
+
+		if (trap_R_LerpTag(&tag, ci->headModel, head.oldframe, head.frame, 1.0f - head.backlerp, "tag_hat")) {
+			int i;
+			vec3_t tempAxis[3];
+
+			VectorCopy(head.origin, hat.origin);
+			for (i = 0; i < 3; i++) {
+				VectorMA(hat.origin, tag.origin[i], head.axis[i], hat.origin);
+			}
+			MatrixMultiply(tag.axis, head.axis, tempAxis);
+			AxisCopy(tempAxis, hat.axis);
+		} else if (ci->hasHatOffset || ci->hasHatRotate) {
+			// fallback: position relative to the head with hatoffset, then rotate via hatrotate
+			int i;
+			vec3_t tempAxis[3], rotAxis[3];
+
+			VectorCopy(head.origin, hat.origin);
+			for (i = 0; i < 3; i++) {
+				VectorMA(hat.origin, ci->hatOffset[i], head.axis[i], hat.origin);
+			}
+			AnglesToAxis(ci->hatRotate, rotAxis);
+			MatrixMultiply(rotAxis, head.axis, tempAxis);
+			AxisCopy(tempAxis, hat.axis);
+		} else {
+			// no tag_hat and no fallback configured: skip drawing the hat
+			goto skipHat;
+		}
+
+		if (ci->hatScale != 1.0f && ci->hatScale > 0.0f) {
+			VectorScale(hat.axis[0], ci->hatScale, hat.axis[0]);
+			VectorScale(hat.axis[1], ci->hatScale, hat.axis[1]);
+			VectorScale(hat.axis[2], ci->hatScale, hat.axis[2]);
+			hat.nonNormalizedAxes = qtrue;
+		}
+
+		CG_AddRefEntityWithPowerups(&hat, &cent->currentState, ci->team);
+	skipHat:;
+	}
 
 	CG_BreathPuffs(cent, &head);
 
