@@ -12,6 +12,7 @@
 #define IMAGE_CHUNK_SIZE (64 * 1024 * 1024)
 
 struct StagingBuffer_t {
+	uint32_t capacity;
 	// Vulkan supports two primary resource types: buffers and images.
 	// Resources are views of memory with associated formatting and dimensionality.
 	// Buffers are essentially unformatted arrays of bytes whereas images contain
@@ -63,6 +64,7 @@ uint32_t find_memory_type(uint32_t memory_type_bits, VkMemoryPropertyFlags prope
 
 static void vk_createStagingBuffer(uint32_t size) {
 	memset(&StagBuf, 0, sizeof(StagBuf));
+	StagBuf.capacity = size;
 
 	ri.Printf(PRINT_DEVELOPER, " Create Staging Buffer: %d\n", size);
 
@@ -592,6 +594,12 @@ image_t *R_CreateImage(const char *name, byte *pic, int width, int height,
 	vk_createImageViewAndDescriptorSet(pImage);
 
 	VK_CHECK(qvkMapMemory(vk.device, StagBuf.mappableMem, 0, VK_WHOLE_SIZE, 0, &data));
+	if (buffer_size > StagBuf.capacity) {
+		qvkUnmapMemory(vk.device, StagBuf.mappableMem);
+		ri.Hunk_FreeTempMemory(pUploadBuffer);
+		ri.Error(ERR_DROP, "R_CreateImage: texture '%s' size %u exceeds staging buffer capacity %u",
+				 name, buffer_size, StagBuf.capacity);
+	}
 	memcpy(data, pUploadBuffer, buffer_size);
 	qvkUnmapMemory(vk.device, StagBuf.mappableMem);
 
@@ -845,7 +853,9 @@ static void R_CreateScratchImage(void) {
 void R_InitImages(void) {
 	memset(hashTable, 0, sizeof(hashTable));
 
-	vk_createStagingBuffer(8 * 1024 * 1024);
+	// Staging buffer must be large enough for the largest possible texture
+	// with full mip chain: 2048x2048 RGBA + mipmaps we ned round about 22MB
+	vk_createStagingBuffer(32 * 1024 * 1024);
 
 	// setup the overbright lighting
 
