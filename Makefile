@@ -11,11 +11,12 @@ GENERATOR      ?= Ninja
 ALLTARGET      ?= all
 CMAKE          ?= cmake
 CMAKE_OPTIONS  ?= -DCMAKE_BUILD_TYPE=$(BUILDTYPE) -G$(GENERATOR) --graphviz=$(BUILDDIR)/deps.dot
-
-$(ALLTARGET):
-	$(Q)if [ ! -f $(BUILDDIR)/CMakeCache.txt ]; then $(CMAKE) -H$(CURDIR) -B$(BUILDDIR) $(CMAKE_OPTIONS); fi
+$(ALLTARGET): $(BUILDDIR)/CMakeCache.txt
 	$(Q)$(CMAKE) --build $(BUILDDIR) --target $@
 	$(Q)$(CMAKE) -E create_symlink $(BUILDDIR)/compile_commands.json compile_commands.json
+
+$(BUILDDIR)/CMakeCache.txt:
+	$(CMAKE) -H$(CURDIR) -B$(BUILDDIR) $(CMAKE_OPTIONS)
 
 release:
 	$(Q)$(MAKE) BUILDTYPE=Release
