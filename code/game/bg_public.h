@@ -857,6 +857,9 @@ qboolean BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime
 
 // These are used by cgame and q3_ui
 #define SPRAYLOGO_PATH "spraylogos"
+// XMAS: when running with the xmas gamedir, spray logos are loaded from a separate folder so they
+// don't overwrite the original WoP logos (see issue #395).
+#define XMAS_SPRAYLOGO_PATH "xmaslogos"
 #define SPRAYLOGO_LIST_CVAR "logolist"
 #define SPRAYLOGO_DEFAULT_NAME "01_wop"
 #define MAX_SPRAYLOGOS_LOADED 64

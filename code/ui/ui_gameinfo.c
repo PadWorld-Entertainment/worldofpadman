@@ -379,13 +379,16 @@ int UI_GetNumBots(void) {
 }
 
 static void UI_LoadLogoForMenu(const char *spraylogoName) {
+	// XMAS: load from the xmas-specific folder so the original WoP logos are not overwritten
+	const char *path = uis.isXmas ? XMAS_SPRAYLOGO_PATH : SPRAYLOGO_PATH;
+
 	if (uis.spraylogosLoaded >= MAX_SPRAYLOGOS_LOADED) {
 		return;
 	}
 
 	Q_strncpyz(uis.spraylogoNames[uis.spraylogosLoaded], spraylogoName,
 			   sizeof(uis.spraylogoNames[uis.spraylogosLoaded]));
-	uis.spraylogoShaders[uis.spraylogosLoaded] = trap_R_RegisterShaderNoMip(va(SPRAYLOGO_PATH "/%s", spraylogoName));
+	uis.spraylogoShaders[uis.spraylogosLoaded] = trap_R_RegisterShaderNoMip(va("%s/%s", path, spraylogoName));
 	uis.spraylogosLoaded++;
 }
 
@@ -404,8 +407,9 @@ static void UI_SearchSpraylogos(void) {
 	int numFiles;
 	int nameLen;
 	char cvarBuff[1024];
+	const char *path = uis.isXmas ? XMAS_SPRAYLOGO_PATH : SPRAYLOGO_PATH;
 
-	numFiles = trap_FS_GetFileList(SPRAYLOGO_PATH, NULL, fileList, sizeof(fileList));
+	numFiles = trap_FS_GetFileList(path, NULL, fileList, sizeof(fileList));
 
 	Com_Printf("Loading spraylogos:\n");
 
