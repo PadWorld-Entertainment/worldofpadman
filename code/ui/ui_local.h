@@ -545,6 +545,16 @@ typedef struct {
 	qhandle_t headModel;
 	qhandle_t headSkin;
 
+	// XMAS: optional hat support (e.g. christmas hats). Mirrors clientInfo_t in cgame.
+	char hatName[MAX_QPATH];
+	qhandle_t hatModel;
+	qhandle_t hatSkin;
+	float hatScale;
+	vec3_t hatOffset;
+	vec3_t hatRotate;
+	qboolean hasHatOffset;
+	qboolean hasHatRotate;
+
 	animation_t animations[MAX_ANIMATIONS];
 
 	vec3_t modeloffset;
@@ -657,6 +667,7 @@ typedef struct {
 
 	qboolean demoversion;
 	qboolean firstdraw;
+	qboolean isXmas; // XMAS: detected from fs_game; gates xmas-only features (e.g. hats)
 } uiStatic_t;
 
 extern void UI_Init(void);

@@ -378,6 +378,10 @@ static void CG_RegisterCvars(void) {
 	trap_Cvar_VariableStringBuffer("sv_running", var, sizeof(var));
 	cgs.localServer = atoi(var);
 
+	// XMAS: detect xmas mod (hat support is enabled only when running with the xmas gamedir)
+	trap_Cvar_VariableStringBuffer("fs_game", var, sizeof(var));
+	cgs.isXmas = (qboolean)(!Q_stricmp(var, "xmas"));
+
 	forceModelModificationCount = cg_forceModel.modificationCount;
 
 	glowModelModificationCount = cg_glowModel.modificationCount;
@@ -387,6 +391,8 @@ static void CG_RegisterCvars(void) {
 	trap_Cvar_Register(NULL, "headmodel", DEFAULT_HEADMODEL, CVAR_USERINFO | CVAR_ARCHIVE);
 	trap_Cvar_Register(NULL, "team_model", DEFAULT_TEAM_MODEL, CVAR_USERINFO | CVAR_ARCHIVE);
 	trap_Cvar_Register(NULL, "team_headmodel", DEFAULT_TEAM_HEADMODEL, CVAR_USERINFO | CVAR_ARCHIVE);
+	// XMAS: hat selection (e.g. "santa"). Only used when running with the xmas gamedir.
+	trap_Cvar_Register(NULL, "hat", "", CVAR_USERINFO | CVAR_ARCHIVE);
 }
 
 /*

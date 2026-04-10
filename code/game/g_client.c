@@ -758,6 +758,7 @@ void ClientUserinfoChanged(int clientNum) {
 	const char *s;
 	char model[MAX_QPATH];
 	char headModel[MAX_QPATH];
+	char hat[MAX_QPATH];
 	char oldname[MAX_STRING_CHARS];
 	gclient_t *client;
 	char sprayColor[MAX_INFO_STRING];
@@ -823,6 +824,9 @@ void ClientUserinfoChanged(int clientNum) {
 		Q_strncpyz(headModel, Info_ValueForKey(userinfo, "headmodel"), sizeof(headModel));
 	}
 
+	// XMAS: optional hat selection forwarded to all clients via configstring
+	Q_strncpyz(hat, Info_ValueForKey(userinfo, "hat"), sizeof(hat));
+
 	team = client->sess.sessionTeam;
 
 	// teamInfo
@@ -848,13 +852,14 @@ void ClientUserinfoChanged(int clientNum) {
 		const char *rndSprayColor;
 		int rnd = randomindex(NUM_COLORS);
 		rndSprayColor = va("%d", rnd);
-		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\sc\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tl\\%d\\sl\\%s",
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\sc\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tl\\%d\\sl\\%s\\hat\\%s",
 			   client->pers.netname, team, model, headModel, rndSprayColor, client->pers.maxHealth, client->sess.wins,
-			   client->sess.losses, Info_ValueForKey(userinfo, "skill"), teamLeader, client->sess.selectedlogo);
+			   client->sess.losses, Info_ValueForKey(userinfo, "skill"), teamLeader, client->sess.selectedlogo, hat);
 	} else {
-		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\sc\\%s\\rc\\%i\\hc\\%i\\w\\%i\\l\\%i\\tl\\%d\\sl\\%s",
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\sc\\%s\\rc\\%i\\hc\\%i\\w\\%i\\l\\%i\\tl\\%d\\sl\\%s\\hat\\%s",
 			   client->pers.netname, client->sess.sessionTeam, model, headModel, sprayColor, randomColor,
-			   client->pers.maxHealth, client->sess.wins, client->sess.losses, teamLeader, client->sess.selectedlogo);
+			   client->pers.maxHealth, client->sess.wins, client->sess.losses, teamLeader, client->sess.selectedlogo,
+			   hat);
 	}
 
 	trap_SetConfigstring(CS_PLAYERS + clientNum, s);
