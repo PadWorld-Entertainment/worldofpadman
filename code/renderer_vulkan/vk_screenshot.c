@@ -173,6 +173,15 @@ static byte *RB_ReadPixels(uint32_t width, uint32_t height) {
 						  NULL, 0, NULL, 1, &image_barrier);
 	qvkCmdCopyImageToBuffer(cmdBuf, vk.swapchain_images_array[vk.idx_swapchain_image],
 							VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, buffer, 1, &image_copy);
+
+	// Transition swapchain image back to present layout
+	image_barrier.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+	image_barrier.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+	image_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+	image_barrier.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	qvkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0,
+						  NULL, 0, NULL, 1, &image_barrier);
+
 	VK_CHECK(qvkEndCommandBuffer(cmdBuf));
 
 	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
