@@ -79,6 +79,10 @@ VkBool32 isVKinitialied(void) {
 void vk_shutdown(void) {
 	ri.Printf(PRINT_DEVELOPER, "vk_shutdown()\n");
 
+	if (vk.device != VK_NULL_HANDLE) {
+		qvkDeviceWaitIdle(vk.device);
+	}
+
 	vk_destroyDepthAttachment();
 
 	vk_destroyFrameBuffers();
