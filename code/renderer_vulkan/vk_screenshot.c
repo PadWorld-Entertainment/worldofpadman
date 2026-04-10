@@ -212,16 +212,19 @@ static byte *RB_ReadPixels(uint32_t width, uint32_t height) {
 
 	RB_FlipFrameBuffer(pBuf, width, height);
 
-	// Remove alpha channel and rbg <-> bgr
+	// Remove alpha channel and swap R/B (BGRA -> RGB)
 	{
 		unsigned char *pSrc = pBuf;
 		unsigned char *pDst = pBuf;
 
 		uint32_t i;
 		for (i = 0; i < width * height; i++) {
-			pSrc[0] = pDst[2];
-			pSrc[1] = pDst[1];
-			pSrc[2] = pDst[0];
+			unsigned char r = pDst[0];
+			unsigned char g = pDst[1];
+			unsigned char b = pDst[2];
+			pSrc[0] = b;
+			pSrc[1] = g;
+			pSrc[2] = r;
 			pSrc += 3;
 			pDst += 4;
 		}
