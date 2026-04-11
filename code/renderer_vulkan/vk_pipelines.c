@@ -143,8 +143,16 @@ void vk_createPipelineLayout(void) {
 
 		push_range.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 		push_range.offset = 0;
-		push_range.size = 128; // 16 mvp floats + 16
+		push_range.size = 128; // 16 mvp floats + 16 eye pos
 
+		{
+			VkPhysicalDeviceProperties props;
+			qvkGetPhysicalDeviceProperties(vk.physical_device, &props);
+			if (push_range.size > props.limits.maxPushConstantsSize) {
+				ri.Error(ERR_FATAL, "Vulkan: push constant size %u exceeds device limit %u",
+						 push_range.size, props.limits.maxPushConstantsSize);
+			}
+		}
 
 		desc.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 		desc.pNext = NULL;
