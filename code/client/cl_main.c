@@ -2968,6 +2968,49 @@ void CL_InitRef(void) {
 	Com_Printf("----- Initializing Renderer ----\n");
 
 #ifdef USE_RENDERER_DLOPEN
+	{
+		char **files;
+		int numfiles;
+		char buf[MAX_CVAR_VALUE_STRING];
+		int i, j;
+		const char *paths[2];
+
+		buf[0] = '\0';
+		paths[0] = Sys_DefaultAppPath();
+		paths[1] = Cvar_VariableString("fs_basepath");
+
+		for (j = 0; j < 2; j++) {
+			if (!paths[j] || !*paths[j]) {
+				continue;
+			}
+			files = Sys_ListFiles(paths[j], DLL_EXT, NULL, &numfiles, qfalse);
+			for (i = 0; i < numfiles; i++) {
+				char name[MAX_OSPATH];
+				const char *p = files[i];
+				if (!Q_stricmpn(p, "renderer_", 9)) {
+					const char *end;
+					p += 9;
+					end = strstr(p, "_" ARCH_STRING DLL_EXT);
+					if (end) {
+						int len = end - p;
+						if (len > 0 && len < sizeof(name)) {
+							Q_strncpyz(name, p, len + 1);
+							if (!strstr(buf, name)) {
+								if (buf[0])
+									Q_strcat(buf, sizeof(buf), " ");
+								Q_strcat(buf, sizeof(buf), name);
+							}
+						}
+					}
+				}
+			}
+			if (files) {
+				Sys_FreeFileList(files);
+			}
+		}
+		Cvar_Get("cl_availableRenderers", buf, CVAR_ROM);
+	}
+
 	cl_renderer = Cvar_Get("cl_renderer", "opengl2", CVAR_ARCHIVE | CVAR_LATCH);
 
 	Com_sprintf(dllName, sizeof(dllName), "renderer_%s_" ARCH_STRING DLL_EXT, cl_renderer->string);

@@ -141,6 +141,37 @@ static const char *detectedResolutions[MAX_RESOLUTIONS];
 static const char **resolutions = builtinResolutions;
 static qboolean resolutionsDetected = qfalse;
 
+#define MAX_RENDERERS 8
+static char rendererStrings[MAX_RENDERERS][32];
+static const char *detectedRenderers[MAX_RENDERERS];
+static const char **renderer_names = detectedRenderers;
+
+static void UI_GraphicsOptions_GetRenderers(void) {
+	char buf[MAX_STRING_CHARS];
+	Q_strncpyz(buf, UI_Cvar_VariableString("cl_availableRenderers"), sizeof(buf));
+	if (*buf) {
+		char *s = buf;
+		unsigned int i = 0;
+		while (s && i < MAX_RENDERERS - 1) {
+			char *next = strchr(s, ' ');
+			if (next)
+				*next++ = '\0';
+
+			Q_strncpyz(rendererStrings[i], s, sizeof(rendererStrings[i]));
+			detectedRenderers[i] = rendererStrings[i];
+			i++;
+			s = next;
+		}
+		detectedRenderers[i] = NULL;
+	} else {
+		Q_strncpyz(rendererStrings[0], "opengl1", sizeof(rendererStrings[0]));
+		Q_strncpyz(rendererStrings[1], "opengl2", sizeof(rendererStrings[1]));
+		detectedRenderers[0] = rendererStrings[0];
+		detectedRenderers[1] = rendererStrings[1];
+		detectedRenderers[2] = NULL;
+	}
+}
+
 /*
 =================
 UI_GraphicsOptions_FindBuiltinResolution
@@ -318,7 +349,7 @@ static void UI_GraphicsOptions_UpdateMenuItems(void) {
 
 #ifdef USE_RENDERER_DLOPEN
 	if (Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2") ||
-		(s_graphicsoptions.renderer.curvalue != 1)) {
+		(detectedRenderers[s_graphicsoptions.renderer.curvalue] && Q_stricmp(detectedRenderers[s_graphicsoptions.renderer.curvalue], "opengl2"))) {
 		s_graphicsoptions.effects.generic.flags |= QMF_GRAYED;
 	} else {
 		s_graphicsoptions.effects.generic.flags &= ~QMF_GRAYED;
@@ -371,16 +402,8 @@ static void UI_GraphicsOptions_ApplyChanges(void *unused, int notification) {
 		return;
 
 #ifdef USE_RENDERER_DLOPEN
-	switch (s_graphicsoptions.renderer.curvalue) {
-	case 0:
-		trap_Cvar_Set("cl_renderer", "opengl1");
-		break;
-	case 1:
-		trap_Cvar_Set("cl_renderer", "opengl2");
-		break;
-//	case 2:
-//		trap_Cvar_Set("cl_renderer", "vulkan");
-//		break;
+	if (s_graphicsoptions.renderer.curvalue >= 0 && detectedRenderers[s_graphicsoptions.renderer.curvalue]) {
+		trap_Cvar_Set("cl_renderer", detectedRenderers[s_graphicsoptions.renderer.curvalue]);
 	}
 #endif
 
@@ -584,13 +607,15 @@ static void UI_GraphicsOptions_SetMenuItems(void) {
 	}
 
 #ifdef USE_RENDERER_DLOPEN
-//	if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "vulkan")) {
-//		s_graphicsoptions.renderer.curvalue = 2;
-//	} else 
-	if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), "opengl2")) {
-		s_graphicsoptions.renderer.curvalue = 1;
-	} else {
+	{
+		int i;
 		s_graphicsoptions.renderer.curvalue = 0;
+		for (i = 0; detectedRenderers[i]; i++) {
+			if (!Q_stricmp(UI_Cvar_VariableString("cl_renderer"), detectedRenderers[i])) {
+				s_graphicsoptions.renderer.curvalue = i;
+				break;
+			}
+		}
 	}
 #endif
 
@@ -699,7 +724,6 @@ UI_GraphicsOptions_MenuInit
 */
 void UI_GraphicsOptions_MenuInit(void) {
 	static const char *templates_names[] = {"Can it run WoP?", "Maximum", "Quality", "Performance", "Minimum", "Custom", NULL};
-	static const char *renderer_names[] = {"OpenGL1", "OpenGL2", NULL}; // "Vulkan", NULL};
 	static const char *colordepth_names[] = {"Desktop", "16 bit", "32 bit", NULL};
 	static const char *lighting_names[] = {"Low (Vertex)", "High (Lightmap)", NULL};
 	static const char *mdetail_names[] = {"Low", "Medium", "High", "Maximum", NULL};
@@ -716,6 +740,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	memset(&s_graphicsoptions, 0, sizeof(graphicsoptions_t));
 
 	UI_GraphicsOptions_GetResolutions();
+	UI_GraphicsOptions_GetRenderers();
 
 	UI_GraphicsOptions_Cache();
 
