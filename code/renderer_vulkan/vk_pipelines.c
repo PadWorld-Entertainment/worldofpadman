@@ -57,6 +57,7 @@ struct GlobalPipelineManager g_stdPipelines;
 #define MAX_VK_PIPELINES 1024
 static struct Vk_Pipeline_Def s_pipeline_defs[MAX_VK_PIPELINES];
 static uint32_t s_numPipelines = 0;
+static VkPipelineCache s_pipelineCache = VK_NULL_HANDLE;
 
 void R_PipelineList_f(void) {
 	ri.Printf(PRINT_DEVELOPER, " Total pipeline created: %d\n", s_numPipelines);
@@ -179,6 +180,17 @@ void vk_createPipelineLayout(void) {
 		//
 		// Each pipeline is created using a pipeline layout.
 		VK_CHECK(qvkCreatePipelineLayout(vk.device, &desc, NULL, &vk.pipeline_layout));
+	}
+
+	// Create pipeline cache
+	{
+		VkPipelineCacheCreateInfo cacheInfo;
+		cacheInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+		cacheInfo.pNext = NULL;
+		cacheInfo.flags = 0;
+		cacheInfo.initialDataSize = 0;
+		cacheInfo.pInitialData = NULL;
+		VK_CHECK(qvkCreatePipelineCache(vk.device, &cacheInfo, NULL, &s_pipelineCache));
 	}
 }
 
@@ -609,11 +621,7 @@ static void vk_create_pipeline(const struct Vk_Pipeline_Def *def, VkPipeline *pP
 	// Graphics pipelines consist of multiple shader stages,
 	// multiple fixed-function pipeline stages, and a pipeline layout.
 	// To create graphics pipelines
-	// VK_NULL_HANDLE indicating that pipeline caching is disabled;
-	// TODO: provide the handle of a valid pipeline cache object,
-	// 1 is the length of the pCreateInfos and pPipelines arrays.
-	//
-	VK_CHECK(qvkCreateGraphicsPipelines(vk.device, VK_NULL_HANDLE, 1, &create_info, NULL, pPipeLine));
+	VK_CHECK(qvkCreateGraphicsPipelines(vk.device, s_pipelineCache, 1, &create_info, NULL, pPipeLine));
 }
 
 static VkPipeline vk_find_pipeline(struct Vk_Pipeline_Def *def) {
@@ -847,6 +855,11 @@ void vk_destroyShaderStagePipeline(void) {
 
 void vk_destroyGlobalStagePipeline(void) {
 	int i, j, k;
+
+	if (s_pipelineCache != VK_NULL_HANDLE) {
+		qvkDestroyPipelineCache(vk.device, s_pipelineCache, NULL);
+		s_pipelineCache = VK_NULL_HANDLE;
+	}
 
 	qvkDestroyDescriptorSetLayout(vk.device, vk.set_layout, NULL);
 	qvkDestroyPipelineLayout(vk.device, vk.pipeline_layout, NULL);
