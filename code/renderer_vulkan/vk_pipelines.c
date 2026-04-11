@@ -630,10 +630,9 @@ static VkPipeline vk_find_pipeline(struct Vk_Pipeline_Def *def) {
 		if (s_pipeline_defs[i].shader_type == def->shader_type && s_pipeline_defs[i].state_bits == def->state_bits &&
 			s_pipeline_defs[i].face_culling == def->face_culling &&
 			s_pipeline_defs[i].polygon_offset == def->polygon_offset &&
-			s_pipeline_defs[i].clipping_plane == def->clipping_plane && s_pipeline_defs[i].mirror == def->mirror
-			// && s_pipeline_defs[i].line_primitives == def->line_primitives
-			// && s_pipeline_defs[i].shadow_phase == def->shadow_phase
-		) {
+			s_pipeline_defs[i].clipping_plane == def->clipping_plane && s_pipeline_defs[i].mirror == def->mirror &&
+			s_pipeline_defs[i].line_primitives == def->line_primitives &&
+			s_pipeline_defs[i].shadow_phase == def->shadow_phase) {
 			return s_pipeline_defs[i].pipeline;
 		}
 	}
