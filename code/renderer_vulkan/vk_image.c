@@ -34,7 +34,7 @@ struct ImageChunk_t {
 
 struct deviceLocalMemory_t {
 	// One large device device local memory allocation, assigned to multiple images
-	struct ImageChunk_t Chunks[8];
+	struct ImageChunk_t Chunks[32];
 	uint32_t Index; // number of chunks used
 };
 
@@ -288,7 +288,7 @@ static void vk_createImageAndBindWithMemory(image_t *pImg) {
 	// Allocate a new chunk
 
 	if (devMemImg.Index >= ARRAY_LEN(devMemImg.Chunks)) {
-		ri.Error(ERR_DROP, "vk_createImageAndBindWithMemory: image chunk array full (max 512MB device memory)");
+		ri.Error(ERR_DROP, "vk_createImageAndBindWithMemory: image chunk array full (max 2GB device memory)");
 	}
 
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
