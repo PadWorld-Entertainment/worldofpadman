@@ -405,7 +405,7 @@ static void UI_SearchSpraylogos(void) {
 	int nameLen;
 	char cvarBuff[1024];
 
-	numFiles = trap_FS_GetFileList("spraylogos", NULL, fileList, sizeof(fileList));
+	numFiles = trap_FS_GetFileList(SPRAYLOGO_PATH, NULL, fileList, sizeof(fileList));
 
 	Com_Printf("Loading spraylogos:\n");
 

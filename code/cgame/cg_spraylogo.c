@@ -186,7 +186,7 @@ static void Load_Logos(void) {
 
 	// register default logo (this will be displayed if we can't find the logo which the server wants to use ... this
 	// should only happen if we are unpure)
-	cgs.media.defaultspraylogo = trap_R_RegisterShader("spraylogos/01_wop");
+	cgs.media.defaultspraylogo = trap_R_RegisterShader(SPRAYLOGO_PATH "/01_wop");
 
 	// set back the loadedcounter
 	loadedlogos = 0;
@@ -199,7 +199,7 @@ static void Load_Logos(void) {
 		logosfound = MAX_LOADEDLOGOS;
 	for (i = 0; i < logosfound; i++) {
 		Com_sprintf(loadedlogos_array[i].name, sizeof(loadedlogos_array[i].name), "%s", logonamelist[i]);
-		loadedlogos_array[i].logohandle = trap_R_RegisterShader(va("spraylogos/%s", logonamelist[i]));
+		loadedlogos_array[i].logohandle = trap_R_RegisterShader(va(SPRAYLOGO_PATH "/%s", logonamelist[i]));
 		// if we get a 0-handle we use the default logo ... this will happen if we want to use an unpure file on a pure
 		// server
 		if (!loadedlogos_array[i].logohandle)
