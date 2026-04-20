@@ -86,18 +86,18 @@ levelshots/wop_darkplaceB
 
 levelshots/wop_darkplaceCTL
 {
-	nomipmaps
-	{
-		map levelshots/wop_darkplace
-	}
+    nomipmaps
+    {
+        map levelshots/wop_darkplace
+    }
 }
 
 levelshots/wop_darkplaceCTLA
 {
-	nomipmaps
-	{
-		map levelshots/wop_darkplaceA
-	}
+    nomipmaps
+    {
+        map levelshots/wop_darkplaceA
+    }
 }
 
 levelshots/wop_darkplaceCTLB
@@ -133,6 +133,42 @@ levelshots/wop_fragboxB
 }
 
 // ==============
+// Marble Maze
+// ==============
+
+levelshots/wop_marblemazeB
+{
+    nomipmaps
+    {
+        animmap 0.5 levelshots/wop_marblemazeB1 levelshots/wop_marblemazeB2 levelshots/wop_marblemazeB3
+    }
+}
+
+levelshots/iltis_handlabyrinth0995CTL
+{
+    nomipmaps
+    {
+        map levelshots/wop_marblemaze
+    }
+}
+
+levelshots/iltis_handlabyrinth0995CTLA
+{
+    nomipmaps
+    {
+        map levelshots/wop_marblemazeA
+    }
+}
+
+// levelshots/wop_marblemazeCTLB
+// {
+//     nomipmaps
+//     {
+//         animmap 0.5 levelshots/wop_marblemazeCTLB1 levelshots/wop_marblemazeCTLB2 levelshots/wop_marblemazeCTLB3
+//     }
+// }
+
+// ==============
 // Hurry up!
 // ==============
 
@@ -146,18 +182,18 @@ levelshots/wop_hurryupB
 
 levelshots/wop_hurryupBB
 {
-	nomipmaps
-	{
-		map levelshots/wop_hurryup
-	}
+    nomipmaps
+    {
+    map levelshots/wop_hurryup
+    }
 }
 
 levelshots/wop_hurryupBBA
 {
-	nomipmaps
-	{
-		map levelshots/wop_hurryupA
-	}
+    nomipmaps
+    {
+        map levelshots/wop_hurryupA
+    }
 }
 
 levelshots/wop_hurryupBBB
@@ -170,18 +206,18 @@ levelshots/wop_hurryupBBB
 
 levelshots/wop_hurryupCTL
 {
-	nomipmaps
-	{
-		map levelshots/wop_hurryup
-	}
+    nomipmaps
+    {
+    map levelshots/wop_hurryup
+    }
 }
 
 levelshots/wop_hurryupCTLA
 {
-	nomipmaps
-	{
-		map levelshots/wop_hurryupA
-	}
+    nomipmaps
+    {
+        map levelshots/wop_hurryupA
+    }
 }
 
 levelshots/wop_hurryupCTLB
