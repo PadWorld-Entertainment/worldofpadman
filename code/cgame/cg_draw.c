@@ -735,6 +735,9 @@ static float CG_DrawVoiceNames(float y) {
 		if (i == cg.predictedPlayerState.clientNum)
 			continue;
 
+		if (!cgs.clientinfo[i].infoValid)
+			continue;
+
 		if (lines++ > lines_max)
 			break;
 

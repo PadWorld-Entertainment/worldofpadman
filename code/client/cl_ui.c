@@ -814,8 +814,8 @@ static intptr_t CL_UISystemCalls(intptr_t *args) {
 		return 0;
 
 	case UI_CM_LERPTAG:
-		re.LerpTag(VMA(1), args[2], args[3], args[4], VMF(5), VMA(6));
-		return 0;
+		// XMAS: forward LerpTag's return value so the UI can detect missing tags (e.g. tag_hat).
+		return re.LerpTag(VMA(1), args[2], args[3], args[4], VMF(5), VMA(6));
 
 	case UI_S_REGISTERSOUND:
 		return S_RegisterSound(VMA(1), args[2]);

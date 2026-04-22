@@ -186,25 +186,30 @@ static void Load_Logos(void) {
 
 	// register default logo (this will be displayed if we can't find the logo which the server wants to use ... this
 	// should only happen if we are unpure)
-	cgs.media.defaultspraylogo = trap_R_RegisterShader(SPRAYLOGO_PATH "/01_wop");
+	// XMAS: in the xmas mod the logos live under XMAS_SPRAYLOGO_PATH so the original WoP logos
+	// are not overwritten (see issue #395).
+	{
+		const char *path = cgs.isXmas ? XMAS_SPRAYLOGO_PATH : SPRAYLOGO_PATH;
+		cgs.media.defaultspraylogo = trap_R_RegisterShader(va("%s/%s", path, SPRAYLOGO_DEFAULT_NAME));
 
-	// set back the loadedcounter
-	loadedlogos = 0;
+		// set back the loadedcounter
+		loadedlogos = 0;
 
-	// clean the array ... isn't really necessary
-	memset(&loadedlogos_array, 0, sizeof(loadedlogos_array));
+		// clean the array ... isn't really necessary
+		memset(&loadedlogos_array, 0, sizeof(loadedlogos_array));
 
-	// register all found logos and save handle+name in the loadedarray
-	if (logosfound > MAX_LOADEDLOGOS)
-		logosfound = MAX_LOADEDLOGOS;
-	for (i = 0; i < logosfound; i++) {
-		Com_sprintf(loadedlogos_array[i].name, sizeof(loadedlogos_array[i].name), "%s", logonamelist[i]);
-		loadedlogos_array[i].logohandle = trap_R_RegisterShader(va(SPRAYLOGO_PATH "/%s", logonamelist[i]));
-		// if we get a 0-handle we use the default logo ... this will happen if we want to use an unpure file on a pure
-		// server
-		if (!loadedlogos_array[i].logohandle)
-			loadedlogos_array[i].logohandle = cgs.media.defaultspraylogo;
-		loadedlogos++; // loaded should become found ;)
+		// register all found logos and save handle+name in the loadedarray
+		if (logosfound > MAX_LOADEDLOGOS)
+			logosfound = MAX_LOADEDLOGOS;
+		for (i = 0; i < logosfound; i++) {
+			Com_sprintf(loadedlogos_array[i].name, sizeof(loadedlogos_array[i].name), "%s", logonamelist[i]);
+			loadedlogos_array[i].logohandle = trap_R_RegisterShader(va("%s/%s", path, logonamelist[i]));
+			// if we get a 0-handle we use the default logo ... this will happen if we want to use an unpure file on a
+			// pure server
+			if (!loadedlogos_array[i].logohandle)
+				loadedlogos_array[i].logohandle = cgs.media.defaultspraylogo;
+			loadedlogos++; // loaded should become found ;)
+		}
 	}
 
 	Sort_Logos(loadedlogos_array, 0, logosfound - 1);
