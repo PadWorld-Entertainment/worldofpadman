@@ -75,16 +75,17 @@ QGL_1_5_PROCS
 QGL_2_0_PROCS
 QGL_3_0_PROCS
 QGL_ARB_occlusion_query_PROCS
-	QGL_ARB_framebuffer_object_PROCS QGL_ARB_vertex_array_object_PROCS QGL_EXT_direct_state_access_PROCS
+QGL_ARB_framebuffer_object_PROCS
+QGL_ARB_vertex_array_object_PROCS
+QGL_EXT_direct_state_access_PROCS
 #undef GLE
 
-	/*
-	===============
-	GLimp_Shutdown
-	===============
-	*/
-	void
-	GLimp_Shutdown(void) {
+/*
+===============
+GLimp_Shutdown
+===============
+*/
+void GLimp_Shutdown(void) {
 	ri.IN_Shutdown();
 
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
@@ -471,11 +472,11 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 
 	if (fullscreen) {
 #ifdef __APPLE__
-        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #else
-        flags |= SDL_WINDOW_FULLSCREEN;
+		flags |= SDL_WINDOW_FULLSCREEN;
 #endif
-        glConfig.isFullscreen = qtrue;
+		glConfig.isFullscreen = qtrue;
 	} else {
 		if (noborder)
 			flags |= SDL_WINDOW_BORDERLESS;
@@ -1068,7 +1069,7 @@ void GLimp_EndFrame(void) {
 		qboolean sdlToggled = qfalse;
 
 		// Find out the current state
-        fullscreen = !!(SDL_GetWindowFlags(SDL_window) & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP));
+		fullscreen = !!(SDL_GetWindowFlags(SDL_window) & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP));
 
 		if (r_fullscreen->integer && ri.Cvar_VariableIntegerValue("in_nograb")) {
 			ri.Printf(PRINT_ALL, "Fullscreen not allowed with in_nograb 1\n");
