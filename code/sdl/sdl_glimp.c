@@ -470,8 +470,12 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 	}
 
 	if (fullscreen) {
-		flags |= SDL_WINDOW_FULLSCREEN;
-		glConfig.isFullscreen = qtrue;
+#ifdef __APPLE__
+        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+#else
+        flags |= SDL_WINDOW_FULLSCREEN;
+#endif
+        glConfig.isFullscreen = qtrue;
 	} else {
 		if (noborder)
 			flags |= SDL_WINDOW_BORDERLESS;
@@ -1064,7 +1068,7 @@ void GLimp_EndFrame(void) {
 		qboolean sdlToggled = qfalse;
 
 		// Find out the current state
-		fullscreen = !!(SDL_GetWindowFlags(SDL_window) & SDL_WINDOW_FULLSCREEN);
+        fullscreen = !!(SDL_GetWindowFlags(SDL_window) & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP));
 
 		if (r_fullscreen->integer && ri.Cvar_VariableIntegerValue("in_nograb")) {
 			ri.Printf(PRINT_ALL, "Fullscreen not allowed with in_nograb 1\n");
