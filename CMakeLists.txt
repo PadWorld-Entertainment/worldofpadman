@@ -18,7 +18,7 @@ option(BUILD_CLIENT "" ON)
 option(BUILD_SERVER "" ON)
 option(BUILD_TESTS "" ON)
 option(BUILD_RENDERER_OPENGL2 "" ON)
-option(BUILD_RENDERER_VULKAN "" OFF)
+option(BUILD_RENDERER_VULKAN "" ON)
 
 option(USE_INTERNAL_LIBS "Use bundled libraries" ON)
 option(USE_INTERNAL_SDL "" ON)
