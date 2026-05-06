@@ -39,6 +39,7 @@ set(SRCS
 	vk_image_sampler2.c
 	vk_pipelines.c
 	vk_frame.c
+	vk_fbo.c
 	vk_swapchain.c
 	vk_screenshot.c
 	vk_shade_geometry.c
