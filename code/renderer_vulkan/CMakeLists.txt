@@ -103,6 +103,7 @@ foreach (shader ${SHADER_SRCS})
 	set_source_files_properties(${spirvfile} PROPERTIES GENERATED TRUE)
 
 	add_custom_command(OUTPUT ${spirvfile}
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${shader}
 		COMMAND ${GLSL_LANG_VALIDATOR} --quiet -V ${CMAKE_CURRENT_SOURCE_DIR}/${shader} -o ${CMAKE_CURRENT_BINARY_DIR}/${spirvfile}
 		COMMENT "Generate spirv for ${shader} (${shadertype}): ${spirvfile}"
 	)
