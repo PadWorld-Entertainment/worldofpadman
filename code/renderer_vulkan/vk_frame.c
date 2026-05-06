@@ -460,7 +460,15 @@ void vk_begin_frame(void) {
 	//  the time vkWaitForFences is called, then vkWaitForFences will block and
 	//  wait up to timeout nanoseconds for the condition to become satisfied.
 
-	VK_CHECK(qvkWaitForFences(vk.device, 1, &fence_renderFinished, VK_FALSE, 1e9));
+	{
+		VkResult fenceResult = qvkWaitForFences(vk.device, 1, &fence_renderFinished, VK_TRUE, 5000000000ULL); // 5 seconds
+		if (fenceResult == VK_TIMEOUT) {
+			ri.Printf(PRINT_WARNING, "Vulkan: fence wait timed out, device may be hung\n");
+			qvkDeviceWaitIdle(vk.device);
+		} else if (fenceResult != VK_SUCCESS) {
+			ri.Printf(PRINT_ALL, "Vulkan: error %s from vkWaitForFences\n", cvtResToStr(fenceResult));
+		}
+	}
 
 	//  To set the state of fences to unsignaled from the host
 	//  "1" is the number of fences to reset.
