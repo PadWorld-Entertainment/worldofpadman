@@ -1,6 +1,7 @@
 #include "vk_frame.h"
 #include "tr_cvar.h"
 #include "tr_local.h"
+#include "vk_fbo.h"
 #include "vk_instance.h"
 #include "vk_shade_geometry.h"
 #include "vk_swapchain.h"
@@ -541,8 +542,17 @@ void vk_begin_frame(void) {
 
 	renderPass_beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	renderPass_beginInfo.pNext = NULL;
-	renderPass_beginInfo.renderPass = vk.render_pass;
-	renderPass_beginInfo.framebuffer = vk.framebuffers[vk.idx_swapchain_image];
+
+	{
+		vk_fbo_t *mainFBO = VK_FBO_GetMain();
+		if (mainFBO) {
+			renderPass_beginInfo.renderPass = mainFBO->renderPass;
+			renderPass_beginInfo.framebuffer = mainFBO->framebuffer;
+		} else {
+			renderPass_beginInfo.renderPass = vk.render_pass;
+			renderPass_beginInfo.framebuffer = vk.framebuffers[vk.idx_swapchain_image];
+		}
+	}
 
 	renderPass_beginInfo.renderArea = get_scissor_rect();
 
@@ -559,6 +569,17 @@ void vk_end_frame(void) {
 	VkResult result;
 
 	qvkCmdEndRenderPass(vk.command_buffer);
+
+	// Blit FBO to swapchain if using FBO rendering
+	{
+		vk_fbo_t *mainFBO = VK_FBO_GetMain();
+		if (mainFBO) {
+			VkExtent2D extent;
+			extent.width = vk.surface_caps.currentExtent.width;
+			extent.height = vk.surface_caps.currentExtent.height;
+			VK_FBO_Blit(vk.command_buffer, mainFBO, vk.swapchain_images_array[vk.idx_swapchain_image], extent);
+		}
+	}
 
 	VK_CHECK(qvkEndCommandBuffer(vk.command_buffer));
 
