@@ -40,6 +40,7 @@ set(SRCS
 	vk_pipelines.c
 	vk_frame.c
 	vk_fbo.c
+	vk_postprocess.c
 	vk_swapchain.c
 	vk_screenshot.c
 	vk_shade_geometry.c
@@ -84,6 +85,8 @@ set(SHADER_SRCS
 	shaders/single_texture_clipping_plane.vert
 	shaders/single_texture.vert
 	shaders/single_texture.frag
+	shaders/postprocess.vert
+	shaders/greyscale.frag
 )
 
 foreach (shader ${SHADER_SRCS})

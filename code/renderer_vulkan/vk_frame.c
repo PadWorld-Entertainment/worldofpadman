@@ -3,6 +3,7 @@
 #include "tr_local.h"
 #include "vk_fbo.h"
 #include "vk_instance.h"
+#include "vk_postprocess.h"
 #include "vk_shade_geometry.h"
 #include "vk_swapchain.h"
 
@@ -546,8 +547,14 @@ void vk_begin_frame(void) {
 	{
 		vk_fbo_t *mainFBO = VK_FBO_GetMain();
 		if (mainFBO) {
-			renderPass_beginInfo.renderPass = mainFBO->renderPass;
-			renderPass_beginInfo.framebuffer = mainFBO->framebuffer;
+			qboolean usePostProcess = (r_greyscale->value > 0.0f);
+			if (usePostProcess) {
+				renderPass_beginInfo.renderPass = mainFBO->renderPass;
+				renderPass_beginInfo.framebuffer = mainFBO->framebuffer;
+			} else {
+				renderPass_beginInfo.renderPass = vk.render_pass;
+				renderPass_beginInfo.framebuffer = vk.framebuffers[vk.idx_swapchain_image];
+			}
 		} else {
 			renderPass_beginInfo.renderPass = vk.render_pass;
 			renderPass_beginInfo.framebuffer = vk.framebuffers[vk.idx_swapchain_image];
@@ -570,14 +577,11 @@ void vk_end_frame(void) {
 
 	qvkCmdEndRenderPass(vk.command_buffer);
 
-	// Blit FBO to swapchain if using FBO rendering
+	// Post-processing from FBO to swapchain (only when effects are active)
 	{
 		vk_fbo_t *mainFBO = VK_FBO_GetMain();
-		if (mainFBO) {
-			VkExtent2D extent;
-			extent.width = vk.surface_caps.currentExtent.width;
-			extent.height = vk.surface_caps.currentExtent.height;
-			VK_FBO_Blit(vk.command_buffer, mainFBO, vk.swapchain_images_array[vk.idx_swapchain_image], extent);
+		if (mainFBO && r_greyscale->value > 0.0f) {
+			VK_PostProcess_Render(vk.command_buffer, vk.idx_swapchain_image);
 		}
 	}
 
