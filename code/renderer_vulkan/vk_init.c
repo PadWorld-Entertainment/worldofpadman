@@ -6,6 +6,7 @@
 #include "vk_frame.h"
 #include "vk_instance.h"
 #include "vk_pipelines.h"
+#include "vk_postprocess.h"
 #include "vk_shade_geometry.h"
 #include "vk_shaders.h"
 #include "vk_init.h"
@@ -47,6 +48,8 @@ void vk_initialize(void) {
 
 	VK_FBO_Init();
 
+	VK_PostProcess_Init();
+
 	// Pipeline layout.
 	// You can use uniform values in shaders, which are globals similar to
 	// dynamic state variables that can be changes at the drawing time to
@@ -87,6 +90,8 @@ void vk_shutdown(void) {
 	}
 
 	vk_destroyDepthAttachment();
+
+	VK_PostProcess_Shutdown();
 
 	VK_FBO_Shutdown();
 
