@@ -48,6 +48,8 @@ extern const int demo_protocols[];
 #define GAMENAME_FOR_MASTER "WorldofPadman"
 #define CINEMATICS_INTRO "wopintro.ogm"
 #define PROTOCOL_HANDLER "worldofpadman"
+// Standalone game. Leave QVM_STRNCPY_OVERLAP undefined so Q_strncpyz()
+// rejects overlapping copies. Define it only for legacy Quake III QVMs.
 
 // Heartbeat for dpmaster protocol. You shouldn't change this unless you know what you're doing
 #define HEARTBEAT_FOR_MASTER "DarkPlaces"
