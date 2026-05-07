@@ -837,8 +837,32 @@ static intptr_t SV_GameSystemCalls(intptr_t *args) {
 
 	case TRAP_STRNCPY:
 		VM_CHECKBOUNDS(gvm, args[1], args[3]);
+#ifdef QVM_STRNCPY_OVERLAP
+		// Legacy QVMs copy a string onto itself. libc strncpy() is undefined
+		// for overlapping regions and glibc 2.37 clears the destination.
+		{
+			char *dest = VMA(1);
+			const char *src = VMA(2);
+			unsigned int destsize = args[3];
+
+			if (dest < src + destsize && src < dest + destsize) {
+				const char *srcend = (const char *)memchr(src, '\0', destsize);
+				unsigned int srclen = srcend ? (unsigned int)(srcend - src) : destsize;
+
+				if (dest < src + srclen) {
+					memmove(dest, src, srclen);
+					memset(dest + srclen, '\0', destsize - srclen);
+					return args[1];
+				}
+			}
+
+			strncpy(dest, src, destsize);
+			return args[1];
+		}
+#else
 		strncpy(VMA(1), VMA(2), args[3]);
 		return args[1];
+#endif
 
 	case TRAP_SIN:
 		return FloatAsInt(sin(VMF(1)));
