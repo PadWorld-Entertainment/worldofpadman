@@ -1588,6 +1588,13 @@ void NET_Sleep(int msec) {
 		if (highestfd == INVALID_SOCKET || ip6_socket > highestfd)
 			highestfd = ip6_socket;
 	}
+	if(multicast6_socket != INVALID_SOCKET && multicast6_socket != ip6_socket)
+	{
+		FD_SET(multicast6_socket, &fdr);
+
+		if(highestfd == INVALID_SOCKET || multicast6_socket > highestfd)
+			highestfd = multicast6_socket;
+	}
 
 #ifdef _WIN32
 	if (highestfd == INVALID_SOCKET) {
