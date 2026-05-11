@@ -62,9 +62,11 @@ static qboolean winsockInitialized = qfalse;
 
 #else
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED == 1020
+#if defined(__APPLE__) && MAC_OS_X_VERSION_MIN_REQUIRED <= 1020
 // needed for socklen_t on OSX 10.2
 #define _BSD_SOCKLEN_T_
+#else
+#define HAVE_POLL
 #endif
 
 #include <sys/socket.h>
@@ -77,6 +79,9 @@ static qboolean winsockInitialized = qfalse;
 #include <sys/types.h>
 #include <sys/time.h>
 #include <unistd.h>
+#ifdef HAVE_POLL
+#include <poll.h>
+#endif
 #if !defined(__sun) && !defined(__sgi)
 #include <ifaddrs.h>
 #endif
@@ -810,10 +815,10 @@ static SOCKET NET_IPSocket(char *net_interface, int port, int *err) {
 		return newsocket;
 	}
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(HAVE_POLL)
 	// warn if cannot use with select()
-	if ( newsocket >= FD_SETSIZE ) {
-		Com_Printf( "WARNING: NET_IPSocket: socket fd %d exceeds FD_SETSIZE (%d)\n", newsocket, FD_SETSIZE);
+	if (newsocket >= FD_SETSIZE) {
+		Com_Printf("WARNING: NET_IPSocket: socket fd %d exceeds FD_SETSIZE (%d)\n", newsocket, FD_SETSIZE);
 	}
 #endif
 
@@ -883,10 +888,10 @@ static SOCKET NET_IP6Socket(char *net_interface, int port, struct sockaddr_in6 *
 		return newsocket;
 	}
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(HAVE_POLL)
 	// warn if cannot use with select()
-	if ( newsocket >= FD_SETSIZE ) {
-		Com_Printf( "WARNING: NET_IP6Socket: socket fd %d exceeds FD_SETSIZE (%d)\n", newsocket, FD_SETSIZE);
+	if (newsocket >= FD_SETSIZE) {
+		Com_Printf("WARNING: NET_IP6Socket: socket fd %d exceeds FD_SETSIZE (%d)\n", newsocket, FD_SETSIZE);
 	}
 #endif
 
@@ -1587,6 +1592,36 @@ Sleeps msec or until something happens on the network
 ====================
 */
 void NET_Sleep(int msec) {
+#ifdef HAVE_POLL
+	struct pollfd fds[3];
+	int retval;
+
+	if (msec < 0)
+		msec = 0;
+
+	fds[0].fd = ip_socket;
+	fds[0].events = POLLIN;
+
+	fds[1].fd = ip6_socket;
+	fds[1].events = POLLIN;
+
+	fds[2].fd = (multicast6_socket != ip6_socket) ? multicast6_socket : INVALID_SOCKET;
+	fds[2].events = POLLIN;
+
+	retval = poll(fds, ARRAY_LEN(fds), msec);
+
+	if (retval == SOCKET_ERROR)
+		Com_Printf("Warning: poll() syscall failed: %s\n", NET_ErrorString());
+	else if (retval > 0) {
+		netsocks_t readsocks;
+
+		readsocks.ip = (fds[0].revents & POLLIN) ? qtrue : qfalse;
+		readsocks.ip6 = (fds[1].revents & POLLIN) ? qtrue : qfalse;
+		readsocks.multicast6 = (fds[2].revents & POLLIN) ? qtrue : qfalse;
+
+		NET_Event(&readsocks);
+	}
+#else
 	struct timeval timeout;
 	fd_set fdr;
 	int retval;
@@ -1661,6 +1696,7 @@ void NET_Sleep(int msec) {
 
 		NET_Event(&readsocks);
 	}
+#endif
 }
 
 /*
