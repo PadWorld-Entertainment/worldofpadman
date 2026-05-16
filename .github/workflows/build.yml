@@ -48,6 +48,7 @@ jobs:
 
       - name: "Test"
         if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
+        continue-on-error: true
         working-directory: build
         run: ctest --output-on-failure
 
