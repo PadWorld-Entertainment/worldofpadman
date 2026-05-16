@@ -2211,9 +2211,7 @@ Save player position in client info
 Used to show several wallhack icons over the players head
 ===============
 */
-
-void CG_SavePlayerPosition(centity_t *cent, clientInfo_t *ci) {
-	
+static void CG_SavePlayerPosition(centity_t *cent, clientInfo_t *ci) {
 	if (cent->currentState.eFlags & (EF_DEAD)) {
 		return;
 	}
