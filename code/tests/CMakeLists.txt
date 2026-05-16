@@ -141,6 +141,7 @@ target_compile_definitions(${PROJECT_NAME}-vm PRIVATE ${TEST_DEFINES})
 set(TESTQVM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/testqvm/test_main.c)
 set(TESTQVM_ASM_OUT ${CMAKE_CURRENT_BINARY_DIR}/test_main.asm)
 set(TESTQVM_SYSCALLS ${CMAKE_CURRENT_SOURCE_DIR}/testqvm/test_syscalls.asm)
+set(TESTQVM_OPS ${CMAKE_CURRENT_SOURCE_DIR}/testqvm/test_ops.asm)
 set(TESTQVM_QVM ${ROOT_DIR}/${ENGINE_BINARY_DIR}/testqvm.qvm)
 
 add_custom_command(
@@ -151,8 +152,8 @@ add_custom_command(
 )
 add_custom_command(
 	OUTPUT ${TESTQVM_QVM}
-	COMMAND q3asm -o "${TESTQVM_QVM}" ${TESTQVM_SYSCALLS} ${TESTQVM_ASM_OUT}
-	DEPENDS q3asm ${TESTQVM_ASM_OUT} ${TESTQVM_SYSCALLS}
+	COMMAND q3asm -o "${TESTQVM_QVM}" ${TESTQVM_SYSCALLS} ${TESTQVM_OPS} ${TESTQVM_ASM_OUT}
+	DEPENDS q3asm ${TESTQVM_ASM_OUT} ${TESTQVM_SYSCALLS} ${TESTQVM_OPS}
 	COMMENT "Assembling test QVM"
 )
 add_custom_target(testqvm_build DEPENDS ${TESTQVM_QVM})
