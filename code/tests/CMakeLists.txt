@@ -136,5 +136,28 @@ add_botlib(${PROJECT_NAME}-vm)
 target_link_libraries(${PROJECT_NAME}-vm ${LIBS})
 target_include_directories(${PROJECT_NAME}-vm PRIVATE ${CODE_DIR}/qcommon)
 target_compile_definitions(${PROJECT_NAME}-vm PRIVATE ${TEST_DEFINES})
+
+# Build the test QVM from C source using q3lcc + q3asm
+set(TESTQVM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/testqvm/test_main.c)
+set(TESTQVM_ASM_OUT ${CMAKE_CURRENT_BINARY_DIR}/test_main.asm)
+set(TESTQVM_SYSCALLS ${CMAKE_CURRENT_SOURCE_DIR}/testqvm/test_syscalls.asm)
+set(TESTQVM_QVM ${ROOT_DIR}/${ENGINE_BINARY_DIR}/testqvm.qvm)
+
+add_custom_command(
+	OUTPUT ${TESTQVM_ASM_OUT}
+	COMMAND q3lcc -o "\"${TESTQVM_ASM_OUT}\"" "\"${TESTQVM_SRC}\""
+	DEPENDS q3lcc ${TESTQVM_SRC}
+	COMMENT "Compiling test QVM source"
+)
+add_custom_command(
+	OUTPUT ${TESTQVM_QVM}
+	COMMAND q3asm -o "${TESTQVM_QVM}" ${TESTQVM_SYSCALLS} ${TESTQVM_ASM_OUT}
+	DEPENDS q3asm ${TESTQVM_ASM_OUT} ${TESTQVM_SYSCALLS}
+	COMMENT "Assembling test QVM"
+)
+add_custom_target(testqvm_build DEPENDS ${TESTQVM_QVM})
+add_dependencies(${PROJECT_NAME}-vm testqvm_build)
+
+target_compile_definitions(${PROJECT_NAME}-vm PRIVATE TEST_QVM_PATH="${TESTQVM_QVM}")
 add_test(NAME ${PROJECT_NAME}-vm COMMAND $<TARGET_FILE:${PROJECT_NAME}-vm>)
 set_tests_properties(${PROJECT_NAME}-vm PROPERTIES WORKING_DIRECTORY ${ROOT_DIR})
