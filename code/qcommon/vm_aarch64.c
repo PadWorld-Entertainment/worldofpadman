@@ -801,8 +801,8 @@ void VM_Compile(vm_t *vm, vmHeader_t *header) {
 
 			case OP_EQF: FJ(COND_EQ); break;
 			case OP_NEF: FJ(COND_NE); break;
-			case OP_LTF: FJ(COND_LT); break;
-			case OP_LEF: FJ(COND_LE); break;
+			case OP_LTF: FJ(COND_MI); break;
+			case OP_LEF: FJ(COND_LS); break;
 			case OP_GTF: FJ(COND_GT); break;
 			case OP_GEF: FJ(COND_GE); break;
 
