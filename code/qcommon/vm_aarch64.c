@@ -613,9 +613,9 @@ void VM_Compile(vm_t *vm, vmHeader_t *header) {
 		/* rOPSTACKBASE = X2 */
 		emit(A64_MOV_X(rOPSTACKBASE, 2));
 
-		/* Branch to code start */
+		/* Branch to code start (BL so LR points to return sequence) */
 		codeOffset = vm->codeLength;
-		emit(A64_B(0)); /* placeholder, patched in pass 1 */
+		emit(A64_BL(0)); /* placeholder, patched in pass 1 */
 
 		/* Return sequence: pop return value from opstack into W0 */
 		/* (we branch back here after vmMain returns) */
@@ -638,7 +638,7 @@ void VM_Compile(vm_t *vm, vmHeader_t *header) {
 		if (pass) {
 			int off = branch_offset(codeOffset, vm->codeLength);
 			unsigned int *patch = (unsigned int *)(vm->codeBase + codeOffset);
-			*patch = A64_B(off);
+			*patch = A64_BL(off);
 		}
 
 
