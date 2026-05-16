@@ -61,6 +61,7 @@ AArch64 VM JIT compiler - ported from vm_armv7l.c
 #define rDATABASE    23
 #define rDATAMASK    24
 #define rINSTPOINTERS 25
+#define rPSTACKPTR   26
 
 /*
  * opcode information table
@@ -621,6 +622,8 @@ void VM_Compile(vm_t *vm, vmHeader_t *header) {
 		emit(A64_LDR_X_IMM(rINSTPOINTERS, 0, offsetof(vm_t, instructionPointers)));
 		/* rPSTACK (W22) = *X1 (programStack value) */
 		emit(A64_LDR_W_IMM(rPSTACK, 1, 0));
+		/* Preserve the host-side programStack pointer across VM execution. */
+		emit(A64_MOV_X(rPSTACKPTR, 1));
 		/* rOPSTACK = X2 */
 		emit(A64_MOV_X(rOPSTACK, 2));
 		/* rOPSTACKBASE = X2 */
@@ -637,7 +640,7 @@ void VM_Compile(vm_t *vm, vmHeader_t *header) {
 		emit(A64_SUB_X_IMM(rOPSTACK, rOPSTACK, 4));
 
 		/* Store programStack back */
-		emit(A64_STR_W_IMM(rPSTACK, 1, 0));
+		emit(A64_STR_W_IMM(rPSTACK, rPSTACKPTR, 0));
 
 		/* Restore callee-saved and return */
 		emit(A64_LDP_X(25, 26, 31, 64));
