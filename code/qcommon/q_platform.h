@@ -187,7 +187,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define PATH_SEP '/'
 
 #if !defined(ARCH_STRING)
-#if INTPTR_MAX == INT64_MAX
+#if defined(__aarch64__)
+#define ARCH_STRING "arm64"
+#elif defined(__arm__)
+#define ARCH_STRING "arm"
+#elif INTPTR_MAX == INT64_MAX
 #define ARCH_STRING "x86_64"
 #elif INTPTR_MAX == INT32_MAX
 #define ARCH_STRING "x86"
