@@ -137,11 +137,10 @@ target_link_libraries(${PROJECT_NAME}-vm ${LIBS})
 target_include_directories(${PROJECT_NAME}-vm PRIVATE ${CODE_DIR}/qcommon)
 target_compile_definitions(${PROJECT_NAME}-vm PRIVATE ${TEST_DEFINES})
 
-# Build the test QVM from C source using q3lcc + q3asm
+# Build the simple test QVM from C source using q3lcc + q3asm
 set(TESTQVM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/testqvm/test_main.c)
 set(TESTQVM_ASM_OUT ${CMAKE_CURRENT_BINARY_DIR}/test_main.asm)
 set(TESTQVM_SYSCALLS ${CMAKE_CURRENT_SOURCE_DIR}/testqvm/test_syscalls.asm)
-set(TESTQVM_OPS ${CMAKE_CURRENT_SOURCE_DIR}/testqvm/test_ops.asm)
 set(TESTQVM_QVM ${ROOT_DIR}/${ENGINE_BINARY_DIR}/testqvm.qvm)
 
 add_custom_command(
@@ -152,13 +151,35 @@ add_custom_command(
 )
 add_custom_command(
 	OUTPUT ${TESTQVM_QVM}
-	COMMAND q3asm -o "${TESTQVM_QVM}" ${TESTQVM_SYSCALLS} ${TESTQVM_OPS} ${TESTQVM_ASM_OUT}
-	DEPENDS q3asm ${TESTQVM_ASM_OUT} ${TESTQVM_SYSCALLS} ${TESTQVM_OPS}
+	COMMAND q3asm -o "${TESTQVM_QVM}" ${TESTQVM_SYSCALLS} ${TESTQVM_ASM_OUT}
+	DEPENDS q3asm ${TESTQVM_ASM_OUT} ${TESTQVM_SYSCALLS}
 	COMMENT "Assembling test QVM"
 )
-add_custom_target(testqvm_build DEPENDS ${TESTQVM_QVM})
+
+# Build the extended opcode-coverage QVM.
+set(TESTQVM2_SRC ${CMAKE_CURRENT_SOURCE_DIR}/testqvm2/test_main.c)
+set(TESTQVM2_ASM_OUT ${CMAKE_CURRENT_BINARY_DIR}/test_main2.asm)
+set(TESTQVM2_SYSCALLS ${CMAKE_CURRENT_SOURCE_DIR}/testqvm2/test_syscalls.asm)
+set(TESTQVM2_OPS ${CMAKE_CURRENT_SOURCE_DIR}/testqvm2/test_ops.asm)
+set(TESTQVM2_QVM ${ROOT_DIR}/${ENGINE_BINARY_DIR}/testqvm2.qvm)
+
+add_custom_command(
+	OUTPUT ${TESTQVM2_ASM_OUT}
+	COMMAND q3lcc -o "\"${TESTQVM2_ASM_OUT}\"" "\"${TESTQVM2_SRC}\""
+	DEPENDS q3lcc ${TESTQVM2_SRC}
+	COMMENT "Compiling extended test QVM source"
+)
+add_custom_command(
+	OUTPUT ${TESTQVM2_QVM}
+	COMMAND q3asm -o "${TESTQVM2_QVM}" ${TESTQVM2_SYSCALLS} ${TESTQVM2_OPS} ${TESTQVM2_ASM_OUT}
+	DEPENDS q3asm ${TESTQVM2_ASM_OUT} ${TESTQVM2_SYSCALLS} ${TESTQVM2_OPS}
+	COMMENT "Assembling extended test QVM"
+)
+add_custom_target(testqvm_build DEPENDS ${TESTQVM_QVM} ${TESTQVM2_QVM})
 add_dependencies(${PROJECT_NAME}-vm testqvm_build)
 
 target_compile_definitions(${PROJECT_NAME}-vm PRIVATE TEST_QVM_PATH="${TESTQVM_QVM}")
+target_compile_definitions(${PROJECT_NAME}-vm PRIVATE TEST_QVM2_PATH="${TESTQVM2_QVM}")
+target_compile_definitions(${PROJECT_NAME}-vm PRIVATE TEST_QVM2_ASM_PATH="${TESTQVM2_ASM_OUT}")
 add_test(NAME ${PROJECT_NAME}-vm COMMAND $<TARGET_FILE:${PROJECT_NAME}-vm>)
 set_tests_properties(${PROJECT_NAME}-vm PROPERTIES WORKING_DIRECTORY ${ROOT_DIR})

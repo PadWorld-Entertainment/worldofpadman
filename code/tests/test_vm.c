@@ -5,7 +5,7 @@
  * Uses fopen to load the QVM file directly, bypassing the engine filesystem.
  */
 #include "test_shared.h"
-#include "testqvm/test_commands.h"
+#include "testqvm2/test_commands.h"
 #include "vm_local.h"
 #include <stdio.h>
 
@@ -22,6 +22,14 @@ static intptr_t testSyscall(intptr_t *parms) {
 
 #ifndef TEST_QVM_PATH
 #define TEST_QVM_PATH "testqvm.qvm"
+#endif
+
+#ifndef TEST_QVM2_PATH
+#define TEST_QVM2_PATH "testqvm2.qvm"
+#endif
+
+#ifndef TEST_QVM2_ASM_PATH
+#define TEST_QVM2_ASM_PATH "test_main2.asm"
 #endif
 
 static byte *loadQVMFile(const char *path, int *outSize) {
@@ -51,6 +59,36 @@ static byte *loadQVMFile(const char *path, int *outSize) {
 
 	fclose(f);
 	*outSize = (int)size;
+	return data;
+}
+
+static char *loadTextFile(const char *path) {
+	FILE *f = fopen(path, "rb");
+	long size;
+	char *data;
+
+	if (!f) {
+		return NULL;
+	}
+
+	fseek(f, 0, SEEK_END);
+	size = ftell(f);
+	fseek(f, 0, SEEK_SET);
+
+	data = (char *)malloc(size + 1);
+	if (!data) {
+		fclose(f);
+		return NULL;
+	}
+
+	if ((long)fread(data, 1, size, f) != size) {
+		free(data);
+		fclose(f);
+		return NULL;
+	}
+
+	data[size] = '\0';
+	fclose(f);
 	return data;
 }
 
@@ -233,6 +271,7 @@ static int expectedIntegerCase(int a, int b, int c, int d, int e, int f) {
 	result += a + b;
 	result += a - b;
 	result += a * b;
+	result += (int)(ua * ub);
 	result += c / d;
 	result += c % d;
 	result += (int)(uc / ud);
@@ -290,7 +329,7 @@ static int expectedMemoryCase(int a, int b, int c, int d, int e) {
 }
 
 static void verifyVMExecution(vmInterpret_t interpret) {
-	vm_t *vm = setupVM(TEST_QVM_PATH, interpret);
+	vm_t *vm = setupVM(TEST_QVM2_PATH, interpret);
 	int result;
 	int expected;
 
@@ -323,25 +362,53 @@ static void verifyVMExecution(vmInterpret_t interpret) {
 
 static void testVMOpcodeCoverage(void) {
 	qboolean seen[TEST_OPCODE_COUNT];
+	char *asmText;
 	int opcode;
 
 	memset(seen, 0, sizeof(seen));
-	collectOpcodeCoverage(TEST_QVM_PATH, seen);
+	collectOpcodeCoverage(TEST_QVM2_PATH, seen);
+	asmText = loadTextFile(TEST_QVM2_ASM_PATH);
+	ASSERT_EQ_INT(1, asmText != NULL);
 
 	for (opcode = 0; opcode < TEST_OPCODE_COUNT; ++opcode) {
-		if (opcode == OP_UNDEF) {
+		if (opcode == OP_UNDEF || opcode == OP_IGNORE) {
 			continue;
 		}
 		EXPECT_EQ_INT(1, seen[opcode]);
 	}
+
+	EXPECT_EQ_INT(1, strstr(asmText, "INDIRB") != NULL);
+	free(asmText);
 }
 
-static void testVMInterpreter(void) {
+static void verifySimpleVM(vmInterpret_t interpret) {
+	vm_t *vm = setupVM(TEST_QVM_PATH, interpret);
+	int result;
+
+	ASSERT_EQ_INT(1, vm != NULL);
+
+	lastReportedValue = 0;
+	result = (int)VM_Call(vm, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	EXPECT_EQ_INT(7, result);
+	EXPECT_EQ_INT(7, (int)lastReportedValue);
+}
+
+static void testVMSimpleInterpreter(void) {
+	verifySimpleVM(VMI_BYTECODE);
+}
+
+#ifndef NO_VM_COMPILED
+static void testVMSimpleCompiled(void) {
+	verifySimpleVM(VMI_COMPILED);
+}
+#endif
+
+static void testVMExtendedInterpreter(void) {
 	verifyVMExecution(VMI_BYTECODE);
 }
 
 #ifndef NO_VM_COMPILED
-static void testVMCompiled(void) {
+static void testVMExtendedCompiled(void) {
 	verifyVMExecution(VMI_COMPILED);
 }
 #endif
@@ -349,10 +416,14 @@ static void testVMCompiled(void) {
 int main(int argc, char *argv[]) {
 	TESTS_INIT();
 
-	ADD_TEST(testVMOpcodeCoverage);
-	ADD_TEST(testVMInterpreter);
+	ADD_TEST(testVMSimpleInterpreter);
 #ifndef NO_VM_COMPILED
-	ADD_TEST(testVMCompiled);
+	ADD_TEST(testVMSimpleCompiled);
+#endif
+	ADD_TEST(testVMOpcodeCoverage);
+	ADD_TEST(testVMExtendedInterpreter);
+#ifndef NO_VM_COMPILED
+	ADD_TEST(testVMExtendedCompiled);
 #endif
 
 	Com_Shutdown();
