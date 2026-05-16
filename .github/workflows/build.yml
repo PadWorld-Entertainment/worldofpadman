@@ -47,6 +47,11 @@ jobs:
           cmake --build .
           cmake --install .
 
+      - name: "Test"
+        if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
+        working-directory: build
+        run: ctest --output-on-failure
+
       - name: "Upload artifacts"
         uses: actions/upload-artifact@v4
         with:

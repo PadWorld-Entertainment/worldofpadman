@@ -69,6 +69,7 @@ target_link_libraries(${PROJECT_NAME}-main ${LIBS})
 target_include_directories(${PROJECT_NAME}-main PRIVATE ${CODE_DIR}/qcommon)
 target_compile_definitions(${PROJECT_NAME}-main PRIVATE ${TEST_DEFINES})
 add_test(NAME ${PROJECT_NAME}-main COMMAND $<TARGET_FILE:${PROJECT_NAME}-main>)
+set_tests_properties(${PROJECT_NAME}-main PROPERTIES WORKING_DIRECTORY ${ROOT_DIR})
 
 set(SRCS_UI
 	test_ui.c
@@ -126,3 +127,14 @@ target_compile_definitions(${PROJECT_NAME}-ui PRIVATE ${TEST_DEFINES})
 target_compile_definitions(${PROJECT_NAME}-ui PRIVATE UI)
 target_compile_definitions(${PROJECT_NAME}-ui PRIVATE UI_HARD_LINKED)
 add_test(NAME ${PROJECT_NAME}-ui COMMAND $<TARGET_FILE:${PROJECT_NAME}-ui>)
+set_tests_properties(${PROJECT_NAME}-ui PROPERTIES WORKING_DIRECTORY ${ROOT_DIR})
+
+set(SRCS_VM test_vm.c ${SRCS_BASE})
+wop_add_executable(TARGET ${PROJECT_NAME}-vm SRCS ${SRCS_VM} NOINSTALL)
+add_asm(${PROJECT_NAME}-vm)
+add_botlib(${PROJECT_NAME}-vm)
+target_link_libraries(${PROJECT_NAME}-vm ${LIBS})
+target_include_directories(${PROJECT_NAME}-vm PRIVATE ${CODE_DIR}/qcommon)
+target_compile_definitions(${PROJECT_NAME}-vm PRIVATE ${TEST_DEFINES})
+add_test(NAME ${PROJECT_NAME}-vm COMMAND $<TARGET_FILE:${PROJECT_NAME}-vm>)
+set_tests_properties(${PROJECT_NAME}-vm PROPERTIES WORKING_DIRECTORY ${ROOT_DIR})
