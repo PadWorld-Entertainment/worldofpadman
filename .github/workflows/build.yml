@@ -13,10 +13,12 @@ jobs:
     strategy:
       matrix:
         platform:
-        - { name: Ubuntu,    os: ubuntu-22.04 }
-        - { name: Windows32, os: windows-2022, param: "-A Win32" }
-        - { name: Windows,   os: windows-2022 }
-        - { name: MacOS14,   os: macos-14 }
+        - { name: Ubuntu,      os: ubuntu-22.04 }
+        - { name: UbuntuArm,   os: ubuntu-22.04-arm }
+        - { name: Windows32,   os: windows-2022, param: "-A Win32" }
+        - { name: Windows,     os: windows-2022 }
+        - { name: WindowsArm,  os: windows-11-arm }
+        - { name: MacOS14,     os: macos-14 }
 
     steps:
       - name: "Checkout"
