@@ -498,6 +498,19 @@ static void emit_MOVXi(vm_t *vm, int pass, int reg, uintptr_t val) {
 		emit(A64_MOVK_X(reg, (val >> 48) & 0xFFFF, 48));
 }
 
+static int movxi_insn_count(uintptr_t val) {
+	int count = 1;
+
+	if (val > 0xFFFF)
+		count++;
+	if (val > 0xFFFFFFFF)
+		count++;
+	if (val > 0xFFFFFFFFFFFF)
+		count++;
+
+	return count;
+}
+
 /* Compute branch offset in instructions from current codeLength to target */
 static int branch_offset(int from, int to) {
 	return (to - from) / 4;
@@ -512,8 +525,8 @@ static int branch_offset(int from, int to) {
 	do { \
 		emit_MOVWi(vm, pass, 1, (unsigned)vm->instructionCount); \
 		emit(A64_CMP_W(0, 1)); \
-		/* if W0 < instructionCount (unsigned), skip error */ \
-		emit(A64_BCOND(COND_LO, 3)); /* skip next 2 insns + this = jump over 2 */ \
+		/* Skip over the full ErrJump pointer load and call on valid targets. */ \
+		emit(A64_BCOND(COND_LO, movxi_insn_count((uintptr_t)ErrJump) + 2)); \
 		emit_MOVXi(vm, pass, 2, (uintptr_t)ErrJump); \
 		emit(A64_BLR(2)); \
 	} while (0)
