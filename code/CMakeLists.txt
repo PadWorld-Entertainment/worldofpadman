@@ -34,8 +34,14 @@ set(QCOMMON_VM_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm.c
 	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_interpreted.c
 	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_local.h
-	${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_x86.c
 )
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$")
+	list(APPEND QCOMMON_VM_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_aarch64.c)
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
+	list(APPEND QCOMMON_VM_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_armv7l.c)
+else()
+	list(APPEND QCOMMON_VM_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/qcommon/vm_x86.c)
+endif()
 
 find_program(GDB_EXECUTABLE gdb)
 find_program(LLDB_EXECUTABLE lldb)

@@ -43,9 +43,7 @@ set(SRCS
 	../qcommon/q_shared.c
 	../qcommon/unzip.c
 	../qcommon/ioapi.c
-	../qcommon/vm.c
-	../qcommon/vm_interpreted.c
-	../qcommon/vm_x86.c
+	${QCOMMON_VM_SRCS}
 	../server/sv_bot.c
 	../server/sv_ccmds.c
 	../server/sv_client.c
