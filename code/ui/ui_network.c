@@ -123,14 +123,14 @@ static void UI_NetworkOptions_SendTargetUpdate(void) {
 				"'Crosshair' to send to the people currently in your crosshair. "
 				"'Spatial' to talk to all people in hearing range. "
 				"NOTE: See ingame VoIP chat menu for more options.";
-			Menu_InitItem((menucommon_s *)&networkOptionsInfo.voipSendTarget);
+			Menu_InitItem(&networkOptionsInfo.voipSendTarget.generic);
 			return;
 		}
 	}
 	networkOptionsInfo.voipSendTarget.itemnames = sendTarget_custom;
 	networkOptionsInfo.voipSendTarget.generic.flags |= QMF_GRAYED;
 	networkOptionsInfo.voipCustomSendTarget = qtrue;
-	Menu_InitItem((menucommon_s *)&networkOptionsInfo.voipSendTarget);
+	Menu_InitItem(&networkOptionsInfo.voipSendTarget.generic);
 }
 
 /*
