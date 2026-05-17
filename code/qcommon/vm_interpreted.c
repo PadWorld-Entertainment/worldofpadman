@@ -21,6 +21,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include "vm_local.h"
 
+static ID_INLINE float VMFRead(const int *opStack, uint8_t index) {
+	floatint_t value;
+	value.i = opStack[index];
+	return value.f;
+}
+
+static ID_INLINE void VMFWrite(int *opStack, uint8_t index, float value) {
+	floatint_t bits;
+	bits.f = value;
+	opStack[index] = bits.i;
+}
+
 //#define	DEBUG_VM
 #ifdef DEBUG_VM
 static char *opnames[256] = {"OP_UNDEF",
@@ -670,7 +682,7 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 		case OP_EQF:
 			opStackOfs -= 2;
 
-			if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] == ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+			if (VMFRead(opStack, (uint8_t)(opStackOfs + 1)) == VMFRead(opStack, (uint8_t)(opStackOfs + 2))) {
 				programCounter = r2; // vm->instructionPointers[r2];
 				goto nextInstruction;
 			} else {
@@ -681,7 +693,7 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 		case OP_NEF:
 			opStackOfs -= 2;
 
-			if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] != ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+			if (VMFRead(opStack, (uint8_t)(opStackOfs + 1)) != VMFRead(opStack, (uint8_t)(opStackOfs + 2))) {
 				programCounter = r2; // vm->instructionPointers[r2];
 				goto nextInstruction;
 			} else {
@@ -692,7 +704,7 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 		case OP_LTF:
 			opStackOfs -= 2;
 
-			if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] < ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+			if (VMFRead(opStack, (uint8_t)(opStackOfs + 1)) < VMFRead(opStack, (uint8_t)(opStackOfs + 2))) {
 				programCounter = r2; // vm->instructionPointers[r2];
 				goto nextInstruction;
 			} else {
@@ -703,8 +715,7 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 		case OP_LEF:
 			opStackOfs -= 2;
 
-			if (((float *)opStack)[(uint8_t)((uint8_t)(opStackOfs + 1))] <=
-				((float *)opStack)[(uint8_t)((uint8_t)(opStackOfs + 2))]) {
+			if (VMFRead(opStack, (uint8_t)(opStackOfs + 1)) <= VMFRead(opStack, (uint8_t)(opStackOfs + 2))) {
 				programCounter = r2; // vm->instructionPointers[r2];
 				goto nextInstruction;
 			} else {
@@ -715,7 +726,7 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 		case OP_GTF:
 			opStackOfs -= 2;
 
-			if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] > ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+			if (VMFRead(opStack, (uint8_t)(opStackOfs + 1)) > VMFRead(opStack, (uint8_t)(opStackOfs + 2))) {
 				programCounter = r2; // vm->instructionPointers[r2];
 				goto nextInstruction;
 			} else {
@@ -726,7 +737,7 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 		case OP_GEF:
 			opStackOfs -= 2;
 
-			if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] >= ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+			if (VMFRead(opStack, (uint8_t)(opStackOfs + 1)) >= VMFRead(opStack, (uint8_t)(opStackOfs + 2))) {
 				programCounter = r2; // vm->instructionPointers[r2];
 				goto nextInstruction;
 			} else {
@@ -802,34 +813,34 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 			goto nextInstruction;
 
 		case OP_NEGF:
-			((float *)opStack)[opStackOfs] = -((float *)opStack)[opStackOfs];
+			VMFWrite(opStack, opStackOfs, -VMFRead(opStack, opStackOfs));
 			goto nextInstruction;
 		case OP_ADDF:
 			opStackOfs--;
-			((float *)opStack)[opStackOfs] =
-				((float *)opStack)[opStackOfs] + ((float *)opStack)[(uint8_t)(opStackOfs + 1)];
+			VMFWrite(opStack, opStackOfs,
+				VMFRead(opStack, opStackOfs) + VMFRead(opStack, (uint8_t)(opStackOfs + 1)));
 			goto nextInstruction;
 		case OP_SUBF:
 			opStackOfs--;
-			((float *)opStack)[opStackOfs] =
-				((float *)opStack)[opStackOfs] - ((float *)opStack)[(uint8_t)(opStackOfs + 1)];
+			VMFWrite(opStack, opStackOfs,
+				VMFRead(opStack, opStackOfs) - VMFRead(opStack, (uint8_t)(opStackOfs + 1)));
 			goto nextInstruction;
 		case OP_DIVF:
 			opStackOfs--;
-			((float *)opStack)[opStackOfs] =
-				((float *)opStack)[opStackOfs] / ((float *)opStack)[(uint8_t)(opStackOfs + 1)];
+			VMFWrite(opStack, opStackOfs,
+				VMFRead(opStack, opStackOfs) / VMFRead(opStack, (uint8_t)(opStackOfs + 1)));
 			goto nextInstruction;
 		case OP_MULF:
 			opStackOfs--;
-			((float *)opStack)[opStackOfs] =
-				((float *)opStack)[opStackOfs] * ((float *)opStack)[(uint8_t)(opStackOfs + 1)];
+			VMFWrite(opStack, opStackOfs,
+				VMFRead(opStack, opStackOfs) * VMFRead(opStack, (uint8_t)(opStackOfs + 1)));
 			goto nextInstruction;
 
 		case OP_CVIF:
-			((float *)opStack)[opStackOfs] = (float)opStack[opStackOfs];
+			VMFWrite(opStack, opStackOfs, (float)opStack[opStackOfs]);
 			goto nextInstruction;
 		case OP_CVFI:
-			opStack[opStackOfs] = Q_ftol(((float *)opStack)[opStackOfs]);
+			opStack[opStackOfs] = Q_ftol(VMFRead(opStack, opStackOfs));
 			goto nextInstruction;
 		case OP_SEX8:
 			opStack[opStackOfs] = (signed char)opStack[opStackOfs];
