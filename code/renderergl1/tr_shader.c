@@ -2673,10 +2673,12 @@ static void ScanAndLoadShaderFiles(void) {
 	// load and parse shader files
 	for (i = 0; i < numShaderFiles; i++) {
 		char filename[MAX_QPATH];
+		void *fileBuffer = NULL;
 
 		Com_sprintf(filename, sizeof(filename), "scripts/%s", shaderFiles[i]);
 		ri.Printf(PRINT_DEVELOPER, "...loading '%s'\n", filename);
-		summand = ri.FS_ReadFile(filename, (void **)&buffers[i]);
+		summand = ri.FS_ReadFile(filename, &fileBuffer);
+		buffers[i] = (char *)fileBuffer;
 
 		if (!buffers[i])
 			ri.Error(ERR_DROP, "Couldn't load %s", filename);

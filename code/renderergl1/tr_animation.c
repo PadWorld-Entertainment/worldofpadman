@@ -329,8 +329,14 @@ void RB_MDRSurfaceAnim(mdrSurface_t *surface) {
 	} else {
 		bonePtr = bones;
 
-		for (i = 0; i < header->numBones * 12; i++) {
-			((float *)bonePtr)[i] = frontlerp * ((float *)frame->bones)[i] + backlerp * ((float *)oldFrame->bones)[i];
+		for (i = 0; i < header->numBones; i++) {
+			int row, col;
+			for (row = 0; row < 3; row++) {
+				for (col = 0; col < 4; col++) {
+					bonePtr[i].matrix[row][col] =
+						frontlerp * frame->bones[i].matrix[row][col] + backlerp * oldFrame->bones[i].matrix[row][col];
+				}
+			}
 		}
 	}
 
@@ -369,7 +375,10 @@ void RB_MDRSurfaceAnim(mdrSurface_t *surface) {
 		tess.texCoords[baseVertex + j][0][0] = v->texCoords[0];
 		tess.texCoords[baseVertex + j][0][1] = v->texCoords[1];
 
-		v = (mdrVertex_t *)&v->weights[v->numWeights];
+		{
+			mdrWeight_t *nextWeights = &v->weights[v->numWeights];
+			v = (mdrVertex_t *)nextWeights;
+		}
 	}
 
 	tess.numVertexes += surface->numVerts;

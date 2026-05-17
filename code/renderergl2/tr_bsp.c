@@ -318,7 +318,11 @@ static void R_LoadLightmaps(const lump_t *l, const lump_t *surfs) {
 							i * (tr.worldDeluxeMapping ? 2 : 1));
 				// ri.Printf(PRINT_ALL, "looking for %s\n", filename);
 
-				size = ri.FS_ReadFile(filename, (void **)&hdrLightmap);
+				{
+					void *fileBuffer = NULL;
+					size = ri.FS_ReadFile(filename, &fileBuffer);
+					hdrLightmap = (byte *)fileBuffer;
+				}
 			}
 
 			if (hdrLightmap) {
@@ -1755,7 +1759,11 @@ static void R_LoadSurfaces(const lump_t *surfs, const lump_t *verts, const lump_
 		Com_sprintf(filename, sizeof(filename), "maps/%s/vertlight.raw", s_worldData.baseName);
 		// ri.Printf(PRINT_ALL, "looking for %s\n", filename);
 
-		size = ri.FS_ReadFile(filename, (void **)&hdrVertColors);
+		{
+			void *fileBuffer = NULL;
+			size = ri.FS_ReadFile(filename, &fileBuffer);
+			hdrVertColors = (float *)fileBuffer;
+		}
 
 		if (hdrVertColors) {
 			// ri.Printf(PRINT_ALL, "Found!\n");
@@ -2218,7 +2226,11 @@ static void R_LoadLightGrid(const lump_t *l) {
 		Com_sprintf(filename, sizeof(filename), "maps/%s/lightgrid.raw", s_worldData.baseName);
 		// ri.Printf(PRINT_ALL, "looking for %s\n", filename);
 
-		size = ri.FS_ReadFile(filename, (void **)&hdrLightGrid);
+		{
+			void *fileBuffer = NULL;
+			size = ri.FS_ReadFile(filename, &fileBuffer);
+			hdrLightGrid = (float *)fileBuffer;
+		}
 
 		if (hdrLightGrid) {
 			// ri.Printf(PRINT_ALL, "found!\n");

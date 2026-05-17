@@ -412,7 +412,9 @@ static int GLSL_LoadGPUShaderText(const char *name, const char *fallback, GLenum
 	}
 
 	if (r_externalGLSL->integer) {
-		size = ri.FS_ReadFile(filename, (void **)&buffer);
+		void *fileBuffer = NULL;
+		size = ri.FS_ReadFile(filename, &fileBuffer);
+		buffer = (GLchar *)fileBuffer;
 	} else {
 		size = 0;
 		buffer = NULL;
