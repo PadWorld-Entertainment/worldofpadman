@@ -65,6 +65,18 @@ static flare_t *g_freeflares;
 static lensflare_t g_lensflares[MAX_LENSFLARES];
 static int g_num_lensflares;
 
+static void CG_SetFlareSpecialIndex(flare_t *flare, int index) {
+	floatint_t value;
+	value.i = index;
+	flare->specialVar = value.f;
+}
+
+static int CG_GetFlareSpecialIndex(const flare_t *flare) {
+	floatint_t value;
+	value.f = flare->specialVar;
+	return value.i;
+}
+
 typedef struct InfosForDrawing_s {
 	int lensflare; // index in g_lensflares
 	vec3_t origin; // origin ... the screen pos will be called @ drawing
@@ -244,16 +256,16 @@ static void CG_StrEndWork(void) {
 		case NT_SETSUBLFPTR: {
 			int i;
 
-			for (i = 0; i < MAX_LENSFLARES; i++) {
-				if (!Q_stricmp(g_lensflares[i].lfname, tmpString)) {
-					*((int *)(&target->firstflare->specialVar)) = i;
-					break;
+				for (i = 0; i < MAX_LENSFLARES; i++) {
+					if (!Q_stricmp(g_lensflares[i].lfname, tmpString)) {
+						CG_SetFlareSpecialIndex(target->firstflare, i);
+						break;
+					}
 				}
-			}
-			if (*((int *)(&target->firstflare->specialVar)) == 0 && Q_stricmp(tmpString, "default"))
-				Com_Printf("Can't find sublf(\"%s\") for %s\n", tmpString, target->lfname);
-			next_tmpstr = NT_NORMAL;
-		} break;
+				if (CG_GetFlareSpecialIndex(target->firstflare) == 0 && Q_stricmp(tmpString, "default"))
+					Com_Printf("Can't find sublf(\"%s\") for %s\n", tmpString, target->lfname);
+				next_tmpstr = NT_NORMAL;
+			} break;
 		default:
 			break;
 		}
@@ -864,13 +876,13 @@ static void CG_DrawLensflare(int lfid, vec2_t dir, float lfalpha, float distance
 			subdir[0] = sin(angle) * curRadius * dirlen * tmpflare->pos;
 			subdir[1] = -cos(angle) * curRadius * dirlen * tmpflare->pos;
 
-			if (*((int *)(&tmpflare->specialVar)) == lfid) {
+			if (CG_GetFlareSpecialIndex(tmpflare) == lfid) {
 				Com_Printf("ERROR: lensflare(%s) with the same lensflare as sublf!!!\n", g_lensflares[lfid].lfname);
 				return;
 			}
 
-			CG_DrawLensflare(*((int *)(&tmpflare->specialVar)), subdir, tmpflare->color[3], distanceSquared, subxywh,
-						  qtrue);
+			CG_DrawLensflare(CG_GetFlareSpecialIndex(tmpflare), subdir, tmpflare->color[3], distanceSquared, subxywh,
+						 qtrue);
 		} break;
 		}
 

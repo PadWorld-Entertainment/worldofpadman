@@ -107,7 +107,7 @@ static void S_TransferStereo16(unsigned long *pbuf, int endtime) {
 	int lpos;
 	int ls_paintedtime;
 
-	snd_p = (int *)paintbuffer;
+	snd_p = &paintbuffer[0].left;
 	ls_paintedtime = s_paintedtime;
 
 	while (ls_paintedtime < endtime) {
@@ -159,7 +159,7 @@ static void S_TransferPaintBuffer(int endtime) {
 	if (dma.samplebits == 16 && dma.channels == 2) { // optimized case
 		S_TransferStereo16(pbuf, endtime);
 	} else { // general case
-		p = (int *)paintbuffer;
+		p = &paintbuffer[0].left;
 		count = (endtime - s_paintedtime) * dma.channels;
 		out_idx = ((unsigned int)s_paintedtime * dma.channels) % dma.samples;
 		step = 3 - MIN(dma.channels, 2);

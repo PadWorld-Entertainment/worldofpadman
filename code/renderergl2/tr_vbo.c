@@ -702,7 +702,7 @@ void VaoCache_Commit(void) {
 	else {
 		srfVert_t *dstVertex = vcq.vertexes;
 		vaoCacheGlIndex_t *dstIndex = vcq.indexes;
-		unsigned short *dstIndexUshort = (unsigned short *)vcq.indexes;
+		byte *dstIndexBytes = (byte *)vcq.indexes;
 
 		batchLength = vc.batchLengths + vc.numBatches;
 		*batchLength = vcq.numSurfaces;
@@ -729,8 +729,11 @@ void VaoCache_Commit(void) {
 			vc.numSurfaces++;
 
 			if (glRefConfig.vaoCacheGlIndexType == GL_UNSIGNED_SHORT) {
-				for (i = 0; i < surf->numIndexes; i++)
-					*dstIndexUshort++ = *srcIndex++ + indexOffset;
+				for (i = 0; i < surf->numIndexes; i++) {
+					unsigned short value = (unsigned short)(*srcIndex++ + indexOffset);
+					Com_Memcpy(dstIndexBytes, &value, sizeof(value));
+					dstIndexBytes += sizeof(value);
+				}
 			} else {
 				for (i = 0; i < surf->numIndexes; i++)
 					*dstIndex++ = *srcIndex++ + indexOffset;

@@ -867,8 +867,15 @@ static qboolean R_LoadMDR(model_t *mod, void *buffer, int filesize, const char *
 			}
 
 			// Next Frame...
-			cframe = (mdrCompFrame_t *)&cframe->bones[j];
-			frame = (mdrFrame_t *)&frame->bones[j];
+			{
+				mdrCompBone_t *nextBones = &cframe->bones[j];
+				cframe = (mdrCompFrame_t *)nextBones;
+			}
+
+			{
+				mdrBone_t *nextBones = &frame->bones[j];
+				frame = (mdrFrame_t *)nextBones;
+			}
 		}
 	} else {
 		mdrFrame_t *curframe;
@@ -889,12 +896,30 @@ static qboolean R_LoadMDR(model_t *mod, void *buffer, int filesize, const char *
 			frame->radius = LittleFloat(curframe->radius);
 			Q_strncpyz(frame->name, curframe->name, sizeof(frame->name));
 
-			for (j = 0; j < (int)(mdr->numBones * sizeof(mdrBone_t) / 4); j++) {
-				((float *)frame->bones)[j] = LittleFloat(((float *)curframe->bones)[j]);
+ #if defined(Q3_BIG_ENDIAN)
+			for (j = 0; j < mdr->numBones; j++) {
+				int row, col;
+				for (row = 0; row < 3; row++) {
+					for (col = 0; col < 4; col++) {
+						frame->bones[j].matrix[row][col] = FloatSwap(&curframe->bones[j].matrix[row][col]);
+					}
+				}
+			}
+ #else
+			for (j = 0; j < mdr->numBones; j++) {
+				frame->bones[j] = curframe->bones[j];
+			}
+ #endif
+
+			{
+				mdrBone_t *nextBones = &curframe->bones[mdr->numBones];
+				curframe = (mdrFrame_t *)nextBones;
 			}
 
-			curframe = (mdrFrame_t *)&curframe->bones[mdr->numBones];
-			frame = (mdrFrame_t *)&frame->bones[mdr->numBones];
+			{
+				mdrBone_t *nextBones = &frame->bones[mdr->numBones];
+				frame = (mdrFrame_t *)nextBones;
+			}
 		}
 	}
 

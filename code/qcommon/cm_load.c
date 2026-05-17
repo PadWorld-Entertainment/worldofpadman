@@ -601,8 +601,11 @@ void CM_LoadMap(const char *name, qboolean clientload, int *checksum) {
 	*checksum = last_checksum;
 
 	header = *(dheader_t *)buf.i;
-	for (i = 0; i < sizeof(dheader_t) / 4; i++) {
-		((int *)&header)[i] = LittleLong(((int *)&header)[i]);
+	header.ident = LittleLong(header.ident);
+	header.version = LittleLong(header.version);
+	for (i = 0; i < HEADER_LUMPS; i++) {
+		header.lumps[i].fileofs = LittleLong(header.lumps[i].fileofs);
+		header.lumps[i].filelen = LittleLong(header.lumps[i].filelen);
 	}
 
 	if (header.version != BSP_VERSION) {
