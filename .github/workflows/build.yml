@@ -38,13 +38,14 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         run: choco install zip
 
-      - name: "Compile"
-        run: |
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=install ${{ matrix.platform.param }}
-          cmake --build .
-          cmake --install .
+      - name: "Configure"
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=build/install ${{ matrix.platform.param }}
+
+      - name: "Build"
+        run: cmake --build build --config RelWithDebInfo
+
+      - name: "Install"
+        run: cmake --install build --config RelWithDebInfo
 
       - name: "Test"
         if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}

@@ -915,3 +915,18 @@ int FS_FOpenFileRead(const char *filename, FILE **file, qboolean uniqueFILE) {
 	*file = fopen(filename, "rb");
 	return (*file != NULL);
 }
+
+#ifdef _WIN32
+int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
+	int retval;
+
+	retval = _vsnprintf(str, size, format, ap);
+
+	if (retval < 0 || (size_t)retval == size) {
+		str[size - 1] = '\0';
+		return size;
+	}
+
+	return retval;
+}
+#endif
