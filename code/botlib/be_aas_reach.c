@@ -29,7 +29,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *****************************************************************************/
 
+#ifdef BSPC
+#include "qcommon/q_shared.h"
+#else
 #include "../qcommon/q_shared.h"
+#endif
 #include "l_log.h"
 #include "l_memory.h"
 #include "l_script.h"
@@ -77,7 +81,7 @@ static int reach_grapple;	   // grapple hook
 static int reach_rocketjump;   // rocket jump
 static int reach_jumppad;	   // jump pads
 // if true grapple reachabilities are skipped
-static int calcgrapplereach;
+int calcgrapplereach;
 // linked reachability
 typedef struct aas_lreachability_s {
 	int areanum;				   // number of the reachable area

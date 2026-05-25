@@ -71,12 +71,10 @@ typedef enum { qfalse, qtrue } qboolean;
 
 #ifdef BSPC
 // include files for usage in the BSP Converter
-#include "../bspc/qbsp.h"
-#include "../bspc/l_log.h"
-#include "../bspc/l_mem.h"
+#include "qbsp.h"
+#include "l_log.h"
+#include "l_mem.h"
 
-#define qtrue true
-#define qfalse false
 #endif // BSPC
 
 #define PUNCTABLE
@@ -1075,7 +1073,7 @@ static int ScriptSkipTo(script_t *script, char *value) {
 
 #ifndef BOTLIB
 
-int FileLength(FILE *fp) {
+static int FileLength(FILE *fp) {
 	int pos;
 	int end;
 

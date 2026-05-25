@@ -92,7 +92,7 @@ void Log_Shutdown(void) {
 		Log_Close();
 }
 
-void QDECL Log_Write(char *fmt, ...) {
+void QDECL Log_Write(const char *fmt, ...) {
 	va_list ap;
 
 	if (!logfile.fp)
@@ -104,7 +104,7 @@ void QDECL Log_Write(char *fmt, ...) {
 	fflush(logfile.fp);
 }
 
-void QDECL Log_WriteTimeStamped(char *fmt, ...) {
+void QDECL Log_WriteTimeStamped(const char *fmt, ...) {
 	va_list ap;
 
 	if (!logfile.fp)

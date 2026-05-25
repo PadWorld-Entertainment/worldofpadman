@@ -9,6 +9,7 @@ Makefile.local
 *.swp
 *tags
 *~
+/bspc*
 
 # OS X
 ####################

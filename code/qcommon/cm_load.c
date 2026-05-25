@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifdef BSPC
 
-#include "../bspc/l_qfiles.h"
+#include "../tools/bspc/l_qfiles.h"
 
 void SetPlaneSignbits(cplane_t *out) {
 	int bits, j;
