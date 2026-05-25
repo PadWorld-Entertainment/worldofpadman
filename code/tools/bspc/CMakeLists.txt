@@ -29,8 +29,10 @@ set(BSPC_SRCS
 	map_q3.c
 	nodraw.c
 	portals.c
+	rch_load.c
 	textures.c
 	tree.c
+	yxml.c
 )
 
 set(BSPC_BOTLIB_SRCS

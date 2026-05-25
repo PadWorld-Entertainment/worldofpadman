@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <stdio.h>
 
-void AAS_CalcReachAndClusters(struct quakefile_s *qf);
+void AAS_CalcReachAndClusters(struct quakefile_s *qf, const char *aasfilename);
 void AAS_InitBotImport(void);
 int Sys_MilliSeconds(void);
 FILE *Sys_FOpen(const char *ospath, const char *mode);

@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "botlib/be_aas_def.h"
 #include "qcommon/cm_public.h"
 #include "be_aas_bspc.h"
+#include "rch_load.h"
 
 #include <stdarg.h>
 
@@ -186,7 +187,7 @@ void AAS_InitBotImport(void) {
 	botimport.BSPModelMinsMaxsOrigin = BotImport_BSPModelMinsMaxsOrigin;
 }
 
-void AAS_CalcReachAndClusters(struct quakefile_s *qf) {
+void AAS_CalcReachAndClusters(struct quakefile_s *qf, const char *aasfilename) {
 	float time;
 
 	Log_Print("loading collision map...\n");
@@ -217,6 +218,8 @@ void AAS_CalcReachAndClusters(struct quakefile_s *qf) {
 	time = 0;
 	while (AAS_ContinueInitReachability(time))
 		time++;
+	// load hand-crafted reachabilities from .rch XML file
+	RCH_LoadReachFile(aasfilename);
 	// calculate clusters
 	AAS_InitClustering();
 }

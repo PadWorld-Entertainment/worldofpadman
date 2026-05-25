@@ -496,7 +496,7 @@ int main(int argc, char **argv) {
 				AAS_Create(filename);
 				// if it's a Quake3 map calculate the reachabilities and clusters
 				if (loadedmaptype == MAPTYPE_QUAKE3)
-					AAS_CalcReachAndClusters(qf);
+					AAS_CalcReachAndClusters(qf, filename);
 				//
 				if (optimize)
 					AAS_Optimize();
@@ -537,7 +537,7 @@ int main(int argc, char **argv) {
 				}
 				// if it's a Quake3 map calculate the reachabilities and clusters
 				if (loadedmaptype == MAPTYPE_QUAKE3) {
-					AAS_CalcReachAndClusters(qf);
+					AAS_CalcReachAndClusters(qf, filename);
 				}
 				//
 				if (optimize)
@@ -583,7 +583,7 @@ int main(int argc, char **argv) {
 					AAS_Create(filename);
 					// if it's a Quake3 map calculate the reachabilities and clusters
 					if (loadedmaptype == MAPTYPE_QUAKE3)
-						AAS_CalcReachAndClusters(qf);
+						AAS_CalcReachAndClusters(qf, filename);
 				}
 				//
 				if (optimize)
