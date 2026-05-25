@@ -75,7 +75,7 @@ qboolean nobrushmerge;		// don't merge brushes
 qboolean lessbrushes;		// create less brushes instead of correct texture placement
 qboolean cancelconversion;	// true if the conversion is being cancelled
 qboolean noliquids;			// no liquids when writing map file
-qboolean forcesidesvisible; // force all brush sides to be visible when loaded from bsp
+qboolean forcesidesvisible; // use all brush sides as BSP split planes (not just textured/visible ones)
 qboolean capsule_collision = 0;
 
 static void AASOuputFile(quakefile_t *qf, char *outputpath, char *filename) {
@@ -674,7 +674,9 @@ int main(int argc, char **argv) {
 			   "   noliquids                            = don't write liquids to map\n"
 			   "   freetree                             = free the bsp tree\n"
 			   "   nocsg                                = disables brush chopping\n"
-			   "   forcesidesvisible                    = force all sides to be visible\n"
+			   "   forcesidesvisible                    = use all brush sides as BSP splitters\n"
+		   "                                           (RECOMMENDED: produces more areas and\n"
+		   "                                           better bot navigation)\n"
 			   "   grapplereach                         = calculate grapple reachabilities\n"
 
 			   /*			"   glview     = output a GL view\n"
