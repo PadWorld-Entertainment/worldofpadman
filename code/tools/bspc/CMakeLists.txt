@@ -58,8 +58,7 @@ set(BSPC_QCOMMON_SRCS
 	${CODE_DIR}/qcommon/ioapi.c
 )
 
-add_executable(bspc ${BSPC_SRCS} ${BSPC_BOTLIB_SRCS} ${BSPC_QCOMMON_SRCS})
-set_target_properties(bspc PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${ROOT_DIR}")
+wop_add_executable(TARGET bspc SRCS ${BSPC_SRCS} ${BSPC_BOTLIB_SRCS} ${BSPC_QCOMMON_SRCS})
 target_compile_definitions(bspc PRIVATE BSPC)
 
 target_include_directories(bspc PRIVATE
