@@ -152,10 +152,6 @@ void Com_DPrintf(const char *fmt, ...) {
 	va_end(argptr);
 }
 
-int COM_Compress(char *data_p) {
-	return strlen(data_p);
-}
-
 int QDECL Com_sprintf(char *dest, int size, const char *fmt, ...) {
 	int len;
 	va_list ap;
