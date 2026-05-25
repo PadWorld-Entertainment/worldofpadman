@@ -73,13 +73,6 @@ int FileTime(char *path);
 
 void Q_mkdir(char *path);
 
-extern char qdir[1024];
-extern char gamedir[1024];
-void SetQdirFromPath(char *path);
-char *ExpandArg(char *path);  // from cmd line
-char *ExpandPath(char *path); // from scripts
-char *ExpandPathAndArchive(char *path);
-
 double I_FloatTime(void);
 
 void Error(char *error, ...) __attribute__((format(printf, 1, 2)));
@@ -118,7 +111,6 @@ void CRC_ProcessByte(unsigned short *crcvalue, byte data);
 unsigned short CRC_Value(unsigned short crcvalue);
 
 void CreatePath(char *path);
-void QCopyFile(char *from, char *to);
 
 extern qboolean archive;
 extern char archivedir[1024];
@@ -136,7 +128,6 @@ typedef struct {
 
 int ParseHex(char *hex);
 void FS_FreeFile(void *buf);
-int FS_ReadFileAndCache(const char *qpath, void **buffer);
 int FS_FOpenFileRead(const char *filename, FILE **file, qboolean uniqueFILE);
 
 #endif

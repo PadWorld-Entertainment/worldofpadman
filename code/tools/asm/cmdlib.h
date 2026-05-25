@@ -81,9 +81,6 @@ int FileTime(const char *path);
 
 void Q_mkdir(const char *path);
 
-extern char qdir[1024];
-extern char gamedir[1024];
-
 double I_FloatTime(void);
 
 void Error(const char *error, ...) __attribute__((noreturn, format(printf, 1, 2)));

@@ -22,24 +22,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "qbsp.h"
 
-int nummiptex;
-textureref_t textureref[MAX_MAP_TEXTURES];
-
-int FindMiptex(char *name) {
-	int i;
-
-	for (i = 0; i < nummiptex; i++) {
-		if (!strcmp(name, textureref[i].name)) {
-			return i;
-		}
-	}
-	if (nummiptex == MAX_MAP_TEXTURES)
-		Error("MAX_MAP_TEXTURES");
-	strcpy(textureref[i].name, name);
-	nummiptex++;
-	return i;
-}
-
 vec3_t baseaxis[18] = {
 	{0, 0, 1},	{1, 0, 0}, {0, -1, 0}, // floor
 	{0, 0, -1}, {1, 0, 0}, {0, -1, 0}, // ceiling

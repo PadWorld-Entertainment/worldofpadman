@@ -22,8 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __MATHLIB__
 #define __MATHLIB__
 
-// mathlib.h
-
+#include "q_shared.h"
 #include <math.h>
 
 #define SIDE_FRONT 0
@@ -43,7 +42,6 @@ vec_t Q_rint(vec_t in);
 
 vec_t ColorNormalize(vec3_t in, vec3_t out);
 
-void R_ConcatRotations(float in1[3][3], float in2[3][3], float out[3][3]);
 void RotatePoint(vec3_t point, vec3_t matrix[3]);
 void CreateRotationMatrix(const vec3_t angles, vec3_t matrix[3]);
 

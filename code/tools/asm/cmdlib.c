@@ -195,20 +195,6 @@ void _printf(const char *format, ...) {
 #endif
 }
 
-/*
-
-qdir will hold the path up to the quake directory, including the slash
-
-  f:\quake\
-  /raid/quake/
-
-gamedir will hold qdir + the game directory (id1, id2, etc)
-
-  */
-
-char qdir[1024];
-char gamedir[1024];
-
 char *copystring(const char *s) {
 	char *b;
 	b = malloc(strlen(s) + 1);
