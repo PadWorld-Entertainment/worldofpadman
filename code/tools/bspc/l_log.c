@@ -34,7 +34,7 @@ typedef struct logfile_s {
 	int numwrites;
 } logfile_t;
 
-logfile_t logfile;
+static logfile_t logfile;
 
 void Log_Open(const char *filename) {
 	if (!filename || !strlen(filename)) {
@@ -95,11 +95,7 @@ void Log_Print(const char *fmt, ...) {
 	va_end(ap);
 
 	if (verbose) {
-#ifdef WINBSPC
-		WinBSPCPrint(buf);
-#else
 		printf("%s", buf);
-#endif // WINBSPS
 	}
 
 	if (logfile.fp) {
@@ -120,25 +116,6 @@ void Log_Write(const char *fmt, ...) {
 	va_end(ap);
 	Log_UnifyEndOfLine(buf);
 	fprintf(logfile.fp, "%s", buf);
-	fflush(logfile.fp);
-}
-
-void Log_WriteTimeStamped(const char *fmt, ...) {
-	va_list ap;
-
-	if (!logfile.fp)
-		return;
-	/*	fprintf(logfile.fp, "%d   %02d:%02d:%02d:%02d   ",
-						logfile.numwrites,
-						(int) (botlibglobals.time / 60 / 60),
-						(int) (botlibglobals.time / 60),
-						(int) (botlibglobals.time),
-						(int) ((int) (botlibglobals.time * 100)) -
-								((int) botlibglobals.time) * 100);*/
-	va_start(ap, fmt);
-	vfprintf(logfile.fp, fmt, ap);
-	va_end(ap);
-	logfile.numwrites++;
 	fflush(logfile.fp);
 }
 

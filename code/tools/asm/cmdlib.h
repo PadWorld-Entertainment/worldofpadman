@@ -65,16 +65,8 @@ typedef unsigned char byte;
 #define MAX_OS_PATH 1024
 #define MEM_BLOCKSIZE 4096
 
-// the dec offsetof macro doesn't work very well...
-#define myoffsetof(type, identifier) ((size_t) & ((type *)0)->identifier)
-
-// set these before calling CheckParm
-extern int myargc;
-extern char **myargv;
-
 int Q_strncasecmp(const char *s1, const char *s2, int n);
 int Q_stricmp(const char *s1, const char *s2);
-void Q_getwd(char *out);
 
 int Q_filelength(FILE *f);
 int FileTime(const char *path);
@@ -84,7 +76,6 @@ void Q_mkdir(const char *path);
 double I_FloatTime(void);
 
 void Error(const char *error, ...) __attribute__((noreturn, format(printf, 1, 2)));
-int CheckParm(const char *check);
 
 FILE *SafeOpenWrite(const char *filename);
 FILE *SafeOpenRead(const char *filename);
@@ -96,12 +87,7 @@ void SaveFile(const char *filename, const void *buffer, int count);
 qboolean FileExists(const char *filename);
 
 void DefaultExtension(char *path, const char *extension);
-void DefaultPath(char *path, const char *basepath);
-void StripFilename(char *path);
 void StripExtension(char *path);
-
-void ExtractFilePath(const char *path, char *dest);
-void ExtractFileBase(const char *path, char *dest);
 
 const char *COM_Parse(const char *data);
 
@@ -117,13 +103,5 @@ extern char archivedir[1024];
 
 extern qboolean verbose;
 void qprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
-
-void ExpandWildcards(int *argc, char ***argv);
-
-// for compression routines
-typedef struct {
-	void *data;
-	int count, width, height;
-} cblock_t;
 
 #endif

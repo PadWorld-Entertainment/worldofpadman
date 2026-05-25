@@ -380,11 +380,7 @@ void TextureAxisFromPlane(plane_t *pln, vec3_t xv, vec3_t yv);
 bspbrush_t *MakeBspBrushList(int startbrush, int endbrush, vec3_t clipmins, vec3_t clipmaxs);
 bspbrush_t *ChopBrushes(bspbrush_t *head);
 bspbrush_t *InitialBrushList(bspbrush_t *list);
-bspbrush_t *OptimizedBrushList(bspbrush_t *list);
 void WriteBrushMap(char *name, bspbrush_t *list);
-void CheckBSPBrush(bspbrush_t *brush);
-void BSPBrushWindings(bspbrush_t *brush);
-bspbrush_t *TryMergeBrushes(bspbrush_t *brush1, bspbrush_t *brush2);
 tree_t *ProcessWorldBrushes(int brush_start, int brush_end);
 
 //=============================================================================
@@ -398,7 +394,6 @@ tree_t *ProcessWorldBrushes(int brush_start, int brush_end);
 
 void PrintContents(int contents);
 int BSPC_BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, plane_t *p);
-bspbrush_t *CopyBrush(bspbrush_t *brush);
 void SplitBrush(bspbrush_t *brush, int planenum, bspbrush_t **front, bspbrush_t **back);
 node_t *AllocNode(void);
 bspbrush_t *AllocBrush(int numsides);
@@ -417,15 +412,8 @@ void ResetBrushBSP(void);
 // portals.c
 //=============================================================================
 
-int VisibleContents(int contents);
-void MakeHeadnodePortals(tree_t *tree);
-void MakeNodePortal(node_t *node);
-void SplitNodePortals(node_t *node);
-qboolean Portal_VisFlood(portal_t *p);
 qboolean FloodEntities(tree_t *tree);
 void FillOutside(node_t *headnode);
-void FloodAreas(tree_t *tree);
-void MarkVisibleSides(tree_t *tree, int start, int end);
 void FreePortal(portal_t *p);
 portal_t *AllocPortal(void);
 void RemovePortalFromNode(portal_t *portal, node_t *l);
@@ -437,19 +425,6 @@ void MakeTreePortals(tree_t *tree);
 //=============================================================================
 
 void OutputWinding(winding_t *w, FILE *glview);
-
-//=============================================================================
-// gldraw.c
-//=============================================================================
-
-extern vec3_t draw_mins, draw_maxs;
-extern qboolean drawflag;
-
-void Draw_ClearWindow(void);
-void DrawWinding(winding_t *w);
-void GLS_BeginScene(void);
-void GLS_Winding(winding_t *w, int code);
-void GLS_EndScene(void);
 
 //=============================================================================
 // leakfile.c

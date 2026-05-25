@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #include "l_cmd.h"
-#include "l_math.h"
 #include "l_mem.h"
 #include "l_log.h"
 #include "botlib/l_script.h"
@@ -109,8 +108,8 @@ qboolean ParseEntity(script_t *script) {
 	return qtrue;
 }
 
-void PrintEntity(entity_t *ent) {
-	epair_t *ep;
+void PrintEntity(const entity_t *ent) {
+	const epair_t *ep;
 
 	printf("------- entity %p -------\n", ent);
 	for (ep = ent->epairs; ep; ep = ep->next) {
@@ -134,7 +133,7 @@ void SetKeyValue(entity_t *ent, char *key, char *value) {
 	ep->value = copystring(value);
 }
 
-char *ValueForKey(entity_t *ent, char *key) {
+const char *ValueForKey(const entity_t *ent, const char *key) {
 	epair_t *ep;
 
 	for (ep = ent->epairs; ep; ep = ep->next)
@@ -143,15 +142,15 @@ char *ValueForKey(entity_t *ent, char *key) {
 	return "";
 }
 
-vec_t FloatForKey(entity_t *ent, char *key) {
-	char *k;
+vec_t FloatForKey(const entity_t *ent, const char *key) {
+	const char *k;
 
 	k = ValueForKey(ent, key);
 	return atof(k);
 }
 
-void GetVectorForKey(entity_t *ent, char *key, vec3_t vec) {
-	char *k;
+void GetVectorForKey(const entity_t *ent, const char *key, vec3_t vec) {
+	const char *k;
 	double v1, v2, v3;
 
 	k = ValueForKey(ent, key);

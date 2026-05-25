@@ -247,9 +247,6 @@ int main(int argc, char **argv) {
 	quakefile_t *qfiles, *qf;
 	double start_time;
 
-	myargc = argc;
-	myargv = argv;
-
 	start_time = I_FloatTime();
 
 	DefaultCfg();
@@ -271,94 +268,6 @@ int main(int argc, char **argv) {
 			Log_Print("optimize = true\n");
 			optimize = qtrue;
 		}
-		/*
-		else if (!Q_stricmp(argv[i],"-glview"))
-		{
-			glview = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-draw"))
-		{
-			Log_Print("drawflag = true\n");
-			drawflag = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-noweld"))
-		{
-			Log_Print("noweld = true\n");
-			noweld = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-noshare"))
-		{
-			Log_Print("noshare = true\n");
-			noshare = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-notjunc"))
-		{
-			Log_Print("notjunc = true\n");
-			notjunc = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-nowater"))
-		{
-			Log_Print("nowater = true\n");
-			nowater = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-noprune"))
-		{
-			Log_Print("noprune = true\n");
-			noprune = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-nomerge"))
-		{
-			Log_Print("nomerge = true\n");
-			nomerge = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-nosubdiv"))
-		{
-			Log_Print("nosubdiv = true\n");
-			nosubdiv = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-nodetail"))
-		{
-			Log_Print("nodetail = true\n");
-			nodetail = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-fulldetail"))
-		{
-			Log_Print("fulldetail = true\n");
-			fulldetail = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-onlyents"))
-		{
-			Log_Print("onlyents = true\n");
-			onlyents = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-micro"))
-		{
-			if (i + 1 >= argc) {i = 0; break;}
-			microvolume = atof(argv[++i]);
-			Log_Print("microvolume = %f\n", microvolume);
-		}
-		else if (!Q_stricmp(argv[i], "-leaktest"))
-		{
-			Log_Print("leaktest = true\n");
-			leaktest = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-verboseentities"))
-		{
-			Log_Print("verboseentities = true\n");
-			verboseentities = qtrue;
-		}
-		else if (!Q_stricmp(argv[i], "-chop"))
-		{
-			if (i + 1 >= argc) {i = 0; break;}
-			subdivide_size = atof(argv[++i]);
-			Log_Print("subdivide_size = %f\n", subdivide_size);
-		}
-		else if (!Q_stricmp (argv[i], "-tmpout"))
-		{
-			strcpy (outbase, "/tmp");
-			Log_Print("temp output\n");
-		}
-		*/
 #ifdef ME
 		else if (!Q_stricmp(argv[i], "-freetree")) {
 			freetree = qtrue;
@@ -485,7 +394,7 @@ int main(int argc, char **argv) {
 				Log_Print("no files found\n");
 			for (qf = qfiles; qf; qf = qf->next) {
 				AASOuputFile(qf, outputpath, filename);
-				//
+
 				Log_Print("bsp2aas: %s to %s\n", qf->origname, filename);
 				if (qf->type != QFILETYPE_BSP)
 					Warning("%s is probably not a BSP file\n", qf->origname);
@@ -497,10 +406,10 @@ int main(int argc, char **argv) {
 				// if it's a Quake3 map calculate the reachabilities and clusters
 				if (loadedmaptype == MAPTYPE_QUAKE3)
 					AAS_CalcReachAndClusters(qf, filename);
-				//
+
 				if (optimize)
 					AAS_Optimize();
-				//
+
 				// write out the stored AAS file
 				if (!AAS_WriteAASFile(filename)) {
 					Error("error writing %s\n", filename);
@@ -515,7 +424,7 @@ int main(int argc, char **argv) {
 				Log_Print("no files found\n");
 			for (qf = qfiles; qf; qf = qf->next) {
 				AASOuputFile(qf, outputpath, filename);
-				//
+
 				Log_Print("reach: %s to %s\n", qf->origname, filename);
 				if (qf->type != QFILETYPE_BSP)
 					Warning("%s is probably not a BSP file\n", qf->origname);
@@ -539,7 +448,7 @@ int main(int argc, char **argv) {
 				if (loadedmaptype == MAPTYPE_QUAKE3) {
 					AAS_CalcReachAndClusters(qf, filename);
 				}
-				//
+
 				if (optimize)
 					AAS_Optimize();
 				// write out the stored AAS file
@@ -556,7 +465,7 @@ int main(int argc, char **argv) {
 				Log_Print("no files found\n");
 			for (qf = qfiles; qf; qf = qf->next) {
 				AASOuputFile(qf, outputpath, filename);
-				//
+
 				Log_Print("cluster: %s to %s\n", qf->origname, filename);
 				if (qf->type != QFILETYPE_BSP)
 					Warning("%s is probably not a BSP file\n", qf->origname);
@@ -585,7 +494,7 @@ int main(int argc, char **argv) {
 					if (loadedmaptype == MAPTYPE_QUAKE3)
 						AAS_CalcReachAndClusters(qf, filename);
 				}
-				//
+
 				if (optimize)
 					AAS_Optimize();
 				// write out the stored AAS file
@@ -602,13 +511,13 @@ int main(int argc, char **argv) {
 				Log_Print("no files found\n");
 			for (qf = qfiles; qf; qf = qf->next) {
 				AASOuputFile(qf, outputpath, filename);
-				//
+
 				Log_Print("optimizing: %s to %s\n", qf->origname, filename);
 				if (qf->type != QFILETYPE_AAS)
 					Warning("%s is probably not a AAS file\n", qf->origname);
-				//
+
 				AAS_InitBotImport();
-				//
+
 				if (!AAS_LoadAASFile(qf->filename, qf->offset, qf->length)) {
 					Error("error loading aas file %s\n", qf->filename);
 				}
@@ -627,13 +536,13 @@ int main(int argc, char **argv) {
 				Log_Print("no files found\n");
 			for (qf = qfiles; qf; qf = qf->next) {
 				AASOuputFile(qf, outputpath, filename);
-				//
+
 				Log_Print("aas info for: %s\n", filename);
 				if (qf->type != QFILETYPE_AAS)
 					Warning("%s is probably not a AAS file\n", qf->origname);
-				//
+
 				AAS_InitBotImport();
-				//
+
 				if (!AAS_LoadAASFile(qf->filename, qf->offset, qf->length)) {
 					Error("error loading aas file %s\n", qf->filename);
 				}
@@ -675,29 +584,9 @@ int main(int argc, char **argv) {
 			   "   freetree                             = free the bsp tree\n"
 			   "   nocsg                                = disables brush chopping\n"
 			   "   forcesidesvisible                    = use all brush sides as BSP splitters\n"
-		   "                                           (RECOMMENDED: produces more areas and\n"
-		   "                                           better bot navigation)\n"
+			   "                                          (RECOMMENDED: produces more areas and\n"
+			   "                                          better bot navigation)\n"
 			   "   grapplereach                         = calculate grapple reachabilities\n"
-
-			   /*			"   glview     = output a GL view\n"
-						   "   draw       = enables drawing\n"
-						   "   noweld     = disables weld\n"
-						   "   noshare    = disables sharing\n"
-						   "   notjunc    = disables juncs\n"
-						   "   nowater    = disables water brushes\n"
-						   "   noprune    = disables node prunes\n"
-						   "   nomerge    = disables face merging\n"
-						   "   nosubdiv   = disables subdeviding\n"
-						   "   nodetail   = disables detail brushes\n"
-						   "   fulldetail = enables full detail\n"
-						   "   onlyents   = only compile entities with bsp\n"
-						   "   micro <volume>\n"
-						   "              = sets the micro volume to the given float\n"
-						   "   leaktest   = perform a leak test\n"
-						   "   verboseentities\n"
-						   "              = enable entity verbose mode\n"
-						   "   chop <subdivide_size>\n"
-						   "              = sets the subdivide size to the given float\n"*/
 			   "\n");
 	}
 	if (Log_FileStruct()) {

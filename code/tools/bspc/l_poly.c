@@ -33,37 +33,27 @@ extern int numthreads;
 
 // counters are only bumped when running single threaded,
 // because they are an awefull coherence problem
-int c_active_windings;
-int c_peak_windings;
-int c_winding_allocs;
-int c_winding_points;
-int c_windingmemory;
-int c_peak_windingmemory;
+static int c_active_windings;
+static int c_peak_windings;
+static int c_winding_allocs;
+static int c_winding_points;
+static int c_windingmemory;
+static int c_peak_windingmemory;
 
-char windingerror[1024];
+static char windingerror[1024];
 
-void pw(winding_t *w) {
+void pw(const winding_t *w) {
 	int i;
 	for (i = 0; i < w->numpoints; i++)
 		printf("(%5.3f, %5.3f, %5.3f)\n", w->p[i][0], w->p[i][1], w->p[i][2]);
 }
 
-void ResetWindings(void) {
-	c_active_windings = 0;
-	c_peak_windings = 0;
-	c_winding_allocs = 0;
-	c_winding_points = 0;
-	c_windingmemory = 0;
-	c_peak_windingmemory = 0;
-
-	strcpy(windingerror, "");
-}
 /*
 =============
 AllocWinding
 =============
 */
-winding_t *AllocWinding(int points) {
+static winding_t *AllocWinding(int points) {
 	winding_t *w;
 	int s;
 

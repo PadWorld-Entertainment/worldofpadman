@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "aas_create.h"
 #include "aas_prunenodes.h"
 
-int c_numprunes;
+static int c_numprunes;
 
 static tmp_node_t *AAS_PruneNodes_r(tmp_node_t *tmpnode) {
 	tmp_area_t *tmparea1, *tmparea2;
@@ -33,7 +33,7 @@ static tmp_node_t *AAS_PruneNodes_r(tmp_node_t *tmpnode) {
 	// if it is a solid leaf
 	if (!tmpnode)
 		return NULL;
-	//
+
 	if (tmpnode->tmparea)
 		return tmpnode;
 	// process the children first
@@ -67,7 +67,7 @@ static tmp_node_t *AAS_PruneNodes_r(tmp_node_t *tmpnode) {
 		AAS_FreeTmpNode(tmpnode);
 		return NULL;
 	}
-	//
+
 	return tmpnode;
 }
 

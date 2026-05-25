@@ -43,7 +43,6 @@ typedef struct {
 #define ON_EPSILON 0.1f
 #endif
 
-winding_t *AllocWinding(int points);
 vec_t WindingArea(winding_t *w);
 void WindingCenter(winding_t *w, vec3_t center);
 void ClipWindingEpsilon(winding_t *in, vec3_t normal, vec_t dist, vec_t epsilon, winding_t **front, winding_t **back);
@@ -62,5 +61,3 @@ void AddWindingToConvexHull(winding_t *w, winding_t **hull, vec3_t normal);
 
 void ChopWindingInPlace(winding_t **w, const vec3_t normal, vec_t dist, vec_t epsilon);
 // frees the original if clipped
-
-void pw(winding_t *w);

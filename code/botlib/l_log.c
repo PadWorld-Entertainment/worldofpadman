@@ -104,22 +104,6 @@ void QDECL Log_Write(const char *fmt, ...) {
 	fflush(logfile.fp);
 }
 
-void QDECL Log_WriteTimeStamped(const char *fmt, ...) {
-	va_list ap;
-
-	if (!logfile.fp)
-		return;
-	fprintf(logfile.fp, "%d   %02d:%02d:%02d:%02d   ", logfile.numwrites, (int)(botlibglobals.time / 60 / 60),
-			(int)(botlibglobals.time / 60), (int)(botlibglobals.time),
-			(int)((int)(botlibglobals.time * 100)) - ((int)botlibglobals.time) * 100);
-	va_start(ap, fmt);
-	vfprintf(logfile.fp, fmt, ap);
-	va_end(ap);
-	fprintf(logfile.fp, "\r\n");
-	logfile.numwrites++;
-	fflush(logfile.fp);
-}
-
 FILE *Log_FilePointer(void) {
 	return logfile.fp;
 }

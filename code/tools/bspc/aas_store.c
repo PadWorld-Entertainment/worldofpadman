@@ -913,13 +913,13 @@ static void AAS_StoreBoundingBoxes(void) {
 	memcpy(aasworld.bboxes, cfg.bboxes, cfg.numbboxes * sizeof(aas_bbox_t));
 }
 
-void AAS_StoreFile(char *filename) {
+void AAS_StoreFile(void) {
 	AAS_AllocMaxAAS();
 
 	Log_Write("AAS_StoreFile\r\n");
-	//
+
 	AAS_StoreBoundingBoxes();
-	//
+
 	qprintf("%6d areas stored", 0);
 	// start with node 1 because node zero is a dummy
 	AAS_StoreTree_r(tmpaasworld.nodes);

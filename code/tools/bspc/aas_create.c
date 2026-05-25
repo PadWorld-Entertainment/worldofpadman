@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
+#include "q_shared.h"
 #include "qbsp.h"
 #include "botlib/aasfile.h"
 #include "aas_create.h"
@@ -562,7 +563,6 @@ static tmp_node_t *AAS_CreateArea(node_t *node) {
 			}
 			// if there's ladder contents at other side of the portal
 			if ((p->nodes[pside]->contents & CONTENTS_LADDER) || (p->nodes[!pside]->contents & CONTENTS_LADDER)) {
-
 				// NOTE: doesn't have to be solid at the other side because
 				//  when standing one can use a crouch area (which is not solid)
 				//  as a ladder
@@ -576,7 +576,7 @@ static tmp_node_t *AAS_CreateArea(node_t *node) {
 			if (AAS_GroundFace(tmpface)) {
 				tmpface->faceflags |= FACE_GROUND;
 			}
-			//
+
 			areafaceflags |= tmpface->faceflags;
 			// no aas face number yet (zero is a dummy in the aasworld faces)
 			tmpface->aasfacenum = 0;
@@ -587,7 +587,7 @@ static tmp_node_t *AAS_CreateArea(node_t *node) {
 	qprintf("\r%6d", tmparea->areanum);
 	// presence type in the area
 	tmparea->presencetype = ~node->expansionbboxes & cfg.allpresencetypes;
-	//
+
 	tmparea->contents = 0;
 	if (node->contents & CONTENTS_CLUSTERPORTAL)
 		tmparea->contents |= AREACONTENTS_CLUSTERPORTAL;
@@ -616,13 +616,13 @@ static tmp_node_t *AAS_CreateArea(node_t *node) {
 	AAS_FlipAreaFaces(tmparea);
 	// check if the area is ok (remove??)
 	AAS_CheckArea(tmparea);
-	//
+
 	tmpnode = AAS_AllocTmpNode();
 	tmpnode->planenum = 0;
 	tmpnode->children[0] = 0;
 	tmpnode->children[1] = 0;
 	tmpnode->tmparea = tmparea;
-	//
+
 	return tmpnode;
 }
 
@@ -666,15 +666,12 @@ static void AAS_PrintNumGroundFaces(void) {
 	}
 	qprintf("%6d ground faces\n", numgroundfaces);
 }
+
 //===========================================================================
 // checks the number of shared faces between the given two areas
 // since areas are convex they should only have ONE shared face
 // however due to crappy face merging there are sometimes several
 // shared faces
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 static void AAS_CheckAreaSharedFaces(tmp_area_t *tmparea1, tmp_area_t *tmparea2) {
 	int numsharedfaces, side;
@@ -742,74 +739,6 @@ static void AAS_FlipFace(tmp_face_t *face) {
 	AAS_AddFaceSideToArea(face, 0, backarea);
 }
 
-/*
-void AAS_FlipAreaSharedFaces(tmp_area_t *tmparea1, tmp_area_t *tmparea2)
-{
-	int numsharedfaces, side, area1facing, area2facing;
-	tmp_face_t *face1, *sharedface;
-
-	if (tmparea1->invalid || tmparea2->invalid) return;
-
-	sharedface = NULL;
-	numsharedfaces = 0;
-	area1facing = 0;		//number of shared faces facing towards area 1
-	area2facing = 0;		//number of shared faces facing towards area 2
-	for (face1 = tmparea1->tmpfaces; face1; face1 = face1->next[side])
-	{
-		side = face1->frontarea != tmparea1;
-		if (face1->backarea == tmparea2 || face1->frontarea == tmparea2)
-		{
-			sharedface = face1;
-			numsharedfaces++;
-			if (face1->frontarea == tmparea1) area1facing++;
-			else area2facing++;
-		}
-	}
-	if (!sharedface) return;
-	//if there's only one shared face
-	if (numsharedfaces <= 1) return;
-	//if all the shared faces are facing to the same area
-	if (numsharedfaces == area1facing || numsharedfaces == area2facing) return;
-	//
-	do
-	{
-		for (face1 = tmparea1->tmpfaces; face1; face1 = face1->next[side])
-		{
-			side = face1->frontarea != tmparea1;
-			if (face1->backarea == tmparea2 || face1->frontarea == tmparea2)
-			{
-				if (face1->frontarea != tmparea1)
-				{
-					AAS_FlipFace(face1);
-					break;
-				}
-			}
-		}
-	} while(face1);
-}
-
-static void AAS_FlipSharedFaces(void)
-{
-	int i;
-	tmp_area_t *tmparea1, *tmparea2;
-
-	i = 0;
-	qprintf("%6d areas checked for shared face flipping", i);
-	for (tmparea1 = tmpaasworld.areas; tmparea1; tmparea1 = tmparea1->l_next)
-	{
-		if (tmparea1->invalid) continue;
-		for (tmparea2 = tmpaasworld.areas; tmparea2; tmparea2 = tmparea2->l_next)
-		{
-			if (tmparea2->invalid) continue;
-			if (tmparea1 == tmparea2) continue;
-			AAS_FlipAreaSharedFaces(tmparea1, tmparea2);
-		}
-		qprintf("\r%6d", ++i);
-	}
-	Log_Print("\r%6d areas checked for shared face flipping\n", i);
-}
-*/
-
 static void AAS_FlipSharedFaces(void) {
 	int i, side1, side2;
 	tmp_area_t *tmparea1;
@@ -842,21 +771,18 @@ static void AAS_FlipSharedFaces(void) {
 	qprintf("\n");
 	Log_Write("%6d areas checked for shared face flipping\r\n", i);
 }
+
 //===========================================================================
 // creates an .AAS file with the given name
 // a MAP should be loaded before calling this
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
-void AAS_Create(char *aasfile) {
+void AAS_Create(const char *aasfile) {
 	entity_t *e;
 	tree_t *tree;
 	double start_time;
 
 	// for a possible leak file
-	strcpy(source, aasfile);
+	Q_strncpyz(source, aasfile, sizeof(source));
 	StripExtension(source);
 	// the time started
 	start_time = I_FloatTime();
@@ -933,11 +859,6 @@ void AAS_Create(char *aasfile) {
 	AAS_RemoveTinyFaces();
 	// create area settings
 	AAS_CreateAreaSettings();
-	// check if the winding plane is equal to the face plane
-	// AAS_CheckAreaWindingPlanes();
-	//
-	// AAS_CheckSharedFaces();
-	//==========================================
 	// if the conversion is cancelled
 	if (cancelconversion) {
 		Tree_Free(tree);
@@ -945,7 +866,7 @@ void AAS_Create(char *aasfile) {
 		return;
 	}
 	// store the created AAS stuff in the AAS file format and write the file
-	AAS_StoreFile(aasfile);
+	AAS_StoreFile();
 	// free the temporary AAS memory
 	AAS_FreeTmpAAS();
 	// display creation time

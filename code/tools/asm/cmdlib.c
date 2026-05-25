@@ -37,65 +37,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define BASEDIRNAME "quake" // assumed to have a 2 or 3 following
 #define PATHSEPERATOR '/'
 
-// set these before calling CheckParm
-int myargc;
-char **myargv;
-
 char com_token[1024];
 qboolean com_eof;
 
 qboolean archive;
 char archivedir[1024];
-
-/*
-===================
-ExpandWildcards
-
-Mimic unix command line expansion
-===================
-*/
-#define MAX_EX_ARGC 1024
-int ex_argc;
-char *ex_argv[MAX_EX_ARGC];
-#ifdef _WIN32
-#include "io.h"
-void ExpandWildcards(int *argc, char ***argv) {
-	struct _finddata_t fileinfo;
-	intptr_t handle;
-	int i;
-	char filename[2048];
-	char filebase[1024];
-	char *path;
-
-	ex_argc = 0;
-	for (i = 0; i < *argc; i++) {
-		path = (*argv)[i];
-		if (path[0] == '-' || (!strstr(path, "*") && !strstr(path, "?"))) {
-			ex_argv[ex_argc++] = path;
-			continue;
-		}
-
-		handle = _findfirst(path, &fileinfo);
-		if (handle == -1)
-			return;
-
-		ExtractFilePath(path, filebase);
-
-		do {
-			snprintf(filename, sizeof(filename), "%s%s", filebase, fileinfo.name);
-			ex_argv[ex_argc++] = copystring(filename);
-		} while (_findnext(handle, &fileinfo) != -1);
-
-		_findclose(handle);
-	}
-
-	*argc = ex_argc;
-	*argv = ex_argv;
-}
-#else
-void ExpandWildcards(int *argc, char ***argv) {
-}
-#endif
 
 #ifdef WIN_ERROR
 #include <windows.h>
@@ -229,26 +175,6 @@ double I_FloatTime(void) {
 
 	return (tp.tv_sec - secbase) + tp.tv_usec/1000000.0;
 #endif
-}
-
-void Q_getwd(char *out) {
-	int i = 0;
-
-#ifdef WIN32
-	if (_getcwd(out, 256) == NULL)
-		strcpy(out, "."); /* shrug */
-	strcat(out, "\\");
-#else
-	if (getcwd(out, 256) == NULL)
-		strcpy(out, "."); /* shrug */
-	strcat(out, "/");
-#endif
-
-	while (out[i] != 0) {
-		if (out[i] == '\\')
-			out[i] = '/';
-		i++;
-	}
 }
 
 void Q_mkdir(const char *path) {
@@ -385,25 +311,6 @@ int Q_stricmp(const char *s1, const char *s2) {
 */
 
 /*
-=================
-CheckParm
-
-Checks for the given parameter in the program's command line arguments
-Returns the argument number (1 to argc-1) or 0 if not present
-=================
-*/
-int CheckParm(const char *check) {
-	int i;
-
-	for (i = 1; i < myargc; i++) {
-		if (!Q_stricmp(check, myargv[i]))
-			return i;
-	}
-
-	return 0;
-}
-
-/*
 ================
 Q_filelength
 ================
@@ -536,25 +443,6 @@ void DefaultExtension(char *path, const char *extension) {
 	strcat(path, extension);
 }
 
-void DefaultPath(char *path, const char *basepath) {
-	char temp[128];
-
-	if (path[0] == PATHSEPERATOR)
-		return; // absolute path location
-	strcpy(temp, path);
-	strcpy(path, basepath);
-	strcat(path, temp);
-}
-
-void StripFilename(char *path) {
-	int length;
-
-	length = strlen(path) - 1;
-	while (length > 0 && path[length] != PATHSEPERATOR)
-		length--;
-	path[length] = 0;
-}
-
 void StripExtension(char *path) {
 	int length;
 
@@ -566,45 +454,6 @@ void StripExtension(char *path) {
 	}
 	if (length)
 		path[length] = 0;
-}
-
-/*
-====================
-Extract file parts
-====================
-*/
-// FIXME: should include the slash, otherwise
-// backing to an empty path will be wrong when appending a slash
-void ExtractFilePath(const char *path, char *dest) {
-	const char *src;
-
-	src = path + strlen(path) - 1;
-
-	//
-	// back up until a \ or the start
-	//
-	while (src != path && *(src - 1) != '\\' && *(src - 1) != '/')
-		src--;
-
-	memcpy(dest, path, src - path);
-	dest[src - path] = 0;
-}
-
-void ExtractFileBase(const char *path, char *dest) {
-	const char *src;
-
-	src = path + strlen(path) - 1;
-
-	//
-	// back up until a \ or the start
-	//
-	while (src != path && *(src - 1) != PATHSEPERATOR)
-		src--;
-
-	while (*src && *src != '.') {
-		*dest++ = *src++;
-	}
-	*dest = 0;
 }
 
 /*

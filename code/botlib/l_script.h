@@ -29,6 +29,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *****************************************************************************/
 
+#ifndef __L_SCRIPT_H__
+#define __L_SCRIPT_H__
+
 // undef if binary numbers of the form 0b... or 0B... are not allowed
 #define BINARYNUMBERS
 // undef if not using the token.intvalue and token.floatvalue
@@ -239,3 +242,5 @@ void PS_SetBaseFolder(const char *path);
 void QDECL ScriptError(script_t *script, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 // print a script warning with filename and line number
 void QDECL ScriptWarning(script_t *script, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
+
+#endif // __L_SCRIPT_H__

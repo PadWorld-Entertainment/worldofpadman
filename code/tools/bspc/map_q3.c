@@ -159,32 +159,18 @@ static void Q3_BSPBrushToMapBrush(q3_dbrush_t *bspbrush, entity_t *mapent) {
 			side->contents = q3_dshaders[bspbrushside->shaderNum].contentFlags;
 			side->surf = q3_dshaders[bspbrushside->shaderNum].surfaceFlags;
 			if (strstr(q3_dshaders[bspbrushside->shaderNum].shader, "common/hint")) {
-				// Log_Print("found hint side\n");
 				side->surf |= SURF_HINT;
 			}
 		}
-		//
+
 		if (side->surf & SURF_NODRAW) {
 			side->flags |= SFL_TEXTURED | SFL_VISIBLE;
 		}
-		/*
-		if (side->contents & (CONTENTS_TRANSLUCENT|CONTENTS_STRUCTURAL))
-		{
-			side->flags |= SFL_TEXTURED|SFL_VISIBLE;
-		} //end if*/
 
 		// hints and skips are never detail, and have no content
 		if (side->surf & (SURF_HINT | SURF_SKIP)) {
 			side->contents = 0;
-			// Log_Print("found hint brush side\n");
 		}
-		/*
-		if ((side->surf & SURF_NODRAW) && (side->surf & SURF_NOIMPACT))
-		{
-			side->contents = 0;
-			side->surf &= ~CONTENTS_DETAIL;
-			Log_Print("probably found hint brush in a BSP without hints being used\n");
-		} //end if*/
 
 		// ME: get a plane for this side
 		bspplane = &q3_dplanes[bspbrushside->planeNum];
@@ -198,8 +184,6 @@ static void Q3_BSPBrushToMapBrush(q3_dbrush_t *bspbrush, entity_t *mapent) {
 		// ME: brush bevel adding is crappy ?
 		for (k = 0; k < b->numsides; k++) {
 			s2 = b->original_sides + k;
-			//			if (DotProduct (mapplanes[s2->planenum].normal, mapplanes[planenum].normal) > 0.999
-			//							&& fabs(mapplanes[s2->planenum].dist - mapplanes[planenum].dist) < 0.01 )
 
 			if (s2->planenum == planenum) {
 				Log_Print("Entity %i, Brush %i: duplicate plane\n", b->entitynum, b->brushnum);
@@ -238,8 +222,6 @@ static void Q3_BSPBrushToMapBrush(q3_dbrush_t *bspbrush, entity_t *mapent) {
 	// get the content for the entire brush
 	b->contents = q3_dshaders[bspbrush->shaderNum].contentFlags;
 	b->contents &= ~(CONTENTS_LADDER | CONTENTS_FOG | CONTENTS_STRUCTURAL);
-	//	b->contents = Q3_BrushContents(b);
-	//
 
 	if (BrushExists(b)) {
 		c_squattbrushes++;
@@ -280,46 +262,6 @@ static void Q3_BSPBrushToMapBrush(q3_dbrush_t *bspbrush, entity_t *mapent) {
 			b->original_sides[i].texinfo = TEXINFO_NODE;
 	}
 
-	//
-	// origin brushes are removed, but they set
-	// the rotation origin for the rest of the brushes
-	// in the entity.  After the entire entity is parsed,
-	// the planenums and texinfos will be adjusted for
-	// the origin brush
-	//
-	// ME: not needed because the entities in the BSP file already
-	//    have an origin set
-	//	if (b->contents & CONTENTS_ORIGIN)
-	//	{
-	//		char	string[32];
-	//		vec3_t	origin;
-	//
-	//		if (num_entities == 1)
-	//		{
-	//			Error ("Entity %i, Brush %i: origin brushes not allowed in world"
-	//				, b->entitynum, b->brushnum);
-	//			return;
-	//		}
-	//
-	//		VectorAdd (b->mins, b->maxs, origin);
-	//		VectorScale (origin, 0.5, origin);
-	//
-	//		sprintf (string, "%i %i %i", (int)origin[0], (int)origin[1], (int)origin[2]);
-	//		SetKeyValue (&entities[b->entitynum], "origin", string);
-	//
-	//		VectorCopy (origin, entities[b->entitynum].origin);
-	//
-	//		// don't keep this brush
-	//		b->numsides = 0;
-	//
-	//		return;
-	//	}
-
-	// ME: the bsp brushes already have bevels, so we won't try to
-	//     add them again (especially since Johny Boy's bevel adding might
-	//     be crappy)
-	//	AddBrushBevels(b);
-
 	nummapbrushes++;
 	mapent->numbrushes++;
 }
@@ -334,7 +276,7 @@ static void Q3_ParseBSPBrushes(entity_t *mapent) {
 
 static qboolean Q3_ParseBSPEntity(int entnum) {
 	entity_t *mapent;
-	char *model;
+	const char *model;
 
 	mapent = &entities[entnum]; // num_entities];
 	mapent->firstbrush = nummapbrushes;
@@ -362,7 +304,7 @@ static qboolean Q3_ParseBSPEntity(int entnum) {
 		// parse the bsp brushes
 		Q3_ParseBSPBrushes(mapent);
 	}
-	//
+
 	// the origin of the entity is already taken into account
 	//
 	// func_group entities can't be in the bsp file

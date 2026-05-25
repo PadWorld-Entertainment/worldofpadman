@@ -37,8 +37,6 @@ void Log_Close(void);
 void Log_Shutdown(void);
 // write to the current opened log file
 void QDECL Log_Write(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
-// write to the current opened log file with a time stamp
-void QDECL Log_WriteTimeStamped(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 // returns a pointer to the log file
 FILE *Log_FilePointer(void);
 // flush log file

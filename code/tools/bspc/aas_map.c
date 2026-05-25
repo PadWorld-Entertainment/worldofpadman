@@ -356,15 +356,15 @@ static mapbrush_t *AAS_CopyMapBrush(mapbrush_t *brush, entity_t *mapent) {
 	return newbrush;
 }
 
-int mark_entities[MAX_MAP_ENTITIES];
+static int mark_entities[MAX_MAP_ENTITIES];
 
-static int AAS_AlwaysTriggered_r(char *targetname) {
+static int AAS_AlwaysTriggered_r(const char *targetname) {
 	int i;
 
 	if (!strlen(targetname)) {
 		return qfalse;
 	}
-	//
+
 	for (i = 0; i < num_entities; i++) {
 		// if the entity will activate the given targetname
 		if (!strcmp(targetname, ValueForKey(&entities[i], "target"))) {
@@ -390,7 +390,7 @@ static int AAS_AlwaysTriggered_r(char *targetname) {
 	return qfalse;
 }
 
-static int AAS_AlwaysTriggered(char *targetname) {
+static int AAS_AlwaysTriggered(const char *targetname) {
 	memset(mark_entities, 0, sizeof(mark_entities));
 	return AAS_AlwaysTriggered_r(targetname);
 }
@@ -450,12 +450,9 @@ static int AAS_TransformPlane(int planenum, vec3_t origin, vec3_t angles) {
 	newdist = mapplanes[planenum].dist + DotProduct(normal, origin);
 	return FindFloatPlane(normal, newdist);
 }
+
 //===========================================================================
 // this function sets the func_rotating_door in it's final position
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 static void AAS_PositionFuncRotatingBrush(entity_t *mapent, mapbrush_t *brush) {
 	int spawnflags, i;
@@ -490,12 +487,12 @@ static void AAS_PositionFuncRotatingBrush(entity_t *mapent, mapbrush_t *brush) {
 		VectorCopy(angles, pos1);
 		VectorInverse(movedir);
 	}
-	//
+
 	for (i = 0; i < brush->numsides; i++) {
 		s = &brush->original_sides[i];
 		s->planenum = AAS_TransformPlane(s->planenum, mapent->origin, pos2);
 	}
-	//
+
 	FreeBrushWindings(brush);
 	AAS_MakeBrushWindings(brush);
 	AddBrushBevels(brush);
@@ -506,7 +503,7 @@ static void AAS_PositionBrush(entity_t *mapent, mapbrush_t *brush) {
 	side_t *s;
 	float newdist;
 	int i, notteam;
-	char *model;
+	const char *model;
 
 	if (!strcmp(ValueForKey(mapent, "classname"), "func_door_rotating")) {
 		AAS_PositionFuncRotatingBrush(mapent, brush);
@@ -529,21 +526,15 @@ static void AAS_PositionBrush(entity_t *mapent, mapbrush_t *brush) {
 				// always avoid so set lava contents
 				brush->contents |= CONTENTS_LAVA;
 			}
-		}
-		//
-		else if (!strcmp("trigger_push", ValueForKey(mapent, "classname"))) {
+		} else if (!strcmp("trigger_push", ValueForKey(mapent, "classname"))) {
 			// set the jumppad contents
 			brush->contents = CONTENTS_JUMPPAD;
 			// Log_Print("found trigger_push brush\n");
-		}
-		//
-		else if (!strcmp("trigger_multiple", ValueForKey(mapent, "classname"))) {
+		} else if (!strcmp("trigger_multiple", ValueForKey(mapent, "classname"))) {
 			// set teleporter contents
 			brush->contents = CONTENTS_TELEPORTER;
 			// Log_Print("found trigger_multiple teleporter brush\n");
-		}
-		//
-		else if (!strcmp("trigger_teleport", ValueForKey(mapent, "classname"))) {
+		} else if (!strcmp("trigger_teleport", ValueForKey(mapent, "classname"))) {
 			// set teleporter contents
 			brush->contents = CONTENTS_TELEPORTER;
 			// Log_Print("found trigger_teleport teleporter brush\n");
@@ -556,16 +547,12 @@ static void AAS_PositionBrush(entity_t *mapent, mapbrush_t *brush) {
 		}
 	}
 }
+
 //===========================================================================
 // uses the global cfg_t cfg
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 void AAS_CreateMapBrushes(mapbrush_t *brush, entity_t *mapent, int addbevels) {
 	int i;
-	// side_t *s;
 	mapbrush_t *bboxbrushes[16];
 
 	// if the brushes are not from an entity used for AAS
@@ -574,7 +561,7 @@ void AAS_CreateMapBrushes(mapbrush_t *brush, entity_t *mapent, int addbevels) {
 		brush->numsides = 0;
 		return;
 	}
-	//
+
 	AAS_PositionBrush(mapent, brush);
 	// from all normal solid brushes only the textured brush sides will
 	// be used as bsp splitters, so set the right texinfo reference here
@@ -589,20 +576,15 @@ void AAS_CreateMapBrushes(mapbrush_t *brush, entity_t *mapent, int addbevels) {
 	}
 	// window and playerclip are used for player clipping, make them solid
 	if (brush->contents & (CONTENTS_WINDOW | CONTENTS_PLAYERCLIP)) {
-		//
 		brush->contents &= ~(CONTENTS_WINDOW | CONTENTS_PLAYERCLIP);
 		brush->contents |= CONTENTS_SOLID;
 		brush->leafnum = -1;
 	}
-	//
+
 	if (brush->contents & CONTENTS_BOTCLIP) {
 		brush->contents = CONTENTS_SOLID;
 		brush->leafnum = -1;
 	}
-	//
-	// Log_Write("brush %d contents = ", brush->brushnum);
-	// PrintContents(brush->contents);
-	// Log_Write("\r\n");
 	// if not one of the following brushes then the brush is NOT used for AAS
 	if (!(brush->contents &
 		  (CONTENTS_SOLID | CONTENTS_LADDER | CONTENTS_CLUSTERPORTAL | CONTENTS_DONOTENTER | CONTENTS_TELEPORTER |
@@ -611,8 +593,6 @@ void AAS_CreateMapBrushes(mapbrush_t *brush, entity_t *mapent, int addbevels) {
 		brush->numsides = 0;
 		return;
 	}
-	// fix the map brush
-	// AAS_FixMapBrush(brush);
 	// if brush bevels should be added (for real map brushes, not bsp map brushes)
 	if (addbevels) {
 		// NOTE: we first have to get the mins and maxs of the brush before

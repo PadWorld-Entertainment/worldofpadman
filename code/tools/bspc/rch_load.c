@@ -91,8 +91,8 @@ static void RCH_SnapToJumppad(aas_reachability_t *reach) {
 	if (bestent) {
 		AAS_VectorForBSPEpairKey(bestent, "origin", origin);
 		VectorCopy(origin, reach->start);
-		Log_Print("  snapped jumppad reach to trigger_push at (%.1f %.1f %.1f), dist=%.1f\n",
-			origin[0], origin[1], origin[2], bestdist);
+		Log_Print("  snapped jumppad reach to trigger_push at (%.1f %.1f %.1f), dist=%.1f\n", origin[0], origin[1],
+				  origin[2], bestdist);
 	} else {
 		Log_Print("WARNING: no trigger_push found for jumppad reachability\n");
 	}
@@ -162,10 +162,9 @@ static void RCH_FinalizeReach(rch_state_t *state) {
 
 	// Debug print
 	Log_Print("  reach: area=%d face=%d edge=%d start=(%.1f %.1f %.1f) end=(%.1f %.1f %.1f) type=%d time=%d\n",
-		r->reach.areanum, r->reach.facenum, r->reach.edgenum,
-		r->reach.start[0], r->reach.start[1], r->reach.start[2],
-		r->reach.end[0], r->reach.end[1], r->reach.end[2],
-		r->reach.traveltype, r->reach.traveltime);
+			  r->reach.areanum, r->reach.facenum, r->reach.edgenum, r->reach.start[0], r->reach.start[1],
+			  r->reach.start[2], r->reach.end[0], r->reach.end[1], r->reach.end[2], r->reach.traveltype,
+			  r->reach.traveltime);
 
 	// Link into list
 	r->next = state->head;

@@ -187,7 +187,7 @@ void AAS_CalcReachAndClusters(struct quakefile_s *qf, const char *aasfilename) {
 	float time;
 
 	Log_Print("loading collision map...\n");
-	//
+
 	if (!qf->pakfile[0])
 		strcpy(qf->pakfile, qf->filename);
 	// load the map

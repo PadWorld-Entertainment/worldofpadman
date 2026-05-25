@@ -26,23 +26,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 // counters are only bumped when running single threaded,
 // because they are an awful coherence problem
-int c_active_windings;
-int c_peak_windings;
-int c_winding_allocs;
-int c_winding_points;
-
-void pw(winding_t *w) {
-	int i;
-	for (i = 0; i < w->numpoints; i++)
-		Com_Printf("%f, %f, %f\n", w->p[i][0], w->p[i][1], w->p[i][2]);
-}
+static int c_active_windings;
+static int c_peak_windings;
+static int c_winding_allocs;
+static int c_winding_points;
 
 /*
 =============
 AllocWinding
 =============
 */
-winding_t *AllocWinding(int points) {
+static winding_t *AllocWinding(int points) {
 	winding_t *w;
 	size_t s;
 
@@ -254,7 +248,7 @@ winding_t *CopyWinding(const winding_t *w) {
 	winding_t *c;
 
 	c = AllocWinding(w->numpoints);
-	size = (intptr_t) & (w->p[w->numpoints]) - (intptr_t)w;
+	size = (intptr_t)&(w->p[w->numpoints]) - (intptr_t)w;
 	Com_Memcpy(c, w, size);
 	return c;
 }

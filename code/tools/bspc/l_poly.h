@@ -41,8 +41,6 @@ typedef struct {
 #define WE_DEGENERATEEDGE 5
 #define WE_NONCONVEX 6
 
-// allocates a winding
-winding_t *AllocWinding(int points);
 // returns the area of the winding
 vec_t WindingArea(winding_t *w);
 // gives the center of the winding
@@ -74,7 +72,7 @@ void WindingBounds(winding_t *w, vec3_t mins, vec3_t maxs);
 // chops the winding with the given plane, the original winding is freed if clipped
 void ChopWindingInPlace(winding_t **w, vec3_t normal, vec_t dist, vec_t epsilon);
 // prints the winding points on STDOUT
-void pw(winding_t *w);
+void pw(const winding_t *w);
 // try to merge the two windings which are in the given plane
 // the original windings are undisturbed
 // the merged winding is returned when merging was possible
@@ -84,8 +82,6 @@ winding_t *TryMergeWinding(winding_t *f1, winding_t *f2, vec3_t planenormal);
 // the two whatsoever
 winding_t *MergeWindings(winding_t *w1, winding_t *w2, vec3_t planenormal);
 
-// #ifdef ME
-void ResetWindings(void);
 // returns the amount of winding memory
 int WindingMemory(void);
 int WindingPeakMemory(void);
@@ -109,6 +105,4 @@ int PointOnWinding(winding_t *w, vec3_t normal, float dist, vec3_t point, int *s
 // this plane will contain both the piece of common edge of the two windings
 // and the vector 'dir'
 int FindPlaneSeperatingWindings(winding_t *w1, winding_t *w2, vec3_t dir, vec3_t normal, float *dist);
-//
 int WindingsNonConvex(winding_t *w1, winding_t *w2, vec3_t normal1, vec3_t normal2, float dist1, float dist2);
-// #endif //ME

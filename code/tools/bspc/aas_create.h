@@ -103,7 +103,7 @@ typedef struct tmp_aas_s {
 extern tmp_aas_t tmpaasworld;
 
 // creates a .AAS file with the given name from an already loaded map
-void AAS_Create(char *aasfile);
+void AAS_Create(const char *aasfile);
 // adds a face side to an area
 void AAS_AddFaceSideToArea(tmp_face_t *tmpface, int side, tmp_area_t *tmparea);
 // remvoes a face from an area
