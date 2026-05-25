@@ -177,7 +177,7 @@ int LoadCfgFile(char *filename) {
 	memset(&cfg, 0, sizeof(cfg_t));
 
 	while (PC_ReadToken(source, &token)) {
-		if (!stricmp(token.string, "bbox")) {
+		if (!Q_stricmp(token.string, "bbox")) {
 			if (cfg.numbboxes >= AAS_MAX_BBOXES) {
 				SourceError(source, "too many bounding box volumes defined");
 			}
@@ -187,7 +187,7 @@ int LoadCfgFile(char *filename) {
 			}
 			cfg.allpresencetypes |= cfg.bboxes[cfg.numbboxes].presencetype;
 			cfg.numbboxes++;
-		} else if (!stricmp(token.string, "settings")) {
+		} else if (!Q_stricmp(token.string, "settings")) {
 			if (settingsdefined) {
 				SourceWarning(source, "settings already defined\n");
 			}

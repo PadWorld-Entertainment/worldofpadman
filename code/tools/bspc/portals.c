@@ -743,9 +743,8 @@ qboolean FloodEntities(tree_t *tree) {
 		//		Log_Print("flooding from entity %d: %s\n", i, cl);
 		// nudge playerstart around if needed so clipping hulls allways
 		// have a valid point
-		if (!strcmp(cl, "info_player_start") || !strcmp(cl, "info_player_deathmatch") ||
-			!strcmp(cl, "team_redspawn") || !strcmp(cl, "team_bluespawn") ||
-			!strcmp(cl, "team_redplayer") || !strcmp(cl, "team_blueplayer")) {
+		if (!strcmp(cl, "info_player_start") || !strcmp(cl, "info_player_deathmatch") || !strcmp(cl, "team_redspawn") ||
+			!strcmp(cl, "team_bluespawn") || !strcmp(cl, "team_redplayer") || !strcmp(cl, "team_blueplayer")) {
 			for (x = -16; x <= 16; x += 16) {
 				for (y = -16; y <= 16; y += 16) {
 					origin[0] += x;

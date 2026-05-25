@@ -61,8 +61,6 @@ set_target_properties(bspc PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${ROOT_DIR}")
 
 target_compile_definitions(bspc PRIVATE
 	BSPC
-	MAC_STATIC=
-	$<$<NOT:$<PLATFORM_ID:Windows>>:stricmp=strcasecmp>
 	$<$<PLATFORM_ID:Linux>:LINUX>
 	$<$<PLATFORM_ID:Darwin>:MACOS_X>
 )
