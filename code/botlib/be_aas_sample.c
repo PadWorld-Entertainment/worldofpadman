@@ -29,7 +29,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *****************************************************************************/
 
+#ifdef BSPC
+#include "qcommon/q_shared.h"
+#else
 #include "../qcommon/q_shared.h"
+#endif
 #include "l_memory.h"
 #include "l_script.h"
 #include "l_precomp.h"
@@ -162,9 +166,9 @@ void AAS_FreeAASLinkedEntities(void) {
 		FreeMemory(aasworld.arealinkedentities);
 	aasworld.arealinkedentities = NULL;
 }
-
 //===========================================================================
 // returns the AAS area the point is in
+
 //===========================================================================
 int AAS_PointAreaNum(vec3_t point) {
 	int nodenum;
@@ -278,8 +282,6 @@ int AAS_PointPresenceType(vec3_t point) {
 		return PRESENCE_NONE;
 	return aasworld.areasettings[areanum].presencetype;
 }
-
-#if 0
 //===========================================================================
 // calculates the minimum distance between the origin of the box and the
 // given plane when both will collide on the given side of the plane
@@ -290,6 +292,7 @@ int AAS_PointPresenceType(vec3_t point) {
 // side		=	side of the plane we want to calculate the distance from
 //					0 normal vector side
 //					1 not normal vector side
+
 //===========================================================================
 static vec_t AAS_BoxOriginDistanceFromPlane(vec3_t normal, vec3_t mins, vec3_t maxs, int side) {
 	vec3_t v1, v2;
@@ -325,7 +328,6 @@ static vec_t AAS_BoxOriginDistanceFromPlane(vec3_t normal, vec3_t mins, vec3_t m
 	//	VectorNegate(normal, v2);
 	return DotProduct(v1, v2);
 }
-#endif
 
 static qboolean AAS_AreaEntityCollision(int areanum, vec3_t start, vec3_t end, int presencetype, int passent,
 								 aas_trace_t *trace) {

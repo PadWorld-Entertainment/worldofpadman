@@ -33,3 +33,5 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // initialize the AAS clustering
 void AAS_InitClustering(void);
 #endif // AASINTERN
+
+void AAS_SetViewPortalsAsClusterPortals(void);

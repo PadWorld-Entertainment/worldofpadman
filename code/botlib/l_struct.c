@@ -41,14 +41,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifdef BSPC
 // include files for usage in the BSP Converter
-#include "../bspc/qbsp.h"
-#include "../bspc/l_log.h"
-#include "../bspc/l_mem.h"
+#include "qbsp.h"
+#include "l_log.h"
+#include "l_mem.h"
 #include "l_precomp.h"
 #include "l_struct.h"
 
-#define qtrue true
-#define qfalse false
 #endif // BSPC
 
 static const fielddef_t *FindField(const fielddef_t *defs, const char *name) {

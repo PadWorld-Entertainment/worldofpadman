@@ -2229,7 +2229,6 @@ static void CG_SavePlayerPosition(centity_t *cent, clientInfo_t *ci) {
 	} else if (ci->lastPosSaveTime != cg.time) {
 		ci->lastPosSaveTime = 0; // "reset"
 	}
-
 }
 
 /*

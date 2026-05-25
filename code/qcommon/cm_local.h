@@ -20,6 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
+#ifndef CM_LOCAL_H
+#define CM_LOCAL_H
+
 #include "q_shared.h"
 #include "qcommon.h"
 #include "cm_polylib.h"
@@ -188,3 +191,9 @@ struct patchCollide_s *CM_GeneratePatchCollide(int width, int height, vec3_t *po
 void CM_TraceThroughPatchCollide(traceWork_t *tw, const struct patchCollide_s *pc);
 qboolean CM_PositionTestInPatchCollide(traceWork_t *tw, const struct patchCollide_s *pc);
 void CM_ClearLevelPatches(void);
+
+// cm_trace.c
+void RotatePoint(vec3_t point, /*const*/ vec3_t matrix[3]);
+void CreateRotationMatrix(const vec3_t angles, vec3_t matrix[3]);
+
+#endif /* CM_LOCAL_H */

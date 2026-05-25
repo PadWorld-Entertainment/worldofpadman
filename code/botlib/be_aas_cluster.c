@@ -29,7 +29,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *****************************************************************************/
 
+#ifdef BSPC
+#include "qcommon/q_shared.h"
+#else
 #include "../qcommon/q_shared.h"
+#endif
 #include "l_memory.h"
 #include "l_script.h"
 #include "l_precomp.h"
@@ -600,7 +604,7 @@ static void AAS_CreateViewPortals(void) {
 	}
 }
 
-static void AAS_SetViewPortalsAsClusterPortals(void) {
+void AAS_SetViewPortalsAsClusterPortals(void) {
 	int i;
 
 	for (i = 1; i < aasworld.numareas; i++) {
