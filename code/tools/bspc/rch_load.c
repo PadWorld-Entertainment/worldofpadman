@@ -56,12 +56,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define RCH_YXML_BUF_SIZE 4096
 #define RCH_CONTENT_BUF_SIZE 64
 
-// traveltype for jumppad (TRAVEL_JUMPPAD in be_aas_reach.c)
-#define TRAVEL_JUMPPAD 0x12
-
 extern int AAS_PointAreaNum(vec3_t point);
 extern int AAS_NextBSPEntity(int ent);
 extern int AAS_ValueForBSPEpairKey(int ent, char *key, char *value, int size);
+extern int AAS_VectorForBSPEpairKey(int ent, const char *key, vec3_t v);
+
+// For jumppad reachabilities (traveltype 0x12), snap the start position
+// to the nearest trigger_push entity origin, matching the binary behavior.
+static void RCH_SnapToJumppad(aas_reachability_t *reach) {
+	int ent;
+	char classname[128];
+	vec3_t origin;
+	float bestdist = 99999.0f;
+	int bestent = 0;
+
+	for (ent = AAS_NextBSPEntity(0); ent; ent = AAS_NextBSPEntity(ent)) {
+		if (!AAS_ValueForBSPEpairKey(ent, "classname", classname, sizeof(classname)))
+			continue;
+		if (strcmp(classname, "trigger_push") != 0)
+			continue;
+		if (!AAS_VectorForBSPEpairKey(ent, "origin", origin))
+			continue;
+
+		float dx = origin[0] - reach->start[0];
+		float dy = origin[1] - reach->start[1];
+		float dz = origin[2] - reach->start[2];
+		float dist = (float)sqrt(dx * dx + dy * dy + dz * dz);
+		if (dist < bestdist) {
+			bestdist = dist;
+			bestent = ent;
+		}
+	}
+
+	if (bestent) {
+		AAS_VectorForBSPEpairKey(bestent, "origin", origin);
+		VectorCopy(origin, reach->start);
+		Log_Print("  snapped jumppad reach to trigger_push at (%.1f %.1f %.1f), dist=%.1f\n",
+			origin[0], origin[1], origin[2], bestdist);
+	} else {
+		Log_Print("WARNING: no trigger_push found for jumppad reachability\n");
+	}
+}
 
 // Temporary linked-list node for parsed reachabilities
 typedef struct rch_reach_s {
@@ -116,6 +151,11 @@ static void RCH_FinalizeReach(rch_state_t *state) {
 	rch_reach_t *r = state->current;
 	if (!r)
 		return;
+
+	// For jumppad reachabilities, snap start to nearest trigger_push
+	if (r->reach.traveltype == TRAVEL_JUMPPAD) {
+		RCH_SnapToJumppad(&r->reach);
+	}
 
 	// Resolve areanum from start position (overrides XML areanum)
 	r->reach.areanum = AAS_PointAreaNum(r->reach.start);
