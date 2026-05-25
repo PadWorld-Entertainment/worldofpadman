@@ -402,8 +402,7 @@ static int AAS_ValidEntity(entity_t *mapent) {
 	// all world brushes are used for AAS
 	if (mapent == &entities[0]) {
 		return qtrue;
-	}
-	else if (!strcmp("func_door_rotating", ValueForKey(mapent, "classname"))) {
+	} else if (!strcmp("func_door_rotating", ValueForKey(mapent, "classname"))) {
 		// if the func_door_rotating is present in deathmatch
 		if (!(atoi(ValueForKey(mapent, "spawnflags")) & SPAWNFLAG_NOT_DEATHMATCH)) {
 			// if the func_door_rotating is always activated in deathmatch

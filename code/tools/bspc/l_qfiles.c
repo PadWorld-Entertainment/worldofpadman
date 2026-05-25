@@ -48,7 +48,7 @@ static int QuakeFileExtensionType(char *extension) {
 	int i;
 
 	for (i = 0; quakefiletypes[i].extension; i++) {
-		if (!stricmp(extension, quakefiletypes[i].extension)) {
+		if (!Q_stricmp(extension, quakefiletypes[i].extension)) {
 			return quakefiletypes[i].type;
 		}
 	}
@@ -211,7 +211,6 @@ static quakefile_t *FindQuakeFilesInZip(char *zipfile, char *filter) {
 
 	return qfiles;
 }
-
 
 static quakefile_t *FindQuakeFilesWithPakFilter(char *pakfilter, char *filter) {
 #if defined(WIN32) | defined(_WIN32)

@@ -93,7 +93,7 @@ static void AASOuputFile(quakefile_t *qf, char *outputpath, char *filename) {
 	}
 	//
 	ExtractFileExtension(qf->filename, ext);
-	if (!stricmp(ext, "pk3") || !stricmp(ext, "pak") || !stricmp(ext, "sin")) {
+	if (!Q_stricmp(ext, "pk3") || !Q_stricmp(ext, "pak") || !Q_stricmp(ext, "sin")) {
 		strcpy(filename, qf->filename);
 		while (strlen(filename) && filename[strlen(filename) - 1] != '\\' && filename[strlen(filename) - 1] != '/') {
 			filename[strlen(filename) - 1] = '\0';
@@ -188,7 +188,7 @@ static void CreateAASFilesForAllBSPFiles(char *quakepath) {
 				strcpy(&aasfile[strlen(aasfile) - strlen(".bsp")], ".aas");
 				for (qf2 = aasfiles; qf2; qf2 = qf2->next) {
 					snprintf(buf, sizeof(buf), "%s/%s", qf2->pakfile, qf2->origname);
-					if (!stricmp(aasfile, buf)) {
+					if (!Q_stricmp(aasfile, buf)) {
 						Log_Print("found %s\n", buf);
 						break;
 					}
@@ -254,128 +254,128 @@ int main(int argc, char **argv) {
 
 	DefaultCfg();
 	for (i = 1; i < argc; i++) {
-		if (!stricmp(argv[i], "-threads")) {
+		if (!Q_stricmp(argv[i], "-threads")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
 			}
 			numthreads = atoi(argv[++i]);
 			Log_Print("threads = %d\n", numthreads);
-		} else if (!stricmp(argv[i], "-noverbose")) {
+		} else if (!Q_stricmp(argv[i], "-noverbose")) {
 			Log_Print("verbose = false\n");
 			verbose = qfalse;
-		} else if (!stricmp(argv[i], "-nocsg")) {
+		} else if (!Q_stricmp(argv[i], "-nocsg")) {
 			Log_Print("nocsg = true\n");
 			nocsg = qtrue;
-		} else if (!stricmp(argv[i], "-optimize")) {
+		} else if (!Q_stricmp(argv[i], "-optimize")) {
 			Log_Print("optimize = true\n");
 			optimize = qtrue;
 		}
 		/*
-		else if (!stricmp(argv[i],"-glview"))
+		else if (!Q_stricmp(argv[i],"-glview"))
 		{
 			glview = qtrue;
 		}
-		else if (!stricmp(argv[i], "-draw"))
+		else if (!Q_stricmp(argv[i], "-draw"))
 		{
 			Log_Print("drawflag = true\n");
 			drawflag = qtrue;
 		}
-		else if (!stricmp(argv[i], "-noweld"))
+		else if (!Q_stricmp(argv[i], "-noweld"))
 		{
 			Log_Print("noweld = true\n");
 			noweld = qtrue;
 		}
-		else if (!stricmp(argv[i], "-noshare"))
+		else if (!Q_stricmp(argv[i], "-noshare"))
 		{
 			Log_Print("noshare = true\n");
 			noshare = qtrue;
 		}
-		else if (!stricmp(argv[i], "-notjunc"))
+		else if (!Q_stricmp(argv[i], "-notjunc"))
 		{
 			Log_Print("notjunc = true\n");
 			notjunc = qtrue;
 		}
-		else if (!stricmp(argv[i], "-nowater"))
+		else if (!Q_stricmp(argv[i], "-nowater"))
 		{
 			Log_Print("nowater = true\n");
 			nowater = qtrue;
 		}
-		else if (!stricmp(argv[i], "-noprune"))
+		else if (!Q_stricmp(argv[i], "-noprune"))
 		{
 			Log_Print("noprune = true\n");
 			noprune = qtrue;
 		}
-		else if (!stricmp(argv[i], "-nomerge"))
+		else if (!Q_stricmp(argv[i], "-nomerge"))
 		{
 			Log_Print("nomerge = true\n");
 			nomerge = qtrue;
 		}
-		else if (!stricmp(argv[i], "-nosubdiv"))
+		else if (!Q_stricmp(argv[i], "-nosubdiv"))
 		{
 			Log_Print("nosubdiv = true\n");
 			nosubdiv = qtrue;
 		}
-		else if (!stricmp(argv[i], "-nodetail"))
+		else if (!Q_stricmp(argv[i], "-nodetail"))
 		{
 			Log_Print("nodetail = true\n");
 			nodetail = qtrue;
 		}
-		else if (!stricmp(argv[i], "-fulldetail"))
+		else if (!Q_stricmp(argv[i], "-fulldetail"))
 		{
 			Log_Print("fulldetail = true\n");
 			fulldetail = qtrue;
 		}
-		else if (!stricmp(argv[i], "-onlyents"))
+		else if (!Q_stricmp(argv[i], "-onlyents"))
 		{
 			Log_Print("onlyents = true\n");
 			onlyents = qtrue;
 		}
-		else if (!stricmp(argv[i], "-micro"))
+		else if (!Q_stricmp(argv[i], "-micro"))
 		{
 			if (i + 1 >= argc) {i = 0; break;}
 			microvolume = atof(argv[++i]);
 			Log_Print("microvolume = %f\n", microvolume);
 		}
-		else if (!stricmp(argv[i], "-leaktest"))
+		else if (!Q_stricmp(argv[i], "-leaktest"))
 		{
 			Log_Print("leaktest = true\n");
 			leaktest = qtrue;
 		}
-		else if (!stricmp(argv[i], "-verboseentities"))
+		else if (!Q_stricmp(argv[i], "-verboseentities"))
 		{
 			Log_Print("verboseentities = true\n");
 			verboseentities = qtrue;
 		}
-		else if (!stricmp(argv[i], "-chop"))
+		else if (!Q_stricmp(argv[i], "-chop"))
 		{
 			if (i + 1 >= argc) {i = 0; break;}
 			subdivide_size = atof(argv[++i]);
 			Log_Print("subdivide_size = %f\n", subdivide_size);
 		}
-		else if (!stricmp (argv[i], "-tmpout"))
+		else if (!Q_stricmp (argv[i], "-tmpout"))
 		{
 			strcpy (outbase, "/tmp");
 			Log_Print("temp output\n");
 		}
 		*/
 #ifdef ME
-		else if (!stricmp(argv[i], "-freetree")) {
+		else if (!Q_stricmp(argv[i], "-freetree")) {
 			freetree = qtrue;
 			Log_Print("freetree = true\n");
-		} else if (!stricmp(argv[i], "-grapplereach")) {
+		} else if (!Q_stricmp(argv[i], "-grapplereach")) {
 			calcgrapplereach = qtrue;
 			Log_Print("grapplereach = true\n");
-		} else if (!stricmp(argv[i], "-nobrushmerge")) {
+		} else if (!Q_stricmp(argv[i], "-nobrushmerge")) {
 			nobrushmerge = qtrue;
 			Log_Print("nobrushmerge = true\n");
-		} else if (!stricmp(argv[i], "-noliquids")) {
+		} else if (!Q_stricmp(argv[i], "-noliquids")) {
 			noliquids = qtrue;
 			Log_Print("noliquids = true\n");
-		} else if (!stricmp(argv[i], "-forcesidesvisible")) {
+		} else if (!Q_stricmp(argv[i], "-forcesidesvisible")) {
 			forcesidesvisible = qtrue;
 			Log_Print("forcesidesvisible = true\n");
-		} else if (!stricmp(argv[i], "-output")) {
+		} else if (!Q_stricmp(argv[i], "-output")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
@@ -383,61 +383,61 @@ int main(int argc, char **argv) {
 			if (access(argv[i + 1], 0x04))
 				Warning("the folder %s does not exist", argv[i + 1]);
 			strcpy(outputpath, argv[++i]);
-		} else if (!stricmp(argv[i], "-breadthfirst")) {
+		} else if (!Q_stricmp(argv[i], "-breadthfirst")) {
 			use_nodequeue = qtrue;
 			Log_Print("breadthfirst = true\n");
-		} else if (!stricmp(argv[i], "-capsule")) {
+		} else if (!Q_stricmp(argv[i], "-capsule")) {
 			capsule_collision = qtrue;
 			Log_Print("capsule_collision = true\n");
-		} else if (!stricmp(argv[i], "-cfg")) {
+		} else if (!Q_stricmp(argv[i], "-cfg")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
 			}
 			if (!LoadCfgFile(argv[++i]))
 				exit(0);
-		} else if (!stricmp(argv[i], "-bsp2map")) {
+		} else if (!Q_stricmp(argv[i], "-bsp2map")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
 			}
 			comp = COMP_BSP2MAP;
 			qfiles = GetArgumentFiles(argc, argv, &i, "bsp");
-		} else if (!stricmp(argv[i], "-bsp2aas")) {
+		} else if (!Q_stricmp(argv[i], "-bsp2aas")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
 			}
 			comp = COMP_BSP2AAS;
 			qfiles = GetArgumentFiles(argc, argv, &i, "bsp");
-		} else if (!stricmp(argv[i], "-aasall")) {
+		} else if (!Q_stricmp(argv[i], "-aasall")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
 			}
 			CreateAASFilesForAllBSPFiles(argv[++i]);
-		} else if (!stricmp(argv[i], "-reach")) {
+		} else if (!Q_stricmp(argv[i], "-reach")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
 			}
 			comp = COMP_REACH;
 			qfiles = GetArgumentFiles(argc, argv, &i, "bsp");
-		} else if (!stricmp(argv[i], "-cluster")) {
+		} else if (!Q_stricmp(argv[i], "-cluster")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
 			}
 			comp = COMP_CLUSTER;
 			qfiles = GetArgumentFiles(argc, argv, &i, "bsp");
-		} else if (!stricmp(argv[i], "-aasinfo")) {
+		} else if (!Q_stricmp(argv[i], "-aasinfo")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
 			}
 			comp = COMP_AASINFO;
 			qfiles = GetArgumentFiles(argc, argv, &i, "aas");
-		} else if (!stricmp(argv[i], "-aasopt")) {
+		} else if (!Q_stricmp(argv[i], "-aasopt")) {
 			if (i + 1 >= argc) {
 				i = 0;
 				break;
@@ -649,54 +649,54 @@ int main(int argc, char **argv) {
 	} else {
 		printf("Usage:   bspc [-<switch> [-<switch> ...]]\n"
 #if defined(WIN32) || defined(_WIN32)
-				  "Example 1: bspc -bsp2aas d:\\quake3\\baseq3\\maps\\mymap?.bsp\n"
-				  "Example 2: bspc -bsp2aas d:\\quake3\\baseq3\\pak0.pk3\\maps/q3dm*.bsp\n"
+			   "Example 1: bspc -bsp2aas d:\\quake3\\baseq3\\maps\\mymap?.bsp\n"
+			   "Example 2: bspc -bsp2aas d:\\quake3\\baseq3\\pak0.pk3\\maps/q3dm*.bsp\n"
 #else
-				  "Example 1: bspc -bsp2aas /quake3/baseq3/maps/mymap?.bsp\n"
-				  "Example 2: bspc -bsp2aas /quake3/baseq3/pak0.pk3/maps/q3dm*.bsp\n"
+			   "Example 1: bspc -bsp2aas /quake3/baseq3/maps/mymap?.bsp\n"
+			   "Example 2: bspc -bsp2aas /quake3/baseq3/pak0.pk3/maps/q3dm*.bsp\n"
 #endif
-				  "\n"
-				  "Switches:\n"
-				  //"   bsp2map  <[pakfilter/]filter.bsp>    = convert BSP to MAP\n"
-				  //"   aasall   <quake3folder>              = create AAS files for all BSPs\n"
-				  "   bsp2aas  <[pakfilter/]filter.bsp>    = convert BSP to AAS\n"
-				  "   reach    <filter.bsp>                = compute reachability & clusters\n"
-				  "   cluster  <filter.aas>                = compute clusters\n"
-				  "   aasopt   <filter.aas>                = optimize aas file\n"
-				  "   aasinfo  <filter.aas>                = show AAS file info\n"
-				  "   output   <output path>               = set output path\n"
-				  "   threads  <X>                         = set number of threads to X\n"
-				  "   cfg      <filename>                  = use this cfg file\n"
-				  "   optimize                             = enable optimization\n"
-				  "   noverbose                            = disable verbose output\n"
-				  "   breadthfirst                         = breadth first bsp building\n"
-				  "   nobrushmerge                         = don't merge brushes\n"
-				  "   noliquids                            = don't write liquids to map\n"
-				  "   freetree                             = free the bsp tree\n"
-				  "   nocsg                                = disables brush chopping\n"
-				  "   forcesidesvisible                    = force all sides to be visible\n"
-				  "   grapplereach                         = calculate grapple reachabilities\n"
+			   "\n"
+			   "Switches:\n"
+			   //"   bsp2map  <[pakfilter/]filter.bsp>    = convert BSP to MAP\n"
+			   //"   aasall   <quake3folder>              = create AAS files for all BSPs\n"
+			   "   bsp2aas  <[pakfilter/]filter.bsp>    = convert BSP to AAS\n"
+			   "   reach    <filter.bsp>                = compute reachability & clusters\n"
+			   "   cluster  <filter.aas>                = compute clusters\n"
+			   "   aasopt   <filter.aas>                = optimize aas file\n"
+			   "   aasinfo  <filter.aas>                = show AAS file info\n"
+			   "   output   <output path>               = set output path\n"
+			   "   threads  <X>                         = set number of threads to X\n"
+			   "   cfg      <filename>                  = use this cfg file\n"
+			   "   optimize                             = enable optimization\n"
+			   "   noverbose                            = disable verbose output\n"
+			   "   breadthfirst                         = breadth first bsp building\n"
+			   "   nobrushmerge                         = don't merge brushes\n"
+			   "   noliquids                            = don't write liquids to map\n"
+			   "   freetree                             = free the bsp tree\n"
+			   "   nocsg                                = disables brush chopping\n"
+			   "   forcesidesvisible                    = force all sides to be visible\n"
+			   "   grapplereach                         = calculate grapple reachabilities\n"
 
-				  /*			"   glview     = output a GL view\n"
-							  "   draw       = enables drawing\n"
-							  "   noweld     = disables weld\n"
-							  "   noshare    = disables sharing\n"
-							  "   notjunc    = disables juncs\n"
-							  "   nowater    = disables water brushes\n"
-							  "   noprune    = disables node prunes\n"
-							  "   nomerge    = disables face merging\n"
-							  "   nosubdiv   = disables subdeviding\n"
-							  "   nodetail   = disables detail brushes\n"
-							  "   fulldetail = enables full detail\n"
-							  "   onlyents   = only compile entities with bsp\n"
-							  "   micro <volume>\n"
-							  "              = sets the micro volume to the given float\n"
-							  "   leaktest   = perform a leak test\n"
-							  "   verboseentities\n"
-							  "              = enable entity verbose mode\n"
-							  "   chop <subdivide_size>\n"
-							  "              = sets the subdivide size to the given float\n"*/
-				  "\n");
+			   /*			"   glview     = output a GL view\n"
+						   "   draw       = enables drawing\n"
+						   "   noweld     = disables weld\n"
+						   "   noshare    = disables sharing\n"
+						   "   notjunc    = disables juncs\n"
+						   "   nowater    = disables water brushes\n"
+						   "   noprune    = disables node prunes\n"
+						   "   nomerge    = disables face merging\n"
+						   "   nosubdiv   = disables subdeviding\n"
+						   "   nodetail   = disables detail brushes\n"
+						   "   fulldetail = enables full detail\n"
+						   "   onlyents   = only compile entities with bsp\n"
+						   "   micro <volume>\n"
+						   "              = sets the micro volume to the given float\n"
+						   "   leaktest   = perform a leak test\n"
+						   "   verboseentities\n"
+						   "              = enable entity verbose mode\n"
+						   "   chop <subdivide_size>\n"
+						   "              = sets the subdivide size to the given float\n"*/
+			   "\n");
 	}
 	if (Log_FileStruct()) {
 		Log_Print("BSPC run time is %5.0f seconds\n", I_FloatTime() - start_time);

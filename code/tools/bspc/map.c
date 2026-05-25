@@ -858,7 +858,7 @@ static qboolean WriteMapFileSafe(FILE *fp) {
 			return qfalse;
 		//
 		if (loadedmaptype == MAPTYPE_QUAKE3) {
-			if (!stricmp(ValueForKey(mapent, "classname"), "light")) {
+			if (!Q_stricmp(ValueForKey(mapent, "classname"), "light")) {
 				SetKeyValue(mapent, "light", "10000");
 			}
 		}
