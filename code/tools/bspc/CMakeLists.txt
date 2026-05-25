@@ -58,10 +58,10 @@ set(BSPC_QCOMMON_SRCS
 	${CODE_DIR}/qcommon/ioapi.c
 )
 
-wop_add_executable(TARGET bspc SRCS ${BSPC_SRCS} ${BSPC_BOTLIB_SRCS} ${BSPC_QCOMMON_SRCS})
-target_compile_definitions(bspc PRIVATE BSPC)
+wop_add_executable(TARGET wopbspc SRCS ${BSPC_SRCS} ${BSPC_BOTLIB_SRCS} ${BSPC_QCOMMON_SRCS})
+target_compile_definitions(wopbspc PRIVATE BSPC)
 
-target_include_directories(bspc PRIVATE
+target_include_directories(wopbspc PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CODE_DIR}/qcommon
 	${CODE_DIR}
@@ -69,13 +69,13 @@ target_include_directories(bspc PRIVATE
 )
 
 if (NOT MSVC)
-	target_compile_options(bspc PRIVATE -Wno-error=implicit-function-declaration)
+	target_compile_options(wopbspc PRIVATE -Wno-error=implicit-function-declaration)
 endif()
 
 find_package(Threads REQUIRED)
 find_library(MATH_LIBRARY m)
 
-target_link_libraries(bspc PRIVATE
+target_link_libraries(wopbspc PRIVATE
 	zlib
 	Threads::Threads
 	$<$<BOOL:${MATH_LIBRARY}>:${MATH_LIBRARY}>
