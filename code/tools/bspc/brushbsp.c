@@ -48,7 +48,6 @@ for all sides
 }
 */
 
-int c_nodes;
 int c_nonvis;
 int c_active_brushes;
 int c_solidleafnodes;
@@ -108,7 +107,6 @@ void PrintContents(int contents) {
 // #endif
 
 void ResetBrushBSP(void) {
-	c_nodes = 0;
 	c_nonvis = 0;
 	c_active_brushes = 0;
 	c_solidleafnodes = 0;
@@ -153,28 +151,6 @@ static void DrawBrushList(bspbrush_t *brush, node_t *node) {
 	GLS_EndScene();
 }
 
-void WriteBrushList(char *name, bspbrush_t *brush, qboolean onlyvis) {
-	int i;
-	side_t *s;
-	FILE *f;
-
-	qprintf("writing %s\n", name);
-	f = SafeOpenWrite(name);
-
-	for (; brush; brush = brush->next) {
-		for (i = 0; i < brush->numsides; i++) {
-			s = &brush->sides[i];
-			if (!s->winding)
-				continue;
-			if (onlyvis && !(s->flags & SFL_VISIBLE))
-				continue;
-			OutputWinding(brush->sides[i].winding, f);
-		}
-	}
-
-	fclose(f);
-}
-
 static void PrintBrush(bspbrush_t *brush) {
 	int i;
 
@@ -184,12 +160,9 @@ static void PrintBrush(bspbrush_t *brush) {
 		printf("\n");
 	}
 }
+
 //===========================================================================
 // Sets the mins/maxs based on the windings
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
 void BoundBrush(bspbrush_t *brush) {
 	int i, j;
@@ -229,12 +202,9 @@ static void CreateBrushWindings(bspbrush_t *brush) {
 
 	BoundBrush(brush);
 }
+
 //===========================================================================
 // Creates a new axial brush
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
 bspbrush_t *BrushFromBounds(vec3_t mins, vec3_t maxs) {
 	bspbrush_t *b;
@@ -375,12 +345,9 @@ void FreeBrushList(bspbrush_t *brushes) {
 		FreeBrush(brushes);
 	}
 }
+
 //===========================================================================
 // Duplicates the brush, the sides, and the windings
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
 bspbrush_t *CopyBrush(bspbrush_t *brush) {
 	bspbrush_t *newbrush;
@@ -415,59 +382,10 @@ static node_t *PointInLeaf(node_t *node, vec3_t point) {
 
 	return node;
 }
+
 //===========================================================================
 // Returns PSIDE_FRONT, PSIDE_BACK, or PSIDE_BOTH
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
-#if 0
-static int BSPC_BoxOnPlaneSide (vec3_t mins, vec3_t maxs, plane_t *plane)
-{
-	int		side;
-	int		i;
-	vec3_t	corners[2];
-	vec_t	dist1, dist2;
-
-	// axial planes are easy
-	if (plane->type < 3)
-	{
-		side = 0;
-		if (maxs[plane->type] > plane->dist+PLANESIDE_EPSILON)
-			side |= PSIDE_FRONT;
-		if (mins[plane->type] < plane->dist-PLANESIDE_EPSILON)
-			side |= PSIDE_BACK;
-		return side;
-	}
-
-	// create the proper leading and trailing verts for the box
-
-	for (i=0 ; i<3 ; i++)
-	{
-		if (plane->normal[i] < 0)
-		{
-			corners[0][i] = mins[i];
-			corners[1][i] = maxs[i];
-		}
-		else
-		{
-			corners[1][i] = mins[i];
-			corners[0][i] = maxs[i];
-		}
-	}
-
-	dist1 = DotProduct (plane->normal, corners[0]) - plane->dist;
-	dist2 = DotProduct (plane->normal, corners[1]) - plane->dist;
-	side = 0;
-	if (dist1 >= PLANESIDE_EPSILON)
-		side = PSIDE_FRONT;
-	if (dist2 < PLANESIDE_EPSILON)
-		side |= PSIDE_BACK;
-
-	return side;
-}
-#else
 int BSPC_BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, plane_t *p) {
 	float dist1, dist2;
 	int sides;
@@ -532,7 +450,6 @@ int BSPC_BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, plane_t *p) {
 
 	return sides;
 }
-#endif
 
 static int QuickTestBrushToPlanenum(bspbrush_t *brush, int planenum, int *numsplits) {
 	int i, num;
@@ -680,13 +597,10 @@ static int TestBrushToPlanenum(bspbrush_t *brush, int planenum, int *numsplits, 
 
 	return s;
 }
+
 //===========================================================================
 // Returns true if the winding would be crunched out of
 // existance by the vertex snapping.
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
 #define EDGE_LENGTH 0.2
 qboolean WindingIsTiny(winding_t *w) {
@@ -713,13 +627,10 @@ qboolean WindingIsTiny(winding_t *w) {
 	return qtrue;
 #endif
 }
+
 //===========================================================================
 // Returns true if the winding still has one of the points
 // from basewinding for plane
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
 qboolean WindingIsHuge(winding_t *w) {
 	int i, j;
@@ -731,12 +642,9 @@ qboolean WindingIsHuge(winding_t *w) {
 	}
 	return qfalse;
 }
+
 //===========================================================================
 // creates a leaf out of the given nodes with the given brushes
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
 static void LeafNode(node_t *node, bspbrush_t *brushes) {
 	bspbrush_t *b;
@@ -804,14 +712,11 @@ static qboolean CheckPlaneAgainstVolume(int pnum, node_t *node) {
 
 	return good;
 }
+
 //===========================================================================
 // Using a hueristic, choses one of the sides out of the brushlist
 // to partition the brushes with.
 // Returns NULL if there are no valid planes to split with..
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
 static side_t *SelectSplitSide(bspbrush_t *brushes, node_t *node) {
 	int value, bestvalue;
@@ -944,7 +849,7 @@ static side_t *SelectSplitSide(bspbrush_t *brushes, node_t *node) {
 	return bestside;
 }
 
-int BrushMostlyOnSide(bspbrush_t *brush, plane_t *plane) {
+static int BrushMostlyOnSide(bspbrush_t *brush, plane_t *plane) {
 	int i, j;
 	winding_t *w;
 	vec_t d, max;
@@ -970,13 +875,9 @@ int BrushMostlyOnSide(bspbrush_t *brush, plane_t *plane) {
 	}
 	return side;
 }
+
 //===========================================================================
-// Generates two new brushes, leaving the original
-// unchanged
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
+// Generates two new brushes, leaving the original unchanged
 //===========================================================================
 void SplitBrush(bspbrush_t *brush, int planenum, bspbrush_t **front, bspbrush_t **back) {
 	bspbrush_t *b[2];
@@ -1207,93 +1108,16 @@ static void CheckBrushLists(bspbrush_t *brushlist1, bspbrush_t *brushlist2) {
 	}
 }
 
-int numrecurse = 0;
-
-static node_t *BuildTree_r(node_t *node, bspbrush_t *brushes) {
-	node_t *newnode;
-	side_t *bestside;
-	int i, totalmem;
-	bspbrush_t *children[2];
-
-	qprintf("\r%6d", numrecurse);
-	numrecurse++;
-
-	if (numthreads == 1) {
-		totalmem = WindingMemory() + c_nodememory + c_brushmemory;
-		if (totalmem > c_peak_totalbspmemory)
-			c_peak_totalbspmemory = totalmem;
-		c_nodes++;
-	}
-
-	if (drawflag)
-		DrawBrushList(brushes, node);
-
-	// find the best plane to use as a splitter
-	bestside = SelectSplitSide(brushes, node);
-	if (!bestside) {
-		// leaf node
-		node->side = NULL;
-		node->planenum = -1;
-		LeafNode(node, brushes);
-		if (node->contents & CONTENTS_SOLID)
-			c_solidleafnodes++;
-		if (create_aas) {
-			// free up memory!!!
-			FreeBrushList(node->brushlist);
-			node->brushlist = NULL;
-			// free the node volume brush
-			if (node->volume) {
-				FreeBrush(node->volume);
-				node->volume = NULL;
-			}
-		}
-		return node;
-	}
-
-	// this is a splitplane node
-	node->side = bestside;
-	node->planenum = bestside->planenum & ~1; // always use front facing
-
-	// split the brush list in two for both children
-	SplitBrushList(brushes, node, &children[0], &children[1]);
-	// free the old brush list
-	FreeBrushList(brushes);
-
-	// allocate children before recursing
-	for (i = 0; i < 2; i++) {
-		newnode = AllocNode();
-		newnode->parent = node;
-		node->children[i] = newnode;
-	}
-
-	// split the volume brush of the node for the children
-	SplitBrush(node->volume, node->planenum, &node->children[0]->volume, &node->children[1]->volume);
-
-	if (create_aas) {
-		// free the volume brush
-		if (node->volume) {
-			FreeBrush(node->volume);
-			node->volume = NULL;
-		}
-	}
-	// recursively process children
-	for (i = 0; i < 2; i++) {
-		node->children[i] = BuildTree_r(node->children[i], children[i]);
-	}
-
-	return node;
-}
-
-node_t *firstnode;	   // first node in the list
-node_t *lastnode;	   // last node in the list
-int nodelistsize;	   // number of nodes in the list
+static 	node_t *firstnode;	   // first node in the list
+static node_t *lastnode;	   // last node in the list
+static int nodelistsize;	   // number of nodes in the list
 int use_nodequeue = 0; // use nodequeue, otherwise a node stack is used
-int numwaiting = 0;
+static int numwaiting = 0;
 
 void (*AddNodeToList)(node_t *node);
 
 // add the node to the front of the node list
-//(effectively using a node stack)
+// (effectively using a node stack)
 static void AddNodeToStack(node_t *node) {
 	ThreadLock();
 
@@ -1307,8 +1131,9 @@ static void AddNodeToStack(node_t *node) {
 	//
 	ThreadSemaphoreIncrease(1);
 }
+
 // add the node to the end of the node list
-//(effectively using a node queue)
+// (effectively using a node queue)
 static void AddNodeToQueue(node_t *node) {
 	ThreadLock();
 
@@ -1324,6 +1149,7 @@ static void AddNodeToQueue(node_t *node) {
 	//
 	ThreadSemaphoreIncrease(1);
 }
+
 // get the first node from the front of the node list
 static node_t *NextNodeFromList(void) {
 	node_t *node;
@@ -1354,6 +1180,7 @@ static node_t *NextNodeFromList(void) {
 
 	return node;
 }
+
 // returns the size of the node list
 static int NodeListSize(void) {
 	int size;
@@ -1364,7 +1191,8 @@ static int NodeListSize(void) {
 
 	return size;
 }
-//
+
+static int numrecurse = 0;
 static void IncreaseNodeCounter(void) {
 	ThreadLock();
 	// if (verbose) printf("\r%6d", numrecurse++);
@@ -1372,6 +1200,7 @@ static void IncreaseNodeCounter(void) {
 	// qprintf("\r%6d %d, %5d ", numrecurse++, GetNumThreads(), nodelistsize);
 	ThreadUnlock();
 }
+
 // thread function, gets nodes from the nodelist and processes them
 static void BuildTreeThread(int threadid) {
 	node_t *newnode, *node;
@@ -1393,7 +1222,6 @@ static void BuildTreeThread(int threadid) {
 			if (totalmem > c_peak_totalbspmemory) {
 				c_peak_totalbspmemory = totalmem;
 			}
-			c_nodes++;
 		}
 
 		if (drawflag) {
@@ -1464,12 +1292,9 @@ static void BuildTreeThread(int threadid) {
 	}
 	RemoveThread(threadid);
 }
+
 //===========================================================================
 // build the bsp tree using a node list
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
 static void BuildTree(tree_t *tree) {
 	int i;
@@ -1503,12 +1328,9 @@ static void BuildTree(tree_t *tree) {
 	ThreadShutdownLock();
 	ThreadShutdownSemaphore();
 }
+
 //===========================================================================
 // The incoming brush list will be freed before exiting
-//
-// Parameter:			-
-// Returns:				-
-// Changes Globals:		-
 //===========================================================================
 tree_t *BrushBSP(bspbrush_t *brushlist, vec3_t mins, vec3_t maxs) {
 	int i, c_faces, c_nonvisfaces, c_brushes;
@@ -1564,7 +1386,6 @@ tree_t *BrushBSP(bspbrush_t *brushlist, vec3_t mins, vec3_t maxs) {
 	c_brushmemory = 0;
 	c_peak_brushmemory = 0;
 
-	c_nodes = 0;
 	c_nonvis = 0;
 	node = AllocNode();
 
@@ -1579,41 +1400,15 @@ tree_t *BrushBSP(bspbrush_t *brushlist, vec3_t mins, vec3_t maxs) {
 	tree->headnode->brushlist = brushlist;
 	BuildTree(tree);
 
-	// build the bsp tree with the start node from the brushlist
-	//	node = BuildTree_r(node, brushlist);
-
 	// if the conversion is cancelled
 	if (cancelconversion)
 		return tree;
 
 	qprintf("\n");
 	Log_Write("%6d splits\r\n", numrecurse);
-	//	Log_Print("%6i visible nodes\n", c_nodes/2 - c_nonvis);
-	//	Log_Print("%6i nonvis nodes\n", c_nonvis);
-	//	Log_Print("%6i leaves\n", (c_nodes+1)/2);
-	//	Log_Print("%6i solid leaf nodes\n", c_solidleafnodes);
-	//	Log_Print("%6i active brushes\n", c_active_brushes);
 	if (numthreads == 1) {
-		//		Log_Print("%6i KB of node memory\n", c_nodememory >> 10);
-		//		Log_Print("%6i KB of brush memory\n", c_brushmemory >> 10);
-		//		Log_Print("%6i KB of peak brush memory\n", c_peak_brushmemory >> 10);
-		//		Log_Print("%6i KB of winding memory\n", WindingMemory() >> 10);
-		//		Log_Print("%6i KB of peak winding memory\n", WindingPeakMemory() >> 10);
 		Log_Print("%6i KB of peak total bsp memory\n", c_peak_totalbspmemory >> 10);
 	}
 
-	/*
-	point[0] = 1485;
-	point[1] = 956.125;
-	point[2] = 352.125;
-	node = PointInLeaf(tree->headnode, point);
-	if (node->planenum != PLANENUM_LEAF)
-	{
-		Log_Print("node not a leaf\n");
-	}
-	Log_Print("at %f %f %f:\n", point[0], point[1], point[2]);
-	PrintContents(node->contents);
-	Log_Print("node->expansionbboxes = %d\n", node->expansionbboxes);
-	//*/
 	return tree;
 }

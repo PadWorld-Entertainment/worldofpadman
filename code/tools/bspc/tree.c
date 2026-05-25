@@ -22,26 +22,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "qbsp.h"
 
-extern int c_nodes;
 int c_pruned;
 int freedtreemem = 0;
 
-static node_t *NodeForPoint(node_t *node, vec3_t origin) {
-	plane_t *plane;
-	vec_t d;
-
-	while (node->planenum != PLANENUM_LEAF) {
-		plane = &mapplanes[node->planenum];
-		d = DotProduct(origin, plane->normal) - plane->dist;
-		if (d >= 0)
-			node = node->children[0];
-		else
-			node = node->children[1];
-	}
-	return node;
-}
-
-void Tree_FreePortals_r(node_t *node) {
+static void Tree_FreePortals_r(node_t *node) {
 	portal_t *p, *nextp;
 	int s;
 
@@ -87,20 +71,6 @@ void Tree_Free_r(node_t *node) {
 	}
 	node->brushlist = NULL;
 
-	/*
-	NOTE: only used when creating Q2 bsp
-	// free faces
-	for (f = node->faces; f; f = nextf)
-	{
-		nextf = f->next;
-#ifdef ME
-		if (f->w) freedtreemem += MemorySize(f->w);
-		freedtreemem += sizeof(face_t);
-#endif //ME
-		FreeFace(f);
-	}
-	*/
-
 	// free the node
 	if (node->volume) {
 #ifdef ME
@@ -109,8 +79,6 @@ void Tree_Free_r(node_t *node) {
 		FreeBrush(node->volume);
 	}
 
-	if (numthreads == 1)
-		c_nodes--;
 #ifdef ME
 	freedtreemem += MemorySize(node);
 #endif // ME
@@ -178,7 +146,7 @@ void Tree_Print_r(node_t *node, int depth) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void Tree_PruneNodes_r(node_t *node) {
+static void Tree_PruneNodes_r(node_t *node) {
 	bspbrush_t *b, *next;
 
 	if (node->planenum == PLANENUM_LEAF)

@@ -396,7 +396,6 @@ tree_t *ProcessWorldBrushes(int brush_start, int brush_end);
 #define PSIDE_BOTH (PSIDE_FRONT | PSIDE_BACK)
 #define PSIDE_FACING 4
 
-void WriteBrushList(char *name, bspbrush_t *brush, qboolean onlyvis);
 void PrintContents(int contents);
 int BSPC_BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, plane_t *p);
 bspbrush_t *CopyBrush(bspbrush_t *brush);
@@ -410,7 +409,6 @@ void BoundBrush(bspbrush_t *brush);
 void FreeBrushList(bspbrush_t *brushes);
 tree_t *BrushBSP(bspbrush_t *brushlist, vec3_t mins, vec3_t maxs);
 bspbrush_t *BrushFromBounds(vec3_t mins, vec3_t maxs);
-int BrushMostlyOnSide(bspbrush_t *brush, plane_t *plane);
 qboolean WindingIsHuge(winding_t *w);
 qboolean WindingIsTiny(winding_t *w);
 void ResetBrushBSP(void);
@@ -439,7 +437,6 @@ void MakeTreePortals(tree_t *tree);
 //=============================================================================
 
 void OutputWinding(winding_t *w, FILE *glview);
-void WriteGLView(tree_t *tree, char *source);
 
 //=============================================================================
 // gldraw.c
@@ -468,6 +465,4 @@ tree_t *Tree_Alloc(void);
 void Tree_Free(tree_t *tree);
 void Tree_Free_r(node_t *node);
 void Tree_Print_r(node_t *node, int depth);
-void Tree_FreePortals_r(node_t *node);
-void Tree_PruneNodes_r(node_t *node);
 void Tree_PruneNodes(node_t *node);
