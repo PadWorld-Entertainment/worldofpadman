@@ -27,6 +27,8 @@ option(BUILD_TESTS "" ON)
 option(BUILD_RENDERER_OPENGL2 "" ON)
 option(BUILD_RENDERER_VULKAN "" OFF)
 
+set(WOPBSPC_OPTIONS "-forcesidesvisible -optimize" CACHE STRING "Global command line options for wopbspc")
+
 option(USE_INTERNAL_LIBS "Use bundled libraries" ON)
 option(USE_INTERNAL_SDL "" ON)
 option(USE_INTERNAL_JPEG "" ON)

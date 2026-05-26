@@ -158,3 +158,46 @@ set(MAPPACK_BSPS
 foreach (BSP ${MAPPACK_BSPS})
     bsp_validation(wop ${BSP} 2)
 endforeach()
+
+separate_arguments(WOPBSPC_OPTIONS_LIST NATIVE_COMMAND "${WOPBSPC_OPTIONS}")
+
+set(UPDATE_AAS_OUTPUTS)
+
+function(add_update_aas_commands MAP_DIR)
+    string(REPLACE "/" "_" MAP_DIR_TAG "${MAP_DIR}")
+
+    foreach (BSP ${ARGN})
+        set(BSP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${MAP_DIR}/${BSP}")
+        get_filename_component(BSP_NAME_WE "${BSP}" NAME_WLE)
+        set(AAS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${MAP_DIR}/${BSP_NAME_WE}.aas")
+        set(AAS_WORK_DIR "${CMAKE_CURRENT_BINARY_DIR}/update-aas-work/${MAP_DIR_TAG}/${BSP_NAME_WE}")
+        set(AAS_LOG_FILE "${CMAKE_CURRENT_BINARY_DIR}/update-aas-logs/${MAP_DIR_TAG}-${BSP_NAME_WE}.log")
+
+        add_custom_command(
+            OUTPUT "${AAS_PATH}"
+            COMMAND ${CMAKE_COMMAND}
+                -DBSPC_EXECUTABLE=$<TARGET_FILE:wopbspc>
+                "-DBSPC_OPTIONS:STRING=${WOPBSPC_OPTIONS}"
+                "-DBSP_INPUT:STRING=${BSP_PATH}"
+                "-DWORK_DIR:STRING=${AAS_WORK_DIR}"
+                "-DLOG_FILE:STRING=${AAS_LOG_FILE}"
+                -P "${ROOT_DIR}/cmake/run_wopbspc_with_log.cmake"
+            DEPENDS wopbspc "${BSP_PATH}"
+            COMMENT "Update AAS ${MAP_DIR}/${BSP_NAME_WE}.aas (log: ${AAS_LOG_FILE})"
+            VERBATIM
+        )
+
+        list(APPEND UPDATE_AAS_OUTPUTS "${AAS_PATH}")
+    endforeach()
+
+    set(UPDATE_AAS_OUTPUTS "${UPDATE_AAS_OUTPUTS}" PARENT_SCOPE)
+endfunction()
+
+add_update_aas_commands("maps.pk3dir/maps" ${BSPS})
+add_update_aas_commands("padpack.pk3dir/maps" ${PADPACK_BSPS})
+add_update_aas_commands("mappack.pk3dir/maps" ${MAPPACK_BSPS})
+
+add_custom_target(update-aas
+    DEPENDS ${UPDATE_AAS_OUTPUTS}
+    COMMENT "Update AAS files for all BSP maps"
+)
