@@ -30,29 +30,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define FACECLIP_EPSILON 0.2
 #define FACE_EPSILON 1.0
 
-int numgravitationalsubdivisions = 0;
-int numladdersubdivisions = 0;
+static int numgravitationalsubdivisions = 0;
+static int numladdersubdivisions = 0;
 
 // NOTE: only do gravitational subdivision BEFORE area merging!!!!!!!
 //			because the bsp tree isn't refreshes like with ladder subdivision
 
 //===========================================================================
 // NOTE: the original face is invalid after splitting
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 static void AAS_SplitFace(tmp_face_t *face, vec3_t normal, float dist, tmp_face_t **frontface, tmp_face_t **backface) {
 	winding_t *frontw, *backw;
 
-	//
 	*frontface = *backface = NULL;
 
 	ClipWindingEpsilon(face->winding, normal, dist, FACECLIP_EPSILON, &frontw, &backw);
 
 #ifdef DEBUG
-	//
 	if (frontw) {
 		if (WindingIsTiny(frontw)) {
 			Log_Write("AAS_SplitFace: tiny back face\r\n");
@@ -91,7 +85,6 @@ static winding_t *AAS_SplitWinding(tmp_area_t *tmparea, int planenum) {
 	int side;
 	winding_t *splitwinding;
 
-	//
 	plane = &mapplanes[planenum];
 	// create a split winding, first base winding for plane
 	splitwinding = BaseWindingForPlane(plane->normal, plane->dist);
@@ -120,7 +113,7 @@ static int AAS_TestSplitPlane(tmp_area_t *tmparea, vec3_t normal, float dist, in
 	if (!w)
 		return qfalse;
 	FreeWinding(w);
-	//
+
 	for (face = tmparea->tmpfaces; face; face = face->next[side]) {
 		// side of the face the area is on
 		side = face->frontarea != tmparea;
@@ -266,7 +259,7 @@ static int AAS_FindBestAreaSplitPlane(tmp_area_t *tmparea, vec3_t normal, float 
 	foundsplitter = qfalse;
 	bestvalue = -999999;
 	bestepsilonfaces = 0;
-	//
+
 #ifdef AW_DEBUG
 	Log_Print("finding split plane for area %d\n", tmparea->areanum);
 #endif // AW_DEBUG
@@ -303,7 +296,8 @@ static int AAS_FindBestAreaSplitPlane(tmp_area_t *tmparea, vec3_t normal, float 
 #ifdef AW_DEBUG
 			Log_Print("normal = \'%f %f %f\', dist = %f\n", tmpnormal[0], tmpnormal[1], tmpnormal[2], tmpdist);
 #endif // AW_DEBUG
-	   // get metrics for this vertical plane
+
+			// get metrics for this vertical plane
 			if (!AAS_TestSplitPlane(tmparea, tmpnormal, tmpdist, &facesplits, &groundsplits, &epsilonfaces)) {
 				continue;
 			}
@@ -374,6 +368,7 @@ static tmp_node_t *AAS_GravitationalSubdivision_r(tmp_node_t *tmpnode) {
 
 //===========================================================================
 // NOTE: merge faces and melt edges first
+// works with the global tmpaasworld
 //===========================================================================
 void AAS_GravitationalSubdivision(void) {
 	Log_Write("AAS_GravitationalSubdivision\r\n");

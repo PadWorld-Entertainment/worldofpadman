@@ -28,10 +28,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //===========================================================================
 // try to melt the windings of the two faces
 // FIXME: this is buggy
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 static int AAS_MeltFaceWinding(tmp_face_t *face1, tmp_face_t *face2) {
 	int i, n;
@@ -58,12 +54,9 @@ static int AAS_MeltFaceWinding(tmp_face_t *face1, tmp_face_t *face2) {
 	}
 	return splits;
 }
+
 //===========================================================================
 // melt the windings of the area faces
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 static int AAS_MeltFaceWindingsOfArea(tmp_area_t *tmparea) {
 	int side1, side2, num_windingsplits = 0;
@@ -80,12 +73,9 @@ static int AAS_MeltFaceWindingsOfArea(tmp_area_t *tmparea) {
 	}
 	return num_windingsplits;
 }
+
 //===========================================================================
 // melt the windings of the faces of all areas
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 void AAS_MeltAreaFaceWindings(void) {
 	tmp_area_t *tmparea;

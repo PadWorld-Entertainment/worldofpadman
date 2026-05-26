@@ -49,7 +49,7 @@ extern int num_entities;
 extern entity_t entities[MAX_MAP_ENTITIES];
 
 void StripTrailing(char *e);
-void SetKeyValue(entity_t *ent, char *key, char *value);
+void SetKeyValue(entity_t *ent, const char *key, const char *value);
 const char *ValueForKey(const entity_t *ent, const char *key); // will return "" if not present
 vec_t FloatForKey(const entity_t *ent, const char *key);
 void GetVectorForKey(const entity_t *ent, const char *key, vec3_t vec);

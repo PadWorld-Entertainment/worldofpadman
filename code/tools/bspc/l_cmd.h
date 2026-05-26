@@ -34,34 +34,34 @@ void Q_strncpyz(char *dest, const char *src, int destsize);
 
 int Q_filelength(FILE *f);
 
-void Q_mkdir(char *path);
+void Q_mkdir(const char *path);
 
 double I_FloatTime(void);
 
-void Error(char *error, ...) __attribute__((format(printf, 1, 2)));
-void Warning(char *warning, ...) __attribute__((format(printf, 1, 2)));
+void Error(const char *error, ...) __attribute__((format(printf, 1, 2)));
+void Warning(const char *warning, ...) __attribute__((format(printf, 1, 2)));
 
-FILE *SafeOpenWrite(char *filename);
-FILE *SafeOpenRead(char *filename);
+FILE *SafeOpenWrite(const char *filename);
+FILE *SafeOpenRead(const char *filename);
 void SafeRead(FILE *f, void *buffer, int count);
 void SafeWrite(FILE *f, void *buffer, int count);
 
-int LoadFile(char *filename, void **bufferptr, int offset, int length);
-int TryLoadFile(char *filename, void **bufferptr);
-void SaveFile(char *filename, void *buffer, int count);
-qboolean FileExists(char *filename);
+int LoadFile(const char *filename, void **bufferptr, int offset, int length);
+int TryLoadFile(const char *filename, void **bufferptr);
+void SaveFile(const char *filename, void *buffer, int count);
+qboolean FileExists(const char *filename);
 
 void StripExtension(char *path);
 
-void ExtractFileBase(char *path, char *dest);
-void ExtractFileExtension(char *path, char *dest);
+void ExtractFileBase(const char *path, char *dest);
+void ExtractFileExtension(const char *path, char *dest);
 
 extern char com_token[1024];
 extern qboolean com_eof;
 
-char *copystring(char *s);
+char *copystring(const char *s);
 
-void CreatePath(char *path);
+void CreatePath(const char *path);
 
 extern qboolean archive;
 extern char archivedir[1024];

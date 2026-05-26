@@ -51,7 +51,7 @@ Error
 For abnormal program terminations in console apps
 =================
 */
-void Error(char *error, ...) {
+void Error(const char *error, ...) {
 	va_list argptr;
 	char text[1024];
 
@@ -66,7 +66,7 @@ void Error(char *error, ...) {
 	exit(1);
 }
 
-void Warning(char *warning, ...) {
+void Warning(const char *warning, ...) {
 	va_list argptr;
 	char text[1024];
 
@@ -113,7 +113,7 @@ void QDECL Com_Printf(const char *fmt, ...) {
 	Log_Print("%s", text);
 }
 
-char *copystring(char *s) {
+char *copystring(const char *s) {
 	char *b;
 	b = GetMemory(strlen(s) + 1);
 	strcpy(b, s);
@@ -133,7 +133,7 @@ double I_FloatTime(void) {
 	return t;
 }
 
-void Q_mkdir(char *path) {
+void Q_mkdir(const char *path) {
 #ifdef WIN32
 	if (_mkdir(path) != -1)
 		return;
@@ -226,7 +226,7 @@ int Q_filelength(FILE *f) {
 	return end;
 }
 
-FILE *SafeOpenWrite(char *filename) {
+FILE *SafeOpenWrite(const char *filename) {
 	FILE *f;
 
 	f = fopen(filename, "wb");
@@ -237,7 +237,7 @@ FILE *SafeOpenWrite(char *filename) {
 	return f;
 }
 
-FILE *SafeOpenRead(char *filename) {
+FILE *SafeOpenRead(const char *filename) {
 	FILE *f;
 
 	f = fopen(filename, "rb");
@@ -263,7 +263,7 @@ void SafeWrite(FILE *f, void *buffer, int count) {
 FileExists
 ==============
 */
-qboolean FileExists(char *filename) {
+qboolean FileExists(const char *filename) {
 	FILE *f;
 
 	f = fopen(filename, "r");
@@ -278,7 +278,7 @@ qboolean FileExists(char *filename) {
 LoadFile
 ==============
 */
-int LoadFile(char *filename, void **bufferptr, int offset, int length) {
+int LoadFile(const char *filename, void **bufferptr, int offset, int length) {
 	FILE *f;
 	void *buffer;
 
@@ -302,7 +302,7 @@ TryLoadFile
 Allows failure
 ==============
 */
-int TryLoadFile(char *filename, void **bufferptr) {
+int TryLoadFile(const char *filename, void **bufferptr) {
 	FILE *f;
 	int length;
 	void *buffer;
@@ -327,7 +327,7 @@ int TryLoadFile(char *filename, void **bufferptr) {
 SaveFile
 ==============
 */
-void SaveFile(char *filename, void *buffer, int count) {
+void SaveFile(const char *filename, void *buffer, int count) {
 	FILE *f;
 
 	f = SafeOpenWrite(filename);
@@ -348,8 +348,8 @@ void StripExtension(char *path) {
 		path[length] = 0;
 }
 
-void ExtractFileBase(char *path, char *dest) {
-	char *src;
+void ExtractFileBase(const char *path, char *dest) {
+	const char *src;
 
 	src = path + strlen(path) - 1;
 
@@ -365,8 +365,8 @@ void ExtractFileBase(char *path, char *dest) {
 	*dest = 0;
 }
 
-void ExtractFileExtension(char *path, char *dest) {
-	char *src;
+void ExtractFileExtension(const char *path, char *dest) {
+	const char *src;
 
 	src = path + strlen(path) - 1;
 
@@ -388,8 +388,9 @@ void ExtractFileExtension(char *path, char *dest) {
 CreatePath
 ============
 */
-void CreatePath(char *path) {
-	char *ofs, c;
+void CreatePath(const char *path) {
+	const char *ofs;
+	char c;
 
 	if (path[1] == ':')
 		path += 2;
@@ -397,9 +398,10 @@ void CreatePath(char *path) {
 	for (ofs = path + 1; *ofs; ofs++) {
 		c = *ofs;
 		if (c == '/' || c == '\\') { // create the directory
-			*ofs = 0;
-			Q_mkdir(path);
-			*ofs = c;
+			char temp[1024];
+			strncpy(temp, path, ofs - path);
+			temp[ofs - path] = 0;
+			Q_mkdir(temp);
 		}
 	}
 }

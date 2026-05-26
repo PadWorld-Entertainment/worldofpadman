@@ -24,47 +24,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define BBOXFL_NOTGROUNDED 2 // bounding box only valid when NOT on ground
 
 typedef struct cfg_s {
-	int numbboxes;					   // number of bounding boxes
-	aas_bbox_t bboxes[AAS_MAX_BBOXES]; // all the bounding boxes
-	int allpresencetypes;			   // or of all presence types
+	int numbboxes;					   // Number of configured bounding boxes.
+	aas_bbox_t bboxes[AAS_MAX_BBOXES]; // Configured bounding boxes.
+	int allpresencetypes;			   // Bitwise OR of all configured bbox presence types.
 	// aas settings
-	vec3_t phys_gravitydirection;
-	float phys_friction;
-	float phys_stopspeed;
-	float phys_gravity;
-	float phys_waterfriction;
-	float phys_watergravity;
-	float phys_maxvelocity;
-	float phys_maxwalkvelocity;
-	float phys_maxcrouchvelocity;
-	float phys_maxswimvelocity;
-	float phys_walkaccelerate;
-	float phys_airaccelerate;
-	float phys_swimaccelerate;
-	float phys_maxstep;
-	float phys_maxsteepness;
-	float phys_maxwaterjump;
-	float phys_maxbarrier;
-	float phys_jumpvel;
-	float phys_falldelta5;
-	float phys_falldelta10;
-	float rs_waterjump;
-	float rs_teleport;
-	float rs_barrierjump;
-	float rs_startcrouch;
-	float rs_startgrapple;
-	float rs_startwalkoffledge;
-	float rs_startjump;
-	float rs_rocketjump;
-	float rs_bfgjump;
-	float rs_jumppad;
-	float rs_aircontrolledjumppad;
-	float rs_funcbob;
-	float rs_startelevator;
-	float rs_falldamage5;
-	float rs_falldamage10;
-	float rs_maxfallheight;
-	float rs_maxjumpfallheight;
+	vec3_t phys_gravitydirection;  // Normalized gravity direction vector.
+	float phys_friction;		   // Friction applied while moving on ground.
+	float phys_stopspeed;		   // Minimum speed used when applying friction.
+	float phys_gravity;			   // Gravity acceleration outside water.
+	float phys_waterfriction;	   // Friction applied while swimming.
+	float phys_watergravity;	   // Gravity acceleration while swimming.
+	float phys_maxvelocity;		   // Velocity cap used when solving jump reachability.
+	float phys_maxwalkvelocity;	   // Maximum walking speed.
+	float phys_maxcrouchvelocity;  // Maximum crouched walking speed.
+	float phys_maxswimvelocity;	   // Maximum swimming speed.
+	float phys_walkaccelerate;	   // Acceleration applied while walking on ground.
+	float phys_airaccelerate;	   // Acceleration applied while airborne.
+	float phys_swimaccelerate;	   // Acceleration applied while swimming.
+	float phys_maxstep;			   // Maximum step height treated as walkable.
+	float phys_maxsteepness;	   // Ground-slope threshold used to classify faces as walkable.
+	float phys_maxwaterjump;	   // Maximum vertical distance for water-jump reachability.
+	float phys_maxbarrier;		   // Maximum obstacle height for barrier-jump reachability.
+	float phys_jumpvel;			   // Initial upward jump velocity.
+	float phys_falldelta5;		   // Fall-damage delta threshold treated as 5 damage.
+	float phys_falldelta10;		   // Fall-damage delta threshold treated as 10 damage.
+	float rs_waterjump;			   // Travel-time cost for water-jump reachability.
+	float rs_teleport;			   // Travel-time cost for teleporter reachability.
+	float rs_barrierjump;		   // Travel-time cost for barrier-jump reachability.
+	float rs_startcrouch;		   // Extra travel-time cost for entering a crouch-only area.
+	float rs_startgrapple;		   // Base travel-time cost for grapple reachability.
+	float rs_startwalkoffledge;	   // Base travel-time cost for walk-off-ledge reachability.
+	float rs_startjump;			   // Base travel-time cost for jump reachability.
+	float rs_rocketjump;		   // Travel-time cost for rocket-jump reachability.
+	float rs_bfgjump;			   // Travel-time cost for BFG-jump reachability.
+	float rs_jumppad;			   // Travel-time cost for jumppad reachability.
+	float rs_aircontrolledjumppad; // Travel-time cost for air-controlled jumppad reachability.
+	float rs_funcbob;			   // Travel-time cost for func_bobbing reachability.
+	float rs_startelevator;		   // Base travel-time cost for elevator reachability.
+	float rs_falldamage5;		   // Extra travel-time cost for falls above phys_falldelta5.
+	float rs_falldamage10;		   // Extra travel-time cost for falls above phys_falldelta10.
+	float rs_maxfallheight;		// Maximum drop height for generated walk-off-ledge reachability; 0 disables the limit.
+	float rs_maxjumpfallheight; // Maximum fall height assumed when estimating jump reachability distance.
 } cfg_t;
 
 extern cfg_t cfg;

@@ -131,42 +131,16 @@ static void AAS_SwapAASData(void) {
 		aasworld.clusters[i].firstportal = LittleLong(aasworld.clusters[i].firstportal);
 	}
 }
+
 //===========================================================================
 // dump the current loaded aas file
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 static void AAS_DumpAASData(void) {
-	/*
-	if (aasworld.vertexes) FreeMemory(aasworld.vertexes);
-	aasworld.vertexes = NULL;
-	if (aasworld.planes) FreeMemory(aasworld.planes);
-	aasworld.planes = NULL;
-	if (aasworld.edges) FreeMemory(aasworld.edges);
-	aasworld.edges = NULL;
-	if (aasworld.edgeindex) FreeMemory(aasworld.edgeindex);
-	aasworld.edgeindex = NULL;
-	if (aasworld.faces) FreeMemory(aasworld.faces);
-	aasworld.faces = NULL;
-	if (aasworld.faceindex) FreeMemory(aasworld.faceindex);
-	aasworld.faceindex = NULL;
-	if (aasworld.areas) FreeMemory(aasworld.areas);
-	aasworld.areas = NULL;
-	if (aasworld.areasettings) FreeMemory(aasworld.areasettings);
-	aasworld.areasettings = NULL;
-	if (aasworld.reachability) FreeMemory(aasworld.reachability);
-	aasworld.reachability = NULL;
-	*/
 	aasworld.loaded = qfalse;
 }
+
 //===========================================================================
 // allocate memory and read a lump of a AAS file
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 static char *AAS_LoadAASLump(FILE *fp, int offset, int length, void *buf) {
 	if (!length) {
@@ -201,12 +175,9 @@ static void AAS_DData(unsigned char *data, int size) {
 		data[i] ^= (unsigned char)i * 119;
 	}
 }
+
 //===========================================================================
 // load an aas file
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 qboolean AAS_LoadAASFile(char *filename, int fpoffset, int fplength) {
 	FILE *fp;
@@ -247,7 +218,7 @@ qboolean AAS_LoadAASFile(char *filename, int fpoffset, int fplength) {
 		fclose(fp);
 		return qfalse;
 	}
-	//
+
 	if (header.version == AASVERSION) {
 		AAS_DData((unsigned char *)&header + 8, sizeof(aas_header_t) - 8);
 	}
@@ -422,12 +393,9 @@ void AAS_ShowTotals(void) {
 	AAS_ShowNumReachabilities(TRAVEL_JUMPPAD, "jump pad");
 	AAS_ShowNumReachabilities(TRAVEL_FUNCBOB, "func bob");
 }
+
 //===========================================================================
 // aas data is useless after writing to file because it is byte swapped
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 qboolean AAS_WriteAASFile(char *filename) {
 	aas_header_t header;

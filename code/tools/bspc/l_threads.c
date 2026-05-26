@@ -349,8 +349,9 @@ sem_t semaphore;
 static int enter;
 
 void ThreadSetDefault(void) {
-	if (numthreads == -1) // not set manually
-	{
+	// not set manually
+	if (numthreads == -1) {
+		// TODO: use sysconf(_SC_NPROCESSORS_ONLN) when available
 		numthreads = 1;
 	}
 	qprintf("%i threads\n", numthreads);
