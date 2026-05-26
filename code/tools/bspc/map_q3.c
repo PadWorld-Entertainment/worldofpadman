@@ -120,7 +120,7 @@ static void Q3_DPlanes2MapPlanes(void) {
 
 static void Q3_BSPBrushToMapBrush(q3_dbrush_t *bspbrush, entity_t *mapent) {
 	mapbrush_t *b;
-	int i, k, n;
+	int i, k, n, sideindex;
 	side_t *side, *s2;
 	int planenum;
 	q3_dbrushside_t *bspbrushside;
@@ -136,8 +136,13 @@ static void Q3_BSPBrushToMapBrush(q3_dbrush_t *bspbrush, entity_t *mapent) {
 	b->leafnum = dbrushleafnums[bspbrush - q3_dbrushes];
 
 	for (n = 0; n < bspbrush->numSides; n++) {
+		sideindex = bspbrush->firstSide + n;
+		if (sideindex < 0 || sideindex >= q3_numbrushsides) {
+			continue;
+		}
+
 		// pointer to the bsp brush side
-		bspbrushside = &q3_dbrushsides[bspbrush->firstSide + n];
+		bspbrushside = &q3_dbrushsides[sideindex];
 
 		if (nummapbrushsides >= MAX_MAPFILE_BRUSHSIDES) {
 			Error("MAX_MAPFILE_BRUSHSIDES");
@@ -145,7 +150,7 @@ static void Q3_BSPBrushToMapBrush(q3_dbrush_t *bspbrush, entity_t *mapent) {
 		// pointer to the map brush side
 		side = &brushsides[nummapbrushsides];
 		// if the BSP brush side is textured
-		if (q3_dbrushsidetextured[bspbrush->firstSide + n])
+		if (q3_dbrushsidetextured && q3_dbrushsidetextured[sideindex])
 			side->flags |= SFL_TEXTURED | SFL_VISIBLE;
 		else
 			side->flags &= ~SFL_TEXTURED;

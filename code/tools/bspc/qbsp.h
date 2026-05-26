@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include "map_limits.h"
 #include "l_cmd.h"
 #include "l_math.h"
 #include "l_poly.h"
@@ -269,9 +270,9 @@ extern char source[1024];
 // map.c
 //=============================================================================
 
-#define MAX_MAPFILE_PLANES 256000
-#define MAX_MAPFILE_BRUSHES 65535
-#define MAX_MAPFILE_BRUSHSIDES (MAX_MAPFILE_BRUSHES * 8)
+#define MAX_MAPFILE_PLANES 0x20000
+#define MAX_MAPFILE_BRUSHES 0x8000
+#define MAX_MAPFILE_BRUSHSIDES 0x40000
 #define MAX_MAPFILE_TEXINFO 8192
 
 extern int entity_num;
@@ -310,10 +311,6 @@ extern int map_numtexinfo;
 #define MAPTYPE_QUAKE2 2
 #define MAPTYPE_HALFLIFE 4
 #define MAPTYPE_SIN 5
-
-#ifndef MAX_MAP_BRUSHSIDES
-#define MAX_MAP_BRUSHSIDES 0x10000
-#endif
 
 extern int nodestack[NODESTACKSIZE];
 extern int *nodestackptr;

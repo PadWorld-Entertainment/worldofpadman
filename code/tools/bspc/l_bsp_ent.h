@@ -22,10 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "q_shared.h"
 #include "l_script.h"
-
-#ifndef MAX_MAP_ENTITIES
-#define MAX_MAP_ENTITIES 2048
-#endif
+#include "qcommon/map_limits.h"
 
 typedef struct epair_s {
 	struct epair_s *next;

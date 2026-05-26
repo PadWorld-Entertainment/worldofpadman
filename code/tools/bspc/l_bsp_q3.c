@@ -90,7 +90,7 @@ q3_dsurface_t *q3_drawSurfaces; //[Q3_MAX_MAP_DRAW_SURFS];
 int q3_numFogs;
 q3_dfog_t *q3_dfogs; //[Q3_MAX_MAP_FOGS];
 
-char q3_dbrushsidetextured[Q3_MAX_MAP_BRUSHSIDES];
+char *q3_dbrushsidetextured;
 
 extern qboolean forcesidesvisible;
 
@@ -163,6 +163,9 @@ void Q3_FreeMaxBSP(void) {
 		FreeMemory(q3_dfogs);
 	q3_dfogs = NULL;
 	q3_numFogs = 0;
+	if (q3_dbrushsidetextured)
+		FreeMemory(q3_dbrushsidetextured);
+	q3_dbrushsidetextured = NULL;
 }
 
 static void Q3_PlaneFromPoints(vec3_t p0, vec3_t p1, vec3_t p2, vec3_t normal, float *dist) {
@@ -204,7 +207,7 @@ static void Q3_SurfacePlane(q3_dsurface_t *surface, vec3_t normal, float *dist) 
 	*dist = DotProduct(p0, normal);
 }
 
-q3_dplane_t *q3_surfaceplanes;
+static q3_dplane_t *q3_surfaceplanes;
 
 static void Q3_CreatePlanarSurfacePlanes(void) {
 	int i;
@@ -261,16 +264,26 @@ static float Q3_FaceOnWinding(q3_dsurface_t *surface, winding_t *winding) {
 // creates a winding for the given brush side on the given brush
 //===========================================================================
 static winding_t *Q3_BrushSideWinding(q3_dbrush_t *brush, q3_dbrushside_t *baseside) {
-	int i;
+	int i, sideindex;
 	q3_dplane_t *baseplane, *plane;
 	winding_t *w;
 	q3_dbrushside_t *side;
+
+	if (baseside->planeNum < 0 || baseside->planeNum >= q3_numplanes)
+		return NULL;
 
 	// create a winding for the brush side with the given planenumber
 	baseplane = &q3_dplanes[baseside->planeNum];
 	w = BaseWindingForPlane(baseplane->normal, baseplane->dist);
 	for (i = 0; i < brush->numSides && w; i++) {
-		side = &q3_dbrushsides[brush->firstSide + i];
+		sideindex = brush->firstSide + i;
+		if (sideindex < 0 || sideindex >= q3_numbrushsides)
+			continue;
+
+		side = &q3_dbrushsides[sideindex];
+		if (side->planeNum < 0 || side->planeNum >= q3_numplanes)
+			continue;
+
 		// don't chop with the base plane
 		if (side->planeNum == baseside->planeNum)
 			continue;
@@ -284,21 +297,26 @@ static winding_t *Q3_BrushSideWinding(q3_dbrush_t *brush, q3_dbrushside_t *bases
 	}
 	return w;
 }
+
+qboolean WindingIsTiny(winding_t *w);
+
 //===========================================================================
 // fix screwed brush texture references
 //===========================================================================
-qboolean WindingIsTiny(winding_t *w);
-
 static void Q3_FindVisibleBrushSides(void) {
-	int i, j, k, we, numtextured, numsides;
+	int i, j, k, sideindex, we, numtextured, numsides;
+	int invalidsideindex = 0, invalidplanenum = 0;
 	float dot;
-	q3_dplane_t *plane;
+	q3_dplane_t *plane, *brushsideplane;
 	q3_dbrushside_t *brushside;
 	q3_dbrush_t *brush;
 	q3_dsurface_t *surface;
 	winding_t *w;
 
-	memset(q3_dbrushsidetextured, qfalse, Q3_MAX_MAP_BRUSHSIDES);
+	if (!q3_dbrushsidetextured || q3_numbrushsides <= 0)
+		return;
+
+	memset(q3_dbrushsidetextured, qfalse, q3_numbrushsides * sizeof(q3_dbrushsidetextured[0]));
 	//
 	numsides = 0;
 	// create planes for the planar surfaces
@@ -311,17 +329,30 @@ static void Q3_FindVisibleBrushSides(void) {
 		// go over all the sides of the brush
 		for (j = 0; j < brush->numSides; j++) {
 			qprintf("\r%6d", numsides++);
-			brushside = &q3_dbrushsides[brush->firstSide + j];
-			//
+			sideindex = brush->firstSide + j;
+			if (sideindex < 0 || sideindex >= q3_numbrushsides) {
+				invalidsideindex++;
+				continue;
+			}
+
+			brushside = &q3_dbrushsides[sideindex];
+			if (brushside->planeNum < 0 || brushside->planeNum >= q3_numplanes) {
+				invalidplanenum++;
+				q3_dbrushsidetextured[sideindex] = qtrue;
+				continue;
+			}
+
+			brushsideplane = &q3_dplanes[brushside->planeNum];
+
 			w = Q3_BrushSideWinding(brush, brushside);
 			if (!w) {
-				q3_dbrushsidetextured[brush->firstSide + j] = qtrue;
+				q3_dbrushsidetextured[sideindex] = qtrue;
 				continue;
 			} else {
 				// RemoveEqualPoints(w, 0.2);
 				if (WindingIsTiny(w)) {
 					FreeWinding(w);
-					q3_dbrushsidetextured[brush->firstSide + j] = qtrue;
+					q3_dbrushsidetextured[sideindex] = qtrue;
 					continue;
 				} else {
 					we = WindingError(w);
@@ -329,13 +360,13 @@ static void Q3_FindVisibleBrushSides(void) {
 						//						|| we == WE_NONCONVEX
 					) {
 						FreeWinding(w);
-						q3_dbrushsidetextured[brush->firstSide + j] = qtrue;
+						q3_dbrushsidetextured[sideindex] = qtrue;
 						continue;
 					}
 				}
 			}
 			if (WindingArea(w) < 20) {
-				q3_dbrushsidetextured[brush->firstSide + j] = qtrue;
+				q3_dbrushsidetextured[sideindex] = qtrue;
 				continue;
 			}
 			// find a face for texturing this brush
@@ -347,14 +378,14 @@ static void Q3_FindVisibleBrushSides(void) {
 				// Q3_SurfacePlane(surface, plane.normal, &plane.dist);
 				plane = &q3_surfaceplanes[k];
 				// the surface plane and the brush side plane should be pretty much the same
-				if (fabs(fabs(plane->dist) - fabs(q3_dplanes[brushside->planeNum].dist)) > 5)
+				if (fabs(fabs(plane->dist) - fabs(brushsideplane->dist)) > 5)
 					continue;
-				dot = DotProduct(plane->normal, q3_dplanes[brushside->planeNum].normal);
+				dot = DotProduct(plane->normal, brushsideplane->normal);
 				if (dot > -0.9 && dot < 0.9)
 					continue;
 				// if the face is partly or totally on the brush side
 				if (Q3_FaceOnWinding(surface, w)) {
-					q3_dbrushsidetextured[brush->firstSide + j] = qtrue;
+					q3_dbrushsidetextured[sideindex] = qtrue;
 					// Log_Write("Q3_FaceOnWinding");
 					break;
 				}
@@ -363,6 +394,10 @@ static void Q3_FindVisibleBrushSides(void) {
 		}
 	}
 	qprintf("\r%6d brush sides\n", numsides);
+	if (invalidsideindex > 0 || invalidplanenum > 0) {
+		Log_Print("skipped %d brush sides with invalid side index and %d with invalid plane number\n", invalidsideindex,
+				  invalidplanenum);
+	}
 	numtextured = 0;
 	for (i = 0; i < q3_numbrushsides; i++) {
 		if (forcesidesvisible)
@@ -544,6 +579,12 @@ void Q3_LoadBSPFile(struct quakefile_s *qf) {
 	q3_numDrawVerts = Q3_CopyLump(header, Q3_LUMP_DRAWVERTS, (void *)&q3_drawVerts, sizeof(q3_drawVert_t));
 	q3_numDrawSurfaces = Q3_CopyLump(header, Q3_LUMP_SURFACES, (void *)&q3_drawSurfaces, sizeof(q3_dsurface_t));
 
+	if (q3_dbrushsidetextured)
+		FreeMemory(q3_dbrushsidetextured);
+	q3_dbrushsidetextured = NULL;
+	if (q3_numbrushsides > 0)
+		q3_dbrushsidetextured = (char *)GetClearedMemory(q3_numbrushsides * sizeof(q3_dbrushsidetextured[0]));
+
 	q3_numVisBytes = Q3_CopyLump(header, Q3_LUMP_VISIBILITY, (void *)&q3_visBytes, 1);
 	q3_numLightBytes = Q3_CopyLump(header, Q3_LUMP_LIGHTMAPS, (void *)&q3_lightBytes, 1);
 	q3_entdatasize = Q3_CopyLump(header, Q3_LUMP_ENTITIES, (void *)&q3_dentdata, 1);
@@ -714,7 +755,7 @@ static void Q3_UnparseEntities(void) {
 		strcat(end, "}\n");
 		end += 2;
 
-		if (end > buf + Q3_MAX_MAP_ENTSTRING)
+		if (end > buf + MAX_MAP_ENTSTRING)
 			Error("Entity text too long");
 	}
 	q3_entdatasize = end - buf + 1;

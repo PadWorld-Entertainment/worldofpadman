@@ -76,7 +76,7 @@ extern q3_dsurface_t *q3_drawSurfaces; //[Q3_MAX_MAP_DRAW_SURFS];
 extern int q3_numFogs;
 extern q3_dfog_t *q3_dfogs; //[Q3_MAX_MAP_FOGS];
 
-extern char q3_dbrushsidetextured[Q3_MAX_MAP_BRUSHSIDES];
+extern char *q3_dbrushsidetextured;
 
 void Q3_LoadBSPFile(struct quakefile_s *qf);
 void Q3_FreeMaxBSP(void);

@@ -26,7 +26,7 @@ typedef struct {
 	vec3_t p[];
 } winding_t;
 
-#define MAX_POINTS_ON_WINDING 96
+#define MAX_POINTS_ON_WINDING 1024
 
 // you can define on_epsilon in the makefile as tighter
 #ifndef ON_EPSILON
