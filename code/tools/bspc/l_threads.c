@@ -103,7 +103,7 @@ thread_t *lastthread;
 int currentnumthreads;
 int currentthreadid;
 
-int numthreads = 1;
+int numthreads = -1;
 CRITICAL_SECTION crit;
 HANDLE semaphore;
 static int enter;
@@ -327,6 +327,12 @@ int GetNumThreads(void) {
 #include <stdint.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <unistd.h>
+
+#if defined(__APPLE__)
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#endif
 
 #define pthread_startroutine_t void *(*)(void *)
 
@@ -342,17 +348,49 @@ thread_t *lastthread;
 int currentnumthreads;
 int currentthreadid;
 
-int numthreads = 1;
+int numthreads = -1;
 pthread_mutex_t my_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_attr_t attrib;
 sem_t semaphore;
 static int enter;
 
+static int ThreadDetectProcessorCount(void) {
+	long detected;
+
+	detected = -1;
+#if defined(_SC_NPROCESSORS_ONLN)
+	detected = sysconf(_SC_NPROCESSORS_ONLN);
+#endif
+
+#if defined(__APPLE__)
+	if (detected < 1) {
+		int cpu_count;
+		size_t size;
+
+		cpu_count = 0;
+		size = sizeof(cpu_count);
+		if (sysctlbyname("hw.logicalcpu", &cpu_count, &size, NULL, 0) == 0 && cpu_count > 0) {
+			detected = cpu_count;
+		} else {
+			cpu_count = 0;
+			size = sizeof(cpu_count);
+			if (sysctlbyname("hw.ncpu", &cpu_count, &size, NULL, 0) == 0 && cpu_count > 0)
+				detected = cpu_count;
+		}
+	}
+#endif
+
+	if (detected < 1)
+		return 1;
+	if (detected > MAX_THREADS)
+		return MAX_THREADS;
+	return detected;
+}
+
 void ThreadSetDefault(void) {
 	// not set manually
 	if (numthreads == -1) {
-		// TODO: use sysconf(_SC_NPROCESSORS_ONLN) when available
-		numthreads = 1;
+		numthreads = ThreadDetectProcessorCount();
 	}
 	qprintf("%i threads\n", numthreads);
 }
