@@ -191,25 +191,7 @@ static void Q3_SurfacePlane(q3_dsurface_t *surface, vec3_t normal, float *dist) 
 		VectorNormalize(normal);
 		if (VectorLength(normal))
 			break;
-	} // end for*/
-	/*
-		float dot;
-		for (i = 0; i < surface->numVerts; i++)
-		{
-			p0 = q3_drawVerts[surface->firstVert + ((i) % surface->numVerts)].xyz;
-			p1 = q3_drawVerts[surface->firstVert + ((i+1) % surface->numVerts)].xyz;
-			p2 = q3_drawVerts[surface->firstVert + ((i+2) % surface->numVerts)].xyz;
-			VectorSubtract(p0, p1, t1);
-			VectorSubtract(p2, p1, t2);
-			VectorNormalize(t1);
-			VectorNormalize(t2);
-			dot = DotProduct(t1, t2);
-			if (dot > -0.9 && dot < 0.9 &&
-				VectorLength(t1) > 0.1 && VectorLength(t2) > 0.1) break;
-		}
-		CrossProduct(t1, t2, normal);
-		VectorNormalize(normal);
-	*/
+	}
 	if (VectorLength(normal) < 0.9) {
 		printf("surface %td bogus normal vector %f %f %f\n", surface - q3_drawSurfaces, normal[0], normal[1],
 			   normal[2]);
@@ -236,29 +218,11 @@ static void Q3_CreatePlanarSurfacePlanes(void) {
 		if (surface->surfaceType != MST_PLANAR)
 			continue;
 		Q3_SurfacePlane(surface, q3_surfaceplanes[i].normal, &q3_surfaceplanes[i].dist);
-		// Log_Print("normal = %f %f %f, dist = %f\n", q3_surfaceplanes[i].normal[0],
-		//											q3_surfaceplanes[i].normal[1],
-		//											q3_surfaceplanes[i].normal[2], q3_surfaceplanes[i].dist);
 	}
 }
 
-/*
-static void Q3_SurfacePlane(q3_dsurface_t *surface, vec3_t normal, float *dist)
-{
-	//take the plane information from the lightmap vector
-	//VectorCopy(surface->lightmapVecs[2], normal);
-	//calculate plane dist with first surface vertex
-//	*dist = DotProduct(q3_drawVerts[surface->firstVert].xyz, normal);
-	Q3_PlaneFromPoints(q3_drawVerts[surface->firstVert].xyz,
-						q3_drawVerts[surface->firstVert+1].xyz,
-						q3_drawVerts[surface->firstVert+2].xyz, normal, dist);
-} //end of the function Q3_SurfacePlane*/
 //===========================================================================
 // returns the amount the face and the winding overlap
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 static float Q3_FaceOnWinding(q3_dsurface_t *surface, winding_t *winding) {
 	int i;
@@ -282,7 +246,7 @@ static float Q3_FaceOnWinding(q3_dsurface_t *surface, winding_t *winding) {
 		CrossProduct(edgevec, plane.normal, normal);
 		VectorNormalize(normal);
 		dist = DotProduct(normal, v1);
-		//
+
 		ChopWindingInPlace(&w, normal, dist, -0.1); // CLIP_EPSILON
 	}
 	if (w) {
@@ -292,12 +256,9 @@ static float Q3_FaceOnWinding(q3_dsurface_t *surface, winding_t *winding) {
 	}
 	return 0;
 }
+
 //===========================================================================
 // creates a winding for the given brush side on the given brush
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 static winding_t *Q3_BrushSideWinding(q3_dbrush_t *brush, q3_dbrushside_t *baseside) {
 	int i;
@@ -317,7 +278,7 @@ static winding_t *Q3_BrushSideWinding(q3_dbrush_t *brush, q3_dbrushside_t *bases
 		plane = &q3_dplanes[side->planeNum];
 		if (DotProduct(baseplane->normal, plane->normal) > 0.999 && fabs(baseplane->dist - plane->dist) < 0.01)
 			continue;
-		//
+
 		plane = &q3_dplanes[side->planeNum ^ 1];
 		ChopWindingInPlace(&w, plane->normal, plane->dist, -0.1); // CLIP_EPSILON);
 	}
@@ -325,10 +286,6 @@ static winding_t *Q3_BrushSideWinding(q3_dbrush_t *brush, q3_dbrushside_t *bases
 }
 //===========================================================================
 // fix screwed brush texture references
-//
-// Parameter:				-
-// Returns:					-
-// Changes Globals:		-
 //===========================================================================
 qboolean WindingIsTiny(winding_t *w);
 
