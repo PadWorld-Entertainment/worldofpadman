@@ -230,7 +230,14 @@ static void UI_VoiceChatMenu_InitClients(void) {
 	}
 }
 
-void UI_VoiceChatMenu_Cache(void);
+static void UI_VoiceChatMenu_Cache(void) {
+	trap_R_RegisterShaderNoMip(ARROWUP0);
+	trap_R_RegisterShaderNoMip(ARROWUP1);
+	trap_R_RegisterShaderNoMip(ARROWDN0);
+	trap_R_RegisterShaderNoMip(ARROWDN1);
+	trap_R_RegisterShaderNoMip(BACK0);
+	trap_R_RegisterShaderNoMip(BACK1);
+}
 
 static void UI_VoiceChatMenu_Init(void) {
 	int n;
@@ -360,15 +367,6 @@ static void UI_VoiceChatMenu_Init(void) {
 	Menu_AddItem(&voiceChatMenuInfo.menu, &voiceChatMenuInfo.muteAll);
 	Menu_AddItem(&voiceChatMenuInfo.menu, &voiceChatMenuInfo.sendTarget);
 	Menu_AddItem(&voiceChatMenuInfo.menu, &voiceChatMenuInfo.back);
-}
-
-void UI_VoiceChatMenu_Cache(void) {
-	trap_R_RegisterShaderNoMip(ARROWUP0);
-	trap_R_RegisterShaderNoMip(ARROWUP1);
-	trap_R_RegisterShaderNoMip(ARROWDN0);
-	trap_R_RegisterShaderNoMip(ARROWDN1);
-	trap_R_RegisterShaderNoMip(BACK0);
-	trap_R_RegisterShaderNoMip(BACK1);
 }
 
 void UI_VoiceIngame(void) {
