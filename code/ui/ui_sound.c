@@ -108,6 +108,7 @@ typedef struct {
 	int soundSystem_original;
 	int quality_original;
 	int inputdevice_original;
+	int alHRTF_original;
 	int device_original;
 
 	char *deviceslist[MAX_DEVICES];
@@ -203,6 +204,7 @@ static void UI_SoundOptions_SetMenuItems(void) {
 	}
 
 	soundOptionsInfo.alHRTF.curvalue = (trap_Cvar_VariableValue("s_alHRTF") != 0);
+	soundOptionsInfo.alHRTF_original = soundOptionsInfo.alHRTF.curvalue;
 }
 
 /*
@@ -250,7 +252,7 @@ static void UI_SoundOptions_UpdateMenuItems(void) {
 		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	} else if (soundOptionsInfo.quality_original != soundOptionsInfo.quality.curvalue) {
 		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
-	} else if (soundOptionsInfo.alHRTF.curvalue != (int)trap_Cvar_VariableValue("s_alHRTF")) {
+	} else if (soundOptionsInfo.alHRTF_original != soundOptionsInfo.alHRTF.curvalue) {
 		soundOptionsInfo.apply.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 	}
 
@@ -326,6 +328,7 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 		trap_Cvar_SetValue("s_doppler", (float)soundOptionsInfo.doppler.curvalue);
 		break;
 
+	case ID_ALHRTF:
 	case ID_DEVICE:
 	case ID_INPUTDEVICE:
 		break;
@@ -351,10 +354,6 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 		}
 		break;
 
-	case ID_ALHRTF:
-		trap_Cvar_SetValue("s_alHRTF", soundOptionsInfo.alHRTF.curvalue);
-		break;
-
 	case ID_BACK:
 		UI_PopMenu();
 		break;
@@ -364,7 +363,8 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 		if (soundOptionsInfo.quality_original != soundOptionsInfo.quality.curvalue ||
 			soundOptionsInfo.soundSystem_original != soundOptionsInfo.soundSystem.curvalue ||
 			soundOptionsInfo.device_original != soundOptionsInfo.device.curvalue ||
-			soundOptionsInfo.inputdevice_original != soundOptionsInfo.inputdevice.curvalue) {
+			soundOptionsInfo.inputdevice_original != soundOptionsInfo.inputdevice.curvalue ||
+			soundOptionsInfo.alHRTF_original != soundOptionsInfo.alHRTF.curvalue) {
 			int speed;
 			const char *deviceCvar;
 			const char *inputdeviceCvar;
@@ -406,6 +406,8 @@ static void UI_SoundOptions_Event(void *ptr, int event) {
 					soundOptionsInfo.inputdevice_original = soundOptionsInfo.inputdevice.curvalue;
 				}
 			}
+
+			trap_Cvar_SetValue("s_alHRTF", soundOptionsInfo.alHRTF.curvalue);
 
 			trap_Cvar_SetValue("s_useOpenAL", (soundOptionsInfo.soundSystem.curvalue == UISND_OPENAL));
 			soundOptionsInfo.soundSystem_original = soundOptionsInfo.soundSystem.curvalue;
