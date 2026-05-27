@@ -642,6 +642,8 @@ void SV_Init(void) {
 	sv_voip = Cvar_Get("sv_voip", "1", CVAR_LATCH);
 	Cvar_CheckRange(sv_voip, 0, 1, qtrue);
 	sv_voipProtocol = Cvar_Get("sv_voipProtocol", sv_voip->integer ? "opus" : "", CVAR_SYSTEMINFO | CVAR_ROM);
+	sv_voipRate = Cvar_Get("sv_voipRate", "25", CVAR_ARCHIVE);
+	Cvar_CheckRange(sv_voipRate, 0, 100, qtrue);
 #endif
 	Cvar_Get("sv_paks", "", CVAR_SYSTEMINFO | CVAR_ROM);
 	Cvar_Get("sv_pakNames", "", CVAR_SYSTEMINFO | CVAR_ROM);

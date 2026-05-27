@@ -132,6 +132,10 @@ static void S_Base_StopCapture(void) {
 static void S_Base_MasterGain(float val) {
 	SNDDMA_MasterGain(val);
 }
+
+static qboolean S_Base_CaptureAvailable(void) {
+	return SNDDMA_CaptureAvailable();
+}
 #endif
 
 /*
@@ -1505,6 +1509,7 @@ qboolean S_Base_Init(soundInterface_t *si) {
 	si->Capture = S_Base_Capture;
 	si->StopCapture = S_Base_StopCapture;
 	si->MasterGain = S_Base_MasterGain;
+	si->CaptureAvailable = S_Base_CaptureAvailable;
 #endif
 
 	return qtrue;

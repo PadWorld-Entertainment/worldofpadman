@@ -148,6 +148,7 @@ typedef struct {
 	void (*Capture)(int samples, byte *data);
 	void (*StopCapture)(void);
 	void (*MasterGain)(float gain);
+	qboolean (*CaptureAvailable)(void);
 #endif
 } soundInterface_t;
 
@@ -180,6 +181,7 @@ int SNDDMA_AvailableCaptureSamples(void);
 void SNDDMA_Capture(int samples, byte *data);
 void SNDDMA_StopCapture(void);
 void SNDDMA_MasterGain(float val);
+qboolean SNDDMA_CaptureAvailable(void);
 #endif
 
 //====================================================================

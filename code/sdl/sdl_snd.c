@@ -435,4 +435,10 @@ void SNDDMA_MasterGain(float val) {
 	sdlMasterGain = val;
 #endif
 }
+
+#ifdef USE_VOIP
+qboolean SNDDMA_CaptureAvailable(void) {
+	return (sdlCaptureDevice != 0);
+}
+#endif
 #endif

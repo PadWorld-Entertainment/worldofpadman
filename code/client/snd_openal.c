@@ -2157,6 +2157,10 @@ static void S_AL_StopCapture(void) {
 static void S_AL_MasterGain(float gain) {
 	qalListenerf(AL_GAIN, gain);
 }
+
+static qboolean S_AL_CaptureAvailable(void) {
+	return (alCaptureDevice != NULL);
+}
 #endif
 
 /*
@@ -2449,6 +2453,7 @@ qboolean S_AL_Init(soundInterface_t *si) {
 	si->Capture = S_AL_Capture;
 	si->StopCapture = S_AL_StopCapture;
 	si->MasterGain = S_AL_MasterGain;
+	si->CaptureAvailable = S_AL_CaptureAvailable;
 #endif
 
 	return qtrue;
