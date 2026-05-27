@@ -859,6 +859,57 @@ void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int tim
 
 	trap_R_AddRefEntityToScene(&head);
 
+	// XMAS: optional hat (e.g. christmas hat) drawn on top of the head model.
+	// Only drawn when the xmas mod is active and a hat model is registered.
+	// Position is taken from the head's tag_hat; if missing, hatoffset/hatrotate from
+	// animation.cfg are used as a fallback. If neither is available the hat is skipped.
+	if (uis.isXmas && pi->hatModel) {
+		refEntity_t hat;
+		orientation_t tag;
+		qboolean drawHat = qfalse;
+
+		memset(&hat, 0, sizeof(hat));
+		hat.hModel = pi->hatModel;
+		hat.customSkin = pi->hatSkin;
+		VectorCopy(origin, hat.lightingOrigin);
+		hat.renderfx = renderfx;
+
+		if (trap_CM_LerpTag(&tag, pi->headModel, head.oldframe, head.frame, 1.0f - head.backlerp, "tag_hat")) {
+			int i;
+			vec3_t tempAxis[3];
+
+			VectorCopy(head.origin, hat.origin);
+			for (i = 0; i < 3; i++) {
+				VectorMA(hat.origin, tag.origin[i], head.axis[i], hat.origin);
+			}
+			MatrixMultiply(tag.axis, head.axis, tempAxis);
+			AxisCopy(tempAxis, hat.axis);
+			drawHat = qtrue;
+		} else if (pi->hasHatOffset || pi->hasHatRotate) {
+			int i;
+			vec3_t tempAxis[3], rotAxis[3];
+
+			VectorCopy(head.origin, hat.origin);
+			for (i = 0; i < 3; i++) {
+				VectorMA(hat.origin, pi->hatOffset[i], head.axis[i], hat.origin);
+			}
+			AnglesToAxis(pi->hatRotate, rotAxis);
+			MatrixMultiply(rotAxis, head.axis, tempAxis);
+			AxisCopy(tempAxis, hat.axis);
+			drawHat = qtrue;
+		}
+
+		if (drawHat) {
+			if (pi->hatScale != 1.0f && pi->hatScale > 0.0f) {
+				VectorScale(hat.axis[0], pi->hatScale, hat.axis[0]);
+				VectorScale(hat.axis[1], pi->hatScale, hat.axis[1]);
+				VectorScale(hat.axis[2], pi->hatScale, hat.axis[2]);
+				hat.nonNormalizedAxes = qtrue;
+			}
+			trap_R_AddRefEntityToScene(&hat);
+		}
+	}
+
 	//
 	// add the gun
 	//
@@ -988,6 +1039,12 @@ static qboolean UI_ParseAnimationFile(const char *filename, playerInfo_t *pi) {
 
 	pi->fixedlegs = qfalse;
 	pi->fixedtorso = qfalse;
+	// XMAS: hat defaults
+	pi->hatScale = 1.0f;
+	VectorClear(pi->hatOffset);
+	VectorClear(pi->hatRotate);
+	pi->hasHatOffset = qfalse;
+	pi->hasHatRotate = qfalse;
 
 	// load the file
 	len = trap_FS_FOpenFile(filename, &f, FS_READ);
@@ -1060,6 +1117,36 @@ static qboolean UI_ParseAnimationFile(const char *filename, playerInfo_t *pi) {
 			continue;
 		} else if (!Q_stricmp(token, "fixedtorso")) {
 			pi->fixedtorso = qtrue;
+			continue;
+		} else if (!Q_stricmp(token, "hatscale")) {
+			// XMAS
+			token = COM_Parse(&text_p);
+			if (!token) {
+				break;
+			}
+			pi->hatScale = atof(token);
+			continue;
+		} else if (!Q_stricmp(token, "hatoffset")) {
+			// XMAS: fallback when there is no tag_hat on the head model
+			for (i = 0; i < 3; i++) {
+				token = COM_Parse(&text_p);
+				if (!token) {
+					break;
+				}
+				pi->hatOffset[i] = atof(token);
+			}
+			pi->hasHatOffset = qtrue;
+			continue;
+		} else if (!Q_stricmp(token, "hatrotate")) {
+			// XMAS: fallback when there is no tag_hat on the head model
+			for (i = 0; i < 3; i++) {
+				token = COM_Parse(&text_p);
+				if (!token) {
+					break;
+				}
+				pi->hatRotate[i] = atof(token);
+			}
+			pi->hasHatRotate = qtrue;
 			continue;
 		}
 
@@ -1274,6 +1361,18 @@ qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName)
 		return qfalse;
 	}
 
+	// XMAS: load optional hat model from models/hats/<hatName>/.
+	pi->hatModel = 0;
+	pi->hatSkin = 0;
+	if (uis.isXmas && pi->hatName[0]) {
+		Com_sprintf(filename, sizeof(filename), "models/hats/%s/hat.md3", pi->hatName);
+		pi->hatModel = trap_R_RegisterModel(filename);
+		if (pi->hatModel) {
+			Com_sprintf(filename, sizeof(filename), "models/hats/%s/hat_default.skin", pi->hatName);
+			pi->hatSkin = trap_R_RegisterSkin(filename);
+		}
+	}
+
 	return qtrue;
 }
 
@@ -1284,6 +1383,11 @@ UI_PlayerInfo_SetModel
 */
 void UI_PlayerInfo_SetModel(playerInfo_t *pi, const char *model) {
 	memset(pi, 0, sizeof(*pi));
+	// XMAS: pick up the currently selected hat from the userinfo cvar so the player menu
+	// shows the same hat that will be used in-game.
+	if (uis.isXmas) {
+		trap_Cvar_VariableStringBuffer("hat", pi->hatName, sizeof(pi->hatName));
+	}
 	UI_RegisterClientModelname(pi, model);
 	pi->weapon = WP_NIPPER;
 	pi->currentWeapon = pi->weapon;

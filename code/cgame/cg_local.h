@@ -380,6 +380,19 @@ typedef struct {
 	qhandle_t headModel;
 	qhandle_t headSkin;
 
+	// XMAS: optional hat support (e.g. christmas hats)
+	// hat models are stored under models/hats/<hatName>/hat.md3 and shared across all
+	// player models. They are positioned via the optional tag_hat on the head model.
+	// If tag_hat is missing, the hatoffset/hatrotate fallback from animation.cfg is used.
+	char hatName[MAX_QPATH];
+	qhandle_t hatModel;
+	qhandle_t hatSkin;
+	float hatScale;		   // hatscale from animation.cfg, default 1.0
+	vec3_t hatOffset;	   // hatoffset from animation.cfg, only used when tag_hat is missing
+	vec3_t hatRotate;	   // hatrotate from animation.cfg (pitch/yaw/roll), only used when tag_hat is missing
+	qboolean hasHatOffset; // true if hatoffset was specified in animation.cfg
+	qboolean hasHatRotate; // true if hatrotate was specified in animation.cfg
+
 	qhandle_t modelIcon;
 
 	animation_t animations[MAX_TOTALANIMATIONS];
@@ -1129,6 +1142,7 @@ typedef struct {
 	int processedSnapshotNum;  // the number of snapshots cgame has requested
 
 	qboolean localServer; // detected on startup by checking sv_running
+	qboolean isXmas;	  // detected on startup by checking fs_game; required for XMAS-only features (e.g. hats)
 
 	// parsed from serverinfo
 	gametype_t gametype;
