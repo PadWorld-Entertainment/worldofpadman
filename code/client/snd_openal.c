@@ -2383,10 +2383,14 @@ qboolean S_AL_Init(soundInterface_t *si) {
 		// !!! FIXME:  so we'll just check the function pointer for now.
 		if (qalcCaptureOpenDevice == NULL)
 #else
-		if (!qalcIsExtensionPresent(NULL, "ALC_EXT_capture"))
+		// Function pointer must be available to actually capture.
+		// Extension string check is case-insensitive fallback for detection.
+		if (qalcCaptureOpenDevice == NULL ||
+		    (!qalcIsExtensionPresent(NULL, "ALC_EXT_CAPTURE") &&
+		     !qalcIsExtensionPresent(NULL, "ALC_EXT_capture")))
 #endif
 		{
-			Com_Printf("No ALC_EXT_capture support, can't record audio.\n");
+			Com_Printf("No ALC_EXT_CAPTURE support, can't record audio.\n");
 		} else {
 			char inputdevicenames[16384] = "";
 			const char *inputdevicelist;
