@@ -2531,7 +2531,6 @@ qboolean S_AL_Init(soundInterface_t *si) {
 
 #ifdef USE_VOIP
 	// !!! FIXME: some of these alcCaptureOpenDevice() values should be cvars.
-	// !!! FIXME: add support for capture device enumeration.
 	// !!! FIXME: add some better error reporting.
 	s_alCapture = Cvar_Get("s_alCapture", "1", CVAR_ARCHIVE | CVAR_LATCH);
 	if (!s_alCapture->integer) {
