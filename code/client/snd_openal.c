@@ -51,6 +51,62 @@ static qboolean enumeration_all_ext = qfalse;
 static qboolean capture_ext = qfalse;
 #endif
 
+// AL_SOFT_direct_channels - bypass spatialization for VoIP/music
+static qboolean alDirectChannels_ext = qfalse;
+#ifndef AL_DIRECT_CHANNELS_SOFT
+#define AL_DIRECT_CHANNELS_SOFT 0x1033
+#endif
+
+// AL_SOFT_deferred_updates - batch source updates for less overhead
+static qboolean alDeferredUpdates_ext = qfalse;
+typedef void(AL_APIENTRY *LPALDEFERUPDATESSOFT)(void);
+typedef void(AL_APIENTRY *LPALPROCESSUPDATESSOFT)(void);
+static LPALDEFERUPDATESSOFT qalDeferUpdatesSOFT;
+static LPALPROCESSUPDATESSOFT qalProcessUpdatesSOFT;
+
+// ALC_SOFT_HRTF - head-related transfer function for headphones
+static qboolean alcHRTF_ext = qfalse;
+#ifndef ALC_HRTF_SOFT
+#define ALC_HRTF_SOFT 0x1992
+#endif
+#ifndef ALC_HRTF_STATUS_SOFT
+#define ALC_HRTF_STATUS_SOFT 0x1993
+#endif
+#ifndef ALC_HRTF_DISABLED_SOFT
+#define ALC_HRTF_DISABLED_SOFT 0x0000
+#endif
+#ifndef ALC_HRTF_ENABLED_SOFT
+#define ALC_HRTF_ENABLED_SOFT 0x0001
+#endif
+
+static cvar_t *s_alHRTF;
+
+// ALC_SOFT_output_limiter - prevents clipping distortion
+static qboolean alcOutputLimiter_ext = qfalse;
+#ifndef ALC_OUTPUT_LIMITER_SOFT
+#define ALC_OUTPUT_LIMITER_SOFT 0x199A
+#endif
+
+// AL_SOFT_source_resampler - per-source resampler quality
+static qboolean alSourceResampler_ext = qfalse;
+#ifndef AL_SOURCE_RESAMPLER_SOFT
+#define AL_SOURCE_RESAMPLER_SOFT 0x1110
+#endif
+#ifndef AL_NUM_RESAMPLERS_SOFT
+#define AL_NUM_RESAMPLERS_SOFT 0x1210
+#endif
+#ifndef AL_DEFAULT_RESAMPLER_SOFT
+#define AL_DEFAULT_RESAMPLER_SOFT 0x1211
+#endif
+#ifndef AL_RESAMPLER_NAME_SOFT
+#define AL_RESAMPLER_NAME_SOFT 0x1212
+#endif
+typedef const ALchar *(AL_APIENTRY *LPALGETSTRINGISOFT)(ALenum pname, ALsizei index);
+static LPALGETSTRINGISOFT qalGetStringiSOFT;
+static ALint alResamplerDefault = 0;  // default resampler index
+static ALint alResamplerFast = 0;     // fastest usable resampler for VoIP
+static ALint alResamplerCount = 0;    // total number of resamplers
+
 /*
 =================
 S_AL_Format
@@ -1528,6 +1584,16 @@ static void S_AL_AllocateStreamChannel(int stream, int entityNum) {
 		qalSource3f(alsrc, AL_DIRECTION, 0.0, 0.0, 0.0);
 		qalSourcef(alsrc, AL_ROLLOFF_FACTOR, 0.0);
 		qalSourcei(alsrc, AL_SOURCE_RELATIVE, AL_TRUE);
+
+		// Bypass spatialization for direct audio (VoIP, music)
+		if (alDirectChannels_ext) {
+			qalSourcei(alsrc, AL_DIRECT_CHANNELS_SOFT, AL_TRUE);
+		}
+
+		// Use fast resampler for VoIP streams (voice doesn't need high-quality resampling)
+		if (alSourceResampler_ext) {
+			qalSourcei(alsrc, AL_SOURCE_RESAMPLER_SOFT, alResamplerFast);
+		}
 	}
 
 	streamSourceHandles[stream] = cursrc;
@@ -1698,8 +1764,8 @@ static void S_AL_StreamDie(int stream) {
 
 //===========================================================================
 
-#define NUM_MUSIC_BUFFERS 4
-#define MUSIC_BUFFER_SIZE 4096
+#define NUM_MUSIC_BUFFERS 8
+#define MUSIC_BUFFER_SIZE 16384
 
 static qboolean musicPlaying = qfalse;
 static srcHandle_t musicSourceHandle = -1;
@@ -2048,6 +2114,11 @@ S_AL_Update
 static void S_AL_Update(void) {
 	int i;
 
+	// Defer all source property changes for batched processing
+	if (alDeferredUpdates_ext) {
+		qalDeferUpdatesSOFT();
+	}
+
 	if (s_muted->modified) {
 		// muted state changed. Let S_AL_Gain turn up all sources again.
 		for (i = 0; i < srcCount; i++) {
@@ -2065,6 +2136,11 @@ static void S_AL_Update(void) {
 	for (i = 0; i < MAX_RAW_STREAMS; i++)
 		S_AL_StreamUpdate(i);
 	S_AL_MusicUpdate();
+
+	// Process all deferred updates atomically
+	if (alDeferredUpdates_ext) {
+		qalProcessUpdatesSOFT();
+	}
 
 	// Doppler
 	if (s_doppler->modified) {
@@ -2190,6 +2266,13 @@ static void S_AL_SoundInfo(void) {
 		Com_Printf("  Available Input Devices:\n%s", s_alAvailableInputDevices->string);
 	}
 #endif
+
+	// Extension status
+	Com_Printf("  Direct Channels: %s\n", alDirectChannels_ext ? "enabled" : "not available");
+	Com_Printf("  Deferred Updates: %s\n", alDeferredUpdates_ext ? "enabled" : "not available");
+	Com_Printf("  HRTF: %s\n", alcHRTF_ext ? (s_alHRTF->integer ? "enabled" : "available (set s_alHRTF 1)") : "not available");
+	Com_Printf("  Output Limiter: %s\n", alcOutputLimiter_ext ? "enabled" : "not available");
+	Com_Printf("  Source Resampler: %s\n", alSourceResampler_ext ? va("enabled (%d available)", alResamplerCount) : "not available");
 }
 
 /*
@@ -2364,6 +2447,87 @@ qboolean S_AL_Init(soundInterface_t *si) {
 	qalDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 	qalDopplerFactor(s_alDopplerFactor->value);
 	qalSpeedOfSound(s_alDopplerSpeed->value);
+
+	// Detect and initialize OpenAL-Soft extensions
+	// AL_SOFT_direct_channels - bypass spatialization for direct audio (VoIP, music)
+	if (qalIsExtensionPresent("AL_SOFT_direct_channels") ||
+	    qalIsExtensionPresent("AL_SOFT_direct_channels_remix")) {
+		alDirectChannels_ext = qtrue;
+		Com_Printf("OpenAL: AL_SOFT_direct_channels detected.\n");
+	}
+
+	// AL_SOFT_deferred_updates - batch source property changes
+	if (qalIsExtensionPresent("AL_SOFT_deferred_updates")) {
+		qalDeferUpdatesSOFT = (LPALDEFERUPDATESSOFT)qalGetProcAddress("alDeferUpdatesSOFT");
+		qalProcessUpdatesSOFT = (LPALPROCESSUPDATESSOFT)qalGetProcAddress("alProcessUpdatesSOFT");
+		if (qalDeferUpdatesSOFT && qalProcessUpdatesSOFT) {
+			alDeferredUpdates_ext = qtrue;
+			Com_Printf("OpenAL: AL_SOFT_deferred_updates detected.\n");
+		}
+	}
+
+	// ALC_SOFT_HRTF - 3D audio for headphones
+	s_alHRTF = Cvar_Get("s_alHRTF", "0", CVAR_ARCHIVE | CVAR_LATCH);
+	if (qalcIsExtensionPresent(alDevice, "ALC_SOFT_HRTF")) {
+		alcHRTF_ext = qtrue;
+		Com_Printf("OpenAL: ALC_SOFT_HRTF detected.\n");
+		if (s_alHRTF->integer) {
+			// Re-create context with HRTF enabled
+			ALCint attrs[] = {ALC_HRTF_SOFT, ALC_HRTF_ENABLED_SOFT, 0};
+			qalcDestroyContext(alContext);
+			alContext = qalcCreateContext(alDevice, attrs);
+			if (!alContext) {
+				Com_Printf("Failed to create HRTF context, falling back to normal.\n");
+				alContext = qalcCreateContext(alDevice, NULL);
+			} else {
+				Com_Printf("OpenAL: HRTF enabled.\n");
+			}
+			qalcMakeContextCurrent(alContext);
+		}
+	}
+
+	// ALC_SOFT_output_limiter - enable output limiter to prevent clipping
+	if (qalcIsExtensionPresent(alDevice, "ALC_SOFT_output_limiter")) {
+		alcOutputLimiter_ext = qtrue;
+		Com_Printf("OpenAL: ALC_SOFT_output_limiter detected (enabled via context).\n");
+		// The limiter is enabled by default in OpenAL-Soft when the extension is present.
+		// No additional action needed - just confirm it's available.
+	}
+
+	// AL_SOFT_source_resampler - per-source resampler quality selection
+	if (qalIsExtensionPresent("AL_SOFT_source_resampler")) {
+		qalGetStringiSOFT = (LPALGETSTRINGISOFT)qalGetProcAddress("alGetStringiSOFT");
+		if (qalGetStringiSOFT) {
+			int i;
+			alSourceResampler_ext = qtrue;
+			qalGetIntegerv(AL_NUM_RESAMPLERS_SOFT, &alResamplerCount);
+			qalGetIntegerv(AL_DEFAULT_RESAMPLER_SOFT, &alResamplerDefault);
+
+			// Find a fast resampler by name. Prefer "Linear" over "Nearest"
+			// (Nearest has artifacts, Linear is cheap and smooth enough for voice).
+			alResamplerFast = alResamplerDefault; // fallback to default
+			for (i = 0; i < alResamplerCount; i++) {
+				const char *name = qalGetStringiSOFT(AL_RESAMPLER_NAME_SOFT, i);
+				if (name && !Q_stricmp(name, "Linear")) {
+					alResamplerFast = i;
+					break;
+				}
+			}
+			// If no "Linear" found, try "Nearest" as last resort
+			if (alResamplerFast == alResamplerDefault) {
+				for (i = 0; i < alResamplerCount; i++) {
+					const char *name = qalGetStringiSOFT(AL_RESAMPLER_NAME_SOFT, i);
+					if (name && !Q_stricmp(name, "Nearest")) {
+						alResamplerFast = i;
+						break;
+					}
+				}
+			}
+
+			Com_Printf("OpenAL: AL_SOFT_source_resampler detected (%d resamplers, default=%d, fast=%d).\n",
+			           alResamplerCount, alResamplerDefault, alResamplerFast);
+		}
+	}
 
 #ifdef USE_VOIP
 	// !!! FIXME: some of these alcCaptureOpenDevice() values should be cvars.
