@@ -380,6 +380,18 @@ void S_MasterGain(float gain) {
 		si.MasterGain(gain);
 	}
 }
+
+/*
+=================
+S_CaptureAvailable
+=================
+*/
+qboolean S_CaptureAvailable(void) {
+	if (si.CaptureAvailable) {
+		return si.CaptureAvailable();
+	}
+	return qfalse;
+}
 #endif
 
 //=============================================================================

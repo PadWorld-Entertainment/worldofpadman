@@ -76,4 +76,5 @@ int S_AvailableCaptureSamples(void);
 void S_Capture(int samples, byte *data);
 void S_StopCapture(void);
 void S_MasterGain(float gain);
+qboolean S_CaptureAvailable(void);
 #endif

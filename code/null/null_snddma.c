@@ -60,6 +60,10 @@ void SNDDMA_StopCapture(void) {
 
 void SNDDMA_MasterGain(float val) {
 }
+
+qboolean SNDDMA_CaptureAvailable(void) {
+	return qfalse;
+}
 #endif
 
 sfxHandle_t S_RegisterSound(const char *name, qboolean compressed) {

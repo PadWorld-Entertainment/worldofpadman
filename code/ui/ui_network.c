@@ -59,6 +59,7 @@ NETWORK OPTIONS MENU
 #define ID_VOIPCAPTUREMULT 16
 #define ID_VOIPSENDTARGET 17
 #define ID_MUMBLESCALE 18
+#define ID_VOIPTEST 19
 
 #define XPOSITION 220
 #define YPOSITION 198
@@ -89,6 +90,7 @@ typedef struct {
 	menuslider_s voipCaptureMult;
 	menulist_s voipSendTarget;
 	menuslider_s mumbleScale;
+	menuradiobutton_s voipTest;
 
 	menubitmap_s back;
 
@@ -180,6 +182,21 @@ UI_NetworkOptions_UpdateMenuItems
 */
 static void UI_NetworkOptions_UpdateMenuItems(void) {
 
+	// No capture device available - disable all VoIP transmit settings
+	if (trap_Cvar_VariableValue("cl_voipNoMic") > 0) {
+		networkOptionsInfo.voipHint.string = "No microphone detected!";
+		networkOptionsInfo.voipHint.generic.flags &= ~QMF_HIDDEN;
+		networkOptionsInfo.voipMode.generic.flags |= QMF_GRAYED;
+		networkOptionsInfo.voipVADmode.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipVADthreshold.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipTest.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.mumbleScale.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		return;
+	}
+
 	// high rate enabled is condition for all voip settings
 	if (trap_Cvar_VariableValue("rate") < 25000) {
 		trap_Cvar_SetValue("cl_voip", 0);
@@ -192,6 +209,7 @@ static void UI_NetworkOptions_UpdateMenuItems(void) {
 		networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 		networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 		networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+		networkOptionsInfo.voipTest.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 		networkOptionsInfo.mumbleScale.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 	} else {
 		networkOptionsInfo.voipHint.generic.flags |= QMF_HIDDEN;
@@ -204,6 +222,7 @@ static void UI_NetworkOptions_UpdateMenuItems(void) {
 			networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 			networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 			networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipTest.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 			networkOptionsInfo.mumbleScale.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 
 			// voipMode is set to Built-in
@@ -213,6 +232,7 @@ static void UI_NetworkOptions_UpdateMenuItems(void) {
 			networkOptionsInfo.voipGainDuringCapture.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 			networkOptionsInfo.voipCaptureMult.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 			networkOptionsInfo.voipSendTarget.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
+			networkOptionsInfo.voipTest.generic.flags &= ~(QMF_HIDDEN | QMF_INACTIVE);
 			networkOptionsInfo.mumbleScale.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 
 			// automatic recording enabled is a condition for voip vad threshold
@@ -229,6 +249,7 @@ static void UI_NetworkOptions_UpdateMenuItems(void) {
 			networkOptionsInfo.voipGainDuringCapture.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 			networkOptionsInfo.voipCaptureMult.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 			networkOptionsInfo.voipSendTarget.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
+			networkOptionsInfo.voipTest.generic.flags |= QMF_HIDDEN | QMF_INACTIVE;
 			networkOptionsInfo.mumbleScale.generic.flags |= (QMF_HIDDEN | QMF_INACTIVE);
 		}
 	}
@@ -325,10 +346,26 @@ static void UI_NetworkOptions_Event(void *ptr, int event) {
 		trap_Cvar_SetValue("cl_mumbleScale", (float)((int)networkOptionsInfo.mumbleScale.curvalue) / 1000);
 		break;
 
+	case ID_VOIPTEST:
+		trap_Cmd_ExecuteText(EXEC_APPEND, "voip test\n");
+		break;
+
 	case ID_BACK:
 		UI_PopMenu();
 		break;
 	}
+}
+
+/*
+===============
+UI_NetworkOptions_OnClose
+
+Called when the menu is closed (back, ESC, or navigating to another tab).
+Stops the mic test if running.
+===============
+*/
+static void UI_NetworkOptions_OnClose(void) {
+	trap_Cmd_ExecuteText(EXEC_APPEND, "voip test_stop\n");
 }
 
 /*
@@ -338,7 +375,49 @@ UI_NetworkOptions_MenuDraw
 */
 static void UI_NetworkOptions_MenuDraw(void) {
 	UI_NetworkOptions_UpdateMenuItems();
+
+	// Sync test button with actual test mode state
+	networkOptionsInfo.voipTest.curvalue = (trap_Cvar_VariableValue("cl_voipTestMode") != 0);
+
 	Menu_Draw(&networkOptionsInfo.menu);
+
+	// Draw mic level overlay on the threshold slider when VoIP is active and test is running
+	if (trap_Cvar_VariableValue("cl_voip") > 0 &&
+	    !(networkOptionsInfo.voipVADthreshold.generic.flags & QMF_HIDDEN)) {
+		// cl_voipMicLevel is peak amplitude as percentage of full scale (0-100)
+		float micLevel = trap_Cvar_VariableValue("cl_voipMicLevel");
+		int sliderX = networkOptionsInfo.voipVADthreshold.generic.x + SMALLCHAR_WIDTH;
+		int sliderY = networkOptionsInfo.voipVADthreshold.generic.y + 4;
+		int sliderW = 96;
+		int sliderH = 8;
+		float levelFrac;
+		vec4_t levelColor;
+
+		// Clamp to slider range 0-100
+		if (micLevel < 0) micLevel = 0;
+		if (micLevel > 100) micLevel = 100;
+
+		levelFrac = micLevel / 100.0f;
+
+		// Color based on signal level
+		if (micLevel > 50) {
+			// Loud - bright green
+			levelColor[0] = 0.1f; levelColor[1] = 0.9f; levelColor[2] = 0.1f; levelColor[3] = 0.6f;
+		} else if (micLevel > 10) {
+			// Normal speech - green
+			levelColor[0] = 0.1f; levelColor[1] = 0.7f; levelColor[2] = 0.1f; levelColor[3] = 0.5f;
+		} else if (micLevel > 0) {
+			// Quiet/background - dim blue
+			levelColor[0] = 0.2f; levelColor[1] = 0.2f; levelColor[2] = 0.6f; levelColor[3] = 0.4f;
+		} else {
+			levelColor[0] = 0; levelColor[1] = 0; levelColor[2] = 0; levelColor[3] = 0;
+		}
+
+		// Draw level fill on the slider
+		if (levelFrac > 0) {
+			UI_FillRect(sliderX, sliderY, sliderW * levelFrac, sliderH, levelColor);
+		}
+	}
 }
 
 /*
@@ -355,6 +434,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 	networkOptionsInfo.menu.wrapAround = qtrue;
 	networkOptionsInfo.menu.fullscreen = qtrue;
 	networkOptionsInfo.menu.draw = UI_NetworkOptions_MenuDraw;
+	networkOptionsInfo.menu.onclose = UI_NetworkOptions_OnClose;
 	networkOptionsInfo.menu.bgparts = BGP_SYSTEM | BGP_MENUFX;
 
 	networkOptionsInfo.graphics.generic.type = MTYPE_BITMAP;
@@ -549,6 +629,18 @@ static void UI_NetworkOptions_MenuInit(void) {
 
 	networkOptionsInfo.voipCustomSendTarget = qtrue;
 
+	y += BIGCHAR_HEIGHT + 2;
+	networkOptionsInfo.voipTest.generic.type = MTYPE_RADIOBUTTON;
+	networkOptionsInfo.voipTest.generic.name = "Mic Test:";
+	networkOptionsInfo.voipTest.generic.flags = QMF_SMALLFONT;
+	networkOptionsInfo.voipTest.generic.callback = UI_NetworkOptions_Event;
+	networkOptionsInfo.voipTest.generic.id = ID_VOIPTEST;
+	networkOptionsInfo.voipTest.generic.x = XPOSITION;
+	networkOptionsInfo.voipTest.generic.y = y;
+	networkOptionsInfo.voipTest.generic.toolTip =
+		"Toggle microphone loopback test. When enabled, your microphone input is encoded and "
+		"played back through your speakers so you can hear yourself and verify your settings.";
+
 	networkOptionsInfo.back.generic.type = MTYPE_BITMAP;
 	networkOptionsInfo.back.generic.name = BACK0;
 	networkOptionsInfo.back.generic.flags = QMF_PULSEIFFOCUS;
@@ -577,6 +669,7 @@ static void UI_NetworkOptions_MenuInit(void) {
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.voipCaptureMult);
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.voipSendTarget);
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.mumbleScale);
+	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.voipTest);
 
 	Menu_AddItem(&networkOptionsInfo.menu, (void *)&networkOptionsInfo.back);
 
