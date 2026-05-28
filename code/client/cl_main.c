@@ -464,67 +464,65 @@ static void CL_CaptureVoip(void) {
 		S_StartCapture();
 		CL_VoipNewGeneration();
 		CL_VoipParseTargets();
+		clc.voipBufferedSamples = 0;
 	}
 
 	if ((cl_voipSend->integer) || (finalFrame)) { // user wants to capture audio?
 		int samples = S_AvailableCaptureSamples();
-		const int packetSamples = (finalFrame) ? VOIP_MAX_FRAME_SAMPLES : VOIP_MAX_PACKET_SAMPLES;
+		const int frameSamples = VOIP_MAX_FRAME_SAMPLES;
 
-		// enough data buffered in audio hardware to process yet?
-		if (samples >= packetSamples) {
-			// audio capture is always MONO16.
+		// Capture and meter audio one frame (20ms) at a time for responsive
+		// power/level updates, but only encode when a full packet is ready.
+		while (samples >= frameSamples) {
 			static int16_t sampbuffer[VOIP_MAX_PACKET_SAMPLES];
 			float voipPower = 0.0f;
 			float peakAmplitude = 0.0f;
-			int voipFrames;
-			int i, bytes;
+			int i;
 
-			if (samples > VOIP_MAX_PACKET_SAMPLES)
-				samples = VOIP_MAX_PACKET_SAMPLES;
+			// Grab one frame from the audio card
+			S_Capture(frameSamples, (byte *)(sampbuffer + clc.voipBufferedSamples));
 
-			// !!! FIXME: maybe separate recording from encoding, so voipPower
-			// !!! FIXME:  updates faster than 4Hz?
-
-			samples -= samples % VOIP_MAX_FRAME_SAMPLES;
-			if (samples != 120 && samples != 240 && samples != 480 && samples != 960 && samples != 1920 &&
-				samples != 2880) {
-				Com_Printf("Voip: bad number of samples %d\n", samples);
-				return;
-			}
-			voipFrames = samples / VOIP_MAX_FRAME_SAMPLES;
-
-			S_Capture(samples, (byte *)sampbuffer); // grab from audio card.
-
-			// check the "power" of this packet...
-			for (i = 0; i < samples; i++) {
-				const float flsamp = (float)sampbuffer[i];
+			// Compute power and apply gain for this frame
+			for (i = 0; i < frameSamples; i++) {
+				const float flsamp = (float)sampbuffer[clc.voipBufferedSamples + i];
 				const float s = fabs(flsamp);
 				voipPower += s * s;
 				if (s > peakAmplitude) peakAmplitude = s;
-				sampbuffer[i] = CL_VoipClampSample(flsamp * audioMult);
+				sampbuffer[clc.voipBufferedSamples + i] = CL_VoipClampSample(flsamp * audioMult);
 			}
 
-			// encode raw audio samples into Opus data...
-			bytes = opus_encode(clc.opusEncoder, sampbuffer, samples, (unsigned char *)clc.voipOutgoingData,
-								sizeof(clc.voipOutgoingData));
-			if (bytes <= 0) {
-				Com_DPrintf("VoIP: Error encoding %d samples\n", samples);
-				bytes = 0;
-			}
-
-			clc.voipPower = (voipPower / (32768.0f * 32768.0f * ((float)samples))) * 100.0f;
-
-			// Update the mic level cvar for UI display (peak amplitude as % of full scale)
+			// Update power and mic level every frame for responsive UI metering
+			clc.voipPower = (voipPower / (32768.0f * 32768.0f * ((float)frameSamples))) * 100.0f;
 			Cvar_Set("cl_voipMicLevel", va("%d", (int)((peakAmplitude / 32768.0f) * 100.0f)));
 
-			if ((useVad) && !CL_VoipVADCheck(clc.voipPower)) {
-				CL_VoipNewGeneration(); // no "talk" for at least 1/4 second.
-			} else {
-				clc.voipOutgoingDataSize = bytes;
-				clc.voipOutgoingDataFrames = voipFrames;
+			clc.voipBufferedSamples += frameSamples;
 
-				Com_DPrintf("VoIP: Send %d frames, %d bytes, %f power\n", voipFrames, bytes, clc.voipPower);
+			// Once we have a full packet (or this is the final frame), encode and send
+			if (clc.voipBufferedSamples >= VOIP_MAX_PACKET_SAMPLES || finalFrame) {
+				int bytes;
+				int voipFrames = clc.voipBufferedSamples / VOIP_MAX_FRAME_SAMPLES;
+
+				bytes = opus_encode(clc.opusEncoder, sampbuffer, clc.voipBufferedSamples,
+									(unsigned char *)clc.voipOutgoingData, sizeof(clc.voipOutgoingData));
+				if (bytes <= 0) {
+					Com_DPrintf("VoIP: Error encoding %d samples\n", clc.voipBufferedSamples);
+					bytes = 0;
+				}
+
+				if ((useVad) && !CL_VoipVADCheck(clc.voipPower)) {
+					CL_VoipNewGeneration(); // no "talk" for at least 1/4 second.
+				} else {
+					clc.voipOutgoingDataSize = bytes;
+					clc.voipOutgoingDataFrames = voipFrames;
+
+					Com_DPrintf("VoIP: Send %d frames, %d bytes, %f power\n", voipFrames, bytes, clc.voipPower);
+				}
+
+				clc.voipBufferedSamples = 0;
+				break; // packet queued, wait for next call
 			}
+
+			samples = S_AvailableCaptureSamples();
 		}
 	}
 
@@ -1303,6 +1301,7 @@ void CL_Disconnect(qboolean showMainMenu) {
 		int tmp = cl_voipUseVAD->integer;
 		cl_voipUseVAD->integer = 0;	  // disable this for a moment.
 		clc.voipOutgoingDataSize = 0; // dump any pending VoIP transmission.
+		clc.voipBufferedSamples = 0;
 		Cvar_Set("cl_voipSend", "0");
 		CL_CaptureVoip(); // clean up any state...
 		cl_voipUseVAD->integer = tmp;
@@ -3551,7 +3550,7 @@ void CL_Init(void) {
 #ifdef USE_VOIP
 	cl_voipSend = Cvar_Get("cl_voipSend", "0", 0);
 	cl_voipSendTarget = Cvar_Get("cl_voipSendTarget", "spatial", 0);
-	cl_voipGainDuringCapture = Cvar_Get("cl_voipGainDuringCapture", "0.2", CVAR_ARCHIVE);
+	cl_voipGainDuringCapture = Cvar_Get("cl_voipGainDuringCapture", "1.0", CVAR_ARCHIVE);
 	cl_voipCaptureMult = Cvar_Get("cl_voipCaptureMult", "2.0", CVAR_ARCHIVE);
 	cl_voipUseVAD = Cvar_Get("cl_voipUseVAD", "0", CVAR_ARCHIVE);
 	cl_voipVADThreshold = Cvar_Get("cl_voipVADThreshold", "0.05", CVAR_ARCHIVE);

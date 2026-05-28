@@ -2231,6 +2231,9 @@ static void S_AL_StopCapture(void) {
 }
 
 static void S_AL_MasterGain(float gain) {
+	// OpenAL capture is isolated from playback - the capture device doesn't
+	// pick up speaker output, so we don't need to reduce playback volume
+	// during VoIP capture. But if the user still wants to do - here we go.
 	qalListenerf(AL_GAIN, gain);
 }
 

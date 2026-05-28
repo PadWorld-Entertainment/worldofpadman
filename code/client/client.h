@@ -253,6 +253,7 @@ typedef struct {
 	byte voipOutgoingGeneration;
 	byte voipOutgoingData[1024];
 	float voipPower;
+	int voipBufferedSamples;
 #endif
 
 	// big stuff at end of structure so most offsets are 15 bits or less
