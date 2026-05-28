@@ -266,12 +266,12 @@ qboolean SNDDMA_Init(void) {
 	//  work at all; we need to keep it significantly bigger than the
 	//  amount of SDL callback samples, and just copy a little each time
 	//  the callback runs.
-	// 32768 is what the OSS driver filled in here on my system. I don't
-	//  know if it's a good value overall, but at least we know it's
-	//  reasonable...this is why I let the user override.
+	// Use a large ring buffer to survive main-thread stalls (e.g. during
+	//  menu transitions when assets are being loaded). We target at least
+	//  one full second of audio to prevent underruns.
 	tmp = s_sdlMixSamps->integer;
 	if (!tmp)
-		tmp = (obtained.samples * obtained.channels) * 10;
+		tmp = (obtained.freq * obtained.channels); // ~1 second of audio
 
 	// samples must be divisible by number of channels
 	tmp -= tmp % obtained.channels;
