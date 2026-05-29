@@ -1,7 +1,9 @@
 #include "vk_frame.h"
 #include "tr_cvar.h"
 #include "tr_local.h"
+#include "vk_fbo.h"
 #include "vk_instance.h"
+#include "vk_postprocess.h"
 #include "vk_shade_geometry.h"
 #include "vk_swapchain.h"
 
@@ -238,8 +240,17 @@ static void vk_createRenderPass(VkDevice device) {
 	// subpasses. Operations right before and right after this subpass also
 	// count as inplicit "subpasses".
 
-	desc.dependencyCount = 0;
-	desc.pDependencies = NULL;
+	VkSubpassDependency dependency;
+	dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+	dependency.dstSubpass = 0;
+	dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+	dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+	dependency.srcAccessMask = 0;
+	dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+	dependency.dependencyFlags = 0;
+
+	desc.dependencyCount = 1;
+	desc.pDependencies = &dependency;
 
 	VK_CHECK(qvkCreateRenderPass(device, &desc, NULL, &vk.render_pass));
 }
@@ -426,8 +437,18 @@ void vk_begin_frame(void) {
 
 	// An application must wait until either the semaphore or fence is signaled
 	// before accessing the image's data.
-	VK_CHECK(qvkAcquireNextImageKHR(vk.device, vk.swapchain, UINT64_MAX, sema_imageAvailable, VK_NULL_HANDLE,
-									&vk.idx_swapchain_image));
+	{
+		VkResult acquireResult = qvkAcquireNextImageKHR(vk.device, vk.swapchain, UINT64_MAX, sema_imageAvailable,
+													   VK_NULL_HANDLE, &vk.idx_swapchain_image);
+		if (acquireResult == VK_ERROR_OUT_OF_DATE_KHR || acquireResult == VK_ERROR_SURFACE_LOST_KHR) {
+			qvkDeviceWaitIdle(vk.device);
+			vk_recreateSwapChain();
+			return;
+		}
+		if (acquireResult != VK_SUCCESS && acquireResult != VK_SUBOPTIMAL_KHR) {
+			ri.Printf(PRINT_ALL, "Vulkan: error %s returned by vkAcquireNextImageKHR\n", cvtResToStr(acquireResult));
+		}
+	}
 
 	//  User could call method vkWaitForFences to wait for completion. A fence is a
 	//  very heavyweight synchronization primitive as it requires the GPU to flush
@@ -441,7 +462,15 @@ void vk_begin_frame(void) {
 	//  the time vkWaitForFences is called, then vkWaitForFences will block and
 	//  wait up to timeout nanoseconds for the condition to become satisfied.
 
-	VK_CHECK(qvkWaitForFences(vk.device, 1, &fence_renderFinished, VK_FALSE, 1e9));
+	{
+		VkResult fenceResult = qvkWaitForFences(vk.device, 1, &fence_renderFinished, VK_TRUE, 5000000000ULL); // 5 seconds
+		if (fenceResult == VK_TIMEOUT) {
+			ri.Printf(PRINT_WARNING, "Vulkan: fence wait timed out, device may be hung\n");
+			qvkDeviceWaitIdle(vk.device);
+		} else if (fenceResult != VK_SUCCESS) {
+			ri.Printf(PRINT_ALL, "Vulkan: error %s from vkWaitForFences\n", cvtResToStr(fenceResult));
+		}
+	}
 
 	//  To set the state of fences to unsignaled from the host
 	//  "1" is the number of fences to reset.
@@ -514,8 +543,23 @@ void vk_begin_frame(void) {
 
 	renderPass_beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	renderPass_beginInfo.pNext = NULL;
-	renderPass_beginInfo.renderPass = vk.render_pass;
-	renderPass_beginInfo.framebuffer = vk.framebuffers[vk.idx_swapchain_image];
+
+	{
+		vk_fbo_t *mainFBO = VK_FBO_GetMain();
+		if (mainFBO) {
+			qboolean usePostProcess = (r_greyscale->value > 0.0f);
+			if (usePostProcess) {
+				renderPass_beginInfo.renderPass = mainFBO->renderPass;
+				renderPass_beginInfo.framebuffer = mainFBO->framebuffer;
+			} else {
+				renderPass_beginInfo.renderPass = vk.render_pass;
+				renderPass_beginInfo.framebuffer = vk.framebuffers[vk.idx_swapchain_image];
+			}
+		} else {
+			renderPass_beginInfo.renderPass = vk.render_pass;
+			renderPass_beginInfo.framebuffer = vk.framebuffers[vk.idx_swapchain_image];
+		}
+	}
 
 	renderPass_beginInfo.renderArea = get_scissor_rect();
 
@@ -532,6 +576,14 @@ void vk_end_frame(void) {
 	VkResult result;
 
 	qvkCmdEndRenderPass(vk.command_buffer);
+
+	// Post-processing from FBO to swapchain (only when effects are active)
+	{
+		vk_fbo_t *mainFBO = VK_FBO_GetMain();
+		if (mainFBO && r_greyscale->value > 0.0f) {
+			VK_PostProcess_Render(vk.command_buffer, vk.idx_swapchain_image);
+		}
+	}
 
 	VK_CHECK(qvkEndCommandBuffer(vk.command_buffer));
 
@@ -614,12 +666,8 @@ void vk_end_frame(void) {
 		return;
 	}
 
-	if ((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_ERROR_SURFACE_LOST_KHR)) {
-		// we first call vkDeviceWaitIdle because we
-		// shouldn't touch resources that still be in use
+	if (result == VK_SUBOPTIMAL_KHR || result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_ERROR_SURFACE_LOST_KHR) {
 		qvkDeviceWaitIdle(vk.device);
-		// recreate the objects that depend on the swap chain and the window size
-
 		vk_recreateSwapChain();
 	}
 }

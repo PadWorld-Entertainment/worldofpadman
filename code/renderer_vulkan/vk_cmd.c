@@ -155,6 +155,9 @@ void record_image_layout_transition(VkCommandBuffer cmdBuf, VkImage image, VkIma
 									VkAccessFlags src_access_flags, VkImageLayout old_layout,
 									VkAccessFlags dst_access_flags, VkImageLayout new_layout) {
 	VkImageMemoryBarrier barrier = {0};
+	VkPipelineStageFlags src_stage = 0;
+	VkPipelineStageFlags dst_stage = 0;
+
 	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	barrier.pNext = NULL;
 	barrier.srcAccessMask = src_access_flags;
@@ -170,12 +173,36 @@ void record_image_layout_transition(VkCommandBuffer cmdBuf, VkImage image, VkIma
 	barrier.subresourceRange.baseArrayLayer = 0;
 	barrier.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
 
-	// vkCmdPipelineBarrier is a synchronization command that inserts a dependency between
-	// commands submitted to the same queue, or between commands in the same subpass.
-	// When vkCmdPipelineBarrier is submitted to a queue, it defines a memory dependency
-	// between commands that were submitted before it, and those submitted after it.
+	// Derive pipeline stages from access flags
+	if (src_access_flags == 0)
+		src_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+	if (src_access_flags & VK_ACCESS_HOST_WRITE_BIT)
+		src_stage |= VK_PIPELINE_STAGE_HOST_BIT;
+	if (src_access_flags & VK_ACCESS_TRANSFER_WRITE_BIT)
+		src_stage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+	if (src_access_flags & VK_ACCESS_TRANSFER_READ_BIT)
+		src_stage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+	if (src_access_flags & VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT)
+		src_stage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	if (src_access_flags & (VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT))
+		src_stage |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+	if (src_access_flags & VK_ACCESS_SHADER_READ_BIT)
+		src_stage |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+	if (!src_stage)
+		src_stage = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
 
-	// cmdBuf is the command buffer into which the command is recorded.
-	qvkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, NULL, 0,
-						  NULL, 1, &barrier);
+	if (dst_access_flags & VK_ACCESS_TRANSFER_WRITE_BIT)
+		dst_stage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+	if (dst_access_flags & VK_ACCESS_TRANSFER_READ_BIT)
+		dst_stage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+	if (dst_access_flags & VK_ACCESS_SHADER_READ_BIT)
+		dst_stage |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+	if (dst_access_flags & VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT)
+		dst_stage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	if (dst_access_flags & (VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT))
+		dst_stage |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+	if (!dst_stage)
+		dst_stage = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+
+	qvkCmdPipelineBarrier(cmdBuf, src_stage, dst_stage, 0, 0, NULL, 0, NULL, 1, &barrier);
 }
