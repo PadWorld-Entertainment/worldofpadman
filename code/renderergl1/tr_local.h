@@ -1141,6 +1141,7 @@ void R_InitFogTable(void);
 float R_FogFactor(float s, float t);
 void R_InitImages(void);
 void R_DeleteTextures(void);
+void R_ConvertTextureFormat(const byte *in, int width, int height, GLenum format, GLenum type, byte *out);
 int R_SumOfUsedImages(void);
 void R_InitSkins(void);
 skin_t *R_GetSkinByHandle(qhandle_t hSkin);
@@ -1173,9 +1174,11 @@ typedef struct stageVars {
 	vec2_t texcoords[NUM_TEXTURE_BUNDLES][SHADER_MAX_VERTEXES];
 } stageVars_t;
 
+// xyz index SHADER_MAX_VERTEXES-1 is used to check for overflow
+// xyz index >= SHADER_MAX_VERTEXES are used for DrawNormals() and RB_ShadowTessEnd()
 typedef struct shaderCommands_s {
 	glIndex_t indexes[SHADER_MAX_INDEXES] QALIGN(16);
-	vec4_t xyz[SHADER_MAX_VERTEXES] QALIGN(16);
+	vec4_t xyz[SHADER_MAX_VERTEXES * 2] QALIGN(16);
 	vec4_t normal[SHADER_MAX_VERTEXES] QALIGN(16);
 	vec2_t texCoords[SHADER_MAX_VERTEXES][2] QALIGN(16);
 	color4ub_t vertexColors[SHADER_MAX_VERTEXES] QALIGN(16);
@@ -1217,6 +1220,9 @@ void RB_StageIteratorLightmappedMultitexture(void);
 
 void RB_AddQuadStamp(vec3_t origin, vec3_t left, vec3_t up, byte *color);
 void RB_AddQuadStampExt(vec3_t origin, vec3_t left, vec3_t up, byte *color, float s1, float t1, float s2, float t2);
+
+void RB_InstantQuad(vec4_t quadVerts[4]);
+void RB_InstantQuad2(vec4_t quadVerts[4], vec2_t texCoords[4]);
 
 void RB_ShowImages(void);
 
