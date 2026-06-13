@@ -192,7 +192,7 @@ static void MakeMeshNormals(int width, int height, srfVert_t ctrl[MAX_GRID_SIZE]
 					continue; // didn't get two points
 				}
 				CrossProduct(around[(k + 1) & 7], around[k], normal);
-				if (VectorNormalize(temp) < 0.001f) {
+				if (VectorNormalize(normal) < 0.001f) {
 					continue;
 				}
 				VectorAdd(normal, sum, sum);
