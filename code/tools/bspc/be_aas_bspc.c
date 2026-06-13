@@ -97,7 +97,7 @@ static int BotImport_PointContents(vec3_t p) {
 	return CM_PointContents(p, worldmodel);
 }
 
-static void *BotImport_GetMemory(int size) {
+static void *BotImport_GetMemory(size_t size) {
 	return GetMemory(size);
 }
 

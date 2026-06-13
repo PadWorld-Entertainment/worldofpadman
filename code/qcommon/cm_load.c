@@ -628,10 +628,18 @@ static void CM_ValidateTree_r(byte *visited, int node) {
 }
 
 static void CM_ValidateTree(void) {
+#ifdef BSPC
+	byte *visited = (byte *)malloc(cm.numNodes);
+#else
 	byte *visited = Hunk_AllocateTempMemory(cm.numNodes);
+#endif
 	memset(visited, 0, cm.numNodes);
 	CM_ValidateTree_r(visited, 0);
+#ifdef BSPC
+	free(visited);
+#else
 	Hunk_FreeTempMemory(visited);
+#endif
 }
 
 /*
