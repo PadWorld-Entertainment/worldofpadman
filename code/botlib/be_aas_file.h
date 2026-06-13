@@ -38,6 +38,4 @@ int AAS_LoadAASFile(char *filename);
 qboolean AAS_WriteAASFile(char *filename);
 // dumps the loaded AAS data
 void AAS_DumpAASData(void);
-// print AAS file information
-void AAS_FileInfo(void);
 #endif // AASINTERN

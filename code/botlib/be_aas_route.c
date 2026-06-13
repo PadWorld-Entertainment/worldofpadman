@@ -378,7 +378,8 @@ unsigned short int AAS_AreaTravelTime(int areanum, vec3_t start, vec3_t end) {
 }
 
 static void AAS_CalculateAreaTravelTimes(void) {
-	int i, l, n, size;
+	int i, l, n;
+	size_t size;
 	char *ptr;
 	vec3_t end;
 	aas_reversedreachability_t *revreach;
@@ -402,7 +403,7 @@ static void AAS_CalculateAreaTravelTimes(void) {
 
 		size += settings->numreachableareas * sizeof(unsigned short *);
 
-		size += settings->numreachableareas * PAD(revreach->numlinks, sizeof(long)) * sizeof(unsigned short);
+		size += settings->numreachableareas * PAD(revreach->numlinks * sizeof(unsigned short), sizeof(uintptr_t));
 	}
 	// allocate memory for the area travel times
 	ptr = (char *)GetClearedMemory(size);
@@ -420,7 +421,7 @@ static void AAS_CalculateAreaTravelTimes(void) {
 
 		for (l = 0; l < settings->numreachableareas; l++) {
 			aasworld.areatraveltimes[i][l] = (unsigned short *)ptr;
-			ptr += PAD(revreach->numlinks, sizeof(long)) * sizeof(unsigned short);
+			ptr += PAD(revreach->numlinks * sizeof(unsigned short), sizeof(uintptr_t));
 			// reachability link
 			reach = &aasworld.reachability[settings->firstreachablearea + l];
 
@@ -515,7 +516,7 @@ static int AAS_FreeOldestCache(void) {
 
 static aas_routingcache_t *AAS_AllocRoutingCache(int numtraveltimes) {
 	aas_routingcache_t *cache;
-	int size;
+	size_t size;
 
 	size = sizeof(aas_routingcache_t) + numtraveltimes * sizeof(unsigned short int) +
 		   numtraveltimes * sizeof(unsigned char);
@@ -937,7 +938,7 @@ void AAS_InitRouting(void) {
 #endif // ROUTING_DEBUG
 
 	routingcachesize = 0;
-	max_routingcachesize = 1024 * (int)LibVarValue("max_routingcache", "4096");
+	max_routingcachesize = 1024 * LibVarInteger("max_routingcache", "4096", 0, 65536);
 	// read any routing cache if available
 	AAS_ReadRouteCache();
 }

@@ -89,7 +89,7 @@ void SV_UpdateConfigstrings(client_t *client) {
 			continue;
 
 		// do not always send server info to all clients
-		if (index == CS_SERVERINFO && client->gentity && (client->gentity->r.svFlags & SVF_NOSERVERINFO)) {
+		if (index == CS_SERVERINFO && (SV_GentityNum(client - svs.clients)->r.svFlags & SVF_NOSERVERINFO)) {
 			continue;
 		}
 		SV_SendConfigstring(client, index);
@@ -136,7 +136,7 @@ void SV_SetConfigstring(int index, const char *val) {
 				continue;
 			}
 			// do not always send server info to all clients
-			if (index == CS_SERVERINFO && client->gentity && (client->gentity->r.svFlags & SVF_NOSERVERINFO)) {
+			if (index == CS_SERVERINFO && (SV_GentityNum(i)->r.svFlags & SVF_NOSERVERINFO)) {
 				continue;
 			}
 
@@ -264,12 +264,17 @@ static void SV_Startup(void) {
 	SV_BoundMaxClients(1);
 
 	svs.clients = Z_Malloc(sizeof(client_t) * sv_maxclients->integer);
+#ifdef USE_CSS
+	// PACKET_BACKUP frames is just about 6.67MB so use that even on listen servers
+	svs.numSnapshotEntities = PACKET_BACKUP * MAX_GENTITIES;
+#else
 	if (com_dedicated->integer) {
 		svs.numSnapshotEntities = sv_maxclients->integer * PACKET_BACKUP * MAX_SNAPSHOT_ENTITIES;
 	} else {
 		// we don't need nearly as many when playing locally
 		svs.numSnapshotEntities = sv_maxclients->integer * 4 * MAX_SNAPSHOT_ENTITIES;
 	}
+#endif
 	svs.initialized = qtrue;
 
 	// Don't respect sv_killserver unless a server is actually running
@@ -340,12 +345,17 @@ void SV_ChangeMaxClients(void) {
 	Hunk_FreeTempMemory(oldClients);
 
 	// allocate new snapshot entities
+#ifdef USE_CSS
+	// PACKET_BACKUP frames is just about 6.67MB so use that even on listen servers
+	svs.numSnapshotEntities = PACKET_BACKUP * MAX_GENTITIES;
+#else
 	if (com_dedicated->integer) {
 		svs.numSnapshotEntities = sv_maxclients->integer * PACKET_BACKUP * MAX_SNAPSHOT_ENTITIES;
 	} else {
 		// we don't need nearly as many when playing locally
 		svs.numSnapshotEntities = sv_maxclients->integer * 4 * MAX_SNAPSHOT_ENTITIES;
 	}
+#endif
 }
 
 /*
@@ -429,6 +439,19 @@ void SV_SpawnServer(const char *server, qboolean killBots) {
 	// allocate the snapshot entities on the hunk
 	svs.snapshotEntities = Hunk_Alloc(sizeof(entityState_t) * svs.numSnapshotEntities, h_high);
 	svs.nextSnapshotEntities = 0;
+
+#ifdef USE_CSS
+	// initialize snapshot storage
+	Com_Memset(svs.snapFrames, 0, sizeof(svs.snapFrames));
+	svs.freeStorageEntities = svs.numSnapshotEntities;
+	svs.currentStoragePosition = 0;
+
+	svs.snapshotFrame = 0;
+	svs.currentSnapshotFrame = 0;
+	svs.lastValidFrame = 0;
+
+	svs.currFrame = NULL;
+#endif
 
 	// toggle the server bit so clients can detect that a
 	// server has changed
@@ -711,6 +734,7 @@ static void SV_FinalMessage(const char *message) {
 				}
 				// force a snapshot to be sent
 				cl->lastSnapshotTime = 0;
+				cl->state = CS_ZOMBIE; // skip delta generation
 				SV_SendClientSnapshot(cl);
 			}
 		}

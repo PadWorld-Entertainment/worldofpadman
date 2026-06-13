@@ -293,7 +293,7 @@ static void BotImport_BSPModelMinsMaxsOrigin(int modelnum, vec3_t angles, vec3_t
 BotImport_GetMemory
 ==================
 */
-static void *BotImport_GetMemory(int size) {
+static void *BotImport_GetMemory(size_t size) {
 	void *ptr;
 
 	ptr = Z_TagMalloc(size, TAG_BOTLIB);
@@ -314,7 +314,7 @@ static void BotImport_FreeMemory(void *ptr) {
 BotImport_HunkAlloc
 =================
 */
-static void *BotImport_HunkAlloc(int size) {
+static void *BotImport_HunkAlloc(size_t size) {
 	if (Hunk_CheckMark()) {
 		Com_Error(ERR_DROP, "SV_Bot_HunkAlloc: Alloc with marks already set");
 	}
@@ -499,7 +499,10 @@ void SV_BotInitCvars(void) {
 	Cvar_Get("bot_enable", "1", 0);						// enable the bot
 	Cvar_Get("bot_developer", "0", CVAR_CHEAT);			// bot developer mode
 	Cvar_Get("bot_debug", "0", CVAR_CHEAT);				// enable bot debugging
-	Cvar_Get("bot_maxdebugpolys", "2", 0);				// maximum number of debug polys
+	{
+		cvar_t *cv = Cvar_Get("bot_maxdebugpolys", "2", 0);	// maximum number of debug polys
+		Cvar_CheckRange(cv, 0, 65536, qtrue);
+	}
 	Cvar_Get("bot_groundonly", "1", 0);					// only show ground faces of areas
 	Cvar_Get("bot_reachability", "0", 0);				// show all reachabilities to other areas
 	Cvar_Get("bot_visualizejumppads", "0", CVAR_CHEAT); // show jumppads
@@ -649,5 +652,9 @@ int SV_BotGetSnapshotEntity(int client, int sequence) {
 	if (sequence < 0 || sequence >= frame->num_entities) {
 		return -1;
 	}
+#ifdef USE_CSS
+	return frame->ents[sequence]->number;
+#else
 	return svs.snapshotEntities[(frame->first_entity + sequence) % svs.numSnapshotEntities].number;
+#endif
 }
