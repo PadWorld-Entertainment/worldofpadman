@@ -350,7 +350,31 @@ static void CL_CM_LoadMap(const char *mapname) {
 }
 
 static void CL_GetVoipTimes(int *times) {
-	memcpy(times, clc.voipLastPacket, sizeof(int) * MAX_CLIENTS);
+	int i;
+	for (i = 0; i < MAX_CLIENTS; i++) {
+		times[i] = clc.voipSenders[i].lastPacketTime;
+	}
+}
+
+// Returns per-client VoIP quality as integer percentage (0=worst, 100=perfect)
+static void CL_GetVoipQuality(int *quality) {
+	int i;
+	for (i = 0; i < MAX_CLIENTS; i++) {
+		voipNetStats_t *stats = &clc.voipSenders[i].netStats;
+		if (stats->packetsReceived > 0) {
+			// Quality = 100 - loss percentage, clamped to [0, 100]
+			int q = 100 - (int)(stats->lossRate * 100.0f + 0.5f);
+			if (q < 0) {
+				q = 0;
+			}
+			if (q > 100) {
+				q = 100;
+			}
+			quality[i] = q;
+		} else {
+			quality[i] = 100; // no data = assume perfect
+		}
+	}
 }
 
 /*
@@ -671,6 +695,9 @@ static intptr_t CL_CgameSystemCalls(intptr_t *args) {
 	case CG_GET_VOIP_TIMES:
 		CL_GetVoipTimes(VMA(1));
 		return 0;
+	case CG_GET_VOIP_QUALITY:
+		CL_GetVoipQuality(VMA(1));
+		return 0;
 
 	default:
 		assert(0);
@@ -876,31 +903,10 @@ static void CL_FirstSnapshot(void) {
 
 #ifdef USE_VOIP
 	if (!clc.voipCodecInitialized) {
-		int i;
-		int error;
-
-		clc.opusEncoder = opus_encoder_create(48000, 1, OPUS_APPLICATION_VOIP, &error);
-
-		if (error) {
-			Com_DPrintf("VoIP: Error opus_encoder_create %d\n", error);
-			return;
+		CL_VoipCodecInit();
+		if (clc.voipCodecInitialized) {
+			Cvar_Set("cl_voipSendTarget", "spatial");
 		}
-
-		for (i = 0; i < MAX_CLIENTS; i++) {
-			clc.opusDecoder[i] = opus_decoder_create(48000, 1, &error);
-			if (error) {
-				Com_DPrintf("VoIP: Error opus_decoder_create(%d) %d\n", i, error);
-				return;
-			}
-			clc.voipIgnore[i] = qfalse;
-			clc.voipGain[i] = 1.0f;
-			clc.voipLastPacket[i] = 0;
-		}
-		clc.voipCodecInitialized = qtrue;
-		clc.voipMuteAll = qfalse;
-		Cmd_AddCommand("voip", CL_Voip_f);
-		Cvar_Set("cl_voipSendTarget", "spatial");
-		Com_Memset(clc.voipTargets, ~0, sizeof(clc.voipTargets));
 	}
 #endif
 }
