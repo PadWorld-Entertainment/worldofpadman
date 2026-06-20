@@ -83,6 +83,7 @@ vmCvar_t g_listEntity;
 vmCvar_t g_enableBreath;
 
 vmCvar_t g_q3Items;
+vmCvar_t g_externalEntities;
 vmCvar_t g_sky;
 vmCvar_t g_skyLensflare;
 vmCvar_t g_LPS_startlives;
@@ -181,6 +182,7 @@ static cvarTable_t gameCvarTable[] = {
 	{&g_KillerduckHealth, "g_KillerduckHealth", "-1", CVAR_ARCHIVE, 0, qfalse},
 
 	{&g_q3Items, "g_q3Items", "0", CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse},
+	{&g_externalEntities, "g_externalEntities", "0", CVAR_ARCHIVE, 0, qtrue},
 	{&g_sky, "g_sky", "", (CVAR_SYSTEMINFO | CVAR_ROM), 0, qfalse},
 	{&g_skyLensflare, "g_skyLensflare", "", (CVAR_SYSTEMINFO | CVAR_ROM), 0, qfalse},
 	{&g_LPS_startlives, "g_LPS_startlives", "10", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse},
