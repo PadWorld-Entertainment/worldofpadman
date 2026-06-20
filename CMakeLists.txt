@@ -25,7 +25,7 @@ option(BUILD_CLIENT "" ON)
 option(BUILD_SERVER "" ON)
 option(BUILD_TESTS "" ON)
 option(BUILD_RENDERER_OPENGL2 "" ON)
-option(BUILD_RENDERER_VULKAN "" OFF)
+option(BUILD_RENDERER_VULKAN "" ON)
 
 set(WOPBSPC_OPTIONS "-forcesidesvisible -optimize" CACHE STRING "Global command line options for wopbspc")
 
