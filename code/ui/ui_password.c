@@ -44,7 +44,7 @@ typedef struct {
 	menubitmap_s fight;
 	menubitmap_s back;
 
-	const char *connectstring;
+	char connectstring[MAX_STRING_CHARS];
 	char servername[32];
 } specifypassword_t;
 
@@ -191,7 +191,7 @@ UI_SpecifyPasswordMenu
 */
 void UI_SpecifyPasswordMenu(const char *string, const char *name) {
 	UI_SpecifyPassword_MenuInit();
-	s_specifypassword.connectstring = string;
+	Q_strncpyz(s_specifypassword.connectstring, string, sizeof(s_specifypassword.connectstring));
 	Q_strncpyz(s_specifypassword.servername, name, sizeof(s_specifypassword.servername));
 	UI_PushMenu(&s_specifypassword.menu);
 }

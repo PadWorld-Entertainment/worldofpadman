@@ -764,6 +764,7 @@ int trap_GetConfigString(int index, char *buff, int buffsize);
 int trap_LAN_GetServerCount(int source);
 void trap_LAN_GetServerAddressString(int source, int n, char *buf, int buflen);
 void trap_LAN_GetServerInfo(int source, int n, char *buf, int buflen);
+int trap_LAN_GetServerPing(int source, int n);
 int trap_LAN_GetPingQueueCount(void);
 int trap_LAN_ServerStatus(const char *serverAddress, char *serverStatus, int maxLen);
 void trap_LAN_ClearPing(int n);

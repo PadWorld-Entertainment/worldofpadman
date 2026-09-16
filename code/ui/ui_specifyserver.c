@@ -34,6 +34,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_BACK 102
 #define ID_FIGHT 103
 
+#define SPECIFY_QUERY_TIMEOUT 3000
+
 static char *specifyserver_artlist[] = {BACK0, BACK1, FIGHT0, FIGHT1, NULL};
 
 typedef struct {
@@ -44,9 +46,121 @@ typedef struct {
 	menufield_s port;
 	menubitmap_s fight;
 	menubitmap_s back;
+
+	qboolean querying;
+	int queryStart;
+	char pendingAddr[256];
+	char connectstring[MAX_STRING_CHARS];
 } specifyserver_t;
 
 static specifyserver_t s_specifyserver;
+
+static void UI_SpecifyServer_ClearPings(void) {
+	int i;
+
+	for (i = 0; i < MAX_PINGREQUESTS; i++) {
+		trap_LAN_ClearPing(i);
+	}
+}
+
+/*
+=================
+UI_SpecifyServer_CachedNeedPass
+
+If this address is already in a LAN server list, return whether it needs a
+password. Otherwise *found is qfalse.
+=================
+*/
+static qboolean UI_SpecifyServer_CachedNeedPass(const char *addr, qboolean *found) {
+	static const int sources[] = {AS_LOCAL, AS_GLOBAL, AS_FAVORITES};
+	int s, i, count;
+	char serveraddr[MAX_STRING_CHARS];
+	char info[MAX_INFO_STRING];
+
+	*found = qfalse;
+
+	for (s = 0; s < ARRAY_LEN(sources); s++) {
+		count = trap_LAN_GetServerCount(sources[s]);
+		if (count < 0) {
+			continue;
+		}
+
+		for (i = 0; i < count; i++) {
+			trap_LAN_GetServerAddressString(sources[s], i, serveraddr, sizeof(serveraddr));
+			if (!serveraddr[0] || Q_stricmp(serveraddr, addr)) {
+				continue;
+			}
+
+			// Master list entries have no getinfo yet, so g_needpass is unknown.
+			if (trap_LAN_GetServerPing(sources[s], i) <= 0) {
+				return qfalse;
+			}
+
+			trap_LAN_GetServerInfo(sources[s], i, info, sizeof(info));
+			*found = qtrue;
+			return atoi(Info_ValueForKey(info, "g_needpass")) ? qtrue : qfalse;
+		}
+	}
+
+	return qfalse;
+}
+
+static void UI_SpecifyServer_FinishConnect(qboolean needPass) {
+	if (s_specifyserver.querying) {
+		UI_SpecifyServer_ClearPings();
+	}
+	s_specifyserver.querying = qfalse;
+
+	if (needPass) {
+		UI_SpecifyPasswordMenu(s_specifyserver.connectstring, s_specifyserver.pendingAddr);
+	} else {
+		trap_Cmd_ExecuteText(EXEC_APPEND, s_specifyserver.connectstring);
+	}
+}
+
+static void UI_SpecifyServer_CheckQuery(void) {
+	int i, time;
+	char adrstr[MAX_STRING_CHARS];
+	char info[MAX_INFO_STRING];
+
+	if (!s_specifyserver.querying) {
+		return;
+	}
+
+	for (i = 0; i < MAX_PINGREQUESTS; i++) {
+		trap_LAN_GetPing(i, adrstr, sizeof(adrstr), &time);
+		if (!adrstr[0] || !time) {
+			continue;
+		}
+
+		trap_LAN_GetPingInfo(i, info, sizeof(info));
+		UI_SpecifyServer_FinishConnect(atoi(Info_ValueForKey(info, "g_needpass")) ? qtrue : qfalse);
+		return;
+	}
+
+	if (uis.realtime - s_specifyserver.queryStart > SPECIFY_QUERY_TIMEOUT) {
+		UI_SpecifyServer_FinishConnect(qfalse);
+	}
+}
+
+static void UI_SpecifyServer_StartQuery(const char *addr) {
+	qboolean found;
+	qboolean needPass;
+
+	Q_strncpyz(s_specifyserver.pendingAddr, addr, sizeof(s_specifyserver.pendingAddr));
+	Com_sprintf(s_specifyserver.connectstring, sizeof(s_specifyserver.connectstring), "connect %s\n", addr);
+
+	needPass = UI_SpecifyServer_CachedNeedPass(addr, &found);
+	if (found) {
+		UI_SpecifyServer_FinishConnect(needPass);
+		return;
+	}
+
+	UI_SpecifyServer_ClearPings();
+	trap_Cmd_ExecuteText(EXEC_NOW, va("ping %s\n", addr));
+	s_specifyserver.querying = qtrue;
+	s_specifyserver.queryStart = uis.realtime;
+}
 
 /*
 =================
@@ -55,8 +169,14 @@ UI_SpecifyServer_Draw
 */
 static void UI_SpecifyServer_Draw(void) {
 	static const vec4_t color_specifyserver = {0.8f, 0.85f, 1.0f, 1.0f};
+
 	UI_DrawProportionalString(SCREEN_WIDTH * 0.5f, 188, "SPECIFY SERVER", UI_CENTER | UI_SMALLFONT, color_specifyserver);
+	if (s_specifyserver.querying) {
+		UI_DrawProportionalString(SCREEN_WIDTH * 0.5f, 320, "Checking server...", UI_CENTER | UI_SMALLFONT,
+								  color_specifyserver);
+	}
 	Menu_Draw(&s_specifyserver.menu);
+	UI_SpecifyServer_CheckQuery();
 }
 
 /*
@@ -65,7 +185,7 @@ UI_SpecifyServer_UpdateMenuItems
 =================
 */
 static void UI_SpecifyServer_UpdateMenuItems(void) {
-	if ((s_specifyserver.domain.field.buffer[0]) && (s_specifyserver.port.field.buffer[0])) {
+	if (!s_specifyserver.querying && (s_specifyserver.domain.field.buffer[0]) && (s_specifyserver.port.field.buffer[0])) {
 		s_specifyserver.fight.generic.flags &= ~QMF_GRAYED;
 	} else {
 		s_specifyserver.fight.generic.flags |= QMF_GRAYED;
@@ -82,7 +202,7 @@ static void UI_SpecifyServer_Event(void *ptr, int event) {
 
 	switch (((menucommon_s *)ptr)->id) {
 	case ID_FIGHT:
-		if (event != QM_ACTIVATED)
+		if (event != QM_ACTIVATED || s_specifyserver.querying)
 			break;
 
 		if (s_specifyserver.domain.field.buffer[0]) {
@@ -90,7 +210,7 @@ static void UI_SpecifyServer_Event(void *ptr, int event) {
 			if (s_specifyserver.port.field.buffer[0])
 				Com_sprintf(buff + strlen(buff), 128, ":%s", s_specifyserver.port.field.buffer);
 
-			trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", buff));
+			UI_SpecifyServer_StartQuery(buff);
 		}
 		break;
 
@@ -98,6 +218,10 @@ static void UI_SpecifyServer_Event(void *ptr, int event) {
 		if (event != QM_ACTIVATED)
 			break;
 
+		if (s_specifyserver.querying) {
+			s_specifyserver.querying = qfalse;
+			UI_SpecifyServer_ClearPings();
+		}
 		UI_PopMenu();
 		break;
 	}
