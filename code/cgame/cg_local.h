@@ -386,7 +386,6 @@ typedef struct {
 	// If tag_hat is missing, the hatoffset/hatrotate fallback from animation.cfg is used.
 	char hatName[MAX_QPATH];
 	qhandle_t hatModel;
-	qhandle_t hatSkin;
 	float hatScale;		   // hatscale from animation.cfg, default 1.0
 	vec3_t hatOffset;	   // hatoffset from animation.cfg, only used when tag_hat is missing
 	vec3_t hatRotate;	   // hatrotate from animation.cfg (pitch/yaw/roll), only used when tag_hat is missing
