@@ -153,89 +153,30 @@ models/powerups/ammo/ammo_splasher
 // XMAS HATS
 // =================
 
-models/hats/elvehat
+models/hats/elf
 {
 	cull none
 	{
-		map models/hats/elvehat
-		rgbGen lightingDiffuse
-	}
-}
-
-models/hats/reindeer
-{
-	{
-		map models/hats/reindeer
-		rgbGen lightingDiffuse
-	}
-}
-
-models/hats/halo
-{
-	cull none
-	{
-		map models/hats/halo
-		blendfunc GL_ONE GL_ONE
-		blendfunc add
-	}
-}
-
-models/hats/irish
-{
-	{
-		map models/hats/irish
+		map models/hats/elf
 		rgbGen lightingDiffuse
 	}
 }
 
 models/hats/tophat
 {
+	cull none
 	{
 		map models/hats/tophat
 		rgbGen lightingDiffuse
 	}
 }
 
-models/hats/nikolaus
+models/hats/santa
 {
 	cull none
 	{
-		map models/hats/nikolaus
+		map models/hats/santa
 		rgbGen lightingDiffuse
-	}
-}
-
-models/hats/hking1
-{
-	cull disable
-	{
-		map models/hats/hking1
-		alphaFunc ge128
-		rgbGen lightingDiffuse
-	}
-	{
-		map textures/pad_gfx02/tinpad
-		blendfunc GL_DST_ALPHA GL_DST_ALPHA
-		tcgen environment
-		rgbGen lightingDiffuse
-		depthfunc equal
-	}
-}
-
-models/hats/lightstringhat
-{
-	cull none
-	{
-	map models/hats/lightstringhat
-	rgbGen lightingDiffuse
-	}
-}
-
-models/hats/light01
-{
-	{
-	animMap 1 models/hats/light01 models/hats/light02
-	rgbGen identity
 	}
 }
 
