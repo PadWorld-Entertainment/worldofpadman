@@ -585,6 +585,9 @@ static qboolean CG_RegisterClientModelname(clientInfo_t *ci, const char *modelNa
 	if (cgs.isXmas && ci->hatName[0]) {
 		Com_sprintf(filename, sizeof(filename), "models/hats/%s.md3", ci->hatName);
 		ci->hatModel = trap_R_RegisterModel(filename);
+		if (!ci->hatModel) {
+			Com_Printf("Failed to load hat model file %s\n", filename);
+		}		
 	}
 
 	if (CG_FindClientHeadFile(filename, sizeof(filename), ci, NULL, headModelName, headSkinName, "icon", "png")) {

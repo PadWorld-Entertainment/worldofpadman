@@ -1365,6 +1365,9 @@ qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName)
 	if (uis.isXmas && pi->hatName[0]) {
 		Com_sprintf(filename, sizeof(filename), "models/hats/%s.md3", pi->hatName);
 		pi->hatModel = trap_R_RegisterModel(filename);
+		if (!pi->hatModel) {
+			Com_Printf("Failed to load hat model file %s\n", filename);
+		}
 	}
 
 	return qtrue;
