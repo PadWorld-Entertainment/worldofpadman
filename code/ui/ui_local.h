@@ -548,7 +548,6 @@ typedef struct {
 	// XMAS: optional hat support (e.g. christmas hats). Mirrors clientInfo_t in cgame.
 	char hatName[MAX_QPATH];
 	qhandle_t hatModel;
-	qhandle_t hatSkin;
 	float hatScale;
 	vec3_t hatOffset;
 	vec3_t hatRotate;

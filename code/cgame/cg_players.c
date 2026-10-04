@@ -582,14 +582,9 @@ static qboolean CG_RegisterClientModelname(clientInfo_t *ci, const char *modelNa
 	// XMAS: load optional hat model from models/hats/. The hat is shared across all
 	// player models. The hat name is selected per-client via the "hat" userinfo cvar.
 	ci->hatModel = 0;
-	ci->hatSkin = 0;
 	if (cgs.isXmas && ci->hatName[0]) {
 		Com_sprintf(filename, sizeof(filename), "models/hats/%s.md3", ci->hatName);
 		ci->hatModel = trap_R_RegisterModel(filename);
-		if (ci->hatModel) {
-			Com_sprintf(filename, sizeof(filename), "models/hats/%s_default.skin", ci->hatName);
-			ci->hatSkin = trap_R_RegisterSkin(filename);
-		}
 	}
 
 	if (CG_FindClientHeadFile(filename, sizeof(filename), ci, NULL, headModelName, headSkinName, "icon", "png")) {
@@ -740,7 +735,6 @@ static void CG_CopyClientInfoModel(const clientInfo_t *from, clientInfo_t *to) {
 
 	// XMAS: hat
 	to->hatModel = from->hatModel;
-	to->hatSkin = from->hatSkin;
 	to->hatScale = from->hatScale;
 	VectorCopy(from->hatOffset, to->hatOffset);
 	VectorCopy(from->hatRotate, to->hatRotate);
@@ -2448,7 +2442,6 @@ void CG_Player(centity_t *cent) {
 
 		memset(&hat, 0, sizeof(hat));
 		hat.hModel = ci->hatModel;
-		hat.customSkin = ci->hatSkin;
 		VectorCopy(cent->lerpOrigin, hat.lightingOrigin);
 		hat.shadowPlane = shadowPlane;
 		hat.renderfx = renderfx;

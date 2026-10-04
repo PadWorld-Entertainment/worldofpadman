@@ -870,7 +870,6 @@ void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int tim
 
 		memset(&hat, 0, sizeof(hat));
 		hat.hModel = pi->hatModel;
-		hat.customSkin = pi->hatSkin;
 		VectorCopy(origin, hat.lightingOrigin);
 		hat.renderfx = renderfx;
 
@@ -1363,14 +1362,9 @@ qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName)
 
 	// XMAS: load optional hat model from models/hats/.
 	pi->hatModel = 0;
-	pi->hatSkin = 0;
 	if (uis.isXmas && pi->hatName[0]) {
 		Com_sprintf(filename, sizeof(filename), "models/hats/%s.md3", pi->hatName);
 		pi->hatModel = trap_R_RegisterModel(filename);
-		if (pi->hatModel) {
-			Com_sprintf(filename, sizeof(filename), "models/hats/%s_default.skin", pi->hatName);
-			pi->hatSkin = trap_R_RegisterSkin(filename);
-		}
 	}
 
 	return qtrue;
