@@ -381,7 +381,7 @@ typedef struct {
 	qhandle_t headSkin;
 
 	// XMAS: optional hat support (e.g. christmas hats)
-	// hat models are stored under models/hats/<hatName>/hat.md3 and shared across all
+	// hat models are stored under models/hats/<hatName>.md3 and shared across all
 	// player models. They are positioned via the optional tag_hat on the head model.
 	// If tag_hat is missing, the hatoffset/hatrotate fallback from animation.cfg is used.
 	char hatName[MAX_QPATH];
