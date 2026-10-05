@@ -49,6 +49,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_NEXTLOGO 46
 #define ID_RANDOMCOLOR 47
 #define ID_SPRAYCOLOR 48
+#define ID_XMASHAT 49
 
 #define MAX_NAMELENGTH 20
 
@@ -76,6 +77,7 @@ typedef struct {
 
 	menutext_s nameheader;
 	menufield_s name;
+	menulist_s xmashat;
 	menulist_s handicap;
 	menutext_s logoheader;
 	menutext_s logoname;
@@ -117,6 +119,8 @@ static playersettings_t s_playersettings;
 static const char *handicap_items[] = {S_COLOR_WHITE "None", S_COLOR_WHITE "90", S_COLOR_WHITE "80", S_COLOR_WHITE "70", S_COLOR_WHITE "60",
 									   S_COLOR_WHITE "50", S_COLOR_WHITE "40", S_COLOR_WHITE "30", S_COLOR_WHITE "20", S_COLOR_WHITE "10",
 									   NULL};
+
+static const char *xmashat_items[] = {S_COLOR_WHITE "None", S_COLOR_WHITE "Santa", S_COLOR_WHITE "Elf", S_COLOR_WHITE "Tophat", NULL};
 
 #define MAX_UIMODELS 96 // 32
 #define MAX_SKINS 640	// padman has 18 skins ...
@@ -310,6 +314,7 @@ static void UI_PlayerSettings_SetMenuItems(void) {
 	int c;
 	int h;
 	char modelname[32];
+	char hatname[32];
 
 	// name
 	Q_strncpyz(s_playersettings.name.field.buffer, UI_Cvar_VariableString("name"),
@@ -354,6 +359,19 @@ static void UI_PlayerSettings_SetMenuItems(void) {
 
 	// random spray color
 	s_playersettings.randomcolor.curvalue = Com_Clamp(0, 1, trap_Cvar_VariableValue("randomcolor"));
+
+	// xmas hat
+	trap_Cvar_VariableStringBuffer("hat", hatname, sizeof(hatname));
+	if (!Q_stricmp(hatname, "santa")) {
+		s_playersettings.xmashat.curvalue = 1;
+	} else if (!Q_stricmp(hatname, "elf")) {
+		s_playersettings.xmashat.curvalue = 2;
+	} else if (!Q_stricmp(hatname, "tophat")) {
+		s_playersettings.xmashat.curvalue = 3;
+	} else {
+		s_playersettings.xmashat.curvalue = 0;
+	}
+
 }
 
 static int GetSpecialSkinScore(const char *iconPath) {
@@ -747,7 +765,7 @@ UI_PlayerSettings_MenuEvent
 =================
 */
 static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
-	int tmpid, i;
+	int tmpid, i, h;
 
 	if (event != QM_ACTIVATED) {
 		return;
@@ -866,6 +884,20 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 	case ID_NEXTLOGO:
 		if (++s_playersettings.slogo_num >= uis.spraylogosLoaded)
 			s_playersettings.slogo_num = 0; // close the circle
+		break;
+	
+	case ID_XMASHAT:
+	// xmas hat
+		h = s_playersettings.xmashat.curvalue;
+		if (h == 1) {
+			trap_Cvar_Set("hat", "santa");
+		} else if (h == 2) {
+			trap_Cvar_Set("hat", "elf");
+		} else if (h == 3) {
+			trap_Cvar_Set("hat", "tophat");	
+		} else {
+			trap_Cvar_Set("hat", "");
+		}
 		break;
 	}
 }
@@ -1060,7 +1092,17 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.name.generic.right = XPOSITION + 80;
 	s_playersettings.name.generic.bottom = y + 2 * (BIGCHAR_HEIGHT);
 
-	y += 3 * (BIGCHAR_HEIGHT + 2);
+	y += 2 * (BIGCHAR_HEIGHT + 2);
+	s_playersettings.xmashat.generic.type = MTYPE_SPINCONTROL;
+	s_playersettings.xmashat.generic.name = "XMAS Hat:";
+	s_playersettings.xmashat.generic.flags = QMF_SMALLFONT;
+	s_playersettings.xmashat.generic.id = ID_XMASHAT;
+	s_playersettings.xmashat.generic.callback = UI_PlayerSettings_MenuEvent;
+	s_playersettings.xmashat.generic.x = XPOSITION;
+	s_playersettings.xmashat.generic.y = y;
+	s_playersettings.xmashat.itemnames = xmashat_items;
+
+	y += BIGCHAR_HEIGHT + 2;
 	s_playersettings.handicap.generic.type = MTYPE_SPINCONTROL;
 	s_playersettings.handicap.generic.name = "Handicap:";
 	s_playersettings.handicap.generic.flags = QMF_SMALLFONT;
@@ -1119,6 +1161,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.skindown);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.nameheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.name);
+	Menu_AddItem(&s_playersettings.menu, &s_playersettings.xmashat);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.handicap);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoheader);
 	Menu_AddItem(&s_playersettings.menu, &s_playersettings.logoname);
