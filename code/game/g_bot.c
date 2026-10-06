@@ -488,7 +488,7 @@ static void G_AddBot(const char *name, float skill, const char *team, int delay,
 	key = "spraylogo";
 	logo = Info_ValueForKey(botinfo, key);
 	if (!*logo) {
-		logo = "15_padlogo";
+		logo = SPRAYLOGO_DEFAULT_NAME;
 	}
 	Info_SetValueForKey(userinfo, key, logo);
 
