@@ -1,0 +1,375 @@
+// =================
+// PADMAN
+// =================
+
+{
+name		PADMAN
+funname		"^0PAD^4MAN"
+model		padman
+aifile		bots/padman_c.c
+spraylogo	15_ornaments
+}
+
+
+// =================
+// PADGiRL
+// =================
+
+{
+name		PadGirl
+funname		"^6PadGirl"
+model		padgirl
+aifile		bots/padgirl_c.c
+spraylogo	22_santa
+}
+
+
+// =================
+// PADBABE
+// =================
+
+{
+name		PadBabe
+funname		"^0Pad^6Babe"
+model		padgirl/padbabe
+aifile		bots/padgirl_c.c
+spraylogo	18_wings
+}
+
+
+// =================
+// PADLiLLY
+// =================
+
+{
+name		PadLilly
+funname		"^5Pad^3Lilly"
+model		padlilly
+aifile		bots/padlilly_c.c
+spraylogo	09_icecrystal
+}
+
+
+// =================
+// PADiLLA
+// =================
+
+{
+name		Padilla
+funname		"^3P^2a^3d^2ill^3a"
+model		padlilly/padilla
+aifile		bots/padlilly_c.c
+spraylogo	35_newyear
+}
+
+
+// =================
+// PAD-RA
+// =================
+
+{
+name		Pad-RA
+funname   	"^5Pad-^3RA"
+model		padman/padra
+aifile		bots/padman_c.c
+spraylogo	19_gingy
+}
+
+
+// =================
+// PADROCK
+// =================
+
+{
+name		PadRock
+model		padman/padrock
+funname 	"Pad^1Rock"
+aifile		bots/padman_c.c
+spraylogo	33_ribbonbow
+}
+
+
+// =================
+// PADSOLDiER
+// =================
+
+{
+name		PadSoldier
+funname		"^0Pad^2Soldier"
+model		padman/padsoldier
+aifile		bots/padman_c.c
+spraylogo	04_candle
+}
+
+
+// =================
+// STONEPAD
+// =================
+
+{
+name		StonePad
+model		padman/stonepad
+funname 	"^2Stone^7Pad"
+aifile		bots/padman_c.c
+spraylogo	16_merryxmas
+}
+
+
+// =================
+// SUPERPAD
+// =================
+
+{
+name		SuperPad
+funname		"^5S^6uper^5P^6ad"
+model		padman/superpad
+aifile		bots/padman_c.c
+spraylogo	13_advent
+}
+
+
+// =================
+// BiOPAD
+// =================
+
+{
+name		BioPad
+funname		"^1B^2io^1P^2ad"
+model		padman/biopad
+aifile		bots/padman_c.c
+spraylogo	31_stocking
+}
+
+
+// ===========
+// HELLPAD
+// ===========
+
+{
+name		HellPad
+funname		"^0H^1ell^0P^1ad"
+model		padman/hellpad
+aifile		bots/padman_c.c
+spraylogo	24_angel
+}
+
+
+// ==================
+// PELViS
+// ==================
+
+{
+name		Pelvis
+model		padman/pelvis
+funname     "^6Pelv^7i^6s"
+aifile      bots/pelvis_c.c
+spraylogo	10_gift
+}
+
+
+// ==================
+// PADCLASSiC
+// ==================
+
+{
+name		PadClassic
+funname		"^1Pad^3Classic"
+model		padman/padclassic
+aifile		bots/padman_c.c
+spraylogo	06_tree
+}
+
+
+// =================
+// PiRATPAD
+// =================
+
+{
+name		PiratePad
+model		piratepad
+funname  	"^4Pirate^1Pad"
+aifile		bots/padman_c.c
+spraylogo	07_holly
+}
+
+
+// =================
+// FATPAD
+// =================
+
+{
+name		FatPad
+model		fatpad
+funname  	"Fat^1Pad"
+aifile		bots/padman_c.c
+spraylogo	08_snowflake
+}
+
+
+// =================
+// FATTY
+// =================
+
+{
+name		FATTY
+funname  	"^7F^5ATT^7Y"
+model		fatpad/fatty
+aifile		bots/padman_c.c
+spraylogo	30_xmassucks
+}
+
+
+// =================
+// MONSTERPAD
+// =================
+
+{
+name		MonsterPad
+funname     "^0M^2o^0n^2s^0t^2e^0r^2P^0a^2d"
+model		monsterpad
+aifile		bots/padman_c.c
+spraylogo	27_nutcracker
+}
+
+
+// =================
+// MONSTERHAWK
+// =================
+
+{
+name		MonsterHawk
+model		monsterpad/monsterhawk
+funname   	"^2Monster^3Hawk"
+aifile		bots/padman_c.c
+spraylogo	36_cheers
+}
+
+
+// =================
+// PADKiNG
+// =================
+
+{
+name		PadKing
+model		padking
+funname  	"^1Pad^4King"
+aifile		bots/padman_c.c
+spraylogo	11_snowman
+}
+
+
+// =================
+// PADKNiGHT
+// =================
+
+{
+name		PadKnight
+model		padking/padknight
+funname  	"^4Pad^2Knight"
+aifile		bots/padman_c.c
+spraylogo	28_branch
+}
+
+
+// =================
+// BEACHPAD
+// =================
+
+{
+name		BeachPad
+model		beachpad
+funname  	"^2Beach^5Pad"
+aifile		bots/padman_c.c
+spraylogo	38_rocket
+}
+
+
+// =================
+// PADPUNK
+// =================
+
+{
+name		PadPunk
+model		padpunk
+funname  	"^3Pad^5Punk"
+aifile	 	bots/padman_c.c
+spraylogo	32_mine
+}
+
+
+// =================
+// PADCHO
+// =================
+
+{
+name		PadCho
+model		padcho
+funname  	"^2Pad^6Cho"
+aifile	 	bots/padman_c.c
+spraylogo	02_meteor
+}
+
+
+// =================
+// GHOSTPiRATE
+// =================
+
+{
+name		GhostPirate
+model		piratepad/ghostpirate
+funname  	"^4Ghost^1Pirate"
+aifile		bots/padman_c.c
+spraylogo	07_holly
+}
+
+
+// =================
+// SPOOKY
+// =================
+
+{
+name		Spooky
+model		piratepad/spooky
+funname  	"^4Spooky"
+aifile		bots/padman_c.c
+spraylogo	26_skate
+}
+
+
+// =================
+// PADDYBELL
+// =================
+
+{
+name		PaddyBell
+model		paddybell
+funname  	"^6Paddy^5Bell"
+aifile		bots/paddy_c.c
+spraylogo	12_candycane
+}
+
+
+// =================
+// BADPADDY
+// =================
+
+{
+name		BadPaddy
+model		paddybell/badpaddy
+funname  	"^4Bad^6Paddy"
+aifile		bots/paddy_c.c
+spraylogo	25_drum
+}
+
+
+// =================
+// PADDYBEE
+// =================
+
+{
+name		PaddyBee
+model		paddybell/paddybee
+funname  	"^2Paddy^3Bee"
+aifile		bots/paddy_c.c
+spraylogo	21_boot
+}
