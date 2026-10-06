@@ -452,6 +452,7 @@ static void G_AddBot(const char *name, float skill, const char *team, int delay,
 	const char *model;
 	const char *headmodel;
 	const char *logo;
+	const char *hatmodel;
 	char userinfo[MAX_INFO_STRING];
 
 	// get the botinfo from bots.txt
@@ -491,6 +492,13 @@ static void G_AddBot(const char *name, float skill, const char *team, int delay,
 		logo = SPRAYLOGO_DEFAULT_NAME;
 	}
 	Info_SetValueForKey(userinfo, key, logo);
+
+	key = "hat";
+	hatmodel = Info_ValueForKey(botinfo, key);
+	if (!*hatmodel) {
+		hatmodel = "";
+	}
+	Info_SetValueForKey(userinfo, key, hatmodel);
 
 	key = "model";
 	model = Info_ValueForKey(botinfo, key);
