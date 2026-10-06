@@ -325,5 +325,428 @@ models/weapons2/spraypistol/xmascart_n
 		alphaFunc ge128
 		rgbGen lightingdiffuse
 
-  	}
+	}
+}
+
+
+// =================
+// XMAS SPRAY LOGOS
+// =================
+
+xmaslogos/01_stars
+{
+	nopicmip
+	{
+		map xmaslogos/01_stars
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/02_meteor
+{
+	nopicmip
+	{
+		map xmaslogos/02_meteor
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/03_star
+{
+	nopicmip
+	{
+		map xmaslogos/03_star
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/04_candle
+{
+	nopicmip
+	{
+		map xmaslogos/04_candle
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/05_bell
+{
+	nopicmip
+	{
+		map xmaslogos/05_bell
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/06_tree
+{
+	nopicmip
+	{
+		map xmaslogos/06_tree
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/07_holly
+{
+	nopicmip
+	{
+		map xmaslogos/07_holly
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/08_snowflake
+{
+	nopicmip
+	{
+		map xmaslogos/08_snowflake
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/09_icecrystal
+{
+	nopicmip
+	{
+		map xmaslogos/09_icecrystal
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/10_gift
+{
+	nopicmip
+	{
+		map xmaslogos/10_gift
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/11_snowman
+{
+	nopicmip
+	{
+		map xmaslogos/11_snowman
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/12_candycane
+{
+	nopicmip
+	{
+		map xmaslogos/12_candycane
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/13_advent
+{
+	nopicmip
+	{
+		map xmaslogos/13_advent
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/14_hat
+{
+	nopicmip
+	{
+		map xmaslogos/14_hat
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/15_ornaments
+{
+	nopicmip
+	{
+		map xmaslogos/15_ornaments
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/16_merryxmas
+{
+	nopicmip
+	{
+		map xmaslogos/16_merryxmas
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/17_beard
+{
+	nopicmip
+	{
+		map xmaslogos/17_beard
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/18_wings
+{
+	nopicmip
+	{
+		map xmaslogos/18_wings
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/19_gingy
+{
+	nopicmip
+	{
+		map xmaslogos/19_gingy
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/20_reindeer
+{
+	nopicmip
+	{
+		map xmaslogos/20_reindeer
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/21_boot
+{
+	nopicmip
+	{
+		map xmaslogos/21_boot
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/22_santa
+{
+	nopicmip
+	{
+		map xmaslogos/22_santa
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/23_sleighteam
+{
+	nopicmip
+	{
+		map xmaslogos/23_sleighteam
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/24_angel
+{
+	nopicmip
+	{
+		map xmaslogos/24_angel
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/25_drum
+{
+	nopicmip
+	{
+		map xmaslogos/25_drum
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/26_skate
+{
+	nopicmip
+	{
+		map xmaslogos/26_skate
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/27_nutcracker
+{
+	nopicmip
+	{
+		map xmaslogos/27_nutcracker
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/28_branch
+{
+	nopicmip
+	{
+		map xmaslogos/28_branch
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/29_wishlist
+{
+	nopicmip
+	{
+		map xmaslogos/29_wishlist
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/30_xmassucks
+{
+	nopicmip
+	{
+		map xmaslogos/30_xmassucks
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/31_stocking
+{
+	nopicmip
+	{
+		map xmaslogos/31_stocking
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/32_mine
+{
+	nopicmip
+	{
+		map xmaslogos/32_mine
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/33_ribbonbow
+{
+	nopicmip
+	{
+		map xmaslogos/33_ribbonbow
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/34_light
+{
+	nopicmip
+	{
+		map xmaslogos/34_light
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/35_newyear
+{
+	nopicmip
+	{
+		map xmaslogos/35_newyear
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/36_cheers
+{
+	nopicmip
+	{
+		map xmaslogos/36_cheers
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/37_firework
+{
+	nopicmip
+	{
+		map xmaslogos/37_firework
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
+}
+
+xmaslogos/38_rocket
+{
+	nopicmip
+	{
+		map xmaslogos/38_rocket
+		blendFunc blend
+		rgbGen vertex
+		alphaGen vertex
+	}
 }
