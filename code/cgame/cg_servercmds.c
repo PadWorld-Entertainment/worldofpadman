@@ -693,7 +693,11 @@ static void CG_ServerCommand(void) {
 			if (buffer[0] != '\0') {
 				trap_SendClientCommand(va("selectlogo \"%s\"\n", buffer));
 			} else {
-				trap_SendClientCommand("selectlogo " SPRAYLOGO_DEFAULT_NAME "\n");
+				if (cgs.isXmas) {
+					trap_SendClientCommand("selectlogo " XMAS_SPRAYLOGO_DEFAULT_NAME "\n");
+				} else {
+					trap_SendClientCommand("selectlogo " SPRAYLOGO_DEFAULT_NAME "\n");
+				}
 			}
 
 			if (cg.wantSelectLogo) {

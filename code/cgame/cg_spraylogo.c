@@ -186,11 +186,21 @@ static void Load_Logos(void) {
 
 	// register default logo (this will be displayed if we can't find the logo which the server wants to use ... this
 	// should only happen if we are unpure)
-	// XMAS: in the xmas mod the logos live under XMAS_SPRAYLOGO_PATH so the original WoP logos
+	// XMAS: in the xmas mod the logos live under XMAS_SPRAYLOGO_PATH and have different file names so the original WoP logos
 	// are not overwritten (see issue #395).
 	{
-		const char *path = cgs.isXmas ? XMAS_SPRAYLOGO_PATH : SPRAYLOGO_PATH;
-		cgs.media.defaultspraylogo = trap_R_RegisterShader(va("%s/%s", path, SPRAYLOGO_DEFAULT_NAME));
+		const char *path;
+		const char *logo;
+		
+		if (cgs.isXmas) {
+			path = XMAS_SPRAYLOGO_PATH;
+			logo = XMAS_SPRAYLOGO_DEFAULT_NAME;
+		} else {
+			path = SPRAYLOGO_PATH;
+			logo = SPRAYLOGO_DEFAULT_NAME;
+		}
+		
+		cgs.media.defaultspraylogo = trap_R_RegisterShader(va("%s/%s", path, logo));
 
 		// set back the loadedcounter
 		loadedlogos = 0;

@@ -1025,7 +1025,12 @@ static void UI_PlayerSettings_MenuInit(void) {
 		trap_Cvar_VariableStringBuffer("syc_logo", spraylogoName, sizeof(spraylogoName));
 
 		if (spraylogoName[0] == '\0') {
-			Q_strncpyz(spraylogoName, SPRAYLOGO_DEFAULT_NAME, sizeof(spraylogoName));
+			//XMAS: if no logo is set, use the default one (xmas or wop)
+			if (uis.isXmas) {
+				Q_strncpyz(spraylogoName, XMAS_SPRAYLOGO_DEFAULT_NAME, sizeof(spraylogoName));
+			} else {
+				Q_strncpyz(spraylogoName, SPRAYLOGO_DEFAULT_NAME, sizeof(spraylogoName));
+			}
 		}
 
 		for (i = 0; i < uis.spraylogosLoaded; i++) {
