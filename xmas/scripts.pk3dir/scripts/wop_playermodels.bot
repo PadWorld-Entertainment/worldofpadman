@@ -8,6 +8,7 @@ funname		"^0PAD^4MAN"
 model		padman
 aifile		bots/padman_c.c
 spraylogo	15_ornaments
+hat         santa
 }
 
 
@@ -21,6 +22,7 @@ funname		"^6PadGirl"
 model		padgirl
 aifile		bots/padgirl_c.c
 spraylogo	22_santa
+hat         santa
 }
 
 
@@ -34,6 +36,7 @@ funname		"^0Pad^6Babe"
 model		padgirl/padbabe
 aifile		bots/padgirl_c.c
 spraylogo	18_wings
+hat         tophat
 }
 
 
@@ -47,6 +50,7 @@ funname		"^5Pad^3Lilly"
 model		padlilly
 aifile		bots/padlilly_c.c
 spraylogo	09_icecrystal
+hat         tophat
 }
 
 
@@ -60,6 +64,7 @@ funname		"^3P^2a^3d^2ill^3a"
 model		padlilly/padilla
 aifile		bots/padlilly_c.c
 spraylogo	35_newyear
+hat         elf
 }
 
 
@@ -125,6 +130,7 @@ funname		"^5S^6uper^5P^6ad"
 model		padman/superpad
 aifile		bots/padman_c.c
 spraylogo	13_advent
+hat         elf
 }
 
 
@@ -151,6 +157,7 @@ funname		"^0H^1ell^0P^1ad"
 model		padman/hellpad
 aifile		bots/padman_c.c
 spraylogo	24_angel
+hat         tophat
 }
 
 
@@ -164,6 +171,7 @@ model		padman/pelvis
 funname     "^6Pelv^7i^6s"
 aifile      bots/pelvis_c.c
 spraylogo	10_gift
+hat         tophat
 }
 
 
@@ -177,6 +185,7 @@ funname		"^1Pad^3Classic"
 model		padman/padclassic
 aifile		bots/padman_c.c
 spraylogo	06_tree
+hat         elf
 }
 
 
@@ -190,6 +199,7 @@ model		piratepad
 funname  	"^4Pirate^1Pad"
 aifile		bots/padman_c.c
 spraylogo	07_holly
+hat         santa
 }
 
 
@@ -203,6 +213,7 @@ model		fatpad
 funname  	"Fat^1Pad"
 aifile		bots/padman_c.c
 spraylogo	08_snowflake
+hat         santa
 }
 
 
@@ -216,6 +227,7 @@ funname  	"^7F^5ATT^7Y"
 model		fatpad/fatty
 aifile		bots/padman_c.c
 spraylogo	30_xmassucks
+hat         tophat
 }
 
 
@@ -281,6 +293,7 @@ model		beachpad
 funname  	"^2Beach^5Pad"
 aifile		bots/padman_c.c
 spraylogo	38_rocket
+hat         elf
 }
 
 
@@ -320,6 +333,7 @@ model		piratepad/ghostpirate
 funname  	"^4Ghost^1Pirate"
 aifile		bots/padman_c.c
 spraylogo	07_holly
+hat         tophat
 }
 
 
@@ -333,6 +347,7 @@ model		piratepad/spooky
 funname  	"^4Spooky"
 aifile		bots/padman_c.c
 spraylogo	26_skate
+hat         elf
 }
 
 
@@ -346,6 +361,7 @@ model		paddybell
 funname  	"^6Paddy^5Bell"
 aifile		bots/paddy_c.c
 spraylogo	12_candycane
+hat         tophat
 }
 
 
