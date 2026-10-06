@@ -862,6 +862,8 @@ qboolean BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime
 #define XMAS_SPRAYLOGO_PATH "xmaslogos"
 #define SPRAYLOGO_LIST_CVAR "logolist"
 #define SPRAYLOGO_DEFAULT_NAME "01_wop"
+// XMAS: when running with the xmas gamedir, spray logos need another default logo name.
+#define XMAS_SPRAYLOGO_DEFAULT_NAME "01_stars"
 #define MAX_SPRAYLOGOS_LOADED 64
 #define MAX_SPRAYLOGO_NAME 32
 
