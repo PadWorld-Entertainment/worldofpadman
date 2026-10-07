@@ -43,20 +43,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_PREVSKIN 24
 #define ID_NEXTSKIN 25
 #define ID_MICON 26 //+5
-#define ID_SICON 32 //+11
-#define ID_PLAYERMODEL 44
-#define ID_PREVLOGO 45
-#define ID_NEXTLOGO 46
-#define ID_RANDOMCOLOR 47
-#define ID_SPRAYCOLOR 48
-#define ID_XMASHAT 49
+#define ID_SICON 32 //+2
+#define ID_PLAYERMODEL 35
+#define ID_PREVLOGO 36
+#define ID_NEXTLOGO 37
+#define ID_RANDOMCOLOR 38
+#define ID_SPRAYCOLOR 39
+#define ID_XMASHAT 40
 
 #define MAX_NAMELENGTH 20
 
 #define MODELSPERPAGE 6
-#define SKINGRID_COLS 1
-#define SKINGRID_ROWS 3
-#define SKINSPERPAGE (SKINGRID_ROWS * SKINGRID_COLS)
+#define SKINSPERPAGE 3
 #define SKINGRID_YPOS 168
 #define SKINGRID_XPOS 744
 #define MODELICON_SIZE 97
@@ -845,16 +843,7 @@ static void UI_PlayerSettings_MenuEvent(void *ptr, int event) {
 		break;
 	case ID_SICON:
 	case ID_SICON + 1:
-	case ID_SICON + 2:
-	case ID_SICON + 3:
-	case ID_SICON + 4:
-	case ID_SICON + 5:
-	case ID_SICON + 6:
-	case ID_SICON + 7:
-	case ID_SICON + 8:
-	case ID_SICON + 9:
-	case ID_SICON + 10:
-	case ID_SICON + 11: {
+	case ID_SICON + 2: {
 		const SkinData_t *skinData = &ps_playericons.modelskins[tmpid - ID_SICON + s_playersettings.firstskin];
 		trap_Cvar_Set("model", skinData->name);
 		trap_Cvar_Set("headmodel", skinData->name);
@@ -981,7 +970,7 @@ static void UI_PlayerSettings_MenuInit(void) {
 	s_playersettings.skindown.generic.name = SARROWDN0;
 	s_playersettings.skindown.generic.flags = QMF_HIGHLIGHT_IF_FOCUS;
 	s_playersettings.skindown.generic.x = SKINGRID_XPOS - 6;
-	s_playersettings.skindown.generic.y = SKINGRID_YPOS + SKINGRID_ROWS * (SKINICON_SIZE + SKINICON_GAP);
+	s_playersettings.skindown.generic.y = SKINGRID_YPOS + SKINSPERPAGE * (SKINICON_SIZE + SKINICON_GAP);
 	s_playersettings.skindown.generic.id = ID_NEXTSKIN;
 	s_playersettings.skindown.generic.callback = UI_PlayerSettings_MenuEvent;
 	s_playersettings.skindown.width = 91;
@@ -1002,20 +991,16 @@ static void UI_PlayerSettings_MenuInit(void) {
 	}
 
 	y = SKINGRID_YPOS;
-	for (i = 0, k = 0; i < SKINGRID_ROWS; i++) {
-		x = SKINGRID_XPOS;
-		for (j = 0; j < SKINGRID_COLS; j++, k++) {
-			s_playersettings.skin_icons[k].generic.type = MTYPE_BITMAP;
-			s_playersettings.skin_icons[k].generic.flags = QMF_LEFT_JUSTIFY;
-			s_playersettings.skin_icons[k].generic.x = x;
-			s_playersettings.skin_icons[k].generic.y = y;
-			s_playersettings.skin_icons[k].width = SKINICON_SIZE;
-			s_playersettings.skin_icons[k].height = SKINICON_SIZE;
-			s_playersettings.skin_icons[k].generic.callback = UI_PlayerSettings_MenuEvent;
-			s_playersettings.skin_icons[k].generic.id = ID_SICON + k;
-			s_playersettings.skin_icons[k].generic.ownerdraw = UI_SelectSkin_DrawSkinIcon;
-			x += (SKINICON_SIZE + SKINICON_GAP);
-		}
+	for (i = 0; i < SKINSPERPAGE; i++) {
+		s_playersettings.skin_icons[i].generic.type = MTYPE_BITMAP;
+		s_playersettings.skin_icons[i].generic.flags = QMF_LEFT_JUSTIFY;
+		s_playersettings.skin_icons[i].generic.x = SKINGRID_XPOS;
+		s_playersettings.skin_icons[i].generic.y = y;
+		s_playersettings.skin_icons[i].width = SKINICON_SIZE;
+		s_playersettings.skin_icons[i].height = SKINICON_SIZE;
+		s_playersettings.skin_icons[i].generic.callback = UI_PlayerSettings_MenuEvent;
+		s_playersettings.skin_icons[i].generic.id = ID_SICON + i;
+		s_playersettings.skin_icons[i].generic.ownerdraw = UI_SelectSkin_DrawSkinIcon;
 		y += (SKINICON_SIZE + SKINICON_GAP);
 	}
 
