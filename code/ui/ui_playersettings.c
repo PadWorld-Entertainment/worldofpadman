@@ -403,7 +403,7 @@ static void sortSkins(int first, int last) {
 }
 
 #define MAX_MODEL_DIR_LIST 2048
-#define MAX_MODELFOLDER_FILELIST 2048
+#define MAX_MODELFOLDER_FILELIST 4096
 
 static const char fixedModelList[] =
 	"padman\0padgirl\0monsterpad\0piratepad\0padlilly\0fatpad\0beachpad\0paddybell\0padcho\0padking\0padpunk";
