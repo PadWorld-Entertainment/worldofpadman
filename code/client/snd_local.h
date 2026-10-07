@@ -148,6 +148,7 @@ typedef struct {
 	void (*Capture)(int samples, byte *data);
 	void (*StopCapture)(void);
 	void (*MasterGain)(float gain);
+	qboolean (*CaptureAvailable)(void);
 #endif
 } soundInterface_t;
 
@@ -180,6 +181,7 @@ int SNDDMA_AvailableCaptureSamples(void);
 void SNDDMA_Capture(int samples, byte *data);
 void SNDDMA_StopCapture(void);
 void SNDDMA_MasterGain(float val);
+qboolean SNDDMA_CaptureAvailable(void);
 #endif
 
 //====================================================================
@@ -196,7 +198,7 @@ extern vec3_t listener_right;
 extern vec3_t listener_up;
 extern dma_t dma;
 
-#define MAX_RAW_SAMPLES 16384
+#define MAX_RAW_SAMPLES 32768
 #define MAX_RAW_STREAMS (MAX_CLIENTS * 2 + 1)
 extern portable_samplepair_t s_rawsamples[MAX_RAW_STREAMS][MAX_RAW_SAMPLES];
 extern int s_rawend[MAX_RAW_STREAMS];

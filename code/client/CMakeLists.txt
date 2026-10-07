@@ -8,6 +8,7 @@ set(SRCS
 	cl_main.c
 	cl_net_chan.c
 	cl_parse.c
+	cl_voip.c
 	cl_scrn.c
 	cl_ui.c
 	cl_avi.c

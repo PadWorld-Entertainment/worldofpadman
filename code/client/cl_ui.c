@@ -625,15 +625,13 @@ static void Key_GetBindingBuf(int keynum, char *buf, int buflen) {
 static float CLUI_GetVoiceGain(const int id) {
 	if (id < 0 || id >= MAX_CLIENTS)
 		return 0;
-	// todo, make sure server is running
-	return clc.voipGain[id];
+	return clc.voipSenders[id].gain;
 }
 
 static int CLUI_GetVoiceMuteClient(const int id) {
 	if (id < 0 || id >= MAX_CLIENTS)
 		return 0;
-	// todo, make sure server is running
-	return clc.voipIgnore[id];
+	return clc.voipSenders[id].ignore;
 }
 
 static int CLUI_GetVoiceMuteAll(void) {

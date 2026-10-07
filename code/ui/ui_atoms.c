@@ -154,6 +154,11 @@ UI_PopMenu
 =================
 */
 void UI_PopMenu(void) {
+	// Call onclose callback before popping
+	if (uis.menusp > 0 && uis.stack[uis.menusp - 1] && uis.stack[uis.menusp - 1]->onclose) {
+		uis.stack[uis.menusp - 1]->onclose();
+	}
+
 	uis.menusp--;
 
 	if (uis.menusp < 0)
@@ -168,6 +173,11 @@ void UI_PopMenu(void) {
 }
 
 void UI_ForceMenuOff(void) {
+	// Call onclose for the active menu before forcing off
+	if (uis.activemenu && uis.activemenu->onclose) {
+		uis.activemenu->onclose();
+	}
+
 	uis.menusp = 0;
 	uis.activemenu = NULL;
 

@@ -692,6 +692,7 @@ typedef struct {
 	qboolean testGun;
 
 	int lastVoiceTime[MAX_CLIENTS];
+	int lastVoiceQuality[MAX_CLIENTS]; // 0-100, quality percentage per sender
 	// cammod
 	vec3_t CamPos;
 	vec3_t CamAngles;
@@ -1841,6 +1842,7 @@ qboolean trap_getCameraInfo(int time, vec3_t *origin, vec3_t *angles);
 
 qboolean trap_GetEntityToken(char *buffer, int bufferSize);
 void trap_GetVoipTimes(int *times);
+void trap_GetVoipQuality(int *quality);
 
 int trap_RealTime(qtime_t *qtime);
 
