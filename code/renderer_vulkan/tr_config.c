@@ -133,6 +133,7 @@ void R_glConfigInit(void) {
 	glConfig.colorBits = 32;
 	glConfig.depthBits = 24;
 	glConfig.stencilBits = 8;
+	glConfig.maxTextureSize = 2048;
 }
 
 static void printDeviceExtensions(void) {

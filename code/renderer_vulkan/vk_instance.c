@@ -77,6 +77,7 @@ PFN_vkCreateFramebuffer qvkCreateFramebuffer;
 PFN_vkCreateGraphicsPipelines qvkCreateGraphicsPipelines;
 PFN_vkCreateImage qvkCreateImage;
 PFN_vkCreateImageView qvkCreateImageView;
+PFN_vkCreatePipelineCache qvkCreatePipelineCache;
 PFN_vkCreatePipelineLayout qvkCreatePipelineLayout;
 PFN_vkCreateRenderPass qvkCreateRenderPass;
 PFN_vkCreateSampler qvkCreateSampler;
@@ -92,6 +93,7 @@ PFN_vkDestroyFramebuffer qvkDestroyFramebuffer;
 PFN_vkDestroyImage qvkDestroyImage;
 PFN_vkDestroyImageView qvkDestroyImageView;
 PFN_vkDestroyPipeline qvkDestroyPipeline;
+PFN_vkDestroyPipelineCache qvkDestroyPipelineCache;
 PFN_vkDestroyPipelineLayout qvkDestroyPipelineLayout;
 PFN_vkDestroyRenderPass qvkDestroyRenderPass;
 PFN_vkDestroySampler qvkDestroySampler;
@@ -355,16 +357,22 @@ static void vk_selectPhysicalDevice(void) {
 
 	// TODO: multi graphic cards selection support
 	VK_CHECK(qvkEnumeratePhysicalDevices(vk.instance, &gpu_count, pPhyDev));
-	for (i = 0; i < gpu_count; i++) {
+	int integrated_index = -1;
+	for (i = 0; i < (int)gpu_count; i++) {
 		VkPhysicalDeviceProperties props;
 		qvkGetPhysicalDeviceProperties(pPhyDev[i], &props);
 		ri.Printf(PRINT_ALL, " %i: %s\n", i, renderer_name(&props));
 		if (device_index == -1 && props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
 			device_index = i;
-		} else if (device_index == -2 && props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
-			device_index = i;
+		} else if (integrated_index == -1 && props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
+			integrated_index = i;
 		}
 	}
+
+	if (device_index == -1)
+		device_index = integrated_index;
+	if (device_index == -1)
+		device_index = 0; // fallback to first available device
 
 	vk.physical_device = pPhyDev[device_index];
 
@@ -648,6 +656,7 @@ static void vk_loadDeviceFunctions(void) {
 	INIT_DEVICE_FUNCTION(vkCreateGraphicsPipelines)
 	INIT_DEVICE_FUNCTION(vkCreateImage)
 	INIT_DEVICE_FUNCTION(vkCreateImageView)
+	INIT_DEVICE_FUNCTION(vkCreatePipelineCache)
 	INIT_DEVICE_FUNCTION(vkCreatePipelineLayout)
 	INIT_DEVICE_FUNCTION(vkCreateRenderPass)
 	INIT_DEVICE_FUNCTION(vkCreateSampler)
@@ -663,6 +672,7 @@ static void vk_loadDeviceFunctions(void) {
 	INIT_DEVICE_FUNCTION(vkDestroyImage)
 	INIT_DEVICE_FUNCTION(vkDestroyImageView)
 	INIT_DEVICE_FUNCTION(vkDestroyPipeline)
+	INIT_DEVICE_FUNCTION(vkDestroyPipelineCache)
 	INIT_DEVICE_FUNCTION(vkDestroyPipelineLayout)
 	INIT_DEVICE_FUNCTION(vkDestroyRenderPass)
 	INIT_DEVICE_FUNCTION(vkDestroySampler)

@@ -12,6 +12,7 @@ typedef struct image_s {
 	uint32_t index;
 
 	VkImage handle;
+	VkDeviceMemory dedicatedMemory; // non-null for images with own allocation (cinematics)
 	// To use any VkImage, including those in the swap chain, int the render pipeline
 	// we have to create a VkImageView object. An image view is quite literally a
 	// view into image. It describe how to access the image and witch part of the

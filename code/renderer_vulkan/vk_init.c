@@ -2,9 +2,11 @@
 #include "tr_config.h"
 #include "vk_cmd.h"
 #include "vk_depth_attachment.h"
+#include "vk_fbo.h"
 #include "vk_frame.h"
 #include "vk_instance.h"
 #include "vk_pipelines.h"
+#include "vk_postprocess.h"
 #include "vk_shade_geometry.h"
 #include "vk_shaders.h"
 #include "vk_init.h"
@@ -44,6 +46,10 @@ void vk_initialize(void) {
 
 	vk_createFrameBuffers(width, height);
 
+	VK_FBO_Init();
+
+	VK_PostProcess_Init();
+
 	// Pipeline layout.
 	// You can use uniform values in shaders, which are globals similar to
 	// dynamic state variables that can be changes at the drawing time to
@@ -79,7 +85,15 @@ VkBool32 isVKinitialied(void) {
 void vk_shutdown(void) {
 	ri.Printf(PRINT_DEVELOPER, "vk_shutdown()\n");
 
+	if (vk.device != VK_NULL_HANDLE) {
+		qvkDeviceWaitIdle(vk.device);
+	}
+
 	vk_destroyDepthAttachment();
+
+	VK_PostProcess_Shutdown();
+
+	VK_FBO_Shutdown();
 
 	vk_destroyFrameBuffers();
 
