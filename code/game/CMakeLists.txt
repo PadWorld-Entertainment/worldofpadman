@@ -8,6 +8,7 @@ set(SRCS
 	ai_main.c
 	ai_team.c
 	ai_vcmd.c
+	be_alloc.c
 	bg_misc.c
 	bg_pmove.c
 	bg_slidemove.c
