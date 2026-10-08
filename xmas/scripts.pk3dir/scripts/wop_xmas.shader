@@ -750,3 +750,149 @@ xmaslogos/38_rocket
 		alphaGen vertex
 	}
 }
+
+// =================
+// XMAS SANTAPAD
+// =================
+
+models/wop_players/padman/santapad_goggles
+{
+	cull disable
+	{
+		map models/wop_players/padman/santapad_head
+		alphaFunc ge128
+		rgbGen lightingDiffuse
+	}
+	{
+		map models/wop_players/padman/pad_fx
+		blendfunc GL_DST_ALPHA GL_DST_ALPHA
+		tcgen environment
+		rgbGen lightingDiffuse
+		depthfunc equal
+	}
+}
+
+models/wop_players/padman/santapad_cape
+{
+	cull disable
+	deformVertexes wave 100 sin 0 0.2 3 1
+	{
+		map models/wop_players/padman/santapad_body
+		alphaFunc ge128
+		rgbGen lightingDiffuse
+	}
+}
+
+models/wop_players/padman/santapad_head
+{
+	nopicmip
+	nomipmaps
+	cull none
+	{
+		map models/wop_players/padman/santapad_head
+		rgbGen lightingDiffuse
+	}
+	{
+		map textures/pad_gfx02/tinpad4
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+	}
+	{
+		map models/wop_players/padman/santapad_head
+		alphaFunc ge128
+		rgbGen lightingDiffuse
+	}
+}
+
+models/wop_players/padman/santapad_body
+{
+	nopicmip
+	nomipmaps
+	cull none
+	{
+		map models/wop_players/padman/santapad_body
+		rgbGen lightingdiffuse
+	}
+
+	{
+		map textures/pad_gfx02/tinpad4
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+	}
+	{
+ 		map models/wop_players/padman/santapad_body
+		alphaFunc ge128
+		rgbGen lightingdiffuse
+	}
+}
+
+models/wop_players/padman/santapad_body_blue
+{
+	nopicmip
+	nomipmaps
+	cull none
+	{
+		map models/wop_players/padman/santapad_body_blue
+		rgbGen lightingdiffuse
+	}
+	{
+		map textures/pad_gfx02/tinpad4
+		blendfunc GL_ONE GL_ONE
+		tcmod scale .5 .5
+		tcGen environment
+		rgbGen lightingdiffuse
+	}
+	{
+ 		map models/wop_players/padman/santapad_body_blue
+		alphaFunc ge128
+		rgbGen lightingdiffuse
+	}
+
+}
+
+models/wop_players/padman/santapad_cape_blue
+{
+	cull disable
+	deformVertexes wave 100 sin 0 0.2 3 1
+	{
+		map models/wop_players/padman/santapad_body_blue
+		alphaFunc ge128
+		rgbGen lightingDiffuse
+	}
+}
+
+// =================
+// XMAS MONSTERDEER
+// =================
+
+models/wop_players/monsterpad/monsterdeer_head
+{
+	cull disable
+	{
+		map models/wop_players/monsterpad/monsterdeer_nose
+		rgbGen wave sin 1 .5 0 1
+	}
+	{
+		map models/wop_players/monsterpad/monsterdeer_head
+		alphaFunc ge128
+		rgbGen lightingDiffuse
+	}
+}
+
+models/wop_players/monsterpad/monsterdeer_head_blue
+{
+	cull disable
+	{
+		map models/wop_players/monsterpad/monsterdeer_nose_blue
+		rgbGen wave sin 1 .5 0 1
+	}
+	{
+		map models/wop_players/monsterpad/monsterdeer_head
+		alphaFunc ge128
+		rgbGen lightingDiffuse
+	}
+}
