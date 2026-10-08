@@ -21,8 +21,8 @@ name		PadGirl
 funname		"^6PadGirl"
 model		padgirl
 aifile		bots/padgirl_c.c
-spraylogo	22_santa
-hat         santa
+spraylogo	34_light
+hat         elf
 }
 
 
@@ -35,7 +35,7 @@ name		PadBabe
 funname		"^0Pad^6Babe"
 model		padgirl/padbabe
 aifile		bots/padgirl_c.c
-spraylogo	18_wings
+spraylogo	24_angel
 hat         tophat
 }
 
@@ -156,10 +156,9 @@ name		HellPad
 funname		"^0H^1ell^0P^1ad"
 model		padman/hellpad
 aifile		bots/padman_c.c
-spraylogo	24_angel
+spraylogo	37_firework
 hat         tophat
 }
-
 
 // ==================
 // PELViS
@@ -195,8 +194,8 @@ hat         elf
 
 {
 name		PiratePad
-model		piratepad
 funname  	"^4Pirate^1Pad"
+model		piratepad
 aifile		bots/padman_c.c
 spraylogo	07_holly
 hat         santa
@@ -226,7 +225,7 @@ name		FATTY
 funname  	"^7F^5ATT^7Y"
 model		fatpad/fatty
 aifile		bots/padman_c.c
-spraylogo	30_xmassucks
+spraylogo	23_sleighteam
 hat         tophat
 }
 
@@ -253,7 +252,7 @@ name		MonsterHawk
 model		monsterpad/monsterhawk
 funname   	"^2Monster^3Hawk"
 aifile		bots/padman_c.c
-spraylogo	36_cheers
+spraylogo	05_bell
 }
 
 
@@ -329,8 +328,8 @@ spraylogo	02_meteor
 
 {
 name		GhostPirate
-model		piratepad/ghostpirate
 funname  	"^4Ghost^1Pirate"
+model		piratepad/ghostpirate
 aifile		bots/padman_c.c
 spraylogo	07_holly
 hat         tophat
@@ -343,8 +342,8 @@ hat         tophat
 
 {
 name		Spooky
-model		piratepad/spooky
 funname  	"^4Spooky"
+model		piratepad/spooky
 aifile		bots/padman_c.c
 spraylogo	26_skate
 hat         elf
@@ -388,4 +387,87 @@ model		paddybell/paddybee
 funname  	"^2Paddy^3Bee"
 aifile		bots/paddy_c.c
 spraylogo	21_boot
+}
+
+
+// =================
+// XMAS SANTAPAD
+// =================
+
+{
+name		SantaPad
+model		padman/santapad
+funname  	"^1Santa^2Pad"
+aifile		bots/padman_c.c
+spraylogo	30_xmassucks
+hat         santa
+}
+
+
+// =================
+// XMAS SANTAGiRL
+// =================
+
+{
+name		SantaGirl
+funname		"^1Santa^2Girl"
+model		padgirl/santagirl
+aifile		bots/padgirl_c.c
+spraylogo	22_santa
+hat         santa
+}
+
+
+// =================
+// XMAS SANTAANGEL
+// =================
+
+{
+name		SantaAngel
+funname		"^1Santa^2Angel"
+model		padlilly/santaangel
+aifile		bots/padlilly_c.c
+spraylogo	18_wings
+hat         santa
+}
+
+
+// =================
+// XMAS MONSTERDEER
+// =================
+
+{
+name		MonsterDeer
+model		monsterpad/monsterdeer
+funname   	"^2Monster^1Deer"
+aifile		bots/padman_c.c
+spraylogo	20_reindeer
+}
+
+
+// =================
+// XMAS CHONKYELF
+// =================
+
+{
+name		ChonkyElf
+funname  	"^1Chonky^2Elf"
+model		fatpad/chonkyelf
+aifile		bots/padman_c.c
+spraylogo	29_wishlist
+hat         elf
+}
+
+
+// =================
+// XMAS SALTYSANTA
+// =================
+
+{
+name		SaltySanta
+funname  	"^2Salty^1Santa"
+model		piratepad/saltysanta
+aifile		bots/padman_c.c
+spraylogo	36_cheers
+hat         santa
 }
