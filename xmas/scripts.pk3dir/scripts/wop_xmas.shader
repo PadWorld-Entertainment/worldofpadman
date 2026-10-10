@@ -751,6 +751,7 @@ xmaslogos/38_rocket
 	}
 }
 
+
 // =================
 // XMAS SANTAPAD
 // =================
@@ -864,6 +865,7 @@ models/wop_players/padman/santapad_cape_blue
 		rgbGen lightingDiffuse
 	}
 }
+
 
 // =================
 // XMAS MONSTERDEER
