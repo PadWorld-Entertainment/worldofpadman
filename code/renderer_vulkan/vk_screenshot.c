@@ -173,6 +173,15 @@ static byte *RB_ReadPixels(uint32_t width, uint32_t height) {
 						  NULL, 0, NULL, 1, &image_barrier);
 	qvkCmdCopyImageToBuffer(cmdBuf, vk.swapchain_images_array[vk.idx_swapchain_image],
 							VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, buffer, 1, &image_copy);
+
+	// Transition swapchain image back to present layout
+	image_barrier.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+	image_barrier.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+	image_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+	image_barrier.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	qvkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0,
+						  NULL, 0, NULL, 1, &image_barrier);
+
 	VK_CHECK(qvkEndCommandBuffer(cmdBuf));
 
 	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -203,16 +212,19 @@ static byte *RB_ReadPixels(uint32_t width, uint32_t height) {
 
 	RB_FlipFrameBuffer(pBuf, width, height);
 
-	// Remove alpha channel and rbg <-> bgr
+	// Remove alpha channel and swap R/B (BGRA -> RGB)
 	{
 		unsigned char *pSrc = pBuf;
 		unsigned char *pDst = pBuf;
 
 		uint32_t i;
 		for (i = 0; i < width * height; i++) {
-			pSrc[0] = pDst[2];
-			pSrc[1] = pDst[1];
-			pSrc[2] = pDst[0];
+			unsigned char r = pDst[0];
+			unsigned char g = pDst[1];
+			unsigned char b = pDst[2];
+			pSrc[0] = b;
+			pSrc[1] = g;
+			pSrc[2] = r;
 			pSrc += 3;
 			pDst += 4;
 		}

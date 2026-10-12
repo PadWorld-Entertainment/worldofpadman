@@ -77,6 +77,7 @@ cvar_t *r_screenshotJpegQuality;
 cvar_t *r_screenshotFormat;
 
 cvar_t *r_enablevalidationlayers;
+cvar_t *r_greyscale;
 
 void R_Register(void) {
 	//
@@ -168,4 +169,5 @@ void R_Register(void) {
 	r_screenshotJpegQuality = ri.Cvar_Get("r_screenshotJpegQuality", "100", CVAR_ARCHIVE);
 	r_screenshotFormat = ri.Cvar_Get("r_screenshotFormat", "2", CVAR_ARCHIVE);
 	r_enablevalidationlayers = ri.Cvar_Get("r_enablevalidationlayers", "0", CVAR_ARCHIVE);
+	r_greyscale = ri.Cvar_Get("r_greyscale", "0", CVAR_ARCHIVE);
 }
