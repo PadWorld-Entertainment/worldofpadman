@@ -5,6 +5,7 @@
 ### Added
 
 - Community MapPack v1.2.0 with a selection of community made maps, fixed, updated and improved for WoP 1.7.x
+- Initial version of the WoP XMAS theme, based on the XMAS modification (WoP 1.2), updated and improved for WoP 1.7.x
 - Crosshair in 3rd person view and enabled by default; disable or set to "traced" mode in game options menu
 - KillerDuck wallhack icon over the carriers head in CATCH to reveal his position, provided the option is enabled in the menu
 - Missing PADMAN winner statue model (md3 file)
@@ -15,6 +16,8 @@
 
 - Fatal crash when starting a new match from the main menu after exiting an arena and returning directly to the main menu
 - WoP freezing or crashing when the `/demo` command is entered with an invalid demo file name
+- Bright corners on curved surfaces when OpenGL2 renderer selected
+- Password protected server could not be joined via "Connect by IP", no password prompt was displayed and the connection failed immediately with "Invalid password."
 - KillerDucks attacking frozen players and stacking up in FT
 - Disconnected clients dropping the freeze power-up in FT, which allowed others to collect the item, run around, and shoot while appearing frozen
 - KillerDucks movement to prevent them to stack and get stuck
@@ -26,6 +29,7 @@
 - Hall of mirrors effect visible on the skybox in PadShip during demo playback when OpenGL2 renderer is enabled
 - Disabling anaglyph 3D mode in the menu prevents adjusting the grayscale afterward, both options are decoupled now
 - Cvar `bot_minplayers` not working as intended in some game types
+- OpenAL input device selection with 1.1 ALSOFT 1.24.2
 - Missing `qer_editorimage` path in `textures/pad_wop/padtele` shader
 - Diner: two weapon markers spawning at Boaster/Betty position (fallen chair) causing z-fights
 
