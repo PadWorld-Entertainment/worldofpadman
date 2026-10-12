@@ -349,6 +349,7 @@ static void CG_ConfigStringModified(void) {
 		cgs.voteModified = qtrue;
 	} else if (num == CS_VOTE_STRING) {
 		Q_strncpyz(cgs.voteString, str, sizeof(cgs.voteString));
+		trap_S_StartLocalSound(cgs.media.voteNow, CHAN_ANNOUNCER);
 	} else if (num >= CS_TEAMVOTE_TIME && num <= CS_TEAMVOTE_TIME + 1) {
 		cgs.teamVoteTime[num - CS_TEAMVOTE_TIME] = atoi(str);
 		cgs.teamVoteModified[num - CS_TEAMVOTE_TIME] = qtrue;
@@ -360,6 +361,7 @@ static void CG_ConfigStringModified(void) {
 		cgs.teamVoteModified[num - CS_TEAMVOTE_NO] = qtrue;
 	} else if (num >= CS_TEAMVOTE_STRING && num <= CS_TEAMVOTE_STRING + 1) {
 		Q_strncpyz(cgs.teamVoteString[num - CS_TEAMVOTE_STRING], str, sizeof(cgs.teamVoteString));
+		trap_S_StartLocalSound(cgs.media.voteNow, CHAN_ANNOUNCER);
 	} else if (num == CS_INTERMISSION) {
 		cg.intermissionStarted = atoi(str);
 	} else if (num >= CS_MODELS && num < CS_MODELS + MAX_MODELS) {
@@ -570,6 +572,13 @@ static void CG_ServerCommand(void) {
 
 	if (!strcmp(cmd, "print")) {
 		CG_Printf("%s", CG_Argv(1));
+		cmd = CG_Argv(1);			// yes, this is obviously a hack, but so is the way we hear about
+									// votes passing or failing
+		if (!Q_stricmpn(cmd, "vote failed", 11) || !Q_stricmpn(cmd, "team vote failed", 16)) {
+			trap_S_StartLocalSound(cgs.media.voteFailed, CHAN_ANNOUNCER);
+		} else if (!Q_stricmpn(cmd, "vote passed", 11) || !Q_stricmpn(cmd, "team vote passed", 16)) {
+			trap_S_StartLocalSound(cgs.media.votePassed, CHAN_ANNOUNCER);
+		}
 		return;
 	}
 
