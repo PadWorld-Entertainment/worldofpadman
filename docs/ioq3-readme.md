@@ -159,6 +159,29 @@ set using command line arguments:
     ioquake3 +set cl_renderer opengl2 +set r_preferOpenGLES 1
 
 
+# OpenGL ES support
+
+The opengl2 renderer supports OpenGL ES 2.0/3.0. The opengl1 renderer supports
+OpenGL 1.1+ and OpenGL ES 1.1.
+
+If you build on a platform that uses OpenGL ES (such as Raspberry Pi), run the
+game using `+set cl_renderer opengl1` for the fixed-function renderer or
+`+set cl_renderer opengl2` for the shader-based renderer.
+
+The `r_preferOpenGLES` cvar controls whether to use OpenGL or OpenGL ES API.
+Set to -1 for auto (default), 0 for OpenGL, and 1 for OpenGL ES. It should be
+set using command line arguments, e.g. `+set r_preferOpenGLES 1`.
+
+When using OpenGL ES the opengl1 renderer does not support `r_flares`[1],
+`r_measureOverdraw`[2], `r_anaglyphMode`[3], `r_stereoEnabled`[3],
+`r_drawBuffer GL_FRONT`[3], and `r_primitives 1/3`[4].
+
+* [1] Requires glReadPixels GL_DEPTH_COMPONENT
+* [2] Requires glReadPixels GL_STENCIL_INDEX
+* [3] Requires glDrawBuffer
+* [4] Requires glBegin
+
+
 # Console
 
 ## New cvars
@@ -324,6 +347,9 @@ set using command line arguments:
                                       cl_aviMotionJpeg is enabled
   r_mode -2                         - This new video mode automatically uses the
                                       desktop resolution.
+  r_preferOpenGLES                  - Controls whether to use OpenGL API or
+                                      OpenGL ES API. Set to -1 for auto (default),
+                                      0 for OpenGL, and 1 for OpenGL ES.
 ```
 
 ## New commands
