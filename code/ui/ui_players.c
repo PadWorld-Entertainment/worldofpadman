@@ -1240,6 +1240,7 @@ qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName)
 
 	pi->torsoModel = 0;
 	pi->headModel = 0;
+	pi->hatModel = 0;
 
 	if (!modelSkinName[0]) {
 		return qfalse;
@@ -1277,10 +1278,19 @@ qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName)
 	if (*skinName && Q_stricmp(skinName, "default")) {
 
 		// first try directly with skinName
-		Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s", modelName, skinName);
-		pi->headModel = trap_R_RegisterModel(filename);
+		// XMAS: first try to load alternative head model suitable for a xmas hat, if selected
+		if (uis.isXmas && pi->hatName[0]) {
+			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s_ifhat", modelName, skinName);
+			pi->headModel = trap_R_RegisterModel(filename);
+		}
 
-		// if it fail, we will try it with a skinName without the teamending
+		// if no alternative head model was found, try to load the normal one
+		if (!pi->headModel) {
+			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s", modelName, skinName);
+			pi->headModel = trap_R_RegisterModel(filename);
+		}
+
+		// if this fails, we will try it with a skinName without the team ending
 		if (!pi->headModel) {
 			char skinWhithoutTeam[MAX_QPATH];
 			char *ptr;
@@ -1290,16 +1300,37 @@ qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName)
 				*ptr = '\0';
 			}
 
-			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s", modelName, skinWhithoutTeam);
+			// XMAS: first try to load alternative head model suitable for a xmas hat, if selected
+			if (uis.isXmas && pi->hatName[0]) {
+				Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s_ifhat", modelName, skinWhithoutTeam);
+				pi->headModel = trap_R_RegisterModel(filename);
+			}
+
+			// if no alternative head model was found, try to load the normal one
+			if (!pi->headModel) {
+				Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s", modelName, skinWhithoutTeam);
+				pi->headModel = trap_R_RegisterModel(filename);
+			}
+		}
+	}
+
+	// if it still fails, we will try it with the default model skin
+	if (!pi->headModel) {
+
+		// XMAS: first try to load alternative head model suitable for a xmas hat, if selected
+		if (uis.isXmas && pi->hatName[0]) {
+			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_ifhat", modelName);
+			pi->headModel = trap_R_RegisterModel(filename);
+		}
+
+		// if no alternative head model was found, try to load the normal one
+		if (!pi->headModel) {
+			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head", modelName);
 			pi->headModel = trap_R_RegisterModel(filename);
 		}
 	}
 
-	if (!pi->headModel) {
-		Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head", modelName);
-		pi->headModel = trap_R_RegisterModel(filename);
-	}
-
+	// if it still fails, then there is sopmething missing in the model folder, so we will return an error
 	if (!pi->headModel) {
 		Com_Printf("Failed to load model file %s\n", filename);
 		return qfalse;
@@ -1361,7 +1392,6 @@ qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName)
 	}
 
 	// XMAS: load optional hat model from models/hats/.
-	pi->hatModel = 0;
 	if (uis.isXmas && pi->hatName[0]) {
 		Com_sprintf(filename, sizeof(filename), "models/hats/%s.md3", pi->hatName);
 		pi->hatModel = trap_R_RegisterModel(filename);

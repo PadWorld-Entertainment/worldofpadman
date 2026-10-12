@@ -490,14 +490,26 @@ static qboolean CG_RegisterClientModelname(clientInfo_t *ci, const char *modelNa
 	}
 
 	ci->headModel = 0;
-	// Request for special head skin and thus head model
-	if ((Q_stricmp(headSkinName, DEFAULT_SKIN) != 0) && (Q_stricmp(headSkinName, "red") != 0) &&
-		(Q_stricmp(headSkinName, "blue") != 0)) {
-		// first try directly with skinName
-		Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s", headModelName, headSkinName);
-		ci->headModel = trap_R_RegisterModel(filename);
+	ci->hatModel = 0;
 
-		// if this fails, we will try it with a skinName without the teamending
+	// Request for special head skin and thus head model
+	if ((Q_stricmp(headSkinName, DEFAULT_SKIN) != 0) && (Q_stricmp(headSkinName, "_red") != 0) &&
+		(Q_stricmp(headSkinName, "_blue") != 0)) {
+		
+		// first try directly with skinName
+		// XMAS: first try to load alternative head model suitable for a xmas hat, if selected
+		if (cgs.isXmas && ci->hatName[0]) {
+			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s_ifhat", headModelName, headSkinName);
+			ci->headModel = trap_R_RegisterModel(filename);
+		}
+		
+		// if no alternative head model was found, try to load the normal one
+		if (!ci->headModel) {
+			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s", headModelName, headSkinName);
+			ci->headModel = trap_R_RegisterModel(filename);
+		}
+
+		// if this fails, we will try it with a skinName without the team ending
 		if (!ci->headModel) {
 			char skinWhithoutTeam[MAX_QPATH];
 			char *ptr;
@@ -507,16 +519,37 @@ static qboolean CG_RegisterClientModelname(clientInfo_t *ci, const char *modelNa
 				*ptr = '\0';
 			}
 
-			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s", headModelName, skinWhithoutTeam);
-			ci->headModel = trap_R_RegisterModel(filename);
+			// XMAS: first try to load alternative head model suitable for a xmas hat, if selected
+			if (cgs.isXmas && ci->hatName[0]) {
+				Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s_ifhat", headModelName, skinWhithoutTeam);
+				ci->headModel = trap_R_RegisterModel(filename);
+			}
+
+			// if no alternative head model was found, try to load the normal one
+			if (!ci->headModel) {
+				Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_%s", headModelName, skinWhithoutTeam);
+				ci->headModel = trap_R_RegisterModel(filename);
+			}
 		}
 	}
 
+	// if it still fails, we will try it with the default model skin
 	if (!ci->headModel) {
-		Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head", headModelName);
-		ci->headModel = trap_R_RegisterModel(filename);
-	}
 
+		// XMAS: first try to load alternative head model suitable for a xmas hat, if selected
+		if (cgs.isXmas && ci->hatName[0]) {
+			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head_ifhat", modelName);
+			ci->headModel = trap_R_RegisterModel(filename);
+		}
+
+		// if no alternative head model was found, try to load the normal one
+		if (!ci->headModel) {
+			Com_sprintf(filename, sizeof(filename), "models/wop_players/%s/head", headModelName);
+			ci->headModel = trap_R_RegisterModel(filename);
+		}
+	}
+	
+	// if it still fails, then there is sopmething missing in the model folder, so we will return an error
 	if (!ci->headModel) {
 		Com_Printf("Failed to load model file %s\n", filename);
 		return qfalse;
@@ -581,7 +614,6 @@ static qboolean CG_RegisterClientModelname(clientInfo_t *ci, const char *modelNa
 
 	// XMAS: load optional hat model from models/hats/. The hat is shared across all
 	// player models. The hat name is selected per-client via the "hat" userinfo cvar.
-	ci->hatModel = 0;
 	if (cgs.isXmas && ci->hatName[0]) {
 		Com_sprintf(filename, sizeof(filename), "models/hats/%s.md3", ci->hatName);
 		ci->hatModel = trap_R_RegisterModel(filename);
