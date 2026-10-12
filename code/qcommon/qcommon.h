@@ -276,7 +276,7 @@ enum svc_ops_e {
 
 	// new commands, supported only by ioquake3 protocol but not legacy
 	svc_voipSpeex, // not wrapped in USE_VOIP, so this value is reserved.
-	svc_voipOpus,  //
+	svc_voipOpus,  // Opus VoIP data from server to client
 
 	svc_max
 };
@@ -294,7 +294,7 @@ enum clc_ops_e {
 
 	// new commands, supported only by ioquake3 protocol but not legacy
 	clc_voipSpeex, // not wrapped in USE_VOIP, so this value is reserved.
-	clc_voipOpus,  //
+	clc_voipOpus,  // Opus VoIP data from client to server
 };
 
 /*

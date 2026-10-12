@@ -189,6 +189,7 @@ typedef struct _tag_menuframework {
 
 	void (*draw)(void);
 	sfxHandle_t (*key)(int key);
+	void (*onclose)(void);
 
 	qboolean wrapAround;
 	qboolean fullscreen;

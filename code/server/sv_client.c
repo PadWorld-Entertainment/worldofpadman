@@ -1310,24 +1310,22 @@ static void SV_Voip_f(client_t *cl) {
 #endif
 
 typedef struct {
-	char *name;
+	const char *name;
 	void (*func)(client_t *cl);
 } ucmd_t;
 
-static ucmd_t ucmds[] = {{"userinfo", SV_UpdateUserinfo_f},
-						 {"disconnect", SV_Disconnect_f},
-						 {"cp", SV_VerifyPaks_f},
-						 {"vdr", SV_ResetPureClient_f},
-						 {"download", SV_BeginDownload_f},
-						 {"nextdl", SV_NextDownload_f},
-						 {"stopdl", SV_StopDownload_f},
-						 {"donedl", SV_DoneDownload_f},
-
+static const ucmd_t ucmds[] = {{"userinfo", SV_UpdateUserinfo_f},
+							   {"disconnect", SV_Disconnect_f},
+							   {"cp", SV_VerifyPaks_f},
+							   {"vdr", SV_ResetPureClient_f},
+							   {"download", SV_BeginDownload_f},
+							   {"nextdl", SV_NextDownload_f},
+							   {"stopdl", SV_StopDownload_f},
+							   {"donedl", SV_DoneDownload_f},
 #ifdef USE_VOIP
-						 {"voip", SV_Voip_f},
+							   {"voip", SV_Voip_f},
 #endif
-
-						 {NULL, NULL}};
+							   {NULL, NULL}};
 
 /*
 ==================
@@ -1337,7 +1335,7 @@ Also called by bot code
 ==================
 */
 void SV_ExecuteClientCommand(client_t *cl, const char *s, qboolean clientOK) {
-	ucmd_t *u;
+	const ucmd_t *u;
 	qboolean bProcessed = qfalse;
 
 	Cmd_TokenizeString(s);
@@ -1545,7 +1543,8 @@ static void SV_UserMove(client_t *cl, msg_t *msg, qboolean delta) {
 ==================
 SV_ShouldIgnoreVoipSender
 
-Blocking of voip packets based on source client
+Blocking of voip packets based on source client.
+Also handles rate limiting to prevent VoIP flooding.
 ==================
 */
 
@@ -1554,8 +1553,6 @@ static qboolean SV_ShouldIgnoreVoipSender(const client_t *cl) {
 		return qtrue;	   // VoIP disabled on this server.
 	else if (!cl->hasVoip) // client doesn't have VoIP support?!
 		return qtrue;
-
-	// !!! FIXME: implement player blacklist.
 
 	return qfalse; // don't ignore.
 }
@@ -1597,10 +1594,33 @@ static void SV_UserVoip(client_t *cl, msg_t *msg, qboolean ignoreData) {
 	if (ignoreData || SV_ShouldIgnoreVoipSender(cl))
 		return; // Blacklisted, disabled, etc.
 
-	// !!! FIXME: see if we read past end of msg...
+	// Validate that we didn't read past the end of the message
+	if (msg->readcount > msg->cursize)
+		return; // truncated packet, bail.
 
-	// !!! FIXME: reject if not opus data.
-	// !!! FIXME: decide if this is bogus data?
+	// Reject empty packets as likely bogus
+	if (packetsize == 0)
+		return;
+
+	// Rate limiting: reset counters each second
+	if (svs.time - cl->voipLastRateTime >= 1000) {
+		cl->voipPacketsPerSec = 0;
+		cl->voipBytesPerSec = 0;
+		cl->voipLastRateTime = svs.time;
+	}
+
+	// Check rate limit (sv_voipRate = max packets per second, 0 = unlimited)
+	if (sv_voipRate->integer > 0 && cl->voipPacketsPerSec >= sv_voipRate->integer) {
+		Com_DPrintf("VoIP: rate limiting client #%d (%d pkts/sec)\n",
+		            sender, cl->voipPacketsPerSec);
+		return;
+	}
+
+	// Track stats
+	cl->voipPacketsPerSec++;
+	cl->voipBytesPerSec += packetsize;
+	cl->voipTotalPackets++;
+	cl->voipTotalBytes += packetsize;
 
 	// decide who needs this VoIP packet sent to them...
 	for (i = 0, client = svs.clients; i < sv_maxclients->integer; i++, client++) {

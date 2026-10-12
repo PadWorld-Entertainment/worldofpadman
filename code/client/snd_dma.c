@@ -132,6 +132,10 @@ static void S_Base_StopCapture(void) {
 static void S_Base_MasterGain(float val) {
 	SNDDMA_MasterGain(val);
 }
+
+static qboolean S_Base_CaptureAvailable(void) {
+	return SNDDMA_CaptureAvailable();
+}
 #endif
 
 /*
@@ -1189,7 +1193,14 @@ static void S_GetSoundtime(void) {
 #endif
 
 	if (dma.submission_chunk < 256) {
-		s_paintedtime = s_soundtime + s_mixPreStep->value * dma.speed;
+		int newPaintedTime = s_soundtime + s_mixPreStep->value * dma.speed;
+		// Only advance s_paintedtime forward, never reset it backwards.
+		// Resetting backwards causes re-reading of raw stream samples that
+		// may have already been overwritten in the ring buffer, leading to
+		// audio stuttering during streaming playback (e.g. OGM cinematics).
+		if (newPaintedTime > s_paintedtime) {
+			s_paintedtime = newPaintedTime;
+		}
 	} else {
 		s_paintedtime = s_soundtime + dma.submission_chunk;
 	}
@@ -1197,16 +1208,11 @@ static void S_GetSoundtime(void) {
 
 static void S_Update_(void) {
 	unsigned endtime;
-	static float lastTime = 0.0f;
-	float ma, op;
-	float thisTime, sane;
 	static int ot = -1;
 
 	if (!s_soundStarted || s_soundMuted) {
 		return;
 	}
-
-	thisTime = Com_Milliseconds();
 
 	// Updates s_soundtime
 	S_GetSoundtime();
@@ -1220,20 +1226,8 @@ static void S_Update_(void) {
 	// and start any new sounds
 	S_ScanChannelStarts();
 
-	sane = thisTime - lastTime;
-	if (sane < 11) {
-		sane = 11; // 85hz
-	}
-
-	ma = s_mixahead->value * dma.speed;
-	op = s_mixPreStep->value + sane * dma.speed * 0.01;
-
-	if (op < ma) {
-		ma = op;
-	}
-
-	// mix ahead of current position
-	endtime = s_soundtime + ma;
+	// mix ahead of current position by s_mixahead seconds
+	endtime = s_soundtime + (unsigned)(s_mixahead->value * dma.speed);
 
 	// mix to an even submission block size
 	endtime = (endtime + dma.submission_chunk - 1) & ~(dma.submission_chunk - 1);
@@ -1242,13 +1236,20 @@ static void S_Update_(void) {
 	if (endtime - s_soundtime > dma.fullsamples)
 		endtime = s_soundtime + dma.fullsamples;
 
+	// don't mix past available streaming music data to avoid dropouts
+	if (s_backgroundStream && s_rawend[0] > s_soundtime && endtime > (unsigned)s_rawend[0]) {
+		endtime = s_rawend[0];
+	}
+
+	if ((int)endtime <= s_paintedtime) {
+		return;
+	}
+
 	SNDDMA_BeginPainting();
 
 	S_PaintChannels(endtime);
 
 	SNDDMA_Submit();
-
-	lastTime = thisTime;
 }
 
 /*
@@ -1456,7 +1457,7 @@ qboolean S_Base_Init(soundInterface_t *si) {
 		return qfalse;
 	}
 
-	s_mixahead = Cvar_Get("s_mixahead", "0.2", CVAR_ARCHIVE);
+	s_mixahead = Cvar_Get("s_mixahead", "0.3", CVAR_ARCHIVE);
 	s_mixPreStep = Cvar_Get("s_mixPreStep", "0.05", CVAR_ARCHIVE);
 	s_show = Cvar_Get("s_show", "0", CVAR_CHEAT);
 	s_testsound = Cvar_Get("s_testsound", "0", CVAR_CHEAT);
@@ -1505,6 +1506,7 @@ qboolean S_Base_Init(soundInterface_t *si) {
 	si->Capture = S_Base_Capture;
 	si->StopCapture = S_Base_StopCapture;
 	si->MasterGain = S_Base_MasterGain;
+	si->CaptureAvailable = S_Base_CaptureAvailable;
 #endif
 
 	return qtrue;

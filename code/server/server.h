@@ -184,6 +184,13 @@ typedef struct client_s {
 	voipServerPacket_t *voipPacket[VOIP_QUEUE_LENGTH];
 	int queuedVoipPackets;
 	int queuedVoipIndex;
+
+	// Rate limiting and stats
+	int voipPacketsPerSec;     // packets received in current second
+	int voipBytesPerSec;       // bytes received in current second
+	int voipLastRateTime;      // svs.time at last rate reset
+	int voipTotalPackets;      // lifetime packets relayed from this client
+	int voipTotalBytes;        // lifetime bytes relayed from this client
 #endif
 
 	int oldServerTime;
@@ -283,6 +290,7 @@ extern int serverBansCount;
 #ifdef USE_VOIP
 extern cvar_t *sv_voip;
 extern cvar_t *sv_voipProtocol;
+extern cvar_t *sv_voipRate;
 #endif
 
 //===========================================================
