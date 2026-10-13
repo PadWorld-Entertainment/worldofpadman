@@ -863,8 +863,8 @@ models/mapobjects/pad_teleporter/pad_base
 // WEAPON MARKER
 // =================
 
-//Weapon marker model used for marking the weapon positions in the padmod maps :)
-//model design by SLoB -shader by SLoB - Skins by Ente 2003
+// Weapon marker model used for marking the weapon positions in the padmod maps :)
+// model design by SLoB -shader by SLoB - Skins by Ente 2003
 // 5 weapon marker shaders
 
 // black/red design with blue glow and blue cone 
@@ -942,8 +942,7 @@ models/markers/purple_pg
 	}
 }
 
-// Conefade - Blue & Green
-
+// cone fade blue
 models/markers/bluecone
 {
 	nopicmip
@@ -956,6 +955,7 @@ models/markers/bluecone
 	}
 }
 
+// cone fade green
 models/markers/greencone
 {
 	nopicmip

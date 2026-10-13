@@ -2195,3 +2195,51 @@ textures/pad_liquidfx/water_calm1
 		rgbgen identity		
 	}
 }
+
+// =================
+// WEAPON MARKER PADPACK WORKAOUND 
+// =================
+
+// Weapon markers got removed from the mapobjects folder which causes breaks with padpack maps
+// having weapon markers baked into the bsp file. This shader is a workaround until we manage
+// a recompile. Remove those shaders once recompiled.
+
+models/mapobjects/pad_weaponmarker/pad_wepm_black_bg
+{
+	nopicmip
+	qer_editorimage models/markers/black_bg
+	{
+		map models/markers/black_bg
+	}
+	{
+		map models/markers/blueglow
+		rgbGen wave sin .05 .9 0 .4
+		blendFunc add
+	}
+}
+
+models/mapobjects/pad_weaponmarker/pad_wepm_green_bg
+{
+	nopicmip
+	qer_editorimage models/markers/purple_pg
+	{
+		map models/markers/purple_pg
+	}
+	{
+		map models/markers/pinkglow
+		rgbGen wave sin .05 .9 0 .4
+		blendFunc add
+	}
+}
+
+models/mapobjects/pad_weaponmarker/pad_wepm_bluecone
+{
+	nopicmip
+	cull none
+	qer_editorimage models/markers/beam_blue
+	{
+		map models/markers/beam_blue
+		tcMod Scroll .3 0
+		blendFunc add
+	}
+}
