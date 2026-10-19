@@ -1,18 +1,16 @@
 set(PK3DIRS
-    scripts
-    models
     gfx
-    menu
-    textures
     maps
+    menu
+    models
     music
+    scripts
+    textures
 )
 compress_pk3(xmas ${PK3DIRS})
 
 set(SHADERS
-    monsterpad.shader
     pad_garden.shader
-    padmodel.shader
     wop_xmas.shader
 )
 foreach (SHADER ${SHADERS})
