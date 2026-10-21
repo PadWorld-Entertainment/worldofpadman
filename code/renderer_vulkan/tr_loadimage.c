@@ -24,86 +24,46 @@ static const imageExtToLoaderMap_t imageLoaders[6] = {{"png", R_LoadPNG},  {"tga
 static const int numImageLoaders = 6;
 
 void R_LoadImage(const char *name, unsigned char **pic, int *width, int *height) {
+	qboolean orgNameFailed = qfalse;
 	int orgLoader = -1;
 	int i;
-	char localName[128] = {0};
-	// int len = strlen(name);
-
-	const char *pSrc = name;
-	char *pDst = localName;
-	// char* dot = NULL;
-	char *pExt = NULL;
-	// char* slash = NULL;
-	char c;
+	char localName[MAX_QPATH];
+	const char *ext;
+	char *altName;
 
 	*pic = NULL;
 	*width = 0;
 	*height = 0;
 
+	Q_strncpyz(localName, name, sizeof(localName));
+	ext = COM_GetExtension(localName);
 
-	// copy name to localName
-	while ((c = *pDst++ = *pSrc++)) {
-
-		if (c == '.')
-			pExt = pDst;
-		//        else if(c == '/')
-		//            slash = pDst-1;
-	}
-
-	if (pExt != NULL) {
-		// Look for the correct loader and use it
+	// If an explicit extension was given, try that loader first
+	if (ext && *ext) {
 		for (i = 0; i < numImageLoaders; i++) {
-			if (!Q_stricmp(pExt, imageLoaders[i].ext)) {
-				orgLoader = i;
-
-				// Load
+			if (!Q_stricmp(ext, imageLoaders[i].ext)) {
 				imageLoaders[i].ImageLoader(localName, pic, width, height);
-				if (*pic != NULL) {
-					// Something loaded
+				if (*pic)
 					return;
-				}
+				orgNameFailed = qtrue;
+				orgLoader = i;
+				break;
 			}
 		}
-
-		// Loader failed, most likely because the file isn't there;
-		// Try and find a suitable match using all the image formats supported
-
-		for (i = 0; i < numImageLoaders; i++) {
-			if (i == orgLoader)
-				continue;
-
-			strcpy(pExt, imageLoaders[i].ext);
-
-			// Load
-			imageLoaders[i].ImageLoader(localName, pic, width, height);
-
-			if (*pic != NULL) {
-				// Something loaded
-				// ri.Printf( PRINT_WARNING, "%s not present, using %s instead\n", name, localName );
-				return;
-			}
-		}
-
-		ri.Printf(PRINT_WARNING, "%s not present\n", localName);
-
-	} else {
-
-		// Try and find a suitable match using all the image formats supported
-		*(pDst - 1) = '.';
-
-		for (i = 0; i < numImageLoaders; i++) {
-			strcpy(pDst, imageLoaders[i].ext);
-			// Load
-			imageLoaders[i].ImageLoader(localName, pic, width, height);
-
-			if (*pic != NULL) {
-				ri.Printf(PRINT_WARNING, "%s without a extension, using %s instead.\n", name, localName);
-				return;
-			}
-		}
+		// Strip extension for fallback probing
+		COM_StripExtension(name, localName, sizeof(localName));
 	}
 
-	ri.Printf(PRINT_WARNING, "%s not present.\n", name);
-
-	// try again without the extension
+	// Try all supported formats (skipping the one that already failed)
+	for (i = 0; i < numImageLoaders; i++) {
+		if (i == orgLoader)
+			continue;
+		altName = va("%s.%s", localName, imageLoaders[i].ext);
+		imageLoaders[i].ImageLoader(altName, pic, width, height);
+		if (*pic) {
+			if (orgNameFailed)
+				ri.Printf(PRINT_DEVELOPER, "WARNING: %s not present, using %s instead\n", name, altName);
+			return;
+		}
+	}
 }

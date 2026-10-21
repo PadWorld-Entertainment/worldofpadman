@@ -157,8 +157,11 @@ static int VKimp_SetMode(int mode, qboolean fullscreen) {
 	if (fullscreen) {
 		// prevent crush the OS
 		r_mode->integer = mode = -2;
-
+#ifdef __APPLE__
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+#else
 		flags |= SDL_WINDOW_FULLSCREEN;
+#endif
 		flags |= SDL_WINDOW_BORDERLESS;
 	}
 
@@ -301,7 +304,7 @@ Minimize the game so that user is back at the desktop
 */
 void vk_minimizeWindow(void) {
 	VkBool32 toggleWorked = 1;
-	VkBool32 isWinFullscreen = (SDL_GetWindowFlags(window_sdl) & SDL_WINDOW_FULLSCREEN);
+	VkBool32 isWinFullscreen = (SDL_GetWindowFlags(window_sdl) & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP));
 
 	ri.Printf(PRINT_ALL, " Minimizing Window (SDL).\n");
 

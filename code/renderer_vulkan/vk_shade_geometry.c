@@ -481,7 +481,9 @@ void vk_UploadXYZI(float (*pXYZ)[4], uint32_t nVertex, uint32_t *pIdx, uint32_t 
 
 		shadingDat.xyz_elements += tess.numVertexes;
 
-		assert(shadingDat.xyz_elements * sizeof(vec4_t) < XYZ_SIZE);
+		if (shadingDat.xyz_elements * sizeof(vec4_t) >= XYZ_SIZE) {
+			ri.Error(ERR_DROP, "vk_shade_geometry: vertex buffer overflow");
+		}
 	}
 
 	// indexes stream
@@ -496,7 +498,9 @@ void vk_UploadXYZI(float (*pXYZ)[4], uint32_t nVertex, uint32_t *pIdx, uint32_t 
 
 		shadingDat.index_buffer_offset += indexes_size;
 
-		assert(shadingDat.index_buffer_offset < INDEX_BUFFER_SIZE);
+		if (shadingDat.index_buffer_offset >= INDEX_BUFFER_SIZE) {
+			ri.Error(ERR_DROP, "vk_shade_geometry: index buffer overflow");
+		}
 	}
 }
 
