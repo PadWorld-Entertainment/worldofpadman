@@ -1415,9 +1415,9 @@ static void UI_Preferences_MenuInit(void) {
 	s_preferences.whKillerduck.generic.x = XPOSITION;
 	s_preferences.whKillerduck.generic.y = y;
 	s_preferences.whKillerduck.generic.toolTip =
-		"Enable to display a KillerDuck icon above the KillerDuck holdable, "
-		"visible through walls, to help you find it in Catch The KillerDuck "
-		"game mode. Default is on.";
+		"Enable to display a KillerDuck icon above the KillerDuck holdable "
+		"or current carrier visible through walls, to help you find it in "
+		"Catch The KillerDuck game mode. Default is on.";
 
 	s_preferences.back.generic.type = MTYPE_BITMAP;
 	s_preferences.back.generic.name = BACK0;
