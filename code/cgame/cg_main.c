@@ -915,12 +915,15 @@ static void CG_RegisterGraphics(void) {
 	if (cgs.gametype == GT_FREEZETAG) {
 		cgs.media.FreezeScreenShader = trap_R_RegisterShaderNoMip("gfx/screen/ice");
 		cgs.media.freezeIconShader = trap_R_RegisterShader("icons/hint_freeze");
-		cgs.media.snowMarkShader = trap_R_RegisterShader("gfx/damage/snow_mrk");
 		cgs.media.thawIcon = trap_R_RegisterShader("icons/hint_thaw");
 		cgs.media.iceblockModel = trap_R_RegisterModel("models/iceblock");
-		cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/ice_mrk");
 	} else {
 		cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/foam_mrk");
+	}
+
+	if (cgs.gametype == GT_FREEZETAG || cgs.isXmas) {
+		cgs.media.snowMarkShader = trap_R_RegisterShader("gfx/damage/snow_mrk");
+		cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/ice_mrk");
 	}
 
 	if (cgs.gametype == GT_CATCH) {

@@ -345,8 +345,8 @@ static void CG_Item(centity_t *cent) {
 		ent.nonNormalizedAxes = qtrue;
 	}
 
-	// alternative weapon skin shaders in freezetag
-	if (CG_FreezeTag() && item->giType == IT_WEAPON) {
+	// alternative weapon skin shaders in freezetag and xmas
+	if ((CG_FreezeTag() || cgs.isXmas) && item->giType == IT_WEAPON) {
 		if (item->giTag == WP_BETTY) {
 			ent.customShader = cgs.media.bettySkinFTShader;
 		} else if (item->giTag == WP_BUBBLEG) {
@@ -457,7 +457,7 @@ static void CG_Missile(centity_t *cent) {
 		ent.reType = RT_SPRITE;
 
 		ent.radius = 50;
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			ent.radius = 25;
 		}
 		ent.rotation = 110;
@@ -465,7 +465,7 @@ static void CG_Missile(centity_t *cent) {
 		trap_R_AddRefEntityToScene(&ent);
 
 		ent.radius = 55;
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			ent.radius = 30;
 		}
 		ent.rotation = 0;
@@ -529,7 +529,7 @@ static void CG_Missile(centity_t *cent) {
 
 	// HERBY: Bubble G
 	if (s1->weapon == WP_BUBBLEG) {
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			VectorScale(g_color_table[ColorIndex(COLOR_WHITE)], 255, ent.shaderRGBA);
 		} else {
 			VectorScale(g_color_table[s1->generic1], 255, ent.shaderRGBA);

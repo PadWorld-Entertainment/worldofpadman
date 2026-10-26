@@ -447,7 +447,7 @@ NOADDITIONALMODELS:
 	case WP_NIPPER:
 		// HERBY: Nippers defs
 		weaponInfo->flashSound[0] = trap_S_RegisterSound("sound/weapons/nipper/flash", qfalse);
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			cgs.media.nipperBallShader = trap_R_RegisterShader("nipperBall_ft");
 			cgs.media.nipperWaveShader = trap_R_RegisterShader("nipperWave_ft");
 			cgs.media.nipperMuzzleFTShader = trap_R_RegisterShader("nipperMuzzle_ft");
@@ -460,7 +460,7 @@ NOADDITIONALMODELS:
 	case WP_PUMPER:
 		weaponInfo->flashSound[0] = trap_S_RegisterSound("sound/weapons/pumper/flash", qfalse);
 		cgs.media.pumperFlashModel = trap_R_RegisterModel("models/weaponsfx/flash");
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			MAKERGB(weaponInfo->flashDlightColor, 1, 1, 1);
 			cgs.media.pumperTrailShader = trap_R_RegisterShader("pumperTrail_ft");
 			cgs.media.pumperFlashShader = trap_R_RegisterShader("pumperFlash_ft");
@@ -483,7 +483,7 @@ NOADDITIONALMODELS:
 		cgs.media.fireBallShader = trap_R_RegisterShader("fireBall");
 		cgs.media.fireTrailShader = trap_R_RegisterShader("fireTrail");
 		cgs.media.fireDropModel = trap_R_RegisterModel("models/weaponsfx/firedrop");
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			cgs.media.fireBallShader = trap_R_RegisterShader("fireBall_ft");
 			cgs.media.fireTrailShader = trap_R_RegisterShader("fireTrail_ft");
 			cgs.media.fireDropShader = trap_R_RegisterShader("fireDrop_ft");
@@ -518,7 +518,7 @@ NOADDITIONALMODELS:
 		// HERBY: BUBBLE G
 		weaponInfo->missileModel = trap_R_RegisterModel("models/weaponsfx/gum");
 		weaponInfo->flashSound[0] = trap_S_RegisterSound("sound/weapons/bubbleg/flash", qfalse);
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			cgs.media.bubblegMuzzleFTShader = trap_R_RegisterShader("bubblegMuzzle_ft");
 			cgs.media.bubblegSkinFTShader = trap_R_RegisterShader("bubblegSkin_ft");
 		}
@@ -958,8 +958,8 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 		return;
 	}
 
-	// alternative weapon skin shaders in freezetag
-	if (CG_FreezeTag()) {
+	// alternative weapon skin shaders in freezetag and xmas
+	if (CG_FreezeTag() || cgs.isXmas) {
 		if (weaponNum == WP_BETTY) {
 			gun.customShader = cgs.media.bettySkinFTShader;
 		} else if (weaponNum == WP_BUBBLEG) {
@@ -1065,8 +1065,8 @@ void CG_AddPlayerWeapon(refEntity_t *parent, const playerState_t *ps, centity_t 
 		return;
 	}
 
-	// alternative muzzle flash shader in freezetag
-	if (CG_FreezeTag()) {
+	// alternative muzzle flash shader in freezetag and xmas
+	if (CG_FreezeTag() || cgs.isXmas) {
 		if (weaponNum == WP_NIPPER) {
 			flash.customShader = cgs.media.nipperMuzzleFTShader;
 		} else if (weaponNum == WP_PUMPER) {
@@ -1787,7 +1787,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		mod = cgs.media.dishFlashModel;
 		shader = cgs.media.waterExplosionShader;
 		sfx = cgs.media.BalloonyExplosion;
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			mark = cgs.media.snowMarkShader;
 		} else {
 			mark = cgs.media.burnMarkShader;
@@ -1796,7 +1796,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		light = 300;
 		duration = 600;
 		isSprite = qtrue;
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			lightColor[0] = 0.0f;
 			lightColor[1] = 0.2f;
 			lightColor[2] = 1.0f;
@@ -1806,12 +1806,12 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 							 0, LEF_GRAVITY, 0);
 		break;
 	case WP_BETTY:
-		if (!CG_FreezeTag()) {
+		if (!CG_FreezeTag() && !cgs.isXmas) {
 			mod = cgs.media.dishFlashModel;
 			shader = cgs.media.fireExplosionShader;
 		}
 		sfx = cgs.media.BettyExplosion;
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			mark = cgs.media.snowMarkShader;
 		} else {
 			mark = cgs.media.burnMarkShader;
@@ -1820,7 +1820,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		light = 300;
 		isSprite = qtrue;
 		duration = 1000;
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			lightColor[0] = 0.0f;
 			lightColor[1] = 0.2f;
 			lightColor[2] = 1.0f;
@@ -1854,7 +1854,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		break;
 	case WP_BUBBLEG:
 		// HERBY: Bubble G
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			mark = cgs.media.snowMarkShader;
 		} else {
 			mark = cgs.media.gumMarkShader;
@@ -1887,7 +1887,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		mod = cgs.media.pumperFlashModel;
 		shader = cgs.media.pumperFlashShader;
 		sfx = cgs.media.pumperexpSound;
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			mark = cgs.media.snowMarkShader;
 		} else {
 			mark = cgs.media.burnMarkShader;
@@ -1959,7 +1959,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		const float *color;
 
 		// colorize with client color
-		if (CG_FreezeTag()) {
+		if (CG_FreezeTag() || cgs.isXmas) {
 			color = g_color_table[ColorIndex(COLOR_WHITE)];
 		} else {
 			color = g_color_table[colorCode]; // HERBY
