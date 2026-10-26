@@ -625,9 +625,9 @@ static qboolean CL_ShouldIgnoreVoipSender(int sender) {
 		return qtrue; // ignore own voice (unless playing back a demo).
 	else if (clc.voipMuteAll)
 		return qtrue; // all channels are muted with extreme prejudice.
-	else if (clc.voipIgnore[sender])
+	else if (clc.voipSenders[sender].ignore)
 		return qtrue; // just ignoring this guy.
-	else if (clc.voipGain[sender] == 0.0f)
+	else if (clc.voipSenders[sender].gain == 0.0f)
 		return qtrue; // too quiet to play.
 
 	return qfalse;
@@ -642,7 +642,7 @@ Play raw data
 */
 static void CL_PlayVoip(int sender, int samplecnt, const byte *data, int flags) {
 	if (flags & VOIP_DIRECT) {
-		S_RawSamples(sender + 1, samplecnt, 48000, 2, 1, data, clc.voipGain[sender], -1);
+		S_RawSamples(sender + 1, samplecnt, 48000, 2, 1, data, clc.voipSenders[sender].gain, -1);
 	}
 
 	if (flags & VOIP_SPATIAL) {
@@ -652,14 +652,114 @@ static void CL_PlayVoip(int sender, int samplecnt, const byte *data, int flags) 
 
 /*
 =====================
+CL_DecodeAndPlayVoipPacket
+
+Decode a single VoIP packet from the jitter buffer and play it.
+Handles packet loss concealment for gaps in the sequence.
+=====================
+*/
+static void CL_DecodeAndPlayVoipPacket(int sender, int sequence, int frames,
+                                       int flags, const byte *encoded, int packetsize) {
+	static short decoded[VOIP_DECODE_BUFFER_SAMPLES];
+	int seqdiff;
+	int written = 0;
+	int numSamples;
+	int i;
+
+	seqdiff = sequence - clc.voipSenders[sender].incomingSequence;
+
+	// Handle generation change
+	if (seqdiff < 0) {
+		opus_decoder_ctl(clc.opusDecoder[sender], OPUS_RESET_STATE);
+		seqdiff = 0;
+	} else if (seqdiff * VOIP_MAX_PACKET_SAMPLES * 2 >= (int)sizeof(decoded)) {
+		// Dropped more than we can handle - reset
+		Com_DPrintf("VoIP: Dropped way too many (%d) frames from client #%d\n", seqdiff, sender);
+		opus_decoder_ctl(clc.opusDecoder[sender], OPUS_RESET_STATE);
+		seqdiff = 0;
+	}
+
+	// Generate PLC frames for any gaps
+	if (seqdiff != 0) {
+		Com_DPrintf("VoIP: Dropped %d frames from client #%d\n", seqdiff, sender);
+		for (i = 0; i < seqdiff; i++) {
+			if ((written + VOIP_MAX_PACKET_SAMPLES) >= VOIP_DECODE_BUFFER_SAMPLES) {
+				break;
+			}
+			numSamples = opus_decode(clc.opusDecoder[sender], NULL, 0,
+			                         decoded + written, VOIP_MAX_PACKET_SAMPLES, 0);
+			if (numSamples <= 0) {
+				Com_DPrintf("VoIP: Error decoding PLC frame %d from client #%d\n", i, sender);
+				continue;
+			}
+			written += numSamples;
+		}
+	}
+
+	// Decode the actual packet
+	numSamples = opus_decode(clc.opusDecoder[sender], encoded, packetsize,
+	                         decoded + written, VOIP_DECODE_BUFFER_SAMPLES - written, 0);
+
+	if (numSamples <= 0) {
+		Com_DPrintf("VoIP: Error decoding voip data from client #%d\n", sender);
+		numSamples = 0;
+	}
+
+	written += numSamples;
+
+	Com_DPrintf("VoIP: playback %d bytes, %d samples, %d frames\n", written * 2, written, frames);
+
+	if (written > 0) {
+		CL_PlayVoip(sender, written, (const byte *)decoded, flags);
+	}
+
+	clc.voipSenders[sender].incomingSequence = sequence + frames;
+	clc.voipSenders[sender].lastPacketTime = cl.serverTime;
+}
+
+/*
+=====================
+CL_VoipProcessJitterBuffers
+
+Called each frame to drain ready packets from jitter buffers and play them.
+=====================
+*/
+void CL_VoipProcessJitterBuffers(void) {
+	int i;
+	int sequence, frames, flags, dataLen;
+	byte data[4000];
+
+	if (!clc.voipCodecInitialized) {
+		return;
+	}
+
+	for (i = 0; i < MAX_CLIENTS; i++) {
+		voipJitterBuffer_t *jb = &clc.voipSenders[i].jitter;
+
+		if (!jb->active) {
+			continue;
+		}
+
+		if (!CL_VoipJitterReady(jb, cls.realtime)) {
+			continue;
+		}
+
+		// Drain packets that are ready to play
+		while (CL_VoipJitterGet(jb, &sequence, &frames, &flags, data, &dataLen, cls.realtime)) {
+			CL_DecodeAndPlayVoipPacket(i, sequence, frames, flags, data, dataLen);
+		}
+	}
+}
+
+/*
+=====================
 CL_ParseVoip
 
-A VoIP message has been received from the server
+A VoIP message has been received from the server.
+Packets are inserted into the jitter buffer for ordered playback.
 =====================
 */
 static void CL_ParseVoip(msg_t *msg, qboolean ignoreData) {
-	static short decoded[VOIP_MAX_PACKET_SAMPLES * 4]; // !!! FIXME: don't hard code
-
 	const int sender = MSG_ReadShort(msg);
 	const int generation = MSG_ReadByte(msg);
 	const int sequence = MSG_ReadLong(msg);
@@ -667,10 +767,6 @@ static void CL_ParseVoip(msg_t *msg, qboolean ignoreData) {
 	const int packetsize = MSG_ReadShort(msg);
 	const int flags = MSG_ReadBits(msg, VOIP_FLAGCNT);
 	unsigned char encoded[4000];
-	int numSamples;
-	int seqdiff;
-	int written = 0;
-	int i;
 
 	Com_DPrintf("VoIP: %d-byte packet from client %d\n", packetsize, sender);
 
@@ -685,12 +781,12 @@ static void CL_ParseVoip(msg_t *msg, qboolean ignoreData) {
 	else if (packetsize < 0)
 		return; // short/invalid packet, bail.
 
-	if (packetsize > sizeof(encoded)) { // overlarge packet?
+	if (packetsize > (int)sizeof(encoded)) { // overlarge packet?
 		int bytesleft = packetsize;
 		while (bytesleft) {
 			int br = bytesleft;
-			if (br > sizeof(encoded))
-				br = sizeof(encoded);
+			if (br > (int)sizeof(encoded))
+				br = (int)sizeof(encoded);
 			MSG_ReadData(msg, encoded, br);
 			bytesleft -= br;
 		}
@@ -709,79 +805,26 @@ static void CL_ParseVoip(msg_t *msg, qboolean ignoreData) {
 		return; // Channel is muted, bail.
 	}
 
-	// !!! FIXME: make sure data is narrowband? Does decoder handle this?
-
 	Com_DPrintf("VoIP: packet accepted!\n");
 
-	seqdiff = sequence - clc.voipIncomingSequence[sender];
-
-	// This is a new "generation" ... a new recording started, reset the bits.
-	if (generation != clc.voipIncomingGeneration[sender]) {
+	// Handle generation change - reset jitter buffer and decoder
+	if (generation != clc.voipSenders[sender].incomingGeneration) {
 		Com_DPrintf("VoIP: new generation %d!\n", generation);
 		opus_decoder_ctl(clc.opusDecoder[sender], OPUS_RESET_STATE);
-		clc.voipIncomingGeneration[sender] = generation;
-		seqdiff = 0;
-	} else if (seqdiff < 0) { // we're ahead of the sequence?!
-		// This shouldn't happen unless the packet is corrupted or something.
-		Com_DPrintf("VoIP: misordered sequence! %d < %d!\n", sequence, clc.voipIncomingSequence[sender]);
-		// reset the decoder just in case.
-		opus_decoder_ctl(clc.opusDecoder[sender], OPUS_RESET_STATE);
-		seqdiff = 0;
-	} else if (seqdiff * VOIP_MAX_PACKET_SAMPLES * 2 >= sizeof(decoded)) { // dropped more than we can handle?
-		// just start over.
-		Com_DPrintf("VoIP: Dropped way too many (%d) frames from client #%d\n", seqdiff, sender);
-		opus_decoder_ctl(clc.opusDecoder[sender], OPUS_RESET_STATE);
-		seqdiff = 0;
+		clc.voipSenders[sender].incomingGeneration = generation;
+		CL_VoipJitterReset(&clc.voipSenders[sender].jitter);
+		CL_VoipNetStatsReset(&clc.voipSenders[sender].netStats);
 	}
 
-	if (seqdiff != 0) {
-		Com_DPrintf("VoIP: Dropped %d frames from client #%d\n", seqdiff, sender);
-		// tell opus that we're missing frames...
-		for (i = 0; i < seqdiff; i++) {
-			assert((written + VOIP_MAX_PACKET_SAMPLES) * 2 < sizeof(decoded));
-			numSamples = opus_decode(clc.opusDecoder[sender], NULL, 0, decoded + written, VOIP_MAX_PACKET_SAMPLES, 0);
-			if (numSamples <= 0) {
-				Com_DPrintf("VoIP: Error decoding frame %d from client #%d\n", i, sender);
-				continue;
-			}
-			written += numSamples;
-		}
+	// Track network stats for this packet
+	CL_VoipNetStatsPacketReceived(&clc.voipSenders[sender].netStats, sequence, frames, cls.realtime);
+
+	// Insert into jitter buffer
+	if (!CL_VoipJitterInsert(&clc.voipSenders[sender].jitter, sequence, generation,
+	                          frames, flags, encoded, packetsize)) {
+		Com_DPrintf("VoIP: jitter buffer rejected packet seq %d from client #%d\n",
+		            sequence, sender);
 	}
-
-	numSamples =
-		opus_decode(clc.opusDecoder[sender], encoded, packetsize, decoded + written, ARRAY_LEN(decoded) - written, 0);
-
-	if (numSamples <= 0) {
-		Com_DPrintf("VoIP: Error decoding voip data from client #%d\n", sender);
-		numSamples = 0;
-	}
-
-#if 0
-	static FILE *encio = NULL;
-	if (encio == NULL)
-		encio = fopen("voip-incoming-encoded.bin", "wb");
-	if (encio != NULL) {
-		fwrite(encoded, packetsize, 1, encio);
-		fflush(encio);
-	}
-	static FILE *decio = NULL;
-	if (decio == NULL)
-		decio = fopen("voip-incoming-decoded.bin", "wb");
-	if (decio != NULL) {
-		fwrite(decoded + written, numSamples * 2, 1, decio);
-		fflush(decio);
-	}
-#endif
-
-	written += numSamples;
-
-	Com_DPrintf("VoIP: playback %d bytes, %d samples, %d frames\n", written * 2, written, frames);
-
-	if (written > 0)
-		CL_PlayVoip(sender, written, (const byte *)decoded, flags);
-
-	clc.voipIncomingSequence[sender] = sequence + frames;
-	clc.voipLastPacket[sender] = cl.serverTime;
 }
 #endif
 

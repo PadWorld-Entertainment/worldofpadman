@@ -746,8 +746,20 @@ static float CG_DrawVoiceNames(float y) {
 		durationFraction = (float)(cg.time - cg.lastVoiceTime[i]) / duration_max;
 		alpha = alpha_max - (durationFraction * (alpha_max - alpha_min));
 
-		nameLeft = SCREEN_WIDTH - (Q_PrintStrlen(name) * BIGCHAR_WIDTH);
-		CG_DrawBigString(nameLeft, y, name, alpha);
+		// Color-code the name based on VoIP quality
+		{
+			const char *qualityPrefix;
+			int quality = cg.lastVoiceQuality[i];
+			if (quality >= 90) {
+				qualityPrefix = S_COLOR_GREEN;
+			} else if (quality >= 70) {
+				qualityPrefix = S_COLOR_YELLOW;
+			} else {
+				qualityPrefix = S_COLOR_RED;
+			}
+			nameLeft = SCREEN_WIDTH - ((Q_PrintStrlen(name) + 1) * BIGCHAR_WIDTH);
+			CG_DrawBigString(nameLeft, y, va("%s%s", qualityPrefix, name), alpha);
+		}
 
 		iconLeft = nameLeft - icon2textSpacing - iconWidth;
 		CG_DrawPic(iconLeft, y, iconWidth, iconHeight, cgs.media.voiceIcon);

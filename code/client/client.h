@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifdef USE_VOIP
 #include <opus.h>
+#include "cl_voip.h"
 #endif
 
 // file full of random crap that gets used to create cl_guid
@@ -234,15 +235,11 @@ typedef struct {
 	qboolean voipEnabled;
 	qboolean voipCodecInitialized;
 
-	// incoming data...
-	// !!! FIXME: convert from parallel arrays to array of a struct.
+	// Per-sender incoming VoIP state
 	OpusDecoder *opusDecoder[MAX_CLIENTS];
-	byte voipIncomingGeneration[MAX_CLIENTS];
-	int voipIncomingSequence[MAX_CLIENTS];
-	float voipGain[MAX_CLIENTS];
-	qboolean voipIgnore[MAX_CLIENTS];
-	int voipLastPacket[MAX_CLIENTS];
+	voipSender_t voipSenders[MAX_CLIENTS];
 	qboolean voipMuteAll;
+	qboolean voipTestMode;  // local loopback test active
 
 	// outgoing data...
 	// if voipTargets[i / 8] & (1 << (i % 8)),
@@ -256,6 +253,7 @@ typedef struct {
 	byte voipOutgoingGeneration;
 	byte voipOutgoingData[1024];
 	float voipPower;
+	int voipBufferedSamples;
 #endif
 
 	// big stuff at end of structure so most offsets are 15 bits or less
@@ -432,13 +430,12 @@ extern cvar_t *cl_voipGainDuringCapture;
 extern cvar_t *cl_voipCaptureMult;
 extern cvar_t *cl_voipShowMeter;
 extern cvar_t *cl_voip;
+extern cvar_t *cl_voipBitrate;
+extern cvar_t *cl_voipComplexity;
+extern cvar_t *cl_voipFEC;
+extern cvar_t *cl_voipPacketLossRate;
+extern cvar_t *cl_voipAdaptive;
 
-// 20ms at 48k
-#define VOIP_MAX_FRAME_SAMPLES (20 * 48)
-
-// 3 frame is 60ms of audio, the max opus will encode at once
-#define VOIP_MAX_PACKET_FRAMES 3
-#define VOIP_MAX_PACKET_SAMPLES (VOIP_MAX_FRAME_SAMPLES * VOIP_MAX_PACKET_FRAMES)
 #endif
 
 //=================================================
@@ -508,6 +505,9 @@ extern int cl_connectedToCheatServer;
 
 #ifdef USE_VOIP
 void CL_Voip_f(void);
+void CL_VoipProcessJitterBuffers(void);
+void CL_VoipAdaptToNetwork(void);
+void CL_VoipTestFrame(void);
 #endif
 
 void CL_SystemInfoChanged(void);
