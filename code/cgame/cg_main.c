@@ -917,13 +917,13 @@ static void CG_RegisterGraphics(void) {
 		cgs.media.freezeIconShader = trap_R_RegisterShader("icons/hint_freeze");
 		cgs.media.thawIcon = trap_R_RegisterShader("icons/hint_thaw");
 		cgs.media.iceblockModel = trap_R_RegisterModel("models/iceblock");
-	} else {
-		cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/foam_mrk");
 	}
 
 	if (cgs.gametype == GT_FREEZETAG || cgs.isXmas) {
 		cgs.media.snowMarkShader = trap_R_RegisterShader("gfx/damage/snow_mrk");
 		cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/ice_mrk");
+	} else {
+		cgs.media.foamMarkShader = trap_R_RegisterShader("gfx/damage/foam_mrk");
 	}
 
 	if (cgs.gametype == GT_CATCH) {
