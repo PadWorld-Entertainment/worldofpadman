@@ -6,13 +6,6 @@ by a Christmas-themed version. The function of all items remains the same.
 In this updated version every character also got one Christmas themed skin and some menus
 have been edited. Bot support for the "Freezetag" mode has been added.
 
-# Freezetag
-
-Freezetag transforms Teamplay/TDM into... something not boring :P Players are not knocked
-out and respawned but literally frozen in place, waiting to be "thawed" by a teammate.
-To thaw a member of your team stand next to them until the "thaw-bar" fills up.
-The team that first manages to freeze the entire opposing team wins the round.
-
 # Music
 
 Included in this package are 6 Songs by the Goyette Christmas Carolers
@@ -31,27 +24,3 @@ The licenses used are:
 * for "Chiron Beta Prime" and "Podsafe Christmas Song" by Jonathan Coulton:
   * Attribution-Noncommercial 3.0 Unported
   * http://creativecommons.org/licenses/by-nc/3.0/
-
-# Freezetag Server Cvars:
-
-* `g_ft_numRounds`
-
-values: positive integers
-
-Specifies how many rounds are played per map.
-
-* `g_ft_playAllRounds`
-
-values: `1` or `0`
-
-Specifies if all rounds set with `g_ft_numRounds` are played or if the match ends when one team
-can not possibly win in the remaining rounds left to play.
-
-* `g_ft_lateJoinTime`
-
-values: positive integers
-
-example: `15`
-
-Specifies the number of seconds a player has time to join a team without penalty. After this time
-is expired joining a team will automatically freeze the player.

@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="readme.css" />
+</head>
+
+<body>
+	<center>
+		<div class="readme_entry">
+			<div class="readme_body">
+				<div class="readme_subject">Useful Commands</div>
+				<div class="readme_inner">
+					<p>
+						<b><u>Force Warmup</u></b>
+						<br /><br />
+						The command <i>g_WarmupReady</i> can be used
+						to prevent a game from starting immediately after loading,
+						but instead wait until a certain number of players have
+						reported as ready using the command <i>/ready</i>. The server 
+						administrator can set the variable <i>g_WarmupReady</i> to a 
+						value between 0 and 1 in the server configuration, with 
+						<i>g_doWarmup</i> also needing to be set to 1. If 
+						<i>g_WarmupReady</i> is set to 0, this means the game will 
+						start immediately. At 1, 100% of the present players must enter 
+						<i>/ready</i> into the console.	Additionally, any other decimal 
+						values between 0 and 1 can be entered to force a specific 
+						percentage of ready players.<br /><br />
+						<u>Examples:</u>
+						<br /><br />
+						set g_doWarmup 1<br />
+						set g_WarmupReady 0.5 -> 50% must be ready.
+						<br /><br />
+						set g_doWarmup 1<br />
+						set g_WarmupReady 0.8 -> 80% must be ready.
+						<br /><br />
+						This command is particularly recommended for Last Pad Standing
+						and generally for team-oriented game modes.
+						<br /><br />
+					</p>
+
+					<p>
+						<br />
+						<b><u>Last Pad Standing (LPS)</u></b>
+						<br /><br />
+						Last Pad Standing comes with a few additional commands 
+						<i>g_lps_startlives</i> and <i>g_lps_flags</i>, allowing for some 
+						customization of the game mode. <i>g_lps_startlives</i> determines 
+						the number of lives each player starts with at the beginning of a 
+						round. <i>g_lps_flags</i> can be set to 0, 1 or 2. If the variable 
+						is set to 1, players must win multiple rounds of LPS consecutively 
+						before one of them reaches the configured point limit. The point limit 
+						can be set using the variable <i>pointlimit</i>. If the variable 
+						<i>g_lps_flags</i> is set to 2, each player receives multiple points 
+						based on their current rank. These points are calculated as the number 
+						of starting lives minus the number of currently remaining players 
+						with lives plus 1. The advantage of this setting is that players who 
+						have many lives will receive many points and players who have few lives 
+						will receive few points. Furthermore, new players can join a round later 
+						on,	giving them a chance to compete for higher positions. If the Varaiable 
+						<i>g_lps_flags</i> is set to 0, the game mode is played as usual, 
+						without special rules.
+						<br /><br />
+						<u>Examples:</u>
+						<br /><br />
+ 						set g_lps_startlives 8 -> Each player starts with 8 lives.
+ 						<br /><br />
+ 						set g_lps_flags 1<br />
+ 						set pointlimit 3 -> A player must win three rounds consecutively, 
+ 						to win.
+ 						<br /><br />
+ 						set g_lps_flags 2 -> Players receive points based on their
+ 						rank, [number of starting lives] – [number of players with remaining 
+						lives] + 1) lives.
+ 						<br /><br />
+					</p>
+
+					<p>
+ 						<br />
+ 						<b><u>Freeze Tag (FT)</u></b>
+ 						<br /><br />
+ 						This game mode can also be played over multiple rounds on a map. 
+						For this purpose, the variable <i>g_ft_numRounds</i> is set to a 
+						positive integer representing the desired number of rounds. Once one 
+						team has won enough rounds such that the other team cannot catch up in 
+						the remaining rounds, the game ends as the winner is practically determined. 
+						By setting the variable <i>g_ft_playAllRounds</i> to value 1, it can 
+						additionally be enforced that all rounds must be played, even if a team has 
+						already been determined as winner. With variable <i>g_ft_lateJoinTime</i>, 
+						late joining players can enter during a certain time after game start without 
+						immediately getting frozen. For this purpose, positive integer values for 
+						seconds need to be defined.
+ 						<br /><br />
+						Examples:
+ 						<br /><br />
+ 						set g_ft_numRounds 5 -> A game goes up to five rounds.<br />
+ 						set g_ft_playAllRounds 0 -> The game ends when one team has won at least 
+						three rounds.
+ 						<br /><br />
+ 						set g_ft_numRounds 5 -> A game goes five rounds.<br />
+ 						set g_ft_playAllRounds 1 -> All rounds must be played.
+ 						<br /><br />
+ 						set g_ft_lateJoinTime 15 -> Players can join up to fifteen seconds after 
+						game start without immediately getting frozen.						
+ 						<br /><br />
+				 </p>
+
+					<p>
+						<br />
+						<b><u>InstaPad</u></b>
+						<br /><br />
+						With the variable <i>g_spawnProtect</i> set to a positive integer, the InstaPad 
+						modulator can be configured to specify how many seconds players should be protected 
+						after respawning, making them invincible. This is useful because newly appearing 
+						players typically need some time to orient themselves and can otherwise quickly 
+						become targets for other players. As long as the time is running, the lower middle 
+						area of the HUD will blink with full health and shield energy.
+						<br /><br />
+						Examples:
+						<br /><br />
+						set g_spawnProtect 6 -> Players are protected for 6 seconds.<br />
+						set g_spawnProtect 3 -> Players are protected for 3 seconds.<br />
+						set g_spawnProtect 0 -> Players are not protected.
+						<br /><br />
+					</p>
+				</div>
+			</div>
+		</div>
+	</center>
+</body>
+
+</html>
