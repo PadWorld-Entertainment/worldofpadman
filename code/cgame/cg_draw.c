@@ -3454,10 +3454,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	CG_DrawBigBalloon(team);
 	CG_DrawCaptureTheLolly(team);
 	CG_DrawOneLollyCapture(team);
-	CG_DrawLPSArrowIcon();
-	CG_DrawTeammateIcon();
-	CG_DrawFrozenTeammateIcon();
-	CG_DrawKillerduckCarrierIcon();
+	CG_DrawFreezeTag();
 
 	cg.scoreBoardShowing = CG_DrawScoreboard();
 	if (!cg.scoreBoardShowing) {
@@ -3483,6 +3480,11 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 	if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR) {
 		CG_DrawEntityIcons();
 	}
+
+	CG_DrawLPSArrowIcon();
+	CG_DrawTeammateIcon();
+	CG_DrawFrozenTeammateIcon();
+	CG_DrawKillerduckCarrierIcon();
 
 	if (cg_cineHideHud.integer) {
 		CG_DrawCenterString();
@@ -3524,8 +3526,6 @@ static void CG_Draw2D(stereoFrame_t stereoFrame) {
 		lenOfDrawStr = strlen(s);
 		CG_DrawStringExt(SCREEN_CENTER - lenOfDrawStr * 4, 240, s, twhite, qfalse, qfalse, FONT_SMALL, 64);
 	}
-
-	CG_DrawFreezeTag();
 
 	// draw the menu above all
 	if (cg.wantSelectLogo) {
