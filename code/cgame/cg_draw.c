@@ -2538,7 +2538,7 @@ static void CG_DrawItemIcon(const centity_t *cent) {
 	}
 }
 
-static void CG_FreezeTagThawerProgressBar(void) {
+static void CG_FreezeTagThawerProgressBar(int team) {
 	static const vec4_t blue = {0.75f, 0.75f, 0.75f, 1.0f};
 	static const vec4_t orange = {0.75f, 0.0f, 0.0f, 1.0f};
 
@@ -2554,7 +2554,7 @@ static void CG_FreezeTagThawerProgressBar(void) {
 
 	int i = barsegments - cg.predictedPlayerState.stats[STAT_CHILL];
 
-	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+	if (team == TEAM_SPECTATOR) {
 		if (!(cg.snap->ps.pm_flags & PMF_FOLLOW)) {
 			return;
 		}
@@ -2577,7 +2577,7 @@ static void CG_FreezeTagThawerProgressBar(void) {
 	trap_R_SetColor(NULL);
 }
 
-static void CG_FreezeTagFrozen(void) {
+static void CG_FreezeTagFrozen(int team) {
 	int x, y, barposy, barposx;
 	int iconsize = 64;
 	int barheight = 12;
@@ -2593,7 +2593,7 @@ static void CG_FreezeTagFrozen(void) {
 	static const vec4_t orange = {0.75f, 0.0f, 0.0f, 1.0f};
 	int i;
 
-	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
+	if (team == TEAM_RED) {
 		teamcolor[0] = 1.0f;
 		teamcolor[1] = 0.0f;
 		teamcolor[2] = 0.0f;
@@ -2602,7 +2602,6 @@ static void CG_FreezeTagFrozen(void) {
 		teamcolor[1] = 0.0f;
 		teamcolor[2] = 1.0f;
 	}
-
 	teamcolor[3] = 0.50f;
 
 	x = SCREEN_CENTER;
@@ -2643,7 +2642,7 @@ static void CG_FreezeTagFrozen(void) {
 	CG_DrawStringExt(x - width / 2, 360, message, colorWhite, qfalse, qtrue, fontsize, 0);
 }
 
-static void CG_DrawFreezeTag(void) {
+static void CG_DrawFreezeTag(int team) {
 	if (!CG_FreezeTag()) {
 		return;
 	}
@@ -2651,11 +2650,11 @@ static void CG_DrawFreezeTag(void) {
 	CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
 
 	if (FT_LocalIsFrozen()) {
-		CG_FreezeTagFrozen();
+		CG_FreezeTagFrozen(team);
 		return;
 	}
 	/* Thawer's progress bar */
-	CG_FreezeTagThawerProgressBar();
+	CG_FreezeTagThawerProgressBar(team);
 }
 
 static void CG_HudDrawHead(void) {
@@ -3454,7 +3453,7 @@ static void CG_DrawHud(stereoFrame_t stereoFrame) {
 	CG_DrawBigBalloon(team);
 	CG_DrawCaptureTheLolly(team);
 	CG_DrawOneLollyCapture(team);
-	CG_DrawFreezeTag();
+	CG_DrawFreezeTag(team);
 
 	cg.scoreBoardShowing = CG_DrawScoreboard();
 	if (!cg.scoreBoardShowing) {
