@@ -224,9 +224,16 @@ void vk_createSwapChain(VkDevice device, VkSurfaceKHR surface, VkSurfaceFormatKH
 		// while your application is running, for example because the window was resized.
 		// In that case the swap chain actually needs to be recreated from scratch and a
 		// reference to the old one must be specified in this field.
-		desc.oldSwapchain = VK_NULL_HANDLE;
+		desc.oldSwapchain = vk.swapchain;
 
-		VK_CHECK(qvkCreateSwapchainKHR(device, &desc, NULL, &vk.swapchain));
+		{
+			VkSwapchainKHR newSwapchain;
+			VK_CHECK(qvkCreateSwapchainKHR(device, &desc, NULL, &newSwapchain));
+			if (desc.oldSwapchain != VK_NULL_HANDLE) {
+				qvkDestroySwapchainKHR(device, desc.oldSwapchain, NULL);
+			}
+			vk.swapchain = newSwapchain;
+		}
 	}
 
 	//

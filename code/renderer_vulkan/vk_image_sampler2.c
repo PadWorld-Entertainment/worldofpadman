@@ -165,8 +165,21 @@ VkSampler vk_find_sampler(VkBool32 mipmap, VkBool32 repeat_texture) {
 	desc.addressModeV = address_mode;
 	desc.addressModeW = address_mode;
 	desc.mipLodBias = 0.0f;
-	desc.anisotropyEnable = VK_FALSE;
-	desc.maxAnisotropy = 1;
+
+	// Enable anisotropic filtering if the device supports it
+	VkPhysicalDeviceFeatures devFeatures;
+	qvkGetPhysicalDeviceFeatures(vk.physical_device, &devFeatures);
+	if (devFeatures.samplerAnisotropy && !max_lod_0_25) {
+		VkPhysicalDeviceProperties devProps;
+		qvkGetPhysicalDeviceProperties(vk.physical_device, &devProps);
+		desc.anisotropyEnable = VK_TRUE;
+		desc.maxAnisotropy = devProps.limits.maxSamplerAnisotropy;
+		if (desc.maxAnisotropy > 16.0f)
+			desc.maxAnisotropy = 16.0f;
+	} else {
+		desc.anisotropyEnable = VK_FALSE;
+		desc.maxAnisotropy = 1.0f;
+	}
 	desc.compareEnable = VK_FALSE;
 	desc.compareOp = VK_COMPARE_OP_ALWAYS;
 	desc.minLod = 0.0f;

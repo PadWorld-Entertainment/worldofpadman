@@ -39,6 +39,8 @@ set(SRCS
 	vk_image_sampler2.c
 	vk_pipelines.c
 	vk_frame.c
+	vk_fbo.c
+	vk_postprocess.c
 	vk_swapchain.c
 	vk_screenshot.c
 	vk_shade_geometry.c
@@ -83,6 +85,8 @@ set(SHADER_SRCS
 	shaders/single_texture_clipping_plane.vert
 	shaders/single_texture.vert
 	shaders/single_texture.frag
+	shaders/postprocess.vert
+	shaders/greyscale.frag
 )
 
 foreach (shader ${SHADER_SRCS})
@@ -103,6 +107,7 @@ foreach (shader ${SHADER_SRCS})
 	set_source_files_properties(${spirvfile} PROPERTIES GENERATED TRUE)
 
 	add_custom_command(OUTPUT ${spirvfile}
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${shader}
 		COMMAND ${GLSL_LANG_VALIDATOR} --quiet -V ${CMAKE_CURRENT_SOURCE_DIR}/${shader} -o ${CMAKE_CURRENT_BINARY_DIR}/${spirvfile}
 		COMMENT "Generate spirv for ${shader} (${shadertype}): ${spirvfile}"
 	)

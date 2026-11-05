@@ -12,6 +12,7 @@
 #define IMAGE_CHUNK_SIZE (64 * 1024 * 1024)
 
 struct StagingBuffer_t {
+	uint32_t capacity;
 	// Vulkan supports two primary resource types: buffers and images.
 	// Resources are views of memory with associated formatting and dimensionality.
 	// Buffers are essentially unformatted arrays of bytes whereas images contain
@@ -33,7 +34,7 @@ struct ImageChunk_t {
 
 struct deviceLocalMemory_t {
 	// One large device device local memory allocation, assigned to multiple images
-	struct ImageChunk_t Chunks[8];
+	struct ImageChunk_t Chunks[32];
 	uint32_t Index; // number of chunks used
 };
 
@@ -63,6 +64,7 @@ uint32_t find_memory_type(uint32_t memory_type_bits, VkMemoryPropertyFlags prope
 
 static void vk_createStagingBuffer(uint32_t size) {
 	memset(&StagBuf, 0, sizeof(StagBuf));
+	StagBuf.capacity = size;
 
 	ri.Printf(PRINT_DEVELOPER, " Create Staging Buffer: %d\n", size);
 
@@ -134,40 +136,41 @@ static void vk_destroy_staging_buffer(void) {
 	memset(&StagBuf, 0, sizeof(StagBuf));
 }
 
-static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pRegion, uint32_t num_region) {
-	// An application can copy buffer and image data using several methods
-	// depending on the type of data transfer. Data can be copied between
-	// buffer objects with vkCmdCopyBuffer and a portion of an image can
-	// be copied to another image with vkCmdCopyImage.
-	//
-	// Image data can also be copied to and from buffer memory using
-	// vkCmdCopyImageToBuffer and vkCmdCopyBufferToImage.
-	//
-	// Image data can be blitted (with or without scaling and filtering)
-	// with vkCmdBlitImage. Multisampled images can be resolved to a
-	// non-multisampled image with vkCmdResolveImage.
-	//
-	VkCommandBuffer cmd_buf;
-	VkBufferMemoryBarrier barrier;
-	VkSubmitInfo submit_info;
+static VkCommandBuffer uploadCmdBuf = VK_NULL_HANDLE;
+static VkFence uploadFence = VK_NULL_HANDLE;
 
-	{
+static void vk_ensureUploadResources(void) {
+	if (uploadCmdBuf == VK_NULL_HANDLE) {
 		VkCommandBufferAllocateInfo alloc_info;
-		VkCommandBufferBeginInfo begin_info;
-
 		alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		alloc_info.pNext = NULL;
 		alloc_info.commandPool = vk.command_pool;
 		alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		alloc_info.commandBufferCount = 1;
-		VK_CHECK(qvkAllocateCommandBuffers(vk.device, &alloc_info, &cmd_buf));
-
-		begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		begin_info.pNext = NULL;
-		begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-		begin_info.pInheritanceInfo = NULL;
-		VK_CHECK(qvkBeginCommandBuffer(cmd_buf, &begin_info));
+		VK_CHECK(qvkAllocateCommandBuffers(vk.device, &alloc_info, &uploadCmdBuf));
 	}
+	if (uploadFence == VK_NULL_HANDLE) {
+		VkFenceCreateInfo fence_info;
+		fence_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		fence_info.pNext = NULL;
+		fence_info.flags = 0;
+		VK_CHECK(qvkCreateFence(vk.device, &fence_info, NULL, &uploadFence));
+	}
+}
+
+static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pRegion, uint32_t num_region,
+										  qboolean transitionToShaderRead) {
+	VkBufferMemoryBarrier barrier;
+	VkSubmitInfo submit_info;
+	VkCommandBufferBeginInfo begin_info;
+
+	vk_ensureUploadResources();
+
+	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	begin_info.pNext = NULL;
+	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+	begin_info.pInheritanceInfo = NULL;
+	VK_CHECK(qvkBeginCommandBuffer(uploadCmdBuf, &begin_info));
 
 	barrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
 	barrier.pNext = NULL;
@@ -179,28 +182,22 @@ static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pReg
 	barrier.offset = 0;
 	barrier.size = VK_WHOLE_SIZE;
 
-	qvkCmdPipelineBarrier(cmd_buf, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, NULL, 1, &barrier,
-						  0, NULL);
+	qvkCmdPipelineBarrier(uploadCmdBuf, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, NULL, 1,
+						  &barrier, 0, NULL);
 
-	record_image_layout_transition(cmd_buf, image, VK_IMAGE_ASPECT_COLOR_BIT, 0, VK_IMAGE_LAYOUT_UNDEFINED,
+	record_image_layout_transition(uploadCmdBuf, image, VK_IMAGE_ASPECT_COLOR_BIT, 0, VK_IMAGE_LAYOUT_UNDEFINED,
 								   VK_ACCESS_TRANSFER_WRITE_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
-	// To copy data from a buffer object to an image object
+	qvkCmdCopyBufferToImage(uploadCmdBuf, StagBuf.buff, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, num_region,
+							pRegion);
 
-	// cmd_buf is the command buffer into which the command will be recorded.
-	// StagBuf.buff is the source buffer.
-	// image is the destination image.
-	// dstImageLayout is the layout of the destination image subresources.
-	// curLevel is the number of regions to copy.
-	// pRegions is a pointer to an array of VkBufferImageCopy structures
-	// specifying the regions to copy.
-	qvkCmdCopyBufferToImage(cmd_buf, StagBuf.buff, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, num_region, pRegion);
+	if (transitionToShaderRead) {
+		record_image_layout_transition(uploadCmdBuf, image, VK_IMAGE_ASPECT_COLOR_BIT, VK_ACCESS_TRANSFER_WRITE_BIT,
+									   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_ACCESS_SHADER_READ_BIT,
+									   VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+	}
 
-	record_image_layout_transition(cmd_buf, image, VK_IMAGE_ASPECT_COLOR_BIT, VK_ACCESS_TRANSFER_WRITE_BIT,
-								   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_ACCESS_SHADER_READ_BIT,
-								   VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-	VK_CHECK(qvkEndCommandBuffer(cmd_buf));
+	VK_CHECK(qvkEndCommandBuffer(uploadCmdBuf));
 
 	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submit_info.pNext = NULL;
@@ -208,14 +205,108 @@ static void vk_stagBufferToDeviceLocalMem(VkImage image, VkBufferImageCopy *pReg
 	submit_info.pWaitSemaphores = NULL;
 	submit_info.pWaitDstStageMask = NULL;
 	submit_info.commandBufferCount = 1;
-	submit_info.pCommandBuffers = &cmd_buf;
+	submit_info.pCommandBuffers = &uploadCmdBuf;
 	submit_info.signalSemaphoreCount = 0;
 	submit_info.pSignalSemaphores = NULL;
 
-	VK_CHECK(qvkQueueSubmit(vk.queue, 1, &submit_info, VK_NULL_HANDLE));
-	VK_CHECK(qvkQueueWaitIdle(vk.queue));
+	VK_CHECK(qvkResetFences(vk.device, 1, &uploadFence));
+	VK_CHECK(qvkQueueSubmit(vk.queue, 1, &submit_info, uploadFence));
+	VK_CHECK(qvkWaitForFences(vk.device, 1, &uploadFence, VK_TRUE, UINT64_MAX));
+}
 
-	qvkFreeCommandBuffers(vk.device, vk.command_pool, 1, &cmd_buf);
+static void vk_generateMipmaps(VkImage image, uint32_t width, uint32_t height, uint32_t mipLevels) {
+	VkCommandBufferBeginInfo begin_info;
+	VkSubmitInfo submit_info;
+	VkImageMemoryBarrier barrier = {0};
+	uint32_t i;
+	int32_t mipWidth = (int32_t)width;
+	int32_t mipHeight = (int32_t)height;
+
+	vk_ensureUploadResources();
+
+	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	begin_info.pNext = NULL;
+	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+	begin_info.pInheritanceInfo = NULL;
+	VK_CHECK(qvkBeginCommandBuffer(uploadCmdBuf, &begin_info));
+
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.image = image;
+	barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	barrier.subresourceRange.levelCount = 1;
+	barrier.subresourceRange.baseArrayLayer = 0;
+	barrier.subresourceRange.layerCount = 1;
+
+	for (i = 1; i < mipLevels; i++) {
+		// Transition level i-1 to TRANSFER_SRC
+		barrier.subresourceRange.baseMipLevel = i - 1;
+		barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		qvkCmdPipelineBarrier(uploadCmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+							  0, 0, NULL, 0, NULL, 1, &barrier);
+
+		// Blit from level i-1 to level i
+		VkImageBlit blit = {0};
+		blit.srcOffsets[0] = (VkOffset3D){0, 0, 0};
+		blit.srcOffsets[1] = (VkOffset3D){mipWidth, mipHeight, 1};
+		blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		blit.srcSubresource.mipLevel = i - 1;
+		blit.srcSubresource.baseArrayLayer = 0;
+		blit.srcSubresource.layerCount = 1;
+
+		int32_t nextWidth = mipWidth > 1 ? mipWidth / 2 : 1;
+		int32_t nextHeight = mipHeight > 1 ? mipHeight / 2 : 1;
+
+		blit.dstOffsets[0] = (VkOffset3D){0, 0, 0};
+		blit.dstOffsets[1] = (VkOffset3D){nextWidth, nextHeight, 1};
+		blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		blit.dstSubresource.mipLevel = i;
+		blit.dstSubresource.baseArrayLayer = 0;
+		blit.dstSubresource.layerCount = 1;
+
+		qvkCmdBlitImage(uploadCmdBuf, image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+						image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_LINEAR);
+
+		// Transition level i-1 to SHADER_READ_ONLY
+		barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		barrier.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		qvkCmdPipelineBarrier(uploadCmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+							  0, 0, NULL, 0, NULL, 1, &barrier);
+
+		mipWidth = nextWidth;
+		mipHeight = nextHeight;
+	}
+
+	// Transition last level to SHADER_READ_ONLY
+	barrier.subresourceRange.baseMipLevel = mipLevels - 1;
+	barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+	barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+	barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	qvkCmdPipelineBarrier(uploadCmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+						  0, 0, NULL, 0, NULL, 1, &barrier);
+
+	VK_CHECK(qvkEndCommandBuffer(uploadCmdBuf));
+
+	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submit_info.pNext = NULL;
+	submit_info.waitSemaphoreCount = 0;
+	submit_info.pWaitSemaphores = NULL;
+	submit_info.pWaitDstStageMask = NULL;
+	submit_info.commandBufferCount = 1;
+	submit_info.pCommandBuffers = &uploadCmdBuf;
+	submit_info.signalSemaphoreCount = 0;
+	submit_info.pSignalSemaphores = NULL;
+
+	VK_CHECK(qvkResetFences(vk.device, 1, &uploadFence));
+	VK_CHECK(qvkQueueSubmit(vk.queue, 1, &submit_info, uploadFence));
+	VK_CHECK(qvkWaitForFences(vk.device, 1, &uploadFence, VK_TRUE, UINT64_MAX));
 }
 
 #define FILE_HASH_SIZE 1024
@@ -263,7 +354,7 @@ static void vk_createImageAndBindWithMemory(image_t *pImg) {
 	desc.arrayLayers = 1;
 	desc.samples = VK_SAMPLE_COUNT_1_BIT;
 	desc.tiling = VK_IMAGE_TILING_OPTIMAL;
-	desc.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	desc.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	desc.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	desc.queueFamilyIndexCount = 0;
 	desc.pQueueFamilyIndices = NULL;
@@ -293,6 +384,10 @@ static void vk_createImageAndBindWithMemory(image_t *pImg) {
 
 	// Couldn't find suitable in existing chunk.
 	// Allocate a new chunk
+
+	if (devMemImg.Index >= ARRAY_LEN(devMemImg.Chunks)) {
+		ri.Error(ERR_DROP, "vk_createImageAndBindWithMemory: image chunk array full (max 2GB device memory)");
+	}
 
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	alloc_info.pNext = NULL;
@@ -520,84 +615,100 @@ image_t *R_CreateImage(const char *name, byte *pic, int width, int height,
 	regions[0].imageExtent.depth = 1;
 
 	if (isMipMap) {
-		uint32_t curMipMapLevel = 1;
-		uint32_t base_width = pImage->uploadWidth;
-		uint32_t base_height = pImage->uploadHeight;
-
-		unsigned char *in_ptr = pUploadBuffer;
-		unsigned char *dst_ptr = in_ptr + buffer_size;
+		// Calculate mip levels
+		uint32_t mipWidth = pImage->uploadWidth;
+		uint32_t mipHeight = pImage->uploadHeight;
+		uint32_t mipCount = 1;
+		while (mipWidth > 1 || mipHeight > 1) {
+			mipWidth >>= 1;
+			if (mipWidth == 0) mipWidth = 1;
+			mipHeight >>= 1;
+			if (mipHeight == 0) mipHeight = 1;
+			mipCount++;
+		}
+		pImage->mipLevels = mipCount;
 
 		R_LightScaleTexture(pUploadBuffer, pUploadBuffer, buffer_size);
 
-		// Use the normal mip-mapping to go down from [scaled_width, scaled_height] to [1,1] dimensions.
+		if (vk.isBlitSupported && !r_colorMipLevels->integer) {
+			// GPU mipmap generation: only upload base level, generate rest on GPU
+		} else {
+			// CPU mipmap generation fallback
+			uint32_t curMipMapLevel = 1;
+			uint32_t base_width = pImage->uploadWidth;
+			uint32_t base_height = pImage->uploadHeight;
+			unsigned char *in_ptr = pUploadBuffer;
+			unsigned char *dst_ptr = in_ptr + buffer_size;
 
-		while (1) {
-			uint32_t curLevelSize;
+			while (1) {
+				uint32_t curLevelSize;
 
-			if (r_simpleMipMaps->integer) {
-				R_MipMap(in_ptr, base_width, base_height, dst_ptr);
-			} else {
-				R_MipMap2(in_ptr, base_width, base_height, dst_ptr);
+				if (r_simpleMipMaps->integer) {
+					R_MipMap(in_ptr, base_width, base_height, dst_ptr);
+				} else {
+					R_MipMap2(in_ptr, base_width, base_height, dst_ptr);
+				}
+
+				if ((base_width == 1) && (base_height == 1))
+					break;
+
+				base_width >>= 1;
+				if (base_width == 0) base_width = 1;
+				base_height >>= 1;
+				if (base_height == 0) base_height = 1;
+
+				regions[curMipMapLevel].bufferOffset = buffer_size;
+				regions[curMipMapLevel].bufferRowLength = 0;
+				regions[curMipMapLevel].bufferImageHeight = 0;
+				regions[curMipMapLevel].imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+				regions[curMipMapLevel].imageSubresource.mipLevel = curMipMapLevel;
+				regions[curMipMapLevel].imageSubresource.baseArrayLayer = 0;
+				regions[curMipMapLevel].imageSubresource.layerCount = 1;
+				regions[curMipMapLevel].imageOffset.x = 0;
+				regions[curMipMapLevel].imageOffset.y = 0;
+				regions[curMipMapLevel].imageOffset.z = 0;
+				regions[curMipMapLevel].imageExtent.width = base_width;
+				regions[curMipMapLevel].imageExtent.height = base_height;
+				regions[curMipMapLevel].imageExtent.depth = 1;
+
+				curLevelSize = base_width * base_height * 4;
+				buffer_size += curLevelSize;
+
+				if (r_colorMipLevels->integer) {
+					R_BlendOverTexture(in_ptr, base_width * base_height, curMipMapLevel);
+				}
+
+				++curMipMapLevel;
+				in_ptr = dst_ptr;
+				dst_ptr += curLevelSize;
 			}
-
-			if ((base_width == 1) && (base_height == 1))
-				break;
-
-			base_width >>= 1;
-			if (base_width == 0)
-				base_width = 1;
-
-			base_height >>= 1;
-			if (base_height == 0)
-				base_height = 1;
-
-			regions[curMipMapLevel].bufferOffset = buffer_size;
-			regions[curMipMapLevel].bufferRowLength = 0;
-			regions[curMipMapLevel].bufferImageHeight = 0;
-			regions[curMipMapLevel].imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-			regions[curMipMapLevel].imageSubresource.mipLevel = curMipMapLevel;
-			regions[curMipMapLevel].imageSubresource.baseArrayLayer = 0;
-			regions[curMipMapLevel].imageSubresource.layerCount = 1;
-			regions[curMipMapLevel].imageOffset.x = 0;
-			regions[curMipMapLevel].imageOffset.y = 0;
-			regions[curMipMapLevel].imageOffset.z = 0;
-
-			regions[curMipMapLevel].imageExtent.width = base_width;
-			regions[curMipMapLevel].imageExtent.height = base_height;
-			regions[curMipMapLevel].imageExtent.depth = 1;
-
-			curLevelSize = base_width * base_height * 4;
-
-			buffer_size += curLevelSize;
-
-			// Regions must not extend outside the bounds of the buffer or image level,
-			// except that regions of compressed images can extend as far as the
-			// dimension of the image level rounded up to a complete compressed texel block.
-
-			assert(buffer_size <= IMAGE_CHUNK_SIZE);
-
-			if (r_colorMipLevels->integer) {
-				R_BlendOverTexture(in_ptr, base_width * base_height, curMipMapLevel);
-			}
-
-			++curMipMapLevel;
-
-			in_ptr = dst_ptr;
-			dst_ptr += curLevelSize;
 		}
-		pImage->mipLevels = curMipMapLevel;
 	}
 
 	vk_createImageAndBindWithMemory(pImage);
 	vk_createImageViewAndDescriptorSet(pImage);
 
+	qboolean useGpuMipmaps = isMipMap && vk.isBlitSupported && !r_colorMipLevels->integer;
+	uint32_t uploadRegions = useGpuMipmaps ? 1 : pImage->mipLevels;
+	uint32_t uploadSize = useGpuMipmaps ? (4 * pImage->uploadWidth * pImage->uploadHeight) : buffer_size;
+
 	VK_CHECK(qvkMapMemory(vk.device, StagBuf.mappableMem, 0, VK_WHOLE_SIZE, 0, &data));
-	memcpy(data, pUploadBuffer, buffer_size);
+	if (uploadSize > StagBuf.capacity) {
+		qvkUnmapMemory(vk.device, StagBuf.mappableMem);
+		ri.Hunk_FreeTempMemory(pUploadBuffer);
+		ri.Error(ERR_DROP, "R_CreateImage: texture '%s' size %u exceeds staging buffer capacity %u",
+				 name, uploadSize, StagBuf.capacity);
+	}
+	memcpy(data, pUploadBuffer, uploadSize);
 	qvkUnmapMemory(vk.device, StagBuf.mappableMem);
 
 	ri.Hunk_FreeTempMemory(pUploadBuffer);
 
-	vk_stagBufferToDeviceLocalMem(pImage->handle, regions, pImage->mipLevels);
+	vk_stagBufferToDeviceLocalMem(pImage->handle, regions, uploadRegions, !useGpuMipmaps);
+
+	if (useGpuMipmaps) {
+		vk_generateMipmaps(pImage->handle, pImage->uploadWidth, pImage->uploadHeight, pImage->mipLevels);
+	}
 
 	hash = generateHashValue(name);
 	pImage->next = hashTable[hash];
@@ -685,8 +796,44 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *d
 		qvkDestroyImage(vk.device, prtImage->handle, NULL);
 		qvkDestroyImageView(vk.device, prtImage->view, NULL);
 		qvkFreeDescriptorSets(vk.device, vk.descriptor_pool, 1, &prtImage->descriptor_set);
+		if (prtImage->dedicatedMemory != VK_NULL_HANDLE) {
+			qvkFreeMemory(vk.device, prtImage->dedicatedMemory, NULL);
+			prtImage->dedicatedMemory = VK_NULL_HANDLE;
+		}
 
-		vk_createImageAndBindWithMemory(prtImage);
+		// Allocate dedicated memory for cinematic (not from chunk allocator)
+		{
+			VkImageCreateInfo imgDesc;
+			VkMemoryRequirements memReqs;
+			VkMemoryAllocateInfo allocInfo;
+
+			imgDesc.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+			imgDesc.pNext = NULL;
+			imgDesc.flags = 0;
+			imgDesc.imageType = VK_IMAGE_TYPE_2D;
+			imgDesc.format = VK_FORMAT_R8G8B8A8_UNORM;
+			imgDesc.extent.width = cols;
+			imgDesc.extent.height = rows;
+			imgDesc.extent.depth = 1;
+			imgDesc.mipLevels = 1;
+			imgDesc.arrayLayers = 1;
+			imgDesc.samples = VK_SAMPLE_COUNT_1_BIT;
+			imgDesc.tiling = VK_IMAGE_TILING_OPTIMAL;
+			imgDesc.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+			imgDesc.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+			imgDesc.queueFamilyIndexCount = 0;
+			imgDesc.pQueueFamilyIndices = NULL;
+			imgDesc.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			VK_CHECK(qvkCreateImage(vk.device, &imgDesc, NULL, &prtImage->handle));
+
+			qvkGetImageMemoryRequirements(vk.device, prtImage->handle, &memReqs);
+			allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+			allocInfo.pNext = NULL;
+			allocInfo.allocationSize = memReqs.size;
+			allocInfo.memoryTypeIndex = find_memory_type(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+			VK_CHECK(qvkAllocateMemory(vk.device, &allocInfo, NULL, &prtImage->dedicatedMemory));
+			VK_CHECK(qvkBindImageMemory(vk.device, prtImage->handle, prtImage->dedicatedMemory, 0));
+		}
 
 		vk_createImageViewAndDescriptorSet(prtImage);
 
@@ -708,7 +855,7 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *d
 		memcpy(pDat, data, buffer_size);
 		qvkUnmapMemory(vk.device, StagBuf.mappableMem);
 
-		vk_stagBufferToDeviceLocalMem(tr.scratchImage[client]->handle, &region, 1);
+		vk_stagBufferToDeviceLocalMem(tr.scratchImage[client]->handle, &region, 1, qtrue);
 	} else if (dirty) {
 		// otherwise, just subimage upload it so that
 		// drivers can tell we are going to be changing
@@ -737,7 +884,7 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const unsigned char *d
 		memcpy(pDat, data, buffer_size);
 		qvkUnmapMemory(vk.device, StagBuf.mappableMem);
 
-		vk_stagBufferToDeviceLocalMem(tr.scratchImage[client]->handle, &region, 1);
+		vk_stagBufferToDeviceLocalMem(tr.scratchImage[client]->handle, &region, 1, qtrue);
 	}
 }
 
@@ -845,7 +992,9 @@ static void R_CreateScratchImage(void) {
 void R_InitImages(void) {
 	memset(hashTable, 0, sizeof(hashTable));
 
-	vk_createStagingBuffer(8 * 1024 * 1024);
+	// Staging buffer must be large enough for the largest possible texture
+	// with full mip chain: 2048x2048 RGBA + mipmaps we ned round about 22MB
+	vk_createStagingBuffer(32 * 1024 * 1024);
 
 	// setup the overbright lighting
 
@@ -903,6 +1052,16 @@ void vk_destroyImageRes(void) {
 	devMemImg.Index = 0;
 
 	vk_destroy_staging_buffer();
+
+	if (uploadFence != VK_NULL_HANDLE) {
+		qvkDestroyFence(vk.device, uploadFence, NULL);
+		uploadFence = VK_NULL_HANDLE;
+	}
+	if (uploadCmdBuf != VK_NULL_HANDLE) {
+		qvkFreeCommandBuffers(vk.device, vk.command_pool, 1, &uploadCmdBuf);
+		uploadCmdBuf = VK_NULL_HANDLE;
+	}
+
 	// Destroying a pool object implicitly frees all objects allocated from that pool.
 	// Specifically, destroying VkCommandPool frees all VkCommandBuffer objects that
 	// were allocated from it, and destroying VkDescriptorPool frees all
