@@ -98,6 +98,9 @@ char *copystring(const char *s);
 
 void CreatePath(const char *path);
 
+// used by LittleLong on big-endian hosts
+int LongSwap(int l);
+
 extern qboolean archive;
 extern char archivedir[1024];
 

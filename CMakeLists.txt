@@ -132,6 +132,20 @@ endif()
 
 include(CPack)
 
+# ppc64le: target POWER8 as baseline (the ppc64le minimum), which enables
+# VSX/Altivec. PPC64LE_CPU can raise the baseline (power9, power10, native)
+# for machine-specific builds. A -mcpu given in CFLAGS (as distribution
+# packagers do) is left alone.
+if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64le" AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang"
+		AND NOT CMAKE_C_FLAGS MATCHES "-mcpu=")
+	set(PPC64LE_CPU "power8" CACHE STRING "-mcpu baseline for ppc64le builds (power8, power9, power10, native)")
+	add_compile_options(-mcpu=${PPC64LE_CPU})
+	if (PPC64LE_CPU STREQUAL "power8")
+		# keep POWER8 compatibility but schedule for POWER9 cores
+		add_compile_options(-mtune=power9)
+	endif()
+endif()
+
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
 	add_compile_definitions(NDEBUG)
 else()

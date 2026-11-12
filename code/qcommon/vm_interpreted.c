@@ -83,7 +83,7 @@ static char *opnames[256] = {"OP_UNDEF",
 							 "OP_CVIF", "OP_CVFI"};
 #endif
 
-#if idppc
+#if idppc && defined(Q3_BIG_ENDIAN)
 
 // FIXME: these, um... look the same to me
 #if defined(__GNUC__)

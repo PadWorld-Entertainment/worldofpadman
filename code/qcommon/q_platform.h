@@ -41,7 +41,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define id386 0
 #endif
 
-#if (defined(powerc) || defined(powerpc) || defined(ppc) || defined(__ppc) || defined(__ppc__)) && !defined(C_ONLY)
+#if (defined(powerc) || defined(powerpc) || defined(ppc) || defined(__ppc) || defined(__ppc__) ||                      \
+	 defined(__ppc64__) || defined(__powerpc64__)) &&                                                                  \
+	!defined(C_ONLY)
 #define idppc 1
 #if defined(__VEC__)
 #define idppc_altivec 1
@@ -191,6 +193,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ARCH_STRING "arm64"
 #elif defined(__arm__)
 #define ARCH_STRING "arm"
+#elif defined(__powerpc64__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define ARCH_STRING "ppc64le"
+#elif defined(__powerpc64__)
+#define ARCH_STRING "ppc64"
 #elif INTPTR_MAX == INT64_MAX
 #define ARCH_STRING "x86_64"
 #elif INTPTR_MAX == INT32_MAX
@@ -209,12 +215,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define Q3_BIG_ENDIAN
 #else
 #define Q3_LITTLE_ENDIAN
-#endif
-
-#if defined(__powerpc64__)
-#ifndef NO_VM_COMPILED
-#define NO_VM_COMPILED
-#endif
 #endif
 
 #define DLL_EXT ".so"
