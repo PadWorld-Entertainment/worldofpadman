@@ -1846,7 +1846,7 @@ Called directly from cgame
 void RE_LoadWorldMap(const char *name) {
 	int i;
 	dheader_t *header;
-	char *buffer;
+	void *buffer;
 	byte *startMarker;
 
 	if (tr.worldMapLoaded) {
@@ -1862,7 +1862,7 @@ void RE_LoadWorldMap(const char *name) {
 	VectorNormalize(tr.sunDirection);
 
 	// load it
-	ri.FS_ReadFile(name, (void **)&buffer);
+	ri.FS_ReadFile(name, &buffer);
 	if (!buffer) {
 		ri.Error(ERR_DROP, "RE_LoadWorldMap: %s not found", name);
 	}

@@ -54,7 +54,8 @@ static void I(defconst)(int suffix, int size, Value v) {
 			fi.f = v.d;
 			print("byte 4 %u\n", fi.ui);
 		} else {
-			unsigned *p = (unsigned *)&v.d;
+			unsigned p[2];
+			memcpy(p, &v.d, sizeof(p));
 			print("byte 4 %u\n", p[swap]);
 			print("byte 4 %u\n", p[1 - swap]);
 		}

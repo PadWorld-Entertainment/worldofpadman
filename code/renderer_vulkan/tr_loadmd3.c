@@ -155,13 +155,13 @@ static qboolean R_LoadMD3(model_t *mod, int lod, void *buffer, const char *mod_n
 }
 
 qhandle_t R_RegisterMD3(const char *name, model_t *mod) {
-	char *buf;
+	void *buf;
 	int numLoaded = 0;
 	char filename[MAX_QPATH] = {0};
 	char *dot;
 	uint32_t lod;
 
-	ri.FS_ReadFile(name, (void**)&buf);
+	ri.FS_ReadFile(name, &buf);
 
 	if (NULL != buf) {
 		qboolean loaded = qfalse;
@@ -197,7 +197,7 @@ qhandle_t R_RegisterMD3(const char *name, model_t *mod) {
 
 		snprintf(namebuf, sizeof(namebuf), "%s_%d.md3", filename, lod);
 
-		ri.FS_ReadFile(namebuf, (void**)&buf);
+		ri.FS_ReadFile(namebuf, &buf);
 		if (!buf)
 			continue;
 

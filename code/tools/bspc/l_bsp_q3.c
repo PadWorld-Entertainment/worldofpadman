@@ -465,8 +465,9 @@ static void Q3_SwapBSPFile(void) {
 	Q3_SwapBlock((int *)q3_dbrushsides, q3_numbrushsides * sizeof(q3_dbrushsides[0]));
 
 	// vis
-	((int *)&q3_visBytes)[0] = LittleLong(((int *)&q3_visBytes)[0]);
-	((int *)&q3_visBytes)[1] = LittleLong(((int *)&q3_visBytes)[1]);
+	if (q3_numVisBytes >= 8) {
+		Q3_SwapBlock((int *)q3_visBytes, 8);
+	}
 
 	// drawverts (don't swap colors )
 	for (i = 0; i < q3_numDrawVerts; i++) {
@@ -547,11 +548,13 @@ Q3_LoadBSPFile
 */
 void Q3_LoadBSPFile(struct quakefile_s *qf) {
 	q3_dheader_t *header;
+	void *buffer;
 
 	// load the file header
 	// LoadFile(filename, (void **)&header, offset, length);
 	//
-	LoadQuakeFile(qf, (void **)&header);
+	LoadQuakeFile(qf, &buffer);
+	header = buffer;
 
 	// swap the header
 	Q3_SwapBlock((int *)header, sizeof(*header));

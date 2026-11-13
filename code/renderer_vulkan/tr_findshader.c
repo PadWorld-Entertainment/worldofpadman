@@ -432,10 +432,12 @@ void ScanAndLoadShaderFiles(void) {
 	for (i = 0; i < numShaderFiles; i++) {
 		char filename[128] = {0};
 		long filesize;
+		void *buffer;
 
 		snprintf(filename, sizeof(filename), "scripts/%s", shaderFiles[i]);
 		ri.Printf(PRINT_ALL, "...loading '%s'\n", filename);
-		filesize = ri.FS_ReadFile(filename, (void**)&buffers[i]);
+		filesize = ri.FS_ReadFile(filename, &buffer);
+		buffers[i] = buffer;
 
 		if (!buffers[i])
 			ri.Error(ERR_DROP, "Couldn't load %s", filename);

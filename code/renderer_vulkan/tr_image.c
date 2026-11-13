@@ -133,7 +133,8 @@ qhandle_t RE_RegisterSkin(const char *name) {
 	qhandle_t hSkin;
 	skin_t *skin;
 	skinSurface_t *surf;
-	char *text, *text_p;
+	void *text;
+	char *text_p;
 	char *token;
 	char surfName[MAX_QPATH];
 
@@ -178,7 +179,7 @@ qhandle_t RE_RegisterSkin(const char *name) {
 	}
 
 	// load and parse the skin file
-	ri.FS_ReadFile(name, (void**)&text);
+	ri.FS_ReadFile(name, &text);
 	if (!text) {
 		return 0;
 	}

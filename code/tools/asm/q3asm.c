@@ -1376,9 +1376,11 @@ static void Assemble(void) {
 	report("outputFilename: %s\n", outputFilename);
 
 	for (i = 0; i < numAsmFiles; i++) {
+		void *buffer;
 		strcpy(filename, asmFileNames[i]);
 		DefaultExtension(filename, ".asm");
-		LoadFile(filename, (void **)&asmFiles[i]);
+		LoadFile(filename, &buffer);
+		asmFiles[i] = buffer;
 	}
 
 	// assemble
@@ -1437,10 +1439,12 @@ ParseOptionFile
 static void ParseOptionFile(const char *filename) {
 	char expanded[MAX_OS_PATH];
 	const char *text, *text_p;
+	void *buffer;
 
 	strcpy(expanded, filename);
 	DefaultExtension(expanded, ".q3asm");
-	LoadFile(expanded, (void **)&text);
+	LoadFile(expanded, &buffer);
+	text = buffer;
 	if (!text) {
 		return;
 	}

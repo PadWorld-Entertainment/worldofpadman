@@ -79,7 +79,7 @@ static byte *RB_ReadPixels(uint32_t width, uint32_t height) {
 	VkCommandBufferAllocateInfo alloc_info;
 	VkCommandBufferBeginInfo begin_info;
 	VkSubmitInfo submit_info;
-	unsigned char *data;
+	void *data;
 
 	qvkDeviceWaitIdle(vk.device);
 
@@ -204,7 +204,7 @@ static byte *RB_ReadPixels(uint32_t width, uint32_t height) {
 	// mapped on the host.
 	//
 	// To retrieve a host virtual address pointer to a region of a mappable memory object
-	VK_CHECK(qvkMapMemory(vk.device, memory, 0, VK_WHOLE_SIZE, 0, (void **)&data));
+	VK_CHECK(qvkMapMemory(vk.device, memory, 0, VK_WHOLE_SIZE, 0, &data));
 	memcpy(pBuf, data, sizeFB);
 	qvkUnmapMemory(vk.device, memory);
 	qvkFreeMemory(vk.device, memory, NULL);

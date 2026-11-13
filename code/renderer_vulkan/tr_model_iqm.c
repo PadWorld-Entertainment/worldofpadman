@@ -1048,12 +1048,12 @@ void RB_IQMSurfaceAnim(surfaceType_t *surface) {
 }
 
 qhandle_t R_RegisterIQM(const char *name, model_t *mod) {
-	char *buf;
+	void *buf;
 
 	qboolean loaded = qfalse;
 	int filesize;
 
-	filesize = ri.FS_ReadFile(name, (void**)&buf);
+	filesize = ri.FS_ReadFile(name, &buf);
 	if (!buf) {
 		mod->type = MOD_BAD;
 		return 0;

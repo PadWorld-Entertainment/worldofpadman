@@ -250,7 +250,7 @@ static qboolean GLimp_GetProcAddresses(qboolean fixedFunction) {
 #define GLE(ret, name, ...) qgl##name = gl #name;
 #else
 #define GLE(ret, name, ...)                                                                                            \
-	*(void **)(&qgl##name) = SDL_GL_GetProcAddress("gl" #name);                                                        \
+	qgl##name = SDL_GL_GetProcAddress("gl" #name);                                                                       \
 	if (qgl##name == NULL) {                                                                                           \
 		ri.Printf(PRINT_ALL, "ERROR: Missing OpenGL function %s\n", "gl" #name);                                       \
 		success = qfalse;                                                                                              \
@@ -880,9 +880,9 @@ static void GLimp_InitExtensions(qboolean fixedFunction) {
 		qglClientActiveTextureARB = NULL;
 		if (SDL_GL_ExtensionSupported("GL_ARB_multitexture")) {
 			if (r_ext_multitexture->value) {
-				*(void **)(&qglMultiTexCoord2fARB) = SDL_GL_GetProcAddress("glMultiTexCoord2fARB");
-				*(void **)(&qglActiveTextureARB) = SDL_GL_GetProcAddress("glActiveTextureARB");
-				*(void **)(&qglClientActiveTextureARB) = SDL_GL_GetProcAddress("glClientActiveTextureARB");
+				qglMultiTexCoord2fARB = SDL_GL_GetProcAddress("glMultiTexCoord2fARB");
+				qglActiveTextureARB = SDL_GL_GetProcAddress("glActiveTextureARB");
+				qglClientActiveTextureARB = SDL_GL_GetProcAddress("glClientActiveTextureARB");
 
 				if (qglActiveTextureARB) {
 					GLint glint = 0;
@@ -908,8 +908,8 @@ static void GLimp_InitExtensions(qboolean fixedFunction) {
 		if (SDL_GL_ExtensionSupported("GL_EXT_compiled_vertex_array")) {
 			if (r_ext_compiled_vertex_array->value) {
 				ri.Printf(PRINT_ALL, "...using GL_EXT_compiled_vertex_array\n");
-				*(void **)(&qglLockArraysEXT) = SDL_GL_GetProcAddress("glLockArraysEXT");
-				*(void **)(&qglUnlockArraysEXT) = SDL_GL_GetProcAddress("glUnlockArraysEXT");
+				qglLockArraysEXT = SDL_GL_GetProcAddress("glLockArraysEXT");
+				qglUnlockArraysEXT = SDL_GL_GetProcAddress("glUnlockArraysEXT");
 				if (!qglLockArraysEXT || !qglUnlockArraysEXT) {
 					ri.Error(ERR_FATAL, "bad getprocaddress");
 				}
