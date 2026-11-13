@@ -8,4 +8,4 @@ set(SRCS
 )
 add_library(opusfile STATIC ${SRCS})
 target_include_directories(opusfile PUBLIC include)
-target_link_libraries(opusfile PRIVATE opus)
+target_link_libraries(opusfile PRIVATE opus ogg)
