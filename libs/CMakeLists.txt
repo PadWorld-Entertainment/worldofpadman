@@ -16,7 +16,7 @@ if (NOT USE_INTERNAL_JPEG)
 	add_library(jpeg INTERFACE)
 	target_link_libraries(jpeg INTERFACE JPEG::JPEG)
 else()
-	add_subdirectory(jpeg-9e)
+	add_subdirectory(jpeg-10)
 endif()
 
 if (NOT USE_INTERNAL_OGG)
