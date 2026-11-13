@@ -114,8 +114,8 @@ update-libvorbis:
 OPUS_VERSION=1.6.1
 update-opus:
 	$(call UPDATE_ARCHIVE,opus-$(OPUS_VERSION),https://downloads.xiph.org/releases/opus/opus-$(OPUS_VERSION).tar.gz) \
-	rm -rf libs/opus-1.3.1/src libs/opus-1.3.1/celt libs/opus-1.3.1/silk libs/opus-1.3.1/include libs/opus-1.3.1/dnn libs/opus-1.3.1/cmake; \
-	cp -r "$$src/." libs/opus-1.3.1
+	rm -rf libs/opus-1.6.1/src libs/opus-1.6.1/celt libs/opus-1.6.1/silk libs/opus-1.6.1/include libs/opus-1.6.1/dnn libs/opus-1.6.1/cmake; \
+	cp -r "$$src/." libs/opus-1.6.1
 
 ZLIB_VERSION=1.4
 update-zlib:
