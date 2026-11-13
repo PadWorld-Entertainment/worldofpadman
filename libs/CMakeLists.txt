@@ -62,6 +62,7 @@ else()
 	set(OPUS_STATIC_RUNTIME ON CACHE BOOL "Use the engine's static MSVC runtime")
 	add_subdirectory(opus-1.6.1)
 	target_compile_definitions(opus PUBLIC USE_CODEC_OPUS)
+	target_compile_options(opus PRIVATE $<$<AND:$<CONFIG:Debug>,$<C_COMPILER_ID:GNU,Clang,AppleClang>>:-O2>)
 endif()
 
 if (NOT USE_INTERNAL_OPUSFILE)
