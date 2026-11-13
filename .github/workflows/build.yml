@@ -27,7 +27,7 @@ jobs:
         if: ${{ runner.os == 'Linux' }}
         run: |
           sudo apt-get update
-          sudo apt-get install libsdl2-dev
+          sudo apt-get install libsdl2-dev glslang-tools
 
       - name: "Install Dependencies (OSX)"
         if: ${{ runner.os == 'macOS' }}
