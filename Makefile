@@ -87,10 +87,10 @@ update-libogg:
 JPEG_VERSION=10
 update-jpeg:
 	$(call UPDATE_ARCHIVE,jpeg-$(JPEG_VERSION),https://ijg.org/files/jpegsrc.v$(JPEG_VERSION).tar.gz) \
-	cp libs/jpeg-9e/jconfig.h "$$src/jconfig.h"; \
-	rm -f libs/jpeg-9e/*.[ch]; \
-	cp "$$src"/*.[ch] libs/jpeg-9e; \
-	cp "$$src/README" libs/jpeg-9e/README
+	cp libs/jpeg-10/jconfig.h "$$src/jconfig.h"; \
+	rm -f libs/jpeg-10/*.[ch]; \
+	cp "$$src"/*.[ch] libs/jpeg-10; \
+	cp "$$src/README" libs/jpeg-10/README
 
 OPUSFILE_VERSION=0.12
 update-opusfile:
