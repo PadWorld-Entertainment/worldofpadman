@@ -48,7 +48,7 @@ if (NOT USE_INTERNAL_THEORA)
 	target_link_libraries(theora INTERFACE ${THEORA_LINK_LIBRARIES})
 	target_compile_definitions(theora INTERFACE USE_CIN_THEORA)
 else()
-	add_subdirectory(libtheora-1.1.1)
+	add_subdirectory(libtheora-1.2.0)
 endif()
 
 if (NOT USE_INTERNAL_OPUS)

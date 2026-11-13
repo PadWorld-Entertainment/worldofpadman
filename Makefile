@@ -102,8 +102,8 @@ update-opusfile:
 LIBTHEORA_VERSION=1.2.0
 update-libtheora:
 	$(call UPDATE_ARCHIVE,libtheora-$(LIBTHEORA_VERSION),https://downloads.xiph.org/releases/theora/libtheora-$(LIBTHEORA_VERSION).tar.gz) \
-	rm -rf libs/libtheora-1.1.1/lib libs/libtheora-1.1.1/include; \
-	cp -r "$$src/lib" "$$src/include" libs/libtheora-1.1.1
+	rm -rf libs/libtheora-1.2.0/lib libs/libtheora-1.2.0/include; \
+	cp -r "$$src/lib" "$$src/include" libs/libtheora-1.2.0
 
 LIBVORBIS_VERSION=1.3.7
 update-libvorbis:
