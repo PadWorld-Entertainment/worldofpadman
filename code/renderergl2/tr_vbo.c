@@ -50,7 +50,7 @@ void R_VaoUnpackTangent(vec4_t v, int16_t *pack) {
 	v[3] = pack[3] / 32767.0f;
 }
 
-void R_VaoUnpackNormal(vec3_t v, int16_t *pack) {
+void R_VaoUnpackNormal(vec3_t v, const int16_t *pack) {
 	v[0] = pack[0] / 32767.0f;
 	v[1] = pack[1] / 32767.0f;
 	v[2] = pack[2] / 32767.0f;
