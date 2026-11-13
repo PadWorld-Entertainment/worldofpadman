@@ -154,8 +154,8 @@ static void DrawNormals(const shaderCommands_t *input) {
 
 	// xyz is vec4_t (x,y,z,1)
 	const float *positionsXYZW = (const float *)input->xyz;
-	const int16_t *packedNormals = (const int16_t *)input->normal;
-	const float *floatNormals = (const float *)input->normal;
+	const int16_t *packedNormals = input->normal[0];
+	const unsigned char *floatNormals = (const unsigned char *)input->normal;
 
 	const vao_t *boundVao = glState.currentVao;
 	qboolean usePacked = qfalse;
@@ -167,10 +167,11 @@ static void DrawNormals(const shaderCommands_t *input) {
 		const float sx = packedNormals[0] * (1.0f / 32767.0f);
 		const float sy = packedNormals[1] * (1.0f / 32767.0f);
 		const float sz = packedNormals[2] * (1.0f / 32767.0f);
+		vec3_t firstNormal;
+		memcpy(firstNormal, floatNormals, sizeof(firstNormal));
 
 		const float lp = sx * sx + sy * sy + sz * sz;
-		const float lf =
-			floatNormals[0] * floatNormals[0] + floatNormals[1] * floatNormals[1] + floatNormals[2] * floatNormals[2];
+		const float lf = firstNormal[0] * firstNormal[0] + firstNormal[1] * firstNormal[1] + firstNormal[2] * firstNormal[2];
 
 		usePacked = fabsf(lp - 1.0f) <= fabsf(lf - 1.0f);
 	}
@@ -185,15 +186,12 @@ static void DrawNormals(const shaderCommands_t *input) {
 	// Build the line list
 	for (int i = 0; i < vertexCount; ++i, positionsXYZW += 4) {
 		vec3_t n;
-
 		if (usePacked) {
-			R_VaoUnpackNormal(n, (int16_t *)packedNormals);
+			R_VaoUnpackNormal(n, packedNormals);
 			packedNormals += 4;
 		} else {
-			n[0] = floatNormals[0];
-			n[1] = floatNormals[1];
-			n[2] = floatNormals[2];
-			floatNormals += 4;
+			memcpy(n, floatNormals, sizeof(n));
+			floatNormals += sizeof(vec4_t);
 		}
 
 		// endpoints in object/world space
