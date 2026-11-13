@@ -26,7 +26,7 @@ if (NOT USE_INTERNAL_OGG)
 	target_include_directories(ogg INTERFACE ${OGG_INCLUDE_DIRS})
 	target_link_libraries(ogg INTERFACE ${OGG_LINK_LIBRARIES})
 else()
-	add_subdirectory(libogg-1.3.5)
+	add_subdirectory(libogg-1.3.6)
 endif()
 
 if (NOT USE_INTERNAL_VORBIS)

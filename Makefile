@@ -60,7 +60,7 @@ endef
 
 .PHONY: update-sdl2 update-openal update-libogg update-jpeg update-opusfile update-libtheora update-libvorbis update-opus update-zlib
 
-# Keep the existing vendored paths: libs/CMakeLists.txt and local build files use them.
+# Keep vendored directory names in sync with libs/CMakeLists.txt.
 SDL2_VERSION=2.32.10
 update-sdl2:
 	$(call UPDATE_ARCHIVE,SDL2-$(SDL2_VERSION),https://github.com/libsdl-org/SDL/releases/download/release-$(SDL2_VERSION)/SDL2-$(SDL2_VERSION).tar.gz) \
@@ -79,10 +79,10 @@ update-openal:
 LIBOGG_VERSION=1.3.6
 update-libogg:
 	$(call UPDATE_ARCHIVE,libogg-$(LIBOGG_VERSION),https://downloads.xiph.org/releases/ogg/libogg-$(LIBOGG_VERSION).tar.gz) \
-	cp libs/libogg-1.3.5/include/ogg/config_types.h "$$src/include/ogg/config_types.h"; \
-	rm -f libs/libogg-1.3.5/src/*.[ch] libs/libogg-1.3.5/include/ogg/*.h; \
-	cp "$$src"/src/*.[ch] libs/libogg-1.3.5/src; \
-	cp "$$src"/include/ogg/*.h libs/libogg-1.3.5/include/ogg
+	cp libs/libogg-1.3.6/include/ogg/config_types.h "$$src/include/ogg/config_types.h"; \
+	rm -f libs/libogg-1.3.6/src/*.[ch] libs/libogg-1.3.6/include/ogg/*.h; \
+	cp "$$src"/src/*.[ch] libs/libogg-1.3.6/src; \
+	cp "$$src"/include/ogg/*.h libs/libogg-1.3.6/include/ogg
 
 JPEG_VERSION=10
 update-jpeg:
