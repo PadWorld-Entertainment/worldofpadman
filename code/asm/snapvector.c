@@ -48,6 +48,7 @@ void qsnapvectorsse(vec3_t vec) {
 					 : "memory", "%xmm0", "%xmm1", "%xmm2");
 }
 
+#if id386
 #define QROUNDX87(src)                                                                                                 \
 	"flds " src "\n"                                                                                                   \
 	"fistpl " src "\n"                                                                                                 \
@@ -57,5 +58,6 @@ void qsnapvectorsse(vec3_t vec) {
 void qsnapvectorx87(vec3_t vec) {
 	__asm__ volatile(QROUNDX87("(%0)") QROUNDX87("4(%0)") QROUNDX87("8(%0)") : : "r"(vec) : "memory");
 }
+#endif
 
 #endif

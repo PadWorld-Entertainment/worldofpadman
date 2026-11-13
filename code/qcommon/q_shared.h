@@ -1474,4 +1474,12 @@ typedef enum _flag_status {
 #define LERP(a, b, w) ((a) * (1.0f - (w)) + (b) * (w))
 #define LUMA(red, green, blue) (0.2126f * (red) + 0.7152f * (green) + 0.0722f * (blue))
 
+#if defined(QAGAME) || defined(CGAME) || defined(UI)
+Q_EXPORT intptr_t vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7,
+						int arg8, int arg9, int arg10, int arg11);
+#ifndef Q3_VM
+Q_EXPORT void dllEntry(intptr_t(QDECL *syscallptr)(intptr_t arg, ...));
+#endif
+#endif
+
 #endif // __Q_SHARED_H

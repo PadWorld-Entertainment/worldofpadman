@@ -49,10 +49,28 @@ static void testCommon(void) {
 	EXPECT_EQ_INT(0, Q_stricmp("foo", "FOo"));
 }
 
+#if idx64
+static void testFloatToLong(void) {
+	EXPECT_EQ_INT(0, Q_ftol(0.0f));
+	EXPECT_EQ_INT(0, Q_ftol(-0.0f));
+	EXPECT_EQ_INT(1, Q_ftol(1.75f));
+	EXPECT_EQ_INT(-1, Q_ftol(-1.75f));
+	EXPECT_EQ_INT(1, Q_ftol(INFINITY) == LONG_MIN);
+	EXPECT_EQ_INT(1, Q_ftol(-INFINITY) == LONG_MIN);
+	EXPECT_EQ_INT(1, Q_ftol(NAN) == LONG_MIN);
+#if LONG_MAX > 2147483647L
+	EXPECT_EQ_INT(1, Q_ftol(2147483648.0f) == 2147483648L);
+#endif
+}
+#endif
+
 int main(int argc, char *argv[]) {
 	TESTS_INIT();
 
 	ADD_TEST(testCommon);
+#if idx64
+	ADD_TEST(testFloatToLong);
+#endif
 #ifdef USE_HTTP
 	ADD_TEST(testHTTPPOST);
 	ADD_TEST(testHTTPGET);
