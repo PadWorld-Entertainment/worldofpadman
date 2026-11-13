@@ -941,6 +941,10 @@ static void S_Base_RawSamples(int stream, int samples, int rate, int width, int 
 		Com_DPrintf("S_Base_RawSamples: resetting minimum: %i < %i\n", s_rawend[stream], s_soundtime);
 		s_rawend[stream] = s_soundtime;
 	}
+	// Voice must start after audio already mixed into the DMA buffer.
+	if (stream > 0 && s_rawend[stream] < s_paintedtime) {
+		s_rawend[stream] = s_paintedtime;
+	}
 
 	scale = (float)rate / dma.speed;
 

@@ -439,7 +439,8 @@ static void CL_CaptureVoip(void) {
 
 	if ((cl_voipSend->integer) || (finalFrame)) { // user wants to capture audio?
 		int samples = S_AvailableCaptureSamples();
-		const int packetSamples = (finalFrame) ? VOIP_MAX_FRAME_SAMPLES : VOIP_MAX_PACKET_SAMPLES;
+		// Send as soon as 20 ms is available; batch up to 60 ms after slow frames.
+		const int packetSamples = VOIP_MAX_FRAME_SAMPLES;
 
 		// enough data buffered in audio hardware to process yet?
 		if (samples >= packetSamples) {
@@ -447,13 +448,10 @@ static void CL_CaptureVoip(void) {
 			static int16_t sampbuffer[VOIP_MAX_PACKET_SAMPLES];
 			float voipPower = 0.0f;
 			int voipFrames;
-			int i, bytes;
+			int bytes;
 
 			if (samples > VOIP_MAX_PACKET_SAMPLES)
 				samples = VOIP_MAX_PACKET_SAMPLES;
-
-			// !!! FIXME: maybe separate recording from encoding, so voipPower
-			// !!! FIXME:  updates faster than 4Hz?
 
 			samples -= samples % VOIP_MAX_FRAME_SAMPLES;
 			if (samples != 120 && samples != 240 && samples != 480 && samples != 960 && samples != 1920 &&
@@ -465,13 +463,7 @@ static void CL_CaptureVoip(void) {
 
 			S_Capture(samples, (byte *)sampbuffer); // grab from audio card.
 
-			// check the "power" of this packet...
-			for (i = 0; i < samples; i++) {
-				const float flsamp = (float)sampbuffer[i];
-				const float s = fabs(flsamp);
-				voipPower += s * s;
-				sampbuffer[i] = (int16_t)((flsamp)*audioMult);
-			}
+			voipPower = CL_VoipCaptureGain(sampbuffer, samples, audioMult);
 
 			// encode raw audio samples into Opus data...
 			bytes = opus_encode(clc.opusEncoder, sampbuffer, samples, (unsigned char *)clc.voipOutgoingData,
@@ -481,24 +473,15 @@ static void CL_CaptureVoip(void) {
 				bytes = 0;
 			}
 
-			clc.voipPower = (voipPower / (32768.0f * 32768.0f * ((float)samples))) * 100.0f;
+			clc.voipPower = voipPower;
 
 			if ((useVad) && (clc.voipPower < cl_voipVADThreshold->value)) {
-				CL_VoipNewGeneration(); // no "talk" for at least 1/4 second.
+				CL_VoipNewGeneration();
 			} else {
 				clc.voipOutgoingDataSize = bytes;
 				clc.voipOutgoingDataFrames = voipFrames;
 
 				Com_DPrintf("VoIP: Send %d frames, %d bytes, %f power\n", voipFrames, bytes, clc.voipPower);
-
-#if 0
-				static FILE *encio = NULL;
-				if (encio == NULL) encio = fopen("voip-outgoing-encoded.bin", "wb");
-				if (encio != NULL) { fwrite(clc.voipOutgoingData, bytes, 1, encio); fflush(encio); }
-				static FILE *decio = NULL;
-				if (decio == NULL) decio = fopen("voip-outgoing-decoded.bin", "wb");
-				if (decio != NULL) { fwrite(sampbuffer, voipFrames * VOIP_MAX_FRAME_SAMPLES * 2, 1, decio); fflush(decio); }
-#endif
 			}
 		}
 	}
