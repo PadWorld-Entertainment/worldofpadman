@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #endif /* USE_HTTP */
 
 #ifdef USE_VOIP
-#include <opus.h>
+#include "cl_voip.h"
 #endif
 
 // file full of random crap that gets used to create cl_guid
@@ -432,13 +432,6 @@ extern cvar_t *cl_voipGainDuringCapture;
 extern cvar_t *cl_voipCaptureMult;
 extern cvar_t *cl_voipShowMeter;
 extern cvar_t *cl_voip;
-
-// 20ms at 48k
-#define VOIP_MAX_FRAME_SAMPLES (20 * 48)
-
-// 3 frame is 60ms of audio, the max opus will encode at once
-#define VOIP_MAX_PACKET_FRAMES 3
-#define VOIP_MAX_PACKET_SAMPLES (VOIP_MAX_FRAME_SAMPLES * VOIP_MAX_PACKET_FRAMES)
 #endif
 
 //=================================================
