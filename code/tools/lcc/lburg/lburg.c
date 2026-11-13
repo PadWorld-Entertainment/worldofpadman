@@ -19,6 +19,9 @@ static Rule rules;
 static int nrules;
 static struct block { struct block *link; } * memlist; /* list of allocated blocks */
 
+#if defined(__GNUC__) || defined(__clang__)
+__attribute__((format(printf, 1, 2)))
+#endif
 static char *stringf(char *fmt, ...);
 static void print(char *fmt, ...);
 static void ckreach(Nonterm p);
