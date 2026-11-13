@@ -12,10 +12,11 @@
 /* #undef const */
 /* #undef CHAR_IS_UNSIGNED */
 
-#ifdef JPEG_INTERNALS
-
 #define HAVE_STDDEF_H 1
 #define HAVE_STDLIB_H 1
+
+#ifdef JPEG_INTERNALS
+
 #define HAVE_LOCALE_H 1
 /* #undef NEED_BSD_STRINGS */
 /* #undef NEED_SYS_TYPES_H */
