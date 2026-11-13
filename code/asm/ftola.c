@@ -21,18 +21,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #include "qasm-inline.h"
+#include "../qcommon/q_shared.h"
+
+#if idx64 && LONG_MAX > 2147483647L
+#include <xmmintrin.h>
+#endif
 
 #if defined(__i386__) || defined(__x86_64__)
 
 /*
- * GNU inline asm ftol conversion functions using SSE or FPU
+ * Float-to-integer conversion functions using SSE or FPU
  */
 long qftolsse(float f) {
+#if idx64 && LONG_MAX > 2147483647L
+	return _mm_cvttss_si64(_mm_set_ss(f));
+#else
 	long retval;
 
 	__asm__ volatile("cvttss2si %1, %0\n" : "=r"(retval) : "x"(f));
 
 	return retval;
+#endif
 }
 
 int qvmftolsse(void) {
@@ -47,6 +56,7 @@ int qvmftolsse(void) {
 	return retval;
 }
 
+#if id386
 static const unsigned short fpucw = 0x0C7F;
 
 long qftolx87(float f) {
@@ -80,4 +90,5 @@ int qvmftolx87(void) {
 
 	return retval;
 }
+#endif
 #endif
