@@ -35,6 +35,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define MAX_ENT_CLUSTERS 16
 
 #ifdef USE_VOIP
+#include "../qcommon/voip.h"
+
 #define VOIP_QUEUE_LENGTH 64
 
 typedef struct voipServerPacket_s {
@@ -44,7 +46,7 @@ typedef struct voipServerPacket_s {
 	int len;
 	int sender;
 	int flags;
-	byte data[4000];
+	byte data[VOIP_MAX_PACKET_BYTES];
 } voipServerPacket_t;
 #endif
 

@@ -1583,7 +1583,7 @@ static void SV_UserVoip(client_t *cl, msg_t *msg, qboolean ignoreData) {
 	flags = MSG_ReadByte(msg);
 	packetsize = MSG_ReadShort(msg);
 
-	if (msg->readcount > msg->cursize)
+	if (msg->readcount > msg->cursize || packetsize < 0)
 		return; // short/invalid packet, bail.
 
 	if (packetsize > sizeof(encoded)) { // overlarge packet?
@@ -1600,10 +1600,11 @@ static void SV_UserVoip(client_t *cl, msg_t *msg, qboolean ignoreData) {
 
 	MSG_ReadData(msg, encoded, packetsize);
 
+	if (msg->readcount > msg->cursize || !Voip_ValidPacket(generation, sequence, frames, packetsize))
+		return;
+
 	if (ignoreData || SV_ShouldIgnoreVoipSender(cl))
 		return; // Blacklisted, disabled, etc.
-
-	// !!! FIXME: see if we read past end of msg...
 
 	// !!! FIXME: reject if not opus data.
 	// !!! FIXME: decide if this is bogus data?
