@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
+#include <stddef.h>
+
 //=============================================================================
 
 // memory.h
@@ -28,17 +30,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifndef MEMDEBUG
 
-void *GetClearedMemory(int size);
-void *GetMemory(unsigned long size);
+void *GetClearedMemory(size_t size);
+void *GetMemory(size_t size);
 
 #else
 
 #define GetMemory(size) GetMemoryDebug(size, #size, __FILE__, __LINE__);
 #define GetClearedMemory(size) GetClearedMemoryDebug(size, #size, __FILE__, __LINE__);
 // allocate a memory block of the given size
-void *GetMemoryDebug(unsigned long size, char *label, char *file, int line);
+void *GetMemoryDebug(size_t size, char *label, char *file, int line);
 // allocate a memory block of the given size and clear it
-void *GetClearedMemoryDebug(unsigned long size, char *label, char *file, int line);
+void *GetClearedMemoryDebug(size_t size, char *label, char *file, int line);
 //
 void PrintMemoryLabels(void);
 #endif // MEMDEBUG
