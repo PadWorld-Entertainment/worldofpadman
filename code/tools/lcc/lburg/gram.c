@@ -1398,7 +1398,7 @@ static int get(void) {
 		while (buf[0] == '%' && buf[1] == '{' && buf[2] == '\n') {
 			for (;;) {
 				if (fgets(buf, sizeof buf, infp) == NULL) {
-					yywarn("unterminated %{...%}\n");
+					yywarn("unterminated %%{...%%}\n");
 					return EOF;
 				}
 				crlf_to_lf(buf, sizeof buf);
