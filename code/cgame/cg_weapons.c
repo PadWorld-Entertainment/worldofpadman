@@ -277,10 +277,15 @@ static void CG_ImperiusTrail(centity_t *ent, const weaponInfo_t *wi) {
 		VectorCopy(altPos, ring->refEntity.origin);
 
 		// convert direction of travel into axis
-		if (VectorNormalize2(ent->currentState.pos.trDelta, ring->refEntity.axis[0]) == 0) {
-			ring->refEntity.axis[0][2] = 1;
+		{
+			vec3_t axis[3];
+
+			if (VectorNormalize2(ent->currentState.pos.trDelta, axis[0]) == 0) {
+				axis[0][2] = 1;
+			}
+			RotateAroundDirection(axis, cg.time);
+			AxisCopy(axis, ring->refEntity.axis);
 		}
-		RotateAroundDirection(ring->refEntity.axis, cg.time);
 	}
 }
 
