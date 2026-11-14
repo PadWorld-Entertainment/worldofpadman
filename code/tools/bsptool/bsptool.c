@@ -391,7 +391,12 @@ static char *loadAllShaders(const char *pk3dir, int mappacktype) {
 				fseek(fp, 0, SEEK_SET);
 
 				buffer = (char *)malloc(file_size + 2);
-				fread(buffer, 1, file_size, fp);
+				if (fread(buffer, 1, file_size, fp) != (size_t)file_size) {
+					free(buffer);
+					fclose(fp);
+					printf("Failed to read %s\n", buf);
+					continue;
+				}
 				buffer[file_size] = '\n';
 				buffer[file_size + 1] = '\0';
 				fclose(fp);
