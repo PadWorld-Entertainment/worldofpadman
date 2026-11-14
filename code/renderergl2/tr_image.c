@@ -1485,9 +1485,9 @@ static qboolean RawImage_ScaleToPower2(byte **data, int *inout_width, int *inout
 	int height = *inout_height;
 	int scaled_width;
 	int scaled_height;
-	qboolean picmip = flags & IMGFLAG_PICMIP;
-	qboolean mipmap = flags & IMGFLAG_MIPMAP;
-	qboolean clampToEdge = flags & IMGFLAG_CLAMPTOEDGE;
+	qboolean picmip = (flags & IMGFLAG_PICMIP) != 0;
+	qboolean mipmap = (flags & IMGFLAG_MIPMAP) != 0;
+	qboolean clampToEdge = (flags & IMGFLAG_CLAMPTOEDGE) != 0;
 	qboolean scaled;
 
 	//
@@ -1632,7 +1632,7 @@ static GLenum RawImage_GetFormat(const byte *data, int numPixels, GLenum picForm
 								 imgFlags_t flags) {
 	int samples = 3;
 	GLenum internalFormat = GL_RGB;
-	qboolean forceNoCompression = (flags & IMGFLAG_NO_COMPRESSION);
+	qboolean forceNoCompression = (flags & IMGFLAG_NO_COMPRESSION) != 0;
 	qboolean normalmap = (type == IMGTYPE_NORMAL || type == IMGTYPE_NORMALHEIGHT);
 
 	if (picFormat != GL_RGBA8)
