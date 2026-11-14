@@ -1092,7 +1092,7 @@ void VM_Compile(vm_t *vm, vmHeader_t *header) {
 	}
 
 	/* Clear instruction cache */
-	__builtin___clear_cache(vm->codeBase, vm->codeBase + vm->codeLength);
+	__builtin___clear_cache((char *)vm->codeBase, (char *)vm->codeBase + vm->codeLength);
 
 	vm->destroy = VM_Destroy_Compiled;
 	vm->compiled = qtrue;
