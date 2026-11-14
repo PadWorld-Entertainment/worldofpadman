@@ -85,6 +85,10 @@ if (USE_MUMBLE)
 	list(APPEND SRCS libmumblelink.c)
 endif()
 
+if (USE_VOIP)
+	list(APPEND SRCS cl_voip.c)
+endif()
+
 project(wop)
 wop_add_executable(TARGET ${PROJECT_NAME} WINDOWED SRCS ${SRCS})
 add_asm(${PROJECT_NAME})

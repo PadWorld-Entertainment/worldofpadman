@@ -71,6 +71,13 @@ target_compile_definitions(${PROJECT_NAME}-main PRIVATE ${TEST_DEFINES})
 add_test(NAME ${PROJECT_NAME}-main COMMAND $<TARGET_FILE:${PROJECT_NAME}-main>)
 set_tests_properties(${PROJECT_NAME}-main PROPERTIES WORKING_DIRECTORY ${ROOT_DIR})
 
+if (USE_VOIP)
+	wop_add_executable(TARGET ${PROJECT_NAME}-voip SRCS test_voip.c ${CODE_DIR}/client/cl_voip.c NOINSTALL)
+	target_include_directories(${PROJECT_NAME}-voip PRIVATE ${CODE_DIR}/qcommon)
+	target_link_libraries(${PROJECT_NAME}-voip opus SDL2::SDL2 m)
+	add_test(NAME ${PROJECT_NAME}-voip COMMAND $<TARGET_FILE:${PROJECT_NAME}-voip>)
+endif()
+
 set(SRCS_UI
 	test_ui.c
 
