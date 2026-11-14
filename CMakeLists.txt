@@ -130,6 +130,11 @@ if (APPLE)
 	set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
 endif()
 
+# Normalize install() DESTINATION paths (avoids CMP0177 warning)
+if (POLICY CMP0177)
+	cmake_policy(SET CMP0177 NEW)
+endif()
+
 include(CPack)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
