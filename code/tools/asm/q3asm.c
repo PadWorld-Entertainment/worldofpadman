@@ -510,7 +510,7 @@ Symbols can only be defined on pass 0
 static void DefineSymbol(char *sym, int value) {
 	/* Hand optimization by PhaethonH */
 	symbol_t *s;
-	char expanded[MAX_LINE_LENGTH];
+	char expanded[MAX_LINE_LENGTH + 12];
 	int hash;
 
 	if (passNumber == 1) {
@@ -564,7 +564,7 @@ Symbols can only be evaluated on pass 1
 */
 static int LookupSymbol(char *sym) {
 	symbol_t *s;
-	char expanded[MAX_LINE_LENGTH];
+	char expanded[MAX_LINE_LENGTH + 12];
 	int hash;
 	hashchain_t *hc;
 

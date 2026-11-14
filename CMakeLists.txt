@@ -130,6 +130,11 @@ if (APPLE)
 	set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
 endif()
 
+# Normalize install() DESTINATION paths (avoids CMP0177 warning)
+if (POLICY CMP0177)
+	cmake_policy(SET CMP0177 NEW)
+endif()
+
 include(CPack)
 
 # ppc64le: target POWER8 as baseline (the ppc64le minimum), which enables
@@ -239,7 +244,7 @@ check_compiler_flag(-Wformat-security)
 check_compiler_flag(-Wno-format-nonliteral)
 check_compiler_flag(-Wno-format-truncation)
 check_compiler_flag(-fstrict-aliasing)
-check_compiler_flag(-Wstrict-aliasing=2)
+check_compiler_flag(-Wstrict-aliasing=3)
 check_compiler_flag(-Wmissing-format-attribute)
 check_compiler_flag(-Wdisabled-optimization)
 check_compiler_flag(-Werror-implicit-function-declaration)

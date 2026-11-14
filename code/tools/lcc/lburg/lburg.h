@@ -55,8 +55,14 @@ struct rule {		/* rules: */
 extern Rule rule(char *id, Tree pattern, char *template, char *code);
 
 /* gram.y: */
+#if defined(__GNUC__) || defined(__clang__)
+__attribute__((format(printf, 1, 2)))
+#endif
 void yyerror(char *fmt, ...);
 int yyparse(void);
+#if defined(__GNUC__) || defined(__clang__)
+__attribute__((format(printf, 1, 2)))
+#endif
 void yywarn(char *fmt, ...);
 extern int errcnt;
 extern FILE *infp;

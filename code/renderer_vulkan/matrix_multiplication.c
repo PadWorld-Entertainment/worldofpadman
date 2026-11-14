@@ -64,7 +64,6 @@ void Mat4Translation(float vec[3], float out[16]) {
 	out[14] = vec[2];
 }
 
-#ifndef __x86_64__
 void MatrixMultiply4x4(const float A[16], const float B[16], float out[16]) {
 	out[0] = A[0] * B[0] + A[1] * B[4] + A[2] * B[8] + A[3] * B[12];
 	out[1] = A[0] * B[1] + A[1] * B[5] + A[2] * B[9] + A[3] * B[13];
@@ -86,7 +85,7 @@ void MatrixMultiply4x4(const float A[16], const float B[16], float out[16]) {
 	out[14] = A[12] * B[2] + A[13] * B[6] + A[14] * B[10] + A[15] * B[14];
 	out[15] = A[12] * B[3] + A[13] * B[7] + A[14] * B[11] + A[15] * B[15];
 }
-#endif
+
 
 /*
  * NOTE; out = B * A in math

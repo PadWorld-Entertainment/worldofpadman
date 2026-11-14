@@ -306,8 +306,10 @@ static void LoadSourceFile(const char *filename) {
 	length = filelength(f);
 	sourceFile = malloc(length + 1);
 	if (sourceFile) {
-		fread(sourceFile, length, 1, f);
-		sourceFile[length] = 0;
+		if (fread(sourceFile, length, 1, f) != 1)
+			sourceFile[0] = 0;
+		else
+			sourceFile[length] = 0;
 	}
 
 	fclose(f);

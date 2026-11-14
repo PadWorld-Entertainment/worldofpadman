@@ -89,9 +89,9 @@ void doinclude(Tokenrow *trp) {
 				break;
 		}
 	if (Mflag > 1 || (!angled && Mflag == 1)) {
-		write(1, objname, strlen(objname));
-		write(1, iname, strlen(iname));
-		write(1, "\n", 1);
+		if (write(1, objname, strlen(objname)) < 0 || write(1, iname, strlen(iname)) < 0 || write(1, "\n", 1) < 0) {
+			/* dependency output is best-effort */
+		}
 	}
 	if (fd >= 0) {
 		if (++incdepth > 10)

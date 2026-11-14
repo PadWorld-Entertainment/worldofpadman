@@ -159,7 +159,7 @@ void RB_ShadowTessEnd(void) {
 	vec3_t lightDir;
 
 	// we can only do this if we have enough space in the vertex buffers
-	if (tess.numVertexes >= SHADER_MAX_VERTEXES / 2) {
+	if (tess.numVertexes <= 0 || tess.numVertexes >= SHADER_MAX_VERTEXES / 2) {
 		return;
 	}
 
@@ -171,7 +171,7 @@ void RB_ShadowTessEnd(void) {
 	}
 
 	// decide which triangles face the light
-	memset(numEdgeDefs, 0, 4 * tess.numVertexes);
+	memset(numEdgeDefs, 0, (size_t)tess.numVertexes * sizeof(numEdgeDefs[0]));
 
 	numTris = tess.numIndexes / 3;
 	for (i = 0; i < numTris; i++) {

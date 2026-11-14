@@ -62,8 +62,7 @@ set_property(CACHE DEBUGGER PROPERTY STRINGS gdb lldb)
 
 function(wop_add_debuggger TARGET)
 	if (${DEBUGGER} MATCHES "gdb")
-		add_custom_target(${TARGET}-debug)
-		add_custom_command(TARGET ${TARGET}-debug
+		add_custom_target(${TARGET}-debug
 			COMMAND ${GDB_EXECUTABLE} -ex run --args $<TARGET_FILE:${TARGET}> +set vm_game 0 +set vm_cgame 0 +set vm_ui 0 +set sv_pure 0 +set ttycon 0 +set com_ansiColor 0 +set developer 1
 			COMMENT "Starting debugger session for ${TARGET}"
 			USES_TERMINAL
@@ -71,8 +70,7 @@ function(wop_add_debuggger TARGET)
 			DEPENDS ${TARGET}
 		)
 	elseif (${DEBUGGER} MATCHES "lldb")
-		add_custom_target(${TARGET}-debug)
-		add_custom_command(TARGET ${TARGET}-debug
+		add_custom_target(${TARGET}-debug
 			COMMAND CG_CONTEXT_SHOW_BACKTRACE=1 ${LLDB_EXECUTABLE} -b -o run $<TARGET_FILE:${TARGET}> +set vm_game 0 +set vm_cgame 0 +set vm_ui 0 +set sv_pure 0 +set ttycon 0 +set com_ansiColor 0 +set developer 1
 			COMMENT "Starting debugger session for ${TARGET}"
 			USES_TERMINAL
@@ -378,7 +376,10 @@ function(add_asm TARGET)
 				set_property(SOURCE ${_file} APPEND PROPERTY COMPILE_DEFINITIONS idx64=1)
 			endif()
 			set_property(SOURCE ${_file} APPEND PROPERTY LANGUAGE ASM_MASM)
-			set_source_files_properties(${_file} PROPERTIES COMPILE_FLAGS "/safeseh")
+			# /safeseh is only valid for 32-bit MASM
+			if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+				set_source_files_properties(${_file} PROPERTIES COMPILE_FLAGS "/safeseh")
+			endif()
 		endforeach()
 		target_sources(${TARGET} PRIVATE ${ASM_SRCS})
 	elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
