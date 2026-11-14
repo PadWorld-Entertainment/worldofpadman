@@ -257,9 +257,9 @@ void DumpMemory(void) {
 #else
 
 #ifdef MEMDEBUG
-void *GetMemoryDebug(unsigned long size, char *label, char *file, int line)
+void *GetMemoryDebug(size_t size, const char *label, const char *file, int line)
 #else
-void *GetMemory(unsigned long size)
+void *GetMemory(size_t size)
 #endif // MEMDEBUG
 {
 	void *ptr;
