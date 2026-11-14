@@ -92,7 +92,7 @@ static void *GPA(char *str) {
 CL_HTTP_Init
 =================
 */
-qboolean CL_HTTP_Init() {
+qboolean CL_HTTP_Init(void) {
 	if (cURLLib)
 		return qtrue;
 
