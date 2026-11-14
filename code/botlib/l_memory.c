@@ -285,6 +285,8 @@ void *GetClearedMemory(size_t size)
 #else
 	ptr = GetMemory(size);
 #endif // MEMDEBUG
+	if (!ptr)
+		return NULL;
 	Com_Memset(ptr, 0, size);
 	return ptr;
 }
@@ -318,6 +320,8 @@ void *GetClearedHunkMemory(size_t size)
 #else
 	ptr = GetHunkMemory(size);
 #endif // MEMDEBUG
+	if (!ptr)
+		return NULL;
 	Com_Memset(ptr, 0, size);
 	return ptr;
 }
