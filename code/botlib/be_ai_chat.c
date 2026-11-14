@@ -745,21 +745,20 @@ static int BotLoadChatMessage(source_t *source, char *chatmessagestring, int siz
 			}
 			strcat(ptr, token.string);
 		}
-		// variable string
-		else if (token.type == TT_NUMBER && (token.subtype & TT_INTEGER)) {
-			if (strlen(ptr) + 7 > size) {
+		// variable or random string
+		else if ((token.type == TT_NUMBER && (token.subtype & TT_INTEGER)) || token.type == TT_NAME) {
+			const int length = (int)strlen(ptr);
+			const int remaining = size - length;
+			int written;
+			if (token.type == TT_NAME) {
+				written = snprintf(ptr + length, remaining, "%cr%s%c", ESCAPE_CHAR, token.string, ESCAPE_CHAR);
+			} else {
+				written = snprintf(ptr + length, remaining, "%cv%lu%c", ESCAPE_CHAR, token.intvalue, ESCAPE_CHAR);
+			}
+			if (written < 0 || written >= remaining) {
 				SourceError(source, "chat message too long");
 				return qfalse;
 			}
-			sprintf(&ptr[strlen(ptr)], "%cv%ld%c", ESCAPE_CHAR, token.intvalue, ESCAPE_CHAR);
-		}
-		// random string
-		else if (token.type == TT_NAME) {
-			if (strlen(ptr) + 7 > size) {
-				SourceError(source, "chat message too long");
-				return qfalse;
-			}
-			sprintf(&ptr[strlen(ptr)], "%cr%s%c", ESCAPE_CHAR, token.string, ESCAPE_CHAR);
 		} else {
 			SourceError(source, "unknown message component %s", token.string);
 			return qfalse;
