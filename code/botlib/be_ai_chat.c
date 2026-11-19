@@ -215,7 +215,8 @@ static void InitConsoleMessageHeap(void) {
 	if (consolemessageheap)
 		FreeMemory(consolemessageheap);
 
-	max_messages = LibVarInteger("max_messages", "1024", 2, 65536);
+	// At a map restart every bot can receive a message about every re-entering client.
+	max_messages = LibVarInteger("max_messages", va("%i", MAX_CLIENTS * MAX_CLIENTS), 2, 65536);
 	consolemessageheap = (bot_consolemessage_t *)GetClearedHunkMemory(max_messages * sizeof(bot_consolemessage_t));
 	consolemessageheap[0].prev = NULL;
 	consolemessageheap[0].next = &consolemessageheap[1];

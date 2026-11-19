@@ -151,6 +151,12 @@ void SV_AddServerCommand(client_t *client, const char *cmd) {
 		return;
 
 	client->reliableSequence++;
+	// A bot reads this queue locally on its next think. Keep the newest commands when it fills.
+	if (client->netchan.remoteAddress.type == NA_BOT &&
+		client->reliableSequence - client->reliableAcknowledge > MAX_RELIABLE_COMMANDS) {
+		client->reliableAcknowledge = client->reliableSequence - MAX_RELIABLE_COMMANDS;
+	}
+
 	// if we would be losing an old command that hasn't been acknowledged,
 	// we must drop the connection
 	// we check == instead of >= so a broadcast print added by SV_DropClient()

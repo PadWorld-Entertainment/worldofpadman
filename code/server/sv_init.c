@@ -43,6 +43,11 @@ static void SV_SendConfigstring(client_t *client, int index) {
 	int maxChunkSize = MAX_STRING_CHARS - 24;
 	int len;
 
+	// Bots read the authoritative configstrings directly from the game VM.
+	if (client->netchan.remoteAddress.type == NA_BOT) {
+		return;
+	}
+
 	len = strlen(sv.configstrings[index]);
 
 	if (len >= maxChunkSize) {
