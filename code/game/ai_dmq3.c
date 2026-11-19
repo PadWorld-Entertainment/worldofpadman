@@ -3364,16 +3364,10 @@ BotMapScripts
 ==================
 */
 void BotMapScripts(bot_state_t *bs) {
-	char info[1024];
-	char mapname[128];
 	vec3_t one, two;
 
-	trap_GetServerinfo(info, sizeof(info));
-
-	Q_strncpyz(mapname, Info_ValueForKey(info, "mapname"), sizeof(mapname));
-
 	// cyr{
-	if (!Q_stricmp(mapname, "wop_padattic")) {
+	if (!Q_stricmp(level.shortmapname, "wop_padattic")) {
 		if (bs->inventory[INVENTORY_SPRAYPISTOLAMMO]) {
 			trap_BotAddAvoidSpot(bs->ms, outtele.origin, 100, AVOID_ALWAYS);
 			VectorCopy(outtele.origin, one);
