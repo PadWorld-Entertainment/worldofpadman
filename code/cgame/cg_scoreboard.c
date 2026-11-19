@@ -79,6 +79,7 @@ See also CG_ParseScores()
 static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, float fade, int lineHeight) {
 	int icony, heady;
 	fontSize_t fontsize = FONT_SMALL;
+	fontSize_t scoreFont = FONT_BIG;
 	char string[1024];
 	vec3_t headAngles;
 	clientInfo_t *ci;
@@ -219,12 +220,13 @@ static void CG_DrawClientScore(int y, const score_t *score, const vec4_t color, 
 		}
 	}
 
-	CG_DrawStringExt(SB_SCORELINE_X + (SB_RATING_WIDTH / 2), y, string, color, qfalse, qfalse, FONT_BIG, 0);
+	scoreFont.h = fontsize.h;
+	CG_DrawStringExt(SB_SCORELINE_X + (SB_RATING_WIDTH / 2), y, string, color, qfalse, qfalse, scoreFont, 0);
 	CG_DrawStringExt(SB_NAME_X - (SB_RATING_WIDTH / 2), y, ci->name, color, qfalse, qfalse, fontsize, 20);
 
 	// add the "ready" marker for intermission exiting
 	if (cg.snap->ps.stats[STAT_CLIENTS_READY] & (1 << score->client)) {
-		CG_DrawStringExt(iconx, y, "READY", color, qfalse, qfalse, FONT_BIG, 0);
+		CG_DrawStringExt(iconx, y, "READY", color, qfalse, qfalse, scoreFont, 0);
 	}
 }
 
