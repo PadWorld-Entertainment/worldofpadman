@@ -9,10 +9,15 @@ static void testLineCount(void) {
 					"third third third third third wrapped\n"
 					"fifth\n"
 					"sixth";
-	EXPECT_EQ_INT(5, UI_AutoWrappedString_LineCount(250, s, UI_SMALLFONT, qfalse));
+	EXPECT_EQ_INT(6, UI_AutoWrappedString_LineCount(250, s, UI_SMALLFONT, qfalse));
+	EXPECT_EQ_INT(5, UI_AutoWrappedString_LineCount(320, s, UI_SMALLFONT, qfalse));
+	EXPECT_EQ_INT(0, UI_AutoWrappedString_LineCount(250, "", UI_SMALLFONT, qfalse));
+	EXPECT_EQ_INT(2, UI_AutoWrappedString_LineCount(250, "\nFooBar", UI_SMALLFONT, qfalse));
 	EXPECT_EQ_INT(1, UI_AutoWrappedString_LineCount(250, "FooBar", UI_SMALLFONT, qfalse));
 	EXPECT_EQ_INT(2, UI_AutoWrappedString_LineCount(250, "FooBar\n", UI_SMALLFONT, qfalse));
 	EXPECT_EQ_INT(3, UI_AutoWrappedString_LineCount(250, "FooBar\n\n", UI_SMALLFONT, qfalse));
+	EXPECT_EQ_INT(3, UI_AutoWrappedString_LineCount(250, "FooBar\n\nBaz", UI_SMALLFONT, qtrue));
+	EXPECT_EQ_INT(1, UI_AutoWrappedString_LineCount(4 * SMALLCHAR_WIDTH, "FooBar", UI_SMALLFONT, qfalse));
 }
 
 int main(int argc, char *argv[]) {
