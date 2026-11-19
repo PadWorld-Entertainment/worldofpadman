@@ -720,6 +720,10 @@ void VM_CheckBounds2(const vm_t *vm, unsigned int addr1, unsigned int addr2, uns
 }
 
 void VM_CheckBounds3(const vm_t *vm, unsigned int address, unsigned int count, unsigned int size) {
+	if (vm->entryPoint) {
+		return;
+	}
+
 	if (count > (unsigned int)vm->dataAlloc / size ||
 		(unsigned int)vm->dataAlloc - count * size < address) {
 		Com_Error(ERR_DROP, "program tried to bypass data segment bounds");
