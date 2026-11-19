@@ -361,6 +361,7 @@ static intptr_t SV_GameSystemCalls(intptr_t *args) {
 		SV_UnlinkEntity(VMA(1));
 		return 0;
 	case G_ENTITIES_IN_BOX:
+		VM_CHECKBOUNDS3(gvm, args[3], args[4], sizeof(int));
 		return SV_AreaEntities(VMA(1), VMA(2), VMA(3), args[4]);
 	case G_ENTITY_CONTACT:
 		return SV_EntityContact(VMA(1), VMA(2), VMA(3), /*int capsule*/ qfalse);
@@ -815,6 +816,7 @@ static intptr_t SV_GameSystemCalls(intptr_t *args) {
 		return 0;
 
 	case TRAP_MEMCPY:
+		VM_CHECKBOUNDS2(gvm, args[1], args[2], args[3]);
 		Com_Memcpy(VMA(1), VMA(2), args[3]);
 		return 0;
 
