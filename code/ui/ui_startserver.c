@@ -86,7 +86,6 @@ typedef struct {
 	int maxpages;
 	char maplist[MAX_SERVERMAPS][MAX_NAMELENGTH];
 	char longnamemaplist[MAX_SERVERMAPS][MAX_LONGNAMELENGTH];
-	int mapGamebits[MAX_SERVERMAPS];
 	selectbotinfo_t selectbotinfos[MAX_SELECTBOTS];
 	int maploop[MAX_MAPSINLOOP];
 	qhandle_t mapNumbers[10];
@@ -346,7 +345,6 @@ static void UI_StartServer_GametypeEvent(void *ptr, int event) {
 		Q_strncpyz(s_startserver.maplist[s_startserver.nummaps], Info_ValueForKey(info, "map"), MAX_NAMELENGTH);
 		Q_strncpyz(s_startserver.longnamemaplist[s_startserver.nummaps], Info_ValueForKey(info, "longname"),
 				   MAX_LONGNAMELENGTH);
-		s_startserver.mapGamebits[s_startserver.nummaps] = gamebits;
 		++s_startserver.nummaps;
 		if (s_startserver.nummaps >= MAX_SERVERMAPS)
 			break;
@@ -876,7 +874,7 @@ UI_StartServer_Cache
 */
 void UI_StartServer_Cache(void) {
 	int i;
-	const char *info;
+	int numArenas;
 	char picname[MAX_QPATH];
 
 	trap_R_RegisterShaderNoMip(FIGHT0);
@@ -895,23 +893,18 @@ void UI_StartServer_Cache(void) {
 	for (i = 0; i < 10; i++)
 		s_startserver.mapNumbers[i] = trap_R_RegisterShaderNoMip(va("menu/numbers/%i", i));
 
-	s_startserver.nummaps = UI_GetNumArenas();
+	numArenas = UI_GetNumArenas();
+	for (i = 0; i < numArenas; i++) {
+		const char *map = Info_ValueForKey(UI_GetArenaInfoByNumber(i), "map");
 
-	for (i = 0; i < s_startserver.nummaps; i++) {
-		info = UI_GetArenaInfoByNumber(i);
-
-		Q_strncpyz(s_startserver.maplist[i], Info_ValueForKey(info, "map"), sizeof(s_startserver.maplist[i]));
-		s_startserver.mapGamebits[i] = UI_StartServer_GametypeBits(Info_ValueForKey(info, "type"));
-
-		Com_sprintf(picname, sizeof(picname), "levelshots/%sA", s_startserver.maplist[i]);
+		Com_sprintf(picname, sizeof(picname), "levelshots/%sA", map);
 		if (!trap_R_RegisterShaderNoMip(picname)) {
-			Com_sprintf(picname, sizeof(picname), "levelshots/%s", s_startserver.maplist[i]);
+			Com_sprintf(picname, sizeof(picname), "levelshots/%s", map);
 			trap_R_RegisterShaderNoMip(picname);
 		}
-		Com_sprintf(picname, sizeof(picname), "levelshots/%sB", s_startserver.maplist[i]);
+		Com_sprintf(picname, sizeof(picname), "levelshots/%sB", map);
 		trap_R_RegisterShaderNoMip(picname);
 	}
-	s_startserver.maxpages = ((s_startserver.nummaps + MAX_MAPSPERPAGE - 1) / MAX_MAPSPERPAGE);
 }
 
 /*

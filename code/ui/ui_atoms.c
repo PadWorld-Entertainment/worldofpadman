@@ -506,159 +506,62 @@ static int CharHeightForStringStyle(int style) {
 	return BIGCHAR_HEIGHT;
 }
 
-int UI_AutoWrappedString_LineCount(int xmax, const char *str, int style, qboolean proportional) {
-	char *s1, *s2, *s3;
-	char c_bcp;
+static int UI_WrapString(int x, int y, int xmax, int ystep, const char *str, int style, const vec4_t color,
+						 qboolean proportional) {
 	char buf[1024];
-	float sizeScale;
+	char *line, *end;
 	int lineCount = 0;
-	int width;
+	int charWidth = CharWidthForStringStyle(style);
+	float sizeScale = UI_ProportionalSizeScale(style);
 
-	if (!str || str[0] == '\0')
+	if (!str || !*str)
 		return 0;
 
-	sizeScale = UI_ProportionalSizeScale(style);
-
 	Q_strncpyz(buf, str, sizeof(buf));
-	s1 = s2 = s3 = buf;
+	for (line = buf;; line = end + 1) {
+		char *lastSpace = NULL;
+		char separator;
 
-	while (1) {
-		do {
-			s3++;
-		} while (*s3 != ' ' && *s3 != '\0' && *s3 != '\n');
-		c_bcp = *s3;
-		*s3 = '\0';
+		for (end = line;; end++) {
+			int width;
+			while (*end && *end != ' ' && *end != '\n')
+				end++;
+			separator = *end;
+			*end = '\0';
+			width = proportional ? (int)(UI_ProportionalStringWidth(line) * sizeScale) : (int)strlen(line) * charWidth;
+			*end = separator;
 
-		if (proportional)
-			width = UI_ProportionalStringWidth(s1) * sizeScale;
-		else
-			width = strlen(s1) * CharWidthForStringStyle(style);
-
-		*s3 = c_bcp;
-		if (width > xmax || c_bcp == '\n') {
-			if (s1 == s2) {
-				// fuck, don't have a clean cut, we'll overflow
-				s2 = s3;
-			}
-			*s2 = '\0';
-			lineCount++;
-			if (c_bcp == '\0') {
-				// that was the last word
-				// we could start a new loop, but that wouldn't be much use
-				// even if the word is too long, we would overflow it (see above)
-				// so just print it now if needed
-				s2++;
-				if (*s2 != '\0') // if we are printing an overflowing line we have s2 == s3
-					lineCount++;
+			if (width > xmax && lastSpace) {
+				end = lastSpace;
+				separator = ' ';
 				break;
 			}
-			s2++;
-			s1 = s2;
-			s3 = s2;
-		} else {
-			s2 = s3;
-			if (c_bcp == '\0') // we reached the end
-			{
-				lineCount++;
+			if (separator != ' ' || width > xmax)
 				break;
-			}
+			if (end != line)
+				lastSpace = end;
 		}
+		*end = '\0';
+		if (color) {
+			if (proportional)
+				UI_DrawProportionalString(x, y, line, style, color);
+			else
+				UI_DrawString(x, y, line, style, color);
+			y += ystep;
+		}
+		lineCount++;
+		if (!separator || (separator == ' ' && !end[1]))
+			return lineCount;
 	}
-	return lineCount;
 }
 
-/*
-=================
-UI_DrawProportionalString_Wrapped
-=================
-*/
+int UI_AutoWrappedString_LineCount(int xmax, const char *str, int style, qboolean proportional) {
+	return UI_WrapString(0, 0, xmax, 0, str, style, NULL, proportional);
+}
+
 void UI_DrawString_AutoWrapped(int x, int y, int xmax, int ystep, const char *str, int style, const vec4_t color,
 							   qboolean proportional) {
-	int width;
-	char *s1, *s2, *s3;
-	char c_bcp;
-	char buf[1024];
-	float sizeScale;
-
-	if (!str || str[0] == '\0')
-		return;
-
-	sizeScale = UI_ProportionalSizeScale(style);
-
-	Q_strncpyz(buf, str, sizeof(buf));
-	s1 = s2 = s3 = buf;
-
-	while (1) {
-		do {
-			s3++;
-		} while (*s3 != ' ' && *s3 != '\0' && *s3 != '\n');
-
-		if (*s3 == '\n') {
-			*s3 = '\0';
-
-			if (proportional)
-				UI_DrawProportionalString(x, y, s1, style, color);
-			else
-				UI_DrawString(x, y, s1, style, color);
-
-			y += ystep;
-			s3++;
-			s1 = s2 = s3;
-			continue;
-		}
-
-		c_bcp = *s3;
-		*s3 = '\0';
-
-		if (proportional)
-			width = UI_ProportionalStringWidth(s1) * sizeScale;
-		else
-			width = strlen(s1) * CharWidthForStringStyle(style);
-
-		*s3 = c_bcp;
-		if (width > xmax) {
-			if (s1 == s2) {
-				// fuck, don't have a clean cut, we'll overflow
-				s2 = s3;
-			}
-			*s2 = '\0';
-
-			if (proportional)
-				UI_DrawProportionalString(x, y, s1, style, color);
-			else
-				UI_DrawString(x, y, s1, style, color);
-
-			y += ystep;
-			if (c_bcp == '\0') {
-				// that was the last word
-				// we could start a new loop, but that wouldn't be much use
-				// even if the word is too long, we would overflow it (see above)
-				// so just print it now if needed
-				s2++;
-				if (*s2 != '\0') // if we are printing an overflowing line we have s2 == s3
-				{
-					if (proportional)
-						UI_DrawProportionalString(x, y, s2, style, color);
-					else
-						UI_DrawString(x, y, s2, style, color);
-				}
-				break;
-			}
-			s2++;
-			s1 = s2;
-			s3 = s2;
-		} else {
-			s2 = s3;
-			if (c_bcp == '\0') // we reached the end
-			{
-				if (proportional)
-					UI_DrawProportionalString(x, y, s1, style, color);
-				else
-					UI_DrawString(x, y, s1, style, color);
-				break;
-			}
-		}
-	}
+	UI_WrapString(x, y, xmax, ystep, str, style, color, proportional);
 }
 
 /*
