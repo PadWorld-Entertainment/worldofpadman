@@ -125,7 +125,7 @@ static int power(int x, int y) {
 	return result;
 }
 
-static const char *builtinResolutions[] = {"640x480", "800x600", "1024x768", "1152x864", "1280x720", "1280x800",
+static const char *const builtinResolutions[] = {"640x480", "800x600", "1024x768", "1152x864", "1280x720", "1280x800",
 										   "1280x960", "1280x1024", "1366x768", "1440x900", "1600x900", "1600x1200",
 										   "1680x1050", "1920x1080", "1920x1200", "2048x1536", "2560x1600", NULL};
 
@@ -136,9 +136,9 @@ static const char *knownRatios[][2] = {{"1.25:1", "5:4"},	{"1.33:1", "4:3"}, {"1
 
 static char resbuf[MAX_STRING_CHARS];
 static char resolutionStrings[MAX_RESOLUTIONS][128];
+static const char *resolutionLabels[MAX_RESOLUTIONS];
 static const char *detectedResolutions[MAX_RESOLUTIONS];
 
-static const char **resolutions = builtinResolutions;
 static qboolean resolutionsDetected = qfalse;
 
 #define MAX_RENDERERS 8
@@ -201,7 +201,6 @@ UI_GraphicsOptions_FindDetectedResolution
 */
 static int UI_GraphicsOptions_FindDetectedResolution(int mode) {
 	int i;
-	int len;
 
 	if (!resolutionsDetected)
 		return mode;
@@ -209,9 +208,8 @@ static int UI_GraphicsOptions_FindDetectedResolution(int mode) {
 	if (mode < 0)
 		return -1;
 
-	len = strlen(builtinResolutions[mode]);
 	for (i = 0; detectedResolutions[i]; i++) {
-		if (!Q_stricmpn(builtinResolutions[mode], detectedResolutions[i], len))
+		if (!Q_stricmp(builtinResolutions[mode], detectedResolutions[i]))
 			return i;
 	}
 
@@ -223,18 +221,18 @@ static int UI_GraphicsOptions_FindDetectedResolution(int mode) {
 UI_GraphicsOptions_GetAspectRatios
 =================
 */
-static void UI_GraphicsOptions_GetAspectRatios(void) {
+static void UI_GraphicsOptions_GetAspectRatios(const char *const *modes) {
 	int i, r;
 
 	// add aspect ratio to the resolution strings
-	for (r = 0; resolutions[r]; r++) {
+	for (r = 0; modes[r]; r++) {
 		int w, h;
 		char *x;
 		char str[8];
 
 		// calculate resolution's aspect ratio
-		x = strchr(resolutions[r], 'x') + 1;
-		Q_strncpyz(str, resolutions[r], x - resolutions[r]);
+		x = strchr(modes[r], 'x') + 1;
+		Q_strncpyz(str, modes[r], x - modes[r]);
 		w = atoi(str);
 		h = atoi(x);
 		Com_sprintf(str, sizeof(str), "%.2f:1", (float)w / (float)h);
@@ -246,9 +244,10 @@ static void UI_GraphicsOptions_GetAspectRatios(void) {
 			}
 		}
 
-		Com_sprintf(resolutionStrings[r], 128, "%s (%s)", resolutions[r], str);
-		resolutions[r] = resolutionStrings[r];
+		Com_sprintf(resolutionStrings[r], sizeof(resolutionStrings[r]), "%s (%s)", modes[r], str);
+		resolutionLabels[r] = resolutionStrings[r];
 	}
+	resolutionLabels[r] = NULL;
 }
 
 /*
@@ -258,6 +257,7 @@ UI_GraphicsOptions_GetResolutions
 */
 static void UI_GraphicsOptions_GetResolutions(void) {
 	Q_strncpyz(resbuf, UI_Cvar_VariableString("r_availableModes"), sizeof(resbuf));
+	resolutionsDetected = *resbuf != '\0';
 	if (*resbuf) {
 		char *s = resbuf;
 		unsigned int i = 0;
@@ -268,14 +268,9 @@ static void UI_GraphicsOptions_GetResolutions(void) {
 				*s++ = '\0';
 		}
 		detectedResolutions[i] = NULL;
-
-		if (i > 0) {
-			resolutions = detectedResolutions;
-			resolutionsDetected = qtrue;
-		}
 	}
 
-	UI_GraphicsOptions_GetAspectRatios();
+	UI_GraphicsOptions_GetAspectRatios(resolutionsDetected ? detectedResolutions : builtinResolutions);
 }
 
 /*
@@ -828,7 +823,7 @@ void UI_GraphicsOptions_MenuInit(void) {
 	s_graphicsoptions.mode.generic.type = MTYPE_SPINCONTROL;
 	s_graphicsoptions.mode.generic.name = "Video Mode:";
 	s_graphicsoptions.mode.generic.flags = QMF_SMALLFONT;
-	s_graphicsoptions.mode.itemnames = resolutions;
+	s_graphicsoptions.mode.itemnames = resolutionLabels;
 	s_graphicsoptions.mode.generic.x = XPOSITION;
 	s_graphicsoptions.mode.generic.y = y;
 	s_graphicsoptions.mode.generic.toolTip =
