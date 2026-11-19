@@ -670,12 +670,14 @@ static void SV_BuildClientSnapshot(client_t *client) {
 	// may include portal entities that merge other viewpoints
 	SV_AddEntitiesVisibleFromPoint(org, frame, &entityNumbers, qfalse);
 
-	// if there were portals visible, there may be out of order entities
-	// in the list which will need to be resorted for the delta compression
-	// to work correctly.  This also catches the error condition
-	// of an entity being included twice.
-	qsort(entityNumbers.snapshotEntities, entityNumbers.numSnapshotEntities, sizeof(entityNumbers.snapshotEntities[0]),
-		  SV_QsortEntityNumbers);
+	// Delta compression needs strictly increasing indices, even after portal recursion.
+	for (i = 1; i < entityNumbers.numSnapshotEntities; i++) {
+		if (entityNumbers.snapshotEntities[i - 1] >= entityNumbers.snapshotEntities[i]) {
+			qsort(entityNumbers.snapshotEntities, entityNumbers.numSnapshotEntities,
+				  sizeof(entityNumbers.snapshotEntities[0]), SV_QsortEntityNumbers);
+			break;
+		}
+	}
 
 	// now that all viewpoint's areabits have been OR'd together, invert
 	// all of them to make it a mask vector, which is what the renderer wants
