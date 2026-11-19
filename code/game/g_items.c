@@ -127,7 +127,7 @@ static int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
 
 	// FIXME: Where's the best place for this?
 	if (ent->item->giTag == PW_BERSERKER) {
-		G_ForceClientWeapon(ent->client, WP_PUNCHY, qfalse);
+		G_ForceClientWeapon(other->client, WP_PUNCHY, qfalse);
 	}
 
 	return RESPAWN_POWERUP;
