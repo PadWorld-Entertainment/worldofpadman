@@ -706,7 +706,7 @@ int BotAI_GetClientState(int clientNum, playerState_t *state) {
 		return qfalse;
 	}
 
-	memcpy(state, &ent->client->ps, sizeof(playerState_t));
+	memcpy(state, &ent->client->ps, sizeof(*state));
 	return qtrue;
 }
 
@@ -719,14 +719,11 @@ int BotAI_GetEntityState(int entityNum, entityState_t *state) {
 	gentity_t *ent;
 
 	ent = &g_entities[entityNum];
-	memset(state, 0, sizeof(entityState_t));
-	if (!ent->inuse)
+	if (!ent->inuse || !ent->r.linked || (ent->r.svFlags & SVF_NOCLIENT) != 0) {
+		memset(state, 0, sizeof(*state));
 		return qfalse;
-	if (!ent->r.linked)
-		return qfalse;
-	if (ent->r.svFlags & SVF_NOCLIENT)
-		return qfalse;
-	memcpy(state, &ent->s, sizeof(entityState_t));
+	}
+	memcpy(state, &ent->s, sizeof(*state));
 	return qtrue;
 }
 
@@ -740,7 +737,7 @@ int BotAI_GetSnapshotEntity(int clientNum, int sequence, entityState_t *state) {
 
 	entNum = trap_BotGetSnapshotEntity(clientNum, sequence);
 	if (entNum == -1) {
-		memset(state, 0, sizeof(entityState_t));
+		memset(state, 0, sizeof(*state));
 		return -1;
 	}
 
