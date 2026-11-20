@@ -190,8 +190,9 @@ typedef struct client_s {
 	int downloadSendTime; // time we last got an ack from the client
 
 	int deltaMessage;						// frame last client usercmd message
-	rateLimit_t userinfoRate;				// limits userinfo commands
-	int nextReliableTime;					// svs.time when another reliable command will be allowed
+	rateLimit_t userinfoRate;	  // limits userinfo commands
+	rateLimit_t commandRate;	  // limits commands for the game
+	rateLimit_t floodNoticeRate; // limits telling it commands were ignored
 	int lastPacketTime;						// svs.time when packet was last received
 	int lastConnectTime;					// svs.time when connection started
 	int lastSnapshotTime;					// svs.time of last sent snapshot

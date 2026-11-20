@@ -1390,6 +1390,23 @@ static ucmd_t ucmds[] = {{"userinfo", SV_UpdateUserinfo_f},
 
 /*
 ==================
+SV_FindUcmd
+
+The server's own client command with this name, or NULL
+==================
+*/
+static ucmd_t *SV_FindUcmd(const char *name) {
+	ucmd_t *u;
+
+	for (u = ucmds; u->name; u++) {
+		if (!strcmp(name, u->name))
+			return u;
+	}
+	return NULL;
+}
+
+/*
+==================
 SV_ExecuteClientCommand
 
 Also called by bot code
@@ -1402,17 +1419,15 @@ void SV_ExecuteClientCommand(client_t *cl, const char *s, qboolean clientOK) {
 	Cmd_TokenizeString(s);
 
 	// see if it is a server level command
-	for (u = ucmds; u->name; u++) {
-		if (!strcmp(Cmd_Argv(0), u->name)) {
-			u->func(cl);
-			bProcessed = qtrue;
-			break;
-		}
+	u = SV_FindUcmd(Cmd_Argv(0));
+	if (u) {
+		u->func(cl);
+		bProcessed = qtrue;
 	}
 
 	if (clientOK) {
 		// pass unknown strings to the game
-		if (!u->name && sv.state == SS_GAME && (cl->state == CS_ACTIVE || cl->state == CS_PRIMED)) {
+		if (!u && sv.state == SS_GAME && (cl->state == CS_ACTIVE || cl->state == CS_PRIMED)) {
 			Cmd_Args_Sanitize();
 			VM_Call(gvm, GAME_CLIENT_COMMAND, cl - svs.clients);
 		}
@@ -1458,23 +1473,16 @@ static qboolean SV_ClientCommand(client_t *cl, msg_t *msg) {
 		return qfalse;
 	}
 
-	// malicious users may try using too many string commands
-	// to lag other players.  If we decide that we want to stall
-	// the command, we will stop processing the rest of the packet,
-	// including the usercmd.  This causes flooders to lag themselves
-	// but not other people
-	// We don't do this when the client hasn't been active yet since it's
-	// normal to spam a lot of commands when downloading
-	if (!com_cl_running->integer && cl->state >= CS_ACTIVE && sv_floodProtect->integer &&
-		svs.time < cl->nextReliableTime) {
-		// ignore any other text messages from this client but let them keep playing
-		// TTimo - moved the ignored verbose to the actual processing in SV_ExecuteClientCommand, only printing if the
-		// core doesn't intercept
+	// Commands for the game come from a leaky bucket. One over it is ignored but acknowledged.
+	// The server's own commands don't count, and the local client isn't limited.
+	if (sv_floodProtect->integer && cl->state >= CS_PRIMED && cl->netchan.remoteAddress.type != NA_LOOPBACK &&
+		!SV_FindUcmd(Cmd_Argv(0)) && SVC_RateLimit(&cl->commandRate, 8, 500)) {
 		clientOk = qfalse;
-	}
 
-	// don't allow another command for one second
-	cl->nextReliableTime = svs.time + 1000;
+		// tell the player, now and then, so that a button that sends a command doesn't just seem broken
+		if (!SVC_RateLimit(&cl->floodNoticeRate, 1, 2000))
+			SV_SendServerCommand(cl, "print \"Too many commands; some were ignored.\n\"");
+	}
 
 	SV_ExecuteClientCommand(cl, s, clientOk);
 
