@@ -662,7 +662,8 @@ MSG_ReadDeltaUsercmdKey
 */
 void MSG_ReadDeltaUsercmdKey(msg_t *msg, int key, usercmd_t *from, usercmd_t *to) {
 	if (MSG_ReadBits(msg, 1)) {
-		to->serverTime = from->serverTime + MSG_ReadBits(msg, 8);
+		// the sender picks the previous time too, so wrap rather than overflow
+		to->serverTime = (int)((unsigned)from->serverTime + MSG_ReadBits(msg, 8));
 	} else {
 		to->serverTime = MSG_ReadBits(msg, 32);
 	}
