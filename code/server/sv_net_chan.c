@@ -102,6 +102,16 @@ void SV_Netchan_Transmit(client_t *client, msg_t *msg) {
 
 	if (client->netchan.unsentFragments || client->netchan_start_queue) {
 		netchan_buffer_t *netbuf;
+		int length = 0;
+
+		// the queue drains at the client's rate, so a client that makes the server send faster could fill the zone
+		for (netbuf = client->netchan_start_queue; netbuf; netbuf = netbuf->next)
+			length++;
+		if (length >= MAX_QUEUED_MESSAGES) {
+			SV_DropClient(client, "netchan queue overflow");
+			return;
+		}
+
 		Com_DPrintf("#462 SV_Netchan_Transmit: unsent fragments, stacked\n");
 		netbuf = (netchan_buffer_t *)Z_Malloc(sizeof(netchan_buffer_t));
 		// store the msg, we can't store it encoded, as the encoding depends on stuff we still have to finish sending
