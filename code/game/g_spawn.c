@@ -718,6 +718,8 @@ Every map should have exactly one worldspawn.
 "message"	Text to print during connection process
 */
 static void SP_worldspawn(void) {
+	// A map restart can apply a latched gametype change. Its new sessions need a fresh warmup.
+	const qboolean warmupCompleted = g_restarted.integer && !level.newSession;
 	const char *s;
 
 	G_SpawnString("classname", "", &s);
@@ -773,8 +775,9 @@ static void SP_worldspawn(void) {
 
 	// see if we want a warmup time
 	trap_SetConfigstring(CS_WARMUP, "");
-	if (g_restarted.integer) {
+	if (g_restarted.integer)
 		trap_Cvar_Set("g_restarted", "0");
+	if (warmupCompleted) {
 		level.warmupTime = 0;
 	} else if (g_doWarmup.integer) { // Turn it on
 		level.warmupTime = -1;
