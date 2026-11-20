@@ -326,13 +326,10 @@ SV_AddEntitiesVisibleFromPoint
 static void SV_AddEntitiesVisibleFromPoint(vec3_t origin, clientSnapshot_t *frame, snapshotEntityNumbers_t *eNums,
 										   qboolean portal) {
 	int e, i;
-	sharedEntity_t *ent;
 	svEntity_t *svEnt;
-#ifdef USE_CSS
-	entityState_t *es;
-#endif
 	int l;
-	int clientarea, clientcluster;
+	int clientarea;
+	int clientcluster;
 	int leafnum;
 	byte *clientpvs;
 	byte *bitvector;
@@ -355,11 +352,11 @@ static void SV_AddEntitiesVisibleFromPoint(vec3_t origin, clientSnapshot_t *fram
 
 #ifdef USE_CSS
 	for (e = 0; e < svs.currFrame->count; e++) {
-		es = svs.currFrame->ents[e];
-		ent = SV_GentityNum(es->number);
+		const entityState_t *es = svs.currFrame->ents[e];
+		sharedEntity_t *ent = SV_GentityNum(es->number);
 #else
 	for (e = 0; e < sv.num_entities; e++) {
-		ent = SV_GentityNum(e);
+		sharedEntity_t *ent = SV_GentityNum(e);
 
 		// never send entities that aren't linked in
 		if (!ent->r.linked) {
