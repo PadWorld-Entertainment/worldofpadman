@@ -474,6 +474,9 @@ void SV_SpawnServer(const char *server, qboolean killBots) {
 		// save when the server started for each client already connected
 		if (svs.clients[i].state >= CS_CONNECTED) {
 			svs.clients[i].oldServerTime = sv.time;
+			if (svs.clients[i].netchan.remoteAddress.type != NA_BOT) {
+				svs.clients[i].state = CS_CONNECTED;
+			}
 		}
 	}
 
