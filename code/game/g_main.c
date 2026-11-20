@@ -63,6 +63,7 @@ vmCvar_t g_weaponTeamRespawn;
 vmCvar_t g_motd;
 vmCvar_t g_synchronousClients;
 vmCvar_t g_warmup;
+static vmCvar_t g_warmupRounds;
 vmCvar_t g_doWarmup;
 vmCvar_t g_warmupReady;
 vmCvar_t g_curWarmupReady;
@@ -139,6 +140,7 @@ static cvarTable_t gameCvarTable[] = {
 	{&g_teamForceBalance, "g_teamForceBalance", "1", CVAR_ARCHIVE, 0, qfalse},
 
 	{&g_warmup, "g_warmup", "20", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qtrue},
+	{&g_warmupRounds, "g_warmupRounds", "-1", CVAR_ARCHIVE, 0, qfalse},
 	{&g_doWarmup, "g_doWarmup", "0", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue},
 	// TODO: Remove g_doWarmup and simply use g_warmup > 0 ?
 	{&g_warmupReady, "g_warmupReady", "0.0", (CVAR_SYSTEMINFO | CVAR_ARCHIVE | CVAR_LATCH), 0, qtrue},
@@ -344,8 +346,6 @@ static void G_RegisterCvars(void) {
 		Com_Printf("g_gametype %i is out of range, defaulting to 0\n", g_gametype.integer);
 		trap_Cvar_Set("g_gametype", "0");
 	}
-
-	level.warmupModificationCount = g_warmup.modificationCount;
 }
 
 /*
@@ -1718,6 +1718,30 @@ FUNCTIONS CALLED EVERY FRAME
 ========================================================================
 */
 
+static void CheckWarmupCountdown(int seconds) {
+	if (!level.warmupTime) {
+		return;
+	}
+	if (level.warmupDuration != seconds) {
+		level.warmupDuration = seconds;
+		level.warmupTime = -1;
+	}
+	if (level.warmupTime < 0) {
+		const int delay = MIN(seconds, (INT_MAX - level.time) / 1000);
+		// A zero countdown must still defer any restart until the next frame.
+		level.warmupTime = level.time + delay * 1000;
+		if (delay > 0) {
+			trap_SetConfigstring(CS_WARMUP, va("%i", level.warmupTime));
+		}
+		return;
+	}
+	if (level.time > level.warmupTime) {
+		trap_Cvar_Set("g_restarted", "1");
+		trap_SendConsoleCommand(EXEC_APPEND, "map_restart 0\n");
+		level.restarted = qtrue;
+	}
+}
+
 /*
 =============
 CheckTournament
@@ -1748,34 +1772,7 @@ static void CheckTournament(void) {
 			return;
 		}
 
-		if (level.warmupTime == 0) {
-			return;
-		}
-
-		// if the warmup is changed at the console, restart it
-		if (g_warmup.modificationCount != level.warmupModificationCount) {
-			level.warmupModificationCount = g_warmup.modificationCount;
-			level.warmupTime = -1;
-		}
-
-		// if all players have arrived, start the countdown
-		if (level.warmupTime < 0) {
-			if (level.numPlayingClients == 2) {
-				// fudge by -1 to account for extra delays
-				level.warmupTime = level.time + (g_warmup.integer - 1) * 1000;
-				trap_SetConfigstring(CS_WARMUP, va("%i", level.warmupTime));
-			}
-			return;
-		}
-
-		// if the warmup time has counted down, restart
-		if (level.time > level.warmupTime) {
-			level.warmupTime += 10000;
-			trap_Cvar_Set("g_restarted", "1");
-			trap_SendConsoleCommand(EXEC_APPEND, "map_restart 0\n");
-			level.restarted = qtrue;
-			return;
-		}
+		CheckWarmupCountdown(MAX(1, g_warmup.integer) - 1);
 	} else if (g_gametype.integer != GT_SINGLE_PLAYER && level.warmupTime != 0) {
 		int counts[TEAM_NUM_TEAMS];
 		qboolean notEnough = qfalse;
@@ -1809,31 +1806,10 @@ static void CheckTournament(void) {
 			return; // still waiting for team members
 		}
 
-		if (level.warmupTime == 0) {
-			return;
-		}
-
-		// if the warmup is changed at the console, restart it
-		if (g_warmup.modificationCount != level.warmupModificationCount) {
-			level.warmupModificationCount = g_warmup.modificationCount;
-			level.warmupTime = -1;
-		}
-
-		// if all players have arrived, start the countdown
-		if (level.warmupTime < 0) {
-			// fudge by -1 to account for extra delays
-			level.warmupTime = level.time + (g_warmup.integer - 1) * 1000;
-			trap_SetConfigstring(CS_WARMUP, va("%i", level.warmupTime));
-			return;
-		}
-
-		// if the warmup time has counted down, restart
-		if (level.time > level.warmupTime) {
-			level.warmupTime += 10000;
-			trap_Cvar_Set("g_restarted", "1");
-			trap_SendConsoleCommand(EXEC_APPEND, "map_restart 0\n");
-			level.restarted = qtrue;
-			return;
+		if (G_FreezeTag() && level.ftNumRoundsPlayed > 0 && g_warmupRounds.integer >= 0) {
+			CheckWarmupCountdown(g_warmupRounds.integer);
+		} else {
+			CheckWarmupCountdown(MAX(1, g_warmup.integer) - 1);
 		}
 	}
 }
@@ -2085,7 +2061,7 @@ static void WoP_RunFrame(void) {
 		else
 			ent->r.svFlags &= ~SVF_BROADCAST;
 
-		if ((level.warmupTime > 0) && (g_warmupReady.value > 0.0f) &&
+		if (level.warmupDuration > 0 && (level.warmupTime > 0) && (g_warmupReady.value > 0.0f) &&
 			(TEAM_SPECTATOR != level.clients[i].sess.sessionTeam) && !(ent->r.svFlags & SVF_BOT)) {
 			maxReady++;
 			if (level.clients[i].readyToFight) {
@@ -2218,8 +2194,10 @@ static void WoP_RunFrame(void) {
 
 	// FIXME: This _really_ needs to be done in CheckExitRules()!!1!
 	if ((g_gametype.integer == GT_LPS) && (g_LPS_flags.integer & LPSF_PPOINTLIMIT) && !level.warmupTime &&
-		(playersWithLives[1] == NULL)) {
+		level.numPlayingClients >= 2 && (playersWithLives[1] == NULL)) {
 		static int roundendtime = 0;
+		const int roundDelay = g_warmupRounds.integer < 0 ? 10000 : MIN(g_warmupRounds.integer, INT_MAX / 1000) * 1000;
+		const int elapsed = level.time - roundendtime;
 		int cNum;
 		int nextpoints;
 		qboolean player0done = qfalse;
@@ -2269,7 +2247,7 @@ static void WoP_RunFrame(void) {
 		}
 		// FIXME: Pseudo restart of match. Should this use map_restart instead? See tournament
 		//        Also define constants!
-		else if ((level.time - roundendtime) > 10000) {
+		else if (elapsed >= roundDelay) {
 			for (i = 0; i < level.maxclients; i++) {
 				if (level.clients[i].pers.connected != CON_CONNECTED) {
 					continue;
@@ -2281,9 +2259,9 @@ static void WoP_RunFrame(void) {
 				level.clients[i].sess.livesleft = g_LPS_startlives.integer;
 				ClientSpawn((g_entities + i));
 			}
-		} else if ((level.time - roundendtime) > 5000 && !(level.time % 500)) {
+		} else if (roundDelay - elapsed <= 5000 && !(level.time % 500)) {
 			trap_SendServerCommand(
-				-1, va("cp \"Next Round starts in %i seconds.\n\"", (10000 - (level.time - roundendtime)) / 1000));
+				-1, va("cp \"Next Round starts in %i seconds.\n\"", (roundDelay - elapsed + 999) / 1000));
 		}
 	}
 

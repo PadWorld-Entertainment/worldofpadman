@@ -471,7 +471,7 @@ typedef struct {
 
 	int snd_fry; // sound index for standing in lava
 
-	int warmupModificationCount; // for detecting if g_warmup is changed
+	int warmupDuration;
 
 	// voting state
 	char voteString[MAX_STRING_CHARS];
