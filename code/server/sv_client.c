@@ -582,6 +582,10 @@ static void SV_SendClientGameState(client_t *client) {
 	// gamestate message was not just sent, forcing a retransmit
 	client->gamestateMessageNum = client->netchan.outgoingSequence;
 
+	// accept usercmds starting from current server time only
+	Com_Memset(&client->lastUsercmd, 0, sizeof(client->lastUsercmd));
+	client->lastUsercmd.serverTime = sv.time - 1;
+
 	MSG_Init(&msg, msgBuffer, sizeof(msgBuffer));
 
 	// NOTE, MRE: all server->client messages now acknowledge
