@@ -1065,6 +1065,11 @@ void ClientEndFrame(gentity_t *ent) {
 
 	G_SetClientSound(ent);
 
+	// Update membership from the final position even when no usercmd arrived this frame.
+	if (level.breathZones) {
+		G_UpdateBreathZone(ent);
+	}
+
 	// set the latest infor
 	if (g_smoothClients.integer) {
 		BG_PlayerStateToEntityStateExtraPolate(&ent->client->ps, &ent->s, ent->client->ps.commandTime, qtrue);

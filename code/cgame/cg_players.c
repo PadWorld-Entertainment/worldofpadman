@@ -1605,16 +1605,12 @@ static void CG_BreathPuffs(const centity_t *cent, const refEntity_t *head) {
 
 	ci = &cgs.clientinfo[cent->currentState.number];
 
- 	if (!cg_enableBreath.integer && !CG_FreezeTag()) {
+	if (!(cent->currentState.eFlags & EF_BREATHZONE) &&
+		(CG_FreezeTag() ? !FT_PlayerIsFrozen(cent) : !cg_enableBreath.integer)) {
 		return;
 	}
 
 	if (cent->currentState.number == cg.snap->ps.clientNum && !cg.renderingThirdPerson) {
-		return;
-	}
-
-	// don't enable it in freezetag as long as the player is not frozen
-	if (CG_FreezeTag() && !FT_PlayerIsFrozen(cent)) {
 		return;
 	}
 

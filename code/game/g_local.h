@@ -432,6 +432,7 @@ typedef struct {
 	struct gentity_s *gentities;
 	int gentitySize;
 	int num_entities; // MAX_CLIENTS <= num_entities <= ENTITYNUM_MAX_NORMAL
+	gentity_t *breathZones;
 
 	int warmupTime; // restart match at this time
 
@@ -597,6 +598,7 @@ void G_FreeEntity(gentity_t *e);
 qboolean G_EntitiesFree(void);
 
 void G_TouchTriggers(gentity_t *ent);
+void G_UpdateBreathZone(gentity_t *ent);
 
 float *tv(float x, float y, float z);
 char *vtos(const vec3_t v);

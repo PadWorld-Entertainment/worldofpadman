@@ -333,6 +333,7 @@ typedef enum {
 #define EF_AWARD_SPRAYKILLER 0x00100000 // draw a spraykiller sprite
 #define EF_NOLIFESLEFT 0x00200000
 #define EF_TALK 0x00400000				// draw a talk balloon sprite
+#define EF_BREATHZONE 0x00800000
 
 #define REMOVE_AWARDFLAGS                                                                                              \
 	~(EF_AWARD_EXCELLENT | EF_AWARD_SNACKATTACK | EF_AWARD_WATCHPAD | EF_AWARD_PADHERO |               \
