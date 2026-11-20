@@ -176,6 +176,7 @@ struct vm_s {
 	struct vmSymbol_s *symbols;
 
 	int callLevel;	   // counts recursive VM_Call
+	int syscallCount;  // since the outermost VM_Call began
 	int breakFunction; // increment breakCount on function entry to this
 	int breakCount;
 
@@ -195,5 +196,6 @@ int VM_CallInterpreted(vm_t *vm, int *args);
 vmSymbol_t *VM_ValueToFunctionSymbol(vm_t *vm, int value);
 const char *VM_ValueToSymbol(vm_t *vm, int value);
 void VM_LogSyscalls(int *args);
+void VM_CountSyscall(vm_t *vm);
 
 void VM_BlockCopy(unsigned int dest, unsigned int src, size_t n);

@@ -329,6 +329,18 @@ Dlls will call this directly
 
 ============
 */
+// a module that makes more system calls than this in one VM_Call is taken to be stuck
+#define VM_MAX_SYSCALLS (1024 * 1024)
+
+void VM_CountSyscall(vm_t *vm) {
+	if (++vm->syscallCount > VM_MAX_SYSCALLS) {
+		// the error skips VM_Call's return, so callLevel stays up and the next call would trip at once
+		vm->syscallCount = 0;
+		Com_Error(ERR_DROP, "%s made over %d system calls in one call; it may be stuck in a loop", vm->name,
+				  VM_MAX_SYSCALLS);
+	}
+}
+
 static intptr_t QDECL VM_DllSyscall(intptr_t arg, ...) {
 #if !id386 || defined __clang__
 	// rcg010206 - see commentary above
@@ -343,8 +355,10 @@ static intptr_t QDECL VM_DllSyscall(intptr_t arg, ...) {
 		args[i] = va_arg(ap, intptr_t);
 	va_end(ap);
 
+	VM_CountSyscall(currentVM);
 	return currentVM->systemCall(args);
 #else // original id code
+	VM_CountSyscall(currentVM);
 	return currentVM->systemCall(&arg);
 #endif
 }
@@ -804,6 +818,8 @@ intptr_t QDECL VM_Call(vm_t *vm, int callnum, ...) {
 		Com_Printf("VM_Call( %d )\n", callnum);
 	}
 
+	if (vm->callLevel == 0)
+		vm->syscallCount = 0;
 	++vm->callLevel;
 	// if we have a dll loaded, call it directly
 	if (vm->entryPoint) {

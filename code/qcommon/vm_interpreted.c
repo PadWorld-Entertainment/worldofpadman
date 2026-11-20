@@ -475,9 +475,11 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 						for (i = 0; i < ARRAY_LEN(argarr); ++i) {
 							argarr[i] = *(++imagePtr);
 						}
+						VM_CountSyscall(vm);
 						r = vm->systemCall(argarr);
 					} else {
 						intptr_t *argptr = (intptr_t *)&image[programStack + 4];
+						VM_CountSyscall(vm);
 						r = vm->systemCall(argptr);
 					}
 				}
