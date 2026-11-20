@@ -652,6 +652,30 @@ static void SV_SendClientGameState(client_t *client) {
 	// write the checksum feed
 	MSG_WriteLong(&msg, sv.checksumFeed);
 
+	// a gamestate cut short fails on the client with a bad command byte, and leaves the server waiting for it
+	if (msg.overflowed) {
+		int configstringChars = 0, baselines = 0;
+
+		for (start = 0; start < MAX_CONFIGSTRINGS; start++) {
+			if (sv.configstrings[start])
+				configstringChars += strlen(sv.configstrings[start]);
+		}
+		for (start = 0; start < MAX_GENTITIES; start++) {
+			if (sv.svEntities[start].baseline.number)
+				baselines++;
+		}
+		Com_Printf("WARNING: gamestate for %s is over %i bytes: %i server commands, "
+				   "%i characters of configstrings, %i baselines\n",
+				   client->name, MAX_MSGLEN, client->reliableSequence - client->reliableAcknowledge, configstringChars,
+				   baselines);
+
+		if (client->netchan.remoteAddress.type == NA_LOOPBACK)
+			Com_Error(ERR_DROP, "gamestate overflow");
+		NET_OutOfBandPrint(NS_SERVER, client->netchan.remoteAddress, "print\n" S_COLOR_RED "SERVER ERROR: gamestate overflow\n");
+		SV_DropClient(client, "gamestate overflow");
+		return;
+	}
+
 	// deliver this to the client
 	SV_SendMessageToClient(&msg, client);
 }
