@@ -633,6 +633,8 @@ static void SV_SendClientGameState(client_t *client) {
 			MSG_WriteBigString(&msg, sv.configstrings[start]);
 		}
 	}
+	// the gamestate already carries every configstring, so none needs sending again on enter
+	Com_Memset(client->csUpdated, 0, sizeof(client->csUpdated));
 
 	// write the baselines
 	Com_Memset(&nullstate, 0, sizeof(nullstate));
