@@ -258,6 +258,7 @@ extern qboolean nobrushmerge;
 extern qboolean cancelconversion;
 extern qboolean noliquids;
 extern qboolean capsule_collision;
+extern int aasCurveError;
 #endif // ME
 
 extern float subdivide_size;
@@ -270,9 +271,10 @@ extern char source[1024];
 // map.c
 //=============================================================================
 
-#define MAX_MAPFILE_PLANES 0x20000
-#define MAX_MAPFILE_BRUSHES 0x8000
-#define MAX_MAPFILE_BRUSHSIDES 0x40000
+// BSPC expands patch facets and brush sides separately for each player hull.
+#define MAX_MAPFILE_PLANES 0x80000
+#define MAX_MAPFILE_BRUSHES 0x20000
+#define MAX_MAPFILE_BRUSHSIDES 0x100000
 #define MAX_MAPFILE_TEXINFO 8192
 
 extern int entity_num;

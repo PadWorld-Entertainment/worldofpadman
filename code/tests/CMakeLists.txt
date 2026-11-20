@@ -71,6 +71,15 @@ target_compile_definitions(${PROJECT_NAME}-main PRIVATE ${TEST_DEFINES})
 add_test(NAME ${PROJECT_NAME}-main COMMAND $<TARGET_FILE:${PROJECT_NAME}-main>)
 set_tests_properties(${PROJECT_NAME}-main PROPERTIES WORKING_DIRECTORY ${ROOT_DIR})
 
+wop_add_executable(TARGET ${PROJECT_NAME}-botlib SRCS test_botlib.c ${SRCS_BASE} NOINSTALL)
+add_asm(${PROJECT_NAME}-botlib)
+add_botlib(${PROJECT_NAME}-botlib)
+target_link_libraries(${PROJECT_NAME}-botlib ${LIBS})
+target_include_directories(${PROJECT_NAME}-botlib PRIVATE ${CODE_DIR}/qcommon)
+target_compile_definitions(${PROJECT_NAME}-botlib PRIVATE ${TEST_DEFINES})
+add_test(NAME ${PROJECT_NAME}-botlib COMMAND $<TARGET_FILE:${PROJECT_NAME}-botlib>)
+set_tests_properties(${PROJECT_NAME}-botlib PROPERTIES WORKING_DIRECTORY ${ROOT_DIR})
+
 set(SRCS_UI
 	test_ui.c
 

@@ -312,7 +312,10 @@ static const char *AAS_ValidateAASData(void) {
 		} else {
 			if (c >= aasworld.numclusters)
 				return "areasettings: bad cluster";
-			if ((unsigned)aasworld.areasettings[i].clusterareanum >= (c ? aasworld.clusters[c].numareas : 1))
+			// The cluster-local number is undefined for an unclustered area.
+			if (!c && !aasworld.areasettings[i].numreachableareas)
+				aasworld.areasettings[i].clusterareanum = 0;
+			else if ((unsigned)aasworld.areasettings[i].clusterareanum >= (c ? aasworld.clusters[c].numareas : 1))
 				return "areasettings: bad clusterareanum";
 		}
 	}

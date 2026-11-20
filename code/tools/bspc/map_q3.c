@@ -368,18 +368,21 @@ static void AAS_CreateCurveBrushes(void) {
 			points[j][2] = dv_p->xyz[2];
 		}
 		// create the internal facet structure
-		pc = CM_GeneratePatchCollide(width, height, points);
+		pc = CM_GeneratePatchCollideWithError(width, height, points, aasCurveError);
 		//
 		for (j = 0; j < pc->numFacets; j++) {
+			int numSides = 2;
 			facet = &pc->facets[j];
+			if (nummapbrushes >= MAX_MAPFILE_BRUSHES)
+				Error("MAX_MAPFILE_BRUSHES");
+			if (nummapbrushsides > MAX_MAPFILE_BRUSHSIDES - facet->numBorders - 2)
+				Error("MAX_MAPFILE_BRUSHSIDES");
 			//
 			brush = &mapbrushes[nummapbrushes];
 			brush->original_sides = &brushsides[nummapbrushsides];
 			brush->entitynum = 0;
 			brush->brushnum = nummapbrushes - mapent->firstbrush;
 			//
-			brush->numsides = facet->numBorders + 2;
-			nummapbrushsides += brush->numsides;
 			brush->contents = CONTENTS_SOLID;
 			//
 			// qprintf("\r%6d curve brushes", nummapbrushsides);//++numcurvebrushes);
@@ -412,7 +415,7 @@ static void AAS_CreateCurveBrushes(void) {
 				if (facet->borderPlanes[n] == facet->surfacePlane)
 					continue;
 				//
-				side = &brush->original_sides[2 + n];
+				side = &brush->original_sides[numSides++];
 				side->planenum = FindFloatPlane(pc->planes[facet->borderPlanes[n]].plane,
 												pc->planes[facet->borderPlanes[n]].plane[3]);
 				if (facet->borderInward[n])
@@ -433,6 +436,8 @@ static void AAS_CreateCurveBrushes(void) {
 				continue;
 			}
 			brush->original_sides[0].winding = winding;
+			brush->numsides = numSides;
+			nummapbrushsides += numSides;
 			WindingBounds(winding, brush->mins, brush->maxs);
 			for (n = 0; n < 3; n++) {
 				// IDBUG: all the indexes into the mins and maxs were zero (not using i)

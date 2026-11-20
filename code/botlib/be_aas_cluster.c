@@ -64,6 +64,7 @@ static void AAS_RemoveClusterAreas(void) {
 
 	for (i = 1; i < aasworld.numareas; i++) {
 		aasworld.areasettings[i].cluster = 0;
+		aasworld.areasettings[i].clusterareanum = 0;
 	}
 }
 

@@ -43,9 +43,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "aas_file.h"
 #include "aas_cfg.h"
 #include "be_aas_bspc.h"
+#include "cm_patch.h"
 
 extern int use_nodequeue;	 // brushbsp.c
 extern int calcgrapplereach; // be_aas_reach.c
+
+#define MAX_AAS_CURVE_ERROR 64
 
 float subdivide_size = 240;
 char source[1024];
@@ -77,6 +80,7 @@ qboolean cancelconversion;	// true if the conversion is being cancelled
 qboolean noliquids;			// no liquids when writing map file
 qboolean forcesidesvisible; // use all brush sides as BSP split planes (not just textured/visible ones)
 qboolean capsule_collision = 0;
+int aasCurveError = SUBDIVIDE_DISTANCE;
 
 static void AASOuputFile(quakefile_t *qf, char *outputpath, char *filename) {
 	char ext[MAX_PATH];
@@ -284,6 +288,16 @@ int main(int argc, char **argv) {
 		} else if (!Q_stricmp(argv[i], "-forcesidesvisible")) {
 			forcesidesvisible = qtrue;
 			Log_Print("forcesidesvisible = true\n");
+		} else if (!Q_stricmp(argv[i], "-curveerror")) {
+			char *end;
+			long maxError;
+			if (++i >= argc)
+				Error("-curveerror requires a distance");
+			maxError = strtol(argv[i], &end, 10);
+			if (*end || maxError < SUBDIVIDE_DISTANCE || maxError > MAX_AAS_CURVE_ERROR)
+				Error("-curveerror must be between %d and %d", SUBDIVIDE_DISTANCE, MAX_AAS_CURVE_ERROR);
+			aasCurveError = (int)maxError;
+			Log_Print("curve error = %d\n", aasCurveError);
 		} else if (!Q_stricmp(argv[i], "-output")) {
 			if (i + 1 >= argc) {
 				i = 0;
@@ -576,6 +590,7 @@ int main(int argc, char **argv) {
 			   "   output   <output path>               = set output path\n"
 			   "   threads  <X>                         = set number of threads to X\n"
 			   "   cfg      <filename>                  = use this cfg file\n"
+			   "   curveerror <units>                   = maximum AAS curve subdivision error (default 16)\n"
 			   "   optimize                             = enable optimization\n"
 			   "   noverbose                            = disable verbose output\n"
 			   "   breadthfirst                         = breadth first bsp building\n"
