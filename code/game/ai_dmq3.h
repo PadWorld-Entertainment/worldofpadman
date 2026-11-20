@@ -67,6 +67,8 @@ char *ClientName(int client, char *name, int size);
 char *EasyClientName(int client, char *name, int size);
 // returns the skin used by the client
 char *ClientSkin(int client, char *skin, int size);
+// returns the appropriate synonym context for the current game type and situation
+int BotSynonymContext(const bot_state_t *bs);
 // selection of goals for teamplay
 void BotTeamGoals(bot_state_t *bs, int retreat);
 // returns the aggression of the bot in the range [0, 100]
