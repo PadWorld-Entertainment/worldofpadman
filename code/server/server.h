@@ -144,6 +144,9 @@ typedef enum {
 	CS_ACTIVE	  // client is fully in game
 } clientState_t;
 
+// messages a client's netchan queue can hold before the client is dropped; each takes a MAX_MSGLEN buffer from the zone
+#define MAX_QUEUED_MESSAGES 16
+
 // A leaky bucket: SVC_RateLimit allows burst requests at once, then one every period msec. A zeroed one is full.
 typedef struct {
 	int lastTime;
@@ -192,6 +195,7 @@ typedef struct client_s {
 	int deltaMessage;						// frame last client usercmd message
 	rateLimit_t userinfoRate;	  // limits userinfo commands
 	rateLimit_t commandRate;	  // limits commands for the game
+	rateLimit_t gamestateRate;	  // limits gamestate resends
 	rateLimit_t floodNoticeRate; // limits telling it commands were ignored
 	int lastPacketTime;						// svs.time when packet was last received
 	int lastConnectTime;					// svs.time when connection started

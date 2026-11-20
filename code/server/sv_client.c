@@ -657,6 +657,23 @@ static void SV_SendClientGameState(client_t *client) {
 }
 
 /*
+================
+SV_ResendGameState
+
+Send a client the gamestate again, when it seems to have missed it.
+Not while one is still being sent, and, except for the local client, at
+most once a second, so a client can't make the server queue them.
+================
+*/
+static void SV_ResendGameState(client_t *client) {
+	if (client->netchan.unsentFragments || client->netchan_start_queue)
+		return;
+	if (client->netchan.remoteAddress.type != NA_LOOPBACK && SVC_RateLimit(&client->gamestateRate, 1, 1000))
+		return;
+	SV_SendClientGameState(client);
+}
+
+/*
 ==================
 SV_ClientEnterWorld
 ==================
@@ -752,6 +769,9 @@ static void SV_DoneDownload_f(client_t *cl) {
 	Com_DPrintf("clientDownload: %s Done\n", cl->name);
 	// resend the game state to update any clients that entered during the download
 	SV_SendClientGameState(cl);
+
+	// so a lost packet doesn't make SV_ResendGameState send it again at once
+	SVC_RateLimit(&cl->gamestateRate, 1, 1000);
 }
 
 /*
@@ -1574,7 +1594,7 @@ static void SV_UserMove(client_t *cl, msg_t *msg, qboolean delta) {
 		if (cl->state == CS_ACTIVE) {
 			// we didn't get a cp yet, don't assume anything and just send the gamestate all over again
 			Com_DPrintf("%s: didn't get cp command, resending gamestate\n", cl->name);
-			SV_SendClientGameState(cl);
+			SV_ResendGameState(cl);
 		}
 		return;
 	}
@@ -1794,7 +1814,7 @@ void SV_ExecuteClientMessage(client_t *cl, msg_t *msg) {
 		// gamestate we sent them, resend it
 		if (cl->state != CS_ACTIVE && cl->messageAcknowledge > cl->gamestateMessageNum) {
 			Com_DPrintf("%s : dropped gamestate, resending\n", cl->name);
-			SV_SendClientGameState(cl);
+			SV_ResendGameState(cl);
 		}
 		return;
 	}
