@@ -786,7 +786,9 @@ void CL_ParseServerMessage(msg_t *msg) {
 	// get the reliable sequence acknowledge number
 	clc.reliableAcknowledge = MSG_ReadLong(msg);
 	//
-	if (clc.reliableAcknowledge < clc.reliableSequence - MAX_RELIABLE_COMMANDS) {
+	// out of range, including past what we've sent, which would make CL_WritePacket count past INT_MAX
+	if (clc.reliableAcknowledge < clc.reliableSequence - MAX_RELIABLE_COMMANDS ||
+		clc.reliableAcknowledge > clc.reliableSequence) {
 		clc.reliableAcknowledge = clc.reliableSequence;
 	}
 
