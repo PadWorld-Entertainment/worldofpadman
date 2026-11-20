@@ -435,6 +435,9 @@ SV_BotClientCommand
 ==================
 */
 static void BotClientCommand(int client, const char *command) {
+	if (client < 0 || client >= sv_maxclients->integer || svs.clients[client].netchan.remoteAddress.type != NA_BOT) {
+		return;
+	}
 	SV_ExecuteClientCommand(&svs.clients[client], command, qtrue);
 }
 

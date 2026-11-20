@@ -1736,6 +1736,8 @@ int BotAISetupClient(int client, struct bot_settings_s *settings, qboolean resta
 		trap_BotFreeWeaponState(bs->ws);
 		return qfalse;
 	}
+	// A disconnect can generate chat before the bot's first think sets its name.
+	trap_BotSetChatName(bs->cs, "", client);
 	// get the gender characteristic
 	trap_Characteristic_String(bs->character, CHARACTERISTIC_GENDER, gender, MAX_PATH);
 	// set the chat gender

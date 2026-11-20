@@ -4385,7 +4385,7 @@ static void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 		else if (attacker == bs->client) {
 			bs->enemydeathtype = mod;
 			bs->lastkilledplayer = target;
-			bs->killedenemy_time = FloatTime();
+			bs->killedenemy_time = OnSameTeam(&g_entities[attacker], &g_entities[target]) ? 0 : FloatTime();
 
 			bs->num_kills++;
 		} else if (attacker == bs->enemy && target == attacker) {

@@ -2577,7 +2577,7 @@ int AINode_Seek_LTG(bot_state_t *bs) {
 	if (!IsWall(bs->enemy))
 		bs->enemy = -1;
 	//
-	if (bs->killedenemy_time > FloatTime() - 2) {
+	if (bs->killedenemy_time > 0 && bs->killedenemy_time > FloatTime() - 2) {
 		if (random() < bs->thinktime * 1) {
 			trap_EA_Gesture(bs->client);
 		}
