@@ -26,6 +26,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "bg_public.h"
 #include "bg_local.h"
 
+#ifdef QAGAME
+static void PM_MoveTo(const vec3_t end) {
+	if (pm->traceTeleporter && pm->teleportEntityNum == ENTITYNUM_NONE && !VectorCompare(pm->ps->origin, end)) {
+		pm->teleportEntityNum = pm->traceTeleporter(pm->ps->origin, pm->mins, pm->maxs, end, pm->ps->clientNum);
+	}
+	VectorCopy(end, pm->ps->origin);
+}
+#else
+#define PM_MoveTo(end) VectorCopy(end, pm->ps->origin)
+#endif
+
 /*
 
 input: origin, velocity, bounds, groundPlane, trace function
@@ -103,7 +114,7 @@ qboolean PM_SlideMove(qboolean gravity) {
 
 		if (trace.fraction > 0) {
 			// actually covered some distance
-			VectorCopy(trace.endpos, pm->ps->origin);
+			PM_MoveTo(trace.endpos);
 		}
 
 		if (trace.fraction == 1) {
@@ -245,6 +256,9 @@ void PM_StepSlideMove(qboolean gravity) {
 	trace_t trace;
 	vec3_t up, down;
 	float stepSize;
+#ifdef QAGAME
+	int teleportEntityNum = pm->teleportEntityNum;
+#endif
 	// use the step move
 	float delta;
 
@@ -277,8 +291,12 @@ void PM_StepSlideMove(qboolean gravity) {
 	}
 
 	stepSize = trace.endpos[2] - start_o[2];
-	// try slidemove from this position
-	VectorCopy(trace.endpos, pm->ps->origin);
+#ifdef QAGAME
+	// Use the step path in place of the initial slide.
+	pm->teleportEntityNum = teleportEntityNum;
+	VectorCopy(start_o, pm->ps->origin);
+#endif
+	PM_MoveTo(trace.endpos);
 	VectorCopy(start_v, pm->ps->velocity);
 
 	PM_SlideMove(gravity);
@@ -288,7 +306,7 @@ void PM_StepSlideMove(qboolean gravity) {
 	down[2] -= stepSize;
 	pm->trace(&trace, pm->ps->origin, pm->mins, pm->maxs, down, pm->ps->clientNum, pm->tracemask);
 	if (!trace.allsolid) {
-		VectorCopy(trace.endpos, pm->ps->origin);
+		PM_MoveTo(trace.endpos);
 	}
 	if (trace.fraction < 1.0) {
 		PM_ClipVelocity(pm->ps->velocity, trace.plane.normal, pm->ps->velocity, OVERCLIP);

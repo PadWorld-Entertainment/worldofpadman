@@ -229,6 +229,7 @@ typedef enum {
 	G_FS_SEEK,
 
 	G_GLOBALMESSAGE, // (const char *user, const char *msg)
+	G_CLIP_TO_ENTITY,
 
 	BOTLIB_SETUP = 200, // ( void );
 	BOTLIB_SHUTDOWN,	// ( void );

@@ -375,6 +375,17 @@ static intptr_t SV_GameSystemCalls(intptr_t *args) {
 	case G_TRACE:
 		SV_Trace(VMA(1), VMA(2), VMA(3), VMA(4), VMA(5), args[6], args[7], /*int capsule*/ qfalse);
 		return 0;
+	case G_CLIP_TO_ENTITY:
+		if (args[6] < 0 || args[6] >= sv.num_entities) {
+			Com_Error(ERR_DROP, "G_CLIP_TO_ENTITY: bad entity number");
+		}
+		VM_CHECKBOUNDS3(gvm, args[1], 1, sizeof(trace_t));
+		VM_CHECKBOUNDS3(gvm, args[2], 1, sizeof(vec3_t));
+		VM_CHECKBOUNDS3(gvm, args[3], 1, sizeof(vec3_t));
+		VM_CHECKBOUNDS3(gvm, args[4], 1, sizeof(vec3_t));
+		VM_CHECKBOUNDS3(gvm, args[5], 1, sizeof(vec3_t));
+		SV_ClipToEntity(VMA(1), VMA(2), VMA(3), VMA(4), VMA(5), args[6], -1, qfalse);
+		return 0;
 	case G_TRACECAPSULE:
 		SV_Trace(VMA(1), VMA(2), VMA(3), VMA(4), VMA(5), args[6], args[7], /*int capsule*/ qtrue);
 		return 0;

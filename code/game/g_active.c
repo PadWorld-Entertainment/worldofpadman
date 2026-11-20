@@ -206,13 +206,51 @@ static void ClientImpacts(gentity_t *ent, pmove_t *pm) {
 
 /*
 ============
+G_TraceTeleporter
+
+Find the first usable teleporter intersected by an accepted move segment.
+============
+*/
+static int G_TraceTeleporter(const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int clientNum) {
+	int i, num, teleporter = ENTITYNUM_NONE;
+	int touch[MAX_GENTITIES];
+	vec3_t boxmins, boxmaxs;
+	float fraction = 1.0f;
+	const gentity_t *player = &g_entities[clientNum];
+
+	for (i = 0; i < 3; i++) {
+		boxmins[i] = MIN(start[i], end[i]) + mins[i];
+		boxmaxs[i] = MAX(start[i], end[i]) + maxs[i];
+	}
+
+	num = trap_EntitiesInBox(boxmins, boxmaxs, touch, MAX_GENTITIES);
+	for (i = 0; i < num; i++) {
+		const gentity_t *hit = &g_entities[touch[i]];
+		trace_t trace;
+
+		if (hit->s.eType != ET_TELEPORT_TRIGGER || !(hit->r.contents & CONTENTS_TRIGGER) || !hit->touch ||
+			!G_CanTouchTeleporter(hit, player)) {
+			continue;
+		}
+
+		trap_ClipToEntity(&trace, start, mins, maxs, end, touch[i]);
+		if (trace.fraction < fraction) {
+			fraction = trace.fraction;
+			teleporter = touch[i];
+		}
+	}
+	return teleporter;
+}
+
+/*
+============
 G_TouchTriggers
 
 Find all trigger entities that ent's current position touches.
 Spectators will only interact with teleporters.
 ============
 */
-void G_TouchTriggers(gentity_t *ent) {
+static void G_TouchTriggers(gentity_t *ent, int teleporter) {
 	int i, num;
 	int touch[MAX_GENTITIES];
 	gentity_t *hit;
@@ -229,43 +267,23 @@ void G_TouchTriggers(gentity_t *ent) {
 		return;
 	}
 
-	VectorSubtract(ent->client->ps.origin, range, mins);
-	VectorAdd(ent->client->ps.origin, range, maxs);
-
-	// check if we lagged through a tele-trigger (for the tele-tubes of the syc-room)
-	{
-		vec3_t tmpv3;
-		float v;
-		trace_t tr;
-
-		tmpv3[0] = ent->client->ps.origin[0] - ent->client->oldOrigin[0];
-		tmpv3[1] = ent->client->ps.origin[1] - ent->client->oldOrigin[1];
-		tmpv3[2] = ent->client->ps.origin[2] - ent->client->oldOrigin[2];
-		v = VectorLengthSquared(tmpv3);
-		// the touchbox checks 80 units ... so we'll need to check the rest ;)
-		if (v >= 80.0f * 80.0f) {
-			trap_Trace(&tr, ent->client->oldOrigin, ent->r.mins, ent->r.maxs, ent->client->ps.origin, ENTITYNUM_WORLD,
-					   (int)0xFFFFFFFF);
-			// ToDo?: checking other triggers?
-			if (tr.fraction < 1.0f && g_entities[tr.entityNum].s.eType == ET_TELEPORT_TRIGGER) {
-				memset(&trace, 0, sizeof(trace));
-				if (g_entities[tr.entityNum].touch) {
-					g_entities[tr.entityNum].touch(&g_entities[tr.entityNum], ent, &trace);
-				}
-				if ((ent->r.svFlags & SVF_BOT) && (ent->touch)) {
-					ent->touch(ent, &g_entities[tr.entityNum], &trace);
-				}
-
-				// vv copy from bellow ... don't know if we realy need it ;P vv
-				if (ent->client->ps.jumppad_frame != ent->client->ps.pmove_framecount) {
-					ent->client->ps.jumppad_frame = 0;
-					ent->client->ps.jumppad_ent = 0;
-				}
-				return;
+	if (teleporter != ENTITYNUM_NONE) {
+		int eFlags = ent->client->ps.eFlags;
+		hit = &g_entities[teleporter];
+		if (hit->r.linked && hit->s.eType == ET_TELEPORT_TRIGGER && hit->touch && G_CanTouchTeleporter(hit, ent)) {
+			memset(&trace, 0, sizeof(trace));
+			hit->touch(hit, ent, &trace);
+			if ((ent->r.svFlags & SVF_BOT) && ent->touch) {
+				ent->touch(ent, hit, &trace);
+			}
+			if ((eFlags ^ ent->client->ps.eFlags) & EF_TELEPORT_BIT) {
+				goto clearJumppad;
 			}
 		}
 	}
 
+	VectorSubtract(ent->client->ps.origin, range, mins);
+	VectorAdd(ent->client->ps.origin, range, maxs);
 	num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
 
 	// can't use ent->absmin, because that has a one unit pad
@@ -315,6 +333,7 @@ void G_TouchTriggers(gentity_t *ent) {
 		}
 	}
 
+clearJumppad:
 	// if we didn't touch a jump pad this pmove frame
 	if (ent->client->ps.jumppad_frame != ent->client->ps.pmove_framecount) {
 		ent->client->ps.jumppad_frame = 0;
@@ -348,6 +367,7 @@ static void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY; // spectators can fly through bodies
 		pm.trace = trap_Trace;
 		pm.pointcontents = trap_PointContents;
+		pm.traceTeleporter = G_TraceTeleporter;
 		pm.gametype = g_gametype.integer;
 
 		// perform a pmove
@@ -355,7 +375,7 @@ static void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 		// save results of pmove
 		VectorCopy(client->ps.origin, ent->s.origin);
 
-		G_TouchTriggers(ent);
+		G_TouchTriggers(ent, pm.teleportEntityNum);
 		trap_UnlinkEntity(ent);
 	}
 
@@ -652,6 +672,7 @@ static void ClientThink_real(gentity_t *ent) {
 	gclient_t *client;
 	pmove_t pm;
 	int oldEventSequence;
+	int eFlags;
 	int msec;
 	usercmd_t *ucmd;
 
@@ -716,8 +737,6 @@ static void ClientThink_real(gentity_t *ent) {
 			return;
 		}
 		SpectatorThink(ent, ucmd);
-		// with wop, we need that in the touch-trigger code ...
-		VectorCopy(client->ps.origin, client->oldOrigin);
 		return;
 	}
 
@@ -814,6 +833,7 @@ static void ClientThink_real(gentity_t *ent) {
 	}
 	pm.trace = trap_Trace;
 	pm.pointcontents = trap_PointContents;
+	pm.traceTeleporter = G_TraceTeleporter;
 	pm.debugLevel = g_debugMove.integer;
 	pm.noFootsteps = (g_dmflags.integer & DF_NO_FOOTSTEPS) > 0;
 
@@ -850,6 +870,7 @@ static void ClientThink_real(gentity_t *ent) {
 	ent->watertype = pm.watertype;
 
 	// execute client events
+	eFlags = client->ps.eFlags;
 	ClientEvents(ent, oldEventSequence);
 
 	// reset forbidden items after events have been handled
@@ -859,7 +880,7 @@ static void ClientThink_real(gentity_t *ent) {
 	// link entity now, after any personal teleporters have been used
 	trap_LinkEntity(ent);
 	if (!ent->client->noclip) {
-		G_TouchTriggers(ent);
+		G_TouchTriggers(ent, ((eFlags ^ client->ps.eFlags) & EF_TELEPORT_BIT) ? ENTITYNUM_NONE : pm.teleportEntityNum);
 	}
 
 	// freezetag

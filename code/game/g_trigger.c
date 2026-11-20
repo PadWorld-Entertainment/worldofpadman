@@ -252,33 +252,33 @@ trigger_teleport
 ==============================================================================
 */
 
+qboolean G_CanTouchTeleporter(const gentity_t *teleporter, const gentity_t *player) {
+	const gclient_t *client = player->client;
+	qboolean spectator;
+
+	if (!client || client->ps.pm_type == PM_DEAD || client->ps.stats[STAT_HEALTH] <= 0) {
+		return qfalse;
+	}
+	spectator = client->sess.sessionTeam == TEAM_SPECTATOR || LPSDeadSpec(client);
+	if ((teleporter->spawnflags & TELEPORT_SPECTATORS_ONLY) && !spectator) {
+		return qfalse;
+	}
+	if (teleporter->spawnflags & TELEPORT_ENTER_SPRAYROOM) {
+		return IsSyc() && (spectator || client->ps.ammo[WP_SPRAYPISTOL] > 0);
+	}
+	return qtrue;
+}
+
 static void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	gentity_t *dest;
 
-	if (!other->client) {
-		return;
-	}
-	if (other->client->ps.pm_type == PM_DEAD) {
-		return;
-	}
-	// Spectators only?
-	if ((self->spawnflags & 1) &&
-		((other->client->sess.sessionTeam != TEAM_SPECTATOR) && !LPSDeadSpec(other->client))) {
-		return;
-	}
-
-	if ((self->spawnflags & TELEPORT_ENTER_SPRAYROOM) && !IsSyc()) {
-		// No need to check for sprayroom teleporter out
+	if (!G_CanTouchTeleporter(self, other)) {
 		return;
 	}
 
 	if ((other->client->sess.sessionTeam != TEAM_SPECTATOR) && !LPSDeadSpec(other->client)) {
 		// sprayroom teleporter in
 		if (self->spawnflags & TELEPORT_ENTER_SPRAYROOM) {
-			if (other->client->ps.ammo[WP_SPRAYPISTOL] <= 0) {
-				return;
-			}
-
 			other->client->logocounter = 0;
 
 			other->client->sprayroomleavetime = ((level.maxsprayroomtime * 1000) + level.time);

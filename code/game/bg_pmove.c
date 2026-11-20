@@ -2049,6 +2049,9 @@ Can be called by either the server or the client
 void Pmove(pmove_t *pmove) {
 	int finalTime;
 
+#ifdef QAGAME
+	pmove->teleportEntityNum = ENTITYNUM_NONE;
+#endif
 	finalTime = pmove->cmd.serverTime;
 
 	if (finalTime < pmove->ps->commandTime) {
