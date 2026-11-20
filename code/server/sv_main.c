@@ -358,7 +358,7 @@ CONNECTIONLESS COMMANDS
 
 static leakyBucket_t buckets[MAX_BUCKETS];
 static leakyBucket_t *bucketHashes[MAX_HASHES];
-leakyBucket_t outboundLeakyBucket;
+rateLimit_t outboundLeakyBucket;
 
 /*
 ================
@@ -430,10 +430,10 @@ static leakyBucket_t *SVC_BucketForAddress(netadr_t address, int burst, int peri
 		int interval;
 
 		bucket = &buckets[i];
-		interval = now - bucket->lastTime;
+		interval = now - bucket->rate.lastTime;
 
 		// Reclaim expired buckets
-		if (bucket->lastTime > 0 && (interval > (burst * period) || interval < 0)) {
+		if (bucket->rate.lastTime > 0 && (interval > (burst * period) || interval < 0)) {
 			if (bucket->prev != NULL) {
 				bucket->prev->next = bucket->next;
 			} else {
@@ -460,8 +460,8 @@ static leakyBucket_t *SVC_BucketForAddress(netadr_t address, int burst, int peri
 				break;
 			}
 
-			bucket->lastTime = now;
-			bucket->burst = 0;
+			bucket->rate.lastTime = now;
+			bucket->rate.burst = 0;
 			bucket->hash = hash;
 
 			// Add to the head of the relevant hash chain
@@ -486,7 +486,7 @@ static leakyBucket_t *SVC_BucketForAddress(netadr_t address, int burst, int peri
 SVC_RateLimit
 ================
 */
-qboolean SVC_RateLimit(leakyBucket_t *bucket, int burst, int period) {
+qboolean SVC_RateLimit(rateLimit_t *bucket, int burst, int period) {
 	if (bucket != NULL) {
 		int now = Sys_Milliseconds();
 		int interval = now - bucket->lastTime;
@@ -521,7 +521,7 @@ Rate limit for a particular address
 qboolean SVC_RateLimitAddress(netadr_t from, int burst, int period) {
 	leakyBucket_t *bucket = SVC_BucketForAddress(from, burst, period);
 
-	return SVC_RateLimit(bucket, burst, period);
+	return SVC_RateLimit(bucket ? &bucket->rate : NULL, burst, period);
 }
 
 /*
@@ -534,8 +534,8 @@ Give back the request an address's last SVC_RateLimitAddress counted
 void SVC_RateRestoreBurstAddress(netadr_t from, int burst, int period) {
 	leakyBucket_t *bucket = SVC_BucketForAddress(from, burst, period);
 
-	if (bucket != NULL && bucket->burst > 0)
-		bucket->burst--;
+	if (bucket != NULL && bucket->rate.burst > 0)
+		bucket->rate.burst--;
 }
 
 /*
@@ -733,7 +733,7 @@ static void SVC_RemoteCommand(netadr_t from, msg_t *msg) {
 	}
 
 	if (!strlen(sv_rconPassword->string) || strcmp(Cmd_Argv(1), sv_rconPassword->string)) {
-		static leakyBucket_t bucket;
+		static rateLimit_t bucket;
 
 		// Make DoS via rcon impractical
 		if (SVC_RateLimit(&bucket, 10, 1000)) {

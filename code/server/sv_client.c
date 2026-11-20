@@ -167,7 +167,7 @@ can't be used to flood another address.
 */
 static void QDECL SV_RefuseConnect(netadr_t to, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 static void QDECL SV_RefuseConnect(netadr_t to, const char *fmt, ...) {
-	static leakyBucket_t bucket;
+	static rateLimit_t bucket;
 	va_list argptr;
 	char message[MAX_STRING_CHARS];
 
@@ -1328,6 +1328,10 @@ SV_UpdateUserinfo_f
 ==================
 */
 static void SV_UpdateUserinfo_f(client_t *cl) {
+	// an empty or missing userinfo would wipe the player's
+	if (Cmd_Argc() != 2 || !*Cmd_Argv(1))
+		return;
+
 	Q_strncpyz(cl->userinfo, Cmd_Argv(1), sizeof(cl->userinfo));
 
 	SV_UserinfoChanged(cl);
@@ -1440,6 +1444,17 @@ static qboolean SV_ClientCommand(client_t *cl, msg_t *msg) {
 	if (seq > cl->lastClientCommand + 1) {
 		Com_Printf("Client %s lost %i clientCommands\n", cl->name, seq - cl->lastClientCommand + 1);
 		SV_DropClient(cl, "Lost reliable commands");
+		return qfalse;
+	}
+
+	Cmd_TokenizeString(s);
+
+	// each userinfo change makes the game send commands to every other client, so a client
+	// changing it often could overflow their command queues. Stall the rest of this client's
+	// packet instead; it will send the command again
+	if (cl->netchan.remoteAddress.type != NA_LOOPBACK && !strcmp(Cmd_Argv(0), "userinfo") &&
+		SVC_RateLimit(&cl->userinfoRate, 5, 1000)) {
+		Com_DPrintf("%s: userinfo flood, delaying it\n", cl->name);
 		return qfalse;
 	}
 
