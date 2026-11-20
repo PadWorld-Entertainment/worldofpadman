@@ -1120,6 +1120,10 @@ int SV_SendDownloadMessages(void) {
 		cl = &svs.clients[i];
 
 		if (cl->state && *cl->downloadName) {
+			// wait until the last fragments have gone out, or a bigger block overflows the queue
+			if (cl->netchan.unsentFragments || cl->netchan_start_queue)
+				continue;
+
 			MSG_Init(&msg, msgBuffer, sizeof(msgBuffer));
 			MSG_WriteLong(&msg, cl->lastClientCommand);
 
