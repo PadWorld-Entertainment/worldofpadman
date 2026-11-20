@@ -233,7 +233,8 @@ int MSG_ReadBits(msg_t *msg, int bits) {
 				//				fwrite(&get, 1, 1, fp);
 				value = (unsigned int)value | ((unsigned int)get << (i + nbits));
 
-				if (msg->bit > msg->cursize << 3) {
+				// the tree's NYT symbol, 256, which no sender writes: the message is damaged
+				if (msg->bit > msg->cursize << 3 || get > 255) {
 					msg->readcount = msg->cursize + 1;
 					return 0;
 				}
