@@ -217,6 +217,7 @@ function(wop_add_executable)
 
 	set(CFGS
 		default.cfg
+		mapcycle.cfg
 		rotation.cfg
 		server-allgametypes.cfg
 		server-bigballoon.cfg

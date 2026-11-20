@@ -52,6 +52,7 @@ set(SRCS
 	../server/sv_game.c
 	../server/sv_init.c
 	../server/sv_main.c
+	../server/sv_mapcycle.c
 	../server/sv_net_chan.c
 	../server/sv_snapshot.c
 	../server/sv_world.c

@@ -8,6 +8,7 @@ set(SRCS
 	sv_http.c
 	sv_init.c
 	sv_main.c
+	sv_mapcycle.c
 	sv_net_chan.c
 	sv_snapshot.c
 	sv_world.c

@@ -770,6 +770,7 @@ void SV_Shutdown(const char *finalmsg) {
 	SV_RemoveOperatorCommands();
 	SV_MasterShutdown();
 	SV_ShutdownGameProgs();
+	SV_StopMapCycle();
 
 	DISCORD_Close();
 	HTTP_Close();

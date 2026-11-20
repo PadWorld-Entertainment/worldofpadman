@@ -515,6 +515,7 @@ int Cvar_VariableIntegerValue(const char *var_name);
 // returns 0 if not defined or non numeric
 
 const char *Cvar_VariableString(const char *var_name);
+const char *Cvar_PendingString(const char *var_name); // latched or current string, NULL if undefined
 void Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize);
 // returns an empty string if not defined
 

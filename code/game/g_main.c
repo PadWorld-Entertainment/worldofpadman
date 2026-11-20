@@ -1183,13 +1183,16 @@ void ExitLevel(void) {
 	// bot interbreeding
 	BotInterbreedEndMatch();
 
-	// if we are running a tournement map, kick the loser to spectator status,
-	// which will automatically grab the next spectator and restart
+	// Move the loser to spectators before running the next map or restart.
 	if (g_gametype.integer == GT_TOURNAMENT) {
 		if (!level.restarted) {
-			RemoveTournamentLoser();
-			trap_SendConsoleCommand(EXEC_APPEND, "map_restart 0\n");
+			char nextmap[MAX_CVAR_VALUE_STRING];
+
+			// Changing teams recalculates ranks and can call ExitLevel again.
 			level.restarted = qtrue;
+			RemoveTournamentLoser();
+			trap_Cvar_VariableStringBuffer("nextmap", nextmap, sizeof(nextmap));
+			trap_SendConsoleCommand(EXEC_APPEND, *nextmap ? "vstr nextmap\n" : "map_restart 0\n");
 			level.changemap = NULL;
 			level.intermissiontime = 0;
 		}
