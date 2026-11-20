@@ -26,35 +26,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define MAX_VERTS_ON_POLY 64
 
-#define MARKER_OFFSET 0 // 1
-
 /*
 =============
 R_ChopPolyBehindPlane
 
-Out must have space for two more vertexes than in
+Out must have space for two more vertices than in. Returns -1 if the input polygon needs no clipping.
 =============
 */
 #define SIDE_FRONT 0
 #define SIDE_BACK 1
 #define SIDE_ON 2
-static void R_ChopPolyBehindPlane(int numInPoints, vec3_t inPoints[MAX_VERTS_ON_POLY], int *numOutPoints,
-								  vec3_t outPoints[MAX_VERTS_ON_POLY], vec3_t normal, vec_t dist, vec_t epsilon) {
-	float dists[MAX_VERTS_ON_POLY + 4] = {0};
-	int sides[MAX_VERTS_ON_POLY + 4] = {0};
-	int counts[3];
+static int R_ChopPolyBehindPlane(int numInPoints, const vec3_t *inPoints, vec3_t *outPoints, const vec3_t normal,
+								vec_t dist, vec_t epsilon) {
+	float dists[MAX_VERTS_ON_POLY];
+	int sides[MAX_VERTS_ON_POLY];
+	qboolean hasFront = qfalse, hasBack = qfalse;
+	int numOutPoints = 0;
 	float dot;
 	int i, j;
-	float *p1, *p2, *clip;
 	float d;
 
 	// don't clip if it might overflow
 	if (numInPoints >= MAX_VERTS_ON_POLY - 2) {
-		*numOutPoints = 0;
-		return;
+		return 0;
 	}
-
-	counts[0] = counts[1] = counts[2] = 0;
 
 	// determine sides for each point
 	for (i = 0; i < numInPoints; i++) {
@@ -63,49 +58,40 @@ static void R_ChopPolyBehindPlane(int numInPoints, vec3_t inPoints[MAX_VERTS_ON_
 		dists[i] = dot;
 		if (dot > epsilon) {
 			sides[i] = SIDE_FRONT;
+			hasFront = qtrue;
 		} else if (dot < -epsilon) {
 			sides[i] = SIDE_BACK;
+			hasBack = qtrue;
 		} else {
 			sides[i] = SIDE_ON;
 		}
-		counts[sides[i]]++;
 	}
-	sides[i] = sides[0];
-	dists[i] = dists[0];
 
-	*numOutPoints = 0;
-
-	if (!counts[0]) {
-		return;
+	if (!hasFront) {
+		return 0;
 	}
-	if (!counts[1]) {
-		*numOutPoints = numInPoints;
-		Com_Memcpy(outPoints, inPoints, numInPoints * sizeof(vec3_t));
-		return;
+	if (!hasBack) {
+		return -1;
 	}
+	sides[numInPoints] = sides[0];
+	dists[numInPoints] = dists[0];
 
 	for (i = 0; i < numInPoints; i++) {
-		p1 = inPoints[i];
-		clip = outPoints[*numOutPoints];
+		const float *p1 = inPoints[i];
+		const float *p2;
+		float *clip;
 
-		if (sides[i] == SIDE_ON) {
+		if (sides[i] != SIDE_BACK) {
+			clip = outPoints[numOutPoints++];
 			VectorCopy(p1, clip);
-			(*numOutPoints)++;
-			continue;
 		}
 
-		if (sides[i] == SIDE_FRONT) {
-			VectorCopy(p1, clip);
-			(*numOutPoints)++;
-			clip = outPoints[*numOutPoints];
-		}
-
-		if (sides[i + 1] == SIDE_ON || sides[i + 1] == sides[i]) {
+		if (sides[i] == SIDE_ON || sides[i + 1] == SIDE_ON || sides[i + 1] == sides[i]) {
 			continue;
 		}
 
 		// generate a split point
-		p2 = inPoints[(i + 1) % numInPoints];
+		p2 = inPoints[i + 1 == numInPoints ? 0 : i + 1];
 
 		d = dists[i] - dists[i + 1];
 		if (d == 0) {
@@ -116,12 +102,12 @@ static void R_ChopPolyBehindPlane(int numInPoints, vec3_t inPoints[MAX_VERTS_ON_
 
 		// clip xyz
 
+		clip = outPoints[numOutPoints++];
 		for (j = 0; j < 3; j++) {
 			clip[j] = p1[j] + dot * (p2[j] - p1[j]);
 		}
-
-		(*numOutPoints)++;
 	}
+	return numOutPoints;
 }
 
 /*
@@ -206,9 +192,12 @@ static void R_AddMarkFragments(int numClipPoints, vec3_t clipPoints[2][MAX_VERTS
 	pingPong = 0;
 
 	for (i = 0; i < numPlanes; i++) {
-
-		R_ChopPolyBehindPlane(numClipPoints, clipPoints[pingPong], &numClipPoints, clipPoints[!pingPong], normals[i],
-							  dists[i], 0.5);
+		int numClipped = R_ChopPolyBehindPlane(numClipPoints, clipPoints[pingPong], clipPoints[!pingPong], normals[i],
+												 dists[i], 0.5);
+		if (numClipped < 0) {
+			continue;
+		}
+		numClipPoints = numClipped;
 		pingPong ^= 1;
 		if (numClipPoints == 0) {
 			break;
@@ -263,7 +252,6 @@ int R_MarkFragments(int numPoints, const vec3_t *points, const vec3_t projection
 	float dists[MAX_VERTS_ON_POLY + 2];
 	vec3_t clipPoints[2][MAX_VERTS_ON_POLY];
 	int numClipPoints;
-	float *v;
 	const srfBspSurface_t *cv;
 	glIndex_t *tri;
 	srfVert_t *dv;
@@ -340,28 +328,13 @@ int R_MarkFragments(int numPoints, const vec3_t *points, const vec3_t projection
 					// curve the unused vertices are flagged. Now the chopped curve
 					// should skip the flagged vertices. This still leaves the
 					// problems with the vertices at the chopped grid edges.
-					//
-					// To avoid issues when LOD applied to "hollow curves" (like
-					// the ones around many jump pads) we now just add a 2 unit
-					// offset to the triangle vertices.
-					// The offset is added in the vertex normal vector direction
-					// so all triangles will still fit together.
-					// The 2 unit offset should avoid pretty much all LOD problems.
-					vec3_t fNormal;
-
 					numClipPoints = 3;
 
 					dv = cv->verts + m * cv->width + n;
 
 					VectorCopy(dv[0].xyz, clipPoints[0][0]);
-					R_VaoUnpackNormal(fNormal, dv[0].normal);
-					VectorMA(clipPoints[0][0], MARKER_OFFSET, fNormal, clipPoints[0][0]);
 					VectorCopy(dv[cv->width].xyz, clipPoints[0][1]);
-					R_VaoUnpackNormal(fNormal, dv[cv->width].normal);
-					VectorMA(clipPoints[0][1], MARKER_OFFSET, fNormal, clipPoints[0][1]);
 					VectorCopy(dv[1].xyz, clipPoints[0][2]);
-					R_VaoUnpackNormal(fNormal, dv[1].normal);
-					VectorMA(clipPoints[0][2], MARKER_OFFSET, fNormal, clipPoints[0][2]);
 					// check the normal of this triangle
 					VectorSubtract(clipPoints[0][0], clipPoints[0][1], v1);
 					VectorSubtract(clipPoints[0][2], clipPoints[0][1], v2);
@@ -379,14 +352,8 @@ int R_MarkFragments(int numPoints, const vec3_t *points, const vec3_t projection
 					}
 
 					VectorCopy(dv[1].xyz, clipPoints[0][0]);
-					R_VaoUnpackNormal(fNormal, dv[1].normal);
-					VectorMA(clipPoints[0][0], MARKER_OFFSET, fNormal, clipPoints[0][0]);
 					VectorCopy(dv[cv->width].xyz, clipPoints[0][1]);
-					R_VaoUnpackNormal(fNormal, dv[cv->width].normal);
-					VectorMA(clipPoints[0][1], MARKER_OFFSET, fNormal, clipPoints[0][1]);
 					VectorCopy(dv[cv->width + 1].xyz, clipPoints[0][2]);
-					R_VaoUnpackNormal(fNormal, dv[cv->width + 1].normal);
-					VectorMA(clipPoints[0][2], MARKER_OFFSET, fNormal, clipPoints[0][2]);
 					// check the normal of this triangle
 					VectorSubtract(clipPoints[0][0], clipPoints[0][1], v1);
 					VectorSubtract(clipPoints[0][2], clipPoints[0][1], v2);
@@ -415,8 +382,7 @@ int R_MarkFragments(int numPoints, const vec3_t *points, const vec3_t projection
 
 			for (k = 0, tri = surf->indexes; k < surf->numIndexes; k += 3, tri += 3) {
 				for (j = 0; j < 3; j++) {
-					v = surf->verts[tri[j]].xyz;
-					VectorMA(v, MARKER_OFFSET, surf->cullPlane.normal, clipPoints[0][j]);
+					VectorCopy(surf->verts[tri[j]].xyz, clipPoints[0][j]);
 				}
 
 				// add the fragments of this face
@@ -432,10 +398,7 @@ int R_MarkFragments(int numPoints, const vec3_t *points, const vec3_t projection
 
 			for (k = 0, tri = surf->indexes; k < surf->numIndexes; k += 3, tri += 3) {
 				for (j = 0; j < 3; j++) {
-					vec3_t fNormal;
-					v = surf->verts[tri[j]].xyz;
-					R_VaoUnpackNormal(fNormal, surf->verts[tri[j]].normal);
-					VectorMA(v, MARKER_OFFSET, fNormal, clipPoints[0][j]);
+					VectorCopy(surf->verts[tri[j]].xyz, clipPoints[0][j]);
 				}
 
 				// add the fragments of this face
