@@ -155,6 +155,7 @@ static const spawn_t spawns[] = {
 
 	{"trigger_balloonzone", SP_trigger_balloonzone},
 	{"trigger_forbiddenitems", SP_trigger_forbiddenitems},
+	{"trigger_breathzone", SP_trigger_breathzone},
 	{"trigger_exit", SP_trigger_exit},
 
 	// targets perform no action by themselves, but must be triggered

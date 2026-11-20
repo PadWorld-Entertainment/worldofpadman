@@ -51,6 +51,7 @@ void SP_trigger_hurt(gentity_t *ent);
 void SP_trigger_balloonzone(gentity_t *ent);
 void SP_trigger_exit(gentity_t *self);
 void SP_trigger_forbiddenitems(gentity_t *self);
+void SP_trigger_breathzone(gentity_t *self);
 
 void SP_target_balloon(gentity_t *ent);
 

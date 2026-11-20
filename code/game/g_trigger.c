@@ -32,6 +32,41 @@ static void InitTrigger(gentity_t *self) {
 	self->r.svFlags = SVF_NOCLIENT;
 }
 
+/*QUAKED trigger_breathzone (0 .5 .5) ?
+Shows breath puffs while a player's bounds touch this brush.
+*/
+void SP_trigger_breathzone(gentity_t *self) {
+	if (!self->model || self->model[0] != '*') {
+		Com_Printf("trigger_breathzone without a brush model\n");
+		G_FreeEntity(self);
+		return;
+	}
+
+	InitTrigger(self);
+	trap_LinkEntity(self);
+	self->chain = level.breathZones;
+	level.breathZones = self;
+}
+
+void G_UpdateBreathZone(gentity_t *ent) {
+	gentity_t *zone;
+	vec3_t mins, maxs;
+
+	ent->client->ps.eFlags &= ~EF_BREATHZONE;
+	if (ent->health <= 0 || ent->client->noclip) {
+		return;
+	}
+
+	VectorAdd(ent->client->ps.origin, ent->r.mins, mins);
+	VectorAdd(ent->client->ps.origin, ent->r.maxs, maxs);
+	for (zone = level.breathZones; zone; zone = zone->chain) {
+		if (BoundsIntersect(mins, maxs, zone->r.absmin, zone->r.absmax) && trap_EntityContact(mins, maxs, zone)) {
+			ent->client->ps.eFlags |= EF_BREATHZONE;
+			return;
+		}
+	}
+}
+
 // the wait time has passed, so set back up for another activation
 static void multi_wait(gentity_t *ent) {
 	ent->nextthink = 0;
