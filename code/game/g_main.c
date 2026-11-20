@@ -624,7 +624,8 @@ static void AddTournamentPlayer(void) {
 	gclient_t *client;
 	gclient_t *nextInLine;
 
-	if (level.numPlayingClients >= 2) {
+	// Players loading the next map still hold their tournament slots.
+	if (level.numNonSpectatorClients >= 2) {
 		return;
 	}
 
