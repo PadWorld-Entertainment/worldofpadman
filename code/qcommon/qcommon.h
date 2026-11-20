@@ -193,7 +193,9 @@ void NET_Sleep(int msec);
 								  // will overflow the reliable commands buffer
 #define MAX_DOWNLOAD_BLKSIZE 1024 // 896 byte block chunks
 
-#define NETCHAN_GENCHECKSUM(challenge, sequence) ((challenge) ^ ((sequence) * (challenge)))
+// unsigned multiply wraps; the bits match the old signed overflow
+#define NETCHAN_GENCHECKSUM(challenge, sequence) \
+	((int)((unsigned)(challenge) ^ ((unsigned)(sequence) * (unsigned)(challenge))))
 
 /*
 Netchan handles packet fragmentation and out of order / duplicate suppression
