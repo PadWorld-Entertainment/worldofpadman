@@ -144,6 +144,12 @@ typedef enum {
 	CS_ACTIVE	  // client is fully in game
 } clientState_t;
 
+// A leaky bucket: SVC_RateLimit allows burst requests at once, then one every period msec. A zeroed one is full.
+typedef struct {
+	int lastTime;
+	int burst;
+} rateLimit_t;
+
 typedef struct netchan_buffer_s {
 	msg_t msg;
 	byte msgBuffer[MAX_MSGLEN];
@@ -184,6 +190,7 @@ typedef struct client_s {
 	int downloadSendTime; // time we last got an ack from the client
 
 	int deltaMessage;						// frame last client usercmd message
+	rateLimit_t userinfoRate;				// limits userinfo commands
 	int nextReliableTime;					// svs.time when another reliable command will be allowed
 	int lastPacketTime;						// svs.time when packet was last received
 	int lastConnectTime;					// svs.time when connection started
@@ -340,17 +347,16 @@ struct leakyBucket_s {
 		byte _6[16];
 	} ipv;
 
-	int lastTime;
-	signed char burst;
+	rateLimit_t rate;
 
 	long hash;
 
 	leakyBucket_t *prev, *next;
 };
 
-extern leakyBucket_t outboundLeakyBucket;
+extern rateLimit_t outboundLeakyBucket;
 
-qboolean SVC_RateLimit(leakyBucket_t *bucket, int burst, int period);
+qboolean SVC_RateLimit(rateLimit_t *bucket, int burst, int period);
 qboolean SVC_RateLimitAddress(netadr_t from, int burst, int period);
 void SVC_RateRestoreBurstAddress(netadr_t from, int burst, int period);
 
