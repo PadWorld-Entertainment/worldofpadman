@@ -313,60 +313,69 @@ static struct addrinfo *SearchAddrInfo(struct addrinfo *hints, sa_family_t famil
 
 /*
 =============
-Sys_StringToSockaddr
+Sys_ResolveSockaddr
 =============
 */
-static qboolean Sys_StringToSockaddr(const char *s, struct sockaddr *sadr, int sadr_len, sa_family_t family) {
+static qboolean Sys_ResolveSockaddr(const char *s, struct sockaddr *sadr, size_t sadr_len, sa_family_t family,
+								   int netFlags, int *error) {
 	struct addrinfo hints;
 	struct addrinfo *res = NULL;
 	struct addrinfo *search = NULL;
-	struct addrinfo *hintsp;
-	int retval;
 
 	memset(sadr, '\0', sizeof(*sadr));
 	memset(&hints, '\0', sizeof(hints));
 
-	hintsp = &hints;
-	hintsp->ai_family = family;
-	hintsp->ai_socktype = SOCK_DGRAM;
+	hints.ai_family = family;
+	hints.ai_socktype = SOCK_DGRAM;
 
-	retval = getaddrinfo(s, NULL, hintsp, &res);
+	*error = getaddrinfo(s, NULL, &hints, &res);
 
-	if (!retval) {
+	if (!*error) {
 		if (family == AF_UNSPEC) {
 			// Decide here and now which protocol family to use
-			if (net_enabled->integer & NET_PRIOV6) {
-				if (net_enabled->integer & NET_ENABLEV6)
+			if (netFlags & NET_PRIOV6) {
+				if (netFlags & NET_ENABLEV6)
 					search = SearchAddrInfo(res, AF_INET6);
 
-				if (!search && (net_enabled->integer & NET_ENABLEV4))
+				if (!search && (netFlags & NET_ENABLEV4))
 					search = SearchAddrInfo(res, AF_INET);
 			} else {
-				if (net_enabled->integer & NET_ENABLEV4)
+				if (netFlags & NET_ENABLEV4)
 					search = SearchAddrInfo(res, AF_INET);
 
-				if (!search && (net_enabled->integer & NET_ENABLEV6))
+				if (!search && (netFlags & NET_ENABLEV6))
 					search = SearchAddrInfo(res, AF_INET6);
 			}
 		} else
 			search = SearchAddrInfo(res, family);
 
 		if (search) {
-			if (search->ai_addrlen > sadr_len)
-				search->ai_addrlen = sadr_len;
-
-			memcpy(sadr, search->ai_addr, search->ai_addrlen);
+			size_t addrlen = search->ai_addrlen;
+			memcpy(sadr, search->ai_addr, addrlen < sadr_len ? addrlen : sadr_len);
 			freeaddrinfo(res);
 
 			return qtrue;
-		} else
-			Com_Printf("Sys_StringToSockaddr: Error resolving %s: No address of required type found.\n", s);
-	} else
-		Com_Printf("Sys_StringToSockaddr: Error resolving %s: %s\n", s, gai_strerror(retval));
+		}
+	}
 
 	if (res)
 		freeaddrinfo(res);
 
+	return qfalse;
+}
+
+void Sys_PrintResolveError(const char *s, int error) {
+	Com_Printf("Sys_StringToSockaddr: Error resolving %s: %s\n", s,
+			   error ? gai_strerror(error) : "No address of required type found.");
+}
+
+static qboolean Sys_StringToSockaddr(const char *s, struct sockaddr *sadr, size_t sadr_len, sa_family_t family) {
+	int error;
+
+	if (Sys_ResolveSockaddr(s, sadr, sadr_len, family, net_enabled->integer, &error)) {
+		return qtrue;
+	}
+	Sys_PrintResolveError(s, error);
 	return qfalse;
 }
 
@@ -389,10 +398,10 @@ static void Sys_SockaddrToString(char *dest, int destlen, struct sockaddr *input
 
 /*
 =============
-Sys_StringToAdr
+Sys_ResolveAddress
 =============
 */
-qboolean Sys_StringToAdr(const char *s, netadr_t *a, netadrtype_t family) {
+qboolean Sys_ResolveAddress(const char *s, netadr_t *a, netadrtype_t family, int netFlags, int *error) {
 	struct sockaddr_storage sadr;
 	sa_family_t fam;
 
@@ -407,7 +416,7 @@ qboolean Sys_StringToAdr(const char *s, netadr_t *a, netadrtype_t family) {
 		fam = AF_UNSPEC;
 		break;
 	}
-	if (!Sys_StringToSockaddr(s, (struct sockaddr *)&sadr, sizeof(sadr), fam)) {
+	if (!Sys_ResolveSockaddr(s, (struct sockaddr *)&sadr, sizeof(sadr), fam, netFlags, error)) {
 		return qfalse;
 	}
 

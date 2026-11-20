@@ -571,6 +571,16 @@ return 0 on address not found, 1 on address found with port, 2 on address found 
 =============
 */
 int NET_StringToAdr(const char *s, netadr_t *a, netadrtype_t family) {
+	int error;
+	int result = NET_ResolveAddress(s, a, family, Cvar_VariableIntegerValue("net_enabled"), &error);
+
+	if (!result) {
+		Sys_PrintResolveError(s, error);
+	}
+	return result;
+}
+
+int NET_ResolveAddress(const char *s, netadr_t *a, netadrtype_t family, int netFlags, int *error) {
 	char base[MAX_STRING_CHARS], *search;
 	char *port = NULL;
 
@@ -610,7 +620,7 @@ int NET_StringToAdr(const char *s, netadr_t *a, netadrtype_t family) {
 		search = base;
 	}
 
-	if (!Sys_StringToAdr(search, a, family)) {
+	if (!Sys_ResolveAddress(search, a, family, netFlags, error)) {
 		a->type = NA_BAD;
 		return 0;
 	}

@@ -27,6 +27,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../sys/sys_local.h"
 #include "../sys/sys_loadlib.h"
 
+#ifdef USE_LOCAL_HEADERS
+#include "SDL.h"
+#else
+#include <SDL.h>
+#endif
+
 #ifdef USE_MUMBLE
 #include "libmumblelink.h"
 #endif
@@ -138,6 +144,23 @@ static void *rendererLib = NULL;
 #endif
 
 static ping_t cl_pinglist[MAX_PINGREQUESTS];
+
+typedef struct {
+	char server[MAX_STRING_CHARS];
+	netadrtype_t family;
+	int netFlags;
+	netadr_t address;
+	int error;
+	qboolean discard;
+} pingLookup_t;
+
+static pingLookup_t cl_pingLookups[MAX_PINGREQUESTS];
+static int cl_pingLookupHead;
+static int cl_pingLookupCount;
+static qboolean cl_pingLookupRunning;
+static SDL_atomic_t cl_pingLookupDone;
+
+static void CL_CheckPingLookups(void);
 
 typedef struct serverStatus_s {
 	char string[BIG_INFO_STRING];
@@ -2647,6 +2670,8 @@ void CL_Frame(int msec) {
 		return;
 	}
 
+	CL_CheckPingLookups();
+
 #ifdef USE_HTTP
 	if (clc.httpUsed) {
 		qboolean finished = CL_HTTP_PerformDownload();
@@ -3598,6 +3623,11 @@ void CL_Shutdown(const char *finalmsg, qboolean disconnect, qboolean quit) {
 	}
 	recursive = qtrue;
 
+	if (cl_pingLookupRunning) {
+		cl_pingLookups[cl_pingLookupHead].discard = qtrue;
+	}
+	cl_pingLookupCount = cl_pingLookupRunning ? 1 : 0;
+
 	noGameRestart = quit;
 
 	if (disconnect)
@@ -4212,14 +4242,78 @@ static ping_t *CL_GetFreePing(void) {
 	return (best);
 }
 
+static void CL_SendPing(netadr_t to) {
+	ping_t *pingptr;
+
+	pingptr = CL_GetFreePing();
+	pingptr->adr = to;
+	pingptr->time = 0;
+
+	CL_SetServerInfoByAddress(pingptr->adr, NULL, 0);
+
+	pingptr->start = Sys_Milliseconds();
+	NET_OutOfBandPrint(NS_CLIENT, to, "getinfo xxx");
+}
+
+static int CL_ResolvePing(void *data) {
+	pingLookup_t *lookup = data;
+
+	NET_ResolveAddress(lookup->server, &lookup->address, lookup->family, lookup->netFlags, &lookup->error);
+	SDL_MemoryBarrierRelease();
+	SDL_AtomicSet(&cl_pingLookupDone, 1);
+	return 0;
+}
+
+static void CL_CheckPingLookups(void) {
+	pingLookup_t *lookup = &cl_pingLookups[cl_pingLookupHead];
+	SDL_Thread *thread;
+
+	if (cl_pingLookupRunning) {
+		if (!SDL_AtomicGet(&cl_pingLookupDone)) {
+			return;
+		}
+		SDL_MemoryBarrierAcquire();
+
+		cl_pingLookupRunning = qfalse;
+		cl_pingLookupHead = (cl_pingLookupHead + 1) % MAX_PINGREQUESTS;
+		cl_pingLookupCount--;
+		if (!lookup->discard) {
+			if (lookup->address.type != NA_BAD) {
+				CL_SendPing(lookup->address);
+			} else {
+				Sys_PrintResolveError(lookup->server, lookup->error);
+			}
+		}
+	}
+
+	if (!cl_pingLookupCount) {
+		return;
+	}
+
+	lookup = &cl_pingLookups[cl_pingLookupHead];
+	lookup->netFlags = Cvar_VariableIntegerValue("net_enabled");
+	Com_Memset(&lookup->address, 0, sizeof(lookup->address));
+	SDL_AtomicSet(&cl_pingLookupDone, 0);
+	thread = SDL_CreateThread(CL_ResolvePing, "PingResolver", lookup);
+	if (!thread) {
+		Com_Printf("ping: could not start address lookup: %s\n", SDL_GetError());
+		cl_pingLookupHead = (cl_pingLookupHead + 1) % MAX_PINGREQUESTS;
+		cl_pingLookupCount--;
+		return;
+	}
+
+	// An OS resolver can take seconds to return, so shutdown never joins this thread.
+	SDL_DetachThread(thread);
+	cl_pingLookupRunning = qtrue;
+}
+
 /*
 ==================
 CL_Ping_f
 ==================
 */
 static void CL_Ping_f(void) {
-	netadr_t to;
-	ping_t *pingptr;
+	pingLookup_t *lookup;
 	const char *server;
 	int argc;
 	netadrtype_t family = NA_UNSPEC;
@@ -4244,21 +4338,23 @@ static void CL_Ping_f(void) {
 		server = Cmd_Argv(2);
 	}
 
-	Com_Memset(&to, 0, sizeof(netadr_t));
+	for (int i = 0; i < cl_pingLookupCount; i++) {
+		lookup = &cl_pingLookups[(cl_pingLookupHead + i) % MAX_PINGREQUESTS];
+		if (!lookup->discard && lookup->family == family && !strcmp(lookup->server, server)) {
+			return;
+		}
+	}
 
-	if (!NET_StringToAdr(server, &to, family)) {
+	if (cl_pingLookupCount == MAX_PINGREQUESTS) {
+		Com_Printf("ping: address lookup queue is full\n");
 		return;
 	}
 
-	pingptr = CL_GetFreePing();
-
-	memcpy(&pingptr->adr, &to, sizeof(netadr_t));
-	pingptr->start = Sys_Milliseconds();
-	pingptr->time = 0;
-
-	CL_SetServerInfoByAddress(pingptr->adr, NULL, 0);
-
-	NET_OutOfBandPrint(NS_CLIENT, to, "getinfo xxx");
+	lookup = &cl_pingLookups[(cl_pingLookupHead + cl_pingLookupCount) % MAX_PINGREQUESTS];
+	Q_strncpyz(lookup->server, server, sizeof(lookup->server));
+	lookup->family = family;
+	lookup->discard = qfalse;
+	cl_pingLookupCount++;
 }
 
 /*

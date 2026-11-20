@@ -180,6 +180,8 @@ qboolean NET_IsLocalAddress(netadr_t adr);
 const char *NET_AdrToString(netadr_t a);
 const char *NET_AdrToStringwPort(netadr_t a);
 int NET_StringToAdr(const char *s, netadr_t *a, netadrtype_t family);
+// Uses the caller's net_enabled snapshot and leaves error reporting to the main thread.
+int NET_ResolveAddress(const char *s, netadr_t *a, netadrtype_t family, int netFlags, int *error);
 qboolean NET_GetLoopPacket(netsrc_t sock, netadr_t *net_from, msg_t *net_message);
 void NET_JoinMulticast6(void);
 void NET_LeaveMulticast6(void);
@@ -1071,7 +1073,8 @@ void Sys_SetErrorText(const char *text);
 void Sys_SendPacket(int length, const void *data, netadr_t to);
 
 // Does NOT parse port numbers, only base addresses.
-qboolean Sys_StringToAdr(const char *s, netadr_t *a, netadrtype_t family);
+qboolean Sys_ResolveAddress(const char *s, netadr_t *a, netadrtype_t family, int netFlags, int *error);
+void Sys_PrintResolveError(const char *s, int error);
 
 qboolean Sys_IsLANAddress(netadr_t adr);
 void Sys_ShowIP(void);
