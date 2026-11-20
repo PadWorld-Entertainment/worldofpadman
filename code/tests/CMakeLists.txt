@@ -81,7 +81,8 @@ add_test(NAME ${PROJECT_NAME}-botlib COMMAND $<TARGET_FILE:${PROJECT_NAME}-botli
 set_tests_properties(${PROJECT_NAME}-botlib PROPERTIES WORKING_DIRECTORY ${ROOT_DIR})
 
 if (USE_VOIP)
-	wop_add_executable(TARGET ${PROJECT_NAME}-voip SRCS test_voip.c ${CODE_DIR}/client/cl_voip.c NOINSTALL)
+	wop_add_executable(TARGET ${PROJECT_NAME}-voip SRCS test_voip.c ${CODE_DIR}/client/cl_voip.c
+						${CODE_DIR}/qcommon/q_shared.c NOINSTALL)
 	target_include_directories(${PROJECT_NAME}-voip PRIVATE ${CODE_DIR}/qcommon)
 	target_link_libraries(${PROJECT_NAME}-voip opus SDL2::SDL2 m)
 	add_test(NAME ${PROJECT_NAME}-voip COMMAND $<TARGET_FILE:${PROJECT_NAME}-voip>)

@@ -1,4 +1,38 @@
 #include "cl_voip.h"
+#include "../game/bg_public.h"
+
+uint8_t CL_VoipTeamTargets(const gameState_t *state, int clientNum, uint8_t targets[VOIP_TARGET_BYTES]) {
+	const char *info = state->stringData + state->stringOffsets[CS_SERVERINFO];
+	const char *mode = Info_ValueForKey(info, "g_gametype");
+	char *end;
+	const long gametype = strtol(mode, &end, 10);
+	int team, i;
+
+	memset(targets, 0, VOIP_TARGET_BYTES);
+	if (end == mode || *end || gametype < GT_FFA || gametype >= GT_MAX_GAME_TYPE ||
+		clientNum < 0 || clientNum >= MAX_CLIENTS) {
+		return 0;
+	}
+	if (gametype < GT_TEAM) {
+		return VOIP_SPATIAL;
+	}
+
+	info = state->stringData + state->stringOffsets[CS_PLAYERS + clientNum];
+	team = atoi(Info_ValueForKey(info, "t"));
+	if (team != TEAM_RED && team != TEAM_BLUE) {
+		return 0;
+	}
+	for (i = 0; i < MAX_CLIENTS; i++) {
+		if (i == clientNum) {
+			continue;
+		}
+		info = state->stringData + state->stringOffsets[CS_PLAYERS + i];
+		if (atoi(Info_ValueForKey(info, "t")) == team && !*Info_ValueForKey(info, "skill")) {
+			targets[i / 8] |= 1 << (i % 8);
+		}
+	}
+	return 0;
+}
 
 float CL_VoipCaptureGain(int16_t *samples, int count, float gain) {
 	float power = 0.0f;

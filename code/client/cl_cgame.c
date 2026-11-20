@@ -926,7 +926,9 @@ static void CL_FirstSnapshot(void) {
 		clc.voipCodecInitialized = qtrue;
 		clc.voipMuteAll = qfalse;
 		Cmd_AddCommand("voip", CL_Voip_f);
-		Cvar_Set("cl_voipSendTarget", "spatial");
+		if (Q_stricmp(cl_voipSendTarget->string, "team")) {
+			Cvar_Set("cl_voipSendTarget", "spatial");
+		}
 		Com_Memset(clc.voipTargets, ~0, sizeof(clc.voipTargets));
 	}
 #endif

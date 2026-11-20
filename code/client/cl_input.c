@@ -880,7 +880,11 @@ void CL_WritePacket(void) {
 
 #ifdef USE_VOIP
 	if (clc.voipOutgoingDataSize > 0) {
-		if ((clc.voipFlags & VOIP_SPATIAL) || Com_IsVoipTarget(clc.voipTargets, sizeof(clc.voipTargets), -1)) {
+		if (clc.voipTeam) {
+			clc.voipFlags = CL_VoipTeamTargets(&cl.gameState, clc.clientNum, clc.voipTargets);
+		}
+		if (!cl_voipSendTarget->modified &&
+			((clc.voipFlags & VOIP_SPATIAL) || Com_IsVoipTarget(clc.voipTargets, sizeof(clc.voipTargets), -1))) {
 			MSG_WriteByte(&buf, clc_voipOpus);
 			MSG_WriteByte(&buf, clc.voipOutgoingGeneration);
 			MSG_WriteLong(&buf, clc.voipOutgoingSequence);
@@ -917,7 +921,7 @@ void CL_WritePacket(void) {
 			clc.voipOutgoingDataSize = 0;
 			clc.voipOutgoingDataFrames = 0;
 		} else {
-			// We have data, but no targets. Silently discard all data
+			// Discard data captured for a previous target or without recipients.
 			clc.voipOutgoingDataSize = 0;
 			clc.voipOutgoingDataFrames = 0;
 		}

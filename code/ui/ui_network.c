@@ -66,7 +66,7 @@ NETWORK OPTIONS MENU
 static const char *rate_items[] = {"Modem", "ISDN", "LAN/Cable/xDSL", NULL};
 static const char *voipMode_items[] = {"Off", "Built-in", "Mumble", NULL};
 static const char *capture_items[] = {"Push to Talk", "Automatic", NULL};
-static const char *sendTarget_items[] = {"all", "none", "attacker", "crosshair", "spatial", NULL};
+static const char *sendTarget_items[] = {"all", "none", "attacker", "crosshair", "spatial", "team", NULL};
 static const char *sendTarget_custom[] = {"Custom Setting", NULL};
 static const char *net_null_items[] = {NULL};
 
@@ -111,7 +111,7 @@ static void UI_NetworkOptions_SendTargetUpdate(void) {
 	trap_Cvar_VariableStringBuffer("cl_voipSendTarget", voipSendTarget, sizeof(voipSendTarget));
 
 	for (i = 0, s = sendTarget_items; *s != NULL; ++s, ++i) {
-		if (!strcmp(*s, voipSendTarget)) {
+		if (!Q_stricmp(*s, voipSendTarget)) {
 			networkOptionsInfo.voipCustomSendTarget = qfalse;
 			networkOptionsInfo.voipSendTarget.curvalue = i;
 			networkOptionsInfo.voipSendTarget.generic.flags &= ~QMF_GRAYED;
@@ -122,6 +122,7 @@ static void UI_NetworkOptions_SendTargetUpdate(void) {
 				"'Attacker' to send to the last person that hit you. "
 				"'Crosshair' to send to the people currently in your crosshair. "
 				"'Spatial' to talk to all people in hearing range. "
+				"'Team' to talk to teammates, with spatial voice in non-team modes. "
 				"NOTE: See ingame VoIP chat menu for more options.";
 			Menu_InitItem(&networkOptionsInfo.voipSendTarget.generic);
 			return;

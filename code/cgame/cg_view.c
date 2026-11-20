@@ -1126,7 +1126,6 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 		CG_Printf("cg.clientFrame:%i\n", cg.clientFrame);
 	}
 
-	CG_UpdateVoipTeamIDs();
 	if (cg_drawVoiceNames.integer) {
 		trap_GetVoipTimes(cg.lastVoiceTime);
 	}

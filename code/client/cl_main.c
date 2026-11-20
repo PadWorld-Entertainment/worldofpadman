@@ -287,8 +287,7 @@ static void CL_VoipNewGeneration(void) {
 CL_VoipParseTargets
 
 sets clc.voipTargets according to cl_voipSendTarget
-Generally we don't want who's listening to change during a transmission,
-so this is only called when the key is first pressed
+Resolve the selected target when capture starts or the setting changes.
 ===============
 */
 static void CL_VoipParseTargets(void) {
@@ -298,6 +297,11 @@ static void CL_VoipParseTargets(void) {
 
 	Com_Memset(clc.voipTargets, 0, sizeof(clc.voipTargets));
 	clc.voipFlags &= ~VOIP_SPATIAL;
+	cl_voipSendTarget->modified = qfalse;
+	clc.voipTeam = !Q_stricmp(target, "team");
+	if (clc.voipTeam) {
+		return;
+	}
 
 	while (target) {
 		while (*target == ',' || *target == ' ')
@@ -434,6 +438,8 @@ static void CL_CaptureVoip(void) {
 		S_MasterGain(Com_Clamp(0.0f, 1.0f, cl_voipGainDuringCapture->value));
 		S_StartCapture();
 		CL_VoipNewGeneration();
+	}
+	if (initialFrame || (cl_voipSend->integer && cl_voipSendTarget->modified && clc.state == CA_ACTIVE)) {
 		CL_VoipParseTargets();
 	}
 

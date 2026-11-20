@@ -622,6 +622,28 @@ static void testTeamOrdersMenu(void) {
 	Cmd_TokenizeString("");
 }
 
+static void testTeamVoiceTarget(void) {
+	const menulist_s *target;
+
+	Cvar_Set("rate", "25000");
+	Cvar_Set("cl_useMumble", "0");
+	Cvar_Set("cl_voipSendTarget", "team");
+	startInGameMenu();
+	ASSERT_EQ_INT(qtrue, openMenu("VOICE CHAT"));
+	target = (const menulist_s *)findMenuItem("Talk To:");
+	ASSERT_EQ_INT(qtrue, target != NULL);
+	ASSERT_EQ_INT(qtrue, target->curvalue >= 0 && target->curvalue < target->numitems);
+	EXPECT_EQ_STRING("team", target->itemnames[target->curvalue]);
+
+	UI_SetActiveMenu(UIMENU_MAIN);
+	UI_NetworkOptionsMenu();
+	ASSERT_EQ_INT(qtrue, drawMenuFrame());
+	target = (const menulist_s *)findMenuItem("Send Target:");
+	ASSERT_EQ_INT(qtrue, target != NULL);
+	ASSERT_EQ_INT(qtrue, target->curvalue >= 0 && target->curvalue < target->numitems);
+	EXPECT_EQ_STRING("team", target->itemnames[target->curvalue]);
+}
+
 static void testConsoleMenus(void) {
 	static const char *const commands[] = {"ui_help items", "ui_help gametype", "wop_music"};
 	menuframework_s *inGame;
@@ -663,6 +685,7 @@ int main(int argc, char *argv[]) {
 	ADD_TEST(testInGameMenus);
 	ADD_TEST(testInGameActions);
 	ADD_TEST(testTeamOrdersMenu);
+	ADD_TEST(testTeamVoiceTarget);
 	ADD_TEST(testConsoleMenus);
 
 	TESTS_SHUTDOWN();

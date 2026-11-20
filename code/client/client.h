@@ -247,8 +247,9 @@ typedef struct {
 	// outgoing data...
 	// if voipTargets[i / 8] & (1 << (i % 8)),
 	// then we are sending to clientnum i.
-	uint8_t voipTargets[(MAX_CLIENTS + 7) / 8];
+	uint8_t voipTargets[VOIP_TARGET_BYTES];
 	uint8_t voipFlags;
+	qboolean voipTeam;
 	OpusEncoder *opusEncoder;
 	int voipOutgoingDataSize;
 	int voipOutgoingDataFrames;
@@ -421,9 +422,7 @@ extern cvar_t *cl_mumbleScale;
 #endif
 
 #ifdef USE_VOIP
-// cl_voipSendTarget is a string: "all" to broadcast to everyone, "none" to
-//  send to no one, or a comma-separated list of client numbers:
-//  "0,7,2,23" ... an empty string is treated like "all".
+// cl_voipSendTarget accepts presets such as "team" and "spatial", and lists of client numbers.
 extern cvar_t *cl_voipUseVAD;
 extern cvar_t *cl_voipVADThreshold;
 extern cvar_t *cl_voipSend;

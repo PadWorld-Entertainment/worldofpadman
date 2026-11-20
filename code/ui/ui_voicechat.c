@@ -46,7 +46,7 @@ typedef struct {
 
 static voiceChatMenuInfo_t voiceChatMenuInfo;
 
-static const char *sendTarget_names[] = {"all", "none", "attacker", "crosshair", "spatial", NULL};
+static const char *sendTarget_names[] = {"all", "none", "attacker", "crosshair", "spatial", "team", NULL};
 
 static void UI_VoiceChatMenu_SetClientNames(void) {
 	int i, j;
@@ -335,9 +335,10 @@ static void UI_VoiceChatMenu_Init(void) {
 	i = 0;
 	while (voiceChatMenuInfo.sendTarget.itemnames[i] != 0) {
 		const char *item = voiceChatMenuInfo.sendTarget.itemnames[i];
+		const int compare = strcmp(item, "team") ? Q_stricmpn(sendTargetValue, item, strlen(item))
+												: Q_stricmp(sendTargetValue, item);
 
-		// sendtargetvalue can have extra data after the keyword
-		if (!Q_stricmpn(sendTargetValue, item, strlen(item))) {
+		if (!compare) {
 			voiceChatMenuInfo.sendTarget.curvalue = i;
 			break;
 		}

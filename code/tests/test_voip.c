@@ -1,11 +1,70 @@
 #include "test_shared.h"
 #include "../client/cl_voip.h"
+#include "../game/bg_public.h"
 
 TESTS_GLOBALS();
 
 static OpusEncoder *encoder;
 static OpusDecoder *decoder;
 static int16_t pcm[VOIP_MAX_PACKET_SAMPLES];
+
+void QDECL Com_Printf(const char *format, ...) {
+	va_list args;
+
+	va_start(args, format);
+	vfprintf(stderr, format, args);
+	va_end(args);
+}
+
+void QDECL Com_Error(int level, const char *format, ...) {
+	va_list args;
+
+	va_start(args, format);
+	vfprintf(stderr, format, args);
+	va_end(args);
+	abort();
+}
+
+static void testTeamTargets(void) {
+	static const char configstrings[] = "\0\\g_gametype\\6\0\\t\\1\0\\t\\2\0\\t\\3\0\\t\\1\\skill\\3";
+	gameState_t state = {0};
+	uint8_t targets[VOIP_TARGET_BYTES];
+	uint8_t expected[VOIP_TARGET_BYTES] = {0};
+	int mode = 1, red = mode + sizeof("\\g_gametype\\6");
+	int blue = red + sizeof("\\t\\1");
+	int spectator = blue + sizeof("\\t\\2");
+	int bot = spectator + sizeof("\\t\\3");
+
+	memcpy(state.stringData, configstrings, sizeof(configstrings));
+	state.stringOffsets[CS_SERVERINFO] = mode;
+	state.stringOffsets[CS_PLAYERS] = red;
+	state.stringOffsets[CS_PLAYERS + 1] = blue;
+	state.stringOffsets[CS_PLAYERS + 2] = bot;
+	state.stringOffsets[CS_PLAYERS + 3] = spectator;
+	state.stringOffsets[CS_PLAYERS + MAX_CLIENTS - 1] = red;
+	expected[VOIP_TARGET_BYTES - 1] = 1 << ((MAX_CLIENTS - 1) % 8);
+
+	EXPECT_EQ_INT(0, CL_VoipTeamTargets(&state, 0, targets));
+	EXPECT_EQ_INT(0, memcmp(expected, targets, sizeof(targets)));
+
+	// A teammate leaving or changing teams clears their bit on the next packet.
+	state.stringOffsets[CS_PLAYERS + MAX_CLIENTS - 1] = blue;
+	memset(expected, 0, sizeof(expected));
+	EXPECT_EQ_INT(0, CL_VoipTeamTargets(&state, 0, targets));
+	EXPECT_EQ_INT(0, memcmp(expected, targets, sizeof(targets)));
+
+	memset(targets, 0xff, sizeof(targets));
+	EXPECT_EQ_INT(0, CL_VoipTeamTargets(&state, 3, targets));
+	EXPECT_EQ_INT(0, memcmp(expected, targets, sizeof(targets)));
+
+	state.stringData[red - 2] = '0';
+	EXPECT_EQ_INT(VOIP_SPATIAL, CL_VoipTeamTargets(&state, 0, targets));
+	EXPECT_EQ_INT(0, memcmp(expected, targets, sizeof(targets)));
+
+	state.stringOffsets[CS_SERVERINFO] = 0;
+	EXPECT_EQ_INT(0, CL_VoipTeamTargets(&state, 0, targets));
+	EXPECT_EQ_INT(0, memcmp(expected, targets, sizeof(targets)));
+}
 
 static void testPacketLimits(void) {
 	EXPECT_EQ_INT(qtrue, Voip_ValidPacket(0, 0, 1, 1));
@@ -112,6 +171,7 @@ int main(void) {
 	}
 
 	ADD_TEST(testPacketLimits);
+	ADD_TEST(testTeamTargets);
 	ADD_TEST(testCaptureGain);
 	ADD_TEST(testPacketPower);
 	ADD_TEST(testDecodeTiming);
