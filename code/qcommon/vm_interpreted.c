@@ -391,7 +391,7 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 		case OP_LOCAL:
 			opStackOfs++;
 			r1 = r0;
-			r0 = opStack[opStackOfs] = r2 + programStack;
+			r0 = opStack[opStackOfs] = (unsigned)r2 + (unsigned)programStack;
 
 			programCounter += 1;
 			goto nextInstruction2;
@@ -747,16 +747,17 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 
 			//===================================================================
 
+		// integer arithmetic wraps, as it does in compiled code
 		case OP_NEGI:
-			opStack[opStackOfs] = -r0;
+			opStack[opStackOfs] = 0u - (unsigned)r0;
 			goto nextInstruction;
 		case OP_ADD:
 			opStackOfs--;
-			opStack[opStackOfs] = r1 + r0;
+			opStack[opStackOfs] = (unsigned)r1 + (unsigned)r0;
 			goto nextInstruction;
 		case OP_SUB:
 			opStackOfs--;
-			opStack[opStackOfs] = r1 - r0;
+			opStack[opStackOfs] = (unsigned)r1 - (unsigned)r0;
 			goto nextInstruction;
 		case OP_DIVI:
 			opStackOfs--;
@@ -776,7 +777,7 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 			goto nextInstruction;
 		case OP_MULI:
 			opStackOfs--;
-			opStack[opStackOfs] = r1 * r0;
+			opStack[opStackOfs] = (unsigned)r1 * (unsigned)r0;
 			goto nextInstruction;
 		case OP_MULU:
 			opStackOfs--;
@@ -801,15 +802,15 @@ int VM_CallInterpreted(vm_t *vm, int *args) {
 
 		case OP_LSH:
 			opStackOfs--;
-			opStack[opStackOfs] = r1 << r0;
+			opStack[opStackOfs] = (unsigned)r1 << (r0 & 31);
 			goto nextInstruction;
 		case OP_RSHI:
 			opStackOfs--;
-			opStack[opStackOfs] = r1 >> r0;
+			opStack[opStackOfs] = r1 >> (r0 & 31);
 			goto nextInstruction;
 		case OP_RSHU:
 			opStackOfs--;
-			opStack[opStackOfs] = ((unsigned)r1) >> r0;
+			opStack[opStackOfs] = ((unsigned)r1) >> (r0 & 31);
 			goto nextInstruction;
 
 		case OP_NEGF:
