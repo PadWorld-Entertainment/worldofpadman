@@ -228,10 +228,9 @@ static void SV_MapRestart_f(void) {
 	const char *denied;
 	qboolean isBot;
 	int delay;
-	static int lastRestartFrame;
 
 	// make sure we aren't restarting twice in the same frame
-	if (com_frameTime == lastRestartFrame) {
+	if (com_frameTime == sv.restartedServerId) {
 		return;
 	}
 
@@ -347,7 +346,7 @@ static void SV_MapRestart_f(void) {
 		}
 	}
 
-	lastRestartFrame = com_frameTime;
+	sv.restartedServerId = com_frameTime;
 }
 
 //===============================================================
