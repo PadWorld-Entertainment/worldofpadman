@@ -1390,8 +1390,10 @@ int FS_Read(void *buffer, int len, fileHandle_t f) {
 		Com_Error(ERR_FATAL, "Filesystem call made without initialization");
 	}
 
+	// fread and unzReadCurrentFile would take a negative length as a huge count
 	if (len < 0) {
-		Com_Error(ERR_FATAL, "FS_Read: len < 0");
+		Com_Printf(S_COLOR_YELLOW "WARNING: FS_Read: negative length %i\n", len);
+		return 0;
 	}
 
 	if (!f) {
