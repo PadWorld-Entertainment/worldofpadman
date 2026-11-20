@@ -692,6 +692,7 @@ void SV_Init(void) {
 	Cvar_Get("nextmap", "", CVAR_TEMP);
 
 	sv_allowDownload = Cvar_Get("sv_allowDownload", "0", CVAR_SERVERINFO);
+	sv_maxDownloads = Cvar_Get("sv_maxDownloads", "8", CVAR_ARCHIVE);
 	Cvar_Get("sv_dlURL", "", CVAR_SERVERINFO | CVAR_ARCHIVE);
 
 	sv_master[0] = Cvar_Get("sv_master1", MASTER_SERVER_NAME, 0);
