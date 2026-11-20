@@ -375,10 +375,11 @@ Returns a single string containing argv(1) to argv(argc()-1)
 ============
 */
 char *Cmd_Args(void) {
-	static char cmd_args[MAX_STRING_CHARS];
+	static char cmd_args[BIG_INFO_STRING];
 	int i;
 
 	cmd_args[0] = 0;
+	// joined, the arguments are no longer than cmd_cmd
 	for (i = 1; i < cmd_argc; i++) {
 		strcat(cmd_args, cmd_argv[i]);
 		if (i != cmd_argc - 1) {
@@ -491,7 +492,8 @@ static void Cmd_TokenizeString2(const char *text_in, qboolean ignoreQuotes) {
 
 	Q_strncpyz(cmd_cmd, text_in, sizeof(cmd_cmd));
 
-	text = text_in;
+	// read from the copy, whose length fits cmd_tokenized
+	text = cmd_cmd;
 	textOut = cmd_tokenized;
 
 	while (1) {
