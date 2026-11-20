@@ -34,10 +34,29 @@ TEAM ORDERS MENU
 #define BACK1 "menu/buttons/back1"
 
 #define ID_LIST_BOTS 10
-#define ID_LIST_CTF_ORDERS 11
-#define ID_LIST_TEAM_ORDERS 12
+#define ID_LIST_ORDERS 11
 
 #define ORDER_HEIGHT 24
+#define VISIBLE_ORDERS 8
+
+static const struct {
+	const char *label;
+	const char *message;
+	unsigned int modes;
+} orders[] = {
+	{"I am the leader", "I am the leader", 0},
+	{"Follow me", "follow me", 0},
+	{"Defend the base", "defend the base", (1 << GT_CTF) | (1 << GT_1FCTF)},
+	{"Get the lolly", "get the lolly", (1 << GT_CTF) | (1 << GT_1FCTF)},
+	{"Camp here", "camp here", 0},
+	{"Roam", "roam", 0},
+	{"Report", "report", 0},
+	{"Give cartridges", "give your cartridges to me", 1 << GT_SPRAY},
+	{"Secure a balloon", "secure a balloon", 1 << GT_BALLOON},
+	{"Defend a balloon", "defend a balloon", 1 << GT_BALLOON},
+	{"Thaw a teammate", "thaw a teammate", 1 << GT_FREEZETAG},
+	{"I relinquish command", "I stop being the leader", 0},
+};
 
 typedef struct {
 	menuframework_s menu;
@@ -49,36 +68,14 @@ typedef struct {
 	int gametype;
 	int numBots;
 	int selectedBot;
-	const char *bots[8];
-	char botNames[8][16];
+	const char *bots[MAX_CLIENTS];
+	char botNames[MAX_CLIENTS][MAX_NAME_LENGTH];
+	int botClients[MAX_CLIENTS];
+	const char *orderLabels[ARRAY_LEN(orders)];
+	const char *orderMessages[ARRAY_LEN(orders)];
 } teamOrdersMenuInfo_t;
 
 static teamOrdersMenuInfo_t teamOrdersMenuInfo;
-
-#define NUM_CTF_ORDERS 7
-static const char *ctfOrders[] = {
-	"I am the leader", "Defend the base",	   "Follow me", "Get enemy lolly", "Camp here",
-	"Report",		   "I relinquish command", NULL};
-static const char *ctfMessages[] = {"I am the leader",
-									"%s defend the base",
-									"%s follow me",
-									"%s get enemy lolly",
-									"%s camp here",
-									"%s report",
-									"I stop being the leader",
-									NULL};
-
-#define NUM_TEAM_ORDERS 7 // raute: 6 -> 7
-static const char *teamOrders[] = {
-	"I am the leader", "Follow me", "Roam", "Camp here", "Report", "Give cartridges", "I relinquish Command", NULL};
-static const char *teamMessages[] = {"I am the leader",
-									 "%s follow me",
-									 "%s roam",
-									 "%s camp here",
-									 "%s report",
-									 "%s give your cartridges to me", // this works, everything else is not implemented
-									 "I stop being the leader",
-									 NULL};
 
 /*
 ===============
@@ -98,29 +95,26 @@ UI_TeamOrdersMenu_SetList
 ===============
 */
 static void UI_TeamOrdersMenu_SetList(int id) {
-	switch (id) {
-	default:
-	case ID_LIST_BOTS:
-		teamOrdersMenuInfo.list.generic.id = id;
-		teamOrdersMenuInfo.list.numitems = teamOrdersMenuInfo.numBots;
-		teamOrdersMenuInfo.list.itemnames = (const char **)teamOrdersMenuInfo.bots;
-		break;
+	menulist_s *list = &teamOrdersMenuInfo.list;
 
-	case ID_LIST_CTF_ORDERS:
-		teamOrdersMenuInfo.list.generic.id = id;
-		teamOrdersMenuInfo.list.numitems = NUM_CTF_ORDERS;
-		teamOrdersMenuInfo.list.itemnames = ctfOrders;
-		break;
-
-	case ID_LIST_TEAM_ORDERS:
-		teamOrdersMenuInfo.list.generic.id = id;
-		teamOrdersMenuInfo.list.numitems = NUM_TEAM_ORDERS;
-		teamOrdersMenuInfo.list.itemnames = teamOrders;
-		break;
+	list->generic.id = id;
+	list->curvalue = list->oldvalue = list->top = 0;
+	if (id == ID_LIST_BOTS) {
+		list->numitems = teamOrdersMenuInfo.numBots;
+		list->itemnames = teamOrdersMenuInfo.bots;
+	} else {
+		int i;
+		list->numitems = 0;
+		list->itemnames = teamOrdersMenuInfo.orderLabels;
+		for (i = 0; i < ARRAY_LEN(orders); i++) {
+			if (orders[i].modes && !(orders[i].modes & (1 << teamOrdersMenuInfo.gametype)))
+				continue;
+			teamOrdersMenuInfo.orderLabels[list->numitems] = orders[i].label;
+			teamOrdersMenuInfo.orderMessages[list->numitems++] = orders[i].message;
+		}
 	}
 
-	teamOrdersMenuInfo.list.generic.bottom =
-		teamOrdersMenuInfo.list.generic.top + teamOrdersMenuInfo.list.numitems * ORDER_HEIGHT;
+	list->generic.bottom = list->generic.top + MIN(list->numitems, VISIBLE_ORDERS) * ORDER_HEIGHT - 1;
 }
 
 /*
@@ -144,7 +138,7 @@ static sfxHandle_t UI_TeamOrdersMenu_Key(int key) {
 		x = l->generic.left;
 		y = l->generic.top;
 		if (UI_CursorInRect(x, y, l->generic.right - x, l->generic.bottom - y)) {
-			index = (uis.cursory - y) / ORDER_HEIGHT;
+			index = l->top + (uis.cursory - y) / ORDER_HEIGHT;
 			l->oldvalue = l->curvalue;
 			l->curvalue = index;
 
@@ -155,6 +149,7 @@ static sfxHandle_t UI_TeamOrdersMenu_Key(int key) {
 		}
 		return menuNullSound;
 
+	case K_MWHEELUP:
 	case K_KP_UPARROW:
 	case K_UPARROW:
 		l->oldvalue = l->curvalue;
@@ -164,18 +159,26 @@ static sfxHandle_t UI_TeamOrdersMenu_Key(int key) {
 		} else {
 			l->curvalue--;
 		}
+		if (l->curvalue < l->top)
+			l->top = l->curvalue;
+		else if (l->curvalue >= l->top + VISIBLE_ORDERS)
+			l->top = l->curvalue - VISIBLE_ORDERS + 1;
 		return menuMoveSound;
 
+	case K_MWHEELDOWN:
 	case K_KP_DOWNARROW:
 	case K_DOWNARROW:
 		l->oldvalue = l->curvalue;
 
 		if (l->curvalue == l->numitems - 1) {
 			l->curvalue = 0;
-			;
 		} else {
 			l->curvalue++;
 		}
+		if (l->curvalue < l->top)
+			l->top = l->curvalue;
+		else if (l->curvalue >= l->top + VISIBLE_ORDERS)
+			l->top = l->curvalue - VISIBLE_ORDERS + 1;
 		return menuMoveSound;
 	}
 
@@ -202,7 +205,7 @@ static void UI_TeamOrdersMenu_ListDraw(void *self) {
 
 	x = l->generic.x;
 	y = l->generic.y;
-	for (i = 0; i < l->numitems; i++) {
+	for (i = l->top; i < l->numitems && i < l->top + VISIBLE_ORDERS; i++) {
 		style = UI_LEFT | UI_SMALLFONT | UI_CENTER;
 		if (i == l->curvalue) {
 			color = color_orange;
@@ -224,90 +227,78 @@ UI_TeamOrdersMenu_ListEvent
 ===============
 */
 static void UI_TeamOrdersMenu_ListEvent(void *ptr, int event) {
-	int id;
-	int selection;
-	char message[256];
+	const menulist_s *list = ptr;
+	const int selection = list->curvalue;
+	int target;
 
-	if (event != QM_ACTIVATED)
+	if (event != QM_ACTIVATED || selection < 0 || selection >= list->numitems)
 		return;
 
-	id = ((const menulist_s *)ptr)->generic.id;
-	selection = ((const menulist_s *)ptr)->curvalue;
-
-	if (id == ID_LIST_BOTS) {
+	if (list->generic.id == ID_LIST_BOTS) {
 		teamOrdersMenuInfo.selectedBot = selection;
-		if (teamOrdersMenuInfo.gametype == GT_CTF) {
-			UI_TeamOrdersMenu_SetList(ID_LIST_CTF_ORDERS);
-		} else {
-			UI_TeamOrdersMenu_SetList(ID_LIST_TEAM_ORDERS);
-		}
+		UI_TeamOrdersMenu_SetList(ID_LIST_ORDERS);
 		return;
 	}
 
-	if (id == ID_LIST_CTF_ORDERS) {
-		Com_sprintf(message, sizeof(message), ctfMessages[selection],
-					teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.selectedBot]);
-	} else {
-		Com_sprintf(message, sizeof(message), teamMessages[selection],
-					teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.selectedBot]);
-	}
-
-	trap_Cmd_ExecuteText(EXEC_APPEND, va("say_team \"%s\"\n", message));
+	target = teamOrdersMenuInfo.botClients[teamOrdersMenuInfo.selectedBot];
+	if (target < 0)
+		trap_Cmd_ExecuteText(EXEC_APPEND, va("say_team \"%s\"\n", teamOrdersMenuInfo.orderMessages[selection]));
+	else
+		trap_Cmd_ExecuteText(EXEC_APPEND, va("tell %d \"%s\"\n", target, teamOrdersMenuInfo.orderMessages[selection]));
 	UI_PopMenu();
 }
 
-/*
-===============
-UI_TeamOrdersMenu_BuildBotList
-===============
-*/
-static void UI_TeamOrdersMenu_BuildBotList(void) {
+static qboolean UI_TeamOrdersFindBots(teamOrdersMenuInfo_t *menu) {
 	uiClientState_t cs;
-	int numPlayers;
-	int isBot;
-	int n;
-	char playerTeam;
-	char botTeam;
 	char info[MAX_INFO_STRING];
-
-	for (n = 0; n < 8; n++) {
-		teamOrdersMenuInfo.bots[n] = teamOrdersMenuInfo.botNames[n];
-	}
+	int gametype, team, numPlayers, n;
 
 	trap_GetClientState(&cs);
-
-	Q_strncpyz(teamOrdersMenuInfo.botNames[0], "Everyone", 16);
-	teamOrdersMenuInfo.numBots = 1;
+	if (cs.connState != CA_ACTIVE || cs.clientNum < 0 || cs.clientNum >= MAX_CLIENTS)
+		return qfalse;
 
 	trap_GetConfigString(CS_SERVERINFO, info, sizeof(info));
-	numPlayers = atoi(Info_ValueForKey(info, "sv_maxclients"));
-	teamOrdersMenuInfo.gametype = atoi(Info_ValueForKey(info, "g_gametype"));
+	gametype = atoi(Info_ValueForKey(info, "g_gametype"));
+	if (gametype < GT_TEAM || gametype >= GT_MAX_GAME_TYPE)
+		return qfalse;
+	numPlayers = Com_Clamp(0, MAX_CLIENTS, atoi(Info_ValueForKey(info, "sv_maxclients")));
 
-	trap_GetConfigString(CS_PLAYERS + cs.clientNum, info, MAX_INFO_STRING);
-	playerTeam = *Info_ValueForKey(info, "t");
+	trap_GetConfigString(CS_PLAYERS + cs.clientNum, info, sizeof(info));
+	team = atoi(Info_ValueForKey(info, "t"));
+	if (team != TEAM_RED && team != TEAM_BLUE)
+		return qfalse;
 
-	for (n = 0; n < numPlayers && teamOrdersMenuInfo.numBots < 8; n++) {
-		trap_GetConfigString(CS_PLAYERS + n, info, MAX_INFO_STRING);
-
-		if (n == cs.clientNum) {
-			//			playerTeam = *Info_ValueForKey( info, "t" );
-			continue;
-		}
-
-		isBot = atoi(Info_ValueForKey(info, "skill"));
-		if (!isBot) {
-			continue;
-		}
-
-		botTeam = *Info_ValueForKey(info, "t");
-		if (botTeam != playerTeam) {
-			continue;
-		}
-
-		Q_strncpyz(teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.numBots], Info_ValueForKey(info, "n"), 16);
-		Q_CleanStr(teamOrdersMenuInfo.botNames[teamOrdersMenuInfo.numBots]);
-		teamOrdersMenuInfo.numBots++;
+	if (menu) {
+		menu->gametype = gametype;
+		menu->numBots = 1;
+		menu->botClients[0] = -1;
+		menu->bots[0] = "Everyone";
 	}
+
+	for (n = 0; n < numPlayers; n++) {
+		const char *name;
+		int i;
+		if (n == cs.clientNum)
+			continue;
+		trap_GetConfigString(CS_PLAYERS + n, info, sizeof(info));
+		if (atoi(Info_ValueForKey(info, "t")) != team || atoi(Info_ValueForKey(info, "skill")) <= 0)
+			continue;
+		name = Info_ValueForKey(info, "n");
+		if (!*name)
+			continue;
+		if (!menu)
+			return qtrue;
+		i = menu->numBots++;
+		menu->botClients[i] = n;
+		Q_strncpyz(menu->botNames[i], name, sizeof(menu->botNames[i]));
+		Q_CleanStr(menu->botNames[i]);
+		menu->bots[i] = menu->botNames[i];
+	}
+	return menu && menu->numBots > 1;
+}
+
+qboolean UI_TeamOrdersAvailable(void) {
+	return UI_TeamOrdersFindBots(NULL);
 }
 
 /*
@@ -328,14 +319,15 @@ static void TeamOrderMenu_Draw(void) {
 UI_TeamOrdersMenu_Init
 ===============
 */
-static void UI_TeamOrdersMenu_Init(void) {
+static qboolean UI_TeamOrdersMenu_Init(void) {
 	UI_TeamOrdersMenu_Cache();
 
 	memset(&teamOrdersMenuInfo, 0, sizeof(teamOrdersMenuInfo));
 	teamOrdersMenuInfo.menu.fullscreen = qfalse;
 	teamOrdersMenuInfo.menu.key = UI_TeamOrdersMenu_Key;
 
-	UI_TeamOrdersMenu_BuildBotList();
+	if (!UI_TeamOrdersFindBots(&teamOrdersMenuInfo))
+		return qfalse;
 
 	teamOrdersMenuInfo.menu.draw = TeamOrderMenu_Draw;
 
@@ -364,6 +356,7 @@ static void UI_TeamOrdersMenu_Init(void) {
 	teamOrdersMenuInfo.list.generic.top = teamOrdersMenuInfo.list.generic.y;
 	teamOrdersMenuInfo.list.generic.right = SCREEN_CENTER + 100;
 	UI_TeamOrdersMenu_SetList(ID_LIST_BOTS);
+	return qtrue;
 }
 
 /*
@@ -382,38 +375,12 @@ UI_TeamOrdersMenu
 ===============
 */
 void UI_TeamOrdersMenu(void) {
-#if 0 // Disabled until the bot chat issues are fixed.
-	trap_Cvar_Set("cl_paused", "1"); // pause game and indirectly pause/stop background music
-
-	UI_TeamOrdersMenu_Init();
-	UI_PushMenu(&teamOrdersMenuInfo.menu);
-#endif
+	if (UI_TeamOrdersMenu_Init()) {
+		trap_Cvar_Set("cl_paused", "1");
+		UI_PushMenu(&teamOrdersMenuInfo.menu);
+	}
 }
 
-/*
-===============
-UI_TeamOrdersMenu_f
-===============
-*/
 void UI_TeamOrdersMenu_f(void) {
-	uiClientState_t cs;
-	char info[MAX_INFO_STRING];
-	int team;
-
-	// make sure it's a team game
-	trap_GetConfigString(CS_SERVERINFO, info, sizeof(info));
-	teamOrdersMenuInfo.gametype = atoi(Info_ValueForKey(info, "g_gametype"));
-	if (teamOrdersMenuInfo.gametype < GT_TEAM) {
-		return;
-	}
-
-	// not available to spectators
-	trap_GetClientState(&cs);
-	trap_GetConfigString(CS_PLAYERS + cs.clientNum, info, MAX_INFO_STRING);
-	team = atoi(Info_ValueForKey(info, "t"));
-	if (team == TEAM_SPECTATOR) {
-		return;
-	}
-
 	UI_TeamOrdersMenu();
 }

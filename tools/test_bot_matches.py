@@ -2,12 +2,14 @@
 """Test WoP's shipped map/mode combinations with bots and an optional spectator client (Python 3.9+)."""
 
 import argparse
+from collections import Counter
 from contextlib import ExitStack
 import json
 import os
 from pathlib import Path
 import re
 import socket
+from statistics import median
 import subprocess
 import tempfile
 import time
@@ -159,7 +161,7 @@ def match_limit(mode, ending, time_limit, point_limit):
     return ""
 
 
-def make_config(map_name, mode, ending, time_limit, point_limit, with_client):
+def make_config(map_name, mode, ending, time_limit, point_limit, with_client, team_ai_side=None):
     timed = ending == "time"
     config = [
         f"set sv_maxclients {NUM_BOTS + int(with_client)}",
@@ -183,10 +185,19 @@ def make_config(map_name, mode, ending, time_limit, point_limit, with_client):
         f"map {map_name}",
         f'set nextmap "set pointlimit 0; set timelimit 0; map {map_name}"',
     ]
+    if team_ai_side:
+        config[:0] = [
+            "set bot_teamAI 1",
+            f"set bot_teamAITeams {1 if team_ai_side == 'red' else 2}",
+            "set bot_nochat 1",
+            "set sv_cheats 1",
+            "set bot_developer 32",
+        ]
     # Stagger joins so each bot can drain server commands between joins.
     for i in range(NUM_BOTS):
         team = ("red", "blue")[i % 2] if MODES[mode] >= MODES["team"] else "free"
-        config += [f"addbot {BOT_MODELS[i % len(BOT_MODELS)]} 3 {team} 0 MatrixBot{i + 1:02}", "wait 5"]
+        model = BOT_MODELS[(i // 2 if team_ai_side else i) % len(BOT_MODELS)]
+        config += [f"addbot {model} 3 {team} 0 MatrixBot{i + 1:02}", "wait 5"]
     config.append("echo WOP_MATRIX_BOTS_ADDED")
     limit = match_limit(mode, ending, time_limit, point_limit)
     if limit and not with_client:
@@ -322,14 +333,95 @@ def stop_process(process):
             process.wait()
 
 
-def run_match(server_path, client_path, case_dir, map_name, mode, ending, args):
+def compare_stats(log_path, team_ai_side):
+    teams = {"1": "red", "2": "blue"}
+    roster = {}
+    captures = {}
+    pickups = Counter()
+    drops = Counter()
+    recoveries = {"red": [], "blue": []}
+    dropped_to_recovered = {"red": [], "blue": []}
+    orders = Counter()
+    last_take = {}
+    last_drop = {}
+    with log_path.open(encoding="utf-8", errors="replace") as log:
+        for line in log:
+            timestamp, event = line.strip().split(" ", 1)
+            minutes, seconds = map(int, timestamp.split(":"))
+            elapsed = 60 * minutes + seconds
+            if event.startswith("InitGame: "):
+                roster.clear()
+                pickups.clear()
+                drops.clear()
+                orders.clear()
+                last_take.clear()
+                last_drop.clear()
+                for team in teams.values():
+                    recoveries[team].clear()
+                    dropped_to_recovered[team].clear()
+            elif event.startswith("ClientUserinfoChanged: "):
+                _, slot, info = event.split(" ", 2)
+                fields = info_fields(info)
+                if fields.get("n", "").startswith("MatrixBot") and fields.get("t") in teams:
+                    roster[slot] = (teams[fields["t"]], fields["model"], fields["skill"].strip())
+            elif event.startswith("BotTeamOrder: "):
+                _, leader, slot, _, _, role = event.split(" ", 5)
+                if any(roster.get(client, (None,))[0] != team_ai_side for client in (leader, slot)):
+                    raise RuntimeError(f"Team AI issued an order outside the enabled side: {event}")
+                orders[role] += 1
+            elif event.startswith("Item: "):
+                _, slot, item = event.split()
+                if item in ("team_CTL_redlolly", "team_CTL_bluelolly") and slot in roster:
+                    side = roster[slot][0]
+                    if item != f"team_CTL_{side}lolly":
+                        pickups[side] += 1
+                        last_take[item] = elapsed
+            elif event.startswith("DropItem: "):
+                _, _, item = event.split()
+                if item in ("team_CTL_redlolly", "team_CTL_bluelolly"):
+                    side = "red" if item == "team_CTL_redlolly" else "blue"
+                    drops[side] += 1
+                    last_drop[side] = elapsed
+            elif event.startswith("AddScore: ") and event.endswith(" recovery"):
+                side = roster[event.split()[1]][0]
+                taken = last_take.pop(f"team_CTL_{side}lolly", None)
+                dropped = last_drop.pop(side, None)
+                if taken is not None:
+                    recoveries[side].append(elapsed - taken)
+                if dropped is not None:
+                    dropped_to_recovered[side].append(elapsed - dropped)
+            elif event.startswith("Teamscores: "):
+                _, _, red, _, blue = event.split()
+                captures = {"red": int(red), "blue": int(blue)}
+                break
+
+    models = {team: Counter(entry[1:] for entry in roster.values() if entry[0] == team) for team in teams.values()}
+    if len(roster) != NUM_BOTS or models["red"] != models["blue"] or not orders or not captures:
+        raise RuntimeError("Expected mirrored bot rosters, team AI orders and a final score")
+    return {
+        "team_ai_orders": dict(orders),
+        "teams": {
+            team: {
+                "captures": captures[team],
+                "lolly_pickups": pickups[team],
+                "own_lolly_drops": drops[team],
+                "recoveries": len(recoveries[team]),
+                "median_seconds_since_drop_at_recovery": median(dropped_to_recovered[team]) if dropped_to_recovered[team] else None,
+                "median_seconds_since_last_pickup_at_recovery": median(recoveries[team]) if recoveries[team] else None,
+            }
+            for team in teams.values()
+        },
+    }
+
+
+def run_match(server_path, client_path, case_dir, map_name, mode, ending, args, team_ai_side):
     home = case_dir / "home"
     game = home / "wop"
     game.mkdir(parents=True)
     scratch = case_dir / "scratch"
     scratch.mkdir()
     (game / "match-test.cfg").write_text(
-        make_config(map_name, mode, ending, args.time_limit, args.point_limit, client_path is not None),
+        make_config(map_name, mode, ending, args.time_limit, args.point_limit, client_path is not None, team_ai_side),
         encoding="utf-8",
     )
     base = ["+set", "fs_basepath", str(ROOT)]
@@ -370,7 +462,10 @@ def run_match(server_path, client_path, case_dir, map_name, mode, ending, args):
                 "+set", "com_playIntro", "0", "+set", "name", SPECTATOR, "+setu", "team", "spectator",
             ]
             spectator = Spectator(f"127.0.0.1:{port}", *start(client_command, "client.log", subprocess.PIPE))
-        return watch_match(server, log, map_name, mode, ending, args, spectator)
+        result = watch_match(server, log, map_name, mode, ending, args, spectator)
+        if team_ai_side:
+            result.update(compare_stats(game / "games.log", team_ai_side))
+        return result
 
 
 def positive_int(value):
@@ -392,10 +487,16 @@ def main():
     parser.add_argument("--time-limit", type=positive_int, default=1, help="timelimit in minutes (default: 1)")
     parser.add_argument("--point-limit", type=positive_int, default=1, help="pointlimit for scoring modes (default: 1)")
     parser.add_argument("--score-timeout", type=positive_int, default=300, help="seconds per scoring round (default: 300)")
+    parser.add_argument("--compare-team-ai", action="store_true", help="play timed CTL matches with team AI on red, then blue, using mirrored bot rosters")
     parser.add_argument("--list", action="store_true", help="print the test plan")
     args = parser.parse_args()
     if args.time_limit > (2**31 - 1) // 60000 or args.point_limit > 2**31 - 1:
         parser.error("game limits must fit the server's integer range")
+    if args.compare_team_ai:
+        if (args.mode and set(args.mode) != {"ctl"}) or args.ending == "score":
+            parser.error("--compare-team-ai uses timed CTL matches")
+        args.mode = ["ctl"]
+        args.ending = "time"
 
     try:
         maps = shipped_maps()
@@ -406,9 +507,10 @@ def main():
     if unknown:
         parser.error(f"unknown official map: {', '.join(sorted(unknown))}")
     cases = [
-        (name, mode, ending) for name, modes in maps if not selected or name.casefold() in selected
+        (name, mode, ending, side) for name, modes in maps if not selected or name.casefold() in selected
         for mode in modes if not args.mode or mode in args.mode
         for ending in ((args.ending,) if args.ending else ("time", "score"))
+        for side in (("red", "blue") if args.compare_team_ai else (None,))
     ]
     if not cases:
         parser.error("no official map/mode combinations match the filters")
@@ -416,8 +518,8 @@ def main():
     extra = " and one spectator client" if with_client else ""
     print(f"{len(cases)} cases on {len({case[0] for case in cases})} maps, {NUM_BOTS} bots{extra} each", flush=True)
     if args.list:
-        for name, mode, ending in cases:
-            print(f"{name:24} {mode:8} {ending}")
+        for name, mode, ending, side in cases:
+            print(f"{name:24} {mode:8} {ending}" + (f" team AI: {side}" if side else ""))
         return 0
 
     binaries = sorted(path for path in ROOT.glob("wopded.*") if path.is_file() and os.access(path, os.X_OK))
@@ -443,15 +545,21 @@ def main():
     print(f"Log directory: {run}", flush=True)
     failures = 0
     with (run / "results.jsonl").open("w", encoding="utf-8", buffering=1) as results:
-        for index, (name, mode, ending) in enumerate(cases, 1):
+        for index, (name, mode, ending, side) in enumerate(cases, 1):
             case = f"{index:03}-{name}-{mode}-{ending}"
-            print(f"[{index}/{len(cases)}] {name} {mode} {ending}", flush=True)
+            if side:
+                case += f"-ai-{side}"
+            print(f"[{index}/{len(cases)}] {name} {mode} {ending}" + (f" team AI: {side}" if side else ""), flush=True)
             start = time.monotonic()
             entry = {"map": name, "mode": mode, "ending": ending, "log": f"{case}/server.log"}
+            if side:
+                entry["team_ai_side"] = side
             if client:
                 entry["client_log"] = f"{case}/client.log"
             try:
-                entry.update(run_match(server, client, run / case, name, mode, ending, args))
+                entry.update(run_match(server, client, run / case, name, mode, ending, args, side))
+                if side:
+                    print(f"  {entry['teams']}", flush=True)
                 if entry["bot_errors"]:
                     entry.update(status="failed", error="Match finished with bot library errors")
                     failures += 1

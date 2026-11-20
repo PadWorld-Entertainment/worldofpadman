@@ -987,7 +987,6 @@ qboolean UI_ConsoleCommand(int realTime) {
 	// ensure minimum menu data is available
 	Menu_Cache();
 
-	// this is still needed, but its ingame menu entry is disabled
 	if (Q_stricmp(cmd, "ui_teamOrders") == 0) {
 		UI_TeamOrdersMenu_f();
 		return qtrue;

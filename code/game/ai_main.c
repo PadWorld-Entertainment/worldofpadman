@@ -896,7 +896,31 @@ static void BotAddInfoLtg(bot_state_t *bs) {
 		BotAddInfo(bs, va("ltg: join mate %s", matename), AIDBG_ALL);
 		break;
 	case LTG_PICKUPFLAG:
-		BotAddInfo(bs, "ltg: pickup", AIDBG_ALL);
+		BotAddInfo(bs, "ltg: recover dropped lolly", AIDBG_ALL);
+		break;
+	case LTG_RECOVERFLAG:
+		BotAddInfo(bs, "ltg: chase lolly carrier", AIDBG_ALL);
+		break;
+	case LTG_LOLLYAMBUSH:
+		BotAddInfo(bs, "ltg: cut off enemy lolly carrier", AIDBG_ALL);
+		break;
+	case LTG_LOLLYSCREEN:
+		BotAddInfo(bs, "ltg: clear lolly return route", AIDBG_ALL);
+		break;
+	case LTG_LOLLYRUNNER:
+		BotAddInfo(bs, "ltg: lead push for the lolly", AIDBG_ALL);
+		break;
+	case LTG_LOLLYESCORT:
+		BotAddInfo(bs, "ltg: cover lolly runner", AIDBG_ALL);
+		break;
+	case LTG_UNFREEZE:
+		BotAddInfo(bs, "ltg: thaw teammate", AIDBG_ALL);
+		break;
+	case LTG_CAMPORDER:
+		BotAddInfo(bs, "ltg: hold position", AIDBG_ALL);
+		break;
+	case LTG_ROAMORDER:
+		BotAddInfo(bs, "ltg: roam", AIDBG_ALL);
 		break;
 	}
 	default:
@@ -924,6 +948,33 @@ static void BotAddInfoNode(bot_state_t *bs) {
 		Com_sprintf(ainode, sizeof(ainode), "unknown");
 
 	BotAddInfo(bs, va("ainode %s", ainode), AIDBG_ALL);
+}
+
+static void BotAddInfoOrder(bot_state_t *bs) {
+	const int team = BotTeam(bs);
+	int leader;
+	char name[MAX_NETNAME];
+
+	if (team != TEAM_RED && team != TEAM_BLUE)
+		return;
+
+	if (BotHasActiveOrder(bs)) {
+		const int sender = bs->decisionmaker;
+		const char *source = bs->orderSource == BOT_ORDER_TEAM ? "team AI" :
+							 (g_entities[sender].r.svFlags & SVF_BOT) ? "bot" : "player";
+		ClientName(sender, name, sizeof(name));
+		BotAddInfo(bs, va("order: %s, %s (#%d)", source, name, sender), AIDBG_ALL);
+	} else {
+		BotAddInfo(bs, "order: none (own goal)", AIDBG_ALL);
+	}
+
+	leader = TeamLeader(team);
+	if (leader >= 0) {
+		ClientName(leader, name, sizeof(name));
+		BotAddInfo(bs, va("team leader: %s (#%d)", name, leader), AIDBG_ALL);
+	} else {
+		BotAddInfo(bs, "team leader: none", AIDBG_ALL);
+	}
 }
 
 static void BotSetInfoConfigString(bot_state_t *bs) {
@@ -968,6 +1019,8 @@ static void BotSetInfoConfigString(bot_state_t *bs) {
 		BotAddInfo(bs, "nmy: boomie", AIDBG_COMBAT);
 	else if (IsBambam(bs->enemy))
 		BotAddInfo(bs, "nmy: bambam", AIDBG_COMBAT);
+
+	BotAddInfoOrder(bs);
 }
 
 #if 0
@@ -1416,11 +1469,29 @@ static void RemoveColorEscapeSequences(char *text) {
 	text[l] = '\0';
 }
 
-/*
-==============
-BotAI
-==============
-*/
+static void BotQueueServerChat(bot_state_t *bs, const char *args) {
+	char text[MAX_MESSAGE_SIZE];
+	const int mode = atoi(COM_Parse(&args));
+	const char *token;
+	int sender;
+
+	if (mode != SAY_TEAM && mode != SAY_TELL)
+		return;
+	token = COM_Parse(&args);
+	if (!*token || !args)
+		return;
+	sender = atoi(token);
+	if (sender < 0 || sender >= level.maxclients)
+		return;
+	while (*args == ' ' || *args == '\t')
+		args++;
+	if (*args != '"')
+		return;
+	Q_strncpyz(text, COM_Parse(&args), sizeof(text));
+	RemoveColorEscapeSequences(text);
+	trap_BotQueueConsoleMessage(bs->cs, CMS_TEAMCHAT_FROM + sender, text);
+}
+
 static int BotAI(int client, float thinktime) {
 	bot_state_t *bs;
 	char buf[1024], *args;
@@ -1446,21 +1517,16 @@ static int BotAI(int client, float thinktime) {
 			continue;
 		*args++ = '\0';
 
-		// remove color espace sequences from the arguments
-		RemoveColorEscapeSequences(args);
-
-		if (!Q_stricmp(buf, "cp ")) {		/*CenterPrintf*/
+		if (!Q_stricmp(buf, "cp")) {		/*CenterPrintf*/
 		} else if (!Q_stricmp(buf, "cs")) { /*ConfigStringModified*/
 		} else if (!Q_stricmp(buf, "print")) {
-			// remove first and last quote from the chat message
-			memmove(args, args + 1, strlen(args));
-			args[strlen(args) - 1] = '\0';
-			trap_BotQueueConsoleMessage(bs->cs, CMS_NORMAL, args);
+			const char *p = args;
+			char message[MAX_MESSAGE_SIZE];
+			Q_strncpyz(message, COM_Parse(&p), sizeof(message));
+			RemoveColorEscapeSequences(message);
+			trap_BotQueueConsoleMessage(bs->cs, CMS_NORMAL, message);
 		} else if (!Q_stricmp(buf, "say")) {
-			// remove first and last quote from the chat message
-			memmove(args, args + 1, strlen(args));
-			args[strlen(args) - 1] = '\0';
-			trap_BotQueueConsoleMessage(bs->cs, CMS_CHAT, args);
+			BotQueueServerChat(bs, args);
 		} else if (!Q_stricmp(buf, "scores")) {			 /*FIXME: parse scores?*/
 		} else if (!Q_stricmp(buf, "clientLevelShot")) { /*ignore*/
 		} else if (!Q_stricmp(buf, "fwc")) // fwc->force weapon change ;)

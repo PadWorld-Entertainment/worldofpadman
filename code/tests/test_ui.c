@@ -24,21 +24,26 @@ extern void QDECL dllEntry(intptr_t(QDECL *syscallptr)(intptr_t, ...));
 
 static int keyCatcher;
 static int drawCalls;
+static int backgroundTracksStarted;
 static float lastDrawY;
 static uiClientState_t clientState;
 static qboolean passwordServer;
 static qboolean voteRunning;
+static int localTeam = TEAM_RED;
+static qboolean fullBotTeam;
 static char lastCommand[MAX_STRING_CHARS];
 
 static const char *testConfigString(int index) {
 	if (clientState.connState < CA_CONNECTED)
 		return "";
+	if (fullBotTeam && index > CS_PLAYERS && index < CS_PLAYERS + MAX_CLIENTS)
+		return va("\\n\\Test Bot %d\\t\\1\\model\\padman\\skill\\3", index - CS_PLAYERS);
 	switch (index) {
 	case CS_SERVERINFO:
-		return va("\\sv_hostname\\Test server\\mapname\\wop_diner\\sv_maxclients\\8\\g_gametype\\%d\\g_allowVote\\1",
-				  Cvar_VariableIntegerValue("g_gametype"));
+		return va("\\sv_hostname\\Test server\\mapname\\wop_diner\\sv_maxclients\\%d\\g_gametype\\%d\\g_allowVote\\1",
+				  fullBotTeam ? MAX_CLIENTS : 8, Cvar_VariableIntegerValue("g_gametype"));
 	case CS_PLAYERS:
-		return "\\n\\Local player\\t\\1\\model\\padman";
+		return va("\\n\\Local player\\t\\%d\\model\\padman", localTeam);
 	case CS_PLAYERS + 1:
 		return "\\n\\Test Bot\\t\\1\\model\\padman\\skill\\3";
 	case CS_PLAYERS + 2:
@@ -167,6 +172,9 @@ static intptr_t QDECL testUISyscall(intptr_t command, ...) {
 		break;
 	case UI_R_REGISTERSHADERNOMIP:
 		result = 1;
+		break;
+	case UI_S_STARTBACKGROUNDTRACK:
+		backgroundTracksStarted++;
 		break;
 	case UI_R_DRAWSTRETCHPIC: {
 		floatint_t y;
@@ -468,7 +476,7 @@ static void startInGameMenu(void) {
 static void testInGameMenus(void) {
 	static const char *const buttons[] = {
 		"START", "ADD BOTS", "REMOVE BOTS", "VOICE CHAT", "CALL VOTE",
-		"SETUP", "SERVER INFO", "RESTART MAP", "EXIT GAME",
+		"SETUP", "SERVER INFO", "RESTART MAP", "EXIT GAME", "TEAM ORDERS",
 	};
 	menuframework_s *inGame;
 	int i;
@@ -532,6 +540,88 @@ static void testInGameActions(void) {
 	EXPECT_EQ_INT(0, uis.menusp);
 }
 
+static void testTeamOrdersMenu(void) {
+	static const struct {
+		int gametype;
+		int index;
+		const char *label;
+		const char *command;
+	} modeOrders[] = {
+		{GT_BALLOON, 6, "Defend a balloon", "say_team \"defend a balloon\"\n"},
+		{GT_FREEZETAG, 5, "Thaw a teammate", "say_team \"thaw a teammate\"\n"},
+	};
+	menuframework_s *inGame;
+	const menulist_s *list;
+	int i, j;
+	startInGameMenu();
+	inGame = uis.activemenu;
+	ASSERT_EQ_INT(qtrue, openMenu("TEAM ORDERS"));
+	list = Menu_ItemAtCursor(uis.activemenu);
+	ASSERT_EQ_INT(qtrue, list && list->generic.type == MTYPE_SCROLLLIST);
+	EXPECT_EQ_INT(2, list->numitems);
+	EXPECT_EQ_STRING("Everyone", list->itemnames[0]);
+	EXPECT_EQ_STRING("Test Bot", list->itemnames[1]);
+	UI_KeyEvent(K_DOWNARROW, qtrue);
+	UI_KeyEvent(K_ENTER, qtrue);
+	EXPECT_EQ_INT(0, list->curvalue);
+	EXPECT_EQ_STRING("Follow me", list->itemnames[1]);
+	UI_KeyEvent(K_DOWNARROW, qtrue);
+	UI_KeyEvent(K_ENTER, qtrue);
+	EXPECT_EQ_STRING("tell 1 \"follow me\"\n", lastCommand);
+	EXPECT_EQ_INT(qtrue, uis.activemenu == inGame);
+
+	Cmd_TokenizeString("ui_teamOrders");
+	Cvar_SetValue("g_gametype", GT_CTF);
+	Cvar_Set("cl_paused", "0");
+	backgroundTracksStarted = 0;
+	uis.musicstate = MUSICSTATE_STOPPED;
+	ASSERT_EQ_INT(qtrue, UI_ConsoleCommand(uis.realtime));
+	ASSERT_EQ_INT(2, uis.menusp);
+	EXPECT_EQ_INT(1, Cvar_VariableIntegerValue("cl_paused"));
+	UI_Refresh(uis.realtime + 16);
+	EXPECT_EQ_INT(0, backgroundTracksStarted);
+	UI_KeyEvent(K_ENTER, qtrue);
+	EXPECT_EQ_STRING("Defend the base", list->itemnames[2]);
+	UI_KeyEvent(K_DOWNARROW, qtrue);
+	UI_KeyEvent(K_DOWNARROW, qtrue);
+	UI_KeyEvent(K_ENTER, qtrue);
+	EXPECT_EQ_STRING("say_team \"defend the base\"\n", lastCommand);
+	EXPECT_EQ_INT(qtrue, uis.activemenu == inGame);
+
+	fullBotTeam = qtrue;
+	UI_ConsoleCommand(uis.realtime);
+	fullBotTeam = qfalse;
+	ASSERT_EQ_INT(MAX_CLIENTS, list->numitems);
+	UI_KeyEvent(K_UPARROW, qtrue);
+	EXPECT_GT_INT(0, list->top);
+	UI_KeyEvent(K_ENTER, qtrue);
+	UI_KeyEvent(K_DOWNARROW, qtrue);
+	UI_KeyEvent(K_ENTER, qtrue);
+	EXPECT_EQ_STRING("tell 63 \"follow me\"\n", lastCommand);
+
+	for (i = 0; i < ARRAY_LEN(modeOrders); i++) {
+		Cvar_SetValue("g_gametype", modeOrders[i].gametype);
+		UI_ConsoleCommand(uis.realtime);
+		ASSERT_EQ_INT(2, uis.menusp);
+		UI_KeyEvent(K_ENTER, qtrue);
+		ASSERT_EQ_INT(qtrue, list->numitems > modeOrders[i].index);
+		EXPECT_EQ_STRING(modeOrders[i].label, list->itemnames[modeOrders[i].index]);
+		for (j = 0; j < modeOrders[i].index; j++)
+			UI_KeyEvent(K_DOWNARROW, qtrue);
+		UI_KeyEvent(K_ENTER, qtrue);
+		EXPECT_EQ_STRING(modeOrders[i].command, lastCommand);
+	}
+
+	localTeam = TEAM_SPECTATOR;
+	UI_ConsoleCommand(uis.realtime);
+	localTeam = TEAM_RED;
+	EXPECT_EQ_INT(qtrue, uis.activemenu == inGame);
+	Cvar_SetValue("g_gametype", GT_FFA);
+	UI_ConsoleCommand(uis.realtime);
+	EXPECT_EQ_INT(qtrue, uis.activemenu == inGame);
+	Cmd_TokenizeString("");
+}
+
 static void testConsoleMenus(void) {
 	static const char *const commands[] = {"ui_help items", "ui_help gametype", "wop_music"};
 	menuframework_s *inGame;
@@ -539,10 +629,6 @@ static void testConsoleMenus(void) {
 
 	startInGameMenu();
 	inGame = uis.activemenu;
-	// Team Orders is compiled out. The legacy command must leave the current menu alone.
-	Cmd_TokenizeString("ui_teamOrders");
-	EXPECT_EQ_INT(qtrue, UI_ConsoleCommand(uis.realtime));
-	EXPECT_EQ_INT(qtrue, uis.activemenu == inGame);
 	for (i = 0; i < ARRAY_LEN(commands); i++) {
 		const int time = uis.realtime;
 		Cmd_TokenizeString(commands[i]);
@@ -576,6 +662,7 @@ int main(int argc, char *argv[]) {
 	ADD_TEST(testConnectScreen);
 	ADD_TEST(testInGameMenus);
 	ADD_TEST(testInGameActions);
+	ADD_TEST(testTeamOrdersMenu);
 	ADD_TEST(testConsoleMenus);
 
 	TESTS_SHUTDOWN();

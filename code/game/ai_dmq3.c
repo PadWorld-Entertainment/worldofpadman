@@ -355,33 +355,6 @@ void BotRefuseOrder(bot_state_t *bs) {
 }
 */
 
-static qboolean GetCTLFlagGoal(int team, bot_goal_t *goal) {
-	int i;
-	vec3_t goalorigin;
-	int itemtag;
-
-	if (team == TEAM_RED)
-		itemtag = PW_REDFLAG;
-	else if (team == TEAM_BLUE)
-		itemtag = PW_BLUEFLAG;
-	else
-		itemtag = PW_NEUTRALFLAG;
-
-	for (i = MAX_CLIENTS; i < level.num_entities; i++) {
-		const gentity_t *ent = &g_entities[i];
-		if (ent->inuse && ent->item && ent->item->giTag == itemtag && ent->flags & FL_DROPPED_ITEM) {
-			memset(goal, 0, sizeof(*goal));
-			goal->areanum = trap_AAS_BestReachableArea(ent->r.currentOrigin, tv(-5, -5, -5), tv(5, 5, 5), goalorigin);
-			VectorCopy(goalorigin, goal->origin);
-			goal->entitynum = i;
-			VectorSet(goal->maxs, 8, 8, 8);
-			VectorSet(goal->mins, -8, -8, -8);
-			return qtrue;
-		}
-	}
-	return qfalse;
-}
-
 // cyr{
 qboolean IsMyBalloon(int team, bot_goal_t *goal) {
 	int state;
@@ -510,7 +483,8 @@ static void BotBalloonSeekGoals(bot_state_t *bs) {
 	vec3_t dir;
 
 	// dont go for balloon as long as bad equiped
-	if (bs->ltgtype != LTG_BALLCAMP && (bs->inventory[INV_GOTWEAPON] < 40 || bs->inventory[INVENTORY_HEALTH] < 30)) {
+	if (bs->orderSource == BOT_ORDER_NONE && bs->ltgtype != LTG_BALLCAMP &&
+		(bs->inventory[INV_GOTWEAPON] < 40 || bs->inventory[INVENTORY_HEALTH] < 30)) {
 		bs->ltgtype = 0;
 		return;
 	}
@@ -538,9 +512,10 @@ static void BotBalloonSeekGoals(bot_state_t *bs) {
 			if (!IsMyBalloon(BotTeam(bs), &bs->teamgoal) && VectorLengthSquared(dir) < Square(75)) {
 				// BotRefuseOrder(bs);
 				bs->ltgtype = LTG_BALLCAMP; // stay here to capture
-				bs->decisionmaker = bs->client;
-				// bs->ordered = qfalse;
-				bs->teamgoal_time = FloatTime() + TEAM_BALLOONCAMP_TIME;
+				if (bs->orderSource == BOT_ORDER_NONE) {
+					bs->decisionmaker = bs->client;
+					bs->teamgoal_time = FloatTime() + TEAM_BALLOONCAMP_TIME;
+				}
 			}
 		}
 	}
@@ -557,7 +532,7 @@ static qboolean PlayerRescuesPlayer(int helper_id, int frozen_id) {
 		return qfalse;
 
 	bs = botstates[helper_id];
-	if (bs->ltgtype != LTG_UNFREEZE)
+	if (!bs || !bs->inuse || bs->ltgtype != LTG_UNFREEZE)
 		return qfalse;
 
 	return (bs->teammate == frozen_id);
@@ -624,9 +599,9 @@ static void BotFreezeTagSeekGoals(bot_state_t *bs) {
 	bs->teammate = frozenmates[pick];
 	bs->teamgoal_time = FloatTime() + TEAM_UNFREEZETIME;
 
-	// tell the mate you are on the way
-	trap_EA_Command(bs->client, va("tell %d Keep cool %s, i'm on my way!\n", bs->teammate,
-								   EasyClientName(bs->teammate, buf, sizeof(buf))));
+	if (!bot_nochat.integer)
+		trap_EA_Command(bs->client, va("tell %d Keep cool %s, i'm on my way!\n", bs->teammate,
+										   EasyClientName(bs->teammate, buf, sizeof(buf))));
 }
 
 static qboolean BotWantsCarts(bot_state_t *bs, int *mate) {
@@ -810,7 +785,7 @@ static int BotNumberInTeam(const bot_state_t *bs) {
 /**
  * @sa BotTeamFlagCarrierVisible()
  */
-static int GetTeamFlagCarrier(int team) {
+int GetTeamFlagCarrier(int team) {
 	int i;
 	int powerupId;
 
@@ -835,23 +810,32 @@ static int GetTeamFlagCarrier(int team) {
 	return -1;
 }
 
-static qboolean GetDroppedLollyGoal(int team, bot_goal_t *goal) {
-	const char *itemname;
+qboolean GetDroppedLollyGoal(int team, bot_goal_t *goal) {
+	const char *classname;
+	gentity_t *item = NULL;
 	if (team == TEAM_RED)
-		itemname = "Red Lolly";
+		classname = "team_CTL_redlolly";
 	else if (team == TEAM_BLUE)
-		itemname = "Blue Lolly";
+		classname = "team_CTL_bluelolly";
 	else
-		itemname = "Neutral Lolly";
+		classname = "team_CTL_neutrallolly";
 
-	if (trap_BotGetLevelItemGoal(-1, itemname, goal) < 0)
-		return qfalse;
-
-	// goal unreachable?
-	if (!goal->areanum || !trap_AAS_AreaReachability(goal->areanum))
-		return qfalse;
-
-	return qtrue;
+	// Botlib only registers stationary items, sometimes after the recovery window has closed.
+	while ((item = G_Find(item, FOFS(classname), classname)) != NULL) {
+		bot_goal_t dropped = {0};
+		if (!(item->flags & FL_DROPPED_ITEM) || !item->r.linked)
+			continue;
+		dropped.areanum = trap_AAS_BestReachableArea(item->r.currentOrigin, item->r.mins, item->r.maxs, dropped.origin);
+		if (!dropped.areanum || !trap_AAS_AreaReachability(dropped.areanum))
+			continue;
+		dropped.entitynum = item->s.number;
+		dropped.flags = GFL_DROPPED;
+		VectorCopy(item->r.mins, dropped.mins);
+		VectorCopy(item->r.maxs, dropped.maxs);
+		*goal = dropped;
+		return qtrue;
+	}
+	return qfalse;
 }
 
 #if 0
@@ -1044,7 +1028,7 @@ static void BotCtfSeekGoals(bot_state_t *bs) {
 	} else if (action == LTG_GETFLAG && bs->ltgtype != LTG_GETFLAG) {
 		if (nmyflagstatus == FLAG_DROPPED) {
 			// get a goal for the flag
-			if (!GetCTLFlagGoal(BotOppositeTeam(bs), &bs->teamgoal)) {
+			if (!GetDroppedLollyGoal(BotOppositeTeam(bs), &bs->teamgoal)) {
 				bs->ltgtype = 0;
 				return;
 			}
@@ -1196,7 +1180,8 @@ static void Bot1FCTFSeekGoals(bot_state_t *bs) {
 			// set the time the bot will stop getting the flag
 			bs->teamgoal_time = FloatTime() + CTF_RUSHBASE_TIME;
 		} else if (action == LTG_PICKUPFLAG && bs->ltgtype != LTG_PICKUPFLAG) {
-			// attack enemy flag/base
+			if (!GetDroppedLollyGoal(TEAM_FREE, &bs->teamgoal))
+				return;
 			bs->decisionmaker = bs->client;
 			bs->ltgtype = LTG_PICKUPFLAG;
 			// set the time the bot will stop getting the flag
@@ -1258,6 +1243,12 @@ BotTeamGoals
 ==================
 */
 void BotTeamGoals(bot_state_t *bs, int retreat) {
+	if (BotOrderActive(bs)) {
+		if (gametype == GT_BALLOON && bs->ltgtype == LTG_ATTACKENEMYBASE)
+			BotBalloonSeekGoals(bs);
+		return;
+	}
+
 	if (gametype == GT_CTF) {
 		BotCtfSeekGoals(bs);
 	} else if (gametype == GT_1FCTF) {
@@ -1265,7 +1256,9 @@ void BotTeamGoals(bot_state_t *bs, int retreat) {
 	} else if (gametype == GT_BALLOON) {
 		BotBalloonSeekGoals(bs);
 	} else if (gametype == GT_FREEZETAG) {
-		BotFreezeTagSeekGoals(bs);
+		const int leader = TeamLeader(BotTeam(bs));
+		if (!BotTeamAIEnabled(BotTeam(bs)) || leader < 0 || !(g_entities[leader].r.svFlags & SVF_BOT))
+			BotFreezeTagSeekGoals(bs);
 	} else if (gametype == GT_SPRAY || gametype == GT_SPRAYFFA) {
 		if (retreat) {
 			BotSyCRetreatGoals(bs);
@@ -1888,7 +1881,8 @@ int BotWantsToRetreat(bot_state_t *bs) {
 	aas_entityinfo_t entinfo;
 
 	if (gametype == GT_CTF || gametype == GT_1FCTF) {
-		if (bs->ltgtype == LTG_CAPTUREFLAG || bs->ltgtype == LTG_GETFLAG || bs->ltgtype == LTG_PICKUPFLAG) {
+		if (bs->ltgtype == LTG_CAPTUREFLAG || bs->ltgtype == LTG_GETFLAG || bs->ltgtype == LTG_PICKUPFLAG ||
+			bs->ltgtype == LTG_LOLLYRUNNER || bs->ltgtype == LTG_RECOVERFLAG) {
 			return qtrue;
 		}
 	} else if (gametype == GT_FREEZETAG) {
@@ -1942,7 +1936,9 @@ int BotWantsToChase(bot_state_t *bs) {
 	aas_entityinfo_t enemyinfo;
 
 	if (gametype == GT_CTF || gametype == GT_1FCTF) {
-		if (bs->ltgtype == LTG_CAPTUREFLAG || bs->ltgtype == LTG_GETFLAG || bs->ltgtype == LTG_PICKUPFLAG) {
+		if (bs->ltgtype == LTG_CAPTUREFLAG || bs->ltgtype == LTG_GETFLAG || bs->ltgtype == LTG_PICKUPFLAG ||
+			bs->ltgtype == LTG_LOLLYRUNNER || bs->ltgtype == LTG_LOLLYESCORT || bs->ltgtype == LTG_LOLLYSCREEN ||
+			bs->ltgtype == LTG_RECOVERFLAG || bs->ltgtype == LTG_LOLLYAMBUSH) {
 			return qfalse;
 		}
 	} else if (gametype == GT_FREEZETAG) {
@@ -2457,6 +2453,22 @@ qboolean BotNmyTurnedInvalid(bot_state_t *bs) {
 	return qfalse;
 }
 
+static int BotLollyPriorityEnemy(const bot_state_t *bs) {
+	const int teammate = bs->teammate;
+	const bot_state_t *runner;
+
+	if (bs->orderSource != BOT_ORDER_TEAM || !BotHasActiveOrder(bs))
+		return -1;
+	if (bs->ltgtype == LTG_RECOVERFLAG || bs->ltgtype == LTG_LOLLYAMBUSH)
+		return teammate;
+	if (bs->ltgtype != LTG_LOLLYESCORT && bs->ltgtype != LTG_LOLLYSCREEN)
+		return -1;
+	runner = botstates[teammate];
+	if (!runner || !runner->inuse || runner->enemyvisible_time + 1 < FloatTime())
+		return -1;
+	return runner->enemy;
+}
+
 /*
 ==================
 BotFindEnemy
@@ -2464,6 +2476,7 @@ BotFindEnemy
 */
 int BotFindEnemy(bot_state_t *bs, int curenemy) {
 	int i, healthdecrease;
+	const int priority = gametype == GT_CTF ? BotLollyPriorityEnemy(bs) : -1;
 	float f, alertness, easyfragger, vis;
 	float squaredist, cursquaredist;
 	aas_entityinfo_t entinfo, curenemyinfo;
@@ -2479,6 +2492,23 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 	healthdecrease = bs->lasthealth > bs->inventory[INVENTORY_HEALTH];
 	// remember the current health value
 	bs->lasthealth = bs->inventory[INVENTORY_HEALTH];
+	// Escorts engage the runner's visible threat. Interceptors focus on the carrier.
+	if (priority >= 0 && priority < level.maxclients && priority != bs->client &&
+		!(g_entities[priority].flags & FL_NOTARGET) && !BotSameTeam(bs, priority)) {
+		BotEntityInfo(priority, &entinfo);
+		if (entinfo.valid && !EntityIsDead(&entinfo) &&
+			(!EntityIsInvisible(&entinfo) || EntityIsShooting(&entinfo)) &&
+			BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 180, priority) > 0) {
+			if (priority == curenemy)
+				return qfalse;
+			bs->enemy = priority;
+			bs->enemysight_time = curenemy >= 0 ? FloatTime() - 2 : FloatTime();
+			bs->enemysuicide = qfalse;
+			bs->enemydeath_time = 0;
+			bs->enemyvisible_time = FloatTime();
+			return qtrue;
+		}
+	}
 	//
 	if (curenemy >= 0) {
 		// can we skip checking other candidates?
@@ -4255,9 +4285,11 @@ static void BotCheckConsoleMessages(bot_state_t *bs) {
 	bot_consolemessage_t m;
 
 	while ((handle = trap_BotNextConsoleMessage(bs->cs, &m)) != 0) {
-		BotMatchMessage(bs, m.message);
+		const int sender = m.type >= CMS_TEAMCHAT_FROM ? m.type - CMS_TEAMCHAT_FROM : -1;
+		BotMatchMessage(bs, m.message, sender);
 		trap_BotRemoveConsoleMessage(bs->cs, handle);
 	}
+	BotSendOrderReply(bs);
 }
 
 /*
@@ -4359,18 +4391,6 @@ static void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 		} else if (attacker == bs->enemy && target == attacker) {
 			bs->enemysuicide = qtrue;
 		}
-#if USE_TEAMAI
-		if (gametype == GT_1FCTF) {
-			aas_entityinfo_t entinfo;
-			BotEntityInfo(target, &entinfo);
-			if (entinfo.powerups & (1 << PW_NEUTRALFLAG)) {
-				if (!BotSameTeam(bs, target)) {
-					bs->neutralflagstatus = 3; // enemy dropped the flag
-					bs->flagstatuschanged = qtrue;
-				}
-			}
-		}
-#endif
 		break;
 	}
 	case EV_GLOBAL_SOUND: {
@@ -4383,45 +4403,6 @@ static void BotCheckEvents(bot_state_t *bs, entityState_t *state) {
 			// powerup respawned... go get it
 			BotGoForPowerups(bs);
 		}
-		break;
-	}
-	case EV_GLOBAL_TEAM_SOUND: {
-#if USE_TEAMAI
-		if (gametype == GT_CTF || gametype == GT_1FCTF) {
-			switch (state->eventParm) {
-			case GTS_RED_CAPTURE:
-				bs->blueflagstatus = 0;
-				bs->redflagstatus = 0;
-				bs->flagstatuschanged = qtrue;
-				break; // see BotMatch_CTF
-			case GTS_BLUE_CAPTURE:
-				bs->blueflagstatus = 0;
-				bs->redflagstatus = 0;
-				bs->flagstatuschanged = qtrue;
-				break; // see BotMatch_CTF
-			case GTS_RED_RETURN:
-				// blue flag is returned
-				bs->blueflagstatus = 0;
-				bs->flagstatuschanged = qtrue;
-				break;
-			case GTS_BLUE_RETURN:
-				// red flag is returned
-				bs->redflagstatus = 0;
-				bs->flagstatuschanged = qtrue;
-				break;
-			case GTS_RED_TAKEN:
-				// blue flag is taken
-				bs->blueflagstatus = 1;
-				bs->flagstatuschanged = qtrue;
-				break; // see BotMatch_CTF
-			case GTS_BLUE_TAKEN:
-				// red flag is taken
-				bs->redflagstatus = 1;
-				bs->flagstatuschanged = qtrue;
-				break; // see BotMatch_CTF
-			}
-		}
-#endif
 		break;
 	}
 	case EV_PLAYER_TELEPORT_IN: {

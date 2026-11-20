@@ -130,6 +130,8 @@ qboolean IsBoomie(int ent);
 qboolean IsBambam(int ent);
 qboolean IsMyBalloon(int team, bot_goal_t *goal);
 qboolean BotCTFCarryingFlag(const bot_state_t *bs);
+qboolean GetDroppedLollyGoal(int team, bot_goal_t *goal);
+int GetTeamFlagCarrier(int team);
 
 #define MAX_HSTATIONS 8
 

@@ -91,6 +91,8 @@ vmCvar_t g_KillerduckHealth;
 vmCvar_t nextmapBackUp;
 vmCvar_t g_transmitSVboastermissiles;
 vmCvar_t g_suddenDeath;
+vmCvar_t bot_teamAI;
+vmCvar_t bot_teamAITeams;
 
 // freezetag
 vmCvar_t g_ft_numRounds;
@@ -189,6 +191,8 @@ static cvarTable_t gameCvarTable[] = {
 	{&nextmapBackUp, "nextmapBackUp", "", 0, 0, qfalse},
 	{&g_transmitSVboastermissiles, "g_transmitSVboastermissiles", "0", 0, 0, qtrue},
 	{&g_suddenDeath, "g_suddenDeath", "1", CVAR_ARCHIVE, 0, qfalse},
+	{&bot_teamAI, "bot_teamAI", "1", CVAR_ARCHIVE, 0, qfalse},
+	{&bot_teamAITeams, "bot_teamAITeams", "3", CVAR_ARCHIVE, 0, qfalse}, // 1 = red, 2 = blue
 
 	// instapad
 	{&g_instaPad, "g_instaPad", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qtrue},

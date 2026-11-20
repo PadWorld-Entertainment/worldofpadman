@@ -66,14 +66,15 @@ static char nodeswitch[MAX_NODESWITCHES + 1][144];
 
 extern bot_state_t *botstates[MAX_CLIENTS];
 
-int BotClientTravelTimeToGoal(int client, bot_goal_t *goal) {
+int BotClientTravelTimeToGoal(int client, const bot_goal_t *goal) {
 	playerState_t ps;
 	int areanum;
 
-	BotAI_GetClientState(client, &ps);
+	if (!goal->areanum || !BotAI_GetClientState(client, &ps))
+		return 0;
 	areanum = BotPointAreaNum(ps.origin);
 	if (!areanum)
-		return 1;
+		return 0;
 	return trap_AAS_AreaTravelTimeToGoalArea(areanum, ps.origin, goal->areanum, TFL_DEFAULT);
 }
 
@@ -273,13 +274,17 @@ static int BotNearbyGoal(bot_state_t *bs, int tfl, bot_goal_t *ltg, float range)
 	if (BotGoForAir(bs, tfl, ltg, range))
 		return qtrue;
 
-	// if the bot is carrying a flag or cubes
+	if (bs->orderSource == BOT_ORDER_TEAM && (bs->ltgtype == LTG_RECOVERFLAG || bs->ltgtype == LTG_PICKUPFLAG))
+		return qfalse;
+
+	// A carrier's movement goal can be a waypoint or an item. Check the scoring base.
 	if (BotCTFCarryingFlag(bs)) {
-		// if the bot is just a few secs away from the base
-		if (trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->teamgoal.areanum, TFL_DEFAULT) < 300) {
-			// make the range really small
-			range = 50;
-		}
+		const int team = gametype == GT_CTF ? BotTeam(bs) : BotOppositeTeam(bs);
+		const bot_goal_t *base = team == TEAM_RED ? &ctf_redflag : &ctf_blueflag;
+		const int travel = bs->areanum && base->areanum ?
+			trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, base->areanum, tfl) : 0;
+		if (travel && travel < 300)
+			range = MIN(range, 50);
 	}
 
 	ret = trap_BotChooseNBGItem(bs->gs, bs->origin, bs->inventory, tfl, ltg, range);
@@ -499,6 +504,39 @@ static void SelfTeamGoal(bot_state_t *bs) {
 	VectorSet(bs->teamgoal.maxs, 8, 8, 8);
 }
 
+static qboolean BotWaitForLollyEscort(bot_state_t *bs, int tfl) {
+	int i, travel;
+	qboolean hasEscort = qfalse;
+
+	if (bs->lollyPushTime && bs->lollyPushTime <= FloatTime())
+		return qfalse;
+	if (!bs->areanum || !bs->teamgoal.areanum)
+		return qfalse;
+	travel = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->teamgoal.areanum, tfl);
+	if (!travel || travel > 350)
+		return qfalse;
+
+	for (i = 0; i < level.maxclients; i++) {
+		bot_state_t *escort = botstates[i];
+
+		if (!escort || !escort->inuse || g_entities[i].health <= 0 || escort->ltgtype != LTG_LOLLYESCORT ||
+			escort->teammate != bs->client || !BotHasActiveOrder(escort))
+			continue;
+		hasEscort = qtrue;
+		if (DistanceSquared(bs->origin, g_entities[i].r.currentOrigin) <= Square(240) &&
+			trap_InPVS(bs->origin, g_entities[i].r.currentOrigin))
+			break;
+	}
+	// Let the runner push on after a short wait or as soon as one escort arrives.
+	if (!hasEscort || i < level.maxclients) {
+		bs->lollyPushTime = FloatTime();
+		return qfalse;
+	}
+	if (!bs->lollyPushTime)
+		bs->lollyPushTime = FloatTime() + 2;
+	return qtrue;
+}
+
 /*
 ==================
 BotGetLongTermGoal
@@ -508,6 +546,33 @@ however this saves us a lot of code
 ==================
 */
 static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t *goal) {
+	const qboolean ordered = BotOrderActive(bs);
+
+	if (ordered && bs->ltgtype == LTG_LOLLYRUNNER) {
+		if (retreat)
+			bs->lollyPushTime = FloatTime();
+		else if (BotWaitForLollyEscort(bs, tfl))
+			return qfalse;
+		*goal = bs->teamgoal;
+		return qtrue;
+	}
+	if (ordered && bs->ltgtype == LTG_RECOVERFLAG) {
+		if (BotPlayerLocation(bs->teammate, goal))
+			bs->teamgoal = *goal;
+		else
+			*goal = bs->teamgoal;
+		return qtrue;
+	}
+	if (ordered && !retreat &&
+		(bs->ltgtype == LTG_CAMPORDER || bs->ltgtype == LTG_LOLLYAMBUSH || bs->ltgtype == LTG_LOLLYSCREEN)) {
+		if (DistanceSquared(bs->origin, bs->teamgoal.origin) <= Square(48)) {
+			trap_BotResetAvoidReach(bs->ms);
+			return qfalse;
+		}
+		*goal = bs->teamgoal;
+		return qtrue;
+	}
+
 	// cyr_drop{
 	if (bs->ltgtype == LTG_FETCHCART) {
 		aas_entityinfo_t entinfo;
@@ -652,7 +717,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 	}
 	if (bs->ltgtype == LTG_UNFREEZE) {
 		gentity_t *mate = &g_entities[bs->teammate];
-		bot_goal_t mategoal;
+		bot_goal_t mategoal = {0};
 
 		// time up?
 		if (bs->teamgoal_time < FloatTime()) {
@@ -667,7 +732,8 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 
 		// create goal from mate position
 		VectorCopy(mate->r.currentOrigin, mategoal.origin);
-		mategoal.areanum = trap_AAS_PointAreaNum(mategoal.origin);
+		mategoal.areanum = BotPointAreaNum(mategoal.origin);
+		mategoal.entitynum = bs->teammate;
 		VectorSet(mategoal.mins, -10, -10, -10);
 		VectorSet(mategoal.maxs, 10, 10, 10);
 		if (!mategoal.areanum) {
@@ -676,6 +742,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		}
 
 		if (FT_InThawingRange(&g_entities[bs->client], mate)) {
+			*goal = mategoal;
 			// camp
 			// Com_Printf("camping \n");
 			VectorCopy(bs->origin, goal->origin);
@@ -691,7 +758,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		return qtrue;
 	}
 	// if the bot accompanies someone
-	if (bs->ltgtype == LTG_TEAMACCOMPANY && !retreat) {
+	if ((bs->ltgtype == LTG_TEAMACCOMPANY && !retreat) || bs->ltgtype == LTG_LOLLYESCORT) {
 		aas_entityinfo_t entinfo;
 		// check for bot typing status message
 		if (bs->teammessage_time && bs->teammessage_time < FloatTime()) {
@@ -840,7 +907,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 			// just to make sure the bot won't spam this message
 			bs->teammatevisible_time = FloatTime();
 		}
-		return qtrue;
+		return goal->areanum != 0;
 	}
 
 	if (bs->ltgtype == LTG_DEFENDKEYAREA) {
@@ -852,7 +919,8 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 		}
 
 		// passed the def range border? return to teamgoal!
-		traveltime = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->teamgoal.areanum, TFL_DEFAULT);
+		traveltime = bs->areanum && bs->teamgoal.areanum ?
+			trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->teamgoal.areanum, TFL_DEFAULT) : 0;
 		if (traveltime > DEFENDAWAY_RANGE) {
 			bs->defendaway_time = 0;
 		}
@@ -955,9 +1023,9 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 					base_flag = &ctf_blueflag;
 
 				// go for items if your flag is not at base
-				if (flagstatus != FLAG_ATBASE) {
+				if (flagstatus != FLAG_ATBASE && bs->areanum && base_flag->areanum) {
 					int tt = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, base_flag->areanum, bs->tfl);
-					if (tt < 400) {
+					if (tt && tt < 400) {
 						bs->rushbaseaway_time = FloatTime() + 30;
 					}
 				}
@@ -1033,6 +1101,10 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 				return qfalse;
 			} else if (status == FLAG_DROPPED) {
 				vec3_t dir;
+				if (bs->orderSource != BOT_ORDER_NONE && !GetDroppedLollyGoal(BotOppositeTeam(bs), &bs->teamgoal)) {
+					bs->ltgtype = 0;
+					return qfalse;
+				}
 				memcpy(goal, &bs->teamgoal, sizeof(*goal));
 				// reset ltg if bot touches the goal.. to cover the case where the flag
 				// got picked up and dropped again between two AI frames
@@ -1111,7 +1183,10 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 				return qfalse;
 			}
 
-			memcpy(goal, &bs->teamgoal, sizeof(*goal));
+			if (ordered && bs->orderSource == BOT_ORDER_TEAM && GetDroppedLollyGoal(BotTeam(bs), goal))
+				bs->teamgoal = *goal;
+			else
+				*goal = bs->teamgoal;
 			return qtrue;
 		}
 		if (bs->ltgtype == LTG_PLANTBOOMIE) {
@@ -1234,11 +1309,15 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 
 			status = Team_GetFlagStatus(TEAM_FREE);
 			BotAddInfo(bs, va("neutral flag %d", status), AIDBG_GAMETYPE);
-			if (status == FLAG_TAKEN) {
+			if (status != FLAG_ATBASE && status != FLAG_DROPPED) {
 				bs->ltgtype = 0;
 				return qfalse;
 			} else if (status == FLAG_DROPPED) {
 				vec3_t dir;
+				if (bs->orderSource != BOT_ORDER_NONE && !GetDroppedLollyGoal(TEAM_FREE, &bs->teamgoal)) {
+					bs->ltgtype = 0;
+					return qfalse;
+				}
 				memcpy(goal, &bs->teamgoal, sizeof(*goal));
 				// reset ltg if bot touches the goal.. to cover the case where the flag
 				// got picked up and dropped again between two AI frames
@@ -1298,7 +1377,7 @@ static int BotGetLongTermGoal(bot_state_t *bs, int tfl, int retreat, bot_goal_t 
 			}
 
 			// flag is no longer there?
-			status = Team_GetFlagStatus(BotTeam(bs));
+			status = Team_GetFlagStatus(TEAM_FREE);
 			if (status != FLAG_DROPPED) {
 				bs->ltgtype = 0;
 				return qfalse;
@@ -2239,6 +2318,9 @@ static void CheckHealth(bot_state_t *bs) {
 	int i, dist, bestdist, bestnum, health, maxH;
 	float res;
 
+	if (bs->orderSource != BOT_ORDER_NONE)
+		return;
+
 	bestnum = 0;
 	bestdist = 99999;
 	health = bs->inventory[INVENTORY_HEALTH];
@@ -2531,7 +2613,7 @@ int AINode_Seek_LTG(bot_state_t *bs) {
 		return qtrue;
 
 	// check for nearby goals periodicly
-	if (bs->check_time < FloatTime()) {
+	if (bs->areanum && goal.areanum && bs->check_time < FloatTime()) {
 		int tt_ltg; // traveltime to LTG
 		bs->check_time = FloatTime() + 0.5;
 
@@ -2556,6 +2638,8 @@ int AINode_Seek_LTG(bot_state_t *bs) {
 
 		if (bs->ltgtype == LTG_CAPTUREFLAG) //|| bs->ltgtype == LTG_GETFLAG )
 			range = 20;
+		else if (bs->ltgtype == LTG_LOLLYRUNNER || bs->ltgtype == LTG_LOLLYESCORT)
+			range = 65;
 
 		// make sure to never to for a NBG that is further away from the bot than the LTG
 		tt_ltg = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, goal.areanum, bs->tfl);
@@ -2564,12 +2648,13 @@ int AINode_Seek_LTG(bot_state_t *bs) {
 
 		//
 		if (BotNearbyGoal(bs, bs->tfl, &goal, range)) {
-			bot_goal_t nbg;
-			int tt_nbg;
-			trap_BotGetTopGoal(bs->gs, &nbg);
-			tt_nbg = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, nbg.areanum, bs->tfl);
-			if (bot_developer.integer & AIDBG_GOAL)
-				Com_Printf(S_COLOR_GREEN "going for NBG with tt: %d, LTG has %d, range %d \n", tt_nbg, tt_ltg, range);
+			if (bot_developer.integer & AIDBG_GOAL) {
+				bot_goal_t nbg;
+				if (trap_BotGetTopGoal(bs->gs, &nbg) && nbg.areanum) {
+					int tt_nbg = trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, nbg.areanum, bs->tfl);
+					Com_Printf(S_COLOR_GREEN "going for NBG with tt: %d, LTG has %d, range %d \n", tt_nbg, tt_ltg, range);
+				}
+			}
 			trap_BotResetLastAvoidReach(bs->ms);
 			// get the goal at the top of the stack
 			// trap_BotGetTopGoal(bs->gs, &tmpgoal);
@@ -2713,7 +2798,8 @@ int AINode_Battle_Fight(bot_state_t *bs) {
 		return qfalse;
 	}
 	// eigena cyr {
-	if (trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->teamgoal.areanum, TFL_DEFAULT) > 250) {
+	if (bs->areanum && bs->teamgoal.areanum &&
+		trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, bs->teamgoal.areanum, TFL_DEFAULT) > 250) {
 		AIEnter_Battle_Retreat(bs, "battle fight: wants to retreat");
 	}
 	// eigene cyr }

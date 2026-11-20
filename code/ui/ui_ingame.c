@@ -258,7 +258,7 @@ static void InGame_MenuInit(void) {
 		s_ingame.removebots.generic.flags |= QMF_GRAYED;
 	}
 
-/* 	y += INGAME_MENU_VERTICAL_SPACING;
+	y += INGAME_MENU_VERTICAL_SPACING;
 	s_ingame.teamorders.generic.type = MTYPE_TEXTS;
 	s_ingame.teamorders.fontHeight = 20.0f;
 	s_ingame.teamorders.generic.flags = QMF_CENTER_JUSTIFY;
@@ -270,17 +270,9 @@ static void InGame_MenuInit(void) {
 	s_ingame.teamorders.color = color_black;
 	s_ingame.teamorders.focuscolor = color_orange;
 	s_ingame.teamorders.style = UI_CENTER | UI_SMALLFONT;
-	if(!(trap_Cvar_VariableValue("g_gametype") >= GT_TEAM)) {
+	if (!UI_TeamOrdersAvailable()) {
 		s_ingame.teamorders.generic.flags |= QMF_GRAYED;
-	} else {
-		trap_GetClientState(&cs);
-		trap_GetConfigString(CS_PLAYERS + cs.clientNum, info, MAX_INFO_STRING);
-		team = atoi(Info_ValueForKey(info, "t"));
-		if(team == TEAM_SPECTATOR) {
-			s_ingame.teamorders.generic.flags |= QMF_GRAYED;
-		}
 	}
- */
 	y += INGAME_MENU_VERTICAL_SPACING;
 	s_ingame.voiceingame.generic.type = MTYPE_TEXTS;
 	s_ingame.voiceingame.fontHeight = 20.0f;
@@ -436,7 +428,7 @@ static void InGame_MenuInit(void) {
 	Menu_AddItem(&s_ingame.menu, &s_ingame.team);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.addbots);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.removebots);
-//	Menu_AddItem(&s_ingame.menu, &s_ingame.teamorders);
+	Menu_AddItem(&s_ingame.menu, &s_ingame.teamorders);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.voiceingame);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.callvote);
 	Menu_AddItem(&s_ingame.menu, &s_ingame.setup);

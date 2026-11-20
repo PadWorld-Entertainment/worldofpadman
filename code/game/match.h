@@ -16,6 +16,17 @@
 #define MSG_DROPCART 8			  // cyr_drop
 #define MSG_WRONGWALL 9			  // cyr_spray
 #define MSG_CATCHME 10			  // cyr_debug
+#define MSG_FOLLOW 11
+#define MSG_DEFEND 12
+#define MSG_GETLOLLY 13
+#define MSG_CAMP 14
+#define MSG_ROAM 15
+#define MSG_REPORT 16
+#define MSG_STOPTEAMLEADERSHIP 17
+#define MSG_DEFENDBALLOON 18
+#define MSG_THAW 19
+#define MSG_THAWME 20
+#define MSG_WHATISMYCOMMAND 21
 
 // command sub types
 #define ST_ADDRESSED 1

@@ -31,4 +31,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *****************************************************************************/
 
 void BotTeamAI(bot_state_t *bs);
-int BotClientTravelTimeToGoal(int client, bot_goal_t *goal);
+qboolean BotTeamAIEnabled(int team);
+extern vmCvar_t bot_teamAI;
+extern vmCvar_t bot_teamAITeams;
+int BotClientTravelTimeToGoal(int client, const bot_goal_t *goal);

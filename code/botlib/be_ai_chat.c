@@ -1984,11 +1984,11 @@ static int BotExpandChatMessage(char *outmessage, const char *message, unsigned 
 			}
 			}
 		} else {
-			outputbuf[len++] = *msgptr++;
-			if (len >= MAX_MESSAGE_SIZE) {
+			if (len == MAX_MESSAGE_SIZE - 1) {
 				botimport.Print(PRT_ERROR, "BotConstructChat: message \"%s\" too long\n", message);
 				break;
 			}
+			outputbuf[len++] = *msgptr++;
 		}
 	}
 	outputbuf[len] = '\0';
@@ -2085,16 +2085,30 @@ int BotNumInitialChats(int chatstate, const char *type) {
 	return 0;
 }
 
+static void BotAppendChatVariables(bot_match_t *match, const char *const *vars) {
+	int i, offset = strlen(match->string);
+
+	for (i = 0; i < MAX_MATCHVARIABLES; i++) {
+		if (!vars[i])
+			continue;
+		Q_strncpyz(match->string + offset, vars[i], sizeof(match->string) - offset);
+		match->variables[i].offset = offset;
+		match->variables[i].length = strlen(match->string + offset);
+		offset += match->variables[i].length;
+	}
+}
+
 void BotInitialChat(int chatstate, const char *type, int mcontext, char *var0, char *var1, char *var2, char *var3,
 					char *var4, char *var5, char *var6, char *var7) {
 	const char *message;
-	int index;
+	const char *vars[] = {var0, var1, var2, var3, var4, var5, var6, var7};
 	bot_match_t match;
 	bot_chatstate_t *cs;
 
 	cs = BotChatStateFromHandle(chatstate);
 	if (!cs)
 		return;
+	cs->chatmessage[0] = '\0';
 	// if no chat file is loaded
 	if (!cs->chat)
 		return;
@@ -2109,55 +2123,7 @@ void BotInitialChat(int chatstate, const char *type, int mcontext, char *var0, c
 	}
 
 	Com_Memset(&match, 0, sizeof(match));
-	index = 0;
-	if (var0) {
-		strcat(match.string, var0);
-		match.variables[0].offset = index;
-		match.variables[0].length = strlen(var0);
-		index += strlen(var0);
-	}
-	if (var1) {
-		strcat(match.string, var1);
-		match.variables[1].offset = index;
-		match.variables[1].length = strlen(var1);
-		index += strlen(var1);
-	}
-	if (var2) {
-		strcat(match.string, var2);
-		match.variables[2].offset = index;
-		match.variables[2].length = strlen(var2);
-		index += strlen(var2);
-	}
-	if (var3) {
-		strcat(match.string, var3);
-		match.variables[3].offset = index;
-		match.variables[3].length = strlen(var3);
-		index += strlen(var3);
-	}
-	if (var4) {
-		strcat(match.string, var4);
-		match.variables[4].offset = index;
-		match.variables[4].length = strlen(var4);
-		index += strlen(var4);
-	}
-	if (var5) {
-		strcat(match.string, var5);
-		match.variables[5].offset = index;
-		match.variables[5].length = strlen(var5);
-		index += strlen(var5);
-	}
-	if (var6) {
-		strcat(match.string, var6);
-		match.variables[6].offset = index;
-		match.variables[6].length = strlen(var6);
-		index += strlen(var6);
-	}
-	if (var7) {
-		strcat(match.string, var7);
-		match.variables[7].offset = index;
-		match.variables[7].length = strlen(var7);
-	}
-
+	BotAppendChatVariables(&match, vars);
 	BotConstructChatMessage(cs, message, mcontext, &match, 0, qfalse);
 }
 
@@ -2210,7 +2176,7 @@ int BotReplyChat(int chatstate, char *message, int mcontext, int vcontext, char 
 	bot_replychatkey_t *key;
 	bot_chatmessage_t *m, *bestchatmessage;
 	bot_match_t match, bestmatch;
-	int bestpriority, num, found, res, numchatmessages, index;
+	int bestpriority, num, found, res, numchatmessages;
 	bot_chatstate_t *cs;
 
 	cs = BotChatStateFromHandle(chatstate);
@@ -2285,54 +2251,8 @@ int BotReplyChat(int chatstate, char *message, int mcontext, int vcontext, char 
 		}
 	}
 	if (bestchatmessage) {
-		index = strlen(bestmatch.string);
-		if (var0) {
-			strcat(bestmatch.string, var0);
-			bestmatch.variables[0].offset = index;
-			bestmatch.variables[0].length = strlen(var0);
-			index += strlen(var0);
-		}
-		if (var1) {
-			strcat(bestmatch.string, var1);
-			bestmatch.variables[1].offset = index;
-			bestmatch.variables[1].length = strlen(var1);
-			index += strlen(var1);
-		}
-		if (var2) {
-			strcat(bestmatch.string, var2);
-			bestmatch.variables[2].offset = index;
-			bestmatch.variables[2].length = strlen(var2);
-			index += strlen(var2);
-		}
-		if (var3) {
-			strcat(bestmatch.string, var3);
-			bestmatch.variables[3].offset = index;
-			bestmatch.variables[3].length = strlen(var3);
-			index += strlen(var3);
-		}
-		if (var4) {
-			strcat(bestmatch.string, var4);
-			bestmatch.variables[4].offset = index;
-			bestmatch.variables[4].length = strlen(var4);
-			index += strlen(var4);
-		}
-		if (var5) {
-			strcat(bestmatch.string, var5);
-			bestmatch.variables[5].offset = index;
-			bestmatch.variables[5].length = strlen(var5);
-			index += strlen(var5);
-		}
-		if (var6) {
-			strcat(bestmatch.string, var6);
-			bestmatch.variables[6].offset = index;
-			bestmatch.variables[6].length = strlen(var6);
-			index += strlen(var6);
-		}
-		if (var7) {
-			strcat(bestmatch.string, var7);
-			bestmatch.variables[7].offset = index;
-			bestmatch.variables[7].length = strlen(var7);
-		}
+		const char *vars[] = {var0, var1, var2, var3, var4, var5, var6, var7};
+		BotAppendChatVariables(&bestmatch, vars);
 		if (LibVarGetValue("bot_testrchat")) {
 			for (m = bestrchat->firstchatmessage; m; m = m->next) {
 				BotConstructChatMessage(cs, m->chatmessage, mcontext, &bestmatch, vcontext, qtrue);
@@ -2515,7 +2435,7 @@ void BotShutdownChatAI(void) {
 	int i;
 
 	// free all remaining chat states
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 1; i <= MAX_CLIENTS; i++) {
 		if (botchatstates[i]) {
 			BotFreeChatState(i);
 		}

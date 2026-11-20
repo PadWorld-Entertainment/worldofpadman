@@ -822,6 +822,7 @@ void UI_VoiceIngame(void);
 extern void UI_TeamOrdersMenu(void);
 extern void UI_TeamOrdersMenu_f(void);
 extern void UI_TeamOrdersMenu_Cache(void);
+extern qboolean UI_TeamOrdersAvailable(void);
 
 //
 // ui_loadconfig.c

@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 //#define DEBUG
 #define CTF
-#define USE_TEAMAI 0
 
 #define MAX_ITEMS 256
 // bot flags
@@ -49,10 +48,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LTG_DEFENDKEYAREA 3 // defend a key area
 #define LTG_GETFLAG 4		// get the enemy or neutral flag
 #define LTG_RUSHBASE 5		// going for spraywall
-//#define LTG_RETURNFLAG				6	//return the flag
+#define LTG_RECOVERFLAG 6 // intercept the enemy lolly carrier
 #define LTG_BALLCAMP 7 // camp somewhere
-//#define LTG_CAMPORDER				8	//ordered to camp somewhere
-//#define LTG_PATROL					9	//patrol
+#define LTG_CAMPORDER 8 // hold the spot requested by a teammate
+#define LTG_ROAMORDER 9 // temporarily roam for items instead of choosing a team goal
 #define LTG_GETITEM 10 // get an item
 //#define LTG_KILL					11	//kill someone
 //#define LTG_HARVEST					12	//harvest skulls
@@ -67,6 +66,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LTG_PLANTBOOMIE 21
 #define LTG_PLANTBAMBAM 22
 #define LTG_UNFREEZE 23
+#define LTG_LOLLYAMBUSH 24 // cut off the enemy lolly carrier
+#define LTG_LOLLYSCREEN 25 // clear the way for our lolly carrier
+#define LTG_LOLLYRUNNER 26 // take the lolly with an assigned escort
+#define LTG_LOLLYESCORT 27 // cover a runner before and after the pickup
 
 // some goal dedication times
 
@@ -86,14 +89,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define TEAM_UNFREEZETIME 120
 
 #define PUSHCART_DIST 160
-#if USE_TEAMAI
-// teamplay task preference
-// TODO: implementation unfinished - see ioq3
-#define TEAMTP_DEFENDER 1
-#define TEAMTP_ATTACKER 2
-// CTF strategy
-#define CTFS_AGRESSIVE 1
-#endif
 // copied from the aas file header
 #define PRESENCE_NONE 1
 #define PRESENCE_NORMAL 2
@@ -282,6 +277,11 @@ typedef struct bot_state_s {
 	// team goals
 	int teammate;	   // team mate involved in this team goal
 	int decisionmaker; // player who decided to go for this goal
+	enum { BOT_ORDER_NONE, BOT_ORDER_PLAYER, BOT_ORDER_TEAM } orderSource;
+	int teamPlanTime;
+	float orderReplyTime;
+	int orderReplyClient;
+	const char *orderReply;
 	// int ordered;									//true if ordered to do something
 	// float order_time;								//time ordered to do something
 	// int owndecision_time;							//time the bot made it's own decision
@@ -304,21 +304,6 @@ typedef struct bot_state_s {
 	// float leadmessage_time;							//last time a messaged was sent to the team mate
 	// float leadbackup_time;							//time backing up towards team mate
 
-#if USE_TEAMAI
-	char teamleader[32];		 // netname of the team leader
-	float askteamleader_time;	 // time asked for team leader
-	float becometeamleader_time; // time the bot will become the team leader
-	float teamgiveorders_time;	 // time to give team orders
-	float lastflagcapture_time;	 // last time a flag was captured
-	int flagstatuschanged;		 // flag status changed
-	int flagcarrier;			 // team mate carrying the enemy flag
-	int ctfstrategy;			 // ctf strategy
-	int forceorders;			 // true if forced to give orders
-	int numteammates;			 // number of team mates
-	int blueflagstatus;			 // 0 = at base, 1 = not at base
-	int redflagstatus;			 // 0 = at base, 1 = not at base
-	int neutralflagstatus;
-#endif
 	int freezecheck_time;
 	int hstationgoal; // 0 = no hstation, > 0 = station index +1
 	// char subteam[32]; // sub team name
@@ -338,7 +323,6 @@ typedef struct bot_state_s {
 	qboolean cartthrown;
 	float checkcarttime; // search for weak cart carrying mates - time interval
 	float checkhealth_time;
-	int orderclient;	// teamleader AI, if this is == -1 order only this client
 	int frametime;		// clock frame duration
 	float duckuse_time; // dont use ducks till that time
 	int observed;
@@ -354,6 +338,11 @@ typedef struct bot_state_s {
 	char log[10][MAX_SAY_TEXT];
 	int logHead;
 	char hudinfo[MAX_INFO_STRING];
+	int orderTravelTime;
+	int orderProgressTime;
+	flagStatus_t teamPlanRedLolly;
+	flagStatus_t teamPlanBlueLolly;
+	float lollyPushTime;
 } bot_state_t;
 
 float AngleDifference(float ang1, float ang2);
