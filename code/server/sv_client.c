@@ -66,16 +66,10 @@ void SV_GetChallenge(netadr_t from) {
 		return;
 	}
 
-	// Prevent using getchallenge as an amplifier
+	// Prevent using getchallenge as an amplifier. The reply is about the request's size,
+	// so there's no limit for all addresses together, which getinfo and getstatus requests would use up
 	if (SVC_RateLimitAddress(from, 10, 1000)) {
 		Com_DPrintf("SV_GetChallenge: rate limit from %s exceeded, dropping request\n", NET_AdrToString(from));
-		return;
-	}
-
-	// Allow getchallenge to be DoSed relatively easily, but prevent
-	// excess outbound bandwidth usage when being flooded inbound
-	if (SVC_RateLimit(&outboundLeakyBucket, 10, 100)) {
-		Com_DPrintf("SV_GetChallenge: rate limit exceeded, dropping request\n");
 		return;
 	}
 
