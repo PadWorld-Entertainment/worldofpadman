@@ -910,6 +910,10 @@ void *Z_TagMalloc(int size, int tag) {
 		zone = mainzone;
 	}
 
+	// a negative size, or one so large the header's room would wrap it
+	if (size < 0 || size > zone->size)
+		Com_Error(ERR_DROP, "Z_Malloc: bad size %i", size);
+
 #ifdef ZONE_DEBUG
 	allocSize = size;
 #endif
@@ -1657,6 +1661,10 @@ void *Hunk_Alloc(int size, ha_pref preference) {
 		Com_Error(ERR_FATAL, "Hunk_Alloc: Hunk memory system not initialized");
 	}
 
+	// a negative size, or one so large rounding it up would wrap it
+	if (size < 0 || size > s_hunkTotal)
+		Com_Error(ERR_DROP, "Hunk_Alloc: bad size %i", size);
+
 	// can't do preference if there is any temp allocated
 	if (preference == h_dontcare || hunk_temp->temp != hunk_temp->permanent) {
 		Hunk_SwapBanks();
@@ -1675,7 +1683,8 @@ void *Hunk_Alloc(int size, ha_pref preference) {
 	// round to cacheline
 	size = (size + 31) & ~31;
 
-	if (hunk_low.temp + hunk_high.temp + size > s_hunkTotal) {
+	// against what's left: adding the size to what's in use can overflow on a hunk of 1 GB or more
+	if (size > s_hunkTotal - hunk_low.temp - hunk_high.temp) {
 #ifdef HUNK_DEBUG
 		Hunk_Log();
 		Hunk_SmallLog();
@@ -1728,6 +1737,10 @@ void *Hunk_AllocateTempMemory(int size) {
 	void *buf;
 	hunkHeader_t *hdr;
 
+	// a negative size, or one so large the header's room would wrap it
+	if (size < 0 || (s_hunkData != NULL && size > s_hunkTotal))
+		Com_Error(ERR_DROP, "Hunk_AllocateTempMemory: bad size %i", size);
+
 	// return a Z_Malloc'd block if the hunk has not been initialized
 	// this allows the config and product id files ( journal files too ) to be loaded
 	// by the file system without redunant routines in the file system utilizing different
@@ -1740,7 +1753,8 @@ void *Hunk_AllocateTempMemory(int size) {
 
 	size = PAD(size, sizeof(intptr_t)) + sizeof(hunkHeader_t);
 
-	if (hunk_temp->temp + hunk_permanent->permanent + size > s_hunkTotal) {
+	// against what's left: adding the size to what's in use can overflow on a hunk of 1 GB or more
+	if (size > s_hunkTotal - hunk_temp->temp - hunk_permanent->permanent) {
 		Com_Error(ERR_DROP, "Hunk_AllocateTempMemory: failed on %i", size);
 	}
 
