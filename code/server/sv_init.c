@@ -428,6 +428,9 @@ void SV_SpawnServer(const char *server, qboolean killBots) {
 	// clear collision map data
 	CM_ClearMap();
 
+	// timescale can change before SV_Frame() and divide by zero in SV_RateMsec()
+	Cvar_CheckRange(com_timescale, 0.001f, 1000000.0f, qfalse);
+
 	// init client structures and svs.numSnapshotEntities
 	if (!Cvar_VariableValue("sv_running")) {
 		SV_Startup();
@@ -791,6 +794,9 @@ void SV_Shutdown(const char *finalmsg) {
 
 	Cvar_Set("sv_running", "0");
 	Cvar_Set("ui_singlePlayerActive", "0");
+
+	// demo playback uses timescale 0 to pause
+	Cvar_CheckRange(com_timescale, 0.0f, 1000000.0f, qfalse);
 
 	Com_Printf("---------------------------\n");
 
