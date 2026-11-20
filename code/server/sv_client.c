@@ -835,6 +835,9 @@ SV_BeginDownload_f
 ==================
 */
 static void SV_BeginDownload_f(client_t *cl) {
+	// a player in the game would stop getting snapshots, and leave the game without the game knowing
+	if (cl->state == CS_ACTIVE)
+		return;
 
 	// Kill any existing download
 	SV_CloseDownload(cl);
@@ -842,6 +845,26 @@ static void SV_BeginDownload_f(client_t *cl) {
 	// cl->downloadName is non-zero now, SV_WriteDownloadToClient will see this and open
 	// the file itself
 	Q_strncpyz(cl->downloadName, Cmd_Argv(1), sizeof(cl->downloadName));
+}
+
+/*
+==================
+SV_DownloadsFull
+
+Whether sv_maxDownloads clients are downloading already. Each download
+holds one of the file handles everything else shares.
+==================
+*/
+static qboolean SV_DownloadsFull(void) {
+	int i, count = 0;
+
+	if (sv_maxDownloads->integer <= 0)
+		return qfalse;
+	for (i = 0; i < sv_maxclients->integer; i++) {
+		if (svs.clients[i].download)
+			count++;
+	}
+	return count >= sv_maxDownloads->integer;
 }
 
 /*
@@ -864,6 +887,13 @@ static int SV_WriteDownloadToClient(client_t *cl, msg_t *msg) {
 
 	if (!cl->download) {
 		qboolean idPack = qfalse;
+		qboolean full = qfalse;
+
+		// a download asked for just before entering the game, as in the same packet as the first usercmd, is ignored too
+		if (cl->state == CS_ACTIVE) {
+			*cl->downloadName = 0;
+			return 0;
+		}
 
 		// Chop off filename extension.
 		Com_sprintf(pakbuf, sizeof(pakbuf), "%s", cl->downloadName);
@@ -899,7 +929,8 @@ static int SV_WriteDownloadToClient(client_t *cl, msg_t *msg) {
 
 		// We open the file here
 		if (!(sv_allowDownload->integer & DLF_ENABLE) || (sv_allowDownload->integer & DLF_NO_UDP) || idPack ||
-			unreferenced || (cl->downloadSize = FS_SV_FOpenFileRead(cl->downloadName, &cl->download)) < 0) {
+			unreferenced || (full = SV_DownloadsFull()) ||
+			(cl->downloadSize = FS_SV_FOpenFileRead(cl->downloadName, &cl->download)) < 0) {
 			// cannot auto-download file
 			if (unreferenced) {
 				Com_Printf("clientDownload: %d : \"%s\" is not referenced and cannot be downloaded.\n",
@@ -929,6 +960,13 @@ static int SV_WriteDownloadToClient(client_t *cl, msg_t *msg) {
 								"able to join the game anyway.\n",
 								cl->downloadName);
 				}
+			} else if (full) {
+				Com_Printf("clientDownload: %d : \"%s\" refused, %d downloads already\n", (int)(cl - svs.clients),
+						   cl->downloadName, sv_maxDownloads->integer);
+				Com_sprintf(errorMessage, sizeof(errorMessage),
+							"The server is sending too many downloads to download \"%s\" now. "
+							"Try again in a moment.\n",
+							cl->downloadName);
 			} else {
 				// NOTE TTimo this is NOT supposed to happen unless bug in our filesystem scheme?
 				//   if the pk3 is referenced, it must have been found somewhere in the filesystem
@@ -951,6 +989,10 @@ static int SV_WriteDownloadToClient(client_t *cl, msg_t *msg) {
 		}
 
 		Com_Printf("clientDownload: %d : beginning \"%s\"\n", (int)(cl - svs.clients), cl->downloadName);
+
+		// server commands wouldn't reach the client until it's done, so don't queue them; donedl sends a new gamestate
+		Com_DPrintf("Going to CS_CONNECTED for %s\n", cl->name);
+		cl->state = CS_CONNECTED;
 
 		// Init
 		cl->downloadCurrentBlock = cl->downloadClientBlock = cl->downloadXmitBlock = 0;
