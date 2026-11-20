@@ -617,6 +617,8 @@ static void SV_BuildClientSnapshot(client_t *client) {
 	// clear everything in this snapshot
 	entityNumbers.numSnapshotEntities = 0;
 	Com_Memset(frame->areabits, 0, sizeof(frame->areabits));
+	// a reused slot must not send a previous frame's length
+	frame->areabytes = 0;
 
 	// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=62
 	frame->num_entities = 0;
