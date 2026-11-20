@@ -88,9 +88,8 @@ typedef struct snapshotFrame_s {
 typedef struct {
 	serverState_t state;
 	qboolean restarting;   // if true, send configstring changes during SS_LOADING
-	int serverId;		   // changes each server start
-	int restartedServerId; // serverId before a map_restart
-	int checksumFeed;	   // the feed key that we use to compute the pure checksum strings
+	int serverId;	  // changes each server start
+	int checksumFeed; // the feed key that we use to compute the pure checksum strings
 	// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=475
 	// the serverId associated with the current checksumFeed (always <= serverId)
 	int checksumFeedServerId;

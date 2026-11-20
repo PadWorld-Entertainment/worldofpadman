@@ -1744,12 +1744,6 @@ void SV_ExecuteClientMessage(client_t *cl, msg_t *msg) {
 	// but we still need to read the next message to move to next download or send gamestate
 	// I don't like this hack though, it must have been working fine at some point, suspecting the fix is somewhere else
 	if (serverId != sv.serverId && !*cl->downloadName && !strstr(cl->lastClientCommandString, "nextdl")) {
-		if (serverId >= sv.restartedServerId &&
-			serverId < sv.serverId) { // TTimo - use a comparison here to catch multiple map_restart
-			// they just haven't caught the map_restart yet
-			Com_DPrintf("%s : ignoring pre map_restart / outdated client message\n", cl->name);
-			return;
-		}
 		// if we can tell that the client has dropped the last
 		// gamestate we sent them, resend it
 		if (cl->state != CS_ACTIVE && cl->messageAcknowledge > cl->gamestateMessageNum) {
