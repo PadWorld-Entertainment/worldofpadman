@@ -526,6 +526,20 @@ qboolean SVC_RateLimitAddress(netadr_t from, int burst, int period) {
 
 /*
 ================
+SVC_RateRestoreBurstAddress
+
+Give back the request an address's last SVC_RateLimitAddress counted
+================
+*/
+void SVC_RateRestoreBurstAddress(netadr_t from, int burst, int period) {
+	leakyBucket_t *bucket = SVC_BucketForAddress(from, burst, period);
+
+	if (bucket != NULL && bucket->burst > 0)
+		bucket->burst--;
+}
+
+/*
+================
 SVC_Status
 
 Responds with all the info that qplug or qspy can see about the server
@@ -779,11 +793,24 @@ connectionless packets.
 static void SV_ConnectionlessPacket(netadr_t from, msg_t *msg) {
 	const char *s;
 	const char *c;
+	qboolean connectCounted = qfalse;
 
 	MSG_BeginReadingOOB(msg);
 	MSG_ReadLong(msg); // skip the -1 marker
 
-	if (!Q_strncmp("connect", (char *)&msg->data[4], 7)) {
+	if (msg->cursize >= 12 && !memcmp("connect ", &msg->data[4], 8)) {
+		// the userinfo is at most MAX_INFO_STRING, so anything longer isn't worth decompressing
+		if (msg->cursize > MAX_INFO_STRING * 2) {
+			Com_DPrintf("%s: connect packet is too long, %i bytes\n", NET_AdrToString(from), msg->cursize);
+			return;
+		}
+		// SV_DirectConnect gives the request back once the challenge checks out
+		if (!NET_IsLocalAddress(from) && SVC_RateLimitAddress(from, 10, 1000)) {
+			Com_DPrintf("SV_ConnectionlessPacket: connect rate limit from %s exceeded, dropping request\n",
+						NET_AdrToString(from));
+			return;
+		}
+		connectCounted = qtrue;
 		Huff_Decompress(msg, 12);
 	}
 
@@ -800,6 +827,12 @@ static void SV_ConnectionlessPacket(netadr_t from, msg_t *msg) {
 	} else if (!Q_stricmp(c, "getchallenge")) {
 		SV_GetChallenge(from);
 	} else if (!Q_stricmp(c, "connect")) {
+		// a connect that isn't compressed, or is spelled another way, is limited the same
+		if (!connectCounted && !NET_IsLocalAddress(from) && SVC_RateLimitAddress(from, 10, 1000)) {
+			Com_DPrintf("SV_ConnectionlessPacket: connect rate limit from %s exceeded, dropping request\n",
+						NET_AdrToString(from));
+			return;
+		}
 		SV_DirectConnect(from);
 	} else if (!Q_stricmp(c, "rcon")) {
 		SVC_RemoteCommand(from, msg);
@@ -824,8 +857,12 @@ void SV_PacketEvent(netadr_t from, msg_t *msg) {
 	client_t *cl;
 	int qport;
 
+	// too short for a sequence number and qport, and for any connectionless command
+	if (msg->cursize < 6)
+		return;
+
 	// check for connectionless packet (0xffffffff) first
-	if (msg->cursize >= 4 && *(int *)msg->data == -1) {
+	if (*(int *)msg->data == -1) {
 		SV_ConnectionlessPacket(from, msg);
 		return;
 	}

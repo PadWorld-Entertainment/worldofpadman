@@ -164,6 +164,33 @@ static qboolean SV_IsBanned(netadr_t *from, qboolean isexception) {
 
 /*
 ==================
+SV_RefuseConnect
+
+Tell a client why its connect was refused. A connect's source address
+can be forged, so the replies to all connects together are limited, and
+can't be used to flood another address.
+==================
+*/
+static void QDECL SV_RefuseConnect(netadr_t to, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
+static void QDECL SV_RefuseConnect(netadr_t to, const char *fmt, ...) {
+	static leakyBucket_t bucket;
+	va_list argptr;
+	char message[MAX_STRING_CHARS];
+
+	if (SVC_RateLimit(&bucket, 10, 200)) {
+		Com_DPrintf("SV_RefuseConnect: rate limit exceeded, not replying to %s\n", NET_AdrToString(to));
+		return;
+	}
+
+	va_start(argptr, fmt);
+	Q_vsnprintf(message, sizeof(message), fmt, argptr);
+	va_end(argptr);
+
+	NET_OutOfBandPrint(NS_SERVER, to, "print\n%s", message);
+}
+
+/*
+==================
 SV_DirectConnect
 
 A "connect" OOB command has been received
@@ -189,7 +216,7 @@ void SV_DirectConnect(netadr_t from) {
 
 	// Check whether this client is banned.
 	if (SV_IsBanned(&from, qfalse)) {
-		NET_OutOfBandPrint(NS_SERVER, from, "print\nYou are banned from this server.\n");
+		SV_RefuseConnect(from, "You are banned from this server.\n");
 		return;
 	}
 
@@ -199,7 +226,7 @@ void SV_DirectConnect(netadr_t from) {
 		if (addr->type != NA_BOT && NET_CompareBaseAdr(*addr, from)) {
 			if (svs.clients[i].state >= CS_CONNECTED && !svs.clients[i].justConnected) {
 				if (++n >= sv_maxclientsPerIP->integer) {
-					NET_OutOfBandPrint(NS_SERVER, from, "print\nToo many connections.\n");
+					SV_RefuseConnect(from, "Too many connections.\n");
 					return;
 				}
 			}
@@ -211,10 +238,10 @@ void SV_DirectConnect(netadr_t from) {
 	version = atoi(Info_ValueForKey(userinfo, "protocol"));
 
 	if (version != com_protocol->integer) {
-		NET_OutOfBandPrint(NS_SERVER, from,
-						   "print\nServer uses protocol version %i "
-						   "(yours is %i).\n",
-						   com_protocol->integer, version);
+		SV_RefuseConnect(from,
+						 "Server uses protocol version %i "
+						 "(yours is %i).\n",
+						 com_protocol->integer, version);
 		Com_DPrintf("    rejected connect from version %i\n", version);
 		return;
 	}
@@ -230,8 +257,7 @@ void SV_DirectConnect(netadr_t from) {
 			if (elapsed < (sv_reconnectlimit->integer * 1000)) {
 				int remains = ((sv_reconnectlimit->integer * 1000) - elapsed + 999) / 1000;
 				Com_DPrintf("%s:reconnect rejected : too soon\n", NET_AdrToString(from));
-				NET_OutOfBandPrint(NS_SERVER, from, "print\nReconnecting, please wait %i second%s.\n", remains,
-								   (remains != 1) ? "s" : "");
+				SV_RefuseConnect(from, "Reconnecting, please wait %i second%s.\n", remains, (remains != 1) ? "s" : "");
 				return;
 			}
 			newcl = cl; // we may reuse this slot
@@ -245,9 +271,9 @@ void SV_DirectConnect(netadr_t from) {
 	else
 		ip = NET_AdrToString(from);
 	if ((strlen(ip) + strlen(userinfo) + 4) >= MAX_INFO_STRING) {
-		NET_OutOfBandPrint(NS_SERVER, from,
-						   "print\nUserinfo string length exceeded.  "
-						   "Try removing setu cvars from your config.\n");
+		SV_RefuseConnect(from,
+						 "Userinfo string length exceeded.  "
+						 "Try removing setu cvars from your config.\n");
 		return;
 	}
 	Info_SetValueForKey(userinfo, "ip", ip);
@@ -265,7 +291,7 @@ void SV_DirectConnect(netadr_t from) {
 		}
 
 		if (i == MAX_CHALLENGES) {
-			NET_OutOfBandPrint(NS_SERVER, from, "print\nNo or bad challenge for your address.\n");
+			SV_RefuseConnect(from, "No or bad challenge for your address.\n");
 			return;
 		}
 
@@ -281,13 +307,13 @@ void SV_DirectConnect(netadr_t from) {
 		// never reject a LAN client based on ping
 		if (!Sys_IsLANAddress(from)) {
 			if (sv_minPing->value && ping < sv_minPing->value) {
-				NET_OutOfBandPrint(NS_SERVER, from, "print\nServer is for high pings only\n");
+				SV_RefuseConnect(from, "Server is for high pings only\n");
 				Com_DPrintf("Client %i rejected on a too low ping\n", i);
 				challengeptr->wasrefused = qtrue;
 				return;
 			}
 			if (sv_maxPing->value && ping > sv_maxPing->value) {
-				NET_OutOfBandPrint(NS_SERVER, from, "print\nServer is for low pings only\n");
+				SV_RefuseConnect(from, "Server is for low pings only\n");
 				Com_DPrintf("Client %i rejected on a too high ping\n", i);
 				challengeptr->wasrefused = qtrue;
 				return;
@@ -296,6 +322,9 @@ void SV_DirectConnect(netadr_t from) {
 
 		Com_Printf("Client %i connecting with %i challenge ping\n", i, ping);
 		challengeptr->connected = qtrue;
+
+		// the challenge shows the address is real, so this connect doesn't count against it
+		SVC_RateRestoreBurstAddress(from, 10, 1000);
 	}
 
 	Com_Memset(&temp, 0, sizeof(temp));
@@ -374,7 +403,7 @@ void SV_DirectConnect(netadr_t from) {
 				return;
 			}
 		} else {
-			NET_OutOfBandPrint(NS_SERVER, from, "print\nServer is full\n");
+			SV_RefuseConnect(from, "Server is full\n");
 			Com_DPrintf("Rejected a connection.\n");
 			return;
 		}
@@ -412,7 +441,7 @@ gotnewcl:
 		// we can't just use VM_ArgPtr, because that is only valid inside a VM_Call
 		char *str = VM_ExplicitArgPtr(gvm, denied);
 
-		NET_OutOfBandPrint(NS_SERVER, from, "print\n%s\n", str);
+		SV_RefuseConnect(from, "%s\n", str);
 		Com_DPrintf("Game rejected a connection: %s.\n", str);
 		return;
 	}
