@@ -32,7 +32,7 @@ spraylogo	22_lips
 name		PadBabe
 funname		"^0Pad^6Babe"
 model		padgirl/padbabe
-aifile		bots/padgirl_c.c
+aifile		bots/padbabe_c.c
 spraylogo	18_padbunny
 }
 
@@ -58,7 +58,7 @@ spraylogo	09_sketch
 name		Padilla
 funname		"^3P^2a^3d^2ill^3a"
 model		padlilly/padilla
-aifile		bots/padlilly_c.c
+aifile		bots/padilla_c.c
 spraylogo	39_greensun
 }
 
@@ -71,7 +71,7 @@ spraylogo	39_greensun
 name		Pad-RA
 funname   	"^5Pad-^3RA"
 model		padman/padra
-aifile		bots/padman_c.c
+aifile		bots/padra_c.c
 spraylogo	19_ankh
 }
 
@@ -84,7 +84,7 @@ spraylogo	19_ankh
 name		PadRock
 model		padman/padrock
 funname 	"Pad^1Rock"
-aifile		bots/padman_c.c
+aifile		bots/padrock_c.c
 spraylogo	37_devilskull
 }
 
@@ -97,7 +97,7 @@ spraylogo	37_devilskull
 name		PadSoldier
 funname		"^0Pad^2Soldier"
 model		padman/padsoldier
-aifile		bots/padman_c.c
+aifile		bots/padsoldier_c.c
 spraylogo	04_padman
 }
 
@@ -110,7 +110,7 @@ spraylogo	04_padman
 name		StonePad
 model		padman/stonepad
 funname 	"^2Stone^7Pad"
-aifile		bots/padman_c.c
+aifile		bots/stonepad_c.c
 spraylogo	16_moon
 }
 
@@ -123,7 +123,7 @@ spraylogo	16_moon
 name		SuperPad
 funname		"^5S^6uper^5P^6ad"
 model		padman/superpad
-aifile		bots/padman_c.c
+aifile		bots/superpad_c.c
 spraylogo	13_questman
 }
 
@@ -136,7 +136,7 @@ spraylogo	13_questman
 name		BioPad
 funname		"^1B^2io^1P^2ad"
 model		padman/biopad
-aifile		bots/padman_c.c
+aifile		bots/biopad_c.c
 spraylogo	31_atom
 }
 
@@ -149,7 +149,7 @@ spraylogo	31_atom
 name		HellPad
 funname		"^0H^1ell^0P^1ad"
 model		padman/hellpad
-aifile		bots/padman_c.c
+aifile		bots/hellpad_c.c
 spraylogo	35_666
 }
 
@@ -175,7 +175,7 @@ spraylogo	48_yinyang
 name		PadClassic
 funname		"^1Pad^3Classic"
 model		padman/padclassic
-aifile		bots/padman_c.c
+aifile		bots/padclassic_c.c
 spraylogo	20_quake3
 }
 
@@ -188,7 +188,7 @@ spraylogo	20_quake3
 name		PiratePad
 model		piratepad
 funname  	"^4Pirate^1Pad"
-aifile		bots/padman_c.c
+aifile		bots/piratepad_c.c
 spraylogo	07_skull
 }
 
@@ -201,7 +201,7 @@ spraylogo	07_skull
 name		FatPad
 model		fatpad
 funname  	"Fat^1Pad"
-aifile		bots/padman_c.c
+aifile		bots/fatpad_c.c
 spraylogo	08_clown
 }
 
@@ -214,7 +214,7 @@ spraylogo	08_clown
 name		FATTY
 funname  	"^7F^5ATT^7Y"
 model		fatpad/fatty
-aifile		bots/padman_c.c
+aifile		bots/fatty_c.c
 spraylogo	30_dieselkopf
 }
 
@@ -227,7 +227,7 @@ spraylogo	30_dieselkopf
 name		MonsterPad
 funname     "^0M^2o^0n^2s^0t^2e^0r^2P^0a^2d"
 model		monsterpad
-aifile		bots/padman_c.c
+aifile		bots/monsterpad_c.c
 spraylogo	27_ugly
 }
 
@@ -240,7 +240,7 @@ spraylogo	27_ugly
 name		MonsterHawk
 model		monsterpad/monsterhawk
 funname   	"^2Monster^3Hawk"
-aifile		bots/padman_c.c
+aifile		bots/monsterhawk_c.c
 spraylogo	40_dog
 }
 
@@ -253,7 +253,7 @@ spraylogo	40_dog
 name		PadKing
 model		padking
 funname  	"^1Pad^4King"
-aifile		bots/padman_c.c
+aifile		bots/padking_c.c
 spraylogo	38_target
 }
 
@@ -266,7 +266,7 @@ spraylogo	38_target
 name		PadKnight
 model		padking/padknight
 funname  	"^4Pad^2Knight"
-aifile		bots/padman_c.c
+aifile		bots/padknight_c.c
 spraylogo	33_spawnpoint
 }
 
@@ -279,7 +279,7 @@ spraylogo	33_spawnpoint
 name		BeachPad
 model		beachpad
 funname  	"^2Beach^5Pad"
-aifile		bots/padman_c.c
+aifile		bots/beachpad_c.c
 spraylogo	42_water
 }
 
@@ -292,7 +292,7 @@ spraylogo	42_water
 name		PadPunk
 model		padpunk
 funname  	"^3Pad^5Punk"
-aifile	 	bots/padman_c.c
+aifile	 	bots/padpunk_c.c
 spraylogo	36_anarchy
 }
 
@@ -305,7 +305,7 @@ spraylogo	36_anarchy
 name		PadCho
 model		padcho
 funname  	"^2Pad^6Cho"
-aifile	 	bots/padman_c.c
+aifile	 	bots/padcho_c.c
 spraylogo	02_cross
 }
 
@@ -318,7 +318,7 @@ spraylogo	02_cross
 name		GhostPirate
 model		piratepad/ghostpirate
 funname  	"^4Ghost^1Pirate"
-aifile		bots/padman_c.c
+aifile		bots/ghostpirate_c.c
 spraylogo	07_skull
 }
 
@@ -331,7 +331,7 @@ spraylogo	07_skull
 name		Spooky
 model		piratepad/spooky
 funname  	"^4Spooky"
-aifile		bots/padman_c.c
+aifile		bots/spooky_c.c
 spraylogo	26_spooky
 }
 
@@ -357,7 +357,7 @@ spraylogo	12_heart
 name		BadPaddy
 model		paddybell/badpaddy
 funname  	"^4Bad^6Paddy"
-aifile		bots/paddy_c.c
+aifile		bots/badpaddy_c.c
 spraylogo	25_hairspray
 }
 
@@ -370,6 +370,6 @@ spraylogo	25_hairspray
 name		PaddyBee
 model		paddybell/paddybee
 funname  	"^2Paddy^3Bee"
-aifile		bots/paddy_c.c
+aifile		bots/paddybee_c.c
 spraylogo	21_apple
 }

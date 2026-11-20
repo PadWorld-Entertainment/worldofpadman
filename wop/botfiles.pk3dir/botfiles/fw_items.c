@@ -1,27 +1,64 @@
 // item fuzzy relations
 #include "inv.h"
 
-//initial powerup weights (overwrites individual values)
+// Pickup weights. A bot item file can #define any of these first.
+// Left unset, every bot keeps these defaults.
+#ifndef W_PADPOWER
 #define W_PADPOWER				1400	// overpowered, so go for it
+#endif
+#ifndef W_CLIMBER
 #define W_CLIMBER				100		// not in the game yet
+#endif
+#ifndef W_SPEEDY
 #define W_SPEEDY				700		// fucks up movement
+#endif
+#ifndef W_JUMPER
 #define W_JUMPER				900		// fucks up movement but looks good
+#endif
+#ifndef W_VISIONLESS
 #define W_VISIONLESS			1000
+#endif
+#ifndef W_REVIVAL
 #define W_REVIVAL				1000
+#endif
+#ifndef W_FLOATER
 #define W_FLOATER				1000
+#endif
+#ifndef W_KILLERDUCKS
 #define W_KILLERDUCKS			1000
+#endif
+#ifndef W_BAMBAM
 #define W_BAMBAM				2000
+#endif
+#ifndef W_BOOMIE
 #define W_BOOMIE				2000
+#endif
 
 // weapons
+#ifndef W_SHOTGUN
 #define W_SHOTGUN				1000
+#endif
+#ifndef W_MACHINEGUN
 #define W_MACHINEGUN			400
+#endif
+#ifndef W_GRENADELAUNCHER
 #define W_GRENADELAUNCHER		1000
+#endif
+#ifndef W_ROCKETLAUNCHER
 #define W_ROCKETLAUNCHER		1200
+#endif
+#ifndef W_RAILGUN
 #define W_RAILGUN				900
+#endif
+#ifndef W_BFG10K
 #define W_BFG10K				1600
+#endif
+#ifndef W_LIGHTNING
 #define W_LIGHTNING				800
+#endif
+#ifndef W_PLASMAGUN
 #define W_PLASMAGUN				1200
+#endif
 
 #define FAC_LUXUS1			0.3
 #define FAC_LUXUS2			0.15

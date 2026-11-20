@@ -1,11 +1,25 @@
 // weapon fuzzy relations
+// A bot weapon file may #define these before including this file.
+// Defaults keep the original curves.
+#ifndef PUNCHY_CLOSE
+#define PUNCHY_CLOSE			5
+#endif
+#ifndef PUNCHY_NEAR
+#define PUNCHY_NEAR				3
+#endif
+#ifndef BUBBLEG_CLOSE
+#define BUBBLEG_CLOSE			1
+#endif
+#ifndef BUBBLEG_FAR
+#define BUBBLEG_FAR				1
+#endif
 
 weight "Punchy"
 {
 	switch(ENEMY_DIST)
 	{
-		case 1: return $evalint(W_GAUNTLET *5);
-		case 70: return $evalint(W_GAUNTLET *3);
+		case 1: return $evalint(W_GAUNTLET * PUNCHY_CLOSE);
+		case 70: return $evalint(W_GAUNTLET * PUNCHY_NEAR);
 		default: return $evalint(W_GAUNTLET*0.1);
 	} //end switch
 } //end weight
@@ -161,7 +175,13 @@ weight "BubbleG"
 				case 15: return W_PLASMAGUN;
 				default:
 				{
-					return W_PLASMAGUN;		// <---
+					// BUBBLEG_CLOSE/FAR default to 1, so this stays flat.
+					switch(ENEMY_DIST)
+					{
+						case 1: return $evalint(W_PLASMAGUN * BUBBLEG_CLOSE);
+						case 400: return W_PLASMAGUN;
+						default: return $evalint(W_PLASMAGUN * BUBBLEG_FAR);
+					} //end switch
 				} //end default
 			} //end switch
 		} //end default

@@ -34,7 +34,7 @@ hat         elf
 name		PadBabe
 funname		"^0Pad^6Babe"
 model		padgirl/padbabe
-aifile		bots/padgirl_c.c
+aifile		bots/padbabe_c.c
 spraylogo	24_angel
 hat         tophat
 }
@@ -62,7 +62,7 @@ hat         tophat
 name		Padilla
 funname		"^3P^2a^3d^2ill^3a"
 model		padlilly/padilla
-aifile		bots/padlilly_c.c
+aifile		bots/padilla_c.c
 spraylogo	35_newyear
 hat         elf
 }
@@ -76,7 +76,7 @@ hat         elf
 name		Pad-RA
 funname   	"^5Pad-^3RA"
 model		padman/padra
-aifile		bots/padman_c.c
+aifile		bots/padra_c.c
 spraylogo	19_gingy
 }
 
@@ -89,7 +89,7 @@ spraylogo	19_gingy
 name		PadRock
 funname 	"Pad^1Rock"
 model		padman/padrock
-aifile		bots/padman_c.c
+aifile		bots/padrock_c.c
 spraylogo	33_ribbonbow
 }
 
@@ -102,7 +102,7 @@ spraylogo	33_ribbonbow
 name		PadSoldier
 funname		"^0Pad^2Soldier"
 model		padman/padsoldier
-aifile		bots/padman_c.c
+aifile		bots/padsoldier_c.c
 spraylogo	04_candle
 }
 
@@ -115,7 +115,7 @@ spraylogo	04_candle
 name		StonePad
 funname 	"^2Stone^7Pad"
 model		padman/stonepad
-aifile		bots/padman_c.c
+aifile		bots/stonepad_c.c
 spraylogo	16_merryxmas
 }
 
@@ -128,7 +128,7 @@ spraylogo	16_merryxmas
 name		SuperPad
 funname		"^5S^6uper^5P^6ad"
 model		padman/superpad
-aifile		bots/padman_c.c
+aifile		bots/superpad_c.c
 spraylogo	13_advent
 hat         elf
 }
@@ -142,7 +142,7 @@ hat         elf
 name		BioPad
 funname		"^1B^2io^1P^2ad"
 model		padman/biopad
-aifile		bots/padman_c.c
+aifile		bots/biopad_c.c
 spraylogo	31_stocking
 }
 
@@ -155,7 +155,7 @@ spraylogo	31_stocking
 name		HellPad
 funname		"^0H^1ell^0P^1ad"
 model		padman/hellpad
-aifile		bots/padman_c.c
+aifile		bots/hellpad_c.c
 spraylogo	37_firework
 hat         tophat
 }
@@ -182,7 +182,7 @@ hat         tophat
 name		PadClassic
 funname		"^1Pad^3Classic"
 model		padman/padclassic
-aifile		bots/padman_c.c
+aifile		bots/padclassic_c.c
 spraylogo	06_tree
 hat         elf
 }
@@ -196,7 +196,7 @@ hat         elf
 name		PiratePad
 funname  	"^4Pirate^1Pad"
 model		piratepad
-aifile		bots/padman_c.c
+aifile		bots/piratepad_c.c
 spraylogo	07_holly
 hat         santa
 }
@@ -210,7 +210,7 @@ hat         santa
 name		FatPad
 funname  	"Fat^1Pad"
 model		fatpad
-aifile		bots/padman_c.c
+aifile		bots/fatpad_c.c
 spraylogo	08_snowflake
 hat         santa
 }
@@ -224,7 +224,7 @@ hat         santa
 name		FATTY
 funname  	"^7F^5ATT^7Y"
 model		fatpad/fatty
-aifile		bots/padman_c.c
+aifile		bots/fatty_c.c
 spraylogo	23_sleighteam
 hat         tophat
 }
@@ -238,7 +238,7 @@ hat         tophat
 name		MonsterPad
 funname     "^0M^2o^0n^2s^0t^2e^0r^2P^0a^2d"
 model		monsterpad
-aifile		bots/padman_c.c
+aifile		bots/monsterpad_c.c
 spraylogo	27_nutcracker
 }
 
@@ -251,7 +251,7 @@ spraylogo	27_nutcracker
 name		MonsterHawk
 funname   	"^2Monster^3Hawk"
 model		monsterpad/monsterhawk
-aifile		bots/padman_c.c
+aifile		bots/monsterhawk_c.c
 spraylogo	05_bell
 }
 
@@ -264,7 +264,7 @@ spraylogo	05_bell
 name		PadKing
 funname  	"^1Pad^4King"
 model		padking
-aifile		bots/padman_c.c
+aifile		bots/padking_c.c
 spraylogo	11_snowman
 }
 
@@ -277,7 +277,7 @@ spraylogo	11_snowman
 name		PadKnight
 funname  	"^4Pad^2Knight"
 model		padking/padknight
-aifile		bots/padman_c.c
+aifile		bots/padknight_c.c
 spraylogo	28_branch
 }
 
@@ -290,7 +290,7 @@ spraylogo	28_branch
 name		BeachPad
 funname  	"^2Beach^5Pad"
 model		beachpad
-aifile		bots/padman_c.c
+aifile		bots/beachpad_c.c
 spraylogo	38_rocket
 hat         elf
 }
@@ -304,7 +304,7 @@ hat         elf
 name		PadPunk
 funname  	"^3Pad^5Punk"
 model		padpunk
-aifile	 	bots/padman_c.c
+aifile	 	bots/padpunk_c.c
 spraylogo	32_mine
 }
 
@@ -317,7 +317,7 @@ spraylogo	32_mine
 name		PadCho
 funname  	"^2Pad^6Cho"
 model		padcho
-aifile	 	bots/padman_c.c
+aifile	 	bots/padcho_c.c
 spraylogo	02_meteor
 }
 
@@ -330,7 +330,7 @@ spraylogo	02_meteor
 name		GhostPirate
 funname  	"^4Ghost^1Pirate"
 model		piratepad/ghostpirate
-aifile		bots/padman_c.c
+aifile		bots/ghostpirate_c.c
 spraylogo	07_holly
 hat         tophat
 }
@@ -344,7 +344,7 @@ hat         tophat
 name		Spooky
 funname  	"^4Spooky"
 model		piratepad/spooky
-aifile		bots/padman_c.c
+aifile		bots/spooky_c.c
 spraylogo	26_skate
 hat         elf
 }
@@ -372,7 +372,7 @@ hat         tophat
 name		BadPaddy
 funname  	"^4Bad^6Paddy"
 model		paddybell/badpaddy
-aifile		bots/paddy_c.c
+aifile		bots/badpaddy_c.c
 spraylogo	25_drum
 }
 
@@ -385,7 +385,7 @@ spraylogo	25_drum
 name		PaddyBee
 funname  	"^2Paddy^3Bee"
 model		paddybell/paddybee
-aifile		bots/paddy_c.c
+aifile		bots/paddybee_c.c
 spraylogo	21_boot
 }
 
@@ -440,7 +440,7 @@ hat         santa
 name		MonsterDeer
 model		monsterpad/monsterdeer
 funname   	"^2Monster^1Deer"
-aifile		bots/padman_c.c
+aifile		bots/monsterpad_c.c
 spraylogo	20_reindeer
 }
 
@@ -453,7 +453,7 @@ spraylogo	20_reindeer
 name		ChonkyElf
 funname  	"^1Chonky^2Elf"
 model		fatpad/chonkyelf
-aifile		bots/padman_c.c
+aifile		bots/fatpad_c.c
 spraylogo	29_wishlist
 hat         elf
 }
@@ -467,7 +467,7 @@ hat         elf
 name		SaltySanta
 funname  	"^2Salty^1Santa"
 model		piratepad/saltysanta
-aifile		bots/padman_c.c
+aifile		bots/piratepad_c.c
 spraylogo	36_cheers
 hat         santa
 }
@@ -481,7 +481,7 @@ hat         santa
 name		MulledPad
 funname  	"^2Mulled^1Pad"
 model		beachpad/mulledpad
-aifile		bots/padman_c.c
+aifile		bots/beachpad_c.c
 spraylogo	14_hat
 hat         tophat
 }
