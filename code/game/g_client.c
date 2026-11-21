@@ -849,11 +849,8 @@ void ClientUserinfoChanged(int clientNum) {
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
 	if (ent->r.svFlags & SVF_BOT) {
-		const char *rndSprayColor;
-		int rnd = randomindex(NUM_COLORS);
-		rndSprayColor = va("%d", rnd);
 		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\sc\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tl\\%d\\sl\\%s\\hat\\%s",
-			   client->pers.netname, team, model, headModel, rndSprayColor, client->pers.maxHealth, client->sess.wins,
+			   client->pers.netname, team, model, headModel, sprayColor, client->pers.maxHealth, client->sess.wins,
 			   client->sess.losses, Info_ValueForKey(userinfo, "skill"), teamLeader, client->sess.selectedlogo, hat);
 	} else {
 		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\sc\\%s\\rc\\%i\\hc\\%i\\w\\%i\\l\\%i\\tl\\%d\\sl\\%s\\hat\\%s",

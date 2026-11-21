@@ -563,7 +563,7 @@ static void G_AddBot(const char *name, float skill, const char *team, int delay,
 	key = "spraycolor";
 	s = Info_ValueForKey(botinfo, key);
 	if (!*s) {
-		s = "2"; // COLOR_GREEN
+		s = va("%d", randomindex(NUM_COLORS));
 	}
 	Info_SetValueForKey(userinfo, key, s);
 
