@@ -1426,7 +1426,7 @@ void BotChooseWeapon(bot_state_t *bs) {
 
 	if ((bs->cur_ps.weaponstate == WEAPON_RAISING) || (bs->cur_ps.weaponstate == WEAPON_DROPPING)) {
 		// check if the weapon is still in inventory
-		if (bs->inventory[(bs->weaponnum + offset)]) {
+		if (bs->weaponnum != WP_NONE && bs->inventory[bs->weaponnum + offset]) {
 			trap_EA_SelectWeapon(bs->client, bs->weaponnum);
 		} else {
 			// Com_Printf(S_COLOR_BLUE " lost weapon during change \n");
@@ -1458,6 +1458,9 @@ void BotChooseWeapon(bot_state_t *bs) {
 			return;
 		}
 
+		if (newweaponnum == WP_NONE) {
+			newweaponnum = WP_PUNCHY;
+		}
 		if (!bs->inventory[newweaponnum + offset]) {
 			return;
 		}
@@ -2734,8 +2737,7 @@ int BotSprayWallCheckAttack(const bot_state_t *bs) {
 	if (attackentity <= MAX_CLIENTS)
 		return qtrue;
 
-	// if changing weapons
-	if (bs->weaponchange_time > FloatTime() - 0.45) {
+	if (bs->weaponnum == WP_NONE || bs->weaponchange_time > FloatTime() - 0.45) {
 		return qtrue;
 	}
 
@@ -2841,8 +2843,7 @@ void BotAimAtEnemy(bot_state_t *bs) {
 	vec3_t target;
 	float wi_spread_y, wi_spread_x; // cyr
 
-	// if the bot has no enemy
-	if (bs->enemy < 0) {
+	if (bs->enemy < 0 || bs->weaponnum == WP_NONE) {
 		return;
 	}
 	if (bs->ltgtype == LTG_GIVECART) {
@@ -3177,8 +3178,7 @@ void BotCheckAttack(bot_state_t *bs) {
 		return;
 	if (bs->teleport_time > FloatTime() - reactiontime)
 		return;
-	// if changing weapons
-	if (bs->weaponchange_time > FloatTime() - 0.1)
+	if (bs->weaponnum == WP_NONE || bs->weaponchange_time > FloatTime() - 0.1)
 		return;
 
 	if (bs->weaponnum != WP_IMPERIUS) {
