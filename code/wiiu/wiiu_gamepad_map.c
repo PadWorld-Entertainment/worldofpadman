@@ -1,6 +1,7 @@
 /* GamePad top-down map, client half: the map replaces the TV mirror only during live play.
  * Off by default; enable with "set gamepad_map 1" (e.g. in autoexec.cfg). */
 
+#include <gx2/display.h>
 #include "qcommon/q_shared.h"
 #include "qcommon/qcommon.h"
 #include "client/client.h"
@@ -14,6 +15,8 @@ static const char *GamepadMap_BlockedBy(void)
 {
 	if (!gamepad_map->integer)
 		return "cvar gamepad_map is 0";
+	if (GX2GetSystemTVScanMode() == GX2_TV_SCAN_MODE_NONE)
+		return "no TV connected";
 	if (clc.state != CA_ACTIVE)
 		return "not in a match";
 	if (!cl.snap.valid)
@@ -40,7 +43,8 @@ void WiiU_GamepadMap_Frame(void)
 		gamepad_map = Cvar_Get("gamepad_map", "0", 0);
 
 	/* Built during the loading screen, so entering the match doesn't stall on it. */
-	if (gamepad_map->integer && clc.state >= CA_LOADING && clc.state <= CA_ACTIVE) {
+	if (gamepad_map->integer && GX2GetSystemTVScanMode() != GX2_TV_SCAN_MODE_NONE &&
+	    clc.state >= CA_LOADING && clc.state <= CA_ACTIVE) {
 		const char *serverInfo = cl.gameState.stringData + cl.gameState.stringOffsets[CS_SERVERINFO];
 		int gametype = atoi(Info_ValueForKey(serverInfo, "g_gametype"));
 		qboolean teamItemsOnly = qfalse;
