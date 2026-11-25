@@ -39,6 +39,9 @@ void GL_Bind(image_t *image) {
 		ri.Printf(PRINT_WARNING, "GL_Bind: NULL image\n");
 		texnum = tr.defaultImage->texnum;
 	} else {
+		#if defined(WIIU_GX2BE)
+		if (image->texnum == 0) R_RealizeLazyImage(image);
+#endif
 		texnum = image->texnum;
 	}
 
@@ -51,7 +54,11 @@ void GL_Bind(image_t *image) {
 			image->frameUsed = tr.frameCount;
 		}
 		glState.currenttextures[glState.currenttmu] = texnum;
+		#if defined(WIIU_GX2BE)
+		GX2BE_BindTexnum(glState.currenttmu, texnum);
+		#else
 		qglBindTexture(GL_TEXTURE_2D, texnum);
+		#endif
 	}
 }
 
@@ -64,20 +71,27 @@ void GL_SelectTexture(int unit) {
 	}
 
 	if (unit == 0) {
+#if !defined(WIIU_GX2BE)
 		qglActiveTextureARB(GL_TEXTURE0_ARB);
 		GLimp_LogComment("glActiveTextureARB( GL_TEXTURE0_ARB )\n");
 		qglClientActiveTextureARB(GL_TEXTURE0_ARB);
 		GLimp_LogComment("glClientActiveTextureARB( GL_TEXTURE0_ARB )\n");
+#endif
 	} else if (unit == 1) {
+#if !defined(WIIU_GX2BE)
 		qglActiveTextureARB(GL_TEXTURE1_ARB);
 		GLimp_LogComment("glActiveTextureARB( GL_TEXTURE1_ARB )\n");
 		qglClientActiveTextureARB(GL_TEXTURE1_ARB);
 		GLimp_LogComment("glClientActiveTextureARB( GL_TEXTURE1_ARB )\n");
+#endif
 	} else {
 		ri.Error(ERR_DROP, "GL_SelectTexture: unit = %i", unit);
 	}
 
 	glState.currenttmu = unit;
+#if defined(WIIU_GX2BE)
+	gx2beState.currenttmu = unit;
+#endif
 }
 
 #if 0
@@ -118,7 +132,10 @@ void GL_Cull(int cullType) {
 	}
 
 	glState.faceCulling = cullType;
-
+#if defined(WIIU_GX2BE)
+	GX2BE_GL_Cull(cullType);
+	return;
+#endif
 	if (cullType == CT_TWO_SIDED) {
 		qglDisable(GL_CULL_FACE);
 	} else {
@@ -143,7 +160,10 @@ void GL_TexEnv(int env) {
 	}
 
 	glState.texEnv[glState.currenttmu] = env;
-
+#if defined(WIIU_GX2BE)
+	GX2BE_GL_TexEnv(glState.currenttmu, env);
+	return;
+#endif
 	switch (env) {
 	case GL_MODULATE:
 	case GL_REPLACE:
@@ -169,6 +189,11 @@ void GL_State(unsigned long stateBits) {
 	if (!diff) {
 		return;
 	}
+#if defined(WIIU_GX2BE)
+	GX2BE_GL_State(stateBits);
+	glState.glStateBits = stateBits;
+	return;
+#endif
 
 	//
 	// check depthFunc bits
@@ -335,13 +360,23 @@ static void RB_Hyperspace(void) {
 	}
 
 	c = (backEnd.refdef.time & 255) / 255.0f;
+#if defined(WIIU_GX2BE)
+	GX2BE_Clear(qtrue, qfalse, c, c, c);
+#else
 	qglClearColor(c, c, c, 1);
 	qglClear(GL_COLOR_BUFFER_BIT);
+#endif
 
 	backEnd.isHyperspace = qtrue;
 }
 
 static void SetViewportAndScissor(void) {
+#if defined(WIIU_GX2BE)
+	GX2BE_LoadProjectionGL(backEnd.viewParms.projectionMatrix);
+	GX2BE_SetViewport(backEnd.viewParms.viewportX, backEnd.viewParms.viewportY, backEnd.viewParms.viewportWidth, backEnd.viewParms.viewportHeight);
+	GX2BE_SetScissor(backEnd.viewParms.viewportX, backEnd.viewParms.viewportY, backEnd.viewParms.viewportWidth, backEnd.viewParms.viewportHeight);
+	return;
+#endif
 	qglMatrixMode(GL_PROJECTION);
 	qglLoadMatrixf(backEnd.viewParms.projectionMatrix);
 	qglMatrixMode(GL_MODELVIEW);
@@ -384,6 +419,10 @@ static void RB_BeginDrawingView(void) {
 
 	// ensures that depth writes are enabled for the depth clear
 	GL_State(GLS_DEFAULT);
+#if defined(WIIU_GX2BE)
+	(void)clearBits;
+	GX2BE_Clear((r_fastsky->integer && !(backEnd.refdef.rdflags & RDF_NOWORLDMODEL)), qtrue, 0.0f, 0.0f, 0.0f);
+#else
 	// clear relevant buffers
 	clearBits = GL_DEPTH_BUFFER_BIT;
 
@@ -399,6 +438,7 @@ static void RB_BeginDrawingView(void) {
 #endif
 	}
 	qglClear(clearBits);
+#endif
 
 	if ((backEnd.refdef.rdflags & RDF_HYPERSPACE)) {
 		RB_Hyperspace();
@@ -414,6 +454,15 @@ static void RB_BeginDrawingView(void) {
 
 	// clip to the plane of the portal
 	if (backEnd.viewParms.isPortal) {
+#if defined(WIIU_GX2BE)
+		float plane[4], plane2[4], eyePlane[4];
+		plane[0] = backEnd.viewParms.portalPlane.normal[0]; plane[1] = backEnd.viewParms.portalPlane.normal[1]; plane[2] = backEnd.viewParms.portalPlane.normal[2]; plane[3] = backEnd.viewParms.portalPlane.dist;
+		plane2[0] = DotProduct(backEnd.viewParms.or.axis[0], plane); plane2[1] = DotProduct(backEnd.viewParms.or.axis[1], plane); plane2[2] = DotProduct(backEnd.viewParms.or.axis[2], plane); plane2[3] = DotProduct(plane, backEnd.viewParms.or.origin) - plane[3];
+		eyePlane[0] = -plane2[1]; eyePlane[1] = plane2[2]; eyePlane[2] = -plane2[0]; eyePlane[3] = plane2[3];
+		GX2BE_LoadProjectionObliqueGL(backEnd.viewParms.projectionMatrix, eyePlane);
+	} else {
+	}
+#else
 		float plane[4];
 		GLdouble plane2[4];
 
@@ -433,6 +482,7 @@ static void RB_BeginDrawingView(void) {
 	} else {
 		qglDisable(GL_CLIP_PLANE0);
 	}
+#endif
 }
 
 /*
@@ -535,7 +585,11 @@ static void RB_RenderDrawSurfList(drawSurf_t *drawSurfs, int numDrawSurfs) {
 				R_TransformDlights(backEnd.refdef.num_dlights, backEnd.refdef.dlights, &backEnd.or);
 			}
 
+#if defined(WIIU_GX2BE)
+			GX2BE_LoadModelviewGL(backEnd.or.modelMatrix);
+#else
 			qglLoadMatrixf(backEnd.or.modelMatrix);
+#endif
 
 			//
 			// change depthrange. Also change projection matrix so first person weapon does not look like coming
@@ -593,7 +647,11 @@ static void RB_RenderDrawSurfList(drawSurf_t *drawSurfs, int numDrawSurfs) {
 	}
 
 	// go back to the world modelview matrix
+#if defined(WIIU_GX2BE)
+	GX2BE_LoadModelviewGL(backEnd.viewParms.world.modelMatrix);
+#else
 	qglLoadMatrixf(backEnd.viewParms.world.modelMatrix);
+#endif
 	if (depthRange) {
 		qglDepthRange(0, 1);
 	}
@@ -626,6 +684,12 @@ RB_SetGL2D
 static void RB_SetGL2D(void) {
 	backEnd.projection2D = qtrue;
 
+#if defined(WIIU_GX2BE)
+	GX2BE_SetViewport(0, 0, glConfig.vidWidth, glConfig.vidHeight);
+	GX2BE_SetScissor(0, 0, glConfig.vidWidth, glConfig.vidHeight);
+	GX2BE_LoadOrtho2D(glConfig.vidWidth, glConfig.vidHeight);
+	GX2BE_LoadIdentityModelview();
+#else
 	// set 2D virtual screen size
 	qglViewport(0, 0, glConfig.vidWidth, glConfig.vidHeight);
 	qglScissor(0, 0, glConfig.vidWidth, glConfig.vidHeight);
@@ -634,6 +698,7 @@ static void RB_SetGL2D(void) {
 	qglOrtho(0, glConfig.vidWidth, glConfig.vidHeight, 0, 0, 1);
 	qglMatrixMode(GL_MODELVIEW);
 	qglLoadIdentity();
+#endif
 
 	GL_State(GLS_DEPTHTEST_DISABLE | GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA);
 
@@ -734,6 +799,20 @@ void RE_StretchRaw(int x, int y, int w, int h, int cols, int rows, const byte *d
 
 	RB_SetGL2D();
 
+#if defined(WIIU_GX2BE)
+	{
+		byte c = (byte)(tr.identityLight * 255.0f);
+		float s0 = 0.5f / cols, s1 = (cols - 0.5f) / cols, t0 = 0.5f / rows, t1 = (rows - 0.5f) / rows;
+		float st[2] = {s0, t0}, xyz[3] = {x, y, 0.0f};
+		GX2BE_ImmediateBegin(GL_QUADS, 4);
+		GX2BE_ImmediateTexVertex(st, xyz, c, c, c, 255);
+		st[0] = s1; xyz[0] = x + w; GX2BE_ImmediateTexVertex(st, xyz, c, c, c, 255);
+		st[1] = t1; xyz[1] = y + h; GX2BE_ImmediateTexVertex(st, xyz, c, c, c, 255);
+		st[0] = s0; xyz[0] = x; GX2BE_ImmediateTexVertex(st, xyz, c, c, c, 255);
+		GX2BE_ImmediateEnd();
+		return;
+	}
+#endif
 	qglColor3f(tr.identityLight, tr.identityLight, tr.identityLight);
 
 	{
@@ -764,6 +843,9 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const byte *data, int 
 		tr.scratchImage[client]->width = tr.scratchImage[client]->uploadWidth = cols;
 		tr.scratchImage[client]->height = tr.scratchImage[client]->uploadHeight = rows;
 
+#if defined(WIIU_GX2BE)
+		GX2BE_Upload32((unsigned *)data, cols, rows, GL_RGB8, (int)tr.scratchImage[client]->texnum, GL_CLAMP_TO_EDGE, qfalse, qfalse);
+#else
 		// manually convert RGBA to RGB for OpenGL ES
 		if (qglesMajorVersion >= 1) {
 			buffer = ri.Hunk_AllocateTempMemory(3 * cols * rows);
@@ -779,9 +861,13 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const byte *data, int 
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glConfig.haveClampToEdge ? GL_CLAMP_TO_EDGE : GL_CLAMP);
+#endif
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glConfig.haveClampToEdge ? GL_CLAMP_TO_EDGE : GL_CLAMP);
 	} else {
 		if (dirty) {
+#if defined(WIIU_GX2BE)
+			GX2BE_TexSubImage2D((int)tr.scratchImage[client]->texnum, cols, rows, data);
+#else
 			if (qglesMajorVersion >= 1) {
 				buffer = ri.Hunk_AllocateTempMemory(3 * cols * rows);
 
@@ -792,6 +878,7 @@ void RE_UploadCinematic(int w, int h, int cols, int rows, const byte *data, int 
 			} else {
 				qglTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, cols, rows, GL_RGBA, GL_UNSIGNED_BYTE, data);
 			}
+#endif
 		}
 	}
 }
@@ -927,8 +1014,12 @@ static const void *RB_DrawBuffer(const void *data) {
 
 	// clear screen for debugging
 	if (r_clear->integer) {
+#if defined(WIIU_GX2BE)
+		GX2BE_Clear(qtrue, qtrue, 1.0f, 0.0f, 0.5f);
+#else
 		qglClearColor(1, 0, 0.5, 1);
 		qglClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+#endif
 	}
 
 	return (const void *)(cmd + 1);
@@ -955,9 +1046,14 @@ void RB_ShowImages(void) {
 		RB_SetGL2D();
 	}
 
+#if defined(WIIU_GX2BE)
+	GX2BE_Clear(qtrue, qfalse, 0.0f, 0.0f, 0.0f);
+	GX2BE_Finish();
+#else
 	qglClear(GL_COLOR_BUFFER_BIT);
 
 	qglFinish();
+#endif
 
 	start = ri.Milliseconds();
 
@@ -982,10 +1078,25 @@ void RB_ShowImages(void) {
 		Vector4Set(quadVerts[2], x + w, y + h, 0, 1);
 		Vector4Set(quadVerts[3], x, y + h, 0, 1);
 
+#if defined(WIIU_GX2BE)
+		{
+			float st[2] = {0, 0}, xyz[3] = {x, y, 0.0f};
+			GX2BE_ImmediateBegin(GL_QUADS, 4);
+			GX2BE_ImmediateTexVertex(st, xyz, 255, 255, 255, 255);
+			st[0] = 1; xyz[0] = x + w; GX2BE_ImmediateTexVertex(st, xyz, 255, 255, 255, 255);
+			st[1] = 1; xyz[1] = y + h; GX2BE_ImmediateTexVertex(st, xyz, 255, 255, 255, 255);
+			st[0] = 0; xyz[0] = x; GX2BE_ImmediateTexVertex(st, xyz, 255, 255, 255, 255);
+			GX2BE_ImmediateEnd();
+		}
+#else
 		RB_InstantQuad(quadVerts);
+#endif
 	}
-
+#if defined(WIIU_GX2BE)
+	GX2BE_Finish();
+#else
 	qglFinish();
+#endif
 
 	end = ri.Milliseconds();
 	ri.Printf(PRINT_ALL, "%i msec to draw all images\n", end - start);
@@ -1019,8 +1130,11 @@ static const void *RB_ClearDepth(const void *data) {
 	// texture swapping test
 	if (r_showImages->integer)
 		RB_ShowImages();
-
+#if defined(WIIU_GX2BE)
+	GX2BE_Clear(qfalse, qtrue, 0.0f, 0.0f, 0.0f);
+#else
 	qglClear(GL_DEPTH_BUFFER_BIT);
+#endif
 
 	return (const void *)(cmd + 1);
 }
@@ -1046,9 +1160,10 @@ static const void *RB_SwapBuffers(const void *data) {
 
 	cmd = (const swapBuffersCommand_t *)data;
 
-	// we measure overdraw by reading back the stencil buffer and
-	// counting up the number of increments that have happened
 	if (r_measureOverdraw->integer) {
+#ifdef WIIU_GX2BE
+		(void)cmd;
+#else
 		int i;
 		long sum = 0;
 		unsigned char *stencilReadback;
@@ -1062,6 +1177,7 @@ static const void *RB_SwapBuffers(const void *data) {
 
 		backEnd.pc.c_overDraw += sum;
 		ri.Hunk_FreeTempMemory(stencilReadback);
+#endif
 	}
 
 	if (!glState.finishCalled) {

@@ -316,7 +316,19 @@ static void RB_SurfaceBeam(void) {
 
 	GL_State(GLS_SRCBLEND_ONE | GLS_DSTBLEND_ONE);
 
+#if defined(WIIU_GX2BE)
+	{
+		float st[2] = { 0.0f, 0.0f };
+		GX2BE_ImmediateBegin(GL_TRIANGLE_STRIP, (NUM_BEAM_SEGS + 1) * 2);
+		for (i = 0; i <= NUM_BEAM_SEGS; i++) {
+			GX2BE_ImmediateTexVertex(st, start_points[i % NUM_BEAM_SEGS], 255, 0, 0, 255);
+			GX2BE_ImmediateTexVertex(st, end_points[i % NUM_BEAM_SEGS], 255, 0, 0, 255);
+		}
+		GX2BE_ImmediateEnd();
+	}
+#else
 	qglColor3f(1, 0, 0);
+#endif
 
 	for (i = 0; i <= NUM_BEAM_SEGS; i++) {
 		VectorCopy(start_points[i % NUM_BEAM_SEGS], verts[i * 2]);
@@ -1042,6 +1054,22 @@ Draws x/y/z lines from the origin for orientation debugging
 ===================
 */
 static void RB_SurfaceAxis(void) {
+	GL_Bind(tr.whiteImage);
+	GL_State(GLS_DEFAULT);
+#if defined(WIIU_GX2BE)
+	{
+		float st[2] = { 0.0f, 0.0f };
+		float o[3] = { 0, 0, 0 }, px[3] = { 16, 0, 0 }, py[3] = { 0, 16, 0 }, pz[3] = { 0, 0, 16 };
+		GX2BE_ImmediateBegin(GL_LINES, 6);
+		GX2BE_ImmediateTexVertex(st, o, 255, 0, 0, 255);
+		GX2BE_ImmediateTexVertex(st, px, 255, 0, 0, 255);
+		GX2BE_ImmediateTexVertex(st, o, 0, 255, 0, 255);
+		GX2BE_ImmediateTexVertex(st, py, 0, 255, 0, 255);
+		GX2BE_ImmediateTexVertex(st, o, 0, 0, 255, 255);
+		GX2BE_ImmediateTexVertex(st, pz, 0, 0, 255, 255);
+		GX2BE_ImmediateEnd();
+	}
+#else
 	vec3_t verts[6] = {
 		{0, 0, 0}, {16, 0, 0},
 		{0, 0, 0}, {0, 16, 0},
@@ -1052,19 +1080,14 @@ static void RB_SurfaceAxis(void) {
 		{0, 255, 0, 255}, {0, 255, 0, 255},
 		{0, 0, 255, 255}, {0, 0, 255, 255}
 	};
-
-	GL_Bind(tr.whiteImage);
-	GL_State(GLS_DEFAULT);
 	qglLineWidth(3);
-
 	qglEnableClientState(GL_COLOR_ARRAY);
 	qglDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
 	qglVertexPointer(3, GL_FLOAT, 0, verts);
 	qglColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
 	qglDrawArrays(GL_LINES, 0, 6);
-
 	qglLineWidth(1);
+#endif
 }
 
 //===========================================================================

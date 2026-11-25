@@ -986,7 +986,8 @@ extern cvar_t *r_nobind;	   // turns off binding to appropriate textures
 extern cvar_t *r_singleShader; // make most world faces use default shader
 extern cvar_t *r_roundImagesDown;
 extern cvar_t *r_colorMipLevels; // development aid to see texture mip usage
-extern cvar_t *r_picmip;		 // controls picmip values
+extern cvar_t *r_picmip;
+extern cvar_t *r_uiMaxSize;		 // controls picmip values
 extern cvar_t *r_finish;
 extern cvar_t *r_textureMode;
 extern cvar_t *r_offsetFactor;
@@ -1545,6 +1546,12 @@ void VectorArrayNormalize(vec4_t *normals, unsigned int count);
 void LerpMeshVertexes_altivec(md3Surface_t *surf, float backlerp);
 void ProjectDlightTexture_altivec(void);
 void RB_CalcDiffuseColor_altivec(unsigned char *colors);
+#endif
+
+#if defined(WIIU_GX2BE)
+#include "../renderergx2/tr_gx2_backend.h"
+void R_MipMap(byte *in, int width, int height);
+void R_RealizeLazyImage(image_t *image);
 #endif
 
 #endif // TR_LOCAL_H

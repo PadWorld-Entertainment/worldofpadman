@@ -682,8 +682,12 @@ void RB_DrawSun(float scale, shader_t *shader) {
 		return;
 	}
 
+#if defined(WIIU_GX2BE)
+	GX2BE_LoadModelviewTranslatedGL(backEnd.viewParms.world.modelMatrix, backEnd.viewParms.or.origin);
+#else
 	qglLoadMatrixf(backEnd.viewParms.world.modelMatrix);
 	qglTranslatef(backEnd.viewParms.or.origin[0], backEnd.viewParms.or.origin[1], backEnd.viewParms.or.origin[2]);
+#endif
 
 	dist = backEnd.viewParms.zFar / 1.75; // div sqrt(3)
 	size = dist * scale;
@@ -738,6 +742,13 @@ void RB_StageIteratorSky(void) {
 
 	// draw the outer skybox
 	if (tess.shader->sky.outerbox[0] && tess.shader->sky.outerbox[0] != tr.defaultImage) {
+#if defined(WIIU_GX2BE)
+		GL_State(0);
+		GL_Cull(CT_FRONT_SIDED);
+		GX2BE_LoadModelviewTranslatedGL(backEnd.viewParms.world.modelMatrix, backEnd.viewParms.or.origin);
+		DrawSkyBox(tess.shader);
+		GX2BE_LoadModelviewGL(backEnd.or.modelMatrix);
+#else
 		qglColor3f(tr.identityLight, tr.identityLight, tr.identityLight);
 
 		qglPushMatrix();
@@ -748,6 +759,7 @@ void RB_StageIteratorSky(void) {
 		DrawSkyBox(tess.shader);
 
 		qglPopMatrix();
+#endif
 	}
 
 	// generate the vertexes for all the clouds, which will be drawn

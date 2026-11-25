@@ -115,6 +115,7 @@ cvar_t *r_singleShader;
 cvar_t *r_roundImagesDown;
 cvar_t *r_colorMipLevels;
 cvar_t *r_picmip;
+cvar_t *r_uiMaxSize;
 cvar_t *r_showtris;
 cvar_t *r_showsky;
 cvar_t *r_shownormals;
@@ -192,13 +193,17 @@ static void InitOpenGL(void) {
 		GLimp_Init(qtrue);
 
 		// OpenGL driver constants
+#if defined(WIIU_GX2BE)
+		(void)temp;
+		glConfig.maxTextureSize = 2048;
+		glConfig.textureEnvAddAvailable = qtrue;
+#else
 		qglGetIntegerv(GL_MAX_TEXTURE_SIZE, &temp);
 		glConfig.maxTextureSize = temp;
-
-		// stubbed or broken drivers may have reported 0...
 		if (glConfig.maxTextureSize <= 0) {
 			glConfig.maxTextureSize = 0;
 		}
+#endif
 	}
 
 	// set default state
@@ -365,11 +370,12 @@ static byte *RB_ReadPixels(int x, int y, int width, int height, size_t *offset, 
 	buffer = ri.Hunk_AllocateTempMemory(padwidth * height + *offset + packAlign - 1);
 
 	bufstart = PADP((intptr_t)buffer + *offset, packAlign);
-	qglReadPixels(x, y, width, height, format, GL_UNSIGNED_BYTE, bufstart);
-
+#if defined(WIIU_GX2BE)
+	GX2BE_ReadPixelsRGB(x, y, width, height, padwidth - (width * 3), bufstart);
 	linelen = width * 3;
-
-	// Convert RGBA to RGB, in place, line by line
+#else
+	qglReadPixels(x, y, width, height, format, GL_UNSIGNED_BYTE, bufstart);
+	linelen = width * 3;
 	if (format == GL_RGBA) {
 		for (yin = 0; yin < height; yin++) {
 			for (xin = 0, xout = 0; xout < linelen; xin += 4, xout += 3) {
@@ -379,6 +385,7 @@ static byte *RB_ReadPixels(int x, int y, int width, int height, size_t *offset, 
 			}
 		}
 	}
+#endif
 
 	*offset = bufstart - buffer;
 	*padlen = padwidth - linelen;
@@ -770,6 +777,16 @@ void GL_SetDefaultState(void) {
 
 	// initialize downstream texture unit if we're running
 	// in a multitexture environment
+#if defined(WIIU_GX2BE)
+	if (qglActiveTextureARB) {
+		GL_SelectTexture(1);
+		GL_TexEnv(GL_MODULATE);
+		GL_SelectTexture(0);
+	}
+	GL_TexEnv(GL_MODULATE);
+	glState.glStateBits = GLS_DEPTHTEST_DISABLE | GLS_DEPTHMASK_TRUE;
+	return;
+#endif
 	if (qglActiveTextureARB) {
 		GL_SelectTexture(1);
 		GL_TextureMode(r_textureMode->string);
@@ -935,10 +952,20 @@ static void R_Register(void) {
 	r_ext_max_anisotropy = ri.Cvar_Get("r_ext_max_anisotropy", "2", CVAR_ARCHIVE | CVAR_LATCH);
 
 	r_picmip = ri.Cvar_Get("r_picmip", "1", CVAR_ARCHIVE | CVAR_LATCH);
+#if defined(__WIIU__)
+	r_uiMaxSize = ri.Cvar_Get("r_uiMaxSize", "1024", CVAR_ARCHIVE | CVAR_LATCH);
+#else
+	r_uiMaxSize = ri.Cvar_Get("r_uiMaxSize", "0", CVAR_ARCHIVE | CVAR_LATCH);
+#endif
+	ri.Cvar_CheckRange(r_uiMaxSize, 0, 4096, qtrue);
 	r_roundImagesDown = ri.Cvar_Get("r_roundImagesDown", "1", CVAR_ARCHIVE | CVAR_LATCH);
 	r_colorMipLevels = ri.Cvar_Get("r_colorMipLevels", "0", CVAR_LATCH);
 	ri.Cvar_CheckRange(r_picmip, 0, 16, qtrue);
+#ifdef __WIIU__
+	r_detailTextures = ri.Cvar_Get("r_detailtextures", "0", CVAR_ARCHIVE | CVAR_LATCH);
+#else
 	r_detailTextures = ri.Cvar_Get("r_detailtextures", "1", CVAR_ARCHIVE | CVAR_LATCH);
+#endif
 	r_texturebits = ri.Cvar_Get("r_texturebits", "0", CVAR_ARCHIVE | CVAR_LATCH);
 	r_colorbits = ri.Cvar_Get("r_colorbits", "0", CVAR_ARCHIVE | CVAR_LATCH);
 	r_stencilbits = ri.Cvar_Get("r_stencilbits", "8", CVAR_ARCHIVE | CVAR_LATCH);
@@ -956,7 +983,11 @@ static void R_Register(void) {
 	r_simpleMipMaps = ri.Cvar_Get("r_simpleMipMaps", "1", CVAR_ARCHIVE | CVAR_LATCH);
 	r_vertexLight = ri.Cvar_Get("r_vertexLight", "0", CVAR_ARCHIVE | CVAR_LATCH);
 	r_uiFullScreen = ri.Cvar_Get("r_uifullscreen", "0", 0);
+#ifdef __WIIU__
+	r_subdivisions = ri.Cvar_Get("r_subdivisions", "16", CVAR_ARCHIVE | CVAR_LATCH);
+#else
 	r_subdivisions = ri.Cvar_Get("r_subdivisions", "4", CVAR_ARCHIVE | CVAR_LATCH);
+#endif
 	r_stereoEnabled = ri.Cvar_Get("r_stereoEnabled", "0", CVAR_ARCHIVE | CVAR_LATCH);
 	r_ignoreFastPath = ri.Cvar_Get("r_ignoreFastPath", "1", CVAR_ARCHIVE | CVAR_LATCH);
 	r_greyscale = ri.Cvar_Get("r_greyscale", "0", CVAR_ARCHIVE | CVAR_LATCH);
@@ -977,7 +1008,11 @@ static void R_Register(void) {
 	//
 	r_lodCurveError = ri.Cvar_Get("r_lodCurveError", "250", CVAR_ARCHIVE | CVAR_CHEAT);
 	r_lodbias = ri.Cvar_Get("r_lodbias", "0", CVAR_ARCHIVE);
+#ifdef __WIIU__
+	r_flares = ri.Cvar_Get("r_flares", "0", CVAR_ARCHIVE);
+#else
 	r_flares = ri.Cvar_Get("r_flares", "1", CVAR_ARCHIVE);
+#endif
 	r_znear = ri.Cvar_Get("r_znear", "4", CVAR_CHEAT);
 	ri.Cvar_CheckRange(r_znear, 0.001f, 200, qfalse);
 	r_zproj = ri.Cvar_Get("r_zproj", "64", CVAR_ARCHIVE);
@@ -986,10 +1021,18 @@ static void R_Register(void) {
 	r_fastsky = ri.Cvar_Get("r_fastsky", "0", CVAR_ARCHIVE);
 	r_inGameVideo = ri.Cvar_Get("r_inGameVideo", "1", CVAR_ARCHIVE);
 	r_drawSun = ri.Cvar_Get("r_drawSun", "0", CVAR_ARCHIVE);
+#ifdef __WIIU__
+	r_dynamiclight = ri.Cvar_Get("r_dynamiclight", "0", CVAR_ARCHIVE);
+#else
 	r_dynamiclight = ri.Cvar_Get("r_dynamiclight", "1", CVAR_ARCHIVE);
+#endif
 	r_dlightBacks = ri.Cvar_Get("r_dlightBacks", "1", CVAR_ARCHIVE);
 	r_finish = ri.Cvar_Get("r_finish", "0", CVAR_ARCHIVE);
+#ifdef __WIIU__
+	r_textureMode = ri.Cvar_Get("r_textureMode", "GL_LINEAR", CVAR_ARCHIVE);
+#else
 	r_textureMode = ri.Cvar_Get("r_textureMode", "GL_LINEAR_MIPMAP_LINEAR", CVAR_ARCHIVE);
+#endif
 	r_swapInterval = ri.Cvar_Get("r_swapInterval", "0", CVAR_ARCHIVE | CVAR_LATCH);
 	r_gamma = ri.Cvar_Get("r_gamma", "1", CVAR_ARCHIVE);
 	r_facePlaneCull = ri.Cvar_Get("r_facePlaneCull", "1", CVAR_ARCHIVE);
@@ -1202,9 +1245,11 @@ Touch all images to make sure they are resident
 */
 static void RE_EndRegistration(void) {
 	R_IssuePendingRenderCommands();
+#ifndef __WIIU__
 	if (!ri.Sys_LowPhysicalMemory()) {
 		RB_ShowImages();
 	}
+#endif
 }
 
 /*
