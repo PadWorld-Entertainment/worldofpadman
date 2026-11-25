@@ -61,6 +61,18 @@
 }
 
 {
+    map "wop_marblemaze" 
+    longname "Iltis' Marble Maze"
+    type "ffa team syc_ffa syc_tp lps ft ctkd"
+}
+ 
+{
+    map "iltis_handlabyrinth0995CTL" 
+    longname "Iltis' Marble Maze"
+    type "ctl"
+}
+
+{
     map "wop_hurryup"
     longname "Hectic's Hurry up!"
     type "ffa lps"
@@ -73,9 +85,9 @@
 }
 
 {
-	map "wop_pacman"
-	longname "Hectic's Pac-Man"
-	type "ffa"
+    map "wop_pacman"
+    longname "Hectic's Pac-Man"
+    type "ffa"
 }
 
 {
