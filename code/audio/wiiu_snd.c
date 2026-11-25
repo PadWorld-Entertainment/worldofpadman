@@ -174,27 +174,16 @@ static void wiiu_release_voices(void)
 
 /* Public API, called from wiiu_main.c */
 
-static void snd_log(const char *msg)
-{
-#ifdef WIIU_DEBUG
-    FILE *f = fopen("fs:/vol/external01/quake3/log.txt", "a");
-    if (f) { fprintf(f, "%s\n", msg); fclose(f); }
-#endif
-    (void)msg;
-}
-
 void WiiU_Snd_Init(void)
 {
     if (s_ax_init)
         return;
 
-    snd_log("AXInitWithParams start");
     AXInitParams params;
     memset(&params, 0, sizeof(params));
     params.renderer = AX_INIT_RENDERER_48KHZ;
     params.pipeline = AX_INIT_PIPELINE_SINGLE;
     AXInitWithParams(&params);
-    snd_log("AXInitWithParams done");
 
     s_ax_init = qtrue;
 }

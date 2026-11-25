@@ -20,15 +20,7 @@
 #include "../qcommon/q_shared.h"
 #include "../qcommon/qcommon.h"
 
-#if defined(STANDALONETA)
-#define WIIU_LOG_PATH "fs:/vol/external01/quake3/log_ta.txt"
-#elif defined(STANDALONEOA)
-#define WIIU_LOG_PATH "fs:/vol/external01/quake3/log_oa.txt"
-#elif defined(CLASSIC)
-#define WIIU_LOG_PATH "fs:/vol/external01/quake3/log_classic.txt"
-#else
-#define WIIU_LOG_PATH "fs:/vol/external01/quake3/log.txt"
-#endif
+#define WIIU_LOG_PATH "fs:/vol/external01/wop/log.txt"
 
 #ifdef DEDICATED
 static int    s_consoleReady = 0;
@@ -55,7 +47,7 @@ void CON_Init(void)
 	/* Truncate log for a clean run. Release builds skip this -- no log.txt at all. */
 	FILE *f = fopen(WIIU_LOG_PATH, "w");
 	if (f) {
-		fputs("=== ioQuake3-U boot log ===\n", f);
+		fputs("=== wop-u boot log ===\n", f);
 		fclose(f);
 	}
 #endif

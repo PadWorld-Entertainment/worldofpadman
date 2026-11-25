@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include <dirent.h>
 
 #include <coreinit/thread.h>
 #include <coreinit/time.h>
@@ -37,41 +38,9 @@ void  CON_Shutdown(void);
 void  CON_SetForeground(qboolean fg);
 qboolean CON_IsForeground(void);
 void  WiiU_SetBasePath(const char *path);
-#if defined(WIIU_HAVE_BUNDLED_PAK) && !defined(DEDICATED)
-void  WiiU_ExtractBundledPak(void);
-#endif
-
 #define WIIU_BASE_PATH "fs:/vol/external01/wop"
-
-#if defined(STANDALONETA)
-#define WIIU_FS_GAME "missionpack"
-#define WIIU_VM_GAME "0"
-#define WIIU_LOG_SUFFIX "_ta"
-#elif defined(STANDALONEOA)
-#define WIIU_FS_GAME "baseoa"
-/* Native: Makefile.client links the vendored OA 0.8.8 gamecode (code/oa/) for this flavor. */
-#define WIIU_VM_GAME "0"
-#define WIIU_LOG_SUFFIX "_oa"
-#elif defined(CLASSIC)
-/* CLASSIC (Dreamcast proto-43): zpack-classic.pk3 layers on baseq3, needs the bytecode qagame.qvm. */
-#define WIIU_FS_GAME "baseq3"
-#define WIIU_VM_GAME "2"
-#define WIIU_LOG_SUFFIX "_classic"
-#elif defined(ELITEFORCE)
-/* EF's playerState_t/entityState_t/usercmd_t layout is incompatible with this repo's
- * native (vanilla Q3A) code/game, so it always runs retail EF's own bytecode qagame.qvm. */
-#define WIIU_FS_GAME "baseEF"
-#define WIIU_VM_GAME "2"
-#define WIIU_LOG_SUFFIX "_ef"
-#elif defined(WOP)
-#define WIIU_FS_GAME ""
-#define WIIU_VM_GAME "0"
+#define WIIU_VM_GAME   "0"
 #define WIIU_LOG_SUFFIX "_wop"
-#else
-#define WIIU_FS_GAME "baseq3"
-#define WIIU_VM_GAME "0"
-#define WIIU_LOG_SUFFIX ""
-#endif
 
 /* Diagnostic toggle for the console-freeze-on-quit bisect; networking was exonerated, kept at 0. */
 #define WIIU_DIAG_SKIP_NET 0
@@ -161,17 +130,17 @@ static uint32_t wiiu_diag_release(void *ctx)
 static void WiiU_ExitHandshake(qboolean alreadyExiting)
 {
 	if (alreadyExiting) {
-		LOGCP("[ioQuake3-U] exit handshake: already EXITING, no pump needed\n");
+		LOGCP("[wop-u] exit handshake: already EXITING, no pump needed\n");
 		return;
 	}
 	if (wiiu_from_hbl) {
-		LOGCP("[ioQuake3-U] exit handshake: SYSRelaunchTitle\n");
+		LOGCP("[wop-u] exit handshake: SYSRelaunchTitle\n");
 		SYSRelaunchTitle(0, NULL);
-		LOGCP("[ioQuake3-U] exit handshake: SYSRelaunchTitle returned\n");
+		LOGCP("[wop-u] exit handshake: SYSRelaunchTitle returned\n");
 	} else {
-		LOGCP("[ioQuake3-U] exit handshake: SYSLaunchMenu\n");
+		LOGCP("[wop-u] exit handshake: SYSLaunchMenu\n");
 		SYSLaunchMenu();
-		LOGCP("[ioQuake3-U] exit handshake: SYSLaunchMenu returned\n");
+		LOGCP("[wop-u] exit handshake: SYSLaunchMenu returned\n");
 	}
 	{
 		int lastSt = -1;
@@ -180,19 +149,19 @@ static void WiiU_ExitHandshake(qboolean alreadyExiting)
 			if ((int)st != lastSt) {
 				char buf[64];
 				snprintf(buf, sizeof(buf),
-				         "[ioQuake3-U] exit handshake: status=%d\n", (int)st);
+				         "[wop-u] exit handshake: status=%d\n", (int)st);
 				LOGCP(buf);
 				lastSt = (int)st;
 			}
 			if (st == PROCUI_STATUS_EXITING) {
-				LOGCP("[ioQuake3-U] exit handshake: EXITING received\n");
+				LOGCP("[wop-u] exit handshake: EXITING received\n");
 				break;
 			}
 			if (st == PROCUI_STATUS_RELEASE_FOREGROUND) {
 				CON_SetForeground(qfalse);
-				LOGCP("[ioQuake3-U] exit handshake: calling ProcUIDrawDoneRelease\n");
+				LOGCP("[wop-u] exit handshake: calling ProcUIDrawDoneRelease\n");
 				ProcUIDrawDoneRelease();
-				LOGCP("[ioQuake3-U] exit handshake: ProcUIDrawDoneRelease returned\n");
+				LOGCP("[wop-u] exit handshake: ProcUIDrawDoneRelease returned\n");
 			} else if (st != PROCUI_STATUS_IN_FOREGROUND) {
 				OSSleepTicks(OSMillisecondsToTicks(16));
 			}
@@ -212,9 +181,9 @@ void Sys_Quit(void)
 {
 	wiiu_running = qfalse;
 #if !WIIU_DIAG_SKIP_NET
-	LOGCP("[ioQuake3-U] Sys_Quit: calling NET_Shutdown\n");
+	LOGCP("[wop-u] Sys_Quit: calling NET_Shutdown\n");
 	NET_Shutdown();
-	LOGCP("[ioQuake3-U] Sys_Quit: NET_Shutdown returned\n");
+	LOGCP("[wop-u] Sys_Quit: NET_Shutdown returned\n");
 #endif
 #ifndef DEDICATED
 	/* Idempotent safety net -- anything left running here stalls exit()'s OS finalizers. */
@@ -223,14 +192,14 @@ void Sys_Quit(void)
 #endif
 	/* Order matters: handshake, then ProcUIShutdown, then GX2. Swap the last two and it hangs. */
 	WiiU_ExitHandshake(qfalse);
-	LOGCP("[ioQuake3-U] Sys_Quit: calling ProcUIShutdown\n");
+	LOGCP("[wop-u] Sys_Quit: calling ProcUIShutdown\n");
 	ProcUIShutdown();
-	LOGCP("[ioQuake3-U] Sys_Quit: ProcUIShutdown returned\n");
+	LOGCP("[wop-u] Sys_Quit: ProcUIShutdown returned\n");
 #ifndef DEDICATED
 	GLimp_ShutdownFinal();
 #endif
 	CON_Shutdown();
-	LOGCP("[ioQuake3-U] Sys_Quit: calling exit(0)\n");
+	LOGCP("[wop-u] Sys_Quit: calling exit(0)\n");
 	exit(0);
 }
 
@@ -270,6 +239,7 @@ void Sys_SigHandler(int signal)
 {
 	(void)signal;
 	wiiu_running = qfalse;
+	Sys_Quit();
 }
 
 /* Entry point. */
@@ -350,42 +320,15 @@ int main(int argc, char **argv)
 
 			/* First safe point to touch SD/OSScreen/do real work. */
 			CON_Init();
-			LOGCP("[ioQuake3-U] main(): ProcUI up, entering init\n");
+			LOGCP("[wop-u] main(): ProcUI up, entering init\n");
 
 			WiiU_SetBasePath(WIIU_BASE_PATH);
 			chdir(WIIU_BASE_PATH);
-			LOGCP("[ioQuake3-U] CP1: base = " WIIU_BASE_PATH "\n");
-
-#if defined(WIIU_HAVE_BUNDLED_PAK) && !defined(DEDICATED)
-			/* Write this flavor's embedded pak to SD before the pak0 preflight check. */
-			WiiU_ExtractBundledPak();
-#endif
+			LOGCP("[wop-u] CP1: base = " WIIU_BASE_PATH "\n");
 
 #ifndef DEDICATED
-			/* Verify paks exist before Com_Init bothers trying. OA/EF check only their own dir. */
-#if defined(STANDALONEOA) || defined(ELITEFORCE)
-			{
-				FILE *pk = fopen(WIIU_BASE_PATH "/" WIIU_FS_GAME "/pak0.pk3", "rb");
-				if (pk) {
-					fclose(pk);
-				} else {
-					LOGCP("[ioQuake3-U] FATAL: " WIIU_FS_GAME "/pak0.pk3 not found on SD card\n");
-					OSSleepTicks(OSMillisecondsToTicks(3000));
-					break;
-				}
-			}
-#if defined(STANDALONEOA) || defined(ELITEFORCE)
-			{
-				FILE *pk = fopen(WIIU_BASE_PATH "/" WIIU_FS_GAME "/pak0.pk3", "rb");
-				if (pk) {
-					fclose(pk);
-				} else {
-					LOGCP("[ioQuake3-U] FATAL: " WIIU_FS_GAME "/pak0.pk3 not found on SD card\n");
-					OSSleepTicks(OSMillisecondsToTicks(3000));
-					break;
-				}
-			}
-#elif defined(WOP)
+#ifndef DEDICATED
+			/* Verify WoP paks exist before Com_Init bothers trying. */
 			{
 				DIR *dir;
 				struct dirent *entry;
@@ -395,43 +338,20 @@ int main(int argc, char **argv)
 				dir = opendir(path);
 				if (dir) {
 					while ((entry = readdir(dir)) != NULL) {
-						if (strcmp(entry->d_name + strlen(entry->d_name) - 4, ".pk3") == 0) {
+						size_t len = strlen(entry->d_name);
+						if (len >= 4 && strcmp(entry->d_name + len - 4, ".pk3") == 0) {
 							found_pk3 = 1;
-						break;
-					}
+							break;
+						}
 					}
 					closedir(dir);
 				}
 				if (!found_pk3) {
-					LOGCP("[ioQuake3-U] FATAL: No .pk3 files found in " WIIU_BASE_PATH "/wop\n");
+					LOGCP("[wop-u] FATAL: No .pk3 files found in " WIIU_BASE_PATH "/wop\n");
 					OSSleepTicks(OSMillisecondsToTicks(3000));
 					break;
 				}
 			}
-#else
-			{
-				FILE *pk = fopen(WIIU_BASE_PATH "/baseq3/pak0.pk3", "rb");
-				if (pk) {
-					fclose(pk);
-				} else {
-					LOGCP("[ioQuake3-U] FATAL: baseq3/pak0.pk3 not found on SD card\n");
-					OSSleepTicks(OSMillisecondsToTicks(3000));
-					break;
-				}
-			}
-#endif
-#if defined(STANDALONETA)
-			{
-				FILE *pk = fopen(WIIU_BASE_PATH "/missionpack/pak0.pk3", "rb");
-				if (pk) {
-					fclose(pk);
-				} else {
-					LOGCP("[ioQuake3-U] FATAL: missionpack/pak0.pk3 not found on SD card\n");
-					OSSleepTicks(OSMillisecondsToTicks(3000));
-					break;
-				}
-			}
-#endif
 #endif
 
 			/* Create qkey if missing. */
@@ -453,11 +373,11 @@ int main(int argc, char **argv)
 
 			/* Input before Com_Init so IN_Init (inside CL_InitRef) has a live backend. */
 			WiiU_Input_Init();
-			LOGCP("[ioQuake3-U] CP2: input ready\n");
+			LOGCP("[wop-u] CP2: input ready\n");
 
 			/* Audio before Com_Init or SNDDMA_Init silently disables sound. Silently. */
 			WiiU_Snd_Init();
-			LOGCP("[ioQuake3-U] CP3: audio ready\n");
+			LOGCP("[wop-u] CP3: audio ready\n");
 #endif
 
 			for (i = 1; i < argc; i++) {
@@ -502,7 +422,7 @@ int main(int argc, char **argv)
 			WiiU_InitDefaultPlayerName();
 #endif
 
-			LOGCP("[ioQuake3-U] CP4: calling Com_Init (loads paks)...\n");
+			LOGCP("[wop-u] CP4: calling Com_Init (loads paks)...\n");
 			WHBLogPrintf("[TIME] before Com_Init: %d ms\n", Sys_Milliseconds());
 			Sys_PlatformInit();
 			Com_Init(commandLine);
@@ -511,7 +431,7 @@ int main(int argc, char **argv)
 			NET_Init();
 			WHBLogPrintf("[TIME] after NET_Init: %d ms\n", Sys_Milliseconds());
 #else
-			LOGCP("[ioQuake3-U] DIAG: skipping NET_Init entirely\n");
+			LOGCP("[wop-u] DIAG: skipping NET_Init entirely\n");
 #endif
 
 #ifdef DEDICATED
@@ -539,7 +459,7 @@ int main(int argc, char **argv)
 		WiiU_Input_Frame();
 
 		if (wiiu_frame_count > 60 && WiiU_Input_QuitPressed()) {
-			LOGCP("[ioQuake3-U] Quit combo detected\n");
+			LOGCP("[wop-u] Quit combo detected\n");
 			break;
 		}
 #endif
@@ -548,29 +468,29 @@ int main(int argc, char **argv)
 		wiiu_frame_count++;
 	}
 
-	LOGCP("[ioQuake3-U] shutting down\n");
+	LOGCP("[wop-u] shutting down\n");
 #if !WIIU_DIAG_SKIP_NET
 	/* Shut down network + somemopt donation thread BEFORE Com_Shutdown/AXQuit (matches Sys_Quit). */
-	LOGCP("[ioQuake3-U] main: calling NET_Shutdown\n");
+	LOGCP("[wop-u] main: calling NET_Shutdown\n");
 	NET_Shutdown();
-	LOGCP("[ioQuake3-U] main: NET_Shutdown returned\n");
+	LOGCP("[wop-u] main: NET_Shutdown returned\n");
 #endif
-	LOGCP("[ioQuake3-U] main: calling Com_Shutdown\n");
+	LOGCP("[wop-u] main: calling Com_Shutdown\n");
 	Com_Shutdown();
-	LOGCP("[ioQuake3-U] main: Com_Shutdown returned\n");
+	LOGCP("[wop-u] main: Com_Shutdown returned\n");
 #ifndef DEDICATED
 	WiiU_Snd_Shutdown();
 	WiiU_Input_Shutdown();
 #endif
 	/* Same order as Sys_Quit: handshake to EXITING, ProcUIShutdown, then GX2 teardown. */
 	WiiU_ExitHandshake(os_exiting);
-	LOGCP("[ioQuake3-U] main: calling ProcUIShutdown\n");
+	LOGCP("[wop-u] main: calling ProcUIShutdown\n");
 	ProcUIShutdown();
-	LOGCP("[ioQuake3-U] main: ProcUIShutdown returned\n");
+	LOGCP("[wop-u] main: ProcUIShutdown returned\n");
 #ifndef DEDICATED
 	GLimp_ShutdownFinal();
 #endif
 	CON_Shutdown();
-	LOGCP("[ioQuake3-U] main: returning 0\n");
+	LOGCP("[wop-u] main: returning 0\n");
 	return 0;
 }

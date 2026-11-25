@@ -11,5 +11,6 @@ void WiiU_Snd_Shutdown(void);
 /* ProcUI foreground/background transitions */
 void WiiU_Snd_ReleaseForeground(void);
 void WiiU_Snd_AcquireForeground(void);
+void WiiU_Snd_SetPaused(qboolean paused);
 
 #endif /* WIIU_SND_H */

@@ -49,11 +49,6 @@ void WiiU_GamepadMap_Frame(void)
 		int gametype = atoi(Info_ValueForKey(serverInfo, "g_gametype"));
 		qboolean teamItemsOnly = qfalse;
 
-#ifdef STANDALONEOA
-		/* OA's instagib and all-rockets modes spawn no pickups except the flags. */
-		teamItemsOnly = atoi(Info_ValueForKey(serverInfo, "g_instantgib")) ||
-		                atoi(Info_ValueForKey(serverInfo, "g_rockets"));
-#endif
 		GX2DrcMap_Prepare(gametype, teamItemsOnly);
 	}
 
