@@ -26,7 +26,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __QGL_H__
 #define __QGL_H__
 
-#ifdef USE_LOCAL_HEADERS
+#if defined(__WIIU__) || defined(WIIU)
+#include <stdint.h>
+#include <stddef.h>
+typedef unsigned int   GLenum;
+typedef unsigned char  GLboolean;
+typedef unsigned int   GLbitfield;
+typedef void           GLvoid;
+typedef signed char    GLbyte;
+typedef short          GLshort;
+typedef int            GLint;
+typedef unsigned char  GLubyte;
+typedef unsigned short GLushort;
+typedef unsigned int   GLuint;
+typedef int            GLsizei;
+typedef float          GLfloat;
+typedef float          GLclampf;
+typedef double         GLdouble;
+typedef double         GLclampd;
+typedef char           GLchar;
+typedef intptr_t       GLintptr;
+typedef ptrdiff_t      GLsizeiptr;
+#ifndef APIENTRY
+#define APIENTRY
+#endif
+#ifndef APIENTRYP
+#define APIENTRYP APIENTRY *
+#endif
+#include "qgl_wiiu_consts.h"
+#elif defined(USE_LOCAL_HEADERS)
 #include "SDL_opengl.h"
 #else
 #include <SDL_opengl.h>
