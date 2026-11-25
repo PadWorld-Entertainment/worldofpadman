@@ -385,6 +385,7 @@ cvar_t *cl_run;
 
 cvar_t *cl_anglespeedkey;
 
+
 /*
 ================
 CL_AdjustAngles
@@ -408,6 +409,7 @@ static void CL_AdjustAngles(void) {
 
 	cl.viewangles[PITCH] -= speed * cl_pitchspeed->value * CL_KeyState(&in_lookup);
 	cl.viewangles[PITCH] += speed * cl_pitchspeed->value * CL_KeyState(&in_lookdown);
+	CL_AssistFrame();
 }
 
 /*
@@ -494,10 +496,17 @@ CL_JoystickMove
 static void CL_JoystickMove(usercmd_t *cmd) {
 	float anglespeed;
 
-	const float yaw = j_yaw->value * cl.joystickAxis[j_yaw_axis->integer];
+	float yaw = j_yaw->value * cl.joystickAxis[j_yaw_axis->integer];
 	const float right = j_side->value * cl.joystickAxis[j_side_axis->integer];
 	const float forward = j_forward->value * cl.joystickAxis[j_forward_axis->integer];
-	const float pitch = j_pitch->value * cl.joystickAxis[j_pitch_axis->integer];
+	float pitch = j_pitch->value * cl.joystickAxis[j_pitch_axis->integer];
+#ifdef __WIIU__
+	{
+		float sensScale = 1.4f + 0.16f * cl_sensitivity->value;
+		yaw *= sensScale;
+		pitch *= sensScale;
+	}
+#endif
 	const float up = j_up->value * cl.joystickAxis[j_up_axis->integer];
 
 	if (!(in_speed.active ^ cl_run->integer)) {
@@ -511,6 +520,9 @@ static void CL_JoystickMove(usercmd_t *cmd) {
 	}
 
 	if (!in_strafe.active) {
+		if (cl.cgameSensitivity < 0.999f) {
+			anglespeed *= CL_AssistGetAdsScale();
+		}
 		cl.viewangles[YAW] += anglespeed * yaw;
 		cmd->rightmove = ClampChar(cmd->rightmove + (int)right);
 	} else {
@@ -1015,6 +1027,7 @@ CL_InitInput
 */
 void CL_InitInput(void) {
 	Cmd_AddCommand("centerview", IN_CenterView);
+	CL_AssistInit();
 
 	Cmd_AddCommand("+moveup", IN_UpDown);
 	Cmd_AddCommand("-moveup", IN_UpUp);
@@ -1093,6 +1106,7 @@ CL_ShutdownInput
 */
 void CL_ShutdownInput(void) {
 	Cmd_RemoveCommand("centerview");
+	CL_AssistShutdown();
 
 	Cmd_RemoveCommand("+moveup");
 	Cmd_RemoveCommand("-moveup");
