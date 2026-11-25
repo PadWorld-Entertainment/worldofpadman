@@ -220,7 +220,11 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_zoomFov, "cg_zoomfov", "22.5", CVAR_ARCHIVE},
 	{&cg_fov, "cg_fov", "90", CVAR_ARCHIVE},
 	{&cg_viewsize, "cg_viewsize", "100", CVAR_ARCHIVE},
+#ifdef __WIIU__
+	{&cg_shadows, "cg_shadows", "0", CVAR_ARCHIVE},
+#else
 	{&cg_shadows, "cg_shadows", "1", CVAR_ARCHIVE},
+#endif
 	{&cg_draw2D, "cg_draw2D", "1", CVAR_ARCHIVE},
 	{&cg_drawStatus, "cg_drawStatus", "1", CVAR_ARCHIVE},
 	{&cg_drawTimer, "cg_drawTimer", "0", CVAR_ARCHIVE},
@@ -241,7 +245,11 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 	{&cg_crosshairX, "cg_crosshairX", "0", CVAR_ARCHIVE},
 	{&cg_crosshairY, "cg_crosshairY", "0", CVAR_ARCHIVE},
 	{&cg_simpleItems, "cg_simpleItems", "0", CVAR_ARCHIVE},
+#ifdef __WIIU__
+	{&cg_addMarks, "cg_marks", "0", CVAR_ARCHIVE},
+#else
 	{&cg_addMarks, "cg_marks", "1", CVAR_ARCHIVE},
+#endif
 	{&cg_lagometer, "cg_lagometer", "0", CVAR_ARCHIVE},
 	{&cg_gun_x, "cg_gunX", "0", CVAR_CHEAT},
 	{&cg_gun_y, "cg_gunY", "0", CVAR_CHEAT},
@@ -329,7 +337,11 @@ static cvarTable_t cvarTable[] = {	   // bk001129
 
 	{&cg_timestamps, "cg_timestamps", "0", CVAR_ARCHIVE},
 
+#ifdef __WIIU__
+	{&cg_drawLensflare, "cg_drawLensflare", "0", CVAR_ARCHIVE},
+#else
 	{&cg_drawLensflare, "cg_drawLensflare", "1", CVAR_ARCHIVE},
+#endif
 	{&cg_drawVoiceNames, "cg_drawVoiceNames", "1", CVAR_ARCHIVE},
 
 	{&cg_drawBBox, "cg_drawBBox", "0", CVAR_CHEAT},

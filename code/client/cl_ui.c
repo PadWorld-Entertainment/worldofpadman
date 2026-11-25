@@ -627,19 +627,31 @@ static float CLUI_GetVoiceGain(const int id) {
 	if (id < 0 || id >= MAX_CLIENTS)
 		return 0;
 	// todo, make sure server is running
+#ifdef USE_VOIP
 	return clc.voipGain[id];
+#else
+	return 0.0f;
+#endif
 }
 
 static int CLUI_GetVoiceMuteClient(const int id) {
 	if (id < 0 || id >= MAX_CLIENTS)
 		return 0;
 	// todo, make sure server is running
+#ifdef USE_VOIP
 	return clc.voipIgnore[id];
+#else
+	return 0;
+#endif
 }
 
 static int CLUI_GetVoiceMuteAll(void) {
 	// todo, make sure server is running
+#ifdef USE_VOIP
 	return clc.voipMuteAll;
+#else
+	return 0;
+#endif
 }
 
 /*

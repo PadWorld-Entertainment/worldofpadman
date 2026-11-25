@@ -4,6 +4,7 @@ set(SRCS
 	cin_ogm.c
 	cl_console.c
 	cl_input.c
+	cl_assist.c
 	cl_keys.c
 	cl_main.c
 	cl_net_chan.c
@@ -90,15 +91,24 @@ if (USE_VOIP)
 	list(APPEND SRCS cl_voip.c)
 endif()
 
+include(${ROOT_DIR}/cmake/wiiu.cmake OPTIONAL)
 project(wop)
 wop_add_executable(TARGET ${PROJECT_NAME} WINDOWED SRCS ${SRCS})
 add_asm(${PROJECT_NAME})
 add_botlib(${PROJECT_NAME})
-add_dependencies(${PROJECT_NAME} cgame qagame ui ${RENDERER_LIST})
+if(NOT WIIU)
+  add_dependencies(${PROJECT_NAME} cgame qagame ui ${RENDERER_LIST})
+else()
+  add_dependencies(${PROJECT_NAME} ${RENDERER_LIST})
+endif()
 target_include_directories(${PROJECT_NAME} PRIVATE ${BACKWARD_INCLUDE_DIRS})
 target_compile_definitions(${PROJECT_NAME} PRIVATE ${BACKWARD_DEFINITIONS})
 set(CLIENT_DEFINES)
-set(LIBS backward opusfile opus vorbis theora zlib openal SDL2::SDL2 SDL2::SDL2main ${CMAKE_DL_LIBS})
+if(WIIU)
+  set(LIBS vorbisfile vorbis ogg z jpeg m wut)
+else()
+  set(LIBS backward opusfile opus vorbis theora zlib openal SDL2::SDL2 SDL2::SDL2main ${CMAKE_DL_LIBS})
+endif()
 if (MSVC)
 	list(APPEND LIBS ws2_32 winmm psapi gdi32 ole32 winhttp)
 elseif (APPLE)
@@ -111,7 +121,9 @@ else()
 	set(CMAKE_REQUIRED_LIBRARIES m)
 	check_symbol_exists("cosf" "math.h" HAVE_COSF)
 	set(CMAKE_REQUIRED_LIBRARIES)
-	list(APPEND LIBS m rt)
+	if(NOT WIIU)
+  list(APPEND LIBS m rt)
+endif()
 endif()
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 if (USE_VOIP)
@@ -145,3 +157,5 @@ endif()
 if (CLIENT_DEFINES)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE ${CLIENT_DEFINES})
 endif()
+
+include(${ROOT_DIR}/cmake/wiiu_post.cmake OPTIONAL)

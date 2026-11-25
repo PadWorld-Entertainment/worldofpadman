@@ -28,9 +28,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../sys/sys_loadlib.h"
 
 #ifdef USE_LOCAL_HEADERS
+#ifndef __WIIU__
 #include "SDL.h"
+#endif
 #else
+#ifndef __WIIU__
 #include <SDL.h>
+#endif
 #endif
 
 #ifdef USE_MUMBLE
@@ -158,7 +162,9 @@ static pingLookup_t cl_pingLookups[MAX_PINGREQUESTS];
 static int cl_pingLookupHead;
 static int cl_pingLookupCount;
 static qboolean cl_pingLookupRunning;
+#ifndef __WIIU__
 static SDL_atomic_t cl_pingLookupDone;
+#endif
 
 static void CL_CheckPingLookups(void);
 
@@ -4255,10 +4261,25 @@ static void CL_SendPing(netadr_t to) {
 	NET_OutOfBandPrint(NS_CLIENT, to, "getinfo xxx");
 }
 
+#ifdef __WIIU__
+static void CL_CheckPingLookups(void) {
+	while (cl_pingLookupCount > 0) {
+		pingLookup_t *lookup = &cl_pingLookups[cl_pingLookupHead];
+		cl_pingLookupHead = (cl_pingLookupHead + 1) % MAX_PINGREQUESTS;
+		cl_pingLookupCount--;
+		if (lookup->discard == qfalse) {
+			lookup->netFlags = Cvar_VariableIntegerValue("net_enabled");
+			Com_Memset(&lookup->address, 0, sizeof(lookup->address));
+			if (!NET_StringToAdr(lookup->server, &lookup->address, lookup->family)) lookup->error = 1;
+			if (lookup->address.type != NA_BAD) CL_SendPing(lookup->address);
+			else Sys_PrintResolveError(lookup->server, lookup->error);
+		}
+	}
+}
+#else
 static int CL_ResolvePing(void *data) {
 	pingLookup_t *lookup = data;
-
-	NET_ResolveAddress(lookup->server, &lookup->address, lookup->family, lookup->netFlags, &lookup->error);
+	if (!NET_StringToAdr(lookup->server, &lookup->address, lookup->family)) lookup->error = 1;
 	SDL_MemoryBarrierRelease();
 	SDL_AtomicSet(&cl_pingLookupDone, 1);
 	return 0;
@@ -4306,6 +4327,7 @@ static void CL_CheckPingLookups(void) {
 	SDL_DetachThread(thread);
 	cl_pingLookupRunning = qtrue;
 }
+#endif
 
 /*
 ==================
@@ -4355,6 +4377,9 @@ static void CL_Ping_f(void) {
 	lookup->family = family;
 	lookup->discard = qfalse;
 	cl_pingLookupCount++;
+#ifdef __WIIU__
+	CL_CheckPingLookups();
+#endif
 }
 
 /*

@@ -35,6 +35,13 @@ and one exported function: Perform
 
 #include "vm_local.h"
 
+#ifdef WIIU_NATIVE_CGAME
+static qboolean VM_WiiUNativeCgameAllowed(const char *module, void *search) {
+	(void)search;
+	return (!Q_stricmp(module, "qagame") || !Q_stricmp(module, "cgame")) ? qtrue : qfalse;
+}
+#endif
+
 vm_t *currentVM = NULL;
 vm_t *lastVM = NULL;
 int vm_debugLevel;
@@ -600,6 +607,12 @@ vm_t *VM_Create(const char *module, intptr_t (*systemCalls)(intptr_t *), vmInter
 	Q_strncpyz(vm->name, module, sizeof(vm->name));
 
 	do {
+#ifdef WIIU_NATIVE_CGAME
+		if (interpret == VMI_NATIVE && !Q_stricmp(module, "qagame")) {
+			Q_strncpyz(filename, module, sizeof(filename));
+			retval = VMI_NATIVE;
+		} else
+#endif
 		retval = FS_FindVM(&startSearch, filename, sizeof(filename), module, (interpret == VMI_NATIVE));
 
 		if (retval == VMI_NATIVE) {
@@ -614,6 +627,17 @@ vm_t *VM_Create(const char *module, intptr_t (*systemCalls)(intptr_t *), vmInter
 
 			Com_Printf("Failed loading dll, trying next\n");
 		} else if (retval == VMI_COMPILED) {
+#ifdef WIIU_NATIVE_CGAME
+			if (interpret == VMI_NATIVE && VM_WiiUNativeCgameAllowed(module, startSearch)) {
+				vm->dllHandle = Sys_LoadGameDll(module, &vm->entryPoint, VM_DllSyscall);
+				if (vm->dllHandle) {
+					FS_ReadFileDir(va("vm/%s.qvm", module), startSearch, qfalse, NULL);
+					Com_Printf("%s: using linked-in native code\n", module);
+					vm->systemCall = systemCalls;
+					return vm;
+				}
+			}
+#endif
 			vm->searchPath = startSearch;
 			if ((header = VM_LoadQVM(vm, qtrue, qfalse)))
 				break;
@@ -723,6 +747,7 @@ void VM_Forced_Unload_Start(void) {
 }
 
 void VM_CheckBounds(const vm_t *vm, unsigned int address, unsigned int length) {
+	if (!vm || vm->dllHandle) return;
 	if ((unsigned int)vm->dataAlloc < address || (unsigned int)vm->dataAlloc - address < length) {
 		Com_Error(ERR_DROP, "program tried to bypass data segment bounds");
 	}
@@ -734,7 +759,7 @@ void VM_CheckBounds2(const vm_t *vm, unsigned int addr1, unsigned int addr2, uns
 }
 
 void VM_CheckBounds3(const vm_t *vm, unsigned int address, unsigned int count, unsigned int size) {
-	if (vm->entryPoint) {
+	if (!vm || vm->dllHandle) {
 		return;
 	}
 
