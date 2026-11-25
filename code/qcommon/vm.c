@@ -73,8 +73,13 @@ VM_Init
 ==============
 */
 void VM_Init(void) {
+#ifdef WIIU_NATIVE_CGAME
+	Cvar_Get("vm_cgame", "0", CVAR_ARCHIVE);
+	Cvar_Get("vm_game", "0", CVAR_ARCHIVE);
+#else
 	Cvar_Get("vm_cgame", "2", CVAR_ARCHIVE); // !@# SHIP WITH SET TO 2
 	Cvar_Get("vm_game", "2", CVAR_ARCHIVE);	 // !@# SHIP WITH SET TO 2
+#endif
 	Cvar_Get("vm_ui", "2", CVAR_ARCHIVE);	 // !@# SHIP WITH SET TO 2
 
 	Cmd_AddCommand("vmprofile", VM_VmProfile_f);
@@ -337,7 +342,11 @@ Dlls will call this directly
 ============
 */
 // a module that makes more system calls than this in one VM_Call is taken to be stuck
+#ifdef __WIIU__
+#define VM_MAX_SYSCALLS (8 * 1024 * 1024)
+#else
 #define VM_MAX_SYSCALLS (1024 * 1024)
+#endif
 
 void VM_CountSyscall(vm_t *vm) {
 	if (++vm->syscallCount > VM_MAX_SYSCALLS) {
