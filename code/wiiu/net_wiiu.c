@@ -316,6 +316,7 @@ void NET_Shutdown(void)
 		Com_Printf("NET_Shutdown: somemopt(CANCEL_WAIT) ret=%d errno=%d\n", r, errno);
 	}
 
+	OSSleepTicks(OSMillisecondsToTicks(50));
 	socket_lib_finish();
 
 	if (ac_connected)

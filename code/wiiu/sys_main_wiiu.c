@@ -64,7 +64,7 @@ void  WiiU_ExtractBundledPak(void);
 #define WIIU_VM_GAME "2"
 #define WIIU_LOG_SUFFIX "_ef"
 #elif defined(WOP)
-#define WIIU_FS_GAME "wop"
+#define WIIU_FS_GAME ""
 #define WIIU_VM_GAME "0"
 #define WIIU_LOG_SUFFIX "_wop"
 #else
@@ -471,7 +471,7 @@ int main(int argc, char **argv)
 			Q_strcat(commandLine, sizeof(commandLine),
 			         "+set fs_basepath " WIIU_BASE_PATH
 			         " +set fs_homepath " WIIU_BASE_PATH
-			         " +set fs_game " WIIU_FS_GAME
+			         " +set com_basegame " BASEGAME
 			         " +set com_hunkMegs 128 +set com_zoneMegs 64"
 			         " +set sv_pure 0 +set com_standalone 0"
 			         " +set com_logfile 0 +set vm_game 0");
@@ -479,7 +479,7 @@ int main(int argc, char **argv)
 			Q_strcat(commandLine, sizeof(commandLine),
 			         "+set fs_basepath " WIIU_BASE_PATH
 			         " +set fs_homepath " WIIU_BASE_PATH
-			         " +set fs_game " WIIU_FS_GAME
+			         " +set com_basegame " BASEGAME
 			         " +set com_hunkMegs 256 +set com_zoneMegs 64"
 			         " +set com_soundMegs 16 +set s_khz 48"
 			         " +set r_mode -1 +set r_customwidth 1280 +set r_customheight 720"
