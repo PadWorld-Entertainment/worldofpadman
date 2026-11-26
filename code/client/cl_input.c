@@ -409,7 +409,7 @@ static void CL_AdjustAngles(void) {
 
 	cl.viewangles[PITCH] -= speed * cl_pitchspeed->value * CL_KeyState(&in_lookup);
 	cl.viewangles[PITCH] += speed * cl_pitchspeed->value * CL_KeyState(&in_lookdown);
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 	CL_AssistFrame();
 #endif
 }
@@ -502,7 +502,7 @@ static void CL_JoystickMove(usercmd_t *cmd) {
 	const float right = j_side->value * cl.joystickAxis[j_side_axis->integer];
 	const float forward = j_forward->value * cl.joystickAxis[j_forward_axis->integer];
 	float pitch = j_pitch->value * cl.joystickAxis[j_pitch_axis->integer];
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 	{
 		float sensScale = 1.4f + 0.16f * cl_sensitivity->value;
 		yaw *= sensScale;
@@ -523,7 +523,7 @@ static void CL_JoystickMove(usercmd_t *cmd) {
 
 	if (!in_strafe.active) {
 		if (cl.cgameSensitivity < 0.999f) {
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 			anglespeed *= CL_AssistGetAdsScale();
 #endif
 		}

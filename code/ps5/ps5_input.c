@@ -1,167 +1,248 @@
+#define PAD_L2 0x0100u
+#define PAD_R2 0x0200u
+#define PAD_L2 0x0100u
+#define PAD_R2 0x0200u
+#define PAD_L2 0x0100u
+#define PAD_R2 0x0200u
 #include <math.h>
+#include <string.h>
 #include "../client/client.h"
 #include "platform.h"
 
-static cvar_t *in_ps5LookSpeed;
-static cvar_t *in_ps5MenuSpeed;
-static qboolean in_open;
-static double in_last;
+#define STICK_DEADZONE      0.15f
+#define STICK_AXIS_SCALE    32767
+#define MENU_CURSOR_SPEED   14.0f
 
-enum {
-	B_CROSS, B_CIRCLE, B_SQUARE, B_TRIANGLE,
-	B_L1, B_R1, B_L2, B_R2, B_L3, B_R3,
-	B_OPTIONS, B_TOUCH,
-	B_UP, B_DOWN, B_LEFT, B_RIGHT,
-	B_COUNT
+#define AXIS_SIDE           0
+#define AXIS_FORWARD        1
+#define AXIS_YAW            4
+#define AXIS_PITCH          3
+
+typedef struct {
+	uint32_t mask;
+	int key_game;
+	int key_menu;
+} ps5ButtonMap_t;
+
+static const ps5ButtonMap_t ps5Buttons[] = {
+	{ PAD_CROSS,     K_PAD0_A,               K_ENTER },
+	{ PAD_CIRCLE,    K_PAD0_B,               K_ESCAPE },
+	{ PAD_SQUARE,    K_PAD0_X,               0 },
+	{ PAD_TRIANGLE,  K_PAD0_Y,               K_CONSOLE },
+	{ PAD_L1,        K_PAD0_LEFTSHOULDER,    0 },
+	{ PAD_R1,        K_PAD0_RIGHTSHOULDER,   0 },
+	{ PAD_L2,        K_PAD0_LEFTTRIGGER,     0 },
+	{ PAD_R2,        K_PAD0_RIGHTTRIGGER,    0 },
+	{ PAD_OPTIONS,   K_ESCAPE,               K_ESCAPE },
+	{ PAD_TOUCH_PAD, K_PAD0_BACK,            0 },
+	{ PAD_L3,        K_PAD0_LEFTSTICK_CLICK, 0 },
+	{ PAD_R3,        K_PAD0_RIGHTSTICK_CLICK,0 },
+	{ PAD_UP,        K_PAD0_DPAD_UP,         K_UPARROW },
+	{ PAD_DOWN,      K_PAD0_DPAD_DOWN,       K_DOWNARROW },
+	{ PAD_LEFT,      K_PAD0_DPAD_LEFT,       K_LEFTARROW },
+	{ PAD_RIGHT,     K_PAD0_DPAD_RIGHT,      K_RIGHTARROW },
 };
 
-static int in_key[B_COUNT];
+#define PS5_BUTTON_COUNT ( (int)( sizeof( ps5Buttons ) / sizeof( ps5Buttons[0] ) ) )
 
-static void IN_SendKey( int t, int slot, int key, qboolean down )
+static cvar_t *stick_move_deadzone;
+static cvar_t *stick_move_curve;
+static cvar_t *stick_look_deadzone;
+static cvar_t *stick_look_curve;
+
+static qboolean in_open;
+static qboolean prev_in_menu;
+static uint32_t prev_held;
+static int prev_axis[MAX_JOYSTICK_AXIS];
+static float cursor_accum_x;
+static float cursor_accum_y;
+
+static void SetDefaultBind( int key, const char *binding )
 {
-	if ( down ) {
-		if ( in_key[slot] == key )
-			return;
-		if ( in_key[slot] )
-			Com_QueueEvent( t, SE_KEY, in_key[slot], qfalse, 0, NULL );
-		in_key[slot] = key;
-		Com_QueueEvent( t, SE_KEY, key, qtrue, 0, NULL );
-	} else if ( in_key[slot] ) {
-		Com_QueueEvent( t, SE_KEY, in_key[slot], qfalse, 0, NULL );
-		in_key[slot] = 0;
+	const char *current = Key_GetBinding( key );
+	if ( !current || !current[0] )
+		Key_SetBinding( key, binding );
+}
+
+static int FilterStick( float raw, float deadzone, float curve )
+{
+	float sign, mag;
+	if ( deadzone < 0.0f ) deadzone = 0.0f;
+	if ( deadzone > 0.9f ) deadzone = 0.9f;
+	if ( curve < 0.25f ) curve = 0.25f;
+	if ( curve > 4.0f ) curve = 4.0f;
+
+	if ( raw > -deadzone && raw < deadzone )
+		return 0;
+
+	sign = ( raw < 0.0f ) ? -1.0f : 1.0f;
+	mag = ( fabsf( raw ) - deadzone ) / ( 1.0f - deadzone );
+	if ( mag > 1.0f ) mag = 1.0f;
+	if ( curve != 1.0f ) mag = powf( mag, curve );
+
+	return (int)( sign * mag * STICK_AXIS_SCALE );
+}
+
+static void InjectMenuCursor( float sx, float sy )
+{
+	float fx, fy;
+	int dx, dy;
+
+	if ( sx > -STICK_DEADZONE && sx < STICK_DEADZONE ) sx = 0.0f;
+	if ( sy > -STICK_DEADZONE && sy < STICK_DEADZONE ) sy = 0.0f;
+
+	fx = sx * fabsf( sx ) * MENU_CURSOR_SPEED;
+	fy = sy * fabsf( sy ) * MENU_CURSOR_SPEED;
+
+	cursor_accum_x += fx;
+	cursor_accum_y += fy;
+
+	dx = (int)cursor_accum_x;
+	dy = (int)cursor_accum_y;
+
+	cursor_accum_x -= (float)dx;
+	cursor_accum_y -= (float)dy;
+
+	if ( dx || dy )
+		Com_QueueEvent( 0, SE_MOUSE, dx, dy, 0, NULL );
+}
+
+static void InjectAxis( int axis, int value )
+{
+	if ( value != prev_axis[axis] ) {
+		prev_axis[axis] = value;
+		Com_QueueEvent( 0, SE_JOYSTICK_AXIS, axis, value, 0, NULL );
 	}
 }
 
-static void IN_ReleaseAll( int t )
+static void ReleaseAll( void )
 {
 	int i;
-	for ( i = 0; i < B_COUNT; i++ )
-		IN_SendKey( t, i, 0, qfalse );
-}
-
-static float IN_ShapeStick( float v, float exponent )
-{
-	const float mag = fabsf( v );
-	if ( mag <= 0.0f )
-		return 0.0f;
-	return copysignf( powf( mag, exponent ), v );
+	for ( i = 0; i < PS5_BUTTON_COUNT; i++ ) {
+		if ( prev_held & ps5Buttons[i].mask ) {
+			int k_game = ps5Buttons[i].key_game;
+			int k_menu = ps5Buttons[i].key_menu ? ps5Buttons[i].key_menu : k_game;
+			if ( k_menu == K_ENTER )
+				Com_QueueEvent( 0, SE_KEY, K_MOUSE1, qfalse, 0, NULL );
+			if ( k_menu )
+				Com_QueueEvent( 0, SE_KEY, k_menu, qfalse, 0, NULL );
+			if ( k_game && k_game != k_menu )
+				Com_QueueEvent( 0, SE_KEY, k_game, qfalse, 0, NULL );
+		}
+	}
+	prev_held = 0;
+	for ( i = 0; i < MAX_JOYSTICK_AXIS; i++ )
+		InjectAxis( i, 0 );
 }
 
 void IN_Init( void *windowData )
 {
 	(void)windowData;
-	in_ps5LookSpeed = Cvar_Get( "in_ps5LookSpeed", "900", CVAR_ARCHIVE );
-	in_ps5MenuSpeed = Cvar_Get( "in_ps5MenuSpeed", "1100", CVAR_ARCHIVE );
-	Cvar_Set( "in_joystick", "1" );
+
+	stick_move_deadzone = Cvar_Get( "stick_move_deadzone", "0.15", CVAR_ARCHIVE );
+	stick_move_curve    = Cvar_Get( "stick_move_curve",    "1.0",  CVAR_ARCHIVE );
+	stick_look_deadzone = Cvar_Get( "stick_look_deadzone", "0.15", CVAR_ARCHIVE );
+	stick_look_curve    = Cvar_Get( "stick_look_curve",    "1.0",  CVAR_ARCHIVE );
+
+	Cvar_SetSafe( "in_joystick", "1" );
+	Cvar_SetSafe( "in_joystickUseAnalog", "1" );
+	Cvar_SetSafe( "j_pitch_axis", "3" );
+	Cvar_SetSafe( "j_yaw_axis", "4" );
+	Cvar_SetSafe( "j_forward_axis", "1" );
+	Cvar_SetSafe( "j_side_axis", "0" );
+	Cvar_SetSafe( "j_pitch", "0.002" );
+	Cvar_SetSafe( "j_yaw", "-0.002" );
+	Cvar_SetSafe( "j_forward", "-0.25" );
+	Cvar_SetSafe( "j_side", "0.25" );
+
+	SetDefaultBind( K_PAD0_A,                "+moveup" );
+	SetDefaultBind( K_PAD0_B,                "+movedown" );
+	SetDefaultBind( K_PAD0_X,                "weapnext" );
+	SetDefaultBind( K_PAD0_Y,                "weapprev" );
+	SetDefaultBind( K_PAD0_LEFTSHOULDER,     "+speed" );
+	SetDefaultBind( K_PAD0_RIGHTSHOULDER,    "+button2" );
+	SetDefaultBind( K_PAD0_LEFTTRIGGER,      "+zoom" );
+	SetDefaultBind( K_PAD0_RIGHTTRIGGER,     "+attack" );
+	SetDefaultBind( K_PAD0_LEFTSTICK_CLICK,  "+scores" );
+	SetDefaultBind( K_PAD0_RIGHTSTICK_CLICK, "+scores" );
+	SetDefaultBind( K_PAD0_BACK,             "+scores" );
+	SetDefaultBind( K_PAD0_DPAD_UP,          "weapnext" );
+	SetDefaultBind( K_PAD0_DPAD_DOWN,        "weapprev" );
+	SetDefaultBind( K_PAD0_DPAD_LEFT,        "weapprev" );
+	SetDefaultBind( K_PAD0_DPAD_RIGHT,       "weapnext" );
+
+	memset( prev_axis, 0, sizeof( prev_axis ) );
+	prev_held = 0;
+	prev_in_menu = qfalse;
+	cursor_accum_x = 0.0f;
+	cursor_accum_y = 0.0f;
+
 	if ( !in_open ) {
 		in_open = pad_open() ? qtrue : qfalse;
 		Com_Printf( "PS5 pad: %s\n", in_open ? "open" : "none" );
 	}
-	in_last = now_seconds();
 }
 
 void IN_Frame( void )
 {
 	struct pad pad;
-	double now, dt;
-	int t;
-	qboolean inMenu;
-	static float remX, remY;
-	static int lastSide, lastForward;
+	uint32_t held, triggered, released;
+	int catcher, i;
+	qboolean in_menu;
 
 	if ( !in_open )
 		return;
 
-	now = now_seconds();
-	dt = now - in_last;
-	if ( dt < 0.0 )
-		dt = 0.0;
-	else if ( dt > 0.1 )
-		dt = 0.1;
-	in_last = now;
-	t = Sys_Milliseconds();
-
 	pad_poll( &pad );
-	inMenu = ( ( Key_GetCatcher() & ( KEYCATCH_UI | KEYCATCH_CONSOLE | KEYCATCH_MESSAGE ) ) != 0 )
+	held = pad.held;
+	if ( pad.l2 > 0.35f )
+		held |= PAD_L2;
+	if ( pad.r2 > 0.25f )
+		held |= PAD_R2;
+
+	catcher = Key_GetCatcher();
+	in_menu = ( ( catcher & ( KEYCATCH_UI | KEYCATCH_CONSOLE | KEYCATCH_MESSAGE ) ) != 0 )
 		|| ( clc.state != CA_ACTIVE );
 
-	if ( inMenu ) {
-		const float sx = fabsf( pad.left_x ) > fabsf( pad.right_x ) ? pad.left_x : pad.right_x;
-		const float sy = fabsf( pad.left_y ) > fabsf( pad.right_y ) ? pad.left_y : pad.right_y;
-		const float mx = IN_ShapeStick( sx, 1.5f ) * in_ps5MenuSpeed->value * (float)dt + remX;
-		const float my = IN_ShapeStick( sy, 1.5f ) * in_ps5MenuSpeed->value * (float)dt + remY;
-		const int dx = (int)mx;
-		const int dy = (int)my;
-		remX = mx - (float)dx;
-		remY = my - (float)dy;
-		if ( dx || dy )
-			Com_QueueEvent( t, SE_MOUSE, dx, dy, 0, NULL );
+	if ( in_menu != prev_in_menu ) {
+		ReleaseAll();
+		cursor_accum_x = 0.0f;
+		cursor_accum_y = 0.0f;
+		prev_in_menu = in_menu;
+	}
 
-		if ( lastSide != 0 ) {
-			lastSide = 0;
-			Com_QueueEvent( t, SE_JOYSTICK_AXIS, 0, 0, 0, NULL );
-		}
-		if ( lastForward != 0 ) {
-			lastForward = 0;
-			Com_QueueEvent( t, SE_JOYSTICK_AXIS, 1, 0, 0, NULL );
-		}
+	triggered = held & ~prev_held;
+	released = prev_held & ~held;
+	prev_held = held;
 
-		IN_SendKey( t, B_UP, K_UPARROW, ( pad.held & PAD_UP ) != 0 );
-		IN_SendKey( t, B_DOWN, K_DOWNARROW, ( pad.held & PAD_DOWN ) != 0 );
-		IN_SendKey( t, B_LEFT, K_LEFTARROW, ( pad.held & PAD_LEFT ) != 0 );
-		IN_SendKey( t, B_RIGHT, K_RIGHTARROW, ( pad.held & PAD_RIGHT ) != 0 );
-		IN_SendKey( t, B_CROSS, K_MOUSE1, ( pad.held & PAD_CROSS ) != 0 );
-		IN_SendKey( t, B_R2, K_MOUSE1, pad.r2 > 0.35f );
-		IN_SendKey( t, B_CIRCLE, K_ESCAPE, ( pad.held & PAD_CIRCLE ) != 0 );
-		IN_SendKey( t, B_OPTIONS, K_ESCAPE, ( pad.held & PAD_OPTIONS ) != 0 );
-		IN_SendKey( t, B_SQUARE, 0, qfalse );
-		IN_SendKey( t, B_TRIANGLE, 0, qfalse );
-		IN_SendKey( t, B_L1, 0, qfalse );
-		IN_SendKey( t, B_R1, 0, qfalse );
-		IN_SendKey( t, B_L2, 0, qfalse );
-		IN_SendKey( t, B_L3, 0, qfalse );
-		IN_SendKey( t, B_R3, 0, qfalse );
-		IN_SendKey( t, B_TOUCH, 0, qfalse );
+	for ( i = 0; i < PS5_BUTTON_COUNT; i++ ) {
+		int key = in_menu ? ps5Buttons[i].key_menu : ps5Buttons[i].key_game;
+		if ( !key )
+			key = ps5Buttons[i].key_game;
+		if ( in_menu && key == K_ENTER && ( catcher & KEYCATCH_UI ) && !( catcher & ( KEYCATCH_CONSOLE | KEYCATCH_MESSAGE ) ) )
+			key = K_MOUSE1;
+		if ( !key )
+			continue;
+
+		if ( triggered & ps5Buttons[i].mask )
+			Com_QueueEvent( 0, SE_KEY, key, qtrue, 0, NULL );
+		if ( released & ps5Buttons[i].mask )
+			Com_QueueEvent( 0, SE_KEY, key, qfalse, 0, NULL );
+	}
+
+	if ( in_menu ) {
+		InjectMenuCursor( pad.left_x, pad.left_y );
 	} else {
-		const float lx = IN_ShapeStick( pad.right_x, 1.8f ) * in_ps5LookSpeed->value * (float)dt + remX;
-		const float ly = IN_ShapeStick( pad.right_y, 1.8f ) * in_ps5LookSpeed->value * (float)dt + remY;
-		const int dx = (int)lx;
-		const int dy = (int)ly;
-		const int side = (int)( IN_ShapeStick( pad.left_x, 1.35f ) * 127.0f );
-		const int forward = (int)( IN_ShapeStick( -pad.left_y, 1.35f ) * 127.0f );
-		remX = lx - (float)dx;
-		remY = ly - (float)dy;
-		if ( dx || dy )
-			Com_QueueEvent( t, SE_MOUSE, dx, dy, 0, NULL );
-		if ( side != lastSide ) {
-			lastSide = side;
-			Com_QueueEvent( t, SE_JOYSTICK_AXIS, 0, side, 0, NULL );
-		}
-		if ( forward != lastForward ) {
-			lastForward = forward;
-			Com_QueueEvent( t, SE_JOYSTICK_AXIS, 1, forward, 0, NULL );
-		}
-
-		IN_SendKey( t, B_CROSS, K_SPACE, ( pad.held & PAD_CROSS ) != 0 );
-		IN_SendKey( t, B_L3, K_SPACE, ( pad.held & PAD_L3 ) != 0 );
-		IN_SendKey( t, B_CIRCLE, K_CTRL, ( pad.held & PAD_CIRCLE ) != 0 );
-		IN_SendKey( t, B_R3, K_CTRL, ( pad.held & PAD_R3 ) != 0 );
-		IN_SendKey( t, B_R2, K_MOUSE1, pad.r2 > 0.25f );
-		IN_SendKey( t, B_SQUARE, K_MOUSE1, ( pad.held & PAD_SQUARE ) != 0 );
-		IN_SendKey( t, B_L1, K_MWHEELDOWN, ( pad.held & PAD_L1 ) != 0 );
-		IN_SendKey( t, B_R1, K_MWHEELUP, ( pad.held & PAD_R1 ) != 0 );
-		IN_SendKey( t, B_TOUCH, K_TAB, ( pad.held & PAD_TOUCH_PAD ) != 0 );
-		IN_SendKey( t, B_OPTIONS, K_ESCAPE, ( pad.held & PAD_OPTIONS ) != 0 );
-		IN_SendKey( t, B_UP, K_UPARROW, ( pad.held & PAD_UP ) != 0 );
-		IN_SendKey( t, B_DOWN, K_DOWNARROW, ( pad.held & PAD_DOWN ) != 0 );
-		IN_SendKey( t, B_LEFT, K_LEFTARROW, ( pad.held & PAD_LEFT ) != 0 );
-		IN_SendKey( t, B_RIGHT, K_RIGHTARROW, ( pad.held & PAD_RIGHT ) != 0 );
+		InjectAxis( AXIS_SIDE,    FilterStick(  pad.left_x,  stick_move_deadzone->value, stick_move_curve->value ) );
+		InjectAxis( AXIS_FORWARD, FilterStick(  pad.left_y,  stick_move_deadzone->value, stick_move_curve->value ) );
+		InjectAxis( AXIS_YAW,     FilterStick(  pad.right_x, stick_look_deadzone->value, stick_look_curve->value ) );
+		InjectAxis( AXIS_PITCH,   FilterStick(  pad.right_y, stick_look_deadzone->value, stick_look_curve->value ) );
 	}
 }
 
 void IN_Shutdown( void )
 {
-	IN_ReleaseAll( Sys_Milliseconds() );
+	ReleaseAll();
 }
 
 void IN_Restart( void )
