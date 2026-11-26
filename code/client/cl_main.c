@@ -31,11 +31,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../sys/sys_loadlib.h"
 
 #ifdef USE_LOCAL_HEADERS
-#ifndef __WIIU__
+#if !defined(__WIIU__) && !defined(__PS5__)
 #include "SDL.h"
 #endif
 #else
-#ifndef __WIIU__
+#if !defined(__WIIU__) && !defined(__PS5__)
 #include <SDL.h>
 #endif
 #endif
@@ -165,7 +165,7 @@ static pingLookup_t cl_pingLookups[MAX_PINGREQUESTS];
 static int cl_pingLookupHead;
 static int cl_pingLookupCount;
 static qboolean cl_pingLookupRunning;
-#ifndef __WIIU__
+#if !defined(__WIIU__) && !defined(__PS5__)
 static SDL_atomic_t cl_pingLookupDone;
 #endif
 
@@ -4268,7 +4268,7 @@ static void CL_SendPing(netadr_t to) {
 	NET_OutOfBandPrint(NS_CLIENT, to, "getinfo xxx");
 }
 
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 static void CL_CheckPingLookups(void) {
 	while (cl_pingLookupCount > 0) {
 		pingLookup_t *lookup = &cl_pingLookups[cl_pingLookupHead];
@@ -4384,7 +4384,7 @@ static void CL_Ping_f(void) {
 	lookup->family = family;
 	lookup->discard = qfalse;
 	cl_pingLookupCount++;
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 	CL_CheckPingLookups();
 #endif
 }

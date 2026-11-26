@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __QGL_H__
 #define __QGL_H__
 
-#if defined(__WIIU__) || defined(WIIU)
+#if defined(__WIIU__) || defined(WIIU) || defined(__PS5__)
 #include <stdint.h>
 #include <stddef.h>
 typedef unsigned int   GLenum;

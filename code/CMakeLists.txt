@@ -107,7 +107,7 @@ function(wop_add_library)
 		set(LIB_BINARY_DIR "${GAME_BINARY_DIR}")
 	endif()
 
-	if (_LIB_STATIC)
+	if (_LIB_STATIC OR PS5)
 		set(LINK_TYPE STATIC)
 	else()
 		set(LINK_TYPE SHARED)
@@ -164,7 +164,7 @@ function(wop_add_executable)
 	# runtime resolvers (dladdr/backward) can find function names from the
 	# executable symbol table. This is required to get human-readable names in
 	# stacktraces when capturing from signal handlers.
-	if (UNIX AND NOT APPLE AND NOT WIIU)
+	if (UNIX AND NOT APPLE AND NOT WIIU AND NOT PS5)
 		# Append the export-dynamic flag to the link flags for this target.
 		# Use APPEND_STRING to avoid overwriting other LINK_FLAGS.
 		set_property(TARGET ${_EXE_TARGET} APPEND_STRING PROPERTY LINK_FLAGS " -Wl,--export-dynamic")
@@ -394,12 +394,15 @@ if (DEFAULT_BASEDIR)
 	add_compile_definitions(DEFAULT_BASEDIR="${DEFAULT_BASEDIR}")
 endif()
 
-if (NOT WIIU)
+if (NOT WIIU AND NOT PS5)
 	add_subdirectory(tools)
 endif()
 
-set(RENDERER_LIST renderer_opengl1)
-add_subdirectory(renderergl1)
+set(RENDERER_LIST)
+if (NOT PS5)
+        list(APPEND RENDERER_LIST renderer_opengl1)
+        add_subdirectory(renderergl1)
+endif()
 if (BUILD_RENDERER_OPENGL2)
 	add_subdirectory(renderergl2)
 	list(APPEND RENDERER_LIST renderer_opengl2)
@@ -409,7 +412,7 @@ if (BUILD_RENDERER_VULKAN)
 	list(APPEND RENDERER_LIST renderer_vulkan)
 endif()
 
-if (NOT WIIU)
+if (NOT WIIU AND NOT PS5)
 	add_subdirectory(cgame)
 	add_subdirectory(game)
 	add_subdirectory(ui)

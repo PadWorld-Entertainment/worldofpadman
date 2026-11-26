@@ -23,10 +23,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../qcommon/q_shared.h"
 #include "../qcommon/qcommon.h"
 
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 #define APIENTRY
 #endif
-#ifndef __WIIU__
+#if !defined(__WIIU__) && !defined(__PS5__)
 
 #ifndef DEDICATED
 #ifndef TESTS

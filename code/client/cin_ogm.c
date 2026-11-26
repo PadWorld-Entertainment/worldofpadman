@@ -17,6 +17,7 @@ theora:
  * theora doxygen docs (1.0beta1)
 */
 
+#include "client.h"
 #if defined(USE_CODEC_VORBIS) && (defined(USE_CIN_XVID) || defined(USE_CIN_THEORA))
 
 #include <ogg/ogg.h>

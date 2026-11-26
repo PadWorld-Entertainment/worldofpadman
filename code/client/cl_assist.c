@@ -1,8 +1,12 @@
 #include "client.h"
 
-#if defined(__WIIU__)
+#if defined(__WIIU__) || defined(__PS5__)
 // turn180, ADS slowdown and aim assist, ported from the Xbox port.
+#ifdef __WIIU__
 extern int WiiU_Input_NunchukActive( void );
+#else
+static int WiiU_Input_NunchukActive( void ) { return 0; }
+#endif
 
 static cvar_t	*cl_turn180time;
 static cvar_t	*cl_adsScale;

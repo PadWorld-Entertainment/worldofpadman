@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-#if defined(__WIIU__) || defined(WIIU)
+#if defined(__WIIU__) || defined(WIIU) || defined(__PS5__)
 #define Sys_LoadLibrary(f) NULL
 #define Sys_UnloadLibrary(h) ((void)(h))
 #define Sys_LoadFunction(h,fn) NULL
