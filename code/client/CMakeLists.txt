@@ -4,7 +4,6 @@ set(SRCS
 	cin_ogm.c
 	cl_console.c
 	cl_input.c
-	cl_assist.c
 	cl_keys.c
 	cl_main.c
 	cl_net_chan.c
@@ -105,6 +104,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${BACKWARD_INCLUDE_DIRS})
 target_compile_definitions(${PROJECT_NAME} PRIVATE ${BACKWARD_DEFINITIONS})
 set(CLIENT_DEFINES)
 if(WIIU)
+	list(APPEND SRCS cl_assist.c)
   set(LIBS vorbisfile vorbis ogg z jpeg m wut)
 else()
   set(LIBS backward opusfile opus vorbis theora zlib openal SDL2::SDL2 SDL2::SDL2main ${CMAKE_DL_LIBS})

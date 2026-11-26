@@ -409,7 +409,9 @@ static void CL_AdjustAngles(void) {
 
 	cl.viewangles[PITCH] -= speed * cl_pitchspeed->value * CL_KeyState(&in_lookup);
 	cl.viewangles[PITCH] += speed * cl_pitchspeed->value * CL_KeyState(&in_lookdown);
+#ifdef __WIIU__
 	CL_AssistFrame();
+#endif
 }
 
 /*
@@ -521,7 +523,9 @@ static void CL_JoystickMove(usercmd_t *cmd) {
 
 	if (!in_strafe.active) {
 		if (cl.cgameSensitivity < 0.999f) {
+#ifdef __WIIU__
 			anglespeed *= CL_AssistGetAdsScale();
+#endif
 		}
 		cl.viewangles[YAW] += anglespeed * yaw;
 		cmd->rightmove = ClampChar(cmd->rightmove + (int)right);
@@ -1027,7 +1031,9 @@ CL_InitInput
 */
 void CL_InitInput(void) {
 	Cmd_AddCommand("centerview", IN_CenterView);
+#ifdef __WIIU__
 	CL_AssistInit();
+#endif
 
 	Cmd_AddCommand("+moveup", IN_UpDown);
 	Cmd_AddCommand("-moveup", IN_UpUp);
@@ -1106,7 +1112,9 @@ CL_ShutdownInput
 */
 void CL_ShutdownInput(void) {
 	Cmd_RemoveCommand("centerview");
+#ifdef __WIIU__
 	CL_AssistShutdown();
+#endif
 
 	Cmd_RemoveCommand("+moveup");
 	Cmd_RemoveCommand("-moveup");

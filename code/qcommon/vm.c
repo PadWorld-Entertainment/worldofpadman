@@ -35,13 +35,6 @@ and one exported function: Perform
 
 #include "vm_local.h"
 
-#ifdef WIIU_NATIVE_CGAME
-static qboolean VM_WiiUNativeCgameAllowed(const char *module, void *search) {
-	(void)search;
-	return (!Q_stricmp(module, "qagame") || !Q_stricmp(module, "cgame")) ? qtrue : qfalse;
-}
-#endif
-
 vm_t *currentVM = NULL;
 vm_t *lastVM = NULL;
 int vm_debugLevel;
@@ -637,7 +630,7 @@ vm_t *VM_Create(const char *module, intptr_t (*systemCalls)(intptr_t *), vmInter
 			Com_Printf("Failed loading dll, trying next\n");
 		} else if (retval == VMI_COMPILED) {
 #ifdef WIIU_NATIVE_CGAME
-			if (interpret == VMI_NATIVE && VM_WiiUNativeCgameAllowed(module, startSearch)) {
+			if (interpret == VMI_NATIVE && !Q_stricmp(module, "cgame")) {
 				vm->dllHandle = Sys_LoadGameDll(module, &vm->entryPoint, VM_DllSyscall);
 				if (vm->dllHandle) {
 					FS_ReadFileDir(va("vm/%s.qvm", module), startSearch, qfalse, NULL);
