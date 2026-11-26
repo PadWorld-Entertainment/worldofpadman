@@ -76,6 +76,7 @@ mkdir -p "$app/sce_sys" "$app/sce_module" "$app/wop"
 "$tool" self --sign --in "$work/eboot.elf.new" --out "$app/eboot.bin" --magic 0x1D3D154F
 "$tool" self --inspect --file "$app/eboot.bin" > /dev/null
 cp "$param" "$app/sce_sys/param.json"
+cp "$ps5/../../misc/ps5/icon0.png" "$app/sce_sys/icon0.png"
 (cd "$vulkan/runtime" && sha256sum --check --strict --quiet libc.prx.sha256)
 cp "$vulkan/runtime/libc.prx" "$app/sce_module/libc.prx"
 mv "$work/eboot.elf.new" "$work/eboot.elf"

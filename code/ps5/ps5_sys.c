@@ -62,11 +62,16 @@ void Q_NORETURN QDECL Sys_Error( const char *format, ... )
 	va_end( argptr );
 
 	say( "Sys_Error: %s", text );
+	FILE *ef = fopen( "/data/homebrew/PPSA99517/last_error.txt", "w" );
+	if ( ef ) { fprintf( ef, "%s\n", text ); fclose( ef ); }
+	fflush( NULL );
+	usleep( 300000 );
 
 	if ( !sys_exiting ) {
 		sys_exiting = qtrue;
 		NET_Shutdown();
-		CL_Shutdown( text, qtrue, qtrue );
+		if ( com_cl_running && com_cl_running->integer )
+			CL_Shutdown( text, qtrue, qtrue );
 	}
 	Sys_Exit( 1 );
 }
