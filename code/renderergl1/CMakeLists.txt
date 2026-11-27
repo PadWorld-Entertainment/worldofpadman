@@ -26,6 +26,7 @@ set(SRCS
 	../renderercommon/tr_image_bmp.c
 	../renderercommon/tr_image_jpg.c
 	../renderercommon/tr_image_pcx.c
+	../renderercommon/puff.c
 	../renderercommon/tr_image_png.c
 	../renderercommon/tr_image_tga.c
 	../renderercommon/tr_noise.c
@@ -43,13 +44,20 @@ if (USE_RENDERER_DLOPEN)
 	)
 endif()
 
+if (WIIU)
+	list(REMOVE_ITEM SRCS ../sdl/sdl_gamma.c ../sdl/sdl_glimp.c)
+endif()
 project(renderer_opengl1)
 set(STATIC FALSE)
 if (NOT USE_RENDERER_DLOPEN)
 	set(STATIC TRUE)
 endif()
 wop_add_library(TARGET ${PROJECT_NAME} SRCS ${SRCS} STATIC ${STATIC})
-set(LIBS jpeg zlib SDL2::SDL2)
+if (WIIU)
+	set(LIBS jpeg z)
+else()
+	set(LIBS jpeg zlib SDL2::SDL2)
+endif()
 if (MSVC)
 	list(APPEND LIBS ws2_32 winmm psapi gdi32 ole32)
 elseif (APPLE)

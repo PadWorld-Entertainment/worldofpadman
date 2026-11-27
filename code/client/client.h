@@ -481,6 +481,10 @@ typedef struct {
 
 void CL_InitInput(void);
 void CL_ShutdownInput(void);
+void CL_AssistFrame(void);
+void CL_AssistInit(void);
+void CL_AssistShutdown(void);
+float CL_AssistGetAdsScale(void);
 void CL_SendCmd(void);
 void CL_ClearState(void);
 void CL_ReadPackets(void);

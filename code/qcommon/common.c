@@ -2531,7 +2531,11 @@ void Com_Init(char *commandLine) {
 	//
 	// init commands and vars
 	//
+#ifdef __WIIU__
+	com_altivec = Cvar_Get("com_altivec", "0", CVAR_ROM);
+#else
 	com_altivec = Cvar_Get("com_altivec", "1", CVAR_ARCHIVE);
+#endif
 	com_maxfps = Cvar_Get("com_maxfps", "125", CVAR_ARCHIVE);
 
 	com_logfile = Cvar_Get("logfile", "0", CVAR_TEMP);

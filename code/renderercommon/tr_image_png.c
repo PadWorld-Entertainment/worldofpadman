@@ -482,7 +482,7 @@ static qboolean FindChunk(struct BufferedFile *BF, uint32_t ChunkType) {
  *  Decompress all IDATs
  */
 
-static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer) {
+static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer, uint32_t ExpectedLen) {
 	uint8_t *DecompressedData;
 	uint32_t DecompressedDataLength;
 
@@ -658,6 +658,21 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer) {
 		}
 	}
 
+	if (ExpectedLen > 0) {
+		uLongf destLen = (uLongf)ExpectedLen;
+		DecompressedData = ri.Malloc(ExpectedLen);
+		if (!DecompressedData) {
+			ri.Free(CompressedData);
+			return (-1);
+		}
+		if (uncompress(DecompressedData, &destLen, CompressedData, CompressedDataLength) == Z_OK && destLen == ExpectedLen) {
+			ri.Free(CompressedData);
+			*Buffer = DecompressedData;
+			return ((uint32_t)destLen);
+		}
+		ri.Free(DecompressedData);
+		DecompressedData = NULL;
+	}
 	/*
 	 *  Let puff() calculate the decompressed data length.
 	 */
@@ -813,109 +828,78 @@ static qboolean UnfilterImage(uint8_t *DecompressedData, uint32_t ImageHeight, u
 	 */
 
 	for (h = 0; h < ImageHeight; h++) {
-		/*
-		 *  Every scanline starts with a FilterType byte.
-		 */
+		uint32_t i;
+		uint8_t *PrevRow = (h > 0) ? (DecompPtr - BytesPerScanline) : NULL;
 
-		FilterType = *DecompPtr;
-		DecompPtr++;
+		FilterType = *DecompPtr++;
 
-		/*
-		 *  Left pixel of the first byte in a scanline is zero.
-		 */
+		switch (FilterType) {
+		case PNG_FilterType_None:
+			DecompPtr += BytesPerScanline;
+			break;
 
-		PixelLeft = Zeros;
+		case PNG_FilterType_Sub:
+			for (i = BytesPerPixel; i < BytesPerScanline; i++) {
+				DecompPtr[i] += DecompPtr[i - BytesPerPixel];
+			}
+			DecompPtr += BytesPerScanline;
+			break;
 
-		/*
-		 *  Set PixelUp to previous line only if we are on the second line or above.
-		 *
-		 *  Plus one byte for the FilterType
-		 */
-
-		if (h > 0) {
-			PixelUp = DecompPtr - (BytesPerScanline + 1);
-		} else {
-			PixelUp = Zeros;
-		}
-
-		/*
-		 * The pixel left to the first pixel of the previous scanline is zero too.
-		 */
-
-		PixelUpLeft = Zeros;
-
-		/*
-		 *  Cycle trough all pixels of the scanline.
-		 */
-
-		for (w = 0; w < (BytesPerScanline / BytesPerPixel); w++) {
-			/*
-			 *  Cycle trough the bytes of the pixel.
-			 */
-
-			for (p = 0; p < BytesPerPixel; p++) {
-				switch (FilterType) {
-				case PNG_FilterType_None: {
-					/*
-					 *  The byte is unfiltered.
-					 */
-
-					break;
-				}
-
-				case PNG_FilterType_Sub: {
-					DecompPtr[p] += PixelLeft[p];
-
-					break;
-				}
-
-				case PNG_FilterType_Up: {
-					DecompPtr[p] += PixelUp[p];
-
-					break;
-				}
-
-				case PNG_FilterType_Average: {
-					DecompPtr[p] += ((uint8_t)((((uint16_t)PixelLeft[p]) + ((uint16_t)PixelUp[p])) / 2));
-
-					break;
-				}
-
-				case PNG_FilterType_Paeth: {
-					DecompPtr[p] += PredictPaeth(PixelLeft[p], PixelUp[p], PixelUpLeft[p]);
-
-					break;
-				}
-
-				default: {
-					return (qfalse);
-				}
+		case PNG_FilterType_Up:
+			if (PrevRow) {
+				for (i = 0; i < BytesPerScanline; i++) {
+					DecompPtr[i] += PrevRow[i];
 				}
 			}
+			DecompPtr += BytesPerScanline;
+			break;
 
-			PixelLeft = DecompPtr;
-
-			/*
-			 *  We only have an upleft pixel if we are on the second line or above.
-			 */
-
-			if (h > 0) {
-				PixelUpLeft = DecompPtr - (BytesPerScanline + 1);
+		case PNG_FilterType_Average:
+			if (PrevRow) {
+				for (i = 0; i < BytesPerPixel; i++) {
+					DecompPtr[i] += (PrevRow[i] >> 1);
+				}
+				for (; i < BytesPerScanline; i++) {
+					DecompPtr[i] += (uint8_t)(((uint16_t)DecompPtr[i - BytesPerPixel] + (uint16_t)PrevRow[i]) >> 1);
+				}
+			} else {
+				for (i = BytesPerPixel; i < BytesPerScanline; i++) {
+					DecompPtr[i] += (DecompPtr[i - BytesPerPixel] >> 1);
+				}
 			}
+			DecompPtr += BytesPerScanline;
+			break;
 
-			/*
-			 *  Skip to the next pixel.
-			 */
-
-			DecompPtr += BytesPerPixel;
-
-			/*
-			 *  We only have a previous line if we are on the second line and above.
-			 */
-
-			if (h > 0) {
-				PixelUp = DecompPtr - (BytesPerScanline + 1);
+		case PNG_FilterType_Paeth:
+			if (PrevRow) {
+				for (i = 0; i < BytesPerPixel; i++) {
+					DecompPtr[i] += PrevRow[i];
+				}
+				for (; i < BytesPerScanline; i++) {
+					int a = DecompPtr[i - BytesPerPixel];
+					int b = PrevRow[i];
+					int c = PrevRow[i - BytesPerPixel];
+					int p_val = a + b - c;
+					int pa = p_val - a;
+					int pb = p_val - b;
+					int pc = p_val - c;
+					if (pa < 0) pa = -pa;
+					if (pb < 0) pb = -pb;
+					if (pc < 0) pc = -pc;
+					if (pa <= pb && pa <= pc) DecompPtr[i] += (uint8_t)a;
+					else if (pb <= pc) DecompPtr[i] += (uint8_t)b;
+					else DecompPtr[i] += (uint8_t)c;
+				}
+			} else {
+				for (i = BytesPerPixel; i < BytesPerScanline; i++) {
+					DecompPtr[i] += DecompPtr[i - BytesPerPixel];
+				}
 			}
+			DecompPtr += BytesPerScanline;
+			break;
+
+		default:
+			return (qfalse);
 		}
 	}
 
@@ -1311,6 +1295,32 @@ static qboolean DecodeImageNonInterlaced(struct PNG_Chunk_IHDR *IHDR, byte *OutB
 
 	OutPtr = OutBuffer;
 	DecompPtr = DecompressedData;
+
+	if (IHDR->BitDepth == PNG_BitDepth_8 && IHDR->ColourType == PNG_ColourType_TrueAlpha) {
+		uint32_t RowBytes = IHDR_Width * Q3IMAGE_BYTESPERPIXEL;
+		for (h = 0; h < IHDR_Height; h++) {
+			DecompPtr++;
+			Com_Memcpy(OutPtr, DecompPtr, RowBytes);
+			OutPtr += RowBytes;
+			DecompPtr += RowBytes;
+		}
+		return (qtrue);
+	}
+
+	if (IHDR->BitDepth == PNG_BitDepth_8 && IHDR->ColourType == PNG_ColourType_True && !HasTransparentColour) {
+		for (h = 0; h < IHDR_Height; h++) {
+			DecompPtr++;
+			for (w = 0; w < IHDR_Width; w++) {
+				OutPtr[0] = DecompPtr[0];
+				OutPtr[1] = DecompPtr[1];
+				OutPtr[2] = DecompPtr[2];
+				OutPtr[3] = 255;
+				OutPtr += 4;
+				DecompPtr += 3;
+			}
+		}
+		return (qtrue);
+	}
 
 	/*
 	 *  Create the output image.
@@ -2155,7 +2165,12 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height) {
 	 *  Decompress all IDAT chunks
 	 */
 
-	DecompressedDataLength = DecompressIDATs(ThePNG, &DecompressedData);
+	uint32_t ExpectedLen = 0;
+	if (IHDR->InterlaceMethod == PNG_InterlaceMethod_NonInterlaced) {
+		uint32_t comps = (IHDR->ColourType == PNG_ColourType_TrueAlpha) ? 4 : (IHDR->ColourType == PNG_ColourType_True) ? 3 : (IHDR->ColourType == PNG_ColourType_GreyAlpha) ? 2 : 1;
+		ExpectedLen = (((IHDR_Width * IHDR->BitDepth * comps + 7) / 8) + 1) * IHDR_Height;
+	}
+	DecompressedDataLength = DecompressIDATs(ThePNG, &DecompressedData, ExpectedLen);
 	if (!(DecompressedDataLength && DecompressedData)) {
 		CloseBufferedFile(ThePNG);
 

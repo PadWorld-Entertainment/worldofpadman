@@ -152,7 +152,11 @@ without compiled vertex arrays.
 */
 void R_DrawElements(int numIndexes, const glIndex_t *indexes) {
 	int primitives;
-
+#if defined(WIIU_GX2BE)
+	(void)primitives;
+	GX2BE_DrawTess(numIndexes, indexes);
+	return;
+#endif
 	primitives = r_primitives->integer;
 
 	// default is to use triangles if compiled vertex arrays are present

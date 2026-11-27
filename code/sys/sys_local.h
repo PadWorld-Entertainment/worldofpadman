@@ -23,6 +23,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../qcommon/q_shared.h"
 #include "../qcommon/qcommon.h"
 
+#ifdef __WIIU__
+#define APIENTRY
+#endif
+#ifndef __WIIU__
+
 #ifndef DEDICATED
 #ifndef TESTS
 #ifdef USE_LOCAL_HEADERS
@@ -41,6 +46,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #endif
 #endif // TESTS
 #endif // DEDICATED
+#endif // __WIIU__
 
 
 // Console

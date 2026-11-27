@@ -164,7 +164,7 @@ function(wop_add_executable)
 	# runtime resolvers (dladdr/backward) can find function names from the
 	# executable symbol table. This is required to get human-readable names in
 	# stacktraces when capturing from signal handlers.
-	if (UNIX AND NOT APPLE)
+	if (UNIX AND NOT APPLE AND NOT WIIU)
 		# Append the export-dynamic flag to the link flags for this target.
 		# Use APPEND_STRING to avoid overwriting other LINK_FLAGS.
 		set_property(TARGET ${_EXE_TARGET} APPEND_STRING PROPERTY LINK_FLAGS " -Wl,--export-dynamic")
@@ -394,7 +394,9 @@ if (DEFAULT_BASEDIR)
 	add_compile_definitions(DEFAULT_BASEDIR="${DEFAULT_BASEDIR}")
 endif()
 
-add_subdirectory(tools)
+if (NOT WIIU)
+	add_subdirectory(tools)
+endif()
 
 set(RENDERER_LIST renderer_opengl1)
 add_subdirectory(renderergl1)
@@ -407,9 +409,11 @@ if (BUILD_RENDERER_VULKAN)
 	list(APPEND RENDERER_LIST renderer_vulkan)
 endif()
 
-add_subdirectory(cgame)
-add_subdirectory(game)
-add_subdirectory(ui)
+if (NOT WIIU)
+	add_subdirectory(cgame)
+	add_subdirectory(game)
+	add_subdirectory(ui)
+endif()
 
 if (BUILD_CLIENT)
 	add_subdirectory(client)

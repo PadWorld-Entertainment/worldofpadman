@@ -66,9 +66,15 @@ VM_Init
 ==============
 */
 void VM_Init(void) {
+#ifdef WIIU_NATIVE_CGAME
+	Cvar_Get("vm_cgame", "0", CVAR_ARCHIVE);
+	Cvar_Get("vm_game", "0", CVAR_ARCHIVE);
+	Cvar_Get("vm_ui", "0", CVAR_ARCHIVE);
+#else
 	Cvar_Get("vm_cgame", "2", CVAR_ARCHIVE); // !@# SHIP WITH SET TO 2
 	Cvar_Get("vm_game", "2", CVAR_ARCHIVE);	 // !@# SHIP WITH SET TO 2
 	Cvar_Get("vm_ui", "2", CVAR_ARCHIVE);	 // !@# SHIP WITH SET TO 2
+#endif
 
 	Cmd_AddCommand("vmprofile", VM_VmProfile_f);
 	Cmd_AddCommand("vminfo", VM_VmInfo_f);
@@ -330,7 +336,11 @@ Dlls will call this directly
 ============
 */
 // a module that makes more system calls than this in one VM_Call is taken to be stuck
+#ifdef __WIIU__
+#define VM_MAX_SYSCALLS (8 * 1024 * 1024)
+#else
 #define VM_MAX_SYSCALLS (1024 * 1024)
+#endif
 
 void VM_CountSyscall(vm_t *vm) {
 	if (++vm->syscallCount > VM_MAX_SYSCALLS) {
@@ -600,6 +610,12 @@ vm_t *VM_Create(const char *module, intptr_t (*systemCalls)(intptr_t *), vmInter
 	Q_strncpyz(vm->name, module, sizeof(vm->name));
 
 	do {
+#ifdef WIIU_NATIVE_CGAME
+		if (interpret == VMI_NATIVE && !Q_stricmp(module, "qagame")) {
+			Q_strncpyz(filename, module, sizeof(filename));
+			retval = VMI_NATIVE;
+		} else
+#endif
 		retval = FS_FindVM(&startSearch, filename, sizeof(filename), module, (interpret == VMI_NATIVE));
 
 		if (retval == VMI_NATIVE) {
@@ -614,6 +630,18 @@ vm_t *VM_Create(const char *module, intptr_t (*systemCalls)(intptr_t *), vmInter
 
 			Com_Printf("Failed loading dll, trying next\n");
 		} else if (retval == VMI_COMPILED) {
+#ifdef WIIU_NATIVE_CGAME
+			if (interpret == VMI_NATIVE && (!Cvar_VariableString("fs_game")[0] || !Q_stricmp(Cvar_VariableString("fs_game"), BASEGAME)) &&
+			    (!Q_stricmp(module, "cgame") || !Q_stricmp(module, "ui"))) {
+				vm->dllHandle = Sys_LoadGameDll(module, &vm->entryPoint, VM_DllSyscall);
+				if (vm->dllHandle) {
+					FS_ReadFileDir(va("vm/%s.qvm", module), startSearch, qfalse, NULL);
+					Com_Printf("%s: using linked-in native code\n", module);
+					vm->systemCall = systemCalls;
+					return vm;
+				}
+			}
+#endif
 			vm->searchPath = startSearch;
 			if ((header = VM_LoadQVM(vm, qtrue, qfalse)))
 				break;
@@ -723,6 +751,7 @@ void VM_Forced_Unload_Start(void) {
 }
 
 void VM_CheckBounds(const vm_t *vm, unsigned int address, unsigned int length) {
+	if (!vm || vm->dllHandle) return;
 	if ((unsigned int)vm->dataAlloc < address || (unsigned int)vm->dataAlloc - address < length) {
 		Com_Error(ERR_DROP, "program tried to bypass data segment bounds");
 	}
@@ -734,7 +763,7 @@ void VM_CheckBounds2(const vm_t *vm, unsigned int addr1, unsigned int addr2, uns
 }
 
 void VM_CheckBounds3(const vm_t *vm, unsigned int address, unsigned int count, unsigned int size) {
-	if (vm->entryPoint) {
+	if (!vm || vm->dllHandle) {
 		return;
 	}
 

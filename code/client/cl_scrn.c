@@ -484,6 +484,14 @@ static void SCR_DrawScreenField(stereoFrame_t stereoFrame) {
 	if (cl_debuggraph->integer || cl_timegraph->integer || cl_debugMove->integer) {
 		SCR_DrawDebugGraph();
 	}
+#ifdef __WIIU__
+	{
+		extern void Con_OSK_Draw(void);
+		extern void WiiU_GamepadMap_Frame(void);
+		Con_OSK_Draw();
+		WiiU_GamepadMap_Frame();
+	}
+#endif
 }
 
 /*
