@@ -486,8 +486,6 @@ static void SCR_DrawScreenField(stereoFrame_t stereoFrame) {
 	}
 #if defined(__WIIU__) || defined(__PS5__)
 	{
-#if defined(__WIIU__) || defined(__PS5__)
-	{
 		extern void Con_OSK_Draw(void);
 		Con_OSK_Draw();
 #ifdef __WIIU__
@@ -496,10 +494,6 @@ static void SCR_DrawScreenField(stereoFrame_t stereoFrame) {
 #endif
 #ifdef __PS5__
 		{ extern void PS5_Input_DrawOverlay(void); PS5_Input_DrawOverlay(); }
-#endif
-	}
-#endif
-		WiiU_GamepadMap_Frame();
 #endif
 	}
 #endif
