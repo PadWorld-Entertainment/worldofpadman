@@ -492,13 +492,13 @@ static void PollVPAD(qboolean in_menu)
             return;
     }
 
-    /* OSK toggle: L3 + B, fires on edge (same shape as the rumble combo below). */
-    if ((status.trigger & VPAD_BUTTON_B && status.hold & VPAD_BUTTON_STICK_L) ||
-        (status.trigger & VPAD_BUTTON_STICK_L && status.hold & VPAD_BUTTON_B)) {
+    /* OSK toggle: L3 + A (matches PS5 L3 + Circle) or L3 + B. */
+    if ((status.trigger & (VPAD_BUTTON_A | VPAD_BUTTON_B) && status.hold & VPAD_BUTTON_STICK_L) ||
+        (status.trigger & VPAD_BUTTON_STICK_L && status.hold & (VPAD_BUTTON_A | VPAD_BUTTON_B))) {
         ReleaseAllKeys();
         Con_OSK_Toggle();
-        status.trigger &= ~(VPAD_BUTTON_B | VPAD_BUTTON_STICK_L);
-        status.release &= ~(VPAD_BUTTON_B | VPAD_BUTTON_STICK_L);
+        status.trigger &= ~(VPAD_BUTTON_A | VPAD_BUTTON_B | VPAD_BUTTON_STICK_L);
+        status.release &= ~(VPAD_BUTTON_A | VPAD_BUTTON_B | VPAD_BUTTON_STICK_L);
         if (Con_OSK_IsActive())
             return;
     }
@@ -621,13 +621,15 @@ static void PollKPAD(qboolean in_menu)
                 status.pro.release &= ~(WPAD_PRO_BUTTON_STICK_L | WPAD_PRO_BUTTON_X);
             }
             if (ComboEdge(status.pro.trigger, status.pro.hold,
+                          WPAD_PRO_BUTTON_STICK_L, WPAD_PRO_BUTTON_A) ||
+                ComboEdge(status.pro.trigger, status.pro.hold,
                           WPAD_PRO_BUTTON_STICK_L, WPAD_PRO_BUTTON_B)) {
                 ReleaseAllKeys();
                 Con_OSK_Toggle();
                 if (Con_OSK_IsActive())
                     return;
-                status.pro.trigger &= ~(WPAD_PRO_BUTTON_STICK_L | WPAD_PRO_BUTTON_B);
-                status.pro.release &= ~(WPAD_PRO_BUTTON_STICK_L | WPAD_PRO_BUTTON_B);
+                status.pro.trigger &= ~(WPAD_PRO_BUTTON_STICK_L | WPAD_PRO_BUTTON_A | WPAD_PRO_BUTTON_B);
+                status.pro.release &= ~(WPAD_PRO_BUTTON_STICK_L | WPAD_PRO_BUTTON_A | WPAD_PRO_BUTTON_B);
             }
             if (textPrompt && (status.pro.trigger & WPAD_PRO_BUTTON_A)) {
                 ReleaseAllKeys();
