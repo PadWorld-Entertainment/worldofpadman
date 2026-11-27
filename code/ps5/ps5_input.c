@@ -180,6 +180,8 @@ static int FilterStick( float raw, float deadzone, float curve )
 	return (int)( sign * mag * STICK_AXIS_SCALE );
 }
 
+static qboolean menu_cursor_active = qfalse;
+
 static void InjectMenuCursor( float sx, float sy )
 {
 	float speed = ( stick_menu_speed && stick_menu_speed->value > 0.0f ) ? stick_menu_speed->value : 6.0f;
@@ -201,8 +203,10 @@ static void InjectMenuCursor( float sx, float sy )
 	cursor_accum_x -= (float)dx;
 	cursor_accum_y -= (float)dy;
 
-	if ( dx || dy )
+	if ( dx || dy ) {
+		menu_cursor_active = qtrue;
 		Com_QueueEvent( 0, SE_MOUSE, dx, dy, 0, NULL );
+	}
 }
 
 static void InjectAxis( int axis, int value )
@@ -394,10 +398,13 @@ void IN_Frame( void )
 	in_menu = ( ( catcher & ( KEYCATCH_UI | KEYCATCH_CONSOLE | KEYCATCH_MESSAGE ) ) != 0 )
 		|| ( clc.state != CA_ACTIVE );
 
+	if ( in_menu && ( triggered & ( PAD_UP | PAD_DOWN | PAD_LEFT | PAD_RIGHT ) ) )
+		menu_cursor_active = qfalse;
 	if ( in_menu != prev_in_menu ) {
 		ReleaseAll();
 		cursor_accum_x = 0.0f;
 		cursor_accum_y = 0.0f;
+		menu_cursor_active = qfalse;
 		prev_in_menu = in_menu;
 	}
 
@@ -443,7 +450,7 @@ void IN_Frame( void )
 		int key = in_menu ? ps5Buttons[i].key_menu : ps5Buttons[i].key_game;
 		if ( !key )
 			key = ps5Buttons[i].key_game;
-		if ( in_menu && key == K_ENTER && ( catcher & KEYCATCH_UI ) && !( catcher & ( KEYCATCH_CONSOLE | KEYCATCH_MESSAGE ) ) )
+		if ( in_menu && menu_cursor_active && key == K_ENTER && ( catcher & KEYCATCH_UI ) && !( catcher & ( KEYCATCH_CONSOLE | KEYCATCH_MESSAGE ) ) )
 			key = K_MOUSE1;
 		if ( !key )
 			continue;
