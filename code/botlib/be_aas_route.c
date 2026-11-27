@@ -938,7 +938,11 @@ void AAS_InitRouting(void) {
 #endif // ROUTING_DEBUG
 
 	routingcachesize = 0;
+#ifdef __WIIU__
+	max_routingcachesize = 1024 * LibVarInteger("max_routingcache", "6144", 0, 65536);
+#else
 	max_routingcachesize = 1024 * LibVarInteger("max_routingcache", "4096", 0, 65536);
+#endif
 	// read any routing cache if available
 	AAS_ReadRouteCache();
 }

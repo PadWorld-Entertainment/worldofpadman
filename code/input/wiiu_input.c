@@ -12,7 +12,7 @@
 #include "client/keycodes.h"
 #include "client/keys.h"
 #include "../input/wiiu_input.h"
-#include "../wiiu/wiiu_osk.h"
+#include "../input/con_osk.h"
 
 /* Avoid pulling in the full client.h header */
 extern int Key_GetCatcher(void);
@@ -478,10 +478,10 @@ static void PollVPAD(qboolean in_menu)
      * focused menu field. See OSK_AcceptRaises(). */
     if (OSK_AcceptRaises() && (status.trigger & VPAD_BUTTON_A)) {
         ReleaseAllKeys();
-        WiiU_OSK_Toggle();
+        Con_OSK_Toggle();
         status.trigger &= ~VPAD_BUTTON_A;
         status.release &= ~VPAD_BUTTON_A;
-        if (WiiU_OSK_IsActive())
+        if (Con_OSK_IsActive())
             return;
     }
 
@@ -489,10 +489,10 @@ static void PollVPAD(qboolean in_menu)
     if ((status.trigger & VPAD_BUTTON_B && status.hold & VPAD_BUTTON_STICK_L) ||
         (status.trigger & VPAD_BUTTON_STICK_L && status.hold & VPAD_BUTTON_B)) {
         ReleaseAllKeys();
-        WiiU_OSK_Toggle();
+        Con_OSK_Toggle();
         status.trigger &= ~(VPAD_BUTTON_B | VPAD_BUTTON_STICK_L);
         status.release &= ~(VPAD_BUTTON_B | VPAD_BUTTON_STICK_L);
-        if (WiiU_OSK_IsActive())
+        if (Con_OSK_IsActive())
             return;
     }
 
@@ -613,16 +613,16 @@ static void PollKPAD(qboolean in_menu)
             if (ComboEdge(status.pro.trigger, status.pro.hold,
                           WPAD_PRO_BUTTON_STICK_L, WPAD_PRO_BUTTON_B)) {
                 ReleaseAllKeys();
-                WiiU_OSK_Toggle();
-                if (WiiU_OSK_IsActive())
+                Con_OSK_Toggle();
+                if (Con_OSK_IsActive())
                     return;
                 status.pro.trigger &= ~(WPAD_PRO_BUTTON_STICK_L | WPAD_PRO_BUTTON_B);
                 status.pro.release &= ~(WPAD_PRO_BUTTON_STICK_L | WPAD_PRO_BUTTON_B);
             }
             if (textPrompt && (status.pro.trigger & WPAD_PRO_BUTTON_A)) {
                 ReleaseAllKeys();
-                WiiU_OSK_Toggle();
-                if (WiiU_OSK_IsActive())
+                Con_OSK_Toggle();
+                if (Con_OSK_IsActive())
                     return;
                 status.pro.trigger &= ~WPAD_PRO_BUTTON_A;
                 status.pro.release &= ~WPAD_PRO_BUTTON_A;
@@ -671,16 +671,16 @@ static void PollKPAD(qboolean in_menu)
             if (ComboEdge(status.classic.trigger, status.classic.hold,
                           WPAD_CLASSIC_BUTTON_ZL, WPAD_CLASSIC_BUTTON_B)) {
                 ReleaseAllKeys();
-                WiiU_OSK_Toggle();
-                if (WiiU_OSK_IsActive())
+                Con_OSK_Toggle();
+                if (Con_OSK_IsActive())
                     return;
                 status.classic.trigger &= ~(WPAD_CLASSIC_BUTTON_ZL | WPAD_CLASSIC_BUTTON_B);
                 status.classic.release &= ~(WPAD_CLASSIC_BUTTON_ZL | WPAD_CLASSIC_BUTTON_B);
             }
             if (textPrompt && (status.classic.trigger & WPAD_CLASSIC_BUTTON_A)) {
                 ReleaseAllKeys();
-                WiiU_OSK_Toggle();
-                if (WiiU_OSK_IsActive())
+                Con_OSK_Toggle();
+                if (Con_OSK_IsActive())
                     return;
                 status.classic.trigger &= ~WPAD_CLASSIC_BUTTON_A;
                 status.classic.release &= ~WPAD_CLASSIC_BUTTON_A;
@@ -723,16 +723,16 @@ static void PollKPAD(qboolean in_menu)
             }
             if (ComboEdge(status.trigger, status.hold, WPAD_BUTTON_1, WPAD_BUTTON_2)) {
                 ReleaseAllKeys();
-                WiiU_OSK_Toggle();
-                if (WiiU_OSK_IsActive())
+                Con_OSK_Toggle();
+                if (Con_OSK_IsActive())
                     return;
                 status.trigger &= ~(WPAD_BUTTON_1 | WPAD_BUTTON_2);
                 status.release &= ~(WPAD_BUTTON_1 | WPAD_BUTTON_2);
             }
             if (textPrompt && (status.trigger & WPAD_BUTTON_A)) {
                 ReleaseAllKeys();
-                WiiU_OSK_Toggle();
-                if (WiiU_OSK_IsActive())
+                Con_OSK_Toggle();
+                if (Con_OSK_IsActive())
                     return;
                 status.trigger &= ~WPAD_BUTTON_A;
                 status.release &= ~WPAD_BUTTON_A;
@@ -1023,12 +1023,12 @@ void WiiU_Input_Frame(void)
 
     /* The OSK takes the whole frame's input across every pad -- no normal
      * mapping runs, so nothing leaks into the game or the text field. */
-    if (WiiU_OSK_IsActive()) {
+    if (Con_OSK_IsActive()) {
         oskInput_t osk;
         memset(&osk, 0, sizeof(osk));
         OSK_GatherVPAD(&osk);
         OSK_GatherKPAD(&osk);
-        WiiU_OSK_Frame(&osk);
+        Con_OSK_Frame(&osk);
 
         /* Stale deltas would fire as a huge jump on the frame it closes. */
         touch_prev_valid = qfalse;
@@ -1055,7 +1055,7 @@ void WiiU_Input_ReleaseForeground(void)
     VPADStopMotor(VPAD_CHAN_0);
     s_rumbleActive = qfalse;
     /* Drop the OSK rather than resume it half-typed after the HOME overlay. */
-    WiiU_OSK_Cancel();
+    Con_OSK_Cancel();
 }
 
 /* ---- ioq3 input interface (called by engine via IN_* function pointers) ---- */

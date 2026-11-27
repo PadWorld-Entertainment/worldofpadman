@@ -23,7 +23,7 @@
 /* client.h already pulls keys.h/keycodes.h; including them again by a different
  * path re-declares qkey_t. */
 #include "client/client.h"
-#include "../wiiu/wiiu_osk.h"
+#include "con_osk.h"
 
 /* ----------------------------------------------------------------
  * Layout -- all geometry in Q3's 640x480 virtual space
@@ -380,7 +380,7 @@ static void OSK_Open(void)
     osk_active = qtrue;
 }
 
-void WiiU_OSK_Toggle(void)
+void Con_OSK_Toggle(void)
 {
     if (osk_active)
         osk_active = qfalse;
@@ -388,12 +388,12 @@ void WiiU_OSK_Toggle(void)
         OSK_Open();
 }
 
-void WiiU_OSK_Cancel(void)
+void Con_OSK_Cancel(void)
 {
     osk_active = qfalse;
 }
 
-qboolean WiiU_OSK_IsActive(void)
+qboolean Con_OSK_IsActive(void)
 {
     return osk_active;
 }
@@ -441,7 +441,7 @@ static qboolean OSK_SelectAt(float cx, float cy)
     return qfalse;
 }
 
-void WiiU_OSK_Frame(const oskInput_t *in)
+void Con_OSK_Frame(const oskInput_t *in)
 {
     int now = Com_Milliseconds();
     int stepX, stepY;
@@ -571,7 +571,7 @@ static void OSK_DrawOutline(float x, float y, float w, float h, const float *col
     SCR_FillRect(x + w - 1.0f, y, 1.0f, h, color);
 }
 
-void WiiU_OSK_Draw(void)
+void Con_OSK_Draw(void)
 {
     float x, y, w, h;
     int row, col;

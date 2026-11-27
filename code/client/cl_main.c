@@ -22,6 +22,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cl_main.c  -- client main loop
 
 #include "client.h"
+#ifdef __WIIU__
+#include "../wiiu/wiiu_account.h"
+#endif
 #include <limits.h>
 
 #include "../sys/sys_local.h"
@@ -3514,7 +3517,11 @@ void CL_Init(void) {
 	cl_consoleKeys = Cvar_Get("cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
 
 	// userinfo
+#ifdef __WIIU__
+	Cvar_Get("name", WiiU_DefaultPlayerName(), CVAR_USERINFO | CVAR_ARCHIVE);
+#else
 	Cvar_Get("name", "PadPlayer", CVAR_USERINFO | CVAR_ARCHIVE);
+#endif
 	cl_rate = Cvar_Get("rate", "25000", CVAR_USERINFO | CVAR_ARCHIVE);
 	// between 1 and sv_fps
 	Cvar_Get("snaps", "20", CVAR_USERINFO | CVAR_ARCHIVE);

@@ -1,5 +1,5 @@
 /*
- * wiiu_osk.h -- custom on-screen keyboard for the Wii U port.
+ * con_osk.h -- custom on-screen keyboard for the Wii U port.
  *
  * nn::swkbd (the system keyboard) hangs forever inside Create() on real
  * hardware and has no known-good homebrew call sequence, so this draws its own
@@ -9,8 +9,8 @@
  * problem against a system keyboard that does work.
  */
 
-#ifndef WIIU_OSK_H
-#define WIIU_OSK_H
+#ifndef CON_OSK_H
+#define CON_OSK_H
 
 #include "qcommon/q_shared.h"
 
@@ -53,18 +53,18 @@ typedef struct {
  * again if already open. Raised by a per-controller combo (L3+B on GamePad and
  * Pro, ZL+B on Classic, 1+2 on Wii Remote) or by the accept button while the
  * console / chat prompt holds the key catcher. */
-void     WiiU_OSK_Toggle(void);
+void     Con_OSK_Toggle(void);
 
 /* Close without committing (used on shutdown / foreground loss). */
-void     WiiU_OSK_Cancel(void);
+void     Con_OSK_Cancel(void);
 
-qboolean WiiU_OSK_IsActive(void);
+qboolean Con_OSK_IsActive(void);
 
 /* Drive the keyboard for one frame. Only called while active; every pad's
  * normal mapping is suppressed for that frame. */
-void     WiiU_OSK_Frame(const oskInput_t *in);
+void     Con_OSK_Frame(const oskInput_t *in);
 
 /* Draw the overlay. Called from SCR_DrawScreenField() after everything else. */
-void     WiiU_OSK_Draw(void);
+void     Con_OSK_Draw(void);
 
-#endif /* WIIU_OSK_H */
+#endif /* CON_OSK_H */

@@ -5,7 +5,7 @@
 #include "qcommon/q_shared.h"
 #include "qcommon/qcommon.h"
 #include "client/client.h"
-#include "../wiiu/wiiu_osk.h"
+#include "../input/con_osk.h"
 #include "../wiiu/wiiu_gamepad_map.h"
 
 static cvar_t *gamepad_map;
@@ -23,7 +23,7 @@ static const char *GamepadMap_BlockedBy(void)
 		return "no valid snapshot";
 	if (Key_GetCatcher() & (KEYCATCH_UI | KEYCATCH_CONSOLE | KEYCATCH_MESSAGE))
 		return "menu, console or chat open";
-	if (WiiU_OSK_IsActive())
+	if (Con_OSK_IsActive())
 		return "on-screen keyboard open";
 	if (cl.snap.ps.pm_type == PM_INTERMISSION || cl.snap.ps.pm_type == PM_SPINTERMISSION)
 		return "intermission";

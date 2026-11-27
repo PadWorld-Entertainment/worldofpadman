@@ -486,9 +486,9 @@ static void SCR_DrawScreenField(stereoFrame_t stereoFrame) {
 	}
 #ifdef __WIIU__
 	{
-		extern void WiiU_OSK_Draw(void);
+		extern void Con_OSK_Draw(void);
 		extern void WiiU_GamepadMap_Frame(void);
-		WiiU_OSK_Draw();
+		Con_OSK_Draw();
 		WiiU_GamepadMap_Frame();
 	}
 #endif

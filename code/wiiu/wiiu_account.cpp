@@ -11,7 +11,7 @@
 #include "wiiu_account.h"
 
 /* Must be the cvar's compiled-in default, not a "+set name" -- cvar_restart
- * would otherwise wipe a command-line value back to "UnnamedPlayer". */
+ * would otherwise wipe a command-line value back to "PadPlayer". */
 static char s_defaultPlayerName[64] = "UnnamedPlayer";
 
 extern "C" void WiiU_InitDefaultPlayerName(void)
