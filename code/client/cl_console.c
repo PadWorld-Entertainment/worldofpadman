@@ -82,6 +82,10 @@ void Con_ToggleConsole_f(void) {
 
 	Con_ClearNotify();
 	Key_SetCatcher(Key_GetCatcher() ^ KEYCATCH_CONSOLE);
+#ifdef __PS5__
+	con.displayFrac = (Key_GetCatcher() & KEYCATCH_CONSOLE) ? 0.5f : 0.0f;
+	con.finalFrac = con.displayFrac;
+#endif
 }
 
 /*
@@ -366,8 +370,13 @@ void Con_Init(void) {
 	con_notifytime = Cvar_Get("con_notifytime", "-4", CVAR_ARCHIVE);
 	con_conspeed = Cvar_Get("scr_conspeed", "3", CVAR_ARCHIVE);
 	con_autoclear = Cvar_Get("con_autoclear", "1", CVAR_ARCHIVE);
+	#ifdef __PS5__
+	con_scale = Cvar_Get("con_scale", "4", CVAR_ARCHIVE);
+	Cvar_CheckRange(con_scale, 1, 6, qfalse);
+#else
 	con_scale = Cvar_Get("con_scale", "2", CVAR_ARCHIVE);
 	Cvar_CheckRange(con_scale, 1, 4, qfalse);
+#endif
 
 	fontSize.w = SMALLCHAR_WIDTH * con_scale->value;
 	fontSize.h = SMALLCHAR_HEIGHT * con_scale->value;
