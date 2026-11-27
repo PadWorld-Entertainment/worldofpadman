@@ -336,7 +336,7 @@ Dlls will call this directly
 ============
 */
 // a module that makes more system calls than this in one VM_Call is taken to be stuck
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 #define VM_MAX_SYSCALLS (8 * 1024 * 1024)
 #else
 #define VM_MAX_SYSCALLS (1024 * 1024)
