@@ -20,7 +20,7 @@ list(APPEND SRCS
   ../ps5/ps5_sys.c
   ../ps5/ps5_shared.c
   ../ps5/ps5_input.c
-  ../wiiu/wiiu_osk.c
+  ../input/con_osk.c
   ../ps5/ps5_snd.c
   ../ps5/platform.c
   ../renderercommon/puff.c

@@ -1,7 +1,7 @@
 #include <math.h>
 #include <string.h>
 #include "../client/client.h"
-#include "../wiiu/wiiu_osk.h"
+#include "../input/con_osk.h"
 #include "platform.h"
 
 #define PAD_L2              0x0100u
@@ -370,7 +370,7 @@ void IN_Frame( void )
 	released = prev_held & ~held;
 	prev_held = held;
 
-	if ( WiiU_OSK_IsActive() ) {
+	if ( Con_OSK_IsActive() ) {
 		oskInput_t osk;
 		memset( &osk, 0, sizeof( osk ) );
 		if ( triggered & PAD_LEFT )     osk.pressLeft   = qtrue;
@@ -385,7 +385,7 @@ void IN_Frame( void )
 		if ( triggered & PAD_TOUCH_PAD ) osk.pressCancel = qtrue;
 		osk.navX = pad.left_x;
 		osk.navY = -pad.left_y;
-		WiiU_OSK_Frame( &osk );
+		Con_OSK_Frame( &osk );
 		PS5_RumbleTick();
 		return;
 	}
@@ -421,7 +421,7 @@ void IN_Frame( void )
 	if ( ComboEdge( triggered, held, PAD_L1, PAD_CIRCLE ) || ComboEdge( triggered, held, PAD_L3, PAD_CIRCLE ) ||
 	     ( OSK_AcceptRaises() && ( triggered & PAD_CROSS ) ) ) {
 		ReleaseAll();
-		WiiU_OSK_Toggle();
+		Con_OSK_Toggle();
 		PS5_RumbleTick();
 		return;
 	}
