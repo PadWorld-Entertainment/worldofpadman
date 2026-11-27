@@ -1029,17 +1029,17 @@ void CL_SendCmd(void) {
 CL_InitInput
 ============
 */
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 static void IN_WeapNoop_f(void) {}
 #endif
 
 void CL_InitInput(void) {
 	Cmd_AddCommand("centerview", IN_CenterView);
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 	Cmd_AddCommand("weapnext", IN_WeapNoop_f);
 	Cmd_AddCommand("weapprev", IN_WeapNoop_f);
 #endif
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 	CL_AssistInit();
 #endif
 
@@ -1120,11 +1120,11 @@ CL_ShutdownInput
 */
 void CL_ShutdownInput(void) {
 	Cmd_RemoveCommand("centerview");
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 	Cmd_RemoveCommand("weapnext");
 	Cmd_RemoveCommand("weapprev");
 #endif
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__PS5__)
 	CL_AssistShutdown();
 #endif
 

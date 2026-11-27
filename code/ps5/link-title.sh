@@ -73,6 +73,7 @@ fi
 title_id=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["titleId"])' "$param")
 app="$work/$title_id"
 mkdir -p "$app/sce_sys" "$app/sce_module" "$app/wop"
+cp -n "$ps5/../../wop/"*.cfg "$app/wop/" 2>/dev/null || true
 "$tool" self --sign --in "$work/eboot.elf.new" --out "$app/eboot.bin" --magic 0x1D3D154F
 "$tool" self --inspect --file "$app/eboot.bin" > /dev/null
 cp "$param" "$app/sce_sys/param.json"
