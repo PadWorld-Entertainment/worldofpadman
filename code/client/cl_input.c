@@ -1029,15 +1029,11 @@ void CL_SendCmd(void) {
 CL_InitInput
 ============
 */
-#ifdef __WIIU__
-static void IN_WeapNoop_f(void) {}
-#endif
-
 void CL_InitInput(void) {
 	Cmd_AddCommand("centerview", IN_CenterView);
 #ifdef __WIIU__
-	Cmd_AddCommand("weapnext", IN_WeapNoop_f);
-	Cmd_AddCommand("weapprev", IN_WeapNoop_f);
+	Cmd_AddCommand("weapnext", NULL);
+	Cmd_AddCommand("weapprev", NULL);
 #endif
 #ifdef __WIIU__
 	CL_AssistInit();
