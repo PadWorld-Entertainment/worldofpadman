@@ -407,7 +407,7 @@ int main(int argc, char **argv)
 			         " +set sv_pure 0 +set com_standalone 0 +set com_logfile 0"
 			         " +set vm_game " WIIU_VM_GAME
 #ifdef WIIU_NATIVE_CGAME
-			         " +set vm_cgame 0"
+			         " +set vm_cgame 0 +set vm_ui 0"
 #endif
 			         " +set in_joystick 1 +set in_joystickUseAnalog 1"
 			         " +set j_pitch_axis 3 +set j_yaw_axis 4"

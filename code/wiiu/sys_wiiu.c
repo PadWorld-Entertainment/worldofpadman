@@ -320,6 +320,11 @@ extern intptr_t cgame_vmMain( int command, int arg0, int arg1, int arg2, int arg
 	int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11 );
 extern char __cgame_data_start[], __cgame_data_end[];
 extern char __cgame_bss_start[], __cgame_bss_end[];
+extern void ui_dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg, ... ) );
+extern intptr_t ui_vmMain( int command, int arg0, int arg1, int arg2, int arg3,
+	int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11 );
+extern char __ui_data_start[], __ui_data_end[];
+extern char __ui_bss_start[], __ui_bss_end[];
 #endif
 
 typedef struct {
@@ -338,6 +343,8 @@ static wiiuNativeModule_t wiiu_native_modules[] = {
 #ifdef WIIU_NATIVE_CGAME
 	{ "cgame", cgame_dllEntry, cgame_vmMain, __cgame_data_start, __cgame_data_end,
 	  __cgame_bss_start, __cgame_bss_end, NULL },
+	{ "ui", ui_dllEntry, ui_vmMain, __ui_data_start, __ui_data_end,
+	  __ui_bss_start, __ui_bss_end, NULL },
 #endif
 	{ NULL }
 };

@@ -69,11 +69,12 @@ void VM_Init(void) {
 #ifdef WIIU_NATIVE_CGAME
 	Cvar_Get("vm_cgame", "0", CVAR_ARCHIVE);
 	Cvar_Get("vm_game", "0", CVAR_ARCHIVE);
+	Cvar_Get("vm_ui", "0", CVAR_ARCHIVE);
 #else
 	Cvar_Get("vm_cgame", "2", CVAR_ARCHIVE); // !@# SHIP WITH SET TO 2
 	Cvar_Get("vm_game", "2", CVAR_ARCHIVE);	 // !@# SHIP WITH SET TO 2
-#endif
 	Cvar_Get("vm_ui", "2", CVAR_ARCHIVE);	 // !@# SHIP WITH SET TO 2
+#endif
 
 	Cmd_AddCommand("vmprofile", VM_VmProfile_f);
 	Cmd_AddCommand("vminfo", VM_VmInfo_f);
@@ -630,7 +631,8 @@ vm_t *VM_Create(const char *module, intptr_t (*systemCalls)(intptr_t *), vmInter
 			Com_Printf("Failed loading dll, trying next\n");
 		} else if (retval == VMI_COMPILED) {
 #ifdef WIIU_NATIVE_CGAME
-			if (interpret == VMI_NATIVE && !Q_stricmp(module, "cgame")) {
+			if (interpret == VMI_NATIVE && (!Cvar_VariableString("fs_game")[0] || !Q_stricmp(Cvar_VariableString("fs_game"), BASEGAME)) &&
+			    (!Q_stricmp(module, "cgame") || !Q_stricmp(module, "ui"))) {
 				vm->dllHandle = Sys_LoadGameDll(module, &vm->entryPoint, VM_DllSyscall);
 				if (vm->dllHandle) {
 					FS_ReadFileDir(va("vm/%s.qvm", module), startSearch, qfalse, NULL);
