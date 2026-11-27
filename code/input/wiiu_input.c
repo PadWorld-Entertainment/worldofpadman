@@ -158,6 +158,7 @@ static qboolean     osk_touch_prev;
 /* Track which ioq3 keys are currently held (for release-all on mode switch) */
 static qboolean     key_held[MAX_KEYS];
 static qboolean     prev_in_menu;
+static qboolean     menu_cursor_active;
 
 /* Stick response tuning (registered in IN_Init) */
 static cvar_t       *stick_move_deadzone;
@@ -266,8 +267,10 @@ static void InjectMenuCursor(float sx, float sy)
     cursor_accum_y -= (float)dy;
 
     /* Q3 mouse Y is down-positive, stick Y is up-positive -- negate. */
-    if (dx || dy)
+    if (dx || dy) {
+        menu_cursor_active = qtrue;
         Com_QueueEvent(0, SE_MOUSE, dx, -dy, 0, NULL);
+    }
 }
 
 /* Emit SE_JOYSTICK_AXIS with change detection */
@@ -288,7 +291,11 @@ static void ProcessButtons(const buttonMap_t *map, int count,
     for (i = 0; i < count; i++) {
         int key = in_menu ? map[i].key_menu : map[i].key_game;
         if (!key) key = map[i].key_game;  /* fallback if menu key is 0 */
-        if (in_menu && key == K_ENTER && (Key_GetCatcher() & KEYCATCH_UI) && !(Key_GetCatcher() & (KEYCATCH_CONSOLE | KEYCATCH_MESSAGE))) {
+        if (in_menu && (triggered & map[i].mask) &&
+            (key == K_UPARROW || key == K_DOWNARROW || key == K_LEFTARROW || key == K_RIGHTARROW)) {
+            menu_cursor_active = qfalse;
+        }
+        if (in_menu && menu_cursor_active && key == K_ENTER && (Key_GetCatcher() & KEYCATCH_UI) && !(Key_GetCatcher() & (KEYCATCH_CONSOLE | KEYCATCH_MESSAGE))) {
             key = K_MOUSE1;
         }
 
@@ -566,8 +573,11 @@ static void PollVPAD(qboolean in_menu)
             int mx = ScaleTouchDelta(tdx, touch_sensitivity->value, touch_accel->value);
             int my = ScaleTouchDelta(tdy, touch_sensitivity->value, touch_accel->value);
 
-            if (mx || my)
+            if (mx || my) {
+                if (in_menu)
+                    menu_cursor_active = qtrue;
                 Com_QueueEvent(0, SE_MOUSE, mx, my, 0, NULL);
+            }
         }
         touch_prev_valid = qtrue;
         touch_prev_x = tp.x;
@@ -773,8 +783,10 @@ static void PollKPAD(qboolean in_menu)
                     if (pointer_prev_valid[ch]) {
                         int mx = (int)((px - pointer_prev_x[ch]) * POINTER_MENU_SCALE);
                         int my = (int)((py - pointer_prev_y[ch]) * POINTER_MENU_SCALE);
-                        if (mx || my)
+                        if (mx || my) {
+                            menu_cursor_active = qtrue;
                             Com_QueueEvent(0, SE_MOUSE, mx, my, 0, NULL);
+                        }
                     }
                 } else {
                     /* Layer 2: instant fine-aim offset, recomputed every frame (no accumulation) */
@@ -971,6 +983,7 @@ void WiiU_Input_Init(void)
     touch_prev_valid = qfalse;
     quit_pressed = qfalse;
     prev_in_menu = qfalse;
+    menu_cursor_active = qfalse;
 
     input_initialized = qtrue;
 }
@@ -1008,6 +1021,7 @@ void WiiU_Input_Frame(void)
         memset(&vpad_r3_tap, 0, sizeof(vpad_r3_tap));
         memset(kpad_r3_tap, 0, sizeof(kpad_r3_tap));
         prev_in_menu = in_menu;
+        menu_cursor_active = qfalse;
     }
 
     /* Clear ui_ime_target as the UI opens so a stale field name can't misroute the OSK (from PS3).
