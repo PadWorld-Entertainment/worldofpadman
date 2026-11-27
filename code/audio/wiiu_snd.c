@@ -10,6 +10,7 @@
 
 #include <coreinit/cache.h>
 #include <coreinit/time.h>
+#include <coreinit/interrupts.h>
 #include <sndcore2/core.h>
 #include <sndcore2/voice.h>
 #include <sndcore2/device.h>
@@ -54,6 +55,7 @@ static int16_t *s_buf_right = NULL;
 /* AXVoice handles -- one per channel. */
 static AXVoice *s_voice_left  = NULL;
 static AXVoice *s_voice_right = NULL;
+static uint32_t s_last_read_pos = 0;
 
 /* Fired if AX force-steals our voice; just mark the pointer NULL. */
 static void wiiu_voice_dropped(void *ctx)
@@ -113,7 +115,7 @@ static qboolean wiiu_setup_voice(AXVoice *voice, const int16_t *buf,
     for (int ch = 0; ch < 2; ch++)
         AXSetVoiceDeviceMix(voice, AX_DEVICE_TYPE_DRC, ch, &drc_mix[ch]);
 
-    AXSetVoiceState(voice, AX_VOICE_STATE_PLAYING);
+    AXSetVoiceState(voice, AX_VOICE_STATE_STOPPED);
 
     AXVoiceEnd(voice);
     return qtrue;
@@ -153,6 +155,15 @@ static qboolean wiiu_acquire_voices(void)
         s_voice_left = s_voice_right = NULL;
         return qfalse;
     }
+
+    /* Start both channels in the same interrupt window so L and R stay sample-locked. */
+    BOOL irq = OSDisableInterrupts();
+    AXSetVoiceCurrentOffset(s_voice_left, 0);
+    AXSetVoiceCurrentOffset(s_voice_right, 0);
+    AXSetVoiceState(s_voice_left, AX_VOICE_STATE_PLAYING);
+    AXSetVoiceState(s_voice_right, AX_VOICE_STATE_PLAYING);
+    s_last_read_pos = 0;
+    OSRestoreInterrupts(irq);
 
     return qtrue;
 }
@@ -258,10 +269,12 @@ void WiiU_Snd_SetPaused(qboolean paused)
         if (s_snd_pause_depth > 0)
             s_snd_pause_depth--;
         if (s_snd_pause_depth == 0) {
+            BOOL irq = OSDisableInterrupts();
             if (s_voice_left)
                 AXSetVoiceState(s_voice_left, AX_VOICE_STATE_PLAYING);
             if (s_voice_right)
                 AXSetVoiceState(s_voice_right, AX_VOICE_STATE_PLAYING);
+            OSRestoreInterrupts(irq);
         }
     }
 }
@@ -317,8 +330,42 @@ qboolean SNDDMA_Init(void)
     return qtrue;
 }
 
+static void wiiu_zero_ring_span(uint32_t start, uint32_t count)
+{
+    if (count == 0)
+        return;
+    if (count >= SND_SAMPLES) {
+        memset(s_dma_buf, 0, SND_INTERLEAVED * (SND_SAMPLEBITS / 8));
+        memset(s_buf_left, 0, SND_RING_BYTES);
+        memset(s_buf_right, 0, SND_RING_BYTES);
+        DCFlushRange(s_buf_left, SND_RING_BYTES);
+        DCFlushRange(s_buf_right, SND_RING_BYTES);
+        return;
+    }
+
+    uint32_t first = SND_SAMPLES - start;
+    if (first > count)
+        first = count;
+
+    memset(s_dma_buf + start * SND_CHANNELS * 2, 0, first * SND_CHANNELS * 2);
+    memset(s_buf_left + start, 0, first * sizeof(int16_t));
+    memset(s_buf_right + start, 0, first * sizeof(int16_t));
+    DCFlushRange(s_buf_left + start, first * sizeof(int16_t));
+    DCFlushRange(s_buf_right + start, first * sizeof(int16_t));
+
+    uint32_t rem = count - first;
+    if (rem > 0) {
+        memset(s_dma_buf, 0, rem * SND_CHANNELS * 2);
+        memset(s_buf_left, 0, rem * sizeof(int16_t));
+        memset(s_buf_right, 0, rem * sizeof(int16_t));
+        DCFlushRange(s_buf_left, rem * sizeof(int16_t));
+        DCFlushRange(s_buf_right, rem * sizeof(int16_t));
+    }
+}
+
 /* Real hardware read position via AXGetVoiceOffsets, not elapsed-time guessing -- drift here
- * means audible clicks, learned that one live. */
+ * means audible clicks, learned that one live. Zero already-consumed samples so map-load
+ * stalls output clean silence instead of looping stale audio. */
 int SNDDMA_GetDMAPos(void)
 {
     if (!s_snd_active || !s_voice_left)
@@ -327,7 +374,14 @@ int SNDDMA_GetDMAPos(void)
     AXVoiceOffsets offs;
     AXGetVoiceOffsets(s_voice_left, &offs);
 
-    return (int)(offs.currentOffset * SND_CHANNELS);
+    uint32_t cur = offs.currentOffset % SND_SAMPLES;
+    uint32_t consumed = (cur - s_last_read_pos) & (SND_SAMPLES - 1);
+    if (consumed > 0) {
+        wiiu_zero_ring_span(s_last_read_pos, consumed);
+        s_last_read_pos = cur;
+    }
+
+    return (int)(cur * SND_CHANNELS);
 }
 
 void SNDDMA_BeginPainting(void)
@@ -335,7 +389,7 @@ void SNDDMA_BeginPainting(void)
     /* No-op: dma.buffer is always valid. */
 }
 
-/* Deinterleave mixed stereo into per-channel mono buffers, flush dcache for AX DMA. */
+/* Deinterleave the active ahead-of-playhead mix window into per-channel mono buffers. */
 void SNDDMA_Submit(void)
 {
     if (!s_snd_active)
@@ -345,13 +399,32 @@ void SNDDMA_Submit(void)
     int16_t *left  = s_buf_left;
     int16_t *right = s_buf_right;
 
-    for (int i = 0; i < SND_SAMPLES; i++) {
-        left[i]  = src[i * 2];
-        right[i] = src[i * 2 + 1];
-    }
+    /* S_PaintChannels mixes roughly [playhead + 2048 .. playhead + 3000]; copy 8192 pairs (~170ms)
+     * starting at s_last_read_pos so newly mixed audio is always transferred while consumed
+     * tail slots behind s_last_read_pos stay zeroed during map-load stalls. */
+    const uint32_t window = 8192;
+    uint32_t idx = s_last_read_pos & (SND_SAMPLES - 1);
+    uint32_t first = SND_SAMPLES - idx;
+    if (first > window)
+        first = window;
 
-    DCFlushRange(s_buf_left, SND_RING_BYTES);
-    DCFlushRange(s_buf_right, SND_RING_BYTES);
+    for (uint32_t i = 0; i < first; i++) {
+        uint32_t p = idx + i;
+        left[p]  = src[p * 2];
+        right[p] = src[p * 2 + 1];
+    }
+    DCFlushRange(left + idx, first * sizeof(int16_t));
+    DCFlushRange(right + idx, first * sizeof(int16_t));
+
+    uint32_t rem = window - first;
+    if (rem > 0) {
+        for (uint32_t i = 0; i < rem; i++) {
+            left[i]  = src[i * 2];
+            right[i] = src[i * 2 + 1];
+        }
+        DCFlushRange(left, rem * sizeof(int16_t));
+        DCFlushRange(right, rem * sizeof(int16_t));
+    }
 }
 
 /* AX stays up until process exit (WiiU_Snd_Shutdown): runtime AXQuit+AXInit on vid_restart or
