@@ -21,7 +21,6 @@ else()
 	add_subdirectory(jpeg-10)
 endif()
 
-if (NOT PS5)
 if (NOT USE_INTERNAL_OGG)
 	find_package(PkgConfig REQUIRED)
 	pkg_check_modules(OGG REQUIRED ogg)
@@ -42,6 +41,8 @@ if (NOT USE_INTERNAL_VORBIS)
 else()
 	add_subdirectory(libvorbis-1.3.7)
 endif()
+
+if (NOT PS5)
 
 if (NOT USE_INTERNAL_THEORA)
 	find_package(PkgConfig REQUIRED)

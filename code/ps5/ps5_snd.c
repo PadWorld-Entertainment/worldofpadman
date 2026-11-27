@@ -52,6 +52,7 @@ static void SNDDMA_Fill( int16_t *frames, int count, void *user )
 			if ( run > bytes )
 				run = bytes;
 			memcpy( out, dma.buffer + pos, run );
+			memset( dma.buffer + pos, 0, run );
 			out += run;
 			bytes -= run;
 			pos = ( pos + run ) % dmasize;
