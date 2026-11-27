@@ -680,6 +680,9 @@ void SV_Init(void) {
 	Cvar_Get("sv_cheats", "1", CVAR_SYSTEMINFO | CVAR_ROM);
 	sv_serverid = Cvar_Get("sv_serverid", "0", CVAR_SYSTEMINFO | CVAR_ROM);
 	sv_pure = Cvar_Get("sv_pure", "1", CVAR_SYSTEMINFO);
+#ifdef __WIIU__
+	Cvar_Set("sv_pure", "0");
+#endif
 #ifdef USE_VOIP
 	sv_voip = Cvar_Get("sv_voip", "1", CVAR_LATCH);
 	Cvar_CheckRange(sv_voip, 0, 1, qtrue);

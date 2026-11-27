@@ -3,7 +3,7 @@
 #include "../qcommon/qcommon.h"
 #include "../client/client.h"
 #include "../qcommon/vm_local.h"
-#include "../wiiu/wiiu_osk.h"
+#include "../input/con_osk.h"
 
 /* WoP Discord webhook stubs */
 int DISCORD_Init(void) { return 0; }
@@ -73,11 +73,11 @@ __attribute__((weak)) cvar_t *cl_voipSend = NULL;
 __attribute__((weak)) cvar_t *cl_voip = NULL;
 
 /* Wii U OSK stubs */
-__attribute__((weak)) qboolean WiiU_OSK_IsActive(void) { return qfalse; }
-__attribute__((weak)) void WiiU_OSK_Toggle(void) {}
-__attribute__((weak)) void WiiU_OSK_Cancel(void) {}
-__attribute__((weak)) void WiiU_OSK_Frame(const oskInput_t *in) { (void)in; }
-__attribute__((weak)) void WiiU_OSK_Draw(void) {}
+__attribute__((weak)) qboolean Con_OSK_IsActive(void) { return qfalse; }
+__attribute__((weak)) void Con_OSK_Toggle(void) {}
+__attribute__((weak)) void Con_OSK_Cancel(void) {}
+__attribute__((weak)) void Con_OSK_Frame(const oskInput_t *in) { (void)in; }
+__attribute__((weak)) void Con_OSK_Draw(void) {}
 
 /* WiiU_ExtractBundledPak stub (called from sys_main_wiiu.c) */
 __attribute__((weak)) void WiiU_ExtractBundledPak(void) {}
