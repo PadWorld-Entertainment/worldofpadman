@@ -17,7 +17,6 @@ theora:
  * theora doxygen docs (1.0beta1)
 */
 
-#include "client.h"
 #if defined(USE_CODEC_VORBIS) && (defined(USE_CIN_XVID) || defined(USE_CIN_THEORA))
 
 #include <ogg/ogg.h>
@@ -837,6 +836,7 @@ void Cin_OGM_Shutdown(cinematics_t *cin) {
 }
 
 #else
+#include "client.h"
 int Cin_OGM_Init(cinematics_t *cin, const char *filename) {
 	return 1;
 }
