@@ -388,25 +388,94 @@ void Sys_ShowConsole( int visLevel, qboolean quitOnClose )
 }
 
 
-// PS5: no dynamic loading; the game modules run as QVMs
+// PS5: native qagame/cgame/ui are pre-linked into eboot.bin with localized symbols
+extern void qagame_dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg, ... ) );
+extern intptr_t qagame_vmMain( int command, int arg0, int arg1, int arg2, int arg3,
+	int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11 );
+extern char __qagame_data_start[], __qagame_data_end[];
+extern char __qagame_bss_start[], __qagame_bss_end[];
+
+extern void cgame_dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg, ... ) );
+extern intptr_t cgame_vmMain( int command, int arg0, int arg1, int arg2, int arg3,
+	int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11 );
+extern char __cgame_data_start[], __cgame_data_end[];
+extern char __cgame_bss_start[], __cgame_bss_end[];
+
+extern void ui_dllEntry( intptr_t (QDECL *syscallptr)( intptr_t arg, ... ) );
+extern intptr_t ui_vmMain( int command, int arg0, int arg1, int arg2, int arg3,
+	int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11 );
+extern char __ui_data_start[], __ui_data_end[];
+extern char __ui_bss_start[], __ui_bss_end[];
+
+typedef struct {
+	const char *name;
+	void (*dllEntry)( intptr_t (QDECL *syscallptr)( intptr_t arg, ... ) );
+	vmMainProc vmMain;
+	char *dataStart, *dataEnd, *bssStart, *bssEnd;
+	char *pristine;
+} ps5NativeModule_t;
+
+static ps5NativeModule_t ps5_native_modules[] = {
+	{ "qagame", qagame_dllEntry, qagame_vmMain, __qagame_data_start, __qagame_data_end,
+	  __qagame_bss_start, __qagame_bss_end, NULL },
+	{ "cgame", cgame_dllEntry, cgame_vmMain, __cgame_data_start, __cgame_data_end,
+	  __cgame_bss_start, __cgame_bss_end, NULL },
+	{ "ui", ui_dllEntry, ui_vmMain, __ui_data_start, __ui_data_end,
+	  __ui_bss_start, __ui_bss_end, NULL },
+	{ NULL }
+};
+
 void *Sys_LoadLibrary( const char *name )
 {
+	(void)name;
 	return NULL;
 }
-
 
 void Sys_UnloadLibrary( void *handle )
 {
+	(void)handle;
 }
-
 
 void *Sys_LoadFunction( void *handle, const char *name )
 {
+	(void)handle; (void)name;
 	return NULL;
 }
-
 
 int Sys_LoadFunctionErrors( void )
 {
 	return 1;
+}
+
+void *Sys_LoadGameDll( const char *name, vmMainProc *entryPoint,
+	intptr_t (QDECL *systemcalls)( intptr_t, ... ) )
+{
+	ps5NativeModule_t *m;
+
+	for ( m = ps5_native_modules; m->name; m++ ) {
+		size_t dataLen;
+
+		if ( Q_stricmp( name, m->name ) )
+			continue;
+
+		dataLen = (size_t)( m->dataEnd - m->dataStart );
+		if ( !m->pristine ) {
+			m->pristine = malloc( dataLen ? dataLen : 1 );
+			if ( !m->pristine )
+				Com_Error( ERR_FATAL, "Sys_LoadGameDll: out of memory for %s data copy", name );
+			memcpy( m->pristine, m->dataStart, dataLen );
+		} else {
+			memcpy( m->dataStart, m->pristine, dataLen );
+		}
+		memset( m->bssStart, 0, (size_t)( m->bssEnd - m->bssStart ) );
+
+		m->dllEntry( systemcalls );
+		*entryPoint = m->vmMain;
+		Com_Printf( "Sys_LoadGameDll(%s): loaded native module\n", name );
+		return (void *)1;
+	}
+
+	(void)entryPoint; (void)systemcalls;
+	Com_Printf( "Sys_LoadGameDll(%s): unknown module\n", name );
+	return NULL;
 }

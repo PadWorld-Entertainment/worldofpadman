@@ -42,7 +42,7 @@ if $platform_has_localeconv && [[ " ${radv_link_flags[*]} " != *" --defsym=local
 fi
 
 # Extract all object files from CMake's linked executable/archive or link directly against its .o files
-mapfile -t cmake_objs < <(find "$work" -name '*.o' ! -path "$work/link/*" ! -path "$work/libs/zlib/*" ! -path "$work/CMakeFiles/*CompilerId*")
+mapfile -t cmake_objs < <(find "$work" -name '*.o' ! -path "$work/link/*" ! -path "$work/libs/zlib/*" ! -path "*/native_tmp/*" ! -path "*/wop_*_objs.dir/*" ! -path "$work/CMakeFiles/*CompilerId*")
 
 "$sdk/bin/prospero-lld" "${radv_linker_script[@]}" --eh-frame-hdr "${radv_link_flags[@]}" \
     --version-script "$native/app-symbols.map" --exclude-libs=ALL \

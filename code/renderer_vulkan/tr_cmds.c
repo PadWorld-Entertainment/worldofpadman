@@ -1,3 +1,4 @@
+#include "vk_image.h"
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -425,6 +426,7 @@ smp extensions, or asynchronously by another thread.
 ====================
 */
 void R_IssueRenderCommands(qboolean runPerformanceCounters) {
+	vk_flushImageUploads();
 	int t1;
 	const byte *data;
 

@@ -254,7 +254,7 @@ int main( int argc, char **argv )
 {
 	static char cmdline[1024] =
 		"+set fs_basepath /app0 +set fs_homepath /app0 +set com_basegame wop "
-		"+set vm_game 1 +set vm_cgame 1 +set vm_ui 1 "
+		"+set vm_game 0 +set vm_cgame 0 +set vm_ui 0 "
 		"+set s_khz 48 +set r_fullscreen 1 +set com_introplayed 1 +set sv_pure 0";
 	FILE *extra;
 	(void)argc; (void)argv;
@@ -275,6 +275,9 @@ int main( int argc, char **argv )
 
 	Sys_PlatformInit();
 	Com_Init( cmdline );
+	Cvar_Set( "vm_game", "0" );
+	Cvar_Set( "vm_cgame", "0" );
+	Cvar_Set( "vm_ui", "0" );
 	NET_Init();
 
 	while ( 1 ) {
@@ -287,7 +290,6 @@ int main( int argc, char **argv )
 const char *Sys_DefaultInstallPath( void ) { return "/app0"; }
 char *Sys_GogPath( void ) { static char empty[] = ""; return empty; }
 qboolean Sys_DllExtension( const char *name ) { (void)name; return qfalse; }
-void *QDECL Sys_LoadGameDll( const char *name, vmMainProc *entryPoint, intptr_t (QDECL *systemcalls)(intptr_t, ...) ) { (void)name; (void)entryPoint; (void)systemcalls; return NULL; }
 void Sys_UnloadDll( void *dllHandle ) { (void)dllHandle; }
 FILE *Sys_Mkfifo( const char *ospath ) { (void)ospath; return NULL; }
 void Sys_InitPIDFile( const char *gamedir ) { (void)gamedir; }

@@ -610,7 +610,7 @@ vm_t *VM_Create(const char *module, intptr_t (*systemCalls)(intptr_t *), vmInter
 	Q_strncpyz(vm->name, module, sizeof(vm->name));
 
 	do {
-#ifdef WIIU_NATIVE_CGAME
+#if defined(WIIU_NATIVE_CGAME) || defined(__PS5__)
 		if (interpret == VMI_NATIVE && !Q_stricmp(module, "qagame")) {
 			Q_strncpyz(filename, module, sizeof(filename));
 			retval = VMI_NATIVE;
@@ -630,7 +630,7 @@ vm_t *VM_Create(const char *module, intptr_t (*systemCalls)(intptr_t *), vmInter
 
 			Com_Printf("Failed loading dll, trying next\n");
 		} else if (retval == VMI_COMPILED) {
-#ifdef WIIU_NATIVE_CGAME
+#if defined(WIIU_NATIVE_CGAME) || defined(__PS5__)
 			if (interpret == VMI_NATIVE && (!Cvar_VariableString("fs_game")[0] || !Q_stricmp(Cvar_VariableString("fs_game"), BASEGAME)) &&
 			    (!Q_stricmp(module, "cgame") || !Q_stricmp(module, "ui"))) {
 				vm->dllHandle = Sys_LoadGameDll(module, &vm->entryPoint, VM_DllSyscall);
