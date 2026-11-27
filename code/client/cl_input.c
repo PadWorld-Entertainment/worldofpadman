@@ -1029,15 +1029,11 @@ void CL_SendCmd(void) {
 CL_InitInput
 ============
 */
-#if defined(__WIIU__) || defined(__PS5__)
-static void IN_WeapNoop_f(void) {}
-#endif
-
 void CL_InitInput(void) {
 	Cmd_AddCommand("centerview", IN_CenterView);
 #if defined(__WIIU__) || defined(__PS5__)
-	Cmd_AddCommand("weapnext", IN_WeapNoop_f);
-	Cmd_AddCommand("weapprev", IN_WeapNoop_f);
+	Cmd_AddCommand("weapnext", NULL);
+	Cmd_AddCommand("weapprev", NULL);
 #endif
 #if defined(__WIIU__) || defined(__PS5__)
 	CL_AssistInit();
