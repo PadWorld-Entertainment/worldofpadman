@@ -157,7 +157,7 @@ void trap_Trace(trace_t *results, const vec3_t start, const vec3_t mins, const v
 
 void trap_ClipToEntity(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end,
 					  int entityNum) {
-	syscall(G_CLIP_TO_ENTITY, results, start, mins, maxs, end, entityNum);
+	syscall(G_CLIP_TO_ENTITY, results, start, mins, maxs, end, (intptr_t)entityNum);
 }
 
 void trap_TraceCapsule(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end,

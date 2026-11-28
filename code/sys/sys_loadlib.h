@@ -20,7 +20,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-#if defined(DEDICATED) || defined(TESTS)
+#if defined(__WIIU__) || defined(WIIU) || defined(__PS5__)
+#define Sys_LoadLibrary(f) NULL
+#define Sys_UnloadLibrary(h) ((void)(h))
+#define Sys_LoadFunction(h,fn) NULL
+#define Sys_LibraryError() "dynamic loading not supported on Wii U"
+#elif defined(DEDICATED) || defined(TESTS)
 #ifdef _WIN32
 #include <windows.h>
 #define Sys_LoadLibrary(f) (void *)LoadLibrary(f)

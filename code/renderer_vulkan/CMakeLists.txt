@@ -65,7 +65,8 @@ set(SRCS
 	ref_import.c
 	render_export.c
 
-	vk_create_window_sdl.c
+	$<$<BOOL:${PS5}>:${CMAKE_SOURCE_DIR}/code/ps5/vk_create_window_ps5.c>
+	$<$<NOT:$<BOOL:${PS5}>>:vk_create_window_sdl.c>
 
 	../renderercommon/tr_font.c
 	../renderercommon/tr_image_bmp.c
@@ -128,7 +129,12 @@ endif()
 
 project(renderer_vulkan)
 wop_add_library(TARGET ${PROJECT_NAME} SRCS ${SRCS})
-set(LIBS jpeg zlib SDL2::SDL2)
+if(PS5)
+        set(LIBS jpeg zlib)
+        target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+else()
+        set(LIBS jpeg zlib SDL2::SDL2)
+endif()
 if (MSVC)
 	list(APPEND LIBS ws2_32 winmm psapi gdi32 ole32)
 endif()
@@ -140,4 +146,8 @@ if (USE_RENDERER_DLOPEN)
 endif()
 if (RENDERER_DEFINES)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE ${RENDERER_DEFINES})
+endif()
+
+if(PS5)
+  target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endif()

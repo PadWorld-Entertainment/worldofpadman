@@ -1,4 +1,4 @@
-build
+build*
 Makefile.local
 /compile_commands.json
 /.vscode

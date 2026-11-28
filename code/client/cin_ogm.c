@@ -836,6 +836,7 @@ void Cin_OGM_Shutdown(cinematics_t *cin) {
 }
 
 #else
+#include "client.h"
 int Cin_OGM_Init(cinematics_t *cin, const char *filename) {
 	return 1;
 }

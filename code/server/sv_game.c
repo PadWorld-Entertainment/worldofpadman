@@ -376,7 +376,7 @@ static intptr_t SV_GameSystemCalls(intptr_t *args) {
 		SV_Trace(VMA(1), VMA(2), VMA(3), VMA(4), VMA(5), args[6], args[7], /*int capsule*/ qfalse);
 		return 0;
 	case G_CLIP_TO_ENTITY:
-		if (args[6] < 0 || args[6] >= sv.num_entities) {
+		if ((int)args[6] < 0 || (int)args[6] >= sv.num_entities) {
 			Com_Error(ERR_DROP, "G_CLIP_TO_ENTITY: bad entity number");
 		}
 		VM_CHECKBOUNDS3(gvm, args[1], 1, sizeof(trace_t));

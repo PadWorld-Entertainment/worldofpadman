@@ -76,6 +76,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define QDECL
 #define QCALL
 
+#ifdef __WIIU__
+#define OS_STRING "wiiu"
+#define ID_INLINE __inline__
+#define PATH_SEP '/'
+#define ARCH_STRING "ppc"
+#define Q3_BIG_ENDIAN
+#define DLL_EXT ".rpl"
+#endif
+
 //================================================================= WIN64/32 ===
 
 #if defined(_WIN64) || defined(__WIN64__)

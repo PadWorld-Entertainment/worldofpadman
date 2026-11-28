@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 // tr_image.c
 #include "tr_local.h"
+#if defined(WIIU_GX2BE)
+extern void WiiU_Snd_SetPaused(qboolean paused);
+#endif
 
 static byte s_intensitytable[256];
 static unsigned char s_gammatable[256];
@@ -440,7 +443,11 @@ R_MipMap
 Operates in place, quartering the size of the texture
 ================
 */
+#if defined(WIIU_GX2BE)
+void R_MipMap(byte *in, int width, int height) {
+#else
 static void R_MipMap(byte *in, int width, int height) {
+#endif
 	int i, j;
 	byte *out;
 	int row;
@@ -594,6 +601,10 @@ Upload32
 
 ===============
 */
+#if defined(WIIU_GX2BE)
+static int s_gx2UploadTexnum = -1;
+static int s_gx2UploadWrap = GL_REPEAT;
+#endif
 static void Upload32(unsigned *data, int width, int height, qboolean mipmap, qboolean picmip, qboolean lightMap,
 					 qboolean allowCompression, int *pInternalFormat, int *pUploadWidth, int *pUploadHeight) {
 	int samples;
@@ -608,13 +619,18 @@ static void Upload32(unsigned *data, int width, int height, qboolean mipmap, qbo
 	GLenum type = GL_UNSIGNED_BYTE;
 	float rMax = 0, gMax = 0, bMax = 0;
 
-	//
-	// convert to exact power of 2 sizes
-	//
-	for (scaled_width = 1; scaled_width < width; scaled_width <<= 1)
-		;
-	for (scaled_height = 1; scaled_height < height; scaled_height <<= 1)
-		;
+#if defined(WIIU_GX2BE)
+	if (mipmap || picmip) {
+		for (scaled_width = 1; scaled_width < width; scaled_width <<= 1);
+		for (scaled_height = 1; scaled_height < height; scaled_height <<= 1);
+	} else {
+		scaled_width = width;
+		scaled_height = height;
+	}
+#else
+	for (scaled_width = 1; scaled_width < width; scaled_width <<= 1);
+	for (scaled_height = 1; scaled_height < height; scaled_height <<= 1);
+#endif
 	if (r_roundImagesDown->integer && scaled_width > width)
 		scaled_width >>= 1;
 	if (r_roundImagesDown->integer && scaled_height > height)
@@ -651,6 +667,7 @@ static void Upload32(unsigned *data, int width, int height, qboolean mipmap, qbo
 	// scale both axis down equally so we don't have to
 	// deal with a half mip resampling
 	//
+	if (!mipmap && !picmip && !lightMap && r_uiMaxSize && r_uiMaxSize->integer > 0) { while (scaled_width > r_uiMaxSize->integer || scaled_height > r_uiMaxSize->integer) { scaled_width >>= 1; scaled_height >>= 1; } if (scaled_width < 1) scaled_width = 1; if (scaled_height < 1) scaled_height = 1; }
 	while (scaled_width > glConfig.maxTextureSize || scaled_height > glConfig.maxTextureSize) {
 		scaled_width >>= 1;
 		scaled_height >>= 1;
@@ -790,9 +807,11 @@ static void Upload32(unsigned *data, int width, int height, qboolean mipmap, qbo
 		formatBuffer = ri.Hunk_AllocateTempMemory(sizeof(unsigned) * scaled_width * scaled_height);
 	}
 
-	// copy or resample data as appropriate for first MIP level
 	if ((scaled_width == width) && (scaled_height == height)) {
-		if (!mipmap) {
+		if (mipmap == qfalse) {
+#if defined(WIIU_GX2BE)
+			GX2BE_Upload32(data, scaled_width, scaled_height, (int)internalFormat, s_gx2UploadTexnum, s_gx2UploadWrap, qfalse, qtrue);
+#else
 			if (formatBuffer) {
 				R_ConvertTextureFormat((byte *)data, scaled_width, scaled_height, format, type, (byte *)formatBuffer);
 				qglTexImage2D(GL_TEXTURE_2D, 0, internalFormat, scaled_width, scaled_height, 0, format, type,
@@ -801,6 +820,7 @@ static void Upload32(unsigned *data, int width, int height, qboolean mipmap, qbo
 				qglTexImage2D(GL_TEXTURE_2D, 0, internalFormat, scaled_width, scaled_height, 0, GL_RGBA,
 							  GL_UNSIGNED_BYTE, data);
 			}
+#endif
 			*pUploadWidth = scaled_width;
 			*pUploadHeight = scaled_height;
 			*pInternalFormat = internalFormat;
@@ -830,6 +850,9 @@ static void Upload32(unsigned *data, int width, int height, qboolean mipmap, qbo
 	*pUploadHeight = scaled_height;
 	*pInternalFormat = internalFormat;
 
+#if defined(WIIU_GX2BE)
+	GX2BE_Upload32(scaledBuffer, scaled_width, scaled_height, (int)internalFormat, s_gx2UploadTexnum, s_gx2UploadWrap, mipmap, qtrue);
+#else
 	if (formatBuffer) {
 		R_ConvertTextureFormat((byte *)scaledBuffer, scaled_width, scaled_height, format, type, (byte *)formatBuffer);
 		qglTexImage2D(GL_TEXTURE_2D, 0, internalFormat, scaled_width, scaled_height, 0, format, type, formatBuffer);
@@ -867,7 +890,9 @@ static void Upload32(unsigned *data, int width, int height, qboolean mipmap, qbo
 			}
 		}
 	}
+#endif
 done:
+#ifndef WIIU_GX2BE
 
 	if (mipmap) {
 		if (glConfig.textureFilterAnisotropic)
@@ -886,6 +911,7 @@ done:
 
 	GL_CheckErrors();
 
+#endif
 	if (formatBuffer != 0)
 		ri.Hunk_FreeTempMemory(formatBuffer);
 	if (scaledBuffer != 0)
@@ -920,7 +946,11 @@ image_t *R_CreateImage(const char *name, byte *pic, int width, int height, imgTy
 	}
 
 	image = tr.images[tr.numImages] = ri.Hunk_Alloc(sizeof(image_t), h_low);
+#if defined(WIIU_GX2BE)
+	GX2BE_CreateTexnum(&image->texnum);
+#else
 	qglGenTextures(1, &image->texnum);
+#endif
 	tr.numImages++;
 
 	image->type = type;
@@ -946,17 +976,23 @@ image_t *R_CreateImage(const char *name, byte *pic, int width, int height, imgTy
 		GL_SelectTexture(image->TMU);
 	}
 
+#if defined(WIIU_GX2BE)
+	s_gx2UploadTexnum = (int)image->texnum;
+	s_gx2UploadWrap = glWrapClampMode;
+#endif
 	GL_Bind(image);
 
 	Upload32((unsigned *)pic, image->width, image->height, image->flags & IMGFLAG_MIPMAP, image->flags & IMGFLAG_PICMIP,
 			 isLightmap, !(image->flags & IMGFLAG_NO_COMPRESSION), &image->internalFormat, &image->uploadWidth,
 			 &image->uploadHeight);
 
+#ifndef WIIU_GX2BE
 	qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glWrapClampMode);
 	qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glWrapClampMode);
 
 	glState.currenttextures[glState.currenttmu] = 0;
 	qglBindTexture(GL_TEXTURE_2D, 0);
+#endif
 
 	if (image->TMU == 1) {
 		GL_SelectTexture(0);
@@ -991,7 +1027,10 @@ Loads any of the supported image types into a canonical
 32 bit format.
 =================
 */
-static void R_LoadImage(const char *name, byte **pic, int *width, int *height) {
+static void 
+	
+
+	R_LoadImage(const char *name, byte **pic, int *width, int *height) {
 	qboolean orgNameFailed = qfalse;
 	int orgLoader = -1;
 	int i;
@@ -1092,10 +1131,27 @@ image_t *R_FindImageFile(const char *name, imgType_t type, imgFlags_t flags) {
 		}
 	}
 
-	//
-	// load the pic from disk
-	//
+#if defined(WIIU_GX2BE)
+	{
+		const char *bgName = (*name == '/') ? (name + 1) : name;
+		if (Q_stricmpn(bgName, "menu/bg/", 8) == 0 && Q_stricmpn(bgName, "menu/bg/main", 12) != 0) {
+			if (tr.numImages == MAX_DRAWIMAGES) ri.Error(ERR_DROP, "R_FindImageFile: MAX_DRAWIMAGES hit");
+			image = tr.images[tr.numImages] = ri.Hunk_Alloc(sizeof(image_t), h_low);
+			tr.numImages++;
+			image->texnum = 0; image->type = type; image->flags = flags;
+			strcpy(image->imgName, name);
+			image->next = hashTable[hash]; hashTable[hash] = image;
+			return image;
+		}
+	}
+#endif
+	#if defined(WIIU_GX2BE)
+	WiiU_Snd_SetPaused(qtrue);
+#endif
 	R_LoadImage(name, &pic, &width, &height);
+	#if defined(WIIU_GX2BE)
+	WiiU_Snd_SetPaused(qfalse);
+#endif
 	if (pic == NULL) {
 		return NULL;
 	}
@@ -1382,16 +1438,61 @@ void R_InitImages(void) {
 R_DeleteTextures
 ===============
 */
+#if defined(WIIU_GX2BE)
+extern void WiiU_Snd_SetPaused(qboolean paused);
+#endif
+void R_RealizeLazyImage(image_t *image) {
+	int width, height, glWrapClampMode;
+	byte *pic;
+	if (image == NULL || image->texnum != 0) return;
+	#if defined(WIIU_GX2BE)
+	WiiU_Snd_SetPaused(qtrue);
+#endif
+	R_LoadImage(image->imgName, &pic, &width, &height);
+	#if defined(WIIU_GX2BE)
+	WiiU_Snd_SetPaused(qfalse);
+#endif
+	if (pic == NULL) {
+		image->texnum = tr.defaultImage->texnum;
+		image->width = image->uploadWidth = tr.defaultImage->width;
+		image->height = image->uploadHeight = tr.defaultImage->height;
+		image->internalFormat = tr.defaultImage->internalFormat;
+		return;
+	}
+#if defined(WIIU_GX2BE)
+	GX2BE_CreateTexnum(&image->texnum);
+#else
+	qglGenTextures(1, &image->texnum);
+#endif
+	image->width = width; image->height = height;
+	glWrapClampMode = (image->flags & IMGFLAG_CLAMPTOEDGE) ? (glConfig.haveClampToEdge ? GL_CLAMP_TO_EDGE : GL_CLAMP) : GL_REPEAT;
+#if defined(WIIU_GX2BE)
+	s_gx2UploadTexnum = (int)image->texnum;
+	s_gx2UploadWrap = glWrapClampMode;
+#endif
+	Upload32((unsigned *)pic, image->width, image->height, image->flags & IMGFLAG_MIPMAP, image->flags & IMGFLAG_PICMIP, qfalse, (image->flags & IMGFLAG_NO_COMPRESSION) == 0, &image->internalFormat, &image->uploadWidth, &image->uploadHeight);
+	ri.Free(pic);
+}
+
 void R_DeleteTextures(void) {
 	int i;
 
 	for (i = 0; i < tr.numImages; i++) {
+#if defined(WIIU_GX2BE)
+		GX2BE_DeleteTexnum((int)tr.images[i]->texnum);
+#else
 		qglDeleteTextures(1, &tr.images[i]->texnum);
+#endif
 	}
 	Com_Memset(tr.images, 0, sizeof(tr.images));
 
 	tr.numImages = 0;
 
+#if defined(WIIU_GX2BE)
+	GX2BE_DeleteAllTexnums();
+	Com_Memset(glState.currenttextures, 0, sizeof(glState.currenttextures));
+	gx2beState.boundtex[0] = -1; gx2beState.boundtex[1] = -1;
+#else
 	Com_Memset(glState.currenttextures, 0, sizeof(glState.currenttextures));
 	if (qglActiveTextureARB) {
 		GL_SelectTexture(1);
@@ -1401,6 +1502,7 @@ void R_DeleteTextures(void) {
 	} else {
 		qglBindTexture(GL_TEXTURE_2D, 0);
 	}
+#endif
 }
 
 /*

@@ -484,6 +484,19 @@ static void SCR_DrawScreenField(stereoFrame_t stereoFrame) {
 	if (cl_debuggraph->integer || cl_timegraph->integer || cl_debugMove->integer) {
 		SCR_DrawDebugGraph();
 	}
+#if defined(__WIIU__) || defined(__PS5__)
+	{
+		extern void Con_OSK_Draw(void);
+		Con_OSK_Draw();
+#ifdef __WIIU__
+		extern void WiiU_GamepadMap_Frame(void);
+		WiiU_GamepadMap_Frame();
+#endif
+#ifdef __PS5__
+		{ extern void PS5_Input_DrawOverlay(void); PS5_Input_DrawOverlay(); }
+#endif
+	}
+#endif
 }
 
 /*

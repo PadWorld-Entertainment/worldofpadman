@@ -350,7 +350,11 @@ static void CL_CM_LoadMap(const char *mapname) {
 }
 
 static void CL_GetVoipTimes(int *times) {
+#ifdef USE_VOIP
 	memcpy(times, clc.voipLastPacket, sizeof(int) * MAX_CLIENTS);
+#else
+	memset(times, 0, sizeof(int) * MAX_CLIENTS);
+#endif
 }
 
 /*
@@ -383,6 +387,22 @@ CL_CgameSystemCalls
 The cgame module is making a system call
 ====================
 */
+#ifdef __WIIU__
+#include <proc_ui/procui.h>
+static int s_cgLastPump = 0;
+static int s_cgLastKeepalive = 0;
+static void CL_PumpPlatformEvents(void) {
+	int now = Sys_Milliseconds();
+	if (now - s_cgLastPump >= 150) { s_cgLastPump = now; ProcUIProcessMessages(true); }
+	if (clc.state == CA_LOADING && clc.demoplaying == qfalse && clc.netchan.remoteAddress.type != NA_LOOPBACK && now - s_cgLastKeepalive >= 1000) {
+		s_cgLastKeepalive = now;
+		CL_WritePacket();
+	}
+}
+#else
+#define CL_PumpPlatformEvents() do {} while (0)
+#endif
+
 static intptr_t CL_CgameSystemCalls(intptr_t *args) {
 	switch (args[0]) {
 	case CG_PRINT:
@@ -439,6 +459,7 @@ static intptr_t CL_CgameSystemCalls(intptr_t *args) {
 		CL_AddReliableCommand(VMA(1), qfalse);
 		return 0;
 	case CG_UPDATESCREEN:
+		CL_PumpPlatformEvents();
 		// this is used during lengthy level loading, so pump message loop
 		//		Com_EventLoop();	// FIXME: if a server restarts here, BAD THINGS HAPPEN!
 		// We can't call Com_EventLoop here, a restart will crash and this _does_ happen
@@ -447,6 +468,7 @@ static intptr_t CL_CgameSystemCalls(intptr_t *args) {
 		SCR_UpdateScreen();
 		return 0;
 	case CG_CM_LOADMAP:
+		CL_PumpPlatformEvents();
 		CL_CM_LoadMap(VMA(1));
 		return 0;
 	case CG_CM_NUMINLINEMODELS:
@@ -510,13 +532,16 @@ static intptr_t CL_CgameSystemCalls(intptr_t *args) {
 		S_StartBackgroundTrack(VMA(1), VMA(2));
 		return 0;
 	case CG_R_LOADWORLDMAP:
+		CL_PumpPlatformEvents();
 		re.LoadWorld(VMA(1));
 		return 0;
 	case CG_R_REGISTERMODEL:
+		CL_PumpPlatformEvents();
 		return re.RegisterModel(VMA(1));
 	case CG_R_REGISTERSKIN:
 		return re.RegisterSkin(VMA(1));
 	case CG_R_REGISTERSHADER:
+		CL_PumpPlatformEvents();
 		return re.RegisterShader(VMA(1));
 	case CG_R_REGISTERSHADERNOMIP:
 		return re.RegisterShaderNoMip(VMA(1));

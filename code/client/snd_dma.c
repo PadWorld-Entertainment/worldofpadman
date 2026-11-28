@@ -338,7 +338,9 @@ static sfxHandle_t S_Base_RegisterSound(const char *name, qboolean compressed) {
 	sfx->inMemory = qfalse;
 	sfx->soundCompressed = compressed;
 
+#ifndef __WIIU__
 	S_memoryLoad(sfx);
+#endif
 
 	if (sfx->defaultSound) {
 		Com_Printf(S_COLOR_YELLOW "WARNING: could not find %s - using default\n", sfx->soundName);

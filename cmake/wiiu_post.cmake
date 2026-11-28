@@ -1,0 +1,7 @@
+if(NOT WIIU)
+  return()
+endif()
+target_include_directories(${PROJECT_NAME} PRIVATE ${CODE_DIR} ${CODE_DIR}/wiiu ${CODE_DIR}/sys ${CODE_DIR}/renderergx2)
+target_compile_definitions(${PROJECT_NAME} PRIVATE BOTLIB USE_CODEC_VORBIS)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${ELF2RPL} $<TARGET_FILE:${PROJECT_NAME}> "${CMAKE_BINARY_DIR}/wop-u.rpx" COMMENT "Generating wop-u.rpx")
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${WUHBTOOL} "${CMAKE_BINARY_DIR}/wop-u.rpx" "${CMAKE_BINARY_DIR}/wop-u.wuhb" --name "World of Padman" --short-name "World of Padman" --author "Padworld Entertainment" --icon "${ROOT_DIR}/misc/wiiu/wop.png" --tv-image "${ROOT_DIR}/misc/wiiu/bootTvTex.png" --drc-image "${ROOT_DIR}/misc/wiiu/bootDrcTex.png" COMMENT "Generating wop-u.wuhb")

@@ -279,7 +279,11 @@ static void RB_TestFlare(flare_t *f) {
 	glState.finishCalled = qfalse;
 
 	// read back the z buffer contents
+#if defined(WIIU_GX2BE)
+	depth = GX2BE_PeekDepth((int)f->windowX, (int)f->windowY);
+#else
 	qglReadPixels(f->windowX, f->windowY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+#endif
 
 	screenZ = backEnd.viewParms.projectionMatrix[14] /
 			  ((2 * depth - 1) * backEnd.viewParms.projectionMatrix[11] - backEnd.viewParms.projectionMatrix[10]);
@@ -518,6 +522,10 @@ void RB_RenderFlares(void) {
 		qglDisable(GL_CLIP_PLANE0);
 	}
 
+#if defined(WIIU_GX2BE)
+	GX2BE_LoadIdentityModelview();
+	GX2BE_LoadOrthoGL(backEnd.viewParms.viewportX, backEnd.viewParms.viewportX + backEnd.viewParms.viewportWidth, backEnd.viewParms.viewportY, backEnd.viewParms.viewportY + backEnd.viewParms.viewportHeight, -99999, 99999);
+#else
 	qglPushMatrix();
 	qglLoadIdentity();
 	qglMatrixMode(GL_PROJECTION);
@@ -526,6 +534,7 @@ void RB_RenderFlares(void) {
 	qglOrtho(backEnd.viewParms.viewportX, backEnd.viewParms.viewportX + backEnd.viewParms.viewportWidth,
 			 backEnd.viewParms.viewportY, backEnd.viewParms.viewportY + backEnd.viewParms.viewportHeight, -99999,
 			 99999);
+#endif
 
 	for (f = r_activeFlares; f; f = f->next) {
 		if (f->frameSceneNum == backEnd.viewParms.frameSceneNum && f->inPortal == backEnd.viewParms.isPortal &&
@@ -534,7 +543,9 @@ void RB_RenderFlares(void) {
 		}
 	}
 
+#if !defined(WIIU_GX2BE)
 	qglPopMatrix();
 	qglMatrixMode(GL_MODELVIEW);
 	qglPopMatrix();
+#endif
 }

@@ -26,4 +26,6 @@ void R_LoadImage(const char *name, unsigned char **pic, int *width, int *height)
 
 void gpuMemUsageInfo_f(void);
 
+void vk_flushImageUploads(void);
+
 #endif

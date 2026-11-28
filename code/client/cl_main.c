@@ -22,15 +22,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cl_main.c  -- client main loop
 
 #include "client.h"
+#ifdef __WIIU__
+#include "../wiiu/wiiu_account.h"
+#endif
 #include <limits.h>
 
 #include "../sys/sys_local.h"
 #include "../sys/sys_loadlib.h"
 
 #ifdef USE_LOCAL_HEADERS
+#if !defined(__WIIU__) && !defined(__PS5__)
 #include "SDL.h"
+#endif
 #else
+#if !defined(__WIIU__) && !defined(__PS5__)
 #include <SDL.h>
+#endif
 #endif
 
 #ifdef USE_MUMBLE
@@ -158,7 +165,9 @@ static pingLookup_t cl_pingLookups[MAX_PINGREQUESTS];
 static int cl_pingLookupHead;
 static int cl_pingLookupCount;
 static qboolean cl_pingLookupRunning;
+#if !defined(__WIIU__) && !defined(__PS5__)
 static SDL_atomic_t cl_pingLookupDone;
+#endif
 
 static void CL_CheckPingLookups(void);
 
@@ -3508,7 +3517,11 @@ void CL_Init(void) {
 	cl_consoleKeys = Cvar_Get("cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
 
 	// userinfo
+#ifdef __WIIU__
+	Cvar_Get("name", WiiU_DefaultPlayerName(), CVAR_USERINFO | CVAR_ARCHIVE);
+#else
 	Cvar_Get("name", "PadPlayer", CVAR_USERINFO | CVAR_ARCHIVE);
+#endif
 	cl_rate = Cvar_Get("rate", "25000", CVAR_USERINFO | CVAR_ARCHIVE);
 	// between 1 and sv_fps
 	Cvar_Get("snaps", "20", CVAR_USERINFO | CVAR_ARCHIVE);
@@ -4255,10 +4268,25 @@ static void CL_SendPing(netadr_t to) {
 	NET_OutOfBandPrint(NS_CLIENT, to, "getinfo xxx");
 }
 
+#if defined(__WIIU__) || defined(__PS5__)
+static void CL_CheckPingLookups(void) {
+	while (cl_pingLookupCount > 0) {
+		pingLookup_t *lookup = &cl_pingLookups[cl_pingLookupHead];
+		cl_pingLookupHead = (cl_pingLookupHead + 1) % MAX_PINGREQUESTS;
+		cl_pingLookupCount--;
+		if (lookup->discard == qfalse) {
+			lookup->netFlags = Cvar_VariableIntegerValue("net_enabled");
+			Com_Memset(&lookup->address, 0, sizeof(lookup->address));
+			if (!NET_StringToAdr(lookup->server, &lookup->address, lookup->family)) lookup->error = 1;
+			if (lookup->address.type != NA_BAD) CL_SendPing(lookup->address);
+			else Sys_PrintResolveError(lookup->server, lookup->error);
+		}
+	}
+}
+#else
 static int CL_ResolvePing(void *data) {
 	pingLookup_t *lookup = data;
-
-	NET_ResolveAddress(lookup->server, &lookup->address, lookup->family, lookup->netFlags, &lookup->error);
+	if (!NET_StringToAdr(lookup->server, &lookup->address, lookup->family)) lookup->error = 1;
 	SDL_MemoryBarrierRelease();
 	SDL_AtomicSet(&cl_pingLookupDone, 1);
 	return 0;
@@ -4306,6 +4334,7 @@ static void CL_CheckPingLookups(void) {
 	SDL_DetachThread(thread);
 	cl_pingLookupRunning = qtrue;
 }
+#endif
 
 /*
 ==================
@@ -4355,6 +4384,9 @@ static void CL_Ping_f(void) {
 	lookup->family = family;
 	lookup->discard = qfalse;
 	cl_pingLookupCount++;
+#if defined(__WIIU__) || defined(__PS5__)
+	CL_CheckPingLookups();
+#endif
 }
 
 /*

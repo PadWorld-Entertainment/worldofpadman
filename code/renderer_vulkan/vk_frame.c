@@ -463,7 +463,11 @@ void vk_begin_frame(void) {
 	//  wait up to timeout nanoseconds for the condition to become satisfied.
 
 	{
+#ifdef __PS5__
+		VkResult fenceResult = qvkWaitForFences(vk.device, 1, &fence_renderFinished, VK_TRUE, UINT64_MAX);
+#else
 		VkResult fenceResult = qvkWaitForFences(vk.device, 1, &fence_renderFinished, VK_TRUE, 5000000000ULL); // 5 seconds
+#endif
 		if (fenceResult == VK_TIMEOUT) {
 			ri.Printf(PRINT_WARNING, "Vulkan: fence wait timed out, device may be hung\n");
 			qvkDeviceWaitIdle(vk.device);
